@@ -76,8 +76,8 @@ public:
      */
     virtual void setUnit(KoUnit unit);
 
-    /// called to set the canvas resource provider of the canvas the user used to insert the new shape.
-    void setResourceProvider(KoResourceManager* provider);
+    /// called to set the canvas resource manager of the canvas the user used to insert the new shape.
+    void setResourceManager(KoResourceManager *rm);
 
     /// Return true if the shape config panel should be shown after the shape is created
     virtual bool showOnShapeCreate();

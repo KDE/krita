@@ -17,13 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "TestCanvasResourceProvider.h"
+#include "TestResourceManager.h"
 
 #include "KoResourceManager.h"
 #include "KoPathShape.h"
 #include <QtTest/QSignalSpy>
 
-void TestCanvasResourceProvider::koShapeResource()
+void TestResourceManager::koShapeResource()
 {
     KoPathShape * shape = new KoPathShape();
     int key = 9001;
@@ -33,7 +33,7 @@ void TestCanvasResourceProvider::koShapeResource()
     QVERIFY( shape == rp.koShapeResource( key ) );
 }
 
-void TestCanvasResourceProvider::testUnitChanged()
+void TestResourceManager::testUnitChanged()
 {
     KoResourceManager rp(0);
     QSignalSpy spy(&rp, SIGNAL(resourceChanged(int, const QVariant &)));
@@ -45,5 +45,5 @@ void TestCanvasResourceProvider::testUnitChanged()
     QCOMPARE(spy.count(), 2);
 }
 
-QTEST_MAIN(TestCanvasResourceProvider)
-#include <TestCanvasResourceProvider.moc>
+QTEST_MAIN(TestResourceManager)
+#include <TestResourceManager.moc>

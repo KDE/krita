@@ -33,9 +33,9 @@ void KoShapeConfigWidgetBase::setUnit(KoUnit unit)
     Q_UNUSED(unit);
 }
 
-void KoShapeConfigWidgetBase::setResourceProvider(KoResourceManager* provider)
+void KoShapeConfigWidgetBase::setResourceManager(KoResourceManager *rm)
 {
-    m_resourceManager = provider;
+    m_resourceManager = rm;
 }
 
 bool KoShapeConfigWidgetBase::showOnShapeCreate()

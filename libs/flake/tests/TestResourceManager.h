@@ -22,7 +22,7 @@
 
 #include <qtest_kde.h>
 
-class TestCanvasResourceProvider : public QObject
+class TestResourceManager : public QObject
 {
     Q_OBJECT
 private slots:

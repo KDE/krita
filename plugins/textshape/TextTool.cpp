@@ -122,7 +122,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_allowActions(true),
         m_allowAddUndoCommand(true),
         m_trackChanges(false),
-        m_allowResourceProviderUpdates(true),
+        m_allowResourceManagerUpdates(true),
         m_prevCursorPosition(-1),
         m_caretTimer(this),
         m_caretTimerState(true),
@@ -465,7 +465,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     m_allowActions(true),
     m_allowAddUndoCommand(true),
     m_trackChanges(false),
-    m_allowResourceProviderUpdates(true),
+    m_allowResourceManagerUpdates(true),
     m_prevCursorPosition(-1),
     m_caretTimer(this),
     m_caretTimerState(true),
@@ -753,7 +753,7 @@ void TextTool::updateSelectionHandler()
     }
 
     KoResourceManager *p = canvas()->resourceManager();
-    m_allowResourceProviderUpdates = false;
+    m_allowResourceManagerUpdates = false;
     if (m_textShapeData) {
         p->setResource(KoText::CurrentTextPosition, m_textEditor->position());
         p->setResource(KoText::CurrentTextAnchor, m_textEditor->anchor());
@@ -765,7 +765,7 @@ void TextTool::updateSelectionHandler()
         p->clearResource(KoText::CurrentTextAnchor);
         p->clearResource(KoText::CurrentTextDocument);
     }
-    m_allowResourceProviderUpdates = true;
+    m_allowResourceManagerUpdates = true;
 }
 
 void TextTool::copy() const
@@ -1816,7 +1816,7 @@ bool TextTool::isBidiDocument() const
 
 void TextTool::resourceChanged(int key, const QVariant &var)
 {
-    if (m_allowResourceProviderUpdates == false)
+    if (m_allowResourceManagerUpdates == false)
         return;
     if (key == KoText::CurrentTextPosition) {
         repaintSelection();

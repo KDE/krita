@@ -25,6 +25,7 @@
 #include "KoShapeControllerBase.h"
 #include "KoDataCenter.h"
 #include "KoImageCollection.h"
+#include "KoResourceManager.h"
 #include "KoLoadingShapeUpdater.h"
 
 #include <kdebug.h>
@@ -125,7 +126,7 @@ void KoShapeLoadingContext::shapeLoaded(KoShape * shape)
 
 KoImageCollection * KoShapeLoadingContext::imageCollection()
 {
-    return dynamic_cast<KoImageCollection*>(d->dataCenterMap.value("ImageCollection", 0));
+    return d->documentResources ? d->documentResources->imageCollection() : 0;
 }
 
 int KoShapeLoadingContext::zIndex()

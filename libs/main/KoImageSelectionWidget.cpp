@@ -24,6 +24,7 @@
 #include <KoImageCollection.h>
 #include <KoShapeFactory.h>
 #include <KoShapeRegistry.h>
+#include <KoResourceManager.h>
 #include <KoShape.h>
 
 #include <kfilewidget.h>
@@ -190,20 +191,19 @@ KoImageData *KoImageSelectionWidget::selectImage(KoImageCollection *collection, 
 }
 
 // static
-KoShape *KoImageSelectionWidget::selectImageShape(const QMap<QString,KoDataCenter*> &dc, QWidget *parent)
+KoShape *KoImageSelectionWidget::selectImageShape(KoResourceManager *documentResources, QWidget *parent)
 {
-    Q_ASSERT(dc.contains("ImageCollection")); // its called wrong.
-    if (!dc.contains("ImageCollection"))
+    if (!documentResources || !documentResources->imageCollection())
         return 0;
     KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape");
     if (!factory) {
         kWarning(30003) << "No picture shape found, installation problem";
         return 0;
     }
-    KoImageData *data = selectImage(dynamic_cast<KoImageCollection*>(dc.value("ImageCollection")),
-            parent);
+    KoImageData *data = selectImage(documentResources->imageCollection(), parent);
     if (data) {
-        KoShape *shape = factory->createDefaultShape(dc, 0);
+        QMap<QString,KoDataCenter*> dc;
+        KoShape *shape = factory->createDefaultShape(dc, documentResources);
         shape->setUserData(data);
         shape->setSize(data->imageSize());
         return shape;

@@ -28,7 +28,7 @@
 class KoImageCollection;
 class KoImageData;
 class KoShape;
-class KoDataCenter;
+class KoResourceManager;
 
 class KOMAIN_EXPORT KoImageSelectionWidget : public QWidget
 {
@@ -43,7 +43,7 @@ public:
     KoImageData *imageData() const;
 
     static KoImageData *selectImage(KoImageCollection *collection, QWidget *parent);
-    static KoShape *selectImageShape(const QMap<QString,KoDataCenter*> &dc, QWidget *parent);
+    static KoShape *selectImageShape(KoResourceManager *documentResourceManager, QWidget *parent);
 
 signals:
     /**

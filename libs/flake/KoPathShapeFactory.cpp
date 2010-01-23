@@ -20,6 +20,7 @@
 #include "KoPathShape.h"
 #include "KoLineBorder.h"
 #include "KoImageCollection.h"
+#include "KoResourceManager.h"
 
 #include <klocale.h>
 
@@ -64,12 +65,16 @@ bool KoPathShapeFactory::supports(const KoXmlElement & e) const
 
 void KoPathShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap)
 {
+}
+
+void KoPathShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+{
     // as we need an image collection for the pattern background
     // we want to make sure that there is always an image collection
     // added to the data center map, in case the picture shape plugin
     // is not loaded
-    if (! dataCenterMap.contains("ImageCollection")) {
+    if (manager->imageCollection() == 0) {
         KoImageCollection *imgCol = new KoImageCollection();
-        dataCenterMap["ImageCollection"] = imgCol;
+        manager->setImageCollection(imgCol);
     }
 }

@@ -33,6 +33,7 @@
 class KoShape;
 class KoLineBorder;
 class KUndoStack;
+class KoImageCollection;
 
 /**
  * The KoCanvasResource contains a set of per-canvas
@@ -271,6 +272,9 @@ public:
 
     KUndoStack *undoStack() const;
     void setUndoStack(KUndoStack *undoStack);
+
+    KoImageCollection *imageCollection() const;
+    void setImageCollection(KoImageCollection *ic);
 
 signals:
     /**

@@ -37,6 +37,8 @@ public:
     bool supports(const KoXmlElement &element) const;
     /// reimplemented
     virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>   &dataCenterMap);
+    /// reimplemented
+    virtual void newDocumentResourceManager(KoResourceManager *manager);
 };
 
 #endif

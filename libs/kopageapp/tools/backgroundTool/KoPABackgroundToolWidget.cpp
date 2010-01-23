@@ -76,7 +76,7 @@ void KoPABackgroundToolWidget::slotActivePageChanged()
 void KoPABackgroundToolWidget::setBackgroundImage()
 {
     // TODO only make images selectable
-    KoImageCollection * collection = dynamic_cast<KoImageCollection *>( m_tool->canvas()->shapeController()->dataCenter( "ImageCollection" ) );
+    KoImageCollection *collection = m_tool->canvas()->shapeController()->resourceManager()->imageCollection();
     Q_ASSERT( collection );
     KoShape * page = m_tool->canvas()->resourceManager()->koShapeResource( KoPageApp::CurrentPage );
     Q_ASSERT( page );

@@ -44,7 +44,9 @@ KoShape *PictureShapeFactory::createDefaultShape(const QMap<QString, KoDataCente
     Q_UNUSED(documentResources);
     PictureShape * defaultShape = new PictureShape();
     defaultShape->setShapeId(PICTURESHAPEID);
-    defaultShape->setImageCollection(dynamic_cast<KoImageCollection *>(dataCenterMap.value("ImageCollection")));
+    if (documentResources) {
+        defaultShape->setImageCollection(documentResources->imageCollection());
+    }
     return defaultShape;
 }
 
@@ -55,12 +57,6 @@ bool PictureShapeFactory::supports(const KoXmlElement &e) const
 
 void PictureShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap)
 {
-    // only add image collection if none exist already
-    if (!dataCenterMap.contains("ImageCollection"))
-    {
-        KoImageCollection *imgCol = new KoImageCollection();
-        dataCenterMap["ImageCollection"] = imgCol;
-    }
 }
 
 QList<KoShapeConfigWidgetBase*> PictureShapeFactory::createShapeOptionPanels()
@@ -68,4 +64,10 @@ QList<KoShapeConfigWidgetBase*> PictureShapeFactory::createShapeOptionPanels()
     QList<KoShapeConfigWidgetBase*> panels;
     panels.append( new PictureShapeConfigWidget() );
     return panels;
+}
+
+void PictureShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+{
+    if (!manager->imageCollection())
+        manager->setImageCollection(new KoImageCollection());
 }

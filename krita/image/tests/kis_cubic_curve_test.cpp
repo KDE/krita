@@ -42,6 +42,26 @@ void KisCubicCurveTest::testCreation()
 
 void KisCubicCurveTest::testCopy()
 {
+    QList<QPointF> pts;
+    QPointF pt1(0.0, 0.0);
+    QPointF pt2(0.5, 0.7);
+    QPointF pt3(1.0, 1.0);
+    QPointF pt4(0.8, 0.6);
+    pts.push_back(pt1);
+    pts.push_back(pt2);
+    pts.push_back(pt3);
+    KisCubicCurve cc1(pts);
+    KisCubicCurve cc2(cc1);
+    QCOMPARE(cc1.points()[0], cc2.points()[0]);
+    QCOMPARE(cc1.points()[1], cc2.points()[1]);
+    QCOMPARE(cc1.points()[2], cc2.points()[2]);
+    cc2.addPoint(pt4);
+    QCOMPARE(cc1.points().size(), 3);
+    QCOMPARE(cc2.points().size(), 4);
+    QCOMPARE(cc1.points()[0], cc2.points()[0]);
+    QCOMPARE(cc1.points()[1], cc2.points()[1]);
+    QCOMPARE(cc1.points()[2], cc2.points()[3]);
+    QCOMPARE(pt4, cc2.points()[2]);
 }
 
 QTEST_KDEMAIN(KisCubicCurveTest, GUI)

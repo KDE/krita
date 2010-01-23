@@ -75,8 +75,8 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
     d->inlineTextObjectManager = new KoInlineTextObjectManager(this);
 
     resourceManager()->setUndoStack(undoStack());
+    resourceManager()->setOdfDocument(this);
     QVariant variant;
-
     d->pageProvider = new KoPAPageProvider();
     variant.setValue<void*>(d->pageProvider);
     resourceManager()->setResource(KoText::PageProvider, variant);

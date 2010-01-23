@@ -34,6 +34,7 @@ class KoShape;
 class KoLineBorder;
 class KUndoStack;
 class KoImageCollection;
+class KoOdfDocument;
 
 /**
  * The KoCanvasResource contains a set of per-canvas
@@ -82,8 +83,9 @@ namespace KoDocumentResource
  * This enum holds identifiers to the resources that can be stored in here.
  */
 enum DocumentResource {
-    UndoStack,      ///< The document-wide undo stack (KUndoStack)
+    UndoStack,              ///< The document-wide undo stack (KUndoStack)
     ImageCollection,        ///< The KoImageCollection for the document
+    OdfDocument,            ///< The document this canvas shows (KoOdfDocument)
 
     KarbonStart = 1000,      ///< Base number for karbon specific values.
     KexiStart = 2000,        ///< Base number for kexi specific values.
@@ -275,6 +277,9 @@ public:
 
     KoImageCollection *imageCollection() const;
     void setImageCollection(KoImageCollection *ic);
+
+    KoOdfDocument *odfDocument() const;
+    void setOdfDocument(KoOdfDocument *currentDocument);
 
 signals:
     /**

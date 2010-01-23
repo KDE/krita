@@ -515,7 +515,7 @@ target_link_libraries(KisMaskGeneratorTest ${KDE4_KDEUI_LIBS} kritaimage ${QT_QT
 ########### next target ###############
 
 set(kis_cubic_curve_test_SRCS kis_cubic_curve_test.cpp )
-kde4_add_unit_test(KisCubicCurveTest TESTNAME krita-cubic-curve-Test ${kis_cubic_curve_test_SRCS})
+kde4_add_unit_test(KisCubicCurveTest TESTNAME krita-image-KisCubicCurveTest ${kis_cubic_curve_test_SRCS})
 target_link_libraries(KisCubicCurveTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 

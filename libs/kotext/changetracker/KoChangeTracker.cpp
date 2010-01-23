@@ -334,16 +334,6 @@ int KoChangeTracker::getLoadedChangeId(QString odfId)
     return d->loadedChanges.value(odfId);
 }
 
-bool KoChangeTracker::completeLoading(KoStore *)
-{
-    return true;
-}
-
-bool KoChangeTracker::completeSaving(KoStore *, KoXmlWriter *, KoShapeSavingContext *)
-{
-    return true;
-}
-
 int KoChangeTracker::getDeletedChanges(QVector<KoChangeTrackerElement *>& deleteVector)
 {
     int numAppendedItems = 0;

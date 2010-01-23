@@ -21,7 +21,6 @@
 
 //KOffice includes
 #include "kotext_export.h"
-#include <KoDataCenter.h>
 //#include "KoChangeTrackerElement.h"
 class KoChangeTrackerElement;
 
@@ -44,7 +43,7 @@ class QString;
 //#include <QList>
 class QTextDocumentFragment;
 
-class KOTEXT_EXPORT KoChangeTracker : public QObject, public KoDataCenter
+class KOTEXT_EXPORT KoChangeTracker : public QObject
 {
     Q_OBJECT
 public:
@@ -98,12 +97,6 @@ public:
     int getLoadedChangeId(QString odfId);
 
 private:
-
-    /// reimplemented
-    virtual bool completeLoading(KoStore *store);
-
-    /// reimplemented
-    virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context);
 
     class Private;
     Private* const d;

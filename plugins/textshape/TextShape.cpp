@@ -55,7 +55,6 @@ struct Finalizer {
 #include <KoShapeLoadingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeSavingContext.h>
-#include <KoStyleManager.h>
 #include <KoText.h>
 #include <KoTextDocument.h>
 #include <KoTextDocumentLayout.h>
@@ -373,13 +372,6 @@ bool TextShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingC
 
 void TextShape::init(const QMap<QString, KoDataCenter*> &dataCenterMap)
 {
-    KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(dataCenterMap["StyleManager"]);
-    KoTextDocument document(m_textShapeData->document());
-    document.setStyleManager(styleManager);
-    //KoInlineTextObjectManager *tom = dynamic_cast<KoInlineTextObjectManager *>(dataCenterMap["InlineTextObjectManager"]);
-    //document.setInlineTextObjectManager(tom);
-//    KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(dataCenterMap["ChangeTracker"]);
-//    document.setChangeTracker(changeTracker);
     m_pageProvider = dynamic_cast<KoPageProvider *>(dataCenterMap[KoPageProvider::ID]);
 }
 

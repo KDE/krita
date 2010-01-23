@@ -27,7 +27,6 @@
 
 #include <QObject>
 #include <QMetaType>
-#include <KoDataCenter.h>
 
 class QTextDocument;
 class KoCharacterStyle;
@@ -47,7 +46,7 @@ class KoTextShapeData;
  * Manages all character, paragraph, table and table cell styles for any number
  * of documents.
  */
-class KOTEXT_EXPORT KoStyleManager : public QObject, public KoDataCenter
+class KOTEXT_EXPORT KoStyleManager : public QObject
 {
     Q_OBJECT
 public:
@@ -333,12 +332,6 @@ public:
 
     /// return all the sectionStyles registered.
     QList<KoSectionStyle*> sectionStyles() const;
-
-    /// reimplemented
-    virtual bool completeLoading(KoStore *store);
-
-    /// reimplemented
-    virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context);
 
 signals:
     void styleAdded(KoParagraphStyle*);

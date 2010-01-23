@@ -703,14 +703,4 @@ QList<KoSectionStyle*> KoStyleManager::sectionStyles() const
     return d->sectionStyles.values();
 }
 
-bool KoStyleManager::completeLoading(KoStore *)
-{
-    return true;
-}
-
-bool KoStyleManager::completeSaving(KoStore *, KoXmlWriter *, KoShapeSavingContext *)
-{
-    return true;
-}
-
 #include <KoStyleManager.moc>

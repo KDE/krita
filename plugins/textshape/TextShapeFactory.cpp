@@ -58,15 +58,21 @@ KoShape *TextShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *
     TextShape *text = new TextShape(m_inlineTextObjectManager);
     text->init(dataCenterMap);
     KoTextDocument document(text->textShapeData()->document());
-    if (documentResources)
+    if (documentResources) {
         document.setUndoStack(documentResources->undoStack());
+
+        if (documentResources->hasResource(KoText::StyleManager)) {
+            KoStyleManager *styleManager = static_cast<KoStyleManager *>(documentResources->resource(KoText::StyleManager).value<void*>());
+            document.setStyleManager(styleManager);
+        }
+    }
+
     return text;
 }
 
 KoShape *TextShapeFactory::createShape(const KoProperties *params, const QMap<QString, KoDataCenter *> &dataCenterMap, KoResourceManager *documentResources) const
 {
-    TextShape *shape = new TextShape(m_inlineTextObjectManager);
-    shape->init(dataCenterMap);
+    TextShape *shape = static_cast<TextShape*>(createDefaultShape(dataCenterMap, documentResources));
     shape->setSize(QSizeF(300, 200));
     shape->setDemoText(params->boolProperty("demo"));
     QString text("text");
@@ -75,9 +81,6 @@ KoShape *TextShapeFactory::createShape(const KoProperties *params, const QMap<QS
         QTextCursor cursor(shapeData->document());
         cursor.insertText(params->stringProperty(text));
     }
-    KoTextDocument document(shape->textShapeData()->document());
-    if (documentResources)
-        document.setUndoStack(documentResources->undoStack());
     return shape;
 }
 
@@ -88,8 +91,6 @@ bool TextShapeFactory::supports(const KoXmlElement & e) const
 
 void TextShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>  & dataCenterMap)
 {
-    dataCenterMap["StyleManager"] = new KoStyleManager();
-    dataCenterMap["ChangeTracker"] = new KoChangeTracker();
 }
 
 void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
@@ -97,12 +98,16 @@ void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
     m_inlineTextObjectManager = new KoInlineTextObjectManager(manager);
     QVariant variant;
     variant.setValue<void*>(m_inlineTextObjectManager);
-    manager->setResource(KoDocumentResource::InlineTextObjectManager, variant);
+    manager->setResource(KoText::InlineTextObjectManager, variant);
 
     if (!manager->hasResource(KoDocumentResource::UndoStackResource)) {
         kWarning(32500) << "No KUndoStack found in the document resource manager, creating a new one";
         manager->setUndoStack(new KUndoStack(manager));
     }
+    variant.setValue<void*>(new KoChangeTracker());
+    manager->setResource(KoText::ChangeTrackerResource, variant);
+    variant.setValue<void*>(new KoStyleManager());
+    manager->setResource(KoText::StyleManager, variant);
 }
 
 #include <TextShapeFactory.moc>

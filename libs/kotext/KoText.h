@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C)  2006 Thomas Zander <zander@kde.org>
+ * Copyright (C)  2006, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C)  2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
 
 #include "kotext_export.h"
 
-
+#include <KoResourceManager.h>
 
 #include <QtCore/QStringList>
 #include <QtCore/QChar>
@@ -82,6 +82,12 @@ enum Direction {
     PerhapsLeftRightTopBottom, ///< \internal
     PerhapsRightLeftTopBottom, ///< \internal
     InheritDirection    ///< Direction is unspecified and should come from the container
+};
+
+enum DocumentResource {
+    ChangeTrackerResource = KoDocumentResource::KoTextStart + 1, ///< KoChangeTracker
+    InlineTextObjectManager, ///< The KoText inline-text-object manager. KoInlineTextObjectManager
+    StyleManager            ///< The KoStyleManager
 };
 
 /// convert the string version of directions (as specified in XSL and ODF) to the Direction enum

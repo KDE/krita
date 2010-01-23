@@ -239,6 +239,7 @@ struct KisCubicCurve::Data : public QSharedData {
     QList<QPointF> points;
     mutable bool validSpline;
     void updateSpline();
+    void keepSorted();
 };
 
 void KisCubicCurve::Data::updateSpline()
@@ -248,12 +249,18 @@ void KisCubicCurve::Data::updateSpline()
     spline.createSpline(points);
 }
 
+void KisCubicCurve::Data::keepSorted()
+{
+    qSort(points.begin(), points.end(), pointLessThan);
+}
+
 struct KisCubicCurve::Private {
     QSharedDataPointer<Data> data;
 };
 
 KisCubicCurve::KisCubicCurve() : d(new Private)
 {
+    d->data = new Data;
     QPointF p;
     p.rx() = 0.0; p.ry() = 0.0;
     d->data->points.append(p);
@@ -267,6 +274,7 @@ KisCubicCurve::KisCubicCurve(const QList<QPointF>& points) : d(new Private)
     d->data = new Data;
     d->data->points = points;
     d->data->validSpline = false;
+    d->data->keepSorted();
 }
 
 KisCubicCurve::KisCubicCurve(const KisCubicCurve& curve) : d(new Private(*curve.d))
@@ -307,14 +315,14 @@ void KisCubicCurve::setPoint(int idx, const QPointF& point)
 {
     d->data.detach();
     d->data->points[idx] = point;
-    qSort(d->data->points.begin(), d->data->points.end(), pointLessThan);
+    d->data->keepSorted();
 }
 
 int KisCubicCurve::addPoint(const QPointF& point)
 {
     d->data.detach();
     d->data->points.append(point);
-    qSort(d->data->points.begin(), d->data->points.end(), pointLessThan);
+    d->data->keepSorted();
     return d->data->points.indexOf(point);
 }
 

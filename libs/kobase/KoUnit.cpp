@@ -29,7 +29,7 @@
 QStringList KoUnit::listOfUnitName(bool hidePixel)
 {
     QStringList lst;
-    for (uint i = 0 ; i <= KoUnit::LastUnit ; ++i) {
+    for (int i = KoUnit::Millimeter; i <= KoUnit::Cicero ; ++i) {
         Unit unit = static_cast<Unit>(i);
         if (i != Pixel || hidePixel == false)
             lst.append(KoUnit::unitDescription(KoUnit(unit)));
@@ -92,7 +92,7 @@ qreal KoUnit::toUserValue(qreal ptValue) const
     }
 }
 
-qreal KoUnit::ptToUnit(const qreal ptValue, const KoUnit unit)
+qreal KoUnit::ptToUnit(const qreal ptValue, const KoUnit &unit)
 {
     switch (unit.m_unit) {
     case Millimeter:
@@ -143,7 +143,7 @@ qreal KoUnit::fromUserValue(qreal value) const
     }
 }
 
-qreal KoUnit::fromUserValue(const QString& value, bool* ok) const
+qreal KoUnit::fromUserValue(const QString &value, bool *ok) const
 {
     return fromUserValue(KGlobal::locale()->readNumber(value, ok));
 }

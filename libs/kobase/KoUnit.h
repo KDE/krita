@@ -22,6 +22,7 @@
 #define KOUNIT_H
 #include <QtCore/QString>
 #include <QtCore/QStringList>
+#include <QtCore/QVariant>
 #include <math.h> // for floor
 #include "kobase_export.h"
 
@@ -56,17 +57,14 @@ class KOBASE_EXPORT KoUnit
 public:
     /** Length units supported by KOffice. */
     enum Unit {
-        Millimeter = 0,
-        Point = 1,
-        Inch = 2,
-        Centimeter = 3,
-        Decimeter = 4,
-        Pica = 5, // pica
-        Cicero = 6, // cicero
-        Pixel = 7, // pixel (not really used yet
-// XXX update LastUnit and rulers to allow for the new Pixel!
-        LastUnit = Pixel// update when adding a new unit
-        // when adding a new unit, make sure to implement support for it in koRuler too
+        Millimeter,
+        Point,  ///< Postscript point, 1/72th of an Inco
+        Inch,
+        Centimeter,
+        Decimeter,
+        Pica,
+        Cicero,
+        Pixel
     };
 
     /** Construction requires initialization. The factor is for variable factor units like pixel */
@@ -74,12 +72,16 @@ public:
         m_unit = unit; m_pixelConversion = factor;
     }
 
-    KoUnit& operator=(const Unit unit) {
+    KoUnit& operator=(Unit unit) {
         m_unit = unit; m_pixelConversion = 1.0; return *this;
     }
 
-    bool operator!=(const KoUnit &ku) {
-        return m_unit != ku.m_unit;
+    bool operator!=(const KoUnit &other) const {
+        return !operator==(other);
+    }
+
+    bool operator==(const KoUnit &other) const {
+        return m_unit == other.m_unit;
     }
 
     /**
@@ -154,7 +156,7 @@ public:
      * Unlike KoUnit::ptToUnit the return value remains unrounded, so that it can be used in complex calculation
      * \return the converted value
      */
-    static qreal ptToUnit(const qreal ptValue, const KoUnit unit);
+    static qreal ptToUnit(const qreal ptValue, const KoUnit &unit);
 
     /// This method is the one to use to display a value in a dialog
     /// @return the value @p ptValue converted the unit and rounded, ready to be displayed
@@ -169,28 +171,30 @@ public:
     /// @param ok if set, the pointed bool is set to true if the value could be
     /// converted to a qreal, and to false otherwise.
     /// @return the value converted to points for internal use
-    qreal fromUserValue(const QString& value, bool* ok = 0) const;
+    qreal fromUserValue(const QString &value, bool *ok = 0) const;
 
     /// Convert a unit name into a KoUnit
-    /// @param _unitName name to convert
+    /// @param unitName name to convert
     /// @param ok if set, it will be true if the unit was known, false if unknown
-    static KoUnit unit(const QString &_unitName, bool* ok = 0);
+    static KoUnit unit(const QString &unitName, bool *ok = 0);
     /// Get the name of a unit
-    static QString unitName(KoUnit _unit);
+    static QString unitName(KoUnit unit);
     /// Get the full (translated) description of a unit
-    static QString unitDescription(KoUnit _unit);
+    static QString unitDescription(KoUnit unit);
     static QStringList listOfUnitName(bool hidePixel = true);
 
     /// Get the index of this unit in the list of names
     /// @param hidePixel count as if the Pixel unit hadn't been shown in the list
     uint indexInList(bool hidePixel = true) const;
 
-    /// parse common %KOffice and OO values, like "10cm", "5mm" to pt
-    static qreal parseValue(const QString& value, qreal defaultVal = 0.0);
+    /// parse common %KOffice and Odf values, like "10cm", "5mm" to pt
+    static qreal parseValue(const QString &value, qreal defaultVal = 0.0);
 
 private:
     Unit m_unit;
     qreal m_pixelConversion;
 };
+
+Q_DECLARE_METATYPE(KoUnit)
 
 #endif

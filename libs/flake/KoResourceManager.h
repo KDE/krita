@@ -18,8 +18,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
  */
-#ifndef KO_CANVAS_RESOURCE_PROVIDER_H
-#define KO_CANVAS_RESOURCE_PROVIDER_H
+#ifndef KO_RESOURCEMANAGER_H
+#define KO_RESOURCEMANAGER_H
 
 #include <QObject>
 #include <QList>
@@ -315,4 +315,4 @@ private:
     Private *const d;
 };
 
-#endif // KO_CANVAS_RESOURCE_PROVIDER_H
+#endif

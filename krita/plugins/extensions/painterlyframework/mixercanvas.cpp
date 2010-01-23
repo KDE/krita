@@ -55,8 +55,6 @@ MixerCanvas::MixerCanvas(QWidget *parent)
 {
     m_viewConverter->setZoom(1.0);
 
-    m_mixerTool = new MixerTool(this);
-
     m_image = QImage(size(), QImage::Format_ARGB32);
     m_image.fill(0);
 
@@ -67,6 +65,8 @@ MixerCanvas::MixerCanvas(QWidget *parent)
         cs = KoColorSpaceRegistry::instance()->rgb16();
     }
     m_paintDevice = new KisPaintDevice(cs, "Mixer");
+    m_mixerTool = new MixerTool(this);
+
 }
 
 MixerCanvas::~MixerCanvas()

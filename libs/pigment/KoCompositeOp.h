@@ -20,6 +20,7 @@
 #define KOCOMPOSITEOP_H
 
 #include <QtCore>
+#include <klocale.h>
 
 #include "pigment_export.h"
 

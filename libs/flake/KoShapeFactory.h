@@ -37,6 +37,7 @@ class KoProperties;
 class KoShapeConfigFactoryBase;
 class KoShapeConfigWidgetBase;
 class KoDataCenter;
+class KoResourceManager;
 
 #define SHAPETEMPLATE_MIMETYPE "application/x-flake-shapetemplate"
 #define SHAPEID_MIMETYPE "application/x-flake-shapeId"
@@ -237,6 +238,17 @@ public:
      * @see setHidden()
      */
     bool hidden() const;
+
+    /**
+     * This slot is called whenever there is a new document resource
+     * manager that is created. The factory may reimplement this in
+     * order to get existing resources or put factory specific resources in.
+     * In case the factory creates new resources it is adviced to parent
+     * them to the manager (which is a QObject) for memory management
+     * purposes.
+     * @param manager the new manager
+     */
+    virtual void newDocumentResourceManager(KoResourceManager *manager);
 
 protected:
 

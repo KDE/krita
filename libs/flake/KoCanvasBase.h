@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006, 2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -163,6 +163,12 @@ public:
      * Return a pointer to the resource manager associated with this
      * canvas. The resource manager contains per-canvas settings such
      * as current foreground and background color.
+     * If instead of per-canvas resources you need per-document resources
+     * you can by going via the shapeController instead;
+     * @code
+     *   canvasBase->shapeController()->resourceManager();
+     * @endcode
+     * @see KoShapeController::resourceManager()
      */
     KoResourceManager *resourceManager() const;
 

@@ -190,4 +190,9 @@ void KoShapeFactory::setHidden(bool hidden)
     d->hidden = hidden;
 }
 
+void KoShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+{
+    Q_UNUSED(manager);
+}
+
 #include <KoShapeFactory.moc>

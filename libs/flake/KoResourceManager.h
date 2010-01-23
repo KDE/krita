@@ -38,7 +38,7 @@ class KoLineBorder;
  * The KoCanvasResource contains a set of per-canvas
  * properties, like current foreground color, current background
  * color and more.
- * \sa KoResourceManager
+ * \sa KoResourceManager KoCanvasBase::resourceManager()
  */
 namespace KoCanvasResource
 {
@@ -71,11 +71,56 @@ enum CanvasResource {
 }
 
 /**
+ * The KoDocumentResource contains a set of per-document
+ * properties.
+ * \sa KoResourceManager KoShapeCollection::resourceManager()
+ */
+namespace KoDocumentResource
+{
+/**
+ * This enum holds identifiers to the resources that can be stored in here.
+ */
+enum DocumentResource {
+    InlineTextObjectManager, ///< The KoText inline-text-object manager.
+    UndoStackResource,      ///< The document-wide undo stack (KUndoStack)
+    ImageCollection,        ///< The KoImageCollection for the document
+
+    KarbonStart = 1000,      ///< Base number for karbon specific values.
+    KexiStart = 2000,        ///< Base number for kexi specific values.
+    KivioStart = 3000,       ///< Base number for kivio specific values.
+    KPlatoStart = 4000,      ///< Base number for kplato specific values.
+    KPresenterStart = 5000,  ///< Base number for kpresenter specific values.
+    KritaStart = 6000,       ///< Base number for krita specific values.
+    KSpreadStart = 7000,     ///< Base number for kspread specific values.
+    KWordStart = 8000,        ///< Base number for kword specific values.
+    KoPageAppStart = 9000    ///< Base number for KoPageApp specific values.
+};
+}
+
+/**
  * The KoResourceManager contains a set of per-canvas
  * properties, like current foreground color, current background
  * color and more. All tools belonging to the current canvas are
  * notified when a Resource changes (is set).
- * The properties come from the KoCanvasResource::CanvasResource enum.
+ * The properties come from the KoCanvasResource::CanvasResource enum or the
+ * KoDocumentResource::DocumentResource depending on which manager you got.
+ * See KoCanvasBase::resourceManager KoShapeController::resourceManager
+ *
+ * The manager can contain all sorts of variable types and there are accessors
+ * for the most common ones.  All variables are always stored inside a QVariant
+ * instance internally and you can always just use the resource() method to get
+ * that directly.
+ * The way to store arbitairy data objects that are stored as pointers you can use
+ * the following code snippets;
+ * @code
+ *  QVariant variant;
+ *  variant.setValue<void*>(textShapeData->document());
+ *  resourceManager->setResource(KoText::CurrentTextDocument, variant);
+ *  // and get it out again.
+ *  QVariant var = resourceManager->resource(KoText::CurrentTextDocument);
+ *  document = static_cast<QTextDocument*>(var.value<void*>());
+ * @endcode
+ * @code
  */
 class FLAKE_EXPORT KoResourceManager : public QObject
 {

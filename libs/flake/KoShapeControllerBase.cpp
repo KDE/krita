@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006, 2010 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,11 +19,41 @@
 */
 
 #include "KoShapeControllerBase.h"
+#include "KoResourceManager.h"
+#include "KoShapeRegistry.h"
+
+class KoShapeControllerBasePrivate
+{
+public:
+    KoShapeControllerBasePrivate()
+        : resourceManager(new KoResourceManager())
+    {
+        KoShapeRegistry *registry = KoShapeRegistry::instance();
+        foreach (const QString &id, registry->keys()) {
+            KoShapeFactory *shapeFactory = registry->value(id);
+            shapeFactory->newDocumentResourceManager(resourceManager);
+        }
+    }
+
+    ~KoShapeControllerBasePrivate()
+    {
+        delete resourceManager;
+    }
+
+    KoResourceManager *resourceManager;
+};
 
 KoShapeControllerBase::KoShapeControllerBase()
+    : d(new KoShapeControllerBasePrivate())
 {
 }
 
 KoShapeControllerBase::~KoShapeControllerBase()
 {
+    delete d;
+}
+
+KoResourceManager *KoShapeControllerBase::resourceManager() const
+{
+    return d->resourceManager;
 }

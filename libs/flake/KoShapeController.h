@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -32,6 +32,7 @@ class KoShape;
 class KoShapeControllerBase;
 class QUndoCommand;
 class KoDataCenter;
+class KoResourceManager;
 
 /**
  * Class used by tools to maintain the list of shapes.
@@ -117,6 +118,15 @@ public:
      * @return The data center map
      */
     QMap<QString, KoDataCenter *> dataCenterMap();
+
+    /**
+     * Return a pointer to the resource manager associated with the
+     * shape-set (typically a document). The resource manager contains
+     * document wide resources * such as variable managers, the image
+     * collection and others.
+     * @see KoCanvasBase::resourceManager()
+     */
+    KoResourceManager *resourceManager() const;
 
 private:
     class Private;

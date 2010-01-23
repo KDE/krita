@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -39,7 +39,12 @@
 class KoShapeController::Private
 {
 public:
-    Private() : canvas(0), shapeController(0) {}
+    Private()
+        : canvas(0),
+        shapeController(0)
+    {
+    }
+
     KoCanvasBase *canvas;
     KoShapeControllerBase *shapeController;
 
@@ -157,4 +162,9 @@ KoDataCenter * KoShapeController::dataCenter(const QString &dataCenterName)
 QMap<QString, KoDataCenter *> KoShapeController::dataCenterMap()
 {
     return d->shapeController->dataCenterMap();
+}
+
+KoResourceManager *KoShapeController::resourceManager() const
+{
+    return d->shapeController->resourceManager();
 }

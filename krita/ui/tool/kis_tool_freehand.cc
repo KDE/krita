@@ -271,7 +271,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         }
     default:
         ;
-    };
+    }
 
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;

@@ -35,6 +35,8 @@ public:
     KisCubicCurve();
     KisCubicCurve(const QList<QPointF>& points);
     KisCubicCurve(const QVector<QPointF>& points);
+    KisCubicCurve(const KisCubicCurve& curve);
+    KisCubicCurve& operator=(const KisCubicCurve& curve);
 public:
     qreal value(qreal x) const;
     QList<QPointF> points() const;
@@ -47,6 +49,7 @@ public:
     int addPoint(const QPointF& point);
     void removePoint(int idx);
 private:
+    struct Data;
     struct Private;
     Private* const d;
 };

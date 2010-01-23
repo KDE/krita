@@ -28,23 +28,16 @@
 class KoShape;
 class KoTextPage;
 
-class KOTEXT_EXPORT KoPageProvider : public KoDataCenter
+/// \internal  this is a hack for kpresenter
+class KOTEXT_EXPORT KoPageProvider
 {
 public:
     KoPageProvider();
     virtual ~KoPageProvider();
 
-    /// reimplemented
-    virtual bool completeLoading(KoStore *store);
-
-    /// reimplemented
-    virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context);
-
     /**
      * Get the page number for the given shape
      */
-    virtual KoTextPage * page( KoShape * shape ) = 0;
-
-    static const char ID[];
+    virtual KoTextPage *page(KoShape *shape) = 0;
 };
 #endif // KOPAGEPROVIDER_H

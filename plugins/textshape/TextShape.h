@@ -89,9 +89,6 @@ public:
      */
     virtual void saveOdf(KoShapeSavingContext & context) const;
 
-    /// reimplemented
-    virtual void init(const QMap<QString, KoDataCenter *> & dataCenterMap);
-
     KoTextShapeData *textShapeData() {
         return m_textShapeData;
     }
@@ -107,6 +104,9 @@ public:
 
     virtual void update(const QRectF &shape) const;
 
+    // required for kpresenter hack
+    void setPageProvider(KoPageProvider *provider) { m_pageProvider = provider; }
+
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement & element, KoShapeLoadingContext & context);
 
@@ -119,7 +119,7 @@ private:
     bool m_demoText;
     mutable QMutex m_mutex;
     mutable QWaitCondition m_waiter;
-    KoPageProvider * m_pageProvider;
+    KoPageProvider *m_pageProvider;
 
     QRegion m_paintRegion;
 };

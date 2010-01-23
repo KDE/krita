@@ -56,7 +56,6 @@ TextShapeFactory::TextShapeFactory(QObject *parent)
 KoShape *TextShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources) const
 {
     TextShape *text = new TextShape(m_inlineTextObjectManager);
-    text->init(dataCenterMap);
     KoTextDocument document(text->textShapeData()->document());
     if (documentResources) {
         document.setUndoStack(documentResources->undoStack());
@@ -64,6 +63,10 @@ KoShape *TextShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *
         if (documentResources->hasResource(KoText::StyleManager)) {
             KoStyleManager *styleManager = static_cast<KoStyleManager *>(documentResources->resource(KoText::StyleManager).value<void*>());
             document.setStyleManager(styleManager);
+        }
+        if (documentResources->hasResource(KoText::PageProvider)) {
+            KoPageProvider *pp = static_cast<KoPageProvider *>(documentResources->resource(KoText::PageProvider).value<void*>());
+            text->setPageProvider(pp);
         }
     }
 

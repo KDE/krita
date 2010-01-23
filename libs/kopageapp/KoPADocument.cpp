@@ -21,6 +21,7 @@
 #include "KoPADocument.h"
 
 #include <KoStore.h>
+#include <KoResourceManager.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoOdfStylesReader.h>
@@ -82,7 +83,9 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
     }
 
     resourceManager()->setUndoStack(undoStack());
-    d->dataCenterMap[KoPageProvider::ID] = new KoPAPageProvider();
+    QVariant variant;
+    variant.setValue<void*>(new KoPAPageProvider());
+    resourceManager()->setResource(KoText::PageProvider, variant);
     loadConfig();
 }
 
@@ -560,7 +563,8 @@ KoPageApp::PageType KoPADocument::pageType() const
 QPixmap KoPADocument::pageThumbnail(KoPAPageBase* page, const QSize& size)
 {
     int pageNumber = pageIndex(page) + 1;
-    static_cast<KoPAPageProvider*>(d->dataCenterMap[KoPAPageProvider::ID])->setPageData(pageNumber, page);
+    QVariant var = resourceManager()->resource(KoText::PageProvider);
+    static_cast<KoPAPageProvider*>(var.value<void*>())->setPageData(pageNumber, page);
     return page->thumbnail(size);
 }
 

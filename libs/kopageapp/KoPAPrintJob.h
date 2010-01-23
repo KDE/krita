@@ -47,7 +47,7 @@ public slots:
 private:
     QPrinter m_printer;
     QList<KoPAPageBase*> m_pages;
-    KoPAPageProvider * m_pageProvider;
+    KoPAPageProvider *m_pageProvider;
 };
 
 #endif /* KOPAPRINTJOB_H */

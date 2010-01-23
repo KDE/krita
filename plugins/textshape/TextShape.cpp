@@ -370,11 +370,6 @@ bool TextShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingC
     return m_textShapeData->loadOdf(element, context);
 }
 
-void TextShape::init(const QMap<QString, KoDataCenter*> &dataCenterMap)
-{
-    m_pageProvider = dynamic_cast<KoPageProvider *>(dataCenterMap[KoPageProvider::ID]);
-}
-
 QTextDocument *TextShape::footnoteDocument()
 {
     if (m_footnotes == 0) {

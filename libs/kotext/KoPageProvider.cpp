@@ -20,26 +20,10 @@
 
 #include "KoPageProvider.h"
 
-const char KoPageProvider::ID[] = "PageProvider";
-
 KoPageProvider::KoPageProvider()
 {
 }
 
 KoPageProvider::~KoPageProvider()
 {
-}
-
-bool KoPageProvider::completeLoading(KoStore *store)
-{
-    Q_UNUSED( store );
-    return true;
-}
-
-bool KoPageProvider::completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context)
-{
-    Q_UNUSED( store );
-    Q_UNUSED( manifestWriter );
-    Q_UNUSED( context );
-    return true;
 }

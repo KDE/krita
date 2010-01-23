@@ -34,6 +34,7 @@ private slots:
     void testCopy();
     void testEdition();
     void testComparison();
+    void testSerialization();
 private:
     QPointF pt0, pt1, pt2, pt3, pt4, pt5;
 };

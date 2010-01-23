@@ -23,6 +23,7 @@
 #include <QPointF>
 #include <QList>
 #include <QSharedData>
+#include <QStringList>
 
 template <typename T>
 class KisTridiagonalSystem
@@ -335,4 +336,33 @@ void KisCubicCurve::removePoint(int idx)
 {
     d->data.detach();
     d->data->points.removeAt(idx);
+}
+
+QString KisCubicCurve::toString() const
+{
+    QString sCurve;
+    foreach(const QPointF & pair, d->data->points) {
+        sCurve += QString::number(pair.x());
+        sCurve += ',';
+        sCurve += QString::number(pair.y());
+        sCurve += ';';
+    }
+    return sCurve;
+}
+
+void KisCubicCurve::fromString(const QString& string)
+{
+    QStringList data = string.split(';');
+
+    QList<QPointF> points;
+
+    foreach(const QString & pair, data) {
+        if (pair.indexOf(',') > -1) {
+            QPointF p;
+            p.rx() = pair.section(',', 0, 0).toDouble();
+            p.ry() = pair.section(',', 1, 1).toDouble();
+            points.append(p);
+        }
+    }
+    setPoints(points);
 }

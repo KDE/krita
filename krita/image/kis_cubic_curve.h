@@ -50,6 +50,9 @@ public:
      */
     int addPoint(const QPointF& point);
     void removePoint(int idx);
+public:
+    QString toString() const;
+    void fromString(const QString&);
 private:
     struct Data;
     struct Private;

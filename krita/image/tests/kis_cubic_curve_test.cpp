@@ -115,5 +115,19 @@ void KisCubicCurveTest::testComparison()
 
 }
 
+void KisCubicCurveTest::testSerialization()
+{
+    QList<QPointF> pts;
+    pts.push_back(pt1);
+    pts.push_back(pt2);
+    pts.push_back(pt4);
+    KisCubicCurve cc1(pts);
+    QString s = cc1.toString();
+    QCOMPARE(s, QString("0.1,0;0.5,0.7;0.9,1;"));
+    KisCubicCurve cc2;
+    cc2.fromString(s);
+    QVERIFY(cc1 == cc2);
+}
+
 QTEST_KDEMAIN(KisCubicCurveTest, GUI)
 #include "kis_cubic_curve_test.moc"

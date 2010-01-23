@@ -20,7 +20,7 @@
 
 #include "kis_debug.h"
 #include "KoDocument.h"
-#include <KoUndoStack.h>
+#include <KUndoStack>
 
 KisUndoAdapter::KisUndoAdapter(KoDocument* doc): m_doc(doc)
 {

@@ -22,7 +22,6 @@
 #include <klocale.h>
 
 #include <KoShape.h>
-#include <KoUndoStack.h>
 #include <KoShapeContainer.h>
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
@@ -56,6 +55,7 @@
 
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
+#include <KoResourceManager.h>
 #include <KoDataCenter.h>
 #include <commands/kis_image_layer_add_command.h>
 #include <kis_undo_adapter.h>
@@ -118,7 +118,7 @@ KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
         shapeFactory->populateDataCenterMap(m_d->dataCenterMap);
     }
 
-    m_d->dataCenterMap["UndoStack"] = doc->undoStack();
+    resourceManager()->setUndoStack(doc->undoStack());
 }
 
 

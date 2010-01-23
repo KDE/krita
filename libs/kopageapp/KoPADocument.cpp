@@ -21,7 +21,6 @@
 #include "KoPADocument.h"
 
 #include <KoStore.h>
-#include <KoUndoStack.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoOdfStylesReader.h>
@@ -82,8 +81,7 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
         shapeFactory->populateDataCenterMap(d->dataCenterMap);
     }
 
-    //Populate the document undoStack in the dataCenterMap. This can be used later by shapes for their undo/redo mechanism.
-    d->dataCenterMap["UndoStack"] = undoStack();
+    resourceManager()->setUndoStack(undoStack());
     d->dataCenterMap[KoPageProvider::ID] = new KoPAPageProvider();
     loadConfig();
 }

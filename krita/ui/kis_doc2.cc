@@ -43,6 +43,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
+#include <KUndoStack>
 
 // KOffice
 #include <KoApplication.h>
@@ -63,7 +64,6 @@
 #include <KoDocumentInfo.h>
 #include <KoShape.h>
 #include <KoToolManager.h>
-#include <KoUndoStack.h>
 
 // Krita Image
 #include <kis_config.h>

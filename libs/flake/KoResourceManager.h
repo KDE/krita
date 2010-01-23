@@ -1,6 +1,6 @@
 /*
    Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
-   Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
+   Copyright (C) 2007, 2009, 2010 Thomas Zander <zander@kde.org>
    Copyright (c) 2008 Carlos Licea <carlos.licea@kdemail.net>
 
    This library is free software; you can redistribute it and/or
@@ -32,6 +32,7 @@
 
 class KoShape;
 class KoLineBorder;
+class KUndoStack;
 
 /**
  * The KoCanvasResource contains a set of per-canvas
@@ -80,7 +81,6 @@ namespace KoDocumentResource
  * This enum holds identifiers to the resources that can be stored in here.
  */
 enum DocumentResource {
-    InlineTextObjectManager, ///< The KoText inline-text-object manager.
     UndoStackResource,      ///< The document-wide undo stack (KUndoStack)
     ImageCollection,        ///< The KoImageCollection for the document
 
@@ -91,8 +91,9 @@ enum DocumentResource {
     KPresenterStart = 5000,  ///< Base number for kpresenter specific values.
     KritaStart = 6000,       ///< Base number for krita specific values.
     KSpreadStart = 7000,     ///< Base number for kspread specific values.
-    KWordStart = 8000,        ///< Base number for kword specific values.
-    KoPageAppStart = 9000    ///< Base number for KoPageApp specific values.
+    KWordStart = 8000,       ///< Base number for kword specific values.
+    KoPageAppStart = 9000,   ///< Base number for KoPageApp specific values.
+    KoTextStart = 10000      ///< Base number for KoText specific values.
 };
 }
 
@@ -160,7 +161,7 @@ public:
      * specified resource does not exist.
      * @param key the key, based on KoCanvasResource::CanvasResource.
      */
-    QVariant resource(int key);
+    QVariant resource(int key) const;
 
     /**
      * Set the foregroundColor resource.
@@ -259,7 +260,7 @@ public:
      * Returns true if there is a resource set with the requested key.
      * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
-    bool hasResource(int key);
+    bool hasResource(int key) const;
 
     /**
      * Remove the resource with @p key from the provider.
@@ -267,6 +268,9 @@ public:
      * There will be a signal emitted with a variable that will return true on QVariable::isNull();
      */
     void clearResource(int key);
+
+    KUndoStack *undoStack() const;
+    void setUndoStack(KUndoStack *undoStack);
 
 signals:
     /**

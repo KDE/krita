@@ -30,7 +30,6 @@
 #include "KoTextLocator.h"
 #include "KoTextOdfSaveHelper.h"
 #include "KoTextPaste.h"
-#include "KoUndoStack.h"
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
 #include "changetracker/KoDeleteChangeMarker.h"
@@ -40,6 +39,7 @@
 #include "styles/KoTableCellStyle.h"
 
 #include <KLocale>
+#include <KUndoStack>
 
 #include <QApplication>
 #include <QFontDatabase>

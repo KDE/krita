@@ -33,7 +33,7 @@
 #include "KoTextDocumentLayout.h"
 #include "styles/KoParagraphStyle.h"
 #include "KoList.h"
-#include <KoUndoStack.h>
+#include <KUndoStack>
 
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
@@ -115,17 +115,17 @@ KoChangeTracker *KoTextDocument::changeTracker() const
     return resource.value<KoChangeTracker *>();
 }
 
-void KoTextDocument::setUndoStack(KoUndoStack *undoStack)
+void KoTextDocument::setUndoStack(KUndoStack *undoStack)
 {
     QVariant v;
-    v.setValue(undoStack);
+    v.setValue<void*>(undoStack);
     m_document->addResource(KoTextDocument::UndoStack, UndoStackURL, v);
 }
 
-KoUndoStack *KoTextDocument::undoStack() const
+KUndoStack *KoTextDocument::undoStack() const
 {
     QVariant resource = m_document->resource(KoTextDocument::UndoStack, UndoStackURL);
-    return resource.value<KoUndoStack *>();
+    return static_cast<KUndoStack*>(resource.value<void*>());
 }
 
 void KoTextDocument::setLists(const QList<KoList *> &lists)
@@ -134,7 +134,6 @@ void KoTextDocument::setLists(const QList<KoList *> &lists)
     v.setValue(lists);
     m_document->addResource(KoTextDocument::Lists, ListsURL, v);
 }
-
 
 QList<KoList *> KoTextDocument::lists() const
 {

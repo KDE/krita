@@ -63,7 +63,6 @@ struct Finalizer {
 #include <KoTextPage.h>
 #include <KoTextShapeContainerModel.h>
 #include <KoPageProvider.h>
-#include <KoUndoStack.h>
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
@@ -379,12 +378,6 @@ void TextShape::init(const QMap<QString, KoDataCenter*> &dataCenterMap)
     document.setStyleManager(styleManager);
     //KoInlineTextObjectManager *tom = dynamic_cast<KoInlineTextObjectManager *>(dataCenterMap["InlineTextObjectManager"]);
     //document.setInlineTextObjectManager(tom);
-    KoUndoStack *undoStack = dynamic_cast<KoUndoStack *>(dataCenterMap["UndoStack"]);
-    if (!undoStack) {
-        kWarning(32500) << "No KoUndoStack found in the dataCenterMap, creating a new one";
-        undoStack = new KoUndoStack();
-    }
-    document.setUndoStack(undoStack);
 //    KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(dataCenterMap["ChangeTracker"]);
 //    document.setChangeTracker(changeTracker);
     m_pageProvider = dynamic_cast<KoPageProvider *>(dataCenterMap[KoPageProvider::ID]);

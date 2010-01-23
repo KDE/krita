@@ -47,7 +47,7 @@ class KoMainWindow;
 class KoView;
 class KoDocumentInfo;
 class KoOpenPane;
-class KoUndoStack;
+class KUndoStack;
 
 class KoVersionInfo
 {
@@ -782,7 +782,7 @@ public slots:
     /**
      * Returns the global undo stack
      */
-    KoUndoStack *undoStack();
+    KUndoStack *undoStack();
     /**
      * Adds a command to the undo stack and executes it by calling the redo() function.
      * @param command command to add to the undo stack

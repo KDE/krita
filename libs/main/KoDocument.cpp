@@ -35,12 +35,12 @@
 #include "KoXmlNS.h"
 #include "KoOpenPane.h"
 #include "KoApplication.h"
-#include "KoUndoStack.h"
 
 #include <KoDpi.h>
 #include <KoXmlWriter.h>
 
 #include <kdialog.h>
+#include <KUndoStack>
 #include <kfileitem.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
@@ -172,7 +172,7 @@ public:
     QString templateType;
     QList<KoVersionInfo> versionInfo;
 
-    KoUndoStack* undoStack;
+    KUndoStack *undoStack;
 
     KoGridData gridData;
     KoGuidesData guidesData;
@@ -290,7 +290,7 @@ KoDocument::KoDocument(QWidget * parentWidget, QObject* parent, bool singleViewM
     d->pageLayout.leftMargin = 0;
     d->pageLayout.rightMargin = 0;
 
-    d->undoStack = new KoUndoStack(this);
+    d->undoStack = new KUndoStack(this);
     d->undoStack->createUndoAction(actionCollection());
     d->undoStack->createRedoAction(actionCollection());
 
@@ -2380,7 +2380,7 @@ QList<KoVersionInfo> & KoDocument::versionList()
     return d->versionInfo;
 }
 
-KoUndoStack* KoDocument::undoStack()
+KUndoStack* KoDocument::undoStack()
 {
     return d->undoStack;
 }

@@ -21,6 +21,7 @@
 #include "KoResourceManager.h"
 
 #include <QVariant>
+#include <KUndoStack>
 
 #include "KoShape.h"
 #include "KoLineBorder.h"
@@ -55,7 +56,7 @@ void KoResourceManager::setResource(int key, const QVariant &value)
     emit resourceChanged(key, value);
 }
 
-QVariant KoResourceManager::resource(int key)
+QVariant KoResourceManager::resource(int key) const
 {
     if (!d->resources.contains(key)) {
         QVariant empty;
@@ -208,7 +209,7 @@ QSizeF KoResourceManager::sizeResource(int key)
     return qvariant_cast<QSizeF>(resource(key));
 }
 
-bool KoResourceManager::hasResource(int key)
+bool KoResourceManager::hasResource(int key) const
 {
     return d->resources.contains(key);
 }
@@ -220,6 +221,20 @@ void KoResourceManager::clearResource(int key)
     d->resources.remove(key);
     QVariant empty;
     emit resourceChanged(key, empty);
+}
+
+KUndoStack *KoResourceManager::undoStack() const
+{
+    if (!hasResource(KoDocumentResource::UndoStackResource))
+        return 0;
+    return static_cast<KUndoStack*>(resource(KoDocumentResource::UndoStackResource).value<void*>());
+}
+
+void KoResourceManager::setUndoStack(KUndoStack *undoStack)
+{
+    QVariant variant;
+    variant.setValue<void*>(undoStack);
+    setResource(KoDocumentResource::UndoStackResource, variant);
 }
 
 #include <KoResourceManager.moc>

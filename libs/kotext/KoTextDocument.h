@@ -31,7 +31,7 @@
 
 class KoStyleManager;
 class KoInlineTextObjectManager;
-class KoUndoStack;
+class KUndoStack;
 class KoTextEditor;
 
 /**
@@ -74,10 +74,10 @@ public:
     KoChangeTracker *changeTracker() const;
 
     ///Sets the global undo stack
-    void setUndoStack(KoUndoStack *undoStack);
+    void setUndoStack(KUndoStack *undoStack);
 
     ///Returns the global undo stack
-    KoUndoStack *undoStack() const;
+    KUndoStack *undoStack() const;
 
     /// Sets the lists of the document
     void setLists(const QList<KoList *> &lists);

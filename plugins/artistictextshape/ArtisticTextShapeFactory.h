@@ -26,16 +26,13 @@ class KoShape;
 
 class ArtisticTextShapeFactory : public KoShapeFactory
 {
-    using KoShapeFactory::createDefaultShape;
-    using KoShapeFactory::createShape;
-
     Q_OBJECT
 
 public:
     explicit ArtisticTextShapeFactory(QObject *parent);
     ~ArtisticTextShapeFactory() {}
 
-    virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
+    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
     // reimplemented from KoShapeFactory
     virtual bool supports(const KoXmlElement & e) const;
 };

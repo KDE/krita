@@ -35,10 +35,9 @@ public:
     explicit TextShapeFactory(QObject *parent);
     ~TextShapeFactory() {}
 
-    virtual KoShape *createShape(const KoProperties *params, const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
-    virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
+    virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const;
+    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
     virtual bool supports(const KoXmlElement & e) const;
-    virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>  & dataCenterMap);
 
     virtual void newDocumentResourceManager(KoResourceManager *manager);
 

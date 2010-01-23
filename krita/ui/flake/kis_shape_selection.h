@@ -90,9 +90,8 @@ public:
     KisShapeSelectionFactory(QObject* parent);
     ~KisShapeSelectionFactory() {}
 
-    virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const {
+    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const {
         Q_UNUSED(documentResources);
-        Q_UNUSED(dataCenterMap);
         return 0;
     }
 };

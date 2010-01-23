@@ -23,12 +23,10 @@
 #ifndef KOSHAPECONTROLLERBASE_H
 #define KOSHAPECONTROLLERBASE_H
 
-#include <QMap>
 #include "flake_export.h"
 
 class KoShape;
 class QString;
-class KoDataCenter;
 class KoShapeControllerBasePrivate;
 class KoResourceManager;
 
@@ -57,13 +55,6 @@ public:
      * @param shape the shape to remove
      */
     virtual void removeShape(KoShape *shape) = 0;
-
-    /**
-     * This method returns a map of KoDataCenter classes.
-     * Typically some class-factories have created DataCenters and added them to this map.
-     * This map is started from scratch with each new document (ehem KoShapeControllerBase)
-     */
-    virtual QMap<QString, KoDataCenter *>  dataCenterMap() const = 0;
 
     /**
      * Return a pointer to the resource manager associated with the

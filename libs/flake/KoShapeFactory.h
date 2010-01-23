@@ -26,7 +26,6 @@
 #include <QString>
 #include <QWidget>
 #include <QList>
-#include <QMap>
 
 #include "flake_export.h"
 
@@ -137,14 +136,6 @@ public:
     QList<KoShapeConfigFactoryBase*> panelFactories();
 
     /**
-     * pouplates the dataCenterMap with any datacenters the shapes might need.
-     * The default implementation does nothing
-     * @param dataCenterMap The map which the shapeControllerBase owns.
-     */
-    virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>  &dataCenterMap) {
-        Q_UNUSED(dataCenterMap)
-    }
-    /**
      * return the id for the shape this factory creates.
      * @return the id for the shape this factory creates.
      */
@@ -219,7 +210,7 @@ public:
      * @return a new shape
      * @see createShape() newDocumentResourceManager()
      */
-    virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const = 0;
+    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const = 0;
 
     /**
      * This method should be implemented by factories to create a shape based on a set of
@@ -233,7 +224,7 @@ public:
      * @see createDefaultShape() newDocumentResourceManager()
      * @see KoShapeTemplate::properties
      */
-    virtual KoShape *createShape(const KoProperties *params, const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
+    virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const;
 
 protected:
 

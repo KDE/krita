@@ -46,7 +46,7 @@ CollectionShapeFactory::~CollectionShapeFactory()
     delete m_shape;
 }
 
-KoShape *CollectionShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources) const
+KoShape *CollectionShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
     QList<KoShape*> shapes;
 
@@ -89,7 +89,7 @@ KoShape *CollectionShapeFactory::createDefaultShape(const QMap<QString, KoDataCe
         }
 
         KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-        KoShapeLoadingContext context(loadingContext, dataCenterMap, documentResources);
+        KoShapeLoadingContext context(loadingContext, documentResources);
 
         KoXmlElement element;
 

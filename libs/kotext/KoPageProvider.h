@@ -21,8 +21,6 @@
 #ifndef KOPAGEPROVIDER_H
 #define KOPAGEPROVIDER_H
 
-#include <KoDataCenter.h>
-
 #include "kotext_export.h"
 
 class KoShape;

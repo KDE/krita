@@ -38,7 +38,7 @@ KoConnectionShapeFactory::KoConnectionShapeFactory(QObject* parent)
     setLoadingPriority(1);
 }
 
-KoShape* KoConnectionShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &, KoResourceManager *) const
+KoShape* KoConnectionShapeFactory::createDefaultShape(KoResourceManager *) const
 {
     KoConnectionShape * shape = new KoConnectionShape();
     shape->setBorder(new KoLineBorder());

@@ -31,11 +31,9 @@ public:
     VideoShapeFactory(QObject *parent);
     ~VideoShapeFactory() {}
 
-    virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
+    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
     virtual bool supports(const KoXmlElement &e) const;
 
-    /// reimplemented
-    virtual void populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap);
     /// reimplemented
     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
     virtual void newDocumentResourceManager(KoResourceManager *manager);

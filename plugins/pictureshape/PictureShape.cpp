@@ -61,8 +61,8 @@ void RenderQueue::renderImage()
 //////////////
 PictureShape::PictureShape()
     : KoFrameShape(KoXmlNS::draw, "image"),
-    m_renderQueue(new RenderQueue(this)),
-    m_imageCollection(0)
+    m_imageCollection(0),
+    m_renderQueue(new RenderQueue(this))
 {
     setKeepAspectRatio(true);
 }

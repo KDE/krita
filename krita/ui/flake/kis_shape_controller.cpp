@@ -112,12 +112,6 @@ KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
     m_d->nameServer = nameServer;
     m_d->image = 0;
     m_d->selectionShapeToBeAdded = false;
-    // Ask every shapefactory to populate the dataCenterMap
-    QList<KoShapeFactory*> shapeFactories = KoShapeRegistry::instance()->values();
-    foreach(KoShapeFactory* shapeFactory, shapeFactories) {
-        shapeFactory->populateDataCenterMap(m_d->dataCenterMap);
-    }
-
     resourceManager()->setUndoStack(doc->undoStack());
 }
 

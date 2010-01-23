@@ -37,7 +37,7 @@ RectangleShapeFactory::RectangleShapeFactory(QObject *parent)
     setLoadingPriority(1);
 }
 
-KoShape *RectangleShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
+KoShape *RectangleShapeFactory::createDefaultShape(KoResourceManager *) const
 {
     RectangleShape *rect = new RectangleShape();
 

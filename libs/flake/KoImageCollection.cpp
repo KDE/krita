@@ -44,8 +44,9 @@ public:
     QMap<QByteArray, KoImageDataPrivate*> storeImages;
 };
 
-KoImageCollection::KoImageCollection()
-    : d(new Private())
+KoImageCollection::KoImageCollection(QObject *parent)
+    : QObject(parent),
+    d(new Private())
 {
 }
 

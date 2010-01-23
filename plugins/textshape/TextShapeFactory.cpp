@@ -53,7 +53,7 @@ TextShapeFactory::TextShapeFactory(QObject *parent)
     addTemplate(t);
 }
 
-KoShape *TextShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources) const
+KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
     TextShape *text = new TextShape(m_inlineTextObjectManager);
     KoTextDocument document(text->textShapeData()->document());
@@ -73,9 +73,9 @@ KoShape *TextShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *
     return text;
 }
 
-KoShape *TextShapeFactory::createShape(const KoProperties *params, const QMap<QString, KoDataCenter *> &dataCenterMap, KoResourceManager *documentResources) const
+KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
 {
-    TextShape *shape = static_cast<TextShape*>(createDefaultShape(dataCenterMap, documentResources));
+    TextShape *shape = static_cast<TextShape*>(createDefaultShape(documentResources));
     shape->setSize(QSizeF(300, 200));
     shape->setDemoText(params->boolProperty("demo"));
     QString text("text");
@@ -92,10 +92,6 @@ bool TextShapeFactory::supports(const KoXmlElement & e) const
     return (e.localName() == "text-box" && e.namespaceURI() == KoXmlNS::draw);
 }
 
-void TextShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>  & dataCenterMap)
-{
-}
-
 void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
 {
     m_inlineTextObjectManager = new KoInlineTextObjectManager(manager);
@@ -103,13 +99,13 @@ void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
     variant.setValue<void*>(m_inlineTextObjectManager);
     manager->setResource(KoText::InlineTextObjectManager, variant);
 
-    if (!manager->hasResource(KoDocumentResource::UndoStackResource)) {
+    if (!manager->hasResource(KoDocumentResource::UndoStack)) {
         kWarning(32500) << "No KUndoStack found in the document resource manager, creating a new one";
         manager->setUndoStack(new KUndoStack(manager));
     }
-    variant.setValue<void*>(new KoChangeTracker());
-    manager->setResource(KoText::ChangeTrackerResource, variant);
-    variant.setValue<void*>(new KoStyleManager());
+    variant.setValue<void*>(new KoChangeTracker(manager));
+    manager->setResource(KoText::ChangeTracker, variant);
+    variant.setValue<void*>(new KoStyleManager(manager));
     manager->setResource(KoText::StyleManager, variant);
 }
 

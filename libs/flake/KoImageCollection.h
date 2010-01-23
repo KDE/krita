@@ -21,6 +21,7 @@
 
 #include "flake_export.h"
 
+#include <QObject>
 #include <KoDataCenter.h>
 
 class QImage;
@@ -32,11 +33,12 @@ class KoImageData;
  * An collection of KoImageData objects to allow loading and saving them all together to the KoStore.
  * It also makes sure that if the same image is added to the collection that they share the internal data structure.
  */
-class FLAKE_EXPORT KoImageCollection : public KoDataCenter
+class FLAKE_EXPORT KoImageCollection : public QObject, public KoDataCenter
 {
+    Q_OBJECT
 public:
     /// constructor
-    KoImageCollection();
+    KoImageCollection(QObject *parent = 0);
     virtual ~KoImageCollection();
 
     /// reimplemented

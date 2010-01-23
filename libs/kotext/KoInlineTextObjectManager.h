@@ -24,8 +24,6 @@
 #include "KoVariableManager.h"
 #include "kotext_export.h"
 
-#include <KoDataCenter.h>
-
 // Qt + kde
 #include <QHash>
 #include <QTextCharFormat>

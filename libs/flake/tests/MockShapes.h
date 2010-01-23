@@ -101,9 +101,6 @@ public:
     bool contains(KoShape* shape) {
         return m_shapes.contains(shape);
     }
-    QMap<QString, KoDataCenter *>  dataCenterMap() const {
-        return QMap<QString, KoDataCenter *>();
-    }
 private:
     QSet<KoShape * > m_shapes;
 };

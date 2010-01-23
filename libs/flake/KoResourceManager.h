@@ -22,7 +22,7 @@
 #define KO_CANVAS_RESOURCE_PROVIDER_H
 
 #include <QObject>
-#include <QHash>
+#include <QList>
 #include <QVariant>
 #include <QSizeF>
 
@@ -82,7 +82,7 @@ namespace KoDocumentResource
  * This enum holds identifiers to the resources that can be stored in here.
  */
 enum DocumentResource {
-    UndoStackResource,      ///< The document-wide undo stack (KUndoStack)
+    UndoStack,      ///< The document-wide undo stack (KUndoStack)
     ImageCollection,        ///< The KoImageCollection for the document
 
     KarbonStart = 1000,      ///< Base number for karbon specific values.

@@ -79,8 +79,7 @@ void TestKoShapeRegistry::testCreateShapes()
     // sensibly filled.
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext odfContext(stylesReader, 0);
-    QMap<QString, KoDataCenter *> dataCenterMap;
-    KoShapeLoadingContext shapeContext(odfContext, dataCenterMap, 0);
+    KoShapeLoadingContext shapeContext(odfContext, 0);
 
     KoShape * shape = registry->createShapeFromOdf(bodyElement, shapeContext);
     QVERIFY(shape == 0);
@@ -127,8 +126,7 @@ void TestKoShapeRegistry::testCreateFramedShapes()
     // sensibly filled.
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext odfContext(stylesReader, 0);
-    QMap<QString, KoDataCenter *> dataCenterMap;
-    KoShapeLoadingContext shapeContext(odfContext, dataCenterMap, 0);
+    KoShapeLoadingContext shapeContext(odfContext, 0);
 
     KoShape * shape = registry->createShapeFromOdf(bodyElement, shapeContext);
     QVERIFY(shape == 0);

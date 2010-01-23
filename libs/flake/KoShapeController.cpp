@@ -154,16 +154,6 @@ void KoShapeController::setShapeControllerBase(KoShapeControllerBase* shapeContr
     d->shapeController = shapeControllerBase;
 }
 
-KoDataCenter * KoShapeController::dataCenter(const QString &dataCenterName)
-{
-    return d->shapeController->dataCenterMap().value(dataCenterName, 0);
-}
-
-QMap<QString, KoDataCenter *> KoShapeController::dataCenterMap()
-{
-    return d->shapeController->dataCenterMap();
-}
-
 KoResourceManager *KoShapeController::resourceManager() const
 {
     return d->shapeController->resourceManager();

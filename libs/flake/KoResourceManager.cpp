@@ -22,6 +22,7 @@
 
 #include <QVariant>
 #include <KUndoStack>
+#include <KDebug>
 
 #include "KoShape.h"
 #include "KoLineBorder.h"
@@ -225,9 +226,9 @@ void KoResourceManager::clearResource(int key)
 
 KUndoStack *KoResourceManager::undoStack() const
 {
-    if (!hasResource(KoDocumentResource::UndoStackResource))
+    if (!hasResource(KoDocumentResource::UndoStack))
         return 0;
-    return static_cast<KUndoStack*>(resource(KoDocumentResource::UndoStackResource).value<void*>());
+    return static_cast<KUndoStack*>(resource(KoDocumentResource::UndoStack).value<void*>());
 }
 
 void KoResourceManager::setUndoStack(KUndoStack *undoStack)

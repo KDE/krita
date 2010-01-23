@@ -36,7 +36,7 @@ public:
     explicit VectorShapeFactory(QObject *parent);
     ~VectorShapeFactory() {}
 
-    virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
+    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
 
     /// Reimplemented
     virtual bool supports(const KoXmlElement & e) const;

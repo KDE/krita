@@ -32,7 +32,7 @@ public:
     explicit DivineProportionShapeFactory(QObject *parent);
     ~DivineProportionShapeFactory() {}
 
-    virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
+    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
 
     QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };

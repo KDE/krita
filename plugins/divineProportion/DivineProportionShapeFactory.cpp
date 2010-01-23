@@ -29,7 +29,7 @@ DivineProportionShapeFactory::DivineProportionShapeFactory(QObject *parent)
     setIcon( "divine-shape" );
 }
 
-KoShape *DivineProportionShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
+KoShape *DivineProportionShapeFactory::createDefaultShape(KoResourceManager *) const
 {
     DivineProportionShape *shape = new DivineProportionShape();
     shape->setShapeId(DivineProportionShape_SHAPEID);

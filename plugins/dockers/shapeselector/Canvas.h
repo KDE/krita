@@ -41,14 +41,9 @@ class DummyShapeController : public KoShapeControllerBase
 {
 public:
     DummyShapeController();
-    ~DummyShapeController();
 
     virtual void addShape( KoShape* ) {}
     virtual void removeShape( KoShape* ) {}
-    virtual QMap<QString, KoDataCenter *>  dataCenterMap() const { return m_dataCenterMap; }
-
-private:
-    QMap<QString, KoDataCenter *> m_dataCenterMap;
 };
 
 class Canvas : public QWidget, public KoCanvasBase

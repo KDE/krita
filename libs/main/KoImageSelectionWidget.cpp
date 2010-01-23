@@ -202,8 +202,7 @@ KoShape *KoImageSelectionWidget::selectImageShape(KoResourceManager *documentRes
     }
     KoImageData *data = selectImage(documentResources->imageCollection(), parent);
     if (data) {
-        QMap<QString,KoDataCenter*> dc;
-        KoShape *shape = factory->createDefaultShape(dc, documentResources);
+        KoShape *shape = factory->createDefaultShape(documentResources);
         shape->setUserData(data);
         shape->setSize(data->imageSize());
         return shape;

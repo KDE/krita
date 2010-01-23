@@ -40,7 +40,7 @@ EllipseShapeFactory::EllipseShapeFactory(QObject *parent)
     setLoadingPriority(1);
 }
 
-KoShape *EllipseShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
+KoShape *EllipseShapeFactory::createDefaultShape(KoResourceManager *) const
 {
     EllipseShape *ellipse = new EllipseShape();
 

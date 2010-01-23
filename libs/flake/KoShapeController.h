@@ -25,13 +25,11 @@
 #include "flake_export.h"
 
 #include <QList>
-#include <QMap>
 
 class KoCanvasBase;
 class KoShape;
 class KoShapeControllerBase;
 class QUndoCommand;
-class KoDataCenter;
 class KoResourceManager;
 
 /**
@@ -104,20 +102,6 @@ public:
      * @param shapeControllerBase the new shapeControllerBase
      */
     void setShapeControllerBase(KoShapeControllerBase* shapeControllerBase);
-
-    /**
-     * @brief Returns pointer to data center with given name.
-     *
-     * @return pointer to requested data center if it exist, else null
-     */
-    KoDataCenter * dataCenter(const QString &dataCenterName);
-
-    /**
-     * @brief Get the dataCenterMap used in the shape controller base
-     *
-     * @return The data center map
-     */
-    QMap<QString, KoDataCenter *> dataCenterMap();
 
     /**
      * Return a pointer to the resource manager associated with the

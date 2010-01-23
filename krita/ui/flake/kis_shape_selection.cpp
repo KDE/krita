@@ -237,10 +237,8 @@ bool KisShapeSelection::loadSelection(KoStore* store)
         return false;
     }
 
-    QMap<QString, KoDataCenter*> dataCenterMap;
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
-    KoShapeLoadingContext shapeContext(context, dataCenterMap, 0);
-
+    KoShapeLoadingContext shapeContext(context, 0);
 
     KoXmlElement layerElement;
     forEachElement(layerElement, context.stylesReader().layerSet()) {

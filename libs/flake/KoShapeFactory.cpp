@@ -179,9 +179,9 @@ void KoShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
     Q_UNUSED(manager);
 }
 
-KoShape *KoShapeFactory::createShape(const KoProperties*, const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources) const
+KoShape *KoShapeFactory::createShape(const KoProperties*, KoResourceManager *documentResources) const
 {
-    return createDefaultShape(dataCenterMap, documentResources);
+    return createDefaultShape(documentResources);
 }
 
 #include <KoShapeFactory.moc>

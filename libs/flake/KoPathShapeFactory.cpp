@@ -38,7 +38,7 @@ KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
     setLoadingPriority(0);
 }
 
-KoShape *KoPathShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &, KoResourceManager *) const
+KoShape *KoPathShapeFactory::createDefaultShape(KoResourceManager *) const
 {
     KoPathShape* path = new KoPathShape();
     path->moveTo(QPointF(0, 50));
@@ -63,10 +63,6 @@ bool KoPathShapeFactory::supports(const KoXmlElement & e) const
     return false;
 }
 
-void KoPathShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap)
-{
-}
-
 void KoPathShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
 {
     // as we need an image collection for the pattern background
@@ -74,7 +70,7 @@ void KoPathShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
     // added to the data center map, in case the picture shape plugin
     // is not loaded
     if (manager->imageCollection() == 0) {
-        KoImageCollection *imgCol = new KoImageCollection();
+        KoImageCollection *imgCol = new KoImageCollection(manager);
         manager->setImageCollection(imgCol);
     }
 }

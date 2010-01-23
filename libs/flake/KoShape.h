@@ -200,13 +200,6 @@ public:
     void saveOdfCommonChildElements(KoShapeSavingContext &context) const;
 
     /**
-     * After the shape has been created this method is called so it can get access to any DataCenter it
-     * might want.
-     * The default implementation does nothing.
-     */
-    virtual void init(const QMap<QString, KoDataCenter*> &dataCenterMap);
-
-    /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
      * @see position()
      *

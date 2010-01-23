@@ -48,7 +48,7 @@ KritaShapeFactory::KritaShapeFactory(QObject* parent)
 
 }
 
-KoShape *KritaShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
+KoShape *KritaShapeFactory::createDefaultShape(KoResourceManager *) const
 {
     KritaShape* shape = new KritaShape(KUrl(), "sRGB built-in - (lcms internal)");
     return shape;

@@ -53,7 +53,7 @@ MusicShapeFactory::MusicShapeFactory( QObject* parent )
     setLoadingPriority( 1 );
 }
 
-KoShape *MusicShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
+KoShape *MusicShapeFactory::createDefaultShape(KoResourceManager *) const
 {
     static bool loadedFont = false;
     if (!loadedFont) {

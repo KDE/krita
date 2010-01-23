@@ -75,13 +75,6 @@ public:
      */
     QList<KoPAPageBase *> loadOdfPages( const KoXmlElement & body, KoPALoadingContext & context );
 
-    /// reimplemented
-    virtual bool completeLoading( KoStore* store );
-
-    /// reimplemented
-    virtual bool completeSaving( KoStore* store );
-
-
     /**
      * Save pages
      *
@@ -205,8 +198,6 @@ public:
     void setRulersVisible(bool visible);
     bool rulersVisible() const;
 
-    virtual QMap<QString, KoDataCenter *>  dataCenterMap() const;
-
     /**
      * Get the page on which the shape is located
      *
@@ -247,8 +238,6 @@ signals:
     void pageRemoved(KoPAPageBase* page);
 
 protected:
-    void insertIntoDataCenterMap(QString key, KoDataCenter *dc);
-
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
 
     /**

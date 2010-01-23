@@ -60,7 +60,7 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
 {
     d->pastedShapes.clear();
     KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-    KoShapeLoadingContext context(loadingContext, d->canvas->shapeController()->dataCenterMap(), d->canvas->shapeController()->resourceManager());
+    KoShapeLoadingContext context(loadingContext, d->canvas->shapeController()->resourceManager());
 
     QList<KoShape*> shapes(d->layer ? d->layer->childShapes(): d->canvas->shapeManager()->topLevelShapes());
 

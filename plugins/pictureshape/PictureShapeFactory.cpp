@@ -39,7 +39,7 @@ PictureShapeFactory::PictureShapeFactory(QObject *parent)
     setLoadingPriority(1);
 }
 
-KoShape *PictureShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources) const
+KoShape *PictureShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
     Q_UNUSED(documentResources);
     PictureShape * defaultShape = new PictureShape();
@@ -55,10 +55,6 @@ bool PictureShapeFactory::supports(const KoXmlElement &e) const
     return e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw;
 }
 
-void PictureShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap)
-{
-}
-
 QList<KoShapeConfigWidgetBase*> PictureShapeFactory::createShapeOptionPanels()
 {
     QList<KoShapeConfigWidgetBase*> panels;
@@ -69,5 +65,5 @@ QList<KoShapeConfigWidgetBase*> PictureShapeFactory::createShapeOptionPanels()
 void PictureShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
 {
     if (!manager->imageCollection())
-        manager->setImageCollection(new KoImageCollection());
+        manager->setImageCollection(new KoImageCollection(manager));
 }

@@ -98,9 +98,7 @@ void KisToolSelectRectangular::LokalTool::finishRect(const QRectF& rect)
         KoShape* shape;
         KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("RectangleShape");
         if (rectFactory) {
-            // it is ok to use a empty map here as the data is not needed.
-            QMap<QString, KoDataCenter *> dataCenterMap;
-            shape = rectFactory->createDefaultShape(dataCenterMap, 0);
+            shape = rectFactory->createDefaultShape();
             shape->setSize(documentRect.size());
             shape->setPosition(documentRect.topLeft());
         } else {

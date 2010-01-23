@@ -155,7 +155,7 @@ void ConnectionTool::mousePressEvent(KoPointerEvent *event)
     if(m_connectionShape == 0) {
         // All sizes and positions are hardcoded for now
         KoShapeFactory *factory = KoShapeRegistry::instance()->value("KoConnectionShape");
-        KoShape *shape = factory->createDefaultShape(canvas()->shapeController()->dataCenterMap(), canvas()->shapeController()->resourceManager());
+        KoShape *shape = factory->createDefaultShape(canvas()->shapeController()->resourceManager());
         if((m_connectionShape = dynamic_cast<KoConnectionShape*>(shape))){
             KoConnectionShape * connectionShapeTest = dynamic_cast<KoConnectionShape*>(tempShape);
             if(isInRoi()) {

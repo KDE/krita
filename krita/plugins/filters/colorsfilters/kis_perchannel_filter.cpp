@@ -169,7 +169,7 @@ inline QPixmap KisPerChannelConfigWidget::getHistogram()
 
 void KisPerChannelConfigWidget::setActiveChannel(int ch)
 {
-    m_curves[m_activeCh] = m_page->curveWidget->getCurve();
+    m_curves[m_activeCh] = m_page->curveWidget->curve();
     m_activeCh = ch;
     m_page->curveWidget->setCurve(m_curves[m_activeCh]);
     m_page->curveWidget->setPixmap(getHistogram());
@@ -222,12 +222,9 @@ KisPropertiesConfiguration * KisPerChannelConfigWidget::configuration() const
     KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
 
     // updating current state
-    m_curves[m_activeCh] = m_page->curveWidget->getCurve();
+    m_curves[m_activeCh] = m_page->curveWidget->curve();
 
     cfg->setCurves(m_curves);
-
-    /* Cached version */
-    cfg->updateTransfers();
 
     return cfg;
 }
@@ -238,7 +235,7 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
     if (!cfg)
         return;
 
-    if (!cfg->m_nTransfers) {
+    if (!cfg->m_curves.size() == 0) {
         /**
          * HACK ALERT: our configuration factory generates
          * default configuration with nTransfers==0.
@@ -247,10 +244,10 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
 
         KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
                 m_dev->colorSpace()->colorChannelCount());
-    } else if (cfg->m_nTransfers != m_dev->colorSpace()->colorChannelCount()) {
+    } else if (cfg->m_curves.size() != m_dev->colorSpace()->colorChannelCount()) {
         return;
     } else {
-        for (unsigned int ch = 0; ch < cfg->m_nTransfers; ch++)
+        for (unsigned int ch = 0; ch < cfg->m_curves.size(); ch++)
             m_curves[ch] = cfg->m_curves[ch];
     }
 
@@ -262,16 +259,12 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int nCh)
         : KisFilterConfiguration("perchannel", 1)
 {
-    m_transfers = NULL;
-    createTransfers(nCh);
     initDefaultCurves(m_curves, nCh);
-    updateTransfers();
     oldCs = 0;
 }
 
 KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 {
-    deleteTransfers();
 }
 
 bool KisPerChannelFilterConfiguration::isCompatible(const KisPaintDeviceSP dev) const
@@ -280,55 +273,17 @@ bool KisPerChannelFilterConfiguration::isCompatible(const KisPaintDeviceSP dev) 
     return *dev->colorSpace() == *oldCs;
 }
 
-void KisPerChannelFilterConfiguration::setCurves(QList<KisCurve> &curves)
+void KisPerChannelFilterConfiguration::setCurves(QList<KisCubicCurve> &curves)
 {
     m_curves.clear();
     m_curves = curves;
-    createTransfers(m_curves.count());
 }
 
-void KisPerChannelFilterConfiguration::initDefaultCurves(QList<KisCurve> &curves, int nCh)
+void KisPerChannelFilterConfiguration::initDefaultCurves(QList<KisCubicCurve> &curves, int nCh)
 {
     curves.clear();
     for (int i = 0; i < nCh; i++) {
-        curves.append(KisCurve());
-        curves[i].append(QPointF(0, 0));
-        curves[i].append(QPointF(1., 1.));
-    }
-}
-
-void KisPerChannelFilterConfiguration::createTransfers(int nTransfers)
-{
-    deleteTransfers();
-    m_transfers = new quint16* [nTransfers];
-    memset(m_transfers, 0, sizeof(qint16*) * nTransfers);
-    m_nTransfers = nTransfers;
-}
-
-void KisPerChannelFilterConfiguration::deleteTransfers()
-{
-    if (m_transfers) {
-        for (int i = 0; i < m_nTransfers; i++)
-            delete[] m_transfers[i];
-        delete[] m_transfers;
-        m_transfers = NULL;
-    }
-}
-
-void KisPerChannelFilterConfiguration::updateTransfers()
-{
-    for (int ch = 0; ch < m_nTransfers; ++ch) {
-        if (!m_transfers[ch])
-            m_transfers[ch] = new quint16[256];
-
-        qint32 val;
-        for (int i = 0; i < 256; ++i) {
-            /* Direct uncached version */
-            val = int(0xFFFF * KisCurveWidget::getCurveValue(m_curves[ch], i / 255.0));
-            val = bounds(val, 0, 0xFFFF);
-            m_transfers[ch][i] = val;
-        }
-
+        curves.append(KisCubicCurve());
     }
 }
 
@@ -339,7 +294,7 @@ void KisPerChannelFilterConfiguration::fromLegacyXML(const QDomElement& root)
 
 void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
 {
-    QList<KisCurve> curves;
+    QList<KisCubicCurve> curves;
     quint16 numTransfers = 0;
     int version;
     version  = root.attribute("version").toInt();
@@ -353,21 +308,12 @@ void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
         } else {
             QRegExp rx("curve(\\d+)");
             if (rx.indexIn(attributeName, 0) != -1) {
-                KisCurve curve;
+                KisCubicCurve curve;
                 quint16 index = rx.cap(1).toUShort();
                 index = qMin(index, quint16(curves.count()));
 
                 if (!e.text().isEmpty()) {
-                    QStringList data = e.text().split(';');
-
-                    foreach(const QString & pair, data) {
-                        if (pair.indexOf(',') > -1) {
-                            QPointF p;
-                            p.rx() = pair.section(',', 0, 0).toDouble();
-                            p.ry() = pair.section(',', 1, 1).toDouble();
-                            curve.append(p);
-                        }
-                    }
+                    curve.fromString(e.text());
                 }
                 curves.insert(index, curve);
             }
@@ -380,7 +326,6 @@ void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
 
     setVersion(version);
     setCurves(curves);
-    updateTransfers();
 }
 
 /**
@@ -410,28 +355,21 @@ void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& roo
     root.setAttribute("version", version());
 
     QDomElement t = doc.createElement("param");
-    QDomText text = doc.createTextNode(QString::number(m_nTransfers));
+    QDomText text = doc.createTextNode(QString::number(m_curves.size()));
     t.setAttribute("name", "nTransfers");
     t.appendChild(text);
     root.appendChild(t);
 
     QString paramName;
 
-    for (int i = 0; i < m_nTransfers; ++i) {
+    for (int i = 0; i < m_curves.size(); ++i) {
         paramName = QString::fromAscii("curve") + QString::number(i);
         t = doc.createElement("param");
         t.setAttribute("name", paramName);
 
-        KisCurve curve = m_curves[i];
+        KisCubicCurve curve = m_curves[i];
 
-        QString sCurve;
-        foreach(const QPointF & pair, curve) {
-            sCurve += QString::number(pair.x());
-            sCurve += ',';
-            sCurve += QString::number(pair.y());
-            sCurve += ';';
-        }
-        text = doc.createTextNode(sCurve);
+        text = doc.createTextNode(curve.toString());
         t.appendChild(text);
         root.appendChild(t);
     }
@@ -467,12 +405,19 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
     KisPerChannelFilterConfiguration* configBC =
         const_cast<KisPerChannelFilterConfiguration*>(dynamic_cast<const KisPerChannelFilterConfiguration*>(config)); // Somehow, this shouldn't happen
     Q_ASSERT(configBC);
-    if (configBC->m_nTransfers != cs->colorChannelCount()) {
+    if (configBC->m_curves.size() != cs->colorChannelCount()) {
         // We got an illegal number of colorchannels.KisFilter
         return 0;
     }
 
-    return cs->createPerChannelAdjustment(configBC->m_transfers);
+    const quint16** transfers = new const quint16*[configBC->m_curves.size()];
+    for(int i = 0; i < configBC->m_curves.size(); ++i)
+    {
+        transfers[i] = configBC->m_curves[i].uint16Transfer();
+    }
+    KoColorTransformation* t = cs->createPerChannelAdjustment(transfers);
+    delete transfers;
+    return t;
 }
 
 #include "kis_perchannel_filter.moc"

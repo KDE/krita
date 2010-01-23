@@ -40,8 +40,6 @@ public:
     }
 };
 
-typedef QList<QPointF> KisCurve;
-
 class KisPerChannelFilterConfiguration
         : public KisFilterConfiguration
 {
@@ -60,20 +58,14 @@ public:
     virtual void fromXML(const QDomElement& e);
     virtual void toXML(QDomDocument& doc, QDomElement& root) const;
 
-    void setCurves(QList<KisCurve> &curves);
-    static inline void initDefaultCurves(QList<KisCurve> &curves, int nCh);
-    void updateTransfers();
+    void setCurves(QList<KisCubicCurve> &curves);
+    static inline void initDefaultCurves(QList<KisCubicCurve> &curves, int nCh);
     bool isCompatible(const KisPaintDeviceSP) const;
 
 public:
-    QList<KisCurve> m_curves;
-    quint16 **m_transfers;
-    quint16 m_nTransfers;
+    QList<KisCubicCurve> m_curves;
     const KoColorSpace* oldCs;
 
-protected:
-    void createTransfers(int nTransfers);
-    void deleteTransfers();
 };
 
 
@@ -122,7 +114,7 @@ private:
     WdgPerChannel * m_page;
     KisPaintDeviceSP m_dev;
     KisHistogram *m_histogram;
-    mutable QList<KisCurve> m_curves;
+    mutable QList<KisCubicCurve> m_curves;
     int m_activeCh;
 
     // scales for displaying color numbers

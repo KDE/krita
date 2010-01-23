@@ -35,8 +35,6 @@
 class QWidget;
 class KoColorTransformation;
 
-typedef QList<QPointF> KisCurve;
-
 class WdgBrightnessContrast : public QWidget, public Ui::WdgBrightnessContrast
 {
     Q_OBJECT
@@ -66,12 +64,10 @@ public:
     virtual ~KisBrightnessContrastFilterConfiguration();
 
 public:
-    quint16 m_transfer[256];
-    KisCurve m_curve;
+    KisCubicCurve m_curve;
 
 protected:
-    void setCurve(KisCurve &curve);
-    void updateTransfers();
+    void setCurve(const KisCubicCurve &curve);
 };
 
 /**

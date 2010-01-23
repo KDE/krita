@@ -133,8 +133,8 @@ void KisCurveWidget::inOutChanged(int)
 
     Q_ASSERT(d->m_grab_point_index >= 0);
 
-    pt.rx() = d->io2sp(d->m_intIn->value());
-    pt.ry() = d->io2sp(d->m_intOut->value());
+    pt.setX(d->io2sp(d->m_intIn->value()));
+    pt.setY(d->io2sp(d->m_intOut->value()));
 
     if (d->jumpOverExistingPoints(pt, d->m_grab_point_index)) {
         d->m_curve.setPoint(d->m_grab_point_index, pt);
@@ -146,8 +146,8 @@ void KisCurveWidget::inOutChanged(int)
     d->m_intIn->blockSignals(true);
     d->m_intOut->blockSignals(true);
 
-    d->m_intIn->setValue(d->sp2io(pt.rx()));
-    d->m_intOut->setValue(d->sp2io(pt.ry()));
+    d->m_intIn->setValue(d->sp2io(pt.x()));
+    d->m_intOut->setValue(d->sp2io(pt.y()));
 
     d->m_intIn->blockSignals(false);
     d->m_intOut->blockSignals(false);
@@ -182,15 +182,15 @@ void KisCurveWidget::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Delete || e->key() == Qt::Key_Backspace) {
         if (d->m_grab_point_index > 0 && d->m_grab_point_index < d->m_curve.points().count() - 1) {
-            //rx() find closest point to get focus afterwards
-            double grab_point_x = d->m_curve.points()[d->m_grab_point_index].rx();
+            //x() find closest point to get focus afterwards
+            double grab_point_x = d->m_curve.points()[d->m_grab_point_index].x();
 
             int left_of_grab_point_index = d->m_grab_point_index - 1;
             int right_of_grab_point_index = d->m_grab_point_index + 1;
             int new_grab_point_index;
 
-            if (fabs(d->m_curve.points()[left_of_grab_point_index].rx() - grab_point_x) <
-                    fabs(d->m_curve.points()[right_of_grab_point_index].rx() - grab_point_x)) {
+            if (fabs(d->m_curve.points()[left_of_grab_point_index].x() - grab_point_x) <
+                    fabs(d->m_curve.points()[right_of_grab_point_index].x() - grab_point_x)) {
                 new_grab_point_index = left_of_grab_point_index;
             } else {
                 new_grab_point_index = d->m_grab_point_index;
@@ -202,8 +202,7 @@ void KisCurveWidget::keyPressEvent(QKeyEvent *e)
         }
         d->setCurveModified();
     } else if (e->key() == Qt::Key_Escape && d->state() != ST_NORMAL) {
-        d->m_curve.points()[d->m_grab_point_index].rx() = d->m_grabOriginalX;
-        d->m_curve.points()[d->m_grab_point_index].ry() = d->m_grabOriginalY;
+        d->m_curve.setPoint(d->m_grab_point_index, QPointF(d->m_grabOriginalX, d->m_grabOriginalY) );
         setCursor(Qt::ArrowCursor);
         d->setState(ST_NORMAL);
 
@@ -217,9 +216,7 @@ void KisCurveWidget::keyPressEvent(QKeyEvent *e)
 
 void KisCurveWidget::addPointInTheMiddle()
 {
-    QPointF pt;
-    pt.rx() = 0.5;
-    pt.ry() = getCurveValue(pt.rx());
+    QPointF pt(0.5, d->m_curve.value(pt.x()));
 
     if (!d->jumpOverExistingPoints(pt, -1))
         return;
@@ -271,7 +268,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
 
 
     // Draw curve.
-    double prevY = wHeight - getCurveValue(0.) * wHeight;
+    double prevY = wHeight - d->m_curve.value(0.) * wHeight;
     double prevX = 0.;
     double curY;
     double normalizedX;
@@ -280,7 +277,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
     p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
     for (x = 0 ; x < wWidth ; x++) {
         normalizedX = double(x) / wWidth;
-        curY = wHeight - getCurveValue(normalizedX) * wHeight;
+        curY = wHeight - d->m_curve.value(normalizedX) * wHeight;
 
         /**
          * Keep in mind that QLineF rounds doubles
@@ -293,7 +290,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
         prevY = curY;
     }
     p.drawLine(QLineF(prevX, prevY ,
-                      x, wHeight - getCurveValue(1.0) * wHeight));
+                      x, wHeight - d->m_curve.value(1.0) * wHeight));
 
     // Drawing curve handles.
     double curveX;
@@ -342,8 +339,7 @@ void KisCurveWidget::mousePressEvent(QMouseEvent * e)
     d->m_grabOriginalY = d->m_curve.points()[d->m_grab_point_index].y();
     d->m_grabOffsetX = d->m_curve.points()[d->m_grab_point_index].x() - x;
     d->m_grabOffsetY = d->m_curve.points()[d->m_grab_point_index].y() - y;
-    d->m_curve.points()[d->m_grab_point_index].rx() = x + d->m_grabOffsetX;
-    d->m_curve.points()[d->m_grab_point_index].ry() = y + d->m_grabOffsetY;
+    d->m_curve.setPoint(d->m_grab_point_index, QPointF(x + d->m_grabOffsetX, y + d->m_grabOffsetY));
 
     d->m_draggedAwayPointIndex = -1;
     d->setState(ST_DRAG);
@@ -411,11 +407,11 @@ void KisCurveWidget::mouseMoveEvent(QMouseEvent * e)
         if (d->m_grab_point_index == 0) {
             leftX = 0.0;
             if (d->m_curve.points().count() > 1)
-                rightX = d->m_curve.points()[d->m_grab_point_index + 1].rx() - POINT_AREA;
+                rightX = d->m_curve.points()[d->m_grab_point_index + 1].x() - POINT_AREA;
             else
                 rightX = 1.0;
         } else if (d->m_grab_point_index == d->m_curve.points().count() - 1) {
-            leftX = d->m_curve.points()[d->m_grab_point_index - 1].rx() + POINT_AREA;
+            leftX = d->m_curve.points()[d->m_grab_point_index - 1].x() + POINT_AREA;
             rightX = 1.0;
         } else {
             Q_ASSERT(d->m_grab_point_index > 0 && d->m_grab_point_index < d->m_curve.points().count() - 1);
@@ -431,8 +427,7 @@ void KisCurveWidget::mouseMoveEvent(QMouseEvent * e)
         d->m_curve.setPoint(d->m_grab_point_index, QPointF(x, y));
 
         if (removePoint && d->m_curve.points().count() > 2) {
-            d->m_draggedAwayPoint.rx() = d->m_curve.points()[d->m_grab_point_index].x();
-            d->m_draggedAwayPoint.ry() = d->m_curve.points()[d->m_grab_point_index].y();
+            d->m_draggedAwayPoint = d->m_curve.points()[d->m_grab_point_index];
             d->m_draggedAwayPointIndex = d->m_grab_point_index;
             d->m_curve.removePoint(d->m_grab_point_index);
             d->m_grab_point_index = bounds(d->m_grab_point_index, 0, d->m_curve.points().count() - 1);
@@ -442,26 +437,15 @@ void KisCurveWidget::mouseMoveEvent(QMouseEvent * e)
     }
 }
 
-double KisCurveWidget::getCurveValue(double x)
+KisCubicCurve KisCurveWidget::curve()
 {
-    return d->m_curve.value(x);
+    return d->m_curve;
 }
 
-double KisCurveWidget::getCurveValue(const QList<QPointF>& curve, double x)
+void KisCurveWidget::setCurve(KisCubicCurve inlist)
 {
-    KisCubicCurve cc(curve);
-    return cc.value(x);
-}
-
-QList<QPointF> KisCurveWidget::getCurve()
-{
-    return d->m_curve.points();
-}
-
-void KisCurveWidget::setCurve(QList<QPointF >inlist)
-{
-    d->m_curve.setPoints(inlist);
-    d->m_grab_point_index = bounds(d->m_grab_point_index, 0, d->m_curve.points().count() - 1);
+    d->m_curve = inlist;
+    d->m_grab_point_index = qBound(0, d->m_grab_point_index, d->m_curve.points().count() - 1);
     d->setCurveModified();
 }
 

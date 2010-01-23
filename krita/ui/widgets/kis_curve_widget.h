@@ -34,6 +34,7 @@
 #include <krita_export.h>
 
 class QSpinBox;
+class KisCubicCurve;
 
 /**
  * KisCurveWidget is a widget that shows a single curve that can be edited
@@ -107,29 +108,17 @@ protected:
 public:
 
     /**
-     * @return the y value on the specified curve corresponding to
-     * the specified x value.
-     */
-    static double getCurveValue(const QList<QPointF> &curve, double x);
-
-    /**
-     * @return the y value corresponding the specified x value of the current
-     * curve.
-     */
-    double getCurveValue(double x);
-
-    /**
      * @return get a list with all defined points. If you want to know what the
      * y value for a given x is on the curve defined by these points, use getCurveValue().
      * @see getCurveValue
      */
-    QList<QPointF> getCurve();
+    KisCubicCurve curve();
 
     /**
      * Replace the current curve with a curve specified by the curve defined by the control
      * points in @param inlist.
      */
-    void setCurve(QList<QPointF> inlist);
+    void setCurve(KisCubicCurve inlist);
 
     /**
      * Connect/disconnect external spinboxes to the curve

@@ -108,7 +108,7 @@ QList< float > KisSumiInkOption::curve() const
     int curveSamples = inkAmount();
     QList<float> result;
     for (int i = 0; i < curveSamples ; i++) {
-        result.append((float)m_options->inkCurve->getCurveValue(i / (float)(curveSamples - 1.0f)));
+        result.append((float)m_options->inkCurve->curve().value(i / (float)(curveSamples - 1.0f)));
     }
     return result;
 }

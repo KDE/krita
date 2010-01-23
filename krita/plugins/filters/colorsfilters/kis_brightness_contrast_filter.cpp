@@ -53,14 +53,6 @@
 KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration()
         : KisFilterConfiguration("brightnesscontrast", 1)
 {
-    for (quint32 i = 0; i < 256; ++i) {
-        m_transfer[i] = i * 257;
-    }
-    QPointF p;
-    p.rx() = 0.0; p.ry() = 0.0;
-    m_curve.append(p);
-    p.rx() = 1.0; p.ry() = 1.0;
-    m_curve.append(p);
 }
 
 KisBrightnessContrastFilterConfiguration::~KisBrightnessContrastFilterConfiguration()
@@ -74,7 +66,7 @@ void KisBrightnessContrastFilterConfiguration::fromLegacyXML(const QDomElement& 
 
 void KisBrightnessContrastFilterConfiguration::fromXML(const QDomElement& root)
 {
-    KisCurve curve;
+    KisCubicCurve curve;
     quint16 numTransfers = 0;
     int version;
     version  = root.attribute("version").toInt();
@@ -94,47 +86,20 @@ void KisBrightnessContrastFilterConfiguration::fromXML(const QDomElement& root)
                     /**
                      * We are going to use first curve only
                      */
-                    QStringList data = e.text().split(';');
-
-                    foreach(const QString & pair, data) {
-                        if (pair.indexOf(',') > -1) {
-                            QPointF p;
-                            p.rx() = pair.section(',', 0, 0).toDouble();
-                            p.ry() = pair.section(',', 1, 1).toDouble();
-                            curve.append(p);
-                        }
-                    }
+                    curve.fromString(e.text());
                 }
             }
         }
         e = e.nextSiblingElement();
     }
 
-    if (curve.isEmpty())
-        return;
-
     setVersion(version);
     setCurve(curve);
-    updateTransfers();
 }
 
-void KisBrightnessContrastFilterConfiguration::setCurve(KisCurve &curve)
+void KisBrightnessContrastFilterConfiguration::setCurve(const KisCubicCurve &curve)
 {
-    m_curve.clear();
     m_curve = curve;
-}
-
-#define bounds(x,a,b) (x<a ? a : (x>b ? b :x))
-
-void KisBrightnessContrastFilterConfiguration::updateTransfers()
-{
-    qint32 val;
-    for (int i = 0; i < 256; ++i) {
-        /* Direct uncached version */
-        val = int(0xFFFF * KisCurveWidget::getCurveValue(m_curve, i / 255.0));
-        val = bounds(val, 0, 0xFFFF);
-        m_transfer[i] = val;
-    }
 }
 
 /**
@@ -171,14 +136,7 @@ void KisBrightnessContrastFilterConfiguration::toXML(QDomDocument& doc, QDomElem
     t = doc.createElement("param");
     t.setAttribute("name", "curve0");
 
-    QString sCurve;
-    foreach(const QPointF & pair, m_curve) {
-        sCurve += QString::number(pair.x());
-        sCurve += ',';
-        sCurve += QString::number(pair.y());
-        sCurve += ';';
-    }
-    text = doc.createTextNode(sCurve);
+    text = doc.createTextNode(m_curve.toString());
     t.appendChild(text);
     root.appendChild(t);
 }
@@ -221,7 +179,7 @@ KoColorTransformation* KisBrightnessContrastFilter::createTransformation(const K
     const KisBrightnessContrastFilterConfiguration* configBC = dynamic_cast<const KisBrightnessContrastFilterConfiguration*>(config);
     if (!configBC) return 0;
 
-    KoColorTransformation * adjustment = cs->createBrightnessContrastAdjustment(configBC->m_transfer);
+    KoColorTransformation * adjustment = cs->createBrightnessContrastAdjustment(configBC->m_curve.uint16Transfer());
     return adjustment;
 }
 
@@ -296,17 +254,7 @@ KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::co
 {
     KisBrightnessContrastFilterConfiguration * cfg = new KisBrightnessContrastFilterConfiguration();
 
-    for (int i = 0; i < 256; i++) {
-        qint32 val;
-        val = int(0xFFFF * m_page->curveWidget->getCurveValue(i / 255.0));
-        if (val > 0xFFFF)
-            val = 0xFFFF;
-        if (val < 0)
-            val = 0;
-
-        cfg->m_transfer[i] = val;
-    }
-    cfg->m_curve = m_page->curveWidget->getCurve();
+    cfg->m_curve = m_page->curveWidget->curve();
     return cfg;
 }
 

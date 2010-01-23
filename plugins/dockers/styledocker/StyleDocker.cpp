@@ -156,14 +156,14 @@ void StyleDocker::setCanvas(KoCanvasBase * canvas)
             this, SLOT(selectionChanged()));
     connect(m_canvas->shapeManager(), SIGNAL(selectionContentChanged()),
             this, SLOT(selectionContentChanged()));
-    connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
+    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
              this, SLOT(resourceChanged(int, const QVariant&)));
 
     KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
     if (shape)
         updateStyle(shape->border(), shape->background());
     else {
-        KoShape* page = m_canvas->resourceProvider()->koShapeResource(KoPageApp::CurrentPage);
+        KoShape* page = m_canvas->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
         if (page) {
             updateStyle(page->border(), page->background());
         }
@@ -215,7 +215,7 @@ void StyleDocker::updateStyle(KoShapeBorderModel * stroke, KoShapeBackground * f
     if (! m_canvas)
         return;
 
-    KoResourceManager * provider = m_canvas->resourceProvider();
+    KoResourceManager * provider = m_canvas->resourceManager();
     int activeStyle = provider->resource(KoCanvasResource::ActiveStyleType).toInt();
 
     QColor qColor;
@@ -224,14 +224,14 @@ void StyleDocker::updateStyle(KoShapeBorderModel * stroke, KoShapeBackground * f
         if (border)
             qColor = border->color();
         else
-            qColor = m_canvas->resourceProvider()->foregroundColor().toQColor();
+            qColor = m_canvas->resourceManager()->foregroundColor().toQColor();
     }
     else {
         KoColorBackground * background = dynamic_cast<KoColorBackground*>(fill);
         if (background)
             qColor = background->color();
         else
-            qColor = m_canvas->resourceProvider()->backgroundColor().toQColor();
+            qColor = m_canvas->resourceManager()->backgroundColor().toQColor();
     }
     m_actionColor->setCurrentColor(qColor);
     updateStyleButtons(activeStyle);
@@ -243,7 +243,7 @@ void StyleDocker::fillSelected()
     if (! m_canvas)
         return;
 
-    m_canvas->resourceProvider()->setResource(KoCanvasResource::ActiveStyleType, KoFlake::Background);
+    m_canvas->resourceManager()->setResource(KoCanvasResource::ActiveStyleType, KoFlake::Background);
     updateStyleButtons(KoFlake::Background);
 }
 
@@ -252,7 +252,7 @@ void StyleDocker::strokeSelected()
     if (! m_canvas)
         return;
 
-    m_canvas->resourceProvider()->setResource(KoCanvasResource::ActiveStyleType, KoFlake::Foreground);
+    m_canvas->resourceManager()->setResource(KoCanvasResource::ActiveStyleType, KoFlake::Foreground);
     updateStyleButtons(KoFlake::Foreground);
 }
 
@@ -276,7 +276,7 @@ void StyleDocker::styleButtonPressed(int buttonId)
         {
             resetColorCommands();
 
-            KoResourceManager * provider = m_canvas->resourceProvider();
+            KoResourceManager * provider = m_canvas->resourceManager();
             KoSelection *selection = m_canvas->shapeManager()->selection();
             if (! selection || ! selection->count())
                 break;
@@ -314,20 +314,20 @@ void StyleDocker::updateColor(const KoColor &c)
 
     KoSelection *selection = m_canvas->shapeManager()->selection();
     if (! selection || ! selection->count()) {
-        KoShape* page = m_canvas->resourceProvider()->koShapeResource(KoPageApp::CurrentPage);
+        KoShape* page = m_canvas->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
         if (page) {
             QList<KoShape*> shapes;
             shapes.append(page);
             updateColor(c.toQColor(), shapes);
         }
         else {
-            KoResourceManager * provider = m_canvas->resourceProvider();
+            KoResourceManager * provider = m_canvas->resourceManager();
             int activeStyle = provider->resource(KoCanvasResource::ActiveStyleType).toInt();
 
             if (activeStyle == KoFlake::Foreground)
-                m_canvas->resourceProvider()->setForegroundColor(c);
+                m_canvas->resourceManager()->setForegroundColor(c);
             else
-                m_canvas->resourceProvider()->setBackgroundColor(c);
+                m_canvas->resourceManager()->setBackgroundColor(c);
         }
     }
     else {
@@ -345,7 +345,7 @@ void StyleDocker::updateColor(const QColor &c, const QList<KoShape*> & selectedS
 
     KoColor kocolor(c, KoColorSpaceRegistry::instance()->rgb8());
 
-    KoResourceManager * provider = m_canvas->resourceProvider();
+    KoResourceManager * provider = m_canvas->resourceManager();
     int activeStyle = provider->resource(KoCanvasResource::ActiveStyleType).toInt();
 
     // check which color to set foreground == border, background == fill
@@ -385,7 +385,7 @@ void StyleDocker::updateColor(const QColor &c, const QList<KoShape*> & selectedS
             m_canvas->addCommand(m_lastStrokeCommand);
         }
         m_lastColorChange = QTime::currentTime();
-        m_canvas->resourceProvider()->setForegroundColor(kocolor);
+        m_canvas->resourceManager()->setForegroundColor(kocolor);
     }
     else {
         if (m_lastColorChange.msecsTo(QTime::currentTime()) > MsecsThresholdForMergingCommands) {
@@ -402,7 +402,7 @@ void StyleDocker::updateColor(const QColor &c, const QList<KoShape*> & selectedS
             m_canvas->addCommand(m_lastFillCommand);
         }
         m_lastColorChange = QTime::currentTime();
-        m_canvas->resourceProvider()->setBackgroundColor(kocolor);
+        m_canvas->resourceManager()->setBackgroundColor(kocolor);
     }
 }
 
@@ -419,7 +419,7 @@ void StyleDocker::updateGradient(KoResource * item)
 
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
     if (selectedShapes.isEmpty()) {
-        KoShape* page = m_canvas->resourceProvider()->koShapeResource(KoPageApp::CurrentPage);
+        KoShape* page = m_canvas->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
         if (page) {
             selectedShapes.append(page);
         }
@@ -435,7 +435,7 @@ void StyleDocker::updateGradient(KoResource * item)
     QGradientStops newStops = newGradient->stops();
     delete newGradient;
 
-    KoResourceManager * provider = m_canvas->resourceProvider();
+    KoResourceManager * provider = m_canvas->resourceManager();
     int activeStyle = provider->resource(KoCanvasResource::ActiveStyleType).toInt();
 
     // check which color to set foreground == border, background == fill
@@ -486,7 +486,7 @@ void StyleDocker::updatePattern(KoResource * item)
 
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
     if (selectedShapes.isEmpty()) {
-        KoShape* page = m_canvas->resourceProvider()->koShapeResource(KoPageApp::CurrentPage);
+        KoShape* page = m_canvas->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
         if (page) {
             selectedShapes.append(page);
         }

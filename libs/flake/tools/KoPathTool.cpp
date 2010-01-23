@@ -656,12 +656,12 @@ void KoPathTool::keyPressEvent(QKeyEvent *event)
         switch (event->key()) {
 // TODO move these to the actions in the constructor.
         case Qt::Key_I: {
-            int handleRadius = d->canvas->resourceProvider()->handleRadius();
+            int handleRadius = d->canvas->resourceManager()->handleRadius();
             if (event->modifiers() & Qt::ControlModifier)
                 handleRadius--;
             else
                 handleRadius++;
-            d->canvas->resourceProvider()->setHandleRadius(handleRadius);
+            d->canvas->resourceManager()->setHandleRadius(handleRadius);
             break;
         }
 #ifndef NDEBUG
@@ -833,7 +833,7 @@ void KoPathTool::activate(bool temporary)
     Q_D(KoTool);
     Q_UNUSED(temporary);
     // retrieve the actual global handle radius
-    m_handleRadius = d->canvas->resourceProvider()->handleRadius();
+    m_handleRadius = d->canvas->resourceManager()->handleRadius();
     d->canvas->snapGuide()->reset();
 
     repaintDecorations();

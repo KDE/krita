@@ -487,7 +487,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
         SelectionDecorator decorator(m_mouseWasInsideHandles ? m_lastHandle : KoFlake::NoHandle,
                  true, true);
         decorator.setSelection(koSelection());
-        decorator.setHandleRadius(canvas()->resourceProvider()->handleRadius());
+        decorator.setHandleRadius(canvas()->resourceManager()->handleRadius());
         decorator.setHotPosition(m_hotPosition);
         decorator.paint(painter, converter);
     }
@@ -555,7 +555,7 @@ void DefaultTool::selectGuideAtPosition(const QPointF &position)
     // check if we are on a guide line
     KoGuidesData * guidesData = canvas()->guidesData();
     if (guidesData && guidesData->showGuideLines()) {
-        qreal grabSensitivity = canvas()->resourceProvider()->grabSensitivity();
+        qreal grabSensitivity = canvas()->resourceManager()->grabSensitivity();
         qreal minDistance = canvas()->viewConverter()->viewToDocumentX(grabSensitivity);
         uint i = 0;
         foreach (qreal guidePos, guidesData->horizontalGuideLines()) {
@@ -699,7 +699,7 @@ void DefaultTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_3:
         case Qt::Key_4:
         case Qt::Key_5:
-            canvas()->resourceProvider()->setResource(HotPosition, event->key()-Qt::Key_1);
+            canvas()->resourceManager()->setResource(HotPosition, event->key()-Qt::Key_1);
             event->accept();
             break;
         default:
@@ -1025,9 +1025,9 @@ void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
 
     // single selected shape is automatically aligned to document rect
     if (editableShapes.count() == 1 ) {
-        if (!canvas()->resourceProvider()->hasResource(KoCanvasResource::PageSize))
+        if (!canvas()->resourceManager()->hasResource(KoCanvasResource::PageSize))
             return;
-        bb = QRectF(QPointF(0,0), canvas()->resourceProvider()->sizeResource(KoCanvasResource::PageSize));
+        bb = QRectF(QPointF(0,0), canvas()->resourceManager()->sizeResource(KoCanvasResource::PageSize));
     } else {
         foreach( KoShape * shape, editableShapes ) {
             bb |= shape->boundingRect();
@@ -1137,7 +1137,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         }
         }
         if (m_hotPosition != newHotPosition)
-            canvas()->resourceProvider()->setResource(HotPosition, newHotPosition);
+            canvas()->resourceManager()->setResource(HotPosition, newHotPosition);
         return 0;
     }
 
@@ -1227,7 +1227,7 @@ void DefaultTool::updateActions()
     action("object_order_raise")->setEnabled(enable);
     action("object_order_lower")->setEnabled(enable);
     action("object_order_back")->setEnabled(enable);
-    enable = (editableShapes.count () > 1) || (enable && canvas()->resourceProvider()->hasResource(KoCanvasResource::PageSize));
+    enable = (editableShapes.count () > 1) || (enable && canvas()->resourceManager()->hasResource(KoCanvasResource::PageSize));
     action("object_align_horizontal_left")->setEnabled(enable);
     action("object_align_horizontal_center")->setEnabled(enable);
     action("object_align_horizontal_right")->setEnabled(enable);

@@ -93,7 +93,7 @@ signals:
     void propertyChanged();
 
 protected:
-    KoResourceManager *m_resourceProvider; ///< the resource provider with data for this canvas
+    KoResourceManager *m_resourceManager; ///< the resource provider with data for this canvas
 };
 
 #endif

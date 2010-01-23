@@ -166,9 +166,9 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
 
         if (m_updateColor) {
             if (event->button() == Qt::LeftButton)
-                canvas()->resourceProvider()->setResource(KoCanvasResource::ForegroundColor, m_pickedColor);
+                canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor, m_pickedColor);
             else
-                canvas()->resourceProvider()->setResource(KoCanvasResource::BackgroundColor, m_pickedColor);
+                canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor, m_pickedColor);
         }
 
         if (m_addPalette) {

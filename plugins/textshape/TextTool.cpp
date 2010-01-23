@@ -352,7 +352,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
         if (factoryId == "spellcheck") {
             kDebug(32500) << "KOffice SpellCheck plugin found";
             m_spellcheckPlugin = plugin;
-            connect(canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
+            connect(canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant &)),
                     plugin, SLOT(resourceChanged(int, const QVariant &)));
         }
         m_textEditingPlugins.insert(factory->id(), plugin);
@@ -752,7 +752,7 @@ void TextTool::updateSelectionHandler()
         }
     }
 
-    KoResourceManager *p = canvas()->resourceProvider();
+    KoResourceManager *p = canvas()->resourceManager();
     m_allowResourceProviderUpdates = false;
     if (m_textShapeData) {
         p->setResource(KoText::CurrentTextPosition, m_textEditor->position());

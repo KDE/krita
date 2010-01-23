@@ -208,7 +208,7 @@ void TextShape::shapeChanged(ChangeType type, KoShape *shape)
 
 void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
 {
-    bool showTextFrames = canvas->resourceProvider()->boolResource(KoText::ShowTextFrames);
+    bool showTextFrames = canvas->resourceManager()->boolResource(KoText::ShowTextFrames);
 
     if (showTextFrames) {
         painter.save();

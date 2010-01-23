@@ -97,9 +97,9 @@ DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital
 void DigitalMixerDock::setCanvas(KoCanvasBase * canvas)
 {
     m_canvas = canvas;
-    connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
+    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
             this, SLOT(resourceChanged(int, const QVariant&)));
-    setCurrentColor(m_canvas->resourceProvider()->foregroundColor());
+    setCurrentColor(m_canvas->resourceManager()->foregroundColor());
 }
 
 void DigitalMixerDock::popupColorChanged(int i)
@@ -131,9 +131,8 @@ void DigitalMixerDock::setCurrentColor(const KoColor& color)
     }
     if (m_canvas && m_tellCanvas)
     {
-        m_canvas->resourceProvider()->setForegroundColor(m_currentColor);
+        m_canvas->resourceManager()->setForegroundColor(m_currentColor);
     }
-    
 }
 
 void DigitalMixerDock::resourceChanged(int key, const QVariant& v)

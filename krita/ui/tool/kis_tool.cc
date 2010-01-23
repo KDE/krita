@@ -122,26 +122,26 @@ void KisTool::activate(bool)
 
     resetCursorStyle();
 
-    d->currentFgColor = canvas()->resourceProvider()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
-    d->currentBgColor = canvas()->resourceProvider()->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
-    d->currentPattern = static_cast<KisPattern *>(canvas()->resourceProvider()->
+    d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+    d->currentBgColor = canvas()->resourceManager()->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
+    d->currentPattern = static_cast<KisPattern *>(canvas()->resourceManager()->
                         resource(KisCanvasResourceProvider::CurrentPattern).value<void *>());
-    d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceProvider()->
+    d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceManager()->
                          resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
 
 
     d->currentPaintOpPreset =
-        canvas()->resourceProvider()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 
     if (d->currentPaintOpPreset && d->currentPaintOpPreset->settings()) {
         d->currentPaintOpPreset->settings()->activate();
     }
 
-    d->currentNode = canvas()->resourceProvider()->
+    d->currentNode = canvas()->resourceManager()->
                      resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-    d->currentExposure = static_cast<float>(canvas()->resourceProvider()->
+    d->currentExposure = static_cast<float>(canvas()->resourceManager()->
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
-    d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceProvider()->
+    d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->
                           resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void *>());
 }
 
@@ -167,7 +167,7 @@ void KisTool::resourceChanged(int key, const QVariant & v)
         break;
     case(KisCanvasResourceProvider::CurrentPaintOpPreset):
         d->currentPaintOpPreset =
-            canvas()->resourceProvider()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+            canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         break;
     case(KisCanvasResourceProvider::HdrExposure):
         d->currentExposure = static_cast<float>(v.toDouble());
@@ -444,17 +444,17 @@ void KisTool::resetCursorStyle()
 
 void KisTool::slotToggleFgBg()
 {
-    KoResourceManager* resourceProvider = canvas()->resourceProvider();
-    KoColor c = resourceProvider->foregroundColor();
-    resourceProvider->setForegroundColor(resourceProvider->backgroundColor());
-    resourceProvider->setBackgroundColor(c);
+    KoResourceManager* resourceManager = canvas()->resourceManager();
+    KoColor c = resourceManager->foregroundColor();
+    resourceManager->setForegroundColor(resourceManager->backgroundColor());
+    resourceManager->setBackgroundColor(c);
 }
 
 void KisTool::slotResetFgBg()
 {
-    KoResourceManager* resourceProvider = canvas()->resourceProvider();
-    resourceProvider->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
-    resourceProvider->setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
+    KoResourceManager* resourceManager = canvas()->resourceManager();
+    resourceManager->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
+    resourceManager->setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
 }
 
 bool KisTool::isCanvasOpenGL() const

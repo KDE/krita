@@ -118,7 +118,7 @@ QMap<QString, QWidget *> KisToolSelectPath::createOptionWidgets()
 void KisToolSelectPath::LokalTool::addPathShape()
 {
     KisNodeSP currentNode =
-        canvas()->resourceProvider()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+        canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     if (!currentNode)
         return;
 

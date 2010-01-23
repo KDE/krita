@@ -73,7 +73,7 @@ public:
                     continue;
                 }
                 widgets.append(widget);
-                widget->setResourceProvider(canvas->resourceProvider());
+                widget->setResourceProvider(canvas->resourceManager());
                 widget->setUnit(canvas->unit());
                 dialog->addPage(widget, panelFactory->name());
                 pageCount ++;
@@ -83,7 +83,7 @@ public:
                     continue;
                 panel->open(shape);
                 widgets.append(panel);
-                panel->setResourceProvider(canvas->resourceProvider());
+                panel->setResourceProvider(canvas->resourceManager());
                 panel->setUnit(canvas->unit());
                 QString title = panel->windowTitle().isEmpty() ? panel->objectName() : panel->windowTitle();
                 dialog->addPage(panel, title);

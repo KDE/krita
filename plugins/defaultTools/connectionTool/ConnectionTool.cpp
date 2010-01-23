@@ -99,7 +99,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
 
         painter.setPen(Qt::blue);
         painter.setBrush(Qt::white);
-        int radius = canvas()->resourceProvider()->handleRadius();
+        int radius = canvas()->resourceManager()->handleRadius();
         // Apply the conversion make by the matrix transformation
         painter.setMatrix(tempShape->absoluteTransformation(&converter) * painter.matrix());
         // ... handle unselected
@@ -107,7 +107,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
 
         painter.restore();
 
-        int grabSensitivity = canvas()->resourceProvider()->grabSensitivity();
+        int grabSensitivity = canvas()->resourceManager()->grabSensitivity();
         QRectF rec(m_mouse.x()-grabSensitivity/2, m_mouse.y()-grabSensitivity/2, grabSensitivity, grabSensitivity);
         int handleId = tempShape->handleIdAt(tempShape->documentToShape(rec));
 
@@ -141,7 +141,7 @@ void ConnectionTool::mousePressEvent(KoPointerEvent *event)
     KoConnectionShape * tempConnectionShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
     if(tempConnectionShape && m_connectionShape == 0){
         // grabSensitivity is defined by the user
-        int grabSensitivity = canvas()->resourceProvider()->grabSensitivity();
+        int grabSensitivity = canvas()->resourceManager()->grabSensitivity();
         QRectF rec(m_mouse.x()-grabSensitivity/2, m_mouse.y()-grabSensitivity/2, grabSensitivity, grabSensitivity);
         m_activeHandle = tempConnectionShape->handleIdAt(tempShape->documentToShape(rec));
         
@@ -399,7 +399,7 @@ float ConnectionTool::distanceSquare(QPointF p1, QPointF p2)
 
 bool ConnectionTool::isInRoi()
 {
-    int grabSensitivity = canvas()->resourceProvider()->grabSensitivity() * canvas()->resourceProvider()->grabSensitivity();
+    int grabSensitivity = canvas()->resourceManager()->grabSensitivity() * canvas()->resourceManager()->grabSensitivity();
     if(m_lastShapeOn == 0)
         return false;
     

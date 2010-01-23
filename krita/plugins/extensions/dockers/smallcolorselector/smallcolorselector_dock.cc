@@ -41,15 +41,15 @@ SmallColorSelectorDock::SmallColorSelectorDock()
 void SmallColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 {
     m_canvas = canvas;
-    connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
+    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
             this, SLOT(resourceChanged(int, const QVariant&)));
-    m_smallColorWidget->setQColor(m_canvas->resourceProvider()->foregroundColor().toQColor());
+    m_smallColorWidget->setQColor(m_canvas->resourceManager()->foregroundColor().toQColor());
 }
 
 void SmallColorSelectorDock::colorChangedProxy(const QColor& c)
 {
     if (m_canvas)
-        m_canvas->resourceProvider()->setForegroundColor(KoColor(c , KoColorSpaceRegistry::instance()->rgb8()));
+        m_canvas->resourceManager()->setForegroundColor(KoColor(c , KoColorSpaceRegistry::instance()->rgb8()));
 }
 
 void SmallColorSelectorDock::resourceChanged(int key, const QVariant& v)

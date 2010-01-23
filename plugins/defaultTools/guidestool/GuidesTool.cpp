@@ -341,7 +341,7 @@ GuidesTool::GuideLine GuidesTool::guideLineAtPosition(const QPointF &position)
     // check if we are on a guide line
     KoGuidesData *guidesData = canvas()->guidesData();
     if (guidesData && guidesData->showGuideLines()) {
-        qreal handleRadius = canvas()->resourceProvider()->handleRadius();
+        qreal handleRadius = canvas()->resourceManager()->handleRadius();
         qreal minDistance = canvas()->viewConverter()->viewToDocumentX(handleRadius);
         int i = 0;
         foreach (qreal guidePos, guidesData->horizontalGuideLines()) {
@@ -405,7 +405,7 @@ void GuidesTool::insertorCreateGuidesSlot(GuidesTransaction *result)
 {
     QPoint documentStart = canvas()->documentOrigin();
     KoGuidesData *guidesData = canvas()->guidesData();
-    const QSizeF pageSize = canvas()->resourceProvider()->sizeResource(KoCanvasResource::PageSize);
+    const QSizeF pageSize = canvas()->resourceManager()->sizeResource(KoCanvasResource::PageSize);
 
     QList< qreal > verticalLines;
     QList< qreal > horizontalLines;

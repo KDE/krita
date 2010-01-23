@@ -64,7 +64,7 @@ void PointHandle::paint(QPainter &painter, const KoViewConverter &converter)
     KoPathPoint::KoPointType type = KoPathPoint::Node;
     if (selection && selection->contains(m_activePoint))
         type = KoPathPoint::All;
-    int handleRadius = m_tool->canvas()->resourceProvider()->handleRadius();
+    int handleRadius = m_tool->canvas()->resourceManager()->handleRadius();
     m_activePoint->paint(painter, handleRadius, type);
     painter.restore();
 }
@@ -158,7 +158,7 @@ void ParameterHandle::paint(QPainter &painter, const KoViewConverter &converter)
     painter.save();
     painter.setMatrix(m_parameterShape->absoluteTransformation(&converter) * painter.matrix());
 
-    int handleRadius = m_tool->canvas()->resourceProvider()->handleRadius();
+    int handleRadius = m_tool->canvas()->resourceManager()->handleRadius();
     m_parameterShape->paintHandle(painter, converter, m_handleId, handleRadius);
     painter.restore();
 }

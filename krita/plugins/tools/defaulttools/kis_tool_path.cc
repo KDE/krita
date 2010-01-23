@@ -46,7 +46,7 @@ KisToolPath::~KisToolPath()
 void KisToolPath::addPathShape()
 {
     KisNodeSP currentNode =
-        canvas()->resourceProvider()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+        canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     if (!currentNode) {
         delete m_shape;
         m_shape = 0;
@@ -82,7 +82,7 @@ void KisToolPath::addPathShape()
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
         painter.setOpacity(OPACITY_OPAQUE);
         painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_OVER));
-        KisPaintOpPresetSP preset = canvas->resourceProvider()->
+        KisPaintOpPresetSP preset = canvas->resourceManager()->
                                     resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         painter.setPaintOpPreset(preset, image);
 

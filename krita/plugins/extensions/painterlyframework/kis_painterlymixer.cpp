@@ -108,7 +108,7 @@ void KisPainterlyMixer::slotChangeColor(int index)
 
 void KisPainterlyMixer::setColor(const KoColor& color)
 {
-    m_canvas->resourceProvider()->setForegroundColor(color);
+    m_canvas->resourceManager()->setForegroundColor(color);
 }
 
 #include "kis_painterlymixer.moc"

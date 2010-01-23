@@ -209,7 +209,7 @@ void KisToolTransform::activate(bool temporary)
         }
     }
     currentNode() =
-        m_canvas->resourceProvider()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+        m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
 }
 
 void KisToolTransform::initHandles()

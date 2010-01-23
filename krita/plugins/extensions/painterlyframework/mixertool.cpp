@@ -84,8 +84,8 @@ void MixerTool::activate(bool temporary)
     m_d->mouseDown = false;
 
     useCursor(m_d->cursor);
-    m_d->foregroundColor = canvas()->resourceProvider()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
-    m_d->backgroundColor = canvas()->resourceProvider()->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
+    m_d->foregroundColor = canvas()->resourceManager()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+    m_d->backgroundColor = canvas()->resourceManager()->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
 }
 
 void MixerTool::deactivate()
@@ -132,7 +132,7 @@ void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     // XXX: We want to be able to set a color source for the other paintops that
     //      contains the impure blend under the current cursor.
-    m_d->mixer->resourceProvider()->setResource(KoCanvasResource::ForegroundColor, event->pos());
+    m_d->mixer->resourceManager()->setResource(KoCanvasResource::ForegroundColor, event->pos());
     m_d->mouseDown = false;
 }
 

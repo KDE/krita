@@ -63,7 +63,7 @@ public:
     KisCanvasResourceProvider(KisView2 * view);
     ~KisCanvasResourceProvider();
 
-    void setCanvasResourceProvider(KoResourceManager * resourceProvider);
+    void setResourceManager(KoResourceManager *resourceManager);
 
     KoCanvasBase * canvas() const;
 
@@ -129,7 +129,7 @@ signals:
 private:
 
     KisView2 * m_view;
-    KoResourceManager * m_resourceProvider;
+    KoResourceManager * m_resourceManager;
     const KoColorProfile * m_displayProfile;
 
 };

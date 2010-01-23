@@ -126,7 +126,7 @@ void ShapeRotateStrategy::rotateBy( qreal angle )
 void ShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
     SelectionDecorator decorator(KoFlake::NoHandle, true, false);
     decorator.setSelection(tool()->canvas()->shapeManager()->selection());
-    decorator.setHandleRadius( tool()->canvas()->resourceProvider()->handleRadius() );
+    decorator.setHandleRadius( tool()->canvas()->resourceManager()->handleRadius() );
     decorator.paint(painter, converter);
 
     // paint the rotation center

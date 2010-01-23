@@ -125,11 +125,11 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     // control-click gets the color at the current point. For now, only with a ratio of 1
     if (e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
         if (e->button() == Qt::LeftButton)
-            canvas()->resourceProvider()->setResource(KoCanvasResource::ForegroundColor,
+            canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor,
                                                       KisToolUtils::pick(currentNode()->paintDevice(),
                                                                          convertToIntPixelCoord(e)));
         else
-            canvas()->resourceProvider()->setResource(KoCanvasResource::BackgroundColor,
+            canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor,
                                                       KisToolUtils::pick(currentNode()->paintDevice(),
                                                                          convertToIntPixelCoord(e)));
 
@@ -137,11 +137,11 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     else if (e->modifiers() == Qt::ControlModifier ) {
 
         if (e->button() == Qt::LeftButton)
-            canvas()->resourceProvider()->setResource(KoCanvasResource::ForegroundColor,
+            canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor,
                                                       KisToolUtils::pick(currentImage()->mergedImage(),
                                                                          convertToIntPixelCoord(e)));
         else
-            canvas()->resourceProvider()->setResource(KoCanvasResource::BackgroundColor,
+            canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor,
                                                       KisToolUtils::pick(currentImage()->mergedImage(),
                                                                          convertToIntPixelCoord(e)));
     }

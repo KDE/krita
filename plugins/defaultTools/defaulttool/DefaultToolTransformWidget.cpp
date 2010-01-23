@@ -50,7 +50,7 @@ DefaultToolTransformWidget::DefaultToolTransformWidget( KoInteractionTool* tool,
 
     setUnit( m_tool->canvas()->unit() );
 
-    connect( m_tool->canvas()->resourceProvider(), SIGNAL( resourceChanged( int, const QVariant& ) ),
+    connect( m_tool->canvas()->resourceManager(), SIGNAL( resourceChanged( int, const QVariant& ) ),
         this, SLOT( resourceChanged( int, const QVariant& ) ) );
 
     connect( rotateButton, SIGNAL( clicked() ), this, SLOT( rotationChanged() ) );

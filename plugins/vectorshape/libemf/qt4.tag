@@ -73011,7 +73011,7 @@
     <member kind="function">
       <name>fromHtml</name>
       <anchor>fromHtml-2</anchor>
-      <arglist>( const QString &amp; text, const QTextDocument * resourceProvider )</arglist>
+      <arglist>( const QString &amp; text, const QTextDocument * resourceManager )</arglist>
     </member>
     <member kind="function">
       <name>fromPlainText</name>

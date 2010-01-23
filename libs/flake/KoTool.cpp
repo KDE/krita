@@ -33,10 +33,10 @@ KoTool::KoTool(KoCanvasBase *canvas)
 {
     Q_D(KoTool);
     if (d->canvas) { // in the case of KoToolManagers dummytool it can be zero :(
-        KoResourceManager * crp = d->canvas->resourceProvider();
+        KoResourceManager * crp = d->canvas->resourceManager();
         Q_ASSERT_X(crp, "KoTool::KoTool", "No KoResourceManager");
         if (crp)
-            connect(d->canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
+            connect(d->canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant &)),
                     this, SLOT(resourceChanged(int, const QVariant &)));
     }
 }
@@ -237,7 +237,7 @@ QRectF KoTool::handleGrabRect(const QPointF &position)
 {
     Q_D(KoTool);
     const KoViewConverter * converter = d->canvas->viewConverter();
-    uint handleSize = 2*d->canvas->resourceProvider()->grabSensitivity();
+    uint handleSize = 2*d->canvas->resourceManager()->grabSensitivity();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;
@@ -247,7 +247,7 @@ QRectF KoTool::handlePaintRect(const QPointF &position)
 {
     Q_D(KoTool);
     const KoViewConverter * converter = d->canvas->viewConverter();
-    uint handleSize = 2*d->canvas->resourceProvider()->handleRadius();
+    uint handleSize = 2*d->canvas->resourceManager()->handleRadius();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;

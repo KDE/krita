@@ -160,11 +160,11 @@ public:
     virtual void updateInputMethodInfo() = 0;
 
     /**
-     * Return a pointer to the resource provider associated with this
-     * canvas. The resource provider contains per-canvas settings such
+     * Return a pointer to the resource manager associated with this
+     * canvas. The resource manager contains per-canvas settings such
      * as current foreground and background color.
      */
-    KoResourceManager *resourceProvider() const;
+    KoResourceManager *resourceManager() const;
 
     /**
      * Return the shape controller for this canvas.

@@ -222,7 +222,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->canvasController->setCanvas(m_d->canvas);
 
     m_d->resourceProvider = new KisCanvasResourceProvider(this);
-    m_d->resourceProvider->setCanvasResourceProvider(m_d->canvas->resourceProvider());
+    m_d->resourceProvider->setResourceManager(m_d->canvas->resourceManager());
 
     Q_ASSERT(m_d->canvasController);
     KoToolManager::instance()->addController(m_d->canvasController);

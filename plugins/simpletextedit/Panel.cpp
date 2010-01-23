@@ -104,7 +104,7 @@ void Panel::setCanvas (KoCanvasBase *canvas)
     m_canvas = canvas;
     Q_ASSERT(m_canvas);
     connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(toolChangeDetected(const QString&)));
-    connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int,const QVariant &)),
+    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int,const QVariant &)),
             this, SLOT(resourceChanged(int,const QVariant&)));
 }
 

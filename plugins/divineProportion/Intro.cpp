@@ -35,9 +35,9 @@ void Intro::save()
 {
     if (m_shape == 0)
         return;
-    Q_ASSERT(m_resourceProvider);
-    if (m_resourceProvider->hasResource(KoCanvasResource::PageSize)) {
-        QSizeF size = m_resourceProvider->sizeResource(KoCanvasResource::PageSize);
+    Q_ASSERT(m_resourceManager);
+    if (m_resourceManager->hasResource(KoCanvasResource::PageSize)) {
+        QSizeF size = m_resourceManager->sizeResource(KoCanvasResource::PageSize);
         if (size.height() > size.width()) {
             m_shape->setSize(QSizeF(size.height(), size.width()));
             m_shape->rotate(-90);

@@ -186,7 +186,7 @@ void StrokeDocker::applyChanges()
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
-    canvasController->canvas()->resourceProvider()->setActiveBorder( d->border );
+    canvasController->canvas()->resourceManager()->setActiveBorder( d->border );
 
     if( ! selection || ! selection->count() )
         return;
@@ -301,7 +301,7 @@ void StrokeDocker::setCanvas( KoCanvasBase *canvas )
     {
         connect( canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), 
                  this, SLOT( selectionChanged() ) );
-        connect( canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
+        connect( canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
                  this, SLOT(resourceChanged(int, const QVariant&)) );
         setUnit( canvas->unit() );
     }

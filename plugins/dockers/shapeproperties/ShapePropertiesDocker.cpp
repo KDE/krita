@@ -67,7 +67,7 @@ void ShapePropertiesDocker::setCanvas( KoCanvasBase *canvas )
             this, SLOT( selectionChanged() ) );
         connect( d->canvas->shapeManager(), SIGNAL( selectionContentChanged() ),
             this, SLOT( selectionChanged() ) );
-        connect( d->canvas->resourceProvider(), SIGNAL( resourceChanged( int, const QVariant& ) ),
+        connect( d->canvas->resourceManager(), SIGNAL( resourceChanged( int, const QVariant& ) ),
             this, SLOT( resourceChanged( int, const QVariant& ) ) );
     }
 }

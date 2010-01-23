@@ -78,7 +78,7 @@ void KoPABackgroundToolWidget::setBackgroundImage()
     // TODO only make images selectable
     KoImageCollection * collection = dynamic_cast<KoImageCollection *>( m_tool->canvas()->shapeController()->dataCenter( "ImageCollection" ) );
     Q_ASSERT( collection );
-    KoShape * page = m_tool->canvas()->resourceProvider()->koShapeResource( KoPageApp::CurrentPage );
+    KoShape * page = m_tool->canvas()->resourceManager()->koShapeResource( KoPageApp::CurrentPage );
     Q_ASSERT( page );
     if ( !collection || !page ) {
         return;
@@ -121,7 +121,7 @@ void KoPABackgroundToolWidget::setBackgroundImage()
 
 void KoPABackgroundToolWidget::useMasterBackground( int state )
 {
-    KoPAPage * page = dynamic_cast<KoPAPage *>( m_tool->canvas()->resourceProvider()->koShapeResource( KoPageApp::CurrentPage ) );
+    KoPAPage * page = dynamic_cast<KoPAPage *>( m_tool->canvas()->resourceManager()->koShapeResource( KoPageApp::CurrentPage ) );
     if ( page ) {
         KoPADisplayMasterBackgroundCommand * cmd = new KoPADisplayMasterBackgroundCommand( page, state == Qt::Checked );
         m_tool->canvas()->addCommand( cmd );
@@ -130,7 +130,7 @@ void KoPABackgroundToolWidget::useMasterBackground( int state )
 
 void KoPABackgroundToolWidget::displayMasterShapes( int state )
 {
-    KoPAPage * page = dynamic_cast<KoPAPage *>( m_tool->canvas()->resourceProvider()->koShapeResource( KoPageApp::CurrentPage ) );
+    KoPAPage * page = dynamic_cast<KoPAPage *>( m_tool->canvas()->resourceManager()->koShapeResource( KoPageApp::CurrentPage ) );
     if ( page ) {
         KoPADisplayMasterShapesCommand * cmd = new KoPADisplayMasterShapesCommand( page, state == Qt::Checked );
         m_tool->canvas()->addCommand( cmd );

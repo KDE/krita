@@ -187,13 +187,6 @@ int KoResourceManager::intResource(int key) const
     return d->resources[key].toInt();
 }
 
-qreal KoResourceManager::doubleResource(int key) const
-{
-    if (! d->resources.contains(key))
-        return 0.;
-    return d->resources[key].toDouble();
-}
-
 QString KoResourceManager::stringResource(int key) const
 {
     if (! d->resources.contains(key)) {

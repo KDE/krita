@@ -239,13 +239,6 @@ public:
     int intResource(int key) const;
 
     /**
-     * Return the resource determined by param key as a qreal.
-     * @param key the indentifying key for the resource
-     * @see KoCanvasResource::CanvasResource KoDocumentResource::DocumentResource
-     */
-    qreal doubleResource(int key) const;
-
-    /**
      * Return the resource determined by param key as a KoColor.
      * @param key the indentifying key for the resource
      * @see KoCanvasResource::CanvasResource KoDocumentResource::DocumentResource

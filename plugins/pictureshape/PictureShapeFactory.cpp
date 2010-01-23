@@ -41,7 +41,6 @@ PictureShapeFactory::PictureShapeFactory(QObject *parent)
 
 KoShape *PictureShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
-    Q_UNUSED(documentResources);
     PictureShape * defaultShape = new PictureShape();
     defaultShape->setShapeId(PICTURESHAPEID);
     if (documentResources) {

@@ -32,6 +32,7 @@ class VideoData;
  */
 class VideoCollection : public QObject, public KoDataCenter
 {
+    Q_OBJECT
 public:
     enum ResouceManager {
         ResourceId = 75208282

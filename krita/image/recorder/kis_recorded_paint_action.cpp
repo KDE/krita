@@ -102,7 +102,7 @@ void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
     elt.appendChild(backgroundColorElt);
 
     // Opacity
-    elt.setAttribute("opacity", d->opacity);
+    elt.setAttribute("opacity", d->opacity / 255.0);
 
     // paintIncremental
     elt.setAttribute("paintIncremental", d->paintIncremental);
@@ -114,6 +114,41 @@ void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
 KisPaintOpPresetSP KisRecordedPaintAction::paintOpPreset() const
 {
     return d->paintOpPreset;
+}
+
+void KisRecordedPaintAction::setPaintOpPreset(KisPaintOpPresetSP preset)
+{
+    d->paintOpPreset = preset;
+}
+
+int KisRecordedPaintAction::opacity() const
+{
+    return d->opacity;
+}
+
+void KisRecordedPaintAction::setOpacity(int opacity)
+{
+    d->opacity = opacity;
+}
+
+KoColor KisRecordedPaintAction::paintColor() const
+{
+    return d->foregroundColor;
+}
+
+void KisRecordedPaintAction::setPaintColor(const KoColor& color)
+{
+    d->foregroundColor = color;
+}
+
+KoColor KisRecordedPaintAction::backgroundColor() const
+{
+    return d->backgroundColor;
+}
+
+void KisRecordedPaintAction::setBackgroundColor(const KoColor& color)
+{
+    d->backgroundColor = color;
 }
 
 void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const

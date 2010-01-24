@@ -60,6 +60,13 @@ protected:
 
 public:
     KisPaintOpPresetSP paintOpPreset() const;
+    void setPaintOpPreset(KisPaintOpPresetSP preset);
+    int opacity() const;
+    void setOpacity(int );
+    KoColor paintColor() const;
+    void setPaintColor(const KoColor& color);
+    KoColor backgroundColor() const;
+    void setBackgroundColor(const KoColor& color);
 private:
 
     struct Private;

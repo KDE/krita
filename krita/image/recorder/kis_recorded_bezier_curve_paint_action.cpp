@@ -151,7 +151,7 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomE
     QString name = elt.attribute("name");
     KisNodeQueryPath pathnode = KisNodeQueryPath::fromString(elt.attribute("path"));
     QString paintOpId = elt.attribute("paintop");
-    int opacity = elt.attribute("opacity", "100").toInt();
+    int opacity = elt.attribute("opacity", "1.0").toDouble() * 255;
     bool paintIncremental = elt.attribute("paintIncremental", "1").toInt();
 
     QString compositeOp = elt.attribute("compositeOp", COMPOSITE_OVER);

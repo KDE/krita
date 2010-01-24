@@ -59,6 +59,7 @@
 #include <kis_perspectivetransform_worker.h>
 #include <kis_pixel_selection.h>
 
+#include "ui_wdgperspectivetransform.h"
 
 namespace
 {
@@ -136,7 +137,7 @@ KisPaintDeviceSP PerspectiveTransformCmd::origDevice()
 }
 
 KisToolPerspectiveTransform::KisToolPerspectiveTransform(KoCanvasBase * canvas)
-        : KisTool(canvas, KisCursor::load("tool_perspectivetransform_cursor.png", 6, 6))
+        : KisTool(canvas, KisCursor::load("tool_perspectivetransform_cursor.png", 6, 6)), m_optWidget(0), m_optForm(0)
 {
     setObjectName("tool_perspectivetransform");
     //m_subject = 0;
@@ -150,6 +151,7 @@ KisToolPerspectiveTransform::KisToolPerspectiveTransform(KoCanvasBase * canvas)
 
 KisToolPerspectiveTransform::~KisToolPerspectiveTransform()
 {
+    delete m_optForm;
 }
 
 void KisToolPerspectiveTransform::deactivate()
@@ -181,8 +183,7 @@ void KisToolPerspectiveTransform::activate(bool tmp)
             m_interractionMode = DRAWRECTINTERRACTION;
             m_points.clear();
             initHandles();
-        }
-        else {
+        } else {
             // One of our commands is on top
             m_interractionMode = EDITRECTINTERRACTION;
             // and it even has the same device
@@ -206,7 +207,7 @@ void KisToolPerspectiveTransform::initHandles()
     m_origDevice = new KisPaintDevice(*dev.data());
     Q_ASSERT(m_origDevice);
 
-	KisSelectionSP selection = currentSelection();
+    KisSelectionSP selection = currentSelection();
     if (selection) {
         m_origSelection = new KisSelection();
         m_initialRect = selection->selectedExactRect();
@@ -235,8 +236,7 @@ void KisToolPerspectiveTransform::orderHandles()
     // find the point that is located at the upper-left
     // of the point of intersection
     for (int i = 0; i < 4; i++) {
-        if ((m_points[i].x() <= diagIntersectPt.x()) && (m_points[i].y() <= diagIntersectPt.y()))
-        {
+        if ((m_points[i].x() <= diagIntersectPt.x()) && (m_points[i].y() <= diagIntersectPt.y())) {
             if (topLeftHandle == -1)
                 topLeftHandle = i;
             else if (m_points[i].x() <= m_points[topLeftHandle].x())
@@ -287,64 +287,63 @@ void KisToolPerspectiveTransform::mousePressEvent(KoPointerEvent *event)
 {
     if (image()) {
         switch (m_interractionMode) {
-            case DRAWRECTINTERRACTION: {
-                m_currentPt = convertToPixelCoord(event);
+        case DRAWRECTINTERRACTION: {
+            m_currentPt = convertToPixelCoord(event);
 
-                if (m_points.isEmpty()) {
-                    m_drawing = true;
-                    m_hasMoveAfterFirstTime = false;
-                    m_points.append(m_currentPt);
-                }
-                else {
-                    m_hasMoveAfterFirstTime = true;
-                }
-
-                updateCanvasPixelRect(image()->bounds());
-
-                break;
+            if (m_points.isEmpty()) {
+                m_drawing = true;
+                m_hasMoveAfterFirstTime = false;
+                m_points.append(m_currentPt);
+            } else {
+                m_hasMoveAfterFirstTime = true;
             }
-            case EDITRECTINTERRACTION: {
-                if (currentImage() && currentNode()->paintDevice() && event->button() == Qt::LeftButton) {
-                    m_actualyMoveWhileSelected = false;
-                    m_dragEnd = convertToPixelCoord(event);
-                    QPoint mousep = m_dragEnd.toPoint();
 
-                    QPointF middleHandlePt;
-                    QPolygonF vertexList;
-                    vertexList << m_topleft << m_topright << m_bottomright << m_bottomleft;
-                    middleHandlePos(vertexList, middleHandlePt);
-                    QPolygonF midHandles = midpointHandles(vertexList);
+            updateCanvasPixelRect(image()->bounds());
 
-                    if (mouseNear(mousep, m_topleft.toPoint())) {
-                        dbgPlugins << " PRESS TOPLEFT HANDLE";
-                        m_currentSelectedPoint = &m_topleft;
-                    } else if (mouseNear(mousep, m_topright.toPoint())) {
-                        dbgPlugins << " PRESS TOPRIGHT HANDLE";
-                        m_currentSelectedPoint = &m_topright;
-                    } else if (mouseNear(mousep, m_bottomleft.toPoint())) {
-                        dbgPlugins << " PRESS BOTTOMLEFT HANDLE";
-                        m_currentSelectedPoint = &m_bottomleft;
-                    } else if (mouseNear(mousep, m_bottomright.toPoint())) {
-                        dbgPlugins << " PRESS BOTTOMRIGHT HANDLE";
-                        m_currentSelectedPoint = &m_bottomright;
-                    } else if (mouseNear(mousep, midHandles[0].toPoint())) {
-                        dbgPlugins << " PRESS TOP HANDLE";
-                        m_handleSelected = TOPHANDLE;
-                    } else if (mouseNear(mousep, midHandles[3].toPoint())) {
-                        dbgPlugins << " PRESS LEFT HANDLE";
-                        m_handleSelected = LEFTHANDLE;
-                    } else if (mouseNear(mousep, midHandles[2].toPoint())) {
-                        dbgPlugins << " PRESS BOTTOM HANDLE";
-                        m_handleSelected = BOTTOMHANDLE;
-                    } else if (mouseNear(mousep, midHandles[1].toPoint())) {
-                        dbgPlugins << " PRESS RIGHT HANDLE";
-                        m_handleSelected = RIGHTHANDLE;
-                    } else if (mouseNear(mousep, middleHandlePt.toPoint())) {
-                        dbgPlugins << " PRESS MIDDLE HANDLE";
-                        m_handleSelected = MIDDLEHANDLE;
-                    }
+            break;
+        }
+        case EDITRECTINTERRACTION: {
+            if (currentImage() && currentNode()->paintDevice() && event->button() == Qt::LeftButton) {
+                m_actualyMoveWhileSelected = false;
+                m_dragEnd = convertToPixelCoord(event);
+                QPoint mousep = m_dragEnd.toPoint();
+
+                QPointF middleHandlePt;
+                QPolygonF vertexList;
+                vertexList << m_topleft << m_topright << m_bottomright << m_bottomleft;
+                middleHandlePos(vertexList, middleHandlePt);
+                QPolygonF midHandles = midpointHandles(vertexList);
+
+                if (mouseNear(mousep, m_topleft.toPoint())) {
+                    dbgPlugins << " PRESS TOPLEFT HANDLE";
+                    m_currentSelectedPoint = &m_topleft;
+                } else if (mouseNear(mousep, m_topright.toPoint())) {
+                    dbgPlugins << " PRESS TOPRIGHT HANDLE";
+                    m_currentSelectedPoint = &m_topright;
+                } else if (mouseNear(mousep, m_bottomleft.toPoint())) {
+                    dbgPlugins << " PRESS BOTTOMLEFT HANDLE";
+                    m_currentSelectedPoint = &m_bottomleft;
+                } else if (mouseNear(mousep, m_bottomright.toPoint())) {
+                    dbgPlugins << " PRESS BOTTOMRIGHT HANDLE";
+                    m_currentSelectedPoint = &m_bottomright;
+                } else if (mouseNear(mousep, midHandles[0].toPoint())) {
+                    dbgPlugins << " PRESS TOP HANDLE";
+                    m_handleSelected = TOPHANDLE;
+                } else if (mouseNear(mousep, midHandles[3].toPoint())) {
+                    dbgPlugins << " PRESS LEFT HANDLE";
+                    m_handleSelected = LEFTHANDLE;
+                } else if (mouseNear(mousep, midHandles[2].toPoint())) {
+                    dbgPlugins << " PRESS BOTTOM HANDLE";
+                    m_handleSelected = BOTTOMHANDLE;
+                } else if (mouseNear(mousep, midHandles[1].toPoint())) {
+                    dbgPlugins << " PRESS RIGHT HANDLE";
+                    m_handleSelected = RIGHTHANDLE;
+                } else if (mouseNear(mousep, middleHandlePt.toPoint())) {
+                    dbgPlugins << " PRESS MIDDLE HANDLE";
+                    m_handleSelected = MIDDLEHANDLE;
                 }
             }
+        }
         }
     }
 }
@@ -352,73 +351,71 @@ void KisToolPerspectiveTransform::mousePressEvent(KoPointerEvent *event)
 void KisToolPerspectiveTransform::mouseMoveEvent(KoPointerEvent *event)
 {
     switch (m_interractionMode) {
-        case DRAWRECTINTERRACTION: {
-            if (m_drawing) {
-                // erase old lines on canvas
-                updateCanvasPixelRect(image()->bounds());
-                
-                // update current point
-                m_currentPt = convertToPixelCoord(event);
+    case DRAWRECTINTERRACTION: {
+        if (m_drawing) {
+            // erase old lines on canvas
+            updateCanvasPixelRect(image()->bounds());
 
-                // draw new lines on canvas
-                updateCanvasPixelRect(image()->bounds());
-            }
-            break;
+            // update current point
+            m_currentPt = convertToPixelCoord(event);
+
+            // draw new lines on canvas
+            updateCanvasPixelRect(image()->bounds());
         }
+        break;
+    }
 
-        case EDITRECTINTERRACTION: {
-            if (m_currentSelectedPoint) {
-                updateCanvasPixelRect(image()->bounds());
-                QPointF translate = convertToPixelCoord(event) - m_dragEnd;
-                m_dragEnd = convertToPixelCoord(event);
-                *m_currentSelectedPoint += translate;
-                updateCanvasPixelRect(image()->bounds());
-                m_actualyMoveWhileSelected = true;
-            }
-            else if (m_handleSelected == TOPHANDLE || m_handleSelected == LEFTHANDLE || m_handleSelected == BOTTOMHANDLE || m_handleSelected == RIGHTHANDLE) {
-                updateCanvasPixelRect(image()->bounds());
+    case EDITRECTINTERRACTION: {
+        if (m_currentSelectedPoint) {
+            updateCanvasPixelRect(image()->bounds());
+            QPointF translate = convertToPixelCoord(event) - m_dragEnd;
+            m_dragEnd = convertToPixelCoord(event);
+            *m_currentSelectedPoint += translate;
+            updateCanvasPixelRect(image()->bounds());
+            m_actualyMoveWhileSelected = true;
+        } else if (m_handleSelected == TOPHANDLE || m_handleSelected == LEFTHANDLE || m_handleSelected == BOTTOMHANDLE || m_handleSelected == RIGHTHANDLE) {
+            updateCanvasPixelRect(image()->bounds());
 
-                QPointF translate = convertToPixelCoord(event) - m_dragEnd;
-                m_dragEnd = convertToPixelCoord(event);
+            QPointF translate = convertToPixelCoord(event) - m_dragEnd;
+            m_dragEnd = convertToPixelCoord(event);
 
-                switch (m_handleSelected) {
-                    case TOPHANDLE:
-                        m_topleft += translate;
-                        m_topright += translate;
-                        break;
-                    case LEFTHANDLE:
-                        m_topleft += translate;
-                        m_bottomleft += translate;
-                        break;
-                    case BOTTOMHANDLE:
-                        m_bottomleft += translate;
-                        m_bottomright += translate;
-                        break;
-                    case RIGHTHANDLE:
-                        m_topright += translate;
-                        m_bottomright += translate;
-                        break;
-                    case MIDDLEHANDLE:
-                    case NOHANDLE:
-                        dbgPlugins << "Should NOT happen";
-                }
-
-                updateCanvasPixelRect(image()->bounds());
-                m_actualyMoveWhileSelected = true;
-            }
-            else if (m_handleSelected == MIDDLEHANDLE) {
-                updateCanvasPixelRect(image()->bounds());
-                QPointF translate = convertToPixelCoord(event) - m_dragEnd;
-                m_dragEnd = convertToPixelCoord(event);
+            switch (m_handleSelected) {
+            case TOPHANDLE:
                 m_topleft += translate;
                 m_topright += translate;
+                break;
+            case LEFTHANDLE:
+                m_topleft += translate;
+                m_bottomleft += translate;
+                break;
+            case BOTTOMHANDLE:
                 m_bottomleft += translate;
                 m_bottomright += translate;
-
-                updateCanvasPixelRect(image()->bounds());
-                m_actualyMoveWhileSelected = true;
+                break;
+            case RIGHTHANDLE:
+                m_topright += translate;
+                m_bottomright += translate;
+                break;
+            case MIDDLEHANDLE:
+            case NOHANDLE:
+                dbgPlugins << "Should NOT happen";
             }
+
+            updateCanvasPixelRect(image()->bounds());
+            m_actualyMoveWhileSelected = true;
+        } else if (m_handleSelected == MIDDLEHANDLE) {
+            updateCanvasPixelRect(image()->bounds());
+            QPointF translate = convertToPixelCoord(event) - m_dragEnd;
+            m_dragEnd = convertToPixelCoord(event);
+            m_topleft += translate;
+            m_topright += translate;
+            m_bottomleft += translate;
+            m_bottomright += translate;
+
+            updateCanvasPixelRect(image()->bounds());
+            m_actualyMoveWhileSelected = true;
         }
+    }
     }
 }
 
@@ -429,50 +426,58 @@ void KisToolPerspectiveTransform::mouseReleaseEvent(KoPointerEvent * event)
 
     if (event->button() == Qt::LeftButton) {
         switch (m_interractionMode) {
-            case DRAWRECTINTERRACTION: {
-                if (m_drawing && event->button() == Qt::LeftButton && m_hasMoveAfterFirstTime)  {
+        case DRAWRECTINTERRACTION: {
+            if (m_drawing && event->button() == Qt::LeftButton && m_hasMoveAfterFirstTime)  {
+                updateCanvasPixelRect(image()->bounds());
+
+                m_points.append(m_currentPt);
+
+                if (m_points.size() == 4) {
+                    // from the points, select which is topleft ? topright ? bottomright ? and bottomleft ?
+                    orderHandles();
+
+
+                    if (m_optForm->radioButtonCorrect->isChecked()) {
+                        Matrix3qreal matrix = KisPerspectiveMath::computeMatrixTransfoToPerspective(m_topleft, m_topright, m_bottomleft, m_bottomright, m_initialRect);
+                        m_topleft = KisPerspectiveMath::matProd(matrix, m_initialRect.topLeft());
+                        m_topright = KisPerspectiveMath::matProd(matrix, m_initialRect.topRight());
+                        m_bottomleft = KisPerspectiveMath::matProd(matrix, m_initialRect.bottomLeft());
+                        m_bottomright = KisPerspectiveMath::matProd(matrix, m_initialRect.bottomRight());
+                    }
+
+                    m_interractionMode = EDITRECTINTERRACTION;
                     updateCanvasPixelRect(image()->bounds());
 
-                    m_points.append(m_currentPt);
-
-                    if (m_points.size() == 4) {
-                        // from the points, select which is topleft ? topright ? bottomright ? and bottomleft ?
-                        orderHandles();
-
-                        m_interractionMode = EDITRECTINTERRACTION;
-                        updateCanvasPixelRect(image()->bounds());
-
-                        QApplication::setOverrideCursor(KisCursor::waitCursor());
-                        transform();
-                        QApplication::restoreOverrideCursor();
-                        useCursor(KisCursor::arrowCursor());
-                    }
-                    else {
-                        updateCanvasPixelRect(image()->bounds());
-                    }
+                    QApplication::setOverrideCursor(KisCursor::waitCursor());
+                    transform();
+                    QApplication::restoreOverrideCursor();
+                    useCursor(KisCursor::arrowCursor());
+                } else {
+                    updateCanvasPixelRect(image()->bounds());
                 }
-                break;
             }
-            case EDITRECTINTERRACTION: {
-                if (m_currentSelectedPoint) {
-                    m_currentSelectedPoint = 0;
-                    if (m_actualyMoveWhileSelected) {
-                        updateCanvasPixelRect(image()->bounds());
-                        QApplication::setOverrideCursor(KisCursor::waitCursor());
-                        transform();
-                        QApplication::restoreOverrideCursor();
-                    }
+            break;
+        }
+        case EDITRECTINTERRACTION: {
+            if (m_currentSelectedPoint) {
+                m_currentSelectedPoint = 0;
+                if (m_actualyMoveWhileSelected) {
+                    updateCanvasPixelRect(image()->bounds());
+                    QApplication::setOverrideCursor(KisCursor::waitCursor());
+                    transform();
+                    QApplication::restoreOverrideCursor();
                 }
-                if (m_handleSelected != NOHANDLE) {
-                    m_handleSelected = NOHANDLE;
-                    if (m_actualyMoveWhileSelected) {
-                        QApplication::setOverrideCursor(KisCursor::waitCursor());
-                        transform();
-                        QApplication::restoreOverrideCursor();
-                    }
-                }
-                break;
             }
+            if (m_handleSelected != NOHANDLE) {
+                m_handleSelected = NOHANDLE;
+                if (m_actualyMoveWhileSelected) {
+                    QApplication::setOverrideCursor(KisCursor::waitCursor());
+                    transform();
+                    QApplication::restoreOverrideCursor();
+                }
+            }
+            break;
+        }
         }
     }
 }
@@ -496,51 +501,51 @@ void KisToolPerspectiveTransform::paintOutline(QPainter& gc, const QRect&)
         //Q_ASSERT(canvas()->canvasController);
 
         switch (m_interractionMode) {
-            case DRAWRECTINTERRACTION: {
-                dbgPlugins << "DRAWRECTINTERRACTION paintOutline" << m_points.size();
+        case DRAWRECTINTERRACTION: {
+            dbgPlugins << "DRAWRECTINTERRACTION paintOutline" << m_points.size();
 
-                for (QPolygonF::iterator iter = m_points.begin(); iter != m_points.end(); iter++) {
-                    if (iter + 1 == m_points.end())
-                        break;
-                    else
-                        gc.drawLine(pixelToView(*iter).toPoint(), pixelToView(*(iter + 1)).toPoint());
-                }
-                if (!m_points.isEmpty()) {
-                    gc.drawLine(pixelToView(*(m_points.end() - 1)).toPoint(), pixelToView(m_currentPt).toPoint());
-                    gc.drawLine(pixelToView(m_currentPt).toPoint(), pixelToView(*m_points.begin()).toPoint());
-                }
-
-                break;
+            for (QPolygonF::iterator iter = m_points.begin(); iter != m_points.end(); iter++) {
+                if (iter + 1 == m_points.end())
+                    break;
+                else
+                    gc.drawLine(pixelToView(*iter).toPoint(), pixelToView(*(iter + 1)).toPoint());
             }
-            case EDITRECTINTERRACTION: {
-                QPoint topleft = pixelToView(m_topleft).toPoint();
-                QPoint topright = pixelToView(m_topright).toPoint();
-                QPoint bottomleft = pixelToView(m_bottomleft).toPoint();
-                QPoint bottomright = pixelToView(m_bottomright).toPoint();
-
-                gc.setPen(pen);
-
-                const QPointF perspectiveVertices[4] = { topleft, topright, bottomright, bottomleft };
-                gc.drawPolygon(perspectiveVertices, 4);
-                gc.drawRect(topleft.x() - 4, topleft.y() - 4, 8, 8);
-                gc.drawRect(topright.x() - 4, topright.y() - 4, 8, 8);
-                gc.drawRect(bottomright.x() - 4, bottomright.y() - 4, 8, 8);
-                gc.drawRect(bottomleft.x() - 4, bottomleft.y() - 4, 8, 8);
-
-                QPointF middleHandlePt;
-                QPolygonF vertexList;
-                vertexList << topleft << topright << bottomright << bottomleft;
-                middleHandlePos(vertexList, middleHandlePt);
-                gc.drawRect(middleHandlePt.x() - 4, middleHandlePt.y() - 4, 8, 8);
-
-                QPolygonF midHandlesList = midpointHandles(vertexList);
-                gc.drawRect(midHandlesList[0].x() - 4, midHandlesList[0].y() - 4, 8, 8);
-                gc.drawRect(midHandlesList[1].x() - 4, midHandlesList[1].y() - 4, 8, 8);
-                gc.drawRect(midHandlesList[2].x() - 4, midHandlesList[2].y() - 4, 8, 8);
-                gc.drawRect(midHandlesList[3].x() - 4, midHandlesList[3].y() - 4, 8, 8);
-
-                break;
+            if (!m_points.isEmpty()) {
+                gc.drawLine(pixelToView(*(m_points.end() - 1)).toPoint(), pixelToView(m_currentPt).toPoint());
+                gc.drawLine(pixelToView(m_currentPt).toPoint(), pixelToView(*m_points.begin()).toPoint());
             }
+
+            break;
+        }
+        case EDITRECTINTERRACTION: {
+            QPoint topleft = pixelToView(m_topleft).toPoint();
+            QPoint topright = pixelToView(m_topright).toPoint();
+            QPoint bottomleft = pixelToView(m_bottomleft).toPoint();
+            QPoint bottomright = pixelToView(m_bottomright).toPoint();
+
+            gc.setPen(pen);
+
+            const QPointF perspectiveVertices[4] = { topleft, topright, bottomright, bottomleft };
+            gc.drawPolygon(perspectiveVertices, 4);
+            gc.drawRect(topleft.x() - 4, topleft.y() - 4, 8, 8);
+            gc.drawRect(topright.x() - 4, topright.y() - 4, 8, 8);
+            gc.drawRect(bottomright.x() - 4, bottomright.y() - 4, 8, 8);
+            gc.drawRect(bottomleft.x() - 4, bottomleft.y() - 4, 8, 8);
+
+            QPointF middleHandlePt;
+            QPolygonF vertexList;
+            vertexList << topleft << topright << bottomright << bottomleft;
+            middleHandlePos(vertexList, middleHandlePt);
+            gc.drawRect(middleHandlePt.x() - 4, middleHandlePt.y() - 4, 8, 8);
+
+            QPolygonF midHandlesList = midpointHandles(vertexList);
+            gc.drawRect(midHandlesList[0].x() - 4, midHandlesList[0].y() - 4, 8, 8);
+            gc.drawRect(midHandlesList[1].x() - 4, midHandlesList[1].y() - 4, 8, 8);
+            gc.drawRect(midHandlesList[2].x() - 4, midHandlesList[2].y() - 4, 8, 8);
+            gc.drawRect(midHandlesList[3].x() - 4, midHandlesList[3].y() - 4, 8, 8);
+
+            break;
+        }
         }
         gc.setPen(old);
     }
@@ -550,7 +555,7 @@ QPolygonF KisToolPerspectiveTransform::midpointHandles(QPolygonF vertexList)
 {
     QPointF middleHandlePt;
     QPolygonF midHandlesList;
-    
+
     middleHandlePos(vertexList, middleHandlePt);
 
     QLineF topLine(vertexList[0], vertexList[1]);
@@ -570,7 +575,7 @@ QPolygonF KisToolPerspectiveTransform::midpointHandles(QPolygonF vertexList)
     if (inter == QLineF::NoIntersection)
         vanishingPt = QPointF((vertexList[2].x() + vertexList[3].x()) * 0.5, (vertexList[2].y() + vertexList[3].y()) * 0.5);
     QLineF verticalLine(vanishingPt, middleHandlePt);
-    
+
     verticalLine.intersect(topLine, &vanishingPt);
     midHandlesList.append(vanishingPt);
     horizontalLine.intersect(rightLine, &vanishingPt);
@@ -628,14 +633,14 @@ void KisToolPerspectiveTransform::transform()
     // has the previous state.
     KisPerspectiveTransformWorker worker(currentNode()->paintDevice(), m_origSelection, m_topleft, m_topright, m_bottomleft, m_bottomright, progress);
     worker.run();
-/*
-    // If canceled, go back to the memento
-    if (worker.isCanceled()) {
-        transaction->undo();
-        delete transaction;
-        return;
-    }
-*/
+    /*
+        // If canceled, go back to the memento
+        if (worker.isCanceled()) {
+            transaction->undo();
+            delete transaction;
+            return;
+        }
+    */
     currentNode()->paintDevice()->setDirty(rc); // XXX: This is not enough - should union with new extent
 
     // Else add the command -- this will have the memento from the previous state,
@@ -673,8 +678,7 @@ void KisToolPerspectiveTransform::notifyCommandExecuted(const QUndoCommand * com
         // The command now on the top of the stack isn't one of ours
         // We should treat this as if the tool has been just activated
         initHandles();
-    } 
-    else {
+    } else {
         // One of our commands is now on top
         // We should ask for tool args and orig selection
         //m_origDevice = cmd->origDevice();
@@ -684,46 +688,18 @@ void KisToolPerspectiveTransform::notifyCommandExecuted(const QUndoCommand * com
     }
 }
 
-#if 0
 QWidget* KisToolPerspectiveTransform::createOptionWidget()
 {
-
-    m_optWidget = new WdgToolPerspectiveTransform(parent);
-    Q_CHECK_PTR(m_optWidget);
-
-    m_optWidget->cmbFilter->clear();
-    m_optWidget->cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
-
-    m_optWidget->cmbFilter->setCurrentText("Mitchell");
-    connect(m_optWidget->cmbFilter, SIGNAL(activated(const KisID &)),
-            this, SLOT(slotSetFilter(const KisID &)));
-
-    KisID filterID = m_optWidget->cmbFilter->currentItem();
-    m_filter = KisFilterStrategyRegistry::instance()->get(filterID);
-
-    /*
-        connect(m_optWidget->intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));
-        connect(m_optWidget->intStartY, SIGNAL(valueChanged(int)), this, SLOT(setStartY(int)));
-        connect(m_optWidget->intEndX, SIGNAL(valueChanged(int)), this, SLOT(setEndX(int)));
-        connect(m_optWidget->intEndY, SIGNAL(valueChanged(int)), this, SLOT(setEndY(int)));
-    */
-    m_optWidget->intStartX->hide();
-    m_optWidget->intStartY->hide();
-    m_optWidget->intEndX->hide();
-    m_optWidget->intEndY->hide();
-    m_optWidget->textLabel1->hide();
-    m_optWidget->textLabel2->hide();
-    m_optWidget->textLabel3->hide();
-    m_optWidget->textLabel4->hide();
-
-    return 0;
+    m_optWidget = new QWidget();
+    m_optForm = new Ui_WdgPerspectiveTransform;
+    m_optForm->setupUi(m_optWidget);
+    return m_optWidget;
 }
 
 QWidget* KisToolPerspectiveTransform::optionWidget()
 {
-    return 0;
+    return m_optWidget;
 }
-#endif
 
 void KisToolPerspectiveTransform::setup(KActionCollection *collection)
 {/*

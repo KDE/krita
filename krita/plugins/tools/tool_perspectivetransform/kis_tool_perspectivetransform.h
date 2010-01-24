@@ -37,6 +37,7 @@
 #include <kis_undo_adapter.h>
 #include <kis_perspective_math.h>
 
+class Ui_WdgPerspectiveTransform;
 
 class WdgToolPerspectiveTransform;
 
@@ -51,15 +52,13 @@ class KisToolPerspectiveTransform : public KisTool, KisCommandHistoryListener
 
     enum InterractionMode { DRAWRECTINTERRACTION, EDITRECTINTERRACTION };
     enum HandleSelected { NOHANDLE, TOPHANDLE, BOTTOMHANDLE, RIGHTHANDLE, LEFTHANDLE, MIDDLEHANDLE };
-    
+
     typedef QVector<QPointF> QPointFVector;
 public:
     KisToolPerspectiveTransform(KoCanvasBase * canvas);
     virtual ~KisToolPerspectiveTransform();
-#if 0
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
-#endif
     virtual void setup(KActionCollection *collection);
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
     virtual void paint(QPainter &painter, const QRect& rc);
@@ -98,8 +97,6 @@ private:
     bool m_hasMoveAfterFirstTime;
     bool m_actualyMoveWhileSelected;
 
-    WdgToolPerspectiveTransform *m_optWidget;
-
     KisPaintDeviceSP m_origDevice;
     KisSelectionSP m_origSelection;
     int m_handleHalfSize, m_handleSize;
@@ -108,6 +105,9 @@ private:
     QPointFVector m_points;
     // The following variables are used when moving a middle handle
     HandleSelected m_handleSelected;
+
+    QWidget* m_optWidget;
+    Ui_WdgPerspectiveTransform* m_optForm;
 
 };
 

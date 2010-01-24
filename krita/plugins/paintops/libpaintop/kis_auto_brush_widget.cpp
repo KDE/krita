@@ -174,6 +174,8 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     inputHFade->setValue(aBrush->maskGenerator()->horizontalFade());
     inputVFade->setValue(aBrush->maskGenerator()->verticalFade());
     inputAngle->setValue(aBrush->angle() * 180 / M_PI);
+    inputSpikes->setValue(aBrush->maskGenerator()->spikes());
+    inputSpacing->setValue(aBrush->spacing());
 }
 
 

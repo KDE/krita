@@ -30,6 +30,8 @@ private slots:
     void initTestCase();
     void benchmarkCreation();
     void benchmarkWriteBytes();
+    void benchmarkReadBytes();
+    void benchmarkReadWriteBytes();
 };
 
 #endif

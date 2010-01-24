@@ -52,7 +52,44 @@ void KisDatamanagerBenchmark::benchmarkWriteBytes()
     QBENCHMARK {
         dm.writeBytes(bytes, 0, 0, 1024, 1024);
     }
+
+    delete[] bytes;
 }
+
+void KisDatamanagerBenchmark::benchmarkReadBytes()
+{
+    quint8 *p = new quint8[3];
+    memset(p, 0, 3);
+    KisDataManager dm(3, p);
+
+    quint8 *bytes = new quint8[3 * 1024 * 1024];
+    memset(bytes, 0, 3 * 1024 * 1024);
+
+    QBENCHMARK {
+        dm.readBytes(bytes, 0, 0, 1024, 1024);
+    }
+
+    delete[] bytes;
+}
+
+
+void KisDatamanagerBenchmark::benchmarkReadWriteBytes()
+{
+    quint8 *p = new quint8[3];
+    memset(p, 0, 3);
+    KisDataManager dm(3, p);
+
+    quint8 *bytes = new quint8[3 * 1024 * 1024];
+    memset(bytes, 0, 3 * 1024 * 1024);
+
+    QBENCHMARK {
+        dm.readBytes(bytes, 0, 0, 1024, 1024);
+        dm.writeBytes(bytes, 0, 0, 1024, 1024);
+    }
+
+    delete[] bytes;
+}
+
 
 
 QTEST_KDEMAIN(KisDatamanagerBenchmark, GUI)

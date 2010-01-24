@@ -23,12 +23,12 @@
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
 
-class SpellCheckPlugin : public QObject {
+class SpellCheckPlugin : public QObject
+{
     Q_OBJECT
 
 public:
-    SpellCheckPlugin(QObject * parent,  const QVariantList &);
-    ~SpellCheckPlugin() {}
+    SpellCheckPlugin(QObject *parent,  const QVariantList &);
 };
 
 #endif

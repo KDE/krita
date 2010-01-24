@@ -24,10 +24,10 @@
 
 class KoTextEditingPlugin;
 
-class SpellCheckFactory : public KoTextEditingFactory {
+class SpellCheckFactory : public KoTextEditingFactory
+{
 public:
     explicit SpellCheckFactory(QObject *parent);
-    ~SpellCheckFactory() {}
 
     KoTextEditingPlugin *create() const;
 };

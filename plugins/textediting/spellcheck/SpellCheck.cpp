@@ -270,7 +270,7 @@ void SpellCheck::configureSpellCheck()
     delete dialog;
 }
 
-void SpellCheck::resourceChanged( int key, const QVariant &resource )
+void SpellCheck::resourceChanged(int key, const QVariant &resource)
 {
     if (key == KoCanvasResource::DocumentIsLoading)
         m_documentIsLoading = resource.toBool();

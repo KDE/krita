@@ -69,13 +69,13 @@ ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
         m_view = (KisView2*) parent;
 
         // Selection manager takes ownership?
-        KAction* a  = new KAction(i18n("Grow selection..."), this);
+        KAction* a  = new KAction(i18n("Grow..."), this);
         actionCollection()->addAction("growselection", a);
-        KAction* b  = new KAction(i18n("Shrink selection..."), this);
+        KAction* b  = new KAction(i18n("Shrink..."), this);
         actionCollection()->addAction("shrinkselection", b);
-        KAction* c  = new KAction(i18n("Border selection..."), this);
+        KAction* c  = new KAction(i18n("Border..."), this);
         actionCollection()->addAction("borderselection", c);
-        KAction* d  = new KAction(i18n("Feather selection..."), this);
+        KAction* d  = new KAction(i18n("Feather..."), this);
         actionCollection()->addAction("featherselection", d);
 
         Q_CHECK_PTR(a);

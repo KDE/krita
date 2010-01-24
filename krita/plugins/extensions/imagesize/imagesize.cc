@@ -87,7 +87,7 @@ ImageSize::ImageSize(QObject *parent, const QVariantList &)
 
         m_view = (KisView2*) parent;
         // Selection manager takes ownership?
-        action  = new KAction(i18n("&Scale Selection..."), this);
+        action  = new KAction(i18n("&Scale..."), this);
         actionCollection()->addAction("selectionscale", action);
         Q_CHECK_PTR(action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));

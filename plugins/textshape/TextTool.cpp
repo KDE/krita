@@ -22,6 +22,7 @@
  */
 
 #include "TextTool.h"
+#include "TextEditingPluginContainer.h"
 #include "dialogs/SimpleStyleWidget.h"
 #include "dialogs/StylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
@@ -96,7 +97,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_prevCursorPosition(-1),
         m_caretTimer(this),
         m_caretTimerState(true),
-        m_spellcheckPlugin(0),
         m_currentCommand(0),
         m_currentCommandHasChildren(false),
         m_specialCharacterDocker(0),
@@ -310,34 +310,49 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setToolTip(i18n("Change text attributes to their default values"));
     connect(action, SIGNAL(triggered()), this, SLOT(setDefaultFormat()));
 
-    foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
-        KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
-        Q_ASSERT(factory);
-        if (m_textEditingPlugins.contains(factory->id())) {
-            kWarning(32500) << "Duplicate id for textEditingPlugin, ignoring one! (" << factory->id() << ")";
-            continue;
-        }
-        QString factoryId = factory->id();
-        KoTextEditingPlugin *plugin = factory->create();
-        if (factoryId == "spellcheck") {
-            kDebug(32500) << "KOffice SpellCheck plugin found";
-            m_spellcheckPlugin = plugin;
-            connect(canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant &)),
-                    plugin, SLOT(resourceChanged(int, const QVariant &)));
-        }
-        m_textEditingPlugins.insert(factory->id(), plugin);
+    m_textEditingPlugins = canvas->resourceManager()->
+        resource(TextEditingPluginContainer::ResourceId).value<TextEditingPluginContainer*>();
+    if (m_textEditingPlugins == 0) {
+        m_textEditingPlugins = new TextEditingPluginContainer(canvas->resourceManager());
+        QVariant variant;
+        variant.setValue(m_textEditingPlugins);
+        canvas->resourceManager()->setResource(TextEditingPluginContainer::ResourceId, variant);
     }
 
-    foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins) {
-        connect(plugin, SIGNAL(startMacro(const QString &)), this, SLOT(startMacro(const QString &)));
+    foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values()) {
+        connect(plugin, SIGNAL(startMacro(const QString &)),
+                this, SLOT(startMacro(const QString &)));
         connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
         QHash<QString, KAction*> actions = plugin->actions();
         QHash<QString, KAction*>::iterator i = actions.begin();
         while (i != actions.end()) {
             addAction(i.key(), i.value());
-            i++;
+            ++i;
         }
     }
+    if (m_textEditingPlugins->spellcheck()) {
+           connect(canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
+                   m_textEditingPlugins->spellcheck(), SLOT(resourceChanged(int, const QVariant&)));
+    }
+
+    // setup the context list.
+    QSignalMapper *signalMapper = new QSignalMapper(this);
+    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
+    QList<QAction*> list;
+    list.append(this->action("text_default"));
+    list.append(this->action("format_font"));
+    foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
+        KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
+        if (factory->showInMenu()) {
+            KAction *a = new KAction(i18n("Apply %1").arg(factory->title()), this);
+            connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
+            signalMapper->setMapping(a, factory->id());
+            list.append(a);
+            addAction(QString("apply_%1").arg(factory->id()), a);
+        }
+    }
+    setPopupActionList(list);
+
 
     action = new KAction(i18n("Table..."), this);
     addAction("insert_table", action);
@@ -395,24 +410,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
     connect(action, SIGNAL(triggered()), this, SLOT(debugTextStyles()));
 #endif
 
-    // setup the context list.
-    QSignalMapper *signalMapper = new QSignalMapper(this);
-    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
-    QList<QAction*> list;
-    list.append(this->action("text_default"));
-    list.append(this->action("format_font"));
-    foreach (const QString & key, KoTextEditingRegistry::instance()->keys()) {
-        KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
-        if (factory->showInMenu()) {
-            KAction *a = new KAction(i18n("Apply %1").arg(factory->title()), this);
-            connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
-            signalMapper->setMapping(a, factory->id());
-            list.append(a);
-            addAction(QString("apply_%1").arg(factory->id()), a);
-        }
-    }
-    setPopupActionList(list);
-
     connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
 
     m_caretTimer.setInterval(500);
@@ -438,10 +435,10 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     m_prevCursorPosition(-1),
     m_caretTimer(this),
     m_caretTimerState(true),
-    m_spellcheckPlugin(0),
     m_currentCommand(0),
     m_currentCommandHasChildren(false),
     m_specialCharacterDocker(0),
+    m_textEditingPlugins(0),
     m_changeTipTimer(this),
     m_changeTipCursorPos(0)
 {
@@ -451,7 +448,6 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 
 TextTool::~TextTool()
 {
-    qDeleteAll(m_textEditingPlugins);
 }
 
 void TextTool::showChangeTip()
@@ -706,8 +702,8 @@ void TextTool::setShapeData(KoTextShapeData *data)
         }
     }
     m_textEditor->updateDefaultTextDirection(m_textShapeData->pageDirection());
-    if (m_spellcheckPlugin)
-        m_spellcheckPlugin->checkSection(m_textShapeData->document(), 0, 0);
+    if (m_textEditingPlugins->spellcheck())
+        m_textEditingPlugins->spellcheck()->checkSection(m_textShapeData->document(), 0, 0);
 }
 
 void TextTool::updateSelectionHandler()
@@ -1763,7 +1759,7 @@ void TextTool::showStyleManager()
 
 void TextTool::startTextEditingPlugin(const QString &pluginId)
 {
-    KoTextEditingPlugin *plugin = m_textEditingPlugins.value(pluginId);
+    KoTextEditingPlugin *plugin = m_textEditingPlugins->plugin(pluginId);
     if (plugin) {
         if (m_textEditor->hasSelection()) {
             int from = m_textEditor->position();
@@ -1891,13 +1887,13 @@ void TextTool::editingPluginEvents()
 
 void TextTool::finishedWord()
 {
-    foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins)
+    foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
         plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
 }
 
 void TextTool::finishedParagraph()
 {
-    foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins)
+    foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
         plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
 }
 

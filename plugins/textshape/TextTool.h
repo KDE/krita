@@ -33,6 +33,7 @@
 #include <QTimer>
 #include <QPointer>
 
+class TextEditingPluginContainer;
 class InsertCharacter;
 class KoChangeTracker;
 class KoCharacterStyle;
@@ -304,9 +305,6 @@ private:
     KoColorPopupAction *m_actionFormatTextColor;
     KoColorPopupAction *m_actionFormatBackgroundColor;
 
-    QHash<QString, KoTextEditingPlugin*> m_textEditingPlugins;
-    KoTextEditingPlugin *m_spellcheckPlugin;
-
     QUndoCommand *m_currentCommand; //this command will be the direct parent of undoCommands generated as the result of QTextDocument changes
 
     bool m_currentCommandHasChildren;
@@ -320,6 +318,8 @@ private:
     QList<TextSelection> m_previousSelections;
 
     InsertCharacter *m_specialCharacterDocker;
+
+    TextEditingPluginContainer *m_textEditingPlugins;
 
     bool m_textTyping;
     bool m_textDeleting;

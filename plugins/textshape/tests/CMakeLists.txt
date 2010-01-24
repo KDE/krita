@@ -39,6 +39,7 @@ set(TestChangeListCommand_test_SRCS
     ../commands/AcceptChangeCommand.cpp
     ../commands/RejectChangeCommand.cpp
     ../TextTool.cpp
+    ../TextEditingPluginContainer.cpp
     ../ChangeTracker.cpp
     ../dialogs/FontDia.cpp
     ../dialogs/InsertCharacter.cpp

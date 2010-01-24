@@ -102,8 +102,9 @@ bool KoConnectionShapePrivate::intersects(const QPointF &p1, const QPointF &d1, 
         } else if (p1.y() == p2.y() && d1.y() == 0.0 && d1.x() != d2.x()) {
             // horizontal, coincident
             isect = 0.5 * (p1 + p2);
-        } else
+        } else {
             return false;
+        }
     } else {
         // they are intersecting normally
         isect = p1 + sp1 * d1;
@@ -245,39 +246,36 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().startElement("draw:connector");
     saveOdfAttributes( context, OdfMandatories | OdfAdditionalAttributes );
 
-    switch( d->connectionType )
-    {
-        case Lines:
-            context.xmlWriter().addAttribute( "draw:type", "lines" );
-            break;
-        case Straight:
-            context.xmlWriter().addAttribute( "draw:type", "line" );
-            break;
-        case Curve:
-            context.xmlWriter().addAttribute( "draw:type", "curve" );
-            break;
-        default:
-            context.xmlWriter().addAttribute( "draw:type", "standard" );
-            break;
+    switch (d->connectionType) {
+    case Lines:
+        context.xmlWriter().addAttribute("draw:type", "lines");
+        break;
+    case Straight:
+        context.xmlWriter().addAttribute("draw:type", "line");
+        break;
+    case Curve:
+        context.xmlWriter().addAttribute("draw:type", "curve");
+        break;
+    default:
+        context.xmlWriter().addAttribute("draw:type", "standard");
+        break;
     }
 
     if (d->shape1) {
-        context.xmlWriter().addAttribute( "draw:start-shape", context.drawId(d->shape1) );
-        context.xmlWriter().addAttribute( "draw:start-glue-point", d->connectionPointIndex1 );
-    }
-    else {
+        context.xmlWriter().addAttribute("draw:start-shape", context.drawId(d->shape1));
+        context.xmlWriter().addAttribute("draw:start-glue-point", d->connectionPointIndex1 );
+    } else {
         QPointF p((d->handles[0] + position()) * context.shapeOffset(this));
-        context.xmlWriter().addAttributePt( "svg:x1", p.x() );
-        context.xmlWriter().addAttributePt( "svg:y1", p.y() );
+        context.xmlWriter().addAttributePt("svg:x1", p.x());
+        context.xmlWriter().addAttributePt("svg:y1", p.y());
     }
     if (d->shape2) {
-        context.xmlWriter().addAttribute( "draw:end-shape", context.drawId(d->shape2) );
-        context.xmlWriter().addAttribute( "draw:end-glue-point", d->connectionPointIndex2 );
-    }
-    else {
+        context.xmlWriter().addAttribute("draw:end-shape", context.drawId(d->shape2));
+        context.xmlWriter().addAttribute("draw:end-glue-point", d->connectionPointIndex2 );
+    } else {
         QPointF p((d->handles[d->handles.count()-1] + position()) * context.shapeOffset(this));
-        context.xmlWriter().addAttributePt( "svg:x2", p.x() );
-        context.xmlWriter().addAttributePt( "svg:y2", p.y() );
+        context.xmlWriter().addAttributePt("svg:x2", p.x());
+        context.xmlWriter().addAttributePt("svg:y2", p.y());
     }
 
     saveOdfCommonChildElements(context);
@@ -301,13 +299,12 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         d->connectionType = Standard;
 
     if (element.hasAttributeNS(KoXmlNS::draw, "start-shape")) {
-        d->connectionPointIndex1 = element.attributeNS(KoXmlNS::draw, "start-glue-point", "").toInt();
-        QString shapeId1 = element.attributeNS(KoXmlNS::draw, "start-shape", "");
+        d->connectionPointIndex1 = element.attributeNS(KoXmlNS::draw, "start-glue-point", QString()).toInt();
+        QString shapeId1 = element.attributeNS(KoXmlNS::draw, "start-shape", QString());
         d->shape1 = context.shapeById(shapeId1);
         if (d->shape1) {
             d->shape1->addDependee(this);
-        }
-        else {
+        } else {
             context.updateShape(shapeId1, new KoConnectionShapeLoadingUpdater(this, KoConnectionShapeLoadingUpdater::First));
         }
     } else {
@@ -321,8 +318,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         d->shape2 = context.shapeById(shapeId2);
         if (d->shape2) {
             d->shape2->addDependee(this);
-        }
-        else {
+        } else {
             context.updateShape(shapeId2, new KoConnectionShapeLoadingUpdater(this, KoConnectionShapeLoadingUpdater::Second));
         }
     } else {
@@ -330,7 +326,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         d->handles[d->handles.count() - 1].setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y2", QString())));
     }
 
-    QString skew = element.attributeNS(KoXmlNS::draw, "line-skew", "");
+    QString skew = element.attributeNS(KoXmlNS::draw, "line-skew", QString());
     QStringList skewValues = skew.simplified().split(' ', QString::SkipEmptyParts);
     // TODO apply skew values once we support them
 
@@ -339,7 +335,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     return true;
 }
 
-void KoConnectionShape::moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
+void KoConnectionShape::moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
     Q_D(KoConnectionShape);
@@ -517,7 +513,7 @@ void KoConnectionShape::setType(Type connectionType)
     updatePath(size());
 }
 
-void KoConnectionShape::shapeChanged(ChangeType type, KoShape * shape)
+void KoConnectionShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_D(KoConnectionShape);
     // check if we are during a forced update
@@ -525,35 +521,35 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape * shape)
 
     d->hasMoved = true;
     switch (type) {
-        case PositionChanged:
-        case RotationChanged:
-        case ShearChanged:
-        case ScaleChanged:
-        case GenericMatrixChange:
-        case ParameterChanged:
-            if (isParametricShape() && shape == 0)
-                d->forceUpdate = true;
-            break;
-        case Deleted:
-            if (shape != d->shape1 && shape != d->shape2)
-                return;
-            if (shape == d->shape1)
-                connectFirst(0, -1);
-            if (shape == d->shape2)
-                connectSecond(0, -1);
-            break;
-        default:
+    case PositionChanged:
+    case RotationChanged:
+    case ShearChanged:
+    case ScaleChanged:
+    case GenericMatrixChange:
+    case ParameterChanged:
+        if (isParametricShape() && shape == 0)
+            d->forceUpdate = true;
+        break;
+    case Deleted:
+        if (shape != d->shape1 && shape != d->shape2)
             return;
+        if (shape == d->shape1)
+            connectFirst(0, -1);
+        if (shape == d->shape2)
+            connectSecond(0, -1);
+        break;
+    default:
+        return;
     }
 
     // the connection was moved while it is connected to some other shapes
     const bool connectionChanged = !shape && (d->shape1 || d->shape2);
     // one of the connected shape has moved
     const bool connectedShapeChanged = shape && (shape == d->shape1 || shape == d->shape2);
-    
+
     if (!updateIsActive && (connectionChanged || connectedShapeChanged) && isParametricShape())
         updateConnections();
-    
+
     // reset the forced update flag
     d->forceUpdate = false;
 }

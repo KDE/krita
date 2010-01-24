@@ -32,8 +32,12 @@ class QDomDocument;
 class KRITAIMAGE_EXPORT KisMaskGenerator
 {
 public:
+    enum Type {
+        CIRCLE, RECTANGLE
+    };
+public:
 
-    KDE_DEPRECATED KisMaskGenerator(double width, double height, double fh, double fv);
+    KDE_DEPRECATED KisMaskGenerator(qreal width, qreal height, qreal fh, qreal fv, Type type);
     /**
      * This function creates an auto brush shape with the following value :
      * @param w width
@@ -41,7 +45,7 @@ public:
      * @param fh horizontal fade (fh \< w / 2 )
      * @param fv vertical fade (fv \< h / 2 )
      */
-    KisMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
+    KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, Type type);
 
     virtual ~KisMaskGenerator();
 
@@ -53,9 +57,9 @@ public:
     /**
      * @return the alpha value at the position (x,y)
      */
-    virtual quint8 valueAt(double x, double y) const = 0;
+    virtual quint8 valueAt(qreal x, qreal y) const = 0;
 
-    quint8 interpolatedValueAt(double x, double y);
+    quint8 interpolatedValueAt(qreal x, qreal y);
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
@@ -64,17 +68,24 @@ public:
      */
     static KisMaskGenerator* fromXML(const QDomElement&);
 
-    double width() const;
+    qreal width() const;
 
-    double height() const;
+    qreal height() const;
 
+    qreal radius() const;
+    qreal ratio() const;
+    qreal horizontalFade() const;
+    qreal verticalFade() const;
+    int spikes() const;
+    Type type() const;
 protected:
     struct Private {
-        double m_radius, m_ratio;
-        double m_fh, m_fv;
+        qreal m_radius, m_ratio;
+        qreal m_fh, m_fv;
         int m_spikes;
-        double cs, ss;
+        qreal cs, ss;
         bool m_empty;
+        Type type;
     };
 
     Private* const d;

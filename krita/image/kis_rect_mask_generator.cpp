@@ -27,26 +27,24 @@ struct KisRectangleMaskGenerator::Private {
 };
 
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(double w, double h, double fh, double fv)
-        : KisMaskGenerator(w, h, 0.5 * w - fh, 0.5 * h - fv), d(new Private)
+        : KisMaskGenerator(w, h, 0.5 * w - fh, 0.5 * h - fv, RECTANGLE), d(new Private)
 {
     if (KisMaskGenerator::d->m_fv == 0 &&
-        KisMaskGenerator::d->m_fh == 0) {
+            KisMaskGenerator::d->m_fh == 0) {
         d->m_c = 0;
-    }
-    else {
+    } else {
         d->m_c = (KisMaskGenerator::d->m_fv / KisMaskGenerator::d->m_fh);
         Q_ASSERT(!isnan(d->m_c));
     }
 }
 
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes)
-        : KisMaskGenerator(radius, ratio, fh, fv, spikes), d(new Private)
+        : KisMaskGenerator(radius, ratio, fh, fv, spikes, RECTANGLE), d(new Private)
 {
     if (KisMaskGenerator::d->m_fv == 0 &&
-        KisMaskGenerator::d->m_fh == 0) {
+            KisMaskGenerator::d->m_fh == 0) {
         d->m_c = 0;
-    }
-    else {
+    } else {
         d->m_c = (KisMaskGenerator::d->m_fv / KisMaskGenerator::d->m_fh);
         Q_ASSERT(!isnan(d->m_c));
     }

@@ -34,17 +34,17 @@ class KRITAIMAGE_EXPORT KisCircleMaskGenerator : public KisMaskGenerator
 
 public:
 
-    KDE_DEPRECATED KisCircleMaskGenerator(double w, double h, double fh, double fv);
-    KisCircleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
+    KDE_DEPRECATED KisCircleMaskGenerator(qreal w, qreal h, qreal fh, qreal fv);
+    KisCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes);
     virtual ~KisCircleMaskGenerator();
 
-    virtual quint8 valueAt(double x, double y) const;
+    virtual quint8 valueAt(qreal x, qreal y) const;
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
 private:
 
-    double norme(double a, double b) const {
+    qreal norme(qreal a, qreal b) const {
         return a*a + b * b;
     }
 

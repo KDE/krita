@@ -25,23 +25,25 @@
 #include "kis_circle_mask_generator.h"
 #include "kis_rect_mask_generator.h"
 
-KisMaskGenerator::KisMaskGenerator(double width, double height, double fh, double fv) : d(new Private)
+KisMaskGenerator::KisMaskGenerator(double width, double height, double fh, double fv, Type type) : d(new Private)
 {
     d->m_radius = width;
     d->m_ratio = height / width;
     d->m_fh = 2.0 * fh / width;
     d->m_fv = 2.0 * fv / height;
     d->m_spikes = 2;
+    d->type = type;
     init();
 }
 
-KisMaskGenerator::KisMaskGenerator(double radius, double ratio, double fh, double fv, int spikes) : d(new Private)
+KisMaskGenerator::KisMaskGenerator(double radius, double ratio, double fh, double fv, int spikes, Type type) : d(new Private)
 {
     d->m_radius = radius;
     d->m_ratio = ratio;
     d->m_fh = 0.5 * fh;
     d->m_fv = 0.5 * fv;
     d->m_spikes = spikes;
+    d->type = type;
     init();
 }
 
@@ -131,3 +133,32 @@ double KisMaskGenerator::height() const
     return d->m_radius;
 }
 
+qreal KisMaskGenerator::radius() const
+{
+    return d->m_radius;
+}
+
+qreal KisMaskGenerator::ratio() const
+{
+    return d->m_ratio;
+}
+
+qreal KisMaskGenerator::horizontalFade() const
+{
+    return d->m_fh;
+}
+
+qreal KisMaskGenerator::verticalFade() const
+{
+    return d->m_fv;
+}
+
+int KisMaskGenerator::spikes() const
+{
+    return d->m_spikes;
+}
+
+KisMaskGenerator::Type KisMaskGenerator::type() const
+{
+    return d->type;
+}

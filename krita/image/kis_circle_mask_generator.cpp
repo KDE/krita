@@ -27,7 +27,7 @@ struct KisCircleMaskGenerator::Private {
 };
 
 KisCircleMaskGenerator::KisCircleMaskGenerator(double w, double h, double fh, double fv)
-        : KisMaskGenerator(w, h, 0.5 * w - fh, 0.5 * h - fv), d(new Private)
+        : KisMaskGenerator(w, h, 0.5 * w - fh, 0.5 * h - fv, CIRCLE), d(new Private)
 {
     d->m_xcoef = 2.0 / w;
     d->m_ycoef = 2.0 / h;
@@ -36,7 +36,7 @@ KisCircleMaskGenerator::KisCircleMaskGenerator(double w, double h, double fh, do
 }
 
 KisCircleMaskGenerator::KisCircleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes)
-        : KisMaskGenerator(radius, ratio, fh, fv, spikes), d(new Private)
+        : KisMaskGenerator(radius, ratio, fh, fv, spikes, CIRCLE), d(new Private)
 {
     d->m_xcoef = 2.0 / width();
     d->m_ycoef = 2.0 / (KisMaskGenerator::d->m_ratio * width());

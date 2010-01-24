@@ -29,7 +29,11 @@ class KoColorPopupAction;
 class KisPaintOpSettingsWidget;
 class KisRecordedPaintAction;
 class Ui_WdgPaintActionEditor;
+class KoResource;
 
+/**
+ * This is the editor for all \ref KisRecordedPaintAction
+ */
 class KisRecordedPaintActionEditor : public QWidget
 {
     Q_OBJECT
@@ -39,6 +43,7 @@ public:
 private slots:
     void configurationUpdated();
     void paintOpChanged(int index);
+    void resourceSelected(KoResource* resource);
 signals:
     void actionEdited();
 private:

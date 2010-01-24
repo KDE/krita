@@ -49,7 +49,7 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
     connect(m_paintColorPopup, SIGNAL(colorChanged(const KoColor &)),
             this, SLOT(configurationUpdated()));
 
-    // Setup backround color editor
+    // Setup background color editor
     m_backgroundColorPopup = new KoColorPopupAction(this);
     m_backgroundColorPopup->setCurrentColor(m_action->backgroundColor());
     m_actionEditor->backgroundColor->setDefaultAction(m_backgroundColorPopup);
@@ -60,7 +60,7 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
     m_actionEditor->opacity->setValue(m_action->opacity() / 2.55);
     connect(m_actionEditor->opacity, SIGNAL(valueChanged(int)), SLOT(configurationUpdated()));
 
-    // Setup paintops
+    // Setup paint ops
 
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
     foreach(const KoID& paintopId, keys) {
@@ -85,11 +85,12 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
     }
     connect(m_actionEditor->paintOps, SIGNAL(activated(int)), SLOT(paintOpChanged(int)));
 
-    // Setup config widget for paintop settings
+    // Setup configuration widget for paint op settings
     m_gridLayout = new QGridLayout(m_actionEditor->frmOptionWidgetContainer);
     setPaintOpPreset();
     m_actionEditor->paintOps->setCurrentIndex(m_paintops.indexOf(m_action->paintOpPreset()->paintOp().id()));
     m_paintOpsToPreset[m_action->paintOpPreset()->paintOp().id()] = m_action->paintOpPreset();
+    connect(m_actionEditor->wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)), SLOT(resourceSelected(KoResource*)));
 }
 
 KisRecordedPaintActionEditor::~KisRecordedPaintActionEditor()
@@ -116,6 +117,15 @@ void KisRecordedPaintActionEditor::paintOpChanged(int index)
         preset = KisPaintOpRegistry::instance()->defaultPreset(KoID(id, ""), 0);
         m_paintOpsToPreset[id] = preset;
     }
+    m_action->setPaintOpPreset(preset);
+    setPaintOpPreset();
+}
+
+void KisRecordedPaintActionEditor::resourceSelected(KoResource* resource)
+{
+    KisPaintOpPresetSP preset = static_cast<KisPaintOpPreset*>(resource)->clone();
+
+    m_paintOpsToPreset[preset->paintOp().id()] = preset;
     m_action->setPaintOpPreset(preset);
     setPaintOpPreset();
 }

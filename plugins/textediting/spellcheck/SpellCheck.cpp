@@ -37,7 +37,7 @@
 
 SpellCheck::SpellCheck()
     : m_bgSpellCheck(0),
-    m_enableSpellCheck(false),
+    m_enableSpellCheck(true),
     m_allowSignals(true),
     m_documentIsLoading(false)
 {

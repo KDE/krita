@@ -23,8 +23,11 @@
 #include "kis_recorded_action_editor_factory.h"
 
 class QGridLayout;
+class KoColor;
+class KoColorPopupAction;
 class KisPaintOpSettingsWidget;
 class KisRecordedPaintAction;
+class Ui_WdgPaintActionEditor;
 
 class KisRecordedPaintActionEditor : public QWidget
 {
@@ -38,8 +41,11 @@ signals:
     void actionEdited();
 private:
     KisRecordedPaintAction* m_action;
-    QGridLayout* m_gridLayout;
     KisPaintOpSettingsWidget* m_configWidget;
+    Ui_WdgPaintActionEditor* m_actionEditor;
+    KoColorPopupAction* m_paintColorPopup;
+    KoColorPopupAction* m_backgroundColorPopup;
+    QGridLayout* m_gridLayout;
 };
 
 class KisRecordedPaintActionEditorFactory : public KisRecordedActionEditorFactory

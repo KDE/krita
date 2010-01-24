@@ -21,17 +21,43 @@
 #include <QLabel>
 #include <QGridLayout>
 
+#include <KoColor.h>
+#include <KoColorPopupAction.h>
+
 #include "recorder/kis_recorded_paint_action.h"
 #include <kis_paintop_preset.h>
 #include <kis_paintop_registry.h>
 #include <kis_paintop_settings_widget.h>
 
+#include "ui_wdgpaintactioneditor.h"
+
 KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisRecordedAction* action) : QWidget(parent),
         m_action(dynamic_cast<KisRecordedPaintAction*>(action)),
-        m_gridLayout(new QGridLayout(this))
+        m_actionEditor(new Ui_WdgPaintActionEditor)
 {
     Q_ASSERT(m_action);
-    m_configWidget = KisPaintOpRegistry::instance()->get(m_action->paintOpPreset()->paintOp().id())->createSettingsWidget(this);
+    m_actionEditor->setupUi(this);
+
+    // Setup paint color editor
+    m_paintColorPopup = new KoColorPopupAction(this);
+    m_paintColorPopup->setCurrentColor(m_action->paintColor());
+    m_actionEditor->paintColor->setDefaultAction(m_paintColorPopup);
+    connect(m_paintColorPopup, SIGNAL(colorChanged(const KoColor &)),
+            this, SLOT(configurationUpdated()));
+
+    // Setup backround color editor
+    m_backgroundColorPopup = new KoColorPopupAction(this);
+    m_backgroundColorPopup->setCurrentColor(m_action->paintColor());
+    m_actionEditor->paintColor->setDefaultAction(m_backgroundColorPopup);
+    connect(m_backgroundColorPopup, SIGNAL(colorChanged(const KoColor &)),
+            this, SLOT(configurationUpdated()));
+
+    // Setup opacity
+    m_actionEditor->opacity->setValue(m_action->opacity());
+    connect(m_actionEditor->opacity, SIGNAL(valueChanged(int)), SLOT(configurationUpdated()));
+
+    m_configWidget = KisPaintOpRegistry::instance()->get(m_action->paintOpPreset()->paintOp().id())->createSettingsWidget(m_actionEditor->frmOptionWidgetContainer);
+    m_gridLayout = new QGridLayout(m_actionEditor->frmOptionWidgetContainer);
     if (m_configWidget) {
         m_gridLayout->addWidget(m_configWidget);
         m_configWidget->setConfiguration(m_action->paintOpPreset()->settings());
@@ -43,11 +69,17 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
 
 KisRecordedPaintActionEditor::~KisRecordedPaintActionEditor()
 {
+    delete m_actionEditor;
 }
 
 void KisRecordedPaintActionEditor::configurationUpdated()
 {
     m_configWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_action->paintOpPreset()->settings().data()));
+
+    m_action->setPaintColor(m_paintColorPopup->currentKoColor());
+    m_action->setBackgroundColor(m_backgroundColorPopup->currentKoColor());
+    m_action->setOpacity(m_actionEditor->opacity->value());
+
     emit(actionEdited());
 }
 

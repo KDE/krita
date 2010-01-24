@@ -2424,17 +2424,15 @@ KoGuidesData &KoDocument::guidesData()
 
 KoMainWindow* KoDocument::currentShell()
 {
-    QWidget* widget = qApp->activeWindow();
-    if (!widget) return 0;
-
-    while(qobject_cast<KoMainWindow*>(widget) == 0 && widget->parent() && widget->parent()->inherits("QWidget")) {
-        widget = qobject_cast<QWidget*>(widget->parent());
+    QWidget *widget = qApp->activeWindow();
+    KoMainWindow *shell = qobject_cast<KoMainWindow*>(widget);
+    while (!shell && widget) {
+        widget = widget->parentWidget();
+        shell = qobject_cast<KoMainWindow*>(widget);
     }
 
-    KoMainWindow* shell = qobject_cast<KoMainWindow*>(widget);
-    if (!shell) {
+    if (!shell)
         shell = d->shells.first();
-    }
     return shell;
 }
 

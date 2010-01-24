@@ -40,6 +40,20 @@ void KisDatamanagerBenchmark::benchmarkCreation()
     }
 }
 
+void KisDatamanagerBenchmark::benchmarkWriteBytes()
+{
+    quint8 *p = new quint8[3];
+    memset(p, 0, 3);
+    KisDataManager dm(3, p);
+
+    quint8 *bytes = new quint8[3 * 1024 * 1024];
+    memset(bytes, 0, 3 * 1024 * 1024);
+
+    QBENCHMARK {
+        dm.writeBytes(bytes, 0, 0, 1024, 1024);
+    }
+}
+
 
 QTEST_KDEMAIN(KisDatamanagerBenchmark, GUI)
 #include "kis_datamanager_benchmark.moc"

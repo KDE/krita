@@ -29,7 +29,7 @@ private slots:
 
     void initTestCase();
     void benchmarkCreation();
-
+    void benchmarkWriteBytes();
 };
 
 #endif

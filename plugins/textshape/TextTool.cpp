@@ -344,7 +344,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         if (factory->showInMenu()) {
-            KAction *a = new KAction(i18n("Apply %1").arg(factory->title()), this);
+            KAction *a = new KAction(i18n("Apply %1", factory->title()), this);
             connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
             signalMapper->setMapping(a, factory->id());
             list.append(a);

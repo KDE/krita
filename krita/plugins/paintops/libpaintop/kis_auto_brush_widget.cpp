@@ -62,10 +62,10 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
 
     inputSpikes->setSliderEnabled(true);
     connect(inputSpikes, SIGNAL(valueChanged(int)), this, SLOT(paramChanged()));
-    
+
     inputAngle->setSliderEnabled(true);
     connect(inputAngle, SIGNAL(valueChanged(int)), this, SLOT(paramChanged()));
-    
+
     showSlider(inputSpacing, 0.1);
     connect(inputSpacing, SIGNAL(valueChanged(double)), this, SLOT(paramChanged()));
 
@@ -96,7 +96,6 @@ void KisAutoBrushWidget::paramChanged()
 
     if (comboBoxShape->currentIndex() == 0) { // use index compare instead of comparing a translatable string
         kas = new KisCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
-//         kas = new KisCircleMaskGenerator(inputRadius->value(), inputRadius->value() * inputRatio->value(), inputHFade->value(), inputVFade->value());
         Q_CHECK_PTR(kas);
 
     } else {
@@ -169,7 +168,12 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     m_autoBrush = brush;
     m_brush = brush->image();
     // XXX: lock, set and unlock the widgets.
-
+    KisAutoBrush* aBrush = dynamic_cast<KisAutoBrush*>(brush.data());
+    inputRadius->setValue(aBrush->maskGenerator()->radius());
+    inputRatio->setValue(aBrush->maskGenerator()->ratio());
+    inputHFade->setValue(aBrush->maskGenerator()->horizontalFade());
+    inputVFade->setValue(aBrush->maskGenerator()->verticalFade());
+    inputAngle->setValue(aBrush->angle() * 180 / M_PI);
 }
 
 

@@ -34,7 +34,7 @@
 
 struct KisAutoBrush::Private {
     KisMaskGenerator* shape;
-    double angle;
+    qreal angle;
 };
 
 KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, double angle)
@@ -178,4 +178,14 @@ QImage KisAutoBrush::createBrushPreview()
 QPointF KisAutoBrush::hotSpot(double scaleX, double scaleY, double rotation) const
 {
     return KisBrush::hotSpot(scaleX, scaleY, rotation + d->angle);
+}
+
+const KisMaskGenerator* KisAutoBrush::maskGenerator() const
+{
+    return d->shape;
+}
+
+qreal KisAutoBrush::angle() const
+{
+    return d->angle;
 }

@@ -92,6 +92,7 @@ add_subdirectory( dtd )
 add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( pics )
+add_subdirectory( benchmarks )
 
 set(kritapart_PART_SRCS krita_part_init.cc)
 kde4_add_plugin(kritapart WITH_PREFIX ${kritapart_PART_SRCS})

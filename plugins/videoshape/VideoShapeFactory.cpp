@@ -37,7 +37,6 @@ VideoShapeFactory::VideoShapeFactory(QObject *parent)
     setIcon("x-shape-video");
     setOdfElementNames(KoXmlNS::draw, QStringList("video"));
     setLoadingPriority(1);
-    m_configWidget = new VideoShapeConfigWidget();
 }
 
 KoShape *VideoShapeFactory::createDefaultShape(KoResourceManager *documentResources) const

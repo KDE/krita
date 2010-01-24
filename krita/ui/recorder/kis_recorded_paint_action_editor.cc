@@ -47,8 +47,8 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
 
     // Setup backround color editor
     m_backgroundColorPopup = new KoColorPopupAction(this);
-    m_backgroundColorPopup->setCurrentColor(m_action->paintColor());
-    m_actionEditor->paintColor->setDefaultAction(m_backgroundColorPopup);
+    m_backgroundColorPopup->setCurrentColor(m_action->backgroundColor());
+    m_actionEditor->backgroundColor->setDefaultAction(m_backgroundColorPopup);
     connect(m_backgroundColorPopup, SIGNAL(colorChanged(const KoColor &)),
             this, SLOT(configurationUpdated()));
 

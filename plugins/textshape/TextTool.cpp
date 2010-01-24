@@ -404,8 +404,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     foreach (const QString & key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         if (factory->showInMenu()) {
-            KAction *a = new KAction(factory->title(), this);
-            //KAction *a = new KAction(i18n("Apply %1").arg(factory->title()), this); // TODO enable this when stringfreeze lifts
+            KAction *a = new KAction(i18n("Apply %1").arg(factory->title()), this);
             connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
             signalMapper->setMapping(a, factory->id());
             list.append(a);
@@ -1257,7 +1256,7 @@ void TextTool::deactivate()
     if (m_textShapeData) {
         TextSelection selection;
         selection.document = m_textShapeData->document();
-        selection.position = m_textEditor->position();//TODO is this really necessary with KoTextEditor?
+        selection.position = m_textEditor->position();
         selection.anchor = m_textEditor->anchor();
         m_previousSelections.append(selection);
     }

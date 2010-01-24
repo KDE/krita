@@ -20,11 +20,11 @@
 #ifndef koDirectoryStore_h
 #define koDirectoryStore_h
 
-#include "KoStoreBase.h"
+#include "KoStore.h"
 
 class QFile;
 
-class KoDirectoryStore : public KoStoreBase
+class KoDirectoryStore : public KoStore
 {
 public:
     KoDirectoryStore(const QString& path, Mode _mode);

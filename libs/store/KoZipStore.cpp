@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2000-2002 David Faure <faure@kde.org>
+   Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,6 +19,7 @@
 */
 
 #include "KoZipStore.h"
+#include "KoStore_p.h"
 
 #include <QBuffer>
 //Added by qt3to4:
@@ -34,6 +36,9 @@ KoZipStore::KoZipStore(const QString & _filename, Mode _mode, const QByteArray &
     kDebug(s_area) << "KoZipStore Constructor filename =" << _filename
     << " mode = " << int(_mode)
     << " mimetype = " << appIdentification << endl;
+    Q_D(KoStore);
+
+    d->localFileName = _filename;
 
     m_pZip = new KZip(_filename);
 
@@ -52,35 +57,37 @@ KoZipStore::KoZipStore(QWidget* window, const KUrl & _url, const QString & _file
     << " filename = " << _filename
     << " mode = " << int(_mode)
     << " mimetype = " << appIdentification << endl;
+    Q_D(KoStore);
 
-    m_url = _url;
-    m_window = window;
+    d->url = _url;
+    d->window = window;
 
     if (_mode == KoStore::Read) {
-        m_fileMode = KoStoreBase::RemoteRead;
-        m_localFileName = _filename;
+        d->fileMode = KoStorePrivate::RemoteRead;
+        d->localFileName = _filename;
 
     } else {
-        m_fileMode = KoStoreBase::RemoteWrite;
-        m_localFileName = "/tmp/kozip"; // ### FIXME with KTempFile
+        d->fileMode = KoStorePrivate::RemoteWrite;
+        d->localFileName = "/tmp/kozip"; // ### FIXME with KTempFile
     }
 
-    m_pZip = new KZip(m_localFileName);
+    m_pZip = new KZip(d->localFileName);
     m_bGood = init(_mode, appIdentification);   // open the zip file and init some vars
 }
 
 KoZipStore::~KoZipStore()
 {
+    Q_D(KoStore);
     kDebug(s_area) << "KoZipStore::~KoZipStore";
     if (!m_bFinalized)
         finalize(); // ### no error checking when the app forgot to call finalize itself
     delete m_pZip;
 
     // Now we have still some job to do for remote files.
-    if (m_fileMode == KoStoreBase::RemoteRead) {
-        KIO::NetAccess::removeTempFile(m_localFileName);
-    } else if (m_fileMode == KoStoreBase::RemoteWrite) {
-        KIO::NetAccess::upload(m_localFileName, m_url, m_window);
+    if (d->fileMode == KoStorePrivate::RemoteRead) {
+        KIO::NetAccess::removeTempFile(d->localFileName);
+    } else if (d->fileMode == KoStorePrivate::RemoteWrite) {
+        KIO::NetAccess::upload(d->localFileName, d->url, d->window);
         // ### FIXME: delete temp file
     }
 }

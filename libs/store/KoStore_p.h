@@ -1,7 +1,7 @@
-//
+// -*- c-basic-offset: 2 -*-
 /* This file is part of the KDE project
    Copyright 2004 Nicolas GOUTTE <goutte@kde.org>
-
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -18,12 +18,31 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoStoreBase.h"
+#ifndef __koStore_p_h_
+#define __koStore_p_h_
 
-KoStoreBase::KoStoreBase(void) : m_fileMode(Local), m_window(0)
-{
-}
 
-KoStoreBase::~KoStoreBase(void)
+#include <QString>
+
+#include <kurl.h>
+
+class QWidget;
+
+class KoStorePrivate
 {
-}
+public:
+    KoStorePrivate() : fileMode(Local), window(0) {}
+
+    enum FileMode { /*Bad=0,*/ Local = 1, RemoteRead, RemoteWrite };
+
+    /**
+     * original URL of the remote file
+     * (undefined for a local file)
+     */
+    KUrl url;
+    FileMode fileMode;
+    QString localFileName;
+    QWidget* window;
+};
+
+#endif

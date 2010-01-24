@@ -20,7 +20,7 @@
 #ifndef koZipStore_h
 #define koZipStore_h
 
-#include "KoStoreBase.h"
+#include "KoStore.h"
 //Added by qt3to4:
 #include <QByteArray>
 
@@ -28,7 +28,7 @@ class KZip;
 class KArchiveDirectory;
 class KUrl;
 
-class KoZipStore : public KoStoreBase
+class KoZipStore : public KoStore
 {
 public:
     KoZipStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification);
@@ -42,7 +42,6 @@ public:
 
     virtual qint64 write(const char* _data, qint64 _len);
 protected:
-
     using KoStore::init;
 
     virtual bool init(Mode _mode, const QByteArray& appIdentification);
@@ -63,6 +62,8 @@ protected:
     /** In "Read" mode this pointer is pointing to the
     current directory in the archive to speed up the verification process */
     const KArchiveDirectory* m_currentDir;
+private:
+    Q_DECLARE_PRIVATE(KoStore)
 };
 
 #endif

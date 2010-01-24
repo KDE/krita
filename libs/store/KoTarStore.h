@@ -20,7 +20,7 @@
 #ifndef koTarStore_h
 #define koTarStore_h
 
-#include "KoStoreBase.h"
+#include "KoStore.h"
 //Added by qt3to4:
 #include <QByteArray>
 
@@ -28,7 +28,7 @@ class KTar;
 class KArchiveDirectory;
 class KUrl;
 
-class KoTarStore : public KoStoreBase
+class KoTarStore : public KoStore
 {
 public:
     KoTarStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification);
@@ -63,7 +63,8 @@ protected:
 
     /// Buffer used when writing
     QByteArray m_byteArray;
-
+private:
+    Q_DECLARE_PRIVATE(KoStore)
 };
 
 #endif

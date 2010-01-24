@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thomas Schaap <thomas.schaap@kdemail.net>
+   Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +21,7 @@
 
 #include "KoEncryptedStore.h"
 #include "KoEncryptionChecker.h"
+#include "KoStore_p.h"
 #include "KoXmlReader.h"
 
 #include <QString>
@@ -89,25 +91,26 @@ KoEncryptedStore::KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray &
 KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QString & filename, Mode mode, const QByteArray & appIdentification)
         : m_qcaInit(QCA::Initializer()), m_password(QCA::SecureArray()), m_filename(QString(url.url())), m_manifestBuffer(QByteArray()), m_tempFile(NULL), m_bPasswordUsed(false), m_bPasswordDeclined(false), m_currentDir(NULL)
 {
+    Q_D(KoStore);
 
-    m_window = window;
+    d->window = window;
     m_bGood = true;
 
     if (mode == Read) {
-        m_fileMode = RemoteRead;
-        m_localFileName = filename;
-        m_pZip = new KZip(m_localFileName);
+        d->fileMode = KoStorePrivate::RemoteRead;
+        d->localFileName = filename;
+        m_pZip = new KZip(d->localFileName);
     } else {
-        m_fileMode = RemoteWrite;
+        d->fileMode = KoStorePrivate::RemoteWrite;
         m_tempFile = new KTemporaryFile();
         if (!m_tempFile->open()) {
             m_bGood = false;
         } else {
-            m_localFileName = m_tempFile->fileName();
+            d->localFileName = m_tempFile->fileName();
             m_pZip = new KZip(m_tempFile);
         }
     }
-    m_url = url;
+    d->url = url;
 
     init(mode, appIdentification);
 }
@@ -435,6 +438,7 @@ bool KoEncryptedStore::doFinalize()
 
 KoEncryptedStore::~KoEncryptedStore()
 {
+    Q_D(KoStore);
     /* Finalization of an encrypted store must happen earlier than deleting the zip. This rule normally is executed by KoStore, but too late to do any good.*/
     if (!m_bFinalized) {
         finalize();
@@ -442,11 +446,11 @@ KoEncryptedStore::~KoEncryptedStore()
 
     delete m_pZip;
 
-    if (m_fileMode == RemoteWrite) {
-        KIO::NetAccess::upload(m_localFileName, m_url, m_window);
+    if (d->fileMode == KoStorePrivate::RemoteWrite) {
+        KIO::NetAccess::upload(d->localFileName, d->url, d->window);
         delete m_tempFile;
-    } else if (m_fileMode == RemoteRead) {
-        KIO::NetAccess::removeTempFile(m_localFileName);
+    } else if (d->fileMode == KoStorePrivate::RemoteRead) {
+        KIO::NetAccess::removeTempFile(d->localFileName);
     }
 
     delete m_stream;
@@ -467,6 +471,7 @@ bool KoEncryptedStore::isToBeEncrypted(const QString& name)
 
 bool KoEncryptedStore::openRead(const QString& name)
 {
+    Q_D(KoStore);
     if (bad())
         return false;
 
@@ -526,7 +531,7 @@ bool KoEncryptedStore::openRead(const QString& name)
             } else {
                 if (!m_filename.isNull())
                     keepPass = false;
-                KPasswordDialog dlg(m_window , keepPass ? KPasswordDialog::ShowKeepPassword : static_cast<KPasswordDialog::KPasswordDialogFlags>(0));
+                KPasswordDialog dlg(d->window , keepPass ? KPasswordDialog::ShowKeepPassword : static_cast<KPasswordDialog::KPasswordDialogFlags>(0));
                 dlg.setPrompt(i18n("Please enter the password to open this file."));
                 if (! dlg.exec()) {
                     m_bPasswordDeclined = true;
@@ -597,6 +602,7 @@ bool KoEncryptedStore::closeRead()
 
 void KoEncryptedStore::findPasswordInKWallet()
 {
+    Q_D(KoStore);
     /* About KWallet access
      *
      * The choice has been made to postfix every entry in a kwallet concerning passwords for opendocument files with /opendocument
@@ -606,7 +612,7 @@ void KoEncryptedStore::findPasswordInKWallet()
      * entry), it seems a good thing to make sure it won't happen.
      */
     if (!m_filename.isNull() && !KWallet::Wallet::folderDoesNotExist(KWallet::Wallet::LocalWallet(), KWallet::Wallet::PasswordFolder()) && !KWallet::Wallet::keyDoesNotExist(KWallet::Wallet::LocalWallet(), KWallet::Wallet::PasswordFolder(), m_filename + "/opendocument")) {
-        KWallet::Wallet *wallet = KWallet::Wallet::openWallet(KWallet::Wallet::LocalWallet(), m_window ? m_window->winId() : 0);
+        KWallet::Wallet *wallet = KWallet::Wallet::openWallet(KWallet::Wallet::LocalWallet(), d->window ? d->window->winId() : 0);
         if (wallet) {
             if (wallet->setFolder(KWallet::Wallet::PasswordFolder())) {
                 QString pass;
@@ -620,7 +626,8 @@ void KoEncryptedStore::findPasswordInKWallet()
 
 void KoEncryptedStore::savePasswordInKWallet()
 {
-    KWallet::Wallet *wallet = KWallet::Wallet::openWallet(KWallet::Wallet::LocalWallet(), m_window ? m_window->winId() : 0);
+    Q_D(KoStore);
+    KWallet::Wallet *wallet = KWallet::Wallet::openWallet(KWallet::Wallet::LocalWallet(), d->window ? d->window->winId() : 0);
     if (wallet) {
         if (!wallet->hasFolder(KWallet::Wallet::PasswordFolder())) {
             wallet->createFolder(KWallet::Wallet::PasswordFolder());
@@ -681,6 +688,7 @@ bool KoEncryptedStore::openWrite(const QString& name)
 
 bool KoEncryptedStore::closeWrite()
 {
+    Q_D(KoStore);
     bool passWasAsked = false;
     if (m_sName == MANIFEST_FILE) {
         m_manifestBuffer = static_cast<QBuffer*>(m_stream)->buffer();
@@ -693,7 +701,7 @@ bool KoEncryptedStore::closeWrite()
         findPasswordInKWallet();
     }
     while (m_password.isEmpty()) {
-        KNewPasswordDialog dlg(m_window);
+        KNewPasswordDialog dlg(d->window);
         dlg.setPrompt(i18n("Please enter the password to encrypt the document with."));
         if (! dlg.exec()) {
             // Without the first password, prevent asking again by deadsimply refusing to continue functioning
@@ -708,7 +716,7 @@ bool KoEncryptedStore::closeWrite()
     }
 
     // Ask the user to save the password
-    if (passWasAsked && KMessageBox::questionYesNo(m_window ? m_window : NULL, i18n("Do you want to save the password?")) == KMessageBox::Yes) {
+    if (passWasAsked && KMessageBox::questionYesNo(d->window, i18n("Do you want to save the password?")) == KMessageBox::Yes) {
         savePasswordInKWallet();
     }
 

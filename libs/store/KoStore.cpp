@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2000-2002 David Faure <faure@kde.org>, Werner Trobin <trobin@kde.org>
+   Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +20,7 @@
 */
 
 #include "KoStore.h"
+#include "KoStore_p.h"
 
 #include "KoTarStore.h"
 #include "KoZipStore.h"
@@ -191,7 +193,7 @@ const char* const ROOTPART = "root";
 const char* const MAINNAME = "maindoc.xml";
 }
 
-KoStore::KoStore()
+KoStore::KoStore() : d_ptr(new KoStorePrivate)
 {
 }
 
@@ -210,6 +212,16 @@ bool KoStore::init(Mode _mode)
 KoStore::~KoStore()
 {
     delete m_stream;
+    delete d_ptr;
+}
+
+KUrl KoStore::urlOfStore() const
+{
+    Q_D(const KoStore);
+    if (d->fileMode == KoStorePrivate::RemoteRead || d->fileMode == KoStorePrivate::RemoteWrite)
+        return d->url;
+    else
+        return KUrl(d->localFileName);
 }
 
 bool KoStore::open(const QString & _name)

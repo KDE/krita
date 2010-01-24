@@ -1,6 +1,7 @@
 // -*- c-basic-offset: 2 -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 David Faure <faure@kde.org>
+   Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,9 +29,10 @@
 #include <QtCore/QByteArray>
 #include "kostore_export.h"
 
-class QWidget;
+#include <kurl.h>
 
-class KUrl;
+class QWidget;
+class KoStorePrivate;
 
 /**
  * Saves and loads KOffice documents using various backends. Currently supported
@@ -93,6 +95,13 @@ public:
      * Destroys the store (i.e. closes the file on the hard disk)
      */
     virtual ~KoStore();
+
+    /**
+     * Returns the url of the store. It can be a filename or a remote url.
+     * it can also be empty, if the store is a bytearray
+     * @return the url of the store as supplied in the createStore calls
+     */
+    KUrl urlOfStore() const;
 
     /**
      * Open a new file inside the store
@@ -435,7 +444,10 @@ protected:
 
     static const int s_area;
 
+    KoStorePrivate *d_ptr;
+
 private:
+    Q_DECLARE_PRIVATE(KoStore)
     /// Used to push/pop directories to make it easy to save/restore the state
     QStack<QString> m_directoryStack;
 

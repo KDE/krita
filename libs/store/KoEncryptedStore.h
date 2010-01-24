@@ -20,7 +20,7 @@
 #ifndef KoEncryptedStore_h
 #define KoEncryptedStore_h
 
-#include "KoStoreBase.h"
+#include "KoStore.h"
 #include <QHash>
 #include <QtCrypto>
 
@@ -34,7 +34,7 @@ class KArchiveDirectory;
 class KTemporaryFile;
 struct KoEncryptedStore_EncryptionData;
 
-class KoEncryptedStore : public KoStoreBase
+class KoEncryptedStore : public KoStore
 {
 public:
     KoEncryptedStore(const QString & filename, Mode mode, const QByteArray & appIdentification);
@@ -117,6 +117,8 @@ protected:
     /** In "Read" mode this pointer is pointing to the
     current directory in the archive to speed up the verification process */
     const KArchiveDirectory* m_currentDir;
+private:
+    Q_DECLARE_PRIVATE(KoStore)
 };
 
 #endif

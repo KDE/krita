@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2000-2002 David Faure <faure@kde.org>
+   Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,6 +19,7 @@
 */
 
 #include "KoTarStore.h"
+#include "KoStore_p.h"
 
 #include <QBuffer>
 //Added by qt3to4:
@@ -33,6 +35,9 @@ KoTarStore::KoTarStore(const QString & _filename, Mode _mode, const QByteArray &
 {
     kDebug(s_area) << "KoTarStore Constructor filename =" << _filename
     << " mode = " << int(_mode) << endl;
+    Q_D(KoStore);
+
+    d->localFileName = _filename;
 
     m_pTar = new KTar(_filename, "application/x-gzip");
 
@@ -57,20 +62,21 @@ KoTarStore::KoTarStore(QWidget* window, const KUrl& _url, const QString & _filen
     kDebug(s_area) << "KoTarStore Constructor url=" << _url.pathOrUrl()
     << " filename = " << _filename
     << " mode = " << int(_mode) << endl;
+    Q_D(KoStore);
 
-    m_url = _url;
-    m_window = window;
+    d->url = _url;
+    d->window = window;
 
     if (_mode == KoStore::Read) {
-        m_fileMode = KoStoreBase::RemoteRead;
-        m_localFileName = _filename;
+        d->fileMode = KoStorePrivate::RemoteRead;
+        d->localFileName = _filename;
 
     } else {
-        m_fileMode = KoStoreBase::RemoteWrite;
-        m_localFileName = "/tmp/kozip"; // ### FIXME with KTempFile
+        d->fileMode = KoStorePrivate::RemoteWrite;
+        d->localFileName = "/tmp/kozip"; // ### FIXME with KTempFile
     }
 
-    m_pTar = new KTar(m_localFileName, "application/x-gzip");
+    m_pTar = new KTar(d->localFileName, "application/x-gzip");
 
     m_bGood = init(_mode);   // open the targz file and init some vars
 
@@ -80,15 +86,16 @@ KoTarStore::KoTarStore(QWidget* window, const KUrl& _url, const QString & _filen
 
 KoTarStore::~KoTarStore()
 {
+    Q_D(KoStore);
     if (!m_bFinalized)
         finalize(); // ### no error checking when the app forgot to call finalize itself
     delete m_pTar;
 
     // Now we have still some job to do for remote files.
-    if (m_fileMode == KoStoreBase::RemoteRead) {
-        KIO::NetAccess::removeTempFile(m_localFileName);
-    } else if (m_fileMode == KoStoreBase::RemoteWrite) {
-        KIO::NetAccess::upload(m_localFileName, m_url, m_window);
+    if (d->fileMode == KoStorePrivate::RemoteRead) {
+        KIO::NetAccess::removeTempFile(d->localFileName);
+    } else if (d->fileMode == KoStorePrivate::RemoteWrite) {
+        KIO::NetAccess::upload(d->localFileName, d->url, d->window);
         // ### FIXME: delete temp file
     }
 }

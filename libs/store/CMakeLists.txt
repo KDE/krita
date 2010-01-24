@@ -10,11 +10,10 @@ add_subdirectory( tests )
 ########### next target ###############
 
 set(kostore_LIB_SRCS 
-   KoStore.cpp 
-   KoTarStore.cpp 
-   KoDirectoryStore.cpp 
-   KoZipStore.cpp 
-   KoStoreBase.cpp 
+   KoStore.cpp
+   KoTarStore.cpp
+   KoDirectoryStore.cpp
+   KoZipStore.cpp
    KoXmlReader.cpp
    KoXmlWriter.cpp
    KoEncryptedStore.cpp

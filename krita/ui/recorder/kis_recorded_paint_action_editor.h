@@ -46,6 +46,7 @@ private:
     KoColorPopupAction* m_paintColorPopup;
     KoColorPopupAction* m_backgroundColorPopup;
     QGridLayout* m_gridLayout;
+    QList<QString> m_paintops;
 };
 
 class KisRecordedPaintActionEditorFactory : public KisRecordedActionEditorFactory

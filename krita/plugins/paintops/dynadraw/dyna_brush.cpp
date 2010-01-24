@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2009-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,10 +35,10 @@ DynaBrush::DynaBrush()
     m_counter = 0;
 
     // default values from Paul Haeberli code
-    m_cursorFilter.setUseFixedAngle(true);
+    /*m_cursorFilter.setUseFixedAngle(true);
     m_cursorFilter.setFixedAngles(0.6,0.2); 
-    m_width = 1.5;
-    m_maxWidth = 0.05;
+    initWidth = 1.5;
+    widthRange = 0.05;*/
     m_odelx = 0.0;
     m_odely = 0.0;
 }
@@ -53,9 +53,14 @@ void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
     my = m_cursorPos.y();
 
     if (!m_initialized) {
-        m_cursorFilter.initialize(mx, my);
+        m_cursorFilter.initFilterPosition(mx, my);
+        m_cursorFilter.setUseFixedAngle(m_properties->useFixedAngle);
+        m_cursorFilter.setFixedAngles(m_properties->xAngle,m_properties->yAngle);
+        m_cursorFilter.setMass(m_properties->mass);
+        m_cursorFilter.setDrag(m_properties->drag);
+        
 
-        for (int i = 0; i < m_circleRadius; i++) {
+        for (quint16 i = 0; i < m_properties->circleRadius; i++) {
             m_prevPosition.append(QPointF(x, y));
         }
 
@@ -82,9 +87,9 @@ void DynaBrush::drawSegment(KisPainter &painter)
     qreal wid;
     qreal px, py, nx, ny;
 
-    wid = m_maxWidth - m_cursorFilter.velocity();
+    wid = m_properties->widthRange - m_cursorFilter.velocity();
 
-    wid = wid * m_width;
+    wid = wid * m_properties->initWidth;
 
     if (wid < 0.00001) {
         wid = 0.00001;
@@ -122,28 +127,28 @@ void DynaBrush::drawSegment(KisPainter &painter)
     nowl.ry() *= m_image->height();
     nowr.ry() *= m_image->height();
 
-    if (m_enableLine)
+    if (m_properties->enableLine)
         painter.drawLine(prev, now);
 
-    if (m_action == 0) {
+    if (m_properties->action == 0) {
         qreal screenX = m_cursorFilter.velocityX() * m_image->width();
         qreal screenY = m_cursorFilter.velocityY() * m_image->height();
         qreal speed = sqrt(screenX * screenX + screenY * screenY);
-        speed = qBound(0.0, speed , m_circleRadius * 2.0);
+        speed = qBound(0.0, speed , m_properties->circleRadius * 2.0);
 
-        drawCircle(painter, prev.x(), prev.y() , m_circleRadius + speed, 2 * m_circleRadius  + speed);
+        drawCircle(painter, prev.x(), prev.y() , m_properties->circleRadius + speed, 2 * m_properties->circleRadius  + speed);
         //painter.paintEllipse(prevl.x(), prevl.y(), qAbs((prevl - prevr).x()), qAbs((prevl - prevr).y()) );
-        if (m_twoCircles) {
-            drawCircle(painter, now.x(), now.y() , m_circleRadius + speed, 2 * m_circleRadius + speed);
+        if (m_properties->useTwoCircles) {
+            drawCircle(painter, now.x(), now.y() , m_properties->circleRadius + speed, 2 * m_properties->circleRadius + speed);
             //drawCircle(painter, now.x(), now.y() , m_circleRadius * m_mouse.vel , 2 * m_circleRadius * m_mouse.vel );
             //  painter.paintEllipse(nowl.x(), nowl.y(), qAbs((nowl - nowr).x()), qAbs((nowl - nowr).y()) );
         }
-    } else if (m_action == 1) {
+    } else if (m_properties->action == 1) {
         drawQuad(painter, prevr, prevl, nowl, nowr);
-    } else if (m_action == 2) {
+    } else if (m_properties->action == 2) {
         drawWire(painter, prevr, prevl, nowl, nowr);
-    } else if (m_action == 3) {
-        drawLines(painter, prev, now, m_lineCount);
+    } else if (m_properties->action == 3) {
+        drawLines(painter, prev, now, m_properties->lineCount);
     }
 
     m_odelx = delx;
@@ -217,8 +222,8 @@ void DynaBrush::drawLines(KisPainter &painter,
 
     int half = count / 2;
     for (int i = 0; i < count; i++) {
-        offsetX = m_cursorFilter.angleX() * (i - half) * m_lineSpacing * m_cursorFilter.acceleration();
-        offsetY = m_cursorFilter.angleY() * (i - half) * m_lineSpacing * m_cursorFilter.acceleration();
+        offsetX = m_cursorFilter.angleX() * (i - half) * m_properties->lineSpacing * m_cursorFilter.acceleration();
+        offsetY = m_cursorFilter.angleY() * (i - half) * m_properties->lineSpacing * m_cursorFilter.acceleration();
 
         p2.setX(now.x() + offsetX);
         p2.setY(now.y() + offsetY);

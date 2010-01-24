@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Lukáš Tvrdý (lukast.dev@gmail.com)
+ * Copyright (c) 2009-2010 Lukáš Tvrdý (lukast.dev@gmail.com)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,18 +18,16 @@
 #include "dyna_paintop_plugin.h"
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
-#include <kstandarddirs.h>
-#include <kis_debug.h>
 #include <kpluginfactory.h>
 
 #include <kis_paintop_registry.h>
 
 #include "kis_dyna_paintop.h"
 #include "kis_dyna_paintop_settings.h"
-#include "kis_simple_paintop_factory.h"
+#include "kis_dyna_paintop_settings_widget.h"
 
+#include "kis_simple_paintop_factory.h"
 #include "kis_global.h"
 
 K_PLUGIN_FACTORY(DynaPaintOpPluginFactory, registerPlugin<DynaPaintOpPlugin>();)
@@ -42,7 +40,7 @@ DynaPaintOpPlugin::DynaPaintOpPlugin(QObject *parent, const QVariantList &)
     //
     //setComponentData(DynaPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisDynaPaintOp, KisDynaPaintOpSettings, KisDynaPaintOpSettingsWidget>("dyna brush", i18n("Dyna brush"), "krita-dyna.png"));
+    r->add(new KisSimplePaintOpFactory<KisDynaPaintOp, KisDynaPaintOpSettings, KisDynaPaintOpSettingsWidget>("dynabrush", i18n("Dyna brush"), "krita-dyna.png"));
 
 }
 

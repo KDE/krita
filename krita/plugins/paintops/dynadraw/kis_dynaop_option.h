@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2009-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,20 @@
 
 #include <kis_paintop_option.h>
 
+const QString DYNA_WIDTH = "Dyna/width";
+const QString DYNA_MASS = "Dyna/mass";
+const QString DYNA_DRAG = "Dyna/drag";
+const QString DYNA_USE_FIXED_ANGLE = "Dyna/useFixedAngle";
+const QString DYNA_X_ANGLE = "Dyna/xAngle";
+const QString DYNA_Y_ANGLE = "Dyna/yAngle";
+const QString DYNA_WIDTH_RANGE = "Dyna/widthRange";
+const QString DYNA_ACTION = "Dyna/action";
+const QString DYNA_CIRCLE_RADIUS = "Dyna/circleRadius";
+const QString DYNA_USE_TWO_CIRCLES = "Dyna/useTwoCirles";
+const QString DYNA_ENABLE_LINE = "Dyna/enableLine";
+const QString DYNA_LINE_COUNT = "Dyna/lineCount";
+const QString DYNA_LINE_SPACING = "Dyna/lineSpacing";
+
 class KisDynaOpOptionsWidget;
 
 class KisDynaOpOption : public KisPaintOpOption
@@ -27,7 +41,6 @@ class KisDynaOpOption : public KisPaintOpOption
 public:
     KisDynaOpOption();
     ~KisDynaOpOption();
-
 
     qreal initWidth() const;
     qreal mass() const;
@@ -40,16 +53,15 @@ public:
     int action() const;
     int circleRadius() const;
     bool enableLine() const;
-    bool twoCircles() const;
+    bool useTwoCircles() const;
 
     int lineCount() const;
     qreal lineSpacing() const;
 
-    //TODO add saving
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-    private:
+private:
     KisDynaOpOptionsWidget * m_options;
 
 };

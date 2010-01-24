@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2009-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,10 +24,10 @@
 class DynaFilter
 {
 public:
-    DynaFilter() { initialize(0.0,0.0);  }
+    DynaFilter() { initFilterPosition(0.0,0.0);  }
     ~DynaFilter() {}
 
-    void initialize(qreal x, qreal y);
+    void initFilterPosition(qreal x, qreal y);
     bool applyFilter(qreal cursorX, qreal cursorY);
     void setFixedAngles(qreal angleX, qreal angleY);
 /* setters */    

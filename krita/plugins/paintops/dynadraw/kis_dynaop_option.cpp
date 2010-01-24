@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2009-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,6 +34,24 @@ KisDynaOpOption::KisDynaOpOption()
 {
     m_checkable = false;
     m_options = new KisDynaOpOptionsWidget();
+    
+    connect(m_options->circleRBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->polygonRBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->wireRBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->linesRBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->initWidthSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->massSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->dragSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->xAngleSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->yAngleSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->widthRangeSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->circleRadiusSPBox,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
+    connect(m_options->lineCountSPBox,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
+    connect(m_options->lineSpacingSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->LineCBox,SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->twoCBox,SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->fixedAngleChBox,SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
+    
     setConfigurationPage(m_options);
 }
 
@@ -101,7 +119,7 @@ bool KisDynaOpOption::enableLine() const
     return m_options->LineCBox->isChecked();
 }
 
-bool KisDynaOpOption::twoCircles() const
+bool KisDynaOpOption::useTwoCircles() const
 {
     return m_options->twoCBox->isChecked();
 }
@@ -118,12 +136,44 @@ qreal KisDynaOpOption::lineSpacing() const
 
 void KisDynaOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    Q_UNUSED(setting);
+    setting->setProperty(DYNA_WIDTH, initWidth());
+    setting->setProperty(DYNA_MASS ,mass());
+    setting->setProperty(DYNA_DRAG ,drag());
+    setting->setProperty(DYNA_USE_FIXED_ANGLE ,useFixedAngle());
+    setting->setProperty(DYNA_X_ANGLE ,xAngle());
+    setting->setProperty(DYNA_Y_ANGLE ,yAngle());
+    setting->setProperty(DYNA_WIDTH_RANGE ,widthRange());
+    setting->setProperty(DYNA_ACTION ,action());
+    setting->setProperty(DYNA_CIRCLE_RADIUS ,circleRadius());
+    setting->setProperty(DYNA_ENABLE_LINE ,enableLine());
+    setting->setProperty(DYNA_USE_TWO_CIRCLES ,useTwoCircles());
+    setting->setProperty(DYNA_LINE_COUNT ,lineCount());
+    setting->setProperty(DYNA_LINE_SPACING ,lineSpacing());
+
 }
 
-void KisDynaOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
-{
-    Q_UNUSED(setting);
+void KisDynaOpOption::readOptionSetting(const KisPropertiesConfiguration* setting){
+    switch (setting->getInt(DYNA_ACTION))
+    {
+        case 0: m_options->circleRBox->setChecked(true); break;
+        case 1: m_options->polygonRBox->setChecked(true); break;
+        case 2: m_options->wireRBox->setChecked(true); break;
+        case 3: m_options->linesRBox->setChecked(true); break;
+        default: break;
+    }
+    
+    m_options->initWidthSPBox->setValue( setting->getDouble(DYNA_WIDTH));
+    m_options->massSPBox->setValue( setting->getDouble(DYNA_MASS));
+    m_options->dragSPBox->setValue( setting->getDouble(DYNA_DRAG));
+    m_options->xAngleSPBox->setValue( setting->getDouble(DYNA_X_ANGLE));
+    m_options->yAngleSPBox->setValue( setting->getDouble(DYNA_Y_ANGLE));
+    m_options->widthRangeSPBox->setValue( setting->getDouble(DYNA_WIDTH_RANGE));
+    m_options->circleRadiusSPBox->setValue( setting->getInt(DYNA_CIRCLE_RADIUS));
+    m_options->lineCountSPBox->setValue( setting->getInt(DYNA_LINE_COUNT));
+    m_options->lineSpacingSPBox->setValue( setting->getDouble(DYNA_LINE_SPACING));
+    m_options->LineCBox->setChecked(setting->getBool(DYNA_ENABLE_LINE));
+    m_options->twoCBox->setChecked(setting->getBool(DYNA_USE_TWO_CIRCLES));
+    m_options->fixedAngleChBox->setChecked(setting->getBool(DYNA_USE_FIXED_ANGLE));
 }
 
 

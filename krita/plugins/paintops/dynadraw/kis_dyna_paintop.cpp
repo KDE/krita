@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2009-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,6 +36,8 @@
 #include <kis_selection.h>
 #include <kis_random_accessor.h>
 
+#include "kis_dynaop_option.h"
+
 #include "filter.h"
 
 KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
@@ -45,21 +47,23 @@ KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainte
 {
     m_dynaBrush.setImage(image);
 
-    m_dynaBrush.setInitialWidth(settings->initWidth());
-    m_dynaBrush.setMass(settings->mass());
-    m_dynaBrush.setDrag(settings->drag());
-    m_dynaBrush.useFixedAngle(settings->useFixedAngle());
-    m_dynaBrush.setAngle(settings->xAngle(), settings->yAngle());
-    m_dynaBrush.setWidthRange(settings->widthRange());
-
-    // primitives
-    m_dynaBrush.setAction(settings->action());
-    m_dynaBrush.setCircleRadius(settings->circleRadius());
-    m_dynaBrush.enableLine(settings->enableLine());
-    m_dynaBrush.enableTwoCircles(settings->twoCircles());
-    m_dynaBrush.setLineCount(settings->lineCount());
-    m_dynaBrush.setLineSpacing(settings->lineSpacing());
-
+    m_properties.initWidth = settings->getDouble(DYNA_WIDTH);
+    m_properties.action = settings->getDouble(DYNA_ACTION);
+    m_properties.mass = settings->getDouble(DYNA_MASS);
+    m_properties.drag = settings->getDouble(DYNA_DRAG);
+    m_properties.xAngle = settings->getDouble(DYNA_X_ANGLE);
+    m_properties.yAngle = settings->getDouble(DYNA_Y_ANGLE);
+    m_properties.widthRange = settings->getDouble(DYNA_WIDTH_RANGE);
+    m_properties.circleRadius = settings->getInt(DYNA_CIRCLE_RADIUS);
+    m_properties.lineCount = settings->getInt(DYNA_LINE_COUNT);
+    m_properties.lineSpacing = settings->getDouble(DYNA_LINE_SPACING);
+    m_properties.enableLine = settings->getBool(DYNA_ENABLE_LINE);
+    m_properties.useTwoCircles = settings->getBool(DYNA_USE_TWO_CIRCLES);
+    m_properties.useFixedAngle = settings->getBool(DYNA_USE_FIXED_ANGLE);
+    
+    settings->dump();
+    
+    m_dynaBrush.setProperties( &m_properties );
 }
 
 KisDynaPaintOp::~KisDynaPaintOp()
@@ -98,5 +102,5 @@ double KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
 
 void KisDynaPaintOp::paintAt(const KisPaintInformation& info)
 {
-    paintLine(info, info, 0);
+    Q_UNUSED(info);
 }

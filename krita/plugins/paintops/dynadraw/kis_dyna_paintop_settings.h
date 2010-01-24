@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2009-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,47 +19,13 @@
 #ifndef KIS_DYNA_PAINTOP_SETTINGS_H_
 #define KIS_DYNA_PAINTOP_SETTINGS_H_
 
-#include <QList>
 #include <kis_paintop_settings.h>
-#include <kis_types.h>
-
-#include "kis_dyna_paintop_settings_widget.h"
-
-class QWidget;
-class QDomElement;
-class QDomDocument;
-
 
 class KisDynaPaintOpSettings : public KisPaintOpSettings
 {
 
 public:
-
-
-    KisDynaPaintOpSettings();
-    virtual ~KisDynaPaintOpSettings() {}
-
     bool paintIncremental();
-
-    qreal initWidth() const;
-    qreal mass() const;
-    qreal drag() const;
-    bool useFixedAngle() const;
-    qreal xAngle() const;
-    qreal yAngle() const;
-    qreal widthRange() const;
-
-    int action() const;
-    int circleRadius() const;
-    bool enableLine() const;
-    bool twoCircles() const;
-
-    int lineCount() const;
-    qreal lineSpacing() const;
-
-private:
-
-    KisDynaPaintOpSettingsWidget* m_options;
 };
 
 #endif

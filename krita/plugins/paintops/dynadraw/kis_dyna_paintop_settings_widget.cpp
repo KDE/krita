@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2009-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@ KisDynaPaintOpSettingsWidget:: KisDynaPaintOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
 {
     m_dynaOption =  new KisDynaOpOption();
-
     addPaintOpOption(m_dynaOption);
     addPaintOpOption(new KisPaintActionTypeOption());
 }
@@ -41,7 +40,6 @@ KisPropertiesConfiguration*  KisDynaPaintOpSettingsWidget::configuration() const
 {
     KisDynaPaintOpSettings* config = new KisDynaPaintOpSettings();
     config->setOptionsWidget(const_cast<KisDynaPaintOpSettingsWidget*>(this));
-
     config->setProperty("paintop", "dynabrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

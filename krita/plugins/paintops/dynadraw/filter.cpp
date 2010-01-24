@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2009-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ bool DynaFilter::applyFilter(qreal cursorX, qreal cursorY)
 }
 
 
-void DynaFilter::initialize(qreal x, qreal y)
+void DynaFilter::initFilterPosition(qreal x, qreal y)
 {
     m_filterX = x;
     m_filterY = y;

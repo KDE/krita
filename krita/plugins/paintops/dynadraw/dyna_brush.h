@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2009-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _BRUSH_H_
-#define _BRUSH_H_
+#ifndef _DYNA_BRUSH_H_
+#define _DYNA_BRUSH_H_
 
 #include <QVector>
 
@@ -29,6 +29,23 @@
 
 #include "filter.h"
 
+class KisDynaProperties{
+public:
+    qreal initWidth;
+    qreal mass;
+    qreal drag;
+    qreal xAngle;
+    qreal yAngle;
+    qreal widthRange;
+    qreal lineSpacing;
+    quint8 action;
+    quint16 circleRadius;
+    quint16 lineCount;
+    bool enableLine;
+    bool useTwoCircles;
+    bool useFixedAngle;
+};
+
 class DynaBrush
 {
 
@@ -37,85 +54,32 @@ public:
     ~DynaBrush();
     DynaBrush(KoColor inkColor);
     void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color);
-
-
+    void drawSegment(KisPainter &painter);
     int applyFilter(qreal mx, qreal my);
-
-    //setters
-    void setImage(KisImageWSP image) {
-        m_image = image;
-    }
-
-    void setInitialWidth(qreal width) {
-        m_width = width;
-    }
-
-    void setMass(qreal mass) {
-        m_cursorFilter.setMass(mass);
-    }
-
-    void setDrag(qreal drag) {
-        m_cursorFilter.setDrag(drag);
-    }
-
-    void useFixedAngle(bool useFixedAngle) {
-        m_cursorFilter.setUseFixedAngle(useFixedAngle);
-    }
-
-    void setAngle(qreal xangle, qreal yangle) {
-        m_cursorFilter.setFixedAngles(xangle, yangle);
-    }
-
-    void setWidthRange(qreal widthRange) {
-        m_maxWidth = widthRange;
-    }
-
-    void setAction(int action) {
-        m_action = action;
-    }
-
-    void setCircleRadius(int circleRadius) {
-        m_circleRadius = circleRadius;
-    }
-
-    void setLineCount(int lineCount) {
-        m_lineCount = lineCount;
-    }
-
-    void setLineSpacing(qreal spacing) {
-        m_lineSpacing = spacing;
-    }
-
-    void enableLine(bool enableLine) {
-        m_enableLine = enableLine;
-    }
-
-    void enableTwoCircles(bool twoCircles) {
-        m_twoCircles = twoCircles;
-    }
 
     void updateCursorPosition(const QPointF &point) {
         m_cursorPos.setX(point.x() / m_image->width());
         m_cursorPos.setY(point.y() / m_image->height());
     }
 
-    void drawSegment(KisPainter &painter);
+    void setProperties(KisDynaProperties * properties){
+        m_properties = properties;
+    }
+    void setImage(KisImageWSP image) {
+        m_image = image;
+    }
 
 
 private:
     void drawCircle(KisPainter &painter, qreal x, qreal y, int radius, int steps);
-
     void drawQuad(KisPainter &painter,
                   QPointF &topRight, QPointF &topLeft,
                   QPointF &bottomLeft, QPointF &bottomRight);
-
     void drawWire(KisPainter &painter,
                   QPointF &topRight,
                   QPointF &topLeft,
                   QPointF &bottomLeft,
                   QPointF &bottomRight);
-
-
     void drawLines(KisPainter &painter,
                    QPointF &prev,
                    QPointF &now,
@@ -128,7 +92,6 @@ private:
     int m_pixelSize;
 
     QVector<QPointF> m_prevPosition;
-
     qreal m_odelx, m_odely;
 
     // cursor position in document in relative coordinates
@@ -137,17 +100,7 @@ private:
     DynaFilter m_cursorFilter;
 
     bool m_initialized;
-    // settings variables
-    qreal m_width;
-    qreal m_maxWidth;
-
-    // drawing various primitives
-    int m_action;
-    bool m_enableLine, m_twoCircles;
-    qreal m_circleRadius;
-
-    int m_lineCount;
-    qreal m_lineSpacing;
+    const KisDynaProperties * m_properties;
 
 };
 

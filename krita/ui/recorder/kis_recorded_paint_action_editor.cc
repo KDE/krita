@@ -36,7 +36,8 @@
 
 KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisRecordedAction* action) : QWidget(parent),
         m_action(dynamic_cast<KisRecordedPaintAction*>(action)),
-        m_actionEditor(new Ui_WdgPaintActionEditor)
+        m_actionEditor(new Ui_WdgPaintActionEditor),
+        m_configWidget(0)
 {
     Q_ASSERT(m_action);
     m_actionEditor->setupUi(this);
@@ -82,18 +83,13 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
             m_paintops.append(paintopId.id());
         }
     }
+    connect(m_actionEditor->paintOps, SIGNAL(activated(int)), SLOT(paintOpChanged(int)));
 
     // Setup config widget for paintop settings
-    m_configWidget = KisPaintOpRegistry::instance()->get(m_action->paintOpPreset()->paintOp().id())->createSettingsWidget(m_actionEditor->frmOptionWidgetContainer);
     m_gridLayout = new QGridLayout(m_actionEditor->frmOptionWidgetContainer);
-    if (m_configWidget) {
-        m_gridLayout->addWidget(m_configWidget);
-        m_configWidget->setConfiguration(m_action->paintOpPreset()->settings());
-        connect(m_configWidget, SIGNAL(sigConfigurationUpdated()), SLOT(configurationUpdated()));
-    } else {
-        m_gridLayout->addWidget(new QLabel("No configuration option.", this));
-    }
+    setPaintOpPreset();
     m_actionEditor->paintOps->setCurrentIndex(m_paintops.indexOf(m_action->paintOpPreset()->paintOp().id()));
+    m_paintOpsToPreset[m_action->paintOpPreset()->paintOp().id()] = m_action->paintOpPreset();
 }
 
 KisRecordedPaintActionEditor::~KisRecordedPaintActionEditor()
@@ -110,6 +106,31 @@ void KisRecordedPaintActionEditor::configurationUpdated()
     m_action->setOpacity(m_actionEditor->opacity->value() * 2.55);
 
     emit(actionEdited());
+}
+
+void KisRecordedPaintActionEditor::paintOpChanged(int index)
+{
+    QString id = m_paintops[index];
+    KisPaintOpPresetSP preset = m_paintOpsToPreset[id];
+    if (!preset) {
+        preset = KisPaintOpRegistry::instance()->defaultPreset(KoID(id, ""), 0);
+        m_paintOpsToPreset[id] = preset;
+    }
+    m_action->setPaintOpPreset(preset);
+    setPaintOpPreset();
+}
+
+void KisRecordedPaintActionEditor::setPaintOpPreset()
+{
+    delete m_configWidget;
+    m_configWidget = KisPaintOpRegistry::instance()->get(m_action->paintOpPreset()->paintOp().id())->createSettingsWidget(m_actionEditor->frmOptionWidgetContainer);
+    if (m_configWidget) {
+        m_gridLayout->addWidget(m_configWidget);
+        m_configWidget->setConfiguration(m_action->paintOpPreset()->settings());
+        connect(m_configWidget, SIGNAL(sigConfigurationUpdated()), SLOT(configurationUpdated()));
+    } else {
+        m_gridLayout->addWidget(new QLabel("No configuration option.", this));
+    }
 }
 
 KisRecordedPaintActionEditorFactory::KisRecordedPaintActionEditorFactory()

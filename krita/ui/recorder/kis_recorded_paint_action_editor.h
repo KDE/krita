@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include "kis_recorded_action_editor_factory.h"
+#include "kis_types.h"
 
 class QGridLayout;
 class KoColor;
@@ -37,16 +38,19 @@ public:
     ~KisRecordedPaintActionEditor();
 private slots:
     void configurationUpdated();
+    void paintOpChanged(int index);
 signals:
     void actionEdited();
 private:
+    void setPaintOpPreset();
     KisRecordedPaintAction* m_action;
-    KisPaintOpSettingsWidget* m_configWidget;
     Ui_WdgPaintActionEditor* m_actionEditor;
+    KisPaintOpSettingsWidget* m_configWidget;
     KoColorPopupAction* m_paintColorPopup;
     KoColorPopupAction* m_backgroundColorPopup;
     QGridLayout* m_gridLayout;
     QList<QString> m_paintops;
+    QMap<QString, KisPaintOpPresetSP> m_paintOpsToPreset;
 };
 
 class KisRecordedPaintActionEditorFactory : public KisRecordedActionEditorFactory

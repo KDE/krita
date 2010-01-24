@@ -90,7 +90,18 @@ void KisDatamanagerBenchmark::benchmarkReadWriteBytes()
     delete[] bytes;
 }
 
-
+void KisDatamanagerBenchmark::benchmarkExtent()
+{
+    quint8 *p = new quint8[3];
+    memset(p, 0, 3);
+    KisDataManager dm(3, p);
+    quint8 *bytes = new quint8[3 * 1021 * 1084];
+    memset(bytes, 0, 3 * 1021 * 1084);
+    dm.writeBytes(bytes, 0, 0, 1021, 1084);
+    QBENCHMARK {
+        QRect extent = dm.extent();
+    }
+}
 
 QTEST_KDEMAIN(KisDatamanagerBenchmark, GUI)
 #include "kis_datamanager_benchmark.moc"

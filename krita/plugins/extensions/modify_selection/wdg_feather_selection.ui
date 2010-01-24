@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>WdgGrowSelection</class>
- <widget class="QWidget" name="WdgGrowSelection">
+ <class>WdgFeatherSelection</class>
+ <widget class="QWidget" name="WdgFeatherSelection">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -36,7 +36,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="textLabel1">
      <property name="text">
-      <string>Grow selection by</string>
+      <string>Feather selection by</string>
      </property>
     </widget>
    </item>

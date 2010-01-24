@@ -52,6 +52,7 @@
 #include "dlg_grow_selection.h"
 #include "dlg_shrink_selection.h"
 #include "dlg_border_selection.h"
+#include "dlg_feather_selection.h"
 
 K_PLUGIN_FACTORY(ModifySelectionFactory, registerPlugin<ModifySelection>();)
 K_EXPORT_PLUGIN(ModifySelectionFactory("krita"))
@@ -74,18 +75,23 @@ ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
         actionCollection()->addAction("shrinkselection", b);
         KAction* c  = new KAction(i18n("Border selection..."), this);
         actionCollection()->addAction("borderselection", c);
+        KAction* d  = new KAction(i18n("Feather selection..."), this);
+        actionCollection()->addAction("featherselection", d);
 
         Q_CHECK_PTR(a);
         Q_CHECK_PTR(b);
         Q_CHECK_PTR(c);
+        Q_CHECK_PTR(d);
 
         connect(a, SIGNAL(triggered()), this, SLOT(slotGrowSelection()));
         connect(b, SIGNAL(triggered()), this, SLOT(slotShrinkSelection()));
         connect(c, SIGNAL(triggered()), this, SLOT(slotBorderSelection()));
+        connect(d, SIGNAL(triggered()), this, SLOT(slotFeatherSelection()));
 
         m_view->selectionManager()->addSelectionAction(a);
         m_view->selectionManager()->addSelectionAction(b);
         m_view->selectionManager()->addSelectionAction(c);
+        m_view->selectionManager()->addSelectionAction(d);
     }
 }
 
@@ -163,6 +169,28 @@ void ModifySelection::slotBorderSelection()
     }
 
     delete dlgBorderSelection;
+}
+
+void ModifySelection::slotFeatherSelection()
+{
+    KisImageWSP image = m_view->image();
+
+    if (!image) return;
+
+    DlgFeatherSelection * dlgFeatherSelection = new DlgFeatherSelection(m_view, "FeatherSelection");
+    Q_CHECK_PTR(dlgFeatherSelection);
+
+    dlgFeatherSelection->setCaption(i18n("Feather Selection"));
+
+    KisConfig cfg;
+
+    if (dlgFeatherSelection->exec() == QDialog::Accepted) {
+        qint32 radius = dlgFeatherSelection->radius();
+
+        m_view->selectionManager()->feather(radius);
+    }
+
+    delete dlgFeatherSelection;
 }
 
 #include "modify_selection.moc"

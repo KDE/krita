@@ -84,7 +84,6 @@ public slots:
     void invert();
     void smooth();
     void copySelectionToNewLayer();
-    void feather();
     void toggleDisplaySelection();
 
     void shapeSelectionChanged();
@@ -96,6 +95,7 @@ public:
     void grow(qint32 xradius, qint32 yradius);
     void shrink(qint32 xradius, qint32 yradius, bool edge_lock);
     void border(qint32 xradius, qint32 yradius);
+    void feather(qint32 radius);
     // the following functions are needed for the siox tool
     // they might be also useful on its own
     void erode();
@@ -132,7 +132,6 @@ private:
     KAction *m_reselect;
     KAction *m_invert;
     KAction *m_toNewLayer;
-    KAction *m_feather;
     KAction *m_smooth;
     KAction *m_load;
     KAction *m_save;

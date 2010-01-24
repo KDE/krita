@@ -99,7 +99,6 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
         m_reselect(0),
         m_invert(0),
         m_toNewLayer(0),
-        m_feather(0),
         m_smooth(0),
         m_load(0),
         m_save(0),
@@ -171,11 +170,6 @@ void KisSelectionManager::setup(KActionCollection * collection)
     collection->addAction("cut_selection_to_new_layer", m_cutToNewLayer);
     m_cutToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_J));
     connect(m_cutToNewLayer, SIGNAL(triggered()), this, SLOT(cutToNewLayer()));
-
-    m_feather  = new KAction(i18n("Feather"), this);
-    collection->addAction("feather", m_feather);
-    m_feather->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_D));
-    connect(m_feather, SIGNAL(triggered()), this, SLOT(feather()));
 
     m_fillForegroundColor  = new KAction(i18n("Fill with Foreground Color"), this);
     collection->addAction("fill_selection_foreground_color", m_fillForegroundColor);
@@ -281,7 +275,6 @@ void KisSelectionManager::updateGUI()
     bool hasPixelSelection = enable && l->selection() && l->selection()->hasPixelSelection()
                              && !m_view->selection()->isDeselected();
     m_invert->setEnabled(hasPixelSelection);
-    m_feather->setEnabled(hasPixelSelection);
 
     m_smooth->setEnabled(enable);
 //    m_load->setEnabled(enable);
@@ -736,50 +729,6 @@ void KisSelectionManager::cutToNewLayer()
 
     cut();
     paste();
-}
-
-
-void KisSelectionManager::feather()
-{
-    KisImageWSP image = m_view->image();
-    if (!image) return;
-    if (!m_view->selection())
-        return;
-
-    KisPixelSelectionSP selection = m_view->selection()->getOrCreatePixelSelection();
-    KisSelectionTransaction * t = new KisSelectionTransaction(i18n("Feather..."), image, m_view->selection());
-    Q_CHECK_PTR(t);
-
-
-    // XXX: we should let gaussian blur & others influence alpha channels as well
-    // (on demand of the caller)
-
-    KisConvolutionPainter painter(selection);
-
-    KisConvolutionKernelSP k = new KisConvolutionKernel(3, 3, 0, 16);
-
-    k->data()[0] = 1;
-    k->data()[1] = 2;
-    k->data()[2] = 1;
-    k->data()[3] = 2;
-    k->data()[4] = 4;
-    k->data()[5] = 2;
-    k->data()[6] = 1;
-    k->data()[7] = 2;
-    k->data()[8] = 1;
-
-    QRect rect = selection->selectedExactRect();
-    // Make sure we've got enough space around the edges.
-    rect = QRect(rect.x() - 3, rect.y() - 3, rect.width() + 6, rect.height() + 6);
-    rect &= QRect(0, 0, image->width(), image->height());
-    painter.setChannelFlags(selection->colorSpace()->channelFlags(false, true, false, false));
-    painter.applyMatrix(k, selection, rect.topLeft(), rect.topLeft(), rect.size(), BORDER_AVOID);
-    painter.end();
-
-    m_view->document()->addCommand(t);
-    m_view->selection()->setDirty(image->bounds());
-    selectionChanged();
-
 }
 
 void KisSelectionManager::toggleDisplaySelection()
@@ -1483,6 +1432,54 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
     density -= xradius;
     delete[] density;
 
+
+    m_view->document()->addCommand(t);
+    m_view->selection()->setDirty(image->bounds());
+    selectionChanged();
+}
+
+void KisSelectionManager::feather(qint32 radius)
+{
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+    if (!m_view->selection())
+        return;
+
+    KisPixelSelectionSP selection = m_view->selection()->getOrCreatePixelSelection();
+    KisSelectionTransaction * t = new KisSelectionTransaction(i18n("Feather..."), image, m_view->selection());
+    Q_CHECK_PTR(t);
+
+    // compute horizontal kernel
+    const uint kernelSize = radius * 2 + 1;
+    Matrix<qreal, Dynamic, Dynamic> gaussianMatrix(1, kernelSize);
+
+    const qreal multiplicand = 1 / (2 * M_PI * radius * radius);
+    const qreal exponentMultiplicand = 1 / (2 * radius * radius);
+
+    for (uint x = 0; x < kernelSize; x++)
+    {
+        uint xDistance = qAbs((int)radius - (int)x);
+        gaussianMatrix(0, x) = multiplicand * exp( -(qreal)((xDistance * xDistance) + (radius * radius)) * exponentMultiplicand );
+    }
+
+    KisConvolutionKernelSP kernelHoriz = KisConvolutionKernel::fromMatrix(gaussianMatrix, 0, gaussianMatrix.sum());
+    KisConvolutionKernelSP kernelVertical = KisConvolutionKernel::fromMatrix(gaussianMatrix.transpose(), 0, gaussianMatrix.sum());
+
+    QRect rect = selection->selectedExactRect();
+    // Make sure we've got enough space around the edges.
+    rect.adjust(-kernelSize, -kernelSize, kernelSize, kernelSize);
+    rect &= QRect(0, 0, image->width(), image->height());
+
+    KisPaintDeviceSP interm = new KisPaintDevice(selection->colorSpace());
+    KisConvolutionPainter horizPainter(interm);
+    horizPainter.setChannelFlags(interm->colorSpace()->channelFlags(false, true, false, false));
+    horizPainter.applyMatrix(kernelHoriz, selection, rect.topLeft(), rect.topLeft(), rect.size(), BORDER_AVOID);
+    horizPainter.end();
+
+    KisConvolutionPainter verticalPainter(selection);
+    verticalPainter.setChannelFlags(selection->colorSpace()->channelFlags(false, true, false, false));
+    verticalPainter.applyMatrix(kernelVertical, interm, rect.topLeft(), rect.topLeft(), rect.size(), BORDER_AVOID);
+    verticalPainter.end();
 
     m_view->document()->addCommand(t);
     m_view->selection()->setDirty(image->bounds());

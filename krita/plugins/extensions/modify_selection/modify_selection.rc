@@ -2,6 +2,7 @@
 <kpartgui library="kritamodifyselection" version="6">
     <MenuBar>
         <Menu name="Select"><text>&amp;Select</text>
+            <Action name="featherselection"/>
             <Action name="growselection"/>
             <Action name="shrinkselection"/>
             <Action name="borderselection"/>

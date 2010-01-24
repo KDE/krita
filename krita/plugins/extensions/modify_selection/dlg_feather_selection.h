@@ -1,7 +1,7 @@
 /*
- * modify_selection.h -- Part of Krita
+ *  dlg_feather_selection.h -- part of Krita
  *
- * Copyright (c) 2006 Michael Thaler (michael.thaler@physik.tu-muenchen.de)
+ *  Copyright (c) 2009 Edward Apap <schumifer@hotmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,33 +17,42 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef MODIFY_SELECTION_H
-#define MODIFY_SELECTION_H
+#ifndef DLG_FEATHER_SELECTION_H
+#define DLG_FEATHER_SELECTION_H
 
-#include <QVariant>
+#include <kdialog.h>
 
-#include <kparts/plugin.h>
+#include "ui_wdg_feather_selection.h"
 
-class KisView2;
-
-class ModifySelection : public KParts::Plugin
+class WdgFeatherSelection : public QWidget, public Ui::WdgFeatherSelection
 {
     Q_OBJECT
+
 public:
-    ModifySelection(QObject *parent, const QVariantList &);
-    virtual ~ModifySelection();
+    WdgFeatherSelection(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
+};
+
+class DlgFeatherSelection: public KDialog
+{
+
+    Q_OBJECT
+
+public:
+
+    DlgFeatherSelection(QWidget * parent = 0, const char* name = 0);
+    ~DlgFeatherSelection();
+
+    qint32 radius();
 
 private slots:
 
-    void slotGrowSelection();
-    void slotShrinkSelection();
-    void slotBorderSelection();
-    void slotFeatherSelection();
+    void okClicked();
 
 private:
 
-    KisView2 * m_view;
-
+    WdgFeatherSelection * m_page;
 };
 
-#endif // MODIFY_SELECTION_H
+#endif // DLG_GROW_SELECTION_H

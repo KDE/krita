@@ -322,4 +322,4 @@ QString OdfCollectionLoader::findMimeTypeByUrl(const KUrl& url)
     return typeName;
 }
 
-#include "OdfCollectionLoader.moc"
+#include <OdfCollectionLoader.moc>

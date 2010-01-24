@@ -95,4 +95,4 @@ void EllipseShapeConfigWidget::closeEllipse()
     emit propertyChanged();
 }
 
-#include "EllipseShapeConfigWidget.moc"
+#include <EllipseShapeConfigWidget.moc>

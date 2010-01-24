@@ -30,4 +30,4 @@ void BadHeader::checkWmfHeader()
 }
 
 QTEST_MAIN( BadHeader )
-#include "bad_header.moc"
+#include <bad_header.moc>

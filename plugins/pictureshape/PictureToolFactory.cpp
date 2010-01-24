@@ -44,6 +44,6 @@ KoTool* PictureToolFactory::createTool( KoCanvasBase* canvas )
     return new PictureTool( canvas );
 }
 
-#include "PictureToolFactory.moc"
+#include <PictureToolFactory.moc>
 
 

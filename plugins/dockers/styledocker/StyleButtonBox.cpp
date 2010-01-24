@@ -351,4 +351,4 @@ void StyleButtonBox::showButtons(StyleButtons buttons)
     }
 }
 
-#include "StyleButtonBox.moc"
+#include <StyleButtonBox.moc>

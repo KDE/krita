@@ -131,4 +131,4 @@ void PartGroup::setCommonBarLines(bool commonBarLines)
 
 } // namespace MusicCore
 
-#include "PartGroup.moc"
+#include <PartGroup.moc>

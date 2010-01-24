@@ -21,7 +21,7 @@
 #define ELLIPSESHAPECONFIGWIDGET_H
 
 #include "EllipseShape.h"
-#include "ui_EllipseShapeConfigWidget.h"
+#include <ui_EllipseShapeConfigWidget.h>
 
 #include <KoShapeConfigWidgetBase.h>
 

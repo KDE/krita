@@ -39,4 +39,4 @@ ArtisticTextShapePlugin::~ArtisticTextShapePlugin()
 {
 }
 
-#include "ArtisticTextShapePlugin.moc"
+#include <ArtisticTextShapePlugin.moc>

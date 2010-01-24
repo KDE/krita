@@ -63,4 +63,4 @@ QList<KoShapeConfigWidgetBase*> VectorShapeFactory::createShapeOptionPanels()
     return result;
 }
 
-#include "VectorShapeFactory.moc"
+#include <VectorShapeFactory.moc>

@@ -20,7 +20,7 @@
 #ifndef AUTOCORRECTCONFIGDIALOG_H
 #define AUTOCORRECTCONFIGDIALOG_H
 
-#include "ui_AutocorrectConfig.h"
+#include <ui_AutocorrectConfig.h>
 #include "Autocorrect.h"
 
 #include <KDialog>

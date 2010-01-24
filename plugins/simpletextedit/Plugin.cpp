@@ -31,5 +31,5 @@ Plugin::Plugin( QObject *parent, const QStringList& )
     KoDockRegistry::instance()->add( new Factory() );
 }
 
-#include "Plugin.moc"
+#include <Plugin.moc>
 

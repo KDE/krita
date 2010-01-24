@@ -317,4 +317,4 @@ void StylePreview::drawStroke(QPainter & painter, const KoShapeBorderModel * str
     painter.restore();
 }
 
-#include "StylePreview.moc"
+#include <StylePreview.moc>

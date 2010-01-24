@@ -28,4 +28,4 @@ void NoSuch::checkNonExisting()
 }
 
 QTEST_MAIN( NoSuch )
-#include "no_such.moc"
+#include <no_such.moc>

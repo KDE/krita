@@ -44,5 +44,5 @@ Plugin::Plugin(QObject *parent, const QStringList&)
     KoDockRegistry::instance()->add(new ShapeCollectionDockerFactory());
 }
 
-#include "Plugin.moc"
+#include <Plugin.moc>
 

@@ -34,5 +34,5 @@ SpellCheckPlugin::SpellCheckPlugin( QObject *parent, const QVariantList& )
     KoTextEditingRegistry::instance()->add( new SpellCheckFactory( parent));
 }
 
-#include "SpellCheckPlugin.moc"
+#include <SpellCheckPlugin.moc>
 

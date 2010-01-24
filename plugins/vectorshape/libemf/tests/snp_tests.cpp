@@ -45,4 +45,4 @@ void SnpTests::test3()
 }
 
 QTEST_MAIN( SnpTests )
-#include "snp_tests.moc"
+#include <snp_tests.moc>

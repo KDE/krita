@@ -120,4 +120,4 @@ void PictureTool::mouseDoubleClickEvent( KoPointerEvent *event )
 */
 }
 
-#include "PictureTool.moc"
+#include <PictureTool.moc>

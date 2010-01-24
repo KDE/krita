@@ -47,4 +47,4 @@ bool ArtisticTextShapeFactory::supports(const KoXmlElement & e) const
     return ( e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw );
 }
 
-#include "ArtisticTextShapeFactory.moc"
+#include <ArtisticTextShapeFactory.moc>

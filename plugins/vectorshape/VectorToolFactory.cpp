@@ -50,4 +50,4 @@ KoTool * VectorToolFactory::createTool(KoCanvasBase *canvas)
 }
 
 
-#include "VectorToolFactory.moc"
+#include <VectorToolFactory.moc>

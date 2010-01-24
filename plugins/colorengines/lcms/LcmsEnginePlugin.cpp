@@ -195,4 +195,4 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QStringList &)
             (KoID("XYZ16HISTO", i18n("XYZ16 Histogram")), XYZAColorModelID.id(), Integer16BitsColorDepthID.id()));
 }
 
-#include "LcmsEnginePlugin.moc"
+#include <LcmsEnginePlugin.moc>

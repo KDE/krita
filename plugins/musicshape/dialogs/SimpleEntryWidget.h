@@ -19,7 +19,7 @@
 #ifndef SIMPLEENTRYWIDGET_H
 #define SIMPLEENTRYWIDGET_H
 
-#include "ui_SimpleEntryWidget.h"
+#include <ui_SimpleEntryWidget.h>
 
 #include <QWidget>
 

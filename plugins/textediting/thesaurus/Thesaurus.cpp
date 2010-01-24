@@ -769,4 +769,4 @@ QString Thesaurus::formatLine(const QString &line) const
     return l;
 }
 
-#include "Thesaurus.moc"
+#include <Thesaurus.moc>

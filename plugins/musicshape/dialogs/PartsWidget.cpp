@@ -94,4 +94,4 @@ void PartsWidget::editPart()
     PartDetailsDialog::showDialog(m_tool, m_sheet->part(row), this);
 }
 
-#include "PartsWidget.moc"
+#include <PartsWidget.moc>

@@ -19,7 +19,7 @@
 #ifndef PARTSWIDGET_H
 #define PARTSWIDGET_H
 
-#include "ui_PartsWidget.h"
+#include <ui_PartsWidget.h>
 
 #include <QWidget>
 

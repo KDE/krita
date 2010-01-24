@@ -78,4 +78,4 @@ QUndoCommand * SpiralShapeConfigWidget::createCommand()
     return new SpiralShapeConfigCommand(m_spiral, type, (widget.clockWise->currentIndex() == 0), widget.fade->value());
 }
 
-#include "SpiralShapeConfigWidget.moc"
+#include <SpiralShapeConfigWidget.moc>

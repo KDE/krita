@@ -36,4 +36,4 @@ Plugin::Plugin(QObject * parent, const QStringList &)
     KoToolRegistry::instance()->add(new ConnectionToolFactory(parent));
 }
 
-#include "Plugin.moc"
+#include <Plugin.moc>

@@ -109,4 +109,4 @@ QWidget *VectorTool::createOptionWidget()
     return widget;
 }
 
-#include "VectorTool.moc"
+#include <VectorTool.moc>

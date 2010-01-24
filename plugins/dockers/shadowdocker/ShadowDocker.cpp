@@ -145,4 +145,4 @@ void ShadowDocker::locationChanged(Qt::DockWidgetArea area)
     d->layout->invalidate();
 }
 
-#include "ShadowDocker.moc"
+#include <ShadowDocker.moc>

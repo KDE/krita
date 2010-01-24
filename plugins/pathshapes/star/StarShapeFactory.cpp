@@ -153,4 +153,4 @@ QList<KoShapeConfigWidgetBase*> StarShapeFactory::createShapeOptionPanels()
     return panels;
 }
 
-#include "StarShapeFactory.moc"
+#include <StarShapeFactory.moc>

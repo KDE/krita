@@ -20,7 +20,7 @@
 #ifndef RECTANGLESHAPECONFIGWIDGET_H
 #define RECTANGLESHAPECONFIGWIDGET_H
 
-#include "ui_RectangleShapeConfigWidget.h"
+#include <ui_RectangleShapeConfigWidget.h>
 
 #include <KoShapeConfigWidgetBase.h>
 

@@ -340,4 +340,4 @@ void Changecase::toggleCase()
     }
 }
 
-#include "Changecase.moc"
+#include <Changecase.moc>

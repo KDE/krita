@@ -70,4 +70,4 @@ void SimpleEntryWidget::setVoiceListEnabled(bool enabled)
     widget.voiceList->setEnabled(enabled);
 }
 
-#include "SimpleEntryWidget.moc"
+#include <SimpleEntryWidget.moc>

@@ -174,4 +174,4 @@ private slots:
 
 QTEST_MAIN(SheetTest)
 
-#include "SheetTest.moc"
+#include <SheetTest.moc>

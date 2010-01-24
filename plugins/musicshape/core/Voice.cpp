@@ -56,4 +56,4 @@ VoiceBar* Voice::bar(int barIdx)
 
 } // namespace MusicCore
 
-#include "Voice.moc"
+#include <Voice.moc>

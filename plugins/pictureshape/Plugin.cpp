@@ -35,5 +35,5 @@ Plugin::Plugin(QObject *parent, const QStringList &)
     KoToolRegistry::instance()->add( new PictureToolFactory(parent) );
 }
 
-#include "Plugin.moc"
+#include <Plugin.moc>
 

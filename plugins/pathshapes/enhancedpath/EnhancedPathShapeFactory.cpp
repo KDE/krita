@@ -551,4 +551,4 @@ bool EnhancedPathShapeFactory::supports(const KoXmlElement & e) const
     return (e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw);
 }
 
-#include "EnhancedPathShapeFactory.moc"
+#include <EnhancedPathShapeFactory.moc>

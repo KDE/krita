@@ -49,4 +49,4 @@ void PartDetailsDialog::showDialog(MusicTool *tool, Part* part, QWidget* parent)
     }
 }
 
-#include "PartDetailsDialog.moc"
+#include <PartDetailsDialog.moc>

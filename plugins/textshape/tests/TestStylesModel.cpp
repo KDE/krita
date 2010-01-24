@@ -126,4 +126,4 @@ void TestStylesModel::fillManager()
 
 QTEST_KDEMAIN(TestStylesModel, GUI)
 
-#include "TestStylesModel.moc"
+#include <TestStylesModel.moc>

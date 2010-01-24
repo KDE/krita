@@ -276,4 +276,4 @@ void SpellCheck::resourceChanged( int key, const QVariant &resource )
         m_documentIsLoading = resource.toBool();
 }
 
-#include "SpellCheck.moc"
+#include <SpellCheck.moc>

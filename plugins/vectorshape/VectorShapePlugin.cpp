@@ -43,4 +43,4 @@ VectorShapePlugin::VectorShapePlugin(QObject * parent, const QStringList &)
     KoShapeRegistry::instance()->add(new VectorShapeFactory(parent));
 }
 
-#include "VectorShapePlugin.moc"
+#include <VectorShapePlugin.moc>

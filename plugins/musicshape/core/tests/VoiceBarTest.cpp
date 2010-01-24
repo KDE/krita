@@ -132,4 +132,4 @@ private slots:
 
 QTEST_MAIN(VoiceBarTest)
 
-#include "VoiceBarTest.moc"
+#include <VoiceBarTest.moc>

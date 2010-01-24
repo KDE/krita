@@ -21,7 +21,7 @@
 #ifndef ARTISTICTEXTSHAPECONFIGWIDGET_H
 #define ARTISTICTEXTSHAPECONFIGWIDGET_H
 
-#include "ui_ArtisticTextShapeConfigWidget.h"
+#include <ui_ArtisticTextShapeConfigWidget.h>
 
 #include "ArtisticTextShape.h"
 

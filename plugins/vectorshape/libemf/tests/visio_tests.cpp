@@ -38,4 +38,4 @@ void VisioTests::test_kde41()
 
 QTEST_MAIN( VisioTests )
 
-#include "visio_tests.moc"
+#include <visio_tests.moc>

@@ -43,4 +43,4 @@ QList<KoShapeConfigWidgetBase*> DivineProportionShapeFactory::createShapeOptionP
     return answer;
 }
 
-#include "DivineProportionShapeFactory.moc"
+#include <DivineProportionShapeFactory.moc>

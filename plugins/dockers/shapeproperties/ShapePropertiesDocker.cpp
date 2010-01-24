@@ -164,4 +164,4 @@ void ShapePropertiesDocker::resourceChanged(int key, const QVariant &variant)
         d->currentPanel->setUnit(variant.value<KoUnit>());
 }
 
-#include "ShapePropertiesDocker.moc"
+#include <ShapePropertiesDocker.moc>

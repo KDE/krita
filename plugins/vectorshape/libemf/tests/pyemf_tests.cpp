@@ -910,4 +910,4 @@ void PyEmfTests::testWorldTransform1()
 }
 
 QTEST_MAIN( PyEmfTests )
-#include "pyemf_tests.moc"
+#include <pyemf_tests.moc>

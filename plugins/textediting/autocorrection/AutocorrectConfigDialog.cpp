@@ -399,4 +399,4 @@ void CharSelectDialog::setCurrentChar(const QChar &c)
     m_charSelect->setCurrentChar(c);
 }
 
-#include "AutocorrectConfigDialog.moc"
+#include <AutocorrectConfigDialog.moc>

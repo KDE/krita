@@ -41,4 +41,4 @@ PathShapesPlugin::PathShapesPlugin(QObject *parent, const QStringList&)
     KoShapeRegistry::instance()->add(new EnhancedPathShapeFactory(parent));
 }
 
-#include "PathShapesPlugin.moc"
+#include <PathShapesPlugin.moc>

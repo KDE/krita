@@ -68,4 +68,4 @@ bool PictureShapeConfigWidget::showOnShapeSelect()
     return false;
 }
 
-#include "PictureShapeConfigWidget.moc"
+#include <PictureShapeConfigWidget.moc>

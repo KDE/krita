@@ -647,4 +647,4 @@ QBrush StyleDocker::applyStrokeGradientStops(KoShape *shape, const QGradientStop
     return brush;
 }
 
-#include "StyleDocker.moc"
+#include <StyleDocker.moc>

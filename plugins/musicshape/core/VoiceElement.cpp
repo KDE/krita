@@ -142,4 +142,4 @@ void VoiceElement::setBeatline(qreal beatline)
 
 } // namespace MusicCore
 
-#include "VoiceElement.moc"
+#include <VoiceElement.moc>

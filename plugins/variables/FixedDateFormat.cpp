@@ -173,4 +173,4 @@ void FixedDateFormat::customTextChanged(const QString& text)
     }
 }
 
-#include "FixedDateFormat.moc"
+#include <FixedDateFormat.moc>

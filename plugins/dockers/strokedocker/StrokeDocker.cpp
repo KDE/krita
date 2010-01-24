@@ -334,5 +334,5 @@ void StrokeDocker::locationChanged(Qt::DockWidgetArea area)
     d->layout->invalidate();
 }
 
-#include "StrokeDocker.moc"
+#include <StrokeDocker.moc>
 

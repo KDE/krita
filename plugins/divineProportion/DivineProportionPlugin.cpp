@@ -34,4 +34,4 @@ DivineProportionPlugin::DivineProportionPlugin(QObject * parent, const QStringLi
     KoShapeRegistry::instance()->add(new DivineProportionShapeFactory(parent));
 }
 
-#include "DivineProportionPlugin.moc"
+#include <DivineProportionPlugin.moc>

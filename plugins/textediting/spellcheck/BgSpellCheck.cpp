@@ -139,4 +139,4 @@ void BgSpellCheck::foundMisspelling(const QString &word, int start)
     BackgroundChecker::continueChecking();
 }
 
-#include "BgSpellCheck.moc"
+#include <BgSpellCheck.moc>

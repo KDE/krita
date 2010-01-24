@@ -21,7 +21,7 @@
 #ifndef KOCONNECTIONTOOLWIDGET_H
 #define KOCONNECTIONTOOLWIDGET_H
 
-#include "ui_ConnectionToolWidget.h"
+#include <ui_ConnectionToolWidget.h>
 
 #include <QtGui/QWidget>
 

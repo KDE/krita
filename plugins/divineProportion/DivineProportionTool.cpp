@@ -174,4 +174,4 @@ QWidget *DivineProportionTool::createOptionWidget()
     return widget;
 }
 
-#include "DivineProportionTool.moc"
+#include <DivineProportionTool.moc>

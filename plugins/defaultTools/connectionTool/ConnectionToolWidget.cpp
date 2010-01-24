@@ -32,4 +32,4 @@ ConnectionToolWidget::ConnectionToolWidget( QWidget * parent )
     widget.connectionType->addItem(i18n("Standard"));
     
 }
-#include "ConnectionToolWidget.moc"
+#include <ConnectionToolWidget.moc>

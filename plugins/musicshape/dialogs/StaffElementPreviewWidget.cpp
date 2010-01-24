@@ -86,4 +86,4 @@ void StaffElementPreviewWidget::paintEvent(QPaintEvent * event)
 }
 
 
-#include "StaffElementPreviewWidget.moc"
+#include <StaffElementPreviewWidget.moc>

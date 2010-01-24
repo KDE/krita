@@ -129,4 +129,4 @@ QList<int> TimeSignature::beatLengths() const
 
 } // namespace MusicCore
 
-#include "TimeSignature.moc"
+#include <TimeSignature.moc>

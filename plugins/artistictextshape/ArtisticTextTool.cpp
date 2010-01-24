@@ -573,4 +573,4 @@ void ArtisticTextTool::textChanged()
     setTextCursorInternal( m_currentShape->text().length() );
 }
 
-#include "ArtisticTextTool.moc"
+#include <ArtisticTextTool.moc>

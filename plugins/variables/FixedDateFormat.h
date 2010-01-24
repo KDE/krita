@@ -21,7 +21,7 @@
 
 #include <QWidget>
 
-#include "ui_FixedDateFormat.h"
+#include <ui_FixedDateFormat.h>
 
 class DateVariable;
 class QListWidgetItem;

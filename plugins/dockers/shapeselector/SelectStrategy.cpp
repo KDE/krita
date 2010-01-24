@@ -120,5 +120,5 @@ void SelectStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         emit itemSelected();
 }
 
-#include "SelectStrategy.moc"
+#include <SelectStrategy.moc>
 

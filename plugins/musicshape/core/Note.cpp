@@ -96,4 +96,4 @@ void Note::setStartTie(bool startTie)
 
 } // namespace MusicCore
 
-#include "Note.moc"
+#include <Note.moc>

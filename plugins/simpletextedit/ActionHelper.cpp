@@ -49,5 +49,5 @@ void ActionHelper::shadowTriggered(bool on) {
     m_blockSignals = false;
 }
 
-#include "ActionHelper.moc"
+#include <ActionHelper.moc>
 

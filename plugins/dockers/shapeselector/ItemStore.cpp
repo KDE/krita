@@ -358,4 +358,4 @@ KoShape *ItemStore::createShapeFromPaste(QByteArray &bytes)
     return paster.shape();
 }
 
-#include "ItemStore.moc"
+#include <ItemStore.moc>

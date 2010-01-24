@@ -74,4 +74,4 @@ bool MusicShapeFactory::supports(const KoXmlElement & e) const
     return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.koffice.org/music" );
 }
 
-#include "MusicShapeFactory.moc"
+#include <MusicShapeFactory.moc>

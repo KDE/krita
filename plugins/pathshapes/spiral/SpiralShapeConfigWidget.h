@@ -21,7 +21,7 @@
 #define SPIRALSHAPECONFIGWIDGET_H
 
 #include "SpiralShape.h"
-#include "ui_SpiralShapeConfigWidget.h"
+#include <ui_SpiralShapeConfigWidget.h>
 
 #include <KoShapeConfigWidgetBase.h>
 

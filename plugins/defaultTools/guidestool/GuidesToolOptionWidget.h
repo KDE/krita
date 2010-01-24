@@ -20,7 +20,7 @@
 #ifndef GUIDESTOOLOPTIONWIDGET_H
 #define GUIDESTOOLOPTIONWIDGET_H
 
-#include "ui_GuidesToolOptionWidget.h"
+#include <ui_GuidesToolOptionWidget.h>
 
 #include <QtGui/QWidget>
 

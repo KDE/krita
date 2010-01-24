@@ -63,4 +63,4 @@ void AbstractMusicAction::keyPress(QKeyEvent* event, const MusicCursor& /*cursor
     Q_UNUSED(event);
 }
 
-#include "AbstractMusicAction.moc"
+#include <AbstractMusicAction.moc>

@@ -255,4 +255,4 @@ void Sheet::updateAccidentals()
 
 } // namespace MusicCore
 
-#include "Sheet.moc"
+#include <Sheet.moc>

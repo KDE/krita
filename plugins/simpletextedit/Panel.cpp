@@ -215,4 +215,4 @@ void Panel::style3ButtonClicked()
    Make the icon size 'configurable' using a context menu.
  */
 
-#include "Panel.moc"
+#include <Panel.moc>

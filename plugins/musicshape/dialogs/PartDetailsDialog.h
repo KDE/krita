@@ -19,7 +19,7 @@
 #ifndef PARTDETAILSDIALOG_H
 #define PARTDETAILSDIALOG_H
 
-#include "ui_PartDetailsDialog.h"
+#include <ui_PartDetailsDialog.h>
 
 #include <KDialog>
 

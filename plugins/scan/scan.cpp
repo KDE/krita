@@ -29,7 +29,7 @@
 #include <KoView.h>
 #include <kgenericfactory.h>
 #include <kicon.h>
-#include "scan.moc"
+#include <scan.moc>
 
 typedef KGenericFactory<Scan> ScanFactory;
 K_EXPORT_COMPONENT_FACTORY( kofficescan, ScanFactory( "kscan_plugin" ) )

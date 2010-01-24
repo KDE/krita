@@ -34,4 +34,4 @@ ThesaurusPlugin::ThesaurusPlugin(QObject *parent, const QVariantList&)
     KoTextEditingRegistry::instance()->add(new ThesaurusFactory(parent));
 }
 
-#include "ThesaurusPlugin.moc"
+#include <ThesaurusPlugin.moc>

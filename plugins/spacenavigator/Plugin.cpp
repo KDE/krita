@@ -31,4 +31,4 @@ Plugin::Plugin(QObject * parent, const QStringList &)
     KoInputDeviceHandlerRegistry::instance()->add(new SpaceNavigatorDevice(parent));
 }
 
-#include "Plugin.moc"
+#include <Plugin.moc>

@@ -41,5 +41,5 @@ ColorDocker::~ColorDocker()
 {
 }
 
-#include "ColorDocker.moc"
+#include <ColorDocker.moc>
 

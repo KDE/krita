@@ -271,4 +271,4 @@ bool validateOutput(Sheet* sheet, const char* fname)
 
 QTEST_MAIN(MusicXmlWriterTest)
 
-#include "MusicXmlWriterTest.moc"
+#include <MusicXmlWriterTest.moc>

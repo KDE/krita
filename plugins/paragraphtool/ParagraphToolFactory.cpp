@@ -41,4 +41,4 @@ KoTool * ParagraphToolFactory::createTool(KoCanvasBase *canvas)
     return new ParagraphTool(canvas);
 }
 
-#include "ParagraphToolFactory.moc"
+#include <ParagraphToolFactory.moc>

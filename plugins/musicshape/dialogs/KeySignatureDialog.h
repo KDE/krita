@@ -19,7 +19,7 @@
 #ifndef KEYSIGNATUREDIALOG_H
 #define KEYSIGNATUREDIALOG_H
 
-#include "ui_KeySignatureDialog.h"
+#include <ui_KeySignatureDialog.h>
 
 #include <KDialog>
 namespace MusicCore {

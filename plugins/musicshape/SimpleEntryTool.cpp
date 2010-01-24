@@ -41,7 +41,7 @@
 #include "MusicCursor.h"
 
 #include "SimpleEntryTool.h"
-#include "SimpleEntryTool.moc"
+#include <SimpleEntryTool.moc>
 
 #include "dialogs/SimpleEntryWidget.h"
 

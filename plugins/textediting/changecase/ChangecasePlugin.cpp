@@ -33,5 +33,5 @@ ChangecasePlugin::ChangecasePlugin( QObject *parent, const QVariantList& )
     KoTextEditingRegistry::instance()->add( new ChangecaseFactory( parent));
 }
 
-#include "ChangecasePlugin.moc"
+#include <ChangecasePlugin.moc>
 

@@ -20,7 +20,7 @@
 #ifndef OPTIONWIDGET_H
 #define OPTIONWIDGET_H
 
-#include "ui_OptionWidget.h"
+#include <ui_OptionWidget.h>
 #include <QWidget>
 
 class OptionWidget : public QWidget

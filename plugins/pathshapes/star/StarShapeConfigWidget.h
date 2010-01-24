@@ -20,7 +20,7 @@
 #ifndef STARSHAPECONFIGWIDGET_H
 #define STARSHAPECONFIGWIDGET_H
 
-#include "ui_StarShapeConfigWidget.h"
+#include <ui_StarShapeConfigWidget.h>
 
 #include <KoShapeConfigWidgetBase.h>
 

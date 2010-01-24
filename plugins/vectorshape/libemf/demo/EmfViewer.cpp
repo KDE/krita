@@ -95,6 +95,6 @@ void EmfViewer::slotOpenFile()
 }
 
 
-#include "EmfViewer.moc"
+#include <EmfViewer.moc>
 
 

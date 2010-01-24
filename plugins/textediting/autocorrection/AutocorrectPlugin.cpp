@@ -34,5 +34,5 @@ AutocorrectPlugin::AutocorrectPlugin( QObject *parent, const QVariantList& )
     KoTextEditingRegistry::instance()->add( new AutocorrectFactory( parent));
 }
 
-#include "AutocorrectPlugin.moc"
+#include <AutocorrectPlugin.moc>
 

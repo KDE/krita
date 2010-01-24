@@ -90,4 +90,4 @@ void StarShapeConfigWidget::typeChanged()
     }
 }
 
-#include "StarShapeConfigWidget.moc"
+#include <StarShapeConfigWidget.moc>

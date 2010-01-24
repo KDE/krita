@@ -37,5 +37,5 @@ VariablesPlugin::VariablesPlugin(QObject *parent, const QStringList&)
     KoVariableRegistry::instance()->add(new InfoVariableFactory());
 }
 
-#include "VariablesPlugin.moc"
+#include <VariablesPlugin.moc>
 

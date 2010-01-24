@@ -200,4 +200,4 @@ qreal Bar::sizeFactor() const
 
 } // namespace MusicCore
 
-#include "Bar.moc"
+#include <Bar.moc>

@@ -31,4 +31,4 @@ ParagraphPlugin::ParagraphPlugin(QObject * parent, const QStringList &)
     KoToolRegistry::instance()->add(new ParagraphToolFactory(parent));
 }
 
-#include "ParagraphPlugin.moc"
+#include <ParagraphPlugin.moc>

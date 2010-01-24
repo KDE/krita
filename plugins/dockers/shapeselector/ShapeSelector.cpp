@@ -105,4 +105,4 @@ void ShapeSelector::addItems(QFile &file, FolderShape *targetFolder)
     file.close();
 }
 
-#include "ShapeSelector.moc"
+#include <ShapeSelector.moc>

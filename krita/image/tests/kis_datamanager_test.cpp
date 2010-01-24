@@ -73,32 +73,32 @@ void KisDataManagerTest::testDefaultPixel()
 
     }
 }
-
-void KisDataManagerTest::testMemento() {}
-
-void KisDataManagerTest::testReadWrite() {}
-
-void KisDataManagerTest::testExtent() {}
-
-void KisDataManagerTest::testClear() {}
-
-void KisDataManagerTest::testSetPixel() {}
-
-void KisDataManagerTest::testReadBytes() {}
-
-void KisDataManagerTest::testWriteBytes() {}
-
-void KisDataManagerTest::testPlanarBytes() {}
-
-void KisDataManagerTest::testContiguousColumns() {}
-
-void KisDataManagerTest::testRowStride() {}
-
-void KisDataManagerTest::testThreadedReadAccess() {}
-
-void KisDataManagerTest::testThreadedWriteAccess() {}
-
-void KisDataManagerTest::testThreadedReadWriteAccess() {}
+//
+//void KisDataManagerTest::testMemento() {}
+//
+//void KisDataManagerTest::testReadWrite() {}
+//
+//void KisDataManagerTest::testExtent() {}
+//
+//void KisDataManagerTest::testClear() {}
+//
+//void KisDataManagerTest::testSetPixel() {}
+//
+//void KisDataManagerTest::testReadBytes() {}
+//
+//void KisDataManagerTest::testWriteBytes() {}
+//
+//void KisDataManagerTest::testPlanarBytes() {}
+//
+//void KisDataManagerTest::testContiguousColumns() {}
+//
+//void KisDataManagerTest::testRowStride() {}
+//
+//void KisDataManagerTest::testThreadedReadAccess() {}
+//
+//void KisDataManagerTest::testThreadedWriteAccess() {}
+//
+//void KisDataManagerTest::testThreadedReadWriteAccess() {}
 
 QTEST_KDEMAIN(KisDataManagerTest, GUI)
 #include "kis_datamanager_test.moc"

@@ -52,6 +52,9 @@ public:
 public slots:
     /// Sets a new color to be displayed
     void setCurrentColor( const QColor &color );
+    
+    /// Sets a new color to be displayed
+    void setCurrentColor( const KoColor &color );
 
     /// Returns the current color
     QColor currentColor() const;

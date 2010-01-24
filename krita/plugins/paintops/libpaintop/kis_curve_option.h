@@ -48,14 +48,15 @@ public:
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
     const QString & label() const;
-    
+
+    KisCubicCurve curve() const;
     void setCurve(const KisCubicCurve& curve);
-    
+
     KisDynamicSensor* sensor() const;
     void setSensor(KisDynamicSensor* sensor);
-    
+
     bool isCheckable();
-    
+
     bool isChecked() const;
     void setChecked(bool checked);
 protected:

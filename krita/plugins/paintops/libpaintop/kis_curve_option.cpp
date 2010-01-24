@@ -39,6 +39,11 @@ const QString & KisCurveOption::label() const
     return m_label;
 }
 
+KisCubicCurve KisCurveOption::curve() const
+{
+    return m_curve;
+}
+
 void KisCurveOption::setCurve(const KisCubicCurve& curve)
 {
     m_curve = curve;
@@ -53,7 +58,7 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
     setting->setProperty("Custom" + m_name, m_customCurve);
     setting->setProperty(QString(m_name + "Sensor"), sensor()->id());
     if (m_customCurve) {
-        setting->setProperty("Curve"+m_name, qVariantFromValue(m_curve));
+        setting->setProperty("Curve" + m_name, qVariantFromValue(m_curve));
     }
 }
 
@@ -65,7 +70,7 @@ void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting
     m_customCurve = setting->getBool("Custom" + m_name, false);
     setSensor(KisDynamicSensor::id2Sensor(setting->getString(QString(m_name + "Sensor"))));
     if (m_customCurve) {
-        m_curve = setting->getCubicCurve("Curve"+m_name);
+        m_curve = setting->getCubicCurve("Curve" + m_name);
     }
 }
 

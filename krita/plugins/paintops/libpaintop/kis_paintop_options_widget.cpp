@@ -38,6 +38,7 @@ public:
 
     QList<KisPaintOpOption*> paintOpOptions;
     QMap<QListWidgetItem*, KisPaintOpOption*> widgetOptionMap;
+    QMap<KisPaintOpOption*, QCheckBox*> checkBoxMap;
     QListWidget * optionsList;
     QStackedWidget * optionsStack;
 };
@@ -93,6 +94,7 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
         w->setLayout(l);
 
         m_d->optionsStack->addWidget(w);
+        m_d->checkBoxMap[option] = c;
     } else {
         m_d->optionsStack->addWidget(option->configurationPage());
     }
@@ -113,6 +115,10 @@ void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration 
     Q_ASSERT(!config->getString("paintop").isEmpty());
     foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
         option->readOptionSetting(config);
+        if (option->isCheckable()) {
+            Q_ASSERT(m_d->checkBoxMap[option]);
+            m_d->checkBoxMap[option]->setChecked(option->isChecked());
+        }
     }
 }
 

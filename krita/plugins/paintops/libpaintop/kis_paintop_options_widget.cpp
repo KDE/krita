@@ -87,6 +87,7 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
         QCheckBox* c = new QCheckBox(i18n("Active"));
         c->setChecked(option->isChecked());
         connect(c, SIGNAL(toggled(bool)), option, SLOT(setChecked(bool)));
+        connect(c, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
         l->addWidget(c);
         l->addWidget(option->configurationPage());
         //option->configurationPage()->setVisible( true );

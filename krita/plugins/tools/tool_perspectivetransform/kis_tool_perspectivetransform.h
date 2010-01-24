@@ -79,6 +79,7 @@ private:
     void transform();
     void initHandles();
     void orderHandles();
+    bool isConvex(QPolygonF);
     QLineF::IntersectType middleHandlePos(QPolygonF, QPointF&);
     QPolygonF midpointHandles(QPolygonF);
 

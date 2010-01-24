@@ -258,6 +258,16 @@ void KisToolPerspectiveTransform::orderHandles()
     m_bottomleft = m_points[(topLeftHandle + 3 * revolveDirection) % 4];
 }
 
+bool KisToolPerspectiveTransform::isConvex(QPolygonF ptList)
+{
+    QLineF l1(ptList[0], ptList[2]);
+    QLineF l2(ptList[1], ptList[3]);
+
+    QLineF::IntersectType interType = l1.intersect(l2, &QPointF());
+
+    return (interType == QLineF::BoundedIntersection);
+}
+
 QLineF::IntersectType KisToolPerspectiveTransform::middleHandlePos(QPolygonF ptList, QPointF& diagIntersect)
 {
     // create two diagonal lines and find their
@@ -436,7 +446,6 @@ void KisToolPerspectiveTransform::mouseReleaseEvent(KoPointerEvent * event)
                     // from the points, select which is topleft ? topright ? bottomright ? and bottomleft ?
                     orderHandles();
 
-
                     if (m_optForm->radioButtonCorrect->isChecked()) {
                         Matrix3qreal matrix = KisPerspectiveMath::computeMatrixTransfoToPerspective(m_topleft, m_topright, m_bottomleft, m_bottomright, m_initialRect);
                         m_topleft = KisPerspectiveMath::matProd(matrix, m_initialRect.topLeft());
@@ -525,24 +534,25 @@ void KisToolPerspectiveTransform::paintOutline(QPainter& gc, const QRect&)
 
             gc.setPen(pen);
 
-            const QPointF perspectiveVertices[4] = { topleft, topright, bottomright, bottomleft };
-            gc.drawPolygon(perspectiveVertices, 4);
+            QPolygonF vertexList;
+            vertexList << topleft << topright << bottomright << bottomleft;
+            gc.drawPolygon(vertexList);
             gc.drawRect(topleft.x() - 4, topleft.y() - 4, 8, 8);
             gc.drawRect(topright.x() - 4, topright.y() - 4, 8, 8);
             gc.drawRect(bottomright.x() - 4, bottomright.y() - 4, 8, 8);
             gc.drawRect(bottomleft.x() - 4, bottomleft.y() - 4, 8, 8);
 
             QPointF middleHandlePt;
-            QPolygonF vertexList;
-            vertexList << topleft << topright << bottomright << bottomleft;
             middleHandlePos(vertexList, middleHandlePt);
             gc.drawRect(middleHandlePt.x() - 4, middleHandlePt.y() - 4, 8, 8);
 
-            QPolygonF midHandlesList = midpointHandles(vertexList);
-            gc.drawRect(midHandlesList[0].x() - 4, midHandlesList[0].y() - 4, 8, 8);
-            gc.drawRect(midHandlesList[1].x() - 4, midHandlesList[1].y() - 4, 8, 8);
-            gc.drawRect(midHandlesList[2].x() - 4, midHandlesList[2].y() - 4, 8, 8);
-            gc.drawRect(midHandlesList[3].x() - 4, midHandlesList[3].y() - 4, 8, 8);
+            if (isConvex(vertexList)) {
+                QPolygonF midHandlesList = midpointHandles(vertexList);
+                gc.drawRect(midHandlesList[0].x() - 4, midHandlesList[0].y() - 4, 8, 8);
+                gc.drawRect(midHandlesList[1].x() - 4, midHandlesList[1].y() - 4, 8, 8);
+                gc.drawRect(midHandlesList[2].x() - 4, midHandlesList[2].y() - 4, 8, 8);
+                gc.drawRect(midHandlesList[3].x() - 4, midHandlesList[3].y() - 4, 8, 8);
+            }
 
             break;
         }
@@ -595,6 +605,11 @@ void KisToolPerspectiveTransform::transform()
 
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
     if (!canvas)
+        return;
+
+    QPolygonF vertexList;
+    vertexList << m_topleft << m_topright << m_bottomright << m_bottomleft;
+    if (!isConvex(vertexList))
         return;
 
     KoProgressUpdater* updater = canvas->view()->createProgressUpdater();

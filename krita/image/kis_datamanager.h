@@ -108,7 +108,7 @@ public:
 
     /**
      * @returns true if there is a memento active. This means that
-     * iterators can rely on oldData() function.
+     * iterators can rely on the oldData() function.
      */
     inline bool hasCurrentMemento() const {
         return ACTUAL_DATAMGR::hasCurrentMemento();

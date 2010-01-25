@@ -511,6 +511,10 @@ public slots:
 
     void slotProjectionUpdated(const QRect & rc);
     void updateProjection(KisNodeSP node, const QRect& rc);
+    
+    /**
+     * Triggers synchronous recomposition of the projection
+     */
     void refreshGraph();
 
 private:

@@ -1,0 +1,9 @@
+<!DOCTYPE foobar>
+<ctlcolorspace>
+    <info  colorModelId="GRAY" colorModelName="Grayscale (without transparency)" type="float" depth="32" name="Gray (without transparency, 32bit float channel) for High Dynamic Range imaging" id="GrayF32" />
+    <channels>
+        <channel name="Gray"   shortName="g" index="0" channelType="Color" valueType="float32" size="4" color="0,0,0" />
+    </channels>
+    <isHdr />
+    <defaultProfile name="Standard Linear Gray (scGRAY)" />
+</ctlcolorspace>

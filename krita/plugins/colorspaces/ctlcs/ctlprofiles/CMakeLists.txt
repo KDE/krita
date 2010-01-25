@@ -1,4 +1,5 @@
 install(FILES
+    scgrayf.ctlp
     lmsaf32.ctlp
     srgbaf.ctlp
     scrgbaf.ctlp

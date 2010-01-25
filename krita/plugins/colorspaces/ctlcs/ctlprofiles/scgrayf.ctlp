@@ -1,0 +1,71 @@
+<ctlprofile>
+    <info colorModel="GRAY" type="float" name="Standard Linear Gray (scGRAY)" />
+    <program>
+<![CDATA[
+
+import "pigmentutils";
+
+const float gamma = 2.4;
+
+// Implement color transformation as defined by http://www.colour.org/tc8-05/Docs/colorspace/61966-2-2NPa.pdf
+
+float gammaToLinearFloat( float v)
+{
+  if (v < 0.03928) return v / 12.92;
+  return pow ((v + 0.055) / 1.055, gamma);
+}
+
+void GRAYAu16_to_scGRAYf(int gIn, int aIn, output float gOut, float exposure = 1.0)
+{
+    gOut = gammaToLinearFloat( int16toFloat( gIn ) ) / exposure;
+}
+
+void scRGBAf_to_scGRAYf(float rIn, float gIn, float bIn, float aIn, output float gOut, float exposure = 1.0)
+{
+    gOut = 0.3 * rIn + 0.59 * gIn + 0.11 * bIn;
+}
+
+float linearFloatToGamma( float v)
+{
+    if( v < 0.00304 ) return 12.92 * v;
+    else return 1.055 * pow (v, (1.0/gamma)) - 0.055;
+}
+
+void scGRAYf_to_GRAYu16(float gIn, output int gOut, output int aOut, float exposure = 1.0)
+{
+    gOut = floatToInt16( linearFloatToGamma( gIn * exposure ) );
+    aOut = 65535;
+}
+
+void scGRAYf_to_scRGBAf(float gIn, output float rOut, output float gOut, output float bOut, output float aOut, float exposure = 1.0)
+{
+    rOut = gIn;
+    gOut = gIn;
+    bOut = gIn;
+    aOut = 1.0;
+}
+
+
+]]>
+    </program>
+    <transformations>
+        <conversions>
+            <conversion function="GRAYAu16_to_scGRAYf">
+                <input colorModel="GRAYA" depth="16" type="integer" profile="gray built-in - (lcms internal)" />
+                <output colorModel="GRAY" type="float" profile = "Standard Linear Gray (scGRAY)" />
+            </conversion>
+            <conversion function="scRGBAf_to_scGRAYf">
+                <input colorModel="RGBA" type="float" profile = "Standard Linear RGB (scRGB/sRGB64)" />
+                <output colorModel="GRAY" type="float" profile="Standard Linear Gray (scGRAY)" />
+            </conversion>
+            <conversion function="scGRAYf_to_GRAYu16">
+                <input colorModel="GRAY" type="float" profile="Standard Linear Gray (scGRAY)" />
+                <output colorModel="GRAYA" depth="16" type="integer" profile="gray built-in - (lcms internal)" />
+            </conversion>
+            <conversion function="scGRAYf_to_scRGBAf">
+                <input colorModel="GRAY" type="float" profile="Standard Linear Gray (scGRAY)" />
+                <output colorModel="RGBA" type="float" profile="Standard Linear RGB (scRGB/sRGB64)" />
+            </conversion>
+        </conversions>
+    </transformations>
+</ctlprofile>

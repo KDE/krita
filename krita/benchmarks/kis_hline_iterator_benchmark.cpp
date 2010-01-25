@@ -123,6 +123,71 @@ void KisHLineIteratorBenchmark::benchmarkReadWriteBytes(){
     
 }
 
+void KisHLineIteratorBenchmark::benchmarkWriteBytesNoMemCpy()
+{
+    KisHLineIteratorPixel it = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
+
+    QBENCHMARK{
+        for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
+            while (!it.isDone()) {
+                ++it;
+            }
+            it.nextRow();
+        }
+    }
+}
+
+void KisHLineIteratorBenchmark::benchmarkReadBytesNoMemCpy()
+{
+    KisHLineIteratorPixel it = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
+
+    QBENCHMARK{
+        for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
+            while (!it.isDone()) {
+                ++it;
+            }
+            it.nextRow();
+        }
+    }
+}
+
+
+void KisHLineIteratorBenchmark::benchmarkConstReadBytesNoMemCpy()
+{
+    KisHLineConstIteratorPixel cit = m_device->createHLineConstIterator(0, 0, TEST_IMAGE_WIDTH);
+
+    QBENCHMARK{
+        for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
+            while (!cit.isDone()) {
+                ++cit;
+            }
+            cit.nextRow();
+        }
+    }
+}
+
+void KisHLineIteratorBenchmark::benchmarkReadWriteBytesNoMemCpy(){
+    KoColor c(m_colorSpace);
+    c.fromQColor(QColor(250,120,0));
+    KisPaintDevice dab(m_colorSpace);
+    dab.fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT, c.data());
+    
+    KisHLineIteratorPixel writeIterator = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
+    KisHLineConstIteratorPixel constReadIterator = dab.createHLineConstIterator(0, 0, TEST_IMAGE_WIDTH);
+
+    QBENCHMARK{
+        for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
+            while (!constReadIterator.isDone()) {
+                ++constReadIterator;
+                ++writeIterator;
+            }
+            constReadIterator.nextRow();
+            writeIterator.nextRow();
+        }
+    }
+    
+}
+
 
 
 QTEST_KDEMAIN(KisHLineIteratorBenchmark, GUI)

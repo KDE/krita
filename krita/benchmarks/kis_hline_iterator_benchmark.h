@@ -49,6 +49,18 @@ private slots:
     void benchmarkConstReadBytes();
     // copy from one device to another
     void benchmarkReadWriteBytes();
+    
+    // memcpy from KoColor to device
+    void benchmarkWriteBytesNoMemCpy();
+    // memcpy from device to KoColor
+    void benchmarkReadBytesNoMemCpy();
+    // const hline iterator used
+    void benchmarkConstReadBytesNoMemCpy();
+    // copy from one device to another
+    void benchmarkReadWriteBytesNoMemCpy();
+    
+    
+    
 };
 
 #endif

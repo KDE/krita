@@ -17,6 +17,7 @@
  */
 
 #include "kis_hline_iterator_benchmark.h"
+#include "kis_benchmark_values.h"
 
 #include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
@@ -27,8 +28,6 @@
 
 #include <qtest_kde.h>
 
-#define TEST_IMAGE_WIDTH 4096
-#define TEST_IMAGE_HEIGHT 4096
 
 void KisHLineIteratorBenchmark::initTestCase()
 {

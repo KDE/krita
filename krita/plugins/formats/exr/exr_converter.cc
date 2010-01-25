@@ -137,7 +137,7 @@ void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
 
     for (int y = 0; y < height; ++y) {
         Imf::FrameBuffer frameBuffer;
-        _T_* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
+        _T_* frameBufferData = (pixels.data()) /*- xstart - (ystart + y) * width*/;
         frameBuffer.insert(info.channelMap["G"].toAscii().data(),
                            Imf::Slice(ptype, (char *) &frameBufferData,
                                       sizeof(_T_) * 1,
@@ -406,53 +406,58 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     // Load the layers
     for (int i = 0; i < infos.size(); ++i) {
         ExrPaintLayerInfo& info = infos[i];
-        dbgFile << "Decoding " << info.name << " with " << info.channelMap.size() << " channels, and color space " << info.colorSpace->id();
-        KisPaintLayerSP layer = new KisPaintLayer(m_image, info.name, OPACITY_OPAQUE, info.colorSpace);
-        KisTransaction("", layer->paintDevice());
+        if(info.colorSpace)
+        {
+            dbgFile << "Decoding " << info.name << " with " << info.channelMap.size() << " channels, and color space " << info.colorSpace->id();
+            KisPaintLayerSP layer = new KisPaintLayer(m_image, info.name, OPACITY_OPAQUE, info.colorSpace);
+            KisTransaction("", layer->paintDevice());
 
-        layer->setCompositeOp(COMPOSITE_OVER);
+            layer->setCompositeOp(COMPOSITE_OVER);
 
-        if (!layer) {
-            return KisImageBuilder_RESULT_FAILURE;
-        }
-
-        switch (info.channelMap.size()) {
-        case 1:
-            // Decode the data
-            switch (imageType) {
-            case IT_FLOAT16:
-                decodeData1<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
-                break;
-            case IT_FLOAT32:
-                decodeData1<float>(file, info, layer, width, dx, dy, height, Imf::FLOAT);
-                break;
-            case IT_UNKNOWN:
-            case IT_UNSUPPORTED:
-                qFatal("Impossible error");
+            if (!layer) {
+                return KisImageBuilder_RESULT_FAILURE;
             }
-            break;
-        case 3:
-        case 4:
-            // Decode the data
-            switch (imageType) {
-            case IT_FLOAT16:
-                decodeData4<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
-                break;
-            case IT_FLOAT32:
-                decodeData4<float>(file, info, layer, width, dx, dy, height, Imf::FLOAT);
-                break;
-            case IT_UNKNOWN:
-            case IT_UNSUPPORTED:
-                qFatal("Impossible error");
-            }
-            break;
-        default:
-            qFatal("Invalid number of channels: %i", info.channelMap.size());
-        }
 
-        KisGroupLayerSP groupLayerParent = (info.parent) ? info.parent->groupLayer : m_image->rootLayer();
-        m_image->addNode(layer, groupLayerParent);
-        layer->setDirty();
+            switch (info.channelMap.size()) {
+            case 1:
+                // Decode the data
+                switch (imageType) {
+                case IT_FLOAT16:
+                    decodeData1<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
+                    break;
+                case IT_FLOAT32:
+                    decodeData1<float>(file, info, layer, width, dx, dy, height, Imf::FLOAT);
+                    break;
+                case IT_UNKNOWN:
+                case IT_UNSUPPORTED:
+                    qFatal("Impossible error");
+                }
+                break;
+            case 3:
+            case 4:
+                // Decode the data
+                switch (imageType) {
+                case IT_FLOAT16:
+                    decodeData4<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
+                    break;
+                case IT_FLOAT32:
+                    decodeData4<float>(file, info, layer, width, dx, dy, height, Imf::FLOAT);
+                    break;
+                case IT_UNKNOWN:
+                case IT_UNSUPPORTED:
+                    qFatal("Impossible error");
+                }
+                break;
+            default:
+                qFatal("Invalid number of channels: %i", info.channelMap.size());
+            }
+
+            KisGroupLayerSP groupLayerParent = (info.parent) ? info.parent->groupLayer : m_image->rootLayer();
+            m_image->addNode(layer, groupLayerParent);
+            layer->setDirty();
+        } else {
+            dbgFile << "No decoding " << info.name << " with " << info.channelMap.size() << " channels, and lack of a color space";
+        }
     }
     m_image->unlock();
     return KisImageBuilder_RESULT_OK;

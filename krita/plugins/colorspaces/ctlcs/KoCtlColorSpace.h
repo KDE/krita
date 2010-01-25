@@ -64,7 +64,9 @@ public:
     virtual KoID colorModelId() const;
     virtual KoID colorDepthId() const;
     virtual quint8 alpha(const quint8 * pixel) const;
+    virtual qreal alpha2(const quint8 * pixel) const;
     virtual void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const;
+    virtual void setAlpha2(quint8 * pixels, qreal alpha, qint32 nPixels) const;
     virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const;
     virtual void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const;
     virtual void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const;

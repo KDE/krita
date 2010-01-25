@@ -109,8 +109,16 @@ public:
         return _CSTrait::alpha(U8_pixel);
     }
 
+    virtual qreal alpha2(const quint8 * U8_pixel) const {
+        return _CSTrait::alpha2(U8_pixel);
+    }
+
     virtual void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const {
         _CSTrait::setAlpha(pixels, alpha, nPixels);
+    }
+
+    virtual void setAlpha2(quint8 * pixels, qreal alpha, qint32 nPixels) const {
+        _CSTrait::setAlpha2(pixels, alpha, nPixels);
     }
 
     virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const {

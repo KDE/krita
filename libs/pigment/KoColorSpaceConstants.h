@@ -26,5 +26,7 @@
 // TODO: find a better place or way to define those stuff
 const quint8 OPACITY_TRANSPARENT = 0;
 const quint8 OPACITY_OPAQUE = UCHAR_MAX;
+const quint8 OPACITY_TRANSPARENT2 = 0.0;
+const quint8 OPACITY_OPAQUE2 = 1.0;
 
 #endif

@@ -22,7 +22,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 
-#define NB_PIXELS 10000000
+#define NB_PIXELS 1000000
 
 void KoColorSpacesBenchmark::createRowsColumns()
 {
@@ -32,11 +32,6 @@ void KoColorSpacesBenchmark::createRowsColumns()
     foreach(const KoColorSpace* colorSpace, colorSpaces) {
         QTest::newRow(colorSpace->name().toLatin1().data()) << colorSpace->colorModelId().id() << colorSpace->colorDepthId().id();
     }
-}
-
-void KoColorSpacesBenchmark::benchmarkAlpha_data()
-{
-    createRowsColumns();
 }
 
 #define START_BENCHMARK \
@@ -51,6 +46,11 @@ void KoColorSpacesBenchmark::benchmarkAlpha_data()
 #define END_BENCHMARK \
     delete[] data;
 
+void KoColorSpacesBenchmark::benchmarkAlpha_data()
+{
+    createRowsColumns();
+}
+
 void KoColorSpacesBenchmark::benchmarkAlpha()
 {
     START_BENCHMARK
@@ -58,6 +58,24 @@ void KoColorSpacesBenchmark::benchmarkAlpha()
         quint8* data_it = data;
         for (int i = 0; i < NB_PIXELS; ++i) {
             colorSpace->alpha(data_it);
+            data_it += pixelSize;
+        }
+    }
+    END_BENCHMARK
+}
+
+void KoColorSpacesBenchmark::benchmarkAlpha2_data()
+{
+    createRowsColumns();
+}
+
+void KoColorSpacesBenchmark::benchmarkAlpha2()
+{
+    START_BENCHMARK
+    QBENCHMARK {
+        quint8* data_it = data;
+        for (int i = 0; i < NB_PIXELS; ++i) {
+            colorSpace->alpha2(data_it);
             data_it += pixelSize;
         }
     }
@@ -78,6 +96,20 @@ void KoColorSpacesBenchmark::benchmarkSetAlpha()
     END_BENCHMARK
 }
 
+void KoColorSpacesBenchmark::benchmarkSetAlpha2_data()
+{
+    createRowsColumns();
+}
+
+void KoColorSpacesBenchmark::benchmarkSetAlpha2()
+{
+    START_BENCHMARK
+    QBENCHMARK {
+        colorSpace->setAlpha2(data, OPACITY_OPAQUE2, NB_PIXELS);
+    }
+    END_BENCHMARK
+}
+
 void KoColorSpacesBenchmark::benchmarkSetAlphaIndividualCall_data()
 {
     createRowsColumns();
@@ -90,6 +122,24 @@ void KoColorSpacesBenchmark::benchmarkSetAlphaIndividualCall()
         quint8* data_it = data;
         for (int i = 0; i < NB_PIXELS; ++i) {
             colorSpace->setAlpha(data_it, OPACITY_OPAQUE, 1);
+            data_it += pixelSize;
+        }
+    }
+    END_BENCHMARK
+}
+
+void KoColorSpacesBenchmark::benchmarkSetAlpha2IndividualCall_data()
+{
+    createRowsColumns();
+}
+
+void KoColorSpacesBenchmark::benchmarkSetAlpha2IndividualCall()
+{
+    START_BENCHMARK
+    QBENCHMARK {
+        quint8* data_it = data;
+        for (int i = 0; i < NB_PIXELS; ++i) {
+            colorSpace->setAlpha2(data_it, OPACITY_OPAQUE2, 1);
             data_it += pixelSize;
         }
     }

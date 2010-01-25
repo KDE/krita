@@ -29,10 +29,16 @@ private:
 private slots:
     void benchmarkAlpha_data();
     void benchmarkAlpha();
+    void benchmarkAlpha2_data();
+    void benchmarkAlpha2();
     void benchmarkSetAlpha_data();
     void benchmarkSetAlpha();
+    void benchmarkSetAlpha2_data();
+    void benchmarkSetAlpha2();
     void benchmarkSetAlphaIndividualCall_data();
     void benchmarkSetAlphaIndividualCall();
+    void benchmarkSetAlpha2IndividualCall_data();
+    void benchmarkSetAlpha2IndividualCall();
 };
 
 #endif

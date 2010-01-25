@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_DATAMANAGER_BENCHMARK_H
-#define KIS_DATAMANAGER_BENCHMARK_H
+#ifndef KIS_HLINEITERATOR_BENCHMARK_H
+#define KIS_HLINEITERATOR_BENCHMARK_H
 
 #include <QtTest/QtTest>
 
@@ -47,6 +47,8 @@ private slots:
     void benchmarkReadBytes();
     // const hline iterator used
     void benchmarkConstReadBytes();
+    // copy from one device to another
+    void benchmarkReadWriteBytes();
 };
 
 #endif

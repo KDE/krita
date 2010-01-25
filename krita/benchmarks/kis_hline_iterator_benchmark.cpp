@@ -56,8 +56,9 @@ void KisHLineIteratorBenchmark::benchmarkCreation()
 
 void KisHLineIteratorBenchmark::benchmarkWriteBytes()
 {
+    KisHLineIteratorPixel it = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
+
     QBENCHMARK{
-        KisHLineIteratorPixel it = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
         for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
             while (!it.isDone()) {
                 memcpy(it.rawData(), m_color->data(), m_colorSpace->pixelSize());
@@ -70,8 +71,9 @@ void KisHLineIteratorBenchmark::benchmarkWriteBytes()
 
 void KisHLineIteratorBenchmark::benchmarkReadBytes()
 {
+    KisHLineIteratorPixel it = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
+
     QBENCHMARK{
-        KisHLineIteratorPixel it = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
         for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
             while (!it.isDone()) {
                 memcpy(m_color->data(), it.rawData(), m_colorSpace->pixelSize());
@@ -85,8 +87,9 @@ void KisHLineIteratorBenchmark::benchmarkReadBytes()
 
 void KisHLineIteratorBenchmark::benchmarkConstReadBytes()
 {
+    KisHLineConstIteratorPixel cit = m_device->createHLineConstIterator(0, 0, TEST_IMAGE_WIDTH);
+
     QBENCHMARK{
-        KisHLineConstIteratorPixel cit = m_device->createHLineConstIterator(0, 0, TEST_IMAGE_WIDTH);
         for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
             while (!cit.isDone()) {
                 memcpy(m_color->data(), cit.rawData(), m_colorSpace->pixelSize());
@@ -95,6 +98,29 @@ void KisHLineIteratorBenchmark::benchmarkConstReadBytes()
             cit.nextRow();
         }
     }
+}
+
+void KisHLineIteratorBenchmark::benchmarkReadWriteBytes(){
+    KoColor c(m_colorSpace);
+    c.fromQColor(QColor(250,120,0));
+    KisPaintDevice dab(m_colorSpace);
+    dab.fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT, c.data());
+    
+    KisHLineIteratorPixel writeIterator = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
+    KisHLineConstIteratorPixel constReadIterator = dab.createHLineConstIterator(0, 0, TEST_IMAGE_WIDTH);
+
+    QBENCHMARK{
+        for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
+            while (!constReadIterator.isDone()) {
+                memcpy(writeIterator.rawData(), constReadIterator.rawData(), m_colorSpace->pixelSize());
+                ++constReadIterator;
+                ++writeIterator;
+            }
+            constReadIterator.nextRow();
+            writeIterator.nextRow();
+        }
+    }
+    
 }
 
 

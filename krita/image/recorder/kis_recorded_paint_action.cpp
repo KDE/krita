@@ -183,6 +183,7 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
 
         painter.setPaintColor(d->foregroundColor);
         painter.setBackgroundColor(d->backgroundColor);
+        d->paintOpPreset->settings()->setNode(node);
         painter.setPaintOpPreset(d->paintOpPreset, info.image());
 
         playPaint(info, &painter);
@@ -206,6 +207,7 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
             node->setDirty(painter.dirtyRegion());
         }
         if (info.undoAdapter()) info.undoAdapter()->addCommand(cmd);
+        d->paintOpPreset->settings()->setNode(0);
     }
 }
 

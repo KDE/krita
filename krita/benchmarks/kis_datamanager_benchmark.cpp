@@ -51,7 +51,7 @@ void KisDatamanagerBenchmark::benchmarkWriteBytes()
     memset(bytes, 128, 3 * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT);
 
     QBENCHMARK {
-        dm.writeBytes(bytes, i, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+        dm.writeBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
     }
 
     delete[] bytes;
@@ -67,7 +67,7 @@ void KisDatamanagerBenchmark::benchmarkReadBytes()
     memset(bytes, 128, 3 * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT);
 
     QBENCHMARK {
-        dm.readBytes(bytes, i, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+        dm.readBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
     }
 
     delete[] bytes;
@@ -83,10 +83,10 @@ void KisDatamanagerBenchmark::benchmarkReadWriteBytes()
     quint8 *bytes = new quint8[3 * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT];
     memset(bytes, 120, 3 * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT);
 
-    dm.writeBytes(bytes, i, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+    dm.writeBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
 
     QBENCHMARK {
-        dm.readBytes(bytes, i, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+        dm.readBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
     }
 
     delete[] bytes;

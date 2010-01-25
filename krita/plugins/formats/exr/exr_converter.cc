@@ -207,7 +207,7 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
             _T_ unmultipliedGreen = rgba -> g;
             _T_ unmultipliedBlue = rgba -> b;
 
-            if (rgba -> a >= HALF_EPSILON && hasAlpha) {
+            if (hasAlpha && rgba -> a >= HALF_EPSILON) {
                 unmultipliedRed /= rgba -> a;
                 unmultipliedGreen /= rgba -> a;
                 unmultipliedBlue /= rgba -> a;
@@ -347,26 +347,20 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     for (int i = 0; i < infos.size(); ++i) {
         ExrPaintLayerInfo& info = infos[i];
         QString modelId;
-        if (info.channelMap.size() == 1)
-        {
+        if (info.channelMap.size() == 1) {
             modelId = GrayColorModelID.id();
             QString channel =  info.channelMap.begin().value();
             info.channelMap.clear();
             info.channelMap["G"] = channel;
-        } else if(info.channelMap.size() == 3 || info.channelMap.size() == 4)
-        {
-            if(info.channelMap.contains("R") && info.channelMap.contains("G") && info.channelMap.contains("B") )
-            {
+        } else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
+            if (info.channelMap.contains("R") && info.channelMap.contains("G") && info.channelMap.contains("B")) {
                 modelId = RGBAColorModelID.id();
-            } else if(info.channelMap.contains("X") && info.channelMap.contains("Y") && info.channelMap.contains("Z") )
-            {
+            } else if (info.channelMap.contains("X") && info.channelMap.contains("Y") && info.channelMap.contains("Z")) {
                 modelId = XYZAColorModelID.id();
                 QMap<QString, QString> newChannelMap;
-                if(info.channelMap.contains("W"))
-                {
+                if (info.channelMap.contains("W")) {
                     newChannelMap["A"] = "W";
-                } else if(info.channelMap.contains("A"))
-                {
+                } else if (info.channelMap.contains("A")) {
                     newChannelMap["A"] = "A";
                 }
                 newChannelMap["B"] = "X";
@@ -375,8 +369,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 info.channelMap = newChannelMap;
             }
         }
-        if(!modelId.isEmpty())
-        {
+        if (!modelId.isEmpty()) {
             info.colorSpace = kisTypeToColorSpace(RGBAColorModelID.id(), info.imageType);
         }
     }
@@ -423,37 +416,36 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             return KisImageBuilder_RESULT_FAILURE;
         }
 
-        switch(info.channelMap.size())
-        {
-            case 1:
-        // Decode the data
-        switch (imageType) {
-        case IT_FLOAT16:
-            decodeData1<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
-            break;
-        case IT_FLOAT32:
-            decodeData1<float>(file, info, layer, width, dx, dy, height, Imf::FLOAT);
-            break;
-        case IT_UNKNOWN:
-        case IT_UNSUPPORTED:
-            qFatal("Impossible error");
-        }
+        switch (info.channelMap.size()) {
+        case 1:
+            // Decode the data
+            switch (imageType) {
+            case IT_FLOAT16:
+                decodeData1<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
                 break;
-            case 3:
-            case 4:
-        // Decode the data
-        switch (imageType) {
-        case IT_FLOAT16:
-            decodeData4<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
+            case IT_FLOAT32:
+                decodeData1<float>(file, info, layer, width, dx, dy, height, Imf::FLOAT);
+                break;
+            case IT_UNKNOWN:
+            case IT_UNSUPPORTED:
+                qFatal("Impossible error");
+            }
             break;
-        case IT_FLOAT32:
-            decodeData4<float>(file, info, layer, width, dx, dy, height, Imf::FLOAT);
+        case 3:
+        case 4:
+            // Decode the data
+            switch (imageType) {
+            case IT_FLOAT16:
+                decodeData4<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
+                break;
+            case IT_FLOAT32:
+                decodeData4<float>(file, info, layer, width, dx, dy, height, Imf::FLOAT);
+                break;
+            case IT_UNKNOWN:
+            case IT_UNSUPPORTED:
+                qFatal("Impossible error");
+            }
             break;
-        case IT_UNKNOWN:
-        case IT_UNSUPPORTED:
-            qFatal("Impossible error");
-        }
-        break;
         default:
             qFatal("Invalid number of channels: %i", info.channelMap.size());
         }

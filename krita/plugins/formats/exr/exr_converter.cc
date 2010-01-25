@@ -134,12 +134,15 @@ template<typename _T_>
 void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype)
 {
     QVector<_T_> pixels(width*height);
+    
+    Q_ASSERT(info.channelMap.contains("G"));
+    dbgFile << "G -> " << info.channelMap["G"];
 
     for (int y = 0; y < height; ++y) {
         Imf::FrameBuffer frameBuffer;
-        _T_* frameBufferData = (pixels.data()) /*- xstart - (ystart + y) * width*/;
+        _T_* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
         frameBuffer.insert(info.channelMap["G"].toAscii().data(),
-                           Imf::Slice(ptype, (char *) &frameBufferData,
+                           Imf::Slice(ptype, (char *) frameBufferData,
                                       sizeof(_T_) * 1,
                                       sizeof(_T_) * width));
 

@@ -37,7 +37,7 @@ class KoStore;
  * the tile manager, are responsible for:
  *
  * * Storing undo/redo data
- * * Offering ordererd and unordered iterators over rects of pixels
+ * * Offering ordered and unordered iterators over rects of pixels
  * * (eventually) efficiently loading and saving data in a format
  * that may allow deferred loading.
  *
@@ -50,7 +50,7 @@ class KisDataManager : public ACTUAL_DATAMGR
 public:
 
     /**
-     * Create a new datamanger where every pixel will take pixelSize bytes and will initialized
+     * Create a new datamanger where every pixel will take pixelSize bytes and will be initialized
      * by default with defPixel. The value of defPixel is copied, the caller still owns the pointer.
      *
      * Note that if pixelSize > size of the defPixel array, we will happily read beyond the
@@ -107,8 +107,8 @@ public:
     }
 
     /**
-     * @returns true is there is a memento active. This means that
-     * iterators can rely on oldData() to function.
+     * @returns true if there is a memento active. This means that
+     * iterators can rely on oldData() function.
      */
     inline bool hasCurrentMemento() const {
         return ACTUAL_DATAMGR::hasCurrentMemento();
@@ -234,7 +234,7 @@ public:
     }
 
     /**
-     * Write the data in the separate arrays to the channes. If there
+     * Write the data in the separate arrays to the channels. If there
      * are less vectors than channels, the remaining channels will not
      * be copied. If any of the arrays points to 0, the channel in
      * that location will not be touched. If the specified area is

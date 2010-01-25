@@ -84,6 +84,7 @@ include (MacroAddFileDependencies)
 # Test for KDE >= 4.3.0
 #
 macro_ensure_version( "4.3.0" ${KDE_VERSION} KDE4_3_0 )
+macro_log_feature(KDE4_3_0 "KDE 4.3.0" "KDE 4.3.0" "" FALSE "" "Required by Krita")
 
  ###########################
 ############################

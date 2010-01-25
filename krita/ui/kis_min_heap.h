@@ -70,6 +70,7 @@ public:
         if (pos < 0) return;
         swap (pos, m_last-1);
         --m_last;
+        delete m_list[m_last];
         m_list[m_last] = 0;
         heapifyUp(pos);
         heapifyDown(pos);
@@ -90,11 +91,11 @@ public:
     }
     void printHeap()
     {
-        qDebug() << "Printing Heap: ";
-        for (int i = 0; i < m_last; i++)
-        {
-            qDebug() << "key: " << m_list[i]->key << " | data: " << m_list[i]->data << " | pos: " << m_list[i]->pos;
-        }
+//        qDebug() << "Printing Heap: ";
+//        for (int i = 0; i < m_last; i++)
+//        {
+//            qDebug() << "key: " << m_list[i]->key << " | data: " << m_list[i]->data << " | pos: " << m_list[i]->pos;
+//        }
     };
 
 

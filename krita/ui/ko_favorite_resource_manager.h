@@ -73,22 +73,15 @@ public:
 
 
     /***********************************Recent Colors************************************/
-
-    /**Checks if newColor is a recently used color.
-    Returns -1 if the newColor is not used recently.
-    Returns the position of the newColor on the list otherwise**/
-    void addRecentColor(QColor*);
     inline int recentColorsTotal() { return m_colorList->size(); } ;
-    inline const QColor& recentColorAt(int pos) { return m_colorList->guiColor(pos); };
-    void addRecentColorNew(const QColor& color);
-    void addRecentColorUpdate(int guipos);
-    void addRecentColor(const QColor& color);
+    inline const KoColor& recentColorAt(int pos) { return m_colorList->guiColor(pos); };
     
 public slots:
     void slotChangePaintopLabel(KisPaintOpPresetSP paintop);
     void slotShowPopupPalette(const QPoint& = QPoint(0,0));
     void slotChangeActivePaintop(int);
     void slotUpdateRecentColor(int);
+    void slotAddRecentColor(KoColor&);
 
 private:
     KisPaletteManager *m_favoriteBrushManager;
@@ -103,7 +96,11 @@ private:
     bool isFavoriteBrushesFull();
     void saveFavoriteBrushes();
 
-    void printColors() { m_colorList->printGuiList(); m_colorList->printPriorityList(); };
+    void printColors() { m_colorList->printGuiList(); /*m_colorList->printPriorityList();*/ };
+
+    void addRecentColorNew(const KoColor& color);
+    void addRecentColorUpdate(int guipos);
+    void addRecentColor(const KoColor& color);
 };
 
 #endif // KIS_FAVORITE_BRUSH_DATA_H

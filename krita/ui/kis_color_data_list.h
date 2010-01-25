@@ -20,6 +20,7 @@
 #define KIS_COLOR_DATA_LIST_H
 
 #include "kis_min_heap.h"
+#include <KoColor.h>
 #include <QColor>
 #include <QList>
 
@@ -36,27 +37,32 @@ public:
     inline int leastUsedGuiPos() { return findPos(m_priorityList->valueAt(0)); };
 
     void printGuiList();
-    const QColor& guiColor (int pos);
-    void append(const QColor&);
-    void appendNew(const QColor&);
+    const KoColor& guiColor (int pos);
+    void append(const KoColor&);
+    void appendNew(const KoColor&);
     void removeLeastUsed();
     void updateKey (int guiPos);
 
     /*find position of the color on the gui list*/
-    int findPos (const QColor&);
+    int findPos (const KoColor&);
 
 private:
-    KisMinHeap <QColor, MAX_RECENT_COLOR> *m_priorityList;
-    QList <PriorityNode <QColor>*> m_guiList;
+//    KisMinHeap <QColor, MAX_RECENT_COLOR> *m_priorityList;
+//    QList <PriorityNode <QColor>*> m_guiList;
+
+//    KoColor* test;
+    KisMinHeap <KoColor, MAX_RECENT_COLOR> *m_priorityList;
+    QList <PriorityNode <KoColor>*> m_guiList;
+
     int m_key;
 
-    int guiInsertPos(const QColor&);
+    int guiInsertPos(const KoColor&);
 
     /*compares c1 and c2 based on HSV.
       c1 < c2, returns -1
       c1 = c2, returns 0
       c1 > c2, returns 1 */
-    int hsvComparison (const QColor& c1, const QColor& c2);
+    int hsvComparison (const KoColor& c1, const KoColor& c2);
 };
 
 #endif // KIS_COLOR_DATA_LIST_H

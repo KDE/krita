@@ -26,20 +26,23 @@ KisColorDataList::KisColorDataList()
     :m_priorityList(0)
 {
     m_key = 0;
-    m_priorityList = new KisMinHeap <QColor, MAX_RECENT_COLOR> ();
+    m_priorityList = new KisMinHeap <KoColor, MAX_RECENT_COLOR> ();
 }
 
 KisColorDataList::~KisColorDataList()
 {
     delete m_priorityList;
+    this->m_priorityList = 0 ;
+
+//    delete m_guiList;
 }
 
-void KisColorDataList::appendNew(const QColor& data)
+void KisColorDataList::appendNew(const KoColor& data)
 {
     if (size() >= KisColorDataList::MAX_RECENT_COLOR) removeLeastUsed();
 
-    PriorityNode<QColor> * node;
-    node = new PriorityNode <QColor>();
+    PriorityNode<KoColor> * node;
+    node = new PriorityNode <KoColor>();
     node->data = data;
     node->key = m_key++;
     m_priorityList->append(node);
@@ -50,7 +53,7 @@ void KisColorDataList::appendNew(const QColor& data)
     node = 0;
 }
 
-void KisColorDataList::append(const QColor& data)
+void KisColorDataList::append(const KoColor& data)
 {
     int pos = findPos(data);
     if (pos > -1) updateKey(pos);
@@ -67,7 +70,7 @@ void KisColorDataList::removeLeastUsed()
     m_priorityList->remove(0);
 }
 
-const QColor& KisColorDataList::guiColor(int pos)
+const KoColor& KisColorDataList::guiColor(int pos)
 {
     Q_ASSERT_X(pos < size(), "KisColorDataList::guiColor", "index out of bound");
     Q_ASSERT_X(pos >= 0, "KisColorDataList::guiColor", "negative index");
@@ -78,13 +81,15 @@ const QColor& KisColorDataList::guiColor(int pos)
 void KisColorDataList::printGuiList()
 {
     qDebug() << "Printing guiList: ";
+    QColor* color = new QColor();
     for (int pos = 0; pos < size() ; pos++)
     {
-        qDebug() << "pos: " << pos << " | data " << m_guiList.at(pos)->data;
+        m_guiList.at(pos)->data.toQColor(color);
+        qDebug() << "pos: " << pos << " | data " << *color;
     }
 }
 
-int KisColorDataList::guiInsertPos(const QColor& color)
+int KisColorDataList::guiInsertPos(const KoColor& color)
 {
     int low = 0, high = size() - 1, mid = (low + high)/2;
     while (low < high)
@@ -101,25 +106,29 @@ int KisColorDataList::guiInsertPos(const QColor& color)
     return mid;
 }
 
-int KisColorDataList::hsvComparison(const QColor& c1, const QColor& c2)
+int KisColorDataList::hsvComparison(const KoColor& c1, const KoColor& c2)
 {
-    if (c1.hue() < c2.hue()) return -1;
-    if (c1.hue() > c2.hue()) return 1;
+    QColor qc1 = c1.toQColor();
+    QColor qc2 = c2.toQColor();
+
+    if (qc1.hue() < qc2.hue()) return -1;
+    if (qc1.hue() > qc2.hue()) return 1;
 
     // hue is the same, ok let's compare saturation
-    if (c1.saturation() < c2.saturation()) return -1;
-    if (c1.saturation() > c2.saturation()) return 1;
+    if (qc1.saturation() < qc2.saturation()) return -1;
+    if (qc1.saturation() > qc2.saturation()) return 1;
 
     // oh, also saturation is same?
-    if (c1.value() < c2.value()) return -1;
-    if (c1.value() > c2.value()) return 1;
+    if (qc1.value() < qc2.value()) return -1;
+    if (qc1.value() > qc2.value()) return 1;
 
     // user selected two similar colors
     return 0;
 }
 
-int KisColorDataList::findPos (const QColor& color)
+int KisColorDataList::findPos (const KoColor& color)
 {
+
     int low = 0, high = size(), mid = 0;
     while (low < high)
     {

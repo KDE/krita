@@ -22,6 +22,7 @@
 #include <kis_types.h>
 #include <QtGui/QWidget>
 #include <QQueue>
+#include <KoColor.h>
 
 class KisFavoriteBrushData;
 class KoFavoriteResourceManager;
@@ -91,12 +92,13 @@ private:
     KoFavoriteResourceManager* m_resourceManager;
 
 signals:
-    void selectNewColor();
-    void changeActivePaintop(int);
-    void updateRecentColor(int);
+    void sigSelectNewColor();
+    void sigChangeActivePaintop(int);
+    void sigUpdateRecentColor(int);
+    void sigAddRecentColor(KoColor&);
 
-private slots:
-    void slotPickNewColor();
+ private slots:
+    void slotSelectNewColor();
 };
 
 #endif // KIS_POPUP_PALETTE_H

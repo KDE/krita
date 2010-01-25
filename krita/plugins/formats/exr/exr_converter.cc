@@ -366,9 +366,23 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 } else if (info.channelMap.contains("A")) {
                     newChannelMap["A"] = "A";
                 }
+                // The decode function expect R, G, B in the channel map
                 newChannelMap["B"] = "X";
                 newChannelMap["G"] = "Y";
                 newChannelMap["R"] = "Z";
+                info.channelMap = newChannelMap;
+            } else {
+                modelId = RGBAColorModelID.id();
+                QMap<QString, QString> newChannelMap;
+                QMap<QString, QString>::iterator it = info.channelMap.begin();
+                newChannelMap["R"] = it.value(); ++it;
+                newChannelMap["G"] = it.value(); ++it;
+                newChannelMap["B"] = it.value();
+                if(info.channelMap.size() == 4)
+                {
+                    ++it;
+                    newChannelMap["A"] = it.value();
+                }
                 info.channelMap = newChannelMap;
             }
         }

@@ -408,7 +408,12 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
     png_byte signature[8];
     iod->peek((char*)signature, 8);
+
+#if PNG_LIBPNG_VER < 10400 
     if (!png_check_sig(signature, 8)) {
+#else
+    if (png_sig_cmp(signature, 0, 8) != 0) {
+#endif
         iod->close();
         return (KisImageBuilder_RESULT_BAD_FETCH);
     }

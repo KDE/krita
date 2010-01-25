@@ -40,6 +40,7 @@
 #include <kis_group_layer.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings.h>
+#include "ko_favorite_resource_manager.h"
 
 #include "kis_exposure_visitor.h"
 #include "kis_config.h"
@@ -49,6 +50,8 @@
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
         : m_view(view)
 {
+    //WARNING: this doesn't seem to be true for the first color that is selected automatically by the system
+    m_fGChanged = true;
 }
 
 KisCanvasResourceProvider::~KisCanvasResourceProvider()
@@ -211,6 +214,8 @@ void KisCanvasResourceProvider::setBGColor(const KoColor& c)
 
 void KisCanvasResourceProvider::setFGColor(const KoColor& c)
 {
+    m_fGChanged = true;
+
     QVariant v;
     v.setValue(c);
     m_resourceManager->setResource(KoCanvasResource::ForegroundColor, v);
@@ -257,6 +262,7 @@ void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & re
 {
     switch (key) {
     case(KoCanvasResource::ForegroundColor):
+        m_fGChanged = true;
         emit sigFGColorChanged(res.value<KoColor>());
         break;
     case(KoCanvasResource::BackgroundColor):
@@ -319,4 +325,14 @@ KoColorProfile *KisCanvasResourceProvider::getScreenProfile(int screen)
 
 #endif
 }
+
+void KisCanvasResourceProvider::slotPainting()
+{
+    if (m_fGChanged)
+    {
+        emit sigFGColorUsed(fgColor());
+        m_fGChanged = false;
+    }
+}
+
 #include "kis_canvas_resource_provider.moc"

@@ -773,7 +773,9 @@ void KisView2::setFavoriteResourceManager(KisPaintopBox* paintopBox)
 {
     qDebug() << "KisView2: Setting favoriteResourceManager";
     m_d->favoriteResourceManager = new KoFavoriteResourceManager(paintopBox, m_d->canvas->canvasWidget());
-    connect(this, SIGNAL(favoritePaletteCalled(const QPoint&)), m_d->favoriteResourceManager, SLOT(slotShowPopupPalette(const QPoint&)));
+    connect(this, SIGNAL(favoritePaletteCalled(const QPoint&)), favoriteResourceManager(), SLOT(slotShowPopupPalette(const QPoint&)));
+    connect(resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)), favoriteResourceManager(), SLOT(slotAddRecentColor(KoColor)));
+    connect(favoriteResourceManager(), SIGNAL(sigSetFGColor(KoColor)), resourceProvider(), SLOT(slotSetFGColor(KoColor)));
 
 }
 

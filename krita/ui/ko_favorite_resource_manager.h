@@ -75,13 +75,20 @@ public:
     /***********************************Recent Colors************************************/
     inline int recentColorsTotal() { return m_colorList->size(); } ;
     inline const KoColor& recentColorAt(int pos) { return m_colorList->guiColor(pos); };
+
+signals:
+    void sigSetFGColor(const KoColor& c);
     
 public slots:
     void slotChangePaintopLabel(KisPaintOpPresetSP paintop);
     void slotShowPopupPalette(const QPoint& = QPoint(0,0));
     void slotChangeActivePaintop(int);
+
+    /*update the priority of a colour in m_colorList, used only by m_popupPalette*/
     void slotUpdateRecentColor(int);
-    void slotAddRecentColor(KoColor&);
+
+    /*add a colour to m_colorList, used by KisCanvasResourceProvider and m_popupPalette (later)*/
+    void slotAddRecentColor(KoColor);
 
 private:
     KisPaletteManager *m_favoriteBrushManager;

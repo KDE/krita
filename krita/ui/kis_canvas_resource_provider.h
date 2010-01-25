@@ -103,6 +103,7 @@ public slots:
     void slotPaintOpPresetActivated(const KisPaintOpPresetSP preset);
     void slotNodeActivated(const KisNodeSP node);
     void slotGeneratorConfigurationActivated(KisFilterConfiguration * generatorConfiguration);
+    void slotPainting();
 
     /**
      * Set the image size in pixels. The resource provider will store
@@ -125,12 +126,14 @@ signals:
     void sigNodeChanged(const KisNodeSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
     void sigGeneratorConfigurationChanged(KisFilterConfiguration * generatorConfiguration);
+    void sigFGColorUsed(const KoColor&);
 
 private:
 
     KisView2 * m_view;
     KoResourceManager * m_resourceManager;
     const KoColorProfile * m_displayProfile;
+    bool m_fGChanged;
 
 };
 

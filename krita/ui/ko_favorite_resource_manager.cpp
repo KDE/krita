@@ -100,7 +100,6 @@ void KoFavoriteResourceManager::slotChangePaintopLabel(KisPaintOpPresetSP painto
 //Popup Palette
 void KoFavoriteResourceManager::slotShowPopupPalette(const QPoint &p)
 {
-    qDebug() << "[KoFavoriteResourceManager] popup palette called";
     if (!m_popupPalette) return;
     else m_popupPalette->showPopupPalette(p);
 }
@@ -261,7 +260,7 @@ void KoFavoriteResourceManager::slotUpdateRecentColor(int pos)
         m_popupPalette->setVisible(false); //automatically close the palette after a button is clicked.
 }
 
-void KoFavoriteResourceManager::slotAddRecentColor(KoColor& color)
+void KoFavoriteResourceManager::slotAddRecentColor(KoColor color)
 {
     addRecentColor(color);
 }
@@ -286,6 +285,8 @@ void KoFavoriteResourceManager::addRecentColorUpdate(int guipos)
         m_popupPalette->setSelectedColor(guipos);
         m_popupPalette->update();
     }
+
+    emit sigSetFGColor(m_colorList->guiColor(guipos));
     printColors();
 }
 
@@ -298,6 +299,9 @@ void KoFavoriteResourceManager::addRecentColor(const KoColor& color)
         m_popupPalette->setSelectedColor(pos);
         m_popupPalette->update();
     }
+
+     //later user can select color from the pop up palette, so it is necessary to send a signal
+    emit sigSetFGColor(color);
     printColors();
 }
 

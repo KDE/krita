@@ -95,7 +95,7 @@ signals:
     void sigSelectNewColor();
     void sigChangeActivePaintop(int);
     void sigUpdateRecentColor(int);
-    void sigAddRecentColor(KoColor&);
+    void sigAddRecentColor(KoColor);
 
  private slots:
     void slotSelectNewColor();

@@ -39,7 +39,7 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
     connect(this, SIGNAL(sigSelectNewColor()), this, SLOT(slotSelectNewColor()));
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
-    connect(this, SIGNAL(sigAddRecentColor(KoColor&)), m_resourceManager, SLOT(slotAddRecentColor(KoColor&)));
+    connect(this, SIGNAL(sigAddRecentColor(KoColor)), m_resourceManager, SLOT(slotAddRecentColor(KoColor)));
 
     colorFoo=0;
     setMouseTracking(true);
@@ -122,9 +122,9 @@ void KisPopupPalette::slotSelectNewColor()
     color.fromQColor(newColor);
 
     //TODO: develop this more!
-    emit sigAddRecentColor(color);
+    //emit sigAddRecentColor(color);
 
-    qDebug() << "new color!!";
+    qDebug() << "[KisPopupPalette] currently disabled";
 
     update();
 

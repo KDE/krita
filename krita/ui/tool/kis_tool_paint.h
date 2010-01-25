@@ -140,7 +140,8 @@ private:
     bool m_supportOutline;
 
 signals:
-    void favoritePaletteCalled(const QPoint&);
+    void sigFavoritePaletteCalled(const QPoint&);
+    void sigPainting();
 };
 
 #endif // KIS_TOOL_PAINT_H_

@@ -10,15 +10,18 @@ add_definitions(-DFILES_OUTPUT_DIR="\\"${CMAKE_CURRENT_BINARY_DIR}\\"")
 set(kis_datamanager_benchmark_SRCS kis_datamanager_benchmark.cpp)
 set(kis_iterator_benchmark_SRCS kis_hline_iterator_benchmark.cpp)
 set(kis_viterator_benchmark_SRCS kis_vline_iterator_benchmark.cpp)
+set(kis_rect_iterator_benchmark_SRCS kis_rect_iterator_benchmark.cpp)
 set(kis_projection_benchmark_SRCS kis_projection_benchmark.cpp)
 
 
 kde4_add_unit_test(KisDatamanagerBenchmark TESTNAME krita-benchmarks-KisDataManager ${kis_datamanager_benchmark_SRCS})
 kde4_add_unit_test(KisHLineIteratorBenchmark TESTNAME krita-benchmarks-KisHLineIterator ${kis_iterator_benchmark_SRCS})
 kde4_add_unit_test(KisVLineIteratorBenchmark TESTNAME krita-benchmarks-KisVLineIterator ${kis_viterator_benchmark_SRCS})
+kde4_add_unit_test(KisRectIteratorBenchmark TESTNAME krita-benchmarks-KisRectIterator ${kis_rect_iterator_benchmark_SRCS})
 kde4_add_unit_test(KisProjectionBenchmark TESTNAME krita-benchmarks-KisProjectionBenchmark ${kis_projection_benchmark_SRCS})
 
 target_link_libraries(KisDatamanagerBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisHLineIteratorBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisVLineIteratorBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisRectIteratorBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisProjectionBenchmark ${KDE4_KDEUI_LIBS} kritaimage kritaui ${QT_QTTEST_LIBRARY})

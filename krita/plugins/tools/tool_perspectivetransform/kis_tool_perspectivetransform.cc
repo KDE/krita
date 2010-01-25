@@ -546,13 +546,11 @@ void KisToolPerspectiveTransform::paintOutline(QPainter& gc, const QRect&)
             middleHandlePos(vertexList, middleHandlePt);
             gc.drawRect(middleHandlePt.x() - 4, middleHandlePt.y() - 4, 8, 8);
 
-            if (isConvex(vertexList)) {
-                QPolygonF midHandlesList = midpointHandles(vertexList);
-                gc.drawRect(midHandlesList[0].x() - 4, midHandlesList[0].y() - 4, 8, 8);
-                gc.drawRect(midHandlesList[1].x() - 4, midHandlesList[1].y() - 4, 8, 8);
-                gc.drawRect(midHandlesList[2].x() - 4, midHandlesList[2].y() - 4, 8, 8);
-                gc.drawRect(midHandlesList[3].x() - 4, midHandlesList[3].y() - 4, 8, 8);
-            }
+            QPolygonF midHandlesList = midpointHandles(vertexList);
+            gc.drawRect(midHandlesList[0].x() - 4, midHandlesList[0].y() - 4, 8, 8);
+            gc.drawRect(midHandlesList[1].x() - 4, midHandlesList[1].y() - 4, 8, 8);
+            gc.drawRect(midHandlesList[2].x() - 4, midHandlesList[2].y() - 4, 8, 8);
+            gc.drawRect(midHandlesList[3].x() - 4, midHandlesList[3].y() - 4, 8, 8);
 
             break;
         }
@@ -563,37 +561,45 @@ void KisToolPerspectiveTransform::paintOutline(QPainter& gc, const QRect&)
 
 QPolygonF KisToolPerspectiveTransform::midpointHandles(QPolygonF vertexList)
 {
-    QPointF middleHandlePt;
+    
     QPolygonF midHandlesList;
 
-    middleHandlePos(vertexList, middleHandlePt);
+    if (isConvex(vertexList)) {
+        QPointF middleHandlePt;
+        middleHandlePos(vertexList, middleHandlePt);
 
-    QLineF topLine(vertexList[0], vertexList[1]);
-    QLineF bottomLine(vertexList[2], vertexList[3]);
-    QLineF leftLine(vertexList[3], vertexList[0]);
-    QLineF rightLine(vertexList[1], vertexList[2]);
+        QLineF topLine(vertexList[0], vertexList[1]);
+        QLineF bottomLine(vertexList[2], vertexList[3]);
+        QLineF leftLine(vertexList[3], vertexList[0]);
+        QLineF rightLine(vertexList[1], vertexList[2]);
 
-    QPointF vanishingPt;
-    QLineF::IntersectType inter;
+        QPointF vanishingPt;
+        QLineF::IntersectType inter;
 
-    inter = topLine.intersect(bottomLine, &vanishingPt);
-    if (inter == QLineF::NoIntersection)
-        vanishingPt = QPointF((vertexList[0].x() + vertexList[3].x()) * 0.5, (vertexList[0].y() + vertexList[3].y()) * 0.5);
-    QLineF horizontalLine(vanishingPt, middleHandlePt);
+        inter = topLine.intersect(bottomLine, &vanishingPt);
+        if (inter == QLineF::NoIntersection)
+            vanishingPt = QPointF((vertexList[0].x() + vertexList[3].x()) * 0.5, (vertexList[0].y() + vertexList[3].y()) * 0.5);
+        QLineF horizontalLine(vanishingPt, middleHandlePt);
 
-    inter = leftLine.intersect(rightLine, &vanishingPt);
-    if (inter == QLineF::NoIntersection)
-        vanishingPt = QPointF((vertexList[2].x() + vertexList[3].x()) * 0.5, (vertexList[2].y() + vertexList[3].y()) * 0.5);
-    QLineF verticalLine(vanishingPt, middleHandlePt);
+        inter = leftLine.intersect(rightLine, &vanishingPt);
+        if (inter == QLineF::NoIntersection)
+            vanishingPt = QPointF((vertexList[2].x() + vertexList[3].x()) * 0.5, (vertexList[2].y() + vertexList[3].y()) * 0.5);
+        QLineF verticalLine(vanishingPt, middleHandlePt);
 
-    verticalLine.intersect(topLine, &vanishingPt);
-    midHandlesList.append(vanishingPt);
-    horizontalLine.intersect(rightLine, &vanishingPt);
-    midHandlesList.append(vanishingPt);
-    verticalLine.intersect(bottomLine, &vanishingPt);
-    midHandlesList.append(vanishingPt);
-    horizontalLine.intersect(leftLine, &vanishingPt);
-    midHandlesList.append(vanishingPt);
+        verticalLine.intersect(topLine, &vanishingPt);
+        midHandlesList.append(vanishingPt);
+        horizontalLine.intersect(rightLine, &vanishingPt);
+        midHandlesList.append(vanishingPt);
+        verticalLine.intersect(bottomLine, &vanishingPt);
+        midHandlesList.append(vanishingPt);
+        horizontalLine.intersect(leftLine, &vanishingPt);
+        midHandlesList.append(vanishingPt);
+    } else {
+        midHandlesList.append(QPointF((vertexList[0].x() + vertexList[1].x()) * 0.5, (vertexList[0].y() + vertexList[1].y()) * 0.5));
+        midHandlesList.append(QPointF((vertexList[1].x() + vertexList[2].x()) * 0.5, (vertexList[1].y() + vertexList[2].y()) * 0.5));
+        midHandlesList.append(QPointF((vertexList[2].x() + vertexList[3].x()) * 0.5, (vertexList[2].y() + vertexList[3].y()) * 0.5));
+        midHandlesList.append(QPointF((vertexList[3].x() + vertexList[0].x()) * 0.5, (vertexList[3].y() + vertexList[0].y()) * 0.5));
+    }
 
     return midHandlesList;
 }

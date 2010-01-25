@@ -370,7 +370,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             }
         }
         if (!modelId.isEmpty()) {
-            info.colorSpace = kisTypeToColorSpace(RGBAColorModelID.id(), info.imageType);
+            info.colorSpace = kisTypeToColorSpace(modelId, info.imageType);
         }
     }
     // Get colorspace
@@ -406,7 +406,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     // Load the layers
     for (int i = 0; i < infos.size(); ++i) {
         ExrPaintLayerInfo& info = infos[i];
-        dbgFile << "Decoding " << info.name << " with " << info.channelMap.size() << " channels, and color space " << info.colorSpace;
+        dbgFile << "Decoding " << info.name << " with " << info.channelMap.size() << " channels, and color space " << info.colorSpace->id();
         KisPaintLayerSP layer = new KisPaintLayer(m_image, info.name, OPACITY_OPAQUE, info.colorSpace);
         KisTransaction("", layer->paintDevice());
 

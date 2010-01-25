@@ -510,6 +510,8 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
 void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 {
     const bool numberedParagraph = element.localName() == "numbered-paragraph";
+    const QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
+    const QTextCharFormat defaultCharFormat = cursor.charFormat();
 
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
     KoListStyle *listStyle = d->textSharedData->listStyle(styleName, d->stylesDotXml);
@@ -558,12 +560,8 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
         if (!numberedParagraph && e.tagName() != "list-item" && !listHeader)
             continue;
 
-        if (!firstTime && !numberedParagraph) {
-            // use empty formats to not inherit from the prev parag
-            QTextBlockFormat bf;
-            QTextCharFormat cf;
-            cursor.insertBlock(bf, cf);
-        }
+        if (!firstTime && !numberedParagraph)
+            cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
         firstTime = false;
 
         QTextBlock current = cursor.block();

@@ -10,6 +10,9 @@ if(OPENEXR_FOUND)
     add_definitions(${OPENEXR_DEFINITIONS})
 endif(OPENEXR_FOUND)
 
+add_subdirectory(tests)
+add_subdirectory(benchmarks)
+
 set(pigmentcms_SRCS
     KoBasicHistogramProducers.cpp
     KoColor.cpp
@@ -78,8 +81,6 @@ set(PIGMENT_INSTALL_FILES
         KoHistogramProducer.h
 )
 
-add_subdirectory(tests)
-
 set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB})
 
 if(MSVC)
@@ -112,4 +113,3 @@ install( FILES ${PIGMENT_INSTALL_FILES}
          DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
 install( FILES pigment.desktop pigmentextension.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
-

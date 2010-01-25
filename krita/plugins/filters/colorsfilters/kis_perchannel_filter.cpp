@@ -413,7 +413,7 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
     const quint16** transfers = new const quint16*[configBC->m_curves.size()];
     for(int i = 0; i < configBC->m_curves.size(); ++i)
     {
-        transfers[i] = configBC->m_curves[i].uint16Transfer();
+        transfers[i] = configBC->m_curves[i].uint16Transfer().data();
     }
     KoColorTransformation* t = cs->createPerChannelAdjustment(transfers);
     delete transfers;

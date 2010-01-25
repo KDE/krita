@@ -239,34 +239,30 @@ struct KisCubicCurve::Data : public QSharedData {
     Data() {
         init();
     }
-    Data(const Data& data) {
+    Data(const Data& data) : QSharedData() {
         init();
         points = data.points;
     }
     void init() {
         validSpline = false;
-        u16Transfer = 0;
         validU16Transfer = false;
-        fTransfer = 0;
         validFTransfer = false;
     }
     ~Data() {
-        delete u16Transfer;
-        delete fTransfer;
     }
     mutable KisCubicSpline<QPointF, qreal> spline;
     QList<QPointF> points;
     mutable bool validSpline;
-    mutable quint16* u16Transfer;
+    mutable QVector<quint16> u16Transfer;
     mutable bool validU16Transfer;
-    mutable qreal* fTransfer;
+    mutable QVector<qreal> fTransfer;
     mutable bool validFTransfer;
     void updateSpline();
     void keepSorted();
     qreal value(qreal x);
     void invalidate();
     template<typename _T_, typename _T2_>
-    void updateTransfer(_T_** transfer, bool& valid, _T2_ min, _T2_ max);
+    void updateTransfer(QVector<_T_>* transfer, bool& valid, _T2_ min, _T2_ max, int size);
 };
 
 void KisCubicCurve::Data::updateSpline()
@@ -300,15 +296,16 @@ qreal KisCubicCurve::Data::value(qreal x)
 }
 
 template<typename _T_, typename _T2_>
-void KisCubicCurve::Data::updateTransfer(_T_** transfer, bool& valid, _T2_ min, _T2_ max)
+void KisCubicCurve::Data::updateTransfer(QVector<_T_>* transfer, bool& valid, _T2_ min, _T2_ max, int size)
 {
-    if (!valid) {
-        if (!*transfer) {
-            *transfer = new _T_[256];
+    if (!valid || transfer->size() != size) {
+        if (transfer->size() != size) {
+            transfer->resize(size);
         }
-        for (int i = 0; i < 256; ++i) {
+        qreal end = 1.0 / (size - 1);
+        for (int i = 0; i < size; ++i) {
             /* Direct uncached version */
-            _T2_ val = value(i / 255.0) * max;
+            _T2_ val = value(i * end ) * max;
             val = qBound(min, val, max);
             (*transfer)[i] = val;
         }
@@ -423,14 +420,14 @@ void KisCubicCurve::fromString(const QString& string)
     setPoints(points);
 }
 
-const quint16* KisCubicCurve::uint16Transfer() const
+QVector<quint16> KisCubicCurve::uint16Transfer(int size) const
 {
-    d->data->updateTransfer<quint16, int>(&d->data->u16Transfer, d->data->validU16Transfer, 0x0, 0xFFFF);
+    d->data->updateTransfer<quint16, int>(&d->data->u16Transfer, d->data->validU16Transfer, 0x0, 0xFFFF, size);
     return d->data->u16Transfer;
 }
 
-const qreal* KisCubicCurve::floatTransfer() const
+QVector<qreal> KisCubicCurve::floatTransfer(int size) const
 {
-    d->data->updateTransfer<qreal, qreal>(&d->data->fTransfer, d->data->validFTransfer, 0.0, 1.0);
+    d->data->updateTransfer<qreal, qreal>(&d->data->fTransfer, d->data->validFTransfer, 0.0, 1.0, size);
     return d->data->fTransfer;
 }

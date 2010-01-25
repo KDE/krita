@@ -143,16 +143,19 @@ void KisCubicCurveTest::testValue()
 void KisCubicCurveTest::testTransfer()
 {
     KisCubicCurve cc;
-    QVERIFY(cc.uint16Transfer());
+    QCOMPARE(cc.uint16Transfer().size(), 256);
+    qreal denom = 1 / 255.0;
     for(int i = 0; i < 256; ++i)
     {
-        QCOMPARE(cc.uint16Transfer()[i], quint16( cc.value(i / 255.0) * 0xFFFF) );
+        QCOMPARE(cc.uint16Transfer()[i], quint16( cc.value(i * denom) * 0xFFFF) );
     }
-    QVERIFY(cc.floatTransfer());
+    QCOMPARE(cc.floatTransfer().size(), 256);
     for(int i = 0; i < 256; ++i)
     {
-        QCOMPARE(cc.floatTransfer()[i], i / 255.0);
+        QCOMPARE(cc.floatTransfer()[i], i * denom);
     }
+    QCOMPARE(cc.uint16Transfer(1024).size(), 1024);
+    QCOMPARE(cc.floatTransfer(1024).size(), 1024);
 }
 
 QTEST_KDEMAIN(KisCubicCurveTest, GUI)

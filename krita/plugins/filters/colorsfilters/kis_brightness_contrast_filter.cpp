@@ -179,7 +179,7 @@ KoColorTransformation* KisBrightnessContrastFilter::createTransformation(const K
     const KisBrightnessContrastFilterConfiguration* configBC = dynamic_cast<const KisBrightnessContrastFilterConfiguration*>(config);
     if (!configBC) return 0;
 
-    KoColorTransformation * adjustment = cs->createBrightnessContrastAdjustment(configBC->m_curve.uint16Transfer());
+    KoColorTransformation * adjustment = cs->createBrightnessContrastAdjustment(configBC->m_curve.uint16Transfer().data());
     return adjustment;
 }
 

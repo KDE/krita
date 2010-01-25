@@ -36,7 +36,7 @@ void KisDatamanagerBenchmark::benchmarkCreation()
 
     QBENCHMARK {
         quint8 * p = new quint8[3];
-        memset(p, 0, 3);
+        memset(p, 255, 3);
         KisDataManager dm(3, p);
     }
 }
@@ -48,12 +48,10 @@ void KisDatamanagerBenchmark::benchmarkWriteBytes()
     KisDataManager dm(3, p);
 
     quint8 *bytes = new quint8[3 * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT];
-    memset(bytes, 0, 3 * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT);
+    memset(bytes, 128, 3 * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT);
 
     QBENCHMARK {
-        for(int i = 0; i < 100 * 1024; i += 1024) {
-            dm.writeBytes(bytes, i, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
-        }
+        dm.writeBytes(bytes, i, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
     }
 
     delete[] bytes;
@@ -66,12 +64,10 @@ void KisDatamanagerBenchmark::benchmarkReadBytes()
     KisDataManager dm(3, p);
 
     quint8 *bytes = new quint8[3 * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT];
-    memset(bytes, 0, 3 * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT);
+    memset(bytes, 128, 3 * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT);
 
     QBENCHMARK {
-        for(int i = 0; i < 100 * TEST_IMAGE_WIDTH; i += TEST_IMAGE_WIDTH) {
-            dm.readBytes(bytes, i, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
-        }
+        dm.readBytes(bytes, i, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
     }
 
     delete[] bytes;
@@ -85,15 +81,12 @@ void KisDatamanagerBenchmark::benchmarkReadWriteBytes()
     KisDataManager dm(3, p);
 
     quint8 *bytes = new quint8[3 * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT];
-    memset(bytes, 0, 3 * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT);
+    memset(bytes, 120, 3 * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT);
+
+    dm.writeBytes(bytes, i, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
 
     QBENCHMARK {
-        for(int i = 0; i < 100 * TEST_IMAGE_WIDTH; i += TEST_IMAGE_WIDTH) {
-            dm.writeBytes(bytes, i, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
-        }
-        for(int i = 0; i < 100 * TEST_IMAGE_WIDTH; i += TEST_IMAGE_WIDTH) {
-            dm.readBytes(bytes, i, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
-        }
+        dm.readBytes(bytes, i, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
     }
 
     delete[] bytes;

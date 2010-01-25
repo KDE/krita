@@ -50,7 +50,9 @@ void KisDatamanagerBenchmark::benchmarkWriteBytes()
     memset(bytes, 0, 3 * 1024 * 1024);
 
     QBENCHMARK {
-        dm.writeBytes(bytes, 0, 0, 1024, 1024);
+        for(int i = 0; i < 100 * 1024; i += 1024) {
+            dm.writeBytes(bytes, i, 0, 1024, 1024);
+        }
     }
 
     delete[] bytes;
@@ -66,7 +68,9 @@ void KisDatamanagerBenchmark::benchmarkReadBytes()
     memset(bytes, 0, 3 * 1024 * 1024);
 
     QBENCHMARK {
-        dm.readBytes(bytes, 0, 0, 1024, 1024);
+        for(int i = 0; i < 100 * 1024; i += 1024) {
+            dm.readBytes(bytes, i, 0, 1024, 1024);
+        }
     }
 
     delete[] bytes;
@@ -83,8 +87,12 @@ void KisDatamanagerBenchmark::benchmarkReadWriteBytes()
     memset(bytes, 0, 3 * 1024 * 1024);
 
     QBENCHMARK {
-        dm.readBytes(bytes, 0, 0, 1024, 1024);
-        dm.writeBytes(bytes, 0, 0, 1024, 1024);
+        for(int i = 0; i < 100 * 1024; i += 1024) {
+            dm.writeBytes(bytes, i, 0, 1024, 1024);
+        }
+        for(int i = 0; i < 100 * 1024; i += 1024) {
+            dm.readBytes(bytes, i, 0, 1024, 1024);
+        }
     }
 
     delete[] bytes;

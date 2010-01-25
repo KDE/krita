@@ -29,9 +29,9 @@
 QStringList KoUnit::listOfUnitName(bool hidePixel)
 {
     QStringList lst;
-    for (int i = KoUnit::Millimeter; i <= KoUnit::Cicero ; ++i) {
+    for (int i = KoUnit::Millimeter; i <= KoUnit::Pixel; ++i) {
         Unit unit = static_cast<Unit>(i);
-        if (i != Pixel || hidePixel == false)
+        if ((i != Pixel) || ((i == Pixel) && (hidePixel == false)))
             lst.append(KoUnit::unitDescription(KoUnit(unit)));
     }
     return lst;

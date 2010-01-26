@@ -8,6 +8,7 @@ Name[pt]=Filtro de Cantos Arredondados
 Name[pt_BR]=Filtro de Cantos Arredondados
 Name[sv]=Filter för rundade hörn
 Name[uk]=Фільтр заокруглених кутів
+Name[x-test]=xxRound Corners Filterxx
 Name[zh_TW]=圓角過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service

@@ -52,6 +52,8 @@ private slots:
     void benchmarkTotalRandom();
     // randomly copy data
     void benchmarkTotalRandomConst();
+    // tile by tile benchmark
+    void benchmarkTileByTileWrite();
     
     void benchmarkNoMemCpy();
     void benchmarkConstNoMemCpy();

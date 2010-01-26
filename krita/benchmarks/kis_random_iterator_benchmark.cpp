@@ -183,6 +183,37 @@ void KisRandomIteratorBenchmark::benchmarkConstNoMemCpy()
     }
 }
 
+#define TEST_AREA_WIDTH 256
+#define TEST_AREA_HEIGHT 64
+void KisRandomIteratorBenchmark::benchmarkTileByTileWrite()
+{
+    int xTiles = TEST_IMAGE_WIDTH / TEST_AREA_WIDTH;
+    int yTiles = TEST_IMAGE_HEIGHT / TEST_AREA_HEIGHT;
+    
+    int xUnprocessed = int(TEST_IMAGE_WIDTH) % int(TEST_AREA_WIDTH);
+    int yUnprocessed = int(TEST_IMAGE_HEIGHT) % int(TEST_AREA_HEIGHT);
+    if ((xUnprocessed) != 0 || (yUnprocessed) != 0)
+    {
+        kWarning() << "There will be some unprocessed pixels! Test area differs from the image size";
+    }
+    
+    KisRandomAccessor it = m_device->createRandomAccessor(0,0);
+    QBENCHMARK{
+        for (int yTile = 0; yTile < yTiles; yTile++){
+            for (int xTile = 0; xTile < xTiles; xTile++){
+                int x = xTile * TEST_AREA_WIDTH;
+                int y = yTile * TEST_AREA_HEIGHT;
+                for (int j = y; j< y+TEST_AREA_HEIGHT; j++ ){
+                    for (int i = x; i < x+TEST_AREA_WIDTH ; i++){
+                        it.moveTo(i,j);
+                        memcpy(it.rawData(), m_color->data(), m_colorSpace->pixelSize());
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 QTEST_KDEMAIN(KisRandomIteratorBenchmark, GUI)
 #include "kis_random_iterator_benchmark.moc"

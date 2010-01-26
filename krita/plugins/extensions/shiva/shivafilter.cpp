@@ -90,7 +90,7 @@ void ShivaFilter::process(KisConstProcessingInformation srcInfo,
         for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it) {
             dbgPlugins << it.key() << " " << it.value();
             const GTLCore::Metadata::Entry* entry = kernel.metadata()->parameter(it.key().toAscii().data());
-            if (entry and entry->asParameterEntry()) {
+            if (entry && entry->asParameterEntry()) {
                 GTLCore::Value val = qvariantToValue(it.value(), entry->asParameterEntry()->valueType());
                 if(val.isValid())
                 {

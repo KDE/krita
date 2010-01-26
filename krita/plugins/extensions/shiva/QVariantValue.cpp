@@ -81,7 +81,7 @@ GTLCore::Value qvariantToValue(const QVariant& variant, const GTLCore::Type* _ty
         foreach(const QVariant& var, variant.toList()) {
             values.push_back(qvariantToValue(var, _type->embeddedType()));
         }
-        if( _type->dataType() == GTLCore::Type::VECTOR and values.size() != _type->vectorSize() )
+        if( _type->dataType() == GTLCore::Type::VECTOR && values.size() != _type->vectorSize() )
         {
           dbgPlugins << "Invalid numbers of element for a vector, got: " << values.size() << " but expected: " << _type->vectorSize();
           return GTLCore::Value();

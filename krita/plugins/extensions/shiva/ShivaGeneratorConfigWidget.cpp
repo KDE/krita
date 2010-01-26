@@ -41,7 +41,7 @@ void ShivaGeneratorConfigWidget::setConfiguration(const KisPropertiesConfigurati
     QMap<QString, QVariant> map = config->getProperties();
     for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it) {
         const GTLCore::Metadata::Entry* entry = m_source->metadata()->parameter(it.key().toAscii().data());
-        if (entry and entry->asParameterEntry()) {
+        if (entry && entry->asParameterEntry()) {
             GTLCore::Value val = qvariantToValue(it.value(), entry->asParameterEntry()->valueType());
             if (val.isValid()) {
                 m_widget->setParameter(it.key().toAscii().data(), val);

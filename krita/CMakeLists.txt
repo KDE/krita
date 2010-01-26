@@ -4,9 +4,11 @@ project(krita)
 # turn on QImage as buffer for QPainter based canvas
 add_definitions(-DINDEPENDENT_CANVAS)
 
-if(GCC)
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS_KRITADEVS "-O2 -g" CACHE STRING "" FORCE)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-operator-names")
-endif(GCC)
+endif(CMAKE_COMPILER_IS_GNUCXX)
+
 include(CheckFunctionExists)
 
 macro_optional_find_package(GLEW)

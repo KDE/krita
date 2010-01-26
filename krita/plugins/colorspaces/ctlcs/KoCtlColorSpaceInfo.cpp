@@ -149,13 +149,13 @@ bool KoCtlColorSpaceInfo::load()
     QDomDocument doc;
     QFile file(fileName());
     dbgPlugins << "Loading cs: " << fileName();
-    if (not file.open(QIODevice::ReadOnly)) {
+    if (!file.open(QIODevice::ReadOnly)) {
         dbgPlugins << "Can't open file : " << fileName();
         return false;
     }
     QString errorMsg;
     int errorLine;
-    if (not doc.setContent(&file, &errorMsg, &errorLine)) {
+    if (!doc.setContent(&file, &errorMsg, &errorLine)) {
         dbgPlugins << "Can't parse file : " << fileName() << " Error at line " << errorLine << " " << errorMsg;
         file.close();
         return false;

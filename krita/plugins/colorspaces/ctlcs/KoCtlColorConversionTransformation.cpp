@@ -44,7 +44,7 @@ KoCtlColorConversionTransformation::KoCtlColorConversionTransformation(const KoC
         d->program = ctlp->createColorConversionProgram(srcCs, dstCs);
         d->srcIsCTL = true;
     }
-    if (not d->program and(ctlp = dynamic_cast<const KoCtlColorProfile*>(dstCs->profile()))) {
+    if (!d->program && (ctlp = dynamic_cast<const KoCtlColorProfile*>(dstCs->profile()))) {
         d->program = ctlp->createColorConversionProgram(srcCs, dstCs);
         d->srcIsCTL = false;
     }

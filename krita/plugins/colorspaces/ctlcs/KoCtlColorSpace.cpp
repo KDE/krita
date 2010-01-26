@@ -179,9 +179,9 @@ bool KoCtlColorSpace::profileIsCompatible(const KoCtlColorSpaceInfo* info, const
     const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>(profile);
     if (!ctlp) return false;
     dbgPlugins << ctlp->colorModel() << ctlp->colorDepth() << info->colorModelId() << info->colorDepthId();
-    if (ctlp and ctlp->colorModel() == info->colorModelId().id()
-            and(ctlp->colorDepth() == info->colorDepthId().id()
-                or(ctlp->colorDepth() == "F" and(info->colorDepthId().id() == "F16" or info->colorDepthId().id() == "F32")))) {
+    if (ctlp && ctlp->colorModel() == info->colorModelId().id()
+            &&(ctlp->colorDepth() == info->colorDepthId().id()
+                ||(ctlp->colorDepth() == "F" &&(info->colorDepthId().id() == "F16" || info->colorDepthId().id() == "F32")))) {
         return true;
     }
     return false;

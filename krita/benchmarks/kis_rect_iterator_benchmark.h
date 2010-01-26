@@ -49,9 +49,8 @@ private slots:
     // copy from one device to another
     void benchmarkReadWriteBytes();
     
-    void benchmarkWriteBytesNoMemCpy();
-    void benchmarkReadBytesNoMemCpy();
-    void benchmarkConstReadBytesNoMemCpy();
+    void benchmarkNoMemCpy();
+    void benchmarkConstNoMemCpy();
 };
 
 #endif

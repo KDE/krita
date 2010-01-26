@@ -109,19 +109,9 @@ void KisRectIteratorBenchmark::benchmarkReadWriteBytes(){
     }
 }
 
-void KisRectIteratorBenchmark::benchmarkWriteBytesNoMemCpy()
-{
-    KisRectIteratorPixel it = m_device->createRectIterator(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
-
-    QBENCHMARK{
-            while (!it.isDone()) {
-                ++it;
-            }
-    }
-}
     
 
-void KisRectIteratorBenchmark::benchmarkReadBytesNoMemCpy()
+void KisRectIteratorBenchmark::benchmarkNoMemCpy()
 {
     KisRectIteratorPixel it = m_device->createRectIterator(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
 
@@ -133,9 +123,9 @@ void KisRectIteratorBenchmark::benchmarkReadBytesNoMemCpy()
 }
 
 
-void KisRectIteratorBenchmark::benchmarkConstReadBytesNoMemCpy()
+void KisRectIteratorBenchmark::benchmarkConstNoMemCpy()
 {
-    KisRectIteratorPixel it = m_device->createRectIterator(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+    KisRectConstIteratorPixel it = m_device->createRectConstIterator(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
 
     QBENCHMARK{
             while (!it.isDone()) {

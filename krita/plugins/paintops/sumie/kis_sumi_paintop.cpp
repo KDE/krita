@@ -73,7 +73,7 @@ void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
     QList<float> list;
     KisCubicCurve curve = settings->getCubicCurve(SUMI_INK_DEPLETION_CURVE);
     for (int i=0;i < m_properties.inkAmount;i++){
-        list[i] = curve.value( i/qreal(m_properties.inkAmount-1) );
+        list << curve.value( i/qreal(m_properties.inkAmount-1) );
     }
 
     m_properties.inkDepletionCurve = list;

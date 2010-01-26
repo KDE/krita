@@ -36,17 +36,6 @@ public:
 
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
-    
-    void setInkDepletion(QList<float> curve){
-        m_inkDepletionCurve = curve;
-    }
-    
-    QList<float> inkDepletionCurve() const{
-        return m_inkDepletionCurve;
-    }
-    
-    private:
-        QList<float> m_inkDepletionCurve;
 };
 
 #endif

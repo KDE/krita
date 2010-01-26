@@ -57,15 +57,6 @@ KisSumiInkOption::~KisSumiInkOption()
 
 void KisSumiInkOption::readOptionSetting(const KisPropertiesConfiguration* settings)
 {
-    // XXX: Use a regular curve option here!
-    // Waiting for Cyrille to improve curve serialization
-/*
-    QList<float> c;
-    int count = config->getInt("curve_count");
-    for (int i = 0; i < count; ++i) {
-        c << config->getFloat(QString("ink_curve_%1").arg(i));
-    }
-*/
     m_options->inkAmountSpinBox->setValue(settings->getInt(SUMI_INK_AMOUNT));
     m_options->saturationCBox->setChecked(settings->getBool(SUMI_INK_USE_SATURATION));
     m_options->opacityCBox->setChecked(settings->getBool(SUMI_INK_USE_OPACITY));
@@ -74,6 +65,7 @@ void KisSumiInkOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_options->bristleLengthSlider->setValue(settings->getInt(SUMI_INK_BRISTLE_LENGTH_WEIGHT));
     m_options->bristleInkAmountSlider->setValue(settings->getInt(SUMI_INK_BRISTLE_INK_AMOUNT_WEIGHT));
     m_options->inkDepletionSlider->setValue(settings->getInt(SUMI_INK_DEPLETION_WEIGHT));
+    m_options->inkCurve->setCurve(settings->getCubicCurve(SUMI_INK_DEPLETION_CURVE));
 }
 
 void KisSumiInkOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
@@ -92,25 +84,13 @@ void KisSumiInkOption::writeOptionSetting(KisPropertiesConfiguration* settings) 
     settings->setProperty(SUMI_INK_BRISTLE_LENGTH_WEIGHT, bristleLengthWeight());
     settings->setProperty(SUMI_INK_BRISTLE_INK_AMOUNT_WEIGHT, bristleInkAmountWeight());
     settings->setProperty(SUMI_INK_DEPLETION_WEIGHT, inkDepletionWeight());
-    //TODO: fix this when we can serialize the curve 
-    static_cast<KisSumiPaintOpSettings*>(settings)->setInkDepletion(curve());
+    settings->setProperty(SUMI_INK_DEPLETION_CURVE, qVariantFromValue(m_options->inkCurve->curve()));
 }
 
 
 int KisSumiInkOption::inkAmount() const
 {
     return m_options->inkAmountSpinBox->value();
-}
-
-
-QList< float > KisSumiInkOption::curve() const
-{
-    int curveSamples = inkAmount();
-    QList<float> result;
-    for (int i = 0; i < curveSamples ; i++) {
-        result.append((float)m_options->inkCurve->curve().value(i / (float)(curveSamples - 1.0f)));
-    }
-    return result;
 }
 
 

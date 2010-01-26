@@ -68,8 +68,15 @@ void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
     m_properties.radius = settings->getInt(SUMI_RADIUS);
     m_properties.inkAmount = settings->getInt(SUMI_INK_AMOUNT);
     m_properties.sigma = settings->getDouble(SUMI_SIGMA);
-    //TODO: fix after few days
-    m_properties.inkDepletionCurve = settings->inkDepletionCurve();
+    //TODO: wait for the transfer function with variable size
+
+    QList<float> list;
+    KisCubicCurve curve = settings->getCubicCurve(SUMI_INK_DEPLETION_CURVE);
+    for (int i=0;i < m_properties.inkAmount;i++){
+        list[i] = curve.value( i/qreal(m_properties.inkAmount-1) );
+    }
+
+    m_properties.inkDepletionCurve = list;
     m_properties.isbrushDimension1D = settings->getBool(SUMI_IS_DIMENSION_1D);
     m_properties.useMousePressure = settings->getBool(SUMI_USE_MOUSEPRESSURE);
     m_properties.useSaturation = settings->getBool(SUMI_INK_USE_SATURATION);

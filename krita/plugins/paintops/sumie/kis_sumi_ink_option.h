@@ -51,7 +51,6 @@ public:
     int inkDepletionWeight() const;
 
     int m_curveSamples;
-    QList<QPointF> m_curveData;
 
     void writeOptionSetting(KisPropertiesConfiguration* config) const;
     void readOptionSetting(const KisPropertiesConfiguration* config);

@@ -122,21 +122,8 @@ void KisHLineIteratorBenchmark::benchmarkReadWriteBytes(){
     
 }
 
-void KisHLineIteratorBenchmark::benchmarkWriteBytesNoMemCpy()
-{
-    KisHLineIteratorPixel it = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
 
-    QBENCHMARK{
-        for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
-            while (!it.isDone()) {
-                ++it;
-            }
-            it.nextRow();
-        }
-    }
-}
-
-void KisHLineIteratorBenchmark::benchmarkReadBytesNoMemCpy()
+void KisHLineIteratorBenchmark::benchmarkNoMemCpy()
 {
     KisHLineIteratorPixel it = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
 

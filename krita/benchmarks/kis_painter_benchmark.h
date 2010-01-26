@@ -16,47 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_HLINEITERATOR_BENCHMARK_H
-#define KIS_HLINEITERATOR_BENCHMARK_H
+#ifndef KIS_PAINTER_BENCHMARK_H
+#define KIS_PAINTER_BENCHMARK_H
 
 #include <QtTest/QtTest>
+#include <kis_types.h>
 
 class KisPaintDevice;
 class KoColorSpace;
 class KoColor;
 
-
-class KisHLineIteratorBenchmark : public QObject
+class KisPainterBenchmark : public QObject
 {
     Q_OBJECT
-
 private:
     const KoColorSpace * m_colorSpace;
-    KisPaintDevice * m_device;        
     KoColor * m_color;
-private slots:
     
+private slots:
     void initTestCase();
     void cleanupTestCase();
     
-    void benchmarkCreation();
-    
-    // memcpy from KoColor to device
-    void benchmarkWriteBytes();
-    // memcpy from device to KoColor
-    void benchmarkReadBytes();
-    // const hline iterator used
-    void benchmarkConstReadBytes();
-    // copy from one device to another
-    void benchmarkReadWriteBytes();
-    
-    
-    void benchmarkNoMemCpy();
-    void benchmarkConstReadBytesNoMemCpy();
-    // copy from one device to another
-    void benchmarkReadWriteBytesNoMemCpy();
-    
-    
+    void benchmarkBitBlt();
     
 };
 

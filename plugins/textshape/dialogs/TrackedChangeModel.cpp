@@ -39,15 +39,35 @@
 
 ////ModelItem
 
-ModelItem::ModelItem(int changeId, ModelItem* parent)
+ModelItem::ModelItem(ModelItem* parent)
 {
-    m_data.changeId = changeId;
     m_parentItem = parent;
+    m_data.changeId = 0;
 }
 
 ModelItem::~ModelItem()
 {
     qDeleteAll(m_childItems);
+}
+
+void ModelItem::setChangeId(int changeId)
+{
+    m_data.changeId = changeId;
+}
+
+void ModelItem::setChangeType(KoGenChange::Type type)
+{
+    m_data.changeType = type;
+}
+
+void ModelItem::setChangeTitle(QString title)
+{
+    m_data.title = title;
+}
+
+void ModelItem::setChangeAuthor(QString author)
+{
+    m_data.author = author;
 }
 
 void ModelItem::appendChild(ModelItem* child)
@@ -133,6 +153,14 @@ QModelIndex TrackedChangeModel::index(int row, int column, const QModelIndex& pa
         return QModelIndex();
 }
 
+QModelIndex TrackedChangeModel::indexForChangeId(int changeId)
+{
+    ModelItem *item = m_changeItems.value(changeId);
+    if (!item)
+        return QModelIndex();
+    return createIndex(item->row(), 0, item);
+}
+
 QModelIndex TrackedChangeModel::parent(const QModelIndex& index) const
 {
     if (!index.isValid())
@@ -197,10 +225,10 @@ QVariant TrackedChangeModel::data(const QModelIndex& index, int role) const
             return QVariant(item->itemData().changeId);
             break;
         case 1:
-            return QVariant(item->itemData().changeRanges.first().first);
+            return QVariant(item->itemData().title);
             break;
         case 2:
-            return QVariant(item->itemData().changeRanges.first().second);
+            return QVariant(item->itemData().author);
             break;
         default:
             return QVariant();
@@ -225,10 +253,10 @@ QVariant TrackedChangeModel::headerData(int section, Qt::Orientation orientation
                 return QVariant(QString("changeId"));
                 break;
             case 1:
-                return QVariant(QString("changeStart"));
+                return QVariant(QString("title"));
                 break;
             case 2:
-                return QVariant(QString("ChangeEnd"));
+                return QVariant(QString("author"));
                 break;
         }
     }
@@ -253,7 +281,7 @@ void TrackedChangeModel::setupModelData(QTextDocument* document, ModelItem* pare
 
     QStack<ModelItem*> itemStack;
     itemStack.push(parent);
-    QHash<int, ModelItem*> createdItems;
+    m_changeItems.clear();
 
     QTextBlock block = document->begin();
     while (block.isValid()) {
@@ -275,11 +303,15 @@ void TrackedChangeModel::setupModelData(QTextDocument* document, ModelItem* pare
                             break;
                     }
                 }
-                ModelItem *item = createdItems.value(changeId);
+                ModelItem *item = m_changeItems.value(changeId);
                 if (!item) {
-                    item = new ModelItem(changeId, itemStack.top());
+                    item = new ModelItem(itemStack.top());
+                    item->setChangeId(changeId);
+                    item->setChangeType(m_changeTracker->elementById(changeId)->getChangeType());
+                    item->setChangeTitle(m_changeTracker->elementById(changeId)->getChangeTitle());
+                    item->setChangeAuthor(m_changeTracker->elementById(changeId)->getCreator());
                     itemStack.top()->appendChild(item);
-                    createdItems.insert(changeId, item);
+                    m_changeItems.insert(changeId, item);
                 }
                 item->setChangeRange(fragment.position(), fragment.position() + fragment.length());
                 ModelItem *parentItem = item->parent();

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-* Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+* Copyright (C) 2009-2010 Pierre Stirnweiss <pstirnweiss@googlemail.com>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Library General Public
@@ -22,14 +22,15 @@
 
 #include <ui_TrackedChangeManager.h>
 
-#include <kdialog.h>
+//#include <kdialog.h>
+#include <QWidget>
 
 class TrackedChangeModel;
 
 class QModelIndex;
 class QTreeView;
 
-class TrackedChangeManager : public KDialog
+class TrackedChangeManager : public QWidget
 {
     Q_OBJECT
 public:
@@ -38,11 +39,13 @@ public:
 
     void setModel(TrackedChangeModel *model);
 
+    void selectItem(QModelIndex newIndex);
+
 signals:
     void currentChanged(QModelIndex newIndex);
 
 private slots:
-    void currentChanged(QModelIndex newIndex,QModelIndex previousIndex);
+    void currentChanged(QModelIndex newIndex, QModelIndex previousIndex);
 
 private:
     Ui::trackedChange widget;

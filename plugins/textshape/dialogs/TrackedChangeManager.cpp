@@ -28,12 +28,9 @@
 
 #include <KDebug>
 
-TrackedChangeManager::TrackedChangeManager(QWidget* parent): KDialog(parent),
+TrackedChangeManager::TrackedChangeManager(QWidget* parent): QWidget(parent),
     m_model(0)
 {
-    setCaption(i18n("Tracked change manager"));
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    showButtonSeparator(true);
     widget.setupUi(this);
 }
 
@@ -41,10 +38,11 @@ TrackedChangeManager::~TrackedChangeManager()
 {
 }
 
-void TrackedChangeManager::setModel ( TrackedChangeModel* model )
+void TrackedChangeManager::setModel(TrackedChangeModel* model)
 {
     m_model = model;
     widget.treeView->setModel(m_model);
+    widget.treeView->reset();
     connect(widget.treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(currentChanged(QModelIndex,QModelIndex)));
 }
 
@@ -52,6 +50,13 @@ void TrackedChangeManager::currentChanged(QModelIndex newIndex, QModelIndex prev
 {
     Q_UNUSED(previousIndex);
     emit currentChanged(newIndex);
+}
+
+void TrackedChangeManager::selectItem(QModelIndex newIndex)
+{
+    QModelIndex currentIndex = widget.treeView->currentIndex();
+    widget.treeView->setCurrentIndex(newIndex);
+    currentChanged(newIndex, currentIndex);
 }
 
 #include <TrackedChangeManager.moc>

@@ -161,7 +161,7 @@ public:
     struct Button {
         QToolButton *button;///< a newly created button.
         QString section;        ///< The section the button wants to be in.
-        int priority;           ///< Higher priority means coming first in the section.
+        int priority;           ///< Lower number (higher priority) means coming first in the section.
         int buttonGroupId;      ///< An unique ID for this button as passed by changedTool()
         QString visibilityCode; ///< This button should become visible when we emit this string in toolCodesSelected()
     };

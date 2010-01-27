@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2009-2010 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +21,7 @@
 #include "ChangeTrackingTool.h"
 
 #include <KoCanvasBase.h>
+#include <KoChangeTracker.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -41,15 +43,20 @@
 
 #include <QHBoxLayout>
 #include <QKeyEvent>
+#include <QModelIndex>
 #include <QPainter>
 #include <QPushButton>
 #include <QTextBlock>
+#include <QTreeView>
+#include <QVBoxLayout>
 
 ChangeTrackingTool::ChangeTrackingTool(KoCanvasBase* canvas): KoTool(canvas),
     m_textEditor(0),
     m_textShapeData(0),
     m_textShape(0),
-    m_model(0)
+    m_model(0),
+    m_trackedChangeManager(0),
+    m_changesTreeView(0)
 {
     KAction *action;
     action = new KAction(i18n("Tracked change manager"), this);
@@ -60,7 +67,8 @@ ChangeTrackingTool::ChangeTrackingTool(KoCanvasBase* canvas): KoTool(canvas),
 
 ChangeTrackingTool::~ChangeTrackingTool()
 {
-
+    delete m_trackedChangeManager;
+    delete m_model;
 }
 
 void ChangeTrackingTool::mouseReleaseEvent(KoPointerEvent* event)
@@ -75,98 +83,159 @@ void ChangeTrackingTool::mouseMoveEvent(KoPointerEvent* event)
 
 void ChangeTrackingTool::mousePressEvent(KoPointerEvent* event)
 {
-    event->ignore();
+    if (event->button() != Qt::RightButton)
+        updateSelectedShape(event->point);
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    if (!selection->isSelected(m_textShape)) {
+        selection->deselectAll();
+        selection->select(m_textShape);
+    }
+
+    int position = pointToPosition(event->point);
+    QTextCursor cursor(m_textShapeData->document());
+    cursor.setPosition(position);
+
+    KoChangeTracker *changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
+    int changeId = cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+    QModelIndex index = m_model->indexForChangeId(changeId);
+    m_changesTreeView->setCurrentIndex(index);
+}
+
+void ChangeTrackingTool::updateSelectedShape(const QPointF &point)
+{
+    if (! m_textShape->boundingRect().contains(point)) {
+        QRectF area(point, QSizeF(1, 1));
+        foreach(KoShape *shape, canvas()->shapeManager()->shapesAt(area, true)) {
+            TextShape *textShape = dynamic_cast<TextShape*>(shape);
+            if (textShape) {
+                KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
+                const bool sameDocument = d->document() == m_textShapeData->document();
+                if (sameDocument && d->position() < 0)
+                    continue; // don't change to a shape that has no text
+                    m_textShape = textShape;
+                if (sameDocument)
+                    break; // stop looking.
+            }
+        }
+        setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
+    }
+}
+
+int ChangeTrackingTool::pointToPosition(const QPointF & point) const
+{
+    QPointF p = m_textShape->convertScreenPos(point);
+    int caretPos = m_textEditor->document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
+    caretPos = qMax(caretPos, m_textShapeData->position());
+    if (m_textShapeData->endPosition() == -1) {
+        m_textShapeData->fireResizeEvent(); // requests a layout run ;)
+    }
+    caretPos = qMin(caretPos, m_textShapeData->endPosition());
+    return caretPos;
 }
 
 void ChangeTrackingTool::paint(QPainter& painter, const KoViewConverter& converter)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
-/*    if (canvas()->canvasWidget()->hasFocus() && !m_caretTimer.isActive()) // make sure we blink
-        m_caretTimer.start();
     QTextBlock block = m_textEditor->block();
     if (! block.layout()) // not layouted yet.  The Shape paint method will trigger a layout
         return;
     if (m_textShapeData == 0)
         return;
 
-    int selectStart = m_textEditor->position();
-    int selectEnd = m_textEditor->anchor();
-    if (selectEnd < selectStart)
-        qSwap(selectStart, selectEnd);
-    QList<TextShape *> shapesToPaint;
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    if (lay) {
-        foreach(KoShape *shape, lay->shapes()) {
-            TextShape *ts = dynamic_cast<TextShape*>(shape);
-            if (! ts)
-                continue;
-            KoTextShapeData *data = ts->textShapeData();
-            // check if shape contains some of the selection, if not, skip
-            if (!( (data->endPosition() >= selectStart && data->position() <= selectEnd)
-                || (data->position() <= selectStart && data->endPosition() >= selectEnd)) )
-                continue;
-            if (painter.hasClipping()) {
-                QRect rect = converter.documentToView(ts->boundingRect()).toRect();
-                if (painter.clipRegion().intersect(QRegion(rect)).isEmpty())
+    if (!m_changesTreeView->currentIndex().isValid())
+        return;
+
+    QList<QPair<int, int> > changeRanges = m_model->changeItemData(m_changesTreeView->currentIndex()).changeRanges;
+
+    for (int i = 0; i < changeRanges.size(); ++i) {
+        int start = changeRanges.at(i).first;
+        int end = changeRanges.at(i).second;
+        if (end < start)
+            qSwap(start, end);
+        QList<TextShape *> shapesToPaint;
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        if (lay) {
+            foreach(KoShape *shape, lay->shapes()) {
+                TextShape *ts = dynamic_cast<TextShape*>(shape);
+                if (! ts)
                     continue;
-            }
-            shapesToPaint << ts;
-        }
-    }
-    if (shapesToPaint.isEmpty()) // quite unlikely, though ;)
-    return;
-
-    qreal zoomX, zoomY;
-    converter.zoom(&zoomX, &zoomY);
-
-    QAbstractTextDocumentLayout::PaintContext pc;
-    QAbstractTextDocumentLayout::Selection selection;
-    selection.cursor = *(m_textEditor->cursor());
-    selection.format.setBackground(canvas()->canvasWidget()->palette().brush(QPalette::Highlight));
-    selection.format.setForeground(canvas()->canvasWidget()->palette().brush(QPalette::HighlightedText));
-    pc.selections.append(selection);
-    foreach(TextShape *ts, shapesToPaint) {
-        KoTextShapeData *data = ts->textShapeData();
-        Q_ASSERT(data);
-        if (data->endPosition() == -1)
-            continue;
-
-        painter.save();
-        QMatrix shapeMatrix = ts->absoluteTransformation(&converter);
-        shapeMatrix.scale(zoomX, zoomY);
-        painter.setMatrix(shapeMatrix * painter.matrix());
-        painter.setClipRect(QRectF(QPointF(), ts->size()), Qt::IntersectClip);
-        painter.translate(0, -data->documentOffset());
-        if ((data->endPosition() >= selectStart && data->position() <= selectEnd)
-            || (data->position() <= selectStart && data->endPosition() >= selectEnd)) {
-            QRectF clip = textRect(qMax(data->position(), selectStart), qMin(data->endPosition(), selectEnd));
-        painter.save();
-        painter.setClipRect(clip, Qt::IntersectClip);
-        data->document()->documentLayout()->draw(&painter, pc);
-        painter.restore();
-        }
-        if ((data == m_textShapeData) && m_caretTimerState) {
-            // paint caret
-            QPen caretPen(Qt::black);
-            if (! m_textShape->hasTransparency()) {
-                KoColorBackground * fill = dynamic_cast<KoColorBackground*>(m_textShape->background());
-                if (fill) {
-                    QColor bg = fill->color();
-                    QColor invert = QColor(255 - bg.red(), 255 - bg.green(), 255 - bg.blue());
-                    caretPen.setColor(invert);
+                KoTextShapeData *data = ts->textShapeData();
+                // check if shape contains some of the selection, if not, skip
+                if (!( (data->endPosition() >= start && data->position() <= end)
+                    || (data->position() <= start && data->endPosition() >= end)))
+                    continue;
+                if (painter.hasClipping()) {
+                    QRect rect = converter.documentToView(ts->boundingRect()).toRect();
+                    if (painter.clipRegion().intersect(QRegion(rect)).isEmpty())
+                        continue;
                 }
+                shapesToPaint << ts;
             }
-            painter.setPen(caretPen);
-            int posInParag = m_textEditor->position() - block.position();
-            if (posInParag <= block.layout()->preeditAreaPosition())
-                posInParag += block.layout()->preeditAreaText().length();
-            block.layout()->drawCursor(&painter, QPointF(), posInParag);
         }
+        if (shapesToPaint.isEmpty()) // quite unlikely, though ;)
+            return;
 
-        painter.restore();
+        qreal zoomX, zoomY;
+        converter.zoom(&zoomX, &zoomY);
+
+        foreach(TextShape *ts, shapesToPaint) {
+            KoTextShapeData *data = ts->textShapeData();
+            Q_ASSERT(data);
+            if (data->endPosition() == -1)
+                continue;
+
+            painter.save();
+            QMatrix shapeMatrix = ts->absoluteTransformation(&converter);
+            shapeMatrix.scale(zoomX, zoomY);
+            painter.setMatrix(shapeMatrix * painter.matrix());
+            painter.setClipRect(QRectF(QPointF(), ts->size()), Qt::IntersectClip);
+            painter.translate(0, -data->documentOffset());
+            if ((data->endPosition() >= start && data->position() <= end)
+                || (data->position() <= start && data->endPosition() >= end)) {
+                QRectF clip = textRect(qMax(data->position(), start), qMin(data->endPosition(), end));
+            painter.save();
+            QPen pen;
+            pen.setColor(QColor(Qt::black));
+            pen.setWidth(3);
+            painter.setPen(pen);
+            painter.setClipRect(clip, Qt::IntersectClip);
+            painter.drawRect(clip);
+            painter.restore();
+            }
+
+            painter.restore();
+        }
     }
-*/
+}
+
+QRectF ChangeTrackingTool::textRect ( int startPosition, int endPosition )
+{
+    Q_ASSERT(startPosition >= 0);
+    Q_ASSERT(endPosition >= 0);
+    if (startPosition > endPosition)
+        qSwap(startPosition, endPosition);
+    QTextBlock block = m_textShapeData->document()->findBlock(startPosition);
+    if (!block.isValid())
+        return QRectF();
+    QTextLine line1 = block.layout()->lineForTextPosition(startPosition - block.position());
+    if (! line1.isValid())
+        return QRectF();
+    qreal startX = line1.cursorToX(startPosition - block.position());
+    if (startPosition == endPosition)
+        return QRectF(startX, line1.y(), 1, line1.height());
+
+    QTextBlock block2 = m_textShapeData->document()->findBlock(endPosition);
+    if (!block2.isValid())
+        return QRectF();
+    QTextLine line2 = block2.layout()->lineForTextPosition(endPosition - block2.position());
+    if (! line2.isValid())
+        return QRectF();
+    qreal endX = line2.cursorToX(endPosition - block2.position());
+
+    if (line1.textStart() + block.position() == line2.textStart() + block2.position())
+        return QRectF(qMin(startX, endX), line1.y(), qAbs(startX - endX), line1.height());
+    return QRectF(0, line1.y(), 10E6, line2.y() + line2.height() - line1.y());
 }
 
 void ChangeTrackingTool::keyPressEvent(QKeyEvent* event)
@@ -203,25 +272,31 @@ void ChangeTrackingTool::setShapeData(KoTextShapeData *data)
 {
     bool docChanged = data == 0 || m_textShapeData == 0 || m_textShapeData->document() != data->document();
     if (m_textShapeData) {
-        disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+//        disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        if (lay)
-            disconnect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
+//        if (lay)
+//            disconnect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
+    }
+    if (!data) {
+        if (m_disableShowChangesOnExit) {
+            ShowChangesCommand *command = new ShowChangesCommand(false, m_textShapeData->document());
+            m_textEditor->addCommand(command);
+        }
     }
     m_textShapeData = data;
     if (m_textShapeData == 0)
         return;
-    connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+//    connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
     if (docChanged) {
-        if (m_textEditor)
-            disconnect(m_textEditor, SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
+//        if (m_textEditor)
+//            disconnect(m_textEditor, SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
         m_textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
         Q_ASSERT(m_textEditor);
-        connect(m_textEditor, SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
+//        connect(m_textEditor, SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
 
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         if (lay) {
-            connect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
+//            connect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
         }
     }
     m_textEditor->updateDefaultTextDirection(m_textShapeData->pageDirection());
@@ -230,26 +305,44 @@ void ChangeTrackingTool::setShapeData(KoTextShapeData *data)
         ShowChangesCommand *command = new ShowChangesCommand(true, m_textShapeData->document());
         m_textEditor->addCommand(command);
     }
-    if (m_model)
+    if (m_model) {
+        disconnect(m_changesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(selectedChangeChanged(QModelIndex,QModelIndex)));
         delete m_model;
+    }
     m_model = new TrackedChangeModel(m_textShapeData->document());
+    if (m_changesTreeView) {
+        QItemSelectionModel *m = m_changesTreeView->selectionModel();
+        m_changesTreeView->setModel(m_model);
+        delete m;
+        connect(m_changesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(selectedChangeChanged(QModelIndex,QModelIndex)));
+        m_changesTreeView->reset();
+    }
 }
 
 void ChangeTrackingTool::deactivate()
 {
     m_textShape = 0;
     setShapeData(0);
+    canvas()->canvasWidget()->setFocus();
 }
 
 QWidget* ChangeTrackingTool::createOptionWidget()
 {
     QWidget *widget = new QWidget();
-    QHBoxLayout *layout = new QHBoxLayout;
+
+    m_changesTreeView = new QTreeView(widget);
+    m_changesTreeView->setModel(m_model);
+    connect(m_changesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(selectedChangeChanged(QModelIndex,QModelIndex)));
+
+    QVBoxLayout *vLayout = new QVBoxLayout(widget);
+    vLayout->addWidget(m_changesTreeView);
+    QHBoxLayout *hLayout = new QHBoxLayout(widget);
     QPushButton *accept = new QPushButton(i18n("Accept"));
     QPushButton *reject = new QPushButton(i18n("Reject"));
-    layout->addWidget(accept);
-    layout->addWidget(reject);
-    widget->setLayout(layout);
+    hLayout->addWidget(accept);
+    hLayout->addWidget(reject);
+    vLayout->addLayout(hLayout);
+    widget->setLayout(vLayout);
 
     connect(accept, SIGNAL(clicked(bool)), this, SLOT(acceptChange()));
     connect(reject, SIGNAL(clicked(bool)), this, SLOT(rejectChange()));
@@ -258,9 +351,9 @@ QWidget* ChangeTrackingTool::createOptionWidget()
 
 void ChangeTrackingTool::acceptChange()
 {
-    if (m_currentHighlightedChange.isValid()) {
-        AcceptChangeCommand *command = new AcceptChangeCommand(m_model->changeItemData(m_currentHighlightedChange).changeId,
-                                                                m_model->changeItemData(m_currentHighlightedChange).changeRanges,
+    if (m_changesTreeView->currentIndex().isValid()) {
+        AcceptChangeCommand *command = new AcceptChangeCommand(m_model->changeItemData(m_changesTreeView->currentIndex()).changeId,
+                                                               m_model->changeItemData(m_changesTreeView->currentIndex()).changeRanges,
                                                                 m_textShapeData->document());
         connect(command, SIGNAL(acceptRejectChange()), m_model, SLOT(setupModel()));
         m_textEditor->addCommand(command);
@@ -269,28 +362,29 @@ void ChangeTrackingTool::acceptChange()
 
 void ChangeTrackingTool::rejectChange()
 {
-    if (m_currentHighlightedChange.isValid()) {
-        RejectChangeCommand *command = new RejectChangeCommand(m_model->changeItemData(m_currentHighlightedChange).changeId,
-                                                               m_model->changeItemData(m_currentHighlightedChange).changeRanges,
+    if (m_changesTreeView->currentIndex().isValid()) {
+        RejectChangeCommand *command = new RejectChangeCommand(m_model->changeItemData(m_changesTreeView->currentIndex()).changeId,
+                                                               m_model->changeItemData(m_changesTreeView->currentIndex()).changeRanges,
                                                                m_textShapeData->document());
         connect(command, SIGNAL(acceptRejectChange()), m_model, SLOT(setupModel()));
         m_textEditor->addCommand(command);
     }
 }
 
-void ChangeTrackingTool::selectedChangeChanged(QModelIndex item)
+void ChangeTrackingTool::selectedChangeChanged(QModelIndex newItem, QModelIndex previousItem)
 {
-    m_currentHighlightedChange = item;
+    Q_UNUSED(previousItem);
+    canvas()->updateCanvas(m_textShape->boundingRect());
 }
 
 void ChangeTrackingTool::showTrackedChangeManager()
 {
-    Q_ASSERT(m_model);
-    TrackedChangeManager *manager = new TrackedChangeManager();
-    manager->setModel(m_model);
-    connect(manager, SIGNAL(currentChanged(QModelIndex)), this, SLOT(selectedChangeChanged(QModelIndex)));
-    manager->show();
-    //    view.setModel(&model);
+/*    Q_ASSERT(m_model);
+    m_trackedChangeManager = new TrackedChangeManager();
+    m_trackedChangeManager->setModel(m_model);
+    connect(m_trackedChangeManager, SIGNAL(currentChanged(QModelIndex)), this, SLOT(selectedChangeChanged(QModelIndex)));
+    m_trackedChangeManager->show();
+*/    //    view.setModel(&model);
     //    view.setWindowTitle("testTracked");
     //    view.show();
     //    TrackedChangeManager *dia = new TrackedChangeManager(m_textShapeData->document());

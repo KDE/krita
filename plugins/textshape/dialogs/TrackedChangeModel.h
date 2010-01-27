@@ -20,6 +20,8 @@
 #ifndef TRACKEDCHANGEMODEL_H
 #define TRACKEDCHANGEMODEL_H
 
+#include <KoGenChange.h>
+
 #include <QAbstractItemModel>
 #include <QHash>
 #include <QList>
@@ -36,6 +38,9 @@ struct ItemData
 {
     int changeId;
     QList<QPair<int, int> > changeRanges;
+    KoGenChange::Type changeType;
+    QString title;
+    QString author;
 };
 
 Q_DECLARE_METATYPE(ItemData)
@@ -43,8 +48,13 @@ Q_DECLARE_METATYPE(ItemData)
 class ModelItem
 {
 public:
-    ModelItem(int changeId, ModelItem *parent = 0);
+    ModelItem(ModelItem *parent = 0);
     ~ModelItem();
+
+    void setChangeId(int changeId);
+    void setChangeType(KoGenChange::Type type);
+    void setChangeTitle(QString title);
+    void setChangeAuthor(QString author);
 
     void appendChild(ModelItem *child);
 
@@ -78,6 +88,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex indexForChangeId(int changeId);
     QModelIndex parent(const QModelIndex &index) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -96,6 +107,7 @@ private:
     KoTextDocumentLayout *m_layout;
 
     QHash<int, int> m_changeOccurenceCounter;
+    QHash<int, ModelItem*> m_changeItems;
 };
 
 #endif // TRACKEDCHANGEMODEL_H

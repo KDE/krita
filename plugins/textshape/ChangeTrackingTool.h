@@ -22,18 +22,20 @@
 
 #include <KoTool.h>
 
-#include <QModelIndex>
-
 class KoCanvasBase;
 class KoPointerEvent;
 class KoTextEditor;
 class KoTextShapeData;
 class KoViewConverter;
 class TextShape;
+class TrackedChangeManager;
 class TrackedChangeModel;
 
+class QModelIndex;
 class QPainter;
+class QRectF;
 class QKeyEvent;
+class QTreeView;
 
 /// This tool allows to manipulate the tracked changes of a document. You can accept or reject changes.
 
@@ -59,18 +61,23 @@ protected:
 private slots:
     void acceptChange();
     void rejectChange();
-    void selectedChangeChanged(QModelIndex item);
+    void selectedChangeChanged(QModelIndex newItem, QModelIndex previousItem);
     void setShapeData(KoTextShapeData *data);
     void showTrackedChangeManager();
 
 private:
+    int pointToPosition(const QPointF & point) const;
+    QRectF textRect(int startPosition, int endPosition);
+    void updateSelectedShape(const QPointF &point);
+
     bool m_disableShowChangesOnExit;
     KoTextEditor *m_textEditor;
     KoTextShapeData *m_textShapeData;
     TextShape *m_textShape;
     TrackedChangeModel *m_model;
 
-    QModelIndex m_currentHighlightedChange;
+    TrackedChangeManager *m_trackedChangeManager;
+    QTreeView *m_changesTreeView;
 };
 
 #endif // CHANGETRACKINGTOOL_H

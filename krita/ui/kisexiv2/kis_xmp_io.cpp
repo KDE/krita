@@ -147,7 +147,7 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
         xmpPacket_ = "http://ns.adobe.com/xap/1.0/\0" + xmpPacket_;
     }
     ioDevice->write(xmpPacket_.c_str(), xmpPacket_.length());
-    return false;
+    return true;
 }
 
 bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const

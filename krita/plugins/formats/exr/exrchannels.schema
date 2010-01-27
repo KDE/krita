@@ -1,0 +1,11 @@
+<schema prefix="exrchannels" uri="http://krita.org/exrchannels/1.0/">
+  <structures>
+    <structure name="channel" prefix="exrchannels" uri="http://krita.org/exrchannels/1.0/">
+      <text name="original" />
+      <text name="current" />
+    </structure>
+  </structures>
+  <properties>
+    <bag name="channelsmap" type="exrchannels:channel" />
+  </properties>
+</schema>

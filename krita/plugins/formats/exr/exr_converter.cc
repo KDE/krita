@@ -22,6 +22,7 @@
 
 #include <half.h>
 
+#include <ImfAttribute.h>
 #include <ImfChannelList.h>
 #include <ImfInputFile.h>
 
@@ -33,6 +34,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
 #include <KoColorSpaceTraits.h>
+#include <KoColorModelStandardIds.h>
 
 #include <kis_doc2.h>
 #include <kis_group_layer.h>
@@ -41,9 +43,12 @@
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
 #include <kis_undo_adapter.h>
-#include <boost/concept_check.hpp>
-#include <ImfAttribute.h>
-#include <KoColorModelStandardIds.h>
+
+#include <metadata/kis_meta_data_entry.h>
+#include <metadata/kis_meta_data_schema.h>
+#include <metadata/kis_meta_data_schema_registry.h>
+#include <metadata/kis_meta_data_store.h>
+#include <metadata/kis_meta_data_value.h>
 
 exrConverter::exrConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
@@ -118,6 +123,13 @@ struct ExrPaintLayerInfo : public ExrLayerInfoBase {
     }
     ImageType imageType;
     QMap< QString, QString> channelMap; ///< first is either R, G, B or A second is the EXR channel name
+    struct Remap {
+        Remap(const QString& _original, const QString& _current) : original(_original), current(_current) {
+        }
+        QString original;
+        QString current;
+    };
+    QList< Remap > remappedChannels; ///< this is used to store in the metadata the mapping between exr channel name, and channels used in Krita
     void updateImageType(ImageType channelType);
 };
 
@@ -134,7 +146,7 @@ template<typename _T_>
 void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype)
 {
     QVector<_T_> pixels(width*height);
-    
+
     Q_ASSERT(info.channelMap.contains("G"));
     dbgFile << "G -> " << info.channelMap["G"];
 
@@ -352,9 +364,13 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         QString modelId;
         if (info.channelMap.size() == 1) {
             modelId = GrayColorModelID.id();
-            QString channel =  info.channelMap.begin().value();
-            info.channelMap.clear();
-            info.channelMap["G"] = channel;
+            QString key = info.channelMap.begin().key();
+            if (key != "G") {
+                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(key, "G"));
+                QString channel =  info.channelMap.begin().value();
+                info.channelMap.clear();
+                info.channelMap["G"] = channel;
+            }
         } else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
             if (info.channelMap.contains("R") && info.channelMap.contains("G") && info.channelMap.contains("B")) {
                 modelId = RGBAColorModelID.id();
@@ -362,26 +378,35 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 modelId = XYZAColorModelID.id();
                 QMap<QString, QString> newChannelMap;
                 if (info.channelMap.contains("W")) {
-                    newChannelMap["A"] = "W";
+                    newChannelMap["A"] = info.channelMap["W"];
+                    info.remappedChannels.push_back(ExrPaintLayerInfo::Remap("W", "A"));
+                    info.remappedChannels.push_back(ExrPaintLayerInfo::Remap("X", "X"));
+                    info.remappedChannels.push_back(ExrPaintLayerInfo::Remap("Y", "Y"));
+                    info.remappedChannels.push_back(ExrPaintLayerInfo::Remap("Z", "Z"));
                 } else if (info.channelMap.contains("A")) {
-                    newChannelMap["A"] = "A";
+                    newChannelMap["A"] = info.channelMap["A"];
                 }
                 // The decode function expect R, G, B in the channel map
-                newChannelMap["B"] = "X";
-                newChannelMap["G"] = "Y";
-                newChannelMap["R"] = "Z";
+                newChannelMap["B"] = info.channelMap["X"];
+                newChannelMap["G"] = info.channelMap["Y"];
+                newChannelMap["R"] = info.channelMap["Z"];
                 info.channelMap = newChannelMap;
             } else {
                 modelId = RGBAColorModelID.id();
                 QMap<QString, QString> newChannelMap;
                 QMap<QString, QString>::iterator it = info.channelMap.begin();
-                newChannelMap["R"] = it.value(); ++it;
-                newChannelMap["G"] = it.value(); ++it;
+                newChannelMap["R"] = it.value();
+                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "R"));
+                ++it;
+                newChannelMap["G"] = it.value();
+                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "G"));
+                ++it;
                 newChannelMap["B"] = it.value();
-                if(info.channelMap.size() == 4)
-                {
+                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "B"));
+                if (info.channelMap.size() == 4) {
                     ++it;
                     newChannelMap["A"] = it.value();
+                    info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "A"));
                 }
                 info.channelMap = newChannelMap;
             }
@@ -423,8 +448,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     // Load the layers
     for (int i = 0; i < infos.size(); ++i) {
         ExrPaintLayerInfo& info = infos[i];
-        if(info.colorSpace)
-        {
+        if (info.colorSpace) {
             dbgFile << "Decoding " << info.name << " with " << info.channelMap.size() << " channels, and color space " << info.colorSpace->id();
             KisPaintLayerSP layer = new KisPaintLayer(m_image, info.name, OPACITY_OPAQUE, info.colorSpace);
             KisTransaction("", layer->paintDevice());
@@ -468,7 +492,18 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             default:
                 qFatal("Invalid number of channels: %i", info.channelMap.size());
             }
-
+            // Check if should set the channels
+            if (!info.remappedChannels.isEmpty()) {
+                QList<KisMetaData::Value> values;
+                foreach(const ExrPaintLayerInfo::Remap& remap, info.remappedChannels) {
+                    QMap<QString, KisMetaData::Value> map;
+                    map["original"] = KisMetaData::Value(remap.original);
+                    map["current"] = KisMetaData::Value(remap.current);
+                    values.append(map);
+                }
+                layer->metaData()->addEntry(KisMetaData::Entry(KisMetaData::SchemaRegistry::instance()->create("http://krita.org/exrchannels/1.0/" , "exrchannels"), "channelsmap", values));
+            }
+            // Add the layer
             KisGroupLayerSP groupLayerParent = (info.parent) ? info.parent->groupLayer : m_image->rootLayer();
             m_image->addNode(layer, groupLayerParent);
             layer->setDirty();

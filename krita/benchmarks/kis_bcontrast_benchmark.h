@@ -19,6 +19,9 @@
 #ifndef KIS_BCONTRAST_BENCHMARK_H
 #define KIS_BCONTRAST_BENCHMARK_H
 
+#include <KoColor.h>
+
+#include <kis_types.h>
 #include <QtTest/QtTest>
 
 class KisPaintDevice;
@@ -30,14 +33,15 @@ class KisBContrastBenchmark : public QObject
     Q_OBJECT
 private:
     const KoColorSpace * m_colorSpace;
-    KisPaintDevice * m_device;        
-    KoColor * m_color;
+    KoColor m_color;
+    KisPaintDeviceSP m_device;        
+    
     
 private slots:
     void initTestCase();
     void cleanupTestCase();
     
-    void benchmarkProjection();
+    void benchmarkFilter();
     
 };
 

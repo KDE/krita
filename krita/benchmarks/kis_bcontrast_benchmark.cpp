@@ -45,7 +45,7 @@ void KisBContrastBenchmark::initTestCase()
 {
     m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();    
     m_device = new KisPaintDevice(m_colorSpace);
-    m_color = new KoColor(m_colorSpace);
+    m_color = KoColor(m_colorSpace);
     
     QColor qcolor(Qt::red);
     srand(31524744);
@@ -58,8 +58,8 @@ void KisBContrastBenchmark::initTestCase()
         g = rand() % 255;
         b = rand() % 255;
         
-        m_color->fromQColor(QColor(r,g,b));
-        memcpy(it.rawData(), m_color->data(), m_colorSpace->pixelSize());
+        m_color.fromQColor(QColor(r,g,b));
+        memcpy(it.rawData(), m_color.data(), m_colorSpace->pixelSize());
         ++it;
     }
     
@@ -70,12 +70,12 @@ void KisBContrastBenchmark::cleanupTestCase()
 }
 
 
-void KisBContrastBenchmark::benchmarkProjection()
+void KisBContrastBenchmark::benchmarkFilter()
 {
     KisFilterSP filter = KisFilterRegistry::instance()->value("brightnesscontrast");
     KisFilterConfiguration * kfc = filter->defaultConfiguration(m_device);
 
-/*    // Get the predefined configuration from a file
+    // Get the predefined configuration from a file
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + filter->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         file.open(QIODevice::WriteOnly | QIODevice::Text);
@@ -87,7 +87,7 @@ void KisBContrastBenchmark::benchmarkProjection()
         s = in.readAll();
         kfc->fromXML(s);
     }
-*/
+
     KisConstProcessingInformation src(m_device,  QPoint(0, 0), 0);
     KisProcessingInformation dst(m_device, QPoint(0, 0), 0);
 

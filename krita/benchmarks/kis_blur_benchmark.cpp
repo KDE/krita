@@ -38,17 +38,14 @@
 
 #include "kis_selection.h"
 
-// #define GMP_IMAGE_WIDTH 3274
-// #define GMP_IMAGE_HEIGHT 2067 
-
-#define GMP_IMAGE_WIDTH 327
-#define GMP_IMAGE_HEIGHT 206
+#define GMP_IMAGE_WIDTH 3274
+#define GMP_IMAGE_HEIGHT 2067
 
 void KisBlurBenchmark::initTestCase()
 {
     m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();    
     m_device = new KisPaintDevice(m_colorSpace);
-    m_color = new KoColor(m_colorSpace);
+    m_color = KoColor(m_colorSpace);
     
     QColor qcolor(Qt::red);
     srand(31524744);
@@ -61,28 +58,22 @@ void KisBlurBenchmark::initTestCase()
         g = rand() % 255;
         b = rand() % 255;
         
-        m_color->fromQColor(QColor(r,g,b));
-        memcpy(it.rawData(), m_color->data(), m_colorSpace->pixelSize());
+        m_color.fromQColor(QColor(r,g,b));
+        memcpy(it.rawData(), m_color.data(), m_colorSpace->pixelSize());
         ++it;
     }
-    
-    qDebug() << m_device->exactBounds();
     
 }
 
 void KisBlurBenchmark::cleanupTestCase()
 {
-    delete m_device;
-    delete m_color;
 }
-
 
 void KisBlurBenchmark::benchmarkProjection()
 {
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     KisFilterConfiguration * kfc = filter->defaultConfiguration(m_device);
-
-/*    // Get the predefined configuration from a file
+    // Get the predefined configuration from a file
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + filter->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         file.open(QIODevice::WriteOnly | QIODevice::Text);
@@ -94,7 +85,6 @@ void KisBlurBenchmark::benchmarkProjection()
         s = in.readAll();
         kfc->fromXML(s);
     }
-*/
     KisConstProcessingInformation src(m_device,  QPoint(0, 0), 0);
     KisProcessingInformation dst(m_device, QPoint(0, 0), 0);
 

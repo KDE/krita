@@ -15,20 +15,19 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include <qtest_kde.h>
 
 #include "kis_projection_benchmark.h"
 #include "kis_benchmark_values.h"
 
-#include "kis_iterators_pixel.h"
-#include "kis_paint_device.h"
-
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 
-#include "kis_doc2.h"
+#include <kis_group_layer.h>
+#include <kis_iterators_pixel.h>
+#include <kis_paint_device.h>
+#include <kis_doc2.h>
 #include <kis_image.h>
 
 void KisProjectionBenchmark::initTestCase()

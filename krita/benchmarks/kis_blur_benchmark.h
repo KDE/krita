@@ -20,6 +20,8 @@
 #define KIS_BLUR_BENCHMARK_H
 
 #include <QtTest/QtTest>
+#include <kis_types.h>
+#include <KoColor.h>
 
 class KisPaintDevice;
 class KoColorSpace;
@@ -30,8 +32,8 @@ class KisBlurBenchmark : public QObject
     Q_OBJECT
 private:
     const KoColorSpace * m_colorSpace;
-    KisPaintDevice * m_device;        
-    KoColor * m_color;
+    KisPaintDeviceSP m_device;
+    KoColor m_color;
     
 private slots:
     void initTestCase();

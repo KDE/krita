@@ -39,7 +39,7 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
     
-    void benchmarkProjection();
+    void benchmarkFilter();
     
 };
 

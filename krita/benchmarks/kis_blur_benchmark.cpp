@@ -62,14 +62,13 @@ void KisBlurBenchmark::initTestCase()
         memcpy(it.rawData(), m_color.data(), m_colorSpace->pixelSize());
         ++it;
     }
-    
 }
 
 void KisBlurBenchmark::cleanupTestCase()
 {
 }
 
-void KisBlurBenchmark::benchmarkProjection()
+void KisBlurBenchmark::benchmarkFilter()
 {
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     KisFilterConfiguration * kfc = filter->defaultConfiguration(m_device);

@@ -260,7 +260,6 @@ const TypeInfo* Schema::Private::parseAttType(QDomElement& elt, bool ignoreStruc
     } else if (type == "rational") {
         return TypeInfo::Private::Rational;
     }
-    errImage << "Unsupported type: " << type << " in an attribute";
     return 0;
 }
 

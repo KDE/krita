@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008-2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008-2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -51,6 +51,22 @@ inline std::string exiv2Prefix(const KisMetaData::Schema* _schema)
     return prefix;
 }
 
+namespace
+{
+void saveStructure(Exiv2::XmpData& xmpData_, const QString& name, const std::string& prefix, const QMap<QString, KisMetaData::Value>& structure, const KisMetaData::Schema* structureSchema)
+{
+    std::string structPrefix = exiv2Prefix(structureSchema);
+    for (QMap<QString, KisMetaData::Value>::const_iterator it = structure.begin();
+            it != structure.end(); ++it) {
+        Q_ASSERT(it.value().type() != KisMetaData::Value::Structure);   // Can't nest structure
+        QString key = QString("%1/%2:%3").arg(name).arg(structPrefix.c_str()).arg(it.key());
+        Exiv2::XmpKey ekey(prefix, key.toAscii().data());
+        dbgFile << ppVar(key) << ppVar(ekey.key().c_str());
+        xmpData_.add(ekey, kmdValueToExivXmpValue(it.value()));
+    }
+}
+}
+
 bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType) const
 {
     dbgFile << "Save XMP Data";
@@ -66,31 +82,43 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
 
         const KisMetaData::Value& value = entry.value();
 
+        const KisMetaData::TypeInfo* typeInfo = entry.schema()->propertyType(entry.name());
         if (value.type() == KisMetaData::Value::Structure) {
             QMap<QString, KisMetaData::Value> structure = value.asStructure();
             const KisMetaData::Schema* structureSchema = 0;
-            const KisMetaData::TypeInfo* typeInfoStructure = entry.schema()->propertyType(entry.name());
-            if (typeInfoStructure) {
-                structureSchema = typeInfoStructure->structureSchema();
+            if (typeInfo) {
+                structureSchema = typeInfo->structureSchema();
             }
             if (!structureSchema) {
                 dbgFile << "Unknown schema for " << entry.name();
                 structureSchema = entry.schema();
             }
             Q_ASSERT(structureSchema);
-            std::string structPrefix = exiv2Prefix(structureSchema);
-            for (QMap<QString, KisMetaData::Value>::iterator it = structure.begin();
-                    it != structure.end(); ++it) {
-                Q_ASSERT(it.value().type() != KisMetaData::Value::Structure);   // Can't nest structure
-                QString key = QString("%1/%2:%3").arg(entry.name()).arg(structPrefix.c_str()).arg(it.key());
-                Exiv2::XmpKey ekey(prefix, key.toAscii().data());
-                dbgFile << ppVar(key) << ppVar(ekey.key().c_str());
-                xmpData_.add(ekey, kmdValueToExivXmpValue(it.value()));
-            }
+            saveStructure(xmpData_, entry.name(), prefix, structure, structureSchema);
         } else {
-            Exiv2::XmpKey key(prefix, entry.name().toAscii().data());
-            dbgFile << ppVar(key.key().c_str());
-            xmpData_.add(key, kmdValueToExivXmpValue(value));
+            if (typeInfo && (typeInfo->propertyType() == KisMetaData::TypeInfo::OrderedArrayType
+                             || typeInfo->propertyType() == KisMetaData::TypeInfo::UnorderedArrayType
+                             || typeInfo->propertyType() == KisMetaData::TypeInfo::AlternativeArrayType)
+                    && typeInfo->embeddedPropertyType()->propertyType() == KisMetaData::TypeInfo::StructureType) { // Here is the bad part, again we need to do it by hand
+                const KisMetaData::TypeInfo* stuctureTypeInfo = typeInfo->embeddedPropertyType();
+                const KisMetaData::Schema* structureSchema = 0;
+                if (stuctureTypeInfo) {
+                    structureSchema = stuctureTypeInfo->structureSchema();
+                }
+                if (!structureSchema) {
+                    dbgFile << "Unknown schema for " << entry.name();
+                    structureSchema = entry.schema();
+                }
+                Q_ASSERT(structureSchema);
+                QList<KisMetaData::Value> array = value.asArray();
+                for (int idx = 0; idx < array.size(); ++idx) {
+                    saveStructure(xmpData_, QString("%1[%2]").arg(entry.name()).arg(idx + 1), prefix, array[idx].asStructure(), structureSchema);
+                }
+            } else {
+                Exiv2::XmpKey key(prefix, entry.name().toAscii().data());
+                dbgFile << ppVar(key.key().c_str());
+                xmpData_.add(key, kmdValueToExivXmpValue(value));
+            }
         }
         // TODO property qualifier
     }

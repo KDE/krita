@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <stdlib.h>
+
 #include <qtest_kde.h>
 
 #include "kis_stroke_benchmark.h"
@@ -43,24 +45,7 @@
 void KisStrokeBenchmark::initTestCase()
 {
     m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();    
-    m_device = new KisPaintDevice(m_colorSpace);
     m_color = KoColor(m_colorSpace);
-    
-    QColor qcolor(Qt::red);
-    srand(31524744);
-    
-    int r,g,b;
-    
-    KisRectIterator it = m_device->createRectIterator(0,0,GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT);
-    while (!it.isDone()) {
-        r = rand() % 255;
-        g = rand() % 255;
-        b = rand() % 255;
-        
-        m_color.fromQColor(QColor(r,g,b));
-        memcpy(it.rawData(), m_color.data(), m_colorSpace->pixelSize());
-        ++it;
-    }
 }
 
 void KisStrokeBenchmark::cleanupTestCase()
@@ -69,12 +54,12 @@ void KisStrokeBenchmark::cleanupTestCase()
 
 void KisStrokeBenchmark::benchmarkStroke()
 {
-    const QString presetFileName = "AutoBrush_70px_rotated.kpp";
     int width = TEST_IMAGE_WIDTH;
     int height = TEST_IMAGE_HEIGHT;
 
-    KisLayerSP layer = new KisPaintLayer(0, "temporary for stroke sample", OPACITY_OPAQUE, m_colorSpace);
-    KisImageSP image = new KisImage(0, width, height, m_colorSpace, "stroke sample image", false);
+    KisImageWSP image = new KisImage(0, width, height, m_colorSpace, "stroke sample image", false);
+    KisLayerSP layer = new KisPaintLayer(image, "temporary for stroke sample", OPACITY_OPAQUE, m_colorSpace);
+
     KisPainter painter(layer->paintDevice());
     painter.setPaintColor(KoColor(Qt::black, m_colorSpace));
 
@@ -98,8 +83,53 @@ void KisStrokeBenchmark::benchmarkStroke()
         painter.paintBezierCurve(pi1, c1, c1, pi2, 0);
         painter.paintBezierCurve(pi2, c2, c2, pi3, 0);
     }
+    
+    //layer->paintDevice()->convertToQImage(0).save(QString(FILES_OUTPUT_DIR) + QDir::separator() + presetFileName + ".png");
 }
 
+
+void KisStrokeBenchmark::benchmarkRandomLines()
+{
+
+    int width = TEST_IMAGE_WIDTH;
+    int height = TEST_IMAGE_HEIGHT;
+
+    KisImageWSP image = new KisImage(0, width, height, m_colorSpace, "stroke sample image", false);
+    KisLayerSP layer = new KisPaintLayer(image, "temporary for stroke sample", OPACITY_OPAQUE, m_colorSpace);
+
+    KisPainter painter(layer->paintDevice());
+    painter.setPaintColor(KoColor(Qt::black, m_colorSpace));
+
+    KisPaintOpPresetSP preset = new KisPaintOpPreset(QString(FILES_DATA_DIR) + QDir::separator() + presetFileName);
+    preset->load();
+    preset->settings()->setNode(layer);
+    painter.setPaintOpPreset(preset, image);
+
+    
+    const int LINES = 20;
+    srand(12345678);
+    QVector<QPointF> startPoints;
+    QVector<QPointF> endPoints;
+    for (int i = 0; i < LINES; i++){
+        qreal sx = rand() / qreal(RAND_MAX - 1);
+        qreal sy = rand() / qreal(RAND_MAX - 1);
+        startPoints.append(QPointF(sx * width,sy * height));
+        qreal ex = rand() / qreal(RAND_MAX - 1);
+        qreal ey = rand() / qreal(RAND_MAX - 1);
+        endPoints.append(QPointF(ex * width,ey * height));
+    }
+    
+    QBENCHMARK{
+        for (int i = 0; i < LINES; i++){
+            KisPaintInformation pi1(startPoints[i], 0.0);
+            KisPaintInformation pi2(endPoints[i], 1.0);
+            painter.paintLine(pi1, pi2);
+        }
+    }
+
+    //layer->paintDevice()->convertToQImage(0).save(QString(FILES_OUTPUT_DIR) + QDir::separator() + presetFileName + "randomLines.png");
+    
+}
 
 
 QTEST_KDEMAIN(KisStrokeBenchmark, GUI)

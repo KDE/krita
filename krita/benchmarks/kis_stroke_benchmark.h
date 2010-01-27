@@ -25,7 +25,8 @@
 
 class KisPaintDevice;
 class KoColorSpace;
-class KoColor;
+
+const QString presetFileName = "AutoBrush_70px_rotated.kpp";
 
 class KisStrokeBenchmark : public QObject
 {
@@ -39,7 +40,10 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
     
+    // benchmarks the preview stroke
     void benchmarkStroke();
+    // benchmark random lines
+    void benchmarkRandomLines();
     
 };
 

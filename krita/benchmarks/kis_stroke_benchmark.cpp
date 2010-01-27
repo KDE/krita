@@ -79,6 +79,7 @@ void KisStrokeBenchmark::benchmarkStroke()
     painter.setPaintColor(KoColor(Qt::black, m_colorSpace));
 
     KisPaintOpPresetSP preset = new KisPaintOpPreset(QString(FILES_DATA_DIR) + QDir::separator() + presetFileName);
+    preset->load();
     preset->settings()->setNode(layer);
     painter.setPaintOpPreset(preset, image);
 

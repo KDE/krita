@@ -103,19 +103,18 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
                     && typeInfo->embeddedPropertyType()->propertyType() == KisMetaData::TypeInfo::StructureType) {
                 // Here is the bad part, again we need to do it by hand
                 Exiv2::XmpTextValue tv;
-                switch(typeInfo->propertyType())
-                {
-                    case KisMetaData::TypeInfo::OrderedArrayType:
-                        tv.setXmpArrayType(Exiv2::XmpValue::xaSeq);
-                        break;
-                    case KisMetaData::TypeInfo::UnorderedArrayType:
-                        tv.setXmpArrayType(Exiv2::XmpValue::xaBag);
-                        break;
-                    case KisMetaData::TypeInfo::AlternativeArrayType:
-                        tv.setXmpArrayType(Exiv2::XmpValue::xaAlt);
-                        break;
-                    default:
-                        qFatal("can't happen");
+                switch (typeInfo->propertyType()) {
+                case KisMetaData::TypeInfo::OrderedArrayType:
+                    tv.setXmpArrayType(Exiv2::XmpValue::xaSeq);
+                    break;
+                case KisMetaData::TypeInfo::UnorderedArrayType:
+                    tv.setXmpArrayType(Exiv2::XmpValue::xaBag);
+                    break;
+                case KisMetaData::TypeInfo::AlternativeArrayType:
+                    tv.setXmpArrayType(Exiv2::XmpValue::xaAlt);
+                    break;
+                default:
+                    qFatal("can't happen");
                 }
                 xmpData_.add(key, &tv); // set the arrya type
                 const KisMetaData::TypeInfo* stuctureTypeInfo = typeInfo->embeddedPropertyType();

@@ -30,9 +30,10 @@
 
 #include <kis_image.h>
 #include <kis_painter.h>
+#include <kis_types.h>
 
-#define GMP_IMAGE_WIDTH 1600
-#define GMP_IMAGE_HEIGHT 1000
+#define GMP_IMAGE_WIDTH 4096
+#define GMP_IMAGE_HEIGHT 4096
 
 void KisPainterBenchmark::initTestCase()
 {
@@ -55,14 +56,13 @@ void KisPainterBenchmark::benchmarkBitBlt()
     src->fill(0,0,GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT, m_color->data());
     dst->fill(0,0,GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT, m_color->data());
     
-    KisPainter * painter = new KisPainter(dst);
+    KisPainter painter(dst);
     
     QPoint pos(0,0);
     QRect rc(0,0,GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT);
-    painter->bitBlt(pos,src, rc);
     
-    QBENCHMARK_ONCE{
-     //   painter->bitBlt(pos,src,rc);
+    QBENCHMARK{
+        painter.bitBlt(pos,src,rc);
     }
 
 }

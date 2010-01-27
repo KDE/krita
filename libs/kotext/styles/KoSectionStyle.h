@@ -186,16 +186,6 @@ signals:
     void nameChanged(const QString &newName);
 
 private:
-    /**
-     * Load the style from the \a KoStyleStack style stack using the
-     * OpenDocument format.
-     */
-    void loadOdfProperties(KoStyleStack &styleStack);
-    qreal propertyDouble(int key) const;
-    int propertyInt(int key) const;
-    bool propertyBoolean(int key) const;
-    QColor propertyColor(int key) const;
-
     class Private;
     Private * const d;
 };

@@ -52,6 +52,30 @@ public:
     void setProperty(int key, const QVariant &value) {
         stylesPrivate.add(key, value);
     }
+    int propertyInt(int key) const {
+        QVariant variant = stylesPrivate.value(key);
+        if (variant.isNull())
+            return 0;
+        return variant.toInt();
+    }
+    bool propertyBoolean(int key) const {
+        QVariant variant = stylesPrivate.value(key);
+        if (variant.isNull())
+            return false;
+        return variant.toBool();
+    }
+    qreal propertyDouble(int key) const {
+        QVariant variant = stylesPrivate.value(key);
+        if (variant.isNull())
+            return 0.0;
+        return variant.toDouble();
+    }
+    QColor propertyColor(int key) const {
+        QVariant variant = stylesPrivate.value(key);
+        if (variant.isNull())
+            return QColor();
+        return variant.value<QColor>();
+    }
 
     QString name;
     KoSectionStyle *parentStyle;
@@ -110,40 +134,6 @@ bool KoSectionStyle::hasProperty(int key) const
     return d->stylesPrivate.contains(key);
 }
 
-qreal KoSectionStyle::propertyDouble(int key) const
-{
-    QVariant variant = value(key);
-    if (variant.isNull())
-        return 0.0;
-    return variant.toDouble();
-}
-
-int KoSectionStyle::propertyInt(int key) const
-{
-    QVariant variant = value(key);
-    if (variant.isNull())
-        return 0;
-    return variant.toInt();
-}
-
-bool KoSectionStyle::propertyBoolean(int key) const
-{
-    QVariant variant = value(key);
-    if (variant.isNull())
-        return false;
-    return variant.toBool();
-}
-
-QColor KoSectionStyle::propertyColor(int key) const
-{
-    QVariant variant = value(key);
-    if (variant.isNull()) {
-        QColor color;
-        return color;
-    }
-    return qvariant_cast<QColor>(variant);
-}
-
 void KoSectionStyle::applyStyle(QTextFrameFormat &format) const
 {
     if (d->parentStyle) {
@@ -186,7 +176,7 @@ void KoSectionStyle::setLeftMargin(qreal margin)
 
 qreal KoSectionStyle::leftMargin() const
 {
-    return propertyDouble(QTextFormat::BlockLeftMargin);
+    return d->propertyDouble(QTextFormat::BlockLeftMargin);
 }
 
 void KoSectionStyle::setRightMargin(qreal margin)
@@ -196,7 +186,7 @@ void KoSectionStyle::setRightMargin(qreal margin)
 
 qreal KoSectionStyle::rightMargin() const
 {
-    return propertyDouble(QTextFormat::BlockRightMargin);
+    return d->propertyDouble(QTextFormat::BlockRightMargin);
 }
 
 KoSectionStyle *KoSectionStyle::parentStyle() const
@@ -219,7 +209,7 @@ void KoSectionStyle::setName(const QString &name)
 
 int KoSectionStyle::styleId() const
 {
-    return propertyInt(StyleId);
+    return d->propertyInt(StyleId);
 }
 
 void KoSectionStyle::setStyleId(int id)
@@ -230,7 +220,7 @@ void KoSectionStyle::setStyleId(int id)
 
 KoText::Direction KoSectionStyle::textProgressionDirection() const
 {
-    return static_cast<KoText::Direction>(propertyInt(TextProgressionDirection));
+    return static_cast<KoText::Direction>(d->propertyInt(TextProgressionDirection));
 }
 
 void KoSectionStyle::setTextProgressionDirection(KoText::Direction dir)
@@ -273,13 +263,9 @@ void KoSectionStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &c
     context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
 
     context.styleStack().setTypeProperties("section");   // load all style attributes from "style:section-properties"
-    loadOdfProperties(context.styleStack());   // load the KoSectionStyle from the stylestack
 
-    context.styleStack().restore();
-}
+    KoStyleStack &styleStack = context.styleStack();
 
-void KoSectionStyle::loadOdfProperties(KoStyleStack &styleStack)
-{
     // in 1.6 this was defined at KoParagLayout::loadOasisParagLayout(KoParagLayout&, KoOasisContext&)
 
     if (styleStack.hasProperty(KoXmlNS::style, "writing-mode")) {     // http://www.w3.org/TR/2004/WD-xsl11-20041216/#writing-mode
@@ -309,6 +295,8 @@ void KoSectionStyle::loadOdfProperties(KoStyleStack &styleStack)
         }
         setBackground(brush);
     }
+
+    styleStack.restore();
 }
 
 

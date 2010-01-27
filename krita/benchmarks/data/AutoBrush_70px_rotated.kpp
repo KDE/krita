@@ -1,0 +1,29 @@
+<PresetResource>
+    <Preset name="my_preset" paintopid="paintbrush">
+        <param name="CurveDarken"><![CDATA[0,0;1,1;]]></param>
+        <param name="CurveMix"><![CDATA[0,0;1,1;]]></param>
+        <param name="CurveOpacity"><![CDATA[0,0;1,1;]]></param>
+        <param name="CurveRotation"><![CDATA[0,0;1,1;]]></param>
+        <param name="CurveSize"><![CDATA[0,0;1,1;]]></param>
+        <param name="CustomDarken"><![CDATA[true]]></param>
+        <param name="CustomMix"><![CDATA[true]]></param>
+        <param name="CustomOpacity"><![CDATA[true]]></param>
+        <param name="CustomRotation"><![CDATA[true]]></param>
+        <param name="CustomSize"><![CDATA[true]]></param>
+        <param name="DarkenSensor"><![CDATA[pressure]]></param>
+        <param name="MixSensor"><![CDATA[pressure]]></param>
+        <param name="OpacitySensor"><![CDATA[pressure]]></param>
+        <param name="PaintOpAction"><![CDATA[2]]></param>
+        <param name="PressureDarken"><![CDATA[false]]></param>
+        <param name="PressureMix"><![CDATA[false]]></param>
+        <param name="PressureOpacity"><![CDATA[true]]></param>
+        <param name="PressureRotation"><![CDATA[false]]></param>
+        <param name="PressureSize"><![CDATA[true]]></param>
+        <param name="RotationSensor"><![CDATA[pressure]]></param>
+        <param name="SizeSensor"><![CDATA[pressure]]></param>
+        <param name="brush_definition"><![CDATA[<!DOCTYPE BrushSetting>
+<brush_definition brush_spacing="0.2" brush_angle="1.570796326794897" brush_type="kis_auto_brush" autobrush_ratio="1" autobrush_type="circle" autobrush_hfade="0.11" autobrush_spikes="10" autobrush_radius="70" autobrush_vfade="0.11"/>
+]]></param>
+        <param name="paintop"><![CDATA[paintbrush]]></param>
+    </Preset>
+</PresetResource>

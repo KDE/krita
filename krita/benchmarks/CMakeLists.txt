@@ -16,6 +16,7 @@ set(kis_projection_benchmark_SRCS kis_projection_benchmark.cpp)
 set(kis_bcontrast_benchmark_SRCS kis_bcontrast_benchmark.cpp)
 set(kis_blur_benchmark_SRCS kis_blur_benchmark.cpp)
 set(kis_painter_benchmark_SRCS kis_painter_benchmark.cpp)
+set(kis_stroke_benchmark_SRCS kis_stroke_benchmark.cpp)
 
 kde4_add_unit_test(KisDatamanagerBenchmark TESTNAME krita-benchmarks-KisDataManager ${kis_datamanager_benchmark_SRCS})
 kde4_add_unit_test(KisHLineIteratorBenchmark TESTNAME krita-benchmarks-KisHLineIterator ${kis_hiterator_benchmark_SRCS})
@@ -26,6 +27,7 @@ kde4_add_unit_test(KisProjectionBenchmark TESTNAME krita-benchmarks-KisProjectio
 kde4_add_unit_test(KisBContrastBenchmark TESTNAME krita-benchmarks-KisBContrastBenchmark ${kis_bcontrast_benchmark_SRCS})
 kde4_add_unit_test(KisBlurBenchmark TESTNAME krita-benchmarks-KisBlurBenchmark ${kis_blur_benchmark_SRCS})
 kde4_add_unit_test(KisPainterBenchmark TESTNAME krita-benchmarks-KisPainterBenchmark ${kis_painter_benchmark_SRCS})
+kde4_add_unit_test(KisStrokeBenchmark TESTNAME krita-benchmarks-KisStrokeBenchmark ${kis_stroke_benchmark_SRCS})
 
 target_link_libraries(KisDatamanagerBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisHLineIteratorBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -36,3 +38,4 @@ target_link_libraries(KisProjectionBenchmark ${KDE4_KDEUI_LIBS} kritaimage krita
 target_link_libraries(KisBContrastBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisBlurBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisPainterBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisStrokeBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

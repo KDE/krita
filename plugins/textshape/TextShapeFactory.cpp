@@ -72,6 +72,10 @@ KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResourc
             KoPageProvider *pp = static_cast<KoPageProvider *>(documentResources->resource(KoText::PageProvider).value<void*>());
             text->setPageProvider(pp);
         }
+        if (documentResources->hasResource(KoText::ChangeTracker)) {
+            KoChangeTracker *changeTracker = documentResources->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+            document.setChangeTracker(changeTracker);
+        }
     }
 
     return text;
@@ -106,8 +110,6 @@ void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
         kWarning(32500) << "No KUndoStack found in the document resource manager, creating a new one";
         manager->setUndoStack(new KUndoStack(manager));
     }
-    variant.setValue(new KoChangeTracker(manager));
-    manager->setResource(KoText::ChangeTracker, variant);
     variant.setValue(new KoStyleManager(manager));
     manager->setResource(KoText::StyleManager, variant);
 }

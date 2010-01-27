@@ -118,7 +118,6 @@ bool KisPaintOpPreset::load()
     if(!m_d->settings)
         return false;
         
-    updateImage();
     return true;
 }
 

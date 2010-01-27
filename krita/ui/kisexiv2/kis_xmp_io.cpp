@@ -96,10 +96,28 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
             Q_ASSERT(structureSchema);
             saveStructure(xmpData_, entry.name(), prefix, structure, structureSchema);
         } else {
+            Exiv2::XmpKey key(prefix, entry.name().toAscii().data());
             if (typeInfo && (typeInfo->propertyType() == KisMetaData::TypeInfo::OrderedArrayType
                              || typeInfo->propertyType() == KisMetaData::TypeInfo::UnorderedArrayType
                              || typeInfo->propertyType() == KisMetaData::TypeInfo::AlternativeArrayType)
-                    && typeInfo->embeddedPropertyType()->propertyType() == KisMetaData::TypeInfo::StructureType) { // Here is the bad part, again we need to do it by hand
+                    && typeInfo->embeddedPropertyType()->propertyType() == KisMetaData::TypeInfo::StructureType) {
+                // Here is the bad part, again we need to do it by hand
+                Exiv2::XmpTextValue tv;
+                switch(typeInfo->propertyType())
+                {
+                    case KisMetaData::TypeInfo::OrderedArrayType:
+                        tv.setXmpArrayType(Exiv2::XmpValue::xaSeq);
+                        break;
+                    case KisMetaData::TypeInfo::UnorderedArrayType:
+                        tv.setXmpArrayType(Exiv2::XmpValue::xaBag);
+                        break;
+                    case KisMetaData::TypeInfo::AlternativeArrayType:
+                        tv.setXmpArrayType(Exiv2::XmpValue::xaAlt);
+                        break;
+                    default:
+                        qFatal("can't happen");
+                }
+                xmpData_.add(key, &tv); // set the arrya type
                 const KisMetaData::TypeInfo* stuctureTypeInfo = typeInfo->embeddedPropertyType();
                 const KisMetaData::Schema* structureSchema = 0;
                 if (stuctureTypeInfo) {
@@ -115,7 +133,6 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
                     saveStructure(xmpData_, QString("%1[%2]").arg(entry.name()).arg(idx + 1), prefix, array[idx].asStructure(), structureSchema);
                 }
             } else {
-                Exiv2::XmpKey key(prefix, entry.name().toAscii().data());
                 dbgFile << ppVar(key.key().c_str());
                 xmpData_.add(key, kmdValueToExivXmpValue(value));
             }

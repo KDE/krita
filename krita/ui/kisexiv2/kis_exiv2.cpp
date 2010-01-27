@@ -218,7 +218,21 @@ Exiv2::Value* kmdValueToExivXmpValue(const KisMetaData::Value& value)
     case KisMetaData::Value::AlternativeArray:
     case KisMetaData::Value::OrderedArray:
     case KisMetaData::Value::UnorderedArray: {
-        Exiv2::Value* arrV = new Exiv2::XmpArrayValue;
+        Exiv2::XmpArrayValue* arrV = new Exiv2::XmpArrayValue;
+        switch(value.type())
+        {
+            case KisMetaData::Value::OrderedArray:
+                arrV->setXmpArrayType(Exiv2::XmpValue::xaSeq);
+                break;
+            case KisMetaData::Value::UnorderedArray:
+                arrV->setXmpArrayType(Exiv2::XmpValue::xaBag);
+                break;
+            case KisMetaData::Value::AlternativeArray:
+                arrV->setXmpArrayType(Exiv2::XmpValue::xaAlt);
+                break;
+            default:
+                qFatal("can't happen");
+        }
         foreach(const KisMetaData::Value& v, value.asArray()) {
             Exiv2::Value* ev = kmdValueToExivXmpValue(v);
             arrV->read(ev->toString());

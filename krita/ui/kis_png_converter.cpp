@@ -85,7 +85,7 @@ int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
 QPair<QString, QString> getColorSpaceForColorType(int color_type, int color_nb_bits)
 {
     QPair<QString, QString> r;
-    
+
     if (color_type ==  PNG_COLOR_TYPE_PALETTE) {
         r.first = RGBAColorModelID.id();
         r.second = Integer8BitsColorDepthID.id();
@@ -201,7 +201,7 @@ QByteArray png_read_raw_profile(png_textp text)
                                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 11, 12,
                                        13, 14, 15
-                                       };
+                                      };
 
     png_charp sp = text[0].text + 1;
     /* look for newline */
@@ -409,7 +409,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     png_byte signature[8];
     iod->peek((char*)signature, 8);
 
-#if PNG_LIBPNG_VER < 10400 
+#if PNG_LIBPNG_VER < 10400
     if (!png_check_sig(signature, 8)) {
 #else
     if (png_sig_cmp(signature, 0, 8) != 0) {
@@ -480,7 +480,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 #endif
 
     // Determine the colorspace
-    QPair<QString,QString> csName = getColorSpaceForColorType(color_type, color_nb_bits);
+    QPair<QString, QString> csName = getColorSpaceForColorType(color_type, color_nb_bits);
     if (csName.first.isEmpty()) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         iod->close();
@@ -494,14 +494,14 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     png_uint_32 proflen;
 
 
-    KoColorProfile* profile = 0;
+    const KoColorProfile* profile = 0;
     if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
         QByteArray profile_rawdata;
         // XXX: Hardcoded for icc type -- is that correct for us?
         if (QString::compare(profile_name, "icc") == 0) {
             profile_rawdata.resize(proflen);
             memcpy(profile_rawdata.data(), profile_data, proflen);
-            profile = KoColorSpaceRegistry::instance()->createProfile("icc", profile_rawdata);
+            profile = KoColorSpaceRegistry::instance()->createColorProfile(csName.first, csName.second, profile_rawdata);
             Q_CHECK_PTR(profile);
             if (profile) {
 //                 dbgFile << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo();
@@ -552,10 +552,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     int unit_type;
     png_uint_32 x_resolution, y_resolution;
 
-    png_get_pHYs(png_ptr, info_ptr,&x_resolution,&y_resolution, &unit_type);
-    if (unit_type == PNG_RESOLUTION_METER)
-    {
-        m_image->setResolution((double) POINT_TO_CM(x_resolution)/100.0, (double) POINT_TO_CM(y_resolution)/100.0 ); // It is the "invert" macro because we convert from pointer-per-inchs to points
+    png_get_pHYs(png_ptr, info_ptr, &x_resolution, &y_resolution, &unit_type);
+    if (unit_type == PNG_RESOLUTION_METER) {
+        m_image->setResolution((double) POINT_TO_CM(x_resolution) / 100.0, (double) POINT_TO_CM(y_resolution) / 100.0); // It is the "invert" macro because we convert from pointer-per-inchs to points
     }
 
     double coeff = quint8_MAX / (double)(pow(2, color_nb_bits) - 1);
@@ -924,7 +923,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
         if ((*it) -> type().startsWith(QString("krita_attribute:"))) { //
             // Attribute
 #ifdef __GNUC__
-    #warning "it should be possible to save krita_attributes in the \"CHUNKs\""
+#warning "it should be possible to save krita_attributes in the \"CHUNKs\""
 #endif
             dbgFile << "cannot save this annotation : " << (*it) -> type();
         } else { // Profile

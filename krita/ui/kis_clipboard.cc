@@ -162,16 +162,7 @@ KisPaintDeviceSP KisClipboard::clip()
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
         KoStore* store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
-        KoColorProfile *profile = 0;
-
-        if (store->hasFile("profile.icc")) {
-            QByteArray data;
-            store->open("profile.icc");
-            data = store->read(store->size());
-            store->close();
-            profile = KoColorSpaceRegistry::instance()->createProfile("icc", data);
-
-        }
+        const KoColorProfile *profile = 0;
 
         QString csDepth, csModel;
         // ColorSpace id of layer data
@@ -186,6 +177,16 @@ KisPaintDeviceSP KisClipboard::clip()
             csDepth = QString(store->read(store->size()));
             store->close();
         }
+
+        if (store->hasFile("profile.icc")) {
+            QByteArray data;
+            store->open("profile.icc");
+            data = store->read(store->size());
+            store->close();
+            profile = KoColorSpaceRegistry::instance()->createColorProfile(csModel, csDepth, data);
+
+        }
+
         const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(csModel, csDepth, profile);
 
         m_clip = new KisPaintDevice(cs);
@@ -268,18 +269,9 @@ QSize KisClipboard::clipSize()
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
         KoStore* store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
-        KoColorProfile *profile = 0;
-
-        if (store->hasFile("profile.icc")) {
-            QByteArray data;
-            store->open("profile.icc");
-            data = store->read(store->size());
-            store->close();
-            profile = KoColorSpaceRegistry::instance()->createProfile("icc", data);
-
-        }
-
+        const KoColorProfile *profile = 0;
         QString csDepth, csModel;
+
         // ColorSpace id of layer data
         if (store->hasFile("colormodel")) {
             store->open("colormodel");
@@ -292,6 +284,16 @@ QSize KisClipboard::clipSize()
             csDepth = QString(store->read(store->size()));
             store->close();
         }
+
+        if (store->hasFile("profile.icc")) {
+            QByteArray data;
+            store->open("profile.icc");
+            data = store->read(store->size());
+            store->close();
+            profile = KoColorSpaceRegistry::instance()->createColorProfile(csModel, csDepth, data);
+
+        }
+
         const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(csModel, csDepth, profile);
 
         clip = new KisPaintDevice(cs);

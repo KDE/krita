@@ -243,7 +243,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
 
     // Read image profile
     dbgFile << "Reading profile";
-    KoColorProfile* profile = 0;
+    const KoColorProfile* profile = 0;
     quint32 EmbedLen;
     quint8* EmbedBuffer;
 
@@ -252,7 +252,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         QByteArray rawdata;
         rawdata.resize(EmbedLen);
         memcpy(rawdata.data(), EmbedBuffer, EmbedLen);
-        profile = KoColorSpaceRegistry::instance()->createProfile("icc", rawdata);
+        profile = KoColorSpaceRegistry::instance()->createColorProfile(colorSpaceId.first, colorSpaceId.second, rawdata);
     } else {
         dbgFile << "No Profile found";
     }

@@ -125,8 +125,8 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
 protected:
 
     LcmsColorSpace(const QString &id, const QString &name,  DWORD cmType,
-                     icColorSpaceSignature colorSpaceSignature,
-                     KoColorProfile *p)
+                   icColorSpaceSignature colorSpaceSignature,
+                   KoColorProfile *p)
             : KoColorSpaceAbstract<_CSTraits>(id, name), KoLcmsInfo(cmType, colorSpaceSignature)
             , d(new Private())
 
@@ -437,6 +437,7 @@ public:
         return false;
     }
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
+    virtual KoColorProfile* createColorProfile(const QByteArray& rawData) const;
 };
 
 #endif

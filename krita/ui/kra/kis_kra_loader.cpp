@@ -208,7 +208,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         QByteArray data; data.resize(store->size());
         store->read(data.data(), store->size());
         store->close();
-        image->setProfile(KoColorSpaceRegistry::instance()->createProfile("icc", data));
+        image->setProfile(KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data));
     }
 
 
@@ -275,8 +275,7 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
     const KoColorSpace* colorSpace = 0;
     if ((element.attribute(COLORSPACE_NAME)).isNull())
         colorSpace = image->colorSpace();
-    else
-    {
+    else {
         QString colorspacename = element.attribute(COLORSPACE_NAME);
         QString colorspaceModel = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
         QString colorspaceDepth = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
@@ -496,7 +495,7 @@ KisNode* KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageWSP i
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     Q_UNUSED(cs);
-  
+
     KisCloneLayer* layer = new KisCloneLayer(0, image, name, opacity);
 
     if ((element.attribute(CLONE_FROM)).isNull()) {

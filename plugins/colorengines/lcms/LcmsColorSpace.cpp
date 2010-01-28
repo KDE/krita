@@ -35,3 +35,8 @@ QList<KoColorConversionTransformationFactory*> LcmsColorSpaceFactory::colorConve
 {
     return QList<KoColorConversionTransformationFactory*>();
 }
+
+KoColorProfile* LcmsColorSpaceFactory::createColorProfile(const QByteArray& rawData) const
+{
+    return new IccColorProfile(rawData);
+}

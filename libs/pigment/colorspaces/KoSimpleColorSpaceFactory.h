@@ -91,7 +91,10 @@ public:
     virtual QString defaultProfile() const {
         return QString::null;
     }
-
+protected:
+    virtual KoColorProfile* createColorProfile(const QByteArray& /*rawData*/) const {
+        return 0;
+    }
 private:
 
     QString m_id;

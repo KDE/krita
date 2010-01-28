@@ -20,8 +20,10 @@
 #include "KoColorSpaceFactory.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
+#include "KoColorSpaceRegistry.h"
 
 struct KoColorSpaceFactory::Private {
+    QList<KoColorProfile*> colorprofiles;
     QList<KoColorSpace*> colorspaces;
     QHash<QString, QList<KoColorSpace*> > availableColorspaces;
 };
@@ -34,16 +36,32 @@ KoColorSpaceFactory::~KoColorSpaceFactory()
 {
     // Check that all color spaces have been released
     int count = 0;
-    foreach( const QList<KoColorSpace*>& cl, d->availableColorspaces)
-    {
+    foreach(const QList<KoColorSpace*>& cl, d->availableColorspaces) {
         count += cl.size();
     }
     Q_ASSERT(count == d->colorspaces.size());
-    foreach( KoColorSpace* cs, d->colorspaces)
-    {
+    foreach(KoColorSpace* cs, d->colorspaces) {
         delete cs;
     }
+    foreach(KoColorProfile* profile, d->colorprofiles) {
+        KoColorSpaceRegistry::instance()->removeProfile(profile);
+        delete profile;
+    }
     delete d;
+}
+
+const KoColorProfile* KoColorSpaceFactory::colorProfile(const QByteArray& rawData) const
+{
+    KoColorProfile* colorProfile = createColorProfile(rawData);
+    if (colorProfile && colorProfile->valid()) {
+        if (const KoColorProfile* existingProfile = KoColorSpaceRegistry::instance()->profileByName(colorProfile->name())) {
+            delete colorProfile;
+            return existingProfile;
+        }
+        KoColorSpaceRegistry::instance()->addProfile(colorProfile);
+        d->colorprofiles.append(colorProfile);
+    }
+    return colorProfile;
 }
 
 KoColorSpace* KoColorSpaceFactory::grabColorSpace(const KoColorProfile * profile)

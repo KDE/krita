@@ -102,7 +102,7 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
 
 bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 {
-
+    dbgFile << "Visit: " << layer->name();
     if (!loadPaintDevice(layer->paintDevice(), getLocation(layer))) {
         return false;
     }
@@ -280,7 +280,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
         dbgFile << "Profile size: " << data.size() << " " << m_store->atEnd() << " " << m_store->device()->bytesAvailable() << " " << read;
         m_store->close();
         // Create a colorspace with the embedded profile
-        KoColorProfile* profile = KoColorSpaceRegistry::instance()->createProfile("icc", data);
+        const KoColorProfile* profile = KoColorSpaceRegistry::instance()->createColorProfile(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), data);
         const KoColorSpace * cs =
             KoColorSpaceRegistry::instance()->colorSpace(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), profile);
         // replace the old colorspace
@@ -307,6 +307,7 @@ bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfiguration* kfc, con
 
 bool KisKraLoadVisitor::loadMetaData(KisNode* node)
 {
+    dbgFile << "Load metadata for " << node->name();
     KisLayer* layer = qobject_cast<KisLayer*>(node);
     if (!layer) return true;
 

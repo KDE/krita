@@ -43,6 +43,7 @@ public:
     virtual bool profileIsCompatible(const KoColorProfile* profile) const;
     // XXX: are these factories ever deleted? memcheck says not.
     QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
+    virtual KoColorProfile* createColorProfile(const QByteArray& rawData) const;
 private:
     KoCtlColorSpaceInfo* m_info;
 };

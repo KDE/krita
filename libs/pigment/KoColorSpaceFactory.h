@@ -109,6 +109,11 @@ public:
      */
     virtual QString defaultProfile() const = 0;
 
+    /**
+     * Create a color profile from a memory array, if possible, otherwise return 0.
+     */
+    const KoColorProfile* colorProfile(const QByteArray& rawData) const;
+
     KoColorSpace* grabColorSpace(const KoColorProfile* profile);
 
     void releaseColorSpace(KoColorSpace *);
@@ -117,6 +122,7 @@ protected:
      * creates a color space using the given profile.
      */
     virtual KoColorSpace *createColorSpace(const KoColorProfile *) const = 0;
+    virtual KoColorProfile* createColorProfile(const QByteArray& rawData) const = 0;
 private:
     struct Private;
     Private* const d;

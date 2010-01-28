@@ -142,7 +142,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     if (!file.open(QIODevice::ReadOnly)) {
         return (KisImageBuilder_RESULT_BAD_FETCH);
     }
-    
+
     KisJPEGSource::setSource(&cinfo, &file);
 
     jpeg_save_markers(&cinfo, JPEG_COM, 0xFFFF);
@@ -167,7 +167,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
     uchar* profile_data;
     uint profile_len;
-    KoColorProfile* profile = 0;
+    const KoColorProfile* profile = 0;
     QByteArray profile_rawdata;
     if (read_icc_profile(&cinfo, &profile_data, &profile_len)) {
         profile_rawdata.resize(profile_len);
@@ -175,7 +175,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, (DWORD)profile_len);
 
         if (hProfile != (cmsHPROFILE) NULL) {
-            profile = KoColorSpaceRegistry::instance()->createProfile("icc", profile_rawdata);
+            profile = KoColorSpaceRegistry::instance()->createColorProfile(modelId, Integer8BitsColorDepthID.id(), profile_rawdata);
             Q_CHECK_PTR(profile);
 //             dbgFile <<"profile name:" << profile->productName() <<" profile description:" << profile->productDescription() <<" information sur le produit:" << profile->productInfo();
             if (!profile->isSuitableForOutput()) {
@@ -217,18 +217,15 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     // Set resolution
     double xres = 72, yres = 72;
-    if ( cinfo.density_unit == 1 )
-    {
+    if (cinfo.density_unit == 1) {
         xres = cinfo.X_density;
         yres = cinfo.Y_density;
-    }
-    else if ( cinfo.density_unit == 2 )
-    {
+    } else if (cinfo.density_unit == 2) {
         xres = cinfo.X_density * 2.54;
         yres = cinfo.Y_density * 2.54;
     }
-    m_image->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres) ); // It is the "invert" macro because we convert from pointer-per-inchs to points
-    
+    m_image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
+
     // Create layer
     KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), quint8_MAX));
     KisTransaction("", layer->paintDevice());

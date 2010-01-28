@@ -36,7 +36,6 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceEngine.h>
-#include <KoColorProfileFactory.h>
 
 #include "IccColorSpaceEngine.h"
 #include "colorprofiles/LcmsColorProfileContainer.h"
@@ -51,21 +50,11 @@
 #include "colorspaces/gray_u16/GrayU16ColorSpace.h"
 #include "colorspaces/rgb_u16/RgbU16ColorSpace.h"
 
-class IccColorProfileFactory : public KoColorProfileFactory {
-
-public:
-
-    KoColorProfile* createColorProfile(const QByteArray& rawData) {
-        return new IccColorProfile(rawData);
-    }
-
-};
-
 typedef KGenericFactory<LcmsEnginePlugin> LcmsEnginePluginFactory;
 K_EXPORT_COMPONENT_FACTORY(kolcmsengine, LcmsEnginePluginFactory("koffice"))
 
 LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QStringList &)
-            : QObject(parent)
+        : QObject(parent)
 {
     kDebug(31000) << "Initializing the lcms engine plugin";
     //setComponentData(LcmsEnginePluginFactory::componentData());
@@ -74,7 +63,6 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QStringList &)
 
 
     KoColorSpaceRegistry* registry = KoColorSpaceRegistry::instance();
-    registry->addColorProfileFactory("icc", new IccColorProfileFactory());
 
     // Initialise color engine
     KoColorSpaceEngineRegistry::instance()->add(new IccColorSpaceEngine);
@@ -114,8 +102,8 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QStringList &)
     registry->addProfile(labProfile);
     registry->add(new LabColorSpaceFactory());
     KoHistogramProducerFactoryRegistry::instance()->add(
-            new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("LABAHISTO", i18n("L*a*b* Histogram")), LABAColorModelID.id(), Integer16BitsColorDepthID.id()));
+        new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
+        (KoID("LABAHISTO", i18n("L*a*b* Histogram")), LABAColorModelID.id(), Integer16BitsColorDepthID.id()));
 
     KoColorProfile *rgbProfile = LcmsColorProfileContainer::createFromLcmsProfile(cmsCreate_sRGBProfile());
     registry->addProfile(rgbProfile);
@@ -124,8 +112,8 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QStringList &)
     registry->add(new RgbU8ColorSpaceFactory());
 
     KoHistogramProducerFactoryRegistry::instance()->add(
-            new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-            (KoID("RGB8HISTO", i18n("RGB8 Histogram")), RGBAColorModelID.id(), Integer8BitsColorDepthID.id()));
+        new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
+        (KoID("RGB8HISTO", i18n("RGB8 Histogram")), RGBAColorModelID.id(), Integer8BitsColorDepthID.id()));
 
     // Create the default profile for grayscale, probably not the best place to but that, but still better than in a grayscale plugin
     // .22 gamma grayscale or something like that. Taken from the lcms tutorial...
@@ -148,40 +136,40 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QStringList &)
     registry->add(csFactory);
 
     KoHistogramProducerFactoryRegistry::instance()->add(
-            new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), GrayColorModelID.id(), Integer16BitsColorDepthID.id()));
+        new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
+        (KoID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), GrayColorModelID.id(), Integer16BitsColorDepthID.id()));
 
     // Gray Alpha 8
     csFactory = new KoGrayAU8ColorSpaceFactory();
     registry->add(csFactory);
 
     KoHistogramProducerFactoryRegistry::instance()->add(
-            new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-            (KoID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), GrayAColorModelID.id(), Integer8BitsColorDepthID.id()) );
+        new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
+        (KoID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), GrayAColorModelID.id(), Integer8BitsColorDepthID.id()));
 
     // Gray Alpha 16
     csFactory = new KoGrayAU16ColorSpaceFactory();
     registry->add(csFactory);
 
     KoHistogramProducerFactoryRegistry::instance()->add(
-            new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), GrayAColorModelID.id(), Integer16BitsColorDepthID.id()) );
+        new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
+        (KoID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), GrayAColorModelID.id(), Integer16BitsColorDepthID.id()));
 
     // CMYK 16
     csFactory = new CmykU16ColorSpaceFactory();
     registry->add(csFactory);
 
     KoHistogramProducerFactoryRegistry::instance()->add(
-            new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("CMYK16HISTO", i18n("CMYK16 Histogram")), CMYKAColorModelID.id(), Integer16BitsColorDepthID.id()) );
+        new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
+        (KoID("CMYK16HISTO", i18n("CMYK16 Histogram")), CMYKAColorModelID.id(), Integer16BitsColorDepthID.id()));
 
     // CMYK 8
     csFactory = new CmykU8ColorSpaceFactory();
     registry->add(csFactory);
 
     KoHistogramProducerFactoryRegistry::instance()->add(
-            new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-            (KoID("CMYK8HISTO", i18n("CMYK8 Histogram")), CMYKAColorModelID.id(), Integer8BitsColorDepthID.id()) );
+        new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
+        (KoID("CMYK8HISTO", i18n("CMYK8 Histogram")), CMYKAColorModelID.id(), Integer8BitsColorDepthID.id()));
 
     // XYZ 16
     KoColorProfile *xyzProfile = LcmsColorProfileContainer::createFromLcmsProfile(cmsCreateXYZProfile());
@@ -191,8 +179,8 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QStringList &)
     registry->add(csFactory);
 
     KoHistogramProducerFactoryRegistry::instance()->add(
-            new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("XYZ16HISTO", i18n("XYZ16 Histogram")), XYZAColorModelID.id(), Integer16BitsColorDepthID.id()));
+        new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
+        (KoID("XYZ16HISTO", i18n("XYZ16 Histogram")), XYZAColorModelID.id(), Integer16BitsColorDepthID.id()));
 }
 
 #include <LcmsEnginePlugin.moc>

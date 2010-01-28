@@ -39,7 +39,6 @@
 #include "KoBasicHistogramProducers.h"
 #include "KoColorSpace.h"
 #include "KoColorProfile.h"
-#include "KoColorProfileFactory.h"
 #include "KoColorConversionCache.h"
 #include "KoColorConversionSystem.h"
 
@@ -54,7 +53,6 @@ struct KoColorSpaceRegistry::Private {
     KoGenericRegistry<KoColorSpaceFactory *> colorsSpaceFactoryRegistry;
     QHash<QString, KoColorProfile * > profileMap;
     QHash<QString, const KoColorSpace * > csMap;
-    QHash<QString, KoColorProfileFactory * > profileFactoryMap;
     const KoColorSpace *alphaCs;
     KoColorConversionSystem *colorConversionSystem;
     KoColorConversionCache* colorConversionCache;
@@ -82,7 +80,7 @@ void KoColorSpaceRegistry::init()
     KoColorSpaceEngineRegistry::instance()->add(new KoSimpleColorSpaceEngine());
 
     addProfile(new KoDummyColorProfile);
-    
+
     // Create the built-in colorspaces
     add(new KoLabColorSpaceFactory());
     add(new KoRgbU8ColorSpaceFactory());
@@ -131,11 +129,6 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
         releaseColorSpace(const_cast<KoColorSpace*>(cs));
     }
     d->csMap.clear();
-
-    foreach(const KoColorProfileFactory* factory, d->profileFactoryMap) {
-        delete factory;
-    }
-    d->profileFactoryMap.clear();
 
     // deleting colorspaces calls a function in the cache
     delete d->colorConversionCache;
@@ -537,18 +530,10 @@ QList<KoID> KoColorSpaceRegistry::listKeys() const
     return answer;
 }
 
-KoColorProfile* KoColorSpaceRegistry::createProfile(const QString& type, QByteArray rawData)
+const KoColorProfile* KoColorSpaceRegistry::createColorProfile(const QString& colorModelId, const QString& colorDepthId, const QByteArray& rawData)
 {
-    // FIXME: add a factory structure to create profiles of different types
-    if (d->profileFactoryMap.contains(type)) {
-        return d->profileFactoryMap[type]->createColorProfile(rawData);
-    }
-    return 0;
-}
-
-void KoColorSpaceRegistry::addColorProfileFactory(const QString& type, KoColorProfileFactory* factory)
-{
-    d->profileFactoryMap[type] = factory;
+    KoColorSpaceFactory* factory_ = d->colorsSpaceFactoryRegistry.get(colorSpaceId(colorModelId, colorDepthId));
+    return factory_->colorProfile(rawData);
 }
 
 QList<const KoColorSpace*> KoColorSpaceRegistry::allColorSpaces(ColorSpaceListVisibility visibility, ColorSpaceListProfilesSelection pSelection)

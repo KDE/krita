@@ -30,6 +30,7 @@
 #include <KoCanvasBase.h>
 #include <KoID.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoAbstractGradient.h>
 
@@ -287,7 +288,7 @@ void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & re
     };
 }
 
-KoColorProfile *KisCanvasResourceProvider::getScreenProfile(int screen)
+const KoColorProfile *KisCanvasResourceProvider::getScreenProfile(int screen)
 {
 #ifdef Q_WS_X11
 
@@ -315,7 +316,7 @@ KoColorProfile *KisCanvasResourceProvider::getScreenProfile(int screen)
         QByteArray bytes(nitems, '\0');
         bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 
-        return KoColorSpaceRegistry::instance()->createProfile("icc", bytes);
+        return KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), bytes);
         return 0;
     } else {
         return 0;
@@ -328,8 +329,7 @@ KoColorProfile *KisCanvasResourceProvider::getScreenProfile(int screen)
 
 void KisCanvasResourceProvider::slotPainting()
 {
-    if (m_fGChanged)
-    {
+    if (m_fGChanged) {
         emit sigFGColorUsed(fgColor());
         m_fGChanged = false;
     }

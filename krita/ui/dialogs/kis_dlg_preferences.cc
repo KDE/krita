@@ -84,10 +84,10 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
     chkShowRootLayer->setChecked(cfg.showRootLayer());
 
-    int autosaveInterval=cfg.autoSaveInterval();
+    int autosaveInterval = cfg.autoSaveInterval();
     //convert to minutes
-    m_autosaveSpinBox->setValue(autosaveInterval/60);
-    m_autosaveCheckBox->setChecked(autosaveInterval>0);
+    m_autosaveSpinBox->setValue(autosaveInterval / 60);
+    m_autosaveCheckBox->setChecked(autosaveInterval > 0);
 }
 
 void GeneralTab::setDefault()
@@ -98,7 +98,7 @@ void GeneralTab::setDefault()
     chkShowRootLayer->setChecked(false);
     m_autosaveCheckBox->setChecked(true);
     //convert to minutes
-    m_autosaveSpinBox->setValue(KoDocument::defaultAutoSave()/60);
+    m_autosaveSpinBox->setValue(KoDocument::defaultAutoSave() / 60);
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -111,9 +111,10 @@ bool GeneralTab::showRootLayer()
     return chkShowRootLayer->isChecked();
 }
 
-int GeneralTab::autoSaveInterval() {
+int GeneralTab::autoSaveInterval()
+{
     //convert to seconds
-    return m_autosaveCheckBox->isChecked()?m_autosaveSpinBox->value()*60:0;
+    return m_autosaveCheckBox->isChecked() ? m_autosaveSpinBox->value()*60 : 0;
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -162,7 +163,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     m_page->cmbMonitorIntent->setCurrentIndex(cfg.renderIntent());
 
-    if (KoColorProfile * profile = KisCanvasResourceProvider::getScreenProfile()) {
+    if (const KoColorProfile * profile = KisCanvasResourceProvider::getScreenProfile()) {
         // We've got an X11 profile, don't allow to override
         m_page->cmbMonitorProfile->hide();
         m_page->lblMonitorProfile->setText(i18n("Monitor profile: ") + profile->name());
@@ -520,9 +521,9 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
 
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
-        foreach (KoDocument* doc, *KoDocument::documentList()) {
+        foreach(KoDocument* doc, *KoDocument::documentList()) {
             doc->setAutoSave(dialog->m_general->autoSaveInterval());
-         }
+        }
 
         // Color settings
         cfg.setMonitorProfile(dialog->m_colorSettings->m_page->cmbMonitorProfile->itemHighlighted());

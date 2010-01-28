@@ -91,7 +91,7 @@ public:
 
     KisFilterConfiguration* currentGeneratorConfiguration() const;
 
-    static KoColorProfile* getScreenProfile(int screen = -1);
+    static const KoColorProfile* getScreenProfile(int screen = -1);
 
 
 public slots:

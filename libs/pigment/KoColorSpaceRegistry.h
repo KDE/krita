@@ -31,7 +31,6 @@
 #include <KoColorSpaceFactory.h>
 
 class KoColorProfile;
-class KoColorProfileFactory;
 class KoColorConversionSystem;
 class KoColorConversionCache;
 
@@ -95,9 +94,7 @@ public:
     /**
      * create a profile of the specified type.
      */
-    KoColorProfile* createProfile(const QString& type, QByteArray rawData);
-
-    void addColorProfileFactory(const QString& type, KoColorProfileFactory* factory);
+    const KoColorProfile* createColorProfile(const QString & colorModelId, const QString & colorDepthId, const QByteArray& rawData);
 
     /**
      * Return a profile by its given name, or 0 if none registered.

@@ -217,7 +217,7 @@ void KisCurveWidget::keyPressEvent(QKeyEvent *e)
 
 void KisCurveWidget::addPointInTheMiddle()
 {
-    QPointF pt(0.5, d->m_curve.value(pt.x()));
+    QPointF pt(0.5, d->m_curve.value(0.5));
 
     if (!d->jumpOverExistingPoints(pt, -1))
         return;

@@ -112,7 +112,7 @@ void KisDatamanagerBenchmark::benchmarkExtent()
     quint8 *p = new quint8[PIXEL_SIZE];
     memset(p, 0, PIXEL_SIZE);
     KisDataManager dm(PIXEL_SIZE, p);
-    quint8 *bytes = new quint8[3 * NO_TILE_EXACT_BOUNDARY_WIDTH * NO_TILE_EXACT_BOUNDARY_HEIGHT];
+    quint8 *bytes = new quint8[PIXEL_SIZE * NO_TILE_EXACT_BOUNDARY_WIDTH * NO_TILE_EXACT_BOUNDARY_HEIGHT];
     memset(bytes, 0, PIXEL_SIZE * NO_TILE_EXACT_BOUNDARY_WIDTH * NO_TILE_EXACT_BOUNDARY_HEIGHT);
     dm.writeBytes(bytes, 0, 0, NO_TILE_EXACT_BOUNDARY_WIDTH, NO_TILE_EXACT_BOUNDARY_HEIGHT);
     QBENCHMARK {

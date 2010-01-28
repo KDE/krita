@@ -162,6 +162,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
     Exiv2::XmpData xmpData_;
     Exiv2::XmpParser::decode(xmpData_, xmpPacket_);
     QMap< const KisMetaData::Schema*, QMap<QString, QMap<QString, KisMetaData::Value> > > structures;
+    QMap< const KisMetaData::Schema*, QMap<QString, QVector< QMap<QString, KisMetaData::Value> > > > arraysOfStructures;
     for (Exiv2::XmpData::iterator it = xmpData_.begin(); it != xmpData_.end(); ++it) {
         dbgFile << it->key().c_str();
         Exiv2::XmpKey key(it->key());
@@ -181,20 +182,41 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             // Decrypt key
             QString structName = "";
             QString tagName = key.tagName().c_str();
+            int arrayIndex;
             const KisMetaData::TypeInfo* typeInfo = 0;
             bool isStructureEntry = false;
+            bool isStructureInArrayEntry = false;
             if (tagName.contains("/")) {
                 QRegExp regexp("([A-Za-z]\\w+)/([A-Za-z]\\w+):([A-Za-z]\\w+)");
                 if (regexp.indexIn(tagName) != -1) {
                     structName = regexp.capturedTexts()[1];
                     tagName =  regexp.capturedTexts()[3];
                     typeInfo = schema->propertyType(structName);
+                    Q_ASSERT(typeInfo == schema->propertyType(structName));
                     if (typeInfo && typeInfo->propertyType() == KisMetaData::TypeInfo::StructureType) {
                         typeInfo = typeInfo->structureSchema()->propertyType(tagName);
                     }
                     isStructureEntry = true;
                 } else {
-                    dbgFile << "Decoding structure name/entry failed: " << tagName;
+                    QRegExp regexp2("([A-Za-z]\\w+)\\[(\\d+)\\]/([A-Za-z]\\w+):([A-Za-z]\\w+)");
+                    if (regexp2.indexIn(tagName) != -1) {
+                        dbgFile << ppVar(tagName);
+                        structName = regexp2.capturedTexts()[1];
+                        arrayIndex = regexp2.capturedTexts()[2].toInt() - 1;
+                        tagName = regexp2.capturedTexts()[4];
+                        dbgFile << ppVar(structName) << ppVar(regexp2.capturedTexts()[3]);
+                        Q_ASSERT(schema->propertyType(structName));
+                        if (schema->propertyType(structName)) {
+                            typeInfo = schema->propertyType(structName)->embeddedPropertyType();
+                            Q_ASSERT(typeInfo);
+                            if (typeInfo && typeInfo->propertyType() == KisMetaData::TypeInfo::StructureType) {
+                                typeInfo = typeInfo->structureSchema()->propertyType(tagName);
+                            }
+                        }
+                        isStructureInArrayEntry = true;
+                    } else {
+                        dbgFile << "Decoding structure name/entry failed: " << tagName;
+                    }
                 }
             } else {
                 typeInfo = schema->propertyType(tagName);
@@ -202,8 +224,10 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             KisMetaData::Value v;
 
             bool ignoreValue = false;
-            if (value->typeId() == Exiv2::xmpBag || value->typeId() == Exiv2::xmpSeq ||
-                    value->typeId() == Exiv2::xmpAlt) {
+            // Compute the value
+            if (value->typeId() == Exiv2::xmpBag
+                    || value->typeId() == Exiv2::xmpSeq
+                    || value->typeId() == Exiv2::xmpAlt) {
                 const KisMetaData::TypeInfo* embeddedTypeInfo = 0;
                 if (typeInfo) {
                     embeddedTypeInfo = typeInfo->embeddedPropertyType();
@@ -265,9 +289,16 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                     }
                 }
             }
+
+            // set the value
             dbgFile << ppVar(tagName);
             if (isStructureEntry) {
                 structures[schema][structName][tagName] = v;
+            } else if (isStructureInArrayEntry) {
+                if (arraysOfStructures[schema][structName].size() <= arrayIndex) {
+                    arraysOfStructures[schema][structName].resize(arrayIndex + 1);
+                }
+                arraysOfStructures[schema][structName][arrayIndex][tagName] = v;
             } else {
                 if (!ignoreValue) {
                     store->addEntry(KisMetaData::Entry(schema, tagName, v));
@@ -284,6 +315,43 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
         for (QMap<QString, QMap<QString, KisMetaData::Value> >::iterator it2 = it.value().begin();
                 it2 != it.value().end(); ++it2) {
             store->addEntry(KisMetaData::Entry(schema, it2.key(), KisMetaData::Value(it2.value())));
+        }
+    }
+    for (QMap< const KisMetaData::Schema*, QMap<QString, QVector< QMap<QString, KisMetaData::Value> > > >::iterator it = arraysOfStructures.begin(); it != arraysOfStructures.end(); ++it) {
+        const KisMetaData::Schema* schema = it.key();
+        for (QMap<QString, QVector<QMap<QString, KisMetaData::Value> > >::iterator it2 = it.value().begin();
+                it2 != it.value().end(); ++it2) {
+            KisMetaData::Value::ValueType type = KisMetaData::Value::OrderedArray;
+            QString entryName = it2.key();
+            if (schema->propertyType(entryName)) {
+                switch (schema->propertyType(entryName)->propertyType()) {
+                case KisMetaData::TypeInfo::OrderedArrayType:
+                    type = KisMetaData::Value::OrderedArray;
+                    break;
+                case KisMetaData::TypeInfo::UnorderedArrayType:
+                    type = KisMetaData::Value::OrderedArray;
+                    break;
+                case KisMetaData::TypeInfo::AlternativeArrayType:
+                    type = KisMetaData::Value::AlternativeArray;
+                    break;
+                default:
+                    type = KisMetaData::Value::Invalid;
+                    break;
+                }
+            } else if (store->containsEntry(schema, entryName)) {
+                KisMetaData::Value value = store->getEntry(schema, entryName).value();
+                if (value.isArray()) {
+                    type = value.type();
+                }
+            }
+            store->removeEntry(schema, entryName);
+            if (type != KisMetaData::Value::Invalid) {
+                QList< KisMetaData::Value > valueList;
+                for (int i = 0; i < it2.value().size(); ++i) {
+                    valueList.append(it2.value()[i]);
+                }
+                store->addEntry(KisMetaData::Entry(schema, entryName, KisMetaData::Value(valueList, type)));
+            }
         }
     }
 

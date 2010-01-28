@@ -34,6 +34,7 @@ private slots:
     void benchmarkReadWriteBytes();
     void benchmarkExtent();
     void benchmarkClear();
+    void benchmarkMemCpy();
 };
 
 #endif

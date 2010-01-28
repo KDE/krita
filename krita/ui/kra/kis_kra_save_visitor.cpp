@@ -182,8 +182,15 @@ bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
     if (layer->paintDevice()->colorSpace()->profile()) {
         const KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
         KisAnnotationSP annotation;
-        if (profile && profile->type() == "icc" && !profile->rawData().isEmpty()) {
-                annotation = new KisAnnotation(ICC, profile->name(), profile->rawData());
+        if (profile) {
+            QByteArray profileRawData = profile->rawData();
+            if (!profileRawData.isEmpty()) {
+                if (profile->type() == "icc") {
+                    annotation = new KisAnnotation(ICC, profile->name(), profile->rawData());
+                } else {
+                    annotation = new KisAnnotation(PROFILE, profile->name(), profile->rawData());
+                }
+            }
         }
 
         if (annotation) {

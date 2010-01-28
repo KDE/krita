@@ -120,8 +120,15 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
     if (image->profile()) {
         const KoColorProfile *profile = image->profile();
         KisAnnotationSP annotation;
-        if (profile && profile->type() == "icc" && !profile->rawData().isEmpty()) {
-                annotation = new  KisAnnotation(ICC, profile->name(), profile->rawData());
+        if (profile) {
+            QByteArray profileRawData = profile->rawData();
+            if (!profileRawData.isEmpty()) {
+                if (profile->type() == "icc") {
+                    annotation = new KisAnnotation(ICC, profile->name(), profile->rawData());
+                } else {
+                    annotation = new KisAnnotation(PROFILE, profile->name(), profile->rawData());
+                }
+            }
         }
 
         if (annotation) {

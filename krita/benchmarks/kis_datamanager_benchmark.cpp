@@ -59,7 +59,7 @@ void KisDatamanagerBenchmark::benchmarkWriteBytes()
         for (int i = 0; i < CYCLES; i++){
             dm.writeBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
         }
-#elif
+#else
         dm.writeBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
 #endif
     }
@@ -96,9 +96,14 @@ void KisDatamanagerBenchmark::benchmarkReadWriteBytes()
     dm.writeBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
 
     QBENCHMARK {
-        dm.readBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+#ifdef CYCLES
+        for (int i = 0; i < 100; i++){
+            dm.readBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+        }
+#else
+            dm.readBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);    
+#endif
     }
-
     delete[] bytes;
 }
 
@@ -148,7 +153,7 @@ void KisDatamanagerBenchmark::benchmarkMemCpy()
         for (int i = 0; i < 100; i++){
             memcpy(dst, src , imgSize);
         }
-#elif
+#else
             memcpy(dst, src , imgSize);
 #endif
     }

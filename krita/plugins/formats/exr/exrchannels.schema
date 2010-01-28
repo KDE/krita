@@ -6,6 +6,6 @@
     </structure>
   </structures>
   <properties>
-    <bag name="channelsmap" type="exrchannels:channel" />
+    <bag name="channelsmap" type="channel" />
   </properties>
 </schema>

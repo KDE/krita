@@ -42,8 +42,10 @@ class Program;
  */
 class PIGMENTCMS_EXPORT KoCtlColorProfile : public KoColorProfile
 {
+    KoCtlColorProfile();
 public:
-    KoCtlColorProfile(QString fileName);
+    static KoCtlColorProfile* fromFile(QString fileName);
+    static KoCtlColorProfile* fromString(QString string);
     KoCtlColorProfile(const KoCtlColorProfile&);
     virtual ~KoCtlColorProfile();
     virtual KoColorProfile* clone() const;
@@ -53,6 +55,8 @@ public:
     virtual bool isSuitableForDisplay() const;
     virtual bool operator==(const KoColorProfile&) const;
     virtual bool load();
+    virtual bool save(const QString &fileName);
+    virtual QByteArray rawData() const;
     /**
      * @return the color model that can be used by this profile
      */

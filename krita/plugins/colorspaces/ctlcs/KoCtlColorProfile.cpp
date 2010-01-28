@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008,2010 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -73,13 +73,34 @@ struct KoCtlColorProfile::Private {
     quint32 colorDepthIDNumber;
     qreal exposure;
     qreal middleGrayScaleFactor;
+    QString profileSource;
+    bool loadFromSource(KoCtlColorProfile* self);
 };
 
-KoCtlColorProfile::KoCtlColorProfile(QString filename) : KoColorProfile(filename), d(new Private)
+KoCtlColorProfile::KoCtlColorProfile() : KoColorProfile(), d(new Private)
 {
     d->module = 0;
     d->middleGrayScaleFactor = 0.0883883;
     d->exposure = pow(2, 2.47393) * d->middleGrayScaleFactor;
+}
+
+KoCtlColorProfile* KoCtlColorProfile::fromFile(QString fileName)
+{
+    KoCtlColorProfile* profile = new KoCtlColorProfile;
+    profile->setFileName(fileName);
+    return profile;
+}
+
+KoCtlColorProfile* KoCtlColorProfile::fromString(QString string)
+{
+    KoCtlColorProfile* profile = new KoCtlColorProfile;
+    profile->d->profileSource = string;
+    if (profile->d->loadFromSource(profile)) {
+        return profile;
+    } else {
+        delete profile;
+        return 0;
+    }
 }
 
 KoCtlColorProfile::KoCtlColorProfile(const KoCtlColorProfile& rhs) : KoColorProfile(rhs), d(new Private(*rhs.d))
@@ -127,11 +148,11 @@ OpenCTL::Program* KoCtlColorProfile::createColorConversionProgram(const KoColorS
     QString dstDepthId = _dstCs->colorDepthId().id();
     foreach(ConversionInfo info, d->conversionInfos) {
         if (info.sourceColorModelID == srcModelId
-                && (info.sourceColorDepthID == srcDepthId ||(info.sourceColorDepthID == "F"
-                        &&(srcDepthId == Float16BitsColorDepthID.id() || srcDepthId == Float32BitsColorDepthID.id())))
+                && (info.sourceColorDepthID == srcDepthId || (info.sourceColorDepthID == "F"
+                        && (srcDepthId == Float16BitsColorDepthID.id() || srcDepthId == Float32BitsColorDepthID.id())))
                 && info.destinationColorModelID == dstModelId
-                &&(info.destinationColorDepthID == dstDepthId ||(info.destinationColorDepthID == "F"
-                        &&(dstDepthId == Float16BitsColorDepthID.id() || dstDepthId == Float32BitsColorDepthID.id())))) {
+                && (info.destinationColorDepthID == dstDepthId || (info.destinationColorDepthID == "F"
+                        && (dstDepthId == Float16BitsColorDepthID.id() || dstDepthId == Float32BitsColorDepthID.id())))) {
             GTLCore::PixelDescription srcPixelDescription = createPixelDescription(_srcCs);
             GTLCore::PixelDescription dstPixelDescription = createPixelDescription(_dstCs);
             return new OpenCTL::Program(info.function.toAscii().data(), d->module, srcPixelDescription, dstPixelDescription);
@@ -262,20 +283,25 @@ void KoCtlColorProfile::decodeConversions(QDomElement& elt)
 
 bool KoCtlColorProfile::load()
 {
-    QDomDocument doc;
     QFile file(fileName());
     if (!file.open(QIODevice::ReadOnly)) {
         dbgPigment << "Can't open file : " << fileName();
         return false;
     }
+    d->profileSource = file.readAll();
+    file.close();
+    return d->loadFromSource(this);
+}
+
+bool KoCtlColorProfile::Private::loadFromSource(KoCtlColorProfile* self)
+{
+    QDomDocument doc;
     QString errorMsg;
     int errorLine;
-    if (!doc.setContent(&file, &errorMsg, &errorLine)) {
-        dbgPigment << "Can't parse file : " << fileName() << " Error at line " << errorLine << " " << errorMsg;
-        file.close();
+    if (!doc.setContent(profileSource, &errorMsg, &errorLine)) {
+        dbgPigment << "Can't parse profile : " << self->fileName() << " Error at line " << errorLine << " " << errorMsg;
         return false;
     }
-    file.close();
     QDomElement docElem = doc.documentElement();
     if (docElem.tagName() != "ctlprofile") {
         dbgPigment << "Not a ctlprofile, root tag was : " << docElem.tagName();
@@ -287,11 +313,11 @@ bool KoCtlColorProfile::load()
         if (!e.isNull()) {
             dbgPigment << e.tagName();
             if (e.tagName() == "info") {
-                setName(e.attribute("name"));
-                d->colorDepthID = KoCtlParser::generateDepthID(e.attribute("depth"), e.attribute("type")).id();
-                d->colorDepthIDNumber = KoUniqueNumberForIdServer::instance()->numberForId(d->colorDepthID);
-                d->colorModelID = e.attribute("colorModel");
-                d->colorModelIDNumber = KoUniqueNumberForIdServer::instance()->numberForId(d->colorModelID);
+                self->setName(e.attribute("name"));
+                colorDepthID = KoCtlParser::generateDepthID(e.attribute("depth"), e.attribute("type")).id();
+                colorDepthIDNumber = KoUniqueNumberForIdServer::instance()->numberForId(colorDepthID);
+                colorModelID = e.attribute("colorModel");
+                colorModelIDNumber = KoUniqueNumberForIdServer::instance()->numberForId(colorModelID);
                 dbgPigment << "colorModel = " << e.attribute("colorModel");;
             } else if (e.tagName() == "program") {
                 QDomNode nCDATA = e.firstChild();
@@ -299,22 +325,39 @@ bool KoCtlColorProfile::load()
                     QMutexLocker lock(ctlMutex);
                     QDomCDATASection CDATA = nCDATA.toCDATASection();
                     dbgPigment << CDATA.data();
-                    d->module = new OpenCTL::Module();
-                    d->module->setSource(name().toAscii().data(), CDATA.data().toAscii().data());
-                    d->module->compile();
+                    module = new OpenCTL::Module();
+                    module->setSource(self->name().toAscii().data(), CDATA.data().toAscii().data());
+                    module->compile();
 #if GTL_CORE_VERSION_MAJOR == 0 && GTL_CORE_VERSION_MINOR == 9 && GTL_CORE_VERSION_REVISION > 12
-                    if (!d->module->isCompiled()) {
-                        dbgKrita << d->module->compilationMessages().toString().c_str();
+                    if (!module->isCompiled()) {
+                        dbgKrita << module->compilationMessages().toString().c_str();
                     }
 #endif
                 }
             } else if (e.tagName() == "transformations") {
-                decodeTransformations(e);
+                self->decodeTransformations(e);
             }
         }
         n = n.nextSibling();
     }
     return true;
+}
+
+bool KoCtlColorProfile::save(const QString &fileName)
+{
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly)) {
+        dbgPigment << "Can't open file : " << fileName;
+        return false;
+    }
+    file.write(d->profileSource.toUtf8());
+    file.close();
+    return true;
+}
+
+QByteArray KoCtlColorProfile::rawData() const
+{
+    return d->profileSource.toUtf8();
 }
 
 QVariant KoCtlColorProfile::property(const QString& _name) const

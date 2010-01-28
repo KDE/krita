@@ -62,7 +62,7 @@ void KoCtlConvolutionOp::convolveColors(const quint8* const* colors, const qreal
     if (totalWeightTransparent == 0) {
         for (int i = 0; i < channelsNb; i++) {
             if ((allChannels && i != (uint)alphaPos)
-                    ||(!allChannels && channelFlags.testBit(i))) {
+                    || (!allChannels && channelFlags.testBit(i))) {
                 m_accumulators[i]->affect(dst, factor, offset);
             }
         }

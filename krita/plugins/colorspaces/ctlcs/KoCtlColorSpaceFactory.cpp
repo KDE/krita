@@ -107,7 +107,7 @@ QString KoCtlColorSpaceFactory::defaultProfile() const
     return m_info->defaultProfile();
 }
 
-KoColorProfile* KoCtlColorSpaceFactory::createColorProfile(const QByteArray& /*rawData*/) const
+KoColorProfile* KoCtlColorSpaceFactory::createColorProfile(const QByteArray& rawData) const
 {
-    return 0;
+    return KoCtlColorProfile::fromString(rawData);
 }

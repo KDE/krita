@@ -180,8 +180,8 @@ bool KoCtlColorSpace::profileIsCompatible(const KoCtlColorSpaceInfo* info, const
     if (!ctlp) return false;
     dbgPlugins << ctlp->colorModel() << ctlp->colorDepth() << info->colorModelId() << info->colorDepthId();
     if (ctlp && ctlp->colorModel() == info->colorModelId().id()
-            &&(ctlp->colorDepth() == info->colorDepthId().id()
-                ||(ctlp->colorDepth() == "F" &&(info->colorDepthId().id() == "F16" || info->colorDepthId().id() == "F32")))) {
+            && (ctlp->colorDepth() == info->colorDepthId().id()
+                || (ctlp->colorDepth() == "F" && (info->colorDepthId().id() == "F16" || info->colorDepthId().id() == "F32")))) {
         return true;
     }
     return false;

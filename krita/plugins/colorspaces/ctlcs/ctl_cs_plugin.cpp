@@ -100,7 +100,7 @@ CTLCSPlugin::CTLCSPlugin(QObject *parent, const QVariantList &)
             KoColorProfile* profile = 0;
             for (QStringList::Iterator it = ctlprofileFilenames.begin(); it != ctlprofileFilenames.end(); ++it) {
                 dbgPlugins << "Load profile : " << *it;
-                profile = new KoCtlColorProfile(*it);
+                profile = KoCtlColorProfile::fromFile(*it);
                 profile->load();
                 if (profile->valid()) {
                     dbgPlugins << "Valid profile : " << profile->name();

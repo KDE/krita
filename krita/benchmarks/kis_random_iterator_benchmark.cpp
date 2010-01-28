@@ -215,5 +215,26 @@ void KisRandomIteratorBenchmark::benchmarkTileByTileWrite()
 }
 
 
+void KisRandomIteratorBenchmark::benchmarkTwoIteratorsNoMemCpy()
+{
+    KoColor c(m_colorSpace);
+    c.fromQColor(QColor(250,120,0));
+    KisPaintDevice dab(m_colorSpace);
+    dab.fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT, c.data());
+    
+    KisRandomAccessor writeIterator = m_device->createRandomAccessor(0,0);
+    KisRandomConstAccessor constReadIterator = dab.createRandomConstAccessor(0,0);
+
+    QBENCHMARK{
+        for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
+            for (int j = 0; j < TEST_IMAGE_WIDTH; j++) {
+                writeIterator.moveTo(j,i);
+                constReadIterator.moveTo(j,i);
+            }
+        }
+    }
+}
+
+
 QTEST_KDEMAIN(KisRandomIteratorBenchmark, GUI)
 #include "kis_random_iterator_benchmark.moc"

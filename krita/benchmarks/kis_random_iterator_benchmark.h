@@ -57,7 +57,7 @@ private slots:
     
     void benchmarkNoMemCpy();
     void benchmarkConstNoMemCpy();
-    
+    void benchmarkTwoIteratorsNoMemCpy();
 };
 
 #endif

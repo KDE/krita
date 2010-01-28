@@ -136,5 +136,25 @@ void KisRectIteratorBenchmark::benchmarkConstNoMemCpy()
 
 
 
+void KisRectIteratorBenchmark::benchmarkTwoIteratorsNoMemCpy()
+{
+    KoColor c(m_colorSpace);
+    c.fromQColor(QColor(250,120,0));
+    KisPaintDevice dab(m_colorSpace);
+    dab.fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT, c.data());
+    
+    KisRectIteratorPixel writeIterator = m_device->createRectIterator(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+    KisRectConstIteratorPixel constReadIterator = dab.createRectConstIterator(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+
+    QBENCHMARK
+    {
+        while (!constReadIterator.isDone()) {
+            ++constReadIterator;
+            ++writeIterator;
+        }
+    }
+}
+
+
 QTEST_KDEMAIN(KisRectIteratorBenchmark, GUI)
 #include "kis_rect_iterator_benchmark.moc"

@@ -30,7 +30,7 @@ public:
     {
         KoShapeRegistry *registry = KoShapeRegistry::instance();
         foreach (const QString &id, registry->keys()) {
-            KoShapeFactory *shapeFactory = registry->value(id);
+            KoShapeFactoryBase *shapeFactory = registry->value(id);
             shapeFactory->newDocumentResourceManager(resourceManager);
         }
     }

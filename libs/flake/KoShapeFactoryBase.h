@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KO_SHAPE_FACTORY_
-#define _KO_SHAPE_FACTORY_
+#ifndef KOSHAPEFACTORYBASE_H
+#define KOSHAPEFACTORYBASE_H
 
 #include <QStringList>
 #include <QString>
@@ -57,7 +57,7 @@ struct FLAKE_EXPORT KoShapeTemplate {
     QString toolTip;    ///< The tooltip text for the template
     QString icon;       ///< Icon name
     /**
-     * The properties which, when passed to the KoShapeFactory::createShape() method
+     * The properties which, when passed to the KoShapeFactoryBase::createShape() method
      * result in the shape this template represents.
      */
     KoProperties *properties;
@@ -71,10 +71,10 @@ struct FLAKE_EXPORT KoShapeTemplate {
  *
  * An example usage would be:
 @code
-class MyShapeFactory : public KoShapeFactory {
+class MyShapeFactory : public KoShapeFactoryBase {
 public:
     MyShapeFactory(QObject *parent)
-        : KoShapeFactory(parent, "MyShape", i18n("My Shape")) {
+        : KoShapeFactoryBase(parent, "MyShape", i18n("My Shape")) {
         setToolTip(i18n("A nice shape"));
     }
     ~MyShapeFactory() {}
@@ -85,7 +85,7 @@ public:
  * After you created the factory you should create a plugin that can announce the factory to the
  * KoShapeRegistry.  See the KoPluginLoader as well.
  */
-class FLAKE_EXPORT KoShapeFactory : public QObject
+class FLAKE_EXPORT KoShapeFactoryBase : public QObject
 {
     Q_OBJECT
 public:
@@ -97,8 +97,8 @@ public:
      *   example for use by the KoTool::activateTemporary.
      * @param name the user visible name of the shape this factory creates.
      */
-    KoShapeFactory(QObject *parent, const QString &id, const QString &name);
-    virtual ~KoShapeFactory();
+    KoShapeFactoryBase(QObject *parent, const QString &id, const QString &name);
+    virtual ~KoShapeFactoryBase();
 
     /**
      * Create a list of option panels to show on creating a new shape.
@@ -288,4 +288,4 @@ private:
     Private * const d;
 };
 
-#endif // _KO_SHAPE_FACTORY_
+#endif

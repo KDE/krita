@@ -23,7 +23,7 @@
 #include <klocale.h>
 
 DivineProportionShapeFactory::DivineProportionShapeFactory(QObject *parent)
-    : KoShapeFactory(parent, DivineProportionShape_SHAPEID, i18n("DivineProportion"))
+    : KoShapeFactoryBase(parent, DivineProportionShape_SHAPEID, i18n("DivineProportion"))
 {
     setToolTip(i18n("A Shape That Shows DivineProportion"));
     setIcon( "divine-shape" );

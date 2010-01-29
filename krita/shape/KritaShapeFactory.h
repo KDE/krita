@@ -21,7 +21,7 @@
 
 #include <QVariant>
 
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 class KoShape;
 
@@ -36,7 +36,7 @@ public:
 
 };
 
-class KritaShapeFactory : public KoShapeFactory
+class KritaShapeFactory : public KoShapeFactoryBase
 {
     Q_OBJECT
 public:

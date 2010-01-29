@@ -20,12 +20,12 @@
 #ifndef VIDEOSHAPEFACTORY_H
 #define VIDEOSHAPEFACTORY_H
 
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 class KoShape;
 class VideoShapeConfigWidget;
 
-class VideoShapeFactory : public KoShapeFactory
+class VideoShapeFactory : public KoShapeFactoryBase
 {
 public:
     VideoShapeFactory(QObject *parent);

@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <KoShapeRegistry.h>
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 #include "PathShapesPlugin.h"
 #include "star/StarShapeFactory.h"

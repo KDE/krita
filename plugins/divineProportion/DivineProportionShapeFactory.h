@@ -20,11 +20,11 @@
 #ifndef SHAPEFACTORY_H
 #define SHAPEFACTORY_H
 
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 class KoShape;
 
-class DivineProportionShapeFactory : public KoShapeFactory {
+class DivineProportionShapeFactory : public KoShapeFactoryBase {
     Q_OBJECT
 
 public:

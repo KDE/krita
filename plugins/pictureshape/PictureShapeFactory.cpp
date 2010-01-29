@@ -31,7 +31,7 @@
 #include <kdebug.h>
 
 PictureShapeFactory::PictureShapeFactory(QObject *parent)
-    : KoShapeFactory(parent, PICTURESHAPEID, i18n("Image"))
+    : KoShapeFactoryBase(parent, PICTURESHAPEID, i18n("Image"))
 {
     setToolTip(i18n("Image shape that can display jpg, png etc."));
     setIcon("x-shape-image");

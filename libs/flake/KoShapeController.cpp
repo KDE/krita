@@ -30,7 +30,7 @@
 #include "KoCanvasBase.h"
 #include "KoShapeConfigWidgetBase.h"
 #include "KoShapeConfigFactoryBase.h"
-#include "KoShapeFactory.h"
+#include "KoShapeFactoryBase.h"
 #include "KoShape.h"
 
 #include <kpagedialog.h>
@@ -52,7 +52,7 @@ public:
         Q_ASSERT(canvas->shapeManager());
 
         if (showDialog) {
-            KoShapeFactory *factory = KoShapeRegistry::instance()->value(shape->shapeId());
+            KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(shape->shapeId());
             Q_ASSERT(factory);
             int z = 0;
             foreach(KoShape *sh, canvas->shapeManager()->shapes())

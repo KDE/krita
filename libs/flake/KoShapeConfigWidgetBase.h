@@ -35,9 +35,9 @@ class QUndoCommand;
 /**
  * Base widget for shape-configuration panels.
  * This is an interface type class used by classes that intend to provide
- * a GUI for configuring newly created shapes as created by a KoShapeFactory.
+ * a GUI for configuring newly created shapes as created by a KoShapeFactoryBase.
  *
- * Every time after a shape is created the KoShapeFactory for that shape-type
+ * Every time after a shape is created the KoShapeFactoryBase for that shape-type
  * will be queried for all the config widgets; both factory specific as well as
  * those set by the hosting application.
  * A dialog will be shown with all those panels, each extending this class.

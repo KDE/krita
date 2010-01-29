@@ -25,12 +25,12 @@
 
 #include <KoGenericRegistry.h>
 #include <KoXmlReader.h>
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 #include "flake_export.h"
 
 class KoShape;
-class KoShapeFactory;
+class KoShapeFactoryBase;
 class KoShapeLoadingContext;
 
 
@@ -39,7 +39,7 @@ class KoShapeLoadingContext;
  * or rather, of the factories that applications can use to create flake
  * shape objects.
  */
-class FLAKE_EXPORT KoShapeRegistry : public QObject,  public KoGenericRegistry<KoShapeFactory*>
+class FLAKE_EXPORT KoShapeRegistry : public QObject,  public KoGenericRegistry<KoShapeFactoryBase*>
 {
     Q_OBJECT
 public:
@@ -57,7 +57,7 @@ public:
      *
      * @param factory The factory of the shape
      */
-    void addFactory(KoShapeFactory *factory);
+    void addFactory(KoShapeFactoryBase *factory);
 
     /**
      * Use the element to find out which flake plugin can load it, and

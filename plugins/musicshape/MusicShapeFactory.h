@@ -20,7 +20,7 @@
 #define MUSIC_SHAPE_FACTORY
 
 
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 class KoShape;
 
@@ -35,7 +35,7 @@ public:
 
 };
 
-class MusicShapeFactory : public KoShapeFactory
+class MusicShapeFactory : public KoShapeFactoryBase
 {
 public:
     MusicShapeFactory( QObject* parent );

@@ -26,7 +26,7 @@
 #include "KoShapeManager.h"
 #include "KoCanvasBase.h"
 #include "KoSelection.h"
-#include "KoShapeFactory.h"
+#include "KoShapeFactoryBase.h"
 #include "KoShapeController.h"
 
 #include <QPainter>
@@ -37,7 +37,7 @@ KoCreateShapeStrategy::KoCreateShapeStrategy(KoCreateShapesTool *tool, const QPo
         : KoShapeRubberSelectStrategy(tool, clicked, tool->canvas()->snapToGrid())
 {
     KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(d_ptr->tool);
-    KoShapeFactory *factory = KoShapeRegistry::instance()->value(parent->shapeId());
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(parent->shapeId());
     if (factory) {
         const KoProperties *props = parent->shapeProperties();
         KoShape *shape;
@@ -57,7 +57,7 @@ QUndoCommand* KoCreateShapeStrategy::createCommand()
 {
     Q_D(KoShapeRubberSelectStrategy);
     KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(d_ptr->tool);
-    KoShapeFactory *factory = KoShapeRegistry::instance()->value(parent->shapeId());
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(parent->shapeId());
     if (! factory) {
         kWarning(30006) << "Application requested a shape that is not registered" << parent->shapeId();
         return 0;

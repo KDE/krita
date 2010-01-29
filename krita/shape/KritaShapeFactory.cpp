@@ -41,7 +41,7 @@ KritaShapePlugin::KritaShapePlugin(QObject * parent,  const QVariantList &)
 
 
 KritaShapeFactory::KritaShapeFactory(QObject* parent)
-        : KoShapeFactory(parent, KritaShapeId, i18n("KritaShape Shape"))
+        : KoShapeFactoryBase(parent, KritaShapeId, i18n("KritaShape Shape"))
 {
     setToolTip(i18n("A color managed, multi-layer raster image"));
     setIcon("kritashape");

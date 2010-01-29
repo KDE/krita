@@ -20,13 +20,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoShapeFactory.h"
+#include "KoShapeFactoryBase.h"
 #include "KoShape.h"
 #include <KoProperties.h>
 
 #include <kdebug.h>
 
-class KoShapeFactory::Private
+class KoShapeFactoryBase::Private
 {
 public:
     Private(const QString &i, const QString &n)
@@ -57,53 +57,53 @@ public:
 };
 
 
-KoShapeFactory::KoShapeFactory(QObject *parent, const QString &id, const QString &name)
+KoShapeFactoryBase::KoShapeFactoryBase(QObject *parent, const QString &id, const QString &name)
         : QObject(parent),
         d(new Private(id, name))
 {
 }
 
-KoShapeFactory::~KoShapeFactory()
+KoShapeFactoryBase::~KoShapeFactoryBase()
 {
     delete d;
 }
 
-QString KoShapeFactory::toolTip() const
+QString KoShapeFactoryBase::toolTip() const
 {
     return d->tooltip;
 }
 
-QString KoShapeFactory::icon() const
+QString KoShapeFactoryBase::icon() const
 {
     return d->iconName;
 }
 
-QString KoShapeFactory::name() const
+QString KoShapeFactoryBase::name() const
 {
     return d->name;
 }
 
-QString KoShapeFactory::family() const
+QString KoShapeFactoryBase::family() const
 {
     return d->family;
 }
 
-int KoShapeFactory::loadingPriority() const
+int KoShapeFactoryBase::loadingPriority() const
 {
     return d->loadingPriority;
 }
 
-QStringList KoShapeFactory::odfElementNames() const
+QStringList KoShapeFactoryBase::odfElementNames() const
 {
     return d->odfElementNames;
 }
 
-QString KoShapeFactory::odfNameSpace() const
+QString KoShapeFactoryBase::odfNameSpace() const
 {
     return d->odfNameSpace;
 }
 
-bool KoShapeFactory::supports(const KoXmlElement & e) const
+bool KoShapeFactoryBase::supports(const KoXmlElement & e) const
 {
     Q_UNUSED(e);
     // XXX: Remove this and replace with a pure virtual once
@@ -111,77 +111,77 @@ bool KoShapeFactory::supports(const KoXmlElement & e) const
     return false;
 }
 
-void KoShapeFactory::addTemplate(const KoShapeTemplate &params)
+void KoShapeFactoryBase::addTemplate(const KoShapeTemplate &params)
 {
     KoShapeTemplate tmplate = params;
     tmplate.id = d->id;
     d->templates.append(tmplate);
 }
 
-void KoShapeFactory::setToolTip(const QString & tooltip)
+void KoShapeFactoryBase::setToolTip(const QString & tooltip)
 {
     d->tooltip = tooltip;
 }
 
-void KoShapeFactory::setIcon(const QString & iconName)
+void KoShapeFactoryBase::setIcon(const QString & iconName)
 {
     d->iconName = iconName;
 }
 
-void KoShapeFactory::setFamily(const QString & family)
+void KoShapeFactoryBase::setFamily(const QString & family)
 {
     d->family = family;
 }
 
-QString KoShapeFactory::id() const
+QString KoShapeFactoryBase::id() const
 {
     return d->id;
 }
 
-void KoShapeFactory::setOptionPanels(const QList<KoShapeConfigFactoryBase*> &panelFactories)
+void KoShapeFactoryBase::setOptionPanels(const QList<KoShapeConfigFactoryBase*> &panelFactories)
 {
     d->configPanels = panelFactories;
 }
 
-QList<KoShapeConfigFactoryBase*> KoShapeFactory::panelFactories()
+QList<KoShapeConfigFactoryBase*> KoShapeFactoryBase::panelFactories()
 {
     return d->configPanels;
 }
 
-QList<KoShapeTemplate> KoShapeFactory::templates() const
+QList<KoShapeTemplate> KoShapeFactoryBase::templates() const
 {
     return d->templates;
 }
 
-void KoShapeFactory::setLoadingPriority(int priority)
+void KoShapeFactoryBase::setLoadingPriority(int priority)
 {
     d->loadingPriority = priority;
 }
 
-void KoShapeFactory::setOdfElementNames(const QString & nameSpace, const QStringList & names)
+void KoShapeFactoryBase::setOdfElementNames(const QString & nameSpace, const QStringList & names)
 {
     d->odfNameSpace = nameSpace;
     d->odfElementNames = names;
 }
 
-bool KoShapeFactory::hidden() const
+bool KoShapeFactoryBase::hidden() const
 {
     return d->hidden;
 }
 
-void KoShapeFactory::setHidden(bool hidden)
+void KoShapeFactoryBase::setHidden(bool hidden)
 {
     d->hidden = hidden;
 }
 
-void KoShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager *manager)
 {
     Q_UNUSED(manager);
 }
 
-KoShape *KoShapeFactory::createShape(const KoProperties*, KoResourceManager *documentResources) const
+KoShape *KoShapeFactoryBase::createShape(const KoProperties*, KoResourceManager *documentResources) const
 {
     return createDefaultShape(documentResources);
 }
 
-#include <KoShapeFactory.moc>
+#include <KoShapeFactoryBase.moc>

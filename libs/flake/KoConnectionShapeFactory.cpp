@@ -30,7 +30,7 @@
 #include <KoLineBorder.h>
 
 KoConnectionShapeFactory::KoConnectionShapeFactory(QObject* parent)
-        : KoShapeFactory(parent, KOCONNECTIONSHAPEID, i18n("Tie"))
+        : KoShapeFactoryBase(parent, KOCONNECTIONSHAPEID, i18n("Tie"))
 {
     setToolTip(i18n("A connection between two other shapes"));
     setIcon("x-shape-connection");

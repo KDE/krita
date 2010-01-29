@@ -33,7 +33,7 @@
 #include <KoShapeController.h>
 #include <KoPathShape.h>
 #include <KoShapeRegistry.h>
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 

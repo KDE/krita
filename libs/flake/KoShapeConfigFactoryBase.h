@@ -32,7 +32,7 @@ class KoShapeConfigWidgetBase;
  * The KoCreateShapesTool is able to show a number of configuration panels after
  * it created a shape via user interaction.  Each shape configuration panel type
  * has its own factory, which will inherit from this class.
- * @see KoShapeFactory::panelFactories()
+ * @see KoShapeFactoryBase::panelFactories()
  * @see KoShapeConfigWidgetBase
  */
 class FLAKE_EXPORT KoShapeConfigFactoryBase
@@ -63,7 +63,7 @@ public:
     /**
      * Return true if the createConfigWidget() should be called at all for a shape of
      * the specified type.
-     * @param id an ID like the KoShapeFactory::shapeId()
+     * @param id an ID like the KoShapeFactoryBase::shapeId()
      */
     virtual bool showForShapeId(const QString &id) const {
         Q_UNUSED(id); return true;

@@ -22,7 +22,7 @@
 #include <KoPathShape.h>
 #include <KoShapeConfigWidgetBase.h>
 #include <KoShapeManager.h>
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -117,7 +117,7 @@ void ShapePropertiesDocker::addWidgetForShape( KoShape * shape )
             if( paramShape && ! paramShape->isParametricShape() )
                 shapeId = shape->shapeId();
         }
-        KoShapeFactory *factory = KoShapeRegistry::instance()->value( shapeId );
+        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value( shapeId );
         if( ! factory )
             return;
         QList<KoShapeConfigWidgetBase*> panels = factory->createShapeOptionPanels();

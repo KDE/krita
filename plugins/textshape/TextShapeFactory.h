@@ -21,12 +21,12 @@
 #ifndef TEXTSHAPEFACTORY_H
 #define TEXTSHAPEFACTORY_H
 
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 class KoShape;
 class KoInlineTextObjectManager;
 
-class TextShapeFactory : public KoShapeFactory
+class TextShapeFactory : public KoShapeFactoryBase
 {
     Q_OBJECT
 

@@ -21,12 +21,12 @@
 
 #include "IconShape.h"
 
-class KoShapeFactory;
+class KoShapeFactoryBase;
 
 class GroupShape : public IconShape
 {
 public:
-    GroupShape(KoShapeFactory *shapeFactory);
+    GroupShape(KoShapeFactoryBase *shapeFactory);
 
     virtual void visit(KoCreateShapesTool *tool);
     virtual void save(QDomElement &root);
@@ -35,7 +35,7 @@ public:
     virtual QString groupId() const;
 
 private:
-    KoShapeFactory *m_shapeFactory;
+    KoShapeFactoryBase *m_shapeFactory;
 };
 
 #endif

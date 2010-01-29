@@ -22,12 +22,12 @@
 #define KOPATHSHAPEFACTORY_H
 
 #include "KoShape.h"
-#include "KoShapeFactory.h"
+#include "KoShapeFactoryBase.h"
 
 #include "KoXmlReader.h"
 
 /// Factory for path shapes.
-class FLAKE_TEST_EXPORT KoPathShapeFactory : public KoShapeFactory
+class FLAKE_TEST_EXPORT KoPathShapeFactory : public KoShapeFactoryBase
 {
 public:
     /// constructor

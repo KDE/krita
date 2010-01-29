@@ -147,7 +147,7 @@ public:
         <td>/always</td>
         <td>An activation shape id ending with '/always' will make the tool always visible and enabled.</td></tr>
      </table>
-     * @see KoShapeFactory::shapeId()
+     * @see KoShapeFactoryBase::shapeId()
      * @see setActivationShapeId()
      * @return the id of a shape, or an empty string for all shapes.
      */
@@ -222,7 +222,7 @@ protected:
     void setPriority(int newPriority);
     /**
      * Set the id of the shape we can process.
-     * This is the Id, as passed to the constructor of a KoShapeFactory, that the tool
+     * This is the Id, as passed to the constructor of a KoShapeFactoryBase, that the tool
      * we create is associated with. This means that if a KoTextShape is selected, then
      * all tools that have its id set here will be added to the dynamic part of the toolbox.
      * @param activationShapeId the Id of the shape

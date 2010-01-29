@@ -96,7 +96,7 @@ void KisToolSelectRectangular::LokalTool::finishRect(const QRectF& rect)
         QRectF documentRect = convertToPt(rect);
 
         KoShape* shape;
-        KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("RectangleShape");
+        KoShapeFactoryBase *rectFactory = KoShapeRegistry::instance()->value("RectangleShape");
         if (rectFactory) {
             shape = rectFactory->createDefaultShape();
             shape->setSize(documentRect.size());

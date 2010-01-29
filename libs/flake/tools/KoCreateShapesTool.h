@@ -53,7 +53,7 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter);
 
     /**
-     * Each shape-type has an Id; as found in KoShapeFactory::id().id(), to choose which
+     * Each shape-type has an Id; as found in KoShapeFactoryBase::id().id(), to choose which
      * shape this controller should actually create; set the id before the user starts to
      * create the new shape.
      * @param id the SHAPEID of the to be generated shape

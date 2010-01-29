@@ -52,7 +52,7 @@
  * to allow themselves to be manipulated by the KoTool s. The content of such an
  * object is independent and based on the model of the data this object represents.
  *
- * If you want to be a supplier of shape objects; create a library with a KoShapeFactory
+ * If you want to be a supplier of shape objects; create a library with a KoShapeFactoryBase
  * class and install a .desktop service file with the following content:
  *
 @verbatim

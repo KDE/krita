@@ -20,12 +20,12 @@
 #ifndef KOENHANCEDPATHSHAPEFACTORY_H
 #define KOENHANCEDPATHSHAPEFACTORY_H
 
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 class KoShape;
 
 /// Factory for path shapes
-class EnhancedPathShapeFactory : public KoShapeFactory
+class EnhancedPathShapeFactory : public KoShapeFactoryBase
 {
     Q_OBJECT
 

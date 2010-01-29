@@ -31,7 +31,7 @@
 #include <kdebug.h>
 
 VideoShapeFactory::VideoShapeFactory(QObject *parent)
-    : KoShapeFactory(parent, VIDEOSHAPEID, i18n("Video"))
+    : KoShapeFactoryBase(parent, VIDEOSHAPEID, i18n("Video"))
 {
     setToolTip(i18n("Video, embedded or fullscreen"));
     setIcon("x-shape-video");

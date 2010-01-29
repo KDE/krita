@@ -20,12 +20,12 @@
 #ifndef KOSPIRALSHAPEFACTORY_H
 #define KOSPIRALSHAPEFACTORY_H
 
-#include "KoShapeFactory.h"
+#include "KoShapeFactoryBase.h"
 
 class KoShape;
 
 /// Factory for spiral shapes
-class SpiralShapeFactory : public KoShapeFactory
+class SpiralShapeFactory : public KoShapeFactoryBase
 {
 public:
     /// constructor

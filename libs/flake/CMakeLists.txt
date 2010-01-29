@@ -44,7 +44,7 @@ set(flake_SRCS
     KoShapeRegistry.cpp
     KoToolFactory.cpp
     KoPathShapeFactory.cpp
-    KoShapeFactory.cpp
+    KoShapeFactoryBase.cpp
     KoShapeUserData.cpp
     KoPointGroup.cpp
     KoParameterShape.cpp
@@ -239,7 +239,7 @@ install(
     KoChildrenData.h
     KoShapeController.h
     KoShapeControllerBase.h
-    KoShapeFactory.h
+    KoShapeFactoryBase.h
     KoShapeGroup.h
     KoShapeLayer.h
     KoShapePainter.h

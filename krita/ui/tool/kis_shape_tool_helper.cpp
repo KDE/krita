@@ -25,7 +25,7 @@
 KoShape* KisShapeToolHelper::createRectangleShape(const QRectF& rect)
 {
     KoShape* shape;
-    KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("RectangleShape");
+    KoShapeFactoryBase *rectFactory = KoShapeRegistry::instance()->value("RectangleShape");
     if (rectFactory) {
         shape = rectFactory->createDefaultShape();
         shape->setSize(rect.size());
@@ -48,7 +48,7 @@ KoShape* KisShapeToolHelper::createRectangleShape(const QRectF& rect)
 KoShape* KisShapeToolHelper::createEllipseShape(const QRectF& rect)
 {
     KoShape* shape;
-    KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("EllipseShape");
+    KoShapeFactoryBase *rectFactory = KoShapeRegistry::instance()->value("EllipseShape");
     if (rectFactory) {
         shape = rectFactory->createDefaultShape();
         shape->setSize(rect.size());

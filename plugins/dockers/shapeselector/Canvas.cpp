@@ -32,7 +32,7 @@
 #include <KoShapeRegistry.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
-#include <KoShapeFactory.h> // for the mimetype defines etc
+#include <KoShapeFactoryBase.h> // for the mimetype defines etc
 
 #include <QApplication>
 #include <QToolTip>

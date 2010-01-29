@@ -20,11 +20,11 @@
 #ifndef PICTURESHAPEFACTORY_H
 #define PICTURESHAPEFACTORY_H
 
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 class KoShape;
 
-class PictureShapeFactory : public KoShapeFactory
+class PictureShapeFactory : public KoShapeFactoryBase
 {
 public:
     PictureShapeFactory(QObject *parent);

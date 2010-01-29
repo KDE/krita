@@ -2390,7 +2390,7 @@ by KisSelection to update it's projection.
         </UML:Operation>
        </UML:Classifier.feature>
       </UML:Class>
-      <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="C2g8muGQV3iq" isRoot="false" isAbstract="false" name="KoShapeFactory" />
+      <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="C2g8muGQV3iq" isRoot="false" isAbstract="false" name="KoShapeFactoryBase" />
       <UML:Generalization isSpecification="false" child="X35qhkisJS2i" visibility="public" namespace="Logical View" xmi.id="aFHb6BndCsRu" parent="C2g8muGQV3iq" discriminator="" name="" />
       <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="3oHiUfJ80Tv2" isRoot="false" isAbstract="false" name="KoShape" />
       <UML:Generalization isSpecification="false" child="AseGHQAA0TFB" visibility="public" namespace="Logical View" xmi.id="lYmf8ikGY0v2" parent="Aa7JHUMqlF0g" discriminator="" name="" />

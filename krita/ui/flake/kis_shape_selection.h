@@ -19,7 +19,7 @@
 #define KIS_SHAPE_SELECTION_H
 
 #include <KoShapeLayer.h>
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 #include <kis_selection_component.h>
 #include <kis_types.h>
@@ -82,7 +82,7 @@ private:
 };
 
 
-class KRITAUI_EXPORT KisShapeSelectionFactory : public KoShapeFactory
+class KRITAUI_EXPORT KisShapeSelectionFactory : public KoShapeFactoryBase
 {
     Q_OBJECT
 public:

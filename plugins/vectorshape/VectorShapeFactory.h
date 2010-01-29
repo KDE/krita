@@ -23,12 +23,12 @@
 #define VECTORSHAPE_FACTORY_H
 
 // KOffice
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 
 class KoShape;
 
-class VectorShapeFactory : public KoShapeFactory {
+class VectorShapeFactory : public KoShapeFactoryBase {
     Q_OBJECT
 
 public:

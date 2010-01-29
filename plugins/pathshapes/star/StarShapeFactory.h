@@ -20,12 +20,12 @@
 #ifndef KOSTARHAPEFACTORY_H
 #define KOSTARHAPEFACTORY_H
 
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 class KoShape;
 
 /// Factory for path shapes
-class StarShapeFactory : public KoShapeFactory
+class StarShapeFactory : public KoShapeFactoryBase
 {
     Q_OBJECT
 

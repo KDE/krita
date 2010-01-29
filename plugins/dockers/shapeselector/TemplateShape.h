@@ -21,7 +21,7 @@
 
 #include "IconShape.h"
 
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 class TemplateShape : public IconShape
 {

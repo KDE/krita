@@ -22,11 +22,11 @@
 #ifndef CONNECTIONSHAPEFACTORY_H
 #define CONNECTIONSHAPEFACTORY_H
 
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 class KoShape;
 
-class KoConnectionShapeFactory : public KoShapeFactory
+class KoConnectionShapeFactory : public KoShapeFactoryBase
 {
 public:
     KoConnectionShapeFactory(QObject *parent);

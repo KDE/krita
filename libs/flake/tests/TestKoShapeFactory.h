@@ -16,8 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef TestKoShapeFactory_H
-#define TestKoShapeFactory_H
+#ifndef TestKoShapeFactoryBase_H
+#define TestKoShapeFactoryBase_H
 
 #include <QtTest/QtTest>
 

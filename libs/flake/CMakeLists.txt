@@ -20,6 +20,7 @@ set(flake_SRCS
     KoCopyController.cpp
     KoDockFactoryBase.cpp
     KoDockRegistry.cpp
+    KoDataCenterBase.cpp
     KoInsets.cpp
     KoPasteController.cpp
     KoGuidesData.cpp

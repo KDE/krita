@@ -40,8 +40,8 @@ class KoXmlWriter;
 class FLAKE_EXPORT KoDataCenterBase
 {
 public:
-    KoDataCenterBase() { }
-    virtual ~KoDataCenterBase() { }
+    KoDataCenterBase();
+    virtual ~KoDataCenterBase();
 
     /**
      * Load any remaining binary blobs needed

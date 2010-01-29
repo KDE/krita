@@ -32,6 +32,7 @@
 #include "KoDockWidgetTitleBar.h"
 #include "KoPrintJob.h"
 #include "KoDocumentEntry.h"
+#include "KoDockerManager.h"
 
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
@@ -71,8 +72,6 @@
 #include <QtGui/QPrintPreviewDialog>
 
 #include "kofficeversion.h"
-
-class KoDockerManager : public QObject { }; // little hack to be able to use this class as a qobject
 
 class KoPartManager : public KParts::PartManager
 {
@@ -1883,8 +1882,7 @@ void KoMainWindow::setDockerManager(KoDockerManager *dm)
 {
     d->dockerManager = dm;
     if (dm) {
-        QObject *manager = static_cast<QObject*> (dm);
-        manager->setParent(this); // make sure that the dockerManager is deleted by us.
+        dm->setParent(this); // make sure that the dockerManager is deleted by us.
         connect(this, SIGNAL(restoringDone()), d->dockerManager, SLOT(removeUnusedOptionWidgets()));
     }
 }

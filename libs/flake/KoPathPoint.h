@@ -55,13 +55,13 @@ public:
     Q_DECLARE_FLAGS(PointProperties, PointProperty)
 
     /// the type for identifying part of a KoPathPoint
-    enum KoPointType {
+    enum PointType {
         Node = 1,          ///< the node point
         ControlPoint1 = 2, ///< the first control point
         ControlPoint2 = 4,  ///< the second control point
         All = 7
     };
-    Q_DECLARE_FLAGS(KoPointTypes, KoPointType)
+    Q_DECLARE_FLAGS(PointTypes, PointType)
 
     /// Default constructor
     KoPathPoint();
@@ -213,7 +213,7 @@ public:
      * @param active If true only the given active points are painted
      *               If false all given points are used.
      */
-    void paint(QPainter &painter, int handleRadius, KoPointTypes types, bool active = true);
+    void paint(QPainter &painter, int handleRadius, PointTypes types, bool active = true);
 
     /**
      * @brief Sets the parent path shape.
@@ -283,6 +283,6 @@ private:
 //   typedef QPair<KoSubpath*, int> KoPointPosition;
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoPathPoint::PointProperties)
-Q_DECLARE_OPERATORS_FOR_FLAGS(KoPathPoint::KoPointTypes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoPathPoint::PointTypes)
 
 #endif

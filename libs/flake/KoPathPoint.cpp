@@ -250,7 +250,7 @@ void KoPathPoint::map(const QMatrix &matrix, bool mapGroup)
         d->shape->notifyChanged();
 }
 
-void KoPathPoint::paint(QPainter &painter, int handleRadius, KoPointTypes types, bool active)
+void KoPathPoint::paint(QPainter &painter, int handleRadius, PointTypes types, bool active)
 {
     QRectF handle(-handleRadius, -handleRadius, 2*handleRadius, 2*handleRadius);
 

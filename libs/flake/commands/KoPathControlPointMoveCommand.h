@@ -40,7 +40,7 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoPathControlPointMoveCommand(const KoPathPointData &pointData, const QPointF &offset,
-            KoPathPoint::KoPointType pointType, QUndoCommand *parent = 0);
+            KoPathPoint::PointType pointType, QUndoCommand *parent = 0);
     /// redo the command
     void redo();
     /// revert the actions done in redo
@@ -49,7 +49,7 @@ private:
     KoPathPointData m_pointData;
     // the offset in shape coordinates
     QPointF m_offset;
-    KoPathPoint::KoPointType m_pointType;
+    KoPathPoint::PointType m_pointType;
 };
 
 #endif // KOPATHCONTROLPOINTMOVECOMMAND_H

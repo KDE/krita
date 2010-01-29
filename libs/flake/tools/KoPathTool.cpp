@@ -535,7 +535,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
             if (! points.empty()) {
                 // find the nearest control point from all points within the roi
                 KoPathPoint * bestPoint = 0;
-                KoPathPoint::KoPointType bestPointType = KoPathPoint::Node;
+                KoPathPoint::PointType bestPointType = KoPathPoint::Node;
                 qreal minDistance = HUGE_VAL;
                 foreach(KoPathPoint *p, points) {
                     // the node point must be hit if the point is not selected yet

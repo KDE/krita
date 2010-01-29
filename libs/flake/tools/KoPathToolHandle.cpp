@@ -46,7 +46,7 @@ KoPathToolHandle::~KoPathToolHandle()
 {
 }
 
-PointHandle::PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::KoPointType activePointType)
+PointHandle::PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::PointType activePointType)
         : KoPathToolHandle(tool)
         , m_activePoint(activePoint)
         , m_activePointType(activePointType)
@@ -61,7 +61,7 @@ void PointHandle::paint(QPainter &painter, const KoViewConverter &converter)
 
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
 
-    KoPathPoint::KoPointType type = KoPathPoint::Node;
+    KoPathPoint::PointType type = KoPathPoint::Node;
     if (selection && selection->contains(m_activePoint))
         type = KoPathPoint::All;
     int handleRadius = m_tool->canvas()->resourceManager()->handleRadius();
@@ -141,7 +141,7 @@ KoPathPoint * PointHandle::activePoint() const
     return m_activePoint;
 }
 
-KoPathPoint::KoPointType PointHandle::activePointType() const
+KoPathPoint::PointType PointHandle::activePointType() const
 {
     return m_activePointType;
 }

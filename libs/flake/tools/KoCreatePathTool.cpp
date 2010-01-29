@@ -158,7 +158,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
         const bool firstPoint = (m_firstPoint == m_activePoint);
         if (m_pointIsDragged || firstPoint) {
             const bool onlyPaintActivePoints = false;
-            KoPathPoint::KoPointTypes paintFlags = KoPathPoint::ControlPoint2;
+            KoPathPoint::PointTypes paintFlags = KoPathPoint::ControlPoint2;
             if (m_activePoint->activeControlPoint1())
                 paintFlags |= KoPathPoint::ControlPoint1;
             m_activePoint->paint(painter, m_handleRadius, paintFlags, onlyPaintActivePoints);

@@ -50,16 +50,16 @@ protected:
 class PointHandle : public KoPathToolHandle
 {
 public:
-    PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::KoPointType activePointType);
+    PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::PointType activePointType);
     void paint(QPainter &painter, const KoViewConverter &converter);
     void repaint() const;
     KoInteractionStrategy *handleMousePress(KoPointerEvent *event);
     bool check();
     KoPathPoint *activePoint() const;
-    KoPathPoint::KoPointType activePointType() const;
+    KoPathPoint::PointType activePointType() const;
 private:
     KoPathPoint *m_activePoint;
-    KoPathPoint::KoPointType m_activePointType;
+    KoPathPoint::PointType m_activePointType;
 };
 
 class ParameterHandle : public KoPathToolHandle

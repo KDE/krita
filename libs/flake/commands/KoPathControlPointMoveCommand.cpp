@@ -25,7 +25,7 @@
 KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(
     const KoPathPointData &pointData,
     const QPointF &offset,
-    KoPathPoint::KoPointType pointType,
+    KoPathPoint::PointType pointType,
     QUndoCommand *parent)
         : QUndoCommand(parent)
         , m_pointData(pointData)

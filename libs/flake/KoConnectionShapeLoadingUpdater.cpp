@@ -38,5 +38,5 @@ void KoConnectionShapeLoadingUpdater::update(KoShape * shape)
     } else {
         m_connectionShape->connectSecond(shape, m_connectionShape->secondConnectionIndex());
     }
-    m_connectionShape->updateConnections();
+    m_connectionShape->finishLoadingConnection();
 }

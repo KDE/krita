@@ -105,7 +105,7 @@ void KoPathShape::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().startElement("draw:path");
     saveOdfAttributes(context, OdfAllAttributes | OdfViewbox);
 
-    context.xmlWriter().addAttribute("svg:d", toString(QMatrix()));
+    context.xmlWriter().addAttribute("svg:d", toString());
     context.xmlWriter().addAttribute("koffice:nodeTypes", d->nodeTypes());
 
     saveOdfCommonChildElements(context);

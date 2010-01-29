@@ -45,7 +45,6 @@ public:
     bool handleConnected(int handleId) const;
 
     QList<QPointF> path;
-    bool hasMoved;
 
     KoShape *shape1;
     KoShape *shape2;
@@ -53,7 +52,7 @@ public:
     int connectionPointIndex2;
     KoConnectionShape::Type connectionType;
     bool forceUpdate;
-
+    bool hasCustomPath;
     Q_DECLARE_PUBLIC(KoConnectionShape)
 };
 

@@ -54,9 +54,6 @@ public:
     // reimplemented
     virtual QString pathShapeId() const;
 
-    /// reimplemented
-    virtual void shapeChanged(ChangeType type, KoShape *shape);
-
     /**
      * Sets the first shape this connector is connected to
      *
@@ -103,14 +100,19 @@ public:
      */
     int secondConnectionIndex() const;
 
-    /// Updates connections to shapes
-    void updateConnections();
+    /**
+     * Finishes the loading of a connection.
+     */
+    void finishLoadingConnection();
 
     /// Returns connection type
     Type type() const;
 
     /// Sets the connection type
     void setType(Type connectionType);
+
+    /// Updates connections to shapes
+    void updateConnections();
 
 protected:
     /// reimplemented
@@ -119,9 +121,11 @@ protected:
     /// reimplemented
     void updatePath(const QSizeF &size);
 
+    /// reimplemented
+    virtual void shapeChanged(ChangeType type, KoShape *shape);
+
 private:
     Q_DECLARE_PRIVATE(KoConnectionShape)
 };
-
 
 #endif

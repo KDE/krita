@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Boudewijn Rempt <boud@kde.org>
  * Copyright (C) 2007,2009 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2007,2009  Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2009,2010  Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,15 +26,21 @@
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 #include "KoConnectionShapeLoadingUpdater.h"
+#include "KoPathShapeLoader.h"
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
-
 #include <QPainter>
 
 #include <KDebug>
+
+// IDs of the connecting handles
+enum HandleId {
+    StartHandle,
+    EndHandle
+};
 
 KoConnectionShapePrivate::KoConnectionShapePrivate(KoConnectionShape *q)
     : KoParameterShapePrivate(q),
@@ -43,7 +49,8 @@ KoConnectionShapePrivate::KoConnectionShapePrivate(KoConnectionShape *q)
     connectionPointIndex1(-1),
     connectionPointIndex2(-1),
     connectionType(KoConnectionShape::Standard),
-    forceUpdate(false)
+    forceUpdate(false),
+    hasCustomPath(false)
 {
 }
 
@@ -55,7 +62,7 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
         QMatrix absoluteMatrix = q->absoluteTransformation(0);
         QPointF handlePoint = absoluteMatrix.map(handles[handleId]);
         QPointF centerPoint;
-        if (handleId == 0)
+        if (handleId == StartHandle)
             centerPoint = shape1->absolutePosition(KoFlake::CenteredPosition);
         else
             centerPoint = shape2->absolutePosition(KoFlake::CenteredPosition);
@@ -125,70 +132,56 @@ QPointF KoConnectionShapePrivate::perpendicularDirection(const QPointF &p1, cons
 
 void KoConnectionShapePrivate::normalPath( const qreal MinimumEscapeLength )
 {
-    if (hasMoved) {
-        hasMoved = false;
-        QPointF firstHandle;
-        QPointF lastHandle;
+    // Clear the path to build it again.
+    path.clear();
+    path.append(handles[StartHandle]);
 
-        // Clear handles keeping the first and last one.
-        firstHandle = handles[0];
-        lastHandle = handles[handles.count() - 1];
+    QList<QPointF> edges1;
+    QList<QPointF> edges2;
 
-        handles.clear();
-        handles.append(firstHandle);
-        handles.append(lastHandle);
+    QPointF direction1 = escapeDirection(StartHandle);
+    QPointF direction2 = escapeDirection(EndHandle);
 
-        // Clear the path to build it again.
-        path.clear();
-        path.append(handles[0]);
+    QPointF edgePoint1 = handles[StartHandle] + MinimumEscapeLength * direction1;
+    QPointF edgePoint2 = handles[EndHandle] + MinimumEscapeLength * direction2;
 
-        QList<QPointF> edges1;
-        QList<QPointF> edges2;
+    edges1.append(edgePoint1);
+    edges2.prepend(edgePoint2);
 
-        QPointF direction1 = escapeDirection(0);
-        QPointF direction2 = escapeDirection(handles.count() - 1);
+    if (handleConnected(StartHandle) && handleConnected(EndHandle)) {
+        QPointF intersection;
+        bool connected = false;
+        do {
+            // first check if directions from current edge points intersect
+            if (intersects(edgePoint1, direction1, edgePoint2, direction2, intersection)) {
+                // directions intersect, we have another edge point and be done
+                edges1.append(intersection);
+                break;
+            }
 
-        QPointF edgePoint1 = handles[0] + MinimumEscapeLength * direction1;
-        QPointF edgePoint2 = handles[handles.count() - 1] + MinimumEscapeLength * direction2;
-
-        edges1.append(edgePoint1);
-        edges2.prepend(edgePoint2);
-
-        if (handleConnected(0) && handleConnected(1)) {
-            QPointF intersection;
-            bool connected = false;
-            do {
-                // first check if directions from current edge points intersect
-                if (intersects(edgePoint1, direction1, edgePoint2, direction2, intersection)) {
-                    // directions intersect, we have another edge point and be done
-                    edges1.append(intersection);
-                    break;
-                }
-
-                // check if we are going toward the other handle
-                qreal sp = scalarProd(direction1, edgePoint2 - edgePoint1);
-                if (sp >= 0.0) {
-                    // if we are having the same direction, go all the way toward
-                    // the other handle, else only go half the way
-                    if (direction1 == direction2)
-                        edgePoint1 += sp * direction1;
-                    else
-                        edgePoint1 += 0.5 * sp * direction1;
-                    edges1.append(edgePoint1);
-                    // switch direction
-                    direction1 = perpendicularDirection(edgePoint1, direction1, edgePoint2);
-                } else {
-                    // we are not going into the same direction, so switch direction
-                    direction1 = perpendicularDirection(edgePoint1, direction1, edgePoint2);
-                }
-            } while (! connected);
-        }
-
-        path.append(edges1);
-        path.append(edges2);
-
-        path.append(handles[handles.count() - 1]);
+            // check if we are going toward the other handle
+            qreal sp = scalarProd(direction1, edgePoint2 - edgePoint1);
+            if (sp >= 0.0) {
+                // if we are having the same direction, go all the way toward
+                // the other handle, else only go half the way
+                if (direction1 == direction2)
+                    edgePoint1 += sp * direction1;
+                else
+                    edgePoint1 += 0.5 * sp * direction1;
+                edges1.append(edgePoint1);
+                // switch direction
+                direction1 = perpendicularDirection(edgePoint1, direction1, edgePoint2);
+            } else {
+                // we are not going into the same direction, so switch direction
+                direction1 = perpendicularDirection(edgePoint1, direction1, edgePoint2);
+            }
+        } while (! connected);
     }
+
+    path.append(edges1);
+    path.append(edges2);
+
+    path.append(handles[EndHandle]);
 }
 
 qreal KoConnectionShapePrivate::scalarProd(const QPointF &v1, const QPointF &v2)
@@ -203,14 +196,49 @@ qreal KoConnectionShapePrivate::crossProd(const QPointF &v1, const QPointF &v2)
 
 bool KoConnectionShapePrivate::handleConnected(int handleId) const
 {
-    if (handleId == 0 && shape1 && connectionPointIndex1 >= 0)
+    if (handleId == StartHandle && shape1 && connectionPointIndex1 >= 0)
         return true;
-    if (handleId == 1 && shape2 && connectionPointIndex2 >= 0)
+    if (handleId == EndHandle && shape2 && connectionPointIndex2 >= 0)
         return true;
 
     return false;
 }
 
+void KoConnectionShape::updateConnections()
+{
+    Q_D(KoConnectionShape);
+    bool updateHandles = false;
+
+    if (d->handleConnected(StartHandle)) {
+        QList<QPointF> connectionPoints = d->shape1->connectionPoints();
+        if (d->connectionPointIndex1 < connectionPoints.count()) {
+            // map connection point into our shape coordinates
+            QPointF p = documentToShape(d->shape1->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex1]));
+            if (d->handles[StartHandle] != p) {
+                d->handles[StartHandle] = p;
+                updateHandles = true;
+            }
+        }
+    }
+    if (d->handleConnected(EndHandle)) {
+        QList<QPointF> connectionPoints = d->shape2->connectionPoints();
+        if (d->connectionPointIndex2 < connectionPoints.count()) {
+            // map connection point into our shape coordinates
+            QPointF p = documentToShape(d->shape2->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex2]));
+            if (d->handles[EndHandle] != p) {
+                d->handles[EndHandle] = p;
+                updateHandles = true;
+            }
+        }
+    }
+
+    if (updateHandles || d->forceUpdate) {
+        update(); // ugly, for repainting the connection we just changed
+        updatePath(QSizeF());
+        update(); // ugly, for repainting the connection we just changed
+        d->forceUpdate = false;
+    }
+}
 
 KoConnectionShape::KoConnectionShape()
     : KoParameterShape(*(new KoConnectionShapePrivate(this)))
@@ -219,16 +247,14 @@ KoConnectionShape::KoConnectionShape()
     d->handles.push_back(QPointF(0, 0));
     d->handles.push_back(QPointF(140, 140));
 
-    moveTo(d->handles[0]);
-    lineTo(d->handles[1]);
+    moveTo(d->handles[StartHandle]);
+    lineTo(d->handles[EndHandle]);
 
     updatePath(QSizeF(140, 140));
 
     int connectionPointCount = connectionPoints().size();
     for (int i = 0; i < connectionPointCount; ++i)
         removeConnectionPoint(0);
-
-    d->hasMoved = true;
 }
 
 KoConnectionShape::~KoConnectionShape()
@@ -265,7 +291,7 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
         context.xmlWriter().addAttribute("draw:start-shape", context.drawId(d->shape1));
         context.xmlWriter().addAttribute("draw:start-glue-point", d->connectionPointIndex1 );
     } else {
-        QPointF p((d->handles[0] + position()) * context.shapeOffset(this));
+        QPointF p((d->handles[StartHandle] + position()) * context.shapeOffset(this));
         context.xmlWriter().addAttributePt("svg:x1", p.x());
         context.xmlWriter().addAttributePt("svg:y1", p.y());
     }
@@ -273,10 +299,14 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
         context.xmlWriter().addAttribute("draw:end-shape", context.drawId(d->shape2));
         context.xmlWriter().addAttribute("draw:end-glue-point", d->connectionPointIndex2 );
     } else {
-        QPointF p((d->handles[d->handles.count()-1] + position()) * context.shapeOffset(this));
+        QPointF p((d->handles[EndHandle] + position()) * context.shapeOffset(this));
         context.xmlWriter().addAttributePt("svg:x2", p.x());
         context.xmlWriter().addAttributePt("svg:y2", p.y());
     }
+
+    // write the path data
+    context.xmlWriter().addAttribute("svg:d", toString());
+    saveOdfAttributes(context, OdfViewbox);
 
     saveOdfCommonChildElements(context);
 
@@ -298,18 +328,29 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     else
         d->connectionType = Standard;
 
+    // reset connection point indeces
+    d->connectionPointIndex1 = -1;
+    d->connectionPointIndex2 = -1;
+    // reset connected shapes
+    d->shape1 = 0;
+    d->shape2 = 0;
+
     if (element.hasAttributeNS(KoXmlNS::draw, "start-shape")) {
         d->connectionPointIndex1 = element.attributeNS(KoXmlNS::draw, "start-glue-point", QString()).toInt();
         QString shapeId1 = element.attributeNS(KoXmlNS::draw, "start-shape", QString());
         d->shape1 = context.shapeById(shapeId1);
         if (d->shape1) {
             d->shape1->addDependee(this);
+            QList<QPointF> connectionPoints = d->shape1->connectionPoints();
+            if (d->connectionPointIndex1 < connectionPoints.count()) {
+                d->handles[StartHandle] = d->shape1->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex1]);
+            }
         } else {
             context.updateShape(shapeId1, new KoConnectionShapeLoadingUpdater(this, KoConnectionShapeLoadingUpdater::First));
         }
     } else {
-        d->handles[0].setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x1", QString())));
-        d->handles[0].setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y1", QString())));
+        d->handles[StartHandle].setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x1", QString())));
+        d->handles[StartHandle].setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y1", QString())));
     }
 
     if (element.hasAttributeNS(KoXmlNS::draw, "end-shape")) {
@@ -318,21 +359,94 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         d->shape2 = context.shapeById(shapeId2);
         if (d->shape2) {
             d->shape2->addDependee(this);
+            QList<QPointF> connectionPoints = d->shape2->connectionPoints();
+            if (d->connectionPointIndex2 < connectionPoints.count()) {
+                d->handles[EndHandle] = d->shape2->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex2]);
+            }
         } else {
             context.updateShape(shapeId2, new KoConnectionShapeLoadingUpdater(this, KoConnectionShapeLoadingUpdater::Second));
         }
     } else {
-        d->handles[d->handles.count() - 1].setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x2", QString())));
-        d->handles[d->handles.count() - 1].setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y2", QString())));
+        d->handles[EndHandle].setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x2", QString())));
+        d->handles[EndHandle].setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y2", QString())));
     }
 
     QString skew = element.attributeNS(KoXmlNS::draw, "line-skew", QString());
     QStringList skewValues = skew.simplified().split(' ', QString::SkipEmptyParts);
     // TODO apply skew values once we support them
 
-    updateConnections();
+    // load the path data if there is any
+    d->hasCustomPath = element.hasAttributeNS(KoXmlNS::svg, "d");
+    if (d->hasCustomPath) {
+        KoPathShapeLoader loader(this);
+        loader.parseSvg(element.attributeNS(KoXmlNS::svg, "d"), true);
+        QRectF viewBox = loadOdfViewbox(element);
+        if (viewBox.isEmpty()) {
+            // there should be a viewBox to transform the path data
+            // if there is none, use the bounding rectangle of the parsed path
+            viewBox = outline().boundingRect();
+        }
+        // convert path to viewbox coordinates to have a bounding rect of (0,0 1x1)
+        // which can later be fitted back into the target rect once we have all
+        // the required information
+        QMatrix viewMatrix;
+        viewMatrix.scale(static_cast<qreal>(1.0) / viewBox.width(), static_cast<qreal>(1.0) / viewBox.height());
+        viewMatrix.translate(-viewBox.left(), -viewBox.top());
+        d->map(viewMatrix);
+
+        // trigger finishing the connections in case we have all data
+        // otherwise it gets called again once the shapes we are
+        // connected to are loaded
+        finishLoadingConnection();
+    } else {
+        d->forceUpdate = true;
+        updateConnections();
+    }
 
     return true;
+}
+
+void KoConnectionShape::finishLoadingConnection()
+{
+    Q_D(KoConnectionShape);
+
+    if (d->hasCustomPath) {
+        const bool loadingFinished1 = d->connectionPointIndex1 >= 0 ? d->shape1 != 0 : true;
+        const bool loadingFinished2 = d->connectionPointIndex2 >= 0 ? d->shape2 != 0 : true;
+        if (loadingFinished1 && loadingFinished2) {
+            QPointF p1, p2;
+            if (d->handleConnected(StartHandle)) {
+                QList<QPointF> connectionPoints = d->shape1->connectionPoints();
+                if (d->connectionPointIndex1 < connectionPoints.count()) {
+                    p1 = d->shape1->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex1]);
+                }
+            } else {
+                p1 = d->handles[StartHandle];
+            }
+            if (d->handleConnected(EndHandle)) {
+                QList<QPointF> connectionPoints = d->shape2->connectionPoints();
+                if (d->connectionPointIndex2 < connectionPoints.count()) {
+                    p2 = d->shape2->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex2]);
+                }
+            } else {
+                p2 = d->handles[EndHandle];
+            }
+            QRectF targetRect = QRectF(p1, p2).normalized();
+            // transform the normalized coordinates back to our target rectangle
+            QMatrix viewMatrix;
+            viewMatrix.translate(targetRect.x(), targetRect.y());
+            viewMatrix.scale(targetRect.width(), targetRect.height());
+            d->map(viewMatrix);
+
+            // pretend we are during a forced update, so normalize()
+            // will not trigger an updateConnections() call
+            d->forceUpdate = true;
+            normalize();
+            d->forceUpdate = false;
+        }
+    } else {
+        updateConnections();
+    }
 }
 
 void KoConnectionShape::moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers)
@@ -351,7 +465,7 @@ void KoConnectionShape::updatePath(const QSizeF &size)
     Q_UNUSED(size);
     Q_D(KoConnectionShape);
 
-    QPointF dst = 0.3 * ( d->handles[0] - d->handles[d->handles.count() - 1]);
+    QPointF dst = 0.3 * ( d->handles[StartHandle] - d->handles[EndHandle]);
     const qreal MinimumEscapeLength = (qreal)20.;
     clear();
     switch (d->connectionType) {
@@ -368,29 +482,29 @@ void KoConnectionShape::updatePath(const QSizeF &size)
     case Lines: {
         QPointF direction1 = d->escapeDirection(0);
         QPointF direction2 = d->escapeDirection(d->handles.count() - 1);
-        moveTo(d->handles[0]);
+        moveTo(d->handles[StartHandle]);
         if (! direction1.isNull())
-            lineTo(d->handles[0] + MinimumEscapeLength * direction1);
+            lineTo(d->handles[StartHandle] + MinimumEscapeLength * direction1);
         if (! direction2.isNull())
-            lineTo(d->handles[d->handles.count() - 1] + MinimumEscapeLength * direction2);
-        lineTo(d->handles[d->handles.count() - 1]);
+            lineTo(d->handles[EndHandle] + MinimumEscapeLength * direction2);
+        lineTo(d->handles[EndHandle]);
         break;
     }
     case Straight:
-        moveTo(d->handles[0]);
-        lineTo(d->handles[d->handles.count() - 1]);
+        moveTo(d->handles[StartHandle]);
+        lineTo(d->handles[EndHandle]);
         break;
     case Curve:
         // TODO
         QPointF direction1 = d->escapeDirection(0);
         QPointF direction2 = d->escapeDirection(d->handles.count() - 1);
-        moveTo(d->handles[0]);
+        moveTo(d->handles[StartHandle]);
         if (! direction1.isNull() && ! direction2.isNull()) {
-            QPointF curvePoint1 = d->handles[0] + 5.0 * MinimumEscapeLength * direction1;
-            QPointF curvePoint2 = d->handles[d->handles.count() - 1] + 5.0 * MinimumEscapeLength * direction2;
-            curveTo(curvePoint1, curvePoint2, d->handles[d->handles.count() - 1]);
+            QPointF curvePoint1 = d->handles[StartHandle] + 5.0 * MinimumEscapeLength * direction1;
+            QPointF curvePoint2 = d->handles[EndHandle] + 5.0 * MinimumEscapeLength * direction2;
+            curveTo(curvePoint1, curvePoint2, d->handles[EndHandle]);
         } else {
-            lineTo(d->handles[d->handles.count() - 1]);
+            lineTo(d->handles[EndHandle]);
         }
         break;
     }
@@ -465,41 +579,6 @@ int KoConnectionShape::secondConnectionIndex() const
     return d->connectionPointIndex2;
 }
 
-void KoConnectionShape::updateConnections()
-{
-    Q_D(KoConnectionShape);
-    bool updateHandles = false;
-
-    if (d->handleConnected(0)) {
-        QList<QPointF> connectionPoints = d->shape1->connectionPoints();
-        if (d->connectionPointIndex1 < connectionPoints.count()) {
-            // map connection point into our shape coordinates
-            QPointF p = documentToShape(d->shape1->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex1]));
-            if (d->handles[0] != p) {
-                d->handles[0] = p;
-                updateHandles = true;
-            }
-        }
-    }
-    if (d->handleConnected(1)) {
-        QList<QPointF> connectionPoints = d->shape2->connectionPoints();
-        if (d->connectionPointIndex2 < connectionPoints.count()) {
-            // map connection point into our shape coordinates
-            QPointF p = documentToShape(d->shape2->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex2]));
-            if (d->handles[d->handles.count() - 1] != p) {
-                d->handles[d->handles.count() - 1] = p;
-                updateHandles = true;
-            }
-        }
-    }
-    if (updateHandles || d->forceUpdate) {
-        update(); // ugly, for repainting the connection we just changed
-        updatePath(QSizeF());
-        update(); // ugly, for repainting the connection we just changed
-        d->forceUpdate = false;
-    }
-}
-
 KoConnectionShape::Type KoConnectionShape::type() const
 {
     Q_D(const KoConnectionShape);
@@ -519,7 +598,6 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape *shape)
     // check if we are during a forced update
     const bool updateIsActive = d->forceUpdate;
 
-    d->hasMoved = true;
     switch (type) {
     case PositionChanged:
     case RotationChanged:

@@ -86,7 +86,6 @@ void ShowChangesCommand::enableDisableChanges()
 
 void ShowChangesCommand::enableDisableStates(bool showChanges)
 {
-    m_changeTracker->setRecordChanges(showChanges);
     m_changeTracker->setDisplayChanges(showChanges);
 
     QTextCharFormat format = m_textEditor->charFormat();
@@ -100,11 +99,9 @@ void ShowChangesCommand::insertDeletedChanges()
     QVector<KoChangeTrackerElement *> elementVector;
     KoTextDocument(m_textEditor->document()).changeTracker()->getDeletedChanges(elementVector);
 
-    QTextCursor caret(m_textEditor->document());
-    caret.beginEditBlock();
-
     foreach (KoChangeTrackerElement *element, elementVector) {
         if (element->isValid()) {
+            QTextCursor caret(element->getDeleteChangeMarker()->document());
             caret.setPosition(element->getDeleteChangeMarker()->position() + numAddedChars +  1);
             QTextCharFormat f = caret.charFormat();
             f.setProperty(KoCharacterStyle::ChangeTrackerId, element->getDeleteChangeMarker()->changeId());
@@ -114,8 +111,6 @@ void ShowChangesCommand::insertDeletedChanges()
             numAddedChars += element->getDeleteData().length();
         }
     }
-
-    caret.endEditBlock();
 }
 
 void ShowChangesCommand::removeDeletedChanges()
@@ -124,11 +119,9 @@ void ShowChangesCommand::removeDeletedChanges()
     QVector<KoChangeTrackerElement *> elementVector;
     m_changeTracker->getDeletedChanges(elementVector);
 
-    QTextCursor caret(m_document);
-    caret.beginEditBlock();
-
     foreach(KoChangeTrackerElement *element, elementVector) {
         if (element->isValid()) {
+            QTextCursor caret(element->getDeleteChangeMarker()->document());
             QTextCharFormat f;
             caret.setPosition(element->getDeleteChangeMarker()->position() +  1 - numDeletedChars);
             caret.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, element->getDeleteData().length());
@@ -136,8 +129,6 @@ void ShowChangesCommand::removeDeletedChanges()
             numDeletedChars += element->getDeleteData().length();
         }
     }
-
-    caret.endEditBlock();
 }
 
 ShowChangesCommand::~ShowChangesCommand()

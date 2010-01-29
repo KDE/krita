@@ -33,6 +33,7 @@
 #include <KUser>
 
 //Qt includes
+#include <QColor>
 #include <QList>
 #include <QString>
 #include <QHash>
@@ -41,7 +42,6 @@
 #include <QTextFormat>
 #include <QTextCharFormat>
 #include <QTextDocumentFragment>
-#include <QColor>
 
 class KoChangeTracker::Private
 {

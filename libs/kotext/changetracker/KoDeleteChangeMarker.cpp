@@ -33,6 +33,7 @@
 
 //Qt includes
 #include <QFontMetrics>
+#include <QTextDocument>
 #include <QTextInlineObject>
 #include <QPainter>
 
@@ -42,6 +43,7 @@ public:
     Private() {}
 
     KoChangeTracker *changeTracker;
+    QTextDocument *document;
     QString text;
     int id;
     int position;
@@ -51,6 +53,7 @@ KoDeleteChangeMarker::KoDeleteChangeMarker(KoChangeTracker* changeTracker)
         : d(new Private())
 {
     d->changeTracker = changeTracker;
+    d->document = 0;
 }
 
 KoDeleteChangeMarker::~KoDeleteChangeMarker()
@@ -115,10 +118,16 @@ void KoDeleteChangeMarker::resize(const QTextDocument *document, QTextInlineObje
 void KoDeleteChangeMarker::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
 {
     d->position = posInDocument;
+    if (document != d->document)
+        d->document = const_cast<QTextDocument*>(document); //TODO: when we get rid of the current visualisation of deleted changes (ie inserting them in the doc), we can get rid of this.
 
-    Q_UNUSED(document);
     Q_UNUSED(object);
     Q_UNUSED(format);
+}
+
+QTextDocument* KoDeleteChangeMarker::document() const
+{
+    return d->document;
 }
 
 void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext &context)

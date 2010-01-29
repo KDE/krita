@@ -64,7 +64,7 @@ private:
         // old control points in document coordinates
         QPointF m_oldControlPoint1;
         QPointF m_oldControlPoint2;
-        KoPathPoint::KoPointProperties m_oldProperties;
+        KoPathPoint::PointProperties m_oldProperties;
         bool m_hadControlPoint1;
         bool m_hadControlPoint2;
     };

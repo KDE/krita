@@ -66,8 +66,8 @@ private:
         // old control points in document coordinates
         QPointF m_controlPoint1;
         QPointF m_controlPoint2;
-        KoPathPoint::KoPointProperties m_properties1;
-        KoPathPoint::KoPointProperties m_properties2;
+        KoPathPoint::PointProperties m_properties1;
+        KoPathPoint::PointProperties m_properties2;
     };
 
     void initialize(const QList<KoPathPointData> &pointDataList);

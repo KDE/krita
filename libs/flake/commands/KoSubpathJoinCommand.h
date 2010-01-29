@@ -53,8 +53,8 @@ private:
     // the control points have to be stored in document positions
     QPointF m_oldControlPoint1;
     QPointF m_oldControlPoint2;
-    KoPathPoint::KoPointProperties m_oldProperties1;
-    KoPathPoint::KoPointProperties m_oldProperties2;
+    KoPathPoint::PointProperties m_oldProperties1;
+    KoPathPoint::PointProperties m_oldProperties2;
     enum Reverse {
         ReverseFirst = 1,
         ReverseSecond = 2

@@ -110,7 +110,7 @@ KoInteractionStrategy * PointHandle::handleMousePress(KoPointerEvent *event)
             return new KoPathControlPointMoveStrategy(m_tool, pd, m_activePointType, event->point);
         }
     } else {
-        KoPathPoint::KoPointProperties props = m_activePoint->properties();
+        KoPathPoint::PointProperties props = m_activePoint->properties();
         if (! m_activePoint->activeControlPoint1() || ! m_activePoint->activeControlPoint2())
             return 0;
 

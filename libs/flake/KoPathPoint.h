@@ -44,7 +44,7 @@ class FLAKE_EXPORT KoPathPoint
 {
 public:
     /// property enum
-    enum KoPointProperty {
+    enum PointProperty {
         Normal = 0, ///< it has no control points
         StartSubpath = 1, ///< it starts a new subpath by a moveTo command
         StopSubpath = 2, ///< it stops a subpath (last point of subpath)
@@ -52,7 +52,7 @@ public:
         IsSmooth = 16, ///< it is smooth, both control points on a line through the point
         IsSymmetric = 32 ///< it is symmetric, like smooth but control points have same distance to point
     };
-    Q_DECLARE_FLAGS(KoPointProperties, KoPointProperty)
+    Q_DECLARE_FLAGS(PointProperties, PointProperty)
 
     /// the type for identifying part of a KoPathPoint
     enum KoPointType {
@@ -73,7 +73,7 @@ public:
      * @param point the position relative to the shape origin
      * @param properties describing the point
      */
-    KoPathPoint(KoPathShape *path, const QPointF &point, KoPointProperties properties = Normal);
+    KoPathPoint(KoPathShape *path, const QPointF &point, PointProperties properties = Normal);
 
     /**
      * @brief Copy Constructor
@@ -150,25 +150,25 @@ public:
      *
      * @return properties of the point
      */
-    KoPointProperties properties() const;
+    PointProperties properties() const;
 
     /**
      * @brief Set the properties of a point
      * @param properties the new properties
      */
-    void setProperties(KoPointProperties properties);
+    void setProperties(PointProperties properties);
 
     /**
      * @brief Sets a single property of a point.
      * @param property the property to set
      */
-    void setProperty(KoPointProperty property);
+    void setProperty(PointProperty property);
 
     /**
      * @brief Removes a property from the point.
      * @param property the property to remove
      */
-    void unsetProperty(KoPointProperty property);
+    void unsetProperty(PointProperty property);
 
     /**
      * @brief Checks if there is a controlPoint1
@@ -282,7 +282,7 @@ private:
 //   /// The position of a path point within a path shape
 //   typedef QPair<KoSubpath*, int> KoPointPosition;
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KoPathPoint::KoPointProperties)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoPathPoint::PointProperties)
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoPathPoint::KoPointTypes)
 
 #endif

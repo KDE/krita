@@ -316,7 +316,7 @@ QPainterPath KoPathShape::outline() const
         KoPathPoint * lastPoint = subpath->first();
         bool activeCP = false;
         foreach(KoPathPoint * currPoint, *subpath) {
-            KoPathPoint::KoPointProperties currProperties = currPoint->properties();
+            KoPathPoint::PointProperties currProperties = currPoint->properties();
             if (currPoint == subpath->first()) {
                 if (currProperties & KoPathPoint::StartSubpath) {
                     path.moveTo(currPoint->point());
@@ -780,7 +780,7 @@ bool KoPathShape::insertPoint(KoPathPoint* point, const KoPathPointIndex &pointI
     if (subpath == 0 || pointIndex.second < 0 || pointIndex.second > subpath->size())
         return false;
 
-    KoPathPoint::KoPointProperties properties = point->properties();
+    KoPathPoint::PointProperties properties = point->properties();
     properties &= ~KoPathPoint::StartSubpath;
     properties &= ~KoPathPoint::StopSubpath;
     properties &= ~KoPathPoint::CloseSubpath;
@@ -990,8 +990,8 @@ bool KoPathShape::reverseSubpath(int subpathIndex)
     KoPathPoint *first = subpath->first();
     KoPathPoint *last = subpath->last();
 
-    KoPathPoint::KoPointProperties firstProps = first->properties();
-    KoPathPoint::KoPointProperties lastProps = last->properties();
+    KoPathPoint::PointProperties firstProps = first->properties();
+    KoPathPoint::PointProperties lastProps = last->properties();
 
     firstProps |= KoPathPoint::StartSubpath;
     firstProps &= ~KoPathPoint::StopSubpath;

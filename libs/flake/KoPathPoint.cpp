@@ -39,7 +39,7 @@ public:
     QPointF point;
     QPointF controlPoint1;
     QPointF controlPoint2;
-    KoPointProperties properties;
+    PointProperties properties;
     KoPointGroup * pointGroup;
     bool activeControlPoint1;
     bool activeControlPoint2;
@@ -62,7 +62,7 @@ KoPathPoint::KoPathPoint()
 {
 }
 
-KoPathPoint::KoPathPoint(KoPathShape * path, const QPointF & point, KoPointProperties properties)
+KoPathPoint::KoPathPoint(KoPathShape * path, const QPointF & point, PointProperties properties)
         : d(new Private())
 {
     d->shape = path;
@@ -150,7 +150,7 @@ void KoPathPoint::removeControlPoint2()
         d->shape->notifyChanged();
 }
 
-void KoPathPoint::setProperties(KoPointProperties properties)
+void KoPathPoint::setProperties(PointProperties properties)
 {
     d->properties = properties;
     // CloseSubpath only allowed with StartSubpath or StopSubpath
@@ -167,7 +167,7 @@ void KoPathPoint::setProperties(KoPointProperties properties)
         d->shape->notifyChanged();
 }
 
-void KoPathPoint::setProperty(KoPointProperty property)
+void KoPathPoint::setProperty(PointProperty property)
 {
     switch (property) {
     case StartSubpath:
@@ -193,7 +193,7 @@ void KoPathPoint::setProperty(KoPointProperty property)
     }
 }
 
-void KoPathPoint::unsetProperty(KoPointProperty property)
+void KoPathPoint::unsetProperty(PointProperty property)
 {
     switch (property) {
     case StartSubpath:
@@ -325,7 +325,7 @@ void KoPathPoint::reverse()
 {
     qSwap(d->controlPoint1, d->controlPoint2);
     qSwap(d->activeControlPoint1, d->activeControlPoint2);
-    KoPointProperties newProps = Normal;
+    PointProperties newProps = Normal;
     newProps |= d->properties & IsSmooth;
     newProps |= d->properties & IsSymmetric;
     newProps |= d->properties & StartSubpath;
@@ -392,7 +392,7 @@ void KoPathPoint::addToGroup(KoPointGroup *pointGroup)
     d->pointGroup = pointGroup;
 }
 
-KoPathPoint::KoPointProperties KoPathPoint::properties() const
+KoPathPoint::PointProperties KoPathPoint::properties() const
 {
     return d->properties;
 }

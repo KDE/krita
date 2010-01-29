@@ -349,7 +349,10 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
                 dbgPigmentCSRegistry << "Unknown color space type :" << csf;
                 return 0;
             }
-
+            Q_ASSERT(csf->profileIsCompatible(profile));
+            if (!csf->profileIsCompatible(profile ) ) {
+                return 0;
+            }
             cs = csf->grabColorSpace(profile);
             if (!cs)
                 return 0;

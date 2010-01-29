@@ -273,15 +273,17 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
     if (opacity > OPACITY_OPAQUE) opacity = OPACITY_OPAQUE;
 
     const KoColorSpace* colorSpace = 0;
-    if ((element.attribute(COLORSPACE_NAME)).isNull())
+    if ((element.attribute(COLORSPACE_NAME)).isNull()) {
+        dbgFile << "No attribute color space for layer: " << name;
         colorSpace = image->colorSpace();
-    else {
+    } else {
         QString colorspacename = element.attribute(COLORSPACE_NAME);
         QString colorspaceModel = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
-        QString colorspaceDepth = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
+        QString colorspaceDepth = KoColorSpaceRegistry::instance()->colorSpaceColorDepthId(colorspacename).id();
 
         // use default profile - it will be replaced later in completeLoading
         colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
+        dbgFile << "Using color space: " << colorspacename << colorspaceModel << colorspaceDepth << " " << colorSpace << " for layer: " << name;
     }
 
     bool visible = element.attribute(VISIBLE, "1") == "0" ? false : true;

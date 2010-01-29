@@ -102,7 +102,7 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
 
 bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 {
-    dbgFile << "Visit: " << layer->name();
+    dbgFile << "Visit: " << layer->name() << " colorSpace: " << layer->colorSpace()->id();
     if (!loadPaintDevice(layer->paintDevice(), getLocation(layer))) {
         return false;
     }
@@ -275,7 +275,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
     if (m_store->hasFile(location)) {
         m_store->open(location);
         QByteArray data; data.resize(m_store->size());
-        dbgFile << "Data to load: " << m_store->size();
+        dbgFile << "Data to load: " << m_store->size() << " from " << location << " with color space " << device->colorSpace()->id();
         int read = m_store->read(data.data(), m_store->size());
         dbgFile << "Profile size: " << data.size() << " " << m_store->atEnd() << " " << m_store->device()->bytesAvailable() << " " << read;
         m_store->close();

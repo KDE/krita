@@ -72,19 +72,13 @@ endif(KDE4_BUILD_TESTS)
 #########################
 ########################
 set(KDE_MIN_VERSION "4.1.0")
-find_package(KDE4 4.1.0 REQUIRED)
+find_package(KDE4 4.3.0 REQUIRED)
 find_package(Qt4 4.5.0 REQUIRED)
 
 include(KDE4Defaults)
 include(MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
-
-#
-# Test for KDE >= 4.3.0
-#
-macro_ensure_version( "4.3.0" ${KDE_VERSION} KDE4_3_0 )
-macro_log_feature(KDE4_3_0 "KDE 4.3.0" "KDE 4.3.0" "" FALSE "" "Required by Krita")
 
  ###########################
 ############################
@@ -339,9 +333,9 @@ if(NOT BZIP2_EXECUTABLE )
 endif(NOT BZIP2_EXECUTABLE )
 
 ### Krita: pigment, blitz, eigen2, exiv2
-if(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT KDE4_3_0)
+if(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT KDE4_3_0)
+endif(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
 
 ### KPlato: kdepimlibs
 if(NOT KdepimLibs_FOUND)

@@ -28,7 +28,7 @@
 
 #include "kis_tool_shape.h"
 #include "kis_types.h"
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 #include "flake/kis_node_shape.h"
 #include <kis_tool_rectangle_base.h>
 
@@ -52,12 +52,12 @@ protected:
     virtual void finishRect(const QRectF& rect);
 };
 
-class KisToolRectangleFactory : public KoToolFactory
+class KisToolRectangleFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolRectangleFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KritaShape/KisToolRectangle") {
+            : KoToolFactoryBase(parent, "KritaShape/KisToolRectangle") {
         setToolTip(i18n("Draw a rectangle"));
 
         setToolType(TOOL_TYPE_SHAPE);

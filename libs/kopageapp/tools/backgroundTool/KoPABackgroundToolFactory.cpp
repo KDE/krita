@@ -25,7 +25,7 @@
 #include "KoPABackgroundTool.h"
 
 KoPABackgroundToolFactory::KoPABackgroundToolFactory( QObject *parent )
-    : KoToolFactory(parent, "KoPABackgroundTool")
+    : KoToolFactoryBase(parent, "KoPABackgroundTool")
 {
     setToolTip( i18n( "Background editing tool" ) );
     setToolType( mainToolType() );

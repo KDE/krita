@@ -100,7 +100,7 @@ protected:
     virtual QWidget * createOptionWidget();
 
     /** Quick help is a short help text about the way the tool functions.
-    * Deprecated: this method may move to KoToolFactory.
+    * Deprecated: this method may move to KoToolFactoryBase.
     */
     virtual KDE_DEPRECATED QString quickHelp() const {
         return QString();

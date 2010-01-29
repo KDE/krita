@@ -21,7 +21,7 @@
 
 #include "kis_tool_freehand.h"
 
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 #include "KoPointerEvent.h"
 
 #include <flake/kis_node_shape.h>
@@ -160,12 +160,12 @@ private:
 };
 
 
-class KisToolDynaFactory : public KoToolFactory
+class KisToolDynaFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolDynaFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KritaShape/KisToolDyna") {
+            : KoToolFactoryBase(parent, "KritaShape/KisToolDyna") {
 
         setToolTip(i18n("Paint with brushes using dynamic movements"));
 

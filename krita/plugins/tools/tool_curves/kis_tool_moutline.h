@@ -21,7 +21,7 @@
 #ifndef KIS_TOOL_MOUTLINE_H_
 #define KIS_TOOL_MOUTLINE_H_
 
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 #include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
 
@@ -84,12 +84,12 @@ private:
 
 };
 
-class KisToolMagneticFactory : public KoToolFactory
+class KisToolMagneticFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolMagneticFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolMagnetic") {
+            : KoToolFactoryBase(parent, "KisToolMagnetic") {
         setToolTip(i18n("Magnetic Selection: move around an edge to select it. Hit Ctrl to enter/quit manual mode, and double click to finish."));
         setToolType(TOOL_TYPE_SELECTED);
         setIcon("tool_moutline");

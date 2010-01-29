@@ -26,7 +26,7 @@
 
 #include <kshortcut.h>
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
 #include <kis_tool_paint.h>
 #include <kis_global.h>
@@ -115,12 +115,12 @@ private:
 #endif
 };
 
-class KisToolGradientFactory : public KoToolFactory
+class KisToolGradientFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolGradientFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KritaFill/KisToolGradient") {
+            : KoToolFactoryBase(parent, "KritaFill/KisToolGradient") {
         setToolTip(i18n("Draw a gradient."));
         setToolType(TOOL_TYPE_FILL);
         setIcon("krita_tool_gradient");

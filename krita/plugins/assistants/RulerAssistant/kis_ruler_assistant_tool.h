@@ -19,7 +19,7 @@
 #define _KIS_RULER_ASSISTANT_TOOL_H_
 
 #include <kis_tool.h>
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 #include "kis_painting_assistant.h"
 #include "ui_AssistantsToolOptions.h"
 
@@ -60,11 +60,11 @@ protected:
 };
 
 
-class KisRulerAssistantToolFactory : public KoToolFactory
+class KisRulerAssistantToolFactory : public KoToolFactoryBase
 {
 public:
     KisRulerAssistantToolFactory(QObject *parent)
-            : KoToolFactory(parent, "KisRulerAssistantTool") {
+            : KoToolFactoryBase(parent, "KisRulerAssistantTool") {
         setToolTip(i18n("Ruler assistant editor tool"));
         setToolType(TOOL_TYPE_VIEW);
         setIcon("krita_tool_ruler_assistant");

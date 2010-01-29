@@ -22,7 +22,7 @@
 #ifndef __KIS_TOOL_SELECT_CONTIGUOUS_H__
 #define __KIS_TOOL_SELECT_CONTIGUOUS_H__
 
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 #include "krita/ui/tool/kis_tool_select_base.h"
 
 
@@ -53,12 +53,12 @@ private:
     bool m_limitToCurrentLayer;
 };
 
-class KisToolSelectContiguousFactory : public KoToolFactory
+class KisToolSelectContiguousFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolSelectContiguousFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolSelectContiguous") {
+            : KoToolFactoryBase(parent, "KisToolSelectContiguous") {
         setToolTip(i18n("Select a contiguous area of colors"));
         setToolType(TOOL_TYPE_SELECTED);
         setIcon("tool_contiguous_selection");

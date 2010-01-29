@@ -25,7 +25,7 @@
 
 #include "kis_tool_shape.h"
 #include "kis_types.h"
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 #include "flake/kis_node_shape.h"
 #include <kis_tool_ellipse_base.h>
 
@@ -46,12 +46,12 @@ protected:
     virtual void finishEllipse(const QRectF& rect);
 };
 
-class KisToolEllipseFactory : public KoToolFactory
+class KisToolEllipseFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolEllipseFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KritaShape/KisToolEllipse") {
+            : KoToolFactoryBase(parent, "KritaShape/KisToolEllipse") {
         setToolTip(i18n("Draw an ellipse"));
         setToolType(TOOL_TYPE_SHAPE);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

@@ -24,7 +24,7 @@
 #include <QPoint>
 #include <QPainterPath>
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 #include "kis_tool.h"
 #include "flake/kis_node_shape.h"
 
@@ -131,12 +131,12 @@ private:
     };
 };
 
-class KisToolCropFactory : public KoToolFactory
+class KisToolCropFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolCropFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolCrop") {
+            : KoToolFactoryBase(parent, "KisToolCrop") {
         setToolTip(i18n("Crop the image to an area"));
         setToolType(TOOL_TYPE_TRANSFORM);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

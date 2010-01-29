@@ -2,7 +2,7 @@
 #define _KIS_TOOL_%{APPNAMEUC}_H_
 
 #include <kis_tool.h>
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
 class KisCanvas2;
 
@@ -38,11 +38,11 @@ protected:
 };
 
 
-class KisTool%{APPNAME}Factory : public KoToolFactory {
+class KisTool%{APPNAME}Factory : public KoToolFactoryBase {
 
 public:
     KisTool%{APPNAME}Factory(QObject *parent)
-        : KoToolFactory(parent, "KisTool%{APPNAME}", i18n( "%{APPNAME}" ))
+        : KoToolFactoryBase(parent, "KisTool%{APPNAME}", i18n( "%{APPNAME}" ))
         {
             setToolTip( i18n( "%{APPNAME}" ) );
             setToolType( TOOL_TYPE_VIEW );

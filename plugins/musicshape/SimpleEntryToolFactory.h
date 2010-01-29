@@ -20,9 +20,9 @@
 #define SIMPLEENTRY_TOOL_FACTORY
 
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
-class SimpleEntryToolFactory : public KoToolFactory
+class SimpleEntryToolFactory : public KoToolFactoryBase
 {
 public:
     SimpleEntryToolFactory( QObject* parent );

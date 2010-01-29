@@ -21,7 +21,7 @@
 #ifndef KIS_TOOL_MOVE_H_
 #define KIS_TOOL_MOVE_H_
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 #include <kis_types.h>
 #include <kis_tool.h>
 #include <flake/kis_node_shape.h>
@@ -84,12 +84,12 @@ private:
 };
 
 
-class KisToolMoveFactory : public KoToolFactory
+class KisToolMoveFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolMoveFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KritaTransform/KisToolMove") {
+            : KoToolFactoryBase(parent, "KritaTransform/KisToolMove") {
         setToolTip(i18n("Move a layer"));
         setToolType(TOOL_TYPE_TRANSFORM);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

@@ -54,7 +54,7 @@ class FLAKE_EXPORT KoTool : public QObject
     Q_OBJECT
 public:
     /**
-     * Constructor, normally only called by the factory (see KoToolFactory)
+     * Constructor, normally only called by the factory (see KoToolFactoryBase)
      * @param canvas the canvas interface this tool will work for.
      */
     explicit KoTool(KoCanvasBase *canvas);
@@ -203,16 +203,16 @@ public:
     virtual void customMoveEvent(KoPointerEvent *event);
 
     /**
-     * Set the identifier code from the KoToolFactory that created this tool.
+     * Set the identifier code from the KoToolFactoryBase that created this tool.
      * @param id the identifier code
-     * @see KoToolFactory::id()
+     * @see KoToolFactoryBase::id()
      */
     void setToolId(const QString &id);
 
     /**
-     * get the identifier code from the KoToolFactory that created this tool.
+     * get the identifier code from the KoToolFactoryBase that created this tool.
      * @return the toolId.
-     * @see KoToolFactory::id()
+     * @see KoToolFactoryBase::id()
      */
     QString toolId() const;
 
@@ -310,7 +310,7 @@ signals:
      * Emitted when this tool wants itself to be replaced by another tool.
      *
      * @param id the identification of the desired tool
-     * @see toolId(), KoToolFactory::id()
+     * @see toolId(), KoToolFactoryBase::id()
      */
     void activateTool(const QString &id);
 

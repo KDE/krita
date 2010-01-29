@@ -26,7 +26,7 @@
 #include <QPointF>
 
 #include <KoInteractionTool.h>
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
 #include <kis_undo_adapter.h>
 #include <kis_types.h>
@@ -129,14 +129,14 @@ private:
     KoCanvasBase *m_canvas;
 };
 
-class KisToolTransformFactory : public KoToolFactory
+class KisToolTransformFactory : public KoToolFactoryBase
 {
 
 
 public:
 
     KisToolTransformFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolTransform") {
+            : KoToolFactoryBase(parent, "KisToolTransform") {
         setToolTip(i18n("Transform a layer or a selection"));
         setToolType(TOOL_TYPE_TRANSFORM);
         setIcon("krita_tool_transform");

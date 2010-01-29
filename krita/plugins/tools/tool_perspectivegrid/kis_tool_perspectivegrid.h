@@ -22,7 +22,7 @@
 
 #include <kis_perspective_grid.h>
 #include <kis_tool.h>
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
 class KisCanvas2;
 
@@ -86,12 +86,12 @@ private:
 };
 
 
-class KisToolPerspectiveGridFactory : public KoToolFactory
+class KisToolPerspectiveGridFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolPerspectiveGridFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolPerspectiveGrid") {
+            : KoToolFactoryBase(parent, "KisToolPerspectiveGrid") {
         setToolTip(i18n("Edit the perspective grid"));
         setToolType(TOOL_TYPE_VIEW);
         setIcon("tool_perspectivegrid");

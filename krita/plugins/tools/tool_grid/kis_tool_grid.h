@@ -19,7 +19,7 @@
 #define _KIS_TOOL_GRID_H_
 
 #include <kis_tool.h>
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
 class KisCanvas2;
 
@@ -59,12 +59,12 @@ private:
 };
 
 
-class KisToolGridFactory : public KoToolFactory
+class KisToolGridFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolGridFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolGrid") {
+            : KoToolFactoryBase(parent, "KisToolGrid") {
         setToolTip(i18n("Edit the grid"));
         setToolType(TOOL_TYPE_VIEW);
         setIcon("krita_tool_grid");

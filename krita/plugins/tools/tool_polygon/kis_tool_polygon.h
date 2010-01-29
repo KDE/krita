@@ -39,14 +39,14 @@ protected:
 };
 
 
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 
-class KisToolPolygonFactory : public KoToolFactory
+class KisToolPolygonFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolPolygonFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolPolygon") {
+            : KoToolFactoryBase(parent, "KisToolPolygon") {
         setToolTip(i18n("Draw a polygon. Shift-mouseclick ends the polygon."));
         setToolType(TOOL_TYPE_SHAPE);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

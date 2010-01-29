@@ -19,9 +19,9 @@
 #ifndef KRITA_SHAPE_TOOL_FACTORY
 #define KRITA_SHAPE_TOOL_FACTORY
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
-class KritaShapeToolFactory : public KoToolFactory
+class KritaShapeToolFactory : public KoToolFactoryBase
 {
     Q_OBJECT
 public:

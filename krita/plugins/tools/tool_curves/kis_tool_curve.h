@@ -28,7 +28,7 @@
 
 #include "kis_selection.h"
 #include "kis_tool_paint.h"
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 #include <flake/kis_node_shape.h>
 
 #include "kis_curve_framework.h"

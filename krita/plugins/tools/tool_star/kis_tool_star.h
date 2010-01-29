@@ -71,14 +71,14 @@ private:
 };
 
 
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 
-class KisToolStarFactory : public KoToolFactory
+class KisToolStarFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolStarFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolStar") {
+            : KoToolFactoryBase(parent, "KisToolStar") {
         setToolTip(i18n("Draw a star with the current brush"));
         setToolType(TOOL_TYPE_SHAPE);
         setPriority(6);

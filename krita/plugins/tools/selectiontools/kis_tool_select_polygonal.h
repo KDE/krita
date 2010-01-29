@@ -23,7 +23,7 @@
 #ifndef KIS_TOOL_SELECT_POLYGONAL_H_
 #define KIS_TOOL_SELECT_POLYGONAL_H_
 
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 #include "krita/ui/tool/kis_tool_select_base.h"
 #include "kis_tool_polyline_base.h"
 
@@ -61,12 +61,12 @@ private:
 };
 
 
-class KisToolSelectPolygonalFactory : public KoToolFactory
+class KisToolSelectPolygonalFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolSelectPolygonalFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolSelectPolygonal") {
+            : KoToolFactoryBase(parent, "KisToolSelectPolygonal") {
         setToolTip(i18n("Select a polygonal region"));
         setToolType(TOOL_TYPE_SELECTED);
         setIcon("tool_polygonal_selection");

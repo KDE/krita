@@ -21,10 +21,10 @@
 #ifndef KOCREATESHAPESTOOLFACTORY_H
 #define KOCREATESHAPESTOOLFACTORY_H
 
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 
 /// The factory for the KoCreateShapesTool
-class KoCreateShapesToolFactory : public KoToolFactory
+class KoCreateShapesToolFactory : public KoToolFactoryBase
 {
 public:
     /// Constructor

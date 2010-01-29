@@ -415,7 +415,7 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
         int highestPriority = INT_MAX;
         ToolHelper * helper = 0;
         foreach(ToolHelper * th, tools) {
-            if (th->toolType() == KoToolFactory::mainToolType()) {
+            if (th->toolType() == KoToolFactoryBase::mainToolType()) {
                 if (th->priority() < highestPriority) {
                     highestPriority = qMin(highestPriority, th->priority());
                     helper = th;
@@ -789,7 +789,7 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
     foreach(ToolHelper *helper, d->tools) {
         if (helper->priority() >= prio)
             continue;
-        if (helper->toolType() == KoToolFactory::mainToolType())
+        if (helper->toolType() == KoToolFactoryBase::mainToolType())
             continue;
         if (types.contains(helper->activationShapeId())) {
             toolType = helper->id();

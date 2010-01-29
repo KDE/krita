@@ -21,10 +21,10 @@
 #ifndef KOZOOMTOOLFACTORY_H
 #define KOZOOMTOOLFACTORY_H
 
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 
 /// Factory for the KoZoomTool
-class KoZoomToolFactory : public KoToolFactory
+class KoZoomToolFactory : public KoToolFactoryBase
 {
 public:
     /// constructor

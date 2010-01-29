@@ -21,7 +21,7 @@
 #ifndef KIS_TOOL_BEZIER_PAINT_H_
 #define KIS_TOOL_BEZIER_PAINT_H_
 
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 #include "kis_tool_bezier.h"
 
 class KisToolBezierPaint : public KisToolBezier
@@ -41,12 +41,12 @@ protected:
 
 };
 
-class KisToolBezierPaintFactory : public KoToolFactory
+class KisToolBezierPaintFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolBezierPaintFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolBezierPaint") {
+            : KoToolFactoryBase(parent, "KisToolBezierPaint") {
         setToolTip(i18n("Draw cubic Beziers. Keep Alt, Control or Shift pressed for options. Return or double-click to finish."));
         setToolType(TOOL_TYPE_SHAPE);
         setPriority(7);

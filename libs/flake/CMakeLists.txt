@@ -42,7 +42,7 @@ set(flake_SRCS
     KoCanvasController.cpp
     KoCanvasController_p.cpp
     KoShapeRegistry.cpp
-    KoToolFactory.cpp
+    KoToolFactoryBase.cpp
     KoPathShapeFactory.cpp
     KoShapeFactoryBase.cpp
     KoShapeUserData.cpp
@@ -255,7 +255,7 @@ install(
     KoSharedSavingData.h
     KoTool.h
     KoToolManager.h
-    KoToolFactory.h
+    KoToolFactoryBase.h
     KoToolProxy.h
     KoToolRegistry.h
     commands/KoEventActionAddCommand.h

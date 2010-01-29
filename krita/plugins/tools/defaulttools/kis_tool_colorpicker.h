@@ -22,7 +22,7 @@
 
 #include <QList>
 
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 #include "ui_wdgcolorpicker.h"
 #include "kis_tool.h"
 #include <flake/kis_node_shape.h>
@@ -80,12 +80,12 @@ private:
     QList<KoColorSet*> m_palettes;
 };
 
-class KisToolColorPickerFactory : public KoToolFactory
+class KisToolColorPickerFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolColorPickerFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KritaSelected/KisToolColorPicker") {
+            : KoToolFactoryBase(parent, "KritaSelected/KisToolColorPicker") {
         setToolTip(i18n("Select a color from the image or current layer"));
         setToolType(TOOL_TYPE_FILL);
 //         setActivationShapeId( KIS_NODE_SHAPE_ID );

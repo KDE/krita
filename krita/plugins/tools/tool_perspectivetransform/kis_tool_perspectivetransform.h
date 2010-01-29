@@ -30,7 +30,7 @@
 
 #include <kactioncollection.h>
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
 #include <kis_layer.h>
 #include "kis_tool.h"
@@ -112,12 +112,12 @@ private:
 
 };
 
-class KisToolPerspectiveTransformFactory : public KoToolFactory
+class KisToolPerspectiveTransformFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolPerspectiveTransformFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolPerspectiveTransform") {
+            : KoToolFactoryBase(parent, "KisToolPerspectiveTransform") {
         setToolTip(i18n("Transform the perspective appearance of a layer or a selection"));
         setToolType(TOOL_TYPE_TRANSFORM);
         setIcon("tool_perspectivetransform");

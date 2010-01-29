@@ -19,7 +19,7 @@
 #define KIS_TOOL_SELECT_SIMILAR_H_
 
 #include <QtGui/QPainter>
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 #include "flake/kis_node_shape.h"
 #include "kis_tool_select_base.h"
 
@@ -53,12 +53,12 @@ private:
     int m_fuzziness;
 };
 
-class KisToolSelectSimilarFactory : public KoToolFactory
+class KisToolSelectSimilarFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolSelectSimilarFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolSelectSimilar") {
+            : KoToolFactoryBase(parent, "KisToolSelectSimilar") {
         setToolTip(i18n("Select similar colors"));
         setToolType(TOOL_TYPE_SELECTED);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

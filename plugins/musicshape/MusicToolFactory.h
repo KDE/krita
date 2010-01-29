@@ -20,9 +20,9 @@
 #define MUSIC_TOOL_FACTORY
 
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
-class MusicToolFactory : public KoToolFactory
+class MusicToolFactory : public KoToolFactoryBase
 {
 public:
     MusicToolFactory( QObject* parent );

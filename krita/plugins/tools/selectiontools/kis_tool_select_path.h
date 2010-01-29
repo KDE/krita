@@ -20,7 +20,7 @@
 #define KIS_TOOL_SELECT_PATH_H_
 
 #include <KoCreatePathTool.h>
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 #include "kis_tool_select_base.h"
 
 class KisSelectionOptions;
@@ -64,12 +64,12 @@ private:
 
 };
 
-class KisToolSelectPathFactory : public KoToolFactory
+class KisToolSelectPathFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolSelectPathFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolSelectPath") {
+            : KoToolFactoryBase(parent, "KisToolSelectPath") {
         setToolTip(i18n("Select an area of the image with path."));
         setToolType(TOOL_TYPE_SELECTED);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

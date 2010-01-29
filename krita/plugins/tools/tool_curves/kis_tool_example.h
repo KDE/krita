@@ -21,7 +21,7 @@
 #ifndef KIS_TOOL_EXAMPLE_H_
 #define KIS_TOOL_EXAMPLE_H_
 
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 #include "kis_tool_curve.h"
 
 
@@ -44,12 +44,12 @@ public:
 
 };
 
-class KisToolExampleFactory : public KoToolFactory
+class KisToolExampleFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolExampleFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolExample") {
+            : KoToolFactoryBase(parent, "KisToolExample") {
         setToolTip(i18n("Example tool for the curves framework"));
         setToolType(TOOL_TYPE_SHAPE);
         setIcon("tool-example");

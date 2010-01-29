@@ -28,7 +28,7 @@
 #include "kis_tool.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 #include "flake/kis_node_shape.h"
 
 class QPointF;
@@ -101,13 +101,13 @@ private:
 };
 
 
-class KisToolMeasureFactory : public KoToolFactory
+class KisToolMeasureFactory : public KoToolFactoryBase
 {
 
 public:
 
     KisToolMeasureFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KritaShape/KisToolMeasure") {
+            : KoToolFactoryBase(parent, "KritaShape/KisToolMeasure") {
         setToolType(TOOL_TYPE_TRANSFORM);
         setToolTip(i18n("Measure the distance between two points"));
         setIcon("krita_tool_measure");

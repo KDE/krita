@@ -24,7 +24,7 @@
 #include <KDebug>
 
 ConnectionToolFactory::ConnectionToolFactory( QObject *parent )
-    : KoToolFactory(parent, ConnectionTool_ID)
+    : KoToolFactoryBase(parent, ConnectionTool_ID)
 {
     setToolTip(i18n("Connect shapes"));    
     setIcon("x-shape-connection");

@@ -35,10 +35,10 @@
  * a toolTip and icon in the constructor of that extending class.
  *
  * An example usage would be:<pre>
-class MyToolFactory : public KoToolFactory {
+class MyToolFactory : public KoToolFactoryBase {
 public:
     MyToolFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "MyTool") {
+        : KoToolFactoryBase(parent, "MyTool") {
         setToolTip(i18n("Create object"));
         setToolType("dynamic");
         setPriority(5);
@@ -51,7 +51,7 @@ K_EXPORT_COMPONENT_FACTORY(myLibrary,
 </pre>
 
  */
-class FLAKE_EXPORT KoToolFactory : public QObject
+class FLAKE_EXPORT KoToolFactoryBase : public QObject
 {
     Q_OBJECT
 
@@ -62,8 +62,8 @@ public:
      * @param id a string that will be used internally for referencing the tool, for
      *   example for use by the KoTool::activateTemporary.
      */
-    KoToolFactory(QObject *parent, const QString &id);
-    virtual ~KoToolFactory();
+    KoToolFactoryBase(QObject *parent, const QString &id);
+    virtual ~KoToolFactoryBase();
 
     /**
      * Instanciate a new tool

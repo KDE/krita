@@ -23,7 +23,7 @@
 
 
 
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 #include "kis_tool_bezier.h"
 
 class KisToolBezierSelect : public KisToolBezier
@@ -50,12 +50,12 @@ protected:
 
 };
 
-class KisToolBezierSelectFactory : public KoToolFactory
+class KisToolBezierSelectFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolBezierSelectFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolBezierSelect") {
+            : KoToolFactoryBase(parent, "KisToolBezierSelect") {
         setToolTip(i18n("Select an area of the image with curves"));
         setToolType(TOOL_TYPE_SELECTED);
         setPriority(0);

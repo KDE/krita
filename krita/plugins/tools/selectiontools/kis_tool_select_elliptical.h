@@ -24,7 +24,7 @@
 #define __KIS_TOOL_SELECT_ELLIPTICAL_H__
 
 #include <QPoint>
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 #include "krita/ui/tool/kis_tool_select_base.h"
 #include "kis_tool_ellipse_base.h"
 
@@ -60,12 +60,12 @@ private:
     friend class LokalTool;
 };
 
-class KisToolSelectEllipticalFactory : public KoToolFactory
+class KisToolSelectEllipticalFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolSelectEllipticalFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolSelectElliptical") {
+            : KoToolFactoryBase(parent, "KisToolSelectElliptical") {
         setToolTip(i18n("Select an elliptical area"));
         setToolType(TOOL_TYPE_SELECTED);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

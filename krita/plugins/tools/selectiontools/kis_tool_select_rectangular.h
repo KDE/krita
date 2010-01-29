@@ -23,7 +23,7 @@
 #define KIS_TOOL_SELECT_RECTANGULAR_H_
 
 #include "krita/ui/tool/kis_tool_select_base.h"
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 #include "kis_tool_rectangle_base.h"
 
 class KoCanvasBase;
@@ -58,12 +58,12 @@ private:
     virtual void deactivate() {m_lokalTool.deactivate();}
 };
 
-class KisToolSelectRectangularFactory : public KoToolFactory
+class KisToolSelectRectangularFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolSelectRectangularFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolSelectRectangular") {
+            : KoToolFactoryBase(parent, "KisToolSelectRectangular") {
         setToolTip(i18n("Select a rectangular area"));
         setToolType(TOOL_TYPE_SELECTED);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

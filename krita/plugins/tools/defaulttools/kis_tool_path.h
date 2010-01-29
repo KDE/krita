@@ -20,7 +20,7 @@
 #define KIS_TOOL_PATH_H_
 
 #include <KoCreatePathTool.h>
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
 #include "flake/kis_node_shape.h"
 #include "kis_tool.h"
@@ -41,12 +41,12 @@ public:
 
 };
 
-class KisToolPathFactory : public KoToolFactory
+class KisToolPathFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolPathFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolPath") {
+            : KoToolFactoryBase(parent, "KisToolPath") {
         setToolTip(i18n("Draw a path."));
         setToolType(TOOL_TYPE_SHAPE);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

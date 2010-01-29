@@ -24,7 +24,7 @@
 #define KIS_TOOL_SELECT_OUTLINE_H_
 
 #include <QPoint>
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 #include "krita/ui/tool/kis_tool_select_base.h"
 
 class KisToolSelectOutline : public KisToolSelectBase
@@ -54,12 +54,12 @@ private:
 };
 
 
-class KisToolSelectOutlineFactory : public KoToolFactory
+class KisToolSelectOutlineFactory : public KoToolFactoryBase
 {
 
 public:
     KisToolSelectOutlineFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolSelectOutline") {
+            : KoToolFactoryBase(parent, "KisToolSelectOutline") {
         setToolTip(i18n("Select an area by its outline"));
         setToolType(TOOL_TYPE_SELECTED);
         setIcon("tool_outline_selection");

@@ -21,10 +21,10 @@
 #ifndef KOPANTOOLFACTORY_H
 #define KOPANTOOLFACTORY_H
 
-#include "KoToolFactory.h"
+#include "KoToolFactoryBase.h"
 
 /// Factory for the KoPanTool
-class KoPanToolFactory : public KoToolFactory
+class KoPanToolFactory : public KoToolFactoryBase
 {
 public:
     /// constructor

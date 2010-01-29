@@ -31,6 +31,7 @@
 
 #include "shivagenerator.h"
 #include "shivafilter.h"
+#include <GTLCore/CompilationMessages.h>
 
 QMutex* shivaMutex;
 
@@ -38,7 +39,7 @@ K_PLUGIN_FACTORY(ShivaPluginFactory, registerPlugin<ShivaPlugin>();)
 K_EXPORT_PLUGIN(ShivaPluginFactory("krita"))
 
 ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+        : KParts::Plugin(parent)
 {
     m_sourceCollection = new OpenShiva::SourcesCollection();
 
@@ -53,8 +54,9 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
         Q_ASSERT(manager);
         std::list< OpenShiva::Source* > kernels = m_sourceCollection->sources(OpenShiva::Source::GeneratorKernel);
 
+        dbgPlugins << "Collection has " << kernels.size() << " filters";
         foreach(OpenShiva::Source* kernel, kernels) {
-            // kDebug() << kernel->metadataCompilationErrors().c_str() << " " << kernel->isCompiled() ;
+            dbgPlugins << kernel->metadataCompilationMessages().toString().c_str();
             if (kernel->outputImageType() == OpenShiva::Source::Image || kernel->outputImageType() == OpenShiva::Source::Image4) {
                 manager->add(new ShivaGenerator(kernel));
             }
@@ -64,8 +66,9 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
         KisFilterRegistry * manager = KisFilterRegistry::instance();
         Q_ASSERT(manager);
         std::list< OpenShiva::Source* > kernels = m_sourceCollection->sources(OpenShiva::Source::FilterKernel);
+        dbgPlugins << "Collection has " << kernels.size() << " filters";
         foreach(OpenShiva::Source* kernel, kernels) {
-            // kDebug() << kernel->metadataCompilationErrors().c_str() << " " << kernel->isCompiled() ;
+            dbgPlugins << kernel->metadataCompilationMessages().toString().c_str() ;
             if (kernel->outputImageType() == OpenShiva::Source::Image && kernel->inputImageType(0) == OpenShiva::Source::Image) {
                 manager->add(new ShivaFilter(kernel));
             }

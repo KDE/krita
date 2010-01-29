@@ -21,6 +21,8 @@
 #include <QObject>
 #include <QVariant>
 
+#include <kparts/plugin.h>
+
 class KisConfigWidget;
 
 namespace OpenShiva
@@ -28,10 +30,10 @@ namespace OpenShiva
 class SourcesCollection;
 }
 
-class ShivaPlugin : public QObject
+class ShivaPlugin : public KParts::Plugin
 {
 public:
-    ShivaPlugin(QObject *parent, const QVariantList &);
+    ShivaPlugin(QObject* parent, const QVariantList&);
     virtual ~ShivaPlugin();
 private:
     OpenShiva::SourcesCollection* m_sourceCollection;

@@ -221,18 +221,16 @@ QVariant TrackedChangeModel::data(const QModelIndex& index, int role) const
     ItemData data = item->itemData();
 
     switch(index.column()) {
-        case 0:
-            return QVariant(item->itemData().changeId);
-            break;
-        case 1:
-            return QVariant(item->itemData().title);
-            break;
-        case 2:
-            return QVariant(item->itemData().author);
-            break;
-        default:
-            return QVariant();
+    case 0:
+        return QVariant(item->itemData().changeId);
+    case 1:
+        return QVariant(item->itemData().title);
+    case 2:
+        return QVariant(item->itemData().author);
+    default:
+        break;
     }
+    return QVariant();
 }
 
 Qt::ItemFlags TrackedChangeModel::flags(const QModelIndex& index) const

@@ -20,24 +20,31 @@
 #define KIS_PAINTER_BENCHMARK_H
 
 #include <QtTest/QtTest>
+
+#include <KoColor.h>
+
 #include <kis_types.h>
+
 
 class KisPaintDevice;
 class KoColorSpace;
-class KoColor;
 
 class KisPainterBenchmark : public QObject
 {
     Q_OBJECT
 private:
     const KoColorSpace * m_colorSpace;
-    KoColor * m_color;
+    KoColor m_color;
     
 private slots:
     void initTestCase();
     void cleanupTestCase();
     
     void benchmarkBitBlt();
+    void benchmarkBitBltSelection();
+    void benchmarkFixedBitBlt();
+    void benchmarkFixedBitBltSelection();
+         
     
 };
 

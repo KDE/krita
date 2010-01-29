@@ -30,7 +30,7 @@
 class KoShape;
 class KoXmlWriter;
 class KoGenStyles;
-class KoDataCenter;
+class KoDataCenterBase;
 class KoEmbeddedDocumentSaver;
 class KoImageData;
 class KoShapeLayer;
@@ -197,12 +197,12 @@ public:
     /**
      * Add data center
      */
-    void addDataCenter(KoDataCenter *dataCenter);
+    void addDataCenter(KoDataCenterBase *dataCenter);
 
     /**
      * Save the data centers
      *
-     * This calls KoDataCenter::completeSaving()
+     * This calls KoDataCenterBase::completeSaving()
      * @returns false if an error occurred, which typically cancels the save.
      */
     bool saveDataCenter(KoStore *store, KoXmlWriter *manifestWriter);

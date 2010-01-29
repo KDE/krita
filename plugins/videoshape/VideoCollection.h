@@ -19,7 +19,7 @@
 #ifndef VIDEOCOLLECTION_H
 #define VIDEOCOLLECTION_H
 
-#include <KoDataCenter.h>
+#include <KoDataCenterBase.h>
 #include <QObject>
 
 class QUrl;
@@ -30,7 +30,7 @@ class VideoData;
  * An collection of VideoData objects to allow loading and saving them all together to the KoStore.
  * It also makes sure that if the same image is added to the collection that they share the internal data structure.
  */
-class VideoCollection : public QObject, public KoDataCenter
+class VideoCollection : public QObject, public KoDataCenterBase
 {
     Q_OBJECT
 public:

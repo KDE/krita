@@ -54,7 +54,7 @@ class KoCanvasBase;
 class KoShapeLoadingContext;
 class KoGenStyle;
 class KoShapeControllerBase;
-class KoDataCenter;
+class KoDataCenterBase;
 class KoShapeShadow;
 class KoEventAction;
 class KoShapePrivate;

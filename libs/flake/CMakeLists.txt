@@ -216,7 +216,7 @@ install(
     KoResourceManager.h
     KoCopyController.h
     KoCutController.h
-    KoDataCenter.h
+    KoDataCenterBase.h
     KoDockFactoryBase.h
     KoDockRegistry.h
     KoDrag.h

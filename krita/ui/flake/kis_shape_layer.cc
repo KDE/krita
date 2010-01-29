@@ -39,7 +39,7 @@
 
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
-#include <KoDataCenter.h>
+#include <KoDataCenterBase.h>
 #include <KoDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyle.h>

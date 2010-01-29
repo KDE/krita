@@ -56,7 +56,7 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
 #include <KoResourceManager.h>
-#include <KoDataCenter.h>
+#include <KoDataCenterBase.h>
 #include <commands/kis_image_layer_add_command.h>
 #include <kis_undo_adapter.h>
 
@@ -69,7 +69,7 @@ public:
     KisNodeMap nodeShapes; // maps from krita/image layers to shapes
     KisDoc2 * doc;
     KisNameServer * nameServer;
-    QMap<QString, KoDataCenter *>  dataCenterMap;
+    QMap<QString, KoDataCenterBase *>  dataCenterMap;
     bool selectionShapeToBeAdded;
 
     void removeShapeFromMap(KoShape*);
@@ -329,7 +329,7 @@ void KisShapeController::addShape(KoShape* shape)
     m_d->doc->setModified(true);
 }
 
-QMap<QString, KoDataCenter *> KisShapeController::dataCenterMap() const
+QMap<QString, KoDataCenterBase *> KisShapeController::dataCenterMap() const
 {
     return m_d->dataCenterMap;
 }

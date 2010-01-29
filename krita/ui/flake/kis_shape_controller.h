@@ -31,7 +31,7 @@ class KoShape;
 class KisView2;
 class KisDoc2;
 class KisNameServer;
-class KoDataCenter;
+class KoDataCenterBase;
 
 /**
  * KisShapeController keeps track of new layers, shapes, masks and
@@ -51,7 +51,7 @@ public:
     void setImage(KisImageWSP image);
     KoShape * shapeForNode(KisNodeSP layer) const;
     void setInitialShapeForView(KisView2 * view);
-    virtual QMap<QString, KoDataCenter *> dataCenterMap() const;
+    virtual QMap<QString, KoDataCenterBase *> dataCenterMap() const;
 
     // Prepares the shape controller to add the next shape to a shape selection
     void prepareAddingSelectionShape();

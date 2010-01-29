@@ -713,17 +713,15 @@ void KisView2::loadPlugins()
                                                                                   "([X-Krita-Version] == 3)"));
     KService::List::ConstIterator iter;
     for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
-
         KService::Ptr service = *iter;
+        dbgUI << "Load plugin " << service->name();
         int errCode = 0;
         KParts::Plugin* plugin =
                 KService::createInstance<KParts::Plugin> (service, this, QStringList(), &errCode);
         if (plugin) {
             insertChildClient(plugin);
         } else {
-            if (errCode == KLibLoader::ErrNoLibrary) {
-                warnKrita << " Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();
-            }
+            errKrita << "Fail to create an instance for " << service->name() << " " << KLibLoader::errorString(errCode) << " " << KLibLoader::self()->lastErrorMessage();
         }
     }
 }

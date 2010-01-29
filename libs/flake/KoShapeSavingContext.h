@@ -66,7 +66,7 @@ public:
          */
         UniqueMasterPages = 8
     };
-    Q_DECLARE_FLAGS(KoShapeSavingOptions, ShapeSavingOption)
+    Q_DECLARE_FLAGS(ShapeSavingOptions, ShapeSavingOption)
 
     /**
      * @brief Constructor
@@ -121,7 +121,7 @@ public:
      *
      * @param options to use
      */
-    void setOptions(KoShapeSavingOptions options);
+    void setOptions(ShapeSavingOptions options);
 
     /// add an option to the set of options stored on this context, will leave the other options intact.
     void addOption(ShapeSavingOption option);
@@ -134,7 +134,7 @@ public:
      *
      * @return options used
      */
-    KoShapeSavingOptions options() const;
+    ShapeSavingOptions options() const;
 
     /**
      * @brief Get the draw id for a shape
@@ -266,6 +266,6 @@ private:
     KoShapeSavingContextPrivate *d;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KoShapeSavingContext::KoShapeSavingOptions)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoShapeSavingContext::ShapeSavingOptions)
 
 #endif // KOSHAPESAVINGCONTEXT_H

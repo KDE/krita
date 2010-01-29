@@ -38,7 +38,7 @@ public:
     KoShapeSavingContextPrivate(KoXmlWriter&, KoGenStyles&, KoEmbeddedDocumentSaver&);
 
     KoXmlWriter *xmlWriter;
-    KoShapeSavingContext::KoShapeSavingOptions savingOptions;
+    KoShapeSavingContext::ShapeSavingOptions savingOptions;
     QMap<const KoShape *, QString> drawIds;
     QList<const KoShapeLayer*> layers;
     QSet<KoDataCenterBase *> dataCenter;
@@ -101,12 +101,12 @@ bool KoShapeSavingContext::isSet(ShapeSavingOption option) const
     return d->savingOptions & option;
 }
 
-void KoShapeSavingContext::setOptions(KoShapeSavingOptions options)
+void KoShapeSavingContext::setOptions(ShapeSavingOptions options)
 {
     d->savingOptions = options;
 }
 
-KoShapeSavingContext::KoShapeSavingOptions KoShapeSavingContext::options() const
+KoShapeSavingContext::ShapeSavingOptions KoShapeSavingContext::options() const
 {
     return d->savingOptions;
 }

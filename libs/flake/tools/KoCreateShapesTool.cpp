@@ -31,7 +31,7 @@
 class KoCreateShapesToolPrivate : public KoInteractionToolPrivate
 {
 public:
-    KoCreateShapesToolPrivate(KoTool *qq, KoCanvasBase *canvas)
+    KoCreateShapesToolPrivate(KoToolBase *qq, KoCanvasBase *canvas)
         : KoInteractionToolPrivate(qq, canvas),
         newShapeProperties(0)
     {
@@ -59,7 +59,7 @@ void KoCreateShapesTool::paint(QPainter &painter, const KoViewConverter &convert
 void KoCreateShapesTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseReleaseEvent(event);
-    emit KoTool::done();
+    emit KoToolBase::done();
 }
 
 void KoCreateShapesTool::activate(bool)

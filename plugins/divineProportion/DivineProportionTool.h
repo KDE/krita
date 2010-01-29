@@ -22,14 +22,14 @@
 
 #include "DivineProportionShape.h"
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 class QAction;
 
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
  */
-class DivineProportionTool : public KoTool {
+class DivineProportionTool : public KoToolBase {
     Q_OBJECT
 public:
     explicit DivineProportionTool(KoCanvasBase *canvas);

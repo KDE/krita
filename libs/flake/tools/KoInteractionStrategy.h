@@ -29,7 +29,7 @@
 class KoPointerEvent;
 class KoViewConverter;
 class KoInteractionStrategyPrivate;
-class KoTool;
+class KoToolBase;
 class QUndoCommand;
 class QPointF;
 class QPainter;
@@ -50,7 +50,7 @@ class FLAKE_EXPORT KoInteractionStrategy
 {
 public:
     /// constructor
-    KoInteractionStrategy(KoTool *parent);
+    KoInteractionStrategy(KoToolBase *parent);
     /// Destructor
     virtual ~KoInteractionStrategy();
 
@@ -90,7 +90,7 @@ public:
      */
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers) = 0;
 
-    KoTool *tool() const;
+    KoToolBase *tool() const;
 
 protected:
     /// constructor

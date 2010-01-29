@@ -97,7 +97,7 @@ public:
 
     virtual ~KisToolColorPickerFactory() {}
 
-    virtual KoTool * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
         return new KisToolColorPicker(canvas);
     }
 };

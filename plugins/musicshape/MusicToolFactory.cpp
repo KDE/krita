@@ -38,7 +38,7 @@ MusicToolFactory::~MusicToolFactory()
 {
 }
 
-KoTool* MusicToolFactory::createTool( KoCanvasBase* canvas )
+KoToolBase* MusicToolFactory::createTool( KoCanvasBase* canvas )
 {
     return new MusicTool( canvas );
 }

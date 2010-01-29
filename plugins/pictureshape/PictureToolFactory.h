@@ -29,7 +29,7 @@ public:
     PictureToolFactory( QObject* parent);
     ~PictureToolFactory();
 
-    KoTool *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
 

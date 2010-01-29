@@ -38,7 +38,7 @@ set(flake_SRCS
     KoShapeManager.cpp
     KoShapePainter.cpp
     KoFrameShape.cpp
-    KoTool.cpp
+    KoToolBase.cpp
     KoCanvasController.cpp
     KoCanvasController_p.cpp
     KoShapeRegistry.cpp
@@ -253,7 +253,7 @@ install(
     KoShapeUserData.h
     KoShapeApplicationData.h
     KoSharedSavingData.h
-    KoTool.h
+    KoToolBase.h
     KoToolManager.h
     KoToolFactoryBase.h
     KoToolProxy.h

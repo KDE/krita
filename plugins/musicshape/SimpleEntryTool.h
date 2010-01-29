@@ -20,7 +20,7 @@
 #define SIMPLEENTRY_TOOL
 
 #include <QPointF>
-#include <KoTool.h>
+#include <KoToolBase.h>
 #include "core/Chord.h"
 
 class MusicShape;
@@ -36,7 +36,7 @@ namespace MusicCore {
 /**
  * Tool that provides functionality to insert/remove notes/rests. Named after Finale's Simple Entry tool.
  */
-class SimpleEntryTool : public KoTool
+class SimpleEntryTool : public KoToolBase
 {
     Q_OBJECT
 public:

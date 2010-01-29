@@ -68,7 +68,7 @@ struct MixerTool::Private {
 };
 
 MixerTool::MixerTool(MixerCanvas* mixer)
-    : KoTool(mixer)
+    : KoToolBase(mixer)
     , m_d( new Private )
 {
     m_d->mixer = mixer;

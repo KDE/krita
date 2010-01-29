@@ -69,7 +69,7 @@ public:
 
     virtual ~KisToolSelectOutlineFactory() {}
 
-    virtual KoTool * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
         return new KisToolSelectOutline(canvas);
     }
 };

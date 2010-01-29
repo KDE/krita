@@ -19,7 +19,7 @@
  */
 #include "KoToolProxy.h"
 
-#include "KoTool.h"
+#include "KoToolBase.h"
 #include "KoPointerEvent.h"
 #include "KoInputDevice.h"
 #include "KoToolManager_p.h"
@@ -142,7 +142,7 @@ public:
         return true;
     }
 
-    KoTool *activeTool;
+    KoToolBase *activeTool;
     bool tabletPressed;
     bool hasSelection;
     QTimer scrollTimer;
@@ -336,7 +336,7 @@ KoToolSelection* KoToolProxy::selection()
     return 0;
 }
 
-void KoToolProxy::setActiveTool(KoTool *tool)
+void KoToolProxy::setActiveTool(KoToolBase *tool)
 {
     if (d->activeTool)
         disconnect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));

@@ -181,7 +181,7 @@ public:
 
     virtual ~KisToolDynaFactory() {}
 
-    virtual KoTool * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
         return new KisToolDyna(canvas);
     }
 

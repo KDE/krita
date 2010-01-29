@@ -22,7 +22,7 @@
 #include "KoParameterShape.h"
 #include "commands/KoParameterHandleMoveCommand.h"
 
-KoParameterChangeStrategy::KoParameterChangeStrategy(KoTool *tool, KoParameterShape *parameterShape, int handleId)
+KoParameterChangeStrategy::KoParameterChangeStrategy(KoToolBase *tool, KoParameterShape *parameterShape, int handleId)
         : KoInteractionStrategy(tool)
         , m_parameterShape(parameterShape)
         , m_handleId(handleId)

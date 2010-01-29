@@ -29,7 +29,7 @@ class ArtisticTextToolFactory : public KoToolFactoryBase
         explicit ArtisticTextToolFactory( QObject *parent );
         ~ArtisticTextToolFactory();
 
-        KoTool * createTool( KoCanvasBase *canvas );
+        KoToolBase * createTool( KoCanvasBase *canvas );
 };
 
 #endif // ARTISTICTEXTTOOLFACTORY_H

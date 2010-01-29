@@ -28,7 +28,7 @@ public:
     SimpleEntryToolFactory( QObject* parent );
     ~SimpleEntryToolFactory();
 
-    KoTool* createTool( KoCanvasBase* canvas );
+    KoToolBase* createTool( KoCanvasBase* canvas );
 };
 
 

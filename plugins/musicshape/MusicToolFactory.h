@@ -28,7 +28,7 @@ public:
     MusicToolFactory( QObject* parent );
     ~MusicToolFactory();
 
-    KoTool* createTool( KoCanvasBase* canvas );
+    KoToolBase* createTool( KoCanvasBase* canvas );
 };
 
 

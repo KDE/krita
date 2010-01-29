@@ -19,7 +19,7 @@
 
 #include "KoPasteController.h"
 
-//   #include <KoTool.h>
+//   #include <KoToolBase.h>
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
 //   #include <KoToolSelection.h>

@@ -35,7 +35,7 @@ GuidesToolFactory::~GuidesToolFactory()
 {
 }
 
-KoTool* GuidesToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase* GuidesToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new GuidesTool(canvas);
 }

@@ -37,7 +37,7 @@ ChangeTrackingToolFactory::~ChangeTrackingToolFactory()
 {
 }
 
-KoTool * ChangeTrackingToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase * ChangeTrackingToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new ChangeTrackingTool(canvas);
 }

@@ -36,6 +36,6 @@ DefaultToolFactory::DefaultToolFactory(QObject *parent)
 DefaultToolFactory::~DefaultToolFactory() {
 }
 
-KoTool* DefaultToolFactory::createTool(KoCanvasBase *canvas) {
+KoToolBase* DefaultToolFactory::createTool(KoCanvasBase *canvas) {
     return new DefaultTool(canvas);
 }

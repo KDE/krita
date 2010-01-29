@@ -115,7 +115,7 @@ private:
 };
 
 KoCreatePathTool::KoCreatePathTool(KoCanvasBase * canvas)
-        : KoTool(canvas)
+        : KoToolBase(canvas)
         , m_shape(0)
         , m_activePoint(0)
         , m_firstPoint(0)

@@ -19,7 +19,7 @@
  */
 
 #include "KoPanTool.h"
-#include "KoTool_p.h"
+#include "KoToolBase_p.h"
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
@@ -30,7 +30,7 @@
 #include <kdebug.h>
 
 KoPanTool::KoPanTool(KoCanvasBase *canvas)
-        : KoTool(canvas),
+        : KoToolBase(canvas),
         m_controller(0),
         m_temporary(false)
 {
@@ -105,7 +105,7 @@ void KoPanTool::customMoveEvent(KoPointerEvent * event)
 
 QPointF KoPanTool::documentToViewport(const QPointF &p)
 {
-    Q_D(KoTool);
+    Q_D(KoToolBase);
     QPointF viewportPoint = d->canvas->viewConverter()->documentToView(p);
     viewportPoint += d->canvas->documentOrigin();
     viewportPoint += QPoint(m_controller->canvasOffsetX(), m_controller->canvasOffsetY());

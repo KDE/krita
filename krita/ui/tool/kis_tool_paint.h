@@ -29,7 +29,7 @@
 #include <QVariant>
 
 #include <KoResourceManager.h>
-#include <KoTool.h>
+#include <KoToolBase.h>
 #include <KoAbstractGradient.h>
 
 #include <krita_export.h>

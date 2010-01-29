@@ -19,11 +19,11 @@
 #ifndef MUSIC_TOOL
 #define MUSIC_TOOL
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 class MusicShape;
 class QUndoCommand;
 
-class MusicTool : public KoTool
+class MusicTool : public KoToolBase
 {
   Q_OBJECT
 public:

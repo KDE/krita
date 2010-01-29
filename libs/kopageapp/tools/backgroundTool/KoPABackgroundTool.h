@@ -21,28 +21,28 @@
 #ifndef KOPABACKGROUNDTOOL_H
 #define KOPABACKGROUNDTOOL_H
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 class KoPAView;
 
-class KoPABackgroundTool : public KoTool
+class KoPABackgroundTool : public KoToolBase
 {
     Q_OBJECT
 public:
     KoPABackgroundTool( KoCanvasBase* base );
     virtual ~KoPABackgroundTool();
 
-    ///Reimplemented from KoTool
+    ///Reimplemented from KoToolBase
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
-    ///Reimplemented from KoTool
+    ///Reimplemented from KoToolBase
     virtual void activate( bool temporary );
-    ///Reimplemented from KoTool
+    ///Reimplemented from KoToolBase
     virtual void deactivate();
-    ///Reimplemented from KoTool
+    ///Reimplemented from KoToolBase
     virtual void mousePressEvent( KoPointerEvent *event );
-    ///Reimplemented from KoTool
+    ///Reimplemented from KoToolBase
     virtual void mouseMoveEvent( KoPointerEvent *event );
-    ///Reimplemented from KoTool
+    ///Reimplemented from KoToolBase
     virtual void mouseReleaseEvent( KoPointerEvent *event );
 
     KoPAView * view() const;
@@ -51,7 +51,7 @@ public slots:
     void slotActivePageChanged();
 
 protected:
-    ///Reimplemented from KoTool
+    ///Reimplemented from KoToolBase
     virtual QMap<QString, QWidget *> createOptionWidgets();
 
 private:

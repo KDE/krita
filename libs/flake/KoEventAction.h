@@ -24,7 +24,7 @@
 #include "KoXmlReaderForward.h"
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
-class KoTool;
+class KoToolBase;
 
 /**
  * This is the base class for actions that are executed on events.

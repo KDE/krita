@@ -57,7 +57,7 @@ public:
 
     virtual ~KisToolPolygonFactory() {}
 
-    virtual KoTool * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
         return new KisToolPolygon(canvas);
     }
 };

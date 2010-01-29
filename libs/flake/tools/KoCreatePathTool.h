@@ -22,7 +22,7 @@
 #define KOCREATEPATHTOOL_H
 
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 #include <QMap>
 
@@ -34,7 +34,7 @@ class KoPathPoint;
 /**
  * Tool for creating path shapes.
  */
-class FLAKE_EXPORT KoCreatePathTool : public KoTool
+class FLAKE_EXPORT KoCreatePathTool : public KoToolBase
 {
     Q_OBJECT
 public:

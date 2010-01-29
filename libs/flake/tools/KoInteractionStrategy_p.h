@@ -20,12 +20,12 @@
 #ifndef KoInteractionStrategyPrivate_H
 #define KoInteractionStrategyPrivate_H
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 class KoInteractionStrategyPrivate
 {
 public:
-    KoInteractionStrategyPrivate(KoTool *t)
+    KoInteractionStrategyPrivate(KoToolBase *t)
         : tool(t)
     {
     }
@@ -34,7 +34,7 @@ public:
         tool->setStatusText(QString());
     }
 
-    KoTool *tool; ///< the KoTool instance that controls this strategy.
+    KoToolBase *tool; ///< the KoToolBase instance that controls this strategy.
 };
 
 #endif

@@ -36,7 +36,7 @@ KritaShapeToolFactory::~KritaShapeToolFactory()
 {
 }
 
-KoTool* KritaShapeToolFactory::createTool(KoCanvasBase* canvas)
+KoToolBase* KritaShapeToolFactory::createTool(KoCanvasBase* canvas)
 {
     return new KritaShapeTool(canvas);
 }

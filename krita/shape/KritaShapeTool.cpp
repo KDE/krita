@@ -41,7 +41,7 @@
 #include "KritaShapeTool.moc"
 
 KritaShapeTool::KritaShapeTool(KoCanvasBase* canvas)
-        : KoTool(canvas),
+        : KoToolBase(canvas),
         m_kritaShapeshape(0)
 {
 }

@@ -21,14 +21,14 @@
 #ifndef MIXERTOOL_H_
 #define MIXERTOOL_H_
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 class KoPointerEvent;
 class MixerCanvas;
 class QRegion;
 class KisPaintInformation;
 
-class MixerTool : public KoTool
+class MixerTool : public KoToolBase
 {
     Q_OBJECT
 
@@ -49,7 +49,7 @@ public:
 
     void setDirty(const QRegion &region);
 
-    // KoTool Implementation.
+    // KoToolBase Implementation.
 
 public slots:
 

@@ -39,7 +39,7 @@ PictureToolFactory::~PictureToolFactory()
 {
 }
 
-KoTool* PictureToolFactory::createTool( KoCanvasBase* canvas )
+KoToolBase* PictureToolFactory::createTool( KoCanvasBase* canvas )
 {
     return new PictureTool( canvas );
 }

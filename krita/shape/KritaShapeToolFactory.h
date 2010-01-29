@@ -28,7 +28,7 @@ public:
     KritaShapeToolFactory(QObject* parent);
     ~KritaShapeToolFactory();
 
-    KoTool* createTool(KoCanvasBase* canvas);
+    KoToolBase* createTool(KoCanvasBase* canvas);
 };
 
 

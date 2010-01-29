@@ -41,7 +41,7 @@
 #include "KoPABackgroundToolWidget.h"
 
 KoPABackgroundTool::KoPABackgroundTool( KoCanvasBase *canvas )
-: KoTool( canvas )
+: KoToolBase( canvas )
 {
     m_view = static_cast<KoPACanvas *>(canvas)->koPAView();
 

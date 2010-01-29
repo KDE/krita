@@ -28,7 +28,7 @@
 #include <QList>
 
 class KoCanvasBase;
-class KoTool;
+class KoToolBase;
 class KoShape;
 
 /**
@@ -43,7 +43,7 @@ public:
      * @param canvas the canvas interface which will supply things like a selection object
      * @param clicked the initial point that the user depressed (in pt).
      */
-    ShapeMoveStrategy(KoTool *tool, const QPointF &clicked);
+    ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked);
     virtual ~ShapeMoveStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);

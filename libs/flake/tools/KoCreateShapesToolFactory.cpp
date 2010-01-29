@@ -39,7 +39,7 @@ KoCreateShapesToolFactory::~KoCreateShapesToolFactory()
 {
 }
 
-KoTool* KoCreateShapesToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase* KoCreateShapesToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KoCreateShapesTool(canvas);
 }

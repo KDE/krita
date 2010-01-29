@@ -24,7 +24,7 @@
 #define KOPATHTOOL_H
 
 #include "KoPathShape.h"
-#include "KoTool.h"
+#include "KoToolBase.h"
 #include "KoPathToolSelection.h"
 
 #include "QMap"
@@ -37,7 +37,7 @@ class KoPathToolHandle;
 class KAction;
 
 /// The tool for editing a KoPathShape or a KoParameterShape
-class FLAKE_TEST_EXPORT KoPathTool : public KoTool
+class FLAKE_TEST_EXPORT KoPathTool : public KoToolBase
 {
     Q_OBJECT
 public:
@@ -139,7 +139,7 @@ private:
     QCursor m_selectCursor;
     QCursor m_moveCursor;
 
-    Q_DECLARE_PRIVATE(KoTool)
+    Q_DECLARE_PRIVATE(KoToolBase)
 };
 
 #endif

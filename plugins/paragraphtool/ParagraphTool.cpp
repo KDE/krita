@@ -33,7 +33,7 @@ class KoViewConverter;
 class QPainter;
 
 ParagraphTool::ParagraphTool(KoCanvasBase *canvas)
-        : KoTool(canvas),
+        : KoToolBase(canvas),
         m_paragraphEditor(this, canvas),
         m_paragraphHighlighter(this, canvas)
 {}

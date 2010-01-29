@@ -29,7 +29,7 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
-#include <KoTool.h>
+#include <KoToolBase.h>
 #include <KoColor.h>
 #include <KoID.h>
 #include <KoPointerEvent.h>
@@ -92,7 +92,7 @@ struct KisTool::Private {
 };
 
 KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
-        : KoTool(canvas)
+        : KoToolBase(canvas)
         , d(new Private)
 {
     d->cursor = cursor;

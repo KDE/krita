@@ -21,14 +21,14 @@
 #ifndef KOINTERACTIONTOOLPRIVATE_H
 #define KOINTERACTIONTOOLPRIVATE_H
 
-#include "KoTool_p.h"
+#include "KoToolBase_p.h"
 #include "KoInteractionStrategy.h"
 
-class KoInteractionToolPrivate : public KoToolPrivate
+class KoInteractionToolPrivate : public KoToolBasePrivate
 {
 public:
-    KoInteractionToolPrivate(KoTool *qq, KoCanvasBase *canvas)
-        : KoToolPrivate(qq, canvas),
+    KoInteractionToolPrivate(KoToolBase *qq, KoCanvasBase *canvas)
+        : KoToolBasePrivate(qq, canvas),
         currentStrategy(0)
     {
     }

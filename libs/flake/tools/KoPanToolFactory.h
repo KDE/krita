@@ -30,6 +30,6 @@ public:
     /// constructor
     KoPanToolFactory(QObject *parent);
 
-    KoTool *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 #endif

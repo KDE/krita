@@ -31,7 +31,7 @@
 class ToolHelper;
 class KoCanvasController;
 class KoCanvasBase;
-class KoTool;
+class KoToolBase;
 class KoCreateShapesTool;
 class KActionCollection;
 class KoShape;
@@ -145,7 +145,7 @@ public:
      *    who's tool you want.
      * @see addController()
      */
-    KoTool *toolById(KoCanvasBase *canvas, const QString id) const;
+    KoToolBase *toolById(KoCanvasBase *canvas, const QString id) const;
 
     /// @return the currently active pointing device
     KoInputDevice currentInputDevice() const;

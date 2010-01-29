@@ -28,12 +28,12 @@
 #include <commands/KoShapeSizeCommand.h>
 #include <commands/KoShapeTransformCommand.h>
 #include <KoSnapGuide.h>
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 #include <klocale.h>
 #include <limits>
 
-ShapeResizeStrategy::ShapeResizeStrategy(KoTool *tool,
+ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool,
         const QPointF &clicked, KoFlake::SelectionHandle direction )
     : KoInteractionStrategy(tool), m_lastScale(1.0,1.0)
 {

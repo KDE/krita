@@ -22,7 +22,7 @@
 #ifndef KOINTERACTIONTOOL_H
 #define KOINTERACTIONTOOL_H
 
-#include "KoTool.h"
+#include "KoToolBase.h"
 #include "flake_export.h"
 
 class KoInteractionStrategy;
@@ -31,12 +31,12 @@ class KoInteractionToolPrivate;
 #define KoInteractionTool_ID "InteractionTool"
 
 /**
- * The interaction tool adds to the normal KoTool class the concept of strategies
+ * The interaction tool adds to the normal KoToolBase class the concept of strategies
  * as a means to get one tool to have different actions the user can perform using the mouse.
  * Each time the user presses the mouse until she releases the mouse a strategy object
  * will be created, used and disgarded.
  * If the usage of a tool fits this pattern you need to inherit from this class instead of the
- * plain KoTool and reimplement your createStrategy() method which returns a tool-specific
+ * plain KoToolBase and reimplement your createStrategy() method which returns a tool-specific
  * strategy where all the real interaction code is placed.
  * A tool can then become as simple as this;
  * @code
@@ -52,7 +52,7 @@ class KoInteractionToolPrivate;
  * @endcode
  * Whereas your strategy (MyStrategy in the example) will contain the interaction code.
  */
-class FLAKE_EXPORT KoInteractionTool : public KoTool
+class FLAKE_EXPORT KoInteractionTool : public KoToolBase
 {
     Q_OBJECT
 public:

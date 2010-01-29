@@ -62,7 +62,7 @@ public:
 
     virtual ~KisToolEllipseFactory() {}
 
-    virtual KoTool * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
         return  new KisToolEllipse(canvas);
     }
 

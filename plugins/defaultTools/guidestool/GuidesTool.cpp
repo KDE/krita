@@ -36,7 +36,7 @@
 #include <QtGui/QPainter>
 
 GuidesTool::GuidesTool(KoCanvasBase *canvas)
-    : KoTool(canvas),
+    : KoToolBase(canvas),
     m_orientation(Qt::Horizontal),
     m_index(-1),
     m_position(0),

@@ -30,7 +30,7 @@ public:
     explicit ParagraphToolFactory(QObject *parent);
     ~ParagraphToolFactory();
 
-    KoTool * createTool(KoCanvasBase *canvas);
+    KoToolBase * createTool(KoCanvasBase *canvas);
 };
 
 #endif

@@ -89,7 +89,7 @@ public:
 
     virtual ~KisToolStarFactory() {}
 
-    virtual KoTool * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
         return new KisToolStar(canvas);
     }
 

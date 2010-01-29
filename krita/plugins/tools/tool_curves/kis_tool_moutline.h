@@ -98,7 +98,7 @@ public:
 
     virtual ~KisToolMagneticFactory() {}
 
-    virtual KoTool * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
         return new KisToolMagnetic(canvas);
     }
 

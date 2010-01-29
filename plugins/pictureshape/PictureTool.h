@@ -20,35 +20,35 @@
 #ifndef PICTURE_TOOL
 #define PICTURE_TOOL
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 #include <KJob>
 
 class PictureShape;
 
-class PictureTool : public KoTool
+class PictureTool : public KoToolBase
 {
     Q_OBJECT
 public:
     explicit PictureTool(KoCanvasBase* canvas);
 
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual void paint(QPainter&, const KoViewConverter&) {}
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual void mousePressEvent(KoPointerEvent*) {}
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual void mouseMoveEvent(KoPointerEvent*) {}
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual void mouseReleaseEvent(KoPointerEvent*) {}
 
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual void activate (bool temporary=false);
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual void deactivate();
 
 protected:
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget();
 
 private slots:

@@ -33,7 +33,7 @@
 class KoToolFactoryBase;
 class KoShapeManager;
 class KoCanvasBase;
-class KoTool;
+class KoToolBase;
 class KoShape;
 class KoToolManager;
 class KoCanvasController;
@@ -50,7 +50,7 @@ public:
     ~Private();
 
     void setup();
-    void switchTool(KoTool *tool, bool temporary);
+    void switchTool(KoToolBase *tool, bool temporary);
     void switchTool(const QString &id, bool temporary);
     void postSwitchTool(bool temporary);
     bool eventFilter(QObject *object, QEvent *event);
@@ -89,7 +89,7 @@ public:
 
     QList<ToolHelper*> tools; // list of all available tools via their factories.
 
-    QHash<KoTool*, int> uniqueToolIds; // for the changedTool signal
+    QHash<KoToolBase*, int> uniqueToolIds; // for the changedTool signal
     QHash<KoCanvasController*, QList<CanvasData*> > canvasses;
     QHash<KoCanvasBase*, KoToolProxy*> proxies;
 
@@ -120,7 +120,7 @@ public:
     QString activationShapeId() const;
     /// wrapper around KoToolFactoryBase::priority();
     int priority() const;
-    KoTool *createTool(KoCanvasBase *canvas) const;
+    KoToolBase *createTool(KoCanvasBase *canvas) const;
     int uniqueId() const {
         return m_uniqueId;
     }

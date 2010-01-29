@@ -38,7 +38,7 @@ SimpleEntryToolFactory::~SimpleEntryToolFactory()
 {
 }
 
-KoTool* SimpleEntryToolFactory::createTool( KoCanvasBase* canvas )
+KoToolBase* SimpleEntryToolFactory::createTool( KoCanvasBase* canvas )
 {
     return new SimpleEntryTool( canvas );
 }

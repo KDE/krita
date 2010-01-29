@@ -30,7 +30,7 @@
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15496" isRoot="false" isAbstract="false" name="K3Command*" elementReference="15482" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15500" isRoot="false" isAbstract="false" name="KoShapeManager*" elementReference="15483" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15503" isRoot="false" isAbstract="false" name="const QRectF&amp;" elementReference="15502" />
-    <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15506" isRoot="false" isAbstract="false" name="KoTool*" elementReference="15484" />
+    <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15506" isRoot="false" isAbstract="false" name="KoToolBase*" elementReference="15484" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15510" isRoot="false" isAbstract="false" name="KoViewConverter*" elementReference="15485" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15513" isRoot="false" isAbstract="false" name="QWidget*" elementReference="15512" />
     <UML:DataType stereotype="15470" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15529" isRoot="false" isAbstract="false" name="KoCanvasBase*" elementReference="15486" />
@@ -223,7 +223,7 @@ updates to the tree are done when they are asked for but when they are needed. "
       </UML:Enumeration>
      </UML:Namespace.ownedElement>
     </UML:Class>
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15484" isRoot="false" isAbstract="false" name="KoTool" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15484" isRoot="false" isAbstract="false" name="KoToolBase" />
     <UML:Class comment="This file is part of the KDE project
 Copyright (C) 2006 Thomas Zander &lt;zander@kde.org>
 

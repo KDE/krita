@@ -118,7 +118,7 @@ public:
 
     virtual ~KisToolMeasureFactory() {}
 
-    virtual KoTool * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
         return new KisToolMeasure(canvas);
     }
 

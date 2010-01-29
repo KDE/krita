@@ -37,7 +37,7 @@ DivineProportionToolFactory::~DivineProportionToolFactory()
 {
 }
 
-KoTool * DivineProportionToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase * DivineProportionToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new DivineProportionTool(canvas);
 }

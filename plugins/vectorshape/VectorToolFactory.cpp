@@ -44,7 +44,7 @@ VectorToolFactory::~VectorToolFactory()
 {
 }
 
-KoTool * VectorToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase * VectorToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new VectorTool(canvas);
 }

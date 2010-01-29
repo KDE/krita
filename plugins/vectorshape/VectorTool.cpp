@@ -40,7 +40,7 @@
 
 
 VectorTool::VectorTool(KoCanvasBase *canvas)
-    : KoTool(canvas)
+    : KoToolBase(canvas)
     , m_currentShape(0)
 {
 }

@@ -36,7 +36,7 @@ ParagraphToolFactory::~ParagraphToolFactory()
 {
 }
 
-KoTool * ParagraphToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase * ParagraphToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new ParagraphTool(canvas);
 }

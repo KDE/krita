@@ -29,7 +29,7 @@
 #include "KoSelection.h"
 #include "KoCanvasBase.h"
 
-KoShapeRubberSelectStrategy::KoShapeRubberSelectStrategy(KoTool *tool, const QPointF &clicked, bool useSnapToGrid)
+KoShapeRubberSelectStrategy::KoShapeRubberSelectStrategy(KoToolBase *tool, const QPointF &clicked, bool useSnapToGrid)
     : KoInteractionStrategy(*(new KoShapeRubberSelectStrategyPrivate(tool)))
 {
     Q_D(KoShapeRubberSelectStrategy);

@@ -37,7 +37,7 @@ ArtisticTextToolFactory::~ArtisticTextToolFactory()
 {
 }
 
-KoTool * ArtisticTextToolFactory::createTool( KoCanvasBase * canvas )
+KoToolBase * ArtisticTextToolFactory::createTool( KoCanvasBase * canvas )
 {
     return new ArtisticTextTool( canvas );
 }

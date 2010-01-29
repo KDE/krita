@@ -27,20 +27,20 @@
 
 class QWidget;
 class KAction;
-class KoTool;
+class KoToolBase;
 class KoCanvasBase;
 
-class KoToolPrivate
+class KoToolBasePrivate
 {
 public:
-    KoToolPrivate(KoTool *qq, KoCanvasBase *canvas_)
+    KoToolBasePrivate(KoToolBase *qq, KoCanvasBase *canvas_)
         : currentCursor(Qt::ArrowCursor),
         q(qq),
         canvas(canvas_)
     {
     }
 
-    ~KoToolPrivate()
+    ~KoToolBasePrivate()
     {
         qDeleteAll(optionWidgets);
     }
@@ -50,7 +50,7 @@ public:
     QHash<QString, KAction*> actionCollection;
     QString toolId;
     QList<QAction*> popupActionList;
-    KoTool *q;
+    KoToolBase *q;
     KoCanvasBase *canvas; ///< the canvas interface this tool will work for.
 };
 

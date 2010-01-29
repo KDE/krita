@@ -34,7 +34,7 @@ public:
     /// Destructor
     ~GuidesToolFactory();
     /// reimplemented
-    KoTool *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
 #endif // GUIDESTOOLFACTORY_H

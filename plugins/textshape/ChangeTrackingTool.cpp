@@ -50,7 +50,7 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 
-ChangeTrackingTool::ChangeTrackingTool(KoCanvasBase* canvas): KoTool(canvas),
+ChangeTrackingTool::ChangeTrackingTool(KoCanvasBase* canvas): KoToolBase(canvas),
     m_textEditor(0),
     m_textShapeData(0),
     m_textShape(0),
@@ -240,7 +240,7 @@ QRectF ChangeTrackingTool::textRect ( int startPosition, int endPosition )
 
 void ChangeTrackingTool::keyPressEvent(QKeyEvent* event)
 {
-    KoTool::keyPressEvent(event);
+    KoToolBase::keyPressEvent(event);
 }
 
 void ChangeTrackingTool::activate(bool temporary)

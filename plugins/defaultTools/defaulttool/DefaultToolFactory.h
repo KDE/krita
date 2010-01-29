@@ -30,6 +30,6 @@ public:
     DefaultToolFactory(QObject *parent);
     ~DefaultToolFactory();
 
-    KoTool* createTool(KoCanvasBase *canvas);
+    KoToolBase* createTool(KoCanvasBase *canvas);
 };
 #endif

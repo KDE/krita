@@ -29,7 +29,7 @@ public:
     explicit DivineProportionToolFactory(QObject *parent);
     ~DivineProportionToolFactory();
 
-    KoTool * createTool(KoCanvasBase *canvas);
+    KoToolBase * createTool(KoCanvasBase *canvas);
 };
 
 #endif

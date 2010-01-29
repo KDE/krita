@@ -20,7 +20,7 @@
 #ifndef CHANGETRACKINGTOOL_H
 #define CHANGETRACKINGTOOL_H
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 class KoCanvasBase;
 class KoPointerEvent;
@@ -39,7 +39,7 @@ class QTreeView;
 
 /// This tool allows to manipulate the tracked changes of a document. You can accept or reject changes.
 
-class ChangeTrackingTool : public KoTool
+class ChangeTrackingTool : public KoToolBase
 {
     Q_OBJECT
 public:

@@ -41,7 +41,7 @@ KoCreatePathToolFactory::~KoCreatePathToolFactory()
 {
 }
 
-KoTool* KoCreatePathToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase* KoCreatePathToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KoCreatePathTool(canvas);
 }

@@ -34,7 +34,7 @@ class QKeyEvent;
 class QWheelEvent;
 class QTabletEvent;
 class KoToolSelection;
-class KoTool;
+class KoToolBase;
 class KoCanvasBase;
 class KoCanvasController;
 class QInputMethodEvent;
@@ -60,33 +60,33 @@ public:
     explicit KoToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
     ~KoToolProxy();
 
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     void paint(QPainter &painter, const KoViewConverter &converter);
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     void repaintDecorations();
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     void tabletEvent(QTabletEvent *event, const QPointF &point);
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     void mousePressEvent(QMouseEvent *event, const QPointF &point);
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     void mouseMoveEvent(QMouseEvent *event, const QPointF &point);
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     void mouseReleaseEvent(QMouseEvent *event, const QPointF &point);
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     void keyPressEvent(QKeyEvent *event);
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     void keyReleaseEvent(QKeyEvent *event);
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     void wheelEvent(QWheelEvent * event, const QPointF &point);
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     void inputMethodEvent(QInputMethodEvent *event);
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     QList<QAction*> popupActionList() const;
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     void deleteSelection();
 
     /**
@@ -96,20 +96,20 @@ public:
     QHash<QString, KAction*> actions() const;
 
     /**
-     * Proxies for KoTool::selection()
+     * Proxies for KoToolBase::selection()
      */
     KoToolSelection *selection();
 
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     void cut();
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     void copy() const;
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     bool paste();
-    /// Forwarded to the current KoTool
+    /// Forwarded to the current KoToolBase
     QStringList supportedPasteMimeTypes() const;
     /// Set the new active tool.
-    void setActiveTool(KoTool *tool);
+    void setActiveTool(KoToolBase *tool);
 
 signals:
     /**
@@ -121,7 +121,7 @@ signals:
     /**
      * Emitted every time a tool is changed.
      * @param toolId the id of the tool.
-     * @see KoTool::toolId()
+     * @see KoToolBase::toolId()
      */
     void toolChanged(const QString &toolId);
 

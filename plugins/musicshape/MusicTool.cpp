@@ -35,7 +35,7 @@
 #include "dialogs/PartsWidget.h"
 
 MusicTool::MusicTool( KoCanvasBase* canvas )
-    : KoTool( canvas ),
+    : KoToolBase( canvas ),
       m_musicshape(0)
 {
 }

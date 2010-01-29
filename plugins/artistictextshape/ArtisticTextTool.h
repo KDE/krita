@@ -23,13 +23,13 @@
 
 #include "ArtisticTextShape.h"
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 #include <QtCore/QTimer>
 
 class QAction;
 
 /// This is the tool for the artistic text shape.
-class ArtisticTextTool : public KoTool 
+class ArtisticTextTool : public KoToolBase 
 {
     Q_OBJECT
 public:

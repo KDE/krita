@@ -24,7 +24,7 @@
 
 #include "TextShape.h"
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 #include <QClipboard>
 #include <QHash>
@@ -56,7 +56,7 @@ class MockCanvas;
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
  */
-class TextTool : public KoTool
+class TextTool : public KoToolBase
 {
     Q_OBJECT
 public:
@@ -122,7 +122,7 @@ public slots:
     void startTextEditingPlugin(const QString &pluginId);
     /// add a command to the undo stack, executing it as well.
     void addCommand(QUndoCommand *command);
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual void resourceChanged(int key, const QVariant &res);
 
     /// call this when the 'is-bidi' boolean has been changed.

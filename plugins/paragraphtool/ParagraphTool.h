@@ -24,7 +24,7 @@
 #include "ParagraphEditor.h"
 #include "ParagraphHighlighter.h"
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 class KoCanvasBase;
 class KoPointerEvent;
@@ -38,7 +38,7 @@ class QWidget;
  * It displays all paragraph formatting parameters directly on the canvas
  * and allows to modify them, too.
  */
-class ParagraphTool : public KoTool
+class ParagraphTool : public KoToolBase
 {
     Q_OBJECT
 public:

@@ -22,7 +22,7 @@
 #define VECTORTOOL_H
 
 // KDE
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 // VectorShape
 #include "VectorShape.h"
@@ -36,7 +36,7 @@ class QAction;
  * The vector shape is a read-only shape that shows a vector image
  * like WMF or EMF.
  */
-class VectorTool : public KoTool {
+class VectorTool : public KoToolBase {
     Q_OBJECT
 public:
     explicit VectorTool(KoCanvasBase *canvas);

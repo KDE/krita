@@ -38,7 +38,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-ShapeShearStrategy::ShapeShearStrategy( KoTool *tool, const QPointF &clicked, KoFlake::SelectionHandle direction )
+ShapeShearStrategy::ShapeShearStrategy( KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction )
 : KoInteractionStrategy(tool)
 , m_start(clicked)
 {

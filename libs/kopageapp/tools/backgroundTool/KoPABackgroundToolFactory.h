@@ -31,7 +31,7 @@ public:
     ///reimplemented from KoToolFactoryBase
     virtual ~KoPABackgroundToolFactory();
     ///reimplemented from KoToolFactoryBase
-    virtual KoTool * createTool( KoCanvasBase *canvas );
+    virtual KoToolBase * createTool( KoCanvasBase *canvas );
     ///reimplemented from KoToolFactoryBase
     virtual bool canCreateTool( KoCanvasBase *canvas ) const;
 };

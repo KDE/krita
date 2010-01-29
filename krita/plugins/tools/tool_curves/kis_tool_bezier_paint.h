@@ -55,7 +55,7 @@ public:
 
     virtual ~KisToolBezierPaintFactory() {}
 
-    virtual KoTool * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
         return new KisToolBezierPaint(canvas);
     }
 

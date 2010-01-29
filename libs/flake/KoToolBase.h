@@ -31,7 +31,7 @@ class KoCanvasBase;
 class KoPointerEvent;
 class KoViewConverter;
 class KoToolSelection;
-class KoToolPrivate;
+class KoToolBasePrivate;
 
 class KAction;
 class QAction;
@@ -49,7 +49,7 @@ class QInputMethodEvent;
  * There exists an instance of every tool for every pointer device.
  * These instances are managed by the toolmanager..
  */
-class FLAKE_EXPORT KoTool : public QObject
+class FLAKE_EXPORT KoToolBase : public QObject
 {
     Q_OBJECT
 public:
@@ -57,8 +57,8 @@ public:
      * Constructor, normally only called by the factory (see KoToolFactoryBase)
      * @param canvas the canvas interface this tool will work for.
      */
-    explicit KoTool(KoCanvasBase *canvas);
-    virtual ~KoTool();
+    explicit KoToolBase(KoCanvasBase *canvas);
+    virtual ~KoToolBase();
 
     /**
      * request a repaint of the decorations to be made. This triggers
@@ -402,16 +402,16 @@ protected:
     QRectF handlePaintRect(const QPointF &position);
 
 protected:
-    KoTool(KoToolPrivate &dd);
+    KoToolBase(KoToolBasePrivate &dd);
 
-    KoToolPrivate *d_ptr;
+    KoToolBasePrivate *d_ptr;
 
 private:
-    KoTool();
-    KoTool(const KoTool&);
-    KoTool& operator=(const KoTool&);
+    KoToolBase();
+    KoToolBase(const KoToolBase&);
+    KoToolBase& operator=(const KoToolBase&);
 
-    Q_DECLARE_PRIVATE(KoTool)
+    Q_DECLARE_PRIVATE(KoToolBase)
 };
 
 #endif /* KOTOOL_H */

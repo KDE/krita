@@ -31,7 +31,7 @@ class KoCopyControllerPrivate;
  * This class takes care of the copy actions integration into flake.
  * Whenever the copy (KStandardAction::Copy) action is triggered the controller
  * will use the currently selected tool and try to copy to the clipboard using that tool.
- * Additionally; when the tool does not allow copying (KoTool::hasSelection() returns false)
+ * Additionally; when the tool does not allow copying (KoToolBase::hasSelection() returns false)
  * the signal copyRequested will be emitted for applications to connect to.
  */
 class FLAKE_EXPORT KoCopyController : public QObject

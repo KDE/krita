@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoTool.h"
-#include "KoTool_p.h"
+#include "KoToolBase.h"
+#include "KoToolBase_p.h"
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
 #include "KoResourceManager.h"
@@ -28,72 +28,72 @@
 #include <kactioncollection.h>
 #include <QWidget>
 
-KoTool::KoTool(KoCanvasBase *canvas)
-    : d_ptr(new KoToolPrivate(this, canvas))
+KoToolBase::KoToolBase(KoCanvasBase *canvas)
+    : d_ptr(new KoToolBasePrivate(this, canvas))
 {
-    Q_D(KoTool);
+    Q_D(KoToolBase);
     if (d->canvas) { // in the case of KoToolManagers dummytool it can be zero :(
         KoResourceManager * crp = d->canvas->resourceManager();
-        Q_ASSERT_X(crp, "KoTool::KoTool", "No KoResourceManager");
+        Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No KoResourceManager");
         if (crp)
             connect(d->canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant &)),
                     this, SLOT(resourceChanged(int, const QVariant &)));
     }
 }
 
-KoTool::KoTool(KoToolPrivate &dd)
+KoToolBase::KoToolBase(KoToolBasePrivate &dd)
     : d_ptr(&dd)
 {
 }
 
-KoTool::~KoTool()
+KoToolBase::~KoToolBase()
 {
     delete d_ptr;
 }
 
-void KoTool::activate(bool temporary)
+void KoToolBase::activate(bool temporary)
 {
     Q_UNUSED(temporary);
 }
 
-void KoTool::deactivate()
+void KoToolBase::deactivate()
 {
 }
 
-void KoTool::resourceChanged(int key, const QVariant & res)
+void KoToolBase::resourceChanged(int key, const QVariant & res)
 {
     Q_UNUSED(key);
     Q_UNUSED(res);
 }
 
-bool KoTool::wantsAutoScroll()
+bool KoToolBase::wantsAutoScroll()
 {
     return true;
 }
 
-void KoTool::mouseDoubleClickEvent(KoPointerEvent *event)
+void KoToolBase::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     event->ignore();
 }
 
-void KoTool::keyPressEvent(QKeyEvent *e)
+void KoToolBase::keyPressEvent(QKeyEvent *e)
 {
     e->ignore();
 }
 
-void KoTool::keyReleaseEvent(QKeyEvent *e)
+void KoToolBase::keyReleaseEvent(QKeyEvent *e)
 {
     e->ignore();
 }
 
-void KoTool::wheelEvent(KoPointerEvent * e)
+void KoToolBase::wheelEvent(KoPointerEvent * e)
 {
     e->ignore();
 }
 
-QVariant KoTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const
+QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const
 {
-    Q_D(const KoTool);
+    Q_D(const KoToolBase);
     if (d->canvas->canvasWidget() == 0)
         return QVariant();
 
@@ -107,7 +107,7 @@ QVariant KoTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConver
     }
 }
 
-void KoTool::inputMethodEvent(QInputMethodEvent * event)
+void KoToolBase::inputMethodEvent(QInputMethodEvent * event)
 {
     if (! event->commitString().isEmpty()) {
         QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
@@ -116,61 +116,61 @@ void KoTool::inputMethodEvent(QInputMethodEvent * event)
     event->accept();
 }
 
-void KoTool::customPressEvent(KoPointerEvent * event)
+void KoToolBase::customPressEvent(KoPointerEvent * event)
 {
     event->ignore();
 }
 
-void KoTool::customReleaseEvent(KoPointerEvent * event)
+void KoToolBase::customReleaseEvent(KoPointerEvent * event)
 {
     event->ignore();
 }
 
-void KoTool::customMoveEvent(KoPointerEvent * event)
+void KoToolBase::customMoveEvent(KoPointerEvent * event)
 {
     event->ignore();
 }
 
-void KoTool::useCursor(const QCursor &cursor)
+void KoToolBase::useCursor(const QCursor &cursor)
 {
-    Q_D(KoTool);
+    Q_D(KoToolBase);
     d->currentCursor = cursor;
     emit cursorChanged(d->currentCursor);
 }
 
-QMap<QString, QWidget *> KoTool::optionWidgets()
+QMap<QString, QWidget *> KoToolBase::optionWidgets()
 {
-    Q_D(KoTool);
+    Q_D(KoToolBase);
     if (d->optionWidgets.empty()) {
         d->optionWidgets = createOptionWidgets();
     }
     return d->optionWidgets;
 }
 
-void KoTool::addAction(const QString &name, KAction *action)
+void KoToolBase::addAction(const QString &name, KAction *action)
 {
-    Q_D(KoTool);
+    Q_D(KoToolBase);
     d->actionCollection.insert(name, action);
 }
 
-QHash<QString, KAction*> KoTool::actions() const
+QHash<QString, KAction*> KoToolBase::actions() const
 {
-    Q_D(const KoTool);
+    Q_D(const KoToolBase);
     return d->actionCollection;
 }
 
-KAction *KoTool::action(const QString &name) const
+KAction *KoToolBase::action(const QString &name) const
 {
-    Q_D(const KoTool);
+    Q_D(const KoToolBase);
     return d->actionCollection.value(name);
 }
 
-QWidget * KoTool::createOptionWidget()
+QWidget * KoToolBase::createOptionWidget()
 {
     return 0;
 }
 
-QMap<QString, QWidget *>  KoTool::createOptionWidgets()
+QMap<QString, QWidget *>  KoToolBase::createOptionWidgets()
 {
     QMap<QString, QWidget *> ow;
     if (QWidget *widget = createOptionWidget()) {
@@ -182,60 +182,60 @@ QMap<QString, QWidget *>  KoTool::createOptionWidgets()
     return ow;
 }
 
-void KoTool::setToolId(const QString &id)
+void KoToolBase::setToolId(const QString &id)
 {
-    Q_D(KoTool);
+    Q_D(KoToolBase);
     d->toolId = id;
 }
 
-QString KoTool::toolId() const
+QString KoToolBase::toolId() const
 {
-    Q_D(const KoTool);
+    Q_D(const KoToolBase);
     return d->toolId;
 }
 
-QCursor KoTool::cursor() const
+QCursor KoToolBase::cursor() const
 {
-    Q_D(const KoTool);
+    Q_D(const KoToolBase);
     return d->currentCursor;
 }
 
-void KoTool::deleteSelection()
+void KoToolBase::deleteSelection()
 {
 }
 
-void KoTool::cut()
+void KoToolBase::cut()
 {
     copy();
     deleteSelection();
 }
 
-QList<QAction*> KoTool::popupActionList() const
+QList<QAction*> KoToolBase::popupActionList() const
 {
-    Q_D(const KoTool);
+    Q_D(const KoToolBase);
     return d->popupActionList;
 }
 
-void KoTool::setPopupActionList(const QList<QAction*> &list)
+void KoToolBase::setPopupActionList(const QList<QAction*> &list)
 {
-    Q_D(KoTool);
+    Q_D(KoToolBase);
     d->popupActionList = list;
 }
 
-KoCanvasBase * KoTool::canvas() const
+KoCanvasBase * KoToolBase::canvas() const
 {
-    Q_D(const KoTool);
+    Q_D(const KoToolBase);
     return d->canvas;
 }
 
-void KoTool::setStatusText(const QString &statusText)
+void KoToolBase::setStatusText(const QString &statusText)
 {
     emit statusTextChanged(statusText);
 }
 
-QRectF KoTool::handleGrabRect(const QPointF &position)
+QRectF KoToolBase::handleGrabRect(const QPointF &position)
 {
-    Q_D(KoTool);
+    Q_D(KoToolBase);
     const KoViewConverter * converter = d->canvas->viewConverter();
     uint handleSize = 2*d->canvas->resourceManager()->grabSensitivity();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
@@ -243,9 +243,9 @@ QRectF KoTool::handleGrabRect(const QPointF &position)
     return r;
 }
 
-QRectF KoTool::handlePaintRect(const QPointF &position)
+QRectF KoToolBase::handlePaintRect(const QPointF &position)
 {
-    Q_D(KoTool);
+    Q_D(KoToolBase);
     const KoViewConverter * converter = d->canvas->viewConverter();
     uint handleSize = 2*d->canvas->resourceManager()->handleRadius();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
@@ -253,27 +253,27 @@ QRectF KoTool::handlePaintRect(const QPointF &position)
     return r;
 }
 
-QStringList KoTool::supportedPasteMimeTypes() const
+QStringList KoToolBase::supportedPasteMimeTypes() const
 {
     return QStringList();
 }
 
-bool KoTool::paste()
+bool KoToolBase::paste()
 {
     return false;
 }
 
-void KoTool::copy() const
+void KoToolBase::copy() const
 {
 }
 
-KoToolSelection *KoTool::selection()
+KoToolSelection *KoToolBase::selection()
 {
     return 0;
 }
 
-void KoTool::repaintDecorations()
+void KoToolBase::repaintDecorations()
 {
 }
 
-#include <KoTool.moc>
+#include <KoToolBase.moc>

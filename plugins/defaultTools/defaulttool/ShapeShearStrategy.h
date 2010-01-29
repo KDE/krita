@@ -28,7 +28,7 @@
 #include <QMatrix>
 
 class KoCanvasBase;
-class KoTool;
+class KoToolBase;
 class KoShape;
 
 /**
@@ -45,7 +45,7 @@ public:
      * @param clicked the initial point that the user depressed (in pt).
      * @param direction the handle that was grabbed
      */
-    ShapeShearStrategy( KoTool *tool, const QPointF &clicked, KoFlake::SelectionHandle direction );
+    ShapeShearStrategy( KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction );
     virtual ~ShapeShearStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);

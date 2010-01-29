@@ -85,7 +85,7 @@ static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut s
 }
 
 TextTool::TextTool(KoCanvasBase *canvas)
-        : KoTool(canvas),
+        : KoToolBase(canvas),
         m_textShape(0),
         m_textShapeData(0),
         m_textEditor(0),
@@ -423,7 +423,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
 #ifndef NDEBUG
 #include "tests/MockShapes.h"
 TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
-    : KoTool(canvas),
+    : KoToolBase(canvas),
     m_textShape(0),
     m_textShapeData(0),
     m_textEditor(0),

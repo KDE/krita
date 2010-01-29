@@ -127,7 +127,7 @@ public:
 
     virtual ~KisToolPerspectiveTransformFactory() {}
 
-    virtual KoTool * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
         return new KisToolPerspectiveTransform(canvas);
     }
 

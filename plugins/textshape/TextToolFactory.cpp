@@ -37,7 +37,7 @@ TextToolFactory::~TextToolFactory()
 {
 }
 
-KoTool * TextToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase * TextToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new TextTool(canvas);
 }

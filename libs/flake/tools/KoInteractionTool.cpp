@@ -20,13 +20,13 @@
 
 #include "KoInteractionTool.h"
 #include "KoInteractionTool_p.h"
-#include "KoTool_p.h"
+#include "KoToolBase_p.h"
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
 #include "KoPanTool.h"
 
 KoInteractionTool::KoInteractionTool(KoCanvasBase *canvas)
-    : KoTool(*(new KoInteractionToolPrivate(this, canvas)))
+    : KoToolBase(*(new KoInteractionToolPrivate(this, canvas)))
 {
 }
 
@@ -124,7 +124,7 @@ void KoInteractionTool::cancelCurrentStrategy()
 }
 
 KoInteractionTool::KoInteractionTool(KoInteractionToolPrivate &dd)
-    : KoTool(dd)
+    : KoToolBase(dd)
 {
 }
 

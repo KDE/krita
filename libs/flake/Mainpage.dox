@@ -12,7 +12,7 @@
  * Flake is a middle layer between the applications and the content providers.
  * The applications will allow flake to be plugged in by implementing the
  * KoCanvasController interface while providers of content (like a chart engine
- * or a text component) will extend KoShape and optionally KoTool to do their
+ * or a text component) will extend KoShape and optionally KoToolBase to do their
  * work.
  *
  * A <b>shape</b> is a rectangle or a text or a movie.  A shape paints itself and has content.
@@ -49,7 +49,7 @@
  * content, and extend KoShapeContainer for objects that can contain others.
  *
  * KoShape is the base class for all flake objects. Flake objects extend it
- * to allow themselves to be manipulated by the KoTool s. The content of such an
+ * to allow themselves to be manipulated by the KoToolBase s. The content of such an
  * object is independent and based on the model of the data this object represents.
  *
  * If you want to be a supplier of shape objects; create a library with a KoShapeFactoryBase

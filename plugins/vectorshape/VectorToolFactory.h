@@ -31,7 +31,7 @@ public:
     explicit VectorToolFactory(QObject *parent);
     ~VectorToolFactory();
 
-    KoTool * createTool(KoCanvasBase *canvas);
+    KoToolBase * createTool(KoCanvasBase *canvas);
 };
 
 #endif

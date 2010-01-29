@@ -22,7 +22,7 @@
 
 #include <QUndoCommand>
 
-KoInteractionStrategy::KoInteractionStrategy(KoTool *parent)
+KoInteractionStrategy::KoInteractionStrategy(KoToolBase *parent)
     : d_ptr(new KoInteractionStrategyPrivate(parent))
 {
 }
@@ -56,7 +56,7 @@ void KoInteractionStrategy::paint(QPainter &, const KoViewConverter &)
 {
 }
 
-KoTool *KoInteractionStrategy::tool() const
+KoToolBase *KoInteractionStrategy::tool() const
 {
     Q_D(const KoInteractionStrategy);
     return d->tool;

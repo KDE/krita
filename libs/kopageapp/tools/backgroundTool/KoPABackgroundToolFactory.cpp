@@ -38,7 +38,7 @@ KoPABackgroundToolFactory::~KoPABackgroundToolFactory()
 {
 }
 
-KoTool * KoPABackgroundToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase * KoPABackgroundToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KoPABackgroundTool( canvas );
 }

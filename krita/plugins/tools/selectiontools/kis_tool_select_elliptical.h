@@ -76,7 +76,7 @@ public:
 
     virtual ~KisToolSelectEllipticalFactory() {}
 
-    virtual KoTool * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
         return  new KisToolSelectElliptical(canvas);
     }
 

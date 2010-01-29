@@ -21,7 +21,7 @@
 #ifndef GUIDESTOOL_H
 #define GUIDESTOOL_H
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 #include <QString>
 #include <QPair>
@@ -31,30 +31,30 @@ class GuidesTransaction;
 class InsertGuidesToolOptionWidget;
 class GuidesToolOptionWidget;
 
-class GuidesTool : public KoTool
+class GuidesTool : public KoToolBase
 {
     Q_OBJECT
 
 public:
     explicit GuidesTool(KoCanvasBase *canvas);
     virtual ~GuidesTool();
-    /// reimplemented form KoTool
+    /// reimplemented form KoToolBase
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
-    /// reimplemented form KoTool
+    /// reimplemented form KoToolBase
     virtual void mousePressEvent(KoPointerEvent *event);
-    /// reimplemented form KoTool
+    /// reimplemented form KoToolBase
     virtual void mouseMoveEvent(KoPointerEvent *event);
-    /// reimplemented form KoTool
+    /// reimplemented form KoToolBase
     virtual void mouseReleaseEvent(KoPointerEvent *event);
-    /// reimplemented form KoTool
+    /// reimplemented form KoToolBase
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
-    /// reimplemented form KoTool
+    /// reimplemented form KoToolBase
     virtual void repaintDecorations();
-    /// reimplemented form KoTool
+    /// reimplemented form KoToolBase
     virtual void activate(bool temporary = false);
-    /// reimplemented form KoTool
+    /// reimplemented form KoToolBase
     virtual void deactivate();
-    /// reimplemented form KoTool
+    /// reimplemented form KoToolBase
     virtual QMap<QString, QWidget*> createOptionWidgets();
     void moveGuideLine(Qt::Orientation orientation, int index);
     void editGuideLine(Qt::Orientation orientation, int index);
@@ -66,7 +66,7 @@ private slots:
     void updateGuidePosition(qreal position);
     void guideLineSelected(Qt::Orientation orientation, int index);
     void guideLinesChanged(Qt::Orientation orientation);
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual void resourceChanged(int key, const QVariant &res);
 
     void insertorCreateGuidesSlot(GuidesTransaction* result);

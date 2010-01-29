@@ -61,7 +61,7 @@ public:
 
     virtual ~KisToolPolylineFactory() {}
 
-    virtual KoTool * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
         return new KisToolPolyline(canvas);
     }
 

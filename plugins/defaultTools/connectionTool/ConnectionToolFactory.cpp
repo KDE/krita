@@ -37,7 +37,7 @@ ConnectionToolFactory::~ConnectionToolFactory()
 {
 }
 
-KoTool* ConnectionToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase* ConnectionToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new ConnectionTool( canvas );
 }

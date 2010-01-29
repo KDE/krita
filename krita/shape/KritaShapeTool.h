@@ -19,11 +19,11 @@
 #ifndef KRITA_SHAPE_TOOL
 #define KRITA_SHAPE_TOOL
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 class KritaShape;
 
-class KritaShapeTool : public KoTool
+class KritaShapeTool : public KoToolBase
 {
     Q_OBJECT
 public:

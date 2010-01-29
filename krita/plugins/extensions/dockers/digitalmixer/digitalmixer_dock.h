@@ -30,7 +30,7 @@ class KisView2;
 class DigitalMixerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
-    DigitalMixerDock( KisView2 *view );
+    DigitalMixerDock( );
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
 public slots:
@@ -42,7 +42,6 @@ private slots:
     void targetColorChanged(int);
 private:
     KoCanvasBase* m_canvas;
-    KisView2* m_view;
     KoColor m_currentColor;
     KoColorPatch* m_currentColorPatch;
     struct Mixer {

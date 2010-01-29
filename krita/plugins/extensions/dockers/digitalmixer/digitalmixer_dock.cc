@@ -17,8 +17,6 @@
 
 #include "digitalmixer_dock.h"
 
-#include <kis_view2.h>
-
 #include <QGridLayout>
 #include <QToolButton>
 #include <QSignalMapper>
@@ -41,7 +39,7 @@ class DigitalMixerPatch : public KoColorPatch {
         }
 };
 
-DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital Colors Mixer")), m_canvas(0), m_view(view), m_tellCanvas(true)
+DigitalMixerDock::DigitalMixerDock( ) : QDockWidget(i18n("Digital Colors Mixer")), m_canvas(0), m_tellCanvas(true)
 {
     QColor initColors[6] = { Qt::black, Qt::white, Qt::red, Qt::green, Qt::blue, Qt::yellow };
     

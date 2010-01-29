@@ -37,14 +37,14 @@
 #include "kis_view2.h"
 
 #include "digitalmixer_dock.h"
+#include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(DigitalMixerPluginFactory, registerPlugin<DigitalMixerPlugin>();)
 K_EXPORT_PLUGIN(DigitalMixerPluginFactory( "krita" ) )
 
 class DigitalMixerDockFactory : public KoDockFactoryBase {
 public:
-    DigitalMixerDockFactory(KisView2 * view)
-        : m_view( view )
+    DigitalMixerDockFactory()
     {
     }
 
@@ -60,7 +60,7 @@ public:
 
     virtual QDockWidget* createDockWidget()
     {
-        DigitalMixerDock * dockWidget = new DigitalMixerDock(m_view);
+        DigitalMixerDock * dockWidget = new DigitalMixerDock();
         
         dockWidget->setObjectName(id());
 
@@ -72,7 +72,7 @@ public:
         return DockMinimized;
     }
 private:
-    KisView2 * m_view;
+
 
 };
 
@@ -80,15 +80,7 @@ private:
 DigitalMixerPlugin::DigitalMixerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    dbgPlugins << "DigitalMixerPlugin";
-    if ( parent->inherits("KisView2") )
-    {
-        m_view = (KisView2*) parent;
-
-        //setComponentData(DigitalMixerPluginFactory::componentData());
-        DigitalMixerDockFactory dockFactory( m_view);
-        m_view->createDockWidget( &dockFactory );
-    }
+    KoDockRegistry::instance()->add(new DigitalMixerDockFactory());
 }
 
 DigitalMixerPlugin::~DigitalMixerPlugin()

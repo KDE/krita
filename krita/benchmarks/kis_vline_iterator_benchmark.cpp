@@ -123,7 +123,7 @@ void KisVLineIteratorBenchmark::benchmarkReadWriteBytes(){
     
 }
 
-void KisVLineIteratorBenchmark::benchmarkWriteBytesNoMemCpy()
+void KisVLineIteratorBenchmark::benchmarkNoMemCpy()
 {
     KisVLineIteratorPixel it = m_device->createVLineIterator(0, 0, TEST_IMAGE_HEIGHT);
 
@@ -138,22 +138,9 @@ void KisVLineIteratorBenchmark::benchmarkWriteBytesNoMemCpy()
 }
     
 
-void KisVLineIteratorBenchmark::benchmarkReadBytesNoMemCpy()
-{
-    KisVLineIteratorPixel it = m_device->createVLineIterator(0, 0, TEST_IMAGE_HEIGHT);
-
-    QBENCHMARK{
-        for (int j = 0; j < TEST_IMAGE_WIDTH; j++) {
-            while (!it.isDone()) {
-                ++it;
-            }
-            it.nextCol();
-        }
-    }
-}
 
 
-void KisVLineIteratorBenchmark::benchmarkConstReadBytesNoMemCpy()
+void KisVLineIteratorBenchmark::benchmarkConstNoMemCpy()
 {
     KisVLineConstIteratorPixel it = m_device->createVLineConstIterator(0, 0, TEST_IMAGE_HEIGHT);
 
@@ -167,6 +154,28 @@ void KisVLineIteratorBenchmark::benchmarkConstReadBytesNoMemCpy()
     }
 }
 
+
+void KisVLineIteratorBenchmark::benchmarkTwoIteratorsNoMemCpy()
+{
+    KoColor c(m_colorSpace);
+    c.fromQColor(QColor(250,120,0));
+    KisPaintDevice dab(m_colorSpace);
+    dab.fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT, c.data());
+    
+    KisVLineIteratorPixel writeIterator = m_device->createVLineIterator(0, 0, TEST_IMAGE_HEIGHT);
+    KisVLineConstIteratorPixel constReadIterator = dab.createVLineConstIterator(0, 0, TEST_IMAGE_HEIGHT);
+
+    QBENCHMARK{
+        for (int j = 0; j < TEST_IMAGE_WIDTH; j++) {
+            while (!constReadIterator.isDone()) {
+                ++constReadIterator;
+                ++writeIterator;
+            }
+            constReadIterator.nextCol();
+            writeIterator.nextCol();
+        }
+    }
+}
 
 
 QTEST_KDEMAIN(KisVLineIteratorBenchmark, GUI)

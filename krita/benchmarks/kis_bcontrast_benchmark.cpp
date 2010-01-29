@@ -38,8 +38,6 @@
 
 #include "kis_selection.h"
 
-#define GMP_IMAGE_WIDTH 3274
-#define GMP_IMAGE_HEIGHT 2067 
 
 void KisBContrastBenchmark::initTestCase()
 {

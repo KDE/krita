@@ -27,7 +27,7 @@
 
 #include <KoCanvasBase.h>
 
-#include "canvas/kis_abstract_canvas_widget.h"
+#include "canvas/kis_canvas_widget_base.h"
 #include "opengl/kis_opengl_image_textures.h"
 
 #include "krita_export.h"
@@ -44,7 +44,7 @@ class KisCanvas2;
  * in the qpainter canvas.
  *
  */
-class KRITAUI_EXPORT KisOpenGLCanvas2 : public QGLWidget, public KisAbstractCanvasWidget
+class KRITAUI_EXPORT KisOpenGLCanvas2 : public QGLWidget, public KisCanvasWidgetBase
 {
 
     Q_OBJECT

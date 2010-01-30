@@ -18,20 +18,15 @@
 #ifndef _KIS_ABSTRACT_CANVAS_WIDGET_
 #define _KIS_ABSTRACT_CANVAS_WIDGET_
 
-#include <QList>
-
 class QWidget;
-class QColor;
 class QRect;
 class QPoint;
-class QImage;
 class QPainter;
 class QRect;
 
 class KoToolProxy;
 
 class KisCanvas2;
-class KisGridDrawer;
 class KisCanvasDecoration;
 
 class KisAbstractCanvasWidget
@@ -56,30 +51,13 @@ public:
     /**
      * Draw the specified decorations on the view.
      */
-    void drawDecorations(QPainter & gc, bool tools,
-                         const QPoint & documentOffset,
-                         const QRect & clipRect,
-                         KisCanvas2 * canvas);
+    virtual void drawDecorations(QPainter & gc, bool tools,
+                                 const QPoint & documentOffset,
+                                 const QRect & clipRect,
+                                 KisCanvas2 * canvas) = 0;
 
-    /**
-     * Returns one check of the background checkerboard pattern.
-     *
-     * @param checkSize the size of the check
-     */
-    QImage checkImage(qint32 checkSize);
-
-    /**
-     * Returns the color of the border, i.e. the part of the canvas 
-     * outside the image contents. 
-     *
-     */
-    QColor borderColor() const;
-
-    void addDecoration(KisCanvasDecoration* deco);
-    KisCanvasDecoration* decoration(const QString& id);
-
-private:
-    QList<KisCanvasDecoration*> m_decorations;
+    virtual void addDecoration(KisCanvasDecoration* deco) = 0;
+    virtual KisCanvasDecoration* decoration(const QString& id) = 0;
 };
 
 #endif // _KIS_ABSTRACT_CANVAS_WIDGET_

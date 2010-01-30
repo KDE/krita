@@ -21,7 +21,7 @@
 
 #include <QWidget>
 
-#include "kis_abstract_canvas_widget.h"
+#include "kis_canvas_widget_base.h"
 #include "kis_prescaled_projection.h"
 
 class QMouseEvent;
@@ -42,7 +42,7 @@ class KoToolProxy;
  *
  * @author Boudewijn Rempt <boud@valdyas.org>
 */
-class KisQPainterCanvas : public QWidget, public KisAbstractCanvasWidget
+class KisQPainterCanvas : public QWidget, public KisCanvasWidgetBase
 {
 
     Q_OBJECT

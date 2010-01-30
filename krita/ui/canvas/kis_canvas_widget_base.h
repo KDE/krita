@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>, (C)
+ * Copyright (C) 2010 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,52 +16,44 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef _KIS_ABSTRACT_CANVAS_WIDGET_
-#define _KIS_ABSTRACT_CANVAS_WIDGET_
+#ifndef _KIS_CANVAS_WIDGET_BASE_
+#define _KIS_CANVAS_WIDGET_BASE_
 
 #include <QList>
 
-class QWidget;
+#include <kis_abstract_canvas_widget.h>
+
 class QColor;
-class QRect;
-class QPoint;
 class QImage;
-class QPainter;
-class QRect;
 
-class KoToolProxy;
-
-class KisCanvas2;
-class KisGridDrawer;
-class KisCanvasDecoration;
-
-class KisAbstractCanvasWidget
+class KisCanvasWidgetBase : public KisAbstractCanvasWidget
 {
 
 public:
 
-    KisAbstractCanvasWidget() {}
+    KisCanvasWidgetBase();
 
-    virtual ~KisAbstractCanvasWidget() {}
+    virtual ~KisCanvasWidgetBase();
 
-    virtual QWidget * widget() = 0;
+    //virtual KoToolProxy * toolProxy();
 
-    virtual KoToolProxy * toolProxy() = 0;
+    //virtual void documentOffsetMoved(const QPoint &);
 
-    virtual void documentOffsetMoved(const QPoint &) = 0;
+    //virtual QPoint documentOrigin();
 
-    virtual QPoint documentOrigin() = 0;
-
-    virtual void adjustOrigin() = 0;
+    //virtual void adjustOrigin();
 
     /**
      * Draw the specified decorations on the view.
      */
-    void drawDecorations(QPainter & gc, bool tools,
-                         const QPoint & documentOffset,
-                         const QRect & clipRect,
-                         KisCanvas2 * canvas);
+    virtual void drawDecorations(QPainter & gc, bool tools,
+                                 const QPoint & documentOffset,
+                                 const QRect & clipRect,
+                                 KisCanvas2 * canvas);
+    virtual void addDecoration(KisCanvasDecoration* deco);
+    virtual KisCanvasDecoration* decoration(const QString& id);
 
+protected:
     /**
      * Returns one check of the background checkerboard pattern.
      *
@@ -75,11 +68,8 @@ public:
      */
     QColor borderColor() const;
 
-    void addDecoration(KisCanvasDecoration* deco);
-    KisCanvasDecoration* decoration(const QString& id);
-
 private:
     QList<KisCanvasDecoration*> m_decorations;
 };
 
-#endif // _KIS_ABSTRACT_CANVAS_WIDGET_
+#endif // _KIS_CANVAS_WIDGET_BASE_

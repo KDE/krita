@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Adrian Page <adrian@pagenet.plus.com>, (C) 2007
+ * Copyright (C) 2007, 2010 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_abstract_canvas_widget.h"
+#include "kis_canvas_widget_base.h"
+
 #include <QImage>
 #include <QPainter>
 
@@ -30,10 +31,18 @@
 #include "../kis_view2.h"
 #include "../kis_selection_manager.h"
 
-void KisAbstractCanvasWidget::drawDecorations(QPainter & gc, bool tools,
-        const QPoint & documentOffset,
-        const QRect & clipRect,
-        KisCanvas2 * canvas)
+KisCanvasWidgetBase::KisCanvasWidgetBase()
+{
+}
+
+KisCanvasWidgetBase::~KisCanvasWidgetBase()
+{
+}
+
+void KisCanvasWidgetBase::drawDecorations(QPainter & gc, bool tools,
+                                          const QPoint & documentOffset,
+                                          const QRect & clipRect,
+                                          KisCanvas2 * canvas)
 {
     // Setup the painter to take care of the offset; all that the
     // classes that do painting need to keep track of is resolution
@@ -63,7 +72,7 @@ void KisAbstractCanvasWidget::drawDecorations(QPainter & gc, bool tools,
     }
 }
 
-QImage KisAbstractCanvasWidget::checkImage(qint32 checkSize)
+QImage KisCanvasWidgetBase::checkImage(qint32 checkSize)
 {
     KisConfig cfg;
 
@@ -77,17 +86,17 @@ QImage KisAbstractCanvasWidget::checkImage(qint32 checkSize)
     return tile;
 }
 
-QColor KisAbstractCanvasWidget::borderColor() const
+QColor KisCanvasWidgetBase::borderColor() const
 {
     return QColor(Qt::gray);
 }
 
-void KisAbstractCanvasWidget::addDecoration(KisCanvasDecoration* deco)
+void KisCanvasWidgetBase::addDecoration(KisCanvasDecoration* deco)
 {
     m_decorations.push_back(deco);
 }
 
-KisCanvasDecoration* KisAbstractCanvasWidget::decoration(const QString& id)
+KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id)
 {
     foreach(KisCanvasDecoration* deco, m_decorations) {
         if (deco->id() == id) {

@@ -79,7 +79,7 @@ void KisToolPolylineBase::mouseReleaseEvent(KoPointerEvent *event)
         m_dragEnd = m_dragStart;
         m_points.append(m_dragStart);
     }
-    else if (event->button()==Qt::RightButton || event->button()==Qt::MidButton) {
+    else if (event->button()==Qt::MidButton) {
         cancel();
         event->accept();
     }

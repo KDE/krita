@@ -58,7 +58,6 @@ struct MixerTool::Private {
     KoColor backgroundColor;
     State state;
     qreal radius;
-    bool mouseDown;
     QCursor cursor;
     QPoint currentMousePosition;
     KisPaintInformation previousPaintInformation;
@@ -98,8 +97,7 @@ void MixerTool::setRadius(qreal radius)
 void MixerTool::activate(bool temporary)
 {
     Q_UNUSED(temporary)
-    m_d->mouseDown = false;
-
+    m_d->state = HOVER;
     useCursor(m_d->cursor);
     m_d->foregroundColor = canvas()->resourceManager()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
     m_d->backgroundColor = canvas()->resourceManager()->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
@@ -125,6 +123,7 @@ void MixerTool::resourceChanged(int key, const QVariant & res)
 
 void MixerTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    kDebug() << m_d->mixer->hasFocus();
     if (m_d->mixer->hasFocus()) {
         m_d->mixingBrush->settings()->paintOutline(m_d->currentMousePosition,
                                                    0,
@@ -136,8 +135,8 @@ void MixerTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 void MixerTool::mousePressEvent(KoPointerEvent *event)
 {
+    kDebug() << event->pos() << event->button() << m_d->state;
     m_d->currentMousePosition = event->pos();
-    m_d->mouseDown = true;
 
     if (event->button() == Qt::LeftButton) {
         initPaint(event);
@@ -146,44 +145,48 @@ void MixerTool::mousePressEvent(KoPointerEvent *event)
                                     event->pressure(), event->xTilt(), event->yTilt(),
                                     KisVector2D::Zero(),
                                     event->rotation(), event->tangentialPressure());
-        paintAt(m_d->previousPaintInformation);
+        m_d->painter->paintAt(m_d->previousPaintInformation);
     }
 }
 
 void MixerTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    kDebug() << event->pos() << event->button() << m_d->state;
+
     m_d->currentMousePosition = event->pos();
-    if (m_d->mouseDown) {
-        switch(m_d->state) {
-        case MIXING:
-            {
-                QPointF dragVec = event->point - m_d->previousPaintInformation.pos();
+    switch(m_d->state) {
+    case MIXING:
+        {
+            QPointF dragVec = event->point - m_d->previousPaintInformation.pos();
 
-                KisPaintInformation info = KisPaintInformation(event->point,
-                                                               event->pressure(), event->xTilt(), event->yTilt(),
-                                                               toKisVector2D(dragVec),
-                                                               event->rotation(), event->tangentialPressure());
+            KisPaintInformation info = KisPaintInformation(event->point,
+                                                           event->pressure(), event->xTilt(), event->yTilt(),
+                                                           toKisVector2D(dragVec),
+                                                           event->rotation(), event->tangentialPressure());
 
-                paintLine(m_d->previousPaintInformation, info);
-                m_d->previousPaintInformation = info;
-            }
-            break;
-        case PANNING:
-            break;
-        case PICKING:
-            break;
-        default:
-            ;
-        };
-    }
+            m_d->painter->paintLine(m_d->previousPaintInformation, info);
+            m_d->previousPaintInformation = info;
+        }
+        break;
+    case PANNING:
+        break;
+    case PICKING:
+        break;
+    default:
+        ;
+    };
 }
 
 void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
 {
+    kDebug() << event->pos() << event->button() << m_d->state;
+
     // XXX: We want to be able to set a color source for the other paintops that
     //      contains the impure blend under the current cursor.
+    if (m_d->state == MIXING) {
+        endPaint();
+    }
     m_d->mixer->resourceManager()->setResource(KoCanvasResource::ForegroundColor, event->pos());
-    m_d->mouseDown = false;
 }
 
 void MixerTool::setDirty(const QRegion& region)
@@ -193,6 +196,7 @@ void MixerTool::setDirty(const QRegion& region)
 
 void MixerTool::initPaint(KoPointerEvent *)
 {
+    kDebug() << m_d->state;
     m_d->state = MIXING;
     m_d->dragDist = 0;
 
@@ -208,31 +212,10 @@ void MixerTool::initPaint(KoPointerEvent *)
 
 void MixerTool::endPaint()
 {
+    kDebug() << m_d->state;
     m_d->state = HOVER;
-//    if (m_d->painter) {
-//
-//        KisPainter painter(m_source, currentSelection());
-//        painter.setCompositeOp(m_compositeOp);
-//        painter.setOpacity(m_opacity);
-//
-//        QRegion r = m_incrementalDirtyRegion;
-//        foreach(const QRect& rc, r.rects()) {
-//            painter.bitBlt(rc.topLeft(), m_target, rc);
-//        }
-//        m_source->setDirty(painter.dirtyRegion());
-//        delete incrementalTransaction;
-//    }
     delete m_d->painter;
     m_d->painter = 0;
 }
-
-void MixerTool::paintAt(const KisPaintInformation &pi)
-{
-}
-
-void MixerTool::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2)
-{
-}
-
 
 #include "mixertool.moc"

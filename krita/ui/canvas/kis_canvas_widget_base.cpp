@@ -204,6 +204,15 @@ QPointF KisCanvasWidgetBase::widgetToDocument(const QPointF& p) const
 }
 
 
+QPointF KisCanvasWidgetBase::mouseEventWidgetToDocument(const QPoint& mousePosition) const
+{
+    const qreal PIXEL_CENTRE_OFFSET = 0.5;
+    const QPointF pixelCentre(mousePosition.x() + PIXEL_CENTRE_OFFSET,
+                              mousePosition.y() + PIXEL_CENTRE_OFFSET);
+    return widgetToDocument(pixelCentre);
+}
+
+
 QPointF KisCanvasWidgetBase::widgetToView(const QPointF& p) const
 {
     return p - m_d->origin;
@@ -233,7 +242,7 @@ void KisCanvasWidgetBase::processMouseMoveEvent(QMouseEvent *e)
     if (m_d->blockMouseEvent.isActive()) {
         return;
     }
-    m_d->toolProxy->mouseMoveEvent(e, widgetToDocument(e->pos()));
+    m_d->toolProxy->mouseMoveEvent(e, mouseEventWidgetToDocument(e->pos()));
 }
 
 void KisCanvasWidgetBase::processContextMenuEvent(QContextMenuEvent *e)
@@ -254,7 +263,7 @@ void KisCanvasWidgetBase::processMousePressEvent(QMouseEvent *e)
         m_d->canvas->view()->favoriteResourceManager()->slotShowPopupPalette();
         return;
     }
-    m_d->toolProxy->mousePressEvent(e, widgetToDocument(e->pos()));
+    m_d->toolProxy->mousePressEvent(e, mouseEventWidgetToDocument(e->pos()));
 }
 
 void KisCanvasWidgetBase::processMouseReleaseEvent(QMouseEvent *e)
@@ -262,7 +271,7 @@ void KisCanvasWidgetBase::processMouseReleaseEvent(QMouseEvent *e)
     if (m_d->blockMouseEvent.isActive()) {
         return;
     }
-    m_d->toolProxy->mouseReleaseEvent(e, widgetToDocument(e->pos()));
+    m_d->toolProxy->mouseReleaseEvent(e, mouseEventWidgetToDocument(e->pos()));
 }
 
 void KisCanvasWidgetBase::processMouseDoubleClickEvent(QMouseEvent *e)
@@ -270,7 +279,7 @@ void KisCanvasWidgetBase::processMouseDoubleClickEvent(QMouseEvent *e)
     if (m_d->blockMouseEvent.isActive()) {
         return;
     }
-    m_d->toolProxy->mouseDoubleClickEvent(e, widgetToDocument(e->pos()));
+    m_d->toolProxy->mouseDoubleClickEvent(e, mouseEventWidgetToDocument(e->pos()));
 }
 
 void KisCanvasWidgetBase::processKeyPressEvent(QKeyEvent *e)

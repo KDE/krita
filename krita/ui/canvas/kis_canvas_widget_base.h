@@ -99,6 +99,15 @@ protected:
     QPointF widgetToDocument(const QPointF& p) const;
 
     /**
+     * Convert a mouse event widget coordinate to a document 
+     * coordinate, applying an offset to convert the integer 
+     * coordinate to floating point.
+     *
+     * @param mousePosition mouse event coordinate
+     */
+    QPointF mouseEventWidgetToDocument(const QPoint& mousePosition) const;
+
+    /**
      * Event handlers to be called by derived canvas event handlers.
      * All common event processing is carried out by these 
      * functions.

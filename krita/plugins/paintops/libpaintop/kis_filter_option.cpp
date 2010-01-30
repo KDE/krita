@@ -105,9 +105,12 @@ void KisFilterOption::setNode(KisNodeSP node)
         // The "not m_currentFilterConfigWidget" is a corner case
         // which happens because the first configuration settings is
         // created before any layer is selected in the view
-        if (!m_currentFilterConfigWidget ||
-                (m_currentFilterConfigWidget && static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration())->isCompatible(m_paintDevice))) {
-
+        if (   !m_currentFilterConfigWidget
+            || (    m_currentFilterConfigWidget
+                 && static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration())->isCompatible(m_paintDevice)
+                )
+            )
+        {
             if (m_currentFilter) {
                 KisPropertiesConfiguration* configuration = 0;
                 if (m_currentFilterConfigWidget)

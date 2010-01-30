@@ -20,10 +20,15 @@
 
 #include <QImage>
 #include <QPainter>
+#include <QTimer>
+#include <QMenu>
+
+#include <kxmlguifactory.h>
 
 #include <KoShapeManager.h>
 #include <KoViewConverter.h>
 #include <KoToolProxy.h>
+#include <ko_favorite_resource_manager.h>
 
 #include "kis_canvas_decoration.h"
 #include "../kis_config.h"
@@ -34,14 +39,27 @@
 class KisCanvasWidgetBase::Private
 {
 public:
-    Private() {}
+    Private(KisCanvas2 *newCanvas)
+        : canvas(newCanvas)
+        , viewConverter(newCanvas->viewConverter())
+        , toolProxy(newCanvas->toolProxy())
+    {}
 
-    QList<KisCanvasDecoration*> m_decorations;
+    QList<KisCanvasDecoration*> decorations;
+    KisCanvas2 * canvas;
+    const KoViewConverter * viewConverter;
+    KoToolProxy * toolProxy;
+    /// the offset of the view in the document, expressed in the view reference (not in the document reference)
+    QPoint documentOffset;
+    /// the origin of the image rect
+    QPoint origin;
+    QTimer blockMouseEvent;
 };
 
-KisCanvasWidgetBase::KisCanvasWidgetBase()
-    : m_d(new Private)
+KisCanvasWidgetBase::KisCanvasWidgetBase(KisCanvas2 * canvas)
+    : m_d(new Private(canvas))
 {
+    m_d->blockMouseEvent.setSingleShot(true);
 }
 
 KisCanvasWidgetBase::~KisCanvasWidgetBase()
@@ -70,7 +88,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, bool tools,
     gc.restore();
 
     // ask the decorations to paint themselves
-    foreach(KisCanvasDecoration* deco, m_d->m_decorations) {
+    foreach(KisCanvasDecoration* deco, m_d->decorations) {
         deco->paint(gc, documentOffset, clipRect, *canvas->viewConverter());
     }
 
@@ -80,6 +98,21 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, bool tools,
         toolProxy()->paint(gc, *canvas->viewConverter());
         gc.restore();
     }
+}
+
+void KisCanvasWidgetBase::addDecoration(KisCanvasDecoration* deco)
+{
+    m_d->decorations.push_back(deco);
+}
+
+KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id)
+{
+    foreach(KisCanvasDecoration* deco, m_d->decorations) {
+        if (deco->id() == id) {
+            return deco;
+        }
+    }
+    return 0;
 }
 
 QImage KisCanvasWidgetBase::checkImage(qint32 checkSize)
@@ -101,18 +134,176 @@ QColor KisCanvasWidgetBase::borderColor() const
     return QColor(Qt::gray);
 }
 
-void KisCanvasWidgetBase::addDecoration(KisCanvasDecoration* deco)
+KisCanvas2 *KisCanvasWidgetBase::canvas() const
 {
-    m_d->m_decorations.push_back(deco);
+    return m_d->canvas;
 }
 
-KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id)
+const KoViewConverter *KisCanvasWidgetBase::viewConverter() const
 {
-    foreach(KisCanvasDecoration* deco, m_d->m_decorations) {
-        if (deco->id() == id) {
-            return deco;
-        }
-    }
-    return 0;
+    return m_d->viewConverter;
 }
+
+KoToolProxy *KisCanvasWidgetBase::toolProxy()
+{
+    return m_d->toolProxy;
+}
+
+QPoint KisCanvasWidgetBase::documentOffset() const
+{
+    return m_d->documentOffset;
+}
+
+QPoint KisCanvasWidgetBase::documentOrigin() const
+{
+    return m_d->origin;
+}
+
+void KisCanvasWidgetBase::documentOffsetMoved(const QPoint & pt)
+{
+    m_d->documentOffset = pt;
+}
+
+QSize KisCanvasWidgetBase::documentSize() const
+{
+    KisImageWSP image = m_d->canvas->image();
+    return QSize(int(ceil(m_d->viewConverter->documentToViewX(image->width()  / image->xRes()))),
+                 int(ceil(m_d->viewConverter->documentToViewY(image->height() / image->yRes()))));
+}
+
+void KisCanvasWidgetBase::adjustOrigin()
+{
+    KisImageWSP image = m_d->canvas->image();
+    if (image == 0) return;
+
+    QRect documentRect = QRect(QPoint(0, 0), documentSize());
+
+    // save the old origin to see if it has changed
+    QPoint oldOrigin = m_d->origin;
+
+    // set the origin to the zoom document rect origin
+    m_d->origin = -documentRect.topLeft();
+
+    // the document bounding rect is always centered on the virtual canvas
+    // if there are margins left around the zoomed document rect then
+    // distribute them evenly on both sides
+    int widthDiff = widget()->size().width() - documentRect.width();
+    if (widthDiff > 0)
+        m_d->origin.rx() += qRound(0.5 * widthDiff);
+    int heightDiff = widget()->size().height() - documentRect.height();
+    if (heightDiff > 0)
+        m_d->origin.ry() += qRound(0.5 * heightDiff);
+ 
+    emitDocumentOriginChangedSignal();
+}
+
+QPoint KisCanvasWidgetBase::widgetToView(const QPoint& p) const
+{
+    return p - m_d->origin;
+}
+
+
+QRect KisCanvasWidgetBase::widgetToView(const QRect& r) const
+{
+    return r.translated(- m_d->origin);
+}
+
+
+QPoint KisCanvasWidgetBase::viewToWidget(const QPoint& p) const
+{
+    return p + m_d->origin;
+}
+
+
+QRect KisCanvasWidgetBase::viewToWidget(const QRect& r) const
+{
+    return r.translated(m_d->origin);
+}
+
+
+void KisCanvasWidgetBase::mouseMoveEvent(QMouseEvent *e)
+{
+    if (m_d->blockMouseEvent.isActive()) {
+        return;
+    }
+    m_d->toolProxy->mouseMoveEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+}
+
+void KisCanvasWidgetBase::contextMenuEvent(QContextMenuEvent *e)
+{
+    m_d->canvas->view()->unplugActionList("flake_tool_actions");
+    m_d->canvas->view()->plugActionList("flake_tool_actions",
+                                        m_d->toolProxy->popupActionList());
+    QMenu *menu = dynamic_cast<QMenu*>(m_d->canvas->view()->factory()->container("image_popup", m_d->canvas->view()));
+    if (menu)
+        menu->exec(e->globalPos());
+}
+
+void KisCanvasWidgetBase::mousePressEvent(QMouseEvent *e)
+{
+    if (m_d->blockMouseEvent.isActive()) {
+        return;
+    } else if (m_d->canvas->view()->favoriteResourceManager()->isPopupPaletteVisible()) {
+        m_d->canvas->view()->favoriteResourceManager()->slotShowPopupPalette();
+        return;
+    }
+    m_d->toolProxy->mousePressEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+}
+
+void KisCanvasWidgetBase::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (m_d->blockMouseEvent.isActive()) {
+        return;
+    }
+    m_d->toolProxy->mouseReleaseEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+}
+
+void KisCanvasWidgetBase::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    if (m_d->blockMouseEvent.isActive()) {
+        return;
+    }
+    m_d->toolProxy->mouseDoubleClickEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+}
+
+void KisCanvasWidgetBase::keyPressEvent(QKeyEvent *e)
+{
+    m_d->toolProxy->keyPressEvent(e);
+    if (! e->isAccepted()) {
+        if (e->key() == Qt::Key_Backtab
+                || (e->key() == Qt::Key_Tab && (e->modifiers() & Qt::ShiftModifier)))
+            callFocusNextPrevChild(false);
+        else if (e->key() == Qt::Key_Tab)
+            callFocusNextPrevChild(true);
+    }
+}
+
+void KisCanvasWidgetBase::keyReleaseEvent(QKeyEvent *e)
+{
+    m_d->toolProxy->keyReleaseEvent(e);
+}
+
+QVariant KisCanvasWidgetBase::inputMethodQuery(Qt::InputMethodQuery query) const
+{
+    return m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter);
+}
+
+void KisCanvasWidgetBase::inputMethodEvent(QInputMethodEvent *event)
+{
+    m_d->toolProxy->inputMethodEvent(event);
+}
+
+void KisCanvasWidgetBase::tabletEvent(QTabletEvent *e)
+{
+    widget()->setFocus(Qt::OtherFocusReason);
+    m_d->blockMouseEvent.start(100);
+
+    m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument(e->hiResGlobalPos() - widget()->mapToGlobal(QPoint(0, 0)) + m_d->documentOffset - m_d->origin));
+}
+
+void KisCanvasWidgetBase::wheelEvent(QWheelEvent *e)
+{
+    m_d->toolProxy->wheelEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+}
+
 

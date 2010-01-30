@@ -20,28 +20,39 @@
 #define _KIS_CANVAS_WIDGET_BASE_
 
 #include <QList>
+#include <Qt>
 
 #include <kis_abstract_canvas_widget.h>
 
 class QColor;
 class QImage;
+class QSize;
+class QContextMenuEvent;
+class QKeyEvent;
+class QMouseEvent;
+class QTabletEvent;
+class QWheelEvent;
+class QInputMethodEvent;
+class QVariant;
+
+class KoViewConverter;
 
 class KisCanvasWidgetBase : public KisAbstractCanvasWidget
 {
-
 public:
-
-    KisCanvasWidgetBase();
+    KisCanvasWidgetBase(KisCanvas2 * canvas);
 
     virtual ~KisCanvasWidgetBase();
 
-    //virtual KoToolProxy * toolProxy();
+public: // KisAbstractCanvasWidget
 
-    //virtual void documentOffsetMoved(const QPoint &);
+    virtual KoToolProxy * toolProxy();
 
-    //virtual QPoint documentOrigin();
+    virtual void documentOffsetMoved(const QPoint &);
 
-    //virtual void adjustOrigin();
+    virtual QPoint documentOrigin() const;
+
+    virtual void adjustOrigin();
 
     /**
      * Draw the specified decorations on the view.
@@ -67,6 +78,42 @@ protected:
      *
      */
     QColor borderColor() const;
+
+    KisCanvas2 *canvas() const;
+
+    const KoViewConverter *viewConverter() const;
+
+    QPoint documentOffset() const;
+
+    /// document size in widget pixels
+    QSize documentSize() const;
+
+    /// these methods take origin coordinate into account, basically it means (point - origin)
+    QPoint widgetToView(const QPoint& p) const;
+    QRect widgetToView(const QRect& r) const;
+    QPoint viewToWidget(const QPoint& p) const;
+    QRect viewToWidget(const QRect& r) const;
+
+    /**
+     * Event handlers to be called by derived canvas event handlers.
+     * All common event processing is carried out by these 
+     * functions.
+     */
+    void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
+    void mouseDoubleClickEvent(QMouseEvent *e);
+    void contextMenuEvent(QContextMenuEvent *e);
+    void tabletEvent(QTabletEvent *e);
+    void wheelEvent(QWheelEvent *e);
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    void inputMethodEvent(QInputMethodEvent *event);
+
+    /// To be implemented by the derived canvas 
+    virtual void emitDocumentOriginChangedSignal() = 0;
+    virtual bool callFocusNextPrevChild(bool next) = 0;
 
 private:
     class Private;

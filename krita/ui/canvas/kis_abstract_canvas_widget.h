@@ -44,7 +44,7 @@ public:
 
     virtual void documentOffsetMoved(const QPoint &) = 0;
 
-    virtual QPoint documentOrigin() = 0;
+    virtual QPoint documentOrigin() const = 0;
 
     virtual void adjustOrigin() = 0;
 

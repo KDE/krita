@@ -136,24 +136,18 @@ protected:
     void initializeGL();
     void resizeGL(int w, int h);
 
-    /// these methods take origin coordinate into account, basically it means (point - origin)
-    QPoint widgetToView(const QPoint& p) const;
-    QRect widgetToView(const QRect& r) const;
-    QPoint viewToWidget(const QPoint& p) const;
-    QRect viewToWidget(const QRect& r) const;
-
 public: // KisAbstractCanvasWidget
 
     QWidget * widget() {
         return this;
     }
 
-    KoToolProxy * toolProxy();
-
     void documentOffsetMoved(const QPoint & pt);
-    virtual QPoint documentOrigin();
-    void adjustOrigin();
 
+protected: // KisCanvasWidgetBase
+
+    virtual void emitDocumentOriginChangedSignal();
+    virtual bool callFocusNextPrevChild(bool next);
 
 private:
     class Private;

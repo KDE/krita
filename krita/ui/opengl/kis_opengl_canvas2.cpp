@@ -31,7 +31,6 @@
 #include <QPaintEvent>
 #include <QPoint>
 #include <QPainter>
-#include <QTimer>
 
 #include <kxmlguifactory.h>
 
@@ -63,35 +62,23 @@ namespace
 class KisOpenGLCanvas2::Private
 {
 public:
-    Private(const KoViewConverter *vc)
-            : viewConverter(vc)
-            , canvas(0)
-            , toolProxy(0)
-            , savedCurrentProgram(NO_PROGRAM)
+    Private()
+            : savedCurrentProgram(NO_PROGRAM)
             , GLStateSaved(false)
     {
     }
 
-    const KoViewConverter * viewConverter;
-    KisCanvas2 * canvas;
-    KoToolProxy * toolProxy;
     KisOpenGLImageTexturesSP openGLImageTextures;
-    /// the origin of the image rect
-    QPoint origin;
-    QPoint documentOffset;
-    QTimer blockMouseEvent;
     GLint savedCurrentProgram;
     bool GLStateSaved;
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures)
         : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget())
-        , m_d(new Private(canvas->viewConverter()))
+        , KisCanvasWidgetBase(canvas)
+        , m_d(new Private())
 {
-    m_d->canvas = canvas;
-    m_d->toolProxy = canvas->toolProxy();
     m_d->openGLImageTextures = imageTextures;
-    m_d->blockMouseEvent.setSingleShot(true);
 
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
@@ -135,7 +122,7 @@ void KisOpenGLCanvas2::draw()
 
     drawBorder();
 
-    if (m_d->canvas->image()) {
+    if (canvas()->image()) {
         drawBackground();
         drawImage();
 
@@ -145,9 +132,9 @@ void KisOpenGLCanvas2::draw()
         bool drawTools = true;
 
         drawDecorations(gc, drawTools,
-                        m_d->documentOffset,
+                        documentOffset(),
                         QRect(QPoint(0, 0), QSize(width(), height())),
-                        m_d->canvas);
+                        canvas());
     } else {
         restoreGLState();
     }
@@ -183,8 +170,8 @@ void KisOpenGLCanvas2::drawBackground()
     glScalef(checkSizeScale, checkSizeScale, 1.0);
 
     if (cfg.scrollCheckers()) {
-        glTranslatef(static_cast<GLfloat>(m_d->documentOffset.x()) / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
-                     static_cast<GLfloat>(m_d->documentOffset.y()) / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
+        glTranslatef(static_cast<GLfloat>(documentOffset().x()) / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
+                     static_cast<GLfloat>(documentOffset().y()) / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
                      0.0);
     }
 
@@ -192,7 +179,7 @@ void KisOpenGLCanvas2::drawBackground()
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(m_d->origin.x(), m_d->origin.y(), 0.0);
+    glTranslatef(documentOrigin().x(), documentOrigin().y(), 0.0);
     glScalef(scaleX, scaleY, 1.0);
 
     glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->backgroundTexture());
@@ -205,7 +192,7 @@ void KisOpenGLCanvas2::drawBackground()
     glTexCoord2f(0.0, 0.0);
     glVertex2f(0.0, 0.0);
 
-    KisImageWSP image = m_d->canvas->image();
+    KisImageWSP image = canvas()->image();
 
     glTexCoord2f(image->width() / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE, 0.0);
     glVertex2f(image->width(), 0.0);
@@ -234,11 +221,11 @@ void KisOpenGLCanvas2::drawImage()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    QRectF documentRect = m_d->viewConverter->viewToDocument(QRectF(m_d->documentOffset.x(), 
-                                                                    m_d->documentOffset.y(), 
+    QRectF documentRect = viewConverter()->viewToDocument(QRectF(documentOffset().x(), 
+                                                                    documentOffset().y(), 
                                                                     width(), 
                                                                     height()));
-    KisImageWSP image = m_d->canvas->image();
+    KisImageWSP image = canvas()->image();
 
     QRect wr = image->documentToIntPixel(documentRect);
     wr &= QRect(0, 0, image->width(), image->height());
@@ -247,7 +234,7 @@ void KisOpenGLCanvas2::drawImage()
         if (m_d->openGLImageTextures->usingHDRExposureProgram()) {
             m_d->openGLImageTextures->activateHDRExposureProgram();
         }
-        m_d->openGLImageTextures->setHDRExposure(m_d->canvas->view()->resourceProvider()->HDRExposure());
+        m_d->openGLImageTextures->setHDRExposure(canvas()->view()->resourceProvider()->HDRExposure());
     }
 
     makeCurrent();
@@ -370,13 +357,13 @@ void KisOpenGLCanvas2::setupMatrices(void)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(-m_d->documentOffset.x(), -m_d->documentOffset.y(), 0.0);
-    glTranslatef(m_d->origin.x(),  m_d->origin.y(), 0.0);
+    glTranslatef(-documentOffset().x(), -documentOffset().y(), 0.0);
+    glTranslatef(documentOrigin().x(),  documentOrigin().y(), 0.0);
 }
 
 void KisOpenGLCanvas2::applyZoomScalingToModelView(void)
 {
-    KisImageWSP image = m_d->canvas->image();
+    KisImageWSP image = canvas()->image();
     
     if (!image) return;
     
@@ -396,17 +383,17 @@ void KisOpenGLCanvas2::setPixelToViewTransformation(void)
 qreal KisOpenGLCanvas2::zoomScaleX() const
 {
     qreal sx, sy;
-    m_d->viewConverter->zoom(&sx, &sy);
+    viewConverter()->zoom(&sx, &sy);
 
-    return sx / m_d->canvas->image()->xRes();
+    return sx / canvas()->image()->xRes();
 }
 
 qreal KisOpenGLCanvas2::zoomScaleY() const
 {
     qreal sx, sy;
-    m_d->viewConverter->zoom(&sx, &sy);
+    viewConverter()->zoom(&sx, &sy);
 
-    return sy / m_d->canvas->image()->yRes();
+    return sy / canvas()->image()->yRes();
 }
 
 void KisOpenGLCanvas2::enterEvent(QEvent* e)
@@ -422,160 +409,74 @@ void KisOpenGLCanvas2::leaveEvent(QEvent* e)
 
 void KisOpenGLCanvas2::mouseMoveEvent(QMouseEvent *e)
 {
-    if (m_d->blockMouseEvent.isActive()) return;
-    m_d->toolProxy->mouseMoveEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+    KisCanvasWidgetBase::mouseMoveEvent(e);
 }
 
 void KisOpenGLCanvas2::contextMenuEvent(QContextMenuEvent *e)
 {
-    m_d->canvas->view()->unplugActionList("flake_tool_actions");
-    m_d->canvas->view()->plugActionList("flake_tool_actions",
-                                        m_d->toolProxy->popupActionList());
-    QMenu *menu = dynamic_cast<QMenu*>(m_d->canvas->view()->factory()->container("image_popup", m_d->canvas->view()));
-    if (menu)
-        menu->exec(e->globalPos());
+    KisCanvasWidgetBase::contextMenuEvent(e);
 }
 
 void KisOpenGLCanvas2::mousePressEvent(QMouseEvent *e)
 {
-    if (m_d->blockMouseEvent.isActive()) return;
-    else if (m_d->canvas->view()->favoriteResourceManager()->isPopupPaletteVisible())
-    {
-        m_d->canvas->view()->favoriteResourceManager()->slotShowPopupPalette();
-        return;
-    }
-    m_d->toolProxy->mousePressEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+    KisCanvasWidgetBase::mousePressEvent(e);
 }
 
 void KisOpenGLCanvas2::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (m_d->blockMouseEvent.isActive()) return;
-    m_d->toolProxy->mouseReleaseEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+    KisCanvasWidgetBase::mouseReleaseEvent(e);
 }
 
 void KisOpenGLCanvas2::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    if (m_d->blockMouseEvent.isActive()) return;
-    m_d->toolProxy->mouseDoubleClickEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
-
+    KisCanvasWidgetBase::mouseDoubleClickEvent(e);
 }
 
 void KisOpenGLCanvas2::keyPressEvent(QKeyEvent *e)
 {
-    m_d->toolProxy->keyPressEvent(e);
-    if (! e->isAccepted()) {
-        if (e->key() == Qt::Key_Backtab
-                || (e->key() == Qt::Key_Tab && (e->modifiers() & Qt::ShiftModifier)))
-            focusNextPrevChild(false);
-        else if (e->key() == Qt::Key_Tab)
-            focusNextPrevChild(true);
-    }
+    KisCanvasWidgetBase::keyPressEvent(e);
 }
 
 void KisOpenGLCanvas2::keyReleaseEvent(QKeyEvent *e)
 {
-    m_d->toolProxy->keyReleaseEvent(e);
+    KisCanvasWidgetBase::keyReleaseEvent(e);
 }
 
 QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-    return m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter);
+    return KisCanvasWidgetBase::inputMethodQuery(query);
 }
 
 void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
 {
-    m_d->toolProxy->inputMethodEvent(event);
+    KisCanvasWidgetBase::inputMethodEvent(event);
 }
 
 void KisOpenGLCanvas2::tabletEvent(QTabletEvent *e)
 {
-    setFocus(Qt::OtherFocusReason);
-    m_d->blockMouseEvent.start(100);
-
-    m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument(e->hiResGlobalPos() - mapToGlobal(QPoint(0, 0)) + m_d->documentOffset - m_d->origin));
-    /*
-    setFocus(Qt::OtherFocusReason);
-    m_d->blockMouseEvent.start(100);
-    qreal subpixelX = e->hiResGlobalX();
-    subpixelX = subpixelX - ((int) subpixelX); // leave only part behind the dot
-    qreal subpixelY = e->hiResGlobalY();
-    subpixelY = subpixelY - ((int) subpixelY); // leave only part behind the dot
-    QPointF pos(e->x() + subpixelX + m_d->documentOffset.x() - m_d->origin.x(), e->y() + subpixelY + m_d->documentOffset.y() - m_d->origin.y() );
-    m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument(pos));
-    */
+    KisCanvasWidgetBase::tabletEvent(e);
 }
 
 void KisOpenGLCanvas2::wheelEvent(QWheelEvent *e)
 {
-    m_d->toolProxy->wheelEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
-}
-
-KoToolProxy * KisOpenGLCanvas2::toolProxy()
-{
-    return m_d->toolProxy;
+    KisCanvasWidgetBase::wheelEvent(e);
 }
 
 void KisOpenGLCanvas2::documentOffsetMoved(const QPoint & pt)
 {
-    m_d->documentOffset = pt;
+    KisCanvasWidgetBase::documentOffsetMoved(pt);
     draw();
 }
 
-void KisOpenGLCanvas2::adjustOrigin()
+void KisOpenGLCanvas2::emitDocumentOriginChangedSignal()
 {
-    KisImageWSP image = m_d->canvas->image();
-    if (image == 0) return;
-
-    QSize documentSize(int(ceil(m_d->viewConverter->documentToViewX(image->width()  / image->xRes()))),
-                       int(ceil(m_d->viewConverter->documentToViewY(image->height() / image->yRes()))));
-    QRect documentRect = QRect(QPoint(0, 0), documentSize);
-
-    // save the old origin to see if it has changed
-    QPoint oldOrigin = m_d->origin;
-    // set the origin to the zoom document rect origin
-    m_d->origin = -documentRect.topLeft();
-
-    // the document bounding rect is always centered on the virtual canvas
-    // if there are margins left around the zoomed document rect then
-    // distribute them evenly on both sides
-    int widthDiff = size().width() - documentRect.width();
-    if (widthDiff > 0)
-        m_d->origin.rx() += qRound(0.5 * widthDiff);
-    int heightDiff = size().height() - documentRect.height();
-    if (heightDiff > 0)
-        m_d->origin.ry() += qRound(0.5 * heightDiff);
-
-    emit documentOriginChanged(m_d->origin);
+    emit documentOriginChanged(documentOrigin());
 }
 
-QPoint KisOpenGLCanvas2::documentOrigin()
+bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
 {
-    return m_d->origin;
+    return focusNextPrevChild(next);
 }
-
-QPoint KisOpenGLCanvas2::widgetToView(const QPoint& p) const
-{
-    return p - m_d->origin;
-}
-
-
-QRect KisOpenGLCanvas2::widgetToView(const QRect& r) const
-{
-    return r.translated(- m_d->origin);
-}
-
-
-QPoint KisOpenGLCanvas2::viewToWidget(const QPoint& p) const
-{
-    return p + m_d->origin;
-}
-
-
-QRect KisOpenGLCanvas2::viewToWidget(const QRect& r) const
-{
-    return r.translated(m_d->origin);
-}
-
 
 #include "kis_opengl_canvas2.moc"
 #endif // HAVE_OPENGL

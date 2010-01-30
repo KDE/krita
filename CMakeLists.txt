@@ -200,6 +200,18 @@ endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for color management and Krita's JPEG filter.")
 
 
+##
+## Test for sqlite
+##
+SET (SQLITE_MIN_VERSION "3.6.16")
+IF(NOT WIN32)
+  INCLUDE (FindPkgConfig)
+  pkg_check_modules (SQLITE3 sqlite3>=3.6.16) #todo let's have this check in FindSqlite instead
+ENDIF(NOT WIN32)
+
+INCLUDE (FindSqlite)
+macro_log_feature(SQLITE_FOUND "SQLite" "SQLite is an embedded SQL database engine." "http://www.sqlite.org" TRUE SQLITE_MIN_VERSION "Required by the default Kexi database driver.")
+
 #Set the build of TextShape changetraker
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
@@ -328,9 +340,9 @@ if(NOT Boost_FOUND)
 endif(NOT Boost_FOUND)
 
 ### Kexi: bzip2
-if(NOT BZIP2_EXECUTABLE )
+if(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND)
     set(SHOULD_BUILD_KEXI FALSE)
-endif(NOT BZIP2_EXECUTABLE )
+endif(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND )
 
 ### Krita: pigment, blitz, eigen2, exiv2
 if(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)

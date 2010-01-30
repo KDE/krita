@@ -69,7 +69,9 @@ protected:
     QColor borderColor() const;
 
 private:
-    QList<KisCanvasDecoration*> m_decorations;
+    class Private;
+    Private * const m_d;
+
 };
 
 #endif // _KIS_CANVAS_WIDGET_BASE_

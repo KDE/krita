@@ -31,12 +31,22 @@
 #include "../kis_view2.h"
 #include "../kis_selection_manager.h"
 
+class KisCanvasWidgetBase::Private
+{
+public:
+    Private() {}
+
+    QList<KisCanvasDecoration*> m_decorations;
+};
+
 KisCanvasWidgetBase::KisCanvasWidgetBase()
+    : m_d(new Private)
 {
 }
 
 KisCanvasWidgetBase::~KisCanvasWidgetBase()
 {
+    delete m_d;
 }
 
 void KisCanvasWidgetBase::drawDecorations(QPainter & gc, bool tools,
@@ -60,7 +70,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, bool tools,
     gc.restore();
 
     // ask the decorations to paint themselves
-    foreach(KisCanvasDecoration* deco, m_decorations) {
+    foreach(KisCanvasDecoration* deco, m_d->m_decorations) {
         deco->paint(gc, documentOffset, clipRect, *canvas->viewConverter());
     }
 
@@ -93,12 +103,12 @@ QColor KisCanvasWidgetBase::borderColor() const
 
 void KisCanvasWidgetBase::addDecoration(KisCanvasDecoration* deco)
 {
-    m_decorations.push_back(deco);
+    m_d->m_decorations.push_back(deco);
 }
 
 KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id)
 {
-    foreach(KisCanvasDecoration* deco, m_decorations) {
+    foreach(KisCanvasDecoration* deco, m_d->m_decorations) {
         if (deco->id() == id) {
             return deco;
         }

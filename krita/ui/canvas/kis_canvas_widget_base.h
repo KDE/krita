@@ -30,6 +30,7 @@ class QSize;
 class QContextMenuEvent;
 class QKeyEvent;
 class QMouseEvent;
+class QPointF;
 class QTabletEvent;
 class QWheelEvent;
 class QInputMethodEvent;
@@ -89,10 +90,13 @@ protected:
     QSize documentSize() const;
 
     /// these methods take origin coordinate into account, basically it means (point - origin)
-    QPoint widgetToView(const QPoint& p) const;
+    QPointF widgetToView(const QPointF& p) const;
     QRect widgetToView(const QRect& r) const;
     QPoint viewToWidget(const QPoint& p) const;
     QRect viewToWidget(const QRect& r) const;
+
+    /// Convert widget coords to document, taking into account document origin and offset.
+    QPointF widgetToDocument(const QPointF& p) const;
 
     /**
      * Event handlers to be called by derived canvas event handlers.

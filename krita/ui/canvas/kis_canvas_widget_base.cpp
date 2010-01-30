@@ -197,7 +197,14 @@ void KisCanvasWidgetBase::adjustOrigin()
     emitDocumentOriginChangedSignal();
 }
 
-QPoint KisCanvasWidgetBase::widgetToView(const QPoint& p) const
+
+QPointF KisCanvasWidgetBase::widgetToDocument(const QPointF& p) const
+{
+    return m_d->viewConverter->viewToDocument(widgetToView(p + m_d->documentOffset));
+}
+
+
+QPointF KisCanvasWidgetBase::widgetToView(const QPointF& p) const
 {
     return p - m_d->origin;
 }
@@ -226,7 +233,7 @@ void KisCanvasWidgetBase::processMouseMoveEvent(QMouseEvent *e)
     if (m_d->blockMouseEvent.isActive()) {
         return;
     }
-    m_d->toolProxy->mouseMoveEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+    m_d->toolProxy->mouseMoveEvent(e, widgetToDocument(e->pos()));
 }
 
 void KisCanvasWidgetBase::processContextMenuEvent(QContextMenuEvent *e)
@@ -247,7 +254,7 @@ void KisCanvasWidgetBase::processMousePressEvent(QMouseEvent *e)
         m_d->canvas->view()->favoriteResourceManager()->slotShowPopupPalette();
         return;
     }
-    m_d->toolProxy->mousePressEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+    m_d->toolProxy->mousePressEvent(e, widgetToDocument(e->pos()));
 }
 
 void KisCanvasWidgetBase::processMouseReleaseEvent(QMouseEvent *e)
@@ -255,7 +262,7 @@ void KisCanvasWidgetBase::processMouseReleaseEvent(QMouseEvent *e)
     if (m_d->blockMouseEvent.isActive()) {
         return;
     }
-    m_d->toolProxy->mouseReleaseEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+    m_d->toolProxy->mouseReleaseEvent(e, widgetToDocument(e->pos()));
 }
 
 void KisCanvasWidgetBase::processMouseDoubleClickEvent(QMouseEvent *e)
@@ -263,7 +270,7 @@ void KisCanvasWidgetBase::processMouseDoubleClickEvent(QMouseEvent *e)
     if (m_d->blockMouseEvent.isActive()) {
         return;
     }
-    m_d->toolProxy->mouseDoubleClickEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+    m_d->toolProxy->mouseDoubleClickEvent(e, widgetToDocument(e->pos()));
 }
 
 void KisCanvasWidgetBase::processKeyPressEvent(QKeyEvent *e)
@@ -298,12 +305,13 @@ void KisCanvasWidgetBase::processTabletEvent(QTabletEvent *e)
     widget()->setFocus(Qt::OtherFocusReason);
     m_d->blockMouseEvent.start(100);
 
-    m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument(e->hiResGlobalPos() - widget()->mapToGlobal(QPoint(0, 0)) + m_d->documentOffset - m_d->origin));
+    const QPointF pos = e->hiResGlobalPos() - widget()->mapToGlobal(QPoint(0, 0));
+    m_d->toolProxy->tabletEvent(e, widgetToDocument(pos));
 }
 
 void KisCanvasWidgetBase::processWheelEvent(QWheelEvent *e)
 {
-    m_d->toolProxy->wheelEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+    m_d->toolProxy->wheelEvent(e, widgetToDocument(e->pos()));
 }
 
 

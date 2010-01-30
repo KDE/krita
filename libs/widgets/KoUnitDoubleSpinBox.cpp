@@ -113,8 +113,7 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
 
     const double value = valueFromText( number );
     double newVal = 0.0;
-    if( value != NAN )
-    {
+    if (!isnan(value)) {
         bool ok;
         KoUnit unit = KoUnit::unit( unitName, &ok );
         if ( ok )

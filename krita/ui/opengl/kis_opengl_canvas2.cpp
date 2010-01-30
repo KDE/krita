@@ -409,57 +409,57 @@ void KisOpenGLCanvas2::leaveEvent(QEvent* e)
 
 void KisOpenGLCanvas2::mouseMoveEvent(QMouseEvent *e)
 {
-    KisCanvasWidgetBase::mouseMoveEvent(e);
+    processMouseMoveEvent(e);
 }
 
 void KisOpenGLCanvas2::contextMenuEvent(QContextMenuEvent *e)
 {
-    KisCanvasWidgetBase::contextMenuEvent(e);
+    processContextMenuEvent(e);
 }
 
 void KisOpenGLCanvas2::mousePressEvent(QMouseEvent *e)
 {
-    KisCanvasWidgetBase::mousePressEvent(e);
+    processMousePressEvent(e);
 }
 
 void KisOpenGLCanvas2::mouseReleaseEvent(QMouseEvent *e)
 {
-    KisCanvasWidgetBase::mouseReleaseEvent(e);
+    processMouseReleaseEvent(e);
 }
 
 void KisOpenGLCanvas2::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    KisCanvasWidgetBase::mouseDoubleClickEvent(e);
+    processMouseDoubleClickEvent(e);
 }
 
 void KisOpenGLCanvas2::keyPressEvent(QKeyEvent *e)
 {
-    KisCanvasWidgetBase::keyPressEvent(e);
+    processKeyPressEvent(e);
 }
 
 void KisOpenGLCanvas2::keyReleaseEvent(QKeyEvent *e)
 {
-    KisCanvasWidgetBase::keyReleaseEvent(e);
+    processKeyReleaseEvent(e);
 }
 
 QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-    return KisCanvasWidgetBase::inputMethodQuery(query);
+    return processInputMethodQuery(query);
 }
 
 void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
 {
-    KisCanvasWidgetBase::inputMethodEvent(event);
+    processInputMethodEvent(event);
 }
 
 void KisOpenGLCanvas2::tabletEvent(QTabletEvent *e)
 {
-    KisCanvasWidgetBase::tabletEvent(e);
+    processTabletEvent(e);
 }
 
 void KisOpenGLCanvas2::wheelEvent(QWheelEvent *e)
 {
-    KisCanvasWidgetBase::wheelEvent(e);
+    processWheelEvent(e);
 }
 
 void KisOpenGLCanvas2::documentOffsetMoved(const QPoint & pt)

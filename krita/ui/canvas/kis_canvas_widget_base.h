@@ -99,17 +99,17 @@ protected:
      * All common event processing is carried out by these 
      * functions.
      */
-    void keyPressEvent(QKeyEvent *e);
-    void keyReleaseEvent(QKeyEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void mouseMoveEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    void mouseDoubleClickEvent(QMouseEvent *e);
-    void contextMenuEvent(QContextMenuEvent *e);
-    void tabletEvent(QTabletEvent *e);
-    void wheelEvent(QWheelEvent *e);
-    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
-    void inputMethodEvent(QInputMethodEvent *event);
+    void processKeyPressEvent(QKeyEvent *e);
+    void processKeyReleaseEvent(QKeyEvent *e);
+    void processMousePressEvent(QMouseEvent *e);
+    void processMouseMoveEvent(QMouseEvent *e);
+    void processMouseReleaseEvent(QMouseEvent *e);
+    void processMouseDoubleClickEvent(QMouseEvent *e);
+    void processContextMenuEvent(QContextMenuEvent *e);
+    void processTabletEvent(QTabletEvent *e);
+    void processWheelEvent(QWheelEvent *e);
+    QVariant processInputMethodQuery(Qt::InputMethodQuery query) const;
+    void processInputMethodEvent(QInputMethodEvent *event);
 
     /// To be implemented by the derived canvas 
     virtual void emitDocumentOriginChangedSignal() = 0;

@@ -20,6 +20,7 @@
 #define _KIS_MEMORY_LEAK_TRACKER_H_
 
 class QObject;
+class KisSharedData;
 
 #include <krita_export.h>
 
@@ -31,18 +32,38 @@ class QObject;
  * and translate to NOOP on other platforms. It is also just a debug tool,
  * and should not be used in a production build of krita.
  */
-class KRITAIMAGE_EXPORT KisMemoryLeakTracker {
-        KisMemoryLeakTracker();
-        ~KisMemoryLeakTracker();
-    public:
-        static KisMemoryLeakTracker* instance();
-        void reference(const void* what, const void* bywho);
-        void dereference(const void* what, const void* bywho);
-        void reference(const QObject* what, const void* bywho);
-        void dereference(const QObject* what, const void* bywho);
-    private:
-        struct Private;
-        Private* const d;
+class KRITAIMAGE_EXPORT KisMemoryLeakTracker
+{
+    KisMemoryLeakTracker();
+    ~KisMemoryLeakTracker();
+public:
+    static KisMemoryLeakTracker* instance();
+    void reference(const void* what, const void* bywho, const char* whatName = 0);
+    void dereference(const void* what, const void* bywho);
+    void reference(const QObject* what, const void* bywho);
+    void dereference(const QObject* what, const void* bywho);
+public:
+    template<typename _T_>
+    void reference(const _T_* what, const void* bywho);
+    template<typename _T_>
+    void dereference(const _T_* what, const void* bywho);
+private:
+    struct Private;
+    Private* const d;
 };
+
+#include <typeinfo>
+
+template<typename _T_>
+void KisMemoryLeakTracker::reference(const _T_* what, const void* bywho)
+{
+    reference((void*)what, bywho, typeid(what).name());
+}
+
+template<typename _T_>
+void KisMemoryLeakTracker::dereference(const _T_* what, const void* bywho)
+{
+    dereference((void*)what, bywho);
+}
 
 #endif

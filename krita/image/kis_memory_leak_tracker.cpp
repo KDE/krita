@@ -45,11 +45,10 @@ KisMemoryLeakTracker* KisMemoryLeakTracker::instance()
 #ifdef Q_OS_LINUX
 
 struct BacktraceInfo {
-    BacktraceInfo() : trace(0), size(0)
-    {
+    BacktraceInfo() : trace(0), size(0) {
     }
-    ~BacktraceInfo()
-    {
+    ~BacktraceInfo() {
+        delete[] trace;
     }
     void** trace;
     int size;
@@ -64,30 +63,31 @@ struct BacktraceInfo {
     info->trace = new void*[BACKTRACE_SIZE]; \
     int n = backtrace(info->trace, BACKTRACE_SIZE); \
     info->size = n;
-    
+
+struct WhatInfo {
+    QHash<const void*, BacktraceInfo*> infos;
+    QString name;
+};
 
 struct KisMemoryLeakTracker::Private {
-    QHash<const void*, QHash<const void*, BacktraceInfo*> > whatWhoWhen;
-    QHash<const QObject*, QHash<const void*, BacktraceInfo*> > whatQObjWhoWhen;
+    QHash<const void*, WhatInfo > whatWhoWhen;
+    QHash<const QObject*, WhatInfo > whatQObjWhoWhen;
     template<typename _T_>
-    void dumpReferencedObjectsAndDelete( QHash<const _T_*, QHash<const void*, BacktraceInfo*> >& );
+    void dumpReferencedObjectsAndDelete(QHash<const _T_*, WhatInfo >&);
 };
 
 template<typename _T_>
-void KisMemoryLeakTracker::Private::dumpReferencedObjectsAndDelete( QHash<const _T_*, QHash<const void*, BacktraceInfo*> >& map)
+void KisMemoryLeakTracker::Private::dumpReferencedObjectsAndDelete(QHash<const _T_*, WhatInfo >& map)
 {
-    for(typename QHash<const _T_*, QHash<const void*, BacktraceInfo*> >::iterator it = map.begin();
-        it != map.end(); ++it)
-    {
-        errKrita << "Object " << it.key() << " is still referenced by " << it.value().size() << " objects:";
-        for( QHash<const void*, BacktraceInfo*>::iterator it2 = it.value().begin();
-            it2 != it.value().end(); ++it2 )
-        {
+    for (typename QHash<const _T_*, WhatInfo >::iterator it = map.begin();
+            it != map.end(); ++it) {
+        errKrita << "Object " << it.key() << "(" << it.value().name << ") is still referenced by " << it.value().infos.size() << " objects:";
+        for (QHash<const void*, BacktraceInfo*>::iterator it2 = it.value().infos.begin();
+                it2 != it.value().infos.end(); ++it2) {
             BacktraceInfo* info = it2.value();
-            char** strings = backtrace_symbols (info->trace, info->size);
+            char** strings = backtrace_symbols(info->trace, info->size);
             errKrita << "Referenced by " << it2.key() << " at:";
-            for(int i = 0; i < info->size; ++i)
-            {
+            for (int i = 0; i < info->size; ++i) {
                 errKrita << strings[i];
             }
             delete info;
@@ -103,8 +103,7 @@ KisMemoryLeakTracker::KisMemoryLeakTracker() : d(new Private)
 
 KisMemoryLeakTracker::~KisMemoryLeakTracker()
 {
-    if(d->whatQObjWhoWhen.isEmpty() && d->whatWhoWhen.isEmpty())
-    {
+    if (d->whatQObjWhoWhen.isEmpty() && d->whatWhoWhen.isEmpty()) {
         dbgKrita << "No leak detected.";
     } else {
         errKrita << "****************************************";
@@ -116,36 +115,42 @@ KisMemoryLeakTracker::~KisMemoryLeakTracker()
     delete d;
 }
 
-void KisMemoryLeakTracker::reference(const void* what, const void* bywho)
+void KisMemoryLeakTracker::reference(const void* what, const void* bywho, const char* whatName)
 {
-    MAKE_BACKTRACEINFO
-    d->whatWhoWhen[what][bywho] = info;
+    if (whatName == 0 || strcmp(whatName, "PK13KisSharedData") != 0) {
+        MAKE_BACKTRACEINFO
+        d->whatWhoWhen[what].infos[bywho] = info;
+        if (whatName) {
+            d->whatWhoWhen[what].name = whatName;
+        }
+    }
 }
 
 void KisMemoryLeakTracker::dereference(const void* what, const void* bywho)
 {
-    QHash<const void*, BacktraceInfo*>& whoWhen = d->whatWhoWhen[what];
-    delete whoWhen[bywho];
-    whoWhen.remove(bywho);
-    if (whoWhen.isEmpty())
-    {
-        d->whatWhoWhen.remove(what);
+    if (d->whatWhoWhen.contains(what)) {
+        QHash<const void*, BacktraceInfo*>& whoWhen = d->whatWhoWhen[what].infos;
+        delete whoWhen[bywho];
+        whoWhen.remove(bywho);
+        if (whoWhen.isEmpty()) {
+            d->whatWhoWhen.remove(what);
+        }
     }
 }
 
 void KisMemoryLeakTracker::reference(const QObject* what, const void* bywho)
 {
     MAKE_BACKTRACEINFO
-    d->whatQObjWhoWhen[what][bywho] = info;
+    d->whatQObjWhoWhen[what].infos[bywho] = info;
+    d->whatQObjWhoWhen[what].name = what->objectName();
 }
 
 void KisMemoryLeakTracker::dereference(const QObject* what, const void* bywho)
 {
-    QHash<const void*, BacktraceInfo*>& whoWhen = d->whatQObjWhoWhen[what];
+    QHash<const void*, BacktraceInfo*>& whoWhen = d->whatQObjWhoWhen[what].infos;
     delete whoWhen[bywho];
     whoWhen.remove(bywho);
-    if (whoWhen.isEmpty())
-    {
+    if (whoWhen.isEmpty()) {
         d->whatQObjWhoWhen.remove(what);
     }
 }
@@ -163,7 +168,7 @@ KisMemoryLeakTracker::~KisMemoryLeakTracker()
 {
 }
 
-void KisMemoryLeakTracker::reference(const void* what, const void* bywho)
+void KisMemoryLeakTracker::reference(const void* what, const void* bywho, const char* whatName)
 {
 }
 

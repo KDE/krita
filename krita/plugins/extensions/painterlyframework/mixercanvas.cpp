@@ -74,7 +74,7 @@ MixerCanvas::~MixerCanvas()
     delete m_mixerTool;
 }
 
-KisPaintDevice *MixerCanvas::device()
+KisPaintDeviceSP MixerCanvas::device()
 {
     return m_paintDevice;
 }

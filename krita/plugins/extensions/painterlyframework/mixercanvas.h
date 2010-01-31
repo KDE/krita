@@ -24,6 +24,7 @@
 #include <QFrame>
 
 #include <KoCanvasBase.h>
+#include <kis_types.h>
 
 class QPoint;
 class QImage;
@@ -54,7 +55,7 @@ public:
 
     void setLayer(const KoColorSpace *cs);
 
-    KisPaintDevice *device();
+    KisPaintDeviceSP device();
     const KoColorSpace* colorSpace();
 
     MixerTool* mixerTool() const { return m_mixerTool; }
@@ -102,7 +103,7 @@ private:
 
     MixerTool *m_mixerTool;
     KoViewConverter *m_viewConverter;
-    KisPaintDevice *m_paintDevice;
+    KisPaintDeviceSP m_paintDevice;
     bool m_dirty;
     QImage m_image;
 

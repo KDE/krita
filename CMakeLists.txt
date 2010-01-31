@@ -179,12 +179,6 @@ macro_optional_find_package(Exiv2)
 macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http://www.exiv2.org" FALSE "0.16" "Required by Krita")
 
 ##
-## Test for bzip2
-##
-find_program(BZIP2_EXECUTABLE NAMES bzip2 )
-macro_log_feature(BZIP2_EXECUTABLE "bzip2" "High-quality data compressor" "http://www.bzip.org" FALSE "" "Required by Kexi")
-
-##
 ## Test for lcms
 ## 
 macro_optional_find_package(LCMS)
@@ -199,18 +193,25 @@ endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 
 macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for color management and Krita's JPEG filter.")
 
+if(SHOULD_BUILD_KEXI)
+    ##
+    ## Test for sqlite
+    ##
+    set(SQLITE_MIN_VERSION "3.6.16")
+    set(SQLITE_RECOMMENDED_VERSION "3.6.22")
+    include(FindSqlite)
+    macro_log_feature(SQLITE_FOUND "SQLite" "SQLite is an embedded SQL database engine." "http://www.sqlite.org"
+                      FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")
+    ## Test for bzip2
+    find_program(BZIP2_EXECUTABLE NAMES bzip2)
+    macro_log_feature(BZIP2_EXECUTABLE "bzip2" "High-quality data compressor" "http://www.bzip.org"
+                      FALSE "" "Required by Kexi.")
 
-##
-## Test for sqlite
-##
-SET (SQLITE_MIN_VERSION "3.6.16")
-IF(NOT WIN32)
-  INCLUDE (FindPkgConfig)
-  pkg_check_modules (SQLITE3 sqlite3>=3.6.16) #todo let's have this check in FindSqlite instead
-ENDIF(NOT WIN32)
-
-INCLUDE (FindSqlite)
-macro_log_feature(SQLITE_FOUND "SQLite" "SQLite is an embedded SQL database engine." "http://www.sqlite.org" TRUE SQLITE_MIN_VERSION "Required by the default Kexi database driver.")
+    if(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND)
+        set(SHOULD_BUILD_KEXI FALSE)
+        message(STATUS "WARNING: Kexi will not be built.")
+    endif(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND)
+endif(SHOULD_BUILD_KEXI)
 
 #Set the build of TextShape changetraker
 
@@ -338,11 +339,6 @@ endif(NOT EIGEN2_FOUND)
 if(NOT Boost_FOUND)
     set(SHOULD_BUILD_KPRESENTER FALSE)
 endif(NOT Boost_FOUND)
-
-### Kexi: bzip2
-if(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND)
-    set(SHOULD_BUILD_KEXI FALSE)
-endif(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND )
 
 ### Krita: pigment, blitz, eigen2, exiv2
 if(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)

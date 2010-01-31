@@ -77,11 +77,6 @@ private:
     KoResourceServerProvider(const KoResourceServerProvider&);
     KoResourceServerProvider operator=(const KoResourceServerProvider&);
 
-    static KoResourceServerProvider *m_singleton;
-    KoResourceServer<KoPattern>* m_patternServer;
-    KoResourceServer<KoAbstractGradient>* m_gradientServer;
-    KoResourceServer<KoColorSet>* m_paletteServer;
-
 private slots:
 
     void paletteThreadDone();
@@ -89,10 +84,8 @@ private slots:
     void gradientThreadDone();
 
 private:
-
-    QThread * paletteThread;
-    QThread * gradientThread;
-    QThread * patternThread;
+    struct Private;
+    Private* const d;
 };
 
 #endif // KORESOURCESERVERPROVIDER_H

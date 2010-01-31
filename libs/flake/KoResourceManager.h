@@ -52,7 +52,7 @@ namespace KoCanvasResource
 enum CanvasResource {
     ForegroundColor,    ///< The active forground color selected for this canvas.
     BackgroundColor,    ///< The active background color selected for this canvas.
-    ActiveBorder,       ///< The actove border selected for this canvas
+    ActiveBorder,       ///< The active border selected for this canvas
     HandleRadius,       ///< The handle radius used for drawing handles of any kind
     GrabSensitivity,    ///< The grab sensitivity used for grabbing handles of any kind
     PageSize,           ///< The size of the (current) page in postscript points.

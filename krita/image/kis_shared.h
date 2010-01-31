@@ -27,17 +27,23 @@ class KisSharedData;
 
 class KRITAIMAGE_EXPORT KisShared
 {
-#if QT_VERSION < 0x040400
-private:
-    typedef QAtomic QAtomicInt;
-#endif
     friend class KisSharedData;
 protected:
     KisShared();
     ~KisShared();
 public:
-    QAtomicInt ref;
     KisSharedPtr< KisSharedData > dataPtr;
+    int refCount() {
+        return _ref;
+    }
+    bool ref() {
+        return _ref.ref();
+    }
+    bool deref() {
+        return _ref.deref();
+    }
+private:
+    QAtomicInt _ref;
 };
 
 #endif

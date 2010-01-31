@@ -207,14 +207,14 @@ private:
 #ifndef NDEBUG
         KisMemoryLeakTracker::instance()->reference(d, this);
 #endif
-        return d->ref.ref();
+        return d->ref();
     }
     inline bool deref() const
     {
 #ifndef NDEBUG
         KisMemoryLeakTracker::instance()->dereference(d, this);
 #endif
-        return d->ref.deref();
+        return d->deref();
     }
 private:
     mutable T* d;
@@ -376,10 +376,10 @@ template <class T>
 Q_INLINE_TEMPLATE void KisSharedPtr<T>::attach(T* p) const
 {
     if (d != p) {
-        if (p) p->ref.ref();
         if (d && !deref())
             delete d;
         d = p;
+        if (d) ref();
     }
 }
 

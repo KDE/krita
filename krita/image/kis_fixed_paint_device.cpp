@@ -32,7 +32,7 @@ KisFixedPaintDevice::~KisFixedPaintDevice()
 }
 
 KisFixedPaintDevice::KisFixedPaintDevice(const KisFixedPaintDevice& rhs)
-        : KisShared(rhs)
+        : KisShared()
 {
     m_bounds = rhs.m_bounds;
     m_colorSpace = rhs.m_colorSpace;

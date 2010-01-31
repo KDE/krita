@@ -42,7 +42,7 @@ public:
     }
 
     KisMementoItem(const KisMementoItem& rhs)
-            : KisShared(rhs),
+            : KisShared(),
             m_tileData(rhs.m_tileData),
             m_commitedFlag(rhs.m_commitedFlag),
             m_type(rhs.m_type),

@@ -36,7 +36,7 @@ KisTiledRandomAccessor::KisTiledRandomAccessor(KisTiledDataManager *ktm, qint32 
 }
 
 KisTiledRandomAccessor::KisTiledRandomAccessor(const KisTiledRandomAccessor& lhs)
-        : KisShared(lhs)
+        : KisShared()
 {
     m_ktm = lhs.m_ktm;
     m_tilesCache = new KisTileInfo*[CACHESIZE];

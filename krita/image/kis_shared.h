@@ -28,6 +28,9 @@ class KisSharedData;
 class KRITAIMAGE_EXPORT KisShared
 {
     friend class KisSharedData;
+private:
+    KisShared(const KisShared& );
+    KisShared& operator=(const KisShared& );
 protected:
     KisShared();
     ~KisShared();

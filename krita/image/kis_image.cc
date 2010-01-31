@@ -119,7 +119,7 @@ KisImage::KisImage(const KisImage& rhs)
         : QObject()
         , KisNodeFacade(rhs)
         , KisNodeGraphListener(rhs)
-        , KisShared(rhs)
+        , KisShared()
         , m_d(new KisImagePrivate())
 {
 

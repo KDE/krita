@@ -26,6 +26,8 @@
  */
 class KisSharedData
 {
+    KisSharedData(const KisSharedData& );
+    KisSharedData& operator=(const KisSharedData& );
 public:
     KisSharedData() : valid(true) { }
     bool valid;

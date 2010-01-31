@@ -47,7 +47,7 @@ KisBaseNode::KisBaseNode()
 
 KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
     : QObject()
-    , KisShared(rhs)
+    , KisShared()
     ,  m_d(new Private())
 {
     QMapIterator<QString, QVariant> iter = rhs.m_d->properties.propertyIterator();

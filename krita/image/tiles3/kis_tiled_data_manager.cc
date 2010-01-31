@@ -59,7 +59,7 @@ KisTiledDataManager::KisTiledDataManager(quint32 pixelSize,
 }
 
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm)
-        : KisShared(dm),
+        : KisShared(),
         m_lock(QReadWriteLock::NonRecursive)
 {
     /* See comment in destructor for details */

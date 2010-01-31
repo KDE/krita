@@ -49,21 +49,21 @@ KisTile::KisTile(qint32 col, qint32 row,
 }
 
 KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row, KisMementoManager* mm)
-        : KisShared(rhs),
+        : KisShared(),
         m_lock(QMutex::Recursive)
 {
     init(col, row, rhs.tileData(), mm);
 }
 
 KisTile::KisTile(const KisTile& rhs, KisMementoManager* mm)
-        : KisShared(rhs),
+        : KisShared(),
         m_lock(QMutex::Recursive)
 {
     init(rhs.col(), rhs.row(), rhs.tileData(), mm);
 }
 
 KisTile::KisTile(const KisTile& rhs)
-        : KisShared(rhs),
+        : KisShared(),
         m_lock(QMutex::Recursive)
 {
     init(rhs.col(), rhs.row(), rhs.tileData(), rhs.m_mementoManager);

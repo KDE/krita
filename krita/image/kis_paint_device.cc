@@ -152,7 +152,7 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         : QObject()
-        , KisShared(rhs)
+        , KisShared()
         , m_d(new Private())
 {
     if (this != &rhs) {

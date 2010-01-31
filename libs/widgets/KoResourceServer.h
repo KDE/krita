@@ -100,6 +100,7 @@ public:
 
     virtual ~KoResourceServer()
         {
+            qDeleteAll(m_resources);
         }
 
    /**

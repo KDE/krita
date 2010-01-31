@@ -73,11 +73,11 @@ struct KisMemoryLeakTracker::Private {
     QHash<const void*, WhatInfo > whatWhoWhen;
     QHash<const QObject*, WhatInfo > whatQObjWhoWhen;
     template<typename _T_>
-    void dumpReferencedObjectsAndDelete(QHash<const _T_*, WhatInfo >&);
+    void dumpReferencedObjectsAndDelete(QHash<const _T_*, WhatInfo >&, bool _delete);
 };
 
 template<typename _T_>
-void KisMemoryLeakTracker::Private::dumpReferencedObjectsAndDelete(QHash<const _T_*, WhatInfo >& map)
+void KisMemoryLeakTracker::Private::dumpReferencedObjectsAndDelete(QHash<const _T_*, WhatInfo >& map, bool _delete)
 {
     for (typename QHash<const _T_*, WhatInfo >::iterator it = map.begin();
             it != map.end(); ++it) {
@@ -90,8 +90,10 @@ void KisMemoryLeakTracker::Private::dumpReferencedObjectsAndDelete(QHash<const _
             for (int i = 0; i < info->size; ++i) {
                 errKrita << strings[i];
             }
-            delete info;
-            it2.value() = 0;
+            if (_delete) {
+                delete info;
+                it2.value() = 0;
+            }
         }
         errKrita << "=====";
     }
@@ -108,8 +110,8 @@ KisMemoryLeakTracker::~KisMemoryLeakTracker()
     } else {
         errKrita << "****************************************";
         errKrita << (d->whatQObjWhoWhen.size() + d->whatWhoWhen.size()) << " leaks have been detected";
-        d->dumpReferencedObjectsAndDelete(d->whatWhoWhen);
-        d->dumpReferencedObjectsAndDelete(d->whatQObjWhoWhen);
+        d->dumpReferencedObjectsAndDelete(d->whatWhoWhen, true);
+        d->dumpReferencedObjectsAndDelete(d->whatQObjWhoWhen, true);
         errKrita << "****************************************";
     }
     delete d;
@@ -154,6 +156,33 @@ void KisMemoryLeakTracker::dereference(const QObject* what, const void* bywho)
         d->whatQObjWhoWhen.remove(what);
     }
 }
+
+void KisMemoryLeakTracker::dumpReferences()
+{
+    errKrita << "****************************************";
+    errKrita << (d->whatQObjWhoWhen.size() + d->whatWhoWhen.size()) << " objects are currently referenced";
+    d->dumpReferencedObjectsAndDelete(d->whatWhoWhen, false);
+    d->dumpReferencedObjectsAndDelete(d->whatQObjWhoWhen, false);
+    errKrita << "****************************************";
+}
+
+void KisMemoryLeakTracker::dumpReferences(const void* what)
+{
+    if (!d->whatWhoWhen.contains(what)) return;
+    WhatInfo& info = d->whatWhoWhen[what];
+    errKrita << "Object " << what << "(" << info.name << ") is still referenced by " << info.infos.size() << " objects:";
+    for (QHash<const void*, BacktraceInfo*>::iterator it2 = info.infos.begin();
+            it2 != info.infos.end(); ++it2) {
+        BacktraceInfo* info = it2.value();
+        char** strings = backtrace_symbols(info->trace, info->size);
+        errKrita << "Referenced by " << it2.key() << " at:";
+        for (int i = 0; i < info->size; ++i) {
+            errKrita << strings[i];
+        }
+    }
+    errKrita << "=====";
+}
+
 #else
 #error "Hum, no memory leak tracker for your platform"
 #endif
@@ -181,6 +210,14 @@ void KisMemoryLeakTracker::reference(const QObject* what, const void* bywho)
 }
 
 void KisMemoryLeakTracker::dereference(const QObject* what, const void* bywho)
+{
+}
+
+void KisMemoryLeakTracker::dumpReferences()
+{
+}
+
+void KisMemoryLeakTracker::dumpReferences(const void* what)
 {
 }
 

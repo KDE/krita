@@ -40,8 +40,8 @@ public:
     static KisMemoryLeakTracker* instance();
     void reference(const void* what, const void* bywho, const char* whatName = 0);
     void dereference(const void* what, const void* bywho);
-    void reference(const QObject* what, const void* bywho);
-    void dereference(const QObject* what, const void* bywho);
+    void dumpReferences();
+    void dumpReferences(const void* what);
 public:
     template<typename _T_>
     void reference(const _T_* what, const void* bywho);

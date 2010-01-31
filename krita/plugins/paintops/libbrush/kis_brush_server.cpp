@@ -81,6 +81,7 @@ KisBrushServer::KisBrushServer()
 KisBrushServer::~KisBrushServer()
 {
     dbgRegistry << "deleting KisBrushServer";
+    delete m_brushServer;
 }
 
 KisBrushServer* KisBrushServer::instance()

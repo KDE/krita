@@ -35,9 +35,9 @@ kernel Caleidoscope
     float vec_length = length( vec );
     float vec_angle = atan2(vec.y, vec.x) - direction;
     while( vec_angle < 0 ) { vec_angle = 6.28 + vec_angle; }
-    float angle2 = fmod(vec_angle, angle);
+    float angle2 = mod(vec_angle, angle);
     float section = floor(vec_angle/angle);
-    if (fmod(section,2.0)>0.5) angle2 = angle-angle2;
+    if (mod(section,2.0)>0.5) angle2 = angle-angle2;
 
     result = img.sampleNearest(center+ vec_length * float2(cos(angle2 += direction), sin(angle2)));
   }

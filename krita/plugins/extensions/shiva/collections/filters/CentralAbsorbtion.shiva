@@ -1,0 +1,30 @@
+<
+  parameters: <
+    xcenter: <
+      label: "Center x";
+      type: float;
+    >;
+    ycenter: <
+      label: "Center y";
+      type: float;
+    >;
+    strength: <
+      label: "Strength";
+      type: float;
+      defaultValue: 10.0;
+      maxValue: 1000.0;
+    >;
+  >;
+>;  
+kernel CentralAbsorbtion
+{
+  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  const float max = (IMAGE_WIDTH + IMAGE_HEIGHT) * 0.5;
+  void evaluatePixel(input image img, output pixel result)
+  {
+    float2 vec = result.coord - center;
+    vec /= length(vec);
+    float2 ortho; ortho.x =  vec.y; ortho.y = -vec.x;
+    result = img.sampleNearest( result.coord + ortho * strength );
+  }
+}

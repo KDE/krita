@@ -44,7 +44,7 @@ kernel PerlinNoise
   
   float fade(float t)
   {
-    return ((2.0*fabs(t)-3.0)*(t)*(t)+1.0);
+    return ((2.0*abs(t)-3.0)*(t)*(t)+1.0);
   }
   
   // Pregenerate grad_x, grad_y and permuation
@@ -55,9 +55,10 @@ kernel PerlinNoise
     {
        permutation[i] = i;
     }
+    int seed = 1252;
     for (int i = 0; i < 1000; ++i) {
-      int j = rand() % 64;
-      int k = rand() % 64;
+      int j = rand(seed) % 64;
+      int k = rand(seed) % 64;
       int t = permutation[j];
       permutation[j] = permutation[k];
       permutation[k] = t;
@@ -65,8 +66,8 @@ kernel PerlinNoise
     // Initialize the gradient table
     for(int i = 0; i < 64; ++i)
     {
-      grad_x[i] = rand() / float(RAND_MAX) - 0.5;
-      grad_y[i] = rand() / float(RAND_MAX) - 0.5;
+      grad_x[i] = rand(seed) / float(RAND_MAX) - 0.5;
+      grad_y[i] = rand(seed) / float(RAND_MAX) - 0.5;
       float norm = 1.0 / sqrt(grad_x[i] * grad_x[i] + grad_y[i] * grad_y[i]);
       grad_x[i] *= norm;
       grad_y[i] *= norm;

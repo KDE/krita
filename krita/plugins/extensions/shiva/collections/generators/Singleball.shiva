@@ -1,0 +1,62 @@
+<
+  parameters: <
+    xcenter: <
+      label: "Center x";
+      type: float;
+    >;
+    ycenter: <
+      label: "Center y";
+      type: float;
+    >;
+    radius: <
+      label: "Radius";
+      type:float;
+      defaultValue: 0.1;
+    >;
+    ringradius: <
+      label: "Ring radius";
+      type:float;
+      defaultValue: 0.05;
+    >;
+    outsidecolor: <
+      label: "Outside color";
+      type: rgba;
+      defaultValue: { 0.0, 0.0, 0.0, 1.0 };
+    >;                                                                        
+    ballcolor: <
+      label: "Ball color";
+      type: rgba;
+      defaultValue: { 0.0, 1.0, 0.0, 1.0 };
+    >;                                                                        
+    
+  >;
+>;
+kernel Singleball
+{
+  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  dependent float pxradius, pxringradius;
+  void evaluateDependents()
+  {
+    int image_size = min(IMAGE_WIDTH, IMAGE_HEIGHT);
+    pxradius = radius * image_size;
+    pxringradius = ringradius * image_size;
+  }
+  void evaluatePixel(out pixel4 result)
+  {
+    float2 vec = result.coord - center;
+    float angle = atan2( vec.x, vec.y);
+    float r = length(vec);
+    if(r < pxradius or r > (pxradius + pxringradius))
+    {
+      result = outsidecolor;
+    } else {
+      float v = (r - pxradius) / pxringradius;
+      result = (1.0 - v) * ballcolor + v * outsidecolor;
+    }
+  }
+  region generated()
+  {
+    region reg = { 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT};
+    return reg;
+  }
+}

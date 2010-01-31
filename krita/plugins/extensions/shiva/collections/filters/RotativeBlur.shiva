@@ -1,0 +1,44 @@
+<
+  parameters: <
+    xcenter: <
+      label: "Center x";
+      type: float;
+    >;
+    ycenter: <
+      label: "Center y";
+      type: float;
+    >;
+    maxlength: <
+      label: "Maximum length";
+      type: float;
+      defaultValue: 10.0;
+      maxValue: 1000.0;
+    >;
+  >;
+>;  
+kernel RotativeBlur
+{
+  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  const float max = (IMAGE_WIDTH + IMAGE_HEIGHT) * 0.25;
+  void evaluatePixel(input image img, output pixel result)
+  {
+    float2 vec = result.coord - center;
+    float l = length(vec);
+    vec /= l;
+    float2 ortho; ortho.x =  vec.y; ortho.y = -vec.x;
+    result.data = 0.0;
+    float d = maxlength * l / max;
+    float p = 0;
+    int count = 0;
+    while( p < d )
+    {
+      result.data += img.sampleNearest( result.coord + p * ortho );
+      count += 1;
+      p += 1.0;
+    }
+    if(count > 0)
+    {
+      result.data /= count;
+    }
+  }
+}

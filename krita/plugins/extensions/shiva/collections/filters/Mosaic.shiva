@@ -14,7 +14,7 @@ kernel Mosaic
   const float2 imsize = { 1000.0, 800.0 };
   float2 fmod2( float2 f, float v )
   {
-    return float2( fmod(f.x,v), fmod(f.y,v) );
+    return float2( mod(f.x,v), mod(f.y,v) );
   }
   void evaluatePixel(image img, out pixel result)
   {

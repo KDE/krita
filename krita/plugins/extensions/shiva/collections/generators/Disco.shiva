@@ -56,8 +56,8 @@ kernel Disco
     float r = length(vec);
     float rz=r*zoom;
     
-    result = float4( fabs( sin( rz / rl + q ) + sin( angle * rl + q ) ),
-                     fabs( sin( rz / gl + q ) + sin( angle * gl + q ) ),
-                     fabs( sin( rz / bl + q ) + sin( angle * bl + q ) ), 2 ) * 0.5;
+    result = float4( abs( sin( rz / rl + q ) + sin( angle * rl + q ) ),
+                     abs( sin( rz / gl + q ) + sin( angle * gl + q ) ),
+                     abs( sin( rz / bl + q ) + sin( angle * bl + q ) ), 2 ) * 0.5;
   }
 }

@@ -1,0 +1,78 @@
+<
+  parameters: <
+    metaballs: <
+      label: "Number of metaballs";
+      type: int;
+    >;
+    radius: <
+      label: "Radius";
+      type:float;
+      defaultValue: 0.05;
+    >;
+    ringradius: <
+      label: "Ring radius";
+      type:float;
+      defaultValue: 0.03;
+    >;
+    outsidecolor: <
+      label: "Outside color";
+      type: rgba;
+      defaultValue: { 0.0, 0.0, 0.0, 1.0 };
+    >;
+    metaballcolor: <
+      label: "Metaball color";
+      type: rgba;
+      defaultValue: { 0.0, 1.0, 0.0, 1.0 };
+    >;
+    seed: <
+      type: int;
+      defaultValue: 42;
+    >;
+  >;
+>;
+kernel Metaball
+{
+  dependent float2 centers[ metaballs ];
+  dependent float pxradius, pxringradius;
+  void evaluateDependents()
+  {
+    int image_size = min(IMAGE_WIDTH, IMAGE_HEIGHT);
+    pxradius = radius * image_size;
+    pxringradius = ringradius * image_size;
+    const float RAND_MAX  = 2147483647;
+    int seed_ = seed;
+    for(int i = 0; i < metaballs; ++i)
+    {
+      centers[i].x = rand(seed_) / RAND_MAX * IMAGE_WIDTH;
+      centers[i].y = rand(seed_) / RAND_MAX * IMAGE_HEIGHT;
+    }
+  }
+  void evaluatePixel(out pixel4 result)
+  {
+    result = outsidecolor;
+    float maxv = 1.1;
+    for(int i = 0; i < metaballs; ++i)
+    {
+      float2 vec = result.coord - centers[i];
+      float angle = atan2( vec.x, vec.y);
+      float r = length(vec);
+      if(r < pxradius )
+      {
+        result = outsidecolor;
+        i = metaballs;
+      } else if( r < (pxradius + pxringradius)) {
+        float v = (r - pxradius) / pxringradius;
+        if(v < maxv)
+        {
+          result = ( (1.0 - v) * metaballcolor + v * outsidecolor );
+          maxv = v;
+        }
+      }
+    }
+  }
+  region generated()
+  {
+    region reg = { 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT};
+    return reg;
+  }
+}

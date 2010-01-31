@@ -90,7 +90,7 @@ kernel StereographicProjection
     // Compute radius
     float radius = xy_replication.y * zoom;
     float zeta     = -sin( warp ) + cos( warp ); 
-    if( r > radius / fabs(zeta) )
+    if( r > radius / abs(zeta) )
 //     if( r > 0.5 * radius )
     {
       result = background;
@@ -98,9 +98,9 @@ kernel StereographicProjection
       // Spectral radius
       float rho = scale * r;
       // Damping
-      float maxpi    = 2.0 * atan( scale );
+      float maxpi    = 2.0 * atan( float(scale) );
       float colat    = 2.0 * atan( rho / radius );
-      float meridian     = fmod(theta + PI2 * turn, PI2);
+      float meridian     = mod(theta + PI2 * turn, PI2);
       // Adjust coordinates
       float ny = (  xy_replication.y ) * ( 2.0 * colat / maxpi ) - (  xy_replication.y );
       float nx = (  xy_replication.x - 1.0 )* meridian / PI - (  xy_replication.x );

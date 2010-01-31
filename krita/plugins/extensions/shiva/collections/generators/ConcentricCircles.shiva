@@ -1,0 +1,50 @@
+<
+  parameters: <
+    radius: <
+      label: "Radius";
+      type: int;
+      defaultValue: 3;
+    >;
+    color1: <
+      label: "Color 1";
+      type: rgba;
+      defaultValue: { 0.0, 0.0, 0.0, 1.0 };
+    >;
+    color2: <
+      label: "Color 2";
+      type: rgba;
+      defaultValue: { 1.0, 1.0, 1.0, 1.0 };
+    >;
+  >;
+>;  
+kernel ConcentricCircles
+{
+  const float2 center = { IMAGE_WIDTH * 0.5 , IMAGE_HEIGHT * 0.5 };
+  void evaluatePixel(out pixel4 result)
+  {
+    float lf = length(result.coord - center);
+    int l = lf;
+    
+    float4 r;
+    if( (l / radius & 1) == 1 )
+    {
+      r = color1;
+    } else {
+      
+      if( ( ((l-1)/radius) & 1) == 1 )
+      {
+        float c = l - lf;
+        if(c < 0) c = -c;
+        r = (1.0- c) * color1 + c * color2;
+      } else if((((l+1)/radius) & 1 ) == 1)
+      {
+        float c = l - lf;
+        if(c < 0) c = -c;
+        r = c * color1 + (1.0 - c) * color2;
+      } else {
+        r = color2;
+      }
+    }
+    result = r;
+  }
+}

@@ -22,7 +22,7 @@
     >;
   >;
 >;  
-kernel Moire
+kernel CheckerBoard
 {
   const int hsize = IMAGE_WIDTH / hcount;
   const int vsize = IMAGE_HEIGHT / vcount;

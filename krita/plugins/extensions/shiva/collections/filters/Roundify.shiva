@@ -33,7 +33,7 @@ kernel Roundify
     float vec_length = length( vec );
     float angle = atan2(vec.y, vec.x);
 
-    float mvt = vec_length * rho + fabs(angle) * theta;
+    float mvt = vec_length * rho + abs(angle) * theta;
     float2 displacement;
     displacement[0] = mvt;
     displacement[1] = mvt;

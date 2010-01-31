@@ -15,7 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "shivaplugin.h"
+#include "shivafiltersplugin.h"
 
 #include <QMutex>
 
@@ -23,13 +23,11 @@
 #include <kpluginfactory.h>
 #include <kstandarddirs.h>
 
-#include <generator/kis_generator_registry.h>
 #include <filter/kis_filter_registry.h>
 
 #include <GTLCore/String.h>
 #include <OpenShiva/SourcesCollection.h>
 
-#include "shivagenerator.h"
 #include "shivafilter.h"
 #include <GTLCore/CompilationMessages.h>
 
@@ -39,7 +37,7 @@ K_PLUGIN_FACTORY(ShivaPluginFactory, registerPlugin<ShivaPlugin>();)
 K_EXPORT_PLUGIN(ShivaPluginFactory("krita"))
 
 ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
     m_sourceCollection = new OpenShiva::SourcesCollection();
 
@@ -48,19 +46,6 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
     foreach(const QString & dir, kernelModulesDirs) {
         dbgPlugins << "Append : " << dir << " to the list of CTL modules";
         m_sourceCollection->addDirectory(dir.toAscii().data());
-    }
-    {
-        KisGeneratorRegistry * manager = KisGeneratorRegistry::instance();
-        Q_ASSERT(manager);
-        std::list< OpenShiva::Source* > kernels = m_sourceCollection->sources(OpenShiva::Source::GeneratorKernel);
-
-        dbgPlugins << "Collection has " << kernels.size() << " filters";
-        foreach(OpenShiva::Source* kernel, kernels) {
-            dbgPlugins << kernel->metadataCompilationMessages().toString().c_str();
-            if (kernel->outputImageType() == OpenShiva::Source::Image || kernel->outputImageType() == OpenShiva::Source::Image4) {
-                manager->add(new ShivaGenerator(kernel));
-            }
-        }
     }
     {
         KisFilterRegistry * manager = KisFilterRegistry::instance();
@@ -79,5 +64,5 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
 
 ShivaPlugin::~ShivaPlugin()
 {
-    delete m_sourceCollection;
+//     delete m_sourceCollection; // The plugin object get deleted right after creation, m_sourceCollection be staticly deleted
 }

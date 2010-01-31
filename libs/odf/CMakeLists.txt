@@ -31,15 +31,6 @@ set(koodf_LIB_SRCS
     KoBorder.cpp
     KoPageLayout.cpp
     KoPageFormat.cpp
-
-    # depracated classes, have to have a home which for now is here.
-    kopicture/KoPictureKey.cpp
-    kopicture/KoPictureBase.cpp
-    kopicture/KoPicture.cpp
-    kopicture/KoPictureShared.cpp
-    kopicture/KoPictureImage.cpp
-    kopicture/KoPictureClipart.cpp
-    kopicture/KoPictureEps.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})

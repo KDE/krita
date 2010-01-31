@@ -35,6 +35,11 @@ public:
     void addShapeManager(KoShapeManager *manager);
     void removeShapeManager(KoShapeManager *manager);
 
+    /**
+     * Fills the style stack and returns the value of the given style property (e.g fill, stroke).
+     */
+    static QString getStyleProperty(const char *property, const KoXmlElement &element, KoShapeLoadingContext &context);
+
     /// calls update on the shape where the border is.
     void updateBorder();
 

@@ -906,19 +906,13 @@ protected:
     virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// Loads the fill style
-    //QBrush loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context );
-    KoShapeBackground *loadOdfFill(const KoXmlElement &element, KoShapeLoadingContext &context);
+    KoShapeBackground *loadOdfFill(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /// Loads the stroke style
-    KoShapeBorderModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context);
+    KoShapeBorderModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /// Loads the shadow style
-    KoShapeShadow *loadOdfShadow(const KoXmlElement &element, KoShapeLoadingContext &context);
-
-    /**
-     * Fills the style stack and returns the value of the given style property (e.g fill, stroke).
-     */
-    QString getStyleProperty(const char *property, const KoXmlElement &element, KoShapeLoadingContext &context);
+    KoShapeShadow *loadOdfShadow(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /* ** end loading saving */
 

@@ -474,7 +474,10 @@ void KisPaintDevice::setProfile(const KoColorProfile * profile)
     const KoColorSpace * dstSpace =
         KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     if (dstSpace)
+    {
+        KoColorSpaceRegistry::instance()->releaseColorSpace(m_d->colorSpace);
         m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(dstSpace);
+    }
     emit profileChanged(profile);
 }
 
@@ -482,7 +485,7 @@ void KisPaintDevice::setDataManager(KisDataManagerSP data, const KoColorSpace * 
 {
     m_d->cache.invalidate();
     m_datamanager = data;
-    //delete m_d->colorSpace;
+    KoColorSpaceRegistry::instance()->releaseColorSpace(m_d->colorSpace);
     m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(colorSpace);
     m_d->pixelSize = m_d->colorSpace->pixelSize();
     m_d->nChannels = m_d->colorSpace->channelCount();

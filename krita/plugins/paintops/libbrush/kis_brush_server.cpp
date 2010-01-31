@@ -60,10 +60,11 @@ private:
         
         // Hack: This prevents the deletion of brushes in the resource server
         // Brushes outside the server use shared pointer, but not inside the server
-        brush->ref.ref();
+        brushes.push_back(brush);
 
         return brush;
     }
+    QList<KisBrushSP> brushes;
 };
 
 KisBrushServer::KisBrushServer()

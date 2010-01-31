@@ -159,7 +159,7 @@ void KoShapePrivate::removeShapeManager(KoShapeManager *manager)
     shapeManagers.remove(manager);
 }
 // static
-QString KoShapePrivate::getStyleProperty(const char *property, const KoXmlElement & element, KoShapeLoadingContext & context)
+QString KoShapePrivate::getStyleProperty(const char *property, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_UNUSED(element);
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
@@ -199,18 +199,18 @@ void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &convert
     Q_UNUSED(converter);
     Q_UNUSED(canvas);
     /* Since this code is not actually used (kivio is going to be the main user) lets disable instead of fix.
-        if ( selected )
+        if (selected)
         {
             // draw connectors
-            QPen pen( Qt::blue );
-            pen.setWidth( 0 );
-            painter.setPen( pen );
-            painter.setBrush( Qt::NoBrush );
-            for ( int i = 0; i < d->connectors.size(); ++i )
+            QPen pen(Qt::blue);
+            pen.setWidth(0);
+            painter.setPen(pen);
+            painter.setBrush(Qt::NoBrush);
+            for (int i = 0; i < d->connectors.size(); ++i)
             {
                 QPointF p = converter.documentToView(d->connectors[ i ]);
-                painter.drawLine( QPointF( p.x() - 2, p.y() + 2 ), QPointF( p.x() + 2, p.y() - 2 ) );
-                painter.drawLine( QPointF( p.x() + 2, p.y() + 2 ), QPointF( p.x() - 2, p.y() - 2 ) );
+                painter.drawLine(QPointF(p.x() - 2, p.y() + 2), QPointF(p.x() + 2, p.y() - 2));
+                painter.drawLine(QPointF(p.x() + 2, p.y() + 2), QPointF(p.x() - 2, p.y() - 2));
             }
         }*/
 }
@@ -512,7 +512,7 @@ void KoShape::copySettings(const KoShape *shape)
     Q_D(KoShape);
     d->size = shape->size();
     d->connectors.clear();
-    foreach(const QPointF & point, shape->connectionPoints())
+    foreach(const QPointF &point, shape->connectionPoints())
         addConnectionPoint(point);
     d->zIndex = shape->zIndex();
     d->visible = shape->isVisible();
@@ -630,7 +630,7 @@ QPointF KoShape::position() const
     Q_D(const KoShape);
     QPointF center(0.5*size().width(), 0.5*size().height());
     return d->localMatrix.map(center) - center;
-    //return d->localMatrix.map( QPointF(0,0) );
+    //return d->localMatrix.map(QPointF(0,0));
 }
 
 void KoShape::addConnectionPoint(const QPointF &point)
@@ -647,7 +647,7 @@ QList<QPointF> KoShape::connectionPoints() const
     QList<QPointF> points;
     QSizeF s = size();
     // convert glue points to shape coordinates
-    foreach(const QPointF & cp, d->connectors)
+    foreach(const QPointF &cp, d->connectors)
         points.append(QPointF(s.width() * cp.x(), s.height() * cp.y()));
 
     return points;
@@ -832,7 +832,7 @@ void KoShape::setBorder(KoShapeBorderModel *border)
     notifyChanged();
 }
 
-void KoShape::setShadow(KoShapeShadow * shadow)
+void KoShape::setShadow(KoShapeShadow *shadow)
 {
     Q_D(KoShape);
     if (d->shadow)
@@ -846,7 +846,7 @@ void KoShape::setShadow(KoShapeShadow * shadow)
     notifyChanged();
 }
 
-KoShapeShadow * KoShape::shadow() const
+KoShapeShadow *KoShape::shadow() const
 {
     Q_D(const KoShape);
     return d->shadow;
@@ -871,7 +871,7 @@ QString KoShape::name() const
     return d->name;
 }
 
-void KoShape::setName(const QString & name)
+void KoShape::setName(const QString &name)
 {
     Q_D(KoShape);
     d->name = name;
@@ -909,23 +909,23 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
 {
     Q_D(const KoShape);
     // and fill the style
-    KoShapeBorderModel * b = border();
+    KoShapeBorderModel *b = border();
     if (b) {
         b->fillStyle(style, context);
     }
     else {
-        style.addProperty( "draw:stroke", "none" );
+        style.addProperty("draw:stroke", "none");
     }
-    KoShapeShadow * s = shadow();
+    KoShapeShadow *s = shadow();
     if (s)
         s->fillStyle(style, context);
 
-    KoShapeBackground * bg = background();
+    KoShapeBackground *bg = background();
     if (bg) {
         bg->fillStyle(style, context);
     }
     else {
-        style.addProperty( "draw:fill", "none" );
+        style.addProperty("draw:fill", "none");
     }
 
     if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml)) {
@@ -951,10 +951,10 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
     return context.mainStyles().lookup(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
 }
 
-void KoShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext &context)
+void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_D(KoShape);
-    
+
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
@@ -967,15 +967,15 @@ void KoShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext &con
         styleStack.setTypeProperties("graphic");
     }
 
-    if(d->fill && !d->fill->deref()) {
+    if (d->fill && !d->fill->deref()) {
         delete d->fill;
         d->fill = 0;
     }
-    if(d->border && !d->border->deref()) {
+    if (d->border && !d->border->deref()) {
         delete d->border;
         d->border = 0;
     }
-    if(d->shadow && !d->shadow->deref()) {
+    if (d->shadow && !d->shadow->deref()) {
         delete d->shadow;
         d->shadow = 0;
     }
@@ -986,7 +986,7 @@ void KoShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext &con
     styleStack.restore();
 }
 
-bool KoShape::loadOdfAttributes(const KoXmlElement & element, KoShapeLoadingContext &context, int attributes)
+bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingContext &context, int attributes)
 {
     Q_D(KoShape);
     if (attributes & OdfPosition) {
@@ -1009,7 +1009,7 @@ bool KoShape::loadOdfAttributes(const KoXmlElement & element, KoShapeLoadingCont
 
     if (attributes & OdfLayer) {
         if (element.hasAttributeNS(KoXmlNS::draw, "layer")) {
-            KoShapeLayer * layer = context.layer(element.attributeNS(KoXmlNS::draw, "layer"));
+            KoShapeLayer *layer = context.layer(element.attributeNS(KoXmlNS::draw, "layer"));
             if (layer) {
                 setParent(layer);
             }
@@ -1028,8 +1028,7 @@ bool KoShape::loadOdfAttributes(const KoXmlElement & element, KoShapeLoadingCont
     if (attributes & OdfZIndex) {
         if (element.hasAttributeNS(KoXmlNS::draw, "z-index")) {
             setZIndex(element.attributeNS(KoXmlNS::draw, "z-index").toInt());
-        }
-        else {
+        } else {
             setZIndex(context.zIndex());
         }
     }
@@ -1052,7 +1051,7 @@ bool KoShape::loadOdfAttributes(const KoXmlElement & element, KoShapeLoadingCont
 
     if (attributes & OdfAdditionalAttributes) {
         QSet<KoShapeLoadingContext::AdditionalAttributeData> additionalAttributeData = KoShapeLoadingContext::additionalAttributeData();
-        foreach(const KoShapeLoadingContext::AdditionalAttributeData & attributeData, additionalAttributeData) {
+        foreach(const KoShapeLoadingContext::AdditionalAttributeData &attributeData, additionalAttributeData) {
             if (element.hasAttributeNS(attributeData.ns, attributeData.tag)) {
                 QString value = element.attributeNS(attributeData.ns, attributeData.tag);
                 //kDebug(30006) << "load additional attribute" << attributeData.tag << value;
@@ -1075,21 +1074,20 @@ bool KoShape::loadOdfAttributes(const KoXmlElement & element, KoShapeLoadingCont
 KoShapeBackground *KoShape::loadOdfFill(const KoXmlElement &element, KoShapeLoadingContext &context) const
 {
     QString fill = KoShapePrivate::getStyleProperty("fill", element, context);
-    KoShapeBackground * bg = 0;
-    if (fill == "solid" || fill == "hatch")
+    KoShapeBackground *bg = 0;
+    if (fill == "solid" || fill == "hatch") {
         bg = new KoColorBackground();
-    else if (fill == "gradient") {
-        QGradient * gradient = new QLinearGradient();
+    } else if (fill == "gradient") {
+        QGradient *gradient = new QLinearGradient();
         gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
         bg = new KoGradientBackground(gradient);
-    }
-    else if (fill == "bitmap")
+    } else if (fill == "bitmap") {
         bg = new KoPatternBackground(context.imageCollection());
-
-    if (! bg)
+    } else {
         return 0;
+    }
 
-    if (! bg->loadStyle(context.odfLoadingContext(), size())) {
+    if (!bg->loadStyle(context.odfLoadingContext(), size())) {
         delete bg;
         return 0;
     }
@@ -1106,7 +1104,7 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
     if (stroke == "solid" || stroke == "dash") {
         QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, stroke, stylesReader);
 
-        KoLineBorder * border = new KoLineBorder();
+        KoLineBorder *border = new KoLineBorder();
 
         if (styleStack.hasProperty(KoXmlNS::koffice, "stroke-gradient")) {
             QString gradientName = styleStack.property(KoXmlNS::koffice, "stroke-gradient");
@@ -1134,7 +1132,7 @@ KoShapeShadow *KoShape::loadOdfShadow(const KoXmlElement &element, KoShapeLoadin
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     QString shadowStyle = KoShapePrivate::getStyleProperty("shadow", element, context);
     if (shadowStyle == "visible" || shadowStyle == "hidden") {
-        KoShapeShadow * shadow = new KoShapeShadow();
+        KoShapeShadow *shadow = new KoShapeShadow();
         QColor shadowColor(styleStack.property(KoXmlNS::draw, "shadow-color"));
         qreal offsetX = KoUnit::parseValue(styleStack.property(KoXmlNS::draw, "shadow-offset-x"));
         qreal offsetY = KoUnit::parseValue(styleStack.property(KoXmlNS::draw, "shadow-offset-y"));
@@ -1358,7 +1356,7 @@ QRectF KoShape::documentToShape(const QRectF &rect) const
     return absoluteTransformation(0).inverted().mapRect(rect);
 }
 
-bool KoShape::addDependee(KoShape * shape)
+bool KoShape::addDependee(KoShape *shape)
 {
     Q_D(KoShape);
     if (! shape)
@@ -1374,7 +1372,7 @@ bool KoShape::addDependee(KoShape * shape)
     return true;
 }
 
-void KoShape::removeDependee(KoShape * shape)
+void KoShape::removeDependee(KoShape *shape)
 {
     Q_D(KoShape);
     int index = d->dependees.indexOf(shape);
@@ -1382,7 +1380,7 @@ void KoShape::removeDependee(KoShape * shape)
         d->dependees.removeAt(index);
 }
 
-bool KoShape::hasDependee(KoShape * shape) const
+bool KoShape::hasDependee(KoShape *shape) const
 {
     Q_D(const KoShape);
     return d->dependees.contains(shape);
@@ -1399,49 +1397,49 @@ KoSnapData KoShape::snapData() const
     return KoSnapData();
 }
 
-void KoShape::setAdditionalAttribute(const char * name, const QString & value)
+void KoShape::setAdditionalAttribute(const char *name, const QString &value)
 {
     Q_D(KoShape);
     d->additionalAttributes.insert(name, value);
 }
 
-void KoShape::removeAdditionalAttribute(const char * name)
+void KoShape::removeAdditionalAttribute(const char *name)
 {
     Q_D(KoShape);
     d->additionalAttributes.remove(name);
 }
 
-bool KoShape::hasAdditionalAttribute(const char * name) const
+bool KoShape::hasAdditionalAttribute(const char *name) const
 {
     Q_D(const KoShape);
     return d->additionalAttributes.contains(name);
 }
 
-QString KoShape::additionalAttribute(const char * name) const
+QString KoShape::additionalAttribute(const char *name) const
 {
     Q_D(const KoShape);
     return d->additionalAttributes.value(name);
 }
 
-void KoShape::setAdditionalStyleAttribute(const char * name, const QString & value)
+void KoShape::setAdditionalStyleAttribute(const char *name, const QString &value)
 {
     Q_D(KoShape);
     d->additionalStyleAttributes.insert(name, value);
 }
 
-void KoShape::removeAdditionalStyleAttribute(const char * name)
+void KoShape::removeAdditionalStyleAttribute(const char *name)
 {
     Q_D(KoShape);
     d->additionalStyleAttributes.remove(name);
 }
 
-KoFilterEffectStack * KoShape::filterEffectStack() const
+KoFilterEffectStack *KoShape::filterEffectStack() const
 {
     Q_D(const KoShape);
     return d->filterEffectStack;
 }
 
-void KoShape::setFilterEffectStack(KoFilterEffectStack * filterEffectStack)
+void KoShape::setFilterEffectStack(KoFilterEffectStack *filterEffectStack)
 {
     Q_D(KoShape);
     if (d->filterEffectStack)

@@ -19,9 +19,9 @@
 #ifndef KO_ENCRYPTION_CHECKER
 #define KO_ENCRYPTION_CHECKER
 
-#include "kostore_export.h"
+#include "koodf_export.h"
 
-class KOSTORE_EXPORT KoEncryptionChecker {
+class KOODF_EXPORT KoEncryptionChecker {
 
 public:
 

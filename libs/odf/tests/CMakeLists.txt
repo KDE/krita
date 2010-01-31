@@ -25,5 +25,44 @@ set(TestKoOdfLoadingContext_SRCS TestKoOdfLoadingContext.cpp )
 kde4_add_unit_test(TestKoOdfLoadingContext TESTNAME libs-odf-TestKoOdfLoadingContext ${TestKoOdfLoadingContext_SRCS})
 target_link_libraries(TestKoOdfLoadingContext koodf ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
 
-########### end ###############
+add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
+########### next target ###############
+
+set(xmlwritertest_SRCS TestXmlWriter.cpp )
+
+kde4_add_unit_test(TestXmlWriter TESTNAME libs-store-testxmlwriter ${xmlwritertest_SRCS})
+
+target_link_libraries(TestXmlWriter koodf ${QT_QTTEST_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS})
+
+########### next target ###############
+
+set(xmlreadertest_SRCS TestXmlReader.cpp )
+kde4_add_unit_test(TestXmlReader TESTNAME libs-store-testxmlreader ${xmlreadertest_SRCS})
+target_link_libraries(TestXmlReader koodf ${QT_QTTEST_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS})
+
+########### next target ###############
+
+set(storedroptest_SRCS storedroptest.cpp )
+
+kde4_add_executable(storedroptest TEST ${storedroptest_SRCS})
+
+target_link_libraries(storedroptest koodf ${QT_QT3SUPPORT_LIBRARY} ${QT_QTGUI_LIBRARY}  ${KDE4_KDEUI_LIBS})
+
+########### next target ###############
+
+set(kodomtest_SRCS kodomtest.cpp )
+
+kde4_add_unit_test(kodomtest TESTNAME libs-store-kodomtest ${kodomtest_SRCS})
+
+target_link_libraries(kodomtest koodf ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDEUI_LIBS} )
+
+########### next target ###############
+
+set(storageTest_SRCS TestStorage.cpp )
+
+kde4_add_unit_test(TestStorage TESTNAME libs-store-storage ${storageTest_SRCS})
+
+target_link_libraries(TestStorage koodf ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY}  ${KDE4_KDEUI_LIBS})
+
+########### end ###############

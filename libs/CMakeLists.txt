@@ -1,4 +1,3 @@
-add_subdirectory( store )
 add_subdirectory( kobase )
 add_subdirectory( widgets )
 add_subdirectory( koplugin )

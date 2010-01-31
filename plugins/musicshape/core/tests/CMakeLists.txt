@@ -76,7 +76,7 @@ set(MusicXmlWriterTest_test_SRCS
 )
 
 kde4_add_unit_test(MusicXmlWriterTest TESTNAME shapes-musicshape-MusicXmlWriterTest ${MusicXmlWriterTest_test_SRCS})
-target_link_libraries(MusicXmlWriterTest ${QT_QTTEST_LIBRARY} kostore)
+target_link_libraries(MusicXmlWriterTest ${QT_QTTEST_LIBRARY} koodf)
 
 
 

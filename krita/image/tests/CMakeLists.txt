@@ -30,7 +30,7 @@ add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
 add_definitions(-DFILES_OUTPUT_DIR="\\"${CMAKE_CURRENT_BINARY_DIR}\\"")
 set(kis_paint_device_test_SRCS kis_paint_device_test.cpp )
 kde4_add_unit_test(KisPaintDeviceTest TESTNAME krita-image-KisPaintDeviceTest ${kis_paint_device_test_SRCS})
-target_link_libraries(KisPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage kostore ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

@@ -23,7 +23,7 @@
 // KOXML_USE_QDOM is defined there
 #include "KoXmlReaderForward.h"
 
-#include "kostore_export.h"
+#include "koodf_export.h"
 
 #include <QtXml/qxml.h>
 #include <QtXml/qdom.h>
@@ -68,7 +68,7 @@ class KoXmlNodeData;
 *
 * @author Ariya Hidayat <ariya@kde.org>
 */
-class KOSTORE_EXPORT KoXmlNode
+class KOODF_EXPORT KoXmlNode
 {
 public:
 
@@ -154,7 +154,7 @@ protected:
 * @author Ariya Hidayat <ariya@kde.org>
 */
 
-class KOSTORE_EXPORT KoXmlElement: public KoXmlNode
+class KOODF_EXPORT KoXmlElement: public KoXmlNode
 {
 public:
     KoXmlElement();
@@ -184,7 +184,7 @@ private:
 * KoXmlText represents a text in a DOM tree.
 * @author Ariya Hidayat <ariya@kde.org>
 */
-class KOSTORE_EXPORT KoXmlText: public KoXmlNode
+class KOODF_EXPORT KoXmlText: public KoXmlNode
 {
 public:
     KoXmlText();
@@ -207,7 +207,7 @@ private:
 * KoXmlCDATASection represents a CDATA section in a DOM tree.
 * @author Ariya Hidayat <ariya@kde.org>
 */
-class KOSTORE_EXPORT KoXmlCDATASection: public KoXmlText
+class KOODF_EXPORT KoXmlCDATASection: public KoXmlText
 {
 public:
     KoXmlCDATASection();
@@ -231,7 +231,7 @@ private:
 * @author Ariya Hidayat <ariya@kde.org>
 */
 
-class KOSTORE_EXPORT KoXmlDocumentType: public KoXmlNode
+class KOODF_EXPORT KoXmlDocumentType: public KoXmlNode
 {
 public:
     KoXmlDocumentType();
@@ -260,7 +260,7 @@ private:
 * @author Ariya Hidayat <ariya@kde.org>
 */
 
-class KOSTORE_EXPORT KoXmlDocument: public KoXmlNode
+class KOODF_EXPORT KoXmlDocument: public KoXmlNode
 {
 public:
     KoXmlDocument();
@@ -300,7 +300,7 @@ private:
 
 #endif // KOXML_USE_QDOM
 
-class KOSTORE_EXPORT KoXmlInputSource: public QXmlInputSource
+class KOODF_EXPORT KoXmlInputSource: public QXmlInputSource
 {
 public:
     explicit KoXmlInputSource(QIODevice *dev);
@@ -362,38 +362,38 @@ namespace KoXml
  *
  * Note: do *NOT* use getElementsByTagNameNS, it's recursive!
  */
-KOSTORE_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
+KOODF_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
                                         const char* nsURI, const char* localName);
 
 /**
  * Explicitly load child nodes of specified node, up to given depth.
  * This function has no effect if QDom is used.
  */
-KOSTORE_EXPORT void load(KoXmlNode& node, int depth = 1);
+KOODF_EXPORT void load(KoXmlNode& node, int depth = 1);
 
 /**
  * Unload child nodes of specified node.
  * This function has no effect if QDom is used.
  */
-KOSTORE_EXPORT void unload(KoXmlNode& node);
+KOODF_EXPORT void unload(KoXmlNode& node);
 
 /**
  * Get the number of child nodes of specified node.
  */
-KOSTORE_EXPORT int childNodesCount(const KoXmlNode& node);
+KOODF_EXPORT int childNodesCount(const KoXmlNode& node);
 
 /**
  * Return the name of all attributes of specified node.
  */
-KOSTORE_EXPORT QStringList attributeNames(const KoXmlNode& node);
+KOODF_EXPORT QStringList attributeNames(const KoXmlNode& node);
 
 /**
  * Convert KoXml classes to the corresponding QDom classes, which has
  * 'ownerDoc' as the owner document (QDomDocument instance).
  */
-KOSTORE_EXPORT QDomNode asQDomNode(QDomDocument ownerDoc, const KoXmlNode& node);
-KOSTORE_EXPORT QDomElement asQDomElement(QDomDocument ownerDoc, const KoXmlElement& element);
-KOSTORE_EXPORT QDomDocument asQDomDocument(QDomDocument ownerDoc, const KoXmlDocument& document);
+KOODF_EXPORT QDomNode asQDomNode(QDomDocument ownerDoc, const KoXmlNode& node);
+KOODF_EXPORT QDomElement asQDomElement(QDomDocument ownerDoc, const KoXmlElement& element);
+KOODF_EXPORT QDomDocument asQDomDocument(QDomDocument ownerDoc, const KoXmlDocument& document);
 
 /*
  * Load an XML document from specified device to a document. You can of
@@ -404,11 +404,11 @@ KOSTORE_EXPORT QDomDocument asQDomDocument(QDomDocument ownerDoc, const KoXmlDoc
  *
  * Note: it is assumed that the XML uses UTF-8 encoding.
  */
-KOSTORE_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
+KOODF_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
                                 bool namespaceProcessing, QString* errorMsg = 0,
                                 int* errorLine = 0, int* errorColumn = 0);
 
-KOSTORE_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
+KOODF_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
                                 QXmlSimpleReader* reader, QString* errorMsg = 0,
                                 int* errorLine = 0, int* errorColumn = 0);
 }

@@ -27,7 +27,7 @@
 #include <QtCore/QIODevice>
 #include <QtCore/QStack>
 #include <QtCore/QByteArray>
-#include "kostore_export.h"
+#include "koodf_export.h"
 
 #include <kurl.h>
 
@@ -40,7 +40,7 @@ class KoStorePrivate;
  * We call a "store" the file on the hard disk (the one the users sees)
  * and call a "file" a file inside the store.
  */
-class KOSTORE_EXPORT KoStore
+class KOODF_EXPORT KoStore
 {
 public:
 

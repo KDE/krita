@@ -260,22 +260,17 @@ configure_file(config-prefix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-prefix.h
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
 
-
-# kostore is at the bottom of stack, so it has the dependency on the kde4 includes.
-set(KOSTORE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/store ${CMAKE_BINARY_DIR}/libs/store ${KDE4_INCLUDES})
-
 # koplugin is at the bottom of the stack
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
 
 # kobase is at the bottom of the stack
 set(KOBASE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kobase)
 
-# koodf depends on kostore, kobase and koodf
+# koodf depends on kobase
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
                    ${CMAKE_BINARY_DIR}/libs/odf
-                   ${KOBASE_INCLUDES}
-                   ${KOSTORE_INCLUDES})
-
+                   ${KDE4_INCLUDES}
+                   ${KOBASE_INCLUDES})
 
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2005 Frerich Raabe <raabe@kde.org>
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006,2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,10 @@
 #include <kis_debug.h>
 
 #include <kis_shared_data.h>
+
+#ifndef NDEBUG
+#include "kis_memory_leak_tracker.h"
+#endif
 
 template<class T>
 class KisWeakSharedPtr;
@@ -81,7 +85,7 @@ public:
      */
     inline KisSharedPtr(T* p)
             : d(p) {
-        if (d) d->ref.ref();
+        if (d) ref();
     }
 
     inline KisSharedPtr(const KisWeakSharedPtr<T>& o);
@@ -92,7 +96,7 @@ public:
      */
     inline KisSharedPtr<T>(const KisSharedPtr<T>& o)
             : d(o.d) {
-        if (d) d->ref.ref();
+        if (d) ref();
     }
 
     /**
@@ -100,7 +104,7 @@ public:
      * the last reference, the object will be deleted.
      */
     inline ~KisSharedPtr() {
-        if (d && !d->ref.deref()) {
+        if (d && !deref()) {
             delete d;
         }
     }
@@ -197,7 +201,21 @@ public:
     inline bool isNull() const {
         return (d == 0);
     }
-
+private:
+    inline bool ref() const
+    {
+#ifndef NDEBUG
+        KisMemoryLeakTracker::instance()->reference(d, this);
+#endif
+        return d->ref.ref();
+    }
+    inline bool deref() const
+    {
+#ifndef NDEBUG
+        KisMemoryLeakTracker::instance()->dereference(d, this);
+#endif
+        return d->ref.deref();
+    }
 private:
     mutable T* d;
 };
@@ -350,7 +368,7 @@ Q_INLINE_TEMPLATE  KisSharedPtr<T>::KisSharedPtr(const KisWeakSharedPtr<T>& o)
         : d(o.d)
 {
     Q_ASSERT(!o.dataPtr || (o.dataPtr && o.dataPtr->valid));
-    if (d) d->ref.ref();
+    if (d) ref();
 }
 
 
@@ -359,7 +377,7 @@ Q_INLINE_TEMPLATE void KisSharedPtr<T>::attach(T* p) const
 {
     if (d != p) {
         if (p) p->ref.ref();
-        if (d && !d->ref.deref())
+        if (d && !deref())
             delete d;
         d = p;
     }

@@ -137,6 +137,7 @@ KoResourceServerProvider::~KoResourceServerProvider()
     delete d->m_patternServer;
     delete d->m_gradientServer;
     delete d->m_paletteServer;
+    delete d;
 }
 
 KoResourceServerProvider* KoResourceServerProvider::instance()

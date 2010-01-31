@@ -56,9 +56,6 @@ public:
     /// Loads gradient style with the given name from style stack and stylesReader adapted to the given size and returns a brush
     static QBrush loadOdfGradientStyleByName(const KoOdfStylesReader & stylesReader, const QString styleName, const QSizeF &size);
 
-    /// Loads pattern style from style stack and oasisstyle adapted to the given size
-    static QBrush loadOdfPatternStyle(const KoStyleStack &styleStack, KoOdfLoadingContext & context, const QSizeF &size);
-
     static QBrush loadOdfFillStyle(const KoStyleStack &styleStack, const QString & fill,  const KoOdfStylesReader & stylesReader);
 
     static QPen loadOdfStrokeStyle(const KoStyleStack &styleStack, const QString & stroke, const KoOdfStylesReader & stylesReader);

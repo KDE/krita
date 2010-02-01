@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KOffice" version="22">
+<kpartgui name="KOffice" version="23">
 <MenuBar>
  <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_new" />
@@ -41,7 +41,7 @@
   <DefineGroup name="settings_configure"/>
  </Menu>
 </MenuBar>
-<ToolBar name="mainToolBar" fullWidth="false" noMerge="1"><Text>File</Text>
+<ToolBar name="mainToolBar" fullWidth="false" iconText="icontextbottom" noMerge="1"><Text>File</Text>
   <Action name="file_new" />
   <Action name="file_open" />
   <Action name="file_save" />

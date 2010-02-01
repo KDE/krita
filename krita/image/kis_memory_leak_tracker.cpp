@@ -23,9 +23,12 @@
 #include <kglobal.h>
 #include "kis_debug.h"
 
-// Only linux support the memory leak tracker
-#ifdef Q_OS_LINUX
+// #define HAVE_BACKTRACE_SUPPORT
 #define HAVE_MEMORY_LEAK_TRACKER
+
+// Only linux support the memory leak tracker
+#ifndef Q_OS_LINUX
+#undef HAVE_MEMORY_LEAK_TRACKER
 #endif
 
 // Disable the memory leak tracker on release build
@@ -60,11 +63,16 @@ struct BacktraceInfo {
 
 #include <execinfo.h>
 
+#ifdef HAVE_BACKTRACE_SUPPORT
 #define MAKE_BACKTRACEINFO \
     BacktraceInfo* info = new BacktraceInfo; \
     info->trace = new void*[BACKTRACE_SIZE]; \
     int n = backtrace(info->trace, BACKTRACE_SIZE); \
     info->size = n;
+#else
+#define MAKE_BACKTRACEINFO \
+    BacktraceInfo* info = 0;
+#endif
 
 struct WhatInfo {
     QHash<const void*, BacktraceInfo*> infos;
@@ -87,9 +95,10 @@ void KisMemoryLeakTracker::Private::dumpReferencedObjectsAndDelete(QHash<const _
         errKrita << "Object " << it.key() << "(" << it.value().name << ") is still referenced by " << it.value().infos.size() << " objects:";
         for (QHash<const void*, BacktraceInfo*>::iterator it2 = it.value().infos.begin();
                 it2 != it.value().infos.end(); ++it2) {
+            errKrita << "Referenced by " << it2.key() << " at:";
+#ifdef HAVE_BACKTRACE_SUPPORT
             BacktraceInfo* info = it2.value();
             char** strings = backtrace_symbols(info->trace, info->size);
-            errKrita << "Referenced by " << it2.key() << " at:";
             for (int i = 0; i < info->size; ++i) {
                 errKrita << strings[i];
             }
@@ -97,6 +106,10 @@ void KisMemoryLeakTracker::Private::dumpReferencedObjectsAndDelete(QHash<const _
                 delete info;
                 it2.value() = 0;
             }
+#else
+            Q_UNUSED(_delete);
+            errKrita << "Enable backtrace support in kis_memory_leak_tracker.cpp";
+#endif
         }
         errKrita << "=====";
     }
@@ -157,15 +170,19 @@ void KisMemoryLeakTracker::dumpReferences(const void* what)
     QMutexLocker l(&d->m);
     if (!d->whatWhoWhen.contains(what)) return;
     WhatInfo& info = d->whatWhoWhen[what];
-    errKrita << "Object " << what << "(" << info.name << ") is still referenced by " << info.infos.size() << " objects:";
+    dbgKrita << "Object " << what << "(" << info.name << ") is still referenced by " << info.infos.size() << " objects:";
     for (QHash<const void*, BacktraceInfo*>::iterator it2 = info.infos.begin();
             it2 != info.infos.end(); ++it2) {
+        dbgKrita << "Referenced by " << it2.key() << " at:";
+#ifdef HAVE_BACKTRACE_SUPPORT
         BacktraceInfo* info = it2.value();
         char** strings = backtrace_symbols(info->trace, info->size);
-        errKrita << "Referenced by " << it2.key() << " at:";
         for (int i = 0; i < info->size; ++i) {
-            errKrita << strings[i];
+            dbgKrita << strings[i];
         }
+#else
+            dbgKrita << "Enable backtrace support in kis_memory_leak_tracker.cpp";
+#endif
     }
     errKrita << "=====";
 }

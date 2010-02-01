@@ -18,6 +18,8 @@
 
 #include "kis_memory_leak_tracker.h"
 
+#include <QMutex>
+
 #include <kglobal.h>
 #include "kis_debug.h"
 
@@ -73,11 +75,13 @@ struct KisMemoryLeakTracker::Private {
     QHash<const void*, WhatInfo > whatWhoWhen;
     template<typename _T_>
     void dumpReferencedObjectsAndDelete(QHash<const _T_*, WhatInfo >&, bool _delete);
+    QMutex m;
 };
 
 template<typename _T_>
 void KisMemoryLeakTracker::Private::dumpReferencedObjectsAndDelete(QHash<const _T_*, WhatInfo >& map, bool _delete)
 {
+    QMutexLocker l(&m);
     for (typename QHash<const _T_*, WhatInfo >::iterator it = map.begin();
             it != map.end(); ++it) {
         errKrita << "Object " << it.key() << "(" << it.value().name << ") is still referenced by " << it.value().infos.size() << " objects:";
@@ -117,6 +121,7 @@ KisMemoryLeakTracker::~KisMemoryLeakTracker()
 
 void KisMemoryLeakTracker::reference(const void* what, const void* bywho, const char* whatName)
 {
+    QMutexLocker l(&d->m);
     if (whatName == 0 || strcmp(whatName, "PK13KisSharedData") != 0) {
         MAKE_BACKTRACEINFO
         d->whatWhoWhen[what].infos[bywho] = info;
@@ -128,6 +133,7 @@ void KisMemoryLeakTracker::reference(const void* what, const void* bywho, const 
 
 void KisMemoryLeakTracker::dereference(const void* what, const void* bywho)
 {
+    QMutexLocker l(&d->m);
     if (d->whatWhoWhen.contains(what)) {
         QHash<const void*, BacktraceInfo*>& whoWhen = d->whatWhoWhen[what].infos;
         delete whoWhen[bywho];
@@ -148,6 +154,7 @@ void KisMemoryLeakTracker::dumpReferences()
 
 void KisMemoryLeakTracker::dumpReferences(const void* what)
 {
+    QMutexLocker l(&d->m);
     if (!d->whatWhoWhen.contains(what)) return;
     WhatInfo& info = d->whatWhoWhen[what];
     errKrita << "Object " << what << "(" << info.name << ") is still referenced by " << info.infos.size() << " objects:";

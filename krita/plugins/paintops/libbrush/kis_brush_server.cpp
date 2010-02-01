@@ -39,7 +39,7 @@ public:
 
     BrushResourceServer() : KoResourceServer<KisBrush>("kis_brushes", "*.gbr:*.gih") {
     }
-
+    
 private:
 
     virtual KisGbrBrush* createResource(const QString & filename) {
@@ -60,11 +60,10 @@ private:
         
         // Hack: This prevents the deletion of brushes in the resource server
         // Brushes outside the server use shared pointer, but not inside the server
-        brushes.push_back(brush);
+        brush->ref();
 
         return brush;
     }
-    QList<KisBrushSP> brushes;
 };
 
 KisBrushServer::KisBrushServer()

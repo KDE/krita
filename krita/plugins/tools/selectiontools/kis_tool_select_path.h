@@ -23,8 +23,8 @@
 #include <KoToolFactoryBase.h>
 #include "kis_tool_select_base.h"
 
-class KisSelectionOptions;
 class KoCanvasBase;
+class KoLineBorder;
 
 class KisToolSelectPath : public KisToolSelectBase
 {
@@ -54,11 +54,14 @@ private:
     class LokalTool : public KoCreatePathTool {
         friend class KisToolSelectPath;
     public:
-        LokalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool)
-            : KoCreatePathTool(canvas), m_selectingTool(selectingTool) {}
+        LokalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool);
+        ~LokalTool();
+        virtual void activate(bool);
+        virtual void deactivate();
         void addPathShape();
     private:
         KisToolSelectPath* const m_selectingTool;
+        KoLineBorder* m_borderBackup;
     };
     LokalTool* const m_lokalTool;
 

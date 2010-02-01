@@ -18,7 +18,6 @@
 
 #include "kis_tool_select_path.h"
 
-#include <QApplication>
 #include <QPainter>
 #include <QPen>
 #include <QLayout>
@@ -33,6 +32,7 @@
 #include <KoPointerEvent.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
+#include <KoLineBorder.h>
 
 #include "kis_image.h"
 #include "kis_painter.h"
@@ -113,6 +113,31 @@ QMap<QString, QWidget *> KisToolSelectPath::createOptionWidgets()
     QMap<QString, QWidget *> map = m_lokalTool->createOptionWidgets();
     map.insert(i18n("Tool Options"), KisToolSelectBase::createOptionWidget());
     return map;
+}
+
+KisToolSelectPath::LokalTool::LokalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool)
+        : KoCreatePathTool(canvas), m_selectingTool(selectingTool), m_borderBackup(0) {}
+
+KisToolSelectPath::LokalTool::~LokalTool()
+{
+    if(m_borderBackup!=0) delete m_borderBackup;
+}
+
+void KisToolSelectPath::LokalTool::activate(bool tmp)
+{
+    Q_ASSERT(m_borderBackup==0);
+    m_borderBackup = new KoLineBorder(canvas()->resourceManager()->activeBorder());
+    canvas()->resourceManager()->setActiveBorder(KoLineBorder());
+
+    KoCreatePathTool::activate(tmp);
+}
+void KisToolSelectPath::LokalTool::deactivate()
+{
+    canvas()->resourceManager()->setActiveBorder(*m_borderBackup);
+    delete m_borderBackup;
+    m_borderBackup=0;
+
+    KoCreatePathTool::deactivate();
 }
 
 void KisToolSelectPath::LokalTool::addPathShape()

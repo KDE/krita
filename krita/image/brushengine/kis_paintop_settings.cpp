@@ -50,6 +50,7 @@ KisPaintOpSettings::KisPaintOpSettings()
 
 KisPaintOpSettings::~KisPaintOpSettings()
 {
+    delete d->settingsWidget;
     delete d;
 }
 

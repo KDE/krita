@@ -40,24 +40,24 @@ public:
     QWidget* createOptionWidget();
 
 private:
-    class LokalTool : public KisToolPolylineBase {
+    class LocalTool : public KisToolPolylineBase {
     public:
-        LokalTool(KoCanvasBase * canvas, KisToolSelectPolygonal* selectingTool)
+        LocalTool(KoCanvasBase * canvas, KisToolSelectPolygonal* selectingTool)
             : KisToolPolylineBase(canvas), m_selectingTool(selectingTool) {}
         void finishPolyline(const QVector<QPointF> &points);
     private:
         KisToolSelectPolygonal* const m_selectingTool;
     };
-    LokalTool m_lokalTool;
+    LocalTool m_localTool;
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter) {m_lokalTool.paint(gc, converter);}
-    virtual void mousePressEvent(KoPointerEvent *e) {m_lokalTool.mousePressEvent(e);}
-    virtual void mouseMoveEvent(KoPointerEvent *e) {m_lokalTool.mouseMoveEvent(e);}
-    virtual void mouseReleaseEvent(KoPointerEvent *e) {m_lokalTool.mouseReleaseEvent(e);}
-    virtual void mouseDoubleClickEvent(KoPointerEvent * e) {m_lokalTool.mouseDoubleClickEvent(e);}
-    virtual void deactivate() {m_lokalTool.deactivate();}
+    virtual void paint(QPainter& gc, const KoViewConverter &converter) {m_localTool.paint(gc, converter);}
+    virtual void mousePressEvent(KoPointerEvent *e) {m_localTool.mousePressEvent(e);}
+    virtual void mouseMoveEvent(KoPointerEvent *e) {m_localTool.mouseMoveEvent(e);}
+    virtual void mouseReleaseEvent(KoPointerEvent *e) {m_localTool.mouseReleaseEvent(e);}
+    virtual void mouseDoubleClickEvent(KoPointerEvent * e) {m_localTool.mouseDoubleClickEvent(e);}
+    virtual void deactivate() {m_localTool.deactivate();}
 
-    friend class LokalTool;
+    friend class LocalTool;
 };
 
 

@@ -50,10 +50,10 @@
 
 KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas)
         : KisToolSelectBase(canvas, KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6)),
-        m_lokalTool(canvas, this)
+        m_localTool(canvas, this)
 {
     setObjectName("tool_select_polygonal");
-    setPopupActionList(m_lokalTool.popupActionList());
+    setPopupActionList(m_localTool.popupActionList());
 }
 
 KisToolSelectPolygonal::~KisToolSelectPolygonal()
@@ -63,7 +63,7 @@ KisToolSelectPolygonal::~KisToolSelectPolygonal()
 void KisToolSelectPolygonal::keyPressEvent(QKeyEvent *e)
 {
     KisToolSelectBase::keyPressEvent(e);
-    m_lokalTool.keyPressEvent(e);
+    m_localTool.keyPressEvent(e);
 }
 
 QWidget* KisToolSelectPolygonal::createOptionWidget()
@@ -73,7 +73,7 @@ QWidget* KisToolSelectPolygonal::createOptionWidget()
     return m_optWidget;
 }
 
-void KisToolSelectPolygonal::LokalTool::finishPolyline(const QVector<QPointF> &points)
+void KisToolSelectPolygonal::LocalTool::finishPolyline(const QVector<QPointF> &points)
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);

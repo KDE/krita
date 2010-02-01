@@ -51,11 +51,11 @@ private:
     /// reimplemented
     virtual QMap<QString, QWidget *> createOptionWidgets();
 
-    class LokalTool : public KoCreatePathTool {
+    class LocalTool : public KoCreatePathTool {
         friend class KisToolSelectPath;
     public:
-        LokalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool);
-        ~LokalTool();
+        LocalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool);
+        ~LocalTool();
         virtual void activate(bool);
         virtual void deactivate();
         void addPathShape();
@@ -63,7 +63,7 @@ private:
         KisToolSelectPath* const m_selectingTool;
         KoLineBorder* m_borderBackup;
     };
-    LokalTool* const m_lokalTool;
+    LocalTool* const m_localTool;
 
 };
 

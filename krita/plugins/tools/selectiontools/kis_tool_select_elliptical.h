@@ -41,23 +41,23 @@ public:
     virtual QWidget * createOptionWidget();
 
 private:
-    class LokalTool : public KisToolEllipseBase {
+    class LocalTool : public KisToolEllipseBase {
     public:
-        LokalTool(KoCanvasBase * canvas, KisToolSelectElliptical* selectingTool)
+        LocalTool(KoCanvasBase * canvas, KisToolSelectElliptical* selectingTool)
             : KisToolEllipseBase(canvas), m_selectingTool(selectingTool) {}
         void finishEllipse(const QRectF &rect);
     private:
         KisToolSelectElliptical* const m_selectingTool;
     };
-    LokalTool m_lokalTool;
+    LocalTool m_localTool;
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter) {m_lokalTool.paint(gc, converter);}
-    virtual void mousePressEvent(KoPointerEvent *e) {m_lokalTool.mousePressEvent(e);}
-    virtual void mouseMoveEvent(KoPointerEvent *e) {m_lokalTool.mouseMoveEvent(e);}
-    virtual void mouseReleaseEvent(KoPointerEvent *e) {m_lokalTool.mouseReleaseEvent(e);}
-    virtual void deactivate() {m_lokalTool.deactivate();}
+    virtual void paint(QPainter& gc, const KoViewConverter &converter) {m_localTool.paint(gc, converter);}
+    virtual void mousePressEvent(KoPointerEvent *e) {m_localTool.mousePressEvent(e);}
+    virtual void mouseMoveEvent(KoPointerEvent *e) {m_localTool.mouseMoveEvent(e);}
+    virtual void mouseReleaseEvent(KoPointerEvent *e) {m_localTool.mouseReleaseEvent(e);}
+    virtual void deactivate() {m_localTool.deactivate();}
 
-    friend class LokalTool;
+    friend class LocalTool;
 };
 
 class KisToolSelectEllipticalFactory : public KoToolFactoryBase

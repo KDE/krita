@@ -51,7 +51,7 @@
 
 
 KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6)), m_lokalTool(canvas, this)
+        : KisToolSelectBase(canvas, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6)), m_localTool(canvas, this)
 {
 }
 
@@ -66,7 +66,7 @@ QWidget* KisToolSelectElliptical::createOptionWidget()
     return m_optWidget;
 }
 
-void KisToolSelectElliptical::LokalTool::finishEllipse(const QRectF &rect)
+void KisToolSelectElliptical::LocalTool::finishEllipse(const QRectF &rect)
 {
     if(rect.isNull()) return;
 

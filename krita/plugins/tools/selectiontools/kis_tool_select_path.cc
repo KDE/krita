@@ -48,49 +48,49 @@
 
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas), m_lokalTool(new LokalTool(canvas, this))
+        : KisToolSelectBase(canvas), m_localTool(new LocalTool(canvas, this))
 {
 }
 
 KisToolSelectPath::~KisToolSelectPath()
 {
-    delete m_lokalTool;
+    delete m_localTool;
 }
 
 void KisToolSelectPath::activate(bool tmp)
 {
     KisToolSelectBase::activate(tmp);
-    m_lokalTool->activate(tmp);
+    m_localTool->activate(tmp);
 }
 
 void KisToolSelectPath::deactivate()
 {
     KisToolSelectBase::deactivate();
-    m_lokalTool->deactivate();
+    m_localTool->deactivate();
 }
 
 void KisToolSelectPath::mousePressEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_lokalTool);
-    m_lokalTool->mousePressEvent(event);
+    Q_ASSERT(m_localTool);
+    m_localTool->mousePressEvent(event);
 }
 
 void KisToolSelectPath::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_lokalTool);
-    m_lokalTool->mouseDoubleClickEvent(event);
+    Q_ASSERT(m_localTool);
+    m_localTool->mouseDoubleClickEvent(event);
 }
 
 void KisToolSelectPath::mouseMoveEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_lokalTool);
-    m_lokalTool->mouseMoveEvent(event);
+    Q_ASSERT(m_localTool);
+    m_localTool->mouseMoveEvent(event);
 }
 
 void KisToolSelectPath::mouseReleaseEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_lokalTool);
-    m_lokalTool->mouseReleaseEvent(event);
+    Q_ASSERT(m_localTool);
+    m_localTool->mouseReleaseEvent(event);
 }
 
 QWidget* KisToolSelectPath::createOptionWidget()
@@ -104,26 +104,26 @@ QWidget* KisToolSelectPath::createOptionWidget()
 
 void KisToolSelectPath::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    Q_ASSERT(m_lokalTool);
-    m_lokalTool->paint(painter, converter);
+    Q_ASSERT(m_localTool);
+    m_localTool->paint(painter, converter);
 }
 
 QMap<QString, QWidget *> KisToolSelectPath::createOptionWidgets()
 {
-    QMap<QString, QWidget *> map = m_lokalTool->createOptionWidgets();
+    QMap<QString, QWidget *> map = m_localTool->createOptionWidgets();
     map.insert(i18n("Tool Options"), KisToolSelectBase::createOptionWidget());
     return map;
 }
 
-KisToolSelectPath::LokalTool::LokalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool)
+KisToolSelectPath::LocalTool::LocalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool)
         : KoCreatePathTool(canvas), m_selectingTool(selectingTool), m_borderBackup(0) {}
 
-KisToolSelectPath::LokalTool::~LokalTool()
+KisToolSelectPath::LocalTool::~LocalTool()
 {
     if(m_borderBackup!=0) delete m_borderBackup;
 }
 
-void KisToolSelectPath::LokalTool::activate(bool tmp)
+void KisToolSelectPath::LocalTool::activate(bool tmp)
 {
     Q_ASSERT(m_borderBackup==0);
     m_borderBackup = new KoLineBorder(canvas()->resourceManager()->activeBorder());
@@ -131,7 +131,7 @@ void KisToolSelectPath::LokalTool::activate(bool tmp)
 
     KoCreatePathTool::activate(tmp);
 }
-void KisToolSelectPath::LokalTool::deactivate()
+void KisToolSelectPath::LocalTool::deactivate()
 {
     canvas()->resourceManager()->setActiveBorder(*m_borderBackup);
     delete m_borderBackup;
@@ -140,7 +140,7 @@ void KisToolSelectPath::LokalTool::deactivate()
     KoCreatePathTool::deactivate();
 }
 
-void KisToolSelectPath::LokalTool::addPathShape()
+void KisToolSelectPath::LocalTool::addPathShape()
 {
     KisNodeSP currentNode =
         canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();

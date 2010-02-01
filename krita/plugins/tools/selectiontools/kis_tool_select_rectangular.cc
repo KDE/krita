@@ -53,7 +53,7 @@
 
 KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase * canvas)
         : KisToolSelectBase(canvas, KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6)),
-        m_lokalTool(canvas, this)
+        m_localTool(canvas, this)
 {
 }
 
@@ -69,7 +69,7 @@ QWidget* KisToolSelectRectangular::createOptionWidget()
     return m_optWidget;
 }
 
-void KisToolSelectRectangular::LokalTool::finishRect(const QRectF& rect)
+void KisToolSelectRectangular::LocalTool::finishRect(const QRectF& rect)
 {
     QRect rc(rect.toRect());
     rc = rc.intersected(currentImage()->bounds());

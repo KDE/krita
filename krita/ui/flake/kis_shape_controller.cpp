@@ -119,17 +119,13 @@ KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
 KisShapeController::~KisShapeController()
 {
     dbgUI << "Deleting the KisShapeController. There are" << m_d->nodeShapes.size() << " shapes";
-    /*
-        XXX: leak!
-
-        foreach( KoShape* shape, m_d->nodeShapes ) {
-            removeShape( shape);
-            delete shape; // XXX: What happes with stuff on the
-                          // clipboard? And how about undo information?
-        }
-        m_d->nodeShapes.clear();
+    foreach( KoShape* shape, m_d->nodeShapes ) {
+//         removeShape( shape);
+        delete shape; // XXX: What happes with stuff on the
+                        // clipboard? And how about undo information?
+    }
+    m_d->nodeShapes.clear();
     // XXX: deleting the undoStack of the document while the document is being deleted is dangerous
-    */
     m_d->dataCenterMap.remove("UndoStack");
     qDeleteAll(m_d->dataCenterMap);
 

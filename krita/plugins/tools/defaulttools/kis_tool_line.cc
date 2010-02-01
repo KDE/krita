@@ -94,6 +94,12 @@ void KisToolLine::mousePressEvent(KoPointerEvent *e)
         m_startPos = pos;
         m_endPos = pos;
     }
+
+    if (m_dragging == true && (e->button() == Qt::MidButton || e->button() == Qt::RightButton)) {
+        // end painting, if calling the menu or the pop up palette. otherwise there is weird behaviour
+        m_dragging = false;
+        updatePreview();
+    }
 }
 
 

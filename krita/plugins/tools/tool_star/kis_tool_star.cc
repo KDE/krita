@@ -69,13 +69,18 @@ void KisToolStar::mousePressEvent(KoPointerEvent *event)
         m_vertices = m_optWidget->verticesSpinBox->value();
         m_innerOuterRatio = m_optWidget->ratioSpinBox->value();
     }
+    if(m_dragging && (event->button() == Qt::MidButton || event->button() == Qt::RightButton)) {
+        //end painting, if calling the menu or the pop up palette. otherwise there is weird behaviour
+        m_dragging=false;
+        updatePreview();
+    }
 }
 
 void KisToolStar::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_dragging) {
         //Erase old lines
-        canvas()->updateCanvas(convertToPt(boundingRect()));
+        updatePreview();
         if (event->modifiers() & Qt::AltModifier) {
             QPointF trans = convertToPixelCoord(event) - m_dragEnd;
             m_dragStart += trans;
@@ -83,7 +88,7 @@ void KisToolStar::mouseMoveEvent(KoPointerEvent *event)
         } else {
             m_dragEnd = convertToPixelCoord(event);
         }
-        canvas()->updateCanvas(convertToPt(boundingRect()));
+        updatePreview();
     }
 }
 
@@ -122,7 +127,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 
             device->setDirty(painter.dirtyRegion());
             notifyModified();
-            canvas()->updateCanvas(convertToPt(boundingRect()));
+            updatePreview();
 
             canvas()->addCommand(painter.endTransaction());
         } else {
@@ -243,12 +248,12 @@ vQPointF KisToolStar::starCoordinates(int N, double mx, double my, double x, dou
     return starCoordinatesArray;
 }
 
-QRectF KisToolStar::boundingRect()
-{
+void KisToolStar::updatePreview() {
     //Calculating the radius
     double radius = sqrt((m_dragEnd.x() - m_dragStart.x()) * (m_dragEnd.x() - m_dragStart.x()) + (m_dragEnd.y() - m_dragStart.y()) * ((m_dragEnd.y() - m_dragStart.y())));
-    return QRectF(m_dragStart.x() - radius, m_dragStart.y() - radius, 2*radius, 2*radius);
+    canvas()->updateCanvas(convertToPt(QRectF(m_dragStart.x() - radius, m_dragStart.y() - radius, 2*radius, 2*radius)));
 }
+
 
 QWidget* KisToolStar::createOptionWidget()
 {

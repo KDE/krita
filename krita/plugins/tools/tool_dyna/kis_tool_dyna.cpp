@@ -466,6 +466,11 @@ void KisToolDyna::mousePressEvent(KoPointerEvent *e)
                                      e->rotation(), e->tangentialPressure());
     }
 
+    if (m_mode == PAINT && (e->button() == Qt::MidButton || e->button() == Qt::RightButton)) {
+        // end painting, if calling the menu or the pop up palette. otherwise there is weird behaviour
+        endPaint();
+    }
+
 }
 #include "kis_tool_dyna.moc"
 

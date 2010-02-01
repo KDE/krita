@@ -43,6 +43,7 @@ private slots:
 
 
     void testColorSpaceConversion();
+    void testDeviceDuplication();
 };
 
 #endif

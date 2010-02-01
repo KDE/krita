@@ -81,7 +81,7 @@ KisTiledDataManager::KisTiledDataManager(quint32 pixelSize, const quint8 *defPix
     m_extentMaxY = qint32_MIN;
 }
 
-KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm) : KisShared(dm)
+KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm) : KisShared()
 {
     m_pixelSize = dm.m_pixelSize;
 

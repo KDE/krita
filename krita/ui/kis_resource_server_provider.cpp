@@ -61,6 +61,8 @@ KisResourceServerProvider::KisResourceServerProvider()
 KisResourceServerProvider::~KisResourceServerProvider()
 {
     dbgRegistry << "deleting KisResourceServerProvider";
+    delete m_patternServer;
+    delete m_paintOpPresetServer;
 }
 
 KisResourceServerProvider* KisResourceServerProvider::instance()

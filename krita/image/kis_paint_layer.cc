@@ -46,8 +46,9 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
 {
     Q_ASSERT(image);
     Q_ASSERT(dev);
-    m_d->paintDevice = dev;
     m_d->alphaLocked = false;
+    m_d->paintDevice = dev;
+    m_d->paintDevice->setParentNode(this);
 }
 
 
@@ -80,7 +81,6 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
 {
     m_d->alphaLocked = rhs.m_d->alphaLocked;
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
-    // FIXME: check this. repeat in other constructors?
     m_d->paintDevice->setParentNode(this);
 }
 

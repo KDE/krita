@@ -125,6 +125,7 @@ KisBrush::KisBrush(const QString& filename)
 
 KisBrush::KisBrush(const KisBrush& rhs)
     : KoResource("")
+    , KisShared()
     , d(new Private)
 {
     m_image = rhs.m_image;

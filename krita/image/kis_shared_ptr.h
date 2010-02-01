@@ -202,19 +202,31 @@ public:
         return (d == 0);
     }
 private:
+    inline static bool ref(const KisSharedPtr<T>* sp, T* t)
+    {
+#ifdef NDEBUG
+        Q_UNUSED(sp);
+#else
+        KisMemoryLeakTracker::instance()->reference(t, sp);
+#endif
+        return t->ref();
+    }
     inline bool ref() const
     {
-#ifndef NDEBUG
-        KisMemoryLeakTracker::instance()->reference(d, this);
+        return ref(this, d);
+    }
+    inline static bool deref(const KisSharedPtr<T>* sp, T* t)
+    {
+#ifdef NDEBUG
+        Q_UNUSED(sp);
+#else
+        KisMemoryLeakTracker::instance()->dereference(t, sp);
 #endif
-        return d->ref();
+        return t->deref();
     }
     inline bool deref() const
     {
-#ifndef NDEBUG
-        KisMemoryLeakTracker::instance()->dereference(d, this);
-#endif
-        return d->deref();
+        return deref(this, d);
     }
 private:
     mutable T* d;
@@ -376,10 +388,11 @@ template <class T>
 Q_INLINE_TEMPLATE void KisSharedPtr<T>::attach(T* p) const
 {
     if (d != p) {
-        if (d && !deref())
-            delete d;
+        if(p) ref(this, p);
+        T* old = d;
         d = p;
-        if (d) ref();
+        if (old && !deref(this, old))
+            delete old;
     }
 }
 

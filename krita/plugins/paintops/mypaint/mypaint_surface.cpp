@@ -69,7 +69,7 @@ bool MyPaintSurface::draw_dab (float x, float y,
     hardness = CLAMP(hardness, 0.0, 1.0);
     if (opaque == 0.0) return false;
     if (radius < 0.1) return false;
-    if (hardness == 0.0) return false; // infintly small point, rest transparent
+    if (hardness == 0.0) return false; // infinitely small point, rest transparent
 
     r_fringe = radius + 1;
     rr = radius*radius;

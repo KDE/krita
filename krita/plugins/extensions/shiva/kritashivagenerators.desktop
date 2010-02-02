@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Shiva Kernel Language Support For Generators
+Name[et]=Shiva kernelikeele toetus genereerijates
+Name[pt]=Suporte à Linguagem do 'Kernel' Shiva para os Geradores
+Name[pt_BR]=Suporte à linguagem do kernel Shiva para geradores
+Name[uk]=Підтримка мови ядра Shiva для породжувачів
+Name[zh_TW]=產生器使用之 Shiva 核心語言支援
 Comment=Shiva Kernel Language Support For Generators
+Comment[et]=Shiva kernelikeele toetus genereerijates
+Comment[pt]=Suporte à Linguagem do 'Kernel' Shiva para os Geradores
+Comment[pt_BR]=Suporte à linguagem do kernel Shiva para geradores
+Comment[uk]=Підтримка мови ядра Shiva для породжувачів
+Comment[zh_TW]=產生器使用之 Shiva 核心語言支援
 X-KDE-ServiceTypes=Krita/Generator
 Type=Service
 X-KDE-Library=kritashivagenerators

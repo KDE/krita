@@ -974,10 +974,10 @@ qreal Layout::topMargin()
 
 void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
-    drawFrame(m_parent->document()->rootFrame(), painter, context, 0, 0);
+    drawFrame(m_parent->document()->rootFrame(), painter, context, 0);
 }
 
-void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumentLayout::PaintContext &context, int inTable, int inSection)
+void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumentLayout::PaintContext &context, int inTable)
 {
     painter->setPen(context.textContext.palette.color(QPalette::Text)); // for text that has no color.
     const QRegion clipRegion = painter->clipRegion();
@@ -1001,13 +1001,13 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
         if (table) {
             m_tableLayout.setTable(table);
             m_tableLayout.drawBackground(painter);
-            drawFrame(table, painter, context, inTable+1, inSection); // this actually only draws the text inside
+            drawFrame(table, painter, context, inTable+1); // this actually only draws the text inside
             QPainterPath accuBlankBorders;
             m_tableLayout.drawBorders(painter, &accuBlankBorders);
             painter->strokePath(accuBlankBorders, QPen(QColor(0,0,0,96)));
             continue;
         } else if (subFrame) {
-            drawFrame(subFrame, painter, context, inTable, inSection+1);
+            drawFrame(subFrame, painter, context, inTable);
             continue;
         } else {
             if (!block.isValid())

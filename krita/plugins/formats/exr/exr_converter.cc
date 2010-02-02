@@ -516,8 +516,6 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     return KisImageBuilder_RESULT_OK;
 }
 
-
-
 KisImageBuilder_Result exrConverter::buildImage(const KUrl& uri)
 {
     if (uri.isEmpty())
@@ -547,40 +545,12 @@ KisImageWSP exrConverter::image()
     return m_image;
 }
 
-
-KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer)
+template<typename _T_>
+void encodeData(Imf::OutputFile& file, KisPaintLayerSP layer, int width, int height, Imf::PixelType /*ptype*/)
 {
-    if (!layer)
-        return KisImageBuilder_RESULT_INVALID_ARG;
-
-    KisImageWSP image = layer->image();
-    if (!image)
-        return KisImageBuilder_RESULT_EMPTY;
-
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
-
-    // Make the header
-    qint32 height = image->height();
-    qint32 width = image->width();
-    Imf::Header header(width, height);
-
-    header.channels().insert("R", Imf::Channel(Imf::FLOAT));
-    header.channels().insert("G", Imf::Channel(Imf::FLOAT));
-    header.channels().insert("B", Imf::Channel(Imf::FLOAT));
-    header.channels().insert("A", Imf::Channel(Imf::FLOAT));
-
-    // Open file for writing
-    Imf::OutputFile file(QFile::encodeName(uri.path()), header);
-
     Imf::FrameBuffer frameBuffer;
     int xstart = 0;
     int ystart = 0;
-
-    typedef float _T_;
 
     typedef Rgba<_T_> Rgba;
 
@@ -610,7 +580,7 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
         while (!it.isDone()) {
 
-            const /*typename*/ KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast < const /*typename*/ KoRgbTraits<_T_>::Pixel* >(it.oldRawData());
+            const typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast < const typename KoRgbTraits<_T_>::Pixel* >(it.oldRawData());
 
             rgba->r = dst->red * dst->alpha;
             rgba->g = dst->green * dst->alpha;
@@ -622,6 +592,38 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
         }
         file.writePixels(1);
     }
+}
+
+KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer)
+{
+    if (!layer)
+        return KisImageBuilder_RESULT_INVALID_ARG;
+
+    KisImageWSP image = layer->image();
+    if (!image)
+        return KisImageBuilder_RESULT_EMPTY;
+
+    if (uri.isEmpty())
+        return KisImageBuilder_RESULT_NO_URI;
+
+    if (!uri.isLocalFile())
+        return KisImageBuilder_RESULT_NOT_LOCAL;
+
+    // Make the header
+    qint32 height = image->height();
+    qint32 width = image->width();
+    Imf::Header header(width, height);
+
+    header.channels().insert("R", Imf::Channel(Imf::FLOAT));
+    header.channels().insert("G", Imf::Channel(Imf::FLOAT));
+    header.channels().insert("B", Imf::Channel(Imf::FLOAT));
+    header.channels().insert("A", Imf::Channel(Imf::FLOAT));
+
+    // Open file for writing
+    Imf::OutputFile file(QFile::encodeName(uri.path()), header);
+
+    encodeData<float>(file, layer, width, height, Imf::FLOAT);
+
     return KisImageBuilder_RESULT_OK;
 }
 

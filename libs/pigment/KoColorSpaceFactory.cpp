@@ -89,6 +89,7 @@ KoColorSpace* KoColorSpaceFactory::grabColorSpace(const KoColorProfile * profile
     if (!csList.isEmpty()) {
         KoColorSpace* cs = csList.back();
         csList.pop_back();
+        Q_ASSERT(!d->availableColorspaces[profile->name()].contains(cs));
         return cs;
     }
     KoColorSpace* cs = createColorSpace(profile);
@@ -103,6 +104,8 @@ void KoColorSpaceFactory::releaseColorSpace(KoColorSpace * colorspace)
 {
     // TODO it is probably worth to avoid caching too many color spaces
     const KoColorProfile* profile = colorspace->profile();
+    Q_ASSERT(d->colorspaces.contains(colorspace));
+    Q_ASSERT(!d->availableColorspaces[profile->name()].contains(colorspace));
     d->availableColorspaces[profile->name()].push_back(colorspace);
 #ifndef NDEBUG
     d->stackInformation.remove(colorspace);

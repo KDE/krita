@@ -25,6 +25,7 @@
 #include <ImfAttribute.h>
 #include <ImfChannelList.h>
 #include <ImfInputFile.h>
+#include <ImfOutputFile.h>
 
 #include <kapplication.h>
 
@@ -561,17 +562,67 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
 
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
-    // Open file for writing
-#if 0
-    FILE *fp = fopen(QFile::encodeName(uri.path()), "wb");
-    if (!fp) {
-        return (KisImageBuilder_RESULT_FAILURE);
-    }
-    uint height = image->height();
-    uint width = image->width();
-#endif
 
-    return KisImageBuilder_RESULT_OK;
+    // Make the header
+    qint32 height = image->height();
+    qint32 width = image->width();
+    Imf::Header header(height, width);
+
+    header.channels().insert("R", Imf::Channel(Imf::FLOAT));
+    header.channels().insert("G", Imf::Channel(Imf::FLOAT));
+    header.channels().insert("B", Imf::Channel(Imf::FLOAT));
+    header.channels().insert("A", Imf::Channel(Imf::FLOAT));
+
+    // Open file for writing
+    Imf::OutputFile file(QFile::encodeName(uri.path()), header);
+
+    Imf::FrameBuffer frameBuffer;
+    int xstart = 0;
+    int ystart = 0;
+
+    typedef float _T_;
+
+    typedef Rgba<_T_> Rgba;
+
+    QVector<Rgba> pixels(width*height);
+
+    for (int y = 0; y < height; ++y) {
+        Imf::PixelType ptype = Imf::FLOAT;
+        Rgba* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
+        frameBuffer.insert("R",
+                           Imf::Slice(ptype, (char *) &frameBufferData->r,
+                                      sizeof(Rgba) * 1,
+                                      sizeof(Rgba) * width));
+        frameBuffer.insert("G",
+                           Imf::Slice(ptype, (char *) &frameBufferData->g,
+                                      sizeof(Rgba) * 1,
+                                      sizeof(Rgba) * width));
+        frameBuffer.insert("B",
+                           Imf::Slice(ptype, (char *) &frameBufferData->b,
+                                      sizeof(Rgba) * 1,
+                                      sizeof(Rgba) * width));
+        frameBuffer.insert("A",
+                           Imf::Slice(ptype, (char *) &frameBufferData->a,
+                                      sizeof(Rgba) * 1,
+                                      sizeof(Rgba) * width));
+        file.setFrameBuffer(frameBuffer);
+        Rgba *rgba = pixels.data();
+        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
+        while (!it.isDone()) {
+
+            const /*typename*/ KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast < const /*typename*/ KoRgbTraits<_T_>::Pixel* >(it.oldRawData());
+
+            rgba->r = dst->red * dst->alpha;
+            rgba->g = dst->green * dst->alpha;
+            rgba->b = dst->blue * dst->alpha;
+            rgba->a = dst->alpha;
+
+            ++it;
+            ++rgba;
+        }
+        file.writePixels(1);
+    }
+    return KisImageBuilder_RESULT_FAILURE;
 }
 
 

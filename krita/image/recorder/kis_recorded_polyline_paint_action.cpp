@@ -126,14 +126,7 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElem
     QString compositeOp = elt.attribute("compositeOp", COMPOSITE_OVER);
 
     // Decode pressets
-    KisPaintOpPresetSP paintOpPreset = 0;
-
-    QDomElement settingsElt = elt.firstChildElement("PaintopPreset");
-    if (!settingsElt.isNull()) {
-        paintOpPreset = paintOpPresetFromXML(settingsElt);
-    } else {
-        dbgUI << "No <PaintOpSettings /> found";
-    }
+    KisPaintOpPresetSP paintOpPreset = paintOpPresetFromXML(elt);
 
     // Decode colors
 

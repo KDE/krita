@@ -157,14 +157,7 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomE
     QString compositeOp = elt.attribute("compositeOp", COMPOSITE_OVER);
 
     // Decode pressets
-    KisPaintOpPresetSP paintOpPreset = 0;
-
-    QDomElement settingsElt = elt.firstChildElement("PaintopPreset");
-    if (!settingsElt.isNull()) {
-        paintOpPreset = paintOpPresetFromXML(settingsElt);
-    } else {
-        dbgImage << "No <PaintOpSettings /> found";
-    }
+    KisPaintOpPresetSP paintOpPreset = paintOpPresetFromXML(elt);
 
     // Decode colors
     KoColor bC = backgroundColorFromXML(elt);

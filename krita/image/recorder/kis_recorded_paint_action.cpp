@@ -214,9 +214,16 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
 
 KisPaintOpPresetSP KisRecordedPaintActionFactory::paintOpPresetFromXML(const QDomElement& elt)
 {
-    KisPaintOpPresetSP settings = new KisPaintOpPreset;
-    settings->fromXML(elt);
-    return settings;
+
+    QDomElement settingsElt = elt.firstChildElement("PaintopPreset");
+    if (!settingsElt.isNull()) {
+        KisPaintOpPresetSP settings = new KisPaintOpPreset;
+        settings->fromXML(elt);
+        return settings;
+    } else {
+        dbgUI << "No <PaintOpSettings /> found";
+        return 0;
+    }
 }
 
 KoColor KisRecordedPaintActionFactory::paintColorFromXML(const QDomElement& elt)

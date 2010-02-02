@@ -462,7 +462,6 @@ QUndoCommand* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoCo
     setDataManager(dst.m_datamanager, dstColorSpace);
 
     emit colorSpaceChanged(dstColorSpace);
-    KoColorSpaceRegistry::instance()->releaseColorSpace(oldColorSpace);
 
     return cmd;
 }

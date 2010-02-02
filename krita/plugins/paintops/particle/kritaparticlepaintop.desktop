@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Particle brush
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritaparticlepaintop
+X-Krita-Version=3

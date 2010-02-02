@@ -34,8 +34,8 @@ VideoShapeFactory::VideoShapeFactory(QObject *parent)
     : KoShapeFactoryBase(parent, VIDEOSHAPEID, i18n("Video"))
 {
     setToolTip(i18n("Video, embedded or fullscreen"));
-    setIcon("x-shape-video");
-    setOdfElementNames(KoXmlNS::draw, QStringList("video"));
+    setIcon("video-x-generic");
+    setOdfElementNames(KoXmlNS::draw, QStringList("plugin"));
     setLoadingPriority(1);
 }
 
@@ -51,7 +51,7 @@ KoShape *VideoShapeFactory::createDefaultShape(KoResourceManager *documentResour
 
 bool VideoShapeFactory::supports(const KoXmlElement &e) const
 {
-    return e.localName() == "video" && e.namespaceURI() == KoXmlNS::draw;
+    return e.localName() == "plugin" && e.namespaceURI() == KoXmlNS::draw;
 }
 
 void VideoShapeFactory::newDocumentResourceManager(KoResourceManager *manager)

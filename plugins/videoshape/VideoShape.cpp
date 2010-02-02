@@ -36,9 +36,10 @@
 
 #include <QPainter>
 #include <kdebug.h>
+#include <kurl.h>
 
 VideoShape::VideoShape()
-    : KoFrameShape(KoXmlNS::draw, "object-ole")
+    : KoFrameShape(KoXmlNS::draw, "plugin")
 {
     setKeepAspectRatio(true);
     addEventAction(new VideoEventAction(this));
@@ -56,6 +57,9 @@ void VideoShape::paint(QPainter &painter, const KoViewConverter &converter)
         painter.fillRect(pixelsF, QColor(Qt::gray));
         return;
     }
+
+
+    painter.fillRect(pixelsF, QColor(Qt::green));
 }
 
 void VideoShape::saveOdf(KoShapeSavingContext &context) const
@@ -69,14 +73,18 @@ void VideoShape::saveOdf(KoShapeSavingContext &context) const
 
     writer.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
-    writer.startElement("draw:object-ole");
+    writer.startElement("draw:plugin");
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
     QString name = videoData->tagForSaving(m_videoCollection->saveCounter);
+    //QUrl storePath = context.odfSavingContext().store()->urlOfStore();
+    //qDebug() << "saving " << storePath << " " << name;
+    //QString relHRef = KUrl::relativeUrl(storePath, name);
+    //qDebug() << "combined " << relHRef;
     writer.addAttribute("xlink:type", "simple");
     writer.addAttribute("xlink:show", "embed");
     writer.addAttribute("xlink:actuate", "onRequest");
     writer.addAttribute("xlink:href", name);
-    writer.endElement(); // draw:object-ole
+    writer.endElement(); // draw:plugin
     saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
 
@@ -95,8 +103,23 @@ bool VideoShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoading
         const QString href = element.attribute("href");
         // this can happen in case it is a presentation:placeholder
         if (!href.isEmpty()) {
-            KoStore *store = context.odfLoadingContext().store();
-            VideoData *data = m_videoCollection->createVideoData(href, store);
+            QUrl url(href);
+            VideoData *data=0;
+                qDebug() << url;
+            if(href.startsWith("../")) {
+                // file is outside store
+                KUrl storePath = context.odfLoadingContext().store()->urlOfStore();
+                KUrl extName(storePath, href.mid(3));
+    qDebug() << "loading " << storePath << " " << extName;
+                data = m_videoCollection->createExternalVideoData(extName.url());
+            } else if(!url.isRelative()) {
+                // file is outside store and absolute
+                data = m_videoCollection->createExternalVideoData(href);
+            } else {
+                // file is inside store
+                KoStore *store = context.odfLoadingContext().store();
+                data = m_videoCollection->createVideoData(href, store);
+            }
             setUserData(data);
         }
     }

@@ -65,9 +65,10 @@ void VideoEventAction::start()
     Phonon::createPath(m_mediaObject, m_audioOutput);
 
     VideoData *videoData = qobject_cast<VideoData*>(m_shape->userData());
+    Q_ASSERT(videoData);
 m_videoWidget->show();
 m_videoWidget->setFullScreen(true);
-    m_mediaObject->setCurrentSource(QUrl(":/home/cbo/FALL98.MPG"));//videoData->videoLocation);
+    m_mediaObject->setCurrentSource(videoData->videoLocation);
     m_mediaObject->play();
 }
 

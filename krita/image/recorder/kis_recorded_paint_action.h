@@ -84,6 +84,10 @@ protected:
     KoColor paintColorFromXML(const QDomElement& elt);
     KoColor backgroundColorFromXML(const QDomElement& elt);
     KoColor colorFromXML(const QDomElement& elt, const QString& elementName);
+    int opacityFromXML(const QDomElement& elt);
+    bool paintIncrementalFromXML(const QDomElement& elt);
+    QString compositeOpFromXML(const QDomElement& elt);
+    KisNodeQueryPath nodeQueryPathFromXML(const QDomElement& elt);
 };
 
 

@@ -250,3 +250,23 @@ KoColor KisRecordedPaintActionFactory::colorFromXML(const QDomElement& elt, cons
     }
     return bC;
 }
+
+int KisRecordedPaintActionFactory::opacityFromXML(const QDomElement& elt)
+{
+    return elt.attribute("opacity", "1.0").toDouble() * 255;
+}
+
+bool KisRecordedPaintActionFactory::paintIncrementalFromXML(const QDomElement& elt)
+{
+    return elt.attribute("paintIncremental", "1").toInt();
+}
+
+QString KisRecordedPaintActionFactory::compositeOpFromXML(const QDomElement& elt)
+{
+    return elt.attribute("compositeOp", COMPOSITE_OVER);
+}
+
+KisNodeQueryPath KisRecordedPaintActionFactory::nodeQueryPathFromXML(const QDomElement& elt)
+{
+    return KisNodeQueryPath::fromString(elt.attribute("path"));
+}

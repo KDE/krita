@@ -566,7 +566,7 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
     // Make the header
     qint32 height = image->height();
     qint32 width = image->width();
-    Imf::Header header(height, width);
+    Imf::Header header(width, height);
 
     header.channels().insert("R", Imf::Channel(Imf::FLOAT));
     header.channels().insert("G", Imf::Channel(Imf::FLOAT));
@@ -622,7 +622,7 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
         }
         file.writePixels(1);
     }
-    return KisImageBuilder_RESULT_FAILURE;
+    return KisImageBuilder_RESULT_OK;
 }
 
 

@@ -185,7 +185,7 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
 {
     typedef Rgba<_T_> Rgba;
 
-    QVector<Rgba> pixels(width*height);
+    QVector<Rgba> pixels(width);
 
     bool hasAlpha = info.channelMap.contains("A");
 
@@ -554,7 +554,7 @@ void encodeData(Imf::OutputFile& file, KisPaintLayerSP layer, int width, int hei
 
     typedef Rgba<_T_> Rgba;
 
-    QVector<Rgba> pixels(width*height);
+    QVector<Rgba> pixels(width);
 
     for (int y = 0; y < height; ++y) {
         Imf::PixelType ptype = Imf::FLOAT;

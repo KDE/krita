@@ -3,6 +3,7 @@
 #include "../TableLayoutData.h"
 
 #include <KoStyleManager.h>
+#include <KoParagraphStyle.h>
 #include <KoTableColumnAndRowStyleManager.h>
 #include <KoTextDocument.h>
 #include <KoTableCellStyle.h>
@@ -129,6 +130,14 @@ void TestTableLayout::initTest(int rows, int columns,
             }
         }
     }
+    KoParagraphStyle style;
+    style.setStyleId(101); // needed to do manually since we don't use the stylemanager
+    QTextBlock b2 = m_doc->begin();
+    while (b2.isValid()) {
+        style.applyStyle(b2);
+        b2 = b2.next();
+    }
+
 }
 
 void TestTableLayout::initTestSimple(int rows, int columns, KoTableStyle *tableStyle)
@@ -323,6 +332,64 @@ void TestTableLayout::testTableMargin() {
      */
     QTextTableCell cell4 = m_table->cellAt(1, 1);
     QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell4), QRectF(102, 18, 100, 16));
+
+    // TODO: Check block positions.
+
+    cleanupTest();
+}
+
+void TestTableLayout::testIndividualTableMargin() {
+    KoTableStyle *tableStyle = new KoTableStyle();
+    Q_ASSERT(tableStyle);
+    tableStyle->setTopMargin(1.0);
+    tableStyle->setRightMargin(2.0);
+    tableStyle->setBottomMargin(4.0);
+    tableStyle->setLeftMargin(8.0);
+    initTestSimple(2, 2, tableStyle);
+
+    m_layout->layout();
+
+    // Check cell bounding rectangles.
+
+    /*
+     * Cell 0, 0 rules:
+     *   x = 8 (only the table margin)
+     *   y = 1 (only the table margin)
+     *   width = 200/2 = 100 (table width/column count)
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    QTextTableCell cell1 = m_table->cellAt(0, 0);
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(8, 1, 100, 16));
+
+    /*
+     * Cell 0, 1 rules:
+     *   x = 108 (table margin + (table width/column count)))
+     *   y = 1 (table margin)
+     *   width = 200/2 = 100 (table width/column count)
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    QTextTableCell cell2 = m_table->cellAt(0, 1);
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell2), QRectF(108, 1, 100, 16));
+
+    /*
+     * Cell 1, 0 rules:
+     *   x = 8 (only the table margin)
+     *   y = 1 + 16 = 17 (table margin + line height)
+     *   width = 200/2 = 100 (table width/column count)
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    QTextTableCell cell3 = m_table->cellAt(1, 0);
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell3), QRectF(8, 17, 100, 16));
+
+    /*
+     * Cell 1, 1 rules:
+     *   x = 108 (table margin + (table width/column count)))
+     *   y = 1 + 16 = 17 (table margin + line height)
+     *   width = 200/2 = 100 (table width/column count)
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    QTextTableCell cell4 = m_table->cellAt(1, 1);
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell4), QRectF(108, 17, 100, 16));
 
     // TODO: Check block positions.
 
@@ -778,6 +845,125 @@ void TestTableLayout::testTableAlignment()
      */
     cell2 = m_table->cellAt(0, 1);
     QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(100, 0, 100, 16));
+
+    cleanupTest();
+}
+
+void TestTableLayout::testFeatureCombination()
+{
+    /* Let's create a larger 3x3 table with interrelated features
+     *  - different borders
+     *  - different column widths
+     *  - merged cells
+     */
+    KoTableStyle *tableStyle = new KoTableStyle();
+    QVERIFY(tableStyle);
+    tableStyle->setWidth(QTextLength(QTextLength::FixedLength, 300.0));
+    QList<KoTableRowStyle *> rowStyles;
+    QMap<QPair<int, int>, KoTableCellStyle *> cellStyles;
+    QMap<QPair<int, int>, QString> cellTexts;
+
+
+    KoTableCellStyle *cellStyle1 = new KoTableCellStyle();
+    QVERIFY(cellStyle1);
+    cellStyle1->setPadding(8.0);
+    cellStyle1->setEdge(KoTableCellStyle::Left, KoTableCellStyle::BorderSolid, 5.0, Qt::black);
+    cellStyle1->setEdge(KoTableCellStyle::Right, KoTableCellStyle::BorderSolid, 6.0, Qt::black);
+    cellStyle1->setEdge(KoTableCellStyle::Top, KoTableCellStyle::BorderSolid, 4.0, Qt::black);
+    cellStyle1->setEdge(KoTableCellStyle::Bottom, KoTableCellStyle::BorderSolid, 8.0, Qt::black);
+    cellStyles.insert(qMakePair(0, 0), cellStyle1);
+
+    KoTableCellStyle *cellStyle2 = new KoTableCellStyle();
+    QVERIFY(cellStyle2);
+    cellStyle2->setEdge(KoTableCellStyle::Left, KoTableCellStyle::BorderSolid, 5.0, Qt::black);
+    cellStyle2->setEdge(KoTableCellStyle::Right, KoTableCellStyle::BorderSolid, 6.0, Qt::black);
+    cellStyle2->setEdge(KoTableCellStyle::Top, KoTableCellStyle::BorderSolid, 8.0, Qt::black);
+    cellStyle2->setEdge(KoTableCellStyle::Bottom, KoTableCellStyle::BorderSolid, 4.0, Qt::black);
+    cellStyles.insert(qMakePair(0, 1), cellStyle2);
+
+    KoTableCellStyle *cellStyle3 = new KoTableCellStyle();
+    QVERIFY(cellStyle3);
+    cellStyle3->setEdge(KoTableCellStyle::Left, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyle3->setEdge(KoTableCellStyle::Right, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyle3->setEdge(KoTableCellStyle::Top, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyle3->setEdge(KoTableCellStyle::Bottom, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyles.insert(qMakePair(0, 2), cellStyle3);
+
+    KoTableCellStyle *cellStyle4 = new KoTableCellStyle();
+    QVERIFY(cellStyle4);
+    cellStyle4->setEdge(KoTableCellStyle::Left, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyle4->setEdge(KoTableCellStyle::Right, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyle4->setEdge(KoTableCellStyle::Top, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyle4->setEdge(KoTableCellStyle::Bottom, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyles.insert(qMakePair(1, 0), cellStyle4);
+
+    KoTableCellStyle *cellStyle5 = new KoTableCellStyle();
+    QVERIFY(cellStyle5);
+    cellStyle5->setEdge(KoTableCellStyle::Left, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyle5->setEdge(KoTableCellStyle::Right, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyle5->setEdge(KoTableCellStyle::Top, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyle5->setEdge(KoTableCellStyle::Bottom, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyles.insert(qMakePair(1, 2), cellStyle5);
+
+    KoTableCellStyle *cellStyle6 = new KoTableCellStyle();
+    QVERIFY(cellStyle6);
+    cellStyle6->setEdge(KoTableCellStyle::Left, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyle6->setEdge(KoTableCellStyle::Right, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyle6->setEdge(KoTableCellStyle::Top, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyle6->setEdge(KoTableCellStyle::Bottom, KoTableCellStyle::BorderSolid, 2.0, Qt::black);
+    cellStyles.insert(qMakePair(2, 2), cellStyle6);
+
+    QList<KoTableColumnStyle *> columnStyles;
+    // Give column 0 50 pt width.
+    KoTableColumnStyle *columnStyle1 = new KoTableColumnStyle();
+    QVERIFY(columnStyle1);
+    columnStyle1->setColumnWidth(50.0);
+    columnStyles.append(columnStyle1);
+    // And column 1 100 pt width.
+    KoTableColumnStyle *columnStyle2 = new KoTableColumnStyle();
+    columnStyle2->setColumnWidth(100.0);
+    QVERIFY(columnStyle2);
+    columnStyles.append(columnStyle2);
+    // And column 2 150 pt width.
+    KoTableColumnStyle *columnStyle3 = new KoTableColumnStyle();
+    columnStyle3->setColumnWidth(150.0);
+    QVERIFY(columnStyle3);
+    columnStyles.append(columnStyle3);
+
+    initTest(3, 3, tableStyle, columnStyles, rowStyles, cellStyles, cellTexts);
+    m_layout->layout();
+    m_table->mergeCells(1, 0, 2, 2);
+
+    /* Top row should be as high as the max required cell height
+     * 1st cell requires row to be 12+8+8+16=44
+     * 2nd cell requires row to be 12+16=28
+     * 3rd cell requires row to be 4+16=20
+     *
+     * Next row hight depends only on last column 4+16
+     *
+     * Last row hight depends only on last column 4+16
+     *
+     * Thus the merged cell have a combined height of 40 at it's disposal
+     *
+     * When testing we need to subtract the margins and paddings to get the cellContentRect
+     */
+    QTextTableCell cell = m_table->cellAt(0, 0);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(13, 12, 23, 16));
+
+    cell = m_table->cellAt(0, 1);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(55, 8, 89, 32));
+
+    cell = m_table->cellAt(0, 2);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(152, 2, 146, 40));
+
+    cell = m_table->cellAt(1, 0);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(2, 28+16+2, 146, 4+2*16));
+
+    cell = m_table->cellAt(1, 2);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(152, 28+16+2, 146, 16));
+
+    cell = m_table->cellAt(2, 2);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(152, 32+2*16+2, 146, 16));
 
     cleanupTest();
 }

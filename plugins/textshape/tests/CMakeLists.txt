@@ -110,3 +110,17 @@ set(TestTableLayout_test_SRCS
 )
 kde4_add_unit_test(TestTableLayout TESTNAME shapes-text-TestTableLayout ${TestTableLayout_test_SRCS})
 target_link_libraries(TestTableLayout kotext komain ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestSections_test_SRCS
+    TestSections.cpp
+    ../TableLayout.cpp
+    ../TableLayoutData.cpp
+    ../Layout.cpp
+    ../TextShape.cpp
+    ../ListItemsHelper.cpp
+)
+kde4_add_unit_test(TestSections TESTNAME shapes-text-TestSections ${TestSections_test_SRCS})
+target_link_libraries(TestSections kotext ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
+

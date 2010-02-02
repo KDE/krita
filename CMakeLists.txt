@@ -61,12 +61,11 @@ ELSE(TINY)
     set(SHOULD_BUILD_SCRIPTING TRUE)
 ENDIF(TINY)
 
-option(BUILD_F_OFFICE "build FreOffice" ON)
-if (BUILD_F_OFFICE) 
+if (BUILD_f-office) 
     set(SHOULD_BUILD_F_OFFICE TRUE)
-else(BUILD_F_OFFICE)
+else (BUILD_f-office) 
     set(SHOULD_BUILD_F_OFFICE FALSE)
-endif(BUILD_F_OFFICE)
+endif (BUILD_f-office) 
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FOO_TEST_EXPORT macro do something

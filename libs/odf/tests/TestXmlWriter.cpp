@@ -19,7 +19,7 @@
  */
 #include <KoXmlWriter.h>
 
-#include <Q3CString>
+#include <QString>
 #include <qtest_kde.h>
 
 class TestXmlWriter : public QObject
@@ -173,7 +173,7 @@ void TestXmlWriter::testAddManifestEntry()
 void TestXmlWriter::testEscapingLongString()
 {
     int sz = 15000;  // must be more than KoXmlWriter::s_escapeBufferLen
-    Q3CString x(sz);
+    QString x(sz);
     x.fill('x', sz);
     x += '&';
     setup();
@@ -182,7 +182,7 @@ void TestXmlWriter::testEscapingLongString()
     writer->addAttribute("a", x);
     writer->endElement();
 
-    Q3CString expected = "<test a=\"";
+    QString expected = "<test a=\"";
     expected += x + "amp;\"/>";
     QCOMPARE(content(), QString(expected));
 }
@@ -224,7 +224,7 @@ void TestXmlWriter::speedTest()
     QTime time;
     time.start();
     QString paragText = QString::fromUtf8("This is the text of the paragraph. I'm including a euro sign to test encoding issues: €");
-    Q3CString styleName = "Heading 1";
+    QString styleName = "Heading 1";
 
     QFile out(QString::fromLatin1("out5.xml"));
     if (out.open(QIODevice::WriteOnly)) {

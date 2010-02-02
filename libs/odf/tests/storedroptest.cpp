@@ -20,18 +20,16 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <KoStore.h>
-#include <q3textbrowser.h>
 #include <QStringList>
 #include <QBuffer>
 #include <QClipboard>
-//Added by qt3to4:
+#include <QTextBrowser>
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
 #include <QKeyEvent>
-#include <Q3CString>
 #include <QDropEvent>
 
-class StoreDropTest : public Q3TextBrowser
+class StoreDropTest : public QTextBrowser
 {
 public:
     StoreDropTest(QWidget* parent);
@@ -62,7 +60,7 @@ int main(int argc, char** argv)
 }
 
 StoreDropTest::StoreDropTest(QWidget* parent)
-        : Q3TextBrowser(parent)
+        : QTextBrowser(parent)
 {
     setText("KoStore drop/paste test\nDrop or paste a selection from a KOffice application into this widget to see the ZIP contents");
     setAcceptDrops(true);
@@ -70,12 +68,12 @@ StoreDropTest::StoreDropTest(QWidget* parent)
 
 void StoreDropTest::contentsDragEnterEvent(QDragEnterEvent * ev)
 {
-    ev->acceptAction();
+    ev->acceptProposedAction();
 }
 
 void StoreDropTest::contentsDragMoveEvent(QDragMoveEvent * ev)
 {
-    ev->acceptAction();
+    ev->acceptProposedAction();
 }
 
 void StoreDropTest::keyPressEvent(QKeyEvent * e)
@@ -90,23 +88,35 @@ void StoreDropTest::keyPressEvent(QKeyEvent * e)
 void StoreDropTest::paste()
 {
     qDebug("paste");
-    QMimeSource* m = QApplication::clipboard()->data();
+    const QMimeData* m = QApplication::clipboard()->mimeData();
     if (!m)
         return;
-    processMimeSource(m);
+
+    const QString acceptMimeType("application/vnd.oasis.opendocument.");
+    QStringList formats = m->formats();
+    foreach(QString fmt, formats) {
+        bool oasis = fmt.startsWith(acceptMimeType);
+        if (oasis || fmt == "application/x-kpresenter") {
+            QByteArray data = m->data(fmt);
+            showZipContents(data, fmt.toAscii(), oasis);
+            return;
+        }
+    }
+    setText("No acceptable format found. All I got was:\n" + formats.join("\n"));
+
 }
 
 void StoreDropTest::contentsDropEvent(QDropEvent *ev)
 {
     if (processMimeSource(ev))
-        ev->acceptAction();
+        ev->acceptProposedAction();
     else
         ev->ignore();
 }
 
 bool StoreDropTest::processMimeSource(QMimeSource* ev)
 {
-    const Q3CString acceptMimeType = "application/vnd.oasis.opendocument.";
+    const QString acceptMimeType("application/vnd.oasis.opendocument.");
     const char* fmt;
     QStringList formats;
     for (int i = 0; (fmt = ev->format(i)); i++) {

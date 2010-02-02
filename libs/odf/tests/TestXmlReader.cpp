@@ -1,4 +1,3 @@
-#include <Q3CString>
 #include <qtest_kde.h>
 
 #include <QBuffer>

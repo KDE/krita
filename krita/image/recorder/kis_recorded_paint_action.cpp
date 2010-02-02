@@ -218,3 +218,28 @@ KisPaintOpPresetSP KisRecordedPaintActionFactory::paintOpPresetFromXML(const QDo
     settings->fromXML(elt);
     return settings;
 }
+
+KoColor KisRecordedPaintActionFactory::paintColorFromXML(const QDomElement& elt)
+{
+    return colorFromXML(elt, "ForegroundColor");
+}
+
+KoColor KisRecordedPaintActionFactory::backgroundColorFromXML(const QDomElement& elt)
+{
+    return colorFromXML(elt, "BackgroundColor");
+}
+
+KoColor KisRecordedPaintActionFactory::colorFromXML(const QDomElement& elt, const QString& elementName)
+{
+    QDomElement colorElt = elt.firstChildElement(elementName);
+    KoColor bC;
+
+    if (!colorElt.isNull()) {
+        bC = KoColor::fromXML(colorElt.firstChildElement(), Integer8BitsColorDepthID.id(), QHash<QString, QString>());
+        bC.setOpacity(255);
+        dbgImage << elementName << " color : " << bC.toQColor();
+    } else {
+        dbgImage << "Warning: no <" << elementName << " /> found";
+    }
+    return bC;
+}

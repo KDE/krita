@@ -137,24 +137,8 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElem
 
     // Decode colors
 
-    QDomElement backgroundColorElt = elt.firstChildElement("BackgroundColor");
-    KoColor bC;
-    if (!backgroundColorElt.isNull()) {
-        bC = KoColor::fromXML(backgroundColorElt.firstChildElement(""), Integer8BitsColorDepthID.id(), QHash<QString, QString>());
-        bC.setOpacity(255);
-        dbgUI << "Background color : " << bC.toQColor();
-    } else {
-        dbgUI << "Warning: no <BackgroundColor /> found";
-    }
-    QDomElement foregroundColorElt = elt.firstChildElement("ForegroundColor");
-    KoColor fC;
-    if (!foregroundColorElt.isNull()) {
-        fC = KoColor::fromXML(foregroundColorElt.firstChildElement(""), Integer8BitsColorDepthID.id(), QHash<QString, QString>());
-        fC.setOpacity(255);
-        dbgUI << "Foreground color : " << fC.toQColor();
-    } else {
-        dbgUI << "Warning: no <ForegroundColor /> found";
-    }
+    KoColor bC = backgroundColorFromXML(elt);
+    KoColor fC = paintColorFromXML(elt);
 
     KisRecordedPolyLinePaintAction* rplpa = new KisRecordedPolyLinePaintAction(name, pathnode, paintOpPreset, fC, bC, opacity, paintIncremental, compositeOp);
 

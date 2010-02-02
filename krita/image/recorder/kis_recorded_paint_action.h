@@ -81,6 +81,9 @@ public:
 protected:
 
     KisPaintOpPresetSP paintOpPresetFromXML(const QDomElement& elt);
+    KoColor paintColorFromXML(const QDomElement& elt);
+    KoColor backgroundColorFromXML(const QDomElement& elt);
+    KoColor colorFromXML(const QDomElement& elt, const QString& elementName);
 };
 
 

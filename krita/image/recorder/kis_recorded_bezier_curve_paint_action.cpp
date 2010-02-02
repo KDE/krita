@@ -167,25 +167,9 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomE
     }
 
     // Decode colors
-    QDomElement backgroundColorElt = elt.firstChildElement("BackgroundColor");
-    KoColor bC;
+    KoColor bC = backgroundColorFromXML(elt);
+    KoColor fC = paintColorFromXML(elt);
 
-    if (!backgroundColorElt.isNull()) {
-        bC = KoColor::fromXML(backgroundColorElt.firstChildElement(), Integer8BitsColorDepthID.id(), QHash<QString, QString>());
-        bC.setOpacity(255);
-        dbgImage << "Background color : " << bC.toQColor();
-    } else {
-        dbgImage << "Warning: no <BackgroundColor /> found";
-    }
-    QDomElement foregroundColorElt = elt.firstChildElement("ForegroundColor");
-    KoColor fC;
-    if (!foregroundColorElt.isNull()) {
-        fC = KoColor::fromXML(foregroundColorElt.firstChildElement(), Integer8BitsColorDepthID.id(), QHash<QString, QString>());
-        dbgImage << "Foreground color : " << fC.toQColor();
-        fC.setOpacity(255);
-    } else {
-        dbgImage << "Warning: no <ForegroundColor /> found";
-    }
     KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(name, pathnode, paintOpPreset, fC, bC, opacity, paintIncremental, compositeOp);
 
     QDomElement wpElt = elt.firstChildElement("Waypoints");

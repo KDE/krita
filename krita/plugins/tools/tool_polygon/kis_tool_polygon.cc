@@ -41,8 +41,13 @@
 #include <kis_selection.h>
 #include "kis_painter.h"
 #include <kis_paint_device.h>
+#include "kis_paint_information.h"
 #include "kis_paintop_registry.h"
 #include "kis_cursor.h"
+
+#include <recorder/kis_action_recorder.h>
+#include <recorder/kis_recorded_polyline_paint_action.h>
+#include <recorder/kis_node_query_path.h>
 
 KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
         : KisToolPolylineBase(canvas, KisCursor::load("tool_polygon_cursor.png", 6, 6))
@@ -56,6 +61,15 @@ KisToolPolygon::~KisToolPolygon()
 
 void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
 {
+    if (image()) {
+        KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction(i18n("Polyline tool"), KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), currentFgColor(), currentBgColor(), m_opacity, false, m_compositeOp->id());
+        foreach(const QPointF& pt, points)
+        {
+            linePaintAction->addPoint(KisPaintInformation(pt));
+        }
+        linePaintAction->addPoint(points[0]);
+        image()->actionRecorder()->addAction(*linePaintAction);
+    }
     if (!currentNode()->inherits("KisShapeLayer")) {
         KisPaintDeviceSP device = currentNode()->paintDevice();
 

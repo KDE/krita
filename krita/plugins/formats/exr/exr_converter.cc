@@ -546,7 +546,7 @@ KisImageWSP exrConverter::image()
 }
 
 template<typename _T_>
-void encodeData(Imf::OutputFile& file, KisPaintLayerSP layer, int width, int height, Imf::PixelType /*ptype*/)
+void encodeData(Imf::OutputFile& file, KisPaintLayerSP layer, int width, int height, Imf::PixelType ptype)
 {
     Imf::FrameBuffer frameBuffer;
     int xstart = 0;
@@ -557,7 +557,6 @@ void encodeData(Imf::OutputFile& file, KisPaintLayerSP layer, int width, int hei
     QVector<Rgba> pixels(width);
 
     for (int y = 0; y < height; ++y) {
-        Imf::PixelType ptype = Imf::FLOAT;
         Rgba* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
         frameBuffer.insert("R",
                            Imf::Slice(ptype, (char *) &frameBufferData->r,
@@ -614,15 +613,27 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
     qint32 width = image->width();
     Imf::Header header(width, height);
 
-    header.channels().insert("R", Imf::Channel(Imf::FLOAT));
-    header.channels().insert("G", Imf::Channel(Imf::FLOAT));
-    header.channels().insert("B", Imf::Channel(Imf::FLOAT));
-    header.channels().insert("A", Imf::Channel(Imf::FLOAT));
+    Imf::PixelType pixelType = (layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) ? Imf::HALF : Imf::FLOAT;
+    
+    header.channels().insert("R", Imf::Channel(pixelType));
+    header.channels().insert("G", Imf::Channel(pixelType));
+    header.channels().insert("B", Imf::Channel(pixelType));
+    header.channels().insert("A", Imf::Channel(pixelType));
 
     // Open file for writing
     Imf::OutputFile file(QFile::encodeName(uri.path()), header);
 
-    encodeData<float>(file, layer, width, height, Imf::FLOAT);
+    if(layer->colorSpace()->colorModelId() == RGBAColorModelID)
+    {
+        if(layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID)
+        {
+            encodeData<half>(file, layer, width, height, Imf::HALF);
+        } else if(layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+            encodeData<float>(file, layer, width, height, Imf::FLOAT);
+        }
+    } else {
+        return KisImageBuilder_RESULT_FAILURE;
+    }
 
     return KisImageBuilder_RESULT_OK;
 }

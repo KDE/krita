@@ -61,6 +61,13 @@ ELSE(TINY)
     set(SHOULD_BUILD_SCRIPTING TRUE)
 ENDIF(TINY)
 
+option(BUILD_F_OFFICE "build FreOffice" ON)
+if (BUILD_F_OFFICE) 
+    set(SHOULD_BUILD_F_OFFICE TRUE)
+else(BUILD_F_OFFICE)
+    set(SHOULD_BUILD_F_OFFICE FALSE)
+endif(BUILD_F_OFFICE)
+
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FOO_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
@@ -432,6 +439,7 @@ macro_display_application_enabled(krita ${SHOULD_BUILD_KRITA})
 macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
 macro_display_application_enabled(kformula ${SHOULD_BUILD_KFORMULA})
 macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
+macro_display_application_enabled(f-office ${SHOULD_BUILD_F_OFFICE})
 
 message(STATUS "--------------------------------------------------------------------------" )
 

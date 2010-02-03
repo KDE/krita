@@ -22,16 +22,10 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoShapeSavingContext.h>
-#include <KoTextLoader.h>
-#include <KoTextDocument.h>
-#include "changetracker/KoChangeTracker.h"
-#include "styles/KoStyleManager.h"
 
 #include <KDebug>
 
 #include <QTextDocumentFragment>
-#include <QTextDocument>
-#include <QTextCursor>
 #include <QString>
 #include <QTextInlineObject>
 #include <QFontMetricsF>
@@ -39,11 +33,12 @@
 #include <QDateTime>
 
 
+
 class KoInlineNote::Private
 {
 public:
     Private(KoInlineNote::Type t) : autoNumbering(false), type(t) {}
-    KoTextDocument *text;
+    QTextDocumentFragment text;
     QString label;
     QString id;
     QString author;
@@ -55,7 +50,6 @@ public:
 KoInlineNote::KoInlineNote(Type type)
         : d(new Private(type))
 {
-    d->text = 0;
 }
 
 KoInlineNote::~KoInlineNote()
@@ -65,15 +59,7 @@ KoInlineNote::~KoInlineNote()
 
 void KoInlineNote::setText(const QTextDocumentFragment text)
 {
-    QTextDocument *doc = new QTextDocument();
-    QTextCursor cursor(doc);
-    cursor.insertFragment(text);
-    d->text = new KoTextDocument(doc);
-}
-
-void KoInlineNote::setText(const QString text)
-{
-    setText(QTextDocumentFragment::fromPlainText(text));
+    d->text = text;
 }
 
 void KoInlineNote::setLabel(const QString &text)
@@ -88,8 +74,7 @@ void KoInlineNote::setId(const QString &id)
 
 QTextDocumentFragment KoInlineNote::text() const
 {
-    QTextDocumentFragment fragment(d->text->document());
-    return fragment;
+    return d->text;
 }
 
 QString KoInlineNote::label() const
@@ -168,16 +153,8 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     layout.draw(&painter, rect.topLeft());
 }
 
-bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context, KoStyleManager *styleManager, KoChangeTracker *changeTracker)
+bool KoInlineNote::loadOdf(const KoXmlElement & element)
 {
-    QTextDocument *document = new QTextDocument();
-    QTextCursor cursor(document);
-    KoTextDocument *textDocument = new KoTextDocument(document);
-    textDocument->setStyleManager(styleManager);
-    textDocument->setChangeTracker(changeTracker);
-
-    KoTextLoader loader(context);
-
     if (element.namespaceURI() == KoXmlNS::text && element.localName() == "note") {
 
         QString className = element.attributeNS(KoXmlNS::text, "note-class");
@@ -198,7 +175,19 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
             if (ts.namespaceURI() != KoXmlNS::text)
                 continue;
             if (ts.localName() == "note-body") {
-                    loader.loadBody(ts, cursor);
+                //d->text = "";
+                KoXmlNode node = ts.firstChild();
+                while (!node.isNull()) {
+                    KoXmlElement commentElement = node.toElement();
+                    if (!commentElement.isNull()) {
+                        if (commentElement.localName() == "p" && commentElement.namespaceURI() == KoXmlNS::text) {
+//                            if (!d->text.isEmpty())
+//                                d->text.append('\n');
+//                            d->text.append(commentElement.text());
+                        }
+                    }
+                    node = node.nextSibling();
+                }
             } else if (ts.localName() == "note-citation") {
                 d->label = ts.attributeNS(KoXmlNS::text, "label");
                 if (d->label.isEmpty()) {
@@ -208,22 +197,15 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
             }
         }
 
+        return true;
     }
     else if (element.namespaceURI() == KoXmlNS::office && element.localName() == "annotation") {
 
         d->author = element.attributeNS(KoXmlNS::text, "dc-creator");
         d->date = QDateTime::fromString(element.attributeNS(KoXmlNS::text, "dc-date"), Qt::ISODate);
-
     }
-    else {
-        delete document;
-        delete textDocument;
-        return false;
-    }
+    return false;
 
-    delete d->text;
-    d->text = textDocument;
-    return true;
 }
 
 void KoInlineNote::saveOdf(KoShapeSavingContext & context)

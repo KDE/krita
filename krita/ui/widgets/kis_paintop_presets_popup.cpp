@@ -84,10 +84,13 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
 
 KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()
 {
-    m_d->layout->removeWidget(m_d->settingsWidget);
-    m_d->settingsWidget->hide();
-    m_d->settingsWidget->setParent(0);
-    m_d->settingsWidget = 0;
+    if (m_d->settingsWidget)
+    {
+        m_d->layout->removeWidget(m_d->settingsWidget);
+        m_d->settingsWidget->hide();
+        m_d->settingsWidget->setParent(0);
+        m_d->settingsWidget = 0;
+    }
     delete m_d;
 }
 
@@ -100,11 +103,12 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     m_d->layout->update();
     updateGeometry();
 
+    m_d->settingsWidget = widget;
+
     if (widget) {
 
         widget->setFont(m_d->smallFont);
 
-        m_d->settingsWidget = widget;
         m_d->settingsWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
         m_d->layout->addWidget(widget);
 

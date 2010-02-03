@@ -51,7 +51,6 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
 
 KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()
 {
-    delete m_brushOption;
 }
 
 KisPropertiesConfiguration* KisBrushOpSettingsWidget::configuration() const

@@ -29,7 +29,12 @@
 #include <OpenShiva/SourcesCollection.h>
 
 #include "shivafilter.h"
+
+#include <OpenShiva/Version.h>
+
+#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 13
 #include <GTLCore/CompilationMessages.h>
+#endif
 
 QMutex* shivaMutex;
 
@@ -53,7 +58,9 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
         std::list< OpenShiva::Source* > kernels = m_sourceCollection->sources(OpenShiva::Source::FilterKernel);
         dbgPlugins << "Collection has " << kernels.size() << " filters";
         foreach(OpenShiva::Source* kernel, kernels) {
+#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 13
             dbgPlugins << kernel->metadataCompilationMessages().toString().c_str() ;
+#endif
             if (kernel->outputImageType() == OpenShiva::Source::Image && kernel->inputImageType(0) == OpenShiva::Source::Image) {
                 manager->add(new ShivaFilter(kernel));
             }

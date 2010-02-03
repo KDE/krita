@@ -59,8 +59,6 @@ public:
      */
     virtual quint8 valueAt(qreal x, qreal y) const = 0;
 
-    quint8 interpolatedValueAt(qreal x, qreal y);
-
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
     /**

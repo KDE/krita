@@ -100,26 +100,6 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
     }
 }
 
-quint8 KisMaskGenerator::interpolatedValueAt(double x, double y)
-{
-    double x_i = floor(x);
-    double x_f = x - x_i;
-    if (x_f < 0.0) {
-        x_f *= -1.0;
-    }
-    double x_f_r = 1.0 - x_f;
-    double y_i = floor(y);
-    double y_f = fabs(y - y_i);
-    if (y_f < 0.0) {
-        y_f *= -1.0;
-    }
-    double y_f_r = 1.0 - y_f;
-    return (x_f_r * y_f_r * valueAt(x_i , y_i) +
-            x_f   * y_f_r * valueAt(x_i + 1, y_i) +
-            x_f_r * y_f   * valueAt(x_i,  y_i + 1) +
-            x_f   * y_f   * valueAt(x_i + 1,  y_i + 1));
-}
-
 double KisMaskGenerator::width() const
 {
     return d->m_radius;

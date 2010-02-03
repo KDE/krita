@@ -135,7 +135,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                     coloringInformation->nextColumn();
                 }
             }
-            cs->setAlpha(dabPointer, OPACITY_OPAQUE - d->shape->interpolatedValueAt(maskX, maskY), 1);
+            cs->setAlpha(dabPointer, OPACITY_OPAQUE - d->shape->valueAt(maskX, maskY), 1);
             dabPointer += pixelSize;
         }
         if (!color && coloringInformation) {

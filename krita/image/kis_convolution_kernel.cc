@@ -129,7 +129,7 @@ KisConvolutionKernelSP KisConvolutionKernel::fromMaskGenerator(KisMaskGenerator*
             double x = cosa * x_ - sina * y_;
             double y = sina * x_ + cosa * y_;
 //             dbgImage << ppVar(x) << ppVar(y) << ppVar(x_) << ppVar(y_) << ppVar( kmg->interpolatedValueAt( x,y) );
-            uint value = 255 - kmg->interpolatedValueAt(x, y);
+            uint value = 255 - kmg->valueAt(x, y);
             data(r, c) = value;
             factor += value;
         }

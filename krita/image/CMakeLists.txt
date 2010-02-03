@@ -105,6 +105,7 @@ set(kritaimage_LIB_SRCS
    kis_convolution_painter.cc
    kis_cubic_curve.cpp
    kis_effect_mask.cc
+   kis_fast_math.cpp
    kis_fill_painter.cc
    kis_filter_mask.cpp
    kis_filter_strategy.cc

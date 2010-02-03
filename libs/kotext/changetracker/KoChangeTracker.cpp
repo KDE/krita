@@ -168,8 +168,7 @@ int KoChangeTracker::getDeleteChangeId(QString title, QTextDocumentFragment sele
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
     KUser user(KUser::UseRealUserID);
     changeElement->setCreator(user.property(KUser::FullName).toString());
-    //TODO preserve formating info there. this will do for now
-    changeElement->setDeleteData(selection.toPlainText());
+    changeElement->setDeleteData(selection);
 
     changeElement->setEnabled(d->recordChanges);
 
@@ -276,7 +275,7 @@ bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)
         change.addChildElement("changeMetaData", d->changes.value(changeId)->getExtraMetaData());
 
     if (d->changes.value(changeId)->hasDeleteData())
-        change.addChildElement("deletedData", d->changes.value(changeId)->getDeleteData());
+        change.addChildElement("deletedData", d->changes.value(changeId)->getDeleteData().toPlainText());
 
     return true;
 }
@@ -300,7 +299,7 @@ void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
                             changeElement = new KoChangeTrackerElement(tag.attributeNS(KoXmlNS::text,"id"),KoGenChange::deleteChange);
                             KoXmlElement deletedData = region.namedItemNS(KoXmlNS::text, "p").toElement();
                             if(!deletedData.isNull())
-                              changeElement->setDeleteData(deletedData.text());
+                              changeElement->setDeleteData(QTextDocumentFragment::fromPlainText(deletedData.text()));
                         }
                         KoXmlElement metadata = region.namedItemNS(KoXmlNS::office,"change-info").toElement();
                         if (!metadata.isNull()) {

@@ -23,6 +23,7 @@
 #include <QMetaType>
 #include <QTextFormat>
 #include <QString>
+#include <QTextDocumentFragment>
 
 #include <KoGenChange.h>
 
@@ -77,8 +78,8 @@ public:
     QString getExtraMetaData() const;
 
     bool hasDeleteData() const;
-    void setDeleteData(const QString& data);
-    QString getDeleteData() const;
+    void setDeleteData(const QTextDocumentFragment& fragment);
+    QTextDocumentFragment getDeleteData() const;
 
     void setDeleteChangeMarker(KoDeleteChangeMarker *marker);
     KoDeleteChangeMarker *getDeleteChangeMarker();

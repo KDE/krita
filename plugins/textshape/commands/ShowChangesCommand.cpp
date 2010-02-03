@@ -107,8 +107,8 @@ void ShowChangesCommand::insertDeletedChanges()
             f.setProperty(KoCharacterStyle::ChangeTrackerId, element->getDeleteChangeMarker()->changeId());
             f.clearProperty(KoCharacterStyle::InlineInstanceId);
             caret.setCharFormat(f);
-            caret.insertText(element->getDeleteData());
-            numAddedChars += element->getDeleteData().length();
+            caret.insertFragment(element->getDeleteData());
+            numAddedChars += element->getDeleteData().toPlainText().length();
         }
     }
 }
@@ -124,9 +124,9 @@ void ShowChangesCommand::removeDeletedChanges()
             QTextCursor caret(element->getDeleteChangeMarker()->document());
             QTextCharFormat f;
             caret.setPosition(element->getDeleteChangeMarker()->position() +  1 - numDeletedChars);
-            caret.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, element->getDeleteData().length());
+            caret.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, element->getDeleteData().toPlainText().length());
             caret.removeSelectedText();
-            numDeletedChars += element->getDeleteData().length();
+            numDeletedChars += element->getDeleteData().toPlainText().length();
         }
     }
 }

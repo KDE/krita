@@ -69,9 +69,9 @@ private slots:
     void init();
     /// Test very basic layout functionality.
     void testBasicLayout();
-    /// Test table padding.
+    /// Test table margin.
     void testTableMargin();
-    /// Test individual table padding (top,right,bottom,left).
+    /// Test individual table margin (top,right,bottom,left).
     void testIndividualTableMargin();
     /// Test table cell styles.
     void testCellStyles();

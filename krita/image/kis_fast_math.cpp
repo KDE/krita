@@ -27,7 +27,6 @@
 #include <kglobal.h>
 
 // Algorithm from http://www.snippetcenter.org/en/a-fast-atan2-function-s1868.aspx
-const double PI = 4 * atan(1.0);
 const double MAX_SECOND_DERIV_IN_RANGE = 0.6495;
 
 /// precision
@@ -83,13 +82,13 @@ float KisFastMath::atan2(float y, float x)
             return(0.f);// the angle is 0
         }
         // toward the left
-        return float(PI);
+        return float(M_PI);
     } // we now know that y is not 0 check x
     if (x == 0.f) { // the line is vertical
         if (y > 0.f) {
-            return(PI / 2.f);
+            return M_PI_2;
         }
-        return(-PI / 2.f);
+        return -M_PI_2;
     }
     // from here on we know that niether x nor y is 0
     if (x > 0.f) {
@@ -100,7 +99,7 @@ float KisFastMath::atan2(float y, float x)
             if (x > y) {
                 return(calcAngle(x, y));
             }
-            return((PI / 2.f) - calcAngle(y, x));
+            return(M_PI_2 - calcAngle(y, x));
         }
         // we are in quadrant 4
         y = -y;
@@ -108,7 +107,7 @@ float KisFastMath::atan2(float y, float x)
         if (x > y) {
             return(-calcAngle(x, y));
         }
-        return(-(PI / 2.f) + calcAngle(y, x));
+        return(-M_PI_2 + calcAngle(y, x));
     }
     // we are in quadrant 2 or 3
     x = -x;
@@ -117,14 +116,14 @@ float KisFastMath::atan2(float y, float x)
         // we are in quadrant 2
         // now figure out which side of the 45 degree line
         if (x > y) {
-            return(PI - calcAngle(x, y));
-        } return(PI / 2.f + calcAngle(y, x));
+            return(M_PI - calcAngle(x, y));
+        } return(M_PI_2 + calcAngle(y, x));
     }
     // we are in quadrant 3
     y = -y;
     // flip y so we can use it as a positve
     // now figure out which side of the 45 degree line
     if (x > y) {
-        return(-PI + calcAngle(x, y));
-    } return(-(PI / 2.f) - calcAngle(y, x));
+        return(-M_PI + calcAngle(x, y));
+    } return(-M_PI_2 - calcAngle(y, x));
 }

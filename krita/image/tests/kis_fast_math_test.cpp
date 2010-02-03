@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,23 +14,33 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- *  adopted from here http://www.snippetcenter.org/en/a-fast-atan2-function-s1868.aspx
  */
 
+#include "kis_fast_math_test.h"
 
-#ifndef _KIS_IMAGE_FAST_
-#define _KIS_IMAGE_FAST_
+#include <qtest_kde.h>
+#include "kis_fast_math.h"
 
-#include "krita_export.h"
+void KisFastMathTest::testAtan2()
+{
+    const int COUNT = 1000;
 
-/**
- * This namespace countains fast but inaccurate version of mathematical function.
- */
-namespace KisFastMath {
+    for (int i = 0 ; i < COUNT; ++i) {
+        double x = i;
+        for (int j = 0 ; j < COUNT; ++j) {
 
-    /// atan2 replacement
-    KRITAIMAGE_EXPORT float atan2(float y, float x);
+            if (i != 0 && j != 0) {
+                double y = j;
+
+                double v1 = atan2(y, x);
+                double v2 = KisFastMath::atan2(y, x);
+
+                QVERIFY(fabs(v1 - v2) < 0.0001);
+            }
+        }
+    }
 }
 
-#endif
+
+QTEST_KDEMAIN(KisFastMathTest, GUI)
+#include "kis_fast_math_test.moc"

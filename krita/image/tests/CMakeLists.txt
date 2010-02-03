@@ -14,6 +14,12 @@ target_link_libraries(KisBaseNodeTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST
 
 ########### next target ###############
 
+set(kis_fast_math_test_SRCS kis_fast_math_test.cpp )
+kde4_add_unit_test(KisFastMathTest TESTNAME krita-image-FastMathTest ${kis_fast_math_test_SRCS})
+target_link_libraries(KisFastMathTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_node_test_SRCS kis_node_test.cpp )
 kde4_add_unit_test(KisNodeTest TESTNAME krita-image-Node-Test ${kis_node_test_SRCS})
 target_link_libraries(KisNodeTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

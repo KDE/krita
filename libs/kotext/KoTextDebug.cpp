@@ -21,14 +21,12 @@
 #include "KoTextDebug.h"
 
 #include <QTextDocument>
-#include <QTextDocumentFragment>
 #include <QTextFrame>
 #include <QTextBlock>
 #include <QTextTable>
 #include <QTextFragment>
 #include <QTextList>
 #include <QDebug>
-
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoListStyle.h"
@@ -142,7 +140,7 @@ QString KoTextDebug::inlineObjectAttributes(const QTextCharFormat &textFormat)
                 attrs.append(" type=\"endnote\"");
             }
             attrs.append(QString(" label=\"%1\"").arg(note->label()));
-            attrs.append(QString(" text=\"%1\"").arg(note->text().toPlainText()));
+            attrs.append(QString(" text=\"%1\"").arg(note->text()));
         } else {
             attrs.append(" type=\"inlineobject\">");
         }

@@ -24,19 +24,20 @@
 
 #include "KoXmlReaderForward.h"
 class KoShapeLoadingContext;
+class QTextDocumentFragment;
 
 /**
  * This object is an inline object, which means it is anchored in the text-flow and it can hold note info.
- * Typical notes that use this are Footnotes and Endnotes.
+ * Typical notes that use this are Footnotes, Endnotes and Annotations (also known as comments).
  */
 class KOTEXT_EXPORT KoInlineNote : public KoInlineObject
 {
 public:
     /// The type of note specifies how the application will use the text from the note.
     enum Type {
-        Footnote,   ///< Notes of this type will have their text placed at the bottom of a shape.
-        Endnote     ///< Notes of this type are used as endnotes in applications that support that.
-        // Comment-note?
+        Footnote,      ///< Notes of this type will have their text placed at the bottom of a shape.
+        Endnote,       ///< Notes of this type are used as endnotes in applications that support that.
+        Annotation,    ///< Notes of this type will have their text places in the document margin.
     };
 
     /**
@@ -51,7 +52,7 @@ public:
      * Set the text that backs this note.
      * @param text the new text
      */
-    void setText(const QString &text);
+    void setText(const QTextDocumentFragment text);
     /**
      * Set the label that is shown at the spot this inline note is inserted.
      * @param text the new label
@@ -64,9 +65,11 @@ public:
     void setId(const QString &id);
 
     /// return the current text
-    QString text() const;
+    QTextDocumentFragment text() const;
+
     /// return the current label
     QString label() const;
+
     /// return the current id
     QString id() const;
 
@@ -74,6 +77,7 @@ public:
      * @return whether the label should be automatically recreated or if the label is static.
      */
     bool autoNumbering() const;
+
     /**
      * Set whether the label should be automatically recreated.
      * @param on if true then changes in footnote-ordering will recalcualte the label.
@@ -84,6 +88,7 @@ public:
     Type type() const;
 
     bool loadOdf(const KoXmlElement &element);
+
     ///reimplemented
     void saveOdf(KoShapeSavingContext &context);
 

@@ -60,6 +60,10 @@ void KisStrokeBenchmark::benchmarkStroke()
     KisImageWSP image = new KisImage(0, width, height, m_colorSpace, "stroke sample image", false);
     KisLayerSP layer = new KisPaintLayer(image, "temporary for stroke sample", OPACITY_OPAQUE, m_colorSpace);
 
+    KoColor white(m_colorSpace);
+    white.fromQColor(Qt::white);
+    layer->paintDevice()->fill(0,0, width, height,white.data());
+    
     KisPainter painter(layer->paintDevice());
     painter.setPaintColor(KoColor(Qt::black, m_colorSpace));
 
@@ -97,6 +101,10 @@ void KisStrokeBenchmark::benchmarkRandomLines()
     KisImageWSP image = new KisImage(0, width, height, m_colorSpace, "stroke sample image", false);
     KisLayerSP layer = new KisPaintLayer(image, "temporary for stroke sample", OPACITY_OPAQUE, m_colorSpace);
 
+    KoColor white(m_colorSpace);
+    white.fromQColor(Qt::white);
+    layer->paintDevice()->fill(0,0, width, height,white.data());
+    
     KisPainter painter(layer->paintDevice());
     painter.setPaintColor(KoColor(Qt::black, m_colorSpace));
 

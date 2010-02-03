@@ -38,10 +38,10 @@ struct KisATanTable {
         qreal nf = ::sqrt(MAX_SECOND_DERIV_IN_RANGE / (8 * MAX_ERROR));
         NUM_ATAN_ENTRIES = int(nf) + 1;
         // Build table
-        qreal y = 10.f;
+        qreal y = 10.0;
         qreal x;
         ATanTable = new qreal[NUM_ATAN_ENTRIES + 1];
-        ATanTable[0] = 0.0f;
+        ATanTable[0] = 0.0;
         for (quint32 i = 1; i <= NUM_ATAN_ENTRIES; i++) {
             x = (y / i) * NUM_ATAN_ENTRIES;
             ATanTable[i] = (qreal)::atan2(y, x);
@@ -72,7 +72,7 @@ inline qreal calcAngle(qreal x, qreal y)
     static int ai = kisATanTable->NUM_ATAN_ENTRIES;
     static qreal* ATanTable = kisATanTable->ATanTable;
     qreal di = (y / x) * af;
-    unsigned int i = int(di);
+    int i = (int)(di);
     if (i >= ai) return ::atan2(y, x);
     return interp(di - i, ATanTable[i], ATanTable[i+1]);
 }
@@ -80,23 +80,23 @@ inline qreal calcAngle(qreal x, qreal y)
 qreal KisFastMath::atan2(qreal y, qreal x)
 {
 
-    if (y == 0.f) { // the line is horizontal
-        if (x >= 0.f) { // towards the right
-            return(0.f);// the angle is 0
+    if (y == 0.0) { // the line is horizontal
+        if (x >= 0.0) { // towards the right
+            return(0.0);// the angle is 0
         }
         // toward the left
         return qreal(M_PI);
     } // we now know that y is not 0 check x
-    if (x == 0.f) { // the line is vertical
-        if (y > 0.f) {
+    if (x == 0.0) { // the line is vertical
+        if (y > 0.0) {
             return M_PI_2;
         }
         return -M_PI_2;
     }
     // from here on we know that niether x nor y is 0
-    if (x > 0.f) {
+    if (x > 0.0) {
         // we are in quadrant 1 or 4
-        if (y > 0.f) {
+        if (y > 0.0) {
             // we are in quadrant 1
             // now figure out which side of the 45 degree line
             if (x > y) {
@@ -115,7 +115,7 @@ qreal KisFastMath::atan2(qreal y, qreal x)
     // we are in quadrant 2 or 3
     x = -x;
     // flip x so we can use it as a positive
-    if (y > 0) {
+    if (y > 0.0) {
         // we are in quadrant 2
         // now figure out which side of the 45 degree line
         if (x > y) {

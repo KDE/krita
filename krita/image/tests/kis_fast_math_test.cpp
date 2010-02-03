@@ -29,14 +29,12 @@ void KisFastMathTest::testAtan2()
         double x = i;
         for (int j = 0 ; j < COUNT; ++j) {
 
-            if (i != 0 && j != 0) {
-                double y = j;
+            double y = j;
 
-                double v1 = atan2(y, x);
-                double v2 = KisFastMath::atan2(y, x);
+            double v1 = atan2(y, x);
+            double v2 = KisFastMath::atan2(y, x);
 
-                QVERIFY(fabs(v1 - v2) < 0.0001);
-            }
+            QVERIFY(fabs(v1 - v2) < 0.0001);
         }
     }
 }

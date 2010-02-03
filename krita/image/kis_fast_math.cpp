@@ -79,7 +79,7 @@ float KisFastMath::atan2(float y, float x)
 {
 
     if (y == 0.f) { // the line is horizontal
-        if (x > 0.f) { // towards the right
+        if (x >= 0.f) { // towards the right
             return(0.f);// the angle is 0
         }
         // toward the left

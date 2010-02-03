@@ -32,6 +32,7 @@ KisShapeSelectionCanvas::KisShapeSelectionCanvas()
 
 KisShapeSelectionCanvas::~KisShapeSelectionCanvas()
 {
+    delete m_shapeManager;
 }
 
 void KisShapeSelectionCanvas::gridSize(qreal *horizontal, qreal *vertical) const

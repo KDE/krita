@@ -154,6 +154,7 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
 
 KisDoc2::~KisDoc2()
 {
+    delete m_d->shapeController; // Despite being a QObject it needs to be deleted before the image
     m_d->image.clear();
 
     delete m_d;

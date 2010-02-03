@@ -119,8 +119,16 @@ KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
 KisShapeController::~KisShapeController()
 {
     dbgUI << "Deleting the KisShapeController. There are" << m_d->nodeShapes.size() << " shapes";
+    foreach( KoShape* shape, m_d->nodeShapes.values() ) {
+        KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>(shape);
+        if (parent) {
+            foreach(KoShape * child, parent->childShapes()) {
+                m_d->removeShapeAndChildrenFromMap(child);
+            }
+        }
+    }
     foreach( KoShape* shape, m_d->nodeShapes ) {
-//         removeShape( shape);
+        removeShape( shape);
         delete shape; // XXX: What happes with stuff on the
                         // clipboard? And how about undo information?
     }

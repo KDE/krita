@@ -52,6 +52,7 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter 
 
 KisShapeLayerCanvas::~KisShapeLayerCanvas()
 {
+    delete m_shapeManager;
 }
 
 void KisShapeLayerCanvas::gridSize(qreal *horizontal, qreal *vertical) const

@@ -30,7 +30,7 @@
 namespace KisFastMath {
 
     /// atan2 replacement
-    KRITAIMAGE_EXPORT float atan2(float y, float x);
+    KRITAIMAGE_EXPORT qreal atan2(qreal y, qreal x);
 }
 
 #endif

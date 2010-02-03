@@ -27,24 +27,24 @@
 #include <kglobal.h>
 
 // Algorithm from http://www.snippetcenter.org/en/a-fast-atan2-function-s1868.aspx
-const double MAX_SECOND_DERIV_IN_RANGE = 0.6495;
+const qreal MAX_SECOND_DERIV_IN_RANGE = 0.6495;
 
 /// precision
-const double MAX_ERROR = 0.0001;
+const qreal MAX_ERROR = 0.0001;
 
 struct KisATanTable {
 
     KisATanTable() {
-        double nf = ::sqrt(MAX_SECOND_DERIV_IN_RANGE / (8 * MAX_ERROR));
+        qreal nf = ::sqrt(MAX_SECOND_DERIV_IN_RANGE / (8 * MAX_ERROR));
         NUM_ATAN_ENTRIES = int(nf) + 1;
         // Build table
-        float y = 10.f;
-        float x;
-        ATanTable = new float[NUM_ATAN_ENTRIES + 1];
+        qreal y = 10.f;
+        qreal x;
+        ATanTable = new qreal[NUM_ATAN_ENTRIES + 1];
         ATanTable[0] = 0.0f;
         for (quint32 i = 1; i <= NUM_ATAN_ENTRIES; i++) {
             x = (y / i) * NUM_ATAN_ENTRIES;
-            ATanTable[i] = (float)::atan2(y, x);
+            ATanTable[i] = (qreal)::atan2(y, x);
         }
 
     }
@@ -54,27 +54,27 @@ struct KisATanTable {
     }
 
     quint32 NUM_ATAN_ENTRIES;
-    float* ATanTable;
+    qreal* ATanTable;
 };
 
 K_GLOBAL_STATIC(KisATanTable, kisATanTable);
 
 /// private functions
 
-inline float interp(float r, float a, float b)
+inline qreal interp(qreal r, qreal a, qreal b)
 {
     return r*(b - a) + a;
 }
 
-inline double calcAngle(float x, float y)
+inline qreal calcAngle(qreal x, qreal y)
 {
-    float di = (y / x) * kisATanTable->NUM_ATAN_ENTRIES;
-    uint i = int(di);
+    qreal di = (y / x) * kisATanTable->NUM_ATAN_ENTRIES;
+    unsigned int i = int(di);
     if (i >= kisATanTable->NUM_ATAN_ENTRIES) return ::atan2(y, x);
     return interp(di - i, kisATanTable->ATanTable[i], kisATanTable->ATanTable[i+1]);
 }
 
-float KisFastMath::atan2(float y, float x)
+qreal KisFastMath::atan2(qreal y, qreal x)
 {
 
     if (y == 0.f) { // the line is horizontal
@@ -82,7 +82,7 @@ float KisFastMath::atan2(float y, float x)
             return(0.f);// the angle is 0
         }
         // toward the left
-        return float(M_PI);
+        return qreal(M_PI);
     } // we now know that y is not 0 check x
     if (x == 0.f) { // the line is vertical
         if (y > 0.f) {

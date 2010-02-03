@@ -44,7 +44,6 @@ endif(PNG_FOUND)
 
 # OpenCTL is needed for having a RGB16/32f color space
 if(OPENEXR_FOUND AND OPENCTL_FOUND)
-    add_subdirectory(openexr)
     add_subdirectory(exr)
 endif(OPENEXR_FOUND AND OPENCTL_FOUND)
 

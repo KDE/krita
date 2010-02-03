@@ -1,14 +1,18 @@
 [Desktop Entry]
 Name=Shiva Kernel Language Support For Filters
 Name[et]=Shiva kernelikeele toetus filtrites
+Name[nl]=Ondersteuning van Shiva-kerneltaal voor filters
 Name[pt]=Suporte à Linguagem do 'Kernel' Shiva para os Filtros
 Name[pt_BR]=Suporte à linguagem do kernel Shiva para filtros
+Name[sv]=Shiva språkstöd i kärnan för filter
 Name[uk]=Підтримка мови ядра Shiva для фільтрів
 Name[zh_TW]=過濾器使用之 Shiva 核心語言支援
 Comment=Shiva Kernel Language Support For Filters
 Comment[et]=Shiva kernelikeele toetus filtrites
+Comment[nl]=Ondersteuning van Shiva-kerneltaal voort filters
 Comment[pt]=Suporte à Linguagem do 'Kernel' Shiva para os Filtros
 Comment[pt_BR]=Suporte à linguagem do kernel Shiva para filtros
+Comment[sv]=Shiva språkstöd i kärnan för filter
 Comment[uk]=Підтримка мови ядра Shiva для фільтрів
 Comment[zh_TW]=過濾器使用之 Shiva 核心語言支援
 X-KDE-ServiceTypes=Krita/Filter

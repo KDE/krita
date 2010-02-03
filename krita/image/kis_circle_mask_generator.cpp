@@ -17,6 +17,7 @@
  */
 
 #include "kis_circle_mask_generator.h"
+#include "kis_fast_math.h"
 
 #include <math.h>
 #include <QDomDocument>
@@ -34,6 +35,7 @@ KisCircleMaskGenerator::KisCircleMaskGenerator(double w, double h, double fh, do
     d->ycoef = 2.0 / h;
     d->xfadecoef = (KisMaskGenerator::d->m_fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->m_fh * width()));
     d->yfadecoef = (KisMaskGenerator::d->m_fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->m_fv * height()));
+    d->cachedSpikesAngle = 0.0;
 }
 
 KisCircleMaskGenerator::KisCircleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes)
@@ -58,7 +60,7 @@ quint8 KisCircleMaskGenerator::valueAt(double x, double y) const
     double yr = fabs(y /*- m_ycenter*/);
 
     if (KisMaskGenerator::d->m_spikes > 2) {
-        double angle = (atan2(yr, xr));
+        double angle = (KisFastMath::atan2(yr, xr));
 
         while (angle > d->cachedSpikesAngle ){
             double sx = xr, sy = yr;

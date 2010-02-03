@@ -253,6 +253,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     forEachElement(tag, bodyElem) {
         if (! tag.isNull()) {
             const QString localName = tag.localName();
+
             if (tag.namespaceURI() == KoXmlNS::text) {
                 if (usedParagraph)
                     cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
@@ -613,7 +614,6 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 
 void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cursor)
 {
-    qDebug() << "loading a section" << endl;
     // Add a frame to the current layout
     QTextFrameFormat sectionFormat;
     QString sectionStyleName = sectionElem.attributeNS(KoXmlNS::text, "style-name", "");
@@ -627,7 +627,7 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
     QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
 
     loadBody(sectionElem, cursorFrame);
-    
+
     // Get out of the frame
     cursor.movePosition(QTextCursor::End);
 }
@@ -638,7 +638,7 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
     if (layout) {
         KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
-        if (note->loadOdf(noteElem)) {
+        if (note->loadOdf(noteElem, d->context, d->styleManager, d->changeTracker)) {
             KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
             textObjectManager->insertInlineObject(cursor, note);
         } else {

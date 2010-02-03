@@ -23,7 +23,11 @@
 #include "kotext_export.h"
 
 #include "KoXmlReaderForward.h"
+
 class KoShapeLoadingContext;
+class KoChangeTracker;
+class KoStyleManager;
+
 class QTextDocumentFragment;
 
 /**
@@ -53,11 +57,16 @@ public:
      * @param text the new text
      */
     void setText(const QTextDocumentFragment text);
+
+    /// @deprecated, use setText(const QTextDocumentFragment text);
+    void setText(const QString text);
+
     /**
      * Set the label that is shown at the spot this inline note is inserted.
      * @param text the new label
      */
     void setLabel(const QString &text);
+
     /**
      * Set the id that is used to reference this note.
      * @param id the new id
@@ -87,7 +96,7 @@ public:
     /// return the type of note.
     Type type() const;
 
-    bool loadOdf(const KoXmlElement &element);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, KoStyleManager *styleManager, KoChangeTracker *changeTracker);
 
     ///reimplemented
     void saveOdf(KoShapeSavingContext &context);

@@ -119,6 +119,7 @@ KisPaintopBox::~KisPaintopBox()
 {
     // Do not delete the widget, since it it is global to the application, not owned by the view
     m_presetsPopup->setPaintOpSettingsWidget(0);
+    qDeleteAll(m_paintopOptionWidgets);
 }
 
 KisPaintOpPresetSP KisPaintopBox::paintOpPresetSP(KoID* paintop)

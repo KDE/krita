@@ -123,7 +123,7 @@ void MixerTool::resourceChanged(int key, const QVariant & res)
 
 void MixerTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    kDebug() << m_d->mixer->hasFocus();
+    qDebug() << "focus" << m_d->mixer->hasFocus();
     if (m_d->mixer->hasFocus()) {
         m_d->mixingBrush->settings()->paintOutline(m_d->currentMousePosition,
                                                    0,
@@ -135,11 +135,24 @@ void MixerTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 void MixerTool::mousePressEvent(KoPointerEvent *event)
 {
-    kDebug() << event->pos() << event->button() << m_d->state;
+    qDebug() << "press" << event->pos() << event->button() << m_d->state;
     m_d->currentMousePosition = event->pos();
 
     if (event->button() == Qt::LeftButton) {
-        initPaint(event);
+        qDebug() << "mouse press event: painting";
+        m_d->state = MIXING;
+        m_d->dragDist = 0;
+
+        // Create painter
+        KisPaintDeviceSP device = m_d->mixer->device();
+
+        if (m_d->painter) delete m_d->painter;
+
+        m_d->painter = new KisPainter(device);
+        m_d->painter->setCompositeOp(m_d->compositeOp);
+        m_d->painter->setPaintColor(m_d->foregroundColor);
+        m_d->painter->setBackgroundColor(m_d->backgroundColor);
+
         m_d->previousPaintInformation =
                 KisPaintInformation(event->point,
                                     event->pressure(), event->xTilt(), event->yTilt(),
@@ -151,12 +164,13 @@ void MixerTool::mousePressEvent(KoPointerEvent *event)
 
 void MixerTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    kDebug() << event->pos() << event->button() << m_d->state;
+    qDebug() << "move" << event->pos() << event->button() << m_d->state;
 
     m_d->currentMousePosition = event->pos();
     switch(m_d->state) {
     case MIXING:
         {
+            qDebug() << "mouse move event: painting";
             QPointF dragVec = event->point - m_d->previousPaintInformation.pos();
 
             KisPaintInformation info = KisPaintInformation(event->point,
@@ -179,12 +193,14 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *event)
 
 void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    kDebug() << event->pos() << event->button() << m_d->state;
+    qDebug() << "mouse release" << event->pos() << event->button() << m_d->state;
 
     // XXX: We want to be able to set a color source for the other paintops that
     //      contains the impure blend under the current cursor.
     if (m_d->state == MIXING) {
-        endPaint();
+        m_d->state = HOVER;
+        delete m_d->painter;
+        m_d->painter = 0;
     }
     m_d->mixer->resourceManager()->setResource(KoCanvasResource::ForegroundColor, event->pos());
 }
@@ -194,28 +210,6 @@ void MixerTool::setDirty(const QRegion& region)
     m_d->mixer->updateCanvas(region);
 }
 
-void MixerTool::initPaint(KoPointerEvent *)
-{
-    kDebug() << m_d->state;
-    m_d->state = MIXING;
-    m_d->dragDist = 0;
 
-    // Create painter
-    KisPaintDeviceSP device = m_d->mixer->device();
-
-    if (m_d->painter) delete m_d->painter;
-
-    m_d->painter = new KisPainter(device);
-    // XXX: setup the painter
-    m_d->painter->setCompositeOp(m_d->compositeOp);
-}
-
-void MixerTool::endPaint()
-{
-    kDebug() << m_d->state;
-    m_d->state = HOVER;
-    delete m_d->painter;
-    m_d->painter = 0;
-}
 
 #include "mixertool.moc"

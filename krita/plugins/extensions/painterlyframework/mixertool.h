@@ -80,11 +80,6 @@ public:
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *) {}
 
-protected:
-
-    void initPaint(KoPointerEvent *e);
-    void endPaint();
-
 private:
 
     struct Private;

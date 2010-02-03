@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_RECORDED_BEZIER_CURVE_PAINT_ACTIONS_H_
-#define _KIS_RECORDED_BEZIER_CURVE_PAINT_ACTIONS_H_
+#ifndef _KIS_RECORDED_ELLIPSE_PAINT_ACTION_H_
+#define _KIS_RECORDED_ELLIPSE_PAINT_ACTION_H_
 
 #include "recorder/kis_recorded_action.h"
 #include "recorder/kis_recorded_paint_action.h"
@@ -27,34 +27,31 @@ class KisPaintInformation;
 class KisPainter;
 class KoColor;
 class KoCompositeOp;
+class QRectF;
 
 #include <krita_export.h>
 
 /**
  * This class will record the painting of a bezier curve.
  */
-class KRITAIMAGE_EXPORT KisRecordedBezierCurvePaintAction : public KisRecordedPaintAction
+class KRITAIMAGE_EXPORT KisRecordedEllipsePaintAction : public KisRecordedPaintAction
 {
 
 public:
 
-    KisRecordedBezierCurvePaintAction(const QString & name,
+    KisRecordedEllipsePaintAction(const QString & name,
                                       const KisNodeQueryPath& path,
                                       const KisPaintOpPresetSP paintOpPreset,
                                       KoColor foregroundColor,
                                       KoColor backgroundColor,
                                       int opacity,
                                       bool paintIncremental,
-                                      const QString& compositeOp);
+                                      const QString& compositeOp,
+                                      const QRectF& rect);
 
-    KisRecordedBezierCurvePaintAction(const KisRecordedBezierCurvePaintAction&);
+    KisRecordedEllipsePaintAction(const KisRecordedEllipsePaintAction&);
 
-    ~KisRecordedBezierCurvePaintAction();
-
-    void addPoint(const KisPaintInformation& point1,
-                  const QPointF& control1,
-                  const QPointF& control2,
-                  const KisPaintInformation& point2);
+    ~KisRecordedEllipsePaintAction();
 
     virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
 
@@ -71,11 +68,11 @@ private:
 };
 
 
-class KisRecordedBezierCurvePaintActionFactory : public KisRecordedPaintActionFactory
+class KisRecordedEllipsePaintActionFactory : public KisRecordedPaintActionFactory
 {
 public:
-    KisRecordedBezierCurvePaintActionFactory();
-    virtual ~KisRecordedBezierCurvePaintActionFactory();
+    KisRecordedEllipsePaintActionFactory();
+    virtual ~KisRecordedEllipsePaintActionFactory();
     virtual KisRecordedAction* fromXML(const QDomElement& elt);
 };
 

@@ -29,7 +29,11 @@
 #include <kis_selection.h>
 #include <kis_shape_tool_helper.h>
 #include <kis_paint_device.h>
+#include <kis_paintop_preset.h>
 
+#include <recorder/kis_action_recorder.h>
+#include <recorder/kis_recorded_ellipse_paint_action.h>
+#include <recorder/kis_node_query_path.h>
 
 KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
         : KisToolEllipseBase(canvas, KisCursor::load("tool_ellipse_cursor.png", 6, 6))
@@ -45,6 +49,11 @@ void KisToolEllipse::finishEllipse(const QRectF& rect)
 {
     if (rect.isEmpty())
         return;
+
+    if (image()) {
+        KisRecordedEllipsePaintAction* linePaintAction = new KisRecordedEllipsePaintAction(i18n("Ellipse tool"), KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), currentFgColor(), currentBgColor(), m_opacity, false, m_compositeOp->id(), rect);
+        image()->actionRecorder()->addAction(*linePaintAction);
+    }
 
     if (!currentNode()->inherits("KisShapeLayer")) {
         if (!currentNode()->paintDevice())

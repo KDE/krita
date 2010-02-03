@@ -55,6 +55,7 @@ public:
 
     /**
      * @brief Add a shape to the document.
+     * If the shape has no parent, the active layer will become its parent.
      *
      * @param shape to add to the document
      * @param parent the parent command if the resulting command is a compound undo command.

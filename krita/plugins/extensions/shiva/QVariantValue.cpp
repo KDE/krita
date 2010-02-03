@@ -19,7 +19,7 @@
 
 #include <GTLCore/Type.h>
 #include <GTLCore/TypesManager.h>
-#include <GTLCore/Version.h>
+#include "Version.h"
 
 #include "kis_debug.h"
 
@@ -42,7 +42,7 @@ QVariant valueToQVariant(const GTLCore::Value& value)
     case GTLCore::Type::FLOAT16:
     case GTLCore::Type::FLOAT32:
     case GTLCore::Type::FLOAT64:
-#if GTL_CORE_VERSION_MAJOR == 0 && GTL_CORE_VERSION_MINOR == 9 && GTL_CORE_VERSION_REVISION < 13
+#if OPENSHIVA_12
         return QVariant(value.asFloat());
 #else
         return QVariant(value.asFloat32());

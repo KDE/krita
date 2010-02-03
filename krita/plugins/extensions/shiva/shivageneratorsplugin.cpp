@@ -29,9 +29,9 @@
 #include <OpenShiva/SourcesCollection.h>
 
 #include "shivagenerator.h"
-#include "OpenShiva/Version.h"
+#include "Version.h"
 
-#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 13
+#if OPENSHIVA_13_OR_MORE
 #include <GTLCore/CompilationMessages.h>
 #endif
 
@@ -58,7 +58,7 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
 
         dbgPlugins << "Collection has " << kernels.size() << " generators";
         foreach(OpenShiva::Source* kernel, kernels) {
-#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 13
+#if OPENSHIVA_13_OR_MORE
             dbgPlugins << kernel->metadataCompilationMessages().toString().c_str();
 #endif
             if (kernel->outputImageType() == OpenShiva::Source::Image || kernel->outputImageType() == OpenShiva::Source::Image4) {

@@ -25,7 +25,7 @@
 
 #include <GTLCore/PixelDescription.h>
 #include <GTLCore/Type.h>
-#include <OpenShiva/Version.h>
+#include "Version.h"
 #include <KoColorSpaceTraits.h>
 
 GTLCore::PixelDescription csToPD(const KoColorSpace* cs)
@@ -55,7 +55,7 @@ GTLCore::PixelDescription csToPD(const KoColorSpace* cs)
             types.push_back(GTLCore::Type::Float32);
             break;
         case KoChannelInfo::FLOAT64:
-#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION < 13
+#if OPENSHIVA_12
             types.push_back(GTLCore::Type::Double);
 #else
             types.push_back(GTLCore::Type::Float64);

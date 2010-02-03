@@ -68,10 +68,13 @@ inline qreal interp(qreal r, qreal a, qreal b)
 
 inline qreal calcAngle(qreal x, qreal y)
 {
-    qreal di = (y / x) * kisATanTable->NUM_ATAN_ENTRIES;
+    static qreal af = kisATanTable->NUM_ATAN_ENTRIES;
+    static int ai = kisATanTable->NUM_ATAN_ENTRIES;
+    static qreal* ATanTable = kisATanTable->ATanTable;
+    qreal di = (y / x) * af;
     unsigned int i = int(di);
-    if (i >= kisATanTable->NUM_ATAN_ENTRIES) return ::atan2(y, x);
-    return interp(di - i, kisATanTable->ATanTable[i], kisATanTable->ATanTable[i+1]);
+    if (i >= ai) return ::atan2(y, x);
+    return interp(di - i, ATanTable[i], ATanTable[i+1]);
 }
 
 qreal KisFastMath::atan2(qreal y, qreal x)

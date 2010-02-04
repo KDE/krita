@@ -59,7 +59,8 @@ KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
         : KisRecordedAction(id, name, path)
         , d(new Private)
 {
-    d->paintOpPreset = paintOpPreset ? d->paintOpPreset = paintOpPreset->clone() : 0;
+    Q_ASSERT(paintOpPreset);
+    d->paintOpPreset = paintOpPreset->clone();
     d->opacity = 100;
     d->paintIncremental = true;
     d->compositeOp = COMPOSITE_OVER;
@@ -248,10 +249,10 @@ KisPaintOpPresetSP KisRecordedPaintActionFactory::paintOpPresetFromXML(const QDo
     QDomElement settingsElt = elt.firstChildElement("PaintopPreset");
     if (!settingsElt.isNull()) {
         KisPaintOpPresetSP settings = new KisPaintOpPreset;
-        settings->fromXML(elt);
+        settings->fromXML(settingsElt);
         return settings;
     } else {
-        dbgUI << "No <PaintOpSettings /> found";
+        errImage << "No <PaintopPreset /> found";
         return 0;
     }
 }

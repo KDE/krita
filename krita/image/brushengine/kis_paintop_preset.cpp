@@ -164,13 +164,19 @@ void KisPaintOpPreset::fromXML(const QDomElement& elt)
     QString paintopid = presetElt.attribute("paintopid");
 
     if (paintopid.isEmpty())
+    {
+        dbgImage << "No paintopid attribute";
         return;
+    }
 
     KoID id(paintopid, "");
 
     KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, 0);
     if (!settings)
+    {
+        dbgImage << "No settings for " << paintopid;
         return;
+    }
     settings->fromXML(presetElt);
     setSettings(settings);
 }

@@ -51,7 +51,7 @@
 #include <QStyle>
 #include <QFontMetrics>
 #include <QTextTableCell>
-
+#include <QTextFragment>
 
 // ---------------- layout helper ----------------
 Layout::Layout(KoTextDocumentLayout *parent)
@@ -1325,11 +1325,11 @@ void Layout::drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int sel
                             switch(changeElement->getChangeType()) {
                                 case (KoGenChange::insertChange):
                                     if (m_changeTracker->displayChanges())
-                                    	painter->fillRect(x1, line.y(), x2-x1, line.height(), m_changeTracker->getInsertionBgColor());
+                                        painter->fillRect(x1, line.y(), x2-x1, line.height(), m_changeTracker->getInsertionBgColor());
                                     break;
                                 case (KoGenChange::formatChange):
                                     if (m_changeTracker->displayChanges())
-                                    	painter->fillRect(x1, line.y(), x2-x1, line.height(), m_changeTracker->getFormatChangeBgColor());
+                                        painter->fillRect(x1, line.y(), x2-x1, line.height(), m_changeTracker->getFormatChangeBgColor());
                                     break;
                                 case (KoGenChange::deleteChange):
                                     if (m_changeTracker->displayChanges())
@@ -1816,7 +1816,7 @@ qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
             cursor.insertText(note->label() + ' ');
             cf.setVerticalAlignment(QTextCharFormat::AlignNormal);
             cursor.mergeCharFormat(cf);
-            cursor.insertText(note->text());
+            cursor.insertFragment(note->text());
         }
         pos = text.indexOf(QChar(0xFFFC), pos + 1);
     }

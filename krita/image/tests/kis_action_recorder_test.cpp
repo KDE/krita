@@ -70,7 +70,7 @@ void KisActionRecorderTest::testFiles()
             QVERIFY(!docElem.isNull() && docElem.tagName() == "RecordedActions");
             // Unserialise
             KisMacro m;
-            m.fromXML(docElem);
+            m.fromXML(docElem, 0);
             // Play
             m.play(KisPlayInfo(image, image->root()));
             QImage sourceImage = image->convertToQImage(0, 0, 200, 200, 0);

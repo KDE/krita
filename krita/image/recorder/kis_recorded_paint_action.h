@@ -78,6 +78,7 @@ public:
     virtual ~KisRecordedPaintActionFactory() {}
 protected:
 
+    void setupPaintAction(KisRecordedPaintAction* action, const QDomElement& elt);
     KisPaintOpPresetSP paintOpPresetFromXML(const QDomElement& elt);
     KoColor paintColorFromXML(const QDomElement& elt);
     KoColor backgroundColorFromXML(const QDomElement& elt);

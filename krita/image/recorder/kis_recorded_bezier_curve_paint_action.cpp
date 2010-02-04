@@ -141,30 +141,14 @@ KisRecordedBezierCurvePaintActionFactory::~KisRecordedBezierCurvePaintActionFact
 
 KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomElement& elt)
 {
-    Q_UNUSED(elt);
-    QString name = elt.attribute("name");
     KisNodeQueryPath pathnode = nodeQueryPathFromXML(elt);
-
-    int opacity = opacityFromXML(elt);
-    bool paintIncremental = paintIncrementalFromXML(elt);
-
-    QString compositeOp = compositeOpFromXML(elt);
 
     // Decode pressets
     KisPaintOpPresetSP paintOpPreset = paintOpPresetFromXML(elt);
 
-    // Decode colors
-    KoColor bC = backgroundColorFromXML(elt);
-    KoColor fC = paintColorFromXML(elt);
-
     KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(pathnode, paintOpPreset);
 
-    rplpa->setName(name);
-    rplpa->setBackgroundColor(bC);
-    rplpa->setPaintColor(fC);
-    rplpa->setOpacity(opacity);
-    rplpa->setPaintIncremental(paintIncremental);
-    rplpa->setCompositeOp(compositeOp);
+    setupPaintAction(rplpa, elt);
 
     QDomElement wpElt = elt.firstChildElement("Waypoints");
     if (!wpElt.isNull()) {

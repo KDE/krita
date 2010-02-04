@@ -99,21 +99,10 @@ KisRecordedEllipsePaintActionFactory::~KisRecordedEllipsePaintActionFactory()
 
 KisRecordedAction* KisRecordedEllipsePaintActionFactory::fromXML(const QDomElement& elt)
 {
-    Q_UNUSED(elt);
-    QString name = elt.attribute("name");
     KisNodeQueryPath pathnode = nodeQueryPathFromXML(elt);
-
-    int opacity = opacityFromXML(elt);
-    bool paintIncremental = paintIncrementalFromXML(elt);
-
-    QString compositeOp = compositeOpFromXML(elt);
 
     // Decode pressets
     KisPaintOpPresetSP paintOpPreset = paintOpPresetFromXML(elt);
-
-    // Decode colors
-    KoColor bC = backgroundColorFromXML(elt);
-    KoColor fC = paintColorFromXML(elt);
 
     QDomElement ellipseElt = elt.firstChildElement("Ellipse");
     qreal x, y, width, height;
@@ -132,11 +121,6 @@ KisRecordedAction* KisRecordedEllipsePaintActionFactory::fromXML(const QDomEleme
 
     KisRecordedEllipsePaintAction* rplpa = new KisRecordedEllipsePaintAction(pathnode, paintOpPreset, QRectF(x, y, width, height));
 
-    rplpa->setName(name);
-    rplpa->setBackgroundColor(bC);
-    rplpa->setPaintColor(fC);
-    rplpa->setOpacity(opacity);
-    rplpa->setPaintIncremental(paintIncremental);
-    rplpa->setCompositeOp(compositeOp);
+    setupPaintAction(rplpa, elt);
     return rplpa;
 }

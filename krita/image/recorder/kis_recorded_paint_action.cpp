@@ -219,6 +219,28 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
     }
 }
 
+void KisRecordedPaintActionFactory::setupPaintAction(KisRecordedPaintAction* action, const QDomElement& elt)
+{
+    QString name = elt.attribute("name");
+
+    int opacity = opacityFromXML(elt);
+    bool paintIncremental = paintIncrementalFromXML(elt);
+
+    QString compositeOp = compositeOpFromXML(elt);
+
+    // Decode colors
+
+    KoColor bC = backgroundColorFromXML(elt);
+    KoColor fC = paintColorFromXML(elt);
+    
+    action->setName(name);
+    action->setBackgroundColor(bC);
+    action->setPaintColor(fC);
+    action->setOpacity(opacity);
+    action->setPaintIncremental(paintIncremental);
+    action->setCompositeOp(compositeOp);
+
+}
 
 KisPaintOpPresetSP KisRecordedPaintActionFactory::paintOpPresetFromXML(const QDomElement& elt)
 {

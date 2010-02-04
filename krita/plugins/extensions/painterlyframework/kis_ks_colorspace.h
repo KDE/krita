@@ -245,7 +245,7 @@ public:
     QString defaultProfile() const {
         return QString("");
     }
-    KoColorProfile* createColorProfile(const QByteArray& rawData) const {
+    KoColorProfile* createColorProfile(const QByteArray& /*rawData*/) const {
         return 0;
     }
 };

@@ -73,7 +73,7 @@ void KoDockerManager::Private::loadDocker(const QString &name, bool visible)
 {
     ToolDockerFactory factory(name);
     KoToolDocker *td = qobject_cast<KoToolDocker*>(mainWindow->createDockWidget(&factory));
-    // A factory need not return a docker for all tools
+    Q_ASSERT(td);
     if (td == 0) return;
     toolDockerMap[name] = td;
     toolDockerVisibilityMap[name] = visible;

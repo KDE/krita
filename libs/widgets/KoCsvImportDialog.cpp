@@ -305,9 +305,12 @@ void KoCsvImportDialog::Private::fillTable()
 
     qApp->setOverrideCursor(Qt::WaitCursor);
 
-    for (row = 0; row < dialog->m_sheet->rowCount(); ++row)
-        for (column = 0; column < dialog->m_sheet->columnCount(); ++column)
-            dialog->m_sheet->item(row, column)->setText("");
+    for (row = 0; row < dialog->m_sheet->rowCount(); ++row) {
+        for (column = 0; column < dialog->m_sheet->columnCount(); ++column) {
+            if(QTableWidgetItem* item = dialog->m_sheet->item(row, column))
+                item->setText("");
+        }
+    }
 
     int maxColumn = 1;
     row = column = 1;

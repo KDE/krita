@@ -31,6 +31,7 @@
 #include <klocale.h>
 
 #include <QTextDocument>
+#include <QtAlgorithms>
 
 ShowChangesCommand::ShowChangesCommand(bool showChanges, QTextDocument *document, QUndoCommand *parent) :
     TextCommandBase (parent),
@@ -93,11 +94,17 @@ void ShowChangesCommand::enableDisableStates(bool showChanges)
     m_textEditor->setCharFormat(format);
 }
 
+bool isPositionLessThan(KoChangeTrackerElement *element1, KoChangeTrackerElement *element2)
+{
+    return element1->getDeleteChangeMarker()->position() < element2->getDeleteChangeMarker()->position();
+}
+
 void ShowChangesCommand::insertDeletedChanges()
 {
     int numAddedChars = 0;
     QVector<KoChangeTrackerElement *> elementVector;
     KoTextDocument(m_textEditor->document()).changeTracker()->getDeletedChanges(elementVector);
+    qSort(elementVector.begin(), elementVector.end(), isPositionLessThan);
 
     foreach (KoChangeTrackerElement *element, elementVector) {
         if (element->isValid()) {
@@ -118,6 +125,7 @@ void ShowChangesCommand::removeDeletedChanges()
     int numDeletedChars = 0;
     QVector<KoChangeTrackerElement *> elementVector;
     m_changeTracker->getDeletedChanges(elementVector);
+    qSort(elementVector.begin(), elementVector.end(), isPositionLessThan);
 
     foreach(KoChangeTrackerElement *element, elementVector) {
         if (element->isValid()) {

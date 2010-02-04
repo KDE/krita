@@ -252,7 +252,7 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
     }
     else if (d->type == Annotation) {
         writer->startElement("office:annotation");
-        if (!d->author.isNull()) {
+        if (!d->author.isEmpty()) {
             writer->startElement("dc:creator");
             writer->addTextNode(d->author);
             writer->endElement();

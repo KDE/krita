@@ -28,8 +28,6 @@ class KoDocument;
 class KoMainWindow;
 class KoPrintJob;
 class KoViewPrivate;
-class KoDockFactoryBase;
-class KoDockerManager;
 class KoZoomController;
 
 // KDE classes
@@ -38,7 +36,6 @@ class KXmlGuiWindow;
 class KAction;
 
 // Qt classes
-class QDockWidget;
 class QToolBar;
 
 /**
@@ -198,25 +195,6 @@ public:
     virtual KoPrintJob * createPrintJob();
 
     /**
-     * @return the KoDockerManager which is assigned to the @ref KoMainWindow of this view
-     * WARNING: this could be 0, if the main window isn't a koffice main window.
-     * (e.g. it can be any KParts application).
-     * or if no docker have been assigned yet. In that case create one and then use
-     * Note KoDockerManager is not actually defined in the main module but rather in guiutils
-     * @ref setDockerManager to assign it.
-     */
-    KoDockerManager * dockerManager() const;
-
-    /**
-     * use this to assign a KoDockerManager to the KoMainWindow of this view.
-     * This function may not do anything if the main window isn't a koffice main window.
-     * (e.g. it can be any KParts application)
-     * Note KoDockerManager is not actually defined in the main module but rather in guiutils
-     * @ref dockerManager to retrieve it.
-     */
-    void setDockerManager(KoDockerManager *);
-
-    /**
      * @return the KoMainWindow in which this view is currently.
      * WARNING: this could be 0, if the main window isn't a koffice main window.
      * (e.g. it can be any KParts application).
@@ -269,31 +247,6 @@ public:
      * Return the zoomController for this view.
      */
     virtual KoZoomController *zoomController() const = 0;
-
-    /**
-     * Creates a dockwidget if needed from @p factory if the mainwindow is a KoMainWindow by calling
-     * KoMainWindow::createDockWidget()
-     *
-     * @param factory the factory used to the create the dockwidget
-     * @return the created dockwidget or NULL if the mainwindow isn't a KoMainWindow
-     */
-    QDockWidget *createDockWidget(KoDockFactoryBase* factory);
-
-    /**
-     * Programatically closes (but doesn't delete) a dockwidget if the mainwindow is a
-     * KoMainWindow by calling KoMainWindow::removeDockWidget()
-     *
-     * @param dock the docker that you want to close
-     */
-    void removeDockWidget(QDockWidget *dock);
-
-    /**
-     * Programatically restore a (previously removed) dockwidget if the mainwindow is a
-     * KoMainWindow by calling KoMainWindow::restoreDockWidget()
-     *
-     * @param dock the docker that you want to close
-     */
-    void restoreDockWidget(QDockWidget *dock);
 
     /**
      * @return the view bar. The bar is created only if this function is called.

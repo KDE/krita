@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QMap>
 
-class KoView;
+class KoMainWindow;
 
 /**
    The docker manager makes sure that tool option widgets are shown at the right time.
@@ -34,7 +34,7 @@ class KOMAIN_EXPORT KoDockerManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit KoDockerManager(KoView* mainWindow);
+    explicit KoDockerManager(KoMainWindow* mainWindow);
     ~KoDockerManager();
 
 public slots:

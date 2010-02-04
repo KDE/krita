@@ -64,6 +64,7 @@
 #include "kis_script_dock.h"
 #include "kis_script_filter.h"
 #include "kis_script_decoration.h"
+#include <KoMainWindow.h>
 
 K_PLUGIN_FACTORY(KritaScriptingFactory, registerPlugin<ScriptingPart>();)
 K_EXPORT_PLUGIN(KritaScriptingFactory("krita"))
@@ -106,7 +107,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QVariantList &)
                 action->addObject(module());
                 dbgScript << "Start Adding scripting dockers with id=" << action->name();
                 KisScriptDockFactory ksdf(action);
-                d->view->createDockWidget(&ksdf);
+                d->view->shell()->createDockWidget(&ksdf);
             } else {
                 dbgScript << "No such interpreter as " << action->interpreter();
             }

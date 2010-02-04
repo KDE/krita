@@ -59,8 +59,8 @@ private:
 class KoDockerManager::Private
 {
 public:
-    Private() : view(0) {}
-    QPointer<KoView> view;
+    Private() {}
+    KoMainWindow* mainWindow;
     QMap<QString, KoToolDocker *> toolDockerMap;
     QMap<QString, bool> toolDockerVisibilityMap;
     QMap<QString, KoToolDocker *> activeToolDockerMap;
@@ -72,7 +72,7 @@ public:
 void KoDockerManager::Private::loadDocker(const QString &name, bool visible)
 {
     ToolDockerFactory factory(name);
-    KoToolDocker *td = qobject_cast<KoToolDocker*>(view->createDockWidget(&factory));
+    KoToolDocker *td = qobject_cast<KoToolDocker*>(mainWindow->createDockWidget(&factory));
     // A factory need not return a docker for all tools
     if (td == 0) return;
     toolDockerMap[name] = td;
@@ -85,38 +85,35 @@ void KoDockerManager::Private::loadDocker(const QString &name, bool visible)
 
 void KoDockerManager::Private::removeDockers()
 {
-    KoMainWindow * shell = view ? view->shell() : 0;
-    if (shell) {
-        // First remove the previous active dockers from sight and docker menu
-        QMapIterator<QString, KoToolDocker *> iter(activeToolDockerMap);
-        while (iter.hasNext()) {
-            iter.next();
+    // First remove the previous active dockers from sight and docker menu
+    QMapIterator<QString, KoToolDocker *> iter(activeToolDockerMap);
+    while (iter.hasNext()) {
+        iter.next();
 
-            // Check if the dock is raised or not
-            QList<QDockWidget*> tabedDocks = shell->tabifiedDockWidgets(iter.value());
-            bool isOnTop = true;
-            int idx = view->children().indexOf(iter.value());
-            foreach (QDockWidget* dock, tabedDocks) {
-                if (shell->children().indexOf(dock) > idx && dock->isVisible() && dock->isEnabled()) {
-                    isOnTop = false;
-                    break;
-                }
+        // Check if the dock is raised or not
+        QList<QDockWidget*> tabedDocks = mainWindow->tabifiedDockWidgets(iter.value());
+        bool isOnTop = true;
+        int idx = mainWindow->children().indexOf(iter.value());
+        foreach (QDockWidget* dock, tabedDocks) {
+            if (mainWindow->children().indexOf(dock) > idx && dock->isVisible() && dock->isEnabled()) {
+                isOnTop = false;
+                break;
             }
-            toolDockerRaisedMap[iter.key()] = isOnTop;
-            //kDebug() << iter.value() << " " << iter.value()->isVisible() << iter.key();
-            iter.value()->toggleViewAction()->setVisible(false);
-            toolDockerVisibilityMap[iter.key()] = iter.value()->isVisible();
-            iter.value()->setVisible(false);
-            iter.value()->setEnabled(false);
         }
+        toolDockerRaisedMap[iter.key()] = isOnTop;
+        //kDebug() << iter.value() << " " << iter.value()->isVisible() << iter.key();
+        iter.value()->toggleViewAction()->setVisible(false);
+        toolDockerVisibilityMap[iter.key()] = iter.value()->isVisible();
+        iter.value()->setVisible(false);
+        iter.value()->setEnabled(false);
     }
     activeToolDockerMap.clear();
 }
 
-KoDockerManager::KoDockerManager(KoView *view)
-    : QObject(view), d( new Private() )
+KoDockerManager::KoDockerManager(KoMainWindow *mainWindow)
+    : QObject(mainWindow), d( new Private() )
 {
-    d->view = view;
+    d->mainWindow = mainWindow;
 
     KConfigGroup cfg = KGlobal::config()->group("DockerManager");
 
@@ -198,7 +195,7 @@ void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> &optionWid
         if (!td) {
             QString name = iter.value()->objectName();
             ToolDockerFactory factory(name);
-            td = qobject_cast<KoToolDocker*>(d->view->createDockWidget(&factory));
+            td = qobject_cast<KoToolDocker*>(d->mainWindow->createDockWidget(&factory));
             Q_ASSERT(td);
             d->toolDockerMap[name] = td;
             d->toolDockerVisibilityMap[name] =  true;
@@ -206,7 +203,7 @@ void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> &optionWid
         td->setEnabled(true);
         td->setWindowTitle(iter.key());
         td->newOptionWidget(iter.value());
-        d->view->restoreDockWidget(td);
+        d->mainWindow->restoreDockWidget(td);
         //kDebug() << iter.value()->objectName() << " " << d->toolDockerVisibilityMap[iter.value()->objectName()];
         td->setVisible(d->toolDockerVisibilityMap[iter.value()->objectName()]);
         //kDebug() << td->isVisible();

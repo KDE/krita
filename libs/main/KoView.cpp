@@ -172,7 +172,8 @@ KoView::KoView(KoDocument *document, QWidget *parent)
     // add all plugins.
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
-        createDockWidget(factory);
+        if (shell())
+            shell()->createDockWidget(factory);
     }
 
     actionCollection()->addAssociatedWidget(this);
@@ -448,20 +449,6 @@ void KoView::newView()
     shell->show();
 }
 
-KoDockerManager * KoView::dockerManager() const
-{
-    KoMainWindow *mw = shell();
-    return mw ? mw->dockerManager() : 0;
-}
-
-void KoView::setDockerManager(KoDockerManager *dm)
-{
-    KoMainWindow *mw = shell();
-
-    if(mw)
-        mw->setDockerManager(dm);
-}
-
 KoMainWindow * KoView::shell() const
 {
     return dynamic_cast<KoMainWindow *>(window());
@@ -498,23 +485,6 @@ void KoView::slotClearStatusText()
 //         d->m_dcopObject = new KoViewIface( this );
 //     return d->m_dcopObject;
 // }
-
-QDockWidget *KoView::createDockWidget(KoDockFactoryBase* factory)
-{
-    return shell() ? shell()->createDockWidget(factory) : 0;
-}
-
-void KoView::removeDockWidget(QDockWidget *dock)
-{
-    if (shell())
-        shell()->removeDockWidget(dock);
-}
-
-void KoView::restoreDockWidget(QDockWidget *dock)
-{
-    if (shell())
-        shell()->restoreDockWidget(dock);
-}
 
 QToolBar* KoView::viewBar()
 {

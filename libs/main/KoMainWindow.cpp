@@ -369,8 +369,11 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
         }
     }
 
-   KConfigGroup config(KGlobal::config(), "MainWindow");
-   restoreWindowSize( config );
+    KConfigGroup config(KGlobal::config(), "MainWindow");
+    restoreWindowSize( config );
+
+    d->dockerManager = new KoDockerManager(this);
+    connect(this, SIGNAL(restoringDone()), d->dockerManager, SLOT(removeUnusedOptionWidgets()));
 }
 
 KoMainWindow::~KoMainWindow()
@@ -419,11 +422,6 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
         d->docToOpen = 0;
     } else {
         d->docToOpen = 0;
-    }
-
-    if (d->dockerManager) { // All the views will be deleted, so lets remove this one too
-        delete d->dockerManager;
-        d->dockerManager = 0;
     }
 
     //kDebug(30003) <<"KoMainWindow::setRootDocument this =" << this <<" doc =" << doc;
@@ -1876,15 +1874,6 @@ QList<KoCanvasObserverBase*> KoMainWindow::canvasObservers()
 KoDockerManager * KoMainWindow::dockerManager() const
 {
     return d->dockerManager;
-}
-
-void KoMainWindow::setDockerManager(KoDockerManager *dm)
-{
-    d->dockerManager = dm;
-    if (dm) {
-        dm->setParent(this); // make sure that the dockerManager is deleted by us.
-        connect(this, SIGNAL(restoringDone()), d->dockerManager, SLOT(removeUnusedOptionWidgets()));
-    }
 }
 
 KRecentFilesAction *KoMainWindow::recentAction() const

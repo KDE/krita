@@ -235,17 +235,14 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     createActions();
 
 
-    KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));
-    createDockWidget(&toolBoxFactory);
+    if (shell())
+    {
+        KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));
+        shell()->createDockWidget(&toolBoxFactory);
 
-    KoDockerManager *dockerMng = dockerManager();
-    if (!dockerMng) {
-        dockerMng = new KoDockerManager(this);
-        setDockerManager(dockerMng);
+        connect(m_d->canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
     }
-
-    connect(m_d->canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
-            dockerMng, SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
 
     m_d->statusBar = new KisStatusBar(this);
     connect(m_d->canvasController, SIGNAL(documentMousePositionChanged(const QPointF &)),

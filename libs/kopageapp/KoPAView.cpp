@@ -238,16 +238,13 @@ void KoPAView::initGUI()
     d->horizontalRuler->createGuideToolConnection(d->canvas);
 
     KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools") );
-    createDockWidget( &toolBoxFactory );
+    if (shell())
+    {
+        shell()->createDockWidget( &toolBoxFactory );
 
-    KoDockerManager *dockerMng = dockerManager();
-    if (!dockerMng) {
-        dockerMng = new KoDockerManager(this);
-        setDockerManager(dockerMng);
+        connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*) ),
+             shell()->dockerManager(), SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*) ) );
     }
-
-    connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*) ),
-             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*) ) );
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(d->canvas, SIGNAL(documentSize(const QSize&)), d->canvasController, SLOT(setDocumentSize(const QSize&)));
@@ -256,7 +253,7 @@ void KoPAView::initGUI()
 
     if (shell()) {
         KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, d->doc->pageType() );
-        d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
+        d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( shell()->createDockWidget( &structureDockerFactory ) );
         connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
                 d->documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
         connect(d->documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));

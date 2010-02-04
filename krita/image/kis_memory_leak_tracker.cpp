@@ -23,8 +23,12 @@
 #include <kglobal.h>
 #include "kis_debug.h"
 
-// #define HAVE_BACKTRACE_SUPPORT
+#define HAVE_BACKTRACE_SUPPORT
 #define HAVE_MEMORY_LEAK_TRACKER
+
+// Those defines are used to ignore classes that are often leaked due to a KisPaintDevice leak
+#define IGNORE_MEMENTO_ITEM
+#define IGNORE_TILE
 
 // Only linux support the memory leak tracker
 #ifndef Q_OS_LINUX
@@ -135,7 +139,14 @@ KisMemoryLeakTracker::~KisMemoryLeakTracker()
 void KisMemoryLeakTracker::reference(const void* what, const void* bywho, const char* whatName)
 {
     QMutexLocker l(&d->m);
-    if (whatName == 0 || strcmp(whatName, "PK13KisSharedData") != 0) {
+    if (whatName == 0 || ( strcmp(whatName, "PK13KisSharedData") != 0
+#ifdef IGNORE_MEMENTO_ITEM
+                           && strcmp(whatName, "PK14KisMementoItem") != 0
+#endif
+#ifdef IGNORE_TILE
+                           && strcmp(whatName, "PK7KisTile") != 0
+#endif
+        ) ) {
         MAKE_BACKTRACEINFO
         d->whatWhoWhen[what].infos[bywho] = info;
         if (whatName) {

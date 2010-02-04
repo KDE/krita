@@ -170,7 +170,7 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
             if (!docElem.isNull() && docElem.tagName() == "RecordedActions") {
                 dbgPlugins << "Load the macro";
                 KisMacro* m = new KisMacro();
-                m->fromXML(docElem);
+                m->fromXML(docElem, 0);
                 return m;
             } else {
                 // TODO error message
@@ -189,7 +189,7 @@ void BigBrotherPlugin::saveMacro(const KisMacro* macro, const KUrl& url)
         QDomDocument doc;
         QDomElement e = doc.createElement("RecordedActions");
 
-        macro->toXML(doc, e);
+        macro->toXML(doc, e, 0);
 
         doc.appendChild(e);
         QFile f(filename);

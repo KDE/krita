@@ -76,9 +76,9 @@ KisRecordedPaintAction::~KisRecordedPaintAction()
     delete d;
 }
 
-void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
+void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* context) const
 {
-    KisRecordedAction::toXML(doc, elt);
+    KisRecordedAction::toXML(doc, elt, context);
 
     // Paint op presset
     QDomElement paintopPressetElt = doc.createElement("PaintopPreset");

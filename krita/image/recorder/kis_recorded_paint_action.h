@@ -45,7 +45,7 @@ public:
 
     ~KisRecordedPaintAction();
 
-    virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
+    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
 
     virtual void play(KisNodeSP node, const KisPlayInfo&) const;
 

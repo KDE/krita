@@ -40,7 +40,7 @@ public:
     KisRecordedFilterAction(const KisRecordedFilterAction&);
     virtual ~KisRecordedFilterAction();
     virtual void play(KisNodeSP node, const KisPlayInfo&) const;
-    virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
+    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
     virtual KisRecordedAction* clone() const;
     const KisFilter* filter() const;
     const KisFilterConfiguration* filterConfiguration() const;
@@ -58,7 +58,7 @@ class KisRecordedFilterActionFactory : public KisRecordedActionFactory
 public:
     KisRecordedFilterActionFactory();
     virtual ~KisRecordedFilterActionFactory();
-    virtual KisRecordedAction* fromXML(const QDomElement& elt);
+    virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*);
 };
 
 #endif

@@ -47,7 +47,7 @@ public:
 
     ~KisRecordedEllipsePaintAction();
 
-    virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
+    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
 
     virtual KisRecordedAction* clone() const;
 
@@ -67,7 +67,7 @@ class KisRecordedEllipsePaintActionFactory : public KisRecordedPaintActionFactor
 public:
     KisRecordedEllipsePaintActionFactory();
     virtual ~KisRecordedEllipsePaintActionFactory();
-    virtual KisRecordedAction* fromXML(const QDomElement& elt);
+    virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*);
 };
 
 #endif

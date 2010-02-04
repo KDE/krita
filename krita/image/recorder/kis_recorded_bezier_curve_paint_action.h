@@ -50,7 +50,7 @@ public:
                   const QPointF& control2,
                   const KisPaintInformation& point2);
 
-    virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
+    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
 
     virtual KisRecordedAction* clone() const;
 
@@ -70,7 +70,7 @@ class KisRecordedBezierCurvePaintActionFactory : public KisRecordedPaintActionFa
 public:
     KisRecordedBezierCurvePaintActionFactory();
     virtual ~KisRecordedBezierCurvePaintActionFactory();
-    virtual KisRecordedAction* fromXML(const QDomElement& elt);
+    virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*);
 };
 
 #endif

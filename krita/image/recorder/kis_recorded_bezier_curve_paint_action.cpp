@@ -93,9 +93,9 @@ void KisRecordedBezierCurvePaintAction::playPaint(const KisPlayInfo&, KisPainter
     }
 }
 
-void KisRecordedBezierCurvePaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
+void KisRecordedBezierCurvePaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* context) const
 {
-    KisRecordedPaintAction::toXML(doc, elt);
+    KisRecordedPaintAction::toXML(doc, elt, context);
     QDomElement waypointsElt = doc.createElement("Waypoints");
     foreach(const Private::BezierCurveSlice & info, d->infos) {
         QDomElement infoElt = doc.createElement("Waypoint");
@@ -139,7 +139,7 @@ KisRecordedBezierCurvePaintActionFactory::~KisRecordedBezierCurvePaintActionFact
 
 }
 
-KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomElement& elt)
+KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*)
 {
     KisNodeQueryPath pathnode = nodeQueryPathFromXML(elt);
 

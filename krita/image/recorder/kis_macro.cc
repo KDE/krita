@@ -113,7 +113,7 @@ void KisMacro::play(const KisPlayInfo& info) const
     }
 }
 
-void KisMacro::fromXML(const QDomElement& docElem)
+void KisMacro::fromXML(const QDomElement& docElem, const KisRecordedActionLoadContext* loadContext)
 {
     d->actions.clear();
     QDomNode node = docElem.firstChild();
@@ -125,7 +125,7 @@ void KisMacro::fromXML(const QDomElement& docElem)
                 dbgImage << "Reconstruct : " << id << endl; // the node really is an element.
                 KisRecordedActionFactory* raf = KisRecordedActionFactoryRegistry::instance()->get(id);
                 if (raf) {
-                    KisRecordedAction* a = raf->fromXML(elt);
+                    KisRecordedAction* a = raf->fromXML(elt, loadContext);
                     Q_ASSERT(a);
                     d->actions.append(a); // TODO should use addAction
                 } else {
@@ -141,12 +141,12 @@ void KisMacro::fromXML(const QDomElement& docElem)
     }
 }
 
-void KisMacro::toXML(QDomDocument& doc, QDomElement& e) const
+void KisMacro::toXML(QDomDocument& doc, QDomElement& e, KisRecordedActionSaveContext* saveContext) const
 {
     for (QList<KisRecordedAction*>::iterator it = d->actions.begin();
             it != d->actions.end(); ++it) {
         QDomElement eAct = doc.createElement("RecordedAction");
-        (*it)->toXML(doc, eAct);
+        (*it)->toXML(doc, eAct, saveContext);
         e.appendChild(eAct);
     }
 }

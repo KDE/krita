@@ -80,9 +80,9 @@ void KisRecordedPolyLinePaintAction::playPaint(const KisPlayInfo&, KisPainter* p
     }
 }
 
-void KisRecordedPolyLinePaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
+void KisRecordedPolyLinePaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* context) const
 {
-    KisRecordedPaintAction::toXML(doc, elt);
+    KisRecordedPaintAction::toXML(doc, elt, context);
     QDomElement waypointsElt = doc.createElement("Waypoints");
     foreach(KisPaintInformation info, d->paintInformationObjects) {
         QDomElement infoElt = doc.createElement("Waypoint");
@@ -109,7 +109,7 @@ KisRecordedPolyLinePaintActionFactory::~KisRecordedPolyLinePaintActionFactory()
 
 }
 
-KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElement& elt)
+KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*)
 {
     KisNodeQueryPath pathnode = nodeQueryPathFromXML(elt);
 

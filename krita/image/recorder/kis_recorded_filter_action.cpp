@@ -112,9 +112,9 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& info) cons
     }
 }
 
-void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt) const
+void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* context) const
 {
-    KisRecordedAction::toXML(doc, elt);
+    KisRecordedAction::toXML(doc, elt, context);
     elt.setAttribute("filter", d->filter->id());
     // Save configuration
     KisFilterConfiguration * kfc = d->configuration();
@@ -156,7 +156,7 @@ KisRecordedFilterActionFactory::~KisRecordedFilterActionFactory()
 
 }
 
-KisRecordedAction* KisRecordedFilterActionFactory::fromXML(const QDomElement& elt)
+KisRecordedAction* KisRecordedFilterActionFactory::fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*)
 {
     QString name = elt.attribute("name");
     KisNodeQueryPath pathnode = KisNodeQueryPath::fromString(elt.attribute("path"));

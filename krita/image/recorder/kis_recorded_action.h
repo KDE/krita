@@ -25,6 +25,8 @@ class QString;
 class KisUndoAdapter;
 class KisNodeQueryPath;
 class KisPlayInfo;
+class KisRecordedActionLoadContext;
+class KisRecordedActionSaveContext;
 
 #include <krita_export.h>
 #include <kis_types.h>
@@ -46,7 +48,7 @@ public:
      * Clone this action.
      */
     virtual KisRecordedAction* clone() const = 0;
-    virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
+    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
 public:
     const QString& id() const;
     const QString& name() const;
@@ -65,7 +67,7 @@ class KRITAIMAGE_EXPORT KisRecordedActionFactory
 public:
     KisRecordedActionFactory(QString id);
     virtual ~KisRecordedActionFactory();
-    virtual KisRecordedAction* fromXML(const QDomElement& elt) = 0;
+    virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*) = 0;
     QString id() const;
     QString name() const;
 private:

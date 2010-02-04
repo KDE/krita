@@ -28,12 +28,14 @@
 
 class KisPlayInfo;
 class KisRecordedAction;
+class KisRecordedActionLoadContext;
+class KisRecordedActionSaveContext;
 
 /**
  * This is the base class for macro in Krita. It's basically a list of recorded action,KisRecordedAction
  * that can be stored as XML, played, and edited.
  */
-class KRITAIMAGE_EXPORT KisMacro : public QObject, public KisSerializableConfiguration
+class KRITAIMAGE_EXPORT KisMacro : public QObject
 {
     Q_OBJECT
 public:
@@ -61,11 +63,8 @@ public:
     void play(const KisPlayInfo&) const;
 public: // serialization functions
 
-    using KisSerializableConfiguration::fromXML;
-    using KisSerializableConfiguration::toXML;
-
-    virtual void fromXML(const QDomElement&);
-    virtual void toXML(QDomDocument&, QDomElement&) const;
+    virtual void fromXML(const QDomElement&, const KisRecordedActionLoadContext* loadContext);
+    virtual void toXML(QDomDocument& doc, QDomElement& e, KisRecordedActionSaveContext* saveContext) const;
     const QList<KisRecordedAction*>& actions() const;
 public slots:
     /**

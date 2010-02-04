@@ -72,7 +72,7 @@ const KisNodeQueryPath& KisRecordedAction::nodeQueryPath() const
     return d->path;
 }
 
-void KisRecordedAction::toXML(QDomDocument& , QDomElement& elt) const
+void KisRecordedAction::toXML(QDomDocument& , QDomElement& elt, KisRecordedActionSaveContext* ) const
 {
     elt.setAttribute("name", name());
     elt.setAttribute("id", id());

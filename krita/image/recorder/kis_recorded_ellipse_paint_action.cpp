@@ -70,9 +70,9 @@ void KisRecordedEllipsePaintAction::playPaint(const KisPlayInfo&, KisPainter* pa
     painter->paintEllipse(d->ellipse);
 }
 
-void KisRecordedEllipsePaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
+void KisRecordedEllipsePaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* context) const
 {
-    KisRecordedPaintAction::toXML(doc, elt);
+    KisRecordedPaintAction::toXML(doc, elt, context);
     QDomElement ellipseElt = doc.createElement("Ellipse");
     ellipseElt.setAttribute("x", d->ellipse.x());
     ellipseElt.setAttribute("y", d->ellipse.y());
@@ -97,7 +97,7 @@ KisRecordedEllipsePaintActionFactory::~KisRecordedEllipsePaintActionFactory()
 
 }
 
-KisRecordedAction* KisRecordedEllipsePaintActionFactory::fromXML(const QDomElement& elt)
+KisRecordedAction* KisRecordedEllipsePaintActionFactory::fromXML(const QDomElement& elt, const KisRecordedActionLoadContext* )
 {
     KisNodeQueryPath pathnode = nodeQueryPathFromXML(elt);
 

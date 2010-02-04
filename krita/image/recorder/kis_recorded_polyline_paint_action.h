@@ -48,7 +48,7 @@ public:
 
     void addPoint(const KisPaintInformation& info);
 
-    virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
+    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
 
     virtual KisRecordedAction* clone() const;
 
@@ -67,7 +67,7 @@ class KisRecordedPolyLinePaintActionFactory : public KisRecordedPaintActionFacto
 public:
     KisRecordedPolyLinePaintActionFactory();
     virtual ~KisRecordedPolyLinePaintActionFactory();
-    virtual KisRecordedAction* fromXML(const QDomElement& elt);
+    virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*);
 };
 
 

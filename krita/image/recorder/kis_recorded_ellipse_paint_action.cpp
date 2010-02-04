@@ -49,7 +49,7 @@ KisRecordedEllipsePaintAction::KisRecordedEllipsePaintAction(
     const KisNodeQueryPath& path,
     const KisPaintOpPresetSP preset,
     const QRectF& rect)
-        : KisRecordedPaintAction("BezierCurvePaintAction", i18n("Ellipse"), path, preset)
+        : KisRecordedPaintAction("EllipsePaintAction", i18n("Ellipse"), path, preset)
         , d(new Private)
 {
     d->ellipse = rect;
@@ -88,7 +88,7 @@ KisRecordedAction* KisRecordedEllipsePaintAction::clone() const
 
 
 KisRecordedEllipsePaintActionFactory::KisRecordedEllipsePaintActionFactory() :
-        KisRecordedPaintActionFactory("BezierCurvePaintAction")
+        KisRecordedPaintActionFactory("EllipsePaintAction")
 {
 }
 

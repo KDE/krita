@@ -16,10 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "recorder/kis_recorded_action_factory_registry.h"
-#include "recorder/kis_recorded_filter_action.h"
-#include "recorder/kis_recorded_bezier_curve_paint_action.h"
-#include "recorder/kis_recorded_polyline_paint_action.h"
+#include "kis_recorded_action_factory_registry.h"
+#include "kis_recorded_filter_action.h"
+#include "kis_recorded_bezier_curve_paint_action.h"
+#include "kis_recorded_polyline_paint_action.h"
+#include "kis_recorded_ellipse_paint_action.h"
 
 #include <kglobal.h>
 #include <kis_debug.h>
@@ -36,6 +37,7 @@ KisRecordedActionFactoryRegistry::KisRecordedActionFactoryRegistry()
     add(new KisRecordedFilterActionFactory);
     add(new KisRecordedPolyLinePaintActionFactory);
     add(new KisRecordedBezierCurvePaintActionFactory);
+    add(new KisRecordedEllipsePaintActionFactory);
 }
 
 KisRecordedActionFactoryRegistry::~KisRecordedActionFactoryRegistry()

@@ -38,14 +38,8 @@ class KRITAIMAGE_EXPORT KisRecordedBezierCurvePaintAction : public KisRecordedPa
 
 public:
 
-    KisRecordedBezierCurvePaintAction(const QString & name,
-                                      const KisNodeQueryPath& path,
-                                      const KisPaintOpPresetSP paintOpPreset,
-                                      KoColor foregroundColor,
-                                      KoColor backgroundColor,
-                                      int opacity,
-                                      bool paintIncremental,
-                                      const QString& compositeOp);
+    KisRecordedBezierCurvePaintAction(const KisNodeQueryPath& path,
+                                      const KisPaintOpPresetSP paintOpPreset);
 
     KisRecordedBezierCurvePaintAction(const KisRecordedBezierCurvePaintAction&);
 

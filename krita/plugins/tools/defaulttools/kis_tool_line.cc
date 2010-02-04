@@ -173,7 +173,8 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
 
 #ifdef ENABLE_RECORDING
                 if (image()) {
-                    KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction(i18n("Line tool"), KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), false, m_compositeOp->id());
+                    KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
+                    setupPaintAction(linePaintAction);
                     linePaintAction->addPoint(m_startPos);
                     linePaintAction->addPoint(m_endPos);
                     image()->actionRecorder()->addAction(*linePaintAction);

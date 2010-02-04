@@ -45,17 +45,11 @@ struct KisRecordedEllipsePaintAction::Private {
     QRectF ellipse;
 };
 
-KisRecordedEllipsePaintAction::KisRecordedEllipsePaintAction(const QString & name,
-        const KisNodeQueryPath& path,
-        const KisPaintOpPresetSP preset,
-        KoColor foregroundColor,
-        KoColor backgroundColor,
-        int opacity,
-        bool paintIncremental,
-        const QString& compositeOp,
-        const QRectF& rect)
-        : KisRecordedPaintAction("BezierCurvePaintAction", name, path, preset,
-                                 foregroundColor, backgroundColor, opacity, paintIncremental, compositeOp)
+KisRecordedEllipsePaintAction::KisRecordedEllipsePaintAction(
+    const KisNodeQueryPath& path,
+    const KisPaintOpPresetSP preset,
+    const QRectF& rect)
+        : KisRecordedPaintAction("BezierCurvePaintAction", i18n("Ellipse"), path, preset)
         , d(new Private)
 {
     d->ellipse = rect;
@@ -123,7 +117,7 @@ KisRecordedAction* KisRecordedEllipsePaintActionFactory::fromXML(const QDomEleme
 
     QDomElement ellipseElt = elt.firstChildElement("Ellipse");
     qreal x, y, width, height;
-    if (!ellipseElt.isNull() ) {
+    if (!ellipseElt.isNull()) {
         x = ellipseElt.attribute("x", "0.0").toDouble();
         y = ellipseElt.attribute("y", "0.0").toDouble();
         width = ellipseElt.attribute("width", "0.0").toDouble();
@@ -135,8 +129,14 @@ KisRecordedAction* KisRecordedEllipsePaintActionFactory::fromXML(const QDomEleme
         height = 0;
         dbgImage << "Warning: no <Ellipse /> found";
     }
-    
-    KisRecordedEllipsePaintAction* rplpa = new KisRecordedEllipsePaintAction(name, pathnode, paintOpPreset, fC, bC, opacity, paintIncremental, compositeOp, QRectF(x, y, width, height));
 
+    KisRecordedEllipsePaintAction* rplpa = new KisRecordedEllipsePaintAction(pathnode, paintOpPreset, QRectF(x, y, width, height));
+
+    rplpa->setName(name);
+    rplpa->setBackgroundColor(bC);
+    rplpa->setPaintColor(fC);
+    rplpa->setOpacity(opacity);
+    rplpa->setPaintIncremental(paintIncremental);
+    rplpa->setCompositeOp(compositeOp);
     return rplpa;
 }

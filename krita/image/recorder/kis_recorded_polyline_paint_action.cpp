@@ -44,16 +44,10 @@ struct KisRecordedPolyLinePaintAction::Private {
     QList<KisPaintInformation> paintInformationObjects;
 };
 
-KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(const QString & name,
-        const KisNodeQueryPath& path,
-        const KisPaintOpPresetSP paintOpPreset,
-        KoColor foregroundColor,
-        KoColor backgroundColor,
-        int opacity,
-        bool paintIncremental,
-        const QString& compositeOp)
-        : KisRecordedPaintAction("PolyLinePaintAction", name, path, paintOpPreset, foregroundColor,
-                                 backgroundColor, opacity, paintIncremental, compositeOp)
+KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(
+    const KisNodeQueryPath& path,
+    const KisPaintOpPresetSP paintOpPreset)
+        : KisRecordedPaintAction("PolyLinePaintAction", i18n("Poly line"), path, paintOpPreset)
         , d(new Private)
 {
 }
@@ -133,7 +127,14 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElem
     KoColor bC = backgroundColorFromXML(elt);
     KoColor fC = paintColorFromXML(elt);
 
-    KisRecordedPolyLinePaintAction* rplpa = new KisRecordedPolyLinePaintAction(name, pathnode, paintOpPreset, fC, bC, opacity, paintIncremental, compositeOp);
+    KisRecordedPolyLinePaintAction* rplpa = new KisRecordedPolyLinePaintAction(pathnode, paintOpPreset);
+
+    rplpa->setName(name);
+    rplpa->setBackgroundColor(bC);
+    rplpa->setPaintColor(fC);
+    rplpa->setOpacity(opacity);
+    rplpa->setPaintIncremental(paintIncremental);
+    rplpa->setCompositeOp(compositeOp);
 
     QDomElement wpElt = elt.firstChildElement("Waypoints");
     if (!wpElt.isNull()) {

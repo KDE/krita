@@ -39,14 +39,8 @@ class KRITAIMAGE_EXPORT KisRecordedEllipsePaintAction : public KisRecordedPaintA
 
 public:
 
-    KisRecordedEllipsePaintAction(const QString & name,
-                                      const KisNodeQueryPath& path,
+    KisRecordedEllipsePaintAction(const KisNodeQueryPath& path,
                                       const KisPaintOpPresetSP paintOpPreset,
-                                      KoColor foregroundColor,
-                                      KoColor backgroundColor,
-                                      int opacity,
-                                      bool paintIncremental,
-                                      const QString& compositeOp,
                                       const QRectF& rect);
 
     KisRecordedEllipsePaintAction(const KisRecordedEllipsePaintAction&);

@@ -51,7 +51,8 @@ void KisToolEllipse::finishEllipse(const QRectF& rect)
         return;
 
     if (image()) {
-        KisRecordedEllipsePaintAction* linePaintAction = new KisRecordedEllipsePaintAction(i18n("Ellipse tool"), KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), currentFgColor(), currentBgColor(), m_opacity, false, m_compositeOp->id(), rect);
+        KisRecordedEllipsePaintAction* linePaintAction = new KisRecordedEllipsePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), rect);
+        setupPaintAction(linePaintAction);
         image()->actionRecorder()->addAction(*linePaintAction);
     }
 
@@ -80,7 +81,7 @@ void KisToolEllipse::finishEllipse(const QRectF& rect)
 
         QUndoCommand * cmd = canvas()->shapeController()->addShape(shape);
         canvas()->addCommand(cmd);
-     }
+    }
 }
 
 #include "kis_tool_ellipse.moc"

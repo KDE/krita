@@ -62,9 +62,9 @@ KisToolPolygon::~KisToolPolygon()
 void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
 {
     if (image()) {
-        KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction(i18n("Polyline tool"), KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), currentFgColor(), currentBgColor(), m_opacity, false, m_compositeOp->id());
-        foreach(const QPointF& pt, points)
-        {
+        KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
+        setupPaintAction(linePaintAction);
+        foreach(const QPointF& pt, points) {
             linePaintAction->addPoint(KisPaintInformation(pt));
         }
         linePaintAction->addPoint(points[0]);

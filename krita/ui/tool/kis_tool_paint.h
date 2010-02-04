@@ -106,6 +106,7 @@ protected:
         return QString();
     }
 
+    virtual void setupPaintAction(KisRecordedPaintAction* action);
 
 public slots:
     virtual void activate(bool temporary = false);

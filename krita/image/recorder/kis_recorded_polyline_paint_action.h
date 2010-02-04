@@ -39,14 +39,8 @@ class KRITAIMAGE_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaint
 
 public:
 
-    KisRecordedPolyLinePaintAction(const QString & name,
-                                   const KisNodeQueryPath& path,
-                                   const KisPaintOpPresetSP paintOpPreset,
-                                   KoColor foregroundColor,
-                                   KoColor backgroundColor,
-                                   int opacity,
-                                   bool paintIncremental,
-                                   const QString& compositeOp);
+    KisRecordedPolyLinePaintAction(const KisNodeQueryPath& path,
+                                   const KisPaintOpPresetSP paintOpPreset);
 
     KisRecordedPolyLinePaintAction(const KisRecordedPolyLinePaintAction&);
 

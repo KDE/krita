@@ -65,6 +65,7 @@
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_cursor.h"
+#include <recorder/kis_recorded_paint_action.h>
 
 struct KisTool::Private {
     Private() : currentPattern(0),
@@ -372,6 +373,11 @@ void KisTool::setupPainter(KisPainter* painter)
 
 }
 
+void KisTool::setupPaintAction(KisRecordedPaintAction* action)
+{
+    action->setPaintColor(currentFgColor());
+    action->setBackgroundColor(currentBgColor());
+}
 
 QWidget* KisTool::createOptionWidget()
 {

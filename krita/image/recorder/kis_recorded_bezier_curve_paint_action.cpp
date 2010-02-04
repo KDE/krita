@@ -50,16 +50,10 @@ struct KisRecordedBezierCurvePaintAction::Private {
     QList<BezierCurveSlice> infos;
 };
 
-KisRecordedBezierCurvePaintAction::KisRecordedBezierCurvePaintAction(const QString & name,
-        const KisNodeQueryPath& path,
-        const KisPaintOpPresetSP preset,
-        KoColor foregroundColor,
-        KoColor backgroundColor,
-        int opacity,
-        bool paintIncremental,
-        const QString& compositeOp)
-        : KisRecordedPaintAction("BezierCurvePaintAction", name, path, preset,
-                                 foregroundColor, backgroundColor, opacity, paintIncremental, compositeOp)
+KisRecordedBezierCurvePaintAction::KisRecordedBezierCurvePaintAction(
+    const KisNodeQueryPath& path,
+    const KisPaintOpPresetSP preset)
+        : KisRecordedPaintAction("BezierCurvePaintAction", i18n("Bezier curve"), path, preset)
         , d(new Private)
 {
 }
@@ -163,7 +157,14 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomE
     KoColor bC = backgroundColorFromXML(elt);
     KoColor fC = paintColorFromXML(elt);
 
-    KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(name, pathnode, paintOpPreset, fC, bC, opacity, paintIncremental, compositeOp);
+    KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(pathnode, paintOpPreset);
+
+    rplpa->setName(name);
+    rplpa->setBackgroundColor(bC);
+    rplpa->setPaintColor(fC);
+    rplpa->setOpacity(opacity);
+    rplpa->setPaintIncremental(paintIncremental);
+    rplpa->setCompositeOp(compositeOp);
 
     QDomElement wpElt = elt.firstChildElement("Waypoints");
     if (!wpElt.isNull()) {

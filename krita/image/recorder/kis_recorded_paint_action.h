@@ -39,12 +39,7 @@ public:
     KisRecordedPaintAction(const QString & id,
                            const QString & name,
                            const KisNodeQueryPath& path,
-                           const KisPaintOpPresetSP paintOpPreset,
-                           KoColor foregroundColor,
-                           KoColor backgroundColor,
-                           int opacity,
-                           bool paintIncremental,
-                           const QString& compositeOp);
+                           KisPaintOpPresetSP paintOpPreset);
 
     KisRecordedPaintAction(const KisRecordedPaintAction&);
 
@@ -67,6 +62,9 @@ public:
     void setPaintColor(const KoColor& color);
     KoColor backgroundColor() const;
     void setBackgroundColor(const KoColor& color);
+    QString compositeOp();
+    void setCompositeOp(const QString& );
+    void setPaintIncremental(bool );
 private:
 
     struct Private;

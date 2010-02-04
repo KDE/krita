@@ -66,6 +66,7 @@
 #include "widgets/kis_cmb_composite.h"
 #include "KoSliderCombo.h"
 #include "kis_canvas_resource_provider.h"
+#include <recorder/kis_recorded_paint_action.h>
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
@@ -84,7 +85,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     m_supportOutline = false;
 
     KisCanvas2* canvas2 = static_cast<KisCanvas2*>(canvas);
-    connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), canvas2->view(), SIGNAL(favoritePaletteCalled(const QPoint&)) );
+    connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), canvas2->view(), SIGNAL(favoritePaletteCalled(const QPoint&)));
     connect(this, SIGNAL(sigPainting()), canvas2->view()->resourceProvider(), SLOT(slotPainting()));
 }
 
@@ -116,7 +117,7 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
         ; // Do nothing
     }
 
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()) );
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
 
 }
 
@@ -148,9 +149,7 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *e)
 //            resourceProvider->setResource(KoCanvasResource::ForegroundColor, bg);
 //            resourceProvider->setResource(KoCanvasResource::BackgroundColor, fg);
 //        }
-    }
-    else if (e->button() == Qt::LeftButton)
-    {
+    } else if (e->button() == Qt::LeftButton) {
 //        if (canvas2->view()->favoriteResourceManager()->isPopupPaletteVisible()) return;
         //TODO: There is a bug here. If pop up palette is visible and a new colour is selected,
         //the new colour will be added when the user clicks on the canvas to hide the palette
@@ -301,5 +300,11 @@ void KisToolPaint::resetCursorStyle()
 
 }
 
+void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
+{
+    KisTool::setupPaintAction(action);
+    action->setOpacity(m_opacity);
+    action->setCompositeOp(m_compositeOp->id());
+}
 
 #include "kis_tool_paint.moc"

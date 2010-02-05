@@ -155,7 +155,16 @@ void KisCubicCurveTest::testTransfer()
         QCOMPARE(cc.floatTransfer()[i], i * denom);
     }
     QCOMPARE(cc.uint16Transfer(1024).size(), 1024);
+    denom = 1 / 1023.0;
+    for(int i = 0; i < 1024; ++i)
+    {
+        QCOMPARE(cc.uint16Transfer(1024)[i], quint16( cc.value(i * denom) * 0xFFFF) );
+    }
     QCOMPARE(cc.floatTransfer(1024).size(), 1024);
+    for(int i = 0; i < 1024; ++i)
+    {
+        QCOMPARE(cc.floatTransfer(1024)[i], i * denom);
+    }
 }
 
 QTEST_KDEMAIN(KisCubicCurveTest, GUI)

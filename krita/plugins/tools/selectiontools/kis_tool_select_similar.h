@@ -76,5 +76,5 @@ public:
 };
 
 
-#endif // KIS_TOOL_SELECT_PICKER_H_
+#endif // KIS_TOOL_SELECT_SIMILAR_H_
 

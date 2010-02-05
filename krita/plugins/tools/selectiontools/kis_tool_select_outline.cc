@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QWidget>
+#include <QPainterPath>
 #include <QLayout>
 #include <QVBoxLayout>
 
@@ -51,14 +52,16 @@
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
 
+
 KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas, KisCursor::load("tool_outline_selection_cursor.png", 5, 5))
+        : KisToolSelectBase(canvas, KisCursor::load("tool_outline_selection_cursor.png", 5, 5)), m_paintPath(new QPainterPath())
 {
     m_dragging = false;
 }
 
 KisToolSelectOutline::~KisToolSelectOutline()
 {
+    delete m_paintPath;
 }
 
 
@@ -68,13 +71,23 @@ void KisToolSelectOutline::mousePressEvent(KoPointerEvent *event)
         m_dragging = true;
         m_points.clear();
         m_points.append(convertToPixelCoord(event));
+
+        m_paintPath->moveTo(pixelToView(convertToPixelCoord(event)));
     }
 }
 
 void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_dragging) {
-        m_points.append(convertToPixelCoord(event));
+        QPointF point = convertToPixelCoord(event);
+        //don't add the point, if the distance is very small
+        if (m_points.size()>0) {
+            QPointF diff = point-m_points.at(m_points.size()-1);
+            if(fabs(diff.x())<3 && fabs(diff.y())<3)
+                return;
+        }
+        m_paintPath->lineTo(pixelToView(point));
+        m_points.append(point);
         updateFeedback();
     }
 }
@@ -136,10 +149,11 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
         }
 
         m_points.clear();
+        delete m_paintPath;
+        m_paintPath = new QPainterPath();
     }
 }
 
-#define FEEDBACK_LINE_WIDTH 1
 
 void KisToolSelectOutline::paint(QPainter& gc, const KoViewConverter &converter)
 {
@@ -147,37 +161,37 @@ void KisToolSelectOutline::paint(QPainter& gc, const KoViewConverter &converter)
 
     if (m_dragging && m_points.count() > 1) {
 
-#ifdef INDEPENDENT_CANVAS
-        QPen pen(QColor(255,128,255), FEEDBACK_LINE_WIDTH, Qt::DotLine);
-        gc.save();
-        QPainter::CompositionMode previousMode = gc.compositionMode();
-        gc.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-#else
-        QPen pen(Qt::white, FEEDBACK_LINE_WIDTH, Qt::DotLine);
-        QPen backgroundPen(Qt::black, FEEDBACK_LINE_WIDTH, Qt::SolidLine);
-        gc.save();
+ #if defined(HAVE_OPENGL)
+        if (isCanvasOpenGL()) {
+            beginOpenGL();
 
-        gc.setPen(backgroundPen);
-        for (qint32 pointIndex = 0; pointIndex < m_points.count() - 1; pointIndex++) {
-            QPointF startPos = pixelToView(m_points[pointIndex]);
-            QPointF endPos = pixelToView(m_points[pointIndex + 1]);
-            gc.drawLine(startPos, endPos);
-        }
+            glEnable(GL_LINE_SMOOTH);
+            glEnable(GL_COLOR_LOGIC_OP);
+            glLogicOp(GL_XOR);
+
+            glBegin(GL_LINE_STRIP);
+            glColor3f(0.5, 1.0, 0.5);
+
+            for (qint32 pointIndex = 0; pointIndex < m_points.count(); pointIndex++) {
+                QPointF point = pixelToView(m_points[pointIndex]);
+                glVertex2f(point.x(), point.y());
+            }
+
+            glEnd();
+
+            glDisable(GL_COLOR_LOGIC_OP);
+            glDisable(GL_LINE_SMOOTH);
+
+            endOpenGL();
+        } else
 #endif
-
-        gc.setPen(pen);
-        for (qint32 pointIndex = 0; pointIndex < m_points.count() - 1; pointIndex++) {
-            QPointF startPos = pixelToView(m_points[pointIndex]);
-            QPointF endPos = pixelToView(m_points[pointIndex + 1]);
-            gc.drawLine(startPos, endPos);
+        {
+            paintToolOutline(&gc, *m_paintPath);
         }
-
-        gc.restore();
-#ifdef INDEPENDENT_CANVAS
-        gc.setCompositionMode(previousMode);
-#endif  
     }
 }
+
+#define FEEDBACK_LINE_WIDTH 2
 
 void KisToolSelectOutline::updateFeedback()
 {

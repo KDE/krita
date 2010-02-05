@@ -27,6 +27,8 @@
 #include <KoToolFactoryBase.h>
 #include "krita/ui/tool/kis_tool_select_base.h"
 
+class QPainterPath;
+
 class KisToolSelectOutline : public KisToolSelectBase
 {
 
@@ -50,7 +52,9 @@ private:
     void updateFeedback();
 
     bool m_dragging;
+    QPainterPath * m_paintPath;
     vQPointF m_points;
+
 };
 
 

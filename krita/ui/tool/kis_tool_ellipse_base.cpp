@@ -191,19 +191,10 @@ void KisToolEllipseBase::paintEllipse(QPainter& gc, const QRect&)
          endOpenGL();
     } else
 #endif
-
         if (canvas()) {
-#ifdef INDEPENDENT_CANVAS
             QPainterPath path;
             path.addEllipse(QRectF(viewDragStart, viewDragEnd));
             paintToolOutline(&gc, path);
-#else
-            QPen old = gc.pen();
-            QPen pen(Qt::SolidLine);
-            gc.setPen(pen);
-            gc.drawEllipse(QRectF(viewDragStart, viewDragEnd));
-            gc.setPen(old);
-#endif
         }
 }
 

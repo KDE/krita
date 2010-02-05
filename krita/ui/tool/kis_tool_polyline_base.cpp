@@ -152,8 +152,6 @@ void KisToolPolylineBase::paint(QPainter& gc, const KoViewConverter &converter)
         endOpenGL();
     } else
 #endif
-
-#ifdef INDEPENDENT_CANVAS
     {
         QPainterPath path;
         if (m_dragging && !m_points.empty()) {
@@ -179,36 +177,6 @@ void KisToolPolylineBase::paint(QPainter& gc, const KoViewConverter &converter)
         }
         paintToolOutline(&gc, path);
     }
-#else
-    {
-        QPen old = gc.pen();
-        QPen pen(Qt::SolidLine);
-        pen.setWidth(PREVIEW_LINE_WIDTH);
-        gc.setPen(pen);
-
-        if (m_dragging && !m_points.empty()) {
-            startPos = pixelToView(m_dragStart);
-            endPos = pixelToView(m_dragEnd);
-            gc.drawLine(startPos, endPos);
-        }
-
-        for (vQPointF::iterator it = m_points.begin(); it != m_points.end(); ++it) {
-
-            if (it == m_points.begin()) {
-                start = (*it);
-            } else {
-                end = (*it);
-
-                startPos = pixelToView(start);
-                endPos = pixelToView(end);
-                gc.drawLine(startPos, endPos);
-                start = end;
-            }
-        }
-        gc.setPen(old);
-
-    }
-#endif
 }
 
 void KisToolPolylineBase::cancel()

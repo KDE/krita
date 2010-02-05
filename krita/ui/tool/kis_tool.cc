@@ -394,14 +394,15 @@ QWidget* KisTool::optionWidget()
 
 void KisTool::paintToolOutline(QPainter* painter, QPainterPath &path)
 {
-    switch (m_outlinePaintMode) {
-    case XOR_MODE: {
+#ifdef INDEPENDENT_CANVAS
+    if (m_outlinePaintMode==XOR_MODE) {
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);
-        break;
     }
-    case BW_MODE: {
+    else/* if (m_outlinePaintMode==BW_MODE)*/
+#endif
+    {
         QPen pen = painter->pen();
         pen.setWidth(3);
         pen.setColor(QColor(0, 0, 0, 100));
@@ -411,13 +412,8 @@ void KisTool::paintToolOutline(QPainter* painter, QPainterPath &path)
         pen.setColor(Qt::white);
         painter->setPen(pen);
         painter->drawPath(path);
-        break;
-    }
-    default:
-        break;
     }
 }
-
 
 void KisTool::resetCursorStyle()
 {

@@ -205,15 +205,11 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
                 }
             }
         }
-
     }
     else if (element.namespaceURI() == KoXmlNS::office && element.localName() == "annotation") {
-
         d->author = element.attributeNS(KoXmlNS::text, "dc-creator");
         d->date = QDateTime::fromString(element.attributeNS(KoXmlNS::text, "dc-date"), Qt::ISODate);
         loader.loadBody(element, cursor); // would skip author and date, and do just the <text-p> and <text-list> elements
-
-        qDebug() << "author" << d->author << "date" << "d-date" << "Text" << d->text.toPlainText();
     }
     else {
         delete document;

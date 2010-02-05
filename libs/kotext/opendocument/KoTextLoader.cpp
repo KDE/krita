@@ -692,6 +692,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         const QString localName(ts.localName());
         const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
         const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
+        const bool isOfficeNS = ts.namespaceURI() == KoXmlNS::office;
 
         if (node.isText()) {
             QString text = node.toText().data();
@@ -767,7 +768,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 howmany = ts.attributeNS(KoXmlNS::text, "c", QString()).toInt();
             }
             cursor.insertText(QString().fill(32, howmany));
-        } else if (isTextNS && localName == "note") { // text:note
+        } else if ( (isOfficeNS && localName  == "annotation") || (isTextNS && localName == "note")) { // text:note or office:annotation
             loadNote(ts, cursor);
         } else if (isTextNS && localName == "tab") { // text:tab
             cursor.insertText("\t");

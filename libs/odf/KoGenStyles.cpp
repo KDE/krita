@@ -4,6 +4,7 @@
    Copyright (C) 2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
    Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
+   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,21 +37,27 @@ static const struct {
     const char * m_propertiesElementName;
     bool m_drawElement;
 } styleData[] = {
-    { KoGenStyle::StyleUser, "style:style", "style:paragraph-properties", false  },
-    { KoGenStyle::StyleText, "style:style", "style:text-properties", false  },
-    { KoGenStyle::StyleChart, "style:style", "style:chart-properties", false  },
-    { KoGenStyle::StyleTableColumn, "style:style", "style:table-column-properties", false  },
-    { KoGenStyle::StyleTableRow, "style:style", "style:table-row-properties", false  },
-    { KoGenStyle::StyleTableCell, "style:style", "style:table-cell-properties", false  },
-    { KoGenStyle::StyleList, "text:list-style", 0, false  },
-    { KoGenStyle::StyleGradientLinear, "svg:linearGradient", 0, true  },
-    { KoGenStyle::StyleGradientRadial, "svg:radialGradient", 0, true  },
+    { KoGenStyle::StyleText,            "style:style", "style:text-properties",         false  },
+    { KoGenStyle::StyleUser,            "style:style", "style:paragraph-properties",    false  },
+    { KoGenStyle::StyleSection,         "style:style", "style:section-properties",      false  },
+    { KoGenStyle::StyleRuby,            "style:style", "style:ruby-properties",         false  },
+    { KoGenStyle::StyleTable,           "style:style", "style:table-properties",        false  },
+    { KoGenStyle::StyleTableColumn,     "style:style", "style:table-column-properties", false  },
+    { KoGenStyle::StyleTableRow,        "style:style", "style:table-row-properties",    false  },
+    { KoGenStyle::StyleTableCell,       "style:style", "style:table-cell-properties",   false  },
+    { KoGenStyle::StyleGraphic,         "style:style", "style:graphic-properties",      false  },
+    { KoGenStyle::StylePresentation,    "style:style", "style:graphic-properties",      false  },
+    { KoGenStyle::StyleDrawingPage,     "style:style", "style:drawing-page-properties", false  },
+    { KoGenStyle::StyleChart,           "style:style", "style:chart-properties",        false  },
+    { KoGenStyle::StyleList,            "text:list-style", 0, false  },
+    { KoGenStyle::StyleGradientLinear,  "svg:linearGradient", 0, true  },
+    { KoGenStyle::StyleGradientRadial,  "svg:radialGradient", 0, true  },
     { KoGenStyle::StyleGradientConical, "koffice:conicalGradient", 0, true  },
-    { KoGenStyle::StyleStrokeDash, "draw:stroke-dash", 0, true  },
-    { KoGenStyle::StyleFillImage, "draw:fill-image", 0, true  },
-    { KoGenStyle::StyleHatch, "draw:hatch", "style:graphic-properties", true  },
-    { KoGenStyle::StyleGradient, "draw:gradient", "style:graphic-properties", true  },
-    { KoGenStyle::StyleMarker, "draw:marker", "style:graphic-properties", true  },
+    { KoGenStyle::StyleStrokeDash,      "draw:stroke-dash", 0, true  },
+    { KoGenStyle::StyleFillImage,       "draw:fill-image", 0, true  },
+    { KoGenStyle::StyleHatch,           "draw:hatch", "style:graphic-properties", true  },
+    { KoGenStyle::StyleGradient,        "draw:gradient", "style:graphic-properties", true  },
+    { KoGenStyle::StyleMarker,          "draw:marker", "style:graphic-properties", true  },
     { KoGenStyle::StylePresentationPageLayout, "style:presentation-page-layout", 0, false  }
 };
 
@@ -62,17 +69,18 @@ static const struct {
     const char * m_propertiesElementName;
     bool m_drawElement;
 } autoStyleData[] = {
-    { KoGenStyle::StyleAuto, "style:style", "style:paragraph-properties", false  },
-    { KoGenStyle::StyleTextAuto, "style:style", "style:text-properties", false  },
-    { KoGenStyle::StyleGraphicAuto, "style:style", "style:graphic-properties", false  },
-    { KoGenStyle::StyleChartAuto, "style:style", "style:chart-properties", false  },
-    { KoGenStyle::StylePresentationAuto, "style:style", "style:graphic-properties", false  },
-    { KoGenStyle::StyleDrawingPage, "style:style", "style:drawing-page-properties", false  },
-    { KoGenStyle::StyleAutoTable, "style:style", "style:table-properties", false  },
-    { KoGenStyle::StyleAutoTableColumn, "style:style", "style:table-column-properties", false  },
-    { KoGenStyle::StyleAutoTableRow, "style:style", "style:table-row-properties", false  },
-    { KoGenStyle::StyleAutoTableCell, "style:style", "style:table-cell-properties", false  },
-    { KoGenStyle::StyleSectionAuto, "style:style", "style:section-properties", false  },
+    { KoGenStyle::StyleTextAuto,         "style:style", "style:text-properties",         false  },
+    { KoGenStyle::StyleAuto,             "style:style", "style:paragraph-properties",    false  },
+    { KoGenStyle::StyleSectionAuto,      "style:style", "style:section-properties",      false  },
+    { KoGenStyle::StyleRubyAuto,         "style:style", "style:ruby-properties",         false  },
+    { KoGenStyle::StyleAutoTable,        "style:style", "style:table-properties",        false  },
+    { KoGenStyle::StyleAutoTableColumn,  "style:style", "style:table-column-properties", false  },
+    { KoGenStyle::StyleAutoTableRow,     "style:style", "style:table-row-properties",    false  },
+    { KoGenStyle::StyleAutoTableCell,    "style:style", "style:table-cell-properties",   false  },
+    { KoGenStyle::StyleGraphicAuto,      "style:style", "style:graphic-properties",      false  },
+    { KoGenStyle::StylePresentationAuto, "style:style", "style:graphic-properties",      false  },
+    { KoGenStyle::StyleDrawingPage,      "style:style", "style:drawing-page-properties", false  },
+    { KoGenStyle::StyleChartAuto,        "style:style", "style:chart-properties",        false  },
     { KoGenStyle::StylePageLayout, "style:page-layout", "style:page-layout-properties", false  },
     { KoGenStyle::StyleListAuto, "text:list-style", 0, false  },
     { KoGenStyle::StyleNumericNumber, "number:number-style", 0, false  },
@@ -163,10 +171,19 @@ QString KoGenStyles::lookup(const KoGenStyle& style, const QString& name, int fl
         // we can have only one default style per type
         Q_ASSERT(!d->defaultStyles.contains(style.type()));
         // default style is only possible for style:style in office:style types
-        Q_ASSERT(style.type() == KoGenStyle::StyleUser ||
+        Q_ASSERT(style.type() == KoGenStyle::StyleText ||
+                 style.type() == KoGenStyle::StyleUser ||
+                 style.type() == KoGenStyle::StyleSection ||
+                 style.type() == KoGenStyle::StyleRuby ||
+                 style.type() == KoGenStyle::StyleTable ||
                  style.type() == KoGenStyle::StyleTableColumn ||
                  style.type() == KoGenStyle::StyleTableRow ||
-                 style.type() == KoGenStyle::StyleTableCell);
+                 style.type() == KoGenStyle::StyleTableCell ||
+                 style.type() == KoGenStyle::StyleGraphic ||
+                 style.type() == KoGenStyle::StylePresentation ||
+                 style.type() == KoGenStyle::StyleDrawingPage ||
+                 style.type() == KoGenStyle::StyleChart);
+
         d->defaultStyles.insert(style.type(), style);
         // default styles don't have a name
         return QString();

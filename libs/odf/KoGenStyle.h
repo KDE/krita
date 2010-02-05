@@ -2,6 +2,7 @@
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
+   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -48,16 +49,39 @@ public:
      */
     enum Type {
         StylePageLayout,             ///< style:page-layout as in odf 14.3 Page Layout
-        StyleUser,                   ///< style:style with style:paragraph-properties as in odf 14.1 Style Element (office:styles)
-        StyleAuto,                   ///< style:style with style:paragraph-properties as in odf 14.1 Style Element (office:automatic-styles)
-        StyleText,                   ///< style:style with style:text-properties as in odf 14.8.1 Text Styles (office:styles)
-        StyleTextAuto,               ///< style:style with style:text-properties as in odf 14.8.1 Text Styles (office:automatic-styles)
-        StyleChart,                  ///< style:style with style:chart-properties
-        StyleChartAuto,              ///< style:style with style:chart-properties
+        /* twelve style families
+           TODO:
+            - rename StyleUser to StyleParagraph
+            - rename StyleAuto to StyleParagraphAuto
+            - move the 'Auto' to the end for the table style families
+         */
+        StyleText,                   ///< style:style from family "text" as in odf 14.8.1 Text Styles (office:styles)
+        StyleTextAuto,               ///< style:style from family "text" as in odf 14.8.1 Text Styles (office:automatic-styles)
+        StyleUser,                   ///< style:style from family "paragraph" as in odf 14.1 Style Element (office:styles)
+        StyleAuto,                   ///< style:style from family "paragraph" as in odf 14.1 Style Element (office:automatic-styles)
+        StyleSection,                ///< style:style from family "section" as in odf 14.8.3 Section Styles (office:styles)
+        StyleSectionAuto,            ///< style:style from family "section" as in odf 14.8.3 Section Styles (office:automatic-styles)
+        StyleRuby,                   ///< style:style from family "ruby"
+        StyleRubyAuto,               ///< style:style from family "ruby"
+        StyleTable,                  ///< style:style from family "table" as in odf1.2 16.9 Table Formatting Properties (office:style)
+        StyleAutoTable,              ///< style:style from family "table" as in odf 15.8 Table Formatting Properties (office:automatic-styles)
+        StyleTableColumn,            ///< style:style from family "table-column" as in odf 15.9 Column Formatting Properties (office:style)
+        StyleAutoTableColumn,        ///< style:style from family "table-column" as in odf 15.9 Column Formatting Properties (office:automatic-styles)
+        StyleTableRow,               ///< style:style from family "table-row" as in odf 15.10 Table Row Formatting Properties (office:style)
+        StyleAutoTableRow,           ///< style:style from family "table-row" as in odf 15.10 Table Row Formatting Properties (office:automatic-styles)
+        StyleTableCell,              ///< style:style from family "table-cell" as in odf 15.11 Table Cell Formatting Properties (office:style)
+        StyleAutoTableCell,          ///< style:style from family "table-cell" as in odf 15.11 Table Cell Formatting Properties (office:automatic-styles)
+        StyleGraphic,                ///< style:style from family "graphic" as in 14.13.1 Graphic and Presentation Styles (office:automatic-styles)
+        StyleGraphicAuto,            ///< style:style from family "graphic" as in 14.13.1 Graphic and Presentation Styles (office:automatic-styles)
+        StylePresentation,           ///< style:style from family "presentation" as in 14.13.1 Graphic and Presentation Styles (office:automatic-styles)
+        StylePresentationAuto,       ///< style:style from family "presentation" as in 14.13.1 Graphic and Presentation Styles (office:automatic-styles)
+        StyleDrawingPage,            ///< style:style from family "drawing-page" as in odf 14.13.2 Drawing Page Style
+        StyleDrawingPageAuto,        ///< style:style from family "drawing-page" as in odf 14.13.2 Drawing Page Style
+        StyleChart,                  ///< style:style from family "chart"
+        StyleChartAuto,              ///< style:style from family "chart"
+
         StyleList,                   ///< text:list-style as in odf 14.10 List Style (office:styles)
         StyleListAuto,               ///< text:list-style as in odf 14.10 List Style (office:automatic-styles)
-        StyleSection,                ///< style:style with style:section-properties as in odf 14.8.3 Section Styles (office:styles)
-        StyleSectionAuto,            ///< style:style with style:section-properties as in odf 14.8.3 Section Styles (office:automatic-styles)
         StyleNumericNumber,          ///< number:number-style as in odf 14.7.1 Number Style
         StyleNumericDate,            ///< number:date-style as in odf 14.7.4 Date Style
         StyleNumericTime,            ///< number:time-style as in odf 14.7.5 Time Style
@@ -67,28 +91,16 @@ public:
         StyleNumericCurrency,        ///< number:currency-style as in odf 14.7.2 Currency Style
         StyleNumericText,            ///< number:text-style 14.7.7 Text Style not used
         StyleHatch,                  ///< draw:hatch as in odf 14.14.3 Hatch (office:styles)
-        StyleGraphicAuto,            ///< style:style with style:graphic-properties as in 14.13.1 Graphic and Presentation Styles (office:automatic-styles)
-        StylePresentationAuto,       ///< style:style with style:graphic-properties as in 14.13.1 Graphic and Presentation Styles (office:automatic-styles)
         StyleStrokeDash,             ///< draw:stroke-dash as in odf 14.14.7 Stroke Dash (office:styles)
         StyleGradient,               ///< draw:gradient as in odf 14.14.1 Gradient (office:styles)
         StyleGradientLinear,         ///< svg:linearGradient as in odf 14.14.2 SVG Gradients (office:styles)
         StyleGradientRadial,         ///< svg:radialGradient as in odf 14.14.2 SVG Gradients (office:styles)
         StyleGradientConical,        ///< koffice:conicalGradient koffice extension for conical gradients 
         StyleFillImage,              ///< draw:fill-image as in odf 14.14.4 Fill Image (office:styles)
-        StyleDrawingPage,            ///< style:drawing-page-properties as in odf 14.13.2 Drawing Page Style
         StyleNumericBoolean,         ///< number:boolean 14.7.6 Boolean Style not used
         StyleOpacity,                ///< draw:opacity as in odf 14.14.5 Opacity Gradient not used
         StyleMarker,                 ///< draw:marker as in odf 14.14.6 Marker
         StylePresentationPageLayout, ///< style:presentation-page-layout as in odf 14.15 Presentation Page Layouts
-        StyleAutoTable,              ///< style:table-properties as in odf 15.8 Table Formatting Properties (office:automatic-styles)
-// office:style needed?
-        StyleTableColumn,            ///< style:table-column-properties as in odf 15.9 Column Formatting Properties (office:style)
-        StyleAutoTableColumn,        ///< style:table-column-properties as in odf 15.9 Column Formatting Properties (office:automatic-styles)
-        StyleTableRow,               ///< style:table-row-properties as in odf 15.10 Table Row Formatting Properties (office:style)
-        StyleAutoTableRow,           ///< style:table-row-properties as in odf 15.10 Table Row Formatting Properties (office:automatic-styles)
-        StyleTableCell,              ///< style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties (office:style)
-        StyleAutoTableCell,          ///< style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties (office:automatic-styles)
-        StyleTable,                  ///< style:table-properties as in odf1.2 16.9 Table Formatting Properties (office:style)
         //   TODO differently
         StyleMaster                  ///< 14.4 Master Pages
         /// style:default-style as in odf 14.2 Default Styles

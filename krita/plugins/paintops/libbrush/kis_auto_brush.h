@@ -61,7 +61,7 @@ public:
     const KisMaskGenerator* maskGenerator() const;
     qreal angle() const;
 private:
-
+    bool isBrushSymmetric(double angle) const;
     QImage createBrushPreview();
 
 private:

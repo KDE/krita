@@ -46,10 +46,11 @@ public:
                                             const channels_type* src,
                                             channels_type* dst,
                                             qint32 pixelSize,
+                                            bool allChannelFlags,
                                             const QBitArray & channelFlags) {
         Q_UNUSED(pixelSize);
         for (uint i = 0; i < _CSTraits::channels_nb; i++) {
-            if ((int)i != _CSTraits::alpha_pos && (channelFlags.isEmpty() ||  channelFlags.testBit(i))) {
+            if ((int)i != _CSTraits::alpha_pos && (allChannelFlags ||  channelFlags.testBit(i))) {
                 compositetype srcColor = src[i];
                 compositetype dstColor = dst[i];
 

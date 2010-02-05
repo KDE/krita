@@ -46,16 +46,17 @@ public:
                                             const channels_type* srcN,
                                             channels_type* dstN,
                                             qint32 pixelSize,
+                                            bool allChannelFlags,
                                             const QBitArray & channelFlags) {
         Q_UNUSED(pixelSize);
         if (srcBlend == NATIVE_OPACITY_OPAQUE) {
             for (int i = 0; (uint)i <  _CSTraits::channels_nb; i++) {
-                if (i != _CSTraits::alpha_pos && (channelFlags.isEmpty() || channelFlags.testBit(i)))
+                if (i != _CSTraits::alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
                     dstN[i] = srcN[i];
             }
         } else {
             for (int i = 0; (uint)i <  _CSTraits::channels_nb; i++) {
-                if (i != _CSTraits::alpha_pos && (channelFlags.isEmpty() || channelFlags.testBit(i)))
+                if (i != _CSTraits::alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
                     dstN[i] = KoColorSpaceMaths<channels_type>::blend(srcN[i], dstN[i], srcBlend);
             }
         }

@@ -62,6 +62,7 @@ public:
                    const QBitArray & channelFlags) const {
 
         qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
+        bool allChannelFlags = channelFlags.isEmpty();
         if (_CSTraits::alpha_pos == -1) {
 
             qint32 pixelSize = colorSpace()->pixelSize();
@@ -92,7 +93,7 @@ public:
                         mask++;
                     }
 
-                    _compositeOp::composeColorChannels(NATIVE_OPACITY_OPAQUE, srcN, dstN, pixelSize, channelFlags);
+                    _compositeOp::composeColorChannels(NATIVE_OPACITY_OPAQUE, srcN, dstN, pixelSize, allChannelFlags, channelFlags);
 
                     columns--;
                     srcN += srcInc;
@@ -160,7 +161,7 @@ public:
                                 srcBlend = srcAlpha;
                             }
                         }
-                        _compositeOp::composeColorChannels(srcBlend, srcN, dstN, pixelSize, channelFlags);
+                        _compositeOp::composeColorChannels(srcBlend, srcN, dstN, pixelSize, allChannelFlags, channelFlags);
 
                     }
                     columns--;

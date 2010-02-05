@@ -115,6 +115,16 @@ KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id)
     return 0;
 }
 
+void KisCanvasWidgetBase::setDecorations(const QList<KisCanvasDecoration*> &decorations)
+{
+    m_d->decorations=decorations;
+}
+
+QList<KisCanvasDecoration*> KisCanvasWidgetBase::decorations()
+{
+    return m_d->decorations;
+}
+
 QImage KisCanvasWidgetBase::checkImage(qint32 checkSize)
 {
     KisConfig cfg;

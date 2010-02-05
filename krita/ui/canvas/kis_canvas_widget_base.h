@@ -65,6 +65,9 @@ public: // KisAbstractCanvasWidget
     virtual void addDecoration(KisCanvasDecoration* deco);
     virtual KisCanvasDecoration* decoration(const QString& id);
 
+    virtual void setDecorations(const QList<KisCanvasDecoration*> &);
+    virtual QList<KisCanvasDecoration*> decorations();
+
 protected:
     /**
      * Returns one check of the background checkerboard pattern.

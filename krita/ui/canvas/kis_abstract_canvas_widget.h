@@ -58,6 +58,9 @@ public:
 
     virtual void addDecoration(KisCanvasDecoration* deco) = 0;
     virtual KisCanvasDecoration* decoration(const QString& id) = 0;
+
+    virtual void setDecorations(const QList<KisCanvasDecoration*> &) = 0;
+    virtual QList<KisCanvasDecoration*> decorations() = 0;
 };
 
 #endif // _KIS_ABSTRACT_CANVAS_WIDGET_

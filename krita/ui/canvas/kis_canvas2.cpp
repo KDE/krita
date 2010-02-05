@@ -119,7 +119,11 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     KisAbstractCanvasWidget * tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
     Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
     emit canvasDestroyed(widget);
+
+    if(m_d->canvasWidget!=0)
+        tmp->setDecorations(m_d->canvasWidget->decorations());
     m_d->canvasWidget = tmp;
+
     widget->setAutoFillBackground(false);
     widget->setAttribute(Qt::WA_OpaquePaintEvent);
     widget->setMouseTracking(true);

@@ -106,15 +106,10 @@ void KisOpenGLCanvas2::resizeGL(int w, int h)
 {
     glViewport(0, 0, (GLint)w, (GLint)h);
     adjustOrigin();
-    draw();
+    update();
 }
 
 void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
-{
-    draw();
-}
-
-void KisOpenGLCanvas2::draw()
 {
     QPainter gc(this);
 
@@ -403,7 +398,7 @@ void KisOpenGLCanvas2::enterEvent(QEvent* e)
 
 void KisOpenGLCanvas2::leaveEvent(QEvent* e)
 {
-    draw();
+    update();
     QWidget::leaveEvent(e);
 }
 
@@ -465,7 +460,7 @@ void KisOpenGLCanvas2::wheelEvent(QWheelEvent *e)
 void KisOpenGLCanvas2::documentOffsetMoved(const QPoint & pt)
 {
     KisCanvasWidgetBase::documentOffsetMoved(pt);
-    draw();
+    update();
 }
 
 void KisOpenGLCanvas2::emitDocumentOriginChangedSignal()

@@ -153,7 +153,6 @@ private:
     class Private;
     Private * const m_d;
 
-    void draw();
     void drawBorder();
     void drawImage();
     void drawBackground();

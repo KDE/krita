@@ -54,8 +54,11 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
 
     for (int pos = 0; pos < favoriteList.size(); pos++)
     {
-        KisPaintOpPresetSP newBrush = m_paintopBox->paintOpPresetSP(new KoID(favoriteList[pos], favoriteList[pos]));
-        m_favoriteBrushesList.append(newBrush);
+        KoID id(favoriteList[pos], favoriteList[pos]);
+        if (KisPaintOpRegistry::instance()->contains(id.id())) {
+            KisPaintOpPresetSP newBrush = m_paintopBox->paintOpPresetSP(&id);
+            m_favoriteBrushesList.append(newBrush);
+        }
     }
 
     m_popupPalette = new KisPopupPalette(this, popupParent);

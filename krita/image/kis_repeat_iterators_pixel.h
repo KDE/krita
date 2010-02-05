@@ -174,6 +174,7 @@ inline void KisRepeatHLineIteratorPixelBase<T>::nextRow()
     } else {
         createIterator();
     }
+    this->m_realX = this->m_startX;
     ++this->m_realY;
 }
 
@@ -231,6 +232,7 @@ inline void KisRepeatVLineIteratorPixelBase<T>::nextCol()
     } else {
         createIterator();
     }
+    this->m_realY = this->m_startY;
     ++this->m_realX;
 }
 

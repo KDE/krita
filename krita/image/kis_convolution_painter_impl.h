@@ -131,13 +131,14 @@ void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel,
 
     // populate pixelPtrCacheCopy for starting position (0, 0)
     qint32 i = 0;
+    typename _IteratorFactory_::HLineConstIterator kitSrc = _IteratorFactory_::createHLineConstIterator(src, col - m_khalfWidth, row - m_khalfHeight + 0, m_kw, _dataRect);
     for (quint32 krow = 0; krow < m_kh; ++krow) {
-        typename _IteratorFactory_::HLineConstIterator kitSrc = _IteratorFactory_::createHLineConstIterator(src, col - m_khalfWidth, row - m_khalfHeight + krow, m_kw, _dataRect);
         while (!kitSrc.isDone()) {
             memcpy(pixelPtrCacheCopy[i], kitSrc.oldRawData(), m_cdepth);
             ++kitSrc;
             ++i;
         }
+        kitSrc.nextRow();
     }
 
     if (traversingDirection == Horizontal)

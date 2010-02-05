@@ -823,8 +823,12 @@ KoPathPoint * KoPathShape::removePoint(const KoPathPointIndex &pointIndex)
 
     KoPathPoint * point = subpath->takeAt(pointIndex.second);
 
+    //don't do anything (not even crash), if there was only one point
+    if (pointCount()==0) {
+        return point;
+    }
     // check if we removed the first point
-    if (pointIndex.second == 0) {
+    else if (pointIndex.second == 0) {
         // first point removed, set new StartSubpath
         subpath->first()->setProperty(KoPathPoint::StartSubpath);
         // check if path was closed

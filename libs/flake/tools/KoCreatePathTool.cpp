@@ -195,17 +195,15 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 {
     if (event->buttons() & Qt::RightButton) {
-        if(m_shape) {
+        if (m_shape) {
             // repaint the shape before removing the last point
             m_canvas->updateCanvas(m_shape->boundingRect());
-            m_shape->removePoint(m_shape->pathPointIndex(m_activePoint));
+            delete m_shape->removePoint(m_shape->pathPointIndex(m_activePoint));
 
             addPathShape();
-            return;
-        } else {
-            // Return as otherwise a point would be added
-            return;
         }
+        // Return as otherwise a point would be added
+        return;
     }
 
     if (m_shape) {
@@ -273,7 +271,8 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 
 void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    Q_UNUSED(event);
+    //remove handle
+    canvas()->updateCanvas(handlePaintRect(event->point));
 
     if (m_shape) {
         // the first click of the double click created a new point which has the be removed again
@@ -403,8 +402,6 @@ void KoCreatePathTool::resourceChanged(int key, const QVariant & res)
 
 void KoCreatePathTool::addPathShape()
 {
-    m_shape->normalize();
-
     // reset snap guide
     m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
     m_canvas->snapGuide()->reset();
@@ -414,8 +411,18 @@ void KoCreatePathTool::addPathShape()
     KoPathShape *pathShape = m_shape;
     m_shape = 0;
 
+    if (pathShape->pointCount() < 2) {
+        //clean up
+        m_existingStartPoint = 0;
+        m_existingEndPoint = 0;
+        m_hoveredPoint = 0;
+        delete pathShape;
+        return;
+    }
+
     KoPathShape * startShape = 0;
     KoPathShape * endShape = 0;
+    pathShape->normalize();
 
     if (connectPaths(pathShape, m_existingStartPoint, m_existingEndPoint)) {
         if (m_existingStartPoint)
@@ -439,6 +446,7 @@ void KoCreatePathTool::addPathShape()
         delete pathShape;
     }
 
+    //clean up
     m_existingStartPoint = 0;
     m_existingEndPoint = 0;
     m_hoveredPoint = 0;

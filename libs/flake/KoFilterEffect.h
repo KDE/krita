@@ -28,6 +28,7 @@ class QRectF;
 class KoViewConverter;
 class KoXmlWriter;
 class KoFilterEffectRenderContext;
+class KoFilterEffectLoadingContext;
 class KoXmlElement;
 
 #include "flake_export.h"
@@ -137,10 +138,10 @@ public:
     /**
      * Loads data from given xml element.
      * @param element the xml element to load data from
-     * @param matrix matrix to transform to bounding box coordinates
+     * @param context the loading context providing additional data
      * @return true if loading was successful, else false
      */
-    virtual bool load(const KoXmlElement &element, const QMatrix &matrix = QMatrix()) = 0;
+    virtual bool load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context) = 0;
 
     /**
      * Writes custom data to given xml element.

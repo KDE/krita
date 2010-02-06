@@ -53,9 +53,6 @@ public:
 
     const KoColorSpace * colorSpace() const;
 
-    QRect repaintOriginal(KisPaintDeviceSP original,
-                          const QRect& rect);
-
     bool needProjection() const;
 
     void copyOriginalToProjection(const KisPaintDeviceSP original,

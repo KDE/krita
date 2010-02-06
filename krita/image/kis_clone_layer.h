@@ -63,9 +63,6 @@ public:
     KisPaintDeviceSP paintDevice() const;
     bool needProjection() const;
 
-    QRect repaintOriginal(KisPaintDeviceSP original,
-                          const QRect& rect);
-
     void copyOriginalToProjection(const KisPaintDeviceSP original,
                                   KisPaintDeviceSP projection,
                                   const QRect& rect) const;

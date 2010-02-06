@@ -78,9 +78,6 @@ public:
      */
     virtual QRect updateProjection(const QRect& rect);
 
-    virtual QRect repaintOriginal(KisPaintDeviceSP original,
-                                  const QRect& rect) = 0;
-
     virtual bool needProjection() const;
 
     virtual void copyOriginalToProjection(const KisPaintDeviceSP original,

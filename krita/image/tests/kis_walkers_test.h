@@ -48,11 +48,6 @@ public:
         return "TEST";
     }
 
-    QRect repaintOriginal(KisPaintDeviceSP original, const QRect& rect) {
-        Q_UNUSED(original);
-        return rect;
-    }
-
     KisPaintDeviceSP original() const {
         // This test doesn't use updateProjection so just return 0
         return 0;
@@ -117,11 +112,6 @@ public:
 
     virtual QString nodeType() {
         return "TEST";
-    }
-
-    QRect repaintOriginal(KisPaintDeviceSP original, const QRect& rect) {
-        Q_UNUSED(original);
-        return rect;
     }
 
     KisPaintDeviceSP original() const {

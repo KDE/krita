@@ -100,13 +100,6 @@ bool KisCloneLayer::needProjection() const
     return m_d->x || m_d->y;
 }
 
-QRect KisCloneLayer::repaintOriginal(KisPaintDeviceSP original,
-                                     const QRect& rect)
-{
-    Q_UNUSED(original);
-    return rect;
-}
-
 void KisCloneLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         KisPaintDeviceSP projection,
         const QRect& rect) const

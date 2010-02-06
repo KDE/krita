@@ -104,13 +104,6 @@ KisPaintDeviceSP KisPaintLayer::paintDevice() const
     return m_d->paintDevice;
 }
 
-QRect KisPaintLayer::repaintOriginal(KisPaintDeviceSP original,
-                                     const QRect& rect)
-{
-    Q_UNUSED(original);
-    return rect;
-}
-
 bool KisPaintLayer::needProjection() const
 {
     return hasTemporaryTarget();

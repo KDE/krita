@@ -124,7 +124,6 @@ set(kritaimage_LIB_SRCS
    kis_circle_mask_generator.cpp
    kis_math_toolbox.cpp
    kis_memory_leak_tracker.cpp
-   kis_merge_visitor.cpp
    kis_name_server.cpp
    kis_node.cpp
    kis_node_facade.cpp

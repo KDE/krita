@@ -106,13 +106,6 @@ KisPaintDeviceSP KisSelectionBasedLayer::paintDevice() const
 }
 
 
-QRect KisSelectionBasedLayer::repaintOriginal(KisPaintDeviceSP original,
-        const QRect& rect)
-{
-    Q_UNUSED(original);
-    return rect;
-}
-
 bool KisSelectionBasedLayer::needProjection() const
 {
     return m_d->selection;

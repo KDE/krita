@@ -64,17 +64,6 @@ public:
     /// @return the projection of the layers in the group before the masks are applied.
     KisPaintDeviceSP original() const;
 
-    /**
-     * If a dirty node is set, repaintOriginal can optimize by checking
-     * whether there is an adjustment layer in the stack, under the dirty
-     * node.
-     *
-     * XXX: protect by a mutex?
-     */
-    void setDirtyNode(KisNodeSP node);
-
-    QRect repaintOriginal(KisPaintDeviceSP original, const QRect& rect);
-
     qint32 x() const;
     qint32 y() const;
     void setX(qint32 x);

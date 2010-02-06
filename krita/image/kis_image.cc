@@ -67,8 +67,6 @@
 #include "kis_crop_visitor.h"
 #include "kis_meta_data_merge_strategy.h"
 
-#include "kis_refresh_visitor.h"
-
 class KisImage::KisImagePrivate
 {
 public:

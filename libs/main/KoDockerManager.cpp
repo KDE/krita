@@ -137,7 +137,6 @@ KoDockerManager::KoDockerManager(KoMainWindow *mainWindow)
 
 KoDockerManager::~KoDockerManager()
 {
-    d->removeDockers();
     KConfigGroup cfg = KGlobal::config()->group("DockerManager");
     QStringList visibleList;
     QStringList hiddenList;
@@ -155,6 +154,7 @@ KoDockerManager::~KoDockerManager()
     cfg.writeEntry("VisibleToolDockers", visibleList);
     cfg.writeEntry("HiddenToolDockers", hiddenList);
     cfg.sync();
+    d->removeDockers();
     delete d;
 }
 

@@ -18,6 +18,7 @@
 
 #include "kis_walkers_test.h"
 
+#include "kis_base_rects_walker.h"
 #include "kis_merge_walker.h"
 #include "kis_full_refresh_walker.h"
 
@@ -95,7 +96,7 @@ QString nodeTypePostfix(KisMergeWalker::NodePosition position)
     return indexName[position];
 }
 
-void KisWalkersTest::verifyResult(KisMergeWalker walker, QStringList reference,
+void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList reference,
                                   QRect accessRect, bool changeRectVaries,
                                   bool needRectVaries)
 {
@@ -123,33 +124,6 @@ void KisWalkersTest::verifyResult(KisMergeWalker walker, QStringList reference,
     QVERIFY(walker.needRectVaries() == needRectVaries);
 }
 
-void KisWalkersTest::verifyResult(KisFullRefreshWalker walker, QStringList reference,
-                                  QRect accessRect, bool changeRectVaries,
-                                  bool needRectVaries)
-{
-    KisMergeWalker::NodeStack &list = walker.nodeStack();
-    QStringList::const_iterator iter = reference.constBegin();
-
-    foreach(KisMergeWalker::JobItem item, list) {
-#ifdef DEBUG_VISITORS
-        qDebug() << item.m_node->name() << '\t'
-                 << item.m_applyRect << '\t'
-                 << nodeTypeString(item.m_position);
-#endif
-
-        QVERIFY(item.m_node->name() == *iter);
-
-        iter++;
-    }
-
-#ifdef DEBUG_VISITORS
-    qDebug() << "Result AR:\t" << walker.accessRect();
-#endif
-
-    QVERIFY(walker.accessRect() == accessRect);
-    QVERIFY(walker.changeRectVaries() == changeRectVaries);
-    QVERIFY(walker.needRectVaries() == needRectVaries);
-}
 
 /************** Actual Testing **************************************/
 

@@ -51,12 +51,14 @@ KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image, KisNodeSP la
 
 void KisImageLayerAddCommand::redo()
 {
+    QRect extent = m_image->bounds();
+
     if (m_aboveThis || m_index == quint32(-1)) {
         m_image->addNode(m_layer, m_parent, m_aboveThis);
     } else {
         m_image->addNode(m_layer, m_parent, m_index);
     }
-    m_layer->setDirty();
+    m_layer->setDirty(extent);
 }
 
 void KisImageLayerAddCommand::undo()

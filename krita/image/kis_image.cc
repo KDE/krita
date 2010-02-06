@@ -754,7 +754,7 @@ void KisImage::flatten()
     // - no =(
     // - KisProjection::lock() should work like a barier
     // - fixme?
-    refreshGraph();
+    //refreshGraph();
 
     lock();
     KisPaintDeviceSP projectionCopy =

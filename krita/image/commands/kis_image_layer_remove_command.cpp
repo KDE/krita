@@ -53,13 +53,14 @@ void KisImageLayerRemoveCommand::redo()
     m_image->removeNode(m_layer);
 
     if(nearestNode)
-        nearestNode->setDirty();
+        nearestNode->setDirty(extent);
     else
         m_image->refreshGraph(parentNode);
 }
 
 void KisImageLayerRemoveCommand::undo()
 {
+    QRect extent = m_image->bounds();
     m_image->addNode(m_layer, m_prevParent, m_prevAbove);
-    m_layer->setDirty();
+    m_layer->setDirty(extent);
 }

@@ -106,23 +106,23 @@ public:
         return true;
     }
 
-    bool visit(KisExternalLayer *layer) {
+    bool visit(KisExternalLayer*) {
         return true;
     }
 
-    bool visit(KisGeneratorLayer * layer) {
+    bool visit(KisGeneratorLayer*) {
         return true;
     }
 
-    bool visit(KisPaintLayer *layer) {
+    bool visit(KisPaintLayer*) {
         return true;
     }
 
-    bool visit(KisGroupLayer *layer) {
+    bool visit(KisGroupLayer*) {
         return true;
     }
 
-    bool visit(KisCloneLayer * layer) {
+    bool visit(KisCloneLayer*) {
         return true;
     }
 

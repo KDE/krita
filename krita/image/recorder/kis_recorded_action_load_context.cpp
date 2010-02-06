@@ -16,20 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_RECORDED_ACTION_LOAD_CONTEXT_H_
-#define _KIS_RECORDED_ACTION_LOAD_CONTEXT_H_
+#include "kis_recorded_action_load_context.h"
 
-#include "krita_export.h"
 
-class KoAbstractGradient;
-class KisPattern;
-class QString;
-
-class KRITAIMAGE_EXPORT KisRecordedActionLoadContext {
-    public:
-        virtual ~KisRecordedActionLoadContext();
-        virtual KoAbstractGradient* gradient(const QString& name) const = 0;
-        virtual KisPattern* pattern(const QString& name) const = 0;
-};
-
-#endif
+KisRecordedActionLoadContext::~KisRecordedActionLoadContext()
+{
+}

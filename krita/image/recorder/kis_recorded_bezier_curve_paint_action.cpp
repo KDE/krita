@@ -139,7 +139,7 @@ KisRecordedBezierCurvePaintActionFactory::~KisRecordedBezierCurvePaintActionFact
 
 }
 
-KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*)
+KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomElement& elt, const KisRecordedActionLoadContext* context)
 {
     KisNodeQueryPath pathnode = nodeQueryPathFromXML(elt);
 
@@ -148,7 +148,7 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomE
 
     KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(pathnode, paintOpPreset);
 
-    setupPaintAction(rplpa, elt);
+    setupPaintAction(rplpa, elt, context);
 
     QDomElement wpElt = elt.firstChildElement("Waypoints");
     if (!wpElt.isNull()) {

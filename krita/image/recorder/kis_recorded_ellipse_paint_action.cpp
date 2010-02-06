@@ -97,7 +97,7 @@ KisRecordedEllipsePaintActionFactory::~KisRecordedEllipsePaintActionFactory()
 
 }
 
-KisRecordedAction* KisRecordedEllipsePaintActionFactory::fromXML(const QDomElement& elt, const KisRecordedActionLoadContext* )
+KisRecordedAction* KisRecordedEllipsePaintActionFactory::fromXML(const QDomElement& elt, const KisRecordedActionLoadContext* context)
 {
     KisNodeQueryPath pathnode = nodeQueryPathFromXML(elt);
 
@@ -121,6 +121,6 @@ KisRecordedAction* KisRecordedEllipsePaintActionFactory::fromXML(const QDomEleme
 
     KisRecordedEllipsePaintAction* rplpa = new KisRecordedEllipsePaintAction(pathnode, paintOpPreset, QRectF(x, y, width, height));
 
-    setupPaintAction(rplpa, elt);
+    setupPaintAction(rplpa, elt, context);
     return rplpa;
 }

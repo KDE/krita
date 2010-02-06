@@ -109,7 +109,7 @@ KisRecordedPolyLinePaintActionFactory::~KisRecordedPolyLinePaintActionFactory()
 
 }
 
-KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*)
+KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElement& elt, const KisRecordedActionLoadContext* context)
 {
     KisNodeQueryPath pathnode = nodeQueryPathFromXML(elt);
 
@@ -117,7 +117,7 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElem
     KisPaintOpPresetSP paintOpPreset = paintOpPresetFromXML(elt);
 
     KisRecordedPolyLinePaintAction* rplpa = new KisRecordedPolyLinePaintAction(pathnode, paintOpPreset);
-    setupPaintAction(rplpa, elt);
+    setupPaintAction(rplpa, elt, context);
 
     QDomElement wpElt = elt.firstChildElement("Waypoints");
     if (!wpElt.isNull()) {

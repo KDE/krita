@@ -136,7 +136,7 @@ void KisAsyncMergerTest::testMerger()
 
 void KisAsyncMergerTest::debugObligeChild()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageWSP image = new KisImage(0, 640, 441, colorSpace, "merger test");
 
     QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");

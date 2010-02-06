@@ -379,10 +379,10 @@ public:
     const KoColor &fillColor() const;
 
     /// Set the current generator (a generator can be used to fill an area
-    void setGenerator(KisFilterConfiguration * generator);
+    void setGenerator(const KisFilterConfiguration * generator);
 
     /// @return the current generator configuration
-    KisFilterConfiguration * generator() const;
+    const KisFilterConfiguration * generator() const;
 
     /// This enum contains the styles with which we can fill things like polygons and ellipses
     enum FillStyle {

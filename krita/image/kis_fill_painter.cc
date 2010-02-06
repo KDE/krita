@@ -151,7 +151,7 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ki
     addDirtyRect(QRect(x1, y1, w, h));
 }
 
-void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisFilterConfiguration * generator)
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisFilterConfiguration* generator)
 {
     if (!generator) return;
     KisGeneratorSP g = KisGeneratorRegistry::instance()->value(generator->name());

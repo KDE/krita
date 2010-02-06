@@ -82,7 +82,7 @@ struct KisPainter::Private {
     KoColor                     paintColor;
     KoColor                     backgroundColor;
     KoColor                     fillColor;
-    KisFilterConfiguration*     generator;
+    const KisFilterConfiguration* generator;
     KisPaintLayer*              sourceLayer;
     FillStyle                   fillStyle;
     StrokeStyle                 strokeStyle;
@@ -1629,12 +1629,12 @@ const KoColor &KisPainter::fillColor() const
     return d->fillColor;
 }
 
-void KisPainter::setGenerator(KisFilterConfiguration * generator)
+void KisPainter::setGenerator(const KisFilterConfiguration * generator)
 {
     d->generator = generator;
 }
 
-KisFilterConfiguration * KisPainter::generator() const
+const KisFilterConfiguration * KisPainter::generator() const
 {
     return d->generator;
 }

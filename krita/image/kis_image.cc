@@ -751,7 +751,7 @@ void KisImage::flatten()
         new KisGroupLayer(this, "root", OPACITY_OPAQUE);
 
     // - synchronous?
-    // - not =(
+    // - no =(
     // - KisProjection::lock() should work like a barier
     // - fixme?
     refreshGraph();
@@ -765,26 +765,14 @@ void KisImage::flatten()
         new KisPaintLayer(this, nextLayerName(), OPACITY_OPAQUE, projectionCopy);
     Q_CHECK_PTR(flattenLayer);
 
-
-    if (undo()) {
-        m_d->adapter->beginMacro(i18n("Flatten Image"));
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-        m_d->adapter->addCommand(new KisImageChangeLayersCommand(KisImageWSP(this), oldRootLayer, newRootLayer, ""));
-    }
-    else {
-        lock();
-        setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE));
-    }
+    m_d->adapter->beginMacro(i18n("Flatten Image"));
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
+    m_d->adapter->addCommand(new KisImageChangeLayersCommand(KisImageWSP(this), oldRootLayer, newRootLayer, ""));
 
     addNode(flattenLayer, newRootLayer, 0);
 
-    if (undo()) {
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-        m_d->adapter->endMacro();
-    }
-    else {
-        unlock();
-    }
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
+    m_d->adapter->endMacro();
 
     notifyLayersChanged();
 }

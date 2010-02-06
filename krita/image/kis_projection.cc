@@ -76,7 +76,12 @@ void KisProjection::run()
     // startUpdate will be executed in gui thread.
     m_d->updater = new KisImageUpdater();
     connect(this, SIGNAL(sigUpdateProjection(KisNodeSP, QRect, QRect)), m_d->updater, SLOT(startUpdate(KisNodeSP, QRect, QRect)));
-    connect(this, SIGNAL(sigFullRefresh(KisNodeSP, QRect)), m_d->updater, SLOT(startFullRefresh(KisNodeSP, QRect)));
+
+    // Full refresh should be synchronous
+    connect(this, SIGNAL(sigFullRefresh(KisNodeSP, QRect)),
+            m_d->updater, SLOT(startFullRefresh(KisNodeSP, QRect)),
+            Qt::BlockingQueuedConnection);
+
     connect(m_d->updater, SIGNAL(updateDone(QRect)), m_d->image, SLOT(slotProjectionUpdated(QRect)));
     exec(); // start the event loop
 }

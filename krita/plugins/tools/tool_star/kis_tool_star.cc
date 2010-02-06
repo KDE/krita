@@ -51,7 +51,7 @@
 #include "kis_selection.h"
 
 #include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_polyline_paint_action.h>
+#include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
 KisToolStar::KisToolStar(KoCanvasBase * canvas)
@@ -117,12 +117,10 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 
         vQPointF coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
         if (image()) {
-            KisRecordedPolyLinePaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
+            KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
             setupPaintAction(&linePaintAction);
-            foreach(const QPointF& pt, coord) {
-                linePaintAction.addPoint(KisPaintInformation(pt));
-            }
-            linePaintAction.addPoint(KisPaintInformation(coord[0]));
+            linePaintAction.addPolyLine(coord.toList());
+            linePaintAction.addLine(KisPaintInformation(coord.last()), KisPaintInformation(coord.first()));
             image()->actionRecorder()->addAction(linePaintAction);
         }
 

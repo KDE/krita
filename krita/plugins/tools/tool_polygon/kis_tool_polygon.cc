@@ -47,7 +47,7 @@
 #include "kis_cursor.h"
 
 #include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_polyline_paint_action.h>
+#include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
 KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
@@ -63,12 +63,10 @@ KisToolPolygon::~KisToolPolygon()
 void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
 {
     if (image()) {
-        KisRecordedPolyLinePaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
+        KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
         setupPaintAction(&linePaintAction);
-        foreach(const QPointF& pt, points) {
-            linePaintAction.addPoint(KisPaintInformation(pt));
-        }
-        linePaintAction.addPoint(points[0]);
+        linePaintAction.addPolyLine(points.toList());
+        linePaintAction.addLine(KisPaintInformation(points.last()), KisPaintInformation(points.first()));
         image()->actionRecorder()->addAction(linePaintAction);
     }
     if (!currentNode()->inherits("KisShapeLayer")) {

@@ -49,7 +49,7 @@
 #include <kis_paint_layer.h>
 
 #include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_polyline_paint_action.h>
+#include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
 
@@ -174,10 +174,9 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
 
 #ifdef ENABLE_RECORDING
                 if (image()) {
-                    KisRecordedPolyLinePaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
+                    KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
                     setupPaintAction(&linePaintAction);
-                    linePaintAction.addPoint(m_startPos);
-                    linePaintAction.addPoint(m_endPos);
+                    linePaintAction.addLine(m_startPos, m_endPos);
                     image()->actionRecorder()->addAction(linePaintAction);
                 }
 #endif

@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_RECORDED_BEZIER_CURVE_PAINT_ACTIONS_H_
-#define _KIS_RECORDED_BEZIER_CURVE_PAINT_ACTIONS_H_
+#ifndef _KIS_RECORDED_PATH_PAINT_ACTIONS_H_
+#define _KIS_RECORDED_PATH_PAINT_ACTIONS_H_
 
 #include "recorder/kis_recorded_action.h"
 #include "recorder/kis_recorded_paint_action.h"
@@ -33,19 +33,22 @@ class KoCompositeOp;
 /**
  * This class will record the painting of a bezier curve.
  */
-class KRITAIMAGE_EXPORT KisRecordedBezierCurvePaintAction : public KisRecordedPaintAction
+class KRITAIMAGE_EXPORT KisRecordedPathPaintAction : public KisRecordedPaintAction
 {
 
 public:
 
-    KisRecordedBezierCurvePaintAction(const KisNodeQueryPath& path,
-                                      const KisPaintOpPresetSP paintOpPreset);
+    KisRecordedPathPaintAction(const KisNodeQueryPath& path,
+                               const KisPaintOpPresetSP paintOpPreset);
 
-    KisRecordedBezierCurvePaintAction(const KisRecordedBezierCurvePaintAction&);
+    KisRecordedPathPaintAction(const KisRecordedPathPaintAction&);
 
-    ~KisRecordedBezierCurvePaintAction();
+    ~KisRecordedPathPaintAction();
 
-    void addPoint(const KisPaintInformation& point1,
+    void addPoint(const KisPaintInformation& info);
+    void addLine(const KisPaintInformation& point1, const KisPaintInformation& point2);
+    void addPolyLine(const QList<QPointF>& points);
+    void addCurve(const KisPaintInformation& point1,
                   const QPointF& control1,
                   const QPointF& control2,
                   const KisPaintInformation& point2);
@@ -65,11 +68,11 @@ private:
 };
 
 
-class KisRecordedBezierCurvePaintActionFactory : public KisRecordedPaintActionFactory
+class KisRecordedPathPaintActionFactory : public KisRecordedPaintActionFactory
 {
 public:
-    KisRecordedBezierCurvePaintActionFactory();
-    virtual ~KisRecordedBezierCurvePaintActionFactory();
+    KisRecordedPathPaintActionFactory();
+    virtual ~KisRecordedPathPaintActionFactory();
     virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*);
 };
 

@@ -37,7 +37,7 @@
 #include <kis_selection.h>
 
 #include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_bezier_curve_paint_action.h>
+#include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
 KisToolPath::KisToolPath(KoCanvasBase * canvas)
@@ -72,7 +72,7 @@ void KisToolPath::addPathShape()
     QPainterPath mapedOutline = matrix.map(m_shape->outline());
 
     // Recorde the paint action
-    KisRecordedBezierCurvePaintAction bezierCurvePaintAction(
+    KisRecordedPathPaintAction bezierCurvePaintAction(
             KisNodeQueryPath::absolutePath(currentNode),
             preset );
     bezierCurvePaintAction.setPaintColor(paintColor);
@@ -89,12 +89,12 @@ void KisToolPath::addPathShape()
             break;
         case QPainterPath::LineToElement:
             nextPoint =  QPointF(element.x, element.y);
-            bezierCurvePaintAction.addPoint(KisPaintInformation(lastPoint), lastPoint, nextPoint, KisPaintInformation(nextPoint));
+            bezierCurvePaintAction.addLine(KisPaintInformation(lastPoint), KisPaintInformation(nextPoint));
             lastPoint = nextPoint;
             break;
         case QPainterPath::CurveToElement:
             nextPoint =  QPointF(mapedOutline.elementAt(i + 2).x, mapedOutline.elementAt(i + 2).y);
-            bezierCurvePaintAction.addPoint(KisPaintInformation(lastPoint),
+            bezierCurvePaintAction.addCurve(KisPaintInformation(lastPoint),
                                              QPointF(mapedOutline.elementAt(i).x,
                                                      mapedOutline.elementAt(i).y),
                                              QPointF(mapedOutline.elementAt(i + 1).x,

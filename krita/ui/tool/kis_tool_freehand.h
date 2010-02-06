@@ -36,8 +36,7 @@ class KisPainter;
 
 class QThreadPool;
 class FreehandPaintJob;
-class KisRecordedPolyLinePaintAction;
-class KisRecordedBezierCurvePaintAction;
+class KisRecordedPathPaintAction;
 class FreehandPaintJobExecutor;
 
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
@@ -137,8 +136,7 @@ private:
     bool m_paintedOutline;
     QRegion m_incrementalDirtyRegion;
     QList<FreehandPaintJob*> m_paintJobs;
-    KisRecordedPolyLinePaintAction* m_polyLinePaintAction;
-    KisRecordedBezierCurvePaintAction* m_bezierCurvePaintAction;
+    KisRecordedPathPaintAction* m_pathPaintAction;
     QThreadPool* m_executor;
 
     // for panning

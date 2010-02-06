@@ -52,8 +52,7 @@
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
 #include <kis_paintop.h>
-#include <recorder/kis_recorded_polyline_paint_action.h>
-#include <recorder/kis_recorded_bezier_curve_paint_action.h>
+#include <recorder/kis_recorded_path_paint_action.h>
 #include <kis_selection.h>
 #include <kis_paintop_preset.h>
 
@@ -166,11 +165,6 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
                                          KisVector2D::Zero(),
                                          e->rotation(), e->tangentialPressure());
             paintAt(m_previousPaintInformation);
-            if (!m_smooth) {
-#ifdef ENABLE_RECORDING
-                m_polyLinePaintAction->addPoint(m_previousPaintInformation);
-#endif
-            }
         } else if (m_mode == PAINT && (e->button() == Qt::RightButton || e->button() == Qt::MidButton)) {
             // end painting, if calling the menu or the pop up palette. otherwise there is weird behaviour
             endPaint();
@@ -236,16 +230,10 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
                              control1,
                              control2,
                              info);
-#ifdef ENABLE_RECORDING
-            m_bezierCurvePaintAction->addPoint(m_previousPaintInformation, control1, control2, info);
-#endif
             m_previousTangent = newTangent;
             m_previousDrag = dragVec;
         } else {
             paintLine(m_previousPaintInformation, info);
-#ifdef ENABLE_RECORDING
-            m_polyLinePaintAction->addPoint(info);
-#endif
         }
 
         m_previousPaintInformation = info;
@@ -404,21 +392,12 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     */
 #ifdef ENABLE_RECORDING // Temporary, to figure out what is going without being
     // distracted by the recording
-    if (m_smooth) {
-        m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction(
+    m_pathPaintAction = new KisRecordedPathPaintAction(
             KisNodeQueryPath::absolutePath(currentNode()),
             currentPaintOpPreset()
         );
-        m_bezierCurvePaintAction->setPaintIncremental(m_paintIncremental);
-        setupPaintAction(m_bezierCurvePaintAction);
-    } else {
-        m_polyLinePaintAction = new KisRecordedPolyLinePaintAction(
-            KisNodeQueryPath::absolutePath(currentNode()),
-            currentPaintOpPreset()
-        );
-        m_polyLinePaintAction->setPaintIncremental(m_paintIncremental);
-        setupPaintAction(m_polyLinePaintAction);
-    }
+    m_pathPaintAction->setPaintIncremental(m_paintIncremental);
+    setupPaintAction(m_pathPaintAction);
 #endif
 }
 
@@ -480,17 +459,10 @@ void KisToolFreehand::endPaint()
         m_paintJobs.clear();
     }
 #ifdef ENABLE_RECORDING
-    if (m_smooth) {
-        if (image())
-            image()->actionRecorder()->addAction(*m_bezierCurvePaintAction);
-        delete m_bezierCurvePaintAction;
-        m_bezierCurvePaintAction = 0;
-    } else {
-        if (image())
-            image()->actionRecorder()->addAction(*m_polyLinePaintAction);
-        delete m_polyLinePaintAction;
-        m_polyLinePaintAction = 0;
-    }
+    if (image())
+        image()->actionRecorder()->addAction(*m_pathPaintAction);
+    delete m_pathPaintAction;
+    m_pathPaintAction = 0;
 #endif
 }
 
@@ -498,6 +470,7 @@ void KisToolFreehand::paintAt(const KisPaintInformation &pi)
 {
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
     queuePaintJob(new FreehandPaintAtJob(this, m_painter, pi, previousJob), previousJob);
+    m_pathPaintAction->addPoint(pi);
 }
 
 void KisToolFreehand::paintLine(const KisPaintInformation &pi1,
@@ -505,6 +478,7 @@ void KisToolFreehand::paintLine(const KisPaintInformation &pi1,
 {
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
     queuePaintJob(new FreehandPaintLineJob(this, m_painter, pi1, pi2, previousJob), previousJob);
+    m_pathPaintAction->addLine(pi1, pi2);
 }
 
 void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
@@ -514,6 +488,7 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
 {
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
     queuePaintJob(new FreehandPaintBezierJob(this, m_painter, pi1, control1, control2, pi2, previousJob), previousJob);
+    m_pathPaintAction->addCurve(pi1, control1, control2, pi2);
 }
 
 void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*previousJob*/)

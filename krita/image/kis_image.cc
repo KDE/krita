@@ -789,57 +789,59 @@ void KisImage::flatten()
     notifyLayersChanged();
 }
 
-
+// FIXME: Rename to Merge Down?
 KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
 {
-    if (!layer->prevSibling()) return 0;
-    // XXX: this breaks if we allow free mixing of masks and layers
-    KisLayerSP layer2 = dynamic_cast<KisLayer*>(layer->prevSibling().data());
-    dbgImage << "Merge " << layer << " with " << layer2;
-    if (!layer2) return 0;
+    if(!layer->prevSibling()) return 0;
 
-    KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), OPACITY_OPAQUE, colorSpace());
-    Q_CHECK_PTR(newLayer);
+    // XXX: this breaks if we allow free mixing of masks and layers
+    KisLayerSP prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
+    if (!prevLayer) return 0;
+
+    dbgImage << "Merge " << layer << " with " << prevLayer;
 
     QRect layerExtent = layer->extent();
-    QRect layerPrevSiblingExtent = layer->prevSibling()->extent();
+    QRect prevLayerExtent = prevLayer->extent();
+    KisPaintDeviceSP mergedDevice = new KisPaintDevice(*prevLayer->projection());
 
-    QRect rc = layerExtent | layerPrevSiblingExtent;
-
-    undoAdapter()->beginMacro(i18n("Merge with Layer Below"));
-
-    KisPainter gc(newLayer->paintDevice());
-    gc.setCompositeOp(newLayer->colorSpace()->compositeOp(COMPOSITE_COPY));
-    gc.bitBlt(rc.topLeft(), layer2->projection(), rc);
-
+    KisPainter gc(mergedDevice);
+    gc.setChannelFlags(layer->channelFlags());
     gc.setCompositeOp(layer->compositeOp());
     gc.setOpacity(layer->opacity());
-    gc.bitBlt(rc.topLeft(), layer->projection(), rc);
+    gc.bitBlt(layerExtent.topLeft(), layer->projection(), layerExtent);
+
+    // FIXME: "Merge Down"?
+    undoAdapter()->beginMacro(i18n("Merge with Layer Below"));
+
+    KisPaintLayerSP mergedLayer = new KisPaintLayer(this, prevLayer->name(), OPACITY_OPAQUE, mergedDevice);
+    Q_CHECK_PTR(mergedLayer);
+
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;
-    srcs.append(static_cast<KisLayer*>(layer->prevSibling().data())->metaData());
+    srcs.append(prevLayer->metaData());
     srcs.append(layer->metaData());
     QList<double> scores;
-    int layerPrevSiblingArea = layerPrevSiblingExtent.width() * layerPrevSiblingExtent.height();
+    int layerPrevSiblingArea = prevLayerExtent.width() * prevLayerExtent.height();
     int layerArea = layerExtent.width() * layerExtent.height();
     double norm = qMax(layerPrevSiblingArea, layerArea);
     scores.append(layerPrevSiblingArea / norm);
     scores.append(layerArea / norm);
-    strategy->merge(newLayer->metaData(), srcs, scores);
+    strategy->merge(mergedLayer->metaData(), srcs, scores);
 
     KisNodeSP parent = layer->parent(); // parent is set to null when the layer is removed from the node
     dbgImage << ppVar(parent);
 
     // XXX: merge the masks!
+    // AAA: do you really think you need it? ;)
 
-    undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, parent, layer));
-    undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer->prevSibling()));
+    undoAdapter()->addCommand(new KisImageLayerAddCommand(this, mergedLayer, parent, layer));
+    undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, prevLayer));
     undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer));
 
     undoAdapter()->endMacro();
 
-    return newLayer;
+    return mergedLayer;
 }
 
 KisLayerSP KisImage::flattenLayer(KisLayerSP layer)

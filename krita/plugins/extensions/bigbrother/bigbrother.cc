@@ -35,15 +35,36 @@
 #include <recorder/kis_play_info.h>
 #include <recorder/kis_recorded_action.h>
 #include <recorder/kis_recorded_action_factory_registry.h>
+#include <recorder/kis_recorded_action_load_context.h>
+#include <recorder/kis_recorded_action_save_context.h>
 #include <kis_types.h>
 #include <kis_view2.h>
 
 #include "actionseditor/kis_actions_editor.h"
 #include "actionseditor/kis_actions_editor_dialog.h"
+#include <kis_resource_server_provider.h>
+#include <KoResourceServerProvider.h>
 
 K_PLUGIN_FACTORY(BigBrotherPluginFactory, registerPlugin<BigBrotherPlugin>();)
 K_EXPORT_PLUGIN(BigBrotherPluginFactory("krita"))
 
+class RecordedActionSaveContext : public KisRecordedActionSaveContext {
+    public:
+        virtual void saveGradient(const KoAbstractGradient* ) {}
+        virtual void savePattern(const KisPattern* ) {}
+};
+
+class RecordedActionLoadContext : public KisRecordedActionLoadContext {
+    public:
+        virtual KoAbstractGradient* gradient(const QString& name) const
+        {
+            return KoResourceServerProvider::instance()->gradientServer()->getResourceByName(name);
+        }
+        virtual KisPattern* pattern(const QString& name) const
+        {
+            return KisResourceServerProvider::instance()->patternServer()->getResourceByName(name);
+        }
+};
 
 BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent), m_recorder(0)
@@ -152,6 +173,7 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
     Q_UNUSED(url);
 
     QString filename = KFileDialog::getOpenFileName(KUrl(), "*.krarec|Recorded actions (*.krarec)", m_view);
+    RecordedActionLoadContext loadContext;
     if (!filename.isNull()) {
         QDomDocument doc;
         QFile f(filename);
@@ -170,7 +192,7 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
             if (!docElem.isNull() && docElem.tagName() == "RecordedActions") {
                 dbgPlugins << "Load the macro";
                 KisMacro* m = new KisMacro();
-                m->fromXML(docElem, 0);
+                m->fromXML(docElem, &loadContext);
                 return m;
             } else {
                 // TODO error message
@@ -188,8 +210,8 @@ void BigBrotherPlugin::saveMacro(const KisMacro* macro, const KUrl& url)
     if (!filename.isNull()) {
         QDomDocument doc;
         QDomElement e = doc.createElement("RecordedActions");
-
-        macro->toXML(doc, e, 0);
+        RecordedActionSaveContext context;
+        macro->toXML(doc, e, &context);
 
         doc.appendChild(e);
         QFile f(filename);

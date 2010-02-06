@@ -384,10 +384,10 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
 
     int rowWidth = dst->bounds().width();
 
-    quint8* maskPointer = outputMask->data();
     quint8* rowPointer = dabPointer;
 
     for (int y = 0; y < maskHeight; y++) {
+        quint8* maskPointer = outputMask->scanline(y);
         for (int x = 0; x < maskWidth; x++) {
             if (coloringInformation) {
                 if (color) {

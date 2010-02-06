@@ -29,11 +29,8 @@
 #include "kis_global.h"
 
 
-KisQImagemask::KisQImagemask(const QImage& image, bool hasColor)
+KisQImagemask::KisQImagemask(const QImage& image, bool hasColor) : m_data(image.width(), image.height(), QImage::Format_Indexed8)
 {
-    m_width = image.width();
-    m_height = image.height();
-
     if (hasColor) {
         copyAlpha(image);
     } else {
@@ -41,11 +38,8 @@ KisQImagemask::KisQImagemask(const QImage& image, bool hasColor)
     }
 }
 
-KisQImagemask::KisQImagemask(const QImage& image)
+KisQImagemask::KisQImagemask(const QImage& image) : m_data(image.width(), image.height(), QImage::Format_Indexed8)
 {
-    m_width = image.width();
-    m_height = image.height();
-
     if (!image.allGray()) {
         copyAlpha(image);
     } else {
@@ -53,13 +47,9 @@ KisQImagemask::KisQImagemask(const QImage& image)
     }
 }
 
-KisQImagemask::KisQImagemask(qint32 width, qint32 height)
+KisQImagemask::KisQImagemask(qint32 width, qint32 height) : m_data(width, height, QImage::Format_Indexed8)
 {
-    m_width = width;
-    m_height = height;
-
-    m_data.clear();
-    m_data.insert(0, width * height, OPACITY_TRANSPARENT);
+    m_data.fill(0);
 }
 
 KisQImagemask::~KisQImagemask()
@@ -68,12 +58,12 @@ KisQImagemask::~KisQImagemask()
 
 qint32 KisQImagemask::width() const
 {
-    return m_width;
+    return m_data.width();
 }
 
 qint32 KisQImagemask::height() const
 {
-    return m_height;
+    return m_data.height();
 }
 void KisQImagemask::copyAlpha(const QImage& image)
 {
@@ -82,7 +72,7 @@ void KisQImagemask::copyAlpha(const QImage& image)
         for (int x = 0; x < image.width(); x++) {
             QRgb c = scanline[x];
             quint8 a = (qGray(c) * qAlpha(c)) / 255;
-            m_data.push_back(a);
+            m_data.scanLine(y)[x] = a;
         }
     }
 }
@@ -99,7 +89,7 @@ void KisQImagemask::computeAlpha(const QImage& image)
     for (int y = 0; y < image.height(); y++) {
         const QRgb *scanline = reinterpret_cast<const QRgb *>(image.scanLine(y));
         for (int x = 0; x < image.width(); x++) {
-            m_data.push_back(255 - qRed(scanline[x]));
+            m_data.scanLine(y)[x] = (255 - qRed(scanline[x]));
         }
     }
 }

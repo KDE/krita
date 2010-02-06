@@ -60,6 +60,7 @@ protected:
     KisPainter::StrokeStyle strokeStyle();
 
     virtual void setupPainter(KisPainter * painter);
+    virtual void setupPaintAction(KisRecordedPaintAction* action);
 
 private:
     QGridLayout *m_optionLayout;

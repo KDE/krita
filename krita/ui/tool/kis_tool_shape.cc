@@ -29,6 +29,7 @@
 
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
+#include <recorder/kis_recorded_paint_action.h>
 
 KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)
         : KisToolPaint(canvas, cursor)
@@ -107,5 +108,14 @@ void KisToolShape::setupPainter(KisPainter * painter)
     }
 }
 
-#include "kis_tool_shape.moc"
+void KisToolShape::setupPaintAction(KisRecordedPaintAction* action)
+{
+    KisTool::setupPaintAction(action);
+    action->setFillStyle(fillStyle());
+    action->setStrokeStyle(strokeStyle());
+    action->setGenerator(currentGenerator());
+    action->setPattern(currentPattern());
+    action->setGradient(currentGradient());
+}
 
+#include "kis_tool_shape.moc"

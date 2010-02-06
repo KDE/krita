@@ -20,6 +20,7 @@
 
 #include <QObject>
 #include <QThread>
+#include <QMutex>
 
 #include "kis_shared.h"
 #include "kis_types.h"
@@ -85,6 +86,12 @@ class KisImageUpdater : public QObject
 {
     Q_OBJECT
 
+public:
+    KisImageUpdater();
+
+    void lock();
+    void unlock();
+
 public slots:
 
     void startUpdate(KisNodeSP node, const QRect& rc, const QRect& cropRect);
@@ -98,6 +105,8 @@ private:
 
     void update(KisNodeSP node, KisNodeSP child, const QRect& rc);
 
+private:
+    QMutex m_mutex;
 };
 
 

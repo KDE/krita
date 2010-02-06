@@ -56,6 +56,17 @@ KisProjection::KisProjection(KisImageWSP image)
     m_d->image = image;
     m_d->updater = 0;
     updateSettings();
+
+    m_d->updater = new KisImageUpdater();
+    m_d->updater->moveToThread(this);
+
+    // Full refresh should be synchronous
+    connect(this, SIGNAL(sigFullRefresh(KisNodeSP, QRect)),
+            m_d->updater, SLOT(startFullRefresh(KisNodeSP, QRect)),
+            Qt::BlockingQueuedConnection);
+
+    connect(this, SIGNAL(sigUpdateProjection(KisNodeSP, QRect, QRect)), m_d->updater, SLOT(startUpdate(KisNodeSP, QRect, QRect)));
+    connect(m_d->updater, SIGNAL(updateDone(QRect)), m_d->image, SLOT(slotProjectionUpdated(QRect)));
 }
 
 
@@ -72,33 +83,24 @@ void KisProjection::stop()
 
 void KisProjection::run()
 {
-    // The image updater is created in the run() method so it lives in the thread, otherwise
-    // startUpdate will be executed in gui thread.
-    m_d->updater = new KisImageUpdater();
-    connect(this, SIGNAL(sigUpdateProjection(KisNodeSP, QRect, QRect)), m_d->updater, SLOT(startUpdate(KisNodeSP, QRect, QRect)));
-
-    // Full refresh should be synchronous
-    connect(this, SIGNAL(sigFullRefresh(KisNodeSP, QRect)),
-            m_d->updater, SLOT(startFullRefresh(KisNodeSP, QRect)),
-            Qt::BlockingQueuedConnection);
-
-    connect(m_d->updater, SIGNAL(updateDone(QRect)), m_d->image, SLOT(slotProjectionUpdated(QRect)));
     exec(); // start the event loop
 }
 
 void KisProjection::lock()
 {
-    if (m_d->updater) {
-        m_d->updater->blockSignals(true);
-    }
+    Q_ASSERT(m_d->updater);
+
     blockSignals(true);
+    m_d->updater->blockSignals(true);
+    m_d->updater->lock();
 }
 
 void KisProjection::unlock()
 {
-    if (m_d->updater) {
-        m_d->updater->blockSignals(false);
-    }
+    Q_ASSERT(m_d->updater);
+
+    m_d->updater->unlock();
+    m_d->updater->blockSignals(false);
     blockSignals(false);
 }
 
@@ -167,8 +169,24 @@ void KisProjection::updateSettings()
     m_d->useRegionOfInterest = cfg.readEntry("use_region_of_interest", false);
 }
 
+KisImageUpdater::KisImageUpdater()
+    : m_mutex(QMutex::Recursive)
+{
+}
+
+void KisImageUpdater::lock()
+{
+    m_mutex.lock();
+}
+
+void KisImageUpdater::unlock()
+{
+    m_mutex.unlock();
+}
+
 void KisImageUpdater::startFullRefresh(KisNodeSP node, const QRect& cropRect)
 {
+    QMutexLocker locker(&m_mutex);
     KisFullRefreshWalker walker(cropRect);
     KisAsyncMerger merger;
 
@@ -181,6 +199,7 @@ void KisImageUpdater::startFullRefresh(KisNodeSP node, const QRect& cropRect)
 
 void KisImageUpdater::startUpdate(KisNodeSP node, const QRect& rc, const QRect& cropRect)
 {
+    QMutexLocker locker(&m_mutex);
     KisMergeWalker walker(cropRect);
     KisAsyncMerger merger;
 

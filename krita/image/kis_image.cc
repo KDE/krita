@@ -771,8 +771,6 @@ void KisImage::flatten()
     addNode(flattenLayer, newRootLayer, 0);
 
     m_d->adapter->endMacro();
-
-    notifyLayersChanged();
 }
 
 // FIXME: Rename to Merge Down?

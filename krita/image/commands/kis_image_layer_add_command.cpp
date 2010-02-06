@@ -61,7 +61,15 @@ void KisImageLayerAddCommand::redo()
 
 void KisImageLayerAddCommand::undo()
 {
+    QRect extent = m_image->bounds();
     KisNodeSP parentNode = m_layer->parent();
+    KisNodeSP nearestNode = m_layer->nextSibling();
+    if(!nearestNode) nearestNode = m_layer->prevSibling();
+
     m_image->removeNode(m_layer);
-    parentNode->setDirty();
+
+    if(nearestNode)
+        nearestNode->setDirty(extent);
+    else
+        m_image->refreshGraph(parentNode);
 }

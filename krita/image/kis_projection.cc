@@ -149,10 +149,10 @@ void KisProjection::updateProjection(KisNodeSP node, const QRect& rc)
     }
 }
 
-void KisProjection::fullRefresh()
+void KisProjection::fullRefresh(KisNodeSP root)
 {
     // No splitting - trivial, but works :)
-    emit sigFullRefresh(m_d->image->rootLayer(), m_d->image->bounds());
+    emit sigFullRefresh(root, m_d->image->bounds());
 }
 
 void KisProjection::updateSettings()

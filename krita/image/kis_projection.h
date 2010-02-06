@@ -56,7 +56,7 @@ public:
      * for KisImageUpdater to catch. KisImageUpdater belongs to this thread.
      */
     void updateProjection(KisNodeSP node, const QRect& rc);
-    void fullRefresh();
+    void fullRefresh(KisNodeSP root);
 
     void setRegionOfInterest(const QRect & roi);
     void updateSettings();

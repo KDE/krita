@@ -48,9 +48,7 @@ void KisImageLockCommand::redo()
     } else {
         m_image->unlock();
     }
-    m_image->rootLayer()->setDirty();
     m_image->refreshGraph();
-
     setUndo(true);
 }
 
@@ -62,7 +60,6 @@ void KisImageLockCommand::undo()
     } else {
         m_image->lock();
     }
-    m_image->rootLayer()->setDirty();
     m_image->refreshGraph();
     setUndo(true);
 }

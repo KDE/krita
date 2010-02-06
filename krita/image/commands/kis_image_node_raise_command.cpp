@@ -32,7 +32,8 @@ KisImageNodeRaiseCommand::KisImageNodeRaiseCommand(KisImageWSP image, KisNodeSP 
 void KisImageNodeRaiseCommand::redo()
 {
     m_image->raiseNode(m_node);
-    m_node->setDirty();
+    if(m_node->prevSibling())
+        m_node->prevSibling()->setDirty(m_node->extent());
 }
 
 void KisImageNodeRaiseCommand::undo()

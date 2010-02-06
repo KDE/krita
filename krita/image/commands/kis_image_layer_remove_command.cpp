@@ -45,10 +45,17 @@ KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageWSP image, KisNod
 
 void KisImageLayerRemoveCommand::redo()
 {
-    KisNodeSP parentNode = m_layer->parent();
     QRect extent = m_image->bounds();
+    KisNodeSP parentNode = m_layer->parent();
+    KisNodeSP nearestNode = m_layer->nextSibling();
+    if(!nearestNode) nearestNode = m_layer->prevSibling();
+
     m_image->removeNode(m_layer);
-    parentNode->setDirty(extent);
+
+    if(nearestNode)
+        nearestNode->setDirty();
+    else
+        m_image->refreshGraph(parentNode);
 }
 
 void KisImageLayerRemoveCommand::undo()

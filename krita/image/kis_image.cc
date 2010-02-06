@@ -1145,10 +1145,12 @@ KisPerspectiveGrid* KisImage::perspectiveGrid()
     return m_d->perspectiveGrid;
 }
 
-void KisImage::refreshGraph()
+void KisImage::refreshGraph(KisNodeSP root)
 {
+    if (!root) root = m_d->rootLayer;
+
     if (!locked() && m_d->projection) {
-        m_d->projection->fullRefresh();
+        m_d->projection->fullRefresh(root);
     }
 }
 

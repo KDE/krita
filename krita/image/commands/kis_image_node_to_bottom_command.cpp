@@ -35,11 +35,11 @@ KisImageNodeToBottomCommand::KisImageNodeToBottomCommand(KisImageWSP image, KisN
 void KisImageNodeToBottomCommand::redo()
 {
     m_image->toBottom(m_node);
-    m_node->setDirty();
+    m_image->refreshGraph(m_prevParent);
 }
 
 void KisImageNodeToBottomCommand::undo()
 {
     m_image->moveNode(m_node, m_prevParent, m_prevAbove);
-    m_node->setDirty();
+    m_image->refreshGraph(m_prevParent);
 }

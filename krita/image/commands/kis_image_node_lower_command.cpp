@@ -38,5 +38,6 @@ void KisImageNodeLowerCommand::redo()
 void KisImageNodeLowerCommand::undo()
 {
     m_image->raiseNode(m_node);
-    m_node->setDirty();
+    if(m_node->prevSibling())
+        m_node->prevSibling()->setDirty(m_node->extent());
 }

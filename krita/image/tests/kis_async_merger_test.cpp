@@ -49,7 +49,7 @@
 void KisAsyncMergerTest::testMerger()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(0, 640, 448, colorSpace, "merger test");
+    KisImageWSP image = new KisImage(0, 640, 441, colorSpace, "merger test");
 
     QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage sourceImage2(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
@@ -76,13 +76,14 @@ void KisAsyncMergerTest::testMerger()
     image->addNode(paintLayer2, groupLayer);
     image->addNode(blur1, groupLayer);
 
-
     QRect testRect1(0,0,100,441);
     QRect testRect2(100,0,400,441);
     QRect testRect3(500,0,140,441);
     QRect testRect4(580,381,40,40);
 
-    KisMergeWalker walker;
+    QRect cropRect(image->bounds());
+
+    KisMergeWalker walker(cropRect);
     KisAsyncMerger merger;
 
     walker.collectRects(paintLayer2, testRect1);
@@ -110,7 +111,7 @@ void KisAsyncMergerTest::testMerger()
 */
 
     KisLayerSP rootLayer = image->rootLayer();
-    QVERIFY(rootLayer->extent() == image->bounds());
+    QVERIFY(rootLayer->exactBounds() == image->bounds());
 
     QImage resultProjection = rootLayer->projection()->convertToQImage(0);
     resultProjection.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + "actual_merge_result.png");

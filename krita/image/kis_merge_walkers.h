@@ -38,8 +38,9 @@ public:
     typedef QStack<JobItem> NodeStack;
 
 public:
-    KisMergeWalker()
+    KisMergeWalker(QRect cropRect)
     {
+        setCropRect(cropRect);
     }
 
     void collectRects(KisNodeSP node, const QRect& requestedRect) {
@@ -48,6 +49,14 @@ public:
         m_requestedRect = requestedRect;
         m_startNode = node;
         startTrip(node);
+    }
+
+    inline void setCropRect(QRect cropRect) {
+        m_cropRect = cropRect;
+    }
+
+    inline QRect cropRect() {
+        return m_cropRect;
     }
 
     // return a reference for efficiency reasons
@@ -85,6 +94,10 @@ protected:
         m_mergeTask.push(item);
     }
 
+    inline QRect cropThisRect(const QRect& rect) {
+        return m_cropRect.isValid() ? rect & m_cropRect : rect;
+    }
+
     inline bool dependOnLowerNodes(KisNodeSP node) {
         /**
          * FIXME: Clone Layers should be considered too
@@ -94,6 +107,7 @@ protected:
 
     void registerChangeRect(KisNodeSP node) {
         QRect currentChangeRect = node->changeRect(m_resultChangeRect);
+        currentChangeRect = cropThisRect(currentChangeRect);
 
         if(!m_changeRectVaries)
             m_changeRectVaries = currentChangeRect != m_resultChangeRect;
@@ -122,13 +136,16 @@ protected:
                  * lying above filthy node.
                  */
                 qWarning() << "Merge walker thought this was not possible!";
+                Q_ASSERT(0);
                 m_lastNeedRect = getChangeRectForNode(node, m_startNode,
                                                       m_requestedRect);
+                m_lastNeedRect = cropThisRect(m_lastNeedRect);
                 pushJob(node, position, m_lastNeedRect);
             }
 
             m_lastNeedRect = node->needRect(m_lastNeedRect,
                                             KisNode::NORMAL);
+            m_lastNeedRect = cropThisRect(m_lastNeedRect);
             m_childNeedRect = m_lastNeedRect;
             break;
         case N_LOWER:
@@ -137,6 +154,7 @@ protected:
                 pushJob(node, position, m_lastNeedRect);
                 m_lastNeedRect = node->needRect(m_lastNeedRect,
                                                 KisNode::BELOW_FILTHY);
+                m_lastNeedRect = cropThisRect(m_lastNeedRect);
             }
             break;
         default:
@@ -166,6 +184,7 @@ private:
      */
     KisNodeSP m_startNode;
     QRect m_requestedRect;
+    QRect m_cropRect;
 
     QRect m_childNeedRect;
     QRect m_lastNeedRect;

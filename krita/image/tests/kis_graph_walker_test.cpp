@@ -231,8 +231,10 @@ void KisGraphWalkerTest::testMergeVisiting()
     image->addNode(paintLayer4, groupLayer);
 
     QRect testRect(10,10,10,10);
+    // Empty rect to show we don't need any cropping
+    QRect cropRect;
 
-    KisMergeWalker walker;
+    KisMergeWalker walker(cropRect);
 
     {
         QString order("root,paint5,cplx2,group,paint1,"
@@ -264,6 +266,22 @@ void KisGraphWalkerTest::testMergeVisiting()
         reportStartWith("paint5");
         walker.collectRects(paintLayer5, testRect);
         verifyResult(walker, orderList, accessRect, false, true);
+    }
+
+    {
+        /**
+         * Test cropping
+         */
+        QString order("root,paint5,cplx2,group,paint1,"
+                      "paint4,paint3,cplx1,paint2");
+        QStringList orderList = order.split(",");
+        QRect accessRect(0,0,40,40);
+
+        reportStartWith("paint2 (with cropping)");
+        walker.setCropRect(image->bounds());
+        walker.collectRects(paintLayer2, testRect);
+        walker.setCropRect(cropRect);
+        verifyResult(walker, orderList, accessRect, true, true);
     }
 
 }
@@ -306,8 +324,10 @@ void KisGraphWalkerTest::testCachedVisiting()
     image->addNode(paintLayer4, groupLayer);
 
     QRect testRect(10,10,10,10);
+    // Empty rect to show we don't need any cropping
+    QRect cropRect;
 
-    KisMergeWalker walker;
+    KisMergeWalker walker(cropRect);
 
     {
         QString order("root,paint5,cache1,group,paint1,"

@@ -75,18 +75,12 @@ public:
         KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
         if (!filter) return false;
 
-        /**
-         * FIXME: Make good cropping!
-         * Maybe at the level of merge walker
-         */
-//        QRect applyRect = m_updateRect & layer->extent();
-        QRect applyRect = m_updateRect & m_projection->exactBounds();
+        QRect applyRect = m_updateRect;
         KisPaintDeviceSP originalDevice = layer->original();
 
-        qDebug()<<"PR:"<<m_projection->exactBounds();
-        qDebug()<<"AR:"<<applyRect;
-        qDebug()<<"NR:"<<layer->needRect(applyRect);
-
+//        qDebug()<<"PR:"<<m_projection->exactBounds();
+//        qDebug()<<"AR:"<<applyRect;
+//        qDebug()<<"NR:"<<layer->needRect(applyRect);
 
         /**
          * FIXME: check whether it's right to leave a selection to
@@ -232,8 +226,14 @@ private:
         KisPaintDeviceSP device = layer->projection();
         if (!device) return true;
 
+        /**
+         * FIXME: Check whether this cropping is still needed
+         * Probable case: selections on layers
+         */
 //        QRect needRect = rect & device->extent();
-        QRect needRect = rect & device->exactBounds();
+//        QRect needRect = rect & device->exactBounds();
+        QRect needRect = rect;
+        Q_ASSERT(device->exactBounds().contains(needRect));
 
         KisPainter gc(m_currentProjection);
         gc.setChannelFlags(layer->channelFlags());

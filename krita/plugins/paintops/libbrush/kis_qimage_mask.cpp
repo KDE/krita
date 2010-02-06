@@ -114,4 +114,21 @@ KisQImagemaskSP KisQImagemask::interpolate(KisQImagemaskSP mask1, KisQImagemaskS
     return outputMask;
 }
 
-
+void KisQImagemask::rotation(double angle)
+{
+    // For some reason rotating an Indexed8 image is broken so convert to RGB32
+    // Would probably be faster to have a native own implementation
+    QVector<QRgb> table;
+    for (int i = 0; i < 255; ++i) table.append(qRgb(i, i, i));
+    m_data.setColorTable(table);
+    QImage tmp = m_data.convertToFormat(QImage::Format_RGB32);
+    tmp = tmp.transformed(QMatrix().rotate(-angle * 180 / M_PI));
+    m_data = QImage(tmp.width(), tmp.height(), QImage::Format_Indexed8);
+    // Do not use convertToFormat to go back to Indexed8, since it is quiet
+    // a slow general operation, while we know that we are outputing a grayscale image
+    for (int y = 0; y < tmp.height(); ++y) {
+        for (int x = 0; x < tmp.width(); ++x) {
+            m_data.scanLine(y)[x] = tmp.scanLine(y)[4 * x];
+        }
+    }
+}

@@ -103,6 +103,10 @@ public:
         }
     }
 
+    /**
+     * Apply rotation to the mask
+     */
+    void rotation(double angle);
 
     // Create a new mask by interpolating between mask1 and mask2 as t
     // goes from 0 to 1.

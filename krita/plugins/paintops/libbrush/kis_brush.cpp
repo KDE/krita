@@ -345,9 +345,14 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
 
     KisQImagemaskSP outputMask = createMask(scale, subPixelX, subPixelY);
 
+    if (angle != 0)
+    {
+        outputMask->rotation(angle);
+    }
+
     qint32 maskWidth = outputMask->width();
     qint32 maskHeight = outputMask->height();
-
+    
     if (coloringInformation) {
 
         // old bounds

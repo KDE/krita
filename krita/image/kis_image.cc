@@ -766,12 +766,10 @@ void KisImage::flatten()
     Q_CHECK_PTR(flattenLayer);
 
     m_d->adapter->beginMacro(i18n("Flatten Image"));
-    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
     m_d->adapter->addCommand(new KisImageChangeLayersCommand(KisImageWSP(this), oldRootLayer, newRootLayer, ""));
 
     addNode(flattenLayer, newRootLayer, 0);
 
-    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
     m_d->adapter->endMacro();
 
     notifyLayersChanged();

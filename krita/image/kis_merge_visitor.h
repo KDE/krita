@@ -46,6 +46,8 @@
 #include "kis_node_progress_proxy.h"
 
 
+#include <stdio.h>
+
 /**
  * The class merge visitor works using a bottom-up recomposition strategy. It does
  * not need to update the projection of the nodes, because this strategy updates
@@ -96,6 +98,8 @@ public:
 
         KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
         if (!filter) return false;
+
+        printf("****Adj layer called\n");
 
         /**
          * FIXME: A set of crutches, until bottom-up

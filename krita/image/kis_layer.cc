@@ -347,6 +347,8 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
     return changeRect;
 }
 
+#define DISABLE_TOP_DOWN_MERGE_STRATEGY
+
 QRect KisLayer::updateProjection(const QRect& rect)
 {
     QRect updatedRect = rect;
@@ -357,11 +359,14 @@ QRect KisLayer::updateProjection(const QRect& rect)
             !originalDevice) return QRect();
 
     if (!needProjection() && !hasEffectMasks()) {
+#ifndef DISABLE_TOP_DOWN_MERGE_STRATEGY
         updatedRect = repaintOriginal(originalDevice, updatedRect);
+#endif
         m_d->projection = 0;
     } else {
+#ifndef DISABLE_TOP_DOWN_MERGE_STRATEGY
         updatedRect = repaintOriginal(originalDevice, updatedRect);
-
+#endif
         if (!updatedRect.isEmpty()) {
 
             if (!m_d->projection ||

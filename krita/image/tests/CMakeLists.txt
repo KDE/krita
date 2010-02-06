@@ -316,6 +316,12 @@ target_link_libraries(KisGraphWalkerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTT
 
 ########### next target ###############
 
+set(kis_async_merger_test_SRCS kis_async_merger_test.cpp )
+kde4_add_unit_test(KisAsyncMergerTest TESTNAME krita-image-KisAsyncMergerTest ${kis_async_merger_test_SRCS})
+target_link_libraries(KisAsyncMergerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_macro_test_SRCS kis_macro_test.cpp )
 kde4_add_unit_test(KisMacroTest TESTNAME krita-image-KisMacroTest ${kis_macro_test_SRCS})
 target_link_libraries(KisMacroTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

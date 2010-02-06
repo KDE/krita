@@ -138,9 +138,12 @@ void KisGroupLayer::setDirtyNode(KisNodeSP node)
     m_d->dirtyNode = node;
 }
 
+#include <stdio.h>
+
 QRect KisGroupLayer::repaintOriginal(KisPaintDeviceSP original,
                                      const QRect& rect)
 {
+    printf("groupppp\n");
     if (original == tryObligeChild()) {
         return rect;
     }

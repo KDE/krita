@@ -107,6 +107,9 @@ public:
      */
     void setFilter(KisFilterConfiguration *filterConfig);
 
+    QRect changeRect(const QRect& rect) const;
+    QRect needRect(const QRect& rect, PositionToFilthy pos = NORMAL) const;
+
 public slots:
     /**
      * gets this AdjustmentLayer. Overriddes function in

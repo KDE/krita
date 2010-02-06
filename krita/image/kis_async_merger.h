@@ -21,6 +21,7 @@
 
 #include <QDebug>
 
+//#include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoUpdater.h>
 
@@ -74,8 +75,18 @@ public:
         KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
         if (!filter) return false;
 
-        QRect applyRect = m_updateRect & layer->extent();
+        /**
+         * FIXME: Make good cropping!
+         * Maybe at the level of merge walker
+         */
+//        QRect applyRect = m_updateRect & layer->extent();
+        QRect applyRect = m_updateRect & m_projection->exactBounds();
         KisPaintDeviceSP originalDevice = layer->original();
+
+        qDebug()<<"PR:"<<m_projection->exactBounds();
+        qDebug()<<"AR:"<<applyRect;
+        qDebug()<<"NR:"<<layer->needRect(applyRect);
+
 
         /**
          * FIXME: check whether it's right to leave a selection to
@@ -91,7 +102,7 @@ public:
         QPointer<KoUpdater> updaterPtr = updater.startSubtask();
 
         KisTransaction* transaction =
-            new KisTransaction("", tempDevice);
+            new KisTransaction("", originalDevice);
         filter->process(srcCfg, dstCfg, applyRect.size(),
                         filterConfig, updaterPtr);
         delete transaction;
@@ -159,8 +170,11 @@ public:
 
         while(!nodeStack.isEmpty()) {
             KisMergeWalker::JobItem item = nodeStack.pop();
-            KisNodeSP currentNode = item.m_node;
+            KisLayerSP currentNode = dynamic_cast<KisLayer*>(item.m_node.data());
             QRect applyRect = item.m_applyRect;
+
+            if(!currentNode->parent()) continue;
+
 
             if(!m_currentProjection)
                 setupProjection(currentNode, useTempProjections);
@@ -169,18 +183,18 @@ public:
                                                      m_currentProjection);
 
             switch(item.m_position) {
-            case N_TOPMOST:
+            case KisGraphWalker::N_TOPMOST:
                 currentNode->accept(originalVisitor);
                 currentNode->updateProjection(applyRect);
                 compositeWithProjection(currentNode, applyRect);
                 writeProjection(currentNode, useTempProjections, applyRect);
                 resetProjection();
                 break;
-            case N_NORMAL:
+            case KisGraphWalker::N_NORMAL:
                 currentNode->accept(originalVisitor);
                 currentNode->updateProjection(applyRect);
-            case N_LOWER:
-            case N_BOTTOMMOST:
+            case KisGraphWalker::N_LOWER:
+            case KisGraphWalker::N_BOTTOMMOST:
                 compositeWithProjection(currentNode, applyRect);
             }
 
@@ -200,16 +214,17 @@ private:
     }
 
     void writeProjection(KisNodeSP topmostNode, bool useTempProjection, QRect rect) {
-        KisPaintDeviceSP parentOriginal = currentNode->parent()->original();
+        Q_UNUSED(useTempProjection);
+        KisPaintDeviceSP parentOriginal = topmostNode->parent()->original();
 
         if(m_currentProjection != parentOriginal) {
             KisPainter gc(parentOriginal);
-            gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+            gc.setCompositeOp(parentOriginal->colorSpace()->compositeOp(COMPOSITE_COPY));
             gc.bitBlt(rect.topLeft(), m_currentProjection, rect);
         }
     }
 
-    bool compositeWithProjection(KisLayer *layer, const QRect &rect) {
+    bool compositeWithProjection(KisLayerSP layer, const QRect &rect) {
 
         Q_ASSERT(m_currentProjection);
         if (!layer->visible()) return true;
@@ -217,7 +232,8 @@ private:
         KisPaintDeviceSP device = layer->projection();
         if (!device) return true;
 
-        QRect needRect = rect & device->extent();
+//        QRect needRect = rect & device->extent();
+        QRect needRect = rect & device->exactBounds();
 
         KisPainter gc(m_currentProjection);
         gc.setChannelFlags(layer->channelFlags());

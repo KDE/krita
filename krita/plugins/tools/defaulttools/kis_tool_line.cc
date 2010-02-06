@@ -5,6 +5,7 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -173,11 +174,11 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
 
 #ifdef ENABLE_RECORDING
                 if (image()) {
-                    KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
-                    setupPaintAction(linePaintAction);
-                    linePaintAction->addPoint(m_startPos);
-                    linePaintAction->addPoint(m_endPos);
-                    image()->actionRecorder()->addAction(*linePaintAction);
+                    KisRecordedPolyLinePaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
+                    setupPaintAction(&linePaintAction);
+                    linePaintAction.addPoint(m_startPos);
+                    linePaintAction.addPoint(m_endPos);
+                    image()->actionRecorder()->addAction(linePaintAction);
                 }
 #endif
                 canvas()->addCommand(m_painter->endTransaction());

@@ -2,6 +2,7 @@
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,12 +52,12 @@ KisToolPolyline::~KisToolPolyline()
 void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
 {
     if (image()) {
-        KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
-        setupPaintAction(linePaintAction);
+        KisRecordedPolyLinePaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
+        setupPaintAction(&linePaintAction);
         foreach(const QPointF& pt, points) {
-            linePaintAction->addPoint(KisPaintInformation(pt));
+            linePaintAction.addPoint(KisPaintInformation(pt));
         }
-        image()->actionRecorder()->addAction(*linePaintAction);
+        image()->actionRecorder()->addAction(linePaintAction);
     }
     if (!currentNode()->inherits("KisShapeLayer")) {
         KisPaintDeviceSP device = currentNode()->paintDevice();

@@ -6,6 +6,7 @@
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,9 +52,9 @@ void KisToolEllipse::finishEllipse(const QRectF& rect)
         return;
 
     if (image()) {
-        KisRecordedShapePaintAction* linePaintAction = new KisRecordedShapePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), KisRecordedShapePaintAction::Ellipse, rect);
-        setupPaintAction(linePaintAction);
-        image()->actionRecorder()->addAction(*linePaintAction);
+        KisRecordedShapePaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), KisRecordedShapePaintAction::Ellipse, rect);
+        setupPaintAction(&linePaintAction);
+        image()->actionRecorder()->addAction(linePaintAction);
     }
 
     if (!currentNode()->inherits("KisShapeLayer")) {

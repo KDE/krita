@@ -203,6 +203,7 @@ public:
 };
 
 class KisMergeWalker;
+class KisFullRefreshWalker;
 
 class KisWalkersTest : public QObject
 {
@@ -212,9 +213,13 @@ private slots:
 
     void testUsualVisiting();
     void testMergeVisiting();
+    void testFullRefreshVisiting();
     void testCachedVisiting();
 private:
     void verifyResult(KisMergeWalker walker, QStringList reference,
+                      QRect accessRect, bool changeRectVaries,
+                      bool needRectVaries);
+    void verifyResult(KisFullRefreshWalker walker, QStringList reference,
                       QRect accessRect, bool changeRectVaries,
                       bool needRectVaries);
 };

@@ -19,6 +19,7 @@
 #include "kis_walkers_test.h"
 
 #include "kis_merge_walker.h"
+#include "kis_full_refresh_walker.h"
 
 #include <qtest_kde.h>
 #include <KoColorSpaceRegistry.h>
@@ -95,8 +96,36 @@ QString nodeTypePostfix(KisMergeWalker::NodePosition position)
 }
 
 void KisWalkersTest::verifyResult(KisMergeWalker walker, QStringList reference,
-                 QRect accessRect, bool changeRectVaries,
-                 bool needRectVaries)
+                                  QRect accessRect, bool changeRectVaries,
+                                  bool needRectVaries)
+{
+    KisMergeWalker::NodeStack &list = walker.nodeStack();
+    QStringList::const_iterator iter = reference.constBegin();
+
+    foreach(KisMergeWalker::JobItem item, list) {
+#ifdef DEBUG_VISITORS
+        qDebug() << item.m_node->name() << '\t'
+                 << item.m_applyRect << '\t'
+                 << nodeTypeString(item.m_position);
+#endif
+
+        QVERIFY(item.m_node->name() == *iter);
+
+        iter++;
+    }
+
+#ifdef DEBUG_VISITORS
+    qDebug() << "Result AR:\t" << walker.accessRect();
+#endif
+
+    QVERIFY(walker.accessRect() == accessRect);
+    QVERIFY(walker.changeRectVaries() == changeRectVaries);
+    QVERIFY(walker.needRectVaries() == needRectVaries);
+}
+
+void KisWalkersTest::verifyResult(KisFullRefreshWalker walker, QStringList reference,
+                                  QRect accessRect, bool changeRectVaries,
+                                  bool needRectVaries)
 {
     KisMergeWalker::NodeStack &list = walker.nodeStack();
     QStringList::const_iterator iter = reference.constBegin();
@@ -291,6 +320,62 @@ void KisWalkersTest::testMergeVisiting()
 
 }
 
+    /*
+      +----------+
+      |root      |
+      | layer 5  |
+      | cplx  2  |
+      | group    |
+      |  paint 4 |
+      |  paint 3 |
+      |  cplx  1 |
+      |  paint 2 |
+      | paint 1  |
+      +----------+
+     */
+
+void KisWalkersTest::testFullRefreshVisiting()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE);
+    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE);
+    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE);
+    KisLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE);
+
+    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE);
+    KisLayerSP complexRectsLayer1 = new ComplexRectsLayer(image, "cplx1", OPACITY_OPAQUE);
+    KisLayerSP complexRectsLayer2 = new ComplexRectsLayer(image, "cplx2", OPACITY_OPAQUE);
+
+    image->addNode(paintLayer1, image->rootLayer());
+    image->addNode(groupLayer, image->rootLayer());
+    image->addNode(complexRectsLayer2, image->rootLayer());
+    image->addNode(paintLayer5, image->rootLayer());
+
+    image->addNode(paintLayer2, groupLayer);
+    image->addNode(complexRectsLayer1, groupLayer);
+    image->addNode(paintLayer3, groupLayer);
+    image->addNode(paintLayer4, groupLayer);
+
+    QRect testRect(10,10,10,10);
+    // Empty rect to show we don't need any cropping
+    QRect cropRect;
+
+    KisFullRefreshWalker walker(cropRect);
+
+    {
+        QString order("root,paint5,cplx2,group,paint1,"
+                      "paint4,paint3,cplx1,paint2");
+        QStringList orderList = order.split(",");
+        QRect accessRect(-4,-4,38,38);
+
+        reportStartWith("root");
+        walker.collectRects(image->rootLayer(), testRect);
+        verifyResult(walker, orderList, accessRect, false, true);
+    }
+}
 
     /*
       +----------+

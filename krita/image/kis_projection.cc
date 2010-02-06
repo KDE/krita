@@ -33,6 +33,7 @@
 #include "kis_group_layer.h"
 
 #include "kis_merge_walker.h"
+#include "kis_full_refresh_walker.h"
 #include "kis_async_merger.h"
 
 class KisProjection::Private
@@ -75,6 +76,7 @@ void KisProjection::run()
     // startUpdate will be executed in gui thread.
     m_d->updater = new KisImageUpdater();
     connect(this, SIGNAL(sigUpdateProjection(KisNodeSP, QRect, QRect)), m_d->updater, SLOT(startUpdate(KisNodeSP, QRect, QRect)));
+    connect(this, SIGNAL(sigFullRefresh(KisNodeSP, QRect)), m_d->updater, SLOT(startFullRefresh(KisNodeSP, QRect)));
     connect(m_d->updater, SIGNAL(updateDone(QRect)), m_d->image, SLOT(slotProjectionUpdated(QRect)));
     exec(); // start the event loop
 }
@@ -147,11 +149,29 @@ void KisProjection::updateProjection(KisNodeSP node, const QRect& rc)
     }
 }
 
+void KisProjection::fullRefresh()
+{
+    // No splitting - trivial, but works :)
+    emit sigFullRefresh(m_d->image->rootLayer(), m_d->image->bounds());
+}
+
 void KisProjection::updateSettings()
 {
     KConfigGroup cfg = KGlobal::config()->group("");
     m_d->updateRectSize = cfg.readEntry("updaterectsize", 512);
     m_d->useRegionOfInterest = cfg.readEntry("use_region_of_interest", false);
+}
+
+void KisImageUpdater::startFullRefresh(KisNodeSP node, const QRect& cropRect)
+{
+    KisFullRefreshWalker walker(cropRect);
+    KisAsyncMerger merger;
+
+    walker.collectRects(node, cropRect);
+    merger.startMerge(walker);
+
+    QRect rect = walker.changeRect();
+    emit updateDone(rect);
 }
 
 void KisImageUpdater::startUpdate(KisNodeSP node, const QRect& rc, const QRect& cropRect)

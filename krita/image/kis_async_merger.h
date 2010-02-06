@@ -160,7 +160,7 @@ public:
      * FIXME: Check node<->layer transitions
      */
 
-    void startMerge(KisMergeWalker &walker) {
+    void startMerge(KisBaseRectsWalker &walker) {
         KisMergeWalker::NodeStack &nodeStack = walker.nodeStack();
 
         const bool useTempProjections = walker.needRectVaries();

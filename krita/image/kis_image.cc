@@ -1150,8 +1150,9 @@ KisPerspectiveGrid* KisImage::perspectiveGrid()
 
 void KisImage::refreshGraph()
 {
-    KisRefreshVisitor refresher(this);
-    rootLayer()->accept(refresher);
+    if (!locked() && m_d->projection) {
+        m_d->projection->fullRefresh();
+    }
 }
 
 void KisImage::slotProjectionUpdated(const QRect & rc)

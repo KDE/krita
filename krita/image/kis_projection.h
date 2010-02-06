@@ -56,6 +56,8 @@ public:
      * for KisImageUpdater to catch. KisImageUpdater belongs to this thread.
      */
     void updateProjection(KisNodeSP node, const QRect& rc);
+    void fullRefresh();
+
     void setRegionOfInterest(const QRect & roi);
     void updateSettings();
     void stop();
@@ -63,6 +65,7 @@ public:
 signals:
 
     void sigUpdateProjection(KisNodeSP node, const QRect& rc, const QRect& cropRect);
+    void sigFullRefresh(KisNodeSP node, const QRect& rc);
 
 private:
 
@@ -85,6 +88,7 @@ class KisImageUpdater : public QObject
 public slots:
 
     void startUpdate(KisNodeSP node, const QRect& rc, const QRect& cropRect);
+    void startFullRefresh(KisNodeSP node, const QRect& rc);
 
 signals:
 

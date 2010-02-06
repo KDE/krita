@@ -157,6 +157,10 @@ public:
     ~KisAsyncMerger() {
     }
 
+    /**
+     * FIXME: Check node<->layer transitions
+     */
+
     void startMerge(KisMergeWalker &walker) {
         KisMergeWalker::NodeStack &nodeStack = walker.nodeStack();
 
@@ -164,11 +168,10 @@ public:
 
         while(!nodeStack.isEmpty()) {
             KisMergeWalker::JobItem item = nodeStack.pop();
+            if(isRootNode(item.m_node)) continue;
+
             KisLayerSP currentNode = dynamic_cast<KisLayer*>(item.m_node.data());
             QRect applyRect = item.m_applyRect;
-
-            if(!currentNode->parent()) continue;
-
 
             if(!m_currentProjection)
                 setupProjection(currentNode, useTempProjections);
@@ -196,6 +199,10 @@ public:
     }
 
 private:
+    static inline bool isRootNode(KisNodeSP node) {
+        return !node->parent();
+    }
+
     void resetProjection() {
         m_currentProjection = 0;
     }

@@ -16,20 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_graph_walker.h"
+#include "kis_merge_walker.h"
 
 
-KisGraphWalker::KisGraphWalker()
+KisMergeWalker::KisMergeWalker(QRect cropRect)
+    : KisBaseRectsWalker(cropRect)
 {
-
 }
 
-KisGraphWalker::~KisGraphWalker()
+KisMergeWalker::~KisMergeWalker()
 {
-
 }
 
-void KisGraphWalker::startTrip(KisNodeSP startWith)
+void KisMergeWalker::startTrip(KisNodeSP startWith)
 {
     visitHigherNode(startWith);
 
@@ -38,7 +37,7 @@ void KisGraphWalker::startTrip(KisNodeSP startWith)
         visitLowerNode(prevNode);
 }
 
-void KisGraphWalker::visitHigherNode(KisNodeSP node)
+void KisMergeWalker::visitHigherNode(KisNodeSP node)
 {
     KisNodeSP nextNode = node->nextSibling();
 
@@ -52,7 +51,7 @@ void KisGraphWalker::visitHigherNode(KisNodeSP node)
     registerNeedRect(node, nextNode ? N_NORMAL : N_TOPMOST);
 }
 
-void KisGraphWalker::visitLowerNode(KisNodeSP node)
+void KisMergeWalker::visitLowerNode(KisNodeSP node)
 {
     KisNodeSP prevNode = node->prevSibling();
     registerNeedRect(node, prevNode ? N_LOWER : N_BOTTOMMOST);
@@ -60,26 +59,3 @@ void KisGraphWalker::visitLowerNode(KisNodeSP node)
     if (prevNode)
         visitLowerNode(prevNode);
 }
-
-
-// QRect KisGraphWalker::getChangeRectForNode(const KisNodeSP &targetNode,
-//                                            const KisNodeSP &startNode,
-//                                            const QRect &startRect)
-// {
-//     KisNodeSP node = startNode;
-//     QRect changeRect = startRect;
-
-//     while(node) {
-//         changeRect = node->changeRect(changeRect);
-
-//         if(node == targetNode)
-//             return changeRect;
-
-//         if (node->nextSibling())
-//             node = node->nextSibling();
-//         else if (node->parent())
-//             node = node->parent();
-//     }
-
-//     return QRect();
-// }

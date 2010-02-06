@@ -16,25 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_GRAPH_WALKER_H
-#define __KIS_GRAPH_WALKER_H
+#ifndef __KIS_MERGE_WALKER_H
+#define __KIS_MERGE_WALKER_H
 
 #include "kis_node.h"
 #include "kis_types.h"
+#include "kis_base_rects_walker.h"
 
-class KRITAIMAGE_EXPORT KisGraphWalker
+class KRITAIMAGE_EXPORT KisMergeWalker : public KisBaseRectsWalker
 {
-public:
-    enum NodePosition {
-        N_NORMAL,
-        N_LOWER,
-        N_TOPMOST,
-        N_BOTTOMMOST
-    };
 
 public:
-    KisGraphWalker();
-    virtual ~KisGraphWalker();
+    KisMergeWalker(QRect cropRect);
+    virtual ~KisMergeWalker();
+
+protected:
 
     /**
      * Begins visiting nodes starting with @startWith.
@@ -60,30 +56,8 @@ private:
      * startTrip() one more time.
      */
     void visitLowerNode(KisNodeSP node);
-
-protected:
-    /**
-     * Repeats iterations of changeRect-loop until reaches @targetNode.
-     * It's O(n) but is supposed to be used very rarely. It will be called
-     * for nodes lying under a node with empty needRect, but above
-     * filthy node.
-     */
-    //QRect getChangeRectForNode(const KisNodeSP &targetNode,
-    //                           const KisNodeSP &startNode,
-    //                           const QRect &startRect);
-
-    /**
-     * Called for every node we meet on a forward way of the trip.
-     */
-    virtual void registerChangeRect(KisNodeSP node) = 0;
-
-    /**
-     * Called for every node we meet on a backward way of the trip.
-     */
-    virtual void registerNeedRect(KisNodeSP node,
-                                  NodePosition position) = 0;
 };
 
 
-#endif /* __KIS_GRAPH_WALKER_H */
+#endif /* __KIS_MERGE_WALKER_H */
 

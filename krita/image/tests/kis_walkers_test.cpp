@@ -16,11 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_graph_walker_test.h"
+#include "kis_walkers_test.h"
 
-#include "kis_graph_walker.h"
-
-#include "kis_merge_walkers.h"
+#include "kis_merge_walker.h"
 
 #include <qtest_kde.h>
 #include <KoColorSpaceRegistry.h>
@@ -33,18 +31,25 @@
 
 #define DEBUG_VISITORS
 
-QString nodeTypeString(KisGraphWalker::NodePosition position);
-QString nodeTypePostfix(KisGraphWalker::NodePosition position);
+QString nodeTypeString(KisMergeWalker::NodePosition position);
+QString nodeTypePostfix(KisMergeWalker::NodePosition position);
 
 /************** Test Implementation Of A Walker *********************/
-class KisTestWalker : public KisGraphWalker
+class KisTestWalker : public KisMergeWalker
 {
 public:
+    KisTestWalker()
+        :KisMergeWalker(QRect())
+    {
+    }
+
     QStringList popResult() {
         QStringList order(m_order);
         m_order.clear();
         return order;
     }
+
+    using KisMergeWalker::startTrip;
 
 protected:
 
@@ -73,7 +78,7 @@ void reportStartWith(QString nodeName)
     qDebug() << "Start with:" << nodeName;
 }
 
-QString nodeTypeString(KisGraphWalker::NodePosition position)
+QString nodeTypeString(KisMergeWalker::NodePosition position)
 {
     static QString pos("  normal,  lower,top,bottom");
     static QStringList positionName  = pos.split(",");
@@ -81,7 +86,7 @@ QString nodeTypeString(KisGraphWalker::NodePosition position)
     return positionName[position];
 }
 
-QString nodeTypePostfix(KisGraphWalker::NodePosition position)
+QString nodeTypePostfix(KisMergeWalker::NodePosition position)
 {
     static QString index("_N,_L,_T,_B");
     static QStringList indexName  = index.split(",");
@@ -89,7 +94,7 @@ QString nodeTypePostfix(KisGraphWalker::NodePosition position)
     return indexName[position];
 }
 
-void KisGraphWalkerTest::verifyResult(KisMergeWalker walker, QStringList reference,
+void KisWalkersTest::verifyResult(KisMergeWalker walker, QStringList reference,
                  QRect accessRect, bool changeRectVaries,
                  bool needRectVaries)
 {
@@ -132,7 +137,7 @@ void KisGraphWalkerTest::verifyResult(KisMergeWalker walker, QStringList referen
       +----------+
      */
 
-void KisGraphWalkerTest::testUsualVisiting()
+void KisWalkersTest::testUsualVisiting()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
@@ -205,7 +210,7 @@ void KisGraphWalkerTest::testUsualVisiting()
       +----------+
      */
 
-void KisGraphWalkerTest::testMergeVisiting()
+void KisWalkersTest::testMergeVisiting()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
@@ -300,7 +305,7 @@ void KisGraphWalkerTest::testMergeVisiting()
       +----------+
      */
 
-void KisGraphWalkerTest::testCachedVisiting()
+void KisWalkersTest::testCachedVisiting()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
@@ -352,6 +357,6 @@ void KisGraphWalkerTest::testCachedVisiting()
 
 }
 
-QTEST_KDEMAIN(KisGraphWalkerTest, NoGUI)
-#include "kis_graph_walker_test.moc"
+QTEST_KDEMAIN(KisWalkersTest, NoGUI)
+#include "kis_walkers_test.moc"
 

@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_GRAPH_WALKER_TESTER_H
-#define KIS_GRAPH_WALKER_TESTER_H
+#ifndef KIS_WALKERS_TEST_H
+#define KIS_WALKERS_TEST_H
 
 #include <QtTest/QtTest>
 
@@ -204,7 +204,7 @@ public:
 
 class KisMergeWalker;
 
-class KisGraphWalkerTest : public QObject
+class KisWalkersTest : public QObject
 {
     Q_OBJECT
 

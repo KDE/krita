@@ -32,7 +32,7 @@
 #include "kis_image.h"
 #include "kis_group_layer.h"
 
-#include "kis_merge_walkers.h"
+#include "kis_merge_walker.h"
 #include "kis_async_merger.h"
 
 class KisProjection::Private

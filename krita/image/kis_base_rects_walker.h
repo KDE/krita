@@ -16,15 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_MERGE_WALKERS_H
-#define __KIS_MERGE_WALKERS_H
+#ifndef __KIS_BASE_RECTS_WALKER_H
+#define __KIS_BASE_RECTS_WALKER_H
 
 #include <QStack>
-#include "kis_graph_walker.h"
 
-class KRITAIMAGE_EXPORT KisMergeWalker : KisGraphWalker
+class KRITAIMAGE_EXPORT KisBaseRectsWalker
 {
 public:
+    enum NodePosition {
+        N_NORMAL,
+        N_LOWER,
+        N_TOPMOST,
+        N_BOTTOMMOST
+    };
+
     struct JobItem {
         KisNodeSP m_node;
         NodePosition m_position;
@@ -41,9 +47,11 @@ public:
     typedef QStack<JobItem> NodeStack;
 
 public:
-    KisMergeWalker(QRect cropRect)
-    {
+    KisBaseRectsWalker(QRect cropRect) {
         setCropRect(cropRect);
+    }
+
+    virtual ~KisBaseRectsWalker() {
     }
 
     void collectRects(KisNodeSP node, const QRect& requestedRect) {
@@ -84,6 +92,14 @@ public:
     }
 
 protected:
+
+    /**
+     * Initiates collecting of rects.
+     * Should be implemented in derived classes
+     */
+    virtual void startTrip(KisNodeSP startWith) = 0;
+
+protected:
     inline void clear() {
         m_resultAccessRect = /*m_resultChangeRect =*/
             m_childNeedRect = m_lastNeedRect = QRect();
@@ -105,14 +121,10 @@ protected:
         return m_cropRect.isValid() ? rect & m_cropRect : rect;
     }
 
-    inline bool dependOnLowerNodes(KisNodeSP node) {
-        /**
-         * FIXME: Clone Layers should be considered too
-         */
-        return qobject_cast<KisAdjustmentLayer*>(node.data());
-    }
-
-    void registerChangeRect(KisNodeSP node) {
+    /**
+     * Called for every node we meet on a forward way of the trip.
+     */
+    virtual void registerChangeRect(KisNodeSP node) {
         QRect currentChangeRect = node->changeRect(m_resultChangeRect);
         currentChangeRect = cropThisRect(currentChangeRect);
 
@@ -122,7 +134,10 @@ protected:
         m_resultChangeRect = currentChangeRect;
     }
 
-    void registerNeedRect(KisNodeSP node, NodePosition position) {
+    /**
+     * Called for every node we meet on a backward way of the trip.
+     */
+    virtual void registerNeedRect(KisNodeSP node, NodePosition position) {
         if(m_mergeTask.isEmpty())
             m_resultAccessRect = m_childNeedRect =
                 m_lastNeedRect = m_resultChangeRect;
@@ -167,11 +182,10 @@ private:
      * data for a successful merge operation.
      */
     QRect m_resultAccessRect;
+    QRect m_resultChangeRect;
     bool m_needRectVaries;
     bool m_changeRectVaries;
     NodeStack m_mergeTask;
-    // FIXME: Think over moving to temporary
-    QRect m_resultChangeRect;
 
     /**
      * Temporary variables
@@ -184,5 +198,5 @@ private:
     QRect m_lastNeedRect;
 };
 
-#endif /* __KIS_MERGE_WALKERS_H */
+#endif /* __KIS_BASE_RECTS_WALKER_H */
 

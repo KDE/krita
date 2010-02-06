@@ -48,7 +48,7 @@
 #include "kis_node_progress_proxy.h"
 
 
-#include "kis_merge_walkers.h"
+#include "kis_merge_walker.h"
 
 
 class KisUpdateOriginalVisitor : public KisNodeVisitor
@@ -179,18 +179,18 @@ public:
                                                      m_currentProjection);
 
             switch(item.m_position) {
-            case KisGraphWalker::N_TOPMOST:
+            case KisMergeWalker::N_TOPMOST:
                 currentNode->accept(originalVisitor);
                 currentNode->updateProjection(applyRect);
                 compositeWithProjection(currentNode, applyRect);
                 writeProjection(currentNode, useTempProjections, applyRect);
                 resetProjection();
                 break;
-            case KisGraphWalker::N_NORMAL:
+            case KisMergeWalker::N_NORMAL:
                 currentNode->accept(originalVisitor);
                 currentNode->updateProjection(applyRect);
-            case KisGraphWalker::N_LOWER:
-            case KisGraphWalker::N_BOTTOMMOST:
+            case KisMergeWalker::N_LOWER:
+            case KisMergeWalker::N_BOTTOMMOST:
                 compositeWithProjection(currentNode, applyRect);
             }
 

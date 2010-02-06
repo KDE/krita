@@ -310,9 +310,9 @@ target_link_libraries(KisLayerCommandsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_Q
 
 ########### next target ###############
 
-set(kis_graph_walker_test_SRCS kis_graph_walker_test.cpp )
-kde4_add_unit_test(KisGraphWalkerTest TESTNAME krita-image-KisGraphWalkerTest ${kis_graph_walker_test_SRCS})
-target_link_libraries(KisGraphWalkerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+set(kis_walkers_test_SRCS kis_walkers_test.cpp )
+kde4_add_unit_test(KisWalkersTest TESTNAME krita-image-KisWalkersTest ${kis_walkers_test_SRCS})
+target_link_libraries(KisWalkersTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

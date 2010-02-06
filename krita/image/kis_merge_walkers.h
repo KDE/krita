@@ -55,7 +55,7 @@ public:
         m_cropRect = cropRect;
     }
 
-    inline QRect cropRect() {
+    inline QRect cropRect() const{
         return m_cropRect;
     }
 
@@ -64,15 +64,15 @@ public:
         return m_mergeTask;
     }
 
-    inline QRect& accessRect() {
+    inline const QRect& accessRect() const {
         return m_resultAccessRect;
     }
 
-    inline bool needRectVaries() {
+    inline bool needRectVaries() const {
         return m_needRectVaries;
     }
 
-    inline bool changeRectVaries() {
+    inline bool changeRectVaries() const {
         return m_changeRectVaries;
     }
 

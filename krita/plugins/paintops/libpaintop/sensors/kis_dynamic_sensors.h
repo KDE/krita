@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006-2007,2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -30,8 +30,8 @@ class KisDynamicSensorFuzzy : public KisDynamicSensor
 public:
     KisDynamicSensorFuzzy();
     virtual ~KisDynamicSensorFuzzy() { }
-    virtual double parameter(const KisPaintInformation&) {
-        return rand() / (double)RAND_MAX;
+    virtual qreal parameter(const KisPaintInformation&) {
+        return rand() / (qreal)RAND_MAX;
     }
 };
 
@@ -40,7 +40,7 @@ class KisDynamicSensorSpeed : public KisDynamicSensor
 public:
     KisDynamicSensorSpeed();
     virtual ~KisDynamicSensorSpeed() { }
-    virtual double parameter(const KisPaintInformation& info) {
+    virtual qreal parameter(const KisPaintInformation& info) {
         return 1.0 + info.movement().norm() * 0.1;
     }
 };
@@ -50,7 +50,17 @@ class KisDynamicSensorDrawingAngle : public KisDynamicSensor
 public:
     KisDynamicSensorDrawingAngle();
     virtual ~KisDynamicSensorDrawingAngle() { }
-    virtual double parameter(const KisPaintInformation& info);
+    virtual qreal parameter(const KisPaintInformation& info);
+};
+
+class KisDynamicSensorRotation : public KisDynamicSensor
+{
+public:
+    KisDynamicSensorRotation();
+    virtual ~KisDynamicSensorRotation() { }
+    virtual qreal parameter(const KisPaintInformation& info) {
+        return info.rotation();
+    }
 };
 
 class KisDynamicSensorPressure : public KisDynamicSensor
@@ -58,7 +68,7 @@ class KisDynamicSensorPressure : public KisDynamicSensor
 public:
     KisDynamicSensorPressure();
     virtual ~KisDynamicSensorPressure() { }
-    virtual double parameter(const KisPaintInformation& info) {
+    virtual qreal parameter(const KisPaintInformation& info) {
         return info.pressure();
     }
 };
@@ -68,7 +78,7 @@ class KisDynamicSensorXTilt : public KisDynamicSensor
 public:
     KisDynamicSensorXTilt();
     virtual ~KisDynamicSensorXTilt() { }
-    virtual double parameter(const KisPaintInformation& info) {
+    virtual qreal parameter(const KisPaintInformation& info) {
         return 1.0 - fabs(info.xTilt()) / 60.0;
     }
 };
@@ -78,7 +88,7 @@ class KisDynamicSensorYTilt : public KisDynamicSensor
 public:
     KisDynamicSensorYTilt();
     virtual ~KisDynamicSensorYTilt() { }
-    virtual double parameter(const KisPaintInformation& info) {
+    virtual qreal parameter(const KisPaintInformation& info) {
         return 1.0 - fabs(info.yTilt()) / 60.0;
     }
 };

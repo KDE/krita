@@ -49,6 +49,8 @@ KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
         return new KisDynamicSensorSpeed();
     } else if (id.id() == DrawingAngleId.id()) {
         return new KisDynamicSensorDrawingAngle();
+    } else if (id.id() == RotationId.id()) {
+        return new KisDynamicSensorRotation();
     } else if (id.id() == TimeId.id()) {
         return new KisDynamicSensorTime();
     } else if (id.id() == FuzzyId.id()) {
@@ -72,7 +74,7 @@ KisDynamicSensor* KisDynamicSensor::createFromXML(const QDomElement& e)
 QList<KoID> KisDynamicSensor::sensorsIds()
 {
     QList<KoID> ids;
-    ids << PressureId << XTiltId << YTiltId << SpeedId << DrawingAngleId << TimeId << FuzzyId;
+    ids << PressureId << XTiltId << YTiltId << SpeedId << DrawingAngleId << RotationId << TimeId << FuzzyId;
     return ids;
 }
 

@@ -747,36 +747,46 @@ qint32 KisImage::nHiddenLayers() const
 void KisImage::flatten()
 {
     KisGroupLayerSP oldRootLayer = m_d->rootLayer;
+    KisGroupLayerSP newRootLayer =
+        new KisGroupLayer(this, "root", OPACITY_OPAQUE);
 
-    KisPaintLayer *dst = new KisPaintLayer(this, nextLayerName(), OPACITY_OPAQUE, colorSpace());
-    Q_CHECK_PTR(dst);
+    // - synchronous?
+    // - not =(
+    // - KisProjection::lock() should work like a barier
+    // - fixme?
+    refreshGraph();
 
-    QRect rc = mergedImage()->extent();
+    lock();
+    KisPaintDeviceSP projectionCopy =
+        new KisPaintDevice(*oldRootLayer->projection());
+    unlock();
 
-    KisPainter gc(dst->paintDevice());
-    gc.setCompositeOp(COMPOSITE_OVER);
-    gc.bitBlt(rc.x(), rc.y(), mergedImage(), rc.left(), rc.top(), rc.width(), rc.height());
+    KisPaintLayerSP flattenLayer =
+        new KisPaintLayer(this, nextLayerName(), OPACITY_OPAQUE, projectionCopy);
+    Q_CHECK_PTR(flattenLayer);
 
-    setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE));
 
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Flatten Image"));
         m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-        m_d->adapter->addCommand(new KisImageChangeLayersCommand(KisImageWSP(this), oldRootLayer, m_d->rootLayer, ""));
+        m_d->adapter->addCommand(new KisImageChangeLayersCommand(KisImageWSP(this), oldRootLayer, newRootLayer, ""));
+    }
+    else {
+        lock();
+        setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE));
     }
 
-    lock();
-
-    addNode(dst, m_d->rootLayer.data(), 0);
-
-    unlock();
-
-    notifyLayersChanged();
+    addNode(flattenLayer, newRootLayer, 0);
 
     if (undo()) {
         m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
         m_d->adapter->endMacro();
     }
+    else {
+        unlock();
+    }
+
+    notifyLayersChanged();
 }
 
 
@@ -1063,6 +1073,9 @@ void KisImage::setColorSpace(const KoColorSpace * colorSpace)
 
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
+    if(m_d->rootLayer)
+        m_d->rootLayer->disconnect();
+
     m_d->rootLayer = rootLayer;
     m_d->rootLayer->disconnect();
     m_d->rootLayer->setGraphListener(this);

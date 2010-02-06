@@ -849,16 +849,12 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
     if (!layer->firstChild()) return layer;
 
     undoAdapter()->beginMacro(i18n("Flatten Layer"));
-    KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), layer->opacity(), colorSpace());
-    newLayer->setCompositeOp(layer->compositeOp()->id());
-    newLayer->metaData();
-    QRect rc = layer->extent();
 
-    KisPainter gc(newLayer->paintDevice());
-    gc.setCompositeOp(newLayer->colorSpace()->compositeOp(COMPOSITE_COPY));
-    gc.bitBlt(rc.topLeft(), layer->projection(), rc);
-    gc.end();
-    undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, layer->parent(), layer->nextSibling()));
+    KisPaintDeviceSP mergedDevice = new KisPaintDevice(*layer->projection());
+    KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), layer->opacity(), mergedDevice);
+    newLayer->setCompositeOp(layer->compositeOp()->id());
+
+    undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, layer->parent(), layer));
 
     KisNodeSP node = layer->firstChild();
     while (node) {

@@ -51,7 +51,7 @@ class KOTEXT_EXPORT KoCharacterStyle : public QObject
 {
     Q_OBJECT
 public:
-    /// list of character style properties we can store in a QCharFormat
+    /// list of character style properties we can store in a QTextCharFormat
     enum Property {
         StyleId = QTextFormat::UserProperty + 1, ///< The id stored in the charFormat to link the text to this style.
         HasHyphenation,

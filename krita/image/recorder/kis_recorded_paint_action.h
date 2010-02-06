@@ -21,6 +21,7 @@
 
 #include "recorder/kis_recorded_action.h"
 #include "kis_types.h"
+#include "kis_painter.h"
 
 class KisPaintInformation;
 class KisPainter;
@@ -65,6 +66,11 @@ public:
     QString compositeOp();
     void setCompositeOp(const QString& );
     void setPaintIncremental(bool );
+    void setStrokeStyle(KisPainter::StrokeStyle );
+    void setFillStyle(KisPainter::FillStyle );
+    void setPattern(const KisPattern* );
+    void setGradient(const KoAbstractGradient* gradient);
+    void setGenerator(const KisFilterConfiguration * generator);
 private:
 
     struct Private;

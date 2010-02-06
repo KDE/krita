@@ -50,6 +50,11 @@ struct KisRecordedPaintAction::Private {
     int opacity;
     bool paintIncremental;
     QString compositeOp;
+    KisPainter::StrokeStyle strokeStyle;
+    KisPainter::FillStyle fillStyle;
+    const KisPattern* pattern;
+    const KoAbstractGradient* gradient;
+    const KisFilterConfiguration* generator;
 };
 
 KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
@@ -64,6 +69,11 @@ KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
     d->opacity = 100;
     d->paintIncremental = true;
     d->compositeOp = COMPOSITE_OVER;
+    d->strokeStyle = KisPainter::StrokeStyleBrush;
+    d->fillStyle = KisPainter::FillStyleNone;
+    d->pattern = 0;
+    d->gradient = 0;
+    d->generator = 0;
 }
 
 KisRecordedPaintAction::KisRecordedPaintAction(const KisRecordedPaintAction& rhs) : KisRecordedAction(rhs), d(new Private(*rhs.d))
@@ -160,6 +170,31 @@ void KisRecordedPaintAction::setPaintIncremental(bool v)
     d->paintIncremental = v;
 }
 
+void KisRecordedPaintAction::setStrokeStyle(KisPainter::StrokeStyle strokeStyle)
+{
+  d->strokeStyle = strokeStyle;
+}
+
+void KisRecordedPaintAction::setFillStyle(KisPainter::FillStyle fillStyle)
+{
+  d->fillStyle = fillStyle;
+}
+
+void KisRecordedPaintAction::setPattern(const KisPattern* pattern)
+{
+  d->pattern = pattern;
+}
+
+void KisRecordedPaintAction::setGradient(const KoAbstractGradient* gradient)
+{
+  d->gradient = gradient;
+}
+
+void KisRecordedPaintAction::setGenerator(const KisFilterConfiguration * generator)
+{
+  d->generator = generator;
+}
+
 void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
 {
     Q_UNUSED(node);
@@ -195,6 +230,12 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
         d->paintOpPreset->settings()->setNode(node);
         painter.setPaintOpPreset(d->paintOpPreset, info.image());
 
+        painter.setStrokeStyle(d->strokeStyle);
+        painter.setFillStyle(d->fillStyle);
+        painter.setPattern(d->pattern);
+        painter.setGradient(d->gradient);
+        painter.setGenerator(d->generator);
+        
         playPaint(info, &painter);
 
         if (!d->paintIncremental) {

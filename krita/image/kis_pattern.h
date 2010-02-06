@@ -44,11 +44,11 @@ public:
      * returns a KisPaintDeviceSP made with colorSpace as the ColorSpace strategy
      * for use in the fill painter.
      **/
-    KisPaintDeviceSP paintDevice(const KoColorSpace * colorSpace);
+    KisPaintDeviceSP paintDevice(const KoColorSpace * colorSpace) const;
 
     KisPattern* clone() const;
 private:
-    QMap<QString, KisPaintDeviceSP> m_colorspaces;
+    mutable QMap<QString, KisPaintDeviceSP> m_colorspaces;
 };
 
 #endif

@@ -349,10 +349,10 @@ public:
     KisPaintOp* paintOp() const;
 
     /// Set the current pattern
-    void setPattern(KisPattern * pattern);
+    void setPattern(const KisPattern * pattern);
 
     /// Returns the currently set pattern
-    KisPattern * pattern() const;
+    const KisPattern * pattern() const;
 
     /**
      * Set the color that will be used to paint with, and convert it

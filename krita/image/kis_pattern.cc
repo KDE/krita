@@ -62,7 +62,7 @@ KisPattern::~KisPattern()
 {
 }
 
-KisPaintDeviceSP KisPattern::paintDevice(const KoColorSpace * colorSpace)
+KisPaintDeviceSP KisPattern::paintDevice(const KoColorSpace * colorSpace) const
 {
     // Check if there's already a pattern prepared for this colorspace
     QMap<QString, KisPaintDeviceSP>::const_iterator it = m_colorspaces.constFind(colorSpace->id());
@@ -70,7 +70,7 @@ KisPaintDeviceSP KisPattern::paintDevice(const KoColorSpace * colorSpace)
         return (*it);
 
     // If not, create one
-    KisPaintDeviceSP layer = KisPaintDeviceSP(new KisPaintDevice(colorSpace));
+    KisPaintDeviceSP layer = new KisPaintDevice(colorSpace);
 
     Q_CHECK_PTR(layer);
 

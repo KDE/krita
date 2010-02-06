@@ -107,7 +107,7 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
     }
 }
 
-void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPattern * pattern)
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPattern * pattern)
 {
     if (!pattern) return;
     if (!pattern->valid()) return;

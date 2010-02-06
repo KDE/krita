@@ -105,7 +105,7 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 
 KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
 {
-    if (parent().isNull() && childCount() == 1) {
+    if (/*parent().isNull() &&*/ childCount() == 1) {
         const KisLayer *child = dynamic_cast<KisLayer*>(firstChild().data());
 
         if (child &&

@@ -119,6 +119,51 @@ void KisAsyncMergerTest::testMerger()
 }
 
 
+/**
+ * This in not fully automated test for child obliging in KisAsyncMerger.
+ * It just checks whether devices are shared. To check if the merger
+ * touches originals you can add a debug message to the merger
+ * and take a look.
+ */
+
+    /*
+      +-----------+
+      |root       |
+      | group     |
+      |  paint 1  |
+      +-----------+
+     */
+
+void KisAsyncMergerTest::debugObligeChild()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    KisImageWSP image = new KisImage(0, 640, 441, colorSpace, "merger test");
+
+    QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
+    device1->convertFromQImage(sourceImage1, "", 0, 0);
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE, device1);
+    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE);
+
+    image->addNode(groupLayer, image->rootLayer());
+    image->addNode(paintLayer1, groupLayer);
+
+    QRect testRect1(0,0,640,441);
+    QRect cropRect(image->bounds());
+
+    KisMergeWalker walker(cropRect);
+    KisAsyncMerger merger;
+
+    walker.collectRects(paintLayer1, testRect1);
+    merger.startMerge(walker);
+
+    KisLayerSP rootLayer = image->rootLayer();
+    QVERIFY(rootLayer->original() == groupLayer->projection());
+    QVERIFY(groupLayer->original() == paintLayer1->projection());
+}
+
+
 QTEST_KDEMAIN(KisAsyncMergerTest, NoGUI)
 #include "kis_async_merger_test.moc"
 

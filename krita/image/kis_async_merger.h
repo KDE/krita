@@ -170,11 +170,14 @@ public:
             KisMergeWalker::JobItem item = nodeStack.pop();
             if(isRootNode(item.m_node)) continue;
 
+            if(!m_currentProjection) {
+                bool obligeChild = setupProjection(item.m_node,
+                                                   useTempProjections);
+                if(obligeChild) continue;
+            }
+
             KisLayerSP currentNode = dynamic_cast<KisLayer*>(item.m_node.data());
             QRect applyRect = item.m_applyRect;
-
-            if(!m_currentProjection)
-                setupProjection(currentNode, useTempProjections);
 
             KisUpdateOriginalVisitor originalVisitor(applyRect,
                                                      m_currentProjection);
@@ -207,11 +210,17 @@ private:
         m_currentProjection = 0;
     }
 
-    void setupProjection(KisNodeSP currentNode, bool useTempProjection) {
+    bool setupProjection(KisNodeSP currentNode, bool useTempProjection) {
         KisPaintDeviceSP parentOriginal = currentNode->parent()->original();
 
-        m_currentProjection = !useTempProjection ? parentOriginal :
-            new KisPaintDevice(parentOriginal->colorSpace());
+        bool obligeChild = parentOriginal == currentNode->projection();
+
+        if (!obligeChild) {
+            m_currentProjection = !useTempProjection ? parentOriginal :
+                new KisPaintDevice(parentOriginal->colorSpace());
+        }
+
+        return obligeChild;
     }
 
     void writeProjection(KisNodeSP topmostNode, bool useTempProjection, QRect rect) {

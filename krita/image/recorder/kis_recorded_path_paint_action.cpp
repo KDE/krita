@@ -235,7 +235,7 @@ KisRecordedAction* KisRecordedPathPaintActionFactory::fromXML(const QDomElement&
             if (!eWp.isNull()) {
                 if( eWp.tagName() == "Point") {
                     rplpa->addPoint(KisPaintInformation::fromXML(eWp));
-                } else if(eWp.tagName() == "Point") {
+                } else if(eWp.tagName() == "Line") {
                     rplpa->addLine(KisPaintInformation::fromXML(eWp.firstChildElement("Point1")),
                                     KisPaintInformation::fromXML(eWp.firstChildElement("Point2")));
                 } else if( eWp.tagName() == "Curve") {

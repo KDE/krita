@@ -160,8 +160,9 @@ QRect KisSelectionBasedLayer::changeRect(const QRect &rect) const
            rect;
 }
 
-QRect KisSelectionBasedLayer::needRect(const QRect &rect) const
+QRect KisSelectionBasedLayer::needRect(const QRect &rect, PositionToFilthy pos) const
 {
+    Q_UNUSED(pos);
     return rect;
 }
 

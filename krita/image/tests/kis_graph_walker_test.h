@@ -172,11 +172,34 @@ public:
         return rect.adjusted(-delta, -delta, delta, delta);
     }
 
-    QRect needRect(const QRect &rect) const {
+    QRect needRect(const QRect &rect, PositionToFilthy pos = NORMAL) const {
+        Q_UNUSED(pos);
         const qint32 delta = 7;
         return rect.adjusted(-delta, -delta, delta, delta);
     }
 
+};
+
+class CacheLayer : public ComplexRectsLayer
+{
+
+    Q_OBJECT
+
+public:
+    CacheLayer(KisImageWSP image, const QString & name, quint8 opacity)
+            : ComplexRectsLayer(image, name, opacity) {
+    }
+
+
+    QRect needRect(const QRect &rect, PositionToFilthy pos = NORMAL) const {
+        QRect retval;
+
+        if(pos == KisNode::NORMAL) {
+            const qint32 delta = 7;
+            retval = rect.adjusted(-delta, -delta, delta, delta);
+        }
+        return retval;
+    }
 };
 
 class KisMergeWalker;
@@ -189,7 +212,7 @@ private slots:
 
     void testUsualVisiting();
     void testMergeVisiting();
-//    void testRectsWalker();
+    void testCachedVisiting();
 private:
     void verifyResult(KisMergeWalker walker, QStringList reference,
                       QRect accessRect, bool changeRectVaries,

@@ -31,7 +31,7 @@
 #include "kis_adjustment_layer.h"
 #include "kis_selection.h"
 
-//#define DEBUG_VISITORS
+#define DEBUG_VISITORS
 
 QString nodeTypeString(KisGraphWalker::NodePosition position);
 QString nodeTypePostfix(KisGraphWalker::NodePosition position);
@@ -260,6 +260,70 @@ void KisGraphWalkerTest::testMergeVisiting()
         QString order("root,paint5,cplx2,group,paint1");
         QStringList orderList = order.split(",");
         QRect accessRect(3,3,24,24);
+
+        reportStartWith("paint5");
+        walker.collectRects(paintLayer5, testRect);
+        verifyResult(walker, orderList, accessRect, false, true);
+    }
+
+}
+
+
+    /*
+      +----------+
+      |root      |
+      | layer 5  |
+      | cache1   |
+      | group    |
+      |  paint 4 |
+      |  paint 3 |
+      |  paint 2 |
+      | paint 1  |
+      +----------+
+     */
+
+void KisGraphWalkerTest::testCachedVisiting()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE);
+    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE);
+    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE);
+    KisLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE);
+
+    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE);
+    KisLayerSP cacheLayer1 = new CacheLayer(image, "cache1", OPACITY_OPAQUE);
+
+    image->addNode(paintLayer1, image->rootLayer());
+    image->addNode(groupLayer, image->rootLayer());
+    image->addNode(cacheLayer1, image->rootLayer());
+    image->addNode(paintLayer5, image->rootLayer());
+
+    image->addNode(paintLayer2, groupLayer);
+    image->addNode(paintLayer3, groupLayer);
+    image->addNode(paintLayer4, groupLayer);
+
+    QRect testRect(10,10,10,10);
+
+    KisMergeWalker walker;
+
+    {
+        QString order("root,paint5,cache1,group,paint1,"
+                      "paint4,paint3,paint2");
+        QStringList orderList = order.split(",");
+        QRect accessRect(0,0,30,30);
+
+        reportStartWith("paint3");
+        walker.collectRects(paintLayer3, testRect);
+        verifyResult(walker, orderList, accessRect, true, true);
+    }
+
+    {
+        QString order("root,paint5,cache1");
+        QStringList orderList = order.split(",");
+        QRect accessRect(10,10,10,10);
 
         reportStartWith("paint5");
         walker.collectRects(paintLayer5, testRect);

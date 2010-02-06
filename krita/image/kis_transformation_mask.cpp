@@ -82,8 +82,9 @@ QRect KisTransformationMask::changeRect(const QRect &rect) const
     return rect;
 }
 
-QRect KisTransformationMask::needRect(const QRect &rect) const
+QRect KisTransformationMask::needRect(const QRect &rect, PositionToFilthy pos) const
 {
+    Q_UNUSED(pos);
     //FIXME: selections?
     return rect;
 }

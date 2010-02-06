@@ -55,7 +55,7 @@ public:
     bool accept(KisNodeVisitor &v);
 
     QRect changeRect(const QRect &rect) const;
-    QRect needRect(const QRect &rect) const;
+    QRect needRect(const QRect &rect, PositionToFilthy pos = NORMAL) const;
 };
 
 #endif //_KIS_TRANSPARENCY_MASK_

@@ -137,7 +137,7 @@ public:
     virtual void setDirty(const QRect & rect);
     virtual void setDirty(const QRegion & region);
 
-    QRect needRect(const QRect &rect) const;
+    QRect needRect(const QRect &rect, PositionToFilthy pos = NORMAL) const;
     QRect changeRect(const QRect &rect) const;
     QImage createThumbnail(qint32 w, qint32 h);
 

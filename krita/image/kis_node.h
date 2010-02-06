@@ -42,6 +42,13 @@ class KRITAIMAGE_EXPORT KisNode : public KisBaseNode
     Q_OBJECT
 
 public:
+    /**
+     * FIXME: Find better names
+     */
+    enum PositionToFilthy {
+        NORMAL,
+        BELOW_FILTHY
+    };
 
     /**
      * Create an empty node without a parent.
@@ -112,7 +119,7 @@ public:
      * compute the new value (for instance, convolution filters)
      * See \ref changeRect
      */
-    virtual QRect needRect(const QRect &rect) const;
+    virtual QRect needRect(const QRect &rect, PositionToFilthy pos = NORMAL) const;
 
 public: // Graph methods
 

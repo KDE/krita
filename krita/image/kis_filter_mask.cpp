@@ -154,8 +154,9 @@ QRect KisFilterMask::changeRect(const QRect& rect) const
     return rect | filteredRect;
 }
 
-QRect KisFilterMask::needRect(const QRect& rect) const
+QRect KisFilterMask::needRect(const QRect& rect, PositionToFilthy pos) const
 {
+    Q_UNUSED(pos);
     if (!m_d->filterConfig) return rect;
     KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
 

@@ -74,7 +74,7 @@ public:
 
     // From KisNode
     QRect changeRect(const QRect &rect) const;
-    QRect needRect(const QRect &rect) const;
+    QRect needRect(const QRect &rect, PositionToFilthy pos = NORMAL) const;
 
     /**
      * resets cached projection of lower layer to a new device

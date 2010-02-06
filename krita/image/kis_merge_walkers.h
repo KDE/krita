@@ -116,23 +116,27 @@ protected:
                 pushJob(node, position, m_lastNeedRect);
             }
             else if(dependOnLowerNodes(node)) {
+                /**
+                 * FIXME: This case seems to never happen.
+                 * Obviously, no layer will report zero needRect
+                 * lying above filthy node.
+                 */
+                qWarning() << "Merge walker thought this was not possible!";
                 m_lastNeedRect = getChangeRectForNode(node, m_startNode,
                                                       m_requestedRect);
-                /**
-                 * TODO:
-                 * needRect(..., ABOVE_FILTHY)
-                 */
                 pushJob(node, position, m_lastNeedRect);
             }
 
-            m_lastNeedRect = node->needRect(m_lastNeedRect);
+            m_lastNeedRect = node->needRect(m_lastNeedRect,
+                                            KisNode::NORMAL);
             m_childNeedRect = m_lastNeedRect;
             break;
         case N_LOWER:
         case N_BOTTOMMOST:
             if(!m_lastNeedRect.isEmpty()) {
                 pushJob(node, position, m_lastNeedRect);
-                m_lastNeedRect = node->needRect(m_lastNeedRect);
+                m_lastNeedRect = node->needRect(m_lastNeedRect,
+                                                KisNode::BELOW_FILTHY);
             }
             break;
         default:

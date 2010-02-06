@@ -91,8 +91,9 @@ KisNode::~KisNode()
     delete m_d;
 }
 
-QRect KisNode::needRect(const QRect &rect) const
+QRect KisNode::needRect(const QRect &rect, PositionToFilthy pos) const
 {
+    Q_UNUSED(pos);
     return rect;
 }
 

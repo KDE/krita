@@ -65,7 +65,7 @@ public:
                        const QRect & rc) const;
 
     QRect changeRect(const QRect &rect) const;
-    QRect needRect(const QRect &rect) const;
+    QRect needRect(const QRect &rect, PositionToFilthy pos = NORMAL) const;
 
 private:
 

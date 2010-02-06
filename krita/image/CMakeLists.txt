@@ -180,7 +180,7 @@ set(kritaimage_LIB_SRCS
    recorder/kis_recorded_action_load_context.cpp
    recorder/kis_recorded_action_save_context.cpp
    recorder/kis_recorded_bezier_curve_paint_action.cpp
-   recorder/kis_recorded_ellipse_paint_action.cpp
+   recorder/kis_recorded_shape_paint_action.cpp
    recorder/kis_recorded_filter_action.cpp
    recorder/kis_recorded_paint_action.cpp
    recorder/kis_recorded_polyline_paint_action.cpp

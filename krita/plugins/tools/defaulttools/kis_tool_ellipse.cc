@@ -32,7 +32,7 @@
 #include <kis_paintop_preset.h>
 
 #include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_ellipse_paint_action.h>
+#include <recorder/kis_recorded_shape_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
 KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
@@ -51,7 +51,7 @@ void KisToolEllipse::finishEllipse(const QRectF& rect)
         return;
 
     if (image()) {
-        KisRecordedEllipsePaintAction* linePaintAction = new KisRecordedEllipsePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), rect);
+        KisRecordedShapePaintAction* linePaintAction = new KisRecordedShapePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), KisRecordedShapePaintAction::Ellipse, rect);
         setupPaintAction(linePaintAction);
         image()->actionRecorder()->addAction(*linePaintAction);
     }

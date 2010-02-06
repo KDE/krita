@@ -34,18 +34,23 @@ class QRectF;
 /**
  * This class will record the painting of a bezier curve.
  */
-class KRITAIMAGE_EXPORT KisRecordedEllipsePaintAction : public KisRecordedPaintAction
+class KRITAIMAGE_EXPORT KisRecordedShapePaintAction : public KisRecordedPaintAction
 {
-
+public:
+    enum Shape {
+        Ellipse,
+        Rectangle
+    };
 public:
 
-    KisRecordedEllipsePaintAction(const KisNodeQueryPath& path,
+    KisRecordedShapePaintAction(const KisNodeQueryPath& path,
                                       const KisPaintOpPresetSP paintOpPreset,
+                                      Shape shape,
                                       const QRectF& rect);
 
-    KisRecordedEllipsePaintAction(const KisRecordedEllipsePaintAction&);
+    KisRecordedShapePaintAction(const KisRecordedShapePaintAction&);
 
-    ~KisRecordedEllipsePaintAction();
+    ~KisRecordedShapePaintAction();
 
     virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
 
@@ -62,11 +67,11 @@ private:
 };
 
 
-class KisRecordedEllipsePaintActionFactory : public KisRecordedPaintActionFactory
+class KisRecordedShapePaintActionFactory : public KisRecordedPaintActionFactory
 {
 public:
-    KisRecordedEllipsePaintActionFactory();
-    virtual ~KisRecordedEllipsePaintActionFactory();
+    KisRecordedShapePaintActionFactory();
+    virtual ~KisRecordedShapePaintActionFactory();
     virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*);
 };
 

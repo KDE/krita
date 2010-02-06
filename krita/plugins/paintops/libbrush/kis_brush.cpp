@@ -426,7 +426,6 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
     Q_ASSERT(valid());
     Q_UNUSED(colorSpace);
     Q_UNUSED(info);
-    Q_UNUSED(angle);
     if (d->scaledBrushes.isEmpty()) {
         createScaledBrushes();
     }
@@ -461,6 +460,11 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
             outputImage = scaleSinglePixelImage(s, aboveBrush->image().pixel(0, 0), subPixelX, subPixelY);
 
         }
+    }
+    
+    if (angle != 0.0)
+    {
+        outputImage = outputImage.transformed(QMatrix().rotate(-angle * 180 / M_PI));
     }
 
     int outputWidth = outputImage.width();

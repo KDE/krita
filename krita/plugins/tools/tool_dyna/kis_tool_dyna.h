@@ -97,8 +97,6 @@ protected:
 private slots:
 
     void timeoutPaint();
-    void slotSetSmoothness(int smoothness);
-    void slotSetMagnetism(int magnetism);
     void slotSetDynaWidth(double width);
     void slotSetMass(double mass);
     void slotSetDrag(double drag);
@@ -111,10 +109,6 @@ private:
     qint32 m_rate;
     QTimer * m_timer;
     QGridLayout* m_optionLayout;
-    QCheckBox * m_chkSmooth;
-    QCheckBox * m_chkAssistant;
-    QSlider * m_sliderMagnetism;
-    QSlider * m_sliderSmoothness;
 
     // dyna gui
     QCheckBox * m_chkFixedAngle;

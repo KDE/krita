@@ -160,19 +160,6 @@ void KisToolDyna::mouseMoveEvent(KoPointerEvent *e)
     }
 }
 
-
-
-void KisToolDyna::slotSetSmoothness(int smoothness)
-{
-    m_smoothness = smoothness / (double)MAXIMUM_SMOOTHNESS;
-}
-
-void KisToolDyna::slotSetMagnetism(int magnetism)
-{
-    m_magnetism = expf(magnetism / (double)MAXIMUM_MAGNETISM) / expf(1.0);
-}
-
-
 void KisToolDyna::slotSetDrag(double drag)
 {
     m_dragDist = drag;
@@ -220,30 +207,6 @@ QWidget * KisToolDyna::createOptionWidget()
 
     QWidget * optionWidget = KisToolFreehand::createOptionWidget();
     optionWidget->setObjectName(toolId() + "option widget");
-    m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smoothness"), optionWidget);
-    m_chkSmooth->setObjectName("chkSmooth");
-    m_chkSmooth->setChecked(m_smooth);
-    connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
-
-    m_sliderSmoothness = new QSlider(Qt::Horizontal, optionWidget);
-    m_sliderSmoothness->setMinimum(0);
-    m_sliderSmoothness->setMaximum(MAXIMUM_SMOOTHNESS);
-    m_sliderSmoothness->setEnabled(false);
-    connect(m_chkSmooth, SIGNAL(toggled(bool)), m_sliderSmoothness, SLOT(setEnabled(bool)));
-    connect(m_sliderSmoothness, SIGNAL(valueChanged(int)), SLOT(slotSetSmoothness(int)));
-    m_sliderSmoothness->setValue(m_smoothness * MAXIMUM_SMOOTHNESS);
-    // Drawing assistant configuration
-    m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionWidget);
-    connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
-    QLabel* labelMagnetism = new QLabel(i18n("Magnetism:"), optionWidget);
-    connect(m_chkAssistant, SIGNAL(toggled(bool)), labelMagnetism, SLOT(setEnabled(bool)));
-    m_sliderMagnetism = new QSlider(Qt::Horizontal, optionWidget);
-    m_sliderMagnetism->setMinimum(0);
-    m_sliderMagnetism->setMaximum(MAXIMUM_SMOOTHNESS);
-    m_sliderMagnetism->setEnabled(false);
-    connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setEnabled(bool)));
-    m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);
-    connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
 
     QLabel* initWidthLbl = new QLabel(i18n("Initial width:"), optionWidget);
     QLabel* massLbl = new QLabel(i18n("Mass:"), optionWidget);
@@ -282,12 +245,7 @@ QWidget * KisToolDyna::createOptionWidget()
     m_optionLayout->setSpacing(2);
 
     KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
-    m_optionLayout->addWidget(m_chkSmooth, 1, 0);
-    m_optionLayout->addWidget(m_sliderSmoothness, 1, 2);
-    m_optionLayout->addWidget(m_chkAssistant, 3, 0);
-    m_optionLayout->addWidget(labelMagnetism, 4, 0);
-    m_optionLayout->addWidget(m_sliderMagnetism, 4, 1, 1, 2);
-    m_optionLayout->addWidget(initWidthLbl, 5, 0);
+   m_optionLayout->addWidget(initWidthLbl, 5, 0);
     m_optionLayout->addWidget(m_initWidthSPBox, 5, 1, 1, 2);
     m_optionLayout->addWidget(massLbl, 6, 0);
     m_optionLayout->addWidget(m_massSPBox, 6, 1, 1, 2);

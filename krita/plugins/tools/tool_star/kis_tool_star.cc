@@ -121,6 +121,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
             foreach(const QPointF& pt, coord) {
                 linePaintAction->addPoint(KisPaintInformation(pt));
             }
+            linePaintAction->addPoint(KisPaintInformation(coord[0]));
             image()->actionRecorder()->addAction(*linePaintAction);
         }
 

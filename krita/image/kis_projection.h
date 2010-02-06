@@ -62,7 +62,7 @@ public:
 
 signals:
 
-    void sigUpdateProjection(KisNodeSP node, const QRect& rc);
+    void sigUpdateProjection(KisNodeSP node, const QRect& rc, const QRect& cropRect);
 
 private:
 
@@ -84,7 +84,7 @@ class KisImageUpdater : public QObject
 
 public slots:
 
-    void startUpdate(KisNodeSP node, const QRect& rc);
+    void startUpdate(KisNodeSP node, const QRect& rc, const QRect& cropRect);
 
 signals:
 

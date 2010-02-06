@@ -68,9 +68,9 @@ protected:
      * for nodes lying under a node with empty needRect, but above
      * filthy node.
      */
-    QRect getChangeRectForNode(const KisNodeSP &targetNode,
-                               const KisNodeSP &startNode,
-                               const QRect &startRect);
+    //QRect getChangeRectForNode(const KisNodeSP &targetNode,
+    //                           const KisNodeSP &startNode,
+    //                           const QRect &startRect);
 
     /**
      * Called for every node we meet on a forward way of the trip.

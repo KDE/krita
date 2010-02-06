@@ -75,12 +75,11 @@ public:
         KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
         if (!filter) return false;
 
-        QRect applyRect = m_updateRect;
         KisPaintDeviceSP originalDevice = layer->original();
+        originalDevice->clear(m_updateRect);
 
-//        qDebug()<<"PR:"<<m_projection->exactBounds();
-//        qDebug()<<"AR:"<<applyRect;
-//        qDebug()<<"NR:"<<layer->needRect(applyRect);
+        if(!m_projection) return true;
+        QRect applyRect = m_updateRect & m_projection->extent();
 
         /**
          * FIXME: check whether it's right to leave a selection to
@@ -170,14 +169,11 @@ public:
             KisMergeWalker::JobItem item = nodeStack.pop();
             if(isRootNode(item.m_node)) continue;
 
-            if(!m_currentProjection) {
-                bool obligeChild = setupProjection(item.m_node,
-                                                   useTempProjections);
-                if(obligeChild) continue;
-            }
-
             KisLayerSP currentNode = dynamic_cast<KisLayer*>(item.m_node.data());
             QRect applyRect = item.m_applyRect;
+
+            if(!m_currentProjection)
+                setupProjection(currentNode, applyRect, useTempProjections);
 
             KisUpdateOriginalVisitor originalVisitor(applyRect,
                                                      m_currentProjection);
@@ -210,21 +206,35 @@ private:
         m_currentProjection = 0;
     }
 
-    bool setupProjection(KisNodeSP currentNode, bool useTempProjection) {
+    void setupProjection(KisNodeSP currentNode, const QRect& rect, bool useTempProjection) {
         KisPaintDeviceSP parentOriginal = currentNode->parent()->original();
 
-        bool obligeChild = parentOriginal == currentNode->projection();
-
-        if (!obligeChild) {
-            m_currentProjection = !useTempProjection ? parentOriginal :
-                new KisPaintDevice(parentOriginal->colorSpace());
+        if (parentOriginal != currentNode->projection()) {
+            if (useTempProjection) {
+                m_currentProjection =
+                    new KisPaintDevice(parentOriginal->colorSpace());
+            }
+            else {
+                parentOriginal->clear(rect);
+                m_currentProjection = parentOriginal;
+            }
         }
-
-        return obligeChild;
+        else {
+            /**
+             * It happened so that our parent uses our own projection as
+             * its original. It means obligeChild mechanism works.
+             * We won't initialise m_currentProjection. This will cause
+             * writeProjection() and compositeWithProjection() do nothing
+             * when called.
+             */
+            /* NOP */
+        }
     }
 
     void writeProjection(KisNodeSP topmostNode, bool useTempProjection, QRect rect) {
         Q_UNUSED(useTempProjection);
+        if (!m_currentProjection) return;
+
         KisPaintDeviceSP parentOriginal = topmostNode->parent()->original();
 
         if(m_currentProjection != parentOriginal) {
@@ -236,20 +246,14 @@ private:
 
     bool compositeWithProjection(KisLayerSP layer, const QRect &rect) {
 
-        Q_ASSERT(m_currentProjection);
+        if (!m_currentProjection) return true;
         if (!layer->visible()) return true;
 
         KisPaintDeviceSP device = layer->projection();
         if (!device) return true;
 
-        /**
-         * FIXME: Check whether this cropping is still needed
-         * Probable case: selections on layers
-         */
-//        QRect needRect = rect & device->extent();
-//        QRect needRect = rect & device->exactBounds();
-        QRect needRect = rect;
-        Q_ASSERT(device->exactBounds().contains(needRect));
+        QRect needRect = rect & device->extent();
+        if(needRect.isEmpty()) return true;
 
         KisPainter gc(m_currentProjection);
         gc.setChannelFlags(layer->channelFlags());

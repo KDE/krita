@@ -19,6 +19,9 @@
 #ifndef __KIS_MERGE_WALKERS_H
 #define __KIS_MERGE_WALKERS_H
 
+#include <QStack>
+#include "kis_graph_walker.h"
+
 class KRITAIMAGE_EXPORT KisMergeWalker : KisGraphWalker
 {
 public:
@@ -66,6 +69,10 @@ public:
 
     inline const QRect& accessRect() const {
         return m_resultAccessRect;
+    }
+
+    inline const QRect& changeRect() const {
+        return m_resultChangeRect;
     }
 
     inline bool needRectVaries() const {
@@ -126,22 +133,9 @@ protected:
         case N_TOPMOST:
             m_lastNeedRect = m_childNeedRect;
         case N_NORMAL:
-            if(!m_lastNeedRect.isEmpty()) {
+            if(!m_lastNeedRect.isEmpty())
                 pushJob(node, position, m_lastNeedRect);
-            }
-            else if(dependOnLowerNodes(node)) {
-                /**
-                 * FIXME: This case seems to never happen.
-                 * Obviously, no layer will report zero needRect
-                 * lying above filthy node.
-                 */
-                qWarning() << "Merge walker thought this was not possible!";
-                Q_ASSERT(0);
-                m_lastNeedRect = getChangeRectForNode(node, m_startNode,
-                                                      m_requestedRect);
-                m_lastNeedRect = cropThisRect(m_lastNeedRect);
-                pushJob(node, position, m_lastNeedRect);
-            }
+            //else /* Why push empty rect? */;
 
             m_lastNeedRect = node->needRect(m_lastNeedRect,
                                             KisNode::NORMAL);

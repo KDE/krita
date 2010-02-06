@@ -32,6 +32,9 @@
 #include "kis_image.h"
 #include "kis_group_layer.h"
 
+#include "kis_merge_walkers.h"
+#include "kis_async_merger.h"
+
 class KisProjection::Private
 {
 public:
@@ -71,7 +74,7 @@ void KisProjection::run()
     // The image updater is created in the run() method so it lives in the thread, otherwise
     // startUpdate will be executed in gui thread.
     m_d->updater = new KisImageUpdater();
-    connect(this, SIGNAL(sigUpdateProjection(KisNodeSP, QRect)), m_d->updater, SLOT(startUpdate(KisNodeSP, QRect)));
+    connect(this, SIGNAL(sigUpdateProjection(KisNodeSP, QRect, QRect)), m_d->updater, SLOT(startUpdate(KisNodeSP, QRect, QRect)));
     connect(m_d->updater, SIGNAL(updateDone(QRect)), m_d->image, SLOT(slotProjectionUpdated(QRect)));
     exec(); // start the event loop
 }
@@ -122,7 +125,7 @@ void KisProjection::updateProjection(KisNodeSP node, const QRect& rc)
     // at the bottom, we have as few and as long runs of pixels left
     // as possible.
     if (w <= m_d->updateRectSize && h <= m_d->updateRectSize) {
-        emit sigUpdateProjection(node, interestingRect);
+        emit sigUpdateProjection(node, interestingRect, m_d->image->bounds());
         return;
     }
     int wleft = w;
@@ -133,7 +136,7 @@ void KisProjection::updateProjection(KisNodeSP node, const QRect& rc)
         while (hleft > 0) {
             QRect rc2(col + x, row + y, qMin(wleft, m_d->updateRectSize), qMin(hleft, m_d->updateRectSize));
 
-            emit sigUpdateProjection(node, rc2);
+            emit sigUpdateProjection(node, rc2, m_d->image->bounds());
 
             hleft -= m_d->updateRectSize;
             row += m_d->updateRectSize;
@@ -151,38 +154,16 @@ void KisProjection::updateSettings()
     m_d->useRegionOfInterest = cfg.readEntry("use_region_of_interest", false);
 }
 
-void KisImageUpdater::startUpdate(KisNodeSP node, const QRect& rc)
+void KisImageUpdater::startUpdate(KisNodeSP node, const QRect& rc, const QRect& cropRect)
 {
-    update(node, 0, rc);
-    emit updateDone(rc);
+    KisMergeWalker walker(cropRect);
+    KisAsyncMerger merger;
+
+    walker.collectRects(node, rc);
+    merger.startMerge(walker);
+
+    QRect rect = walker.changeRect();
+    emit updateDone(rect);
 }
-
-void KisImageUpdater::update(KisNodeSP node, KisNodeSP child, const QRect & rc)
-{
-    QRect dirtyRect = rc;
-
-    // group layers get special treatment so we can optimize if there
-    // are clean adjustmentlayers in the stack
-    KisGroupLayer* grouplayer = dynamic_cast<KisGroupLayer*>(node.data());
-
-    if (grouplayer && child) {
-        grouplayer->setDirtyNode(child);
-    }
-
-    // update the projection of the layer: this may increase the dirty rect
-    if (KisLayer* layer = dynamic_cast<KisLayer*>(node.data())) {
-        dirtyRect |= layer->updateProjection(dirtyRect);
-    }
-
-    if (grouplayer) {
-        grouplayer->setDirtyNode(0);
-    }
-
-    // go up in the stack, recursively.
-    if (node->parent()) {
-        update(node->parent(), node, dirtyRect);
-    }
-}
-
 
 #include "kis_projection.moc"

@@ -62,24 +62,24 @@ void KisGraphWalker::visitLowerNode(KisNodeSP node)
 }
 
 
-QRect KisGraphWalker::getChangeRectForNode(const KisNodeSP &targetNode,
-                                           const KisNodeSP &startNode,
-                                           const QRect &startRect)
-{
-    KisNodeSP node = startNode;
-    QRect changeRect = startRect;
+// QRect KisGraphWalker::getChangeRectForNode(const KisNodeSP &targetNode,
+//                                            const KisNodeSP &startNode,
+//                                            const QRect &startRect)
+// {
+//     KisNodeSP node = startNode;
+//     QRect changeRect = startRect;
 
-    while(node) {
-        changeRect = node->changeRect(changeRect);
+//     while(node) {
+//         changeRect = node->changeRect(changeRect);
 
-        if(node == targetNode)
-            return changeRect;
+//         if(node == targetNode)
+//             return changeRect;
 
-        if (node->nextSibling())
-            node = node->nextSibling();
-        else if (node->parent())
-            node = node->parent();
-    }
+//         if (node->nextSibling())
+//             node = node->nextSibling();
+//         else if (node->parent())
+//             node = node->parent();
+//     }
 
-    return QRect();
-}
+//     return QRect();
+// }

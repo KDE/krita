@@ -18,7 +18,6 @@
 
 #include "kis_async_merger_test.h"
 
-#include "kis_graph_walker.h"
 #include "kis_merge_walkers.h"
 #include "kis_async_merger.h"
 

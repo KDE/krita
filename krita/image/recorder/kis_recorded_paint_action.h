@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,8 +57,11 @@ protected:
 public:
     KisPaintOpPresetSP paintOpPreset() const;
     void setPaintOpPreset(KisPaintOpPresetSP preset);
-    int opacity() const;
-    void setOpacity(int );
+    /**
+     * @return the opacity in the range 0.0->1.0
+     */
+    qreal opacity() const;
+    void setOpacity(qreal );
     KoColor paintColor() const;
     void setPaintColor(const KoColor& color);
     KoColor backgroundColor() const;

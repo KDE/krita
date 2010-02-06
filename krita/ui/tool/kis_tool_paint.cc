@@ -303,7 +303,7 @@ void KisToolPaint::resetCursorStyle()
 void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
 {
     KisTool::setupPaintAction(action);
-    action->setOpacity(m_opacity);
+    action->setOpacity(m_opacity / 255.0);
     action->setCompositeOp(m_compositeOp->id());
 }
 

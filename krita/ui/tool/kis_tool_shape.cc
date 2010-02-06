@@ -110,7 +110,7 @@ void KisToolShape::setupPainter(KisPainter * painter)
 
 void KisToolShape::setupPaintAction(KisRecordedPaintAction* action)
 {
-    KisTool::setupPaintAction(action);
+    KisToolPaint::setupPaintAction(action);
     action->setFillStyle(fillStyle());
     action->setStrokeStyle(strokeStyle());
     action->setGenerator(currentGenerator());

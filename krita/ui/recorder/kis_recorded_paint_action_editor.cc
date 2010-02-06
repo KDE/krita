@@ -57,7 +57,7 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
             this, SLOT(configurationUpdated()));
 
     // Setup opacity
-    m_actionEditor->opacity->setValue(m_action->opacity() / 2.55);
+    m_actionEditor->opacity->setValue(m_action->opacity() * 100.0);
     connect(m_actionEditor->opacity, SIGNAL(valueChanged(int)), SLOT(configurationUpdated()));
 
     // Setup paint ops
@@ -104,7 +104,7 @@ void KisRecordedPaintActionEditor::configurationUpdated()
 
     m_action->setPaintColor(m_paintColorPopup->currentKoColor());
     m_action->setBackgroundColor(m_backgroundColorPopup->currentKoColor());
-    m_action->setOpacity(m_actionEditor->opacity->value() * 2.55);
+    m_action->setOpacity(m_actionEditor->opacity->value() / 100.0);
 
     emit(actionEdited());
 }

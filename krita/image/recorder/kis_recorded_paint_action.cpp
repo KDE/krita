@@ -56,7 +56,7 @@ struct KisRecordedPaintAction::Private {
     KisPaintOpPresetSP paintOpPreset;
     KoColor foregroundColor;
     KoColor backgroundColor;
-    int opacity;
+    qreal opacity; ///< opacity in the range 0.0 -> 100.0
     bool paintIncremental;
     QString compositeOp;
     KisPainter::StrokeStyle strokeStyle;
@@ -75,7 +75,7 @@ KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
 {
     Q_ASSERT(paintOpPreset);
     d->paintOpPreset = paintOpPreset->clone();
-    d->opacity = 100;
+    d->opacity = 1.0;
     d->paintIncremental = true;
     d->compositeOp = COMPOSITE_OVER;
     d->strokeStyle = KisPainter::StrokeStyleBrush;
@@ -115,7 +115,7 @@ void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecor
     elt.appendChild(backgroundColorElt);
 
     // Opacity
-    elt.setAttribute("opacity", d->opacity / 255.0);
+    elt.setAttribute("opacity", d->opacity);
 
     // paintIncremental
     elt.setAttribute("paintIncremental", d->paintIncremental);
@@ -181,12 +181,12 @@ void KisRecordedPaintAction::setPaintOpPreset(KisPaintOpPresetSP preset)
     d->paintOpPreset = preset;
 }
 
-int KisRecordedPaintAction::opacity() const
+qreal KisRecordedPaintAction::opacity() const
 {
     return d->opacity;
 }
 
-void KisRecordedPaintAction::setOpacity(int opacity)
+void KisRecordedPaintAction::setOpacity(qreal opacity)
 {
     d->opacity = opacity;
 }
@@ -274,7 +274,7 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
 
         if (d->paintIncremental) {
             painter.setCompositeOp(d->compositeOp);
-            painter.setOpacity(d->opacity);
+            painter.setOpacity(d->opacity * 255);
         } else {
             painter.setCompositeOp(node->paintDevice()->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
             painter.setOpacity(OPACITY_OPAQUE);
@@ -297,7 +297,7 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
         if (!d->paintIncremental) {
             KisPainter painter2(node->paintDevice());
             painter2.setCompositeOp(d->compositeOp);
-            painter2.setOpacity(d->opacity);
+            painter2.setOpacity(d->opacity * 255);
 
             QRegion r = painter.dirtyRegion();
             QVector<QRect> dirtyRects = r.rects();
@@ -441,7 +441,7 @@ KoColor KisRecordedPaintActionFactory::colorFromXML(const QDomElement& elt, cons
 
 int KisRecordedPaintActionFactory::opacityFromXML(const QDomElement& elt)
 {
-    return elt.attribute("opacity", "1.0").toDouble() * 255;
+    return elt.attribute("opacity", "1.0").toDouble();
 }
 
 bool KisRecordedPaintActionFactory::paintIncrementalFromXML(const QDomElement& elt)

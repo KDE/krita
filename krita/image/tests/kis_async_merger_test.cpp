@@ -51,27 +51,24 @@ void KisAsyncMergerTest::testMerger()
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageWSP image = new KisImage(0, 640, 448, colorSpace, "merger test");
 
-    QImage image1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage sourceImage2(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
+    QImage referenceProjection(QString(FILES_DATA_DIR) + QDir::separator() + "merged_hakonepa.png");
+
     KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
-    device1->convertFromQImage(image1, "", 0, 0);
-
-    QImage image2(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
     KisPaintDeviceSP device2 = new KisPaintDevice(colorSpace);
-    device2->convertFromQImage(image2, "", 0, 0);
-
-    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE, device1);
-    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE, device2);
-
-    KisLayerSP groupLayer = new KisGroupLayer(image, "group", 200/*OPACITY_OPAQUE*/);
+    device1->convertFromQImage(sourceImage1, "", 0, 0);
+    device2->convertFromQImage(sourceImage2, "", 0, 0);
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
     KisFilterConfiguration *configuration = filter->defaultConfiguration(0);
     Q_ASSERT(configuration);
 
-
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE, device1);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE, device2);
+    KisLayerSP groupLayer = new KisGroupLayer(image, "group", 200/*OPACITY_OPAQUE*/);
     KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
-    Q_ASSERT(blur1);
 
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(groupLayer, image->rootLayer());
@@ -83,11 +80,7 @@ void KisAsyncMergerTest::testMerger()
     QRect testRect1(0,0,100,441);
     QRect testRect2(100,0,400,441);
     QRect testRect3(500,0,140,441);
-
     QRect testRect4(580,381,40,40);
-
-
-    qDebug()<<"PL"<<paintLayer1->extent();
 
     KisMergeWalker walker;
     KisAsyncMerger merger;
@@ -105,6 +98,7 @@ void KisAsyncMergerTest::testMerger()
     merger.startMerge(walker);
 
     // Old style merging: has artefacts at x=100 and x=500
+    // And should be turned on inside KisLayer
 /*    paintLayer2->setDirty(testRect1);
     QTest::qSleep(3000);
     paintLayer2->setDirty(testRect2);
@@ -114,8 +108,13 @@ void KisAsyncMergerTest::testMerger()
     paintLayer2->setDirty(testRect4);
     QTest::qSleep(3000);
 */
-    qDebug()<<"RL"<<image->rootLayer()->extent();
-    image->rootLayer()->projection()->convertToQImage(0).save("OOOOUT.png");
+
+    KisLayerSP rootLayer = image->rootLayer();
+    QVERIFY(rootLayer->extent() == image->bounds());
+
+    QImage resultProjection = rootLayer->projection()->convertToQImage(0);
+    resultProjection.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + "actual_merge_result.png");
+    QVERIFY(resultProjection == referenceProjection);
 }
 
 

@@ -321,11 +321,11 @@ void KisRecordedPaintActionFactory::setupPaintAction(KisRecordedPaintAction* act
 {
     QString name = elt.attribute("name");
 
-    int opacity = opacityFromXML(elt);
+    qreal opacity = opacityFromXML(elt);
+    dbgKrita << ppVar(opacity);
     bool paintIncremental = paintIncrementalFromXML(elt);
 
     QString compositeOp = compositeOpFromXML(elt);
-
     // Decode colors
 
     KoColor bC = backgroundColorFromXML(elt);
@@ -439,7 +439,7 @@ KoColor KisRecordedPaintActionFactory::colorFromXML(const QDomElement& elt, cons
     return bC;
 }
 
-int KisRecordedPaintActionFactory::opacityFromXML(const QDomElement& elt)
+qreal KisRecordedPaintActionFactory::opacityFromXML(const QDomElement& elt)
 {
     return elt.attribute("opacity", "1.0").toDouble();
 }

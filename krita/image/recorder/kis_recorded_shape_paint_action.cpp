@@ -119,7 +119,7 @@ KisRecordedAction* KisRecordedShapePaintAction::clone() const
 
 
 KisRecordedShapePaintActionFactory::KisRecordedShapePaintActionFactory() :
-        KisRecordedPaintActionFactory("EllipsePaintAction")
+        KisRecordedPaintActionFactory("ShapePaintAction")
 {
 }
 

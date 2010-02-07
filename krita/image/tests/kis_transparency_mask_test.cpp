@@ -52,7 +52,7 @@ void KisTransparencyMaskTest::testCreation()
 #define initImage(image, layer, device, mask) do {                      \
     image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, 0, "tests");     \
     device = createDevice();                                            \
-    layer = new KisPaintLayer(KisImageWSP(0), "", 100, device);         \
+    layer = new KisPaintLayer(image, "", 100, device);                  \
     mask = new KisTransparencyMask();                                   \
     image->addNode(layer);                                              \
     image->addNode(mask, layer);                                        \
@@ -62,7 +62,7 @@ void KisTransparencyMaskTest::testApply()
 {
     QPoint errpoint;
 
-    KisImageWSP image;
+    KisImageSP image;
     KisPaintLayerSP layer;
     KisPaintDeviceSP dev;
     KisTransparencyMaskSP mask;

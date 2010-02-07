@@ -67,6 +67,7 @@ class KisShapeController::Private
 public:
     KisImageWSP image;
     KisNodeMap nodeShapes; // maps from krita/image layers to shapes
+    KisNodeSP rootNode;
     KisDoc2 * doc;
     KisNameServer * nameServer;
     QMap<QString, KoDataCenterBase *>  dataCenterMap;
@@ -82,14 +83,18 @@ void KisShapeController::Private::removeShapeFromMap(KoShape* shape)
     KisNodeMap::iterator begin = nodeShapes.begin();
     KisNodeMap::iterator end = nodeShapes.end();
     KisNodeMap::iterator it = begin;
+    bool toBeDeleted = true;
     while (it != end) {
         if (it.value() == shape) {
             dbgKrita << "Going to delete node " << it.key() << " with shape " << it.value() << ", because it is the same as " << shape;
+            toBeDeleted = !it.key()->inherits("KisShapeLayer"); // KisShapeLayers shape is equal to the layer, it should *not* be deleted by the shape controller
             nodeShapes.remove(it.key());
             break;
         }
         ++it;
     }
+    if (toBeDeleted)
+        delete shape;
 }
 
 
@@ -111,6 +116,7 @@ KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
     m_d->doc = doc;
     m_d->nameServer = nameServer;
     m_d->image = 0;
+    m_d->rootNode = 0;
     m_d->selectionShapeToBeAdded = false;
     resourceManager()->setUndoStack(doc->undoStack());
 }
@@ -123,7 +129,10 @@ KisShapeController::~KisShapeController()
     for(KisNodeMap::iterator it = m_d->nodeShapes.begin(); it != m_d->nodeShapes.end(); ++it)
     {
         dbgUI << it.key() << it.key()->name() << it.value();
-        delete it.value();
+        if (!it.key()->inherits("KisShapeLayer")) // KisShapeLayers shape is equal to the layer, it should *not* be deleted by the shape controller
+        {
+            delete it.value();
+        }
     }
     
     // XXX: deleting the undoStack of the document while the document is being deleted is dangerous
@@ -138,20 +147,25 @@ void KisShapeController::setImage(KisImageWSP image)
     dbgUI << ppVar(image);
     if (m_d->image) {
         m_d->image->disconnect(this);
-        // First clear the current set of shapes away
-        foreach(KoShape* shape, m_d->nodeShapes) {
-            removeShape(shape);
-            // clipboard? And how about undo information?
-
+        // XXX: In theory only the rootShape should be parentless, but in reality the KisFlakeShape are also parentless
+        QList<KoShape*> parentLessShapes;
+        for(KisNodeMap::iterator it = m_d->nodeShapes.begin(); it != m_d->nodeShapes.end(); ++it)
+        {
+            dbgUI << it.key() << it.key()->name() << it.value() << " with parent " << it.value()->parent();
+            if (it.value()->parent() == 0)
+                parentLessShapes.append(it.value());
         }
-#ifdef __GNUC__
-#warning "KisShapeController::setImage: FIXME someone clever should know how to fix the shape corresponding to the root layer and delete that"
-#endif
+        foreach(KoShape* shape, parentLessShapes)
+        {
+            removeShape(shape);
+        }
+        Q_ASSERT(m_d->nodeShapes.empty());
         m_d->nodeShapes.clear();
 
     }
 
     if (image) {
+        m_d->rootNode = image->root();
         m_d->image = image;
 
         dbgUI << "New root layer is " << m_d->image->rootLayer();
@@ -183,12 +197,13 @@ void KisShapeController::setImage(KisImageWSP image)
 
 void KisShapeController::removeShape(KoShape* shape)
 {
-
+    dbgUI << "Remove shape " << shape;
     // Also remove all the children, if any
     {
         KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>(shape);
         if (parent) {
             foreach(KoShape * child, parent->childShapes()) {
+                dbgUI << "Removing " << child << " as child of " << parent;
                 removeShape(child);
             }
         }
@@ -407,7 +422,7 @@ void KisShapeController::slotNodeRemoved(KisNode* parent, int index)
 void KisShapeController::slotLayersChanged(KisGroupLayerSP rootLayer)
 {
     Q_UNUSED(rootLayer);
-
+    
     setImage(m_d->image);
 }
 

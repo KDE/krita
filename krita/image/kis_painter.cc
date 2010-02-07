@@ -679,6 +679,10 @@ void KisPainter::paintPolygon(const vQPointF& points)
 
 void KisPainter::paintPainterPath(const QPainterPath& path)
 {
+    if (d->fillStyle != FillStyleNone) {
+        fillPainterPath(path);
+    }
+
     QPointF lastPoint, nextPoint;
     int elementCount = path.elementCount();
     for (int i = 0; i < elementCount; i++) {

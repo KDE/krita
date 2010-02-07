@@ -315,7 +315,7 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const 
     m_d->width = width;
     m_d->height = height;
 
-    m_d->recorder = new KisActionRecorder();
+    m_d->recorder = new KisActionRecorder(this);
 
     m_d->projection = 0;
     if (m_d->startProjection) {

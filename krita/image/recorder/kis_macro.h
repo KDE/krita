@@ -39,7 +39,7 @@ class KRITAIMAGE_EXPORT KisMacro : public QObject
 {
     Q_OBJECT
 public:
-    KisMacro();
+    KisMacro(QObject* parent = 0);
     KisMacro(const QList<KisRecordedAction*>& _actions);
     ~KisMacro();
 public:

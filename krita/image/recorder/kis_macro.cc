@@ -33,7 +33,7 @@ struct KisMacro::Private {
     QList<KisRecordedAction*> actions;
 };
 
-KisMacro::KisMacro() : d(new Private)
+KisMacro::KisMacro(QObject* parent) : QObject(parent), d(new Private)
 {
 }
 

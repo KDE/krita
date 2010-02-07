@@ -20,8 +20,8 @@
 
 #include "recorder/kis_recorded_action.h"
 
-KisActionRecorder::KisActionRecorder()
-        : KisMacro()
+KisActionRecorder::KisActionRecorder(QObject* parent)
+        : KisMacro(parent)
 {
 
 }

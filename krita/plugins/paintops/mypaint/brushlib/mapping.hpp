@@ -41,7 +41,7 @@ public:
     base_value = 0;
   }
   ~Mapping() {
-    delete pointsList;
+    delete[] pointsList;
   }
 
   void set_n (int input, int n)

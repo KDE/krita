@@ -39,7 +39,12 @@ public:
 
     BrushResourceServer() : KoResourceServer<KisBrush>("kis_brushes", "*.gbr:*.gih") {
     }
-    
+    ~BrushResourceServer() {
+        foreach(KisGbrBrush* brush, brushes)
+        {
+            brush->deref();
+        }
+    }
 private:
 
     virtual KisGbrBrush* createResource(const QString & filename) {
@@ -61,9 +66,11 @@ private:
         // Hack: This prevents the deletion of brushes in the resource server
         // Brushes outside the server use shared pointer, but not inside the server
         brush->ref();
+        brushes.append(brush);
 
         return brush;
     }
+    QList<KisGbrBrush*> brushes;
 };
 
 KisBrushServer::KisBrushServer()
@@ -100,11 +107,6 @@ void KisBrushServer::brushThreadDone()
 {
     delete brushThread;
     brushThread = 0;
-
-    QList<KisBrush*> brushPointers = m_brushServer->resources();
-    foreach(KisBrush* brush, brushPointers) {
-        m_brushes << brush;
-    }
 }
 
 #include "kis_brush_server.moc"

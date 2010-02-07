@@ -26,5 +26,6 @@ KisShared::KisShared() : dataPtr(new KisSharedData())
 
 KisShared::~KisShared()
 {
+    Q_ASSERT(_ref == 0); // This check that the KisShared object is not anymore referenced
     dataPtr->valid = false;
 }

@@ -69,6 +69,8 @@ KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painte
     m_tmpDevice = new KisPaintDevice(source()->colorSpace());
     m_sizeOption.readOptionSetting(settings);
     m_sizeOption.sensor()->reset();
+    m_filter = KisFilterRegistry::instance()->get(settings->getString(FILTER_ID));
+    m_ignoreAlpha = settings->getBool(FILTER_IGNORE_ALPHA);
 }
 
 KisFilterOp::~KisFilterOp()
@@ -81,10 +83,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
         return;
     }
 
-    if (!settings->m_options) return;
-
-    KisFilterSP filter = settings->filter();
-    if (!filter) {
+    if (!m_filter) {
         return;
     }
 
@@ -120,7 +119,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     qint32 maskHeight = brush->maskHeight(scale, 0.0);
 
     // Filter the paint device
-    filter->process(KisConstProcessingInformation(source(), QPoint(x, y)),
+    m_filter->process(KisConstProcessingInformation(source(), QPoint(x, y)),
                     KisProcessingInformation(m_tmpDevice, QPoint(0, 0)),
                     QSize(maskWidth, maskHeight),
                     settings->filterConfig(), 0);
@@ -135,7 +134,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     brush->mask(fixedDab, scale, scale, 0.0, info, xFraction, yFraction);
     m_tmpDevice->writeBytes(fixedDab->data(), fixedDab->bounds());
 
-    if (!settings->ignoreAlpha()) {
+    if (!m_ignoreAlpha) {
         KisHLineIteratorPixel itTmpDev = m_tmpDevice->createHLineIterator(0, 0, maskWidth);
         KisHLineIteratorPixel itSrc = source()->createHLineIterator(x, y, maskWidth);
         const KoColorSpace* cs = m_tmpDevice->colorSpace();

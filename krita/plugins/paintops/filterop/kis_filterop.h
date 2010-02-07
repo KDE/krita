@@ -48,6 +48,8 @@ private:
     const KisFilterOpSettings * settings;
     KisPaintDeviceSP m_tmpDevice;
     KisPressureSizeOption m_sizeOption;
+    KisFilterSP m_filter;
+    bool m_ignoreAlpha;
 };
 
 #endif // KIS_FILTEROP_H_

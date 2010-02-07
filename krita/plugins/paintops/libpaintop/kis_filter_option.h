@@ -29,6 +29,11 @@ class KoID;
 class KisConfigWidget;
 class KisFilterConfiguration;
 class KisFilterOptionWidget;
+
+const QString FILTER_ID = "Filter/id";
+const QString FILTER_IGNORE_ALPHA = "Filter/ignoreAlpha";
+const QString FILTER_CONFIGURATION = "Filter/configuration";
+
 /**
  * The filter option allows the user to select a particular filter
  * that can be applied by the paintop to the brush footprint or the
@@ -55,7 +60,7 @@ public:
     /**
      * XXX
      */
-    bool ignoreAlpha();
+    bool ignoreAlpha() const;
 
     /**
      * XXX

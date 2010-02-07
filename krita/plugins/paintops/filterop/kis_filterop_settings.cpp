@@ -49,30 +49,28 @@ bool KisFilterOpSettings::paintIncremental()
 
 void KisFilterOpSettings::setNode(KisNodeSP node)
 {
+    KisFilterOpSettingsWidget* options = dynamic_cast<KisFilterOpSettingsWidget*>(optionsWidget());
+
     KisPaintOpSettings::setNode(node);
-    if (m_options) {
-        m_options->m_filterOption->setNode(node);
+    if (options) {
+        options->m_filterOption->setNode(node);
     }
 }
 
 void KisFilterOpSettings::setImage(KisImageWSP image)
 {
-    if (m_options) {
-        m_options->m_filterOption->setImage(image);
-    }
-}
+    KisFilterOpSettingsWidget* options = dynamic_cast<KisFilterOpSettingsWidget*>(optionsWidget());
 
-KisFilterSP KisFilterOpSettings::filter() const
-{
-    return m_options->m_filterOption->filter();
+    if (options) {
+        options->m_filterOption->setImage(image);
+    }
 }
 
 KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
 {
-    return m_options->m_filterOption->filterConfig();
-}
+    KisFilterOpSettingsWidget* options = dynamic_cast<KisFilterOpSettingsWidget*>(optionsWidget());
+    if(!options)
+        return 0;
 
-bool KisFilterOpSettings::ignoreAlpha() const
-{
-    return m_options->m_filterOption->ignoreAlpha();
+    return options->m_filterOption->filterConfig();
 }

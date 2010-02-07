@@ -44,9 +44,7 @@ public:
 
     void setImage(KisImageWSP image);
 
-    KisFilterSP filter() const;
     KisFilterConfiguration* filterConfig() const;
-    bool ignoreAlpha() const;
 
 public:
 

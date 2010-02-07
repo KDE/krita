@@ -91,7 +91,7 @@ KisFilterConfiguration* KisFilterOption::filterConfig() const
 }
 
 
-bool KisFilterOption::ignoreAlpha()
+bool KisFilterOption::ignoreAlpha() const
 {
     return m_options->checkBoxIgnoreAlpha->isChecked();
 }
@@ -140,6 +140,7 @@ void KisFilterOption::setCurrentFilter( const KoID& id)
 {
     m_currentFilter = KisFilterRegistry::instance()->get(id.id());
     updateFilterConfigWidget();
+    emit sigSettingChanged();
 }
 
 
@@ -173,10 +174,11 @@ void KisFilterOption::updateFilterConfigWidget()
 
 void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    Q_UNUSED(setting);
-#ifdef __GNUC__
-#warning "KisFilterOption::writeOptionSetting: write the filter option setting"
-#endif
+    setting->setProperty(FILTER_ID, m_currentFilter->id());
+    setting->setProperty(FILTER_IGNORE_ALPHA, ignoreAlpha());
+    if(filterConfig()) {
+        setting->setProperty(FILTER_CONFIGURATION, filterConfig()->toLegacyXML());
+    }
 }
 
 void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* setting)

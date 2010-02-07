@@ -48,7 +48,7 @@
 void KisAsyncMergerTest::testMerger()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(0, 640, 441, colorSpace, "merger test");
+    KisImageSP image = new KisImage(0, 640, 441, colorSpace, "merger test");
 
     QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage sourceImage2(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
@@ -136,7 +136,7 @@ void KisAsyncMergerTest::testMerger()
 void KisAsyncMergerTest::debugObligeChild()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(0, 640, 441, colorSpace, "merger test");
+    KisImageSP image = new KisImage(0, 640, 441, colorSpace, "merger test");
 
     QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);

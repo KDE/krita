@@ -28,7 +28,7 @@
 void KisSelectionMaskTest::testCreation()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(0, 10, 10, cs, "bla");
+    KisImageSP image = new KisImage(0, 10, 10, cs, "bla");
     KisSelectionMask test(image);
 }
 

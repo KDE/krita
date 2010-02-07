@@ -39,13 +39,13 @@ void KisLayerTest::testCreation()
 {
 
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     image->lock();
 
     KisLayerSP layer = new TestLayer(image, "test", OPACITY_OPAQUE);
     QCOMPARE(layer->name(), QString("test"));
     QCOMPARE(layer->opacity(), OPACITY_OPAQUE);
-    QCOMPARE(layer->image(), image);
+    QCOMPARE(layer->image().data(), image.data());
     QCOMPARE(layer->colorSpace(), image->colorSpace());
     QCOMPARE(layer->visible(), true);
     QCOMPARE(layer->userLocked(), false);
@@ -76,7 +76,7 @@ void KisLayerTest::testCreation()
 void KisLayerTest::testOrdering()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     image->lock();
 
     KisLayerSP layer1 = new TestLayer(image, "layer1", OPACITY_OPAQUE);
@@ -161,7 +161,7 @@ void KisLayerTest::testOrdering()
 void KisLayerTest::testMoveNode()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     image->lock();
 
     KisLayerSP node1 = new TestLayer(image, "layer1", OPACITY_OPAQUE);
@@ -192,7 +192,7 @@ void KisLayerTest::testMoveNode()
 void KisLayerTest::testMoveLayer()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     image->lock();
 
     KisLayerSP node1 = new TestLayer(image, "layer1", OPACITY_OPAQUE);

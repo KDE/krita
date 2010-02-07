@@ -143,7 +143,7 @@ void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList refere
 void KisWalkersTest::testUsualVisiting()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE);
     KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE);
@@ -216,7 +216,7 @@ void KisWalkersTest::testUsualVisiting()
 void KisWalkersTest::testMergeVisiting()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE);
     KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE);
@@ -311,7 +311,7 @@ void KisWalkersTest::testMergeVisiting()
 void KisWalkersTest::testFullRefreshVisiting()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE);
     KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE);
@@ -367,7 +367,7 @@ void KisWalkersTest::testFullRefreshVisiting()
 void KisWalkersTest::testCachedVisiting()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE);
     KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE);

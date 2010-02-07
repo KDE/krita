@@ -38,7 +38,7 @@ void KisCropVisitorTest::testUndo()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
     TestUtil::KisUndoAdapterDummy* undoAdapterDummy = new TestUtil::KisUndoAdapterDummy();
-    KisImageWSP image = new KisImage(undoAdapterDummy, 300, 300, cs, "test");
+    KisImageSP image = new KisImage(undoAdapterDummy, 300, 300, cs, "test");
     image->lock();
     KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE);
     KisPaintDeviceSP dev = layer->paintDevice();

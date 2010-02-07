@@ -52,7 +52,7 @@ void KisMacroTest::testCreation()
     actions << &tc;
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(0, 512, 512, cs, "test");
+    KisImageSP image = new KisImage(0, 512, 512, cs, "test");
 
     KisMacro a();
     KisMacro b(actions);

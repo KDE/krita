@@ -48,11 +48,11 @@ private:
     void updateSimpleOutline();
     void updateMaskVisualisation(const QRect & r);
 private:
-    QVector<QPolygon> outline;
-    QVector<QPolygon> simpleOutline;
-    QTimer* timer;
-    int offset;
-    QList<QBrush> brushes;
+    QVector<QPolygon> m_outline;
+    QVector<QPolygon> m_simpleOutline;
+    QTimer* m_timer;
+    int m_offset;
+    QList<QBrush> m_brushes;
     QImage m_image;
     Mode m_mode;
 };

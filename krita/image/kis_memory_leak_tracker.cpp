@@ -23,8 +23,7 @@
 #include <kglobal.h>
 #include "kis_debug.h"
 
-#define HAVE_BACKTRACE_SUPPORT
-#define HAVE_MEMORY_LEAK_TRACKER
+#include "config-memory-leak-tracker.h"
 
 // Those defines are used to ignore classes that are often leaked due to a KisPaintDevice leak
 #define IGNORE_MEMENTO_ITEM

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2009 Vera Lukman <shichan.karachu@gmail.com>
+   Copyright 2009 Vera Lukman <shicmap@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,6 +43,7 @@ public:
     QSize sizeHint() const;
 
     void showPopupPalette (const QPoint&);
+    void showPopupPalette (bool b);
 
     //functions to set up selectedBrush
     void setSelectedBrush( int x );
@@ -71,13 +72,14 @@ protected:
 
 
 private:
+//    void setVisible(bool b);
+
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
     bool isPointInPixmap(QPointF&, int pos);
 
     //inline functions
     inline int brushRadius(){ return 50; }
-    inline float PI(){ return 3.14159265; }
     inline float brushInnerRadius(){ return width()/2 - 60; }
     inline float brushOuterRadius(){ return width()/2 - 40; }
     inline float colorInnerRadius(){ return width()/2 - 30; }
@@ -96,6 +98,7 @@ signals:
     void sigChangeActivePaintop(int);
     void sigUpdateRecentColor(int);
     void sigAddRecentColor(KoColor);
+    void sigEnableChangeColor(bool);
 
  private slots:
     void slotSelectNewColor();

@@ -151,6 +151,7 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *e)
 //        }
     } else if (e->button() == Qt::LeftButton) {
 //        if (canvas2->view()->favoriteResourceManager()->isPopupPaletteVisible()) return;
+
         //TODO: There is a bug here. If pop up palette is visible and a new colour is selected,
         //the new colour will be added when the user clicks on the canvas to hide the palette
         emit sigPainting();

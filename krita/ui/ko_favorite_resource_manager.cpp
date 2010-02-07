@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2009 Vera Lukman <shichan.karachu@gmail.com>
+   Copyright 2009 Vera Lukman <shicmap@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -62,7 +62,7 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
     }
 
     m_popupPalette = new KisPopupPalette(this, popupParent);
-    m_popupPalette->setVisible(false);
+    m_popupPalette->showPopupPalette(false);
     m_colorList = new KisColorDataList();
 }
 
@@ -139,7 +139,7 @@ void KoFavoriteResourceManager::slotChangeActivePaintop(int pos)
     m_paintopBox->setCurrentPaintop(m_favoriteBrushesList.at(pos)->paintOp());
 
     if (m_popupPalette)
-        m_popupPalette->setVisible(false); //automatically close the palette after a button is clicked.
+        m_popupPalette->showPopupPalette(false); //automatically close the palette after a button is clicked.
 }
 
 bool KoFavoriteResourceManager::isPopupPaletteVisible()
@@ -260,12 +260,20 @@ void KoFavoriteResourceManager::slotUpdateRecentColor(int pos)
     addRecentColorUpdate(pos);
 
     if (m_popupPalette)
-        m_popupPalette->setVisible(false); //automatically close the palette after a button is clicked.
+        m_popupPalette->showPopupPalette(false); //automatically close the palette after a button is clicked.
 }
 
 void KoFavoriteResourceManager::slotAddRecentColor(KoColor color)
 {
     addRecentColor(color);
+}
+
+void KoFavoriteResourceManager::slotAddRecentColorNotify(KoColor color)
+{
+    addRecentColor(color);
+
+    //user can select color from the pop up palette, so it is necessary to send a signal
+    emit sigSetFGColor(color);
 }
 
 void KoFavoriteResourceManager::addRecentColorNew(const KoColor& color)
@@ -303,8 +311,6 @@ void KoFavoriteResourceManager::addRecentColor(const KoColor& color)
         m_popupPalette->update();
     }
 
-     //later user can select color from the pop up palette, so it is necessary to send a signal
-    emit sigSetFGColor(color);
     printColors();
 }
 

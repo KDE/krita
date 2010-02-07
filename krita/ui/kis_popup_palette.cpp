@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2009 Vera Lukman <shichan.karachu@gmail.com>
+   Copyright 2009 Vera Lukman <shicmap@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,9 +15,6 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 
-   Known issues:
-   1. calculateFavoriteBrush() sometimes does not return the right value. Find
-      a better formula!
 */
 
 #include "kis_popup_palette.h"
@@ -39,7 +36,8 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
     connect(this, SIGNAL(sigSelectNewColor()), this, SLOT(slotSelectNewColor()));
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
-    connect(this, SIGNAL(sigAddRecentColor(KoColor)), m_resourceManager, SLOT(slotAddRecentColor(KoColor)));
+    connect(this, SIGNAL(sigAddRecentColor(KoColor)), m_resourceManager, SLOT(slotAddRecentColorNotify(KoColor)));
+    connect(this, SIGNAL(sigEnableChangeColor(bool)), m_resourceManager, SIGNAL(sigEnableChangeColor(bool)));
 
     colorFoo=0;
     setMouseTracking(true);
@@ -151,7 +149,16 @@ void KisPopupPalette::showPopupPalette (const QPoint &p)
         move(pointPalette);
 
     }
-    setVisible(!isVisible());
+    showPopupPalette(!isVisible());
+
+}
+
+void KisPopupPalette::showPopupPalette(bool b)
+{
+    // we want to enable change color when the widget is not visible
+    if (b)
+        emit sigEnableChangeColor(!b);
+    setVisible(b);
 }
 
 QSize KisPopupPalette::sizeHint() const
@@ -200,7 +207,7 @@ void KisPopupPalette::paintEvent(QPaintEvent*)
         QPixmap pixmap(pixmaps.at(pos));
         QPointF pixmapOffset(pixmap.width()/2, pixmap.height()/2);
 
-        float angle = pos*PI()*2.0/pixmaps.size();
+        float angle = pos*M_PI*2.0/pixmaps.size();
         QPointF pointTemp(brushRadius()*sin(angle),brushRadius()*cos(angle));
         painter.drawPixmap(QPoint(pointTemp.x()-pixmapOffset.x(), pointTemp.y()-pixmapOffset.y()), pixmap);
     }
@@ -292,8 +299,8 @@ QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, 
 QPainterPath KisPopupPalette::drawDonutPathAngle(int inner_radius, int outer_radius, int limit)
 {
     QPainterPath path;
-    path.moveTo(-1*outer_radius * sin(PI()/limit),
-                   outer_radius * cos(PI()/limit));
+    path.moveTo(-1*outer_radius * sin(M_PI/limit),
+                   outer_radius * cos(M_PI/limit));
     path.arcTo(-1*outer_radius, -1*outer_radius, 2*outer_radius,2*outer_radius,-90.0 - 180.0/limit,
                        360.0/limit);
     path.arcTo(-1*inner_radius, -1*inner_radius, 2*inner_radius,2*inner_radius,-90.0 + 180.0/limit,
@@ -396,7 +403,8 @@ void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
     }
     else if (event->button() == Qt::MidButton)
     {
-        setVisible(false);
+        showPopupPalette(false);
+        emit sigEnableChangeColor(true);
     }
 }
 
@@ -407,13 +415,13 @@ int KisPopupPalette::calculateIndex(QPointF point, int n)
     point.setY(point.y() - height()/2);
 
     //rotate
-    float smallerAngle = PI()/2 + PI()/n - atan2 ( point.y(), point.x() );
+    float smallerAngle = M_PI/2 + M_PI/n - atan2 ( point.y(), point.x() );
     float radius = sqrt ( point.x()*point.x() + point.y()*point.y() );
     point.setX( radius * cos(smallerAngle) );
     point.setY( radius * sin(smallerAngle) );
 
     //calculate brush index
-    int pos = floor (acos(point.x()/radius) * n/ (2 * PI()));
+    int pos = floor (acos(point.x()/radius) * n/ (2 * M_PI));
     if (point.y() < 0) pos =  n - pos - 1;
 
     return pos;
@@ -424,7 +432,7 @@ bool KisPopupPalette::isPointInPixmap(QPointF& point, int pos)
     QPixmap pixmap(m_resourceManager->favoriteBrushPixmap(pos));
 
     //calculating if the point is inside the pixmap
-    float angle = pos*PI()*2.0/m_resourceManager->favoriteBrushesTotal();
+    float angle = pos*M_PI*2.0/m_resourceManager->favoriteBrushesTotal();
     QPainterPath path;
     path.addRect(brushRadius()*sin(angle)-pixmap.width()/2+width()/2,
                  brushRadius()*cos(angle)-pixmap.height()/2+height()/2,

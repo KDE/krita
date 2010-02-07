@@ -26,6 +26,7 @@
 
 #include <QImage>
 #include <QPainter>
+#include <QDebug>
 
 #include <KoCanvasBase.h>
 #include <KoID.h>
@@ -51,8 +52,8 @@
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
         : m_view(view)
 {
-    //WARNING: this doesn't seem to be true for the first color that is selected automatically by the system
     m_fGChanged = true;
+    m_enablefGChange = true;
 }
 
 KisCanvasResourceProvider::~KisCanvasResourceProvider()
@@ -329,10 +330,18 @@ const KoColorProfile *KisCanvasResourceProvider::getScreenProfile(int screen)
 
 void KisCanvasResourceProvider::slotPainting()
 {
-    if (m_fGChanged) {
+    qDebug() << "[KisCanvasResourceProvider::slotPainting] m_fGChanged: " << m_fGChanged << " | m_enablefGChange: " << m_enablefGChange;
+    if (m_fGChanged && m_enablefGChange) {
         emit sigFGColorUsed(fgColor());
         m_fGChanged = false;
     }
+    m_enablefGChange = true;
+}
+
+void KisCanvasResourceProvider::slotEnableChangeColor(bool b)
+{
+    m_enablefGChange = b;
+    qDebug() << "[KisCanvasResourceProvider::slotEnableChangeColor] m_enablefGChange: " << m_enablefGChange;
 }
 
 #include "kis_canvas_resource_provider.moc"

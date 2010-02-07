@@ -56,7 +56,9 @@ MixerCanvas::MixerCanvas(QWidget *parent)
     m_viewConverter->setZoom(1.0);
 
     m_image = QImage(size(), QImage::Format_ARGB32);
-    m_image.fill(0);
+    QPainter p(&m_image);
+    p.fillRect(m_image.rect(), Qt::white);
+    p.end();
 
     KisConfig config;
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(config.defaultPainterlyColorModelId(), config.defaultPainterlyColorDepthId(), "");
@@ -65,6 +67,7 @@ MixerCanvas::MixerCanvas(QWidget *parent)
         cs = KoColorSpaceRegistry::instance()->rgb16();
     }
     m_paintDevice = new KisPaintDevice(cs, "Mixer");
+    m_paintDevice->convertFromQImage(m_image, QString::null);
     m_mixerTool = new MixerTool(this);
 
 }
@@ -149,9 +152,8 @@ void MixerCanvas::resizeEvent(QResizeEvent *event)
     if (event->size().width() > m_image.width() ||
             event->size().height() > m_image.height()) {
         QImage newImage(event->size(), QImage::Format_ARGB32);
-        newImage.fill(0);
-
         QPainter p(&newImage);
+        p.fillRect(m_image.rect(), Qt::white);
         p.drawImage(m_image.rect(), m_image, m_image.rect());
         p.end();
 

@@ -22,6 +22,8 @@
 
 #include <QCursor>
 #include <QRegion>
+#include <QDomDocument>
+#include <QDomElement>
 #include <QString>
 
 #include <KoPointerEvent.h>
@@ -74,7 +76,40 @@ MixerTool::MixerTool(MixerCanvas* mixer)
     m_d->state = MIXING;
     m_d->painter = 0;
     m_d->compositeOp = mixer->device()->colorSpace()->compositeOp(COMPOSITE_OVER);
-    m_d->mixingBrush = KisPaintOpRegistry::instance()->defaultPreset(KoID("complex"));
+    m_d->mixingBrush = KisPaintOpRegistry::instance()->defaultPreset(KoID("paintbrush"));
+    QString preset = "<PresetResource>"
+                     "<Preset name=\"my_preset\" paintopid=\"paintbrush\">"
+                     "<param name=\"CurveDarken\"><![CDATA[0,0;1,1;]]></param>"
+                         "<param name=\"CurveMix\"><![CDATA[0,0;1,1;]]></param>"
+                         "<param name=\"CurveOpacity\"><![CDATA[0,0;1,1;]]></param>"
+                         "<param name=\"CurveRotation\"><![CDATA[0,0;1,1;]]></param>"
+                         "<param name=\"CurveSize\"><![CDATA[0,0;1,1;]]></param>"
+                         "<param name=\"CustomDarken\"><![CDATA[false]]></param>"
+                         "<param name=\"CustomMix\"><![CDATA[false]]></param>"
+                         "<param name=\"CustomOpacity\"><![CDATA[true]]></param>"
+                         "<param name=\"CustomRotation\"><![CDATA[true]]></param>"
+                         "<param name=\"CustomSize\"><![CDATA[true]]></param>"
+                         "<param name=\"DarkenSensor\"><![CDATA[pressure]]></param>"
+                         "<param name=\"MixSensor\"><![CDATA[pressure]]></param>"
+                         "<param name=\"OpacitySensor\"><![CDATA[pressure]]></param>"
+                         "<param name=\"PaintOpAction\"><![CDATA[2]]></param>"
+                         "<param name=\"PressureDarken\"><![CDATA[false]]></param>"
+                         "<param name=\"PressureMix\"><![CDATA[false]]></param>"
+                         "<param name=\"PressureOpacity\"><![CDATA[false]]></param>"
+                         "<param name=\"PressureRotation\"><![CDATA[false]]></param>"
+                         "<param name=\"PressureSize\"><![CDATA[true]]></param>"
+                         "<param name=\"RotationSensor\"><![CDATA[pressure]]></param>"
+                         "<param name=\"SizeSensor\"><![CDATA[pressure]]></param>"
+                         "<param name=\"brush_definition\"><![CDATA[<!DOCTYPE BrushSetting>"
+                 "<brush_definition brush_spacing=\"0.2\" brush_angle=\"1.570796326794897\" brush_type=\"kis_auto_brush\" autobrush_ratio=\"1\" autobrush_type=\"circle\" autobrush_hfade=\"0.11\" autobrush_spikes=\"10\" autobrush_radius=\"15\" autobrush_vfade=\"0.11\"/>"
+                 "]]></param>"
+                 "        <param name=\"paintop\"><![CDATA[paintbrush]]></param>"
+                 "    </Preset>"
+                " </PresetResource>";
+    QDomDocument dom;
+    dom.setContent(preset);
+    QDomElement element = dom.documentElement();
+    m_d->mixingBrush->fromXML(element);
     activate();
 }
 
@@ -123,7 +158,7 @@ void MixerTool::resourceChanged(int key, const QVariant & res)
 
 void MixerTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    qDebug() << "focus" << m_d->mixer->hasFocus();
+
     if (m_d->mixer->hasFocus()) {
         m_d->mixingBrush->settings()->paintOutline(m_d->currentMousePosition,
                                                    0,
@@ -135,11 +170,9 @@ void MixerTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 void MixerTool::mousePressEvent(KoPointerEvent *event)
 {
-    qDebug() << "press" << event->pos() << event->button() << m_d->state;
     m_d->currentMousePosition = event->pos();
 
     if (event->button() == Qt::LeftButton) {
-        qDebug() << "mouse press event: painting";
         m_d->state = MIXING;
         m_d->dragDist = 0;
 
@@ -152,25 +185,23 @@ void MixerTool::mousePressEvent(KoPointerEvent *event)
         m_d->painter->setCompositeOp(m_d->compositeOp);
         m_d->painter->setPaintColor(m_d->foregroundColor);
         m_d->painter->setBackgroundColor(m_d->backgroundColor);
-
+        m_d->painter->setPaintOpPreset(m_d->mixingBrush, 0);
         m_d->previousPaintInformation =
                 KisPaintInformation(event->point,
                                     event->pressure(), event->xTilt(), event->yTilt(),
                                     KisVector2D::Zero(),
                                     event->rotation(), event->tangentialPressure());
         m_d->painter->paintAt(m_d->previousPaintInformation);
+        m_d->mixer->updateCanvas(m_d->painter->dirtyRegion());
     }
 }
 
 void MixerTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    qDebug() << "move" << event->pos() << event->button() << m_d->state;
-
     m_d->currentMousePosition = event->pos();
     switch(m_d->state) {
     case MIXING:
         {
-            qDebug() << "mouse move event: painting";
             QPointF dragVec = event->point - m_d->previousPaintInformation.pos();
 
             KisPaintInformation info = KisPaintInformation(event->point,
@@ -180,6 +211,7 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *event)
 
             m_d->painter->paintLine(m_d->previousPaintInformation, info);
             m_d->previousPaintInformation = info;
+            m_d->mixer->updateCanvas(m_d->painter->dirtyRegion());
         }
         break;
     case PANNING:
@@ -193,14 +225,15 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *event)
 
 void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    qDebug() << "mouse release" << event->pos() << event->button() << m_d->state;
-
     // XXX: We want to be able to set a color source for the other paintops that
     //      contains the impure blend under the current cursor.
     if (m_d->state == MIXING) {
         m_d->state = HOVER;
+        m_d->mixer->updateCanvas(m_d->painter->dirtyRegion());
         delete m_d->painter;
         m_d->painter = 0;
+        m_d->mixer->device()->convertToQImage(0).save("canvas.png");
+
     }
     m_d->mixer->resourceManager()->setResource(KoCanvasResource::ForegroundColor, event->pos());
 }

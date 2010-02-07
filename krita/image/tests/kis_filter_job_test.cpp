@@ -52,6 +52,7 @@ void KisFilterJobTest::testCreation()
     KisFilterJobFactory factory(f, kfc);
     ThreadWeaver::Job* job = factory.createJob(0, dev, QRect(0, 0, 2000, 2000), up);
     Q_ASSERT(job);
+    delete job;
 }
 
 

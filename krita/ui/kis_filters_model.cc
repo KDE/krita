@@ -90,6 +90,11 @@ KisFiltersModel::KisFiltersModel(KisPaintDeviceSP thumb) : d(new Private)
     qSort(d->categoriesKeys);
 }
 
+KisFiltersModel::~KisFiltersModel()
+{
+    delete d;
+}
+
 int KisFiltersModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid()) {

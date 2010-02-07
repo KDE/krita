@@ -84,6 +84,7 @@ KisFilterSelectorWidget::~KisFilterSelectorWidget()
     QList<int> sizes = d->uiFilterSelector.splitter->sizes();
     cfg.setShowFilterGallery(sizes[0] > 0);
     delete d->filtersModel;
+    delete d->currentBookmarkedFilterConfigurationsModel;
     delete d->currentCentralWidget;
     delete d->widgetLayout;
     delete d;

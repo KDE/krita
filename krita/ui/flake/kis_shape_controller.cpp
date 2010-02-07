@@ -118,21 +118,14 @@ KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
 
 KisShapeController::~KisShapeController()
 {
-    dbgUI << "Deleting the KisShapeController. There are" << m_d->nodeShapes.size() << " shapes";
-    foreach( KoShape* shape, m_d->nodeShapes.values() ) {
-        KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>(shape);
-        if (parent) {
-            foreach(KoShape * child, parent->childShapes()) {
-                m_d->removeShapeAndChildrenFromMap(child);
-            }
-        }
+    dbgUI << "Deleting the KisShapeController " << this << " There are" << m_d->nodeShapes.size() << " shapes";
+    
+    for(KisNodeMap::iterator it = m_d->nodeShapes.begin(); it != m_d->nodeShapes.end(); ++it)
+    {
+        dbgUI << it.key() << it.key()->name() << it.value();
+        delete it.value();
     }
-    foreach( KoShape* shape, m_d->nodeShapes ) {
-        removeShape( shape);
-        delete shape; // XXX: What happes with stuff on the
-                        // clipboard? And how about undo information?
-    }
-    m_d->nodeShapes.clear();
+    
     // XXX: deleting the undoStack of the document while the document is being deleted is dangerous
     m_d->dataCenterMap.remove("UndoStack");
     qDeleteAll(m_d->dataCenterMap);

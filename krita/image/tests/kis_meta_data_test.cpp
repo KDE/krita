@@ -193,6 +193,7 @@ void KisMetaDataTest::testEntry()
     Value v1 = createIntegerValue(42);
     Value v2 = createIntegerValue(12);
     Entry e(schema, "test", v1);
+    QVERIFY(schema);
     QCOMPARE(e.name(), QString("test"));
     QCOMPARE(e.schema(), schema);
     QCOMPARE(e.qualifiedName(), schema->generateQualifiedName("test"));

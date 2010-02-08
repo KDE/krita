@@ -87,7 +87,7 @@ set(kritaui_LIB_SRCS
     kis_resource_server_provider.cpp 
     kis_selection_decoration.cc
     kis_selection_manager.cc 
-    kis_statusbar.cc 
+    kis_statusbar.cc
     kis_view2.cpp 
     kis_zoom_manager.cc
     ko_favorite_resource_manager.cpp

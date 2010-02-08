@@ -26,7 +26,6 @@
 
 #include <QImage>
 #include <QPainter>
-#include <QDebug>
 
 #include <KoCanvasBase.h>
 #include <KoID.h>
@@ -330,7 +329,6 @@ const KoColorProfile *KisCanvasResourceProvider::getScreenProfile(int screen)
 
 void KisCanvasResourceProvider::slotPainting()
 {
-    qDebug() << "[KisCanvasResourceProvider::slotPainting] m_fGChanged: " << m_fGChanged << " | m_enablefGChange: " << m_enablefGChange;
     if (m_fGChanged && m_enablefGChange) {
         emit sigFGColorUsed(fgColor());
         m_fGChanged = false;
@@ -341,7 +339,6 @@ void KisCanvasResourceProvider::slotPainting()
 void KisCanvasResourceProvider::slotEnableChangeColor(bool b)
 {
     m_enablefGChange = b;
-    qDebug() << "[KisCanvasResourceProvider::slotEnableChangeColor] m_enablefGChange: " << m_enablefGChange;
 }
 
 #include "kis_canvas_resource_provider.moc"

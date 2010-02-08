@@ -95,10 +95,7 @@ public slots:
     void slotUpdateRecentColor(int);
 
     /*add a colour to m_colorList, used by KisCanvasResourceProvider*/
-    void slotAddRecentColor(KoColor);
-
-    /*add a colour to m_colorList, used by m_popupPalette. It notifies the system to change FGColor*/
-    void slotAddRecentColorNotify(KoColor);
+    void slotAddRecentColor(const KoColor&);
 
 private:
     KisPaletteManager *m_favoriteBrushManager;

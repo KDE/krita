@@ -139,7 +139,10 @@ void KoFavoriteResourceManager::slotChangeActivePaintop(int pos)
     m_paintopBox->setCurrentPaintop(m_favoriteBrushesList.at(pos)->paintOp());
 
     if (m_popupPalette)
+    {
         m_popupPalette->showPopupPalette(false); //automatically close the palette after a button is clicked.
+        emit sigEnableChangeColor(true);
+    }
 }
 
 bool KoFavoriteResourceManager::isPopupPaletteVisible()
@@ -263,17 +266,9 @@ void KoFavoriteResourceManager::slotUpdateRecentColor(int pos)
         m_popupPalette->showPopupPalette(false); //automatically close the palette after a button is clicked.
 }
 
-void KoFavoriteResourceManager::slotAddRecentColor(KoColor color)
+void KoFavoriteResourceManager::slotAddRecentColor(const KoColor& color)
 {
     addRecentColor(color);
-}
-
-void KoFavoriteResourceManager::slotAddRecentColorNotify(KoColor color)
-{
-    addRecentColor(color);
-
-    //user can select color from the pop up palette, so it is necessary to send a signal
-    emit sigSetFGColor(color);
 }
 
 void KoFavoriteResourceManager::addRecentColorNew(const KoColor& color)

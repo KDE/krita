@@ -23,11 +23,12 @@
 #include <QtGui/QWidget>
 #include <QQueue>
 #include <KoColor.h>
+#include <KoTriangleColorSelector.h>
 
 class KisFavoriteBrushData;
 class KoFavoriteResourceManager;
 class QWidget;
-
+class KisTriangleColorSelector;
 
 class KisPopupPalette : public QWidget
 {
@@ -72,36 +73,36 @@ protected:
 
 
 private:
-//    void setVisible(bool b);
+    void setVisible(bool b);
 
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
     bool isPointInPixmap(QPointF&, int pos);
 
     //inline functions
-    inline int brushRadius(){ return 50; }
-    inline float brushInnerRadius(){ return width()/2 - 60; }
-    inline float brushOuterRadius(){ return width()/2 - 40; }
+    inline int brushRadius(){ return (brushInnerRadius()+brushOuterRadius())/2; }
+    inline float brushInnerRadius(){ return width()/2 - 55; }
+    inline float brushOuterRadius(){ return width()/2 - 35; }
     inline float colorInnerRadius(){ return width()/2 - 30; }
     inline float colorOuterRadius(){ return width()/2 - 10; }
 
 private:
-    int colorFoo;//TEMPORARY
     int m_hoveredBrush;
     int m_selectedBrush;
     int m_hoveredColor;
     int m_selectedColor;
     KoFavoriteResourceManager* m_resourceManager;
+    KoTriangleColorSelector* m_triangleColorSelector;
 
 signals:
-    void sigSelectNewColor();
     void sigChangeActivePaintop(int);
     void sigUpdateRecentColor(int);
-    void sigAddRecentColor(KoColor);
+    void sigAddRecentColor(const KoColor&);
     void sigEnableChangeColor(bool);
+    void sigChangefGColor(const KoColor&);
 
- private slots:
-    void slotSelectNewColor();
+private slots:
+    void slotChangefGColor(const QColor& newColor);
 };
 
 #endif // KIS_POPUP_PALETTE_H

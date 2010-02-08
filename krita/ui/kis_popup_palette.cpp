@@ -18,11 +18,11 @@
 */
 
 #include "kis_popup_palette.h"
+#include "kis_paintop_box.h"
+#include "ko_favorite_resource_manager.h"
+#include <kis_types.h>
 #include <QtGui>
 #include <QDebug>
-#include "kis_paintop_box.h"
-#include <kis_types.h>
-#include "ko_favorite_resource_manager.h"
 #include <QQueue>
 #include <QtGui>
 #include <math.h>
@@ -30,16 +30,23 @@
 KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
     , m_resourceManager (manager)
+    , m_triangleColorSelector (0)
 {
+    m_triangleColorSelector  = new KoTriangleColorSelector(this);
+    int offset = m_triangleColorSelector->height()/2 + 10;
+    m_triangleColorSelector->move(offset, offset);
+    m_triangleColorSelector->setVisible(true);
+
     setAutoFillBackground(true);
     setAttribute(Qt::WA_ContentsPropagated,true);
-    connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
-    connect(this, SIGNAL(sigSelectNewColor()), this, SLOT(slotSelectNewColor()));
-    connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
-    connect(this, SIGNAL(sigAddRecentColor(KoColor)), m_resourceManager, SLOT(slotAddRecentColorNotify(KoColor)));
-    connect(this, SIGNAL(sigEnableChangeColor(bool)), m_resourceManager, SIGNAL(sigEnableChangeColor(bool)));
 
-    colorFoo=0;
+    connect(m_triangleColorSelector, SIGNAL(colorChanged(const QColor& )), SLOT(slotChangefGColor(QColor)));
+    connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
+    connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
+    connect(this, SIGNAL(sigAddRecentColor(const KoColor&)), m_resourceManager, SLOT(slotAddRecentColorNotify(const KoColor&)));
+    connect(this, SIGNAL(sigEnableChangeColor(bool)), m_resourceManager, SIGNAL(sigEnableChangeColor(bool)));
+    connect(this, SIGNAL(sigChangefGColor(const KoColor&)), m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
+
     setMouseTracking(true);
     setHoveredBrush(-1);
     setHoveredColor(-1);
@@ -57,75 +64,12 @@ void KisPopupPalette::setHoveredColor(int x) { m_hoveredColor = x; }
 int KisPopupPalette::selectedColor() const { return m_selectedColor; }
 void KisPopupPalette::setSelectedColor(int x) { m_selectedColor = x; }
 
-void KisPopupPalette::slotSelectNewColor()
+void KisPopupPalette::slotChangefGColor(const QColor& newColor)
 {
-    //TODO:get currently used Color
-    QColor newColor;
-
-    /****************************REMOVE THIS LATER**********************************/
-    switch (colorFoo % 15){
-        case 0:
-            newColor.setRgb (255,0,0,255);
-            break;
-        case 1:
-            newColor.setRgb (0,197,42,255);
-            break;
-        case 2:
-            newColor.setRgb (192,0,255,255);
-            break;
-        case 3:
-            newColor.setRgb (0,30,255,255);
-            break;
-        case 4:
-            newColor.setRgb (116,227,255,255);
-            break;
-        case 5:
-            newColor.setRgb (255,240,0,255);
-            break;
-        case 6:
-            newColor.setRgb (119,156,110,255);
-            break;
-        case 7:
-            newColor.setRgb (144,56,91,255);
-            break;
-        case 8:
-            newColor.setRgb (162,201,255,255);
-            break;
-        case 9:
-            newColor.setRgb (250,162,255,255);
-            break;
-        case 10:
-            newColor.setRgb (255,215,162,255);
-            break;
-        case 11:
-            newColor.setRgb (162,255,245,255);
-            break;
-        case 12:
-            newColor.setRgb (234,255,162,255);
-            break;
-        case 13:
-            newColor.setRgb (105,111,123,255);
-            break;
-        default:
-            newColor.setRgb (255,162,162,255);
-            break;
-    }
-    colorFoo++;
-
-    qDebug() << "Color to be added: (r)" << newColor.red() << "(g)" << newColor.green()
-            << "(b)" << newColor.blue();
-    /****************************REMOVE THIS LATER**********************************/
-
     KoColor color;
     color.fromQColor(newColor);
 
-    //TODO: develop this more!
-    //emit sigAddRecentColor(color);
-
-    qDebug() << "[KisPopupPalette] currently disabled";
-
-    update();
-
+    emit sigChangefGColor(color);
 }
 
 void KisPopupPalette::showPopupPalette (const QPoint &p)
@@ -161,9 +105,14 @@ void KisPopupPalette::showPopupPalette(bool b)
     setVisible(b);
 }
 
+void KisPopupPalette::setVisible(bool b)
+{
+    QWidget::setVisible(b);
+}
+
 QSize KisPopupPalette::sizeHint() const
 {
-    return QSize(200,200);
+    return QSize(220,220);
 }
 
 void KisPopupPalette::resizeEvent(QResizeEvent*)
@@ -232,18 +181,12 @@ void KisPopupPalette::paintEvent(QPaintEvent*)
         painter.rotate(rotationAngle);
     }
 
-    //temporary new color 'button'
-    painter.setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
-    painter.setBrush(Qt::white);
-    painter.drawEllipse(QPoint(0,0), 30,30);
-    painter.drawText(QPoint(-15,0), "color");
-
     painter.setBrush(Qt::transparent);
 
     if (m_resourceManager->recentColorsTotal() == 0)
     {
         QPainterPath path_ColorDonut(drawDonutPathFull(0,0,colorInnerRadius(), colorOuterRadius()));
-        painter.setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+        painter.setPen(QPen(palette().color(QPalette::Window).darker(130), 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
         painter.drawPath(path_ColorDonut);
     }
 
@@ -396,10 +339,6 @@ void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
                 emit sigUpdateRecentColor(pos);
             }
         }
-        else if (pathSelCol.contains(point))
-        {
-            emit sigSelectNewColor();
-        }
     }
     else if (event->button() == Qt::MidButton)
     {
@@ -444,6 +383,8 @@ bool KisPopupPalette::isPointInPixmap(QPointF& point, int pos)
 
 KisPopupPalette::~KisPopupPalette()
 {
+    delete m_triangleColorSelector;
+    m_triangleColorSelector = 0;
     m_resourceManager = 0;
 }
 

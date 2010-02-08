@@ -117,127 +117,36 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     double centerX = dstWidth  * 0.5 - 1.0 + subPixelX;
     double centerY = dstHeight * 0.5 - 1.0 + subPixelY;
 
-    // check geometrical and color symmetricity
-    if (isBrushSymmetric(angle) && (dynamic_cast<PlainColoringInformation*>(coloringInformation))) 
-    {
-        int maskCenterX = qRound(dstWidth * 0.5);
-        int maskCenterY = qRound(dstHeight * 0.5);
-        
-        // dabPointer is topLeft 
-        int dstRow = dstWidth * pixelSize;
-        int quarterRow = (maskCenterX) * pixelSize;
-
-        quint8 * topRightPointer = dst->data();
-
-        topRightPointer += dstRow - pixelSize; 
-
-        // compute 1/4 of the mask 
-        for (int y = 0; y < maskCenterY;y++){
-            for (int x = 0; x < maskCenterX;x++){
-                // we don't rotate here compared to version below
-                double maskX = (x - centerX) * invScaleX;
-                double maskY = (y - centerY) * invScaleY;
-
-                if (coloringInformation) {
-                    if (color) {
-                        memcpy(dabPointer, color, pixelSize);
-                    } else {
-                        memcpy(dabPointer, coloringInformation->color(), pixelSize);
-                        coloringInformation->nextColumn();
-                    }
-                }
-                cs->setAlpha(dabPointer, OPACITY_OPAQUE - d->shape->valueAt(maskX, maskY) , 1);
-                memcpy(topRightPointer, dabPointer, pixelSize);
+    double cosa = cos(angle);
+    double sina = sin(angle);
             
-                // topLeft goes to next right pixel
-                dabPointer += pixelSize;
-                // one pixel left
-                topRightPointer -= pixelSize;
-            }
-            if (!color && coloringInformation) {
-                coloringInformation->nextRow();
-            }
+    for (int y = 0; y < dstHeight; y++) {
+        for (int x = 0; x < dstWidth; x++) {
 
-            // put the pointer back at the start of the row and next row
-            dabPointer = (dabPointer - quarterRow ) + dstRow;
-            // put the pointer back at the end of the row and next row
-            topRightPointer = (topRightPointer + quarterRow ) + dstRow;
-            //TODO: this never happens probably? 
-            /*            if (dstWidth < rowWidth) {
-                dabPointer += (pixelSize * (rowWidth - dstWidth));
-            }*/
-        }
-        
-        // copy the upper half of the mask 
-        // if the height is even copy every row, if not, skip the one in the middle
-        if ((dstHeight % 2) == 0)
-        {        
-            topRightPointer = topRightPointer - dstRow + pixelSize - dstRow;
-            // copy the upper part of the mask
-            for (int i = 0; i < maskCenterY ;i++){
-                memcpy(dabPointer, topRightPointer , dstRow);
-                topRightPointer -= dstRow;
-                dabPointer += dstRow;
+            double x_ = (x - centerX) * invScaleX;
+            double y_ = (y - centerY) * invScaleY;
+            double maskX = cosa * x_ - sina * y_;
+            double maskY = sina * x_ + cosa * y_;
+
+            if (coloringInformation) {
+                if (color) {
+                    memcpy(dabPointer, color, pixelSize);
+                } else {
+                    memcpy(dabPointer, coloringInformation->color(), pixelSize);
+                    coloringInformation->nextColumn();
+                }
             }
+            cs->setAlpha(dabPointer, OPACITY_OPAQUE - d->shape->valueAt(maskX, maskY), 1);
+            dabPointer += pixelSize;
         }
-        else
-        {
-            topRightPointer = topRightPointer - dstRow + pixelSize - dstRow - dstRow;
-            for (int i = 1; i < maskCenterY ;i++){
-                memcpy(dabPointer, topRightPointer , dstRow);
-                topRightPointer -= dstRow;
-                dabPointer += dstRow;
-            }
+        if (!color && coloringInformation) {
+            coloringInformation->nextRow();
+        }
+        //TODO: this never happens probably? 
+        if (dstWidth < rowWidth) {
+            dabPointer += (pixelSize * (rowWidth - dstWidth));
         }
     }
-    else
-    {
-            double cosa = cos(angle);
-            double sina = sin(angle);
-            
-            for (int y = 0; y < dstHeight; y++) {
-                for (int x = 0; x < dstWidth; x++) {
-
-                    double x_ = (x - centerX) * invScaleX;
-                    double y_ = (y - centerY) * invScaleY;
-                    double maskX = cosa * x_ - sina * y_;
-                    double maskY = sina * x_ + cosa * y_;
-
-                    if (coloringInformation) {
-                        if (color) {
-                            memcpy(dabPointer, color, pixelSize);
-                        } else {
-                            memcpy(dabPointer, coloringInformation->color(), pixelSize);
-                            coloringInformation->nextColumn();
-                        }
-                    }
-                    cs->setAlpha(dabPointer, OPACITY_OPAQUE - d->shape->valueAt(maskX, maskY), 1);
-                    dabPointer += pixelSize;
-                }
-                if (!color && coloringInformation) {
-                    coloringInformation->nextRow();
-                }
-                //TODO: this never happens probably? 
-                if (dstWidth < rowWidth) {
-                    dabPointer += (pixelSize * (rowWidth - dstWidth));
-                }
-            }
-        
-    }//else rotation involved
-}
-
-
-
-bool KisAutoBrush::isBrushSymmetric(double angle) const
-{
-    // small brushes compute directly
-    if (d->shape->height() < 3 ) return false; 
-    // even spikes are symmetric
-    if ((d->shape->spikes() % 2) != 0) return false;
-    // main condition, if not rotated or use optimization for rotated circles - rotated circle is circle again
-    if ( angle == 0.0 || ( ( d->shape->type() == KisMaskGenerator::CIRCLE ) && ( d->shape->width() == d->shape->height() ) ) ) return true;
-    // in other case return false
-    return false;
 }
 
 

@@ -183,6 +183,10 @@ bool KoPADocument::saveOdf( SavingContext & documentContext )
     bodyWriter->startElement( "office:body" );
     bodyWriter->startElement( odfTagName( true ) );
 
+    if ( !saveOdfProlog( paContext ) ) {
+        return false;
+    }
+
     if ( !saveOdfPages( paContext, d->pages, d->masterPages ) ) {
         return false;
     }
@@ -295,6 +299,12 @@ bool KoPADocument::saveOdfPages( KoPASavingContext &paContext, QList<KoPAPageBas
         paContext.incrementPage();
     }
 
+    return true;
+}
+
+bool KoPADocument::saveOdfProlog( KoPASavingContext & paContext )
+{
+    Q_UNUSED( paContext );
     return true;
 }
 

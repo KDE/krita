@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2010 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -254,6 +254,13 @@ protected:
      * The default implementation is empty
      */
     virtual bool loadOdfEpilogue( const KoXmlElement & body, KoPALoadingContext & context );
+
+    /**
+     * Save the prolog
+     *
+     * The default implementation is empty
+     */
+    virtual bool saveOdfProlog( KoPASavingContext & paContext );
 
     /**
      * Save the epilouge

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Shiva Kernel Language Support For Generators
+Name[en_GB]=Shiva Kernel Language Support For Generators
 Name[et]=Shiva kernelikeele toetus genereerijates
 Name[nl]=Ondersteuning van Shiva-kerneltaal voor generatoren
 Name[pt]=Suporte à Linguagem do 'Kernel' Shiva para os Geradores
@@ -9,6 +10,7 @@ Name[uk]=Підтримка мови ядра Shiva для породжувач�
 Name[x-test]=xxShiva Kernel Language Support For Generatorsxx
 Name[zh_TW]=產生器使用之 Shiva 核心語言支援
 Comment=Shiva Kernel Language Support For Generators
+Comment[en_GB]=Shiva Kernel Language Support For Generators
 Comment[et]=Shiva kernelikeele toetus genereerijates
 Comment[nl]=Ondersteuning van Shiva-kerneltaal voor generators
 Comment[pt]=Suporte à Linguagem do 'Kernel' Shiva para os Geradores

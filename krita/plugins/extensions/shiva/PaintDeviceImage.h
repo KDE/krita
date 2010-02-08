@@ -30,6 +30,7 @@ public:
     virtual char* rawData( int _x, int _y );
     virtual const char* data(int _x, int _y) const ;
     virtual const char* rawData( int _x, int _y ) const;
+    virtual GTLCore::RegionI boundingBox() const;
     virtual ConstIterator* createIterator() const;
     virtual Iterator* createIterator();
 private:
@@ -46,6 +47,7 @@ public:
     virtual char* rawData( int _x, int _y );
     virtual const char* data(int _x, int _y) const ;
     virtual const char* rawData( int _x, int _y ) const;
+    virtual GTLCore::RegionI boundingBox() const;
     virtual ConstIterator* createIterator() const;
     virtual Iterator* createIterator();
 private:

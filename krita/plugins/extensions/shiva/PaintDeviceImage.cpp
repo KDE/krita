@@ -112,6 +112,11 @@ const char* ConstPaintDeviceImage::rawData(int _x, int _y) const
     return (const char*)(m_accessor->oldRawData());
 }
 
+GTLCore::RegionI ConstPaintDeviceImage::boundingBox() const
+{
+  return GTLCore::RegionI(0,0,-1,-1);
+}
+
 GTLCore::AbstractImage::ConstIterator* ConstPaintDeviceImage::createIterator() const
 {
     return 0;
@@ -154,6 +159,11 @@ const char* PaintDeviceImage::rawData(int _x, int _y) const
 {
     m_accessor->moveTo(_x, _y);
     return (const char*)(m_accessor->oldRawData());
+}
+
+GTLCore::RegionI PaintDeviceImage::boundingBox() const
+{
+  return GTLCore::RegionI(0,0,-1,-1);
 }
 
 GTLCore::AbstractImage::ConstIterator* PaintDeviceImage::createIterator() const

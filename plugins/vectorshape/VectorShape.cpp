@@ -150,6 +150,7 @@ void VectorShape::drawNull(QPainter &painter) const
 
 void VectorShape::drawWmf(QPainter &painter) const
 {
+    // Debug
     //drawNull(painter);
 
     WmfPainter  wmfPainter;
@@ -177,6 +178,7 @@ void VectorShape::drawWmf(QPainter &painter) const
 
     // Actually paint the WMF.
     wmfPainter.play(painter, true);
+
     painter.restore();
 }
 

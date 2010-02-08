@@ -38,7 +38,7 @@ public:
     WmfPainter();
     ~WmfPainter() { }
 
-private:
+protected:
     // -------------------------------------------------------------------------
     // Reimplemented functions
 
@@ -46,6 +46,10 @@ private:
 
     void  setWindowOrg(int left, int top);
     void  setWindowExt(int width, int height);
+
+private:
+    qreal  mScaleX;
+    qreal  mScaleY;
 };
 
 #endif

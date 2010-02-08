@@ -32,7 +32,6 @@
 
 #include <kdebug.h>
 #include <QTimer>
-#include <QPointer>
 
 /* Unused for now.
 #if 0
@@ -143,7 +142,7 @@ public:
         return true;
     }
 
-    QPointer<KoToolBase> activeTool;
+    KoToolBase *activeTool;
     bool tabletPressed;
     bool hasSelection;
     QTimer scrollTimer;

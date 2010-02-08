@@ -39,28 +39,46 @@
 
 #include <KoColor.h>
 
+#include <kis_softop_option.h>
+
+
 KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp( painter )
     , m_settings( settings )
     , m_image ( image )
 {
-    m_radius = qRound(0.5 * m_settings->diameter());
+
+    m_brushType = SoftBrushType(settings->getInt(SOFT_BRUSH_TIP));
+    // brushType == 0
+    if (m_brushType == CURVE){
+       
+        m_curveMaskProperties.diameter = quint16(settings->getDouble(SOFTCURVE_DIAMETER));
+        m_curveMaskProperties.scale = settings->getDouble(SOFTCURVE_SCALE);    
+        m_curveMaskProperties.curve = settings->getCubicCurve(SOFTCURVE_CURVE);
+        
+        m_radius = qRound(0.5 * m_curveMaskProperties.diameter);
+        m_curveMaskProperties.curveData = m_curveMaskProperties.curve.floatTransfer(m_radius+2);
+        
+        m_curveMask.setProperties(&m_curveMaskProperties);
+        
+        m_gaussBrush.distMask = 0;
+    }else if (m_brushType == GAUSS){
+
+        m_radius = qRound(settings->getDouble(SOFT_DIAMETER) * 0.5);
+        m_gaussBrush.distMask = new KisCircleAlphaMask(m_radius);
+        m_gaussBrush.distMask->setSigma( settings->getDouble(SOFT_SIGMA), settings->getDouble(SOFT_SOFTNESS) / 100.0  );
+        m_gaussBrush.distMask->generateGaussMap( true );
+        qreal start = m_settings->getDouble(SOFT_START);
+        qreal end = m_settings->getDouble(SOFT_END);
+        m_gaussBrush.distMask->smooth( start,end );
+    }
     m_color = painter->paintColor();
 
-    m_xSpacing = qMax(1.0,m_settings->spacing() * m_radius);
-    m_ySpacing = qMax(1.0,m_settings->spacing() * m_radius);
+        
+    m_xSpacing = qMax(1.0,settings->getDouble(SOFT_SPACING) * m_radius);
+    m_ySpacing = qMax(1.0,settings->getDouble(SOFT_SPACING) * m_radius);
     m_spacing = sqrt(m_xSpacing*m_xSpacing + m_ySpacing*m_ySpacing);
-
     
-    m_distMask = new KisCircleAlphaMask(m_radius);
-    m_distMask->setSigma( m_settings->sigma(), m_settings->flow() / 100.0  );
-    m_distMask->generateGaussMap( true );
-    
-    qreal start = m_settings->start();
-    qreal end = m_settings->end();
-    //m_distMask->smooth( start,end );
-
-
 #ifdef BENCHMARK
     m_count = m_total = 0;
 #endif
@@ -68,7 +86,7 @@ KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainte
 
 KisSoftPaintOp::~KisSoftPaintOp()
 {
-    delete m_distMask;
+    delete m_gaussBrush.distMask;
 }
 
 
@@ -100,39 +118,64 @@ void KisSoftPaintOp::paintAt(const KisPaintInformation& info)
 
     KisRandomAccessor acc = m_dab->createRandomAccessor( info.pos().x(), info.pos().y() );
 
-   
     quint8 alpha;
     int pixelSize = m_dab->colorSpace()->pixelSize();
 
     int curX = qRound(info.pos().x());
     int curY = qRound(info.pos().y());
-    int left = curX - m_distMask->radius();
-    int top = curY - m_distMask->radius();
 
-    int w = m_distMask->radius() * 2 + 1;
+    int left = curX - m_radius;
+    int top = curY - m_radius;
+
+    int w = m_radius * 2 + 1;
     int h = w;
 
-    int newX;
-    int newY;
+    int maskX;
+    int maskY;
 
     KisRectIterator m_srcIt = m_dab->createRectIterator(left, top, w ,h );
     int x;
     int y;
 
-    int border = ( m_distMask->radius() + 1 ) * ( m_distMask->radius() + 1 );    
+    
+    
+    if (m_brushType == CURVE){
+        KisFixedPaintDeviceSP dab = cachedDab(painter()->device()->colorSpace());
+
+        qint32 x;
+        double subPixelX;
+        qint32 y;
+        double subPixelY;
+
+        QPointF pos = info.pos() - m_curveMask.hotSpot();
+        
+        splitCoordinate(pos.x(), &x, &subPixelX);
+        splitCoordinate(pos.y(), &y, &subPixelY);
+
+        m_curveMask.mask(dab,painter()->paintColor(),1.0,0.0,subPixelX,subPixelY);
+        painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
+        return;
+    }
+    
+    
+    int border = ( m_radius ) * ( m_radius );    
     for (;!m_srcIt.isDone(); ++m_srcIt) {
 
         x = m_srcIt.x();
         y = m_srcIt.y();
 
-        newX = x - curX;
-        newY = y - curY;
-/*        if (newX*newX + newY*newY > border)
+        maskX = x - curX;
+        maskY = y - curY;
+        qreal dist = maskX*maskX + maskY*maskY;
+        if (dist > border)
         {
-            continue;
-        }else*/
+            //continue;
+        }else
         {
-            alpha = qRound(m_distMask->valueAt(newX,newY) * OPACITY_OPAQUE);
+            if (m_brushType == GAUSS)
+            {
+                alpha = qRound(m_gaussBrush.distMask->valueAt(maskX,maskY) * OPACITY_OPAQUE);
+            }
             if (alpha == 0) continue;
             m_color.setOpacity(alpha);
             memcpy(m_srcIt.rawData(), m_color.data(), pixelSize);

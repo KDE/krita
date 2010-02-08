@@ -47,14 +47,6 @@ public:
 
     virtual void paintOutline ( const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, OutlineMode _mode ) const;
     virtual QRectF paintOutlineRect ( const QPointF& pos, KisImageWSP image, OutlineMode _mode ) const;
-
-    int diameter() const;
-    qreal spacing() const;
-    qreal sigma() const;
-    quint8 flow() const;
-
-    qreal start() const;
-    qreal end() const;
     
 #if defined(HAVE_OPENGL)
     QString modelName() const { return "3d-pencil"; }

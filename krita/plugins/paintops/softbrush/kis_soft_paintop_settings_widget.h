@@ -21,8 +21,8 @@
 
 #include <kis_paintop_options_widget.h>
 
-#include "ui_wdgsoftoptions.h"
-#include "widgets/kis_popup_button.h"
+// #include "ui_wdgsoftoptions.h"
+// #include "widgets/kis_popup_button.h"
 
 class KisPaintActionTypeOption;
 class KisSoftOpOption;
@@ -41,7 +41,6 @@ public:
 public:
     KisPaintActionTypeOption* m_paintActionTypeOption;
     KisSoftOpOption* m_softOption;
-
 };
 
 #endif

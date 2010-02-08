@@ -52,7 +52,7 @@ KisPropertiesConfiguration*  KisSoftPaintOpSettingsWidget::configuration() const
 void KisSoftPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
 {
     if (qAbs(x) > qAbs(y)){
-        m_softOption->setDiameter( m_softOption->diameter() + qRound(x) );
+        //m_softOption->setDiameter( m_softOption->diameter() + qRound(x) );
     }
     else // vertical drag
     {

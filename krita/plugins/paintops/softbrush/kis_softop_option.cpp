@@ -21,99 +21,66 @@
 #include <QWidget>
 #include <QRadioButton>
 
-#include "ui_wdgsoftoptions.h"
-
-class KisSoftOpOptionsWidget: public QWidget, public Ui::WdgSoftOptions
-{
-public:
-    KisSoftOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent)
-    {
-        setupUi(this);
-    }
-};
-
 KisSoftOpOption::KisSoftOpOption()
-        : KisPaintOpOption(i18n("Brush size"), false)
+        : KisPaintOpOption(i18n("Brush tip"), false)
 {
     m_checkable = false;
-    m_options = new KisSoftOpOptionsWidget();
+    m_options = new KisSoftBrushSelectionWidget();
 
-    connect(m_options->diameterSpinBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->endSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->startSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->spacingSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->sigmaSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->flowSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->m_gaussBrushTip->diameterSpinBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->m_gaussBrushTip->endSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->m_gaussBrushTip->startSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->m_gaussBrushTip->spacingSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->m_gaussBrushTip->sigmaSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->m_gaussBrushTip->flowSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
 
+    connect(m_options->m_curveBrushTip->curveDiameter,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->m_curveBrushTip->scale,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->m_curveBrushTip->softCurve, SIGNAL(modified()),SIGNAL(sigSettingChanged()));
+    
+    connect(m_options->m_brushesTab, SIGNAL(currentChanged(int)),SIGNAL(sigSettingChanged()));
+    
     setConfigurationPage(m_options);
 }
 
 KisSoftOpOption::~KisSoftOpOption()
 {
-    // delete m_options; 
-}
-
-void KisSoftOpOption::setDiameter ( int diameter )
-{
-    m_options->diameterSpinBox->setValue( diameter );
-}
-
-
-int KisSoftOpOption::diameter() const
-{
-    return m_options->diameterSpinBox->value();
-}
-
-
-qreal KisSoftOpOption::end() const
-{
-    return m_options->endSPBox->value();
-}
-
-
-qreal KisSoftOpOption::start() const
-{
-    return m_options->startSPBox->value();
-}
-
-
-qreal KisSoftOpOption::spacing() const
-{
-    return m_options->spacingSPBox->value();
-}
-
-
-qreal KisSoftOpOption::sigma() const
-{
-    return m_options->sigmaSPBox->value();
-}
-
-
-int KisSoftOpOption::flow() const
-{
-    return qRound(m_options->flowSPBox->value());
+    delete m_options; 
 }
 
 
 void KisSoftOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-
-    setting->setProperty( "Soft/diameter", diameter() );
-    setting->setProperty( "Soft/end", end() );
-    setting->setProperty( "Soft/start", start() );
-    setting->setProperty( "Soft/spacing", spacing() );
-    setting->setProperty( "Soft/sigma", sigma() );
-    setting->setProperty( "Soft/flow", flow() );
+    setting->setProperty( SOFT_BRUSH_TIP, m_options->m_brushesTab->currentIndex());
+    setting->setProperty( SOFT_DIAMETER, m_options->m_gaussBrushTip->diameterSpinBox->value() );
+    setting->setProperty( SOFT_END, m_options->m_gaussBrushTip->endSPBox->value() );
+    setting->setProperty( SOFT_START, m_options->m_gaussBrushTip->startSPBox->value() );
+    setting->setProperty( SOFT_SPACING, m_options->m_gaussBrushTip->spacingSPBox->value() );
+    setting->setProperty( SOFT_SIGMA, m_options->m_gaussBrushTip->sigmaSPBox->value() );
+    setting->setProperty( SOFT_SOFTNESS, m_options->m_gaussBrushTip->flowSPBox->value() );
+    
+    setting->setProperty( SOFTCURVE_DIAMETER, m_options->m_curveBrushTip->curveDiameter->value() );
+    setting->setProperty( SOFTCURVE_SCALE, m_options->m_curveBrushTip->scale->value() );
+    setting->setProperty( SOFTCURVE_CURVE, qVariantFromValue(m_options->m_curveBrushTip->softCurve->curve()) );
 }
 
 void KisSoftOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->diameterSpinBox->setValue( setting->getInt("Soft/diameter") );
-    m_options->endSPBox->setValue( setting->getDouble("Soft/end") );
-    m_options->startSPBox->setValue( setting->getDouble("Soft/start") );
-    m_options->spacingSPBox->setValue( setting->getDouble("Soft/spacing") );    
-    m_options->sigmaSPBox->setValue( setting->getDouble("Soft/sigma") );
-    m_options->flowSPBox->setValue( setting->getDouble("Soft/flow") );
+    if (m_options->m_brushesTab->currentIndex() == 0){
+        m_options->setCurveBrush(true);
+    }else if (m_options->m_brushesTab->currentIndex() == 1){
+        m_options->setGaussianBrush(true);
+    }
+    
+    m_options->m_gaussBrushTip->diameterSpinBox->setValue( setting->getInt(SOFT_DIAMETER) );
+    m_options->m_gaussBrushTip->endSPBox->setValue( setting->getDouble(SOFT_END) );
+    m_options->m_gaussBrushTip->startSPBox->setValue( setting->getDouble(SOFT_START) );
+    m_options->m_gaussBrushTip->spacingSPBox->setValue( setting->getDouble(SOFT_SPACING) );    
+    m_options->m_gaussBrushTip->sigmaSPBox->setValue( setting->getDouble(SOFT_SIGMA) );
+    m_options->m_gaussBrushTip->flowSPBox->setValue( setting->getDouble(SOFT_SOFTNESS) );
+    
+    m_options->m_curveBrushTip->curveDiameter->setValue( setting->getDouble(SOFTCURVE_DIAMETER) );
+    m_options->m_curveBrushTip->scale->setValue( setting->getDouble(SOFTCURVE_SCALE) );
+    m_options->m_curveBrushTip->softCurve->setCurve( setting->getCubicCurve(SOFTCURVE_CURVE) );
 }
 

@@ -18,32 +18,35 @@
 #ifndef KIS_SOFTOP_OPTION_H
 #define KIS_SOFTOP_OPTION_H
 
+#include <kis_softbrush_selection_widget.h>
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
-class KisSoftOpOptionsWidget;
+/// 0 - CURVE , 1 - GAUSS
+const QString SOFT_BRUSH_TIP = "Soft/brushTip";
+
+const QString SOFT_DIAMETER = "Soft/diameter";
+const QString SOFT_END = "Soft/end";
+const QString SOFT_START = "Soft/start";
+const QString SOFT_SPACING = "Soft/spacing";
+const QString SOFT_SIGMA = "Soft/sigma";
+const QString SOFT_SOFTNESS =  "Soft/softness";
+
+const QString SOFTCURVE_DIAMETER = "SoftCurve/diameter";
+const QString SOFTCURVE_SCALE = "SoftCurve/scale";
+const QString SOFTCURVE_CURVE = "SoftCurve/curve";
 
 class KisSoftOpOption : public KisPaintOpOption
 {
 public:
     KisSoftOpOption();
     ~KisSoftOpOption();
-
-    int diameter() const;
-    void setDiameter(int diameter);
-    qreal spacing() const;
-    qreal start() const;
-    qreal end() const;
-    qreal sigma() const;
-    int flow() const;
-    
+   
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
 private:
-
-   KisSoftOpOptionsWidget * m_options;
-
+    KisSoftBrushSelectionWidget * m_options;
 };
 
 #endif

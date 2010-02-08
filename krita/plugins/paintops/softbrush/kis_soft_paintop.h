@@ -29,8 +29,21 @@
 #include <KoColor.h>
 
 #include "kis_alpha_mask.h"
+#include "kis_curve_mask.h"
 
 class KisPainter;
+class KisCubicCurve;
+
+
+struct KisGaussSoftBrush{
+    KisCircleAlphaMask * distMask;
+
+};
+
+enum SoftBrushType{
+    CURVE,
+    GAUSS
+};
 
 
 class KisSoftPaintOp : public KisPaintOp
@@ -45,10 +58,7 @@ public:
     virtual bool incremental() const {
         return false;
     }
-
-
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
-
 
 private:
     const KisSoftPaintOpSettings* m_settings;
@@ -56,12 +66,20 @@ private:
     KisPaintDeviceSP m_dab;
     int m_radius;
     KoColor m_color;
-    KisCircleAlphaMask * m_distMask;
+
+    
+    KisGaussSoftBrush m_gaussBrush;
+    SoftBrushType m_brushType;
+    
+    
+    KisCurveProperties m_curveMaskProperties;
+    KisCurveMask m_curveMask;
     
     qreal m_xSpacing;
     qreal m_ySpacing;
     qreal m_spacing;
 
+    
 #ifdef BENCHMARK
     int m_total;
     int m_count;

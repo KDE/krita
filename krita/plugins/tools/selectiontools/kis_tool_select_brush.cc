@@ -21,7 +21,7 @@
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QPainterPath>
-
+#include <QVector2D>
 
 #include <KIntNumInput>
 
@@ -45,14 +45,13 @@
 KisToolSelectBrush::KisToolSelectBrush(KoCanvasBase * canvas)
         : KisToolSelectBase(canvas, KisCursor::load("tool_brush_selection_cursor.png", 6, 6)),
         m_brusRadius(15),
-        m_dragging(false),
-        m_selection(new QPainterPath())
+        m_dragging(false)
 {
+    resetSelection();
 }
 
 KisToolSelectBrush::~KisToolSelectBrush()
 {
-    delete m_selection;
 }
 
 QWidget* KisToolSelectBrush::createOptionWidget()
@@ -66,7 +65,7 @@ QWidget* KisToolSelectBrush::createOptionWidget()
 
     KIntNumInput * input = new KIntNumInput(m_optWidget);
     input->setRange(0, 500, 5);
-    input->setValue(m_brusRadius);
+    input->setValue(m_brusRadius*2);
     fl->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetBrushSize(int)));
 
@@ -85,7 +84,7 @@ void KisToolSelectBrush::paint(QPainter& gc, const KoViewConverter &converter)
     qreal sx, sy;
     converter.zoom(&sx, &sy);
     gc.scale(sx / image()->xRes(), sy / image()->xRes());
-    paintToolOutline(&gc, *m_selection);
+    paintToolOutline(&gc, m_selection);
     gc.restore();
 }
 
@@ -93,7 +92,8 @@ void KisToolSelectBrush::mousePressEvent(KoPointerEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
         m_dragging = true;
-        addPoint(e->point);
+        m_lastPoint=convertToPixelCoord(e->point);
+        addPoint(convertToPixelCoord(e->point));
         e->accept();
     }
     else if (e->button()==Qt::RightButton || e->button()==Qt::MidButton) {
@@ -106,7 +106,18 @@ void KisToolSelectBrush::mousePressEvent(KoPointerEvent *e)
 void KisToolSelectBrush::mouseMoveEvent(KoPointerEvent *e)
 {
     if (m_dragging) {
-        addPoint(e->point);
+
+        // this gives better performance
+        if(QVector2D(m_lastPoint-e->point).length()<m_brusRadius/6)
+            return;
+
+        //randomise the point to workaround a bug in QPainterPath::operator|=()
+        qreal randomX=rand()%100;
+        randomX/=1000.;
+        qreal randomY=rand()%100;
+        randomY/=1000.;
+        QPointF smallRandomPoint(randomX, randomY);
+        addPoint(convertToPixelCoord(e->point)+smallRandomPoint);
     }
 }
 
@@ -114,7 +125,7 @@ void KisToolSelectBrush::mouseReleaseEvent(KoPointerEvent *e)
 {
     if (m_dragging && e->button() == Qt::LeftButton) {
         m_dragging = false;
-        applyToSelection(*m_selection);
+        applyToSelection(m_selection);
         e->accept();
     }
 }
@@ -158,7 +169,6 @@ void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
         painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
         painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
 
-//        painter.paintPainterPath(selection);
         painter.fillPainterPath(selection);
 
         QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
@@ -170,20 +180,57 @@ void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
 
 void KisToolSelectBrush::resetSelection()
 {
-    updateCanvasPixelRect(m_selection->boundingRect());
+    updateCanvasPixelRect(m_selection.boundingRect());
     m_dragging=false;
-    delete m_selection;
-    m_selection = new QPainterPath();
+    m_selection = QPainterPath();
 }
 
 void KisToolSelectBrush::addPoint(const QPointF& point)
 {
     QPainterPath ellipse;
-    ellipse.addEllipse(convertToPixelCoord(point), m_brusRadius, m_brusRadius);
-    m_selection->operator|=(ellipse);
+    ellipse.addEllipse(point, m_brusRadius, m_brusRadius);
 
-    QPointF tmp = QPointF(m_brusRadius, m_brusRadius);
-    updateCanvasPixelRect(QRectF(convertToPixelCoord(point)-tmp, convertToPixelCoord(point)+tmp));
+    m_selection |= (ellipse);
+    addGap(m_lastPoint, point);
+
+    updateCanvasPixelRect(QRectF(m_lastPoint, point).normalized().adjusted(-m_brusRadius, -m_brusRadius, m_brusRadius, m_brusRadius));
+
+    m_lastPoint = point;
+}
+
+void KisToolSelectBrush::addGap(const QPointF& start, const QPointF& end)
+{
+    QVector2D way(end-start);
+    if (way.length()<m_brusRadius/3)
+        return;
+
+    QVector2D direction(way.normalized());
+
+    //rotate 90 degrees clockwise
+    QVector2D rotatedPlus(direction.y(), -direction.x());
+
+    //rotate 90 degrees counter clockwise
+    QVector2D rotatedMinus(-direction.y(), direction.x());
+
+    //don't use QPointF, as this triggers a bug in QPainterPath::operator|=()
+    QPointF p1((rotatedPlus*m_brusRadius).toPoint());
+    QPointF p2(way.toPoint()+p1);
+    QPointF p4((rotatedMinus*m_brusRadius).toPoint());
+    QPointF p3(way.toPoint()+p4);
+
+    p1+=start;
+    p2+=start;
+    p3+=start;
+    p4+=start;
+
+    QPainterPath gap;
+    gap.moveTo(p1);
+    gap.lineTo(p2);
+    gap.lineTo(p3);
+    gap.lineTo(p4);
+    gap.closeSubpath();
+
+    m_selection |= (gap);
 }
 
 

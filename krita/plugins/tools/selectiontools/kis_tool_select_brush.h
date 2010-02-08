@@ -21,9 +21,9 @@
 
 #include "KoToolFactoryBase.h"
 #include "krita/ui/tool/kis_tool_select_base.h"
+#include <QPointF>
+#include <QPainterPath>
 
-
-class QPainterPath;
 
 class KisToolSelectBrush : public KisToolSelectBase
 {
@@ -52,11 +52,13 @@ protected:
     void applyToSelection(const QPainterPath& selection);
     void resetSelection();
     void addPoint(const QPointF& point);
+    void addGap(const QPointF& start, const QPointF& end);
 
 private:
     qreal m_brusRadius;
     bool m_dragging;
-    QPainterPath *m_selection;
+    QPainterPath m_selection;
+    QPointF m_lastPoint;
 
 };
 

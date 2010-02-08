@@ -55,7 +55,7 @@ protected:
     void addGap(const QPointF& start, const QPointF& end);
 
 private:
-    qreal m_brusRadius;
+    qreal m_brushRadius;
     bool m_dragging;
     QPainterPath m_selection;
     QPointF m_lastPoint;

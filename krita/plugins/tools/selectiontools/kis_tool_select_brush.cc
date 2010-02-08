@@ -21,7 +21,6 @@
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QPainterPath>
-#include <QVector2D>
 
 #include <KIntNumInput>
 
@@ -30,6 +29,9 @@
 #include <KoPointerEvent.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
+
+#include <Eigen/Core>
+USING_PART_OF_NAMESPACE_EIGEN
 
 #include "kis_cursor.h"
 #include "kis_canvas2.h"
@@ -44,7 +46,7 @@
 
 KisToolSelectBrush::KisToolSelectBrush(KoCanvasBase * canvas)
         : KisToolSelectBase(canvas, KisCursor::load("tool_brush_selection_cursor.png", 6, 6)),
-        m_brusRadius(15),
+        m_brushRadius(15),
         m_dragging(false)
 {
     resetSelection();
@@ -65,7 +67,7 @@ QWidget* KisToolSelectBrush::createOptionWidget()
 
     KIntNumInput * input = new KIntNumInput(m_optWidget);
     input->setRange(0, 500, 5);
-    input->setValue(m_brusRadius*2);
+    input->setValue(m_brushRadius*2);
     fl->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetBrushSize(int)));
 
@@ -108,7 +110,7 @@ void KisToolSelectBrush::mouseMoveEvent(KoPointerEvent *e)
     if (m_dragging) {
 
         // this gives better performance
-        if(QVector2D(m_lastPoint-e->point).length()<m_brusRadius/6)
+        if(Vector2f((m_lastPoint-e->point).x(), (m_lastPoint-e->point).y()).norm()<m_brushRadius/6)
             return;
 
         //randomise the point to workaround a bug in QPainterPath::operator|=()
@@ -118,7 +120,7 @@ void KisToolSelectBrush::mouseMoveEvent(KoPointerEvent *e)
         qreal randomY=rand()%100;
         randomY/=1000.;
         QPointF smallRandomPoint(randomX, randomY);
-        addPoint(convertToPixelCoord(e->point)/*+smallRandomPoint*/);
+        addPoint(convertToPixelCoord(e->point)+smallRandomPoint);
     }
 }
 
@@ -145,7 +147,7 @@ void KisToolSelectBrush::deactivate()
 
 void KisToolSelectBrush::slotSetBrushSize(int size)
 {
-    m_brusRadius = ((qreal) size)/2.0;
+    m_brushRadius = ((qreal) size)/2.0;
 }
 
 void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
@@ -189,47 +191,55 @@ void KisToolSelectBrush::resetSelection()
 void KisToolSelectBrush::addPoint(const QPointF& point)
 {
     QPainterPath ellipse;
-    ellipse.addEllipse(point, m_brusRadius, m_brusRadius);
+    ellipse.addEllipse(point, m_brushRadius, m_brushRadius);
 
     m_selection |= (ellipse);
     addGap(m_lastPoint, point);
 
-    updateCanvasPixelRect(QRectF(m_lastPoint, point).normalized().adjusted(-m_brusRadius, -m_brusRadius, m_brusRadius, m_brusRadius));
+    updateCanvasPixelRect(QRectF(m_lastPoint, point).normalized().adjusted(-m_brushRadius, -m_brushRadius, m_brushRadius, m_brushRadius));
 
     m_lastPoint = point;
 }
 
+
 void KisToolSelectBrush::addGap(const QPointF& start, const QPointF& end)
 {
-    QVector2D way(end-start);
-    if (way.length()<m_brusRadius/3)
+    Vector2f way((end-start).x(), (end-start).y());
+    if(way.norm() < m_brushRadius/3.)
         return;
 
-    QVector2D direction(way.normalized());
+    Vector2f direction(way.normalized());
 
     //rotate 90 degrees clockwise
-    QVector2D rotatedPlus(direction.y(), -direction.x());
+    Vector2f rotatedPlus(direction.y(), -direction.x());
 
     //rotate 90 degrees counter clockwise
-    QVector2D rotatedMinus(-direction.y(), direction.x());
+    Vector2f rotatedMinus(-direction.y(), direction.x());
 
-    //don't use QPointF, as this triggers a bug in QPainterPath::operator|=()
+    Vector2f p1(rotatedPlus * m_brushRadius);
+    Vector2f p2(way+p1);
+    Vector2f p4(rotatedMinus * m_brushRadius);
+    Vector2f p3(way+p4);
+
+    //we need to convert floating point vectors to int ones because of a bug in QPainterPath::operator|=()
     //FIXME: http://bugreports.qt.nokia.com/browse/QTBUG-8035
-    QPointF p1((rotatedPlus*m_brusRadius).toPointF());
-    QPointF p2(way.toPointF()+p1);
-    QPointF p4((rotatedMinus*m_brusRadius).toPointF());
-    QPointF p3(way.toPointF()+p4);
+    //converting int to float should be done with rounding, so don't use eigen casting.
+    //parameter start contains important decimal places, these shouldn't be lost.
+    QPointF pp1 = QPointF(p1.x(), p1.y()).toPoint();
+    QPointF pp2 = QPointF(p2.x(), p2.y()).toPoint();
+    QPointF pp3 = QPointF(p3.x(), p3.y()).toPoint();
+    QPointF pp4 = QPointF(p4.x(), p4.y()).toPoint();
 
-    p1+=start;
-    p2+=start;
-    p3+=start;
-    p4+=start;
+    pp1+=start;
+    pp2+=start;
+    pp3+=start;
+    pp4+=start;
 
     QPainterPath gap;
-    gap.moveTo(p1);
-    gap.lineTo(p2);
-    gap.lineTo(p3);
-    gap.lineTo(p4);
+    gap.moveTo(pp1);
+    gap.lineTo(pp2);
+    gap.lineTo(pp3);
+    gap.lineTo(pp4);
     gap.closeSubpath();
 
     m_selection |= (gap);

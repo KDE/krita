@@ -112,12 +112,13 @@ void KisToolSelectBrush::mouseMoveEvent(KoPointerEvent *e)
             return;
 
         //randomise the point to workaround a bug in QPainterPath::operator|=()
+        //FIXME: http://bugreports.qt.nokia.com/browse/QTBUG-8035
         qreal randomX=rand()%100;
         randomX/=1000.;
         qreal randomY=rand()%100;
         randomY/=1000.;
         QPointF smallRandomPoint(randomX, randomY);
-        addPoint(convertToPixelCoord(e->point)+smallRandomPoint);
+        addPoint(convertToPixelCoord(e->point)/*+smallRandomPoint*/);
     }
 }
 
@@ -213,10 +214,11 @@ void KisToolSelectBrush::addGap(const QPointF& start, const QPointF& end)
     QVector2D rotatedMinus(-direction.y(), direction.x());
 
     //don't use QPointF, as this triggers a bug in QPainterPath::operator|=()
-    QPointF p1((rotatedPlus*m_brusRadius).toPoint());
-    QPointF p2(way.toPoint()+p1);
-    QPointF p4((rotatedMinus*m_brusRadius).toPoint());
-    QPointF p3(way.toPoint()+p4);
+    //FIXME: http://bugreports.qt.nokia.com/browse/QTBUG-8035
+    QPointF p1((rotatedPlus*m_brusRadius).toPointF());
+    QPointF p2(way.toPointF()+p1);
+    QPointF p4((rotatedMinus*m_brusRadius).toPointF());
+    QPointF p3(way.toPointF()+p4);
 
     p1+=start;
     p2+=start;

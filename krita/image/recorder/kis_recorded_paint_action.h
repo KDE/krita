@@ -51,7 +51,15 @@ public:
     virtual void play(KisNodeSP node, const KisPlayInfo&) const;
 
 protected:
-
+    /**
+     * This function will create a painter for the given device. The default
+     * implementation creates a KisPainter, subclass can reimplement it if
+     * they want to use one of the subclass of KisPainter.
+     */
+    virtual KisPainter* createPainter(KisPaintDeviceSP device) const;
+    /**
+     * Reimplement this function in a subclass to play the painting.
+     */
     virtual void playPaint(const KisPlayInfo&, KisPainter* painter) const = 0;
 
 public:
@@ -71,6 +79,7 @@ public:
     void setPaintIncremental(bool );
     void setStrokeStyle(KisPainter::StrokeStyle );
     void setFillStyle(KisPainter::FillStyle );
+    KisPainter::FillStyle fillStyle() const;
     void setPattern(const KisPattern* );
     void setGradient(const KoAbstractGradient* gradient);
     void setGenerator(const KisFilterConfiguration * generator);

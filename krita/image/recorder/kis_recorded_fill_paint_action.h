@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_RECORDED_ELLIPSE_PAINT_ACTION_H_
-#define _KIS_RECORDED_ELLIPSE_PAINT_ACTION_H_
+#ifndef _KIS_RECORDED_FILL_PAINT_ACTION_H_
+#define _KIS_RECORDED_FILL_PAINT_ACTION_H_
 
 #include "recorder/kis_recorded_action.h"
 #include "recorder/kis_recorded_paint_action.h"
@@ -28,23 +28,15 @@
 /**
  * This class will record the painting of a bezier curve.
  */
-class KRITAIMAGE_EXPORT KisRecordedShapePaintAction : public KisRecordedPaintAction
+class KRITAIMAGE_EXPORT KisRecordedFillPaintAction : public KisRecordedPaintAction
 {
 public:
-    enum Shape {
-        Ellipse,
-        Rectangle
-    };
-public:
 
-    KisRecordedShapePaintAction(const KisNodeQueryPath& path,
-                                      const KisPaintOpPresetSP paintOpPreset,
-                                      Shape shape,
-                                      const QRectF& rect);
+    KisRecordedFillPaintAction(const KisNodeQueryPath& path, const QPoint& pt, const KisNodeQueryPath& projectionPath);
 
-    KisRecordedShapePaintAction(const KisRecordedShapePaintAction&);
+    KisRecordedFillPaintAction(const KisRecordedFillPaintAction&);
 
-    ~KisRecordedShapePaintAction();
+    ~KisRecordedFillPaintAction();
 
     virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
 
@@ -52,6 +44,7 @@ public:
 
 protected:
 
+    virtual KisPainter* createPainter(KisPaintDeviceSP device) const;
     virtual void playPaint(const KisPlayInfo& info, KisPainter* painter) const;
 
 private:
@@ -61,11 +54,11 @@ private:
 };
 
 
-class KisRecordedShapePaintActionFactory : public KisRecordedPaintActionFactory
+class KisRecordedFillPaintActionFactory : public KisRecordedPaintActionFactory
 {
 public:
-    KisRecordedShapePaintActionFactory();
-    virtual ~KisRecordedShapePaintActionFactory();
+    KisRecordedFillPaintActionFactory();
+    virtual ~KisRecordedFillPaintActionFactory();
     virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*);
 };
 

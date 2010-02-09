@@ -73,8 +73,10 @@ KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
         : KisRecordedAction(id, name, path)
         , d(new Private)
 {
-    Q_ASSERT(paintOpPreset);
-    d->paintOpPreset = paintOpPreset->clone();
+    if (paintOpPreset)
+    {
+        d->paintOpPreset = paintOpPreset->clone();
+    }
     d->opacity = 1.0;
     d->paintIncremental = true;
     d->compositeOp = COMPOSITE_OVER;
@@ -100,9 +102,12 @@ void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecor
     KisRecordedAction::toXML(doc, elt, context);
 
     // Paint op presset
-    QDomElement paintopPressetElt = doc.createElement("PaintopPreset");
-    d->paintOpPreset->toXML(doc, paintopPressetElt);
-    elt.appendChild(paintopPressetElt);
+    if (d->paintOpPreset)
+    {
+        QDomElement paintopPressetElt = doc.createElement("PaintopPreset");
+        d->paintOpPreset->toXML(doc, paintopPressetElt);
+        elt.appendChild(paintopPressetElt);
+    }
 
     // ForegroundColor
     QDomElement foregroundColorElt = doc.createElement("ForegroundColor");
@@ -236,6 +241,11 @@ void KisRecordedPaintAction::setFillStyle(KisPainter::FillStyle fillStyle)
   d->fillStyle = fillStyle;
 }
 
+KisPainter::FillStyle KisRecordedPaintAction::fillStyle() const
+{
+    return d->fillStyle;
+}
+
 void KisRecordedPaintAction::setPattern(const KisPattern* pattern)
 {
   d->pattern = pattern;
@@ -270,36 +280,39 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
             target = new KisPaintDevice(node->paintDevice()->colorSpace());
         }
 
-        KisPainter painter(target);
+        KisPainter* painter = createPainter(target);
 
         if (d->paintIncremental) {
-            painter.setCompositeOp(d->compositeOp);
-            painter.setOpacity(d->opacity * 255);
+            painter->setCompositeOp(d->compositeOp);
+            painter->setOpacity(d->opacity * 255);
         } else {
-            painter.setCompositeOp(node->paintDevice()->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
-            painter.setOpacity(OPACITY_OPAQUE);
+            painter->setCompositeOp(node->paintDevice()->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
+            painter->setOpacity(OPACITY_OPAQUE);
 
         }
 
-        painter.setPaintColor(d->foregroundColor);
-        painter.setBackgroundColor(d->backgroundColor);
-        d->paintOpPreset->settings()->setNode(node);
-        painter.setPaintOpPreset(d->paintOpPreset, info.image());
+        painter->setPaintColor(d->foregroundColor);
+        painter->setBackgroundColor(d->backgroundColor);
+        if (d->paintOpPreset)
+        {
+            d->paintOpPreset->settings()->setNode(node);
+            painter->setPaintOpPreset(d->paintOpPreset, info.image());
+        }
 
-        painter.setStrokeStyle(d->strokeStyle);
-        painter.setFillStyle(d->fillStyle);
-        painter.setPattern(d->pattern);
-        painter.setGradient(d->gradient);
-        painter.setGenerator(d->generator);
+        painter->setStrokeStyle(d->strokeStyle);
+        painter->setFillStyle(d->fillStyle);
+        painter->setPattern(d->pattern);
+        painter->setGradient(d->gradient);
+        painter->setGenerator(d->generator);
         
-        playPaint(info, &painter);
+        playPaint(info, painter);
 
         if (!d->paintIncremental) {
             KisPainter painter2(node->paintDevice());
             painter2.setCompositeOp(d->compositeOp);
             painter2.setOpacity(d->opacity * 255);
 
-            QRegion r = painter.dirtyRegion();
+            QRegion r = painter->dirtyRegion();
             QVector<QRect> dirtyRects = r.rects();
             QVector<QRect>::iterator it = dirtyRects.begin();
             QVector<QRect>::iterator end = dirtyRects.end();
@@ -310,11 +323,18 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
 
             node->setDirty(painter2.dirtyRegion());
         } else {
-            node->setDirty(painter.dirtyRegion());
+            node->setDirty(painter->dirtyRegion());
         }
+        delete painter;
         if (info.undoAdapter()) info.undoAdapter()->addCommand(cmd);
-        d->paintOpPreset->settings()->setNode(0);
+        if (d->paintOpPreset)
+            d->paintOpPreset->settings()->setNode(0);
     }
+}
+
+KisPainter* KisRecordedPaintAction::createPainter(KisPaintDeviceSP device) const
+{
+    return new KisPainter(device);
 }
 
 void KisRecordedPaintActionFactory::setupPaintAction(KisRecordedPaintAction* action, const QDomElement& elt, const KisRecordedActionLoadContext* context)

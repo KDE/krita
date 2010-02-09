@@ -71,7 +71,8 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_dropCapsAffectedLineWidthAdjust(0),
         m_y_justBelowDropCaps(0),
         m_restartingAfterTableBreak(false),
-        m_restartingFirstCellAfterTableBreak(false)
+        m_restartingFirstCellAfterTableBreak(false),
+        m_parseFootnoteAfterReset(false)
 {
 }
 
@@ -884,6 +885,9 @@ void Layout::resetPrivate()
         QTextCursor cursor(m_textShape->footnoteDocument());
         cursor.select(QTextCursor::Document);
         cursor.removeSelectedText();
+        // All existing Footnotes are cleared. Next time footnote has to be
+        // handled in a different way.
+        m_parseFootnoteAfterReset = true;
     }
     m_demoText = m_textShape->demoText();
     m_data = qobject_cast<KoTextShapeData*>(shape->userData());
@@ -1792,9 +1796,19 @@ qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
     if (m_parent->inlineTextObjectManager() == 0)
         return 0;
     Q_ASSERT(oldLength);
+    bool firstFootnote = true;
+
+    //  If current block is at the top position then no need to handle
+    //  footnote in different way
+    if (m_block.position() == m_data->position())
+        m_parseFootnoteAfterReset = false;
+
+    if (m_parseFootnoteAfterReset)
+        firstFootnote = findFootnote(oldLength);
+
     QString text = m_block.text();
     int pos = text.indexOf(QChar(0xFFFC), line.textStart());
-    bool firstFootnote = true;
+
     while (pos >= 0 && pos <= line.textStart() + line.textLength()) {
         QTextCursor c1(m_block);
         c1.setPosition(m_block.position() + pos);
@@ -1820,9 +1834,64 @@ qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
         }
         pos = text.indexOf(QChar(0xFFFC), pos + 1);
     }
+
     if (m_textShape->hasFootnoteDocument())
         return m_textShape->footnoteDocument()->size().height();
     return 0;
+}
+
+bool Layout::findFootnote(int *oldLength)
+{
+    QTextBlock currBlock = m_data->document()->begin();
+    bool firstFootnote = true;
+    m_parseFootnoteAfterReset = false;
+
+    // Iterate till you reach the current block(m_block),
+    // This block is handled by findFootnote(const QTextLine, int *)
+    // Since we can have part of the line in this page and remaining in next page
+    while (m_block != currBlock) {
+        if ((!currBlock.isValid()) || (currBlock.position() > m_data->endPosition()))
+            break;
+        QString text = currBlock.text();
+        int pos = text.indexOf(QChar(0xFFFC), pos + 1);
+        // Iterate till you reach end of the block and move to the next block.
+        while (pos >= 0 ) {
+            QTextCursor c1(currBlock);
+            c1.setPosition(currBlock.position() + pos);
+            c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
+            if (currBlock.position()+pos < m_data->position()) {
+                currBlock = currBlock.next();
+                continue;
+            }
+            else if (currBlock.position()+pos > m_data->endPosition())
+                return firstFootnote;
+            // Break if you are at the end of the block.
+            if (c1.atEnd())
+                break;
+            KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_parent->inlineTextObjectManager()->inlineTextObject(c1));
+            if (note && ((note->type() == KoInlineNote::Footnote) || (note->type() == KoInlineNote::Endnote))) {
+                QTextCursor cursor(m_textShape->footnoteDocument());
+                cursor.setPosition(m_textShape->footnoteDocument()->characterCount()-1);
+                if (firstFootnote) {
+                    (*oldLength) = cursor.position();
+                    firstFootnote = false;
+                }
+                if (cursor.position() > 1)
+                    cursor.insertText("\n");
+
+                QTextCharFormat cf;
+                cf.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+                cursor.mergeCharFormat(cf);
+                cursor.insertText(note->label() + ' ');
+                cf.setVerticalAlignment(QTextCharFormat::AlignNormal);
+                cursor.mergeCharFormat(cf);
+                cursor.insertFragment(note->text());
+            }
+            pos = text.indexOf(QChar(0xFFFC), pos + 1);
+        }
+        currBlock = currBlock.next();
+    }
+    return firstFootnote;
 }
 
 QTextTableCell Layout::hitTestTable(QTextTable *table, const QPointF &point)

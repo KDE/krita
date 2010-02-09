@@ -25,6 +25,7 @@
 
 #include <GTLCore/PixelDescription.h>
 #include <GTLCore/Type.h>
+#include <GTLCore/Region.h>
 #include "Version.h"
 #include <KoColorSpaceTraits.h>
 

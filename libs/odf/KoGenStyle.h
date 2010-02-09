@@ -204,6 +204,24 @@ public:
         ParagraphType,
         /// GraphicType is always graphic-properties.
         GraphicType,
+        /// SectionType is always section-properties.
+        SectionType,
+        /// RubyType is always ruby-properties.
+        RubyType,
+        /// TableType is always table-properties.
+        TableType,
+        /// TableColumnType is always table-column-properties
+        TableColumnType,
+        /// TableRowType is always table-row-properties.
+        TableRowType,
+        /// TableCellType is always for table-cell-properties.
+        TableCellType,
+        /// PresentationType is always for presentation-properties.
+        PresentationType,
+        /// DrawingPageType is always for presentation-properties.
+        DrawingPageType,
+        /// ChartType is always for presentation-properties.
+        ChartType,
         Reserved1, ///< @internal for binary compatible extensions
         /// For elements that are children of the style itself, not any of the properties
         StyleChildElement,

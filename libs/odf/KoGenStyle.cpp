@@ -67,9 +67,37 @@ void KoGenStyle::writeStyleProperties(KoXmlWriter* writer, PropertyType i,
     }
 }
 
-static KoGenStyle::PropertyType s_propertyTypes[] = { KoGenStyle::DefaultType, KoGenStyle::TextType, KoGenStyle::ParagraphType, KoGenStyle::GraphicType };
+/*
+ * The order of this list is important; e.g. a graphic-properties must
+ * precede a text-properties always. See the Relax NG to check the order.
+ */
+static KoGenStyle::PropertyType s_propertyTypes[] = {
+    KoGenStyle::DefaultType,
+    KoGenStyle::SectionType,
+    KoGenStyle::RubyType,
+    KoGenStyle::TableColumnType,
+    KoGenStyle::TableRowType,
+    KoGenStyle::TableCellType,
+    KoGenStyle::DrawingPageType,
+    KoGenStyle::ChartType,
+    KoGenStyle::GraphicType,
+    KoGenStyle::ParagraphType,
+    KoGenStyle::TextType,
+};
 
-static const char* s_propertyNames[] = { 0, "style:text-properties", "style:paragraph-properties", "style:graphic-properties" };
+static const char* s_propertyNames[] = {
+    0,
+    "style:section-properties",
+    "style:ruby-properties",
+    "style:table-column-properties",
+    "style:table-row-properties",
+    "style:table-cell-properties",
+    "style:drawing-page-properties",
+    "style:chart-properties",
+    "style:graphic-properties",
+    "style:paragraph-properties",
+    "style:text-properties"
+};
 
 static const int s_propertyNamesCount = sizeof(s_propertyNames) / sizeof(*s_propertyNames);
 
@@ -181,7 +209,7 @@ void KoGenStyle::writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, cons
     //start with i=1 to skip the defaultType that we already took care of
     for (int i = 1; i < s_propertyNamesCount; ++i) {
         //skip any properties that are the same as the defaultType
-        if (i != defaultPropertyType) {
+        if (s_propertyTypes[i] != defaultPropertyType) {
             writeStyleProperties(writer, s_propertyTypes[i], s_propertyNames[i], parentStyle);
         }
     }

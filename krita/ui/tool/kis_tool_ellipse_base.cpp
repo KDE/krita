@@ -24,8 +24,6 @@
 #include <KoCanvasController.h>
 #include <KoViewConverter.h>
 
-#include <opengl/kis_opengl.h>
-
 #include "kis_canvas2.h"
 
 KisToolEllipseBase::KisToolEllipseBase(KoCanvasBase * canvas, const QCursor & cursor) :
@@ -125,77 +123,11 @@ void KisToolEllipseBase::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolEllipseBase::paintEllipse(QPainter& gc, const QRect&)
 {
-    QPointF viewDragStart = pixelToView(m_dragStart);
-    QPointF viewDragEnd = pixelToView(m_dragEnd);
-
-#if defined(HAVE_OPENGL)
-    if (isCanvasOpenGL()) {
-        beginOpenGL();
-
-        glEnable(GL_LINE_SMOOTH);
-        glEnable(GL_COLOR_LOGIC_OP);
-        glLogicOp(GL_XOR);
-        glColor3f(0.501961, 1.0, 0.501961);
-
-        int steps = 72;
-        qreal x = (viewDragEnd.x() - viewDragStart.x()) * 0.5;
-        qreal a = qAbs(x);
-        qreal y = (viewDragEnd.y() - viewDragStart.y()) * 0.5;
-        qreal b = qAbs(y);
-
-        x += viewDragStart.x();
-        y += viewDragStart.y();
-
-// useful for debugging
-#if 0
-        glPointSize(20);
-        glBegin(GL_POINTS);
-        glVertex2d(x, y);
-        glEnd();
-
-        glBegin(GL_LINES);
-        glVertex2d(viewDragStart.x(), viewDragStart.y());
-        glVertex2d(viewDragEnd.x(), viewDragEnd.y());
-
-        glVertex2d(x, y);
-        glVertex2d(x + a, y);
-
-        glVertex2d(x, y);
-        glVertex2d(x, y + b);
-
-        glEnd();
-#endif
-
-        qreal angle = 0;
-        qreal beta = -angle;
-        qreal sinbeta = sin(beta);
-        qreal cosbeta = cos(beta);
-
-        glBegin(GL_LINE_LOOP);
-        for (int i = 0; i < 360; i += 360.0 / steps) {
-            qreal alpha = i * (M_PI / 180) ;
-            qreal sinalpha = sin(alpha);
-            qreal cosalpha = cos(alpha);
-
-            qreal X = x + (a * cosalpha * cosbeta - b * sinalpha * sinbeta);
-            qreal Y = y + (a * cosalpha * sinbeta + b * sinalpha * cosbeta);
-
-            glVertex2d(X, Y);
-        }
-        glEnd();
-
-
-        glDisable(GL_COLOR_LOGIC_OP);
-        glDisable(GL_LINE_SMOOTH);
-
-         endOpenGL();
-    } else
-#endif
-        if (canvas()) {
-            QPainterPath path;
-            path.addEllipse(QRectF(viewDragStart, viewDragEnd));
-            paintToolOutline(&gc, path);
-        }
+    if (canvas()) {
+        QPainterPath path;
+        path.addEllipse(QRectF(pixelToView(m_dragStart), pixelToView(m_dragEnd)));
+        paintToolOutline(&gc, path);
+    }
 }
 
 void KisToolEllipseBase::updateArea()

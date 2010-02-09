@@ -37,7 +37,6 @@
 #include <KoCanvasController.h>
 #include <KoPointerEvent.h>
 
-#include <opengl/kis_opengl.h>
 #include <kis_debug.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -229,40 +228,12 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
     QPointF viewStartPos = pixelToView(m_startPos);
     QPointF viewStartEnd = pixelToView(m_endPos);
 
-#if defined(HAVE_OPENGL)
-    if (isCanvasOpenGL()) {
-        beginOpenGL();
-
-        glEnable(GL_LINE_SMOOTH);
-        glEnable(GL_COLOR_LOGIC_OP);
-        glLogicOp(GL_XOR);
-
-        glBegin(GL_LINES);
-        glColor3f(0.5, 1.0, 0.5);
-        glVertex2f(viewStartPos.x(), viewStartPos.y());
-        glVertex2f(viewStartEnd.x(), viewStartEnd.y());
-        glEnd();
-
-        glDisable(GL_COLOR_LOGIC_OP);
-        glDisable(GL_LINE_SMOOTH);
-
-        endOpenGL();
-    } else
-#endif
-
-        if (canvas()) {
-#ifdef INDEPENDENT_CANVAS
-            QPainterPath path;
-            path.moveTo(viewStartPos);
-            path.lineTo(viewStartEnd);
-            paintToolOutline(&gc, path);
-#else
-            QPen old = gc.pen();
-            QPen pen(Qt::SolidLine);
-            gc.drawLine(viewStartPos, viewStartEnd);
-            gc.setPen(old);
-#endif
-        }
+    if (canvas()) {
+        QPainterPath path;
+        path.moveTo(viewStartPos);
+        path.lineTo(viewStartEnd);
+        paintToolOutline(&gc, path);
+    }
 }
 
 QString KisToolLine::quickHelp() const

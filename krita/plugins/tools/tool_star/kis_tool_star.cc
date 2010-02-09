@@ -39,7 +39,6 @@
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
 
-#include <opengl/kis_opengl.h>
 #include <kis_debug.h>
 #include <canvas/kis_canvas2.h>
 #include <kis_painter.h>
@@ -176,44 +175,14 @@ void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
 
     vQPointF points = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
 
-#if defined(HAVE_OPENGL)
-    if (isCanvasOpenGL()) {
-        beginOpenGL();
-
-        QPointF begin, end;
-
-        glEnable(GL_LINE_SMOOTH);
-        glEnable(GL_COLOR_LOGIC_OP);
-        glLogicOp(GL_XOR);
-        glColor3f(0.501961, 1.0, 0.501961);
-
-        glBegin(GL_LINE_LOOP);
-        for (int i = 0; i < points.count() - 1; i++) {
-            begin = pixelToView(points[i]);
-            end = pixelToView(points[i + 1]);
-
-            glVertex2f(begin.x(), begin.y());
-            glVertex2f(end.x(), end.y());
-
-        }
-        glEnd();
-
-        glDisable(GL_COLOR_LOGIC_OP);
-        glDisable(GL_LINE_SMOOTH);
-
-        endOpenGL();
-    } else
-#endif
-    {
-        QPainterPath path;
-        for (int i = 0; i < points.count() - 1; i++) {
-            path.moveTo(pixelToView(points[i]));
-            path.lineTo(pixelToView(points[i + 1]));
-        }
-        path.moveTo(pixelToView(points[points.count() - 1]));
-        path.lineTo(pixelToView(points[0]));
-        paintToolOutline(&gc, path);
+    QPainterPath path;
+    for (int i = 0; i < points.count() - 1; i++) {
+        path.moveTo(pixelToView(points[i]));
+        path.lineTo(pixelToView(points[i + 1]));
     }
+    path.moveTo(pixelToView(points[points.count() - 1]));
+    path.lineTo(pixelToView(points[0]));
+    paintToolOutline(&gc, path);
 }
 
 vQPointF KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)

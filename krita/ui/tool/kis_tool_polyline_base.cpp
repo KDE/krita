@@ -26,8 +26,6 @@
 #include <KoCanvasController.h>
 #include <KoViewConverter.h>
 
-#include <opengl/kis_opengl.h>
-
 #include "kis_tool_polyline_base.h"
 
 #define PREVIEW_LINE_WIDTH 1
@@ -109,74 +107,29 @@ void KisToolPolylineBase::paint(QPainter& gc, const KoViewConverter &converter)
     QPointF startPos;
     QPointF endPos;
 
-#if defined(HAVE_OPENGL)
-    if (isCanvasOpenGL()) {
-        beginOpenGL();
+    QPainterPath path;
+    if (m_dragging && !m_points.empty()) {
+        startPos = pixelToView(m_dragStart);
+        endPos = pixelToView(m_dragEnd);
+        path.moveTo(startPos);
+        path.lineTo(endPos);
+    }
 
-        glEnable(GL_LINE_SMOOTH);
-        glEnable(GL_COLOR_LOGIC_OP);
-        glLogicOp(GL_XOR);
-        glColor3f(0.501961, 1.0, 0.501961);
+    for (vQPointF::iterator it = m_points.begin(); it != m_points.end(); ++it) {
 
-        if (m_dragging && !m_points.empty()) {
-            startPos = pixelToView(m_dragStart);
-            endPos = pixelToView(m_dragEnd);
-            glBegin(GL_LINES);
-            glVertex2f(startPos.x(), startPos.y());
-            glVertex2f(endPos.x(), endPos.y());
-            glEnd();
-        }
+        if (it == m_points.begin()) {
+            start = (*it);
+        } else {
+            end = (*it);
 
-        glBegin(GL_LINES);
-        for (vQPointF::iterator it = m_points.begin(); it != m_points.end(); ++it) {
-
-            if (it == m_points.begin()) {
-                start = (*it);
-            } else {
-                end = (*it);
-
-                startPos = pixelToView(start);
-                endPos = pixelToView(end);
-
-                glVertex2f(startPos.x(), startPos.y());
-                glVertex2f(endPos.x(), endPos.y());
-
-                start = end;
-            }
-        }
-        glEnd();
-
-        glDisable(GL_COLOR_LOGIC_OP);
-        glDisable(GL_LINE_SMOOTH);
-
-        endOpenGL();
-    } else
-#endif
-    {
-        QPainterPath path;
-        if (m_dragging && !m_points.empty()) {
-            startPos = pixelToView(m_dragStart);
-            endPos = pixelToView(m_dragEnd);
+            startPos = pixelToView(start);
+            endPos = pixelToView(end);
             path.moveTo(startPos);
             path.lineTo(endPos);
+            start = end;
         }
-
-        for (vQPointF::iterator it = m_points.begin(); it != m_points.end(); ++it) {
-
-            if (it == m_points.begin()) {
-                start = (*it);
-            } else {
-                end = (*it);
-
-                startPos = pixelToView(start);
-                endPos = pixelToView(end);
-                path.moveTo(startPos);
-                path.lineTo(endPos);
-                start = end;
-            }
-        }
-        paintToolOutline(&gc, path);
     }
+    paintToolOutline(&gc, path);
 }
 
 void KisToolPolylineBase::cancel()

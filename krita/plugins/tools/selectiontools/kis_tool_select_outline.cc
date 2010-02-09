@@ -160,34 +160,7 @@ void KisToolSelectOutline::paint(QPainter& gc, const KoViewConverter &converter)
     Q_UNUSED(converter);
 
     if (m_dragging && m_points.count() > 1) {
-
- #if defined(HAVE_OPENGL)
-        if (isCanvasOpenGL()) {
-            beginOpenGL();
-
-            glEnable(GL_LINE_SMOOTH);
-            glEnable(GL_COLOR_LOGIC_OP);
-            glLogicOp(GL_XOR);
-
-            glBegin(GL_LINE_STRIP);
-            glColor3f(0.5, 1.0, 0.5);
-
-            for (qint32 pointIndex = 0; pointIndex < m_points.count(); pointIndex++) {
-                QPointF point = pixelToView(m_points[pointIndex]);
-                glVertex2f(point.x(), point.y());
-            }
-
-            glEnd();
-
-            glDisable(GL_COLOR_LOGIC_OP);
-            glDisable(GL_LINE_SMOOTH);
-
-            endOpenGL();
-        } else
-#endif
-        {
             paintToolOutline(&gc, *m_paintPath);
-        }
     }
 }
 

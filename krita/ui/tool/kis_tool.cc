@@ -20,6 +20,7 @@
 #include <QCursor>
 #include <QLabel>
 #include <QWidget>
+#include <QPolygonF>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -394,6 +395,34 @@ QWidget* KisTool::optionWidget()
 
 void KisTool::paintToolOutline(QPainter* painter, QPainterPath &path)
 {
+#if defined(HAVE_OPENGL)
+    if (m_outlinePaintMode==XOR_MODE && isCanvasOpenGL()) {
+        beginOpenGL();
+
+        glEnable(GL_LINE_SMOOTH);
+        glEnable(GL_COLOR_LOGIC_OP);
+        glLogicOp(GL_XOR);
+        glColor3f(0.501961, 1.0, 0.501961);
+
+        QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
+        for(int i=0; i<subPathPolygons.size(); i++) {
+            const QPolygonF& polygon = subPathPolygons.at(i);
+
+            glBegin(GL_LINE_STRIP);
+            for(int j=0; j<polygon.count(); j++) {
+                QPointF p = /*pixelToView*/(polygon.at(j));
+                glVertex2f(p.x(), p.y());
+            }
+            glEnd();
+        }
+
+        glDisable(GL_COLOR_LOGIC_OP);
+        glDisable(GL_LINE_SMOOTH);
+
+        endOpenGL();
+    }
+    else
+#endif
 #ifdef INDEPENDENT_CANVAS
     if (m_outlinePaintMode==XOR_MODE) {
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);

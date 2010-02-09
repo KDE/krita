@@ -24,8 +24,6 @@
 #include <KoViewConverter.h>
 
 
-#include <opengl/kis_opengl.h>
-
 KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, const QCursor & cursor) :
     KisToolShape(canvas, cursor), m_dragStart(0, 0), m_dragEnd(0, 0), m_dragging(false)
 {
@@ -122,39 +120,9 @@ void KisToolRectangleBase::paintRectangle(QPainter& gc, const QRect&)
 {
     Q_ASSERT(canvas() && currentImage());
 
-    QPointF viewDragStart = pixelToView(m_dragStart);
-    QPointF viewDragEnd = pixelToView(m_dragEnd);
-
-#if defined(HAVE_OPENGL)
-    if (isCanvasOpenGL()) {
-        beginOpenGL();
-
-        glEnable(GL_LINE_SMOOTH);
-        glEnable(GL_COLOR_LOGIC_OP);
-        glLogicOp(GL_XOR);
-
-        glBegin(GL_LINE_LOOP);
-        glColor3f(0.5, 1.0, 0.5);
-
-        glVertex2f(viewDragStart.x(), viewDragStart.y());
-        glVertex2f(viewDragEnd.x(), viewDragStart.y());
-
-        glVertex2f(viewDragEnd.x(), viewDragEnd.y());
-        glVertex2f(viewDragStart.x(), viewDragEnd.y());
-
-        glEnd();
-
-        glDisable(GL_COLOR_LOGIC_OP);
-        glDisable(GL_LINE_SMOOTH);
-
-        endOpenGL();
-    } else
-#endif
-    {
-        QPainterPath path;
-        path.addRect(QRectF(viewDragStart, viewDragEnd));
-        paintToolOutline(&gc, path);
-    }
+    QPainterPath path;
+    path.addRect(QRectF(pixelToView(m_dragStart), pixelToView(m_dragEnd)));
+    paintToolOutline(&gc, path);
 }
 
 void KisToolRectangleBase::updateArea() {

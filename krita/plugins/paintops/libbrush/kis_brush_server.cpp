@@ -32,18 +32,31 @@
 #include "kis_gbr_brush.h"
 #include "kis_imagepipe_brush.h"
 
-class BrushResourceServer : public KoResourceServer<KisBrush>
+class BrushResourceServer : public KoResourceServer<KisBrush>, public KoResourceServerObserver<KisBrush>
 {
 
 public:
 
     BrushResourceServer() : KoResourceServer<KisBrush>("kis_brushes", "*.gbr:*.gih") {
+        addObserver(this, true);
     }
     ~BrushResourceServer() {
-        foreach(KisGbrBrush* brush, brushes)
+        foreach(KisBrush* brush, brushes)
         {
             brush->deref();
         }
+    }
+    virtual void resourceAdded(KisBrush* brush)
+    {
+        // Hack: This prevents the deletion of brushes in the resource server
+        // Brushes outside the server use shared pointer, but not inside the server
+        brush->ref();
+        brushes.append(brush);
+    }
+    virtual void removingResource(KisBrush* brush)
+    {
+        brush->deref();
+        brushes.removeAll(brush);
     }
 private:
 
@@ -62,15 +75,10 @@ private:
         } else if (fileExtension == ".gih") {
             brush = new KisImagePipeBrush(filename);
         }
-        
-        // Hack: This prevents the deletion of brushes in the resource server
-        // Brushes outside the server use shared pointer, but not inside the server
-        brush->ref();
-        brushes.append(brush);
 
         return brush;
     }
-    QList<KisGbrBrush*> brushes;
+    QList<KisBrush*> brushes;
 };
 
 KisBrushServer::KisBrushServer()

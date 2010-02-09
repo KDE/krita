@@ -194,6 +194,8 @@ public:
 
     void setDeselected(bool deselected);
     bool isDeselected();
+    void setVisible(bool visible);
+    bool isVisible();
 
 private:
 

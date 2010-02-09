@@ -233,16 +233,19 @@ public:
     }
 
     /**
-     * @return true if this node is visible (i.e, active) in the graph
+     * @return true if this node is visible (i.e, active (except for
+     * selection masks where visible and active properties are
+     * different)) in the graph
      */
     bool visible() const;
 
     /**
      * Set the visible status of this node. Visible nodes are active
-     * in the graph, that is to say, they are taken into account when
-     * merging. Invisible nodes play no role in the final image, but
-     * will be modified when modifying all layers, for instance when
-     * cropping.
+     * in the graph (except for selections masks which can be active
+     * while hidden), that is to say, they are taken into account
+     * when merging. Invisible nodes play no role in the final image
+     *, but will be modified when modifying all layers, for instance
+     * when cropping.
      *
      * Toggling the visibility of a node will not automatically lead
      * to recomposition.

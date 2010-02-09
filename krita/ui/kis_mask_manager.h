@@ -167,6 +167,8 @@ public slots:
      */
     void masksUpdated();
 
+    void changeActivity(KisSelectionMask *mask,bool active);
+
 private:
 
     friend class KisNodeManager;

@@ -21,6 +21,9 @@
 #include <QRect>
 #include "kicon.h"
 
+#include "KoDocumentSectionModel.h"
+#include <KoProperties.h>
+
 #include "kis_types.h"
 #include "kis_mask.h"
 
@@ -67,6 +70,18 @@ public:
      * Set deselected selection
      */
     void setDeleselectedSelection(KisSelectionSP selection);
+
+    virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
+    virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
+
+    void setVisible(bool visible);
+    bool active() const;
+    void setActive(bool active);
+
+    QImage createThumbnail(qint32 w, qint32 h);
+
+signals:
+    void changeActivity(KisSelectionMask* mask, bool active);
 
 private:
 

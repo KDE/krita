@@ -26,6 +26,7 @@
 #include <KoCompositeOp.h>
 #include "kis_node_visitor.h"
 #include "kis_pixel_selection.h"
+#include "kis_undo_adapter.h"
 
 class KisSelectionMask::Private
 {
@@ -38,6 +39,7 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image)
         : KisMask("selection")
         , m_d(new Private())
 {
+    setActive(true);
     m_d->image = image;
     m_d->deselectedSelection = 0;
 }
@@ -96,5 +98,59 @@ KisSelectionSP KisSelectionMask::deleselectedSelection()
 void KisSelectionMask::setDeleselectedSelection(KisSelectionSP selection)
 {
     m_d->deselectedSelection = selection;
+}
+
+KoDocumentSectionModel::PropertyList KisSelectionMask::sectionModelProperties() const
+{
+    KoDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
+    l << KoDocumentSectionModel::Property(i18n("Active"), KIcon("active"),KIcon("noactive"),active());
+    return l;
+}
+
+void KisSelectionMask::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
+{
+    setVisible(properties.at(0).state.toBool());
+    setUserLocked(properties.at(1).state.toBool());
+    setActive(properties.at(2).state.toBool());
+}
+
+void KisSelectionMask::setVisible(bool visible)
+{
+    nodeProperties().setProperty("visible", visible);
+
+    if (selection())
+        selection()->setVisible(visible);
+    emit(visibilityChanged(visible));
+}
+
+bool KisSelectionMask::active() const
+{
+    return nodeProperties().boolProperty("active", true);
+}
+
+void KisSelectionMask::setActive(bool active)
+{
+    //the change needs to be done by the manager to deactive current active selectionMask
+    emit changeActivity(this,active);
+}
+
+QImage KisSelectionMask::createThumbnail(qint32 w, qint32 h)
+{
+    KisPaintDeviceSP originalDevice = paintDevice();
+    QRect boundRect=parent()->paintDevice()->exactBounds();
+
+    if (!originalDevice || !boundRect.height()) return QImage();
+
+    int wprop,hprop;
+    double c=(double)boundRect.width()/(double)boundRect.height();
+    hprop=(int)((double)w/c);
+    if (hprop<=h)
+        wprop=w;
+    else {
+        hprop=h;
+        wprop=(int)(c*(double)h);
+    }
+
+    return originalDevice->createThumbnailDevice(w,h,0,boundRect)->convertToQImage(originalDevice->colorSpace()->profile(),0,0,wprop,hprop);
 }
 

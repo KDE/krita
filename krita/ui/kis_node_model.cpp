@@ -29,6 +29,7 @@
 #include <kis_node_progress_proxy.h>
 #include <kis_image.h>
 #include <kis_selection.h>
+#include <kis_selection_mask.h>
 #include <kis_undo_adapter.h>
 #include <commands/kis_node_property_list_command.h>
 #include <kis_paint_layer.h>
@@ -294,6 +295,13 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             foreach(KoDocumentSectionModel::Property prop, proplist) {
                 if (prop.name == i18n("Visible") && node->visible() !=prop.state.toBool()) undo = false;
                 if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) undo = false;
+                if (prop.name == i18n("Active")) {
+                    if (KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node)) {
+                        if (m->active() != prop.state.toBool()) {
+                            undo = false;
+                        }
+                    }
+                }
                 if (prop.name == i18n("Alpha Locked")) {
                     if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(node)) {
                         if (l->alphaLocked() != prop.state.toBool()) {

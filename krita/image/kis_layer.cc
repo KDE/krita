@@ -179,8 +179,12 @@ void KisLayer::setDirty(const QRegion & region)
 
 KisSelectionMaskSP KisLayer::selectionMask() const
 {
-    QList<KisNodeSP> masks = childNodes(QStringList("KisSelectionMask"), KoProperties());
-    Q_ASSERT(masks.size() <= 1); // Or do we allow more than one selection mask to a layer?
+    KoProperties properties;
+    properties.setProperty("active", true);
+    QList<KisNodeSP> masks = childNodes(QStringList("KisSelectionMask"), properties);
+    Q_ASSERT(masks.size() <= 1); // only one active mask at a time
+
+    //finds the active selection mask
     if (masks.size() == 1) {
         KisSelectionMaskSP selection = dynamic_cast<KisSelectionMask*>(masks[0].data());
         return selection;
@@ -190,13 +194,14 @@ KisSelectionMaskSP KisLayer::selectionMask() const
 
 KisSelectionSP KisLayer::selection() const
 {
-    KisSelectionMaskSP selMask = selectionMask();
-    if (selMask && selMask->visible())
-        return selMask->selection();
+   KisLayer *layer=(KisLayer *)this;
+
+    if (layer->selectionMask())
+        return layer->selectionMask()->selection();
     else if (m_d->image)
         return m_d->image->globalSelection();
     else
-        return 0;
+        return KisSelectionSP(new KisSelection());
 }
 
 ///////////////////////////////////////////////////////////////////////

@@ -551,9 +551,9 @@ void KisSelectionManager::selectAll()
 
     QUndoCommand* selectionCmd = new QUndoCommand(i18n("Select All"));
 
-    if (!m_view->selection())
+    if (!image->globalSelection())
         new KisSetGlobalSelectionCommand(image, selectionCmd);
-    KisSelectionSP selection = m_view->selection();
+    KisSelectionSP selection = image->globalSelection();
 
     new KisSelectionTransaction(QString(), image, selection, selectionCmd);
 
@@ -574,14 +574,9 @@ void KisSelectionManager::deselect()
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
-    if (layer->selectionMask()) {
-        KisDeselectLocalSelectionCommand* cmd = new KisDeselectLocalSelectionCommand(image, layer->selectionMask());
+    if (image->globalSelection()) {
+        KisDeselectGlobalSelectionCommand* cmd = new KisDeselectGlobalSelectionCommand(image);
         m_view->document()->addCommand(cmd);
-    } else {
-        if (image->globalSelection()) {
-            KisDeselectGlobalSelectionCommand* cmd = new KisDeselectGlobalSelectionCommand(image);
-            m_view->document()->addCommand(cmd);
-        }
     }
 }
 
@@ -675,14 +670,9 @@ void KisSelectionManager::reselect()
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
-    if (layer->selectionMask() && layer->selectionMask()->deleselectedSelection()) {
-        KisReselectLocalSelectionCommand* cmd = new KisReselectLocalSelectionCommand(image, layer->selectionMask());
+    if (image->globalSelection()) {
+        KisReselectGlobalSelectionCommand* cmd = new KisReselectGlobalSelectionCommand(image);
         m_view->document()->addCommand(cmd);
-    } else {
-        if (image->globalSelection()) {
-            KisReselectGlobalSelectionCommand* cmd = new KisReselectGlobalSelectionCommand(image);
-            m_view->document()->addCommand(cmd);
-        }
     }
 }
 

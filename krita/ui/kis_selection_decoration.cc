@@ -182,8 +182,7 @@ void KisSelectionDecoration::drawDecoration(QPainter& painter, const QPoint& doc
     Q_UNUSED(documentOffset)
     Q_UNUSED(area);
     KisSelectionSP selection = view()->selection();
-
-    if (!selection || selection->isDeselected())
+    if (!selection || selection->isDeselected() || !selection->isVisible())
         return;
 
     qreal sx, sy;

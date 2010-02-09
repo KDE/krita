@@ -63,7 +63,6 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_paintop_registry.cc
    brushengine/kis_paintop_settings.cpp
    commands/kis_deselect_global_selection_command.cpp
-   commands/kis_deselect_local_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_command.cpp
    commands/kis_image_convert_type_command.cpp
@@ -85,7 +84,6 @@ set(kritaimage_LIB_SRCS
    commands/kis_node_move_command.cpp
    commands/kis_node_property_list_command.cpp
    commands/kis_reselect_global_selection_command.cpp
-   commands/kis_reselect_local_selection_command.cpp
    commands/kis_set_global_selection_command.cpp
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc

@@ -561,14 +561,18 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
     return image;
 }
 
-KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection) const
+KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection, QRect rect) const
 {
     KisPaintDeviceSP thumbnail = new KisPaintDevice(colorSpace());
     thumbnail->clear();
 
     int srcWidth, srcHeight;
     int srcX0, srcY0;
-    const QRect e = extent();
+    QRect e;
+    if (!rect.isValid())
+        e = extent();
+    else
+        e = rect;
     e.getRect(&srcX0, &srcY0, &srcWidth, &srcHeight);
 
 
@@ -603,7 +607,7 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, const
 
 }
 
-QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, const KisSelection *selection)
+QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, const KisSelection *selection, QRect rect)
 {
     if (m_d->cache.thumbnailsValid) {
         if (m_d->cache.thumbnails.contains(w) && m_d->cache.thumbnails[w].contains(h)) {
@@ -617,7 +621,7 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, const KisSelection *s
         m_d->cache.thumbnails.clear();
     }
 
-    KisPaintDeviceSP dev = createThumbnailDevice(w, h, selection);
+    KisPaintDeviceSP dev = createThumbnailDevice(w, h, selection, rect);
 
     QImage thumbnail = dev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());
 

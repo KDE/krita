@@ -44,7 +44,9 @@ KisImageChangeLayersCommand::KisImageChangeLayersCommand(KisImageWSP image, KisN
 void KisImageChangeLayersCommand::redo()
 {
     setUndo(false);
+    m_image->lock();
     m_image->setRootLayer(static_cast<KisGroupLayer*>(m_newRootLayer.data()));
+    m_image->unlock();
     m_image->refreshGraph();
     m_image->notifyLayersChanged();
     setUndo(true);
@@ -53,7 +55,9 @@ void KisImageChangeLayersCommand::redo()
 void KisImageChangeLayersCommand::undo()
 {
     setUndo(false);
+    m_image->lock();
     m_image->setRootLayer(static_cast<KisGroupLayer*>(m_oldRootLayer.data()));
+    m_image->unlock();
     m_image->refreshGraph();
     m_image->notifyLayersChanged();
     setUndo(true);

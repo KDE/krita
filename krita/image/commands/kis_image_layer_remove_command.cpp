@@ -42,25 +42,22 @@ KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageWSP image, KisNod
     m_prevAbove = layer->prevSibling();
 }
 
-
 void KisImageLayerRemoveCommand::redo()
 {
-    QRect extent = m_image->bounds();
-    KisNodeSP parentNode = m_layer->parent();
-    KisNodeSP nearestNode = m_layer->nextSibling();
-    if(!nearestNode) nearestNode = m_layer->prevSibling();
+    UpdateTarget target(m_image, m_layer, m_image->bounds());
 
+    m_image->lock();
     m_image->removeNode(m_layer);
+    m_image->unlock();
 
-    if(nearestNode)
-        nearestNode->setDirty(extent);
-    else
-        m_image->refreshGraph(parentNode);
+    target.update();
 }
 
 void KisImageLayerRemoveCommand::undo()
 {
-    QRect extent = m_image->bounds();
+    m_image->lock();
     m_image->addNode(m_layer, m_prevParent, m_prevAbove);
-    m_layer->setDirty(extent);
+    m_image->unlock();
+
+    m_layer->setDirty(m_image->bounds());
 }

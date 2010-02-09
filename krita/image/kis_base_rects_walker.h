@@ -21,6 +21,8 @@
 
 #include <QStack>
 
+#include "kis_layer.h"
+
 class KRITAIMAGE_EXPORT KisBaseRectsWalker
 {
 public:
@@ -100,6 +102,10 @@ protected:
     virtual void startTrip(KisNodeSP startWith) = 0;
 
 protected:
+    static inline bool isLayer(KisNodeSP node) {
+        return dynamic_cast<KisLayer*>(node.data());
+    }
+
     inline void clear() {
         m_resultAccessRect = /*m_resultChangeRect =*/
             m_childNeedRect = m_lastNeedRect = QRect();
@@ -125,6 +131,9 @@ protected:
      * Called for every node we meet on a forward way of the trip.
      */
     virtual void registerChangeRect(KisNodeSP node) {
+        // We do not work with masks here. It is KisLayer's job.
+        if(!isLayer(node)) return;
+
         QRect currentChangeRect = node->changeRect(m_resultChangeRect);
         currentChangeRect = cropThisRect(currentChangeRect);
 
@@ -138,6 +147,9 @@ protected:
      * Called for every node we meet on a backward way of the trip.
      */
     virtual void registerNeedRect(KisNodeSP node, NodePosition position) {
+        // We do not work with masks here. It is KisLayer's job.
+        if(!isLayer(node)) return;
+
         if(m_mergeTask.isEmpty())
             m_resultAccessRect = m_childNeedRect =
                 m_lastNeedRect = m_resultChangeRect;

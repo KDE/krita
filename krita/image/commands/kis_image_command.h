@@ -24,6 +24,7 @@
 
 #include <QUndoCommand>
 #include <QSize>
+#include <QRect>
 #include <QBitArray>
 #include "kis_types.h"
 
@@ -43,6 +44,27 @@ public:
      */
     KisImageCommand(const QString& name, KisImageWSP image);
     virtual ~KisImageCommand();
+
+protected:
+
+    /**
+     * Used for performing the smallest update
+     * after a node has been removed from stack.
+     * First tries to setDirty() node's siblings.
+     * If it doesn't help, performs full refresh.
+     */
+    class UpdateTarget
+    {
+    public:
+        UpdateTarget(KisImageWSP image, KisNodeSP removedNode, const QRect &updateRect);
+        void update();
+
+    private:
+        KisImageWSP m_image;
+        QRect m_updateRect;
+        bool m_needsFullRefresh;
+        KisNodeSP m_node;
+    };
 
 protected:
     /**

@@ -170,6 +170,9 @@ public:
             if(isRootNode(item.m_node)) continue;
 
             KisLayerSP currentNode = dynamic_cast<KisLayer*>(item.m_node.data());
+            // All the masks should be filtered by the walkers
+            Q_ASSERT(currentNode);
+
             QRect applyRect = item.m_applyRect;
 
             if(!m_currentProjection)

@@ -44,13 +44,19 @@ KisImageResizeCommand::KisImageResizeCommand(KisImageWSP image, qint32 width, qi
 void KisImageResizeCommand::redo()
 {
     setUndo(false);
+    m_image->lock();
     m_image->resize(m_after.width(), m_after.height());
+    m_image->unlock();
+    m_image->refreshGraph();
     setUndo(true);
 }
 
 void KisImageResizeCommand::undo()
 {
     setUndo(false);
+    m_image->lock();
     m_image->resize(m_before.width(), m_before.height());
+    m_image->unlock();
+    m_image->refreshGraph();
     setUndo(true);
 }

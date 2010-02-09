@@ -331,7 +331,7 @@ bool KisImage::locked() const
 
 void KisImage::lock()
 {
-    blockSignals(true);
+//  blockSignals(true);
     if (!locked()) {
         if (m_d->projection) {
             m_d->projection->lock();
@@ -357,7 +357,7 @@ void KisImage::unlock()
                 m_d->projection->unlock();
             }
         }
-        blockSignals(false);
+//      blockSignals(false);
     }
 }
 
@@ -383,8 +383,6 @@ void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
 {
     if (w != width() || h != height()) {
 
-        lock();
-
         if (undo()) {
             if (cropLayers)
                 m_d->adapter->beginMacro(i18n("Crop Image"));
@@ -404,8 +402,6 @@ void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
         }
 
         emitSizeChanged();
-
-        unlock();
 
         if (undo()) {
             m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
@@ -769,6 +765,10 @@ void KisImage::flatten()
     m_d->adapter->addCommand(new KisImageChangeLayersCommand(KisImageWSP(this), oldRootLayer, newRootLayer, ""));
 
     addNode(flattenLayer, newRootLayer, 0);
+
+    // notify once again to be sure tools have set
+    // their current paint devices
+    notifyLayersChanged();
 
     m_d->adapter->endMacro();
 }

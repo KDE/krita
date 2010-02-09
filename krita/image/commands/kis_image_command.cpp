@@ -44,10 +44,46 @@ KisImageCommand::~KisImageCommand()
 {
 }
 
-
 void KisImageCommand::setUndo(bool undo)
 {
     if (m_image->undoAdapter()) {
         m_image->undoAdapter()->setUndo(undo);
+    }
+}
+
+static inline bool isLayer(KisNodeSP node) {
+    return qobject_cast<KisLayer*>(node.data());
+}
+
+KisImageCommand::UpdateTarget::UpdateTarget(KisImageWSP image,
+                                            KisNodeSP removedNode,
+                                            const QRect &updateRect)
+    : m_image(image), m_updateRect(updateRect)
+{
+    m_needsFullRefresh = false;
+
+    if(!isLayer(removedNode)) {
+        m_node = removedNode->parent();
+    }
+    else {
+        m_node = removedNode->nextSibling();
+
+        if(!m_node)
+            m_node = removedNode->prevSibling();
+
+        if(!m_node) {
+            m_node = removedNode->parent();
+            m_needsFullRefresh = true;
+        }
+    }
+}
+
+void KisImageCommand::UpdateTarget::update() {
+    if (m_needsFullRefresh) {
+        m_image->refreshGraph(m_node);
+        m_node->setDirty(m_updateRect);
+    }
+    else {
+        m_node->setDirty(m_updateRect);
     }
 }

@@ -113,15 +113,6 @@ private:
      * @return the height in document points of space used for all footnotes in this frame.
      */
     qreal findFootnote(const QTextLine &line, int *oldLength);
-
-    /**
-     * If footnotes has been cleared due to relayout, Then footnote has to be parsed from start of the page.
-     * @param oldLength this pointer will be filled with the text position in the footnote document
-     *      before any footnotes have been inserted.  This is useful to undo the insertion of the
-     *      footnote.
-     * @return true if no footnote is found till the current text position else returns false
-     */
-    bool findFootnote(int *oldLength);
     void resetPrivate();
 
     /**
@@ -151,7 +142,6 @@ private:
     KoChangeTracker *m_changeTracker;
 
     qreal m_y;
-    bool m_parseFootnoteAfterReset;
     QTextBlock m_block;
     KoTextBlockData *m_blockData;
 

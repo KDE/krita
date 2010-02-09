@@ -20,6 +20,7 @@
 #include "kis_recorded_filter_action.h"
 #include "kis_recorded_path_paint_action.h"
 #include "kis_recorded_shape_paint_action.h"
+#include "kis_recorded_fill_paint_action.h"
 
 #include <kglobal.h>
 #include <kis_debug.h>
@@ -36,6 +37,7 @@ KisRecordedActionFactoryRegistry::KisRecordedActionFactoryRegistry()
     add(new KisRecordedFilterActionFactory);
     add(new KisRecordedPathPaintActionFactory);
     add(new KisRecordedShapePaintActionFactory);
+    add(new KisRecordedFillPaintActionFactory);
 }
 
 KisRecordedActionFactoryRegistry::~KisRecordedActionFactoryRegistry()

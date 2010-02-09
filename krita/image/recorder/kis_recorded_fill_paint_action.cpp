@@ -55,8 +55,9 @@ KisRecordedFillPaintAction::~KisRecordedFillPaintAction()
     delete d;
 }
 
-void KisRecordedFillPaintAction::toXML(QDomDocument& /*doc*/, QDomElement& elt, KisRecordedActionSaveContext* ) const
+void KisRecordedFillPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* context) const
 {
+    KisRecordedPaintAction::toXML(doc, elt, context);
     elt.setAttribute("x", d->pt.x());
     elt.setAttribute("y", d->pt.y());
     elt.setAttribute("projectionPath", d->projectionPath.toString());
@@ -81,6 +82,8 @@ void KisRecordedFillPaintAction::playPaint(const KisPlayInfo& info, KisPainter* 
         projection = nodes[0]->projection();
     }
     KisFillPainter* painter = static_cast<KisFillPainter*>(_painter);
+    painter->setWidth(info.image()->width());
+    painter->setHeight(info.image()->height());
     if (fillStyle() == KisPainter::FillStylePattern)
     {
         painter->fillPattern(d->pt.x(), d->pt.y(), projection);

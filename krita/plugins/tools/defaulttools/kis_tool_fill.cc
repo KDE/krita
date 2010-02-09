@@ -50,6 +50,9 @@
 #include <canvas/kis_canvas2.h>
 #include <widgets/kis_cmb_composite.h>
 #include <kis_cursor.h>
+#include <recorder/kis_recorded_fill_paint_action.h>
+#include <recorder/kis_node_query_path.h>
+#include <recorder/kis_action_recorder.h>
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
@@ -70,6 +73,22 @@ KisToolFill::~KisToolFill()
 
 bool KisToolFill::flood(int startX, int startY)
 {
+    if (image()) {
+        KisNodeSP projectionNode;
+        if(m_unmerged) {
+            projectionNode = currentNode();
+        } else {
+            projectionNode = image()->root();
+        }
+        KisRecordedFillPaintAction paintAction(KisNodeQueryPath::absolutePath(currentNode()), QPoint(startX, startY), KisNodeQueryPath::absolutePath(projectionNode));
+        setupPaintAction(&paintAction);
+        paintAction.setPattern(currentPattern());
+        if(m_usePattern)
+        {
+            paintAction.setFillStyle(KisPainter::FillStylePattern);
+        }
+        image()->actionRecorder()->addAction(paintAction);
+    }
 
     KisPaintDeviceSP device = currentNode()->paintDevice();
     if (!device) return false;

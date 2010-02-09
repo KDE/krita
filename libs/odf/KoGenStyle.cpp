@@ -52,21 +52,6 @@ KoGenStyle::~KoGenStyle()
 {
 }
 
-void KoGenStyle::writeStyleProperties(KoXmlWriter* writer, PropertyType i,
-                                      const char* elementName, const KoGenStyle* parentStyle) const
-{
-    if (!m_properties[i].isEmpty()) {
-        writer->startElement(elementName);
-        QMap<QString, QString>::const_iterator it = m_properties[i].begin();
-        const QMap<QString, QString>::const_iterator end = m_properties[i].end();
-        for (; it != end; ++it) {
-            if (!parentStyle || parentStyle->property(it.key(), i) != it.value())
-                writer->addAttribute(it.key().toUtf8(), it.value().toUtf8());
-        }
-        writer->endElement();
-    }
-}
-
 /*
  * The order of this list is important; e.g. a graphic-properties must
  * precede a text-properties always. See the Relax NG to check the order.
@@ -111,7 +96,28 @@ static KoGenStyle::PropertyType propertyTypeByElementName(const char* properties
     return KoGenStyle::DefaultType;
 }
 
-
+void KoGenStyle::writeStyleProperties(KoXmlWriter* writer, PropertyType type,
+                                      const KoGenStyle* parentStyle) const
+{
+    const char* elementName = 0;
+    for (int i=0; i<s_propertyNamesCount; ++i) {
+        if (s_propertyTypes[i] == type) {
+            elementName = s_propertyNames[i];
+        }
+    }
+    Q_ASSERT(elementName);
+    const StyleMap& map = m_properties[type];
+    if (!map.isEmpty()) {
+        writer->startElement(elementName);
+        QMap<QString, QString>::const_iterator it = map.begin();
+        const QMap<QString, QString>::const_iterator end = map.end();
+        for (; it != end; ++it) {
+            if (!parentStyle || parentStyle->property(it.key(), type) != it.value())
+                writer->addAttribute(it.key().toUtf8(), it.value().toUtf8());
+        }
+        writer->endElement();
+    }
+}
 
 void KoGenStyle::writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement) const
 {
@@ -210,7 +216,7 @@ void KoGenStyle::writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, cons
     for (int i = 1; i < s_propertyNamesCount; ++i) {
         //skip any properties that are the same as the defaultType
         if (s_propertyTypes[i] != defaultPropertyType) {
-            writeStyleProperties(writer, s_propertyTypes[i], s_propertyNames[i], parentStyle);
+            writeStyleProperties(writer, s_propertyTypes[i], parentStyle);
         }
     }
 

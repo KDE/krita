@@ -344,6 +344,15 @@ public:
                     const char* propertiesElementName, bool closeElement = true, bool drawElement = false) const;
 
     /**
+     *  Write the definition of these style properties to @p writer, using the OASIS format.
+     *  @param writer the KoXmlWriter in which @p elementName will be created and filled in
+     *  @param type the type of properties to write
+     *  @param parentStyle the parent to this style
+     */
+    void writeStyleProperties(KoXmlWriter* writer, PropertyType type,
+                              const KoGenStyle* parentStyle = 0) const;
+
+    /**
      *  QMap requires a complete sorting order.
      *  Another solution would have been a qdict and a key() here, a la KoTextFormat,
      *  but the key was difficult to generate.
@@ -370,8 +379,6 @@ private:
         return QString();
     }
 
-    void writeStyleProperties(KoXmlWriter* writer, PropertyType i,
-                              const char* elementName, const KoGenStyle* parentStyle) const;
 
 #ifndef NDEBUG
     void printDebug() const;

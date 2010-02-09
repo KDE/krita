@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
@@ -63,6 +63,7 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_isRtl(false),
         m_inTable(false),
         m_parent(parent),
+        m_textShape(0),
         m_demoText(false),
         m_endOfDemoText(false),
         m_defaultTabSizing(MM_TO_POINT(15)),
@@ -256,7 +257,8 @@ bool Layout::addLine(QTextLine &line)
         if (m_data->endPosition() == -1) // no text at all fit in the shape!
             m_data->setEndPosition(m_data->position());
         m_data->wipe();
-        m_textShape->markLayoutDone();
+        if (m_textShape) // kword uses a dummy shape which is not a text shape
+            m_textShape->markLayoutDone();
         nextShape();
         if (m_data)
             m_data->setPosition(m_block.position() + (ignoreParagraph ? 0 : line.textStart()));
@@ -737,6 +739,7 @@ void Layout::nextShape()
 
     shape = 0;
     m_data = 0;
+    m_textShape = 0;
 
     QList<KoShape *> shapes = m_parent->shapes();
     for (shapeNumber++; shapeNumber < shapes.count(); shapeNumber++) {
@@ -759,6 +762,7 @@ void Layout::nextShape()
         QTextCursor cursor(m_textShape->footnoteDocument());
         cursor.select(QTextCursor::Document);
         cursor.removeSelectedText();
+        Q_ASSERT(!m_textShape->hasFootnoteDocument());
     }
     m_shapeBorder = shape->borderInsets();
     m_y += m_shapeBorder.top;
@@ -812,6 +816,7 @@ void Layout::resetPrivate()
     shape = 0;
     layout = 0;
     m_newShape = true;
+    m_textShape = 0;
     m_blockData = 0;
     m_newParag = true;
     m_block = m_parent->document()->begin();
@@ -844,6 +849,7 @@ void Layout::resetPrivate()
                 // block has been layouted. So use its offset.
                 m_y = m_block.layout()->lineAt(0).position().y();
                 if (m_y < data->documentOffset() - 0.126) { // 0.126 to account of rounding in Qt-scribe
+                    // the last layed-out parag
                     Q_ASSERT(shapeNumber > 0);
                     // since we only recalc whole parags; we need to go back a little.
                     shapeNumber--;
@@ -878,10 +884,10 @@ void Layout::resetPrivate()
         return;
     Q_ASSERT(shapeNumber < shapes.count());
     shape = shapes[shapeNumber];
-
+    m_data = qobject_cast<KoTextShapeData*>(shape->userData());
     m_textShape = dynamic_cast<TextShape*>(shape);
     Q_ASSERT(m_textShape);
-    if (m_textShape->hasFootnoteDocument()) {
+    if (m_textShape->hasFootnoteDocument() && m_y == m_data->documentOffset()) {
         QTextCursor cursor(m_textShape->footnoteDocument());
         cursor.select(QTextCursor::Document);
         cursor.removeSelectedText();
@@ -890,7 +896,6 @@ void Layout::resetPrivate()
         m_parseFootnoteAfterReset = true;
     }
     m_demoText = m_textShape->demoText();
-    m_data = qobject_cast<KoTextShapeData*>(shape->userData());
     m_shapeBorder = shape->borderInsets();
     if (m_y == 0)
         m_y = m_shapeBorder.top;
@@ -1710,6 +1715,8 @@ bool Layout::setFollowupShape(KoShape *followupShape)
 
     m_newShape = false;
     shape = followupShape;
+    m_textShape = 0;
+    m_y = m_y + 10000; // make sure any lines added in this one will not show un in any actual shapes
     m_data->setDocumentOffset(m_y);
     m_shapeBorder = shape->borderInsets();
     return true;
@@ -1763,6 +1770,7 @@ bool Layout::previousParag()
         QList<KoShape *> shapes = m_parent->shapes();
         for (--shapeNumber; shapeNumber >= 0; shapeNumber--) {
             shape = shapes[shapeNumber];
+            m_textShape = dynamic_cast<TextShape*>(shape);
             m_data = qobject_cast<KoTextShapeData*>(shape->userData());
             if (m_data != 0)
                 break;
@@ -1793,7 +1801,7 @@ qreal Layout::inlineCharHeight(const QTextFragment &fragment)
 
 qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
 {
-    if (m_parent->inlineTextObjectManager() == 0)
+    if (m_parent->inlineTextObjectManager() == 0 || m_textShape == 0)
         return 0;
     Q_ASSERT(oldLength);
     bool firstFootnote = true;

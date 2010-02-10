@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -133,9 +133,9 @@ void BrushShape::fromLine(int radius, float sigma)
     }
 }
 
-void BrushShape::fromBitMap(const char* fileName)
+void BrushShape::fromQImage(const QString fileName)
 {
-    QImage image(fileName, 0);
+    QImage image(fileName);
     if (image.isNull()) {
         return;
     }
@@ -146,8 +146,8 @@ void BrushShape::fromBitMap(const char* fileName)
     m_width = image.width();
     m_height = image.height();
 
-    int x_radius = m_width / 2;
-    int y_radius = m_height / 2;
+    int x_radius = qRound(m_width * 0.5);
+    int y_radius = qRound(m_height * 0.5);
 
     QColor pixelColor;
     for (int x = -x_radius; x < x_radius; x++) {

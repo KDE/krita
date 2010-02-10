@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 #include <QVector>
 #include "bristle.h"
 
+class QString;
+
 class BrushShape
 {
 
@@ -32,7 +34,8 @@ public:
     void fromDistance(int radius, float scale);
     void fromGaussian(int radius, float sigma);
     void fromLine(int radius, float sigma);
-    void fromBitMap(const char* fileName);
+    // slow, optimize!
+    void fromQImage(const QString fileName);
     void tresholdBristles(double treshold);
 
     QVector<Bristle> getBristles();

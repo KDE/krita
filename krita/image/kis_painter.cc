@@ -1569,17 +1569,7 @@ void KisPainter::setChannelFlags(QBitArray channelFlags)
             d->channelFlags = d->colorSpace->channelFlags(true, false, true, true);
             d->channelFlags = d->colorSpace->setChannelFlagsToPixelOrder(d->channelFlags);
         }
-        else {
-            QList<KoChannelInfo*> channels = d->colorSpace->channels();
-            foreach (KoChannelInfo* channel, channels) {
-                if (channel->channelType() == KoChannelInfo::ALPHA) {
-                    d->channelFlags.setBit(channel->pos());
-                }
-            }
-        }
     }
-
-
 }
 
 QBitArray KisPainter::channelFlags()

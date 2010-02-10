@@ -139,6 +139,8 @@ void KisBrushChooser::setBrush(KisBrushSP _brush)
 {
     Q_UNUSED(_brush);
     /*
+      XXX: why is this uncommented?
+
         KisGbrBrush* brush = static_cast<KisGbrBrush*>(_brush.data());
 
         QString text = QString("%1 (%2 x %3)")

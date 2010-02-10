@@ -40,6 +40,7 @@ void KisColorInput::init()
 {
     QHBoxLayout* m_layout = new QHBoxLayout(this);
     QLabel* m_label = new QLabel(i18n("%1:", m_channelInfo->name()), this);
+    m_label->setMinimumWidth(50);
     m_layout->addWidget(m_label);
     
     m_colorSlider = new KoColorSlider(Qt::Horizontal, this);

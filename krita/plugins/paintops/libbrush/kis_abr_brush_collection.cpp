@@ -494,7 +494,7 @@ qint32 KisAbrBrushCollection::abr_brush_load (QDataStream & abr, AbrInfo *abr_hd
 
 
 KisAbrBrushCollection::KisAbrBrushCollection(const QString& filename)
-    : KoResource(filename)
+    : KisBrush(filename)
 {
 }
 

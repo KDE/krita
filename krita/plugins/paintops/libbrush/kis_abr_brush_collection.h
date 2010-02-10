@@ -25,7 +25,7 @@
 #include <QDataStream>
 #include <QString>
 
-#include <KoResource.h>
+#include <kis_brush.h>
 
 #include "kis_types.h"
 #include "kis_shared.h"
@@ -44,7 +44,7 @@ class AbrInfo;
 /**
  * load a collection of brushes from an abr file
  */
-class BRUSH_EXPORT KisAbrBrushCollection : public KoResource
+class BRUSH_EXPORT KisAbrBrushCollection : public KisBrush
 {
 
 protected:

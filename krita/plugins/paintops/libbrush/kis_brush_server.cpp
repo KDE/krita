@@ -29,6 +29,8 @@
 
 #include <kis_debug.h>
 
+#include "kis_abr_brush.h"
+#include "kis_abr_brush_collection.h"
 #include "kis_gbr_brush.h"
 #include "kis_imagepipe_brush.h"
 
@@ -37,30 +39,44 @@ class BrushResourceServer : public KoResourceServer<KisBrush>, public KoResource
 
 public:
 
-    BrushResourceServer() : KoResourceServer<KisBrush>("kis_brushes", "*.gbr:*.gih") {
+    BrushResourceServer() : KoResourceServer<KisBrush>("kis_brushes", "*.gbr:*.gih:*.abr") {
         addObserver(this, true);
     }
+
     ~BrushResourceServer() {
         foreach(KisBrush* brush, brushes)
         {
             brush->deref();
         }
     }
+
     virtual void resourceAdded(KisBrush* brush)
     {
         // Hack: This prevents the deletion of brushes in the resource server
         // Brushes outside the server use shared pointer, but not inside the server
-        brush->ref();
-        brushes.append(brush);
+        if (dynamic_cast<KisAbrBrushCollection*>(brush)) {
+            QVector<KisAbrBrush*> abrBrushes = dynamic_cast<KisAbrBrushCollection*>(brush)->brushes();
+            foreach(KisAbrBrush* abrBrush, abrBrushes) {
+                abrBrush->ref();
+                brushes.append(abrBrush);
+            }
+            delete brush;
+        }
+        else {
+            brush->ref();
+            brushes.append(brush);
+        }
     }
+
     virtual void removingResource(KisBrush* brush)
     {
         brush->deref();
         brushes.removeAll(brush);
     }
+
 private:
 
-    virtual KisGbrBrush* createResource(const QString & filename) {
+    virtual KisBrush* createResource(const QString & filename) {
 
         QString fileExtension;
         int index = filename.lastIndexOf('.');
@@ -68,16 +84,18 @@ private:
         if (index != -1)
             fileExtension = filename.mid(index).toLower();
 
-        KisGbrBrush* brush = 0;
+        KisBrush* brush = 0;
 
         if (fileExtension == ".gbr") {
             brush = new KisGbrBrush(filename);
         } else if (fileExtension == ".gih") {
             brush = new KisImagePipeBrush(filename);
+        } else if (fileExtension == ".abr") {
+            brush = new KisAbrBrushCollection(filename);
         }
-
         return brush;
     }
+
     QList<KisBrush*> brushes;
 };
 

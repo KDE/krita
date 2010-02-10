@@ -64,20 +64,16 @@ void OutputPainterStrategy::init( const Header *header )
     QSize  emfSize = header->bounds().size();
 
 #if 0
-    qDebug("emfOrigin  = %d, %d", header->bounds().x(), header->bounds().y());
-    qDebug("emfSize    = %d, %d", emfSize.width(), emfSize.height() );
-    qDebug("emfFrame   = %d, %d, %d, %d", 
-           header->frame().x(), header->frame().y(),
-           header->frame().width(), header->frame().height());
-    qDebug("emfBounds   = %d, %d, %d, %d", 
-           header->bounds().x(), header->bounds().y(),
-           header->bounds().width(), header->bounds().height());
-    qDebug("emfSize    = %d, %d", emfSize.width(), emfSize.height() );
-    qDebug("outputSize = %d, %d", m_outputSize.width(), m_outputSize.height() );
+    kDebug(31000) << "emfFrame         =" << header->frame().x() << header->frame().y()
+                  << header->frame().width() << header->frame().height();
+    kDebug(31000) << "emfBounds (size) =" << header->bounds().x() << header->bounds().y()
+                  << header->bounds().width() << header->bounds().height();
+    kDebug(31000) << "emfSize          =" << emfSize.width() << emfSize.height();
+    kDebug(31000) << "outputSize       =" << m_outputSize.width() << m_outputSize.height();
 
-    qDebug("Device = %d, %d", header->device().width(), header->device().height() );
-    qDebug("Millimeters = %d, %d", header->millimeters().width(), header->millimeters().height() );
-    kDebug(31000) << "Foo";
+    kDebug(31000) << "Device =" << header->device().width() << header->device().height();
+    kDebug(31000) << "Millimeters =" << header->millimeters().width() 
+                  << header->millimeters().height();
 #endif
 
     // This is restored in cleanup().
@@ -194,12 +190,16 @@ void OutputPainterStrategy::setMetaRgn()
 
 void OutputPainterStrategy::setWindowOrgEx( const QPoint &origin )
 {
+    //kDebug(31000) << origin;
+
     QSize windowSize = m_painter->window().size();
     m_painter->setWindow( QRect( origin, windowSize ) );
 }
 
 void OutputPainterStrategy::setWindowExtEx( const QSize &size )
 {
+    //kDebug(31000) << size;
+
     QPoint windowOrigin = m_painter->window().topLeft();
     m_painter->setWindow( QRect( windowOrigin, size ) );
 }
@@ -651,7 +651,7 @@ void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QSt
     m_painter->setPen( m_textPen );
     m_painter->drawText( referencePoint, textString );
 
-    kDebug(33100) << "extTextOutW: ref.point = " << referencePoint.x() << " " << referencePoint.y()
+    kDebug(31000) << "extTextOutW: ref.point = " << referencePoint.x() << " " << referencePoint.y()
                   << " Text = " << textString.toLatin1().data();
 
     m_painter->restore();

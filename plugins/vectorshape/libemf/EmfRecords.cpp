@@ -55,15 +55,25 @@ DeviceInfoHeader::~DeviceInfoHeader()
 /*****************************************************************************/
 BitBltRecord::BitBltRecord( QDataStream &stream )
 {
+#if 0
+    qint32 x, y, width, height;
+    stream >> x >> y >> width >> height;
+    kDebug(31000) << "Bounds" << x << y << width << height;
+    m_Bounds = QRect( QPoint(x, y), QSize(width, height));
+#else
     stream >> m_Bounds;
+#endif
     stream >> m_xDest;
     stream >> m_yDest;
     stream >> m_cxDest;
     stream >> m_cyDest;
+    kDebug(31000) << "Destination" << m_xDest << m_yDest << m_cxDest << m_cyDest;
+
     stream >> m_BitBltRasterOperation;
-    kDebug(33100) << "bitblt raster operation:" << m_BitBltRasterOperation;
+    //kDebug(31000) << "bitblt raster operation:" << m_BitBltRasterOperation;
     stream >> m_xSrc;
     stream >> m_ySrc;
+    //kDebug(31000) << "Sourcd" << m_xSrc << m_ySrc;
 
     float M11, M12, M21, M22, Dx, Dy;
     stream >> M11;
@@ -73,6 +83,7 @@ BitBltRecord::BitBltRecord( QDataStream &stream )
     stream >> Dx;
     stream >> Dy;
     m_XFormSrc = QMatrix( M11, M12, M21, M22, Dx, Dy );
+    //kDebug(31000) << m_XFormSrc;
 
     stream >> m_red >> m_green >> m_blue >> m_reserved;
     stream >> m_UsageSrc;
@@ -86,7 +97,7 @@ BitBltRecord::BitBltRecord( QDataStream &stream )
     if ( m_cbBmiSrc == 40 ) {
 	m_BmiSrc = new DeviceInfoHeader( stream );
     } else {
-	kDebug(33100) << "m_cbBmiSrc:" << m_cbBmiSrc;
+	//kDebug(31000) << "m_cbBmiSrc:" << m_cbBmiSrc;
 	Q_ASSERT( 0 );
     }
 

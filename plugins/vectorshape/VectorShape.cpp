@@ -33,7 +33,6 @@
 #include <QDataStream>
 #include <QPixmap>
 
-
 // KDE
 #include <KDebug>
 
@@ -44,12 +43,13 @@
 #include "KoXmlReader.h"
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
-#include "KoShapeSavingContext.h"
+#include <KoShapeSavingContext.h>
 #include <WmfPainter.h>
 
 // Vector shape
 #include "libemf/EmfParser.h"
 #include "libemf/EmfOutputPainterStrategy.h"
+#include "libemf/EmfOutputDebugStrategy.h"
 
 
 VectorShape::VectorShape()
@@ -191,12 +191,6 @@ void VectorShape::drawEmf(QPainter &painter) const
     //kDebug(31000) << "position: " << position();
     //kDebug(31000) << "-------------------------------------------";
 
-    // FIXME: Make it static to save time?
-    Libemf::Parser  emfParser;
-
-    Libemf::OutputPainterStrategy  emfOutput( painter, sizeInt );
-    emfParser.setOutput( &emfOutput );
-    
     // Create a QBuffer to read from...
     QByteArray  emfArray(m_bytes, m_size);
     QBuffer     emfBuffer(&emfArray);
@@ -207,7 +201,15 @@ void VectorShape::drawEmf(QPainter &painter) const
     emfStream.setDevice(&emfBuffer);
     emfStream.setByteOrder(QDataStream::LittleEndian);
 
-    // This does the actual painting.
+    // FIXME: Make it static to save time?
+    Libemf::Parser  emfParser;
+#if 1
+    Libemf::OutputPainterStrategy  emfPaintOutput( painter, sizeInt );
+    emfParser.setOutput( &emfPaintOutput );
+#else
+    Libemf::OutputDebugStrategy  emfDebugOutput;
+    emfParser.setOutput( &emfDebugOutput );
+#endif
     emfParser.loadFromStream(emfStream);
 
     return;

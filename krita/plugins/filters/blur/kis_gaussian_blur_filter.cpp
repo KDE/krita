@@ -89,6 +89,14 @@ void KisGaussianBlurFilter::process(KisConstProcessingInformation srcInfo,
     config->getProperty("vertRadius", value);
     uint verticalRadius = value.toUInt();
 
+    QBitArray channelFlags;
+    if (config) {
+        channelFlags = config->channelFlags();
+    } 
+    if (channelFlags.isEmpty() || !config) {
+        channelFlags = QBitArray(src->colorSpace()->channelCount(), true);
+    }
+
     // compute horizontal kernel
     uint horizKernelSize = horizontalRadius * 2 + 1;
     Matrix<qreal, Dynamic, Dynamic> horizGaussian(1, horizKernelSize);
@@ -125,10 +133,12 @@ void KisGaussianBlurFilter::process(KisConstProcessingInformation srcInfo,
         KisConvolutionKernelSP kernelVertical = KisConvolutionKernel::fromMatrix(verticalGaussian, 0, verticalGaussian.sum());
 
         KisConvolutionPainter horizPainter(interm, dstInfo.selection());
+        horizPainter.setChannelFlags(channelFlags);
         horizPainter.setProgress(progressUpdater);
         horizPainter.applyMatrix(kernelHoriz, src, srcTopLeft, srcTopLeft, size, BORDER_REPEAT);
 
         KisConvolutionPainter verticalPainter(dst, dstInfo.selection());
+        verticalPainter.setChannelFlags(channelFlags);
         verticalPainter.setProgress(progressUpdater);
         verticalPainter.applyMatrix(kernelVertical, interm, srcTopLeft, dstTopLeft, size, BORDER_REPEAT);
     }
@@ -137,6 +147,7 @@ void KisGaussianBlurFilter::process(KisConstProcessingInformation srcInfo,
         if (horizontalRadius > 0)
         {
             KisConvolutionPainter painter(dst, dstInfo.selection());
+            painter.setChannelFlags(channelFlags);
             painter.setProgress(progressUpdater);
 
             KisConvolutionKernelSP kernelHoriz = KisConvolutionKernel::fromMatrix(horizGaussian, 0, horizGaussian.sum());
@@ -146,6 +157,7 @@ void KisGaussianBlurFilter::process(KisConstProcessingInformation srcInfo,
         if (verticalRadius > 0)
         {
             KisConvolutionPainter painter(dst, dstInfo.selection());
+            painter.setChannelFlags(channelFlags);
             painter.setProgress(progressUpdater);
 
             KisConvolutionKernelSP kernelVertical = KisConvolutionKernel::fromMatrix(verticalGaussian, 0, verticalGaussian.sum());

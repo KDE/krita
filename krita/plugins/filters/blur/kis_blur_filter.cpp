@@ -102,9 +102,18 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
         break;
     }
 
+    QBitArray channelFlags;
+    if (config) {
+        channelFlags = config->channelFlags();
+    } 
+    if (channelFlags.isEmpty() || !config) {
+        channelFlags = QBitArray(src->colorSpace()->channelCount(), true);
+    }
+
     KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas, rotate * M_PI / 180.0);
     delete kas;
     KisConvolutionPainter painter(dst, dstInfo.selection());
+    painter.setChannelFlags(channelFlags);
     painter.setProgress(progressUpdater);
     painter.applyMatrix(kernel, src, srcTopLeft, dstTopLeft, size, BORDER_REPEAT);
 

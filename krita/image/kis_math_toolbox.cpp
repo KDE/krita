@@ -28,6 +28,7 @@
 
 #include <QVector>
 
+#include <KoColorSpaceMaths.h>
 #include <kglobal.h>
 
 #include <kis_debug.h>
@@ -61,12 +62,10 @@ KisMathToolboxRegistry::~KisMathToolboxRegistry()
 }
 
 template<typename T>
-double toDouble(const quint8* data, int channelpos)
+inline double toDouble(const quint8* data, int channelpos)
 {
-    return (float)(*((T*)(data + channelpos)));
+    return (double)(*((T*)(data + channelpos)));
 }
-
-typedef double(*PtrToDouble)(const quint8*, int);
 
 template<typename T>
 void fromDouble(quint8* data, int channelpos, double v)
@@ -74,14 +73,40 @@ void fromDouble(quint8* data, int channelpos, double v)
     *((T*)(data + channelpos)) = (T)v;
 }
 
-typedef void (*PtrFromDouble)(quint8*, int, double);
-
 void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation* fr, const QRect& rect)
 {
     qint32 depth = src->colorSpace()->colorChannelCount();
-    QVector<PtrToDouble> f(depth);
     QList<KoChannelInfo *> cis = src->colorSpace()->channels();
-    for (qint32 k = 0; k < depth; k++) {
+    // remove non-color channels
+    for (quint32 c = 0; c < cis.count(); ++c) {
+        if (cis[c]->channelType() != KoChannelInfo::COLOR)
+            cis.removeAt(c--);
+    }
+    QVector<PtrToDouble> f(depth);
+    if (!getToDoubleChannelPtr(cis, f))
+        return;
+
+    KisHLineConstIteratorPixel srcIt = src->createHLineIterator(rect.x(), rect.y(), rect.width());
+
+    for (int i = rect.y(); i < rect.height(); i++) {
+        float *dstIt = fr->coeffs + (i - rect.y()) * fr->size * fr->depth;
+        while (! srcIt.isDone()) {
+            const quint8* v1 = srcIt.rawData();
+            for (int k = 0; k < depth; k++) {
+                *dstIt = f[k](v1, cis[k]->pos());
+                ++dstIt;
+            }
+            ++srcIt;
+        }
+        srcIt.nextRow();
+    }
+}
+
+bool KisMathToolbox::getToDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector<PtrToDouble>& f)
+{
+    qint32 channels = cis.count();
+
+    for (qint32 k = 0; k < channels; k++) {
         switch (cis[k]->channelValueType()) {
         case KoChannelInfo::UINT8:
             f[k] = toDouble<quint8>;
@@ -105,32 +130,47 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
             break;
         default:
             warnKrita << "Unsupported value type in KisMathToolbox";
-            return;
+            return false;
         }
     }
 
-    KisHLineConstIteratorPixel srcIt = src->createHLineIterator(rect.x(), rect.y(), rect.width());
-
-    for (int i = rect.y(); i < rect.height(); i++) {
-        float *dstIt = fr->coeffs + (i - rect.y()) * fr->size * fr->depth;
-        while (! srcIt.isDone()) {
-            const quint8* v1 = srcIt.rawData();
-            for (int k = 0; k < depth; k++) {
-                *dstIt = f[k](v1, cis[k]->pos());
-                ++dstIt;
-            }
-            ++srcIt;
-        }
-        srcIt.nextRow();
-    }
+    return true;
 }
 
 void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentation* fr, const QRect& rect)
 {
     qint32 depth = dst->colorSpace()->colorChannelCount();
-    QVector<PtrFromDouble> f(depth);
     QList<KoChannelInfo *> cis = dst->colorSpace()->channels();
-    for (qint32 k = 0; k < depth; k++) {
+    // remove non-color channels
+    for (quint32 c = 0; c < cis.count(); ++c) {
+        if (cis[c]->channelType() != KoChannelInfo::COLOR)
+            cis.removeAt(c--);
+    }
+
+    QVector<PtrFromDouble> f(depth);
+    if (!getFromDoubleChannelPtr(cis, f))
+        return;
+
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y(), rect.width());
+    for (int i = rect.y(); i < rect.height(); i++) {
+        float *srcIt = fr->coeffs + (i - rect.y()) * fr->size * fr->depth;
+        while (! dstIt.isDone()) {
+            quint8* v1 = dstIt.rawData();
+            for (int k = 0; k < depth; k++) {
+                f[k](v1, cis[k]->pos(), *srcIt);
+                ++srcIt;
+            }
+            ++dstIt;
+        }
+        dstIt.nextRow();
+    }
+}
+
+bool KisMathToolbox::getFromDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector<PtrFromDouble>& f)
+{
+    qint32 channels = cis.count();
+
+    for (qint32 k = 0; k < channels; k++) {
         switch (cis[k]->channelValueType()) {
         case KoChannelInfo::UINT8:
             f[k] = fromDouble<quint8>;
@@ -154,22 +194,46 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentatio
             break;
         default:
             warnKrita << "Unsupported value type in KisMathToolbox";
-            return;
+            return false;
         }
     }
 
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y(), rect.width());
-    for (int i = rect.y(); i < rect.height(); i++) {
-        float *srcIt = fr->coeffs + (i - rect.y()) * fr->size * fr->depth;
-        while (! dstIt.isDone()) {
-            quint8* v1 = dstIt.rawData();
-            for (int k = 0; k < depth; k++) {
-                f[k](v1, cis[k]->pos(), *srcIt);
-                ++srcIt;
-            }
-            ++dstIt;
-        }
-        dstIt.nextRow();
+    return true;
+}
+
+double KisMathToolbox::minChannelValue(KoChannelInfo *c)
+{
+    switch (c->channelValueType())
+    {
+    case KoChannelInfo::UINT8 : return KoColorSpaceMathsTraits<quint8>::min;
+    case KoChannelInfo::UINT16 : return KoColorSpaceMathsTraits<quint16>::min;
+    case KoChannelInfo::UINT32 : return KoColorSpaceMathsTraits<quint32>::min;
+    #ifdef HAVE_OPENEXR
+    case KoChannelInfo::FLOAT16 : return KoColorSpaceMathsTraits<half>::min;
+    #endif
+    case KoChannelInfo::FLOAT32 : return KoColorSpaceMathsTraits<float>::min;
+    case KoChannelInfo::FLOAT64 : return KoColorSpaceMathsTraits<double>::min;
+    case KoChannelInfo::INT8 : return 127;
+    case KoChannelInfo::INT16 : return KoColorSpaceMathsTraits<qint16>::min;
+    default: return 0;
+    }
+}
+
+double KisMathToolbox::maxChannelValue(KoChannelInfo *c)
+{
+    switch (c->channelValueType())
+    {
+    case KoChannelInfo::UINT8 : return KoColorSpaceMathsTraits<quint8>::max;
+    case KoChannelInfo::UINT16 : return KoColorSpaceMathsTraits<quint16>::max;
+    case KoChannelInfo::UINT32 : return KoColorSpaceMathsTraits<quint32>::max;
+    #ifdef HAVE_OPENEXR
+    case KoChannelInfo::FLOAT16 : return KoColorSpaceMathsTraits<half>::max;
+    #endif
+    case KoChannelInfo::FLOAT32 : return KoColorSpaceMathsTraits<float>::max;
+    case KoChannelInfo::FLOAT64 : return KoColorSpaceMathsTraits<double>::max;
+    case KoChannelInfo::INT8 : return -128;
+    case KoChannelInfo::INT16 : return KoColorSpaceMathsTraits<qint16>::max;
+    default: return 0;
     }
 }
 

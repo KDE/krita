@@ -35,6 +35,9 @@
 #pragma warning(disable: 4290) // disable "C++ exception specification ignored" warning
 #endif
 
+typedef double(*PtrToDouble)(const quint8*, int);
+typedef void (*PtrFromDouble)(quint8*, int, double);
+
 class KRITAIMAGE_EXPORT KisMathToolbox : public QObject
 {
 
@@ -110,6 +113,12 @@ public:
      * the buffer
      */
     virtual void fastWaveletUntransformation(KisPaintDeviceSP dst, const QRect&, KisWavelet* wav, KisWavelet* buff = 0) = 0;
+
+    bool getToDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector<PtrToDouble>& f);
+    bool getFromDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector<PtrFromDouble>& f);
+
+    double minChannelValue(KoChannelInfo *);
+    double maxChannelValue(KoChannelInfo *);
 
 signals:
 

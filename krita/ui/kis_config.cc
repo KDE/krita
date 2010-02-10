@@ -589,7 +589,7 @@ QString KisConfig::defaultPainterlyColorModelId()
 
 void KisConfig::setDefaultPainterlyColorModelId(const QString& def)
 {
-    m_cfg.writeEntry("defaultpainterlycolormodel", def);;
+    m_cfg.writeEntry("defaultpainterlycolormodel", def);
 }
 
 QString KisConfig::defaultPainterlyColorDepthId()
@@ -599,7 +599,7 @@ QString KisConfig::defaultPainterlyColorDepthId()
 
 void KisConfig::setDefaultPainterlyColorDepthId(const QString& def)
 {
-    m_cfg.writeEntry("defaultpainterlycolordepth", def);;
+    m_cfg.writeEntry("defaultpainterlycolordepth", def);
 }
 
 QString KisConfig::canvasState() const

@@ -29,6 +29,7 @@
 #include <kis_types.h>
 #include <kis_node.h>
 #include <kis_selection.h>
+#include <kis_selection_mask.h>
 #include <kis_layer.h>
 #include <kis_mask.h>
 #include <kis_image.h>
@@ -202,6 +203,13 @@ void KisNodeManager::moveNode(KisNodeSP node, KisNodeSP activeNode)
     KisNodeSP above;
 
     getNewNodeLocation(node->metaObject()->className(), parent, above, activeNode);
+    if (node->inherits("KisSelectionMask") && parent->inherits("KisLayer")) {
+        KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data());
+        KisLayer *l = dynamic_cast<KisLayer*>(parent.data());
+        KisSelectionMaskSP selMask = l->selectionMask();
+        if (m && m->active() && l && l->selectionMask())
+            selMask->setActive(false);
+    }
     m_d->commandsAdapter->moveNode(node, parent, above);
     node->setDirty(node->extent());
 }
@@ -209,6 +217,13 @@ void KisNodeManager::moveNode(KisNodeSP node, KisNodeSP activeNode)
 void KisNodeManager::moveNodeAt(KisNodeSP node, KisNodeSP parent, int index)
 {
     if (allowAsChild(parent->metaObject()->className(), node->metaObject()->className())) {
+        if (node->inherits("KisSelectionMask") && parent->inherits("KisLayer")) {
+            KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data());
+            KisLayer *l = dynamic_cast<KisLayer*>(parent.data());
+            KisSelectionMaskSP selMask = l->selectionMask();
+            if (m && m->active() && l && l->selectionMask())
+                selMask->setActive(false);
+        }
         m_d->commandsAdapter->moveNode(node, parent, index);
     }
 }

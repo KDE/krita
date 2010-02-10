@@ -513,7 +513,7 @@ void KisMaskManager::maskToBottom()
 
 void KisMaskManager::changeActivity(KisSelectionMask *mask,bool active)
 {
-    KisLayerSP layer = m_view->activeLayer();
+    KisLayer * layer = dynamic_cast<KisLayer*>(mask->parent().data());
 
     if (active && layer && layer->selectionMask())
         layer->selectionMask()->setActive(false);

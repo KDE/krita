@@ -9,6 +9,8 @@ set(kritalibbrush_LIB_SRCS
     kis_brush_registry.cpp
     kis_brush_server.cpp
     kis_gbr_brush.cpp
+    kis_abr_brush.cpp
+    kis_abr_brush_collection.cpp
     kis_imagepipe_brush.cpp
     kis_imagepipe_brush_p.cpp
     kis_qimage_mask.cpp

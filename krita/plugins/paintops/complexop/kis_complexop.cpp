@@ -68,6 +68,7 @@ KisComplexOp::KisComplexOp(const KisComplexOpSettings *settings, KisPainter *pai
     m_sizeOption.readOptionSetting(settings);
     m_darkenOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
+    m_bidiOption.readOptionSetting(settings);
 }
 
 KisComplexOp::~KisComplexOp()
@@ -139,7 +140,7 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
         brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
-    settings->m_options->m_bidiOption->applyFixed(dab, device, painter(), sx, sy, sw, sh, scale, dstRect);
+    m_bidiOption.applyFixed(dab, device, painter(), sx, sy, sw, sh, scale, dstRect);
 
     qDebug() << "ComplexOp blitting: " << dstRect;
     painter()->bltFixed(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);

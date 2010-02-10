@@ -30,7 +30,7 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
-#include <kis_bidirectional_mixing_option.h>
+#include <kis_bidirectional_mixing_option_widget.h>
 #include <kis_curve_option_widget.h>
 
 KisComplexOpSettingsWidget::KisComplexOpSettingsWidget(QWidget* parent)
@@ -39,7 +39,7 @@ KisComplexOpSettingsWidget::KisComplexOpSettingsWidget(QWidget* parent)
     setObjectName("mixing brush option widget");
 
     m_brushOption = new KisBrushOptionWidget;
-    m_bidiOption = new KisBidirectionalMixingOption;
+    m_bidiOption = new KisBidirectionalMixingOptionWidget;
 
     addPaintOpOption(m_brushOption);
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));

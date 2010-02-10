@@ -18,16 +18,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_BIDIRECTIONAL_MIXING_OPTION_H
-#define KIS_BIDIRECTIONAL_MIXING_OPTION_H
+#ifndef KIS_BIDIRECTIONAL_MIXING_OPTION_WIDGET_H
+#define KIS_BIDIRECTIONAL_MIXING_OPTION_WIDGET_H
 
 #include "kis_paintop_option.h"
 #include <kis_types.h>
 
 class KisPropertiesConfiguration;
 class QLabel;
-class KisPainter;
-class QRect;
+
+const QString BIDIRECTIONAL_MIXING_ENABLED = "BidirectionalMixing/Enabled";
 
 /**
  * The bidirectional mixing option uses the painterly framework to
@@ -37,20 +37,20 @@ class QRect;
  *
  * Taken from the complex paintop
  */
-class PAINTOP_EXPORT KisBidirectionalMixingOption
+class PAINTOP_EXPORT KisBidirectionalMixingOptionWidget : public KisPaintOpOption
 {
 public:
-    KisBidirectionalMixingOption();
+    KisBidirectionalMixingOptionWidget();
+    ~KisBidirectionalMixingOptionWidget();
 
-    ~KisBidirectionalMixingOption();
-
-    void apply(KisPaintDeviceSP dab, KisPaintDeviceSP device, KisPainter* painter, qint32 sx, qint32 sy, qint32 sw, qint32 sh, quint8 pressure, const QRect& dstRect);
-    void applyFixed(KisFixedPaintDeviceSP dab, KisPaintDeviceSP device, KisPainter* painter, qint32 sx, qint32 sy, qint32 sw, qint32 sh, quint8 pressure, const QRect& dstRect);
-
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    ///Reimplemented
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     
+    ///Reimplemented
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
+
 private:
-    bool m_mixingEnabled;
+    QLabel * m_optionWidget;
 };
 
 #endif

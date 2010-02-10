@@ -28,6 +28,7 @@
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
+#include <kis_bidirectional_mixing_option.h>
 
 class KisBrushOptionWidget;
 class KisPaintActionTypeOption;
@@ -55,6 +56,7 @@ private:
     KisPressureOpacityOption m_opacityOption;
     KisPressureDarkenOption m_darkenOption;
     KisPressureSizeOption m_sizeOption;
+    KisBidirectionalMixingOption m_bidiOption;
 };
 
 #endif // KIS_COMPLEXOP_H_

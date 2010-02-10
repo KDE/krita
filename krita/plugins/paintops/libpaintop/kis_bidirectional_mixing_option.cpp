@@ -31,15 +31,12 @@
 #include <kis_fixed_paint_device.h>
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
+#include "kis_bidirectional_mixing_option_widget.h"
 
 
 KisBidirectionalMixingOption::KisBidirectionalMixingOption()
-        : KisPaintOpOption(i18n("Mixing"), false)
+    : m_mixingEnabled(false)
 {
-    m_checkable = true;
-    m_optionWidget = new QLabel(i18n("The mixing option mixes the paint on the brush with that on the canvas."));
-    m_optionWidget->hide();
-    setConfigurationPage(m_optionWidget);
 }
 
 
@@ -49,7 +46,7 @@ KisBidirectionalMixingOption::~KisBidirectionalMixingOption()
 
 void KisBidirectionalMixingOption::apply(KisPaintDeviceSP dab, KisPaintDeviceSP device, KisPainter* painter, qint32 sx, qint32 sy, qint32 sw, qint32 sh, quint8 pressure, const QRect& dstRect)
 {
-    if (!isChecked()) return;
+    if (!m_mixingEnabled) return;
 
     KoColorSpace *cs = dab->colorSpace();
     KisPaintDeviceSP canvas = new KisPaintDevice(cs);
@@ -83,7 +80,9 @@ void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPain
     Q_UNUSED(sx);
     Q_UNUSED(sy);
 
-    if (!isChecked()) return;
+    kDebug() << "mixing " << m_mixingEnabled;
+    
+    if (!m_mixingEnabled) return;
 
     KisFixedPaintDevice canvas(device->colorSpace());
     canvas.setRect(QRect(dstRect.x(), dstRect.y(), sw, sh));
@@ -123,13 +122,8 @@ void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPain
 
 }
 
-void KisBidirectionalMixingOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
-{
-    setting->setProperty("BidirectionalMixing", isChecked());
-}
-
 void KisBidirectionalMixingOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    setChecked(setting->getBool("BidirectionalMixing", false));
+    m_mixingEnabled = setting->getBool(BIDIRECTIONAL_MIXING_ENABLED, false);
 }
 

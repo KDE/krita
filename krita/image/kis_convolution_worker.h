@@ -83,10 +83,14 @@ protected:
     QList<KoChannelInfo *> convolvableChannelList(const KisPaintDeviceSP src)
     {
         QBitArray painterChannelFlags = m_painter->channelFlags();
+        if (painterChannelFlags.isEmpty()) {
+            painterChannelFlags = QBitArray(4, true);
+        }
         QList<KoChannelInfo *> channelInfo = src->colorSpace()->channels();
         QList<KoChannelInfo *> convChannelList;
 
         for (qint32 c = 0; c < channelInfo.count(); ++c) {
+            qDebug() << channelInfo[c]->channelType();
             if (painterChannelFlags.testBit(channelInfo[c]->channelType())) {
                 convChannelList.append(channelInfo[c]);
             }

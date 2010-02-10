@@ -427,7 +427,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
             // set current filter region
             renderContext.setFilterRegion(subRegion & sourceGraphic.rect());
 
-            if (filterEffect->maximalInputCount() == 1) {
+            if (filterEffect->maximalInputCount() <= 1) {
                 QList<QString> inputs = filterEffect->inputs();
                 QString input = inputs.count() ? inputs.first() : QString();
                 // get input image from image buffers and apply the filter effect

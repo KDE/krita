@@ -145,16 +145,16 @@ QImage KoFilterEffect::processImages(const QList<QImage> &images, const KoFilter
 
 void KoFilterEffect::setRequiredInputCount(int count)
 {
-    d->requiredInputCount = qMax(1,count);
+    d->requiredInputCount = qMax(0,count);
     for (int i = d->inputs.count(); i < d->requiredInputCount; ++i)
         d->inputs.append(QString());
 }
 
 void KoFilterEffect::setMaximalInputCount(int count)
 {
-    d->maximalInputCount = qMax(1,count);
+    d->maximalInputCount = qMax(0,count);
     if (d->inputs.count() > maximalInputCount()) {
-        int removeCount = maximalInputCount()-d->inputs.count();
+        int removeCount = d->inputs.count()-maximalInputCount();
         for (int i = 0; i < removeCount; ++i)
             d->inputs.pop_back();
     }

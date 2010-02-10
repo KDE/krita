@@ -250,7 +250,7 @@ private:
     /**
      * Set the parent of this node.
      */
-    void setParent(KisNodeSP parent);
+    void setParent(KisNodeWSP parent);
 
     /**
      * Add the specified node above the specified node. If aboveThis

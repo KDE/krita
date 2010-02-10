@@ -122,7 +122,7 @@ KisNodeSP KisNode::parent() const
     return m_d->parent;
 }
 
-void KisNode::setParent(KisNodeSP parent)
+void KisNode::setParent(KisNodeWSP parent)
 {
     m_d->parent = parent;
 }

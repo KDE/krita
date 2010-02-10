@@ -414,15 +414,14 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         imageBuffers.insert(QString(), sourceGraphic);
         imageBuffers.insert("SourceAlpha", sourceAlpha);
 
-        QMatrix coordTransform = QMatrix().scale(shapeBound.width(), shapeBound.height());
         KoFilterEffectRenderContext renderContext(converter);
-        renderContext.setCoordinateTransformation(coordTransform);
+        renderContext.setShapeBoundingBox(shapeBound);
 
         QImage result;
         QList<KoFilterEffect*> filterEffects = shape->filterEffectStack()->filterEffects();
         // Filter
         foreach(KoFilterEffect* filterEffect, filterEffects) {
-            QRectF filterRegion = filterEffect->filterRectForBoundingRect(clipRegion);
+            QRectF filterRegion = filterEffect->filterRectForBoundingRect(shapeBound);
             filterRegion = converter.documentToView(filterRegion);
             QRect subRegion = filterRegion.translated(-clippingOffset).toRect();
             // set current filter region

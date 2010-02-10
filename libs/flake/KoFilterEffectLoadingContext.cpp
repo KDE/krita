@@ -27,8 +27,13 @@
 class KoFilterEffectLoadingContext::Private
 {
 public:
+    Private()
+        : convertFilterUnits(false), convertFilterPrimitiveUnits(false)
+    {}
     QString basePath;
     QRectF shapeBound;
+    bool convertFilterUnits;
+    bool convertFilterPrimitiveUnits;
 };
 
 KoFilterEffectLoadingContext::KoFilterEffectLoadingContext(const QString &basePath)
@@ -47,22 +52,59 @@ void KoFilterEffectLoadingContext::setShapeBoundingBox(const QRectF &shapeBound)
     d->shapeBound = shapeBound;
 }
 
-QPointF KoFilterEffectLoadingContext::fromUserSpace(const QPointF &value) const
+void KoFilterEffectLoadingContext::enableFilterUnitsConversion(bool enable)
 {
-    return QPointF(fromUserSpaceX(value.x()), fromUserSpaceY(value.y()));
+    d->convertFilterUnits = enable;
 }
 
-qreal KoFilterEffectLoadingContext::fromUserSpaceX(qreal value) const
+void KoFilterEffectLoadingContext::enableFilterPrimitiveUnitsConversion(bool enable)
 {
-    if (!d->shapeBound.width())
+    d->convertFilterPrimitiveUnits = enable;
+}
+
+QPointF KoFilterEffectLoadingContext::convertFilterUnits(const QPointF &value) const
+{
+    if (!d->convertFilterUnits)
+        return value;
+
+    return QPointF(convertFilterUnitsX(value.x()), convertFilterUnitsY(value.y()));
+}
+
+qreal KoFilterEffectLoadingContext::convertFilterUnitsX(qreal value) const
+{
+    if (!d->convertFilterUnits)
         return value;
 
     return value / d->shapeBound.width();
 }
 
-qreal KoFilterEffectLoadingContext::fromUserSpaceY(qreal value) const
+qreal KoFilterEffectLoadingContext::convertFilterUnitsY(qreal value) const
 {
-    if (!d->shapeBound.height())
+    if (!d->convertFilterUnits)
+        return value;
+
+    return value / d->shapeBound.height();
+}
+
+QPointF KoFilterEffectLoadingContext::convertFilterPrimitiveUnits(const QPointF &value) const
+{
+    if (!d->convertFilterPrimitiveUnits)
+        return value;
+
+    return QPointF(convertFilterPrimitiveUnitsX(value.x()), convertFilterPrimitiveUnitsY(value.y()));
+}
+
+qreal KoFilterEffectLoadingContext::convertFilterPrimitiveUnitsX(qreal value) const
+{
+    if (!d->convertFilterPrimitiveUnits)
+        return value;
+
+    return value / d->shapeBound.width();
+}
+
+qreal KoFilterEffectLoadingContext::convertFilterPrimitiveUnitsY(qreal value) const
+{
+    if (!d->convertFilterPrimitiveUnits)
         return value;
 
     return value / d->shapeBound.height();

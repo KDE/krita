@@ -47,14 +47,28 @@ public:
      */
     void setShapeBoundingBox(const QRectF &shapeBound);
 
-    /// Converts an point value from user space to bounding box coordinates
-    QPointF fromUserSpace(const QPointF &value) const;
+    /// Enables conversion of filter units
+    void enableFilterUnitsConversion(bool enable);
+
+    /// Enables conversion of filter primitive units
+    void enableFilterPrimitiveUnitsConversion(bool enable);
+
+    /// Converts a point value from user space to bounding box coordinates
+    QPointF convertFilterUnits(const QPointF &value) const;
 
     /// Converts an x value from user space to bounding box coordinates
-    qreal fromUserSpaceX(qreal value) const;
+    qreal convertFilterUnitsX(qreal value) const;
 
     /// Converts an y value from user space to bounding box coordinates
-    qreal fromUserSpaceY(qreal value) const;
+    qreal convertFilterUnitsY(qreal value) const;
+
+    QPointF convertFilterPrimitiveUnits(const QPointF &value) const;
+
+    /// Converts an x value from user space to bounding box coordinates
+    qreal convertFilterPrimitiveUnitsX(qreal value) const;
+
+    /// Converts an y value from user space to bounding box coordinates
+    qreal convertFilterPrimitiveUnitsY(qreal value) const;
 
     /// Converts a href to an absolute path name
     QString pathFromHref(const QString &href) const;

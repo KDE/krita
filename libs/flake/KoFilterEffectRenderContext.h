@@ -23,7 +23,7 @@
 #include "flake_export.h"
 
 class QRectF;
-class QMatrix;
+class QPointF;
 class KoViewConverter;
 
 /// This class provides the render context for filter effects
@@ -39,11 +39,17 @@ public:
     /// Sets the filter region the filter is applied to
     void setFilterRegion(const QRectF &filterRegion);
 
-    /// Transformation used to transform to document coordinates
-    QMatrix coordinateTransformation() const;
+    /// Sets the shape bounding box used to convert to user space coordinates
+    void setShapeBoundingBox(const QRectF &bound);
 
-    /// Sets the coordinate transformation matrix
-    void setCoordinateTransformation(const QMatrix &transform);
+    /// Converts point from bounding box coordinates to user space coordinates
+    QPointF toUserSpace(const QPointF &value) const;
+
+    /// Converts x-coordinate from bounding box coordinates to user space coordinates
+    qreal toUserSpaceX(qreal value) const;
+
+    /// Converts y-coordinate from bounding box coordinates to user space coordinates
+    qreal toUserSpaceY(qreal value) const;
 
     /// Returns the view converter
     const KoViewConverter *viewConverter() const;

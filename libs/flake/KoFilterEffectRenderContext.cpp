@@ -31,7 +31,7 @@ public:
     {}
 
     QRectF filterRegion;
-    QMatrix transform;
+    QRectF shapeBound;
     const KoViewConverter & converter;
 };
 
@@ -55,14 +55,24 @@ void KoFilterEffectRenderContext::setFilterRegion(const QRectF &filterRegion)
     d->filterRegion = filterRegion;
 }
 
-QMatrix KoFilterEffectRenderContext::coordinateTransformation() const
+void KoFilterEffectRenderContext::setShapeBoundingBox(const QRectF &bound)
 {
-    return d->transform;
+    d->shapeBound = bound;
 }
 
-void KoFilterEffectRenderContext::setCoordinateTransformation(const QMatrix &transform)
+QPointF KoFilterEffectRenderContext::toUserSpace(const QPointF &value) const
 {
-    d->transform = transform;
+    return QPointF(value.x()*d->shapeBound.width(), value.y()*d->shapeBound.height());
+}
+
+qreal KoFilterEffectRenderContext::toUserSpaceX(qreal value) const
+{
+    return value * d->shapeBound.width();
+}
+
+qreal KoFilterEffectRenderContext::toUserSpaceY(qreal value) const
+{
+    return value * d->shapeBound.height();
 }
 
 const KoViewConverter * KoFilterEffectRenderContext::viewConverter() const

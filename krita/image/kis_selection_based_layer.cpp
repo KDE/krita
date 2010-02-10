@@ -62,7 +62,7 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
 
 KisSelectionBasedLayer::KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs)
         : KisLayer(rhs)
-        , KisIndirectPaintingSupport(rhs)
+        , KisIndirectPaintingSupport()
         , KisNodeFilterInterface(rhs)
         , m_d(new Private())
 {

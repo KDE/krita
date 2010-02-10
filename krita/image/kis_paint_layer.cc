@@ -76,7 +76,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
         : KisLayer(rhs)
-        , KisIndirectPaintingSupport(rhs)
+        , KisIndirectPaintingSupport()
         , m_d(new Private)
 {
     m_d->alphaLocked = rhs.m_d->alphaLocked;

@@ -254,7 +254,8 @@ private:
  */
 class KRITAIMAGE_EXPORT KisIndirectPaintingSupport
 {
-
+    KisIndirectPaintingSupport(const KisIndirectPaintingSupport&);
+    KisIndirectPaintingSupport& operator=(const KisIndirectPaintingSupport&);
 public:
 
     KisIndirectPaintingSupport();

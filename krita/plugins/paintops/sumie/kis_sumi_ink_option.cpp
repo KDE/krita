@@ -45,6 +45,7 @@ KisSumiInkOption::KisSumiInkOption()
     connect(m_options->bristleInkAmountSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->inkDepletionSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->inkCurve, SIGNAL(modified()),SIGNAL(sigSettingChanged()));
+    connect(m_options->soakInkCBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     
     setConfigurationPage(m_options);
 }
@@ -66,6 +67,7 @@ void KisSumiInkOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_options->bristleInkAmountSlider->setValue(settings->getInt(SUMI_INK_BRISTLE_INK_AMOUNT_WEIGHT));
     m_options->inkDepletionSlider->setValue(settings->getInt(SUMI_INK_DEPLETION_WEIGHT));
     m_options->inkCurve->setCurve(settings->getCubicCurve(SUMI_INK_DEPLETION_CURVE));
+    m_options->soakInkCBox->setChecked(settings->getBool(SUMI_INK_SOAK));
 }
 
 void KisSumiInkOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
@@ -85,6 +87,7 @@ void KisSumiInkOption::writeOptionSetting(KisPropertiesConfiguration* settings) 
     settings->setProperty(SUMI_INK_BRISTLE_INK_AMOUNT_WEIGHT, bristleInkAmountWeight());
     settings->setProperty(SUMI_INK_DEPLETION_WEIGHT, inkDepletionWeight());
     settings->setProperty(SUMI_INK_DEPLETION_CURVE, qVariantFromValue(m_options->inkCurve->curve()));
+    settings->setProperty(SUMI_INK_SOAK,m_options->soakInkCBox->isChecked());
 }
 
 

@@ -87,6 +87,7 @@ void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
     m_properties.bristleLengthWeight = settings->getDouble(SUMI_INK_BRISTLE_LENGTH_WEIGHT) / 100.0;
     m_properties.bristleInkAmountWeight = settings->getDouble(SUMI_INK_BRISTLE_INK_AMOUNT_WEIGHT) / 100.0;
     m_properties.inkDepletionWeight = settings->getDouble(SUMI_INK_DEPLETION_WEIGHT);
+    m_properties.useSoakInk = settings->getBool(SUMI_INK_SOAK);
 
     m_properties.shearFactor = settings->getDouble(SUMI_SHEAR);
     m_properties.randomFactor = settings->getDouble(SUMI_RANDOM);
@@ -102,6 +103,7 @@ void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
         brushShape.tresholdBristles(0.1);
     }
     m_brush.setBrushShape(brushShape);
+    
 }
 
 
@@ -118,6 +120,7 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     time.start();
 #endif
 
+    // spacing is ignored in sumi-e, maybe todo
     Q_UNUSED(savedDist);
 
     if (!painter()) return 0;
@@ -127,7 +130,6 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     } else {
         m_dab->clear();
     }
-
     m_brush.paintLine(m_dab, m_dev, pi1, pi2);
 
     //QRect rc = m_dab->exactBounds();

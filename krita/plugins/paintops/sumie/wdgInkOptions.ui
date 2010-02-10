@@ -73,6 +73,22 @@
      </widget>
     </item>
     <item>
+     <widget class="QCheckBox" name="soakInkCBox">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="toolTip">
+       <string>Soak ink from the initial position of the stroke</string>
+      </property>
+      <property name="text">
+       <string>Soak ink</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>

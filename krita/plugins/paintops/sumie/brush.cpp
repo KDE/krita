@@ -34,6 +34,7 @@
 #include <ctime>
 
 const float radToDeg = 57.29578f;
+const float _180_DEGREES = M_PI * 0.5;
 
 #if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand
@@ -122,7 +123,12 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     KoColorTransformation* transfo;
     transfo = m_dev->colorSpace()->createColorTransformation("hsv_adjustment", params);
 
-    rotateBristles(angle + 1.57);
+    rotateBristles(angle + _180_DEGREES);
+    // if this is first time the brush touches the canvas and we use soak the ink from canvas
+    if ((m_counter == 1) && m_properties->useSoakInk){
+        colorifyBristles(laccessor,layer->colorSpace() ,pi1.pos());
+    }
+
     int ix1, iy1, ix2, iy2;
 
     int size = m_bristles.size();
@@ -468,6 +474,8 @@ void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow, double
 }
 
 
+
+
 void Brush::putBristle(Bristle *bristle, float wx, float wy, const KoColor &color)
 {
     m_dabAccessor->moveTo((int)wx, (int)wy);
@@ -529,5 +537,25 @@ double Brush::computeMousePressure(double distance)
     double result = ((4.0 * oldPressure) + minPressure + factor) / 5.0;
     m_oldPressure = result;
     return result;
+}
+
+
+void Brush::colorifyBristles(KisRandomAccessor& acc, KoColorSpace * cs, QPointF point)
+{
+    QPoint p = point.toPoint();
+    KoColor color(cs);
+    int pixelSize = cs->pixelSize();
+
+    Bristle *b = 0;
+    int size = m_bristles.size();
+    for (int i = 0; i < size; i++){
+        b = &m_bristles[i];
+        int x = qRound(b->x() + point.x());
+        int y = qRound(b->y() + point.y());
+        acc.moveTo(x,y);
+        memcpy(color.data(),acc.rawData(),pixelSize);
+        b->setColor(color);
+    }
+    
 }
 

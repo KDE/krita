@@ -32,6 +32,8 @@
 #include <kis_paint_information.h>
 #include <kis_random_accessor.h>
 
+class KoColorSpace;
+
 class KisSumiProperties{
 public:
     quint16 radius;
@@ -44,6 +46,8 @@ public:
     bool useOpacity;
     bool useWeights;
 
+    bool useSoakInk;
+    
     quint8 pressureWeight;
     quint8 bristleLengthWeight;
     quint8 bristleInkAmountWeight;
@@ -52,6 +56,7 @@ public:
     qreal shearFactor;
     qreal randomFactor;
     qreal scaleFactor;
+    
 };
 
 class Brush
@@ -77,6 +82,9 @@ public:
     void addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
     void oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
 
+    /// similar to sample input color in spray
+    void colorifyBristles(KisRandomAccessor& acc, KoColorSpace * cs, QPointF point);
+    
 private:
     const KisSumiProperties * m_properties;
     

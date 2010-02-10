@@ -29,6 +29,7 @@ const QString SUMI_INK_BRISTLE_LENGTH_WEIGHT = "SumiInk/bristleLengthWeights";
 const QString SUMI_INK_BRISTLE_INK_AMOUNT_WEIGHT = "SumiInk/bristleInkAmountWeight";
 const QString SUMI_INK_DEPLETION_WEIGHT = "SumiInk/inkDepletionWeight";
 const QString SUMI_INK_DEPLETION_CURVE = "SumiInk/inkDepletionCurve";
+const QString SUMI_INK_SOAK = "SumiInk/soak";
 
 class KisInkOptionsWidget;
 

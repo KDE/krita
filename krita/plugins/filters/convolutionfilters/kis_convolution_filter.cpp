@@ -60,11 +60,17 @@ void KisConvolutionFilter::process(KisConstProcessingInformation srcInfo,
     KisConvolutionPainter painter(dst, dstInfo.selection());
 
     QBitArray channelFlags;
-    if (config) channelFlags = config->channelFlags();
-    if (channelFlags.isEmpty()) {
-        channelFlags = dst->colorSpace()->channelFlags();
+    if (config) {
+        channelFlags = config->channelFlags();
     }
+    if (channelFlags.isEmpty() || !config) {
+        channelFlags = QBitArray(src->colorSpace()->channelCount(), true);
+    }
+ 
+    // disable alpha channel
+    channelFlags.clearBit(1);
 
+    painter.setChannelFlags(channelFlags);
     painter.setProgress(progressUpdater);
     painter.applyMatrix(m_matrix, src, srcTopLeft, dstTopLeft, size, BORDER_REPEAT);
 
@@ -73,4 +79,9 @@ void KisConvolutionFilter::process(KisConstProcessingInformation srcInfo,
 int KisConvolutionFilter::overlapMarginNeeded(const KisFilterConfiguration* /*c*/) const
 {
     return qMax(m_matrix->width() / 2, m_matrix->height() / 2);
+}
+
+void KisConvolutionFilter::setIgnoreAlpha(bool v)
+{
+    m_ignoreAlpha = v;
 }

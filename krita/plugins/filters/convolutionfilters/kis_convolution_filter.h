@@ -42,8 +42,11 @@ public:
                 ) const;
     virtual int overlapMarginNeeded(const KisFilterConfiguration* c) const;
 protected:
+    void setIgnoreAlpha(bool v);
 
+protected:
     KisConvolutionKernelSP m_matrix;
+    bool m_ignoreAlpha;
 };
 
 #endif

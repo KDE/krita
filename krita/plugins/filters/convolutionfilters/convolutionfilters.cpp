@@ -102,7 +102,8 @@ KisEmbossLaplascianFilter::KisEmbossLaplascianFilter()
                      0, 4,  0,
                     -1, 0, -1;
 
-    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 127, 1);
+    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
+    setIgnoreAlpha(true);
 }
 
 KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter()
@@ -115,7 +116,8 @@ KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter()
                     -1,  8, -1,
                     -1, -1, -1;
 
-    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 127, 1);
+    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
+    setIgnoreAlpha(true);
 }
 
 KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter()
@@ -128,7 +130,8 @@ KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter()
                     -1,  4, -1,
                      0, -1,  0;
 
-    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 127, 1);
+    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
+    setIgnoreAlpha(true);
 }
 
 KisEmbossVerticalFilter::KisEmbossVerticalFilter()
@@ -141,7 +144,8 @@ KisEmbossVerticalFilter::KisEmbossVerticalFilter()
                     0,  2, 0,
                     0, -1, 0;
 
-    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 127, 1);
+    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
+    setIgnoreAlpha(true);
 }
 
 KisEmbossHorizontalFilter::KisEmbossHorizontalFilter() :
@@ -154,7 +158,8 @@ KisEmbossHorizontalFilter::KisEmbossHorizontalFilter() :
                     -1, 2, -1,
                      0, 0,  0;
 
-    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 127, 1);
+    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
+    setIgnoreAlpha(true);
 }
 
 KisEmbossDiagonalFilter::KisEmbossDiagonalFilter()
@@ -167,7 +172,8 @@ KisEmbossDiagonalFilter::KisEmbossDiagonalFilter()
                      0, 4,  0,
                     -1, 0, -1;
 
-    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 127, 1);
+    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
+    setIgnoreAlpha(true);
 }
 
 
@@ -181,7 +187,8 @@ KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter()
                      0,  0,  0,
                     -1, -1, -1;
 
-    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 127, 1);
+    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
+    setIgnoreAlpha(true);
 }
 
 KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter()
@@ -194,7 +201,8 @@ KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter()
                     -1, 0, 1,
                     -1, 0, 1;
 
-    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 127, 1);
+    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
+    setIgnoreAlpha(true);
 }
 
 KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter() : KisConvolutionFilter(id(), categoryEdgeDetection(), i18n("Bottom Edge Detection"))
@@ -206,7 +214,8 @@ KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter() : KisConvolutionFil
                      0,  0,  0,
                      1,  1,  1;
 
-    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 127, 1);
+    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
+    setIgnoreAlpha(true);
 }
 
 KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter() : KisConvolutionFilter(id(), categoryEdgeDetection(), i18n("Left Edge Detection"))
@@ -218,5 +227,6 @@ KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter() : KisConvolutionFilter(
                     1, 0, -1,
                     1, 0, -1;
 
-    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 127, 1);
+    m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
+    setIgnoreAlpha(true);
 }

@@ -56,7 +56,14 @@
 
 #include "kis_selection.h"
 
-#include "kis_convolution_painter_impl.h"
+#include "kis_convolution_worker.h"
+#include "kis_convolution_worker_spatial.h"
+
+#include "config_convolution.h"
+
+#ifdef HAVE_FFTW3
+#include "kis_convolution_worker_fft.h"
+#endif
 
 
 KisConvolutionPainter::KisConvolutionPainter()
@@ -93,13 +100,29 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
          * o check other cases of the switch for the vulnerability
          */
 
-        if(dataRect.isValid())
-            applyMatrixImpl<RepeatIteratorFactory>(kernel, src, srcPos, dstPos, areaSize, dataRect);
+        if(dataRect.isValid()) {
+            KisConvolutionWorker<RepeatIteratorFactory> *worker;
+            #ifdef HAVE_FFTW3
+            worker = new KisConvolutionWorkerFFT<RepeatIteratorFactory>(this, progressUpdater());
+            #else
+            worker = new KisConvolutionWorkerSpatial<RepeatIteratorFactory>(this, progressUpdater());
+            #endif
+            worker->execute(kernel, src, srcPos, dstPos, areaSize, dataRect);
+            delete worker;
+        }
+        break;
     }
     return;
     case BORDER_DEFAULT_FILL : {
-        applyMatrixImpl<StandardIteratorFactory>(kernel, src, srcPos, dstPos, areaSize, QRect());
-        return;
+        KisConvolutionWorker<StandardIteratorFactory> *worker;
+        #ifdef HAVE_FFTW3
+        worker = new KisConvolutionWorkerFFT<StandardIteratorFactory>(this, progressUpdater());
+        #else
+        worker = new KisConvolutionWorkerSpatial<StandardIteratorFactory>(this, progressUpdater());
+        #endif
+        worker->execute(kernel, src, srcPos, dstPos, areaSize, QRect());
+        delete worker;
+        break;
     }
     case BORDER_WRAP: {
         qFatal("Not implemented");
@@ -113,7 +136,15 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
         srcPos += tr;
         dstPos += tr;
         areaSize -= QSize(kw - 1, kh - 1);
-        applyMatrixImpl<StandardIteratorFactory>(kernel, src, srcPos, dstPos, areaSize, QRect());
+
+        KisConvolutionWorker<StandardIteratorFactory> *worker;
+        #ifdef HAVE_FFTW3
+        worker = new KisConvolutionWorkerFFT<StandardIteratorFactory>(this, progressUpdater());
+        #else
+        worker = new KisConvolutionWorkerSpatial<StandardIteratorFactory>(this, progressUpdater());
+        #endif
+        worker->execute(kernel, src, srcPos, dstPos, areaSize, QRect());
+        delete worker;
     }
     }
 }

@@ -13,16 +13,16 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-tiles.h.cmake ${CMAKE_CURRENT_
 
 if(USE_TILESYSTEM EQUAL 1)
 set(libkritatile_SRCS
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiled_random_accessor.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledvlineiterator.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledhlineiterator.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tileddatamanager.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tile.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tilediterator.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledrectiterator.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_memento.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tilemanager.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tile_compressor.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiled_random_accessor.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledvlineiterator.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledhlineiterator.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tileddatamanager.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tile.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tilediterator.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledrectiterator.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_memento.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tilemanager.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tile_compressor.cc
 )
 add_subdirectory( tiles )
 elseif(USE_TILESYSTEM EQUAL 3)
@@ -31,13 +31,13 @@ set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data_store.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data_pooler.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_data_manager.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_memento_manager.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tilediterator.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledrectiterator.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledvlineiterator.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledhlineiterator.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_random_accessor.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_data_manager.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_memento_manager.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tilediterator.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledrectiterator.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledvlineiterator.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledhlineiterator.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_random_accessor.cc
 )
 add_subdirectory( tiles3 )
 endif(USE_TILESYSTEM EQUAL 1)
@@ -45,6 +45,11 @@ endif(USE_TILESYSTEM EQUAL 1)
 option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in release build)" ON)
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
+
+macro_optional_find_package(FFTW3)
+macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
+macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
 
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
                      ${CMAKE_SOURCE_DIR}/krita/image/metadata
@@ -198,6 +203,10 @@ if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})
 endif(OPENEXR_FOUND)
 
+if(FFTW3_FOUND)
+  target_link_libraries(kritaimage  ${FFTW3_LIBRARIES})
+endif(FFTW3_FOUND)
+
 
 set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
@@ -223,6 +232,7 @@ install( FILES
     kis_config_widget.h
     kis_convolution_kernel.h
     kis_convolution_painter.h
+    kis_convolution_worker.h
     kis_debug.h
     kis_filter_strategy.h
     kis_generic_colorspace.h

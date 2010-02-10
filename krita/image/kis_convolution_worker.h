@@ -90,7 +90,6 @@ protected:
         QList<KoChannelInfo *> convChannelList;
 
         for (qint32 c = 0; c < channelInfo.count(); ++c) {
-            qDebug() << channelInfo[c]->channelType();
             if (painterChannelFlags.testBit(channelInfo[c]->channelType())) {
                 convChannelList.append(channelInfo[c]);
             }

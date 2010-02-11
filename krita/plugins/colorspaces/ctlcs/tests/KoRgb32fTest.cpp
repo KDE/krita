@@ -47,14 +47,14 @@ void KoRgb32fTest::testChannels()
     QCOMPARE(channels[0]->channelValueType(), KoChannelInfo::FLOAT32);
 //     QCOMPARE(channels[0]->color(), Qt::red);
     QCOMPARE(channels[0]->name(), QString("Red"));
-    QCOMPARE(channels[0]->pos(), 2);
+    QCOMPARE(channels[0]->pos(), 8);
     QCOMPARE(channels[0]->size(), 4);
     // Green
     QCOMPARE(channels[1]->channelType(), KoChannelInfo::COLOR);
     QCOMPARE(channels[1]->channelValueType(), KoChannelInfo::FLOAT32);
 //     QCOMPARE(channels[1]->color(), Qt::green);
     QCOMPARE(channels[1]->name(), QString("Green"));
-    QCOMPARE(channels[1]->pos(), 1);
+    QCOMPARE(channels[1]->pos(), 4);
     QCOMPARE(channels[1]->size(), 4);
     // Blue
     QCOMPARE(channels[2]->channelType(), KoChannelInfo::COLOR);
@@ -68,7 +68,7 @@ void KoRgb32fTest::testChannels()
     QCOMPARE(channels[3]->channelValueType(), KoChannelInfo::FLOAT32);
 //     QCOMPARE(channels[3]->color(), Qt::red);
     QCOMPARE(channels[3]->name(), QString("Alpha"));
-    QCOMPARE(channels[3]->pos(), 3);
+    QCOMPARE(channels[3]->pos(), 12);
     QCOMPARE(channels[3]->size(), 4);
 }
 

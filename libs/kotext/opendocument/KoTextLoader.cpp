@@ -530,7 +530,6 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 
         d->currentList = d->list(cursor.block().document(), listStyle);
         d->currentListStyle = listStyle;
-
         level = d->currentListLevel++;
     }
 

@@ -325,7 +325,7 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
             switch (bulletChar[0].unicode()) {
             case 0x2022: // bullet, a small disc -> circle
                 //TODO use BulletSize to differ between small and large discs
-                setStyle(KoListStyle::CircleItem);
+                setStyle(KoListStyle::DiscItem);
                 break;
             case 0x25CF: // black circle, large disc -> disc
             case 0xF0B7: // #113361
@@ -504,14 +504,13 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer) const
             bullet = d->stylesPrivate.value(KoListStyle::BulletCharacter).toInt();
         } else { // try to determine the bullet character from the style
             switch (style()) {
-            case KoListStyle::CircleItem:           bullet = 0x2022; break;
+            case KoListStyle::DiscItem:             bullet = 0x2022; break;
             case KoListStyle::RhombusItem:          bullet = 0xE00C; break;
             case KoListStyle::SquareItem:           bullet = 0xE00A; break;
             case KoListStyle::RightArrowHeadItem:   bullet = 0x27A2; break;
             case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
             case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
             case KoListStyle::BallotXItem:          bullet = 0x2717; break;
-            case KoListStyle::DiscItem: // intentional fall through
             default:                                bullet = 0x25CF; break;
             }
         }

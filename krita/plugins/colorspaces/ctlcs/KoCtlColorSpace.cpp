@@ -56,7 +56,7 @@ KoCtlColorSpace::KoCtlColorSpace(const KoCtlColorSpaceInfo* info, const KoCtlCol
         d->ctlChannels.push_back(0);
     }
     foreach(const KoCtlColorSpaceInfo::ChannelInfo* cinfo, info->channels()) {
-        addChannel(new KoChannelInfo(cinfo->name(), cinfo->index(), cinfo->channelType(), cinfo->valueType(), cinfo->size(), cinfo->color()));
+        addChannel(new KoChannelInfo(cinfo->name(), cinfo->position(), cinfo->channelType(), cinfo->valueType(), cinfo->size(), cinfo->color()));
         KoCtlChannel* ctlchannel = 0;
 
         switch (cinfo->valueType()) {

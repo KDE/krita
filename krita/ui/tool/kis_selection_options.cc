@@ -63,6 +63,21 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * canvas)
 
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SIGNAL(modeChanged(int)));
     connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));
+
+    //hide action buttons and antialiasing, if shape selection is active (actions currently don't work on shape selection)
+    connect(m_page->shape, SIGNAL(clicked()), m_page->lblAction, SLOT(hide()));
+    connect(m_page->shape, SIGNAL(clicked()), m_page->add,       SLOT(hide()));
+    connect(m_page->shape, SIGNAL(clicked()), m_page->subtract,  SLOT(hide()));
+    connect(m_page->shape, SIGNAL(clicked()), m_page->replace,   SLOT(hide()));
+    connect(m_page->shape, SIGNAL(clicked()), m_page->intersect, SLOT(hide()));
+    connect(m_page->shape, SIGNAL(clicked()), m_page->chkAntiAliasing, SLOT(hide()));
+
+    connect(m_page->pixel, SIGNAL(clicked()), m_page->lblAction, SLOT(show()));
+    connect(m_page->pixel, SIGNAL(clicked()), m_page->add,       SLOT(show()));
+    connect(m_page->pixel, SIGNAL(clicked()), m_page->subtract,  SLOT(show()));
+    connect(m_page->pixel, SIGNAL(clicked()), m_page->replace,   SLOT(show()));
+    connect(m_page->pixel, SIGNAL(clicked()), m_page->intersect, SLOT(show()));
+    connect(m_page->pixel, SIGNAL(clicked()), m_page->chkAntiAliasing, SLOT(show()));
 }
 
 KisSelectionOptions::~KisSelectionOptions()
@@ -88,6 +103,7 @@ bool KisSelectionOptions::antiAliasSelection()
 void KisSelectionOptions::disableAntiAliasSelectionOption()
 {
     m_page->chkAntiAliasing->hide();
+    disconnect(m_page->pixel, SIGNAL(clicked()), m_page->chkAntiAliasing, SLOT(show()));
 }
 
 void KisSelectionOptions::disableSelectionModeOption()

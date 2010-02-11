@@ -96,8 +96,8 @@ void KisToolSelectElliptical::LocalTool::finishEllipse(const QRectF &rect)
         QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
         canvas()->addCommand(cmd);
     } else {
-        QRectF rect = convertToPt(rect);
-        KoShape* shape = KisShapeToolHelper::createEllipseShape(rect);
+        QRectF ptRect = convertToPt(rect);
+        KoShape* shape = KisShapeToolHelper::createEllipseShape(ptRect);
 
         helper.addSelectionShape(shape);
     }

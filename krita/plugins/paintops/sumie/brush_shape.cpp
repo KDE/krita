@@ -116,7 +116,7 @@ void BrushShape::fromLine(int radius, float sigma)
     float length;
     for (int x = -radius; x <= radius; x++) {
         length = exp(x * x / sigmaSquare) * sigmaConst;
-        Bristle b(x , 0.0f , length);
+        Bristle b(0.0 , x , length);
         m_bristles.append(b);
     }
 
@@ -188,8 +188,8 @@ float BrushShape::sigma()
 void BrushShape::tresholdBristles(double treshold)
 {
     for (int i = 0; i < m_bristles.size(); i++) {
-        if (m_bristles[i].length() < treshold) {
-            m_bristles.remove(i);
+        if (m_bristles.at(i).length() < treshold) {
+            m_bristles[i].setEnabled(false);
         }
     }
 }

@@ -34,6 +34,7 @@ void Bristle::init(float x, float y, float length)
     m_y = y;
     m_length = length;
     m_counter = 0;
+    m_enabled = true;
 }
 
 Bristle::~Bristle()
@@ -72,3 +73,8 @@ void Bristle::setColor(const KoColor &color)
     m_color = color;
 }
 
+
+void Bristle::setEnabled(bool enabled)
+{
+    m_enabled = enabled;
+}

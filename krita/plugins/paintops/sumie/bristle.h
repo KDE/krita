@@ -30,23 +30,23 @@ public:
     Bristle();
     ~Bristle();
 
-    inline float x() {
+    inline float x() const{
         return m_x;
     }
 
-    inline float y() {
+    inline float y() const{
         return m_y;
     }
 
-    inline float length() {
+    inline float length() const{
         return m_length;
     }
 
-    inline  KoColor color() {
+    inline  const KoColor &color() const{
         return m_color;
     }
 
-    inline int increment() {
+    inline int increment() const{
         return m_counter;
     }
 
@@ -54,7 +54,7 @@ public:
         m_counter++;
     }
 
-    inline float inkAmount() {
+    inline float inkAmount() const{
         return m_inkAmount;
     };
 
@@ -69,13 +69,19 @@ public:
         m_y = y;
     }
 
+    inline bool enabled() const{
+        return m_enabled;
+    }
+    
     void setLength(float length);
     void setColor(const KoColor &color);
 
     void addInk(float value);
     void removeInk(float value);
     void setInkAmount(float inkAmount);
-
+    void setEnabled(bool enabled);
+    
+    
 private:
     void init(float x, float y, float length);
 
@@ -89,6 +95,7 @@ private:
     // new dimension in bristle
     int m_counter;
 
+    bool m_enabled;
 };
 
 #endif

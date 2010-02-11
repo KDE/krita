@@ -25,8 +25,6 @@
 #include <kis_paintop_factory.h>
 #include <kis_types.h>
 
-//#define BENCHMARK
-
 #include "brush.h"
 
 #include "kis_sumi_paintop_settings.h"
@@ -64,12 +62,6 @@ private:
     Brush m_brush;
 
     void loadSettings(const KisSumiPaintOpSettings* settings);
-    
-#ifdef BENCHMARK
-    int m_total;
-    int m_count;
-#endif
-   
 };
 
 #endif // KIS_SUMIPAINTOP_H_

@@ -34,7 +34,8 @@
 #include <ctime>
 
 const float radToDeg = 57.29578f;
-const float _180_DEGREES = M_PI * 0.5;
+//const float _180_DEGREES = M_PI * 0.5;
+const float _180_DEGREES = 0.0;
 
 #if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand
@@ -72,11 +73,7 @@ void Brush::setInkColor(const KoColor &color)
 
 void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2)
 {
-
     m_counter++;
-
-    qreal dx = pi2.pos().x() - pi1.pos().x();
-    qreal dy = pi2.pos().y() - pi1.pos().y();
 
     qreal x1 = pi1.pos().x();
     qreal y1 = pi1.pos().y();
@@ -84,8 +81,10 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     qreal x2 = pi2.pos().x();
     qreal y2 = pi2.pos().y();
 
+    qreal dx = x2 - x1;
+    qreal dy = y2 - y1;
+    
     qreal angle = atan2(dy, dx);
-
 
     qreal distance = sqrt(dx * dx + dy * dy);
 
@@ -103,7 +102,6 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     m_pixelSize = dev->colorSpace()->pixelSize();
     m_dabAccessor = &accessor;
     m_dev = dev;
-
 
     KisRandomAccessor laccessor = layer->createRandomAccessor((int)x1, (int)y1);
     m_layerAccessor = &laccessor;
@@ -123,38 +121,31 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     KoColorTransformation* transfo;
     transfo = m_dev->colorSpace()->createColorTransformation("hsv_adjustment", params);
 
-    rotateBristles(angle + _180_DEGREES);
+    rotateBristles(angle);
     // if this is first time the brush touches the canvas and we use soak the ink from canvas
     if ((m_counter == 1) && m_properties->useSoakInk){
         colorifyBristles(laccessor,layer->colorSpace() ,pi1.pos());
     }
 
-    int ix1, iy1, ix2, iy2;
-
+    qreal fx1, fy1, fx2, fy2;
     int size = m_bristles.size();
     Trajectory trajectory; // used for interpolation the path of bristles
     QVector<QPointF> bristlePath; // path for single bristle
     int inkDepletionSize = m_properties->inkDepletionCurve.size();
     for (int i = 0; i < size; i++) {
-        /*            if (m_bristles[i].distanceCenter() > m_radius || drand48() <0.5){
-                      continue;
-                      }*/
-        bristle = &m_bristles[i];
 
-        qreal fx1, fy1, fx2, fy2;
-        qreal rndFactor = m_properties->randomFactor;
-        qreal scaleFactor = m_properties->scaleFactor;
-        qreal shearFactor = m_properties->shearFactor;
+        if (!m_bristles.at(i).enabled()) continue;
+        bristle = &m_bristles[i];
 
         qreal randomX = drand48();
         qreal randomY = drand48();
         randomX -= 0.5;
         randomY -= 0.5;
-        randomX *= rndFactor;
-        randomY *= rndFactor;
+        randomX *= m_properties->randomFactor;
+        randomY *= m_properties->randomFactor;
 
-        qreal scale = pressure * scaleFactor;
-        qreal shear = pressure * shearFactor;
+        qreal scale = pressure * m_properties->scaleFactor;
+        qreal shear = pressure * m_properties->shearFactor;
 
         m_transform.reset();
         m_transform.scale(scale, scale);
@@ -173,11 +164,6 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
 
         fx2 += x2;
         fy2 += y2;
-
-        ix1 = (int)fx1;
-        iy1 = (int)fy1;
-        ix2 = (int)fx2;
-        iy2 = (int)fy2;
 
         // paint between first and last dab
         bristlePath = trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
@@ -257,7 +243,7 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
         }
 
     }
-    rotateBristles(-(angle + 1.57));
+    rotateBristles(-angle);
     //repositionBristles(angle,slope);
     m_dev = 0;
     m_dabAccessor = 0;

@@ -35,11 +35,6 @@
 #include <kis_sumi_ink_option.h>
 #include <kis_sumi_shape_option.h>
 
-#ifdef BENCHMARK
-    #include <QTime>
-#endif
-
-
 KisSumiPaintOp::KisSumiPaintOp(const
                                KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
@@ -58,9 +53,6 @@ KisSumiPaintOp::KisSumiPaintOp(const
     } else {
         m_dev = settings->node()->paintDevice();
     }
-#ifdef BENCHMARK
-    m_count = m_total = 0;
-#endif
 }
 
 void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
@@ -115,11 +107,6 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 
 double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
 {
-#ifdef BENCHMARK
-    QTime time;
-    time.start();
-#endif
-
     // spacing is ignored in sumi-e, maybe todo
     Q_UNUSED(savedDist);
 
@@ -135,14 +122,6 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     //QRect rc = m_dab->exactBounds();
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-
-
-#ifdef BENCHMARK
-    int msec = time.elapsed();
-    kDebug() << msec << " ms/dab " << "[average: " << m_total / (qreal)m_count << "]";
-    m_total += msec;
-    m_count++;
-#endif
 
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());

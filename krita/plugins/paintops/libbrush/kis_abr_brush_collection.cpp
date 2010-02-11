@@ -376,6 +376,8 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6 (QDataStream & abr, AbrInfo *ab
     KisAbrBrush* abrBrush = new KisAbrBrush(name);
     abrBrush->setImage(convertToQImage(buffer, width, height , name));
     // XXX: call extra setters on abrBrush for other options of ABR brushes
+    abrBrush->setValid(true);
+    m_abrBrushes.append(abrBrush);
 
     free (buffer);
     abr.device()->seek(next_brush);

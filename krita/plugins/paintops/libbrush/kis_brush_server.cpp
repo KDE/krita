@@ -54,18 +54,8 @@ public:
     {
         // Hack: This prevents the deletion of brushes in the resource server
         // Brushes outside the server use shared pointer, but not inside the server
-        if (dynamic_cast<KisAbrBrushCollection*>(brush)) {
-            QVector<KisAbrBrush*> abrBrushes = dynamic_cast<KisAbrBrushCollection*>(brush)->brushes();
-            foreach(KisAbrBrush* abrBrush, abrBrushes) {
-                abrBrush->ref();
-                m_brushes.append(abrBrush);
-            }
-            delete brush;
-        }
-        else {
-            brush->ref();
-            m_brushes.append(brush);
-        }
+        brush->ref();
+        m_brushes.append(brush);
     }
 
     virtual void removingResource(KisBrush* brush)
@@ -76,24 +66,48 @@ public:
 
 private:
 
+    ///Reimplemented
+    virtual QList<KisBrush*> createResources( const QString & filename )
+    {
+        QList<KisBrush*> brushes;
+
+        QString fileExtension = extension(filename);
+        if(fileExtension == ".abr") {
+            KisAbrBrushCollection collection(filename);
+            collection.load();
+            kDebug() << "abr brushes " << collection.brushes().count();
+            foreach(KisAbrBrush* abrBrush, collection.brushes()) {
+                brushes.append(abrBrush);
+            }
+        } else {
+            brushes.append(createResource(filename));
+        }
+        return brushes;
+    }
+    
+    ///Reimplemented
     virtual KisBrush* createResource(const QString & filename) {
 
-        QString fileExtension;
-        int index = filename.lastIndexOf('.');
-
-        if (index != -1)
-            fileExtension = filename.mid(index).toLower();
-
+        QString fileExtension = extension(filename);
+        
         KisBrush* brush = 0;
 
         if (fileExtension == ".gbr") {
             brush = new KisGbrBrush(filename);
         } else if (fileExtension == ".gih") {
             brush = new KisImagePipeBrush(filename);
-        } else if (fileExtension == ".abr") {
-            brush = new KisAbrBrushCollection(filename);
         }
         return brush;
+    }
+    
+    QString extension( const QString & filename ) {
+
+        QString fileExtension;
+        int index = filename.lastIndexOf('.');
+
+        if (index != -1)
+            fileExtension = filename.mid(index).toLower();
+        return fileExtension;
     }
 
     QList<KisBrush*> m_brushes;

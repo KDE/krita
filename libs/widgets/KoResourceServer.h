@@ -127,22 +127,24 @@ public:
             if (uniqueFiles.empty() || uniqueFiles.indexOf(fname) == -1) {
                 m_loadLock.lock();
                 uniqueFiles.append(fname);
-                T* resource = createResource(front);
-                if (resource->load() && resource->valid())
-                {
-                    m_resourcesByFilename[front] = resource;
+                QList<T*> resources = createResources(front);
+                foreach(T* resource, resources) {
+                    if (resource->load() && resource->valid())
+                    {
+                        m_resourcesByFilename[front] = resource;
 
-                    if ( resource->name().isNull() ) {
-                        resource->setName( fname );
+                        if ( resource->name().isNull() ) {
+                            resource->setName( fname );
+                        }
+                        m_resourcesByName[resource->name()] = resource;
+                        m_resources.append(resource);
+
+                        notifyResourceAdded(resource);
+                        Q_CHECK_PTR(resource);
                     }
-                    m_resourcesByName[resource->name()] = resource;
-                    m_resources.append(resource);
-
-                    notifyResourceAdded(resource);
-                    Q_CHECK_PTR(resource);
-                }
-                else {
-                    delete resource;
+                    else {
+                        delete resource;
+                    }
                 }
                 m_loadLock.unlock();
             }
@@ -315,6 +317,18 @@ public:
 
 protected:
 
+    /**
+     * Create one or more resources from a single file. By default one resource is created.
+     * Overide to create more resources from the file.
+     * @param filename the filename of the resource or resource collection
+     */
+    virtual QList<T*> createResources( const QString & filename )
+    {
+        QList<T*> createdResources;
+        createdResources.append(createResource(filename));
+        return createdResources;
+    }
+    
     virtual T* createResource( const QString & filename ) { return new T(filename); }
 
     void notifyResourceAdded(T* resource)

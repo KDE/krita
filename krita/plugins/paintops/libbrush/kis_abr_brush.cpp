@@ -50,7 +50,7 @@ KisAbrBrush::KisAbrBrush(const QString& filename)
 
 bool KisAbrBrush::load()
 {
-    return false;
+    return true;
 }
 
 bool KisAbrBrush::save()

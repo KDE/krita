@@ -359,7 +359,8 @@ public:
     /**
      * returns a paintdevice that contains the merged layers of this
      * image, within the bounds of this image (with the colorspace and
-     * profile of this image)
+     * profile of this image) It will cause a synchronous update to the
+     * projection.
      */
     KisPaintDeviceSP mergedImage();
 

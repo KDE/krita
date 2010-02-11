@@ -254,7 +254,7 @@ void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
                     Q_CHECK_PTR(pixels);
                     deletePixelsAfterUse = true;
 
-                    m_image->mergedImage()->readBytes(pixels, tileUpdateRect.x(), tileUpdateRect.y(),
+                    m_image->projection()->readBytes(pixels, tileUpdateRect.x(), tileUpdateRect.y(),
                                                       tileUpdateRect.width(), tileUpdateRect.height());
 
 #if defined(HAVE_GLEW) && defined(HAVE_OPENEXR)

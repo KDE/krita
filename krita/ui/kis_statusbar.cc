@@ -74,6 +74,7 @@ KisStatusBar::KisStatusBar(KisView2 * view)
     m_pointerPositionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_pointerPositionLabel->setMinimumWidth(100);
     view->addStatusBarItem(m_pointerPositionLabel);
+    m_pointerPositionLabel->setVisible(false);
 
     m_progress = new KisProgressWidget(view);
     m_progress->setMaximumWidth(225);

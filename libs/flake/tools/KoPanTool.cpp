@@ -36,7 +36,7 @@ KoPanTool::KoPanTool(KoCanvasBase *canvas)
 {
 }
 
-bool KoPanTool::wantsAutoScroll()
+bool KoPanTool::wantsAutoScroll() const
 {
     return false;
 }

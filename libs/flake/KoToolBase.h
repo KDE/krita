@@ -72,7 +72,7 @@ public:
      * canvas (default is true).
      * @return if this tool wants mouse events to cause scrolling of canvas.
      */
-    virtual bool wantsAutoScroll();
+    virtual bool wantsAutoScroll() const;
 
     /**
      * Called by the canvas to paint any decorations that the tool deems needed.
@@ -389,7 +389,7 @@ protected:
     *
     * @return the handle rectangle in document coordinates
     */
-    QRectF handleGrabRect(const QPointF &position);
+    QRectF handleGrabRect(const QPointF &position) const;
 
     /**
     * Returns a handle paint rect at the given position.
@@ -399,7 +399,7 @@ protected:
     *
     * @return the handle rectangle in document coordinates
     */
-    QRectF handlePaintRect(const QPointF &position);
+    QRectF handlePaintRect(const QPointF &position) const;
 
 protected:
     KoToolBase(KoToolBasePrivate &dd);

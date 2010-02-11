@@ -181,7 +181,7 @@ DefaultTool::~DefaultTool()
     delete m_guideLine;
 }
 
-bool DefaultTool::wantsAutoScroll()
+bool DefaultTool::wantsAutoScroll() const
 {
     return true;
 }

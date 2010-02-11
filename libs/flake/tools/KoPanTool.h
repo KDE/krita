@@ -41,7 +41,7 @@ public:
     explicit KoPanTool(KoCanvasBase *canvas);
 
     /// reimplemented from superclass
-    virtual bool wantsAutoScroll();
+    virtual bool wantsAutoScroll() const;
     /// reimplemented from superclass
     virtual void mousePressEvent(KoPointerEvent *event);
     /// reimplemented from superclass

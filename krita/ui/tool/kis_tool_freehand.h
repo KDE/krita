@@ -55,7 +55,7 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent *e);
     virtual void customMoveEvent(KoPointerEvent * event); // only for panning
     virtual void keyPressEvent(QKeyEvent *event);
-    virtual bool wantsAutoScroll();
+    virtual bool wantsAutoScroll() const;
     virtual void setDirty(const QRegion& region);
 
 protected:

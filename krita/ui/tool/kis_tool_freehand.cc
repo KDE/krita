@@ -498,7 +498,7 @@ void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*p
     m_executor->start(job, -m_paintJobs.size());
 }
 
-bool KisToolFreehand::wantsAutoScroll()
+bool KisToolFreehand::wantsAutoScroll() const
 {
     if (m_mode == PAN) {
         return false;

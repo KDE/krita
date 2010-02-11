@@ -55,10 +55,8 @@ private:
         friend class KisToolSelectPath;
     public:
         LocalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool);
-        ~LocalTool();
-        virtual void activate(bool);
-        virtual void deactivate();
-        void addPathShape();
+        virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
+        virtual void addPathShape(KoPathShape* pathShape);
     private:
         KisToolSelectPath* const m_selectingTool;
         KoLineBorder* m_borderBackup;

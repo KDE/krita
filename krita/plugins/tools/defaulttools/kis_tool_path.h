@@ -37,7 +37,7 @@ public:
     KisToolPath(KoCanvasBase * canvas);
     virtual ~KisToolPath();
 
-    void addPathShape();
+    void addPathShape(KoPathShape* pathShape);
 
 };
 

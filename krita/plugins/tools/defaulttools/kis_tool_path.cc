@@ -49,14 +49,12 @@ KisToolPath::~KisToolPath()
 {
 }
 
-void KisToolPath::addPathShape()
+void KisToolPath::addPathShape(KoPathShape* pathShape)
 {
     KisNodeSP currentNode =
         canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2 *>(this->canvas());
     if (!currentNode || !kiscanvas) {
-        delete m_shape;
-        m_shape = 0;
         return;
     }
     // Get painting options
@@ -68,8 +66,8 @@ void KisToolPath::addPathShape()
     KisImageWSP image = kiscanvas->view()->image();
     QMatrix matrix;
     matrix.scale(image->xRes(), image->yRes());
-    matrix.translate(m_shape->position().x(), m_shape->position().y());
-    QPainterPath mapedOutline = matrix.map(m_shape->outline());
+    matrix.translate(pathShape->position().x(), pathShape->position().y());
+    QPainterPath mapedOutline = matrix.map(pathShape->outline());
 
     // Recorde the paint action
     KisRecordedPathPaintAction bezierCurvePaintAction(
@@ -113,8 +111,6 @@ void KisToolPath::addPathShape()
         KisPaintDeviceSP dev = currentNode->paintDevice();
 
         if (!dev) {
-            delete m_shape;
-            m_shape = 0;
             return;
         }
 
@@ -142,14 +138,12 @@ void KisToolPath::addPathShape()
         image->setModified();
 
         kiscanvas->addCommand(painter.endTransaction());
-        delete m_shape;
 
     } else {
-        m_shape->normalize();
-        QUndoCommand * cmd = canvas()->shapeController()->addShape(m_shape);
+        pathShape->normalize();
+        QUndoCommand * cmd = canvas()->shapeController()->addShape(pathShape);
         canvas()->addCommand(cmd);
     }
-    m_shape = 0;
 }
 
 #include "kis_tool_path.moc"

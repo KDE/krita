@@ -22,6 +22,7 @@
 #include <QPen>
 #include <QLayout>
 #include <QVBoxLayout>
+#include <QMatrix>
 
 #include <klocale.h>
 
@@ -116,48 +117,36 @@ QMap<QString, QWidget *> KisToolSelectPath::createOptionWidgets()
 }
 
 KisToolSelectPath::LocalTool::LocalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool)
-        : KoCreatePathTool(canvas), m_selectingTool(selectingTool), m_borderBackup(0) {}
+        : KoCreatePathTool(canvas), m_selectingTool(selectingTool) {}
 
-KisToolSelectPath::LocalTool::~LocalTool()
+void KisToolSelectPath::LocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
 {
-    if(m_borderBackup!=0) delete m_borderBackup;
+    Q_UNUSED(converter);
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    if (!kisCanvas)
+        return;
+
+    QMatrix matrix;
+    matrix.scale(kisCanvas->image()->xRes(), kisCanvas->image()->yRes());
+    matrix.translate(pathShape.position().x(), pathShape.position().y());
+    m_selectingTool->paintToolOutline(&painter, m_selectingTool->pixelToView(matrix.map(pathShape.outline())));
 }
 
-void KisToolSelectPath::LocalTool::activate(bool tmp)
-{
-    Q_ASSERT(m_borderBackup==0);
-    m_borderBackup = new KoLineBorder(canvas()->resourceManager()->activeBorder());
-    canvas()->resourceManager()->setActiveBorder(KoLineBorder());
-
-    KoCreatePathTool::activate(tmp);
-}
-void KisToolSelectPath::LocalTool::deactivate()
-{
-    canvas()->resourceManager()->setActiveBorder(*m_borderBackup);
-    delete m_borderBackup;
-    m_borderBackup=0;
-
-    KoCreatePathTool::deactivate();
-}
-
-void KisToolSelectPath::LocalTool::addPathShape()
+void KisToolSelectPath::LocalTool::addPathShape(KoPathShape* pathShape)
 {
     KisNodeSP currentNode =
         canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     if (!currentNode)
         return;
 
-    KisImageWSP image = qobject_cast<KisLayer*>(currentNode->parent().data())->image();
-
-    m_shape->normalize();
-
-    KoPathShape *shape = m_shape;
-    shape->close();
-    m_shape = 0;
+    pathShape->normalize();
+    pathShape->close();
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     if (!kisCanvas)
         return;
+
+    KisImageWSP image = kisCanvas->image();
 
     KisSelectionToolHelper helper(kisCanvas, currentNode, i18n("Path Selection"));
 
@@ -175,15 +164,15 @@ void KisToolSelectPath::LocalTool::addPathShape()
 
         QMatrix matrix;
         matrix.scale(image->xRes(), image->yRes());
-        matrix.translate(shape->position().x(), shape->position().y());
-        painter.fillPainterPath(matrix.map(shape->outline()));
+        matrix.translate(pathShape->position().x(), pathShape->position().y());
+        painter.fillPainterPath(matrix.map(pathShape->outline()));
 
         QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
         canvas()->addCommand(cmd);
 
-        delete shape;
+        delete pathShape;
     } else {
-        helper.addSelectionShape(shape);
+        helper.addSelectionShape(pathShape);
     }
 }
 

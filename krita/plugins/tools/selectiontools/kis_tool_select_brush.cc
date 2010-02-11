@@ -83,33 +83,7 @@ QWidget* KisToolSelectBrush::createOptionWidget()
 void KisToolSelectBrush::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
-
-    //convert to view coordinates
-    QPainterPath toolOutline;
-    for(int i=0; i<m_selection.elementCount(); i++) {
-        QPainterPath::Element element = m_selection.elementAt(i);
-        switch (element.type) {
-        case QPainterPath::MoveToElement:
-            toolOutline.moveTo(pixelToView(element));
-            break;
-        case QPainterPath::LineToElement:
-            toolOutline.lineTo(pixelToView(element));
-            break;
-        case QPainterPath::CurveToElement:
-        case QPainterPath::CurveToDataElement:
-            {
-                QPointF ctrl1=pixelToView(m_selection.elementAt(i));
-                QPointF ctrl2=pixelToView(m_selection.elementAt(i+1));
-                QPointF toElem=pixelToView(m_selection.elementAt(i+2));
-                toolOutline.cubicTo(ctrl1, ctrl2, toElem);
-                i+=2;
-            }
-            break;
-        default:
-            break;
-        }
-    }
-    paintToolOutline(&gc, toolOutline);
+    paintToolOutline(&gc, pixelToView(m_selection));
 }
 
 void KisToolSelectBrush::mousePressEvent(KoPointerEvent *e)

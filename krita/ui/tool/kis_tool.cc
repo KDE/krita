@@ -21,6 +21,7 @@
 #include <QLabel>
 #include <QWidget>
 #include <QPolygonF>
+#include <QMatrix>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -207,7 +208,7 @@ QPoint KisTool::convertToIntPixelCoord(KoPointerEvent *e)
     return image()->documentToIntPixel(e->point);
 }
 
-QPointF KisTool::viewToPixel(const QPointF &viewCoord)
+QPointF KisTool::viewToPixel(const QPointF &viewCoord) const
 {
     if (!image())
         return viewCoord;
@@ -226,7 +227,7 @@ QRectF KisTool::convertToPt(const QRectF &rect)
     return r;
 }
 
-QPointF KisTool::pixelToView(const QPoint &pixelCoord)
+QPointF KisTool::pixelToView(const QPoint &pixelCoord) const
 {
     if (!image())
         return pixelCoord;
@@ -234,7 +235,7 @@ QPointF KisTool::pixelToView(const QPoint &pixelCoord)
     return canvas()->viewConverter()->documentToView(documentCoord);
 }
 
-QPointF KisTool::pixelToView(const QPointF &pixelCoord)
+QPointF KisTool::pixelToView(const QPointF &pixelCoord) const
 {
     if (!image())
         return pixelCoord;
@@ -242,13 +243,22 @@ QPointF KisTool::pixelToView(const QPointF &pixelCoord)
     return canvas()->viewConverter()->documentToView(documentCoord);
 }
 
-QRectF KisTool::pixelToView(const QRectF &pixelRect)
+QRectF KisTool::pixelToView(const QRectF &pixelRect) const
 {
     if (!image())
         return pixelRect;
     QPointF topLeft = pixelToView(pixelRect.topLeft());
     QPointF bottomRight = pixelToView(pixelRect.bottomRight());
     return QRectF(topLeft, bottomRight);
+}
+
+QPainterPath KisTool::pixelToView(const QPainterPath &pixelPath) const
+{
+    QMatrix matrix;
+    qreal zoomX, zoomY;
+    canvas()->viewConverter()->zoom(&zoomX, &zoomY);
+    matrix.scale(zoomX/image()->xRes(), zoomY/ image()->yRes());
+    return matrix.map(pixelPath);
 }
 
 void KisTool::updateCanvasPixelRect(const QRectF &pixelRect)
@@ -393,7 +403,7 @@ QWidget* KisTool::optionWidget()
 }
 
 
-void KisTool::paintToolOutline(QPainter* painter, QPainterPath &path)
+void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
 #if defined(HAVE_OPENGL)
     if (m_outlinePaintMode==XOR_MODE && isCanvasOpenGL()) {

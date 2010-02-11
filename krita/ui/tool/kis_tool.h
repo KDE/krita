@@ -94,16 +94,19 @@ public:
 
     QRectF convertToPt(const QRectF &rect);
 
-    QPointF viewToPixel(const QPointF &viewCoord);
+    QPointF viewToPixel(const QPointF &viewCoord) const;
     /// Convert an integer pixel coordinate into a view coordinate.
     /// The view coordinate is at the centre of the pixel.
-    QPointF pixelToView(const QPoint &pixelCoord);
+    QPointF pixelToView(const QPoint &pixelCoord) const;
 
     /// Convert a floating point pixel coordinate into a view coordinate.
-    QPointF pixelToView(const QPointF &pixelCoord);
+    QPointF pixelToView(const QPointF &pixelCoord) const;
 
     /// Convert a pixel rectangle into a view rectangle.
-    QRectF pixelToView(const QRectF &pixelRect);
+    QRectF pixelToView(const QRectF &pixelRect) const;
+
+    /// Convert a pixel path into a view path
+    QPainterPath pixelToView(const QPainterPath &pixelPath) const;
 
     /// Update the canvas for the given rectangle in image pixel coordinates.
     void updateCanvasPixelRect(const QRectF &pixelRect);
@@ -144,7 +147,8 @@ protected:
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 
     /// paint the path which is in view coordinates, default paint mode is XOR_MODE, BW_MODE is also possible
-    void paintToolOutline(QPainter * painter, QPainterPath &path);
+    /// never apply transformations to the painter, they would be useless, if drawing in OpenGL mode. The coordinates in the path should be in view coordinates.
+    void paintToolOutline(QPainter * painter, const QPainterPath &path);
 
     /// Returns true if the canvas this tool is associated with supports OpenGL rendering.
     bool isCanvasOpenGL() const;

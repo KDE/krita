@@ -292,7 +292,7 @@ public:
 
     void load_from_string(const QString& s)
     {
-        dbgKrita << brush_setting_definition->cname << s;
+        //dbgKrita << brush_setting_definition->cname << s;
 
         pointsPerInput.clear();
         for (int i = 0; i < s_brush_input_definitions->list.size(); ++i) {
@@ -306,16 +306,16 @@ public:
 
         if (parts.size() > 0 ) {
 
-            dbgKrita << parts;
+            //dbgKrita << parts;
 
             parts = parts[0].trimmed().split(" ", QString::SkipEmptyParts);
 
-            dbgKrita << "parts" << parts;
+            //dbgKrita << "parts" << parts;
 
             QString command = parts.takeFirst().trimmed();
             parts = parts.join(" ").split(",");
 
-            dbgKrita << "command" << command << "parts" << parts;
+            //dbgKrita << "command" << command << "parts" << parts;
 
             Q_ASSERT(s_brush_input_definitions->dict.contains(command));
             BrushInputDefinition* input = s_brush_input_definitions->dict[command];
@@ -355,7 +355,7 @@ MyPaintBrushResource::~MyPaintBrushResource()
 
 bool MyPaintBrushResource::load()
 {
-    dbgKrita << filename();
+    //dbgKrita << filename();
 
     QFileInfo iconFile(filename());
     m_icon.load(iconFile.path() + "/" + iconFile.baseName() + "_prev.png");
@@ -369,11 +369,11 @@ bool MyPaintBrushResource::load()
         while(!stream.atEnd()) {
             line = stream.readLine().trimmed();
             if (line.startsWith('#')) {
-                dbgKrita << "\t comment, skip";
+                //dbgKrita << "\t comment, skip";
                 continue;
             }
             if (!line.contains(' ')) {
-                dbgKrita << "\t no space, skip";
+                //dbgKrita << "\t no space, skip";
                 continue;
             }
             QStringList parts = line.split(' ');

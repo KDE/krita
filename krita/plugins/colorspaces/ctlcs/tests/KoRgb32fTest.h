@@ -26,7 +26,7 @@ class KoRgb32fTest : public QObject
 {
     Q_OBJECT
 private slots:
-
+    void testChannels();
     void testConversion();
 };
 

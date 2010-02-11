@@ -36,6 +36,42 @@ void randomizator(typename KoRgbTraits<_T_>::Pixel& p)
     p.alpha = rand();
 }
 
+void KoRgb32fTest::testChannels()
+{
+    const KoColorSpace* rgb32f = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
+    QVERIFY(rgb32f);
+    QList<KoChannelInfo *> channels = rgb32f->channels();
+    QCOMPARE(channels.size(), 4);
+    // Red
+    QCOMPARE(channels[0]->channelType(), KoChannelInfo::COLOR);
+    QCOMPARE(channels[0]->channelValueType(), KoChannelInfo::FLOAT32);
+//     QCOMPARE(channels[0]->color(), Qt::red);
+    QCOMPARE(channels[0]->name(), QString("Red"));
+    QCOMPARE(channels[0]->pos(), 2);
+    QCOMPARE(channels[0]->size(), 4);
+    // Green
+    QCOMPARE(channels[1]->channelType(), KoChannelInfo::COLOR);
+    QCOMPARE(channels[1]->channelValueType(), KoChannelInfo::FLOAT32);
+//     QCOMPARE(channels[1]->color(), Qt::green);
+    QCOMPARE(channels[1]->name(), QString("Green"));
+    QCOMPARE(channels[1]->pos(), 1);
+    QCOMPARE(channels[1]->size(), 4);
+    // Blue
+    QCOMPARE(channels[2]->channelType(), KoChannelInfo::COLOR);
+    QCOMPARE(channels[2]->channelValueType(), KoChannelInfo::FLOAT32);
+//     QCOMPARE(channels[2]->color(), Qt::blue);
+    QCOMPARE(channels[2]->name(), QString("Blue"));
+    QCOMPARE(channels[2]->pos(), 0);
+    QCOMPARE(channels[2]->size(), 4);
+    // Alpha
+    QCOMPARE(channels[3]->channelType(), KoChannelInfo::ALPHA);
+    QCOMPARE(channels[3]->channelValueType(), KoChannelInfo::FLOAT32);
+//     QCOMPARE(channels[3]->color(), Qt::red);
+    QCOMPARE(channels[3]->name(), QString("Alpha"));
+    QCOMPARE(channels[3]->pos(), 3);
+    QCOMPARE(channels[3]->size(), 4);
+}
+
 void KoRgb32fTest::testConversion()
 {
     const KoColorSpace* rgb32f = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);

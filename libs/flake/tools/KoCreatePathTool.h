@@ -28,6 +28,9 @@
 
 class KoPathShape;
 class KoPathPoint;
+class KoLineBorder;
+
+class KoCreatePathToolPrivate;
 
 #define KoCreatePathTool_ID "CreatePathTool"
 
@@ -45,52 +48,48 @@ public:
     explicit KoCreatePathTool(KoCanvasBase * canvas);
     virtual ~KoCreatePathTool();
 
-    void paint(QPainter &painter, const KoViewConverter &converter);
+    /// reimplemented
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
-    void mousePressEvent(KoPointerEvent *event);
-    void mouseDoubleClickEvent(KoPointerEvent *event);
-    void mouseMoveEvent(KoPointerEvent *event);
-    void mouseReleaseEvent(KoPointerEvent *event);
+    /// reimplemented
+    virtual void mousePressEvent(KoPointerEvent *event);
+    /// reimplemented
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    /// reimplemented
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    /// reimplemented
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
 
 public slots:
+    /// reimplemented
     virtual void activate(bool temporary = false);
+    /// reimplemented
     virtual void deactivate();
+    /// reimplemented
     virtual void resourceChanged(int key, const QVariant & res);
 
 protected:
-    /// add path shape to document
-    virtual void addPathShape();
+    /**
+     * Add path shape to document.
+     * This method can be overridden and change the behaviour of the tool. In that case the subclass takes ownership of pathShape.
+     * It gets only called, if there are two or more points in the path.
+     */
+    virtual void addPathShape(KoPathShape* pathShape);
+
+protected:
+    /**
+      * This method is called to paint the path. Decorations are drawn by KoCreatePathTool afterwards.
+      */
+    virtual void paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter);
+
     /// reimplemented
     virtual QMap<QString, QWidget *> createOptionWidgets();
 
-    KoPathShape *m_shape;
-
-private slots:
-    void angleDeltaChanged(int value);
-
 private:
-    void repaintActivePoint();
-
-    /// returns the nearest existing path point
-    KoPathPoint* endPointAtPosition( const QPointF &position );
-
-    /// Connects given path with the ones we hit when starting/finishing
-    bool connectPaths( KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd );
-
-    KoPathPoint *m_activePoint;
-    KoPathPoint *m_firstPoint;
-    int m_handleRadius;
-    bool m_mouseOverFirstPoint;
-    bool m_pointIsDragged;
-    KoPathPoint *m_existingStartPoint; ///< an existing path point we started a new path at
-    KoPathPoint *m_existingEndPoint;   ///< an existing path point we finished a new path at
-    KoPathPoint *m_hoveredPoint; ///< an existing path end point the mouse is hovering on
-
-    class AngleSnapStrategy;
-    AngleSnapStrategy *m_angleSnapStrategy;
-    int m_angleSnappingDelta;
-    KoCanvasBase * const m_canvas;
+    Q_DECLARE_PRIVATE(KoCreatePathTool);
+    Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(int));
 };
 #endif
 

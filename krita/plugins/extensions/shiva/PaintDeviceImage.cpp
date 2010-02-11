@@ -164,10 +164,12 @@ const char* PaintDeviceImage::rawData(int _x, int _y) const
     return (const char*)(m_accessor->oldRawData());
 }
 
+#if OPENSHIVA_13_OR_MORE
 GTLCore::RegionI PaintDeviceImage::boundingBox() const
 {
   return GTLCore::RegionI(0,0,-1,-1);
 }
+#endif
 
 GTLCore::AbstractImage::ConstIterator* PaintDeviceImage::createIterator() const
 {

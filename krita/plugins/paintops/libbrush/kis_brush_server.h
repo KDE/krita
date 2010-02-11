@@ -58,7 +58,7 @@ private slots:
 
 private:
 
-    QThread * brushThread;
+    QThread * m_brushThread;
 
 };
 

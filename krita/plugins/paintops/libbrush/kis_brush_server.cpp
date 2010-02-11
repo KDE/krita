@@ -44,7 +44,7 @@ public:
     }
 
     ~BrushResourceServer() {
-        foreach(KisBrush* brush, brushes)
+        foreach(KisBrush* brush, m_brushes)
         {
             brush->deref();
         }
@@ -58,20 +58,20 @@ public:
             QVector<KisAbrBrush*> abrBrushes = dynamic_cast<KisAbrBrushCollection*>(brush)->brushes();
             foreach(KisAbrBrush* abrBrush, abrBrushes) {
                 abrBrush->ref();
-                brushes.append(abrBrush);
+                m_brushes.append(abrBrush);
             }
             delete brush;
         }
         else {
             brush->ref();
-            brushes.append(brush);
+            m_brushes.append(brush);
         }
     }
 
     virtual void removingResource(KisBrush* brush)
     {
         brush->deref();
-        brushes.removeAll(brush);
+        m_brushes.removeAll(brush);
     }
 
 private:
@@ -96,7 +96,7 @@ private:
         return brush;
     }
 
-    QList<KisBrush*> brushes;
+    QList<KisBrush*> m_brushes;
 };
 
 KisBrushServer::KisBrushServer()
@@ -106,9 +106,9 @@ KisBrushServer::KisBrushServer()
     KGlobal::mainComponent().dirs()->addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
 
     m_brushServer = new BrushResourceServer();
-    brushThread = new KoResourceLoaderThread(m_brushServer);
-    connect(brushThread, SIGNAL(finished()), this, SLOT(brushThreadDone()));
-    brushThread->start();
+    m_brushThread = new KoResourceLoaderThread(m_brushServer);
+    connect(m_brushThread, SIGNAL(finished()), this, SLOT(brushThreadDone()));
+    m_brushThread->start();
 }
 
 KisBrushServer::~KisBrushServer()
@@ -131,8 +131,8 @@ KoResourceServer<KisBrush>* KisBrushServer::brushServer()
 
 void KisBrushServer::brushThreadDone()
 {
-    delete brushThread;
-    brushThread = 0;
+    delete m_brushThread;
+    m_brushThread = 0;
 }
 
 #include "kis_brush_server.moc"

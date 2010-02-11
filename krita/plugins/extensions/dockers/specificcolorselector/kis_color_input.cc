@@ -22,6 +22,8 @@
 #include <half.h>
 #endif
 
+#include <kis_debug.h>
+
 #include <QHBoxLayout>
 #include <QLabel>
 
@@ -42,14 +44,14 @@ void KisColorInput::init()
     QLabel* m_label = new QLabel(i18n("%1:", m_channelInfo->name()), this);
     m_label->setMinimumWidth(50);
     m_layout->addWidget(m_label);
-    
+
     m_colorSlider = new KoColorSlider(Qt::Horizontal, this);
     m_colorSlider->setMaximumHeight(20);
     m_colorSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_layout->addWidget(m_colorSlider);
-    
+
     QWidget* m_input = createInput();
-    m_input->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
+    m_input->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     m_layout->addWidget(m_input);
 }
 
@@ -151,7 +153,7 @@ void KisFloatColorInput::setValue(double v)
         break;
 #endif
     case KoChannelInfo::FLOAT32:
-        *(reinterpret_cast<double*>(data)) = v;
+        *(reinterpret_cast<float*>(data)) = v;
         break;
     default:
         Q_ASSERT(false);
@@ -164,13 +166,14 @@ QWidget* KisFloatColorInput::createInput()
     m_dblNumInput = new KDoubleNumInput(this);
     m_dblNumInput->setMinimum(0);
     m_dblNumInput->setMaximum(1.0);
+    connect(m_colorSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
     connect(m_dblNumInput, SIGNAL(valueChanged(double)), this, SLOT(setValue(double)));
     return m_dblNumInput;
 }
 
 void KisFloatColorInput::sliderChanged(int i)
 {
-    m_dblNumInput->setValue( i / 255.0);
+    m_dblNumInput->setValue(i / 255.0);
 }
 
 void KisFloatColorInput::update()
@@ -178,20 +181,22 @@ void KisFloatColorInput::update()
     KoColor min = *m_color;
     KoColor max = *m_color;
     quint8* data = m_color->data() + m_channelInfo->pos();
+    quint8* dataMin = min.data() + m_channelInfo->pos();
+    quint8* dataMax = max.data() + m_channelInfo->pos();
     switch (m_channelInfo->channelValueType()) {
 #ifdef HAVE_OPENEXR
     case KoChannelInfo::FLOAT16:
         m_dblNumInput->setValue(*(reinterpret_cast<half*>(data)));
         m_colorSlider->setValue(*(reinterpret_cast<half*>(data)) * 255);
-        *(reinterpret_cast<half*>(data)) = 0.0;
-        *(reinterpret_cast<half*>(data)) = 1.0;
+        *(reinterpret_cast<half*>(dataMin)) = 0.0;
+        *(reinterpret_cast<half*>(dataMax)) = 1.0;
         break;
 #endif
     case KoChannelInfo::FLOAT32:
         m_dblNumInput->setValue(*(reinterpret_cast<float*>(data)));
         m_colorSlider->setValue(*(reinterpret_cast<float*>(data)) * 255);
-        *(reinterpret_cast<float*>(data)) = 0.0;
-        *(reinterpret_cast<float*>(data)) = 1.0;
+        *(reinterpret_cast<float*>(dataMin)) = 0.0;
+        *(reinterpret_cast<float*>(dataMax)) = 1.0;
         break;
     default:
         Q_ASSERT(false);

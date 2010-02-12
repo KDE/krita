@@ -104,11 +104,13 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
     m_d->widgetOptionMap[item] = option;
     item->setText(option->label());
     Qt::ItemFlags flags = item->flags();
+    flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     if (option->isCheckable()) {
 
         flags |= Qt::ItemIsUserCheckable;
+        item->setCheckState((option->isChecked()) ? Qt::Checked : Qt::Unchecked);
     }
-    item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    item->setFlags(flags);
 }
 
 void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration * config)

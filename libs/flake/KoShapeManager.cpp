@@ -391,6 +391,8 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         // Paint the shape on the image
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
         if (group) {
+            // the childrens matrix contains the groups matrix as well
+            // so we have to compensate for that before painting the children
             imagePainter.setMatrix(group->absoluteTransformation(&converter).inverted(), true);
             d->paintGroup(group, imagePainter, converter, forPrint);
         } else {

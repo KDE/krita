@@ -19,6 +19,7 @@ set(kritalibbrush_LIB_SRCS
     kis_auto_brush_factory.cpp
     kis_text_brush_factory.cpp
     kis_gbr_brush_factory.cpp
+    kis_abr_brush_factory.cpp
 )
 
 kde4_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )

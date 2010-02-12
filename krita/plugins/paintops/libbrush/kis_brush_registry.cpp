@@ -35,6 +35,7 @@
 #include "kis_brush_factory.h"
 #include "kis_auto_brush_factory.h"
 #include "kis_gbr_brush_factory.h"
+#include "kis_abr_brush_factory.h"
 #include "kis_text_brush_factory.h"
 
 KisBrushRegistry::KisBrushRegistry()
@@ -53,6 +54,7 @@ KisBrushRegistry* KisBrushRegistry::instance()
     if (!s_instance.exists()) {
         s_instance->add(new KisAutoBrushFactory());
         s_instance->add(new KisGbrBrushFactory());
+        s_instance->add(new KisAbrBrushFactory());
         s_instance->add(new KisTextBrushFactory());
         KoPluginLoader::instance()->load("Krita/brush", "Type == 'Service' and ([X-Krita-Version] == 3)");
     }

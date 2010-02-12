@@ -48,9 +48,8 @@ struct AbrInfo{
 };
 
 /// save the QImages as png files to directory image_tests
-static QImage convertToQImage(char * buffer,qint32 width, qint32 height, const QString fileName)
+static QImage convertToQImage(char * buffer,qint32 width, qint32 height)
 {
-
     // create 8-bit indexed image
     QImage img(width, height, QImage::Format_Indexed8);
 
@@ -67,9 +66,6 @@ static QImage convertToQImage(char * buffer,qint32 width, qint32 height, const Q
     QColor black(Qt::black);
     out.fill(black.rgb());
     out.setAlphaChannel(img);
-
-    Q_UNUSED(fileName);
-    //out.save("image_tests/" + fileName + ".png");
 
     return out;
 }
@@ -373,10 +369,14 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6 (QDataStream & abr, AbrInfo *ab
         rle_decode (abr, buffer, height);
     }
 
+    // filename - filename of the file , e.g. test.abr
+    // name - test_number_of_the_brush, e.g test_1, test_2
     KisAbrBrush* abrBrush = new KisAbrBrush(name);
-    abrBrush->setImage(convertToQImage(buffer, width, height , name));
+    
+    abrBrush->setImage(convertToQImage(buffer, width, height));
     // XXX: call extra setters on abrBrush for other options of ABR brushes
     abrBrush->setValid(true);
+    abrBrush->setName(name);
     m_abrBrushes.append(abrBrush);
 
     free (buffer);
@@ -463,7 +463,7 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12 (QDataStream & abr, AbrInfo *ab
             }
 
             KisAbrBrush* abrBrush = new KisAbrBrush(name);
-            abrBrush->setImage(convertToQImage(buffer, width, height , name));
+            abrBrush->setImage(convertToQImage(buffer, width, height));
             // XXX: call extra setters on abrBrush for other options of ABR brushes   free (buffer);
         }
     }

@@ -48,16 +48,16 @@ bool EnhancedPathCommand::execute()
      * drawing routine. This is done by computing (2*M_PI - angle).
      */
     QList<QPointF> points = pointsFromParameters();
-    uint pointsCount = points.size();
+    const int pointsCount = points.size();
 
-    switch (m_command.toAscii()) {
+    switch (m_command.unicode()) {
     // starts new subpath at given position (x y) +
     case 'M':
         if (!pointsCount)
             return false;
         m_parent->moveTo(m_parent->viewboxToShape(points[0]));
         if (pointsCount > 1)
-            for (uint i = 1; i < pointsCount; i++)
+            for (int i = 1; i < pointsCount; i++)
                 m_parent->lineTo(m_parent->viewboxToShape(points[i]));
         break;
     // line from current point (x y) +
@@ -67,7 +67,7 @@ bool EnhancedPathCommand::execute()
         break;
     // cubic bezier curve from current point (x1 y1 x2 y2 x y) +
     case 'C':
-        for (uint i = 0; i < pointsCount; i+=3)
+        for (int i = 0; i < pointsCount; i+=3)
             m_parent->curveTo(m_parent->viewboxToShape(points[i]),
                                m_parent->viewboxToShape(points[i+1]),
                                m_parent->viewboxToShape(points[i+2]));
@@ -92,9 +92,9 @@ bool EnhancedPathCommand::execute()
     case 'T':
     // same like T but with implied movement to starting point (x y w h t0 t1) +
     case 'U': {
-        bool lineTo = m_command == 'T';
+        bool lineTo = m_command.unicode() == 'T';
 
-        for (uint i = 0; i < pointsCount; i+=3) {
+        for (int i = 0; i < pointsCount; i+=3) {
             const QPointF &radii = m_parent->viewboxToShape(points[i+1]);
             const QPointF &angles = points[i+2] / rad2deg;
             // compute the ellipses starting point
@@ -114,9 +114,9 @@ bool EnhancedPathCommand::execute()
     case 'A':
     // the same as A, with implied moveto to the starting point (x1 y1 x2 y2 x3 y3 x y) +
     case 'B': {
-        bool lineTo = m_command == 'A';
+        bool lineTo = m_command.unicode() == 'A';
 
-        for (uint i = 0; i < pointsCount; i+=4) {
+        for (int i = 0; i < pointsCount; i+=4) {
             QRectF bbox = rectFromPoints(points[i], points[i+1]);
             QPointF center = bbox.center();
             qreal rx = 0.5 * m_parent->viewboxToShape(bbox.width());
@@ -141,9 +141,9 @@ bool EnhancedPathCommand::execute()
     case 'W':
     // the same as W, but implied moveto (x1 y1 x2 y2 x3 y3 x y) +
     case 'V': {
-        bool lineTo = m_command == 'W';
+        bool lineTo = m_command.unicode() == 'W';
 
-        for (uint i = 0; i < pointsCount; i+=4) {
+        for (int i = 0; i < pointsCount; i+=4) {
             QRectF bbox = rectFromPoints(points[i], points[i+1]);
             QPointF center = bbox.center();
             qreal rx = 0.5 * m_parent->viewboxToShape(bbox.width());
@@ -190,7 +190,7 @@ bool EnhancedPathCommand::execute()
     }
     // quadratic bezier curve (x1 y1 x y)+
     case 'Q':
-        for (uint i = 0; i < pointsCount; i+=2)
+        for (int i = 0; i < pointsCount; i+=2)
             m_parent->curveTo(m_parent->viewboxToShape(points[i]),
                                m_parent->viewboxToShape(points[i+1]));
         break;

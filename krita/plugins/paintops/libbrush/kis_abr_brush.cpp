@@ -43,7 +43,7 @@
 KisAbrBrush::KisAbrBrush(const QString& filename)
     : KisBrush(filename)
 {
-    setBrushType(INVALID);
+    setBrushType(MASK);
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 }
@@ -62,18 +62,6 @@ bool KisAbrBrush::saveToDevice(QIODevice* dev) const
 {
     return false;
 }
-
-QImage KisAbrBrush::image() const
-{
-    return m_image;
-}
-
-
-enumBrushType KisAbrBrush::brushType() const
-{
-    return MASK;
-}
-
 
 void KisAbrBrush::setImage(const QImage& image)
 {

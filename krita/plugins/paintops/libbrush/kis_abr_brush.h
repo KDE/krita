@@ -53,16 +53,9 @@ public:
     virtual bool save();
 
     /**
-     * @return a preview of the brush
-     */
-    virtual QImage image() const;
-
-    /**
      * save the content of this brush to an IO device
      */
     virtual bool saveToDevice(QIODevice* dev) const;
-
-    virtual enumBrushType brushType() const;
 
     /**
      * @return default file extension for saving the brush

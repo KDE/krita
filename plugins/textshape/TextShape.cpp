@@ -151,14 +151,14 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
             // this is used to not trigger repaints if layout during the painting is done
             // this enbales to use the same shapes on different pages showing different page numbers
             m_paintRegion = painter.clipRegion();
-            if (!m_textShapeData->page() || page->pageNumber() != m_textShapeData->page()->pageNumber() ) {
+            if (!m_textShapeData->page() || page->pageNumber() != m_textShapeData->page()->pageNumber()) {
                 m_textShapeData->setPage(page);
                 m_textShapeData->foul();
                 lay->interruptLayout();
                 m_textShapeData->fireResizeEvent();
             }
 
-            if ( lay ) {
+            if (lay) {
                 while (m_textShapeData->isDirty()){
                     lay->layout();
                 }
@@ -242,7 +242,7 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
     if (m_textShapeData->endPosition() < 0) return;
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     if (showTextFrames && lay) {
-        QList< KoShape * > shapes = lay->shapes();
+        QList<KoShape *> shapes = lay->shapes();
         // Get the bottom of the text.
         bool moreText = false;
         qreal max = m_textShapeData->documentOffset() + size().height();
@@ -417,7 +417,7 @@ void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
     }
     else {
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        if ( lay ) {
+        if (lay) {
             while (m_textShapeData->isDirty()){
                 lay->layout();
             }

@@ -275,7 +275,7 @@ bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)
         change.addChildElement("changeMetaData", d->changes.value(changeId)->getExtraMetaData());
 
     if (d->changes.value(changeId)->hasDeleteData())
-        change.addChildElement("deletedData", d->changes.value(changeId)->getDeleteData().toPlainText());
+        change.addChildElement("deletedData", d->changes.value(changeId)->getDeleteData());
 
     return true;
 }
@@ -297,9 +297,6 @@ void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
                             changeElement = new KoChangeTrackerElement(tag.attributeNS(KoXmlNS::text,"id"),KoGenChange::formatChange);
                         } else if (region.localName() == "deletion") {
                             changeElement = new KoChangeTrackerElement(tag.attributeNS(KoXmlNS::text,"id"),KoGenChange::deleteChange);
-                            KoXmlElement deletedData = region.namedItemNS(KoXmlNS::text, "p").toElement();
-                            if(!deletedData.isNull())
-                              changeElement->setDeleteData(QTextDocumentFragment::fromPlainText(deletedData.text()));
                         }
                         KoXmlElement metadata = region.namedItemNS(KoXmlNS::office,"change-info").toElement();
                         if (!metadata.isNull()) {

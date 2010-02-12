@@ -114,6 +114,7 @@ public:
     int loadSpanInitialPos;
     QStack<int> changeStack;
     QMap<QString, int> changeTransTable;
+    QMap<QString, KoXmlElement> deleteChangeTable;
 
     explicit Private(KoShapeLoadingContext &context)
             : context(context),
@@ -260,6 +261,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                 usedParagraph = true;
                 if (d->changeTracker && localName == "tracked-changes") {
                     d->changeTracker->loadOdfChanges(tag);
+                    storeDeleteChanges(tag);
                     usedParagraph = false;
                 } else if (d->changeTracker && localName == "change-start") {
                     d->openChangeRegion(tag);
@@ -276,6 +278,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                         KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
                         deleteChangemarker->setChangeId(changeId);
                         KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
+                        changeElement->setDeleteChangeMarker(deleteChangemarker);
                         changeElement->setEnabled(true);
                         KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
                         if (layout) {
@@ -283,6 +286,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                             textObjectManager->insertInlineObject(cursor, deleteChangemarker);
                         }
                     }
+                    
+                    loadDeleteChangeOutsidePorH(id, cursor);
                     usedParagraph = false;
                 } else if (localName == "p") {    // text paragraph
                     loadParagraph(tag, cursor);
@@ -420,6 +425,36 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     }
     endBody();
     cursor.endEditBlock();
+}
+
+void KoTextLoader::loadDeleteChangeOutsidePorH(QString id, QTextCursor &cursor)
+{
+    int startPosition = cursor.position();
+    int changeId = d->changeTracker->getLoadedChangeId(id);
+
+    if (changeId) {
+        KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
+        KoXmlElement element = d->deleteChangeTable.value(id);
+        
+        //Call loadBody with this element
+        loadBody(element, cursor);
+            
+        int endPosition = cursor.position();
+            
+        //Set the char format to the changeId 
+        cursor.setPosition(startPosition);
+        cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+        QTextCharFormat format;
+        format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+        cursor.mergeCharFormat(format);
+
+        //Get the QTextDocumentFragment from the selection and store it in the changeElement
+        QTextDocumentFragment deletedFragment(cursor);
+        changeElement->setDeleteData(deletedFragment);
+
+        //Now Remove this from the document. Will be re-inserted whenever changes have to be seen
+        cursor.removeSelectedText();
+    }
 }
 
 void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &cursor)
@@ -743,6 +778,8 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
                     textObjectManager->insertInlineObject(cursor, deleteChangemarker);
                 }
+                
+                loadDeleteChangeWithinPorH(id, cursor);
             }
         } else if (isTextNS && localName == "span") { // text:span
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
@@ -864,6 +901,46 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             }
         }
         --d->loadSpanLevel;
+    }
+
+    void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
+    {
+        int startPosition = cursor.position();
+        int changeId = d->changeTracker->getLoadedChangeId(id);
+        int loadedTags = 0;
+
+        if (changeId) {
+            KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
+            KoXmlElement element = d->deleteChangeTable.value(id);
+            KoXmlElement tag;
+            forEachElement(tag, element) {
+                if (tag.localName() == "p") {
+                    if (loadedTags) {
+                        QTextCharFormat charFormat = cursor.block().charFormat();
+                        QTextBlockFormat blockFormat = cursor.block().blockFormat();
+                        cursor.insertBlock(blockFormat, charFormat);
+                    }
+                    cursor.insertText(tag.text());
+                    loadedTags++;
+                }
+            }
+            
+            int endPosition = cursor.position();
+            
+            //Set the char format to the changeId 
+            cursor.setPosition(startPosition);
+            cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+            QTextCharFormat format;
+            format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+            cursor.mergeCharFormat(format);
+
+            //Get the QTextDocumentFragment from the selection and store it in the changeElement
+            QTextDocumentFragment deletedFragment(cursor);
+            changeElement->setDeleteData(deletedFragment);
+
+            //Now Remove this from the document. Will be re-inserted whenever changes have to be seen
+            cursor.removeSelectedText();
+        }
     }
 
     void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
@@ -1000,5 +1077,26 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
     void KoTextLoader::endBody()
     {
     }
+
+void KoTextLoader::storeDeleteChanges(KoXmlElement &element)
+{
+    KoXmlElement tag;
+    forEachElement(tag, element) {
+        if (! tag.isNull()) {
+            const QString localName = tag.localName();
+            if (localName == "changed-region") {
+                KoXmlElement region;
+                forEachElement(region, tag) {
+                    if (!region.isNull()) {
+                        if (region.localName() == "deletion") {
+                            QString id = tag.attributeNS(KoXmlNS::text, "id");
+                            d->deleteChangeTable.insert(id, region); 
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 #include <KoTextLoader.moc>

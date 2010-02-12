@@ -104,6 +104,16 @@ private:
     void loadSpan(const KoXmlElement &element, QTextCursor &cursor, bool *leadingSpace);
 
     /**
+    * Load the deleted change within a \p or a \h and store it in the Delete Change Marker
+    */
+    void loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor);
+
+    /**
+    * Load the deleted change outside of a \p or a \h and store it in the Delete Change Marker
+    */
+    void loadDeleteChangeOutsidePorH(QString id, QTextCursor &cursor);
+
+    /**
      * Load the table from the \p element into the \p cursor.
      *
      * The table and its contents are placed in a new shape.
@@ -139,6 +149,11 @@ private:
     * This is called in loadBody once the body was read.
     */
     void endBody();
+
+    /**
+    * Store the delete changes in the deleteChangeTable. Will be processed with "change" is encountered
+    */
+    void storeDeleteChanges(KoXmlElement &tag);
 
     /// \internal d-pointer class.
     class Private;

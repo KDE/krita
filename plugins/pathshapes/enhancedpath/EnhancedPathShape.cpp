@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -266,24 +266,20 @@ void EnhancedPathShape::addCommand(const QString &command)
 
 void EnhancedPathShape::addCommand(const QString &command, bool triggerUpdate)
 {
-    if (command.isEmpty())
-        return;
-
     QString commandStr = command.simplified();
     if (commandStr.isEmpty())
         return;
 
     // the first character is the command
-    EnhancedPathCommand * cmd = new EnhancedPathCommand(commandStr[0], this);
+    EnhancedPathCommand *cmd = new EnhancedPathCommand(commandStr[0], this);
 
     // strip command char
-    commandStr = commandStr.mid(1);
+    commandStr = commandStr.mid(1).simplified();
 
     // now parse the command parameters
-    if (commandStr.length() > 0) {
-        QStringList tokens = commandStr.simplified().split(' ');
-        int tokenCount = tokens.count();
-        for (int i = 0; i < tokenCount; ++i)
+    if (!commandStr.isEmpty()) {
+        QStringList tokens = commandStr.split(' ');
+        for (int i = 0; i < tokens.count(); ++i)
             cmd->addParameter(parameter(tokens[i]));
     }
     m_commands.append(cmd);
@@ -420,57 +416,30 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     return true;
 }
 
-void EnhancedPathShape::parsePathData(const QString & data)
+void EnhancedPathShape::parsePathData(const QString &data)
 {
     if (data.isEmpty())
         return;
 
-    QString d = data;
-    d = d.replace(',', ' ');
-    d = d.simplified();
-
-    const QByteArray buffer = d.toLatin1();
-    const char *ptr = buffer.constData();
-    const char *end = buffer.constData() + buffer.length();
-
-    char lastChar = ' ';
-
-    QString cmdString;
-
-    for (; ptr < end; ptr++) {
-        switch(*ptr) {
-        case 'M':
-        case 'L':
-        case 'C':
-        case 'Z':
-        case 'N':
-        case 'F':
-        case 'S':
-        case 'T':
-        case 'U':
-        case 'A':
-        case 'B':
-        case 'W':
-        case 'V':
-        case 'X':
-        case 'Y':
-        case 'Q':
-            if (lastChar == ' ' || QChar(lastChar).isNumber()) {
-                if (! cmdString.isEmpty())
-                    addCommand(cmdString, false);
-                cmdString = *ptr;
-            } else {
-                cmdString += *ptr;
+    int start = -1;
+    for (int i = 0; i < data.length(); ++i) {
+        QChar ch = data.at(i);
+        if (ch.unicode() == 'M' || ch.unicode() == 'L'
+            || ch.unicode() == 'C' || ch.unicode() == 'Z'
+            || ch.unicode() == 'N' || ch.unicode() == 'F'
+            || ch.unicode() == 'S' || ch.unicode() == 'T'
+            || ch.unicode() == 'U' || ch.unicode() == 'A'
+            || ch.unicode() == 'B' || ch.unicode() == 'W'
+            || ch.unicode() == 'V' || ch.unicode() == 'X'
+            || ch.unicode() == 'Y' || ch.unicode() == 'Q') {
+            if (start != -1) { // process last chars
+                addCommand(data.mid(start, i - start));
             }
-            break;
-        default:
-            cmdString += *ptr;
+            start = i;
         }
-
-        lastChar = *ptr;
     }
-    if (! cmdString.isEmpty())
-        addCommand(cmdString, false);
-
-    updatePath(size());
+    if (start < data.length())
+        addCommand(data.mid(start));
+    if (start != -1)
+        updatePath(size());
 }

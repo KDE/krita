@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,6 +23,8 @@
 #include "EnhancedPathShape.h"
 #include <KoPathPoint.h>
 #include <math.h>
+
+#include <KDebug>
 
 // radian to degree factor
 const qreal rad2deg = 180.0/M_PI;
@@ -211,6 +214,22 @@ QList<QPointF> EnhancedPathCommand::pointsFromParameters()
         p.setY(m_parameters[i+1]->evaluate());
         points.append(p);
     }
+
+    int mod = 1;
+    if (m_command.unicode() == 'C' || m_command.unicode() == 'U'
+            || m_command.unicode() == 'T') {
+        mod = 3;
+    } else if (m_command.unicode() == 'A' || m_command.unicode() == 'B'
+            || m_command.unicode() == 'W' || m_command.unicode() == 'V') {
+        mod = 4;
+    } else if (m_command.unicode() == 'Q') {
+        mod = 2;
+    }
+    if ((points.count() % mod) != 0) { // invalid command
+        kWarning(31000) << "Invalid point count for command" << m_command << "ignoring";
+        return QList<QPointF>();
+    }
+
     return points;
 }
 

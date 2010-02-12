@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -185,8 +186,8 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
 
 void KisBrushChooser::update(KoResource * resource)
 {
-    KisGbrBrush* brush = static_cast<KisGbrBrush*>(resource);
-
+    KisBrush* brush = static_cast<KisBrush*>(resource);
+    
     QString text = QString("%1 (%2 x %3)")
                    .arg(i18n(brush->name().toUtf8().data()))
                    .arg(brush->width())
@@ -194,9 +195,14 @@ void KisBrushChooser::update(KoResource * resource)
 
     m_lbName->setText(text);
     m_slSpacing->setValue(brush->spacing());
-    m_chkColorMask->setChecked(brush->useColorAsMask());
+    
+    
+    // useColorAsMask support is only in gimp brush so far
+    if (KisGbrBrush * gimpBrush = dynamic_cast<KisGbrBrush*>(resource)){
+        m_chkColorMask->setChecked(gimpBrush->useColorAsMask());
+    }
     m_chkColorMask->setEnabled(brush->hasColor());
-
+    
     emit sigBrushChanged();
 }
 

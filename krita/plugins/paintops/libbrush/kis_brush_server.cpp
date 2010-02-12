@@ -71,8 +71,8 @@ private:
     {
         QList<KisBrush*> brushes;
 
-        QString fileExtension = extension(filename);
-        if(fileExtension == ".abr") {
+        QString fileExtension = QFileInfo(filename).suffix().toLower();
+        if(fileExtension == "abr") {
             KisAbrBrushCollection collection(filename);
             collection.load();
             kDebug() << "abr brushes " << collection.brushes().count();
@@ -88,26 +88,16 @@ private:
     ///Reimplemented
     virtual KisBrush* createResource(const QString & filename) {
 
-        QString fileExtension = extension(filename);
+        QString fileExtension = QFileInfo(filename).suffix().toLower();
         
         KisBrush* brush = 0;
 
-        if (fileExtension == ".gbr") {
+        if (fileExtension == "gbr") {
             brush = new KisGbrBrush(filename);
-        } else if (fileExtension == ".gih") {
+        } else if (fileExtension == "gih") {
             brush = new KisImagePipeBrush(filename);
         }
         return brush;
-    }
-    
-    QString extension( const QString & filename ) {
-
-        QString fileExtension;
-        int index = filename.lastIndexOf('.');
-
-        if (index != -1)
-            fileExtension = filename.mid(index).toLower();
-        return fileExtension;
     }
 
     QList<KisBrush*> m_brushes;

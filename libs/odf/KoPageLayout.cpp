@@ -154,11 +154,11 @@ KoPageLayout KoPageLayout::standardLayout()
     layout.topMargin = MM_TO_POINT(20.0);
     layout.bottomMargin = MM_TO_POINT(20.0);
 
-    // padding.  FIXME: Find the best real values.
-    layout.leftPadding = MM_TO_POINT(20.0);
-    layout.rightPadding = MM_TO_POINT(20.0);
-    layout.topPadding = MM_TO_POINT(20.0);
-    layout.bottomPadding = MM_TO_POINT(20.0);
+    // padding.
+    layout.leftPadding = 0;
+    layout.rightPadding = 0;
+    layout.topPadding = 0;
+    layout.bottomPadding = 0;
 
     // borders
     layout.border.setLeftBorderStyle(KoBorder::BorderNone);

@@ -1712,7 +1712,6 @@ bool Layout::setFollowupShape(KoShape *followupShape)
     m_newShape = false;
     shape = followupShape;
     m_textShape = 0;
-    m_y = m_y + 10000; // make sure any lines added in this one will not show un in any actual shapes
     m_data->setDocumentOffset(m_y);
     m_shapeBorder = shape->borderInsets();
     return true;

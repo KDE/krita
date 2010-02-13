@@ -87,7 +87,11 @@ void ShivaFilter::process(KisConstProcessingInformation srcInfo,
             dbgPlugins << it.key() << " " << it.value();
             const GTLCore::Metadata::Entry* entry = kernel.metadata()->parameter(it.key().toAscii().data());
             if (entry && entry->asParameterEntry()) {
+#if OPENSHIVA_12
                 GTLCore::Value val = qvariantToValue(it.value(), entry->asParameterEntry()->valueType());
+#else
+                GTLCore::Value val = qvariantToValue(it.value(), entry->asParameterEntry()->type());
+#endif
                 if(val.isValid())
                 {
                     kernel.setParameter(it.key().toAscii().data(), val);

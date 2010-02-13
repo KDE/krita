@@ -37,7 +37,7 @@
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
 #include "KoFilterEffectRenderContext.h"
-
+#include "KoShapeBackground.h"
 #include <KoRTree.h>
 
 #include <QPainter>
@@ -384,7 +384,6 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         QHash<QString, QImage> imageBuffers;
 
         QSet<QString> requiredStdInputs = shape->filterEffectStack()->requiredStandarsInputs();
-        kDebug() << requiredStdInputs;
 
         if (requiredStdInputs.contains("SourceGraphic") || requiredStdInputs.contains("SourceAlpha")) {
             // Init the buffer painter
@@ -418,6 +417,18 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
             sourceAlpha.fill(qRgba(0,0,0,255));
             sourceAlpha.setAlphaChannel(sourceGraphic.alphaChannel());
             imageBuffers.insert("SourceAlpha", sourceAlpha);
+        }
+        if (requiredStdInputs.contains("FillPaint")) {
+            QImage fillPaint = sourceGraphic;
+            if (shape->background()) {
+                QPainter fillPainter(&fillPaint);
+                QPainterPath fillPath;
+                fillPath.addRect(fillPaint.rect());
+                shape->background()->paint(fillPainter, fillPath);
+            } else {
+                fillPaint.fill(qRgba(0,0,0,0));
+            }
+            imageBuffers.insert("FillPaint", fillPaint);
         }
 
         imageBuffers.insert("SourceGraphic", sourceGraphic);

@@ -20,7 +20,7 @@
 #ifndef __rdf_InsertSemanticObjectReferenceAction_h__
 #define __rdf_InsertSemanticObjectReferenceAction_h__
 
-#include "rdf/InsertSemanticObjectActionBase.h"
+#include "InsertSemanticObjectActionBase.h"
 
 class InsertSemanticObjectReferenceAction : public InsertSemanticObjectActionBase
 {

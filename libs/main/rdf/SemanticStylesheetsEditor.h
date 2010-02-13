@@ -39,7 +39,7 @@ class QTableWidgetItem;
  */
 class KOMAIN_EXPORT SemanticStylesheetsEditor : public KDialog
 {
-    Q_OBJECT;
+    Q_OBJECT
 public:
     SemanticStylesheetsEditor(QWidget *parent, KoDocumentRdf *rdf);
     ~SemanticStylesheetsEditor();

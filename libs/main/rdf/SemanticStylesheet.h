@@ -44,7 +44,7 @@
  */
 class KOMAIN_EXPORT SemanticStylesheet : public QObject
 {
-    Q_OBJECT;
+    Q_OBJECT
 
     QString m_uuid;
     QString m_name;

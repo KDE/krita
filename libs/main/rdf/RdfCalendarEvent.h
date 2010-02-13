@@ -20,15 +20,14 @@
 #ifndef __rdf_RdfCalendarEvent_h__
 #define __rdf_RdfCalendarEvent_h__
 
-#include "komain_export.h"
-#include "rdf/RdfSemanticItem.h"
+#include "../komain_export.h"
+#include "RdfSemanticItem.h"
 #include <QSharedPointer>
 
 namespace KCal
 {
     class Event;
-};
-
+}
 
 /**
  * @short Calendar event information from Rdf (ical/vevent).
@@ -42,30 +41,25 @@ namespace KCal
  */
 class KOMAIN_EXPORT RdfCalendarEvent : public RdfSemanticItem
 {
-    Q_OBJECT;
-    struct Private;
-    QSharedPointer<Private> d;
-
-    KCal::Event* toKEvent();
-    void fromKEvent(KCal::Event* e);
+    Q_OBJECT
 
 public:
-    RdfCalendarEvent(QObject* parent, KoDocumentRdf* m_rdf = 0);
-    RdfCalendarEvent(QObject* parent, KoDocumentRdf* m_rdf, Soprano::QueryResultIterator& it);
+    RdfCalendarEvent(QObject *parent, KoDocumentRdf *m_rdf = 0);
+    RdfCalendarEvent(QObject *parent, KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it);
     virtual ~RdfCalendarEvent();
 
     // inherited and reimplemented...
 
-    virtual void exportToFile(const QString& fileName = "");
-    virtual void importFromData(const QByteArray& ba, KoDocumentRdf* m_rdf = 0, KoCanvasBase* host = 0);
+    virtual void exportToFile(const QString& fileName = QString());
+    virtual void importFromData(const QByteArray& ba, KoDocumentRdf *m_rdf = 0, KoCanvasBase *host = 0);
     virtual QWidget* createEditor(QWidget *parent);
     virtual void updateFromEditorData();
-    virtual RdfSemanticTreeWidgetItem* createQTreeWidgetItem(QTreeWidgetItem* parent = 0);
+    virtual RdfSemanticTreeWidgetItem* createQTreeWidgetItem(QTreeWidgetItem *parent = 0);
     virtual Soprano::Node linkingSubject() const;
-    virtual void setupStylesheetReplacementMapping(QMap< QString, QString >& m);
-    virtual void exportToMime(QMimeData* md);
-    virtual QList<SemanticStylesheet*>& stylesheets();
-    virtual QList<SemanticStylesheet*>& userStylesheets();
+    virtual void setupStylesheetReplacementMapping(QMap<QString, QString> &m);
+    virtual void exportToMime(QMimeData *md);
+    virtual QList<SemanticStylesheet*> &stylesheets();
+    virtual QList<SemanticStylesheet*> &userStylesheets();
 
     /**
      * Save ourself to the users KDE events calendar.
@@ -80,5 +74,12 @@ public:
     QString uid();
     KDateTime start();
     KDateTime end();
+
+private:
+    class Private;
+    QSharedPointer<Private> d;
+
+    KCal::Event *toKEvent();
+    void fromKEvent(KCal::Event *e);
 };
 #endif

@@ -21,8 +21,8 @@
 #define __koDocumentRdfEditWidget_h__
 
 #include "komain_export.h"
-#include "rdf/RdfForward.h"
-#include "rdf/KoDocumentRdfEditWidgetBase.h"
+#include "RdfForward.h"
+#include "KoDocumentRdfEditWidgetBase.h"
 #include <QWidget>
 
 class KoDocumentRdf;
@@ -47,7 +47,6 @@ class QComboBox;
 class KOMAIN_EXPORT KoDocumentRdfEditWidget : public KoDocumentRdfEditWidgetBase
 {
     Q_OBJECT
-
 public:
 
     /**
@@ -55,13 +54,13 @@ public:
      * @param parent a pointer to the parent widget
      * @param docRdf a pointer to the KoDocumentRdf to show/edit
      */
-    KoDocumentRdfEditWidget(QWidget *parent, KoDocumentRdf* docRdf);
+    KoDocumentRdfEditWidget(QWidget *parent, KoDocumentRdf *docRdf);
 
     /** The destructor */
     virtual ~KoDocumentRdfEditWidget();
 
     /** Add this widget to a user interface where you want Rdf editing */
-    QWidget* widget();
+    QWidget *widget();
 
     bool shouldDialogCloseBeVetoed();
 
@@ -120,18 +119,18 @@ private slots:
     /**
      * Show a context menu for the semantic treeview
      */
-    void showSemanticViewContextMenu(const QPoint &);
+    void showSemanticViewContextMenu(const QPoint &at);
 
     /**
      * The user edited a semantic item, update the view.
      */
-    void semanticObjectUpdated(RdfSemanticItem* item);
+    void semanticObjectUpdated(RdfSemanticItem *item);
 
 private:
 
     SemanticStylesheet *stylesheetFromComboBox(QComboBox *w);
 
     class KoDocumentRdfEditWidgetPrivate;
-    KoDocumentRdfEditWidgetPrivate* const d;
+    KoDocumentRdfEditWidgetPrivate *const d;
 };
 #endif

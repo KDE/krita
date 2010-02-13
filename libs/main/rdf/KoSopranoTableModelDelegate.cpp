@@ -17,28 +17,29 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "rdf/KoSopranoTableModelDelegate.h"
-#include "rdf/KoSopranoTableModel.h"
+#include "KoSopranoTableModelDelegate.h"
+#include "KoSopranoTableModel.h"
 
 #include "KoDocumentRdf.h"
-#include "KoDocument.h"
+#include "../KoDocument.h"
 
+#include <klocale.h>
 #include <QComboBox>
 
-KoSopranoTableModelDelegate::KoSopranoTableModelDelegate(QObject* parent)
+KoSopranoTableModelDelegate::KoSopranoTableModelDelegate(QObject *parent)
         : QStyledItemDelegate(parent)
 {
 }
 
-QWidget* KoSopranoTableModelDelegate::createEditor(QWidget *parent,
-        const QStyleOptionViewItem & option,
+QWidget *KoSopranoTableModelDelegate::createEditor(QWidget *parent,
+        const QStyleOptionViewItem &option,
         const QModelIndex &index) const
 {
     QComboBox *comboBox = new QComboBox(parent);
     if (index.column() == KoSopranoTableModel::COL_OBJ_TYPE) {
-        comboBox->addItem(tr("URI"));
-        comboBox->addItem(tr("Literal"));
-        comboBox->addItem(tr("Blank"));
+        comboBox->addItem(i18n("URI"));
+        comboBox->addItem(i18n("Literal"));
+        comboBox->addItem(i18n("Blank"));
     } else {
         return QStyledItemDelegate::createEditor(parent, option, index);
     }
@@ -67,7 +68,6 @@ void KoSopranoTableModelDelegate::setModelData(QWidget *editor, QAbstractItemMod
     }
     model->setData(index, comboBox->currentText());
 }
-
 
 void KoSopranoTableModelDelegate::emitCommitData()
 {

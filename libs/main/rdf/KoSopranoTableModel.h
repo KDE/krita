@@ -36,17 +36,16 @@ class KoDocumentRdf;
  * and storage location of the triple.
  */
 class KoSopranoTableModel
-        :
-        public QAbstractTableModel
+        : public QAbstractTableModel
 {
-    KoDocumentRdf* m_rdf;
+    KoDocumentRdf *m_rdf;
     /**
      * Because we need to be able to lookup triples by
      * row number, a QList is created giving efficient index
      * lookup for statements. Note that Soprano::Statement
      * uses pimpl so we are not really copying statements here.
      */
-    QList< Soprano::Statement > m_statementIndex;
+    QList<Soprano::Statement> m_statementIndex;
 
     /**
      * True if the statement is stored in content.xml
@@ -60,9 +59,10 @@ public:
      * Get the RDF model we this class is showing.
      * You should not delete the return value.
      */
-    Soprano::Model* model() const;
+    Soprano::Model *model() const;
 
     enum {
+        // TODO CamelCase
         COL_ISVALID = 0,  // Is this triple valid
         COL_SUBJ,         // subject
         COL_PRED,         // predicate
@@ -76,19 +76,17 @@ public:
     /**
      * Convenience method, same as m_rdf->getPrefixMapping()
      */
-    QString URItoPrefexedLocalname(QString uri) const;
+    QString URItoPrefexedLocalname(const QString &uri) const;
     /**
      * Convenience method, same as m_rdf->getPrefixMapping()
      */
-    QString PrefexedLocalnameToURI(QString pname);
+    QString PrefexedLocalnameToURI(const QString &pname);
 
-
-
-    virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
-    int columnCount(const QModelIndex & parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    Qt::ItemFlags flags(const QModelIndex & index) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
     /**
      * You MUST use this method if you want to change a Statement.
@@ -97,8 +95,8 @@ public:
      * The internal m_statementIndex int->statement is updated
      * as well as the dataChanged signal emitted
      */
-    bool setDataUpdateTriple(const QModelIndex & index, Soprano::Statement& old, Soprano::Statement& n);
-    bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
+    bool setDataUpdateTriple(const QModelIndex &index, Soprano::Statement &old, Soprano::Statement &n);
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     /**
      * Add the statement 'st' to the model as the new last row.
@@ -111,17 +109,17 @@ public:
      * postfix so that the new triple copies can be inserted into
      * the Rdf model. It is a copy in a looser sense of the word.
      */
-    QModelIndexList copyTriples(QModelIndexList srclist);
+    QModelIndexList copyTriples(const QModelIndexList &srclist);
 
     /**
      * Delete all the triples in srclist from the model.
      */
-    void deleteTriples(QModelIndexList srclist);
+    void deleteTriples(const QModelIndexList &srclist);
 
     /**
      * Find the statement at the given row.
      */
-    Soprano::Statement statementAtIndex(QModelIndex mi);
+    Soprano::Statement statementAtIndex(const QModelIndex &mi);
 
     /**
      * The number of statements that have been partially or invalidly
@@ -138,5 +136,5 @@ public:
      */
     QModelIndexList invalidStatementList();
 };
-#endif
 
+#endif

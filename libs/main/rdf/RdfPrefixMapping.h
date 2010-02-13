@@ -42,7 +42,7 @@
  */
 class KOMAIN_EXPORT RdfPrefixMapping : public QObject
 {
-    Q_OBJECT;
+    Q_OBJECT
 
     friend class KoDocumentRdfEditWidget;
     KoDocumentRdf* m_rdf;

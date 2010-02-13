@@ -29,9 +29,8 @@ class KOMAIN_EXPORT KoDocumentRdfEditWidgetBase : public QWidget
 {
     Q_OBJECT
 public:
-    KoDocumentRdfEditWidgetBase(QWidget *parent, KoDocumentRdf* docRdf);
+    KoDocumentRdfEditWidgetBase(QWidget *parent, KoDocumentRdf *docRdf);
     virtual bool shouldDialogCloseBeVetoed();
     virtual void apply();
-
 };
 #endif

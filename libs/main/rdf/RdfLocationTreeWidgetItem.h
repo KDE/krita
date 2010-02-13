@@ -35,7 +35,7 @@ class KoCanvasBase;
  */
 class KOMAIN_EXPORT RdfLocationTreeWidgetItem : public RdfSemanticTreeWidgetItem
 {
-    Q_OBJECT;
+    Q_OBJECT
 
     RdfLocation* m_semanticObject;
 protected:

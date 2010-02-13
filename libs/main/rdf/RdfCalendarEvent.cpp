@@ -36,7 +36,7 @@
 #include <KConfigGroup>
 #endif
 
-#include "ui_RdfCalendarEventEditWidget.h"
+#include <ui_RdfCalendarEventEditWidget.h>
 
 using namespace Soprano;
 
@@ -55,16 +55,15 @@ public:
     Ui::RdfCalendarEventEditWidget editWidget;
 };
 
-RdfCalendarEvent::RdfCalendarEvent(QObject* parent, KoDocumentRdf* m_rdf)
+RdfCalendarEvent::RdfCalendarEvent(QObject *parent, KoDocumentRdf *m_rdf)
         : RdfSemanticItem(parent, m_rdf)
         , d(new Private())
 {
     d->m_startTimespec = KSystemTimeZones::local();
     d->m_endTimespec = KSystemTimeZones::local();
-
 }
 
-static KDateTime VEventDateTimeToKDateTime(QString s, KDateTime::Spec& tz)
+static KDateTime VEventDateTimeToKDateTime(const QString &s, KDateTime::Spec &tz)
 {
     kDebug(30015) << "top... tz.offset:" << tz.timeZone().currentOffset();
 
@@ -94,10 +93,10 @@ static KDateTime VEventDateTimeToKDateTime(QString s, KDateTime::Spec& tz)
     ret = ret.toLocalZone();
     tz = KSystemTimeZones::local();
     kDebug(30015) << "date string:" << s << "\n"
-    << " is valid:" << ret.isValid() << "\n"
-    << " parsed:" << ret << "\n"
-    << " time.tz.offset:" << ret.timeZone().currentOffset()
-    << " tz.offset:" << tz.timeZone().currentOffset();
+        << " is valid:" << ret.isValid() << "\n"
+        << " parsed:" << ret << "\n"
+        << " time.tz.offset:" << ret.timeZone().currentOffset()
+        << " tz.offset:" << tz.timeZone().currentOffset();
     return ret;
 }
 
@@ -114,8 +113,8 @@ static KTimeZone toKTimeZone(Soprano::Node n)
     }
     KTimeZone kt = KSystemTimeZones::zone(dt);
     kDebug(30015) << "input:" << n.dataType().toString()
-    << " output tz.valid:" << kt.isValid()
-    << " timezone:" << dt;
+        << " output tz.valid:" << kt.isValid()
+        << " timezone:" << dt;
     if (!kt.isValid()) {
         // UTC "Zulu" Time
         if (dt == "2001/XMLSchema#dateTime" && n.toString().endsWith("Z")) {
@@ -131,8 +130,7 @@ static KTimeZone toKTimeZone(Soprano::Node n)
     return kt;
 }
 
-
-RdfCalendarEvent::RdfCalendarEvent(QObject* parent, KoDocumentRdf* m_rdf, Soprano::QueryResultIterator& it)
+RdfCalendarEvent::RdfCalendarEvent(QObject *parent, KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it)
         : RdfSemanticItem(parent, m_rdf, it)
         , d(new Private())
 {
@@ -151,9 +149,9 @@ RdfCalendarEvent::RdfCalendarEvent(QObject* parent, KoDocumentRdf* m_rdf, Sopran
     d->m_dtend = VEventDateTimeToKDateTime(it.binding("dtend").toString(),
                                            d->m_endTimespec);
     kDebug(30015) << "RdfCalendarEvent() start:" << d->m_dtstart
-    << " end:" << d->m_dtend;
+        << " end:" << d->m_dtend;
     kDebug(30015) << "RdfCalendarEvent() long:" << optionalBindingAsString(it, "long")
-    << " lat:" << optionalBindingAsString(it, "lat");
+        << " lat:" << optionalBindingAsString(it, "lat");
     kDebug(30015) << "RdfCalendarEvent() context-direct:" << it.binding("graph").toString();
     kDebug(30015) << "RdfCalendarEvent() context():" << context().toString();
     kDebug(30015) << "d->m_startTimespec.offset:" << d->m_startTimespec.timeZone().currentOffset();
@@ -167,9 +165,9 @@ RdfCalendarEvent::~RdfCalendarEvent()
 {
 }
 
-QWidget* RdfCalendarEvent::createEditor(QWidget * parent)
+QWidget* RdfCalendarEvent::createEditor(QWidget *parent)
 {
-    QWidget* ret = new QWidget(parent);
+    QWidget *ret = new QWidget(parent);
 
     kDebug(30015) << "createEditor()";
     kDebug(30015) << "linkingSubject:" << linkingSubject().toString();
@@ -178,6 +176,7 @@ QWidget* RdfCalendarEvent::createEditor(QWidget * parent)
     d->editWidget.summary->setText(d->m_summary);
     d->editWidget.location->setText(d->m_location);
     enum {
+        // TODO CamelCase
         COL_AREA = 0,
         COL_REGION,
         COL_COMMENT,
@@ -248,9 +247,9 @@ void RdfCalendarEvent::updateFromEditorData()
     }
 }
 
-RdfSemanticTreeWidgetItem* RdfCalendarEvent::createQTreeWidgetItem(QTreeWidgetItem* parent)
+RdfSemanticTreeWidgetItem *RdfCalendarEvent::createQTreeWidgetItem(QTreeWidgetItem* parent)
 {
-    RdfCalendarEventTreeWidgetItem* item  =
+    RdfCalendarEventTreeWidgetItem *item  =
         new RdfCalendarEventTreeWidgetItem(parent, this);
     return item;
 }
@@ -261,7 +260,7 @@ Soprano::Node RdfCalendarEvent::linkingSubject() const
     return d->m_linkSubject;
 }
 
-void RdfCalendarEvent::setupStylesheetReplacementMapping(QMap< QString, QString >& m)
+void RdfCalendarEvent::setupStylesheetReplacementMapping(QMap<QString, QString> &m)
 {
     m["%UID%"] = d->m_uid;
     m["%START%"] = KGlobal::locale()->formatDateTime(d->m_dtstart.dateTime());
@@ -272,19 +271,18 @@ void RdfCalendarEvent::setupStylesheetReplacementMapping(QMap< QString, QString 
     times["START"] = d->m_dtstart;
     times["END"] = d->m_dtend;
     for (QMap< QString, KDateTime >::iterator ti = times.begin(); ti != times.end(); ++ti) {
-        QString  KEY = QString("%") + ti.key();
+        QString key = QString("%") + ti.key();
         KDateTime dt = ti.value();
-        QDate     qd = dt.date();
-        m[KEY + "-YEAR%"] = qd.year();
-        m[KEY + "-MONTH-NUM%"] = qd.month();
-        m[KEY + "-MONTH-NAME%"] = QDate::shortMonthName(qd.month());
-        m[KEY + "-DAY-NUM%"] = qd.day();
-        m[KEY + "-DAY-NAME%"] = QDate::shortDayName(qd.day());
+        QDate qd = dt.date();
+        m[key + "-YEAR%"] = qd.year();
+        m[key + "-MONTH-NUM%"] = qd.month();
+        m[key + "-MONTH-NAME%"] = QDate::shortMonthName(qd.month());
+        m[key + "-DAY-NUM%"] = qd.day();
+        m[key + "-DAY-NAME%"] = QDate::shortDayName(qd.day());
     }
 }
 
-
-void RdfCalendarEvent::exportToMime(QMimeData* md)
+void RdfCalendarEvent::exportToMime(QMimeData *md)
 {
     QTemporaryFile file;
     if (file.open()) {
@@ -308,8 +306,9 @@ void RdfCalendarEvent::exportToMime(QMimeData* md)
     md->setText(data);
 }
 
-QList<SemanticStylesheet*>& RdfCalendarEvent::stylesheets()
+QList<SemanticStylesheet*> &RdfCalendarEvent::stylesheets()
 {
+    // TODO we probably want a namespace for these (like KoXmlNS).
     static QList<SemanticStylesheet*> stylesheets;
     if (stylesheets.empty()) {
         stylesheets.append(
@@ -331,7 +330,7 @@ QList<SemanticStylesheet*>& RdfCalendarEvent::stylesheets()
     return stylesheets;
 }
 
-QList<SemanticStylesheet*>& RdfCalendarEvent::userStylesheets()
+QList<SemanticStylesheet*> &RdfCalendarEvent::userStylesheets()
 {
     static QList<SemanticStylesheet*> ret;
     return ret;
@@ -367,9 +366,9 @@ KDateTime RdfCalendarEvent::end()
     return d->m_dtend;
 }
 
-static KCal::CalendarResources* StdCalendar()
+static KCal::CalendarResources *StdCalendar()
 {
-    static KCal::CalendarResources* ret = 0;
+    static KCal::CalendarResources *ret = 0;
     if (!ret) {
         ret = new KCal::CalendarResources(KSystemTimeZones::local());
         ret->readConfig();
@@ -382,8 +381,7 @@ static KCal::CalendarResources* StdCalendar()
     return ret;
 }
 
-KCal::Event*
-RdfCalendarEvent::toKEvent()
+KCal::Event *RdfCalendarEvent::toKEvent()
 {
     KCal::Event *event = new KCal::Event();
     event->setDtStart(start());
@@ -394,7 +392,7 @@ RdfCalendarEvent::toKEvent()
     return event;
 }
 
-void RdfCalendarEvent::fromKEvent(KCal::Event* event)
+void RdfCalendarEvent::fromKEvent(KCal::Event *event)
 {
     d->m_dtstart = event->dtStart();
     d->m_dtend   = event->dtEnd();
@@ -418,14 +416,12 @@ void RdfCalendarEvent::fromKEvent(KCal::Event* event)
     kDebug(30015) << "dtstart.roundTrip.offset:" << tz.timeZone().currentOffset();
 }
 
-
-
 void RdfCalendarEvent::saveToKCal()
 {
 #ifdef KDEPIMLIBS_FOUND
-    KCal::CalendarResources* calendarResource = StdCalendar();
+    KCal::CalendarResources *calendarResource = StdCalendar();
     calendarResource->load();
-    KCal::Event* event = toKEvent();
+    KCal::Event *event = toKEvent();
     if (calendarResource->addEvent(event)) {
         kDebug(30015) << "Added calendar entry:" << name();
         calendarResource->save();
@@ -435,7 +431,7 @@ void RdfCalendarEvent::saveToKCal()
 #endif
 }
 
-void RdfCalendarEvent::exportToFile(const QString& fileNameConst)
+void RdfCalendarEvent::exportToFile(const QString &fileNameConst)
 {
     QString fileName = fileNameConst;
 #ifdef KDEPIMLIBS_FOUND
@@ -461,7 +457,7 @@ void RdfCalendarEvent::exportToFile(const QString& fileNameConst)
 #endif
 }
 
-void RdfCalendarEvent::importFromData(const QByteArray& ba, KoDocumentRdf* _rdf, KoCanvasBase* host)
+void RdfCalendarEvent::importFromData(const QByteArray &ba, KoDocumentRdf *_rdf, KoCanvasBase *host)
 {
     kDebug(30015) << "data.sz:" << ba.size();
     kDebug(30015) << "_rdf:" << _rdf;
@@ -469,7 +465,7 @@ void RdfCalendarEvent::importFromData(const QByteArray& ba, KoDocumentRdf* _rdf,
         m_rdf = _rdf;
     }
     KCal::VCalFormat v;
-    KCal::Calendar* cal = new KCal::CalendarLocal(KSystemTimeZones::local());
+    KCal::Calendar *cal = new KCal::CalendarLocal(KSystemTimeZones::local());
     bool rc = v.fromRawString(cal, ba);
     kDebug(30015) << "parse rc:" << rc;
     KCal::Event::List events = cal->rawEvents();

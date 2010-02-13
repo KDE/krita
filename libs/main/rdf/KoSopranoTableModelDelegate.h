@@ -33,8 +33,7 @@
  */
 class KoSopranoTableModelDelegate : public QStyledItemDelegate
 {
-    Q_OBJECT;
-
+    Q_OBJECT
 public:
     KoSopranoTableModelDelegate(QObject *parent);
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,

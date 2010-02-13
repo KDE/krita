@@ -32,7 +32,7 @@
  */
 class KOMAIN_EXPORT RdfLocationEditWidget : public QWidget
 {
-    Q_OBJECT;
+    Q_OBJECT
 public:
     RdfLocationEditWidget(QWidget* parent, Ui::RdfLocationEditWidget* ew);
 

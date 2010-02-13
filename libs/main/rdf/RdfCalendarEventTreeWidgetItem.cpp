@@ -19,9 +19,9 @@
 
 #include "RdfCalendarEventTreeWidgetItem.h"
 
-#include "rdf/KoDocumentRdf.h"
-#include "rdf/KoDocumentRdf_p.h"
-#include "rdf/RdfSemanticTreeWidgetSelectAction.h"
+#include "KoDocumentRdf.h"
+#include "KoDocumentRdf_p.h"
+#include "RdfSemanticTreeWidgetSelectAction.h"
 
 #include <kdebug.h>
 #include <klocale.h>

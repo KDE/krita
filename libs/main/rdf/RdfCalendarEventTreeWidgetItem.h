@@ -35,7 +35,7 @@ class KoCanvasBase;
  */
 class KOMAIN_EXPORT RdfCalendarEventTreeWidgetItem : public RdfSemanticTreeWidgetItem
 {
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
     enum {

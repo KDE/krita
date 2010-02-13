@@ -53,7 +53,7 @@ class QTreeWidgetItem;
  */
 class KOMAIN_EXPORT RdfSemanticItem : public QObject
 {
-    Q_OBJECT;
+    Q_OBJECT
 
     /**
      * The updateTriple() methods all call remove() then add() to

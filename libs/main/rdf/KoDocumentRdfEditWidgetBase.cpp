@@ -19,7 +19,7 @@
 
 #include "KoDocumentRdfEditWidgetBase.h"
 
-KoDocumentRdfEditWidgetBase::KoDocumentRdfEditWidgetBase(QWidget *parent, KoDocumentRdf* docRdf)
+KoDocumentRdfEditWidgetBase::KoDocumentRdfEditWidgetBase(QWidget *parent, KoDocumentRdf *docRdf)
         : QWidget(parent)
 {
     Q_UNUSED(docRdf);

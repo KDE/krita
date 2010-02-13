@@ -39,7 +39,7 @@
  */
 class KOMAIN_EXPORT RdfLocation : public RdfSemanticItem
 {
-    Q_OBJECT;
+    Q_OBJECT
     struct Private;
     QSharedPointer<Private> d;
 

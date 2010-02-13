@@ -1364,7 +1364,7 @@ void KoDocumentRdf::insertReflow(QMap<int, reflowItem> &col, RdfSemanticItem *ob
 }
 
 void KoDocumentRdf::insertReflow(QMap<int, reflowItem> &col, RdfSemanticItem *obj,
-                                 QString sheetType, QString stylesheetName)
+                                 const QString &sheetType, const QString &stylesheetName)
 {
     SemanticStylesheet *ss = obj->findStylesheetByName(sheetType, stylesheetName);
     insertReflow(col, obj, ss);

@@ -43,7 +43,7 @@ class KoCanvasBase;
  */
 class KOMAIN_EXPORT RdfSemanticTreeWidgetItem : public QObject, public QTreeWidgetItem
 {
-    Q_OBJECT;
+    Q_OBJECT
 
     virtual void testfunc() {}
 

@@ -49,6 +49,7 @@ public:
     static const char* const xlink;
     static const char* const VL;
     static const char* const smil;
+    static const char* const xhtml;
 
     static const char* const koffice;
 private:

@@ -26,10 +26,11 @@
 #include <KoShapeSavingContext.h>
 
 #include <opendocument/KoTextSharedSavingData.h>
+#include "KoTextSopranoRdfModel_p.h"
 
 struct KoTextOdfSaveHelper::Private {
     Private(KoTextShapeData *shapeData, int from, int to)
-            :shapeData(shapeData),
+            : shapeData(shapeData),
             from(from),
             to(to) {}
 
@@ -38,6 +39,8 @@ struct KoTextOdfSaveHelper::Private {
 
     int from;
     int to;
+
+    Soprano::Model* m_rdfModel; //< This is so cut/paste can serialize the relevant RDF to the clipboard
 };
 
 
@@ -74,3 +77,14 @@ KoShapeSavingContext * KoTextOdfSaveHelper::context(KoXmlWriter * bodyWriter, Ko
     d->context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
     return d->context;
 }
+
+void KoTextOdfSaveHelper::setRdfModel(Soprano::Model* m)
+{
+    d->m_rdfModel = m;
+}
+
+Soprano::Model* KoTextOdfSaveHelper::rdfModel() const
+{
+    return d->m_rdfModel;
+}
+

@@ -33,6 +33,7 @@ class KoStyleManager;
 class KoInlineTextObjectManager;
 class KUndoStack;
 class KoTextEditor;
+class KoDocument;
 
 /**
  * KoTextDocument provides an easy mechanism to set and access the

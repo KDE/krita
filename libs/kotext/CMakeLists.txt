@@ -51,6 +51,8 @@ set(kotext_LIB_SRCS
     KoTextPage.cpp
     KoPageProvider.cpp
     KoTableColumnAndRowStyleManager.cpp
+    KoTextInlineRdf.cpp
+    KoTextMeta.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
@@ -79,9 +81,18 @@ set(kotext_LIB_SRCS
     KoTextDrag.cpp
 )
 
+if( Soprano_FOUND )
+    set(kotext_LIB_SRCS ${kotext_LIB_SRCS}
+        KoTextRdfCore.cpp
+    )
+endif( Soprano_FOUND )
+
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
 target_link_libraries(kotext flake ${KDE4_KUTILS_LIBS})
+if( Soprano_FOUND )
+    target_link_libraries(kotext ${SOPRANO_LIBRARIES})
+endif( Soprano_FOUND )
 target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake)
 
 set_target_properties(kotext PROPERTIES
@@ -118,6 +129,9 @@ install(
     KoVariable.h
     KoVariableManager.h
     KoVariableRegistry.h
+    KoTextRdfCore.h
+    KoTextInlineRdf.h
+    KoTextMeta.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel

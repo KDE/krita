@@ -26,6 +26,10 @@
 #include "KoDocumentInfo.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
+#include "rdf/KoDocumentRdfEditWidgetBase.h"
+#ifdef SHOULD_BUILD_RDF
+#include "rdf/KoDocumentRdfEditWidget.h"
+#endif
 
 #include <kmimetype.h>
 #include <klocale.h>
@@ -53,6 +57,8 @@ class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
 public:
     KoDocumentInfoDlgPrivate() :
+            m_rdf(0),
+            m_rdfEditWidget(0),
             m_toggleEncryption(false),
             m_applyToggleEncryption(false),
             m_documentSaved(false) {}
@@ -61,18 +67,24 @@ public:
     KoDocumentInfo* m_info;
     Ui::KoDocumentInfoAboutWidget* m_aboutUi;
     Ui::KoDocumentInfoAuthorWidget* m_authorUi;
-
+    KoDocumentRdf* m_rdf;
+#ifdef SHOULD_BUILD_RDF
+    KoDocumentRdfEditWidget* m_rdfEditWidget;
+#else
+    KoDocumentRdfEditWidgetBase* m_rdfEditWidget;
+#endif
     bool m_toggleEncryption;
     bool m_applyToggleEncryption;
     bool m_documentSaved;
 };
 
 
-KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
+KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo, KoDocumentRdf* docRdf)
         : KPageDialog(parent)
         , d(new KoDocumentInfoDlgPrivate)
 {
     d->m_info = docInfo;
+    d->m_rdf = docRdf;
 
     setCaption(i18n("Document Information"));
     setInitialSize(QSize(500, 500));
@@ -113,6 +125,17 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
     // Saving encryption implies saving the document, this is done after closing the dialog
     connect(this, SIGNAL(hidden()), this, SLOT(slotSaveEncryption()));
+
+    if (d->m_rdf) {
+        d->m_rdfEditWidget = 0;
+
+#ifdef SHOULD_BUILD_RDF
+        d->m_rdfEditWidget = new KoDocumentRdfEditWidget(this, d->m_rdf);
+        page = new KPageWidgetItem(d->m_rdfEditWidget->widget(), i18n("Rdf"));
+        page->setHeader(i18n("Rdf"));
+        addPage(page);
+#endif
+    }
 }
 
 KoDocumentInfoDlg::~KoDocumentInfoDlg()
@@ -120,6 +143,22 @@ KoDocumentInfoDlg::~KoDocumentInfoDlg()
     delete d->m_authorUi;
     delete d->m_aboutUi;
     delete d;
+}
+
+void KoDocumentInfoDlg::slotButtonClicked(int button)
+{
+    emit buttonClicked(static_cast<KDialog::ButtonCode>(button));
+    switch (button) {
+    case Ok:
+        if (d->m_rdfEditWidget) {
+            if (d->m_rdfEditWidget->shouldDialogCloseBeVetoed()) {
+                return;
+            }
+        }
+        accept();
+        return;
+    }
+    KPageDialog::slotButtonClicked(button);
 }
 
 bool KoDocumentInfoDlg::isDocumentSaved()
@@ -236,6 +275,9 @@ void KoDocumentInfoDlg::slotApply()
 {
     saveAboutData();
     saveAuthorData();
+    if (d->m_rdfEditWidget) {
+        d->m_rdfEditWidget->apply();
+    }
 }
 
 void KoDocumentInfoDlg::saveAboutData()

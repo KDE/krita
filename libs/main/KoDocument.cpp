@@ -28,6 +28,10 @@
 #include "KoMainWindow.h"
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
+#include "rdf/KoDocumentRdfBase.h"
+#ifdef SHOULD_BUILD_RDF
+#include "rdf/KoDocumentRdf.h"
+#endif
 #include "KoOdfStylesReader.h"
 #include "KoOdfReadStore.h"
 #include "KoOdfWriteStore.h"
@@ -138,6 +142,11 @@ public:
 
     KoViewWrapperWidget *wrapperWidget;
     KoDocumentInfo *docInfo;
+#ifdef SHOULD_BUILD_RDF
+    KoDocumentRdf *docRdf;
+#else
+    KoDocumentRdfBase *docRdf;
+#endif
 
     KoUnit unit;
 
@@ -282,6 +291,10 @@ KoDocument::KoDocument(QWidget * parentWidget, QObject* parent, bool singleViewM
     }
 
     d->docInfo = new KoDocumentInfo(this);
+    d->docRdf = 0;
+#ifdef SHOULD_BUILD_RDF
+    d->docRdf  = new KoDocumentRdf(this);
+#endif
 
     d->pageLayout.width = 0;
     d->pageLayout.height = 0;
@@ -704,6 +717,20 @@ KoDocumentInfo *KoDocument::documentInfo() const
     return d->docInfo;
 }
 
+KoDocumentRdf *KoDocument::documentRdf() const
+{
+#ifdef SHOULD_BUILD_RDF
+    return d->docRdf;
+#endif
+    return 0;
+}
+
+KoDocumentRdfBase *KoDocument::documentRdfBase() const
+{
+    return d->docRdf;
+}
+
+
 void KoDocument::paintEverything(QPainter &painter, const QRect &rect, KoView *view)
 {
     Q_UNUSED(view);
@@ -809,6 +836,12 @@ bool KoDocument::saveNativeFormatODF(KoStore* store, const QByteArray &mimeType)
         manifestWriter->addManifestEntry("meta.xml", "text/xml");
     } else {
         d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("meta.xml"));
+        delete store;
+        return false;
+    }
+
+    if (d->docRdf && !d->docRdf->saveOasis(store, manifestWriter)) {
+        d->lastErrorMessage = i18n("Not able to write RDF metadata. Partition full?");
         delete store;
         return false;
     }
@@ -1587,6 +1620,12 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore * store)
         delete d->docInfo;
         d->docInfo = new KoDocumentInfo(this);
     }
+
+    if (oasis && store->hasFile("manifest.rdf") && d->docRdf) {
+        d->docRdf->loadOasis(store);
+    }
+
+
 
     if (oasis && store->hasFile("VersionList.xml")) {
         KMessageBox::information(0, i18n("This document contains several versions. Go to File->Versions to open an old version."), QString(), "informVersionsAtLoading");

@@ -83,7 +83,7 @@ public:
         setIgnoreScrollBars(true);
     }
     virtual bool eventFilter(QObject *obj, QEvent *ev) {
-        if (!obj->isWidgetType() )
+        if (!obj->isWidgetType())
             return false;
         return KParts::PartManager::eventFilter(obj, ev);
     }
@@ -1234,7 +1234,7 @@ void KoMainWindow::slotDocumentInfo()
     if (!docInfo)
         return;
 
-    KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(this, docInfo);
+    KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(this, docInfo, rootDocument()->documentRdf());
     if (dlg->exec()) {
         if (dlg->isDocumentSaved()) {
             rootDocument()->setModified(false);

@@ -26,6 +26,10 @@
 
 class KoTextShapeData;
 class KoXmlWriter;
+namespace Soprano
+{
+class Model;
+}
 
 class KOTEXT_EXPORT KoTextOdfSaveHelper : public KoDragOdfSaveHelper
 {
@@ -37,6 +41,14 @@ public:
     virtual bool writeBody();
 
     virtual KoShapeSavingContext * context(KoXmlWriter * bodyWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver & embeddedSaver);
+
+    /**
+     * The Rdf Model ownership is not taken, you must still delete it,
+     * and you need to ensure that it lives longer than this object
+     * unless you reset the model to 0.
+     */
+    void setRdfModel(Soprano::Model* m);
+    Soprano::Model* rdfModel() const;
 
 private:
     struct Private;

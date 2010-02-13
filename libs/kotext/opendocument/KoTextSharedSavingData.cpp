@@ -20,6 +20,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "KoTextSharedSavingData.h"
 
 #include "KoGenChanges.h"
+#include "KoTextSopranoRdfModel_p.h"
 
 class KoTextSharedSavingData::Private
 {
@@ -27,10 +28,12 @@ public:
     ~Private() {}
 
     KoGenChanges *changes;
+    QMap<QString, QString> m_rdfIdMapping; //< This lets the RDF system know old->new xml:id
+    Soprano::Model* m_rdfModel; //< This is so cut/paste can serialize the relevant RDF to the clipboard
 };
 
 KoTextSharedSavingData::KoTextSharedSavingData()
-: d(new Private())
+        : d(new Private())
 {
 }
 
@@ -47,3 +50,24 @@ KoGenChanges& KoTextSharedSavingData::genChanges()
 {
     return *(d->changes);
 }
+
+void KoTextSharedSavingData::addRdfIdMapping(QString oldid, QString newid)
+{
+    d->m_rdfIdMapping[ oldid ] = newid;
+}
+
+QMap<QString, QString> KoTextSharedSavingData::getRdfIdMapping()
+{
+    return d->m_rdfIdMapping;
+}
+
+void KoTextSharedSavingData::setRdfModel(Soprano::Model* m)
+{
+    d->m_rdfModel = m;
+}
+
+Soprano::Model* KoTextSharedSavingData::rdfModel() const
+{
+    return d->m_rdfModel;
+}
+

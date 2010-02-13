@@ -28,20 +28,30 @@
 #include "KoTextShapeData.h"
 #include "opendocument/KoTextLoader.h"
 
-class KoTextPaste::Private {
+#include <kdebug.h>
+#ifdef SHOULD_BUILD_RDF
+#include "KoTextRdfCore.h"
+#endif
+
+class KoTextPaste::Private
+{
 public:
-    Private(KoTextShapeData * shapeData, QTextCursor & cursor, KoCanvasBase * canvas)
+    Private(KoTextShapeData *shapeData, QTextCursor &cursor,
+            KoCanvasBase *canvas, Soprano::Model *rdfModel)
             : shapeData(shapeData)
             , cursor(cursor)
-            , canvas(canvas) {}
+            , canvas(canvas)
+            , rdfModel(rdfModel) {}
 
-    KoTextShapeData * shapeData;
-    QTextCursor & cursor;
-    KoCanvasBase * canvas;
+    KoTextShapeData *shapeData;
+    QTextCursor &cursor;
+    KoCanvasBase *canvas;
+    Soprano::Model *rdfModel;
 };
 
-KoTextPaste::KoTextPaste(KoTextShapeData * shapeData, QTextCursor & cursor, KoCanvasBase * canvas)
-        : d(new Private(shapeData, cursor, canvas))
+KoTextPaste::KoTextPaste(KoTextShapeData *shapeData, QTextCursor &cursor,
+                         KoCanvasBase *canvas, Soprano::Model *rdfModel)
+        : d(new Private(shapeData, cursor, canvas, rdfModel))
 {
 }
 
@@ -50,14 +60,29 @@ KoTextPaste::~KoTextPaste()
     delete d;
 }
 
-bool KoTextPaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
+
+bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
 {
+    bool ok = true;
     KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
     KoShapeLoadingContext context(loadingContext, d->canvas->shapeController()->resourceManager());
 
     KoTextLoader loader(context);
 
+    kDebug(30015) << "text paste";
     loader.loadBody(body, d->cursor);   // now let's load the body from the ODF KoXmlElement.
 
-    return true;
+#ifdef SHOULD_BUILD_RDF
+    // RDF: Grab RDF metadata from ODF file if present & load it into rdfModel
+    if (d->rdfModel) {
+        Soprano::Model *tmpmodel(Soprano::createModel());
+        bool ok = KoTextRdfCore::loadManifest(odfStore.store(), tmpmodel);
+        kDebug(30015) << "ok:" << ok << " model.sz:" << tmpmodel->statementCount();
+        KoTextRdfCore::dumpModel("RDF from C+P", tmpmodel);
+        d->rdfModel->addStatements(tmpmodel->listStatements().allElements());
+        delete tmpmodel;
+    }
+#endif
+
+    return ok;
 }

@@ -78,11 +78,42 @@ set(komain_LIB_SRCS
     KoTemplatesPane.cpp
     KoTemplateTree.cpp
 
+    rdf/KoDocumentRdfBase.cpp
+    rdf/KoDocumentRdfEditWidgetBase.cpp
+
     ActionJob_p.cpp
     KoAction.cpp
     KoExecutePolicy.cpp
     KoJobsListPolicy.cpp
 )
+if( Soprano_FOUND )
+    set(komain_LIB_SRCS ${komain_LIB_SRCS}
+        rdf/KoDocumentRdf.cpp
+        rdf/KoDocumentRdfEditWidget.cpp
+        rdf/KoSopranoTableModelDelegate.cpp
+        rdf/KoSopranoTableModel.cpp
+        rdf/RdfPrefixMapping.cpp
+        rdf/SemanticStylesheet.cpp
+        rdf/RdfSemanticItem.cpp
+        rdf/RdfFoaF.cpp
+        rdf/RdfCalendarEvent.cpp
+        rdf/RdfLocationEditWidget.cpp
+        rdf/RdfLocation.cpp
+        rdf/RdfSemanticItemViewSite.cpp
+        rdf/RdfSemanticTree.cpp
+        rdf/RdfSemanticTreeWidgetItem.cpp
+        rdf/RdfSemanticTreeWidgetAction.cpp
+        rdf/RdfSemanticTreeWidgetSelectAction.cpp
+        rdf/InsertSemanticObjectActionBase.cpp
+        rdf/InsertSemanticObjectCreateAction.cpp
+        rdf/InsertSemanticObjectReferenceAction.cpp
+        rdf/RdfFoaFTreeWidgetItem.cpp
+        rdf/RdfCalendarEventTreeWidgetItem.cpp
+        rdf/RdfLocationTreeWidgetItem.cpp
+        rdf/SemanticStylesheetsEditor.cpp
+        rdf/KoChangeTrackerDisabledRAII.cpp
+    )
+endif( Soprano_FOUND )
 
 kde4_add_ui_files( komain_LIB_SRCS
    koDocumentInfoAboutWidget.ui
@@ -90,6 +121,17 @@ kde4_add_ui_files( komain_LIB_SRCS
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )
+if( Soprano_FOUND )
+    kde4_add_ui_files( komain_LIB_SRCS
+       rdf/KoDocumentRdfEditWidget.ui
+       rdf/RdfFoaFEditWidget.ui
+       rdf/RdfCalendarEventEditWidget.ui
+       rdf/RdfLocationEditWidget.ui
+       rdf/RdfLocationViewWidget.ui
+       rdf/SemanticStylesheetsEditor.ui
+    )
+endif( Soprano_FOUND )
+
 
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 
@@ -97,10 +139,15 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KABC_LIBS}
     ${KDE4_KFILE_LIBRARY}
+    ${KDE4_KCAL_LIBS}
     ${KDE4_THREADWEAVER_LIBRARIES}
     kowidgets
     kotext
 )
+if( Soprano_FOUND )
+    target_link_libraries(komain ${SOPRANO_LIBRARIES})
+endif( Soprano_FOUND )
+
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
 
@@ -137,6 +184,38 @@ install( FILES
     KoProgressBar.h
     KoUpdater.h
     KoStandardAction.h
+    rdf/KoDocumentRdfBase.h
+    rdf/KoDocumentRdfEditWidgetBase.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+
+if( Soprano_FOUND )
+    install( FILES
+        rdf/RdfForward.h
+        rdf/KoDocumentRdf.h
+        rdf/KoDocumentRdfEditWidget.h
+        rdf/KoSopranoTableModelDelegate.h
+        rdf/KoSopranoTableModel.h
+        rdf/RdfPrefixMapping.h
+        rdf/SemanticStylesheet.h
+        rdf/RdfSemanticItem.h
+        rdf/RdfFoaF.h
+        rdf/RdfCalendarEvent.h
+        rdf/RdfLocationEditWidget.h
+        rdf/RdfLocation.h
+        rdf/RdfSemanticItemViewSite.h
+        rdf/RdfSemanticTree.h
+        rdf/RdfSemanticTreeWidgetItem.h
+        rdf/RdfSemanticTreeWidgetAction.h
+        rdf/RdfSemanticTreeWidgetSelectAction.h
+        rdf/InsertSemanticObjectActionBase.h
+        rdf/InsertSemanticObjectCreateAction.h
+        rdf/InsertSemanticObjectReferenceAction.h
+        rdf/RdfFoaFTreeWidgetItem.h
+        rdf/RdfCalendarEventTreeWidgetItem.h
+        rdf/RdfLocationTreeWidgetItem.h
+        rdf/SemanticStylesheetsEditor.h
+        rdf/KoChangeTrackerDisabledRAII.h
+    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+endif( Soprano_FOUND )
 

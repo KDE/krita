@@ -21,6 +21,7 @@
 
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
+#include <KoTextInlineRdf.h>
 
 #include <QTextDocument>
 #include <QTextInlineObject>
@@ -33,7 +34,9 @@
 class KoBookmark::Private
 {
 public:
-    Private(const QTextDocument *doc) : document(doc) { }
+    Private(const QTextDocument *doc)
+            : document(doc),
+            posInDocument(0) { }
     const QTextDocument *document;
     int posInDocument;
     KoBookmark *endBookmark;
@@ -68,6 +71,10 @@ void KoBookmark::saveOdf(KoShapeSavingContext &context)
         nodeName = "text:bookmark-end";
     writer->startElement(nodeName.toLatin1(), false);
     writer->addAttribute("text:name", d->name.toLatin1());
+
+    if (d->type == StartBookmark && inlineRdf()) {
+        inlineRdf()->saveOdf(context, writer);
+    }
     writer->endElement();
 }
 

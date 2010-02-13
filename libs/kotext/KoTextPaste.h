@@ -27,15 +27,26 @@ class QTextCursor;
 class KoTextShapeData;
 class KoCanvasBase;
 
+#include <QSharedPointer>
+namespace Soprano
+{
+    class Model;
+}
+
 class KOTEXT_EXPORT KoTextPaste : public KoOdfPaste
 {
 public:
-    KoTextPaste(KoTextShapeData * shapeData, QTextCursor & cursor, KoCanvasBase * canvas);
+    /**
+     * Note: RdfModel ownership is not taken. You must ensure that it remains
+     * valid for the lifetime of the object.
+     */
+    KoTextPaste(KoTextShapeData *shapeData, QTextCursor &cursor,
+                KoCanvasBase *canvas, Soprano::Model *rdfModel);
     virtual ~KoTextPaste();
 
 protected:
     /// reimplemented
-    virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore);
+    virtual bool process(const KoXmlElement &body, KoOdfReadStore &odfStore);
 
     class Private;
     Private * const d;

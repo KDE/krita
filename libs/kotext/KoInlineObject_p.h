@@ -18,21 +18,23 @@
  */
 
 #include <QDebug>
+class KoTextInlineRdf;
 
 class KoInlineObjectPrivate
 {
 public:
     KoInlineObjectPrivate()
-        : manager(0),
-        id(-1),
-        propertyChangeListener(0)
-    {
+            : manager(0),
+            id(-1),
+            propertyChangeListener(0),
+            rdf(0) {
     }
     virtual ~KoInlineObjectPrivate() { }
 
     KoInlineTextObjectManager *manager;
     int id;
     bool propertyChangeListener;
+    KoTextInlineRdf* rdf; //< An inline object might have RDF, we own it.
 
     virtual QDebug printDebug(QDebug dbg) const;
 };

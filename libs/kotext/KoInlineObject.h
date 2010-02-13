@@ -34,6 +34,7 @@ class KoShape;
 class KoInlineTextObjectManager;
 class KoInlineObjectPrivate;
 class KoShapeSavingContext;
+class KoTextInlineRdf;
 
 /**
  * Base class for all inline-text-objects.
@@ -194,6 +195,19 @@ public:
      * @see KoInlineTextObjectManager::setProperty()
      */
     bool propertyChangeListener() const;
+
+    /**
+     * An inline object might have some Rdf metadata associated with it
+     * in content.xml
+     * Ownership of the rdf object is taken by this object, you should not
+     * delete it.
+     */
+    void setInlineRdf(KoTextInlineRdf* rdf);
+    /**
+     * Get any Rdf which was stored in content.xml for this inline object
+     * This object continues to own the object, do not delete it.
+     */
+    KoTextInlineRdf* inlineRdf() const;
 
 protected:
     explicit KoInlineObject(KoInlineObjectPrivate &, bool propertyChangeListener = false);

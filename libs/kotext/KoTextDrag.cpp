@@ -19,7 +19,6 @@
  */
 
 #include "KoTextDrag.h"
-
 #include <QApplication>
 #include <QBuffer>
 #include <QByteArray>
@@ -40,6 +39,10 @@
 #include <opendocument/KoTextSharedSavingData.h>
 
 #include "KoTextOdfSaveHelper.h"
+
+#ifdef SHOULD_BUILD_RDF
+#include "KoTextRdfCore.h"
+#endif
 
 KoTextDrag::KoTextDrag()
         : m_mimeData(0)
@@ -100,6 +103,8 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
             Q_ASSERT(false);
         }
     }
+    kDebug(30015) << "helper.model:" << helper.rdfModel();
+    textSharedData->setRdfModel(helper.rdfModel());
 
     if (!helper.writeBody()) {
         return false;
@@ -113,6 +118,15 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     //add manifest line for content.xml
     manifestWriter->addManifestEntry("content.xml", "text/xml");
 
+    kDebug(30015) << "testing to see if we should add rdf to odf file?";
+#ifdef SHOULD_BUILD_RDF
+    // RDF: Copy relevant RDF to output ODF
+    if (Soprano::Model* m = helper.rdfModel()) {
+        kDebug(30015) << "rdf model size:" << m->statementCount();
+        KoTextRdfCore::createAndSaveManifest(m, textSharedData->getRdfIdMapping(),
+                                             store, manifestWriter);
+    }
+#endif
 
     if (!mainStyles.saveOdfStylesDotXml(store, manifestWriter)) {
         return false;

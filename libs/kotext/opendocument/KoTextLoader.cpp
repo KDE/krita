@@ -7,6 +7,7 @@
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+   Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@
 
 #include "KoTextLoader.h"
 
+#include <KoTextMeta.h>
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
 #include <KoInlineNote.h>
@@ -53,6 +55,7 @@
 #include <KoVariableRegistry.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
+#include "KoTextInlineRdf.h"
 
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
@@ -395,6 +398,20 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                                             cell.setFormat(cellFormat);
                                                         }
 
+                                                        // handle inline Rdf
+                                                        // rowTag is the current table cell.
+                                                        if (rowTag.hasAttributeNS(KoXmlNS::xhtml, "property")
+                                                                || rowTag.hasAttribute("id")) {
+                                                            KoTextInlineRdf* inlineRdf =
+                                                                new KoTextInlineRdf((QTextDocument*)cursor.block().document(),
+                                                                                    cell);
+                                                            inlineRdf->loadOdf(rowTag);
+                                                            QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
+                                                            cellFormat.setProperty(KoTableCellStyle::inlineRdf,
+                                                                                   QVariant::fromValue(inlineRdf));
+                                                            cell.setFormat(cellFormat);
+                                                        }
+
                                                         cursor = cell.firstCursorPosition();
                                                         loadBody(rowTag, cursor);
                                                     } else
@@ -487,6 +504,16 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
         kWarning(32500) << "paragraph style " << styleName << " not found";
     }
 
+    // attach Rdf to cursor.block()
+    // remember inline Rdf metadata
+    if (element.hasAttributeNS(KoXmlNS::xhtml, "property")
+            || element.hasAttribute("id")) {
+        QTextBlock block = cursor.block();
+        KoTextInlineRdf* inlineRdf =
+            new KoTextInlineRdf((QTextDocument*)block.document(), block);
+        inlineRdf->loadOdf(element);
+        KoTextInlineRdf::attach(inlineRdf, cursor);
+    }
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat()) << d->currentList << d->currentListStyle;
 
     bool stripLeadingSpace = true;
@@ -532,6 +559,17 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
             KoList *list = d->list(block.document(), outlineStyle);
             list->applyStyle(block, outlineStyle, level);
         }
+    }
+
+    // attach Rdf to cursor.block()
+    // remember inline Rdf metadata
+    if (element.hasAttributeNS(KoXmlNS::xhtml, "property")
+            || element.hasAttribute("id")) {
+        QTextBlock block = cursor.block();
+        KoTextInlineRdf* inlineRdf =
+            new KoTextInlineRdf((QTextDocument*)block.document(), block);
+        inlineRdf->loadOdf(element);
+        KoTextInlineRdf::attach(inlineRdf, cursor);
     }
 
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
@@ -714,6 +752,29 @@ static QString normalizeWhitespace(const QString &in, bool leadingSpace)
     return text;
 }
 
+
+QString KoTextLoader::createUniqueBookmarkName(KoBookmarkManager* bmm, QString bookmarkName, bool isEndMarker)
+{
+    QString ret = bookmarkName;
+    int uniqID = 0;
+
+    while (true) {
+        if (bmm->retrieveBookmark(ret)) {
+            ret = QString("%1_%2").arg(bookmarkName).arg(++uniqID);
+        } else {
+            if (isEndMarker) {
+                --uniqID;
+                if (!uniqID)
+                    ret = bookmarkName;
+                else
+                    ret = QString("%1_%2").arg(bookmarkName).arg(uniqID);
+            }
+            break;
+        }
+    }
+    return ret;
+}
+
 void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bool *stripLeadingSpace)
 {
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
@@ -835,22 +896,61 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
 #endif
             cursor.insertText("\n");
         }
-        // text:bookmark, text:bookmark-start and text:bookmark-end
-        else if (isTextNS && (localName == "bookmark" || localName == "bookmark-start" || localName == "bookmark-end")) {
-            QString bookmarkName = ts.attribute("name");
+        else if (isTextNS && localName == "meta") {
+            kDebug(30015) << "loading a text:meta";
             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
             if (layout) {
                 const QTextDocument *document = cursor.block().document();
                 KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
-                KoBookmark *bookmark = new KoBookmark(bookmarkName, document);
+                KoTextMeta* startmark = new KoTextMeta(document);
+                textObjectManager->insertInlineObject(cursor, startmark);
+
+                // Add inline Rdf here.
+                if (ts.hasAttributeNS(KoXmlNS::xhtml, "property")
+                        || ts.hasAttribute("id")) {
+                    KoTextInlineRdf* inlineRdf =
+                        new KoTextInlineRdf((QTextDocument*)document, startmark);
+                    inlineRdf->loadOdf(ts);
+                    startmark->setInlineRdf(inlineRdf);
+                }
+
+                loadSpan(ts, cursor, stripLeadingSpace);   // recurse
+
+                KoTextMeta* endmark = new KoTextMeta(document);
+                textObjectManager->insertInlineObject(cursor, endmark);
+                startmark->setEndBookmark(endmark);
+            }
+        }
+        // text:bookmark, text:bookmark-start and text:bookmark-end
+        else if (isTextNS && (localName == "bookmark" || localName == "bookmark-start" || localName == "bookmark-end")) {
+            QString bookmarkName = ts.attribute("name");
+
+            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+            if (layout) {
+                const QTextDocument *document = cursor.block().document();
+                KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
+                // For cut and paste, make sure that the name is unique.
+                QString uniqBookmarkName = createUniqueBookmarkName(textObjectManager->bookmarkManager(),
+                                           bookmarkName,
+                                           (localName == "bookmark-end"));
+                KoBookmark *bookmark = new KoBookmark(uniqBookmarkName, document);
 
                 if (localName == "bookmark")
                     bookmark->setType(KoBookmark::SinglePosition);
-                else if (localName == "bookmark-start")
+                else if (localName == "bookmark-start") {
                     bookmark->setType(KoBookmark::StartBookmark);
-                else if (localName == "bookmark-end") {
+
+                    // Add inline Rdf to the bookmark.
+                    if (ts.hasAttributeNS(KoXmlNS::xhtml, "property")
+                            || ts.hasAttribute("id")) {
+                        KoTextInlineRdf* inlineRdf =
+                            new KoTextInlineRdf((QTextDocument*)document, bookmark);
+                        inlineRdf->loadOdf(ts);
+                        bookmark->setInlineRdf(inlineRdf);
+                    }
+                } else if (localName == "bookmark-end") {
                     bookmark->setType(KoBookmark::EndBookmark);
-                    KoBookmark *startBookmark = textObjectManager->bookmarkManager()->retrieveBookmark(bookmarkName);
+                    KoBookmark *startBookmark = textObjectManager->bookmarkManager()->retrieveBookmark(uniqBookmarkName);
                     startBookmark->setEndBookmark(bookmark);
                 }
                 textObjectManager->insertInlineObject(cursor, bookmark);

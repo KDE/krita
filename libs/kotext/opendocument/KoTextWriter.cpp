@@ -26,6 +26,7 @@
 #include <QTextDocument>
 #include <QTextTable>
 #include <QStack>
+#include <QTextTableCellFormat>
 
 #include "KoInlineObject.h"
 #include "KoInlineTextObjectManager.h"
@@ -34,10 +35,15 @@
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoListStyle.h"
 #include "styles/KoListLevelProperties.h"
+#include "styles/KoTableCellStyle.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextBlockData.h"
 #include "KoTextDocument.h"
+#include "KoTextInlineRdf.h"
 #include "KoTableOfContents.h"
+
+#include "KoTextMeta.h"
+#include "KoBookmark.h"
 
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
@@ -287,6 +293,11 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     if (!styleName.isEmpty())
         writer->addAttribute("text:style-name", styleName);
 
+    // Things like bookmarks need to be properly turn down
+    // during a cut and paste operation when their end marker
+    // is not included in the selection.
+    QList<KoInlineObject*> pairedInlineObjectStack;
+
     // Write the fragments and their formats
     QTextCharFormat blockCharFormat = cursor.blockCharFormat();
     QTextCharFormat previousCharFormat;
@@ -310,16 +321,65 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
             saveChange(charFormat);
 
+            kDebug(30015) << "from:" << from << " to:" << to;
+            if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
+                // Write xml:id here for Rdf
+                kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
+                inlineRdf->saveOdf(context, writer);
+            }
+
             if (changeTracker
-                && charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt()
-                && changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() == KoGenChange::deleteChange)
+                    && charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt()
+                    && changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() == KoGenChange::deleteChange)
                 continue;
 
             KoInlineObject *inlineObject = layout ? layout->inlineTextObjectManager()->inlineTextObject(charFormat) : 0;
             if (currentFragment.length() == 1 && inlineObject
                     && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
-                if (!dynamic_cast<KoDeleteChangeMarker*>(inlineObject))
-                    inlineObject->saveOdf(context);
+                if (!dynamic_cast<KoDeleteChangeMarker*>(inlineObject)) {
+                    bool saveInlineObject = true;
+
+                    if (KoTextMeta* z = dynamic_cast<KoTextMeta*>(inlineObject)) {
+                        if (z->position() < from) {
+                            //
+                            // This <text:meta> starts before the selection, default
+                            // to not saving it with special cases to allow saving
+                            //
+                            saveInlineObject = false;
+                            if (z->type() == KoTextMeta::StartBookmark) {
+                                if (z->endBookmark()->position() > from) {
+                                    //
+                                    // They have selected something starting after the
+                                    // <text:meta> opening but before the </text:meta>
+                                    //
+                                    saveInlineObject = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (saveInlineObject) {
+                        inlineObject->saveOdf(context);
+                    }
+                    //
+                    // Track the end marker for matched pairs so we produce valid
+                    // ODF
+                    //
+                    if (KoTextMeta* z = dynamic_cast<KoTextMeta*>(inlineObject)) {
+                        kDebug(30015) << "found kometa, type:" << z->type();
+                        if (z->type() == KoTextMeta::StartBookmark)
+                            pairedInlineObjectStack.append(z->endBookmark());
+                        if (z->type() == KoTextMeta::EndBookmark
+                                && !pairedInlineObjectStack.isEmpty())
+                            pairedInlineObjectStack.removeLast();
+                    } else if (KoBookmark* z = dynamic_cast<KoBookmark*>(inlineObject)) {
+                        if (z->type() == KoBookmark::StartBookmark)
+                            pairedInlineObjectStack.append(z->endBookmark());
+                        if (z->type() == KoBookmark::EndBookmark
+                                && !pairedInlineObjectStack.isEmpty())
+                            pairedInlineObjectStack.removeLast();
+                    }
+                }
             } else {
                 QString styleName = saveCharacterStyle(charFormat, blockCharFormat);
                 if (charFormat.isAnchor()) {
@@ -348,6 +408,11 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         } // if (fragment.valid())
     } // foreach(fragment)
 
+    kDebug(30015) << "pairedInlineObjectStack.sz:" << pairedInlineObjectStack.size();
+    foreach (KoInlineObject* inlineObject, pairedInlineObjectStack) {
+        inlineObject->saveOdf(context);
+    }
+
     foreach(int change, changeStack) {
         writer->startElement("text:change-end", false);
         writer->addAttribute("text:change-id", changeTransTable.value(change));
@@ -358,7 +423,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     writer->endElement();
 }
 
-void KoTextWriter::Private::saveTable (QTextTable *table, QHash<QTextList *, QString> &listStyles)
+void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
 {
     writer->startElement("table:table");
     for (int c = 0 ; c < table->columns() ; c++) {
@@ -373,6 +438,13 @@ void KoTextWriter::Private::saveTable (QTextTable *table, QHash<QTextList *, QSt
                 writer->startElement("table:table-cell");
                 writer->addAttribute("rowSpan", cell.rowSpan());
                 writer->addAttribute("columnSpan", cell.columnSpan());
+
+                // Save the Rdf for the table cell
+                QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
+                QVariant v = cellFormat.property(KoTableCellStyle::inlineRdf);
+                if (KoTextInlineRdf* inlineRdf = v.value<KoTextInlineRdf*>()) {
+                    inlineRdf->saveOdf(context, writer);
+                }
                 writeBlocks(table->document(), cell.firstPosition(), cell.lastPosition(), listStyles, table);
             } else {
                 writer->startElement("table:covered-table-cell");

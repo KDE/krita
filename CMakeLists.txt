@@ -181,8 +181,24 @@ macro_optional_find_package(Exiv2)
 macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http://www.exiv2.org" FALSE "0.16" "Required by Krita")
 
 ##
+## Test for soprano
+##
+macro_optional_find_package(Soprano)
+macro_log_feature(Soprano_FOUND "Soprano" "KDE4 RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")
+if(NOT Soprano_FOUND)
+    set(SHOULD_BUILD_RDF FALSE)
+    set(SOPRANO_INCLUDE_DIR "")
+else(NOT Soprano_FOUND)
+    set(SHOULD_BUILD_RDF TRUE)
+endif(NOT Soprano_FOUND)
+if( Soprano_FOUND )
+   add_definitions( -DSHOULD_BUILD_RDF )
+endif( Soprano_FOUND )
+
+
+##
 ## Test for lcms
-## 
+##
 macro_optional_find_package(LCMS)
 set(REQUIRED_LCMS_VERSION 118)
 if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
@@ -302,6 +318,7 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
 
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
+                    ${SOPRANO_INCLUDE_DIR}
                     ${KOTEXT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/main

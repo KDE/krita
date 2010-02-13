@@ -1002,13 +1002,13 @@ int KoTextEditor::position() const
 
 void KoTextEditor::removeSelectedText()
 {
-//TODO
+    d->caret.removeSelectedText();
 }
 
 void KoTextEditor::select(QTextCursor::SelectionType selection)
 {
     //TODO add selection of previous/next char, and option about hasSelection
-    d->caret.select (selection);
+    d->caret.select(selection);
 }
 
 QString KoTextEditor::selectedText() const

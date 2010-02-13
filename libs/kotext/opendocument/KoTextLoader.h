@@ -31,6 +31,7 @@
 
 class KoShapeLoadingContext;
 class QTextCursor;
+class KoBookmarkManager;
 
 /**
  * The KoTextLoader loads is use to load text for one and only one textdocument or shape
@@ -154,6 +155,14 @@ private:
     * Store the delete changes in the deleteChangeTable. Will be processed with "change" is encountered
     */
     void storeDeleteChanges(KoXmlElement &tag);
+
+    /**
+     * This is called in loadSpan to allow Cut and Paste of bookmarks. This
+     * method gives a correct, unique, name, respecting the fact that an
+     * endMarker should be the foo_lastID instead of foo_lastID+1
+     */
+    QString createUniqueBookmarkName(KoBookmarkManager* bmm, QString bookmarkName, bool isEndMarker);
+
 
     /// \internal d-pointer class.
     class Private;

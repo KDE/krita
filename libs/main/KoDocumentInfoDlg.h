@@ -24,6 +24,7 @@
 #include <kpagedialog.h>
 
 class KoDocumentInfo;
+class KoDocumentRdf;
 
 /**
  * @short The dialog that shows information about the document
@@ -53,7 +54,7 @@ public:
      * @param parent a pointer to the parent widget
      * @param docInfo a pointer to the shown KoDocumentInfo
      */
-    KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo* docInfo);
+    KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo* docInfo, KoDocumentRdf* docRdf = 0);
 
     /** The destructor */
     virtual ~KoDocumentInfoDlg();
@@ -86,6 +87,8 @@ private:
     void saveAboutData();
     /** Saves the changed data back to the KoDocumentInfo class */
     void saveAuthorData();
+
+    void slotButtonClicked(int button);
 
     class KoDocumentInfoDlgPrivate;
     KoDocumentInfoDlgPrivate * const d;

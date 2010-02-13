@@ -46,8 +46,11 @@ class KoOdfWriteStore;
 class KoMainWindow;
 class KoView;
 class KoDocumentInfo;
+class KoDocumentRdf;
+class KoDocumentRdfBase;
 class KoOpenPane;
 class KUndoStack;
+class KoTextEditor;
 
 class KoVersionInfo
 {
@@ -562,6 +565,19 @@ public:
      * @see KoDocumentInfo
      */
     KoDocumentInfo *documentInfo() const;
+
+    /**
+     * @return the Rdf metadata for this document.
+     * This method should only be used by code that links to
+     * the RDF system and needs full access to the KoDocumentRdf object.
+     * @see KoDocumentRdf
+     */
+    KoDocumentRdf *documentRdf() const;
+    /**
+     * @return the Rdf metadata for this document.
+     * @see KoDocumentRdf
+     */
+    KoDocumentRdfBase *documentRdfBase() const;
 
     /**
      * Appends the shell to the list of shells which show this

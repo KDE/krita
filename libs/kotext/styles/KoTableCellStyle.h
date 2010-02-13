@@ -71,7 +71,8 @@ public:
         RightBorderSpacing,        ///< the right border spacing between inner and outer border
         RightBorderInnerPen,     ///< the right border inner pen
         CellBackgroundBrush,     ///< the cell background brush, as QTextFormat::BackgroundBrush is used by paragraphs
-        MasterPageName         ///< Optional name of the master-page
+        MasterPageName,         ///< Optional name of the master-page
+        inlineRdf               ///< Optional KoTextInlineRdf object
     };
 
     enum Side {

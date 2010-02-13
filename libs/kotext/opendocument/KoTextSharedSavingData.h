@@ -24,9 +24,16 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoSharedSavingData.h>
 #include "kotext_export.h"
 
+#include <QMap>
+
 #define KOTEXT_SHARED_SAVING_ID "KoTextSharedSavingId"
 
 class KoGenChanges;
+
+namespace Soprano
+{
+class Model;
+}
 
 class KOTEXT_EXPORT KoTextSharedSavingData : public KoSharedSavingData
 {
@@ -37,6 +44,17 @@ public:
     void setGenChanges(KoGenChanges &changes);
 
     KoGenChanges& genChanges();
+
+    void addRdfIdMapping(QString oldid, QString newid);
+    QMap<QString, QString> getRdfIdMapping();
+
+    /**
+     * The Rdf Model ownership is not taken, you must still delete it,
+     * and you need to ensure that it lives longer than this object
+     * unless you reset the model to 0.
+     */
+    void setRdfModel(Soprano::Model *m);
+    Soprano::Model* rdfModel() const;
 
 private:
 

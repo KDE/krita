@@ -33,6 +33,12 @@
 #include "DeleteCommand.h"
 #include <KAction>
 
+#ifdef SHOULD_BUILD_RDF
+#include <rdf/KoDocumentRdf.h>
+#else
+#include "KoTextSopranoRdfModel_p.h"
+#endif
+
 TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, QUndoCommand *parent)
     : QUndoCommand (parent),
     m_tool(tool),
@@ -67,10 +73,35 @@ void TextPasteCommand::redo()
         const QMimeData *data = QApplication::clipboard()->mimeData(m_mode);
 
         if (data->hasFormat("application/vnd.oasis.opendocument.text")) {
+
+            bool weOwnRdfModel = true;
+            Soprano::Model* rdfModel = 0;
+#ifdef SHOULD_BUILD_RDF
+            rdfModel = Soprano::createModel();
+            if (KoDocumentRdf* rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
+                if (rdfModel) {
+                    delete rdfModel;
+                }
+                rdfModel = rdf->model();
+                weOwnRdfModel = false;
+            }
+#endif
+
             //kDebug() << "pasting odf text";
-            KoTextPaste paste(m_tool->m_textShapeData, *editor->cursor(), m_tool->canvas());
+            KoTextPaste paste(m_tool->m_textShapeData, *editor->cursor(),
+                              m_tool->canvas(), rdfModel);
             paste.paste(KoOdf::Text, data);
             //kDebug() << "done with pasting odf";
+
+#ifdef SHOULD_BUILD_RDF
+            if (KoDocumentRdf* rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
+                KoTextEditor* e = KoDocumentRdf::ensureTextTool(m_tool->canvas());
+                rdf->updateInlineRdfStatements(e->document());
+            }
+            if (weOwnRdfModel && rdfModel) {
+                delete rdfModel;
+            }
+#endif
         } else if (data->hasHtml()) {
             //kDebug() << "pasting html";
             editor->cursor()->insertHtml(data->html());

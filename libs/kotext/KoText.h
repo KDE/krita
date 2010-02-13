@@ -54,7 +54,9 @@ enum Options {
     CurrentTextAnchor = 341899485,   ///<  used by the text plugin whenever the anchor-position is changed
     SelectedTextPosition = 21314576,   ///<  used by the text plugin whenever the alternative selection is changed
     ///  used by the text plugin whenever the alternative selection anchor-position is changed
-    SelectedTextAnchor = 3344189
+    SelectedTextAnchor = 3344189,
+    DocumentRdf ///< The KoDocumentRdf for the document,
+    /// this will be a KoDocumentRdfBase when Soprano support is not compiled in.
 };
 
 /// For paragraphs each tab definition is represented by this struct.

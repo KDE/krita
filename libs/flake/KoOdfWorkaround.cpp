@@ -21,6 +21,7 @@
 #include "KoOdfWorkaround.h"
 
 #include "KoShapeLoadingContext.h"
+#include "KoShape.h"
 #include <KoOdfLoadingContext.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
@@ -31,6 +32,8 @@
 #include <QColor>
 
 #include <kdebug.h>
+
+static bool s_workaroundPresentationPlaceholderBug = false;
 
 // TODO only parse the generator string once so we don't have a string compare for every loaded shape
 void KoOdfWorkaround::fixPenWidth(QPen & pen, KoShapeLoadingContext &context)
@@ -154,4 +157,23 @@ bool KoOdfWorkaround::fixMissingStyle_DisplayLabel(const KoXmlElement &element, 
 
     // In all other cases, they're visible
     return true;
+}
+
+void KoOdfWorkaround::setFixPresentationPlaceholder(bool fix, KoShapeLoadingContext &context)
+{
+    if (context.odfLoadingContext().generator().startsWith("OpenOffice.org")) {
+        s_workaroundPresentationPlaceholderBug = fix;
+    }
+}
+
+bool KoOdfWorkaround::fixPresentationPlaceholder()
+{
+    return s_workaroundPresentationPlaceholderBug;
+}
+
+void KoOdfWorkaround::fixPresentationPlaceholder(KoShape *shape)
+{
+    if (s_workaroundPresentationPlaceholderBug && !shape->hasAdditionalAttribute("presentation:placeholder")) {
+        shape->setAdditionalAttribute("presentation::placeholder", "true");
+    }
 }

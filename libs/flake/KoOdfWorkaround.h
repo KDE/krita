@@ -23,6 +23,7 @@
 #include "flake_export.h"
 
 class KoXmlElement;
+class KoShape;
 class KoShapeLoadingContext;
 class QPen;
 class QColor;
@@ -56,6 +57,15 @@ namespace KoOdfWorkaround
     FLAKE_EXPORT QColor fixMissingStrokeColor(const KoXmlElement &element, KoShapeLoadingContext &context);
     FLAKE_EXPORT QColor fixMissingFillColor(const KoXmlElement &element, KoShapeLoadingContext &context);
     FLAKE_EXPORT bool   fixMissingStyle_DisplayLabel(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    /**
+     * Old versions of ooimpress does not set the placeholder for shapes that should have it set
+     * See open office issue http://www.openoffice.org/issues/show_bug.cgi?id=96406
+     * And kde bug https://bugs.kde.org/show_bug.cgi?id=185354
+     */
+    FLAKE_EXPORT void setFixPresentationPlaceholder(bool fix, KoShapeLoadingContext &context);
+    FLAKE_EXPORT bool fixPresentationPlaceholder();
+    FLAKE_EXPORT void fixPresentationPlaceholder(KoShape *shape);
 }
 
 #endif /* KOODFWORKAROUND_H */

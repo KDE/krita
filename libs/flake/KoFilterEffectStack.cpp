@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (c) 2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (c) 2009-2010 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,6 +22,7 @@
 #include "KoXmlWriter.h"
 
 #include <QtCore/QAtomicInt>
+#include <QtCore/QSet>
 
 class KoFilterEffectStack::Private
 {
@@ -134,4 +135,31 @@ void KoFilterEffectStack::save(KoXmlWriter &writer, const QString &filterId)
     }
 
     writer.endElement();
+}
+
+QSet<QString> KoFilterEffectStack::requiredStandarsInputs() const
+{
+    static QSet<QString> stdInputs = QSet<QString>()
+        << "SourceGraphic"
+        << "SourceAlpha"
+        << "BackgroundImage"
+        << "BackgroundAlpha"
+        << "FillPaint"
+        << "StrokePaint";
+
+    QSet<QString> requiredInputs;
+    if (isEmpty())
+        return requiredInputs;
+
+    if (d->filterEffects.first()->inputs().contains("") )
+        requiredInputs.insert("SourceGraphic");
+
+    foreach(KoFilterEffect *effect, d->filterEffects) {
+        foreach(const QString &input, effect->inputs()) {
+            if (stdInputs.contains(input))
+                requiredInputs.insert(input);
+        }
+    }
+
+    return requiredInputs;
 }

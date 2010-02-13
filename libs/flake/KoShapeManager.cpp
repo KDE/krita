@@ -2,7 +2,7 @@
 
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
-   Copyright (C) 2009 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2009-2010 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -377,44 +377,51 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         // determine the offset of the clipping rect from the shapes origin
         QPointF clippingOffset = zoomedClipRegion.topLeft();
 
-        // Init the buffer image
+        // Initialize the buffer image
         QImage sourceGraphic(zoomedClipRegion.size().toSize(), QImage::Format_ARGB32_Premultiplied);
         sourceGraphic.fill(qRgba(0,0,0,0));
 
-        // Init the buffer painter
-        QPainter imagePainter(&sourceGraphic);
-        imagePainter.translate(-1.0f*clippingOffset);
-        imagePainter.setPen(Qt::NoPen);
-        imagePainter.setBrush(Qt::NoBrush);
-        imagePainter.setRenderHint(QPainter::Antialiasing, painter.testRenderHint(QPainter::Antialiasing));
+        QHash<QString, QImage> imageBuffers;
 
-        // Paint the shape on the image
-        KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
-        if (group) {
-            // the childrens matrix contains the groups matrix as well
-            // so we have to compensate for that before painting the children
-            imagePainter.setMatrix(group->absoluteTransformation(&converter).inverted(), true);
-            d->paintGroup(group, imagePainter, converter, forPrint);
-        } else {
-            imagePainter.save();
-            shape->paint(imagePainter, converter);
-            imagePainter.restore();
-            if (shape->border()) {
+        QSet<QString> requiredStdInputs = shape->filterEffectStack()->requiredStandarsInputs();
+        kDebug() << requiredStdInputs;
+
+        if (requiredStdInputs.contains("SourceGraphic") || requiredStdInputs.contains("SourceAlpha")) {
+            // Init the buffer painter
+            QPainter imagePainter(&sourceGraphic);
+            imagePainter.translate(-1.0f*clippingOffset);
+            imagePainter.setPen(Qt::NoPen);
+            imagePainter.setBrush(Qt::NoBrush);
+            imagePainter.setRenderHint(QPainter::Antialiasing, painter.testRenderHint(QPainter::Antialiasing));
+
+            // Paint the shape on the image
+            KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
+            if (group) {
+                // the childrens matrix contains the groups matrix as well
+                // so we have to compensate for that before painting the children
+                imagePainter.setMatrix(group->absoluteTransformation(&converter).inverted(), true);
+                d->paintGroup(group, imagePainter, converter, forPrint);
+            } else {
                 imagePainter.save();
-                shape->border()->paint(shape, imagePainter, converter);
+                shape->paint(imagePainter, converter);
                 imagePainter.restore();
+                if (shape->border()) {
+                    imagePainter.save();
+                    shape->border()->paint(shape, imagePainter, converter);
+                    imagePainter.restore();
+                }
+                imagePainter.end();
             }
-            imagePainter.end();
+        }
+        if (requiredStdInputs.contains("SourceAlpha")) {
+            QImage sourceAlpha = sourceGraphic;
+            sourceAlpha.fill(qRgba(0,0,0,255));
+            sourceAlpha.setAlphaChannel(sourceGraphic.alphaChannel());
+            imageBuffers.insert("SourceAlpha", sourceAlpha);
         }
 
-        QImage sourceAlpha = sourceGraphic;
-        sourceAlpha.fill(qRgba(0,0,0,255));
-        sourceAlpha.setAlphaChannel(sourceGraphic.alphaChannel());
-
-        QHash<QString, QImage> imageBuffers;
         imageBuffers.insert("SourceGraphic", sourceGraphic);
         imageBuffers.insert(QString(), sourceGraphic);
-        imageBuffers.insert("SourceAlpha", sourceAlpha);
 
         KoFilterEffectRenderContext renderContext(converter);
         renderContext.setShapeBoundingBox(shapeBound);

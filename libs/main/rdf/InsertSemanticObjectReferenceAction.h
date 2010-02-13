@@ -26,7 +26,7 @@ class InsertSemanticObjectReferenceAction : public InsertSemanticObjectActionBas
 {
     Q_OBJECT
 public:
-    InsertSemanticObjectReferenceAction(KoCanvasBase *canvas, KoDocumentRdf* rdf, const QString &name);
+    InsertSemanticObjectReferenceAction(KoCanvasBase *canvas, KoDocumentRdf *rdf, const QString &name);
     virtual ~InsertSemanticObjectReferenceAction();
 
 private slots:

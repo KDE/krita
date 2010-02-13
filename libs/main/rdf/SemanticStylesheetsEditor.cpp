@@ -26,18 +26,19 @@
 class SemanticStylesheetsEditor::Private
 {
 public:
-    Ui::SemanticStylesheetsEditor* m_ui;
-    KoDocumentRdf* m_rdf;
-    QTreeWidgetItem* m_systemSheetsParentItem;
-    QTreeWidgetItem* m_userSheetsParentItem;
-    QMap< QString, QTreeWidgetItem* > m_systemSheetsItems;
-    QMap< QString, QTreeWidgetItem* > m_userSheetsItems;
+    Ui::SemanticStylesheetsEditor *m_ui;
+    KoDocumentRdf *m_rdf;
+    QTreeWidgetItem *m_systemSheetsParentItem;
+    QTreeWidgetItem *m_userSheetsParentItem;
+    QMap<QString, QTreeWidgetItem*> m_systemSheetsItems;
+    QMap<QString, QTreeWidgetItem*> m_userSheetsItems;
     Private()
             : m_systemSheetsParentItem(0)
             , m_userSheetsParentItem(0) {}
 };
 
 enum {
+    // TODO CamelCase
     COL_NAME = 0,
     COL_SEMOBJ = 1,
     COL_VAR = 0,
@@ -47,12 +48,12 @@ enum {
 class SemanticStylesheetWidgetItem : public QTreeWidgetItem
 {
 public:
-    KoDocumentRdf* m_rdf;
+    KoDocumentRdf *m_rdf;
     SemanticStylesheet *m_ss;
-    RdfSemanticItem* m_si;
-    SemanticStylesheetWidgetItem(KoDocumentRdf* rdf,
+    RdfSemanticItem *m_si;
+    SemanticStylesheetWidgetItem(KoDocumentRdf *rdf,
                                  SemanticStylesheet *ss,
-                                 RdfSemanticItem* si,
+                                 RdfSemanticItem *si,
                                  QTreeWidgetItem *parent,
                                  int type = Type)
             : QTreeWidgetItem(parent, type)
@@ -60,8 +61,8 @@ public:
             , m_ss(ss)
             , m_si(si) {
     }
-    SemanticStylesheetWidgetItem(KoDocumentRdf* rdf,
-                                 RdfSemanticItem* si,
+    SemanticStylesheetWidgetItem(KoDocumentRdf *rdf,
+                                 RdfSemanticItem *si,
                                  QTreeWidgetItem *parent,
                                  int type = Type)
             : QTreeWidgetItem(parent, type)
@@ -70,7 +71,7 @@ public:
             , m_si(si) {
     }
 
-    virtual void setData(int column, int role, const QVariant & value) {
+    virtual void setData(int column, int role, const QVariant &value) {
         if (m_ss && m_ss->isMutable() && column == COL_NAME) {
             QString newName = value.toString();
             kDebug(30015) << "update to value:" << newName;
@@ -84,14 +85,12 @@ public:
 };
 
 
-
-SemanticStylesheetsEditor::SemanticStylesheetsEditor(QWidget* parent, KoDocumentRdf* rdf)
-        :
-        KDialog(parent),
+SemanticStylesheetsEditor::SemanticStylesheetsEditor(QWidget *parent, KoDocumentRdf *rdf)
+        : KDialog(parent),
         d(new Private())
 {
     d->m_rdf = rdf;
-    QWidget* widget = new QWidget(this);
+    QWidget *widget = new QWidget(this);
     setMainWidget(widget);
     d->m_ui = new Ui::SemanticStylesheetsEditor();
     d->m_ui->setupUi(widget);
@@ -117,9 +116,9 @@ SemanticStylesheetsEditor::SemanticStylesheetsEditor(QWidget* parent, KoDocument
     QTreeWidgetItem *treewidget = 0;
     treewidget = d->m_systemSheetsParentItem;
     classNames = RdfSemanticItem::classNames();
-    foreach (QString klass, classNames) {
+    foreach (const QString &klass, classNames) {
         RdfSemanticItem* si = RdfSemanticItem::createSemanticItem(this, rdf, klass);
-        SemanticStylesheetWidgetItem* item = new SemanticStylesheetWidgetItem(rdf, si, treewidget);
+        SemanticStylesheetWidgetItem *item = new SemanticStylesheetWidgetItem(rdf, si, treewidget);
         item->setText(COL_NAME, klass);
         d->m_systemSheetsItems[klass] = item;
         d->m_ui->stylesheets->expandItem(item);
@@ -131,7 +130,7 @@ SemanticStylesheetsEditor::SemanticStylesheetsEditor(QWidget* parent, KoDocument
 
     treewidget = d->m_userSheetsParentItem;
     classNames = RdfSemanticItem::classNames();
-    foreach (QString klass, classNames) {
+    foreach (const QString &klass, classNames) {
         RdfSemanticItem* si = RdfSemanticItem::createSemanticItem(this, rdf, klass);
         SemanticStylesheetWidgetItem* item = new SemanticStylesheetWidgetItem(rdf, si, treewidget);
         item->setText(COL_NAME, klass);
@@ -141,9 +140,9 @@ SemanticStylesheetsEditor::SemanticStylesheetsEditor(QWidget* parent, KoDocument
 
     // initialize stylesheets tree
     classNames = RdfSemanticItem::classNames();
-    foreach (QString klass, classNames) {
+    foreach (const QString &klass, classNames) {
         kDebug(30015) << "klass:" << klass;
-        RdfSemanticItem* p = RdfSemanticItem::createSemanticItem(this, rdf, klass);
+        RdfSemanticItem *p = RdfSemanticItem::createSemanticItem(this, rdf, klass);
         setupStylesheetsItems(klass, p, p->stylesheets(), d->m_systemSheetsItems);
         setupStylesheetsItems(klass, p, p->userStylesheets(), d->m_userSheetsItems, true);
     }
@@ -158,15 +157,15 @@ SemanticStylesheetsEditor::~SemanticStylesheetsEditor()
 }
 
 void SemanticStylesheetsEditor::setupStylesheetsItems(const QString& klass,
-        RdfSemanticItem* si,
-        const QList<SemanticStylesheet*>& ssl,
-        const QMap<QString, QTreeWidgetItem*>& m,
+        RdfSemanticItem *si,
+        const QList<SemanticStylesheet*> &ssl,
+        const QMap<QString, QTreeWidgetItem*> &m,
         bool editable)
 {
     foreach (SemanticStylesheet *ss, ssl) {
         kDebug(30015) << "ss:" << ss->name();
         QTreeWidgetItem *parent = m[klass];
-        SemanticStylesheetWidgetItem* item = new SemanticStylesheetWidgetItem(d->m_rdf, ss, si, parent);
+        SemanticStylesheetWidgetItem *item = new SemanticStylesheetWidgetItem(d->m_rdf, ss, si, parent);
         item->setText(COL_NAME, ss->name());
         item->setText(COL_SEMOBJ, klass);
         if (editable) {
@@ -209,7 +208,7 @@ void SemanticStylesheetsEditor::maskButtonsDependingOnCurrentItem(QTreeWidgetIte
 
 void SemanticStylesheetsEditor::definitionChanged()
 {
-    if (SemanticStylesheetWidgetItem* ssitem
+    if (SemanticStylesheetWidgetItem *ssitem
             = dynamic_cast<SemanticStylesheetWidgetItem*>(d->m_ui->stylesheets->currentItem())) {
         if (!ssitem->m_ss) {
             return;
@@ -221,9 +220,9 @@ void SemanticStylesheetsEditor::definitionChanged()
 }
 
 struct SignalBlockerRAII {
-    QObject* obj;
+    QObject *obj;
     bool oldval;
-    SignalBlockerRAII(QObject* o)
+    SignalBlockerRAII(QObject *o)
             : obj(o) {
         oldval = obj->blockSignals(true);
     }
@@ -233,7 +232,7 @@ struct SignalBlockerRAII {
 };
 
 
-void SemanticStylesheetsEditor::currentItemChanged(QTreeWidgetItem * current, QTreeWidgetItem * previous)
+void SemanticStylesheetsEditor::currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
     SignalBlockerRAII _blocker1(d->m_ui->definition);
     kDebug(30015) << "current:" << current;
@@ -242,7 +241,7 @@ void SemanticStylesheetsEditor::currentItemChanged(QTreeWidgetItem * current, QT
     if (previous) {
         QString desc = d->m_ui->definition->toPlainText();
         kDebug(30015) << "desc:" << desc;
-        if (SemanticStylesheetWidgetItem* ssitem
+        if (SemanticStylesheetWidgetItem *ssitem
                 = dynamic_cast<SemanticStylesheetWidgetItem*>(previous)) {
             kDebug(30015) << "ssitem, ss?:" << ssitem->m_ss;
 
@@ -251,26 +250,26 @@ void SemanticStylesheetsEditor::currentItemChanged(QTreeWidgetItem * current, QT
             }
         }
     }
-    if (SemanticStylesheetWidgetItem* ssitem
+    if (SemanticStylesheetWidgetItem *ssitem
             = dynamic_cast<SemanticStylesheetWidgetItem*>(current)) {
-        d->m_ui->definition->setPlainText("");
+        d->m_ui->definition->setPlainText(QString());
         d->m_ui->variables->clear();
         if (!ssitem->m_ss) {
             return;
         }
         d->m_ui->definition->setPlainText(ssitem->m_ss->templateString());
         // update the list of available variables
-        QTableWidget* v = d->m_ui->variables;
+        QTableWidget *v = d->m_ui->variables;
         v->clear();
         int row = 0;
-        QMap< QString, QString > m;
+        QMap<QString, QString> m;
         ssitem->m_si->setupStylesheetReplacementMapping(m);
         QMap< QString, QString >::const_iterator mi = m.begin();
         QMap< QString, QString >::const_iterator me = m.end();
         for (; mi != me; ++mi) {
-            QTableWidgetItem* item = 0;
+            QTableWidgetItem *item = 0;
             QString varName = mi.key();
-            QString desc = "t";
+            QString desc("t");
             v->setRowCount(row + 1);
             item = new QTableWidgetItem(varName);
             v->setItem(row, COL_VAR, item);
@@ -283,8 +282,8 @@ void SemanticStylesheetsEditor::currentItemChanged(QTreeWidgetItem * current, QT
 
 void SemanticStylesheetsEditor::newStylesheet()
 {
-    kDebug(30015) << "";
-    if (SemanticStylesheetWidgetItem* ssitem
+    kDebug(30015);
+    if (SemanticStylesheetWidgetItem *ssitem
             = dynamic_cast<SemanticStylesheetWidgetItem*>(d->m_ui->stylesheets->currentItem())) {
         if (ssitem->m_ss) {
             ssitem = dynamic_cast<SemanticStylesheetWidgetItem*>(ssitem->parent());
@@ -293,8 +292,8 @@ void SemanticStylesheetsEditor::newStylesheet()
             }
         }
         kDebug(30015) << ssitem;
-        static int uniqueCounter = 1;
-        RdfSemanticItem* si = ssitem->m_si;
+        static int uniqueCounter = 1; // TODO avoid static
+        RdfSemanticItem *si = ssitem->m_si;
         SemanticStylesheet *ss = si->createUserStylesheet(
                                      QString("new stylesheet %1").arg(uniqueCounter++), "");
         QTreeWidgetItem *parent = ssitem;
@@ -310,8 +309,8 @@ void SemanticStylesheetsEditor::newStylesheet()
 
 void SemanticStylesheetsEditor::deleteStylesheet()
 {
-    kDebug(30015) << "";
-    if (SemanticStylesheetWidgetItem* ssitem
+    kDebug(30015);
+    if (SemanticStylesheetWidgetItem *ssitem
             = dynamic_cast<SemanticStylesheetWidgetItem*>(d->m_ui->stylesheets->currentItem())) {
         if (!ssitem->m_ss) {
             return;
@@ -325,10 +324,10 @@ void SemanticStylesheetsEditor::deleteStylesheet()
 
 void SemanticStylesheetsEditor::onVariableActivated(QTableWidgetItem* item)
 {
-    QTableWidgetItem* vitem = d->m_ui->variables->item(item->row(), COL_VAR);
+    QTableWidgetItem *vitem = d->m_ui->variables->item(item->row(), COL_VAR);
     QString vtext = vitem->text();
     QTextCursor cursor(d->m_ui->definition->textCursor());
     cursor.insertText(vtext);
 }
 
-#include "SemanticStylesheetsEditor.moc"
+#include <SemanticStylesheetsEditor.moc>

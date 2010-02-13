@@ -446,12 +446,12 @@ public:
      *
      * @see insertReflow()
      */
-    void applyReflow(QMap<int, reflowItem>& col);
+    void applyReflow(const QMap<int, reflowItem> &col);
 
     /**
      * For debugging, output the model and a header string for identification
      */
-    void dumpModel(QString msg, Soprano::Model* m = 0) const;
+    void dumpModel(const QString &msg, Soprano::Model* m = 0) const;
 
     /**
      * If the current tool is not something that you can get a
@@ -538,7 +538,7 @@ signals:
 public:
     void emitSemanticObjectAdded(RdfSemanticItem *item);
     void emitSemanticObjectUpdated(RdfSemanticItem *item);
-    void emitSemanticObjectViewSiteUpdated(RdfSemanticItem *item, QString xmlid);
+    void emitSemanticObjectViewSiteUpdated(RdfSemanticItem *item, const QString &xmlid);
     void emitSemanticObjectAddedConst(RdfSemanticItem* const item);
 
 

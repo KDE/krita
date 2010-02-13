@@ -32,10 +32,10 @@
 
 InsertSemanticObjectCreateAction::InsertSemanticObjectCreateAction(
     KoCanvasBase *canvas,
-    KoDocumentRdf* rdf,
+    KoDocumentRdf *rdf,
     const QString &name)
         : InsertSemanticObjectActionBase(canvas, rdf, name),
-        klass(name)
+        m_klass(name)
 {
 }
 
@@ -50,13 +50,13 @@ void InsertSemanticObjectCreateAction::activated()
     QVBoxLayout *lay = new QVBoxLayout(widget);
     widget->setLayout(lay);
     lay->setMargin(0);
-    kDebug(30015) << "klass:" << klass;
-    RdfSemanticItem* semItem = RdfSemanticItem::createSemanticItem(
-                                   m_rdf, m_rdf, klass);
-    QWidget* w = semItem->createEditor(widget);
+    kDebug(30015) << "klass:" << m_klass;
+    RdfSemanticItem *semItem = RdfSemanticItem::createSemanticItem(
+                                   m_rdf, m_rdf, m_klass);
+    QWidget *w = semItem->createEditor(widget);
     lay->addWidget(w);
     KPageDialog dialog(m_canvas->canvasWidget());
-    dialog.setCaption(i18n("%1 Options", text()));
+    dialog.setCaption(i18n("%1 Options", text())); // TODO add comment using i18nc
     dialog.addPage(widget, QString());
     if (dialog.exec() == KPageDialog::Accepted) {
         kDebug(30015) << "activated...";

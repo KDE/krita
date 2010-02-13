@@ -20,8 +20,6 @@
 #ifndef __rdf_RdfForward_h__
 #define __rdf_RdfForward_h__
 
-#include <QList>
-
 class KoDocumentRdf;
 class KoDocumentRdfEditWidget;
 class KoTextInlineRdf;
@@ -34,19 +32,18 @@ class SemanticStylesheet;
 
 namespace Ui
 {
-class RdfLocationEditWidget;
-};
+    class RdfLocationEditWidget;
+}
 namespace Marble
 {
-class MarbleWidget;
-class LatLonEdit;
+    class MarbleWidget;
+    class LatLonEdit;
 }
 namespace Soprano
 {
-class Model;
-class Statement;
-class Node;
+    class Model;
+    class Statement;
+    class Node;
 }
-
 
 #endif

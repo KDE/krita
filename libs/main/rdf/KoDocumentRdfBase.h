@@ -34,10 +34,11 @@ class QTextDocument;
 class KoStore;
 class KoXmlWriter;
 class KoDocument;
+
 namespace Soprano
 {
-class Model;
-};
+    class Model;
+}
 
 /**
  * A base class that provides the interface to many RDF features
@@ -52,13 +53,13 @@ class KOMAIN_EXPORT KoDocumentRdfBase : public QObject, public KoDataCenterBase
     Q_OBJECT
 
 public:
-    KoDocumentRdfBase(KoDocument* parent);
+    KoDocumentRdfBase(KoDocument *parent);
 
     /**
      * Get the Soprano::Model that contains all the Rdf
      * You do not own the model, do not delete it.
      */
-    virtual Soprano::Model* model() const;
+    virtual Soprano::Model *model() const;
 
     /**
      * Convenience method to get the KoDocumentRdf given a CanvasBase
@@ -68,13 +69,13 @@ public:
      * Note that this method can return either a valid KoDocumentRdf
      * pointer or a NULL pointer if there is no Rdf for the canvas.
      */
-    static KoDocumentRdfBase* fromResourceManager(KoCanvasBase* host);
-    virtual void linkToResourceManager(KoResourceManager* rm);
+    static KoDocumentRdfBase *fromResourceManager(KoCanvasBase *host);
+    virtual void linkToResourceManager(KoResourceManager *rm);
 
-    virtual void updateInlineRdfStatements(QTextDocument* qdoc);
-    virtual void updateXmlIdReferences(const QMap<QString, QString>& m);
-    virtual bool loadOasis(KoStore* store);
-    virtual bool saveOasis(KoStore* store, KoXmlWriter* manifestWriter);
+    virtual void updateInlineRdfStatements(QTextDocument *qdoc);
+    virtual void updateXmlIdReferences(const QMap<QString, QString> &m);
+    virtual bool loadOasis(KoStore *store);
+    virtual bool saveOasis(KoStore *store, KoXmlWriter *manifestWriter);
 };
 
 #endif

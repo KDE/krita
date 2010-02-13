@@ -18,27 +18,27 @@
 */
 
 #include "KoDocumentRdfBase.h"
-#include "KoDocument.h"
-#include "KoResourceManager.h"
-#include "KoCanvasBase.h"
-#include "KoText.h"
-#include "KoXmlWriter.h"
-#include "KoStoreDevice.h"
+#include "../KoDocument.h"
+#include <KoResourceManager.h>
+#include <KoCanvasBase.h>
+#include <KoText.h>
+#include <KoXmlWriter.h>
+#include <KoStoreDevice.h>
 
 #include "KoTextSopranoRdfModel_p.h"
 #include <kdebug.h>
 
-KoDocumentRdfBase::KoDocumentRdfBase(KoDocument* parent)
+KoDocumentRdfBase::KoDocumentRdfBase(KoDocument *parent)
         : QObject(parent)
 {
 }
 
-Soprano::Model* KoDocumentRdfBase::model() const
+Soprano::Model *KoDocumentRdfBase::model() const
 {
     return 0;
 }
 
-KoDocumentRdfBase* KoDocumentRdfBase::fromResourceManager(KoCanvasBase* host)
+KoDocumentRdfBase *KoDocumentRdfBase::fromResourceManager(KoCanvasBase *host)
 {
     KoResourceManager *rm = host->resourceManager();
     if (!rm->hasResource(KoText::DocumentRdf)) {
@@ -47,30 +47,30 @@ KoDocumentRdfBase* KoDocumentRdfBase::fromResourceManager(KoCanvasBase* host)
     return static_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<void*>());
 }
 
-void KoDocumentRdfBase::linkToResourceManager(KoResourceManager* rm)
+void KoDocumentRdfBase::linkToResourceManager(KoResourceManager *rm)
 {
     QVariant variant;
     variant.setValue<void*>(this);
     rm->setResource(KoText::DocumentRdf, variant);
 }
 
-void KoDocumentRdfBase::updateInlineRdfStatements(QTextDocument* qdoc)
+void KoDocumentRdfBase::updateInlineRdfStatements(QTextDocument *qdoc)
 {
     Q_UNUSED(qdoc);
 }
 
-void KoDocumentRdfBase::updateXmlIdReferences(const QMap<QString, QString>& m)
+void KoDocumentRdfBase::updateXmlIdReferences(const QMap<QString, QString> &m)
 {
     Q_UNUSED(m);
 }
 
-bool KoDocumentRdfBase::loadOasis(KoStore* store)
+bool KoDocumentRdfBase::loadOasis(KoStore *store)
 {
     Q_UNUSED(store);
     return true;
 }
 
-bool KoDocumentRdfBase::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
+bool KoDocumentRdfBase::saveOasis(KoStore *store, KoXmlWriter *manifestWriter)
 {
     Q_UNUSED(store);
     Q_UNUSED(manifestWriter);

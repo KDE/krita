@@ -22,14 +22,16 @@
 
 #include "rdf/KoDocumentRdf.h"
 
+// TODO give these methods some context, they can't just be global.
+
 QString getProperty(Soprano::Model* m,
                     Soprano::Node subj,
                     Soprano::Node pred,
                     QString defval);
 QString optionalBindingAsString(Soprano::QueryResultIterator& it,
                                 QString bindingName,
-                                QString def = "");
-QByteArray fileToByteArray(QString fileName);
+                                QString def = QString());
+QByteArray fileToByteArray(const QString &fileName);
 
 
 #endif

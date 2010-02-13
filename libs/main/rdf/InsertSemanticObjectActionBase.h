@@ -21,8 +21,7 @@
 #define __rdf_InsertSemanticObjectActionBase_h__
 
 #include "komain_export.h"
-#include "rdf/RdfForward.h"
-#include <QObject>
+#include "RdfForward.h"
 #include <KAction>
 
 class KoCanvasBase;
@@ -33,14 +32,15 @@ class InsertSemanticObjectActionBase : public KAction
     Q_OBJECT
 public:
     InsertSemanticObjectActionBase(KoCanvasBase *canvas,
-                                   KoDocumentRdf* rdf,
+                                   KoDocumentRdf *rdf,
                                    const QString &name);
     virtual ~InsertSemanticObjectActionBase();
 
 private slots:
     virtual void activated();
+
 protected:
-    KoTextEditor* editor();
+    KoTextEditor *editor();
     KoCanvasBase *m_canvas;
     KoDocumentRdf *m_rdf;
 };

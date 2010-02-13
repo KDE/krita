@@ -20,20 +20,21 @@
 #ifndef __rdf_InsertSemanticObjectCreateAction_h__
 #define __rdf_InsertSemanticObjectCreateAction_h__
 
-#include "rdf/InsertSemanticObjectActionBase.h"
+#include "InsertSemanticObjectActionBase.h"
 
 class InsertSemanticObjectCreateAction : public InsertSemanticObjectActionBase
 {
     Q_OBJECT
-    QString klass;
 public:
-    InsertSemanticObjectCreateAction(KoCanvasBase *canvas, KoDocumentRdf* rdf, const QString &name);
+    InsertSemanticObjectCreateAction(KoCanvasBase *canvas, KoDocumentRdf *rdf, const QString &name);
     virtual ~InsertSemanticObjectCreateAction();
 
 private slots:
     virtual void activated();
-};
 
+private:
+    QString m_klass;
+};
 
 #endif
 

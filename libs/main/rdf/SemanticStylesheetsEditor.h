@@ -22,7 +22,7 @@
 
 #include "komain_export.h"
 
-#include "rdf/RdfForward.h"
+#include "RdfForward.h"
 #include <KDialog>
 #include <QSharedPointer>
 
@@ -41,27 +41,27 @@ class KOMAIN_EXPORT SemanticStylesheetsEditor : public KDialog
 {
     Q_OBJECT;
 public:
-    SemanticStylesheetsEditor(QWidget* parent, KoDocumentRdf* rdf);
+    SemanticStylesheetsEditor(QWidget *parent, KoDocumentRdf *rdf);
     ~SemanticStylesheetsEditor();
 
-protected Q_SLOTS:
+protected slots:
     void slotOk();
-    void currentItemChanged(QTreeWidgetItem * current, QTreeWidgetItem * previous);
+    void currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void newStylesheet();
     void deleteStylesheet();
-    void onVariableActivated(QTableWidgetItem* item);
+    void onVariableActivated(QTableWidgetItem *item);
     void definitionChanged();
 
 private:
 
-    void setupStylesheetsItems(const QString& klass,
-                               RdfSemanticItem* si,
-                               const QList<SemanticStylesheet*>& ssl,
-                               const QMap<QString, QTreeWidgetItem*>& m,
+    void setupStylesheetsItems(const QString &klass,
+                               RdfSemanticItem *si,
+                               const QList<SemanticStylesheet*> &ssl,
+                               const QMap<QString, QTreeWidgetItem*> &m,
                                bool editable = false);
     void maskButtonsDependingOnCurrentItem(QTreeWidgetItem *current);
 
-    struct Private;
+    class Private;
     QSharedPointer<Private> d;
 };
 

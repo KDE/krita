@@ -40,12 +40,13 @@ class KoChangeTracker;
  */
 class KOMAIN_EXPORT KoChangeTrackerDisabledRAII
 {
-    KoChangeTracker *m_changeTracker;
-    bool m_oldval;
 public:
     KoChangeTrackerDisabledRAII(KoChangeTracker *changeTracker);
     ~KoChangeTrackerDisabledRAII();
-};
 
+private:
+    KoChangeTracker *m_changeTracker;
+    bool m_oldval;
+};
 
 #endif

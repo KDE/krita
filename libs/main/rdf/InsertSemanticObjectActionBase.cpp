@@ -17,13 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "rdf/InsertSemanticObjectActionBase.h"
-#include "KoTextEditor.h"
-#include "KoToolProxy.h"
-#include "KoCanvasBase.h"
+#include "InsertSemanticObjectActionBase.h"
+#include <KoTextEditor.h>
+#include <KoToolProxy.h>
+#include <KoCanvasBase.h>
 
 InsertSemanticObjectActionBase::InsertSemanticObjectActionBase(KoCanvasBase *canvas,
-        KoDocumentRdf* rdf,
+        KoDocumentRdf *rdf,
         const QString &name)
         : KAction(name, canvas->canvasWidget()),
         m_canvas(canvas),
@@ -36,9 +36,9 @@ InsertSemanticObjectActionBase::~InsertSemanticObjectActionBase()
 {
 }
 
-KoTextEditor* InsertSemanticObjectActionBase::editor()
+KoTextEditor *InsertSemanticObjectActionBase::editor()
 {
-    KoTextEditor* ret = qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
+    KoTextEditor *ret = qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
     return ret;
 }
 

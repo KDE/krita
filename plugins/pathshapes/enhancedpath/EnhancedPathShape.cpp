@@ -422,21 +422,23 @@ void EnhancedPathShape::parsePathData(const QString &data)
         return;
 
     int start = -1;
+    bool separator = true;
     for (int i = 0; i < data.length(); ++i) {
         QChar ch = data.at(i);
-        if (ch.unicode() == 'M' || ch.unicode() == 'L'
+        if (separator && (ch.unicode() == 'M' || ch.unicode() == 'L'
             || ch.unicode() == 'C' || ch.unicode() == 'Z'
             || ch.unicode() == 'N' || ch.unicode() == 'F'
             || ch.unicode() == 'S' || ch.unicode() == 'T'
             || ch.unicode() == 'U' || ch.unicode() == 'A'
             || ch.unicode() == 'B' || ch.unicode() == 'W'
             || ch.unicode() == 'V' || ch.unicode() == 'X'
-            || ch.unicode() == 'Y' || ch.unicode() == 'Q') {
+            || ch.unicode() == 'Y' || ch.unicode() == 'Q')) {
             if (start != -1) { // process last chars
                 addCommand(data.mid(start, i - start));
             }
             start = i;
         }
+        separator = ch.isSpace();
     }
     if (start < data.length())
         addCommand(data.mid(start));

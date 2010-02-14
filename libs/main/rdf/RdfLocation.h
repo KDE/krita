@@ -20,7 +20,6 @@
 #ifndef __rdf_RdfLocation_h__
 #define __rdf_RdfLocation_h__
 
-#include "komain_export.h"
 #include "rdf/RdfSemanticItem.h"
 #include <QSharedPointer>
 
@@ -37,7 +36,7 @@
  * http://www.w3.org/TR/rdfcal/     Relates an Rdf "geo" to a list of 2 doubles.
  *
  */
-class KOMAIN_EXPORT RdfLocation : public RdfSemanticItem
+class RdfLocation : public RdfSemanticItem
 {
     Q_OBJECT
 

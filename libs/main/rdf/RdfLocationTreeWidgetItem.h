@@ -20,11 +20,10 @@
 #ifndef __rdf_RdfLocationTreeWidgetItem_h__
 #define __rdf_RdfLocationTreeWidgetItem_h__
 
-#include "komain_export.h"
-#include "rdf/RdfForward.h"
-#include "rdf/RdfLocation.h"
-#include "rdf/RdfSemanticTreeWidgetItem.h"
-#include "rdf/RdfCalendarEventTreeWidgetItem.h"
+#include "RdfForward.h"
+#include "RdfLocation.h"
+#include "RdfSemanticTreeWidgetItem.h"
+#include "RdfCalendarEventTreeWidgetItem.h"
 
 class KoCanvasBase;
 
@@ -33,7 +32,7 @@ class KoCanvasBase;
  *        to such infomartion.
  * @author Ben Martin <ben.martin@kogmbh.com>
  */
-class KOMAIN_EXPORT RdfLocationTreeWidgetItem : public RdfSemanticTreeWidgetItem
+class RdfLocationTreeWidgetItem : public RdfSemanticTreeWidgetItem
 {
     Q_OBJECT
 public:

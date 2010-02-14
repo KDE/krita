@@ -20,7 +20,6 @@
 #ifndef __rdf_RdfFoaFTreeWidgetItem_h__
 #define __rdf_RdfFoaFTreeWidgetItem_h__
 
-#include "komain_export.h"
 #include "rdf/RdfForward.h"
 #include "rdf/RdfFoaF.h"
 #include "rdf/RdfSemanticTreeWidgetItem.h"
@@ -32,7 +31,7 @@ class KoCanvasBase;
  *        to such infomartion.
  * @author Ben Martin <ben.martin@kogmbh.com>
  */
-class KOMAIN_EXPORT RdfFoaFTreeWidgetItem : public RdfSemanticTreeWidgetItem
+class RdfFoaFTreeWidgetItem : public RdfSemanticTreeWidgetItem
 {
     Q_OBJECT
 public:

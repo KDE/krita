@@ -20,7 +20,6 @@
 #ifndef __rdf_RdfCalendarEvent_h__
 #define __rdf_RdfCalendarEvent_h__
 
-#include "../komain_export.h"
 #include "RdfSemanticItem.h"
 #include <QSharedPointer>
 
@@ -39,7 +38,7 @@ namespace KCal
  * http://www.w3.org/2002/12/cal/test/
  *
  */
-class KOMAIN_EXPORT RdfCalendarEvent : public RdfSemanticItem
+class RdfCalendarEvent : public RdfSemanticItem
 {
     Q_OBJECT
 

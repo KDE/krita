@@ -20,7 +20,6 @@
 #ifndef __rdf_RdfFoaF_h__
 #define __rdf_RdfFoaF_h__
 
-#include "../komain_export.h"
 #include "RdfSemanticItem.h"
 #include <QSharedPointer>
 
@@ -28,7 +27,7 @@
  * @short Contact information from the FOAF vocabulary.
  * @author Ben Martin <ben.martin@kogmbh.com>
  */
-class KOMAIN_EXPORT RdfFoaF : public RdfSemanticItem
+class RdfFoaF : public RdfSemanticItem
 {
     Q_OBJECT
 public:

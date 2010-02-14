@@ -20,12 +20,11 @@
 #ifndef __koDocumentRdfEditWidgetBase_h__
 #define __koDocumentRdfEditWidgetBase_h__
 
-#include "komain_export.h"
 #include <QWidget>
 
 class KoDocumentRdf;
 
-class KOMAIN_EXPORT KoDocumentRdfEditWidgetBase : public QWidget
+class KoDocumentRdfEditWidgetBase : public QWidget
 {
     Q_OBJECT
 public:

@@ -185,7 +185,6 @@ install( FILES
     KoUpdater.h
     KoStandardAction.h
     rdf/KoDocumentRdfBase.h
-    rdf/KoDocumentRdfEditWidgetBase.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
@@ -193,16 +192,10 @@ if( Soprano_FOUND )
     install( FILES
         rdf/RdfForward.h
         rdf/KoDocumentRdf.h
-        rdf/KoDocumentRdfEditWidget.h
         rdf/KoSopranoTableModelDelegate.h
         rdf/KoSopranoTableModel.h
-        rdf/RdfPrefixMapping.h
         rdf/SemanticStylesheet.h
         rdf/RdfSemanticItem.h
-        rdf/RdfFoaF.h
-        rdf/RdfCalendarEvent.h
-        rdf/RdfLocationEditWidget.h
-        rdf/RdfLocation.h
         rdf/RdfSemanticItemViewSite.h
         rdf/RdfSemanticTree.h
         rdf/RdfSemanticTreeWidgetItem.h
@@ -211,11 +204,7 @@ if( Soprano_FOUND )
         rdf/InsertSemanticObjectActionBase.h
         rdf/InsertSemanticObjectCreateAction.h
         rdf/InsertSemanticObjectReferenceAction.h
-        rdf/RdfFoaFTreeWidgetItem.h
-        rdf/RdfCalendarEventTreeWidgetItem.h
-        rdf/RdfLocationTreeWidgetItem.h
         rdf/SemanticStylesheetsEditor.h
-        rdf/KoChangeTrackerDisabledRAII.h
     DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 endif( Soprano_FOUND )
 

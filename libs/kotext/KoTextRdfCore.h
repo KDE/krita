@@ -17,15 +17,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KO_TEXT_Rdf_CORE_H
-#define KO_TEXT_Rdf_CORE_H
+#ifndef KO_TEXT_RDF_CORE_H
+#define KO_TEXT_RDF_CORE_H
 
 #include "kotext_export.h"
 
 // this file can only be used by code that is built
 // with soprano enabled.
 #include <Soprano/Soprano>
-#include <QSharedPointer>
 
 class KoStore;
 class KoXmlWriter;
@@ -46,7 +45,7 @@ namespace KoTextRdfCore
  * Save the RDF selected triples from model to the store with the
  * given RDF/XML filename
  */
-bool KOTEXT_EXPORT saveRdf(Soprano::Model *model, Soprano::StatementIterator triples,
+bool saveRdf(Soprano::Model *model, Soprano::StatementIterator triples,
         KoStore *store, KoXmlWriter *manifestWriter, const QString &fileName);
 
 /**
@@ -54,14 +53,14 @@ bool KOTEXT_EXPORT saveRdf(Soprano::Model *model, Soprano::StatementIterator tri
  * to maintain xml:id links from the model so they will be valid with
  * the content.xml that generated the idmap.
  */
-bool KOTEXT_EXPORT createAndSaveManifest(Soprano::Model *model,
+bool createAndSaveManifest(Soprano::Model *model,
         const QMap<QString, QString> &idmap, KoStore *store, KoXmlWriter *manifestWriter);
 
 /**
  * Load the manifest.rdf file from the ODF container store
  * into the model provided.
  */
-bool KOTEXT_EXPORT loadManifest(KoStore *store, Soprano::Model *model);
+bool loadManifest(KoStore *store, Soprano::Model *model);
 
 /**
  * For debugging, dump the model to kDebug() along with the

@@ -21,7 +21,6 @@
 #define __rdf_RdfLocationEditWidget_h__
 
 #include "RdfForward.h"
-#include "komain_export.h"
 #include <QObject>
 #include <QWidget>
 
@@ -30,7 +29,7 @@
  * This class allows the map to adjust the LatLonEdit widgets as the
  * user drags the map
  */
-class KOMAIN_EXPORT RdfLocationEditWidget : public QWidget
+class RdfLocationEditWidget : public QWidget
 {
     Q_OBJECT
 public:

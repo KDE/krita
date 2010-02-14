@@ -20,7 +20,6 @@
 #ifndef __koDocumentRdfEditWidget_h__
 #define __koDocumentRdfEditWidget_h__
 
-#include "komain_export.h"
 #include "RdfForward.h"
 #include "KoDocumentRdfEditWidgetBase.h"
 #include <QWidget>
@@ -44,7 +43,7 @@ class QComboBox;
  * document.
  *
  */
-class KOMAIN_EXPORT KoDocumentRdfEditWidget : public KoDocumentRdfEditWidgetBase
+class KoDocumentRdfEditWidget : public KoDocumentRdfEditWidgetBase
 {
     Q_OBJECT
 public:

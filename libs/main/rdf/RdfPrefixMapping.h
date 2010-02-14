@@ -20,7 +20,6 @@
 #ifndef __rdf_RdfPrefixMapping_h__
 #define __rdf_RdfPrefixMapping_h__
 
-#include "komain_export.h"
 #include "RdfForward.h"
 
 #include <QObject>
@@ -40,7 +39,7 @@
  * For example, to be able to say dc:author for the dublin core author uri
  *
  */
-class KOMAIN_EXPORT RdfPrefixMapping : public QObject
+class RdfPrefixMapping : public QObject
 {
     Q_OBJECT
 public:

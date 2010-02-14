@@ -25,6 +25,7 @@
 #include "kotext_export.h"
 
 class KoTextBlockBorderData;
+class KoTextBlockPaintStrategy;
 
 /**
  * This class is used to store properties for KoText layouting inside Qt QTextBlock
@@ -110,6 +111,17 @@ public:
      * Return the border associated with this paragraph, or 0 if there is no border set.
      */
     KoTextBlockBorderData *border() const;
+
+    /**
+     * sets a paintStrategy of this paragraph
+     * @param paintStrategy the paintStrategy to be used for this paragraph
+     */
+    void setPaintStrategy(KoTextBlockPaintStrategy *paintStrategy);
+
+    /**
+     * Return the paintStrategy of this paragraph
+     */
+    KoTextBlockPaintStrategy *paintStrategy() const;
 
 private:
     class Private;

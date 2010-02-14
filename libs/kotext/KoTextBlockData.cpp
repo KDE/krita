@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,14 +20,17 @@
 
 #include "KoTextBlockData.h"
 #include "KoTextBlockBorderData.h"
+#include "KoTextBlockPaintStrategy.h"
 
 class KoTextBlockData::Private
 {
 public:
-    Private() : counterWidth(0), counterSpacing(0), counterIndex(1), border(0) {}
+    Private() : counterWidth(0), counterSpacing(0), counterIndex(1), border(0)
+    , paintStrategy(new KoTextBlockPaintStrategy) {}
     ~Private() {
         if (border && !border->deref())
             delete border;
+        delete paintStrategy;
     }
     qreal counterWidth;
     qreal counterSpacing;
@@ -35,6 +39,7 @@ public:
     int counterIndex;
     QPointF counterPos;
     KoTextBlockBorderData *border;
+    KoTextBlockPaintStrategy *paintStrategy;
 };
 
 KoTextBlockData::KoTextBlockData()
@@ -125,5 +130,16 @@ QPointF KoTextBlockData::counterPosition() const
 KoTextBlockBorderData *KoTextBlockData::border() const
 {
     return d->border;
+}
+
+void KoTextBlockData::setPaintStrategy(KoTextBlockPaintStrategy *paintStrategy)
+{
+    delete d->paintStrategy;
+    d->paintStrategy = paintStrategy;
+}
+
+KoTextBlockPaintStrategy *KoTextBlockData::paintStrategy() const
+{
+    return d->paintStrategy;
 }
 

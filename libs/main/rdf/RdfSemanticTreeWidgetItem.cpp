@@ -171,7 +171,7 @@ void RdfSemanticTreeWidgetItem::insert(KoCanvasBase* host)
 
 void RdfSemanticTreeWidgetItem::edit()
 {
-    QString caption = QString(i18n("Edit %1").arg(UIObjectName()));
+    QString caption = i18n("Edit %1",UIObjectName());
     QWidget *widget = new QWidget();
     QVBoxLayout *lay = new QVBoxLayout(widget);
     widget->setLayout(lay);

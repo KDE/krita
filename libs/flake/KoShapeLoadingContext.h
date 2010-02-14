@@ -23,6 +23,8 @@
 
 #include <QSet>
 #include <QString>
+#include <QVariant>
+#include <QPair>
 
 #include "flake_export.h"
 
@@ -96,6 +98,11 @@ public:
     void addShapeId(KoShape *shape, const QString &id);
     /// return the shape formerly registered using addShapeId()
     KoShape *shapeById(const QString &id);
+
+    /// register the id for a specific shape sub item
+    void addShapeSubItemId(KoShape *shape, const QVariant &subItem, const QString &id);
+    /// return the shape and subitem formerly registered using addShapeSubItemId()
+    QPair<KoShape *, QVariant> shapeSubItemById(const QString &id);
 
     /**
      * call function on the shapeUpdater when the shape with the id shapeid is inserted

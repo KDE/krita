@@ -264,8 +264,8 @@ void SemanticStylesheetsEditor::currentItemChanged(QTreeWidgetItem *current, QTr
         int row = 0;
         QMap<QString, QString> m;
         ssitem->m_si->setupStylesheetReplacementMapping(m);
-        QMap< QString, QString >::const_iterator mi = m.begin();
-        QMap< QString, QString >::const_iterator me = m.end();
+        QMap< QString, QString >::const_iterator mi = m.constBegin();
+        QMap< QString, QString >::const_iterator me = m.constEnd();
         for (; mi != me; ++mi) {
             QTableWidgetItem *item = 0;
             QString varName = mi.key();

@@ -26,7 +26,7 @@
 #include <QSharedData>
 #include <QList>
 #include <QString>
-#include "rdf/RdfForward.h"
+#include "RdfForward.h"
 
 /**
  * @short A stylesheet that knows how to format a given RdfSemanticItem
@@ -45,13 +45,6 @@
 class KOMAIN_EXPORT SemanticStylesheet : public QObject
 {
     Q_OBJECT
-
-    QString m_uuid;
-    QString m_name;
-    QString m_templateString;
-    QString m_type;
-    bool m_isMutable;
-
 protected:
 
     // Restrict who can make us
@@ -59,8 +52,8 @@ protected:
     friend class RdfCalendarEvent;
     friend class RdfFoaF;
     friend class RdfLocation;
-    SemanticStylesheet(const QString& uuid, const QString& name, const QString& templateString,
-                       const QString& type = "System", bool isMutable = false);
+    SemanticStylesheet(const QString &uuid, const QString &name, const QString &templateString,
+                       const QString &type = "System", bool isMutable = false);
 
     friend class RdfSemanticItemViewSite;
     /**
@@ -68,10 +61,10 @@ protected:
      * applies the stylesheet to a specific reference to a semantic
      * item in the document.
      */
-    void format(RdfSemanticItem* obj, KoTextEditor* editor, const QString& xmlid = "");
+    void format(RdfSemanticItem *obj, KoTextEditor *editor, const QString& xmlid = QString());
 
 public:
-    static QString TYPE_SYSTEM;
+    static QString TYPE_SYSTEM; // TODO static QStrings are not safe. Also fix CamelCase
     static QString TYPE_USER;
 
     QString uuid();
@@ -82,11 +75,19 @@ public:
 
     // if (isMutable()) these methods update
     // user stylesheets are mutable, system ones are not
-    void name(const QString& v);
-    void templateString(const QString& v);
+    void name(const QString &v);
+    void templateString(const QString &v);
 
 signals:
     void nameChanging(SemanticStylesheet*, QString oldName, QString newName);
+
+private:
+    QString m_uuid;
+    QString m_name;
+    QString m_templateString;
+    QString m_type;
+    bool m_isMutable;
+
 };
 
 #include <QMetaType>

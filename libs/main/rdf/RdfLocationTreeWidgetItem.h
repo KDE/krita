@@ -36,27 +36,29 @@ class KoCanvasBase;
 class KOMAIN_EXPORT RdfLocationTreeWidgetItem : public RdfSemanticTreeWidgetItem
 {
     Q_OBJECT
-
-    RdfLocation* m_semanticObject;
-protected:
-    virtual RdfSemanticItem* semanticItem();
-    virtual QString UIObjectName();
 public:
     enum {
         Type = RdfCalendarEventTreeWidgetItem::Type + 1
     };
-    RdfLocationTreeWidgetItem(QTreeWidgetItem* parent, RdfLocation* semObj);
+    RdfLocationTreeWidgetItem(QTreeWidgetItem *parent, RdfLocation *semObj);
 
     /****************************************/
     /****************************************/
     /**** inherited and reimplemented... **/
 
-    RdfLocation* semanticObject();
-    virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase* host = 0);
-    virtual void insert(KoCanvasBase* host);
+    RdfLocation *semanticObject();
+    virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase *host = 0);
+    virtual void insert(KoCanvasBase *host);
 
 public slots:
     void showInViewer();
     void exportToFile();
+
+protected:
+    virtual RdfSemanticItem* semanticItem();
+    virtual QString uIObjectName();
+
+private:
+    RdfLocation* m_semanticObject;
 };
 #endif

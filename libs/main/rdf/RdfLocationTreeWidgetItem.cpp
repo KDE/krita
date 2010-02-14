@@ -19,16 +19,15 @@
 
 #include "RdfLocationTreeWidgetItem.h"
 
-#include "rdf/KoDocumentRdf.h"
-#include "rdf/KoDocumentRdf_p.h"
-#include "rdf/RdfSemanticTreeWidgetSelectAction.h"
+#include "KoDocumentRdf.h"
+#include "KoDocumentRdf_p.h"
+#include "RdfSemanticTreeWidgetSelectAction.h"
 
 #include <kdebug.h>
 #include <klocale.h>
 
-RdfLocationTreeWidgetItem::RdfLocationTreeWidgetItem(QTreeWidgetItem* parent, RdfLocation* semObj)
-        :
-        RdfSemanticTreeWidgetItem(parent, Type)
+RdfLocationTreeWidgetItem::RdfLocationTreeWidgetItem(QTreeWidgetItem *parent, RdfLocation *semObj)
+        : RdfSemanticTreeWidgetItem(parent, Type)
         , m_semanticObject(semObj)
 {
     setText(COL_NAME, m_semanticObject->name());
@@ -39,15 +38,15 @@ RdfSemanticItem* RdfLocationTreeWidgetItem::semanticItem()
     return m_semanticObject;
 }
 
-QString RdfLocationTreeWidgetItem::UIObjectName()
+QString RdfLocationTreeWidgetItem::uIObjectName()
 {
     return i18n("Location Information");
 }
 
-QList<KAction *> RdfLocationTreeWidgetItem::actions(QWidget *parent, KoCanvasBase* host)
+QList<KAction *> RdfLocationTreeWidgetItem::actions(QWidget *parent, KoCanvasBase *host)
 {
     QList<KAction *> m_actions;
-    KAction* action = 0;
+    KAction *action = 0;
     // These were coded to need marble
     // action = createAction(parent, host, "Edit...");
     // connect(action, SIGNAL(triggered(bool)), this, SLOT(edit()));
@@ -66,12 +65,12 @@ QList<KAction *> RdfLocationTreeWidgetItem::actions(QWidget *parent, KoCanvasBas
     return m_actions;
 }
 
-RdfLocation* RdfLocationTreeWidgetItem::semanticObject()
+RdfLocation *RdfLocationTreeWidgetItem::semanticObject()
 {
     return m_semanticObject;
 }
 
-void RdfLocationTreeWidgetItem::insert(KoCanvasBase* host)
+void RdfLocationTreeWidgetItem::insert(KoCanvasBase *host)
 {
     semanticObject()->insert(host);
 }

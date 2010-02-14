@@ -17,18 +17,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "rdf/RdfSemanticItem.h"
-#include "rdf/KoDocumentRdf.h"
-#include "rdf/KoDocumentRdf_p.h"
-#include "KoInlineObject.h"
-#include "KoTextInlineRdf.h"
-#include "KoTextRdfCore.h"
-#include "KoTextEditor.h"
-#include "KoCanvasBase.h"
-#include "KoToolProxy.h"
-#include "KoBookmark.h"
-#include "KoTextMeta.h"
-#include "KoTextDocument.h"
+#include "RdfSemanticItem.h"
+#include "KoDocumentRdf.h"
+#include "KoDocumentRdf_p.h"
+#include <KoInlineObject.h>
+#include <KoTextInlineRdf.h>
+#include <KoTextRdfCore.h>
+#include <KoTextEditor.h>
+#include <KoCanvasBase.h>
+#include <KoToolProxy.h>
+#include <KoBookmark.h>
+#include <KoTextMeta.h>
+#include <KoTextDocument.h>
 
 #include <kdebug.h>
 #include <QUuid>
@@ -37,15 +37,15 @@
 
 using namespace Soprano;
 
-RdfSemanticItem::RdfSemanticItem(QObject* parent, KoDocumentRdf* m_rdf)
+RdfSemanticItem::RdfSemanticItem(QObject *parent, KoDocumentRdf *rdf)
         : QObject(parent),
-        m_rdf(m_rdf)
+        m_rdf(rdf)
 {
 }
 
-RdfSemanticItem::RdfSemanticItem(QObject* parent, KoDocumentRdf* m_rdf, Soprano::QueryResultIterator& it)
+RdfSemanticItem::RdfSemanticItem(QObject *parent, KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
         : QObject(parent),
-        m_rdf(m_rdf)
+        m_rdf(rdf)
 {
     m_context = it.binding("graph");
     kDebug(30015) << "RdfSemanticItem() context:" << m_context.toString();
@@ -55,7 +55,7 @@ RdfSemanticItem::~RdfSemanticItem()
 {
 }
 
-KoDocumentRdf* RdfSemanticItem::DocumentRdf() const
+KoDocumentRdf *RdfSemanticItem::documentRdf() const
 {
     return m_rdf;
 }
@@ -72,30 +72,26 @@ QStringList RdfSemanticItem::xmlIdList() const
                                Node(),
                                m_rdf->manifestRdfNode());
     QList<Statement> allStatements = it.allElements();
-    Q_FOREACH(Soprano::Statement s, allStatements) {
+    foreach (Soprano::Statement s, allStatements) {
         QString xmlid = s.object().toString();
         ret << xmlid;
     }
     return ret;
 }
 
-RdfSemanticTreeWidgetItem* RdfSemanticItem::createQTreeWidgetItem(QTreeWidgetItem* parent)
+RdfSemanticTreeWidgetItem *RdfSemanticItem::createQTreeWidgetItem(QTreeWidgetItem *parent)
 {
     Q_UNUSED(parent);
     return 0;
 }
 
-void RdfSemanticItem::updateTriple_remove(const Soprano::LiteralValue& toModify,
-        const QString& predString,
-        const Soprano::Node& explicitLinkingSubject)
+void RdfSemanticItem::updateTriple_remove(const Soprano::LiteralValue &toModify,
+        const QString &predString,
+        const Soprano::Node &explicitLinkingSubject)
 {
-    Soprano::Model* m = m_rdf->model();
+    Soprano::Model *m = m_rdf->model();
     Node pred = Node::createResourceNode(QUrl(predString));
-    m->removeStatement(
-        explicitLinkingSubject,
-        pred,
-        Node::createLiteralNode(toModify)
-    );
+    m->removeStatement(explicitLinkingSubject,pred, Node::createLiteralNode(toModify));
     kDebug(30015) << "Rdf.del subj:" << explicitLinkingSubject;
     kDebug(30015) << "Rdf.del pred:" << pred;
     kDebug(30015) << "Rdf.del  obj:" << Node::createLiteralNode(toModify);
@@ -110,7 +106,7 @@ void RdfSemanticItem::updateTriple_remove(const Soprano::LiteralValue& toModify,
     StatementIterator it = m->listStatements(explicitLinkingSubject, pred, Node());
     QList<Statement> removeList;
     QList<Statement> allStatements = it.allElements();
-    Q_FOREACH(Soprano::Statement s, allStatements) {
+    foreach (Soprano::Statement s, allStatements) {
         kDebug(30015) << "typeless remove,  s:" << s.object().toString();
         kDebug(30015) << "typeless remove, tm:" << Node::createLiteralNode(toModify).toString();
 
@@ -129,26 +125,22 @@ void RdfSemanticItem::updateTriple_remove(const Soprano::LiteralValue& toModify,
     m->removeStatements(removeList);
 }
 
-void RdfSemanticItem::updateTriple_add(const Soprano::LiteralValue& toModify,
-                                       const QString& predString,
-                                       const Soprano::Node& explicitLinkingSubject)
+void RdfSemanticItem::updateTriple_add(const Soprano::LiteralValue &toModify,
+                                       const QString &predString,
+                                       const Soprano::Node &explicitLinkingSubject)
 {
-    Soprano::Model* m = m_rdf->model();
+    Soprano::Model *m = m_rdf->model();
     Node pred = Node::createResourceNode(QUrl(predString));
 
     kDebug(30015) << "Rdf.add subj:" << explicitLinkingSubject;
     kDebug(30015) << "Rdf.add pred:" << pred;
     kDebug(30015) << "Rdf.add  obj:" << Node::createLiteralNode(toModify);
     kDebug(30015) << "Rdf.add  ctx:" << context();
-    m->addStatement(
-        explicitLinkingSubject,
-        pred,
-        Node::createLiteralNode(toModify),
-        context());
+    m->addStatement(explicitLinkingSubject, pred, Node::createLiteralNode(toModify), context());
 }
 
 
-void RdfSemanticItem::updateTriple(QString& toModify, const QString& newValue, const QString& predString)
+void RdfSemanticItem::updateTriple(QString &toModify, const QString &newValue, const QString &predString)
 {
     kDebug(30015) << "tomod:" << toModify << " newV:" << newValue << " pred:" << predString;
     updateTriple_remove(toModify, predString, linkingSubject());
@@ -156,7 +148,7 @@ void RdfSemanticItem::updateTriple(QString& toModify, const QString& newValue, c
     updateTriple_add(toModify, predString, linkingSubject());
 }
 
-void RdfSemanticItem::updateTriple(KDateTime& toModify, const KDateTime& newValue, const QString& predString)
+void RdfSemanticItem::updateTriple(KDateTime &toModify, const KDateTime &newValue, const QString &predString)
 {
     updateTriple_remove(Soprano::LiteralValue(toModify.dateTime()),
                         predString, linkingSubject());
@@ -165,35 +157,31 @@ void RdfSemanticItem::updateTriple(KDateTime& toModify, const KDateTime& newValu
                      predString, linkingSubject());
 }
 
-void RdfSemanticItem::updateTriple(double& toModify,
-                                   double    newValue,
-                                   const QString& predString,
-                                   const Soprano::Node& explicitLinkingSubject)
+void RdfSemanticItem::updateTriple(double &toModify,
+                                   double newValue,
+                                   const QString &predString,
+                                   const Soprano::Node &explicitLinkingSubject)
 {
     updateTriple_remove(Soprano::LiteralValue(toModify), predString, explicitLinkingSubject);
     toModify = newValue;
     updateTriple_add(Soprano::LiteralValue(toModify), predString, explicitLinkingSubject);
 }
 
-void RdfSemanticItem::setRdfType(const QString& t)
+void RdfSemanticItem::setRdfType(const QString &t)
 {
-    Soprano::Model* m = m_rdf->model();
+    Soprano::Model *m = m_rdf->model();
     Node pred = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"));
-    m->addStatement(
-        linkingSubject(),
-        pred,
-        Node::createResourceNode(t),
-        context());
+    m->addStatement(linkingSubject(), pred, Node::createResourceNode(t), context());
 }
 
-void RdfSemanticItem::importFromDataComplete(const QByteArray& ba, KoDocumentRdf* m_rdf, KoCanvasBase* host)
+void RdfSemanticItem::importFromDataComplete(const QByteArray &ba, KoDocumentRdf *rdf, KoCanvasBase *host)
 {
     Q_UNUSED(ba);
 
     // Create and populate and editor with the current data,
     // then update the Rdf from that editor.
-    QWidget* parent = 0;
-    QWidget* objectEditor = createEditor(parent);
+    QWidget *parent = 0;
+    QWidget *objectEditor = createEditor(parent);
     updateFromEditorData();
 
     if (host) {
@@ -201,8 +189,8 @@ void RdfSemanticItem::importFromDataComplete(const QByteArray& ba, KoDocumentRdf
     }
     delete objectEditor;
 
-    if (m_rdf) {
-        m_rdf->emitSemanticObjectAdded(this);
+    if (rdf) {
+        rdf->emitSemanticObjectAdded(this);
     }
 }
 
@@ -219,30 +207,29 @@ Soprano::Node RdfSemanticItem::context()
     return m_rdf->manifestRdfNode();
 }
 
-void RdfSemanticItem::setupStylesheetReplacementMapping(QMap< QString, QString >& m)
+void RdfSemanticItem::setupStylesheetReplacementMapping(QMap<QString, QString> &m)
 {
     Q_UNUSED(m);
 }
 
-void RdfSemanticItem::exportToMime(QMimeData* md)
+void RdfSemanticItem::exportToMime(QMimeData *md)
 {
     Q_UNUSED(md);
 }
 
-void RdfSemanticItem::insert(KoCanvasBase* host)
+void RdfSemanticItem::insert(KoCanvasBase *host)
 {
     kDebug(30015) << "insert...";
-    KoTextEditor* editor = KoDocumentRdf::ensureTextTool(host);
+    KoTextEditor *editor = KoDocumentRdf::ensureTextTool(host);
     Q_ASSERT(editor);
     Q_ASSERT(editor->document());
 
     KoTextDocument ktd(editor->document());
     KoChangeTrackerDisabledRAII disableChangeTracker(ktd.changeTracker());
 
-    KoTextMeta* startmark = new KoTextMeta(editor->document());
+    KoTextMeta *startmark = new KoTextMeta(editor->document());
     editor->insertInlineObject(startmark);
-    KoTextInlineRdf* inlineRdf(
-        new KoTextInlineRdf((QTextDocument*)editor->document(), startmark));
+    KoTextInlineRdf *inlineRdf(new KoTextInlineRdf((QTextDocument*)editor->document(), startmark));
 
     // generate an xml:id for inlineRdf
     // set it and also insert some Rdf into manifest.rdf to link
@@ -280,7 +267,7 @@ void RdfSemanticItem::insert(KoCanvasBase* host)
     //
     editor->insertText(name());
 
-    KoTextMeta* endmark = new KoTextMeta(editor->document());
+    KoTextMeta *endmark = new KoTextMeta(editor->document());
     editor->insertInlineObject(endmark);
     startmark->setEndBookmark(endmark);
 
@@ -299,7 +286,7 @@ QStringList RdfSemanticItem::classNames()
     return ret;
 }
 
-RdfSemanticItem* RdfSemanticItem::createSemanticItem(QObject* parent, KoDocumentRdf* m_rdf, const QString& klass)
+RdfSemanticItem *RdfSemanticItem::createSemanticItem(QObject *parent, KoDocumentRdf *m_rdf, const QString &klass)
 {
     if (klass == "Contact") {
         return new RdfFoaF(parent, m_rdf);
@@ -313,7 +300,7 @@ RdfSemanticItem* RdfSemanticItem::createSemanticItem(QObject* parent, KoDocument
     return 0;
 }
 
-SemanticStylesheet *RdfSemanticItem::findStylesheetByUuid(const QString& id)
+SemanticStylesheet *RdfSemanticItem::findStylesheetByUuid(const QString &id)
 {
     SemanticStylesheet *ret = 0;
     if (id.isEmpty()) {
@@ -332,8 +319,8 @@ SemanticStylesheet *RdfSemanticItem::findStylesheetByUuid(const QString& id)
     return ret;
 }
 
-SemanticStylesheet *RdfSemanticItem::findStylesheetByName(const QList<SemanticStylesheet*>& ssheets,
-        const QString& n)
+SemanticStylesheet *RdfSemanticItem::findStylesheetByName(const QList<SemanticStylesheet*> &ssheets,
+        const QString &n)
 {
     SemanticStylesheet *ret = 0;
     foreach (SemanticStylesheet *ss, ssheets) {
@@ -344,7 +331,7 @@ SemanticStylesheet *RdfSemanticItem::findStylesheetByName(const QList<SemanticSt
     return ret;
 }
 
-SemanticStylesheet *RdfSemanticItem::findStylesheetByName(const QString& sheetType, const QString& n)
+SemanticStylesheet *RdfSemanticItem::findStylesheetByName(const QString &sheetType, const QString &n)
 {
     if (sheetType == "System") {
         return findStylesheetByName(stylesheets(), n);
@@ -352,22 +339,21 @@ SemanticStylesheet *RdfSemanticItem::findStylesheetByName(const QString& sheetTy
     return findStylesheetByName(userStylesheets(), n);
 }
 
-
 SemanticStylesheet *RdfSemanticItem::defaultStylesheet()
 {
     QString klass = metaObject()->className();
-    QString name = getProperty(DocumentRdf()->model(),
+    QString name = getProperty(documentRdf()->model(),
                                Node::createResourceNode(QUrl("http://kogmbh.net/rdf/document/" + klass)),
                                Node::createResourceNode(QUrl("http://kogmbh.net/rdf/stylesheet")),
                                "name");
-    QString type = getProperty(DocumentRdf()->model(),
+    QString type = getProperty(documentRdf()->model(),
                                Node::createResourceNode(QUrl("http://kogmbh.net/rdf/document/" + klass)),
                                Node::createResourceNode(QUrl("http://kogmbh.net/rdf/stylesheet-type")),
                                SemanticStylesheet::TYPE_SYSTEM);
-    QString uuid = getProperty(DocumentRdf()->model(),
+    QString uuid = getProperty(documentRdf()->model(),
                                Node::createResourceNode(QUrl("http://kogmbh.net/rdf/document/" + klass)),
                                Node::createResourceNode(QUrl("http://kogmbh.net/rdf/stylesheet-uuid")),
-                               "");
+                               QString());
     kDebug(30015) << "name:" << name << " type:" << type << "\n uuid:" << uuid;
     SemanticStylesheet *ret = findStylesheetByUuid(uuid);
     if (!ret) {
@@ -383,8 +369,8 @@ SemanticStylesheet *RdfSemanticItem::defaultStylesheet()
 
 void RdfSemanticItem::defaultStylesheet(SemanticStylesheet *ss)
 {
-    KoDocumentRdf* rdf = DocumentRdf();
-    Soprano::Model* m = rdf->model();
+    KoDocumentRdf *rdf = documentRdf();
+    Soprano::Model *m = rdf->model();
     QString uuid = ss->uuid();
     QString name = ss->name();
     QString klass = metaObject()->className();
@@ -414,7 +400,7 @@ void RdfSemanticItem::defaultStylesheet(SemanticStylesheet *ss)
                     rdf->manifestRdfNode());
 }
 
-SemanticStylesheet *RdfSemanticItem::createUserStylesheet(const QString& name, const QString& templateString)
+SemanticStylesheet *RdfSemanticItem::createUserStylesheet(const QString &name, const QString &templateString)
 {
     bool isMutable = true;
     SemanticStylesheet *ss =
@@ -428,7 +414,7 @@ SemanticStylesheet *RdfSemanticItem::createUserStylesheet(const QString& name, c
     return ss;
 }
 
-void RdfSemanticItem::onUserStylesheetRenamed(SemanticStylesheet *ss, QString oldName, QString newName)
+void RdfSemanticItem::onUserStylesheetRenamed(SemanticStylesheet *ss, const QString &oldName, const QString &newName)
 {
     Q_UNUSED(ss);
     Q_UNUSED(oldName);
@@ -438,10 +424,9 @@ void RdfSemanticItem::onUserStylesheetRenamed(SemanticStylesheet *ss, QString ol
 void RdfSemanticItem::destroyUserStylesheet(SemanticStylesheet *ss)
 {
     userStylesheets().removeAll(ss);
-    ss = 0;
 }
 
-void RdfSemanticItem::loadUserStylesheets(Soprano::Model* model)
+void RdfSemanticItem::loadUserStylesheets(Soprano::Model *model)
 {
     QString klass = metaObject()->className();
     QString nodePrefix = "http://kogmbh.net/rdf/user-stylesheets/" + klass + "/";
@@ -479,7 +464,7 @@ void RdfSemanticItem::loadUserStylesheets(Soprano::Model* model)
     }
 }
 
-void RdfSemanticItem::saveUserStylesheets(Soprano::Model* model, const Soprano::Node& context)
+void RdfSemanticItem::saveUserStylesheets(Soprano::Model *model, const Soprano::Node &context)
 {
     QString klass = metaObject()->className();
     QString nodePrefix = "http://kogmbh.net/rdf/user-stylesheets/" + klass + "/";
@@ -490,26 +475,17 @@ void RdfSemanticItem::saveUserStylesheets(Soprano::Model* model, const Soprano::
     Soprano::Node dataBNode = model->createBlankNode();
     QList< Soprano::Node > dataBNodeList;
 
-    QList<SemanticStylesheet*>& ssl = userStylesheets();
+    QList<SemanticStylesheet*> &ssl = userStylesheets();
     foreach (SemanticStylesheet *ss, ssl) {
         kDebug(30015) << "saving sheet:" << ss->name();
 
         dataBNode = model->createBlankNode();
-        model->addStatement(
-            dataBNode,
-            Node::createResourceNode(QUrl(nodePrefix + "uuid")),
-            Node::createLiteralNode(ss->uuid()),
-            context);
-        model->addStatement(
-            dataBNode,
-            Node::createResourceNode(QUrl(nodePrefix + "name")),
-            Node::createLiteralNode(ss->name()),
-            context);
-        model->addStatement(
-            dataBNode,
-            Node::createResourceNode(QUrl(nodePrefix + "template")),
-            Node::createLiteralNode(ss->templateString()),
-            context);
+        model->addStatement(dataBNode, Node::createResourceNode(QUrl(nodePrefix + "uuid")),
+            Node::createLiteralNode(ss->uuid()), context);
+        model->addStatement(dataBNode, Node::createResourceNode(QUrl(nodePrefix + "name")),
+            Node::createLiteralNode(ss->name()), context);
+        model->addStatement(dataBNode, Node::createResourceNode(QUrl(nodePrefix + "template")),
+            Node::createLiteralNode(ss->templateString()), context);
         dataBNodeList << dataBNode;
     }
 
@@ -521,8 +497,8 @@ void RdfSemanticItem::saveUserStylesheets(Soprano::Model* model, const Soprano::
 Soprano::Node RdfSemanticItem::createNewUUIDNode()
 {
     QString uuid = QUuid::createUuid().toString();
-    uuid.replace("{", "");
-    uuid.replace("}", "");
+    uuid.replace("{", QString());
+    uuid.replace("}", QString());
     QString nodestr = "http://kogmbh.net/uuidnode/" + uuid;
     return Node::createResourceNode(nodestr);
 }

@@ -46,50 +46,11 @@ class KoResourceManager;
  */
 class KOMAIN_EXPORT RdfSemanticItemViewSite
 {
-    QString m_xmlid;
-    RdfSemanticItem* m_semItem;
-
-    /**
-     * This is similar to the linkingSubject() used by RdfSemanticItem
-     * in that you have:
-     * linkingSubject() common#idref xml:id
-     * but metadata about the site at xml:id is stored as properties
-     * off the RdfSemanticItemViewSite::linkingSubject() subject.
-     *
-     * The difference between this linkingSubject() and RdfSemanticItem
-     * is that this is for Rdf describing a single xml:id site in the document,
-     * the RdfSemanticItem::linkingSubject() is the model that can be referenced
-     * by many xml:id sites.
-     */
-    Soprano::Node linkingSubject();
-
-    /**
-     * Convenience method to get a specific property from the Rdf
-     * model. There should be either zero or only one value for X in
-     * the triple:
-     *
-     * linkingSubject(), prop, X
-     *
-     * if the property does not exist defval is returned.
-     */
-    QString getProperty(QString prop, QString defval);
-    /**
-     * Set the single value for the Rdf predicate prop.
-     * @see getProperty()
-     */
-    void setProperty(QString prop, QString v);
-
-    /**
-     * Convenience method to select from startpos to endpos in the
-     * document
-     */
-    void selectRange(KoResourceManager *provider, int startpos, int endpos);
-
 public:
     /**
      * Performing actions on a specific reference to a semantic item in the document.
      */
-    RdfSemanticItemViewSite(RdfSemanticItem* si, QString xmlid);
+    RdfSemanticItemViewSite(RdfSemanticItem* si, const QString &xmlid);
 
     /**
      * The stylesheet that has been set for this view site
@@ -115,7 +76,7 @@ public:
      * @see setStylesheetWithoutReflow()
      * @see reflowUsingCurrentStylesheet()
      */
-    void applyStylesheet(KoTextEditor* editor, SemanticStylesheet *ss);
+    void applyStylesheet(KoTextEditor *editor, SemanticStylesheet *ss);
     /**
      * Remember that a specific stylesheet should be applied for this
      * semantic item. No reflow of the document is performed and thus
@@ -131,12 +92,53 @@ public:
      *
      * @see applyStylesheet()
      */
-    void reflowUsingCurrentStylesheet(KoTextEditor* editor);
+    void reflowUsingCurrentStylesheet(KoTextEditor *editor);
 
     /**
      * Select this view of the semantic item in the document.
      */
     void select(KoCanvasBase *canvas);
+
+private:
+    QString m_xmlid;
+    RdfSemanticItem *m_semItem;
+
+    /**
+     * This is similar to the linkingSubject() used by RdfSemanticItem
+     * in that you have:
+     * linkingSubject() common#idref xml:id
+     * but metadata about the site at xml:id is stored as properties
+     * off the RdfSemanticItemViewSite::linkingSubject() subject.
+     *
+     * The difference between this linkingSubject() and RdfSemanticItem
+     * is that this is for Rdf describing a single xml:id site in the document,
+     * the RdfSemanticItem::linkingSubject() is the model that can be referenced
+     * by many xml:id sites.
+     */
+    Soprano::Node linkingSubject();
+
+    /**
+     * Convenience method to get a specific property from the Rdf
+     * model. There should be either zero or only one value for X in
+     * the triple:
+     *
+     * linkingSubject(), prop, X
+     *
+     * if the property does not exist defval is returned.
+     */
+    QString getProperty(const QString &prop, const QString &defval);
+    /**
+     * Set the single value for the Rdf predicate prop.
+     * @see getProperty()
+     */
+    void setProperty(const QString &prop, const QString &v);
+
+    /**
+     * Convenience method to select from startpos to endpos in the
+     * document
+     */
+    void selectRange(KoResourceManager *provider, int startpos, int endpos);
+
 };
 
 #endif

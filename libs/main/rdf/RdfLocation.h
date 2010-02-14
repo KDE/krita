@@ -40,26 +40,24 @@
 class KOMAIN_EXPORT RdfLocation : public RdfSemanticItem
 {
     Q_OBJECT
-    struct Private;
-    QSharedPointer<Private> d;
 
 public:
-    RdfLocation(QObject* parent, KoDocumentRdf* m_rdf = 0);
-    RdfLocation(QObject* parent, KoDocumentRdf* m_rdf, Soprano::QueryResultIterator& it, bool isGeo84);
+    RdfLocation(QObject *parent, KoDocumentRdf *m_rdf = 0);
+    RdfLocation(QObject *parent, KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it, bool isGeo84);
     virtual ~RdfLocation();
 
     // inherited and reimplemented...
 
-    virtual void exportToFile(const QString& fileName = "");
-    virtual void importFromData(const QByteArray& ba, KoDocumentRdf* m_rdf = 0, KoCanvasBase* host = 0);
-    virtual QWidget* createEditor(QWidget * parent);
+    virtual void exportToFile(const QString &fileName = QString());
+    virtual void importFromData(const QByteArray &ba, KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0);
+    virtual QWidget *createEditor(QWidget *parent);
     virtual void updateFromEditorData();
-    virtual RdfSemanticTreeWidgetItem* createQTreeWidgetItem(QTreeWidgetItem* parent = 0);
+    virtual RdfSemanticTreeWidgetItem *createQTreeWidgetItem(QTreeWidgetItem *parent = 0);
     virtual Soprano::Node linkingSubject() const;
-    virtual void setupStylesheetReplacementMapping(QMap< QString, QString >& m);
-    virtual void exportToMime(QMimeData* md);
-    virtual QList<SemanticStylesheet*>& stylesheets();
-    virtual QList<SemanticStylesheet*>& userStylesheets();
+    virtual void setupStylesheetReplacementMapping(QMap<QString, QString> &m);
+    virtual void exportToMime(QMimeData *md);
+    virtual QList<SemanticStylesheet*> &stylesheets();
+    virtual QList<SemanticStylesheet*> &userStylesheets();
 
     /**
      * Present the location in some graphical map display
@@ -69,8 +67,12 @@ public:
 
     // accessor methods...
 
-    QString name();
+    virtual QString name() const;
     double dlat();
     double dlong();
+
+private:
+    class Private;
+    QSharedPointer<Private> d;
 };
 #endif

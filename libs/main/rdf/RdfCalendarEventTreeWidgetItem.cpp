@@ -37,7 +37,8 @@ RdfSemanticItem* RdfCalendarEventTreeWidgetItem::semanticItem()
 {
     return m_semanticObject;
 }
-QString RdfCalendarEventTreeWidgetItem::UIObjectName()
+
+QString RdfCalendarEventTreeWidgetItem::uIObjectName()
 {
     return i18n("Calendar Event");
 }
@@ -46,13 +47,13 @@ QList<KAction *> RdfCalendarEventTreeWidgetItem::actions(QWidget *parent, KoCanv
 {
     QList<KAction *> m_actions;
     KAction* action = 0;
-    action = createAction(parent, host, "Edit...");
+    action = createAction(parent, host, i18n("Edit..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(edit()));
     m_actions.append(action);
-    action = createAction(parent, host, "Import event to Calendar");
+    action = createAction(parent, host, i18n("Import event to Calendar"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(saveToKCal()));
     m_actions.append(action);
-    action = createAction(parent, host, "Export event to iCal file...");
+    action = createAction(parent, host, i18n("Export event to iCal file..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(exportToFile()));
     m_actions.append(action);
     addApplyStylesheetActions(parent, m_actions, host);
@@ -63,12 +64,12 @@ QList<KAction *> RdfCalendarEventTreeWidgetItem::actions(QWidget *parent, KoCanv
     return m_actions;
 }
 
-RdfCalendarEvent* RdfCalendarEventTreeWidgetItem::semanticObject()
+RdfCalendarEvent *RdfCalendarEventTreeWidgetItem::semanticObject()
 {
     return m_semanticObject;
 }
 
-void RdfCalendarEventTreeWidgetItem::insert(KoCanvasBase* host)
+void RdfCalendarEventTreeWidgetItem::insert(KoCanvasBase *host)
 {
     semanticObject()->insert(host);
 }
@@ -76,13 +77,13 @@ void RdfCalendarEventTreeWidgetItem::insert(KoCanvasBase* host)
 void RdfCalendarEventTreeWidgetItem::saveToKCal()
 {
     kDebug(30015) << "import a calendar event from the document... "
-    << " name:" << m_semanticObject->name();
+        << " name:" << m_semanticObject->name();
     semanticObject()->saveToKCal();
 }
 
 void RdfCalendarEventTreeWidgetItem::exportToFile()
 {
     kDebug(30015) << "exporting to an iCal file..."
-    << " name:" << m_semanticObject->name();
+        << " name:" << m_semanticObject->name();
     semanticObject()->exportToFile();
 }

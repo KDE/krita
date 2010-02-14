@@ -16,25 +16,25 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include "rdf/SemanticStylesheet.h"
+#include "SemanticStylesheet.h"
 
 #include <QCoreApplication>
 #include <kdebug.h>
-#include "KoTextEditor.h"
 
 #include "KoDocumentRdf.h"
-#include "KoDocument.h"
-#include "KoTextDocument.h"
+#include "../KoDocument.h"
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
 
 #include "KoChangeTrackerDisabledRAII.h"
 
 QString SemanticStylesheet::TYPE_SYSTEM = "System";
 QString SemanticStylesheet::TYPE_USER = "User";
 
-SemanticStylesheet::SemanticStylesheet(const QString& uuid,
-                                       const QString& name,
-                                       const QString& templateString,
-                                       const QString& type, bool isMutable)
+SemanticStylesheet::SemanticStylesheet(const QString &uuid,
+                                       const QString &name,
+                                       const QString &templateString,
+                                       const QString &type, bool isMutable)
         : QObject(QCoreApplication::instance()),
         m_uuid(uuid),
         m_name(name),
@@ -70,7 +70,7 @@ bool SemanticStylesheet::isMutable()
     return m_isMutable;
 }
 
-void SemanticStylesheet::name(const QString& v)
+void SemanticStylesheet::name(const QString &v)
 {
     if (m_isMutable) {
         emit nameChanging(this, m_name, v);
@@ -78,7 +78,7 @@ void SemanticStylesheet::name(const QString& v)
     }
 }
 
-void SemanticStylesheet::templateString(const QString& v)
+void SemanticStylesheet::templateString(const QString &v)
 {
     if (m_isMutable) {
         m_templateString = v;
@@ -86,15 +86,15 @@ void SemanticStylesheet::templateString(const QString& v)
 }
 
 
-void SemanticStylesheet::format(RdfSemanticItem* obj, KoTextEditor* editor, const QString& xmlid)
+void SemanticStylesheet::format(RdfSemanticItem *obj, KoTextEditor *editor, const QString &xmlid)
 {
     kDebug(30015) << "formating obj:" << obj << " name:" << obj->name();
     kDebug(30015) << "xmlid:" << xmlid << " editor:" << editor << " sheet-name:" << name();
-    KoDocumentRdf* rdf = obj->DocumentRdf();
+    KoDocumentRdf *rdf = obj->documentRdf();
     Q_ASSERT(rdf);
     Q_ASSERT(editor);
     Q_ASSERT(rdf->document());
-    QPair< int, int > p;
+    QPair<int, int> p;
     if (xmlid.size()) {
         p = rdf->findExtent(xmlid);
     } else {
@@ -117,19 +117,19 @@ void SemanticStylesheet::format(RdfSemanticItem* obj, KoTextEditor* editor, cons
     kDebug(30015) << "formating start:" << startpos << " end:" << endpos;
     kDebug(30015) << "semantic item oldText:" << oldText;
     QString data = templateString();
-    QMap< QString, QString > m;
+    QMap<QString, QString> m;
     m["%NAME%"] = obj->name();
     obj->setupStylesheetReplacementMapping(m);
 
-    for (QMap< QString, QString >::iterator mi = m.begin(); mi != m.end(); ++mi) {
+    for (QMap<QString, QString>::iterator mi = m.begin(); mi != m.end(); ++mi) {
         QString k = mi.key();
         QString v = mi.value();
         data = data.replace(k, v);
     }
     // make sure there is something in the replacement other than commas and spaces
     QString tmpstring = data;
-    tmpstring = tmpstring.replace(" ", "");
-    tmpstring = tmpstring.replace(",", "");
+    tmpstring = tmpstring.replace(" ", QString());
+    tmpstring = tmpstring.replace(",", QString());
     if (!tmpstring.size()) {
         kDebug(30015) << "stylesheet results in empty data, using name() instead";
         data = name();

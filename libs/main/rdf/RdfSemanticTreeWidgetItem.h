@@ -48,29 +48,30 @@ class KOMAIN_EXPORT RdfSemanticTreeWidgetItem : public QObject, public QTreeWidg
     virtual void testfunc() {}
 
 protected:
-    virtual QString UIObjectName() = 0;
-    void addApplyStylesheetActions(QWidget *parent, QList<KAction *>& actions, KoCanvasBase* host);
-    KAction* createAction(QWidget *parent, KoCanvasBase* host, const QString & text);
+    virtual QString uIObjectName() = 0;
+    void addApplyStylesheetActions(QWidget *parent, QList<KAction *> &actions, KoCanvasBase *host);
+    KAction* createAction(QWidget *parent, KoCanvasBase *host, const QString &text);
 
 public:
     enum {
         Type = QTreeWidgetItem::UserType + 1
     };
     enum {
+        // camel case
         COL_NAME = 0,
         COL_SIZE
     };
 
-    RdfSemanticTreeWidgetItem(QTreeWidgetItem* parent, int Type);
+    RdfSemanticTreeWidgetItem(QTreeWidgetItem *parent, int type);
     virtual ~RdfSemanticTreeWidgetItem();
 
     /**
      * Get the underlying SemanticItem for this widget
      */
-    virtual RdfSemanticItem* semanticItem() = 0;
+    virtual RdfSemanticItem *semanticItem() = 0;
 
-    virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase* host = 0);
-    virtual void insert(KoCanvasBase* host);
+    virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase *host = 0);
+    virtual void insert(KoCanvasBase *host);
 
 public slots:
     virtual void edit();

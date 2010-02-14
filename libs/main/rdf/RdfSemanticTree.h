@@ -23,9 +23,9 @@
 #include "komain_export.h"
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include "rdf/RdfFoaF.h"
-#include "rdf/RdfCalendarEvent.h"
-#include "rdf/RdfLocation.h"
+#include "RdfFoaF.h"
+#include "RdfCalendarEvent.h"
+#include "RdfLocation.h"
 
 /**
  * @short Manage a QTreeWidget showing a collection of Semantic Items
@@ -35,11 +35,13 @@
  * is created and updated in multiple places, it makes sense to collect
  * the code handling it into a central location for easy global updates.
  */
-struct KOMAIN_EXPORT RdfSemanticTree {
-    QTreeWidget* m_tree;
-    QTreeWidgetItem* m_peopleItem;
-    QTreeWidgetItem* m_eventsItem;
-    QTreeWidgetItem* m_locationsItem;
+struct KOMAIN_EXPORT RdfSemanticTree
+{
+public:
+    QTreeWidget *m_tree;
+    QTreeWidgetItem *m_peopleItem;
+    QTreeWidgetItem *m_eventsItem;
+    QTreeWidgetItem *m_locationsItem;
     QList<RdfFoaF*> m_foafs;
     QList<RdfCalendarEvent*> m_cals;
     QList<RdfLocation*> m_locations;
@@ -48,26 +50,26 @@ struct KOMAIN_EXPORT RdfSemanticTree {
      * Setup the TreeWidget with a default sorting order etc and
      * initialize the people, events and locations base tree Items.
      */
-    static RdfSemanticTree createTree(QTreeWidget* v);
+    static RdfSemanticTree createTree(QTreeWidget *v);
 
     /**
      * Update the Items shown in the tree to reflect the Rdf in the
      * given model. if the model is not passed in then any Rdf in the
      * KoDocumentRdf is used to populate the tree.
      */
-    void update(KoDocumentRdf* rdf, Soprano::Model* model = 0);
+    void update(KoDocumentRdf *rdf, Soprano::Model *model = 0);
+
 private:
 
     /**
      * Called from update() to reset the tree to a default state.
      */
-    void clear(QTreeWidgetItem* parent);
+    void clear(QTreeWidgetItem *parent);
 
     /**
      * Add the name of each selected child of parent to the 'ret' set.
      */
-    QSet<QString>& buildSelectedSet(QTreeWidgetItem* parent, QSet<QString>& ret);
-
+    QSet<QString> &buildSelectedSet(QTreeWidgetItem *parent, QSet<QString> &ret);
 };
 
 #endif

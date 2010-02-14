@@ -336,7 +336,7 @@ QList<SemanticStylesheet*> &RdfCalendarEvent::userStylesheets()
     return ret;
 }
 
-QString RdfCalendarEvent::name()
+QString RdfCalendarEvent::name() const
 {
     return d->m_summary;
 }

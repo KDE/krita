@@ -17,20 +17,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "rdf/KoDocumentRdf.h"
+#include "KoDocumentRdf.h"
 #include "RdfSemanticTreeWidgetSelectAction.h"
 #include "RdfSemanticItemViewSite.h"
 
-#include "KoTextEditor.h"
+#include <KoTextEditor.h>
 
 #include <kdebug.h>
 
 RdfSemanticTreeWidgetSelectAction::RdfSemanticTreeWidgetSelectAction(QWidget *parent,
-        KoCanvasBase *canvas,
-        RdfSemanticItem* si,
-        QString name)
-        : RdfSemanticTreeWidgetAction(parent, canvas, name)
-        , si(si)
+        KoCanvasBase *canvas, RdfSemanticItem* si, QString name)
+    : RdfSemanticTreeWidgetAction(parent, canvas, name)
+    , si(si)
 {
     kDebug(30015) << "select action ctor";
 }
@@ -41,7 +39,7 @@ RdfSemanticTreeWidgetSelectAction::~RdfSemanticTreeWidgetSelectAction()
 
 void RdfSemanticTreeWidgetSelectAction::activated()
 {
-    KoDocumentRdf* rdf = si->DocumentRdf();
+    KoDocumentRdf *rdf = si->documentRdf();
     QString xmlid = rdf->findXmlId(editor());
     kDebug(30015) << "selecting xmlid:" << xmlid;
     RdfSemanticItemViewSite vs(si, xmlid);

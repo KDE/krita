@@ -21,17 +21,15 @@
 #define __rdf_RdfSemanticTreeWidgetSelectAction_h__
 
 #include "komain_export.h"
-#include "rdf/RdfForward.h"
-#include "rdf/RdfSemanticTreeWidgetAction.h"
+#include "RdfForward.h"
+#include "RdfSemanticTreeWidgetAction.h"
 
 class RdfSemanticTreeWidgetSelectAction : public RdfSemanticTreeWidgetAction
 {
     RdfSemanticItem* si;
 public:
-    RdfSemanticTreeWidgetSelectAction(QWidget *parent,
-                                      KoCanvasBase *canvas,
-                                      RdfSemanticItem* si,
-                                      QString name = "Select");
+    RdfSemanticTreeWidgetSelectAction(QWidget *parent, KoCanvasBase *canvas,
+            RdfSemanticItem *si, QString name = QString("Select"));
     virtual ~RdfSemanticTreeWidgetSelectAction();
     virtual void activated();
 };

@@ -34,8 +34,10 @@ class RdfSemanticTreeWidgetAction : public KAction
 public:
     RdfSemanticTreeWidgetAction(QWidget *parent, KoCanvasBase *canvas, const QString &name);
     virtual ~RdfSemanticTreeWidgetAction();
+
 public slots:
     virtual void activated();
+
 protected:
     KoCanvasBase *m_canvas;
     KoTextEditor* editor();

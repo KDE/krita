@@ -68,7 +68,7 @@ public:
 
     // accessor methods...
 
-    QString name();
+    virtual QString name() const;
     QString location();
     QString summary();
     QString uid();

@@ -20,8 +20,8 @@
 #ifndef __rdf_RdfFoaF_h__
 #define __rdf_RdfFoaF_h__
 
-#include "komain_export.h"
-#include "rdf/RdfSemanticItem.h"
+#include "../komain_export.h"
+#include "RdfSemanticItem.h"
 #include <QSharedPointer>
 
 /**
@@ -31,13 +31,10 @@
 class KOMAIN_EXPORT RdfFoaF : public RdfSemanticItem
 {
     Q_OBJECT
-    struct Private;
-    QSharedPointer<Private> d;
-
 public:
 
-    RdfFoaF(QObject* parent, KoDocumentRdf* m_rdf = 0);
-    RdfFoaF(QObject* parent, KoDocumentRdf* m_rdf, Soprano::QueryResultIterator& it);
+    RdfFoaF(QObject *parent, KoDocumentRdf *m_rdf = 0);
+    RdfFoaF(QObject *parent, KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it);
     virtual ~RdfFoaF();
 
     // inherited and reimplemented...
@@ -46,20 +43,19 @@ public:
      * Export to a VCard format file
      * Prompt for a filename if none is given
      */
-    void exportToFile(const QString& fileName = "");
+    void exportToFile(const QString& fileName = QString());
     /**
      * Import from VCard data contained in ba.
      */
-    virtual void importFromData(const QByteArray& ba, KoDocumentRdf* m_rdf = 0, KoCanvasBase* host = 0);
-    virtual QWidget* createEditor(QWidget * parent);
+    virtual void importFromData(const QByteArray &ba, KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0);
+    virtual QWidget *createEditor(QWidget *parent);
     virtual void updateFromEditorData();
-    virtual RdfSemanticTreeWidgetItem* createQTreeWidgetItem(QTreeWidgetItem* parent = 0);
+    virtual RdfSemanticTreeWidgetItem *createQTreeWidgetItem(QTreeWidgetItem *parent = 0);
     virtual Soprano::Node linkingSubject() const;
-    virtual void setupStylesheetReplacementMapping(QMap< QString, QString >& m);
-    virtual void exportToMime(QMimeData* md);
-    virtual QList<SemanticStylesheet*>& stylesheets();
-    virtual QList<SemanticStylesheet*>& userStylesheets();
-
+    virtual void setupStylesheetReplacementMapping(QMap<QString, QString> &m);
+    virtual void exportToMime(QMimeData *md);
+    virtual QList<SemanticStylesheet*> &stylesheets();
+    virtual QList<SemanticStylesheet*> &userStylesheets();
 
     /**
      * Export the contact to your current KDE addressbook.
@@ -68,6 +64,11 @@ public:
 
     // accessor methods...
 
-    QString name();
+    virtual QString name() const;
+
+private:
+    class Private;
+    QSharedPointer<Private> d;
+
 };
 #endif

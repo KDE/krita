@@ -17,15 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "rdf/RdfSemanticTreeWidgetAction.h"
-#include "KoTextEditor.h"
-#include "KoToolProxy.h"
-#include "KoCanvasBase.h"
-
+#include "RdfSemanticTreeWidgetAction.h"
+#include <KoTextEditor.h>
+#include <KoToolProxy.h>
+#include <KoCanvasBase.h>
 
 RdfSemanticTreeWidgetAction::RdfSemanticTreeWidgetAction(QWidget *parent,
-        KoCanvasBase *canvas,
-        const QString &name)
+        KoCanvasBase *canvas, const QString &name)
         : KAction(name, parent)
         , m_canvas(canvas)
 {
@@ -38,8 +36,7 @@ RdfSemanticTreeWidgetAction::~RdfSemanticTreeWidgetAction()
 
 KoTextEditor* RdfSemanticTreeWidgetAction::editor()
 {
-    KoTextEditor* ret = qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
-    return ret;
+    return qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
 }
 
 void RdfSemanticTreeWidgetAction::activated()

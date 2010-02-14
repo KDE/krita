@@ -20,7 +20,7 @@
 #ifndef __rdf_RdfLocationEditWidget_h__
 #define __rdf_RdfLocationEditWidget_h__
 
-#include "rdf/RdfForward.h"
+#include "RdfForward.h"
 #include "komain_export.h"
 #include <QObject>
 #include <QWidget>
@@ -34,7 +34,7 @@ class KOMAIN_EXPORT RdfLocationEditWidget : public QWidget
 {
     Q_OBJECT
 public:
-    RdfLocationEditWidget(QWidget* parent, Ui::RdfLocationEditWidget* ew);
+    RdfLocationEditWidget(QWidget *parent, Ui::RdfLocationEditWidget *ew);
 
 public slots:
     void mouseMoveGeoPosition(QString);

@@ -21,10 +21,10 @@
 #define __rdf_RdfCalendarEventTreeWidgetItem_h__
 
 #include "komain_export.h"
-#include "rdf/RdfForward.h"
-#include "rdf/RdfCalendarEvent.h"
-#include "rdf/RdfSemanticTreeWidgetItem.h"
-#include "rdf/RdfFoaFTreeWidgetItem.h"
+#include "RdfForward.h"
+#include "RdfCalendarEvent.h"
+#include "RdfSemanticTreeWidgetItem.h"
+#include "RdfFoaFTreeWidgetItem.h"
 
 class KoCanvasBase;
 
@@ -41,24 +41,24 @@ public:
     enum {
         Type = RdfFoaFTreeWidgetItem::Type + 1
     };
-    RdfCalendarEventTreeWidgetItem(QTreeWidgetItem* parent, RdfCalendarEvent* ev);
+    RdfCalendarEventTreeWidgetItem(QTreeWidgetItem *parent, RdfCalendarEvent *ev);
 
     // inherited and reimplemented...
 
-    RdfCalendarEvent* semanticObject();
-    virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase* host = 0);
-    virtual void insert(KoCanvasBase* host);
+    RdfCalendarEvent *semanticObject();
+    virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase *host = 0);
+    virtual void insert(KoCanvasBase *host);
 
 public slots:
     void saveToKCal();
     void exportToFile();
 
 private:
+    RdfCalendarEvent *m_semanticObject;
 
-    RdfCalendarEvent* m_semanticObject;
 protected:
-    virtual RdfSemanticItem* semanticItem();
-    virtual QString UIObjectName();
-
+    virtual RdfSemanticItem *semanticItem();
+    virtual QString uIObjectName();
 };
+
 #endif

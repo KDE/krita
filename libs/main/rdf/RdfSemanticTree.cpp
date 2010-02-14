@@ -45,7 +45,7 @@ RdfSemanticTree RdfSemanticTree::createTree(QTreeWidget* tree)
     return ret;
 }
 
-void RdfSemanticTree::clear(QTreeWidgetItem* parent)
+void RdfSemanticTree::clear(QTreeWidgetItem *parent)
 {
     while (parent->childCount()) {
         QTreeWidgetItem* c = parent->child(0);
@@ -54,12 +54,12 @@ void RdfSemanticTree::clear(QTreeWidgetItem* parent)
     }
 }
 
-QSet<QString>& RdfSemanticTree::buildSelectedSet(QTreeWidgetItem* parent, QSet<QString>& ret)
+QSet<QString>& RdfSemanticTree::buildSelectedSet(QTreeWidgetItem *parent, QSet<QString> &ret)
 {
     for (int i = 0; i < parent->childCount(); ++i) {
-        QTreeWidgetItem* c = parent->child(i);
+        QTreeWidgetItem *c = parent->child(i);
         if (c->isSelected()) {
-            if (RdfSemanticTreeWidgetItem* item = dynamic_cast<RdfSemanticTreeWidgetItem*>(c)) {
+            if (RdfSemanticTreeWidgetItem *item = dynamic_cast<RdfSemanticTreeWidgetItem*>(c)) {
                 ret << item->semanticItem()->name();
             }
         }
@@ -67,14 +67,14 @@ QSet<QString>& RdfSemanticTree::buildSelectedSet(QTreeWidgetItem* parent, QSet<Q
     return ret;
 }
 
-void RdfSemanticTree::update(KoDocumentRdf* rdf, Soprano::Model* model)
+void RdfSemanticTree::update(KoDocumentRdf *rdf, Soprano::Model *model)
 {
-    QSet<QString> m_selectedPeople;
-    QSet<QString> m_selectedEvents;
-    QSet<QString> m_selectedLocations;
-    buildSelectedSet(m_peopleItem, m_selectedPeople);
-    buildSelectedSet(m_eventsItem, m_selectedEvents);
-    buildSelectedSet(m_locationsItem, m_selectedLocations);
+    QSet<QString> selectedPeople;
+    QSet<QString> selectedEvents;
+    QSet<QString> selectedLocations;
+    buildSelectedSet(m_peopleItem, selectedPeople);
+    buildSelectedSet(m_eventsItem, selectedEvents);
+    buildSelectedSet(m_locationsItem, selectedLocations);
     clear(m_peopleItem);
     clear(m_eventsItem);
     clear(m_locationsItem);
@@ -86,18 +86,18 @@ void RdfSemanticTree::update(KoDocumentRdf* rdf, Soprano::Model* model)
     m_locations.clear();
     // people
     m_foafs = rdf->foaf(model);
-    foreach (RdfFoaF* foaf, m_foafs) {
-        RdfSemanticTreeWidgetItem* item = foaf->createQTreeWidgetItem(m_peopleItem);
-        if (m_selectedPeople.contains(item->semanticItem()->name())) {
+    foreach (RdfFoaF *foaf, m_foafs) {
+        RdfSemanticTreeWidgetItem *item = foaf->createQTreeWidgetItem(m_peopleItem);
+        if (selectedPeople.contains(item->semanticItem()->name())) {
             item->setSelected(true);
         }
     }
     m_tree->expandItem(m_peopleItem);
     // events
     m_cals = rdf->calendarEvents(model);
-    foreach (RdfCalendarEvent* e, m_cals) {
-        RdfSemanticTreeWidgetItem* item = e->createQTreeWidgetItem(m_eventsItem);
-        if (m_selectedEvents.contains(item->semanticItem()->name())) {
+    foreach (RdfCalendarEvent *e, m_cals) {
+        RdfSemanticTreeWidgetItem *item = e->createQTreeWidgetItem(m_eventsItem);
+        if (selectedEvents.contains(item->semanticItem()->name())) {
             item->setSelected(true);
         }
     }
@@ -118,9 +118,9 @@ void RdfSemanticTree::update(KoDocumentRdf* rdf, Soprano::Model* model)
         kDebug(30015) << "expanding lists... new.sz:" << model->statementCount();
     }
     m_locations = rdf->locations(model);
-    foreach (RdfLocation* e, m_locations) {
-        RdfSemanticTreeWidgetItem* item = e->createQTreeWidgetItem(m_locationsItem);
-        if (m_selectedLocations.contains(item->semanticItem()->name())) {
+    foreach (RdfLocation *e, m_locations) {
+        RdfSemanticTreeWidgetItem *item = e->createQTreeWidgetItem(m_locationsItem);
+        if (selectedLocations.contains(item->semanticItem()->name())) {
             item->setSelected(true);
         }
     }

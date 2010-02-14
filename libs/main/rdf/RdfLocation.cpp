@@ -17,18 +17,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "rdf/RdfLocation.h"
-#include "rdf/RdfLocationEditWidget.h"
+#include "RdfLocation.h"
+#include "RdfLocationEditWidget.h"
 
-#include "rdf/KoDocumentRdf.h"
-#include "rdf/KoDocumentRdf_p.h"
+#include "KoDocumentRdf.h"
+#include "KoDocumentRdf_p.h"
 
 #include <QTemporaryFile>
 #include <kdebug.h>
 #include <kfiledialog.h>
 
-#include "ui_RdfLocationEditWidget.h"
-#include "ui_RdfLocationViewWidget.h"
+#include <ui_RdfLocationEditWidget.h>
+#include <ui_RdfLocationViewWidget.h>
 
 using namespace Soprano;
 
@@ -38,8 +38,8 @@ class RdfLocation::Private
 public:
     Soprano::Node m_linkSubject;
     QString m_name;
-    double  m_dlat;
-    double  m_dlong;
+    double m_dlat;
+    double m_dlong;
     //
     // For geo84 simple ontology
     // geo84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
@@ -53,14 +53,14 @@ public:
     Ui::RdfLocationViewWidget viewWidget;
 };
 
-RdfLocation::RdfLocation(QObject* parent, KoDocumentRdf* m_rdf)
+RdfLocation::RdfLocation(QObject *parent, KoDocumentRdf *m_rdf)
         : RdfSemanticItem(parent, m_rdf)
         , d(new Private())
 {
     d->m_isGeo84 = true;
 }
 
-RdfLocation::RdfLocation(QObject* parent, KoDocumentRdf* m_rdf, Soprano::QueryResultIterator& it, bool isGeo84)
+RdfLocation::RdfLocation(QObject *parent, KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it, bool isGeo84)
         : RdfSemanticItem(parent, m_rdf, it),
         d(new Private())
 {
@@ -82,35 +82,35 @@ void RdfLocation::showInViewer()
     kDebug(30015) << "RdfLocation::showInViewer() long:" << dlong() << " lat:" << dlat();
 }
 
-void RdfLocation::exportToFile(const QString& fileNameConst)
+void RdfLocation::exportToFile(const QString &fileNameConst)
 {
     QString fileName = fileNameConst;
     // save to KML
     kDebug(30015) << "RdfLocation::exportToFile() long:" << dlong() << " lat:" << dlat();
-    if (!fileName.size()) {
+    if (fileName.isEmpty()) {
         fileName = KFileDialog::getSaveFileName(
                        KUrl("kfiledialog:///ExportDialog"),
                        "*.kml|KML files",
                        0,
                        "Export to selected KML file");
 
-        if (!fileName.size()) {
+        if (fileName.isEmpty()) {
             return;
         }
     }
     QString xmlstring;
     QTextStream xmlss(&xmlstring);
     xmlss << "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n"
-    << "<kml xmlns=\"http://www.opengis.net/kml/2.2\" > \n"
-    << " \n"
-    << "<Placemark> \n"
-    << "  <name>" << name() << "</name> \n"
-    << "  <LookAt> \n"
-    << "    <longitude>" << dlong() << "</longitude> \n"
-    << "    <latitude>" << dlat() << "</latitude> \n"
-    << "  </LookAt> \n"
-    << "</Placemark> \n"
-    << "</kml>\n";
+        << "<kml xmlns=\"http://www.opengis.net/kml/2.2\" > \n"
+        << " \n"
+        << "<Placemark> \n"
+        << "  <name>" << name() << "</name> \n"
+        << "  <LookAt> \n"
+        << "    <longitude>" << dlong() << "</longitude> \n"
+        << "    <latitude>" << dlat() << "</latitude> \n"
+        << "  </LookAt> \n"
+        << "</Placemark> \n"
+        << "</kml>\n";
     xmlss.flush();
     QFile file(fileName);
     file.open(QIODevice::WriteOnly);
@@ -118,21 +118,20 @@ void RdfLocation::exportToFile(const QString& fileNameConst)
     file.close();
 }
 
-QWidget* RdfLocation::createEditor(QWidget * parent)
+QWidget *RdfLocation::createEditor(QWidget *parent)
 {
     kDebug(30015) << "RdfLocation::createEditor()";
-    QWidget* ret = new QWidget(parent);
+    QWidget *ret = new QWidget(parent);
     return ret;
 }
 
 void RdfLocation::updateFromEditorData()
 {
-    return;
 }
 
-RdfSemanticTreeWidgetItem* RdfLocation::createQTreeWidgetItem(QTreeWidgetItem* parent)
+RdfSemanticTreeWidgetItem *RdfLocation::createQTreeWidgetItem(QTreeWidgetItem *parent)
 {
-    RdfLocationTreeWidgetItem* item =
+    RdfLocationTreeWidgetItem *item =
         new RdfLocationTreeWidgetItem(parent, this);
     return item;
 }
@@ -143,14 +142,14 @@ Soprano::Node RdfLocation::linkingSubject() const
     return d->m_linkSubject;
 }
 
-void RdfLocation::setupStylesheetReplacementMapping(QMap< QString, QString >& m)
+void RdfLocation::setupStylesheetReplacementMapping(QMap<QString, QString> &m)
 {
     m["%DLAT%"] = d->m_dlat;
     m["%DLONG%"] = d->m_dlong;
     m["%ISGEO84%"] = d->m_isGeo84;
 }
 
-void RdfLocation::exportToMime(QMimeData* md)
+void RdfLocation::exportToMime(QMimeData *md)
 {
     QTemporaryFile file;
     if (file.open()) {
@@ -167,7 +166,7 @@ void RdfLocation::exportToMime(QMimeData* md)
     md->setText(data);
 }
 
-QList<SemanticStylesheet*>& RdfLocation::stylesheets()
+QList<SemanticStylesheet*> &RdfLocation::stylesheets()
 {
     static QList<SemanticStylesheet*> stylesheets;
     if (stylesheets.empty()) {
@@ -181,7 +180,7 @@ QList<SemanticStylesheet*>& RdfLocation::stylesheets()
     return stylesheets;
 }
 
-QList<SemanticStylesheet*>& RdfLocation::userStylesheets()
+QList<SemanticStylesheet*> &RdfLocation::userStylesheets()
 {
     static QList<SemanticStylesheet*> ret;
     return ret;
@@ -192,7 +191,7 @@ void RdfLocation::importFromData(const QByteArray& ba, KoDocumentRdf* m_rdf, KoC
     // FIXME
 }
 
-QString RdfLocation::name()
+QString RdfLocation::name() const
 {
     return d->m_name;
 }

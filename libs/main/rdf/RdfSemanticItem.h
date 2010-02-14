@@ -55,32 +55,8 @@ class KOMAIN_EXPORT RdfSemanticItem : public QObject
 {
     Q_OBJECT
 
-    /**
-     * The updateTriple() methods all call remove() then add() to
-     * perform their work. These lower level functions accept
-     * Soprano::LiteralValues to remove/add. Note that corner cases
-     * like "double" values are explicitly handled by these methods.
-     * For example, at times a double will undergo some rounding
-     * during serialization, so you can not just call
-     * Soprano::Model.removeStatement() because you have to take
-     * rounding errors into account for the value you are intending to
-     * remove.
-     */
-    void updateTriple_remove(const Soprano::LiteralValue& toModify,
-                             const QString& predString,
-                             const Soprano::Node& explicitLinkingSubject);
-
-    /**
-     * After updateTriple() calls remove() it can set toModify to the
-     * new value and call this method to add the new value to the Rdf
-     * store.
-     */
-    void updateTriple_add(const Soprano::LiteralValue& toModify,
-                          const QString& predString,
-                          const Soprano::Node& explicitLinkingSubject);
-
 protected:
-    KoDocumentRdf* m_rdf;    //< For access to the Rdf model during CRUD operations
+    KoDocumentRdf *m_rdf;    //< For access to the Rdf model during CRUD operations
     Soprano::Node m_context; //< This determines the Rdf/XML file the Rdf is stored in (see context())
 
     /**
@@ -126,16 +102,16 @@ protected:
      * hard not to directly update the Soprano::Model outside these
      * methods.
      */
-    void updateTriple(QString& toModify,   const QString& newValue, const QString& predString);
-    void updateTriple(KDateTime& toModify, const KDateTime& newValue, const QString& predString);
-    void updateTriple(double& toModify,    double newValue, const QString& predString, const Soprano::Node& explicitLinkingSubject);
+    void updateTriple(QString &toModify, const QString &newValue, const QString &predString);
+    void updateTriple(KDateTime &toModify, const KDateTime &newValue, const QString &predString);
+    void updateTriple(double &toModify, double newValue, const QString &predString, const Soprano::Node &explicitLinkingSubject);
 
     /**
      * Ensure the Rdf Type of the linkingSubject is what you want
      * After this method, the Rdf will have the following:
-     * linkingSubject() rdf:type t
+     * linkingSubject() rdf:type type
      */
-    void setRdfType(const QString& t);
+    void setRdfType(const QString &type);
 
     /**
      * The importFromData() method can use this method to finish an
@@ -151,23 +127,22 @@ protected:
      * shown to the user.
      *
      */
-    virtual void importFromDataComplete(const QByteArray& ba, KoDocumentRdf* m_rdf = 0, KoCanvasBase* host = 0);
-
+    virtual void importFromDataComplete(const QByteArray &ba, KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0);
 
     friend class SemanticStylesheetsEditor;
     friend class SemanticStylesheet;
-    virtual void setupStylesheetReplacementMapping(QMap< QString, QString >& m);
+    virtual void setupStylesheetReplacementMapping(QMap<QString, QString> &m);
 
 public:
 
-    RdfSemanticItem(QObject* parent, KoDocumentRdf* m_rdf = 0);
-    RdfSemanticItem(QObject* parent, KoDocumentRdf* m_rdf, Soprano::QueryResultIterator& it);
+    RdfSemanticItem(QObject *parent, KoDocumentRdf *rdf = 0);
+    RdfSemanticItem(QObject *parent, KoDocumentRdf *rdf, Soprano::QueryResultIterator &it);
     virtual ~RdfSemanticItem();
 
     /**
      * The document Rdf object that this semantic item is associated with.
      */
-    KoDocumentRdf* DocumentRdf() const;
+    KoDocumentRdf *documentRdf() const;
 
     /**
      * A Semantic Item can appear multiple times in a document. For
@@ -193,7 +168,7 @@ public:
      *
      * @see updateFromEditorData()
      */
-    virtual QWidget* createEditor(QWidget * parent) = 0;
+    virtual QWidget *createEditor(QWidget *parent) = 0;
 
     /**
      * Update the SemanticItem from the edited dialog that was created using
@@ -209,7 +184,7 @@ public:
      * SemanticItems becuase the returned widgetItem can also create a
      * menu and perform other actions for the SemanticItem.
      */
-    virtual RdfSemanticTreeWidgetItem* createQTreeWidgetItem(QTreeWidgetItem* parent = 0);
+    virtual RdfSemanticTreeWidgetItem *createQTreeWidgetItem(QTreeWidgetItem *parent = 0);
 
     /**
      * Insert the SemanticItem into the document at the current cursor
@@ -222,7 +197,7 @@ public:
      * the default stylesheet to insert a representation of the
      * SemanticItem.
      */
-    virtual void insert(KoCanvasBase* host);
+    virtual void insert(KoCanvasBase *host);
 
     /**
      * Export the SemanticItem to MimeData. This mehtod is used by
@@ -233,13 +208,13 @@ public:
      * represenation should also be set with md->setText() so items
      * can be dragged to text editors and consoles.
      */
-    virtual void exportToMime(QMimeData* md);
+    virtual void exportToMime(QMimeData *md);
 
     /**
      * Export to a file in whatever format is the most useful for the
      * semantic item. Prompt for a filename if none is given.
      */
-    virtual void exportToFile(const QString& fileName = "") = 0;
+    virtual void exportToFile(const QString &fileName = QString()) = 0;
 
     /**
      * Import the data in ba to the semnatic item. This is used for
@@ -251,12 +226,12 @@ public:
      * This method calls also insert() which links the semanticItem with the
      * KoDocumentRdf object m_rdf.
      */
-    virtual void importFromData(const QByteArray& ba, KoDocumentRdf* m_rdf = 0, KoCanvasBase* host = 0) = 0;
+    virtual void importFromData(const QByteArray &ba, KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0) = 0;
 
     /**
      * A simple description of the semantic item that can be shown to the user
      */
-    virtual QString name() = 0;
+    virtual QString name() const = 0;
 
     /**
      * Gets a list of SemanticItem subclasses that can be created.
@@ -272,37 +247,37 @@ public:
      * classNames(). Useful for menus and other places that want to
      * allow the user to create new SemanticItem Objects.
      */
-    static RdfSemanticItem* createSemanticItem(QObject* parent, KoDocumentRdf* m_rdf, const QString& klass);
+    static RdfSemanticItem* createSemanticItem(QObject *parent, KoDocumentRdf *rdf, const QString &klass);
 
     /**
      * Get the system semantic stylesheets that are supported for this
      * particular semantic item subclass.
      */
-    virtual QList<SemanticStylesheet*>& stylesheets() = 0;
+    virtual QList<SemanticStylesheet*> &stylesheets() = 0;
     /**
      * Get the user created/editable semantic stylesheets that are
      * supported for this particular semantic item subclass.
      */
-    virtual QList<SemanticStylesheet*>& userStylesheets() = 0;
+    virtual QList<SemanticStylesheet*> &userStylesheets() = 0;
 
     /**
      * Unambiguiously find a stylesheet by its UUID. The sheet can
      * be either user or system as long as it has the uuid you want.
      */
-    SemanticStylesheet *findStylesheetByUuid(const QString& uuid);
+    SemanticStylesheet *findStylesheetByUuid(const QString &uuid);
 
     /**
      * Find a user/system stylesheet by name.
      * sheetType is one of TYPE_SYSTEM/TYPE_USER.
      * n is the name of the stylesheet you want.
      */
-    SemanticStylesheet *findStylesheetByName(const QString& sheetType, const QString& n);
+    SemanticStylesheet *findStylesheetByName(const QString &sheetType, const QString &n);
     /**
      * Find a user/system stylesheet by name.
      * ssl is either stylesheets() or userStylesheets()
      * n is the name of the stylesheet you want.
      */
-    SemanticStylesheet *findStylesheetByName(const QList<SemanticStylesheet*>& ssl, const QString& n);
+    SemanticStylesheet *findStylesheetByName(const QList<SemanticStylesheet*> &ssl, const QString &n);
 
     /**
      * Get the default stylesheet for this subclass of Semantic Item.
@@ -326,7 +301,7 @@ public:
     /**
      * Create a new user stylesheet
      */
-    SemanticStylesheet *createUserStylesheet(const QString& name, const QString& templateString = "");
+    SemanticStylesheet *createUserStylesheet(const QString &name, const QString &templateString = QString());
 
     /**
      * Destroy a user stylesheet
@@ -339,7 +314,7 @@ public:
      *
      * @see saveUserStylesheets()
      */
-    void loadUserStylesheets(Soprano::Model* model);
+    void loadUserStylesheets(Soprano::Model *model);
     /**
      * Save the user stylesheets to the Rdf model given.
      *
@@ -356,7 +331,7 @@ public:
      * @see loadUserStylesheets()
      * @see classNames()
      */
-    void saveUserStylesheets(Soprano::Model* model, const Soprano::Node& context);
+    void saveUserStylesheets(Soprano::Model *model, const Soprano::Node &context);
 
 
 protected slots:
@@ -364,7 +339,32 @@ protected slots:
      * In case the stylesheets move to using a QMap<String,sheet> or
      * we want to know when a stylesheet has been renamed.
      */
-    void onUserStylesheetRenamed(SemanticStylesheet *ss, QString oldName, QString newName);
+    void onUserStylesheetRenamed(SemanticStylesheet *ss, const QString &oldName, const QString &newName);
+
+private:
+    /**
+     * The updateTriple() methods all call remove() then add() to
+     * perform their work. These lower level functions accept
+     * Soprano::LiteralValues to remove/add. Note that corner cases
+     * like "double" values are explicitly handled by these methods.
+     * For example, at times a double will undergo some rounding
+     * during serialization, so you can not just call
+     * Soprano::Model.removeStatement() because you have to take
+     * rounding errors into account for the value you are intending to
+     * remove.
+     */
+    void updateTriple_remove(const Soprano::LiteralValue &toModify,
+                             const QString &predString,
+                             const Soprano::Node& explicitLinkingSubject);
+
+    /**
+     * After updateTriple() calls remove() it can set toModify to the
+     * new value and call this method to add the new value to the Rdf
+     * store.
+     */
+    void updateTriple_add(const Soprano::LiteralValue &toModify,
+                          const QString &predString,
+                          const Soprano::Node &explicitLinkingSubject);
 };
 
 #endif

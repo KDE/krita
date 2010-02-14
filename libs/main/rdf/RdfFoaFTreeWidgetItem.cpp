@@ -18,9 +18,9 @@
 */
 
 #include "RdfFoaFTreeWidgetItem.h"
-#include "rdf/KoDocumentRdf.h"
-#include "rdf/KoDocumentRdf_p.h"
-#include "rdf/RdfSemanticTreeWidgetSelectAction.h"
+#include "KoDocumentRdf.h"
+#include "KoDocumentRdf_p.h"
+#include "RdfSemanticTreeWidgetSelectAction.h"
 
 #include <kdebug.h>
 
@@ -34,46 +34,46 @@
 #endif
 
 
-RdfFoaFTreeWidgetItem::RdfFoaFTreeWidgetItem(QTreeWidgetItem* parent, RdfFoaF* foaf)
+RdfFoaFTreeWidgetItem::RdfFoaFTreeWidgetItem(QTreeWidgetItem *parent, RdfFoaF *foaf)
         : RdfSemanticTreeWidgetItem(parent, Type)
         , m_foaf(foaf)
 {
     setText(COL_NAME, m_foaf->name());
 }
 
-RdfSemanticItem* RdfFoaFTreeWidgetItem::semanticItem()
+RdfSemanticItem *RdfFoaFTreeWidgetItem::semanticItem()
 {
     kDebug(30015) << "ret. m_foaf:" << m_foaf;
     return m_foaf;
 }
 
-QString RdfFoaFTreeWidgetItem::UIObjectName()
+QString RdfFoaFTreeWidgetItem::uIObjectName()
 {
     return i18n("Contact Information");
 }
 
-RdfFoaF* RdfFoaFTreeWidgetItem::foaf()
+RdfFoaF *RdfFoaFTreeWidgetItem::foaf()
 {
     return m_foaf;
 }
 
-void RdfFoaFTreeWidgetItem::insert(KoCanvasBase* host)
+void RdfFoaFTreeWidgetItem::insert(KoCanvasBase *host)
 {
     foaf()->insert(host);
 }
 
-QList<KAction *> RdfFoaFTreeWidgetItem::actions(QWidget *parent, KoCanvasBase* host)
+QList<KAction *> RdfFoaFTreeWidgetItem::actions(QWidget *parent, KoCanvasBase *host)
 {
     QList<KAction *> m_actions;
-    KAction* action = 0;
+    KAction *action = 0;
 
-    action = createAction(parent, host, "Edit...");
+    action = createAction(parent, host, i18n("Edit..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(edit()));
     m_actions.append(action);
-    action = createAction(parent, host, "Import contact");
+    action = createAction(parent, host, i18n("Import contact"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(importSelectedSemanticViewContact()));
     m_actions.append(action);
-    action = createAction(parent, host, "Export as vcard...");
+    action = createAction(parent, host, i18n("Export as vcard..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(exportToFile()));
     m_actions.append(action);
     addApplyStylesheetActions(parent, m_actions, host);

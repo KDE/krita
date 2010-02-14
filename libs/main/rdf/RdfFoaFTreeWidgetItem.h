@@ -34,29 +34,29 @@ class KoCanvasBase;
  */
 class KOMAIN_EXPORT RdfFoaFTreeWidgetItem : public RdfSemanticTreeWidgetItem
 {
-    Q_OBJECT;
-
-    RdfFoaF* m_foaf;
-protected:
-    virtual RdfSemanticItem* semanticItem();
-    virtual QString UIObjectName();
-
+    Q_OBJECT
 public:
     enum {
         Type = RdfSemanticTreeWidgetItem::Type + 1
     };
-    RdfFoaFTreeWidgetItem(QTreeWidgetItem* parent, RdfFoaF* foaf);
+    RdfFoaFTreeWidgetItem(QTreeWidgetItem *parent, RdfFoaF *foaf);
 
     // inherited and reimplemented...
 
-    RdfFoaF* foaf();
-    virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase* host = 0);
-    virtual void insert(KoCanvasBase* host);
+    RdfFoaF *foaf();
+    virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase *host = 0);
+    virtual void insert(KoCanvasBase *host);
 
 public slots:
     void importSelectedSemanticViewContact();
     void exportToFile();
 
+protected:
+    virtual RdfSemanticItem *semanticItem();
+    virtual QString uIObjectName();
+
+private:
+    RdfFoaF *m_foaf;
 };
 
 #endif

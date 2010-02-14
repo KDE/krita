@@ -128,8 +128,8 @@ public:
         v->header()->setResizeMode(RdfPrefixMappingTreeWidgetItem::COL_KEY,
                                    QHeaderView::ResizeToContents);
         RdfPrefixMapping *mapping = m_rdf->getPrefixMapping();
-        const RdfPrefixMapping::m_mappings_t& m = m_rdf->getPrefixMapping()->m_mappings;
-        for (RdfPrefixMapping::m_mappings_t::const_iterator mi = m.begin(); mi != m.end(); ++mi) {
+        const QMap<QString,QString> &m = m_rdf->getPrefixMapping()->m_mappings;
+        for (QMap<QString,QString>::const_iterator mi = m.begin(); mi != m.end(); ++mi) {
             RdfPrefixMappingTreeWidgetItem *item =
                 new RdfPrefixMappingTreeWidgetItem(mapping, mi.key());
             v->addTopLevelItem(item);

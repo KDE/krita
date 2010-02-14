@@ -18,13 +18,13 @@
 */
 
 #include "RdfPrefixMapping.h"
-#include "KoTextRdfCore.h"
+#include <KoTextRdfCore.h>
 #include <Soprano/Soprano>
 #include <kdebug.h>
 using namespace Soprano;
 
-RdfPrefixMapping::RdfPrefixMapping(KoDocumentRdf* m_rdf)
-        : m_rdf(m_rdf)
+RdfPrefixMapping::RdfPrefixMapping(KoDocumentRdf *rdf)
+        : m_rdf(rdf)
 {
     insert("pkg", "http://docs.oasis-open.org/opendocument/meta/package/common#");
     insert("odf", "http://docs.oasis-open.org/opendocument/meta/package/odf#");
@@ -43,22 +43,23 @@ RdfPrefixMapping::~RdfPrefixMapping()
 {
 }
 
-QString RdfPrefixMapping::canonPrefix(QString pname) const
+QString RdfPrefixMapping::canonPrefix(const QString &pname) const
 {
-    int idx = pname.indexOf(':');
+    QString name = pname;
+    int idx = name.indexOf(':');
     if (idx >= 0) {
-        pname = pname.left(idx + 1);
+        name = name.left(idx + 1);
     }
-    if (!pname.endsWith(":")) {
-        pname += ":";
+    if (!name.endsWith(':')) {
+        name += ':';
     }
-    return pname;
+    return name;
 }
 
 
-QString RdfPrefixMapping::URItoPrefexedLocalname(QString uri) const
+QString RdfPrefixMapping::URItoPrefexedLocalname(const QString &uri) const
 {
-    for (m_mappings_t::const_iterator mi = m_mappings.begin(); mi != m_mappings.end(); ++mi) {
+    for (QMap<QString,QString>::const_iterator mi = m_mappings.begin(); mi != m_mappings.end(); ++mi) {
         if (uri.startsWith(mi.value())) {
             QString ret = mi.key() + uri.mid(mi.value().length());
             return ret;
@@ -67,24 +68,24 @@ QString RdfPrefixMapping::URItoPrefexedLocalname(QString uri) const
     return uri;
 }
 
-QString RdfPrefixMapping::PrefexedLocalnameToURI(QString pname) const
+QString RdfPrefixMapping::PrefexedLocalnameToURI(const QString &pname) const
 {
     QString pfx = canonPrefix(pname);
     if (pfx.isEmpty()) {
         return pname;
     }
-    m_mappings_t::const_iterator mi = m_mappings.find(pfx);
+    QMap<QString,QString>::const_iterator mi = m_mappings.find(pfx);
     if (mi == m_mappings.end())
         return pname;
     return mi.value() + pname.mid(mi.key().length());
 }
 
-QString RdfPrefixMapping::prefexToURI(QString pfx) const
+QString RdfPrefixMapping::prefexToURI(const QString &pfx) const
 {
-    pfx = canonPrefix(pfx);
-    m_mappings_t::const_iterator mi = m_mappings.find(pfx);
+    QString prefix = canonPrefix(pfx);
+    QMap<QString,QString>::const_iterator mi = m_mappings.find(prefix);
     if (mi == m_mappings.end()) {
-        return "";
+        return QString();
     }
     return mi.value();
 }
@@ -94,21 +95,21 @@ void RdfPrefixMapping::dump() const
     kDebug(30015) << m_mappings;
 }
 
-void RdfPrefixMapping::insert(QString prefix, QString url)
+void RdfPrefixMapping::insert(const QString &prefix, const QString &url)
 {
-    prefix = canonPrefix(prefix);
-    kDebug(30015) << " prefix:" << prefix << " url:" << url;
-    m_mappings.insert(prefix, url);
+    QString fixedPrefix = canonPrefix(prefix);
+    kDebug(30015) << " prefix:" << fixedPrefix << " url:" << url;
+    m_mappings.insert(fixedPrefix, url);
 }
 
-void RdfPrefixMapping::remove(QString prefix)
+void RdfPrefixMapping::remove(const QString &prefix)
 {
-    prefix = canonPrefix(prefix);
-    kDebug(30015) << " prefix:" << prefix;
-    m_mappings.remove(prefix);
+    QString fixedPrefix = canonPrefix(prefix);
+    kDebug(30015) << " prefix:" << fixedPrefix;
+    m_mappings.remove(fixedPrefix);
 }
 
-void RdfPrefixMapping::load(Soprano::Model* model)
+void RdfPrefixMapping::load(Soprano::Model *model)
 {
     QString nodePrefix = "http://kogmbh.net/rdf/prefixmapping/";
     Node rdfNil = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"));
@@ -128,7 +129,7 @@ void RdfPrefixMapping::load(Soprano::Model* model)
     }
 }
 
-void RdfPrefixMapping::save(Soprano::Model* model, Soprano::Node context) const
+void RdfPrefixMapping::save(Soprano::Model *model, Soprano::Node context) const
 {
     QString nodePrefix = "http://kogmbh.net/rdf/prefixmapping/";
     Node rdfNil = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"));
@@ -136,21 +137,15 @@ void RdfPrefixMapping::save(Soprano::Model* model, Soprano::Node context) const
     Node rdfRest = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"));
     Soprano::Node dataBNode = model->createBlankNode();
     QList< Soprano::Node > dataBNodeList;
-    m_mappings_t::const_iterator mi = m_mappings.begin();
-    m_mappings_t::const_iterator me = m_mappings.end();
+    QMap<QString,QString>::const_iterator mi = m_mappings.begin();
+    QMap<QString,QString>::const_iterator me = m_mappings.end();
     for (; mi != me; ++mi) {
         kDebug(30015) << "saving prefix:" << mi.key() << " url:" << mi.value();
         dataBNode = model->createBlankNode();
-        model->addStatement(
-            dataBNode,
-            Node::createResourceNode(QUrl(nodePrefix + "prefix")),
-            Node::createLiteralNode(mi.key()),
-            context);
-        model->addStatement(
-            dataBNode,
-            Node::createResourceNode(QUrl(nodePrefix + "url")),
-            Node::createLiteralNode(mi.value()),
-            context);
+        model->addStatement(dataBNode,Node::createResourceNode(QUrl(nodePrefix + "prefix")),
+            Node::createLiteralNode(mi.key()), context);
+        model->addStatement(dataBNode, Node::createResourceNode(QUrl(nodePrefix + "url")),
+            Node::createLiteralNode(mi.value()), context);
         dataBNodeList << dataBNode;
     }
     Soprano::Node ListHeadSubject = Node::createResourceNode(QUrl(nodePrefix + "list"));

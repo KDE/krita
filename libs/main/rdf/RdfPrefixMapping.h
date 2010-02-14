@@ -21,11 +21,11 @@
 #define __rdf_RdfPrefixMapping_h__
 
 #include "komain_export.h"
+#include "RdfForward.h"
 
 #include <QObject>
 #include <QMap>
 #include <QString>
-#include "rdf/RdfForward.h"
 
 /**
  * @short Supports bidirectional prefix:lname -> uri/lname translation
@@ -43,22 +43,8 @@
 class KOMAIN_EXPORT RdfPrefixMapping : public QObject
 {
     Q_OBJECT
-
-    friend class KoDocumentRdfEditWidget;
-    KoDocumentRdf* m_rdf;
-
-    /**
-     * prefix -> uri map.
-     * gives speed preference to prefix resolution over
-     * turning a uri into a prefixed shorter string
-         */
-    typedef QMap< QString, QString > m_mappings_t;
-    m_mappings_t m_mappings;
-
-    QString canonPrefix(QString pname) const;
-
 public:
-    RdfPrefixMapping(KoDocumentRdf* m_rdf);
+    RdfPrefixMapping(KoDocumentRdf *rdf);
     ~RdfPrefixMapping();
 
     /**
@@ -69,36 +55,36 @@ public:
      * foo:bar
      * as the return value
      */
-    QString URItoPrefexedLocalname(QString uri) const;
+    QString URItoPrefexedLocalname(const QString &uri) const;
 
     /**
      * Opposite of URItoPrefexedLocalname(). Given foo:bar
      * you get http://www.example.com/foo/bar
      */
-    QString PrefexedLocalnameToURI(QString pname) const;
+    QString PrefexedLocalnameToURI(const QString &pname) const;
 
     /**
      * Lookup the URI associated with a prefix.
      * given foo: you might get http://www.example.com/foo/
      */
-    QString prefexToURI(QString pname) const;
+    QString prefexToURI(const QString &pname) const;
 
     /**
      * Insert a new mapping prefix -> uri
      */
-    void insert(QString prefix, QString url);
+    void insert(const QString &prefix, const QString &url);
 
     /**
      * Delete the mapping for prefix
      */
-    void remove(QString prefix);
+    void remove(const QString &prefix);
 
     /**
      * Load the prefix mapping information from the given model.
      *
      * @see save()
      */
-    void load(Soprano::Model* model);
+    void load(Soprano::Model *model);
 
     /**
      * Save the prefix mapping into the given Rdf model. If there is
@@ -108,12 +94,25 @@ public:
      *
      * @see load()
      */
-    void save(Soprano::Model* model, Soprano::Node context) const;
+    void save(Soprano::Model *model, Soprano::Node context) const;
 
     /**
      * Debug method to capture the data structure in the logs.
      */
     void dump() const;
+
+private:
+    friend class KoDocumentRdfEditWidget;
+    KoDocumentRdf *m_rdf;
+
+    /**
+     * prefix -> uri map.
+     * gives speed preference to prefix resolution over
+     * turning a uri into a prefixed shorter string
+         */
+    QMap<QString, QString> m_mappings;
+
+    QString canonPrefix(const QString &pname) const;
 };
 
 #endif

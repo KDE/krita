@@ -17,15 +17,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "rdf/RdfLocationEditWidget.h"
-#include "rdf/KoDocumentRdf.h"
-#include "rdf/KoDocumentRdf_p.h"
+#include "RdfLocationEditWidget.h"
+#include "KoDocumentRdf.h"
+#include "KoDocumentRdf_p.h"
 
 #include <kdebug.h>
 
-RdfLocationEditWidget::RdfLocationEditWidget(QWidget* parent, Ui::RdfLocationEditWidget* ew)
-        :
-        QWidget(parent)
+RdfLocationEditWidget::RdfLocationEditWidget(QWidget *parent, Ui::RdfLocationEditWidget *ew)
+        : QWidget(parent)
 {
     Q_UNUSED(ew);
 }

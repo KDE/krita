@@ -18,8 +18,8 @@
 */
 
 #include "RdfFoaF.h"
-#include "rdf/KoDocumentRdf.h"
-#include "rdf/KoDocumentRdf_p.h"
+#include "KoDocumentRdf.h"
+#include "KoDocumentRdf_p.h"
 
 #include <QUuid>
 #include <QTemporaryFile>
@@ -57,14 +57,13 @@ public:
     void fromKABC(KABC::Addressee addr);
 };
 
-RdfFoaF::RdfFoaF(QObject* parent, KoDocumentRdf* m_rdf)
-        :
-        RdfSemanticItem(parent, m_rdf),
+RdfFoaF::RdfFoaF(QObject *parent, KoDocumentRdf *m_rdf)
+        : RdfSemanticItem(parent, m_rdf),
         d(new Private())
 {
 }
 
-RdfFoaF::RdfFoaF(QObject* parent, KoDocumentRdf* m_rdf, Soprano::QueryResultIterator& it)
+RdfFoaF::RdfFoaF(QObject *parent, KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it)
         : RdfSemanticItem(parent, m_rdf, it),
         d(new Private())
 {
@@ -82,14 +81,14 @@ RdfFoaF::~RdfFoaF()
     kDebug(30015) << "~RdfFoaF() this:" << this << " name:" << name();
 }
 
-QString RdfFoaF::name()
+QString RdfFoaF::name() const
 {
     return d->m_name;
 }
 
 QWidget* RdfFoaF::createEditor(QWidget * parent)
 {
-    QWidget* ret = new QWidget(parent);
+    QWidget *ret = new QWidget(parent);
     d->editWidget.setupUi(ret);
     d->editWidget.name->setText(d->m_name);
     d->editWidget.nick->setText(d->m_nick);
@@ -108,19 +107,19 @@ void RdfFoaF::updateFromEditorData()
     QString predBase = "http://xmlns.com/foaf/0.1/";
     kDebug(30015) << "name:" << d->m_name << " newV:" << d->editWidget.name->text();
     setRdfType(predBase + "Person");
-    updateTriple(d->m_name,     d->editWidget.name->text(),  predBase + "name");
-    updateTriple(d->m_nick,     d->editWidget.nick->text(),  predBase + "nick");
-    updateTriple(d->m_homePage, d->editWidget.url->text(),   predBase + "homepage");
-    updateTriple(d->m_phone,    d->editWidget.phone->text(), predBase + "phone");
+    updateTriple(d->m_name, d->editWidget.name->text(), predBase + "name");
+    updateTriple(d->m_nick, d->editWidget.nick->text(), predBase + "nick");
+    updateTriple(d->m_homePage, d->editWidget.url->text(), predBase + "homepage");
+    updateTriple(d->m_phone, d->editWidget.phone->text(), predBase + "phone");
     if (m_rdf) {
         m_rdf->emitSemanticObjectUpdated(this);
     }
 }
 
-RdfSemanticTreeWidgetItem* RdfFoaF::createQTreeWidgetItem(QTreeWidgetItem* parent)
+RdfSemanticTreeWidgetItem *RdfFoaF::createQTreeWidgetItem(QTreeWidgetItem *parent)
 {
     kDebug(30015) << "format(), default stylesheet:" << defaultStylesheet()->name();
-    RdfFoaFTreeWidgetItem* item = new RdfFoaFTreeWidgetItem(parent, this);
+    RdfFoaFTreeWidgetItem *item = new RdfFoaFTreeWidgetItem(parent, this);
     return item;
 }
 
@@ -129,7 +128,7 @@ Soprano::Node RdfFoaF::linkingSubject() const
     return Node::createResourceNode(d->m_uri);
 }
 
-void RdfFoaF::setupStylesheetReplacementMapping(QMap< QString, QString >& m)
+void RdfFoaF::setupStylesheetReplacementMapping(QMap<QString, QString> &m)
 {
     m["%URI%"] = d->m_uri;
     m["%NICK%"] = d->m_nick;
@@ -137,11 +136,11 @@ void RdfFoaF::setupStylesheetReplacementMapping(QMap< QString, QString >& m)
     m["%PHONE%"] = d->m_phone;
 }
 
-void RdfFoaF::exportToMime(QMimeData* md)
+void RdfFoaF::exportToMime(QMimeData *md)
 {
     QTemporaryFile file;
     if (file.open()) {
-        QString mimeType = "text/directory"; // text/x-vcard";
+        //QString mimeType = "text/directory"; // text/x-vcard";
         exportToFile(file.fileName());
         QByteArray ba = fileToByteArray(file.fileName());
         md->setData("text/directory", ba);
@@ -155,7 +154,7 @@ void RdfFoaF::exportToMime(QMimeData* md)
     md->setText(data);
 }
 
-QList<SemanticStylesheet*>& RdfFoaF::stylesheets()
+QList<SemanticStylesheet*> &RdfFoaF::stylesheets()
 {
     static QList<SemanticStylesheet*> stylesheets;
     if (stylesheets.empty()) {
@@ -173,7 +172,7 @@ QList<SemanticStylesheet*>& RdfFoaF::stylesheets()
     return stylesheets;
 }
 
-QList<SemanticStylesheet*>& RdfFoaF::userStylesheets()
+QList<SemanticStylesheet*> &RdfFoaF::userStylesheets()
 {
     static QList<SemanticStylesheet*> ret;
     return ret;
@@ -198,8 +197,6 @@ void RdfFoaF::Private::fromKABC(KABC::Addressee addr)
     m_homePage = addr.url().url();
 }
 
-
-
 void RdfFoaF::saveToKABC()
 {
     kDebug(30015) << "saving name:" << d->m_name;
@@ -217,7 +214,7 @@ void RdfFoaF::saveToKABC()
 #endif
 }
 
-void RdfFoaF::exportToFile(const QString& fileNameConst)
+void RdfFoaF::exportToFile(const QString &fileNameConst)
 {
     QString fileName = fileNameConst;
 
@@ -247,8 +244,7 @@ void RdfFoaF::exportToFile(const QString& fileNameConst)
 #endif
 }
 
-
-void RdfFoaF::importFromData(const QByteArray& ba, KoDocumentRdf* _rdf, KoCanvasBase* host)
+void RdfFoaF::importFromData(const QByteArray &ba, KoDocumentRdf *_rdf, KoCanvasBase *host)
 {
     kDebug(30015) << "data.sz:" << ba.size();
     kDebug(30015) << "_rdf:" << _rdf;

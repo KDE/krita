@@ -29,25 +29,25 @@
 
 using namespace Soprano;
 
-RdfSemanticItemViewSite::RdfSemanticItemViewSite(RdfSemanticItem* si, QString xmlid)
+RdfSemanticItemViewSite::RdfSemanticItemViewSite(RdfSemanticItem *si, const QString &xmlid)
         : m_xmlid(xmlid)
         , m_semItem(si)
 {
-    KoDocumentRdf* rdf = m_semItem->DocumentRdf();
+    KoDocumentRdf *rdf = m_semItem->documentRdf();
     Q_UNUSED(rdf);
 }
 
 Soprano::Node RdfSemanticItemViewSite::linkingSubject()
 {
-    KoDocumentRdf* rdf = m_semItem->DocumentRdf();
-    Soprano::Model* m = rdf->model();
+    KoDocumentRdf *rdf = m_semItem->documentRdf();
+    Soprano::Model *m = rdf->model();
     Node pred(QUrl("http://kogmbh.net/rdf/site/package/common#idref"));
     Node obj = Node::createLiteralNode(m_xmlid);
     Node context = rdf->manifestRdfNode();
     // try to find it if it already exists
     StatementIterator it = m->listStatements(Node(), pred, obj, context);
     QList<Statement> allStatements = it.allElements();
-    Q_FOREACH(Soprano::Statement s, allStatements) {
+    foreach (Soprano::Statement s, allStatements) {
         return s.subject();
     }
     Node ret = m->createBlankNode();
@@ -55,34 +55,30 @@ Soprano::Node RdfSemanticItemViewSite::linkingSubject()
     return ret;
 }
 
-QString RdfSemanticItemViewSite::getProperty(QString prop, QString defval)
+QString RdfSemanticItemViewSite::getProperty(const QString &prop, const QString &defval)
 {
     Soprano::Node ls = linkingSubject();
     QString fqprop = "http://kogmbh.net/rdf/site#" + prop;
-    KoDocumentRdf* rdf = m_semItem->DocumentRdf();
-    Soprano::Model* m = rdf->model();
-    StatementIterator it = m->listStatements(
-                               ls,
-                               Node::createResourceNode(QUrl(fqprop)),
+    KoDocumentRdf *rdf = m_semItem->documentRdf();
+    Soprano::Model *m = rdf->model();
+    StatementIterator it = m->listStatements(ls, Node::createResourceNode(QUrl(fqprop)),
                                Node(), rdf->manifestRdfNode());
     QList<Statement> allStatements = it.allElements();
-    Q_FOREACH(Soprano::Statement s, allStatements) {
+    foreach (Soprano::Statement s, allStatements) {
         return s.object().toString();
     }
     return defval;
 }
 
-void RdfSemanticItemViewSite::setProperty(QString prop, QString v)
+void RdfSemanticItemViewSite::setProperty(const QString &prop, const QString &v)
 {
     QString fqprop = "http://kogmbh.net/rdf/site#" + prop;
-    KoDocumentRdf* rdf = m_semItem->DocumentRdf();
-    Soprano::Model* m = rdf->model();
+    KoDocumentRdf *rdf = m_semItem->documentRdf();
+    Soprano::Model *m = rdf->model();
     Soprano::Node ls = linkingSubject();
     Soprano::Node pred = Node::createResourceNode(QUrl(fqprop));
     m->removeAllStatements(Statement(ls, pred, Node()));
-    m->addStatement(ls, pred,
-                    Node::createLiteralNode(v),
-                    rdf->manifestRdfNode());
+    m->addStatement(ls, pred,Node::createLiteralNode(v), rdf->manifestRdfNode());
 }
 
 SemanticStylesheet *RdfSemanticItemViewSite::stylesheet()
@@ -107,7 +103,7 @@ SemanticStylesheet *RdfSemanticItemViewSite::stylesheet()
     return ret;
 }
 
-void RdfSemanticItemViewSite::applyStylesheet(KoTextEditor* editor, SemanticStylesheet *ss)
+void RdfSemanticItemViewSite::applyStylesheet(KoTextEditor *editor, SemanticStylesheet *ss)
 {
     // Save the stylesheet property and cause a reflow.
     kDebug(30015) << "apply stylesheet at site. format(), xmlid:" << m_xmlid << " sheet:" << ss->name();
@@ -132,7 +128,7 @@ void RdfSemanticItemViewSite::setStylesheetWithoutReflow(SemanticStylesheet *ss)
     setProperty("stylesheet-uuid", ss->uuid());
 }
 
-void RdfSemanticItemViewSite::reflowUsingCurrentStylesheet(KoTextEditor* editor)
+void RdfSemanticItemViewSite::reflowUsingCurrentStylesheet(KoTextEditor *editor)
 {
     SemanticStylesheet *ss = stylesheet();
     ss->format(m_semItem, editor, m_xmlid);
@@ -151,16 +147,15 @@ void RdfSemanticItemViewSite::selectRange(KoResourceManager *provider, int start
     }
 }
 
-
 void RdfSemanticItemViewSite::select(KoCanvasBase *host)
 {
     Q_ASSERT(m_semItem);
-    Q_ASSERT(m_semItem->DocumentRdf());
+    Q_ASSERT(m_semItem->documentRdf());
     Q_ASSERT(host);
-    KoTextEditor* editor = KoDocumentRdf::ensureTextTool(host);
-    KoResourceManager* provider = host->resourceManager();
-    KoDocumentRdf* rdf = m_semItem->DocumentRdf();
-    QPair< int, int > p = p = rdf->findExtent(m_xmlid);
+    KoTextEditor *editor = KoDocumentRdf::ensureTextTool(host);
+    KoResourceManager *provider = host->resourceManager();
+    KoDocumentRdf *rdf = m_semItem->documentRdf();
+    QPair<int, int> p = p = rdf->findExtent(m_xmlid);
     int startpos = p.first;
     int endpos = p.second + 1;
     if (!endpos) {

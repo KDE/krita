@@ -36,7 +36,8 @@
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
 #else
-#include "KoTextSopranoRdfModel_p.h"
+#include "KoTextSopranoRdfModel_p.h" // TODO get rid of this include.
+                    // we can't include a private header from kotext outside of kotext.
 #endif
 
 TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, QUndoCommand *parent)
@@ -75,10 +76,10 @@ void TextPasteCommand::redo()
         if (data->hasFormat("application/vnd.oasis.opendocument.text")) {
 
             bool weOwnRdfModel = true;
-            Soprano::Model* rdfModel = 0;
+            Soprano::Model *rdfModel = 0;
 #ifdef SHOULD_BUILD_RDF
             rdfModel = Soprano::createModel();
-            if (KoDocumentRdf* rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
+            if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
                 if (rdfModel) {
                     delete rdfModel;
                 }
@@ -94,8 +95,8 @@ void TextPasteCommand::redo()
             //kDebug() << "done with pasting odf";
 
 #ifdef SHOULD_BUILD_RDF
-            if (KoDocumentRdf* rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
-                KoTextEditor* e = KoDocumentRdf::ensureTextTool(m_tool->canvas());
+            if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
+                KoTextEditor *e = KoDocumentRdf::ensureTextTool(m_tool->canvas());
                 rdf->updateInlineRdfStatements(e->document());
             }
             if (weOwnRdfModel && rdfModel) {

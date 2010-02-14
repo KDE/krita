@@ -4,6 +4,7 @@
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2009-2010 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,6 +46,7 @@
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
 #include <KoGenChange.h>
+#include <KoTextBlockPaintStrategy.h>
 
 #include <KDebug>
 #include <QTextList>
@@ -1023,9 +1025,23 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
 
         if (!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty()) {
             started = true;
-            QBrush bg = block.blockFormat().background();
+            
+            KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
+            KoTextBlockBorderData *border = 0;
+            KoTextBlockPaintStrategy dummyPaintStrategy;
+            KoTextBlockPaintStrategy *paintStrategy = &dummyPaintStrategy;
+            if (blockData) {
+                border = blockData->border();
+                paintStrategy = blockData->paintStrategy();
+            }
+
+            if (!paintStrategy->visible())
+                continue; // this paragraph shouldn't be shown so just skip it
+
+            QBrush bg = paintStrategy->background(block.blockFormat().background());
             if (bg != Qt::NoBrush)
                 painter->fillRect(layout->boundingRect(), bg);
+            paintStrategy->modifyPainter(painter);
             painter->save();
             drawListItem(painter, block);
             painter->restore();
@@ -1059,10 +1075,6 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
             layout->draw(painter, QPointF(0, 0), selections);
             decorateParagraph(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
 
-            KoTextBlockBorderData *border = 0;
-            KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
-            if (blockData)
-                border = dynamic_cast<KoTextBlockBorderData*>(blockData->border());
             if (lastBorder && lastBorder != border) {
                 painter->save();
                 lastBorder->paint(*painter);

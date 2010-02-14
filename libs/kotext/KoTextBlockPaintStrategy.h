@@ -33,7 +33,7 @@ class KOTEXT_EXPORT KoTextBlockPaintStrategy
 public:
     KoTextBlockPaintStrategy();
     virtual ~KoTextBlockPaintStrategy() {}
-    virtual QBrush background(const QBrush &defaultBackground) {return defaultBackground;};
+    virtual QBrush background(const QBrush &defaultBackground) {return defaultBackground;}
     virtual void modifyPainter(QPainter *painter) {}
     virtual bool visible() {return true;}
 };

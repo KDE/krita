@@ -815,7 +815,7 @@ void KoDocumentRdf::expandStatements(Soprano::Model *model)
 
 KAction *KoDocumentRdf::createInsertSemanticObjectReferenceAction(KoCanvasBase *host)
 {
-    KAction *ret = new InsertSemanticObjectReferenceAction(host, this, "Reference");
+    KAction *ret = new InsertSemanticObjectReferenceAction(host, this, i18n("Reference"));
     kDebug(30015) << "createInsertSemanticObjectReferenceAction";
     return ret;
 }

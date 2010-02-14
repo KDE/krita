@@ -20,7 +20,6 @@
 #ifndef KO_TEXT_SOPRANO_RDF_MODEL_H
 #define KO_TEXT_SOPRANO_RDF_MODEL_H
 
-#include <QSharedPointer>
 /**
  * Dummy definition in case Soprano is not available.
  */

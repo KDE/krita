@@ -202,12 +202,12 @@ public:
      * Ownership of the rdf object is taken by this object, you should not
      * delete it.
      */
-    void setInlineRdf(KoTextInlineRdf* rdf);
+    void setInlineRdf(KoTextInlineRdf *rdf);
     /**
      * Get any Rdf which was stored in content.xml for this inline object
      * This object continues to own the object, do not delete it.
      */
-    KoTextInlineRdf* inlineRdf() const;
+    KoTextInlineRdf *inlineRdf() const;
 
 protected:
     explicit KoInlineObject(KoInlineObjectPrivate &, bool propertyChangeListener = false);

@@ -33,6 +33,12 @@ QDebug KoInlineObjectPrivate::printDebug(QDebug dbg) const
     return dbg.space();
 }
 
+
+KoInlineObjectPrivate::~KoInlineObjectPrivate()
+{
+    delete rdf;
+}
+
 KoInlineObject::KoInlineObject(bool propertyChangeListener)
         : d_ptr(new KoInlineObjectPrivate)
 {
@@ -51,9 +57,6 @@ KoInlineObject::~KoInlineObject()
 {
     if (d_ptr->manager) {
         d_ptr->manager->removeInlineObject(this);
-    }
-    if (d_ptr->rdf) {
-        delete d_ptr->rdf;
     }
     delete d_ptr;
     d_ptr = 0;

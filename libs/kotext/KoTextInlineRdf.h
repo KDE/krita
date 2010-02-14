@@ -21,7 +21,7 @@
 #define KO_TEXT_INLINE_RDF_H
 
 #include "kotext_export.h"
-#include "KoXmlReaderForward.h"
+#include <KoXmlReaderForward.h>
 
 #include <QTextBlockUserData>
 #include <QTextTableCell>
@@ -71,17 +71,12 @@ class KoTextEditor;
  */
 class KOTEXT_EXPORT KoTextInlineRdf : public QObject, public QSharedData
 {
-    Q_OBJECT;
-
-    friend class RdfSemanticItem;
-    friend class RdfFoaF;
-    friend class KoDocumentRdf;
-
+    Q_OBJECT
 public:
-    KoTextInlineRdf(QTextDocument* doc, QTextBlock b);
-    KoTextInlineRdf(QTextDocument* doc, KoBookmark* b);
-    KoTextInlineRdf(QTextDocument* doc, KoTextMeta* b);
-    KoTextInlineRdf(QTextDocument* doc, QTextTableCell b);
+    KoTextInlineRdf(QTextDocument *doc, QTextBlock b);
+    KoTextInlineRdf(QTextDocument *doc, KoBookmark *b);
+    KoTextInlineRdf(QTextDocument *doc, KoTextMeta *b);
+    KoTextInlineRdf(QTextDocument *doc, QTextTableCell b);
 
     virtual ~KoTextInlineRdf();
 
@@ -91,20 +86,19 @@ public:
      * with the cursor and fetch back the inline Rdf if one is associated
      * with a text block.
      */
-    static KoTextInlineRdf* tryToGetInlineRdf(QTextCursor& cursor);
-    static KoTextInlineRdf* tryToGetInlineRdf(QTextFormat& tf);
-    static KoTextInlineRdf* tryToGetInlineRdf(KoTextEditor* handler);
+    static KoTextInlineRdf *tryToGetInlineRdf(QTextCursor &cursor);
+    static KoTextInlineRdf *tryToGetInlineRdf(QTextFormat &tf);
+    static KoTextInlineRdf *tryToGetInlineRdf(KoTextEditor *handler);
     /**
      * The attach() and tryToGetInlineRdf() are used by the ODF load and
      * save codepaths respectively. They associate an inlineRdf object
      * with the cursor and fetch back the inline Rdf if one is associated
      * with a text block.
      */
-    static void attach(KoTextInlineRdf* inlineRdf, QTextCursor& cursor);
+    static void attach(KoTextInlineRdf *inlineRdf, QTextCursor &cursor);
 
-    bool loadOdf(const KoXmlElement & element);
-    bool saveOdf(KoShapeSavingContext &context,
-                 KoXmlWriter* writer);
+    bool loadOdf(const KoXmlElement &element);
+    bool saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer);
 
     /**
      * Get the RDF subject for this inline RDF
@@ -136,18 +130,21 @@ public:
      */
     QPair<int, int> findExtent();
 
-
 private:
 
     /**
      * Update the xml:id, using during cut and paste as well as document save.
      */
-    void setXmlId(const QString& id);
+    void setXmlId(const QString &id);
 
     /**
      * Create a new and unique xml:id
      */
-    QString createXmlId(KoXmlWriter* writer = 0);
+    QString createXmlId(KoXmlWriter *writer = 0);
+
+    friend class RdfSemanticItem;
+    friend class RdfFoaF;
+    friend class KoDocumentRdf;
 
     class Private;
     Private* d;

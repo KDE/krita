@@ -29,12 +29,12 @@ public:
             propertyChangeListener(0),
             rdf(0) {
     }
-    virtual ~KoInlineObjectPrivate() { }
+    virtual ~KoInlineObjectPrivate();
 
     KoInlineTextObjectManager *manager;
     int id;
     bool propertyChangeListener;
-    KoTextInlineRdf* rdf; //< An inline object might have RDF, we own it.
+    KoTextInlineRdf *rdf; //< An inline object might have RDF, we own it.
 
     virtual QDebug printDebug(QDebug dbg) const;
 };

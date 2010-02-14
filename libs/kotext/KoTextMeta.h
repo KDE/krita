@@ -23,7 +23,7 @@
 #include "KoInlineObject.h"
 #include "kotext_export.h"
 
-#include "KoXmlReaderForward.h"
+#include <KoXmlReaderForward.h>
 class KoShape;
 class QTextDocument;
 class KoShapeSavingContext;
@@ -80,9 +80,8 @@ public:
     /// @return the exact cursor position of this bookmark in document
     int position() const;
 
-
 private:
-    class Private;
+    class Private; // TODO share the private with super
     Private *const d;
 };
 

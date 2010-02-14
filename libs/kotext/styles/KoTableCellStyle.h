@@ -72,7 +72,7 @@ public:
         RightBorderInnerPen,     ///< the right border inner pen
         CellBackgroundBrush,     ///< the cell background brush, as QTextFormat::BackgroundBrush is used by paragraphs
         MasterPageName,         ///< Optional name of the master-page
-        inlineRdf               ///< Optional KoTextInlineRdf object
+        InlineRdf               ///< Optional KoTextInlineRdf object
     };
 
     enum Side {

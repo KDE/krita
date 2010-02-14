@@ -86,7 +86,6 @@ bool KoTextMeta::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     return true;
 }
 
-
 void KoTextMeta::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(object);

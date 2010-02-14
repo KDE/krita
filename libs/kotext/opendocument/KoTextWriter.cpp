@@ -441,7 +441,7 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
 
                 // Save the Rdf for the table cell
                 QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                QVariant v = cellFormat.property(KoTableCellStyle::inlineRdf);
+                QVariant v = cellFormat.property(KoTableCellStyle::InlineRdf);
                 if (KoTextInlineRdf* inlineRdf = v.value<KoTextInlineRdf*>()) {
                     inlineRdf->saveOdf(context, writer);
                 }

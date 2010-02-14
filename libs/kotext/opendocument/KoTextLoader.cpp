@@ -407,7 +407,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                                                                     cell);
                                                             inlineRdf->loadOdf(rowTag);
                                                             QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                                                            cellFormat.setProperty(KoTableCellStyle::inlineRdf,
+                                                            cellFormat.setProperty(KoTableCellStyle::InlineRdf,
                                                                                    QVariant::fromValue(inlineRdf));
                                                             cell.setFormat(cellFormat);
                                                         }

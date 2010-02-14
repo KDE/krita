@@ -18,7 +18,7 @@
 */
 
 #include "KoTextInlineRdf.h"
-#include <opendocument/KoTextSharedSavingData.h>
+#include "opendocument/KoTextSharedSavingData.h"
 #include <KoShapeSavingContext.h>
 
 #include <KoXmlReader.h>
@@ -27,7 +27,7 @@
 #include "KoBookmark.h"
 #include "KoTextMeta.h"
 #include "KoTextBlockData.h"
-#include "KoCharacterStyle.h"
+#include "styles/KoCharacterStyle.h"
 #include "KoTextEditor.h"
 
 #include <kdebug.h>
@@ -54,34 +54,37 @@ enum Type {
 class KoTextInlineRdf::Private
 {
 public:
-    Private(QTextDocument* doc, QTextBlock b)
+    Private(QTextDocument *doc, QTextBlock b)
             : block(b),
             document(doc),
             bookmark(0),
-            kotextmeta(0) {
+            kotextmeta(0)
+    {
         isObjectAttriuteUsed = false;
         sopranoObjectType = LiteralNode;
     }
-    Private(QTextDocument* doc, KoBookmark* b)
+    Private(QTextDocument *doc, KoBookmark *b)
             : document(doc),
             bookmark(b),
-            kotextmeta(0) {
+            kotextmeta(0)
+    {
         isObjectAttriuteUsed = false;
         sopranoObjectType = LiteralNode;
     }
-    Private(QTextDocument* doc, KoTextMeta* b)
-            :
-            document(doc),
+    Private(QTextDocument *doc, KoTextMeta *b)
+            : document(doc),
             bookmark(0),
-            kotextmeta(b) {
+            kotextmeta(b)
+    {
         isObjectAttriuteUsed = false;
         sopranoObjectType = LiteralNode;
     }
-    Private(QTextDocument* doc, QTextTableCell c)
+    Private(QTextDocument *doc, QTextTableCell c)
             : document(doc),
             bookmark(0),
             kotextmeta(0),
-            cell(c) {
+            cell(c)
+    {
         isObjectAttriuteUsed = false;
         sopranoObjectType = LiteralNode;
     }
@@ -92,9 +95,9 @@ public:
     QTextBlock block;
 
     // or document and one of bookmark, kotextmeta, ...
-    QTextDocument* document;
-    KoBookmark* bookmark;
-    KoTextMeta* kotextmeta;
+    QTextDocument *document;
+    KoBookmark *bookmark;
+    KoTextMeta *kotextmeta;
     QTextTableCell cell;
 
     QString subject;
@@ -106,25 +109,24 @@ public:
     // then isObjectAttriuteUsed=1 and object=content attribute value.
     QString object;
     bool isObjectAttriuteUsed;
-
 };
 
-KoTextInlineRdf::KoTextInlineRdf(QTextDocument* doc, QTextBlock b)
+KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, QTextBlock b)
         : d(new Private(doc, b))
 {
 }
 
-KoTextInlineRdf::KoTextInlineRdf(QTextDocument* doc, KoBookmark* b)
+KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, KoBookmark *b)
         : d(new Private(doc, b))
 {
 }
 
-KoTextInlineRdf::KoTextInlineRdf(QTextDocument* doc, KoTextMeta* b)
+KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, KoTextMeta *b)
         : d(new Private(doc, b))
 {
 }
 
-KoTextInlineRdf::KoTextInlineRdf(QTextDocument* doc, QTextTableCell b)
+KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, QTextTableCell b)
         : d(new Private(doc, b))
 {
 }
@@ -135,7 +137,7 @@ KoTextInlineRdf::~KoTextInlineRdf()
     delete d;
 }
 
-bool KoTextInlineRdf::loadOdf(const KoXmlElement& e)
+bool KoTextInlineRdf::loadOdf(const KoXmlElement &e)
 {
     d->id = e.attribute("id", QString());
     d->subject = e.attributeNS(KoXmlNS::xhtml, "about");
@@ -152,7 +154,7 @@ bool KoTextInlineRdf::loadOdf(const KoXmlElement& e)
     return true;
 }
 
-bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter* writer)
+bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer)
 {
     kDebug(30015) << " this:" << (void*)this << " xmlid:" << d->id;
     QString oldID = d->id;
@@ -162,9 +164,8 @@ bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter* writer
         textSharedData = dynamic_cast<KoTextSharedSavingData *>(sharedData);
     }
     QString newID = createXmlId(writer);
-    if (KoTextSharedSavingData* sharedData =
-                dynamic_cast<KoTextSharedSavingData *>(
-                    context.sharedData(KOTEXT_SHARED_SAVING_ID))) {
+    if (KoTextSharedSavingData *sharedData =
+            dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID))) {
         sharedData->addRdfIdMapping(oldID, newID);
     }
     kDebug(30015) << "oldID:" << oldID << " newID:" << newID;
@@ -185,7 +186,7 @@ bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter* writer
     return true;
 }
 
-QString KoTextInlineRdf::createXmlId(KoXmlWriter* writer)
+QString KoTextInlineRdf::createXmlId(KoXmlWriter *writer)
 {
     Q_UNUSED(writer);
     QString uuid = QUuid::createUuid().toString();
@@ -195,7 +196,6 @@ QString KoTextInlineRdf::createXmlId(KoXmlWriter* writer)
     kDebug(30015) << "createXmlId() ret:" << ret;
     return ret;
 }
-
 
 QString KoTextInlineRdf::subject()
 {
@@ -207,25 +207,25 @@ QString KoTextInlineRdf::predicate()
     return d->predicate;
 }
 
-QPair< int, int >  KoTextInlineRdf::findExtent()
+QPair<int, int>  KoTextInlineRdf::findExtent()
 {
     if (d->bookmark && d->document) {
-        KoBookmark* e = d->bookmark->endBookmark();
-        return QPair< int, int >(d->bookmark->position(), e->position());
+        KoBookmark *e = d->bookmark->endBookmark();
+        return QPair<int, int>(d->bookmark->position(), e->position());
     }
     if (d->kotextmeta && d->document) {
-        KoTextMeta* e = d->kotextmeta->endBookmark();
+        KoTextMeta *e = d->kotextmeta->endBookmark();
         if (!e) {
-            return QPair< int, int >(0, 0);
+            return QPair<int, int>(0, 0);
         }
-        return QPair< int, int >(d->kotextmeta->position(), e->position());
+        return QPair<int, int>(d->kotextmeta->position(), e->position());
     }
     if (d->cell.isValid() && d->document) {
         QTextCursor b = d->cell.firstCursorPosition();
         QTextCursor e = d->cell.lastCursorPosition();
-        return QPair< int, int >(b.position(), e.position());
+        return QPair<int, int>(b.position(), e.position());
     }
-    return QPair< int, int >(0, 0);
+    return QPair<int, int>(0, 0);
 }
 
 QString KoTextInlineRdf::object()
@@ -234,24 +234,24 @@ QString KoTextInlineRdf::object()
         return d->object;
     }
     if (d->bookmark && d->document) {
-        KoBookmark* e = d->bookmark->endBookmark();
+        KoBookmark *e = d->bookmark->endBookmark();
         QTextCursor cursor(d->document);
 
         cursor.setPosition(d->bookmark->position(), QTextCursor::MoveAnchor);
-        cursor.setPosition(e->position(),           QTextCursor::KeepAnchor);
+        cursor.setPosition(e->position(), QTextCursor::KeepAnchor);
         QString ret = cursor.QTextCursor::selectedText();
         return ret.replace(QChar::ObjectReplacementCharacter, QString());
     }
     if (d->kotextmeta && d->document) {
-        KoTextMeta* e = d->kotextmeta->endBookmark();
+        KoTextMeta *e = d->kotextmeta->endBookmark();
         QTextCursor cursor(d->document);
 
         if (!e) {
             kDebug(30015) << "Broken KoTextMeta, no end tag found!";
-            return "";
+            return QString();
         } else {
             cursor.setPosition(d->kotextmeta->position(), QTextCursor::MoveAnchor);
-            cursor.setPosition(e->position(),             QTextCursor::KeepAnchor);
+            cursor.setPosition(e->position(), QTextCursor::KeepAnchor);
             QString ret = cursor.selectedText();
             return ret.replace(QChar::ObjectReplacementCharacter, QString());
         }
@@ -280,53 +280,50 @@ QString KoTextInlineRdf::xmlId()
     return d->id;
 }
 
-void KoTextInlineRdf::setXmlId(const QString& id)
+void KoTextInlineRdf::setXmlId(const QString &id)
 {
     d->id = id;
 }
 
-KoTextInlineRdf* KoTextInlineRdf::tryToGetInlineRdf(QTextFormat& tf)
+KoTextInlineRdf *KoTextInlineRdf::tryToGetInlineRdf(QTextFormat &tf)
 {
-    if (!tf.hasProperty(KoCharacterStyle::inlineRdf)) {
+    if (!tf.hasProperty(KoCharacterStyle::InlineRdf)) {
         return 0;
     }
-    QVariant v = tf.property(KoCharacterStyle::inlineRdf);
-    KoTextInlineRdf* inlineRdf = v.value< KoTextInlineRdf* >();
+    QVariant v = tf.property(KoCharacterStyle::InlineRdf);
+    KoTextInlineRdf *inlineRdf = v.value<KoTextInlineRdf *>();
     if (inlineRdf) {
         return inlineRdf;
     }
-    KoTextInlineRdf* ret(0);
-    return ret;
+    return 0;
 }
 
-KoTextInlineRdf* KoTextInlineRdf::tryToGetInlineRdf(QTextCursor& cursor)
+KoTextInlineRdf *KoTextInlineRdf::tryToGetInlineRdf(QTextCursor &cursor)
 {
     QTextCharFormat cf = cursor.charFormat();
-    QVariant v = cf.property(KoCharacterStyle::inlineRdf);
-    KoTextInlineRdf* inlineRdf = v.value< KoTextInlineRdf* >();
+    QVariant v = cf.property(KoCharacterStyle::InlineRdf);
+    KoTextInlineRdf *inlineRdf = v.value<KoTextInlineRdf *>();
     if (inlineRdf) {
         return inlineRdf;
     }
-    KoTextInlineRdf* ret(0);
-    return ret;
+    return 0;
 }
 
-KoTextInlineRdf* KoTextInlineRdf::tryToGetInlineRdf(KoTextEditor* handler)
+KoTextInlineRdf *KoTextInlineRdf::tryToGetInlineRdf(KoTextEditor *handler)
 {
     QTextCharFormat cf = handler->charFormat();
-    QVariant v = cf.property(KoCharacterStyle::inlineRdf);
-    KoTextInlineRdf* inlineRdf = v.value< KoTextInlineRdf* >();
+    QVariant v = cf.property(KoCharacterStyle::InlineRdf);
+    KoTextInlineRdf *inlineRdf = v.value<KoTextInlineRdf *>();
     if (inlineRdf) {
         return inlineRdf;
     }
-    KoTextInlineRdf* ret(0);
-    return ret;
+    return 0;
 }
 
-void KoTextInlineRdf::attach(KoTextInlineRdf* inlineRdf, QTextCursor& cursor)
+void KoTextInlineRdf::attach(KoTextInlineRdf *inlineRdf, QTextCursor &cursor)
 {
     QTextCharFormat format = cursor.charFormat();
     QVariant v = QVariant::fromValue(inlineRdf);
-    format.setProperty(KoCharacterStyle::inlineRdf, v);
+    format.setProperty(KoCharacterStyle::InlineRdf, v);
     cursor.mergeCharFormat(format);
 }

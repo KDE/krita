@@ -60,7 +60,6 @@ KoTextPaste::~KoTextPaste()
     delete d;
 }
 
-
 bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
 {
     bool ok = true;
@@ -76,9 +75,11 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
     // RDF: Grab RDF metadata from ODF file if present & load it into rdfModel
     if (d->rdfModel) {
         Soprano::Model *tmpmodel(Soprano::createModel());
-        bool ok = KoTextRdfCore::loadManifest(odfStore.store(), tmpmodel);
+        ok = KoTextRdfCore::loadManifest(odfStore.store(), tmpmodel);
         kDebug(30015) << "ok:" << ok << " model.sz:" << tmpmodel->statementCount();
+#ifndef NDEBUG
         KoTextRdfCore::dumpModel("RDF from C+P", tmpmodel);
+#endif
         d->rdfModel->addStatements(tmpmodel->listStatements().allElements());
         delete tmpmodel;
     }

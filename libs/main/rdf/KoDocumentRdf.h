@@ -38,16 +38,11 @@
 #include <KDateTime>
 
 class QDomDocument;
-class QDomElement;
 class KoStore;
 class KoXmlWriter;
-class KoXmlDocument;
 class KoDocument;
 class KoCanvasBase;
 class KoTextEditor;
-class QMimeData;
-class KoShapeController;
-class KoCanvasResourceProvider;
 
 #include "RdfForward.h"
 #include "SemanticStylesheet.h"

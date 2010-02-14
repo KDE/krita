@@ -26,7 +26,6 @@
 #include <KDialog>
 #include <QSharedPointer>
 
-class QModelIndex;
 class QTreeWidgetItem;
 class QTableWidgetItem;
 

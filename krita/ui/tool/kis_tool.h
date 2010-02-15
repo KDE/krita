@@ -35,6 +35,7 @@ class KisFilterConfiguration;
 class KisPainter;
 class QPainter;
 class QPainterPath;
+class QPolygonF;
 class KisRecordedPaintAction;
 
 enum PaintMode { XOR_MODE, BW_MODE };
@@ -107,6 +108,8 @@ public:
 
     /// Convert a pixel path into a view path
     QPainterPath pixelToView(const QPainterPath &pixelPath) const;
+
+    QPolygonF pixelToView(const QPolygonF &pixelPolygon) const;
 
     /// Update the canvas for the given rectangle in image pixel coordinates.
     void updateCanvasPixelRect(const QRectF &pixelRect);

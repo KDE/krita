@@ -252,7 +252,16 @@ QRectF KisTool::pixelToView(const QRectF &pixelRect) const
     return QRectF(topLeft, bottomRight);
 }
 
-QPainterPath KisTool::pixelToView(const QPainterPath &pixelPath) const
+QPainterPath KisTool::pixelToView(const QPainterPath &pixelPolygon) const
+{
+    QMatrix matrix;
+    qreal zoomX, zoomY;
+    canvas()->viewConverter()->zoom(&zoomX, &zoomY);
+    matrix.scale(zoomX/image()->xRes(), zoomY/ image()->yRes());
+    return matrix.map(pixelPolygon);
+}
+
+QPolygonF KisTool::pixelToView(const QPolygonF &pixelPath) const
 {
     QMatrix matrix;
     qreal zoomX, zoomY;
@@ -405,6 +414,7 @@ QWidget* KisTool::optionWidget()
 
 void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
+    //KisToolSelectMagnetic uses custom painting, so don't forget to update that as well
 #if defined(HAVE_OPENGL)
     if (m_outlinePaintMode==XOR_MODE && isCanvasOpenGL()) {
         beginOpenGL();

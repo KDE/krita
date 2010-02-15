@@ -53,8 +53,10 @@ public:
     QString m_imageUrl;
     QString m_phone;
     Ui::RdfFoaFEditWidget editWidget;
+#ifdef KDEPIMLIBS_FOUND
     KABC::Addressee toKABC();
     void fromKABC(KABC::Addressee addr);
+#endif
 };
 
 RdfFoaF::RdfFoaF(QObject *parent, KoDocumentRdf *m_rdf)
@@ -178,6 +180,7 @@ QList<SemanticStylesheet*> &RdfFoaF::userStylesheets()
     return ret;
 }
 
+#ifdef KDEPIMLIBS_FOUND
 KABC::Addressee RdfFoaF::Private::toKABC()
 {
     KABC::Addressee addr;
@@ -196,6 +199,7 @@ void RdfFoaF::Private::fromKABC(KABC::Addressee addr)
     m_phone = ph.number();
     m_homePage = addr.url().url();
 }
+#endif
 
 void RdfFoaF::saveToKABC()
 {
@@ -246,6 +250,7 @@ void RdfFoaF::exportToFile(const QString &fileNameConst)
 
 void RdfFoaF::importFromData(const QByteArray &ba, KoDocumentRdf *_rdf, KoCanvasBase *host)
 {
+#ifdef KDEPIMLIBS_FOUND
     kDebug(30015) << "data.sz:" << ba.size();
     kDebug(30015) << "_rdf:" << _rdf;
     if (_rdf) {
@@ -257,4 +262,7 @@ void RdfFoaF::importFromData(const QByteArray &ba, KoDocumentRdf *_rdf, KoCanvas
     kDebug(30015) << "adding name:" << d->m_name;
     kDebug(30015) << "uri:" << d->m_uri;
     importFromDataComplete(ba, m_rdf, host);
+#else
+    kDebug(30015) << "KDEPIM support not built!";
+#endif
 }

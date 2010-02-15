@@ -26,6 +26,7 @@
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <KMessageBox>
+#include "ksystemtimezone.h"
 
 // calendars
 #ifdef KDEPIMLIBS_FOUND
@@ -366,6 +367,7 @@ KDateTime RdfCalendarEvent::end()
     return d->m_dtend;
 }
 
+#ifdef KDEPIMLIBS_FOUND
 static KCal::CalendarResources *StdCalendar()
 {
     static KCal::CalendarResources *ret = 0;
@@ -391,9 +393,11 @@ KCal::Event *RdfCalendarEvent::toKEvent()
     event->setUid(uid());
     return event;
 }
+#endif
 
 void RdfCalendarEvent::fromKEvent(KCal::Event *event)
 {
+#ifdef KDEPIMLIBS_FOUND
     d->m_dtstart = event->dtStart();
     d->m_dtend   = event->dtEnd();
     d->m_summary = event->summary();
@@ -414,6 +418,7 @@ void RdfCalendarEvent::fromKEvent(KCal::Event *event)
     kDebug(30015) << "dtend:" << d->m_dtend;
     kDebug(30015) << "dtstart.rdfnode:" << n;
     kDebug(30015) << "dtstart.roundTrip.offset:" << tz.timeZone().currentOffset();
+#endif
 }
 
 void RdfCalendarEvent::saveToKCal()
@@ -459,6 +464,7 @@ void RdfCalendarEvent::exportToFile(const QString &fileNameConst)
 
 void RdfCalendarEvent::importFromData(const QByteArray &ba, KoDocumentRdf *_rdf, KoCanvasBase *host)
 {
+#ifdef KDEPIMLIBS_FOUND
     kDebug(30015) << "data.sz:" << ba.size();
     kDebug(30015) << "_rdf:" << _rdf;
     if (_rdf) {
@@ -476,4 +482,5 @@ void RdfCalendarEvent::importFromData(const QByteArray &ba, KoDocumentRdf *_rdf,
     }
     delete cal;
     importFromDataComplete(ba, m_rdf, host);
+#endif
 }

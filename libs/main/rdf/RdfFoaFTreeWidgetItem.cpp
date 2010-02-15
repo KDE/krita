@@ -23,6 +23,7 @@
 #include "RdfSemanticTreeWidgetSelectAction.h"
 
 #include <kdebug.h>
+#include <klocalizedstring.h>
 
 // contacts
 #ifdef KDEPIMLIBS_FOUND

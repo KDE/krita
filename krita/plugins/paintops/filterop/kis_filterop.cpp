@@ -63,6 +63,7 @@
 KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter)
         : KisBrushBasedPaintOp(settings, painter)
         , settings(settings)
+        , m_filterConfiguration(0)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -70,6 +71,7 @@ KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painte
     m_sizeOption.readOptionSetting(settings);
     m_sizeOption.sensor()->reset();
     m_filter = KisFilterRegistry::instance()->get(settings->getString(FILTER_ID));
+    m_filterConfiguration = settings->filterConfig();
     m_ignoreAlpha = settings->getBool(FILTER_IGNORE_ALPHA);
 }
 
@@ -122,7 +124,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     m_filter->process(KisConstProcessingInformation(source(), QPoint(x, y)),
                     KisProcessingInformation(m_tmpDevice, QPoint(0, 0)),
                     QSize(maskWidth, maskHeight),
-                    settings->filterConfig(), 0);
+                    m_filterConfiguration, 0);
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
 

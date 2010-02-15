@@ -21,21 +21,23 @@
  */
 
 #include "kis_filterop_settings.h"
+
+#include <QDomDocument>
+
 #include "kis_filterop_settings_widget.h"
 
-#include <kis_brush_option.h>
-#include <kis_paintop_options_widget.h>
-#include <kis_pressure_size_option.h>
 #include <kis_filter_option.h>
 #include <filter/kis_filter.h>
+#include <filter/kis_filter_registry.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_node.h>
 #include <kis_image.h>
-
+#include <kis_types.h>
+#include <kis_paint_device.h>
 
 KisFilterOpSettings::KisFilterOpSettings()
-        : m_options(0)
 {
+    setPropertyNotSaved(FILTER_CONFIGURATION);
 }
 
 KisFilterOpSettings::~KisFilterOpSettings()
@@ -68,9 +70,43 @@ void KisFilterOpSettings::setImage(KisImageWSP image)
 
 KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
 {
-    KisFilterOpSettingsWidget* options = dynamic_cast<KisFilterOpSettingsWidget*>(optionsWidget());
-    if(!options)
-        return 0;
-
-    return options->m_filterOption->filterConfig();
+    if (hasProperty(FILTER_ID)) {
+        KisFilterSP filter = KisFilterRegistry::instance()->get(getString(FILTER_ID));
+        Q_ASSERT(filter);
+        if(filter) {
+            KisFilterConfiguration* configuration = filter->factoryConfiguration(0);
+            configuration->fromLegacyXML(getString(FILTER_CONFIGURATION));
+            return configuration;
+        }
+    }
+    return 0;
 }
+
+void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& root) const
+{
+    KisPaintOpSettings::toXML(doc, root);
+    KisFilterConfiguration* configuration = filterConfig();
+    if (configuration) {
+        QDomElement e = doc.createElement("filterconfig");
+        configuration->toXML(doc, e);
+        root.appendChild(e);
+    }
+    delete configuration;
+}
+
+void KisFilterOpSettings::fromXML(const QDomElement& e)
+{
+    KisPaintOpSettings::fromXML(e);
+    QDomElement element = e.firstChildElement("filterconfig");
+    if (hasProperty(FILTER_ID)) {
+        KisFilterSP filter = KisFilterRegistry::instance()->get(getString(FILTER_ID));
+        Q_ASSERT(filter);
+        if(filter) {
+            KisFilterConfiguration* configuration = filter->factoryConfiguration(0);
+            configuration->fromXML(element);
+            setProperty(FILTER_CONFIGURATION, configuration->toLegacyXML());
+            delete configuration;
+        }
+    }
+}
+

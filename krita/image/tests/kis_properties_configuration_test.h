@@ -34,6 +34,7 @@ private slots:
     void testSetGet();
     void testSerialization();
     void testDefaultValues();
+    void testNotSavedValues();
 private:
     KisPropertiesConfiguration* createConfig();
     void testConfig(KisPropertiesConfiguration* config);

@@ -264,7 +264,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 
     if (preset != 0 && preset->settings()) {
         if (!m_paintopOptionWidgets.contains(paintop)) {
-        m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createSettingsWidget(this);
+            m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createSettingsWidget(this);
         }
         m_optionWidget = m_paintopOptionWidgets[paintop];
         m_optionWidget->setImage(m_view->image());

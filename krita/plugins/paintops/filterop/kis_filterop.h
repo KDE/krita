@@ -29,6 +29,7 @@
 #include <KoColorSpace.h>
 #include <kis_pressure_size_option.h>
 
+class KisFilterConfiguration;
 class KisFilterOpSettings;
 class KisPaintInformation;
 class KisPainter;
@@ -49,6 +50,7 @@ private:
     KisPaintDeviceSP m_tmpDevice;
     KisPressureSizeOption m_sizeOption;
     KisFilterSP m_filter;
+    KisFilterConfiguration* m_filterConfiguration;
     bool m_ignoreAlpha;
 };
 

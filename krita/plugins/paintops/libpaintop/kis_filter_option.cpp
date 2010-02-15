@@ -134,11 +134,15 @@ void KisFilterOption::setImage( KisImageWSP image )
     else {
         m_image = image;
     }
+    if(!m_currentFilterConfigWidget) {
+        updateFilterConfigWidget();
+    }
 }
 
 void KisFilterOption::setCurrentFilter( const KoID& id)
 {
     m_currentFilter = KisFilterRegistry::instance()->get(id.id());
+    m_options->filtersList->setCurrent(id);
     updateFilterConfigWidget();
     emit sigSettingChanged();
 }
@@ -170,8 +174,6 @@ void KisFilterOption::updateFilterConfigWidget()
     m_layout->update();
 }
 
-
-
 void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     setting->setProperty(FILTER_ID, m_currentFilter->id());
@@ -183,10 +185,14 @@ void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
 
 void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    Q_UNUSED(setting);
-#ifdef __GNUC__
-#warning "KisFilterOption::readOptionSetting: restore the filter option setting"
-#endif
+    KoID id(setting->getString(FILTER_ID), "");
+    setCurrentFilter(id);
+    m_options->checkBoxIgnoreAlpha->setChecked(setting->getBool(FILTER_IGNORE_ALPHA));
+    KisFilterConfiguration* configuration = filterConfig();
+    if(configuration) {
+        configuration->fromLegacyXML(setting->getString(FILTER_CONFIGURATION));
+        m_currentFilterConfigWidget->setConfiguration(configuration);
+    }
 }
 
 #include "kis_filter_option.moc"

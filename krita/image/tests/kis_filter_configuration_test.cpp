@@ -20,9 +20,13 @@
 #include <QApplication>
 #include <qtest_kde.h>
 #include <kis_debug.h>
+#include <KoID.h>
+#include <kis_paint_device.h>
 
 
 #include "../filter/kis_filter_configuration.h"
+#include "../filter/kis_filter_registry.h"
+#include "../filter/kis_filter.h"
 
 void KisFilterConfigurationTest::testCreation()
 {
@@ -50,6 +54,18 @@ void KisFilterConfigurationTest::testRoundTrip()
 
 void KisFilterConfigurationTest::testSetGetProperty()
 {
+    KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1);
+    kfc->setProperty("value1", 10);
+    kfc->setProperty("value2", "foo");
+    QCOMPARE(kfc->getInt("value1"), 10);
+    QCOMPARE(kfc->getString("value2"), QString("foo"));
+    QString s = kfc->toLegacyXML();
+    delete kfc;
+    kfc = new KisFilterConfiguration("test2", 2);
+    kfc->fromLegacyXML(s);
+    QCOMPARE(kfc->getInt("value1"), 10);
+    QCOMPARE(kfc->getString("value2"), QString("foo"));
+    delete kfc;   
 }
 
 

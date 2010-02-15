@@ -138,6 +138,9 @@ public:
      */
     ColorSpaceIndependence colorSpaceIndependence() const;
 
+    /// @return the default configuration as defined by whoever wrote the plugin
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    
 protected:
 
     void setSupportsPainting(bool v);
@@ -150,9 +153,6 @@ protected:
 protected:
 
     void init(const QString& configEntryGroup);
-
-    /// @return the default configuration as defined by whoever wrote the plugin
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
 private:
     struct Private;

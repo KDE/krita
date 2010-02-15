@@ -78,6 +78,23 @@ void KisPropertiesConfigurationTest::testConfig(KisPropertiesConfiguration* conf
     QVERIFY(config->getCubicCurve("v5") == v5);
 }
 
+void KisPropertiesConfigurationTest::testNotSavedValues()
+{
+    KisPropertiesConfiguration* config = createConfig();
+    config->setPropertyNotSaved("v3");
+    testConfig(config);
+    QString s = config->toXML();
+    delete config;
+    config = new KisPropertiesConfiguration();
+    config->fromXML(s);
+    QVERIFY(config->getInt("v1", 0) == v1);
+    QVERIFY(config->getString("v2", "") == v2);
+    QVERIFY(config->hasProperty("v3") == false);
+    QVERIFY(config->getBool("v4", !v4) == v4);
+    QVERIFY(config->getCubicCurve("v5") == v5);
+    delete config;   
+}
+
 QTEST_KDEMAIN(KisPropertiesConfigurationTest, NoGUI)
 
 #include "kis_properties_configuration_test.moc"

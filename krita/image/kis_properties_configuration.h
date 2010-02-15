@@ -84,7 +84,7 @@ public:
     /**
      * @return true if the map contains a property with the specified name
      */
-    bool hasProperty(const QString& name);
+    bool hasProperty(const QString& name) const;
 
     /**
      * Set the property with name to value.
@@ -118,6 +118,9 @@ public:
 
     /// Clear the map of properties
     void clearProperties();
+    
+    ///Marks a property that should not be saved by toXML
+    void setPropertyNotSaved(const QString & name);
 
 public:
 

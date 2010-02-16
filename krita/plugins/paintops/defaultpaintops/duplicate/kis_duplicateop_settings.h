@@ -45,8 +45,6 @@ public:
     QPointF offset() const;
     void mousePressEvent(KoPointerEvent *e);
     void activate();
-    bool healing() const;
-    bool perspectiveCorrection() const;
 
     void fromXML(const QDomElement& elt);
     void toXML(QDomDocument& doc, QDomElement& rootElt) const;

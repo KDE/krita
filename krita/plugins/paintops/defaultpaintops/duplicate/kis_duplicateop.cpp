@@ -61,6 +61,7 @@
 
 #include "kis_duplicateop_settings.h"
 #include "kis_duplicateop_settings_widget.h"
+#include "kis_duplicateop_option.h"
 
 
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter *painter)
@@ -70,6 +71,8 @@ KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainte
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     m_sizeOption.readOptionSetting(settings);
+    m_healing = settings->getBool(DUPLICATE_HEALING);
+    m_perspectiveCorrection = settings->getBool(DUPLICATE_CORRECT_PERSPECTIVE);
 }
 
 KisDuplicateOp::~KisDuplicateOp()
@@ -111,8 +114,6 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
         m_duplicateStartIsSet = true;
         m_duplicateStart = info.pos();
     }
-
-    bool heal = settings->healing();
 
     if (!source()) return;
 
@@ -159,7 +160,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     // Perspective correction ?
     KisImageWSP image = settings->m_image;
-    if (settings->perspectiveCorrection() && image && image->perspectiveGrid()->countSubGrids() == 1) {
+    if (m_perspectiveCorrection && image && image->perspectiveGrid()->countSubGrids() == 1) {
         Matrix3qreal startM = Matrix3qreal::Identity();
         Matrix3qreal endM = Matrix3qreal::Identity();
 
@@ -221,7 +222,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     // heal ?
 
-    if (heal) {
+    if (m_healing) {
         quint16 dataDevice[4];
         quint16 dataSrcDev[4];
         double* matrix = new double[ 3 * sw * sh ];

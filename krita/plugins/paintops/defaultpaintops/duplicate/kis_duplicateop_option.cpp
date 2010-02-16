@@ -79,14 +79,14 @@ void KisDuplicateOpOption::setPerspective(bool perspective)
 
 void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty("Duplicateop/Healing", healing());
-    setting->setProperty("Duplicateop/CorrectPerspective", correctPerspective());
+    setting->setProperty(DUPLICATE_HEALING, healing());
+    setting->setProperty(DUPLICATE_CORRECT_PERSPECTIVE, correctPerspective());
 }
 
 void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_optionWidget->cbHealing->setChecked(setting->getBool("Duplicateop/Healing", false));
-    m_optionWidget->cbPerspective->setChecked(setting->getBool("Duplicateop/CorrectPerspective", false));
+    m_optionWidget->cbHealing->setChecked(setting->getBool(DUPLICATE_HEALING, false));
+    m_optionWidget->cbPerspective->setChecked(setting->getBool(DUPLICATE_CORRECT_PERSPECTIVE, false));
     emit sigSettingChanged();
 }
 

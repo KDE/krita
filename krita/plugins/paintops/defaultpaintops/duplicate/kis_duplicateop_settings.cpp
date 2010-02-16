@@ -41,8 +41,7 @@
 
 
 KisDuplicateOpSettings::KisDuplicateOpSettings(KisImageWSP image)
-        : m_options(0)
-        , m_image(image)
+        : m_image(image)
         , m_isOffsetNotUptodate(true)
 {
 }
@@ -80,22 +79,16 @@ void KisDuplicateOpSettings::mousePressEvent(KoPointerEvent *e)
 
 void KisDuplicateOpSettings::activate()
 {
+    KisDuplicateOpSettingsWidget* options = dynamic_cast<KisDuplicateOpSettingsWidget*>(optionsWidget());
+    if(!options)
+        return;
+    
     if (m_image->perspectiveGrid()->countSubGrids() != 1) {
-        m_options->m_duplicateOption->setHealing(false);
-        m_options->m_duplicateOption->setPerspective(false);
+        options->m_duplicateOption->setHealing(false);
+        options->m_duplicateOption->setPerspective(false);
     } else {
-        m_options->m_duplicateOption->setPerspective(false);;
+        options->m_duplicateOption->setPerspective(false);;
     }
-}
-
-bool KisDuplicateOpSettings::healing() const
-{
-    return m_options->m_duplicateOption->healing();
-}
-
-bool KisDuplicateOpSettings::perspectiveCorrection() const
-{
-    return m_options->m_duplicateOption->correctPerspective();
 }
 
 void KisDuplicateOpSettings::fromXML(const QDomElement& elt)
@@ -107,26 +100,15 @@ void KisDuplicateOpSettings::fromXML(const QDomElement& elt)
     m_offset.setX(elt.attribute("OffsetX", "0.0").toDouble());
     m_offset.setY(elt.attribute("OffsetY", "0.0").toDouble());
     m_isOffsetNotUptodate = false;
-
-    // Then load the properties for all widgets
-    m_options->setConfiguration(this);
 }
 
 void KisDuplicateOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 {
-
-    // First, make sure all the option widgets have saved their state
-    // to the property configuration
-    KisPropertiesConfiguration * settings = m_options->configuration();
-
     // Then call the parent class fromXML
-    settings->KisPropertiesConfiguration::toXML(doc, rootElt);
+    KisPropertiesConfiguration::toXML(doc, rootElt);
 
     rootElt.setAttribute("OffsetX", QString::number(m_offset.x()));
     rootElt.setAttribute("OffsetY", QString::number(m_offset.y()));
-
-
-    delete settings;
 }
 
 
@@ -157,9 +139,13 @@ QRectF KisDuplicateOpSettings::duplicateOutlineRect(const QPointF& pos, KisImage
 
 QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
+    KisDuplicateOpSettingsWidget* options = dynamic_cast<KisDuplicateOpSettingsWidget*>(optionsWidget());
+    if(!options)
+        return QRectF();
+    
     QRectF dubRect = duplicateOutlineRect(pos, image);
     if (_mode == CURSOR_IS_OUTLINE) {
-        KisBrushSP brush = m_options->m_brushOption->brush();
+        KisBrushSP brush = options->m_brushOption->brush();
         QPointF hotSpot = brush->hotSpot(1.0, 1.0);
         QRectF rect = QRect(0, 0, brush->width(), brush->height());
         rect.translate(pos - hotSpot - QPoint(0.5, 0.5));
@@ -171,7 +157,11 @@ QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP 
 
 void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
 {
-    KisBrushSP brush = m_options->m_brushOption->brush();
+    KisDuplicateOpSettingsWidget* options = dynamic_cast<KisDuplicateOpSettingsWidget*>(optionsWidget());
+    if(!options)
+        return;
+    
+    KisBrushSP brush = options->m_brushOption->brush();
     painter.setPen(Qt::black);
     painter.setBackground(Qt::black);
     if (_mode == CURSOR_IS_OUTLINE) {

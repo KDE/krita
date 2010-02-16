@@ -330,8 +330,7 @@ bool Layout::nextParag()
         }
         qreal borderBottom = m_y;
         if (m_block.isValid() && !m_newShape) { // only add bottom of prev parag if we did not go to a new shape for this parag.
-            if (m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysAfter ||
-                    m_format.boolProperty(KoParagraphStyle::BreakAfter)) {
+            if (m_format.pageBreakPolicy() & QTextFormat::PageBreak_AlwaysAfter) {
                 m_data->setEndPosition(m_block.position() - 1);
                 m_data->wipe();
                 nextShape();
@@ -411,8 +410,7 @@ bool Layout::nextParag()
         m_blockData->setCounterWidth(0.0);
     }
 
-    bool pagebreak = m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore ||
-                      m_format.boolProperty(KoParagraphStyle::BreakBefore);
+    bool pagebreak = m_format.pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore;
 
     const QVariant masterPageName = m_format.property(KoParagraphStyle::MasterPageName);
     if (! masterPageName.isNull() && m_currentMasterPage != masterPageName.toString()) {
@@ -964,7 +962,7 @@ qreal Layout::topMargin()
     bool allowMargin = true; // wheather to allow margins at top of shape
     if (m_newShape) {
         allowMargin = false; // false by default, but check 2 exceptions.
-        if (m_format.boolProperty(KoParagraphStyle::BreakBefore))
+        if (m_format.pageBreakPolicy () & QTextFormat::PageBreak_AlwaysBefore)
             allowMargin = true;
         else if (m_styleManager && m_format.topMargin() > 0) {
             // also allow it when the paragraph has the margin, but the style has a different one.

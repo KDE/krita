@@ -346,14 +346,6 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
         case KoParagraphStyle::MasterPageName:
         case KoParagraphStyle::OutlineLevel:
             break;
-        case KoParagraphStyle::BreakBefore:
-            key = "breakBefore";
-            value = properties[id].toBool() ? "true" : "false" ;
-            break;
-        case KoParagraphStyle::BreakAfter:
-            key = "breakAfter";
-            value = properties[id].toBool() ? "true" : "false" ;
-            break;
         case KoParagraphStyle::AutoTextIndent:
             key = "autotextindent";
             value = properties[id].toBool() ? "true" : "false" ;

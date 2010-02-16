@@ -55,7 +55,9 @@ bool KisAbrBrush::load()
 
 bool KisAbrBrush::save()
 {
-    return false;
+    //Return true, otherwise the brush won't be add to the
+    //resource server if the brush is loaded via import
+    return true;
 }
 
 bool KisAbrBrush::saveToDevice(QIODevice* dev) const

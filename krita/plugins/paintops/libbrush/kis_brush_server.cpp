@@ -58,10 +58,28 @@ public:
         m_brushes.append(brush);
     }
 
+    ///Reimplemented
     virtual void removingResource(KisBrush* brush)
     {
         brush->deref();
         m_brushes.removeAll(brush);
+    }
+    
+    ///Reimplemented
+    void importResourceFile( const QString & filename ) {
+        QFileInfo fi( filename );
+        if( fi.exists() == false )
+            return;
+        
+        if( fi.suffix().toLower() == "abr") {
+            QFile::copy(filename, saveLocation() + fi.fileName());
+            QList<KisBrush*> collectionResources = createResources( filename );
+            foreach(KisBrush* brush, collectionResources) {
+                addResource(brush);
+            }
+        } else {
+            KoResourceServer<KisBrush>::importResourceFile(filename);
+        }
     }
 
 private:

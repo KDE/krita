@@ -1,0 +1,22 @@
+<PresetResource>
+    <Preset name="sumi" paintopid="sumibrush">
+        <param name="Sumi/isDimension1D"><![CDATA[false]]></param>
+        <param name="Sumi/radius"><![CDATA[70]]></param>
+        <param name="Sumi/random"><![CDATA[3]]></param>
+        <param name="Sumi/scale"><![CDATA[1]]></param>
+        <param name="Sumi/shear"><![CDATA[0]]></param>
+        <param name="Sumi/sigma"><![CDATA[20]]></param>
+        <param name="Sumi/useMousePressure"><![CDATA[false]]></param>
+        <param name="SumiInk/bristleInkAmountWeight"><![CDATA[50]]></param>
+        <param name="SumiInk/bristleLengthWeights"><![CDATA[50]]></param>
+        <param name="SumiInk/inkAmount"><![CDATA[8096]]></param>
+        <param name="SumiInk/inkDepletionCurve"><![CDATA[0,0;1,1;]]></param>
+        <param name="SumiInk/inkDepletionWeight"><![CDATA[50]]></param>
+        <param name="SumiInk/pressureWeights"><![CDATA[50]]></param>
+        <param name="SumiInk/soak"><![CDATA[false]]></param>
+        <param name="SumiInk/useOpacity"><![CDATA[true]]></param>
+        <param name="SumiInk/useSaturation"><![CDATA[true]]></param>
+        <param name="SumiInk/useWeights"><![CDATA[false]]></param>
+        <param name="paintop"><![CDATA[sumibrush]]></param>
+    </Preset>
+</PresetResource>

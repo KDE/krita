@@ -18,6 +18,7 @@
 */
 
 #include "KoXmlReader.h"
+#include "KoXmlNS.h"
 
 /*
   This is a memory-efficient DOM implementation for KOffice. See the API
@@ -68,8 +69,6 @@
 
  */
 
-
-
 #include <QTextCodec>
 #include <QTextDecoder>
 
@@ -119,6 +118,45 @@ static inline uint qHash(const KoXmlStringPair &p)
 
     // in case of doubt, use this:
     // return qHash(p.first)^qHash(p.second);
+}
+
+// Older versions of OpenOffice.org used different namespaces. This function
+// does translate the old namespaces into the new ones.
+QString fixNamespace(const QString &nsURI)
+{
+    if (nsURI == "http://openoffice.org/2000/office")
+        return KoXmlNS::office;
+    if (nsURI == "http://openoffice.org/2000/text")
+        return KoXmlNS::text;
+    if (nsURI == "http://openoffice.org/2000/style")
+        return KoXmlNS::style;
+    if (nsURI == "http://www.w3.org/1999/XSL/Format")
+        return KoXmlNS::fo;
+    if (nsURI == "http://openoffice.org/2000/table")
+        return KoXmlNS::table;
+    if (nsURI == "http://openoffice.org/2000/drawing")
+        return KoXmlNS::draw;
+    if (nsURI == "http://openoffice.org/2000/datastyle")
+        return KoXmlNS::number;
+    if (nsURI == "http://www.w3.org/2000/svg")
+        return KoXmlNS::svg;
+    if (nsURI == "http://openoffice.org/2000/chart")
+        return KoXmlNS::chart;
+    if (nsURI == "http://openoffice.org/2000/dr3d")
+        return KoXmlNS::dr3d;
+    if (nsURI == "http://openoffice.org/2000/form")
+        return KoXmlNS::form;
+    if (nsURI == "http://openoffice.org/2000/script")
+        return KoXmlNS::script;
+    if (nsURI == "http://openoffice.org/2000/meta")
+        return KoXmlNS::meta;
+    if (nsURI == "http://openoffice.org/2001/config")
+        return KoXmlNS::config;
+    if (nsURI == "http://openoffice.org/2000/presentation")
+        return KoXmlNS::presentation;
+    if (nsURI == "http://openoffice.org/2001/manifest")
+        return KoXmlNS::manifest;
+    return nsURI;
 }
 
 // ==================================================================
@@ -1056,7 +1094,7 @@ bool KoXmlHandler::startElement(const QString& nsURI, const QString& localName,
 {
     Q_UNUSED(localName);
 
-    document->addElement(name, nsURI);
+    document->addElement(name, fixNamespace(nsURI));
 
     // add all attributes
     for (int c = 0; c < atts.length(); c++)
@@ -1554,7 +1592,7 @@ void KoXmlNodeData::loadChildren(int depth)
         // attribute belongs to this node
         if (item.attr) {
             QString name = packedDoc->stringList[item.nameIndex];
-            QString nsURI = packedDoc->stringList[item.nsURIIndex];
+            QString nsURI = fixNamespace(packedDoc->stringList[item.nsURIIndex]);
             QString value = item.value;
 
             QString prefix;
@@ -1574,7 +1612,7 @@ void KoXmlNodeData::loadChildren(int depth)
                 setAttribute(qName, value);
         } else {
             QString name = packedDoc->stringList[item.nameIndex];
-            QString nsURI = packedDoc->stringList[item.nsURIIndex];
+            QString nsURI = fixNamespace(packedDoc->stringList[item.nsURIIndex]);
             QString value = item.value;
 
             QString nodeName = name;
@@ -1655,7 +1693,7 @@ void KoXmlNodeData::loadChildren(int depth)
         // attribute belongs to this node
         if (item.attr && (item.depth == (unsigned)nodeDepth)) {
             QString name = packedDoc->stringList[item.nameIndex];
-            QString nsURI = packedDoc->stringList[item.nsURIIndex];
+            QString nsURI = fixNamespace(packedDoc->stringList[item.nsURIIndex]);
             QString value = item.value;
 
             QString prefix;
@@ -1684,7 +1722,7 @@ void KoXmlNodeData::loadChildren(int depth)
 
             if (ok) {
                 QString name = packedDoc->stringList[item.nameIndex];
-                QString nsURI = packedDoc->stringList[item.nsURIIndex];
+                QString nsURI = fixNamespace(packedDoc->stringList[item.nsURIIndex]);
                 QString value = item.value;
 
                 QString nodeName = name;
@@ -1786,7 +1824,7 @@ static QDomNode itemAsQDomNode(QDomDocument ownerDoc, KoXmlPackedDocument* packe
         QDomElement element;
 
         QString name = packedDoc->stringList[self.nameIndex];
-        QString nsURI = packedDoc->stringList[self.nsURIIndex];
+        QString nsURI = fixNamespace(packedDoc->stringList[self.nsURIIndex]);
 
         if (packedDoc->processNamespace)
             element = ownerDoc.createElementNS(nsURI, name);
@@ -1802,7 +1840,7 @@ static QDomNode itemAsQDomNode(QDomDocument ownerDoc, KoXmlPackedDocument* packe
             // attribute belongs to this node
             if (item.attr) {
                 QString name = packedDoc->stringList[item.nameIndex];
-                QString nsURI = packedDoc->stringList[item.nsURIIndex];
+                QString nsURI = fixNamespace(packedDoc->stringList[item.nsURIIndex]);
                 QString value = item.value;
 
                 QString prefix;
@@ -1868,7 +1906,7 @@ static QDomNode itemAsQDomNode(QDomDocument ownerDoc, KoXmlPackedDocument* packe
         QDomElement element;
 
         QString name = packedDoc->stringList[item.nameIndex];
-        QString nsURI = packedDoc->stringList[item.nsURIIndex];
+        QString nsURI = fixNamespace(packedDoc->stringList[item.nsURIIndex]);
 
         if (packedDoc->processNamespace)
             element = ownerDoc.createElementNS(nsURI, name);
@@ -1890,7 +1928,7 @@ static QDomNode itemAsQDomNode(QDomDocument ownerDoc, KoXmlPackedDocument* packe
             // attribute belongs to this node
             if (item.attr && (item.depth == (unsigned)nodeDepth)) {
                 QString name = packedDoc->stringList[item.nameIndex];
-                QString nsURI = packedDoc->stringList[item.nsURIIndex];
+                QString nsURI = fixNamespace(packedDoc->stringList[item.nsURIIndex]);
                 QString value = item.value;
                 QString prefix;
 

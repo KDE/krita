@@ -186,6 +186,7 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);
     }
+    format.clearProperty(QTextFormat::PageBreakPolicy); //this should not be inherited according to odf
     QList<int> keys = d->stylesPrivate.keys();
     for (int i = 0; i < keys.count(); i++) {
         QVariant variant = d->stylesPrivate.value(keys[i]);
@@ -1445,12 +1446,6 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                 if (!direction.isEmpty())
                     style.addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
             }
-        } else if (key == QTextFormat::PageBreakPolicy) {
-            QTextFormat::PageBreakFlag pageBreak = static_cast<QTextFormat::PageBreakFlag>(d->stylesPrivate.value(key).toInt());
-            if (pageBreak == QTextFormat::PageBreak_AlwaysBefore)
-                style.addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
-            else if (pageBreak == QTextFormat::PageBreak_AlwaysAfter)
-                style.addProperty("fo:break-after", "page", KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::PageBreakPolicy) {
             if (breakBefore())
                 style.addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);

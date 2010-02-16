@@ -100,7 +100,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
         QString filter = extensions.replace(QString(":"), QString(" "));
         QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose File to Add" ) );
 
-        d->model->resourceServerAdapter()->importResource(filename);
+        d->model->resourceServerAdapter()->importResourceFile(filename);
     }
     else if( button == Button_Remove ) {
         QModelIndex index = d->view->currentIndex();

@@ -107,6 +107,41 @@ void KisDatamanagerBenchmark::benchmarkReadWriteBytes()
     delete[] bytes;
 }
 
+void KisDatamanagerBenchmark::benchmarkReadWriteBytes2()
+{
+    quint8 *p = new quint8[PIXEL_SIZE];
+    memset(p, 0, PIXEL_SIZE);
+    KisDataManager dm(PIXEL_SIZE, p);
+    
+    KisDataManager dab(PIXEL_SIZE, p);
+
+    {
+        quint8 *bytes = new quint8[PIXEL_SIZE * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT];
+        memset(bytes, 120, PIXEL_SIZE * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT);
+
+        dm.writeBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+        dab.writeBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+        delete[] bytes;
+    }
+
+    QBENCHMARK {
+        int size = TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT;
+        quint8 *bytes = new quint8[PIXEL_SIZE * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT];
+        quint8 *bytes2 = new quint8[PIXEL_SIZE * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT];
+        dm.readBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+        dab.readBytes(bytes2, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+        quint8 *bytes_it = bytes;
+        quint8 *bytes2_it = bytes2;
+        for (int i = 0; i < size; i += PIXEL_SIZE, bytes_it += PIXEL_SIZE, bytes2_it += PIXEL_SIZE)
+        {
+            memcpy(bytes_it, bytes2_it, PIXEL_SIZE);
+        }
+        dm.writeBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+        delete[] bytes;
+        delete[] bytes2;
+    }
+}
+
 void KisDatamanagerBenchmark::benchmarkExtent()
 {
     quint8 *p = new quint8[PIXEL_SIZE];

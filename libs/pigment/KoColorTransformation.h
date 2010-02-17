@@ -60,16 +60,20 @@ public:
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const = 0;
 
     /**
-     * Update the parameters of a cached transformation object.
-     * The default implementation recursively calls \ref setParameter
+     * @return the list of parmeters
      */
-    virtual void setParameters(const QHash<QString, QVariant> & parameters);
+    virtual QList<QString> parameters() const;
+    /**
+     * Get the parameter id for a parameter name
+     */
+    virtual int parameterId(const QString& name) const;
 
+    void setParameters(const QHash<QString, QVariant> & parameters);
     /**
      * Update one parameter of a cached transformation object.
      *
      */
-    virtual void setParameter(const QString& name, const QVariant& parameter);
+    virtual void setParameter(int id, const QVariant& parameter);
 };
 
 #endif

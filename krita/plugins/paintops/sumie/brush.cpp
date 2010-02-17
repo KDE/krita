@@ -119,6 +119,7 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     m_params[SATURATION] = 0.0;
     KoColorTransformation* transfo;
     transfo = m_dev->colorSpace()->createColorTransformation("hsv_adjustment", m_params);
+    int saturationId = transfo->parameterId(SATURATION);
 
     rotateBristles(angle);
     // if this is first time the brush touches the canvas and we use soak the ink from canvas
@@ -199,7 +200,7 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
                                             (1.0 - inkDeplation)) - 1.0;
 
                 }
-                transfo->setParameter(SATURATION, saturationVariant);
+                transfo->setParameter(saturationId, saturationVariant);
                 transfo->transform(bristleColor.data(), bristleColor.data() , 1);
             }
 

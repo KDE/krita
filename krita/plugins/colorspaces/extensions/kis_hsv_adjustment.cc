@@ -108,20 +108,45 @@ public:
             ++dst;
         }
     }
+    virtual QList<QString> parameters() const
+    {
+      QList<QString> list;
+      list << "h" << "s" << "v";
+      return list;
+    }
 
+    virtual int parameterId(const QString& name) const
+    {
+        if (name == "h") {
+            return 0;
+        } else if (name == "s") {
+            return 1;
+        } else if (name == "v") {
+            return 2;
+        }
+        return -1;
+    }
+    
     /**
     * name - "h", "s" or "v"
     * (h)ue in range <-1.0, 1.0> ( for user, show as -180, 180)
     * (s)aturation in range <-1.0, 1.0> ( for user, show -100, 100)
     * (v)alue in range <-1.0, 1.0> (for user, show -100, 100)
     */
-    virtual void setParameter(const QString& name, const QVariant& parameter) {
-        if (name == "h") {
+    virtual void setParameter(int id, const QVariant& parameter) {
+        switch(id)
+        {
+        case 0:
             m_adj_h = parameter.toDouble() * 180;
-        } else if (name == "s") {
+            break;
+        case 1:
             m_adj_s = parameter.toDouble();
-        } else if (name == "v") {
+            break;
+        case 2:
             m_adj_v = parameter.toDouble();
+            break;
+        default:
+            qFatal("Unknown parameter id %i", id);
         }
     }
 

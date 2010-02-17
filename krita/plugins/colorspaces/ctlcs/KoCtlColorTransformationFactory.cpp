@@ -42,6 +42,11 @@ class KoCtlColorTransformation : public KoColorTransformation
 {
 public:
     KoCtlColorTransformation(OpenCTL::Program* program, const KoColorSpace* colorSpace, const KoCtlColorTransformationFactory* _factory, const GTLCore::PixelDescription& _pixelDescription) : m_program(program), m_colorSpace(colorSpace), m_factory(_factory), m_pixelDescription(_pixelDescription) {
+        const std::list<GTLCore::String>& v = program->varyings();
+        foreach(const GTLCore::String& s, v)
+        {
+            m_parametersName.push_back(s.c_str());
+        }
     }
     ~KoCtlColorTransformation() {
         m_factory->putBackProgram(m_pixelDescription, m_program);
@@ -55,10 +60,17 @@ public:
         ops.push_back(&src);
         m_program->apply(ops, dst);
     }
-
-    virtual void setParameter(const QString& name, const QVariant& variant) {
-        QByteArray ascii = name.toAscii();
-        dbgPlugins << name << " " << ascii.data() << ": " << variant;
+    virtual QList<QString> parameters() const
+    {
+      return m_parametersName;
+    }
+    virtual int parameterId(const QString& name) const
+    {
+      return m_parametersName.indexOf(name);
+    }
+    virtual void setParameter(int index, const QVariant& variant) {
+        QByteArray ascii = m_parametersName[index].toAscii();
+        dbgPlugins << ascii.data() << ": " << variant;
         const GTLCore::Type* type = m_program->varying(ascii.data()).type();
         switch (type->dataType()) {
         case GTLCore::Type::BOOLEAN:
@@ -93,6 +105,7 @@ private:
     const KoColorSpace* m_colorSpace;
     const KoCtlColorTransformationFactory* m_factory;
     GTLCore::PixelDescription m_pixelDescription;
+    QList<QString> m_parametersName;
 };
 
 

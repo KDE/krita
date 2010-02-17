@@ -31,8 +31,17 @@ public:
     ~Trajectory();
     QVector<QPointF> &getLinearTrajectory(const QPointF &start, const QPointF &end, double space);
     QVector<QPointF> getDDATrajectory(QPointF start, QPointF end, double space);
+    
+    inline int size(){ return m_size; }
+
 private:
     QVector<QPointF> m_path;
+    int m_i;
+    int m_size;
+
+private:
+    void addPoint(QPointF pos);
+    void reset();
 
 };
 #endif

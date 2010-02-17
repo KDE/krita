@@ -25,12 +25,14 @@
 
 #include <KoColor.h>
 
+#include "trajectory.h"
 #include "bristle.h"
 #include "brush_shape.h"
 
 #include <kis_paint_device.h>
 #include <kis_paint_information.h>
 #include <kis_random_accessor.h>
+
 
 class KoColorSpace;
 
@@ -88,12 +90,14 @@ public:
 private:
     const KisSumiProperties * m_properties;
     
-    QVector<Bristle> m_bristles;
+    QVector<Bristle*> m_bristles;
     QTransform m_transform;
 
     BrushShape m_initialShape;
-    KoColor m_inkColor;
-
+   
+    // used for interpolation the path of bristles
+    Trajectory m_trajectory;
+    QHash<QString, QVariant> m_params;    
     // temporary device
     KisPaintDeviceSP m_dev;
     KisRandomAccessor * m_dabAccessor;

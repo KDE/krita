@@ -31,7 +31,8 @@ BrushShape::BrushShape()
 
 BrushShape::~BrushShape()
 {
-
+/*    qDeleteAll(m_bristles.begin(), m_bristles.end());
+    m_bristles.clear();*/
 }
 
 void BrushShape::fromDistance(int radius, float scale)
@@ -40,14 +41,15 @@ void BrushShape::fromDistance(int radius, float scale)
     m_width = m_height = radius * 2 + 1;
     qreal distance = 0.0;
     qreal maxDist = sqrt(radius * radius);
-
+    
+    Bristle *b;
     for (int y = -radius; y <= radius; y++) {
         for (int x = -radius; x <= radius; x++) {
             if ((x*x + y*y) < radius*radius) {
                 distance = sqrt(x * x + y * y);
                 distance /= maxDist;
-                Bristle b(x, y, 1.0 - distance);
-                b.setInkAmount(1.0f);
+                b = new Bristle(x, y, 1.0 - distance);
+                b->setInkAmount(1.0f);
                 m_bristles.append(b);
             }
         }
@@ -70,21 +72,20 @@ void BrushShape::fromGaussian(int radius, float sigma)
     float length = 0;
     int p = 0;
 
-
-
+    Bristle *b;
     for (int y = -radius; y <= radius; y++) {
         for (int x = -radius; x <= radius; x++) {
             length = (exp((x * x + y * y) / sigmaSquare) * sigmaConst);
             total += length;
-            Bristle b(x, y, length);
-            b.setInkAmount(1.0f);
+            b = new Bristle(x, y, length);
+            b->setInkAmount(1.0f);
             m_bristles.append(b);
             p++;
         }
     }
 
-    float minLen = m_bristles[0].length();
-    float maxLen = m_bristles[gaussLength/2].length();
+    float minLen = m_bristles.at(0)->length();
+    float maxLen = m_bristles.at(gaussLength/2)->length();
     float dist = maxLen - minLen;
 
     // normalise lengths
@@ -93,8 +94,8 @@ void BrushShape::fromGaussian(int radius, float sigma)
 
     for (int x = 0; x < m_width; x++) {
         for (int y = 0; y < m_height; y++, i++) {
-            result = (m_bristles[i].length() - minLen) / dist;
-            m_bristles[i].setLength(result);
+            result = (m_bristles.at(i)->length() - minLen) / dist;
+            m_bristles[i]->setLength(result);
         }
     }
 
@@ -114,22 +115,23 @@ void BrushShape::fromLine(int radius, float sigma)
     float sigmaConst = 1.0f / (sigma * 2.506628f); /* sqrt(2.0*pi) */
 
     float length;
+    Bristle *b;
     for (int x = -radius; x <= radius; x++) {
         length = exp(x * x / sigmaSquare) * sigmaConst;
-        Bristle b(0.0 , x , length);
+        b = new Bristle(0.0 , x , length);
         m_bristles.append(b);
     }
 
-    float minLen = m_bristles[0].length();
-    float maxLen = m_bristles[gaussLength/2].length();
+    float minLen = m_bristles.at(0)->length();
+    float maxLen = m_bristles.at(gaussLength/2)->length();
     float dist = maxLen - minLen;
 
     // normalise lengths
     float result;
 
     for (int x = 0; x < m_width; x++) {
-        result = (m_bristles[x].length() - minLen) / dist;
-        m_bristles[x].setLength(result);
+        result = (m_bristles.at(x)->length() - minLen) / dist;
+        m_bristles[x]->setLength(result);
     }
 }
 
@@ -150,17 +152,18 @@ void BrushShape::fromQImage(const QString fileName)
     int y_radius = qRound(m_height * 0.5);
 
     QColor pixelColor;
+    Bristle *b;
     for (int x = -x_radius; x < x_radius; x++) {
         for (int y = -y_radius; y < y_radius; y++) {
             pixelColor.setRgba(image.pixel(x + x_radius, y + y_radius));
-            Bristle b(x, y , (float)pixelColor.value() / 255.0f); // using value from image as length of bristle
+            b = new Bristle(x, y , (float)pixelColor.value() / 255.0f); // using value from image as length of bristle
             m_bristles.append(b);
         }
     }
 
 }
 
-QVector<Bristle> BrushShape::getBristles()
+QVector<Bristle*> BrushShape::getBristles()
 {
     return m_bristles;
 }
@@ -188,8 +191,8 @@ float BrushShape::sigma()
 void BrushShape::tresholdBristles(double treshold)
 {
     for (int i = 0; i < m_bristles.size(); i++) {
-        if (m_bristles.at(i).length() < treshold) {
-            m_bristles[i].setEnabled(false);
+        if (m_bristles.at(i)->length() < treshold) {
+            m_bristles[i]->setEnabled(false);
         }
     }
 }

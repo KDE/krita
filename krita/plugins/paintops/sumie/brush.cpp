@@ -34,8 +34,10 @@
 #include <ctime>
 
 const float radToDeg = 57.29578f;
-//const float _180_DEGREES = M_PI * 0.5;
-const float _180_DEGREES = 0.0;
+
+const QString HUE = "h";
+const QString SATURATION = "s";
+const QString VALUE = "v";
 
 #if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand
@@ -52,6 +54,10 @@ Brush::Brush()
     m_counter = 0;
     m_lastAngle = 0.0;
     m_oldPressure = 0.0f;
+
+    m_params[HUE] = 0.0;
+    m_params[SATURATION] = 0.0;
+    m_params[VALUE] = 0.0;
 }
 
 
@@ -65,9 +71,8 @@ void Brush::setBrushShape(BrushShape brushShape)
 void Brush::setInkColor(const KoColor &color)
 {
     for (int i = 0; i < m_bristles.size(); i++) {
-        m_bristles[i].setColor(color);
+        m_bristles[i]->setColor(color);
     }
-    m_inkColor = color;
 }
 
 
@@ -109,17 +114,11 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     m_layer = layer;
 
     qreal inkDeplation;
-
-    QHash<QString, QVariant> params;
-    params["h"] = 0.0;
-    params["s"] = 0.0;
-    params["v"] = 0.0;
-
-    QString saturation("s");
     QVariant saturationVariant;
 
+    m_params[SATURATION] = 0.0;
     KoColorTransformation* transfo;
-    transfo = m_dev->colorSpace()->createColorTransformation("hsv_adjustment", params);
+    transfo = m_dev->colorSpace()->createColorTransformation("hsv_adjustment", m_params);
 
     rotateBristles(angle);
     // if this is first time the brush touches the canvas and we use soak the ink from canvas
@@ -129,13 +128,13 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
 
     qreal fx1, fy1, fx2, fy2;
     int size = m_bristles.size();
-    Trajectory trajectory; // used for interpolation the path of bristles
+     
     QVector<QPointF> bristlePath; // path for single bristle
     int inkDepletionSize = m_properties->inkDepletionCurve.size();
     for (int i = 0; i < size; i++) {
 
-        if (!m_bristles.at(i).enabled()) continue;
-        bristle = &m_bristles[i];
+        if (!m_bristles.at(i)->enabled()) continue;
+        bristle = m_bristles[i];
 
         qreal randomX = drand48();
         qreal randomY = drand48();
@@ -166,14 +165,12 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
         fy2 += y2;
 
         // paint between first and last dab
-        bristlePath = trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
+        bristlePath = m_trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
+        int brpathSize = m_trajectory.size();
 
         bristleColor = bristle->color();
         int bristleCounter = 0;
-        int brpathSize = bristlePath.size();
         
-
-
         for (int i = 0; i < brpathSize ; i++) {
             bristleCounter = bristle->increment();
             if (bristleCounter >= inkDepletionSize - 1) {
@@ -202,8 +199,8 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
                                             (1.0 - inkDeplation)) - 1.0;
 
                 }
-                transfo->setParameter(saturation, saturationVariant);
-                transfo->transform(m_inkColor.data(), bristleColor.data() , 1);
+                transfo->setParameter(SATURATION, saturationVariant);
+                transfo->transform(bristleColor.data(), bristleColor.data() , 1);
             }
 
             // opacity transformation of the bristle color
@@ -227,8 +224,7 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
                 bristleColor.setOpacity(static_cast<int>(opacity));
             }
 
-            QPointF *bristlePos = &bristlePath[i];
-            addBristleInk(bristle, bristlePos->x(), bristlePos->y(), bristleColor);
+            addBristleInk(bristle, bristlePath.at(i).x(), bristlePath.at(i).y(), bristleColor);
 
 #if 0
             // some kind of nice weighted bidirectional painting
@@ -258,13 +254,13 @@ void Brush::rotateBristles(double angle)
     m_transform.rotateRadians(angle);
 
     for (int i = 0; i < m_bristles.size(); i++) {
-        x = m_bristles[i].x();
-        y = m_bristles[i].y();
-        m_transform.map(x, y, &tx, &ty);
-        //      tx = cos(angle)*x - sin(angle)*y;
-        //      ty = sin(angle)*x + cos(angle)*y;
-        m_bristles[i].setX(tx);
-        m_bristles[i].setY(ty);
+        if (m_bristles.at(i)->enabled()){
+            x = m_bristles.at(i)->x();
+            y = m_bristles.at(i)->y();
+            m_transform.map(x, y, &tx, &ty);
+            m_bristles[i]->setX(tx);
+            m_bristles[i]->setY(ty);
+        }
     }
     m_lastAngle = angle;
 }
@@ -274,15 +270,15 @@ void Brush::repositionBristles(double angle, double slope)
     // setX
     srand48((int)slope);
     for (int i = 0; i < m_bristles.size(); i++) {
-        float x = m_bristles[i].x();
-        m_bristles[i].setX(x + drand48());
+        float x = m_bristles[i]->x();
+        m_bristles[i]->setX(x + drand48());
     }
 
     // setY
     srand48((int)angle);
     for (int i = 0; i < m_bristles.size(); i++) {
-        float y = m_bristles[i].y();
-        m_bristles[i].setY(y + drand48());
+        float y = m_bristles[i]->y();
+        m_bristles[i]->setY(y + drand48());
     }
 }
 
@@ -535,7 +531,7 @@ void Brush::colorifyBristles(KisRandomAccessor& acc, KoColorSpace * cs, QPointF 
     Bristle *b = 0;
     int size = m_bristles.size();
     for (int i = 0; i < size; i++){
-        b = &m_bristles[i];
+        b = m_bristles[i];
         int x = qRound(b->x() + point.x());
         int y = qRound(b->y() + point.y());
         acc.moveTo(x,y);

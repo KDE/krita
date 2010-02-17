@@ -38,7 +38,7 @@ public:
     void fromQImage(const QString fileName);
     void tresholdBristles(double treshold);
 
-    QVector<Bristle> getBristles();
+    QVector<Bristle*> getBristles();
     int width();
     int height();
     int radius();
@@ -51,7 +51,7 @@ private:
     int m_radius;
     float m_sigma;
 
-    QVector<Bristle> m_bristles;
+    QVector<Bristle*> m_bristles;
 };
 
 #endif

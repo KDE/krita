@@ -67,6 +67,7 @@ void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
     for (int i=0;i < m_properties.inkAmount;i++){
         list << curve.value( i/qreal(m_properties.inkAmount-1) );
     }
+    curve.floatTransfer(m_properties.inkAmount);
 
     m_properties.inkDepletionCurve = list;
     m_properties.isbrushDimension1D = settings->getBool(SUMI_IS_DIMENSION_1D);

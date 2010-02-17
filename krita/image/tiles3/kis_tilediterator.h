@@ -230,10 +230,9 @@ protected:
     // how many columns in the row are already cached
     // one row consists of m_rightCol - m_leftCol + 1 columns. The one column is represented by tile 
 private:
-    qint32 m_cachedRow;
     QVector<KisTileInfo> m_tilesCache;
     quint32 m_tilesCacheSize;
-    bool m_CachingFirstRow;
+
 private:
     inline qint32 calcLeftInTile(qint32 col) const {
         return (col > m_leftCol) ? 0

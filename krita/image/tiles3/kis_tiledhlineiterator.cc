@@ -54,12 +54,13 @@ KisTiledHLineIterator::KisTiledHLineIterator(KisTiledDataManager *dataManager,
 
     qint32 leftInLeftmostTile = calcLeftInTile(m_leftCol);
 
-    m_cachedRow = m_row;
-    
     m_tilesCacheSize = m_rightCol - m_leftCol + 1;
     m_tilesCache.resize(m_tilesCacheSize);
-    m_CachingFirstRow = true;
-    preallocateTiles(m_row);
+    
+    // let's prealocate first row 
+    for (int i = 0; i < m_tilesCacheSize; i++){
+        m_tilesCache[i] = fetchTileDataForCache(m_leftCol + i, m_row);
+    }
     
     switchToTile(m_leftCol, leftInLeftmostTile);
 }
@@ -202,6 +203,7 @@ void KisTiledHLineIterator::nextRow()
     } else {
         m_row++;
         m_yInTile = 0;
+        preallocateTiles(m_row);
     }
     switchToTile(m_leftCol, leftInLeftmostTile);
 
@@ -209,15 +211,9 @@ void KisTiledHLineIterator::nextRow()
 }
 
 void KisTiledHLineIterator::fetchTileData(qint32 col, qint32 row){
-    
     // check if we have the cached column and row
     int index = col - m_leftCol;
     
-    if (row != m_cachedRow){
-        m_CachingFirstRow = false;
-        preallocateTiles(row);
-    }
-
     // setup correct data
     m_data = m_tilesCache[index].data;
     m_oldData = m_tilesCache[index].oldData;
@@ -239,17 +235,9 @@ KisTiledHLineIterator::KisTileInfo KisTiledHLineIterator::fetchTileDataForCache(
 
 void KisTiledHLineIterator::preallocateTiles(qint32 row)
 {
-    if (m_CachingFirstRow){
-        // we don't unlock non-existing tiles
-        for (int i = 0; i < m_tilesCacheSize; i++){
-            m_tilesCache[i] = fetchTileDataForCache(m_leftCol + i, row);
-        }
-    }else{
-        for (int i = 0; i < m_tilesCacheSize; i++){
-            unlockTile(m_tilesCache[i].tile);
-            unlockTile(m_tilesCache[i].oldtile);
-            m_tilesCache[i] = fetchTileDataForCache(m_leftCol + i, row);
-        }
+    for (int i = 0; i < m_tilesCacheSize; i++){
+        unlockTile(m_tilesCache[i].tile);
+        unlockTile(m_tilesCache[i].oldtile);
+        m_tilesCache[i] = fetchTileDataForCache(m_leftCol + i, row);
     }
-    m_cachedRow = row;
 }

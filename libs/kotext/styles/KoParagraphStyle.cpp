@@ -382,10 +382,15 @@ bool KoParagraphStyle::followDocBaseline() const
 
 void KoParagraphStyle::setBreakBefore(bool on)
 {
-    if(on)
-       setProperty(QTextFormat::PageBreakPolicy, QTextFormat::PageBreak_AlwaysBefore);
-    else
-       setProperty(QTextFormat::PageBreakPolicy, QTextFormat::PageBreak_Auto);
+    int prop = d->stylesPrivate.value(QTextFormat::PageBreakPolicy).toInt();
+
+    if(on) {
+        prop |= QTextFormat::PageBreak_AlwaysBefore;
+    } else {
+        prop &= ~QTextFormat::PageBreak_AlwaysBefore;
+    }
+
+    setProperty(QTextFormat::PageBreakPolicy, prop);
 }
 
 bool KoParagraphStyle::breakBefore()
@@ -400,10 +405,15 @@ bool KoParagraphStyle::breakBefore()
 
 void KoParagraphStyle::setBreakAfter(bool on)
 {
-    if(on)
-       setProperty(QTextFormat::PageBreakPolicy, QTextFormat::PageBreak_AlwaysAfter);
-    else
-       setProperty(QTextFormat::PageBreakPolicy, QTextFormat::PageBreak_Auto);
+    int prop = d->stylesPrivate.value(QTextFormat::PageBreakPolicy).toInt();
+
+    if(on) {
+        prop |= QTextFormat::PageBreak_AlwaysAfter;
+    } else {
+        prop &= ~QTextFormat::PageBreak_AlwaysAfter;
+    }
+
+    setProperty(QTextFormat::PageBreakPolicy, prop);
 }
 
 bool KoParagraphStyle::breakAfter()
@@ -413,7 +423,7 @@ bool KoParagraphStyle::breakAfter()
     if(var.isNull())
         return false;
 
-    return var.toInt() & QTextFormat::PageBreak_AlwaysBefore;
+    return var.toInt() & QTextFormat::PageBreak_AlwaysAfter;
 }
 
 void KoParagraphStyle::setLeftPadding(qreal padding)

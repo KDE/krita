@@ -108,23 +108,23 @@ void RgbU8CompositeOp::compositeDarken(quint8 *dstRowStart, qint32 dstRowStride,
 
             // apply the alphamask
             if (mask != 0) {
-                if (*mask != OPACITY_OPAQUE)
+                if (*mask != OPACITY_OPAQUE_U8)
                     srcAlpha = UINT8_MULT(srcAlpha, *mask);
                 mask++;
             }
 
-            if (srcAlpha != OPACITY_TRANSPARENT) {
+            if (srcAlpha != OPACITY_TRANSPARENT_U8) {
 
-                if (opacity != OPACITY_OPAQUE) {
+                if (opacity != OPACITY_OPAQUE_U8) {
                     srcAlpha = UINT8_MULT(src[KoRgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
 
-                if (dstAlpha == OPACITY_OPAQUE) {
+                if (dstAlpha == OPACITY_OPAQUE_U8) {
                     srcBlend = srcAlpha;
                 } else {
-                    quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+                    quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE_U8 - dstAlpha, srcAlpha);
                     dst[KoRgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
@@ -180,23 +180,23 @@ void RgbU8CompositeOp::compositeLighten(quint8 *dstRowStart, qint32 dstRowStride
 
             // apply the alphamask
             if (mask != 0) {
-                if (*mask != OPACITY_OPAQUE)
+                if (*mask != OPACITY_OPAQUE_U8)
                     srcAlpha = UINT8_MULT(srcAlpha, *mask);
                 mask++;
             }
 
-            if (srcAlpha != OPACITY_TRANSPARENT) {
+            if (srcAlpha != OPACITY_TRANSPARENT_U8) {
 
-                if (opacity != OPACITY_OPAQUE) {
+                if (opacity != OPACITY_OPAQUE_U8) {
                     srcAlpha = UINT8_MULT(src[KoRgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
 
-                if (dstAlpha == OPACITY_OPAQUE) {
+                if (dstAlpha == OPACITY_OPAQUE_U8) {
                     srcBlend = srcAlpha;
                 } else {
-                    quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+                    quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE_U8 - dstAlpha, srcAlpha);
                     dst[KoRgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
@@ -251,23 +251,23 @@ void RgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride, co
 
             // apply the alphamask
             if (mask != 0) {
-                if (*mask != OPACITY_OPAQUE)
+                if (*mask != OPACITY_OPAQUE_U8)
                     srcAlpha = UINT8_MULT(srcAlpha, *mask);
                 mask++;
             }
 
-            if (srcAlpha != OPACITY_TRANSPARENT) {
+            if (srcAlpha != OPACITY_TRANSPARENT_U8) {
 
-                if (opacity != OPACITY_OPAQUE) {
+                if (opacity != OPACITY_OPAQUE_U8) {
                     srcAlpha = UINT8_MULT(src[KoRgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
 
-                if (dstAlpha == OPACITY_OPAQUE) {
+                if (dstAlpha == OPACITY_OPAQUE_U8) {
                     srcBlend = srcAlpha;
                 } else {
-                    quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+                    quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE_U8 - dstAlpha, srcAlpha);
                     dst[KoRgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
@@ -336,23 +336,23 @@ void RgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRowStr
 
             // apply the alphamask
             if (mask != 0) {
-                if (*mask != OPACITY_OPAQUE)
+                if (*mask != OPACITY_OPAQUE_U8)
                     srcAlpha = UINT8_MULT(srcAlpha, *mask);
                 mask++;
             }
 
-            if (srcAlpha != OPACITY_TRANSPARENT) {
+            if (srcAlpha != OPACITY_TRANSPARENT_U8) {
 
-                if (opacity != OPACITY_OPAQUE) {
+                if (opacity != OPACITY_OPAQUE_U8) {
                     srcAlpha = UINT8_MULT(src[KoRgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
 
-                if (dstAlpha == OPACITY_OPAQUE) {
+                if (dstAlpha == OPACITY_OPAQUE_U8) {
                     srcBlend = srcAlpha;
                 } else {
-                    quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+                    quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE_U8 - dstAlpha, srcAlpha);
                     dst[KoRgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
@@ -420,23 +420,23 @@ void RgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStride, 
 
             // apply the alphamask
             if (mask != 0) {
-                if (*mask != OPACITY_OPAQUE)
+                if (*mask != OPACITY_OPAQUE_U8)
                     srcAlpha = UINT8_MULT(srcAlpha, *mask);
                 mask++;
             }
 
-            if (srcAlpha != OPACITY_TRANSPARENT) {
+            if (srcAlpha != OPACITY_TRANSPARENT_U8) {
 
-                if (opacity != OPACITY_OPAQUE) {
+                if (opacity != OPACITY_OPAQUE_U8) {
                     srcAlpha = UINT8_MULT(src[KoRgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
 
-                if (dstAlpha == OPACITY_OPAQUE) {
+                if (dstAlpha == OPACITY_OPAQUE_U8) {
                     srcBlend = srcAlpha;
                 } else {
-                    quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+                    quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE_U8 - dstAlpha, srcAlpha);
                     dst[KoRgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
@@ -505,23 +505,23 @@ void RgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStride, 
 
             // apply the alphamask
             if (mask != 0) {
-                if (*mask != OPACITY_OPAQUE)
+                if (*mask != OPACITY_OPAQUE_U8)
                     srcAlpha = UINT8_MULT(srcAlpha, *mask);
                 mask++;
             }
 
-            if (srcAlpha != OPACITY_TRANSPARENT) {
+            if (srcAlpha != OPACITY_TRANSPARENT_U8) {
 
-                if (opacity != OPACITY_OPAQUE) {
+                if (opacity != OPACITY_OPAQUE_U8) {
                     srcAlpha = UINT8_MULT(src[KoRgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
 
-                if (dstAlpha == OPACITY_OPAQUE) {
+                if (dstAlpha == OPACITY_OPAQUE_U8) {
                     srcBlend = srcAlpha;
                 } else {
-                    quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+                    quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE_U8 - dstAlpha, srcAlpha);
                     dst[KoRgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
@@ -584,7 +584,7 @@ void RgbU8CompositeOp::compositeIn(qint32 pixelSize,
                                      quint8 opacity, const QBitArray & channelFlags) const
 {
 
-    if (opacity == OPACITY_TRANSPARENT)
+    if (opacity == OPACITY_TRANSPARENT_U8)
         return;
 
     quint8 *d;
@@ -600,11 +600,11 @@ void RgbU8CompositeOp::compositeIn(qint32 pixelSize,
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
 
-            if (s[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT) {
+            if (s[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT_U8) {
                 memcpy(d, s, pixelSize * sizeof(quint8));
                 continue;
             }
-            if (d[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT)
+            if (d[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT_U8)
                 continue;
 
             sAlpha = UINT8_MAX - s[KoRgbU8Traits::alpha_pos];
@@ -638,7 +638,7 @@ void RgbU8CompositeOp::compositeOut(qint32 pixelSize,
                                       qint32 cols,
                                       quint8 opacity, const QBitArray & channelFlags) const
 {
-    if (opacity == OPACITY_TRANSPARENT)
+    if (opacity == OPACITY_TRANSPARENT_U8)
         return;
 
     quint8 *d;
@@ -653,12 +653,12 @@ void RgbU8CompositeOp::compositeOut(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            if (s[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT) {
+            if (s[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT_U8) {
                 memcpy(d, s, pixelSize * sizeof(quint8));
                 break;
             }
-            if (d[KoRgbU8Traits::alpha_pos] == OPACITY_OPAQUE) {
-                d[KoRgbU8Traits::alpha_pos] = OPACITY_TRANSPARENT;
+            if (d[KoRgbU8Traits::alpha_pos] == OPACITY_OPAQUE_U8) {
+                d[KoRgbU8Traits::alpha_pos] = OPACITY_TRANSPARENT_U8;
                 break;
             }
             sAlpha = UINT8_MAX - s[KoRgbU8Traits::alpha_pos];
@@ -689,7 +689,7 @@ void RgbU8CompositeOp::compositeDiff(qint32 pixelSize,
                                        qint32 cols,
                                        quint8 opacity, const QBitArray & channelFlags) const
 {
-    if (opacity == OPACITY_TRANSPARENT)
+    if (opacity == OPACITY_TRANSPARENT_U8)
         return;
 
     quint8 *d;
@@ -739,7 +739,7 @@ void RgbU8CompositeOp::compositeBumpmap(qint32 pixelSize,
         qint32 cols,
         quint8 opacity, const QBitArray & channelFlags) const
 {
-    if (opacity == OPACITY_TRANSPARENT)
+    if (opacity == OPACITY_TRANSPARENT_U8)
         return;
 
     quint8 *d;
@@ -754,7 +754,7 @@ void RgbU8CompositeOp::compositeBumpmap(qint32 pixelSize,
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
             // Is this correct? It's not this way in GM.
-            if (s[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT)
+            if (s[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT_U8)
                 continue;
 
             // And I'm not sure whether this is correct, either.
@@ -831,7 +831,7 @@ void RgbU8CompositeOp::compositeDissolve(qint32 pixelSize,
         qint32 cols,
         quint8 opacity, const QBitArray & channelFlags) const
 {
-    if (opacity == OPACITY_TRANSPARENT)
+    if (opacity == OPACITY_TRANSPARENT_U8)
         return;
 
     quint8 *d;
@@ -846,7 +846,7 @@ void RgbU8CompositeOp::compositeDissolve(qint32 pixelSize,
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
             // XXX: correct?
-            if (s[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT) continue;
+            if (s[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT_U8) continue;
 
             sAlpha = UINT8_MAX - s[KoRgbU8Traits::alpha_pos];
             dAlpha = UINT8_MAX - d[KoRgbU8Traits::alpha_pos];
@@ -864,7 +864,7 @@ void RgbU8CompositeOp::compositeDissolve(qint32 pixelSize,
                                                      (UINT8_MAX - sAlpha) * d[KoRgbU8Traits::blue_pos]) / UINT8_MAX + 0.5);
 
             if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::alpha_pos))
-                d[KoRgbU8Traits::alpha_pos] = OPACITY_OPAQUE;
+                d[KoRgbU8Traits::alpha_pos] = OPACITY_OPAQUE_U8;
 
         }
         dst += dstRowSize;

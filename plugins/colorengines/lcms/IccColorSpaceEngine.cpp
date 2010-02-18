@@ -55,8 +55,8 @@ public:
 
         // Lcms does nothing to the destination alpha channel so we must convert that manually.
         while (numPixels > 0) {
-            quint8 alpha = srcColorSpace()->alpha(src);
-            dstColorSpace()->setAlpha(dst, alpha, 1);
+            quint8 alpha = srcColorSpace()->opacityU8(src);
+            dstColorSpace()->setOpacity(dst, alpha, 1);
 
             src += srcPixelSize;
             dst += dstPixelSize;

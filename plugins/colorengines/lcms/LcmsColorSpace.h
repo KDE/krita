@@ -96,8 +96,8 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
             qint32 numPixels = nPixels;
             qint32 pixelSize = m_colorSpace->pixelSize();
             while (numPixels > 0) {
-                quint8 alpha = m_colorSpace->alpha(src);
-                m_colorSpace->setAlpha(dst, alpha, 1);
+                quint8 alpha = m_colorSpace->opacityU8(src);
+                m_colorSpace->setOpacity(dst, alpha, 1);
 
                 src += pixelSize;
                 dst += pixelSize;
@@ -227,7 +227,7 @@ public:
             cmsDoTransform(d->lastFromRGB, d->qcolordata, dst, 1);
         }
 
-        this->setAlpha(dst, color.alpha() , 1);
+        this->setOpacity(dst, (quint8)(color.alpha()) , 1);
     }
 
     virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * koprofile = 0) const {
@@ -246,7 +246,7 @@ public:
             cmsDoTransform(d->lastToRGB, const_cast <quint8 *>(src), d->qcolordata, 1);
         }
         c->setRgb(d->qcolordata[2], d->qcolordata[1], d->qcolordata[0]);
-        c->setAlpha(this->alpha(src));
+        c->setAlpha(this->opacityU8(src));
     }
 
     virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const {
@@ -357,8 +357,9 @@ public:
         quint8 lab1[8], lab2[8];
         cmsCIELab labF1, labF2;
 
-        if (this->alpha(src1) == OPACITY_TRANSPARENT || this->alpha(src2) == OPACITY_TRANSPARENT)
-            return (this->alpha(src1) == this->alpha(src2) ? 0 : 255);
+        if (this->opacityU8(src1) == OPACITY_TRANSPARENT_U8
+            || this->opacityU8(src2) == OPACITY_TRANSPARENT_U8)
+            return (this->opacityU8(src1) == this->opacityU8(src2) ? 0 : 255);
         Q_ASSERT(this->toLabA16Converter());
         this->toLabA16Converter()->transform(src1, lab1, 1),
         this->toLabA16Converter()->transform(src2, lab2, 1),

@@ -197,7 +197,7 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
             images.push_back(pi);
         }
 
-        KisPaintLayerSP layer = new KisPaintLayer(m_view->image(), i18n("Panorama Layer"), OPACITY_OPAQUE, images[0].bigDevice->colorSpace());
+        KisPaintLayerSP layer = new KisPaintLayer(m_view->image(), i18n("Panorama Layer"), OPACITY_OPAQUE_U8, images[0].bigDevice->colorSpace());
         Q_ASSERT(layer);
         KisGroupLayerSP parent;
         KisLayerSP above;

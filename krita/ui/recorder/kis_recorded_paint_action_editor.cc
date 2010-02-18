@@ -136,7 +136,8 @@ void KisRecordedPaintActionEditor::setPaintOpPreset()
     m_configWidget = KisPaintOpRegistry::instance()->get(m_action->paintOpPreset()->paintOp().id())->createSettingsWidget(m_actionEditor->frmOptionWidgetContainer);
     if (m_configWidget) {
         m_gridLayout->addWidget(m_configWidget);
-        m_configWidget->setConfiguration(m_action->paintOpPreset()->settings());
+        //TODO use default configuration instead?
+        //m_configWidget->setConfiguration(m_action->paintOpPreset()->settings());
         connect(m_configWidget, SIGNAL(sigConfigurationUpdated()), SLOT(configurationUpdated()));
     } else {
         m_gridLayout->addWidget(new QLabel("No configuration option.", this));

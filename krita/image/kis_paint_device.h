@@ -483,6 +483,7 @@ public:
      * the paint device.
      * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
      * you can.
+     * @param x, y starting point of the accessor
      * @param selection an up-to-date selection that has the same origin as the paint device
      */
     KisRandomAccessorPixel createRandomAccessor(qint32 x, qint32 y, const KisSelection * selection = 0);

@@ -29,12 +29,14 @@
 
 class QWidget;
 class KoCanvasBase;
+class KisSelectionOptions;
+class KisRandomConstAccessor;
+class KoColorTransformation;
+class KoColorSpace;
 
 /**
  * Tool to select colors by pointing at a color on the image.
  */
-
-class KisSelectionOptions;
 
 class KisToolSelectMagnetic : public KisToolSelectBase
 {
@@ -61,19 +63,27 @@ private:
         friend class KisToolSelectPath;
     public:
         LocalTool(KoCanvasBase * canvas, KisToolSelectMagnetic* selectingTool);
+        ~LocalTool();
+        void activate(bool temporary);
+        void deactivate();
     protected:
         void paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter);
         void paintOutline(QPainter* painter, const QPainterPath &path, qreal zoom);
         virtual void addPathShape(KoPathShape* pathShape);
         void computeOutline(const QPainterPath &pixelPath);
+        void computeEdge(const QVector2D &startPoint, const QVector2D &direction);
     private:
         KisToolSelectMagnetic* const m_selectingTool;
         KoLineBorder* m_borderBackup;
         QPolygonF m_outline;
+        KisRandomConstAccessor* m_randomAccessor;
+        const KoColorSpace* m_colorSpace;
+        KoColorTransformation* m_colorTransformation;
+        QPolygon m_detectedBorder;
 
         //debuging
         QPolygonF m_debugPolyline;
-        QPolygonF m_debugScannedPoints;
+        QPolygon m_debugScannedPoints;
     };
     LocalTool m_localTool;
 };

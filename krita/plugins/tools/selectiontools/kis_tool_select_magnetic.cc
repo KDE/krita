@@ -24,14 +24,24 @@
 #include <QVector2D>
 #include <KIntNumInput>
 #include <cmath>
+#include <cstdlib>
 
 #include <KoPathShape.h>
 #include <KoCanvasBase.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoCompositeOp.h>
 
 #include "kis_cursor.h"
 #include "kis_canvas2.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_image.h"
+#include "kis_painter.h"
 #include "kis_selection_options.h"
+#include "kis_selection_tool_helper.h"
+#include "kis_random_accessor.h"
+#include "kis_pixel_selection.h"
+
 
 inline qreal dist(const QPointF &p1, const QPointF &p2)
 {
@@ -114,7 +124,35 @@ QWidget* KisToolSelectMagnetic::createOptionWidget()
 }
 
 KisToolSelectMagnetic::LocalTool::LocalTool(KoCanvasBase * canvas, KisToolSelectMagnetic* selectingTool)
-        : KoCreatePathTool(canvas), m_selectingTool(selectingTool) {}
+        : KoCreatePathTool(canvas), m_selectingTool(selectingTool), m_randomAccessor(0) {}
+
+KisToolSelectMagnetic::LocalTool::~LocalTool()
+{
+    if(m_randomAccessor!=0)
+        delete m_randomAccessor;
+}
+
+void KisToolSelectMagnetic::LocalTool::activate(bool temporary)
+{
+    KoCreatePathTool::activate(temporary);
+    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kisCanvas);
+    KisImageWSP img = kisCanvas->image();
+
+//    KisRandomAccessor m_randomAccessor = (img->projection()->createRandomAccessor(0,0));
+
+    m_colorSpace = img->colorSpace();
+    Q_ASSERT(m_colorSpace);
+    m_colorTransformation = m_colorSpace->createDesaturateAdjustment();
+    Q_ASSERT(m_colorTransformation);
+}
+
+void KisToolSelectMagnetic::LocalTool::deactivate()
+{
+    KoCreatePathTool::deactivate();
+
+    delete m_colorTransformation;
+}
 
 void KisToolSelectMagnetic::LocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
 {
@@ -146,8 +184,11 @@ void KisToolSelectMagnetic::LocalTool::paintPath(KoPathShape &pathShape, QPainte
     painter.setPen(QColor(255,255,255));
     painter.drawPoints(m_selectingTool->pixelToView(m_debugPolyline));
 
-    painter.setPen(QColor(255,0,0));
-    painter.drawPoints(m_selectingTool->pixelToView(m_debugScannedPoints));
+    painter.setPen(QPen(QColor(255,0,0), 1));
+    painter.drawPoints(m_selectingTool->pixelToView(QPolygonF(m_debugScannedPoints)));
+
+    painter.setPen(QPen(QColor(255,0,0), 5));
+    painter.drawPolyline(m_selectingTool->pixelToView(QPolygonF(m_detectedBorder)));
 }
 
 void KisToolSelectMagnetic::LocalTool::paintOutline(QPainter *painter, const QPainterPath &path, qreal width)
@@ -162,6 +203,7 @@ void KisToolSelectMagnetic::LocalTool::paintOutline(QPainter *painter, const QPa
 
 void KisToolSelectMagnetic::LocalTool::computeOutline(const QPainterPath &pixelPath)
 {
+
     const int accuracy = 2;
 
     QPolygonF polyline = pixelPath.toFillPolygon();
@@ -188,70 +230,95 @@ void KisToolSelectMagnetic::LocalTool::computeOutline(const QPainterPath &pixelP
         }
     }
 
-    m_debugScannedPoints = QPolygonF();
-    for(int i=0; i<points.count(); i++) {
+
+    m_debugScannedPoints = QPolygon();
+    m_detectedBorder = QPolygon();
+    for(int i=1; i<points.count(); i++) {
         QVector2D tangent = tangentAt(points, i);
 
         QVector2D startPos = QVector2D(points.at(i)) + rotateClockWise(tangent) * (m_selectingTool->m_distance/2);
 
-        QVector2D currentPos = startPos;
-        while((currentPos - startPos).length()<m_selectingTool->m_distance) {
-            m_debugScannedPoints.append(currentPos.toPointF());
-            //move one pixel
-            currentPos+=rotateAntiClockWise(tangent)*1;
-        }
+        computeEdge(startPos, rotateAntiClockWise(tangent));
     }
 
     m_debugPolyline = points;
+    m_randomAccessor = 0;
 
+}
+
+void KisToolSelectMagnetic::LocalTool::computeEdge(const QVector2D &startPoint, const QVector2D &direction)
+{
+    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kisCanvas);
+    KisImageWSP img = kisCanvas->image();
+
+    KisRandomAccessor m_randomAccessor = (img->projection()->createRandomAccessor(0,0));
+//    m_randomAccessor = &m_selectingTool->currentNode()->paintDevice()->createRandomConstAccessor(0,0);
+//    KisRandomAccessor it = m_selectingTool->currentNode()->paintDevice()->createRandomConstAccessor(0,0);
+
+//    Q_ASSERT(m_randomAccessor!=0);
+    QVector2D currentPoint = startPoint;
+    KoColor* color = new KoColor(m_colorSpace);
+
+    m_colorTransformation->transform(m_randomAccessor.rawData(), color->data(), 1);
+    int value = color->toQColor().value();
+
+    while((currentPoint - startPoint).length()<m_selectingTool->m_distance) {
+        //
+
+        m_debugScannedPoints.append(currentPoint.toPoint());
+        m_randomAccessor.moveTo(currentPoint.x(), currentPoint.y());
+//        memcpy(color->data(), m_randomAccessor.rawData(), colorSpace->pixelSize());
+
+        m_colorTransformation->transform(m_randomAccessor.rawData(), color->data(), 1);
+        int currentValue = color->toQColor().value();
+        if(std::abs(value-currentValue)>20) {
+            m_detectedBorder.append(currentPoint.toPoint());
+//            qDebug()<<"###value="<<value<<"   current value="<<currentValue<<"   diff="<<std::abs(value-currentValue);
+            break;
+        }
+        else {
+//            qDebug()<<"~~~value="<<value<<"   current value="<<currentValue<<"   diff="<<std::abs(value-currentValue);
+        }
+        //
+        //move one pixel
+        currentPoint+=direction*1;
+    }
+    delete color;
 }
 
 void KisToolSelectMagnetic::LocalTool::addPathShape(KoPathShape* pathShape)
 {
+    KisNodeSP currentNode =
+        canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+    if (!currentNode)
+        return;
+
+    KisImageWSP image = qobject_cast<KisLayer*>(currentNode->parent().data())->image();
+
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    if (!kisCanvas)
+        return;
+
+    KisSelectionToolHelper helper(kisCanvas, currentNode, i18n("Path Selection"));
+
+
+    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+
+    KisPainter painter(tmpSel);
+    painter.setBounds(m_selectingTool->currentImage()->bounds());
+    painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
+    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+    painter.setOpacity(OPACITY_OPAQUE);
+    painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
+
+    painter.paintPolygon(QPolygonF(m_detectedBorder));
+
+    QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
+    canvas()->addCommand(cmd);
+
     delete pathShape;
-//    KisNodeSP currentNode =
-//        canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-//    if (!currentNode)
-//        return;
-//
-//    KisImageWSP image = qobject_cast<KisLayer*>(currentNode->parent().data())->image();
-//
-//    m_shape->normalize();
-//
-//    KoPathShape *shape = m_shape;
-//    shape->close();
-//    m_shape = 0;
-//
-//    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-//    if (!kisCanvas)
-//        return;
-//
-//    KisSelectionToolHelper helper(kisCanvas, currentNode, i18n("Path Selection"));
-//
-//    if (m_selectingTool->m_selectionMode == PIXEL_SELECTION) {
-//
-//        KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
-//
-//        KisPainter painter(tmpSel);
-//        painter.setBounds(m_selectingTool->currentImage()->bounds());
-//        painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-//        painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-//        painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-//        painter.setOpacity(OPACITY_OPAQUE);
-//        painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
-//
-//        QMatrix matrix;
-//        matrix.scale(image->xRes(), image->yRes());
-//        matrix.translate(shape->position().x(), shape->position().y());
-//        painter.fillPainterPath(matrix.map(shape->outline()));
-//
-//        QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
-//        canvas()->addCommand(cmd);
-//
-//        delete shape;
-//    } else {
-//        helper.addSelectionShape(shape);
-//    }
 }
 
 #include "kis_tool_select_magnetic.moc"

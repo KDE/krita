@@ -143,7 +143,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
                 pixel->green = correctIndian(ptr[1]);
                 pixel->blue = correctIndian(ptr[2]);
 #endif
-                cs->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
+                cs->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
                 ++it;
             }
             it.nextRow();

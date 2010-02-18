@@ -82,6 +82,9 @@ public:
     ///Reimplemented
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
     {
+        if(m_paintopID.id().isEmpty())
+            return true;
+        
         QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
         if(!index.isValid())
             return false;
@@ -90,7 +93,8 @@ public:
         return preset->paintOp() == m_paintopID;
     }
     
-    ///Set id for paintop to be accept by the proxy model
+    ///Set id for paintop to be accept by the proxy model, if not filter is set all
+    ///presets will be shown.
     void setPresetFilter(const KoID &paintopID)
     {
         m_paintopID = paintopID;

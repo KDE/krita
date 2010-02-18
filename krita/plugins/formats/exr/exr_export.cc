@@ -74,8 +74,11 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
 
     exrConverter kpc(output, output->undoAdapter());
 
+    image->refreshGraph();
+    image->lock();
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE, pd);
+    image->unlock();
 
     KisImageBuilder_Result res;
 

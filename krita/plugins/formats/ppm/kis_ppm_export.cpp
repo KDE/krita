@@ -165,8 +165,10 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
 
     KisImageWSP image = output->image();
     Q_CHECK_PTR(image);
-
+    image->refreshGraph();
+    image->lock();
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
+    image->unlock();
 
     // Test color space
     if (((rgb && (pd->colorSpace()->id() != "RGBA" && pd->colorSpace()->id() != "RGBA16"))

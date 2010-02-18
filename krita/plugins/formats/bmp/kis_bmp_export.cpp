@@ -73,8 +73,8 @@ KoFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const Q
     url.setPath(filename);
 
     QRect rc = output->image()->bounds();
-    output->image()->lock();
     output->image()->refreshGraph();
+    output->image()->lock();
     QImage image = output->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height());
     output->image()->unlock();
     image.save(url.toLocalFile());

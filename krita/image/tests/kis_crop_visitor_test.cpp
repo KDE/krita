@@ -40,7 +40,7 @@ void KisCropVisitorTest::testUndo()
     TestUtil::KisUndoAdapterDummy* undoAdapterDummy = new TestUtil::KisUndoAdapterDummy();
     KisImageSP image = new KisImage(undoAdapterDummy, 300, 300, cs, "test");
     image->lock();
-    KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE);
+    KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP dev = layer->paintDevice();
 
     KisFillPainter painter(dev);

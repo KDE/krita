@@ -359,7 +359,7 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
         while (i < srcLen + extraLen) {
             data = srcIt.rawData();
             memcpy(&tmpLine[i*pixelSize], data, pixelSize);
-            cs->setAlpha(data, 0, 1);
+            cs->setOpacity(data, quint8(0), 1);
             if (i < srcLen + extraLen - 1) // duplicate pixels along edge
                 ++srcIt;
             i++;

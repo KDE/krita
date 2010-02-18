@@ -136,16 +136,16 @@ void KisPaintDeviceTest::testGeometry()
 
     dev->clear(QRect(50, 50, 50, 50));
     dev->pixel(80, 80, &c);
-    QVERIFY(c.alpha() == OPACITY_TRANSPARENT);
+    QVERIFY(c.alpha() == OPACITY_TRANSPARENT_U8);
 
     dev->fill(0, 0, 512, 512, pixel);
     dev->pixel(80, 80, &c);
     QVERIFY(c == Qt::white);
-    QVERIFY(c.alpha() == OPACITY_OPAQUE);
+    QVERIFY(c.alpha() == OPACITY_OPAQUE_U8);
 
     dev->clear();
     dev->pixel(80, 80, &c);
-    QVERIFY(c.alpha() == OPACITY_TRANSPARENT);
+    QVERIFY(c.alpha() == OPACITY_TRANSPARENT_U8);
 
     // XXX: No idea why we get this extent and bounds after a clear --
     // but I want to know as soon as possible if this behaviour

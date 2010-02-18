@@ -212,17 +212,16 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
                                   (pressure * m_properties->pressureWeight) +
                                   (bristle->length() * m_properties->bristleLengthWeight) +
                                   (bristle->inkAmount() * m_properties->bristleInkAmountWeight) +
-                                  ((1.0 - inkDeplation) * m_properties->inkDepletionWeight)) * 255.0;
+                                  ((1.0 - inkDeplation) * m_properties->inkDepletionWeight));
 
                 } else {
                     opacity =
-                        255.0 *
                         /* pressure * */
                         bristle->length() *
                         bristle->inkAmount() *
                         (1.0 - inkDeplation);
                 }
-                bristleColor.setOpacity(static_cast<int>(opacity));
+                bristleColor.setOpacity(opacity);
             }
 
             addBristleInk(bristle, bristlePath.at(i).x(), bristlePath.at(i).y(), bristleColor);
@@ -290,7 +289,7 @@ inline void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoC
     int ix = (int)wx;
     int iy = (int)wy;
     m_dabAccessor->moveTo(ix, iy);
-    if (m_layer->colorSpace()->alpha(m_dabAccessor->rawData()) < color.opacity()) {
+    if (m_layer->colorSpace()->opacityU8(m_dabAccessor->rawData()) < color.opacityU8()) {
         memcpy(m_dabAccessor->rawData(), color.data(), m_pixelSize);
     }
     bristle->upIncrement();
@@ -306,8 +305,8 @@ void Brush::oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor
 
     qint16 colorWeights[2];
 
-    colorWeights[0] = static_cast<quint8>(color.opacity());
-    colorWeights[1] = static_cast<quint8>(255 - color.opacity());
+    colorWeights[0] = static_cast<quint8>(color.opacityU8());
+    colorWeights[1] = static_cast<quint8>(255 - color.opacityU8());
     mixOp->mixColors(colors, colorWeights, 2, m_dabAccessor->rawData());
 
     //memcpy ( m_dabAccessor->rawData(), color.data(), m_pixelSize );

@@ -81,7 +81,7 @@ KisPaintDeviceSP KisBaseNode::projection() const
 
 quint8 KisBaseNode::opacity() const
 {
-    return nodeProperties().intProperty("opacity", OPACITY_OPAQUE);
+    return nodeProperties().intProperty("opacity", OPACITY_OPAQUE_U8);
 }
 
 void KisBaseNode::setOpacity(quint8 val)

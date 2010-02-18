@@ -190,7 +190,7 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
 
         if (makeOpaque) {
             while (! dstIt.isDone()) {
-                dst->colorSpace()->setAlpha(dstIt.rawData(), 255, 1);
+                dst->colorSpace()->setOpacity(dstIt.rawData(), OPACITY_OPAQUE_U8, 1);
                 ++dstIt;
             }
             dstIt.nextRow();

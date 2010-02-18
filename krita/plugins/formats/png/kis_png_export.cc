@@ -90,7 +90,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     image->lock();
     KisPaintDeviceSP pd;
     pd = new KisPaintDevice(*image->projection());
-    KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE, pd);
+    KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
     image->unlock();
 
     KisRectConstIteratorPixel it = l->paintDevice()->createRectConstIterator(0, 0, image->width(), image->height());
@@ -98,7 +98,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
 
     bool isThereAlpha = false;
     while (!it.isDone()) {
-        if (cs->alpha(it.rawData()) != 255) {
+        if (cs->opacityU8(it.rawData()) != OPACITY_OPAQUE_U8) {
             isThereAlpha = true;
             break;
         }

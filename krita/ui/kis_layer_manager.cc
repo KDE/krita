@@ -345,7 +345,7 @@ void KisLayerManager::addLayer(KisNodeSP parent, KisNodeSP above)
     if (image) {
         KisConfig cfg;
         QString profilename;
-        KisLayerSP layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE, image->colorSpace());
+        KisLayerSP layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
         if (layer) {
             layer->setCompositeOp(COMPOSITE_OVER);
             m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
@@ -361,7 +361,7 @@ void KisLayerManager::addGroupLayer(KisNodeSP parent, KisNodeSP above)
 {
     KisImageWSP image = m_view->image();
     if (image) {
-        KisLayerSP layer = KisLayerSP(new KisGroupLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE));
+        KisLayerSP layer = KisLayerSP(new KisGroupLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8));
         if (layer) {
             layer->setCompositeOp(COMPOSITE_OVER);
             m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
@@ -399,7 +399,7 @@ void KisLayerManager::addCloneLayer(KisNodeSP parent, KisNodeSP above)
             }
         }
 
-        KisLayerSP layer = new KisCloneLayer(m_activeLayer, image.data(), image->nextLayerName(), OPACITY_OPAQUE);
+        KisLayerSP layer = new KisCloneLayer(m_activeLayer, image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
 
         if (layer) {
 
@@ -435,7 +435,7 @@ void KisLayerManager::addShapeLayer(KisNodeSP parent, KisNodeSP above)
             dynamic_cast<KoShapeContainer*>(m_doc->shapeForNode(parentLayer));
         if (!parentContainer) return;
 
-        KisLayerSP layer = new KisShapeLayer(parentContainer, m_doc->shapeController(), image.data(), image->nextLayerName(), OPACITY_OPAQUE);
+        KisLayerSP layer = new KisShapeLayer(parentContainer, m_doc->shapeController(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
         if (layer) {
             layer->setCompositeOp(COMPOSITE_OVER);
             m_commandsAdapter->addNode(layer.data(), parent, above.data());

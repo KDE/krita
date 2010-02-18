@@ -337,9 +337,9 @@ void KisShapeSelection::renderSelection(KisSelection* projection, const QRect& r
     for (qint32 x = r.x(); x < r.x() + r.width(); x += MASK_IMAGE_WIDTH) {
         for (qint32 y = r.y(); y < r.y() + r.height(); y += MASK_IMAGE_HEIGHT) {
 
-            maskPainter.fillRect(polygonMaskImage.rect(), QColor(OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, 255));
+            maskPainter.fillRect(polygonMaskImage.rect(), QColor(OPACITY_TRANSPARENT_U8, OPACITY_TRANSPARENT_U8, OPACITY_TRANSPARENT_U8, 255));
             maskPainter.translate(-x, -y);
-            maskPainter.fillPath(resolutionMatrix.map(selectionOutline()), QColor(OPACITY_OPAQUE, OPACITY_OPAQUE, OPACITY_OPAQUE, 255));
+            maskPainter.fillPath(resolutionMatrix.map(selectionOutline()), QColor(OPACITY_OPAQUE_U8, OPACITY_OPAQUE_U8, OPACITY_OPAQUE_U8, 255));
             maskPainter.translate(x, y);
 
             qint32 rectWidth = qMin(r.x() + r.width() - x, MASK_IMAGE_WIDTH);

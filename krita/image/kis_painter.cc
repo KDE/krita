@@ -135,7 +135,7 @@ void KisPainter::init()
     d->transaction = 0;
     d->paintOp = 0;
     d->pattern = 0;
-    d->opacity = OPACITY_OPAQUE;
+    d->opacity = OPACITY_OPAQUE_U8;
     d->sourceLayer = 0;
     d->fillStyle = FillStyleNone;
     d->strokeStyle = StrokeStyleBrush;
@@ -756,10 +756,10 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
         // Currently unsupported, fall through
         warnImage << "Unknown or unsupported fill style in fillPolygon\n";
     case FillStyleForegroundColor:
-        d->fillPainter->fillRect(fillRect, paintColor(), OPACITY_OPAQUE);
+        d->fillPainter->fillRect(fillRect, paintColor(), OPACITY_OPAQUE_U8);
         break;
     case FillStyleBackgroundColor:
-        d->fillPainter->fillRect(fillRect, backgroundColor(), OPACITY_OPAQUE);
+        d->fillPainter->fillRect(fillRect, backgroundColor(), OPACITY_OPAQUE_U8);
         break;
     case FillStylePattern:
         Q_ASSERT(d->pattern != 0);
@@ -778,12 +778,12 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     }
 
     // Break the mask up into chunks so we don't have to allocate a potentially very large QImage.
-    const QColor opaqueColor(OPACITY_OPAQUE, OPACITY_OPAQUE, OPACITY_OPAQUE, 255);
+    const QColor opaqueColor(OPACITY_OPAQUE_U8, OPACITY_OPAQUE_U8, OPACITY_OPAQUE_U8, 255);
     const QBrush brush(opaqueColor);
     for (qint32 x = fillRect.x(); x < fillRect.x() + fillRect.width(); x += d->maskImageWidth) {
         for (qint32 y = fillRect.y(); y < fillRect.y() + fillRect.height(); y += d->maskImageHeight) {
 
-            d->polygonMaskImage.fill(qRgba(OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, 255));
+            d->polygonMaskImage.fill(qRgba(OPACITY_TRANSPARENT_U8, OPACITY_TRANSPARENT_U8, OPACITY_TRANSPARENT_U8, 255));
             d->maskPainter->translate(-x, -y);
             d->maskPainter->fillPath(path, brush);
             d->maskPainter->translate(x, y);
@@ -916,13 +916,13 @@ void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
 
             accessor.moveTo(x, y);
             if (accessor.isSelected()) {
-                mycolor.setOpacity((int)(255*br1));
+                mycolor.setOpacity((quint8)(255*br1));
                 memcpy(accessor.rawData(), mycolor.data(), pixelSize);
             }
 
             accessor.moveTo(x + 1, y);
             if (accessor.isSelected()) {
-                mycolor.setOpacity((int)(255*br2));
+                mycolor.setOpacity((quint8)(255*br2));
                 memcpy(accessor.rawData(), mycolor.data(), pixelSize);
             }
         }
@@ -944,13 +944,13 @@ void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
 
             accessor.moveTo(x, y);
             if (accessor.isSelected()) {
-                mycolor.setOpacity((int)(255*br1));
+                mycolor.setOpacity((quint8)(255*br1));
                 memcpy(accessor.rawData(), mycolor.data(), pixelSize);
             }
 
             accessor.moveTo(x, y + 1);
             if (accessor.isSelected()) {
-                mycolor.setOpacity((int)(255*br2));
+                mycolor.setOpacity((quint8)(255*br2));
                 memcpy(accessor.rawData(), mycolor.data(), pixelSize);
             }
         }
@@ -975,7 +975,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
     float brightness1, brightness2;
 
     int ix1, ix2, iy1, iy2;
-    int c1, c2;
+    quint8 c1, c2;
     const float MaxPixelValue = 255.0f;
 
     // gradient of line
@@ -1220,7 +1220,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
     int tp0, tn0, tp1, tn1;
 
     int horizontal = 0;
-    float opacity = OPACITY_OPAQUE;
+    float opacity = 1.0;
 
     tp0 = startWidth / 2;
     tn0 = startWidth / 2;
@@ -1290,16 +1290,16 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
         if (horizontal) {
             accessor.moveTo(x0a, y0a - 1);
             if (accessor.isSelected()) {
-                quint8 alpha = cs->alpha(accessor.rawData());
-                opacity = .25 * c1.opacity() + (1 - .25) * alpha;
+                qreal alpha = cs->opacityF(accessor.rawData());
+                opacity = .25 * c1.opacityF() + (1 - .25) * alpha;
                 col1.setOpacity(opacity);
                 memcpy(accessor.rawData(), col1.data(), pixelSize);
             }
 
             accessor.moveTo(x1b, y1b + 1);
             if (accessor.isSelected()) {
-                quint8 alpha = cs->alpha(accessor.rawData());
-                opacity = .25 * c2.opacity() + (1 - .25) * alpha;
+                qreal alpha = cs->opacityF(accessor.rawData());
+                opacity = .25 * c2.opacityF() + (1 - .25) * alpha;
                 col1.setOpacity(opacity);
                 memcpy(accessor.rawData(), col1.data(), pixelSize);
             }
@@ -1307,16 +1307,16 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
         } else {
             accessor.moveTo(x0a - 1, y0a);
             if (accessor.isSelected()) {
-                quint8 alpha = cs->alpha(accessor.rawData());
-                opacity = .25 * c1.opacity() + (1 - .25) * alpha;
+                qreal alpha = cs->opacityF(accessor.rawData());
+                opacity = .25 * c1.opacityF() + (1 - .25) * alpha;
                 col1.setOpacity(opacity);
                 memcpy(accessor.rawData(), col1.data(), pixelSize);
             }
 
             accessor.moveTo(x1b + 1, y1b);
             if (accessor.isSelected()) {
-                quint8 alpha = cs->alpha(accessor.rawData());
-                opacity = .25 * c2.opacity() + (1 - .25) * alpha;
+                qreal alpha = cs->opacityF(accessor.rawData());
+                opacity = .25 * c2.opacityF() + (1 - .25) * alpha;
                 col1.setOpacity(opacity);
                 memcpy(accessor.rawData(), col1.data(), pixelSize);
             }
@@ -1368,13 +1368,13 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             b2b = fracb;
 
             // color first pixel of bottom line
-            opacity = ((x - ix1) / dx) * c2.opacity() + (1 - (x - ix1) / dx) * c1.opacity();
-            c3.setOpacity(static_cast<int>(opacity));
+            opacity = ((x - ix1) / dx) * c2.opacityF() + (1 - (x - ix1) / dx) * c1.opacityF();
+            c3.setOpacity(opacity);
 
             accessor.moveTo(x, (int)yfa);
             if (accessor.isSelected()) {
-                quint8 alpha = cs->alpha(accessor.rawData());
-                opacity = b1a * c3.opacity() + (1 - b1a) * alpha;
+                qreal alpha = cs->opacityF(accessor.rawData());
+                opacity = b1a * c3.opacityF() + (1 - b1a) * alpha;
                 col1.setOpacity(opacity);
                 memcpy(accessor.rawData(), col1.data(), pixelSize);
             }
@@ -1383,8 +1383,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             if (!(startWidth == 1 && endWidth == 1)) {
                 accessor.moveTo(x, (int)yfb);
                 if (accessor.isSelected()) {
-                    quint8 alpha = cs->alpha(accessor.rawData());
-                    opacity = b1b * c3.opacity() + (1 - b1b) * alpha;
+                    qreal alpha = cs->opacityF(accessor.rawData());
+                    opacity = b1b * c3.opacityF() + (1 - b1b) * alpha;
                     col1.setOpacity(opacity);
                     memcpy(accessor.rawData(), col1.data(), pixelSize);
                 }
@@ -1394,8 +1394,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             if (grada != 0 && grada != 1) { // if not flat or exact diagonal
                 accessor.moveTo(x, int (yfa) + 1);
                 if (accessor.isSelected()) {
-                    quint8 alpha = cs->alpha(accessor.rawData());
-                    opacity = b2a * c3.opacity() + (1 - b2a)  * alpha;
+                    qreal alpha = cs->opacityF(accessor.rawData());
+                    opacity = b2a * c3.opacityF() + (1 - b2a)  * alpha;
                     col2.setOpacity(opacity);
                     memcpy(accessor.rawData(), col2.data(), pixelSize);
                 }
@@ -1406,8 +1406,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             if (gradb != 0 && gradb != 1 && !(startWidth == 1 && endWidth == 1)) {
                 accessor.moveTo(x, int (yfb) + 1);
                 if (accessor.isSelected()) {
-                    quint8 alpha = cs->alpha(accessor.rawData());
-                    opacity = b2b * c3.opacity() + (1 - b2b) * alpha;
+                    qreal alpha = cs->opacityF(accessor.rawData());
+                    opacity = b2b * c3.opacityF() + (1 - b2b) * alpha;
                     col2.setOpacity(opacity);
                     memcpy(accessor.rawData(), col2.data(), pixelSize);
                 }
@@ -1470,13 +1470,13 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             b2b = fracb;
 
             // color first pixel of left line
-            opacity = ((y - iy1) / dy) * c2.opacity() + (1 - (y - iy1) / dy) * c1.opacity();
-            c3.setOpacity(static_cast<int>(opacity));
+            opacity = ((y - iy1) / dy) * c2.opacityF() + (1 - (y - iy1) / dy) * c1.opacityF();
+            c3.setOpacity(opacity);
 
             accessor.moveTo(int (xfa), y);
             if (accessor.isSelected()) {
-                quint8 alpha = cs->alpha(accessor.rawData());
-                opacity = b1a * c3.opacity() + (1 - b1a) * alpha;
+                qreal alpha = cs->opacityF(accessor.rawData());
+                opacity = b1a * c3.opacityF() + (1 - b1a) * alpha;
                 col1.setOpacity(opacity);
                 memcpy(accessor.rawData(), col1.data(), pixelSize);
             }
@@ -1485,8 +1485,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             if (!(startWidth == 1 && endWidth == 1)) {
                 accessor.moveTo(int(xfb), y);
                 if (accessor.isSelected()) {
-                    quint8 alpha = cs->alpha(accessor.rawData());
-                    opacity = b1b * c3.opacity() + (1 - b1b)  * alpha;
+                    qreal alpha = cs->opacityF(accessor.rawData());
+                    opacity = b1b * c3.opacityF() + (1 - b1b)  * alpha;
                     col1.setOpacity(opacity);
                     memcpy(accessor.rawData(), col1.data(), pixelSize);
                 }
@@ -1496,8 +1496,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             if (grada != 0 && grada != 1) { // if not flat or exact diagonal
                 accessor.moveTo(int(xfa) + 1, y);
                 if (accessor.isSelected()) {
-                    quint8 alpha = cs->alpha(accessor.rawData());
-                    opacity = b2a * c3.opacity() + (1 - b2a) * alpha;
+                    qreal alpha = cs->opacityF(accessor.rawData());
+                    opacity = b2a * c3.opacityF() + (1 - b2a) * alpha;
                     col2.setOpacity(opacity);
                     memcpy(accessor.rawData(), col2.data(), pixelSize);
                 }
@@ -1508,8 +1508,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             if (gradb != 0 && gradb != 1 && !(startWidth == 1 && endWidth == 1)) {
                 accessor.moveTo(int(xfb) + 1, y);
                 if (accessor.isSelected()) {
-                    quint8 alpha = cs->alpha(accessor.rawData());
-                    opacity = b2b * c3.opacity() + (1 - b2b) * alpha;
+                    qreal alpha = cs->opacityF(accessor.rawData());
+                    opacity = b2b * c3.opacityF() + (1 - b2b) * alpha;
                     col2.setOpacity(opacity);
                     memcpy(accessor.rawData(), col2.data(), pixelSize);
                 }

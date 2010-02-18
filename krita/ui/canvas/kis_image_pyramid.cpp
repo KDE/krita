@@ -148,7 +148,7 @@ void KisImagePyramid::setDirty(const QRect &rc)
 
     KisPainter gc(m_pyramid[ORIGINAL_INDEX]);
     gc.setCompositeOp(m_monitorColorSpace->compositeOp(COMPOSITE_COPY));
-    gc.setOpacity(OPACITY_OPAQUE);
+    gc.setOpacity(OPACITY_OPAQUE_U8);
     gc.bitBlt(rc.topLeft(), originalProjection, rc);
     gc.end();
 

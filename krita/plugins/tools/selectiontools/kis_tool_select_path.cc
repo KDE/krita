@@ -159,7 +159,7 @@ void KisToolSelectPath::LocalTool::addPathShape(KoPathShape* pathShape)
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-        painter.setOpacity(OPACITY_OPAQUE);
+        painter.setOpacity(OPACITY_OPAQUE_U8);
         painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
 
         QMatrix matrix;

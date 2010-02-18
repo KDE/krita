@@ -37,7 +37,7 @@ void KisPixelSelectionTest::testCreation()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, cs, "merge test");
-    KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
+    KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP dev = layer->paintDevice();
 
     KisPixelSelectionSP selection = new KisPixelSelection();

@@ -268,9 +268,9 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
     qint32 x = element.attribute(X, "0").toInt();
     qint32 y = element.attribute(Y, "0").toInt();
 
-    qint32 opacity = element.attribute(OPACITY, QString::number(OPACITY_OPAQUE)).toInt();
-    if (opacity < OPACITY_TRANSPARENT) opacity = OPACITY_TRANSPARENT;
-    if (opacity > OPACITY_OPAQUE) opacity = OPACITY_OPAQUE;
+    qint32 opacity = element.attribute(OPACITY, QString::number(OPACITY_OPAQUE_U8)).toInt();
+    if (opacity < OPACITY_TRANSPARENT_U8) opacity = OPACITY_TRANSPARENT_U8;
+    if (opacity > OPACITY_OPAQUE_U8) opacity = OPACITY_OPAQUE_U8;
 
     const KoColorSpace* colorSpace = 0;
     if ((element.attribute(COLORSPACE_NAME)).isNull()) {

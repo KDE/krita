@@ -110,7 +110,7 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
                 child->channelFlags().isEmpty() &&
                 child->projection() &&
                 child->visible() &&
-                child->opacity() == OPACITY_OPAQUE &&
+                child->opacity() == OPACITY_OPAQUE_U8 &&
                 *child->projection()->colorSpace() == *colorSpace()) {
 
             return child->projection();

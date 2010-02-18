@@ -378,7 +378,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
         m_painter->setOpacity(m_opacity);
     } else {
         m_painter->setCompositeOp(device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
-        m_painter->setOpacity(OPACITY_OPAQUE);
+        m_painter->setOpacity(OPACITY_OPAQUE_U8);
     }
 
     m_previousTangent = QPointF(0, 0);

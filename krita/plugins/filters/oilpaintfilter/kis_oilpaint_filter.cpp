@@ -219,7 +219,7 @@ void KisOilPaintFilter::MostFrequentColor(const KisPaintDeviceSP src, quint8* ds
         cs->fromNormalisedChannelsValue(dst, channel);
     } else {
         memset(dst, 0, cs->pixelSize());
-        cs->setAlpha(dst, 255, 1);
+        cs->setOpacity(dst, OPACITY_OPAQUE_U8, 1);
     }
 
 

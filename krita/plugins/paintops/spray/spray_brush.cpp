@@ -217,7 +217,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             }
                 
             if (m_colorProperties->useRandomOpacity){
-                quint8 alpha = qRound(drand48() * OPACITY_OPAQUE);
+                quint8 alpha = qRound(drand48() * OPACITY_OPAQUE_U8);
                 m_inkColor.setOpacity( alpha );
                 m_painter->setOpacity( alpha );
             }
@@ -328,17 +328,17 @@ void SprayBrush::paintParticle(KisRandomAccessor &writeAccessor, const KoColor &
 {
     // opacity top left, right, bottom left, right
     KoColor pcolor(color);
-    int opacity = pcolor.opacity();
+    int opacity = pcolor.opacityU8();
 
     int ipx = int (rx);
     int ipy = int (ry);
     qreal fx = rx - ipx;
     qreal fy = ry - ipy;
 
-    int btl = qRound((1 - fx) * (1 - fy) * opacity);
-    int btr = qRound((fx)  * (1 - fy) * opacity);
-    int bbl = qRound((1 - fx) * (fy)  * opacity);
-    int bbr = qRound((fx)  * (fy)  * opacity);
+    qreal btl = (1 - fx) * (1 - fy);
+    qreal btr = (fx)  * (1 - fy);
+    qreal bbl = (1 - fx) * (fy);
+    qreal bbr = (fx)  * (fy);
 
     // this version overwrite pixels, e.g. when it sprays two particle next
     // to each other, the pixel with lower opacity can override other pixel.
@@ -449,61 +449,61 @@ void SprayBrush::paintOutline(KisPaintDeviceSP dev , const KoColor &outlineColor
     for (int y = -radius + posY; y <= radius + posY; y++) {
         for (int x = -radius + posX; x <= radius + posX; x++) {
             accessor.moveTo(x, y);
-            qreal alpha = dev->colorSpace()->alpha(accessor.rawData());
+            qreal alpha = dev->colorSpace()->opacityU8(accessor.rawData());
 
             if (alpha != 0) {
                 // top left
                 accessor.moveTo(x - 1, y - 1);
-                if (dev->colorSpace()->alpha(accessor.rawData()) == 0) {
+                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
                     antiPixels.append(QPointF(x - 1, y - 1));
                     //continue;
                 }
 
                 // top
                 accessor.moveTo(x, y - 1);
-                if (dev->colorSpace()->alpha(accessor.rawData()) == 0) {
+                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
                     antiPixels.append(QPointF(x, y - 1));
                     //continue;
                 }
 
                 // top right
                 accessor.moveTo(x + 1, y - 1);
-                if (dev->colorSpace()->alpha(accessor.rawData()) == 0) {
+                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
                     antiPixels.append(QPointF(x + 1, y - 1));
                     //continue;
                 }
 
                 //left
                 accessor.moveTo(x - 1, y);
-                if (dev->colorSpace()->alpha(accessor.rawData()) == 0) {
+                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
                     antiPixels.append(QPointF(x - 1, y));
                     //continue;
                 }
 
                 //right
                 accessor.moveTo(x + 1, y);
-                if (dev->colorSpace()->alpha(accessor.rawData()) == 0) {
+                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
                     antiPixels.append(QPointF(x + 1, y));
                     //continue;
                 }
 
                 // bottom left
                 accessor.moveTo(x - 1, y + 1);
-                if (dev->colorSpace()->alpha(accessor.rawData()) == 0) {
+                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
                     antiPixels.append(QPointF(x - 1, y + 1));
                     //continue;
                 }
 
                 // bottom
                 accessor.moveTo(x, y + 1);
-                if (dev->colorSpace()->alpha(accessor.rawData()) == 0) {
+                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
                     antiPixels.append(QPointF(x, y + 1));
                     //continue;
                 }
 
                 // bottom right
                 accessor.moveTo(x + 1, y + 1);
-                if (dev->colorSpace()->alpha(accessor.rawData()) == 0) {
+                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
                     antiPixels.append(QPointF(x + 1, y + 1));
                     //continue;
                 }

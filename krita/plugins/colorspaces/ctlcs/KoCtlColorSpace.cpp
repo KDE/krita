@@ -248,7 +248,7 @@ void KoCtlColorSpace::fromQColor(const QColor& color, quint8 *dst, const KoColor
     d->qcolordata[1] = KoColorSpaceMaths<quint8, quint16>::scaleToA(color.green());
     d->qcolordata[0] = KoColorSpaceMaths<quint8, quint16>::scaleToA(color.blue());
     this->fromRgbA16((const quint8*)d->qcolordata, dst, 1);
-    this->setAlpha(dst, color.alpha(), 1);
+    this->setOpacity(dst, quint8(color.alpha()), 1);
 }
 
 void KoCtlColorSpace::toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile) const
@@ -259,7 +259,7 @@ void KoCtlColorSpace::toQColor(const quint8 *src, QColor *c, const KoColorProfil
         KoColorSpaceMaths<quint16, quint8>::scaleToA(d->qcolordata[2]),
         KoColorSpaceMaths<quint16, quint8>::scaleToA(d->qcolordata[1]),
         KoColorSpaceMaths<quint16, quint8>::scaleToA(d->qcolordata[0]));
-    c->setAlpha(this->alpha(src));
+    c->setAlpha(this->opacityU8(src));
 }
 
 quint8 KoCtlColorSpace::intensity8(const quint8 * src) const
@@ -308,7 +308,7 @@ void KoCtlColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
             channel->scaleFromF32(pixel, elt.attribute(channelInfo->shortName()).toDouble());
         }
     }
-    setAlpha(pixel, OPACITY_OPAQUE, 1);
+    setOpacity(pixel, OPACITY_OPAQUE_U8, 1);
 }
 
 KoID KoCtlColorSpace::colorModelId() const
@@ -320,7 +320,7 @@ KoID KoCtlColorSpace::colorDepthId() const
     return d->info->colorDepthId();
 }
 
-quint8 KoCtlColorSpace::alpha(const quint8 * pixel) const
+quint8 KoCtlColorSpace::opacityU8(const quint8 * pixel) const
 {
     if (d->alphaCtlChannel) {
         return d->alphaCtlChannel->scaleToU8(pixel);
@@ -329,7 +329,7 @@ quint8 KoCtlColorSpace::alpha(const quint8 * pixel) const
     }
 }
 
-qreal KoCtlColorSpace::alpha2(const quint8 * pixel) const
+qreal KoCtlColorSpace::opacityF(const quint8 * pixel) const
 {
     if (d->alphaCtlChannel) {
         return d->alphaCtlChannel->scaleToF32(pixel);
@@ -338,7 +338,7 @@ qreal KoCtlColorSpace::alpha2(const quint8 * pixel) const
     }
 }
 
-void KoCtlColorSpace::setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const
+void KoCtlColorSpace::setOpacity(quint8 * pixels, quint8 alpha, qint32 nPixels) const
 {
     if (!d->alphaCtlChannel) return;
     quint32 pixelSize_ = pixelSize();
@@ -347,7 +347,7 @@ void KoCtlColorSpace::setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) co
     }
 }
 
-void KoCtlColorSpace::setAlpha2(quint8 * pixels, qreal alpha, qint32 nPixels) const
+void KoCtlColorSpace::setOpacity(quint8 * pixels, qreal alpha, qint32 nPixels) const
 {
     if (!d->alphaCtlChannel) return;
     quint32 pixelSize_ = pixelSize();

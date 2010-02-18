@@ -55,7 +55,7 @@ void ParticleBrush::paintParticle(KisRandomAccessor& accWrite,KoColorSpace * cs,
 {
     // opacity top left, right, bottom left, right
     KoColor myColor(color);
-    quint8 opacity = respectOpacity? myColor.opacity() : OPACITY_OPAQUE;
+    quint8 opacity = respectOpacity? myColor.opacityU8() : OPACITY_OPAQUE_U8;
 
     int ipx = int (pos.x());
     int ipy = int (pos.y());
@@ -68,19 +68,19 @@ void ParticleBrush::paintParticle(KisRandomAccessor& accWrite,KoColorSpace * cs,
     quint8 bbr = qRound((fx)  * (fy)  * opacity * weight);
 
     accWrite.moveTo(ipx  , ipy);
-    myColor.setOpacity( qBound<quint16>(OPACITY_TRANSPARENT,btl + cs->alpha(accWrite.rawData()),OPACITY_OPAQUE) );
+    myColor.setOpacity( qBound<quint8>(OPACITY_TRANSPARENT_U8,btl + cs->opacityU8(accWrite.rawData()),OPACITY_OPAQUE_U8) );
     memcpy(accWrite.rawData(), myColor.data(), cs->pixelSize());
 
     accWrite.moveTo(ipx + 1, ipy);
-    myColor.setOpacity( qBound<quint16>(OPACITY_TRANSPARENT,btr + cs->alpha(accWrite.rawData()),OPACITY_OPAQUE) );
+    myColor.setOpacity( qBound<quint8>(OPACITY_TRANSPARENT_U8,btr + cs->opacityU8(accWrite.rawData()),OPACITY_OPAQUE_U8) );
     memcpy(accWrite.rawData(), myColor.data(), cs->pixelSize());
 
     accWrite.moveTo(ipx, ipy + 1);
-    myColor.setOpacity( qBound<quint16>(OPACITY_TRANSPARENT,bbl + cs->alpha(accWrite.rawData()),OPACITY_OPAQUE) );
+    myColor.setOpacity( qBound<quint8>(OPACITY_TRANSPARENT_U8,bbl + cs->opacityU8(accWrite.rawData()),OPACITY_OPAQUE_U8) );
     memcpy(accWrite.rawData(), myColor.data(), cs->pixelSize());
 
     accWrite.moveTo(ipx + 1, ipy + 1);
-    myColor.setOpacity( qBound<quint16>(OPACITY_TRANSPARENT,bbr + cs->alpha(accWrite.rawData()),OPACITY_OPAQUE) );
+    myColor.setOpacity( qBound<quint8>(OPACITY_TRANSPARENT_U8,bbr + cs->opacityU8(accWrite.rawData()),OPACITY_OPAQUE_U8) );
     memcpy(accWrite.rawData(), myColor.data(), cs->pixelSize());
 }
 

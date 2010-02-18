@@ -60,9 +60,9 @@ quint8 KisPressureRateOption::apply(quint8 opacity, const KisPaintInformation& i
     opacity = (m_rate * 255) / 100;
 
     if (isChecked()) {
-        opacity = qBound((qint32)OPACITY_TRANSPARENT,
+        opacity = qBound((qint32)OPACITY_TRANSPARENT_U8,
                          (qint32)(double(opacity) * computeValue(info) / PRESSURE_DEFAULT),
-                         (qint32)OPACITY_OPAQUE);
+                         (qint32)OPACITY_OPAQUE_U8);
     }
 
     return opacity;

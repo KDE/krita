@@ -84,7 +84,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
 
         if (dstWidth * dstHeight <= bounds.width() * bounds.height()) {
             // just clear the data in dst,
-            memset(dst->data(), OPACITY_TRANSPARENT, dstWidth * dstHeight * dst->pixelSize());
+            memset(dst->data(), OPACITY_TRANSPARENT_U8, dstWidth * dstHeight * dst->pixelSize());
         } else {
             // enlarge the data
             dst->initialize();
@@ -106,7 +106,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         }
     } else {
         // Mask everything out
-        cs->setAlpha(dst->data(), OPACITY_TRANSPARENT, dst->bounds().width() * dst->bounds().height());
+        cs->setOpacity(dst->data(), OPACITY_TRANSPARENT_U8, dst->bounds().width() * dst->bounds().height());
     }
 
     int rowWidth = dst->bounds().width();
@@ -136,7 +136,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                     coloringInformation->nextColumn();
                 }
             }
-            cs->setAlpha(dabPointer, OPACITY_OPAQUE - d->shape->valueAt(maskX, maskY), 1);
+            cs->setOpacity(dabPointer, quint8(OPACITY_OPAQUE_U8 - d->shape->valueAt(maskX, maskY)), 1);
             dabPointer += pixelSize;
         }
         if (!color && coloringInformation) {

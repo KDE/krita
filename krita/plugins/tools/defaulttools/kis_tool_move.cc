@@ -79,7 +79,7 @@ KisNodeSP findNode(KisNodeSP node, int x, int y)
         const KoColorSpace* cs = layer->projection()->colorSpace();
         KoColor color(cs);
         layer->projection()->pixel(x, y, &color);
-        if (cs->alpha(color.data()) == OPACITY_TRANSPARENT) {
+        if (cs->opacityU8(color.data()) == OPACITY_TRANSPARENT_U8) {
             return 0;
         }
     }
@@ -97,7 +97,7 @@ KisNodeSP findNode(KisNodeSP node, int x, int y)
                     layer->projection()->pixel(x, y, &color);
 
                     // XXX:; have threshold here? Like, only a little bit transparent, we don't select it?
-                    if (cs->alpha(color.data()) != OPACITY_TRANSPARENT) {
+                    if (cs->opacityU8(color.data()) != OPACITY_TRANSPARENT_U8) {
                         foundNode = node;
                     }
                 }
@@ -128,7 +128,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
 
         KisSelectionSP selection = currentSelection();
 
-        if (cs->alpha(color.data()) == OPACITY_TRANSPARENT
+        if (cs->opacityU8(color.data()) == OPACITY_TRANSPARENT_U8
                 || m_optionsWidget->radioSelectedLayer->isChecked()
                 || e->modifiers() == Qt::ControlModifier) {
             node = currentNode();
@@ -169,7 +169,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
                 KisPainter gc(dev);
                 gc.setSelection(selection);
                 gc.setCompositeOp(COMPOSITE_OVER);
-                gc.setOpacity(OPACITY_OPAQUE);
+                gc.setOpacity(OPACITY_OPAQUE_U8);
                 QRect rc = oldLayer->extent();
                 gc.bitBlt(rc.topLeft(), oldLayer->paintDevice(), rc);
                 gc.end();

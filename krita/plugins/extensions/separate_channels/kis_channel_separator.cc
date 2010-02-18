@@ -141,9 +141,9 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
                         if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
                             //dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
-                            dstCs->setAlpha(dstIt.rawData(), srcCs->alpha(srcIt.rawData()), 1);
+                            dstCs->setOpacity(dstIt.rawData(), srcCs->opacityU8(srcIt.rawData()), 1);
                         } else {
-                            dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
+                            dstCs->setOpacity(dstIt.rawData(), OPACITY_OPAQUE_U8, 1);
                         }
                     } else {
 
@@ -156,9 +156,9 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                             dstIt.rawData()[0] = srcIt.rawData()[channelPos];
 
                             if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
-                                dstCs->setAlpha(dstIt.rawData(), srcCs->alpha(srcIt.rawData()), 1);
+                                dstCs->setOpacity(dstIt.rawData(), srcCs->opacityU8(srcIt.rawData()), 1);
                             } else {
-                                dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
+                                dstCs->setOpacity(dstIt.rawData(), OPACITY_OPAQUE_U8, 1);
                             }
                         } else if (channelSize == 2 && destSize == 2) {
 
@@ -167,22 +167,22 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                             dstIt.rawData()[1] = srcIt.rawData()[channelPos + 1];
 
                             if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
-                                dstCs->setAlpha(dstIt.rawData(), srcCs->alpha(srcIt.rawData()), 1);
+                                dstCs->setOpacity(dstIt.rawData(), srcCs->opacityU8(srcIt.rawData()), 1);
                             } else {
-                                dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
+                                dstCs->setOpacity(dstIt.rawData(), OPACITY_OPAQUE_U8, 1);
                             }
                         } else if (channelSize != 1 && destSize == 1) {
                             // Downscale
                             memset(dstIt.rawData(), srcCs->scaleToU8(srcIt.rawData(), channelPos), 1);
 
                             // XXX: Do alpha
-                            dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
+                            dstCs->setOpacity(dstIt.rawData(), OPACITY_OPAQUE_U8, 1);
                         } else if (channelSize != 2 && destSize == 2) {
                             // Upscale
                             dstIt.rawData()[0] = srcCs->scaleToU8(srcIt.rawData(), channelPos);
 
                             // XXX: Do alpha
-                            dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
+                            dstCs->setOpacity(dstIt.rawData(), OPACITY_OPAQUE_U8, 1);
 
                         }
                     }
@@ -232,7 +232,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
             }
 
             if (outputOps == TO_LAYERS) {
-                KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE, *deviceIt));
+                KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
                 if (undo && undo->undo()) {
                     adapter.addNode(l.data(), image->rootLayer(), 0);
                 } else {
@@ -261,7 +261,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 }
 
 
-                KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE, *deviceIt));
+                KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
                 QRect r = l->exactBounds();
 
                 KisDoc2 d;

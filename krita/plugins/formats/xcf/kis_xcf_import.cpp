@@ -260,7 +260,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
                             KoRgbTraits<quint8>::setRed(it.rawData(), GET_RED(*data));
                             KoRgbTraits<quint8>::setGreen(it.rawData(), GET_GREEN(*data));
                             KoRgbTraits<quint8>::setBlue(it.rawData(), GET_BLUE(*data));
-                            KoRgbTraits<quint8>::setAlpha(it.rawData(), GET_ALPHA(*data), 1);
+                            KoRgbTraits<quint8>::setOpacity(it.rawData(), quint8(GET_ALPHA(*data)), 1);
                             ++data;
                             ++it;
                         }

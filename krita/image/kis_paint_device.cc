@@ -141,7 +141,7 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
 
     quint8 *defaultPixel = new quint8[ m_d->pixelSize ];
     m_d->colorSpace->fromQColor(Qt::black, defaultPixel);
-    m_d->colorSpace->setAlpha(defaultPixel, OPACITY_TRANSPARENT, 1);
+    m_d->colorSpace->setOpacity(defaultPixel, OPACITY_TRANSPARENT_U8, 1);
 
     m_datamanager = new KisDataManager(m_d->pixelSize, defaultPixel);
     delete [] defaultPixel;

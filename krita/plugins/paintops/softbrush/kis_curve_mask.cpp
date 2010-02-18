@@ -31,7 +31,7 @@ KisCurveMask::KisCurveMask()
 
 
 
-void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal scale, qreal rotation, qreal subPixelX, qreal subPixelY)
+void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal /*scale*/, qreal /*rotation*/, qreal /*subPixelX*/, qreal /*subPixelY*/)
 {
     KoColor dabColor(color);
     
@@ -83,9 +83,9 @@ void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal sc
                     continue;
                 }
            
-                quint8 alpha = qRound(OPACITY_OPAQUE * (
+                qreal alpha = (
                 (1.0 - alphaValueF) * m_properties->curveData.at(alphaValue) + 
-                    alphaValueF * m_properties->curveData.at(alphaValue+1)) ); 
+                    alphaValueF * m_properties->curveData.at(alphaValue+1)); 
             
                 dabColor.setOpacity(alpha);
                 memcpy(dabPointer,dabColor.data(), pixelSize);

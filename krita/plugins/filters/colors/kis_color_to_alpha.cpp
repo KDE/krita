@@ -78,6 +78,7 @@ void KisFilterColorToAlpha::process(KisConstProcessingInformation srcInfo,
     QVariant value;
     QColor cTA = (config->getProperty("targetcolor", value)) ? value.value<QColor>() : QColor(255, 255, 255);
     int threshold = (config->getProperty("threshold", value)) ? value.toInt() : 0;
+    qreal thresholdF = threshold;
 
     KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
     KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection());
@@ -96,9 +97,9 @@ void KisFilterColorToAlpha::process(KisConstProcessingInformation srcInfo,
         if (srcIt.isSelected()) {
             quint8 d = cs->difference(color, srcIt.oldRawData());
             if (d >= threshold) {
-                cs->setAlpha(dstIt.rawData(), 255, 1);
+                cs->setOpacity(dstIt.rawData(), 1.0, 1);
             } else {
-                cs->setAlpha(dstIt.rawData(), (255 * d) / threshold, 1);
+                cs->setOpacity(dstIt.rawData(), d / thresholdF, 1);
             }
         }
         if (progressUpdater) progressUpdater->setProgress((++currentProgress) / totalCost);

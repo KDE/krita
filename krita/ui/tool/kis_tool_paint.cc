@@ -79,7 +79,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     m_lbComposite = 0;
     m_cmbComposite = 0;
 
-    m_opacity = OPACITY_OPAQUE;
+    m_opacity = OPACITY_OPAQUE_U8;
     m_compositeOp = 0;
 
     m_supportOutline = false;
@@ -170,7 +170,7 @@ QWidget * KisToolPaint::createOptionWidget()
     m_slOpacity->setMinimum(0);
     m_slOpacity->setMaximum(100);
     m_slOpacity->setDecimals(0);
-    m_slOpacity->setValue(m_opacity / OPACITY_OPAQUE * 100);
+    m_slOpacity->setValue(m_opacity / OPACITY_OPAQUE_U8 * 100);
     connect(m_slOpacity, SIGNAL(valueChanged(qreal, bool)), this, SLOT(slotSetOpacity(qreal, bool)));
 
     m_lbComposite = new QLabel(i18n("Mode: "), optionWidget);
@@ -231,7 +231,7 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 void KisToolPaint::slotSetOpacity(qreal opacityPerCent, bool final)
 {
     Q_UNUSED(final);
-    m_opacity = (int)(opacityPerCent * OPACITY_OPAQUE / 100);
+    m_opacity = (int)(opacityPerCent * OPACITY_OPAQUE_U8 / 100);
 }
 
 

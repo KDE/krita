@@ -145,13 +145,13 @@ void KisWalkersTest::testUsualVisiting()
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
 
-    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE);
-    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE);
-    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE);
-    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE);
-    KisLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE);
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE_U8);
 
-    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE);
+    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE_U8);
     KisLayerSP adjustmentLayer = new KisAdjustmentLayer(image, "adj", 0, 0);
 
 
@@ -218,15 +218,15 @@ void KisWalkersTest::testMergeVisiting()
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
 
-    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE);
-    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE);
-    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE);
-    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE);
-    KisLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE);
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE_U8);
 
-    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE);
-    KisLayerSP complexRectsLayer1 = new ComplexRectsLayer(image, "cplx1", OPACITY_OPAQUE);
-    KisLayerSP complexRectsLayer2 = new ComplexRectsLayer(image, "cplx2", OPACITY_OPAQUE);
+    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE_U8);
+    KisLayerSP complexRectsLayer1 = new ComplexRectsLayer(image, "cplx1", OPACITY_OPAQUE_U8);
+    KisLayerSP complexRectsLayer2 = new ComplexRectsLayer(image, "cplx2", OPACITY_OPAQUE_U8);
 
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(groupLayer, image->rootLayer());
@@ -313,15 +313,15 @@ void KisWalkersTest::testFullRefreshVisiting()
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
 
-    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE);
-    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE);
-    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE);
-    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE);
-    KisLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE);
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE_U8);
 
-    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE);
-    KisLayerSP complexRectsLayer1 = new ComplexRectsLayer(image, "cplx1", OPACITY_OPAQUE);
-    KisLayerSP complexRectsLayer2 = new ComplexRectsLayer(image, "cplx2", OPACITY_OPAQUE);
+    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE_U8);
+    KisLayerSP complexRectsLayer1 = new ComplexRectsLayer(image, "cplx1", OPACITY_OPAQUE_U8);
+    KisLayerSP complexRectsLayer2 = new ComplexRectsLayer(image, "cplx2", OPACITY_OPAQUE_U8);
 
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(groupLayer, image->rootLayer());
@@ -369,14 +369,14 @@ void KisWalkersTest::testCachedVisiting()
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
 
-    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE);
-    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE);
-    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE);
-    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE);
-    KisLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE);
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE_U8);
 
-    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE);
-    KisLayerSP cacheLayer1 = new CacheLayer(image, "cache1", OPACITY_OPAQUE);
+    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE_U8);
+    KisLayerSP cacheLayer1 = new CacheLayer(image, "cache1", OPACITY_OPAQUE_U8);
 
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(groupLayer, image->rootLayer());

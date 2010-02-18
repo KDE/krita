@@ -93,10 +93,12 @@ public:
      * Convenient function to set the opacity of the color.
      */
     void setOpacity(quint8 alpha);
+    void setOpacity(qreal alpha);
     /**
      * Convenient function that return the opacity of the color
      */
-    quint8 opacity() const;
+    quint8 opacityU8() const;
+    qreal opacityF() const;
 
 // what about making the next two methods static factory methods?
     /// Convenient function for converting from a QColor

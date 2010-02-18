@@ -99,7 +99,7 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
         KoColor kc2(kc); // get rid of const
         kc2.convertTo(device()->colorSpace());
         quint8 * data = kc2.data();
-        device()->colorSpace()->setAlpha(data, opacity, 1);
+        device()->colorSpace()->setOpacity(data, opacity, 1);
 
         device()->fill(x1, y1, w, h, data);
 
@@ -334,7 +334,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         selIt += x;
         if (m_fuzzy) {
             colorSpace->fromQColor(Qt::white, selIt.rawData());
-            colorSpace->setAlpha(selIt.rawData(), MAX_SELECTED - diff, 1);
+            colorSpace->setOpacity(selIt.rawData(), quint8(MAX_SELECTED - diff), 1);
         } else
             colorSpace->fromQColor(Qt::white, selIt.rawData());
 
@@ -376,7 +376,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
                 if (m_fuzzy) {
                     colorSpace->fromQColor(Qt::white, selIt.rawData());
-                    colorSpace->setAlpha(selIt.rawData(), MAX_SELECTED - diff, 1);
+                    colorSpace->setOpacity(selIt.rawData(), quint8(MAX_SELECTED - diff), 1);
                 } else
                     colorSpace->fromQColor(Qt::white, selIt.rawData());
 
@@ -435,7 +435,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
             if (m_fuzzy) {
                 colorSpace->fromQColor(Qt::white, selIt.rawData());
-                colorSpace->setAlpha(selIt.rawData(), MAX_SELECTED - diff, 1);
+                colorSpace->setOpacity(selIt.rawData(), quint8(MAX_SELECTED - diff), 1);
             } else
                 colorSpace->fromQColor(Qt::white, selIt.rawData());
 

@@ -73,10 +73,10 @@ void KisAutogradient::slotSelectedSegment(KoGradientSegment* segment)
     comboBoxColorInterpolationType->setCurrentIndex(segment->colorInterpolation());
     comboBoxInterpolationType->setCurrentIndex(segment->interpolation());
 
-    int leftOpacity = (startColor.alpha() * 100) / OPACITY_OPAQUE;
+    int leftOpacity = (startColor.alpha() * 100) / OPACITY_OPAQUE_U8;
     intNumInputLeftOpacity->setValue(leftOpacity);
 
-    int rightOpacity = (endColor.alpha() * 100) / OPACITY_OPAQUE;
+    int rightOpacity = (endColor.alpha() * 100) / OPACITY_OPAQUE_U8;
     intNumInputRightOpacity->setValue(rightOpacity);
 
     paramChanged();
@@ -112,7 +112,7 @@ void KisAutogradient::slotChangedLeftColor(const QColor& color)
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment) {
         KoColor c(color, segment->startColor().colorSpace());
-        c.setOpacity(segment->startColor().opacity());
+        c.setOpacity(segment->startColor().opacityU8());
         segment->setStartColor(c);
     }
     gradientSlider->update();
@@ -126,7 +126,7 @@ void KisAutogradient::slotChangedRightColor(const QColor& color)
     if (segment) {
         QColor unused;
         KoColor c(color, segment->endColor().colorSpace());
-        c.setOpacity(segment->endColor().opacity());
+        c.setOpacity(segment->endColor().opacityU8());
         segment->setEndColor(c);
     }
     gradientSlider->repaint();
@@ -139,7 +139,7 @@ void KisAutogradient::slotChangedLeftOpacity(int value)
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment) {
         KoColor c(segment->startColor().toQColor(), segment->startColor().colorSpace());
-        c.setOpacity((value * OPACITY_OPAQUE) / 100);
+        c.setOpacity(value / 100.0);
         segment->setStartColor(c);
     }
     gradientSlider->repaint();
@@ -152,7 +152,7 @@ void KisAutogradient::slotChangedRightOpacity(int value)
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment) {
         KoColor c(segment->endColor().toQColor(), segment->endColor().colorSpace());
-        c.setOpacity((value *OPACITY_OPAQUE) / 100);
+        c.setOpacity(quint8((value *OPACITY_OPAQUE_U8) / 100));
         segment->setEndColor(c);
     }
     gradientSlider->repaint();

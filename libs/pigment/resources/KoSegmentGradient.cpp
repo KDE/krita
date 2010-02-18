@@ -143,14 +143,14 @@ bool KoSegmentGradient::init()
         data[2] = static_cast<quint8>(leftRed * 255 + 0.5);
         data[1] = static_cast<quint8>(leftGreen * 255 + 0.5);
         data[0] = static_cast<quint8>(leftBlue * 255 + 0.5);
-        data[3] = static_cast<quint8>(leftAlpha * OPACITY_OPAQUE + 0.5);
+        data[3] = static_cast<quint8>(leftAlpha * OPACITY_OPAQUE_U8 + 0.5);
 
         KoColor leftColor(data, rgbColorSpace);
 
         data[2] = static_cast<quint8>(rightRed * 255 + 0.5);
         data[1] = static_cast<quint8>(rightGreen * 255 + 0.5);
         data[0] = static_cast<quint8>(rightBlue * 255 + 0.5);
-        data[3] = static_cast<quint8>(rightAlpha * OPACITY_OPAQUE + 0.5);
+        data[3] = static_cast<quint8>(rightAlpha * OPACITY_OPAQUE_U8 + 0.5);
 
         KoColor rightColor(data, rgbColorSpace);
 

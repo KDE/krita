@@ -179,9 +179,9 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
                 }
                 
                 if (m_colorProperties.useRandomOpacity){
-                    quint8 alpha = qRound(drand48() * OPACITY_OPAQUE);
+                    qreal alpha = drand48();
                     color.setOpacity( alpha );
-                    m_painter->setOpacity( alpha );
+                    m_painter->setOpacity( qRound(alpha * OPACITY_OPAQUE_U8) );
                 }
 
                 if ( !m_colorProperties.colorPerParticle ){

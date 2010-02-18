@@ -176,7 +176,7 @@ void KisFixedPaintDeviceTest::testClear()
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
     dev->clear(QRect(0, 0, 100, 100));
     QVERIFY(dev->bounds() == QRect(0, 0, 100, 100));
-    QVERIFY(cs->alpha(dev->data() + (50 * 50 * cs->pixelSize())) == OPACITY_TRANSPARENT);
+    QVERIFY(cs->opacityU8(dev->data() + (50 * 50 * cs->pixelSize())) == OPACITY_TRANSPARENT_U8);
 }
 
 void KisFixedPaintDeviceTest::testFill()
@@ -184,13 +184,13 @@ void KisFixedPaintDeviceTest::testFill()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     quint8* red = new quint8[cs->pixelSize()];
     memcpy(red, KoColor(Qt::red, cs).data(), cs->pixelSize());;
-    cs->setAlpha(red, 128, 1);
+    cs->setOpacity(red, quint8(128), 1);
 
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
     dev->fill(0, 0, 100, 100, red);
 
     QVERIFY(dev->bounds() == QRect(0, 0, 100, 100));
-    QVERIFY(cs->alpha(dev->data()) == 128);
+    QVERIFY(cs->opacityU8(dev->data()) == 128);
     QVERIFY(memcmp(dev->data(), red, cs->pixelSize()) == 0);
 
     delete[] red;

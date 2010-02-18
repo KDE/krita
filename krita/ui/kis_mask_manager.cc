@@ -291,7 +291,7 @@ void KisMaskManager::maskToLayer()
     KisSelectionSP selection = m_activeMask->selection();
     selection->updateProjection();
     KisPaintLayerSP layer =
-        new KisPaintLayer(image, m_activeMask->name(), OPACITY_OPAQUE);
+        new KisPaintLayer(image, m_activeMask->name(), OPACITY_OPAQUE_U8);
 
     const KoColorSpace * cs = layer->colorSpace();
     QRect rc = selection->selectedExactRect();
@@ -300,7 +300,7 @@ void KisMaskManager::maskToLayer()
     KisHLineIteratorPixel dstiter = layer->paintDevice()->createHLineIterator(rc.x(), rc.y(), rc.width(), selection);
     for (int row = 0; row < rc.height(); ++row) {
         while (!dstiter.isDone()) {
-            cs->setAlpha(color.data(), dstiter.selectedness(), 1);
+            cs->setOpacity(color.data(), dstiter.selectedness(), 1);
             memcpy(dstiter.rawData(), color.data(), pixelsize);
             ++dstiter;
         }

@@ -95,7 +95,7 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *e)
 {
     if (canvas()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-        quint8 opacity = OPACITY_OPAQUE;
+        quint8 opacity = OPACITY_OPAQUE_U8;
 
         if (e->button() != Qt::LeftButton)
             return;
@@ -119,7 +119,7 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *e)
 
         KoColor c;
         dev->pixel(pos.x(), pos.y(), &c);
-        opacity = dev->colorSpace()->alpha(c.data());
+        opacity = dev->colorSpace()->opacityU8(c.data());
 
         // XXX we should make this configurable: "allow to select transparent"
         // if (opacity > OPACITY_TRANSPARENT)

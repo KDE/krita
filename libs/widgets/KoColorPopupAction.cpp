@@ -120,11 +120,11 @@ void KoColorPopupAction::setCurrentColor( const KoColor &color )
     d->currentColor = minColor;
 
     KoColor maxColor( color );
-    minColor.setOpacity( 0 );
-    maxColor.setOpacity( 255 );
+    minColor.setOpacity( OPACITY_TRANSPARENT_U8 );
+    maxColor.setOpacity( OPACITY_OPAQUE_U8 );
     d->opacitySlider->blockSignals( true );
     d->opacitySlider->setColors( minColor, maxColor );
-    d->opacitySlider->setValue( color.opacity() );
+    d->opacitySlider->setValue( color.opacityU8() );
     d->opacitySlider->blockSignals( false );
 
     updateIcon();
@@ -195,13 +195,13 @@ void KoColorPopupAction::colorWasSelected(const KoColor &color, bool final)
 void KoColorPopupAction::colorWasEdited( const QColor &color )
 {
     d->currentColor = KoColor( color, KoColorSpaceRegistry::instance()->rgb8() );
-    int opacity = d->opacitySlider->value();
+    quint8 opacity = d->opacitySlider->value();
     d->currentColor.setOpacity( opacity );
 
     KoColor minColor = d->currentColor;
-    minColor.setOpacity( 0 );
+    minColor.setOpacity( OPACITY_TRANSPARENT_U8 );
     KoColor maxColor = minColor;
-    maxColor.setOpacity( 255 );
+    maxColor.setOpacity( OPACITY_OPAQUE_U8 );
 
     d->opacitySlider->setColors( minColor, maxColor );
 
@@ -212,7 +212,7 @@ void KoColorPopupAction::colorWasEdited( const QColor &color )
 
 void KoColorPopupAction::opacityWasChanged( int opacity )
 {
-    d->currentColor.setOpacity( opacity );
+    d->currentColor.setOpacity( quint8(opacity) );
 
     emitColorChanged();
 }

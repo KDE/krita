@@ -330,34 +330,32 @@ void CurveBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
         qreal fx = paintX - ipx;
         qreal fy = paintY - ipy;
 
-        qreal MAX_OPACITY = 255;
-
-        int btl = qRound((1 - fx) * (1 - fy) * MAX_OPACITY);
-        int btr = qRound((fx)   * (1 - fy) * MAX_OPACITY);
-        int bbl = qRound((1 - fx) * (fy)   * MAX_OPACITY);
-        int bbr = qRound((fx)   * (fy)   * MAX_OPACITY);
+        qreal btl = (1 - fx) * (1 - fy);
+        qreal btr = (fx)   * (1 - fy);
+        qreal bbl = (1 - fx) * (fy);
+        qreal bbr = (fx)   * (fy);
 
         pcolor.setOpacity(btl);
         m_writeAccessor->moveTo(ipx  , ipy);
-        if (m_layer->colorSpace()->alpha(m_writeAccessor->rawData()) < pcolor.opacity()) {
+        if (m_layer->colorSpace()->opacityU8(m_writeAccessor->rawData()) < pcolor.opacityU8()) {
             memcpy(m_writeAccessor->rawData(), pcolor.data(), m_pixelSize);
         }
 
         pcolor.setOpacity(btr);
         m_writeAccessor->moveTo(ipx + 1, ipy);
-        if (m_layer->colorSpace()->alpha(m_writeAccessor->rawData()) < pcolor.opacity()) {
+        if (m_layer->colorSpace()->opacityU8(m_writeAccessor->rawData()) < pcolor.opacityU8()) {
             memcpy(m_writeAccessor->rawData(), pcolor.data(), m_pixelSize);
         }
 
         pcolor.setOpacity(bbl);
         m_writeAccessor->moveTo(ipx, ipy + 1);
-        if (m_layer->colorSpace()->alpha(m_writeAccessor->rawData()) < pcolor.opacity()) {
+        if (m_layer->colorSpace()->opacityU8(m_writeAccessor->rawData()) < pcolor.opacityU8()) {
             memcpy(m_writeAccessor->rawData(), pcolor.data(), m_pixelSize);
         }
 
         pcolor.setOpacity(bbr);
         m_writeAccessor->moveTo(ipx + 1, ipy + 1);
-        if (m_layer->colorSpace()->alpha(m_writeAccessor->rawData()) < pcolor.opacity()) {
+        if (m_layer->colorSpace()->opacityU8(m_writeAccessor->rawData()) < pcolor.opacityU8()) {
             memcpy(m_writeAccessor->rawData(), pcolor.data(), m_pixelSize);
         }
 

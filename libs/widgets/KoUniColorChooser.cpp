@@ -471,7 +471,7 @@ void KoUniColorChooser::slotHSVChanged()
 {
     quint8 data[4];
     HSVtoRGB(m_HIn->value(), m_SIn->value(), m_VIn->value(), data+2, data+1, data);
-    data[3] = m_currentColor.colorSpace()->alpha(m_currentColor.data());
+    data[3] = m_currentColor.colorSpace()->opacityU8(m_currentColor.data());
     m_currentColor.setColor(data, rgbColorSpace());
     updateValues();
     updateSelectorsCurrent();
@@ -484,7 +484,7 @@ void KoUniColorChooser::slotRGBChanged()
     data[2] = m_RIn->value();
     data[1] = m_GIn->value();
     data[0] = m_BIn->value();
-    data[3] = m_currentColor.colorSpace()->alpha(m_currentColor.data());
+    data[3] = m_currentColor.colorSpace()->opacityU8(m_currentColor.data());
     m_currentColor.setColor(data, rgbColorSpace());
     updateValues();
     updateSelectorsCurrent();
@@ -494,7 +494,7 @@ void KoUniColorChooser::slotRGBChanged()
 void KoUniColorChooser::slotSliderChanged(int v)
 {
     quint8 data[4];
-    data[3] = m_currentColor.colorSpace()->alpha(m_currentColor.data());
+    data[3] = m_currentColor.colorSpace()->opacityU8(m_currentColor.data());
     switch(m_activeChannel)
     {
         case CHANNEL_H:
@@ -545,7 +545,7 @@ void KoUniColorChooser::slotSliderChanged(int v)
 void KoUniColorChooser::slotXYChanged(int u, int v)
 {
     quint8 data[4];
-    data[3] = m_currentColor.colorSpace()->alpha(m_currentColor.data());
+    data[3] = m_currentColor.colorSpace()->opacityU8(m_currentColor.data());
     switch(m_activeChannel)
     {
         case CHANNEL_H:
@@ -592,8 +592,8 @@ void KoUniColorChooser::slotXYChanged(int u, int v)
 
 void KoUniColorChooser::slotOpacityChanged(int o)
 {
-    quint8 opacity = o * OPACITY_OPAQUE / 100;
-    m_currentColor.colorSpace()->setAlpha(m_currentColor.data(), opacity, 1);
+    qreal opacity = o / 100.0;
+    m_currentColor.colorSpace()->setOpacity(m_currentColor.data(), opacity, 1);
     updateValues();
     announceColor();
 }
@@ -854,13 +854,13 @@ void KoUniColorChooser::updateValues()
         m_opacityIn->blockSignals(true);
 
         KoColor minColor = tmpColor;
-        tmpColor.colorSpace()->setAlpha(minColor.data(), 0, 1);
+        tmpColor.colorSpace()->setOpacity(minColor.data(), OPACITY_TRANSPARENT_U8, 1);
         KoColor maxColor = tmpColor;
-        tmpColor.colorSpace()->setAlpha(maxColor.data(), 255, 1);
+        tmpColor.colorSpace()->setOpacity(maxColor.data(), OPACITY_OPAQUE_U8, 1);
 
         m_opacitySlider->setColors(minColor, maxColor);
-        m_opacitySlider->setValue(tmpColor.data()[3]* 100 / OPACITY_OPAQUE);
-        m_opacityIn->setValue(tmpColor.data()[3]* 100 / OPACITY_OPAQUE);
+        m_opacitySlider->setValue(tmpColor.opacityF() * 100 );
+        m_opacityIn->setValue(tmpColor.opacityF() * 100 );
 
         m_opacityIn->blockSignals(false);
         m_opacitySlider->blockSignals(false);

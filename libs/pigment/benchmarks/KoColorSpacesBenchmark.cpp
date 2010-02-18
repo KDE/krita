@@ -57,7 +57,7 @@ void KoColorSpacesBenchmark::benchmarkAlpha()
     QBENCHMARK {
         quint8* data_it = data;
         for (int i = 0; i < NB_PIXELS; ++i) {
-            colorSpace->alpha(data_it);
+            colorSpace->opacityU8(data_it);
             data_it += pixelSize;
         }
     }
@@ -75,7 +75,7 @@ void KoColorSpacesBenchmark::benchmarkAlpha2()
     QBENCHMARK {
         quint8* data_it = data;
         for (int i = 0; i < NB_PIXELS; ++i) {
-            colorSpace->alpha2(data_it);
+            colorSpace->opacityF(data_it);
             data_it += pixelSize;
         }
     }
@@ -91,7 +91,7 @@ void KoColorSpacesBenchmark::benchmarkSetAlpha()
 {
     START_BENCHMARK
     QBENCHMARK {
-        colorSpace->setAlpha(data, OPACITY_OPAQUE, NB_PIXELS);
+        colorSpace->setOpacity(data, OPACITY_OPAQUE_U8, NB_PIXELS);
     }
     END_BENCHMARK
 }
@@ -105,7 +105,7 @@ void KoColorSpacesBenchmark::benchmarkSetAlpha2()
 {
     START_BENCHMARK
     QBENCHMARK {
-        colorSpace->setAlpha2(data, OPACITY_OPAQUE2, NB_PIXELS);
+        colorSpace->setOpacity(data, OPACITY_OPAQUE_F, NB_PIXELS);
     }
     END_BENCHMARK
 }
@@ -121,7 +121,7 @@ void KoColorSpacesBenchmark::benchmarkSetAlphaIndividualCall()
     QBENCHMARK {
         quint8* data_it = data;
         for (int i = 0; i < NB_PIXELS; ++i) {
-            colorSpace->setAlpha(data_it, OPACITY_OPAQUE, 1);
+            colorSpace->setOpacity(data_it, OPACITY_OPAQUE_U8, 1);
             data_it += pixelSize;
         }
     }
@@ -139,7 +139,7 @@ void KoColorSpacesBenchmark::benchmarkSetAlpha2IndividualCall()
     QBENCHMARK {
         quint8* data_it = data;
         for (int i = 0; i < NB_PIXELS; ++i) {
-            colorSpace->setAlpha2(data_it, OPACITY_OPAQUE2, 1);
+            colorSpace->setOpacity(data_it, OPACITY_OPAQUE_F, 1);
             data_it += pixelSize;
         }
     }

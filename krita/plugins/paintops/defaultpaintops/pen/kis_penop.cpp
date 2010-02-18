@@ -112,12 +112,12 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     QRect rc = dab->bounds();
     int pixelSize = dab->pixelSize();
     for (int i = 0; i < rc.width() * rc.height(); i++) {
-        quint8 alpha = cs->alpha(dabPointer);
+        quint8 alpha = cs->opacityU8(dabPointer);
 
-        if (alpha < (4 * OPACITY_OPAQUE) / 10) {
-            cs->setAlpha(dabPointer, OPACITY_TRANSPARENT, 1);
+        if (alpha < (4 * OPACITY_OPAQUE_U8) / 10) {
+            cs->setOpacity(dabPointer, OPACITY_TRANSPARENT_U8, 1);
         } else {
-            cs->setAlpha(dabPointer, OPACITY_OPAQUE, 1);
+            cs->setOpacity(dabPointer, OPACITY_OPAQUE_U8, 1);
         }
 
         dabPointer += pixelSize;

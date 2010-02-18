@@ -45,7 +45,7 @@ void KoColorConversionFromAlphaTransformation::transform(const quint8 *src, quin
 
     while (nPixels > 0) {
 
-        dstColorSpace()->setAlpha(dst, *src, 1);
+        dstColorSpace()->setOpacity(dst, *src, 1);
 
         src ++;
         dst += size;
@@ -101,7 +101,7 @@ void KoColorConversionToAlphaTransformation::transform(const quint8 *src, quint8
 
     while (nPixels > 0) {
 
-        *dst = srcColorSpace()->alpha(src);
+        *dst = srcColorSpace()->opacityU8(src);
 
         src += size;
         dst ++;

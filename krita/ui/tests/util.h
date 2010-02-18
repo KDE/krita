@@ -92,7 +92,7 @@ KisDoc2* createCompleteDocument()
 
     KisGroupLayerSP group2 = new KisGroupLayer(image, "group2", 100);
 
-    KisPaintLayerSP paintLayer1 = new KisPaintLayer(image, "paintlayer1", OPACITY_OPAQUE);
+    KisPaintLayerSP paintLayer1 = new KisPaintLayer(image, "paintlayer1", OPACITY_OPAQUE_U8);
     paintLayer1->setUserLocked(true);
     QBitArray channelFlags(4);
     channelFlags[0] = true;
@@ -105,7 +105,7 @@ KisDoc2* createCompleteDocument()
         gc.end();
     }
 
-    KisPaintLayerSP paintLayer2 = new KisPaintLayer(image, "paintlayer2", OPACITY_TRANSPARENT, KoColorSpaceRegistry::instance()->lab16());
+    KisPaintLayerSP paintLayer2 = new KisPaintLayer(image, "paintlayer2", OPACITY_TRANSPARENT_U8, KoColorSpaceRegistry::instance()->lab16());
     paintLayer2->setVisible(false);
     {
         KisFillPainter gc(paintLayer2->paintDevice());

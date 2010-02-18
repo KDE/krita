@@ -143,18 +143,18 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
          * this combination is then composited upon the actual image
        TODO: what happened exactly in 1.6 (and should happen now) when the dab resizes halfway due to pressure?
     */
-    int opacity = OPACITY_OPAQUE;
+    int opacity = OPACITY_OPAQUE_U8;
     if (!m_firstRun) {
         opacity = m_rateOption.apply(opacity, info);
 
         KisRectIterator it = m_srcdev->createRectIterator(0, 0, sw, sh);
         KoColorSpace* cs = m_srcdev->colorSpace();
         while (!it.isDone()) {
-            cs->setAlpha(it.rawData(), (cs->alpha(it.rawData()) * opacity) / OPACITY_OPAQUE, 1);
+            cs->setOpacity(it.rawData(), quint8(cs->opacityF(it.rawData()) * opacity), 1);
             ++it;
         }
 
-        opacity = OPACITY_OPAQUE - opacity;
+        opacity = OPACITY_OPAQUE_U8 - opacity;
     } else {
         m_firstRun = false;
     }
@@ -169,7 +169,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     // Looks hacky, but we lost bltMask, or the ability to easily convert alpha8 paintdev to selection?
     KisSelectionSP dabAsSelection = new KisSelection();
     copyPainter.begin(dabAsSelection);
-    copyPainter.setOpacity(OPACITY_OPAQUE);
+    copyPainter.setOpacity(OPACITY_OPAQUE_U8);
     copyPainter.setCompositeOp(COMPOSITE_COPY);
     copyPainter.bltFixed(0, 0, dab, 0, 0, sw, sh);
     copyPainter.end();

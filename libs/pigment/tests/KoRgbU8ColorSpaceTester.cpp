@@ -167,7 +167,7 @@ void KoRgbColorSpaceTester::testCompositeOps()
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 
         copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
-                          0, 0, 1, 1, OPACITY_OPAQUE);
+                          0, 0, 1, 1, OPACITY_OPAQUE_U8);
 
         src.fromQColor(red);
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) == 0);
@@ -179,7 +179,7 @@ void KoRgbColorSpaceTester::testCompositeOps()
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 
         copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
-                          0, 0, 1, 1, OPACITY_OPAQUE);
+                          0, 0, 1, 1, OPACITY_OPAQUE_U8);
 
         src.fromQColor(transparentRed);
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) == 0);
@@ -191,7 +191,7 @@ void KoRgbColorSpaceTester::testCompositeOps()
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 
         copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
-                          0, 0, 1, 1, OPACITY_OPAQUE);
+                          0, 0, 1, 1, OPACITY_OPAQUE_U8);
 
         src.fromQColor(blue);
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) == 0);

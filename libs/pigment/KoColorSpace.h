@@ -388,8 +388,8 @@ public:
     /**
      * Get the alpha value of the given pixel, downscaled to an 8-bit value.
      */
-    virtual quint8 alpha(const quint8 * pixel) const = 0;
-    virtual qreal alpha2(const quint8 * pixel) const = 0;
+    virtual quint8 opacityU8(const quint8 * pixel) const = 0;
+    virtual qreal opacityF(const quint8 * pixel) const = 0;
 
     /**
      * Set the alpha channel of the given run of pixels to the given value.
@@ -399,8 +399,8 @@ public:
      * nPixels -- the number of pixels
      *
      */
-    virtual void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const = 0;
-    virtual void setAlpha2(quint8 * pixels, qreal alpha, qint32 nPixels) const = 0;
+    virtual void setOpacity(quint8 * pixels, quint8 alpha, qint32 nPixels) const = 0;
+    virtual void setOpacity(quint8 * pixels, qreal alpha, qint32 nPixels) const = 0;
 
     /**
      * Multiply the alpha channel of the given run of pixels by the given value.

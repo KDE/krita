@@ -46,7 +46,7 @@ void KoCtlConvolutionOp::convolveColors(const quint8* const* colors, const qreal
     for (; nPixels--; colors++, kernelValues++) {
         qreal weight = *kernelValues;
         if (weight != 0) {
-            if (m_colorSpace->alpha(*colors) == 0) {
+            if (m_colorSpace->opacityU8(*colors) == 0) {
                 totalWeightTransparent += weight;
             } else {
                 for (int i = 0; i < channelsNb; i++) {

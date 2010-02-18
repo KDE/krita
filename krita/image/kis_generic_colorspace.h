@@ -187,18 +187,18 @@ public:
         return false;
     }
 
-    virtual quint8 alpha(const quint8 * /*pixel*/) const {
+    virtual quint8 opacityU8(const quint8 * /*pixel*/) const {
         return 0;
     }
 
-    virtual qreal alpha2(const quint8 * /*pixel*/) const {
+    virtual qreal opacityF(const quint8 * /*pixel*/) const {
         return 0;
     }
 
-    virtual void setAlpha(quint8 * /*pixels*/, quint8 /*alpha*/, qint32 /*nPixels*/) const { }
+    virtual void setOpacity(quint8 * /*pixels*/, quint8 /*alpha*/, qint32 /*nPixels*/) const { }
 
 
-    virtual void setAlpha2(quint8 * /*pixels*/, qreal /*alpha*/, qint32 /*nPixels*/) const { }
+    virtual void setOpacity(quint8 * /*pixels*/, qreal /*alpha*/, qint32 /*nPixels*/) const { }
 
     virtual void multiplyAlpha(quint8 * /*pixels*/, quint8 /*alpha*/, qint32 /*nPixels*/) const { }
 

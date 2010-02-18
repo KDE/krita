@@ -89,7 +89,7 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
         }
 
         if ( m_settings->opacity() ){
-            int opacity = qRound((1.0f + result) * OPACITY_OPAQUE);
+            qreal opacity = (1.0f + result);
             m_inkColor.setOpacity(opacity);
         }
     }

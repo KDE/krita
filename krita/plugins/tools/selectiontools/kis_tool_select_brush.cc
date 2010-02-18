@@ -166,7 +166,7 @@ void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
         painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
-        painter.setOpacity(OPACITY_OPAQUE);
+        painter.setOpacity(OPACITY_OPAQUE_U8);
         painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
         painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
 

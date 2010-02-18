@@ -94,7 +94,7 @@ public:
 
     virtual void applyInverseU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const {
         for (; nPixels > 0; --nPixels, pixels += m_pixelSize, ++alpha) {
-            _ChannelType_ valpha =  KoColorSpaceMaths<quint8, _ChannelType_>::scaleToA(OPACITY_OPAQUE - *alpha);
+            _ChannelType_ valpha =  KoColorSpaceMaths<quint8, _ChannelType_>::scaleToA(OPACITY_OPAQUE_U8 - *alpha);
             _ChannelType_* alphapixel = channel(pixels);
             *alphapixel = KoColorSpaceMaths<_ChannelType_>::multiply(*alphapixel, valpha);
         }

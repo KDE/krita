@@ -87,7 +87,7 @@ public:
             qreal weight = *kernelValues;
             const channels_type* color = _CSTrait::nativeArray(*colors);
             if (weight != 0) {
-                if (_CSTrait::alpha(*colors) == 0) {
+                if (_CSTrait::opacityU8(*colors) == 0) {
                     totalWeightTransparent += weight;
                 } else {
                     for (uint i = 0; i < _CSTrait::channels_nb; i++) {

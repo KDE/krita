@@ -64,8 +64,8 @@ void KisAsyncMergerTest::testMerger()
     KisFilterConfiguration *configuration = filter->defaultConfiguration(0);
     Q_ASSERT(configuration);
 
-    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE, device1);
-    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE, device2);
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8, device2);
     KisLayerSP groupLayer = new KisGroupLayer(image, "group", 200/*OPACITY_OPAQUE*/);
     KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
 
@@ -142,8 +142,8 @@ void KisAsyncMergerTest::debugObligeChild()
     KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
     device1->convertFromQImage(sourceImage1, "", 0, 0);
 
-    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE, device1);
-    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE);
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
+    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE_U8);
 
     image->addNode(groupLayer, image->rootLayer());
     image->addNode(paintLayer1, groupLayer);

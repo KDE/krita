@@ -110,21 +110,21 @@ void KisRoundCornersFilter::process(KisConstProcessingInformation srcInfo,
                     double dy = radius - y;
                     double dradius = static_cast<double>(radius);
                     if (dx >= sqrt(dradius*dradius - dy*dy)) {
-                        cs->setAlpha(dstIt.rawData(), 0, 1);
+                        cs->setOpacity(dstIt.rawData(), OPACITY_TRANSPARENT_U8, 1);
                     }
                 } else if (x >= x0 + width - radius && y <= radius) {
                     double dx = x + radius - x0 - width;
                     double dy = radius - y;
                     double dradius = static_cast<double>(radius);
                     if (dx >= sqrt(dradius*dradius - dy*dy)) {
-                        cs->setAlpha(dstIt.rawData(), 0, 1);
+                        cs->setOpacity(dstIt.rawData(), OPACITY_TRANSPARENT_U8, 1);
                     }
                 } else if (x <= radius && y >= y0 + height - radius) {
                     double dx = radius - x;
                     double dy = y + radius - y0 - height;
                     double dradius = static_cast<double>(radius);
                     if (dx >= sqrt(dradius*dradius - dy*dy)) {
-                        cs->setAlpha(dstIt.rawData(), 0, 1);
+                        cs->setOpacity(dstIt.rawData(), OPACITY_TRANSPARENT_U8, 1);
                     }
                 } else if (x >= x0 + width - radius && y >= y0 + height - radius) {
 
@@ -132,7 +132,7 @@ void KisRoundCornersFilter::process(KisConstProcessingInformation srcInfo,
                     double dy = y + radius - y0 - height;
                     double dradius = static_cast<double>(radius);
                     if (dx >= sqrt(dradius*dradius - dy*dy)) {
-                        cs->setAlpha(dstIt.rawData(), 0, 1);
+                        cs->setOpacity(dstIt.rawData(), OPACITY_TRANSPARENT_U8, 1);
                     }
                 }
             }

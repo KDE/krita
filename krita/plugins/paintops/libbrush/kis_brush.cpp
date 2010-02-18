@@ -363,7 +363,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
 
         if (maskWidth * maskHeight <= bounds.width() * bounds.height()) {
             // just clear the data in dst,
-            memset(dst->data(), OPACITY_TRANSPARENT, maskWidth * maskHeight * dst->pixelSize());
+            memset(dst->data(), OPACITY_TRANSPARENT_U8, maskWidth * maskHeight * dst->pixelSize());
         } else {
             dst->initialize();
         }
@@ -384,7 +384,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         }
     } else {
         // Mask everything out
-        cs->setAlpha(dst->data(), OPACITY_TRANSPARENT, dst->bounds().width() * dst->bounds().height());
+        cs->setOpacity(dst->data(), OPACITY_TRANSPARENT_U8, dst->bounds().width() * dst->bounds().height());
     }
 
     int rowWidth = dst->bounds().width();
@@ -640,10 +640,10 @@ KisQImagemaskSP KisBrush::scaleMask(const KisScaledBrush *srcBrush, double scale
 
             double yInterp = srcY - topY;
 
-            quint8 topLeft = (leftX >= 0 && leftX < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask->alphaAt(leftX, topY) : OPACITY_TRANSPARENT;
-            quint8 bottomLeft = (leftX >= 0 && leftX < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask->alphaAt(leftX, topY + 1) : OPACITY_TRANSPARENT;
-            quint8 topRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask->alphaAt(leftX + 1, topY) : OPACITY_TRANSPARENT;
-            quint8 bottomRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask->alphaAt(leftX + 1, topY + 1) : OPACITY_TRANSPARENT;
+            quint8 topLeft = (leftX >= 0 && leftX < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask->alphaAt(leftX, topY) : OPACITY_TRANSPARENT_U8;
+            quint8 bottomLeft = (leftX >= 0 && leftX < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask->alphaAt(leftX, topY + 1) : OPACITY_TRANSPARENT_U8;
+            quint8 topRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask->alphaAt(leftX + 1, topY) : OPACITY_TRANSPARENT_U8;
+            quint8 bottomRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask->alphaAt(leftX + 1, topY + 1) : OPACITY_TRANSPARENT_U8;
 
             double a = 1 - xInterp;
             double b = 1 - yInterp;
@@ -654,10 +654,10 @@ KisQImagemaskSP KisBrush::scaleMask(const KisScaledBrush *srcBrush, double scale
                                      + (1 - a) * b * topRight
                                      + (1 - a) * (1 - b) * bottomRight + 0.5);
 
-            if (d < OPACITY_TRANSPARENT) {
-                d = OPACITY_TRANSPARENT;
-            } else if (d > OPACITY_OPAQUE) {
-                d = OPACITY_OPAQUE;
+            if (d < OPACITY_TRANSPARENT_U8) {
+                d = OPACITY_TRANSPARENT_U8;
+            } else if (d > OPACITY_OPAQUE_U8) {
+                d = OPACITY_OPAQUE_U8;
             }
 
             dstMask->setAlphaAt(dstX, dstY, static_cast<quint8>(d));
@@ -954,10 +954,10 @@ KisQImagemaskSP KisBrush::scaleSinglePixelMask(double scale, quint8 maskValue, d
 
         for (int x = 0; x < dstWidth; x++) {
 
-            quint8 topLeft = (x > 0 && y > 0) ? maskValue : OPACITY_TRANSPARENT;
-            quint8 bottomLeft = (x > 0 && y < srcHeight) ? maskValue : OPACITY_TRANSPARENT;
-            quint8 topRight = (x < srcWidth && y > 0) ? maskValue : OPACITY_TRANSPARENT;
-            quint8 bottomRight = (x < srcWidth && y < srcHeight) ? maskValue : OPACITY_TRANSPARENT;
+            quint8 topLeft = (x > 0 && y > 0) ? maskValue : OPACITY_TRANSPARENT_U8;
+            quint8 bottomLeft = (x > 0 && y < srcHeight) ? maskValue : OPACITY_TRANSPARENT_U8;
+            quint8 topRight = (x < srcWidth && y > 0) ? maskValue : OPACITY_TRANSPARENT_U8;
+            quint8 bottomRight = (x < srcWidth && y < srcHeight) ? maskValue : OPACITY_TRANSPARENT_U8;
 
             // Bi-linear interpolation
             int d = static_cast<int>(a * b * topLeft
@@ -969,10 +969,10 @@ KisQImagemaskSP KisBrush::scaleSinglePixelMask(double scale, quint8 maskValue, d
             // has 0.25 the value of the 1x1.
             d = static_cast<int>(d * scale * scale + 0.5);
 
-            if (d < OPACITY_TRANSPARENT) {
-                d = OPACITY_TRANSPARENT;
-            } else if (d > OPACITY_OPAQUE) {
-                d = OPACITY_OPAQUE;
+            if (d < OPACITY_TRANSPARENT_U8) {
+                d = OPACITY_TRANSPARENT_U8;
+            } else if (d > OPACITY_OPAQUE_U8) {
+                d = OPACITY_OPAQUE_U8;
             }
 
             outputMask->setAlphaAt(x, y, static_cast<quint8>(d));

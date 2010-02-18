@@ -70,7 +70,7 @@ public:
                 if (mask != 0) {
                     quint8 U8_mask = *mask;
 
-                    if (U8_mask != OPACITY_OPAQUE) {
+                    if (U8_mask != OPACITY_OPAQUE_U8) {
                         srcAlpha = KoColorSpaceMaths< channels_type, channels_type >::blend(srcAlpha,
                                    NATIVE_OPACITY_OPAQUE,
                                    KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_mask));

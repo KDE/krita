@@ -101,10 +101,10 @@ bool GifConverter::convertLine(GifFileType* gifFile, GifPixelType* line, int row
         KoRgbTraits<quint8>::setBlue(dst, color.Blue);
 
         if (colorIndex == m_transparentColorIndex) {
-            layer->colorSpace()->setAlpha(dst, OPACITY_TRANSPARENT, 1);
+            layer->colorSpace()->setOpacity(dst, OPACITY_TRANSPARENT_U8, 1);
         }
         else {
-            layer->colorSpace()->setAlpha(dst, OPACITY_OPAQUE, 1);
+            layer->colorSpace()->setOpacity(dst, OPACITY_OPAQUE_U8, 1);
         }
     }
     return true;
@@ -117,7 +117,7 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageWSP kisImage) {
         return 0;
     }
 
-    KisPaintLayerSP layer = new KisPaintLayer(kisImage, kisImage->nextLayerName(), OPACITY_OPAQUE);
+    KisPaintLayerSP layer = new KisPaintLayer(kisImage, kisImage->nextLayerName(), OPACITY_OPAQUE_U8);
 
     GifImageDesc image = gifFile->Image;
 
@@ -134,7 +134,7 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageWSP kisImage) {
     KoRgbTraits<quint8>::setRed(fillPixel, color.Red);
     KoRgbTraits<quint8>::setGreen(fillPixel, color.Green);
     KoRgbTraits<quint8>::setBlue(fillPixel, color.Blue);
-    layer->colorSpace()->setAlpha(fillPixel, OPACITY_TRANSPARENT, 1);
+    layer->colorSpace()->setOpacity(fillPixel, OPACITY_TRANSPARENT_U8, 1);
 
     layer->paintDevice()->fill(0, 0, m_img->width(), m_img->height(), fillPixel);
 

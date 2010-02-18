@@ -59,7 +59,7 @@ void KisBidirectionalMixingOption::apply(KisPaintDeviceSP dab, KisPaintDeviceSP 
     KisRectIterator dit = dab->createRectIterator(sx, sy, sw, sh);
     QVector<float> cc(count), dc(count);
     while (!cit.isDone()) {
-        if (cs->alpha(dit.rawData()) > 10 && cs->alpha(cit.rawData()) > 10) {
+        if (cs->opacityU8(dit.rawData()) > 10 && cs->opacityU8(cit.rawData()) > 10) {
             cs->normalisedChannelsValue(cit.rawData(), cc);
             cs->normalisedChannelsValue(dit.rawData(), dc);
             for (int i = 0; i < count; i++) {
@@ -98,7 +98,7 @@ void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPain
 
     for (int y = 0; y < sh; y++) {
         for (int x = 0; x < sw; x++) {
-            if (cs->alpha(dabPointer) > 10 && cs->alpha(canvasPointer) > 10) {
+            if (cs->opacityU8(dabPointer) > 10 && cs->opacityU8(canvasPointer) > 10) {
 
                 cs->normalisedChannelsValue(canvasPointer, cc);
                 cs->normalisedChannelsValue(dabPointer, dc);

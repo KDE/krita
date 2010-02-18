@@ -442,7 +442,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         ExrGroupLayerInfo& info = groups[i];
         Q_ASSERT(info.parent == 0 || info.parent->groupLayer);
         KisGroupLayerSP groupLayerParent = (info.parent) ? info.parent->groupLayer : m_image->rootLayer();
-        info.groupLayer = new KisGroupLayer(m_image, info.name, OPACITY_OPAQUE);
+        info.groupLayer = new KisGroupLayer(m_image, info.name, OPACITY_OPAQUE_U8);
         m_image->addNode(info.groupLayer, groupLayerParent);
     }
 
@@ -451,7 +451,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         ExrPaintLayerInfo& info = infos[i];
         if (info.colorSpace) {
             dbgFile << "Decoding " << info.name << " with " << info.channelMap.size() << " channels, and color space " << info.colorSpace->id();
-            KisPaintLayerSP layer = new KisPaintLayer(m_image, info.name, OPACITY_OPAQUE, info.colorSpace);
+            KisPaintLayerSP layer = new KisPaintLayer(m_image, info.name, OPACITY_OPAQUE_U8, info.colorSpace);
             KisTransaction("", layer->paintDevice());
 
             layer->setCompositeOp(COMPOSITE_OVER);

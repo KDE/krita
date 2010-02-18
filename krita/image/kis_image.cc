@@ -307,7 +307,7 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const 
 
     m_d->colorSpace = colorSpace;
 
-    setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE));
+    setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
 
     m_d->xres = 1.0;
     m_d->yres = 1.0;
@@ -744,7 +744,7 @@ void KisImage::flatten()
 {
     KisGroupLayerSP oldRootLayer = m_d->rootLayer;
     KisGroupLayerSP newRootLayer =
-        new KisGroupLayer(this, "root", OPACITY_OPAQUE);
+        new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8);
 
     // - synchronous?
     // - no =(
@@ -758,7 +758,7 @@ void KisImage::flatten()
     unlock();
 
     KisPaintLayerSP flattenLayer =
-        new KisPaintLayer(this, nextLayerName(), OPACITY_OPAQUE, projectionCopy);
+        new KisPaintLayer(this, nextLayerName(), OPACITY_OPAQUE_U8, projectionCopy);
     Q_CHECK_PTR(flattenLayer);
 
     m_d->adapter->beginMacro(i18n("Flatten Image"));
@@ -797,7 +797,7 @@ KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrate
     // FIXME: "Merge Down"?
     undoAdapter()->beginMacro(i18n("Merge with Layer Below"));
 
-    KisPaintLayerSP mergedLayer = new KisPaintLayer(this, prevLayer->name(), OPACITY_OPAQUE, mergedDevice);
+    KisPaintLayerSP mergedLayer = new KisPaintLayer(this, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
     Q_CHECK_PTR(mergedLayer);
 
 

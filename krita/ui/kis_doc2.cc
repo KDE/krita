@@ -397,7 +397,7 @@ bool KisDoc2::newImage(const QString& name,
     documentInfo()->setAboutInfo("title", name);
     documentInfo()->setAboutInfo("comments", description);
 
-    layer = new KisPaintLayer(image.data(), image->nextLayerName(), bgColor.opacity(), cs);
+    layer = new KisPaintLayer(image.data(), image->nextLayerName(), bgColor.opacityU8(), cs);
     Q_CHECK_PTR(layer);
 
     layer->paintDevice()->setDefaultPixel(bgColor.data());

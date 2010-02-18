@@ -122,7 +122,7 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                 painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
                 painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-                painter.setOpacity(OPACITY_OPAQUE);
+                painter.setOpacity(OPACITY_OPAQUE_U8);
                 painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
                 painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
                 painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));

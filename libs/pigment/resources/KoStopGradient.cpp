@@ -334,13 +334,13 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
                         data[1] = static_cast<quint8>(color2 * 255 + 0.5);
                         data[2] = static_cast<quint8>(color3 * 255 + 0.5);
                         data[3] = static_cast<quint8>(color4 * 255 + 0.5);
-                        data[4] = static_cast<quint8>(opacity * OPACITY_OPAQUE + 0.5);
+                        data[4] = static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5);
                         color.setColor(data, stopColorSpace);
                     } else {
                         // cmyk colorspace not found fallback to rgb
                         color.convertTo(KoColorSpaceRegistry::instance()->rgb8());
                         tmpColor.setCmykF(color1, color2, color3, color4);
-                        tmpColor.setAlpha(static_cast<quint8>(opacity * OPACITY_OPAQUE + 0.5));
+                        tmpColor.setAlpha(static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5));
                         color.fromQColor(tmpColor);
                     }
                     break;
@@ -351,7 +351,7 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
 
                     color.convertTo(KoColorSpaceRegistry::instance()->rgb8());
                     tmpColor.setHsvF(color1, color2, color3);
-                    tmpColor.setAlpha(static_cast<quint8>(opacity * OPACITY_OPAQUE + 0.5));
+                    tmpColor.setAlpha(static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5));
                     color.fromQColor(tmpColor);
                     break;
                 case 3: // gray
@@ -360,13 +360,13 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
                     if (stopColorSpace) {
                         quint8 data[2];
                         data[0] = static_cast<quint8>(color1 * 255 + 0.5);
-                        data[1] = static_cast<quint8>(opacity * OPACITY_OPAQUE + 0.5);
+                        data[1] = static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5);
                         color.setColor(data, stopColorSpace);
                     } else {
                         // gray colorspace not found fallback to rgb
                         color.convertTo(KoColorSpaceRegistry::instance()->rgb8());
                         tmpColor.setRgbF(color1, color1, color1);
-                        tmpColor.setAlpha(static_cast<quint8>(opacity * OPACITY_OPAQUE + 0.5));
+                        tmpColor.setAlpha(static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5));
                         color.fromQColor(tmpColor);
                     }
                     break;
@@ -380,7 +380,7 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
                     data[2] = static_cast<quint8>(color1 * 255 + 0.5);
                     data[1] = static_cast<quint8>(color2 * 255 + 0.5);
                     data[0] = static_cast<quint8>(color3 * 255 + 0.5);
-                    data[3] = static_cast<quint8>(opacity * OPACITY_OPAQUE + 0.5);
+                    data[3] = static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5);
 
                     color.setColor(data, stopColorSpace);
                 }
@@ -556,7 +556,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
 
             KoColor color(rgbColorSpace);
             color.fromQColor(c);
-            color.setOpacity(static_cast<quint8>(opacity * OPACITY_OPAQUE + 0.5));
+            color.setOpacity(static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5));
 
             //According to the SVG spec each gradient offset has to be equal to or greater than the previous one
             //if not it needs to be adjusted to be equal

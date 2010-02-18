@@ -56,20 +56,20 @@ struct KoColorSpaceTrait {
     /**
      * @return the value of the alpha channel for this pixel in the 0..255 range
      */
-    inline static quint8 alpha(const quint8 * U8_pixel) {
-        if (alpha_pos < 0) return OPACITY_OPAQUE;
+    inline static quint8 opacityU8(const quint8 * U8_pixel) {
+        if (alpha_pos < 0) return OPACITY_OPAQUE_U8;
         channels_type c = nativeArray(U8_pixel)[alpha_pos];
         return  KoColorSpaceMaths<channels_type, quint8>::scaleToA(c);
     }
-    inline static qreal alpha2(const quint8 * U8_pixel) {
-        if (alpha_pos < 0) return OPACITY_OPAQUE2;
+    inline static qreal opacityF(const quint8 * U8_pixel) {
+        if (alpha_pos < 0) return OPACITY_OPAQUE_F;
         channels_type c = nativeArray(U8_pixel)[alpha_pos];
         return  KoColorSpaceMaths<channels_type, qreal>::scaleToA(c);
     }
     /**
      * Set the alpha channel for this pixel from a value in the 0..255 range
      */
-    inline static void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) {
+    inline static void setOpacity(quint8 * pixels, quint8 alpha, qint32 nPixels) {
         if (alpha_pos < 0) return;
         qint32 psize = pixelSize;
         channels_type valpha =  KoColorSpaceMaths<quint8, channels_type>::scaleToA(alpha);
@@ -77,7 +77,7 @@ struct KoColorSpaceTrait {
             nativeArray(pixels)[alpha_pos] = valpha;
         }
     }
-    inline static void setAlpha2(quint8 * pixels, qreal alpha, qint32 nPixels) {
+    inline static void setOpacity(quint8 * pixels, qreal alpha, qint32 nPixels) {
         if (alpha_pos < 0) return;
         qint32 psize = pixelSize;
         channels_type valpha =  KoColorSpaceMaths<qreal, channels_type>::scaleToA(alpha);
@@ -169,7 +169,7 @@ struct KoColorSpaceTrait {
         if (alpha_pos < 0) return;
 
         for (; nPixels > 0; --nPixels, pixels += pixelSize, ++alpha) {
-            channels_type valpha =  KoColorSpaceMaths<quint8, channels_type>::scaleToA(OPACITY_OPAQUE - *alpha);
+            channels_type valpha =  KoColorSpaceMaths<quint8, channels_type>::scaleToA(OPACITY_OPAQUE_U8 - *alpha);
             channels_type* alphapixel = nativeArray(pixels) + alpha_pos;
             *alphapixel = KoColorSpaceMaths<channels_type>::multiply(*alphapixel, valpha);
         }

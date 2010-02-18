@@ -244,7 +244,7 @@ void Bracketing2HDRPlugin::createHDRPaintDevice(QList<BracketingFrame> frames,  
             } else {
                 pixelData[KoRgbU16Traits::blue_pos] = 0.0;
             }
-            device->colorSpace()->setAlpha(dstIt.rawData(), 255, 1);
+            device->colorSpace()->setOpacity(dstIt.rawData(), OPACITY_OPAQUE_F, 1);
             ++dstIt;
         }
         dstIt.nextRow();

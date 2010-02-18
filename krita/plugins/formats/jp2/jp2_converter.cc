@@ -229,7 +229,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     }
 
     // Create the layer
-    KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image->nextLayerName(), OPACITY_OPAQUE);
+    KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image->nextLayerName(), OPACITY_OPAQUE_U8);
     KisTransaction("", layer->paintDevice());
     m_image->addNode(layer.data(), m_image->rootLayer().data());
 
@@ -243,7 +243,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
                 for (int i = 0; i < components; ++i) {
                     px[channelorder[i]] = image->comps[i].data[pos];
                 }
-                colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
+                colorSpace->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
                 ++pos;
                 ++it;
             }
@@ -253,7 +253,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
                 for (int i = 0; i < components; ++i) {
                     px[channelorder[i]] = image->comps[i].data[pos];
                 }
-                colorSpace->setAlpha(px, OPACITY_OPAQUE, 1);
+                colorSpace->setOpacity(px, OPACITY_OPAQUE_U8, 1);
                 ++pos;
                 ++it;
             }

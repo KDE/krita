@@ -39,7 +39,7 @@ void KisImageTest::layerTests()
     QVERIFY(image->rootLayer() != 0);
     QVERIFY(image->rootLayer()->firstChild() == 0);
 
-    KisLayerSP layer = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE);
+    KisLayerSP layer = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE_U8);
     image->addNode(layer);
 
     QVERIFY(image->rootLayer()->firstChild()->objectName() == layer->objectName());

@@ -131,7 +131,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     // read the projection into our single layer
     if (layerSection.nLayers == 0) {
         dbgFile << "Position" << f.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
-        KisPaintLayerSP layer = new KisPaintLayer(m_image, i18n("Background"), OPACITY_OPAQUE);
+        KisPaintLayerSP layer = new KisPaintLayer(m_image, i18n("Background"), OPACITY_OPAQUE_U8);
         KisTransaction("", layer -> paintDevice());
         //readLayerData(&f, layer->paintDevice(), f.pos(), QRect(0, 0, header.m_width, header.m_height));
         m_image->addNode(layer, m_image->rootLayer());

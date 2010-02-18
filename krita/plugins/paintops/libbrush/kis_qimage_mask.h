@@ -93,7 +93,7 @@ public:
         if (y >= 0 && y < m_data.height() && x >= 0 && x < m_data.width()) {
             return m_data.scanLine(y)[x];
         } else {
-            return OPACITY_TRANSPARENT;
+            return OPACITY_TRANSPARENT_U8;
         }
     }
 

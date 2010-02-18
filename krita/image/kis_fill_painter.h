@@ -225,13 +225,13 @@ private:
 inline
 void KisFillPainter::fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor& c)
 {
-    fillRect(x, y, w, h, c, OPACITY_OPAQUE);
+    fillRect(x, y, w, h, c, OPACITY_OPAQUE_U8);
 }
 
 inline
 void KisFillPainter::fillRect(const QRect& rc, const KoColor& c)
 {
-    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_OPAQUE);
+    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_OPAQUE_U8);
 }
 
 inline
@@ -239,7 +239,7 @@ void KisFillPainter::eraseRect(qint32 x1, qint32 y1, qint32 w, qint32 h)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KoColor c(Qt::black, cs);
-    fillRect(x1, y1, w, h, c, OPACITY_TRANSPARENT);
+    fillRect(x1, y1, w, h, c, OPACITY_TRANSPARENT_U8);
 }
 
 inline
@@ -247,7 +247,7 @@ void KisFillPainter::eraseRect(const QRect& rc)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KoColor c(Qt::black, cs);
-    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_TRANSPARENT);
+    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_TRANSPARENT_U8);
 }
 
 inline

@@ -142,10 +142,10 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
         const KoColorSpace* cs = m_tmpDevice->colorSpace();
         for (int y = 0; y < maskHeight; ++y) {
             while (!itTmpDev.isDone()) {
-                quint8 alphaTmpDev = cs->alpha(itTmpDev.rawData());
-                quint8 alphaSrc = cs->alpha(itSrc.rawData());
+                quint8 alphaTmpDev = cs->opacityU8(itTmpDev.rawData());
+                quint8 alphaSrc = cs->opacityU8(itSrc.rawData());
 
-                cs->setAlpha(itTmpDev.rawData(), qMin(alphaTmpDev, alphaSrc), 1);
+                cs->setOpacity(itTmpDev.rawData(), qMin(alphaTmpDev, alphaSrc), 1);
                 ++itTmpDev;
                 ++itSrc;
             }

@@ -44,7 +44,7 @@ void KoCtlMixColorsOp::mixColors(const quint8 * const* colors, const qint16 *wei
         double alphaTimesWeight;
 
         if (alphaPos != -1) {
-            alphaTimesWeight = m_colorSpace->alpha(color) / 255.0;
+            alphaTimesWeight = m_colorSpace->opacityF(color);
         } else {
             alphaTimesWeight = 1.0;
         }
@@ -59,7 +59,7 @@ void KoCtlMixColorsOp::mixColors(const quint8 * const* colors, const qint16 *wei
         ++colors;
         ++weights;
     }
-    if (totalAlpha > 255.0) totalAlpha = 255.0;
+    if (totalAlpha > 1.0) totalAlpha = 1.0;
 
     if (totalAlpha > 0) {
         double inv = 1.0 / totalAlpha;
@@ -68,7 +68,7 @@ void KoCtlMixColorsOp::mixColors(const quint8 * const* colors, const qint16 *wei
                 m_accumulators[i]->affect(dst, inv);
             }
         }
-        m_colorSpace->setAlpha(dst, totalAlpha, 1);
+        m_colorSpace->setOpacity(dst, totalAlpha, 1);
     } else {
         memset(dst, 0, m_colorSpace->pixelSize());
     }

@@ -51,7 +51,7 @@ KoColor::KoColor()
     d->colorSpace = KoColorSpaceRegistry::instance()->lab16(0);
     d->data = new quint8[d->colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
-    d->colorSpace->setAlpha(d->data, OPACITY_OPAQUE, 1);
+    d->colorSpace->setOpacity(d->data, OPACITY_OPAQUE_U8, 1);
 }
 
 KoColor::KoColor(const KoColorSpace * colorSpace)
@@ -249,11 +249,19 @@ void KoColor::toXML(QDomDocument& doc, QDomElement& colorElt) const
 
 void KoColor::setOpacity(quint8 alpha)
 {
-    d->colorSpace->setAlpha(d->data, alpha, 1);
+    d->colorSpace->setOpacity(d->data, alpha, 1);
 }
-quint8 KoColor::opacity() const
+void KoColor::setOpacity(qreal alpha)
 {
-    return d->colorSpace->alpha(d->data);
+    d->colorSpace->setOpacity(d->data, alpha, 1);
+}
+quint8 KoColor::opacityU8() const
+{
+    return d->colorSpace->opacityU8(d->data);
+}
+qreal KoColor::opacityF() const
+{
+    return d->colorSpace->opacityF(d->data);
 }
 
 KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, const QHash<QString, QString> & aliases)

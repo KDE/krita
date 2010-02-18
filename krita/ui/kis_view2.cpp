@@ -309,7 +309,7 @@ void KisView2::dropEvent(QDropEvent *event)
         if (kisimage) {
             KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
             device->convertFromQImage(qimage, "");
-            KisLayerSP layer = new KisPaintLayer(kisimage.data(), kisimage->nextLayerName(), OPACITY_OPAQUE, device);
+            KisLayerSP layer = new KisPaintLayer(kisimage.data(), kisimage->nextLayerName(), OPACITY_OPAQUE_U8, device);
 
             QPointF pos = kisimage->documentToIntPixel(m_d->viewConverter->viewToDocument(event->pos() + m_d->canvas->documentOffset() - m_d->canvas->documentOrigin()));
             layer->setX(pos.x());

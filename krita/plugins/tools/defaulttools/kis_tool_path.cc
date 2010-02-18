@@ -128,7 +128,7 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
         painter.setPaintColor(paintColor);
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-        painter.setOpacity(OPACITY_OPAQUE);
+        painter.setOpacity(OPACITY_OPAQUE_U8);
         painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_OVER));
         painter.setPaintOpPreset(preset, image);
 

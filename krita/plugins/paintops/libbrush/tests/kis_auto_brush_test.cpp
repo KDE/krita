@@ -48,7 +48,7 @@ void KisAutoBrushTest::testMaskGeneration()
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
     fdev->setRect(QRect(0, 0, 100, 100));
     fdev->initialize();
-    cs->setAlpha(fdev->data(), OPACITY_OPAQUE, 100 * 100);
+    cs->setOpacity(fdev->data(), OPACITY_OPAQUE_U8, 100 * 100);
 
     QPoint errpoint;
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_1.png");
@@ -81,7 +81,7 @@ void KisAutoBrushTest::testMaskGeneration()
 
     // Check creating a mask dab with a color taken from a paint device
     KoColor red(Qt::red, cs);
-    cs->setAlpha(red.data(), 128, 1);
+    cs->setOpacity(red.data(), quint8(128), 1);
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(0, 0, 100, 100, red.data());
 

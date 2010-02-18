@@ -106,7 +106,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
             while (! srcIt.isDone()) {
                 if (srcIt.isSelected()) {
                     //set the shadow color
-                    quint8 alpha = dev->colorSpace()->alpha(srcIt.rawData());
+                    quint8 alpha = dev->colorSpace()->opacityU8(srcIt.rawData());
                     color.setAlpha(alpha);
                     rgb8cs->fromQColor(color, dstIt.rawData());
                 }

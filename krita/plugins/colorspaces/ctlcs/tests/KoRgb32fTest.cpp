@@ -89,16 +89,16 @@ void KoRgb32fTest::testConversion()
 
     // Test alpha function
     p32f.alpha = 1.0;
-    QCOMPARE(qint32(rgb32f->alpha(p32fPtr)), 255);
+    QCOMPARE(qint32(rgb32f->opacityU8(p32fPtr)), 255);
     p32f.alpha = 0.5;
-    QCOMPARE(qint32(rgb32f->alpha(p32fPtr)), 127);
+    QCOMPARE(qint32(rgb32f->opacityU8(p32fPtr)), 127);
 
     // Test setAlpha
-    rgb32f->setAlpha(p32fPtr, 255, 1);
+    rgb32f->setOpacity(p32fPtr, quint8(255), 1);
     QCOMPARE(p32f.alpha, 1.0f);
-    rgb32f->setAlpha(p32fPtr, 0, 1);
+    rgb32f->setOpacity(p32fPtr, quint8(0), 1);
     QCOMPARE(p32f.alpha, 0.0f);
-    rgb32f->setAlpha(p32fPtr, 127, 1);
+    rgb32f->setOpacity(p32fPtr, quint8(127), 1);
     QCOMPARE(p32f.alpha, float(127 / 255.0));
 
     // Test conversion of black from 32f to 16u back to 32f

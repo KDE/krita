@@ -74,11 +74,11 @@ void KisBoundary::generateBoundary(int w, int h)
             bool darkBot;
 
             if (dataPointerTop < dataPointer) {
-                darkTop = OPACITY_TRANSPARENT;
+                darkTop = OPACITY_TRANSPARENT_U8;
             } else {
-                darkTop = cs->alpha(dataPointerTop);
+                darkTop = cs->opacityU8(dataPointerTop);
             }
-            darkBot = cs->alpha(dataPointerBot);
+            darkBot = cs->opacityU8(dataPointerBot);
 
             if (darkTop != darkBot) {
                 // detected a change
@@ -103,8 +103,8 @@ void KisBoundary::generateBoundary(int w, int h)
             quint8* dataPointerLeft = d->m_device->data() + (h * pixelSize) + (currentX * pixelSize);
             quint8* dataPointerRight = dataPointerTop - pixelSize;
 
-            darkLeft = cs->alpha(dataPointerLeft);
-            darkRight = cs->alpha(dataPointerRight);
+            darkLeft = cs->opacityU8(dataPointerLeft);
+            darkRight = cs->opacityU8(dataPointerRight);
 
             if (darkLeft != darkRight) {
                 // detected a change

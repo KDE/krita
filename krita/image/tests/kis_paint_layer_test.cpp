@@ -43,7 +43,7 @@ void KisPaintLayerTest::testProjection()
     KisImageSP image = new KisImage(0, qimage.width(), qimage.height(), cs, "merge test");
     image->lock(); // We'll call for recomposition ourselves
 
-    KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
+    KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
     layer->paintDevice()->convertFromQImage(qimage, 0, 0, 0);
     image->addNode(layer.data());
 
@@ -82,7 +82,7 @@ void KisPaintLayerTest::testProjection()
     // By default a new transparency mask blanks out the entire layer (photoshop mode "hide all")
     KisRectConstIterator it = layer->projection()->createRectConstIterator(0, 0, qimage.width(), qimage.height());
     while (!it.isDone()) {
-        QVERIFY(cs->alpha(it.rawData()) == OPACITY_OPAQUE);
+        QVERIFY(cs->opacityU8(it.rawData()) == OPACITY_OPAQUE_U8);
         ++it;
     }
 

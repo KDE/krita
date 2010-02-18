@@ -455,7 +455,7 @@ void KisSelectionManager::paste()
     KisPaintDeviceSP clip = m_clipboard->clip();
 
     if (clip) {
-        KisPaintLayer *layer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE);
+        KisPaintLayer *layer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8);
         Q_CHECK_PTR(layer);
 
         QRect r = clip->exactBounds();
@@ -527,7 +527,7 @@ void KisSelectionManager::pasteNew()
 
     KisImageWSP image = new KisImage(doc->undoAdapter(), r.width(), r.height(),
                                    KoColorSpaceRegistry::instance()->colorSpace(clip->colorSpace()->colorModelId().id(), clip->colorSpace()->colorDepthId().id(), clip->colorSpace()->profile()), "Pasted");    // TODO should be translated ?
-    KisPaintLayerSP layer = new KisPaintLayer(image.data(), clip->objectName(), OPACITY_OPAQUE, clip->colorSpace());
+    KisPaintLayerSP layer = new KisPaintLayer(image.data(), clip->objectName(), OPACITY_OPAQUE_U8, clip->colorSpace());
 
     KisPainter p(layer->paintDevice());
     p.setCompositeOp(COMPOSITE_COPY);

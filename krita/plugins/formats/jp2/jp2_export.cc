@@ -97,7 +97,7 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
     jp2Converter kpc(output, output->undoAdapter());
 
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
-    KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE, pd);
+    KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
     image->unlock();
 
     KisImageBuilder_Result res;

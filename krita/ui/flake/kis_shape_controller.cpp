@@ -309,7 +309,7 @@ void KisShapeController::addShape(KoShape* shape)
                                                this,
                                                m_d->image,
                                                i18n("Flake shapes %1", m_d->nameServer->number()),
-                                               OPACITY_OPAQUE);
+                                               OPACITY_OPAQUE_U8);
 
                 // Add the shape layer to the image. The image then emits
                 // a signal that is caught by us (the document) and the

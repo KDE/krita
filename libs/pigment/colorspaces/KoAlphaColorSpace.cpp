@@ -78,7 +78,7 @@ public:
             d = dst;
             while (rows-- > 0) {
 
-                memset(d, OPACITY_TRANSPARENT, linesize);
+                memset(d, OPACITY_TRANSPARENT_U8, linesize);
                 d += dststride;
             }
         } else {
@@ -92,7 +92,7 @@ public:
                     // If the mask tells us to completely not
                     // blend this pixel, continue.
                     if (mask != 0) {
-                        if (mask[0] == OPACITY_TRANSPARENT) {
+                        if (mask[0] == OPACITY_TRANSPARENT_U8) {
                             mask++;
                             continue;
                         }
@@ -156,7 +156,7 @@ public:
                 // If the mask tells us to completely not
                 // blend this pixel, continue.
                 if (mask != 0) {
-                    if (mask[0] == OPACITY_TRANSPARENT) {
+                    if (mask[0] == OPACITY_TRANSPARENT_U8) {
                         mask++;
                         continue;
                     }
@@ -164,7 +164,7 @@ public:
                 }
 
                 if (d[PIXEL_MASK] <= s[PIXEL_MASK]) {
-                    d[PIXEL_MASK] = OPACITY_TRANSPARENT;
+                    d[PIXEL_MASK] = OPACITY_TRANSPARENT_U8;
                 } else {
                     d[PIXEL_MASK] -= s[PIXEL_MASK];
                 }

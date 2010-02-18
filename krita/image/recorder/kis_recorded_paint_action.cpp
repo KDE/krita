@@ -287,7 +287,7 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
             painter->setOpacity(d->opacity * 255);
         } else {
             painter->setCompositeOp(node->paintDevice()->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
-            painter->setOpacity(OPACITY_OPAQUE);
+            painter->setOpacity(OPACITY_OPAQUE_U8);
 
         }
 
@@ -451,7 +451,7 @@ KoColor KisRecordedPaintActionFactory::colorFromXML(const QDomElement& elt, cons
 
     if (!colorElt.isNull()) {
         bC = KoColor::fromXML(colorElt.firstChildElement(), Integer8BitsColorDepthID.id(), QHash<QString, QString>());
-        bC.setOpacity(255);
+        bC.setOpacity(quint8(255));
         dbgImage << elementName << " color : " << bC.toQColor();
     } else {
         dbgImage << "Warning: no <" << elementName << " /> found";

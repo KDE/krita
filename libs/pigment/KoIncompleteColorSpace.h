@@ -67,7 +67,7 @@ public:
         m_qcolordata[1] = KoColorSpaceMaths<quint8, quint16>::scaleToA(color.green());
         m_qcolordata[0] = KoColorSpaceMaths<quint8, quint16>::scaleToA(color.blue());
         this->fromRgbA16((const quint8*)m_qcolordata, dst, 1);
-        this->setAlpha(dst, color.alpha(), 1);
+        this->setOpacity(dst, quint8(color.alpha()), 1);
     }
 
     virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const {
@@ -76,7 +76,7 @@ public:
         c->setRgb(KoColorSpaceMaths<quint16, quint8>::scaleToA(m_qcolordata[2]),
                   KoColorSpaceMaths<quint16, quint8>::scaleToA(m_qcolordata[1]),
                   KoColorSpaceMaths<quint16, quint8>::scaleToA(m_qcolordata[0]));
-        c->setAlpha(this->alpha(src));
+        c->setAlpha(this->opacityU8(src));
     }
 
     virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const {

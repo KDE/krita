@@ -628,7 +628,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                     double maxDistance = 0;
                     quint8* thisPixel = colorSpace->allocPixelBuffer(1);
                     memcpy(thisPixel, iter.rawData(), pixelSize);
-                    quint8 thisPixelOpacity = colorSpace->alpha(thisPixel);
+                    quint8 thisPixelOpacity = colorSpace->opacityU8(thisPixel);
 
                     // XXX: Move the distance computation into the colorspace when it works.
                     for (int yOffset = -1; yOffset < 2; yOffset++) {
@@ -644,7 +644,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
                                     accessor.moveTo(x, y);
                                     quint8 * pixel = accessor.rawData();
-                                    quint8 opacity = colorSpace->alpha(pixel);
+                                    quint8 opacity = colorSpace->opacityU8(pixel);
 
                                     double totalDistance = 0;
 
@@ -738,7 +738,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                         }
                                     }
                                 }
-                                totalOpacity += colorSpace->alpha(color.data());
+                                totalOpacity += colorSpace->opacityU8(color.data());
                             }
                         }
                         accessor.moveTo(x - startx, y - starty);
@@ -750,7 +750,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                 memcpy(pixel + pos, &val, channel->size());
                             }
                         }
-                        colorSpace->setAlpha(pixel, totalOpacity, 1);
+                        colorSpace->setOpacity(pixel, quint8(totalOpacity), 1);
                     }
 
                     pixelsProcessed++;

@@ -302,7 +302,7 @@ void DlgColorRange::slotSelectClicked()
 
             cs->toQColor(hiter.rawData(), &c);
             // Don't try to select transparent pixels.
-            if (c.alpha() > OPACITY_TRANSPARENT) {
+            if (c.alpha() > OPACITY_TRANSPARENT_U8) {
                 quint8 match = matchColors(c, m_currentAction);
 
                 if (match) {

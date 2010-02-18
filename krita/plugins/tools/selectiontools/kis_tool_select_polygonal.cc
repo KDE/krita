@@ -92,7 +92,7 @@ void KisToolSelectPolygonal::LocalTool::finishPolyline(const QVector<QPointF> &p
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
         painter.setAntiAliasPolygonFill(m_selectingTool->m_optWidget->antiAliasSelection());
-        painter.setOpacity(OPACITY_OPAQUE);
+        painter.setOpacity(OPACITY_OPAQUE_U8);
         painter.setPaintOpPreset(m_selectingTool->currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
         painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
         painter.paintPolygon(points);

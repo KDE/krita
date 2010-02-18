@@ -118,7 +118,7 @@ void KisSoftPaintOp::paintAt(const KisPaintInformation& info)
 
     KisRandomAccessor acc = m_dab->createRandomAccessor( info.pos().x(), info.pos().y() );
 
-    quint8 alpha;
+    quint8 alpha = 0;
     int pixelSize = m_dab->colorSpace()->pixelSize();
 
     int curX = qRound(info.pos().x());
@@ -174,7 +174,7 @@ void KisSoftPaintOp::paintAt(const KisPaintInformation& info)
         {
             if (m_brushType == GAUSS)
             {
-                alpha = qRound(m_gaussBrush.distMask->valueAt(maskX,maskY) * OPACITY_OPAQUE);
+                alpha = qRound(m_gaussBrush.distMask->valueAt(maskX,maskY) * OPACITY_OPAQUE_U8);
             }
             if (alpha == 0) continue;
             m_color.setOpacity(alpha);

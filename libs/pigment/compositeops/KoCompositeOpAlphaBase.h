@@ -83,7 +83,7 @@ public:
                     // transparent
 
                     if (mask != 0) {
-                        if (*mask == OPACITY_TRANSPARENT) {
+                        if (*mask == OPACITY_TRANSPARENT_U8) {
                             mask++;
                             columns--;
                             srcN += _CSTraits::channels_nb;
@@ -131,7 +131,7 @@ public:
 
                     // apply the alphamask
                     if (mask != 0) {
-                        if (*mask != OPACITY_OPAQUE) {
+                        if (*mask != OPACITY_OPAQUE_U8) {
                             srcAlpha = KoColorSpaceMaths<channels_type, quint8>::multiply(srcAlpha, *mask);
                         }
                         mask++;

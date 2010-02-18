@@ -127,4 +127,10 @@ QString KisPaintOpPresetsPopup::getPresetName() const
     return m_d->uiWdgPaintOpPresets.txtPreset->text();
 }
 
+void KisPaintOpPresetsPopup::setPresetFilter(const KoID& paintopID)
+{
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->setPresetFilter(paintopID);
+}
+
+
 #include "kis_paintop_presets_popup.moc"

@@ -20,6 +20,7 @@
 #define KIS_PAINTOP_PRESETS_POPUP_H
 
 #include <QWidget>
+#include <KoID.h>
 
 class QString;
 class KoResource;
@@ -52,7 +53,11 @@ public:
     /**
      * @return the name entered in the preset name lineedit
      */
-    QString getPresetName() const;    
+    QString getPresetName() const;
+
+    ///Set id for paintop to be accept by the proxy model
+    ///@param paintopID id of the paintop for which the presets will be shown
+    void setPresetFilter(const KoID & paintopID);
 signals:
     void savePresetClicked();
     void resourceSelected( KoResource * resource );

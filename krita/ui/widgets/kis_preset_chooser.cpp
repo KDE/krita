@@ -23,10 +23,12 @@
 #include <QPainter>
 #include <QAbstractItemDelegate>
 #include <QStyleOptionViewItem>
+#include <QSortFilterProxyModel>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <KoResourceItemChooser.h>
+#include <KoResourceModel.h>
 #include "kis_paintop_settings.h"
 #include "kis_paintop_preset.h"
 #include "kis_resource_server_provider.h"
@@ -53,8 +55,10 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     if (! index.isValid())
         return;
 
-    KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(index.internalPointer());
-
+    const QAbstractProxyModel* proxyModel = dynamic_cast<const QAbstractProxyModel*>(index.model());
+    QModelIndex originalIndex = proxyModel->mapToSource(index);
+    KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(originalIndex.internalPointer());
+    
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
         painter->fillRect(option.rect, option.palette.highlight());
@@ -69,6 +73,33 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
                        preview.scaled(previewRect.size(), Qt::KeepAspectRatio));
 }
 
+class KisPresetProxyModel : public QSortFilterProxyModel
+{
+public:
+    KisPresetProxyModel(QObject * parent = 0) : QSortFilterProxyModel(parent) {}
+    virtual ~KisPresetProxyModel() {}
+
+    ///Reimplemented
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+    {
+        QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
+        if(!index.isValid())
+            return false;
+        
+        KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(index.internalPointer());
+        return preset->paintOp() == m_paintopID;
+    }
+    
+    ///Set id for paintop to be accept by the proxy model
+    void setPresetFilter(const KoID &paintopID)
+    {
+        m_paintopID = paintopID;
+    }
+
+private:
+    KoID m_paintopID;
+};
+
 KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
         : QWidget(parent)
 {
@@ -77,6 +108,8 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisPaintOpPreset>(rserver);
     m_chooser = new KoResourceItemChooser(adapter, this);
+    m_presetProxy = new KisPresetProxyModel(this);
+    m_chooser->setProxyModel(m_presetProxy);
     m_chooser->setColumnCount(1);
     m_chooser->setRowHeight(60);
     m_chooser->setItemDelegate(new KisPresetDelegate(this));
@@ -90,7 +123,11 @@ KisPresetChooser::~KisPresetChooser()
 {
 }
 
-
+void KisPresetChooser::setPresetFilter(const KoID& paintopID)
+{
+    m_presetProxy->setPresetFilter(paintopID);
+    m_presetProxy->invalidate();
+}
 
 #include "kis_preset_chooser.moc"
 

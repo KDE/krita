@@ -29,7 +29,7 @@
 KisTiledHLineIterator::KisTiledHLineIterator(KisTiledDataManager *dataManager,
         qint32 x, qint32 y,
         qint32 w, bool writable)
-        : KisTiledIterator(dataManager)
+        : KisTiledIterator(dataManager), m_tilesCacheSize(0)
 {
     m_writable = writable;
 
@@ -56,6 +56,7 @@ KisTiledHLineIterator::KisTiledHLineIterator(KisTiledDataManager *dataManager,
 
     m_tilesCacheSize = m_rightCol - m_leftCol + 1;
     m_tilesCache.resize(m_tilesCacheSize);
+    Q_ASSERT(m_tilesCacheSize == m_tilesCache.size());
     
     // let's prealocate first row 
     for (int i = 0; i < m_tilesCacheSize; i++){
@@ -78,6 +79,8 @@ KisTiledHLineIterator::KisTiledHLineIterator(const KisTiledHLineIterator& rhs)
         m_leftInTile = rhs.m_leftInTile;
         m_rightInTile = rhs.m_rightInTile;
         m_isDoneFlag = rhs.m_isDoneFlag;
+        m_tilesCacheSize = rhs.m_tilesCacheSize;
+        m_tilesCache = rhs.m_tilesCache;
     }
 }
 
@@ -94,12 +97,15 @@ KisTiledHLineIterator& KisTiledHLineIterator::operator=(const KisTiledHLineItera
         m_leftInTile = rhs.m_leftInTile;
         m_rightInTile = rhs.m_rightInTile;
         m_isDoneFlag = rhs.m_isDoneFlag;
+        m_tilesCacheSize = rhs.m_tilesCacheSize;
+        m_tilesCache = rhs.m_tilesCache;
     }
     return *this;
 }
 
 KisTiledHLineIterator::~KisTiledHLineIterator()
 {
+    Q_ASSERT(m_tilesCacheSize == m_tilesCache.size());
     for (uint i = 0; i < m_tilesCacheSize; i++) {
         unlockTile(m_tilesCache[i].tile);
         unlockTile(m_tilesCache[i].oldtile);

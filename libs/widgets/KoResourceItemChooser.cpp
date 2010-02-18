@@ -24,6 +24,7 @@
 #include <QButtonGroup>
 #include <QPushButton>
 #include <QHeaderView>
+#include <QAbstractProxyModel>
 
 #include <kfiledialog.h>
 #include <kiconloader.h>
@@ -106,7 +107,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
         QModelIndex index = d->view->currentIndex();
         if( index.isValid() ) {
 
-            KoResource * resource = static_cast<KoResource*>( index.internalPointer() );
+            KoResource * resource = resourceFromModelIndex(index);
             if( resource ) {
                 d->model->resourceServerAdapter()->removeResource(resource);
             }
@@ -140,7 +141,7 @@ KoResource *  KoResourceItemChooser::currentResource()
 {
     QModelIndex index = d->view->currentIndex();
     if( index.isValid() )
-        return static_cast<KoResource*>( index.internalPointer() );
+        return resourceFromModelIndex(index);
 
     return 0;
 }
@@ -154,12 +155,18 @@ void KoResourceItemChooser::setCurrentItem(int row, int column)
     d->view->setCurrentIndex(index);
 }
 
+void KoResourceItemChooser::setProxyModel( QAbstractProxyModel* proxyModel )
+{
+    proxyModel->setSourceModel(d->model);
+    d->view->setModel(proxyModel);
+}
+
 void KoResourceItemChooser::activated( const QModelIndex & index )
 {
     if( ! index.isValid() )
         return;
 
-    KoResource * resource = static_cast<KoResource*>( index.internalPointer() );
+    KoResource * resource = resourceFromModelIndex(index);
 
     if( resource ) {
         emit resourceSelected( resource );
@@ -181,5 +188,21 @@ void KoResourceItemChooser::updateRemoveButtonState()
 
     removeButton->setEnabled( false );
 }
+
+KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index)
+{
+    if(!index.isValid())
+        return 0;
+    
+    const QAbstractProxyModel* proxyModel = dynamic_cast<const QAbstractProxyModel*>(index.model());
+    if(proxyModel) {
+        //Get original model index, because proxy models destroy the internalPointer
+        QModelIndex originalIndex = proxyModel->mapToSource(index);
+        return static_cast<KoResource*>( originalIndex.internalPointer() );
+    }
+
+    return static_cast<KoResource*>( index.internalPointer() );
+}
+
 
 #include <KoResourceItemChooser.moc>

@@ -27,6 +27,7 @@
 
 #include "kowidgets_export.h"
 
+class QAbstractProxyModel;
 class QButtonGroup;
 class QAbstractItemDelegate;
 class KoAbstractResourceServerAdapter;
@@ -65,6 +66,9 @@ public:
     void setCurrentItem(int row, int column);
 
     void showButtons( bool show );
+    
+    ///Set a proxy model with will be used to filter the resources
+    void setProxyModel( QAbstractProxyModel* proxyModel );
 signals:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );
@@ -77,6 +81,10 @@ private:
     enum Buttons { Button_Import, Button_Remove };
 
     void updateRemoveButtonState();
+
+    /// Resource for a given model index
+    /// @returns the resource pointer, 0 is index not valid
+    KoResource* resourceFromModelIndex(const QModelIndex & index );
 
     class Private;
     Private * const d;

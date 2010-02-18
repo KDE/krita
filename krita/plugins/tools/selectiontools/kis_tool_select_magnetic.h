@@ -27,6 +27,8 @@
 #include "flake/kis_node_shape.h"
 #include "kis_tool_select_base.h"
 
+//#include "kis_random_accessor.h"
+
 class QWidget;
 class KoCanvasBase;
 class KisSelectionOptions;
@@ -71,12 +73,12 @@ private:
         void paintOutline(QPainter* painter, const QPainterPath &path, qreal zoom);
         virtual void addPathShape(KoPathShape* pathShape);
         void computeOutline(const QPainterPath &pixelPath);
-        void computeEdge(const QVector2D &startPoint, const QVector2D &direction);
+        void computeEdge(const QVector2D &startPoint, const QVector2D &direction, KisRandomConstAccessor *pixelAccessor);
     private:
         KisToolSelectMagnetic* const m_selectingTool;
         KoLineBorder* m_borderBackup;
         QPolygonF m_outline;
-        KisRandomConstAccessor* m_randomAccessor;
+//        KisRandomConstAccessor &m_randomAccessor;
         const KoColorSpace* m_colorSpace;
         KoColorTransformation* m_colorTransformation;
         QPolygon m_detectedBorder;

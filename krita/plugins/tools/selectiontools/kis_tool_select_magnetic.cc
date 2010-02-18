@@ -42,6 +42,8 @@
 #include "kis_random_accessor.h"
 #include "kis_pixel_selection.h"
 
+#include "kis_tool_select_magnetic_option_widget.h"
+
 
 inline qreal dist(const QPointF &p1, const QPointF &p2)
 {
@@ -106,30 +108,22 @@ QWidget* KisToolSelectMagnetic::createOptionWidget()
     m_optWidget->disableAntiAliasSelectionOption();
     m_optWidget->disableSelectionModeOption();
 
-    QHBoxLayout* fl = new QHBoxLayout();
-    QLabel * lbl = new QLabel(i18n("Distance: "), m_optWidget);
-    fl->addWidget(lbl);
-
-    KIntNumInput * input = new KIntNumInput(m_optWidget);
-    input->setRange(15, 55, 5);
-    input->setValue(m_distance);
-    fl->addWidget(input);
-    connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetDistance(int)));
+    KisToolSelectMagneticOptionWidget* magneticOptions = new KisToolSelectMagneticOptionWidget(m_optWidget);
 
     QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);
-    l->insertLayout(1, fl);
+    l->addWidget(magneticOptions);
 
     return m_optWidget;
 }
 
 KisToolSelectMagnetic::LocalTool::LocalTool(KoCanvasBase * canvas, KisToolSelectMagnetic* selectingTool)
-        : KoCreatePathTool(canvas), m_selectingTool(selectingTool), m_randomAccessor(0) {}
+        : KoCreatePathTool(canvas), m_selectingTool(selectingTool) {}
 
 KisToolSelectMagnetic::LocalTool::~LocalTool()
 {
-    if(m_randomAccessor!=0)
-        delete m_randomAccessor;
+//    if(m_randomAccessor!=0)
+//        delete m_randomAccessor;
 }
 
 void KisToolSelectMagnetic::LocalTool::activate(bool temporary)
@@ -203,6 +197,13 @@ void KisToolSelectMagnetic::LocalTool::paintOutline(QPainter *painter, const QPa
 
 void KisToolSelectMagnetic::LocalTool::computeOutline(const QPainterPath &pixelPath)
 {
+    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kisCanvas);
+    KisImageWSP img = kisCanvas->image();
+
+//    KisRandomConstAccessor randomAccessor = (img->projection()->createRandomConstAccessor(0,0));
+//    m_randomAccessor = &m_selectingTool->currentNode()->paintDevice()->createRandomConstAccessor(0,0);
+    KisRandomConstAccessor randomAccessor = m_selectingTool->currentNode()->paintDevice()->createRandomConstAccessor(0,0);
 
     const int accuracy = 2;
 
@@ -238,39 +239,32 @@ void KisToolSelectMagnetic::LocalTool::computeOutline(const QPainterPath &pixelP
 
         QVector2D startPos = QVector2D(points.at(i)) + rotateClockWise(tangent) * (m_selectingTool->m_distance/2);
 
-        computeEdge(startPos, rotateAntiClockWise(tangent));
+        computeEdge(startPos, rotateAntiClockWise(tangent), &randomAccessor);
     }
 
     m_debugPolyline = points;
-    m_randomAccessor = 0;
+//    m_randomAccessor = 0;
 
 }
 
-void KisToolSelectMagnetic::LocalTool::computeEdge(const QVector2D &startPoint, const QVector2D &direction)
+void KisToolSelectMagnetic::LocalTool::computeEdge(const QVector2D &startPoint, const QVector2D &direction, KisRandomConstAccessor *pixelAccessor)
 {
-    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
-    KisImageWSP img = kisCanvas->image();
-
-    KisRandomAccessor m_randomAccessor = (img->projection()->createRandomAccessor(0,0));
-//    m_randomAccessor = &m_selectingTool->currentNode()->paintDevice()->createRandomConstAccessor(0,0);
-//    KisRandomAccessor it = m_selectingTool->currentNode()->paintDevice()->createRandomConstAccessor(0,0);
-
 //    Q_ASSERT(m_randomAccessor!=0);
     QVector2D currentPoint = startPoint;
     KoColor* color = new KoColor(m_colorSpace);
 
-    m_colorTransformation->transform(m_randomAccessor.rawData(), color->data(), 1);
+    pixelAccessor->moveTo(currentPoint.x(), currentPoint.y());
+    m_colorTransformation->transform(pixelAccessor->rawData(), color->data(), 1);
     int value = color->toQColor().value();
 
     while((currentPoint - startPoint).length()<m_selectingTool->m_distance) {
         //
 
         m_debugScannedPoints.append(currentPoint.toPoint());
-        m_randomAccessor.moveTo(currentPoint.x(), currentPoint.y());
+        pixelAccessor->moveTo(currentPoint.x(), currentPoint.y());
 //        memcpy(color->data(), m_randomAccessor.rawData(), colorSpace->pixelSize());
 
-        m_colorTransformation->transform(m_randomAccessor.rawData(), color->data(), 1);
+        m_colorTransformation->transform(pixelAccessor->rawData(), color->data(), 1);
         int currentValue = color->toQColor().value();
         if(std::abs(value-currentValue)>20) {
             m_detectedBorder.append(currentPoint.toPoint());
@@ -310,7 +304,7 @@ void KisToolSelectMagnetic::LocalTool::addPathShape(KoPathShape* pathShape)
     painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
     painter.setFillStyle(KisPainter::FillStyleForegroundColor);
     painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-    painter.setOpacity(OPACITY_OPAQUE);
+    painter.setOpacity(OPACITY_OPAQUE_U8);
     painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
 
     painter.paintPolygon(QPolygonF(m_detectedBorder));

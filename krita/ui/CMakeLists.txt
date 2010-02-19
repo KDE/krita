@@ -109,7 +109,6 @@ set(kritaui_LIB_SRCS
     recorder/kis_recorded_action_editor_factory_registry.cc
     recorder/kis_recorded_filter_action_editor.cc
     recorder/kis_recorded_paint_action_editor.cc
-    tool/kis_selection_options.cc 
     tool/kis_selection_tool_helper.cpp 
     tool/kis_shape_tool_helper.cpp 
     tool/kis_tool.cc 
@@ -143,6 +142,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_preset_chooser.cpp
     widgets/kis_preset_widget.cpp 
     widgets/kis_progress_widget.cpp
+    widgets/kis_selection_options.cc 
     widgets/kis_tree_view_popup.cc 
     widgets/kis_wdg_generator.cpp
     widgets/squeezedcombobox.cpp

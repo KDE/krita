@@ -1575,6 +1575,12 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block)
         if (m_styleManager) {
             const int id = listFormat.intProperty(KoListStyle::CharacterStyleId);
             KoCharacterStyle *cs = m_styleManager->characterStyle(id);
+            if (!cs) {
+                KoParagraphStyle *ps = m_styleManager->paragraphStyle(
+                                       block.blockFormat().intProperty(KoParagraphStyle::StyleId));
+                if (ps)
+                    cs = ps->characterStyle();
+            }
             if (cs) {
                 cs->applyStyle(cf);
                 filled = true;

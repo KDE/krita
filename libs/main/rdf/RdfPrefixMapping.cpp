@@ -98,14 +98,14 @@ void RdfPrefixMapping::dump() const
 void RdfPrefixMapping::insert(const QString &prefix, const QString &url)
 {
     QString fixedPrefix = canonPrefix(prefix);
-    kDebug(30015) << " prefix:" << fixedPrefix << " url:" << url;
+    //kDebug(30015) << " prefix:" << fixedPrefix << " url:" << url;
     m_mappings.insert(fixedPrefix, url);
 }
 
 void RdfPrefixMapping::remove(const QString &prefix)
 {
     QString fixedPrefix = canonPrefix(prefix);
-    kDebug(30015) << " prefix:" << fixedPrefix;
+    //kDebug(30015) << " prefix:" << fixedPrefix;
     m_mappings.remove(fixedPrefix);
 }
 
@@ -117,14 +117,14 @@ void RdfPrefixMapping::load(Soprano::Model *model)
     Node rdfRest = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"));
     Soprano::Node ListHeadSubject = Node::createResourceNode(QUrl(nodePrefix + "list"));
     QList<Statement> listNodes = KoTextRdfCore::loadList(model, ListHeadSubject);
-    kDebug(30015) << "found count:" << listNodes.size();
+    //kDebug(30015) << "found count:" << listNodes.size();
     foreach (Soprano::Statement s, listNodes) {
         Soprano::Node dataBNode = s.object();
         QString prefix = KoTextRdfCore::getObject(model, dataBNode,
                          Node::createResourceNode(QUrl(nodePrefix + "prefix"))).toString();
         QString url = KoTextRdfCore::getObject(model, dataBNode,
                                                Node::createResourceNode(QUrl(nodePrefix + "url"))).toString();
-        kDebug(30015) << "found prefix:" << prefix << " url:" << url;
+        //kDebug(30015) << "found prefix:" << prefix << " url:" << url;
         insert(prefix, url);
     }
 }
@@ -140,7 +140,7 @@ void RdfPrefixMapping::save(Soprano::Model *model, Soprano::Node context) const
     QMap<QString,QString>::const_iterator mi = m_mappings.begin();
     QMap<QString,QString>::const_iterator me = m_mappings.end();
     for (; mi != me; ++mi) {
-        kDebug(30015) << "saving prefix:" << mi.key() << " url:" << mi.value();
+        //kDebug(30015) << "saving prefix:" << mi.key() << " url:" << mi.value();
         dataBNode = model->createBlankNode();
         model->addStatement(dataBNode,Node::createResourceNode(QUrl(nodePrefix + "prefix")),
             Node::createLiteralNode(mi.key()), context);

@@ -45,7 +45,7 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
     m_row = yToRow(m_y);
     m_yInTile = calcYInTile(m_y, m_row);
 
-    qint32 leftInLeftmostTile = calcLeftInTile(m_leftCol);
+    m_leftInLeftmostTile = (m_leftCol > m_leftCol) ? 0 : m_left - m_leftCol * KisTileData::WIDTH;
 
     m_tilesCacheSize = m_rightCol - m_leftCol + 1;
     m_tilesCache.resize(m_tilesCacheSize);
@@ -54,52 +54,8 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
     for (int i = 0; i < m_tilesCacheSize; i++){
         m_tilesCache[i] = fetchTileDataForCache(m_leftCol + i, m_row);
     }
-    switchToTile(m_leftCol, leftInLeftmostTile);
+    switchToTile(m_leftCol, m_leftInLeftmostTile);
 }
-
-
-KisHLineIterator2& KisHLineIterator2::operator=(const KisHLineIterator2 & rhs)
-{
-    if (this != &rhs) {
-
-        if (m_tile)
-            unlockTile(m_tile);
-        if (m_oldTile)
-            unlockTile(m_oldTile);
-
-        m_dataManager = rhs.m_dataManager;
-        m_pixelSize = rhs.m_pixelSize;
-        m_x = rhs.m_x;
-        m_y = rhs.m_y;
-        m_row = rhs.m_row;
-        m_col = rhs.m_col;
-        m_data = rhs.m_data;
-        m_oldData = rhs.m_oldData;
-        m_offset = rhs.m_offset;
-        m_tile = rhs.m_tile;
-        m_oldTile = rhs.m_oldTile;
-        m_writable = rhs.m_writable;
-
-        if (m_tile)
-            lockTile(m_tile);
-        if (m_oldTile)
-            lockOldTile(m_oldTile);
-
-        m_left = rhs.m_left;
-        m_right = rhs.m_right;
-        m_leftCol = rhs.m_leftCol;
-        m_rightCol = rhs.m_rightCol;
-        m_xInTile = rhs.m_xInTile;
-        m_yInTile = rhs.m_yInTile;
-        m_leftInTile = rhs.m_leftInTile;
-        m_rightInTile = rhs.m_rightInTile;
-        m_havePixels = rhs.m_havePixels;
-    }
-    return *this;
-}
-
-
-
 
 bool KisHLineIterator2::nextPixel()
 {
@@ -122,8 +78,6 @@ bool KisHLineIterator2::nextPixel()
 
 void KisHLineIterator2::nextRow()
 {
-    qint32 leftInLeftmostTile = calcLeftInTile(m_leftCol);
-
     m_x = m_left;
     m_y++;
 
@@ -134,7 +88,7 @@ void KisHLineIterator2::nextRow()
         m_yInTile = 0;
         preallocateTiles(m_row);
     }
-    switchToTile(m_leftCol, leftInLeftmostTile);
+    switchToTile(m_leftCol, m_leftInLeftmostTile);
 
     m_havePixels = true;
 }
@@ -179,7 +133,6 @@ void KisHLineIterator2::switchToTile(qint32 col, qint32 xInTile)
     Q_ASSERT(col >= m_leftCol);
 
     m_rightInTile = calcRightInTile(col);
-    m_leftInTile = calcLeftInTile(col);
 
     m_col = col;
     m_xInTile = xInTile;

@@ -29,6 +29,8 @@
 #include "kis_iterator_ng.h"
 
 class KisHLineIterator2 : public KisShared, public KisHLineIteratorNG{
+    KisHLineIterator2(const KisHLineIterator2&);
+    KisHLineIterator2& operator=(const KisHLineIterator2&);
 
 public:
     struct KisTileInfo {
@@ -42,7 +44,6 @@ public:
 public:    
     KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY);
     ~KisHLineIterator2();
-    KisHLineIterator2& operator=(const KisHLineIterator2&);
     
     virtual bool nextPixel();
     virtual void nextRow();
@@ -72,9 +73,9 @@ protected:
     qint32 m_leftCol;
     qint32 m_rightCol;
 
+    qint32 m_leftInLeftmostTile;
     qint32 m_xInTile;
     qint32 m_yInTile;
-    qint32 m_leftInTile;
     qint32 m_rightInTile;
 
     QVector<KisTileInfo> m_tilesCache;
@@ -119,11 +120,6 @@ protected:
 
 
 private:
-    inline qint32 calcLeftInTile(qint32 col) const {
-        return (col > m_leftCol) ? 0
-               : m_left - m_leftCol * KisTileData::WIDTH;
-    }
-
     inline qint32 calcRightInTile(qint32 col) const {
         return (col < m_rightCol)
                ? KisTileData::WIDTH - 1

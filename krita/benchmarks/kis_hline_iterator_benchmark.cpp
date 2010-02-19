@@ -139,7 +139,7 @@ void KisHLineIteratorBenchmark::benchmarkReadWriteBytes2()
             do {
                 memcpy(writeIterator->rawData(), readIterator->rawData(), m_colorSpace->pixelSize());
                 writeIterator->nextPixel();
-            } while (readIterator->nextPixel())
+            } while (readIterator->nextPixel());
             readIterator->nextRow();
             writeIterator->nextRow();
         }

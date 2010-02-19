@@ -312,20 +312,12 @@ void ListItemsHelper::recalculate()
                     kWarning(32500) << "Skipping textblock cause userData() does not contain a valid KoTextBlockData";
                     continue;
                 }
-                if (tmpDisplayLevel - 1 < otherLevel) { // can't just copy it fully since we are
-                    // displaying less then the full counter
-                    item += otherData->partialCounterText();
+                item += otherData->partialCounterText();
+                tmpDisplayLevel--;
+                checkLevel--;
+                for (int i = otherLevel + 1;i < level; i++) {
                     tmpDisplayLevel--;
-                    checkLevel--;
-                    for (int i = otherLevel + 1;i < level; i++) {
-                        tmpDisplayLevel--;
-                        item += ".0"; // add missing counters.
-                    }
-                } else { // just copy previous counter as prefix
-                    item += otherData->counterText();
-                    for (int i = otherLevel + 1;i < level; i++)
-                        item += ".0"; // add missing counters.
-                    break;
+                    item += ".0"; // add missing counters.
                 }
             }
         }
@@ -432,8 +424,9 @@ void ListItemsHelper::recalculate()
     }
 
     qreal counterSpacing = m_fm.width(' ');
+    counterSpacing = qMax(format.doubleProperty(KoListStyle::MinimumDistance), counterSpacing);
     width += m_fm.width(prefix + suffix); // same for all
-    width = qMax(format.doubleProperty(KoListStyle::MinimumDistance), width);
+    width = qMax(format.doubleProperty(KoListStyle::MinimumWidth), width);
     for (int i = 0; i < m_textList->count(); i++) {
         QTextBlock tb = m_textList->item(i);
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(tb.userData());

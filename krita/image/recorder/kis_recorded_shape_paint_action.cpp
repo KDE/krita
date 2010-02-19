@@ -55,6 +55,7 @@ QString selectName(KisRecordedShapePaintAction::Shape s)
         case KisRecordedShapePaintAction::Rectangle:
             return i18n("Rectangle");
     }
+    return QString();
 }
 
 KisRecordedShapePaintAction::KisRecordedShapePaintAction(

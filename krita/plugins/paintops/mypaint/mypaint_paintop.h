@@ -30,6 +30,7 @@ class KisPainter;
 
 class MyPaintSettings;
 class MyPaintSurface;
+class MyPaintBrushResource;
 
 class MyPaint : public KisPaintOp
 {
@@ -50,6 +51,7 @@ private:
     bool m_mypaintThinksStrokeHasEnded;
     MyPaintSurface* m_surface;
     const MyPaintSettings* m_settings;
+    MyPaintBrushResource *m_brush;
 };
 
 #endif // KIS_MYPAINTPAINTOP_H_

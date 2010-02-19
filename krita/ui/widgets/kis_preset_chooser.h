@@ -47,6 +47,9 @@ public:
 
 signals:
     void resourceSelected( KoResource * resource );
+    
+private slots:
+    void searchTextChanged(const QString& searchString);
 
 private:
     KoResourceItemChooser *m_chooser;

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,10 +21,43 @@
 #include <qtest_kde.h>
 #include "kis_iterators_pixel.h"
 
+#include <kis_paint_device.h>
+#include <KoColorSpaceRegistry.h>
+
 void KisIteratorsPixelTest::testCreation()
 {
-}
+    KisPaintDevice dev(KoColorSpaceRegistry::instance()->rgb8());
 
+    KisHLineIteratorNG* it = dev.createHLineIterator2(0, 0, 200);
+    quint8 data = 0;
+    for(int y = 0; y < 200; ++y)
+    {
+        do {
+            for(int i = 0; i < 4; ++i)
+            {
+                it->rawData()[i] = ++data;
+            }
+        } while(it->nextPixel());
+        it->nextRow();
+    }
+    delete it;
+    it = 0;
+    KisHLineIteratorPixel it2 = dev.createHLineIterator(0,0,200);
+    data = 0;
+    for(int y = 0; y < 200; ++y)
+    {
+        while(!it2.isDone())
+        {
+            for(int i = 0; i < 4; ++i)
+            {
+                quint8 d = ++data;
+                QCOMPARE(it2.rawData()[i], d);
+            }
+            ++it2;
+        }
+        it2.nextRow();
+    }
+}
 
 QTEST_KDEMAIN(KisIteratorsPixelTest, GUI)
 #include "kis_iterators_pixel_test.moc"

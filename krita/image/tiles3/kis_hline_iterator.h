@@ -64,7 +64,8 @@ private:
     KisTileSP m_tile;
     KisTileSP m_oldTile;
     bool m_writable;
-
+    bool m_havePixels;
+    
 protected:
     qint32 m_right;
     qint32 m_left;
@@ -79,7 +80,6 @@ protected:
     QVector<KisTileInfo> m_tilesCache;
     quint32 m_tilesCacheSize;
     
-    bool m_isDoneFlag;
     void fetchTileData(qint32 col, qint32 row);
     
 protected:

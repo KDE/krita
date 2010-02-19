@@ -26,8 +26,6 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
     m_pixelSize = m_dataManager->pixelSize();
 
     //m_writable = writable;
-    qDebug() << "I'm Created!";
-    
     
     m_x = x;
     m_y = y;
@@ -35,15 +33,14 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
     m_left = x;
     m_right = x + w - 1;
 
-    m_isDoneFlag = !w;
+    m_havePixels = (w == 0) ? false : true;
     if (m_left > m_right) {
-        m_isDoneFlag = true;
+        m_havePixels = false;
         return;
     }
 
     m_leftCol = xToCol(m_left);
     m_rightCol = xToCol(m_right);
-    
     
     m_row = yToRow(m_y);
     m_yInTile = calcYInTile(m_y, m_row);
@@ -106,11 +103,10 @@ KisHLineIterator2& KisHLineIterator2::operator=(const KisHLineIterator2 & rhs)
 
 bool KisHLineIterator2::nextPixel()
 {
-    qDebug() << "!m_isDoneFlag: " << !m_isDoneFlag;
-    
     // We won't increment m_x here as integer can overflow here
     if (m_x >= m_right) {
-        return !m_isDoneFlag;
+        //return !m_isDoneFlag;
+        return m_havePixels = false;
     } else {
         m_x++;
         if (++m_xInTile <= m_rightInTile)
@@ -119,7 +115,8 @@ bool KisHLineIterator2::nextPixel()
             // Switching to the beginning of the next tile
             switchToTile(m_col + 1, 0);
     }
-    return m_isDoneFlag;
+
+    return m_havePixels;
 }
 
 
@@ -139,7 +136,7 @@ void KisHLineIterator2::nextRow()
     }
     switchToTile(m_leftCol, leftInLeftmostTile);
 
-    m_isDoneFlag = false;
+    m_havePixels = true;
 }
 
 
@@ -165,6 +162,7 @@ const quint8 * KisHLineIterator2::oldRawData() const
 }
 
 void KisHLineIterator2::fetchTileData(qint32 col, qint32 row){
+    Q_UNUSED(row);
     // check if we have the cached column and row
     int index = col - m_leftCol;
     

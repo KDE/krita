@@ -23,12 +23,15 @@
 #include "kis_sumi_ink_option.h"
 
 #include <kis_paintop_options_widget.h>
+#include <kis_brush_option_widget.h>
 
 KisSumiPaintOpSettingsWidget:: KisSumiPaintOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
 {
     m_sumiShapeOption = new KisSumiShapeOption();
     m_sumiInkOption = new KisSumiInkOption();
+    m_brushOption = new KisBrushOptionWidget();
+    addPaintOpOption(m_brushOption);
     addPaintOpOption(m_sumiShapeOption);
     addPaintOpOption(m_sumiInkOption);
 }

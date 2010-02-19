@@ -34,6 +34,9 @@
 
 #include <kis_sumi_ink_option.h>
 #include <kis_sumi_shape_option.h>
+#include <kis_brush_option.h>
+
+#include "kis_brush.h"
 
 KisSumiPaintOp::KisSumiPaintOp(const
                                KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
@@ -44,10 +47,24 @@ KisSumiPaintOp::KisSumiPaintOp(const
 
 {
     Q_ASSERT(settings);
+
+    KisBrushOption brushOption;
+    brushOption.readOptionSetting(settings);
+    KisBrushSP kisBrush = brushOption.brush();
+    BrushShape bs; 
+    
+    bs.setColorSpace(painter->device()->colorSpace());
+    bs.setHasColor(kisBrush->hasColor());
+    bs.fromQImage(kisBrush->image());
+    m_brush.setBrushShape(bs);
+    
     loadSettings(settings);
     m_brush.setProperties( &m_properties );
     
-    m_brush.setInkColor(painter->paintColor());    
+    if (!bs.hasColor()){
+        m_brush.setInkColor(painter->paintColor());    
+    }
+    
     if (!settings->node()) {
         m_dev = 0;
     } else {
@@ -86,7 +103,7 @@ void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
     m_properties.randomFactor = settings->getDouble(SUMI_RANDOM);
     m_properties.scaleFactor = settings->getDouble(SUMI_SCALE);
     
-    BrushShape brushShape;
+/*    BrushShape brushShape;
     if (m_properties.isbrushDimension1D) 
     {
         brushShape.fromLine(m_properties.radius, m_properties.sigma);
@@ -95,7 +112,7 @@ void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
         brushShape.fromGaussian(m_properties.radius, m_properties.sigma);
         brushShape.tresholdBristles(0.1);
     }
-    m_brush.setBrushShape(brushShape);
+    m_brush.setBrushShape(brushShape);*/
     
 }
 

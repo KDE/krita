@@ -26,7 +26,7 @@
 
 BrushShape::BrushShape()
 {
-
+    m_hasColor = false;
 }
 
 BrushShape::~BrushShape()
@@ -135,12 +135,8 @@ void BrushShape::fromLine(int radius, float sigma)
     }
 }
 
-void BrushShape::fromQImage(const QString fileName)
+void BrushShape::fromQImage(QImage image)
 {
-    QImage image(fileName);
-    if (image.isNull()) {
-        return;
-    }
 
     m_radius = -1;
     m_sigma = -1;
@@ -148,19 +144,32 @@ void BrushShape::fromQImage(const QString fileName)
     m_width = image.width();
     m_height = image.height();
 
-    int x_radius = qRound(m_width * 0.5);
-    int y_radius = qRound(m_height * 0.5);
+    int centerX = qRound(m_width * 0.5);
+    int centerY = qRound(m_height * 0.5);
 
-    QColor pixelColor;
-    Bristle *b;
-    for (int x = -x_radius; x < x_radius; x++) {
-        for (int y = -y_radius; y < y_radius; y++) {
-            pixelColor.setRgba(image.pixel(x + x_radius, y + y_radius));
-            b = new Bristle(x, y , (float)pixelColor.value() / 255.0f); // using value from image as length of bristle
-            m_bristles.append(b);
+    // make mask 
+    Bristle *bristle;
+    int a;
+    QRgb color;
+    KoColor kcolor(m_colorSpace);
+    QColor qcolor;
+    
+    for (int y = 0; y < m_height; y++) {
+        QRgb *pixelLine = reinterpret_cast<QRgb *>(image.scanLine(y));
+        for (int x = 0; x < m_width; x++) {
+            color = pixelLine[x];
+            a = ((255 - qGray(color)) * qAlpha(color)) / 255; 
+            if (a != 0){
+                bristle = new Bristle(x - centerX, y - centerY, a / 255.0); // using value from image as length of bristle    
+                if (m_hasColor){
+                    qcolor.setRgb(color);
+                    kcolor.fromQColor(qcolor);
+                    bristle->setColor(kcolor);
+                } 
+                m_bristles.append(bristle);
+            }
         }
     }
-
 }
 
 QVector<Bristle*> BrushShape::getBristles()

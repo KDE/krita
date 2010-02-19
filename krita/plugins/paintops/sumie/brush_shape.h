@@ -23,7 +23,8 @@
 #include "bristle.h"
 
 class QString;
-
+class QImage;
+class KoColorSpace;
 class BrushShape
 {
 
@@ -35,7 +36,7 @@ public:
     void fromGaussian(int radius, float sigma);
     void fromLine(int radius, float sigma);
     // slow, optimize!
-    void fromQImage(const QString fileName);
+    void fromQImage(QImage image);
     void tresholdBristles(double treshold);
 
     QVector<Bristle*> getBristles();
@@ -44,6 +45,9 @@ public:
     int radius();
     float sigma();
 
+    bool hasColor(){ return m_hasColor; }
+    void setHasColor(bool hasColor){ m_hasColor = hasColor; }
+    void setColorSpace(KoColorSpace * cs){ m_colorSpace = cs;}
 private:
     int m_width;
     int m_height;
@@ -51,6 +55,8 @@ private:
     int m_radius;
     float m_sigma;
 
+    bool m_hasColor;
+    const KoColorSpace * m_colorSpace;
     QVector<Bristle*> m_bristles;
 };
 

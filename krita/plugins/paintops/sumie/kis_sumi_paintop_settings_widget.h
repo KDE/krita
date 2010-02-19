@@ -24,6 +24,7 @@
 
 class KisSumiInkOption;
 class KisSumiShapeOption;
+class KisBrushOptionWidget;
 
 class KisSumiPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {
@@ -39,6 +40,8 @@ public:
 public:
     KisSumiShapeOption * m_sumiShapeOption;
     KisSumiInkOption * m_sumiInkOption;
+    
+    KisBrushOptionWidget * m_brushOption;
 };
 
 #endif

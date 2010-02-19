@@ -85,14 +85,14 @@ bool KisHLineIterator2::nextPixel()
 void KisHLineIterator2::nextRow()
 {
     m_x = m_left;
-    m_y++;
+    ++m_y;
 
     if (++m_yInTile < KisTileData::HEIGHT) {
         /* do nothing, usual case */
     } else {
-        m_row++;
+        ++m_row;
         m_yInTile = 0;
-        preallocateTiles(m_row);
+        preallocateTiles();
     }
     m_index = 0;
     switchToTile(m_leftInLeftmostTile);
@@ -151,11 +151,11 @@ KisHLineIterator2::KisTileInfo KisHLineIterator2::fetchTileDataForCache(qint32 c
     return kti;
 }
 
-void KisHLineIterator2::preallocateTiles(qint32 row)
+void KisHLineIterator2::preallocateTiles()
 {
     for (quint32 i = 0; i < m_tilesCacheSize; i++){
         unlockTile(m_tilesCache[i].tile);
         unlockTile(m_tilesCache[i].oldtile);
-        m_tilesCache[i] = fetchTileDataForCache(m_leftCol + i, row);
+        m_tilesCache[i] = fetchTileDataForCache(m_leftCol + i, m_row);
     }
 }

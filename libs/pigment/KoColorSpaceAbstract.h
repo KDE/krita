@@ -144,7 +144,7 @@ public:
     }
 
     virtual KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const {
-        return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(""), new KoLabDarkenColorTransformation<quint16>(shade, compensate, compensation));
+        return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(""), new KoLabDarkenColorTransformation<quint16>(shade, compensate, compensation, KoColorSpaceRegistry::instance()->lab16("")));
     }
 
     virtual KoID mathToolboxId() const {

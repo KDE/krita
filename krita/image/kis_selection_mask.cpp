@@ -60,6 +60,7 @@ KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
         : KisMask(rhs)
         , m_d(new Private())
 {
+    m_d->image=rhs.image();
 }
 
 void KisSelectionMask::setSelection(KisSelectionSP selection)
@@ -145,7 +146,7 @@ QImage KisSelectionMask::createThumbnail(qint32 w, qint32 h)
     else
         boundRect=originalDevice->exactBounds();
 
-    if (!boundRect.height()) return QImage();
+    if (boundRect.isEmpty()) return QImage();
 
     int wprop,hprop;
     double c=(double)boundRect.width()/(double)boundRect.height();

@@ -30,7 +30,7 @@
 #include "compositeops/KoCompositeOpAdd.h"
 #include "compositeops/KoCompositeOpSubtract.h"
 
-#include "RgbU8CompositeOp.h"
+#include "compositeops/RgbCompositeOps.h"
 
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((quint8) (257UL*(value)))
@@ -75,19 +75,18 @@ RgbU8ColorSpace::RgbU8ColorSpace(KoColorProfile *p) :
     // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
     addStandardCompositeOps<KoRgbU8Traits>(this);
 
-    addCompositeOp(new RgbU8CompositeOp(this, COMPOSITE_DARKEN,  i18n("Darken")));
-    addCompositeOp(new RgbU8CompositeOp(this, COMPOSITE_LIGHTEN,  i18n("Lighten")));
-    addCompositeOp(new RgbU8CompositeOp(this, COMPOSITE_HUE,  i18n("Hue")));
-    addCompositeOp(new RgbU8CompositeOp(this, COMPOSITE_SATURATION,  i18n("Saturation")));
-    addCompositeOp(new RgbU8CompositeOp(this, COMPOSITE_VALUE,  i18n("Value")));
-    addCompositeOp(new RgbU8CompositeOp(this, COMPOSITE_COLOR,  i18n("Color")));
-    addCompositeOp(new RgbU8CompositeOp(this, COMPOSITE_IN,  i18n("In")));
-    addCompositeOp(new RgbU8CompositeOp(this, COMPOSITE_OUT,  i18n("Out")));
-    addCompositeOp(new RgbU8CompositeOp(this, COMPOSITE_DIFF,  i18n("Diff")));
-    addCompositeOp(new RgbU8CompositeOp(this, COMPOSITE_BUMPMAP,  i18n("Bumpmap")));
-    addCompositeOp(new RgbU8CompositeOp(this, COMPOSITE_CLEAR,  i18n("Clear")));
-    addCompositeOp(new RgbU8CompositeOp(this, COMPOSITE_DISSOLVE,  i18n("Dissolve")));
-
+    addCompositeOp(new RgbCompositeOpDarken<KoRgbU8Traits>(this));
+    addCompositeOp(new RgbCompositeOpLighten<KoRgbU8Traits>(this));
+    addCompositeOp(new RgbCompositeOpHue<KoRgbU8Traits>(this));
+    addCompositeOp(new RgbCompositeOpSaturation<KoRgbU8Traits>(this));
+    addCompositeOp(new RgbCompositeOpValue<KoRgbU8Traits>(this));
+    addCompositeOp(new RgbCompositeOpColor<KoRgbU8Traits>(this));
+    addCompositeOp(new RgbCompositeOpIn<KoRgbU8Traits>(this));
+    addCompositeOp(new RgbCompositeOpOut<KoRgbU8Traits>(this));
+    addCompositeOp(new RgbCompositeOpDiff<KoRgbU8Traits>(this));
+    addCompositeOp(new RgbCompositeOpBumpmap<KoRgbU8Traits>(this));
+    addCompositeOp(new RgbCompositeOpClear<KoRgbU8Traits>(this));
+    addCompositeOp(new RgbCompositeOpDissolve<KoRgbU8Traits>(this));
 }
 
 

@@ -23,8 +23,6 @@
 #include <KoColorSpaceTraits.h>
 #include "KoColorModelStandardIds.h"
 
-const qint32 MAX_CHANNEL_RGB = 3;
-
 class RgbU8ColorSpace : public LcmsColorSpace<KoRgbU8Traits>
 {
 

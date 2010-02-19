@@ -34,7 +34,6 @@ SET ( lcmsengine_SRCS
     colorspaces/xyz_u16/XyzU16ColorSpace.cpp
     colorspaces/gray_u8_no_alpha/GrayU8NoAlphaColorSpace.cpp
     colorspaces/gray_u16_no_alpha/GrayU16NoAlphaColorSpace.cpp
-    colorspaces/rgb_u8/RgbU8CompositeOp.cpp
     colorspaces/rgb_u8/RgbU8ColorSpace.cpp
     colorspaces/gray_u16/GrayU16ColorSpace.cpp
     colorspaces/rgb_u16/RgbU16ColorSpace.cpp

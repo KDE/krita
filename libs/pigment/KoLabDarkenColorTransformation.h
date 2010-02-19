@@ -24,17 +24,26 @@
 
 template<typename _lab_channels_type_>
 struct KoLabDarkenColorTransformation : public KoColorTransformation {
-    KoLabDarkenColorTransformation(qint32 shade, bool compensate, qreal compensation) : m_shade(shade), m_compensate(compensate), m_compensation(compensation) {
+    KoLabDarkenColorTransformation(qint32 shade, bool compensate, qreal compensation, const KoColorSpace *colorspace) : m_shade(shade), m_compensate(compensate), m_compensation(compensation), m_colorSpace(colorspace) {
 
     }
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const {
-        const _lab_channels_type_ * srcNT = reinterpret_cast<const _lab_channels_type_*>(src);
-        _lab_channels_type_ * dstNT = reinterpret_cast<_lab_channels_type_*>(dst);
-        for (int i = 0; i < nPixels * 4; ++i) {
+        *((quint32 *)dst)=*((const quint32 *)src);
+        QColor c;
+        
+        for (int i = 0; i < nPixels*m_colorSpace->pixelSize(); i+=m_colorSpace->pixelSize()) {
             if (m_compensate) {
-                dstNT[i] = static_cast<quint16>((srcNT[i] * m_shade) / (m_compensation * 255));
+                m_colorSpace->toQColor(src+i,&c);
+                c.setRed((c.red()*m_shade)/(m_compensation*255));
+                c.setGreen((c.green()*m_shade)/(m_compensation*255));
+                c.setBlue((c.blue()*m_shade)/(m_compensation*255));
+                m_colorSpace->fromQColor(c,dst+i);
             } else {
-                dstNT[i] = static_cast<quint16>(srcNT[i] * m_shade  / 255);
+                m_colorSpace->toQColor(src+i,&c);
+                c.setRed((c.red()*m_shade)/255);
+                c.setGreen((c.green()*m_shade)/255);
+                c.setBlue((c.blue()*m_shade)/255);
+                m_colorSpace->fromQColor(c,dst+i);
             }
         }
     }

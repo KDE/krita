@@ -22,7 +22,6 @@
 #ifndef KOCREATEPATHTOOL_P_H
 #define KOCREATEPATHTOOL_P_H
 
-#include <QObject>
 #include "KoCreatePathTool.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"

@@ -54,7 +54,7 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
     
     // let's prealocate first row 
     for (quint32 i = 0; i < m_tilesCacheSize; i++){
-        m_tilesCache[i] = fetchTileDataForCache(m_leftCol + i, m_row);
+        fetchTileDataForCache(m_tilesCache[i], m_leftCol + i, m_row);
     }
     m_index = 0;
     switchToTile(m_leftInLeftmostTile);
@@ -137,9 +137,8 @@ void KisHLineIterator2::switchToTile(qint32 xInTile)
 }
 
 
-KisHLineIterator2::KisTileInfo KisHLineIterator2::fetchTileDataForCache(qint32 col, qint32 row)
+void KisHLineIterator2::fetchTileDataForCache(KisTileInfo& kti, qint32 col, qint32 row)
 {
-    KisTileInfo kti;
     kti.tile = m_dataManager->getTile(col, row);
     lockTile(kti.tile);
     kti.data = kti.tile->data();
@@ -148,7 +147,6 @@ KisHLineIterator2::KisTileInfo KisHLineIterator2::fetchTileDataForCache(qint32 c
     kti.oldtile = m_dataManager->getOldTile(col, row);
     lockOldTile(kti.oldtile);
     kti.oldData = kti.oldtile->data();
-    return kti;
 }
 
 void KisHLineIterator2::preallocateTiles()
@@ -156,6 +154,6 @@ void KisHLineIterator2::preallocateTiles()
     for (quint32 i = 0; i < m_tilesCacheSize; i++){
         unlockTile(m_tilesCache[i].tile);
         unlockTile(m_tilesCache[i].oldtile);
-        m_tilesCache[i] = fetchTileDataForCache(m_leftCol + i, m_row);
+        fetchTileDataForCache(m_tilesCache[i], m_leftCol + i, m_row);
     }
 }

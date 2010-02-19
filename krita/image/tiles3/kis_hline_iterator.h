@@ -119,7 +119,7 @@ private:
     }
 
     void switchToTile(qint32 xInTile);
-    KisTileInfo fetchTileDataForCache(qint32 col, qint32 row);
+    void fetchTileDataForCache(KisTileInfo& kti, qint32 col, qint32 row);
     void preallocateTiles();
     
 

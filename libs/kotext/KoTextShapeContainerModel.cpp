@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007,2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007,2009,2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -146,56 +146,73 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
     if (relation == 0 || relation->anchor == 0)
         return;
 
-    QPointF newPosition = child->position() + move;
-    QRectF parentShapeRect(QPointF(0, 0), child->parent()->size());
-//kDebug(32500) <<"proposeMove:" << move <<" |" << newPosition <<" |" << parentShapeRect;
+    QPointF newPosition = child->position() + move/* + relation->anchor->offset()*/;
+    const QRectF parentShapeRect(QPointF(0, 0), child->parent()->size());
+//kDebug(32500) <<"proposeMove:" /*<< move <<" |"*/ << newPosition <<" |" << parentShapeRect;
 
-    if (qAbs(newPosition.x()) < 10) // align left
+    QTextLayout *layout = 0;
+    int anchorPosInParag = -1;
+    if (qAbs(newPosition.x()) < 10) { // align left
         relation->anchor->setAlignment(KoTextAnchor::Left);
-    else if (qAbs(parentShapeRect.width() - newPosition.x()) < 10.0)
+        relation->anchor->setOffset(QPointF(0, relation->anchor->offset().y()));
+    } else if (qAbs(parentShapeRect.width() - newPosition.x() - child->size().width()) < 10.0) {
         relation->anchor->setAlignment(KoTextAnchor::Right);
-    else if (qAbs(parentShapeRect.width() / 2.0 - newPosition.x()) < 10.0)
+        relation->anchor->setOffset(QPointF(0, relation->anchor->offset().y()));
+    } else if (qAbs(parentShapeRect.width() / 2.0 - (newPosition.x() + child->size().width() / 2.0)) < 10.0) {
         relation->anchor->setAlignment(KoTextAnchor::Center);
-    /*else {
+        relation->anchor->setOffset(QPointF(0, relation->anchor->offset().y()));
+    } else {
         relation->anchor->setAlignment(KoTextAnchor::HorizontalOffset);
-        // TODO
-        //QPointF offset = relation->anchor->offset();
-        //offset.setX(offset.x() + move.x());
-        //relation->anchor->setOffset(offset);
-    } */
+        QTextBlock block = relation->anchor->document()->findBlock(relation->anchor->positionInDocument());
+        layout = block.layout();
+        anchorPosInParag = relation->anchor->positionInDocument() - block.position();
+        QTextLine tl = layout->lineForTextPosition(anchorPosInParag);
+        relation->anchor->setOffset(QPointF(newPosition.x() - tl.cursorToX(anchorPosInParag) + tl.x(),
+                    relation->anchor->offset().y()));
+    }
 
-    if (qAbs(newPosition.y()) < 10.0) // TopOfFrame
-    {
+    if (qAbs(newPosition.y()) < 10.0) { // TopOfFrame
         kDebug(32500) <<"  TopOfFrame";
         relation->anchor->setAlignment(KoTextAnchor::TopOfFrame);
+        relation->anchor->setOffset(QPointF(relation->anchor->offset().x(), 0));
     } else if (qAbs(parentShapeRect.height() - newPosition.y()) < 10.0) {
         kDebug(32500) <<"  BottomOfFrame";
         relation->anchor->setAlignment(KoTextAnchor::BottomOfFrame); // TODO
+        relation->anchor->setOffset(QPointF(relation->anchor->offset().x(), 0));
     } else { // need layout info..
-        QTextBlock block = relation->anchor->document()->findBlock(relation->anchor->positionInDocument());
-        QTextLayout *layout = block.layout();
+        relation->anchor->setOffset(QPointF(relation->anchor->offset().x(), 0));
+        // the rest of the code uses the shape baseline, at this time the bottom. So adjust
+        newPosition.setY(newPosition.y() + child->size().height());
+        if (layout == 0) {
+            QTextBlock block = relation->anchor->document()->findBlock(relation->anchor->positionInDocument());
+            layout = block.layout();
+            anchorPosInParag = relation->anchor->positionInDocument() - block.position();
+        }
         if (layout->lineCount() > 0) {
             KoTextShapeData *data = qobject_cast<KoTextShapeData*>(child->parent()->userData());
             Q_ASSERT(data);
             QTextLine tl = layout->lineAt(0);
-            qreal y = tl.y() - data->documentOffset() - newPosition.y();
-            if (y >= 0 && y < 10) {
-                kDebug(32500) <<"  TopOfParagraph" << y <<"";
+            qreal y = tl.y() - data->documentOffset() - newPosition.y() + child->size().height();
+            if (y >= -5 && y < 10) {
+                kDebug(32500) <<"  TopOfParagraph" << y;
                 relation->anchor->setAlignment(KoTextAnchor::TopOfParagraph);
             } else {
                 tl = layout->lineAt(layout->lineCount() - 1);
-                y = newPosition.y() - tl.y() - data->documentOffset() - tl.ascent();
+                y = newPosition.y() - tl.y() - data->documentOffset() - tl.ascent() - child->size().height();
                 if (y >= 0 && y < 10) {
                     kDebug(32500) <<"  BottomOfParagraph" << y;
                     relation->anchor->setAlignment(KoTextAnchor::BottomOfParagraph); // TODO
                 } else {
-                    tl = layout->lineForTextPosition(relation->anchor->positionInDocument() - block.position());
-                    y = tl.y() - data->documentOffset() - newPosition.y();
+                    tl = layout->lineForTextPosition(anchorPosInParag);
+                    y = tl.y() - data->documentOffset() - newPosition.y() + child->size().height();
                     if (y >= 0 && y < 10) {
                         kDebug(32500) <<"  AboveCurrentLine";
                         relation->anchor->setAlignment(KoTextAnchor::AboveCurrentLine);
                     }
-                    //else  do VerticalOffset here as well?
+                    else {
+                        relation->anchor->setAlignment(KoTextAnchor::VerticalOffset);
+                        relation->anchor->setOffset(QPointF(relation->anchor->offset().x(), -y));
+                    }
                 }
             }
         }

@@ -25,7 +25,7 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
     m_dataManager = dataManager;
     m_pixelSize = m_dataManager->pixelSize();
 
-    //m_writable = writable;
+    m_writable = true;
     
     m_x = x;
     m_y = y;
@@ -49,9 +49,11 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
 
     m_tilesCacheSize = m_rightCol - m_leftCol + 1;
     m_tilesCache.resize(m_tilesCacheSize);
+
+    m_tileWidth = m_pixelSize * KisTileData::HEIGHT;
     
     // let's prealocate first row 
-    for (int i = 0; i < m_tilesCacheSize; i++){
+    for (quint32 i = 0; i < m_tilesCacheSize; i++){
         m_tilesCache[i] = fetchTileDataForCache(m_leftCol + i, m_row);
     }
     switchToTile(m_leftCol, m_leftInLeftmostTile);
@@ -65,8 +67,9 @@ bool KisHLineIterator2::nextPixel()
         return m_havePixels = false;
     } else {
         m_x++;
-        if (++m_xInTile <= m_rightInTile)
-            m_offset += m_pixelSize;
+        m_data += m_pixelSize;
+        if (m_data < m_dataRight)
+            m_oldData += m_pixelSize;
         else
             // Switching to the beginning of the next tile
             switchToTile(m_col + 1, 0);
@@ -106,13 +109,13 @@ KisHLineIterator2::~KisHLineIterator2()
 
 quint8 * KisHLineIterator2::rawData()
 {
-    return m_data + m_offset;
+    return m_data;
 }
 
 
 const quint8 * KisHLineIterator2::oldRawData() const
 {
-    return m_oldData + m_offset;
+    return m_oldData;
 }
 
 void KisHLineIterator2::fetchTileData(qint32 col, qint32 row){
@@ -125,20 +128,17 @@ void KisHLineIterator2::fetchTileData(qint32 col, qint32 row){
     m_oldData = m_tilesCache[index].oldData;
 }
 
-
 void KisHLineIterator2::switchToTile(qint32 col, qint32 xInTile)
 {
     // The caller must ensure that we are not out of bounds
     Q_ASSERT(col <= m_rightCol);
     Q_ASSERT(col >= m_leftCol);
 
-    m_rightInTile = calcRightInTile(col);
-
     m_col = col;
-    m_xInTile = xInTile;
-    m_offset = calcOffset(m_xInTile, m_yInTile);
-
     fetchTileData(col, m_row);
+    m_data += m_pixelSize * (m_yInTile * KisTileData::WIDTH);
+    m_dataRight = m_data + m_tileWidth;
+    m_data  += m_pixelSize * xInTile;
 }
 
 
@@ -158,7 +158,7 @@ KisHLineIterator2::KisTileInfo KisHLineIterator2::fetchTileDataForCache(qint32 c
 
 void KisHLineIterator2::preallocateTiles(qint32 row)
 {
-    for (int i = 0; i < m_tilesCacheSize; i++){
+    for (quint32 i = 0; i < m_tilesCacheSize; i++){
         unlockTile(m_tilesCache[i].tile);
         unlockTile(m_tilesCache[i].oldtile);
         m_tilesCache[i] = fetchTileDataForCache(m_leftCol + i, row);

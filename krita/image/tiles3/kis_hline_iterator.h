@@ -59,24 +59,22 @@ private:
     qint32 m_y;        // current y position
     qint32 m_row;    // current row in tilemgr
     qint32 m_col;    // current col in tilemgr
+    qint32 m_tileWidth;
     quint8 *m_data;
+    quint8 *m_dataRight;
     quint8 *m_oldData;
-    qint32 m_offset;
     KisTileSP m_tile;
     KisTileSP m_oldTile;
     bool m_writable;
     bool m_havePixels;
     
-protected:
     qint32 m_right;
     qint32 m_left;
     qint32 m_leftCol;
     qint32 m_rightCol;
 
     qint32 m_leftInLeftmostTile;
-    qint32 m_xInTile;
     qint32 m_yInTile;
-    qint32 m_rightInTile;
 
     QVector<KisTileInfo> m_tilesCache;
     quint32 m_tilesCacheSize;
@@ -103,10 +101,6 @@ protected:
     }
     inline quint32 yToRow(quint32 y) const {
         return m_dataManager ? m_dataManager->yToRow(y) : 0;
-    }
-
-    inline qint32 calcOffset(qint32 x, qint32 y) const {
-        return m_pixelSize *(y * KisTileData::WIDTH + x);
     }
 
     inline qint32 calcXInTile(qint32 x, qint32 col) const {

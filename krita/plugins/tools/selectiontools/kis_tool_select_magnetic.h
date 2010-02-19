@@ -27,6 +27,8 @@
 #include "flake/kis_node_shape.h"
 #include "kis_tool_select_base.h"
 
+#include "kis_tool_select_magnetic_option_widget.h"
+
 //#include "kis_random_accessor.h"
 
 class QWidget;
@@ -35,6 +37,7 @@ class KisSelectionOptions;
 class KisRandomConstAccessor;
 class KoColorTransformation;
 class KoColorSpace;
+
 
 /**
  * Tool to select colors by pointing at a color on the image.
@@ -56,10 +59,21 @@ public:
     virtual void deactivate() {m_localTool.deactivate();}
 
 public slots:
-    virtual void slotSetDistance(int);
+    void setRadius(int);
+    void setTreshold(int);
+    void setSearchStartPoint(KisToolSelectMagneticOptionWidget::SearchStartPoint);
+    void setColorLimitation(KisToolSelectMagneticOptionWidget::ColorLimitation);
+    void setLimitToCurrentLayer(bool);
 private:
     virtual QWidget* createOptionWidget();
-    int m_distance;
+    int m_radius;
+    int m_treshold;
+    KisToolSelectMagneticOptionWidget::SearchStartPoint m_searchStartPoint;
+    KisToolSelectMagneticOptionWidget::ColorLimitation m_colorLimitation;
+    bool m_limitToCurrentLayer;
+
+
+    KisToolSelectMagneticOptionWidget *m_magneticOptions;
 
     class LocalTool : public KoCreatePathTool {
         friend class KisToolSelectPath;

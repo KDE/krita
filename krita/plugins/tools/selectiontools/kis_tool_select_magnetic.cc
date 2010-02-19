@@ -84,7 +84,9 @@ inline QVector2D rotateAntiClockWise(const QVector2D &v)
 }
 
 KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas, KisCursor::load("tool_magneticoutline_selection_cursor.png", 6, 6)), m_distance(25), m_localTool(canvas, this)
+        : KisToolSelectBase(canvas, KisCursor::load("tool_magneticoutline_selection_cursor.png", 6, 6)),
+        m_magneticOptions(0),
+        m_localTool(canvas, this)
 {
 }
 
@@ -92,12 +94,29 @@ KisToolSelectMagnetic::~KisToolSelectMagnetic()
 {
 }
 
-
-
-
-void KisToolSelectMagnetic::slotSetDistance(int distance)
+void KisToolSelectMagnetic::setRadius(int radius)
 {
-    m_distance= distance;
+    m_radius = radius;
+}
+
+void KisToolSelectMagnetic::setTreshold(int treshold)
+{
+    m_treshold = treshold;
+}
+
+void KisToolSelectMagnetic::setSearchStartPoint(KisToolSelectMagneticOptionWidget::SearchStartPoint searchStartPoint)
+{
+    m_searchStartPoint = searchStartPoint;
+}
+
+void KisToolSelectMagnetic::setColorLimitation(KisToolSelectMagneticOptionWidget::ColorLimitation colorLimitation)
+{
+    m_colorLimitation = colorLimitation;
+}
+
+void KisToolSelectMagnetic::setLimitToCurrentLayer(bool limitToCurrentLayer)
+{
+    m_limitToCurrentLayer = limitToCurrentLayer;
 }
 
 
@@ -108,11 +127,11 @@ QWidget* KisToolSelectMagnetic::createOptionWidget()
     m_optWidget->disableAntiAliasSelectionOption();
     m_optWidget->disableSelectionModeOption();
 
-    KisToolSelectMagneticOptionWidget* magneticOptions = new KisToolSelectMagneticOptionWidget(m_optWidget);
+    m_magneticOptions = new KisToolSelectMagneticOptionWidget(m_optWidget);
 
     QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);
-    l->addWidget(magneticOptions);
+    l->addWidget(m_magneticOptions);
 
     return m_optWidget;
 }
@@ -167,7 +186,7 @@ void KisToolSelectMagnetic::LocalTool::paintPath(KoPathShape &pathShape, QPainte
     //if the following fails, just comment it out. this tool won't be scaled correctly.
     Q_ASSERT(qFuzzyCompare(zoomX, zoomY));
 
-    qreal width = m_selectingTool->m_distance;
+    qreal width = m_selectingTool->m_radius;
     width *= zoomX/m_selectingTool->image()->xRes();
 
 
@@ -237,7 +256,7 @@ void KisToolSelectMagnetic::LocalTool::computeOutline(const QPainterPath &pixelP
     for(int i=1; i<points.count(); i++) {
         QVector2D tangent = tangentAt(points, i);
 
-        QVector2D startPos = QVector2D(points.at(i)) + rotateClockWise(tangent) * (m_selectingTool->m_distance/2);
+        QVector2D startPos = QVector2D(points.at(i)) + rotateClockWise(tangent) * (m_selectingTool->m_radius/2);
 
         computeEdge(startPos, rotateAntiClockWise(tangent), &randomAccessor);
     }
@@ -257,7 +276,7 @@ void KisToolSelectMagnetic::LocalTool::computeEdge(const QVector2D &startPoint, 
     m_colorTransformation->transform(pixelAccessor->rawData(), color->data(), 1);
     int value = color->toQColor().value();
 
-    while((currentPoint - startPoint).length()<m_selectingTool->m_distance) {
+    while((currentPoint - startPoint).length()<m_selectingTool->m_radius) {
         //
 
         m_debugScannedPoints.append(currentPoint.toPoint());

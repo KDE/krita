@@ -28,12 +28,35 @@ namespace Ui {
 
 class KisToolSelectMagneticOptionWidget : public QWidget {
     Q_OBJECT
+
 public:
+    enum SearchStartPoint {
+        SearchFromLeft,
+        SearchFromRight
+    };
+
+    // ColorLimitation must be the same order, as in the widget
+    enum ColorLimitation {
+        ColorLimitToAll=0,
+        ColorLimitToRed=1,
+        ColorLimitToGreen=2,
+        ColorLimitToBlue=3
+    };
+
     KisToolSelectMagneticOptionWidget(QWidget *parent = 0);
     ~KisToolSelectMagneticOptionWidget();
+signals:
+    void radiusChanged(int radius);
+    void tresholdChanged(int treshold);
+    void searchStartPointChanged(SearchStartPoint searchOrder);
+    void colorLimitationChanged(ColorLimitation colorLimitation);
+    void layerLimitationChanged(bool limitToLayer);
 
 protected:
     void changeEvent(QEvent *e);
+
+protected slots:
+    void searchStartPointRadioChanged();
 
 private:
     Ui::KisToolSelectMagneticOptionWidget *ui;

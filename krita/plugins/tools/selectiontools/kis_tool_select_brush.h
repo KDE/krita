@@ -61,6 +61,7 @@ private:
     bool m_dragging;
     QPainterPath m_selection;
     QPointF m_lastPoint;
+    QPoint m_lastMousePosition;
 
 };
 

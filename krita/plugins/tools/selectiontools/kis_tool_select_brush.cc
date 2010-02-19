@@ -49,7 +49,8 @@ USING_PART_OF_NAMESPACE_EIGEN
 KisToolSelectBrush::KisToolSelectBrush(KoCanvasBase * canvas)
         : KisToolSelectBase(canvas, KisCursor::load("tool_brush_selection_cursor.png", 6, 6)),
         m_brushRadius(15),
-        m_dragging(false)
+        m_dragging(false),
+        m_lastMousePosition(-1, -1)
 {
     resetSelection();
 }
@@ -85,7 +86,14 @@ QWidget* KisToolSelectBrush::createOptionWidget()
 void KisToolSelectBrush::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
-    paintToolOutline(&gc, pixelToView(m_selection));
+    if(m_dragging) {
+        paintToolOutline(&gc, pixelToView(m_selection));
+    }
+    else  if(m_lastMousePosition!=QPoint(-1, -1)) {
+        QPainterPath brushOutline;
+        brushOutline.addEllipse(m_lastMousePosition, m_brushRadius, m_brushRadius);
+        paintToolOutline(&gc, pixelToView(brushOutline));
+    }
 }
 
 void KisToolSelectBrush::mousePressEvent(KoPointerEvent *e)
@@ -108,7 +116,7 @@ void KisToolSelectBrush::mouseMoveEvent(KoPointerEvent *e)
     if (m_dragging) {
 
         // this gives better performance
-        if(Vector2f((m_lastPoint-e->point).x(), (m_lastPoint-e->point).y()).norm()<m_brushRadius/6)
+        if(Vector2f((m_lastPoint-convertToPixelCoord(e->point)).x(), (m_lastPoint-convertToPixelCoord(e->point)).y()).norm()<m_brushRadius/6)
             return;
 
         //randomise the point to workaround a bug in QPainterPath::operator|=()
@@ -119,6 +127,18 @@ void KisToolSelectBrush::mouseMoveEvent(KoPointerEvent *e)
         randomY/=1000.;
         QPointF smallRandomPoint(randomX, randomY);
         addPoint(convertToPixelCoord(e->point)+smallRandomPoint);
+    }
+    else {
+        QRect brushRect(-m_brushRadius, -m_brushRadius, 2*m_brushRadius, 2*m_brushRadius);
+        brushRect.adjust(-2, -2, 2, 2);     //width of tool outline
+
+        brushRect.moveCenter(m_lastMousePosition);
+        updateCanvasPixelRect(brushRect);
+
+        m_lastMousePosition = convertToPixelCoord(e).toPoint();
+
+        brushRect.moveCenter(m_lastMousePosition);
+        updateCanvasPixelRect(brushRect);
     }
 }
 

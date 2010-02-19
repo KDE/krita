@@ -34,14 +34,14 @@ class ArtisticTextShapeConfigWidget : public QWidget
     Q_OBJECT
 public:
     ArtisticTextShapeConfigWidget();
-    
+
 public slots:
     /// initializes widget from given shape
     void initializeFromShape(ArtisticTextShape *shape, KoCanvasBase *canvas);
-    
+
     /// updates the widget form the current one
     void updateWidget();
-    
+
 private slots:
     void propertyChanged();
 

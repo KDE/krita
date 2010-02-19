@@ -75,7 +75,7 @@ void ArtisticTextShapeConfigWidget::initializeFromShape(ArtisticTextShape *shape
 {
     m_shape = shape;
     m_canvas = canvas;
-    
+
     if( ! m_shape || ! m_canvas )
         return;
 
@@ -105,13 +105,13 @@ void ArtisticTextShapeConfigWidget::propertyChanged()
 {
     if( ! m_shape || ! m_canvas )
         return;
-    
+
     QFont font = m_shape->font();
     font.setFamily( widget.fontFamily->currentFont().family() );
     font.setBold( widget.bold->isChecked() );
     font.setItalic( widget.italic->isChecked() );
     font.setPointSize( widget.fontSize->value() );
-    
+
     ArtisticTextShape::TextAnchor newAnchor;
     if ( widget.anchorStart->isChecked() )
         newAnchor = ArtisticTextShape::AnchorStart;
@@ -119,9 +119,9 @@ void ArtisticTextShapeConfigWidget::propertyChanged()
         newAnchor = ArtisticTextShape::AnchorMiddle;
     else
         newAnchor = ArtisticTextShape::AnchorEnd;
-    
+
     qreal newOffset = static_cast<qreal>(widget.startOffset->value()) / 100.0;
-    
+
     QUndoCommand * cmd = 0;
     if ( newAnchor != m_shape->textAnchor() ) {
         cmd = new ChangeTextAnchorCommand( m_shape, newAnchor );
@@ -132,7 +132,7 @@ void ArtisticTextShapeConfigWidget::propertyChanged()
     else if( font.key() != m_shape->font().key() ) {
         cmd = new ChangeTextFontCommand(m_shape, font);
     }
-    
+
     if( cmd )
         m_canvas->addCommand(cmd);
 }

@@ -54,7 +54,7 @@ KisSumiPaintOp::KisSumiPaintOp(const
     BrushShape bs; 
     
     bs.setColorSpace(painter->device()->colorSpace());
-    bs.setHasColor(kisBrush->hasColor());
+    bs.setHasColor(kisBrush->brushType() != MASK);
     bs.fromQImage(kisBrush->image());
     m_brush.setBrushShape(bs);
     

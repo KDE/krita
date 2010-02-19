@@ -43,7 +43,6 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     connect(m_triangleColorSelector, SIGNAL(colorChanged(const QColor& )), SLOT(slotChangefGColor(QColor)));
     connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
-    connect(this, SIGNAL(sigAddRecentColor(const KoColor&)), m_resourceManager, SLOT(slotAddRecentColorNotify(const KoColor&)));
     connect(this, SIGNAL(sigEnableChangeColor(bool)), m_resourceManager, SIGNAL(sigEnableChangeColor(bool)));
     connect(this, SIGNAL(sigChangefGColor(const KoColor&)), m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
 

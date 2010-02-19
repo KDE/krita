@@ -97,7 +97,6 @@ private:
 signals:
     void sigChangeActivePaintop(int);
     void sigUpdateRecentColor(int);
-    void sigAddRecentColor(const KoColor&);
     void sigEnableChangeColor(bool);
     void sigChangefGColor(const KoColor&);
 

@@ -24,14 +24,14 @@
 
 template<typename _lab_channels_type_>
 struct KoLabDarkenColorTransformation : public KoColorTransformation {
-    KoLabDarkenColorTransformation(qint32 shade, bool compensate, qreal compensation, const KoColorSpace *colorspace) : m_shade(shade), m_compensate(compensate), m_compensation(compensation), m_colorSpace(colorspace) {
+    KoLabDarkenColorTransformation(qint32 shade, bool compensate, qreal compensation, const KoColorSpace *colorspace) : m_colorSpace(colorspace), m_shade(shade), m_compensate(compensate), m_compensation(compensation) {
 
     }
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const {
         *((quint32 *)dst)=*((const quint32 *)src);
         QColor c;
         
-        for (int i = 0; i < nPixels*m_colorSpace->pixelSize(); i+=m_colorSpace->pixelSize()) {
+        for (unsigned int i = 0; i < nPixels*m_colorSpace->pixelSize(); i+=m_colorSpace->pixelSize()) {
             if (m_compensate) {
                 m_colorSpace->toQColor(src+i,&c);
                 c.setRed((c.red()*m_shade)/(m_compensation*255));

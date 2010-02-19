@@ -52,6 +52,8 @@
 #include "kis_repeat_iterators_pixel.h"
 #include <KoColorModelStandardIds.h>
 
+#include "tiles3/kis_hline_iterator.h"
+
 class KisPaintDevice::Private
 {
 

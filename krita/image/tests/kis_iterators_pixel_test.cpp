@@ -23,6 +23,7 @@
 
 #include <kis_paint_device.h>
 #include <KoColorSpaceRegistry.h>
+#include <kis_iterator_ng.h>
 
 void KisIteratorsPixelTest::testCreation()
 {

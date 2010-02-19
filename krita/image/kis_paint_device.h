@@ -31,8 +31,6 @@
 #include "kis_shared.h"
 #include "kis_iterators_pixel.h"
 
-#include "tiles3/kis_hline_iterator.h"
-
 #include <krita_export.h>
 
 class QUndoCommand;
@@ -47,6 +45,7 @@ class KoColor;
 class KoColorSpace;
 class KoColorProfile;
 
+class KisHLineIteratorNG;
 class KisRandomSubAccessorPixel;
 class KisDataManager;
 class KisSelectionComponent;

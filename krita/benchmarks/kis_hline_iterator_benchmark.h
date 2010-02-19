@@ -50,12 +50,14 @@ private slots:
     // copy from one device to another
     void benchmarkReadWriteBytes();
     
+    void benchmarkReadWriteBytes2();
     
     void benchmarkNoMemCpy();
     void benchmarkConstNoMemCpy();
     // copy from one device to another
     void benchmarkTwoIteratorsNoMemCpy();
     
+
     
     
 };

@@ -31,6 +31,8 @@
 #include "kis_shared.h"
 #include "kis_iterators_pixel.h"
 
+#include "tiles3/kis_hline_iterator.h"
+
 #include <krita_export.h>
 
 class QUndoCommand;
@@ -445,6 +447,8 @@ public:
      */
     KisHLineConstIteratorPixel createHLineConstIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection = 0) const;
 
+    KisHLineIteratorNG * createHLineIterator2(qint32 x, qint32 y, qint32 w, const KisSelection * selection = 0);
+    
     /**
      * Create an iterator that will "artificially" extend the paint device with the
      * value of the border when trying to access values outside the range of data.

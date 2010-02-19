@@ -106,6 +106,7 @@ protected:
     // Allow the baseclass of iterators access to the interior
     // derived iterator classes must go through KisTiledIterator
     friend class KisTiledIterator;
+    friend class KisHLineIterator2;
     friend class KisTiledRandomAccessor;
 protected:
 

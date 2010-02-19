@@ -28,6 +28,7 @@
 
 #include <qtest_kde.h>
 
+#include "kis_iterator_ng.h"
 
 void KisHLineIteratorBenchmark::initTestCase()
 {
@@ -35,7 +36,7 @@ void KisHLineIteratorBenchmark::initTestCase()
     m_device = new KisPaintDevice(m_colorSpace);
     m_color = new KoColor(m_colorSpace);
     // some random color
-    m_color->fromQColor(QColor(0,120,250));
+    m_color->fromQColor(QColor(0,0,250));
     m_device->fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT,m_color->data());
 }
 
@@ -119,7 +120,34 @@ void KisHLineIteratorBenchmark::benchmarkReadWriteBytes(){
             writeIterator.nextRow();
         }
     }
+}
+
+
+
+void KisHLineIteratorBenchmark::benchmarkReadWriteBytes2()
+{
+    KoColor c(m_colorSpace);
+    c.fromQColor(QColor(255,0,0));
+    KisPaintDevice dab(m_colorSpace);
+    dab.fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT, c.data());
+
+    KisHLineIteratorNG *writeIterator = m_device->createHLineIterator2(0,0,TEST_IMAGE_WIDTH);
+    KisHLineIteratorNG *readIterator = dab.createHLineIterator2(0,0,TEST_IMAGE_WIDTH);
     
+    QBENCHMARK{
+        for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
+            while (readIterator->nextPixel()) {
+                memcpy(writeIterator->rawData(), readIterator->rawData(), m_colorSpace->pixelSize());
+                writeIterator->nextPixel();
+            }
+            readIterator->nextRow();
+            writeIterator->nextRow();
+        }
+    }
+
+    QImage img = m_device->convertToQImage(m_device->colorSpace()->profile(),0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+    img.save("write.png");
+
 }
 
 

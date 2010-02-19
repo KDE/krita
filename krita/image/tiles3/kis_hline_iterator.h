@@ -58,7 +58,7 @@ private:
     qint32 m_x;        // current x position
     qint32 m_y;        // current y position
     qint32 m_row;    // current row in tilemgr
-    qint32 m_col;    // current col in tilemgr
+    qint32 m_index;    // current col in tilemgr
     qint32 m_tileWidth;
     quint8 *m_data;
     quint8 *m_dataRight;
@@ -78,8 +78,6 @@ private:
 
     QVector<KisTileInfo> m_tilesCache;
     quint32 m_tilesCacheSize;
-    
-    void fetchTileData(qint32 col, qint32 row);
     
 protected:
     inline void lockTile(KisTileSP &tile) {
@@ -120,7 +118,7 @@ private:
                : m_right - m_rightCol * KisTileData::WIDTH;
     }
 
-    void switchToTile(qint32 col, qint32 xInTile);
+    void switchToTile(qint32 xInTile);
     KisTileInfo fetchTileDataForCache(qint32 col, qint32 row);
     void preallocateTiles(qint32 row);
     

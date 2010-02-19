@@ -56,7 +56,8 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
     for (quint32 i = 0; i < m_tilesCacheSize; i++){
         m_tilesCache[i] = fetchTileDataForCache(m_leftCol + i, m_row);
     }
-    switchToTile(m_leftCol, m_leftInLeftmostTile);
+    m_index = 0;
+    switchToTile(m_leftInLeftmostTile);
 }
 
 bool KisHLineIterator2::nextPixel()
@@ -66,13 +67,15 @@ bool KisHLineIterator2::nextPixel()
         //return !m_isDoneFlag;
         return m_havePixels = false;
     } else {
-        m_x++;
+        ++m_x;
         m_data += m_pixelSize;
         if (m_data < m_dataRight)
             m_oldData += m_pixelSize;
-        else
+        else {
             // Switching to the beginning of the next tile
-            switchToTile(m_col + 1, 0);
+            ++m_index;
+            switchToTile(0);
+        }
     }
 
     return m_havePixels;
@@ -91,7 +94,8 @@ void KisHLineIterator2::nextRow()
         m_yInTile = 0;
         preallocateTiles(m_row);
     }
-    switchToTile(m_leftCol, m_leftInLeftmostTile);
+    m_index = 0;
+    switchToTile(m_leftInLeftmostTile);
 
     m_havePixels = true;
 }
@@ -118,24 +122,15 @@ const quint8 * KisHLineIterator2::oldRawData() const
     return m_oldData;
 }
 
-void KisHLineIterator2::fetchTileData(qint32 col, qint32 row){
-    Q_UNUSED(row);
-    // check if we have the cached column and row
-    int index = col - m_leftCol;
-    
-    // setup correct data
-    m_data = m_tilesCache[index].data;
-    m_oldData = m_tilesCache[index].oldData;
-}
-
-void KisHLineIterator2::switchToTile(qint32 col, qint32 xInTile)
+void KisHLineIterator2::switchToTile(qint32 xInTile)
 {
     // The caller must ensure that we are not out of bounds
-    Q_ASSERT(col <= m_rightCol);
-    Q_ASSERT(col >= m_leftCol);
+    Q_ASSERT(m_index < m_tilesCacheSize);
+    Q_ASSERT(m_index >= 0);
 
-    m_col = col;
-    fetchTileData(col, m_row);
+    m_data = m_tilesCache[m_index].data;
+    m_oldData = m_tilesCache[m_index].oldData;
+
     m_data += m_pixelSize * (m_yInTile * KisTileData::WIDTH);
     m_dataRight = m_data + m_tileWidth;
     m_data  += m_pixelSize * xInTile;

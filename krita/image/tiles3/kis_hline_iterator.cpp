@@ -93,7 +93,7 @@ KisHLineIterator2& KisHLineIterator2::operator=(const KisHLineIterator2 & rhs)
         m_yInTile = rhs.m_yInTile;
         m_leftInTile = rhs.m_leftInTile;
         m_rightInTile = rhs.m_rightInTile;
-        m_isDoneFlag = rhs.m_isDoneFlag;
+        m_havePixels = rhs.m_havePixels;
     }
     return *this;
 }

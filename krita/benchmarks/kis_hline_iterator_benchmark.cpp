@@ -136,10 +136,10 @@ void KisHLineIteratorBenchmark::benchmarkReadWriteBytes2()
     
     QBENCHMARK{
         for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
-            while (readIterator->nextPixel()) {
+            do {
                 memcpy(writeIterator->rawData(), readIterator->rawData(), m_colorSpace->pixelSize());
                 writeIterator->nextPixel();
-            }
+            } while (readIterator->nextPixel())
             readIterator->nextRow();
             writeIterator->nextRow();
         }

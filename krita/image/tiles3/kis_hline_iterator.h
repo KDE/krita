@@ -63,8 +63,6 @@ private:
     quint8 *m_data;
     quint8 *m_dataRight;
     quint8 *m_oldData;
-    KisTileSP m_tile;
-    KisTileSP m_oldTile;
     bool m_writable;
     bool m_havePixels;
     
@@ -112,11 +110,6 @@ protected:
 
 
 private:
-    inline qint32 calcRightInTile(qint32 col) const {
-        return (col < m_rightCol)
-               ? KisTileData::WIDTH - 1
-               : m_right - m_rightCol * KisTileData::WIDTH;
-    }
 
     void switchToTile(qint32 xInTile);
     void fetchTileDataForCache(KisTileInfo& kti, qint32 col, qint32 row);

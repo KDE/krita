@@ -45,7 +45,7 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
     m_row = yToRow(m_y);
     m_yInTile = calcYInTile(m_y, m_row);
 
-    m_leftInLeftmostTile = (m_leftCol > m_leftCol) ? 0 : m_left - m_leftCol * KisTileData::WIDTH;
+    m_leftInLeftmostTile = m_left - m_leftCol * KisTileData::WIDTH;
 
     m_tilesCacheSize = m_rightCol - m_leftCol + 1;
     m_tilesCache.resize(m_tilesCacheSize);
@@ -151,7 +151,7 @@ void KisHLineIterator2::fetchTileDataForCache(KisTileInfo& kti, qint32 col, qint
 
 void KisHLineIterator2::preallocateTiles()
 {
-    for (quint32 i = 0; i < m_tilesCacheSize; i++){
+    for (quint32 i = 0; i < m_tilesCacheSize; ++i){
         unlockTile(m_tilesCache[i].tile);
         unlockTile(m_tilesCache[i].oldtile);
         fetchTileDataForCache(m_tilesCache[i], m_leftCol + i, m_row);

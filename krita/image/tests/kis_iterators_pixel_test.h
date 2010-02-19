@@ -26,7 +26,10 @@ class KisIteratorsPixelTest : public QObject
     Q_OBJECT
 private slots:
 
-    void testCreation();
+    void testAlignedOnTile();
+    void testUnalignedOnTile();
+private:
+    void test(int width, int height);
 
 };
 

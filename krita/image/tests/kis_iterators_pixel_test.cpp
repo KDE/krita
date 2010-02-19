@@ -25,13 +25,13 @@
 #include <KoColorSpaceRegistry.h>
 #include <kis_iterator_ng.h>
 
-void KisIteratorsPixelTest::testCreation()
+void KisIteratorsPixelTest::test(int width, int height)
 {
     KisPaintDevice dev(KoColorSpaceRegistry::instance()->rgb8());
 
-    KisHLineIteratorNG* it = dev.createHLineIterator2(0, 0, 200);
+    KisHLineIteratorNG* it = dev.createHLineIterator2(0, 0, width);
     quint8 data = 0;
-    for(int y = 0; y < 200; ++y)
+    for(int y = 0; y < height; ++y)
     {
         do {
             for(int i = 0; i < 4; ++i)
@@ -43,9 +43,9 @@ void KisIteratorsPixelTest::testCreation()
     }
     delete it;
     it = 0;
-    KisHLineIteratorPixel it2 = dev.createHLineIterator(0,0,200);
+    KisHLineIteratorPixel it2 = dev.createHLineIterator(0,0,width);
     data = 0;
-    for(int y = 0; y < 200; ++y)
+    for(int y = 0; y < height; ++y)
     {
         while(!it2.isDone())
         {
@@ -59,6 +59,23 @@ void KisIteratorsPixelTest::testCreation()
         it2.nextRow();
     }
 }
+
+void KisIteratorsPixelTest::testAlignedOnTile()
+{
+  test(64,64);
+  test(64,128);
+  test(128,64);
+  test(128,128);
+}
+
+void KisIteratorsPixelTest::testUnalignedOnTile()
+{
+  test(200,200);
+  test(20,20);
+  test(20,200);
+  test(200,20);
+}
+
 
 QTEST_KDEMAIN(KisIteratorsPixelTest, GUI)
 #include "kis_iterators_pixel_test.moc"

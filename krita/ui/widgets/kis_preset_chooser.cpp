@@ -92,7 +92,6 @@ public:
             return false;
         
         KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(index.internalPointer());
-        kDebug() << "nmae filkter" << m_nameFilter;
         return (preset->paintOp() == m_paintopID && preset->name().contains(m_nameFilter, Qt::CaseInsensitive));
     }
     

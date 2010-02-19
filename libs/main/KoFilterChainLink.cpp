@@ -63,6 +63,10 @@ namespace KOfficeFilter {
             return KoFilter::CreationError;
         }
 
+        // redirect the progress information to the KoFilterManager
+        QObject::connect(m_filter, SIGNAL(sigProgress(int)),
+                         m_chain->manager(), SIGNAL(sigProgress(int)));
+
         if (parentChainLink)
             setupCommunication(parentChainLink->m_filter);
 
@@ -86,10 +90,6 @@ namespace KOfficeFilter {
 
     void ChainLink::setupCommunication(const KoFilter* const parentFilter) const
     {
-        // progress information
-        QObject::connect(m_filter, SIGNAL(sigProgress(int)),
-                         m_chain->manager(), SIGNAL(sigProgress(int)));
-
         if (!parentFilter)
             return;
 

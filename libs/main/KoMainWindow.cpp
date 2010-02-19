@@ -1522,6 +1522,7 @@ void KoMainWindow::slotProgress(int value)
 
         d->progress = new QProgressBar(statusBar());
         d->progress->setMaximumHeight(statusBar()->fontMetrics().height());
+        d->progress->setRange(0, 100);
         statusBar()->addPermanentWidget(d->progress);
         d->progress->show();
         d->firstTime = false;

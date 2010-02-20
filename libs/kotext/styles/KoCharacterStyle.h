@@ -166,10 +166,6 @@ public:
     void setFontLetterSpacing(qreal spacing);
     /// See similar named method on QTextCharFormat
     qreal fontLetterSpacing() const;
-    /// See similar named method on QTextCharFormat //actually right now that doesn't exist
-    void setFontLetterAbsoluteSpacing(qreal spacing);
-    /// See similar named method on QTextCharFormat //actually right now that doesn't exist
-    qreal fontLetterAbsoluteSpacing() const;
     /// See similar named method on QTextCharFormat
     void setFontWordSpacing(qreal spacing);
     /// See similar named method on QTextCharFormat

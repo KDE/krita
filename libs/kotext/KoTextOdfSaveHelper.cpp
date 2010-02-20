@@ -30,9 +30,12 @@
 
 struct KoTextOdfSaveHelper::Private {
     Private(KoTextShapeData *shapeData, int from, int to)
-            : shapeData(shapeData),
-            from(from),
-            to(to) {}
+        : shapeData(shapeData),
+        from(from),
+        to(to),
+        rdfModel(0)
+    {
+    }
 
     KoShapeSavingContext *context;
     KoTextShapeData *shapeData;

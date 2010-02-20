@@ -197,14 +197,14 @@ private:
 
         { // start / end stroke (for "stroke" input only)
             if (!states[STATE_STROKE_STARTED]) {
-                if (pressure > settings[BRUSH_STROKE_TRESHOLD]->base_value + 0.0001) {
+                if (pressure > settings[BRUSH_STROKE_THRESHOLD]->base_value + 0.0001) {
                     // start new stroke
                     //printf("stroke start %f\n", pressure);
                     states[STATE_STROKE_STARTED] = 1;
                     states[STATE_STROKE] = 0.0;
                 }
             } else {
-                if (pressure <= settings[BRUSH_STROKE_TRESHOLD]->base_value * 0.9 + 0.0001) {
+                if (pressure <= settings[BRUSH_STROKE_THRESHOLD]->base_value * 0.9 + 0.0001) {
                     // end stroke
                     //printf("stroke end\n");
                     states[STATE_STROKE_STARTED] = 0;
@@ -553,7 +553,7 @@ public:
         TODO:
         if (dist_todo > 300) {
         // this happens quite often, eg when moving the cursor back into the window
-        // FIXME: bad to hardcode a distance treshold here - might look at zoomed image
+        // FIXME: bad to hardcode a distance threshold here - might look at zoomed image
         //        better detect leaving/entering the window and reset then.
         g_print ("Warning: NOT drawing %f dabs.\n", dist_todo);
         g_print ("dtime=%f, dx=%f\n", dtime, x-states[STATE_X]);

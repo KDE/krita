@@ -107,10 +107,10 @@ void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
     if (m_properties.isbrushDimension1D) 
     {
         brushShape.fromLine(m_properties.radius, m_properties.sigma);
-        brushShape.tresholdBristles(0.1);
+        brushShape.thresholdBristles(0.1);
     } else {
         brushShape.fromGaussian(m_properties.radius, m_properties.sigma);
-        brushShape.tresholdBristles(0.1);
+        brushShape.thresholdBristles(0.1);
     }
     m_brush.setBrushShape(brushShape);*/
     

@@ -197,10 +197,10 @@ float BrushShape::sigma()
     return m_sigma;
 }
 
-void BrushShape::tresholdBristles(double treshold)
+void BrushShape::thresholdBristles(double threshold)
 {
     for (int i = 0; i < m_bristles.size(); i++) {
-        if (m_bristles.at(i)->length() < treshold) {
+        if (m_bristles.at(i)->length() < threshold) {
             m_bristles[i]->setEnabled(false);
         }
     }

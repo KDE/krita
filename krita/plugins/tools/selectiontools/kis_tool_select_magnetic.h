@@ -60,14 +60,14 @@ public:
 
 public slots:
     void setRadius(int);
-    void setTreshold(int);
+    void setThreshold(int);
     void setSearchStartPoint(KisToolSelectMagneticOptionWidget::SearchStartPoint);
     void setColorLimitation(KisToolSelectMagneticOptionWidget::ColorLimitation);
     void setLimitToCurrentLayer(bool);
 private:
     virtual QWidget* createOptionWidget();
     int m_radius;
-    int m_treshold;
+    int m_threshold;
     KisToolSelectMagneticOptionWidget::SearchStartPoint m_searchStartPoint;
     KisToolSelectMagneticOptionWidget::ColorLimitation m_colorLimitation;
     bool m_limitToCurrentLayer;

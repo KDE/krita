@@ -27,7 +27,7 @@ KisToolSelectMagneticOptionWidget::KisToolSelectMagneticOptionWidget(QWidget *pa
     ui->setupUi(this);
 
     connect(ui->m_radius,           SIGNAL(valueChanged(int)),          this, SIGNAL(radiusChanged(int)));
-    connect(ui->m_treshold,         SIGNAL(valueChanged(int)),          this, SIGNAL(tresholdChanged(int)));
+    connect(ui->m_threshold,        SIGNAL(valueChanged(int)),          this, SIGNAL(thresholdChanged(int)));
     connect(ui->m_searchFromLeft,   SIGNAL(clicked()),                  this, SLOT(searchStartPointRadioChanged()));
     connect(ui->m_searchFromRight,  SIGNAL(clicked()),                  this, SLOT(searchStartPointRadioChanged()));
     connect(ui->m_colorLimitation,  SIGNAL(currentIndexChanged(int)),   this, SIGNAL(colorLimitationChanged(ColorLimitation)));

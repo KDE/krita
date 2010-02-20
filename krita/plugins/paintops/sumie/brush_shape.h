@@ -37,7 +37,7 @@ public:
     void fromLine(int radius, float sigma);
     // slow, optimize!
     void fromQImage(QImage image);
-    void tresholdBristles(double treshold);
+    void thresholdBristles(double threshold);
 
     QVector<Bristle*> getBristles();
     int width();

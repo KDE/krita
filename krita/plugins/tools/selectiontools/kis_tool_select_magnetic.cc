@@ -99,9 +99,9 @@ void KisToolSelectMagnetic::setRadius(int radius)
     m_radius = radius;
 }
 
-void KisToolSelectMagnetic::setTreshold(int treshold)
+void KisToolSelectMagnetic::setThreshold(int threshold)
 {
-    m_treshold = treshold;
+    m_threshold = threshold;
 }
 
 void KisToolSelectMagnetic::setSearchStartPoint(KisToolSelectMagneticOptionWidget::SearchStartPoint searchStartPoint)
@@ -128,6 +128,12 @@ QWidget* KisToolSelectMagnetic::createOptionWidget()
     m_optWidget->disableSelectionModeOption();
 
     m_magneticOptions = new KisToolSelectMagneticOptionWidget(m_optWidget);
+
+    connect(m_magneticOptions, SIGNAL(radiusChanged(int)),                        this, SLOT(setRadius(int)));
+    connect(m_magneticOptions, SIGNAL(thresholdChanged(int)),                     this, SLOT(setThreshold(int)));
+    connect(m_magneticOptions, SIGNAL(searchStartPointChanged(SearchStartPoint)), this, SLOT(setSearchStartPoint(KisToolSelectMagneticOptionWidget::SearchStartPoint)));
+    connect(m_magneticOptions, SIGNAL(colorLimitationChanged(ColorLimitation)),   this, SLOT(setColorLimitation(KisToolSelectMagneticOptionWidget::ColorLimitation)));
+    connect(m_magneticOptions, SIGNAL(layerLimitationChanged(bool)),              this, SLOT(setLimitToCurrentLayer(bool)));
 
     QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);

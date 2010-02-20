@@ -47,7 +47,7 @@ public:
     ~KisToolSelectMagneticOptionWidget();
 signals:
     void radiusChanged(int radius);
-    void tresholdChanged(int treshold);
+    void thresholdChanged(int threshold);
     void searchStartPointChanged(SearchStartPoint searchOrder);
     void colorLimitationChanged(ColorLimitation colorLimitation);
     void layerLimitationChanged(bool limitToLayer);

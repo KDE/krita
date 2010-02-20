@@ -769,7 +769,9 @@ bool TextTool::paste()
     // on windows we do not have data if we try to paste this selection
     if (!data) return false;
 
+    m_prevCursorPosition = m_textEditor->position();
     m_textEditor->addCommand(new TextPasteCommand(QClipboard::Clipboard, this));
+    editingPluginEvents();
     return true;
 }
 

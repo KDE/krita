@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2008 Fredy Yanardi <fyanardi@gmail.com>
- * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007,2009,2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,27 +19,28 @@
  */
 
 #include "SpellCheck.h"
+#include "BgSpellCheck.h"
 
-#include <QTextBlock>
-#include <QTextDocument>
-#include <QTextLayout>
-#include <QTextCharFormat>
+#include <KoCharacterStyle.h>
+#include <KoResourceManager.h>
 
 #include <KLocale>
 #include <KDebug>
 #include <KAction>
 #include <sonnet/configdialog.h>
 
-#include <KoCharacterStyle.h>
-#include <KoResourceManager.h>
-
-#include "BgSpellCheck.h"
+#include <QTextBlock>
+#include <QThread>
+#include <QTimer>
+#include <QApplication>
+#include <QTextCharFormat>
 
 SpellCheck::SpellCheck()
     : m_bgSpellCheck(0),
     m_enableSpellCheck(true),
     m_allowSignals(true),
-    m_documentIsLoading(false)
+    m_documentIsLoading(false),
+    m_isChecking(false)
 {
     /* setup actions for this plugin */
     KAction *configureAction = new KAction(i18n("Configure &Spell Checking..."), this);
@@ -55,51 +56,41 @@ SpellCheck::SpellCheck()
 
     connect(m_bgSpellCheck, SIGNAL(misspelledWord(const QString &,int,bool)),
             this, SLOT(highlightMisspelled(const QString &,int,bool)));
-    connect(m_bgSpellCheck, SIGNAL(done()), this, SLOT(dequeueDocument()));
+    connect(m_bgSpellCheck, SIGNAL(done()), this, SLOT(finishedRun()));
 }
 
 void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
 {
-    setDocument(document);
     if (m_documentIsLoading || !m_enableSpellCheck)
         return;
 
     QTextBlock block = document->findBlock(cursorPosition);
     if (!block.isValid())
         return;
-    QList<QTextLayout::FormatRange> ranges = block.layout()->additionalFormats();
-    QList<QTextLayout::FormatRange> newRanges;
-    QList<QTextLayout::FormatRange>::Iterator iter = ranges.begin();
-    while (iter != ranges.end()) {
-        QTextLayout::FormatRange r = *(iter);
-        if (r.format != m_defaultMisspelledFormat) // any ranges in the block at higher cursor pos can be removed.
-            newRanges.append(r);
-        ++iter;
-    }
-    m_allowSignals = false;
-    if (ranges.count() != newRanges.count())
-        block.layout()->setAdditionalFormats(newRanges);
-    m_allowSignals = true;
-    m_bgSpellCheck->startRun(m_document, block.position(), block.position() + block.length());
+    checkSection(document, block.position(), block.position() + block.length());
 }
 
 void SpellCheck::finishedParagraph(QTextDocument *document, int cursorPosition)
 {
     Q_UNUSED(document);
     Q_UNUSED(cursorPosition);
+    //QTextBlock block = document->findBlock(cursorPosition);
+    //checkSection(document, block.position(), block.position() + block.length());
 }
 
 void SpellCheck::checkSection(QTextDocument *document, int startPosition, int endPosition)
 {
-    setDocument(document);
     if (m_documentIsLoading || !m_enableSpellCheck) return;
 
-    if (m_documentsQueue.isEmpty()) {
-        kDebug(31000) << "Document queue is empty";
-        m_bgSpellCheck->startRun(document, startPosition, endPosition);
-    } else {
-        m_documentsQueue.enqueue(document);
+    foreach (const SpellSections &ss, m_documentsQueue) {
+        if (ss.from <= startPosition && ss.to >= endPosition)
+            return;
+        // TODO also check if we should replace an existing queued item with a longer span
     }
+
+    SpellSections ss(document, startPosition, endPosition);
+    m_documentsQueue.enqueue(ss);
+    runQueue();
 }
 
 QStringList SpellCheck::availableBackends() const
@@ -111,11 +102,6 @@ QStringList SpellCheck::availableLanguages() const
 {
     return m_speller.availableLanguages();
 }
-
-/* void SpellCheck::setDefaultClient(const QString &client)
-{
-    m_speller.setDefaultClient(client);
-} */
 
 void SpellCheck::setDefaultLanguage(const QString &language)
 {
@@ -143,11 +129,6 @@ void SpellCheck::setSkipRunTogetherWords(bool on)
     m_speller.setAttribute(Speller::SkipRunTogether, on);
 }
 
-/* QString SpellCheck::defaultClient() const
-{
-    return m_speller.defaultClient();
-} */
-
 QString SpellCheck::defaultLanguage() const
 {
     return m_speller.defaultLanguage();
@@ -170,96 +151,63 @@ bool SpellCheck::skipRunTogetherWords()
 
 void SpellCheck::highlightMisspelled(const QString &word, int startPosition, bool misspelled)
 {
-    // TODO: Exception, such as words that contain numbers, numbers
-    kDebug(31000) << "Highlighting: " << word << " : " << startPosition;
-    QTextBlock block = m_document->findBlock(startPosition);
-    QTextLayout *layout = block.layout();
-    QTextLayout::FormatRange range;
-    range.start = startPosition - block.position();
-    range.length = word.trimmed().length();
-
-    QList<QTextLayout::FormatRange> ranges = layout->additionalFormats();
-    range.format = m_defaultMisspelledFormat;
-    ranges.append(range);
-    m_allowSignals = false;
-    if (ranges.isEmpty())
-        layout->clearAdditionalFormats();
-    else if (ranges.count() != layout->additionalFormats().count())
-        layout->setAdditionalFormats(ranges);
-    if (misspelled)
-        m_document->markContentsDirty(startPosition, range.length);
-    m_allowSignals = true;
-}
-
-void SpellCheck::dequeueDocument()
-{
-    // kDebug(31000) << "Dequeueing document";
-    if (!m_documentsQueue.isEmpty()) {
-        m_bgSpellCheck->startRun(m_documentsQueue.dequeue(), 0, 0);
-    }
-}
-
-void SpellCheck::checkDocument(int position, int charsRemoved, int charsAdded)
-{
-    if (! m_allowSignals)
+    // be aware that this method is called in a different thread!!
+    if (!misspelled)
         return;
 
-    int changeStart = position;
-    int changeEnd = position;
-    bool recheck = false;
+#if 0
+    // DEBUG
+class MyThread : public QThread { public: static void mySleep(unsigned long msecs) { msleep(msecs); }};
+static_cast<MyThread*>(QThread::currentThread())->mySleep(400);
+#endif
 
-    // TODO make for loop for all affected blocks ??
-    QTextBlock block = m_document->findBlock(position);
-    QTextLayout *layout = block.layout();
-    QList< QTextLayout::FormatRange > ranges = layout->additionalFormats();
-    for (int index =0; index < ranges.count(); index++) {
-        QTextLayout::FormatRange range = ranges[index];
-        if (range.format != m_defaultMisspelledFormat)
-            continue;
-
-        if (range.start > position - block.position()
-                && qMax(charsRemoved, charsAdded) + position - block.position() < range.start + range.length) { // range is moved.
-            range.start += charsAdded - charsRemoved;
+    int blockIndex = 0;
+    while (blockIndex < m_misspellings.count()) {
+        BlockLayout bl = m_misspellings[blockIndex];
+        if (bl.start <= startPosition && bl.start + bl.length > startPosition) {
+            break;
         }
-        else if (position - block.position() >= range.start &&
-                position - block.position() < range.start + range.length) { // change is starting inside this range
-            if (position - block.position() + qMax(charsRemoved, charsAdded) > range.start + range.length) {
-                recheck = true;
-                changeEnd = qMax(changeEnd, range.start + range.length);
-            }
-
-            range.length = 0; // delete range, I don't want to see spell-check errors while typing a word
-        } else {
-            continue;
-        }
-
-        ranges.takeAt(index);
-        if (range.length > 0) {
-            ranges.insert(0, range);
-            changeStart = qMin(changeStart, range.start);
-            changeEnd = qMax(changeEnd, range.start + range.length);
-        } else {
-            index--; // make sure we don't skip one
-        }
+        ++blockIndex;
     }
+    if (blockIndex >= m_misspellings.count()) // not found, doc went out of sync
+        return;
+    BlockLayout block = m_misspellings.at(blockIndex);
 
-    m_allowSignals = false;
-    layout->setAdditionalFormats(ranges);
-    if (changeStart != changeEnd)
-        m_document->markContentsDirty(changeStart, changeEnd);
-    m_allowSignals = true;
-
-    if (recheck)
-        m_bgSpellCheck->startRun(m_document, changeStart, changeEnd);
+    QTextLayout::FormatRange range;
+    range.format = m_defaultMisspelledFormat;
+    range.start = startPosition - block.start;
+    range.length = word.trimmed().length();
+    block.ranges << range;
+    m_misspellings[blockIndex] = block;
 }
 
-void SpellCheck::setDocument(QTextDocument *document)
+void SpellCheck::runQueue()
 {
-    if (m_document.data() == document) return;
-    if (!m_document.isNull())
-        disconnect(m_document, SIGNAL(contentsChange(int,int,int)), this, SLOT(checkDocument(int,int,int)));
-    m_document = document;
-    connect(m_document, SIGNAL(contentsChange(int,int,int)), this, SLOT(checkDocument(int,int,int)), Qt::DirectConnection);
+    Q_ASSERT(QThread::currentThread() == QApplication::instance()->thread());
+    if (m_isChecking)
+        return;
+    while (!m_documentsQueue.isEmpty()) {
+        SpellSections section = m_documentsQueue.dequeue();
+        if (section.document.isNull())
+            continue;
+        QTextBlock block = section.document->findBlock(section.from);
+        if (!block.isValid())
+            continue;
+        m_isChecking = true;
+        m_document = section.document;
+        m_misspellings.clear();
+        do {
+            BlockLayout bl;
+            bl.start = block.position();
+            bl.length = block.length();
+            bl.checkStart = qMax(bl.start, section.from);
+            m_misspellings << bl;
+            block = block.next();
+        } while(block.isValid() && block.position() < section.to);
+
+        m_bgSpellCheck->startRun(section.document, section.from, section.to);
+        break;
+    }
 }
 
 void SpellCheck::configureSpellCheck()
@@ -274,6 +222,59 @@ void SpellCheck::resourceChanged(int key, const QVariant &resource)
 {
     if (key == KoCanvasResource::DocumentIsLoading)
         m_documentIsLoading = resource.toBool();
+}
+
+void SpellCheck::finishedRun()
+{
+    Q_ASSERT(QThread::currentThread() == QApplication::instance()->thread());
+    m_isChecking = false;
+
+    m_allowSignals = false;
+    foreach (const BlockLayout &bl, m_misspellings) {
+        QTextBlock block = m_document->findBlock(bl.start);
+        if (!block.isValid())
+            continue;
+        if (bl.start != block.position() || bl.length != block.length())
+            continue;
+        QList<QTextLayout::FormatRange> ranges = block.layout()->additionalFormats();
+        bool changed = false;
+        int numMisspellings = 0;
+        foreach (const QTextLayout::FormatRange &range, ranges) {
+            if (range.format != m_defaultMisspelledFormat)
+                continue;
+            if (range.start + range.length < bl.checkStart)
+                continue;
+            ++numMisspellings;
+            bool found = false;
+            foreach (const QTextLayout::FormatRange &newRange, bl.ranges) {
+                if (range.start == newRange.start && range.length == newRange.length) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                changed = true;
+                break;
+            }
+        }
+        if (changed || numMisspellings != bl.ranges.count()) {
+            QList<QTextLayout::FormatRange> newRanges;
+            newRanges = bl.ranges;
+            foreach (const QTextLayout::FormatRange &range, ranges) {
+                if (range.format != m_defaultMisspelledFormat
+                        || range.start + range.length < bl.checkStart)
+                    newRanges << range;
+            }
+            if (newRanges.isEmpty())
+                block.layout()->clearAdditionalFormats();
+            else
+                block.layout()->setAdditionalFormats(newRanges);
+            m_document->markContentsDirty(bl.start, bl.start + bl.length);
+        }
+    }
+    m_allowSignals = true;
+
+    QTimer::singleShot(0, this, SLOT(runQueue()));
 }
 
 #include <SpellCheck.moc>

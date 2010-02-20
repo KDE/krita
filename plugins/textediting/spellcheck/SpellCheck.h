@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007,2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,13 +21,15 @@
 #ifndef SPELLCHECK_H
 #define SPELLCHECK_H
 
-#include <QQueue>
-
 #include <KoTextEditingPlugin.h>
 
 #include <sonnet/speller.h>
 #include <QTextCharFormat>
+#include <QTextDocument>
 #include <QPointer>
+#include <QQueue>
+#include <QTextLayout>
+
 class QTextDocument;
 class BgSpellCheck;
 
@@ -44,17 +46,14 @@ public:
     QStringList availableBackends() const;
     QStringList availableLanguages() const;
 
-    // void setDefaultClient(const QString &client);
     void setBackgroundSpellChecking(bool b);
     void setSkipAllUppercaseWords(bool b);
     void setSkipRunTogetherWords(bool b);
 
-    // QString defaultClient() const;
     QString defaultLanguage() const;
     bool backgroundSpellChecking();
     bool skipAllUppercaseWords();
     bool skipRunTogetherWords();
-    void setDocument(QTextDocument *doc);
 
 public slots:
     void resourceChanged( int key, const QVariant & res );
@@ -62,21 +61,44 @@ public slots:
 
 private slots:
     void highlightMisspelled(const QString &word, int startPosition, bool misspelled = true);
-    void dequeueDocument();
-    void checkDocument(int position, int charsRemoved, int charsAdded);
-
+    void finishedRun();
     void configureSpellCheck();
+    void runQueue();
 
 private:
     Sonnet::Speller m_speller;
     QPointer<QTextDocument> m_document;
     QString m_word;
     BgSpellCheck *m_bgSpellCheck;
-    QQueue<QTextDocument *> m_documentsQueue;
+    struct SpellSections {
+        SpellSections(QTextDocument *doc, int start, int end)
+            : document(doc)
+        {
+            from = start;
+            to = end;
+        }
+        QPointer<QTextDocument> document;
+        int from;
+        int to;
+    };
+    QQueue<SpellSections> m_documentsQueue;
     bool m_enableSpellCheck;
     bool m_allowSignals;
     bool m_documentIsLoading;
+    bool m_isChecking;
     QTextCharFormat m_defaultMisspelledFormat;
+
+    /**
+     For a whole text run we accumulate all misspellings and apply them to
+     the doc at once when done.
+     */
+    struct BlockLayout {
+        int start;
+        int length;
+        int checkStart; // in case we partially check this block
+        QList<QTextLayout::FormatRange> ranges;
+    };
+    QList<BlockLayout> m_misspellings;
 };
 
 #endif

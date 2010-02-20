@@ -28,6 +28,8 @@ set(kritaexrexport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
+kde4_add_ui_files(kritaexrexport_PART_SRCS exr_export_widget.ui )
+
 kde4_add_plugin(kritaexrexport WITH_PREFIX ${kritaexrexport_PART_SRCS})
 
 

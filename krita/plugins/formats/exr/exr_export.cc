@@ -37,6 +37,8 @@
 
 #include "exr_converter.h"
 
+#include "ui_exr_export_widget.h"
+
 class KisExternalLayer;
 
 K_PLUGIN_FACTORY(ExportFactory, registerPlugin<exrExport>();)
@@ -57,6 +59,16 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
+    KDialog dialog;
+    dialog.setWindowTitle(i18n("TIFF Export Options"));
+    dialog.setButtons(KDialog::Ok | KDialog::Cancel);
+    Ui::ExrExportWidget widget;
+    widget.setupUi(&dialog);
+    
+    if (dialog.exec() == QDialog::Rejected) {
+        return KoFilter::UserCancelled;
+    }
+    
     KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
@@ -74,20 +86,24 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
 
     exrConverter kpc(output, output->undoAdapter());
 
-    image->refreshGraph();
-    image->lock();
-    KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
-    KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-    image->unlock();
+    if (widget.flatten->isChecked())
+    {
+        image->refreshGraph();
+        image->lock();
+        KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
+        KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
+        image->unlock();
 
-    KisImageBuilder_Result res;
+        KisImageBuilder_Result res;
 
-    if ((res = kpc.buildFile(url, l)) == KisImageBuilder_RESULT_OK) {
-        dbgFile << "success !";
-        return KoFilter::OK;
+        if ((res = kpc.buildFile(url, l)) == KisImageBuilder_RESULT_OK) {
+            dbgFile << "success !";
+            return KoFilter::OK;
+        }
+        
+        dbgFile << " Result =" << res;
+        return KoFilter::InternalError;
     }
-    dbgFile << " Result =" << res;
-    return KoFilter::InternalError;
 }
 
 #include <exr_export.moc>

@@ -1617,6 +1617,9 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block)
             layout.setTextOption(option);
             layout.beginLayout();
             QTextLine line = layout.createLine();
+            if (line.isValid()) {
+                line.setLineWidth(data->counterWidth());
+            }
             layout.endLayout();
             QPointF counterPosition = data->counterPosition();
             if (block.layout()->lineCount() > 0) {

@@ -22,6 +22,8 @@ install(FILES
     selection_subtract.png
     select_pixel.png
     select_shape.png
+    local_selection_active.png
+    local_selection_inactive.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )

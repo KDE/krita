@@ -104,7 +104,7 @@ void KisSelectionMask::setDeleselectedSelection(KisSelectionSP selection)
 KoDocumentSectionModel::PropertyList KisSelectionMask::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KoDocumentSectionModel::Property(i18n("Active"), KIcon("active"),KIcon("noactive"),active());
+    l << KoDocumentSectionModel::Property(i18n("Active"), KIcon("local_selection_active"),KIcon("local_selection_inactive"),active());
     return l;
 }
 

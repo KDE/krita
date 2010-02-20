@@ -112,10 +112,10 @@ void RdfSemanticTree::update(KoDocumentRdf *rdf, Soprano::Model *model)
         // _:genid1 <http://www.w3.org/2003/01/geo/wgs84_pos#lat> "51.47026" (empty)
         // _:genid1 <http://www.w3.org/2003/01/geo/wgs84_pos#long> "-2.59466" (empty)
         rdf->expandStatementsSubjectPointsTo(model);
-        kDebug(30015) << "expanding lists... old.sz:" << model->statementCount();
+        //kDebug(30015) << "expanding lists... old.sz:" << model->statementCount();
         // other geo is an rdf:list, so bring that in too
         rdf->expandStatementsToIncludeRdfLists(model);
-        kDebug(30015) << "expanding lists... new.sz:" << model->statementCount();
+        //kDebug(30015) << "expanding lists... new.sz:" << model->statementCount();
     }
     m_locations = rdf->locations(model);
     foreach (RdfLocation *e, m_locations) {

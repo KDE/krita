@@ -24,6 +24,7 @@
 
 #include <QTextBlock>
 #include <QTextCursor>
+#include <QFontMetrics>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
@@ -674,6 +675,18 @@ qreal KoCharacterStyle::fontLetterSpacing() const
     return d->propertyDouble(QTextCharFormat::FontLetterSpacing);
 }
 
+void KoCharacterStyle::setFontLetterAbsoluteSpacing(qreal spacing)
+{
+    //Qt doesn't support yet
+    //TODO d->setProperty(QTextCharFormat::FontLetterAbsoluteSpacing, spacing);
+}
+
+qreal KoCharacterStyle::fontLetterAbsoluteSpacing() const
+{
+    //Qt doesn't support yet
+    return 0;// TODO d->propertyDouble(QTextCharFormat::FontLetterAbsoluteSpacing);
+}
+
 void KoCharacterStyle::setFontWordSpacing(qreal spacing)
 {
     d->setProperty(QTextCharFormat::FontWordSpacing, spacing);
@@ -1040,6 +1053,13 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
         } else {
             setFontKerning(false);
         }
+    }
+
+    if (styleStack.hasProperty(KoXmlNS::fo, "letter-spacing")) {
+        qreal space = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "letter-spacing"));
+        setFontLetterAbsoluteSpacing(space);
+        QFontMetrics fm(font());
+        setFontLetterSpacing(100+100*space/fm.averageCharWidth());
     }
 
     if (styleStack.hasProperty(KoXmlNS::style, "text-outline")) {

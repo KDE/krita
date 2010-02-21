@@ -20,13 +20,20 @@
 
 #include "KoTextBlockData.h"
 #include "KoTextBlockBorderData.h"
-#include "KoTextBlockPaintStrategy.h"
+#include "KoTextBlockPaintStrategyBase.h"
 
 class KoTextBlockData::Private
 {
 public:
-    Private() : counterWidth(0), counterSpacing(0), counterIndex(1), border(0)
-    , paintStrategy(new KoTextBlockPaintStrategy) {}
+    Private()
+        : counterWidth(0),
+        counterSpacing(0),
+        counterIndex(1),
+        border(0),
+        paintStrategy(0)
+    {
+    }
+
     ~Private() {
         if (border && !border->deref())
             delete border;
@@ -39,7 +46,7 @@ public:
     int counterIndex;
     QPointF counterPos;
     KoTextBlockBorderData *border;
-    KoTextBlockPaintStrategy *paintStrategy;
+    KoTextBlockPaintStrategyBase *paintStrategy;
 };
 
 KoTextBlockData::KoTextBlockData()
@@ -132,13 +139,13 @@ KoTextBlockBorderData *KoTextBlockData::border() const
     return d->border;
 }
 
-void KoTextBlockData::setPaintStrategy(KoTextBlockPaintStrategy *paintStrategy)
+void KoTextBlockData::setPaintStrategy(KoTextBlockPaintStrategyBase *paintStrategy)
 {
     delete d->paintStrategy;
     d->paintStrategy = paintStrategy;
 }
 
-KoTextBlockPaintStrategy *KoTextBlockData::paintStrategy() const
+KoTextBlockPaintStrategyBase *KoTextBlockData::paintStrategy() const
 {
     return d->paintStrategy;
 }

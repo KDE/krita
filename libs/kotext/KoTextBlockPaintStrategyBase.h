@@ -18,25 +18,31 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoTextBlockPaintStrategy.h"
+#ifndef KOTEXTBLOCKPAINTSTRATEGYBASE_H
+#define KOTEXTBLOCKPAINTSTRATEGYBASE_H
 
-KoTextBlockPaintStrategy::KoTextBlockPaintStrategy()
+#include "kotext_export.h"
+
+#include <QBrush>
+
+class QPainter;
+
+/**
+ * This class is used to control aspects of textblock painting
+ * Which is used when KPresenter animates text.
+ * TODO rename to end in Base
+ */
+class KOTEXT_EXPORT KoTextBlockPaintStrategyBase
 {
-}
+public:
+    KoTextBlockPaintStrategyBase();
+    virtual ~KoTextBlockPaintStrategyBase();
+    /// returns a background for the block, the default implemntation returns the defaultBackground
+    virtual QBrush background(const QBrush &defaultBackground);
+    /// A strategy implementing this class can apply its settings by modifying the \a painter
+    virtual void applyStrategy(QPainter *painter);
+    /// Returns true if the block should be painted at all or false when it should be skipped
+    virtual bool isVisible();
+};
 
-KoTextBlockPaintStrategy::~KoTextBlockPaintStrategy()
-{
-}
-
-QBrush KoTextBlockPaintStrategy::background(const QBrush &defaultBackground)
-{
-    return defaultBackground;
-}
-
-void KoTextBlockPaintStrategy::applyStrategy(QPainter *)
-{
-}
-
-bool KoTextBlockPaintStrategy::isVisible() {
-    return true;
-}
+#endif

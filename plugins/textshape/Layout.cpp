@@ -46,7 +46,7 @@
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
 #include <KoGenChange.h>
-#include <KoTextBlockPaintStrategy.h>
+#include <KoTextBlockPaintStrategyBase.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
 
@@ -1026,23 +1026,24 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
 
         if (!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty()) {
             started = true;
-            
+
             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
             KoTextBlockBorderData *border = 0;
-            KoTextBlockPaintStrategy dummyPaintStrategy;
-            KoTextBlockPaintStrategy *paintStrategy = &dummyPaintStrategy;
+            KoTextBlockPaintStrategyBase *paintStrategy = 0;
             if (blockData) {
                 border = blockData->border();
                 paintStrategy = blockData->paintStrategy();
             }
-
-            if (!paintStrategy->visible())
+            KoTextBlockPaintStrategyBase dummyPaintStrategy;
+            if (paintStrategy == 0)
+                paintStrategy = &dummyPaintStrategy;
+            if (!paintStrategy->isVisible())
                 continue; // this paragraph shouldn't be shown so just skip it
 
             QBrush bg = paintStrategy->background(block.blockFormat().background());
             if (bg != Qt::NoBrush)
                 painter->fillRect(layout->boundingRect(), bg);
-            paintStrategy->modifyPainter(painter);
+            paintStrategy->applyStrategy(painter);
             painter->save();
             drawListItem(painter, block, context.imageCollection);
             painter->restore();

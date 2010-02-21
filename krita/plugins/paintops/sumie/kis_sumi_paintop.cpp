@@ -34,6 +34,7 @@
 
 #include <kis_sumi_ink_option.h>
 #include <kis_sumi_shape_option.h>
+#include <kis_sumi_bristle_option.h>
 #include <kis_brush_option.h>
 
 #include "kis_brush.h"
@@ -88,7 +89,7 @@ void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
 
     m_properties.inkDepletionCurve = list;
     m_properties.isbrushDimension1D = settings->getBool(SUMI_IS_DIMENSION_1D);
-    m_properties.useMousePressure = settings->getBool(SUMI_USE_MOUSEPRESSURE);
+    m_properties.useMousePressure = settings->getBool(SUMI_BRISTLE_USE_MOUSEPRESSURE);
     m_properties.useSaturation = settings->getBool(SUMI_INK_USE_SATURATION);
     m_properties.useOpacity = settings->getBool(SUMI_INK_USE_OPACITY);
     m_properties.useWeights = settings->getBool(SUMI_INK_USE_WEIGHTS);
@@ -99,9 +100,9 @@ void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
     m_properties.inkDepletionWeight = settings->getDouble(SUMI_INK_DEPLETION_WEIGHT);
     m_properties.useSoakInk = settings->getBool(SUMI_INK_SOAK);
 
-    m_properties.shearFactor = settings->getDouble(SUMI_SHEAR);
-    m_properties.randomFactor = settings->getDouble(SUMI_RANDOM);
-    m_properties.scaleFactor = settings->getDouble(SUMI_SCALE);
+    m_properties.shearFactor = settings->getDouble(SUMI_BRISTLE_SHEAR);
+    m_properties.randomFactor = settings->getDouble(SUMI_BRISTLE_RANDOM);
+    m_properties.scaleFactor = settings->getDouble(SUMI_BRISTLE_SCALE);
     
 /*    BrushShape brushShape;
     if (m_properties.isbrushDimension1D) 

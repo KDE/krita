@@ -24,6 +24,7 @@
 
 class KisSumiInkOption;
 class KisSumiShapeOption;
+class KisSumiBristleOption;
 class KisBrushOptionWidget;
 
 class KisSumiPaintOpSettingsWidget : public KisPaintOpOptionsWidget
@@ -40,7 +41,7 @@ public:
 public:
     KisSumiShapeOption * m_sumiShapeOption;
     KisSumiInkOption * m_sumiInkOption;
-    
+    KisSumiBristleOption * m_sumiBristleOption;
     KisBrushOptionWidget * m_brushOption;
 };
 

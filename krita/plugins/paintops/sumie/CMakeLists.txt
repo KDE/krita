@@ -1,6 +1,7 @@
 set(kritasumipaintop_PART_SRCS
     sumi_paintop_plugin.cpp
     kis_sumi_paintop.cpp
+    kis_sumi_bristle_option.cpp
     kis_sumi_shape_option.cpp
     kis_sumi_ink_option.cpp
     kis_sumi_paintop_settings.cpp
@@ -11,7 +12,7 @@ set(kritasumipaintop_PART_SRCS
     trajectory.cpp
     )
 
-kde4_add_ui_files(kritasumipaintop_PART_SRCS wdgInkOptions.ui  wdgshapeoptions.ui )
+kde4_add_ui_files(kritasumipaintop_PART_SRCS wdgInkOptions.ui  wdgshapeoptions.ui wdgbristleoptions.ui)
 
 kde4_add_plugin(kritasumipaintop ${kritasumipaintop_PART_SRCS})
 

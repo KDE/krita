@@ -24,21 +24,28 @@
 
 #include <kis_paintop_options_widget.h>
 #include <kis_brush_option_widget.h>
+#include <kis_paint_action_type_option.h>
+#include "kis_sumi_bristle_option.h"
 
 KisSumiPaintOpSettingsWidget:: KisSumiPaintOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
 {
     m_sumiShapeOption = new KisSumiShapeOption();
+    m_sumiBristleOption = new KisSumiBristleOption();
     m_sumiInkOption = new KisSumiInkOption();
     m_brushOption = new KisBrushOptionWidget();
+
     addPaintOpOption(m_brushOption);
     addPaintOpOption(m_sumiShapeOption);
+    addPaintOpOption(m_sumiBristleOption);
     addPaintOpOption(m_sumiInkOption);
+    addPaintOpOption(new KisPaintActionTypeOption());
 }
 
 KisSumiPaintOpSettingsWidget::~ KisSumiPaintOpSettingsWidget()
 {
     delete m_sumiShapeOption;
+    delete m_sumiBristleOption;
     delete m_sumiInkOption;
 }
 

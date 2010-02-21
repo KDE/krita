@@ -545,8 +545,15 @@ KisImageWSP exrConverter::image()
     return m_image;
 }
 
+struct ExrPaintLayerSaveInfo {
+    QString name; ///< name of the layer with a "." at the end (ie "group1.group2.layer1.")
+    KisPaintLayerSP layer;
+    QList<QString> channels;
+    Imf::PixelType pixelType;
+};
+
 template<typename _T_>
-void encodeData(Imf::OutputFile& file, KisPaintLayerSP layer, int width, int height, Imf::PixelType ptype)
+void encodeData(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int width, int height, Imf::PixelType ptype)
 {
     Imf::FrameBuffer frameBuffer;
     int xstart = 0;
@@ -576,7 +583,7 @@ void encodeData(Imf::OutputFile& file, KisPaintLayerSP layer, int width, int hei
                                       sizeof(Rgba) * width));
         file.setFrameBuffer(frameBuffer);
         Rgba *rgba = pixels.data();
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
+        KisHLineIterator it = info.layer->paintDevice()->createHLineIterator(0, y, width);
         while (!it.isDone()) {
 
             const typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast < const typename KoRgbTraits<_T_>::Pixel* >(it.oldRawData());
@@ -620,14 +627,21 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
     header.channels().insert("B", Imf::Channel(pixelType));
     header.channels().insert("A", Imf::Channel(pixelType));
 
+    ExrPaintLayerSaveInfo info;
+    info.layer = layer;
+    info.channels.push_back("R");
+    info.channels.push_back("G");
+    info.channels.push_back("B");
+    info.channels.push_back("A");
+
     // Open file for writing
     Imf::OutputFile file(QFile::encodeName(uri.path()), header);
 
     if (layer->colorSpace()->colorModelId() == RGBAColorModelID) {
         if (layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
-            encodeData<half>(file, layer, width, height, Imf::HALF);
+            encodeData<half>(file, info, width, height, Imf::HALF);
         } else if (layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
-            encodeData<float>(file, layer, width, height, Imf::FLOAT);
+            encodeData<float>(file, info, width, height, Imf::FLOAT);
         }
     } else {
         return KisImageBuilder_RESULT_FAILURE;
@@ -635,13 +649,6 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
 
     return KisImageBuilder_RESULT_OK;
 }
-
-struct ExrPaintLayerSaveInfo {
-    QString name; ///< name of the layer with a "." at the end (ie "group1.group2.layer1.")
-    KisPaintLayerSP layer;
-    QList<QString> channels;
-    Imf::PixelType pixelType;
-};
 
 void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& infos, const QString& name, KisGroupLayerSP parent)
 {

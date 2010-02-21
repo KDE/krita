@@ -75,11 +75,12 @@ KisSumiPaintOp::KisSumiPaintOp(const
 
 void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
 {
-    m_properties.radius = settings->getInt(SUMI_RADIUS);
-    m_properties.inkAmount = settings->getInt(SUMI_INK_AMOUNT);
+/*    m_properties.radius = settings->getInt(SUMI_RADIUS);
     m_properties.sigma = settings->getDouble(SUMI_SIGMA);
+    m_properties.isbrushDimension1D = settings->getBool(SUMI_IS_DIMENSION_1D);*/
+    
+    m_properties.inkAmount = settings->getInt(SUMI_INK_AMOUNT);
     //TODO: wait for the transfer function with variable size
-
     QList<float> list;
     KisCubicCurve curve = settings->getCubicCurve(SUMI_INK_DEPLETION_CURVE);
     for (int i=0;i < m_properties.inkAmount;i++){
@@ -88,8 +89,7 @@ void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
     curve.floatTransfer(m_properties.inkAmount);
 
     m_properties.inkDepletionCurve = list;
-    m_properties.isbrushDimension1D = settings->getBool(SUMI_IS_DIMENSION_1D);
-    m_properties.useMousePressure = settings->getBool(SUMI_BRISTLE_USE_MOUSEPRESSURE);
+
     m_properties.useSaturation = settings->getBool(SUMI_INK_USE_SATURATION);
     m_properties.useOpacity = settings->getBool(SUMI_INK_USE_OPACITY);
     m_properties.useWeights = settings->getBool(SUMI_INK_USE_WEIGHTS);
@@ -100,6 +100,7 @@ void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
     m_properties.inkDepletionWeight = settings->getDouble(SUMI_INK_DEPLETION_WEIGHT);
     m_properties.useSoakInk = settings->getBool(SUMI_INK_SOAK);
 
+    m_properties.useMousePressure = settings->getBool(SUMI_BRISTLE_USE_MOUSEPRESSURE);
     m_properties.shearFactor = settings->getDouble(SUMI_BRISTLE_SHEAR);
     m_properties.randomFactor = settings->getDouble(SUMI_BRISTLE_RANDOM);
     m_properties.scaleFactor = settings->getDouble(SUMI_BRISTLE_SCALE);

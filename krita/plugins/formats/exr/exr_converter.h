@@ -59,6 +59,7 @@ public:
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);
     KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer);
+    KisImageBuilder_Result buildFile(const KUrl& uri, KisGroupLayerSP layer);
     /**
      * Retrieve the constructed image
      */

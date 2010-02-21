@@ -64,11 +64,11 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
     Ui::ExrExportWidget widget;
     widget.setupUi(&dialog);
-    
+
     if (dialog.exec() == QDialog::Rejected) {
         return KoFilter::UserCancelled;
     }
-    
+
     KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
@@ -86,8 +86,7 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
 
     exrConverter kpc(output, output->undoAdapter());
 
-    if (widget.flatten->isChecked())
-    {
+    if (widget.flatten->isChecked()) {
         image->refreshGraph();
         image->lock();
         KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
@@ -100,7 +99,21 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
             dbgFile << "success !";
             return KoFilter::OK;
         }
-        
+
+        dbgFile << " Result =" << res;
+        return KoFilter::InternalError;
+    } else {
+        image->lock();
+        kpc.buildFile(url, image->rootLayer());
+
+        KisImageBuilder_Result res = kpc.buildFile(url, image->rootLayer());
+        image->unlock();
+
+        if (res == KisImageBuilder_RESULT_OK) {
+            dbgFile << "success !";
+            return KoFilter::OK;
+        }
+
         dbgFile << " Result =" << res;
         return KoFilter::InternalError;
     }

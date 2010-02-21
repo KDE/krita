@@ -55,7 +55,8 @@ KoInlineObject *KoInlineTextObjectManager::inlineTextObject(int id) const
 void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInlineObject *object)
 {
     QTextCharFormat oldCf = cursor.charFormat();
-    // create a new format out of the old so that the current formating is also used for the inserted object
+    // create a new format out of the old so that the current formatting is
+    // also used for the inserted object.  KoVariables render text too ;)
     QTextCharFormat cf(oldCf);
     cf.setObjectType(QTextFormat::UserObject + 1);
     cf.setProperty(InlineInstanceId, ++m_lastObjectId);
@@ -72,8 +73,9 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
     }
 
     KoBookmark *bookmark = dynamic_cast<KoBookmark *>(object);
-    if (bookmark &&
-            (bookmark->type() == KoBookmark::StartBookmark || bookmark->type() == KoBookmark::SinglePosition))
+    if (bookmark
+            && (bookmark->type() == KoBookmark::StartBookmark
+                || bookmark->type() == KoBookmark::SinglePosition))
         m_bookmarkManager.insert(bookmark->name(), bookmark);
 
     // reset to use old format so that the InlineInstanceId is no longer set.
@@ -135,8 +137,8 @@ void KoInlineTextObjectManager::setProperty(KoInlineObject::Property key, const 
         m_properties.remove(key);
     }
     m_properties.insert(key, value);
-    foreach(KoInlineObject *obj, m_listeners)
-    obj->propertyChanged(key, value);
+    foreach (KoInlineObject *obj, m_listeners)
+        obj->propertyChanged(key, value);
 }
 
 QVariant KoInlineTextObjectManager::property(KoInlineObject::Property key) const

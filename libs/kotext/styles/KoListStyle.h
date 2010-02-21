@@ -30,7 +30,7 @@
 #include <KoXmlReader.h>
 
 class KoListLevelProperties;
-class KoOdfLoadingContext;
+class KoShapeLoadingContext;
 class KoGenStyle;
 
 /**
@@ -90,10 +90,11 @@ public:
         Thai,       ///< Thai characters for normal 10-base counting
         Abjad,      ///< Abjad sequence.
         AbjadMinor, ///< A lesser known version of the Abjad sequence.
-        ArabicAlphabet
+        ArabicAlphabet,
+        /// an image for the bullet
+        ImageItem
 
         // TODO look at css 3 for things like hebrew counters
-        // TODO allow a bitmap 'bullet'
     };
 
     /// further properties
@@ -114,7 +115,10 @@ public:
         StyleId,        ///< The id stored in the listFormat to link the list to this style.
         ContinueNumbering, ///< Continue numbering this list from the counter of a previous list
         Indent,         ///< The space (margin) to include for all paragraphs
-        MinimumDistance ///< The minimum distance, in pt, between the counter and the text
+        MinimumDistance, ///< The minimum distance, in pt, between the counter and the text
+        Width,          ///< The width, in pt, of  a picture bullet.
+        Height,         ///< The height, in pt, of a picture bullet.
+        BulletImageKey ///< Bullet image stored as a key for lookup in the imageCollection
     };
 
     /**
@@ -192,7 +196,7 @@ public:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOdf(KoOdfLoadingContext& context, const KoXmlElement& style = KoXmlElement());
+    void loadOdf(KoShapeLoadingContext& context, const KoXmlElement& style = KoXmlElement());
 
     /**
      * Save the style to a KoGenStyle object using the OpenDocument format

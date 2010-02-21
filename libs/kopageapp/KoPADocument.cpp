@@ -134,7 +134,7 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
     KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
 
-    sharedData->loadOdfStyles(loadingContext, styleManager);
+    sharedData->loadOdfStyles(paContext, styleManager);
     paContext.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
 
     d->masterPages = loadOdfMasterPages( odfStore.styles().masterPages(), paContext );

@@ -35,6 +35,7 @@ class KoStyleManager;
 class QTextLayout;
 class KoInlineTextObjectManager;
 class KoViewConverter;
+class KoImageCollection;
 
 /**
  * KWords text layouter that allows text to flow in multiple frames and around
@@ -48,11 +49,13 @@ public:
 
     /// This struct is a helper for painting of kotext texts.
     struct PaintContext {
-        PaintContext() : viewConverter(0) { }
+        PaintContext() : viewConverter(0), imageCollection(0) { }
         /// the QText context
         QAbstractTextDocumentLayout::PaintContext textContext;
         /// A view converter, when set, is used to find out when the zoom is so low that painting of text is unneeded
         const KoViewConverter *viewConverter;
+
+        KoImageCollection *imageCollection;
     };
 
     /// constructor

@@ -62,10 +62,10 @@ public:
      * If your application uses a style manager call this function from you application with insertOfficeStyles = true
      * to load the custom styles into the style manager before the rest of the loading is started.
      *
-     * @param context The shape loading context.
+     * @param scontext The shape loading context.
      * @param styleManager The style manager too use or 0 if you don't have a style manager.
      */
-    void loadOdfStyles(KoOdfLoadingContext &context, KoStyleManager *styleManager);
+    void loadOdfStyles(KoShapeLoadingContext &scontext, KoStyleManager *styleManager);
 
     /**
      * Get the paragraph style for the given name
@@ -170,9 +170,9 @@ private:
     QList<QPair<QString, KoCharacterStyle *> > loadCharacterStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     // helper functions for loading of list styles
-    void addListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
+    void addListStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                        KoStyleManager *styleManager = 0);
-    QList<QPair<QString, KoListStyle *> > loadListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
+    QList<QPair<QString, KoListStyle *> > loadListStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     // helper functions for loading of table styles
     void addTableStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
@@ -199,7 +199,7 @@ private:
                        KoStyleManager *styleManager = 0);
     QList<QPair<QString, KoSectionStyle *> > loadSectionStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
 
-    void addOutlineStyle(KoOdfLoadingContext & context, KoStyleManager *styleManager);
+    void addOutlineStyle(KoShapeLoadingContext & context, KoStyleManager *styleManager);
 
     class Private;
     Private * const d;

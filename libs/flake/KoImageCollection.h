@@ -95,6 +95,8 @@ public:
     void remove(const KoImageData &data);
     void removeOnKey(qint64 imageDataKey);
 
+    bool fillFromKey(KoImageData &idata, qint64 imageDataKey);
+
     /**
      * Get the number of images inside the collection
      */

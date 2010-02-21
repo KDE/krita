@@ -215,7 +215,7 @@ KoTextLoader::KoTextLoader(KoShapeLoadingContext &context)
     if (!d->textSharedData) {
         d->textSharedData = new KoTextSharedLoadingData();
         // TODO pass style manager so that on copy and paste we can recognice the same styles
-        d->textSharedData->loadOdfStyles(context.odfLoadingContext(), 0);
+        d->textSharedData->loadOdfStyles(context, 0);
         if (!sharedData) {
             context.addSharedData(KOTEXT_SHARED_LOADING_ID, d->textSharedData);
         } else {

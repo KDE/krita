@@ -27,8 +27,9 @@
 #include <KoXmlReader.h>
 
 class KoListStyle;
-class KoOdfLoadingContext;
+class KoShapeLoadingContext;
 class KoXmlWriter;
+class KoImageData;
 
 /**
  * Properties per list level.
@@ -92,6 +93,16 @@ public:
     void setMinimumWidth(qreal width);
     /// return the minimum width (in pt) of the list label for all items in this list
     qreal minimumWidth() const;
+    /// set the width (in pt) of the image bullet
+    void setWidth(qreal width);
+    /// return the width (in pt) of the image bullet
+    qreal width() const;
+    /// set the height (in pt) of the image bullet
+    void setHeight(qreal height);
+    /// return the height (in pt) of the image bullet
+    qreal height() const;
+    /// set the bullet image key (as from the KoImageData)
+    void setBulletImage(KoImageData *imageData);
     /// set the listId used by all list-styles that together make 1 user defined list in an ODF file.
     void setListId(const QString &listId);
     /// return the listId used by all list-styles that together make 1 user defined list in an ODF file.
@@ -142,7 +153,7 @@ public:
     /**
      * Load the properties from the \p style using the OpenDocument format.
      */
-    void loadOdf(KoOdfLoadingContext& context, const KoXmlElement& style);
+    void loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& style);
 
     /**
      * Save the properties of the style using the OpenDocument format

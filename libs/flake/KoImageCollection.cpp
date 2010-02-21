@@ -186,6 +186,15 @@ KoImageData *KoImageCollection::cacheImage(KoImageData *data)
     return data;
 }
 
+bool KoImageCollection::fillFromKey(KoImageData &idata, qint64 key)
+{
+    if (d->images.contains(key)) {
+        idata = KoImageData(d->images.value(key));
+        return true;
+    }
+    return false;
+}
+
 int KoImageCollection::size() const
 {
     return d->images.count();

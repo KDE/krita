@@ -33,6 +33,7 @@
 #include <KoXmlNS.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
 
 #include "styles/KoStyleManager.h"
 #include "styles/KoParagraphStyle.h"
@@ -109,16 +110,18 @@ static void addDefaultParagraphStyle(KoOdfLoadingContext &context, const KoXmlEl
     }
 }
 
-void KoTextSharedLoadingData::loadOdfStyles(KoOdfLoadingContext &context, KoStyleManager *styleManager)
+void KoTextSharedLoadingData::loadOdfStyles(KoShapeLoadingContext &scontext, KoStyleManager *styleManager)
 {
+    KoOdfLoadingContext &context = scontext.odfLoadingContext();
+
     addCharacterStyles(context, context.stylesReader().autoStyles("text").values(), ContentDotXml);
     addCharacterStyles(context, context.stylesReader().autoStyles("text", true).values(), StylesDotXml);
     // only add styles of office:styles to the style manager
     addCharacterStyles(context, context.stylesReader().customStyles("text").values(), ContentDotXml | StylesDotXml, styleManager);
 
-    addListStyles(context, context.stylesReader().autoStyles("list").values(), ContentDotXml);
-    addListStyles(context, context.stylesReader().autoStyles("list", true).values(), StylesDotXml);
-    addListStyles(context, context.stylesReader().customStyles("list").values(), ContentDotXml | StylesDotXml, styleManager);
+    addListStyles(scontext, context.stylesReader().autoStyles("list").values(), ContentDotXml);
+    addListStyles(scontext, context.stylesReader().autoStyles("list", true).values(), StylesDotXml);
+    addListStyles(scontext, context.stylesReader().customStyles("list").values(), ContentDotXml | StylesDotXml, styleManager);
 
     addDefaultParagraphStyle(context, context.stylesReader().defaultStyle("paragraph"), context.defaultStylesReader().defaultStyle("paragraph"), styleManager);
     // adding all the styles in order of dependency; automatic styles can have a parent in the named styles, so load the named styles first.
@@ -151,7 +154,7 @@ void KoTextSharedLoadingData::loadOdfStyles(KoOdfLoadingContext &context, KoStyl
     addSectionStyles(context, context.stylesReader().autoStyles("section", true).values(), StylesDotXml);
     addSectionStyles(context, context.stylesReader().customStyles("section").values(), ContentDotXml | StylesDotXml, styleManager);
 
-    addOutlineStyle(context, styleManager);
+    addOutlineStyle(scontext, styleManager);
 
     kDebug(32500) << "content.xml: paragraph styles" << d->paragraphContentDotXmlStyles.count() << "character styles" << d->characterContentDotXmlStyles.count();
     kDebug(32500) << "styles.xml:  paragraph styles" << d->paragraphStylesDotXmlStyles.count() << "character styles" << d->characterStylesDotXmlStyles.count();
@@ -281,7 +284,7 @@ QList<QPair<QString, KoCharacterStyle *> > KoTextSharedLoadingData::loadCharacte
     return characterStyles;
 }
 
-void KoTextSharedLoadingData::addListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements,
+void KoTextSharedLoadingData::addListStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements,
                                             int styleTypes, KoStyleManager *styleManager)
 {
     QList<QPair<QString, KoListStyle *> > listStyles(loadListStyles(context, styleElements));
@@ -304,7 +307,7 @@ void KoTextSharedLoadingData::addListStyles(KoOdfLoadingContext &context, QList<
     }
 }
 
-QList<QPair<QString, KoListStyle *> > KoTextSharedLoadingData::loadListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements)
+QList<QPair<QString, KoListStyle *> > KoTextSharedLoadingData::loadListStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements)
 {
     QList<QPair<QString, KoListStyle *> > listStyles;
 
@@ -518,10 +521,10 @@ QList<QPair<QString, KoSectionStyle *> > KoTextSharedLoadingData::loadSectionSty
     return sectionStyles;
 }
 
-void KoTextSharedLoadingData::addOutlineStyle(KoOdfLoadingContext &context, KoStyleManager *styleManager)
+void KoTextSharedLoadingData::addOutlineStyle(KoShapeLoadingContext &context, KoStyleManager *styleManager)
 {
     // outline-styles used e.g. for headers
-    KoXmlElement outlineStyleElem = KoXml::namedItemNS(context.stylesReader().officeStyle(), KoXmlNS::text, "outline-style");
+    KoXmlElement outlineStyleElem = KoXml::namedItemNS(context.odfLoadingContext().stylesReader().officeStyle(), KoXmlNS::text, "outline-style");
     if (styleManager && outlineStyleElem.isElement()) {
         KoListStyle *outlineStyle = new KoListStyle();
         outlineStyle->loadOdf(context, outlineStyleElem);

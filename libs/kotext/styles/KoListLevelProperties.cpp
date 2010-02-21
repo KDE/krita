@@ -27,9 +27,12 @@
 
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <KoXmlWriter.h>
 #include <KoUnit.h>
 #include <KoText.h>
+#include <KoImageCollection.h>
+#include <KoImageData.h>
 
 class KoListLevelProperties::Private
 {
@@ -233,6 +236,31 @@ qreal KoListLevelProperties::minimumWidth() const
     return propertyDouble(KoListStyle::MinimumWidth);
 }
 
+void KoListLevelProperties::setWidth(qreal width)
+{
+    setProperty(KoListStyle::Width, width);
+}
+
+qreal KoListLevelProperties::width() const
+{
+    return propertyDouble(KoListStyle::Width);
+}
+
+void KoListLevelProperties::setHeight(qreal height)
+{
+    setProperty(KoListStyle::Height, height);
+}
+
+qreal KoListLevelProperties::height() const
+{
+    return propertyDouble(KoListStyle::Height);
+}
+
+void KoListLevelProperties::setBulletImage(KoImageData *imageData)
+{
+    setProperty(KoListStyle::BulletImageKey, imageData->key());
+}
+
 KoListLevelProperties & KoListLevelProperties::operator=(const KoListLevelProperties & other)
 {
     d->copy(other.d);
@@ -301,9 +329,9 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)
     return llp;
 }
 
-void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlElement& style)
+void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& style)
 {
-    Q_UNUSED(context);
+    KoOdfLoadingContext& context = scontext.odfLoadingContext();
 
     // The text:level attribute specifies the level of the number list
     // style. It can be used on all list-level styles.
@@ -411,10 +439,25 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
         const QString startValue = style.attributeNS(KoXmlNS::text, "start-value", QString("1"));
         setStartValue(startValue.toInt());
     }
-    // TODO implement bitmap for now just use an empty buller char
     else if (style.localName() == "list-level-style-image") {   // list with image
-        setStyle(KoListStyle::CustomCharItem);
-        setBulletCharacter(QChar());
+        setStyle(KoListStyle::ImageItem);
+        KoImageCollection *imageCollection = scontext.imageCollection();
+        const QString href = style.attribute("href");
+        if(imageCollection) {
+            if (!href.isEmpty()) {
+                KoStore *store = context.store();
+                setBulletImage(imageCollection->createImageData(href, store));
+            } else {
+                // check if we have an office:binary data element containing the image data
+                const KoXmlElement &binaryData(KoXml::namedItemNS(style, KoXmlNS::office, "binary-data"));
+                if (!binaryData.isNull()) {
+                    QImage image;
+                    if (image.loadFromData(QByteArray::fromBase64(binaryData.text().toLatin1()))) {
+                        setBulletImage(imageCollection->createImageData(image));
+                    }
+                }
+            }
+        }
     }
     else { // if not defined, we have do nothing
         kDebug(32500) << "stylename else:" << style.localName() << "level=" << level << "displayLevel=" << displayLevel;
@@ -442,7 +485,13 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
                 setAlignment(KoText::alignmentFromString(property.attributeNS(KoXmlNS::fo, "text-align")));
 
             if (property.hasAttributeNS(KoXmlNS::text, "min-label-distance"))
-                setMinimumWidth(KoUnit::parseValue(property.attributeNS(KoXmlNS::text, "min-label-distance")));
+                setMinimumDistance(KoUnit::parseValue(property.attributeNS(KoXmlNS::text, "min-label-distance")));
+
+            if (property.hasAttributeNS(KoXmlNS::fo, "width"))
+                setWidth(KoUnit::parseValue(property.attributeNS(KoXmlNS::fo, "width")));
+
+            if (property.hasAttributeNS(KoXmlNS::fo, "height"))
+                setHeight(KoUnit::parseValue(property.attributeNS(KoXmlNS::fo, "height")));
         } else if (localName == "text-properties") {
             // TODO
         }

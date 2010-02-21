@@ -651,7 +651,6 @@ void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& infos, const QStri
             ExrPaintLayerSaveInfo info;
             info.name = name + paintLayer->name() + ".";
             info.layer = paintLayer;
-            infos.push_back(info);
             if (paintLayer->colorSpace()->colorModelId() == RGBAColorModelID) {
                 info.channels.push_back(info.name + "R");
                 info.channels.push_back(info.name + "G");
@@ -670,9 +669,12 @@ void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& infos, const QStri
             }
             if (paintLayer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
                 info.pixelType = Imf::HALF;
-            } else if (paintLayer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+            } else if (paintLayer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
                 info.pixelType = Imf::FLOAT;
+            } else {
+                info.pixelType = Imf::NUM_PIXELTYPES;
             }
+            infos.push_back(info);
         } else if (KisGroupLayerSP groupLayer = dynamic_cast<KisGroupLayer*>(node.data())) {
             recBuildPaintLayerSaveInfo(infos, name + groupLayer->name() + ".", groupLayer);
         }
@@ -700,16 +702,23 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP 
 
     QList<ExrPaintLayerSaveInfo> infos;
     recBuildPaintLayerSaveInfo(infos, "", layer);
+    
+    dbgFile << infos.size() << " layers to save";
 
     foreach(const ExrPaintLayerSaveInfo& info, infos) {
-        foreach(const QString& channel, info.channels) {
-            header.channels().insert(channel.toUtf8().data(), Imf::Channel(info.pixelType));
+        if (info.pixelType < Imf::NUM_PIXELTYPES)
+        {
+            foreach(const QString& channel, info.channels) {
+                dbgFile << channel << " " << info.pixelType;
+                header.channels().insert(channel.toUtf8().data(), Imf::Channel(info.pixelType));
+            }
         }
     }
 
     // Open file for writing
     Imf::OutputFile file(QFile::encodeName(uri.path()), header);
 
+    return KisImageBuilder_RESULT_OK;
 }
 
 void exrConverter::cancel()

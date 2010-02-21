@@ -96,7 +96,6 @@ target_link_libraries(
     ${EXTRA_LIBRARIES}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTXML_LIBRARY}
-    ${X11_X11_LIB}
     )
 
 target_link_libraries(

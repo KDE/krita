@@ -639,19 +639,42 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
 struct ExrPaintLayerSaveInfo {
     QString name; ///< name of the layer with a "." at the end (ie "group1.group2.layer1.")
     KisPaintLayerSP layer;
+    QList<QString> channels;
+    Imf::PixelType pixelType;
 };
 
 void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& infos, const QString& name, KisGroupLayerSP parent)
 {
     for (uint i = 0; i < parent->childCount(); ++i) {
         KisNodeSP node = parent->at(i);
-        if (KisPaintLayerSP paintlayer = dynamic_cast<KisPaintLayer*>(node.data())) {
+        if (KisPaintLayerSP paintLayer = dynamic_cast<KisPaintLayer*>(node.data())) {
             ExrPaintLayerSaveInfo info;
-            info.name = name + paintlayer->name() + ".";
-            info.layer = paintlayer;
+            info.name = name + paintLayer->name() + ".";
+            info.layer = paintLayer;
             infos.push_back(info);
+            if (paintLayer->colorSpace()->colorModelId() == RGBAColorModelID) {
+                info.channels.push_back(info.name + "R");
+                info.channels.push_back(info.name + "G");
+                info.channels.push_back(info.name + "B");
+                info.channels.push_back(info.name + "A");
+            } else if (paintLayer->colorSpace()->colorModelId() == GrayAColorModelID) {
+                info.channels.push_back(info.name + "G");
+                info.channels.push_back(info.name + "A");
+            } else if (paintLayer->colorSpace()->colorModelId() == GrayColorModelID) {
+                info.channels.push_back(info.name + "G");
+            } else if (paintLayer->colorSpace()->colorModelId() == XYZAColorModelID) {
+                info.channels.push_back(info.name + "X");
+                info.channels.push_back(info.name + "Y");
+                info.channels.push_back(info.name + "Z");
+                info.channels.push_back(info.name + "A");
+            }
+            if (paintLayer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+                info.pixelType = Imf::HALF;
+            } else if (paintLayer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+                info.pixelType = Imf::FLOAT;
+            }
         } else if (KisGroupLayerSP groupLayer = dynamic_cast<KisGroupLayer*>(node.data())) {
-            recBuildPaintLayerSaveInfo(infos, name + groupLayer->name() + ".", parent);
+            recBuildPaintLayerSaveInfo(infos, name + groupLayer->name() + ".", groupLayer);
         }
     }
 }
@@ -677,6 +700,16 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP 
 
     QList<ExrPaintLayerSaveInfo> infos;
     recBuildPaintLayerSaveInfo(infos, "", layer);
+
+    foreach(const ExrPaintLayerSaveInfo& info, infos) {
+        foreach(const QString& channel, info.channels) {
+            header.channels().insert(channel.toUtf8().data(), Imf::Channel(info.pixelType));
+        }
+    }
+
+    // Open file for writing
+    Imf::OutputFile file(QFile::encodeName(uri.path()), header);
+
 }
 
 void exrConverter::cancel()

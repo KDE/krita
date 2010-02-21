@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,18 +25,24 @@
 
 #include <QBrush>
 
+class QPainter;
+
 /**
  * This class is used to control aspects of textblock painting
- * Which is used when KPresenter animate text. Though KPresenter uses a subclass.
+ * Which is used when KPresenter animates text.
+ * TODO rename to end in Base
  */
 class KOTEXT_EXPORT KoTextBlockPaintStrategy
 {
 public:
     KoTextBlockPaintStrategy();
-    virtual ~KoTextBlockPaintStrategy() {}
-    virtual QBrush background(const QBrush &defaultBackground) {return defaultBackground;}
-    virtual void modifyPainter(QPainter *painter) {}
-    virtual bool visible() {return true;}
+    virtual ~KoTextBlockPaintStrategy()
+    /// returns a background for the block, the default implemntation returns the defaultBackground
+    virtual QBrush background(const QBrush &defaultBackground);
+    /// A strategy implementing this class can apply its settings by modifying the \a painter
+    virtual void applyStrategy(QPainter *painter);
+    /// Returns true if the block should be painted at all or false when it should be skipped
+    virtual bool isVisible();
 };
 
 #endif

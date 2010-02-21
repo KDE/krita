@@ -72,7 +72,6 @@ public:
     void repositionBristles(double angle, double slope);
     void rotateBristles(double angle);
     double computeMousePressure(double distance);
-    double getAngleDelta(const KisPaintInformation& info);
 
     void setInkColor(const KoColor &color);
     void setBrushShape(BrushShape brushShape);
@@ -80,7 +79,6 @@ public:
     
     /// paints single bristle
     void putBristle(Bristle *bristle, float wx, float wy, const KoColor &color);
-    void mixCMY(double x, double y, int cyan, int magenta, int yellow, double weight);
     void addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
     void oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
 

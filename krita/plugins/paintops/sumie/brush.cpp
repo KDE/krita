@@ -137,10 +137,10 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
         if (!m_bristles.at(i)->enabled()) continue;
         bristle = m_bristles[i];
 
-        qreal randomX = drand48();
-        qreal randomY = drand48();
-        randomX -= 0.5;
-        randomY -= 0.5;
+        qreal randomX = drand48() * 2;
+        qreal randomY = drand48() * 2;
+        randomX -= 1.0;
+        randomY -= 1.0;
         randomX *= m_properties->randomFactor;
         randomY *= m_properties->randomFactor;
 
@@ -276,8 +276,8 @@ Brush::~Brush(){}
 
 inline void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color)
 {
-    int ix = (int)wx;
-    int iy = (int)wy;
+    int ix = qRound(wx);
+    int iy = qRound(wy);
     m_dabAccessor->moveTo(ix, iy);
     if (m_layer->colorSpace()->opacityU8(m_dabAccessor->rawData()) < color.opacityU8()) {
         memcpy(m_dabAccessor->rawData(), color.data(), m_pixelSize);

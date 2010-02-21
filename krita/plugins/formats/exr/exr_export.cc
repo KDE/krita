@@ -104,7 +104,6 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
         return KoFilter::InternalError;
     } else {
         image->lock();
-        kpc.buildFile(url, image->rootLayer());
 
         KisImageBuilder_Result res = kpc.buildFile(url, image->rootLayer());
         image->unlock();

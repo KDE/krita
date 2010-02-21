@@ -271,16 +271,12 @@ void KoFavoriteResourceManager::slotAddRecentColor(const KoColor& color)
     addRecentColor(color);
 }
 
-void KoFavoriteResourceManager::addRecentColorNew(const KoColor& color)
+void KoFavoriteResourceManager::slotChangeFGColorSelector(KoColor c)
 {
-    m_colorList->appendNew(color);
-    int pos = m_colorList->findPos(color);
-    if (m_popupPalette)
-    {
-        m_popupPalette->setSelectedColor(pos);
-        m_popupPalette->update();
-    }
-    printColors();
+    QColor color;
+    color = c.toQColor();
+
+    emit sigChangeFGColorSelector(color);
 }
 
 void KoFavoriteResourceManager::addRecentColorUpdate(int guipos)

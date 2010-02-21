@@ -45,12 +45,16 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
     connect(this, SIGNAL(sigEnableChangeColor(bool)), m_resourceManager, SIGNAL(sigEnableChangeColor(bool)));
     connect(this, SIGNAL(sigChangefGColor(const KoColor&)), m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
+    connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(const QColor&)), m_triangleColorSelector, SLOT(setQColor(const QColor&)));
 
     setMouseTracking(true);
     setHoveredBrush(-1);
     setHoveredColor(-1);
     setSelectedBrush(-1);
     setSelectedColor(-1);
+
+    setVisible(true);
+    setVisible(false);
 }
 
 //setting KisPopupPalette properties

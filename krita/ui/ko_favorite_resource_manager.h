@@ -82,9 +82,11 @@ signals:
     // This is a flag to handle a bug:
     // If pop up palette is visible and a new colour is selected, the new colour
     // will be added when the user clicks on the canvas to hide the palette
-    // In general, we want to be able to store recent color if the pop up palette
+    // In general, we want to be able to store recent colours if the pop up palette
     // is not visible
     void sigEnableChangeColor(bool b);
+
+    void sigChangeFGColorSelector(const QColor&);
     
 public slots:
     void slotChangePaintopLabel(KisPaintOpPresetSP paintop);
@@ -96,6 +98,8 @@ public slots:
 
     /*add a colour to m_colorList, used by KisCanvasResourceProvider*/
     void slotAddRecentColor(const KoColor&);
+
+    void slotChangeFGColorSelector(KoColor c);
 
 private:
     KisPaletteManager *m_favoriteBrushManager;
@@ -112,7 +116,6 @@ private:
 
     void printColors() { m_colorList->printGuiList(); /*m_colorList->printPriorityList();*/ };
 
-    void addRecentColorNew(const KoColor& color);
     void addRecentColorUpdate(int guipos);
     void addRecentColor(const KoColor& color);
 

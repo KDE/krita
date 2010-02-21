@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>436</width>
-    <height>350</height>
+    <width>385</width>
+    <height>380</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,7 +19,7 @@
   <property name="minimumSize">
    <size>
     <width>385</width>
-    <height>350</height>
+    <height>380</height>
    </size>
   </property>
   <widget class="KisCurveWidget" name="softCurve" native="true">
@@ -35,13 +35,13 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>271</y>
+     <x>2</x>
+     <y>273</y>
      <width>371</width>
-     <height>66</height>
+     <height>94</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
     <item row="0" column="0">
      <widget class="QLabel" name="DiameterLbl">
       <property name="sizePolicy">
@@ -59,12 +59,15 @@
       <property name="text">
        <string>Diameter</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
     </item>
     <item row="0" column="1">
      <widget class="KDoubleNumInput" name="curveDiameter">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -92,7 +95,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0" rowspan="2" colspan="2">
+    <item row="1" column="0">
      <widget class="QLabel" name="ScaleLbl">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -109,12 +112,15 @@
       <property name="text">
        <string>Scale</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="1" column="1">
      <widget class="KDoubleNumInput" name="scale">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -139,6 +145,62 @@
       </property>
       <property name="exponentRatio">
        <double>1.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="spacingLbl">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>60</width>
+        <height>16</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Spacing</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="KDoubleNumInput" name="spacing">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="value">
+       <double>0.300000000000000</double>
+      </property>
+      <property name="minimum">
+       <double>0.010000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>5.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+      <property name="suffix">
+       <string/>
+      </property>
+      <property name="decimals">
+       <number>2</number>
+      </property>
+      <property name="sliderEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="exponentRatio">
+       <double>2.000000000000000</double>
       </property>
      </widget>
     </item>

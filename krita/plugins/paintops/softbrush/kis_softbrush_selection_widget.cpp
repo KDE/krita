@@ -30,7 +30,7 @@ KisSoftBrushSelectionWidget::KisSoftBrushSelectionWidget(QWidget * parent)
         : QWidget(parent)
 {
     QHBoxLayout * l = new QHBoxLayout(this);
-    l->setObjectName("brushpopuplayout");
+    l->setObjectName("brushpopup");
     l->setMargin(2);
     l->setSpacing(2);
 
@@ -55,6 +55,7 @@ KisSoftBrushSelectionWidget::~KisSoftBrushSelectionWidget()
 {
     delete m_curveBrushTip;
     delete m_gaussBrushTip;
+    delete m_brushesTab;
 }
 
 
@@ -72,6 +73,7 @@ void KisSoftBrushSelectionWidget::setGaussianBrush(bool on)
 qreal KisSoftBrushSelectionWidget::currentBrushSize()
 {
     //TODO:
+    return 0.0;
 }
 
 

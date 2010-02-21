@@ -36,6 +36,7 @@ KisSoftOpOption::KisSoftOpOption()
 
     connect(m_options->m_curveBrushTip->curveDiameter,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
     connect(m_options->m_curveBrushTip->scale,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->m_curveBrushTip->spacing,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
     connect(m_options->m_curveBrushTip->softCurve, SIGNAL(modified()),SIGNAL(sigSettingChanged()));
     
     connect(m_options->m_brushesTab, SIGNAL(currentChanged(int)),SIGNAL(sigSettingChanged()));
@@ -61,7 +62,9 @@ void KisSoftOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
     
     setting->setProperty( SOFTCURVE_DIAMETER, m_options->m_curveBrushTip->curveDiameter->value() );
     setting->setProperty( SOFTCURVE_SCALE, m_options->m_curveBrushTip->scale->value() );
+    setting->setProperty( SOFTCURVE_SPACING, m_options->m_curveBrushTip->spacing->value() );
     setting->setProperty( SOFTCURVE_CURVE, qVariantFromValue(m_options->m_curveBrushTip->softCurve->curve()) );
+    
 }
 
 void KisSoftOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -81,6 +84,7 @@ void KisSoftOpOption::readOptionSetting(const KisPropertiesConfiguration* settin
     
     m_options->m_curveBrushTip->curveDiameter->setValue( setting->getDouble(SOFTCURVE_DIAMETER) );
     m_options->m_curveBrushTip->scale->setValue( setting->getDouble(SOFTCURVE_SCALE) );
+    m_options->m_curveBrushTip->spacing->setValue( setting->getDouble(SOFTCURVE_SPACING) );
     m_options->m_curveBrushTip->softCurve->setCurve( setting->getCubicCurve(SOFTCURVE_CURVE) );
 }
 

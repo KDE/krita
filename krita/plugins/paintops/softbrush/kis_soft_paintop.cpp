@@ -51,7 +51,7 @@ KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainte
     m_brushType = SoftBrushType(settings->getInt(SOFT_BRUSH_TIP));
     // brushType == 0
     if (m_brushType == CURVE){
-       
+
         m_curveMaskProperties.diameter = quint16(settings->getDouble(SOFTCURVE_DIAMETER));
         m_curveMaskProperties.scale = settings->getDouble(SOFTCURVE_SCALE);    
         m_curveMaskProperties.curve = settings->getCubicCurve(SOFTCURVE_CURVE);
@@ -60,9 +60,15 @@ KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainte
         m_curveMaskProperties.curveData = m_curveMaskProperties.curve.floatTransfer(m_radius+2);
         
         m_curveMask.setProperties(&m_curveMaskProperties);
-        
+
+        m_xSpacing = qMax(0.5,settings->getDouble(SOFTCURVE_SPACING) * m_radius * m_curveMaskProperties.scale);
+        m_ySpacing = qMax(0.5,settings->getDouble(SOFTCURVE_SPACING) * m_radius * m_curveMaskProperties.scale);
+
         m_gaussBrush.distMask = 0;
     }else if (m_brushType == GAUSS){
+
+        m_xSpacing = qMax(1.0,settings->getDouble(SOFT_SPACING) * m_radius);
+        m_ySpacing = qMax(1.0,settings->getDouble(SOFT_SPACING) * m_radius);
 
         m_radius = qRound(settings->getDouble(SOFT_DIAMETER) * 0.5);
         m_gaussBrush.distMask = new KisCircleAlphaMask(m_radius);
@@ -74,9 +80,6 @@ KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainte
     }
     m_color = painter->paintColor();
 
-        
-    m_xSpacing = qMax(1.0,settings->getDouble(SOFT_SPACING) * m_radius);
-    m_ySpacing = qMax(1.0,settings->getDouble(SOFT_SPACING) * m_radius);
     m_spacing = sqrt(m_xSpacing*m_xSpacing + m_ySpacing*m_ySpacing);
     
 #ifdef BENCHMARK

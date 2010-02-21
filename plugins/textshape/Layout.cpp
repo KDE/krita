@@ -47,6 +47,8 @@
 #include <KoChangeTrackerElement.h>
 #include <KoGenChange.h>
 #include <KoTextBlockPaintStrategy.h>
+#include <KoImageData.h>
+#include <KoImageCollection.h>
 
 #include <KDebug>
 #include <QTextList>
@@ -75,6 +77,7 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_y_justBelowDropCaps(0),
         m_restartingAfterTableBreak(false),
         m_restartingFirstCellAfterTableBreak(false)
+        ,m_imageCollection(0)
 {
 }
 
@@ -1041,7 +1044,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
                 painter->fillRect(layout->boundingRect(), bg);
             paintStrategy->modifyPainter(painter);
             painter->save();
-            drawListItem(painter, block);
+            drawListItem(painter, block, context.imageCollection);
             painter->restore();
 
             QVector<QTextLayout::FormatRange> selections;
@@ -1561,7 +1564,7 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
     painter->setFont(oldFont);
 }
 
-void Layout::drawListItem(QPainter *painter, const QTextBlock &block)
+void Layout::drawListItem(QPainter *painter, const QTextBlock &block, KoImageCollection *imageCollection)
 {
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
     if (data == 0)
@@ -1711,6 +1714,16 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block)
                 break;
             default:; // others we ignore.
             }
+        } else if (listStyle == KoListStyle::ImageItem && imageCollection) {
+            QFontMetricsF fm(cf.font(), m_parent->paintDevice());
+            qreal x = qMax(qreal(1), data->counterPosition().x());
+            qreal width = qMax(listFormat.doubleProperty(KoListStyle::Width), 1.0);
+            qreal height = qMax(listFormat.doubleProperty(KoListStyle::Height), 1.0);
+            qreal y = data->counterPosition().y() + fm.ascent() - fm.xHeight()/2 - height/2; // centered
+            qint64 key = listFormat.property(KoListStyle::BulletImageKey).value<qint64>();
+            KoImageData idata;
+            imageCollection->fillFromKey(idata, key);
+            painter->drawPixmap(x, y, width, height, idata.pixmap());
         }
     }
 }

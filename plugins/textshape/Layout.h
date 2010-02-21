@@ -36,6 +36,7 @@ class KoTextBlockData;
 class KoTextShapeData;
 class TextShape;
 class KoChangeTracker;
+class KoImageCollection;
 
 /**
  * The document layouter for KoText style docs.
@@ -96,7 +97,7 @@ private:
     void cleanupShape(KoShape *daShape);
     void nextShape();
     void drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumentLayout::PaintContext & context, int inTable);
-    void drawListItem(QPainter *painter, const QTextBlock &block);
+    void drawListItem(QPainter *painter, const QTextBlock &block, KoImageCollection *imageCollection);
     void drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
     void decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
     void decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock);
@@ -171,6 +172,8 @@ private:
     QTextTableCell m_tableCell;  /**< Current table cell. */
     bool m_restartingAfterTableBreak; /** We are in a re-layout that was a result of a break in a table. */
     bool m_restartingFirstCellAfterTableBreak; /** We are in a re-layout that was a result of a break in a table. only true first cell after */
+
+    KoImageCollection *m_imageCollection;
 };
 
 #endif

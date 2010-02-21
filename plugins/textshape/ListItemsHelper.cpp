@@ -393,6 +393,10 @@ void ListItemsHelper::recalculate()
         case KoListStyle::AbjadMinor:
             partialCounterText = intToScriptList(index, listStyle);
             break;
+        case KoListStyle::ImageItem:
+            calcWidth = false;
+            width = qMax(format.doubleProperty(KoListStyle::Width), 1.0);
+            break;
         default:  // others we ignore.
             calcWidth = false;
         }

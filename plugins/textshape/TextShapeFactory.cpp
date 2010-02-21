@@ -30,6 +30,7 @@
 #include <KoResourceManager.h>
 #include <KoInlineTextObjectManager.h>
 #include <changetracker/KoChangeTracker.h>
+#include <KoImageCollection.h>
 
 #include <klocale.h>
 #include <KUndoStack>
@@ -76,6 +77,8 @@ KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResourc
             KoChangeTracker *changeTracker = documentResources->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
             document.setChangeTracker(changeTracker);
         }
+        
+        text->setImageCollection(documentResources->imageCollection());
     }
 
     return text;
@@ -91,6 +94,9 @@ KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceMan
         KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(shape->userData());
         QTextCursor cursor(shapeData->document());
         cursor.insertText(params->stringProperty(text));
+    }
+    if (documentResources) {
+        shape->setImageCollection(documentResources->imageCollection());
     }
     return shape;
 }
@@ -112,6 +118,9 @@ void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
     }
     variant.setValue(new KoStyleManager(manager));
     manager->setResource(KoText::StyleManager, variant);
+    
+    if (!manager->imageCollection())
+        manager->setImageCollection(new KoImageCollection(manager));
 }
 
 #include <TextShapeFactory.moc>

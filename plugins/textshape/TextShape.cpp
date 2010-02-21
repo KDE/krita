@@ -84,6 +84,7 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         , m_footnotes(0)
         , m_demoText(false)
         ,m_pageProvider(0)
+        ,m_imageCollection(0)
 {
     setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
@@ -131,6 +132,8 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     Q_ASSERT(doc);
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
 
+    //lay->state()->setImageCollection(m_imageCollection);
+
     if (m_textShapeData->endPosition() < 0) { // not layouted yet.
         if (lay == 0) {
             kWarning(32500) << "Painting shape that doesn't have a kotext doc-layout, which can't work";
@@ -170,6 +173,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     KoTextDocumentLayout::PaintContext context;
     context.textContext = pc;
     context.viewConverter = &converter;
+    context.imageCollection = m_imageCollection;
 
     QRectF rect(0, 0, size().width(), size().height());
     rect.adjust(-5, 0, 5, 0);

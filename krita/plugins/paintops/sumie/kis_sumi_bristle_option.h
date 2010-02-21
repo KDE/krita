@@ -26,6 +26,7 @@ const QString SUMI_BRISTLE_USE_MOUSEPRESSURE = "SumiBristle/useMousePressure";
 const QString SUMI_BRISTLE_SCALE = "SumiBristle/scale";
 const QString SUMI_BRISTLE_SHEAR = "SumiBristle/shear";
 const QString SUMI_BRISTLE_RANDOM = "SumiBristle/random";
+const QString SUMI_BRISTLE_DENSITY = "SumiBristle/density";
 
 class KisBristleOptionsWidget;
 

@@ -25,8 +25,8 @@
   <widget class="QCheckBox" name="mousePressureCBox">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>110</y>
+     <x>0</x>
+     <y>180</y>
      <width>391</width>
      <height>23</height>
     </rect>
@@ -38,13 +38,13 @@
     <bool>false</bool>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>10</y>
      <width>411</width>
-     <height>94</height>
+     <height>126</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
@@ -162,6 +162,53 @@
       </property>
       <property name="singleStep">
        <double>1.000000000000000</double>
+      </property>
+      <property name="sliderEnabled">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="density">
+      <property name="minimumSize">
+       <size>
+        <width>90</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Density</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="KDoubleNumInput" name="densityBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="value">
+       <double>100.000000000000000</double>
+      </property>
+      <property name="minimum">
+       <double>0.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>100.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>1.000000000000000</double>
+      </property>
+      <property name="suffix">
+       <string>%</string>
+      </property>
+      <property name="decimals">
+       <number>0</number>
       </property>
       <property name="sliderEnabled">
        <bool>true</bool>

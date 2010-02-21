@@ -39,7 +39,8 @@ KisSumiBristleOption::KisSumiBristleOption()
     connect(m_options->rndBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->scaleBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->shearBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-
+    connect(m_options->densityBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    
     setConfigurationPage(m_options);
 }
 
@@ -56,6 +57,7 @@ void KisSumiBristleOption::readOptionSetting(const KisPropertiesConfiguration* c
     m_options->shearBox->setValue(config->getDouble(SUMI_BRISTLE_SHEAR));
     m_options->rndBox->setValue(config->getDouble(SUMI_BRISTLE_RANDOM));
     m_options->scaleBox->setValue(config->getDouble(SUMI_BRISTLE_SCALE));
+    m_options->densityBox->setValue(config->getDouble(SUMI_BRISTLE_DENSITY));
 }
 
 
@@ -65,5 +67,6 @@ void KisSumiBristleOption::writeOptionSetting(KisPropertiesConfiguration* config
     config->setProperty(SUMI_BRISTLE_SCALE,m_options->scaleBox->value());
     config->setProperty(SUMI_BRISTLE_SHEAR,m_options->shearBox->value());
     config->setProperty(SUMI_BRISTLE_RANDOM,m_options->rndBox->value());
+    config->setProperty(SUMI_BRISTLE_DENSITY,m_options->densityBox->value());
 }
 

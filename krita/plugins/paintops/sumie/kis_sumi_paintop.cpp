@@ -56,7 +56,7 @@ KisSumiPaintOp::KisSumiPaintOp(const
     
     bs.setColorSpace(painter->device()->colorSpace());
     bs.setHasColor(kisBrush->brushType() != MASK);
-    bs.fromQImage(kisBrush->image());
+    bs.fromQImageWithDensity(kisBrush->image(), settings->getDouble(SUMI_BRISTLE_DENSITY) * 0.01);
     m_brush.setBrushShape(bs);
     
     loadSettings(settings);

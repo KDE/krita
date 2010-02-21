@@ -36,7 +36,7 @@ public:
     void fromGaussian(int radius, float sigma);
     void fromLine(int radius, float sigma);
     // slow, optimize!
-    void fromQImage(QImage image);
+    void fromQImageWithDensity(QImage image, qreal density);
     void thresholdBristles(double threshold);
 
     QVector<Bristle*> getBristles();

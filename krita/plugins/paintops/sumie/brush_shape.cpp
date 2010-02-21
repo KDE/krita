@@ -135,12 +135,9 @@ void BrushShape::fromLine(int radius, float sigma)
     }
 }
 
-void BrushShape::fromQImage(QImage image)
+
+void BrushShape::fromQImageWithDensity(QImage image, qreal density)
 {
-
-    m_radius = -1;
-    m_sigma = -1;
-
     m_width = image.width();
     m_height = image.height();
 
@@ -153,13 +150,18 @@ void BrushShape::fromQImage(QImage image)
     QRgb color;
     KoColor kcolor(m_colorSpace);
     QColor qcolor;
+    srand48(12345678);
     
     for (int y = 0; y < m_height; y++) {
         QRgb *pixelLine = reinterpret_cast<QRgb *>(image.scanLine(y));
         for (int x = 0; x < m_width; x++) {
+            // density computation
             color = pixelLine[x];
             a = ((255 - qGray(color)) * qAlpha(color)) / 255; 
             if (a != 0){
+                if (drand48() > density){
+                    continue;
+                }
                 bristle = new Bristle(x - centerX, y - centerY, a / 255.0); // using value from image as length of bristle    
                 if (m_hasColor){
                     qcolor.setRgb(color);
@@ -171,6 +173,7 @@ void BrushShape::fromQImage(QImage image)
         }
     }
 }
+
 
 QVector<Bristle*> BrushShape::getBristles()
 {

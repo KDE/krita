@@ -40,12 +40,14 @@ set(koodf_LIB_SRCS
     KoXmlWriter.cpp
     KoEncryptedStore.cpp
     KoEncryptionChecker.cpp
+    KoProperties.cpp
+    KoUnit.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
 
-target_link_libraries(koodf kobase ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY})
-target_link_libraries(koodf LINK_INTERFACE_LIBRARIES kobase ${KDE4_KIO_LIBS})
+target_link_libraries(koodf ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY})
+target_link_libraries(koodf LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS})
 if( QCA2_FOUND )
     target_link_libraries(koodf ${QCA2_LIBRARIES})
 endif( QCA2_FOUND )
@@ -86,5 +88,7 @@ install( FILES
     KoXmlReader.h
     KoXmlWriter.h
     KoXmlReaderForward.h
+    KoProperties.h
+    KoUnit.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

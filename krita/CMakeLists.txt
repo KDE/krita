@@ -65,7 +65,6 @@ set(KRITA_INCLUDES
     ${CMAKE_BINARY_DIR}/krita/ui
     
     ${PIGMENT_INCLUDES}
-    ${KOBASE_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets/resources

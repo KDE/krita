@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kopropertiestest.h"
+#include "KoPropertiesTest.h"
 
 #include <qtest_kde.h>
 #include <KoProperties.h>
@@ -142,6 +142,4 @@ void KoPropertiesTest::testPassAround()
 }
 
 QTEST_KDEMAIN(KoPropertiesTest, NoGUI)
-#include <kopropertiestest.moc>
-
-
+#include <KoPropertiesTest.moc>

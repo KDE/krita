@@ -281,14 +281,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CM
 # koplugin is at the bottom of the stack
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
 
-# kobase is at the bottom of the stack
-set(KOBASE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kobase)
-
-# koodf depends on kobase
+# koodf is at the bottom of the stack
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
                    ${CMAKE_BINARY_DIR}/libs/odf
-                   ${KDE4_INCLUDES}
-                   ${KOBASE_INCLUDES})
+                   ${KDE4_INCLUDES})
 
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}

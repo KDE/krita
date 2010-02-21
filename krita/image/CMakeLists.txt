@@ -55,7 +55,6 @@ configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_con
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
                      ${CMAKE_SOURCE_DIR}/krita/image/metadata
                      ${KOMAIN_INCLUDES}
-                     ${KOBASE_INCLUDES}
 )
 
 set(kritaimage_LIB_SRCS
@@ -197,8 +196,8 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} ${KDE4_KDE3SUPPORT_LIBS} kobase komain pigmentcms ${KDE4_THREADWEAVER_LIBRARIES} )
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES kobase pigmentcms komain ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
+target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} ${KDE4_KDE3SUPPORT_LIBS} komain pigmentcms ${KDE4_THREADWEAVER_LIBRARIES} )
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms komain ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})

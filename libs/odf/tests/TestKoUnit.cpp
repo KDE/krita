@@ -39,4 +39,4 @@ void TestKoUnit::testUnit()
 }
 
 QTEST_MAIN(TestKoUnit)
-#include "TestKoUnit.moc"
+#include <TestKoUnit.moc>

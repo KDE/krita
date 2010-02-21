@@ -24,7 +24,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 #include <math.h> // for floor
-#include "kobase_export.h"
+#include "koodf_export.h"
 
 // 1 inch ^= 72 pt
 // 1 inch ^= 25.399956 mm (-pedantic ;p)
@@ -52,7 +52,7 @@
  * When displaying a value to the user, the value is converted to the user's unit
  * of choice, and rounded to a reasonable precision to avoid 0.999999
  */
-class KOBASE_EXPORT KoUnit
+class KOODF_EXPORT KoUnit
 {
 public:
     /** Length units supported by KOffice. */

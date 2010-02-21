@@ -552,46 +552,56 @@ struct ExrPaintLayerSaveInfo {
     Imf::PixelType pixelType;
 };
 
-template<typename _T_>
+template<typename _T_, int size>
+struct ExrPixel {
+    _T_ data[size];
+};
+
+
+template<typename _T_, int size, int alphaPos>
 void encodeData(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int width, int height, Imf::PixelType ptype)
 {
     Imf::FrameBuffer frameBuffer;
     int xstart = 0;
     int ystart = 0;
 
-    typedef Rgba<_T_> Rgba;
+    typedef ExrPixel<_T_, size> ExrPixel;
 
-    QVector<Rgba> pixels(width);
-
+    QVector<ExrPixel> pixels(width);
+    
     for (int y = 0; y < height; ++y) {
-        Rgba* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
-        frameBuffer.insert("R",
-                           Imf::Slice(ptype, (char *) &frameBufferData->r,
-                                      sizeof(Rgba) * 1,
-                                      sizeof(Rgba) * width));
-        frameBuffer.insert("G",
-                           Imf::Slice(ptype, (char *) &frameBufferData->g,
-                                      sizeof(Rgba) * 1,
-                                      sizeof(Rgba) * width));
-        frameBuffer.insert("B",
-                           Imf::Slice(ptype, (char *) &frameBufferData->b,
-                                      sizeof(Rgba) * 1,
-                                      sizeof(Rgba) * width));
-        frameBuffer.insert("A",
-                           Imf::Slice(ptype, (char *) &frameBufferData->a,
-                                      sizeof(Rgba) * 1,
-                                      sizeof(Rgba) * width));
+        ExrPixel* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
+        for (int k = 0; k < size; ++k)
+        {
+            frameBuffer.insert( info.channels[k].toUtf8(),
+                            Imf::Slice(ptype, (char *) &frameBufferData->data[k],
+                                        sizeof(ExrPixel) * 1,
+                                        sizeof(ExrPixel) * width));
+        }
         file.setFrameBuffer(frameBuffer);
-        Rgba *rgba = pixels.data();
+        ExrPixel *rgba = pixels.data();
         KisHLineIterator it = info.layer->paintDevice()->createHLineIterator(0, y, width);
         while (!it.isDone()) {
 
-            const typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast < const typename KoRgbTraits<_T_>::Pixel* >(it.oldRawData());
+            const _T_* dst = reinterpret_cast < const _T_* >(it.oldRawData());
 
-            rgba->r = dst->red * dst->alpha;
-            rgba->g = dst->green * dst->alpha;
-            rgba->b = dst->blue * dst->alpha;
-            rgba->a = dst->alpha;
+            if (alphaPos == -1)
+            {
+                for(int i = 0; i < size; ++i)
+                {
+                    rgba->data[i] = dst[i];
+                }
+            } else {
+                _T_ alpha = dst[alphaPos];
+                for(int i = 0; i < size; ++i)
+                {
+                    if (i != alphaPos)
+                    {
+                        rgba->data[i] = dst[i] * alpha;
+                    }
+                }
+                rgba->data[alphaPos] = alpha;
+            }
 
             ++it;
             ++rgba;
@@ -629,9 +639,9 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
 
     ExrPaintLayerSaveInfo info;
     info.layer = layer;
-    info.channels.push_back("R");
-    info.channels.push_back("G");
     info.channels.push_back("B");
+    info.channels.push_back("G");
+    info.channels.push_back("R");
     info.channels.push_back("A");
 
     // Open file for writing
@@ -639,9 +649,9 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
 
     if (layer->colorSpace()->colorModelId() == RGBAColorModelID) {
         if (layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
-            encodeData<half>(file, info, width, height, Imf::HALF);
+            encodeData<half, 4, 3>(file, info, width, height, Imf::HALF);
         } else if (layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
-            encodeData<float>(file, info, width, height, Imf::FLOAT);
+            encodeData<float, 4, 3>(file, info, width, height, Imf::FLOAT);
         }
     } else {
         return KisImageBuilder_RESULT_FAILURE;

@@ -49,9 +49,18 @@ public:
         m_properties = properties;
     }
 
-    QPointF hotSpot(){
-        return QPointF(m_properties->diameter * 0.5,m_properties->diameter * 0.5);
+    QPointF hotSpot(qreal scale){
+        return QPointF(m_properties->diameter * scale * 0.5,m_properties->diameter * scale * 0.5);
     }
+    
+    int maskWidth(qreal scale){
+        return qRound(m_properties->diameter * scale);
+    }
+    
+    int maskHeight(qreal scale){
+        return qRound(m_properties->diameter * scale);
+    }
+    
 
 private:    
     KisCurveProperties * m_properties;

@@ -147,12 +147,12 @@ void KisSoftPaintOp::paintAt(const KisPaintInformation& info)
         qint32 y;
         double subPixelY;
 
-        QPointF pos = info.pos() - m_curveMask.hotSpot();
+        QPointF pos = info.pos() - m_curveMask.hotSpot(m_curveMaskProperties.scale);
         
         splitCoordinate(pos.x(), &x, &subPixelX);
         splitCoordinate(pos.y(), &y, &subPixelY);
 
-        m_curveMask.mask(dab,painter()->paintColor(),1.0,0.0,subPixelX,subPixelY);
+        m_curveMask.mask(dab,painter()->paintColor(),m_curveMaskProperties.scale,0.0,subPixelX,subPixelY);
         painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
         return;
     }

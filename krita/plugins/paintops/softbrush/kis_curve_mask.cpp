@@ -31,55 +31,53 @@ KisCurveMask::KisCurveMask()
 
 
 
-void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal /*scale*/, qreal /*rotation*/, qreal /*subPixelX*/, qreal /*subPixelY*/)
+void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal scale, qreal rotation, qreal subPixelX, qreal subPixelY)
 {
+    Q_UNUSED(rotation);
     KoColor dabColor(color);
     
-    int maskWidth = m_properties->diameter;
-    int maskHeight = m_properties->diameter;
+    int dstWidth = maskWidth(scale);
+    int dstHeight = maskHeight(scale);
 
-    QRect maskRect = QRect(0,0,maskWidth,maskHeight);
+    QRect maskRect = QRect(0,0,dstWidth,dstHeight);
     int w = dab->bounds().width();
     int h = dab->bounds().height();
    
     quint32 pixelSize = dab->colorSpace()->pixelSize();
     
     // clear
-    if (w!=maskWidth || h!=maskHeight){
+    if (w!=dstWidth || h!=dstHeight){
         dab->setRect(maskRect);
         dab->initialize();
     }else{
         dab->clear(maskRect);
     }
     
-    qreal centerX = maskWidth  * 0.5;// - 1.0 + subPixelX;
-    qreal centerY = maskHeight * 0.5;// - 1.0 + subPixelY;
+    qreal centerX = dstWidth  * 0.5 - 1.0 + subPixelX;
+    qreal centerY = dstHeight * 0.5 - 1.0 + subPixelY;
 
     quint8* dabPointer = dab->data();
     
-//     double invScaleX = 1.0 / scale;
-//     double invScaleY = 1.0 / scale;
+    double inverseScale = 1.0 / scale;
 
     // maximal distnace in the circle is radius^2
-    qreal border = (maskWidth * 0.5) * (maskWidth * 0.5);
-    
-    KoColor red(dab->colorSpace());
-    red.fromQColor(Qt::red);
-    
-    for (int y = 0; y <  maskHeight; y++){
-        for (int x = 0; x < maskWidth; x++){
-            double maskX = (x - centerX);// * invScaleX;
-            double maskY = (y - centerY);// * invScaleY;
+    qreal border = (dstWidth * 0.5) * (dstWidth * 0.5);
+   
+    for (int y = 0; y <  dstHeight; y++){
+        for (int x = 0; x < dstWidth; x++){
+            double maskX = (x - centerX);
+            double maskY = (y - centerY);
             
             qreal dist = maskX*maskX + maskY*maskY;
             if (dist <= border){
                 
                 qreal distance = sqrt(dist);
+                distance *= inverseScale; // apply scale
                 quint16 alphaValue = distance;
                 qreal alphaValueF = distance - alphaValue;
 
                 if (m_properties->curveData.size() <= (alphaValue+1)){
-                    qDebug() << "[ " << maskX << ", " << maskY << " ] distance: " << distance << "size: " << m_properties->curveData.size();;
+                    kDebug() << "[ " << maskX << ", " << maskY << " ] distance: " << distance << "size: " << m_properties->curveData.size();
                     continue;
                 }
            

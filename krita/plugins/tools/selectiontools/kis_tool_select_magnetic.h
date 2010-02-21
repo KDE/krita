@@ -26,10 +26,8 @@
 #include <KoCreatePathTool.h>
 #include "flake/kis_node_shape.h"
 #include "kis_tool_select_base.h"
+//#include "kis_tool_select_magnetic_option_widget.h"
 
-#include "kis_tool_select_magnetic_option_widget.h"
-
-//#include "kis_random_accessor.h"
 
 class QWidget;
 class KoCanvasBase;
@@ -38,6 +36,9 @@ class KisRandomConstAccessor;
 class KoColorTransformation;
 class KoColorSpace;
 
+namespace Ui {
+    class KisToolSelectMagneticOptionWidget;
+}
 
 /**
  * Tool to select colors by pointing at a color on the image.
@@ -58,22 +59,15 @@ public:
     virtual void activate(bool temporary) {m_localTool.activate(temporary);}
     virtual void deactivate() {m_localTool.deactivate();}
 
-public slots:
-    void setRadius(int);
-    void setThreshold(int);
-    void setSearchStartPoint(KisToolSelectMagneticOptionWidget::SearchStartPoint);
-    void setColorLimitation(KisToolSelectMagneticOptionWidget::ColorLimitation);
-    void setLimitToCurrentLayer(bool);
+    int radius() const;
+    int threshold() const;
+    int searchStartPoint() const;
+    int colorLimitation() const;
+    bool limitToCurrentLayer() const;
+
 private:
     virtual QWidget* createOptionWidget();
-    int m_radius;
-    int m_threshold;
-    KisToolSelectMagneticOptionWidget::SearchStartPoint m_searchStartPoint;
-    KisToolSelectMagneticOptionWidget::ColorLimitation m_colorLimitation;
-    bool m_limitToCurrentLayer;
-
-
-    KisToolSelectMagneticOptionWidget *m_magneticOptions;
+    Ui::KisToolSelectMagneticOptionWidget *m_magneticOptions;
 
     class LocalTool : public KoCreatePathTool {
         friend class KisToolSelectPath;
@@ -87,12 +81,11 @@ private:
         void paintOutline(QPainter* painter, const QPainterPath &path, qreal zoom);
         virtual void addPathShape(KoPathShape* pathShape);
         void computeOutline(const QPainterPath &pixelPath);
-        void computeEdge(const QVector2D &startPoint, const QVector2D &direction, KisRandomConstAccessor *pixelAccessor);
+        void computeEdge(const QVector2D &startPoint, const QVector2D &direction, KisRandomConstAccessor pixelAccessor);
     private:
         KisToolSelectMagnetic* const m_selectingTool;
         KoLineBorder* m_borderBackup;
         QPolygonF m_outline;
-//        KisRandomConstAccessor &m_randomAccessor;
         const KoColorSpace* m_colorSpace;
         KoColorTransformation* m_colorTransformation;
         QPolygon m_detectedBorder;

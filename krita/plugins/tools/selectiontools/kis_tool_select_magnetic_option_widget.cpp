@@ -26,11 +26,13 @@ KisToolSelectMagneticOptionWidget::KisToolSelectMagneticOptionWidget(QWidget *pa
 {
     ui->setupUi(this);
 
-    connect(ui->m_radius,           SIGNAL(valueChanged(int)),          this, SIGNAL(radiusChanged(int)));
-    connect(ui->m_threshold,        SIGNAL(valueChanged(int)),          this, SIGNAL(thresholdChanged(int)));
-    connect(ui->m_searchFromLeft,   SIGNAL(clicked()),                  this, SLOT(searchStartPointRadioChanged()));
-    connect(ui->m_searchFromRight,  SIGNAL(clicked()),                  this, SLOT(searchStartPointRadioChanged()));
-    connect(ui->m_colorLimitation,  SIGNAL(currentIndexChanged(int)),   this, SIGNAL(colorLimitationChanged(ColorLimitation)));
+    ui->m_colorLimitation->hide(); //hide color limitation, as it doesn't work yet
+    ui->label_4->hide();//color limitation label
+
+    //default values
+    ui->m_radius->setValue(25);
+    ui->m_searchFromLeft->setChecked(true);
+    ui->m_threshold->setValue(15);
 }
 
 KisToolSelectMagneticOptionWidget::~KisToolSelectMagneticOptionWidget()
@@ -48,15 +50,6 @@ void KisToolSelectMagneticOptionWidget::changeEvent(QEvent *e)
     default:
         break;
     }
-}
-
-
-void KisToolSelectMagneticOptionWidget::searchStartPointRadioChanged()
-{
-    if(ui->m_searchFromLeft->isChecked())
-        emit searchStartPointChanged(SearchFromLeft);
-    else
-        emit searchStartPointChanged(SearchFromRight);
 }
 
 #include "kis_tool_select_magnetic_option_widget.moc"

@@ -45,21 +45,12 @@ public:
 
     KisToolSelectMagneticOptionWidget(QWidget *parent = 0);
     ~KisToolSelectMagneticOptionWidget();
-signals:
-    void radiusChanged(int radius);
-    void thresholdChanged(int threshold);
-    void searchStartPointChanged(SearchStartPoint searchOrder);
-    void colorLimitationChanged(ColorLimitation colorLimitation);
-    void layerLimitationChanged(bool limitToLayer);
+
+    Ui::KisToolSelectMagneticOptionWidget *ui;
 
 protected:
     void changeEvent(QEvent *e);
 
-protected slots:
-    void searchStartPointRadioChanged();
-
-private:
-    Ui::KisToolSelectMagneticOptionWidget *ui;
 };
 
 #endif // KIS_TOOL_SELECT_MAGNETIC_OPTION_WIDGET_H

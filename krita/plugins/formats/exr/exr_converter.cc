@@ -728,29 +728,52 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
     return KisImageBuilder_RESULT_OK;
 }
 
+QString remap(const QMap<QString, QString>& current2original, const QString& current)
+{
+    if(current2original.contains(current))
+    {
+        return current2original[current];
+    }
+    return current;
+}
+
 void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& infos, const QString& name, KisGroupLayerSP parent)
 {
     for (uint i = 0; i < parent->childCount(); ++i) {
         KisNodeSP node = parent->at(i);
         if (KisPaintLayerSP paintLayer = dynamic_cast<KisPaintLayer*>(node.data())) {
+            QMap<QString, QString> current2original;
+            if(paintLayer->metaData()->containsEntry(KisMetaData::SchemaRegistry::instance()->create("http://krita.org/exrchannels/1.0/" , "exrchannels"), "channelsmap"))
+            {
+                const KisMetaData::Entry& entry = paintLayer->metaData()->getEntry(KisMetaData::SchemaRegistry::instance()->create("http://krita.org/exrchannels/1.0/" , "exrchannels"), "channelsmap");
+                QList< KisMetaData::Value> values = entry.value().asArray();
+                foreach(const KisMetaData::Value& value, values)
+                {
+                    QMap<QString, KisMetaData::Value> map = value.asStructure();
+                    if(map.contains("original") && map.contains("current"))
+                    {
+                        current2original[map["current"].toString()] = map["original"].toString();
+                    }
+                }
+            }
             ExrPaintLayerSaveInfo info;
             info.name = name + paintLayer->name() + ".";
             info.layer = paintLayer;
             if (paintLayer->colorSpace()->colorModelId() == RGBAColorModelID) {
-                info.channels.push_back(info.name + "B");
-                info.channels.push_back(info.name + "G");
-                info.channels.push_back(info.name + "R");
-                info.channels.push_back(info.name + "A");
+                info.channels.push_back(info.name + remap(current2original, "B"));
+                info.channels.push_back(info.name + remap(current2original, "G"));
+                info.channels.push_back(info.name + remap(current2original, "R"));
+                info.channels.push_back(info.name + remap(current2original, "A"));
             } else if (paintLayer->colorSpace()->colorModelId() == GrayAColorModelID) {
-                info.channels.push_back(info.name + "G");
-                info.channels.push_back(info.name + "A");
+                info.channels.push_back(info.name + remap(current2original, "G"));
+                info.channels.push_back(info.name + remap(current2original, "A"));
             } else if (paintLayer->colorSpace()->colorModelId() == GrayColorModelID) {
-                info.channels.push_back(info.name + "G");
+                info.channels.push_back(info.name + remap(current2original, "G"));
             } else if (paintLayer->colorSpace()->colorModelId() == XYZAColorModelID) {
-                info.channels.push_back(info.name + "X");
-                info.channels.push_back(info.name + "Y");
-                info.channels.push_back(info.name + "Z");
-                info.channels.push_back(info.name + "A");
+                info.channels.push_back(info.name + remap(current2original, "X"));
+                info.channels.push_back(info.name + remap(current2original, "Y"));
+                info.channels.push_back(info.name + remap(current2original, "Z"));
+                info.channels.push_back(info.name + remap(current2original, "A"));
             }
             if (paintLayer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
                 info.pixelType = Imf::HALF;

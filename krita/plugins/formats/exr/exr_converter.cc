@@ -568,15 +568,14 @@ void encodeData(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int wi
     typedef ExrPixel<_T_, size> ExrPixel;
 
     QVector<ExrPixel> pixels(width);
-    
+
     for (int y = 0; y < height; ++y) {
         ExrPixel* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
-        for (int k = 0; k < size; ++k)
-        {
-            frameBuffer.insert( info.channels[k].toUtf8(),
-                            Imf::Slice(ptype, (char *) &frameBufferData->data[k],
-                                        sizeof(ExrPixel) * 1,
-                                        sizeof(ExrPixel) * width));
+        for (int k = 0; k < size; ++k) {
+            frameBuffer.insert(info.channels[k].toUtf8(),
+                               Imf::Slice(ptype, (char *) &frameBufferData->data[k],
+                                          sizeof(ExrPixel) * 1,
+                                          sizeof(ExrPixel) * width));
         }
         file.setFrameBuffer(frameBuffer);
         ExrPixel *rgba = pixels.data();
@@ -585,18 +584,14 @@ void encodeData(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int wi
 
             const _T_* dst = reinterpret_cast < const _T_* >(it.oldRawData());
 
-            if (alphaPos == -1)
-            {
-                for(int i = 0; i < size; ++i)
-                {
+            if (alphaPos == -1) {
+                for (int i = 0; i < size; ++i) {
                     rgba->data[i] = dst[i];
                 }
             } else {
                 _T_ alpha = dst[alphaPos];
-                for(int i = 0; i < size; ++i)
-                {
-                    if (i != alphaPos)
-                    {
+                for (int i = 0; i < size; ++i) {
+                    if (i != alphaPos) {
                         rgba->data[i] = dst[i] * alpha;
                     }
                 }
@@ -607,6 +602,37 @@ void encodeData(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int wi
             ++rgba;
         }
         file.writePixels(1);
+    }
+}
+
+void encodeData(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int width, int height)
+{
+//     bool hasAlpha = info.layer->colorSpace()->channelCount() != info.layer->colorSpace()->colorChannelCount();
+    switch (info.layer->colorSpace()->channelCount()) {
+    case 1: {
+        if (info.layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+            encodeData < half, 1, -1 > (file, info, width, height, Imf::HALF);
+        } else if (info.layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+            encodeData < float, 1, -1 > (file, info, width, height, Imf::FLOAT);
+        }
+        break;
+    }
+    case 2: {
+        if (info.layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+            encodeData<half, 2, 1>(file, info, width, height, Imf::HALF);
+        } else if (info.layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+            encodeData<float, 2, 1>(file, info, width, height, Imf::FLOAT);
+        }
+        break;
+    }
+    case 4: {
+        if (info.layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+            encodeData<half, 4, 3>(file, info, width, height, Imf::HALF);
+        } else if (info.layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+            encodeData<float, 4, 3>(file, info, width, height, Imf::FLOAT);
+        }
+        break;
+    }
     }
 }
 
@@ -647,15 +673,7 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
     // Open file for writing
     Imf::OutputFile file(QFile::encodeName(uri.path()), header);
 
-    if (layer->colorSpace()->colorModelId() == RGBAColorModelID) {
-        if (layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
-            encodeData<half, 4, 3>(file, info, width, height, Imf::HALF);
-        } else if (layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
-            encodeData<float, 4, 3>(file, info, width, height, Imf::FLOAT);
-        }
-    } else {
-        return KisImageBuilder_RESULT_FAILURE;
-    }
+    encodeData(file, info, width, height);
 
     return KisImageBuilder_RESULT_OK;
 }
@@ -719,12 +737,11 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP 
 
     QList<ExrPaintLayerSaveInfo> infos;
     recBuildPaintLayerSaveInfo(infos, "", layer);
-    
+
     dbgFile << infos.size() << " layers to save";
 
     foreach(const ExrPaintLayerSaveInfo& info, infos) {
-        if (info.pixelType < Imf::NUM_PIXELTYPES)
-        {
+        if (info.pixelType < Imf::NUM_PIXELTYPES) {
             foreach(const QString& channel, info.channels) {
                 dbgFile << channel << " " << info.pixelType;
                 header.channels().insert(channel.toUtf8().data(), Imf::Channel(info.pixelType));
@@ -734,6 +751,10 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP 
 
     // Open file for writing
     Imf::OutputFile file(QFile::encodeName(uri.path()), header);
+
+    foreach(const ExrPaintLayerSaveInfo& info, infos) {
+        encodeData(file, info, width, height);
+    }
 
     return KisImageBuilder_RESULT_OK;
 }

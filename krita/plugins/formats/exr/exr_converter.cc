@@ -557,20 +557,22 @@ struct ExrPixel_ {
     _T_ data[size];
 };
 
-class Encoder {
+class Encoder
+{
 public:
     virtual ~Encoder() {}
-    virtual void prepareFrameBuffer(Imf::FrameBuffer*, int line ) = 0;
+    virtual void prepareFrameBuffer(Imf::FrameBuffer*, int line) = 0;
     virtual void encodeData(int line) = 0;
 
 };
 
 template<typename _T_, int size, int alphaPos>
-class EncoderImpl : public Encoder {
+class EncoderImpl : public Encoder
+{
 public:
     EncoderImpl(Imf::OutputFile* _file, const ExrPaintLayerSaveInfo* _info, int width) : file(_file), info(_info), pixels(width), m_width(width) {}
     virtual ~EncoderImpl() {}
-    virtual void prepareFrameBuffer(Imf::FrameBuffer*, int line );
+    virtual void prepareFrameBuffer(Imf::FrameBuffer*, int line);
     virtual void encodeData(int line);
 private:
     typedef ExrPixel_<_T_, size> ExrPixel;
@@ -581,7 +583,7 @@ private:
 };
 
 template<typename _T_, int size, int alphaPos>
-void EncoderImpl<_T_,size,alphaPos>::prepareFrameBuffer(Imf::FrameBuffer* frameBuffer, int line)
+void EncoderImpl<_T_, size, alphaPos>::prepareFrameBuffer(Imf::FrameBuffer* frameBuffer, int line)
 {
     int xstart = 0;
     int ystart = 0;
@@ -589,13 +591,13 @@ void EncoderImpl<_T_,size,alphaPos>::prepareFrameBuffer(Imf::FrameBuffer* frameB
     for (int k = 0; k < size; ++k) {
         frameBuffer->insert(info->channels[k].toUtf8(),
                             Imf::Slice(info->pixelType, (char *) &frameBufferData->data[k],
-                                        sizeof(ExrPixel) * 1,
-                                        sizeof(ExrPixel) * m_width));
+                                       sizeof(ExrPixel) * 1,
+                                       sizeof(ExrPixel) * m_width));
     }
 }
 
 template<typename _T_, int size, int alphaPos>
-void EncoderImpl<_T_,size,alphaPos>::encodeData(int line)
+void EncoderImpl<_T_, size, alphaPos>::encodeData(int line)
 {
     ExrPixel *rgba = pixels.data();
     KisHLineIterator it = info->layer->paintDevice()->createHLineIterator(0, line, m_width);
@@ -629,10 +631,10 @@ Encoder* encoder(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int w
     case 1: {
         if (info.layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
             Q_ASSERT(info.pixelType == Imf::HALF);
-            return new EncoderImpl< half, 1, -1 > (&file, &info, width);
+            return new EncoderImpl < half, 1, -1 > (&file, &info, width);
         } else if (info.layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
             Q_ASSERT(info.pixelType == Imf::FLOAT);
-            return new EncoderImpl< float, 1, -1 > (&file, &info, width);
+            return new EncoderImpl < float, 1, -1 > (&file, &info, width);
         }
         break;
     }
@@ -666,15 +668,14 @@ void encodeData(Imf::OutputFile& file, const QList<ExrPaintLayerSaveInfo>& infos
     foreach(const ExrPaintLayerSaveInfo& info, infos) {
         encoders.push_back(encoder(file, info, width));
     }
-    
-    for(int y = 0; y < height; ++y)
-    {
+
+    for (int y = 0; y < height; ++y) {
         Imf::FrameBuffer frameBuffer;
-        foreach(Encoder* encoder, encoders){
+        foreach(Encoder* encoder, encoders) {
             encoder->prepareFrameBuffer(&frameBuffer, y);
         }
         file.setFrameBuffer(frameBuffer);
-        foreach(Encoder* encoder, encoders){
+        foreach(Encoder* encoder, encoders) {
             encoder->encodeData(y);
         }
         file.writePixels(1);
@@ -719,7 +720,7 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
 
     // Open file for writing
     Imf::OutputFile file(QFile::encodeName(uri.path()), header);
-    
+
     QList<ExrPaintLayerSaveInfo> infos;
     infos.push_back(info);
 
@@ -730,8 +731,7 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
 
 QString remap(const QMap<QString, QString>& current2original, const QString& current)
 {
-    if(current2original.contains(current))
-    {
+    if (current2original.contains(current)) {
         return current2original[current];
     }
     return current;
@@ -743,15 +743,12 @@ void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& infos, const QStri
         KisNodeSP node = parent->at(i);
         if (KisPaintLayerSP paintLayer = dynamic_cast<KisPaintLayer*>(node.data())) {
             QMap<QString, QString> current2original;
-            if(paintLayer->metaData()->containsEntry(KisMetaData::SchemaRegistry::instance()->create("http://krita.org/exrchannels/1.0/" , "exrchannels"), "channelsmap"))
-            {
+            if (paintLayer->metaData()->containsEntry(KisMetaData::SchemaRegistry::instance()->create("http://krita.org/exrchannels/1.0/" , "exrchannels"), "channelsmap")) {
                 const KisMetaData::Entry& entry = paintLayer->metaData()->getEntry(KisMetaData::SchemaRegistry::instance()->create("http://krita.org/exrchannels/1.0/" , "exrchannels"), "channelsmap");
                 QList< KisMetaData::Value> values = entry.value().asArray();
-                foreach(const KisMetaData::Value& value, values)
-                {
+                foreach(const KisMetaData::Value& value, values) {
                     QMap<QString, KisMetaData::Value> map = value.asStructure();
-                    if(map.contains("original") && map.contains("current"))
-                    {
+                    if (map.contains("original") && map.contains("current")) {
                         current2original[map["current"].toString()] = map["original"].toString();
                     }
                 }

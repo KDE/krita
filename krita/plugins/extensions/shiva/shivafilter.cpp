@@ -40,7 +40,7 @@ extern QMutex* shivaMutex;
 ShivaFilter::ShivaFilter(OpenShiva::Source* kernel) : KisFilter(KoID(kernel->name().c_str(), kernel->name().c_str()), categoryOther(), kernel->name().c_str()), m_source(kernel)
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
-    setSupportsPainting(true);
+    setSupportsPainting(false);
     setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
 }

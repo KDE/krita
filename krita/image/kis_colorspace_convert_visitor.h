@@ -33,10 +33,6 @@
 #include "kis_adjustment_layer.h"
 #include "kis_group_layer.h"
 #include "kis_external_layer_iface.h"
-#include "filter/kis_filter_configuration.h"
-#include "filter/kis_filter_registry.h"
-#include "filter/kis_filter.h"
-#include "generator/kis_generator_layer.h"
 
 class KRITAIMAGE_EXPORT KisColorSpaceConvertVisitor : public KisNodeVisitor
 {

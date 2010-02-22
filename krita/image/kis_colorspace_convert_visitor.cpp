@@ -21,6 +21,10 @@
 #include "kis_image.h"
 #include "kis_undo_adapter.h"
 #include "commands/kis_layer_props_command.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
+#include "filter/kis_filter.h"
+#include "generator/kis_generator_layer.h"
 
 KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(KisImageWSP image,
         const KoColorSpace *dstColorSpace,

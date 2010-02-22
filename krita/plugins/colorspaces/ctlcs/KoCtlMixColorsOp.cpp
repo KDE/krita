@@ -59,10 +59,11 @@ void KoCtlMixColorsOp::mixColors(const quint8 * const* colors, const qint16 *wei
         ++colors;
         ++weights;
     }
+    totalAlpha /= 255; // 255 is the sum of weights
     if (totalAlpha > 1.0) totalAlpha = 1.0;
 
     if (totalAlpha > 0) {
-        double inv = 1.0 / totalAlpha;
+        double inv = 1.0 / (totalAlpha * 255);
         for (uint i = 0; i < m_colorSpace->channelCount(); i++) {
             if (i != alphaPos) {
                 m_accumulators[i]->affect(dst, inv);

@@ -28,6 +28,7 @@
 #include <krita_export.h>
 
 class QString;
+class KisFilterConfiguration;
 
 class KRITAIMAGE_EXPORT KisFilterRegistry : public QObject, public KoGenericRegistry<KisFilterSP>
 {
@@ -42,6 +43,7 @@ public:
     void add(KisFilterSP item);
     void add(const QString &id, KisFilterSP item);
 
+    KisFilterConfiguration* cloneConfiguration(KisFilterConfiguration*);
 signals:
 
     void filterAdded(QString id);

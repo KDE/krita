@@ -38,6 +38,7 @@
 
 #include "kis_paint_device.h"
 #include "filter/kis_filter.h"
+#include "kis_filter_configuration.h"
 
 KisFilterRegistry::KisFilterRegistry()
 {
@@ -66,6 +67,14 @@ void KisFilterRegistry::add(const QString &id, KisFilterSP item)
 {
     KoGenericRegistry<KisFilterSP>::add(id, item);
     emit(filterAdded(id));
+}
+
+KisFilterConfiguration* KisFilterRegistry::cloneConfiguration(KisFilterConfiguration* kfc)
+{
+    KisFilterSP filter = value(kfc->name());
+    KisFilterConfiguration* newkfc = filter->defaultConfiguration(0);
+    newkfc->fromXML(kfc->toXML());
+    return newkfc;
 }
 
 #include "kis_filter_registry.moc"

@@ -38,6 +38,7 @@ public:
         return _ref.ref();
     }
     bool deref() {
+        Q_ASSERT(_ref > 0);
         return _ref.deref();
     }
 private:

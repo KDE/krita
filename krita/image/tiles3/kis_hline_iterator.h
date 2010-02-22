@@ -50,7 +50,7 @@ public:
     virtual const quint8* oldRawData() const;
     virtual quint8* rawData();
     virtual qint32 nConseqHPixels() const;
-    
+    virtual void nextPixels(qint32 n);
     
 private:
     KisTiledDataManager *m_dataManager;

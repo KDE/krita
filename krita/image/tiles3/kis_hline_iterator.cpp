@@ -108,6 +108,30 @@ qint32 KisHLineIterator2::nConseqHPixels() const
 
 
 
+void KisHLineIterator2::nextPixels(qint32 n)
+{
+    Q_ASSERT_X(!(m_x > 0 && (m_x + n) < 0), "hlineIt+=", "Integer overflow");
+
+    qint32 previousCol = xToCol(m_x);
+    // We won't increment m_x here first as integer can overflow
+    if (m_x >= m_right || (m_x += n) > m_right) {
+        m_havePixels = false;
+    } else {
+        qint32 col = xToCol(m_x);
+        // if we are in the same column in tiles
+        if (col == previousCol) {
+            m_data += n * m_pixelSize;
+        } else {
+            qint32 xInTile = calcXInTile(m_x, col);
+            m_index += col - previousCol;
+            switchToTile(xInTile);
+        }
+    }
+
+}
+
+
+
 KisHLineIterator2::~KisHLineIterator2()
 {
     for (uint i = 0; i < m_tilesCacheSize; i++) {

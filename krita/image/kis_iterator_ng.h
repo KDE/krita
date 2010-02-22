@@ -48,6 +48,8 @@ class KRITAIMAGE_EXPORT KisHLineIteratorNG {
      * @return return number of consequential numbers of pixels, useful for optimization 
      */
     virtual qint32 nConseqHPixels() const = 0;
+    
+    virtual void nextPixels(qint32 n) = 0;
 };
 
 #endif

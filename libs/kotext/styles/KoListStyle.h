@@ -36,9 +36,24 @@ class KoGenStyle;
 /**
  * This class groups all styling-options for lists.
  * See KoParagraphStyle::setListStyle()
- * This class represents one list-level which can span several paragraphs, but
- * typically just one pargraph-style since that style can be reused on various
- * paragraphs.
+ * The list-style represents several list-levels, where each level is represented by the
+ * KoListLevelProperties class. The top most list level is 1.
+ *
+ * list level1
+ *   list level2
+ *   list level2
+ *     list level3
+ * list level1
+ *
+ * A list-style as such represents cross paragraph relations. The most obvious evidence of this
+ * is with a numbered list where a counter is automatically increased from one paragraph to the next.
+ *
+ * If the list is interrupted by a praragraph with another list-style the counting will start from
+ * fresh when the list resumes. However you can set the list to continue if you like.
+ *
+ * Following from the above you can use the same paragraph style for several paragraphs and the
+ * the counter wil increase. If you want a paragraph to be on a sub level you do however need to
+ * create a new paragraph-style when another listLevel set.
  */
 class  KOTEXT_EXPORT KoListStyle : public QObject
 {

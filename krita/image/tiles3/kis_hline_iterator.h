@@ -49,7 +49,7 @@ public:
     virtual void nextRow();
     virtual const quint8* oldRawData() const;
     virtual quint8* rawData();
-
+    virtual qint32 nConseqHPixels() const;
     
     
 private:

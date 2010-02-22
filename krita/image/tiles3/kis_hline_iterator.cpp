@@ -101,6 +101,12 @@ void KisHLineIterator2::nextRow()
 }
 
 
+qint32 KisHLineIterator2::nConseqHPixels() const
+{
+    return (m_dataRight - m_data) / m_pixelSize;
+}
+
+
 
 KisHLineIterator2::~KisHLineIterator2()
 {

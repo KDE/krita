@@ -44,6 +44,10 @@ class KRITAIMAGE_EXPORT KisHLineIteratorNG {
      * @return a pointer to the pixel data as it was at the moment of the last memento creation.
      */
     virtual const quint8 * oldRawData() const = 0;
+    /**
+     * @return return number of consequential numbers of pixels, useful for optimization 
+     */
+    virtual qint32 nConseqHPixels() const = 0;
 };
 
 #endif

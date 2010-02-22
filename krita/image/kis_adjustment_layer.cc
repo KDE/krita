@@ -43,14 +43,14 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageWSP image,
         : KisSelectionBasedLayer(image.data(), name, selection),
         m_d(new Private())
 {
-    m_d->filterConfig = kfc;
+    m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(kfc);
 }
 
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
         : KisSelectionBasedLayer(rhs),
         m_d(new Private())
 {
-    m_d->filterConfig = new KisFilterConfiguration(*rhs.m_d->filterConfig);
+    m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(rhs.m_d->filterConfig);
 }
 
 
@@ -68,7 +68,8 @@ KisFilterConfiguration * KisAdjustmentLayer::filter() const
 
 void KisAdjustmentLayer::setFilter(KisFilterConfiguration * filterConfig)
 {
-    m_d->filterConfig = filterConfig;
+    delete m_d->filterConfig;
+    m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(filterConfig);
 }
 
 QRect KisAdjustmentLayer::changeRect(const QRect& rect) const

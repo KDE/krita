@@ -66,7 +66,7 @@ KisFilterMask::KisFilterMask(const KisFilterMask& rhs)
         , KisNodeFilterInterface(rhs)
         , m_d(new Private())
 {
-    m_d->filterConfig = rhs.m_d->filterConfig;
+    m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(rhs.m_d->filterConfig);
 }
 
 KisFilterConfiguration * KisFilterMask::filter() const
@@ -82,7 +82,8 @@ QIcon KisFilterMask::icon() const
 void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
 {
     Q_ASSERT(filterConfig);
-    m_d->filterConfig = filterConfig;
+    delete m_d->filterConfig;
+    m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(filterConfig);
 }
 
 QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,

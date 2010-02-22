@@ -22,13 +22,14 @@
 #include <KoViewConverter.h>
 #include "kis_image.h"
 
+#include "kis_paint_action_type_option.h"
 #include "kis_sumi_paintop_settings.h"
 #include "kis_sumi_bristle_option.h"
 #include "kis_sumi_shape_option.h"
 
 bool KisSumiPaintOpSettings::paintIncremental()
 {
-    return false;
+    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
 

@@ -85,7 +85,7 @@ public:
      */
     inline KisSharedPtr(T* p)
             : d(p) {
-        if (d) ref();
+        ref();
     }
 
     inline KisSharedPtr(const KisWeakSharedPtr<T>& o);
@@ -96,7 +96,7 @@ public:
      */
     inline KisSharedPtr<T>(const KisSharedPtr<T>& o)
             : d(o.d) {
-        if (d) ref();
+        ref();
     }
 
     /**
@@ -104,9 +104,7 @@ public:
      * the last reference, the object will be deleted.
      */
     inline ~KisSharedPtr() {
-        if (d && !deref()) {
-            delete d;
-        }
+        deref();
     }
 
     inline KisSharedPtr<T>& operator= (const KisSharedPtr& o) {
@@ -179,8 +177,6 @@ public:
         Q_ASSERT(d); return *d;
     }
     inline T& operator*() {
-        if (!d)
-            warnKrita << kBacktrace();
         Q_ASSERT(d); return *d;
     }
 
@@ -188,10 +184,6 @@ public:
         Q_ASSERT(d); return d;
     }
     inline T* operator->() {
-        if (!d) {
-            warnKrita << kBacktrace();
-        }
-
         Q_ASSERT(d); return d;
     }
 
@@ -202,18 +194,19 @@ public:
         return (d == 0);
     }
 private:
-    inline static bool ref(const KisSharedPtr<T>* sp, T* t)
+    inline static void ref(const KisSharedPtr<T>* sp, T* t)
     {
 #ifdef NDEBUG
         Q_UNUSED(sp);
 #else
         KisMemoryLeakTracker::instance()->reference(t, sp);
 #endif
-        return t->ref();
+        if (t)
+            t->ref();
     }
-    inline bool ref() const
+    inline void ref() const
     {
-        return ref(this, d);
+        ref(this, d);
     }
     inline static bool deref(const KisSharedPtr<T>* sp, T* t)
     {
@@ -222,11 +215,22 @@ private:
 #else
         KisMemoryLeakTracker::instance()->dereference(t, sp);
 #endif
-        return t->deref();
+        if (t && !t->deref())
+        {
+            delete t;
+            return false;
+        }
+        return true;
     }
-    inline bool deref() const
+    inline void deref() const
     {
-        return deref(this, d);
+        bool v = deref(this, d);
+#ifndef NDEBUG
+        if (!v)
+        {
+            d = 0;
+        }
+#endif
     }
 private:
     mutable T* d;
@@ -380,7 +384,7 @@ Q_INLINE_TEMPLATE  KisSharedPtr<T>::KisSharedPtr(const KisWeakSharedPtr<T>& o)
         : d(o.d)
 {
     Q_ASSERT(!o.dataPtr || (o.dataPtr && o.dataPtr->valid));
-    if (d) ref();
+    ref();
 }
 
 
@@ -388,11 +392,10 @@ template <class T>
 Q_INLINE_TEMPLATE void KisSharedPtr<T>::attach(T* p) const
 {
     if (d != p) {
-        if(p) ref(this, p);
+        ref(this, p);
         T* old = d;
         d = p;
-        if (old && !deref(this, old))
-            delete old;
+        deref(this, old);
     }
 }
 

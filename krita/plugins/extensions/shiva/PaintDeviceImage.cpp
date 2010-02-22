@@ -89,16 +89,14 @@ ConstPaintDeviceImage::~ConstPaintDeviceImage()
 
 char* ConstPaintDeviceImage::data(int _x, int _y)
 {
-    // TODO should return 0, when http://bugs.opengtl.org/index.php?do=details&task_id=24 is fixed
-    m_accessor->moveTo(_x, _y);
-    return const_cast<char*>((const char*)(m_accessor->oldRawData()));
+    qFatal("Accessing non const data in a ConstPaintDevice");
+    return 0;
 }
 
 char* ConstPaintDeviceImage::rawData( int _x, int _y )
 {
-    // TODO should return 0, when http://bugs.opengtl.org/index.php?do=details&task_id=24 is fixed
-    m_accessor->moveTo(_x, _y);
-    return const_cast<char*>((const char*)(m_accessor->oldRawData()));
+    qFatal("Accessing non const data in a ConstPaintDevice");
+    return 0;
 }
 
 const char* ConstPaintDeviceImage::data(int _x, int _y) const

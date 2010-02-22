@@ -184,16 +184,17 @@ public:
             if(item.m_position & KisMergeWalker::N_FILTHY) {
                 currentNode->accept(originalVisitor);
                 currentNode->updateProjection(applyRect);
-                compositeWithProjection(currentNode, applyRect);
             }
             else if(item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
                 currentNode->accept(originalVisitor);
-                currentNode->updateProjection(applyRect);
-                compositeWithProjection(currentNode, applyRect);
+                if(dependOnLowerNodes(currentNode))
+                    currentNode->updateProjection(applyRect);
             }
             else /*if(item.m_position & KisMergeWalker::N_BELOW_FILTHY)*/ {
-                compositeWithProjection(currentNode, applyRect);
+                /* nothing to do */
             }
+
+            compositeWithProjection(currentNode, applyRect);
 
             if(item.m_position & KisMergeWalker::N_TOPMOST) {
                 writeProjection(currentNode, useTempProjections, applyRect);
@@ -205,6 +206,10 @@ public:
 private:
     static inline bool isRootNode(KisNodeSP node) {
         return !node->parent();
+    }
+
+    static inline bool dependOnLowerNodes(KisNodeSP node) {
+        return qobject_cast<KisAdjustmentLayer*>(node.data());
     }
 
     void resetProjection() {

@@ -25,10 +25,13 @@ KoColorTransformation::~KoColorTransformation()
 
 QList<QString> KoColorTransformation::parameters() const
 {
+    return QList<QString>();
 }
 
 int KoColorTransformation::parameterId(const QString& name) const
 {
+    Q_UNUSED(name);
+    return -1;
 }
 
 void KoColorTransformation::setParameter(int id, const QVariant& parameter)

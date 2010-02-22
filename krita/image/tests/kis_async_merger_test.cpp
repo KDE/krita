@@ -34,6 +34,7 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 
+#include "../../sdk/tests/testutil.h"
 
     /*
       +-----------+
@@ -114,7 +115,8 @@ void KisAsyncMergerTest::testMerger()
 
     QImage resultProjection = rootLayer->projection()->convertToQImage(0);
     resultProjection.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + "actual_merge_result.png");
-    QVERIFY(resultProjection == referenceProjection);
+    QPoint pt;
+    QVERIFY(TestUtil::compareQImages(pt, resultProjection, referenceProjection));
 }
 
 

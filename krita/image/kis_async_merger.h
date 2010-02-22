@@ -181,22 +181,24 @@ public:
             KisUpdateOriginalVisitor originalVisitor(applyRect,
                                                      m_currentProjection);
 
-            switch(item.m_position) {
-            case KisMergeWalker::N_TOPMOST:
+            if(item.m_position & KisMergeWalker::N_FILTHY) {
                 currentNode->accept(originalVisitor);
                 currentNode->updateProjection(applyRect);
                 compositeWithProjection(currentNode, applyRect);
-                writeProjection(currentNode, useTempProjections, applyRect);
-                resetProjection();
-                break;
-            case KisMergeWalker::N_NORMAL:
+            }
+            else if(item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
                 currentNode->accept(originalVisitor);
                 currentNode->updateProjection(applyRect);
-            case KisMergeWalker::N_LOWER:
-            case KisMergeWalker::N_BOTTOMMOST:
+                compositeWithProjection(currentNode, applyRect);
+            }
+            else /*if(item.m_position & KisMergeWalker::N_BELOW_FILTHY)*/ {
                 compositeWithProjection(currentNode, applyRect);
             }
 
+            if(item.m_position & KisMergeWalker::N_TOPMOST) {
+                writeProjection(currentNode, useTempProjections, applyRect);
+                resetProjection();
+            }
         }
     }
 

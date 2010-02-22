@@ -48,7 +48,7 @@ private:
      * startTrip() one more time. After the top is reached
      * returns back to the @node.
      */
-    void visitHigherNode(KisNodeSP node);
+    void visitHigherNode(KisNodeSP node, NodePosition positionToFilthy);
 
     /**
      * Visits a node @node and goes on crowling

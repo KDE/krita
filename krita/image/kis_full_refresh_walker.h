@@ -55,15 +55,18 @@ protected:
 
         // Just for consistency reasons
         if(isRootNode(startWith))
-            registerNeedRect(startWith, N_TOPMOST);
+            registerNeedRect(startWith, N_TOPMOST | N_FILTHY);
 
         KisNodeSP currentNode = startWith->lastChild();
         if(!currentNode) return;
 
-        registerNeedRect(currentNode, N_TOPMOST);
+        registerNeedRect(currentNode, N_TOPMOST | N_FILTHY);
 
-        while ((currentNode = currentNode->prevSibling())) {
-            registerNeedRect(currentNode, N_NORMAL);
+        KisNodeSP prevNode = currentNode->prevSibling();
+        while ((currentNode = prevNode)) {
+            prevNode = currentNode->prevSibling();
+            registerNeedRect(currentNode,
+                             (!prevNode ? N_BOTTOMMOST : N_NORMAL) | N_FILTHY);
         }
 
         currentNode = startWith->lastChild();

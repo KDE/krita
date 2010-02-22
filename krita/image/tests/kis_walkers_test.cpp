@@ -82,18 +82,48 @@ void reportStartWith(QString nodeName)
 
 QString nodeTypeString(KisMergeWalker::NodePosition position)
 {
-    static QString pos("  normal,  lower,top,bottom");
-    static QStringList positionName  = pos.split(",");
+    QString string;
 
-    return positionName[position];
+    if(position & KisMergeWalker::N_TOPMOST)
+        string="TOP";
+    else if(position & KisMergeWalker::N_BOTTOMMOST)
+        string="BOT";
+    else
+        string="NOR";
+
+    if(position & KisMergeWalker::N_ABOVE_FILTHY)
+        string+="_ABOVE ";
+    else if(position & KisMergeWalker::N_FILTHY)
+        string+="_FILTH*";
+    else if(position & KisMergeWalker::N_BELOW_FILTHY)
+        string+="_BELOW ";
+    else
+        qFatal("Impossible happened");
+
+    return string;
 }
 
 QString nodeTypePostfix(KisMergeWalker::NodePosition position)
 {
-    static QString index("_N,_L,_T,_B");
-    static QStringList indexName  = index.split(",");
+    QString string="_";
 
-    return indexName[position];
+    if(position & KisMergeWalker::N_TOPMOST)
+        string+="T";
+    else if(position & KisMergeWalker::N_BOTTOMMOST)
+        string+="B";
+    else
+        string+="N";
+
+    if(position & KisMergeWalker::N_ABOVE_FILTHY)
+        string+="A";
+    else if(position & KisMergeWalker::N_FILTHY)
+        string+="F";
+    else if(position & KisMergeWalker::N_BELOW_FILTHY)
+        string+="B";
+    else
+        qFatal("Impossible happened");
+
+    return string;
 }
 
 void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList reference,
@@ -168,8 +198,8 @@ void KisWalkersTest::testUsualVisiting()
 
     {
         QString order("paint3,paint4,group,paint5,root,"
-                      "root_T,paint5_T,group_N,paint1_B,"
-                      "paint4_T,paint3_N,adj_L,paint2_B");
+                      "root_TF,paint5_TA,group_NF,paint1_BB,"
+                      "paint4_TA,paint3_NF,adj_NB,paint2_BB");
         QStringList orderList = order.split(",");
 
         reportStartWith("paint3");
@@ -179,8 +209,8 @@ void KisWalkersTest::testUsualVisiting()
 
     {
         QString order("adj,paint3,paint4,group,paint5,root,"
-                      "root_T,paint5_T,group_N,paint1_B,"
-                      "paint4_T,paint3_N,adj_N,paint2_B");
+                      "root_TF,paint5_TA,group_NF,paint1_BB,"
+                      "paint4_TA,paint3_NA,adj_NF,paint2_BB");
         QStringList orderList = order.split(",");
 
         reportStartWith("adj");
@@ -190,7 +220,7 @@ void KisWalkersTest::testUsualVisiting()
 
     {
         QString order("group,paint5,root,"
-                      "root_T,paint5_T,group_N,paint1_B");
+                      "root_TF,paint5_TA,group_NF,paint1_BB");
         QStringList orderList = order.split(",");
 
         reportStartWith("group");
@@ -414,6 +444,86 @@ void KisWalkersTest::testCachedVisiting()
         verifyResult(walker, orderList, accessRect, false, true);
     }
 
+}
+
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
+#include "kis_filter_mask.h"
+#include "kis_transparency_mask.h"
+
+    /*
+      +----------+
+      |root      |
+      | paint 2  |
+      | paint 1  |
+      |  fmask2  |
+      |  tmask   |
+      |  fmask1  |
+      +----------+
+     */
+
+void KisWalkersTest::testMasksVisiting()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE);
+
+    image->addNode(paintLayer1, image->rootLayer());
+    image->addNode(paintLayer2, image->rootLayer());
+
+    KisFilterMaskSP filterMask1 = new KisFilterMask();
+    KisFilterMaskSP filterMask2 = new KisFilterMask();
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
+    Q_ASSERT(filter);
+    KisFilterConfiguration *configuration1 = filter->defaultConfiguration(0);
+    KisFilterConfiguration *configuration2 = filter->defaultConfiguration(0);
+
+    filterMask1->setFilter(configuration1);
+    filterMask2->setFilter(configuration2);
+
+    QRect selection1(10, 10, 20, 10);
+    QRect selection2(30, 15, 10, 10);
+    QRect selection3(20, 10, 20, 10);
+
+    filterMask1->select(selection1, MAX_SELECTED);
+    transparencyMask->select(selection2, MAX_SELECTED);
+    filterMask2->select(selection3, MAX_SELECTED);
+
+//    image->addNode(filterMask1, paintLayer1);
+//    image->addNode(transparencyMask, paintLayer1);
+//    image->addNode(filterMask2, paintLayer1);
+
+    QRect testRect(5,5,30,30);
+    // Empty rect to show we don't need any cropping
+    QRect cropRect;
+
+/*    KisMergeWalker walker(cropRect);
+    {
+        QString order("root,paint2,paint1");
+        QStringList orderList = order.split(",");
+        QRect accessRect(5,5,30,30);
+
+        reportStartWith("paint1");
+        walker.collectRects(paintLayer1, testRect);
+        verifyResult(walker, orderList, accessRect, false, false);
+        }*/
+
+    KisTestWalker walker;
+    {
+        QString order("paint1,paint2,root,"
+                      "root_TF,paint2_TA,paint1_BF");
+        QStringList orderList = order.split(",");
+        QRect accessRect(5,5,30,30);
+
+        reportStartWith("paint1");
+        walker.startTrip(paintLayer1);
+        QVERIFY(walker.popResult() == orderList);
+    }
 }
 
 QTEST_KDEMAIN(KisWalkersTest, NoGUI)

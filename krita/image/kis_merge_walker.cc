@@ -30,31 +30,36 @@ KisMergeWalker::~KisMergeWalker()
 
 void KisMergeWalker::startTrip(KisNodeSP startWith)
 {
-    visitHigherNode(startWith);
+    visitHigherNode(startWith, N_FILTHY);
 
     KisNodeSP prevNode = startWith->prevSibling();
     if(prevNode)
         visitLowerNode(prevNode);
 }
 
-void KisMergeWalker::visitHigherNode(KisNodeSP node)
+void KisMergeWalker::visitHigherNode(KisNodeSP node, NodePosition positionToFilthy)
 {
     KisNodeSP nextNode = node->nextSibling();
+    KisNodeSP prevNode = node->prevSibling();
 
     registerChangeRect(node);
 
     if (nextNode)
-        visitHigherNode(nextNode);
+        visitHigherNode(nextNode, N_ABOVE_FILTHY);
     else if (node->parent())
         startTrip(node->parent());
 
-    registerNeedRect(node, nextNode ? N_NORMAL : N_TOPMOST);
+    positionToFilthy |=
+        !nextNode ? N_TOPMOST : !prevNode ? N_BOTTOMMOST : N_NORMAL;
+    registerNeedRect(node, positionToFilthy);
 }
 
 void KisMergeWalker::visitLowerNode(KisNodeSP node)
 {
     KisNodeSP prevNode = node->prevSibling();
-    registerNeedRect(node, prevNode ? N_LOWER : N_BOTTOMMOST);
+    NodePosition position =
+        N_BELOW_FILTHY | (prevNode ? N_NORMAL : N_BOTTOMMOST);
+    registerNeedRect(node, position);
 
     if (prevNode)
         visitLowerNode(prevNode);

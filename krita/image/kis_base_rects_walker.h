@@ -26,11 +26,21 @@
 class KRITAIMAGE_EXPORT KisBaseRectsWalker
 {
 public:
-    enum NodePosition {
-        N_NORMAL,
-        N_LOWER,
-        N_TOPMOST,
-        N_BOTTOMMOST
+    typedef qint32 NodePosition;
+    enum NodePositionValues {
+        /**
+         * There are two different sets of values.
+         * The first describes the position of the node to the graph,
+         * the second shows the position to the filthy node
+         */
+
+        N_NORMAL     = 0x00,
+        N_TOPMOST    = 0x01,
+        N_BOTTOMMOST = 0x02,
+
+        N_ABOVE_FILTHY = 0x04,
+        N_FILTHY       = 0x08,
+        N_BELOW_FILTHY = 0x10
     };
 
     struct JobItem {
@@ -156,10 +166,10 @@ protected:
 
         QRect currentNeedRect;
 
-        switch(position) {
-        case N_TOPMOST:
+        if(position & N_TOPMOST)
             m_lastNeedRect = m_childNeedRect;
-        case N_NORMAL:
+
+        if(position & (N_FILTHY | N_ABOVE_FILTHY)) {
             if(!m_lastNeedRect.isEmpty())
                 pushJob(node, position, m_lastNeedRect);
             //else /* Why push empty rect? */;
@@ -168,17 +178,16 @@ protected:
                                             KisNode::NORMAL);
             m_lastNeedRect = cropThisRect(m_lastNeedRect);
             m_childNeedRect = m_lastNeedRect;
-            break;
-        case N_LOWER:
-        case N_BOTTOMMOST:
+        }
+        else if(position & N_BELOW_FILTHY) {
             if(!m_lastNeedRect.isEmpty()) {
                 pushJob(node, position, m_lastNeedRect);
                 m_lastNeedRect = node->needRect(m_lastNeedRect,
                                                 KisNode::BELOW_FILTHY);
                 m_lastNeedRect = cropThisRect(m_lastNeedRect);
             }
-            break;
-        default:
+        }
+        else {
             qFatal("Merge visitor: node position(%d) is out of range", position);
         }
 

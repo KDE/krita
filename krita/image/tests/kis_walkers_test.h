@@ -199,11 +199,12 @@ class KisWalkersTest : public QObject
     Q_OBJECT
 
 private slots:
-
     void testUsualVisiting();
     void testMergeVisiting();
     void testFullRefreshVisiting();
     void testCachedVisiting();
+    void testMasksVisiting();
+
 private:
     void verifyResult(KisBaseRectsWalker &walker, QStringList reference,
                       QRect accessRect, bool changeRectVaries,

@@ -62,7 +62,7 @@ private:
     void initShapeLayer(KoShapeControllerBase* controller);
 public:
     KisNodeSP clone() const {
-        return KisNodeSP(new KisShapeLayer(*this));
+        return new KisShapeLayer(*this);
     }
     bool allowAsChild(KisNodeSP) const;
 

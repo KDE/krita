@@ -41,6 +41,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoXmlWriter.h>
 #include <KoStore.h>
+#include <KoShapeController.h>
 #include <KoShapeSavingContext.h>
 #include <KoStoreDevice.h>
 
@@ -51,6 +52,7 @@
 #include "kis_image.h"
 #include "kis_selection.h"
 #include "kis_shape_selection_canvas.h"
+#include "kis_shape_layer_paste.h"
 
 #include <kis_debug.h>
 
@@ -73,12 +75,26 @@ KisShapeSelection::~KisShapeSelection()
 }
 
 KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs)
-        : KoShapeLayer(rhs)
+        : KoShapeLayer()
 {
     m_dirty = rhs.m_dirty;
     m_image = rhs.m_image;
     m_canvas = new KisShapeSelectionCanvas();
     m_canvas->shapeManager()->add(this);
+
+    KoShapeOdfSaveHelper saveHelper(rhs.childShapes());
+    KoDrag drag;
+    drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+    QMimeData* mimeData = drag.mimeData();
+
+    Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
+
+    KisShapeLayerShapePaste paste(this, 0);
+    bool success = paste.paste(KoOdf::Text, mimeData);
+    Q_ASSERT(success);
+    if (!success) {
+        warnUI << "Could not paste shape layer";
+    }
 }
 
 KisSelectionComponent* KisShapeSelection::clone()

@@ -36,6 +36,12 @@ KisShapeSelectionModel::KisShapeSelectionModel(KisImageWSP image, KisSelectionSP
 
 KisShapeSelectionModel::~KisShapeSelectionModel()
 {
+    qDebug() << "~KisShapeSelectionModel() " << this << kBacktrace();
+    qDebug() << m_image.isValid();
+    if(m_parentSelection)
+        qDebug() << m_parentSelection->refCount();
+    m_image = 0;
+    m_parentSelection.clear();
 }
 
 void KisShapeSelectionModel::add(KoShape *child)

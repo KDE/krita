@@ -293,6 +293,7 @@ void ListItemsHelper::recalculate()
                 break;
             }
         }
+
         QString item("");
         if (displayLevel > 1) {
             int checkLevel = level;
@@ -312,12 +313,24 @@ void ListItemsHelper::recalculate()
                     kWarning(32500) << "Skipping textblock cause userData() does not contain a valid KoTextBlockData";
                     continue;
                 }
-                item += otherData->partialCounterText();
-                tmpDisplayLevel--;
-                checkLevel--;
-                for (int i = otherLevel + 1;i < level; i++) {
+                if (tmpDisplayLevel - 1 < otherLevel) { // can't just copy it fully since we are
+                    // displaying less then the full counter
+                    item += otherData->partialCounterText();
                     tmpDisplayLevel--;
-                    item += ".0"; // add missing counters.
+                    checkLevel--;
+                    for (int i = otherLevel + 1;i < level; i++) {
+                        tmpDisplayLevel--;
+                        item += ".0"; // add missing counters.
+                    }
+                } else { // just copy previous counter as prefix
+                    QString otherPrefix = lf.stringProperty(KoListStyle::ListItemPrefix);
+                    QString otherSuffix = lf.stringProperty(KoListStyle::ListItemSuffix);
+                    QString pureCounter = otherData->counterText().mid(otherPrefix.size());
+                    pureCounter = pureCounter.left(pureCounter.size() - otherSuffix.size());
+                    item += pureCounter;
+                    for (int i = otherLevel + 1;i < level; i++)
+                        item += ".0"; // add missing counters.
+                    break;
                 }
             }
         }

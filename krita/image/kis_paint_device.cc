@@ -58,7 +58,6 @@ class KisPaintDevice::Private
 {
 
 public:
-
     KisNodeWSP parent;
     qint32 x;
     qint32 y;
@@ -69,26 +68,21 @@ public:
 
     struct Cache {
 
-        Cache() { invalidate(); }
+        Cache() : self(0) { invalidate(); }
 
-        bool exactBoundsValid;
+        KisPaintDevice* self;
         bool thumbnailsValid;
 
-        QRect exactBounds;
         QMap<int, QMap<int, QImage> > thumbnails;
 
 
         void invalidate()
         {
-            exactBoundsValid = false;
             thumbnailsValid = false;
+            if (self)
+                self->dataManager()->invalidateExactBounds();
         }
 
-        void setExactBounds(QRect bounds)
-        {
-            exactBoundsValid = true;
-            exactBounds = bounds;
-        }
     };
 
     Cache cache;
@@ -103,6 +97,7 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
 
     Q_ASSERT(colorSpace);
 
+    m_d->cache.self = this;
     m_d->x = 0;
     m_d->y = 0;
 
@@ -129,6 +124,7 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
     setObjectName(name);
     Q_ASSERT(colorSpace);
 
+    m_d->cache.self = this;
     m_d->x = 0;
     m_d->y = 0;
 
@@ -157,6 +153,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         , KisShared()
         , m_d(new Private())
 {
+    m_d->cache.self = this;
     if (this != &rhs) {
         m_d->parent = 0;
         if (rhs.m_datamanager) {
@@ -256,8 +253,8 @@ void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) con
 
 QRect KisPaintDevice::exactBounds() const
 {
-    if (m_d->cache.exactBoundsValid) {
-        return m_d->cache.exactBounds;
+    if (m_datamanager->valideExactBounds()) {
+        return m_datamanager->exactBounds();
     }
 
     // Solution n°2
@@ -340,9 +337,9 @@ QRect KisPaintDevice::exactBounds() const
             if (found) break;
         }
     }
-    m_d->cache.setExactBounds(QRect(boundX2, boundY2, boundW2, boundH2));
+    m_datamanager->setExactBounds(QRect(boundX2, boundY2, boundW2, boundH2));
 
-    return m_d->cache.exactBounds;
+    return m_datamanager->exactBounds();
 }
 
 

@@ -56,8 +56,8 @@ public:
      * Note that if pixelSize > size of the defPixel array, we will happily read beyond the
      * defPixel array.
      */
-    KisDataManager(quint32 pixelSize, const quint8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel) {}
-    KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm) { }
+    KisDataManager(quint32 pixelSize, const quint8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel), m_exactBoundsValid(false) {}
+    KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm), m_exactBoundsValid(false) { }
 
 public:
     /**
@@ -280,11 +280,28 @@ public:
     inline qint32 rowStride(qint32 x, qint32 y) const {
         return ACTUAL_DATAMGR::rowStride(x, y);
     }
-
+public:
+    void invalidateExactBounds() {
+        m_exactBoundsValid = false;
+    }
+    void setExactBounds(const QRect& rect) const {
+        m_exactBoundsValid = true;
+        m_exactBounds = rect;
+    }
+    bool valideExactBounds() const {
+        return m_exactBoundsValid;
+    }
+    QRect exactBounds() const {
+        Q_ASSERT(m_exactBoundsValid);
+        return m_exactBounds;
+    }
 protected:
     friend class KisRectIterator;
     friend class KisHLineIterator;
     friend class KisVLineIterator;
+private:
+    mutable bool m_exactBoundsValid;
+    mutable QRect m_exactBounds;
 };
 
 

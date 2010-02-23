@@ -68,8 +68,8 @@ bool KisAbrBrush::saveToDevice(QIODevice* dev) const
 void KisAbrBrush::setImage(const QImage& image)
 {
     setValid(true);
-    setBrushType(IMAGE);
-    setHasColor(true);
+    setBrushType(MASK);
+    setHasColor(false);
     KisBrush::setImage(image);
 }
 

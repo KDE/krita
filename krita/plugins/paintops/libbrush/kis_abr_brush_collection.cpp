@@ -51,23 +51,19 @@ struct AbrInfo{
 static QImage convertToQImage(char * buffer,qint32 width, qint32 height)
 {
     // create 8-bit indexed image
-    QImage img(width, height, QImage::Format_Indexed8);
-
-    // every image needs color index table
-    QVector<QRgb> table;
-    for (int i = 0; i < 255; ++i) table.append(qRgb(i, i, i));
-    img.setColorTable(table);
-
+    QImage img(width, height, QImage::Format_RGB32);
+    int pos = 0;
+    int value = 0;
     for (int y = 0; y < height;y++){
-        memcpy(img.scanLine(y), buffer + width * y, width);
+        QRgb *pixel = reinterpret_cast<QRgb *>(img.scanLine(y));
+        for (int x = 0; x < width;x++,pos++){
+            value = 255 - buffer[pos];
+            pixel[x] = qRgb(value, value ,value);
+        }
+        
     }
 
-    QImage out(width, height, QImage::Format_ARGB32);
-    QColor black(Qt::black);
-    out.fill(black.rgb());
-    out.setAlphaChannel(img);
-
-    return out;
+    return img;
 }
 
 static qint32 rle_decode(QDataStream & abr, char *buffer, qint32 height)

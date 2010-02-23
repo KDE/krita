@@ -230,6 +230,8 @@ private:
         {
             d = 0;
         }
+#else
+    Q_UNUSED(v);
 #endif
     }
 private:

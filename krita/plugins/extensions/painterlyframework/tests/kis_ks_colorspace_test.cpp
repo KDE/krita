@@ -103,7 +103,7 @@ void KisKSColorSpaceTest::testRegistry()
     */
     // Now with a profile
     cs = f->colorSpace(KisKSF32ColorSpace<4>::ColorModelId().id(), KisKSF32ColorSpace<4>::ColorDepthId().id(), p1);
-    QVERIFY2(cs != 0, "ColorSpace KS4 loaded - with custom profile");
+    QVERIFY2(cs != 0, "ColorSpace KS4 loaded - with custom profile"); // FIXME: Fails because this function dynamic_cast KisIlluminantProfile, but we have two KisIlluminantProfile the one from the profile, and the one that is statiscally linked into the test, meaning the dynamic_cast return 0
     cs = f->colorSpace(KisKSF32ColorSpace<6>::ColorModelId().id(), KisKSF32ColorSpace<6>::ColorDepthId().id(), p2);
     QVERIFY2(cs != 0, "ColorSpace KS6 loaded - with custom profile");
 

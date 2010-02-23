@@ -85,21 +85,40 @@ public:
                 }
 
                 // not transparent
-                if (srcAlpha != NATIVE_OPACITY_TRANSPARENT && srcAlpha >= dstAlpha) {
-                    if (!testChannelFlags) {
-                        for (uint i = 0; i < _CSTraits::channels_nb; i++) {
-                            if ((int)i != _CSTraits::alpha_pos) {
-                                d[i] = s[i];
-                            }
-                        }
-                    } else {
-                        for (uint i = 0; i < _CSTraits::channels_nb; i++) {
-                            if ((int)i != _CSTraits::alpha_pos && channelFlags.testBit(i)) {
-                                d[i] = s[i];
-                            }
-                        }
-                    }
-                    d[_CSTraits::alpha_pos] = srcAlpha;
+                if (srcAlpha != NATIVE_OPACITY_TRANSPARENT )
+                {
+                    if (srcAlpha >= dstAlpha) {
+                      if (!testChannelFlags) {
+                          for (uint i = 0; i < _CSTraits::channels_nb; i++) {
+                              if ((int)i != _CSTraits::alpha_pos) {
+                                  d[i] = s[i];
+                              }
+                          }
+                      } else {
+                          for (uint i = 0; i < _CSTraits::channels_nb; i++) {
+                              if ((int)i != _CSTraits::alpha_pos && channelFlags.testBit(i)) {
+                                  d[i] = s[i];
+                              }
+                          }
+                      }
+                      d[_CSTraits::alpha_pos] = srcAlpha;
+                  } else {
+                      qreal blend1 = srcAlpha / qreal(dstAlpha);
+                      qreal blend0 = 1.0 - blend1;
+                      if (!testChannelFlags) {
+                          for (uint i = 0; i < _CSTraits::channels_nb; i++) {
+                              if ((int)i != _CSTraits::alpha_pos) {
+                                  d[i] = d[i] * blend0 + s[i] * blend1;
+                              }
+                          }
+                      } else {
+                          for (uint i = 0; i < _CSTraits::channels_nb; i++) {
+                              if ((int)i != _CSTraits::alpha_pos && channelFlags.testBit(i)) {
+                                  d[i] = d[i] * blend0 + s[i] * blend1;
+                              }
+                          }
+                      }                      
+                  }
                 }
             }
 

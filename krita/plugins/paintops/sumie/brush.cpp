@@ -108,10 +108,7 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     m_dabAccessor = &accessor;
     m_dev = dev;
 
-    KisRandomAccessor laccessor = layer->createRandomAccessor((int)x1, (int)y1);
-    m_layerAccessor = &laccessor;
-    m_layerPixelSize = layer->colorSpace()->pixelSize();
-    m_layer = layer;
+    
 
     qreal inkDeplation;
     QVariant saturationVariant;
@@ -124,6 +121,7 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     rotateBristles(angle);
     // if this is first time the brush touches the canvas and we use soak the ink from canvas
     if ((m_counter == 1) && m_properties->useSoakInk){
+        KisRandomConstAccessor laccessor = layer->createRandomConstAccessor((int)x1, (int)y1);
         colorifyBristles(laccessor,layer->colorSpace() ,pi1.pos());
     }
 
@@ -279,7 +277,7 @@ inline void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoC
     int ix = qRound(wx);
     int iy = qRound(wy);
     m_dabAccessor->moveTo(ix, iy);
-    if (m_layer->colorSpace()->opacityU8(m_dabAccessor->rawData()) < color.opacityU8()) {
+    if (m_dev->colorSpace()->opacityU8(m_dabAccessor->rawData()) < color.opacityU8()) {
         memcpy(m_dabAccessor->rawData(), color.data(), m_pixelSize);
     }
     bristle->upIncrement();
@@ -328,7 +326,7 @@ double Brush::computeMousePressure(double distance)
 }
 
 
-void Brush::colorifyBristles(KisRandomAccessor& acc, KoColorSpace * cs, QPointF point)
+void Brush::colorifyBristles(KisRandomConstAccessor& acc, KoColorSpace * cs, QPointF point)
 {
     QPoint p = point.toPoint();
     KoColor color(cs);

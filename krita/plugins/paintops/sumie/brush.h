@@ -83,7 +83,7 @@ public:
     void oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
 
     /// similar to sample input color in spray
-    void colorifyBristles(KisRandomAccessor& acc, KoColorSpace * cs, QPointF point);
+    void colorifyBristles(KisRandomConstAccessor& acc, KoColorSpace * cs, QPointF point);
     
 private:
     const KisSumiProperties * m_properties;
@@ -100,11 +100,6 @@ private:
     KisPaintDeviceSP m_dev;
     KisRandomAccessor * m_dabAccessor;
     quint32 m_pixelSize;
-
-    // painter()->device()
-    KisPaintDeviceSP m_layer;
-    KisRandomAccessor * m_layerAccessor;
-    quint32 m_layerPixelSize;
 
     int m_counter;
 

@@ -169,7 +169,7 @@ void KisHLineIterator2::switchToTile(qint32 xInTile)
 
 void KisHLineIterator2::fetchTileDataForCache(KisTileInfo& kti, qint32 col, qint32 row)
 {
-    kti.tile = m_dataManager->getTile(col, row);
+    kti.tile = m_dataManager->getTile(col, row, m_writable);
     lockTile(kti.tile);
     kti.data = kti.tile->data();
 

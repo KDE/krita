@@ -104,6 +104,7 @@ void KisTiledDataManager::setDefaultPixel(const quint8 *defaultPixel)
                       defaultPixel);
     m_hashTable->setDefaultTileData(td);
     m_mementoManager->setDefaultTileData(td);
+    m_defaultTile = new KisTile(-1,-1, td, 0);
 
     memcpy(m_defaultPixel, defaultPixel, pixelSize());
 }
@@ -452,7 +453,7 @@ KisTileDataWrapper KisTiledDataManager::pixelPtr(qint32 x, qint32 y,
           if(newTile)
           updateExtent(tile->col(), tile->row());
     */
-    KisTileSP tile = getTile(col, row);
+    KisTileSP tile = getTile(col, row, type == KisTileDataWrapper::WRITE);
 
     return KisTileDataWrapper(tile,
                               pixelIndex*pixelSize(),

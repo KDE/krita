@@ -231,7 +231,7 @@ protected:
     // one row consists of m_rightCol - m_leftCol + 1 columns. The one column is represented by tile 
 private:
     QVector<KisTileInfo> m_tilesCache;
-    quint32 m_tilesCacheSize;
+    int m_tilesCacheSize;
 
 private:
     inline qint32 calcLeftInTile(qint32 col) const {

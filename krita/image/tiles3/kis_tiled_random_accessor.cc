@@ -113,7 +113,7 @@ const quint8 * KisTiledRandomAccessor::oldRawData() const
 KisTiledRandomAccessor::KisTileInfo* KisTiledRandomAccessor::fetchTileData(qint32 col, qint32 row)
 {
     KisTileInfo* kti = new KisTileInfo;
-    kti->tile = m_ktm->getTile(col, row);
+    kti->tile = m_ktm->getTile(col, row, m_writable);
     lockTile(kti->tile);
 
     kti->data = kti->tile->data();

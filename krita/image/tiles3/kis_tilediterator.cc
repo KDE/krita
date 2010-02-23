@@ -121,7 +121,7 @@ void KisTiledIterator::fetchTileData(qint32 col, qint32 row)
     if (m_oldTile)
         unlockTile(m_oldTile);
 
-    m_tile = m_dataManager->getTile(col, row);
+    m_tile = m_dataManager->getTile(col, row, m_writable);
     lockTile(m_tile);
 
     m_oldTile = m_dataManager->getOldTile(col, row);

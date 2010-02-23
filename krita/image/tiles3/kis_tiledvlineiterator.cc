@@ -170,7 +170,7 @@ void KisTiledVLineIterator::fetchTileData(qint32 col, qint32 row){
 KisTiledVLineIterator::KisTileInfo KisTiledVLineIterator::fetchTileDataForCache(qint32 col, qint32 row)
 {
     KisTileInfo kti;
-    kti.tile = m_dataManager->getTile(col, row);
+    kti.tile = m_dataManager->getTile(col, row, m_writable);
     lockTile(kti.tile);
     kti.data = kti.tile->data();
 

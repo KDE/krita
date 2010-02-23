@@ -1,29 +1,16 @@
-@operation(compose, inputs=2, arguments=float blend)
-{
-  if(blend == 1.0 )
-  {
-    @colorchannels( @out = @in(0) ; )
-  } else {
-    @colorchannels( @out = ( ( @in(0) - @in(1)) * blend + @in(1) ); )
-  }
-}
-
 @operation(compositeWithmask, inputs=2, arguments=int mask, optional_arguments=int opacity = 255)
 {
   // @in(0) -> dst
   // @in(1) -> src
-  @alphachannel( float blend = @in(1) / (1.0 * @unit); )
+  @alphachannel( @type newalpha = @in(1); )
   if(mask != 255)
   {
-    blend = (blend * mask) / 255;
+    newalpha = (newalpha * mask) / 255;
   }
   if( opacity != 255 )
   {
-      blend = (blend * opacity) / 255;
+      newalpha = (newalpha * opacity) / 255;
   }
-  @alphachannel(
-    @type newalpha = blend * @in(1);
-  )
   if( @alphachannel( @in(1) != 0 ) )
   {    
     if( newalpha >= @alphachannel( @in(0) ))

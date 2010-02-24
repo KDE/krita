@@ -451,7 +451,8 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader & 
 
 QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, const QString & fill,  const KoOdfStylesReader & stylesReader)
 {
-    QBrush tmpBrush;
+    QBrush tmpBrush; // default brush for "none" is a Qt::NoBrush
+
     if (fill == "solid") {
         tmpBrush.setStyle(static_cast<Qt::BrushStyle>(1));
         if (styleStack.hasProperty(KoXmlNS::draw, "fill-color"))
@@ -572,7 +573,7 @@ QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, cons
 
 QPen KoOdfGraphicStyles::loadOdfStrokeStyle(const KoStyleStack &styleStack, const QString & stroke, const KoOdfStylesReader & stylesReader)
 {
-    QPen tmpPen;
+    QPen tmpPen(Qt::NoPen); // default pen for "none" is a Qt::NoPen
 
     if (stroke == "solid" || stroke == "dash") {
         if (styleStack.hasProperty(KoXmlNS::svg, "stroke-color"))

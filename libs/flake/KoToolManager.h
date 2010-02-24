@@ -28,14 +28,12 @@
 #include <QCursor>
 #include <QList>
 
-class ToolHelper;
 class KoCanvasController;
 class KoCanvasBase;
 class KoToolBase;
 class KoCreateShapesTool;
 class KActionCollection;
 class KoShape;
-class KoToolProxy;
 class QToolButton;
 class KoInputDeviceHandlerEvent;
 class KoShapeLayer;

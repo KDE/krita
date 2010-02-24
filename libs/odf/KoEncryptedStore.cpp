@@ -71,9 +71,10 @@ const char* THUMBNAIL_FILE = "Thumbnails/thumbnail.png";
 KoEncryptedStore::KoEncryptedStore(const QString & filename, Mode mode, const QByteArray & appIdentification)
         : m_qcaInit(QCA::Initializer()), m_password(QCA::SecureArray()), m_filename(QString(filename)), m_manifestBuffer(QByteArray()), m_tempFile(NULL), m_bPasswordUsed(false), m_bPasswordDeclined(false), m_currentDir(NULL)
 {
+    Q_D(KoStore);
 
     m_pZip = new KZip(filename);
-    m_bGood = true;
+    d->good = true;
 
     init(mode, appIdentification);
 }
@@ -81,9 +82,10 @@ KoEncryptedStore::KoEncryptedStore(const QString & filename, Mode mode, const QB
 KoEncryptedStore::KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification)
         : m_qcaInit(QCA::Initializer()), m_password(QCA::SecureArray()), m_filename(QString()), m_manifestBuffer(QByteArray()), m_tempFile(NULL), m_bPasswordUsed(false), m_bPasswordDeclined(false), m_currentDir(NULL)
 {
+    Q_D(KoStore);
 
     m_pZip = new KZip(dev);
-    m_bGood = true;
+    d->good = true;
 
     init(mode, appIdentification);
 }
@@ -94,7 +96,7 @@ KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QStri
     Q_D(KoStore);
 
     d->window = window;
-    m_bGood = true;
+    d->good = true;
 
     if (mode == Read) {
         d->fileMode = KoStorePrivate::RemoteRead;
@@ -104,7 +106,7 @@ KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QStri
         d->fileMode = KoStorePrivate::RemoteWrite;
         m_tempFile = new KTemporaryFile();
         if (!m_tempFile->open()) {
-            m_bGood = false;
+            d->good = false;
         } else {
             d->localFileName = m_tempFile->fileName();
             m_pZip = new KZip(m_tempFile);
@@ -117,19 +119,20 @@ KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QStri
 
 bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
 {
+    Q_D(KoStore);
     bool checksumErrorShown = false;
     bool unreadableErrorShown = false;
-    if (!KoStore::init(mode) || !m_bGood) {
+    if (!KoStore::init(mode) || !d->good) {
         // This Store is already bad
-        m_bGood = false;
+        d->good = false;
         return false;
     }
-    m_mode = mode;
+    d->mode = mode;
     if (mode == Write) {
-        m_bGood = KoEncryptionChecker::isEncryptionSupported();
-        if (m_bGood) {
+        d->good = KoEncryptionChecker::isEncryptionSupported();
+        if (d->good) {
             if (!m_pZip->open(QIODevice::WriteOnly)) {
-                m_bGood = false;
+                d->good = false;
                 return false;
             }
             m_pZip->setCompression(KZip::NoCompression);
@@ -140,9 +143,9 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
             // We don't need the extra field in KOffice - so we leave it as "no extra field".
         }
     } else {
-        m_bGood = m_pZip->open(QIODevice::ReadOnly);
-        m_bGood &= m_pZip->directory() != 0;
-        if (!m_bGood) {
+        d->good = m_pZip->open(QIODevice::ReadOnly);
+        d->good &= m_pZip->directory() != 0;
+        if (!d->good) {
             return false;
         }
 
@@ -160,7 +163,7 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
             dev->close();
             delete dev;
             m_pZip->close();
-            m_bGood = false;
+            d->good = false;
             return false;
         }
         KoXmlElement xmlroot = xmldoc.documentElement();
@@ -169,7 +172,7 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
             dev->close();
             delete dev;
             m_pZip->close();
-            m_bGood = false;
+            d->good = false;
             return false;
         }
 
@@ -294,21 +297,22 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
         delete dev;
 
         if (isEncrypted() && !(QCA::isSupported("sha1") && QCA::isSupported("pbkdf2(sha1)") && QCA::isSupported("blowfish-cfb"))) {
-            m_bGood = false;
+            d->good = false;
             KMessage::message(KMessage::Error, i18n("QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can not be opened."));
         }
     }
 
-    return m_bGood;
+    return d->good;
 }
 
 bool KoEncryptedStore::doFinalize()
 {
-    if (m_bGood) {
+    Q_D(KoStore);
+    if (d->good) {
         if (isOpen()) {
             close();
         }
-        if (m_mode == Write) {
+        if (d->mode == Write) {
             // First change the manifest file and write it
             // We'll use the QDom classes here, since KoXmlReader and KoXmlWriter have no way of copying a complete xml-file
             // other than parsing it completely and rebuilding it.
@@ -440,7 +444,7 @@ KoEncryptedStore::~KoEncryptedStore()
 {
     Q_D(KoStore);
     /* Finalization of an encrypted store must happen earlier than deleting the zip. This rule normally is executed by KoStore, but too late to do any good.*/
-    if (!m_bFinalized) {
+    if (!d->finalized) {
         finalize();
     }
 
@@ -453,12 +457,13 @@ KoEncryptedStore::~KoEncryptedStore()
         KIO::NetAccess::removeTempFile(d->localFileName);
     }
 
-    delete m_stream;
+    delete d->stream;
 }
 
 bool KoEncryptedStore::isEncrypted()
 {
-    if (m_mode == Read) {
+    Q_D(KoStore);
+    if (d->mode == Read) {
         return !m_encryptionData.isEmpty();
     }
     return true;
@@ -485,33 +490,33 @@ bool KoEncryptedStore::openRead(const QString& name)
     }
     const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>(fileArchiveEntry);
 
-    delete m_stream;
-    m_stream = fileZipEntry->createDevice();
-    m_iSize = fileZipEntry->size();
+    delete d->stream;
+    d->stream = fileZipEntry->createDevice();
+    d->size = fileZipEntry->size();
     if (m_encryptionData.contains(name)) {
         // This file is encrypted, do some decryption first
         if (m_bPasswordDeclined) {
             // The user has already declined to give a password
             // Open the file as empty
-            m_stream->close();
-            delete m_stream;
-            m_stream = new QBuffer();
-            m_stream->open(QIODevice::ReadOnly);
-            m_iSize = 0;
+            d->stream->close();
+            delete d->stream;
+            d->stream = new QBuffer();
+            d->stream->open(QIODevice::ReadOnly);
+            d->size = 0;
             return true;
         }
-        QCA::SecureArray encryptedFile(m_stream->readAll());
-        if (encryptedFile.size() != m_iSize) {
+        QCA::SecureArray encryptedFile(d->stream->readAll());
+        if (encryptedFile.size() != d->size) {
             // Read error detected
-            m_stream->close();
-            delete m_stream;
-            m_stream = NULL;
+            d->stream->close();
+            delete d->stream;
+            d->stream = NULL;
             kWarning(s_area) << "read error";
             return false;
         }
-        m_stream->close();
-        delete m_stream;
-        m_stream = NULL;
+        d->stream->close();
+        delete d->stream;
+        d->stream = NULL;
         KoEncryptedStore_EncryptionData encData = m_encryptionData.value(name);
         QCA::SecureArray decrypted;
 
@@ -535,9 +540,9 @@ bool KoEncryptedStore::openRead(const QString& name)
                 dlg.setPrompt(i18n("Please enter the password to open this file."));
                 if (! dlg.exec()) {
                     m_bPasswordDeclined = true;
-                    m_stream = new QBuffer();
-                    m_stream->open(QIODevice::ReadOnly);
-                    m_iSize = 0;
+                    d->stream = new QBuffer();
+                    d->stream->open(QIODevice::ReadOnly);
+                    d->size = 0;
                     return true;
                 }
                 password = QCA::SecureArray(dlg.password().toUtf8());
@@ -585,18 +590,19 @@ bool KoEncryptedStore::openRead(const QString& name)
             return false;
         }
         static_cast<KFilterDev*>(resultDevice)->setSkipHeaders();
-        m_stream = resultDevice;
-        m_iSize = encData.filesize;
+        d->stream = resultDevice;
+        d->size = encData.filesize;
     }
-    m_stream->open(QIODevice::ReadOnly);
+    d->stream->open(QIODevice::ReadOnly);
 
     return true;
 }
 
 bool KoEncryptedStore::closeRead()
 {
-    delete m_stream;
-    m_stream = NULL;
+    Q_D(KoStore);
+    delete d->stream;
+    d->stream = NULL;
     return true;
 }
 
@@ -671,6 +677,7 @@ QString KoEncryptedStore::password()
 
 bool KoEncryptedStore::openWrite(const QString& name)
 {
+    Q_D(KoStore);
     if (bad())
         return false;
     if (isToBeEncrypted(name)) {
@@ -679,8 +686,8 @@ bool KoEncryptedStore::openWrite(const QString& name)
     } else {
         m_pZip->setCompression(KZip::DeflateCompression);
     }
-    m_stream = new QBuffer();
-    (static_cast< QBuffer* >(m_stream))->open(QIODevice::WriteOnly);
+    d->stream = new QBuffer();
+    (static_cast< QBuffer* >(d->stream))->open(QIODevice::WriteOnly);
     if (name == MANIFEST_FILE)
         return true;
     return m_pZip->prepareWriting(name, "", "", 0);
@@ -690,8 +697,8 @@ bool KoEncryptedStore::closeWrite()
 {
     Q_D(KoStore);
     bool passWasAsked = false;
-    if (m_sName == MANIFEST_FILE) {
-        m_manifestBuffer = static_cast<QBuffer*>(m_stream)->buffer();
+    if (d->fileName == MANIFEST_FILE) {
+        m_manifestBuffer = static_cast<QBuffer*>(d->stream)->buffer();
         return true;
     }
 
@@ -708,7 +715,7 @@ bool KoEncryptedStore::closeWrite()
             // TODO: This feels rather hackish. There should be a better way to do this.
             delete m_pZip;
             m_pZip = 0;
-            m_bGood = false;
+            d->good = false;
             return false;
         }
         m_password = QCA::SecureArray(dlg.password().toUtf8());
@@ -721,11 +728,11 @@ bool KoEncryptedStore::closeWrite()
     }
 
     QByteArray resultData;
-    if (m_sName == THUMBNAIL_FILE) {
+    if (d->fileName == THUMBNAIL_FILE) {
         // TODO: Replace with a generic 'encrypted'-thumbnail
-        resultData = static_cast<QBuffer*>(m_stream)->buffer();
-    } else if (!isToBeEncrypted(m_sName)) {
-        resultData = static_cast<QBuffer*>(m_stream)->buffer();
+        resultData = static_cast<QBuffer*>(d->stream)->buffer();
+    } else if (!isToBeEncrypted(d->fileName)) {
+        resultData = static_cast<QBuffer*>(d->stream)->buffer();
     } else {
         m_bPasswordUsed = true;
         // Build all cryptographic data
@@ -739,7 +746,7 @@ bool KoEncryptedStore::closeWrite()
         QCA::Cipher encrypter("blowfish", QCA::Cipher::CFB, QCA::Cipher::DefaultPadding, QCA::Encode, key, QCA::InitializationVector(encData.initVector));
 
         // Get the written data
-        QByteArray data = static_cast<QBuffer*>(m_stream)->buffer();
+        QByteArray data = static_cast<QBuffer*>(d->stream)->buffer();
         encData.filesize = data.size();
 
         // Compress the data
@@ -768,7 +775,7 @@ bool KoEncryptedStore::closeWrite()
         result += encrypter.final();
         resultData = result.toByteArray();
 
-        m_encryptionData.insert(m_sName, encData);
+        m_encryptionData.insert(d->fileName, encData);
     }
 
     if (!m_pZip->writeData(resultData.data(), resultData.size())) {
@@ -781,7 +788,8 @@ bool KoEncryptedStore::closeWrite()
 
 bool KoEncryptedStore::enterRelativeDirectory(const QString& dirName)
 {
-    if (m_mode == Read) {
+    Q_D(KoStore);
+    if (d->mode == Read) {
         if (!m_currentDir) {
             m_currentDir = m_pZip->directory(); // initialize
         }

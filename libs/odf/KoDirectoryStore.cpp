@@ -18,6 +18,7 @@
 */
 
 #include "KoDirectoryStore.h"
+#include "KoStore_p.h"
 
 #include <QFile>
 #include <QDir>
@@ -28,6 +29,7 @@
 KoDirectoryStore::KoDirectoryStore(const QString& path, Mode _mode)
         : m_basePath(path)
 {
+    Q_D(KoStore);
     const int pos = path.lastIndexOf('/');
     if (pos != -1 && pos != m_basePath.length() - 1)
         m_basePath = m_basePath.left(pos);
@@ -35,7 +37,7 @@ KoDirectoryStore::KoDirectoryStore(const QString& path, Mode _mode)
         m_basePath += '/';
     m_currentPath = m_basePath;
     kDebug(s_area) << "KoDirectoryStore::KoDirectoryStore base path:" << m_basePath;
-    m_bGood = init(_mode);
+    d->good = init(_mode);
 }
 
 KoDirectoryStore::~KoDirectoryStore()
@@ -59,6 +61,7 @@ bool KoDirectoryStore::init(Mode _mode)
 
 bool KoDirectoryStore::openReadOrWrite(const QString& name, QIODevice::OpenModeFlag iomode)
 {
+    Q_D(KoStore);
     //kDebug(s_area) <<"KoDirectoryStore::openReadOrWrite m_currentPath=" << m_currentPath <<" name=" << name;
     int pos = name.lastIndexOf('/');
     if (pos != -1) { // there are subdirs in the name -> maybe need to create them, when writing
@@ -70,14 +73,14 @@ bool KoDirectoryStore::openReadOrWrite(const QString& name, QIODevice::OpenModeF
         if (!ret)
             return false;
     }
-    m_stream = new QFile(m_basePath + name);
-    if (!m_stream->open(iomode)) {
-        delete m_stream;
-        m_stream = 0;
+    d->stream = new QFile(m_basePath + name);
+    if (!d->stream->open(iomode)) {
+        delete d->stream;
+        d->stream = 0;
         return false;
     }
     if (iomode == QIODevice::ReadOnly)
-        m_iSize = m_stream->size();
+        d->size = d->stream->size();
     return true;
 }
 

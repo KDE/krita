@@ -1,4 +1,3 @@
-// -*- c-basic-offset: 2 -*-
 /* This file is part of the KDE project
    Copyright 2004 Nicolas GOUTTE <goutte@kde.org>
    
@@ -22,6 +21,8 @@
 #define __koStore_p_h_
 
 
+#include "KoStore.h"
+
 #include <QString>
 
 #include <kurl.h>
@@ -42,7 +43,36 @@ public:
     KUrl url;
     FileMode fileMode;
     QString localFileName;
-    QWidget* window;
+    QWidget *window;
+
+    KoStore::Mode mode;
+
+    /// Store the filenames (with full path inside the archive) when writing, to avoid duplicates
+    QStringList filesList;
+
+    /// The "current directory" (path)
+    QStringList currentPath;
+
+    /// Current filename (between an open() and a close())
+    QString fileName;
+    /// Current size of the file named m_sName
+    qint64 size;
+
+    /// The stream for the current read or write operation
+    QIODevice *stream;
+
+    bool isOpen;
+    /// Must be set by the constructor.
+    bool good;
+    bool finalized;
+
+    QStack<QString> directoryStack;
+
+    mutable enum {
+        NamingVersion21,
+        NamingVersion22,
+        NamingVersionRaw  ///< Never expand file and directory names
+    } namingVersion;
 };
 
 #endif

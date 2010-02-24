@@ -24,6 +24,8 @@ Graphics:
 - Karbon     -  Vector graphics 
 - Krita      -  Advanced drawing and image manipulation
 
+More information about Krita can be found at http://www.krita.org
+
 Management:
 - KPlato     -  Project planning
 
@@ -126,11 +128,16 @@ Contact info
 
 User mailing list:      mailto:koffice@kde.org
 Developer mailing list: mailto:koffice-devel@kde.org
+Krita mailing list:     mailto:kimageshop@kde.org
 
 Subscribing and list information: http://www.kde.org/mailinglists
 Archives: http://lists.kde.org
 
 IRC channel for developers:  #koffice on irc.freenode.org
+IRC channel for Krita: #krita on irc.freenode.org
+
+KOffice forums:         http://forum.kde.org/viewforum.php?f=96
+Krita forums:           http://forum.kde.org/viewforum.php?f=136
 
 If you have questions about this README file or about KOffice in general,
 please mail to the KOffice mailing list: mailto:koffice@kde.org

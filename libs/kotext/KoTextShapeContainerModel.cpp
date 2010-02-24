@@ -42,14 +42,14 @@ public:
 
 Relation::~Relation()
 {
-    delete anchor;
 }
 
 class KoTextShapeContainerModel::Private
 {
 public:
-    Private() {}
+    Private(){}
     QHash<KoShape*, Relation*> children;
+    QList<KoTextAnchor *> shapeRemovedAnchors;
 };
 
 KoTextShapeContainerModel::KoTextShapeContainerModel()
@@ -68,12 +68,27 @@ void KoTextShapeContainerModel::add(KoShape *child)
         return;
     Relation *relation = new Relation(child);
     d->children.insert(child, relation);
+   
+    KoTextAnchor *toBeAddedAnchor = 0; 
+    foreach (KoTextAnchor *anchor, d->shapeRemovedAnchors) {
+        if (child == anchor->shape()) {
+            toBeAddedAnchor = anchor;
+            break;
+        }
+    }
+
+    if (toBeAddedAnchor) {
+        addAnchor(toBeAddedAnchor);
+        d->shapeRemovedAnchors.removeAll(toBeAddedAnchor);
+    }
 }
 
 void KoTextShapeContainerModel::remove(KoShape *child)
 {
     Relation *relation = d->children.value(child);
     d->children.remove(child);
+    if (relation && relation->anchor)
+        d->shapeRemovedAnchors.append(relation->anchor);
     delete relation;
 }
 
@@ -136,8 +151,10 @@ void KoTextShapeContainerModel::addAnchor(KoTextAnchor *anchor)
 void KoTextShapeContainerModel::removeAnchor(KoTextAnchor *anchor)
 {
     Relation *relation = d->children.value(anchor->shape());
-    if (relation)
+    if (relation) {
         relation->anchor = 0;
+        d->shapeRemovedAnchors.removeAll(anchor);
+    }
 }
 
 void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)

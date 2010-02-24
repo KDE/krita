@@ -66,6 +66,7 @@ SET ( textshape_SRCS
     commands/TextPasteCommand.cpp
     commands/TextCutCommand.cpp
     commands/ShowChangesCommand.cpp
+    commands/ChangeTrackedDeleteCommand.cpp
     commands/DeleteCommand.cpp
     commands/AcceptChangeCommand.cpp
     commands/RejectChangeCommand.cpp

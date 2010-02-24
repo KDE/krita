@@ -30,6 +30,7 @@
 
 #include <QApplication>
 #include <QMimeData>
+#include "ChangeTrackedDeleteCommand.h"
 #include "DeleteCommand.h"
 #include <KAction>
 
@@ -65,9 +66,9 @@ void TextPasteCommand::redo()
         m_first = false;
         if (editor->hasSelection()) { //TODO
             if (m_tool->m_actionShowChanges->isChecked())
-                editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_tool));
+                editor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_tool));
             else
-                editor->deleteChar();
+                editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_tool));
         }
 
         // check for mime type

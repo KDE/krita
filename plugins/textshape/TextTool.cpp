@@ -37,6 +37,7 @@
 #include "commands/ChangeListLevelCommand.h"
 #include "commands/ListItemNumberingCommand.h"
 #include "commands/ShowChangesCommand.h"
+#include "commands/ChangeTrackedDeleteCommand.h"
 #include "commands/DeleteCommand.h"
 
 #include <KoCanvasBase.h>
@@ -756,9 +757,9 @@ void TextTool::copy() const
 void TextTool::deleteSelection()
 {
     if (m_actionRecordChanges->isChecked())
-      m_textEditor->addCommand(new DeleteCommand(DeleteCommand::NextChar, this));
+      m_textEditor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, this));
     else
-      m_textEditor->deleteChar();
+      m_textEditor->addCommand(new DeleteCommand(DeleteCommand::NextChar, this));
     editingPluginEvents();
 }
 
@@ -911,9 +912,9 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             if (!m_textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) // delete prev word.
                 m_textEditor->movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
             if (m_actionRecordChanges->isChecked())
-              m_textEditor->addCommand(new DeleteCommand(DeleteCommand::PreviousChar, this));
+              m_textEditor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar, this));
             else
-              m_textEditor->deletePreviousChar();
+              m_textEditor->addCommand(new DeleteCommand(DeleteCommand::PreviousChar, this));
             editingPluginEvents();
         }
         ensureCursorVisible();
@@ -930,9 +931,9 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         // the event only gets through when the Del is not used in the app
         // if the app forwards Del then deleteSelection is used
         if (m_actionRecordChanges->isChecked())
-          m_textEditor->addCommand(new DeleteCommand(DeleteCommand::NextChar, this));
+          m_textEditor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, this));
         else
-          m_textEditor->deleteChar();
+          m_textEditor->addCommand(new DeleteCommand(DeleteCommand::NextChar, this));
         editingPluginEvents();
     } else if ((event->key() == Qt::Key_Left) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
         moveOperation = QTextCursor::Left;
@@ -1087,9 +1088,9 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
         m_textEditor->setPosition(m_textEditor->position() + event->replacementStart());
         for (int i = event->replacementLength(); i > 0; --i) {
             if (m_actionRecordChanges->isChecked())
-              m_textEditor->addCommand(new DeleteCommand(DeleteCommand::NextChar, this));
+              m_textEditor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, this));
             else
-              m_textEditor->deleteChar();
+              m_textEditor->addCommand(new DeleteCommand(DeleteCommand::NextChar, this));
         }
     }
     QTextBlock block = m_textEditor->block();

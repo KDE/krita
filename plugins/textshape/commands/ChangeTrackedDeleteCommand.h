@@ -17,20 +17,18 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.*/
 
-#ifndef DELETECOMMAND_H
-#define DELETECOMMAND_H
+#ifndef CHANGETRACKEDDELETECOMMAND_H
+#define CHANGETRACKEDDELETECOMMAND_H
 
 #include <QUndoStack>
 #include "TextCommandBase.h"
-#include <QTextCharFormat>
 #include <QList>
 
 class TextTool;
 class QTextCursor;
-class KoInlineObject;
-class KoShape;
+class KoChangeTrackerElement;
 
-class DeleteCommand : public TextCommandBase
+class ChangeTrackedDeleteCommand : public TextCommandBase
 {
 public:
     enum DeleteMode {
@@ -38,33 +36,27 @@ public:
         NextChar
     };
 
-    DeleteCommand(DeleteMode mode, TextTool *tool, QUndoCommand* parent = 0);
-    ~DeleteCommand();
+    ChangeTrackedDeleteCommand(DeleteMode mode, TextTool *tool, QUndoCommand* parent = 0);
+    ~ChangeTrackedDeleteCommand();
 
     virtual void undo();
     virtual void redo();
 
     virtual int id() const;
-    virtual bool mergeWith(const QUndoCommand *command);
+    virtual bool mergeWith ( const QUndoCommand *command);
 
 private:
     TextTool *m_tool;
-    QList<QUndoCommand *> m_shapeDeleteCommands;
-    QList<KoInlineObject *> m_invalidInlineObjects;
     bool m_first;
     bool m_undone;
     DeleteMode m_mode;
-    int m_position;
-    int m_length;
-    QTextCharFormat m_format;
-    bool m_multipleFormatDeletion;
+    QList<int> m_removedElements;
+    int m_addedChangeElement;
 
     virtual void deleteChar();
     virtual void deletePreviousChar();
     virtual void deleteSelection(QTextCursor &selection);
-    virtual void deleteInlineObjects(QTextCursor &selection);
-    virtual void deleteTextAnchor(KoInlineObject *object);
-    virtual bool checkMerge(const QUndoCommand *command);
+    virtual void removeChangeElement(int changeId);
 };
 
-#endif // DELTECOMMAND_H
+#endif // CHANGETRACKEDDELTECOMMAND_H

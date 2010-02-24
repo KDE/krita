@@ -272,6 +272,7 @@ private:
     friend class TextPasteCommand;
     friend class TextCutCommand;
     friend class ShowChangesCommand;
+    friend class ChangeTrackedDeleteCommand;
     friend class DeleteCommand;
     TextShape *m_textShape;
     KoTextShapeData *m_textShapeData;

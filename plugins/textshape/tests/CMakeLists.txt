@@ -34,6 +34,7 @@ set(TestChangeListCommand_test_SRCS
     ../commands/TextCommandBase.cpp
     ../commands/TextPasteCommand.cpp
     ../commands/TextCutCommand.cpp
+    ../commands/ChangeTrackedDeleteCommand.cpp
     ../commands/DeleteCommand.cpp
     ../commands/ShowChangesCommand.cpp
     ../commands/AcceptChangeCommand.cpp

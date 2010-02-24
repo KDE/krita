@@ -34,6 +34,7 @@ class KisFixedPaintDevice;
 struct KisCurveProperties{
     QVector<qreal> curveData;
     quint16 diameter;
+    qreal aspect;
     qreal scale;
     KisCubicCurve curve;
 };
@@ -45,12 +46,13 @@ public:
     KisCurveMask();
     ~KisCurveMask(){};
     void mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal scale, qreal rotation, qreal xSubpixel, qreal ySubpixel);
+    
     void setProperties(KisCurveProperties * properties){
         m_properties = properties;
     }
 
     QPointF hotSpot(qreal scale){
-        return QPointF(m_properties->diameter * scale * 0.5,m_properties->diameter * scale * 0.5);
+        return QPointF(m_properties->diameter * scale * 0.5,m_properties->diameter * m_properties->aspect * scale * 0.5);
     }
     
     int maskWidth(qreal scale){
@@ -58,12 +60,24 @@ public:
     }
     
     int maskHeight(qreal scale){
-        return qRound(m_properties->diameter * scale);
+        return qRound(m_properties->diameter * m_properties->aspect  * scale);
     }
     
 
 private:    
     KisCurveProperties * m_properties;
+    
+    qreal m_majorAxis;
+    qreal m_minorAxis;
+    qreal m_inverseScale;
+    qreal m_maskRadius;
+    
+    inline qreal valueAt(qreal x, qreal y);
+    // used for ellipse canonical implicit equation (x/a)^2 + (y/b)^2 = 1
+    inline qreal norme(qreal x,qreal y){
+        return x*x + y*y; 
+    }
+    
 };
 
 #endif

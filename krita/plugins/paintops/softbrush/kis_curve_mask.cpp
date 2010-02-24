@@ -58,40 +58,51 @@ void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal sc
 
     quint8* dabPointer = dab->data();
     
-    double inverseScale = 1.0 / scale;
-
-    // maximal distnace in the circle is radius^2
-    qreal border = (dstWidth * 0.5) * (dstWidth * 0.5);
-   
+    // major axis
+    m_majorAxis = 2.0/dstWidth;
+    // minor axis
+    m_minorAxis = 2.0/dstHeight;
+    // inverse square
+    m_inverseScale = 1.0 / scale;
+    // amount of precomputed data
+    m_maskRadius = 0.5 * dstWidth;
+    
     for (int y = 0; y <  dstHeight; y++){
         for (int x = 0; x < dstWidth; x++){
             double maskX = (x - centerX);
             double maskY = (y - centerY);
-            
-            qreal dist = maskX*maskX + maskY*maskY;
-            if (dist <= border){
-                
-                qreal distance = sqrt(dist);
-                distance *= inverseScale; // apply scale
-                quint16 alphaValue = distance;
-                qreal alphaValueF = distance - alphaValue;
 
-                if (m_properties->curveData.size() <= (alphaValue+1)){
-                    kDebug() << "[ " << maskX << ", " << maskY << " ] distance: " << distance << "size: " << m_properties->curveData.size();
-                    continue;
-                }
-           
-                qreal alpha = (
-                (1.0 - alphaValueF) * m_properties->curveData.at(alphaValue) + 
-                    alphaValueF * m_properties->curveData.at(alphaValue+1)); 
-            
+            qreal alpha = valueAt(maskX, maskY);
+            if (alpha != OPACITY_OPAQUE_F)
+            {
                 dabColor.setOpacity(alpha);
                 memcpy(dabPointer,dabColor.data(), pixelSize);
-                
             }
             dabPointer += pixelSize;
         }
     }
 }
 
+qreal KisCurveMask::valueAt(qreal x, qreal y)
+{
+    qreal dist = norme(x * m_majorAxis, y * m_minorAxis);
+    if (dist <= 1.0){
+        qreal distance = dist * m_maskRadius;
+        distance *= m_inverseScale; // apply scale
+    
+        quint16 alphaValue = distance;
+        qreal alphaValueF = distance - alphaValue;
+
+        if (m_properties->curveData.size() <= (alphaValue+1)){
+            kDebug() << "[ " << x << ", " << y << " ] distance: " << distance << "size: " << m_properties->curveData.size();
+            return OPACITY_TRANSPARENT_F;
+        }
+           
+        qreal alpha = (
+            (1.0 - alphaValueF) * m_properties->curveData.at(alphaValue) + 
+                    alphaValueF * m_properties->curveData.at(alphaValue+1));
+        return alpha;
+    }            
+    return OPACITY_TRANSPARENT_F;
+}
 

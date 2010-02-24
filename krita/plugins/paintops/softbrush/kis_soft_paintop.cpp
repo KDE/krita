@@ -53,6 +53,7 @@ KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainte
     if (m_brushType == CURVE){
 
         m_curveMaskProperties.diameter = quint16(settings->getDouble(SOFTCURVE_DIAMETER));
+        m_curveMaskProperties.aspect = settings->getDouble(SOFTCURVE_ASPECT);
         m_curveMaskProperties.scale = settings->getDouble(SOFTCURVE_SCALE);    
         m_curveMaskProperties.curve = settings->getCubicCurve(SOFTCURVE_CURVE);
         
@@ -62,7 +63,7 @@ KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainte
         m_curveMask.setProperties(&m_curveMaskProperties);
 
         m_xSpacing = qMax(0.5,settings->getDouble(SOFTCURVE_SPACING) * m_radius * m_curveMaskProperties.scale);
-        m_ySpacing = qMax(0.5,settings->getDouble(SOFTCURVE_SPACING) * m_radius * m_curveMaskProperties.scale);
+        m_ySpacing = qMax(0.5,settings->getDouble(SOFTCURVE_SPACING) * m_radius * m_curveMaskProperties.aspect * m_curveMaskProperties.scale);
 
         m_gaussBrush.distMask = 0;
     }else if (m_brushType == GAUSS){
@@ -149,12 +150,12 @@ void KisSoftPaintOp::paintAt(const KisPaintInformation& info)
         double subPixelX;
         qint32 y;
         double subPixelY;
-
         QPointF pos = info.pos() - m_curveMask.hotSpot(m_curveMaskProperties.scale);
         
         splitCoordinate(pos.x(), &x, &subPixelX);
         splitCoordinate(pos.y(), &y, &subPixelY);
 
+        
         m_curveMask.mask(dab,painter()->paintColor(),m_curveMaskProperties.scale,0.0,subPixelX,subPixelY);
         painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
         return;

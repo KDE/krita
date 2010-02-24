@@ -576,6 +576,10 @@ QPen KoOdfGraphicStyles::loadOdfStrokeStyle(const KoStyleStack &styleStack, cons
     QPen tmpPen(Qt::NoPen); // default pen for "none" is a Qt::NoPen
 
     if (stroke == "solid" || stroke == "dash") {
+        // If solid or dash is set then we assume that the color is black and the penWidth
+        // is zero till defined otherwise with the following attributes.
+        tmpPen = QPen();
+
         if (styleStack.hasProperty(KoXmlNS::svg, "stroke-color"))
             tmpPen.setColor(styleStack.property(KoXmlNS::svg, "stroke-color"));
         if (styleStack.hasProperty(KoXmlNS::svg, "stroke-opacity")) {

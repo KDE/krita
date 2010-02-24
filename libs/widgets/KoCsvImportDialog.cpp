@@ -664,15 +664,15 @@ void KoCsvImportDialog::delimiterClicked(int id)
 {
     const QButtonGroup* group = d->dialog->m_radioComma->group();
     if (id == group->id(d->dialog->m_radioComma) )
-        d->delimiter = ",";
+        d->delimiter = ',';
     else if (id == group->id(d->dialog->m_radioOther))
         d->delimiter = d->dialog->m_delimiterEdit->text();
     else if (id == group->id(d->dialog->m_radioTab))
-        d->delimiter = "\t";
+        d->delimiter = '\t';
     else if (id == group->id(d->dialog->m_radioSpace))
-        d->delimiter = " ";
+        d->delimiter = ' ';
     else if (id == group->id(d->dialog->m_radioSemicolon))
-        d->delimiter = ";";
+        d->delimiter = ';';
 
     kDebug(30501) << "Delimiter" << d->delimiter << "selected.";
     d->fillTable();

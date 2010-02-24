@@ -446,7 +446,7 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
             break;
         case KoParagraphStyle::IsListHeader:
             key = "list-header";
-            value = "1";
+            value = '1';
             break;
         case KoParagraphStyle::ListLevel:
             key = "list-level";

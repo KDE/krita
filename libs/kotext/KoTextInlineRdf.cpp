@@ -190,8 +190,8 @@ QString KoTextInlineRdf::createXmlId(KoXmlWriter *writer)
 {
     Q_UNUSED(writer);
     QString uuid = QUuid::createUuid().toString();
-    uuid.replace("{", QString());
-    uuid.replace("}", QString());
+    uuid.remove('{');
+    uuid.remove('}');
     QString ret = "rdfid-" + uuid;
     kDebug(30015) << "createXmlId() ret:" << ret;
     return ret;
@@ -240,7 +240,7 @@ QString KoTextInlineRdf::object()
         cursor.setPosition(d->bookmark->position(), QTextCursor::MoveAnchor);
         cursor.setPosition(e->position(), QTextCursor::KeepAnchor);
         QString ret = cursor.QTextCursor::selectedText();
-        return ret.replace(QChar::ObjectReplacementCharacter, QString());
+        return ret.remove(QChar::ObjectReplacementCharacter);
     }
     if (d->kotextmeta && d->document) {
         KoTextMeta *e = d->kotextmeta->endBookmark();
@@ -253,7 +253,7 @@ QString KoTextInlineRdf::object()
             cursor.setPosition(d->kotextmeta->position(), QTextCursor::MoveAnchor);
             cursor.setPosition(e->position(), QTextCursor::KeepAnchor);
             QString ret = cursor.selectedText();
-            return ret.replace(QChar::ObjectReplacementCharacter, QString());
+            return ret.remove(QChar::ObjectReplacementCharacter);
         }
     }
     if (d->cell.isValid() && d->document) {
@@ -264,7 +264,7 @@ QString KoTextInlineRdf::object()
         cursor.setPosition(b.position(), QTextCursor::MoveAnchor);
         cursor.setPosition(e.position(),  QTextCursor::KeepAnchor);
         QString ret = cursor.selectedText();
-        return ret.replace(QChar::ObjectReplacementCharacter, QString());
+        return ret.remove(QChar::ObjectReplacementCharacter);
     }
 
     return d->block.text();

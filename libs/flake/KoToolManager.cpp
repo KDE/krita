@@ -377,6 +377,10 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
         }
     }
 
+    KoToolProxy *proxy = proxies.value(controller->canvas());
+    if (proxy)
+        proxy->setActiveTool(0);
+
     QList<KoToolBase *> tools;
     foreach(CanvasData *cd, canvasses.value(controller)) {
         foreach(KoToolBase *tool, cd->allTools)

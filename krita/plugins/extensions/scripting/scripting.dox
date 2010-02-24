@@ -10,9 +10,10 @@
  * Krita offers a complete handbook which includes detailed informations
  * about the scripting API, examples and more.
  *
- * @see http://www.koffice.org/krita
+ * @see http://www.krita.org
  * @see http://docs.kde.org/development/en/koffice/krita/
  * @see http://techbase.kde.org/Development/Tutorials/Krita_Scripting
+ * @see http://userbase.kde.org/Krita
  *
  * @section Objects
  *

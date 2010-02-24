@@ -32,10 +32,55 @@ class QWidget;
 class KoStorePrivate
 {
 public:
-    KoStorePrivate() : fileMode(Local), window(0) {}
+    KoStorePrivate(KoStore *qq)
+        : q(qq),
+        fileMode(Local),
+        window(0),
+        size(0),
+        stream(0),
+        isOpen(false),
+        good(false),
+        finalized(false)
+    {
+    }
 
     enum FileMode { /*Bad=0,*/ Local = 1, RemoteRead, RemoteWrite };
 
+    /**
+     * Conversion routine
+     * @param _internalNaming name used internally : "root", "tar:/0", ...
+     * @return the name used in the file, more user-friendly ("maindoc.xml",
+     *         "part0/maindoc.xml", ...)
+     * Examples:
+     *
+     * tar:/0 is saved as part0/maindoc.xml
+     * tar:/0/1 is saved as part0/part1/maindoc.xml
+     * tar:/0/1/pictures/picture0.png is saved as part0/part1/pictures/picture0.png
+     *
+     * see specification (koffice/lib/store/SPEC) for details.
+     */
+    QString toExternalNaming(const QString &internalNaming) const;
+
+    /**
+     *  Expands a full path name for a stream (directories+filename)
+     */
+    QString expandEncodedPath(const QString &intern) const;
+
+    /**
+     * Expands only directory names(!)
+     * Needed for the path handling code, as we only operate on internal names
+     */
+    QString expandEncodedDirectory(const QString &intern) const;
+
+    /**
+     * Enter *one* single directory. Nothing like foo/bar/bleh allowed.
+     * Performs some checking when in Read mode
+     */
+    bool enterDirectoryInternal(const QString &directory);
+
+    bool extractFile(const QString &sourceName, QIODevice &buffer);
+
+    KoStore *q;
     /**
      * original URL of the remote file
      * (undefined for a local file)

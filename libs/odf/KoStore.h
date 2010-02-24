@@ -361,43 +361,6 @@ protected:
      */
     virtual bool fileExists(const QString &absPath) const = 0;
 
-private:
-    static Backend determineBackend(QIODevice *device);
-
-    /**
-     * Conversion routine
-     * @param _internalNaming name used internally : "root", "tar:/0", ...
-     * @return the name used in the file, more user-friendly ("maindoc.xml",
-     *         "part0/maindoc.xml", ...)
-     * Examples:
-     *
-     * tar:/0 is saved as part0/maindoc.xml
-     * tar:/0/1 is saved as part0/part1/maindoc.xml
-     * tar:/0/1/pictures/picture0.png is saved as part0/part1/pictures/picture0.png
-     *
-     * see specification (koffice/lib/store/SPEC) for details.
-     */
-    QString toExternalNaming(const QString &internalNaming) const;
-
-    /**
-     *  Expands a full path name for a stream (directories+filename)
-     */
-    QString expandEncodedPath(const QString &intern) const;
-
-    /**
-     * Expands only directory names(!)
-     * Needed for the path handling code, as we only operate on internal names
-     */
-    QString expandEncodedDirectory(const QString &intern) const;
-
-    /**
-     * Enter *one* single directory. Nothing like foo/bar/bleh allowed.
-     * Performs some checking when in Read mode
-     */
-    bool enterDirectoryInternal(const QString &directory);
-
-    bool extractFile(const QString &sourceName, QIODevice &buffer);
-
 protected:
     KoStorePrivate *d_ptr;
 

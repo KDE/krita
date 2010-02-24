@@ -43,15 +43,15 @@
 
 #define DefaultFormat KoStore::Zip
 
-KoStore::Backend KoStore::determineBackend(QIODevice *dev)
+static KoStore::Backend determineBackend(QIODevice *dev)
 {
     unsigned char buf[5];
     if (dev->read((char *)buf, 4) < 4)
         return DefaultFormat; // will create a "bad" store (bad()==true)
     if (buf[0] == 0037 && buf[1] == 0213)   // gzip -> tar.gz
-        return Tar;
+        return KoStore::Tar;
     if (buf[0] == 'P' && buf[1] == 'K' && buf[2] == 3 && buf[3] == 4)
-        return Zip;
+        return KoStore::Zip;
     return DefaultFormat; // fallback
 }
 
@@ -191,7 +191,8 @@ const char* const ROOTPART = "root";
 const char* const MAINNAME = "maindoc.xml";
 }
 
-KoStore::KoStore() : d_ptr(new KoStorePrivate)
+KoStore::KoStore()
+    : d_ptr(new KoStorePrivate(this))
 {
 }
 
@@ -228,7 +229,7 @@ bool KoStore::open(const QString & _name)
 {
     Q_D(KoStore);
     // This also converts from relative to absolute, i.e. merges the currentPath()
-    d->fileName = toExternalNaming(_name);
+    d->fileName = d->toExternalNaming(_name);
 
     if (d->isOpen) {
         kWarning(30002) << "Store is already opened, missing close";
@@ -374,19 +375,20 @@ qint64 KoStore::size() const
     return d->size;
 }
 
-bool KoStore::enterDirectory(const QString& directory)
+bool KoStore::enterDirectory(const QString &directory)
 {
+    Q_D(KoStore);
     //kDebug(30002) <<"enterDirectory" << directory;
     int pos;
     bool success = true;
     QString tmp(directory);
 
     while ((pos = tmp.indexOf('/')) != -1 &&
-            (success = enterDirectoryInternal(tmp.left(pos))))
+            (success = d->enterDirectoryInternal(tmp.left(pos))))
         tmp = tmp.mid(pos + 1);
 
     if (success && !tmp.isEmpty())
-        return enterDirectoryInternal(tmp);
+        return d->enterDirectoryInternal(tmp);
     return success;
 }
 
@@ -398,12 +400,13 @@ bool KoStore::leaveDirectory()
 
     d->currentPath.pop_back();
 
-    return enterAbsoluteDirectory(expandEncodedDirectory(currentPath()));
+    return enterAbsoluteDirectory(d->expandEncodedDirectory(currentPath()));
 }
 
 QString KoStore::currentDirectory() const
 {
-    return expandEncodedDirectory(currentPath());
+    Q_D(const KoStore);
+    return d->expandEncodedDirectory(currentPath());
 }
 
 QString KoStore::currentPath() const
@@ -498,24 +501,26 @@ bool KoStore::addDataToFile(QByteArray &buffer, const QString &destName)
 
 bool KoStore::extractFile(const QString &srcName, const QString &fileName)
 {
+    Q_D(KoStore);
     QFile file(fileName);
-    return extractFile(srcName, file);
+    return d->extractFile(srcName, file);
 }
 
 
 bool KoStore::extractFile(const QString &srcName, QByteArray &data)
 {
+    Q_D(KoStore);
     QBuffer buffer(&data);
-    return extractFile(srcName, buffer);
+    return d->extractFile(srcName, buffer);
 }
 
-bool KoStore::extractFile(const QString &srcName, QIODevice &buffer)
+bool KoStorePrivate::extractFile(const QString &srcName, QIODevice &buffer)
 {
-    if (!open(srcName))
+    if (!q->open(srcName))
         return false;
 
     if (!buffer.open(QIODevice::WriteOnly)) {
-        close();
+        q->close();
         return false;
     }
     // ### This could use KArchive::copy or something, no?
@@ -523,15 +528,15 @@ bool KoStore::extractFile(const QString &srcName, QIODevice &buffer)
     QByteArray data;
     data.resize(8 * 1024);
     uint total = 0;
-    for (int block = 0; (block = read(data.data(), data.size())) > 0; total += block) {
+    for (int block = 0; (block = q->read(data.data(), data.size())) > 0; total += block) {
         buffer.write(data.data(), block);
     }
 
-    if (size() != static_cast<qint64>(-1))
-        Q_ASSERT(total == size());
+    if (q->size() != static_cast<qint64>(-1))
+        Q_ASSERT(total == q->size());
 
     buffer.close();
-    close();
+    q->close();
 
     return true;
 }
@@ -555,26 +560,25 @@ bool KoStore::atEnd() const
 }
 
 // See the specification for details of what this function does.
-QString KoStore::toExternalNaming(const QString & _internalNaming) const
+QString KoStorePrivate::toExternalNaming(const QString & _internalNaming) const
 {
     if (_internalNaming == ROOTPART)
-        return expandEncodedDirectory(currentPath()) + MAINNAME;
+        return expandEncodedDirectory(q->currentPath()) + MAINNAME;
 
     QString intern;
     if (_internalNaming.startsWith("tar:/"))     // absolute reference
         intern = _internalNaming.mid(5);   // remove protocol
     else
-        intern = currentPath() + _internalNaming;
+        intern = q->currentPath() + _internalNaming;
 
     return expandEncodedPath(intern);
 }
 
-QString KoStore::expandEncodedPath(const QString& _intern) const
+QString KoStorePrivate::expandEncodedPath(const QString& _intern) const
 {
-    Q_D(const KoStore);
     QString intern = _intern;
 
-    if (d->namingVersion == KoStorePrivate::NamingVersionRaw)
+    if (namingVersion == KoStorePrivate::NamingVersionRaw)
         return intern;
 
     QString result;
@@ -590,26 +594,25 @@ QString KoStore::expandEncodedPath(const QString& _intern) const
     if (QChar(intern.at(0)).isDigit()) {
         // If this is the first part name, check if we have a store with
         // old-style names.
-        if ((d->namingVersion == KoStorePrivate::NamingVersion22) &&
-                (d->mode == Read) &&
-                (fileExists(result + "part" + intern + ".xml")))
-            d->namingVersion = KoStorePrivate::NamingVersion21;
+        if (namingVersion == KoStorePrivate::NamingVersion22
+                && mode == KoStore::Read && q->fileExists(result + "part" + intern + ".xml"))
+            namingVersion = KoStorePrivate::NamingVersion21;
 
-        if (d->namingVersion == KoStorePrivate::NamingVersion21)
+        if (namingVersion == KoStorePrivate::NamingVersion21)
             result = result + "part" + intern + ".xml";
         else
             result = result + "part" + intern + '/' + MAINNAME;
-    } else
+    } else {
         result += intern;
+    }
     return result;
 }
 
-QString KoStore::expandEncodedDirectory(const QString& _intern) const
+QString KoStorePrivate::expandEncodedDirectory(const QString& _intern) const
 {
-    Q_D(const KoStore);
     QString intern = _intern;
 
-    if (d->namingVersion == KoStorePrivate::NamingVersionRaw)
+    if (namingVersion == KoStorePrivate::NamingVersionRaw)
         return intern;
 
     QString result;
@@ -627,11 +630,10 @@ QString KoStore::expandEncodedDirectory(const QString& _intern) const
     return result;
 }
 
-bool KoStore::enterDirectoryInternal(const QString& directory)
+bool KoStorePrivate::enterDirectoryInternal(const QString &directory)
 {
-    Q_D(KoStore);
-    if (enterRelativeDirectory(expandEncodedDirectory(directory))) {
-        d->currentPath.append(directory);
+    if (q->enterRelativeDirectory(expandEncodedDirectory(directory))) {
+        currentPath.append(directory);
         return true;
     }
     return false;
@@ -645,7 +647,8 @@ void KoStore::disallowNameExpansion()
 
 bool KoStore::hasFile(const QString& fileName) const
 {
-    return fileExists(toExternalNaming(currentPath() + fileName));
+    Q_D(const KoStore);
+    return fileExists(d->toExternalNaming(currentPath() + fileName));
 }
 
 bool KoStore::finalize()

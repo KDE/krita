@@ -399,8 +399,6 @@ private:
     bool extractFile(const QString &sourceName, QIODevice &buffer);
 
 protected:
-    static const int s_area;
-
     KoStorePrivate *d_ptr;
 
 private:

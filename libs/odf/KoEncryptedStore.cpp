@@ -485,7 +485,7 @@ bool KoEncryptedStore::openRead(const QString& name)
         return false;
     }
     if (fileArchiveEntry->isDirectory()) {
-        kWarning(s_area) << name << " is a directory!";
+        kWarning(30002) << name << " is a directory!";
         return false;
     }
     const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>(fileArchiveEntry);
@@ -511,7 +511,7 @@ bool KoEncryptedStore::openRead(const QString& name)
             d->stream->close();
             delete d->stream;
             d->stream = NULL;
-            kWarning(s_area) << "read error";
+            kWarning(30002) << "read error";
             return false;
         }
         d->stream->close();
@@ -555,7 +555,7 @@ bool KoEncryptedStore::openRead(const QString& name)
 
             decrypted = decryptFile(encryptedFile, encData, password);
             if (decrypted.isEmpty()) {
-                kError(s_area) << "empty decrypted file" << endl;
+                kError(30002) << "empty decrypted file" << endl;
                 return false;
             }
 

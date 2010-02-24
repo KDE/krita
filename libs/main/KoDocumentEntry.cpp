@@ -117,7 +117,7 @@ QList<KoDocumentEntry> KoDocumentEntry::query(QueryFlags flags, const QString & 
     QList<KoDocumentEntry> lst;
     QString constr;
     if (!_constr.isEmpty()) {
-        constr = "(";
+        constr = '(';
         constr += _constr;
         constr += ") and ";
     }

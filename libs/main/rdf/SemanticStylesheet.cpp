@@ -128,8 +128,8 @@ void SemanticStylesheet::format(RdfSemanticItem *obj, KoTextEditor *editor, cons
     }
     // make sure there is something in the replacement other than commas and spaces
     QString tmpstring = data;
-    tmpstring = tmpstring.replace(" ", QString());
-    tmpstring = tmpstring.replace(",", QString());
+    tmpstring = tmpstring.remove(' ');
+    tmpstring = tmpstring.remove(',');
     if (!tmpstring.size()) {
         kDebug(30015) << "stylesheet results in empty data, using name() instead";
         data = name();

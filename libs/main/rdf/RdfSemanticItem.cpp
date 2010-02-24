@@ -497,8 +497,8 @@ void RdfSemanticItem::saveUserStylesheets(Soprano::Model *model, const Soprano::
 Soprano::Node RdfSemanticItem::createNewUUIDNode()
 {
     QString uuid = QUuid::createUuid().toString();
-    uuid.replace("{", QString());
-    uuid.replace("}", QString());
+    uuid.remove('{');
+    uuid.remove('}');
     QString nodestr = "http://kogmbh.net/uuidnode/" + uuid;
     return Node::createResourceNode(nodestr);
 }

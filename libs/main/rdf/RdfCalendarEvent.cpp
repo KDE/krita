@@ -68,7 +68,7 @@ static KDateTime VEventDateTimeToKDateTime(const QString &s, KDateTime::Spec &tz
 {
     kDebug(30015) << "top... tz.offset:" << tz.timeZone().currentOffset();
 
-    if (s.endsWith("Z")) {
+    if (s.endsWith('Z')) {
         tz = KSystemTimeZones::zone("UTC");
         kDebug(30015) << "tz.offset:" << tz.timeZone().currentOffset();
         kDebug(30015) << "new date string:" << s;
@@ -104,7 +104,7 @@ static KDateTime VEventDateTimeToKDateTime(const QString &s, KDateTime::Spec &tz
 static KTimeZone toKTimeZone(Soprano::Node n)
 {
     QString dt = n.dataType().toString();
-    dt.replace(QRegExp("#tz$"), "");
+    dt.remove(QRegExp("#tz$"));
     int idx = dt.lastIndexOf('/');
     if (idx > 0) {
         idx = dt.lastIndexOf('/', idx - 1);
@@ -118,7 +118,7 @@ static KTimeZone toKTimeZone(Soprano::Node n)
         << " timezone:" << dt;
     if (!kt.isValid()) {
         // UTC "Zulu" Time
-        if (dt == "2001/XMLSchema#dateTime" && n.toString().endsWith("Z")) {
+        if (dt == "2001/XMLSchema#dateTime" && n.toString().endsWith('Z')) {
             kDebug(30015) << "input:" << n.dataType().toString()
             << " is UTC...";
             kt = KSystemTimeZones::zone("UTC");

@@ -181,7 +181,7 @@ public:
     /**
      * Create a QTreeWidgetItem to display this SemanticItem. This
      * method should be used if you want to present a QTree of
-     * SemanticItems becuase the returned widgetItem can also create a
+     * SemanticItems because the returned widgetItem can also create a
      * menu and perform other actions for the SemanticItem.
      */
     virtual RdfSemanticTreeWidgetItem *createQTreeWidgetItem(QTreeWidgetItem *parent = 0);

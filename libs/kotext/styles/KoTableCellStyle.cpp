@@ -270,7 +270,7 @@ void KoTableCellStyle::drawTopHorizontalBorder(QPainter &painter, qreal x, qreal
         painter.drawLine(QLineF(x, t, x+w, t));
         t = y + d->edges[Top].spacing + pen.widthF();
     } else if (accumulatedBlankBorders) {
-        // No border but we'd like to draw one for user convinience when on screen
+        // No border but we'd like to draw one for user convenience when on screen
         accumulatedBlankBorders->moveTo(x, t);
         accumulatedBlankBorders->lineTo(x+w, t);
     }
@@ -302,7 +302,7 @@ void KoTableCellStyle::drawSharedHorizontalBorder(QPainter &painter, const KoTab
             painter.drawLine(QLineF(x, t, x+w, t));
             t = y + d->edges[Bottom].spacing + pen.widthF();
         } else if (accumulatedBlankBorders) {
-            // No border but we'd like to draw one for user convinience when on screen
+            // No border but we'd like to draw one for user convenience when on screen
             accumulatedBlankBorders->moveTo(x, t);
             accumulatedBlankBorders->lineTo(x+w, t);
 
@@ -346,7 +346,7 @@ void KoTableCellStyle::drawBottomHorizontalBorder(QPainter &painter, qreal x, qr
         painter.drawLine(QLineF(x, t, x+w, t));
         t = y - d->edges[Bottom].spacing - pen.widthF();
     } else if (accumulatedBlankBorders) {
-        // No border but we'd like to draw one for user convinience when on screen
+        // No border but we'd like to draw one for user convenience when on screen
         accumulatedBlankBorders->moveTo(x, t);
         accumulatedBlankBorders->lineTo(x+w, t);
 
@@ -374,7 +374,7 @@ void KoTableCellStyle::drawLeftmostVerticalBorder(QPainter &painter, qreal x, qr
         painter.drawLine(QLineF(l, y, l, y+h));
         l += d->edges[Left].spacing + pen.widthF() / 2.0;
     } else if (accumulatedBlankBorders) {
-        // No border but we'd like to draw one for user convinience when on screen
+        // No border but we'd like to draw one for user convenience when on screen
         accumulatedBlankBorders->moveTo(l, y);
         accumulatedBlankBorders->lineTo(l, y+h);
 
@@ -409,7 +409,7 @@ void KoTableCellStyle::drawSharedVerticalBorder(QPainter &painter, const KoTable
             painter.drawLine(QLineF(l, y, l, y+h));
             l += d->edges[Right].spacing + pen.widthF() / 2.0;
         } else if (accumulatedBlankBorders) {
-            // No border but we'd like to draw one for user convinience when on screen
+            // No border but we'd like to draw one for user convenience when on screen
             accumulatedBlankBorders->moveTo(l, y);
             accumulatedBlankBorders->lineTo(l, y+h);
 
@@ -456,7 +456,7 @@ void KoTableCellStyle::drawRightmostVerticalBorder(QPainter &painter, qreal x, q
         painter.drawLine(QLineF(l, y, l, y+h));
         l += d->edges[Right].spacing - pen.widthF() / 2.0;
     } else if (accumulatedBlankBorders) {
-        // No border but we'd like to draw one for user convinience when on screen
+        // No border but we'd like to draw one for user convenience when on screen
         accumulatedBlankBorders->moveTo(l, y);
         accumulatedBlankBorders->lineTo(l, y+h);
 

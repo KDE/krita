@@ -378,7 +378,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
 KoMainWindow::~KoMainWindow()
 {
-    // Explicitely delete the docker manager to ensure that it is deleted before the dockers
+    // Explicitly delete the docker manager to ensure that it is deleted before the dockers
     delete d->dockerManager;
     d->dockerManager = 0;
     // The doc and view might still exist (this is the case when closing the window)

@@ -184,7 +184,7 @@ public:
 
         /// the index in the list of shapes (or frameset) of the shape we are currently layouting.
         int shapeNumber;
-        /// the shape that is currently being layed out
+        /// the shape that is currently being laid out
         KoShape *shape;
         /// The current paragraph layout.
         QTextLayout *layout;

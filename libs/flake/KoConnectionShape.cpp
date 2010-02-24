@@ -328,7 +328,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     else
         d->connectionType = Standard;
 
-    // reset connection point indeces
+    // reset connection point indices
     d->connectionPointIndex1 = -1;
     d->connectionPointIndex2 = -1;
     // reset connected shapes

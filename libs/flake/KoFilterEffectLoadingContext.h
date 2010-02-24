@@ -79,3 +79,4 @@ private:
 };
 
 #endif // KOFILTEREFFECTLOADINGCONTEXT_H
+

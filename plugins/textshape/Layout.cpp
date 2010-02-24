@@ -365,7 +365,8 @@ bool Layout::nextParag()
         shape->update(QRectF(0.0, offsetInShape, shape->size().width(), shape->size().height() - offsetInShape));
         // cleanup and repaint rest of shapes.
         m_data->wipe();
-        m_textShape->markLayoutDone();
+        if (m_textShape) // may be null in relation to setFollowupShape
+            m_textShape->markLayoutDone();
         cleanupShapes();
         return false;
     }

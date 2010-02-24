@@ -524,37 +524,6 @@ bool KoStore::extractFile(const QString &srcName, QIODevice &buffer)
     return true;
 }
 
-
-QStringList KoStore::addLocalDirectory(const QString &dirPath, const QString &destName)
-{
-    QString dot('.');
-    QString dotdot = "..";
-    QStringList content;
-
-    QDir dir(dirPath);
-    if (!dir.exists())
-        return QStringList();
-
-    const QStringList files = dir.entryList();
-    for (QStringList::ConstIterator it = files.begin(); it != files.end(); ++it) {
-        if (*it != dot && *it != dotdot) {
-            QString currentFile = dirPath + '/' + *it;
-            QString dest = destName.isEmpty() ? *it : (destName + '/' + *it);
-
-            QFileInfo fi(currentFile);
-            if (fi.isFile()) {
-                addLocalFile(currentFile, dest);
-                content.append(dest);
-            } else if (fi.isDir()) {
-                content += addLocalDirectory(currentFile, dest);
-            }
-        }
-    }
-
-    return content;
-}
-
-
 bool KoStore::seek(qint64 pos)
 {
     return m_stream->seek(pos);

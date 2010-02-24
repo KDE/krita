@@ -1,4 +1,3 @@
-// -*- c-basic-offset: 2 -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 David Faure <faure@kde.org>
    Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
@@ -238,15 +237,6 @@ public:
      * @param destName file in the store
      */
     bool addDataToFile(QByteArray &buffer, const QString &destName);
-
-    /**
-     * Imports a local directory
-     * @param dirPath path to the directory on a disk
-     * @param dest path in the store where the directory should get saved
-     * @return the directory index
-     */
-    QStringList addLocalDirectory(const QString &dirPath, const QString &dest);
-
 
     /**
      * Extracts a file out of the store

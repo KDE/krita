@@ -33,47 +33,6 @@
 #include <kdebug.h>
 #include <QTimer>
 
-/* Unused for now.
-#if 0
-namespace
-{
-
-    // Helper class to determine when the user might switch between
-    // tablet and mouse.
-    class TabletProximityFilter {
-    public:
-
-        TabletProximityFilter( KoToolManager * manager )
-            : m_manager( manager )
-            {
-            }
-
-        virtual ~TabletProximityFilter();
-
-        bool eventFilter( QObject * object,  QEvent * event ) {
-
-            if ( object == qApp ) {
-                switch( event->type() ) {
-                    case QEvent::TabletEnterProximity:
-                        break;
-                    case QEvent::TabletLeaveProximity:
-                        break;
-                    default:
-                        break;
-                }
-            }
-            return false;
-        }
-
-    private:
-
-        KoToolManager * m_manager;
-    };
-
-}
-#endif */
-
-
 class KoToolProxy::Private
 {
 public:

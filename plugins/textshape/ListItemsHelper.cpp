@@ -408,7 +408,7 @@ void ListItemsHelper::recalculate()
             break;
         case KoListStyle::ImageItem:
             calcWidth = false;
-            width = qMax(format.doubleProperty(KoListStyle::Width), 1.0);
+            width = qMax(format.doubleProperty(KoListStyle::Width), (qreal)1.0);
             break;
         default:  // others we ignore.
             calcWidth = false;

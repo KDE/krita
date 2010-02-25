@@ -51,9 +51,12 @@ KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainte
     m_brushType = SoftBrushType(settings->getInt(SOFT_BRUSH_TIP));
     // brushType == 0
     if (m_brushType == CURVE){
-
+        m_rotationOption.readOptionSetting(settings);
+        m_rotationOption.sensor()->reset();
+        
         m_curveMaskProperties.diameter = quint16(settings->getDouble(SOFTCURVE_DIAMETER));
         m_curveMaskProperties.aspect = settings->getDouble(SOFTCURVE_ASPECT);
+        m_curveMaskProperties.rotation = settings->getDouble(SOFTCURVE_ROTATION) * (M_PI/180.0);
         m_curveMaskProperties.scale = settings->getDouble(SOFTCURVE_SCALE);    
         m_curveMaskProperties.curve = settings->getCubicCurve(SOFTCURVE_CURVE);
         
@@ -150,13 +153,16 @@ void KisSoftPaintOp::paintAt(const KisPaintInformation& info)
         double subPixelX;
         qint32 y;
         double subPixelY;
-        QPointF pos = info.pos() - m_curveMask.hotSpot(m_curveMaskProperties.scale);
+        
+        double rotation = m_rotationOption.apply(info);
+                
+        rotation += m_curveMaskProperties.rotation;
+        QPointF pos = info.pos() - m_curveMask.hotSpot(m_curveMaskProperties.scale, rotation);
         
         splitCoordinate(pos.x(), &x, &subPixelX);
         splitCoordinate(pos.y(), &y, &subPixelY);
-
         
-        m_curveMask.mask(dab,painter()->paintColor(),m_curveMaskProperties.scale,0.0,subPixelX,subPixelY);
+        m_curveMask.mask(dab,painter()->paintColor(),m_curveMaskProperties.scale,rotation,subPixelX,subPixelY);
         painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
         return;
     }

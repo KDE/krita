@@ -20,6 +20,7 @@
 #define KIS_CURVE_MASK_H
 
 // Qt 
+class QRectF;
 #include <QVector>
 
 // KOffice
@@ -36,6 +37,7 @@ struct KisCurveProperties{
     quint16 diameter;
     qreal aspect;
     qreal scale;
+    qreal rotation;
     KisCubicCurve curve;
 };
 
@@ -51,16 +53,14 @@ public:
         m_properties = properties;
     }
 
-    QPointF hotSpot(qreal scale){
-        return QPointF(m_properties->diameter * scale * 0.5,m_properties->diameter * m_properties->aspect * scale * 0.5);
+    QPointF hotSpot(qreal scale, qreal rotation);
+    
+    qreal maskWidth(qreal scale){
+        return m_properties->diameter * scale;
     }
     
-    int maskWidth(qreal scale){
-        return qRound(m_properties->diameter * scale);
-    }
-    
-    int maskHeight(qreal scale){
-        return qRound(m_properties->diameter * m_properties->aspect  * scale);
+    qreal maskHeight(qreal scale){
+        return m_properties->diameter * m_properties->aspect  * scale;
     }
     
 
@@ -71,6 +71,7 @@ private:
     qreal m_minorAxis;
     qreal m_inverseScale;
     qreal m_maskRadius;
+    QRectF m_maskRect;
     
     inline qreal valueAt(qreal x, qreal y);
     // used for ellipse canonical implicit equation (x/a)^2 + (y/b)^2 = 1

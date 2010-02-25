@@ -30,16 +30,36 @@ KisCurveMask::KisCurveMask()
 }
 
 
+QPointF KisCurveMask::hotSpot(qreal scale, qreal rotation)
+{
+    qreal fWidth = maskWidth(scale);
+    qreal fHeight = maskHeight(scale);
+
+    QTransform m;
+    m.reset();
+    m.rotateRadians(rotation);
+
+    m_maskRect = QRect(0,0,fWidth,fHeight);
+    m_maskRect.translate(-m_maskRect.center());
+    m_maskRect = m.mapRect(m_maskRect);
+    m_maskRect.translate(-m_maskRect.topLeft());
+    return m_maskRect.center();
+}
+
 
 void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal scale, qreal rotation, qreal subPixelX, qreal subPixelY)
 {
-    Q_UNUSED(rotation);
     KoColor dabColor(color);
     
-    int dstWidth = maskWidth(scale);
-    int dstHeight = maskHeight(scale);
-
-    QRect maskRect = QRect(0,0,dstWidth,dstHeight);
+    qreal cosa = cos(rotation);
+    qreal sina = sin(rotation);
+    
+    qreal fWidth = maskWidth(scale);
+    qreal fHeight = maskHeight(scale);
+    
+    int dstWidth =  qRound( m_maskRect.width() );
+    int dstHeight = qRound( m_maskRect.height());
+    
     int w = dab->bounds().width();
     int h = dab->bounds().height();
    
@@ -47,10 +67,10 @@ void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal sc
     
     // clear
     if (w!=dstWidth || h!=dstHeight){
-        dab->setRect(maskRect);
+        dab->setRect(m_maskRect.toRect());
         dab->initialize();
     }else{
-        dab->clear(maskRect);
+        dab->clear(m_maskRect.toRect());
     }
     
     qreal centerX = dstWidth  * 0.5 - 1.0 + subPixelX;
@@ -59,20 +79,25 @@ void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal sc
     quint8* dabPointer = dab->data();
     
     // major axis
-    m_majorAxis = 2.0/dstWidth;
+    m_majorAxis = 2.0/fWidth;
     // minor axis
-    m_minorAxis = 2.0/dstHeight;
+    m_minorAxis = 2.0/fHeight;
     // inverse square
     m_inverseScale = 1.0 / scale;
     // amount of precomputed data
-    m_maskRadius = 0.5 * dstWidth;
+    m_maskRadius = 0.5 * fWidth;
+    
     
     for (int y = 0; y <  dstHeight; y++){
         for (int x = 0; x < dstWidth; x++){
             double maskX = (x - centerX);
             double maskY = (y - centerY);
 
-            qreal alpha = valueAt(maskX, maskY);
+            double rmaskX = cosa * maskX - sina * maskY;
+            double rmaskY = sina * maskX + cosa * maskY;
+
+
+            qreal alpha = valueAt(rmaskX, rmaskY);
             if (alpha != OPACITY_OPAQUE_F)
             {
                 dabColor.setOpacity(alpha);
@@ -94,7 +119,7 @@ qreal KisCurveMask::valueAt(qreal x, qreal y)
         qreal alphaValueF = distance - alphaValue;
 
         if (m_properties->curveData.size() <= (alphaValue+1)){
-            kDebug() << "[ " << x << ", " << y << " ] distance: " << distance << "size: " << m_properties->curveData.size();
+            //kDebug() << "[ " << x << ", " << y << " ] distance: " << distance << "size: " << m_properties->curveData.size();
             return OPACITY_TRANSPARENT_F;
         }
            

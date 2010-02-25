@@ -23,6 +23,7 @@
 
 #include <kis_paintop.h>
 #include <kis_types.h>
+#include <kis_pressure_rotation_option.h>
 
 #include "kis_soft_paintop_settings.h"
 
@@ -74,12 +75,12 @@ private:
     
     KisCurveProperties m_curveMaskProperties;
     KisCurveMask m_curveMask;
-    
+
     qreal m_xSpacing;
     qreal m_ySpacing;
     qreal m_spacing;
 
-    
+    KisPressureRotationOption m_rotationOption;    
 #ifdef BENCHMARK
     int m_total;
     int m_count;

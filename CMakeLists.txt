@@ -327,6 +327,16 @@ endif(SHOULD_BUILD_SCRIPTING)
 # kopageapp
 set(KOPAGEAPP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
 
+# koproperty
+SET(KOPROPERTY_TARGETNAME koproperty)                           # TODO remove when we move to independent place
+SET(KOPROPERTY_LIBS ${KOPROPERTY_TARGETNAME})                   # TODO remove when we move to independent place
+SET(KOPROPERTY_LIB_VERSION ${GENERIC_KOFFICE_LIB_VERSION})      # TODO remove when we move to independent place
+SET(KOPROPERTY_LIB_SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION})  # TODO remove when we move to independent place
+SET(KOPROPERTY_USE_KOLIBS TRUE)                                 # TODO remove when we move to independent place
+set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
+                        ${CMAKE_SOURCE_DIR}/libs
+                        ${CMAKE_SOURCE_DIR}/libs/widgets)
+
  #############################################
 ##############################################
 ## Detect which applications can be compile ##

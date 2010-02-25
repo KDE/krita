@@ -49,7 +49,7 @@ KoLineBorder::KoLineBorder()
     d->pen.setWidthF(1.0);
 }
 
-KoLineBorder::KoLineBorder(const KoLineBorder & other)
+KoLineBorder::KoLineBorder(const KoLineBorder &other)
         : KoShapeBorderModel(), d(new Private())
 {
     d->color = other.d->color;
@@ -70,7 +70,7 @@ KoLineBorder::~KoLineBorder()
     delete d;
 }
 
-KoLineBorder& KoLineBorder::operator = (const KoLineBorder & rhs)
+KoLineBorder& KoLineBorder::operator = (const KoLineBorder &rhs)
 {
     if (this == &rhs)
         return *this;
@@ -102,7 +102,7 @@ void KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets)
 
     // if we have square cap, we need a little more space
     // -> sqrt( (0.5*penWidth)^2 + (0.5*penWidth)^2 )
-    if( capStyle() == Qt::SquareCap )
+    if (capStyle() == Qt::SquareCap)
         lineWidth *= M_SQRT2;
 
     insets.top = lineWidth;
@@ -127,18 +127,18 @@ void KoLineBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverte
     else
         pen.setColor(d->color);
 
-    if(!pen.isCosmetic())
+    if (!pen.isCosmetic())
         painter.strokePath(shape->outline(), pen);
 }
 
-void KoLineBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor & color )
+void KoLineBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color )
 {
     KoShape::applyConversion(painter, converter);
 
     QPen pen = d->pen;
     pen.setColor(color);
 
-    if(!pen.isCosmetic()) {
+    if (!pen.isCosmetic()) {
         painter.strokePath(shape->outline(), pen);
     }
 }
@@ -221,7 +221,7 @@ qreal KoLineBorder::dashOffset() const
     return d->pen.dashOffset();
 }
 
-void KoLineBorder::setLineBrush(const QBrush & brush)
+void KoLineBorder::setLineBrush(const QBrush &brush)
 {
     d->brush = brush;
 }

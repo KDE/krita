@@ -44,7 +44,7 @@ public:
     int maximalInputCount;
 };
 
-KoFilterEffect::KoFilterEffect( const QString& id, const QString& name )
+KoFilterEffect::KoFilterEffect(const QString &id, const QString &name)
     : d(new Private)
 {
     d->id = id;
@@ -137,15 +137,12 @@ int KoFilterEffect::maximalInputCount() const
 QImage KoFilterEffect::processImages(const QList<QImage> &images, const KoFilterEffectRenderContext &/*context*/) const
 {
     Q_ASSERT(images.count());
-
-    Q_UNUSED(images);
-
     return images.first();
 }
 
 void KoFilterEffect::setRequiredInputCount(int count)
 {
-    d->requiredInputCount = qMax(0,count);
+    d->requiredInputCount = qMax(0, count);
     for (int i = d->inputs.count(); i < d->requiredInputCount; ++i)
         d->inputs.append(QString());
 }
@@ -163,7 +160,7 @@ void KoFilterEffect::setMaximalInputCount(int count)
 void KoFilterEffect::saveCommonAttributes(KoXmlWriter &writer)
 {
     writer.addAttribute("result", output());
-    if( requiredInputCount() == 1 && maximalInputCount() == 1 && d->inputs.count() == 1) {
+    if (requiredInputCount() == 1 && maximalInputCount() == 1 && d->inputs.count() == 1) {
         writer.addAttribute("in", d->inputs[0]);
     }
     writer.addAttribute("x", d->filterRect.x());

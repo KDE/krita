@@ -91,12 +91,12 @@ public:
 
     bool isActiveLayerEditable()
     {
-        if( ! activeTool )
+        if (!activeTool)
             return false;
 
         KoShapeManager * shapeManager = activeTool->canvas()->shapeManager();
         KoShapeLayer * activeLayer = shapeManager->selection()->activeLayer();
-        if( activeLayer && ! activeLayer->isEditable() )
+        if (activeLayer && !activeLayer->isEditable())
             return false;
         return true;
     }
@@ -147,7 +147,7 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
     switch (event->type()) {
     case QEvent::TabletPress:
         ev.setTabletButton(Qt::LeftButton);
-        if (! d->tabletPressed && d->activeTool)
+        if (!d->tabletPressed && d->activeTool)
             d->activeTool->mousePressEvent(&ev);
         d->tabletPressed = true;
         break;
@@ -155,11 +155,14 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
         ev.setTabletButton(Qt::LeftButton);
         d->tabletPressed = false;
         d->scrollTimer.stop();
-        if (d->activeTool) d->activeTool->mouseReleaseEvent(&ev);
+        if (d->activeTool)
+            d->activeTool->mouseReleaseEvent(&ev);
         break;
     case QEvent::TabletMove:
-        if (d->tabletPressed) ev.setTabletButton(Qt::LeftButton);
-        if (d->activeTool) d->activeTool->mouseMoveEvent(&ev);
+        if (d->tabletPressed)
+            ev.setTabletButton(Qt::LeftButton);
+        if (d->activeTool)
+            d->activeTool->mouseMoveEvent(&ev);
         d->checkAutoScroll(ev);
     default:
         ; // ignore the rest.
@@ -182,8 +185,10 @@ void KoToolProxy::mousePressEvent(QMouseEvent *event, const QPointF &point)
         return;
 
     KoPointerEvent ev(event, point);
-    if (d->activeTool) d->activeTool->mousePressEvent(&ev);
-    else event->ignore();
+    if (d->activeTool)
+        d->activeTool->mousePressEvent(&ev);
+    else
+        event->ignore();
 }
 
 void KoToolProxy::mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point)
@@ -259,21 +264,27 @@ void KoToolProxy::mouseReleaseEvent(QMouseEvent *event, const QPointF &point)
 
 void KoToolProxy::keyPressEvent(QKeyEvent *event)
 {
-    if (d->activeTool) d->activeTool->keyPressEvent(event);
-    else event->ignore();
+    if (d->activeTool)
+        d->activeTool->keyPressEvent(event);
+    else
+        event->ignore();
 }
 
 void KoToolProxy::keyReleaseEvent(QKeyEvent *event)
 {
-    if (d->activeTool) d->activeTool->keyReleaseEvent(event);
-    else event->ignore();
+    if (d->activeTool)
+        d->activeTool->keyReleaseEvent(event);
+    else
+        event->ignore();
 }
 
-void KoToolProxy::wheelEvent(QWheelEvent * event, const QPointF &point)
+void KoToolProxy::wheelEvent(QWheelEvent *event, const QPointF &point)
 {
     KoPointerEvent ev(event, point);
-    if (d->activeTool) d->activeTool->wheelEvent(&ev);
-    else event->ignore();
+    if (d->activeTool)
+        d->activeTool->wheelEvent(&ev);
+    else
+        event->ignore();
 }
 
 QVariant KoToolProxy::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const

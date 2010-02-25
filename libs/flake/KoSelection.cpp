@@ -88,7 +88,7 @@ void KoSelectionPrivate::selectGroupChildren(KoShapeGroup *group)
             continue;
         selectedShapes << shape;
 
-        KoShapeGroup* childGroup = dynamic_cast<KoShapeGroup*>(shape);
+        KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup*>(shape);
         if (childGroup)
             selectGroupChildren(childGroup);
     }
@@ -103,7 +103,7 @@ void KoSelectionPrivate::deselectGroupChildren(KoShapeGroup *group)
         if (selectedShapes.contains(shape))
             selectedShapes.removeAll(shape);
 
-        KoShapeGroup* childGroup = dynamic_cast<KoShapeGroup*>(shape);
+        KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup*>(shape);
         if (childGroup)
             deselectGroupChildren(childGroup);
     }
@@ -135,13 +135,13 @@ void KoSelection::select(KoShape *shape, bool recursive)
         return;
 
     // save old number of selected shapes
-    uint oldSelectionCount = d->selectedShapes.count();
+    int oldSelectionCount = d->selectedShapes.count();
 
     if (!d->selectedShapes.contains(shape))
         d->selectedShapes << shape;
 
     // automatically recursively select all child shapes downwards in the hierarchy
-    KoShapeGroup* group = dynamic_cast<KoShapeGroup*>(shape);
+    KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
     if (group)
         d->selectGroupChildren(group);
 
@@ -165,16 +165,16 @@ void KoSelection::select(KoShape *shape, bool recursive)
     }
     else {
         // reset global bound if there were no shapes selected before
-        if( ! oldSelectionCount )
+        if (!oldSelectionCount )
             d->globalBound = QRectF();
 
         setTransformation(QMatrix());
         // we are resetting the transformation here anyway,
         // so we can just add the newly selected shapes to the bounding box
         // in document coordinates and then use that size and position
-        uint newSelectionCount = d->selectedShapes.count();
-        for( uint i = oldSelectionCount; i < newSelectionCount; ++i ) {
-            KoShape * shape = d->selectedShapes[i];
+        int newSelectionCount = d->selectedShapes.count();
+        for (int i = oldSelectionCount; i < newSelectionCount; ++i) {
+            KoShape *shape = d->selectedShapes[i];
             const QMatrix shapeTransform = shape->absoluteTransformation(0);
             const QRectF shapeRect(QRectF(QPointF(), shape->size()));
 
@@ -243,10 +243,11 @@ bool KoSelection::hitTest(const QPointF &position) const
     if (count() > 1) {
         QRectF bb(boundingRect());
         return bb.contains(position);
-    } else if (count() == 1)
+    } else if (count() == 1) {
         return (*d->selectedShapes.begin())->hitTest(position);
-    else // count == 0
+    } else { // count == 0
         return false;
+    }
 }
 void KoSelection::updateSizeAndPosition()
 {
@@ -312,7 +313,7 @@ KoShape *KoSelection::firstSelectedShape(KoFlake::SelectionType strip) const
     return *(set.begin());
 }
 
-void KoSelection::setActiveLayer(KoShapeLayer* layer)
+void KoSelection::setActiveLayer(KoShapeLayer *layer)
 {
     Q_D(KoSelection);
     d->activeLayer = layer;

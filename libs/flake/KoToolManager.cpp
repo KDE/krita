@@ -142,11 +142,11 @@ CanvasData *KoToolManager::Private::createCanvasData(KoCanvasController *control
     return cd;
 }
 
-bool KoToolManager::Private::toolCanBeUsed( const QString &activationShapeId)
+bool KoToolManager::Private::toolCanBeUsed(const QString &activationShapeId)
 {
     if (layerEnabled)
         return true;
-    if (activationShapeId.endsWith(QLatin1String( "/always")))
+    if (activationShapeId.endsWith(QLatin1String("/always")))
         return true;
     return false;
 }
@@ -259,7 +259,8 @@ void KoToolManager::Private::switchTool(const QString &id, bool temporary)
 
     foreach(ToolHelper *th, tools) {
         if (th->id() == id) {
-            if(!toolCanBeUsed(th->activationShapeId()) ) return;
+            if (!toolCanBeUsed(th->activationShapeId()))
+                return;
             canvasData->activationShapeId = th->activationShapeId();
             break;
         }
@@ -311,7 +312,7 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
         toolWidget = canvasData->dummyToolWidget;
         if (toolWidget == 0) {
             toolWidget = new QWidget();
-            toolWidget->setObjectName( "DummyToolWidget" );
+            toolWidget->setObjectName("DummyToolWidget");
             QVBoxLayout *layout = new QVBoxLayout(toolWidget);
             layout->setMargin(3);
             canvasData->dummyToolLabel = new QLabel(toolWidget);
@@ -542,12 +543,12 @@ void KoToolManager::Private::currentLayerChanged(const KoShapeLayer *layer)
     emit q->currentLayerChanged(canvasData->canvas, layer);
     layerEnabled = layer == 0 || (layer->isEditable() && layer->isVisible());
 
-    kDebug(30006 ) << "and the layer enabled is" << (layerEnabled ? "true" : "false");
+    kDebug(30006) << "and the layer enabled is" << (layerEnabled ? "true" : "false");
 
     KoToolProxy *proxy = proxies.value(canvasData->canvas->canvas());
     kDebug(30006) << " and the proxy is" << proxy;
     if (proxy) {
-        kDebug( 30006 ) << " set " << canvasData->activeTool << (layerEnabled ? "enabled" : "disabled");
+        kDebug(30006) << " set" << canvasData->activeTool << (layerEnabled ? "enabled" : "disabled");
         proxy->setActiveTool(toolCanBeUsed(canvasData->activationShapeId) ? canvasData->activeTool : 0);
     }
 }

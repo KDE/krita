@@ -40,9 +40,9 @@ public:
         delete snapGuide;
     }
     KoShapeController *shapeController;
-    KoResourceManager * resourceManager;
+    KoResourceManager *resourceManager;
     KoCanvasController *controller;
-    KoSnapGuide * snapGuide;
+    KoSnapGuide *snapGuide;
 };
 
 KoCanvasBase::KoCanvasBase(KoShapeControllerBase *shapeControllerBase)

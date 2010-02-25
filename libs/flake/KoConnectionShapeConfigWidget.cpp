@@ -57,9 +57,9 @@ void KoConnectionShapeConfigWidget::save()
 
 QUndoCommand * KoConnectionShapeConfigWidget::createCommand()
 {
-    if (! m_connection)
+    if (!m_connection) {
         return 0;
-    else {
+    } else {
         KoConnectionShape::Type type = static_cast<KoConnectionShape::Type>(widget.connectionType->currentIndex());
         return new KoConnectionShapeTypeCommand(m_connection, type);
     }

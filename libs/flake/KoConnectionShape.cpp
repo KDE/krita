@@ -186,12 +186,12 @@ void KoConnectionShapePrivate::normalPath( const qreal MinimumEscapeLength )
 
 qreal KoConnectionShapePrivate::scalarProd(const QPointF &v1, const QPointF &v2)
 {
-    return v1.x()*v2.x() + v1.y()*v2.y();
+    return v1.x() * v2.x() + v1.y() * v2.y();
 }
 
 qreal KoConnectionShapePrivate::crossProd(const QPointF &v1, const QPointF &v2)
 {
-    return (v1.x()*v2.y() - v1.y()*v2.x());
+    return v1.x() * v2.y() - v1.y() * v2.x();
 }
 
 bool KoConnectionShapePrivate::handleConnected(int handleId) const
@@ -473,7 +473,7 @@ void KoConnectionShape::updatePath(const QSizeF &size)
         d->normalPath(MinimumEscapeLength);
         if (d->path.count() != 0){
             moveTo(d->path[0]);
-            for(int index = 1; index < d->path.count(); ++index )
+            for (int index = 1; index < d->path.count(); ++index )
                 lineTo(d->path[index]);
         }
 

@@ -19,11 +19,9 @@
 
 #include "KoPasteController.h"
 
-//   #include <KoToolBase.h>
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
-//   #include <KoToolSelection.h>
-//
+
 #include <KDebug>
 #include <QAction>
 
@@ -34,7 +32,7 @@ public:
 
     void paste() {
         kDebug(30004) <<"Paste!";
-        if(! canvas->toolProxy()->paste()) {
+        if (! canvas->toolProxy()->paste()) {
             // means paste failed
             // TODO find a shape that can be created to hold the relevant content and load it.
         }
@@ -57,7 +55,8 @@ KoPasteController::KoPasteController(KoCanvasBase *canvas, QAction *pasteAction)
     connect(pasteAction, SIGNAL(triggered()), this, SLOT(paste()));
 }
 
-KoPasteController::~KoPasteController() {
+KoPasteController::~KoPasteController()
+{
     delete d;
 }
 

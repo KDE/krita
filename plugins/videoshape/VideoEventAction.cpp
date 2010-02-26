@@ -23,9 +23,9 @@
 
 #include <QString>
 #include <QUrl>
-#include <Phonon/VideoWidget>
-#include <Phonon/AudioOutput>
-#include <Phonon/MediaObject>
+#include <phonon/videowidget.h>
+#include <phonon/audiooutput.h>
+#include <phonon/mediaobject.h>
 
 #include "VideoData.h"
 #include "VideoShape.h"

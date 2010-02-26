@@ -268,6 +268,7 @@ void KoFavoriteResourceManager::slotUpdateRecentColor(int pos)
 
 void KoFavoriteResourceManager::slotAddRecentColor(const KoColor& color)
 {
+    qDebug() << "[KoFavoriteResourceManager] adding new colour";
     addRecentColor(color);
 }
 

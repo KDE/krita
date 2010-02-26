@@ -248,7 +248,7 @@ QPainterPath KisPopupPalette::drawDonutPathAngle(int inner_radius, int outer_rad
     QPainterPath path;
     path.moveTo(-1*outer_radius * sin(M_PI/limit),
                    outer_radius * cos(M_PI/limit));
-    path.arcTo((-1*outer_radius)-10, -1*outer_radius, 2*outer_radius,2*outer_radius,-90.0 - 180.0/limit,
+    path.arcTo((-1*outer_radius), -1*outer_radius, 2*outer_radius,2*outer_radius,-90.0 - 180.0/limit,
                        360.0/limit);
     path.arcTo(-1*inner_radius, -1*inner_radius, 2*inner_radius,2*inner_radius,-90.0 + 180.0/limit,
                      - 360.0/limit);

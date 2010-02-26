@@ -32,6 +32,7 @@
 
 #include <KoPluginLoader.h>
 
+#include "filter/kis_filter_configuration.h"
 #include "kis_debug.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"
@@ -66,6 +67,14 @@ void KisGeneratorRegistry::add(const QString &id, KisGeneratorSP item)
     dbgPlugins << "adding " << item->name() << " with id " << id;
     KoGenericRegistry<KisGeneratorSP>::add(id, item);
     emit(generatorAdded(id));
+}
+
+KisFilterConfiguration* KisGeneratorRegistry::cloneConfiguration(KisFilterConfiguration* kfc)
+{
+    KisGeneratorSP filter = value(kfc->name());
+    KisFilterConfiguration* newkfc = filter->defaultConfiguration(0);
+    newkfc->fromXML(kfc->toXML());
+    return newkfc;
 }
 
 #include "kis_generator_registry.moc"

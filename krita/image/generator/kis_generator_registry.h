@@ -27,6 +27,7 @@
 #include <krita_export.h>
 
 class QString;
+class KisFilterConfiguration;
 
 /**
  * XXX_DOCS
@@ -42,6 +43,7 @@ public:
     static KisGeneratorRegistry* instance();
     void add(KisGeneratorSP item);
     void add(const QString &id, KisGeneratorSP item);
+    KisFilterConfiguration* cloneConfiguration(KisFilterConfiguration* kfc);
 
 signals:
 

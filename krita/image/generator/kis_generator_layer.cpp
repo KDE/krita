@@ -42,6 +42,8 @@ KisGeneratorLayer::KisGeneratorLayer(KisImageWSP image,
         : KisSelectionBasedLayer(image, name, selection),
         m_d(new Private())
 {
+    if(kfc)
+      kfc = KisGeneratorRegistry::instance()->cloneConfiguration(kfc);
     m_d->filterConfig = kfc;
     update();
 }
@@ -50,7 +52,7 @@ KisGeneratorLayer::KisGeneratorLayer(const KisGeneratorLayer& rhs)
         : KisSelectionBasedLayer(rhs),
         m_d(new Private())
 {
-    m_d->filterConfig = new KisFilterConfiguration(*rhs.m_d->filterConfig);
+    m_d->filterConfig = KisGeneratorRegistry::instance()->cloneConfiguration(rhs.m_d->filterConfig);
 }
 
 KisGeneratorLayer::~KisGeneratorLayer()
@@ -69,7 +71,8 @@ KisFilterConfiguration * KisGeneratorLayer::filter() const
 void KisGeneratorLayer::setFilter(KisFilterConfiguration *filterConfig)
 {
     Q_ASSERT(filterConfig);
-    m_d->filterConfig = filterConfig;
+    delete m_d->filterConfig;
+    m_d->filterConfig = KisGeneratorRegistry::instance()->cloneConfiguration(filterConfig);
     update();
 }
 

@@ -62,7 +62,7 @@ void KoCreateShapesTool::mouseReleaseEvent(KoPointerEvent *event)
     emit KoToolBase::done();
 }
 
-void KoCreateShapesTool::activate(bool)
+void KoCreateShapesTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
     useCursor(Qt::ArrowCursor);
 }

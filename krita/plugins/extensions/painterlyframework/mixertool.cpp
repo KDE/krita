@@ -110,7 +110,7 @@ MixerTool::MixerTool(MixerCanvas* mixer)
     dom.setContent(preset);
     QDomElement element = dom.documentElement();
     m_d->mixingBrush->fromXML(element);
-    activate();
+    activate(KoToolBase::DefaultActivation, QSet<KoShape*>());
 }
 
 MixerTool::~MixerTool()
@@ -129,9 +129,9 @@ void MixerTool::setRadius(qreal radius)
     m_d->mixingBrush->settings()->changePaintOpSize(radius, radius);
 }
 
-void MixerTool::activate(bool temporary)
+void MixerTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
 {
-    Q_UNUSED(temporary)
+    Q_UNUSED(toolActivation)
     m_d->state = HOVER;
     useCursor(m_d->cursor);
     m_d->foregroundColor = canvas()->resourceManager()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();

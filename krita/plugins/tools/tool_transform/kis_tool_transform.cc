@@ -186,9 +186,9 @@ void KisToolTransform::deactivate()
     m_canvas->updateCanvas(QRect(m_originalTopLeft, m_originalBottomRight));
 }
 
-void KisToolTransform::activate(bool temporary)
+void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
 {
-    Q_UNUSED(temporary);
+    Q_UNUSED(toolActivation);
 
     if (currentNode() && currentNode()->paintDevice()) {
         image()->undoAdapter()->setCommandHistoryListener(this);

@@ -43,7 +43,7 @@ public:
 
     virtual QWidget *createOptionWidget();
 public slots:
-    virtual void activate(bool temp = false);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 private slots:
     void createNewAssistant();

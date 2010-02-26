@@ -36,7 +36,7 @@ public:
   virtual void mouseMoveEvent( KoPointerEvent* event );
   virtual void mouseReleaseEvent( KoPointerEvent* event );
 
-  void activate (bool temporary=false);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
   void deactivate();
 
   void addCommand(QUndoCommand* command);

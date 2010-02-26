@@ -1207,12 +1207,11 @@ void TextTool::updateStyleManager()
     m_changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
 }
 
-void TextTool::activate(bool temporary)
+void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED(temporary);
+    Q_UNUSED(toolActivation);
     m_caretTimer.start();
-    KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach (KoShape *shape, selection->selectedShapes()) {
+    foreach (KoShape *shape, shapes) {
         m_textShape = dynamic_cast<TextShape*>(shape);
         if (m_textShape)
             break;
@@ -1221,11 +1220,7 @@ void TextTool::activate(bool temporary)
         emit done();
         return;
     }
-    foreach (KoShape *shape, selection->selectedShapes()) {
-        // deselect others.
-        if (m_textShape == shape) continue;
-        selection->deselect(shape);
-    }
+
     setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
     useCursor(Qt::IBeamCursor);
 

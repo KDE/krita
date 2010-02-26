@@ -120,9 +120,8 @@ KisTool::~KisTool()
     delete d;
 }
 
-void KisTool::activate(bool)
+void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
-
     resetCursorStyle();
 
     d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();

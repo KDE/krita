@@ -58,9 +58,9 @@ QWidget* KisToolSelectBase::optionWidget()
     return m_optWidget;
 }
 
-void KisToolSelectBase::activate(bool temporary)
+void KisToolSelectBase::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KisTool::activate(temporary);
+    KisTool::activate(toolActivation, shapes);
 }
 
 void KisToolSelectBase::deactivate()

@@ -35,7 +35,7 @@ public:
     ///Reimplemented from KoToolBase
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
     ///Reimplemented from KoToolBase
-    virtual void activate( bool temporary );
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     ///Reimplemented from KoToolBase
     virtual void deactivate();
     ///Reimplemented from KoToolBase

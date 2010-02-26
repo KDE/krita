@@ -56,7 +56,9 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *e) {m_localTool.mouseMoveEvent(e);}
     virtual void mouseReleaseEvent(KoPointerEvent *e) {m_localTool.mouseReleaseEvent(e);}
     virtual void mouseDoubleClickEvent(KoPointerEvent *e) {m_localTool.mouseDoubleClickEvent(e);}
-    virtual void activate(bool temporary) {m_localTool.activate(temporary);}
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) {
+        m_localTool.activate(toolActivation, shapes);
+    }
     virtual void deactivate() {m_localTool.deactivate();}
 
     int radius() const;
@@ -74,7 +76,7 @@ private:
     public:
         LocalTool(KoCanvasBase * canvas, KisToolSelectMagnetic* selectingTool);
         ~LocalTool();
-        void activate(bool temporary);
+        void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
         void deactivate();
     protected:
         void paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter);

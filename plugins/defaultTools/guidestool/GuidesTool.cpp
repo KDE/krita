@@ -103,13 +103,13 @@ void GuidesTool::repaintDecorations()
     canvas()->updateCanvas(rect);
 }
 
-void GuidesTool::activate(bool temporary)
+void GuidesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
 {
     if (m_mode != None)
         useCursor(m_orientation == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor);
     else
         useCursor(Qt::ArrowCursor);
-    if (temporary)
+    if (toolActivation == KoToolBase::TemporaryActivation)
         canvas()->canvasWidget()->grabMouse();
 
     if (m_options) {

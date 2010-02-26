@@ -51,7 +51,7 @@ public:
     /// reimplemented form KoToolBase
     virtual void repaintDecorations();
     /// reimplemented form KoToolBase
-    virtual void activate(bool temporary = false);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     /// reimplemented form KoToolBase
     virtual void deactivate();
     /// reimplemented form KoToolBase

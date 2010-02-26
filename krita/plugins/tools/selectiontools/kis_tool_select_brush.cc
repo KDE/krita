@@ -151,10 +151,9 @@ void KisToolSelectBrush::mouseReleaseEvent(KoPointerEvent *e)
     }
 }
 
-void KisToolSelectBrush::activate(bool temprorary)
+void KisToolSelectBrush::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KisToolSelectBase::activate(temprorary);
-
+    KisToolSelectBase::activate(toolActivation, shapes);
 }
 
 void KisToolSelectBrush::deactivate()

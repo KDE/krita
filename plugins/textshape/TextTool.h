@@ -80,7 +80,7 @@ public:
     virtual void keyReleaseEvent(QKeyEvent *event);
 
     /// reimplemented from superclass
-    virtual void activate(bool temporary = false);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     /// reimplemented from superclass
     virtual void deactivate();
     /// reimplemented from superclass

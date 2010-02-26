@@ -50,12 +50,10 @@ KritaShapeTool::~KritaShapeTool()
 {
 }
 
-void KritaShapeTool::activate(bool temporary)
+void KritaShapeTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED(temporary);
-
-    KoSelection* selection = canvas()->shapeManager()->selection();
-    foreach(KoShape* shape, selection->selectedShapes()) {
+    Q_UNUSED(toolActivation);
+    foreach (KoShape *shape, shapes) {
         m_kritaShapeshape = dynamic_cast<KritaShape*>(shape);
         if (m_kritaShapeshape)
             break;

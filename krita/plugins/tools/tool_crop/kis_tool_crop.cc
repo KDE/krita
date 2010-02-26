@@ -64,9 +64,9 @@ KisToolCrop::~KisToolCrop()
 {
 }
 
-void KisToolCrop::activate(bool tmp)
+void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KisTool::activate(tmp);
+    KisTool::activate(toolActivation, shapes);
 
     KisSelectionSP sel = currentSelection();
     if (sel) {

@@ -57,7 +57,7 @@ public slots:
 
     void setRadius(qreal radius);
 
-    virtual void activate(bool temporary = false);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
     virtual void deactivate();
 

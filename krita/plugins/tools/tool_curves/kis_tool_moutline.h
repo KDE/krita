@@ -62,7 +62,7 @@ public:
 
 public slots:
 
-    virtual void activate();
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
     void slotCommitCurve();

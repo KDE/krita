@@ -75,7 +75,7 @@ public:
     void notifyCommandExecuted(const QUndoCommand *);
 
 public slots:
-    virtual void activate(bool temporary);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
 private:

@@ -55,7 +55,7 @@ public:
 //     virtual QWidget* optionWidget();
 
 public slots:
-    virtual void activate(bool temp = false);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 
 protected:

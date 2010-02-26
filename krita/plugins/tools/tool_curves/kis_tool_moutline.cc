@@ -77,9 +77,9 @@ KisToolMagnetic::~KisToolMagnetic()
     delete m_derived;
 }
 
-void KisToolMagnetic::activate()
+void KisToolMagnetic::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KisToolCurve::activate();
+    KisToolCurve::activate(toolActivation, shapes);
     if (!m_derived) {
         m_derived = new KisCurveMagnetic(this);
         m_curve = m_derived;

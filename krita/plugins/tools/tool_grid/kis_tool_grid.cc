@@ -44,12 +44,12 @@ KisToolGrid::~KisToolGrid()
 {
 }
 
-void KisToolGrid::activate(bool)
+void KisToolGrid::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     m_canvas->view()->gridManager()->setVisible(true);
     m_canvas->view()->gridManager()->checkVisibilityAction(true);
     m_canvas->updateCanvas();
-    KisTool::activate();
+    KisTool::activate(toolActivation, shapes);
 }
 
 void KisToolGrid::deactivate()

@@ -45,7 +45,7 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent *e);
 
 public slots:
-    virtual void activate(bool temprorary);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
     void slotSetBrushSize(int size);

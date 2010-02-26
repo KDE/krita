@@ -57,10 +57,9 @@ void KoPABackgroundTool::paint( QPainter &painter, const KoViewConverter &conver
     Q_UNUSED( converter );
 }
 
-
-void KoPABackgroundTool::activate( bool temporary )
+void KoPABackgroundTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
 {
-    Q_UNUSED( temporary );
+    Q_UNUSED(toolActivation);
 
     canvas()->shapeManager()->selection()->deselectAll();
     canvas()->resourceManager()->setResource( KoPageApp::CurrentPage, m_view->activePage() );

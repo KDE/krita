@@ -166,9 +166,9 @@ void KisToolPerspectiveTransform::deactivate()
     updateCanvasPixelRect(image()->bounds());
 }
 
-void KisToolPerspectiveTransform::activate(bool tmp)
+void KisToolPerspectiveTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KisTool::activate(tmp);
+    KisTool::activate(toolActivation, shapes);
     m_currentSelectedPoint = 0;
 
     if (image() && currentImage() && currentNode()->paintDevice()) {

@@ -341,11 +341,10 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void ArtisticTextTool::activate( bool )
+void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach( KoShape *shape, selection->selectedShapes() ) 
-    {
+    Q_UNUSED(toolActivation);
+    foreach (KoShape *shape, shapes) {
         m_currentShape = dynamic_cast<ArtisticTextShape*>( shape );
         if(m_currentShape)
             break;

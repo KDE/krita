@@ -150,9 +150,9 @@ KisToolSelectMagnetic::LocalTool::~LocalTool()
 {
 }
 
-void KisToolSelectMagnetic::LocalTool::activate(bool temporary)
+void KisToolSelectMagnetic::LocalTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KoCreatePathTool::activate(temporary);
+    KoCreatePathTool::activate(toolActivation, shapes);
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
     KisImageWSP img = kisCanvas->image();

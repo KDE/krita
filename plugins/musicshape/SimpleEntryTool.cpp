@@ -310,12 +310,10 @@ SimpleEntryTool::~SimpleEntryTool()
     qDeleteAll(m_menus);
 }
 
-void SimpleEntryTool::activate (bool temporary)
+void SimpleEntryTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED( temporary );
-    KoSelection* selection = canvas()->shapeManager()->selection();
-    foreach ( KoShape* shape, selection->selectedShapes() )
-    {
+    Q_UNUSED(toolActivation);
+    foreach (KoShape *shape, shapes) {
         m_musicshape = dynamic_cast<MusicShape*>( shape );
         if ( m_musicshape )
         {

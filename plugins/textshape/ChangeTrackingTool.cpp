@@ -243,11 +243,11 @@ void ChangeTrackingTool::keyPressEvent(QKeyEvent* event)
     KoToolBase::keyPressEvent(event);
 }
 
-void ChangeTrackingTool::activate(bool temporary)
+void ChangeTrackingTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED(temporary);
+    Q_UNUSED(toolActivation);
     KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach(KoShape *shape, selection->selectedShapes()) {
+    foreach(KoShape *shape, shapes) {
         m_textShape = dynamic_cast<TextShape*>(shape);
         if (m_textShape)
             break;

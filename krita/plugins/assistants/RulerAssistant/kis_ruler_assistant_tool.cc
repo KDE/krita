@@ -48,10 +48,10 @@ QPointF adjustPointF(const QPointF& _pt, const QRectF& _rc)
     return QPointF(qBound(_rc.left(), _pt.x(), _rc.right()), qBound(_rc.top(), _pt.y(), _rc.bottom()));
 }
 
-void KisRulerAssistantTool::activate(bool)
+void KisRulerAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     // Add code here to initialize your tool when it got activated
-    KisTool::activate();
+    KisTool::activate(toolActivation, shapes);
 
     m_handles = m_canvas->view()->paintingAssistantManager()->handles();
     m_canvas->view()->paintingAssistantManager()->setVisible(true);

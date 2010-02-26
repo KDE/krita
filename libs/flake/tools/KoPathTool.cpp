@@ -828,17 +828,17 @@ bool KoPathTool::segmentAtPoint( const QPointF &point, KoPathShape* &shape, KoPa
     return (shape && segmentStart);
 }
 
-void KoPathTool::activate(bool temporary)
+void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     Q_D(KoToolBase);
-    Q_UNUSED(temporary);
+    Q_UNUSED(toolActivation);
     // retrieve the actual global handle radius
     m_handleRadius = d->canvas->resourceManager()->handleRadius();
     d->canvas->snapGuide()->reset();
 
     repaintDecorations();
     QList<KoPathShape*> selectedShapes;
-    foreach(KoShape *shape, d->canvas->shapeManager()->selection()->selectedShapes()) {
+    foreach(KoShape *shape, shapes) {
         KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
 
         if (shape->isEditable() && pathShape) {

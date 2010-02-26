@@ -58,10 +58,10 @@ KisToolSelectPath::~KisToolSelectPath()
     delete m_localTool;
 }
 
-void KisToolSelectPath::activate(bool tmp)
+void KisToolSelectPath::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KisToolSelectBase::activate(tmp);
-    m_localTool->activate(tmp);
+    KisToolSelectBase::activate(toolActivation, shapes);
+    m_localTool->activate(toolActivation, shapes);
 }
 
 void KisToolSelectPath::deactivate()

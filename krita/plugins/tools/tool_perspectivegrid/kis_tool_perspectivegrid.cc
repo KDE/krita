@@ -60,9 +60,9 @@ KisToolPerspectiveGrid::~KisToolPerspectiveGrid()
 {
 }
 
-void KisToolPerspectiveGrid::activate(bool)
+void KisToolPerspectiveGrid::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KisTool::activate();
+    KisTool::activate(toolActivation, shapes);
 
     m_canvas->view()->perspectiveGridManager()->startEdition();
     if (! m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid()->hasSubGrids()) {

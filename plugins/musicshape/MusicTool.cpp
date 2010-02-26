@@ -44,14 +44,12 @@ MusicTool::~MusicTool()
 {
 }
 
-void MusicTool::activate (bool temporary)
+void MusicTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED( temporary );
+    Q_UNUSED(toolActivation);
     //kDebug() ;
 
-    KoSelection* selection = canvas()->shapeManager()->selection();
-    foreach ( KoShape* shape, selection->selectedShapes() )
-    {
+    foreach (KoShape *shape, shapes) {
         m_musicshape = dynamic_cast<MusicShape*>( shape );
         if ( m_musicshape )
             break;

@@ -122,9 +122,9 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
 }
 
 
-void KisToolPaint::activate(bool temporary)
+void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KisTool::activate(temporary);
+    KisTool::activate(toolActivation, shapes);
     resetCursorStyle();
 }
 

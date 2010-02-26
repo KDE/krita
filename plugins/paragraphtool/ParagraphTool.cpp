@@ -208,7 +208,7 @@ void ParagraphTool::keyReleaseEvent(QKeyEvent *event)
         m_paragraphEditor.toggleSmoothMovement();
 }
 
-void  ParagraphTool::activate(bool)
+void ParagraphTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
     useCursor(Qt::ArrowCursor);
 }

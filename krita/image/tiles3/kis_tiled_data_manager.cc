@@ -73,6 +73,7 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm)
      * has already been made shared in m_hashTable(dm->m_hashTable)
      */
     memcpy(m_defaultPixel, dm.m_defaultPixel, m_pixelSize);
+    m_defaultTile = new KisTile(-1,-1, m_hashTable->defaultTileData(), 0);
 
     m_extentMinX = dm.m_extentMinX;
     m_extentMinY = dm.m_extentMinY;

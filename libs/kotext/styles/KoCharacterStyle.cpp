@@ -287,8 +287,10 @@ static void importOdfLine(const QString &type, const QString &style, const QStri
         fixedType.clear();
     else if (fixedType.isEmpty() && !fixedStyle.isEmpty())
         fixedType = "single";
-    else if (!fixedType.isEmpty() && fixedStyle.isEmpty())
+    else if (!fixedType.isEmpty() && fixedType != "none" && fixedStyle.isEmpty()) {
+        // don't set a style when the type is none
         fixedStyle = "solid";
+    }
 
     if (fixedType == "single")
         lineType = KoCharacterStyle::SingleLine;

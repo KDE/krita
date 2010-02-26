@@ -215,10 +215,9 @@ if(SHOULD_BUILD_KEXI)
     ##
     ## Test for sqlite
     ##
-    set(SQLITE_MIN_VERSION "3.6.16")
     set(SQLITE_RECOMMENDED_VERSION "3.6.22")
-    include(FindSqlite)
-    macro_log_feature(SQLITE_FOUND "SQLite" "SQLite is an embedded SQL database engine." "http://www.sqlite.org"
+    find_package(KofficeSqlite 3.6.16)
+    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
                       FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")
     ## Test for bzip2
     find_program(BZIP2_EXECUTABLE NAMES bzip2)

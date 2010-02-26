@@ -87,6 +87,7 @@ void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal sc
     // amount of precomputed data
     m_maskRadius = 0.5 * fWidth;
     
+    srand48(12345678);
     for (int y = 0; y <  dstHeight; y++){
         for (int x = 0; x < dstWidth; x++){
             double maskX = (x - centerX);

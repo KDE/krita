@@ -134,7 +134,7 @@ bool KisPaintOpPreset::save()
         return false;
 
     QDomDocument doc;
-    QDomElement root = doc.createElement("PresetResource");
+    QDomElement root = doc.createElement("Preset");
     toXML(doc, root);
     doc.appendChild(root);
     
@@ -146,20 +146,16 @@ bool KisPaintOpPreset::save()
 
 void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
 {
-    QDomElement presetElt = doc.createElement("Preset");
-
     QString paintopid = m_d->settings->getString("paintop", "");
 
-    presetElt.setAttribute("paintopid", paintopid);
-    presetElt.setAttribute("name", name());
+    elt.setAttribute("paintopid", paintopid);
+    elt.setAttribute("name", name());
 
-    m_d->settings->toXML(doc, presetElt);
-    elt.appendChild(presetElt);
+    m_d->settings->toXML(doc, elt);
 }
 
-void KisPaintOpPreset::fromXML(const QDomElement& elt)
+void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
 {
-    QDomElement presetElt = elt.firstChildElement("Preset");
     setName(presetElt.attribute("name"));
     QString paintopid = presetElt.attribute("paintopid");
 

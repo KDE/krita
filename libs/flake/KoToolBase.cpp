@@ -51,11 +51,6 @@ KoToolBase::~KoToolBase()
     delete d_ptr;
 }
 
-void KoToolBase::activate(bool temporary)
-{
-    Q_UNUSED(temporary);
-}
-
 void KoToolBase::deactivate()
 {
 }

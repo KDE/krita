@@ -287,16 +287,38 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
     Q_ASSERT(canvasData);
     if (!canvasData) return;
 
+    KoToolBase::ToolActivation toolActivation;
+    if (temporary)
+        toolActivation = KoToolBase::TemporaryActivation;
+    else
+        toolActivation = KoToolBase::DefaultActivation;
+    QSet<KoShape*> shapesToOperateOn;
+    if (canvasData->activeTool
+            && canvasData->activeTool->canvas()
+            && canvasData->activeTool->canvas()->shapeManager()) {
+        KoSelection *selection = canvasData->activeTool->canvas()->shapeManager()->selection();
+        Q_ASSERT(selection);
+
+        foreach(KoShape *shape, selection->selectedShapes()) {
+            QSet<KoShape*> delegates = shape->toolDelegates();
+            if (delegates.isEmpty()) { // no delegates, just the orig shape
+                shapesToOperateOn << shape;
+            } else {
+                shapesToOperateOn += delegates;
+            }
+        }
+    }
+
     if (canvasData->canvas->canvas()) {
         KoCanvasBase *canvas = canvasData->canvas->canvas();
         // Caller of postSwitchTool expect this to be called to update the selected tool
         KoToolProxy *tp = proxies.value(canvas);
         if (tp)
             tp->setActiveTool(canvasData->activeTool);
-        canvasData->activeTool->activate(temporary);
+        canvasData->activeTool->activate(toolActivation, shapesToOperateOn);
         canvas->updateInputMethodInfo();
     } else {
-        canvasData->activeTool->activate(temporary);
+        canvasData->activeTool->activate(toolActivation, shapesToOperateOn);
     }
 
     QMap<QString, QWidget *> optionWidgetMap = canvasData->activeTool->optionWidgets();

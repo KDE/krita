@@ -20,8 +20,8 @@
 
 #include "test.h"
 
-#include "koproperty/Property.h"
-#include "koproperty/EditorView.h"
+#include "Property.h"
+#include "EditorView.h"
 
 #include <KLocale>
 #include <KDebug>

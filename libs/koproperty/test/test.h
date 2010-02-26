@@ -23,7 +23,7 @@
 
 #include <QWidget>
 
-#include "koproperty/Set.h"
+#include "Set.h"
 
 /*!
  * @internal

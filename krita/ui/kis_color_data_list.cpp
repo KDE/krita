@@ -32,8 +32,7 @@ KisColorDataList::KisColorDataList()
 KisColorDataList::~KisColorDataList()
 {
     delete m_priorityList;
-    this->m_priorityList = 0 ;
-
+    m_priorityList = 0 ;
 //    delete m_guiList;
 }
 

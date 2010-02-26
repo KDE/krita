@@ -104,6 +104,7 @@ private slots:
     void updateActions();
     void pointToLine();
     void pointToCurve();
+    void activate();
 
 private:
 

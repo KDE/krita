@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006,2008-2009 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
- *               2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -858,6 +858,21 @@ void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &s
     connect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(activate()));
     updateOptionsWidget();
     updateActions();
+}
+
+void KoPathTool::activate()
+{
+    Q_D(KoToolBase);
+    QSet<KoShape*> shapes;
+    foreach(KoShape *shape, d->canvas->shapeManager()->selection()->selectedShapes()) {
+        QSet<KoShape*> delegates = shape->toolDelegates();
+        if (delegates.isEmpty()) {
+            shapes << shape;
+        } else {
+            shapes += delegates;
+        }
+    }
+    activate(DefaultActivation, shapes);
 }
 
 void KoPathTool::updateOptionsWidget()

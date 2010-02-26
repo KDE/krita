@@ -60,8 +60,9 @@ void Array2DImpl::init(int sx, int sy, int cols, int rows, int index, KisPaintDe
 Array2DImpl::~Array2DImpl()
 {
     delete d->randomAccessor;
-    delete d->colorSpace;
+    KisGenericColorSpace<float, 1>* cs = d->colorSpace;
     delete d;
+    delete cs;
 }
 
 int Array2DImpl::getCols() const

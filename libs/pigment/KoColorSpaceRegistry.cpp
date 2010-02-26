@@ -262,12 +262,21 @@ QString KoColorSpaceRegistry::idsToCacheName(const QString & csId, const QString
 
 KoColorSpace* KoColorSpaceRegistry::grabColorSpace(const KoColorSpace* colorSpace)
 {
-    return d->colorsSpaceFactoryRegistry.value(colorSpace->id())->grabColorSpace(colorSpace->profile());
+    if(d->colorsSpaceFactoryRegistry.contains(colorSpace->id()))
+    {
+        KoColorSpace* cs = d->colorsSpaceFactoryRegistry.value(colorSpace->id())->grabColorSpace(colorSpace->profile());
+        return cs;
+    }
+    warnPigment << "Unknow factory " << colorSpace->id() << " returning the colorspace itself";
+    return const_cast<KoColorSpace*>(colorSpace);
 }
 
 void KoColorSpaceRegistry::releaseColorSpace(KoColorSpace* colorSpace)
 {
-    d->colorsSpaceFactoryRegistry.value(colorSpace->id())->releaseColorSpace(colorSpace);
+    if(d->colorsSpaceFactoryRegistry.contains(colorSpace->id()))
+    {
+        d->colorsSpaceFactoryRegistry.value(colorSpace->id())->releaseColorSpace(colorSpace);
+    }
 }
 
 const KoColorSpaceFactory* KoColorSpaceRegistry::colorSpaceFactory(const QString &colorSpaceId) const

@@ -253,7 +253,7 @@ void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) con
 
 QRect KisPaintDevice::exactBounds() const
 {
-    if (m_datamanager->valideExactBounds()) {
+    if (m_datamanager->validExactBounds()) {
         return m_datamanager->exactBounds();
     }
 

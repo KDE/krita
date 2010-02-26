@@ -288,7 +288,7 @@ public:
         m_exactBoundsValid = true;
         m_exactBounds = rect;
     }
-    bool valideExactBounds() const {
+    bool validExactBounds() const {
         return m_exactBoundsValid;
     }
     QRect exactBounds() const {

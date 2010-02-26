@@ -161,8 +161,8 @@ public:
     virtual bool isCompatibleWith(const KoColorSpace* colorSpace) const {
         return colorSpace->colorModelId().id() == m_modelId || colorSpace->colorDepthId().id() == m_depthId;
     }
-    virtual float preferrednessLevelWith(const KoColorSpace* /*colorSpace*/) const {
-        return 1.0;
+    virtual float preferrednessLevelWith(const KoColorSpace* colorSpace) const {
+        return 0.5 * ( (colorSpace->colorModelId().id() == m_modelId) + (colorSpace->colorDepthId().id() == m_depthId) );
     }
 protected:
     QString m_modelId, m_depthId;

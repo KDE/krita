@@ -46,7 +46,10 @@ class KisSoftOpOption : public KisPaintOpOption
 public:
     KisSoftOpOption();
     ~KisSoftOpOption();
-   
+
+    int diameter() const;
+    void setDiameter(int diameter);
+    
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 

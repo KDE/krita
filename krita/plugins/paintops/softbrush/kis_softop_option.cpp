@@ -53,6 +53,28 @@ KisSoftOpOption::~KisSoftOpOption()
 }
 
 
+int KisSoftOpOption::diameter() const
+{
+    if (m_options->m_brushesTab->currentIndex() == 0)
+    {
+        return qRound(m_options->m_curveBrushTip->curveDiameter->value());
+    }else{
+        return qRound(m_options->m_gaussBrushTip->diameterSpinBox->value());
+    }
+}
+
+
+void KisSoftOpOption::setDiameter(int diameter)
+{
+    if (m_options->m_brushesTab->currentIndex() == 0)
+    {
+        m_options->m_curveBrushTip->curveDiameter->setValue(diameter);
+    }else{
+        m_options->m_gaussBrushTip->diameterSpinBox->setValue(diameter);
+    }
+}
+
+
 void KisSoftOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     setting->setProperty( SOFT_BRUSH_TIP, m_options->m_brushesTab->currentIndex());

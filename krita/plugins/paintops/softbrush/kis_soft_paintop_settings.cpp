@@ -34,9 +34,9 @@ void KisSoftPaintOpSettings::paintOutline ( const QPointF& pos, KisImageWSP imag
     if (_mode != CURSOR_IS_OUTLINE) return;
     qreal size;
     if (getInt(SOFT_BRUSH_TIP) == 0){
-        size = qRound(0.5 * getDouble(SOFTCURVE_DIAMETER));
+        size = qRound(getDouble(SOFTCURVE_DIAMETER) * getDouble(SOFTCURVE_SCALE));
     }else{
-        size = qRound(0.5 * getDouble(SOFT_DIAMETER));
+        size = qRound(getDouble(SOFT_DIAMETER));
     }
 
 
@@ -58,9 +58,9 @@ QRectF KisSoftPaintOpSettings::paintOutlineRect ( const QPointF& pos, KisImageWS
     if (_mode != CURSOR_IS_OUTLINE) return QRectF();
     qreal size;
     if (getInt(SOFT_BRUSH_TIP) == 0){
-        size = qRound(0.5 * getDouble(SOFTCURVE_DIAMETER));
+        size = qRound(getDouble(SOFTCURVE_DIAMETER) * getDouble(SOFTCURVE_SCALE));
     }else{
-        size = qRound(0.5 * getDouble(SOFT_DIAMETER));
+        size = qRound(getDouble(SOFT_DIAMETER));
     }
     
     size += 5;

@@ -39,7 +39,7 @@ const QString SOFTCURVE_ASPECT = "SoftCurve/aspect";
 const QString SOFTCURVE_SCALE = "SoftCurve/scale";
 const QString SOFTCURVE_ROTATION = "SoftCurve/rotation";
 const QString SOFTCURVE_SPACING = "SoftCurve/spacing";
-
+const QString SOFTCURVE_DENSITY = "SoftCurve/density";
 
 class KisSoftOpOption : public KisPaintOpOption
 {

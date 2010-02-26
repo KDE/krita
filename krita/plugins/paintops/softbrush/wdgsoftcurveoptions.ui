@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>385</width>
-    <height>480</height>
+    <height>500</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -38,7 +38,7 @@
      <x>10</x>
      <y>270</y>
      <width>371</width>
-     <height>187</height>
+     <height>219</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
@@ -362,6 +362,62 @@
         <string>Rectangle</string>
        </property>
       </item>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="KDoubleNumInput" name="densityBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="value">
+       <double>100.000000000000000</double>
+      </property>
+      <property name="minimum">
+       <double>0.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>100.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>1.000000000000000</double>
+      </property>
+      <property name="suffix">
+       <string>%</string>
+      </property>
+      <property name="decimals">
+       <number>0</number>
+      </property>
+      <property name="sliderEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="exponentRatio">
+       <double>1.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="densityLbl">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>60</width>
+        <height>16</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Density</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
     </item>
    </layout>

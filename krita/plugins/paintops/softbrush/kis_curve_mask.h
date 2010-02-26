@@ -38,6 +38,7 @@ struct KisCurveProperties{
     qreal aspect;
     qreal scale;
     qreal rotation;
+    qreal density;
     KisCubicCurve curve;
 };
 

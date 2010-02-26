@@ -58,6 +58,7 @@ KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainte
         m_curveMaskProperties.aspect = settings->getDouble(SOFTCURVE_ASPECT);
         m_curveMaskProperties.rotation = settings->getDouble(SOFTCURVE_ROTATION) * (M_PI/180.0);
         m_curveMaskProperties.scale = settings->getDouble(SOFTCURVE_SCALE);    
+        m_curveMaskProperties.density = settings->getDouble(SOFTCURVE_DENSITY) * 0.01;    
         m_curveMaskProperties.curve = settings->getCubicCurve(SOFTCURVE_CURVE);
         
         m_radius = qRound(0.5 * m_curveMaskProperties.diameter);
@@ -123,29 +124,6 @@ void KisSoftPaintOp::paintAt(const KisPaintInformation& info)
         m_dab->clear();
     }
 
-    KisRandomAccessor acc = m_dab->createRandomAccessor( info.pos().x(), info.pos().y() );
-
-    quint8 alpha = 0;
-    int pixelSize = m_dab->colorSpace()->pixelSize();
-
-    int curX = qRound(info.pos().x());
-    int curY = qRound(info.pos().y());
-
-    int left = curX - m_radius;
-    int top = curY - m_radius;
-
-    int w = m_radius * 2 + 1;
-    int h = w;
-
-    int maskX;
-    int maskY;
-
-    KisRectIterator m_srcIt = m_dab->createRectIterator(left, top, w ,h );
-    int x;
-    int y;
-
-    
-    
     if (m_brushType == CURVE){
         KisFixedPaintDeviceSP dab = cachedDab(painter()->device()->colorSpace());
 
@@ -166,7 +144,26 @@ void KisSoftPaintOp::paintAt(const KisPaintInformation& info)
         painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
         return;
     }
-    
+
+    quint8 alpha = 0;
+    int pixelSize = m_dab->colorSpace()->pixelSize();
+
+    int curX = qRound(info.pos().x());
+    int curY = qRound(info.pos().y());
+
+    int left = curX - m_radius;
+    int top = curY - m_radius;
+
+    int w = m_radius * 2 + 1;
+    int h = w;
+
+    int maskX;
+    int maskY;
+
+
+    KisRectIterator m_srcIt = m_dab->createRectIterator(left, top, w ,h );
+    int x;
+    int y;
     
     int border = ( m_radius ) * ( m_radius );    
     for (;!m_srcIt.isDone(); ++m_srcIt) {

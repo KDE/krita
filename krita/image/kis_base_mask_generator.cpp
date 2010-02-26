@@ -62,23 +62,23 @@ void KisMaskGenerator::init()
 void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
     Q_UNUSED(doc);
-    e.setAttribute("autobrush_radius", d->m_radius);
-    e.setAttribute("autobrush_ratio", d->m_ratio);
-    e.setAttribute("autobrush_hfade", d->m_fh * 2); // 'cause in init we divide it again
-    e.setAttribute("autobrush_vfade", d->m_fv * 2); // 'cause in init we divide it again
-    e.setAttribute("autobrush_spikes", d->m_spikes);
+    e.setAttribute("radius", d->m_radius);
+    e.setAttribute("ratio", d->m_ratio);
+    e.setAttribute("hfade", d->m_fh * 2); // 'cause in init we divide it again
+    e.setAttribute("vfade", d->m_fv * 2); // 'cause in init we divide it again
+    e.setAttribute("spikes", d->m_spikes);
 
 }
 
 KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
 {
-    if (elt.hasAttribute("autobrush_radius")) {
-        double radius = elt.attribute("autobrush_radius", "1.0").toDouble();
-        double ratio = elt.attribute("autobrush_ratio", "1.0").toDouble();
-        double hfade = elt.attribute("autobrush_hfade", "0.0").toDouble();
-        double vfade = elt.attribute("autobrush_vfade", "0.0").toDouble();
-        int spikes = elt.attribute("autobrush_spikes", "2").toInt();
-        QString typeShape = elt.attribute("autobrush_type", "circle");
+    if (elt.hasAttribute("radius")) {
+        double radius = elt.attribute("radius", "1.0").toDouble();
+        double ratio = elt.attribute("ratio", "1.0").toDouble();
+        double hfade = elt.attribute("hfade", "0.0").toDouble();
+        double vfade = elt.attribute("vfade", "0.0").toDouble();
+        int spikes = elt.attribute("spikes", "2").toInt();
+        QString typeShape = elt.attribute("type", "circle");
 
         if (typeShape == "circle") {
             return new KisCircleMaskGenerator(radius, ratio, hfade, vfade, spikes);
@@ -86,11 +86,11 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
             return new KisRectangleMaskGenerator(radius, ratio, hfade, vfade, spikes);
         }
     } else {
-        double width = elt.attribute("autobrush_width", "1.0").toDouble();
-        double height = elt.attribute("autobrush_height", "1.0").toDouble();
-        double hfade = elt.attribute("autobrush_hfade", "1.0").toDouble();
-        double vfade = elt.attribute("autobrush_vfade", "1.0").toDouble();
-        QString typeShape = elt.attribute("autobrush_type", "circle");
+        double width = elt.attribute("width", "1.0").toDouble();
+        double height = elt.attribute("height", "1.0").toDouble();
+        double hfade = elt.attribute("hfade", "1.0").toDouble();
+        double vfade = elt.attribute("vfade", "1.0").toDouble();
+        QString typeShape = elt.attribute("type", "circle");
 
         if (typeShape == "circle") {
             return new KisCircleMaskGenerator(width, height, hfade, vfade);

@@ -42,11 +42,12 @@ public:
      */
     KisFilterConfiguration(const QString & name, qint32 version);
 
+protected:
     /**
      * Deep copy the filter configFile
      */
     KisFilterConfiguration(const KisFilterConfiguration & rhs);
-
+public:
     virtual ~KisFilterConfiguration();
 
 public:

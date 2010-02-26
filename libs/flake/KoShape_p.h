@@ -53,6 +53,7 @@ public:
 
     KoShapeContainer *parent;
     QSet<KoShapeManager *> shapeManagers;
+    QSet<KoShape *> toolDelegates;
     KoShapeUserData *userData;
     KoShapeApplicationData *appData;
     KoShapeBackground * fill; ///< Stands for the background color / fill etc.

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006, 2008 Casper Boemann <cbr@boemann.dk>
-   Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2007-2009 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -834,6 +834,24 @@ public:
      * @returns true if collision detection is on.
      */
     bool collisionDetection();
+
+    /**
+     * Return the tool delegates for this shape.
+     * In Flake a shape being selected will cause the tool manager to make available all tools that
+     * can edit the selected shapes.  In some cases selecting one shape should allow the tool to
+     * edit a related shape be available too.  The tool delegates allows this to happen by taking
+     * all the shapes in the set into account on tool selection.
+     * Notice that if you the set is non-empty 'this' shape is no longer looked at. You can choose
+     * to add itself to the set too.
+     */
+    QSet<KoShape*> toolDelegates() const;
+
+    /**
+     * Set the tool delegates.
+     * @param delegates the new delegates.
+     * @see toolDelegates()
+     */
+    void setToolDelegates(const QSet<KoShape*> &delegates);
 
     /**
      * \internal

@@ -517,8 +517,16 @@ void KoToolManager::Private::selectionChanged(QList<KoShape*> shapes)
 {
     QList<QString> types;
     foreach(KoShape *shape, shapes) {
-        if (! types.contains(shape->shapeId())) {
-            types.append(shape->shapeId());
+        QSet<KoShape*> delegates = shape->toolDelegates();
+        if (delegates.isEmpty()) { // no delegates, just the orig shape
+            delegates << shape;
+        }
+
+        foreach (KoShape *shape2, delegates) {
+            Q_ASSERT(shape2);
+            if (! types.contains(shape2->shapeId())) {
+                types.append(shape2->shapeId());
+            }
         }
     }
 

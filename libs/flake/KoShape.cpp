@@ -1451,6 +1451,18 @@ void KoShape::setFilterEffectStack(KoFilterEffectStack *filterEffectStack)
     notifyChanged();
 }
 
+QSet<KoShape*> KoShape::toolDelegates() const
+{
+    Q_D(const KoShape);
+    return d->toolDelegates;
+}
+
+void KoShape::setToolDelegates(const QSet<KoShape*> &delegates)
+{
+    Q_D(KoShape);
+    d->toolDelegates = delegates;
+}
+
 KoShapePrivate *KoShape::priv()
 {
     Q_D(KoShape);

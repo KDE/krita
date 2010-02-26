@@ -65,10 +65,16 @@ void KisPainterlyMixer::initSpots()
     loadColors();
 
     l->setSpacing(5);
+
     for (row = 0; row < ROWS; row++) {
         for (col = 0; col < COLS; col++) {
             int index = row * COLS + col;
             QToolButton *curr = new ColorSpot(m_spotsFrame, m_vColors[index]);
+            QPalette p (curr->palette());
+            p.setColor(QPalette::Button, m_vColors[index].toQColor());
+            curr->setPalette(p);
+            curr->setAutoFillBackground(false);
+
             l->addWidget(curr, row, col);
 
             m_bgColors->addButton(curr, index);

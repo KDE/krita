@@ -281,6 +281,8 @@ void KoFavoriteResourceManager::slotChangeFGColorSelector(KoColor c)
 
 void KoFavoriteResourceManager::addRecentColorUpdate(int guipos)
 {
+    // Do not update the key, the colour might be selected but it is not used yet. So we are not supposed
+    // to update the colour priority when we select it.
     m_colorList->updateKey(guipos);
     if (m_popupPalette)
     {

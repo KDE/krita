@@ -89,8 +89,10 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
         QDomText text;
         if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KisCubicCurve>()) {
             text = doc.createCDATASection(v.value<KisCubicCurve>().toString());
-        } else {
+        } else if(v.type() == QVariant::String ) {
             text = doc.createCDATASection(v.toString());  // XXX: Unittest this!
+        } else {
+            text = doc.createTextNode(v.toString());
         }
         e.appendChild(text);
         root.appendChild(e);

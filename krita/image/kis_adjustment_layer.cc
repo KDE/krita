@@ -43,7 +43,8 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageWSP image,
         : KisSelectionBasedLayer(image.data(), name, selection),
         m_d(new Private())
 {
-    m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(kfc);
+    if(kfc)
+        m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(kfc);
 }
 
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)

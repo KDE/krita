@@ -42,7 +42,7 @@ public:
     virtual ~KisGbrBrushFactory() {}
 
     virtual QString id() const {
-        return "kis_gbr_brush";
+        return "gbr_brush";
     }
 
     /**

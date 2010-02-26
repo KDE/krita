@@ -152,10 +152,12 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
 
 void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
 {
-    d->shape->toXML(doc, e);
-    e.setAttribute("brush_type", "kis_auto_brush");
-    e.setAttribute("brush_spacing", spacing());
-    e.setAttribute("brush_angle", d->angle);
+    QDomElement shapeElt = doc.createElement("MaskGenerator");
+    d->shape->toXML(doc, shapeElt);
+    e.appendChild(shapeElt);
+    e.setAttribute("type", "auto_brush");
+    e.setAttribute("spacing", spacing());
+    e.setAttribute("angle", d->angle);
 }
 
 QImage KisAutoBrush::createBrushPreview()

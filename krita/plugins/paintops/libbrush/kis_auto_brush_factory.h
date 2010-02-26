@@ -41,7 +41,7 @@ public:
     virtual ~KisAutoBrushFactory() {}
 
     virtual QString id() const {
-        return "kis_auto_brush";
+        return "auto_brush";
     }
 
     /**

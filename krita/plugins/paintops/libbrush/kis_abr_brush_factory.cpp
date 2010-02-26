@@ -40,7 +40,7 @@ KisBrushSP KisAbrBrushFactory::getOrCreateBrush(const QDomElement& brushDefiniti
         return 0;
     }
     
-    double spacing = brushDefinition.attribute("brush_spacing", "0.25").toDouble();
+    double spacing = brushDefinition.attribute("spacing", "0.25").toDouble();
     brush->setSpacing(spacing);
 
     return brush;

@@ -64,7 +64,7 @@ KisBrushRegistry* KisBrushRegistry::instance()
 
 KisBrushSP KisBrushRegistry::getOrCreateBrush(const QDomElement& element)
 {
-    QString brushType = element.attribute("brush_type");
+    QString brushType = element.attribute("type");
 
     if (brushType.isEmpty()) return 0;
 

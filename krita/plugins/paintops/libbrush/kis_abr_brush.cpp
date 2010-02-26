@@ -76,12 +76,10 @@ void KisAbrBrush::setImage(const QImage& image)
 void KisAbrBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
     Q_UNUSED(d);
-    e.setAttribute("type", "brush"); // legacy
-    e.setAttribute("brush_type", "kis_abr_brush");
+    e.setAttribute("type", "abr_brush");
     e.setAttribute("name", name()); // legacy
-    e.setAttribute("filename", filename()); // legacy
-    e.setAttribute("brush_filename", filename());
-    e.setAttribute("brush_spacing", spacing());
+    e.setAttribute("filename", filename());
+    e.setAttribute("spacing", spacing());
 }
 
 QString KisAbrBrush::defaultFileExtension() const

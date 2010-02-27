@@ -136,7 +136,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     Q_ASSERT(uri.isLocalFile());
 
     // open the file
-    QFile file(QFile::encodeName(uri.toLocalFile()));
+    QFile file(uri.toLocalFile());
     if (!file.exists()) {
         return (KisImageBuilder_RESULT_NOT_EXIST);
     }
@@ -193,7 +193,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         delete profile;
         profile = 0;
     }
-    
+
     // Retrieve a pointer to the colorspace
     const KoColorSpace* cs;
     if (profile && profile->isSuitableForOutput()) {

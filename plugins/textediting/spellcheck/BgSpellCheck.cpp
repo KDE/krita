@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2008 Fredy Yanardi <fyanardi@gmail.com>
- * Copyright (C) 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,14 +24,20 @@
 #include <KoCharacterStyle.h>
 
 #include <QTextDocument>
+#include <QCoreApplication>
 #include <QTextBlock>
 #include <KDebug>
+
+#define MaxCharsPerRun 1000
 
 BgSpellCheck::BgSpellCheck(const Speller &speller, QObject *parent):
     BackgroundChecker(speller, parent)
 {
     connect(this, SIGNAL(misspelling(const QString &, int)), this, SLOT(foundMisspelling(const QString &, int)));
-    setDefaultLanguage(speller.language());
+    QString lang = speller.language();
+    if (lang.isEmpty()) // have *some* default...
+        lang = "en_US";
+    setDefaultLanguage(lang);
 }
 
 void BgSpellCheck::setDefaultLanguage(const QString &language)
@@ -47,34 +53,77 @@ void BgSpellCheck::setDefaultLanguage(const QString &language)
 void BgSpellCheck::startRun(QTextDocument *document, int startPosition, int endPosition)
 {
     m_document = document;
-    m_cursor = QTextCursor(document);
-    m_cursor.setPosition(startPosition);
-    m_currentPosition = -1;
+    m_currentPosition = startPosition;
+    m_nextPosition = startPosition;
     m_endPosition = endPosition;
+    if (m_currentLanguage != m_defaultLanguage || m_currentCountry != m_defaultCountry) {
+        m_currentCountry = m_defaultCountry;
+        m_currentLanguage = m_defaultLanguage;
+        changeLanguage(m_currentLanguage);
+    }
     if (m_currentPosition < m_endPosition) {
         kDebug(31000) << "Starting:" << m_currentPosition << m_endPosition;
         BackgroundChecker::start();
+    } else {
+        emit done();
     }
 }
 
 QString BgSpellCheck::fetchMoreText()
 {
-    m_cursor.select(QTextCursor::WordUnderCursor);
-    QString word = m_cursor.selectedText();
-    int position = m_cursor.selectionStart();
+    m_currentPosition = m_nextPosition;
+    if (m_currentPosition >= m_endPosition)
+        return QString();
 
-    QString language = m_defaultLanguage;
-    QString country = m_defaultCountry;
-    QTextCharFormat cf = m_cursor.blockCharFormat();
+    QTextBlock block = m_document->findBlock(m_currentPosition);
+    if (!block.isValid()) {
+        m_nextPosition = m_endPosition; // ends run
+        return QString();
+    }
+
+    QString language = m_currentLanguage;
+    QString country = m_currentCountry;
+    QTextCharFormat cf = block.charFormat();
     if (cf.hasProperty(KoCharacterStyle::Language))
         language = cf.property(KoCharacterStyle::Language).toString();
     if (cf.hasProperty(KoCharacterStyle::Country))
         country = cf.property(KoCharacterStyle::Country).toString();
-    cf = m_cursor.charFormat();
-    if (cf.hasProperty(KoCharacterStyle::Language))
-        language = cf.property(KoCharacterStyle::Language).toString();
-    if (cf.hasProperty(KoCharacterStyle::Country))
-        country = cf.property(KoCharacterStyle::Country).toString();
+
+    QTextBlock::iterator iter = block.begin();
+    while (!iter.atEnd() && iter.fragment().position() + iter.fragment().length() < m_currentPosition)
+        iter++;
+
+    int end = m_endPosition;
+    do {
+        cf = iter.fragment().charFormat();
+        if (cf.hasProperty(KoCharacterStyle::Language))
+            language = cf.property(KoCharacterStyle::Language).toString();
+        if (cf.hasProperty(KoCharacterStyle::Country))
+            country = cf.property(KoCharacterStyle::Country).toString();
+
+        ++iter;
+        while (iter.atEnd()) {
+            end = block.position() + block.length() - 1;
+            block = block.next();
+            if (!block.isValid())
+                break;
+            cf = block.charFormat();
+            if (cf.hasProperty(KoCharacterStyle::Language))
+                language = cf.property(KoCharacterStyle::Language).toString();
+            if (cf.hasProperty(KoCharacterStyle::Country))
+                country = cf.property(KoCharacterStyle::Country).toString();
+            iter = block.begin();
+        }
+        if (!block.isValid())
+            break;
+
+        Q_ASSERT(!iter.atEnd());
+        Q_ASSERT(iter.fragment().isValid());
+        end = iter.fragment().position() + iter.fragment().length();
+        if (end >= qMin(m_endPosition, m_currentPosition + MaxCharsPerRun))
+            break;
+    } while(language == m_currentLanguage && country == m_currentCountry);
+
     if (m_currentLanguage != language || m_currentCountry != country) {
         kDebug(31000) << "switching to language" << language << country;
         // hmm, seems we can't set country. *shrug*
@@ -83,53 +132,15 @@ QString BgSpellCheck::fetchMoreText()
         m_currentCountry = country;
     }
 
-    // checking should end here
-    if (position >= m_endPosition)
-        return QString();
-
-    // check whether we can move to next word (moveNextWord)
-    // and whether we are keep selecting the same word again and again (samePosition)
-    const bool moveNextWord = m_cursor.movePosition(QTextCursor::NextWord);
-    const bool samePosition = m_currentPosition == position;
-    if (!moveNextWord || samePosition || word.isEmpty()) {
-        if (samePosition) {
-            // analyze the remaining of the text in this block, whether we still have words to check
-            m_cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            QString remaining = m_cursor.selectedText();
-            // kDebug(31000) << "Remaining text from this block: " << remaining;
-            int pos = m_cursor.selectionStart();
-            QString::ConstIterator constIter = remaining.constBegin();
-            while (constIter != remaining.constEnd()) {
-                if (constIter->isLetter()) {
-                    m_cursor.setPosition(++pos);
-                    return word;
-                }
-                constIter++;
-                pos++;
-            }
-        }
-
-        while (true) { // found an end of text block, search for a non-empty text block
-            if (word.isEmpty()) {
-                // kDebug(31000) << "Empty word";
-                QString space(" "); // just to avoid returning empty string which will stop bg checker
-                if (!m_cursor.movePosition(QTextCursor::NextBlock))
-                    return QString();
-                return space;
-            }
-            if (m_cursor.movePosition(QTextCursor::NextBlock)) {
-                if (m_cursor.block().length() == 1) // keep searching if current block is empty
-                    continue;
-                else // found non-empty block
-                    break;
-            } else {
-                return QString(); // end of document, return empty string to finish background spelling
-            }
-        }
+    QTextCursor cursor(m_document);
+    cursor.setPosition(end);
+    if (end != m_endPosition) {
+        cursor.movePosition(QTextCursor::StartOfWord); // word boundary
+        end = cursor.position();
     }
-    m_currentPosition = position;
-
-    return word;
+    cursor.setPosition(m_currentPosition, QTextCursor::KeepAnchor);
+    m_nextPosition = end;
+    return cursor.selectedText();
 }
 
 void BgSpellCheck::foundMisspelling(const QString &word, int start)

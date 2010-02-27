@@ -67,7 +67,7 @@ void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
     QTextBlock block = document->findBlock(cursorPosition);
     if (!block.isValid())
         return;
-    checkSection(document, block.position(), block.position() + block.length());
+    checkSection(document, block.position(), block.position() + block.length() - 1);
 }
 
 void SpellCheck::finishedParagraph(QTextDocument *document, int cursorPosition)
@@ -80,7 +80,10 @@ void SpellCheck::finishedParagraph(QTextDocument *document, int cursorPosition)
 
 void SpellCheck::checkSection(QTextDocument *document, int startPosition, int endPosition)
 {
-    if (m_documentIsLoading || !m_enableSpellCheck) return;
+    if (m_documentIsLoading || !m_enableSpellCheck)
+        return;
+    if (startPosition >= endPosition) // no work
+        return;
 
     foreach (const SpellSections &ss, m_documentsQueue) {
         if (ss.from <= startPosition && ss.to >= endPosition)

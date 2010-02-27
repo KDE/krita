@@ -52,9 +52,9 @@ signals:
 
 private:
     QTextDocument *m_document;
-    QTextCursor m_cursor;
 
     int m_currentPosition;
+    int m_nextPosition; // the position we expect the next fetchMoreText to start from
     int m_endPosition;
     QString m_currentLanguage;
     QString m_currentCountry;

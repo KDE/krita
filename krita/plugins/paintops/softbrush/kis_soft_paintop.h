@@ -19,8 +19,6 @@
 #ifndef KIS_SOFT_PAINTOP_H_
 #define KIS_SOFT_PAINTOP_H_
 
-//#define BENCHMARK
-
 #include <kis_paintop.h>
 #include <kis_types.h>
 #include <kis_pressure_rotation_option.h>
@@ -34,7 +32,7 @@
 
 class KisPainter;
 class KisCubicCurve;
-
+class KisBrushSizeProperties;
 
 struct KisGaussSoftBrush{
     KisCircleAlphaMask * distMask;
@@ -72,7 +70,7 @@ private:
     KisGaussSoftBrush m_gaussBrush;
     SoftBrushType m_brushType;
     
-    
+    KisBrushSizeProperties m_sizeProperties;
     KisCurveProperties m_curveMaskProperties;
     KisCurveMask m_curveMask;
 
@@ -81,11 +79,6 @@ private:
     qreal m_spacing;
 
     KisPressureRotationOption m_rotationOption;    
-#ifdef BENCHMARK
-    int m_total;
-    int m_count;
-#endif
-    
 };
 
 #endif // KIS_SOFT_PAINTOP_H_

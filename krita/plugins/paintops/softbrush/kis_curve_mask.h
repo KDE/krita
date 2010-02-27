@@ -32,13 +32,10 @@ class KisFixedPaintDevice;
 
 #include <kis_types.h>
 
+#include "kis_brush_size_properties.h"
+
 struct KisCurveProperties{
     QVector<qreal> curveData;
-    quint16 diameter;
-    qreal aspect;
-    qreal scale;
-    qreal rotation;
-    qreal density;
     KisCubicCurve curve;
 };
 
@@ -53,20 +50,25 @@ public:
     void setProperties(KisCurveProperties * properties){
         m_properties = properties;
     }
+    
+    void setSizeProperties(KisBrushSizeProperties * properties){
+        m_sizeProperties = properties;
+    }
 
     QPointF hotSpot(qreal scale, qreal rotation);
     
     qreal maskWidth(qreal scale){
-        return m_properties->diameter * scale;
+        return m_sizeProperties->diameter * scale;
     }
     
     qreal maskHeight(qreal scale){
-        return m_properties->diameter * m_properties->aspect  * scale;
+        return m_sizeProperties->diameter * m_sizeProperties->aspect  * scale;
     }
     
 
 private:    
     KisCurveProperties * m_properties;
+    KisBrushSizeProperties * m_sizeProperties;
     
     qreal m_majorAxis;
     qreal m_minorAxis;

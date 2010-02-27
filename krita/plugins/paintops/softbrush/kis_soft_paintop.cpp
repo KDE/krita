@@ -40,6 +40,7 @@
 #include <KoColor.h>
 
 #include <kis_softop_option.h>
+#include <kis_soft_size_option.h>
 
 
 KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
@@ -47,35 +48,24 @@ KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainte
     , m_settings( settings )
     , m_image ( image )
 {
-
+    // load shared settings like diameter, size, etc.
+    m_sizeProperties.readOptionSetting(settings);
+    m_radius = qRound(0.5 * m_sizeProperties.diameter);
+    
     m_brushType = SoftBrushType(settings->getInt(SOFT_BRUSH_TIP));
-    // brushType == 0
     if (m_brushType == CURVE){
+        srand48(time(0));
         m_rotationOption.readOptionSetting(settings);
         m_rotationOption.sensor()->reset();
         
-        m_curveMaskProperties.diameter = quint16(settings->getDouble(SOFTCURVE_DIAMETER));
-        m_curveMaskProperties.aspect = settings->getDouble(SOFTCURVE_ASPECT);
-        m_curveMaskProperties.rotation = settings->getDouble(SOFTCURVE_ROTATION) * (M_PI/180.0);
-        m_curveMaskProperties.scale = settings->getDouble(SOFTCURVE_SCALE);    
-        m_curveMaskProperties.density = settings->getDouble(SOFTCURVE_DENSITY) * 0.01;    
         m_curveMaskProperties.curve = settings->getCubicCurve(SOFTCURVE_CURVE);
-        
-        m_radius = qRound(0.5 * m_curveMaskProperties.diameter);
         m_curveMaskProperties.curveData = m_curveMaskProperties.curve.floatTransfer(m_radius+2);
-        
-        m_curveMask.setProperties(&m_curveMaskProperties);
 
-        m_xSpacing = qMax(0.5,settings->getDouble(SOFTCURVE_SPACING) * m_radius * m_curveMaskProperties.scale);
-        m_ySpacing = qMax(0.5,settings->getDouble(SOFTCURVE_SPACING) * m_radius * m_curveMaskProperties.aspect * m_curveMaskProperties.scale);
+        m_curveMask.setProperties(&m_curveMaskProperties);
+        m_curveMask.setSizeProperties(&m_sizeProperties);
 
         m_gaussBrush.distMask = 0;
     }else if (m_brushType == GAUSS){
-
-        m_xSpacing = qMax(1.0,settings->getDouble(SOFT_SPACING) * m_radius);
-        m_ySpacing = qMax(1.0,settings->getDouble(SOFT_SPACING) * m_radius);
-
-        m_radius = qRound(settings->getDouble(SOFT_DIAMETER) * 0.5);
         m_gaussBrush.distMask = new KisCircleAlphaMask(m_radius);
         m_gaussBrush.distMask->setSigma( settings->getDouble(SOFT_SIGMA), settings->getDouble(SOFT_SOFTNESS) / 100.0  );
         m_gaussBrush.distMask->generateGaussMap( true );
@@ -85,6 +75,9 @@ KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainte
     }
     m_color = painter->paintColor();
 
+    // compute spacing for brush
+    m_xSpacing = qMax(0.5,m_sizeProperties.spacing * 0.5 * m_sizeProperties.diameter * m_sizeProperties.scale);
+    m_ySpacing = qMax(0.5,m_sizeProperties.spacing * 0.5 * m_sizeProperties.diameter * m_sizeProperties.aspect * m_sizeProperties.scale);
     m_spacing = sqrt(m_xSpacing*m_xSpacing + m_ySpacing*m_ySpacing);
     
 #ifdef BENCHMARK
@@ -99,11 +92,6 @@ KisSoftPaintOp::~KisSoftPaintOp()
 
 double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
 {
-#ifdef BENCHMARK
-    QTime time;
-    time.start();
-#endif
-
     if (!painter()) return m_spacing;
 
     if (!m_dab) {
@@ -120,16 +108,22 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
         double subPixelX;
         qint32 y;
         double subPixelY;
-        
         double rotation = m_rotationOption.apply(info);
                 
-        rotation += m_curveMaskProperties.rotation;
-        QPointF pos = info.pos() - m_curveMask.hotSpot(m_curveMaskProperties.scale, rotation);
+        rotation += m_sizeProperties.rotation;
+
+        QPointF pt = info.pos();
+        if (m_sizeProperties.jitterEnabled){
+            pt.setX(pt.x() + (  ( m_sizeProperties.diameter * drand48() ) - m_radius) * m_sizeProperties.jitterMovementAmount);
+            pt.setY(pt.y() + (  ( m_sizeProperties.diameter * drand48() ) - m_radius) * m_sizeProperties.jitterMovementAmount);
+        }
+
+        QPointF pos = pt - m_curveMask.hotSpot(m_sizeProperties.scale, rotation);
         
         splitCoordinate(pos.x(), &x, &subPixelX);
         splitCoordinate(pos.y(), &y, &subPixelY);
         
-        m_curveMask.mask(dab,painter()->paintColor(),m_curveMaskProperties.scale,rotation,subPixelX,subPixelY);
+        m_curveMask.mask(dab,painter()->paintColor(),m_sizeProperties.scale,rotation,subPixelX,subPixelY);
         painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
         return m_spacing;
     }
@@ -181,15 +175,26 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
 
     QRect rc(left,top,w,h); 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-
-#ifdef BENCHMARK
-    int msec = time.elapsed();
-    kDebug() << msec << " ms/dab " << "[average: " << m_total / (qreal)m_count << "]";
-    m_total += msec;
-    m_count++;
-#endif
     return m_spacing;
 }
 
 
+
+void KisBrushSizeProperties::readOptionSetting(const KisSoftPaintOpSettings* settings)
+{
+    //TODO:shape
+    diameter = quint16(settings->getDouble(SOFT_DIAMETER));
+    aspect = settings->getDouble(SOFT_ASPECT);
+    rotation = settings->getDouble(SOFT_ROTATION) * (M_PI/180.0);
+    scale = settings->getDouble(SOFT_SCALE);    
+    density = settings->getDouble(SOFT_DENSITY) * 0.01;
+    spacing = settings->getDouble(SOFT_SPACING);
+    if (jitterEnabled = settings->getBool(SOFT_JITTER_MOVEMENT_ENABLED)){
+        jitterMovementAmount = settings->getDouble(SOFT_JITTER_MOVEMENT);
+    }else{
+        jitterMovementAmount = 0.0;
+    }
+    
+    
+}
 

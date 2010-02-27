@@ -26,66 +26,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
-     <width>361</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="diameterLayout">
-    <item>
-     <widget class="QLabel" name="radiusLabel">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>diameter</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="KDoubleNumInput" name="diameterSpinBox">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="value">
-       <double>20.000000000000000</double>
-      </property>
-      <property name="minimum">
-       <double>1.000000000000000</double>
-      </property>
-      <property name="maximum">
-       <double>1000.000000000000000</double>
-      </property>
-      <property name="singleStep">
-       <double>1.000000000000000</double>
-      </property>
-      <property name="suffix">
-       <string/>
-      </property>
-      <property name="decimals">
-       <number>0</number>
-      </property>
-      <property name="sliderEnabled">
-       <bool>true</bool>
-      </property>
-      <property name="exponentRatio">
-       <double>1.500000000000000</double>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>190</y>
+     <y>90</y>
      <width>108</width>
      <height>62</height>
     </rect>
@@ -130,70 +71,11 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>50</y>
-     <width>361</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="spacingLayout">
-    <item>
-     <widget class="QLabel" name="spacingLbl">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>spacing</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="KDoubleNumInput" name="spacingSPBox">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="value">
-       <double>0.200000000000000</double>
-      </property>
-      <property name="minimum">
-       <double>0.000000000000000</double>
-      </property>
-      <property name="maximum">
-       <double>1.000000000000000</double>
-      </property>
-      <property name="singleStep">
-       <double>0.100000000000000</double>
-      </property>
-      <property name="suffix">
-       <string/>
-      </property>
-      <property name="decimals">
-       <number>2</number>
-      </property>
-      <property name="sliderEnabled">
-       <bool>true</bool>
-      </property>
-      <property name="exponentRatio">
-       <double>1.000000000000000</double>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
   <widget class="QLabel" name="spacingLbl_2">
    <property name="geometry">
     <rect>
      <x>7</x>
-     <y>90</y>
+     <y>10</y>
      <width>49</width>
      <height>28</height>
     </rect>
@@ -212,7 +94,7 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>90</y>
+     <y>10</y>
      <width>306</width>
      <height>28</height>
     </rect>
@@ -252,7 +134,7 @@
    <property name="geometry">
     <rect>
      <x>63</x>
-     <y>130</y>
+     <y>50</y>
      <width>306</width>
      <height>28</height>
     </rect>
@@ -292,7 +174,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>130</y>
+     <y>50</y>
      <width>49</width>
      <height>28</height>
     </rect>

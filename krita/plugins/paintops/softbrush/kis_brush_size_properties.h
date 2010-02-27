@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,31 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SOFTPAINTOP_SETTINGS_WIDGET_H_
-#define KIS_SOFTPAINTOP_SETTINGS_WIDGET_H_
+#ifndef KIS_BRUSH_SIZE_PROPERTIES_H_
+#define KIS_BRUSH_SIZE_PROPERTIES_H_
 
-#include <kis_paintop_options_widget.h>
+#include <QtGlobal>
+class KisSoftPaintOpSettings;
 
-
-class KisPaintActionTypeOption;
-class KisSoftOpOption;
-class KisSoftSizeOption;
-
-class KisSoftPaintOpSettingsWidget : public KisPaintOpOptionsWidget
-{
-    Q_OBJECT
+class KisBrushSizeProperties{
 
 public:
-    KisSoftPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisSoftPaintOpSettingsWidget();
-
-    KisPropertiesConfiguration* configuration() const;
-    virtual void changePaintOpSize ( qreal x, qreal y );
+    quint16 shape;
+    quint16 diameter;
+    qreal aspect;
+    qreal scale;
+    qreal rotation;
+    qreal spacing;
+    qreal density;
     
+    qreal jitterMovementAmount;
+    bool jitterEnabled;
+
 public:
-    KisPaintActionTypeOption* m_paintActionTypeOption;
-    KisSoftOpOption* m_softOption;
-    KisSoftSizeOption * m_sizeOption;
+    void readOptionSetting(const KisSoftPaintOpSettings *settings);
+
 };
 
 #endif

@@ -15,34 +15,38 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_SOFTOP_OPTION_H
-#define KIS_SOFTOP_OPTION_H
+#ifndef KIS_SOFT_SIZE_OPTION_H
+#define KIS_SOFT_SIZE_OPTION_H
 
-#include <kis_softbrush_selection_widget.h>
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
-/// 0 - CURVE , 1 - GAUSS
-const QString SOFT_BRUSH_TIP = "Soft/brushTip";
+class KisSoftSizeOptionsWidget;
 
-const QString SOFT_END = "Soft/end";
-const QString SOFT_START = "Soft/start";
-const QString SOFT_SIGMA = "Soft/sigma";
-const QString SOFT_SOFTNESS =  "Soft/softness";
+const QString SOFT_SHAPE = "Soft/shape";
+const QString SOFT_DIAMETER = "Soft/diameter";
+const QString SOFT_ASPECT = "Soft/aspect";
+const QString SOFT_SCALE = "Soft/scale";
+const QString SOFT_ROTATION = "Soft/rotation";
+const QString SOFT_SPACING = "Soft/spacing";
+const QString SOFT_DENSITY = "Soft/density";
+const QString SOFT_JITTER_MOVEMENT = "Soft/jitterMovement";
+const QString SOFT_JITTER_MOVEMENT_ENABLED = "Soft/jitterMovementEnabled";
 
-const QString SOFTCURVE_CURVE = "SoftCurve/curve";
-
-class KisSoftOpOption : public KisPaintOpOption
+class KisSoftSizeOption : public KisPaintOpOption
 {
 public:
-    KisSoftOpOption();
-    ~KisSoftOpOption();
+    KisSoftSizeOption();
+    ~KisSoftSizeOption();
 
+    int diameter() const;
+    void setDiameter(int diameter);
+    
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
 private:
-    KisSoftBrushSelectionWidget * m_options;
+    KisSoftSizeOptionsWidget * m_options;
 };
 
 #endif

@@ -27,20 +27,12 @@ KisSoftOpOption::KisSoftOpOption()
     m_checkable = false;
     m_options = new KisSoftBrushSelectionWidget();
 
-    connect(m_options->m_gaussBrushTip->diameterSpinBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
     connect(m_options->m_gaussBrushTip->endSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
     connect(m_options->m_gaussBrushTip->startSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->m_gaussBrushTip->spacingSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
     connect(m_options->m_gaussBrushTip->sigmaSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
     connect(m_options->m_gaussBrushTip->flowSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
 
-    connect(m_options->m_curveBrushTip->curveDiameter,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->m_curveBrushTip->scale,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->m_curveBrushTip->spacing,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
     connect(m_options->m_curveBrushTip->softCurve, SIGNAL(modified()),SIGNAL(sigSettingChanged()));
-    connect(m_options->m_curveBrushTip->aspectBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->m_curveBrushTip->rotationBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->m_curveBrushTip->densityBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     
     connect(m_options->m_brushesTab, SIGNAL(currentChanged(int)),SIGNAL(sigSettingChanged()));
     
@@ -53,44 +45,15 @@ KisSoftOpOption::~KisSoftOpOption()
 }
 
 
-int KisSoftOpOption::diameter() const
-{
-    if (m_options->m_brushesTab->currentIndex() == 0)
-    {
-        return qRound(m_options->m_curveBrushTip->curveDiameter->value());
-    }else{
-        return qRound(m_options->m_gaussBrushTip->diameterSpinBox->value());
-    }
-}
-
-
-void KisSoftOpOption::setDiameter(int diameter)
-{
-    if (m_options->m_brushesTab->currentIndex() == 0)
-    {
-        m_options->m_curveBrushTip->curveDiameter->setValue(diameter);
-    }else{
-        m_options->m_gaussBrushTip->diameterSpinBox->setValue(diameter);
-    }
-}
-
 
 void KisSoftOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     setting->setProperty( SOFT_BRUSH_TIP, m_options->m_brushesTab->currentIndex());
-    setting->setProperty( SOFT_DIAMETER, m_options->m_gaussBrushTip->diameterSpinBox->value() );
     setting->setProperty( SOFT_END, m_options->m_gaussBrushTip->endSPBox->value() );
     setting->setProperty( SOFT_START, m_options->m_gaussBrushTip->startSPBox->value() );
-    setting->setProperty( SOFT_SPACING, m_options->m_gaussBrushTip->spacingSPBox->value() );
     setting->setProperty( SOFT_SIGMA, m_options->m_gaussBrushTip->sigmaSPBox->value() );
     setting->setProperty( SOFT_SOFTNESS, m_options->m_gaussBrushTip->flowSPBox->value() );
     
-    setting->setProperty( SOFTCURVE_DIAMETER, m_options->m_curveBrushTip->curveDiameter->value() );
-    setting->setProperty( SOFTCURVE_ASPECT, m_options->m_curveBrushTip->aspectBox->value() );
-    setting->setProperty( SOFTCURVE_ROTATION, m_options->m_curveBrushTip->rotationBox->value() );
-    setting->setProperty( SOFTCURVE_SCALE, m_options->m_curveBrushTip->scale->value() );
-    setting->setProperty( SOFTCURVE_SPACING, m_options->m_curveBrushTip->spacing->value() );
-    setting->setProperty( SOFTCURVE_DENSITY, m_options->m_curveBrushTip->densityBox->value() );
     setting->setProperty( SOFTCURVE_CURVE, qVariantFromValue(m_options->m_curveBrushTip->softCurve->curve()) );
     
 }
@@ -103,19 +66,11 @@ void KisSoftOpOption::readOptionSetting(const KisPropertiesConfiguration* settin
         m_options->setGaussianBrush(true);
     }
     
-    m_options->m_gaussBrushTip->diameterSpinBox->setValue( setting->getInt(SOFT_DIAMETER) );
     m_options->m_gaussBrushTip->endSPBox->setValue( setting->getDouble(SOFT_END) );
     m_options->m_gaussBrushTip->startSPBox->setValue( setting->getDouble(SOFT_START) );
-    m_options->m_gaussBrushTip->spacingSPBox->setValue( setting->getDouble(SOFT_SPACING) );    
     m_options->m_gaussBrushTip->sigmaSPBox->setValue( setting->getDouble(SOFT_SIGMA) );
     m_options->m_gaussBrushTip->flowSPBox->setValue( setting->getDouble(SOFT_SOFTNESS) );
     
-    m_options->m_curveBrushTip->curveDiameter->setValue( setting->getDouble(SOFTCURVE_DIAMETER) );
-    m_options->m_curveBrushTip->aspectBox->setValue( setting->getDouble(SOFTCURVE_ASPECT) );
-    m_options->m_curveBrushTip->rotationBox->setValue( setting->getDouble(SOFTCURVE_SCALE) );
-    m_options->m_curveBrushTip->scale->setValue( setting->getDouble(SOFTCURVE_SCALE) );
-    m_options->m_curveBrushTip->spacing->setValue( setting->getDouble(SOFTCURVE_SPACING) );
-    m_options->m_curveBrushTip->densityBox->setValue( setting->getDouble(SOFTCURVE_DENSITY) );
     m_options->m_curveBrushTip->softCurve->setCurve( setting->getCubicCurve(SOFTCURVE_CURVE) );
 }
 

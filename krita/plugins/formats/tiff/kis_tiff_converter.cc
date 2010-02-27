@@ -256,6 +256,15 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     } else {
         dbgFile << "No Profile found";
     }
+    
+    // Check that the profile is used by the color space
+    if (profile && !KoColorSpaceRegistry::instance()->colorSpaceFactory(
+        KoColorSpaceRegistry::instance()->colorSpaceId(
+      colorSpaceId.first, colorSpaceId.second))->profileIsCompatible(profile)) {
+        warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << colorSpaceId.first << " " << colorSpaceId.second;
+        delete profile;
+        profile = 0;
+    }
 
     // Retrieve a pointer to the colorspace
     const KoColorSpace* cs = 0;

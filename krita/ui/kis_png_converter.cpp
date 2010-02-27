@@ -515,6 +515,15 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     } else {
         dbgFile << "no embedded profile, will use the default profile";
     }
+    
+    // Check that the profile is used by the color space
+    if (profile && !KoColorSpaceRegistry::instance()->colorSpaceFactory(
+        KoColorSpaceRegistry::instance()->colorSpaceId(
+      csName.first, csName.second))->profileIsCompatible(profile)) {
+        warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << csName.first << " " << csName.second;
+        delete profile;
+        profile = 0;
+    }
 
     // Retrieve a pointer to the colorspace
     const KoColorSpace* cs;

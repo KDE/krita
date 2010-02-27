@@ -67,7 +67,6 @@ extern "C" {
 
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
-#include <boost/concept_check.hpp>
 
 #define ICC_MARKER  (JPEG_APP0 + 2) /* JPEG marker code for ICC */
 #define ICC_OVERHEAD_LEN  14    /* size of non-profile data in APP2 */

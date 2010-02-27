@@ -32,6 +32,7 @@
 #include "kis_painter.h"
 #include "kis_paint_device.h"
 #include "kis_node_visitor.h"
+#include "kis_default_bounds.h"
 
 class KisPaintLayer::Private
 {
@@ -49,6 +50,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
     m_d->alphaLocked = false;
     m_d->paintDevice = dev;
     m_d->paintDevice->setParentNode(this);
+    m_d->paintDevice->setDefaultBounds(KisDefaultBounds(image));
 }
 
 
@@ -57,7 +59,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
         , m_d(new Private())
 {
     Q_ASSERT(image);
-    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace());
+    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), KisDefaultBounds(image));
     m_d->alphaLocked = false;
 }
 
@@ -70,7 +72,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
         colorSpace = image->colorSpace();
     }
     Q_ASSERT(colorSpace);
-    m_d->paintDevice = new KisPaintDevice(this, colorSpace);
+    m_d->paintDevice = new KisPaintDevice(this, colorSpace, KisDefaultBounds(image));
     m_d->alphaLocked = false;
 }
 
@@ -130,6 +132,12 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 QIcon KisPaintLayer::icon() const
 {
     return QIcon();
+}
+
+void KisPaintLayer::setImage(KisImageWSP image)
+{
+    m_d->paintDevice->setDefaultBounds(KisDefaultBounds(image));
+    KisLayer::setImage(image);
 }
 
 KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() const

@@ -30,6 +30,7 @@
 #include "kis_global.h"
 #include "kis_shared.h"
 #include "kis_iterators_pixel.h"
+#include "kis_default_bounds.h"
 
 #include <krita_export.h>
 
@@ -49,6 +50,7 @@ class KisHLineIteratorNG;
 class KisRandomSubAccessorPixel;
 class KisDataManager;
 class KisSelectionComponent;
+
 
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
@@ -84,7 +86,7 @@ public:
      * @param colorSpace the colorspace of this paint device
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, const QString& name = QString());
+    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBounds defaultBounds = KisDefaultBounds(), const QString& name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
@@ -107,6 +109,12 @@ public:
      * set the parent node of the paint device
      */
     void setParentNode(KisNodeWSP parent);
+
+    /**
+     * set the default bounds for the paint device when
+     * the default pixel in not completely transarent
+     */
+    void setDefaultBounds(KisDefaultBounds bounds);
 
     /**
      * Moves the device to these new coordinates (so no incremental move or so)

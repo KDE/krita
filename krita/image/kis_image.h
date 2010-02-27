@@ -32,6 +32,7 @@
 #include "kis_shared.h"
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
+#include "kis_default_bounds.h"
 
 class KoColorSpace;
 class KoCompositeOp;
@@ -406,6 +407,7 @@ public:
     KisLayerSP flattenLayer(KisLayerSP layer);
 
 
+    /// This overrides interface for KisDefaultBounds
     /// @return the exact bounds of the image in pixel coordinates.
     QRect bounds() const;
 

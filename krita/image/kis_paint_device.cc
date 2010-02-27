@@ -59,6 +59,7 @@ class KisPaintDevice::Private
 
 public:
     KisNodeWSP parent;
+    KisDefaultBounds defaultBounds;
     qint32 x;
     qint32 y;
     KoColorSpace* colorSpace;
@@ -117,7 +118,7 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
 
 }
 
-KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, const QString& name)
+KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBounds defaultBounds, const QString& name)
         : QObject(0)
         , m_d(new Private())
 {
@@ -128,7 +129,8 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
     m_d->x = 0;
     m_d->y = 0;
 
-    m_d->parent = parent;
+    setParentNode(parent);
+    setDefaultBounds(defaultBounds);
 
     m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(colorSpace);
 
@@ -204,6 +206,11 @@ void KisPaintDevice::setParentNode(KisNodeWSP parent)
     m_d->parent = parent;
 }
 
+void KisPaintDevice::setDefaultBounds(KisDefaultBounds defaultBounds)
+{
+    m_d->defaultBounds = defaultBounds;
+}
+
 void KisPaintDevice::move(qint32 x, qint32 y)
 {
     QRect dirtyRegion = extent();
@@ -233,12 +240,21 @@ void KisPaintDevice::extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
 
 QRect KisPaintDevice::extent() const
 {
-    qint32 x, y, w, h;
-    m_datamanager->extent(x, y, w, h);
-    x += m_d->x;
-    y += m_d->y;
+    QRect extent;
 
-    return QRect(x, y, w, h);
+    quint8 defaultOpacity = colorSpace()->opacityU8(defaultPixel());
+    if(defaultOpacity != OPACITY_TRANSPARENT_U8) {
+        extent = m_d->defaultBounds.bounds();
+    }
+    else {
+        qint32 x, y, w, h;
+        m_datamanager->extent(x, y, w, h);
+        x += m_d->x;
+        y += m_d->y;
+        extent = QRect(x, y, w, h);
+    }
+
+    return extent;
 }
 
 void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const

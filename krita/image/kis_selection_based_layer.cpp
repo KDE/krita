@@ -27,6 +27,7 @@
 
 #include "kis_image.h"
 #include "kis_painter.h"
+#include "kis_default_bounds.h"
 
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
@@ -57,7 +58,7 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
 
     setShowSelection(true);
 
-    m_d->paintDevice = new KisPaintDevice(image->colorSpace());
+    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), KisDefaultBounds(image));
 }
 
 KisSelectionBasedLayer::KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs)
@@ -88,6 +89,12 @@ void KisSelectionBasedLayer::initSelection()
      * for being really interested in it?
      */
     m_d->selection->setInterestedInDirtyness(true);
+}
+
+void KisSelectionBasedLayer::setImage(KisImageWSP image)
+{
+    m_d->paintDevice->setDefaultBounds(KisDefaultBounds(image));
+    KisLayer::setImage(image);
 }
 
 bool KisSelectionBasedLayer::allowAsChild(KisNodeSP node) const

@@ -61,6 +61,8 @@ public:
      */
     bool allowAsChild(KisNodeSP node) const;
 
+    void setImage(KisImageWSP image);
+
     KisPaintDeviceSP original() const;
     KisPaintDeviceSP paintDevice() const;
 

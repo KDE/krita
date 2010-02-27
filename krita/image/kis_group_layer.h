@@ -48,6 +48,8 @@ public:
 
     QIcon icon() const;
 
+    void setImage(KisImageWSP image);
+
     /**
      * Clear the projection
      */

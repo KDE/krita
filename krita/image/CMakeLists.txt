@@ -111,6 +111,7 @@ set(kritaimage_LIB_SRCS
    kis_convolution_kernel.cc
    kis_convolution_painter.cc
    kis_cubic_curve.cpp
+   kis_default_bounds.cpp
    kis_effect_mask.cc
    kis_fast_math.cpp
    kis_fill_painter.cc

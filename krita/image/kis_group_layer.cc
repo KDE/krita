@@ -27,6 +27,7 @@
 #include "kis_debug.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
+#include "kis_default_bounds.h"
 
 class KisGroupLayer::Private
 {
@@ -46,7 +47,7 @@ KisGroupLayer::KisGroupLayer(KisImageWSP image, const QString &name, quint8 opac
         KisLayer(image, name, opacity),
         m_d(new Private())
 {
-    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace());
+    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), KisDefaultBounds(image));
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
@@ -76,6 +77,12 @@ const KoColorSpace * KisGroupLayer::colorSpace() const
 QIcon KisGroupLayer::icon() const
 {
     return KIcon("folder");
+}
+
+void KisGroupLayer::setImage(KisImageWSP image)
+{
+    m_d->paintDevice->setDefaultBounds(KisDefaultBounds(image));
+    KisLayer::setImage(image);
 }
 
 void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)

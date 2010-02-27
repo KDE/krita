@@ -33,8 +33,7 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     , m_triangleColorSelector (0)
 {
     m_triangleColorSelector  = new KoTriangleColorSelector(this);
-    int offset = m_triangleColorSelector->height()/2 + 10;
-    m_triangleColorSelector->move(offset, offset);
+    m_triangleColorSelector->move(60, 60);
     m_triangleColorSelector->setVisible(true);
 
     setAutoFillBackground(true);
@@ -128,6 +127,8 @@ void KisPopupPalette::resizeEvent(QResizeEvent*)
 
 void KisPopupPalette::paintEvent(QPaintEvent* e)
 {
+    float rotationAngle = 0.0;
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.fillRect(e->rect(), palette().brush(QPalette::Window));
@@ -136,22 +137,23 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     //painting favorite brushes
     QList<QPixmap> pixmaps (m_resourceManager->favoriteBrushPixmaps());
 
+    rotationAngle = 360.0/pixmaps.size();
     //highlight hovered brush
     if (hoveredBrush() > -1)
     {
-        painter.rotate((pixmaps.size() - hoveredBrush()) *360.0/pixmaps.size());
-        QPainterPath path(drawDonutPathAngle(brushInnerRadius(),brushOuterRadius(), pixmaps.size()));
+        painter.rotate((pixmaps.size() - hoveredBrush()) *rotationAngle);
+        QPainterPath path(drawDonutPathAngle(brushInnerRadius,brushOuterRadius, pixmaps.size()));
         painter.fillPath(path, palette().color(QPalette::Highlight));
-        painter.rotate(hoveredBrush() *360.0/pixmaps.size());
+        painter.rotate(hoveredBrush() *rotationAngle);
     }
 
     //highlight selected brush
     if (selectedBrush() > -1)
     {
-        painter.rotate((pixmaps.size() - selectedBrush()) *360.0/pixmaps.size());
-        QPainterPath path(drawDonutPathAngle(brushInnerRadius(),brushOuterRadius(), pixmaps.size()));
+        painter.rotate((pixmaps.size() - selectedBrush()) *rotationAngle);
+        QPainterPath path(drawDonutPathAngle(brushInnerRadius,brushOuterRadius, pixmaps.size()));
         painter.fillPath(path, palette().color(QPalette::Highlight).darker(130));
-        painter.rotate(selectedBrush() *360.0/pixmaps.size());
+        painter.rotate(selectedBrush() *rotationAngle);
     }
 
     //painting favorite brushes pixmap/icon
@@ -161,20 +163,57 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         QPointF pixmapOffset(pixmap.width()/2, pixmap.height()/2);
 
         float angle = pos*M_PI*2.0/pixmaps.size();
-        QPointF pointTemp(brushRadius()*sin(angle),brushRadius()*cos(angle));
+        QPointF pointTemp(brushRadius*sin(angle),brushRadius*cos(angle));
         painter.drawPixmap(QPoint(pointTemp.x()-pixmapOffset.x(), pointTemp.y()-pixmapOffset.y()), pixmap);
     }
 
+    //painting recent colors : bevel (raised)
+    rotationAngle = 180;
+    float radius = 51.0;
+    painter.setPen(QPen(Qt::white,2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+
+    //outer radius
+//    for (int i = 0 ; i < 2 ; i++)
+//    {
+        QPainterPath path1;
+        path1.moveTo(cos(M_PI/4)*radius,-1*sin(M_PI/4)*radius);
+        path1.arcTo(-1*radius, -1*radius, 2*radius+0.5,2*radius+0.5, 45, 180);
+        painter.drawPath(path1);
+
+        painter.setPen(QPen(Qt::black,2 , Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+        QPainterPath path2;
+        path2.moveTo(-1*cos(M_PI/4)*radius,sin(M_PI/4)*radius);
+        path2.arcTo(-1*radius, -1*radius, 2*radius+0.5,2*radius+0.5, 180+45, 180);
+        painter.drawPath(path2);
+//    }
+
+    painter.setPen(QPen(Qt::black,2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+    //outer radius
+//    for (int i = 0 ; i < 2 ; i++)
+//    {
+        radius = 33.5;
+        QPainterPath path3;
+        path3.moveTo(cos(M_PI/4)*radius,-1*sin(M_PI/4)*radius);
+        path3.arcTo(-1*radius, -1*radius, 2*radius+0.5,2*radius+0.5, 45, 180);
+        painter.drawPath(path3);
+
+        painter.setPen(QPen(Qt::white,2 , Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+        QPainterPath path4;
+        path4.moveTo(-1*cos(M_PI/4)*radius,sin(M_PI/4)*radius);
+        path4.arcTo(-1*radius, -1*radius, 2*radius,2*radius, 180+45, 180);
+        painter.drawPath(path4);
+//    }
+
     //painting recent colors
     painter.setPen(Qt::NoPen);
-    float rotationAngle = -360.0/m_resourceManager->recentColorsTotal();
+    rotationAngle = -360.0/m_resourceManager->recentColorsTotal();
 
     QColor qcolor;
     KoColor kcolor;
 
     for (int pos = 0; pos < m_resourceManager->recentColorsTotal(); pos++)
     {
-        QPainterPath path(drawDonutPathAngle(colorInnerRadius() , colorOuterRadius(), m_resourceManager->recentColorsTotal()));
+        QPainterPath path(drawDonutPathAngle(colorInnerRadius , colorOuterRadius, m_resourceManager->recentColorsTotal()));
     
         //accessing recent color of index pos
         kcolor = m_resourceManager->recentColorAt(pos);
@@ -189,7 +228,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     if (m_resourceManager->recentColorsTotal() == 0)
     {
-        QPainterPath path_ColorDonut(drawDonutPathFull(0,0,colorInnerRadius(), colorOuterRadius()));
+        QPainterPath path_ColorDonut(drawDonutPathFull(0,0,colorInnerRadius, colorOuterRadius));
         painter.setPen(QPen(palette().color(QPalette::Window).darker(130), 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
         painter.drawPath(path_ColorDonut);
     }
@@ -201,13 +240,13 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
         if (m_resourceManager->recentColorsTotal() == 1)
         {
-            QPainterPath path_ColorDonut(drawDonutPathFull(0,0,colorInnerRadius(), colorOuterRadius()));
+            QPainterPath path_ColorDonut(drawDonutPathFull(0,0,colorInnerRadius, colorOuterRadius));
             painter.drawPath(path_ColorDonut);
         }
         else
         {
             painter.rotate((m_resourceManager->recentColorsTotal() + hoveredColor()) *rotationAngle);
-            QPainterPath path(drawDonutPathAngle(colorInnerRadius(),colorOuterRadius(), m_resourceManager->recentColorsTotal()));
+            QPainterPath path(drawDonutPathAngle(colorInnerRadius,colorOuterRadius, m_resourceManager->recentColorsTotal()));
             painter.drawPath(path);
             painter.rotate(hoveredColor() *-1 *rotationAngle);
         }
@@ -220,19 +259,19 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
         if (m_resourceManager->recentColorsTotal() == 1)
         {
-            QPainterPath path_ColorDonut(drawDonutPathFull(0,0,colorInnerRadius(), colorOuterRadius()));
+            QPainterPath path_ColorDonut(drawDonutPathFull(0,0,colorInnerRadius, colorOuterRadius));
             painter.drawPath(path_ColorDonut);
         }
         else
         {
             painter.rotate((m_resourceManager->recentColorsTotal() + selectedColor()) *rotationAngle);
-            QPainterPath path(drawDonutPathAngle(colorInnerRadius(),colorOuterRadius(), m_resourceManager->recentColorsTotal()));
+            QPainterPath path(drawDonutPathAngle(colorInnerRadius,colorOuterRadius, m_resourceManager->recentColorsTotal()));
             painter.drawPath(path);
             painter.rotate(selectedColor() *-1 *rotationAngle);
         }
     }
 }
-::
+
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)
 {
     QPainterPath path;
@@ -262,8 +301,8 @@ void KisPopupPalette::mouseMoveEvent (QMouseEvent* event)
     QPointF point = event->posF();
     event->accept();
 
-    QPainterPath pathBrush(drawDonutPathFull(width()/2, height()/2, brushInnerRadius(), brushOuterRadius()));
-    QPainterPath pathColor(drawDonutPathFull(width()/2, height()/2, colorInnerRadius(), colorOuterRadius()));
+    QPainterPath pathBrush(drawDonutPathFull(width()/2, height()/2, brushInnerRadius, brushOuterRadius));
+    QPainterPath pathColor(drawDonutPathFull(width()/2, height()/2, colorInnerRadius, colorOuterRadius));
 
     setHoveredBrush(-1);
     setHoveredColor(-1);
@@ -297,8 +336,8 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
 
     if (event->button() == Qt::LeftButton)
     {
-        QPainterPath pathBrush(drawDonutPathFull(width()/2, height()/2, brushInnerRadius(), brushOuterRadius()));
-//        QPainterPath pathColor(drawDonutPathFull(width()/2, height()/2, colorInnerRadius(), colorOuterRadius()));
+        QPainterPath pathBrush(drawDonutPathFull(width()/2, height()/2, brushInnerRadius, brushOuterRadius));
+//        QPainterPath pathColor(drawDonutPathFull(width()/2, height()/2, colorInnerRadius, colorOuterRadius));
 
         if (pathBrush.contains(point))
         { //in favorite brushes area
@@ -320,8 +359,8 @@ void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
 
     if (event->button() == Qt::LeftButton)
     {
-        QPainterPath pathBrush(drawDonutPathFull(width()/2, height()/2, brushInnerRadius(), brushOuterRadius()));
-        QPainterPath pathColor(drawDonutPathFull(width()/2, height()/2, colorInnerRadius(), colorOuterRadius()));
+        QPainterPath pathBrush(drawDonutPathFull(width()/2, height()/2, brushInnerRadius, brushOuterRadius));
+        QPainterPath pathColor(drawDonutPathFull(width()/2, height()/2, colorInnerRadius, colorOuterRadius));
         QPainterPath pathSelCol;
         pathSelCol.addEllipse(QPoint(width()/2, height()/2), 30,30);
 
@@ -377,8 +416,8 @@ bool KisPopupPalette::isPointInPixmap(QPointF& point, int pos)
     //calculating if the point is inside the pixmap
     float angle = pos*M_PI*2.0/m_resourceManager->favoriteBrushesTotal();
     QPainterPath path;
-    path.addRect(brushRadius()*sin(angle)-pixmap.width()/2+width()/2,
-                 brushRadius()*cos(angle)-pixmap.height()/2+height()/2,
+    path.addRect(brushRadius*sin(angle)-pixmap.width()/2+width()/2,
+                 brushRadius*cos(angle)-pixmap.height()/2+height()/2,
                  pixmap.width(), pixmap.height());
 
     if(path.contains(point) || pixmap.isNull()) return true;

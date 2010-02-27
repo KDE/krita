@@ -19,6 +19,12 @@
 #ifndef KIS_POPUP_PALETTE_H
 #define KIS_POPUP_PALETTE_H
 
+#define brushInnerRadius 80.0
+#define brushOuterRadius 100.0
+#define colorInnerRadius 55.0
+#define colorOuterRadius 75.0
+#define brushRadius (brushInnerRadius+brushOuterRadius)/2
+
 #include <kis_types.h>
 #include <QtGui/QWidget>
 #include <QQueue>
@@ -78,13 +84,6 @@ private:
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
     bool isPointInPixmap(QPointF&, int pos);
-
-    //inline functions
-    inline int brushRadius(){ return (brushInnerRadius()+brushOuterRadius())/2; }
-    inline float brushInnerRadius(){ return width()/2 - 55; }
-    inline float brushOuterRadius(){ return width()/2 - 35; }
-    inline float colorInnerRadius(){ return width()/2 - 30; }
-    inline float colorOuterRadius(){ return width()/2 - 10; }
 
 private:
     int m_hoveredBrush;

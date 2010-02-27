@@ -86,15 +86,16 @@ void KisShapeController::Private::removeShapeFromMap(KoShape* shape)
     bool toBeDeleted = false;
     while (it != end) {
         if (it.value() == shape) {
-            dbgKrita << "Going to delete node " << it.key() << " with shape " << it.value() << ", because it is the same as " << shape;
-            toBeDeleted = it.key()->inherits("KisShapeLayer"); // KisShapeLayers shape is equal to the layer, it should *not* be deleted by the shape controller
+            dbgKrita << "Going to remove node " << it.key() << " with shape " << it.value() << ", because it is the same as " << shape;
+            toBeDeleted = !it.key()->inherits("KisShapeLayer"); // KisShapeLayers shape is equal to the layer, it should *not* be deleted by the shape controller
             nodeShapes.remove(it.key());
             break;
         }
         ++it;
     }
-    if (toBeDeleted)
+    if (toBeDeleted) {
         delete shape;
+    }
 }
 
 

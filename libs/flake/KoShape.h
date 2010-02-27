@@ -753,16 +753,22 @@ public:
 
     /**
      * Adds a shape which depends on this shape.
+     * Making a shape dependent on this one means it will get shapeChanged() called
+     * on each update of this shape.
      *
      * If this shape already depends on the given shape, establishing the
      * dependency is refused to prevent circular dependencies.
      *
      * @param shape the shape which depends on this shape
-     * @return true if dependency could be established, else false
+     * @return true if dependency could be established, otherwise false
+     * @see removeDependee(), hasDependee()
      */
     bool addDependee(KoShape *shape);
 
-    /// Removes as shape depending on this shape
+    /**
+     * Removes as shape depending on this shape.
+     * @see addDependee(), hasDependee()
+     */
     void removeDependee(KoShape *shape);
 
     /// Returns if the given shape is dependent on this shape

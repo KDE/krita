@@ -37,8 +37,7 @@ class KisPaintOpOptionsWidget::Private
 public:
 
     QList<KisPaintOpOption*> paintOpOptions;
-    QMap<QListWidgetItem*, KisPaintOpOption*> widgetOptionMap;
-    QMap<KisPaintOpOption*, QCheckBox*> checkBoxMap;
+    QMap<QListWidgetItem*, KisPaintOpOption*> checkBoxMap;
     QListWidget * optionsList;
     QStackedWidget * optionsStack;
 };
@@ -65,6 +64,8 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
     connect(m_d->optionsList,
             SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
             this, SLOT(changePage(QListWidgetItem *, QListWidgetItem*)));
+            
+    connect(m_d->optionsList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(itemChanged(QListWidgetItem*)));
 }
 
 
@@ -81,27 +82,9 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
 
     connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
 
-    if (option->isCheckable()) {
-        QWidget* w = new QWidget;
-        QVBoxLayout* l = new QVBoxLayout;
-        QCheckBox* c = new QCheckBox(i18n("Active"));
-        c->setChecked(option->isChecked());
-        connect(c, SIGNAL(toggled(bool)), option, SLOT(setChecked(bool)));
-        connect(c, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
-        l->addWidget(c);
-        l->addWidget(option->configurationPage());
-        //option->configurationPage()->setVisible( true );
-        l->addSpacing(1);
-        w->setLayout(l);
-
-        m_d->optionsStack->addWidget(w);
-        m_d->checkBoxMap[option] = c;
-    } else {
-        m_d->optionsStack->addWidget(option->configurationPage());
-    }
-
+    m_d->optionsStack->addWidget(option->configurationPage());
+        
     QListWidgetItem * item = new QListWidgetItem(m_d->optionsList);
-    m_d->widgetOptionMap[item] = option;
     item->setText(option->label());
     Qt::ItemFlags flags = item->flags();
     flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
@@ -109,6 +92,7 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
 
         flags |= Qt::ItemIsUserCheckable;
         item->setCheckState((option->isChecked()) ? Qt::Checked : Qt::Unchecked);
+        m_d->checkBoxMap[item] = option;
     }
     item->setFlags(flags);
 }
@@ -118,10 +102,9 @@ void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration 
     Q_ASSERT(!config->getString("paintop").isEmpty());
     foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
         option->readOptionSetting(config);
-        if (option->isCheckable()) {
-            Q_ASSERT(m_d->checkBoxMap[option]);
-            m_d->checkBoxMap[option]->setChecked(option->isChecked());
-        }
+    }
+    foreach(QListWidgetItem* checkableItem, m_d->checkBoxMap.keys()) {
+        checkableItem->setCheckState((m_d->checkBoxMap[checkableItem]->isChecked()) ? Qt::Checked : Qt::Unchecked);
     }
 }
 
@@ -145,5 +128,12 @@ void KisPaintOpOptionsWidget::changePage(QListWidgetItem *current, QListWidgetIt
     m_d->optionsStack->setCurrentIndex(m_d->optionsList->row(current));
 }
 
+void KisPaintOpOptionsWidget::itemChanged(QListWidgetItem* item)
+{
+    if(m_d->checkBoxMap.contains(item)) {
+        m_d->checkBoxMap[item]->setChecked(item->checkState() == Qt::Checked);
+        emit sigConfigurationItemChanged();
+    }
+}
 
 #include "kis_paintop_options_widget.moc"

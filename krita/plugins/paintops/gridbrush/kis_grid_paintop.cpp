@@ -68,6 +68,7 @@ KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainte
 
 KisGridPaintOp::~KisGridPaintOp()
 {
+    delete m_painter;
 }
 
 double KisGridPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {

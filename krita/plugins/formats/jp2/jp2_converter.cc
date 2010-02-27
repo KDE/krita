@@ -480,7 +480,9 @@ int jp2Converter::getFileFormat(const KUrl& uri) const
     } else if (extension == "jpt") {
         return JPT_CFMT;
     }
+#ifndef NDEBUG
     qFatal("Unsupported extension");
+#endif
     return -1;
 }
 

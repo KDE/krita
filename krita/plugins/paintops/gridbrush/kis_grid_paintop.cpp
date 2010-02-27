@@ -71,24 +71,14 @@ KisGridPaintOp::~KisGridPaintOp()
     delete m_painter;
 }
 
-double KisGridPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
-        Q_UNUSED(pressure1);
-        Q_UNUSED(pressure2);
-        xSpacing = m_xSpacing;
-        ySpacing = m_ySpacing;
-
-        return m_spacing;
-}
-
-
-void KisGridPaintOp::paintAt(const KisPaintInformation& info)
+double KisGridPaintOp::paintAt(const KisPaintInformation& info)
 {
 #ifdef BENCHMARK
     QTime time;
     time.start();
 #endif
 
-    if (!painter()) return;
+    if (!painter()) return m_spacing;
     m_dab->clear();
 
     int gridWidth = m_properties.gridWidth * m_properties.scale;
@@ -240,6 +230,7 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
     m_total += msec;
     m_count++;
 #endif
+    return m_spacing;
 }
 
 void KisGridProperties::fillProperties(const KisPropertiesConfiguration* setting)

@@ -48,7 +48,7 @@ public:
     KisComplexOp(const KisComplexOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisComplexOp();
 
-    void paintAt(const KisPaintInformation& info);
+    double paintAt(const KisPaintInformation& info);
 
 private:
 

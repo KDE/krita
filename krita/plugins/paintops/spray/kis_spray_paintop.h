@@ -40,8 +40,7 @@ public:
     KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisSprayPaintOp();
 
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
-    void paintAt(const KisPaintInformation& info);
+    double paintAt(const KisPaintInformation& info);
 
     virtual bool incremental() const {
         return true;

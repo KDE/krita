@@ -100,7 +100,8 @@ double KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     return  dragVec.norm();
 }
 
-void KisDynaPaintOp::paintAt(const KisPaintInformation& info)
+double KisDynaPaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
+    return 1.0;
 }

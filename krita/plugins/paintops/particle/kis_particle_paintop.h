@@ -37,22 +37,12 @@ public:
     KisParticlePaintOp(const KisParticlePaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisParticlePaintOp();
 
-    virtual void paintAt(const KisPaintInformation& info);
+    virtual double paintAt(const KisPaintInformation& info);
     virtual double paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, double savedDist = -1);
     
     virtual bool incremental() const {
         return true;
     }
-
-
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
-        Q_UNUSED(pressure1);
-        Q_UNUSED(pressure2);
-        xSpacing = 10;
-        ySpacing = 10;
-        return 10;
-    }
-
 
 private:
     const KisParticlePaintOpSettings* m_settings;

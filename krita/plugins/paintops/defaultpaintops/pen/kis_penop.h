@@ -43,7 +43,7 @@ public:
     KisPenOp(const KisPenOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisPenOp();
 
-    void paintAt(const KisPaintInformation& info);
+    double paintAt(const KisPaintInformation& info);
 
 private:
 

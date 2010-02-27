@@ -58,19 +58,19 @@ KisPenOp::~KisPenOp()
 {
 }
 
-void KisPenOp::paintAt(const KisPaintInformation& info)
+double KisPenOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()->device()) return;
+    if (!painter()->device()) return 1.0;
 
     KisBrushSP brush = m_brush;
     if (!m_brush)
-        return;
+        return 1.0;
 
     if (! brush->canPaintFor(info))
-        return;
+        return 1.0;
 
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
-    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return;
+    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 1.0;
 
     KisPaintDeviceSP device = painter()->device();
     QPointF hotSpot = brush->hotSpot(scale, scale);
@@ -102,7 +102,7 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
         dstRect &= painter()->bounds();
     }
 
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1.0;
 
     const KoColorSpace * cs = dab->colorSpace();
 
@@ -131,4 +131,6 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     painter()->bltFixed(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);
+    
+    return spacing(info.pressure());
 }

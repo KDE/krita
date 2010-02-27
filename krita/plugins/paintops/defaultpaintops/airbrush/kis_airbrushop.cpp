@@ -58,7 +58,7 @@ KisAirbrushOp::~KisAirbrushOp()
 {
 }
 
-void KisAirbrushOp::paintAt(const KisPaintInformation& info)
+double KisAirbrushOp::paintAt(const KisPaintInformation& info)
 {
 // See: http://www.sysf.physto.se/~klere/airbrush/ for information
 // about _real_ airbrushes.
@@ -93,14 +93,14 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
 // airbrush, for the first and up to now the last time...
 //
 
-    if (!painter()->device()) return;
+    if (!painter()->device()) return 0.0;
 
     KisBrushSP brush = m_brush;
     if (!brush)
-        return;
+        return 0.0;
 
     if (! brush->canPaintFor(info))
-        return;
+        return 0.0;
 
     KisPaintDeviceSP device = painter()->device();
 
@@ -129,7 +129,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
         dstRect &= painter()->bounds();
     }
 
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 0.0;
 
     qint32 sx = dstRect.x() - x;
     qint32 sy = dstRect.y() - y;
@@ -147,7 +147,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
 
     painter()->bltFixed(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
 
-
+    return spacing(info.pressure());
 }
 
 double KisAirbrushOp::paintLine(const KisPaintInformation &pi1,

@@ -54,17 +54,7 @@ MyPaint::~MyPaint()
     delete m_surface;
 }
 
-double MyPaint::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
-{
-    Q_UNUSED(xSpacing);
-    Q_UNUSED(ySpacing);
-    Q_UNUSED(pressure1);
-    Q_UNUSED(pressure2);
-    return 1.0;
-}
-
-
-void MyPaint::paintAt(const KisPaintInformation& info)
+double MyPaint::paintAt(const KisPaintInformation& info)
 {
     if (m_mypaintThinksStrokeHasEnded) {
         m_settings->brush()->new_stroke();
@@ -75,6 +65,7 @@ void MyPaint::paintAt(const KisPaintInformation& info)
                                            info.pos().y(),
                                            info.pressure(),
                                            double(m_eventTime.elapsed()) / 1000);
+    return 1.0;
 }
 
 double MyPaint::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)

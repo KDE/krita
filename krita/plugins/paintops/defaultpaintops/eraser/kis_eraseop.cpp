@@ -74,7 +74,7 @@ KisEraseOp::~KisEraseOp()
 {
 }
 
-void KisEraseOp::paintAt(const KisPaintInformation& info)
+double KisEraseOp::paintAt(const KisPaintInformation& info)
 {
 // Erasing is traditionally in paint applications one of two things:
 // either it is painting in the 'background' color, or it is replacing
@@ -96,17 +96,17 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
 // in one layer and your pencil in another is not the same as really working
 // with the combination.
 
-    if (!painter()->device()) return;
+    if (!painter()->device()) return 1.0;
 
     KisBrushSP brush = m_brush;
     if (!m_brush)
-        return;
+        return 1.0;
     
     if (! brush->canPaintFor(info))
-        return;
+        return 1.0;
 
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
-    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return;
+    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 0.0;
 
     KisPaintDeviceSP device = painter()->device();
     QPointF hotSpot = brush->hotSpot(scale, scale);
@@ -132,7 +132,7 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
         dstRect &= painter()->bounds();
     }
 
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1.0;
 
     qint32 sx = dstRect.x() - x;
     qint32 sy = dstRect.y() - y;
@@ -155,4 +155,5 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
 
     painter()->setOpacity(origOpacity);
 
+    return spacing(info.pressure());
 }

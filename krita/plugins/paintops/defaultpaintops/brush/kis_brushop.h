@@ -49,7 +49,7 @@ public:
     KisBrushOp(const KisBrushOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisBrushOp();
 
-    void paintAt(const KisPaintInformation& info);
+    double paintAt(const KisPaintInformation& info);
 
 private:
     KisColorSource* m_colorSource;

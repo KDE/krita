@@ -67,20 +67,10 @@ KisDeformPaintOp::~KisDeformPaintOp()
 {
 }
 
-double KisDeformPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
+double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 {
-    Q_UNUSED(pressure1);
-    Q_UNUSED(pressure2);
-    xSpacing = m_xSpacing;
-    ySpacing = m_ySpacing;
-    return m_spacing;
-}
-
-
-void KisDeformPaintOp::paintAt(const KisPaintInformation& info)
-{
-    if (!painter()) return;
-    if (!m_dev) return;
+    if (!painter()) return m_spacing;
+    if (!m_dev) return m_spacing;
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
@@ -93,6 +83,5 @@ void KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
+    return m_spacing;
 }
-
-

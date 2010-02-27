@@ -52,7 +52,7 @@ public:
     KisEraseOp(const KisEraseOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisEraseOp();
 
-    void paintAt(const KisPaintInformation& info);
+    double paintAt(const KisPaintInformation& info);
 
 private:
 

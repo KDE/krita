@@ -119,9 +119,10 @@ void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
 }
 
 
-void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
+double KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
+    return 0.5;
 }
 
 

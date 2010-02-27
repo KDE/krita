@@ -39,17 +39,8 @@ class KisSumiPaintOp : public KisPaintOp
 public:
     KisSumiPaintOp(const KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
 
-    void paintAt(const KisPaintInformation& info);
+    double paintAt(const KisPaintInformation& info);
     double paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist);
-
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
-        Q_UNUSED(xSpacing);
-        Q_UNUSED(ySpacing);
-        Q_UNUSED(pressure1);
-        Q_UNUSED(pressure2);
-        // this is wrong, but that doesn't matter, since paintLine doesn't use spacing.
-        return 0.5;
-    }
 
 private:
     KisSumiProperties m_properties;

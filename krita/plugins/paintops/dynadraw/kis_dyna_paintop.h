@@ -38,22 +38,12 @@ public:
     KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisDynaPaintOp();
 
-    void paintAt(const KisPaintInformation& info);
+    double paintAt(const KisPaintInformation& info);
     double paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist);
 
     virtual bool incremental() const {
         return true;
     }
-
-
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
-        Q_UNUSED(pressure1);
-        Q_UNUSED(pressure2);
-        xSpacing = 1;
-        ySpacing = 1;
-        return 1;
-    }
-
 
 private:
     const KisDynaPaintOpSettings* m_settings;

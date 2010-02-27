@@ -54,7 +54,7 @@ public:
     KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisSoftPaintOp();
 
-    void paintAt(const KisPaintInformation& info);
+    double paintAt(const KisPaintInformation& info);
 
     virtual bool incremental() const {
         return true;

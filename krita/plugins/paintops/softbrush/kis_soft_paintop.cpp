@@ -97,25 +97,14 @@ KisSoftPaintOp::~KisSoftPaintOp()
     delete m_gaussBrush.distMask;
 }
 
-
-double KisSoftPaintOp::spacing(double& xSpacing, double& ySpacing, double pressure1, double pressure2) const
-{
-    Q_UNUSED(pressure1);
-    Q_UNUSED(pressure2);
-    xSpacing = m_xSpacing;
-    ySpacing = m_ySpacing;
-    return m_spacing;
-}
-
-
-void KisSoftPaintOp::paintAt(const KisPaintInformation& info)
+double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
 {
 #ifdef BENCHMARK
     QTime time;
     time.start();
 #endif
 
-    if (!painter()) return;
+    if (!painter()) return m_spacing;
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
@@ -142,7 +131,7 @@ void KisSoftPaintOp::paintAt(const KisPaintInformation& info)
         
         m_curveMask.mask(dab,painter()->paintColor(),m_curveMaskProperties.scale,rotation,subPixelX,subPixelY);
         painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
-        return;
+        return m_spacing;
     }
 
     quint8 alpha = 0;
@@ -199,7 +188,7 @@ void KisSoftPaintOp::paintAt(const KisPaintInformation& info)
     m_total += msec;
     m_count++;
 #endif
-
+    return m_spacing;
 }
 
 

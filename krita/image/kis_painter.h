@@ -186,7 +186,7 @@ public:
      */
     double paintLine(const KisPaintInformation &pi1,
                      const KisPaintInformation &pi2,
-                     double savedDist = -1);
+                     double savedDist = 0);
 
     /**
      * Draw a Bezier curve between pos1 and pos2 using control points 1 and 2.
@@ -199,7 +199,7 @@ public:
                             const QPointF &control1,
                             const QPointF &control2,
                             const KisPaintInformation &pi2,
-                            const double savedDist = -1);
+                            const double savedDist = 0);
     /**
      * Fill the given vector points with the points needed to draw the Bezier curve between
      * pos1 and pos2 using control points 1 and 2, excluding the final pos2.

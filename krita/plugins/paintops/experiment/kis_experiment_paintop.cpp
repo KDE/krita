@@ -83,18 +83,10 @@ KisExperimentPaintOp::~KisExperimentPaintOp()
 {
 }
 
-double KisExperimentPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
-        Q_UNUSED(pressure1);
-        Q_UNUSED(pressure2);
-        xSpacing = m_xSpacing;
-        ySpacing = m_ySpacing;
-        return m_spacing;
-}
-
 #define MEMORY
-void KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
+double KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()) return;
+    if (!painter()) return m_spacing;
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
@@ -184,5 +176,7 @@ void KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
     m_settings->node()->setDirty(erasedRc);
 #endif
     m_isFirst = false;
+    
+    return m_spacing;
 }
 

@@ -42,8 +42,8 @@ public:
         return m_useMovementPaint;
     }
 
-    void paintAt(const KisPaintInformation& info);
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
+    double paintAt(const KisPaintInformation& info);
+    double spacing(double pressure) const;
 
 
 private:

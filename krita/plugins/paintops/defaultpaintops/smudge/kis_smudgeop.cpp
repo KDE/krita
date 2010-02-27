@@ -86,19 +86,19 @@ KisSmudgeOp::~KisSmudgeOp()
 {
 }
 
-void KisSmudgeOp::paintAt(const KisPaintInformation& info)
+double KisSmudgeOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()->device()) return;
+    if (!painter()->device()) return 1.0;
 
     KisBrushSP brush = m_brush;
     if (!brush)
-        return;
+        return 1.0;
 
     if (! brush->canPaintFor(info))
-        return;
+        return 1.0;
 
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
-    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return;
+    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 1.0;
 
     KisPaintDeviceSP device = painter()->device();
     QPointF hotSpot = brush->hotSpot(scale, scale);
@@ -119,7 +119,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1.0;
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->paintDevice(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
@@ -186,5 +186,5 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     sh = dstRect.height();
 
     painter()->bitBlt(dstRect.x(), dstRect.y(), m_target, sx, sy, sw, sh);
-
+    return spacing(info.pressure());
 }

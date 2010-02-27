@@ -42,7 +42,7 @@ public:
         return false;
     }
 
-    void paintAt(const KisPaintInformation& info);
+    double paintAt(const KisPaintInformation& info);
     double paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist);
 
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {

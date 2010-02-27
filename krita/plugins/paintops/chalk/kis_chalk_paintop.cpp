@@ -53,9 +53,9 @@ KisChalkPaintOp::~KisChalkPaintOp()
     delete m_chalkBrush;
 }
 
-void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
+double KisChalkPaintOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()) return;
+    if (!painter()) return 1;
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
@@ -75,4 +75,5 @@ void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->setOpacity(origOpacity);
+    return 1;
 }

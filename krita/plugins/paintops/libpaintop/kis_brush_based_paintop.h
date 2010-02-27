@@ -35,7 +35,7 @@ class PAINTOP_EXPORT KisBrushBasedPaintOp : public KisPaintOp
 public:
 
     KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter);
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
+    double spacing(double pressure) const;
 
     ///Reimplemented, false if brush is 0
     virtual bool canPaint() const;

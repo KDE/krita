@@ -36,21 +36,11 @@ public:
     KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisChalkPaintOp();
 
-    void paintAt(const KisPaintInformation& info);
+    double paintAt(const KisPaintInformation& info);
 
     virtual bool incremental() const {
         return false;
     }
-
-
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
-        Q_UNUSED(pressure1);
-        Q_UNUSED(pressure2);
-        xSpacing = 1;
-        ySpacing = 1;
-        return 1;
-    }
-
 
 private:
     const KisChalkPaintOpSettings* m_settings;

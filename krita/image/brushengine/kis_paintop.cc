@@ -3,7 +3,7 @@
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2004,2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2007,2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -161,59 +161,19 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
 
     KisVector2D dragVec = end - start;
 
-    if (savedDist < 0) {
-        paintAt(pi1);
-        savedDist = 0;
-    }
+    Q_ASSERT(savedDist >= 0);
 
-    double xSpacing = 1.0;
-    double ySpacing = 1.0;
-    double sp = spacing(xSpacing, ySpacing, pi1.pressure(), pi2.pressure());
-
-    Q_ASSERT(xSpacing >= 0.0);
-    Q_ASSERT(ySpacing >= 0.0);
-
-    KisVector2D scale(1, 1);
-
-    // Scale x or y so that we effectively have a square brush
-    // and calculate distance in that coordinate space. We reverse this scaling
-    // before drawing the brush. This produces the correct spacing in both
-    // x and y directions, even if the brush's aspect ratio is not 1:1.
-    if (xSpacing > ySpacing) {
-        scale.y() = xSpacing / ySpacing;
-    } else {
-        scale.x() = ySpacing / xSpacing;
-    }
-
-    dragVec = dragVec.cwise() * scale;
-
-    double newDist = dragVec.norm();
-    double dist = savedDist + newDist;
-    double l_savedDist = savedDist;
-
-    if (dist < sp) {
-        return dist;
-    }
+    double endDist = dragVec.norm();
+    double currentDist = savedDist;
 
     dragVec.normalize();
     KisVector2D step(0, 0);
 
-    while (dist >= sp) {
-        if (l_savedDist > 0) {
-            step += dragVec * (sp - l_savedDist);
-            l_savedDist -= sp;
-        } else {
-            step += dragVec * sp;
-        }
+    while (currentDist < endDist) {
 
-        QPointF p = toQPointF(start + step.cwise() / scale);
+        QPointF p = toQPointF(start +  currentDist * dragVec);
 
-        double distanceMoved = step.norm();
-        double t = 0;
-
-        if (!Eigen::ei_isMuchSmallerThan(newDist, distanceMoved)) {
-            t = distanceMoved / newDist;
-        }
+        double t = currentDist / endDist;
 
         double pressure = (1 - t) * pi1.pressure() + t * pi2.pressure();
         double xTilt = (1 - t) * pi1.xTilt() + t * pi2.xTilt();
@@ -221,17 +181,13 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
         double rotation = (1 - t) * pi1.rotation() + t * pi2.rotation();
         double tangentialPressure = (1 - t) * pi1.tangentialPressure() + t * pi2.tangentialPressure();
 
-        paintAt(KisPaintInformation(p, pressure, xTilt, yTilt, dragVec, rotation, tangentialPressure));
-        dist -= sp;
+        currentDist += paintAt(KisPaintInformation(p, pressure, xTilt, yTilt, dragVec, rotation, tangentialPressure));
     }
 
     QRect r(pi1.pos().toPoint(), pi2.pos().toPoint());
     d->painter->addDirtyRect(r.normalized());
 
-    if (dist > 0)
-        return dist;
-    else
-        return 0;
+    return currentDist - endDist;
 }
 
 KisPainter* KisPaintOp::painter() const

@@ -49,7 +49,7 @@ public:
 
     virtual ~KisDuplicateOp();
 
-    void paintAt(const KisPaintInformation& info);
+    double paintAt(const KisPaintInformation& info);
 
 private:
 

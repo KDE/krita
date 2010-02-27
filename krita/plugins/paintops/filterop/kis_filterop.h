@@ -42,7 +42,7 @@ public:
     KisFilterOp(const KisFilterOpSettings *settings, KisPainter * painter);
     virtual ~KisFilterOp();
 
-    void paintAt(const KisPaintInformation& info);
+    double paintAt(const KisPaintInformation& info);
 
 private:
 

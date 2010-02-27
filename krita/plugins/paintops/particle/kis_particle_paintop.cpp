@@ -61,9 +61,9 @@ KisParticlePaintOp::~KisParticlePaintOp()
 {
 }
 
-void KisParticlePaintOp::paintAt(const KisPaintInformation& info)
+double KisParticlePaintOp::paintAt(const KisPaintInformation& info)
 {
-    paintLine(info, info);
+    return paintLine(info, info);
 }
 
 

@@ -75,19 +75,19 @@ KisComplexOp::~KisComplexOp()
 {
 }
 
-void KisComplexOp::paintAt(const KisPaintInformation& info)
+double KisComplexOp::paintAt(const KisPaintInformation& info)
 {
     dbgPlugins << "KisComplexOp::paintAt" << 1;
-    if (!painter()->device()) return;
+    if (!painter()->device()) return 1.0;
 
     dbgPlugins << 2;
     KisBrushSP brush = m_brush;
     if (!m_brush)
-        return;
+        return 1.0;
 
     dbgPlugins << 3;
     if (! brush->canPaintFor(info))
-        return;
+        return 1.0;
 
     dbgPlugins << 4;
 
@@ -120,7 +120,7 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
         dstRect &= painter()->bounds();
     }
 
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 0.0;
 
     dbgPlugins << 5;
 
@@ -148,4 +148,5 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);
 
+    return spacing(info.pressure());
 }

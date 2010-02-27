@@ -130,8 +130,11 @@ static double paintBezierCurve(KisPaintOp *paintOp,
         double midPressure = (pi1.pressure() + pi2.pressure()) / 2;
         double midXTilt = (pi1.xTilt() + pi2.xTilt()) / 2;
         double midYTilt = (pi1.yTilt() + pi2.yTilt()) / 2;
+        KisVector2D midMovement = (pi1.movement() + pi2.movement()) * 0.5;
+        double midRotation = (pi1.rotation() + pi2.rotation()) * 0.5;
+        double tangentialPressure = (pi1.tangentialPressure() + pi2.tangentialPressure()) * 0.5;
 
-        KisPaintInformation middlePI(toQPointF(l4), midPressure, midXTilt, midYTilt);
+        KisPaintInformation middlePI(toQPointF(l4), midPressure, midXTilt, midYTilt, midMovement, midRotation, tangentialPressure);
         newDistance = paintBezierCurve(paintOp, pi1, l2, l3, middlePI, savedDist);
         newDistance = paintBezierCurve(paintOp, middlePI, r2, r3, pi2, newDistance);
     }
@@ -215,8 +218,10 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
         double pressure = (1 - t) * pi1.pressure() + t * pi2.pressure();
         double xTilt = (1 - t) * pi1.xTilt() + t * pi2.xTilt();
         double yTilt = (1 - t) * pi1.yTilt() + t * pi2.yTilt();
+        double rotation = (1 - t) * pi1.rotation() + t * pi2.rotation();
+        double tangentialPressure = (1 - t) * pi1.tangentialPressure() + t * pi2.tangentialPressure();
 
-        paintAt(KisPaintInformation(p, pressure, xTilt, yTilt, dragVec));
+        paintAt(KisPaintInformation(p, pressure, xTilt, yTilt, dragVec, rotation, tangentialPressure));
         dist -= sp;
     }
 

@@ -32,5 +32,5 @@ KisPressureRotationOption::KisPressureRotationOption()
 double KisPressureRotationOption::apply(const KisPaintInformation & info) const
 {
     if (!isChecked()) return 0.0;
-    return computeValue(info) * 2.0 * M_PI;
+    return (1.0 - computeValue(info)) * 2.0 * M_PI;
 }

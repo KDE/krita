@@ -841,7 +841,7 @@ public:
      * can edit the selected shapes.  In some cases selecting one shape should allow the tool to
      * edit a related shape be available too.  The tool delegates allows this to happen by taking
      * all the shapes in the set into account on tool selection.
-     * Notice that if you the set is non-empty 'this' shape is no longer looked at. You can choose
+     * Notice that if the set is non-empty 'this' shape is no longer looked at. You can choose
      * to add itself to the set too.
      */
     QSet<KoShape*> toolDelegates() const;

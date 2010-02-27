@@ -38,7 +38,7 @@ KisDynamicSensorRotation::KisDynamicSensorRotation() : KisDynamicSensor(Rotation
 qreal KisDynamicSensorDrawingAngle::parameter(const KisPaintInformation& info)
 {
     /* so that we are in 0.0..1.0 */
-    return info.angle() / (2.0 * M_PI);
+    return 0.5 + info.angle() / (2.0 * M_PI);
 }
 
 KisDynamicSensorPressure::KisDynamicSensorPressure() : KisDynamicSensor(PressureId)

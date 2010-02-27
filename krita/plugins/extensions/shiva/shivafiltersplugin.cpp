@@ -55,16 +55,24 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
     {
         KisFilterRegistry * manager = KisFilterRegistry::instance();
         Q_ASSERT(manager);
+#if OPENSHIVA_13_OR_MORE
+        std::list< OpenShiva::Source > kernels = m_sourceCollection->sources(OpenShiva::Source::FilterKernel);
+        dbgPlugins << "Collection has " << kernels.size() << " filters";
+        foreach(OpenShiva::Source kernel, kernels) {
+            dbgPlugins << kernel.metadataCompilationMessages().toString().c_str() ;
+            if (kernel.outputImageType() == OpenShiva::Source::Image && kernel.inputImageType(0) == OpenShiva::Source::Image) {
+                manager->add(new ShivaFilter(new OpenShiva::Source(kernel)));
+            }
+        }
+#else
         std::list< OpenShiva::Source* > kernels = m_sourceCollection->sources(OpenShiva::Source::FilterKernel);
         dbgPlugins << "Collection has " << kernels.size() << " filters";
         foreach(OpenShiva::Source* kernel, kernels) {
-#if OPENSHIVA_13_OR_MORE
-            dbgPlugins << kernel->metadataCompilationMessages().toString().c_str() ;
-#endif
             if (kernel->outputImageType() == OpenShiva::Source::Image && kernel->inputImageType(0) == OpenShiva::Source::Image) {
                 manager->add(new ShivaFilter(kernel));
             }
         }
+#endif
     }
     shivaMutex = new QMutex;
 }

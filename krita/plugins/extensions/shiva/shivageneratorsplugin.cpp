@@ -54,17 +54,26 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
     {
         KisGeneratorRegistry * manager = KisGeneratorRegistry::instance();
         Q_ASSERT(manager);
-        std::list< OpenShiva::Source* > kernels = m_sourceCollection->sources(OpenShiva::Source::GeneratorKernel);
+#if OPENSHIVA_13_OR_MORE
+        std::list< OpenShiva::Source > kernels = m_sourceCollection->sources(OpenShiva::Source::GeneratorKernel);
 
         dbgPlugins << "Collection has " << kernels.size() << " generators";
+        foreach(OpenShiva::Source kernel, kernels) {
+            dbgPlugins << kernel.metadataCompilationMessages().toString().c_str();
+            if (kernel.outputImageType() == OpenShiva::Source::Image || kernel.outputImageType() == OpenShiva::Source::Image4) {
+                manager->add(new ShivaGenerator(new OpenShiva::Source(kernel)));
+            }
+        }
+#else
+        std::list< OpenShiva::Source* > kernels = m_sourceCollection->sources(OpenShiva::Source::GeneratorKernel);
+
         foreach(OpenShiva::Source* kernel, kernels) {
-#if OPENSHIVA_13_OR_MORE
             dbgPlugins << kernel->metadataCompilationMessages().toString().c_str();
-#endif
             if (kernel->outputImageType() == OpenShiva::Source::Image || kernel->outputImageType() == OpenShiva::Source::Image4) {
                 manager->add(new ShivaGenerator(kernel));
             }
         }
+#endif
     }
     shivaMutex = new QMutex;
 }

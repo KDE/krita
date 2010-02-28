@@ -403,6 +403,8 @@ if (SHOULD_BUILD_KCHART)
     set (WITH_kchart true CACHE BOOL "" FORCE)
     add_definitions(-DHAVE_KCHART)
     macro_optional_add_subdirectory(kchart)
+else (SHOULD_BUILD_KCHART)
+    set (WITH_kchart false CACHE BOOL "" FORCE)
 endif (SHOULD_BUILD_KCHART)
 
 if(SHOULD_BUILD_KPRESENTER)

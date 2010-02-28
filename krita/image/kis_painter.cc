@@ -504,8 +504,9 @@ void KisPainter::paintPolyline(const vQPointF &points,
         numPoints = points.count() - index;
 
 
+    double saveDist = 0;
     for (int i = index; i < index + numPoints - 1; i++) {
-        paintLine(points [index], points [index + 1]);
+        saveDist = paintLine(points [index], points [index + 1], saveDist);
     }
 }
 
@@ -667,7 +668,7 @@ void KisPainter::paintPolygon(const vQPointF& points)
 
     if (d->strokeStyle != StrokeStyleNone) {
         if (points.count() > 1) {
-            double distance = -1;
+            double distance = 0;
 
             for (int i = 0; i < points.count() - 1; i++) {
                 distance = paintLine(KisPaintInformation(points[i]), KisPaintInformation(points[i + 1]), distance);
@@ -685,6 +686,7 @@ void KisPainter::paintPainterPath(const QPainterPath& path)
 
     QPointF lastPoint, nextPoint;
     int elementCount = path.elementCount();
+    double saveDist = 0;
     for (int i = 0; i < elementCount; i++) {
         QPainterPath::Element element = path.elementAt(i);
         switch (element.type) {
@@ -693,15 +695,15 @@ void KisPainter::paintPainterPath(const QPainterPath& path)
             break;
         case QPainterPath::LineToElement:
             nextPoint =  QPointF(element.x, element.y);
-            paintLine(KisPaintInformation(lastPoint), KisPaintInformation(nextPoint));
+            saveDist = paintLine(KisPaintInformation(lastPoint), KisPaintInformation(nextPoint), saveDist);
             lastPoint = nextPoint;
             break;
         case QPainterPath::CurveToElement:
             nextPoint =  QPointF(path.elementAt(i + 2).x, path.elementAt(i + 2).y);
-            paintBezierCurve(KisPaintInformation(lastPoint),
+            saveDist = paintBezierCurve(KisPaintInformation(lastPoint),
                              QPointF(path.elementAt(i).x, path.elementAt(i).y),
                              QPointF(path.elementAt(i + 1).x, path.elementAt(i + 1).y),
-                             KisPaintInformation(nextPoint));
+                             KisPaintInformation(nextPoint), saveDist);
             lastPoint = nextPoint;
             break;
         default:

@@ -32,9 +32,11 @@ QRectF KisBrushBasedPaintOpSettings::paintOutlineRect(const QPointF& pos, KisIma
     if (_mode != CURSOR_IS_OUTLINE) return QRectF();
     KisBrushSP brush = options->brush();
     QPointF hotSpot = brush->hotSpot(1.0, 1.0);
-    return image->pixelToDocument(
-               QRectF(0, 0, brush->width() + 1, brush->height() + 1).translated(-(hotSpot + QPointF(0.5, 0.5)))
-           ).translated(pos);
+    QRectF rect = image->pixelToDocument(
+                  QRectF(0, 0, brush->width() + 1, brush->height() + 1).translated(-(hotSpot + QPointF(0.5, 0.5)))
+                  ).translated(pos);
+    rect.adjust(-2, -2, 2, 2);
+    return rect;
 }
 
 void KisBrushBasedPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, KisPaintOpSettings::OutlineMode _mode) const

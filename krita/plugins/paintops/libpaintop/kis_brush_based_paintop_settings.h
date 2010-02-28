@@ -24,6 +24,7 @@
 
 class PAINTOP_EXPORT KisBrushBasedPaintOpSettings : public KisPaintOpSettings
 {
+public:
     ///Reimplemented
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const;
     

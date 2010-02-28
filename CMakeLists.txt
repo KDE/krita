@@ -400,6 +400,8 @@ if (SHOULD_BUILD_KPLATO)
 endif (SHOULD_BUILD_KPLATO)
 
 if (SHOULD_BUILD_KCHART)
+    set (WITH_kchart true CACHE BOOL "" FORCE)
+    add_definitions(-DHAVE_KCHART)
     macro_optional_add_subdirectory(kchart)
 endif (SHOULD_BUILD_KCHART)
 

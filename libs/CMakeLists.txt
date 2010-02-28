@@ -10,4 +10,9 @@ if (SHOULD_BUILD_SCRIPTING)
 endif (SHOULD_BUILD_SCRIPTING)
 add_subdirectory( kopageapp )
 add_subdirectory( koproperty ) # TODO move to independent place like kdesupport
-#add_subdirectory( koreport )
+
+#atm, koreport depends on kdchart.  this will hopefully
+#fix builds for people who dont build kchart
+if (WITH_kchart)
+    add_subdirectory( koreport )
+endif (WITH_kchart)

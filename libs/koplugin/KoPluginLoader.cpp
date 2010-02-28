@@ -92,8 +92,9 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             } else
                 blacklist << service->library();
         }
-    } else
+    } else {
         plugins = offers;
+    }
 
     QMap<QString, KSharedPtr<KService> > serviceNames;
     foreach(KSharedPtr<KService> service, plugins) {

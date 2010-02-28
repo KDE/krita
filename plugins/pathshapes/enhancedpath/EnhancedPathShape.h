@@ -83,8 +83,17 @@ public:
     const QRectF & viewBox() const;
     QPointF shapeToViewbox(const QPointF &point) const;
     QPointF viewboxToShape(const QPointF &point) const;
-    qreal shapeToViewbox(qreal value) const;
     qreal viewboxToShape(qreal value) const;
+
+    /// Sets if the shape is to be mirrored horizontally before aplying any other transformations
+    //NOTE: in the standard nothing is mentioned about the priorities of the transformations"
+    //it's assumed like this because of the behavior shwon in OOo
+    void setMirrorHorizontally(bool mirrorHorizontally);
+
+    /// Sets if the shape is to be mirrored vertically before aplying any other transformations
+    //NOTE: in the standard nothing is mentioned about the priorities of the transformations"
+    //it's assumed like this because of the behavior shwon in OOo
+    void setMirrorVertically(bool mirrorVertically);
 
     /// Returns parameter from given textual representation
     EnhancedPathParameter *parameter(const QString &text);
@@ -107,18 +116,23 @@ private:
     /// Adds a new command
     void addCommand(const QString &command, bool triggerUpdate);
 
+    void setMirroring();
+
     typedef QMap<QString, EnhancedPathFormula*> FormulaStore;
     typedef QList<qreal> ModifierStore;
     typedef QMap<QString, EnhancedPathParameter*> ParameterStore;
 
     QRectF m_viewBox;
     QMatrix m_viewMatrix;
+    QMatrix m_flipMatrix;
     QPointF m_viewBoxOffset;
     QList<EnhancedPathCommand*> m_commands; ///< the commands creating the outline
     QList<EnhancedPathHandle*> m_enhancedHandles; ///< the handles for modifiying the shape
     FormulaStore m_formulae;     ///< the formulae
     ModifierStore m_modifiers;   ///< the modifier values
     ParameterStore m_parameters; ///< the shared parameters
+    bool m_mirrorVertically; ///<whether or not the shape is to be mirrored vertically before transforming it
+    bool m_mirrorHorizontally; ///<whether or not the shape is to be mirrored horizontally before transforming it
 };
 
 #endif // KOENHANCEDPATHSHAPE_H

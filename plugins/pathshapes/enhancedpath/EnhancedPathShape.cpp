@@ -32,7 +32,7 @@
 #include <KoOdfWorkaround.h>
 
 EnhancedPathShape::EnhancedPathShape(const QRectF &viewBox)
-: m_viewBox(viewBox), m_viewBoxOffset(0.0, 0.0)
+: m_viewBox(viewBox), m_viewBoxOffset(0.0, 0.0), m_mirrorVertically(false), m_mirrorHorizontally(false)
 {
 }
 
@@ -89,6 +89,8 @@ void EnhancedPathShape::setSize(const QSizeF &newSize)
     m_viewBoxOffset.rx() *= scaleX;
     m_viewBoxOffset.ry() *= scaleY;
     m_viewMatrix.scale(scaleX, scaleY);
+
+    setMirroring();
 }
 
 
@@ -295,22 +297,18 @@ const QRectF & EnhancedPathShape::viewBox() const
 
 QPointF EnhancedPathShape::shapeToViewbox(const QPointF &point) const
 {
-    return m_viewMatrix.inverted().map(point-m_viewBoxOffset);
+    //NOTE: m_flipMatrix doesn't need to be inverted since when we flip twice the efect of the flip is inverted.
+    return m_viewMatrix.inverted().map( m_flipMatrix.map(point)-m_viewBoxOffset );
 }
 
 QPointF EnhancedPathShape::viewboxToShape(const QPointF &point) const
 {
-    return m_viewMatrix.map(point) + m_viewBoxOffset;
-}
-
-qreal EnhancedPathShape::shapeToViewbox(qreal value) const
-{
-    return m_viewMatrix.inverted().map(QPointF(value, value)).x();
+    return m_flipMatrix.map(m_viewMatrix.map(point) + m_viewBoxOffset);
 }
 
 qreal EnhancedPathShape::viewboxToShape(qreal value) const
 {
-    return m_viewMatrix.map(QPointF(value, value)).x();
+    return m_flipMatrix.map(m_viewMatrix.map(QPointF(value, value))).x();
 }
 
 void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
@@ -368,6 +366,9 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
             if (! modifiers.isEmpty()) {
                 addModifiers(modifiers);
             }
+
+            setMirrorHorizontally( child.attributeNS(KoXmlNS::draw, "mirror-horizontal") == "true");
+            setMirrorVertically( child.attributeNS(KoXmlNS::draw, "mirror-vertical") == "true");
 
             KoXmlElement grandChild;
             forEachElement(grandChild, child) {
@@ -444,4 +445,31 @@ void EnhancedPathShape::parsePathData(const QString &data)
         addCommand(data.mid(start));
     if (start != -1)
         updatePath(size());
+}
+
+void EnhancedPathShape::setMirrorHorizontally(bool mirrorHorizontally)
+{
+    if( m_mirrorHorizontally != mirrorHorizontally) {
+        m_mirrorHorizontally = mirrorHorizontally;
+//         setMirroring();
+    }
+}
+
+void EnhancedPathShape::setMirrorVertically(bool mirrorVertically)
+{
+    if( m_mirrorVertically != mirrorVertically) {
+        m_mirrorVertically = mirrorVertically;
+//         setMirroring();
+    }
+}
+
+void EnhancedPathShape::setMirroring()
+{
+    qreal centerX = size().width() * 0.5;
+    qreal centerY = size().height() * 0.5;
+
+    m_flipMatrix.reset();
+    m_flipMatrix.translate(centerX, centerY);
+    m_flipMatrix.scale(m_mirrorHorizontally? -1.0 : 1.0, m_mirrorVertically? -1.0 : 1.0);
+    m_flipMatrix.translate(-centerX, -centerY);
 }

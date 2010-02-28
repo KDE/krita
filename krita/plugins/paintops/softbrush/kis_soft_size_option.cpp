@@ -47,6 +47,8 @@ KisSoftSizeOption::KisSoftSizeOption()
     connect(m_options->rotationBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->densityBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->jitterMove, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->jitterMove, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     
     connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), m_options->jitterMove, SLOT(setEnabled(bool)));
     setConfigurationPage(m_options);
@@ -91,7 +93,7 @@ void KisSoftSizeOption::readOptionSetting(const KisPropertiesConfiguration* sett
     m_options->spacing->setValue( setting->getDouble(SOFT_SPACING) );
     m_options->densityBox->setValue( setting->getDouble(SOFT_DENSITY) );
     m_options->jitterMove->setValue( setting->getDouble(SOFT_JITTER_MOVEMENT) );
-    m_options->jitterMoveBox->setEnabled( setting->getBool(SOFT_JITTER_MOVEMENT_ENABLED) );
+    m_options->jitterMoveBox->setChecked( setting->getBool(SOFT_JITTER_MOVEMENT_ENABLED) );
     
 }
 

@@ -83,6 +83,8 @@ private:
 
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
+    void drawArcRisen
+            (QPainter& painter, QColor color, int radius, int startAngle, float x, float y, float w, float h);
     bool isPointInPixmap(QPointF&, int pos);
 
 private:

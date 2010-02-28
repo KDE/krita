@@ -215,6 +215,7 @@ void KisCanvasResourceProvider::setBGColor(const KoColor& c)
 
 void KisCanvasResourceProvider::setFGColor(const KoColor& c)
 {
+    qDebug() << "setting color";
     m_fGChanged = true;
 
     QVariant v;
@@ -225,6 +226,7 @@ void KisCanvasResourceProvider::setFGColor(const KoColor& c)
 
 void KisCanvasResourceProvider::slotSetFGColor(const KoColor& c)
 {
+    qDebug() <<"Kiscanvasresourceprovider: another blah";
     setFGColor(c);
 }
 

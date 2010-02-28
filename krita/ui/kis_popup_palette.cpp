@@ -69,6 +69,7 @@ void KisPopupPalette::setSelectedColor(int x) { m_selectedColor = x; }
 
 void KisPopupPalette::slotChangefGColor(const QColor& newColor)
 {
+    qDebug() << "Kispopuppalette: blah";
     KoColor color;
     color.fromQColor(newColor);
 
@@ -168,41 +169,20 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     }
 
     //painting recent colors : bevel (raised)
-    rotationAngle = 180;
     float radius = 51.0;
-    painter.setPen(QPen(Qt::white,2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
-
     //outer radius
-//    for (int i = 0 ; i < 2 ; i++)
-//    {
-        QPainterPath path1;
-        path1.moveTo(cos(M_PI/4)*radius,-1*sin(M_PI/4)*radius);
-        path1.arcTo(-1*radius, -1*radius, 2*radius+0.5,2*radius+0.5, 45, 180);
-        painter.drawPath(path1);
+    drawArcRisen
+            (painter, QColor(Qt::white), radius, 45, cos(M_PI/4)*radius, -1*sin(M_PI/4)*radius, 2*radius+0.5, 2*radius+0.5);
+    drawArcRisen
+            (painter, QColor(Qt::black), radius, 180+45, -1*cos(M_PI/4)*radius, sin(M_PI/4)*radius, 2*radius+0.5, 2*radius+0.5);
 
-        painter.setPen(QPen(Qt::black,2 , Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
-        QPainterPath path2;
-        path2.moveTo(-1*cos(M_PI/4)*radius,sin(M_PI/4)*radius);
-        path2.arcTo(-1*radius, -1*radius, 2*radius+0.5,2*radius+0.5, 180+45, 180);
-        painter.drawPath(path2);
-//    }
+    //inner radius
+    radius = 33.5;
+    drawArcRisen
+            (painter, QColor(Qt::black), radius, 45, cos(M_PI/4)*radius, -1*sin(M_PI/4)*radius, 2*radius+0.5, 2*radius+0.5);
+    drawArcRisen
+           (painter, QColor(Qt::white), radius, 180+45, -1*cos(M_PI/4)*radius, sin(M_PI/4)*radius, 2*radius, 2*radius);
 
-    painter.setPen(QPen(Qt::black,2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
-    //outer radius
-//    for (int i = 0 ; i < 2 ; i++)
-//    {
-        radius = 33.5;
-        QPainterPath path3;
-        path3.moveTo(cos(M_PI/4)*radius,-1*sin(M_PI/4)*radius);
-        path3.arcTo(-1*radius, -1*radius, 2*radius+0.5,2*radius+0.5, 45, 180);
-        painter.drawPath(path3);
-
-        painter.setPen(QPen(Qt::white,2 , Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
-        QPainterPath path4;
-        path4.moveTo(-1*cos(M_PI/4)*radius,sin(M_PI/4)*radius);
-        path4.arcTo(-1*radius, -1*radius, 2*radius,2*radius, 180+45, 180);
-        painter.drawPath(path4);
-//    }
 
     //painting recent colors
     painter.setPen(Qt::NoPen);
@@ -270,6 +250,16 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.rotate(selectedColor() *-1 *rotationAngle);
         }
     }
+}
+
+void KisPopupPalette::drawArcRisen
+        (QPainter& painter, QColor color, int radius, int startAngle, float x, float y, float w, float h)
+{
+    painter.setPen(QPen(color ,2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+    QPainterPath path;
+    path.moveTo(x,y);
+    path.arcTo(-1*radius, -1*radius, w, h, startAngle, 180);
+    painter.drawPath(path);
 }
 
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)

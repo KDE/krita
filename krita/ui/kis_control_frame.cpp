@@ -182,7 +182,6 @@ void KisControlFrame::slotSaveToFavouriteBrushes()
 {
     if(! m_view->canvasBase()->favoriteResourceManager())
     {
-        qDebug() << "favoriteResourceManager is not instantiated";
         m_view->canvasBase()->createFavoriteResourceManager(m_paintopBox);
     }
     else {

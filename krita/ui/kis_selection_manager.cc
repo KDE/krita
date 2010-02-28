@@ -482,8 +482,6 @@ void KisSelectionManager::paste()
         layer->setX(viewConverter->viewToDocumentX(canvasBase->canvasController()->canvasOffsetX() + center.x()));
         layer->setY(viewConverter->viewToDocumentY(canvasBase->canvasController()->canvasOffsetY() + center.y()));
 
-        qDebug() << "layer x,y:" << layer->x() << ", " << layer->y();
-
         /*XXX CBR have an idea of asking the user if he is about to paste a clip in another cs than that of
           the image if that is what he want rather than silently converting
           if ( ! ( *clip->colorSpace == *image ->colorSpace()) )

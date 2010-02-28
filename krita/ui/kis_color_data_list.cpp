@@ -79,12 +79,10 @@ const KoColor& KisColorDataList::guiColor(int pos)
 
 void KisColorDataList::printGuiList()
 {
-    qDebug() << "Printing guiList: ";
     QColor* color = new QColor();
     for (int pos = 0; pos < size() ; pos++)
     {
         m_guiList.at(pos)->data.toQColor(color);
-        qDebug() << "pos: " << pos << " | data " << *color << " | priority " << m_guiList.at(pos)->key;
     }
 }
 

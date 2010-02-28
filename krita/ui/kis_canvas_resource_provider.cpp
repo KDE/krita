@@ -214,7 +214,6 @@ void KisCanvasResourceProvider::setBGColor(const KoColor& c)
 
 void KisCanvasResourceProvider::setFGColor(const KoColor& c)
 {
-    qDebug() << "setting color";
     m_fGChanged = true;
 
     QVariant v;
@@ -330,7 +329,6 @@ const KoColorProfile *KisCanvasResourceProvider::getScreenProfile(int screen)
 void KisCanvasResourceProvider::slotPainting()
 {
 
-//    qDebug() << "slotPainting | m_enablefGChange " << m_enablefGChange;
     if (m_fGChanged && m_enablefGChange) {
         emit sigFGColorUsed(fgColor());
         m_fGChanged = false;
@@ -339,7 +337,6 @@ void KisCanvasResourceProvider::slotPainting()
 
 void KisCanvasResourceProvider::slotResetEnableFGChange(bool b)
 {
-//    qDebug() << "slotResetEnableFGChange | m_enablefGChange " << b;
     m_enablefGChange = b;
 }
 

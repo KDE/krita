@@ -329,7 +329,7 @@ bool KisShapeLayer::loadLayer(KoStore* store)
     odfStore.loadAndParse(errorMessage);
 
     if (!errorMessage.isEmpty()) {
-        qDebug() << errorMessage;
+        warnKrita << errorMessage;
         return false;
     }
 
@@ -343,21 +343,18 @@ bool KisShapeLayer::loadLayer(KoStore* store)
     KoXmlElement body(KoXml::namedItemNS(contents, KoXmlNS::office, "body"));
 
     if (body.isNull()) {
-        qDebug() << "No office:body found!";
         //setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
         return false;
     }
 
     body = KoXml::namedItemNS(body, KoXmlNS::office, "drawing");
     if (body.isNull()) {
-        qDebug() << "No office:drawing found!";
         //setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
         return false;
     }
 
     KoXmlElement page(KoXml::namedItemNS(body, KoXmlNS::draw, "page"));
     if (page.isNull()) {
-        qDebug() << "No office:drawing found!";
         //setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
         return false;
     }

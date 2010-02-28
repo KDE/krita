@@ -111,7 +111,6 @@ void KoFavoriteResourceManager::resetPopupPaletteParent(QWidget* w)
 {
     if (m_popupPalette)
     {
-        qDebug() << "[KoFavoriteResourceManager] m_popupPalette exists and parent is being reset";
         m_popupPalette->setParent(w);
     }
 }
@@ -246,7 +245,6 @@ void KoFavoriteResourceManager::saveFavoriteBrushes()
         (favoriteList.append(m_favoriteBrushesList.at(pos)->paintOp().id())).append(",");
     }
 
-    qDebug() << "[KoFavoriteResourceManager] Saving list: " << favoriteList;
     KConfigGroup group(KGlobal::config(), "favoriteList");
     group.writeEntry("favoriteBrushes", favoriteList);
     group.config()->sync();
@@ -267,7 +265,6 @@ void KoFavoriteResourceManager::slotUpdateRecentColor(int pos)
 
 void KoFavoriteResourceManager::slotAddRecentColor(const KoColor& color)
 {
-    qDebug() << "[KoFavoriteResourceManager] adding new colour";
     addRecentColor(color);
 }
 

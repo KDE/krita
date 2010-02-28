@@ -498,7 +498,6 @@ QPoint KisCanvas2::documentOffset() const
 
 void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
 {
-    qDebug() << "KisCanvas2: Setting favoriteResourceManager";
     m_d->favoriteResourceManager = new KoFavoriteResourceManager(paintopbox, canvasWidget());
     connect(this, SIGNAL(favoritePaletteCalled(const QPoint&)), favoriteResourceManager(), SLOT(slotShowPopupPalette(const QPoint&)));
     connect(view()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)), favoriteResourceManager(), SLOT(slotAddRecentColor(KoColor)));
@@ -509,7 +508,6 @@ void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
 
 void KisCanvas2::slotCanvasDestroyed(QWidget* w)
 {
-    qDebug() << "[KisView2] Resetting popupPalette parent";
     if (m_d->favoriteResourceManager != 0)
     {
         m_d->favoriteResourceManager->resetPopupPaletteParent(w);

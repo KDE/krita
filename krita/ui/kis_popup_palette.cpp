@@ -389,7 +389,6 @@ void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
 
             if (pos >= 0 && pos < m_resourceManager->recentColorsTotal())
             {
-                qDebug() << "[KisPopupPalette] pos: " << pos;
                 emit sigUpdateRecentColor(pos);
             }
         }

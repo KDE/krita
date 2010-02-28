@@ -94,7 +94,6 @@ KisPainter::StrokeStyle KisToolShape::strokeStyle(void)
 
 void KisToolShape::setupPainter(KisPainter * painter)
 {
-    qDebug() << "setupPainter";
     KisTool::setupPainter(painter);
     painter->setFillStyle(fillStyle());
     painter->setStrokeStyle(strokeStyle());
@@ -103,7 +102,6 @@ void KisToolShape::setupPainter(KisPainter * painter)
         if (paintLayer) {
             painter->setChannelFlags(paintLayer->channelFlags());
             if (paintLayer->alphaLocked()) {
-                qDebug() << "\t" << "alphalocked";
                 painter->setLockAlpha(paintLayer->alphaLocked());
             }
         }

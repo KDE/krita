@@ -236,7 +236,6 @@ KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image,
                 for (child = node.lastChild(); !child.isNull(); child = child.previousSibling()) {
                     KisNode* node = loadNode(child.toElement(), image);
                     if (!node) {
-                        qDebug() << ">>>>>>>>>>>>>>>>>>> Could not load node";
 #ifdef __GNUC__
 #warning "KisKraLoader::loadNodes: report node load failures back to the user!"
 #endif

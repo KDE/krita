@@ -19,6 +19,7 @@
 #include "kis_boundary_painter.h"
 #include <QPixmap>
 #include <QPainter>
+#include <QPen>
 
 #include <KoViewConverter.h>
 
@@ -27,48 +28,9 @@
 
 void KisBoundaryPainter::paint(const KisBoundary* boundary, KisImageWSP image, QPainter& painter, const KoViewConverter &converter)
 {
-    KisBoundary::PointPairListList::const_iterator it = boundary->horizontalSegment().constBegin();
-    KisBoundary::PointPairListList::const_iterator end = boundary->horizontalSegment().constEnd();
-
-    // Horizontal
-    while (it != end) {
-        KisBoundary::PointPairList::const_iterator lineIt = (*it).constBegin();
-        KisBoundary::PointPairList::const_iterator lineEnd = (*it).constEnd();
-        while (lineIt != lineEnd) {
-            int x1 = static_cast<int>((*lineIt).first.x());
-            int y = static_cast<int>((*lineIt).first.y());
-            int x2 = x1 + (*lineIt).second;
-
-            QPointF p1 = converter.documentToView(image->pixelToDocument(QPoint(x1, y)));
-            QPointF p2 = converter.documentToView(image->pixelToDocument(QPoint(x2, y)));
-            painter.drawLine(p1, p2);
-            painter.drawPoint(p2);
-
-            ++lineIt;
-        }
-        ++it;
-    }
-
-    // Vertical
-    it = boundary->verticalSegment().constBegin();
-    end = boundary->verticalSegment().constEnd();
-
-    while (it != end) {
-        KisBoundary::PointPairList::const_iterator lineIt = (*it).constBegin();
-        KisBoundary::PointPairList::const_iterator lineEnd = (*it).constEnd();
-        while (lineIt != lineEnd) {
-            int x = static_cast<int>((*lineIt).first.x());
-            int y1 = static_cast<int>((*lineIt).first.y());
-            int y2 = y1 + (*lineIt).second;
-
-            QPointF p1 = converter.documentToView(image->pixelToDocument(QPoint(x, y1)));
-            QPointF p2 = converter.documentToView(image->pixelToDocument(QPoint(x, y2)));
-            painter.drawLine(p1, p2);
-            painter.drawPoint(p2);
-
-            ++lineIt;
-        }
-        ++it;
-    }
+    qreal zoomX, zoomY;
+    converter.zoom(&zoomX, &zoomY);
+    painter.scale(zoomX/image->xRes(), zoomY/image->yRes());
+    boundary->paint(painter);
 }
 

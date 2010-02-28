@@ -17,111 +17,44 @@
  */
 
 #include "kis_boundary.h"
-#include <QPixmap>
 #include <QPainter>
-#include <QList>
+#include <QPen>
 
 #include "KoColorSpace.h"
 #include "kis_fixed_paint_device.h"
-#include "kis_iterators_pixel.h"
+#include "kis_outline_generator.h"
 
 struct KisBoundary::Private {
-    bool isDark(quint8 val);
     KisFixedPaintDeviceSP m_device;
-    int m_fuzzyness;
-
-    PointPairListList m_horSegments;
-    PointPairListList m_vertSegments;
-
+    QVector<QPolygon> m_boundary;
 };
 
 KisBoundary::KisBoundary(KisFixedPaintDeviceSP dev) : d(new Private)
 {
     d->m_device = dev;
-    d->m_fuzzyness = 255 / 2;
 }
 
 KisBoundary::~KisBoundary()
 {
 }
 
-bool KisBoundary::Private::isDark(quint8 val)
-{
-    return val < m_fuzzyness;
-}
-
-void KisBoundary::generateBoundary(int w, int h)
+void KisBoundary::generateBoundary()
 {
     if (!d->m_device)
         return;
 
-    const KoColorSpace* cs = d->m_device->colorSpace();
-    int pixelSize = d->m_device->pixelSize();
+    KisOutlineGenerator generator(d->m_device->colorSpace(), OPACITY_TRANSPARENT_U8);
+    d->m_boundary = generator.outline(d->m_device->data(), 0, 0, d->m_device->bounds().width(), d->m_device->bounds().height());
+}
 
-    // Yes, we start looking before the begin of the data. There we return the default pixel,
-    // which is transparent.
-    quint8* dataPointer = d->m_device->data();
-    quint8* dataPointerTop = d->m_device->data() - w * pixelSize;
-    quint8* dataPointerBot = d->m_device->data();
-    // Horizontal
-    for (int currentY = -1; currentY < h; currentY++) {
-
-        d->m_horSegments.append(QList<PointPair>());
-
-        for (int currentX = 0; currentX < w; currentX++) {
-
-            bool darkTop;
-            bool darkBot;
-
-            if (dataPointerTop < dataPointer) {
-                darkTop = OPACITY_TRANSPARENT_U8;
-            } else {
-                darkTop = cs->opacityU8(dataPointerTop);
-            }
-            darkBot = cs->opacityU8(dataPointerBot);
-
-            if (darkTop != darkBot) {
-                // detected a change
-                d->m_horSegments.back().append(qMakePair(QPointF(currentX, currentY + 1), 1));
-            }
-
-            dataPointerTop++;
-            dataPointerBot++;
-        }
+void KisBoundary::paint(QPainter& painter) const
+{ 
+    QPen pen;
+    pen.setWidth(0);
+    pen.setBrush(Qt::black);
+    painter.setPen(pen);
+    
+    foreach(const QPolygon & polygon, d->m_boundary) {
+        painter.drawPolygon(polygon);
     }
-
-    // Vertical
-    for (int currentX = - 1; currentX < w; currentX++) {
-
-        bool darkLeft;
-        bool darkRight;
-
-        d->m_vertSegments.append(QList<PointPair>());
-
-        for (int currentY = 0; currentY < h; currentY++) {
-
-            quint8* dataPointerLeft = d->m_device->data() + (h * pixelSize) + (currentX * pixelSize);
-            quint8* dataPointerRight = dataPointerTop - pixelSize;
-
-            darkLeft = cs->opacityU8(dataPointerLeft);
-            darkRight = cs->opacityU8(dataPointerRight);
-
-            if (darkLeft != darkRight) {
-                // detected a change
-                d->m_vertSegments.back().append(qMakePair(QPointF(currentX, currentY), 1));
-            }
-        }
-    }
-
 }
-
-const KisBoundary::PointPairListList& KisBoundary::horizontalSegment() const
-{
-    return d->m_horSegments;
-}
-
-const KisBoundary::PointPairListList& KisBoundary::verticalSegment() const
-{
-    return d->m_vertSegments;
-}
-

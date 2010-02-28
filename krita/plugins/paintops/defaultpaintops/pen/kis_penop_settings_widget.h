@@ -23,12 +23,12 @@
 #ifndef KIS_PENOP_SETTINGS_WIDGET_H_
 #define KIS_PENOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_options_widget.h>
+#include <kis_brush_based_paintop_options_widget.h>
 #include <kis_image.h>
 
 class KisBrushOptionWidget;
 
-class KisPenOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisPenOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {
 
     Q_OBJECT
@@ -40,10 +40,6 @@ public:
     ~KisPenOpSettingsWidget();
 
     KisPropertiesConfiguration* configuration() const;
-
-public:
-
-    KisBrushOptionWidget * m_brushOption;
 };
 
 

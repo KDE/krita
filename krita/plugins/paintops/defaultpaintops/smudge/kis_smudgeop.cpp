@@ -42,20 +42,15 @@
 #include <KoInputDevice.h>
 
 #include <kis_brush.h>
-#include <kis_datamanager.h>
 #include <kis_global.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_paintop.h>
 #include <kis_properties_configuration.h>
 #include <kis_selection.h>
-#include <kis_brush_option_widget.h>
-#include <kis_paintop_options_widget.h>
+#include <kis_brush_based_paintop_settings.h>
 
-#include "kis_smudgeop_settings.h"
-#include "kis_smudgeop_settings_widget.h"
-
-KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painter, KisImageWSP image)
+KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(settings, painter)
         , settings(settings)
         , m_firstRun(true)

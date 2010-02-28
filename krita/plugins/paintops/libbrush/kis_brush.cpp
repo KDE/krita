@@ -1133,8 +1133,6 @@ void KisBrush::resetBoundary()
 void KisBrush::generateBoundary() const
 {
     KisFixedPaintDeviceSP dev;
-    int w = width();
-    int h = height();
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
         dev = paintDevice(KoColorSpaceRegistry::instance()->rgb8(), 1.0, 0.0, KisPaintInformation());
@@ -1161,8 +1159,8 @@ void KisBrush::generateBoundary() const
 #endif
     }
 
-    d->boundary = new KisBoundary(dev.data());
-    d->boundary->generateBoundary(w, h);
+    d->boundary = new KisBoundary(dev);
+    d->boundary->generateBoundary();
 }
 
 const KisBoundary* KisBrush::boundary() const

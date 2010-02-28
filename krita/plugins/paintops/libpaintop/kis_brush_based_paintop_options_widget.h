@@ -1,9 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,24 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_PENOP_SETTINGS_H_
-#define KIS_PENOP_SETTINGS_H_
+#ifndef KIS_BRUSH_BASED_PAINTOP_OPTIONS_WIDGET_H
+#define KIS_BRUSH_BASED_PAINTOP_OPTIONS_WIDGET_H
 
-#include <kis_brush_based_paintop_settings.h>
-#include <kis_paintop_settings.h>
-#include <kis_types.h>
+#include "kis_paintop_options_widget.h"
+#include "kis_types.h"
+#include "kis_brush.h"
+#include <krita_export.h>
 
-class QDomElement;
+class KisBrushOptionWidget;
 
-class KisPenOpSettings : public KisBrushBasedPaintOpSettings
+class PAINTOP_EXPORT KisBrushBasedPaintopOptionWidget : public KisPaintOpOptionsWidget
 {
-
 public:
-    KisPenOpSettings();
+    KisBrushBasedPaintopOptionWidget(QWidget* parent = 0);
+    virtual ~KisBrushBasedPaintopOptionWidget();
+    
+    KisBrushSP brush();
+    
+    void changePaintOpSize(qreal x, qreal y);
 
-    virtual ~KisPenOpSettings();
-    bool paintIncremental();
+private:
+    KisBrushOptionWidget * m_brushOption;
 };
 
-
-#endif // KIS_PENOP_SETTINGS_H_
+#endif // KIS_BRUSH_BASED_PAINTOP_OPTIONS_WIDGET_H

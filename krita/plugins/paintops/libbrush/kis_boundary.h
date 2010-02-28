@@ -20,6 +20,8 @@
 
 #include <QList>
 #include <QPair>
+#include <QPainter>
+
 #include <krita_export.h>
 
 #include "kis_types.h"
@@ -39,12 +41,10 @@ class BRUSH_EXPORT KisBoundary
 public:
     KisBoundary(KisFixedPaintDeviceSP dev);
     ~KisBoundary();
-    void generateBoundary(int w, int h);
-    typedef QPair<QPointF, int> PointPair; // int->length
-    typedef QList<PointPair> PointPairList;
-    typedef QList< PointPairList > PointPairListList;
-    const PointPairListList& horizontalSegment() const;
-    const PointPairListList& verticalSegment() const;
+    void generateBoundary();
+    
+    void paint(QPainter& painter) const;
+
 private:
     struct Private;
     Private* const d;

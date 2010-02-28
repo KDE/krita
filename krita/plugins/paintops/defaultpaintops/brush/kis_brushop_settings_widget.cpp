@@ -34,13 +34,10 @@
 #include <kis_curve_option_widget.h>
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
-        : KisPaintOpOptionsWidget(parent)
+        : KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
 
-    m_brushOption = new KisBrushOptionWidget();
-
-    addPaintOpOption(m_brushOption);
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption()));
@@ -60,14 +57,6 @@ KisPropertiesConfiguration* KisBrushOpSettingsWidget::configuration() const
     config->setProperty("paintop", "paintbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;
-}
-
-void KisBrushOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
-{
-    Q_UNUSED(y);
-    qreal currentDiameter = m_brushOption->autoBrushDiameter();
-    
-    m_brushOption->setAutoBrushDiameter(currentDiameter + qRound(x));
 }
 
 #include "kis_brushop_settings_widget.moc"

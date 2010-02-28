@@ -1,9 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,24 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_PENOP_SETTINGS_H_
-#define KIS_PENOP_SETTINGS_H_
+#ifndef KIS_BRUSH_BASED_PAINTOP_SETTINGS_H
+#define KIS_BRUSH_BASED_PAINTOP_SETTINGS_H
 
-#include <kis_brush_based_paintop_settings.h>
 #include <kis_paintop_settings.h>
-#include <kis_types.h>
+#include <krita_export.h>
 
-class QDomElement;
-
-class KisPenOpSettings : public KisBrushBasedPaintOpSettings
+class PAINTOP_EXPORT KisBrushBasedPaintOpSettings : public KisPaintOpSettings
 {
-
-public:
-    KisPenOpSettings();
-
-    virtual ~KisPenOpSettings();
-    bool paintIncremental();
+    ///Reimplemented
+    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const;
+    
+    ///Reimplemented
+    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, KisPaintOpSettings::OutlineMode _mode) const;
 };
 
-
-#endif // KIS_PENOP_SETTINGS_H_
+#endif // KIS_BRUSH_BASED_PAINTOP_SETTINGS_H

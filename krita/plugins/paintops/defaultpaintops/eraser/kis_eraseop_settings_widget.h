@@ -23,14 +23,14 @@
 #ifndef KIS_ERASEOP_SETTINGS_WIDGET_H_
 #define KIS_ERASEOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_options_widget.h>
+#include <kis_brush_based_paintop_options_widget.h>
 #include <kis_image.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 
 class KisBrushOptionWidget;
 
-class KisEraseOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisEraseOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {
 
     Q_OBJECT
@@ -42,10 +42,6 @@ public:
     ~KisEraseOpSettingsWidget();
 
     KisPropertiesConfiguration* configuration() const;
-
-public:
-
-    KisBrushOptionWidget * m_brushOption;
 };
 
 

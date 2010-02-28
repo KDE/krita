@@ -23,10 +23,10 @@
 #ifndef KIS_BRUSHOP_SETTINGS_H_
 #define KIS_BRUSHOP_SETTINGS_H_
 
-#include <kis_paintop_settings.h>
+#include <kis_brush_based_paintop_settings.h>
 #include <kis_types.h>
 
-class KisBrushOpSettings : public KisPaintOpSettings
+class KisBrushOpSettings : public KisBrushBasedPaintOpSettings
 {
 
 public:
@@ -34,9 +34,6 @@ public:
     virtual ~KisBrushOpSettings();
 
     bool paintIncremental();
-
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 };
 
 

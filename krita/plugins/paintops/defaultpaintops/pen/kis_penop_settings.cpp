@@ -21,17 +21,9 @@
  */
 
 #include "kis_penop_settings.h"
-#include "kis_penop_settings_widget.h"
-
-#include <kis_brush_option_widget.h>
-#include <kis_paintop_options_widget.h>
-#include <kis_pressure_darken_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
 
 KisPenOpSettings::KisPenOpSettings()
-        : m_options(0)
 {
 }
 

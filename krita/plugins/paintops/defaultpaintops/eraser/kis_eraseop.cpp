@@ -106,7 +106,7 @@ double KisEraseOp::paintAt(const KisPaintInformation& info)
         return 1.0;
 
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
-    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 0.0;
+    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(scale);
 
     KisPaintDeviceSP device = painter()->device();
     QPointF hotSpot = brush->hotSpot(scale, scale);

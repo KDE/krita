@@ -66,7 +66,7 @@
 
 	</collection>
     <collection name="filters" text="Filters" comment="Scripting filters for Krita" enabled="false">
-        <script text="Invert Filter with Ruby" comment="Invert the pixels of an image with Ruby as a filter" 
+<!--        <script text="Invert Filter with Ruby" comment="Invert the pixels of an image with Ruby as a filter" 
             name="rbinvertfilter"
             interpreter="ruby"
             file="filters/invert.rb">
@@ -81,10 +81,10 @@
             <property name="categoryId">other_filters</property>
             <property name="categoryName">Other</property>
             <property name="supportsPainting">true</property>
-        </script>
+        </script>-->
     </collection>
 
-    <collection name="dockers" text="Dockers" comment="Dockers for Krita" enabled="true">
+    <collection name="dockers" text="Dockers" comment="Dockers for Krita" enabled="false">
 <!--        <script text="Palette Docker" comment="Show a palette docker"
             name="Palette Docker"
             interpreter="ruby"
@@ -98,7 +98,7 @@
             <property name="defaultDockPosition">Qt::DockRight</property>
         </script>-->
     </collection>
-    <collection name="decorations" text="Canvas decorations" comment="Decorations for the canvas of Krita" enabled="true">
+    <collection name="decorations" text="Canvas decorations" comment="Decorations for the canvas of Krita" enabled="false">
 <!--        <script text="Vanishing Point Decoration" comment="Show some vanishing points"
             name="VanishingPointDecoration"
             interpreter="ruby"

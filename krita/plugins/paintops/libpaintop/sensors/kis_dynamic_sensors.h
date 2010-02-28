@@ -40,14 +40,7 @@ class KisDynamicSensorSpeed : public KisDynamicSensor
 public:
     KisDynamicSensorSpeed();
     virtual ~KisDynamicSensorSpeed() { }
-    virtual qreal parameter(const KisPaintInformation& info) {
-        int dt = qMax(1, info.currentTime() - m_lastTime); // make sure dt > 1
-        m_lastTime = info.currentTime();
-        m_speed += (info.movement().norm() - m_lastMove) / dt;
-        m_lastMove = info.movement().norm();
-        m_speed = qMin(1.0, m_speed);
-        return 1.0 - m_speed;
-    }
+    virtual qreal parameter(const KisPaintInformation& info);
     void reset() {
         m_lastTime = 0;
         m_lastMove = 0.0;

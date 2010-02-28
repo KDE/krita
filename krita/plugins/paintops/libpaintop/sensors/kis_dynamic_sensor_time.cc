@@ -25,7 +25,7 @@
 #include "kis_paint_information.h"
 #include "kis_sensor_selector.h"
 
-KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0.0), m_length(30 * 1000), m_periodic(true)
+KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0.0), m_length(3 * 1000), m_periodic(true)
 {
 
 }

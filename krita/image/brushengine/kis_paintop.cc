@@ -46,6 +46,7 @@
 
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 #define MAXIMUM_SCALE 2
+#include <kis_distance_information.h>
 
 struct KisPaintOp::Private {
     Private()
@@ -99,14 +100,14 @@ void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fract
     *fraction = f;
 }
 
-static double paintBezierCurve(KisPaintOp *paintOp,
+static KisDistanceInformation paintBezierCurve(KisPaintOp *paintOp,
                                const KisPaintInformation &pi1,
                                const KisVector2D &control1,
                                const KisVector2D &control2,
                                const KisPaintInformation &pi2,
-                               const double savedDist)
+                               const KisDistanceInformation& savedDist)
 {
-    qreal newDistance;
+    KisDistanceInformation newDistance;
     LineEquation line = LineEquation::Through(toKisVector2D(pi1.pos()), toKisVector2D(pi2.pos()));
     qreal d1 = line.absDistance(control1);
     qreal d2 = line.absDistance(control2);
@@ -138,34 +139,34 @@ static double paintBezierCurve(KisPaintOp *paintOp,
     return newDistance;
 }
 
-double KisPaintOp::paintBezierCurve(const KisPaintInformation &pi1,
+KisDistanceInformation KisPaintOp::paintBezierCurve(const KisPaintInformation &pi1,
                                     const QPointF &control1,
                                     const QPointF &control2,
                                     const KisPaintInformation &pi2,
-                                    const double savedDist)
+                                    const KisDistanceInformation& savedDist)
 {
     return ::paintBezierCurve(this, pi1, toKisVector2D(control1), toKisVector2D(control2), pi2, savedDist);
 }
 
 
-double KisPaintOp::paintLine(const KisPaintInformation &pi1,
+KisDistanceInformation KisPaintOp::paintLine(const KisPaintInformation &pi1,
                              const KisPaintInformation &pi2,
-                             double savedDist)
+                             const KisDistanceInformation& savedDist)
 {
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());
 
     KisVector2D dragVec = end - start;
 
-    Q_ASSERT(savedDist >= 0);
+    Q_ASSERT(savedDist.distance >= 0);
 
     double endDist = dragVec.norm();
-    double currentDist = savedDist;
+    double currentDist = savedDist.distance;
 
     dragVec.normalize();
     KisVector2D step(0, 0);
 
-    double sp = currentDist;
+    double sp = savedDist.spacing;
     while (currentDist < endDist) {
 
         QPointF p = toQPointF(start +  currentDist * dragVec);
@@ -179,7 +180,7 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
     QRect r(pi1.pos().toPoint(), pi2.pos().toPoint());
     d->painter->addDirtyRect(r.normalized());
 
-    return currentDist - endDist;
+    return KisDistanceInformation(currentDist - endDist, sp);
 }
 
 KisPainter* KisPaintOp::painter() const

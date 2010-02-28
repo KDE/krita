@@ -119,7 +119,7 @@ QImage KisPaintOpSettings::sampleStroke(const QSize& size)
 
     QPointF c1(1.0 / 4.0* width , height - 2.0);
     QPointF c2(c1);
-    double saveddist = painter.paintBezierCurve(pi1, c1, c2, pi2, 0);
+    KisDistanceInformation saveddist = painter.paintBezierCurve(pi1, c1, c2, pi2, KisDistanceInformation());
 
     c1.setX(3.0 / 4.0 * width);
     c1.setY(0);

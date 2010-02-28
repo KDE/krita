@@ -39,7 +39,7 @@ public:
     virtual ~KisDynaPaintOp();
 
     double paintAt(const KisPaintInformation& info);
-    double paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist);
+    KisDistanceInformation paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist);
 
     virtual bool incremental() const {
         return true;

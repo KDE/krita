@@ -26,6 +26,7 @@
 
 #include <kis_debug.h>
 #include <kis_paint_information.h>
+#include <kis_distance_information.h>
 
 class KisToolFreehand;
 class KisPainter;
@@ -50,8 +51,8 @@ public:
 
     virtual ~FreehandPaintJob();
 
-    double dragDist() const {
-        Q_ASSERT(m_dragDist >= 0.0);   // This ensure that FreeHandPaintJob was runned before its drag dist is used
+    KisDistanceInformation dragDist() const {
+        Q_ASSERT(m_dragDist.distance >= 0.0);   // This ensure that FreeHandPaintJob was runned before its drag dist is used
         return m_dragDist;
     }
     virtual void run() = 0;
@@ -60,7 +61,7 @@ protected:
 
     KisToolFreehand* m_toolFreeHand;
     KisPainter* m_painter;
-    double m_dragDist;
+    KisDistanceInformation m_dragDist;
     KisPaintInformation m_pi1;
     KisPaintInformation m_pi2;
     const FreehandPaintJob* m_previousPaintJob;

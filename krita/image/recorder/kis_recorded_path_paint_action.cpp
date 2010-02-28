@@ -120,15 +120,14 @@ void KisRecordedPathPaintAction::playPaint(const KisPlayInfo&, KisPainter* paint
 {
     dbgImage << "play path paint action with " << d->infos.size() << " slices";
     if (d->infos.size() <= 0) return;
-    double savedDist = 0.0;
+    KisDistanceInformation savedDist;
     
     foreach (Private::BezierCurveSlice slice, d->infos)
     {
         switch(slice.type)
         {
             case Private::BezierCurveSlice::Point:
-                painter->paintAt(slice.point1);
-                savedDist = 0.0;
+                savedDist = KisDistanceInformation(0, painter->paintAt(slice.point1));
                 break;
             case Private::BezierCurveSlice::Line:
                 savedDist = painter->paintLine(slice.point1, slice.point2, savedDist);

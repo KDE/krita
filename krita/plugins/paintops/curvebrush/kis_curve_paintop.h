@@ -43,7 +43,7 @@ public:
     }
 
     double paintAt(const KisPaintInformation& info);
-    double paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist);
+    KisDistanceInformation paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist);
 
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
         Q_UNUSED(xSpacing);

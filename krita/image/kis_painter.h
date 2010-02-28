@@ -24,6 +24,7 @@
 
 #include <KoColorSpaceConstants.h>
 
+#include "kis_distance_information.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include <krita_export.h>
@@ -184,9 +185,9 @@ public:
      * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
      * because the currenlty set brush has a spacing greater than that distance.
      */
-    double paintLine(const KisPaintInformation &pi1,
+    KisDistanceInformation paintLine(const KisPaintInformation &pi1,
                      const KisPaintInformation &pi2,
-                     double savedDist = 0);
+                     const KisDistanceInformation& savedDist = KisDistanceInformation());
 
     /**
      * Draw a Bezier curve between pos1 and pos2 using control points 1 and 2.
@@ -195,11 +196,11 @@ public:
      * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
      * because the currenlty set brush has a spacing greater than that distance.
      */
-    double paintBezierCurve(const KisPaintInformation &pi1,
+    KisDistanceInformation paintBezierCurve(const KisPaintInformation &pi1,
                             const QPointF &control1,
                             const QPointF &control2,
                             const KisPaintInformation &pi2,
-                            const double savedDist = 0);
+                            const KisDistanceInformation& savedDist = KisDistanceInformation());
     /**
      * Fill the given vector points with the points needed to draw the Bezier curve between
      * pos1 and pos2 using control points 1 and 2, excluding the final pos2.
@@ -256,7 +257,7 @@ public:
     void paintPolygon(const vQPointF& points);
 
     /** Draw a spot at pos using the currently set paint op, brush and color */
-    void paintAt(const KisPaintInformation &pos);
+    double paintAt(const KisPaintInformation &pos);
 
     /**
      * Stroke the given QPainterPath.

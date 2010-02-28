@@ -56,12 +56,12 @@ double KisCurvePaintOp::paintAt(const KisPaintInformation& info)
 }
 
 
-double KisCurvePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
+KisDistanceInformation KisCurvePaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
 {
     Q_UNUSED(savedDist);
-    if (!painter()) return 0;
+    if (!painter()) return KisDistanceInformation();
     m_dev = painter()->device();
-    if (!m_dev) return 0;
+    if (!m_dev) return KisDistanceInformation();
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
@@ -78,6 +78,6 @@ double KisCurvePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaint
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());
     KisVector2D dragVec = end - start;
-    return  dragVec.norm();
+    return KisDistanceInformation(0, dragVec.norm());
 
 }

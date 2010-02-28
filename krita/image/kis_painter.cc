@@ -481,12 +481,12 @@ void KisPainter::bltFixed(const QPoint & pos, const KisFixedPaintDeviceSP src, c
     bltFixed(pos.x(), pos.y(), src, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
 }
 
-double KisPainter::paintLine(const KisPaintInformation &pi1,
+KisDistanceInformation KisPainter::paintLine(const KisPaintInformation &pi1,
                              const KisPaintInformation &pi2,
-                             double savedDist)
+                             const KisDistanceInformation& savedDist)
 {
-    if (!d->device) return 0;
-    if (!d->paintOp || !d->paintOp->canPaint()) return 0;
+    if (!d->device) return KisDistanceInformation();
+    if (!d->paintOp || !d->paintOp->canPaint()) return KisDistanceInformation();
 
     return d->paintOp->paintLine(pi1, pi2, savedDist);
 }
@@ -504,7 +504,7 @@ void KisPainter::paintPolyline(const vQPointF &points,
         numPoints = points.count() - index;
 
 
-    double saveDist = 0;
+    KisDistanceInformation saveDist;
     for (int i = index; i < index + numPoints - 1; i++) {
         saveDist = paintLine(points [index], points [index + 1], saveDist);
     }
@@ -546,16 +546,16 @@ void KisPainter::getBezierCurvePoints(const QPointF &pos1,
     ::getBezierCurvePoints(toKisVector2D(pos1), toKisVector2D(control1), toKisVector2D(control2), toKisVector2D(pos2), points);
 }
 
-double KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
+KisDistanceInformation KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
                                     const QPointF &control1,
                                     const QPointF &control2,
                                     const KisPaintInformation &pi2,
-                                    const double savedDist)
+                                    const KisDistanceInformation& savedDist)
 {
     if (d->paintOp && d->paintOp->canPaint()) {
         return d->paintOp->paintBezierCurve(pi1, control1, control2, pi2, savedDist);
     }
-    return 0.5;
+    return KisDistanceInformation();
 }
 
 void KisPainter::paintRect(const QRectF &rect)
@@ -630,10 +630,10 @@ void KisPainter::paintEllipse(const double x,
     paintEllipse(QRectF(x, y, w, h));
 }
 
-void KisPainter::paintAt(const KisPaintInformation& pi)
+double KisPainter::paintAt(const KisPaintInformation& pi)
 {
-    if (!d->paintOp || !d->paintOp->canPaint()) return;
-    d->paintOp->paintAt(pi);
+    if (!d->paintOp || !d->paintOp->canPaint()) return 0.0;
+    return d->paintOp->paintAt(pi);
 }
 
 void KisPainter::fillPolygon(const vQPointF& points, FillStyle fillStyle)
@@ -668,7 +668,7 @@ void KisPainter::paintPolygon(const vQPointF& points)
 
     if (d->strokeStyle != StrokeStyleNone) {
         if (points.count() > 1) {
-            double distance = 0;
+            KisDistanceInformation distance;
 
             for (int i = 0; i < points.count() - 1; i++) {
                 distance = paintLine(KisPaintInformation(points[i]), KisPaintInformation(points[i + 1]), distance);
@@ -686,7 +686,7 @@ void KisPainter::paintPainterPath(const QPainterPath& path)
 
     QPointF lastPoint, nextPoint;
     int elementCount = path.elementCount();
-    double saveDist = 0;
+    KisDistanceInformation saveDist;
     for (int i = 0; i < elementCount; i++) {
         QPainterPath::Element element = path.elementAt(i);
         switch (element.type) {

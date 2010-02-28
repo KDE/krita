@@ -23,6 +23,7 @@
 #ifndef KIS_PAINTOP_H_
 #define KIS_PAINTOP_H_
 
+#include "kis_distance_information.h"
 #include "kis_shared.h"
 #include "kis_types.h"
 #include "kis_paintop_settings.h"
@@ -78,9 +79,9 @@ public:
      * between p1 and p2 not covered because the currenlty set brush
      * has a spacing greater than that distance.
      */
-    virtual double paintLine(const KisPaintInformation &pi1,
+    virtual KisDistanceInformation paintLine(const KisPaintInformation &pi1,
                              const KisPaintInformation &pi2,
-                             double savedDist = 0);
+                             const KisDistanceInformation& savedDist = KisDistanceInformation());
 
     /**
      * Draw a Bezier curve between pos1 and pos2 using control points 1 and 2.
@@ -89,11 +90,11 @@ public:
      * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
      * because the currenlty set brush has a spacing greater than that distance.
      */
-    virtual double paintBezierCurve(const KisPaintInformation &pi1,
+    virtual KisDistanceInformation paintBezierCurve(const KisPaintInformation &pi1,
                                     const QPointF &control1,
                                     const QPointF &control2,
                                     const KisPaintInformation &pi2,
-                                    const double savedDist = 0);
+                                    const KisDistanceInformation& savedDist = KisDistanceInformation());
 
     /**
      * Whether this paintop wants to deposit paint even when not moving, i.e. the

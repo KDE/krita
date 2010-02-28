@@ -63,14 +63,14 @@ KisParticlePaintOp::~KisParticlePaintOp()
 
 double KisParticlePaintOp::paintAt(const KisPaintInformation& info)
 {
-    return paintLine(info, info);
+    return paintLine(info, info).spacing;
 }
 
 
-double KisParticlePaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, double savedDist)
+KisDistanceInformation KisParticlePaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
 {
     Q_UNUSED(savedDist);
-    if (!painter()) return -1;
+    if (!painter()) return KisDistanceInformation();
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
@@ -91,5 +91,5 @@ double KisParticlePaintOp::paintLine(const KisPaintInformation& pi1, const KisPa
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
 
     QPointF diff = pi2.pos() - pi1.pos();
-    return sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+    return KisDistanceInformation(0, sqrt( diff.x()*diff.x() + diff.y()*diff.y() ));
 }

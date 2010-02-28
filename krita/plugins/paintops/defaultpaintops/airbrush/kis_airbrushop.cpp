@@ -150,9 +150,9 @@ double KisAirbrushOp::paintAt(const KisPaintInformation& info)
     return spacing(info.pressure());
 }
 
-double KisAirbrushOp::paintLine(const KisPaintInformation &pi1,
+KisDistanceInformation KisAirbrushOp::paintLine(const KisPaintInformation &pi1,
                                 const KisPaintInformation &pi2,
-                                double savedDist)
+                                const KisDistanceInformation& savedDist)
 {
     KisPaintInformation adjustedInfo1(pi1);
     KisPaintInformation adjustedInfo2(pi2);

@@ -68,11 +68,11 @@ double MyPaint::paintAt(const KisPaintInformation& info)
     return 1.0;
 }
 
-double MyPaint::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
+KisDistanceInformation MyPaint::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist)
 {
     Q_UNUSED(savedDist);
 
-    if (!painter()) return 0;
+    if (!painter()) return KisDistanceInformation();
 
     if (m_mypaintThinksStrokeHasEnded) {
         m_brush->new_stroke();
@@ -93,5 +93,5 @@ double MyPaint::paintLine(const KisPaintInformation &pi1, const KisPaintInformat
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());
     KisVector2D dragVec = end - start;
-    return  dragVec.norm();
+    return KisDistanceInformation(0, dragVec.norm());
 }

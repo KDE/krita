@@ -38,7 +38,7 @@ public:
     virtual ~KisParticlePaintOp();
 
     virtual double paintAt(const KisPaintInformation& info);
-    virtual double paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, double savedDist = -1);
+    virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
     
     virtual bool incremental() const {
         return true;

@@ -63,8 +63,9 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     // kDebug( 30003 ) <<"KoPluginLoader::load" << serviceType << kBacktrace();
     d->loadedServiceTypes << serviceType;
     QString query = QString::fromLatin1("(Type == 'Service')");
-    if (! versionString.isEmpty())
+    if (!versionString.isEmpty()) {
         query += QString::fromLatin1(" and (%1)").arg(versionString);
+    }
 
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
     KService::List plugins;
@@ -79,18 +80,19 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         // if there was no list of defaults; all plugins are loaded.
         const bool firstStart = !config.defaults.isEmpty() && !configGroup.hasKey(config.whiteList);
         knownList = configGroup.readEntry(config.blacklist, knownList);
-        if (firstStart)
+        if (firstStart) {
             configChanged = true;
-
+        }
         foreach(KSharedPtr<KService> service, offers) {
             QString lib = service->library();
-            if (whiteList.contains(lib))
+            if (whiteList.contains(lib)) {
                 plugins.append(service);
-            else if (!firstStart && !knownList.contains(lib)) { // also load newly installed plugins.
+            } else if (!firstStart && !knownList.contains(lib)) { // also load newly installed plugins.
                 plugins.append(service);
                 configChanged = true;
-            } else
+            } else {
                 blacklist << service->library();
+            }
         }
     } else {
         plugins = offers;
@@ -100,12 +102,14 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     foreach(KSharedPtr<KService> service, plugins) {
         if (serviceNames.contains(service->name())) { // duplicate
             QVariant pluginVersion2 = service->property("X-Flake-PluginVersion");
-            if (pluginVersion2.isNull()) // just take the first one found...
+            if (pluginVersion2.isNull()) { // just take the first one found...
                 continue;
+            }
             KSharedPtr<KService> otherService = serviceNames.value(service->name());
             QVariant pluginVersion = otherService->property("X-Flake-PluginVersion");
-            if (!(pluginVersion.isNull() || pluginVersion.toInt() < pluginVersion2.toInt()))
+            if (!(pluginVersion.isNull() || pluginVersion.toInt() < pluginVersion2.toInt())) {
                 continue; // replace the old one with this one, since its newer.
+            }
         }
         serviceNames.insert(service->name(), service);
     }

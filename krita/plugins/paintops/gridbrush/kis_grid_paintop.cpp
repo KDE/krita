@@ -240,9 +240,9 @@ void KisGridProperties::fillProperties(const KisPropertiesConfiguration* setting
     divisionLevel = setting->getInt(GRID_DIVISION_LEVEL);
     pressureDivision =  setting->getBool(GRID_PRESSURE_DIVISION);
     randomBorder = setting->getBool(GRID_RANDOM_BORDER);
-    scale = setting->getBool(GRID_SCALE);
-    vertBorder  = setting->getBool(GRID_VERTICAL_BORDER);
-    horizBorder = setting->getBool(GRID_HORIZONTAL_BORDER);
+    scale = setting->getDouble(GRID_SCALE);
+    vertBorder  = setting->getDouble(GRID_VERTICAL_BORDER);
+    horizBorder = setting->getDouble(GRID_HORIZONTAL_BORDER);
     
     shape = setting->getInt(GRIDSHAPE_SHAPE);
 }

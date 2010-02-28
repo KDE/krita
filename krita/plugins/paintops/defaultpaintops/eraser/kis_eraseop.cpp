@@ -155,5 +155,5 @@ double KisEraseOp::paintAt(const KisPaintInformation& info)
 
     painter()->setOpacity(origOpacity);
 
-    return spacing(info.pressure());
+    return spacing(scale);
 }

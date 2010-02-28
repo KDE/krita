@@ -306,5 +306,5 @@ double KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     painter()->bitBlt(dstRect.x(), dstRect.y(), m_srcdev, sx, sy, sw, sh);
 
-    return spacing(info.pressure());
+    return spacing(scale);
 }

@@ -100,7 +100,7 @@ double KisFilterOp::paintAt(const KisPaintInformation& info)
         return 1.0;
 
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
-    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 1.0;
+    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(scale);
 
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
@@ -169,5 +169,5 @@ double KisFilterOp::paintAt(const KisPaintInformation& info)
     qint32 sh = dstRect.height();
 
     painter()->bitBlt(dstRect.x(), dstRect.y(), m_tmpDevice, sx, sy, sw, sh);
-    return spacing(info.pressure());
+    return spacing(scale);
 }

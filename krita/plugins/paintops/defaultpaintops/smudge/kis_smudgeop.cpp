@@ -186,5 +186,5 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     sh = dstRect.height();
 
     painter()->bitBlt(dstRect.x(), dstRect.y(), m_target, sx, sy, sw, sh);
-    return spacing(info.pressure());
+    return spacing(scale);
 }

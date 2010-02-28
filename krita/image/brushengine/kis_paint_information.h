@@ -20,6 +20,7 @@
 #define _KIS_PAINT_INFORMATION_
 
 #include <QDebug>
+#include <QTime>
 
 #include "kis_global.h"
 #include "kis_vec.h"
@@ -65,8 +66,8 @@ public:
                         double yTilt = 0.0,
                         const KisVector2D& movement = nullKisVector2D(),
                         double rotation = 0.0,
-                        double tangentialPressure = 0.0
-                       );
+                        double tangentialPressure = 0.0,
+                        int time = 0);
 
     KisPaintInformation(const KisPaintInformation& rhs);
 
@@ -101,6 +102,9 @@ public:
 
     /// tangential pressure (i.e., rate for an airbrush device)
     double tangentialPressure() const;
+    
+    /// Number of ms since the begining of the stroke
+    int currentTime() const;
 
     void toXML(QDomDocument&, QDomElement&) const;
 

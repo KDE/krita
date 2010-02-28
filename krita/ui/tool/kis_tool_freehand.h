@@ -142,7 +142,7 @@ private:
     // for panning
     QPointF documentToViewport(const QPointF &p);
     QPointF m_lastPosition;
-
+    QTime m_strokeTimeMeasure;
 };
 
 

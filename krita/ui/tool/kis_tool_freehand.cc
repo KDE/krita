@@ -106,6 +106,7 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
+    m_strokeTimeMeasure.start();
     //    dbgUI << "mousePressEvent" << m_mode;
     //     if (!currentImage())
     //    return;
@@ -163,7 +164,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
             m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point)),
                                          e->pressure(), e->xTilt(), e->yTilt(),
                                          KisVector2D::Zero(),
-                                         e->rotation(), e->tangentialPressure());
+                                         e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed());
             paintAt(m_previousPaintInformation);
         } else if (m_mode == PAINT && (e->button() == Qt::RightButton || e->button() == Qt::MidButton)) {
             // end painting, if calling the menu or the pop up palette. otherwise there is weird behaviour
@@ -194,7 +195,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         KisPaintInformation info = KisPaintInformation(pos,
                                    e->pressure(), e->xTilt(), e->yTilt(),
                                    toKisVector2D(dragVec),
-                                   e->rotation(), e->tangentialPressure());
+                                   e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed());
 
         if (m_smooth) {
             QPointF newTangent;

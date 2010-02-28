@@ -30,13 +30,15 @@ struct KisPaintInformation::Private {
     double angle;
     double rotation;
     double tangentialPressure;
+    int time;
 };
 
 KisPaintInformation::KisPaintInformation(const QPointF & pos_, double pressure_,
         double xTilt_, double yTilt_,
         const KisVector2D& movement_,
         double rotation_,
-        double tangentialPressure_)
+        double tangentialPressure_,
+        int time)
         : d(new Private)
 {
     d->pos = pos_;
@@ -47,6 +49,7 @@ KisPaintInformation::KisPaintInformation(const QPointF & pos_, double pressure_,
     d->rotation = rotation_;
     d->tangentialPressure = tangentialPressure_;
     d->angle = atan2(movement_.y(), movement_.x());
+    d->time = time;
 }
 
 KisPaintInformation::KisPaintInformation(const KisPaintInformation& rhs) : d(new Private(*rhs.d))
@@ -75,6 +78,7 @@ void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
     e.setAttribute("movementY", QString::number(movement().y(), 'g', 15));
     e.setAttribute("rotation", QString::number(rotation(), 'g', 15));
     e.setAttribute("tangentialPressure", QString::number(tangentialPressure(), 'g', 15));
+    e.setAttribute("time", d->time);
 }
 
 KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
@@ -88,9 +92,10 @@ KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
     double yTilt = e.attribute("yTilt", "0.0").toDouble();
     double movementX = e.attribute("movementX", "0.0").toDouble();
     double movementY = e.attribute("movementY", "0.0").toDouble();
+    int time = e.attribute("time", "0").toInt();
 
     return KisPaintInformation(QPointF(pointX, pointY), pressure, xTilt, yTilt, KisVector2D(movementX, movementY),
-                               rotation, tangentialPressure);
+                               rotation, tangentialPressure, time);
 }
 
 const QPointF& KisPaintInformation::pos() const
@@ -143,6 +148,11 @@ double KisPaintInformation::tangentialPressure() const
     return d->tangentialPressure;
 }
 
+int KisPaintInformation::currentTime() const
+{
+    return d->time;
+}
+
 QDebug operator<<(QDebug dbg, const KisPaintInformation &info)
 {
 #ifdef NDEBUG
@@ -156,6 +166,7 @@ QDebug operator<<(QDebug dbg, const KisPaintInformation &info)
     dbg.nospace() << ", Rotation: " << info.rotation();
     dbg.nospace() << ", Tangential Pressure: " << info.tangentialPressure();
     dbg.nospace() << ", Angle: " << info.angle();
+    dbg.nospace() << ", Time: " << info.currentTime();
 #endif
     return dbg.space();
 }
@@ -167,5 +178,6 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, double t, const K
     double yTilt = (1 - t) * pi1.yTilt() + t * pi2.yTilt();
     double rotation = (1 - t) * pi1.rotation() + t * pi2.rotation();
     double tangentialPressure = (1 - t) * pi1.tangentialPressure() + t * pi2.tangentialPressure();
-    return KisPaintInformation(p, pressure, xTilt, yTilt, movement, rotation, tangentialPressure);    
+    int time = (1 - t) * pi1.currentTime() + t * pi2.currentTime();
+    return KisPaintInformation(p, pressure, xTilt, yTilt, movement, rotation, tangentialPressure, time);
 }

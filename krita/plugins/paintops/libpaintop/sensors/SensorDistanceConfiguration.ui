@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SensorTimeConfiguration</class>
- <widget class="QWidget" name="SensorTimeConfiguration">
+ <class>SensorDistanceConfiguration</class>
+ <widget class="QWidget" name="SensorDistanceConfiguration">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>150</width>
+    <width>148</width>
     <height>55</height>
    </rect>
   </property>
@@ -32,12 +32,12 @@
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Duration:</string>
+        <string>Length:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBoxDuration">
+      <widget class="QSpinBox" name="spinBoxLength">
        <property name="minimum">
         <number>1</number>
        </property>
@@ -52,7 +52,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>s</string>
+        <string>px</string>
        </property>
       </widget>
      </item>

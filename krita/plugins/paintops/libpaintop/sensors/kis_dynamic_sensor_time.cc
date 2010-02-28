@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -15,76 +15,76 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_dynamic_sensor_distance.h"
+#include "kis_dynamic_sensor_time.h"
 
 #include <kis_debug.h>
 
 #include <QDomElement>
-#include "ui_SensorDistanceConfiguration.h"
+#include "ui_SensorTimeConfiguration.h"
 
 #include "kis_paint_information.h"
 #include "kis_sensor_selector.h"
 
-KisDynamicSensorDistance::KisDynamicSensorDistance() : KisDynamicSensor(DistanceId), m_time(0.0), m_length(30), m_periodic(true)
+KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0.0), m_length(30 * 1000), m_periodic(true)
 {
 
 }
 
-double KisDynamicSensorDistance::parameter(const KisPaintInformation&  pi)
+double KisDynamicSensorTime::parameter(const KisPaintInformation&  pi)
 {
-    m_time += pi.movement().norm();
+    m_time += pi.currentTime() - m_lastTime;
+    m_lastTime = pi.currentTime();
     if (m_time > m_length) {
         if (m_periodic) {
-            do {
-                m_time -= m_length; // TODO: replace by a modulo when I am a little bit more awake
-            } while (m_time > m_length);
+            m_time = fmod(m_time, m_length);
         } else {
             m_time = m_length;
         }
     }
-    return 1.0 - m_time / m_length;
+    return 1.0 - m_time / float(m_length);
 }
 
-void KisDynamicSensorDistance::reset()
+void KisDynamicSensorTime::reset()
 {
+    m_lastTime = 0;
     m_time = 0;
 }
 
-void KisDynamicSensorDistance::setPeriodic(bool periodic)
+void KisDynamicSensorTime::setPeriodic(bool periodic)
 {
     m_periodic = periodic;
 }
 
-void KisDynamicSensorDistance::setLength(int length)
+void KisDynamicSensorTime::setLength(int length)
 {
-    m_length = length;
+    m_length = length * 1000;
 }
 
-QWidget* KisDynamicSensorDistance::createConfigurationWidget(QWidget* parent, KisSensorSelector* ss)
+QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent, KisSensorSelector* ss)
 {
     QWidget* wdg = new QWidget(parent);
-    Ui_SensorDistanceConfiguration stc;
+    Ui_SensorTimeConfiguration stc;
     stc.setupUi(wdg);
     stc.checkBoxRepeat->setChecked(m_periodic);
     connect(stc.checkBoxRepeat, SIGNAL(toggled(bool)), SLOT(setPeriodic(bool)));
     connect(stc.checkBoxRepeat, SIGNAL(toggled(bool)), ss, SIGNAL(parametersChanged()));
-    stc.spinBoxLength->setValue(m_length);
-    connect(stc.spinBoxLength, SIGNAL(valueChanged(int)), SLOT(setLength(int)));
-    connect(stc.spinBoxLength, SIGNAL(valueChanged(int)), ss, SIGNAL(parametersChanged()));
+    stc.spinBoxDuration->setValue(m_length / 1000);
+    connect(stc.spinBoxDuration, SIGNAL(valueChanged(int)), SLOT(setLength(int)));
+    connect(stc.spinBoxDuration, SIGNAL(valueChanged(int)), ss, SIGNAL(parametersChanged()));
     return wdg;
 }
 
-void KisDynamicSensorDistance::toXML(QDomDocument& doc, QDomElement& e) const
+void KisDynamicSensorTime::toXML(QDomDocument& doc, QDomElement& e) const
 {
     KisDynamicSensor::toXML(doc, e);
     e.setAttribute("periodic", m_periodic);
-    e.setAttribute("length", m_length);
+    e.setAttribute("duration", m_length);
 }
 
-void KisDynamicSensorDistance::fromXML(const QDomElement& e)
+void KisDynamicSensorTime::fromXML(const QDomElement& e)
 {
     m_periodic = e.attribute("periodic", "0").toInt();
-    m_length = e.attribute("length", "30").toInt();
+    m_length = e.attribute("duration", "30").toInt();
 }
 
-#include "kis_dynamic_sensor_distance.moc"
+#include "kis_dynamic_sensor_time.moc"

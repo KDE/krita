@@ -15,14 +15,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_DYNAMIC_SENSOR_DISTANCE_H_
-#define _KIS_DYNAMIC_SENSOR_DISTANCE_H_
+#ifndef _KIS_DYNAMIC_SENSOR_TIME_H_
+#define _KIS_DYNAMIC_SENSOR_TIME_H_
 
 #include "kis_vec.h"
 
 #include "kis_dynamic_sensor.h"
 //
-class KisDynamicSensorDistance : public QObject, public KisDynamicSensor
+class KisDynamicSensorTime : public QObject, public KisDynamicSensor
 {
     Q_OBJECT
 public:
@@ -31,8 +31,8 @@ public:
     using KisSerializableConfiguration::toXML;
 
 
-    KisDynamicSensorDistance();
-    virtual ~KisDynamicSensorDistance() { }
+    KisDynamicSensorTime();
+    virtual ~KisDynamicSensorTime() { }
     virtual double parameter(const KisPaintInformation&);
     virtual void reset();
     virtual QWidget* createConfigurationWidget(QWidget* parent, KisSensorSelector*);
@@ -44,10 +44,10 @@ public slots:
     virtual void toXML(QDomDocument&, QDomElement&) const;
     virtual void fromXML(const QDomElement&);
 private:
-    double m_time;
+    int m_time;
     int m_length;
     bool m_periodic;
-    bool m_firstPos;
+    int m_lastTime;
 };
 
 #endif

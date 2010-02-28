@@ -31,6 +31,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_text_brush_chooser.cpp
     sensors/kis_dynamic_sensors.cc
     sensors/kis_dynamic_sensor_distance.cc
+    sensors/kis_dynamic_sensor_time.cc
 )
 
 kde4_add_ui_files(kritalibpaintop_LIB_SRCS
@@ -41,6 +42,7 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     wdgincremental.ui
     wdgfilteroption.ui
     wdgcoloroptions.ui
+    sensors/SensorDistanceConfiguration.ui
     sensors/SensorTimeConfiguration.ui
     SensorSelector.ui
 )

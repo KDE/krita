@@ -165,13 +165,15 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
     dragVec.normalize();
     KisVector2D step(0, 0);
 
+    double sp = currentDist;
     while (currentDist < endDist) {
 
         QPointF p = toQPointF(start +  currentDist * dragVec);
 
         double t = currentDist / endDist;
 
-        currentDist += paintAt(KisPaintInformation::mix(p, t, pi1, pi2, dragVec));
+        sp = paintAt(KisPaintInformation::mix(p, t, pi1, pi2, sp * dragVec));
+        currentDist += sp;
     }
 
     QRect r(pi1.pos().toPoint(), pi2.pos().toPoint());

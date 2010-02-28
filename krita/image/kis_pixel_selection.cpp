@@ -37,6 +37,7 @@
 #include "kis_image.h"
 #include "kis_datamanager.h"
 #include "kis_fill_painter.h"
+#include "kis_outline_generator.h"
 
 struct KisPixelSelection::Private {
     KisPaintDeviceWSP parentPaintDevice;
@@ -352,150 +353,15 @@ QVector<QPolygon> KisPixelSelection::outline()
     qint32 height = selectionExtent.height();
 
     quint8* buffer = new quint8[width*height];
-    quint8* marks = new quint8[width*height];
-    for (int i = 0; i < width*height; i++) {
-        marks[i] = 0;
-    }
-    QVector<QPolygon> paths;
 
     readBytes(buffer, xOffset, yOffset, width, height);
 
-    int nodes = 0;
-    for (qint32 y = 0; y < height; y++) {
-        for (qint32 x = 0; x < width; x++) {
-
-            if (buffer[y*width+x] == defaultPixel)
-                continue;
-
-            EdgeType startEdge = TopEdge;
-
-            EdgeType edge = startEdge;
-            while (edge != NoEdge && (marks[y*width+x] & (1 << edge) || !isOutlineEdge(edge, x, y, buffer, width, height))) {
-                edge = nextEdge(edge);
-                if (edge == startEdge)
-                    edge = NoEdge;
-            }
-
-            if (edge != NoEdge) {
-                QPolygon path;
-                path << QPoint(x + xOffset, y + yOffset);
-
-// XXX: Unused? (BSAR)
-//                bool clockwise = edge == BottomEdge;
-
-                qint32 row = y, col = x;
-                EdgeType currentEdge = edge;
-                EdgeType lastEdge = currentEdge;
-                do {
-                    //While following a strait line no points nead to be added
-                    if (lastEdge != currentEdge) {
-                        appendCoordinate(&path, col + xOffset, row + yOffset, currentEdge);
-                        nodes++;
-                        lastEdge = currentEdge;
-                    }
-
-                    marks[row*width+col] |= 1 << currentEdge;
-                    nextOutlineEdge(&currentEdge, &row, &col, buffer, width, height);
-                } while (row != y || col != x || currentEdge != edge);
-
-                paths.push_back(path);
-            }
-        }
-    }
+    KisOutlineGenerator generator(colorSpace(), defaultPixel);
+    QVector<QPolygon> paths = generator.outline(buffer, xOffset, yOffset, width, height);
+    
     delete[] buffer;
-    delete[] marks;
 
     return paths;
-}
-bool KisPixelSelection::isOutlineEdge(EdgeType edge, qint32 x, qint32 y, quint8* buffer, qint32 bufWidth, qint32 bufHeight)
-{
-    quint8 defaultPixel = *(m_datamanager->defaultPixel());
-    if (buffer[y*bufWidth+x] == defaultPixel)
-        return false;
-
-    switch (edge) {
-    case LeftEdge:
-        return x == 0 || buffer[y*bufWidth+(x - 1)] == defaultPixel;
-    case TopEdge:
-        return y == 0 || buffer[(y - 1)*bufWidth+x] == defaultPixel;
-    case RightEdge:
-        return x == bufWidth - 1 || buffer[y*bufWidth+(x + 1)] == defaultPixel;
-    case BottomEdge:
-        return y == bufHeight - 1 || buffer[(y + 1)*bufWidth+x] == defaultPixel;
-    case NoEdge:
-        return false;
-    }
-    return false;
-}
-
-#define TRY_PIXEL(deltaRow, deltaCol, test_edge)                                                \
-    {                                                                                               \
-        int test_row = *row + deltaRow;                                                             \
-        int test_col = *col + deltaCol;                                                             \
-        if ( (0 <= (test_row) && (test_row) < height && 0 <= (test_col) && (test_col) < width) &&   \
-                isOutlineEdge (test_edge, test_col, test_row, buffer, width, height))                  \
-        {                                                                                           \
-            *row = test_row;                                                                        \
-            *col = test_col;                                                                        \
-            *edge = test_edge;                                                                      \
-            break;                                                                                  \
-        }                                                                                       \
-    }
-
-void KisPixelSelection::nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, quint8* buffer, qint32 width, qint32 height)
-{
-    int original_row = *row;
-    int original_col = *col;
-
-    switch (*edge) {
-    case RightEdge:
-        TRY_PIXEL(-1, 0, RightEdge);
-        TRY_PIXEL(-1, 1, BottomEdge);
-        break;
-
-    case TopEdge:
-        TRY_PIXEL(0, -1, TopEdge);
-        TRY_PIXEL(-1, -1, RightEdge);
-        break;
-
-    case LeftEdge:
-        TRY_PIXEL(1, 0, LeftEdge);
-        TRY_PIXEL(1, -1, TopEdge);
-        break;
-
-    case BottomEdge:
-        TRY_PIXEL(0, 1, BottomEdge);
-        TRY_PIXEL(1, 1, LeftEdge);
-        break;
-
-    default:
-        break;
-
-    }
-
-    if (*row == original_row && *col == original_col)
-        *edge = nextEdge(*edge);
-}
-
-void KisPixelSelection::appendCoordinate(QPolygon * path, int x, int y, EdgeType edge)
-{
-    switch (edge) {
-    case TopEdge:
-        x++;
-        break;
-    case RightEdge:
-        x++;
-        y++;
-        break;
-    case BottomEdge:
-        y++;
-        break;
-    case LeftEdge:
-    case NoEdge:
-        break;
-
-    }
-    *path << QPoint(x, y);
 }
 
 void KisPixelSelection::renderToProjection(KisSelection* projection)

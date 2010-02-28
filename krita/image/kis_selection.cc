@@ -2,9 +2,6 @@
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *
- *  Outline algorithm based of the limn of fontutils
- *  Copyright (c) 1992 Karl Berry <karl@cs.umb.edu>
- *  Copyright (c) 1992 Kathryn Hargreaves <letters@cs.umb.edu>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

@@ -170,22 +170,7 @@ private:
     QRect exactBounds() const {
         return KisPaintDevice::exactBounds();
     }
-
-
-    enum EdgeType {
-        TopEdge = 1, LeftEdge = 2, BottomEdge = 3, RightEdge = 0, NoEdge = 4
-    };
-
-    bool isOutlineEdge(EdgeType edge, qint32 row, qint32 col, quint8* buffer, qint32 width, qint32 height);
-
-    EdgeType nextEdge(EdgeType edge) {
-        return edge == NoEdge ? edge : static_cast<EdgeType>((edge + 1) % 4);
-    }
-
-    void nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, quint8* buffer, qint32 bufWidth, qint32 bufHeight);
-
-    void appendCoordinate(QPolygon * path, int x, int y, EdgeType edge);
-
+    
 private:
 
     struct Private;

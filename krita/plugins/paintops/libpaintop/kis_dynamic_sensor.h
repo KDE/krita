@@ -75,6 +75,7 @@ public:
     static KisDynamicSensor* id2Sensor(const QString& s) {
         return id2Sensor(KoID(s));
     }
+    static KisDynamicSensor* createFromXML(const QString&);
     static KisDynamicSensor* createFromXML(const QDomElement&);
     /**
      * @return the list of sensors

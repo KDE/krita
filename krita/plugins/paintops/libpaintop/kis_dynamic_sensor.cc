@@ -61,6 +61,15 @@ KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
     return 0;
 }
 
+
+KisDynamicSensor* KisDynamicSensor::createFromXML(const QString& s)
+{
+    QDomDocument doc;
+    doc.setContent(s);
+    QDomElement e = doc.documentElement();
+    return createFromXML(e);
+}
+
 KisDynamicSensor* KisDynamicSensor::createFromXML(const QDomElement& e)
 {
     QString id = e.attribute("id", "");

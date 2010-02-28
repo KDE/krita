@@ -87,7 +87,6 @@ endif(HAVE_OPENGL)
 
 add_subdirectory( image )
 add_subdirectory( ui )
-add_subdirectory( shape )
 add_subdirectory( dtd )
 add_subdirectory( plugins )
 add_subdirectory( data )

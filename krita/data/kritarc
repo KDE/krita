@@ -142,3 +142,10 @@ Collapsed=false
 [KoShapeCollection]
 QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,EllipseShape,RectangleShape
 
+[koffice]
+FlakePluginsDisabled=formulashape,divineproportionshape,kexirelationdesignshape,vectorshape
+ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetshape
+TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect
+TextVariablePluginsDisabled=textvariables,kprvariables
+ToolPluginsDisabled=paragraphtool,kopabackgroundtool,kpresentertoolanimation
+

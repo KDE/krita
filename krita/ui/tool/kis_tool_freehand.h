@@ -58,6 +58,9 @@ public:
     virtual bool wantsAutoScroll() const;
     virtual void setDirty(const QRegion& region);
 
+signals:
+    void sigPainting();
+
 protected:
 
     /// Paint a single brush footprint on the current layer

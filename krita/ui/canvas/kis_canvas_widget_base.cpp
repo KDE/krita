@@ -28,7 +28,6 @@
 #include <KoShapeManager.h>
 #include <KoViewConverter.h>
 #include <KoToolProxy.h>
-#include <ko_favorite_resource_manager.h>
 
 #include "kis_canvas_decoration.h"
 #include "../kis_config.h"
@@ -203,7 +202,7 @@ void KisCanvasWidgetBase::adjustOrigin()
     int heightDiff = widget()->size().height() - documentRect.height();
     if (heightDiff > 0)
         m_d->origin.ry() += qRound(0.5 * heightDiff);
- 
+
     emitDocumentOriginChangedSignal();
 }
 
@@ -268,9 +267,6 @@ void KisCanvasWidgetBase::processContextMenuEvent(QContextMenuEvent *e)
 void KisCanvasWidgetBase::processMousePressEvent(QMouseEvent *e)
 {
     if (m_d->blockMouseEvent.isActive()) {
-        return;
-    } else if (m_d->canvas->view()->favoriteResourceManager()->isPopupPaletteVisible()) {
-        m_d->canvas->view()->favoriteResourceManager()->slotShowPopupPalette();
         return;
     }
     m_d->toolProxy->mousePressEvent(e, mouseEventWidgetToDocument(e->pos()));

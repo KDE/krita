@@ -95,14 +95,26 @@ private:
     KoFavoriteResourceManager* m_resourceManager;
     KoTriangleColorSelector* m_triangleColorSelector;
 
+    QTimer* m_timer;
+
 signals:
     void sigChangeActivePaintop(int);
     void sigUpdateRecentColor(int);
-    void sigEnableChangeColor(bool);
     void sigChangefGColor(const KoColor&);
+
+    // These are used to handle a bug:
+    // If pop up palette is visible and a new colour is selected, the new colour
+    // will be added when the user clicks on the canvas to hide the palette
+    // In general, we want to be able to store recent color if the pop up palette
+    // is not visible
+    void sigEnableChangeFGColor(bool);
+    void sigTriggerTimer();
 
 private slots:
     void slotChangefGColor(const QColor& newColor);
+
+    void slotTriggerTimer();
+    void slotEnableChangeFGColor();
 };
 
 #endif // KIS_POPUP_PALETTE_H

@@ -132,8 +132,7 @@ public:
         , imageManager(0)
         , gridManager(0)
         , perspectiveGridManager(0)
-        , paintingAssistantManager(0)
-        , favoriteResourceManager(0) {
+        , paintingAssistantManager(0) {
 
     }
 
@@ -151,7 +150,6 @@ public:
         delete perspectiveGridManager;
         delete paintingAssistantManager;
         delete viewConverter;
-        delete favoriteResourceManager;
     }
 
 public:
@@ -757,32 +755,6 @@ void KisView2::slotTotalRefresh()
 {
     KisConfig cfg;
     m_d->canvas->resetCanvas(cfg.useOpenGL());
-}
-
-KoFavoriteResourceManager* KisView2::favoriteResourceManager()
-{
-    return m_d->favoriteResourceManager;
-}
-
-void KisView2::setFavoriteResourceManager(KisPaintopBox* paintopBox)
-{
-    qDebug() << "KisView2: Setting favoriteResourceManager";
-    m_d->favoriteResourceManager = new KoFavoriteResourceManager(paintopBox, m_d->canvas->canvasWidget());
-    connect(this, SIGNAL(favoritePaletteCalled(const QPoint&)), favoriteResourceManager(), SLOT(slotShowPopupPalette(const QPoint&)));
-    connect(resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)), favoriteResourceManager(), SLOT(slotAddRecentColor(KoColor)));
-    connect(resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), favoriteResourceManager(), SLOT(slotChangeFGColorSelector(KoColor)));
-    connect(favoriteResourceManager(), SIGNAL(sigSetFGColor(KoColor)), resourceProvider(), SLOT(slotSetFGColor(KoColor)));
-    connect(favoriteResourceManager(), SIGNAL(sigEnableChangeColor(bool)), resourceProvider(), SLOT(slotEnableChangeColor(bool)));
-
-}
-
-void KisView2::slotCanvasDestroyed(QWidget* w)
-{
-    qDebug() << "[KisView2] Resetting popupPalette parent";
-    if (m_d->favoriteResourceManager != 0)
-    {
-        m_d->favoriteResourceManager->resetPopupPaletteParent(w);
-    }
 }
 
 void KisView2::toggleDockers(bool toggle)

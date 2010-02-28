@@ -31,6 +31,7 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     : QWidget(parent, Qt::FramelessWindowHint)
     , m_resourceManager (manager)
     , m_triangleColorSelector (0)
+    , m_timer(0)
 {
     m_triangleColorSelector  = new KoTriangleColorSelector(this);
     m_triangleColorSelector->move(60, 60);
@@ -43,9 +44,19 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     connect(m_triangleColorSelector, SIGNAL(colorChanged(const QColor& )), SLOT(slotChangefGColor(QColor)));
     connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
-    connect(this, SIGNAL(sigEnableChangeColor(bool)), m_resourceManager, SIGNAL(sigEnableChangeColor(bool)));
     connect(this, SIGNAL(sigChangefGColor(const KoColor&)), m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
     connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(const QColor&)), m_triangleColorSelector, SLOT(setQColor(const QColor&)));
+
+    // This is used to handle a bug:
+    // If pop up palette is visible and a new colour is selected, the new colour
+    // will be added when the user clicks on the canvas to hide the palette
+    // In general, we want to be able to store recent color if the pop up palette
+    // is not visible
+    m_timer = new QTimer(this);
+    m_timer->setSingleShot(true);
+    connect(this, SIGNAL(sigTriggerTimer()), this, SLOT(slotTriggerTimer()));
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(slotEnableChangeFGColor()));
+    connect(this, SIGNAL(sigEnableChangeFGColor(bool)), m_resourceManager, SIGNAL(sigEnableChangeColor(bool)));
 
     setMouseTracking(true);
     setHoveredBrush(-1);
@@ -69,11 +80,20 @@ void KisPopupPalette::setSelectedColor(int x) { m_selectedColor = x; }
 
 void KisPopupPalette::slotChangefGColor(const QColor& newColor)
 {
-    qDebug() << "Kispopuppalette: blah";
     KoColor color;
     color.fromQColor(newColor);
 
     emit sigChangefGColor(color);
+}
+
+void KisPopupPalette::slotTriggerTimer()
+{
+    m_timer->start(750);
+}
+
+void KisPopupPalette::slotEnableChangeFGColor()
+{
+    emit sigEnableChangeFGColor(true);
 }
 
 void KisPopupPalette::showPopupPalette (const QPoint &p)
@@ -103,9 +123,10 @@ void KisPopupPalette::showPopupPalette (const QPoint &p)
 
 void KisPopupPalette::showPopupPalette(bool b)
 {
-    // we want to enable change color when the widget is not visible
     if (b)
-        emit sigEnableChangeColor(!b);
+        emit sigEnableChangeFGColor(!b);
+    else
+        emit sigTriggerTimer();
     setVisible(b);
 }
 
@@ -194,12 +215,12 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     for (int pos = 0; pos < m_resourceManager->recentColorsTotal(); pos++)
     {
         QPainterPath path(drawDonutPathAngle(colorInnerRadius , colorOuterRadius, m_resourceManager->recentColorsTotal()));
-    
+
         //accessing recent color of index pos
         kcolor = m_resourceManager->recentColorAt(pos);
         kcolor.toQColor(&qcolor);
         painter.fillPath(path, qcolor);
-    
+
         painter.drawPath(path);
         painter.rotate(rotationAngle);
     }
@@ -376,7 +397,6 @@ void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
     else if (event->button() == Qt::MidButton)
     {
         showPopupPalette(false);
-        emit sigEnableChangeColor(true);
     }
 }
 

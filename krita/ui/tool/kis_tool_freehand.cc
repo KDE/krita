@@ -1,4 +1,4 @@
-/*
+    /*
  *  kis_tool_freehand.cc - part of Krita
  *
  *  Copyright (c) 2003-2007 Boudewijn Rempt <boud@valdyas.org>
@@ -43,6 +43,10 @@
 #include <KoResourceManager.h>
 #include <KoCanvasController.h>
 #include <KoViewConverter.h>
+
+//pop up palette
+#include <ko_favorite_resource_manager.h>
+#include <kis_canvas_resource_provider.h>
 
 // Krita/image
 #include <recorder/kis_action_recorder.h>
@@ -97,6 +101,10 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_prevxTilt = 0.0;
     m_prevyTilt = 0.0;
 #endif
+
+    KisCanvas2* canvas2 = static_cast<KisCanvas2*>(canvas);
+    connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), canvas2, SIGNAL(favoritePaletteCalled(const QPoint&)));
+    connect(this, SIGNAL(sigPainting()), canvas2->view()->resourceProvider(), SLOT(slotPainting()));
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -106,7 +114,11 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    if (canvas2->handlePopupPaletteIsVisible(e)) return;
+
     m_strokeTimeMeasure.start();
+
     //    dbgUI << "mousePressEvent" << m_mode;
     //     if (!currentImage())
     //    return;
@@ -289,7 +301,16 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 {
-    //    dbgUI << "mouseReleaseEvent" << m_mode << " " << e->button() << " " << e->button();
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+
+    if (canvas2->handlePopupPaletteIsVisible(e)) return;
+    else if (e->button() == Qt::LeftButton) {
+
+        //TODO: There is a bug here. If pop up palette is visible and a new colour is selected,
+        //the new colour will be added when the user clicks on the canvas to hide the palette
+        //This is used to handle recently used colour (KoFavoriteResourceManager)
+        emit sigPainting();
+    }
     switch (m_mode) {
     case PAINT:
         endPaint();

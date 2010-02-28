@@ -104,7 +104,6 @@ public slots:
     void slotNodeActivated(const KisNodeSP node);
     void slotGeneratorConfigurationActivated(KisFilterConfiguration * generatorConfiguration);
     void slotPainting();
-    void slotEnableChangeColor(bool b);
 
     /**
      * Set the image size in pixels. The resource provider will store
@@ -112,6 +111,13 @@ public slots:
      */
     void slotImageSizeChanged();
     void slotSetDisplayProfile(const KoColorProfile * profile);
+
+    // This is a flag to handle a bug:
+    // If pop up palette is visible and a new colour is selected, the new colour
+    // will be added when the user clicks on the canvas to hide the palette
+    // In general, we want to be able to store recent color if the pop up palette
+    // is not visible
+    void slotResetEnableFGChange(bool);
 
 private slots:
 

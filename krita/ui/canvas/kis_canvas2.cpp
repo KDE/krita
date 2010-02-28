@@ -62,6 +62,10 @@
 #endif
 #include "kis_projection_cache.h"
 
+//Favorite resource Manager
+#include <ko_favorite_resource_manager.h>
+#include <kis_paintop_box.h>
+
 class KisCanvas2::KisCanvas2Private
 {
 
@@ -75,7 +79,8 @@ public:
         , monitorProfile(0)
         , currentCanvasIsOpenGL(false)
         , currentCanvasUsesOpenGLShaders(false)
-        , toolProxy(new KoToolProxy(parent)) {
+        , toolProxy(new KoToolProxy(parent))
+        , favoriteResourceManager(0) {
     }
 
     ~KisCanvas2Private() {
@@ -93,6 +98,7 @@ public:
     KoToolProxy *toolProxy;
     QPoint documentOffset;
     KoShapeControllerBase *sc;
+    KoFavoriteResourceManager *favoriteResourceManager;
 #ifdef HAVE_OPENGL
     KisOpenGLImageTexturesSP openGLImageTextures;
 #endif
@@ -106,7 +112,7 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShape
     createCanvas();
     connect(view->canvasController(), SIGNAL(moveDocumentOffset(const QPoint&)), SLOT(documentOffsetMoved(const QPoint&)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    connect(this, SIGNAL(canvasDestroyed(QWidget *)), m_d->view, SLOT(slotCanvasDestroyed(QWidget *)));
+    connect(this, SIGNAL(canvasDestroyed(QWidget *)), this, SLOT(slotCanvasDestroyed(QWidget *)));
 }
 
 KisCanvas2::~KisCanvas2()
@@ -490,5 +496,43 @@ QPoint KisCanvas2::documentOffset() const
     return m_d->documentOffset;
 }
 
+void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
+{
+    qDebug() << "KisCanvas2: Setting favoriteResourceManager";
+    m_d->favoriteResourceManager = new KoFavoriteResourceManager(paintopbox, canvasWidget());
+    connect(this, SIGNAL(favoritePaletteCalled(const QPoint&)), favoriteResourceManager(), SLOT(slotShowPopupPalette(const QPoint&)));
+    connect(view()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)), favoriteResourceManager(), SLOT(slotAddRecentColor(KoColor)));
+    connect(view()->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), favoriteResourceManager(), SLOT(slotChangeFGColorSelector(KoColor)));
+    connect(favoriteResourceManager(), SIGNAL(sigSetFGColor(KoColor)), view()->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
+    connect(favoriteResourceManager(), SIGNAL(sigEnableChangeColor(bool)), view()->resourceProvider(), SLOT(slotResetEnableFGChange(bool)));
+}
+
+void KisCanvas2::slotCanvasDestroyed(QWidget* w)
+{
+    qDebug() << "[KisView2] Resetting popupPalette parent";
+    if (m_d->favoriteResourceManager != 0)
+    {
+        m_d->favoriteResourceManager->resetPopupPaletteParent(w);
+    }
+}
+
+KoFavoriteResourceManager* KisCanvas2::favoriteResourceManager()
+{
+    return m_d->favoriteResourceManager;
+}
+
+
+bool KisCanvas2::handlePopupPaletteIsVisible(KoPointerEvent* e)
+{
+    e->accept();
+
+    //TODO: port favoriteResourceManager to KisCanvas2, then enable this function.
+    if (e->button() && (Qt::LeftButton || Qt::MidButton || Qt::RightButton)
+        && favoriteResourceManager()->isPopupPaletteVisible()) {
+        favoriteResourceManager()->slotShowPopupPalette();
+        return true;
+    }
+    return false;
+}
 
 #include "kis_canvas2.moc"

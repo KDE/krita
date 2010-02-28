@@ -60,6 +60,7 @@
 #include "widgets/kis_pattern_chooser.h"
 #include "kis_popup_palette.h"
 #include "ko_favorite_resource_manager.h"
+#include <kis_canvas2.h>
 
 
 KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
@@ -116,7 +117,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     action->setDefaultWidget(m_paintopBox);
 
         /***TESTING***/
-    m_view->setFavoriteResourceManager(m_paintopBox);
+    m_view->canvasBase()->createFavoriteResourceManager(m_paintopBox);
 
     m_paletteButton = new QPushButton("Save to Palette");
     connect(m_paletteButton, SIGNAL(clicked()), this, SLOT(slotSaveToFavouriteBrushes()));
@@ -179,13 +180,13 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
 
 void KisControlFrame::slotSaveToFavouriteBrushes()
 {
-    if(! m_view->favoriteResourceManager())
+    if(! m_view->canvasBase()->favoriteResourceManager())
     {
         qDebug() << "favoriteResourceManager is not instantiated";
-        m_view->setFavoriteResourceManager(m_paintopBox);
+        m_view->canvasBase()->createFavoriteResourceManager(m_paintopBox);
     }
     else {
-        m_view->favoriteResourceManager()->showPaletteManager();
+        m_view->canvasBase()->favoriteResourceManager()->showPaletteManager();
     }
 }
 

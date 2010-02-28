@@ -52,7 +52,6 @@ KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
         : m_view(view)
 {
     m_fGChanged = true;
-    m_enablefGChange = true;
 }
 
 KisCanvasResourceProvider::~KisCanvasResourceProvider()
@@ -226,7 +225,6 @@ void KisCanvasResourceProvider::setFGColor(const KoColor& c)
 
 void KisCanvasResourceProvider::slotSetFGColor(const KoColor& c)
 {
-    qDebug() <<"Kiscanvasresourceprovider: another blah";
     setFGColor(c);
 }
 
@@ -331,15 +329,17 @@ const KoColorProfile *KisCanvasResourceProvider::getScreenProfile(int screen)
 
 void KisCanvasResourceProvider::slotPainting()
 {
+
+//    qDebug() << "slotPainting | m_enablefGChange " << m_enablefGChange;
     if (m_fGChanged && m_enablefGChange) {
         emit sigFGColorUsed(fgColor());
         m_fGChanged = false;
     }
-    m_enablefGChange = true;
 }
 
-void KisCanvasResourceProvider::slotEnableChangeColor(bool b)
+void KisCanvasResourceProvider::slotResetEnableFGChange(bool b)
 {
+//    qDebug() << "slotResetEnableFGChange | m_enablefGChange " << b;
     m_enablefGChange = b;
 }
 

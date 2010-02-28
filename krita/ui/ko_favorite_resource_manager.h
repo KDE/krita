@@ -87,7 +87,7 @@ signals:
     void sigEnableChangeColor(bool b);
 
     void sigChangeFGColorSelector(const QColor&);
-    
+
 public slots:
     void slotChangePaintopLabel(KisPaintOpPresetSP paintop);
     void slotShowPopupPalette(const QPoint& = QPoint(0,0));

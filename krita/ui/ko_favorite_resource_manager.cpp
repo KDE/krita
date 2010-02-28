@@ -141,7 +141,6 @@ void KoFavoriteResourceManager::slotChangeActivePaintop(int pos)
     if (m_popupPalette)
     {
         m_popupPalette->showPopupPalette(false); //automatically close the palette after a button is clicked.
-        emit sigEnableChangeColor(true);
     }
 }
 

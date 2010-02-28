@@ -142,12 +142,9 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         paintCircle(m_painter,x,y,m_radius,steps);
     }
 
-    QMatrix m;
+    QTransform m;
     m.reset();
-    // constant user rotation
-    m.rotate( m_properties->brushRotation );
-    // rotation from the sensor
-    m.rotate( rad2deg(rotation) );
+    m.rotateRadians(-rotation + deg2rad(m_properties->brushRotation) );
     m.scale( m_properties->scale, m_properties->scale);
 
     for (quint32 i = 0; i < m_particlesCount; i++){

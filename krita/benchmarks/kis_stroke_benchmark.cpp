@@ -84,8 +84,8 @@ void KisStrokeBenchmark::benchmarkStroke()
     QPointF c2(3.0 / 4.0 * width, 0);
     
     QBENCHMARK{
-        painter.paintBezierCurve(pi1, c1, c1, pi2, 0);
-        painter.paintBezierCurve(pi2, c2, c2, pi3, 0);
+        painter.paintBezierCurve(pi1, c1, c1, pi2, KisDistanceInformation());
+        painter.paintBezierCurve(pi2, c2, c2, pi3, KisDistanceInformation());
     }
     
     //layer->paintDevice()->convertToQImage(0).save(QString(FILES_OUTPUT_DIR) + QDir::separator() + presetFileName + ".png");

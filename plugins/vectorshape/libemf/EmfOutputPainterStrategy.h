@@ -33,6 +33,9 @@
 #include "EmfRecords.h"
 #include "EmfOutput.h"
 
+
+#define DEBUG_EMFPAINT 0
+
 /**
    \file
 
@@ -133,6 +136,8 @@ public:
     void stretchDiBits( StretchDiBitsRecord stretchDiBitsRecord );
 
 private:
+    void paintBounds(const Header *header);
+
     /**
        Select a stock object.
 
@@ -142,12 +147,7 @@ private:
     */
     void selectStockObject( const quint32 ihObject );
 
-    /**
-       Test if we are currently building a path
-    */
-    bool currentlyBuildingPath() const;
 
-    
     /**
        Helper routine to convert the EMF angle (centrepoint + radial endpoint) into
        the Qt format (in degress - may need to multiply by 16 for some purposes)
@@ -169,6 +169,7 @@ private:
     */
     int convertFontWeight( quint32 emfWeight );
 
+
     QPainter                *m_painter;
     int                      m_painterSaves; // The number of times that save() was called.
     QSize                    m_outputSize;
@@ -177,7 +178,7 @@ private:
     QMap<quint32, QVariant>  m_objectTable;
 
     QPainterPath *m_path;
-    bool m_currentlyBuildingPath;
+    bool          m_currentlyBuildingPath;
 
     /**
        The image we are painting to

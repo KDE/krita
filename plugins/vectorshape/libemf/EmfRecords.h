@@ -20,6 +20,7 @@
 #define EMFRECORDS_H
 
 #include <QDataStream>
+#include <QColor>
 #include <QImage>
 #include <QRect> // also provides QSize
 #include <QString>
@@ -131,6 +132,10 @@ public:
        The height of the destination rectangle
     */
     qint32 cyDest() const { return m_cyDest; };
+
+    quint32 rasterOperation() const { return m_BitBltRasterOperation; }
+
+    QColor bkColorSrc() const { return QColor(m_red, m_green, m_blue, m_reserved); }
 
     /**
        The destination rectangle

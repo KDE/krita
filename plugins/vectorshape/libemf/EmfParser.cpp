@@ -27,6 +27,9 @@
 #include <KDebug>
 
 
+#define DEBUG_EMFPARSER 0
+
+
 namespace Libemf
 {
 
@@ -34,7 +37,8 @@ namespace Libemf
 // ================================================================
 
 
-Parser::Parser() : mOutput( 0 )
+Parser::Parser()
+    : mOutput( 0 )
 {
 }
 
@@ -339,7 +343,9 @@ bool Parser::readRecord( QDataStream &stream )
             name = EmfRecords[type].name;
         else
             name = "(out of bounds)";
-        //kDebug(31000) << "Record type " << hex << type << "(" << dec << type << ")" << name;
+#if DEBUG_EMFPARSER
+        kDebug(31000) << "Record type " << hex << type << "(" << dec << type << ")" << name;
+#endif
     }
 
     switch ( type ) {

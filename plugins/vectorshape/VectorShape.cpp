@@ -204,7 +204,8 @@ void VectorShape::drawEmf(QPainter &painter) const
     // FIXME: Make it static to save time?
     Libemf::Parser  emfParser;
 #if 1
-    Libemf::OutputPainterStrategy  emfPaintOutput( painter, sizeInt );
+    // Create a new painter output strategy.  Last param = true means keep aspect ratio. 
+    Libemf::OutputPainterStrategy  emfPaintOutput( painter, sizeInt, true );
     emfParser.setOutput( &emfPaintOutput );
 #else
     Libemf::OutputDebugStrategy  emfDebugOutput;

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -158,4 +158,14 @@ QDebug operator<<(QDebug dbg, const KisPaintInformation &info)
     dbg.nospace() << ", Angle: " << info.angle();
 #endif
     return dbg.space();
+}
+
+KisPaintInformation KisPaintInformation::mix(const QPointF& p, double t, const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisVector2D& movement)
+{
+    double pressure = (1 - t) * pi1.pressure() + t * pi2.pressure();
+    double xTilt = (1 - t) * pi1.xTilt() + t * pi2.xTilt();
+    double yTilt = (1 - t) * pi1.yTilt() + t * pi2.yTilt();
+    double rotation = (1 - t) * pi1.rotation() + t * pi2.rotation();
+    double tangentialPressure = (1 - t) * pi1.tangentialPressure() + t * pi2.tangentialPressure();
+    return KisPaintInformation(p, pressure, xTilt, yTilt, movement, rotation, tangentialPressure);    
 }

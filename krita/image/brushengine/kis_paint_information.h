@@ -105,6 +105,9 @@ public:
     void toXML(QDomDocument&, QDomElement&) const;
 
     static KisPaintInformation fromXML(const QDomElement&);
+    
+    /// (1-t) * p1 + t * p2
+    static KisPaintInformation mix(const QPointF& p, double t, const KisPaintInformation& p1, const KisPaintInformation& p2, const KisVector2D& movement);
 
 private:
     struct Private;

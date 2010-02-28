@@ -115,7 +115,7 @@ void KRBarcodeData::createProperties()
     strings << "3of9" << "3of9+" << "128" << "upc-a" << "upc-e" << "ean13" << "ean8";
     m_format = new KoProperty::Property("barcode-format", keys, strings, "3of9", i18n("Barcode Format"));
 
-    m_maxLength = new KoProperty::Property("barcode-max-length", 5, i18n("Max Length"), i18n("Maximum Barode Length"));
+    m_maxLength = new KoProperty::Property("barcode-max-length", 5, i18n("Max Length"), i18n("Maximum Barcode Length"));
 
     addDefaultProperties();
     m_set->addProperty(m_controlSource);

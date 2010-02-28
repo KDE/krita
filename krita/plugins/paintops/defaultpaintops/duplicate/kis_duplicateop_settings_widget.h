@@ -23,14 +23,13 @@
 #ifndef KIS_DUPLICATEOP_SETTINGS_WIDGET_H_
 #define KIS_DUPLICATEOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_options_widget.h>
+#include <kis_brush_based_paintop_options_widget.h>
 #include <kis_image.h>
 
-class KisBrushOptionWidget;
 class KisPressureSizeOption;
 class KisDuplicateOpOption;
 
-class KisDuplicateOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisDuplicateOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {
 
     Q_OBJECT
@@ -44,8 +43,6 @@ public:
     KisPropertiesConfiguration* configuration() const;
 
 public:
-
-    KisBrushOptionWidget* m_brushOption;
     KisDuplicateOpOption* m_duplicateOption;
 
 };

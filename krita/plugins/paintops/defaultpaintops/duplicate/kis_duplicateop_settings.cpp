@@ -145,29 +145,14 @@ QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP 
     
     QRectF dubRect = duplicateOutlineRect(pos, image);
     if (_mode == CURSOR_IS_OUTLINE) {
-        KisBrushSP brush = options->m_brushOption->brush();
-        QPointF hotSpot = brush->hotSpot(1.0, 1.0);
-        QRectF rect = QRect(0, 0, brush->width(), brush->height());
-        rect.translate(pos - hotSpot - QPoint(0.5, 0.5));
-        rect = image->pixelToDocument(rect).translated(pos);
-        dubRect |= rect;
+        dubRect |= KisBrushBasedPaintOpSettings::paintOutlineRect(pos, image, _mode);
     }
     return dubRect;
 }
 
 void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
 {
-    KisDuplicateOpSettingsWidget* options = dynamic_cast<KisDuplicateOpSettingsWidget*>(optionsWidget());
-    if(!options)
-        return;
-    
-    KisBrushSP brush = options->m_brushOption->brush();
-    painter.setPen(Qt::black);
-    painter.setBackground(Qt::black);
-    if (_mode == CURSOR_IS_OUTLINE) {
-        QPointF hotSpot = brush->hotSpot(1.0, 1.0);
-        painter.drawEllipse(converter.documentToView(image->pixelToDocument(QRectF(0, 0, brush->width(), brush->height()).translated(- hotSpot - QPoint(1.0, 1.0))).translated(pos)));
-    }
+    KisBrushBasedPaintOpSettings::paintOutline(pos, image, painter, converter, _mode);
     QRectF rect2 = converter.documentToView(duplicateOutlineRect(pos, image));
     painter.drawLine(rect2.topLeft(), rect2.bottomRight());
     painter.drawLine(rect2.topRight(), rect2.bottomLeft());

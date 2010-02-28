@@ -23,14 +23,14 @@
 #ifndef KIS_DUPLICATEOP_SETTINGS_H_
 #define KIS_DUPLICATEOP_SETTINGS_H_
 
-#include <kis_paintop_settings.h>
+#include <kis_brushop_settings.h>
 #include <kis_types.h>
 #include <QPointF>
 
 #include "kis_duplicateop_settings_widget.h"
 
 class QDomElement;
-class KisDuplicateOpSettings : public KisPaintOpSettings
+class KisDuplicateOpSettings : public KisBrushBasedPaintOpSettings
 {
 
 public:

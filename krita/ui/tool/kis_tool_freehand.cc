@@ -443,6 +443,7 @@ void KisToolFreehand::endPaint()
             m_source->setDirty(painter.dirtyRegion());
             delete incrementalTransaction;
 
+            m_incrementalDirtyRegion = QRegion();
             canvas()->addCommand(painter.endTransaction());
         } else {
             canvas()->addCommand(m_painter->endTransaction());

@@ -69,6 +69,11 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     quint32 pixelSize = cs->pixelSize();
 
     angle += d->angle;
+    
+    // Make sure the angle stay in [0;2*M_PI]
+    if(angle < 0) angle += 2 * M_PI;
+    if(angle > 2 * M_PI) angle -= 2 * M_PI;
+    
     int dstWidth = maskWidth(scaleX, angle);
     int dstHeight = maskHeight(scaleY, angle);
 

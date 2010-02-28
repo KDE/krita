@@ -31,7 +31,7 @@ public:
             : KisPaintOp(gc) {
     }
 
-    void paintAt(const KisPaintInformation&) {
+    double paintAt(const KisPaintInformation&) {
     }
     double spacing(double&, double&, double, double) const {
         return 0.5;

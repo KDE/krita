@@ -34,7 +34,7 @@ class KisSensorSelector;
 
 const KoID FuzzyId("fuzzy", i18n("Fuzzy")); ///< generate a random number
 const KoID SpeedId("speed", i18n("Speed")); ///< generate a number depending on the speed of the cursor
-const KoID TimeId("time", i18n("Time")); ///< generate a number that increase with time
+const KoID DistanceId("distance", i18n("Distance")); ///< generate a number that increase with distance
 const KoID DrawingAngleId("drawingangle", i18n("Drawing angle")); ///< number depending on the angle
 const KoID RotationId("rotation", i18n("Rotation")); ///< rotation coming from the device
 const KoID PressureId("pressure", i18n("Pressure")); ///< number depending on the pressure

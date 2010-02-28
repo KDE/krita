@@ -19,7 +19,7 @@
 #include <QDomElement>
 
 #include "sensors/kis_dynamic_sensors.h"
-#include "sensors/kis_dynamic_sensor_time.h"
+#include "sensors/kis_dynamic_sensor_distance.h"
 
 KisDynamicSensor::KisDynamicSensor(const KoID& id) : m_id(id)
 {
@@ -51,8 +51,8 @@ KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
         return new KisDynamicSensorDrawingAngle();
     } else if (id.id() == RotationId.id()) {
         return new KisDynamicSensorRotation();
-    } else if (id.id() == TimeId.id()) {
-        return new KisDynamicSensorTime();
+    } else if (id.id() == DistanceId.id()) {
+        return new KisDynamicSensorDistance();
     } else if (id.id() == FuzzyId.id()) {
         return new KisDynamicSensorFuzzy();
     }
@@ -74,7 +74,7 @@ KisDynamicSensor* KisDynamicSensor::createFromXML(const QDomElement& e)
 QList<KoID> KisDynamicSensor::sensorsIds()
 {
     QList<KoID> ids;
-    ids << PressureId << XTiltId << YTiltId << SpeedId << DrawingAngleId << RotationId << TimeId << FuzzyId;
+    ids << PressureId << XTiltId << YTiltId << SpeedId << DrawingAngleId << RotationId << DistanceId << FuzzyId;
     return ids;
 }
 

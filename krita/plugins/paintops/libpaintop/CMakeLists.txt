@@ -30,7 +30,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_sensor_selector.cc
     kis_text_brush_chooser.cpp
     sensors/kis_dynamic_sensors.cc
-    sensors/kis_dynamic_sensor_time.cc
+    sensors/kis_dynamic_sensor_distance.cc
 )
 
 kde4_add_ui_files(kritalibpaintop_LIB_SRCS

@@ -22,7 +22,7 @@
 
 #include "kis_dynamic_sensor.h"
 //
-class KisDynamicSensorTime : public QObject, public KisDynamicSensor
+class KisDynamicSensorDistance : public QObject, public KisDynamicSensor
 {
     Q_OBJECT
 public:
@@ -31,8 +31,8 @@ public:
     using KisSerializableConfiguration::toXML;
 
 
-    KisDynamicSensorTime();
-    virtual ~KisDynamicSensorTime() { }
+    KisDynamicSensorDistance();
+    virtual ~KisDynamicSensorDistance() { }
     virtual double parameter(const KisPaintInformation&);
     virtual void reset();
     virtual QWidget* createConfigurationWidget(QWidget* parent, KisSensorSelector*);

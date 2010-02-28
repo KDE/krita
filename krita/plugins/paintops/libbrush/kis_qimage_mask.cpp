@@ -119,7 +119,7 @@ void KisQImagemask::rotation(double angle)
     // For some reason rotating an Indexed8 image is broken so convert to RGB32
     // Would probably be faster to have a native own implementation
     QVector<QRgb> table;
-    for (int i = 0; i < 255; ++i) table.append(qRgb(i, i, i));
+    for (int i = 0; i < 256; ++i) table.append(qRgb(i, i, i));
     m_data.setColorTable(table);
     QImage tmp = m_data.convertToFormat(QImage::Format_RGB32);
     tmp = tmp.transformed(QMatrix().rotate(-angle * 180 / M_PI));

@@ -676,6 +676,10 @@ QImage KisBrush::scaleImage(const KisScaledBrush *srcBrush, double scale, double
     QImage dstImage(dstWidth, dstHeight, QImage::Format_ARGB32);
 
     QImage srcImage = srcBrush->image();
+    if (srcImage.format() != QImage::Format_ARGB32)
+    {
+        srcImage = srcImage.convertToFormat(QImage::Format_ARGB32);
+    }
 
     // Compute scales to map the scaled brush onto the required scale.
     double xScale = srcBrush->xScale() / scale;
@@ -777,6 +781,10 @@ QImage KisBrush::scaleImage(const QImage& _srcImage, int width, int height)
     QImage scaledImage;
     QImage srcImage = _srcImage; // detaches!
     //QString filename;
+    if (srcImage.format() != QImage::Format_ARGB32)
+    {
+        srcImage = srcImage.convertToFormat(QImage::Format_ARGB32);
+    }
 
     int srcWidth = srcImage.width();
     int srcHeight = srcImage.height();

@@ -91,7 +91,7 @@ void KisScratchPad::setColorSpace(const KoColorSpace *colorSpace) {
 void KisScratchPad::setDisplayProfile(const KoColorProfile *colorProfile) {
 
     m_displayProfile = colorProfile;
-    update();
+    QWidget::update();
 }
 
 void KisScratchPad::clear() {
@@ -112,7 +112,7 @@ void KisScratchPad::clear() {
             m_paintDevice->setDefaultPixel(c.data());
         }
     }
-    update();
+    QWidget::update();
 }
 
 void KisScratchPad::contextMenuEvent ( QContextMenuEvent * event ) {
@@ -338,7 +338,7 @@ void KisScratchPad::pan(QMouseEvent* event) {
     QPoint distance = m_lastPosition - actualPosition;
 
     m_offset += distance;
-    update();
+    QWidget::update();
 
     m_lastPosition = actualPosition;
     event->accept();
@@ -355,6 +355,6 @@ void KisScratchPad::update(const QRegion& region, const QPoint& delta) {
 
     QVector<QRect> rects = region.rects();
     foreach(const QRect& rect, rects) {
-        QWidget::update(rect.translated(m_delta));
+        QWidget::update(rect.translated(delta));
     }
 }

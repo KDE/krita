@@ -47,8 +47,6 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
 
     connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
 
-//     showSlider(inputRadius);
-    inputRadius->setRange(inputRadius->minimum(), inputRadius->maximum(), 1.0, false);
     connect(inputRadius, SIGNAL(valueChanged(double)), this, SLOT(spinBoxRadiusChanged(double)));
 
     showSlider(inputRatio, 0.1);

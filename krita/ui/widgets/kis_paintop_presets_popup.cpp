@@ -72,8 +72,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
     m_d->settingsWidget = 0;
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 
-    m_d->uiWdgPaintOpPresets.presetPreview->setDrawArrow(false);
-
     connect(m_d->uiWdgPaintOpPresets.bnSave, SIGNAL(clicked()),
             this, SIGNAL(savePresetClicked()));
 
@@ -115,11 +113,6 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
         m_d->layout->update();
         widget->show();
     }
-}
-
-KisPresetWidget* KisPaintOpPresetsPopup::presetPreview()
-{
-    return m_d->uiWdgPaintOpPresets.presetPreview;
 }
 
 QString KisPaintOpPresetsPopup::getPresetName() const

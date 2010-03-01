@@ -45,12 +45,6 @@ public:
     void setPaintOpSettingsWidget(QWidget * widget);
 
     /**
-     * The preset preview at the widget bottom
-     * @return the preset preview
-     */
-    KisPresetWidget* presetPreview();
-    
-    /**
      * @return the name entered in the preset name lineedit
      */
     QString getPresetName() const;

@@ -110,7 +110,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
 
     connect(m_presetsPopup, SIGNAL(savePresetClicked()), this, SLOT(slotSaveActivePreset()));
-    
+
     connect(m_presetsPopup, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
 }
@@ -184,7 +184,7 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
 {
     KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(resource);
     dbgUI << "preset " << preset->name() << "selected";
-    
+
     m_optionWidget->setConfiguration(preset->settings());
     slotUpdatePreset();
 }
@@ -252,7 +252,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
     if (m_activePreset && m_optionWidget) {
         m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
         m_optionWidget->disconnect(m_presetWidget);
-        m_optionWidget->disconnect(m_presetsPopup->presetPreview());
         m_presetsPopup->setPaintOpSettingsWidget(0);
         m_optionWidget->hide();
     }
@@ -297,7 +296,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
     m_cmbPaintops->setCurrentIndex(index);
     m_activePreset = preset;
     m_presetWidget->setPreset(m_activePreset);
-    m_presetsPopup->presetPreview()->setPreset(m_activePreset);
+    //m_presetsPopup->presetPreview()->setPreset(m_activePreset);
 
     emit signalPaintopChanged(preset);
 }
@@ -361,7 +360,7 @@ void KisPaintopBox::slotUpdatePreset()
 {
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
     m_presetWidget->updatePreview();
-    m_presetsPopup->presetPreview()->updatePreview();
+    //m_presetsPopup->presetPreview()->updatePreview();
 }
 
 #include "kis_paintop_box.moc"

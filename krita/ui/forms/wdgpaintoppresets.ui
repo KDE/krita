@@ -5,7 +5,7 @@
   <property name="geometry">
    <rect>
     <x>0</x>
-    <y>122</y>
+    <y>0</y>
     <width>393</width>
     <height>208</height>
    </rect>
@@ -78,17 +78,17 @@
         </layout>
        </item>
        <item row="5" column="0">
-        <widget class="KisPresetWidget" name="presetPreview">
-         <property name="minimumSize">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
           <size>
-           <width>0</width>
-           <height>100</height>
+           <width>20</width>
+           <height>40</height>
           </size>
          </property>
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -132,11 +132,6 @@
    <extends>QWidget</extends>
    <header>widgets/kis_preset_chooser.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisPresetWidget</class>
-   <extends>QPushButton</extends>
-   <header>widgets/kis_preset_widget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

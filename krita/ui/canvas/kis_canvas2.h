@@ -39,8 +39,7 @@ class KoFavoriteResourceManager;
 
 enum KisCanvasType {
     QPAINTER,
-    OPENGL,
-    MITSHM
+    OPENGL
 };
 
 class KoViewConverter;

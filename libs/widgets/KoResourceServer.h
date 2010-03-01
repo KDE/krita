@@ -202,12 +202,11 @@ public:
             kWarning(30009) << "Could not remove resource!";
         }
 
-        notifyRemovingResource(resource);
-
         if (removedFromDisk) {
             m_resourcesByName.remove(resource->name());
             m_resourcesByFilename.remove(resource->filename());
             m_resources.removeAt(m_resources.indexOf(resource));
+            notifyRemovingResource(resource);
             delete resource;
         } else {
             // TODO: save blacklist to config file and load it again on next start

@@ -158,12 +158,12 @@ void MixerTool::resourceChanged(int key, const QVariant & res)
 
 void MixerTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(converter);
 
     if (m_d->mixer->hasFocus()) {
         m_d->mixingBrush->settings()->paintOutline(m_d->currentMousePosition,
                                                    0,
                                                    painter,
-                                                   converter,
                                                    KisPaintOpSettings::CURSOR_IS_OUTLINE);
     }
 }

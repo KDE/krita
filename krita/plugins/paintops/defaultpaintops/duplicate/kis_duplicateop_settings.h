@@ -23,7 +23,7 @@
 #ifndef KIS_DUPLICATEOP_SETTINGS_H_
 #define KIS_DUPLICATEOP_SETTINGS_H_
 
-#include <kis_brushop_settings.h>
+#include <kis_brush_based_paintop_settings.h>
 #include <kis_types.h>
 #include <QPointF>
 

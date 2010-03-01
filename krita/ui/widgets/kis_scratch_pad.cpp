@@ -149,12 +149,8 @@ void KisScratchPad::mouseMoveEvent ( QMouseEvent * event ) {
         paint(event);
     }
     else if (event->button() == Qt::MidButton) {
-        // start panning
-        m_toolMode = PANNING;
     }
     else if (event->button() == Qt::RightButton) {
-        // start picking
-        m_toolMode = PICKING;
     }
 }
 
@@ -210,10 +206,12 @@ void KisScratchPad::resizeEvent ( QResizeEvent * event ) {
 
 void KisScratchPad::tabletEvent ( QTabletEvent * event ) {
 
+    if (!m_paintDevice) return;
+
     if (event->type() == QEvent::TabletPress) {
         initPainting(event);
     }
-    else if (event->type() == QEvent::TabletMove) {
+    else if (event->type() == QEvent::TabletMove && m_toolMode == PAINTING) {
         paint(event);
     }
     else {
@@ -256,6 +254,8 @@ void KisScratchPad::initPainting(QEvent* event) {
 }
 
 void KisScratchPad::paint(QEvent* event) {
+
+    if (!m_painter) return;
 
     KisPaintInformation info;
     if (QTabletEvent* tabletEvent = dynamic_cast<QTabletEvent*>(event)) {

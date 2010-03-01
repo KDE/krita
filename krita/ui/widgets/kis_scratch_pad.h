@@ -70,6 +70,10 @@ public slots:
     void setDisplayProfile(const KoColorProfile* colorProfile);
     void clear();
 
+signals:
+
+    void colorSelected(const KoColor& color);
+
 protected:
 
     virtual void contextMenuEvent ( QContextMenuEvent * event );
@@ -89,6 +93,12 @@ private:
     void initPainting(QEvent* event);
     void paint(QEvent* event);
     void endPaint(QEvent* event);
+
+    void pick(QMouseEvent* event);
+
+    void initPan(QMouseEvent* event);
+    void pan(QMouseEvent* event);
+    void endPan(QMouseEvent* event);
 
     enum Mode {
         PAINTING,
@@ -113,6 +123,7 @@ private:
     KisPainter *m_painter;
     double m_dragDist;
     const KoCompositeOp *m_compositeOp;
+    QPoint m_lastPosition;
 };
 
 #endif // KIS_SCRATCH_PAD_H

@@ -120,6 +120,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_ellipse_base.cpp
     tool/kis_tool_rectangle_base.cpp
     tool/kis_tool_polyline_base.cpp
+    tool/kis_color_picker_utils.cpp
     widgets/kis_channelflags_widget.cpp 
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_idlist.cc 

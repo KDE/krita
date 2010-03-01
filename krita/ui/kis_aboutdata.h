@@ -62,6 +62,7 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor(ki18n("Michael Thaler"), KLocalizedString(), "michael.thaler@physik.tu-muenchen.de");
     aboutData->addAuthor(ki18n("Øyvind Kolås"), ki18n("Wiseguy"), "pippin@gimp.org", "http://codecave.org/");
     aboutData->addAuthor(ki18n("Patrick Julien"), KLocalizedString(), "freak@codepimps.org");
+    aboutData->addAuthor(ki18n("Peter Sikking"), ki18n("Vision master"), "");
     aboutData->addAuthor(ki18n("Roger Larsson"), KLocalizedString(), "roger.larsson@norran.net");
     aboutData->addAuthor(ki18n("Samy Lange"), KLocalizedString(), "enkithan@free.fr");
     aboutData->addAuthor(ki18n("Sven Langkamp"), KLocalizedString(), "sven.langkamp@gmail.com");

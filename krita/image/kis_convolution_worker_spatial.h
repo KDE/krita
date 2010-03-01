@@ -145,6 +145,7 @@ public:
                 for (quint32 i = 0; i < m_cacheSize; ++i)
                     memcpy(m_pixelPtrCache[i], m_pixelPtrCacheCopy[i], m_pixelSize);
 
+                typename _IteratorFactory_::VLineConstIterator kitSrc = _IteratorFactory_::createVLineConstIterator(src, col + m_khalfWidth, row - m_khalfHeight, m_kh, dataRect);
                 for (int pcol = 0; pcol < areaSize.width(); ++pcol)
                 {
                     // write original channel values
@@ -152,9 +153,9 @@ public:
                     convolveCache(hitDst.rawData());
 
                     ++col;
+                    kitSrc.nextCol();
                     ++hitDst;
                     ++hitSrc;
-                    typename _IteratorFactory_::VLineConstIterator kitSrc = _IteratorFactory_::createVLineConstIterator(src, col + m_khalfWidth, row - m_khalfHeight, m_kh, dataRect);
                     moveKernelRight(kitSrc, m_pixelPtrCache);
                 }
 
@@ -182,6 +183,7 @@ public:
             typename _IteratorFactory_::VLineIterator vitDst = _IteratorFactory_::createVLineIterator(this->m_painter->device(), dstPos.x(), dstPos.y(), areaSize.height(), dataRect);
             typename _IteratorFactory_::VLineIterator vitSrc = _IteratorFactory_::createVLineIterator(src, srcPos.x(), srcPos.y(), areaSize.height(), dataRect);
 
+            typename _IteratorFactory_::VLineConstIterator kitSrc = _IteratorFactory_::createVLineConstIterator(src, col + m_khalfWidth, row - m_khalfHeight, m_kh, dataRect);
             for (int pcol = 0; pcol < areaSize.width(); pcol++)
             {
                 // reload cache from copy
@@ -201,11 +203,11 @@ public:
                 }
 
                 ++col;
+                kitSrc.nextCol();
                 vitDst.nextCol();
                 vitSrc.nextCol();
                 row = srcPos.y();
 
-                typename _IteratorFactory_::VLineConstIterator kitSrc = _IteratorFactory_::createVLineConstIterator(src, col + m_khalfWidth, row - m_khalfHeight, m_kh, dataRect);
                 moveKernelRight(kitSrc, m_pixelPtrCacheCopy);
 
                 if (hasProgressUpdater) {

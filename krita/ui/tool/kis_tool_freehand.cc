@@ -523,10 +523,7 @@ void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*p
 
 bool KisToolFreehand::wantsAutoScroll() const
 {
-    if (m_mode == PAN) {
-        return false;
-    }
-    return true;
+    return false;
 }
 
 void KisToolFreehand::setDirty(const QRegion& region)

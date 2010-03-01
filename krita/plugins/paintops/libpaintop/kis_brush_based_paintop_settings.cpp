@@ -18,9 +18,18 @@
 
 #include "kis_brush_based_paintop_settings.h"
 
+#include <kis_paint_action_type_option.h>
 #include "kis_brush_based_paintop_options_widget.h"
 #include "kis_boundary_painter.h"
 #include <kis_boundary.h>
+
+bool KisBrushBasedPaintOpSettings::paintIncremental()
+{
+    if(hasProperty("PaintOpAction")) {
+        return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
+    }
+    return true;
+}
 
 QRectF KisBrushBasedPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
 {

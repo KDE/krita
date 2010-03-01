@@ -18,10 +18,9 @@
 
 #include "kis_brush_based_paintop_settings.h"
 
-#include <KoViewConverter.h>
-
 #include "kis_brush_based_paintop_options_widget.h"
 #include "kis_boundary_painter.h"
+#include <kis_boundary.h>
 
 QRectF KisBrushBasedPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
 {
@@ -39,7 +38,7 @@ QRectF KisBrushBasedPaintOpSettings::paintOutlineRect(const QPointF& pos, KisIma
     return rect;
 }
 
-void KisBrushBasedPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, KisPaintOpSettings::OutlineMode _mode) const
+void KisBrushBasedPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
 {
     KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
     if(!options)
@@ -50,6 +49,7 @@ void KisBrushBasedPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP 
     QPointF hotSpot = brush->hotSpot(1.0, 1.0);
     painter.setPen(Qt::black);
     painter.setBackground(Qt::black);
-    painter.translate(converter.documentToView(pos - image->pixelToDocument(hotSpot + QPointF(0.5, 0.5))));
-    KisBoundaryPainter::paint(brush->boundary(), image, painter, converter);
+    painter.translate(pos - image->pixelToDocument(hotSpot + QPointF(0.5, 0.5)));
+    painter.scale(1/image->xRes(), 1/image->yRes());
+    brush->boundary()->paint(painter);
 }

@@ -27,6 +27,7 @@
 #include <kis_paintop_registry.h>
 
 #include "kis_experiment_paintop.h"
+#include "kis_experiment_paintop_settings_widget.h"
 #include "kis_simple_paintop_factory.h"
 
 #include "kis_global.h"

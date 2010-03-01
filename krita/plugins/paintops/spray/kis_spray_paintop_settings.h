@@ -38,7 +38,7 @@ public:
     virtual ~KisSprayPaintOpSettings() {}
 
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
+    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
     
     bool paintIncremental();
     void setQImage(const QImage &image){ m_image = image; }

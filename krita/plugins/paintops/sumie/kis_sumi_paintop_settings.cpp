@@ -19,7 +19,6 @@
 
 #include <QPainter>
 
-#include <KoViewConverter.h>
 #include "kis_image.h"
 
 #include "kis_paint_action_type_option.h"
@@ -33,12 +32,12 @@ bool KisSumiPaintOpSettings::paintIncremental()
 }
 
 
-void KisSumiPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, KisPaintOpSettings::OutlineMode _mode) const
+void KisSumiPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return;
     qreal size = getInt(SUMI_RADIUS) * 2 * getDouble(SUMI_BRISTLE_SCALE) + 1;
     painter.setPen(Qt::black);
-    painter.drawEllipse(converter.documentToView(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos)));
+    painter.drawEllipse(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos));
 }
 
 

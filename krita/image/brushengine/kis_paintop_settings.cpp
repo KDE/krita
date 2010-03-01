@@ -138,12 +138,11 @@ QRectF KisPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP imag
     return QRectF();
 }
 
-void KisPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
+void KisPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
 {
     Q_UNUSED(pos);
     Q_UNUSED(image);
     Q_UNUSED(painter);
-    Q_UNUSED(converter);
     Q_UNUSED(_mode);
 }
 

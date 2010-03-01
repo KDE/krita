@@ -16,8 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <KoViewConverter.h>
-
 #include <kis_paint_action_type_option.h>
 #include <kis_color_option.h>
 
@@ -41,14 +39,14 @@ QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
     return image->pixelToDocument(rc.translated(- QPoint(width * 0.5, height * 0.5))).translated(pos);
 }
 
-void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
+void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return;
     qreal width = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_SCALE);
     qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT) * getDouble(SPRAY_SCALE);
     painter.setPen(QColor(255,128,255));
     painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-    painter.drawEllipse(converter.documentToView(image->pixelToDocument(QRectF(0, 0, width, height).translated(- QPoint(width * 0.5, height * 0.5))).translated(pos)));
+    painter.drawEllipse(image->pixelToDocument(QRectF(0, 0, width, height).translated(- QPoint(width * 0.5, height * 0.5))).translated(pos));
 }
 
 QImage KisSprayPaintOpSettings::image() const

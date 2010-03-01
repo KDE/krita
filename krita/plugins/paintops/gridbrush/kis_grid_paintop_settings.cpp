@@ -16,8 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <KoViewConverter.h>
-
 #include <kis_paint_action_type_option.h>
 
 #include "kis_grid_paintop_settings.h"
@@ -33,9 +31,7 @@ bool KisGridPaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-
-
-void KisGridPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, OutlineMode _mode) const
+void KisGridPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return;
     qreal sizex = getInt(GRID_WIDTH) * getDouble(GRID_SCALE);
@@ -43,7 +39,7 @@ void KisGridPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image,
 
     painter.setPen(QColor(255,128,255));
     painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-    painter.drawRect(converter.documentToView(image->pixelToDocument(QRectF(0, 0, sizex, sizey).translated(- QPoint(sizex * 0.5, sizey * 0.5))).translated(pos)));
+    painter.drawRect(image->pixelToDocument(QRectF(0, 0, sizex, sizey).translated(- QPoint(sizex * 0.5, sizey * 0.5))).translated(pos));
 }
 
 

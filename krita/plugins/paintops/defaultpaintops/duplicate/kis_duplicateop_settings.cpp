@@ -37,8 +37,6 @@
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
 #include <kis_perspective_grid.h>
-#include <KoViewConverter.h>
-
 
 KisDuplicateOpSettings::KisDuplicateOpSettings(KisImageWSP image)
         : m_image(image)
@@ -150,10 +148,10 @@ QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP 
     return dubRect;
 }
 
-void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
+void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
 {
-    KisBrushBasedPaintOpSettings::paintOutline(pos, image, painter, converter, _mode);
-    QRectF rect2 = converter.documentToView(duplicateOutlineRect(pos, image));
+    KisBrushBasedPaintOpSettings::paintOutline(pos, image, painter, _mode);
+    QRectF rect2 = duplicateOutlineRect(pos, image);
     painter.drawLine(rect2.topLeft(), rect2.bottomRight());
     painter.drawLine(rect2.topRight(), rect2.bottomLeft());
 

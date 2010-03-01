@@ -15,7 +15,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <KoViewConverter.h>
 
 #include <kis_deform_paintop_settings.h>
 #include <kis_deform_paintop_settings_widget.h>
@@ -74,7 +73,7 @@ QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWS
     return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
 }
 
-void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
+void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return;
     qreal size = radius() * 2;
@@ -96,5 +95,5 @@ void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP imag
 #else
     painter.setPen(Qt::black);
 #endif
-    painter.drawEllipse(converter.documentToView(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos)));
+    painter.drawEllipse(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos));
 }

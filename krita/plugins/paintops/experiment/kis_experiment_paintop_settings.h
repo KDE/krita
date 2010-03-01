@@ -22,12 +22,6 @@
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
-#include "kis_experiment_paintop_settings_widget.h"
-
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
-
 class QWidget;
 class QDomElement;
 class QDomDocument;
@@ -37,7 +31,7 @@ class KisExperimentPaintOpSettings : public KisPaintOpSettings
 {
 public:
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
+    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
     bool paintIncremental();
 };
 

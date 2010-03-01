@@ -29,7 +29,7 @@ bool KisSoftPaintOpSettings::paintIncremental()
 }
 
 
-void KisSoftPaintOpSettings::paintOutline ( const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, KisPaintOpSettings::OutlineMode _mode ) const
+void KisSoftPaintOpSettings::paintOutline ( const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode ) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return;
     qreal size;
@@ -40,7 +40,7 @@ void KisSoftPaintOpSettings::paintOutline ( const QPointF& pos, KisImageWSP imag
     }
 
 
-    QRectF ellipseRect = converter.documentToView(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos));
+    QRectF ellipseRect = image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
     QPen pen = painter.pen();
     // temporary solution til i find out the bug with RasterOp_XOR in OpenGL canvas
     pen.setColor(Qt::white);

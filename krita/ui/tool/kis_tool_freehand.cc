@@ -638,7 +638,10 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
         } else {
             outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
         }
-        currentPaintOpPreset()->settings()->paintOutline(m_mousePos, currentImage(), gc, converter, outlineMode);
+        qreal zoomX, zoomY;
+        converter.zoom(&zoomX, &zoomY);
+        gc.scale(zoomX, zoomY);
+        currentPaintOpPreset()->settings()->paintOutline(m_mousePos, currentImage(), gc, outlineMode);
 
     }
 }

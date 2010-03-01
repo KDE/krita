@@ -23,7 +23,7 @@
 #ifndef KIS_FILTEROP_SETTINGS_H_
 #define KIS_FILTEROP_SETTINGS_H_
 
-#include <kis_paintop_settings.h>
+#include <kis_brush_based_paintop_settings.h>
 #include <kis_types.h>
 
 #include "kis_filterop_settings_widget.h"
@@ -31,7 +31,7 @@
 class QDomElement;
 class KisFilterConfiguration;
 
-class KisFilterOpSettings : public KisPaintOpSettings
+class KisFilterOpSettings : public KisBrushBasedPaintOpSettings
 {
 
 public:

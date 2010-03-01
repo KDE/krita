@@ -23,16 +23,15 @@
 #ifndef KIS_COMPLEXOP_SETTINGS_H_
 #define KIS_COMPLEXOP_SETTINGS_H_
 
-#include <kis_paintop_settings.h>
+#include <kis_brush_based_paintop_settings.h>
 #include <kis_types.h>
 #include "kis_complexop_settings_widget.h"
 
 class QDomElement;
 class QPointF;
 class QPainter;
-class KoViewConverter;
 
-class KisComplexOpSettings : public KisPaintOpSettings
+class KisComplexOpSettings : public KisBrushBasedPaintOpSettings
 {
     
 public:
@@ -41,12 +40,6 @@ public:
     virtual ~KisComplexOpSettings();
 
     bool paintIncremental();
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
-
-public:
-
-    KisComplexOpSettingsWidget *m_options;
-
 };
 
 

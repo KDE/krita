@@ -128,7 +128,7 @@ public:
      * And we need a lot of caching here, since no matter what we do, it is utterly slow, especially
      * when using a tablet. How does XXX works with the duplicate op ? List of images ? With a center ?
      */
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
+    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
 
     /**
      * XXX: document!

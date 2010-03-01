@@ -29,7 +29,7 @@ public:
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const;
     
     ///Reimplemented
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, KisPaintOpSettings::OutlineMode _mode) const;
+    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const;
 };
 
 #endif // KIS_BRUSH_BASED_PAINTOP_SETTINGS_H

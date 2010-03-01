@@ -24,7 +24,6 @@
 #include "kis_filterop_settings.h"
 
 #include <kis_properties_configuration.h>
-#include <kis_brush_option_widget.h>
 #include <filter/kis_filter.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
@@ -35,14 +34,12 @@
 #include <kis_filter_option.h>
 
 KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
-        : KisPaintOpOptionsWidget(parent)
+        : KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("filter option widget");
 
-    m_brushOption = new KisBrushOptionWidget();
     m_filterOption = new KisFilterOption();
 
-    addPaintOpOption(m_brushOption);
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(m_filterOption);
 
@@ -50,7 +47,6 @@ KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
 
 KisFilterOpSettingsWidget::~KisFilterOpSettingsWidget()
 {
-    delete m_brushOption;
     delete m_filterOption;
 }
 

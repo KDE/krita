@@ -19,11 +19,14 @@
 
 #include <QRect>
 #include <QPaintEvent>
+#include <QMouseEvent>
+#include <QTabletEvent>
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 
+#include <kis_vec.h>
 #include <kis_cursor.h>
 #include <kis_paint_device.h>
 
@@ -34,17 +37,29 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     , m_toolMode(HOVERING)
     , m_backgroundMode(SOLID_COLOR)
     , m_displayProfile(0)
+    , m_painter(0)
+    , m_compositeOp(0)
 {
     m_cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
+    setCursor(m_cursor);
 }
 
 KisScratchPad::~KisScratchPad() {
 
+    delete m_painter;
 }
 
-void KisScratchPad::setPaintColor(const KoColor& foregroundColor) {
+void KisScratchPad::setPaintColor(const QColor& paintColor) {
 
-    m_foregroundColor = foregroundColor;
+    KoColor c(m_colorSpace);
+    c.fromQColor(paintColor);
+    m_paintColor = c;
+}
+
+void KisScratchPad::setPaintColor(KoColor& paintColor) {
+
+    paintColor.convertTo(m_colorSpace);
+    m_paintColor = paintColor;
 }
 
 void KisScratchPad::setPreset(KisPaintOpPresetSP preset) {
@@ -69,6 +84,7 @@ void KisScratchPad::setColorSpace(const KoColorSpace *colorSpace) {
 
     m_colorSpace = colorSpace;
     m_paintDevice = new KisPaintDevice(colorSpace, "ScratchPad");
+    m_compositeOp = m_colorSpace->compositeOp(COMPOSITE_OVER);
     clear();
 }
 
@@ -126,13 +142,41 @@ void KisScratchPad::mouseDoubleClickEvent ( QMouseEvent * event ) {
 void KisScratchPad::mouseMoveEvent ( QMouseEvent * event ) {
 
     qDebug() << "mouseMoveEvent();" << event->pos() << event->button();
-    QWidget::mouseMoveEvent(event);
+    if (!m_paintDevice) return;
+
+    m_currentMousePosition = event->pos();
+    if (event->button() == Qt::LeftButton) {
+        paint(event);
+    }
+    else if (event->button() == Qt::MidButton) {
+        // start panning
+        m_toolMode = PANNING;
+    }
+    else if (event->button() == Qt::RightButton) {
+        // start picking
+        m_toolMode = PICKING;
+    }
 }
 
 void KisScratchPad::mousePressEvent ( QMouseEvent * event ) {
 
     qDebug() << "mousePressEvent();" << event->pos() << event->button();
-    QWidget::mousePressEvent(event);
+    if (!m_paintDevice) return;
+
+    m_currentMousePosition = event->pos();
+    if (event->button() == Qt::LeftButton) {
+        initPainting(event);
+    }
+    else if (event->button() == Qt::MidButton) {
+        // start panning
+        m_toolMode = PANNING;
+    }
+    else if (event->button() == Qt::RightButton) {
+        // start picking
+        m_toolMode = PICKING;
+    }
+
+
 }
 
 void KisScratchPad::mouseReleaseEvent ( QMouseEvent * event ) {
@@ -166,12 +210,77 @@ void KisScratchPad::resizeEvent ( QResizeEvent * event ) {
 
 void KisScratchPad::tabletEvent ( QTabletEvent * event ) {
 
-    qDebug() << "tabletEvent";
-    QWidget::tabletEvent(event);
+    if (event->type() == QEvent::TabletPress) {
+        initPainting(event);
+    }
+    else if (event->type() == QEvent::TabletMove) {
+        paint(event);
+    }
+    else {
+        endPaint(event);
+    }
+
 }
 
 void KisScratchPad::wheelEvent ( QWheelEvent * event ) {
 
     qDebug() << "wheelEvent";
     QWidget::wheelEvent(event);
+}
+
+void KisScratchPad::initPainting(QEvent* event) {
+
+    qDebug() << "start painting";
+    m_toolMode = PAINTING;
+    m_dragDist = 0;
+    if (m_painter) delete m_painter;
+    m_painter = new KisPainter(m_paintDevice);
+    m_painter->setCompositeOp(m_compositeOp);
+    m_painter->setPaintColor(m_paintColor);
+    m_painter->setPaintOpPreset(m_preset, 0);
+    if (QTabletEvent* tabletEvent = dynamic_cast<QTabletEvent*>(event)) {
+        const QPointF pos = tabletEvent->hiResGlobalPos() - mapToGlobal(QPoint(0, 0));
+        m_previousPaintInformation = KisPaintInformation(pos,
+                                                         tabletEvent->pressure(),
+                                                         tabletEvent->xTilt(),
+                                                         tabletEvent->yTilt(),
+                                                         KisVector2D::Zero(),
+                                                         tabletEvent->rotation(),
+                                                         tabletEvent->tangentialPressure());
+    }
+    else if (QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event)) {
+        m_previousPaintInformation = KisPaintInformation(mouseEvent->posF());
+    }
+    m_painter->paintAt(m_previousPaintInformation);
+    update(m_painter->dirtyRegion());
+}
+
+void KisScratchPad::paint(QEvent* event) {
+
+    KisPaintInformation info;
+    if (QTabletEvent* tabletEvent = dynamic_cast<QTabletEvent*>(event)) {
+        const QPointF pos = tabletEvent->hiResGlobalPos() - mapToGlobal(QPoint(0, 0));
+        QPointF dragVec = pos - m_previousPaintInformation.pos();
+        info = KisPaintInformation(pos,
+                                   tabletEvent->pressure(),
+                                   tabletEvent->xTilt(),
+                                   tabletEvent->yTilt(),
+                                   toKisVector2D(dragVec),
+                                   tabletEvent->rotation(),
+                                   tabletEvent->tangentialPressure());
+
+    }
+    else if (QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event)) {
+        info = KisPaintInformation(mouseEvent->posF());
+    }
+
+    m_painter->paintLine(m_previousPaintInformation, info);
+    m_previousPaintInformation = info;
+    update(m_painter->dirtyRegion());
+
+}
+
+void KisScratchPad::endPaint(QEvent *event) {
+
+    qDebug() << "endPaint";
 }

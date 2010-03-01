@@ -28,6 +28,7 @@
 #include <KoColorProfile.h>
 #include <KoColor.h>
 #include <KoCompositeOp.h>
+#include <KoPointerEvent.h>
 
 #include <kis_paintop_preset.h>
 #include <kis_types.h>
@@ -60,7 +61,8 @@ public:
 
 public slots:
 
-    void setPaintColor(const KoColor& foregroundColor);
+    void setPaintColor(const QColor& foregroundColor);
+    void setPaintColor(KoColor& foregroundColor);
     void setPreset(KisPaintOpPresetSP preset);
     void setBackgroundColor(const QColor& backgroundColor);
     void setBackgroundTile(const QImage& tile);
@@ -77,12 +79,16 @@ protected:
     virtual void mouseMoveEvent ( QMouseEvent * event );
     virtual void mousePressEvent ( QMouseEvent * event );
     virtual void mouseReleaseEvent ( QMouseEvent * event );
-    virtual void paintEvent ( QPaintEvent * event );
-    virtual void resizeEvent ( QResizeEvent * event );
     virtual void tabletEvent ( QTabletEvent * event );
     virtual void wheelEvent ( QWheelEvent * event );
+    virtual void paintEvent ( QPaintEvent * event );
+    virtual void resizeEvent ( QResizeEvent * event );
 
 private:
+
+    void initPainting(QEvent* event);
+    void paint(QEvent* event);
+    void endPaint(QEvent* event);
 
     enum Mode {
         PAINTING,
@@ -93,7 +99,7 @@ private:
 
     QPoint m_offset;
     const KoColorSpace* m_colorSpace;
-    KoColor m_foregroundColor;
+    KoColor m_paintColor;
     QImage m_backgroundTile;
     QColor m_backgroundColor;
     Mode m_toolMode;

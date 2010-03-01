@@ -67,10 +67,11 @@ int main(int argc, char** argv)
         }
     }
 
-    scratchpad->setBackgroundColor(Qt::white);
     const KoColorProfile* profile = KoColorSpaceRegistry::instance()->rgb8()->profile();
-    scratchpad->setDisplayProfile(profile);
     scratchpad->setColorSpace(KoColorSpaceRegistry::instance()->rgb16());
+    scratchpad->setDisplayProfile(profile);
+    scratchpad->setBackgroundColor(Qt::white);
+    scratchpad->setPaintColor(Qt::black);
     scratchpad->show();
     return app.exec();
 }

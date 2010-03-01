@@ -51,8 +51,8 @@
 #include "kis_debug.h"
 #include "kis_selection_manager.h"
 
-#define NEAR_VAL -10.0
-#define FAR_VAL 10.0
+#define NEAR_VAL -1000.0
+#define FAR_VAL 1000.0
 
 namespace
 {

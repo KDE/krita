@@ -88,6 +88,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     //convert to minutes
     m_autosaveSpinBox->setValue(autosaveInterval / 60);
     m_autosaveCheckBox->setChecked(autosaveInterval > 0);
+    m_undoStackSize->setValue(cfg.undoStackLimit());
 }
 
 void GeneralTab::setDefault()
@@ -99,6 +100,7 @@ void GeneralTab::setDefault()
     m_autosaveCheckBox->setChecked(true);
     //convert to minutes
     m_autosaveSpinBox->setValue(KoDocument::defaultAutoSave() / 60);
+    m_undoStackSize->setValue(30);
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -115,6 +117,11 @@ int GeneralTab::autoSaveInterval()
 {
     //convert to seconds
     return m_autosaveCheckBox->isChecked() ? m_autosaveSpinBox->value()*60 : 0;
+}
+
+int GeneralTab::undoStackSize()
+{
+    return m_undoStackSize->value();
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -524,6 +531,7 @@ bool KisDlgPreferences::editPreferences()
         foreach(KoDocument* doc, *KoDocument::documentList()) {
             doc->setAutoSave(dialog->m_general->autoSaveInterval());
         }
+        cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
 
         // Color settings
         cfg.setMonitorProfile(dialog->m_colorSettings->m_page->cmbMonitorProfile->itemHighlighted());

@@ -61,6 +61,7 @@ public:
     bool showRootLayer();
     int autoSaveInterval();
     void setDefault();
+    int undoStackSize();
 
 };
 

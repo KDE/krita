@@ -150,6 +150,7 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
     setTemplateType("krita_template");
     init();
     connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
+    undoStack()->setUndoLimit(KisConfig().undoStackLimit());
 }
 
 KisDoc2::~KisDoc2()

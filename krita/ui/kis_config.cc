@@ -73,6 +73,16 @@ void KisConfig::setUndoEnabled(bool undo)
     m_cfg.writeEntry("undoEnabled", undo);
 }
 
+int KisConfig::undoStackLimit() const
+{
+    return m_cfg.readEntry("undoStackLimit", 100);
+}
+
+void KisConfig::setUndoStackLimit(int limit)
+{
+    m_cfg.writeEntry("undoStackLimit", limit);
+}
+
 qint32 KisConfig::defImageWidth() const
 {
     return m_cfg.readEntry("imageWidthDef", IMAGE_DEFAULT_WIDTH);

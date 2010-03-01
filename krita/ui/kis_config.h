@@ -38,6 +38,9 @@ public:
 
     bool undoEnabled() const;
     void setUndoEnabled(bool undo);
+    
+    int undoStackLimit() const;
+    void setUndoStackLimit(int limit);
 
     qint32 defImageWidth() const;
     void defImageWidth(qint32 width);

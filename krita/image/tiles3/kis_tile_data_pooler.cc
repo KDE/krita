@@ -104,8 +104,11 @@ void KisTileDataPooler::cloneTileData(KisTileData *td, qint32 numClones) const
              * a temporary "solution".
              * FIXME: Implement a lockless list (or stack) for this.
              */
-            if(!td->m_clonesList.isEmpty())
-                td->m_clonesList.removeFirst();
+            if(!td->m_clonesList.isEmpty()) {
+                KisTileData *clone;
+                clone = td->m_clonesList.takeFirst();
+                delete clone;
+            }
         }
     }
 

@@ -82,12 +82,12 @@ public:
             this->m_progress->setProgress(0);
 
         // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them.
-        m_pixelPtrCache = new quint8*[m_cacheSize];
-        m_pixelPtrCacheCopy = new quint8*[m_cacheSize];
+        m_pixelPtrCache = new double*[m_cacheSize];
+        m_pixelPtrCacheCopy = new double*[m_cacheSize];
         for (quint32 c = 0; c < m_cacheSize; ++c)
         {
-            m_pixelPtrCache[c] = new quint8[m_pixelSize];
-            m_pixelPtrCacheCopy[c] = new quint8[m_pixelSize];
+            m_pixelPtrCache[c] = new double[m_pixelSize];
+            m_pixelPtrCacheCopy[c] = new double[m_pixelSize];
         }
 
         // decide caching strategy
@@ -230,11 +230,10 @@ public:
     inline void convolveCache(quint8* dstPtr)
     {
         for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
-            const quint32 channelPos = m_convChannelList[k]->pos();
             qreal interimConvoResult = 0;
 
             for (quint32 pIndex = 0; pIndex < m_cacheSize; ++pIndex) {
-                qreal cacheValue = m_toDoubleFuncPtr[k](m_pixelPtrCache[pIndex], channelPos);
+                qreal cacheValue = m_pixelPtrCache[pIndex][k];
                 interimConvoResult += m_kernelData[pIndex] * cacheValue;
             }
 
@@ -246,40 +245,49 @@ public:
             else if (channelPixelValue < m_minClamp[k])
                 channelPixelValue = m_minClamp[k];
 
+            const quint32 channelPos = m_convChannelList[k]->pos();
             m_fromDoubleFuncPtr[k](dstPtr, channelPos, channelPixelValue);
         }
     }
 
-    inline void moveKernelRight(typename _IteratorFactory_::VLineConstIterator& kitSrc, quint8 **pixelPtrCache)
+    inline void moveKernelRight(typename _IteratorFactory_::VLineConstIterator& kitSrc, double **pixelPtrCache)
     {
-        quint8** d = pixelPtrCache;
+        double** d = pixelPtrCache;
 
         for (quint32 krow = 0; krow < m_kh; ++krow) {
-            quint8* first = *d;
-            memmove(d, d + 1, (m_kw - 1) * sizeof(quint8 *));
+            double* first = *d;
+            memmove(d, d + 1, (m_kw - 1) * sizeof(double *));
             *(d + m_kw - 1) = first;
             d += m_kw;
         }
 
         qint32 i = m_kw - 1;
         while (!kitSrc.isDone()) {
-            memcpy(pixelPtrCache[i], kitSrc.oldRawData(), m_pixelSize);
+            for(quint32 k = 0; k < m_convolveChannelsNo; ++k)
+            {
+              const quint32 channelPos = m_convChannelList[k]->pos();
+              pixelPtrCache[i][k] = m_toDoubleFuncPtr[k](kitSrc.oldRawData(), channelPos);
+            }
             ++kitSrc;
             i += m_kw;
         }
     }
 
-    inline void moveKernelDown(typename _IteratorFactory_::HLineConstIterator& kitSrc, quint8 **pixelPtrCache)
+    inline void moveKernelDown(typename _IteratorFactory_::HLineConstIterator& kitSrc, double **pixelPtrCache)
     {
         quint8 **tmp = new quint8*[m_kw];
-        memcpy(tmp, pixelPtrCache, m_kw * sizeof(quint8 *));
+        memcpy(tmp, pixelPtrCache, m_kw * sizeof(double *));
         memmove(pixelPtrCache, pixelPtrCache + m_kw, (m_kw * m_kh - m_kw) * sizeof(quint8 *));
         memcpy(pixelPtrCache + m_kw * (m_kh - 1), tmp, m_kw * sizeof(quint8 *));
         delete[] tmp;
 
         qint32 i = m_kw * (m_kh - 1);
         while (!kitSrc.isDone()) {
-            memcpy(pixelPtrCache[i], kitSrc.oldRawData(), m_pixelSize);
+            for(quint32 k = 0; k < m_convolveChannelsNo; ++k)
+            {
+              const quint32 channelPos = m_convChannelList[k]->pos();
+              pixelPtrCache[i][k] = m_toDoubleFuncPtr[k](kitSrc.oldRawData(), channelPos);
+            }
             ++kitSrc;
             i++;
         }
@@ -308,7 +316,7 @@ private:
     quint32 m_cacheSize, m_pixelSize;
 
     qreal *m_kernelData;
-    quint8** m_pixelPtrCache, ** m_pixelPtrCacheCopy;
+    double** m_pixelPtrCache, ** m_pixelPtrCacheCopy;
     double* m_minClamp, *m_maxClamp, *m_absoluteOffset;
 
     qreal m_kernelFactor;

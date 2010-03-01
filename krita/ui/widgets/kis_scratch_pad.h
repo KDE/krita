@@ -22,12 +22,17 @@
 #include <QFrame>
 #include <QImage>
 #include <QColor>
+#include <QCursor>
+#include <QPoint>
 
 #include <KoColorProfile.h>
 #include <KoColor.h>
+#include <KoCompositeOp.h>
 
 #include <kis_paintop_preset.h>
 #include <kis_types.h>
+#include <kis_paint_information.h>
+#include <kis_painter.h>
 
 #include <krita_export.h>
 /**
@@ -82,7 +87,8 @@ private:
     enum Mode {
         PAINTING,
         HOVERING,
-        PANNING
+        PANNING,
+        PICKING
     };
 
     QPoint m_offset;
@@ -95,6 +101,12 @@ private:
     KisPaintOpPresetSP m_preset;
     BackgroundMode m_backgroundMode;
     const KoColorProfile* m_displayProfile;
+    QCursor m_cursor;
+    QPoint m_currentMousePosition;
+    KisPaintInformation m_previousPaintInformation;
+    KisPainter *m_painter;
+    double m_dragDist;
+    const KoCompositeOp *m_compositeOp;
 };
 
 #endif // KIS_SCRATCH_PAD_H

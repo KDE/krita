@@ -24,6 +24,7 @@
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 
+#include <kis_cursor.h>
 #include <kis_paint_device.h>
 
 KisScratchPad::KisScratchPad(QWidget *parent)
@@ -34,12 +35,12 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     , m_backgroundMode(SOLID_COLOR)
     , m_displayProfile(0)
 {
+    m_cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
 }
 
 KisScratchPad::~KisScratchPad() {
 
 }
-
 
 void KisScratchPad::setPaintColor(const KoColor& foregroundColor) {
 
@@ -48,6 +49,7 @@ void KisScratchPad::setPaintColor(const KoColor& foregroundColor) {
 
 void KisScratchPad::setPreset(KisPaintOpPresetSP preset) {
 
+    qDebug() << "setPreset" << preset->name();
     m_preset = preset;
 }
 

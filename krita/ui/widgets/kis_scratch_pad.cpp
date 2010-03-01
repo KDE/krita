@@ -20,13 +20,19 @@
 #include <QRect>
 #include <QPaintEvent>
 
+#include <KoColorSpace.h>
+#include <KoColorProfile.h>
+#include <KoColorSpaceRegistry.h>
+
 #include <kis_paint_device.h>
 
-KisScratchPad::KisScratchPad(QObject *parent)
-    : m_colorSpace(0)
+KisScratchPad::KisScratchPad(QWidget *parent)
+    : QWidget(parent)
+    , m_colorSpace(0)
     , m_backgroundColor(Qt::white)
     , m_toolMode(HOVERING)
     , m_backgroundMode(SOLID_COLOR)
+    , m_displayProfile(0)
 {
 }
 
@@ -57,14 +63,25 @@ void KisScratchPad::setBackgroundTile(const QImage& tile) {
 
 void KisScratchPad::setColorSpace(const KoColorSpace *colorSpace) {
 
+    qDebug() << "setColorSpace();" << colorSpace->name();
+
     m_colorSpace = colorSpace;
     m_paintDevice = new KisPaintDevice(colorSpace, "ScratchPad");
     clear();
 }
 
+void KisScratchPad::setDisplayProfile(const KoColorProfile *colorProfile) {
+
+    m_displayProfile = colorProfile;
+    update();
+}
+
 void KisScratchPad::clear() {
 
+    qDebug() << "clear";
+
     if (m_paintDevice) {
+        m_paintDevice->clear();
         switch(m_backgroundMode) {
         case TILED:
         case STRETCHED:
@@ -74,7 +91,7 @@ void KisScratchPad::clear() {
         default:
             KoColor c;
             c.fromQColor(m_backgroundColor);
-            m_paintDevice->fill(0, 0, width(), height(), c.data());
+            m_paintDevice->setDefaultPixel(c.data());
         }
     }
     update();
@@ -82,44 +99,55 @@ void KisScratchPad::clear() {
 
 void KisScratchPad::contextMenuEvent ( QContextMenuEvent * event ) {
 
+    qDebug() << "contextMenuEvent()";
+    QWidget::contextMenuEvent(event);
 }
 
 void KisScratchPad::keyPressEvent ( QKeyEvent * event ) {
 
+    qDebug() << "keyPressEvent();" << event->key();
+    QWidget::keyPressEvent(event);
 }
 
 void KisScratchPad::keyReleaseEvent ( QKeyEvent * event ) {
 
+    qDebug() << "keyReleaseEvent();" << event->key();
+    QWidget::keyReleaseEvent(event);
 }
 
 void KisScratchPad::mouseDoubleClickEvent ( QMouseEvent * event ) {
 
+    qDebug() << "mouseDoubleClickEvent();" << event->pos() << event->button();
+    QWidget::mouseDoubleClickEvent(event);
 }
 
 void KisScratchPad::mouseMoveEvent ( QMouseEvent * event ) {
 
+    qDebug() << "mouseMoveEvent();" << event->pos() << event->button();
+    QWidget::mouseMoveEvent(event);
 }
 
 void KisScratchPad::mousePressEvent ( QMouseEvent * event ) {
 
+    qDebug() << "mousePressEvent();" << event->pos() << event->button();
+    QWidget::mousePressEvent(event);
 }
 
 void KisScratchPad::mouseReleaseEvent ( QMouseEvent * event ) {
 
-}
-
-void KisScratchPad::moveEvent ( QMoveEvent * event ) {
-
+    qDebug() << "mouseReleaseEvent();" << event->pos() << event->button();
+    QWidget::mouseReleaseEvent(event);
 }
 
 void KisScratchPad::paintEvent ( QPaintEvent * event ) {
 
+    qDebug() << "paintEvent()" << event->rect();
     if (m_colorSpace == 0 || m_paintDevice == 0) {
         return;
     }
     QRect rc = event->rect();
     QPainter gc(this);
-    gc.drawImage(rc, m_paintDevice->convertToQImage(0,
+    gc.drawImage(rc, m_paintDevice->convertToQImage(m_displayProfile,
                                                     rc.x() + m_offset.x(),
                                                     rc.y() + m_offset.y(),
                                                     rc.width(),
@@ -129,12 +157,19 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
 
 void KisScratchPad::resizeEvent ( QResizeEvent * event ) {
 
+    qDebug() << "resizeEvent";
+
+    QWidget::resizeEvent(event);
 }
 
 void KisScratchPad::tabletEvent ( QTabletEvent * event ) {
 
+    qDebug() << "tabletEvent";
+    QWidget::tabletEvent(event);
 }
 
 void KisScratchPad::wheelEvent ( QWheelEvent * event ) {
 
+    qDebug() << "wheelEvent";
+    QWidget::wheelEvent(event);
 }

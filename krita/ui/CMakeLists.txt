@@ -143,6 +143,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_preset_widget.cpp 
     widgets/kis_progress_widget.cpp
     widgets/kis_selection_options.cc 
+    widgets/kis_scratch_pad.cpp
     widgets/kis_tree_view_popup.cc 
     widgets/kis_wdg_generator.cpp
     widgets/squeezedcombobox.cpp

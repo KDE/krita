@@ -23,16 +23,19 @@
 #include <QImage>
 #include <QColor>
 
+#include <KoColorProfile.h>
 #include <KoColor.h>
 
 #include <kis_paintop_preset.h>
 #include <kis_types.h>
+
+#include <krita_export.h>
 /**
  * A scratchpad is a painting canvas with only one zoomlevel and based on
  * a paint device, not on a KisImage. It can have a blank, tiled background or
  * a gradient background.
  */
-class KisScratchPad : public QWidget
+class KRITAUI_EXPORT KisScratchPad : public QWidget
 {
 
     Q_OBJECT
@@ -47,7 +50,7 @@ public:
         SOLID_COLOR
     };
 
-    KisScratchPad(QObject *parent);
+    KisScratchPad(QWidget *parent = 0);
     virtual ~KisScratchPad();
 
 public slots:
@@ -57,6 +60,7 @@ public slots:
     void setBackgroundColor(const QColor& backgroundColor);
     void setBackgroundTile(const QImage& tile);
     void setColorSpace(const KoColorSpace* colorSpace);
+    void setDisplayProfile(const KoColorProfile* colorProfile);
     void clear();
 
 protected:
@@ -68,7 +72,6 @@ protected:
     virtual void mouseMoveEvent ( QMouseEvent * event );
     virtual void mousePressEvent ( QMouseEvent * event );
     virtual void mouseReleaseEvent ( QMouseEvent * event );
-    virtual void moveEvent ( QMoveEvent * event );
     virtual void paintEvent ( QPaintEvent * event );
     virtual void resizeEvent ( QResizeEvent * event );
     virtual void tabletEvent ( QTabletEvent * event );
@@ -91,6 +94,7 @@ private:
     KisPaintDeviceSP m_paintDevice;
     KisPaintOpPresetSP m_preset;
     BackgroundMode m_backgroundMode;
+    const KoColorProfile* m_displayProfile;
 };
 
 #endif // KIS_SCRATCH_PAD_H

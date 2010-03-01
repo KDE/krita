@@ -18,6 +18,8 @@
 */
 
 #include <QFile>
+#include <QString>
+#include <QTextStream>
 #include <QProcess>
 #include <QTemporaryFile>
 
@@ -44,8 +46,27 @@ int main(int argc, char** argv)
                          "www.krita.org",
                          "submit@bugs.kde.org");
     KCmdLineArgs::init(argc, argv, &aboutData);
+    KCmdLineOptions options;
+
+    options.add("+preset", ki18n("preset to load"));
+    KCmdLineArgs::addCmdLineOptions(options);
+
     KApplication app;
+
     KisScratchPad *scratchpad = new KisScratchPad();
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    if (args->count() > 0 ) {
+        QString fileName = args->arg(0);
+        if (QFile::exists(fileName)) {
+            KisPaintOpPresetSP preset = new KisPaintOpPreset(fileName);
+            preset->load();
+            if (preset->valid()) {
+                scratchpad->setPreset(preset);
+            }
+        }
+    }
+
     scratchpad->setBackgroundColor(Qt::white);
     const KoColorProfile* profile = KoColorSpaceRegistry::instance()->rgb8()->profile();
     scratchpad->setDisplayProfile(profile);

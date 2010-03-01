@@ -27,13 +27,10 @@
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
-#include <kis_paint_action_type_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_mix_option.h>
 
-class KisBrushOptionWidget;
-class KisBrushOpSettings;
-class KisBrushOpSettingsWidget;
+class KisBrushBasedPaintOpSettings;
 
 class QWidget;
 class QPointF;
@@ -46,14 +43,13 @@ class KisBrushOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisBrushOp(const KisBrushOpSettings *settings, KisPainter * painter, KisImageWSP image);
+    KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisBrushOp();
 
     double paintAt(const KisPaintInformation& info);
 
 private:
     KisColorSource* m_colorSource;
-    const KisBrushOpSettings * settings;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
     KisPressureDarkenOption m_darkenOption;

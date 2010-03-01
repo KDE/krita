@@ -24,7 +24,6 @@
 #define KIS_BRUSHOP_SETTINGS_WIDGET_H_
 
 #include <kis_brush_based_paintop_options_widget.h>
-#include <kis_image.h>
 
 class KisBrushOptionWidget;
 

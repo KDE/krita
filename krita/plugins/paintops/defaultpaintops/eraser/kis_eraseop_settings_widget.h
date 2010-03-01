@@ -24,7 +24,6 @@
 #define KIS_ERASEOP_SETTINGS_WIDGET_H_
 
 #include <kis_brush_based_paintop_options_widget.h>
-#include <kis_image.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 

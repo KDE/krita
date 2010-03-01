@@ -21,7 +21,7 @@
  */
 
 #include "kis_eraseop_settings_widget.h"
-#include "kis_eraseop_settings.h"
+#include <kis_brush_based_paintop_settings.h>
 #include <kis_properties_configuration.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
@@ -43,7 +43,7 @@ KisEraseOpSettingsWidget::~KisEraseOpSettingsWidget()
 
 KisPropertiesConfiguration* KisEraseOpSettingsWidget::configuration() const
 {
-    KisEraseOpSettings *config = new KisEraseOpSettings();
+    KisBrushBasedPaintOpSettings *config = new KisBrushBasedPaintOpSettings();
     config->setOptionsWidget(const_cast<KisEraseOpSettingsWidget*>(this));
     config->setProperty("paintop", "eraser"); // XXX: make this a const id string
     writeConfiguration(config);

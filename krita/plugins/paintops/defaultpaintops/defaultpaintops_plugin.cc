@@ -27,22 +27,18 @@
 #include <kpluginfactory.h>
 
 #include "kis_simple_paintop_factory.h"
-#include "kis_airbrushop.h"
-#include "kis_airbrushop_settings.h"
-#include "kis_airbrushop_settings_widget.h"
 #include "kis_brushop.h"
-#include "kis_brushop_settings.h"
 #include "kis_brushop_settings_widget.h"
 #include "kis_duplicateop_factory.h"
 #include "kis_eraseop.h"
-#include "kis_eraseop_settings.h"
+#include "kis_eraseop_settings_widget.h"
 #include "kis_penop.h"
-#include "kis_penop_settings.h"
 #include "kis_penop_settings_widget.h"
 #include "kis_smudgeop.h"
-#include "kis_smudgeop_settings.h"
+#include "kis_smudgeop_settings_widget.h"
 #include "kis_global.h"
 #include "kis_paintop_registry.h"
+#include "kis_brush_based_paintop_settings.h"
 
 K_PLUGIN_FACTORY(DefaultPaintOpsPluginFactory, registerPlugin<DefaultPaintOpsPlugin>();)
 K_EXPORT_PLUGIN(DefaultPaintOpsPluginFactory("krita"))
@@ -54,11 +50,10 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QVariantList
     //setComponentData(DefaultPaintOpsPluginFactory::componentData());
 
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisAirbrushOp, KisAirbrushOpSettings, KisAirbrushOpSettingsWidget>("airbrush", i18n("Pixel Airbrush"), "krita-airbrush.png"));
-    r->add(new KisSimplePaintOpFactory<KisBrushOp, KisBrushOpSettings, KisBrushOpSettingsWidget>("paintbrush", i18n("Pixel Brush"), "krita-paintbrush.png"));
+    r->add(new KisSimplePaintOpFactory<KisBrushOp, KisBrushBasedPaintOpSettings, KisBrushOpSettingsWidget>("paintbrush", i18n("Pixel Brush"), "krita-paintbrush.png"));
     r->add(new KisDuplicateOpFactory);
-    r->add(new KisSimplePaintOpFactory<KisEraseOp, KisEraseOpSettings, KisEraseOpSettingsWidget>("eraser", i18n("Pixel Eraser"), "krita-eraser.png"));
-    r->add(new KisSimplePaintOpFactory<KisPenOp, KisPenOpSettings, KisPenOpSettingsWidget>("pencil", "Pixel Pencil", "krita-pencil.png"));
+    r->add(new KisSimplePaintOpFactory<KisEraseOp, KisBrushBasedPaintOpSettings, KisEraseOpSettingsWidget>("eraser", i18n("Pixel Eraser"), "krita-eraser.png"));
+    r->add(new KisSimplePaintOpFactory<KisPenOp, KisBrushBasedPaintOpSettings, KisPenOpSettingsWidget>("pencil", "Pixel Pencil", "krita-pencil.png"));
     r->add(new KisSimplePaintOpFactory<KisSmudgeOp, KisBrushBasedPaintOpSettings, KisSmudgeOpSettingsWidget>("smudge", i18n("Smudge Brush"), "krita-smudgebrush.png"));
 }
 

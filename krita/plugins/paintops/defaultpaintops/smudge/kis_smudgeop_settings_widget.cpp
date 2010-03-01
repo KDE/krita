@@ -21,7 +21,7 @@
  */
 
 #include "kis_smudgeop_settings_widget.h"
-#include "kis_smudgeop_settings.h"
+#include "kis_brush_based_paintop_settings.h"
 #include <kis_properties_configuration.h>
 #include <kis_paintop_options_widget.h>
 #include <kis_pressure_darken_option.h>
@@ -49,7 +49,7 @@ KisSmudgeOpSettingsWidget::~KisSmudgeOpSettingsWidget()
 
 KisPropertiesConfiguration* KisSmudgeOpSettingsWidget::configuration() const
 {
-    KisSmudgeOpSettings *config = new KisSmudgeOpSettings();
+    KisBrushBasedPaintOpSettings *config = new KisBrushBasedPaintOpSettings();
     config->setOptionsWidget(const_cast<KisSmudgeOpSettingsWidget*>(this));
     config->setProperty("paintop", "smudge"); // XXX: make this a const id string
     writeConfiguration(config);

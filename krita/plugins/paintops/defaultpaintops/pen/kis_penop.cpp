@@ -33,15 +33,10 @@
 #include <kis_global.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
-#include <kis_paintop.h>
-#include <kis_selection.h>
-#include <kis_brush_option_widget.h>
+#include <kis_brush_based_paintop_settings.h>
 
-#include <kis_penop_settings.h>
-
-KisPenOp::KisPenOp(const KisPenOpSettings *settings, KisPainter *painter, KisImageWSP image)
+KisPenOp::KisPenOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(settings, painter)
-        , settings(settings)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);

@@ -22,16 +22,7 @@
 
 #include "kis_smudgeop.h"
 
-#include <string.h>
-
 #include <QRect>
-#include <QWidget>
-#include <QLayout>
-#include <QLabel>
-#include <QCheckBox>
-#include <QDomElement>
-#include <QHBoxLayout>
-#include <qtoolbutton.h>
 
 #include <kis_debug.h>
 
@@ -39,20 +30,16 @@
 #include <KoColorTransformation.h>
 #include <KoColor.h>
 #include <KoCompositeOp.h>
-#include <KoInputDevice.h>
 
 #include <kis_brush.h>
 #include <kis_global.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
-#include <kis_paintop.h>
-#include <kis_properties_configuration.h>
 #include <kis_selection.h>
 #include <kis_brush_based_paintop_settings.h>
 
 KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(settings, painter)
-        , settings(settings)
         , m_firstRun(true)
         , m_target(0)
         , m_srcdev(0)

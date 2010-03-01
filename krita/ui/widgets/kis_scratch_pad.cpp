@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- * Copyright 2010 (C) Boudewijn Rempt <boud@valdyas.org>
- *
+ * Copyright 2010 (C) Boudewijn Rempt <boud@valdyas.org> *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -17,16 +16,17 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "kis_scratch_pad.h"
+
 #include <QRect>
 #include <QPaintEvent>
+
 #include <kis_paint_device.h>
 
 KisScratchPad::KisScratchPad(QObject *parent)
-    : m_toolMode(HOVERING)
-    , m_colorSpace(0)
-    , m_backgroundMode(SOLID_COLOR)
+    : m_colorSpace(0)
     , m_backgroundColor(Qt::white)
-    , m_dirty(false)
+    , m_toolMode(HOVERING)
+    , m_backgroundMode(SOLID_COLOR)
 {
 }
 
@@ -45,7 +45,7 @@ void KisScratchPad::setPreset(KisPaintOpPresetSP preset) {
     m_preset = preset;
 }
 
-void KisScratchPad::setBackgroundColor(const KoColor& backgroundColor) {
+void KisScratchPad::setBackgroundColor(const QColor& backgroundColor) {
 
     m_backgroundColor = backgroundColor;
 }
@@ -118,28 +118,17 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
         return;
     }
     QRect rc = event->rect();
-    if (m_dirty) {
-
-        QPainter gc(m_image);
-        gc.drawImage(rc, m_paintDevice->convertToQImage(0,
-                                                        rc.x() + m_offset.x(),
-                                                        rc.y() + m_offset.y(),
-                                                        rc.width(),
-                                                        rc.height()));
-        gc.end();
-    }
     QPainter gc(this);
-    gc.drawImage(rc, m_image, rc);
+    gc.drawImage(rc, m_paintDevice->convertToQImage(0,
+                                                    rc.x() + m_offset.x(),
+                                                    rc.y() + m_offset.y(),
+                                                    rc.width(),
+                                                    rc.height()));
     gc.end();
 }
 
 void KisScratchPad::resizeEvent ( QResizeEvent * event ) {
 
-    m_image = QImage(size(), QImage::Format_ARGB32);
-    QPainter p(&m_image);
-    p.fillRect(m_image.rect(), Qt::red);
-    p.end();
-    update();
 }
 
 void KisScratchPad::tabletEvent ( QTabletEvent * event ) {

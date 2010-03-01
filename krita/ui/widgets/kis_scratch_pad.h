@@ -21,9 +21,11 @@
 
 #include <QFrame>
 #include <QImage>
+#include <QColor>
 
 #include <KoColor.h>
 
+#include <kis_paintop_preset.h>
 #include <kis_types.h>
 /**
  * A scratchpad is a painting canvas with only one zoomlevel and based on
@@ -52,7 +54,7 @@ public slots:
 
     void setPaintColor(const KoColor& foregroundColor);
     void setPreset(KisPaintOpPresetSP preset);
-    void setBackgroundColor(const KoColor& backgroundColor);
+    void setBackgroundColor(const QColor& backgroundColor);
     void setBackgroundTile(const QImage& tile);
     void setColorSpace(const KoColorSpace* colorSpace);
     void clear();
@@ -86,10 +88,9 @@ private:
     QImage m_backgroundTile;
     QColor m_backgroundColor;
     Mode m_toolMode;
-    QImage m_image;
     KisPaintDeviceSP m_paintDevice;
     KisPaintOpPresetSP m_preset;
-    BackgroundMode m_backgroundMode = SOLID_COLOR;
+    BackgroundMode m_backgroundMode;
 };
 
 #endif // KIS_SCRATCH_PAD_H

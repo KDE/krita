@@ -25,6 +25,7 @@
 class KisPaintActionTypeOption;
 class KisSoftOpOption;
 class KisSoftSizeOption;
+class KisHSVOption;
 
 class KisSoftPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {
@@ -41,6 +42,7 @@ public:
     KisPaintActionTypeOption* m_paintActionTypeOption;
     KisSoftOpOption* m_softOption;
     KisSoftSizeOption * m_sizeOption;
+    KisHSVOption * m_hsvOption;
 };
 
 #endif

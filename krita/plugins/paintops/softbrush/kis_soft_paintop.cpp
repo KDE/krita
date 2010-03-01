@@ -41,13 +41,27 @@
 
 #include <kis_softop_option.h>
 #include <kis_soft_size_option.h>
-
+#include "kis_hsv_option.h"
 
 KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp( painter )
     , m_settings( settings )
     , m_image ( image )
 {
+    m_amount = 0.0;
+    
+    m_hAmount = settings->getDouble(HSV_HUE_INK_AMOUNT);
+    m_sAmount = settings->getDouble(HSV_SATURATION_INK_AMOUNT);
+    m_vAmount = settings->getDouble(HSV_VALUE_INK_AMOUNT);
+    
+    m_hcurve = settings->getCubicCurve(HSV_HUE_CURVE);
+    m_scurve = settings->getCubicCurve(HSV_SATURATION_CURVE);
+    m_vcurve = settings->getCubicCurve(HSV_VALUE_CURVE);
+    
+    m_hmode = settings->getInt(HSV_HMODE);
+    m_smode = settings->getInt(HSV_SMODE);
+    m_vmode = settings->getInt(HSV_VMODE);
+    
     // load shared settings like diameter, size, etc.
     m_sizeProperties.readOptionSetting(settings);
     m_radius = qRound(0.5 * m_sizeProperties.diameter);
@@ -101,6 +115,55 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
         m_dab->clear();
     }
 
+    KoColor color(painter()->paintColor());
+    
+    QHash<QString, QVariant> params;
+    params["h"] = 0.0;
+    params["s"] = 0.0;
+    params["v"] = 0.0;
+
+    switch (m_hmode){
+        case 0:
+            params["h"] = m_hcurve.value( m_amount / (qreal)m_hAmount ) ;
+            break;
+        case 1:
+            params["h"] = -m_hcurve.value( m_amount / (qreal)m_hAmount ) ;
+            break;
+        case 2:
+            params["h"] = drand48() * 2.0 - 1.0;
+        default: break;
+    }
+    
+    switch (m_smode){
+        case 0:
+            params["s"] = m_scurve.value( m_amount / (qreal)m_sAmount ) ;
+            break;
+        case 1:
+            params["s"] = -m_scurve.value( m_amount / (qreal)m_sAmount ) ;
+            break;
+        case 2:
+            params["s"] = drand48() * 2.0 - 1.0;
+    }
+    
+    switch (m_vmode){
+        case 0:
+            params["v"] = m_vcurve.value( m_amount / (qreal)m_vAmount ) ;
+            break;
+        case 1:
+            params["v"] = -m_vcurve.value( m_amount / (qreal)m_vAmount ) ;
+            break;
+        case 2:
+            params["v"] = drand48() * 2.0 - 1.0;
+        default: break;
+    }
+
+
+
+    KoColorTransformation* transfo;
+    transfo = m_dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
+    transfo->transform(color.data(), color.data() , 1);
+    m_amount += 1.0;
+    
     if (m_brushType == CURVE){
         KisFixedPaintDeviceSP dab = cachedDab(painter()->device()->colorSpace());
 
@@ -123,7 +186,7 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
         splitCoordinate(pos.x(), &x, &subPixelX);
         splitCoordinate(pos.y(), &y, &subPixelY);
         
-        m_curveMask.mask(dab,painter()->paintColor(),m_sizeProperties.scale,rotation,subPixelX,subPixelY);
+        m_curveMask.mask(dab,color,m_sizeProperties.scale,rotation,subPixelX,subPixelY);
         painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
         return m_spacing;
     }

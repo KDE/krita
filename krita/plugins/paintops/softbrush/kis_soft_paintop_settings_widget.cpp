@@ -28,6 +28,7 @@
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_rotation_option.h>
 
+#include "kis_hsv_option.h"
 
 KisSoftPaintOpSettingsWidget:: KisSoftPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpOptionsWidget(parent)
@@ -35,9 +36,11 @@ KisSoftPaintOpSettingsWidget:: KisSoftPaintOpSettingsWidget(QWidget* parent)
     m_paintActionTypeOption = new KisPaintActionTypeOption();
     m_softOption =  new KisSoftOpOption();
     m_sizeOption = new KisSoftSizeOption();
+    m_hsvOption = new KisHSVOption();
     
     addPaintOpOption(m_sizeOption);
     addPaintOpOption(m_softOption);
+    addPaintOpOption(m_hsvOption);
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(m_paintActionTypeOption);
 }

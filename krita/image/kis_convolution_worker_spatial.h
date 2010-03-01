@@ -139,6 +139,7 @@ public:
             typename _IteratorFactory_::HLineIterator hitDst = _IteratorFactory_::createHLineIterator(this->m_painter->device(), dstPos.x(), dstPos.y(), areaSize.width(), dataRect);
             typename _IteratorFactory_::HLineIterator hitSrc = _IteratorFactory_::createHLineIterator(src, srcPos.x(), srcPos.y(), areaSize.width(), dataRect);
 
+            typename _IteratorFactory_::HLineConstIterator khitSrc = _IteratorFactory_::createHLineConstIterator(src, col - m_khalfWidth, row + m_khalfHeight, m_kw, dataRect);
             for (int prow = 0; prow < areaSize.height(); ++prow)
             {
                 // reload cache from copy
@@ -160,11 +161,12 @@ public:
                 }
 
                 row++;
+                khitSrc.nextRow();
                 hitDst.nextRow();
                 hitSrc.nextRow();
                 col = srcPos.x();
 
-                moveKernelDown(src, dataRect, m_pixelPtrCacheCopy, col, row);
+                moveKernelDown(khitSrc, m_pixelPtrCacheCopy);
 
                 if (hasProgressUpdater) {
                     this->m_progress->setProgress(prow * maxProgressValue);
@@ -190,6 +192,7 @@ public:
                 for (quint32 i = 0; i < m_cacheSize; ++i)
                     memcpy(m_pixelPtrCache[i], m_pixelPtrCacheCopy[i], m_pixelSize);
 
+                typename _IteratorFactory_::HLineConstIterator khitSrc = _IteratorFactory_::createHLineConstIterator(src, col - m_khalfWidth, row + m_khalfHeight, m_kw, dataRect);
                 for (int prow = 0; prow < areaSize.height(); prow++)
                 {
                     // write original channel values
@@ -197,9 +200,10 @@ public:
                     convolveCache(vitDst.rawData());
 
                     ++row;
+                    khitSrc.nextRow();
                     ++vitDst;
                     ++vitSrc;
-                    moveKernelDown(src, dataRect, m_pixelPtrCache, col, row);
+                    moveKernelDown(khitSrc, m_pixelPtrCache);
                 }
 
                 ++col;
@@ -258,7 +262,6 @@ public:
         }
 
         qint32 i = m_kw - 1;
-//         typename _IteratorFactory_::VLineConstIterator kitSrc = _IteratorFactory_::createVLineConstIterator(src, col + m_khalfWidth, row - m_khalfHeight, m_kh, _dataRect);
         while (!kitSrc.isDone()) {
             memcpy(pixelPtrCache[i], kitSrc.oldRawData(), m_pixelSize);
             ++kitSrc;
@@ -266,7 +269,7 @@ public:
         }
     }
 
-    inline void moveKernelDown(const KisPaintDeviceSP src, const QRect& _dataRect, quint8 **pixelPtrCache, quint32 col, quint32 row)
+    inline void moveKernelDown(typename _IteratorFactory_::HLineConstIterator& kitSrc, quint8 **pixelPtrCache)
     {
         quint8 **tmp = new quint8*[m_kw];
         memcpy(tmp, pixelPtrCache, m_kw * sizeof(quint8 *));
@@ -275,7 +278,6 @@ public:
         delete[] tmp;
 
         qint32 i = m_kw * (m_kh - 1);
-        typename _IteratorFactory_::HLineConstIterator kitSrc = _IteratorFactory_::createHLineConstIterator(src, col - m_khalfWidth, row + m_khalfHeight, m_kw, _dataRect);
         while (!kitSrc.isDone()) {
             memcpy(pixelPtrCache[i], kitSrc.oldRawData(), m_pixelSize);
             ++kitSrc;

@@ -46,7 +46,7 @@ int main(int argc, char** argv)
     KCmdLineArgs::init(argc, argv, &aboutData);
     KApplication app;
     KisScratchPad *scratchpad = new KisScratchPad();
-    scratchpad->setBackgroundColor(Qt::red);
+    scratchpad->setBackgroundColor(Qt::white);
     const KoColorProfile* profile = KoColorSpaceRegistry::instance()->rgb8()->profile();
     scratchpad->setDisplayProfile(profile);
     scratchpad->setColorSpace(KoColorSpaceRegistry::instance()->rgb16());

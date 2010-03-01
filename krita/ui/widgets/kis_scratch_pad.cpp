@@ -89,7 +89,7 @@ void KisScratchPad::clear() {
         case GRADIENT:
         case SOLID_COLOR:
         default:
-            KoColor c;
+            KoColor c(m_paintDevice->colorSpace());
             c.fromQColor(m_backgroundColor);
             m_paintDevice->setDefaultPixel(c.data());
         }

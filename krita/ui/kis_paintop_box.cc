@@ -164,17 +164,26 @@ void KisPaintopBox::updatePaintops()
     m_displayedOps.clear();
     m_cmbPaintops->clear();
 
+    QStringList paintopNames;
+    QMap<QString, KoID> paintopMap;
     foreach(const KoID & paintopId, m_paintops) {
-        if (KisPaintOpRegistry::instance()->userVisible(paintopId, m_colorspace)) {
-            QPixmap pm = paintopPixmap(paintopId);
+        paintopNames << paintopId.name();
+        paintopMap[paintopId.name()] = paintopId;
+    }
+    qSort(paintopNames);
+
+    foreach(QString paintopName, paintopNames) {
+        KoID paintop = paintopMap[paintopName];
+        if (KisPaintOpRegistry::instance()->userVisible(paintop, m_colorspace)) {
+            QPixmap pm = paintopPixmap(paintop);
 
             if (pm.isNull()) {
                 pm = QPixmap(16, 16);
                 pm.fill();
             }
 
-            m_cmbPaintops->addItem(QIcon(pm), paintopId.name());
-            m_displayedOps.append(paintopId);
+            m_cmbPaintops->addItem(QIcon(pm), paintopName);
+            m_displayedOps.append(paintop);
         }
     }
 

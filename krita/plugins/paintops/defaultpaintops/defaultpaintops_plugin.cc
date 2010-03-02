@@ -54,7 +54,7 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QVariantList
     r->add(new KisDuplicateOpFactory);
     r->add(new KisSimplePaintOpFactory<KisEraseOp, KisBrushBasedPaintOpSettings, KisEraseOpSettingsWidget>("eraser", i18n("Pixel Eraser"), "krita-eraser.png"));
     r->add(new KisSimplePaintOpFactory<KisPenOp, KisBrushBasedPaintOpSettings, KisPenOpSettingsWidget>("pencil", "Pixel Pencil", "krita-pencil.png"));
-    r->add(new KisSimplePaintOpFactory<KisSmudgeOp, KisBrushBasedPaintOpSettings, KisSmudgeOpSettingsWidget>("smudge", i18n("Smudge Brush"), "krita-smudgebrush.png"));
+    r->add(new KisSimplePaintOpFactory<KisSmudgeOp, KisBrushBasedPaintOpSettings, KisSmudgeOpSettingsWidget>("smudge", i18n("Smudge Brush"), "krita-smudgebrush.png","smudge-finger"));
 }
 
 DefaultPaintOpsPlugin::~DefaultPaintOpsPlugin()

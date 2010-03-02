@@ -118,6 +118,12 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
 {
     setObjectName(name);
     QVBoxLayout * layout = new QVBoxLayout(this);
+    
+    KLineEdit * searchLineEdit = new KLineEdit( this );
+    searchLineEdit->setClickMessage(i18n("Search preset"));
+    searchLineEdit->setClearButtonShown(true);
+    layout->addWidget(searchLineEdit);
+    
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisPaintOpPreset>(rserver);
     m_chooser = new KoResourceItemChooser(adapter, this);
@@ -127,10 +133,6 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     m_chooser->setRowHeight(60);
     m_chooser->setItemDelegate(new KisPresetDelegate(this));
     layout->addWidget(m_chooser);
-    KLineEdit * searchLineEdit = new KLineEdit( this );
-    searchLineEdit->setClickMessage(i18n("Search preset"));
-    searchLineEdit->setClearButtonShown(true);
-    layout->addWidget(searchLineEdit);
     
     connect(searchLineEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(searchTextChanged(const QString&)));

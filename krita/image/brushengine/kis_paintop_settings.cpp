@@ -41,6 +41,7 @@
 struct KisPaintOpSettings::Private {
     KisNodeSP node;
     QPointer<KisPaintOpSettingsWidget> settingsWidget;
+    QString modelName;
 };
 
 KisPaintOpSettings::KisPaintOpSettings()
@@ -161,12 +162,15 @@ void KisPaintOpSettings::changePaintOpSize(qreal x, qreal y)
     }
 }
 
-#if defined(HAVE_OPENGL)
 QString KisPaintOpSettings::modelName() const
 {
-    return "";
+    return d->modelName;
 }
-#endif
+
+void KisPaintOpSettings::setModelName(const QString & modelName)
+{
+    d->modelName = modelName;
+}
 
 KisPaintOpSettingsWidget* KisPaintOpSettings::optionsWidget() const
 {

@@ -21,6 +21,7 @@
 
 #include <KoInputDevice.h>
 #include <kis_paintop_factory.h>
+#include <kis_paintop_settings.h>
 
 /**
  *
@@ -28,10 +29,12 @@
 template <class Op, class OpSettings, class OpSettingsWidget> class KisSimplePaintOpFactory  : public KisPaintOpFactory {
 
 public:
-    KisSimplePaintOpFactory(const QString& id, const QString& name, const QString& pixmap)
+    KisSimplePaintOpFactory(const QString& id, const QString& name,
+                            const QString& pixmap, const QString& model = QString())
         : m_id(id)
         , m_name(name)
         , m_pixmap(pixmap)
+        , m_model(model)
         {
         }
 
@@ -52,7 +55,9 @@ public:
     KisPaintOpSettingsSP settings(KisImageWSP image)
     {
         Q_UNUSED(image);
-        return new OpSettings();
+        KisPaintOpSettingsSP settings = new OpSettings();
+        settings->setModelName(m_model);
+        return settings;
     }
 
     KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent)
@@ -76,6 +81,7 @@ private:
     QString m_id;
     QString m_name;
     QString m_pixmap;
+    QString m_model;
 };
 
 #endif // KIS_SIMPLE_PAINTOP_FACTORY_H

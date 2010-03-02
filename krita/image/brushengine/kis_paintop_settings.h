@@ -137,10 +137,16 @@ public:
     
     // XXX: I'd like to be able to get at the size as well
 
-#if defined(HAVE_OPENGL)
+    /**
+     * @return filename of the 3D brush model, empty if no brush is set
+     */
     virtual QString modelName() const;
-#endif
 
+     /**
+     * Set filename of 3D brush model. By default no brush is set
+     */
+    void setModelName(const QString & modelName);
+    
 protected:
      /**
      * @return the option widget of the paintop (can be 0 is no option widgets is set)

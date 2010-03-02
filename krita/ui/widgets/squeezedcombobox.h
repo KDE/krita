@@ -73,6 +73,13 @@ public:
     bool contains(const QString & text) const;
 
     /**
+     *
+     * Returns index of a orinal text, -1 if the text isn't found
+     * @param text the original (not-squeezed) text to search for
+     */
+    qint32 findOriginalText(const QString & text) const;
+    
+    /**
      * This inserts a item to the list. See QComboBox::insertItem()
      * for detaills. Please do not use QComboBox::insertItem() to this
      * widget, as that will fail.

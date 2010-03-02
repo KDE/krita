@@ -29,6 +29,7 @@
 #include <QApplication>
 #include <QToolTip>
 #include <QResizeEvent>
+#include <kdebug.h>
 
 SqueezedComboBox::SqueezedComboBox(QWidget *parent, const char *name)
         : QComboBox(parent)
@@ -65,6 +66,17 @@ bool SqueezedComboBox::contains(const QString& _text) const
     return false;
 }
 
+qint32 SqueezedComboBox::findOriginalText(const QString& text) const
+{
+    for(int i = 0; i < m_originalItems.size(); i++) {
+        if(m_originalItems.value(i) == text) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
 QSize SqueezedComboBox::sizeHint() const
 {
     ensurePolished();
@@ -97,8 +109,7 @@ void SqueezedComboBox::addSqueezedItem(const QString& newItem)
 
 void SqueezedComboBox::setCurrent(const QString& itemText)
 {
-    QString squeezedText = squeezeText(itemText);
-    qint32 itemIndex = findText(squeezedText);
+    qint32 itemIndex = findOriginalText(itemText);
     if (itemIndex >= 0) {
         setCurrentIndex(itemIndex);
     }

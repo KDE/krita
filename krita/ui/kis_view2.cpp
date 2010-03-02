@@ -541,7 +541,6 @@ void KisView2::slotLoadingFinished()
 
 void KisView2::createActions()
 {
-    actionCollection()->addAction(KStandardAction::FullScreen, "full_screen", shell(), SLOT(viewFullscreen(bool)));
     actionCollection()->addAction(KStandardAction::Preferences,  "preferences", this, SLOT(slotPreferences()));
 
     KAction* action = new KAction(i18n("Edit Palette..."), this);

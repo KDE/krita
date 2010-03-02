@@ -32,6 +32,7 @@ public:
     }
 
     double paintAt(const KisPaintInformation&) {
+        return 0.0;
     }
     double spacing(double&, double&, double, double) const {
         return 0.5;

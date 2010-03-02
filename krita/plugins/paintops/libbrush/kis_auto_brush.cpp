@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004,2007-2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,6 +36,7 @@
 struct KisAutoBrush::Private {
     KisMaskGenerator* shape;
     qreal angle;
+    mutable QVector<quint8> precomputedQuarter;
 };
 
 KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, double angle)
@@ -122,36 +124,96 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     double centerX = dstWidth  * 0.5 - 1.0 + subPixelX;
     double centerY = dstHeight * 0.5 - 1.0 + subPixelY;
 
-    double cosa = cos(angle);
-    double sina = sin(angle);
-            
-    for (int y = 0; y < dstHeight; y++) {
-        for (int x = 0; x < dstWidth; x++) {
-
-            double x_ = (x - centerX) * invScaleX;
-            double y_ = (y - centerY) * invScaleY;
-            double maskX = cosa * x_ - sina * y_;
-            double maskY = sina * x_ + cosa * y_;
-
-            if (coloringInformation) {
-                if (color) {
-                    memcpy(dabPointer, color, pixelSize);
-                } else {
-                    memcpy(dabPointer, coloringInformation->color(), pixelSize);
-                    coloringInformation->nextColumn();
-                }
+    // the results differ, sometimes this code is faster, sometimes it is not
+    // more investigation is probably needed
+    // valueAt is costly similary to interpolation is some cases
+    if (false && isBrushSymmetric(angle) && (dynamic_cast<PlainColoringInformation*>(coloringInformation))){
+        // round eg. 14.3 to 15 so that we can interpolate
+        // we have to add one pixel because of subpixel precision (see the centerX, centerY computation) 
+        // and add one pixel because of interpolation
+        int halfWidth = qRound((dstWidth - centerX) ) + 2;
+        int halfHeight = qRound((dstHeight - centerY) ) + 2;
+        
+        int size = halfWidth * halfHeight;
+        if (d->precomputedQuarter.size() != size)
+        {
+            d->precomputedQuarter.resize(size);
+        }
+        
+        // precompute the table for interpolation 
+        int pos = 0;
+        for (int y = 0; y < halfHeight; y++){
+            for (int x = 0; x < halfWidth; x++, pos++){
+                double maskX = x * invScaleX;
+                double maskY = y * invScaleY;
+                d->precomputedQuarter[pos] = d->shape->valueAt(maskX, maskY);
             }
-            cs->setOpacity(dabPointer, quint8(OPACITY_OPAQUE_U8 - d->shape->valueAt(maskX, maskY)), 1);
-            dabPointer += pixelSize;
         }
-        if (!color && coloringInformation) {
-            coloringInformation->nextRow();
-        }
-        //TODO: this never happens probably? 
-        if (dstWidth < rowWidth) {
-            dabPointer += (pixelSize * (rowWidth - dstWidth));
-        }
+        
+        for (int y = 0; y < dstHeight; y++) {
+            for (int x = 0; x < dstWidth; x++) {
+
+                double maskX = (x - centerX);
+                double maskY = (y - centerY);
+
+                if (coloringInformation) {
+                    if (color) {
+                        memcpy(dabPointer, color, pixelSize);
+                    } else {
+                        memcpy(dabPointer, coloringInformation->color(), pixelSize);
+                        coloringInformation->nextColumn();
+                    }
+                }
+                cs->setOpacity(dabPointer, quint8( OPACITY_OPAQUE_U8 - interpolatedValueAt(maskX, maskY,d->precomputedQuarter,halfWidth) ), 1);
+                dabPointer += pixelSize;
+            }//endfor x
+            //printf("\n");
+
+            if (!color && coloringInformation) {
+                coloringInformation->nextRow();
+            }
+            //TODO: this never happens probably? 
+            if (dstWidth < rowWidth) {
+                dabPointer += (pixelSize * (rowWidth - dstWidth));
+            }
+            
+        }//endfor y
+        
     }
+    else
+    {
+        double cosa = cos(angle);
+        double sina = sin(angle);
+        
+        for (int y = 0; y < dstHeight; y++) {
+            for (int x = 0; x < dstWidth; x++) {
+
+                double x_ = (x - centerX) * invScaleX;
+                double y_ = (y - centerY) * invScaleY;
+                double maskX = cosa * x_ - sina * y_;
+                double maskY = sina * x_ + cosa * y_;
+
+                if (coloringInformation) {
+                    if (color) {
+                        memcpy(dabPointer, color, pixelSize);
+                    } else {
+                        memcpy(dabPointer, coloringInformation->color(), pixelSize);
+                        coloringInformation->nextColumn();
+                    }
+                }
+                
+                cs->setOpacity(dabPointer, quint8(OPACITY_OPAQUE_U8 - d->shape->valueAt(maskX, maskY)), 1);
+                dabPointer += pixelSize;
+            }//endfor x
+            if (!color && coloringInformation) {
+                coloringInformation->nextRow();
+            }
+            //TODO: this never happens probably? 
+            if (dstWidth < rowWidth) {
+                dabPointer += (pixelSize * (rowWidth - dstWidth));
+            }
+        }//endfor y
+    }//else 
 }
 
 
@@ -197,3 +259,38 @@ qreal KisAutoBrush::angle() const
 {
     return d->angle;
 }
+
+
+bool KisAutoBrush::isBrushSymmetric(double angle) const
+{       
+    // small brushes compute directly   
+    if (d->shape->height() < 3 ) return false;          
+    // even spikes are symmetric        
+    if ((d->shape->spikes() % 2) != 0) return false;    
+    // main condition, if not rotated or use optimization for rotated circles - rotated circle is circle again          
+    if ( angle == 0.0 || ( ( d->shape->type() == KisMaskGenerator::CIRCLE ) && ( d->shape->width() == d->shape->height() ) ) ) return true;     
+    // in other case return false       
+    return false;
+}
+
+
+quint8 KisAutoBrush::interpolatedValueAt(double x, double y,const QVector<quint8> &precomputedQuarter,int width) const 
+{
+    x = qAbs(x);
+    y = qAbs(y);
+    
+    double x_i = floor(x);         
+    double x_f = x - x_i;       
+    double x_f_r = 1.0 - x_f;   
+
+    double y_i = floor(y);      
+    double y_f = fabs(y - y_i);         
+    double y_f_r = 1.0 - y_f;   
+    
+    return (x_f_r * y_f_r * valueAt(x_i , y_i, precomputedQuarter, width) +        
+            x_f   * y_f_r * valueAt(x_i + 1, y_i, precomputedQuarter, width) +     
+            x_f_r * y_f   * valueAt(x_i,  y_i + 1, precomputedQuarter, width) +    
+            x_f   * y_f   * valueAt(x_i + 1,  y_i + 1, precomputedQuarter, width));
+}
+
+

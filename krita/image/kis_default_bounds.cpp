@@ -43,6 +43,7 @@ KisDefaultBounds::KisDefaultBounds(const KisDefaultBounds& rhs)
 KisDefaultBounds& KisDefaultBounds::operator=(const KisDefaultBounds& rhs)
 {
     m_d->image = rhs.m_d->image;
+    return *this;
 }
 
 KisDefaultBounds::~KisDefaultBounds()

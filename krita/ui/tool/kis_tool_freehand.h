@@ -28,6 +28,7 @@
 // OpenGL
 #include <opengl/kis_opengl.h>
 
+class KAction;
 
 class KoPointerEvent;
 class KoCanvasBase;
@@ -95,6 +96,11 @@ private:
     QPointF adjustPosition(const QPointF& point);
     void queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* previousJob);
 
+private slots:
+
+    void increaseBrushSize();
+    void decreaseBrushSize();
+
 protected:
 
     KisPaintInformation m_previousPaintInformation;
@@ -135,7 +141,7 @@ private:
     QPoint  m_originalPos;
 
     // for painting
-    QRectF oldOutlineRect;
+    QRectF m_oldOutlineRect;
     bool m_paintedOutline;
     QRegion m_incrementalDirtyRegion;
     QList<FreehandPaintJob*> m_paintJobs;
@@ -146,6 +152,9 @@ private:
     QPointF documentToViewport(const QPointF &p);
     QPointF m_lastPosition;
     QTime m_strokeTimeMeasure;
+
+    KAction* m_increaseBrushSize;
+    KAction* m_decreaseBrushSize;
 };
 
 

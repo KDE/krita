@@ -34,9 +34,8 @@
 #include <QThreadPool>
 #include <QWidget>
 
-#include <kis_debug.h>
-#include "kis_config.h"
 #include <klocale.h>
+#include <kaction.h>
 
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
@@ -59,10 +58,11 @@
 #include <recorder/kis_recorded_path_paint_action.h>
 #include <kis_selection.h>
 #include <kis_paintop_preset.h>
-
+#include <kis_debug.h>
 #include <kis_transaction.h>
 
 // Krita/ui
+#include "kis_config.h"
 #include <opengl/kis_opengl.h>
 #include "canvas/kis_canvas2.h"
 #include "kis_cursor.h"
@@ -101,6 +101,16 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_prevxTilt = 0.0;
     m_prevyTilt = 0.0;
 #endif
+
+    m_increaseBrushSize = new KAction(i18n("Increase Brush Size"), this);
+    m_increaseBrushSize->setShortcut(Qt::Key_Period);
+    connect(m_increaseBrushSize, SIGNAL(activated()), SLOT(increaseBrushSize()));
+    addAction("increase_brush_size", m_increaseBrushSize);
+
+    m_decreaseBrushSize = new KAction(i18n("Decrease Brush Size"), this);
+    m_decreaseBrushSize->setShortcut(Qt::Key_Comma);
+    connect(m_decreaseBrushSize, SIGNAL(activated()), SLOT(decreaseBrushSize()));
+    addAction("decrease_brush_size", m_decreaseBrushSize);
 
     KisCanvas2* canvas2 = static_cast<KisCanvas2*>(canvas);
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), canvas2, SIGNAL(favoritePaletteCalled(const QPoint&)));
@@ -275,8 +285,8 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
     }
 
-    if (!oldOutlineRect.isEmpty()) {
-        canvas()->updateCanvas(oldOutlineRect); // erase the old guy
+    if (!m_oldOutlineRect.isEmpty()) {
+        canvas()->updateCanvas(m_oldOutlineRect); // erase the old guy
     }
 
     m_mousePos = e->point;
@@ -292,9 +302,9 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     }
 #endif
 
-    oldOutlineRect = currentPaintOpPreset()->settings()->paintOutlineRect(m_mousePos, currentImage(), outlineMode);
-    if (!oldOutlineRect.isEmpty()) {
-        canvas()->updateCanvas(oldOutlineRect); // erase the old guy
+    m_oldOutlineRect = currentPaintOpPreset()->settings()->paintOutlineRect(m_mousePos, currentImage(), outlineMode);
+    if (!m_oldOutlineRect.isEmpty()) {
+        canvas()->updateCanvas(m_oldOutlineRect); // erase the old guy
     }
 
 }
@@ -702,6 +712,18 @@ QPointF KisToolFreehand::documentToViewport(const QPointF &p)
     return viewportPoint;
 }
 
+void KisToolFreehand::increaseBrushSize()
+{
+    currentPaintOpPreset()->settings()->changePaintOpSize(1, 0);
+    m_oldOutlineRect.adjust(-1, -1, 1, 1);
+    canvas()->updateCanvas(m_oldOutlineRect);
+}
+
+void KisToolFreehand::decreaseBrushSize()
+{
+    currentPaintOpPreset()->settings()->changePaintOpSize(-1, 0);
+    canvas()->updateCanvas(m_oldOutlineRect);
+}
 
 #include "kis_tool_freehand.moc"
 

@@ -468,9 +468,6 @@ signals:
      */
     void sigPostLayersChanged(KisGroupLayerSP rootLayer);
 
-    void sigLayerMoved(KisLayerSP layer);
-    void sigLayerRemoved(KisLayerSP layer);
-
     /**
      *  Emitted whenever an action has caused the image to be
      *  recomposited.

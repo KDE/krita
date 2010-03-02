@@ -173,16 +173,6 @@ void KisImage::aboutToAddANode(KisNode *parent, int index)
 
 void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 {
-    KisLayer * layer = dynamic_cast<KisLayer*>(parent->at(index).data());
-    if (layer) {
-        // The addition of temporary layers is not interesting
-        KoProperties props;
-        props.setProperty("temporary", false);
-
-        if (!layer->check(props)) {
-            emit sigLayerMoved(layer);
-        }
-    }
     emit sigNodeHasBeenAdded(parent, index);
 }
 
@@ -195,17 +185,6 @@ void KisImage::nodeHasBeenRemoved(KisNode *parent, int index)
 {
     // XXX: Temporarily for compatibility
     emit sigNodeHasBeenRemoved(parent, index);
-
-    KisLayer * l = dynamic_cast<KisLayer*>(parent->at(index).data());
-    if (l) {
-        // The removal of temporary layers is not interesting
-        KoProperties props;
-        props.setProperty("temporary", false);
-
-        if (!l->check(props)) {
-            emit sigLayerRemoved(l);
-        }
-    }
 }
 
 void KisImage::aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex)
@@ -218,20 +197,6 @@ void KisImage::aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex)
 void KisImage::nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex)
 {
     Q_UNUSED(oldIndex);
-
-    KisLayer * l = dynamic_cast<KisLayer*>(parent->at(newIndex).data());
-    if (l) {
-
-        // The moving of temporary layers is not interesting
-
-        KoProperties props;
-        props.setProperty("temporary", false);
-
-        if (!l->check(props)) {
-
-            emit sigLayerMoved(l);
-        }
-    }
 }
 
 

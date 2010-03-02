@@ -134,8 +134,7 @@ void KoResourceModel::resourceAdded(KoResource *resource)
 
 void KoResourceModel::resourceRemoved(KoResource *resource)
 {
-    m_resourceAdapter->resources().indexOf(resource);
-
+    Q_UNUSED(resource);
     reset();
 }
 

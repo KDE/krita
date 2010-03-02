@@ -747,10 +747,11 @@ void KisView2::resizeEvent ( QResizeEvent * event )
 {
     dbgUI << "resize: " << event->oldSize() << " to " << event->size() << "main window" << mainWindow()->size();
 
-    if (mainWindow()->size().height() > QApplication::desktop()->availableGeometry(this).height()) {
-        mainWindow()->resize(mainWindow()->width(),
-                             QApplication::desktop()->availableGeometry(this).height());
-    }
+//     // This code makes the full screen mode unusuable, it force the size of the view, (the reason is that QApplication::desktop()->availableGeometry(this) return the size of the screen minus the size taken by a panel, while in full screen mode the window cover a bigger area), and further more it does not prevent my window to increase its size out of the screen
+//     if (mainWindow()->size().height() > QApplication::desktop()->availableGeometry(this).height()) {
+//         mainWindow()->resize(mainWindow()->width(),
+//                              QApplication::desktop()->availableGeometry(this).height());
+//     }
 }
 
 

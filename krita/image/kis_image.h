@@ -507,6 +507,16 @@ signals:
      */
     void sigNodeHasBeenRemoved(KisNode *parent, int index);
 
+    /**
+     * Inform the model we're about to move a layer.
+     */
+    void sigAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
+    
+    /**
+     * Inform the model we're done moving a layer.
+     */
+    void sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
+
 public slots:
 
     void slotProjectionUpdated(const QRect & rc);

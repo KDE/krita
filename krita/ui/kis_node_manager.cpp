@@ -58,6 +58,8 @@ struct KisNodeManager::Private {
     KisNodeSP activeNode;
     KisNodeManager* self;
     KisNodeCommandsAdapter* commandsAdapter;
+    KisNodeSP activeNodeBeforeMove;
+    
     void slotLayersChanged(KisGroupLayerSP);
 };
 
@@ -76,6 +78,8 @@ KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
     m_d->self = this;
     m_d->commandsAdapter = new KisNodeCommandsAdapter(view);
     connect(m_d->view->image(), SIGNAL(sigPostLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged(KisGroupLayerSP)));
+    connect(m_d->view->image(), SIGNAL(sigAboutToMoveNode(KisNode*,int,int)), SLOT(aboutToMoveNode()));
+    connect(m_d->view->image(), SIGNAL(sigNodeHasBeenMoved(KisNode*,int,int)), SLOT(nodeHasBeenMoved()));
 }
 
 KisNodeManager::~KisNodeManager()
@@ -485,6 +489,19 @@ void KisNodeManager::mirrorNodeY()
         m_d->layerManager->mirrorLayerY();
     } else if (node->inherits("KisMask")) {
         m_d->maskManager->mirrorMaskY();
+    }
+}
+
+void KisNodeManager::aboutToMoveNode()
+{
+    m_d->activeNodeBeforeMove = activeNode();
+}
+
+void KisNodeManager::nodeHasBeenMoved()
+{
+    if (m_d->activeNodeBeforeMove) {
+        activateNode(m_d->activeNodeBeforeMove);
+        m_d->activeNodeBeforeMove = 0;
     }
 }
 

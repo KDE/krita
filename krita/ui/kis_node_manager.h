@@ -129,6 +129,10 @@ public slots:
      * belonging to the current layer.
      */
     void nodeToBottom();
+private slots:
+    // Those slots are used to ensure that the node that was selected remains selected after a move
+    void aboutToMoveNode();
+    void nodeHasBeenMoved();
 
 private:
     void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active);

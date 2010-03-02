@@ -189,14 +189,12 @@ void KisImage::nodeHasBeenRemoved(KisNode *parent, int index)
 
 void KisImage::aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex)
 {
-    Q_UNUSED(parent);
-    Q_UNUSED(oldIndex);
-    Q_UNUSED(newIndex);
+    emit sigAboutToMoveNode(parent, oldIndex, newIndex);
 }
 
 void KisImage::nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex)
 {
-    Q_UNUSED(oldIndex);
+    emit sigNodeHasBeenMoved(parent, oldIndex, newIndex);
 }
 
 

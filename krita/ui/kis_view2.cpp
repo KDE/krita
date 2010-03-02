@@ -541,7 +541,7 @@ void KisView2::slotLoadingFinished()
 
 void KisView2::createActions()
 {
-    actionCollection()->addAction(KStandardAction::FullScreen, "full_screen", this, SLOT(slotUpdateFullScreen(bool)));
+    actionCollection()->addAction(KStandardAction::FullScreen, "full_screen", shell(), SLOT(viewFullscreen(bool)));
     actionCollection()->addAction(KStandardAction::Preferences,  "preferences", this, SLOT(slotPreferences()));
 
     KAction* action = new KAction(i18n("Edit Palette..."), this);
@@ -641,22 +641,6 @@ void KisView2::disconnectCurrentImage()
             image()->disconnect(m_d->statusBar);
 
         m_d->canvas->disconnectCurrentImage();
-    }
-}
-
-void KisView2::slotUpdateFullScreen(bool toggle)
-{
-    if (KoView::shell()) {
-
-        Qt::WindowStates newState = KoView::shell()->windowState();
-
-        if (toggle) {
-            newState |= Qt::WindowFullScreen;
-        } else {
-            newState &= ~Qt::WindowFullScreen;
-        }
-
-        KoView::shell()->setWindowState(newState);
     }
 }
 

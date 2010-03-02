@@ -100,8 +100,6 @@ private:
     void pan(QMouseEvent* event);
     void endPan(QMouseEvent* event);
 
-    void update(const QRegion& region, const QPoint& delta);
-
     enum Mode {
         PAINTING,
         HOVERING,

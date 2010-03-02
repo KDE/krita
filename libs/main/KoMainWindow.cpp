@@ -211,6 +211,7 @@ public:
     QMap<QDockWidget*, bool> dockWidgetVisibilityMap;
     KoDockerManager *dockerManager;
     QList<QDockWidget*> dockWidgets;
+    QList<QDockWidget*> hiddenDockwidgets; // List of dockers hiddent by the call to hideDocker
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)
@@ -1036,6 +1037,11 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 void KoMainWindow::closeEvent(QCloseEvent *e)
 {
     if (queryClose()) {
+        // Reshow the docker that were temporarely hidden before saving settings
+        foreach(QDockWidget* dw, d->hiddenDockwidgets) {
+            dw->show();
+        }
+        d->hiddenDockwidgets.clear();
         saveWindowSettings();
         setRootDocument(0);
         if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
@@ -1878,6 +1884,29 @@ QList<KoCanvasObserverBase*> KoMainWindow::canvasObservers()
 KoDockerManager * KoMainWindow::dockerManager() const
 {
     return d->dockerManager;
+}
+
+void KoMainWindow::toggleDockersVisibility(bool v) const
+{
+    Q_UNUSED(v);
+    qDebug() << "toggleDockersVisibility";
+    if (d->hiddenDockwidgets.isEmpty()){
+        foreach(QObject* widget, children()) {
+            if (widget->inherits("QDockWidget")) {
+                QDockWidget* dw = static_cast<QDockWidget*>(widget);
+                if (dw->isVisible()) {
+                    dw->hide();
+                    d->hiddenDockwidgets << dw;
+                }
+            }
+        }
+    }
+    else {
+        foreach(QDockWidget* dw, d->hiddenDockwidgets) {
+            dw->show();
+        }
+        d->hiddenDockwidgets.clear();
+    }
 }
 
 KRecentFilesAction *KoMainWindow::recentAction() const

@@ -172,7 +172,6 @@ public:
     KisPerspectiveGridManager * perspectiveGridManager;
     KisPaintingAssistantsManager* paintingAssistantManager;
     KoFavoriteResourceManager* favoriteResourceManager;
-    QVector<QDockWidget*> hiddenDockwidgets;
 };
 
 
@@ -188,13 +187,17 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
     connect(m_d->totalRefresh, SIGNAL(triggered()), this, SLOT(slotTotalRefresh()));
 
-    m_d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
-    m_d->toggleDockers->setChecked(true);
-    actionCollection()->addAction("toggledockers", m_d->toggleDockers);
+    if (shell()) {
+        m_d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
+        m_d->toggleDockers->setChecked(true);
+        actionCollection()->addAction("toggledockers", m_d->toggleDockers);
 
 
-    m_d->toggleDockers->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
-    connect(m_d->toggleDockers, SIGNAL(toggled(bool)), this, SLOT(toggleDockers(bool)));
+        m_d->toggleDockers->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
+        connect(m_d->toggleDockers, SIGNAL(toggled(bool)), shell(), SLOT(toggleDockersVisibility(bool)));
+    } else {
+        m_d->toggleDockers = 0;
+    }
 
     setComponentData(KisFactory2::componentData(), false);
 
@@ -755,29 +758,6 @@ void KisView2::slotTotalRefresh()
 {
     KisConfig cfg;
     m_d->canvas->resetCanvas(cfg.useOpenGL());
-}
-
-void KisView2::toggleDockers(bool toggle)
-{
-    Q_UNUSED(toggle);
-    if (m_d->hiddenDockwidgets.isEmpty()){
-        foreach(QObject* widget, mainWindow()->children()) {
-            if (widget->inherits("QDockWidget")) {
-                QDockWidget* dw = static_cast<QDockWidget*>(widget);
-                if (dw->isVisible()) {
-                    dw->hide();
-                    m_d->hiddenDockwidgets << dw;
-                }
-            }
-        }
-    }
-    else {
-        foreach(QDockWidget* dw, m_d->hiddenDockwidgets) {
-            dw->show();
-        }
-        m_d->hiddenDockwidgets.clear();
-    }
-
 }
 
 void KisView2::resizeEvent ( QResizeEvent * event )

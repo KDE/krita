@@ -322,6 +322,10 @@ public slots:
 
     void slotProgress(int value);
 
+    /**
+     * Hide the dockers
+     */
+    void toggleDockersVisibility(bool v) const;
 
 private:
 

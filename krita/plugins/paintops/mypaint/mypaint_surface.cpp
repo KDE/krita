@@ -150,9 +150,9 @@ bool MyPaintSurface::draw_dab (float x, float y,
 
                         int idx = (yp*TILE_SIZE + xp)*4;
                         rgba_p[idx+3] = opa_a + (opa_b*rgba_p[idx+3])/(1<<15);
-                        rgba_p[idx+0] = (opa_a*color_r_ + opa_b*rgba_p[idx+0])/(1<<15);
+                        rgba_p[idx+2] = (opa_a*color_r_ + opa_b*rgba_p[idx+0])/(1<<15);
                         rgba_p[idx+1] = (opa_a*color_g_ + opa_b*rgba_p[idx+1])/(1<<15);
-                        rgba_p[idx+2] = (opa_a*color_b_ + opa_b*rgba_p[idx+2])/(1<<15);
+                        rgba_p[idx+0] = (opa_a*color_b_ + opa_b*rgba_p[idx+2])/(1<<15);
                     }
                 }
             }

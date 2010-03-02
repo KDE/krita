@@ -26,11 +26,11 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabCustom">
       <attribute name="title">
-       <string>Current Preset Definition</string>
+       <string>Active Settings</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
        <item row="4" column="0" colspan="2">

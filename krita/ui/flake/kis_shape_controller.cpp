@@ -158,7 +158,7 @@ void KisShapeController::setImage(KisImageWSP image)
         }
         foreach(KoShape* shape, parentLessShapes)
         {
-            removeShape(shape);
+            m_d->removeShapeAndChildrenFromMap(shape);
         }
         Q_ASSERT(m_d->nodeShapes.empty());
         m_d->nodeShapes.clear();

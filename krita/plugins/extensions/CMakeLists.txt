@@ -20,13 +20,6 @@ add_subdirectory( tonemapping )
 add_subdirectory( dockers )
 add_subdirectory( extensionsmanager )
 
-macro_optional_find_package(GMM)
-macro_log_feature(GMM_FOUND "Gmm++" "Generic C++ template library for sparse, dense and skyline matrices" "http://home.gna.org/getfem/download.html" FALSE "" "Required by the Krita panorama plugin")
-
-if(GMM_FOUND AND NOT MSVC)
-     add_subdirectory( panorama )
-endif(GMM_FOUND AND NOT MSVC)
-
 if(OPENEXR_FOUND)
   add_subdirectory( painterlyframework )
 endif(OPENEXR_FOUND)

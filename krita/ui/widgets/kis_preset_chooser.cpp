@@ -78,7 +78,8 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 class KisPresetProxyModel : public QSortFilterProxyModel
 {
 public:
-    KisPresetProxyModel(QObject * parent = 0) : QSortFilterProxyModel(parent) {}
+    KisPresetProxyModel(QObject * parent = 0)
+        : QSortFilterProxyModel(parent), m_showAll(false){}
     virtual ~KisPresetProxyModel() {}
 
     ///Reimplemented
@@ -92,7 +93,8 @@ public:
             return false;
         
         KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(index.internalPointer());
-        return (preset->paintOp() == m_paintopID && preset->name().contains(m_nameFilter, Qt::CaseInsensitive));
+        return ((preset->paintOp() == m_paintopID || m_showAll) &&
+                preset->name().contains(m_nameFilter, Qt::CaseInsensitive));
     }
     
     ///Set id for paintop to be accept by the proxy model, if not filter is set all
@@ -107,23 +109,23 @@ public:
     {
         m_nameFilter = nameFilter;
     }
+    
+    void setShowAll(bool show)
+    {
+        m_showAll = show;
+    }
 
 private:
     KoID m_paintopID;
     QString m_nameFilter;
+    bool m_showAll;
 };
 
 KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
         : QWidget(parent)
 {
     setObjectName(name);
-    QVBoxLayout * layout = new QVBoxLayout(this);
-    
-    KLineEdit * searchLineEdit = new KLineEdit( this );
-    searchLineEdit->setClickMessage(i18n("Search preset"));
-    searchLineEdit->setClearButtonShown(true);
-    layout->addWidget(searchLineEdit);
-    
+    QVBoxLayout * layout = new QVBoxLayout(this);  
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisPaintOpPreset>(rserver);
     m_chooser = new KoResourceItemChooser(adapter, this);
@@ -134,9 +136,6 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     m_chooser->setItemDelegate(new KisPresetDelegate(this));
     layout->addWidget(m_chooser);
     
-    connect(searchLineEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(searchTextChanged(const QString&)));
-            
     connect(m_chooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
 }
@@ -153,8 +152,13 @@ void KisPresetChooser::setPresetFilter(const KoID& paintopID)
 
 void KisPresetChooser::searchTextChanged(const QString& searchString)
 {
-    kDebug() << "text " << searchString;
     m_presetProxy->setPresetNameFilter(searchString);
+    m_presetProxy->invalidate();
+}
+
+void KisPresetChooser::setShowAll(bool show)
+{
+    m_presetProxy->setShowAll(show);
     m_presetProxy->invalidate();
 }
 

@@ -193,6 +193,10 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
 {
     KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(resource);
     dbgUI << "preset " << preset->name() << "selected";
+    
+    if(preset->paintOp() != currentPaintop()) {
+        setCurrentPaintop(preset->paintOp());
+    }
 
     m_optionWidget->setConfiguration(preset->settings());
     slotUpdatePreset();

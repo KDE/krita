@@ -60,12 +60,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
 
     m_d->uiWdgPaintOpPresets.setupUi(this);
 
-    // TODO 2.2 Disables preset collections
-//     QWidget * collectionWidget = m_d->uiWdgPaintOpPresets.tabPresets->widget(1);
-//     m_d->uiWdgPaintOpPresets.tabPresets->removeTab(1);
-//     delete collectionWidget;
-//     m_d->uiWdgPaintOpPresets.bnSave->setEnabled(false);
-
     m_d->layout = new QGridLayout(m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer);
     m_d->layout->setSizeConstraint(QLayout::SetFixedSize);
 
@@ -77,6 +71,12 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
 
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
+            
+    connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(textChanged(const QString&)),
+            m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(searchTextChanged(const QString&)));
+            
+    connect(m_d->uiWdgPaintOpPresets.showAllCheckBox, SIGNAL(toggled(bool)),
+            m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(setShowAll(bool)));
 }
 
 

@@ -96,16 +96,37 @@
       <attribute name="title">
        <string>Preset Collection</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
+      <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
-        <widget class="KisPresetChooser" name="wdgPresetChooser" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>4</horstretch>
-           <verstretch>4</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
+        <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1" columnminimumwidth="0,0">
+         <item row="0" column="0">
+          <widget class="KLineEdit" name="searchBar">
+           <property name="clickMessage">
+            <string>Search Preset</string>
+           </property>
+           <property name="showClearButton" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QCheckBox" name="showAllCheckBox">
+           <property name="text">
+            <string>Show all</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2">
+          <widget class="KisPresetChooser" name="wdgPresetChooser" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>4</horstretch>
+             <verstretch>4</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -114,6 +135,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
   <customwidget>
    <class>KisPresetChooser</class>
    <extends>QWidget</extends>

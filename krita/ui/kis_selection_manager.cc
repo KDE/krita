@@ -146,7 +146,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
     m_clear = collection->addAction(KStandardAction::Clear,  "clear", this, SLOT(clear()));
 
-    m_delete = new KAction(KIcon("edit-delete"), i18n("D&elete"), this);
+    m_delete = new KAction(KIcon("edit-delete"), i18n("D&elete Selection"), this);
     collection->addAction("delete", m_delete);
     m_delete->setShortcut(QKeySequence(Qt::Key_Delete));
     connect(m_delete, SIGNAL(triggered()), this, SLOT(deleteSelection()));
@@ -156,7 +156,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_reselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_D));
     connect(m_reselect, SIGNAL(triggered()), this, SLOT(reselect()));
 
-    m_invert  = new KAction(i18n("&Invert"), this);
+    m_invert  = new KAction(i18n("&Invert Selection"), this);
     collection->addAction("invert", m_invert);
     m_invert->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
     connect(m_invert, SIGNAL(triggered()), this, SLOT(invert()));
@@ -755,7 +755,7 @@ void KisSelectionManager::grow(qint32 xradius, qint32 yradius)
     if (xradius <= 0 || yradius <= 0)
         return;
 
-    KisSelectionTransaction *t = new KisSelectionTransaction(i18n("Grow"), image, m_view->selection());
+    KisSelectionTransaction *t = new KisSelectionTransaction(i18n("Grow Selection"), image, m_view->selection());
 
     max = new quint8* [layerSize.width() + 2 * xradius];
     buf = new quint8* [yradius + 1];
@@ -867,7 +867,7 @@ void KisSelectionManager::shrink(qint32 xradius, qint32 yradius, bool edge_lock)
     if (!m_view->selection()) return;
     KisPixelSelectionSP selection = m_view->selection()->getOrCreatePixelSelection();
 
-    KisSelectionTransaction *t = new KisSelectionTransaction(i18n("Shrink"), image, m_view->selection());
+    KisSelectionTransaction *t = new KisSelectionTransaction(i18n("Shrink Selection"), image, m_view->selection());
     Q_CHECK_PTR(t);
 
     //determine the layerSize
@@ -1216,7 +1216,7 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
     //determine the layerSize
     QRect layerSize = image->bounds();
 
-    KisSelectionTransaction *t = new KisSelectionTransaction(i18n("Border"), image, m_view->selection());
+    KisSelectionTransaction *t = new KisSelectionTransaction(i18n("Border Selection"), image, m_view->selection());
     Q_CHECK_PTR(t);
 
     quint8  *buf[3];
@@ -1434,7 +1434,7 @@ void KisSelectionManager::feather(qint32 radius)
         return;
 
     KisPixelSelectionSP selection = m_view->selection()->getOrCreatePixelSelection();
-    KisSelectionTransaction * t = new KisSelectionTransaction(i18n("Feather..."), image, m_view->selection());
+    KisSelectionTransaction * t = new KisSelectionTransaction(i18n("Feather Selection"), image, m_view->selection());
     Q_CHECK_PTR(t);
 
     // compute horizontal kernel

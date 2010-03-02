@@ -60,7 +60,7 @@ ColorRange::ColorRange(QObject *parent, const QVariantList &)
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/colorrange.rc"),
                    true);
         m_view = dynamic_cast<KisView2*>(parent);
-        QAction *action  = new KAction(i18n("&Color Range..."), this);
+        QAction *action  = new KAction(i18n("Select from Color Range..."), this);
         actionCollection()->addAction("colorrange", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
         m_view->selectionManager()->addSelectionAction(action);

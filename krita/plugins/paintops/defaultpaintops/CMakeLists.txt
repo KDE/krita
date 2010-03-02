@@ -51,7 +51,5 @@ install( FILES
 
 install( FILES  
     smudge/smudge-finger.obj 
-    smudge/smudge-finger.mtl
-    airbrush/airbrush.obj
-    airbrush/airbrush.mtl DESTINATION ${DATA_INSTALL_DIR}/krita/brushmodels )
+    smudge/smudge-finger.mtl DESTINATION ${DATA_INSTALL_DIR}/krita/brushmodels )
 

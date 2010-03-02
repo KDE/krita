@@ -40,10 +40,17 @@ public:
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
     
+    
+    QString modelName() const{
+        return "airbrush";
+    }
+    
     bool paintIncremental();
     void setQImage(const QImage &image){ m_image = image; }
     QImage image() const;
-private:
+
+    
+    private:
     QImage m_image;
 
 };

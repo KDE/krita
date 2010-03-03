@@ -41,8 +41,6 @@ void KisIteratorsPixelTest::test(int width, int height)
         } while(it->nextPixel());
         it->nextRow();
     }
-    delete it;
-    it = 0;
     KisHLineIteratorPixel it2 = dev.createHLineIterator(0,0,width);
     data = 0;
     for(int y = 0; y < height; ++y)

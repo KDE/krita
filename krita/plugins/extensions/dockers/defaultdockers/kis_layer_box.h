@@ -63,11 +63,8 @@ public:
     KisLayerBox();
     virtual ~KisLayerBox();
 
-    virtual bool eventFilter(QObject *object, QEvent *event);
-
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-
 private slots:
 
     void setImage(KisImageWSP image);

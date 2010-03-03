@@ -20,26 +20,14 @@
 #define _KIS_ITERATOR_NG_H_
 
 #include <krita_export.h>
-
-/**
- * Iterates over the line of a paint device.
- */
-class KRITAIMAGE_EXPORT KisHLineIteratorNG {
+class KRITAIMAGE_EXPORT KisBaseConstIteratorNG {
   public:
-    virtual ~KisHLineIteratorNG() {}
+    virtual ~KisBaseConstIteratorNG() {}
     /**
      * Move to the next pixel
      * @return false if there is no more pixel in the line
      */
     virtual bool nextPixel() = 0;
-    /**
-     * Move to the next row
-     */
-    virtual void nextRow() = 0;
-    /**
-     * @return a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
-     */
-    virtual quint8 * rawData() = 0;
     /**
      * @return a pointer to the pixel data as it was at the moment of the last memento creation.
      */
@@ -47,9 +35,40 @@ class KRITAIMAGE_EXPORT KisHLineIteratorNG {
     /**
      * @return return number of consequential numbers of pixels, useful for optimization 
      */
-    virtual qint32 nConseqHPixels() const = 0;
-    
+    virtual qint32 nConseqPixels() const = 0;
+    /**
+     * Move to the next pixels
+     */
     virtual void nextPixels(qint32 n) = 0;
+};
+
+class KRITAIMAGE_EXPORT KisBaseIteratorNG : public virtual KisBaseConstIteratorNG {
+  public:
+    virtual ~KisBaseIteratorNG() {}
+    /**
+     * @return a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
+     */
+    virtual quint8 * rawData() = 0;
+};
+
+/**
+ * Iterates over the line of a paint device.
+ */
+class KRITAIMAGE_EXPORT KisHLineConstIteratorNG : public virtual KisBaseConstIteratorNG {
+  public:
+    virtual ~KisHLineConstIteratorNG() {}
+    /**
+     * Move to the next row
+     */
+    virtual void nextRow() = 0;
+};
+
+/**
+ * Iterates over the line of a paint device.
+ */
+class KRITAIMAGE_EXPORT KisHLineIteratorNG : public KisHLineConstIteratorNG, public KisBaseIteratorNG {
+  public:
+    virtual ~KisHLineIteratorNG() {}
 };
 
 #endif

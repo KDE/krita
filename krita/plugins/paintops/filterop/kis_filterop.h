@@ -24,8 +24,6 @@
 #define KIS_FILTEROP_H_
 
 #include "kis_brush_based_paintop.h"
-#include <klocale.h>
-#include <QDialog>
 #include <KoColorSpace.h>
 #include <kis_pressure_size_option.h>
 
@@ -39,7 +37,7 @@ class KisFilterOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisFilterOp(const KisFilterOpSettings *settings, KisPainter * painter);
+    KisFilterOp(const KisFilterOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisFilterOp();
 
     double paintAt(const KisPaintInformation& info);

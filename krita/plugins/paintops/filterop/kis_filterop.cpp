@@ -22,18 +22,6 @@
 
 #include "kis_filterop.h"
 
-#include <string.h>
-
-#include <QRect>
-#include <QWidget>
-#include <QLayout>
-#include <QLabel>
-#include <QCheckBox>
-#include <QDomElement>
-#include <QHBoxLayout>
-#include <qtoolbutton.h>
-
-#include <kis_image.h>
 #include <kis_debug.h>
 
 #include <KoColorTransformation.h>
@@ -45,22 +33,16 @@
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_brush.h>
-#include <kis_datamanager.h>
 #include <kis_global.h>
-#include <kis_paint_device.h>
 #include <kis_painter.h>
-#include <kis_paintop.h>
+#include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
 #include <kis_selection.h>
-#include <kis_brush_option_widget.h>
-#include <kis_paintop_options_widget.h>
 #include <kis_pressure_size_option.h>
 #include <kis_filter_option.h>
 #include <kis_filterop_settings.h>
-#include <kis_filterop_settings_widget.h>
 
-
-KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter)
+KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(settings, painter)
         , settings(settings)
         , m_filterConfiguration(0)

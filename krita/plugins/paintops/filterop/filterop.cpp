@@ -25,8 +25,10 @@
 #include <kpluginfactory.h>
 
 #include <kis_paintop_registry.h>
-
-#include "kis_filterop_factory.h"
+#include "kis_simple_paintop_factory.h"
+#include "kis_filterop.h"
+#include "kis_filterop_settings.h"
+#include "kis_filterop_settings_widget.h"
 
 K_PLUGIN_FACTORY(FilterOpFactory, registerPlugin<FilterOp>();)
 K_EXPORT_PLUGIN(FilterOpFactory("krita"))
@@ -38,7 +40,7 @@ FilterOp::FilterOp(QObject *parent, const QVariantList &)
 
     // This is not a gui plugin; only load it when the doc is created.
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisFilterOpFactory);
+    r->add(new KisSimplePaintOpFactory<KisFilterOp, KisFilterOpSettings, KisFilterOpSettingsWidget>("filter", i18n("Filter Brush"), "krita-filterop.png"));
 
 }
 

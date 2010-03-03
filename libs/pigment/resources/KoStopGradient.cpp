@@ -169,7 +169,6 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
         }
 
         if ( !(*buffer.colorSpace() == *colorSpace())) {
-            qDebug() << buffer.colorSpace()->id() << " " << colorSpace()->id();
             buffer = KoColor(colorSpace());
         }
 

@@ -131,8 +131,8 @@ void KisHLineIteratorBenchmark::benchmarkReadWriteBytes2()
     KisPaintDevice dab(m_colorSpace);
     dab.fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT, c.data());
 
-    KisHLineIteratorNG *writeIterator = m_device->createHLineIterator2(0,0,TEST_IMAGE_WIDTH);
-    KisHLineIteratorNG *readIterator = dab.createHLineIterator2(0,0,TEST_IMAGE_WIDTH);
+    KisHLineIteratorSP writeIterator = m_device->createHLineIteratorNG(0,0,TEST_IMAGE_WIDTH);
+    KisHLineIteratorSP readIterator = dab.createHLineIteratorNG(0,0,TEST_IMAGE_WIDTH);
     
     QBENCHMARK{
         for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {

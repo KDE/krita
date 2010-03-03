@@ -131,10 +131,6 @@ bool KoDocumentSectionDelegate::editorEvent(QEvent *e, QAbstractItemModel *model
             d->view->setCurrentIndex(index);
             return false;
         }
-
-        if (!(me->modifiers() & Qt::ControlModifier) && !(me->modifiers() & Qt::ShiftModifier)) {
-            d->view->setCurrentIndex(index);
-        }
     }
     else if (e->type() == QEvent::ToolTip) {
         QHelpEvent *he = static_cast<QHelpEvent*>(e);

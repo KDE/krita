@@ -709,13 +709,13 @@ KisVLineConstIteratorSP KisPaintDevice::createVLineConstIteratorNG(qint32 x, qin
 KisRectIteratorSP KisPaintDevice::createRectIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h)
 {
     m_d->cache.invalidate();
-    return new KisRectIterator2(m_datamanager.data(), x, y, w, h, true);
+    return new KisRectIterator2(m_datamanager.data(), x, y, w, h, m_d->x, m_d->y, true);
 }
 
 KisRectConstIteratorSP KisPaintDevice::createRectConstIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h) const
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
-    return new KisRectIterator2(dm, x, y, w, h, false);
+    return new KisRectIterator2(dm, x, y, w, h, m_d->x, m_d->y, false);
 }
 
 KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection) const
@@ -798,14 +798,14 @@ KisRandomConstAccessorPixel KisPaintDevice::createRandomConstAccessor(qint32 x, 
 KisRandomAccessorSP KisPaintDevice::createRandomAccessorNG(qint32 x, qint32 y)
 {
     m_d->cache.invalidate();
-    return new KisRandomAccessor2(m_datamanager.data(), x, y, true);
+    return new KisRandomAccessor2(m_datamanager.data(), x, y, m_d->x, m_d->y, true);
 }
 
 KisRandomConstAccessorSP KisPaintDevice::createRandomConstAccessorNG(qint32 x, qint32 y) const
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
 
-    return new KisRandomAccessor2(dm, x, y, false);
+    return new KisRandomAccessor2(dm, x, y, m_d->x, m_d->y, false);
 }
 
 KisRandomSubAccessorPixel KisPaintDevice::createRandomSubAccessor(const KisSelection * selection) const

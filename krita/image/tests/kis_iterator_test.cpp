@@ -331,7 +331,22 @@ void KisIteratorTest::randomAccessor(const KoColorSpace * colorSpace)
     }
     QCOMPARE(dev.extent(), QRect(0, 0, 128, 128));
     QCOMPARE(dev.exactBounds(), QRect(0, 0, 128, 128));
+    
+    dev.clear();
+    dev.setX(10);
+    dev.setY(-15);
 
+    {
+        KisRandomAccessorPixel ac = dev.createRandomAccessor(0, 0);
+        for (int y = 0; y < 128; ++y) {
+            for (int x = 0; x < 128; ++x) {
+                ac.moveTo(x, y);
+                memcpy(ac.rawData(), bytes, colorSpace->pixelSize());
+            }
+        }
+        QCOMPARE(dev.extent(), QRect(-54, -15, 192, 192));
+        QCOMPARE(dev.exactBounds(), QRect(0, 0, 128, 128));
+    }
     delete[] bytes;
 }
 

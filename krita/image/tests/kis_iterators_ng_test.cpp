@@ -317,7 +317,7 @@ void KisIteratorTest::randomAccessor(const KoColorSpace * colorSpace)
             memcpy(ac->rawData(), bytes, colorSpace->pixelSize());
         }
     }
-    QCOMPARE(dev.extent(), QRect(10, -15, 128, 128));
+    QCOMPARE(dev.extent(), QRect(-54, -15, 192, 192));
     QCOMPARE(dev.exactBounds(), QRect(0, 0, 128, 128));
 
     delete[] bytes;

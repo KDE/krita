@@ -24,14 +24,16 @@
 
 KisRectIterator2::KisRectIterator2(KisTiledDataManager *dataManager,
         qint32 left, qint32 top,
-        qint32 width, qint32 height,
+        qint32 width, qint32 height, qint32 offsetX, qint32 offsetY,
         bool writable)
-        : KisRectIteratorNG(), KisBaseIterator(dataManager, writable),
-        m_left(left),
-        m_top(top),
+        : KisRectIteratorNG(), KisBaseIterator(dataManager, writable, offsetX, offsetY),
         m_width(width),
         m_height(height)
 {
+    left -= offsetX;
+    top -= offsetY;
+    m_left = left;
+    m_top = top;
 
     Q_ASSERT(dataManager != 0);
     m_x = left;

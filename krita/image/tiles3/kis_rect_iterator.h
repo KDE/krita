@@ -31,7 +31,7 @@ class KRITAIMAGE_EXPORT KisRectIterator2 : public KisRectIteratorNG, KisBaseIter
 
 public:
     /// do not call constructor directly use factory method in KisDataManager instead.
-    KisRectIterator2(KisTiledDataManager *dataManager, qint32  x, qint32  y, qint32  w, qint32  h, bool writable);
+    KisRectIterator2(KisTiledDataManager *dataManager, qint32  x, qint32  y, qint32  w, qint32  h, qint32 offsetX, qint32 offsetY, bool writable);
     ~KisRectIterator2();
 
 public:

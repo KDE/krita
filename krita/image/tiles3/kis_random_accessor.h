@@ -40,7 +40,7 @@ class KisRandomAccessor2 : public KisRandomAccessorNG
 
 public:
 
-    KisRandomAccessor2(KisTiledDataManager *ktm, qint32 x, qint32 y, bool writable);
+    KisRandomAccessor2(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetX, qint32 offsetY, bool writable);
     KisRandomAccessor2(const KisTiledRandomAccessor& lhs);
     ~KisRandomAccessor2();
 
@@ -87,6 +87,7 @@ private:
     const quint8* m_oldData;
     bool m_writable;
     int m_lastX, m_lastY;
+    qint32 m_offsetX, m_offsetY;
     static const quint32 CACHESIZE; // Define the number of tiles we keep in cache
 
 };

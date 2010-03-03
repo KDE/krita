@@ -37,8 +37,6 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
-
 if(SQLITE_INCLUDE_DIR AND SQLITE_LIBRARIES)
    # in cache already
    SET(Sqlite_FIND_QUIETLY TRUE)

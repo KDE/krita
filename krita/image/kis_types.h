@@ -203,6 +203,15 @@ typedef KisSharedPtr<KisRectIteratorNG> KisRectIteratorSP;
 class KisRectConstIteratorNG;
 typedef KisSharedPtr<KisRectConstIteratorNG> KisRectConstIteratorSP;
 
+class KisRandomConstAccessorNG;
+typedef KisSharedPtr<KisRandomConstAccessorNG> KisRandomConstAccessorSP;
+
+class KisRandomAccessorNG;
+typedef KisSharedPtr<KisRandomAccessorNG> KisRandomAccessorSP;
+
+class KisRandomSubAccessorPixel;
+typedef KisSharedPtr<KisRandomSubAccessorPixel> KisRandomSubAccessorPixelSP;
+
 // Things
 
 typedef QVector<QPointF> vQPointF;

@@ -31,24 +31,19 @@ void KisIteratorsPixelTest::testHLine(int width, int height)
 
     KisHLineIteratorSP it = dev.createHLineIteratorNG(0, 0, width);
     quint8 data = 0;
-    for(int y = 0; y < height; ++y)
-    {
+    for (int y = 0; y < height; ++y) {
         do {
-            for(int i = 0; i < 4; ++i)
-            {
+            for (int i = 0; i < 4; ++i) {
                 it->rawData()[i] = ++data;
             }
-        } while(it->nextPixel());
+        } while (it->nextPixel());
         it->nextRow();
     }
-    KisHLineIteratorPixel it2 = dev.createHLineIterator(0,0,width);
+    KisHLineIteratorPixel it2 = dev.createHLineIterator(0, 0, width);
     data = 0;
-    for(int y = 0; y < height; ++y)
-    {
-        while(!it2.isDone())
-        {
-            for(int i = 0; i < 4; ++i)
-            {
+    for (int y = 0; y < height; ++y) {
+        while (!it2.isDone()) {
+            for (int i = 0; i < 4; ++i) {
                 quint8 d = ++data;
                 QCOMPARE(it2.rawData()[i], d);
             }
@@ -60,18 +55,18 @@ void KisIteratorsPixelTest::testHLine(int width, int height)
 
 void KisIteratorsPixelTest::testHLineAlignedOnTile()
 {
-    testHLine(64,64);
-    testHLine(64,128);
-    testHLine(128,64);
-    testHLine(128,128);
+    testHLine(64, 64);
+    testHLine(64, 128);
+    testHLine(128, 64);
+    testHLine(128, 128);
 }
 
 void KisIteratorsPixelTest::testHLineUnalignedOnTile()
 {
-    testHLine(200,200);
-    testHLine(20,20);
-    testHLine(20,200);
-    testHLine(200,20);
+    testHLine(200, 200);
+    testHLine(20, 20);
+    testHLine(20, 200);
+    testHLine(200, 20);
 }
 
 void KisIteratorsPixelTest::testVLine(int width, int height)
@@ -80,24 +75,19 @@ void KisIteratorsPixelTest::testVLine(int width, int height)
 
     KisVLineIteratorSP it = dev.createVLineIteratorNG(0, 0, height);
     quint8 data = 0;
-    for(int y = 0; y < width; ++y)
-    {
+    for (int y = 0; y < width; ++y) {
         do {
-            for(int i = 0; i < 4; ++i)
-            {
+            for (int i = 0; i < 4; ++i) {
                 it->rawData()[i] = ++data;
             }
-        } while(it->nextPixel());
+        } while (it->nextPixel());
         it->nextColumn();
     }
-    KisVLineIteratorPixel it2 = dev.createVLineIterator(0,0,height);
+    KisVLineIteratorPixel it2 = dev.createVLineIterator(0, 0, height);
     data = 0;
-    for(int y = 0; y < width; ++y)
-    {
-        while(!it2.isDone())
-        {
-            for(int i = 0; i < 4; ++i)
-            {
+    for (int y = 0; y < width; ++y) {
+        while (!it2.isDone()) {
+            for (int i = 0; i < 4; ++i) {
                 quint8 d = ++data;
                 QCOMPARE(it2.rawData()[i], d);
             }
@@ -109,36 +99,37 @@ void KisIteratorsPixelTest::testVLine(int width, int height)
 
 void KisIteratorsPixelTest::testVLineAlignedOnTile()
 {
-    testVLine(64,64);
-    testVLine(64,128);
-    testVLine(128,64);
-    testVLine(128,128);
+    testVLine(64, 64);
+    testVLine(64, 128);
+    testVLine(128, 64);
+    testVLine(128, 128);
 }
 
 void KisIteratorsPixelTest::testVLineUnalignedOnTile()
 {
-    testVLine(200,200);
-    testVLine(20,20);
-    testVLine(20,200);
-    testVLine(200,20);
+    testVLine(200, 200);
+    testVLine(20, 20);
+    testVLine(20, 200);
+    testVLine(200, 20);
 }
 
 
 void KisIteratorsPixelTest::testRectAlignedOnTile()
 {
-    testRect(64,64);
-    testRect(64,128);
-    testRect(128,64);
-    testRect(128,128);
+    testRect(64, 64);
+    testRect(64, 128);
+    testRect(128, 64);
+    testRect(128, 128);
 }
 
 void KisIteratorsPixelTest::testRectUnalignedOnTile()
 {
-    testRect(200,200);
-    testRect(20,20);
-    testRect(20,200);
-    testRect(200,20);
+    testRect(200, 200);
+    testRect(20, 20);
+    testRect(20, 200);
+    testRect(200, 20);
 }
+
 void KisIteratorsPixelTest::testRect(int width, int height)
 {
     KisPaintDevice dev(KoColorSpaceRegistry::instance()->rgb8());
@@ -146,18 +137,15 @@ void KisIteratorsPixelTest::testRect(int width, int height)
     KisRectIteratorSP it = dev.createRectIteratorNG(0, 0, width, height);
     quint8 data = 0;
     do {
-        for(int i = 0; i < 4; ++i)
-        {
+        for (int i = 0; i < 4; ++i) {
             it->rawData()[i] = ++data;
         }
-    } while(it->nextPixel());
-    
+    } while (it->nextPixel());
+
     KisRectIteratorPixel it2 = dev.createRectIterator(0, 0, width, height);
     data = 0;
-    while(!it2.isDone())
-    {
-        for(int i = 0; i < 4; ++i)
-        {
+    while (!it2.isDone()) {
+        for (int i = 0; i < 4; ++i) {
             quint8 d = ++data;
             QCOMPARE(it2.rawData()[i], d);
         }

@@ -103,6 +103,7 @@ set(kritaimage_LIB_SRCS
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
    kis_background.cpp
+   kis_base_accessor.cpp
    kis_base_node.cpp
    kis_base_processor.cpp
    kis_basic_math_toolbox.cpp
@@ -151,6 +152,7 @@ set(kritaimage_LIB_SRCS
    kis_projection.cc
    kis_properties_configuration.cc
    kis_random_accessor.cpp
+   kis_random_accessor_ng.cpp
    kis_random_generator.cc
    kis_random_sub_accessor.cpp
    kis_shear_visitor.cpp

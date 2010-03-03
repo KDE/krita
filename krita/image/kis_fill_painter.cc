@@ -63,6 +63,7 @@
 #include "kis_iterator.h"
 #include "KoColor.h"
 #include "kis_selection.h"
+#include "kis_random_accessor_ng.h"
 
 KisFillPainter::KisFillPainter()
         : KisPainter()
@@ -281,9 +282,9 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     const KoColorSpace * devColorSpace = sourceDevice->colorSpace();
 
     quint8* source = new quint8[sourceDevice->pixelSize()];
-    KisRandomAccessor pixelIt = sourceDevice->createRandomAccessor(startX, startY);
+    KisRandomAccessorSP pixelIt = sourceDevice->createRandomAccessorNG(startX, startY);
 
-    memcpy(source, pixelIt.rawData(), sourceDevice->pixelSize());
+    memcpy(source, pixelIt->rawData(), sourceDevice->pixelSize());
 
     std::stack<FillSegment> stack;
 
@@ -321,8 +322,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         Q_ASSERT(y < m_height);
         /* We need an iterator that is valid in the range (0,y) - (width,y). Therefore,
         it is needed to start the iterator at the first position, and then skip to (x,y). */
-        pixelIt.moveTo(x,y);
-        quint8 diff = devColorSpace->difference(source, pixelIt.rawData());
+        pixelIt->moveTo(x,y);
+        quint8 diff = devColorSpace->difference(source, pixelIt->rawData());
 
         if (diff > m_threshold
                 || (hasSelection && srcSel->selected(x, y) == MIN_SELECTED)) {
@@ -331,12 +332,12 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         }
 
         // Here as well: start the iterator at (0,y)
-        KisRandomAccessor selIt = pSel->createRandomAccessor(x, y);
+        KisRandomAccessorSP selIt = pSel->createRandomAccessorNG(x, y);
         
         if (m_fuzzy) {
-            *selIt.rawData() = quint8(MAX_SELECTED - diff);
+            *selIt->rawData() = quint8(MAX_SELECTED - diff);
         } else
-            *selIt.rawData() = MAX_SELECTED;
+            *selIt->rawData() = MAX_SELECTED;
 
         if (y > 0 && (map[m_width *(y - 1) + x] == None)) {
             map[m_width *(y - 1) + x] = Added;
@@ -360,14 +361,14 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         bool stop = false;
 
         --x;
-        pixelIt.moveTo(x,y);
-        selIt.moveTo(x,y);
+        pixelIt->moveTo(x,y);
+        selIt->moveTo(x,y);
 
         if (x > 0) {
             // go to the left
             while (!stop && x >= 0 && (map[m_width * y + x] != Checked)) { // FIXME optimizeable?
                 map[m_width * y + x] = Checked;
-                diff = devColorSpace->difference(source, pixelIt.rawData());
+                diff = devColorSpace->difference(source, pixelIt->rawData());
                 if (diff > m_threshold
                         || (hasSelection && srcSel->selected(x, y) == MIN_SELECTED)) {
                     stop = true;
@@ -375,9 +376,9 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                 }
 
                 if (m_fuzzy) {
-                    *selIt.rawData() = quint8(MAX_SELECTED - diff);
+                    *selIt->rawData() = quint8(MAX_SELECTED - diff);
                 } else{
-                    *selIt.rawData() = MAX_SELECTED;
+                    *selIt->rawData() = MAX_SELECTED;
                 }
 
                 if (y > 0 && (map[m_width *(y - 1) + x] == None)) {
@@ -399,8 +400,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                 ++pixelsDone;
 
                 --x;
-                pixelIt.moveTo(x,y);
-                selIt.moveTo(x,y);
+                pixelIt->moveTo(x,y);
+                selIt->moveTo(x,y);
                 
             }
         }
@@ -421,14 +422,14 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             continue;
 
         // and go to the right
-        pixelIt.moveTo(x, y);
-        selIt.moveTo(x, y);
+        pixelIt->moveTo(x, y);
+        selIt->moveTo(x, y);
 
 
 
         stop = false;
         while (!stop && x < m_width && (map[m_width * y + x] != Checked)) {
-            diff = devColorSpace->difference(source, pixelIt.rawData());
+            diff = devColorSpace->difference(source, pixelIt->rawData());
             map[m_width * y + x] = Checked;
 
             if (diff > m_threshold
@@ -438,9 +439,9 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             }
 
             if (m_fuzzy) {
-                *selIt.rawData() = quint8(MAX_SELECTED - diff);
+                *selIt->rawData() = quint8(MAX_SELECTED - diff);
             } else{
-                *selIt.rawData() = MAX_SELECTED;
+                *selIt->rawData() = MAX_SELECTED;
             }
             
             if (y > 0 && (map[m_width *(y - 1) + x] == None)) {
@@ -462,8 +463,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             ++pixelsDone;
 
             ++x;
-            pixelIt.moveTo(x,y);
-            selIt.moveTo(x,y);
+            pixelIt->moveTo(x,y);
+            selIt->moveTo(x,y);
         }
 
         if (m_size > 0) {

@@ -25,11 +25,13 @@
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoAbstractGradient.h>
 
 #include <kis_color_picker_utils.h>
 #include <kis_vec.h>
 #include <kis_cursor.h>
 #include <kis_paint_device.h>
+#include <kis_gradient_painter.h>
 
 KisScratchPad::KisScratchPad(QWidget *parent)
     : QWidget(parent)
@@ -56,10 +58,10 @@ void KisScratchPad::setPaintColor(const QColor& paintColor) {
     m_paintColor = c;
 }
 
-void KisScratchPad::setPaintColor(KoColor& paintColor) {
+void KisScratchPad::setPaintColor(const KoColor& paintColor) {
 
-    paintColor.convertTo(m_colorSpace);
     m_paintColor = paintColor;
+    m_paintColor.convertTo(m_colorSpace);
 }
 
 void KisScratchPad::setPreset(KisPaintOpPresetSP preset) {
@@ -107,6 +109,23 @@ void KisScratchPad::clear() {
             m_paintDevice->setDefaultPixel(c.data());
         }
     }
+    update();
+}
+
+void KisScratchPad::fillGradient(KoAbstractGradient* gradient)
+{
+    KisGradientPainter painter(m_paintDevice);
+    painter.setGradient(gradient);
+    painter.paintGradient(QPointF(0,0), QPointF(width(), height()),
+                          KisGradientPainter::GradientShapeLinear, KisGradientPainter::GradientRepeatNone,
+                          0.2, false,
+                          0, 0, width(), height());
+    update();                         
+}
+
+void KisScratchPad::fillSolid(const KoColor& color)
+{
+    m_paintDevice->fill(0, 0, width(), height(), color.data());
     update();
 }
 

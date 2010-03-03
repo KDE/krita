@@ -28,6 +28,7 @@ class KoResource;
 class KisPaintOpPreset;
 class KisPropertiesConfiguration;
 class KisPresetWidget;
+class KisCanvasResourceProvider;
 
 /**
  * Popup widget for presets with built-in functionality
@@ -39,7 +40,7 @@ class KisPaintOpPresetsPopup : public QWidget
 
 public:
 
-    KisPaintOpPresetsPopup(QWidget * parent = 0);
+    KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent = 0);
 
     ~KisPaintOpPresetsPopup();
 
@@ -61,6 +62,11 @@ public:
 signals:
     void savePresetClicked();
     void resourceSelected( KoResource * resource );
+    
+private slots:
+    void fillScratchPadGradient();
+    void fillScratchPadSolid();
+    void fillScratchPadLayer();
 
 private:
 

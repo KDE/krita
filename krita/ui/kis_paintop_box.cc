@@ -95,7 +95,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_layout->addWidget(m_cmbPaintops);
     m_layout->addWidget(m_presetWidget);
 
-    m_presetsPopup = new KisPaintOpPresetsPopup();
+    m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_presetWidget->setPopupWidget(m_presetsPopup);
 
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();

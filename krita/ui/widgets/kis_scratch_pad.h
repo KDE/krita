@@ -62,14 +62,18 @@ public:
 public slots:
 
     void setPaintColor(const QColor& foregroundColor);
-    void setPaintColor(KoColor& foregroundColor);
+    void setPaintColor(const KoColor& foregroundColor);
     void setPreset(KisPaintOpPresetSP preset);
     void setBackgroundColor(const QColor& backgroundColor);
     void setBackgroundTile(const QImage& tile);
     void setColorSpace(const KoColorSpace* colorSpace);
     void setDisplayProfile(const KoColorProfile* colorProfile);
     void clear();
+    
+    void fillGradient(KoAbstractGradient* gradient);
 
+    void fillSolid(const KoColor& color);
+    
 signals:
 
     void colorSelected(const KoColor& color);

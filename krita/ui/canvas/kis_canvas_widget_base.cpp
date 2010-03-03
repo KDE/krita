@@ -42,6 +42,7 @@ public:
         : canvas(newCanvas)
         , viewConverter(newCanvas->viewConverter())
         , toolProxy(newCanvas->toolProxy())
+        , ignorenextMouseEventExceptRightMiddleClick(0)
     {}
 
     QList<KisCanvasDecoration*> decorations;
@@ -53,6 +54,8 @@ public:
     /// the origin of the image rect
     QPoint origin;
     QTimer blockMouseEvent;
+    
+    bool ignorenextMouseEventExceptRightMiddleClick; // HACK work around Qt bug not sending tablet right/dblclick http://bugreports.qt.nokia.com/browse/QTBUG-8598
 };
 
 KisCanvasWidgetBase::KisCanvasWidgetBase(KisCanvas2 * canvas)
@@ -248,6 +251,11 @@ QRect KisCanvasWidgetBase::viewToWidget(const QRect& r) const
 
 void KisCanvasWidgetBase::processMouseMoveEvent(QMouseEvent *e)
 {
+    if (m_d->ignorenextMouseEventExceptRightMiddleClick )
+    {
+        m_d->ignorenextMouseEventExceptRightMiddleClick = false;
+        return;
+    }
     if (m_d->blockMouseEvent.isActive()) {
         return;
     }
@@ -266,6 +274,15 @@ void KisCanvasWidgetBase::processContextMenuEvent(QContextMenuEvent *e)
 
 void KisCanvasWidgetBase::processMousePressEvent(QMouseEvent *e)
 {
+    if (m_d->ignorenextMouseEventExceptRightMiddleClick)
+    {
+        m_d->ignorenextMouseEventExceptRightMiddleClick = false;
+        if (e->button() == Qt::RightButton || e->button() == Qt::MidButton)
+        {
+            m_d->toolProxy->mousePressEvent(e, mouseEventWidgetToDocument(e->pos()));
+        }
+        return;
+    }
     if (m_d->blockMouseEvent.isActive()) {
         return;
     }
@@ -274,6 +291,15 @@ void KisCanvasWidgetBase::processMousePressEvent(QMouseEvent *e)
 
 void KisCanvasWidgetBase::processMouseReleaseEvent(QMouseEvent *e)
 {
+    if (m_d->ignorenextMouseEventExceptRightMiddleClick)
+    {
+        m_d->ignorenextMouseEventExceptRightMiddleClick = false;
+        if (e->button() == Qt::RightButton || e->button() == Qt::MidButton)
+        {
+            m_d->toolProxy->mouseReleaseEvent(e, mouseEventWidgetToDocument(e->pos()));
+        }
+        return;
+    }
     if (m_d->blockMouseEvent.isActive()) {
         return;
     }
@@ -282,6 +308,15 @@ void KisCanvasWidgetBase::processMouseReleaseEvent(QMouseEvent *e)
 
 void KisCanvasWidgetBase::processMouseDoubleClickEvent(QMouseEvent *e)
 {
+    if (m_d->ignorenextMouseEventExceptRightMiddleClick )
+    {
+        m_d->ignorenextMouseEventExceptRightMiddleClick = false;
+        if (e->button() == Qt::RightButton || e->button() == Qt::MidButton)
+        {
+            m_d->toolProxy->mouseDoubleClickEvent(e, mouseEventWidgetToDocument(e->pos()));
+        }
+        return;
+    }
     if (m_d->blockMouseEvent.isActive()) {
         return;
     }
@@ -322,6 +357,11 @@ void KisCanvasWidgetBase::processTabletEvent(QTabletEvent *e)
 
     const QPointF pos = e->hiResGlobalPos() - widget()->mapToGlobal(QPoint(0, 0));
     m_d->toolProxy->tabletEvent(e, widgetToDocument(pos));
+    
+    // HACK
+    e->ignore();
+    m_d->ignorenextMouseEventExceptRightMiddleClick = true;
+    // HACK
 }
 
 void KisCanvasWidgetBase::processWheelEvent(QWheelEvent *e)

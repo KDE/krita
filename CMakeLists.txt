@@ -369,6 +369,11 @@ if(NOT KdepimLibs_FOUND)
     set(SHOULD_BUILD_KPLATO FALSE)
 endif(NOT KdepimLibs_FOUND)
 
+if(NOT WITH_kchart OR NOT SHOULD_BUILD_KCHART)
+    set(SHOULD_BUILD_KPLATO FALSE)
+    set(SHOULD_BUILD_KEXI FALSE)
+endif(NOT WITH_kchart OR NOT SHOULD_BUILD_KCHART)
+
  ###################
 ####################
 ## Subdirectories ##

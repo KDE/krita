@@ -1,5 +1,4 @@
-add_subdirectory( widgets )
-add_subdirectory( koplugin )
+
 add_subdirectory( odf )
 add_subdirectory( kotext )
 add_subdirectory( flake )
@@ -11,7 +10,7 @@ endif (SHOULD_BUILD_SCRIPTING)
 add_subdirectory( kopageapp )
 add_subdirectory( koproperty ) # TODO move to independent place like kdesupport
 
-# only build koreport for applications that need it
-if (SHOULD_BUILD_KEXI OR SHOULD_BUILD_KPLATO)
+# only build koreport if possible
+if (WITH_kchart AND SHOULD_BUILD_KCHART)
     add_subdirectory( koreport )
-endif (SHOULD_BUILD_KEXI OR SHOULD_BUILD_KPLATO)
+endif (WITH_kchart AND SHOULD_BUILD_KCHART)

@@ -36,10 +36,6 @@ public:
      * @return return number of consequential numbers of pixels, useful for optimization
      */
     virtual qint32 nConseqPixels() const = 0;
-    /**
-     * Move to the next pixels
-     */
-    virtual bool nextPixels(qint32 n) = 0;
 };
 
 class KRITAIMAGE_EXPORT KisBaseAccessor

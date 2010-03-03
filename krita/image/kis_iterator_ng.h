@@ -32,6 +32,10 @@ public:
      * @return false if there is no more pixel in the line
      */
     virtual bool nextPixel() = 0;
+    /**
+     * Move to the next pixels
+     */
+    virtual bool nextPixels(qint32 n) = 0;
 };
 
 class KRITAIMAGE_EXPORT KisBaseIteratorNG : public virtual KisBaseConstIteratorNG, public virtual KisBaseAccessor

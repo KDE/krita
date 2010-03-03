@@ -460,7 +460,9 @@ public:
     KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const;
     KisRectIteratorSP createRectIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h);
     KisRectConstIteratorSP createRectConstIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h) const;
-    
+    KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y);
+    KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const;
+
     /**
      * Create an iterator that will "artificially" extend the paint device with the
      * value of the border when trying to access values outside the range of data.

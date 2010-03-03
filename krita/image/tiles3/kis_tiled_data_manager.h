@@ -108,6 +108,7 @@ protected:
     friend class KisTiledIterator;
     friend class KisBaseIterator;
     friend class KisTiledRandomAccessor;
+    friend class KisRandomAccessor2;
 protected:
 
     void setDefaultPixel(const quint8 *defPixel);
@@ -119,8 +120,7 @@ protected:
 public:
 
     inline KisTileSP getTile(qint32 col, qint32 row, bool writable) {
-        if (writable)
-        {
+        if (writable) {
             bool newTile;
             KisTileSP tile = m_hashTable->getTileLazy(col, row, newTile);
             if (newTile)

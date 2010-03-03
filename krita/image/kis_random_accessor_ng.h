@@ -21,18 +21,20 @@
 
 #include "kis_base_accessor.h"
 
-class KisRandomConstAccessorNG : public KisBaseConstAccessor
+class KRITAIMAGE_EXPORT KisRandomConstAccessorNG : public KisBaseConstAccessor
 {
     Q_DISABLE_COPY(KisRandomConstAccessorNG)
 public:
+    KisRandomConstAccessorNG() {}
     virtual ~KisRandomConstAccessorNG();
     virtual void moveTo(qint32 x, qint32 y) = 0;
 };
 
-class KisRandomAccessorNG : public KisBaseConstAccessor, public KisBaseAccessor
+class KRITAIMAGE_EXPORT KisRandomAccessorNG : public KisRandomConstAccessorNG, public KisBaseAccessor
 {
     Q_DISABLE_COPY(KisRandomAccessorNG)
 public:
+    KisRandomAccessorNG() {}
     virtual ~KisRandomAccessorNG();
 };
 

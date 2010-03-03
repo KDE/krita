@@ -24,6 +24,8 @@
 #include <kis_paint_device.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_iterator_ng.h>
+#include <kis_random_accessor_ng.h>
+#include <kis_random_accessor.h>
 
 void KisIteratorsPixelTest::testHLine(int width, int height)
 {
@@ -150,6 +152,49 @@ void KisIteratorsPixelTest::testRect(int width, int height)
             QCOMPARE(it2.rawData()[i], d);
         }
         ++it2;
+    }
+}
+
+void KisIteratorsPixelTest::testRandomAccessorAlignedOnTile()
+{
+    testRandomAccessor(64, 64);
+    testRandomAccessor(64, 128);
+    testRandomAccessor(128, 64);
+    testRandomAccessor(128, 128);
+}
+
+void KisIteratorsPixelTest::testRandomAccessorUnalignedOnTile()
+{
+    testRandomAccessor(200, 200);
+    testRandomAccessor(20, 20);
+    testRandomAccessor(20, 200);
+    testRandomAccessor(200, 20);
+}
+
+void KisIteratorsPixelTest::testRandomAccessor(int width, int height)
+{
+    KisPaintDevice dev(KoColorSpaceRegistry::instance()->rgb8());
+
+    KisRandomAccessorSP it = dev.createRandomAccessorNG(0, 0);
+    quint8 data = 0;
+    for (int y = 0; y < width; ++y) {
+        for (int x = 0; x < height; ++x) {
+            it->moveTo(x, y);
+            for (int i = 0; i < 4; ++i) {
+                it->rawData()[i] = ++data;
+            }
+        }
+    }
+
+    KisRandomAccessor it2 = dev.createRandomAccessor(0, 0);
+    data = 0;
+    for (int y = 0; y < width; ++y) {
+        for (int x = 0; x < height; ++x) {
+            it2.moveTo(x, y);
+            for (int i = 0; i < 4; ++i) {
+                it2.rawData()[i] = ++data;
+            }
+        }
     }
 }
 

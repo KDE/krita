@@ -41,6 +41,7 @@ set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_vline_iterator.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_rect_iterator.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_random_accessor.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_random_accessor.cc
 )
 add_subdirectory( tiles3 )
 endif(USE_TILESYSTEM EQUAL 1)

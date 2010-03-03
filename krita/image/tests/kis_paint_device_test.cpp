@@ -433,6 +433,23 @@ void KisPaintDeviceTest::testDeviceDuplication()
 
 }
 
+void KisPaintDeviceTest::testTranslate()
+{
+    QRect fillRect(0,0,64,64);
+    quint8 fillPixel[4]={255,255,255,255};
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP device = new KisPaintDevice(cs);
+
+    device->fill(fillRect.left(), fillRect.top(),
+                 fillRect.width(), fillRect.height(),fillPixel);
+
+    device->setX(-10);
+    device->setY(10);
+    QCOMPARE(device->exactBounds(), QRect(-10,10,64,64));
+    QCOMPARE(device->extent(), QRect(-10,10,64,64));
+}
+
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)
 #include "kis_paint_device_test.moc"
 

@@ -58,11 +58,18 @@ public:
     ///Set preset for the scratchpad
     ///@param preset that will be used in the scratchpad
     void setPreset(KisPaintOpPresetSP preset);
-    
+
+protected:
+
+    void contextMenuEvent(QContextMenuEvent *);
+
+public slots:
+    void switchDetached();
+
 signals:
     void savePresetClicked();
     void resourceSelected( KoResource * resource );
-    
+
 private slots:
     void fillScratchPadGradient();
     void fillScratchPadSolid();

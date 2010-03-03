@@ -97,6 +97,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_presetWidget->setPopupWidget(m_presetsPopup);
+    m_presetsPopup->switchDetached();
 
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
     for (QList<KoID>::Iterator it = keys.begin(); it != keys.end(); ++it) {
@@ -193,7 +194,7 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
 {
     KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(resource);
     dbgUI << "preset " << preset->name() << "selected";
-    
+
     if(preset->paintOp() != currentPaintop()) {
         setCurrentPaintop(preset->paintOp());
     }

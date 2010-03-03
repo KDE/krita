@@ -627,3 +627,13 @@ void KisConfig::setCanvasState(const QString& state)
         m_cfg.writeEntry("canvasState", state);
     }
 }
+
+bool KisConfig::paintopPopupDetached() const
+{
+    return m_cfg.readEntry("PaintopPopupDetached", false);
+}
+
+void KisConfig::setPaintopPopupDetached(bool detached)
+{
+    m_cfg.writeEntry("PaintopPopupDetached", detached);
+}

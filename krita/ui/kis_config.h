@@ -38,7 +38,7 @@ public:
 
     bool undoEnabled() const;
     void setUndoEnabled(bool undo);
-    
+
     int undoStackLimit() const;
     void setUndoStackLimit(int limit);
 
@@ -212,6 +212,10 @@ public:
     // OPENGL_SUCCESS, TRY_OPENGL, OPENGL_NOT_TRIED, OPENGL_FAILED
     QString canvasState() const;
     void setCanvasState(const QString& state);
+
+    bool paintopPopupDetached() const;
+    void setPaintopPopupDetached(bool detached);
+
 
 private:
     KisConfig(const KisConfig&);

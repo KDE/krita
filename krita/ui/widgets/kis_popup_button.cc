@@ -68,6 +68,7 @@ void KisPopupButton::setPopupWidget(QWidget* widget)
     delete m_d->frame;
     if (widget) {
         m_d->frame = new QFrame(this);
+        m_d->frame->setObjectName("popup frame");
         m_d->frame->setFrameStyle(QFrame::Box | QFrame::Plain);
         m_d->frame->setWindowFlags(Qt::Popup);
         m_d->frameLayout = new QHBoxLayout(m_d->frame);

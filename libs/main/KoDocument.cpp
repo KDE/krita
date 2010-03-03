@@ -1626,7 +1626,11 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore * store)
     }
 
     if (oasis && store->hasFile("VersionList.xml")) {
-        KMessageBox::information(0, i18n("This document contains several versions. Go to File->Versions to open an old version."), QString(), "informVersionsAtLoading");
+        KNotification *notify = new KNotification("DocumentHasVersions");
+        notify->setText(i18n("Document <i>%1</i> contains several versions. Go to File->Versions to open an old version.", store->urlOfStore().url()));
+        notify->addContext("url", store->urlOfStore().url());
+        QTimer::singleShot(0, notify, SLOT(sendEvent()));
+
         KoXmlDocument versionInfo;
         KoOdfReadStore oasisStore(store);
         if (oasisStore.loadAndParse("VersionList.xml", versionInfo, d->lastErrorMessage)) {

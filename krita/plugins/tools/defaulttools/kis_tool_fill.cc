@@ -60,7 +60,7 @@ KisToolFill::KisToolFill(KoCanvasBase * canvas)
     setObjectName("tool_fill");
     m_painter = 0;
     m_oldColor = 0;
-    m_threshold = 15;
+    m_threshold = 80;
     m_usePattern = false;
     m_unmerged = false;
     m_fillOnlySelection = false;

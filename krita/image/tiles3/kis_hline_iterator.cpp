@@ -19,13 +19,13 @@
 #include "kis_hline_iterator.h"
 
 
-KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY)
+KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY, bool writable)
 {
     Q_ASSERT(dataManager != 0);
     m_dataManager = dataManager;
     m_pixelSize = m_dataManager->pixelSize();
 
-    m_writable = true;
+    m_writable = writable;
     
     m_x = x;
     m_y = y;

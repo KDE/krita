@@ -20,7 +20,9 @@
 #define _KIS_ITERATOR_NG_H_
 
 #include <krita_export.h>
-class KRITAIMAGE_EXPORT KisBaseConstIteratorNG {
+#include <kis_shared_data.h>
+
+class KRITAIMAGE_EXPORT KisBaseConstIteratorNG : public KisSharedData {
   public:
     virtual ~KisBaseConstIteratorNG() {}
     /**

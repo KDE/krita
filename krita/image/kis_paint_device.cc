@@ -681,17 +681,17 @@ KisHLineIteratorPixel  KisPaintDevice::createHLineIterator(qint32 x, qint32 y, q
 }
 
 
-KisHLineIteratorNG * KisPaintDevice::createHLineIterator2(qint32 x, qint32 y, qint32 w, const KisSelection* selection)
+KisHLineIteratorSP KisPaintDevice::createHLineIteratorNG(qint32 x, qint32 y, qint32 w)
 {
     m_d->cache.invalidate();
-    KisDataManager* selectionDm = 0;
-
-    if (selection)
-        selectionDm = selection->dataManager().data();
-
-    return new KisHLineIterator2(m_datamanager.data(), x, y, w, m_d->x, m_d->y);
+    return new KisHLineIterator2(m_datamanager.data(), x, y, w, m_d->x, m_d->y, true);
 }
 
+KisHLineConstIteratorSP KisPaintDevice::createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const
+{
+    KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
+    return new KisHLineIterator2(dm, x, y, w, m_d->x, m_d->y, false);
+}
 
 KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection) const
 {

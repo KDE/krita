@@ -298,6 +298,12 @@ target_link_libraries(KisIteratorsPixelTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_
 
 ########### next target ###############
 
+set(kis_iterators_ng_test_SRCS kis_iterators_ng_test.cpp )
+kde4_add_unit_test(KisIteratorsNGTest TESTNAME krita-image-KisIteratorsNGTest ${kis_iterators_ng_test_SRCS})
+target_link_libraries(KisIteratorsNGTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_iterator_benchmark_SRCS kis_iterator_benchmark.cpp )
 kde4_add_unit_test(KisIteratorBenchmark TESTNAME krita-image-KisIteratorBenchmark ${kis_iterator_benchmark_SRCS})
 target_link_libraries(KisIteratorBenchmark  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

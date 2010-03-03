@@ -426,7 +426,9 @@ QUndoCommand* KisShapeLayer::crop(const QRect & rect) {
 }
 
 QUndoCommand* KisShapeLayer::transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
-    
+
+    Q_UNUSED(xshear);
+    Q_UNUSED(yshear);
     QPointF transF = m_d->converter->viewToDocument(QPoint(translatex, translatey));;
     QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
     if(shapes.isEmpty())

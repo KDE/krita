@@ -79,7 +79,7 @@ KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
 #if KDE_IS_VERSION(4,2,88)
     m_action->setCode(code.toLocal8Bit());
 #else
-    m_action->setCode(fieldFunctions().toLocal8Bit() + '\n' + scriptCode().toLocal8Bit());
+    m_action->setCode(fieldFunctions().toLocal8Bit() + '\n' + code.toLocal8Bit());
 #endif
 }
 

@@ -153,13 +153,23 @@ bool KoOdfReadStore::loadAndParse(QIODevice* fileDevice, KoXmlDocument& doc, QSt
     return ok;
 }
 
-QString KoOdfReadStore::mimeForPath(const KoXmlDocument& doc, const QString& fullPath)
+QString normalizeFullPath(QString s)
 {
+    if(s.startsWith("./"))
+        s = s.mid(2);
+    if(s.endsWith("/"))
+        s = s.left(s.length()-1);
+    return s;
+}
+
+QString KoOdfReadStore::mimeForPath(const KoXmlDocument& doc, const QString& _fullPath)
+{
+    QString fullPath = normalizeFullPath(_fullPath);
     KoXmlElement docElem = doc.documentElement();
     KoXmlElement elem;
     forEachElement(elem, docElem) {
         if (elem.localName() == "file-entry" && elem.namespaceURI() == KoXmlNS::manifest) {
-            if (elem.attributeNS(KoXmlNS::manifest, "full-path", QString()) == fullPath)
+            if (normalizeFullPath(elem.attributeNS(KoXmlNS::manifest, "full-path", QString())) == fullPath)
                 return elem.attributeNS(KoXmlNS::manifest, "media-type", QString());
         }
     }

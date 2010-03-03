@@ -126,7 +126,7 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->bnLower->setEnabled(false);
     m_wdgLayerBox->bnLower->setIcon(SmallIcon("go-down"));
 
-    m_wdgLayerBox->bnProperties->setText("...");
+    m_wdgLayerBox->bnProperties->setIcon(SmallIcon("document-properties"));
 
     m_wdgLayerBox->bnDuplicate->setIcon(SmallIcon("edit-copy"));
 

@@ -374,10 +374,10 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                 }
 
                 if (m_fuzzy) {
-                    colorSpace->fromQColor(Qt::white, selIt.rawData());
-                    colorSpace->setOpacity(selIt.rawData(), quint8(MAX_SELECTED - diff), 1);
-                } else
-                    colorSpace->fromQColor(Qt::white, selIt.rawData());
+                    *selIt.rawData() = quint8(MAX_SELECTED - diff);
+                } else{
+                    *selIt.rawData() = MAX_SELECTED;
+                }
 
                 if (y > 0 && (map[m_width *(y - 1) + x] == None)) {
                     map[m_width *(y - 1) + x] = Added;
@@ -433,11 +433,11 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             }
 
             if (m_fuzzy) {
-                colorSpace->fromQColor(Qt::white, selIt.rawData());
-                colorSpace->setOpacity(selIt.rawData(), quint8(MAX_SELECTED - diff), 1);
-            } else
-                colorSpace->fromQColor(Qt::white, selIt.rawData());
-
+                *selIt.rawData() = quint8(MAX_SELECTED - diff);
+            } else{
+                *selIt.rawData() = MAX_SELECTED;
+            }
+            
             if (y > 0 && (map[m_width *(y - 1) + x] == None)) {
                 map[m_width *(y - 1) + x] = Added;
                 Q_ASSERT(x >= 0);

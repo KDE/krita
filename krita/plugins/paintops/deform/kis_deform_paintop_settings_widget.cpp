@@ -18,6 +18,7 @@
 #include "kis_deform_paintop_settings.h"
 #include "kis_deform_paintop_settings_widget.h"
 #include "kis_deform_option.h"
+#include "kis_deform_size_option.h"
 
 #include <kis_paintop_options_widget.h>
 
@@ -25,12 +26,15 @@ KisDeformPaintOpSettingsWidget::KisDeformPaintOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
 {
     m_deformOption = new KisDeformOption();
+    m_deformSizeOption = new KisDeformSizeOption();
+    addPaintOpOption(m_deformSizeOption);
     addPaintOpOption(m_deformOption);
 }
 
 KisDeformPaintOpSettingsWidget::~ KisDeformPaintOpSettingsWidget()
 {
     delete m_deformOption;
+    delete m_deformSizeOption;
 }
 
 
@@ -38,7 +42,7 @@ void KisDeformPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
 {
     // if the movement is more left<->right then up<->down
     if (qAbs(x) > qAbs(y)){
-        m_deformOption->setRadius( m_deformOption->radius() + qRound(x) );
+        m_deformSizeOption->setDiameter( m_deformSizeOption->diameter() + qRound(x) );
     }
     else // vice-versa
     {

@@ -34,12 +34,15 @@
 #include "kis_selection.h"
 #include "kis_random_accessor.h"
 
+#include "kis_deform_size_option.h"
+
 KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
 {
     Q_ASSERT(settings);
+    m_deformBrush.setDiameter(settings->getDouble(DEFORM_DIAMETER));
+    
     m_deformBrush.setAction(settings->deformAction());
-    m_deformBrush.setRadius(settings->radius());
     m_deformBrush.setDeformAmount(settings->deformAmount());
     m_deformBrush.setInterpolation(settings->bilinear());
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,33 +15,38 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_DEFORM_OPTION_H
-#define KIS_DEFORM_OPTION_H
+#ifndef KIS_DEFORM_SIZE_OPTION_H
+#define KIS_DEFORM_SIZE_OPTION_H
 
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
-class KisDeformOptionsWidget;
+class KisDeformSizeOptionsWidget;
 
-class KisDeformOption : public KisPaintOpOption
+const QString DEFORM_SHAPE = "Soft/shape";
+const QString DEFORM_DIAMETER = "Soft/diameter";
+const QString DEFORM_ASPECT = "Soft/aspect";
+const QString DEFORM_SCALE = "Soft/scale";
+const QString DEFORM_ROTATION = "Soft/rotation";
+const QString DEFORM_SPACING = "Soft/spacing";
+const QString DEFORM_DENSITY = "Soft/density";
+const QString DEFORM_JITTER_MOVEMENT = "Soft/jitterMovement";
+const QString DEFORM_JITTER_MOVEMENT_ENABLED = "Soft/jitterMovementEnabled";
+
+class KisDeformSizeOption : public KisPaintOpOption
 {
 public:
-    KisDeformOption();
-    ~KisDeformOption();
+    KisDeformSizeOption();
+    ~KisDeformSizeOption();
 
-    double deformAmount() const;
-    int deformAction() const;
-    bool bilinear() const;
-    bool useMovementPaint() const;
-    bool useCounter() const;
-    bool useOldData() const;
+    int diameter() const;
+    void setDiameter(int diameter);
     
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
 private:
-    KisDeformOptionsWidget * m_options;
-
+    KisDeformSizeOptionsWidget * m_options;
 };
 
 #endif

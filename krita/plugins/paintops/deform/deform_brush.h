@@ -29,6 +29,7 @@
 #include <kis_random_accessor.h>
 #include <kis_image.h>
 
+
 class DeformBrush
 {
 
@@ -52,6 +53,10 @@ public:
     void lensDistortion(qreal cursorX, qreal cursorY, qreal k1, qreal k2);
     void deformColor(qreal cursorX, qreal cursorY, qreal amount);
 
+    void setDiameter(int diameter){
+        setRadius(qRound(0.5 * diameter));
+    }
+    
     void setRadius(int deformRadius) {
         m_radius = deformRadius;
 
@@ -120,6 +125,8 @@ private:
     qreal* m_distanceTable;
 
     int m_radius;
+    int diameter;
+    
     qreal m_maxdist;
     qreal m_amount;
     bool m_useBilinear;

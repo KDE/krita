@@ -42,17 +42,13 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     m_deformBrush.setRadius(settings->radius());
     m_deformBrush.setDeformAmount(settings->deformAmount());
     m_deformBrush.setInterpolation(settings->bilinear());
-    m_deformBrush.setImage(image);
+
     m_deformBrush.setCounter(1);
     m_useMovementPaint = settings->useMovementPaint();
     m_deformBrush.setUseCounter(settings->useCounter());
     m_deformBrush.setUseOldData(settings->useOldData());
 
-    if (!settings->node()) {
-        m_dev = 0;
-    } else {
-        m_dev = settings->node()->paintDevice();
-    }
+    m_dev = source();
 
     if ((settings->radius()) > 1) {
         m_ySpacing = m_xSpacing = settings->radius() * settings->spacing();
@@ -71,7 +67,7 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return m_spacing;
     if (!m_dev) return m_spacing;
-
+ 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
     } else {

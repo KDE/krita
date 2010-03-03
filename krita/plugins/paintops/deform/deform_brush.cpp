@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ inline void DeformBrush::myMovePixel(qreal newX, qreal newY, quint8 *dst)
             bilinear_interpolation(newX, newY, dst);
         }
 
-    } else if (point_interpolation(&newX, &newY, m_image)) {
+    } else if (point_interpolation(&newX, &newY)) {
         m_readAccessor->moveTo(newX, newY);
 
         if (m_useOldData) {
@@ -91,7 +91,7 @@ inline void DeformBrush::movePixel(qreal newX, qreal newY, quint8 *dst)
             m_srcAcc->sampledRawData(dst);
         }
     } else {
-        if (point_interpolation(&newX, &newY, m_image)) {
+        if (point_interpolation(&newX, &newY)) {
             m_readAccessor->moveTo(newX, newY);
             if (m_useOldData) {
                 memcpy(dst , m_readAccessor->oldRawData(), m_pixelSize);
@@ -630,14 +630,11 @@ void DeformBrush::paint(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisP
 }
 
 
-bool DeformBrush::point_interpolation(qreal* x, qreal* y, KisImageWSP image)
+bool DeformBrush::point_interpolation(qreal* x, qreal* y)
 {
-    if (*x >= 0 && *x < image->width() - 1 && *y >= 0 && *y < image->height() - 1) {
         *x = *x + 0.5; // prepare for typing to int
         *y = *y + 0.5;
         return true;
-    }
-    return false;
 }
 
 void DeformBrush::debugColor(const quint8* data)
@@ -670,37 +667,32 @@ void DeformBrush::bilinear_interpolation(double x, double y, quint8 *dst)
 
     int ix = (int)floor(x);
     int iy = (int)floor(y);
+    
+    const quint8 *colors[4];
+    m_readAccessor->moveTo(ix, iy);
+    colors[0] = m_readAccessor->rawData(); //11
 
-    if (ix >= 0 &&
-            ix <= m_image->width() - 2 &&
-            iy >= 0 &&
-            iy <= m_image->height() - 2) {
-        const quint8 *colors[4];
-        m_readAccessor->moveTo(ix, iy);
-        colors[0] = m_readAccessor->rawData(); //11
+    m_readAccessor->moveTo(ix + 1, iy);
+    colors[1] = m_readAccessor->rawData(); //12
 
-        m_readAccessor->moveTo(ix + 1, iy);
-        colors[1] = m_readAccessor->rawData(); //12
+    m_readAccessor->moveTo(ix, iy + 1);
+    colors[2] = m_readAccessor->rawData(); //21
 
-        m_readAccessor->moveTo(ix, iy + 1);
-        colors[2] = m_readAccessor->rawData(); //21
+    m_readAccessor->moveTo(ix + 1, iy + 1);
+    colors[3] = m_readAccessor->rawData();  //22
 
-        m_readAccessor->moveTo(ix + 1, iy + 1);
-        colors[3] = m_readAccessor->rawData();  //22
+    double x_frac = x - (double)ix;
+    double y_frac = y - (double)iy;
 
-        double x_frac = x - (double)ix;
-        double y_frac = y - (double)iy;
+    qint16 colorWeights[4];
+    int MAX_16BIT = 255;
 
-        qint16 colorWeights[4];
-        int MAX_16BIT = 255;
+    colorWeights[0] = static_cast<quint16>((1.0 - y_frac) * (1.0 - x_frac) * MAX_16BIT);
+    colorWeights[1] = static_cast<quint16>((1.0 - y_frac) *  x_frac * MAX_16BIT);
+    colorWeights[2] = static_cast<quint16>(y_frac * (1.0 - x_frac) * MAX_16BIT);
+    colorWeights[3] = static_cast<quint16>(y_frac * x_frac * MAX_16BIT);
 
-        colorWeights[0] = static_cast<quint16>((1.0 - y_frac) * (1.0 - x_frac) * MAX_16BIT);
-        colorWeights[1] = static_cast<quint16>((1.0 - y_frac) *  x_frac * MAX_16BIT);
-        colorWeights[2] = static_cast<quint16>(y_frac * (1.0 - x_frac) * MAX_16BIT);
-        colorWeights[3] = static_cast<quint16>(y_frac * x_frac * MAX_16BIT);
-
-        mixOp->mixColors(colors, colorWeights, 4, dst);
-    }
+    mixOp->mixColors(colors, colorWeights, 4, dst);
 }
 
 
@@ -710,34 +702,29 @@ void DeformBrush::bilinear_interpolation_old(double x, double y , quint8 *dst)
 
     int ix = (int)floor(x);
     int iy = (int)floor(y);
+    
+    const quint8 *colors[4];
+    m_readAccessor->moveTo(ix, iy);
+    colors[0] = m_readAccessor->oldRawData(); //11
 
-    if (ix >= 0 &&
-            ix <= m_image->width() - 2 &&
-            iy >= 0 &&
-            iy <= m_image->height() - 2) {
-        const quint8 *colors[4];
-        m_readAccessor->moveTo(ix, iy);
-        colors[0] = m_readAccessor->oldRawData(); //11
+    m_readAccessor->moveTo(ix + 1, iy);
+    colors[1] = m_readAccessor->oldRawData(); //12
 
-        m_readAccessor->moveTo(ix + 1, iy);
-        colors[1] = m_readAccessor->oldRawData(); //12
+    m_readAccessor->moveTo(ix, iy + 1);
+    colors[2] = m_readAccessor->oldRawData(); //21
 
-        m_readAccessor->moveTo(ix, iy + 1);
-        colors[2] = m_readAccessor->oldRawData(); //21
+    m_readAccessor->moveTo(ix + 1, iy + 1);
+    colors[3] = m_readAccessor->oldRawData();  //22
 
-        m_readAccessor->moveTo(ix + 1, iy + 1);
-        colors[3] = m_readAccessor->oldRawData();  //22
+    double x_frac = x - (double)ix;
+    double y_frac = y - (double)iy;
 
-        double x_frac = x - (double)ix;
-        double y_frac = y - (double)iy;
+    qint16 colorWeights[4];
+    int MAX_16BIT = 255;
 
-        qint16 colorWeights[4];
-        int MAX_16BIT = 255;
-
-        colorWeights[0] = static_cast<quint16>((1.0 - y_frac) * (1.0 - x_frac) * MAX_16BIT);
-        colorWeights[1] = static_cast<quint16>((1.0 - y_frac) *  x_frac * MAX_16BIT);
-        colorWeights[2] = static_cast<quint16>(y_frac * (1.0 - x_frac) * MAX_16BIT);
-        colorWeights[3] = static_cast<quint16>(y_frac * x_frac * MAX_16BIT);
-        mixOp->mixColors(colors, colorWeights, 4, dst);
-    }
+    colorWeights[0] = static_cast<quint16>((1.0 - y_frac) * (1.0 - x_frac) * MAX_16BIT);
+    colorWeights[1] = static_cast<quint16>((1.0 - y_frac) *  x_frac * MAX_16BIT);
+    colorWeights[2] = static_cast<quint16>(y_frac * (1.0 - x_frac) * MAX_16BIT);
+    colorWeights[3] = static_cast<quint16>(y_frac * x_frac * MAX_16BIT);
+    mixOp->mixColors(colors, colorWeights, 4, dst);
 }

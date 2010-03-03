@@ -96,7 +96,7 @@ private:
     void movePixel(qreal newX, qreal newY, quint8 *dst);
     void myMovePixel(qreal newX, qreal newY, quint8 *dst);
 
-    bool point_interpolation(qreal* x, qreal* y, KisImageWSP image);
+    bool point_interpolation(qreal* x, qreal* y);
     void debugColor(const quint8* data);
     void precomputeDistances(int radius);
     void fastScale(qreal cursorX, qreal cursorY, qreal factor);

@@ -40,7 +40,8 @@ void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const Ko
 
         qDebug() << "Testing with" << cs->id();
 
-        (this->*funcPtr)(cs);
+        if (cs->id() != "GRAYU16") // No point in testing extend for GRAYU16
+            (this->*funcPtr)(cs);
 
     }
 }
@@ -159,6 +160,20 @@ void KisIteratorTest::rectIter(const KoColorSpace * colorSpace)
         QCOMPARE(dev.exactBounds(), QRect(10, 10, 128, 128));
     }
 
+    dev.clear();
+    dev.setX(10);
+    dev.setY(-15);
+
+    {
+        KisRectIteratorPixel it = dev.createRectIterator(10, 10, 128, 128);
+        while (!it.isDone()) {
+            memcpy(it.rawData(), bytes, colorSpace->pixelSize());
+            ++it;
+        }
+        QCOMPARE(dev.extent(), QRect(10, -15, 128, 192));
+        QCOMPARE(dev.exactBounds(), QRect(10, 10, 128, 128));
+    }
+
     delete[] bytes;
 }
 
@@ -216,6 +231,21 @@ void KisIteratorTest::hLineIter(const KoColorSpace * colorSpace)
         QCOMPARE(dev.exactBounds(), QRect(10, 10, 128, 1));
     }
 
+    dev.clear();
+    dev.setX(10);
+    dev.setY(-15);
+
+    {
+        KisHLineIteratorPixel it = dev.createHLineIterator(10, 10, 128);
+        while (!it.isDone()) {
+            memcpy(it.rawData(), bytes, colorSpace->pixelSize());
+            ++it;
+        }
+
+        QCOMPARE(dev.extent(), QRect(10, -15, 128, 64));
+        QCOMPARE(dev.exactBounds(), QRect(10, 10, 128, 1));
+    }
+
     delete[] bytes;
 }
 
@@ -253,6 +283,21 @@ void KisIteratorTest::vLineIter(const KoColorSpace * colorSpace)
         }
 
         QCOMPARE(dev.extent(), QRect(0, 0, 64, 192));
+        QCOMPARE(dev.exactBounds(), QRect(10, 10, 1, 128));
+    }
+    
+    dev.clear();
+    dev.setX(10);
+    dev.setY(-15);
+
+    {
+        KisVLineIteratorPixel it = dev.createVLineIterator(10, 10, 128);
+        while (!it.isDone()) {
+            memcpy(it.rawData(), bytes, colorSpace->pixelSize());
+            ++it;
+        }
+
+        QCOMPARE(dev.extent(), QRect(10, -15, 64, 192));
         QCOMPARE(dev.exactBounds(), QRect(10, 10, 1, 128));
     }
 

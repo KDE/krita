@@ -42,8 +42,8 @@ void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const Ko
     foreach(const KoColorSpace* cs, colorsapces) {
 
         qDebug() << "Testing with" << cs->id();
-
-        (this->*funcPtr)(cs);
+        if (cs->id() != "GRAYU16") // No point in testing extend for GRAYU16
+            (this->*funcPtr)(cs);
 
     }
 }
@@ -156,6 +156,17 @@ void KisIteratorTest::rectIter(const KoColorSpace * colorSpace)
     QCOMPARE(dev.extent(), QRect(0, 0, 3 * 64, 3 * 64));
     QCOMPARE(dev.exactBounds(), QRect(10, 10, 128, 128));
 
+    dev.clear();
+    dev.setX(10);
+    dev.setY(-15);
+
+    it = dev.createRectIteratorNG(10, 10, 128, 128);
+    do {
+        memcpy(it->rawData(), bytes, colorSpace->pixelSize());
+    } while (it->nextPixel());
+    QCOMPARE(dev.extent(), QRect(10, -15, 128, 192));
+    QCOMPARE(dev.exactBounds(), QRect(10, 10, 128, 128));
+
     delete[] bytes;
 }
 
@@ -203,6 +214,18 @@ void KisIteratorTest::hLineIter(const KoColorSpace * colorSpace)
     QCOMPARE(dev.extent(), QRect(0, 0, 192, 64));
     QCOMPARE(dev.exactBounds(), QRect(10, 10, 128, 1));
 
+    dev.clear();
+    dev.setX(10);
+    dev.setY(-15);
+
+    it = dev.createHLineIteratorNG(10, 10, 128);
+    do {
+        memcpy(it->rawData(), bytes, colorSpace->pixelSize());
+    } while (it->nextPixel());
+
+    QCOMPARE(dev.extent(), QRect(10, -15, 128, 64));
+    QCOMPARE(dev.exactBounds(), QRect(10, 10, 128, 1));
+
     delete[] bytes;
 }
 
@@ -239,6 +262,18 @@ void KisIteratorTest::vLineIter(const KoColorSpace * colorSpace)
 
     QCOMPARE(dev.extent(), QRect(0, 0, 64, 192));
     QCOMPARE(dev.exactBounds(), QRect(10, 10, 1, 128));
+    
+    dev.clear();
+    dev.setX(10);
+    dev.setY(-15);
+
+    it = dev.createVLineIteratorNG(10, 10, 128);
+    do {
+        memcpy(it->rawData(), bytes, colorSpace->pixelSize());
+    } while(it->nextPixel());
+
+    QCOMPARE(dev.extent(), QRect(10, -15, 64, 192));
+    QCOMPARE(dev.exactBounds(), QRect(10, 10, 1, 128));
 
     delete[] bytes;
 
@@ -269,6 +304,20 @@ void KisIteratorTest::randomAccessor(const KoColorSpace * colorSpace)
         }
     }
     QCOMPARE(dev.extent(), QRect(0, 0, 128, 128));
+    QCOMPARE(dev.exactBounds(), QRect(0, 0, 128, 128));
+
+    dev.clear();
+    dev.setX(10);
+    dev.setY(-15);
+
+    ac = dev.createRandomAccessorNG(0, 0);
+    for (int y = 0; y < 128; ++y) {
+        for (int x = 0; x < 128; ++x) {
+            ac->moveTo(x, y);
+            memcpy(ac->rawData(), bytes, colorSpace->pixelSize());
+        }
+    }
+    QCOMPARE(dev.extent(), QRect(10, -15, 128, 128));
     QCOMPARE(dev.exactBounds(), QRect(0, 0, 128, 128));
 
     delete[] bytes;

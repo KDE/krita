@@ -169,11 +169,12 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
         }
 
         if ( !(*buffer.colorSpace() == *colorSpace())) {
+            qDebug() << buffer.colorSpace()->id() << " " << colorSpace()->id();
             buffer = KoColor(colorSpace());
         }
 
-        KoGradientStop leftStop = *(stop - 1);
-        KoGradientStop rightStop = *(stop);
+        const KoGradientStop& leftStop = *(stop - 1);
+        const KoGradientStop& rightStop = *(stop);
 
         const quint8 *colors[2];
         colors[0] = leftStop.second.data();

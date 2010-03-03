@@ -1,5 +1,6 @@
 /* 
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_HLINE_ITERATOR_H_
-#define _KIS_HLINE_ITERATOR_H_
+#ifndef _KIS_VLINE_ITERATOR_H_
+#define _KIS_VLINE_ITERATOR_H_
 
 #include "kis_iterator_ng.h"
 #include "kis_datamanager.h"
@@ -28,9 +29,9 @@
 
 #include "kis_iterator_ng.h"
 
-class KisHLineIterator2 : public KisShared, public KisHLineIteratorNG{
-    KisHLineIterator2(const KisHLineIterator2&);
-    KisHLineIterator2& operator=(const KisHLineIterator2&);
+class KisVLineIterator2 : public KisShared, public KisVLineIteratorNG{
+    KisVLineIterator2(const KisVLineIterator2&);
+    KisVLineIterator2& operator=(const KisVLineIterator2&);
 
 public:
     struct KisTileInfo {
@@ -42,11 +43,11 @@ public:
 
 
 public:    
-    KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY, bool writable);
-    ~KisHLineIterator2();
+    KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY, bool writable);
+    ~KisVLineIterator2();
     
     virtual bool nextPixel();
-    virtual void nextRow();
+    virtual void nextColumn();
     virtual const quint8* oldRawData() const;
     virtual quint8* rawData();
     virtual qint32 nConseqPixels() const;

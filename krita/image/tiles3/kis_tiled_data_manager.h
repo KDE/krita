@@ -107,6 +107,8 @@ protected:
     // derived iterator classes must go through KisTiledIterator
     friend class KisTiledIterator;
     friend class KisHLineIterator2;
+    friend class KisVLineIterator2;
+    friend class KisRectIterator2;
     friend class KisTiledRandomAccessor;
 protected:
 

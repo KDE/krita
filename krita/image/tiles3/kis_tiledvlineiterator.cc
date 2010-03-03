@@ -54,7 +54,7 @@ KisTiledVLineIterator::KisTiledVLineIterator(KisTiledDataManager *dataManager,
     m_tilesCache.resize(m_tilesCacheSize);
     
     // let's prealocate first row 
-    for (int i = 0; i < m_tilesCacheSize; i++){
+    for (quint32 i = 0; i < m_tilesCacheSize; i++){
         m_tilesCache[i] = fetchTileDataForCache( m_col, m_topRow + i);
     }
     

@@ -25,7 +25,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <kis_iterator_ng.h>
 
-void KisIteratorsPixelTest::test(int width, int height)
+void KisIteratorsPixelTest::testHLine(int width, int height)
 {
     KisPaintDevice dev(KoColorSpaceRegistry::instance()->rgb8());
 
@@ -58,22 +58,70 @@ void KisIteratorsPixelTest::test(int width, int height)
     }
 }
 
-void KisIteratorsPixelTest::testAlignedOnTile()
+void KisIteratorsPixelTest::testHLineAlignedOnTile()
 {
-  test(64,64);
-  test(64,128);
-  test(128,64);
-  test(128,128);
+  testHLine(64,64);
+  testHLine(64,128);
+  testHLine(128,64);
+  testHLine(128,128);
 }
 
-void KisIteratorsPixelTest::testUnalignedOnTile()
+void KisIteratorsPixelTest::testHLineUnalignedOnTile()
 {
-  test(200,200);
-  test(20,20);
-  test(20,200);
-  test(200,20);
+  testHLine(200,200);
+  testHLine(20,20);
+  testHLine(20,200);
+  testHLine(200,20);
 }
 
+void KisIteratorsPixelTest::testVLine(int width, int height)
+{
+    KisPaintDevice dev(KoColorSpaceRegistry::instance()->rgb8());
+
+    KisVLineIteratorSP it = dev.createVLineIteratorNG(0, 0, width);
+    quint8 data = 0;
+    for(int y = 0; y < height; ++y)
+    {
+        do {
+            for(int i = 0; i < 4; ++i)
+            {
+                it->rawData()[i] = ++data;
+            }
+        } while(it->nextPixel());
+        it->nextColumn();
+    }
+    KisVLineIteratorPixel it2 = dev.createVLineIterator(0,0,width);
+    data = 0;
+    for(int y = 0; y < height; ++y)
+    {
+        while(!it2.isDone())
+        {
+            for(int i = 0; i < 4; ++i)
+            {
+                quint8 d = ++data;
+                QCOMPARE(it2.rawData()[i], d);
+            }
+            ++it2;
+        }
+        it2.nextCol();
+    }
+}
+
+void KisIteratorsPixelTest::testVLineAlignedOnTile()
+{
+  testVLine(64,64);
+  testVLine(64,128);
+  testVLine(128,64);
+  testVLine(128,128);
+}
+
+void KisIteratorsPixelTest::testVLineUnalignedOnTile()
+{
+  testVLine(200,200);
+  testVLine(20,20);
+  testVLine(20,200);
+  testVLine(200,20);
+}
 
 QTEST_KDEMAIN(KisIteratorsPixelTest, GUI)
 #include "kis_iterators_pixel_test.moc"

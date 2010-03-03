@@ -191,6 +191,18 @@ typedef KisSharedPtr<KisHLineIteratorNG> KisHLineIteratorSP;
 class KisHLineConstIteratorNG;
 typedef KisSharedPtr<KisHLineConstIteratorNG> KisHLineConstIteratorSP;
 
+class KisVLineIteratorNG;
+typedef KisSharedPtr<KisVLineIteratorNG> KisVLineIteratorSP;
+
+class KisVLineConstIteratorNG;
+typedef KisSharedPtr<KisVLineConstIteratorNG> KisVLineConstIteratorSP;
+
+class KisRectIteratorNG;
+typedef KisSharedPtr<KisRectIteratorNG> KisRectIteratorSP;
+
+class KisRectConstIteratorNG;
+typedef KisSharedPtr<KisRectConstIteratorNG> KisRectConstIteratorSP;
+
 // Things
 
 typedef QVector<QPointF> vQPointF;

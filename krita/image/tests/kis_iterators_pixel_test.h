@@ -26,10 +26,13 @@ class KisIteratorsPixelTest : public QObject
     Q_OBJECT
 private slots:
 
-    void testAlignedOnTile();
-    void testUnalignedOnTile();
+    void testHLineAlignedOnTile();
+    void testHLineUnalignedOnTile();
+    void testVLineAlignedOnTile();
+    void testVLineUnalignedOnTile();
 private:
-    void test(int width, int height);
+    void testHLine(int width, int height);
+    void testVLine(int width, int height);
 
 };
 

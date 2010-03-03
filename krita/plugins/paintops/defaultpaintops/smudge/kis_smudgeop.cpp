@@ -109,8 +109,9 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     } else {
         dab = cachedDab();
         KoColor color = painter()->paintColor();
-        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
+        color.convertTo(dab->colorSpace());
         brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
+        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     }
 
     qint32 sw = dab->bounds().width();

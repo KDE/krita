@@ -28,10 +28,11 @@ kde4_add_plugin(kritagifexport WITH_PREFIX ${kritagifexport_PART_SRCS})
 
 target_link_libraries(kritagifexport kritaui ${GIF_LIBRARIES})
 
-install(TARGETS kritagifexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+#install(TARGETS kritagifexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  krita_gif_import.desktop krita_gif_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_gif_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+#install( FILES  krita_gif_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  krita_gif.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

@@ -21,14 +21,10 @@
 
 #include <iostream>
 
-KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 h, qint32 /*offsetX*/, qint32 /*offsetY*/, bool writable)
+KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 h, qint32 /*offsetX*/, qint32 /*offsetY*/, bool writable) : KisBaseIterator(dataManager, writable)
 {
     Q_ASSERT(dataManager != 0);
-    m_dataManager = dataManager;
-    m_pixelSize = m_dataManager->pixelSize();
     m_lineStride = m_pixelSize * KisTileData::WIDTH;
-
-    m_writable = writable;
     
     m_x = x;
     m_y = y;
@@ -109,7 +105,7 @@ qint32 KisVLineIterator2::nConseqPixels() const
     return 1;
 }
 
-void KisVLineIterator2::nextPixels(qint32 n)
+bool KisVLineIterator2::nextPixels(qint32 n)
 {
     Q_ASSERT_X(!(m_y > 0 && (m_y + n) < 0), "vlineIt+=", "Integer overflow");
 
@@ -128,7 +124,7 @@ void KisVLineIterator2::nextPixels(qint32 n)
             switchToTile(yInTile);
         }
     }
-
+    return m_havePixels;
 }
 
 

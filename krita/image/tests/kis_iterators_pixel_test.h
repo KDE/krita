@@ -30,10 +30,12 @@ private slots:
     void testHLineUnalignedOnTile();
     void testVLineAlignedOnTile();
     void testVLineUnalignedOnTile();
+    void testRectAlignedOnTile();
+    void testRectUnalignedOnTile();
 private:
     void testHLine(int width, int height);
     void testVLine(int width, int height);
-
+    void testRect(int width, int height);
 };
 
 #endif

@@ -19,13 +19,9 @@
 #include "kis_hline_iterator.h"
 
 
-KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 /*offsetX*/, qint32 /*offsetY*/, bool writable)
+KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 /*offsetX*/, qint32 /*offsetY*/, bool writable) : KisBaseIterator(dataManager, writable)
 {
     Q_ASSERT(dataManager != 0);
-    m_dataManager = dataManager;
-    m_pixelSize = m_dataManager->pixelSize();
-
-    m_writable = writable;
     
     m_x = x;
     m_y = y;
@@ -108,7 +104,7 @@ qint32 KisHLineIterator2::nConseqPixels() const
 
 
 
-void KisHLineIterator2::nextPixels(qint32 n)
+bool KisHLineIterator2::nextPixels(qint32 n)
 {
     Q_ASSERT_X(!(m_x > 0 && (m_x + n) < 0), "hlineIt+=", "Integer overflow");
 
@@ -127,7 +123,7 @@ void KisHLineIterator2::nextPixels(qint32 n)
             switchToTile(xInTile);
         }
     }
-
+    return m_havePixels;
 }
 
 

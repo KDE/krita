@@ -19,16 +19,11 @@
 #ifndef _KIS_HLINE_ITERATOR_H_
 #define _KIS_HLINE_ITERATOR_H_
 
-#include "kis_iterator_ng.h"
-#include "kis_datamanager.h"
-#include "kis_tiled_data_manager.h"
-#include "kis_tile.h"
-#include "kis_types.h"
-#include "kis_shared.h"
+#include "kis_base_iterator.h"
 
 #include "kis_iterator_ng.h"
 
-class KisHLineIterator2 : public KisShared, public KisHLineIteratorNG{
+class KisHLineIterator2 : public KisHLineIteratorNG, public KisBaseIterator {
     KisHLineIterator2(const KisHLineIterator2&);
     KisHLineIterator2& operator=(const KisHLineIterator2&);
 
@@ -50,11 +45,9 @@ public:
     virtual const quint8* oldRawData() const;
     virtual quint8* rawData();
     virtual qint32 nConseqPixels() const;
-    virtual void nextPixels(qint32 n);
+    virtual bool nextPixels(qint32 n);
     
 private:
-    KisTiledDataManager *m_dataManager;
-    qint32 m_pixelSize;        // bytes per pixel
     qint32 m_x;        // current x position
     qint32 m_y;        // current y position
     qint32 m_row;    // current row in tilemgr
@@ -63,7 +56,6 @@ private:
     quint8 *m_data;
     quint8 *m_dataRight;
     quint8 *m_oldData;
-    bool m_writable;
     bool m_havePixels;
     
     qint32 m_right;
@@ -77,35 +69,6 @@ private:
     QVector<KisTileInfo> m_tilesCache;
     quint32 m_tilesCacheSize;
     
-protected:
-    inline void lockTile(KisTileSP &tile) {
-        if (m_writable)
-            tile->lockForWrite();
-        else
-            tile->lockForRead();
-    }
-    inline void lockOldTile(KisTileSP &tile) {
-        // Doesn't depend on current access type
-        tile->lockForRead();
-    }
-    inline void unlockTile(KisTileSP &tile) {
-        tile->unlock();
-    }
-
-    inline quint32 xToCol(quint32 x) const {
-        return m_dataManager ? m_dataManager->xToCol(x) : 0;
-    }
-    inline quint32 yToRow(quint32 y) const {
-        return m_dataManager ? m_dataManager->yToRow(y) : 0;
-    }
-
-    inline qint32 calcXInTile(qint32 x, qint32 col) const {
-        return x - col * KisTileData::WIDTH;
-    }
-
-    inline qint32 calcYInTile(qint32 y, qint32 row) const {
-        return y - row * KisTileData::HEIGHT;
-    }
 private:
 
     void switchToTile(qint32 xInTile);

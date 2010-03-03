@@ -456,8 +456,10 @@ public:
 
     KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w);
     KisHLineConstIteratorSP createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const;
-    KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 w);
-    KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const;
+    KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h);
+    KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const;
+    KisRectIteratorSP createRectIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h);
+    KisRectConstIteratorSP createRectConstIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h) const;
     
     /**
      * Create an iterator that will "artificially" extend the paint device with the

@@ -54,6 +54,7 @@
 
 #include "tiles3/kis_hline_iterator.h"
 #include "tiles3/kis_vline_iterator.h"
+#include "tiles3/kis_rect_iterator.h"
 
 class KisPaintDevice::Private
 {
@@ -704,6 +705,18 @@ KisVLineConstIteratorSP KisPaintDevice::createVLineConstIteratorNG(qint32 x, qin
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     return new KisVLineIterator2(dm, x, y, w, m_d->x, m_d->y, false);
+}
+
+KisRectIteratorSP KisPaintDevice::createRectIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h)
+{
+    m_d->cache.invalidate();
+    return new KisRectIterator2(m_datamanager.data(), x, y, w, h, true);
+}
+
+KisRectConstIteratorSP KisPaintDevice::createRectConstIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h) const
+{
+   KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
+   return new KisRectIterator2(dm, x, y, w, h, false);
 }
 
 KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection) const

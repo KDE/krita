@@ -20,9 +20,9 @@
 #define _KIS_ITERATOR_NG_H_
 
 #include <krita_export.h>
-#include <kis_shared_data.h>
+#include <kis_shared.h>
 
-class KRITAIMAGE_EXPORT KisBaseConstIteratorNG : public KisSharedData {
+class KRITAIMAGE_EXPORT KisBaseConstIteratorNG : public KisShared {
   public:
     virtual ~KisBaseConstIteratorNG();
     /**
@@ -41,7 +41,7 @@ class KRITAIMAGE_EXPORT KisBaseConstIteratorNG : public KisSharedData {
     /**
      * Move to the next pixels
      */
-    virtual void nextPixels(qint32 n) = 0;
+    virtual bool nextPixels(qint32 n) = 0;
 };
 
 class KRITAIMAGE_EXPORT KisBaseIteratorNG : public virtual KisBaseConstIteratorNG {

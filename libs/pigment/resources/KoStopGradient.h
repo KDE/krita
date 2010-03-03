@@ -61,7 +61,8 @@ protected:
     QPointF m_start;
     QPointF m_stop;
     QPointF m_focalPoint;
-
+private:
+    mutable KoColor buffer;
 private:
     void loadKarbonGradient(QFile* file);
     void parseKarbonGradient(const QDomElement& element);

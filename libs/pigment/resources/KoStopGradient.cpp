@@ -168,7 +168,9 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
                 break;
         }
 
-        KoColor buffer(colorSpace());
+        if ( !(*buffer.colorSpace() == *colorSpace())) {
+            buffer = KoColor(colorSpace());
+        }
 
         KoGradientStop leftStop = *(stop - 1);
         KoGradientStop rightStop = *(stop);

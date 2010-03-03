@@ -333,10 +333,9 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         KisHLineIteratorPixel selIt = pSel->createHLineIterator(0, y, m_width);
         selIt += x;
         if (m_fuzzy) {
-            colorSpace->fromQColor(Qt::white, selIt.rawData());
-            colorSpace->setOpacity(selIt.rawData(), quint8(MAX_SELECTED - diff), 1);
+            *selIt.rawData() = quint8(MAX_SELECTED - diff);
         } else
-            colorSpace->fromQColor(Qt::white, selIt.rawData());
+            *selIt.rawData() = MAX_SELECTED;
 
         if (y > 0 && (map[m_width *(y - 1) + x] == None)) {
             map[m_width *(y - 1) + x] = Added;

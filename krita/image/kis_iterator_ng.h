@@ -24,7 +24,7 @@
 
 class KRITAIMAGE_EXPORT KisBaseConstIteratorNG : public KisSharedData {
   public:
-    virtual ~KisBaseConstIteratorNG() {}
+    virtual ~KisBaseConstIteratorNG();
     /**
      * Move to the next pixel
      * @return false if there is no more pixel in the line
@@ -46,7 +46,7 @@ class KRITAIMAGE_EXPORT KisBaseConstIteratorNG : public KisSharedData {
 
 class KRITAIMAGE_EXPORT KisBaseIteratorNG : public virtual KisBaseConstIteratorNG {
   public:
-    virtual ~KisBaseIteratorNG() {}
+    virtual ~KisBaseIteratorNG();
     /**
      * @return a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
      */
@@ -58,7 +58,7 @@ class KRITAIMAGE_EXPORT KisBaseIteratorNG : public virtual KisBaseConstIteratorN
  */
 class KRITAIMAGE_EXPORT KisHLineConstIteratorNG : public virtual KisBaseConstIteratorNG {
   public:
-    virtual ~KisHLineConstIteratorNG() {}
+    virtual ~KisHLineConstIteratorNG();
     /**
      * Move to the next row
      */
@@ -66,11 +66,49 @@ class KRITAIMAGE_EXPORT KisHLineConstIteratorNG : public virtual KisBaseConstIte
 };
 
 /**
- * Iterates over the line of a paint device.
+ * Also support writting.
  */
 class KRITAIMAGE_EXPORT KisHLineIteratorNG : public KisHLineConstIteratorNG, public KisBaseIteratorNG {
   public:
-    virtual ~KisHLineIteratorNG() {}
+    virtual ~KisHLineIteratorNG();
+};
+
+/**
+ * Iterates over the column of a paint device.
+ */
+class KRITAIMAGE_EXPORT KisVLineConstIteratorNG : public virtual KisBaseConstIteratorNG {
+  public:
+    virtual ~KisVLineConstIteratorNG();
+    /**
+     * Move to the next row
+     */
+    virtual void nextColumn() = 0;
+};
+
+/**
+ * Also support writting.
+ */
+class KRITAIMAGE_EXPORT KisVLineIteratorNG : public KisVLineConstIteratorNG, public KisBaseIteratorNG {
+  public:
+    virtual ~KisVLineIteratorNG();
+};
+
+/**
+ * Create an iterator over a rectangle section of a paint device, the path followed by
+ * the iterator is not guaranteed, it is optimized for speed, which means that you shouldn't
+ * use this type of iterator if you are combining two differents layers.
+ */
+class KRITAIMAGE_EXPORT KisRectConstIteratorNG : public virtual KisBaseConstIteratorNG {
+  public:
+    virtual ~KisRectConstIteratorNG();
+};
+
+/**
+ * Also support writting.
+ */
+class KRITAIMAGE_EXPORT KisRectIteratorNG : public KisRectConstIteratorNG, public KisBaseIteratorNG {
+  public:
+    virtual ~KisRectIteratorNG();
 };
 
 #endif

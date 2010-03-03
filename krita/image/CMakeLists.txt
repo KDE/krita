@@ -119,6 +119,7 @@ set(kritaimage_LIB_SRCS
    kis_filter_strategy.cc
    kis_gradient_painter.cc
    kis_gradient_job.cpp
+   kis_iterator_ng.cpp
    kis_merge_walker.cc
    kis_group_layer.cc
    kis_count_visitor.cpp

@@ -27,6 +27,9 @@
 #include <QFont>
 #include <kconfig.h>
 #include <kglobalsettings.h>
+
+#include <KoColorSpaceRegistry.h>
+
 #include <kis_paintop_preset.h>
 #include <widgets/kis_preset_widget.h>
 #include <widgets/kis_preset_chooser.h>
@@ -62,6 +65,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
 
     m_d->layout = new QGridLayout(m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer);
     m_d->layout->setSizeConstraint(QLayout::SetFixedSize);
+    
+    m_d->uiWdgPaintOpPresets.scratchPad->setBackgroundColor(Qt::white);
+    m_d->uiWdgPaintOpPresets.scratchPad->setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
 
     m_d->settingsWidget = 0;
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
@@ -123,6 +129,11 @@ QString KisPaintOpPresetsPopup::getPresetName() const
 void KisPaintOpPresetsPopup::setPresetFilter(const KoID& paintopID)
 {
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setPresetFilter(paintopID);
+}
+
+void KisPaintOpPresetsPopup::setPreset(KisPaintOpPresetSP preset)
+{
+    m_d->uiWdgPaintOpPresets.scratchPad->setPreset(preset);
 }
 
 

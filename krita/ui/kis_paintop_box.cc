@@ -291,6 +291,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         Q_ASSERT(m_optionWidget);
         Q_ASSERT(m_presetWidget);
         connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotUpdatePreset()));
+        m_presetsPopup->setPreset(preset);
     } else {
         m_presetsPopup->setPaintOpSettingsWidget(0);
     }

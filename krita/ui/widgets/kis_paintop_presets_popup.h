@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include <KoID.h>
+#include <kis_types.h>
 
 class QString;
 class KoResource;
@@ -52,6 +53,11 @@ public:
     ///Set id for paintop to be accept by the proxy model
     ///@param paintopID id of the paintop for which the presets will be shown
     void setPresetFilter(const KoID & paintopID);
+
+    ///Set preset for the scratchpad
+    ///@param preset that will be used in the scratchpad
+    void setPreset(KisPaintOpPresetSP preset);
+    
 signals:
     void savePresetClicked();
     void resourceSelected( KoResource * resource );

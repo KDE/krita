@@ -78,9 +78,9 @@ void KisIteratorsPixelTest::testVLine(int width, int height)
 {
     KisPaintDevice dev(KoColorSpaceRegistry::instance()->rgb8());
 
-    KisVLineIteratorSP it = dev.createVLineIteratorNG(0, 0, width);
+    KisVLineIteratorSP it = dev.createVLineIteratorNG(0, 0, height);
     quint8 data = 0;
-    for(int y = 0; y < height; ++y)
+    for(int y = 0; y < width; ++y)
     {
         do {
             for(int i = 0; i < 4; ++i)
@@ -90,9 +90,9 @@ void KisIteratorsPixelTest::testVLine(int width, int height)
         } while(it->nextPixel());
         it->nextColumn();
     }
-    KisVLineIteratorPixel it2 = dev.createVLineIterator(0,0,width);
+    KisVLineIteratorPixel it2 = dev.createVLineIterator(0,0,height);
     data = 0;
-    for(int y = 0; y < height; ++y)
+    for(int y = 0; y < width; ++y)
     {
         while(!it2.isDone())
         {

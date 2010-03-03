@@ -19,59 +19,61 @@
 
 #include "kis_vline_iterator.h"
 
+#include <iostream>
 
-KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 /*offsetX*/, qint32 /*offsetY*/, bool writable)
+KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 h, qint32 /*offsetX*/, qint32 /*offsetY*/, bool writable)
 {
     Q_ASSERT(dataManager != 0);
     m_dataManager = dataManager;
     m_pixelSize = m_dataManager->pixelSize();
+    m_lineStride = m_pixelSize * KisTileData::WIDTH;
 
     m_writable = writable;
     
     m_x = x;
     m_y = y;
 
-    m_left = x;
-    m_right = x + w - 1;
+    m_top = y;
+    m_bottom = y + h - 1;
 
-    m_havePixels = (w == 0) ? false : true;
-    if (m_left > m_right) {
+    m_havePixels = (h == 0) ? false : true;
+    if (m_top > m_bottom) {
         m_havePixels = false;
         return;
     }
 
-    m_leftCol = xToCol(m_left);
-    m_rightCol = xToCol(m_right);
+    m_topRow = yToRow(m_top);
+    m_bottomRow = yToRow(m_bottom);
     
-    m_row = yToRow(m_y);
-    m_yInTile = calcYInTile(m_y, m_row);
+    m_column = xToCol(m_x);
+    m_xInTile = calcXInTile(m_x, m_column);
 
-    m_leftInLeftmostTile = m_left - m_leftCol * KisTileData::WIDTH;
+    m_topInTopmostTile = m_top - m_topRow * KisTileData::WIDTH;
 
-    m_tilesCacheSize = m_rightCol - m_leftCol + 1;
+    m_tilesCacheSize = m_bottomRow - m_topRow + 1;
     m_tilesCache.resize(m_tilesCacheSize);
 
-    m_tileWidth = m_pixelSize * KisTileData::HEIGHT;
+    m_tileSize = m_lineStride * KisTileData::HEIGHT;
     
     // let's prealocate first row 
     for (quint32 i = 0; i < m_tilesCacheSize; i++){
-        fetchTileDataForCache(m_tilesCache[i], m_leftCol + i, m_row);
+        fetchTileDataForCache(m_tilesCache[i], m_column, m_topRow + i);
     }
     m_index = 0;
-    switchToTile(m_leftInLeftmostTile);
+    switchToTile(m_topInTopmostTile);
 }
 
 bool KisVLineIterator2::nextPixel()
 {
     // We won't increment m_x here as integer can overflow here
-    if (m_x >= m_right) {
+    if (m_y >= m_bottom) {
         //return !m_isDoneFlag;
         return m_havePixels = false;
     } else {
-        ++m_x;
-        m_data += m_pixelSize;
-        if (m_data < m_dataRight)
-            m_oldData += m_pixelSize;
+        ++m_y;
+        m_data += m_lineStride;
+        if (m_data < m_dataBottom)
+            m_oldData += m_lineStride;
         else {
             // Switching to the beginning of the next tile
             ++m_index;
@@ -85,18 +87,18 @@ bool KisVLineIterator2::nextPixel()
 
 void KisVLineIterator2::nextColumn()
 {
-    m_x = m_left;
-    ++m_y;
+    m_y = m_top;
+    ++m_x;
 
-    if (++m_yInTile < KisTileData::HEIGHT) {
+    if (++m_xInTile < KisTileData::HEIGHT) {
         /* do nothing, usual case */
     } else {
-        ++m_row;
-        m_yInTile = 0;
+        ++m_column;
+        m_xInTile = 0;
         preallocateTiles();
     }
     m_index = 0;
-    switchToTile(m_leftInLeftmostTile);
+    switchToTile(m_topInTopmostTile);
 
     m_havePixels = true;
 }
@@ -104,28 +106,26 @@ void KisVLineIterator2::nextColumn()
 
 qint32 KisVLineIterator2::nConseqPixels() const
 {
-    return (m_dataRight - m_data) / m_pixelSize;
+    return 1;
 }
-
-
 
 void KisVLineIterator2::nextPixels(qint32 n)
 {
-    Q_ASSERT_X(!(m_x > 0 && (m_x + n) < 0), "vlineIt+=", "Integer overflow");
+    Q_ASSERT_X(!(m_y > 0 && (m_y + n) < 0), "vlineIt+=", "Integer overflow");
 
-    qint32 previousCol = xToCol(m_x);
+    qint32 previousRow = yToRow(m_y);
     // We won't increment m_x here first as integer can overflow
-    if (m_x >= m_right || (m_x += n) > m_right) {
+    if (m_y >= m_bottom || (m_y += n) > m_bottom) {
         m_havePixels = false;
     } else {
-        qint32 col = xToCol(m_x);
+        qint32 row = yToRow(m_y);
         // if we are in the same column in tiles
-        if (col == previousCol) {
+        if (row == previousRow) {
             m_data += n * m_pixelSize;
         } else {
-            qint32 xInTile = calcXInTile(m_x, col);
-            m_index += col - previousCol;
-            switchToTile(xInTile);
+            qint32 yInTile = calcYInTile(m_y, row);
+            m_index += row - previousRow;
+            switchToTile(yInTile);
         }
     }
 
@@ -153,7 +153,7 @@ const quint8 * KisVLineIterator2::oldRawData() const
     return m_oldData;
 }
 
-void KisVLineIterator2::switchToTile(qint32 xInTile)
+void KisVLineIterator2::switchToTile(qint32 yInTile)
 {
     // The caller must ensure that we are not out of bounds
     Q_ASSERT(m_index < m_tilesCacheSize);
@@ -161,10 +161,9 @@ void KisVLineIterator2::switchToTile(qint32 xInTile)
 
     m_data = m_tilesCache[m_index].data;
     m_oldData = m_tilesCache[m_index].oldData;
-
-    m_data += m_pixelSize * (m_yInTile * KisTileData::WIDTH);
-    m_dataRight = m_data + m_tileWidth;
-    m_data  += m_pixelSize * xInTile;
+    m_data += m_pixelSize * m_xInTile;
+    m_dataBottom = m_data + m_tileSize;
+    m_data  += m_pixelSize * yInTile * KisTileData::WIDTH;
 }
 
 
@@ -185,6 +184,6 @@ void KisVLineIterator2::preallocateTiles()
     for (quint32 i = 0; i < m_tilesCacheSize; ++i){
         unlockTile(m_tilesCache[i].tile);
         unlockTile(m_tilesCache[i].oldtile);
-        fetchTileDataForCache(m_tilesCache[i], m_leftCol + i, m_row);
+        fetchTileDataForCache(m_tilesCache[i], m_column, m_topRow + i );
     }
 }

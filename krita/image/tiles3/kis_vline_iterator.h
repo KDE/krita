@@ -43,7 +43,7 @@ public:
 
 
 public:    
-    KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY, bool writable);
+    KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 h, qint32 offsetX, qint32 offsetY, bool writable);
     ~KisVLineIterator2();
     
     virtual bool nextPixel();
@@ -58,22 +58,23 @@ private:
     qint32 m_pixelSize;        // bytes per pixel
     qint32 m_x;        // current x position
     qint32 m_y;        // current y position
-    qint32 m_row;    // current row in tilemgr
-    qint32 m_index;    // current col in tilemgr
-    qint32 m_tileWidth;
+    qint32 m_column;    // current column in tilemgr
+    qint32 m_index;    // current row in tilemgr
+    qint32 m_tileSize;
     quint8 *m_data;
-    quint8 *m_dataRight;
+    quint8 *m_dataBottom;
     quint8 *m_oldData;
     bool m_writable;
     bool m_havePixels;
     
-    qint32 m_right;
-    qint32 m_left;
-    qint32 m_leftCol;
-    qint32 m_rightCol;
+    qint32 m_top;
+    qint32 m_bottom;
+    qint32 m_topRow;
+    qint32 m_bottomRow;
 
-    qint32 m_leftInLeftmostTile;
-    qint32 m_yInTile;
+    qint32 m_topInTopmostTile;
+    qint32 m_xInTile;
+    qint32 m_lineStride;
 
     QVector<KisTileInfo> m_tilesCache;
     quint32 m_tilesCacheSize;

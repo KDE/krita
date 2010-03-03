@@ -422,13 +422,16 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
     } else {
         parentNode = m_d->image->root();
     }
+    dbgUI << activeNode << " " << parentNode;
     if (action == Qt::CopyAction) {
         dbgUI << "KisNodeModel::dropMimeData copy action on " << activeNode;
         foreach(KisNode* n, nodes) {
             if (row >= 0) {
                 emit requestAddNode(n->clone(), parentNode, parentNode->childCount() - row);
-            } else {
+            } else if (activeNode) {
                 emit requestAddNode(n->clone(), activeNode);
+            } else {
+                emit requestAddNode(n->clone(), parentNode, 0);
             }
         }
         return true;
@@ -437,8 +440,10 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
         foreach(KisNode* n, nodes) {
             if (row >= 0) {
                 emit requestMoveNode(n, parentNode, parentNode->childCount() - row);
-            } else {
+            } else if (activeNode) {
                 emit requestMoveNode(n, activeNode);
+            } else {
+                emit requestMoveNode(n, parentNode, 0);
             }
         }
         return true;

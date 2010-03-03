@@ -29,7 +29,7 @@ void KisIteratorsPixelTest::test(int width, int height)
 {
     KisPaintDevice dev(KoColorSpaceRegistry::instance()->rgb8());
 
-    KisHLineIteratorNG* it = dev.createHLineIterator2(0, 0, width);
+    KisHLineIteratorSP it = dev.createHLineIteratorNG(0, 0, width);
     quint8 data = 0;
     for(int y = 0; y < height; ++y)
     {

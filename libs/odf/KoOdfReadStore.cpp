@@ -153,16 +153,16 @@ bool KoOdfReadStore::loadAndParse(QIODevice* fileDevice, KoXmlDocument& doc, QSt
     return ok;
 }
 
-QString normalizeFullPath(QString s)
+static QString normalizeFullPath(QString s)
 {
-    if(s.startsWith("./"))
+    if (s.startsWith("./"))
         s = s.mid(2);
-    if(s.endsWith("/"))
+    if (s.endsWith("/"))
         s = s.left(s.length()-1);
     return s;
 }
 
-QString KoOdfReadStore::mimeForPath(const KoXmlDocument& doc, const QString& _fullPath)
+QString KoOdfReadStore::mimeForPath(const KoXmlDocument &doc, const QString &_fullPath)
 {
     QString fullPath = normalizeFullPath(_fullPath);
     KoXmlElement docElem = doc.documentElement();

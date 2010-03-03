@@ -131,7 +131,7 @@ void KisToolPaint::paint(QPainter&, const KoViewConverter &)
 
 void KisToolPaint::mouseReleaseEvent(KoPointerEvent *e)
 {
-    if (e->button() == Qt::MidButton) {
+    if (e->button() == Qt::RightButton) {
         //CALLING POP UP PALETTE
         emit sigFavoritePaletteCalled(e->pos());
 

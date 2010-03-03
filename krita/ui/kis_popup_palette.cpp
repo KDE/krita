@@ -39,7 +39,7 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
 
     setAutoFillBackground(true);
     setAttribute(Qt::WA_ContentsPropagated,true);
-//    setAttribute(Qt::WA_TranslucentBackground, true);
+    //    setAttribute(Qt::WA_TranslucentBackground, true);
 
     connect(m_triangleColorSelector, SIGNAL(colorChanged(const QColor& )), SLOT(slotChangefGColor(QColor)));
     connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
@@ -121,13 +121,19 @@ void KisPopupPalette::showPopupPalette (const QPoint &p)
 
 }
 
-void KisPopupPalette::showPopupPalette(bool b)
+void KisPopupPalette::showPopupPalette(bool show)
 {
-    if (b)
-        emit sigEnableChangeFGColor(!b);
+    if (show)
+        emit sigEnableChangeFGColor(!show);
     else
         emit sigTriggerTimer();
-    setVisible(b);
+
+    if(show)
+        QApplication::setOverrideCursor(Qt::ArrowCursor);
+    else
+        QApplication::restoreOverrideCursor();
+
+    setVisible(show);
 }
 
 void KisPopupPalette::setVisible(bool b)
@@ -202,7 +208,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     drawArcRisen
             (painter, QColor(Qt::black), radius, 45, cos(M_PI/4)*radius, -1*sin(M_PI/4)*radius, 2*radius+0.5, 2*radius+0.5);
     drawArcRisen
-           (painter, QColor(Qt::white), radius, 180+45, -1*cos(M_PI/4)*radius, sin(M_PI/4)*radius, 2*radius, 2*radius);
+            (painter, QColor(Qt::white), radius, 180+45, -1*cos(M_PI/4)*radius, sin(M_PI/4)*radius, 2*radius, 2*radius);
 
 
     //painting recent colors
@@ -297,11 +303,11 @@ QPainterPath KisPopupPalette::drawDonutPathAngle(int inner_radius, int outer_rad
 {
     QPainterPath path;
     path.moveTo(-1*outer_radius * sin(M_PI/limit),
-                   outer_radius * cos(M_PI/limit));
+                outer_radius * cos(M_PI/limit));
     path.arcTo((-1*outer_radius), -1*outer_radius, 2*outer_radius,2*outer_radius,-90.0 - 180.0/limit,
-                       360.0/limit);
+               360.0/limit);
     path.arcTo(-1*inner_radius, -1*inner_radius, 2*inner_radius,2*inner_radius,-90.0 + 180.0/limit,
-                     - 360.0/limit);
+               - 360.0/limit);
     path.closeSubpath();
 
     return path;
@@ -323,8 +329,8 @@ void KisPopupPalette::mouseMoveEvent (QMouseEvent* event)
         int pos = calculateIndex(point, m_resourceManager->favoriteBrushesTotal());
 
         if (pos >= 0 && pos < m_resourceManager->favoriteBrushesTotal()
-                && isPointInPixmap(point, pos))
-        {
+            && isPointInPixmap(point, pos))
+            {
             setHoveredBrush(pos);
         }
     }
@@ -348,14 +354,14 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton)
     {
         QPainterPath pathBrush(drawDonutPathFull(width()/2, height()/2, brushInnerRadius, brushOuterRadius));
-//        QPainterPath pathColor(drawDonutPathFull(width()/2, height()/2, colorInnerRadius, colorOuterRadius));
+        //        QPainterPath pathColor(drawDonutPathFull(width()/2, height()/2, colorInnerRadius, colorOuterRadius));
 
         if (pathBrush.contains(point))
         { //in favorite brushes area
             int pos = calculateIndex(point, m_resourceManager->favoriteBrushesTotal());
             if (pos >= 0 && pos < m_resourceManager->favoriteBrushesTotal()
                 && isPointInPixmap(point, pos))
-            {
+                {
                 setSelectedBrush(pos);
                 update();
             }

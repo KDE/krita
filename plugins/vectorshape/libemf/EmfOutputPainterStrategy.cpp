@@ -320,16 +320,16 @@ void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 
         pen.setStyle( Qt::SolidLine );
         break;
     case PS_USERSTYLE:
-        kDebug(33100) << "UserStyle pen not yet supported";
-        Q_ASSERT( 0 );
+        kDebug(33100) << "UserStyle pen not yet supported, using SolidLine";
+        pen.setStyle( Qt::SolidLine );
         break;
     case PS_ALTERNATE:
-        kDebug(33100) << "Alternate pen not yet supported";
-        Q_ASSERT( 0 );
+        kDebug(33100) << "Alternate pen not yet supported, using DashLine";
+        pen.setStyle( Qt::DashLine );
         break;
     default:
-        kDebug(33100) << "unexpected pen type" << (penStyle & 0xF);
-        Q_ASSERT( 0 );
+        kDebug(33100) << "unexpected pen type, using SolidLine" << (penStyle & 0xF);
+        pen.setStyle( Qt::SolidLine );
     }
    
     switch ( penStyle & PS_ENDCAP_FLAT ) {
@@ -343,8 +343,8 @@ void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 
         pen.setCapStyle( Qt::FlatCap );
         break;
     default:
-        kDebug(33100) << "unexpected cap style" << (penStyle & PS_ENDCAP_FLAT);
-        Q_ASSERT( 0 ); 
+        kDebug(33100) << "unexpected cap style, using SquareCap" << (penStyle & PS_ENDCAP_FLAT);
+        pen.setCapStyle( Qt::SquareCap );
     }
     pen.setWidth( x );
 

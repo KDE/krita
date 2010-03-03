@@ -285,9 +285,9 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
     memcpy(source, pixelIt.rawData(), sourceDevice->pixelSize());
 
-    std::stack<FillSegment*> stack;
+    std::stack<FillSegment> stack;
 
-    stack.push(new FillSegment(startX, startY/*, 0*/));
+    stack.push(FillSegment(startX, startY/*, 0*/));
 
     Status* map = new Status[m_size];
 
@@ -305,16 +305,16 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     }
 
     while (!stack.empty()) {
-        FillSegment* segment = stack.top();
+        FillSegment segment = stack.top();
         stack.pop();
-        if (map[m_width * segment->y + segment->x] == Checked) {
-            delete segment;
+        if (map[m_width * segment.y + segment.x] == Checked) {
+            //delete segment;
             continue;
         }
-        map[m_width * segment->y + segment->x] = Checked;
+        map[m_width * segment.y + segment.x] = Checked;
 
-        int x = segment->x;
-        int y = segment->y;
+        int x = segment.x;
+        int y = segment.y;
         Q_ASSERT(x >= 0);
         Q_ASSERT(x < m_width);
         Q_ASSERT(y >= 0);
@@ -326,7 +326,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
         if (diff > m_threshold
                 || (hasSelection && srcSel->selected(x, y) == MIN_SELECTED)) {
-            delete segment;
+            //delete segment;
             continue;
         }
 
@@ -344,7 +344,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             Q_ASSERT(x < m_width);
             Q_ASSERT(y - 1 >= 0);
             Q_ASSERT(y - 1 < m_height);
-            stack.push(new FillSegment(x, y - 1));
+            stack.push(FillSegment(x, y - 1));
         }
         if (y < (m_height - 1) && (map[m_width *(y + 1) + x] == None)) {
             map[m_width *(y + 1) + x] = Added;
@@ -352,7 +352,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             Q_ASSERT(x < m_width);
             Q_ASSERT(y + 1 >= 0);
             Q_ASSERT(y + 1 < m_height);
-            stack.push(new FillSegment(x, y + 1));
+            stack.push(FillSegment(x, y + 1));
         }
 
         ++pixelsDone;
@@ -386,7 +386,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                     Q_ASSERT(x < m_width);
                     Q_ASSERT(y - 1 >= 0);
                     Q_ASSERT(y - 1 < m_height);
-                    stack.push(new FillSegment(x, y - 1));
+                    stack.push(FillSegment(x, y - 1));
                 }
                 if (y < (m_height - 1) && (map[m_width *(y + 1) + x] == None)) {
                     map[m_width *(y + 1) + x] = Added;
@@ -394,7 +394,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                     Q_ASSERT(x < m_width);
                     Q_ASSERT(y + 1 >= 0);
                     Q_ASSERT(y + 1 < m_height);
-                    stack.push(new FillSegment(x, y + 1));
+                    stack.push(FillSegment(x, y + 1));
                 }
                 ++pixelsDone;
 
@@ -405,9 +405,9 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             }
         }
 
-        x = segment->x + 1;
-        delete segment;
-        segment = 0;
+        x = segment.x + 1;
+        //delete segment;
+        //segment = 0;
 
         if (x >= m_width) {
             continue;
@@ -449,7 +449,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                 Q_ASSERT(x < m_width);
                 Q_ASSERT(y >= 0);
                 Q_ASSERT(y - 1 < m_height);
-                stack.push(new FillSegment(x, y - 1));
+                stack.push(FillSegment(x, y - 1));
             }
             if (y < (m_height - 1) && (map[m_width *(y + 1) + x] == None)) {
                 map[m_width *(y + 1) + x] = Added;
@@ -457,7 +457,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                 Q_ASSERT(x < m_width);
                 Q_ASSERT(y + 1 >= 0);
                 Q_ASSERT(y + 1 < m_height);
-                stack.push(new FillSegment(x, y + 1));
+                stack.push(FillSegment(x, y + 1));
             }
             ++pixelsDone;
 

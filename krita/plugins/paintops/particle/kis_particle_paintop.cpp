@@ -43,7 +43,7 @@ KisParticlePaintOp::KisParticlePaintOp(const KisParticlePaintOpSettings *setting
     : KisPaintOp( painter )
     , m_settings( settings )
 {
-    if(!image) return;
+    Q_UNUSED(image);
     
     m_properties.particleCount = settings->getInt(PARTICLE_COUNT);
     m_properties.iterations = settings->getInt(PARTICLE_ITERATIONS);

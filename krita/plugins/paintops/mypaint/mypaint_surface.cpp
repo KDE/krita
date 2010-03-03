@@ -1,4 +1,4 @@
-/*
+    /*
  *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (C) 2008 by Martin Renold <martinxyz@gmx.ch>
  *
@@ -21,6 +21,7 @@
 
 #include <math.h>
 
+#include <KoIntegerMaths.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -58,12 +59,12 @@ bool MyPaintSurface::draw_dab (float x, float y,
     float one_over_radius2;
 
     eraser_target_alpha = CLAMP(eraser_target_alpha, 0.0, 1.0);
-    quint32 color_r_ = color_r * (1<<15);
-    quint32 color_g_ = color_g * (1<<15);
-    quint32 color_b_ = color_b * (1<<15);
-    color_r = CLAMP(color_r, 0, (1<<15));
-    color_g = CLAMP(color_g, 0, (1<<15));
-    color_b = CLAMP(color_b, 0, (1<<15));
+    quint32 color_r_ = color_r * UINT16_MAX;
+    quint32 color_g_ = color_g * UINT16_MAX;
+    quint32 color_b_ = color_b * UINT16_MAX;
+    color_r = CLAMP(color_r, 0, UINT16_MAX);
+    color_g = CLAMP(color_g, 0, UINT16_MAX);
+    color_b = CLAMP(color_b, 0, UINT16_MAX);
 
     opaque = CLAMP(opaque, 0.0, 1.0);
     hardness = CLAMP(hardness, 0.0, 1.0);
@@ -84,14 +85,10 @@ bool MyPaintSurface::draw_dab (float x, float y,
         for (tx = tx1; tx <= tx2; tx++) {
 
             //uint16_t * rgba_p = get_tile_memory(tx, ty, false);
-            m_dst->readBytes(m_dstData, tx, ty, TILE_SIZE, TILE_SIZE);
+            m_dst->readBytes(m_dstData, tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE);
             m_dst->colorSpace()->convertPixelsTo(m_dstData, m_dstRgb16Data, m_rgb16, TILE_SIZE * TILE_SIZE);
 
             quint16* rgba_p = reinterpret_cast<quint16*>(m_dstRgb16Data);
-            if (!rgba_p) {
-                printf("Python exception during draw_dab()!\n");
-                return true;
-            }
 
             float xc = x - tx*TILE_SIZE;
             float yc = y - ty*TILE_SIZE;
@@ -142,22 +139,23 @@ bool MyPaintSurface::draw_dab (float x, float y,
                         // OPTIMIZE: separate function for the standard case without erasing?
                         // OPTIMIZE: don't use floats here in the inner loop?
 
-                        quint32 opa_a = (1<<15)*opa;   // topAlpha
-                        quint32 opa_b = (1<<15)-opa_a; // bottomAlpha
+                        quint32 opa_a = UINT16_MAX*opa;   // topAlpha
+                        quint32 opa_b = UINT16_MAX-opa_a; // bottomAlpha
 
                         // only for eraser, or for painting with translucent-making colors
                         opa_a *= eraser_target_alpha;
 
                         int idx = (yp*TILE_SIZE + xp)*4;
-                        rgba_p[idx+3] = opa_a + (opa_b*rgba_p[idx+3])/(1<<15);
-                        rgba_p[idx+2] = (opa_a*color_r_ + opa_b*rgba_p[idx+0])/(1<<15);
-                        rgba_p[idx+1] = (opa_a*color_g_ + opa_b*rgba_p[idx+1])/(1<<15);
-                        rgba_p[idx+0] = (opa_a*color_b_ + opa_b*rgba_p[idx+2])/(1<<15);
+
+                        rgba_p[idx+2] = (opa_a*color_r_ + opa_b*rgba_p[idx+2])/UINT16_MAX;
+                        rgba_p[idx+1] = (opa_a*color_g_ + opa_b*rgba_p[idx+1])/UINT16_MAX;
+                        rgba_p[idx+0] = (opa_a*color_b_ + opa_b*rgba_p[idx+0])/UINT16_MAX;
+                        rgba_p[idx+3] = opa_a + (opa_b*rgba_p[idx+3])/UINT16_MAX;
                     }
                 }
             }
             m_rgb16->convertPixelsTo(m_dstRgb16Data, m_dstData, m_dst->colorSpace(), TILE_SIZE * TILE_SIZE);
-            m_dst->writeBytes(m_dstData, tx, ty, TILE_SIZE, TILE_SIZE);
+            m_dst->writeBytes(m_dstData, tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE);
         }
     }
 
@@ -170,6 +168,8 @@ void MyPaintSurface::get_color (float x, float y,
                                 float radius,
                                 float* color_r, float* color_g, float* color_b, float* color_a )
 {
+    //qDebug() << "x" << x << "y" << y << "radius" << radius;
+
     float r_fringe;
     int xp, yp;
     float xx, yy, rr;
@@ -183,8 +183,8 @@ void MyPaintSurface::get_color (float x, float y,
     sum_r = sum_g = sum_b = sum_a = sum_weight = 0.0;
 
     // in case we return with an error
-    *color_r = 0.0;
-    *color_g = 1.0;
+    *color_r = 1.0;
+    *color_g = 0.0;
     *color_b = 0.0;
 
     // WARNING: some code duplication with draw_dab
@@ -193,23 +193,23 @@ void MyPaintSurface::get_color (float x, float y,
     rr = radius*radius;
     one_over_radius2 = 1.0/rr;
 
+    //qDebug() << "r_fringe" << r_fringe << "rr" << rr << "one_over_radius2" << one_over_radius2;
+
     int tx1 = floor(floor(x - r_fringe) / TILE_SIZE);
     int tx2 = floor(floor(x + r_fringe) / TILE_SIZE);
     int ty1 = floor(floor(y - r_fringe) / TILE_SIZE);
     int ty2 = floor(floor(y + r_fringe) / TILE_SIZE);
-    int tx, ty;
-    for (ty = ty1; ty <= ty2; ty++) {
-        for (tx = tx1; tx <= tx2; tx++) {
+
+    //qDebug() << "tx1" << tx1 << "tx2" << tx2 << "ty1" << ty1 << "ty2" << ty2;
+
+    for (int ty = ty1; ty <= ty2; ty++) {
+        for (int tx = tx1; tx <= tx2; tx++) {
             //uint16_t * rgba_p = get_tile_memory(tx, ty, true);
-            m_src->readBytes(m_srcData, tx, ty, TILE_SIZE, TILE_SIZE);
-            m_src->colorSpace()->convertPixelsTo(m_dstData, m_dstRgb16Data, m_rgb16, TILE_SIZE * TILE_SIZE);
+            //qDebug() << "tx" << tx << "tx * TILE_SIZE" << tx * TILE_SIZE << "ty" << ty << "ty * TILE_SIZE" << ty * TILE_SIZE;
+            m_src->readBytes(m_srcData, tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            m_src->colorSpace()->convertPixelsTo(m_srcData, m_dstRgb16Data, m_rgb16, TILE_SIZE * TILE_SIZE);
 
             quint16* rgba_p = reinterpret_cast<quint16*>(m_dstRgb16Data);
-
-            if (!rgba_p) {
-                printf("Python exception during get_color()!\n");
-                return;
-            }
 
             float xc = x - tx*TILE_SIZE;
             float yc = y - ty*TILE_SIZE;
@@ -222,6 +222,8 @@ void MyPaintSurface::get_color (float x, float y,
             if (y0 < 0) y0 = 0;
             if (x1 > TILE_SIZE-1) x1 = TILE_SIZE-1;
             if (y1 > TILE_SIZE-1) y1 = TILE_SIZE-1;
+
+            //qDebug() << "x" << x << "y" << y << "xc" << xc << "yc" << yc << "x0" << x0 << "y0" << y0 << "x1" << x1 << "y1" << y1;
 
             for (yp = y0; yp <= y1; yp++) {
                 yy = (yp + 0.5 - yc);
@@ -246,17 +248,22 @@ void MyPaintSurface::get_color (float x, float y,
                         // note that we are working on premultiplied alpha
                         // we do not un-premultiply it yet, so colors are weighted with their alpha
                         int idx = (yp * TILE_SIZE + xp)*4;
+                        //qDebug() << idx << xp << yp;
                         sum_weight += opa;
-                        sum_r      += opa*rgba_p[idx+0]/(1<<15);
-                        sum_g      += opa*rgba_p[idx+1]/(1<<15);
-                        sum_b      += opa*rgba_p[idx+2]/(1<<15);
-                        sum_a      += opa*rgba_p[idx+3]/(1<<15);
+
+                        sum_b      += opa*rgba_p[idx+0]/UINT16_MAX;
+                        sum_g      += opa*rgba_p[idx+1]/UINT16_MAX;
+                        sum_r      += opa*rgba_p[idx+2]/UINT16_MAX;
+                        sum_a      += opa*rgba_p[idx+3]/UINT16_MAX;
+                        //qDebug() << rgba_p[idx] << rgba_p[idx + 1] << rgba_p[idx+2] << rgba_p[idx+3] << m_src->colorSpace()->opacityU8((quint8*)rgba_p);
+                        //qDebug() << opa << sum_a << rgba_p[idx+3] << opa*rgba_p[idx+3] << opa*rgba_p[idx+3]/UINT16_MAX;
                     }
                 }
             }
         }
     }
 
+    //qDebug() << "sum_a" << sum_a << "rgb" << sum_r << sum_g << sum_b << "sum_weight" << sum_weight;
     Q_ASSERT(sum_weight > 0.0);
     sum_a /= sum_weight;
     sum_r /= sum_weight;
@@ -270,10 +277,11 @@ void MyPaintSurface::get_color (float x, float y,
         *color_g = sum_g / sum_a;
         *color_b = sum_b / sum_a;
     } else {
+        //qDebug() << "Eeek!";
         // it is all transparent, so don't care about the colors
         // (let's make them ugly so bugs will be visible)
-        *color_r = 0.0;
-        *color_g = 1.0;
+        *color_r = 1.0;
+        *color_g = 0.0;
         *color_b = 0.0;
     }
 

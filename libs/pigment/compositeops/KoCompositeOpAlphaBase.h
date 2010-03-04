@@ -22,8 +22,9 @@
 
 #include <QBitArray>
 
-#include "KoColorSpaceMaths.h"
-#include "KoCompositeOp.h"
+#include <KoColorSpaceMaths.h>
+#include <KoCompositeOp.h>
+#include <KoColorSpaceConstants.h>
 
 #define NATIVE_MIN_VALUE KoColorSpaceMathsTraits<channels_type>::min
 #define NATIVE_MAX_VALUE KoColorSpaceMathsTraits<channels_type>::max
@@ -65,7 +66,7 @@ public:
         bool allChannelFlags = channelFlags.isEmpty();
         if (_CSTraits::alpha_pos == -1) {
 
-            qint32 pixelSize = colorSpace()->pixelSize();
+            qint32 pixelSize = _CSTraits::pixelSize;
 
             // XXX: if cols == (dststride/dstPixelSize) == (srcstride/srcPixelSize) == maskstride/maskpixelsize)
             // then don't loop through rows and cols, but composite everything in one go
@@ -116,7 +117,7 @@ public:
             }
 
             channels_type opacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_opacity);
-            qint32 pixelSize = colorSpace()->pixelSize();
+            qint32 pixelSize = _CSTraits::pixelSize;
 
             while (rows > 0) {
                 const channels_type *srcN = reinterpret_cast<const channels_type *>(srcRowStart);

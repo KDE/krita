@@ -20,6 +20,7 @@
 #include "KoTextMeta.h"
 
 #include <KoShapeSavingContext.h>
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoTextInlineRdf.h>
 

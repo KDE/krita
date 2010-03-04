@@ -27,6 +27,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoAbstractGradient.h>
 
+#include <kis_config.h>
 #include <kis_color_picker_utils.h>
 #include <kis_vec.h>
 #include <kis_cursor.h>
@@ -42,14 +43,41 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     , m_displayProfile(0)
     , m_painter(0)
     , m_compositeOp(0)
+    , m_scale(1.0)
 {
+    setAutoFillBackground(false);
+
     m_cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
+
+    KisConfig cfg;
+    int checkSize = cfg.checkSize();
+    QImage tile(checkSize * 2, checkSize * 2, QImage::Format_RGB32);
+    QPainter pt(&tile);
+    pt.fillRect(tile.rect(), Qt::white);
+    pt.fillRect(0, 0, checkSize, checkSize, cfg.checkersColor());
+    pt.fillRect(checkSize, checkSize, checkSize, checkSize, cfg.checkersColor());
+    pt.end();
+    m_checkBrush = QBrush(tile);
 }
 
 KisScratchPad::~KisScratchPad() {
 
     delete m_painter;
 }
+
+
+void KisScratchPad::setCutoutOverlay(const QRect& rc)  {
+
+    m_cutoutOverlay = rc.intersected(QRect(QPoint(0, 0), size()));
+}
+
+QImage KisScratchPad::cutoutOverlay() const {
+
+    QRect rc = m_cutoutOverlay.translated(m_offset);
+    QImage img = m_paintDevice->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    return img;
+}
+
 
 void KisScratchPad::setPaintColor(const QColor& paintColor) {
 
@@ -72,6 +100,7 @@ void KisScratchPad::setPreset(KisPaintOpPresetSP preset) {
 void KisScratchPad::setBackgroundColor(const QColor& backgroundColor) {
 
     m_backgroundColor = backgroundColor;
+    clear();
 }
 
 void KisScratchPad::setBackgroundTile(const QImage& tile) {
@@ -114,17 +143,19 @@ void KisScratchPad::clear() {
 
 void KisScratchPad::fillGradient(KoAbstractGradient* gradient)
 {
+    if (!m_paintDevice) return;
     KisGradientPainter painter(m_paintDevice);
     painter.setGradient(gradient);
     painter.paintGradient(QPointF(0,0), QPointF(width(), height()),
                           KisGradientPainter::GradientShapeLinear, KisGradientPainter::GradientRepeatNone,
                           0.2, false,
                           0, 0, width(), height());
-    update();                         
+    update();
 }
 
 void KisScratchPad::fillSolid(const KoColor& color)
 {
+    if (!m_paintDevice) return;
     m_paintDevice->fill(0, 0, width(), height(), color.data());
     update();
 }
@@ -214,11 +245,18 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
     }
     QRect rc = event->rect();
     QPainter gc(this);
+    gc.fillRect(rc, m_checkBrush);
     gc.drawImage(rc, m_paintDevice->convertToQImage(m_displayProfile,
                                                     rc.x() + m_offset.x(),
                                                     rc.y() + m_offset.y(),
                                                     rc.width(),
                                                     rc.height()));
+    QBrush brush(Qt::lightGray);
+    QPen pen(brush, 1, Qt::DotLine);
+    gc.setPen(pen);
+    if (m_cutoutOverlay.isValid()) {
+        gc.drawRect(m_cutoutOverlay);
+    }
     gc.end();
 }
 
@@ -244,6 +282,8 @@ void KisScratchPad::tabletEvent ( QTabletEvent * event ) {
 }
 
 void KisScratchPad::wheelEvent ( QWheelEvent * event ) {
+
+
 
     QWidget::wheelEvent(event);
 }

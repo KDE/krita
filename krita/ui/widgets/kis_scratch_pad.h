@@ -24,6 +24,7 @@
 #include <QColor>
 #include <QCursor>
 #include <QPoint>
+#include <QRect>
 
 #include <KoColorProfile.h>
 #include <KoColor.h>
@@ -59,21 +60,46 @@ public:
     KisScratchPad(QWidget *parent = 0);
     virtual ~KisScratchPad();
 
+    /// set the specified rect as the area taken for @see cutoutOverlay
+    void setCutoutOverlay(const QRect&rc);
+
+    /// return the contents of the area under the cutoutOverlay rect
+    QImage cutoutOverlay() const;
+
+
 public slots:
 
+
+    /// Set the current paint color as a QColor
     void setPaintColor(const QColor& foregroundColor);
+
+    /// Set the current paint color as a KoColor
     void setPaintColor(const KoColor& foregroundColor);
+
+    /// Set the preset to use
     void setPreset(KisPaintOpPresetSP preset);
+
+    /// Set the background color for the paint device.
     void setBackgroundColor(const QColor& backgroundColor);
+
+    /// Set an image for the paint paint device
     void setBackgroundTile(const QImage& tile);
+
+    /// Set the colorspace for the paint device
     void setColorSpace(const KoColorSpace* colorSpace);
+
+    /// Set the display profile (should be the same as for the main canvas, probably)
     void setDisplayProfile(const KoColorProfile* colorProfile);
+
+    /// Clear the paint device to the background color default pixel.
     void clear();
-    
+
+    /// fill the visible area of the paint device with the given color
     void fillGradient(KoAbstractGradient* gradient);
 
+    /// fill the visible area of the paint device with a solid color
     void fillSolid(const KoColor& color);
-    
+
 signals:
 
     void colorSelected(const KoColor& color);
@@ -128,6 +154,9 @@ private:
     double m_dragDist;
     const KoCompositeOp *m_compositeOp;
     QPoint m_lastPosition;
+    qreal m_scale;
+    QRect m_cutoutOverlay;
+    QBrush m_checkBrush;
 };
 
 #endif // KIS_SCRATCH_PAD_H

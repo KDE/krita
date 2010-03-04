@@ -23,6 +23,7 @@
 #include <QSize>
 #include <QImage>
 #include <QDomDocument>
+#include <QBuffer>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoInputDevice.h>
@@ -152,6 +153,20 @@ void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
     elt.setAttribute("name", name());
 
     m_d->settings->toXML(doc, elt);
+    
+    if(!m_d->image.isNull()) {
+        QDomElement preview = doc.createElement("PreviewImage");
+        preview.setAttribute("width", m_d->image.width());
+        preview.setAttribute("height", m_d->image.height());
+        
+        QByteArray ba;
+        QBuffer buffer(&ba);
+        buffer.open(QIODevice::WriteOnly);
+        m_d->image.save(&buffer, "PPM");
+        
+        preview.appendChild(doc.createCDATASection(ba.toHex()));
+        elt.appendChild(preview);
+    }
 }
 
 void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
@@ -182,13 +197,8 @@ QImage KisPaintOpPreset::image() const
     return m_d->image;
 }
 
-void KisPaintOpPreset::updateImage()
+void KisPaintOpPreset::setImage(QImage image)
 {
-    m_d->image = m_d->settings->sampleStroke(QSize(100, 20));
-}
-
-QImage KisPaintOpPreset::generatePreviewImage(int width, int height)
-{
-    return m_d->settings->sampleStroke(QSize(width, height));
+    m_d->image = image;
 }
 

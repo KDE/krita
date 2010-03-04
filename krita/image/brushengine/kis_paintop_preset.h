@@ -67,6 +67,8 @@ public:
 
     QImage image() const;
 
+    void setImage(QImage image);
+    
     bool removable() const {
         return true;
     }
@@ -74,10 +76,6 @@ public:
     QString defaultFileExtension() const {
         return "kpp";
     }
-
-    void updateImage();
-    
-    QImage generatePreviewImage(int width, int height);
 
 private:
 

@@ -75,6 +75,6 @@ quint8 KisRectangleMaskGenerator::valueAt(double x, double y) const
 void KisRectangleMaskGenerator::toXML(QDomDocument& d, QDomElement& e) const
 {
     KisMaskGenerator::toXML(d, e);
-    e.setAttribute("autobrush_type", "rect");
+    e.setAttribute("type", "rect");
 }
 

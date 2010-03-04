@@ -105,6 +105,6 @@ quint8 KisCircleMaskGenerator::valueAt(double x, double y) const
 void KisCircleMaskGenerator::toXML(QDomDocument& d, QDomElement& e) const
 {
     KisMaskGenerator::toXML(d, e);
-    e.setAttribute("autobrush_type", "circle");
+    e.setAttribute("type", "circle");
 }
 

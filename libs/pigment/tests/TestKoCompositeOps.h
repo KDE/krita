@@ -28,6 +28,7 @@ class TestKoCompositeOps : public QObject
 private slots:
 
     void testCompositeOver();
+    void testCompositeAlphaDarken();
 };
 
 #endif

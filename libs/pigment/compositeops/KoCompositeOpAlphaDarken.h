@@ -22,6 +22,7 @@
 
 #include "KoColorSpaceMaths.h"
 #include "KoCompositeOp.h"
+#include "KoColorSpaceConstants.h"
 
 #define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::unitValue
 #define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::zeroValue

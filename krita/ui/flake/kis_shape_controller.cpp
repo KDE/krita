@@ -104,7 +104,7 @@ void KisShapeController::Private::removeShapeAndChildrenFromMap(KoShape* shape)
     KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>(shape);
     if (parent) {
         foreach(KoShape * child, parent->childShapes()) {
-            removeShapeFromMap(child);
+            removeShapeAndChildrenFromMap(child);
         }
     }
     removeShapeFromMap(shape);
@@ -160,6 +160,12 @@ void KisShapeController::setImage(KisImageWSP image)
         {
             m_d->removeShapeAndChildrenFromMap(shape);
         }
+#ifndef NDEBUG
+        for(KisNodeMap::iterator it = m_d->nodeShapes.begin(); it != m_d->nodeShapes.end(); ++it)
+        {
+            dbgUI << it.key() << " " << it.data();
+        }
+#endif
         Q_ASSERT(m_d->nodeShapes.empty());
         m_d->nodeShapes.clear();
 

@@ -190,6 +190,12 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
     }
     settings->fromXML(presetElt);
     setSettings(settings);
+    
+    QDomElement preview = presetElt.firstChildElement("PreviewImage");
+    if(!preview.isNull()) {
+         QByteArray data = QByteArray::fromHex(preview.text().toAscii());
+         m_d->image = QImage::fromData(data, "PPM");
+    }
 }
 
 QImage KisPaintOpPreset::image() const

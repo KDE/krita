@@ -50,15 +50,15 @@ void KisPresetWidget::setDrawArrow(bool v)
 
 void KisPresetWidget::updatePreview()
 {
-    if (m_preset) {
-        if((width() < 100) || (height() < 100)) {
-            m_image = m_preset->generatePreviewImage(width() * 3, height() * 3);
-        }
-        else {
-            m_image = m_preset->generatePreviewImage(width(), height());
-        }
-        update();
-    }
+//     if (m_preset) {
+//         if((width() < 100) || (height() < 100)) {
+//             m_image = m_preset->generatePreviewImage(width() * 3, height() * 3);
+//         }
+//         else {
+//             m_image = m_preset->generatePreviewImage(width(), height());
+//         }
+//         update();
+//     }
 }
 
 void KisPresetWidget::paintEvent(QPaintEvent *)

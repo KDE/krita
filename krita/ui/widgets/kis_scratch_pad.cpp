@@ -68,7 +68,7 @@ KisScratchPad::~KisScratchPad() {
 
 void KisScratchPad::setCutoutOverlay(const QRect& rc)  {
 
-    m_cutoutOverlay = rc.intersected(QRect(QPoint(0, 0), size()));
+    m_cutoutOverlay = rc;
 }
 
 QImage KisScratchPad::cutoutOverlay() const {

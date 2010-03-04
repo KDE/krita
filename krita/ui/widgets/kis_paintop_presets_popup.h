@@ -58,6 +58,10 @@ public:
     ///Set preset for the scratchpad
     ///@param preset that will be used in the scratchpad
     void setPreset(KisPaintOpPresetSP preset);
+    
+    ///Image for preset preview
+    ///@return image cut out from the scratchpad
+    QImage cutOutOverlay();
 
 protected:
 

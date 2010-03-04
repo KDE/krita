@@ -355,6 +355,7 @@ void KisPaintopBox::slotSaveActivePreset()
         return;
 
     KisPaintOpPreset* newPreset = preset->clone();
+    newPreset->setImage(m_presetsPopup->cutOutOverlay());
 
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();

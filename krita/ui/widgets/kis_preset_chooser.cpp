@@ -67,10 +67,14 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
 
     painter->setPen(Qt::black);
-    painter->drawText(option.rect.x() + 5, option.rect.y() + option.rect.height() - 5, preset->name());
+    painter->drawText(option.rect.x() + 255, option.rect.y() + option.rect.height() - 5, preset->name());
     
-    QRect previewRect = option.rect.adjusted(200, 0, -20, 0);
-    QImage preview = preset->settings()->sampleStroke(previewRect.size());
+    QRect previewRect = QRect(option.rect.x(), option.rect.y(), 250, option.rect.height());
+    QImage preview = preset->image();
+    
+    if(preview.isNull()) {
+        return;
+    }
     painter->drawImage(previewRect.x(), previewRect.y(),
                        preview.scaled(previewRect.size(), Qt::KeepAspectRatio));
 }

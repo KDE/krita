@@ -170,6 +170,11 @@ void KisPaintOpPresetsPopup::setPreset(KisPaintOpPresetSP preset)
     m_d->uiWdgPaintOpPresets.scratchPad->setPreset(preset);
 }
 
+QImage KisPaintOpPresetsPopup::cutOutOverlay()
+{
+    return m_d->uiWdgPaintOpPresets.scratchPad->cutoutOverlay();
+}
+
 void KisPaintOpPresetsPopup::fillScratchPadGradient()
 {
     m_d->uiWdgPaintOpPresets.scratchPad->fillGradient(m_d->resourceProvider->currentGradient());

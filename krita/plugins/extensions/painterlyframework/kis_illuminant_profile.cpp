@@ -174,7 +174,7 @@ KisIlluminantProfile::KisIlluminantProfile(const KisIlluminantProfile &copy)
 
         nc = copy.nc;
         coeffs = new double[nc*m_wl];
-        for (qint8 i = 0; i < nc*m_wl; i++)
+        for (int i = 0; i < nc*m_wl; i++)
             coeffs[i] = copy.coeffs[i];
 
         m_refvec = new double[m_wl];

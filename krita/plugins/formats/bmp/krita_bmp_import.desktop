@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Krita BMP Import Filter
+X-KDE-Export=application/x-krita
+X-KDE-ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Import=image/bmp
+X-KDE-Weight=1
+X-KDE-Library=libkritabmpimport
+NoDisplay=true

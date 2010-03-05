@@ -54,13 +54,8 @@ KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainte
     m_opacityOption.sensor()->reset();
     m_rateOption.sensor()->reset();
 
-    if (settings->node()) {
-        m_source = settings->node()->paintDevice();
-    } else {
-        m_source = painter->device();
-    }
-    m_srcdev = new KisPaintDevice(m_source->colorSpace());
-    m_target = new KisPaintDevice(m_source->colorSpace());
+    m_srcdev = new KisPaintDevice(painter->device()->colorSpace());
+    m_target = new KisPaintDevice(painter->device()->colorSpace());
 
 }
 
@@ -147,7 +142,7 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     copyPainter.bitBlt(0, 0, device, pt.x(), pt.y(), sw, sh);
     copyPainter.end();
 
-    m_target = new KisPaintDevice(device->colorSpace());
+    m_target->clear();
 
     // Looks hacky, but we lost bltMask, or the ability to easily convert alpha8 paintdev to selection?
     KisSelectionSP dabAsSelection = new KisSelection();

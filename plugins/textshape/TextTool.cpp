@@ -359,7 +359,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
     action = new KAction(i18n("Table..."), this);
     addAction("insert_table", action);
-    action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
     action->setToolTip(i18n("Insert a table into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
 

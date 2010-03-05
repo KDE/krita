@@ -51,7 +51,7 @@ protected:
     void run();
 private:
     bool interestingTileData(KisTileData* td);
-
+    void debugTileStatistics();
 protected:
     QSemaphore m_semaphore;
     QAtomicInt m_shouldExitFlag;

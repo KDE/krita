@@ -387,7 +387,6 @@ void TestDocumentLayout::testNestedPrefixedLists()
     block = block.next();
     static const char* texts[] = { "Main1:", "Sub1.1*"};
     int i = 0;
-    qreal indent = 0.0;
     while (block.isValid()) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
         //qDebug() << "text: " << block.text();

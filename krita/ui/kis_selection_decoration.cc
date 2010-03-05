@@ -57,10 +57,6 @@ KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
         m_brushes << brush;
     }
 
-    int width = KisSelectionDecoration::view()->image()->bounds().width();
-    int height = KisSelectionDecoration::view()->image()->bounds().height();
-    m_image = QImage(width, height, QImage::Format_ARGB32);
-
     // XXX: Make sure no timers are running all the time! We need to
     // provide a signal to tell the selection manager that we've got a
     // current selection now (global or local).
@@ -189,10 +185,7 @@ void KisSelectionDecoration::drawDecoration(QPainter& painter, const QPoint& doc
     converter.zoom(&sx, &sy);
 
     if (m_mode == Mask) {
-        painter.save();
-        painter.scale(sx / view()->image()->xRes(), sy / view()->image()->yRes());
-        painter.drawImage(0, 0, m_image);
-        painter.restore();
+        Q_ASSERT_X(0, "KisSelectionDecoration.cc", "MASK MODE NOT SUPPORTED YET!");
     }
     if (m_mode == Ants && selection && selection->hasPixelSelection()) {
 
@@ -255,37 +248,14 @@ void KisSelectionDecoration::drawDecoration(QPainter& painter, const QPoint& doc
 
 void KisSelectionDecoration::updateMaskVisualisation(const QRect & r)
 {
-    if (m_image.isNull() || !view()->selection()) {
-        return;
-    }
-
-    qint32 width = r.width();
-    qint32 height = r.height();
-
-    QVarLengthArray<quint8> buffer(width*height);
-    view()->selection()->readBytes(&buffer[0], r.x(), r.y(), width, height);
-
-    for (qint32 y = 0; y < height; y++) {
-
-        QRgb *imagePixel = reinterpret_cast<QRgb *>(m_image.scanLine(y));
-        for (qint32 x = 0; x < width; x++) {
-            *imagePixel = qRgba(128, 128, 165, 0.5 * (MAX_SELECTED - buffer[y*width+x]));
-            imagePixel++;
-        }
-    }
+    Q_UNUSED(r);
+    Q_ASSERT_X(0, "KisSelectionDecoration.cc", "MASK MODE NOT SUPPORTED YET!");
 }
 
 void KisSelectionDecoration::resourceChanged(int key, const QVariant & v)
 {
     Q_UNUSED(v);
-    if (key == KoCanvasResource::PageSize) {
-        int width = KisSelectionDecoration::view()->image()->bounds().width();
-        int height = KisSelectionDecoration::view()->image()->bounds().height();
-        m_image = QImage(width, height, QImage::Format_ARGB32);
-
-        updateMaskVisualisation(view()->image()->bounds());
-        view()->canvasBase()->updateCanvas();
-    }
+    warnKrita << "Mask mode not supported yet";
 }
 
 #include "kis_selection_decoration.moc"

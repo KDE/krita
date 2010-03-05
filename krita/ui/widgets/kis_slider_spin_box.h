@@ -25,7 +25,7 @@
 #include <QStyleOptionProgressBar>
 
 class QLineEdit;
-class QIntValidator;
+class QDoubleValidator;
 class QTimer;
 
 class KisSliderSpinBox : public QAbstractSlider
@@ -37,6 +37,13 @@ public:
 
    void showEdit();
    void hideEdit();
+
+   void setRange(double minimum, double maximum, int decimals = 0);
+   
+   void setSuffix(const QString& suffix);
+   
+   ///Get the value, don't use value()
+   double valueDouble();
 
 protected:
    virtual void paintEvent(QPaintEvent* e);
@@ -59,17 +66,23 @@ protected:
    QRect downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
 
    int valueForX(int x) const;
-
+   
+   QString valueString() const;
+   
+signals:
+    void valueDoubleChanged(double value);
+   
 protected slots:
-   void updateValidatorRange(int min, int max);
-   void contextMenuEvent(QContextMenuEvent * event); 
+   void contextMenuEvent(QContextMenuEvent * event);
+   void internalValueChanged(int value);
 
 private:
    QLineEdit* m_edit;
-   QIntValidator* m_validator;
+   QDoubleValidator* m_validator;
    bool m_upButtonDown;
    bool m_downButtonDown;
-
+   int m_factor;
+   QString m_suffix;
 };
 
 #endif //kISSLIDERSPINBOX_H

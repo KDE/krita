@@ -18,6 +18,9 @@
  */
 #include "kis_slider_spin_box.h"
 
+#include <math.h>
+#include <kdebug.h>
+
 #include <QPainter>
 #include <QStyle>
 #include <QLineEdit>
@@ -45,9 +48,10 @@ KisSliderSpinBox::KisSliderSpinBox(QWidget* parent) :
    pal.setColor(QPalette::Base, Qt::transparent);
    m_edit->setPalette(pal);
 
-   m_validator = new QIntValidator(m_edit);
-   m_validator->setRange(minimum(), maximum());
+   m_validator = new QDoubleValidator(m_edit);
    m_edit->setValidator(m_validator);
+   setRange(0.0, 100.0, 0);
+
 
    connect(this, SIGNAL(rangeChanged(int,int)),
            this, SLOT(updateValidatorRange(int,int)));
@@ -65,7 +69,7 @@ KisSliderSpinBox::~KisSliderSpinBox()
 void KisSliderSpinBox::showEdit()
 {
    m_edit->setGeometry(progressRect(spinBoxOptions()));
-   m_edit->setText(QString::number(value()));
+   m_edit->setText(valueString());
    m_edit->selectAll();
    m_edit->show();
    m_edit->setFocus(Qt::OtherFocusReason);
@@ -216,7 +220,7 @@ bool KisSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
       {
          case Qt::Key_Enter:
          case Qt::Key_Return:
-            setValue(m_edit->text().toInt());
+            setValue(m_edit->text().toDouble()*m_factor);
             hideEdit();
             return true;
          case Qt::Key_Escape:
@@ -312,7 +316,7 @@ QStyleOptionProgressBar KisSliderSpinBox::progressBarOptions() const
    progressOpts.maximum = maximum();
    progressOpts.minimum = minimum();
    progressOpts.progress = value();
-   progressOpts.text = QString::number(value());
+   progressOpts.text = valueString() + m_suffix;
    progressOpts.textAlignment = Qt::AlignCenter;
    progressOpts.textVisible = !(m_edit->isVisible());
 
@@ -359,12 +363,37 @@ int KisSliderSpinBox::valueForX(int x) const
    return ((dValues * percent) + minDbl);
 }
 
-void KisSliderSpinBox::updateValidatorRange(int min, int max)
+void KisSliderSpinBox::setRange(double minimum, double maximum, int decimals)
 {
-  m_validator->setRange(min, max); 
+    m_validator->setDecimals(decimals);
+    m_factor = pow(10,decimals);
+    
+    setMinimum(minimum*m_factor);
+    setMaximum(maximum*m_factor);
+    m_validator->setRange(minimum, maximum);
+}
+
+void KisSliderSpinBox::setSuffix(const QString& suffix)
+{
+    m_suffix = suffix;
+}
+
+double KisSliderSpinBox::valueDouble()
+{
+    return (double)value()/m_factor;
+}
+
+QString KisSliderSpinBox::valueString() const
+{
+    return QString::number((double)value()/m_factor, 'f', 2);
 }
 
 void KisSliderSpinBox::contextMenuEvent(QContextMenuEvent* event)
 {
     event->accept();
+}
+
+void KisSliderSpinBox::internalValueChanged(int value)
+{
+    emit valueDoubleChanged(value/m_factor);
 }

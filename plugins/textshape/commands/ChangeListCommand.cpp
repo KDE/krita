@@ -93,7 +93,7 @@ void ChangeListCommand::extractTextBlocks(const QTextCursor &cursor, int level)
             KoListLevelProperties prop;
             prop.setStyle(KoListStyle::None);
             m_formerProperties.insert((m_blocks.size() - 1), prop);
-            m_levels.insert((m_blocks.size() - 1), 1);
+            m_levels.insert((m_blocks.size() - 1), level);
         }
         oneOf = false;
         block = block.next();

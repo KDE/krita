@@ -116,6 +116,9 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     }
     KoListStyle *listStyle = savingStyle->listStyle();
     KoListLevelProperties llp = listStyle->levelProperties(widget.depth->value());
+    foreach (int level, listStyle->listLevels()) {
+        listStyle->removeLevelProperties(level);
+    }
     llp.setStyle(style);
     llp.setLevel(widget.depth->value());
     llp.setDisplayLevel(widget.levels->value());

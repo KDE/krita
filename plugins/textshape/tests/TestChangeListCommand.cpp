@@ -63,6 +63,42 @@ void TestChangeListCommand::addList()
     QVERIFY(block.textList() != tl);
 }
 
+void TestChangeListCommand::addListWithLevel2()
+{
+    QTextDocument doc;
+    KoTextDocument(&doc).setStyleManager(new KoStyleManager);
+    MockTextTool *tool = new MockTextTool(new MockCanvas);
+    QTextCursor cursor(&doc);
+    cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4\n");
+
+    QTextBlock block = doc.begin().next();
+    cursor.setPosition(block.position());
+
+    KoListStyle style;
+    KoListLevelProperties llp;
+    llp.setLevel(2);
+    llp.setDisplayLevel(2);
+    llp.setStyle(KoListStyle::DiscItem);
+    style.setLevelProperties(llp);
+
+    ChangeListCommand clc(cursor, &style, 2);
+    clc.setTool(tool);
+    clc.redo();
+
+    block = doc.begin();
+    QVERIFY(block.textList() == 0);
+    block = block.next();
+    QVERIFY(block.textList()); // this one we just changed
+    QTextList *tl = block.textList();
+    block = block.next();
+    QVERIFY(block.textList() == 0);
+
+    QTextListFormat format = tl->format();
+    QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DiscItem);
+    QCOMPARE(format.intProperty(KoListStyle::DisplayLevel), (int) 2);
+    QCOMPARE(format.intProperty(KoListStyle::Level), (int) 2);
+}
+
 void TestChangeListCommand::removeList()
 {
     QTextDocument doc;

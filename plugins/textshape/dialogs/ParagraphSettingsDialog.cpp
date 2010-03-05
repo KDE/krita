@@ -73,7 +73,9 @@ void ParagraphSettingsDialog::slotApply()
     chosenStyle.applyStyle(format);
     m_cursor->mergeBlockFormat(format);
     if (chosenStyle.listStyle()) {
-        ChangeListCommand *cmd = new ChangeListCommand(*m_cursor, chosenStyle.listStyle(), 0, ChangeListCommand::MergeWithAdjacentList);
+        ChangeListCommand *cmd = new ChangeListCommand(*m_cursor, chosenStyle.listStyle(),
+                chosenStyle.listStyle()->listLevels().first(),
+                ChangeListCommand::MergeWithAdjacentList);
         m_tool->addCommand(cmd);
     } else {
         QTextList *list = m_cursor->block().textList();

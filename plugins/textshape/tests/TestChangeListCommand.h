@@ -12,6 +12,7 @@ public:
 
 private slots:
     void addList();
+    void addListWithLevel2();
     void removeList();
     void joinList();
     void joinList2();

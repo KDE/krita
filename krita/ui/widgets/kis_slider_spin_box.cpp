@@ -1,0 +1,383 @@
+/* This file is part of the KDE project
+ * Copyright 2010 (C) Justin Noel <justin@ics.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+#include "kis_slider_spin_box.h"
+
+#include <QPainter>
+#include <QStyle>
+#include <QLineEdit>
+#include <QApplication>
+#include <QKeyEvent>
+#include <QMouseEvent>
+#include <QIntValidator>
+#include <QTimer>
+#include <QtDebug>
+
+KisSliderSpinBox::KisSliderSpinBox(QWidget* parent) :
+   QAbstractSlider(parent),
+   m_setValueCache(0),
+   m_upButtonDown(false),
+   m_downButtonDown(false)
+{  
+   m_edit = new QLineEdit(this);
+   m_edit->setFrame(false);
+   m_edit->setAlignment(Qt::AlignCenter);
+   m_edit->hide();
+   m_edit->installEventFilter(this);
+
+   //Make edit transparent
+   m_edit->setAutoFillBackground(false);
+   QPalette pal = m_edit->palette();
+   pal.setColor(QPalette::Base, Qt::transparent);
+   m_edit->setPalette(pal);
+
+   m_validator = new QIntValidator(m_edit);
+   m_validator->setRange(minimum(), maximum());
+   m_edit->setValidator(m_validator);
+
+   connect(this, SIGNAL(rangeChanged(int,int)),
+           this, SLOT(updateValidatorRange(int,int)));
+
+   m_setValueTimer = new QTimer(this);
+   m_setValueTimer->setInterval(qApp->doubleClickInterval());
+
+   connect(m_setValueTimer, SIGNAL(timeout()),
+           this, SLOT(setValueAfterDblClickInterval()));
+
+   //Set sane defaults
+   setFocusPolicy(Qt::StrongFocus);
+   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+}
+
+KisSliderSpinBox::~KisSliderSpinBox()
+{
+
+}
+
+void KisSliderSpinBox::showEdit()
+{
+   m_edit->setGeometry(progressRect(spinBoxOptions()));
+   m_edit->setText(QString::number(value()));
+   m_edit->selectAll();
+   m_edit->show();
+   m_edit->setFocus(Qt::OtherFocusReason);
+   update();
+}
+
+void KisSliderSpinBox::hideEdit()
+{
+   m_edit->hide();
+   update();
+}
+
+void KisSliderSpinBox::paintEvent(QPaintEvent* e)
+{
+   Q_UNUSED(e)
+   
+   QPainter painter(this);
+
+   //Create options to draw spin box parts
+   QStyleOptionSpinBox spinOpts = spinBoxOptions();
+   
+   //Draw "SpinBox".Clip off the area of the lineEdit to avoid double
+   //borders being drawn
+   painter.setClipping(true);
+   QRect eraseRect(QPoint(rect().x(), rect().y()),
+                   QPoint(progressRect(spinOpts).right(), rect().bottom()));
+   painter.setClipRegion(QRegion(rect()).subtracted(eraseRect));
+   style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, 0);
+   painter.setClipping(false);
+   
+
+   //Create options to draw progress bar parts
+   QStyleOptionProgressBar progressOpts = progressBarOptions();
+
+   //Draw "ProgressBar" in SpinBox
+   style()->drawControl(QStyle::CE_ProgressBar, &progressOpts, &painter, 0);
+
+   //Draw focus if necessary
+   if(hasFocus() &&
+      m_edit->hasFocus())
+   {
+      QStyleOptionFocusRect focusOpts;
+      focusOpts.initFrom(this);
+      focusOpts.rect = progressOpts.rect;
+      focusOpts.backgroundColor = palette().color(QPalette::Background);
+      style()->drawPrimitive(QStyle::PE_FrameFocusRect, &focusOpts, &painter, this);
+   }
+   
+}
+
+void KisSliderSpinBox::mousePressEvent(QMouseEvent* e)
+{
+   QStyleOptionSpinBox spinOpts = spinBoxOptions();
+   
+   //Depress buttons or highlight slider
+   //Also used to emulate mouse grab...
+   if(upButtonRect(spinOpts).contains(e->pos()))
+   {
+      m_upButtonDown = true;
+   }
+   else if(downButtonRect(spinOpts).contains(e->pos()))
+   {
+      m_downButtonDown = true;
+   }
+   
+  update();
+}
+
+void KisSliderSpinBox::mouseReleaseEvent(QMouseEvent* e)
+{   
+   QStyleOptionSpinBox spinOpts = spinBoxOptions();
+   
+   //Step up/down for buttons
+   //Emualting mouse grab too
+   if(upButtonRect(spinOpts).contains(e->pos()) && m_upButtonDown)
+   {
+      setValue(value() + singleStep());
+   }
+   else if(downButtonRect(spinOpts).contains(e->pos()) && m_downButtonDown)
+   {
+      setValue(value() - singleStep());
+   }
+   else if( progressRect(spinOpts).contains(e->pos()) &&
+            !(m_edit->isVisible()) &&
+            !(m_upButtonDown || m_downButtonDown) )
+   {
+      //Snap to percentage for progress area
+      m_setValueCache = valueForX(e->pos().x());
+      m_setValueTimer->start();
+      //Timer is needed to work around double click
+   }
+
+   m_upButtonDown = false;
+   m_downButtonDown = false;
+   update();
+}
+
+void KisSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
+{
+   QStyleOptionSpinBox spinOpts = spinBoxOptions();
+   //Respect emulated mouse grab.
+   if(progressRect(spinOpts).contains(e->pos()) &&
+      e->buttons() & Qt::LeftButton &&
+      !(m_downButtonDown || m_upButtonDown))
+   {
+      setValue(valueForX(e->pos().x()));
+   }
+}
+
+void KisSliderSpinBox::mouseDoubleClickEvent(QMouseEvent* e)
+{
+   QStyleOptionSpinBox spinOpts = spinBoxOptions();
+
+   if(progressRect(spinOpts).contains(e->pos()))
+   {
+      m_setValueTimer->stop();
+      showEdit();
+   }
+}
+
+void KisSliderSpinBox::keyPressEvent(QKeyEvent* e)
+{
+   switch(e->key())
+   {
+      case Qt::Key_Up:
+      case Qt::Key_Right:
+         setValue(value() + singleStep());
+         break;
+      case Qt::Key_Down:
+      case Qt::Key_Left:
+         setValue(value() - singleStep());
+         break;
+      case Qt::Key_Enter: //Line edit isn't "accepting" key strokes..
+      case Qt::Key_Return:
+      case Qt::Key_Escape:
+         break;
+      default:
+         showEdit();
+         qApp->sendEvent(m_edit, e);
+         break;
+   }
+}
+
+bool KisSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
+{
+   if(recv == static_cast<QObject*>(m_edit) &&
+      e->type() == QEvent::KeyRelease)
+   {
+      QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
+      
+      switch(keyEvent->key())
+      {
+         case Qt::Key_Enter:
+         case Qt::Key_Return:
+            setValue(m_edit->text().toInt());
+            hideEdit();
+            return true;
+         case Qt::Key_Escape:
+            hideEdit();
+            return true;
+         default:
+            break;
+      }
+   }
+
+   return false;
+}
+
+QSize KisSliderSpinBox::sizeHint() const
+{
+   QStyleOptionSpinBox spinOpts = spinBoxOptions();
+   
+   QFontMetrics fm(font());
+   //We need at least 50 pixels or things start to look bad
+   int w = qMax(fm.width(QString::number(maximum())), 50);
+   QSize hint(w, m_edit->sizeHint().height());
+
+   //Getting the size of the buttons is a pain as the calcs require a rect
+   //that is "big enough". We run the calc twice to get the "smallest" buttons
+   //This code was inspired by QAbstractSpinBox
+   QSize extra(35, 6);
+   spinOpts.rect.setSize(hint + extra);
+   extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
+                                          QStyle::SC_SpinBoxEditField, this).size();
+
+   spinOpts.rect.setSize(hint + extra);
+   extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
+                                          QStyle::SC_SpinBoxEditField, this).size();
+   hint += extra;
+
+   spinOpts.rect = rect();
+   return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint, 0)
+                                       .expandedTo(QApplication::globalStrut());
+
+}
+
+QSize KisSliderSpinBox::minimumSizeHint() const
+{
+   return sizeHint();
+}
+
+QStyleOptionSpinBox KisSliderSpinBox::spinBoxOptions() const
+{
+   QStyleOptionSpinBox opts;
+   opts.initFrom(this);
+   opts.frame = false;
+   opts.buttonSymbols = QAbstractSpinBox::UpDownArrows;
+   opts.subControls = QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown;
+
+   //Disable non-logical buttons
+   if(value() == minimum())
+   {
+      opts.stepEnabled = QAbstractSpinBox::StepUpEnabled;
+   }
+   else if(value() == maximum())
+   {
+      opts.stepEnabled = QAbstractSpinBox::StepDownEnabled;
+   }
+   else
+   {
+      opts.stepEnabled = QAbstractSpinBox::StepUpEnabled | QAbstractSpinBox::StepDownEnabled;
+   }
+   
+   //Deal with depressed buttons                     
+   if(m_upButtonDown)
+   {
+      opts.activeSubControls = QStyle::SC_SpinBoxUp;
+   }
+   else if(m_downButtonDown)
+   {
+      opts.activeSubControls = QStyle::SC_SpinBoxDown;
+   }
+   else
+   {
+      opts.activeSubControls = 0;
+   }
+
+   return opts;
+}
+
+QStyleOptionProgressBar KisSliderSpinBox::progressBarOptions() const
+{
+   QStyleOptionSpinBox spinOpts = spinBoxOptions();
+
+   //Create opts for drawing the progress portion
+   QStyleOptionProgressBar progressOpts;
+   progressOpts.initFrom(this);
+   progressOpts.maximum = maximum();
+   progressOpts.minimum = minimum();
+   progressOpts.progress = value();
+   progressOpts.text = QString::number(value());
+   progressOpts.textAlignment = Qt::AlignCenter;
+   progressOpts.textVisible = !(m_edit->isVisible());
+
+   //Change opts rect to be only the ComboBox's text area
+   progressOpts.rect = progressRect(spinOpts);
+
+   return progressOpts;
+}
+
+QRect KisSliderSpinBox::progressRect(const QStyleOptionSpinBox& spinBoxOptions) const
+{
+   return style()->subControlRect(QStyle::CC_SpinBox, &spinBoxOptions,
+                                  QStyle::SC_SpinBoxEditField);
+}
+
+QRect KisSliderSpinBox::upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const
+{
+   return style()->subControlRect(QStyle::CC_SpinBox, &spinBoxOptions,
+                                  QStyle::SC_SpinBoxUp);
+}
+
+QRect KisSliderSpinBox::downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const
+{
+   return style()->subControlRect(QStyle::CC_SpinBox, &spinBoxOptions,
+                                  QStyle::SC_SpinBoxDown);
+}
+
+void KisSliderSpinBox::setValueAfterDblClickInterval()
+{
+   m_setValueTimer->stop();
+   setValue(m_setValueCache);
+   m_setValueCache = 0;
+}
+
+int KisSliderSpinBox::valueForX(int x) const
+{  
+   QStyleOptionSpinBox spinOpts = spinBoxOptions();
+
+   //Adjust for magic number in style code (margins)
+   QRect correctedProgRect = progressRect(spinOpts).adjusted(2,2,-2,-2);
+      
+   double leftDbl = correctedProgRect.left();
+   double xDbl = x - leftDbl;
+   double rightDbl = correctedProgRect.right();
+   double minDbl = minimum();
+   double maxDbl = maximum();
+
+   double dValues = (maxDbl - minDbl);
+   double percent = (xDbl / (rightDbl-leftDbl));
+
+   return ((dValues * percent) + minDbl);
+}
+
+void KisSliderSpinBox::updateValidatorRange(int min, int max)
+{
+  m_validator->setRange(min, max); 
+}

@@ -1,0 +1,18 @@
+Issues:
+    Double Clicks mixed with single clicks causes the underlying value to change.
+      There is a hack implemented that delays mouseRelease setValue calls.
+      However, it makes the widget "feel" slow. Need better solution.
+
+    Need to implement Auto-Repeat when holding down mouseover buttons.
+
+    Clipping isn't working on some styles(Plastique). Resulting in double borders.
+
+    Drawing focus highlight isn't working. Although some styles draw it
+    automatically for drawing CE_SpinBox. The call in paintEvent seems to
+    have no effect...
+
+    Typing is buggy
+
+    Tablet event: tilt should work
+    
+    

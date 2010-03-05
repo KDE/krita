@@ -31,7 +31,13 @@ private slots:
     void testCompositeAlphaDarken();
     void testCompositeAdd();
     void testCompositeBurn();
+    void testCompositeDivide();
+    void testCompositeDodge();
+    void testCompositeInversedSubtract();
+    void testCompositeMulitply();
+    void testCompositeOverlay();
+    void testCompositeScreen();
+    void testCompositeSubtract();
 };
 
 #endif
-

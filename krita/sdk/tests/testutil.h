@@ -96,10 +96,15 @@ bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, i
                 const bool same = qAbs(qRed(a) - qRed(b)) <= fuzzy
                                   && qAbs(qGreen(a) - qGreen(b)) <= fuzzy
                                   && qAbs(qBlue(a) - qBlue(b)) <= fuzzy;
-                if (!same && (qAlpha(a) != 0 || qAlpha(b) != 0)) {
-                    qDebug() << " Different! source" << qRed(a) << qGreen(a) << qBlue(a) << "dest" << qRed(b) << qGreen(b) << qBlue(b);
+                const bool sameAlpha = qAlpha(a) == qAlpha(b);
+                const bool bothTransparent = sameAlpha && qAlpha(a)==0;
+
+                if (!bothTransparent && (!same || !sameAlpha)) {
                     pt.setX(x);
                     pt.setY(y);
+                    qDebug() << " Different at" << pt
+                             << "source" << qRed(a) << qGreen(a) << qBlue(a)
+                             << "dest" << qRed(b) << qGreen(b) << qBlue(b);
                     return false;
                 }
             }

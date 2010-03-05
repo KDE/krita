@@ -339,6 +339,11 @@ KisCubicCurve::KisCubicCurve(const KisCubicCurve& curve) : d(new Private(*curve.
 {
 }
 
+KisCubicCurve::~KisCubicCurve()
+{
+    delete d;
+}
+
 KisCubicCurve& KisCubicCurve::operator=(const KisCubicCurve & curve)
 {
     *d = *curve.d;

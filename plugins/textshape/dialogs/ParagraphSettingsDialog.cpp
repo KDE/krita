@@ -66,7 +66,7 @@ void ParagraphSettingsDialog::slotOk()
 
 void ParagraphSettingsDialog::slotApply()
 {
-    emit startMacro(i18n("Paragraph Settings\n"));
+    emit startMacro(i18n("Paragraph Settings"));
     KoParagraphStyle chosenStyle;
     m_paragraphGeneral->save(&chosenStyle);
     QTextBlockFormat format;

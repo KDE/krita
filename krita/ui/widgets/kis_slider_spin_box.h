@@ -61,14 +61,12 @@ protected:
    int valueForX(int x) const;
 
 protected slots:
-   void setValueAfterDblClickInterval();
-   void updateValidatorRange(int min, int max);   
+   void updateValidatorRange(int min, int max);
+   void contextMenuEvent(QContextMenuEvent * event); 
 
 private:
    QLineEdit* m_edit;
    QIntValidator* m_validator;
-   QTimer* m_setValueTimer;
-   int m_setValueCache;
    bool m_upButtonDown;
    bool m_downButtonDown;
 

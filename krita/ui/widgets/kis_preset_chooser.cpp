@@ -37,6 +37,7 @@
 #include "kis_paintop_preset.h"
 #include "kis_resource_server_provider.h"
 #include "kis_global.h"
+#include "kis_slider_spin_box.h"
 
 /// The resource item delegate for rendering the resource preview
 class KisPresetDelegate : public QAbstractItemDelegate
@@ -139,6 +140,8 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     m_chooser->setRowHeight(60);
     m_chooser->setItemDelegate(new KisPresetDelegate(this));
     layout->addWidget(m_chooser);
+    
+    layout->addWidget(new KisSliderSpinBox);
     
     connect(m_chooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));

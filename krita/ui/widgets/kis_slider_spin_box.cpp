@@ -30,7 +30,6 @@
 
 KisSliderSpinBox::KisSliderSpinBox(QWidget* parent) :
    QAbstractSlider(parent),
-   m_setValueCache(0),
    m_upButtonDown(false),
    m_downButtonDown(false)
 {  
@@ -52,12 +51,6 @@ KisSliderSpinBox::KisSliderSpinBox(QWidget* parent) :
 
    connect(this, SIGNAL(rangeChanged(int,int)),
            this, SLOT(updateValidatorRange(int,int)));
-
-   m_setValueTimer = new QTimer(this);
-   m_setValueTimer->setInterval(qApp->doubleClickInterval());
-
-   connect(m_setValueTimer, SIGNAL(timeout()),
-           this, SLOT(setValueAfterDblClickInterval()));
 
    //Set sane defaults
    setFocusPolicy(Qt::StrongFocus);
@@ -129,14 +122,19 @@ void KisSliderSpinBox::mousePressEvent(QMouseEvent* e)
    
    //Depress buttons or highlight slider
    //Also used to emulate mouse grab...
-   if(upButtonRect(spinOpts).contains(e->pos()))
-   {
-      m_upButtonDown = true;
+   if(e->buttons() & Qt::LeftButton) {
+        if(upButtonRect(spinOpts).contains(e->pos()))
+        {
+            m_upButtonDown = true;
+        }
+        else if(downButtonRect(spinOpts).contains(e->pos()))
+        {
+            m_downButtonDown = true;
+        }
+   } else if(e->buttons() & Qt::RightButton){
+        showEdit();
    }
-   else if(downButtonRect(spinOpts).contains(e->pos()))
-   {
-      m_downButtonDown = true;
-   }
+
    
   update();
 }
@@ -160,9 +158,7 @@ void KisSliderSpinBox::mouseReleaseEvent(QMouseEvent* e)
             !(m_upButtonDown || m_downButtonDown) )
    {
       //Snap to percentage for progress area
-      m_setValueCache = valueForX(e->pos().x());
-      m_setValueTimer->start();
-      //Timer is needed to work around double click
+      setValue(valueForX(e->pos().x()));
    }
 
    m_upButtonDown = false;
@@ -184,13 +180,6 @@ void KisSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
 
 void KisSliderSpinBox::mouseDoubleClickEvent(QMouseEvent* e)
 {
-   QStyleOptionSpinBox spinOpts = spinBoxOptions();
-
-   if(progressRect(spinOpts).contains(e->pos()))
-   {
-      m_setValueTimer->stop();
-      showEdit();
-   }
 }
 
 void KisSliderSpinBox::keyPressEvent(QKeyEvent* e)
@@ -351,13 +340,6 @@ QRect KisSliderSpinBox::downButtonRect(const QStyleOptionSpinBox& spinBoxOptions
                                   QStyle::SC_SpinBoxDown);
 }
 
-void KisSliderSpinBox::setValueAfterDblClickInterval()
-{
-   m_setValueTimer->stop();
-   setValue(m_setValueCache);
-   m_setValueCache = 0;
-}
-
 int KisSliderSpinBox::valueForX(int x) const
 {  
    QStyleOptionSpinBox spinOpts = spinBoxOptions();
@@ -380,4 +362,9 @@ int KisSliderSpinBox::valueForX(int x) const
 void KisSliderSpinBox::updateValidatorRange(int min, int max)
 {
   m_validator->setRange(min, max); 
+}
+
+void KisSliderSpinBox::contextMenuEvent(QContextMenuEvent* event)
+{
+    event->accept();
 }

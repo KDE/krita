@@ -22,6 +22,7 @@
 #include <QStack>
 
 #include "kis_layer.h"
+#include "kis_mask.h"
 
 class KRITAIMAGE_EXPORT KisBaseRectsWalker
 {
@@ -39,8 +40,10 @@ public:
         N_BOTTOMMOST = 0x02,
 
         N_ABOVE_FILTHY = 0x04,
-        N_FILTHY       = 0x08,
-        N_BELOW_FILTHY = 0x10
+        N_FILTHY_ORIGINAL   = 0x08, // not used actually
+        N_FILTHY_PROJECTION = 0x10,
+        N_FILTHY = 0x20,
+        N_BELOW_FILTHY = 0x40
     };
 
     struct JobItem {
@@ -113,7 +116,11 @@ protected:
 
 protected:
     static inline bool isLayer(KisNodeSP node) {
-        return dynamic_cast<KisLayer*>(node.data());
+        return qobject_cast<KisLayer*>(node.data());
+    }
+
+    static inline bool isMask(KisNodeSP node) {
+        return qobject_cast<KisMask*>(node.data());
     }
 
     inline void clear() {
@@ -179,7 +186,7 @@ protected:
             m_lastNeedRect = cropThisRect(m_lastNeedRect);
             m_childNeedRect = m_lastNeedRect;
         }
-        else if(position & N_BELOW_FILTHY) {
+        else if(position & (N_BELOW_FILTHY | N_FILTHY_PROJECTION)) {
             if(!m_lastNeedRect.isEmpty()) {
                 pushJob(node, position, m_lastNeedRect);
                 m_lastNeedRect = node->needRect(m_lastNeedRect,
@@ -188,12 +195,25 @@ protected:
             }
         }
         else {
-            qFatal("Merge visitor: node position(%d) is out of range", position);
+            // N_FILTHY_ORIGINAL is not used so it goes there
+            qFatal("KisBaseRectsWalker: node position(%d) is out of range", position);
         }
 
         if(!m_needRectVaries)
             m_needRectVaries = m_resultAccessRect != m_lastNeedRect;
         m_resultAccessRect |= m_lastNeedRect;
+    }
+
+    virtual void adjustMasksChangeRect(KisNodeSP firstMask) {
+        KisNodeSP currentNode = firstMask;
+
+        while (currentNode) {
+            m_resultChangeRect = currentNode->changeRect(m_resultChangeRect);
+
+            do {
+                currentNode = currentNode->nextSibling();
+            } while (currentNode && !isMask(currentNode));
+        }
     }
 
 private:

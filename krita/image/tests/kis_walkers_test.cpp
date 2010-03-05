@@ -95,6 +95,10 @@ QString nodeTypeString(KisMergeWalker::NodePosition position)
         string+="_ABOVE ";
     else if(position & KisMergeWalker::N_FILTHY)
         string+="_FILTH*";
+    else if(position & KisMergeWalker::N_FILTHY_PROJECTION)
+        string+="_PROJE*";
+    else if(position & KisMergeWalker::N_FILTHY_ORIGINAL)
+        string+="_ORIGI*_WARNINIG!!!: NOT USED";
     else if(position & KisMergeWalker::N_BELOW_FILTHY)
         string+="_BELOW ";
     else
@@ -118,6 +122,10 @@ QString nodeTypePostfix(KisMergeWalker::NodePosition position)
         string+="A";
     else if(position & KisMergeWalker::N_FILTHY)
         string+="F";
+    else if(position & KisMergeWalker::N_FILTHY_PROJECTION)
+        string+="P";
+    else if(position & KisMergeWalker::N_FILTHY_ORIGINAL)
+        string+="O";
     else if(position & KisMergeWalker::N_BELOW_FILTHY)
         string+="B";
     else
@@ -132,6 +140,11 @@ void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList refere
 {
     KisMergeWalker::NodeStack &list = walker.nodeStack();
     QStringList::const_iterator iter = reference.constBegin();
+
+    if(reference.size() != list.size()) {
+        qDebug() << "*** Seems like the walker returned stack of wrong size";
+        qDebug() << "*** We are going to crash soon... just wait...";
+    }
 
     foreach(KisMergeWalker::JobItem item, list) {
 #ifdef DEBUG_VISITORS
@@ -494,35 +507,34 @@ void KisWalkersTest::testMasksVisiting()
     transparencyMask->select(selection2, MAX_SELECTED);
     filterMask2->select(selection3, MAX_SELECTED);
 
-//    image->addNode(filterMask1, paintLayer1);
-//    image->addNode(transparencyMask, paintLayer1);
-//    image->addNode(filterMask2, paintLayer1);
+    image->addNode(filterMask1, paintLayer1);
+    image->addNode(transparencyMask, paintLayer1);
+    image->addNode(filterMask2, paintLayer1);
 
     QRect testRect(5,5,30,30);
     // Empty rect to show we don't need any cropping
     QRect cropRect;
 
-/*    KisMergeWalker walker(cropRect);
+    KisMergeWalker walker(cropRect);
     {
         QString order("root,paint2,paint1");
         QStringList orderList = order.split(",");
-        QRect accessRect(5,5,30,30);
+        QRect accessRect(0,0,40,40);
 
-        reportStartWith("paint1");
-        walker.collectRects(paintLayer1, testRect);
+        reportStartWith("tmask");
+        walker.collectRects(transparencyMask, testRect);
         verifyResult(walker, orderList, accessRect, false, false);
-        }*/
+    }
 
-    KisTestWalker walker;
+    KisTestWalker twalker;
     {
-        QString order("paint1,paint2,root,"
-                      "root_TF,paint2_TA,paint1_BF");
+        QString order("paint2,root,"
+                      "root_TF,paint2_TA,paint1_BP");
         QStringList orderList = order.split(",");
-        QRect accessRect(5,5,30,30);
 
-        reportStartWith("paint1");
-        walker.startTrip(paintLayer1);
-        QVERIFY(walker.popResult() == orderList);
+        reportStartWith("tmask");
+        twalker.startTrip(transparencyMask);
+        QCOMPARE(twalker.popResult(), orderList);
     }
 }
 

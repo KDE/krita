@@ -41,6 +41,8 @@ protected:
      */
     void startTrip(KisNodeSP startWith);
 
+    void startTripWithMask(KisNodeSP filthyMask);
+
 private:
     /**
      * Visits a node @node and goes on crowling

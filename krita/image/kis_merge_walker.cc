@@ -30,9 +30,37 @@ KisMergeWalker::~KisMergeWalker()
 
 void KisMergeWalker::startTrip(KisNodeSP startWith)
 {
+    if(isMask(startWith)) {
+        startTripWithMask(startWith);
+        return;
+    }
+
     visitHigherNode(startWith, N_FILTHY);
 
     KisNodeSP prevNode = startWith->prevSibling();
+    if(prevNode)
+        visitLowerNode(prevNode);
+}
+
+void KisMergeWalker::startTripWithMask(KisNodeSP filthyMask)
+{
+    adjustMasksChangeRect(filthyMask);
+
+    KisNodeSP parentLayer = filthyMask->parent();
+    Q_ASSERT(parentLayer);
+
+    KisNodeSP nextNode = parentLayer->nextSibling();
+    KisNodeSP prevNode = parentLayer->prevSibling();
+
+    if (nextNode)
+        visitHigherNode(nextNode, N_ABOVE_FILTHY);
+    else if (parentLayer->parent())
+        startTrip(parentLayer->parent());
+
+    NodePosition positionToFilthy = N_FILTHY_PROJECTION |
+        (!nextNode ? N_TOPMOST : !prevNode ? N_BOTTOMMOST : N_NORMAL);
+    registerNeedRect(parentLayer, positionToFilthy);
+
     if(prevNode)
         visitLowerNode(prevNode);
 }

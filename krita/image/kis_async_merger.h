@@ -51,6 +51,16 @@
 #include "kis_merge_walker.h"
 
 
+//#define DEBUG_MERGER
+
+#ifdef DEBUG_MERGER
+#define DEBUG_NODE_UPDATE(type, node, rect)                             \
+    qDebug() << "Updating" << type << ":" << node->name() << rect
+#else
+#define DEBUG_NODE_UPDATE(type, node, rect)
+#endif
+
+
 class KisUpdateOriginalVisitor : public KisNodeVisitor
 {
 public:
@@ -182,15 +192,22 @@ public:
                                                      m_currentProjection);
 
             if(item.m_position & KisMergeWalker::N_FILTHY) {
+                DEBUG_NODE_UPDATE("N_FILTHY", currentNode, applyRect);
                 currentNode->accept(originalVisitor);
                 currentNode->updateProjection(applyRect);
             }
             else if(item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
+                DEBUG_NODE_UPDATE("N_ABOVE_FILTHY", currentNode, applyRect);
                 currentNode->accept(originalVisitor);
                 if(dependOnLowerNodes(currentNode))
                     currentNode->updateProjection(applyRect);
             }
+            else if(item.m_position & KisMergeWalker::N_FILTHY_PROJECTION) {
+                DEBUG_NODE_UPDATE("N_FILTHY_PROJECTION", currentNode, applyRect);
+                currentNode->updateProjection(applyRect);
+            }
             else /*if(item.m_position & KisMergeWalker::N_BELOW_FILTHY)*/ {
+                DEBUG_NODE_UPDATE("N_BELOW_FILTHY", currentNode, applyRect);
                 /* nothing to do */
             }
 

@@ -156,5 +156,7 @@ void KoShapeController::setShapeControllerBase(KoShapeControllerBase* shapeContr
 
 KoResourceManager *KoShapeController::resourceManager() const
 {
+    if(!d->shapeController)
+        return 0;
     return d->shapeController->resourceManager();
 }

@@ -30,6 +30,7 @@ private slots:
     void testWithProgressUpdater();
     void testSingleThreaded();
     void testDifferentSrcAndDst();
+    void testOldDataApiAfterCopy();
 };
 
 #endif

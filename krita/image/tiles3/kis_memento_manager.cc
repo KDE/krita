@@ -65,10 +65,12 @@ KisMementoManager::KisMementoManager(const KisMementoManager& rhs)
         : m_index(rhs.m_index),
         m_revisions(rhs.m_revisions),
         m_cancelledRevisions(rhs.m_cancelledRevisions),
-        m_headsHashTable(rhs.m_headsHashTable, 0)
+        m_headsHashTable(rhs.m_headsHashTable, 0),
+        m_currentMemento(rhs.m_currentMemento)
 {
-    // See a comment in the default constuctor
-    (void) getMemento();
+    Q_ASSERT_X(m_currentMemento,
+               "KisMementoManager", "(impossible happened) "
+               "Seems like a device was created without history support");
 }
 
 KisMementoManager::~KisMementoManager()

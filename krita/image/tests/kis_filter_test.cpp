@@ -152,5 +152,65 @@ void KisFilterTest::testDifferentSrcAndDst()
     }
 }
 
+void KisFilterTest::testOldDataApiAfterCopy()
+{
+    QRect updateRect(0,0,63,63);
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    quint8 *whitePixel = new quint8[cs->pixelSize()];
+    cs->fromQColor(Qt::white, whitePixel);
+    cs->setOpacity(whitePixel, OPACITY_OPAQUE_U8, 1);
+
+    KisPaintDeviceSP tmp = new KisPaintDevice(cs);
+
+    KisPaintDeviceSP src = new KisPaintDevice(cs);
+    src->fill(0, 0, 50, 50, whitePixel);
+
+    /**
+     * Make a full copy here to catch the bug.
+     * Buggy memento manager would make a commit
+     * that is not good.
+     */
+    KisPaintDeviceSP dst = new KisPaintDevice(*src);
+
+    /**
+     * This would write go to a new revision in a buggy
+     * memento manager
+     */
+    dst->clear(updateRect);
+
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT(f);
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    Q_ASSERT(kfc);
+
+    KisConstProcessingInformation srcCfg(dst,  updateRect.topLeft(), 0);
+    KisProcessingInformation dstCfg(tmp, updateRect.topLeft(), 0);
+
+
+    /**
+     * This filter reads from oldRawData, so if we have some
+     * weirdness with transactions it will read from old and non-cleared
+     * version of the device and we will see a black square instead
+     * of empty device in tmp
+     */
+    f->process(srcCfg, dstCfg, updateRect.size(), kfc);
+
+    /**
+     * In theory, both devices: dst and tmp must be empty by now
+     */
+    KisPaintDeviceSP reference = new KisPaintDevice(cs);
+
+    QImage refImage = reference->convertToQImage(0,0,0,63,63);
+    QImage dstImage = dst->convertToQImage(0,0,0,63,63);
+    QImage tmpImage = tmp->convertToQImage(0,0,0,63,63);
+
+    QPoint pt;
+    QVERIFY(TestUtil::compareQImages(pt, refImage, dstImage));
+    QVERIFY(TestUtil::compareQImages(pt, refImage, tmpImage));
+
+}
+
+
 QTEST_KDEMAIN(KisFilterTest, GUI)
 #include "kis_filter_test.moc"

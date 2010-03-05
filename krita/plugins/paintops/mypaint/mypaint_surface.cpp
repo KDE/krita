@@ -209,7 +209,13 @@ void MyPaintSurface::get_color (float x, float y,
             m_src->readBytes(m_srcData, tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE);
             m_src->colorSpace()->convertPixelsTo(m_srcData, m_dstRgb16Data, m_rgb16, TILE_SIZE * TILE_SIZE);
 
+            //qDebug() << "bounds" << m_src->exactBounds();
+            m_src->convertToQImage(0).save("bla.png");
+
             quint16* rgba_p = reinterpret_cast<quint16*>(m_dstRgb16Data);
+            KisPaintDeviceSP dev = new KisPaintDevice(m_rgb16);
+            dev->writeBytes(m_dstRgb16Data, 0, 0, TILE_SIZE, TILE_SIZE);
+            dev->convertToQImage(0).save(QString("bla%1_%2.png").arg(tx).arg(ty));
 
             float xc = x - tx*TILE_SIZE;
             float yc = y - ty*TILE_SIZE;
@@ -232,6 +238,7 @@ void MyPaintSurface::get_color (float x, float y,
                     xx = (xp + 0.5 - xc);
                     xx *= xx;
                     rr = (yy + xx) * one_over_radius2;
+                    //qDebug() << "yp" << yp << "y1" << y1 << "xp" << xp << "x1" << x1 << "xx" << xx << "rr" << rr;
                     // rr is in range 0.0..1.0*sqrt(2)
 
                     if (rr <= 1.0) {
@@ -263,7 +270,7 @@ void MyPaintSurface::get_color (float x, float y,
         }
     }
 
-    //qDebug() << "sum_a" << sum_a << "rgb" << sum_r << sum_g << sum_b << "sum_weight" << sum_weight;
+    qDebug() << "sum_a" << sum_a << "rgb" << sum_r << sum_g << sum_b << "sum_weight" << sum_weight;
     Q_ASSERT(sum_weight > 0.0);
     sum_a /= sum_weight;
     sum_r /= sum_weight;
@@ -277,7 +284,7 @@ void MyPaintSurface::get_color (float x, float y,
         *color_g = sum_g / sum_a;
         *color_b = sum_b / sum_a;
     } else {
-        //qDebug() << "Eeek!";
+        qDebug() << "Eeek!";
         // it is all transparent, so don't care about the colors
         // (let's make them ugly so bugs will be visible)
         *color_r = 1.0;

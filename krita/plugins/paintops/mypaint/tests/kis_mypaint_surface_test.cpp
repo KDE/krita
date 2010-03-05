@@ -66,7 +66,7 @@ void KisMyPaintSurfaceTest::testGetColor()
     float b = 0.0;
     float a = 0.0;
 
-    surface.get_color(1000.0, 1000.0, 100.0, &r, &g, &b, &a);
+    surface.get_color(500.0, 500.0, 100.0, &r, &g, &b, &a);
 
     qDebug() << r << g << b << a;
 

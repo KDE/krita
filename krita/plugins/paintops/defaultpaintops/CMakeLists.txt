@@ -1,6 +1,5 @@
 include_directories(brush)
 include_directories(pen)
-include_directories(airbrush)
 include_directories(eraser)
 include_directories(duplicate)
 include_directories(smudge)
@@ -8,9 +7,6 @@ include_directories(smudge)
 
 set(kritadefaultpaintops_PART_SRCS
 	defaultpaintops_plugin.cc
-	airbrush/kis_airbrushop.cpp
-	airbrush/kis_airbrushop_settings.cpp
-	airbrush/kis_airbrushop_settings_widget.cpp
 	brush/kis_brushop.cpp
 	brush/kis_brushop_settings_widget.cpp
 	duplicate/kis_duplicateop.cpp
@@ -41,7 +37,6 @@ install(TARGETS kritadefaultpaintops  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  kritadefaultpaintops.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES
-    krita-airbrush.png
     krita-smudgebrush.png
     krita-paintbrush.png
     krita-eraser.png

@@ -272,6 +272,11 @@ void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) con
 
 QRect KisPaintDevice::exactBounds() const
 {
+    quint8 defaultOpacity = colorSpace()->opacityU8(defaultPixel());
+    if(defaultOpacity != OPACITY_TRANSPARENT_U8) {
+        return m_d->defaultBounds.bounds();
+    }
+
     if (m_datamanager->validExactBounds()) {
         return m_datamanager->exactBounds();
     }

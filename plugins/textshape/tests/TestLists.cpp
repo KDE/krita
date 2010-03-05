@@ -121,7 +121,7 @@ void TestDocumentLayout::testNumberedList()
 
     // now to make sure the text is actually properly set.
     block = m_doc->begin().next();
-    i = 0;
+    i = 1;
     while (block.isValid() && i < 13) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
         QVERIFY(data);
@@ -698,4 +698,27 @@ void TestDocumentLayout::testCenteredItems()
     QTextLine line = layout->lineAt(0);
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
     QCOMPARE(data->counterPosition().x(), 200 - padding - data->counterWidth());
+}
+
+void TestDocumentLayout::testMultiLevel()
+{
+    initForNewTest("ListItem1\n");
+    KoListStyle listStyle;
+    KoListLevelProperties llp;
+    llp.setStyle(KoListStyle::DecimalItem);
+    llp.setLevel(3);
+    llp.setDisplayLevel(4); // we won't show a .0 at the end so this is truncated to 3
+    listStyle.setLevelProperties(llp);
+
+    QTextBlock block = m_doc->begin();
+    QVERIFY(block.isValid());
+    listStyle.applyStyle(block);
+    QVERIFY(block.textList());
+
+    m_layout->layout();
+
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+    QVERIFY(data);
+    QVERIFY(data->hasCounterData());
+    QCOMPARE(data->counterText(), QString("1.1.1"));
 }

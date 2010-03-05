@@ -72,6 +72,7 @@ private slots:
     void testLetterSynchronization();
     void testInvalidateLists();
     void testCenteredItems();
+    void testMultiLevel();
 
 // relativeBulletSize
 

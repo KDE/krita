@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
@@ -224,7 +224,7 @@ ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font)
 
 void ListItemsHelper::recalculate()
 {
-    //kDebug(32500) <<"ListItemsHelper::recalculate";
+    //kDebug(32500);
     const QTextListFormat format = m_textList->format();
     const KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(m_textList->format().style());
 
@@ -236,7 +236,9 @@ void ListItemsHelper::recalculate()
         dp = level;
     const int displayLevel = dp ? dp : 1;
 
-    int startValue = format.intProperty(KoListStyle::StartValue);
+    int startValue = 1;
+    if (format.hasProperty(KoListStyle::StartValue))
+        startValue = format.intProperty(KoListStyle::StartValue);
     if (format.boolProperty(KoListStyle::ContinueNumbering)) {
         // Look for the index of a previous list of the same numbering style and level
         for (QTextBlock tb = m_textList->item(0).previous(); tb.isValid(); tb = tb.previous()) {
@@ -319,7 +321,7 @@ void ListItemsHelper::recalculate()
                     item += otherData->partialCounterText();
                     tmpDisplayLevel--;
                     checkLevel--;
-                    for (int i = otherLevel + 1;i < level; i++) {
+                    for (int i = otherLevel + 1; i < level; i++) {
                         tmpDisplayLevel--;
                         item += ".0"; // add missing counters.
                     }
@@ -331,9 +333,12 @@ void ListItemsHelper::recalculate()
                     item += pureCounter;
                     for (int i = otherLevel + 1; i < level; i++)
                         item += ".0"; // add missing counters.
+                    tmpDisplayLevel = 0;
                     break;
                 }
             }
+            for (int i = 1; i < tmpDisplayLevel; i++)
+                item = "1." + item; // add missing counters.
         }
 
         if ((listStyle == KoListStyle::DecimalItem || listStyle == KoListStyle::AlphaLowerItem ||

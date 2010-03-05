@@ -26,14 +26,14 @@
  * A template version of the divide composite operation to use in colorspaces.
  */
 template<class _CSTraits>
-class KoCompositeOpDivide : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDivide<_CSTraits> >
+class KoCompositeOpDivide : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDivide<_CSTraits>, true >
 {
     typedef typename _CSTraits::channels_type channels_type;
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
 public:
 
     KoCompositeOpDivide(const KoColorSpace * cs)
-            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDivide<_CSTraits> >(cs, COMPOSITE_DIVIDE, i18n("Divide"), KoCompositeOp::categoryArithmetic()) {
+            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDivide<_CSTraits>, true >(cs, COMPOSITE_DIVIDE, i18n("Divide"), KoCompositeOp::categoryArithmetic()) {
     }
 
 public:

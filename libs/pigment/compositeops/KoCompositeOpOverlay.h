@@ -26,14 +26,14 @@
  * A template version of the burn composite operation to use in colorspaces.
  */
 template<class _CSTraits>
-class KoCompositeOpOverlay : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOverlay<_CSTraits> >
+class KoCompositeOpOverlay : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOverlay<_CSTraits>, true >
 {
     typedef typename _CSTraits::channels_type channels_type;
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
 public:
 
     KoCompositeOpOverlay(const KoColorSpace * cs)
-            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOverlay<_CSTraits> >(cs, COMPOSITE_OVERLAY, i18n("Overlay"), KoCompositeOp::categoryArithmetic()) {
+            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOverlay<_CSTraits>, true >(cs, COMPOSITE_OVERLAY, i18n("Overlay"), KoCompositeOp::categoryArithmetic()) {
     }
 
 public:

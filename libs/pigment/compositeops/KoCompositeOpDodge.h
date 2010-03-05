@@ -27,14 +27,14 @@
  * A template version of the dodge composite operation to use in colorspaces.
  */
 template<class _CSTraits>
-class KoCompositeOpDodge : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDodge<_CSTraits> >
+class KoCompositeOpDodge : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDodge<_CSTraits>, true >
 {
     typedef typename _CSTraits::channels_type channels_type;
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
 public:
 
     KoCompositeOpDodge(const KoColorSpace * cs)
-            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDodge<_CSTraits> >(cs, COMPOSITE_DODGE, i18n("Dodge"), KoCompositeOp::categoryLight()) {
+            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDodge<_CSTraits>, true >(cs, COMPOSITE_DODGE, i18n("Dodge"), KoCompositeOp::categoryLight()) {
     }
 
 public:

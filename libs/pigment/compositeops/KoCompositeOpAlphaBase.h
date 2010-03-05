@@ -38,7 +38,7 @@
  * @param _compositeOp this class should define a function with the
  *        following signature: inline static void composeColorChannels
  */
-template<class _CSTraits, class _compositeOp>
+template<class _CSTraits, class _compositeOp, bool _alphaLocked>
 class KoCompositeOpAlphaBase : public KoCompositeOp
 {
     typedef typename _CSTraits::channels_type channels_type;
@@ -152,7 +152,7 @@ public:
                             srcBlend = srcAlpha;
                         } else {
                             channels_type newAlpha = dstAlpha + KoColorSpaceMaths<channels_type>::multiply(NATIVE_OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                            if (!alphaLocked) {
+                            if (!alphaLocked && !_alphaLocked) {
                                 dstN[_CSTraits::alpha_pos] = newAlpha;
                             }
 

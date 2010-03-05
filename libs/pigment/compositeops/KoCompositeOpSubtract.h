@@ -27,14 +27,14 @@
  * A template version of the subtract composite operation to use in colorspaces.
  */
 template<class _CSTraits>
-class KoCompositeOpSubtract : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpSubtract<_CSTraits> >
+class KoCompositeOpSubtract : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpSubtract<_CSTraits>, true >
 {
     typedef typename _CSTraits::channels_type channels_type;
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
 public:
 
     KoCompositeOpSubtract(const KoColorSpace * cs)
-            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpSubtract<_CSTraits> >(cs, COMPOSITE_SUBTRACT, i18n("Subtract"), KoCompositeOp::categoryArithmetic()) {
+            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpSubtract<_CSTraits>, true >(cs, COMPOSITE_SUBTRACT, i18n("Subtract"), KoCompositeOp::categoryArithmetic()) {
     }
 
 public:

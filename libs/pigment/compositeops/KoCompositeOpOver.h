@@ -27,13 +27,13 @@
  * A template version of the over composite operation to use in colorspaces.
  */
 template<class _CSTraits>
-class KoCompositeOpOver : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOver<_CSTraits> >
+class KoCompositeOpOver : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOver<_CSTraits>, false >
 {
     typedef typename _CSTraits::channels_type channels_type;
 public:
 
     KoCompositeOpOver(const KoColorSpace * cs)
-            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOver<_CSTraits> >(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix()) {
+            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOver<_CSTraits>, false >(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix()) {
     }
 
 public:

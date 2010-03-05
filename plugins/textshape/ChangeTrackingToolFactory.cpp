@@ -48,7 +48,7 @@ KoToolBase * ChangeTrackingToolFactory::createTool(KoCanvasBase *canvas)
 
 bool ChangeTrackingToolFactory::canCreateTool(KoCanvasBase* canvas) const
 {
-    if (canvas->shapeController()->resourceManager()->hasResource(KoText::ChangeTracker))
+    if (canvas->shapeController()->resourceManager() && canvas->shapeController()->resourceManager()->hasResource(KoText::ChangeTracker))
         return true;
     return false;
 }

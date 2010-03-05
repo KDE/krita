@@ -54,10 +54,10 @@
 //#define DEBUG_MERGER
 
 #ifdef DEBUG_MERGER
-#define DEBUG_NODE_UPDATE(type, node, rect)                             \
-    qDebug() << "Updating" << type << ":" << node->name() << rect
+#define DEBUG_NODE_ACTION(message, type, node, rect)            \
+    qDebug() << message << type << ":" << node->name() << rect
 #else
-#define DEBUG_NODE_UPDATE(type, node, rect)
+#define DEBUG_NODE_ACTION(message, type, node, rect)
 #endif
 
 
@@ -192,22 +192,22 @@ public:
                                                      m_currentProjection);
 
             if(item.m_position & KisMergeWalker::N_FILTHY) {
-                DEBUG_NODE_UPDATE("N_FILTHY", currentNode, applyRect);
+                DEBUG_NODE_ACTION("Updating", "N_FILTHY", currentNode, applyRect);
                 currentNode->accept(originalVisitor);
                 currentNode->updateProjection(applyRect);
             }
             else if(item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
-                DEBUG_NODE_UPDATE("N_ABOVE_FILTHY", currentNode, applyRect);
+                DEBUG_NODE_ACTION("Updating", "N_ABOVE_FILTHY", currentNode, applyRect);
                 currentNode->accept(originalVisitor);
                 if(dependOnLowerNodes(currentNode))
                     currentNode->updateProjection(applyRect);
             }
             else if(item.m_position & KisMergeWalker::N_FILTHY_PROJECTION) {
-                DEBUG_NODE_UPDATE("N_FILTHY_PROJECTION", currentNode, applyRect);
+                DEBUG_NODE_ACTION("Updating", "N_FILTHY_PROJECTION", currentNode, applyRect);
                 currentNode->updateProjection(applyRect);
             }
             else /*if(item.m_position & KisMergeWalker::N_BELOW_FILTHY)*/ {
-                DEBUG_NODE_UPDATE("N_BELOW_FILTHY", currentNode, applyRect);
+                DEBUG_NODE_ACTION("Updating", "N_BELOW_FILTHY", currentNode, applyRect);
                 /* nothing to do */
             }
 
@@ -269,6 +269,7 @@ private:
             gc.setCompositeOp(parentOriginal->colorSpace()->compositeOp(COMPOSITE_COPY));
             gc.bitBlt(rect.topLeft(), m_currentProjection, rect);
         }
+        DEBUG_NODE_ACTION("Writing projection", "", topmostNode->parent(), rect);
     }
 
     bool compositeWithProjection(KisLayerSP layer, const QRect &rect) {
@@ -288,6 +289,7 @@ private:
         gc.setOpacity(layer->opacity());
         gc.bitBlt(needRect.topLeft(), device, needRect);
 
+        DEBUG_NODE_ACTION("Compositing projection", "", layer, needRect);
         return true;
     }
 

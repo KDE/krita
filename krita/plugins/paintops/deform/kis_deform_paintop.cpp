@@ -104,14 +104,13 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
         return m_spacing;
     }else{
-        qDebug() << "Old";
         if (!m_dab) {
             m_dab = new KisPaintDevice(painter()->device()->colorSpace());
         } else {
             m_dab->clear();
         }
 
-        m_deformBrush.fastDeformColor(m_dab,m_dev,info.pos(),m_properties.deformAmount);
+        m_deformBrush.oldDeform(m_dab,m_dev,info.pos());
         QRect rc = m_dab->extent();
         painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
         return m_spacing;

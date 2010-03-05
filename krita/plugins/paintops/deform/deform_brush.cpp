@@ -65,59 +65,48 @@ inline void DeformBrush::movePixel(qreal newX, qreal newY, quint8 *dst)
     
 }
 
-
-void DeformBrush::fastDeformColor(KisPaintDeviceSP dab,KisPaintDeviceSP layer, QPointF pos, qreal amount)
+void DeformBrush::oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF pos)
 {
-    if (!setupAction(pos)){
-        return;
-    }
-    
     KisRandomSubAccessorPixel srcAcc = layer->createRandomSubAccessor();
     m_srcAcc = &srcAcc;
     m_pixelSize = layer->pixelSize();
     
+    if (!setupAction(pos)){ return; }
+
     int curXi = static_cast<int>(pos.x() + 0.5);
     int curYi = static_cast<int>(pos.y() + 0.5);
-    
-    qreal x, y;
+
+    qreal maskX, maskY;
     qreal distance;
-    qreal randomX, randomY;
 
-    int width = 0.5 * m_sizeProperties->diameter;
-    int height =  0.5 * m_sizeProperties->diameter * m_sizeProperties->aspect;
-    int left = curXi - width;
-    int top = curYi - height;
-    int w = width * 2 + 1;
-    int h = height * 2 + 1;
+    qint32 x;
+    qint32 y;
 
-    qreal maskX;
-    qreal maskY;
-    // major axis
-    m_majorAxis = 2.0/w;
-    // minor axis
-    m_minorAxis = 2.0/h;
-
+    int radius = m_sizeProperties->diameter * 0.5;
+    int left = curXi - radius;
+    int top = curYi - radius;
+    int w = radius * 2 + 1;
+    int h = w;
+    qreal m_majorAxis = 2.0/radius;
+    qreal m_minorAxis = 2.0/radius;
+    
     KisRectIterator m_srcIt = dab->createRectIterator(left, top, w , h);
     for (; !m_srcIt.isDone(); ++m_srcIt) {
-        x = m_srcIt.x();
-        y = m_srcIt.y();
-        maskX = x - curXi;
-        maskY = y - curYi;
-        
+        maskX = m_srcIt.x() - curXi;
+        maskY = m_srcIt.y() - curYi;
+
         distance = norme(maskX * m_majorAxis, maskY * m_minorAxis);
-        if (distance > 1.0){
-                continue;
-        }
+        if (distance > 1.0){ continue; }
 
         m_deformAction->transform( &maskX, &maskY, distance);
 
-        maskX += x;
-        maskY += y;
+        maskX += curXi;
+        maskY += curYi;
 
         movePixel(maskX, maskY, m_srcIt.rawData());
     }
+    m_counter++;
 }
-
 
 
 void DeformBrush::initDeformAction()
@@ -172,7 +161,6 @@ bool DeformBrush::setupAction(QPointF pos)
         {
             // grow or shrink, the sign decide
             qreal sign = (m_properties->action == 1) ? 1.0 : -1.0;
-            qDebug() << sign;
             qreal factor;
             if (m_properties->useCounter){
                 factor = (1.0 + sign*(m_counter*m_counter / 100.0));
@@ -203,7 +191,6 @@ bool DeformBrush::setupAction(QPointF pos)
                 m_prevY = pos.y();
                 static_cast<DeformMove*>(m_deformAction)->setDistance(0.0,0.0);
                 m_firstPaint = true;
-                // can't paint for the first time
                 return false;
             } else {
                 static_cast<DeformMove*>(m_deformAction)->setDistance(pos.x() - m_prevX,pos.y() - m_prevY);
@@ -392,3 +379,7 @@ QPointF DeformBrush::hotSpot(qreal scale, qreal rotation)
 }
 
 
+/***
+* methods with fast prefix (like this one called fastScale) uses KisRectIterator,
+* they are faster just a little bit (according my tests 120 miliseconds faster with big radius, slower with small radius)
+**/

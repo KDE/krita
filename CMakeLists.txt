@@ -211,25 +211,6 @@ endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 
 macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for color management and Krita")
 
-if(SHOULD_BUILD_KEXI)
-    ##
-    ## Test for sqlite
-    ##
-    set(SQLITE_RECOMMENDED_VERSION "3.6.22")
-    find_package(KofficeSqlite 3.6.16)
-    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
-                      FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")
-    ## Test for bzip2
-    find_program(BZIP2_EXECUTABLE NAMES bzip2)
-    macro_log_feature(BZIP2_EXECUTABLE "bzip2" "High-quality data compressor" "http://www.bzip.org"
-                      FALSE "" "Required by Kexi.")
-
-    if(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND)
-        set(SHOULD_BUILD_KEXI FALSE)
-        message(STATUS "WARNING: Kexi will not be built.")
-    endif(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND)
-endif(SHOULD_BUILD_KEXI)
-
 #Set the build of TextShape changetraker
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
@@ -369,11 +350,6 @@ if(NOT KdepimLibs_FOUND)
     set(SHOULD_BUILD_KPLATO FALSE)
 endif(NOT KdepimLibs_FOUND)
 
-if(NOT BUILD_kchart OR NOT SHOULD_BUILD_KCHART)
-    set(SHOULD_BUILD_KPLATO FALSE)
-    set(SHOULD_BUILD_KEXI FALSE)
-endif(NOT BUILD_kchart OR NOT SHOULD_BUILD_KCHART)
-
  ###################
 ####################
 ## Subdirectories ##
@@ -405,11 +381,13 @@ if (SHOULD_BUILD_KPLATO)
 endif (SHOULD_BUILD_KPLATO)
 
 if (SHOULD_BUILD_KCHART)
-    set (WITH_kchart true CACHE BOOL "" FORCE)
+    set(BUILD_kchart true CACHE BOOL "" FORCE)
     add_definitions(-DHAVE_KCHART)
     macro_optional_add_subdirectory(kchart)
 else (SHOULD_BUILD_KCHART)
-    set (WITH_kchart false CACHE BOOL "" FORCE)
+    set(BUILD_kchart false CACHE BOOL "" FORCE)
+    set(SHOULD_BUILD_KPLATO FALSE)
+    set(SHOULD_BUILD_KEXI FALSE)
 endif (SHOULD_BUILD_KCHART)
 
 if(SHOULD_BUILD_KPRESENTER)
@@ -417,6 +395,23 @@ if(SHOULD_BUILD_KPRESENTER)
 endif(SHOULD_BUILD_KPRESENTER)
 
 if(SHOULD_BUILD_KEXI)
+    ##
+    ## Test for sqlite
+    ##
+    set(SQLITE_RECOMMENDED_VERSION "3.6.22")
+    find_package(KofficeSqlite 3.6.16)
+    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
+                      FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")
+    ## Test for bzip2
+    find_program(BZIP2_EXECUTABLE NAMES bzip2)
+    macro_log_feature(BZIP2_EXECUTABLE "bzip2" "High-quality data compressor" "http://www.bzip.org"
+                      FALSE "" "Required by Kexi.")
+
+    if(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND)
+        set(SHOULD_BUILD_KEXI FALSE)
+        message(STATUS "WARNING: Kexi will not be built.")
+    endif(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND)
+
     macro_optional_add_subdirectory(kexi)
 endif(SHOULD_BUILD_KEXI)
 

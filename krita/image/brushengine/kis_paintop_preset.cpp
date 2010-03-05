@@ -22,6 +22,8 @@
 #include <QFile>
 #include <QSize>
 #include <QImage>
+#include <QImageWriter>
+#include <QImageReader>
 #include <QDomDocument>
 #include <QBuffer>
 
@@ -99,30 +101,32 @@ KisPaintOpSettingsSP KisPaintOpPreset::settings() const
 
 bool KisPaintOpPreset::load()
 {
+    dbgImage << "Load preset " << filename();
     if (filename().isEmpty())
         return false;
 
-    QFile f(filename());
+    QImageReader reader(filename(), "PNG");
 
+    QString version = reader.text("version");
+    QString preset = reader.text("preset");
+    
+    dbgImage << version << preset;
+    
+    if (version != "2.2") {
+        return false;
+    }
+    
+    if (!reader.read(&m_d->image))
+    {
+        dbgImage << "Fail to decode PNG";
+        return false;
+    }
+    
     QDomDocument doc;
-    if (!f.open(QIODevice::ReadOnly))
-        return false;
-    if (!doc.setContent(&f)) {
-        f.close();
+    if (!doc.setContent(preset)) {
         return false;
     }
-    f.close();
-
-    QDomElement element = doc.documentElement();
-    fromXML(element);
-    
-        
-    QDomElement preview = element.firstChildElement("PreviewImage");
-    if(!preview.isNull()) {
-         QByteArray data = QByteArray::fromHex(preview.text().toAscii());
-         m_d->image = QImage::fromData(data, "PPM");
-    }
-    
+    fromXML(doc.documentElement());
     if(!m_d->settings)
         return false;
         
@@ -131,40 +135,36 @@ bool KisPaintOpPreset::load()
 
 bool KisPaintOpPreset::save()
 {
+    
     if (filename().isEmpty())
         return false;
-
-    QFile f(filename());
-    f.open(QIODevice::WriteOnly);
     
     QString paintopid = m_d->settings->getString("paintop", "");
     if (paintopid.isEmpty())
         return false;
+    
+    QImageWriter writer(filename(), "PNG");
 
     QDomDocument doc;
     QDomElement root = doc.createElement("Preset");
     toXML(doc, root);
+    doc.appendChild(root);
+
+    writer.setText("version", "2.2");
+    writer.setText("preset", doc.toString());
     
-    if(!m_d->image.isNull()) {
-        QDomElement preview = doc.createElement("PreviewImage");
-        preview.setAttribute("width", m_d->image.width());
-        preview.setAttribute("height", m_d->image.height());
-        
-        QByteArray ba;
-        QBuffer buffer(&ba);
-        buffer.open(QIODevice::WriteOnly);
-        m_d->image.save(&buffer, "PPM");
-        
-        preview.appendChild(doc.createCDATASection(ba.toHex()));
-        root.appendChild(preview);
+    kDebug() << "preset: " << doc.toString();
+    
+    QImage img;
+    
+    if(m_d->image.isNull())
+    {
+        img = QImage(1,1, QImage::Format_RGB32);
+    } else {
+        img = m_d->image;
     }
     
-    doc.appendChild(root);
-    
-    QTextStream textStream(&f);
-    doc.save(textStream, 4);
-    f.close();
-    return true;
+    return writer.write(img);
 }
 
 void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const

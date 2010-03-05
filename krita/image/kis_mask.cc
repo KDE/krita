@@ -31,6 +31,9 @@
 #include "kis_pixel_selection.h"
 #include "kis_painter.h"
 
+#include "kis_image.h"
+#include "kis_layer.h"
+
 struct KisMask::Private {
     KisSelectionSP selection;
 };
@@ -204,25 +207,15 @@ void KisMask::setY(qint32 y)
         m_d->selection->setY(y);
 }
 
-void KisMask::setDirty()
-{
-    if (parent() && parent()->inherits("KisLayer")) {
-        parent()->setDirty();
-    }
-}
-
 void KisMask::setDirty(const QRect & rect)
 {
-    if (parent() && parent()->inherits("KisLayer")) {
-        parent()->setDirty(rect);
-    }
-}
+    Q_ASSERT(parent());
 
-void KisMask::setDirty(const QRegion & region)
-{
-    if (parent() && parent()->inherits("KisLayer")) {
-        parent()->setDirty(region);
-    }
+    const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
+    KisImageWSP image = parentLayer->image();
+    Q_ASSERT(image);
+
+    image->updateProjection(this, rect);
 }
 
 QImage KisMask::createThumbnail(qint32 w, qint32 h)

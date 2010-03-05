@@ -208,11 +208,16 @@ protected:
         KisNodeSP currentNode = firstMask;
 
         while (currentNode) {
-            m_resultChangeRect = currentNode->changeRect(m_resultChangeRect);
+            /**
+             * ATTENTION: we miss the first mask
+             */
 
             do {
                 currentNode = currentNode->nextSibling();
             } while (currentNode && !isMask(currentNode));
+
+            if(currentNode)
+                m_resultChangeRect = currentNode->changeRect(m_resultChangeRect);
         }
     }
 

@@ -289,5 +289,18 @@ void KisNode::createNodeProgressProxy()
     }
 }
 
+void KisNode::setDirty()
+{
+    setDirty(extent());
+}
+
+void KisNode::setDirty(const QRegion & region)
+{
+    if (region.isEmpty()) return;
+
+    foreach(const QRect & rc, region.rects()) {
+        setDirty(rc);
+    }
+}
 
 #include "kis_node.moc"

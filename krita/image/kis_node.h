@@ -84,7 +84,7 @@ public:
      * nodes all the way to the root node. By default this is the
      * empty rect (through KisBaseNode::extent())
      */
-    virtual void setDirty() {}
+    virtual void setDirty();
 
     /**
      * Add the given rect to the set of dirty rects for this node;
@@ -100,9 +100,7 @@ public:
      * this percolates up to parent nodes all the way to the root
      * node, if propagate is true;
      */
-    virtual void setDirty(const QRegion & region) {
-        Q_UNUSED(region);
-    }
+    virtual void setDirty(const QRegion & region);
 
     /**
      * Some filters will cause a change of pixels those are outside

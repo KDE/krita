@@ -168,11 +168,10 @@ public:
     QImage createThumbnail(qint32 w, qint32 h);
 public:
 
-    virtual void setDirty();
+    void setDirty(const QRect & rect);
 
-    virtual void setDirty(const QRect & rect);
+    using KisNode::setDirty;
 
-    virtual void setDirty(const QRegion & region);
     /**
      * Returns true if there are any effect masks present
      */
@@ -182,6 +181,8 @@ public:
      * @return the list of effect masks
      */
     QList<KisEffectMaskSP> effectMasks() const;
+
+    QRect changeRect(const QRect &rect) const;
 
     /**
      * Set a temporary effect mask on this layer for filter previews.

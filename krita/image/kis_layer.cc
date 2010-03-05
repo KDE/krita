@@ -158,23 +158,9 @@ void KisLayer::setImage(KisImageWSP image)
     }
 }
 
-void KisLayer::setDirty()
-{
-    setDirty(extent());
-}
-
 void KisLayer::setDirty(const QRect & rect)
 {
     m_d->image->updateProjection(this, rect);
-}
-
-void KisLayer::setDirty(const QRegion & region)
-{
-    if (region.isEmpty()) return;
-
-    foreach(const QRect & rc, region.rects()) {
-        setDirty(rc);
-    }
 }
 
 KisSelectionMaskSP KisLayer::selectionMask() const
@@ -408,6 +394,16 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 KisPaintDeviceSP KisLayer::projection() const
 {
     return m_d->projection ? m_d->projection : original();
+}
+
+QRect KisLayer::changeRect(const QRect &rect) const
+{
+    bool changeRectVaries;
+    QRect changeRect;
+
+    changeRect = masksChangeRect(effectMasks(), rect, changeRectVaries);
+
+    return rect | changeRect;
 }
 
 QImage KisLayer::createThumbnail(qint32 w, qint32 h)

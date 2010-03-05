@@ -1167,7 +1167,6 @@
     <item find="windoes" replace="windows" />
     <item find="witha" replace="with a" />
     <item find="you;re" replace="you're" />
-    <item find="your" replace="your" />
     <item find="Beligian" replace="Belgian" />
     <item find="Indiania" replace="Indiana" />
     <item find="Japanes" replace="Japanese" />

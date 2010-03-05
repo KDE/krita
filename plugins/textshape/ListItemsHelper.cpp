@@ -294,7 +294,7 @@ void ListItemsHelper::recalculate()
             }
         }
 
-        QString item("");
+        QString item;
         if (displayLevel > 1) {
             int checkLevel = level;
             int tmpDisplayLevel = displayLevel;
@@ -309,8 +309,9 @@ void ListItemsHelper::recalculate()
                       TODO
                   } */
                 KoTextBlockData *otherData = dynamic_cast<KoTextBlockData*>(b.userData());
-                if (! otherData) {  //sebsauer, 2007-09-21, happens on loading the odf 1.1 draft odt in kword
-                    kWarning(32500) << "Skipping textblock cause userData() does not contain a valid KoTextBlockData";
+                if (! otherData) {
+                    //sebsauer, 2007-09-21, happens on loading the odf 1.1 draft odt in kword
+                    kWarning(32500) << "Missing KoTextBlockData, Skipping textblock";
                     continue;
                 }
                 if (tmpDisplayLevel - 1 < otherLevel) { // can't just copy it fully since we are
@@ -328,7 +329,7 @@ void ListItemsHelper::recalculate()
                     QString pureCounter = otherData->counterText().mid(otherPrefix.size());
                     pureCounter = pureCounter.left(pureCounter.size() - otherSuffix.size());
                     item += pureCounter;
-                    for (int i = otherLevel + 1;i < level; i++)
+                    for (int i = otherLevel + 1; i < level; i++)
                         item += ".0"; // add missing counters.
                     break;
                 }

@@ -29,8 +29,8 @@
 #include <KLocale>
 #include <KDebug>
 
-ChangeListCommand::ChangeListCommand( const QTextCursor &cursor, KoListStyle::Style style, int level,
-                                     int flags, QUndoCommand *parent)
+ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Style style, int level,
+                                     ChangeFlags flags, QUndoCommand *parent)
         : TextCommandBase(parent),
         m_flags(flags),
         m_first(true)
@@ -58,8 +58,8 @@ ChangeListCommand::ChangeListCommand( const QTextCursor &cursor, KoListStyle::St
     setText(i18n("Change List"));
 }
 
-ChangeListCommand::ChangeListCommand( const QTextCursor &cursor, KoListStyle *style, int level,
-                                     int flags, QUndoCommand *parent)
+ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level,
+                                     ChangeFlags flags, QUndoCommand *parent)
         : TextCommandBase(parent),
           m_flags(flags),
           m_first(true)

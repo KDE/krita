@@ -56,6 +56,7 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     
     m_deformBrush.setProperties( &m_properties );
     m_deformBrush.setSizeProperties( &m_sizeProperties );
+    m_deformBrush.initDeformAction();
     
     m_useMovementPaint = settings->getBool(DEFORM_USE_MOVEMENT_PAINT);
     m_dev = source();
@@ -77,45 +78,44 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     if (!painter()) return m_spacing;
     if (!m_dev) return m_spacing;
  
-    if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
-    } else {
-        m_dab->clear();
-    }
+    if (true){
+        KisFixedPaintDeviceSP dab = cachedDab(painter()->device()->colorSpace());
 
-    //write device, read device, position
-    //m_deformBrush.paint(m_dab, m_dev, info);
-
-    KisFixedPaintDeviceSP dab = cachedDab(painter()->device()->colorSpace());
-
-    qint32 x;
-    double subPixelX;
-    qint32 y;
-    double subPixelY;
-    
-    QPointF pt = info.pos();
-//     if (m_sizeProperties.jitterEnabled){
-//             pt.setX(pt.x() + (  ( m_sizeProperties.diameter * drand48() ) - m_radius) * m_sizeProperties.jitterMovementAmount);
-//             pt.setY(pt.y() + (  ( m_sizeProperties.diameter * drand48() ) - m_radius) * m_sizeProperties.jitterMovementAmount);
-//     }
-
-    QPointF pos = pt - m_deformBrush.hotSpot();
+        qint32 x;
+        double subPixelX;
+        qint32 y;
+        double subPixelY;
         
-    splitCoordinate(pos.x(), &x, &subPixelX);
-    splitCoordinate(pos.y(), &y, &subPixelY);
+        QPointF pt = info.pos();
+        if (m_sizeProperties.jitterEnabled){
+                pt.setX(pt.x() + (  ( m_sizeProperties.diameter * drand48() ) - m_sizeProperties.diameter * 0.5) * m_sizeProperties.jitterMovementAmount);
+                pt.setY(pt.y() + (  ( m_sizeProperties.diameter * drand48() ) - m_sizeProperties.diameter * 0.5) * m_sizeProperties.jitterMovementAmount);
+        }
+        qreal rotation = m_sizeProperties.rotation;
+        qreal scale = m_sizeProperties.scale;
 
-    qreal rotation = 0.0;
-    qreal scale = 1.0;
-    
-    m_deformBrush.paint(dab, m_dev, scale,rotation,info.pos(), subPixelX,subPixelY);
-    
-    painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
-    return m_spacing;
-    
-    
-/*    QRect rc = m_dab->extent();
-    painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-    return m_spacing;*/
+        QPointF pos = pt - m_deformBrush.hotSpot(scale,rotation);
+            
+        splitCoordinate(pos.x(), &x, &subPixelX);
+        splitCoordinate(pos.y(), &y, &subPixelY);
+        
+        m_deformBrush.paintMask(dab, m_dev, scale,rotation,info.pos(), subPixelX,subPixelY);
+        
+        painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
+        return m_spacing;
+    }else{
+        qDebug() << "Old";
+        if (!m_dab) {
+            m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+        } else {
+            m_dab->clear();
+        }
+
+        m_deformBrush.fastDeformColor(m_dab,m_dev,info.pos(),m_properties.deformAmount);
+        QRect rc = m_dab->extent();
+        painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
+        return m_spacing;
+    }
 }
 
 

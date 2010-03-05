@@ -17,11 +17,14 @@
  */
 
 #include "deform_brush.h"
+#include "kis_painter.h"
 
 #include "kis_fixed_paint_device.h"
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
+
+#include <QRect>
 
 #include <kis_types.h>
 #include <kis_random_sub_accessor.h>
@@ -32,28 +35,18 @@
 const qreal radToDeg = 57.29578;
 const qreal degToRad = M_PI / 180.0;
 
-#if defined(_WIN32) || defined(_WIN64)
-#define srand48 srand
-inline double drand48()
-{
-    return double(rand()) / RAND_MAX;
-}
-#endif
 
 DeformBrush::DeformBrush()
 {
     m_firstPaint = false;
     m_counter = 1;
+    m_deformAction = 0;
 }
 
 DeformBrush::~DeformBrush()
 {
-/*    if (m_distanceTable != 0) {
-        delete[] m_distanceTable;
-    }*/
+    delete m_deformAction;
 }
-
-
 
 /// this method uses KisSubPixelAccessor
 inline void DeformBrush::movePixel(qreal newX, qreal newY, quint8 *dst)
@@ -73,358 +66,231 @@ inline void DeformBrush::movePixel(qreal newX, qreal newY, quint8 *dst)
 }
 
 
-void DeformBrush::maskScale(KisFixedPaintDeviceSP dab,
-                            KisPaintDeviceSP layer, 
-                            qreal scale, qreal rotation, QPointF pos,qreal subPixelX, qreal subPixelY, qreal factor)
+void DeformBrush::fastDeformColor(KisPaintDeviceSP dab,KisPaintDeviceSP layer, QPointF pos, qreal amount)
 {
-    int dstWidth =  m_sizeProperties->diameter;
-    int dstHeight = m_sizeProperties->diameter;
-
-    QRectF m_maskRect(0,0,m_sizeProperties->diameter, m_sizeProperties->diameter);
-    
-    int w = dab->bounds().width();
-    int h = dab->bounds().height();
-   
-    // clear
-    if (w!=dstWidth || h!=dstHeight){
-        dab->setRect(m_maskRect.toRect());
-        dab->initialize();
-    }else{
-        dab->clear(m_maskRect.toRect());
+    if (!setupAction(pos)){
+        return;
     }
     
-    qreal centerX = dstWidth  * 0.5 - 1.0 + subPixelX;
-    qreal centerY = dstHeight * 0.5 - 1.0 + subPixelY;
-
-    quint8* dabPointer = dab->data();
-    
-    
-    qreal newX = 0.0;
-    qreal newY = 0.0;
-    for (int y = 0; y <  dstHeight; y++){
-        for (int x = 0; x < dstWidth; x++){
-            double maskX = (x - centerX);
-            double maskY = (y - centerY);
-
-            qreal distance = sqrt(maskX*maskX + maskY*maskY) / (m_sizeProperties->diameter*0.5);
-            
-            if (distance > 1.0) {
-                dabPointer += m_pixelSize;
-                continue;
-            }
-
-            qreal scaleFactor = (1.0 - distance) * factor + distance;
-
-            newX = maskX / scaleFactor;
-            newY = maskY / scaleFactor;
-
-            newX += pos.x();
-            newY += pos.y();
-            
-            movePixel(newX, newY, dabPointer);    
-            
-            dabPointer += m_pixelSize;
-        }
-    }
-}
-
-
-void DeformBrush::maskSwirl(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer, qreal scale, qreal rotation, QPointF pos, qreal subPixelX, qreal subPixelY, qreal factor)
-{
-    int dstWidth =  m_sizeProperties->diameter;
-    int dstHeight = m_sizeProperties->diameter;
-
-    QRectF m_maskRect(0,0,m_sizeProperties->diameter, m_sizeProperties->diameter);
-    
-    int w = dab->bounds().width();
-    int h = dab->bounds().height();
-   
-    // clear
-    if (w!=dstWidth || h!=dstHeight){
-        dab->setRect(m_maskRect.toRect());
-        dab->initialize();
-    }else{
-        dab->clear(m_maskRect.toRect());
-    }
-    
-    qreal centerX = dstWidth  * 0.5 - 1.0 + subPixelX;
-    qreal centerY = dstHeight * 0.5 - 1.0 + subPixelY;
-
-    quint8* dabPointer = dab->data();
-    
-    qreal newX, newY ;
-    qreal rotX, rotY;
-    //TODO:alpha
-    qreal alpha = factor;
-    for (int y = 0; y <  dstHeight; y++){
-        for (int x = 0; x < dstWidth; x++){
-            newX = (x - centerX);
-            newY = (y - centerY);
-
-            qreal distance = sqrt(newX*newX + newY*newY) / (m_sizeProperties->diameter*0.5);
-            if (distance > 1.0) {
-                dabPointer += m_pixelSize;
-                continue;
-            }
-            distance = 1.0 - distance;
-            rotX = cos(-alpha * distance) * newX - sin(-alpha * distance) * newY;
-            rotY = sin(-alpha * distance) * newX + cos(-alpha * distance) * newY;
-
-            newX = rotX;
-            newY = rotY;
-
-            newX += pos.x();
-            newY += pos.y();
-            
-            movePixel(newX, newY, dabPointer);    
-            
-            dabPointer += m_pixelSize;
-        }
-    }
-
-}
-
-
-void DeformBrush::maskMove(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer, qreal scale, qreal rotation, QPointF pos, qreal subPixelX, qreal subPixelY, qreal dx, qreal dy)
-{
-    int dstWidth =  m_sizeProperties->diameter;
-    int dstHeight = m_sizeProperties->diameter;
-
-    QRectF m_maskRect(0,0,m_sizeProperties->diameter, m_sizeProperties->diameter);
-    
-    int w = dab->bounds().width();
-    int h = dab->bounds().height();
-   
-    // clear
-    if (w!=dstWidth || h!=dstHeight){
-        dab->setRect(m_maskRect.toRect());
-        dab->initialize();
-    }else{
-        dab->clear(m_maskRect.toRect());
-    }
-    
-    qreal centerX = dstWidth  * 0.5 - 1.0 + subPixelX;
-    qreal centerY = dstHeight * 0.5 - 1.0 + subPixelY;
-
-    quint8* dabPointer = dab->data();
-    
-    qreal newX, newY ;
-    
-    for (int y = 0; y <  dstHeight; y++){
-        for (int x = 0; x < dstWidth; x++){
-            newX = (x - centerX);
-            newY = (y - centerY);
-
-            qreal distance = sqrt(newX*newX + newY*newY) / (m_sizeProperties->diameter*0.5);
-            if (distance > 1.0) {
-                dabPointer += m_pixelSize;
-                continue;
-            }
-            newX -= dx * m_properties->deformAmount * (1.0 - distance);
-            newY -= dy * m_properties->deformAmount * (1.0 - distance);
-
-            newX += pos.x();
-            newY += pos.y();
-            
-            movePixel(newX, newY, dabPointer);    
-            
-            dabPointer += m_pixelSize;
-        }
-    }
-}
-
-
-
-void DeformBrush::maskLensDistortion(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer, qreal scale, qreal rotation, QPointF pos, qreal subPixelX, qreal subPixelY, qreal k1, qreal k2)
-{
-    int dstWidth =  m_sizeProperties->diameter;
-    int dstHeight = m_sizeProperties->diameter;
-
-    QRectF m_maskRect(0,0,m_sizeProperties->diameter, m_sizeProperties->diameter);
-    
-    int w = dab->bounds().width();
-    int h = dab->bounds().height();
-   
-    // clear
-    if (w!=dstWidth || h!=dstHeight){
-        dab->setRect(m_maskRect.toRect());
-        dab->initialize();
-    }else{
-        dab->clear(m_maskRect.toRect());
-    }
-    
-    qreal centerX = dstWidth  * 0.5 - 1.0 + subPixelX;
-    qreal centerY = dstHeight * 0.5 - 1.0 + subPixelY;
-
-    quint8* dabPointer = dab->data();
-    
-    qreal newX, newY ;
-    m_maxdist = m_sizeProperties->diameter * 0.5;
-    for (int y = 0; y <  dstHeight; y++){
-        for (int x = 0; x < dstWidth; x++){
-            newX = (x - centerX);
-            newY = (y - centerY);
-
-            qreal distance = sqrt(newX*newX + newY*newY) / (m_sizeProperties->diameter*0.5);
-            if (distance > 1.0) {
-                dabPointer += m_pixelSize;
-                continue;
-            }
-
-            //normalize
-            newX /= m_maxdist;
-            newY /= m_maxdist;
-
-            qreal radius_2 = newX * newX + newY * newY;
-            qreal radius_4 = radius_2 * radius_2;
-
-            if (m_properties->action == 7) {
-                newX = newX * (1.0 + k1 * radius_2 + k2 * radius_4);
-                newY = newY * (1.0 + k1 * radius_2 + k2 * radius_4);
-            } else {
-                newX = newX / (1.0 + k1 * radius_2 + k2 * radius_4);
-                newY = newY / (1.0 + k1 * radius_2 + k2 * radius_4);
-            }
-
-            newX = m_maxdist * newX;
-            newY = m_maxdist * newY;
-
-
-            newX += pos.x();
-            newY += pos.y();
-            
-            movePixel(newX, newY, dabPointer);    
-            
-            dabPointer += m_pixelSize;
-        }
-    }
-}
-
-
-
-
-void DeformBrush::maskDeformColor(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer, qreal scale, qreal rotation, QPointF pos, qreal subPixelX, qreal subPixelY, qreal amount)
-{
-    int dstWidth =  m_sizeProperties->diameter;
-    int dstHeight = m_sizeProperties->diameter;
-
-    QRectF m_maskRect(0,0,m_sizeProperties->diameter, m_sizeProperties->diameter);
-    
-    int w = dab->bounds().width();
-    int h = dab->bounds().height();
-   
-    // clear
-    if (w!=dstWidth || h!=dstHeight){
-        dab->setRect(m_maskRect.toRect());
-        dab->initialize();
-    }else{
-        dab->clear(m_maskRect.toRect());
-    }
-    
-    qreal centerX = dstWidth  * 0.5 - 1.0 + subPixelX;
-    qreal centerY = dstHeight * 0.5 - 1.0 + subPixelY;
-
-    quint8* dabPointer = dab->data();
-    
-    qreal newX, newY ;
-    qreal randomX, randomY;
-    srand48(time(0)); 
-    qreal radius = pow(m_sizeProperties->diameter*0.5,2);
-    for (int y = 0; y <  dstHeight; y++){
-        for (int x = 0; x < dstWidth; x++){
-            newX = qRound(x - centerX);
-            newY = qRound(y - centerY);
-
-            if (newX*newX + newY*newY >  radius)  {
-                dabPointer += m_pixelSize;
-                continue;
-            }
-
-            randomX = amount * (drand48() * 2.0) - 1.0;
-            randomY = amount * (drand48() * 2.0) - 1.0;
-            
-            newX += randomX;
-            newY += randomY;
-
-            newX += pos.x();
-            newY += pos.y();
-
-            movePixel(newX, newY, dabPointer);    
-            dabPointer += m_pixelSize;
-        }
-    }
-}
-
-
-void DeformBrush::paint(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer, qreal scale, qreal rotation, QPointF pos, qreal subPixelX, qreal subPixelY)
-{
-    qreal x1 = pos.x();
-    qreal y1 = pos.y();
-
-    //m_dab = dev;
-    m_pixelSize = layer->colorSpace()->pixelSize();
-
     KisRandomSubAccessorPixel srcAcc = layer->createRandomSubAccessor();
     m_srcAcc = &srcAcc;
+    m_pixelSize = layer->pixelSize();
+    
+    int curXi = static_cast<int>(pos.x() + 0.5);
+    int curYi = static_cast<int>(pos.y() + 0.5);
+    
+    qreal x, y;
+    qreal distance;
+    qreal randomX, randomY;
 
+    int width = 0.5 * m_sizeProperties->diameter;
+    int height =  0.5 * m_sizeProperties->diameter * m_sizeProperties->aspect;
+    int left = curXi - width;
+    int top = curYi - height;
+    int w = width * 2 + 1;
+    int h = height * 2 + 1;
+
+    qreal maskX;
+    qreal maskY;
+    // major axis
+    m_majorAxis = 2.0/w;
+    // minor axis
+    m_minorAxis = 2.0/h;
+
+    KisRectIterator m_srcIt = dab->createRectIterator(left, top, w , h);
+    for (; !m_srcIt.isDone(); ++m_srcIt) {
+        x = m_srcIt.x();
+        y = m_srcIt.y();
+        maskX = x - curXi;
+        maskY = y - curYi;
+        
+        distance = norme(maskX * m_majorAxis, maskY * m_minorAxis);
+        if (distance > 1.0){
+                continue;
+        }
+
+        m_deformAction->transform( &maskX, &maskY, distance);
+
+        maskX += x;
+        maskY += y;
+
+        movePixel(maskX, maskY, m_srcIt.rawData());
+    }
+}
+
+
+
+void DeformBrush::initDeformAction()
+{
     switch(m_properties->action){
-        case 1: {
-            if (m_properties->useCounter) {
-                maskScale(dab,layer,scale, rotation, pos,subPixelX,subPixelY,1.0 + m_counter*m_counter / 100.0);
-            } else {
-                maskScale(dab,layer,scale, rotation, pos,subPixelX,subPixelY,1.0 + m_properties->deformAmount);
-            }
+        case 1:
+        case 2: 
+        {
+            m_deformAction = new DeformScale();
             break;
         }
-        case 2: {
-            if (m_properties->useCounter) {
-                maskScale(dab,layer,scale, rotation, pos,subPixelX,subPixelY,1.0 - m_counter*m_counter / 100.0);
-            } else {
-                maskScale(dab,layer,scale, rotation, pos,subPixelX,subPixelY,1.0 - m_properties->deformAmount);
-            }
+        case 3:
+        case 4:
+        {
+            m_deformAction = new DeformRotation();
             break;
         }
-        case 3: {
-            if (m_properties->useCounter) {
-                maskSwirl(dab,layer,scale, rotation, pos,subPixelX,subPixelY,(m_counter) *  degToRad);
-            } else {
-                maskSwirl(dab,layer,scale, rotation, pos,subPixelX,subPixelY,(360 * m_properties->deformAmount * 0.5) *  degToRad);
-            }
+        
+        case 5:
+        {
+            m_deformAction = new DeformMove();
+            static_cast<DeformMove*>(m_deformAction)->setFactor(m_properties->deformAmount);
             break;
         }
-        case 4: {
-            if (m_properties->useCounter) {
-                maskSwirl(dab,layer,scale, rotation, pos,subPixelX,subPixelY,(m_counter) *  -degToRad);
-            } else {
-                maskSwirl(dab,layer,scale, rotation, pos,subPixelX,subPixelY,(360 * m_properties->deformAmount * 0.5) *  -degToRad);
-            }
-            break;
-        }
-        case 5: {
-                if (m_firstPaint == false) {
-                    m_prevX = x1;
-                    m_prevY = y1;
-                    m_firstPaint = true;
-                } else {
-                    maskMove(dab,layer,scale, rotation, pos,subPixelX,subPixelY,x1 - m_prevX, y1 - m_prevY);
-                    m_prevX = x1;
-                    m_prevY = y1;
-                }
-            break;
-        }
-        case 6: 
+        case 6:
         case 7:
         {
-            maskLensDistortion(dab,layer,scale, rotation, pos,subPixelX,subPixelY,m_properties->deformAmount, 0);
+            m_deformAction = new DeformLens(); 
+            static_cast<DeformLens*>(m_deformAction)->setLensFactor(m_properties->deformAmount,0.0);
+            static_cast<DeformLens*>(m_deformAction)->setMode(m_properties->action == 7);
             break;
         }
         case 8:
         {
-            maskDeformColor(dab,layer,scale, rotation, pos,subPixelX,subPixelY,m_properties->deformAmount);
+            m_deformAction = new DeformColor();
+            static_cast<DeformColor*>(m_deformAction)->setFactor(m_properties->deformAmount);
             break;
         }
-        default: break;
+        default:{
+            m_deformAction = new DeformBase();
+            break;
+        }
     }
+}
+
+bool DeformBrush::setupAction(QPointF pos)
+{
+    
+    switch(m_properties->action){
+        case 1:
+        case 2: 
+        {
+            // grow or shrink, the sign decide
+            qreal sign = (m_properties->action == 1) ? 1.0 : -1.0;
+            qDebug() << sign;
+            qreal factor;
+            if (m_properties->useCounter){
+                factor = (1.0 + sign*(m_counter*m_counter / 100.0));
+            } else{
+                factor =  (1.0 + sign*(m_properties->deformAmount));
+            }
+            dynamic_cast<DeformScale*>(m_deformAction)->setFactor(factor);
+            break;
+        }
+        case 3:
+        case 4:
+        {
+             // CW or CCW, the sign decide
+            qreal sign = (m_properties->action == 3) ? 1.0 : -1.0;
+            qreal factor;
+            if (m_properties->useCounter){
+                factor = m_counter * sign * degToRad;
+            } else{
+                factor =  (360 * m_properties->deformAmount * 0.5) * sign * degToRad;
+            }
+            dynamic_cast<DeformRotation*>(m_deformAction)->setAlpha(factor);
+            break;
+        }
+        case 5:
+        {
+            if (m_firstPaint == false) {
+                m_prevX = pos.x();
+                m_prevY = pos.y();
+                static_cast<DeformMove*>(m_deformAction)->setDistance(0.0,0.0);
+                m_firstPaint = true;
+                // can't paint for the first time
+                return false;
+            } else {
+                static_cast<DeformMove*>(m_deformAction)->setDistance(pos.x() - m_prevX,pos.y() - m_prevY);
+                m_prevX = pos.x();
+                m_prevY = pos.y();
+            }
+            break;
+        }
+        case 6:
+        case 7:
+        {
+            static_cast<DeformLens*>(m_deformAction)->setMaxDistance(m_sizeProperties->diameter * 0.5, m_sizeProperties->diameter * 0.5);
+            break;
+        }
+        case 8:
+        {
+            // no run-time setup 
+            break;
+        }
+        default:{
+            break;
+        }
+    }
+    return true;
+}
+
+void DeformBrush::paintMask(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer, qreal scale, qreal rotation, QPointF pos, qreal subPixelX, qreal subPixelY)
+{
+    KisRandomSubAccessorPixel srcAcc = layer->createRandomSubAccessor();
+    m_srcAcc = &srcAcc;
+    m_pixelSize = layer->colorSpace()->pixelSize();
+    
+    qreal fWidth = maskWidth(scale);
+    qreal fHeight = maskHeight(scale);
+    
+    int dstWidth =  qRound( m_maskRect.width() );
+    int dstHeight = qRound( m_maskRect.height());
+  
+    // clear
+    if (dab->bounds().width() != dstWidth || dab->bounds().height() != dstHeight){
+        dab->setRect(m_maskRect.toRect());
+        dab->initialize();
+    }else{
+        dab->clear(m_maskRect.toRect());
+    }
+    
+    m_centerX = dstWidth  * 0.5  + subPixelX;
+    m_centerY = dstHeight * 0.5  + subPixelY;
+
+    quint8* dabPointer = dab->data();
+    
+    // major axis
+    m_majorAxis = 2.0/fWidth;
+    // minor axis
+    m_minorAxis = 2.0/fHeight;
+    // inverse square
+    m_inverseScale = 1.0 / scale;
+    // amount of precomputed data
+    m_maskRadius = 0.5 * fWidth;
+
+    qreal maskX;
+    qreal maskY;
+    qreal distance;
+
+    // if can't paint, stop
+    if (!setupAction(pos)) return;
+    
+    for (int y = 0; y <  dstHeight; y++){
+        for (int x = 0; x < dstWidth; x++){
+            maskX = x - m_centerX;
+            maskY = y - m_centerY;
+            distance = norme(maskX * m_majorAxis, maskY * m_minorAxis);
+            if (distance > 1.0){
+                // leave there OPACITY TRANSPARENT pixel (default pixel)
+                dabPointer += m_pixelSize;
+                continue;
+            }
+            
+            m_deformAction->transform( &maskX, &maskY, distance);
+            
+            maskX += pos.x();
+            maskY += pos.y();
+            
+            movePixel(maskX, maskY, dabPointer);    
+            dabPointer += m_pixelSize;
+        }
+    }    
     m_counter++;
 }
 
@@ -438,18 +304,6 @@ void DeformBrush::debugColor(const quint8* data, KoColorSpace * cs)
     << ", " << rgbcolor.blue()
     << ", " << rgbcolor.alpha() << ")";
 }
-
-// void DeformBrush::precomputeDistances(int radius)
-// {
-//     int size = (radius + 1) * (radius + 1);
-//     m_distanceTable = new qreal[size];
-//     int pos = 0;
-// 
-//     for (int y = 0; y <= radius; y++)
-//         for (int x = 0; x <= radius; x++, pos++) {
-//             m_distanceTable[pos] = sqrt(x * x + y * y) / m_maxdist;
-//         }
-// }
 
 
 // void DeformBrush::bilinear_interpolation(double x, double y, quint8 *dst)
@@ -519,3 +373,22 @@ void DeformBrush::debugColor(const quint8* data, KoColorSpace * cs)
 //     colorWeights[3] = static_cast<quint16>(y_frac * x_frac * MAX_16BIT);
 //     mixOp->mixColors(colors, colorWeights, 4, dst);
 // }
+
+
+QPointF DeformBrush::hotSpot(qreal scale, qreal rotation)
+{
+    qreal fWidth = maskWidth(scale);
+    qreal fHeight = maskHeight(scale);
+
+    QTransform m;
+    m.reset();
+    m.rotateRadians(rotation);
+
+    m_maskRect = QRect(0,0,fWidth,fHeight);
+    m_maskRect.translate(-m_maskRect.center());
+    m_maskRect = m.mapRect(m_maskRect);
+    m_maskRect.translate(-m_maskRect.topLeft());
+    return m_maskRect.center();
+}
+
+

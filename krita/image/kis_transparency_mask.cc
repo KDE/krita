@@ -52,7 +52,6 @@ QRect KisTransparencyMask::decorateRect(KisPaintDeviceSP &src,
                                         const QRect & rc) const
 {
     if (src != dst) {
-        //dst = new KisPaintDevice(*src);
         KisPainter gc(dst);
         gc.setCompositeOp(src->colorSpace()->compositeOp(COMPOSITE_COPY));
         gc.bitBlt(rc.topLeft(), src, rc);
@@ -60,6 +59,16 @@ QRect KisTransparencyMask::decorateRect(KisPaintDeviceSP &src,
     }
 
     return rc;
+}
+
+QRect KisTransparencyMask::extent() const
+{
+    return parent() ? parent()->extent() : QRect();
+}
+
+QRect KisTransparencyMask::exactBounds() const
+{
+    return parent() ? parent()->exactBounds() : QRect();
 }
 
 QRect KisTransparencyMask::changeRect(const QRect &rect) const

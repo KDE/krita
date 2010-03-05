@@ -1,0 +1,19 @@
+<PresetResource>
+    <Preset name="Very" paintopid="filter">
+        <param name="CurveSize"><![CDATA[0,0;1,1;]]></param>
+        <param name="CustomSize"><![CDATA[true]]></param>
+        <param name="Filter/id"><![CDATA[gaussian blur]]></param>
+        <param name="Filter/ignoreAlpha"><![CDATA[false]]></param>
+        <param name="PressureSize"><![CDATA[true]]></param>
+        <param name="SizeSensor"><![CDATA[pressure]]></param>
+        <param name="brush_definition"><![CDATA[<!DOCTYPE BrushSetting>
+<brush_definition brush_spacing="0.1" brush_angle="0" brush_type="kis_auto_brush" autobrush_ratio="1" autobrush_type="circle" autobrush_hfade="0.25" autobrush_spikes="2" autobrush_radius="20" autobrush_vfade="0.25"/>
+]]></param>
+        <param name="paintop"><![CDATA[filter]]></param>
+        <filterconfig>
+            <param name="horizRadius"><![CDATA[10]]></param>
+            <param name="lockAspect"><![CDATA[true]]></param>
+            <param name="vertRadius"><![CDATA[10]]></param>
+        </filterconfig>
+    </Preset>
+</PresetResource>

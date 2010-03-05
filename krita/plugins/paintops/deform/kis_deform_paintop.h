@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,10 +24,12 @@
 #include <kis_types.h>
 
 #include "deform_brush.h"
+
 #include "kis_deform_paintop_settings.h"
 
 class QPointF;
 class KisPainter;
+class KisBrushSizeProperties;
 
 class KisDeformPaintOp : public KisPaintOp
 {
@@ -53,6 +54,9 @@ private:
     KisPaintDeviceSP m_dev;
 
     DeformBrush m_deformBrush;
+    DeformProperties m_properties;
+    KisBrushSizeProperties m_sizeProperties;
+    
     qreal m_xSpacing;
     qreal m_ySpacing;
     qreal m_spacing;

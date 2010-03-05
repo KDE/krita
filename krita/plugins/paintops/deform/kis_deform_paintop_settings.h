@@ -42,15 +42,6 @@ public:
 
     bool paintIncremental();
 
-    int radius() const;
-    double deformAmount() const;
-    int deformAction() const;
-    bool bilinear() const;
-    bool useMovementPaint() const;
-    bool useCounter() const;
-    bool useOldData() const;
-    qreal spacing() const;
-
 #if defined(HAVE_OPENGL)
     inline QString modelName() const {
         return "3d-deform-brush";

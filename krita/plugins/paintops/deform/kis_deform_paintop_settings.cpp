@@ -19,56 +19,19 @@
 #include <kis_deform_paintop_settings.h>
 #include <kis_deform_paintop_settings_widget.h>
 
+#include "kis_deform_size_option.h"
+
 bool KisDeformPaintOpSettings::paintIncremental()
 {
     return true;
 }
 
-int KisDeformPaintOpSettings::radius() const
-{
-    return getInt("Deform/radius");
-}
-
-
-double KisDeformPaintOpSettings::deformAmount() const
-{
-    return getDouble("Deform/deformAmount");
-}
-
-bool KisDeformPaintOpSettings::bilinear() const
-{
-    return getBool("Deform/bilinear");
-}
-
-bool KisDeformPaintOpSettings::useMovementPaint() const
-{
-    return getBool("Deform/useMovementPaint");
-}
-
-bool KisDeformPaintOpSettings::useCounter() const
-{
-    return getBool("Deform/useCounter");
-}
-
-bool KisDeformPaintOpSettings::useOldData() const
-{
-    return getBool("Deform/useOldData");
-}
-
-int KisDeformPaintOpSettings::deformAction() const
-{
-    return getInt("Deform/deformAction");
-}
-
-qreal KisDeformPaintOpSettings::spacing() const
-{
-    return getDouble("Deform/spacing");
-}
 
 QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return QRectF();
-    qreal size = radius() * 2;
+    // TODO: fix
+    qreal size = getDouble(DEFORM_DIAMETER);
     size += 10;
     return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
 }
@@ -76,7 +39,7 @@ QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWS
 void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return;
-    qreal size = radius() * 2;
+    qreal size = getDouble(DEFORM_DIAMETER);;
 
 #if 0
 //     painter.setPen( QColor(128,255,128) );

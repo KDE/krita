@@ -23,6 +23,13 @@
 
 class KisDeformOptionsWidget;
 
+const QString DEFORM_AMOUNT = "Deform/deformAmount";
+const QString DEFORM_ACTION = "Deform/deformAction";
+const QString DEFORM_USE_BILINEAR = "Deform/bilinear";
+const QString DEFORM_USE_MOVEMENT_PAINT = "Deform/useMovementPaint";
+const QString DEFORM_USE_COUNTER = "Deform/useCounter";
+const QString DEFORM_USE_OLD_DATA = "Deform/useOldData";
+
 class KisDeformOption : public KisPaintOpOption
 {
 public:

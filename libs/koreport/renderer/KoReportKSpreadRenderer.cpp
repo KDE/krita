@@ -16,14 +16,15 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "KoReportKSpreadRenderer.h"
-#include <kspread/part/Doc.h>
-#include <kspread/Map.h>
-#include <kspread/Sheet.h>
+#include <ods/KoSimpleOdsDocument.h>
+#include <ods/KoSimpleOdsCell.h>
+#include <ods/KoSimpleOdsSheet.h>
 #include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoDocument.h>
 #include "renderobjects.h"
+#include <kdebug.h>
 
 KoReportKSpreadRenderer::KoReportKSpreadRenderer()
 {
@@ -36,11 +37,11 @@ KoReportKSpreadRenderer::~KoReportKSpreadRenderer()
 
 bool KoReportKSpreadRenderer::render(const KoReportRendererContext& context, ORODocument* document, int page)
 {
-    KSpread::Doc *ksdoc = new KSpread::Doc();
+    KoSimpleOdsDocument *doc = new KoSimpleOdsDocument();
+    KoSimpleOdsSheet *sht = new KoSimpleOdsSheet();
 
-    KSpread::Sheet *sht = ksdoc->map()->addNewSheet();
-
-    sht->setSheetName(document->title());
+    kDebug() << "Setting name to: " << document->title();
+    sht->setName(document->title());
 
     bool renderedPageHeader = false;
     bool renderedPageFooter = false;
@@ -70,7 +71,7 @@ bool KoReportKSpreadRenderer::render(const KoReportRendererContext& context, ORO
                 if (prim->type() == OROTextBox::TextBox) {
                     OROTextBox * tb = (OROTextBox*) prim;
 
-                    KSpread::Cell(sht, i + 1, s + 1).parseUserInput(tb->text());
+                    sht->addCell(s, i, new KoSimpleOdsCell(tb->text()));
                 }
                 /*
                 else if (prim->type() == OROImage::Image)
@@ -102,12 +103,16 @@ bool KoReportKSpreadRenderer::render(const KoReportRendererContext& context, ORO
         }
     }
 
+    doc->addSheet(sht);
+    
     bool status;
-    if (ksdoc->exportDocument(context.destinationUrl))
+    if (doc->saveDocument(context.destinationUrl.path()) == QFile::NoError) {
         status = true;
-    else
+    }
+    else {
         status = false;
+    }
 
-    delete ksdoc;
+    delete doc;
     return status;
 }

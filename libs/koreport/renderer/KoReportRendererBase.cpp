@@ -48,12 +48,10 @@ KoReportRendererBase* KoReportRendererFactory::createInstance(const QString& key
     }
     if (key.toLower() == QLatin1String("print")) {
         return new KoReportPrintRenderer();
-    }
-#ifdef HAVE_KSPREAD    
-    if (key.toLower() == QLatin1String("kspread")) {
+    }  
+    if (key.toLower() == QLatin1String("ods")) {
         return new KoReportKSpreadRenderer();
-    }
-#endif    
+    } 
     if (key.toLower() == QLatin1String("htmltable")) {
         return new KoReportHTMLTableRenderer();
     }

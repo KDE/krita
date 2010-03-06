@@ -56,7 +56,7 @@
         </sizepolicy>
        </property>
        <property name="value">
-        <double>20.000000000000000</double>
+        <double>200.000000000000000</double>
        </property>
        <property name="minimum">
         <double>1.000000000000000</double>

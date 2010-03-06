@@ -19,7 +19,7 @@
 #include <kis_deform_paintop_settings.h>
 #include <kis_deform_paintop_settings_widget.h>
 
-#include "kis_deform_size_option.h"
+#include <kis_brush_size_option.h>
 
 bool KisDeformPaintOpSettings::paintIncremental()
 {
@@ -30,13 +30,13 @@ bool KisDeformPaintOpSettings::paintIncremental()
 QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return QRectF();
-    qreal width = getDouble(DEFORM_DIAMETER)  * getDouble(DEFORM_SCALE);
-    qreal height = getDouble(DEFORM_DIAMETER) * getDouble(DEFORM_ASPECT)  * getDouble(DEFORM_SCALE);
+    qreal width = getDouble(BRUSH_DIAMETER)  * getDouble(BRUSH_SCALE);
+    qreal height = getDouble(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT)  * getDouble(BRUSH_SCALE);
     QRectF brush(0,0,width,height);
     brush.translate(-brush.center());
     QTransform m;
     m.reset();
-    m.rotate(getDouble(DEFORM_ROTATION));
+    m.rotate(getDouble(BRUSH_ROTATION));
     brush = m.mapRect(brush);
     brush.adjust(-1,-1,1,1);
     
@@ -46,14 +46,14 @@ QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWS
 void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return;
-    qreal width = getDouble(DEFORM_DIAMETER)  * getDouble(DEFORM_SCALE);
-    qreal height = getDouble(DEFORM_DIAMETER) * getDouble(DEFORM_ASPECT)  * getDouble(DEFORM_SCALE);
+    qreal width = getDouble(BRUSH_DIAMETER)  * getDouble(BRUSH_SCALE);
+    qreal height = getDouble(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT)  * getDouble(BRUSH_SCALE);
 
     QRectF brush(0,0,width,height);
     brush.translate(-brush.center());
     painter.save();
     painter.translate( pos);
-    painter.rotate(getDouble(DEFORM_ROTATION));
+    painter.rotate(getDouble(BRUSH_ROTATION));
     
 #if 0
 //     painter.setPen( QColor(128,255,128) );

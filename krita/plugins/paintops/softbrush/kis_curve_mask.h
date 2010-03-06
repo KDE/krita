@@ -31,8 +31,7 @@ class KisFixedPaintDevice;
 #include <kis_cubic_curve.h>
 
 #include <kis_types.h>
-
-#include "kis_brush_size_properties.h"
+#include <kis_brush_size_option.h>
 
 struct KisCurveProperties{
     QVector<qreal> curveData;

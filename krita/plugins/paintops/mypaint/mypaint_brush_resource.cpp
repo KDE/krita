@@ -349,6 +349,10 @@ MyPaintBrushResource::MyPaintBrushResource(const QString& filename)
 
 MyPaintBrushResource::~MyPaintBrushResource()
 {
+    foreach(BrushSetting* setting, m_settings) {
+        delete setting;
+    }
+
     m_settings.clear();
 
 }

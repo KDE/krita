@@ -27,6 +27,8 @@ KisDeformPaintOpSettingsWidget::KisDeformPaintOpSettingsWidget(QWidget* parent)
 {
     m_deformOption = new KisDeformOption();
     m_brushSizeOption = new KisBrushSizeOption();
+    m_brushSizeOption->setDiameter(200);
+    
     addPaintOpOption(m_brushSizeOption);
     addPaintOpOption(m_deformOption);
 }

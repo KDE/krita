@@ -39,7 +39,6 @@ QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWS
     m.rotate(getDouble(BRUSH_ROTATION));
     brush = m.mapRect(brush);
     brush.adjust(-1,-1,1,1);
-    
     return image->pixelToDocument(brush).translated(pos);
 }
 
@@ -54,24 +53,7 @@ void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP imag
     painter.save();
     painter.translate( pos);
     painter.rotate(getDouble(BRUSH_ROTATION));
-    
-#if 0
-//     painter.setPen( QColor(128,255,128) );
-//     painter.setCompositionMode(QPainter::CompositionMode_Exclusion);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    QRectF sizerc = converter.documentToView(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos));
-    QPen pen = painter.pen();
-    pen.setColor(QColor(3, 3, 3, 150));
-    pen.setWidth(5);
-    painter.setPen(pen);
-    painter.drawEllipse(sizerc);
-    pen.setColor(Qt::white);
-    pen.setWidth(1);
-    painter.setPen(pen);
-    painter.drawEllipse(sizerc);
-#else
     painter.setPen(Qt::black);
-#endif
     painter.drawEllipse(image->pixelToDocument(brush));
     painter.restore();
 }

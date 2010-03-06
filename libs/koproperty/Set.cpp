@@ -562,6 +562,12 @@ Set::operator= (const Set & set)
     return *this;
 }
 
+QVariant Set::propertyValue(const QByteArray &name, const QVariant& defaultValue) const
+{
+    const Property *p = d->property(name);
+    return p ? p->value() : defaultValue;
+}
+
 void
 Set::changeProperty(const QByteArray &property, const QVariant &value)
 {

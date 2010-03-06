@@ -34,6 +34,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoLineBorder.h>
+#include <KoViewConverter.h>
 
 #include "kis_image.h"
 #include "kis_painter.h"

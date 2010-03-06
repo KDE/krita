@@ -145,9 +145,9 @@ void KisHLineIteratorBenchmark::benchmarkReadWriteBytes2()
         }
     }
 
-    QImage img = m_device->convertToQImage(m_device->colorSpace()->profile(),0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
-    img.save("write.png");
-
+    ///QImage img = m_device->convertToQImage(m_device->colorSpace()->profile(),0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+    //img.save("write.png");
+    
 }
 
 

@@ -46,6 +46,7 @@ IF (TINY)
     set(SHOULD_BUILD_KOUNAVAIL FALSE)
     set(SHOULD_BUILD_SCRIPTING FALSE)
     set(SHOULD_BUILD_F_OFFICE TRUE)
+    set(SHOULD_BUILD_KOREPORT FALSE)
 ELSE(TINY)
     set(SHOULD_BUILD_KWORD TRUE)
     set(SHOULD_BUILD_KPRESENTER TRUE)
@@ -61,6 +62,7 @@ ELSE(TINY)
     set(SHOULD_BUILD_KOUNAVAIL TRUE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
     set(SHOULD_BUILD_F_OFFICE TRUE)
+    set(SHOULD_BUILD_KOREPORT TRUE)
 ENDIF(TINY)
 
 if(KDE4_BUILD_TESTS)
@@ -211,25 +213,6 @@ endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 
 macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for color management and Krita")
 
-if(SHOULD_BUILD_KEXI)
-    ##
-    ## Test for sqlite
-    ##
-    set(SQLITE_RECOMMENDED_VERSION "3.6.22")
-    find_package(KofficeSqlite 3.6.16)
-    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
-                      FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")
-    ## Test for bzip2
-    find_program(BZIP2_EXECUTABLE NAMES bzip2)
-    macro_log_feature(BZIP2_EXECUTABLE "bzip2" "High-quality data compressor" "http://www.bzip.org"
-                      FALSE "" "Required by Kexi.")
-
-    if(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND)
-        set(SHOULD_BUILD_KEXI FALSE)
-        message(STATUS "WARNING: Kexi will not be built.")
-    endif(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND)
-endif(SHOULD_BUILD_KEXI)
-
 #Set the build of TextShape changetraker
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
@@ -370,9 +353,43 @@ if(NOT KdepimLibs_FOUND)
 endif(NOT KdepimLibs_FOUND)
 
 if(NOT BUILD_kchart OR NOT SHOULD_BUILD_KCHART)
+    message(STATUS "WARNING: KoReport component will not be built because KChart is not available.")
+    if(BUILD_kplato AND SHOULD_BUILD_KPLATO)
+        message(STATUS "WARNING: KPlato will not be built because KoReport component is not available.")
+    endif(BUILD_kplato AND SHOULD_BUILD_KPLATO)
+# no, Kexi can work without reports    set(SHOULD_BUILD_KEXI FALSE)
     set(SHOULD_BUILD_KPLATO FALSE)
-    set(SHOULD_BUILD_KEXI FALSE)
+    set(SHOULD_BUILD_KOREPORT FALSE)
 endif(NOT BUILD_kchart OR NOT SHOULD_BUILD_KCHART)
+
+if(BUILD_kexi AND SHOULD_BUILD_KEXI)
+    ##
+    ## Test for sqlite
+    ##
+    set(SQLITE_RECOMMENDED_VERSION "3.6.22")
+    find_package(KofficeSqlite 3.6.16)
+    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
+                      FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")
+    ## Test for bzip2
+    find_program(BZIP2_EXECUTABLE NAMES bzip2)
+    macro_log_feature(BZIP2_EXECUTABLE "bzip2" "High-quality data compressor" "http://www.bzip.org"
+                      FALSE "" "Required by Kexi.")
+
+    if(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND)
+        set(SHOULD_BUILD_KEXI FALSE)
+        message(STATUS "WARNING: Kexi will not be built.")
+    endif(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND)
+endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
+
+# koreport component not needed if no app is using it
+if(BUILD_koreport AND SHOULD_BUILD_KOREPORT)
+    if(NOT BUILD_kexi AND NOT SHOULD_BUILD_KEXI)
+        if(NOT BUILD_kplato AND NOT SHOULD_BUILD_KPLATO)
+            message(STATUS "KoReport component will not be built because is unused.")
+            set(SHOULD_BUILD_KOREPORT FALSE)
+        endif(NOT BUILD_kplato AND NOT SHOULD_BUILD_KPLATO)
+    endif(NOT BUILD_kexi AND NOT SHOULD_BUILD_KEXI)
+endif(BUILD_koreport AND SHOULD_BUILD_KOREPORT)
 
  ###################
 ####################
@@ -401,11 +418,8 @@ if (SHOULD_BUILD_KPLATO)
 endif (SHOULD_BUILD_KPLATO)
 
 if (SHOULD_BUILD_KCHART)
-    set (WITH_kchart true CACHE BOOL "" FORCE)
     add_definitions(-DHAVE_KCHART)
     macro_optional_add_subdirectory(kchart)
-else (SHOULD_BUILD_KCHART)
-    set (WITH_kchart false CACHE BOOL "" FORCE)
 endif (SHOULD_BUILD_KCHART)
 
 if(SHOULD_BUILD_KPRESENTER)
@@ -466,6 +480,10 @@ macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
 macro_display_application_enabled(kformula ${SHOULD_BUILD_KFORMULA})
 macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
 macro_display_application_enabled(f-office ${SHOULD_BUILD_F_OFFICE})
+
+message(STATUS "---------------- The following components will be built ----------------" )
+
+macro_display_application_enabled(koreport ${SHOULD_BUILD_KOREPORT})
 
 message(STATUS "--------------------------------------------------------------------------" )
 

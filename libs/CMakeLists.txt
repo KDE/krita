@@ -12,9 +12,6 @@ add_subdirectory( kopageapp )
 add_subdirectory( koproperty ) # TODO move to independent place like kdesupport
 
 # only build koreport if possible
-
-set(SHOULD_BUILD_KEXI_OR_KPLATO SHOULD_BUILD_KEXI OR SHOULD_BUILD_KPLATO) 
-
-if (BUILD_kchart AND SHOULD_BUILD_KCHART AND SHOULD_BUILD_KEXI_OR_KPLATO )
-    add_subdirectory( koreport )
-endif (BUILD_kchart AND SHOULD_BUILD_KCHART AND SHOULD_BUILD_KEXI_OR_KPLATO )
+if (SHOULD_BUILD_KOREPORT)
+    macro_optional_add_subdirectory( koreport )
+endif (SHOULD_BUILD_KOREPORT)

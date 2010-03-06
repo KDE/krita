@@ -258,18 +258,31 @@ void DeformBrush::paintMask(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer, q
     // if can't paint, stop
     if (!setupAction(pos)) return;
     
+    qreal cosa = cos(-rotation);
+    qreal sina = sin(-rotation);
+
+    qreal bcosa = cos(rotation);
+    qreal bsina = sin(rotation);
+    
     for (int y = 0; y <  dstHeight; y++){
         for (int x = 0; x < dstWidth; x++){
             maskX = x - m_centerX;
             maskY = y - m_centerY;
-            distance = norme(maskX * m_majorAxis, maskY * m_minorAxis);
+            double rmaskX = cosa * maskX - sina * maskY;
+            double rmaskY = sina * maskX + cosa * maskY;
+
+            
+            distance = norme(rmaskX * m_majorAxis, rmaskY * m_minorAxis);
             if (distance > 1.0){
                 // leave there OPACITY TRANSPARENT pixel (default pixel)
                 dabPointer += m_pixelSize;
                 continue;
             }
             
-            m_deformAction->transform( &maskX, &maskY, distance);
+            m_deformAction->transform( &rmaskX, &rmaskY, distance);
+
+            maskX = bcosa * rmaskX - bsina * rmaskY;
+            maskY = bsina * rmaskX + bcosa * rmaskY;
             
             maskX += pos.x();
             maskY += pos.y();

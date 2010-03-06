@@ -30,17 +30,31 @@ bool KisDeformPaintOpSettings::paintIncremental()
 QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return QRectF();
-    // TODO: fix
-    qreal size = getDouble(DEFORM_DIAMETER);
-    size += 10;
-    return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
+    qreal width = getDouble(DEFORM_DIAMETER)  * getDouble(DEFORM_SCALE);
+    qreal height = getDouble(DEFORM_DIAMETER) * getDouble(DEFORM_ASPECT)  * getDouble(DEFORM_SCALE);
+    QRectF brush(0,0,width,height);
+    brush.translate(-brush.center());
+    QTransform m;
+    m.reset();
+    m.rotate(getDouble(DEFORM_ROTATION));
+    brush = m.mapRect(brush);
+    brush.adjust(-1,-1,1,1);
+    
+    return image->pixelToDocument(brush).translated(pos);
 }
 
 void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return;
-    qreal size = getDouble(DEFORM_DIAMETER);;
+    qreal width = getDouble(DEFORM_DIAMETER)  * getDouble(DEFORM_SCALE);
+    qreal height = getDouble(DEFORM_DIAMETER) * getDouble(DEFORM_ASPECT)  * getDouble(DEFORM_SCALE);
 
+    QRectF brush(0,0,width,height);
+    brush.translate(-brush.center());
+    painter.save();
+    painter.translate( pos);
+    painter.rotate(getDouble(DEFORM_ROTATION));
+    
 #if 0
 //     painter.setPen( QColor(128,255,128) );
 //     painter.setCompositionMode(QPainter::CompositionMode_Exclusion);
@@ -58,5 +72,6 @@ void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP imag
 #else
     painter.setPen(Qt::black);
 #endif
-    painter.drawEllipse(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos));
+    painter.drawEllipse(image->pixelToDocument(brush));
+    painter.restore();
 }

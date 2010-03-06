@@ -117,28 +117,6 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="KDoubleNumInput" name="inputRadius">
-          <property name="value">
-           <double>5.000000000000000</double>
-          </property>
-          <property name="minimum">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>1000.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>1.000000000000000</double>
-          </property>
-          <property name="sliderEnabled">
-           <bool>true</bool>
-          </property>
-          <property name="exponentRatio">
-           <double>5.000000000000000</double>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="1">
          <widget class="KDoubleNumInput" name="inputRatio">
           <property name="value">
@@ -148,6 +126,9 @@
            <double>1.000000000000000</double>
           </property>
          </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="KisSliderSpinBox" name="inputRadius" native="true"/>
         </item>
        </layout>
       </widget>
@@ -294,6 +275,12 @@
    <class>KoAspectButton</class>
    <extends>QWidget</extends>
    <header>KoAspectButton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

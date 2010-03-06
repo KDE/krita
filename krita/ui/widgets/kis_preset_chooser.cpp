@@ -140,9 +140,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     m_chooser->setRowHeight(60);
     m_chooser->setItemDelegate(new KisPresetDelegate(this));
     layout->addWidget(m_chooser);
-    
-    layout->addWidget(new KisSliderSpinBox);
-    
+        
     connect(m_chooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
 }

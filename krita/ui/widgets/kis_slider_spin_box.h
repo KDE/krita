@@ -23,12 +23,13 @@
 
 #include <QStyleOptionSpinBox>
 #include <QStyleOptionProgressBar>
+#include <krita_export.h>
 
 class QLineEdit;
 class QDoubleValidator;
 class QTimer;
 
-class KisSliderSpinBox : public QAbstractSlider
+class  KRITAUI_EXPORT KisSliderSpinBox : public QAbstractSlider
 {
    Q_OBJECT
 public:
@@ -44,6 +45,9 @@ public:
    
    ///Get the value, don't use value()
    double valueDouble();
+
+   ///Set the value, don't use setValue()
+   void setValueDouble(double value);
 
 protected:
    virtual void paintEvent(QPaintEvent* e);

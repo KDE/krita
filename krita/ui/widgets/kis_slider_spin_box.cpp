@@ -51,10 +51,8 @@ KisSliderSpinBox::KisSliderSpinBox(QWidget* parent) :
    m_validator = new QDoubleValidator(m_edit);
    m_edit->setValidator(m_validator);
    setRange(0.0, 100.0, 0);
-
-
-   connect(this, SIGNAL(rangeChanged(int,int)),
-           this, SLOT(updateValidatorRange(int,int)));
+   
+   connect(this, SIGNAL(valueChanged(int)), this, SLOT(internalValueChanged(int)));
 
    //Set sane defaults
    setFocusPolicy(Qt::StrongFocus);
@@ -381,6 +379,12 @@ void KisSliderSpinBox::setSuffix(const QString& suffix)
 double KisSliderSpinBox::valueDouble()
 {
     return (double)value()/m_factor;
+}
+
+void KisSliderSpinBox::setValueDouble(double value)
+{
+    setValue(value*m_factor);
+    update();
 }
 
 QString KisSliderSpinBox::valueString() const

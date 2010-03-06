@@ -7,6 +7,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_brush_based_paintop.cpp
     kis_brush_chooser.cpp
     kis_brush_option_widget.cpp
+    kis_brush_size_option.cpp
     kis_brush_option.cpp
     kis_brush_selection_widget.cpp
     kis_color_option.cpp
@@ -37,6 +38,7 @@ set(kritalibpaintop_LIB_SRCS
 
 kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     wdgautobrush.ui
+    wdgBrushSizeOptions.ui
     wdgcurveoption.ui
     wdgcustombrush.ui
     wdgtextbrush.ui

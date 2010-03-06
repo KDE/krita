@@ -81,12 +81,12 @@ public:
     virtual bool mergeWith(const QUndoCommand *other);
 
 private:
-    enum commandAction {
-        createNew,
-        modifyExisting,
-        reparentList,
-        mergeList,
-        removeList
+    enum CommandAction {
+        CreateNew,
+        ModifyExisting,
+        ReparentList,
+        MergeList,
+        RemoveList
     };
     void extractTextBlocks(const QTextCursor &cursor, int level);
     int detectLevel(const QTextBlock &block, int givenLevel);
@@ -102,7 +102,7 @@ private:
     QHash<int, int> m_levels;
     QHash<int, KoList*> m_list;
     QHash<int, KoList*> m_oldList;
-    QHash<int, commandAction> m_actions;
+    QHash<int, CommandAction> m_actions;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeListCommand::ChangeFlags)

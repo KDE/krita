@@ -163,7 +163,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
         m_newProperties.insert(i, listStyle->levelProperties(m_levels.value(i)));
         // First check if we want to remove a list
         if (m_newProperties.value(i).style() == KoListStyle::None) {
-            m_actions.insert(i, ChangeListCommand::removeList);
+            m_actions.insert(i, ChangeListCommand::RemoveList);
             continue;
         }
         // Then check if we want to modify an existing list.
@@ -171,14 +171,14 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
         if ((m_flags & ModifyExistingList) && (m_blocks.size() == 1)) {
             m_list.insert(i, document.list(m_blocks.at(i)));
             if (m_list.value(i)) {
-                m_actions.insert(i, ChangeListCommand::modifyExisting);
+                m_actions.insert(i, ChangeListCommand::ModifyExisting);
                 continue;
             }
         }
         // Then check if we can merge with an existing list. The actual check was done before, here we just check the result.
         if (mergeableList) {
             m_list.insert(i, mergeableList);
-            m_actions.insert(i, ChangeListCommand::mergeList);
+            m_actions.insert(i, ChangeListCommand::MergeList);
             continue;
         }
         // All else failing, we need to create a new list.
@@ -186,7 +186,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
         if (!newList)
             newList = new KoList(m_blocks.at(i).document(), listStyle, type);
         m_list.insert(i, newList);
-        m_actions.insert(i, ChangeListCommand::createNew);
+        m_actions.insert(i, ChangeListCommand::CreateNew);
     }
 }
 
@@ -194,7 +194,7 @@ void ChangeListCommand::redo()
 {
     if (!m_first) {
         for (int i = 0; i < m_blocks.size(); ++i) { // We invalidate the lists before calling redo on the QTextDocument
-            if (m_actions.value(i) == ChangeListCommand::removeList)
+            if (m_actions.value(i) == ChangeListCommand::RemoveList)
                 for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
                     if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
                         if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
@@ -206,8 +206,8 @@ void ChangeListCommand::redo()
         TextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
         for (int i = 0; i < m_blocks.size(); ++i) {
-            if ((m_actions.value(i) == ChangeListCommand::modifyExisting) || (m_actions.value(i) == ChangeListCommand::createNew)
-                    || (m_actions.value(i) == ChangeListCommand::mergeList)) {
+            if ((m_actions.value(i) == ChangeListCommand::ModifyExisting) || (m_actions.value(i) == ChangeListCommand::CreateNew)
+                    || (m_actions.value(i) == ChangeListCommand::MergeList)) {
                 m_list.value(i)->updateStoredList(m_blocks.at(i));
                 KoListStyle *listStyle = m_list.value(i)->style();
                 listStyle->refreshLevelProperties(m_newProperties.value(i));
@@ -225,10 +225,10 @@ void ChangeListCommand::redo()
     }
     else {
         for (int i = 0; i < m_blocks.size(); ++i) {
-            if (m_actions.value(i) == ChangeListCommand::removeList) {
+            if (m_actions.value(i) == ChangeListCommand::RemoveList) {
                 KoList::remove(m_blocks.at(i));
             }
-            else if (m_actions.value(i) == ChangeListCommand::modifyExisting) {
+            else if (m_actions.value(i) == ChangeListCommand::ModifyExisting) {
                 KoListStyle *listStyle = m_list.value(i)->style();
                 listStyle->setLevelProperties(m_newProperties.value(i));
                 QTextCursor cursor(m_blocks.at(i));
@@ -237,8 +237,8 @@ void ChangeListCommand::redo()
                 cursor.setBlockFormat(format);
             }
             else {
-                //(ChangeListCommand::createNew)
-                //(ChangeListCommand::mergeList)
+                //(ChangeListCommand::CreateNew)
+                //(ChangeListCommand::MergeList)
                 m_list.value(i)->add(m_blocks.at(i), m_newProperties.value(i).level());
                 QTextCursor cursor(m_blocks.at(i));
                 QTextBlockFormat format = m_blocks.at(i).blockFormat();
@@ -257,7 +257,7 @@ void ChangeListCommand::undo()
 
     for (int i = 0; i < m_blocks.size(); ++i) {
         // command to undo:
-        if (m_actions.value(i) == ChangeListCommand::removeList) {
+        if (m_actions.value(i) == ChangeListCommand::RemoveList) {
             m_oldList.value(i)->updateStoredList(m_blocks.at(i));
             if ((m_flags & ModifyExistingList) && (m_formerProperties.value(i).style() != KoListStyle::None)) {
                 KoListStyle *listStyle = m_oldList.value(i)->style();
@@ -271,7 +271,7 @@ void ChangeListCommand::undo()
                 }
             }
         }
-        else if (m_actions.value(i) == ChangeListCommand::modifyExisting) {
+        else if (m_actions.value(i) == ChangeListCommand::ModifyExisting) {
             m_list.value(i)->updateStoredList(m_blocks.at(i));
             if ((m_flags & ModifyExistingList) && (m_formerProperties.value(i).style() != KoListStyle::None)) {
                 KoListStyle *listStyle = m_oldList.value(i)->style();
@@ -286,8 +286,8 @@ void ChangeListCommand::undo()
             }
         }
         else {
-            //(ChangeListCommand::createNew)
-            //(ChangeListCommand::mergeList)
+            //(ChangeListCommand::CreateNew)
+            //(ChangeListCommand::MergeList)
 
             //if the new/merged list replaced an existing list, the pointer to QTextList in oldList needs updating.
             if ((m_oldList.value(i))) {

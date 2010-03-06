@@ -88,7 +88,7 @@ void KisDeformSizeOption::readOptionSetting(const KisPropertiesConfiguration* se
 {
     m_options->diameter->setValue( setting->getDouble(DEFORM_DIAMETER) );
     m_options->aspectBox->setValue( setting->getDouble(DEFORM_ASPECT) );
-    m_options->rotationBox->setValue( setting->getDouble(DEFORM_SCALE) );
+    m_options->rotationBox->setValue( setting->getDouble(DEFORM_ROTATION) );
     m_options->scale->setValue( setting->getDouble(DEFORM_SCALE) );
     m_options->spacing->setValue( setting->getDouble(DEFORM_SPACING) );
     m_options->densityBox->setValue( setting->getDouble(DEFORM_DENSITY) );

@@ -21,6 +21,8 @@
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
+const QString HSV_ENABLED = "HSV/enabled";
+
 const QString HSV_HMODE = "HSV/hueMode";
 const QString HSV_SMODE = "HSV/saturationMode";
 const QString HSV_VMODE = "HSV/valueMode";
@@ -47,6 +49,39 @@ public:
 
 private:
     KisHsvOptionsWidget * m_options;
+};
+
+class HsvProperties{
+public:
+    quint16 hAmount;
+    quint16 sAmount;
+    quint16 vAmount;
+        
+    KisCubicCurve hcurve;
+    KisCubicCurve scurve;
+    KisCubicCurve vcurve;
+    
+    quint16 hmode;
+    quint16 smode; 
+    quint16 vmode; 
+
+    bool enabled;
+
+    void readOptionSetting(const KisPropertiesConfiguration * setting){
+        hAmount = setting->getDouble(HSV_HUE_INK_AMOUNT);
+        sAmount = setting->getDouble(HSV_SATURATION_INK_AMOUNT);
+        vAmount = setting->getDouble(HSV_VALUE_INK_AMOUNT);
+
+        hcurve = setting->getCubicCurve(HSV_HUE_CURVE);
+        scurve = setting->getCubicCurve(HSV_SATURATION_CURVE);
+        vcurve = setting->getCubicCurve(HSV_VALUE_CURVE);
+
+        hmode = setting->getInt(HSV_HMODE);
+        smode = setting->getInt(HSV_SMODE);
+        vmode = setting->getInt(HSV_VMODE);
+        
+        enabled = setting->getBool(HSV_ENABLED);
+    }
 };
 
 #endif

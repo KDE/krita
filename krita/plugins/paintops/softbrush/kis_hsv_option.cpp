@@ -34,7 +34,7 @@ public:
 KisHSVOption::KisHSVOption()
         : KisPaintOpOption(i18n("HSV dynamics"), false)
 {
-    m_checkable = false;
+    m_checkable = true;
     m_options = new KisHsvOptionsWidget();
 
     connect(m_options->modeHueCBox,SIGNAL(currentIndexChanged(int)),SIGNAL(sigSettingChanged()));
@@ -61,6 +61,7 @@ KisHSVOption::~KisHSVOption()
 
 void KisHSVOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
+    setting->setProperty( HSV_ENABLED, isChecked() );
     setting->setProperty( HSV_HMODE, m_options->modeHueCBox->currentIndex() );
     setting->setProperty( HSV_HUE_INK_AMOUNT, m_options->inkAmountHue->value());
     setting->setProperty( HSV_HUE_CURVE, qVariantFromValue( m_options->hueCurve->curve() ) );
@@ -77,6 +78,7 @@ void KisHSVOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 
 void KisHSVOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
+    setChecked(setting->getBool( HSV_ENABLED));
     m_options->inkAmountHue->setValue(setting->getDouble(HSV_HUE_INK_AMOUNT));
     m_options->modeHueCBox->setCurrentIndex(setting->getInt(HSV_HMODE));
     m_options->hueCurve->setCurve(setting->getCubicCurve(HSV_HUE_CURVE));

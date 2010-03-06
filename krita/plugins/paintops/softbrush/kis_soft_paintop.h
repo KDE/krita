@@ -30,6 +30,8 @@
 #include "kis_alpha_mask.h"
 #include "kis_curve_mask.h"
 
+#include "kis_hsv_option.h"
+
 class KisPainter;
 class KisCubicCurve;
 class KisBrushSizeProperties;
@@ -81,18 +83,7 @@ private:
     KisPressureRotationOption m_rotationOption;    
     
     qreal m_amount;
-    
-    quint16 m_hAmount;
-    quint16 m_sAmount;
-    quint16 m_vAmount;
-        
-    KisCubicCurve m_hcurve;
-    KisCubicCurve m_scurve;
-    KisCubicCurve m_vcurve;
-    
-    quint16 m_hmode;
-    quint16 m_smode; 
-    quint16 m_vmode; 
+    HsvProperties m_hsvProperties;
     
 };
 

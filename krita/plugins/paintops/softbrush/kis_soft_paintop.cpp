@@ -121,6 +121,9 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
             case 2:
                 params["h"] = drand48() * 2.0 - 1.0;
             default: break;
+            case 3:
+                params["h"] = scaleForPressure(info.pressure())*0.5;
+            break;
         }
     
         switch (m_hsvProperties.smode){
@@ -132,6 +135,10 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
                 break;
             case 2:
                 params["s"] = drand48() * 2.0 - 1.0;
+                break;
+            case 3:
+                params["s"] = scaleForPressure(info.pressure())*0.5;
+                break;
         }
         
         switch (m_hsvProperties.vmode){
@@ -144,6 +151,10 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
             case 2:
                 params["v"] = drand48() * 2.0 - 1.0;
             default: break;
+            case 3:
+                params["v"] = scaleForPressure(info.pressure())*0.5;
+            break;
+
         }
 
         KoColorTransformation* transfo;

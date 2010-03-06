@@ -26,7 +26,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="hueTab">
       <attribute name="title">
@@ -64,6 +64,11 @@
        <item>
         <property name="text">
          <string>Random</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Pressure</string>
         </property>
        </item>
       </widget>
@@ -182,6 +187,11 @@
          <string>Random</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Pressure</string>
+        </property>
+       </item>
       </widget>
      </widget>
      <widget class="QWidget" name="valueTab">
@@ -198,7 +208,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>41</x>
@@ -249,6 +259,11 @@
           <item>
            <property name="text">
             <string>Random</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Pressure</string>
            </property>
           </item>
          </widget>

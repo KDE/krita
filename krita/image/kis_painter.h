@@ -161,6 +161,30 @@ public:
      */
     void bltFixed(const QPoint & pos, const KisFixedPaintDeviceSP src, const QRect & srcRect);
 
+    /**
+     * Transfer the specified region from src onto the current paint device with selection. 
+     * Src is a * fixed-size paint device: this means that src must have the same colorspace as
+     * the destination device. Selection is also fixed-size paint device and it's colorspace has
+     * to be alpha8. Assert if there is wrong colorspace for selection
+     *
+     * @param dx the destination x-coordinate
+     * @param dy the destination y-coordinate
+     * @param op a pointer to the composite op use to blast the pixels from src on dst
+     * @param src the source device
+     * @param selection the selection stored in fixed device
+     * @param sx the source x-coordinate
+     * @param sy the source y-coordinate
+     * @param sw the width of the region
+     * @param sh the height of the region
+     */
+    void bltFixed(qint32 dx, qint32 dy,
+                  const KisFixedPaintDeviceSP srcDev,
+                  const KisFixedPaintDeviceSP selection,
+                  qint32 sx, qint32 sy,
+                  qint32 sw, qint32 sh);
+    
+    
+    
 
     /**
      * The methods below are 'higher' level than the above methods. They need brushes, colors

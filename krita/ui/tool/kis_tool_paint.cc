@@ -294,7 +294,9 @@ void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
 {
     KisTool::setupPaintAction(action);
     action->setOpacity(m_opacity / 255.0);
-    action->setCompositeOp(m_compositeOp->id());
+    if (m_compositeOp) {
+        action->setCompositeOp(m_compositeOp->id());
+    }
 }
 
 #include "kis_tool_paint.moc"

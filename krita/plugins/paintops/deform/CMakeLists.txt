@@ -5,11 +5,10 @@ set(kritadeformpaintop_PART_SRCS
     kis_deform_paintop_settings.cpp
     kis_deform_paintop_factory.cpp
     kis_deform_option.cpp
-    kis_deform_size_option.cpp
     kis_deform_paintop_settings_widget.cpp
     )
 
-kde4_add_ui_files(kritadeformpaintop_PART_SRCS wdgdeformoptions.ui wdgDeformSizeOptions.ui )
+kde4_add_ui_files(kritadeformpaintop_PART_SRCS wdgdeformoptions.ui )
 
 kde4_add_plugin(kritadeformpaintop ${kritadeformpaintop_PART_SRCS})
 

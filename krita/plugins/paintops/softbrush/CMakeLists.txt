@@ -2,7 +2,6 @@ set(kritasoftpaintop_PART_SRCS
     soft_paintop_plugin.cpp
     kis_soft_paintop.cpp
     kis_softop_option.cpp
-    kis_soft_size_option.cpp
     kis_soft_paintop_settings.cpp
     kis_softbrush_selection_widget.cpp
     kis_soft_paintop_settings_widget.cpp
@@ -11,7 +10,7 @@ set(kritasoftpaintop_PART_SRCS
     kis_hsv_option.cpp
     )
 
-kde4_add_ui_files(kritasoftpaintop_PART_SRCS wdgSoftSizeOptions.ui 
+kde4_add_ui_files(kritasoftpaintop_PART_SRCS
     wdgsoftoptions.ui 
     wdgsoftcurveoptions.ui 
     wdgHsvOptions.ui

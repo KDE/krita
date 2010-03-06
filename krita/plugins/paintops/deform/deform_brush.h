@@ -22,7 +22,7 @@
 #include <kis_paint_device.h>
 #include <kis_paint_information.h>
 
-#include <kis_brush_size_properties.h>
+#include <kis_brush_size_option.h>
 
 #if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand

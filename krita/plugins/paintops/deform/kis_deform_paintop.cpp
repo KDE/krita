@@ -34,11 +34,10 @@
 #include "kis_selection.h"
 #include "kis_random_accessor.h"
 
-#include "kis_deform_size_option.h"
 #include <kis_fixed_paint_device.h>
 
 #include "kis_deform_option.h"
-#include "kis_brush_size_properties.h"
+#include "kis_brush_size_option.h"
 
 KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
@@ -123,19 +122,5 @@ double KisDeformPaintOp::spacing(double pressure) const
     return m_spacing;
 }
 
-void KisBrushSizeProperties::readOptionSetting(const KisDeformPaintOpSettings* settings)
-{
-    diameter = quint16(settings->getDouble(DEFORM_DIAMETER));
-    aspect = settings->getDouble(DEFORM_ASPECT);
-    rotation = settings->getDouble(DEFORM_ROTATION) * (M_PI/180.0);
-    scale = settings->getDouble(DEFORM_SCALE);    
-    density = settings->getDouble(DEFORM_DENSITY) * 0.01;
-    spacing = settings->getDouble(DEFORM_SPACING);
-    if (jitterEnabled = settings->getBool(DEFORM_JITTER_MOVEMENT_ENABLED)){
-        jitterMovementAmount = settings->getDouble(DEFORM_JITTER_MOVEMENT);
-    }else{
-        jitterMovementAmount = 0.0;
-    }
-}
 
 

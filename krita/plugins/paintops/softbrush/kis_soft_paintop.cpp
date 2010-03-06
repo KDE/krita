@@ -40,7 +40,7 @@
 #include <KoColor.h>
 
 #include <kis_softop_option.h>
-#include <kis_soft_size_option.h>
+#include <kis_brush_size_option.h>
 #include "kis_hsv_option.h"
 
 KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
@@ -206,7 +206,6 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
     int maskX;
     int maskY;
 
-
     KisRectIterator m_srcIt = m_dab->createRectIterator(left, top, w ,h );
     int x;
     int y;
@@ -234,30 +233,8 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
             memcpy(m_srcIt.rawData(), m_color.data(), pixelSize);
         }
     }
-    
 
     QRect rc(left,top,w,h); 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     return m_spacing;
 }
-
-
-
-void KisBrushSizeProperties::readOptionSetting(const KisSoftPaintOpSettings* settings)
-{
-    //TODO:shape
-    diameter = quint16(settings->getDouble(SOFT_DIAMETER));
-    aspect = settings->getDouble(SOFT_ASPECT);
-    rotation = settings->getDouble(SOFT_ROTATION) * (M_PI/180.0);
-    scale = settings->getDouble(SOFT_SCALE);    
-    density = settings->getDouble(SOFT_DENSITY) * 0.01;
-    spacing = settings->getDouble(SOFT_SPACING);
-    if (jitterEnabled = settings->getBool(SOFT_JITTER_MOVEMENT_ENABLED)){
-        jitterMovementAmount = settings->getDouble(SOFT_JITTER_MOVEMENT);
-    }else{
-        jitterMovementAmount = 0.0;
-    }
-    
-    
-}
-

@@ -22,7 +22,7 @@
 #include <kis_paintop_options_widget.h>
 
 class KisDeformOption;
-class KisDeformSizeOption;
+class KisBrushSizeOption;
 
 class KisDeformPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {
@@ -36,7 +36,7 @@ public:
     
 private:
     KisDeformOption * m_deformOption;
-    KisDeformSizeOption * m_deformSizeOption;
+    KisBrushSizeOption * m_brushSizeOption;
 };
 
 #endif

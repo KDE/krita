@@ -17,7 +17,7 @@
  */
 #include "kis_soft_paintop_settings.h"
 #include "kis_softop_option.h"
-#include "kis_soft_size_option.h"
+#include "kis_brush_size_option.h"
 #include <kis_paint_action_type_option.h>
 
 #include <KoViewConverter.h>
@@ -34,9 +34,9 @@ void KisSoftPaintOpSettings::paintOutline ( const QPointF& pos, KisImageWSP imag
     if (_mode != CURSOR_IS_OUTLINE) return;
     qreal size;
     if (getInt(SOFT_BRUSH_TIP) == 0){
-        size = qRound(getDouble(SOFT_DIAMETER) * getDouble(SOFT_SCALE));
+        size = qRound(getDouble(BRUSH_DIAMETER) * getDouble(BRUSH_SCALE));
     }else{
-        size = qRound(getDouble(SOFT_DIAMETER));
+        size = qRound(getDouble(BRUSH_DIAMETER));
     }
 
 
@@ -58,9 +58,9 @@ QRectF KisSoftPaintOpSettings::paintOutlineRect ( const QPointF& pos, KisImageWS
     if (_mode != CURSOR_IS_OUTLINE) return QRectF();
     qreal size;
     if (getInt(SOFT_BRUSH_TIP) == 0){
-        size = qRound(getDouble(SOFT_DIAMETER) * getDouble(SOFT_SCALE));
+        size = qRound(getDouble(BRUSH_DIAMETER) * getDouble(BRUSH_SCALE));
     }else{
-        size = qRound(getDouble(SOFT_DIAMETER));
+        size = qRound(getDouble(BRUSH_DIAMETER));
     }
     
     size += 5;

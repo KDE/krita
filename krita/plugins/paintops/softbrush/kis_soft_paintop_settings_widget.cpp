@@ -19,13 +19,14 @@
 #include "kis_soft_paintop_settings_widget.h"
 
 #include "kis_softop_option.h"
-#include "kis_soft_size_option.h"
 #include "kis_soft_paintop_settings.h"
 
 #include <kis_paintop_options_widget.h>
 #include <kis_paint_action_type_option.h>
 
 #include <kis_curve_option_widget.h>
+#include <kis_brush_size_option.h>
+
 #include <kis_pressure_rotation_option.h>
 
 #include "kis_hsv_option.h"
@@ -35,7 +36,7 @@ KisSoftPaintOpSettingsWidget:: KisSoftPaintOpSettingsWidget(QWidget* parent)
 {
     m_paintActionTypeOption = new KisPaintActionTypeOption();
     m_softOption =  new KisSoftOpOption();
-    m_sizeOption = new KisSoftSizeOption();
+    m_sizeOption = new KisBrushSizeOption();
     m_hsvOption = new KisHSVOption();
     
     addPaintOpOption(m_sizeOption);

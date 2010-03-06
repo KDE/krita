@@ -19,6 +19,7 @@
 
 #include "KoTextMeta.h"
 
+#include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>

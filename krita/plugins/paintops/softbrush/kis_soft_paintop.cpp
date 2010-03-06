@@ -48,17 +48,23 @@ KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainte
     , m_settings( settings )
     , m_image ( image )
 {
-    m_amount = 0.0;
+    // custom options
     m_hsvProperties.readOptionSetting(settings);
     m_sizeProperties.readOptionSetting(settings);
-
-    m_radius = qRound(0.5 * m_sizeProperties.diameter);
+    // sensors
+    m_sizeOption.readOptionSetting(settings);
+    m_opacityOption.readOptionSetting(settings);
+    m_rotationOption.readOptionSetting(settings);
+    m_sizeOption.sensor()->reset();
+    m_opacityOption.sensor()->reset();
+    m_rotationOption.sensor()->reset();
     
+    m_radius = qRound(0.5 * m_sizeProperties.diameter);
+    m_amount = 0.0;
     m_brushType = SoftBrushType(settings->getInt(SOFT_BRUSH_TIP));
+
     if (m_brushType == CURVE){
         srand48(time(0));
-        m_rotationOption.readOptionSetting(settings);
-        m_rotationOption.sensor()->reset();
         
         m_curveMaskProperties.curve = settings->getCubicCurve(SOFTCURVE_CURVE);
         m_curveMaskProperties.curveData = m_curveMaskProperties.curve.floatTransfer(m_radius+2);
@@ -170,9 +176,6 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
         double subPixelX;
         qint32 y;
         double subPixelY;
-        double rotation = m_rotationOption.apply(info);
-                
-        rotation += m_sizeProperties.rotation;
 
         QPointF pt = info.pos();
         if (m_sizeProperties.jitterEnabled){
@@ -180,13 +183,18 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
             pt.setY(pt.y() + (  ( m_sizeProperties.diameter * drand48() ) - m_radius) * m_sizeProperties.jitterMovementAmount);
         }
 
-        QPointF pos = pt - m_curveMask.hotSpot(m_sizeProperties.scale, rotation);
+        qreal scale = m_sizeProperties.scale + KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+        qreal rotation = m_sizeProperties.rotation + m_rotationOption.apply(info);
+        
+        QPointF pos = pt - m_curveMask.hotSpot(scale, rotation);
         
         splitCoordinate(pos.x(), &x, &subPixelX);
         splitCoordinate(pos.y(), &y, &subPixelY);
         
-        m_curveMask.mask(dab,color,m_sizeProperties.scale,rotation,subPixelX,subPixelY);
+        m_curveMask.mask(dab,color,scale,rotation,subPixelX,subPixelY);
+        quint8 origOpacity = m_opacityOption.apply(painter(), info);
         painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
+        painter()->setOpacity(origOpacity);
         return m_spacing;
     }
 

@@ -31,6 +31,8 @@
 #include "kis_curve_mask.h"
 
 #include "kis_hsv_option.h"
+#include <kis_pressure_size_option.h>
+#include <kis_pressure_opacity_option.h>
 
 class KisPainter;
 class KisCubicCurve;
@@ -80,6 +82,8 @@ private:
     qreal m_ySpacing;
     qreal m_spacing;
 
+    KisPressureSizeOption m_sizeOption;
+    KisPressureOpacityOption m_opacityOption;
     KisPressureRotationOption m_rotationOption;    
     
     qreal m_amount;

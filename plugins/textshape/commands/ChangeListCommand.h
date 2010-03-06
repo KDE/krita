@@ -38,6 +38,7 @@ class ChangeListCommand : public TextCommandBase
 {
 public:
     enum ChangeFlag {
+        NoFlags = 0,
         ModifyExistingList = 1,
         MergeWithAdjacentList = 2,
         MergeExactly = 4,

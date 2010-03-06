@@ -88,7 +88,7 @@ void KisSoftSizeOption::readOptionSetting(const KisPropertiesConfiguration* sett
 {
     m_options->diameter->setValue( setting->getDouble(SOFT_DIAMETER) );
     m_options->aspectBox->setValue( setting->getDouble(SOFT_ASPECT) );
-    m_options->rotationBox->setValue( setting->getDouble(SOFT_SCALE) );
+    m_options->rotationBox->setValue( setting->getDouble(SOFT_ROTATION) );
     m_options->scale->setValue( setting->getDouble(SOFT_SCALE) );
     m_options->spacing->setValue( setting->getDouble(SOFT_SPACING) );
     m_options->densityBox->setValue( setting->getDouble(SOFT_DENSITY) );

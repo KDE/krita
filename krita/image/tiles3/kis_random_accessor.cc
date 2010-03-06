@@ -126,4 +126,5 @@ KisRandomAccessor2::KisTileInfo* KisRandomAccessor2::fetchTileData(qint32 col, q
 qint32 KisRandomAccessor2::nConseqPixels() const
 {
     qFatal("Not implemented.");
+    return 0;
 }

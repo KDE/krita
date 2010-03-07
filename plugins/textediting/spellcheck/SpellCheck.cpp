@@ -154,7 +154,6 @@ bool SpellCheck::skipRunTogetherWords()
 
 void SpellCheck::highlightMisspelled(const QString &word, int startPosition, bool misspelled)
 {
-    // be aware that this method is called in a different thread!!
     if (!misspelled)
         return;
 

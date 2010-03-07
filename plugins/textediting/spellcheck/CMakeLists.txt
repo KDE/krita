@@ -1,4 +1,5 @@
 project(spellcheck)
+add_subdirectory( tests )
 
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOTEXT_INCLUDES} ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} )
 

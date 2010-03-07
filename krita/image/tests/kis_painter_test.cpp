@@ -48,6 +48,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoCo
         if (csId.startsWith("Xyz")) continue;
         if (csId.startsWith("Y")) continue;
         if (csId.contains("AF")) continue;
+        if (csId == "GRAYU16") continue; // No point in testing bounds with a cs without alpha
 
         qDebug() << "Testing with cs" << csId;
 

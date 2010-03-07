@@ -102,8 +102,8 @@ public:
      * a polar handle. This means the the x-coordinate of the position represents
      * an angle in degree and the y-coordinate a radius.
      * 
-     * @param minY the minimum y-coordinate
-     * @param maxY the maximum y-coordinate
+     * @param polarX the polar center x-coordinate
+     * @param polarY the polar center y-coordinate
      */
     void setPolarCenter(EnhancedPathParameter *polarX, EnhancedPathParameter *polarY);
 

@@ -125,7 +125,7 @@ void EnhancedPathHandle::setRangeY(EnhancedPathParameter *minY, EnhancedPathPara
     m_maximumY = maxY;
 }
 
-void EnhancedPathHandle::setPolarCenter(EnhancedPathParameter *polarX, EnhancedPathParameter *polarY)
+void EnhancedPathHandle::setPolarCenter(EnhancedPathParameter* polarX, EnhancedPathParameter* polarY)
 {
     m_polarX = polarX;
     m_polarY = polarY;

@@ -49,7 +49,6 @@
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <klocale.h>
-#include <knuminput.h>
 #include <kurlrequester.h>
 #include <kpagewidgetmodel.h>
 #include <kicon.h>

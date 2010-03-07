@@ -38,7 +38,6 @@
 #include <kis_debug.h>
 #include <kicon.h>
 #include <klocale.h>
-#include <knuminput.h>
 #include <kiconloader.h>
 
 #include <KoShape.h>

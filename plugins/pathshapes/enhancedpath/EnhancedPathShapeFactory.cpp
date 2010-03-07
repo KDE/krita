@@ -339,13 +339,13 @@ void EnhancedPathShapeFactory::addCallout()
     formulae["f19"] = "if(?f1 ,-1,?f22)";
     formulae["f20"] = "abs(?f0)";
     formulae["f21"] = "abs(?f1)";
-    formulae["f22"] = "?f20 -?f21 ";
+    formulae["f22"] = "?f20 -?f21";
     formulae["f23"] = "if($0 ,-1,?f24)";
     formulae["f24"] = "if(?f1 ,?f22 ,-1)";
     formulae["f25"] = "$1 -21600";
     formulae["f26"] = "if(?f25 ,?f27 ,-1)";
     formulae["f27"] = "if(?f0 ,-1,?f28)";
-    formulae["f28"] = "?f21 -?f20 ";
+    formulae["f28"] = "?f21 -?f20";
     formulae["f29"] = "if(?f25 ,?f30 ,-1)";
     formulae["f30"] = "if(?f0 ,?f28 ,-1)";
     formulae["f31"] = "$0 -21600";
@@ -357,8 +357,8 @@ void EnhancedPathShapeFactory::addCallout()
     formulae["f37"] = "if(?f0 ,?f28 ,-1)";
     formulae["f38"] = "if($1 ,-1,?f39)";
     formulae["f39"] = "if(?f0 ,-1,?f28)";
-    formulae["f40"] = "$0 ";
-    formulae["f41"] = "$1 ";
+    formulae["f40"] = "$0";
+    formulae["f41"] = "$1";
 
     ListType handles;
     ComplexType handle;
@@ -400,8 +400,8 @@ void EnhancedPathShapeFactory::addSmiley()
 
     ComplexType formulae;
     formulae["f0"] = "$0 -15510";
-    formulae["f1"] = "17520-?f0 ";
-    formulae["f2"] = "15510+?f0 ";
+    formulae["f1"] = "17520-?f0";
+    formulae["f2"] = "15510+?f0";
 
     ListType handles;
     ComplexType handle;
@@ -436,10 +436,10 @@ void EnhancedPathShapeFactory::addCircularArrow()
 
     ComplexType formulae;
 
-    formulae["f0"] = "$0 ";
-    formulae["f1"] = "$1 ";
-    formulae["f2"] = "$2 ";
-    formulae["f3"] = "10800+$2 ";
+    formulae["f0"] = "$0";
+    formulae["f1"] = "$1";
+    formulae["f2"] = "$2";
+    formulae["f3"] = "10800+$2";
     formulae["f4"] = "10800*sin($0 *(pi/180))";
     formulae["f5"] = "10800*cos($0 *(pi/180))";
     formulae["f6"] = "10800*sin($1 *(pi/180))";
@@ -456,7 +456,7 @@ void EnhancedPathShapeFactory::addCircularArrow()
     formulae["f17"] = "?f13 +10800";
     formulae["f18"] = "?f14 +10800";
     formulae["f19"] = "?f15 +10800";
-    formulae["f20"] = "21600-?f3 ";
+    formulae["f20"] = "21600-?f3";
     formulae["f21"] = "13500*sin($1 *(pi/180))";
     formulae["f22"] = "13500*cos($1 *(pi/180))";
     formulae["f23"] = "?f21 +10800";

@@ -57,7 +57,11 @@ set(koreport_LIB_SRCS
 	renderer/scripting/krscriptline.cpp
 	renderer/scripting/krscriptimage.cpp
 	renderer/scripting/krscriptchart.cpp
-	
+
+	renderer/ods/KoSimpleOdsDocument.cpp
+	renderer/ods/KoSimpleOdsSheet.cpp
+	renderer/ods/KoSimpleOdsCell.cpp
+
 	wrtembed/detailgroupsectiondialog.cpp
 	wrtembed/reportentities.cpp
 	wrtembed/reportrectentity.cpp

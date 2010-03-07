@@ -3,12 +3,12 @@
     colors: <
       colorrgb: <
         label: "Object";
-        type: rgb;
+        type: color;
         defaultValue: { 0.2, 0.01, 0.08 };
       >;
       colorcenterrgb: <
         label: "Background";
-        type: rgb;
+        type: color;
         defaultValue: { 1.0, 1.0, 1.0 };
       >;
     >;

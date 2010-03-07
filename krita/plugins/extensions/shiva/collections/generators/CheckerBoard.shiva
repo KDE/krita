@@ -12,12 +12,12 @@
     >;
     color1: <
       label: "Color 1";
-      type: rgba;
+      type: color;
       defaultValue: { 0.0, 0.0, 0.0, 1.0 };
     >;
     color2: <
       label: "Color 2";
-      type: rgba;
+      type: color;
       defaultValue: { 1.0, 1.0, 1.0, 1.0 };
     >;
   >;

@@ -21,7 +21,7 @@
     >;
     colorrgb: <
       label: "Color";
-      type: rgb;
+      type: color;
       defaultValue: { 0.3, 0.05, 0.01 };
     >;
   >;

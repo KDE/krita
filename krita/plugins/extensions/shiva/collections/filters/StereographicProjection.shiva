@@ -52,7 +52,7 @@
     >;
     background: <
       label: "Background";
-      type: rgba;
+      type: color;
       defaultValue: {0.5,0.5,0.5,1.0};
     >;
   >;

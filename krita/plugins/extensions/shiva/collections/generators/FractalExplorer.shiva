@@ -294,21 +294,21 @@
       >;
       color1:
       <
-          type: rgba;
+          type: color;
           defaultValue: {1.0, 1.0, 1.0, 1.0};
           description: "The outer colour.";
       >;
       
       color2:
       <
-          type: rgba;
+          type: color;
           defaultValue: {0.0, 0.28, 0.46, 1.0};
           description: "The inner colour.";
       >;
       
       colorBackground:
       <
-          type: rgba;
+          type: color;
           defaultValue: { 0.0, 0.0, 0.0, 1.0 };
           description: "The background colour.";
       >;

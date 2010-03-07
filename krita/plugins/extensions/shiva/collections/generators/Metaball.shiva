@@ -16,12 +16,12 @@
     >;
     outsidecolor: <
       label: "Outside color";
-      type: rgba;
+      type: color;
       defaultValue: { 0.0, 0.0, 0.0, 1.0 };
     >;
     metaballcolor: <
       label: "Metaball color";
-      type: rgba;
+      type: color;
       defaultValue: { 0.0, 1.0, 0.0, 1.0 };
     >;
     seed: <

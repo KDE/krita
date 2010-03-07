@@ -3,15 +3,15 @@
   parameters: <
     colors: <
       color1: <
-        type: rgba;
+        type: color;
         defaultValue: { 0.1, 0.1, 0.2, 1.0 };
       >;
       color2: <
-        type: rgba;
+        type: color;
         defaultValue: { 0.2, 0.2, 0.4, 1.0 };
       >;
       colorCenter: <
-        type: rgba;
+        type: color;
         defaultValue: { 0.9, 0.9, 1.0, 1.0 };
       >;
     >;

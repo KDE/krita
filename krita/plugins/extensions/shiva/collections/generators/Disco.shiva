@@ -4,13 +4,13 @@
       label: "Time";
       type: float;
     >;
-    xcenter: <                                                          
-      label: "Center x";                                                
-      type: float;                                                      
-    >;                                                                  
-    ycenter: <                                                          
-      label: "Center y";                                                
-      type: float;                                                      
+    xcenter: <
+      label: "Center x";
+      type: float;
+    >;
+    ycenter: <
+      label: "Center y";
+      type: float;
     >;
     zoom: <
       label: "Zoom";

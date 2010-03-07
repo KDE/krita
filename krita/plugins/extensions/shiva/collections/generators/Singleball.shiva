@@ -20,12 +20,12 @@
     >;
     outsidecolor: <
       label: "Outside color";
-      type: rgba;
+      type: color;
       defaultValue: { 0.0, 0.0, 0.0, 1.0 };
     >;                                                                        
     ballcolor: <
       label: "Ball color";
-      type: rgba;
+      type: color;
       defaultValue: { 0.0, 1.0, 0.0, 1.0 };
     >;                                                                        
     

@@ -56,7 +56,6 @@ public:
     bool skipRunTogetherWords();
 
 public slots:
-    void resourceChanged( int key, const QVariant & res );
     void setDefaultLanguage(const QString &lang);
 
 private slots:

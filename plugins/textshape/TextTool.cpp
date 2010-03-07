@@ -333,10 +333,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
             ++i;
         }
     }
-    if (m_textEditingPlugins->spellcheck()) {
-           connect(canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-                   m_textEditingPlugins->spellcheck(), SLOT(resourceChanged(int, const QVariant&)));
-    }
 
     // setup the context list.
     QSignalMapper *signalMapper = new QSignalMapper(this);
@@ -704,8 +700,6 @@ void TextTool::setShapeData(KoTextShapeData *data)
         }
     }
     m_textEditor->updateDefaultTextDirection(m_textShapeData->pageDirection());
-    if (m_textEditingPlugins->spellcheck())
-        m_textEditingPlugins->spellcheck()->checkSection(m_textShapeData->document(), 0, 0);
 }
 
 void TextTool::updateSelectionHandler()

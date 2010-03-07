@@ -81,14 +81,24 @@ QString BgSpellCheck::fetchMoreText()
         return QString();
 
     QTextBlock block = m_document->findBlock(m_currentPosition);
-    if (!block.isValid()) {
-        m_nextPosition = m_endPosition; // ends run
-        return QString();
-    }
+    QTextBlock::iterator iter;
+    while (true) {
+        if (!block.isValid()) {
+            m_nextPosition = m_endPosition; // ends run
+            return QString();
+        }
+        if (block.length() == 1) { // only linefeed
+            block = block.next();
+            m_currentPosition++;
+            continue;
+        }
 
-    QTextBlock::iterator iter = block.begin();
-    while (!iter.atEnd() && iter.fragment().position() + iter.fragment().length() <= m_currentPosition)
-        iter++;
+        iter = block.begin();
+        while (!iter.atEnd() && iter.fragment().position() + iter.fragment().length() <=
+                m_currentPosition)
+            iter++;
+        break;
+    }
 
     int end = m_endPosition;
     QTextCharFormat cf = iter.fragment().charFormat();
@@ -132,7 +142,7 @@ QString BgSpellCheck::fetchMoreText()
         if ((cf.hasProperty(KoCharacterStyle::Country)
                     && country != cf.property(KoCharacterStyle::Country).toString())
                 || (!cf.hasProperty(KoCharacterStyle::Country)
-                    && country != m_defaultLanguage))
+                    && country != m_defaultCountry))
             break;
     }
 

@@ -82,6 +82,16 @@ void TestSpellCheck::testFetchMoreText()
     QCOMPARE(checker.publicFetchMoreText(), block.text().left(2));
 }
 
+void TestSpellCheck::testFetchMoreText2()
+{
+    MySpellCheck checker;
+    QTextDocument doc;
+    doc.setPlainText("\n\n\nMostly Empty Parags.\n\n");
+    checker.startRun(&doc, 0, 20);
+    checker.setDefaultLanguage("en_NZ");
+    QCOMPARE(checker.publicFetchMoreText(), QString("Mostly Empty Parags."));
+}
+
 QTEST_KDEMAIN(TestSpellCheck, GUI)
 
 #include <TestSpellCheck.moc>

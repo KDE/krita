@@ -56,7 +56,6 @@ enum CanvasResource {
     HandleRadius,       ///< The handle radius used for drawing handles of any kind
     GrabSensitivity,    ///< The grab sensitivity used for grabbing handles of any kind
     PageSize,           ///< The size of the (current) page in postscript points.
-    DocumentIsLoading,  ///< A boolean that is set to true while loading is happening.
     Unit,               ///< The unit of this canvas
     CurrentPage,        ///< The current page number
     ActiveStyleType,    ///< the actual active style type see KoFlake::StyleType for valid values

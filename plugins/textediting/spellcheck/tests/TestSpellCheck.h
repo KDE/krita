@@ -12,6 +12,7 @@ public:
 
 private slots:
     void testFetchMoreText();
+    void testFetchMoreText2();
 };
 
 #endif

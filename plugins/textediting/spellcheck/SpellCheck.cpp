@@ -61,7 +61,7 @@ SpellCheck::SpellCheck()
 
 void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
 {
-    if (m_documentIsLoading || !m_enableSpellCheck)
+    if (!m_enableSpellCheck)
         return;
 
     QTextBlock block = document->findBlock(cursorPosition);
@@ -80,7 +80,7 @@ void SpellCheck::finishedParagraph(QTextDocument *document, int cursorPosition)
 
 void SpellCheck::checkSection(QTextDocument *document, int startPosition, int endPosition)
 {
-    if (m_documentIsLoading || !m_enableSpellCheck)
+    if (!m_enableSpellCheck)
         return;
     if (startPosition >= endPosition) // no work
         return;
@@ -139,7 +139,7 @@ QString SpellCheck::defaultLanguage() const
 
 bool SpellCheck::backgroundSpellChecking()
 {
-    return !m_documentIsLoading && m_enableSpellCheck;
+    return m_enableSpellCheck;
 }
 
 bool SpellCheck::skipAllUppercaseWords()
@@ -218,12 +218,6 @@ void SpellCheck::configureSpellCheck()
     connect (dialog, SIGNAL(languageChanged(const QString&)), this, SLOT(setDefaultLanguage(const QString&)));
     dialog->exec();
     delete dialog;
-}
-
-void SpellCheck::resourceChanged(int key, const QVariant &resource)
-{
-    if (key == KoCanvasResource::DocumentIsLoading)
-        m_documentIsLoading = resource.toBool();
 }
 
 void SpellCheck::finishedRun()

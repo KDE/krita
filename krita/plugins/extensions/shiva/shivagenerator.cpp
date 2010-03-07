@@ -37,6 +37,10 @@
 #include "QVariantValue.h"
 #include "UpdaterProgressReport.h"
 
+#if OPENSHIVA_13_OR_MORE
+#include "GTLCore/CompilationMessages.h"
+#endif
+
 extern QMutex* shivaMutex;
 
 ShivaGenerator::ShivaGenerator(OpenShiva::Source* kernel) : KisGenerator(KoID(kernel->name().c_str(), kernel->name().c_str()), KoID("basic"), kernel->name().c_str()), m_source(kernel)
@@ -108,4 +112,9 @@ void ShivaGenerator::generate(KisProcessingInformation dstInfo,
         kernel.evaluatePixels(region, inputs, &pdi, report );
 #endif
     }
+#if OPENSHIVA_13_OR_MORE
+    else {
+        dbgPlugins << "Error: " << kernel.compilationMessages().toString().c_str();
+    }
+#endif
 }

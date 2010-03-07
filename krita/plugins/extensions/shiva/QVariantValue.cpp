@@ -17,11 +17,16 @@
 
 #include "QVariantValue.h"
 
+#include <QColor>
 #include <GTLCore/Type.h>
 #include <GTLCore/TypesManager.h>
 #include "Version.h"
 
 #include "kis_debug.h"
+
+#ifdef OPENSHIVA_13_OR_MORE
+#include <GTLCore/Color.h>
+#endif
 
 QVariant valueToQVariant(const GTLCore::Value& value)
 {
@@ -55,7 +60,16 @@ QVariant valueToQVariant(const GTLCore::Value& value)
         }
         return QVariant(variant);
     }
+#if OPENSHIVA_13_OR_MORE
+    case GTLCore::Type::STRUCTURE:
+        if (value.type() == GTLCore::Type::Color )
+        {
+            GTLCore::Color c = value.asColor();
+            return QVariant(QColor(c.red() * 255, c.green() * 255, c.blue() * 255, c.alpha() * 255) );
+        }
     }
+#endif
+    qFatal("Unsupported type: %i", value.type());
 }
 
 GTLCore::Value qvariantToValue(const QVariant& variant, const GTLCore::Type* _type)
@@ -88,6 +102,15 @@ GTLCore::Value qvariantToValue(const QVariant& variant, const GTLCore::Type* _ty
         }
         return GTLCore::Value(values, _type);
     }
+#if OPENSHIVA_13_OR_MORE
+    case GTLCore::Type::STRUCTURE: {
+        if (_type == GTLCore::Type::Color) {
+            QColor c = variant.value<QColor>();
+            dbgPlugins << c << variant;
+            return GTLCore::Value(GTLCore::Color(c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0, c.alpha() / 255.0));
+        }
+    }
+#endif
     default:
     case GTLCore::Type::UNDEFINED: {
         qFatal("Unsupported type: %i", variant.type());

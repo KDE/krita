@@ -183,9 +183,9 @@ KisDoc2* createCompleteDocument()
     image->addNode(transformationMask2, adjustmentLayer2);
 
     KisSelectionMaskSP selectionMask1 = new KisSelectionMask(image);
+    image->addNode(selectionMask1, paintLayer1);
     selectionMask1->setName("selectionMask1");
     selectionMask1->setSelection(createPixelSelection(paintLayer1->paintDevice()));
-    image->addNode(selectionMask1, paintLayer1);
 
     KisSelectionMaskSP selectionMask2 = new KisSelectionMask(image);
     selectionMask2->setName("selectionMask2");

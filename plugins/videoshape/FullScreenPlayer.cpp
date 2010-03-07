@@ -24,6 +24,7 @@
 #include <phonon/mediaobject.h>
 #include <QUrl>
 #include <QVBoxLayout>
+#include <QKeyEvent>
 
 FullScreenPlayer::FullScreenPlayer(const QUrl &url)
     : QWidget(0)
@@ -61,6 +62,14 @@ void FullScreenPlayer::mousePressEvent(QMouseEvent *event)
     Q_UNUSED(event)
     m_mediaObject->stop();
     deleteLater();
+}
+
+void FullScreenPlayer::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key()==Qt::Key_Escape) {
+       m_mediaObject->stop();
+       deleteLater();
+    }
 }
 
 #include "FullScreenPlayer.moc"

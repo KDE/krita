@@ -44,8 +44,9 @@ public:
 
 protected slots:
     void stop();
-    
+
 protected:
+    virtual void keyPressEvent(QKeyEvent *event); ///reimplemented
     virtual void mousePressEvent(QMouseEvent *event); ///reimplemented
     Phonon::MediaObject *m_mediaObject;
     Phonon::VideoWidget *m_videoWidget;

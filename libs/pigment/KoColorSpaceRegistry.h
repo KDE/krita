@@ -70,7 +70,7 @@ public:
 
     /**
      * Remove a color space factory from the registry. Note that it is the
-     * responsability of the caller to ensure that the colorspaces are not
+     * responsibility of the caller to ensure that the colorspaces are not
      * used anymore.
      */
     void remove(KoColorSpaceFactory* item);

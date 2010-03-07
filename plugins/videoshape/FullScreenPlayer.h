@@ -16,34 +16,40 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef VIDEOEVENTACTION_H
-#define VIDEOEVENTACTION_H
+#ifndef FULLSCREENPLAYER_H
+#define FULLSCREENPLAYER_H
 
-#include <KoEventAction.h>
+#include <QWidget>
 
-class VideoShape;
-class FullScreenPlayer;
+namespace Phonon
+{
+    class MediaObject;
+    class VideoWidget;
+    class AudioOutput;
+};
+
+class QUrl;
 
 /**
  * This class represents the click event action that starts the playing of the video.
  */
-class VideoEventAction : public KoEventAction
+class FullScreenPlayer : public QWidget
 {
+    Q_OBJECT
 public:
-    VideoEventAction(VideoShape *parent);
+    FullScreenPlayer(const QUrl &);
 
     /// destructor
-    virtual ~VideoEventAction();
+    virtual ~FullScreenPlayer();
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
-
-    virtual void start();
-    virtual void finish();
-
+protected slots:
+    void stop();
+    
 protected:
-    VideoShape *m_shape;
-    FullScreenPlayer *m_player;
+    virtual void mousePressEvent(QMouseEvent *event); ///reimplemented
+    Phonon::MediaObject *m_mediaObject;
+    Phonon::VideoWidget *m_videoWidget;
+    Phonon::AudioOutput *m_audioOutput;
 };
 
 #endif

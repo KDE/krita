@@ -10,6 +10,7 @@ SET (videoshape_LIB_SRCS
     VideoEventAction.cpp
     Plugin.cpp
     VideoShapeConfigWidget.cpp
+    FullScreenPlayer.cpp
 )
 
 kde4_add_plugin(videoshape ${videoshape_LIB_SRCS})

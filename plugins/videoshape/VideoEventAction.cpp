@@ -51,11 +51,9 @@ void VideoEventAction::saveOdf(KoShapeSavingContext &context) const
 
 void VideoEventAction::start()
 {
-    qDebug() << "action activated" << endl;
-
     VideoData *videoData = qobject_cast<VideoData*>(m_shape->userData());
     Q_ASSERT(videoData);
-    m_player = new FullScreenPlayer(videoData->videoLocation);
+    m_player = new FullScreenPlayer(videoData->playableUrl());
 }
 
 void VideoEventAction::finish()

@@ -105,12 +105,10 @@ bool VideoShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoading
         if (!href.isEmpty()) {
             QUrl url(href);
             VideoData *data=0;
-                qDebug() << url;
             if(href.startsWith("../")) {
                 // file is outside store
                 KUrl storePath = context.odfLoadingContext().store()->urlOfStore();
                 KUrl extName(storePath, href.mid(3));
-    qDebug() << "loading " << storePath << " " << extName;
                 data = m_videoCollection->createExternalVideoData(extName.url());
             } else if(!url.isRelative()) {
                 // file is outside store and absolute

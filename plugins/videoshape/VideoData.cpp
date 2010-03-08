@@ -61,13 +61,12 @@ VideoData::~VideoData()
 
 QString VideoData::tagForSaving(int &counter)
 {
-    if(saveName.isEmpty())
+    if (!saveName.isEmpty())
         return saveName;
-    
-    if ( suffix.isEmpty() ) {
+
+    if (suffix.isEmpty()) {
         return saveName = QString("Videos/video%1").arg(++counter);
-    }
-    else {
+    } else {
         return saveName = QString("Videos/video%1.%2").arg(++counter).arg(suffix);
     }
 }
@@ -99,19 +98,13 @@ void VideoData::setVideo(const QString &url, KoStore *store, VideoCollection *co
         delete other;
     } else {
         setSuffix(url);
-
         if (store->open(url)) {
-            struct Finalizer {
-                ~Finalizer() { store->close(); }
-                KoStore *store;
-            };
-            Finalizer closer;
-            closer.store = store;
             KoStoreDevice device(store);
             QByteArray data = device.readAll();
             if (!device.open(QIODevice::ReadOnly)) {
                 kWarning(30006) << "open file from store " << url << "failed";
                 errorCode = OpenFailed;
+                store->close();
                 return;
             }
             copyToTemporary(device);
@@ -123,6 +116,14 @@ void VideoData::setVideo(const QString &url, KoStore *store, VideoCollection *co
     }
 }
 
+QUrl VideoData::playableUrl() const
+{
+    if (dataStoreState == StateSpooled) {
+        return QUrl(temporaryFile->fileName());
+    } else {
+        return videoLocation;
+    }
+}
 
 bool VideoData::isValid() const
 {
@@ -149,7 +150,7 @@ bool VideoData::saveData(QIODevice &device)
                 kWarning(30006) << "Read file from temporary store failed";
                 return false;
             }
-            char buf[4096];
+            char buf[8192];
             while (true) {
                 temporaryFile->waitForReadyRead(-1);
                 qint64 bytes = temporaryFile->read(buf, sizeof(buf));
@@ -167,6 +168,32 @@ bool VideoData::saveData(QIODevice &device)
             temporaryFile->close();
         }
         return true;
+    } else if (!videoLocation.isEmpty()) {
+        if (true) { //later on this should check if the user wants us to do this
+            // An external video have been specified
+            QFile file(videoLocation.toLocalFile());
+
+            if (!file.open(QIODevice::ReadOnly)) {
+                kWarning(30006) << "Read file failed";
+                return false;
+            }
+            char buf[8192];
+            while (true) {
+                file.waitForReadyRead(-1);
+                qint64 bytes = file.read(buf, sizeof(buf));
+                if (bytes <= 0)
+                    break; // done!
+                do {
+                    qint64 nWritten = device.write(buf, bytes);
+                    if (nWritten == -1) {
+                        file.close();
+                        return false;
+                    }
+                    bytes -= nWritten;
+                } while (bytes > 0);
+            }
+            file.close();
+        }
     }
     return false;
 }

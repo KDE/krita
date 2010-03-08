@@ -21,6 +21,7 @@
 #include "VideoShape.h"
 
 #include <VideoData.h>
+#include <VideoCollection.h>
 
 #include <kfilewidget.h>
 #include <KDebug>
@@ -57,13 +58,10 @@ void VideoShapeConfigWidget::save()
 {
     if (!m_shape)
         return;
-    VideoData *data = new VideoData();
-    if (data) {
-        m_fileWidget->slotOk();
-        m_fileWidget->accept();
-        data->setExternalVideo(m_fileWidget->selectedUrl(), m_shape->videoCollection());
-        m_shape->setUserData(data);
-    }
+    m_fileWidget->slotOk();
+    m_fileWidget->accept();
+    VideoData *data = m_shape->videoCollection()->createExternalVideoData(m_fileWidget->selectedUrl());
+    m_shape->setUserData(data);
 }
 
 bool VideoShapeConfigWidget::showOnShapeCreate()

@@ -43,9 +43,9 @@ public:
 };
 
 VideoCollection::VideoCollection(QObject *parent)
-    : QObject(parent),
-    d(new Private())
+    : QObject(parent)
     , saveCounter(0)
+    , d(new Private())
 {
 }
 
@@ -71,11 +71,7 @@ bool VideoCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter
     while (dataIt != d->videos.end()) {
         if (!dataIt.value()->saveName.isEmpty()) {
             VideoData *videoData = dataIt.value();
-            if (videoData->videoLocation.isValid()) {
-                // TODO store url
-                Q_ASSERT(0); // not impleented yet
-            }
-            else if (store->open(videoData->saveName)) {
+            if (store->open(videoData->saveName)) {
                 KoStoreDevice device(store);
                 bool ok = videoData->saveData(device);
                 store->close();
@@ -89,9 +85,9 @@ bool VideoCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter
             } else {
                 kWarning(30006) << "saving video failed: open store failed";
             }
+            dataIt.value()->saveName.clear();
             ++dataIt;
         }
-        dataIt.value()->saveName.clear();
     }
     saveCounter=0;
     return true;
@@ -129,6 +125,7 @@ VideoData *VideoCollection::createVideoData(const QString &href, KoStore *store)
 
     VideoData *data = new VideoData();
     data->setVideo(href, store);
+    data->collection = this;
 
     d->storeVideos.insert(storeKey, data);
     return data;

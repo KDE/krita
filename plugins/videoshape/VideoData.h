@@ -90,9 +90,10 @@ public:
     bool isValid() const;
 
     ErrorCode errorCode;
-    
+
+    QUrl playableUrl() const;
+
     QString saveName;
-    QUrl videoLocation;
 
 protected:
     friend class VideoCollection;
@@ -112,6 +113,7 @@ protected:
         StateSpooled, ///< Video data is spooled
     };
 
+    QUrl videoLocation;
     VideoCollection *collection;
 
     // video data store.

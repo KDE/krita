@@ -219,6 +219,7 @@ int KoTextDocumentLayout::hitTestIterated(QTextFrame::iterator begin, QTextFrame
     for (it = begin; it != end; ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
+        QTextFrame *subFrame = qobject_cast<QTextFrame*>(it.currentFrame());
 
         if (table) {
             QTextTableCell cell = m_state->hitTestTable(table, point);
@@ -226,6 +227,9 @@ int KoTextDocumentLayout::hitTestIterated(QTextFrame::iterator begin, QTextFrame
                 return hitTestIterated(cell.begin(), cell.end(), point,
                                 accuracy);
             }
+            continue;
+        } else if (subFrame) {
+            return hitTestIterated(subFrame->begin(), subFrame->end(), point, accuracy);
             continue;
         } else {
             if (!block.isValid())

@@ -72,4 +72,4 @@ void FullScreenPlayer::keyPressEvent(QKeyEvent *event)
     }
 }
 
-#include "FullScreenPlayer.moc"
+#include <FullScreenPlayer.moc>

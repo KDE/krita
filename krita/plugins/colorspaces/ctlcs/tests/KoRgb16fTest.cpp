@@ -181,7 +181,7 @@ void KoRgb16fTest::testConversion()
     QCOMPAREh(p16f1.blue, 0.700392f);
     QCOMPAREh(p16f1.alpha, 1.0f);
 
-    // Test mask, full opacity
+    // Test mask, half opacity
     p16f.red = 0.5; p16f.green = 0.1; p16f.blue = 0.6; p16f.alpha = 1.0;
     p16f1.red = 0.3; p16f1.green = 0.5; p16f1.blue = 0.8; p16f1.alpha = 1.0;
     over->composite(p16fPtr1, rgb16f->pixelSize(), p16fPtr, rgb16f->pixelSize(), &mask, 1, 1, 1, 127);

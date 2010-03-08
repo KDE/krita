@@ -133,6 +133,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo, K
         d->m_rdfEditWidget = new KoDocumentRdfEditWidget(this, d->m_rdf);
         page = new KPageWidgetItem(d->m_rdfEditWidget->widget(), i18n("Rdf"));
         page->setHeader(i18n("Rdf"));
+        page->setIcon(KIcon("text-rdf"));
         addPage(page);
 #endif
     }

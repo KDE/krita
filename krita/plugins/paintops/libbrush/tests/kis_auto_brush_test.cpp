@@ -31,13 +31,13 @@
 
 void KisAutoBrushTest::testCreation()
 {
-    KisCircleMaskGenerator circle(10, 10, 1.0, 1.0);
-    KisRectangleMaskGenerator rect(10, 10, 1.0, 1.0);
+    KisCircleMaskGenerator circle(10, 1.0, 1.0, 1.0, 2);
+    KisRectangleMaskGenerator rect(10, 1.0, 1.0, 1.0, 2);
 }
 
 void KisAutoBrushTest::testMaskGeneration()
 {
-    KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 10, 1.0, 1.0);
+    KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 1.0, 1.0, 1.0, 2);
     KisBrushSP a = new KisAutoBrush(circle, 0.0);
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 

@@ -28,16 +28,6 @@ struct KisCircleMaskGenerator::Private {
     double cachedSpikesAngle;
 };
 
-KisCircleMaskGenerator::KisCircleMaskGenerator(double w, double h, double fh, double fv)
-        : KisMaskGenerator(w, h, 0.5 * w - fh, 0.5 * h - fv, CIRCLE), d(new Private)
-{
-    d->xcoef = 2.0 / w;
-    d->ycoef = 2.0 / h;
-    d->xfadecoef = (KisMaskGenerator::d->m_fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->m_fh * width()));
-    d->yfadecoef = (KisMaskGenerator::d->m_fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->m_fv * height()));
-    d->cachedSpikesAngle = 0.0;
-}
-
 KisCircleMaskGenerator::KisCircleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes)
         : KisMaskGenerator(radius, ratio, fh, fv, spikes, CIRCLE), d(new Private)
 {

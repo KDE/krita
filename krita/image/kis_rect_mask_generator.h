@@ -34,7 +34,6 @@ class KRITAIMAGE_EXPORT KisRectangleMaskGenerator : public KisMaskGenerator
 
 public:
 
-    KDE_DEPRECATED KisRectangleMaskGenerator(double w, double h, double fh, double fv);
     KisRectangleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
     virtual ~KisRectangleMaskGenerator();
 

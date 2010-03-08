@@ -99,7 +99,7 @@ void KisSimpleNoiseReducer::process(KisConstProcessingInformation srcInfo,
     const KoColorSpace* cs = src->colorSpace();
 
     // Compute the blur mask
-    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(2*windowsize + 1, 2*windowsize + 1, windowsize, windowsize);
+    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(2*windowsize + 1, 1, windowsize, windowsize, 2);
 
     KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
     delete kas;

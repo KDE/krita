@@ -39,7 +39,7 @@ QImage createQImageFromMask(const KisMaskGenerator& generator)
 
 void KisMaskGeneratorTest::testCircleSerialisation()
 {
-    KisCircleMaskGenerator cmg(10.0 * rand() / RAND_MAX, 10.0 * rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX);
+    KisCircleMaskGenerator cmg(10.0 * rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX, 4);
     QDomDocument doc = QDomDocument("cmg");
     QDomElement root = doc.createElement("cmg");
     doc.appendChild(root);
@@ -69,9 +69,9 @@ void KisMaskGeneratorTest::testSquareSerialisation()
     }
 
     KisRectangleMaskGenerator cmg(10.0 * rand() / RAND_MAX,
-                                  10.0 * rand() / RAND_MAX,
-                                  rand() / RAND_MAX,
-                                  rand() / RAND_MAX);
+                                  rand() / float(RAND_MAX),
+                                  rand() / float(RAND_MAX),
+                                  rand() / float(RAND_MAX), 4);
     QDomDocument doc = QDomDocument("cmg");
     QDomElement root = doc.createElement("cmg");
     doc.appendChild(root);

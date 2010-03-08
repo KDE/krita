@@ -34,7 +34,6 @@ class KRITAIMAGE_EXPORT KisCircleMaskGenerator : public KisMaskGenerator
 
 public:
 
-    KDE_DEPRECATED KisCircleMaskGenerator(qreal w, qreal h, qreal fh, qreal fv);
     KisCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes);
     virtual ~KisCircleMaskGenerator();
 

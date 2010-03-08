@@ -72,31 +72,17 @@ void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 
 KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
 {
-    if (elt.hasAttribute("radius")) {
-        double radius = elt.attribute("radius", "1.0").toDouble();
-        double ratio = elt.attribute("ratio", "1.0").toDouble();
-        double hfade = elt.attribute("hfade", "0.0").toDouble();
-        double vfade = elt.attribute("vfade", "0.0").toDouble();
-        int spikes = elt.attribute("spikes", "2").toInt();
-        QString typeShape = elt.attribute("type", "circle");
+    double radius = elt.attribute("radius", "1.0").toDouble();
+    double ratio = elt.attribute("ratio", "1.0").toDouble();
+    double hfade = elt.attribute("hfade", "0.0").toDouble();
+    double vfade = elt.attribute("vfade", "0.0").toDouble();
+    int spikes = elt.attribute("spikes", "2").toInt();
+    QString typeShape = elt.attribute("type", "circle");
 
-        if (typeShape == "circle") {
-            return new KisCircleMaskGenerator(radius, ratio, hfade, vfade, spikes);
-        } else {
-            return new KisRectangleMaskGenerator(radius, ratio, hfade, vfade, spikes);
-        }
+    if (typeShape == "circle") {
+        return new KisCircleMaskGenerator(radius, ratio, hfade, vfade, spikes);
     } else {
-        double width = elt.attribute("width", "1.0").toDouble();
-        double height = elt.attribute("height", "1.0").toDouble();
-        double hfade = elt.attribute("hfade", "1.0").toDouble();
-        double vfade = elt.attribute("vfade", "1.0").toDouble();
-        QString typeShape = elt.attribute("type", "circle");
-
-        if (typeShape == "circle") {
-            return new KisCircleMaskGenerator(width, height, hfade, vfade);
-        } else {
-            return new KisRectangleMaskGenerator(width, height, hfade, vfade);
-        }
+        return new KisRectangleMaskGenerator(radius, ratio, hfade, vfade, spikes);
     }
 }
 

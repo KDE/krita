@@ -89,7 +89,7 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     double amount = (config->getProperty("amount", value)) ? value.toDouble() : 0.5;
     uint threshold = (config->getProperty("threshold", value)) ? value.toUInt() : 10;
 
-    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(brushsize, brushsize, halfSize, halfSize);
+    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(brushsize, 1, halfSize, halfSize, 2);
 
     KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
 

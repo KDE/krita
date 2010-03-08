@@ -103,8 +103,8 @@ bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, i
                     pt.setX(x);
                     pt.setY(y);
                     qDebug() << " Different at" << pt
-                             << "source" << qRed(a) << qGreen(a) << qBlue(a)
-                             << "dest" << qRed(b) << qGreen(b) << qBlue(b);
+                             << "source" << qRed(a) << qGreen(a) << qBlue(a) << qAlpha(a)
+                             << "dest" << qRed(b) << qGreen(b) << qBlue(b) << qAlpha(b);
                     return false;
                 }
             }

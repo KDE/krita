@@ -219,7 +219,7 @@ int KoTextDocumentLayout::hitTestIterated(QTextFrame::iterator begin, QTextFrame
     for (it = begin; it != end; ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
-        QTextFrame *subFrame = qobject_cast<QTextFrame*>(it.currentFrame());
+        QTextFrame *subFrame = it.currentFrame();
 
         if (table) {
             QTextTableCell cell = m_state->hitTestTable(table, point);

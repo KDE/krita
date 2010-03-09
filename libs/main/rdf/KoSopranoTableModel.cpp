@@ -154,12 +154,14 @@ Qt::ItemFlags KoSopranoTableModel::flags(const QModelIndex &index) const
     if (index.column() == COL_ISVALID) {
         ret |= Qt::ItemIsUserCheckable;
     }
-    Soprano::Statement st = m_statementIndex[index.row()];
-    if (isInlineRdf(st)) {
-        if (index.column() == COL_SUBJ
-                || index.column() == COL_OBJ_TYPE
-                || index.column() == COL_CTX) {
-            ret &= (~Qt::ItemIsEditable);
+    if (index.row() >= 0) {
+        Soprano::Statement st = m_statementIndex[index.row()];
+        if (isInlineRdf(st)) {
+            if (index.column() == COL_SUBJ
+                    || index.column() == COL_OBJ_TYPE
+                    || index.column() == COL_CTX) {
+                ret &= (~Qt::ItemIsEditable);
+            }
         }
     }
     return ret;

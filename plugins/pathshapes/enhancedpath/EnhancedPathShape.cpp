@@ -354,6 +354,13 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         context.xmlWriter().endElement(); // draw:enhanced-geometry
         saveOdfCommonChildElements(context);
         context.xmlWriter().endElement(); // draw:custom-shape
+
+        if (m_mirrorHorizontally) {
+            context.xmlWriter().addAttribute("draw:mirror-horizontal", "true");
+        }
+        if (m_mirrorVertically) {
+            context.xmlWriter().addAttribute("draw:mirror-vertical", "true");
+        }
     } else {
         KoPathShape::saveOdf(context);
     }

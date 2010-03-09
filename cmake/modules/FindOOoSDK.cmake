@@ -2,6 +2,14 @@
 # OOOSDK_INCLUDE_DIRS
 # OOOSDK_LIBRARY_DIRS
 # OOOSDK_LIBRARIES
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
+# Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 # look for cppuhelper/bootstrap.hxx
 

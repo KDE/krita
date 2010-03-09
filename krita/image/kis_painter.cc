@@ -155,7 +155,7 @@ void KisPainter::init()
 
 KisPainter::~KisPainter()
 {
-    end();
+    delete end();
     delete d->paintOp;
     delete d->maskPainter;
     delete d->fillPainter;
@@ -1607,11 +1607,6 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
 void KisPainter::setProgress(KoUpdater * progressUpdater)
 {
     d->progressUpdater = progressUpdater;
-}
-
-KisTransaction  * KisPainter::transaction()
-{
-    return d->transaction;
 }
 
 const KisPaintDeviceSP KisPainter::device() const

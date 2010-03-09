@@ -109,9 +109,6 @@ public:
     /// begin a transaction with the given command
     void beginTransaction(KisTransaction* command);
 
-    /// Return the current transcation
-    KisTransaction  * transaction();
-
     /// Returns the current paint device.
     const KisPaintDeviceSP device() const;
     KisPaintDeviceSP device();

@@ -48,7 +48,6 @@ KisClipboard::KisClipboard()
 {
     m_pushedClipboard = false;
     m_hasClip = false;
-    m_clip = 0;
 
     // Check that we don't already have a clip ready
     clipboardDataChanged();
@@ -72,9 +71,9 @@ KisClipboard* KisClipboard::instance()
     return s_instance;
 }
 
-void KisClipboard::setClip(KisPaintDeviceSP selection)
+void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
 {
-    m_clip = selection;
+    dbgUI << selection->exactBounds();
 
     if (!selection)
         return;
@@ -98,6 +97,11 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
         store->close();
     }
 
+    // Coordinates
+    if (store->open("topLeft")) {
+        store->write(QString("%1 %2").arg(topLeft.x()).arg(topLeft.y()).toAscii());
+        store->close();
+    }
     // ColorSpace id of layer data
     if (store->open("colormodel")) {
         QString csName = selection->colorSpace()->colorModelId().id();
@@ -152,19 +156,38 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     }
 }
 
-KisPaintDeviceSP KisClipboard::clip()
+KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
 {
+    bool customTopLeft = false;
+    QPoint topLeft = topLeftHint;
     QClipboard *cb = QApplication::clipboard();
     QByteArray mimeType("application/x-krita-selection");
     const QMimeData *cbData = cb->mimeData();
-
+    KisPaintDeviceSP clip;
+    
     if (cbData && cbData->hasFormat(mimeType)) {
+        dbgUI << "Use clip as x-krita-selection";
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
         KoStore* store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
         const KoColorProfile *profile = 0;
 
         QString csDepth, csModel;
+        
+        // topLeft
+        if (store->hasFile("topLeft")) {
+            store->open("topLeft");
+            QString str = store->read(store->size());
+            store->close();
+            QStringList list = str.split(" ");
+            if (list.size() == 2) {
+                topLeft.setX(list[0].toInt());
+                topLeft.setY(list[1].toInt());
+                customTopLeft = true;
+            }
+            dbgUI << str << topLeft;
+        }
+        
         // ColorSpace id of layer data
         if (store->hasFile("colormodel")) {
             store->open("colormodel");
@@ -189,15 +212,16 @@ KisPaintDeviceSP KisClipboard::clip()
 
         const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(csModel, csDepth, profile);
 
-        m_clip = new KisPaintDevice(cs);
+        clip = new KisPaintDevice(cs);
 
         if (store->hasFile("layerdata")) {
             store->open("layerdata");
-            m_clip->read(store);
+            clip->read(store);
             store->close();
         }
         delete store;
     } else {
+        dbgUI << "Use clip as QImage";
         QImage qimage = cb->image();
 
         if (qimage.isNull())
@@ -223,12 +247,18 @@ KisPaintDeviceSP KisClipboard::clip()
             profileName = cs->profile()->name();
         }
 
-        m_clip = new KisPaintDevice(cs);
-        Q_CHECK_PTR(m_clip);
-        m_clip->convertFromQImage(qimage, profileName);
+        clip = new KisPaintDevice(cs);
+        Q_CHECK_PTR(clip);
+        clip->convertFromQImage(qimage, profileName);
     }
-
-    return m_clip;
+    if (!customTopLeft)
+    {
+        QRect exactBounds = clip->exactBounds();
+        topLeft -= exactBounds.topLeft() / 2;
+    }
+    clip->setX(topLeft.x());
+    clip->setY(topLeft.y());
+    return clip;
 }
 
 void KisClipboard::clipboardDataChanged()

@@ -440,7 +440,7 @@ void KisSelectionManager::copy()
             }
         }
 
-        m_clipboard->setClip(clip);
+        m_clipboard->setClip(clip, r.topLeft());
     }
 
     selectionChanged();
@@ -451,43 +451,29 @@ void KisSelectionManager::paste()
 {
     KisImageWSP image = m_view->image();
     if (!image) return;
+    
+    //figure out where to position the clip
+    // XXX: Fix this for internal points & zoom! (BSAR)
+    QWidget * w = m_view->canvas();
+    QPoint center = QPoint(w->width() / 2, w->height() / 2);
+    QPoint bottomright = QPoint(w->width(), w->height());
+    if (bottomright.x() > image->width())
+        center.setX(image->width() / 2);
+    if (bottomright.y() > image->height())
+        center.setY(image->height() / 2);
 
-    KisPaintDeviceSP clip = m_clipboard->clip();
+    const KoCanvasBase* canvasBase = m_view->canvasBase();
+    const KoViewConverter* viewConverter = m_view->canvasBase()->viewConverter();
+
+    KisPaintDeviceSP clip = m_clipboard->clip(
+        QPoint(
+            viewConverter->viewToDocumentX(canvasBase->canvasController()->canvasOffsetX()) + center.x(),
+            viewConverter->viewToDocumentY(canvasBase->canvasController()->canvasOffsetY()) + center.y()));
 
     if (clip) {
-        KisPaintLayer *layer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8);
+        KisPaintLayer *layer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8, clip);
         Q_CHECK_PTR(layer);
 
-        QRect r = clip->exactBounds();
-        KisPainter gc;
-        gc.begin(layer->paintDevice());
-        gc.setCompositeOp(COMPOSITE_COPY);
-        gc.bitBlt(0, 0, clip, r.x(), r.y(), r.width(), r.height());
-        gc.end();
-
-        //figure out where to position the clip
-        // XXX: Fix this for internal points & zoom! (BSAR)
-        QWidget * w = m_view->canvas();
-        QPoint center = QPoint(w->width() / 2, w->height() / 2);
-        QPoint bottomright = QPoint(w->width(), w->height());
-        if (bottomright.x() > image->width())
-            center.setX(image->width() / 2);
-        if (bottomright.y() > image->height())
-            center.setY(image->height() / 2);
-        center -= QPoint(r.width() / 2, r.height() / 2);
-
-        const KoCanvasBase* canvasBase = m_view->canvasBase();
-        const KoViewConverter* viewConverter = m_view->canvasBase()->viewConverter();
-
-        layer->setX(viewConverter->viewToDocumentX(canvasBase->canvasController()->canvasOffsetX() + center.x()));
-        layer->setY(viewConverter->viewToDocumentY(canvasBase->canvasController()->canvasOffsetY() + center.y()));
-
-        /*XXX CBR have an idea of asking the user if he is about to paste a clip in another cs than that of
-          the image if that is what he want rather than silently converting
-          if ( ! ( *clip->colorSpace == *image ->colorSpace()) )
-          if (dlg->exec() == QDialog::Accepted)
-          layer->convertTo(image->colorSpace());
-        */
         if (m_view->activeLayer()) {
             m_adapter->addNode(layer , m_view->activeLayer()->parent(), m_view->activeLayer().data());
         } else {
@@ -505,7 +491,7 @@ void KisSelectionManager::pasteAt()
 
 void KisSelectionManager::pasteNew()
 {
-    KisPaintDeviceSP clip = m_clipboard->clip();
+    KisPaintDeviceSP clip = m_clipboard->clip(QPoint(0,0));
     if (!clip) return;
 
     QRect r = clip->exactBounds();

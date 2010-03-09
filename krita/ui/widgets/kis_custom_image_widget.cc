@@ -198,7 +198,7 @@ void KisCustomImageWidget::buttonClicked()
 
         }
         if (chkFromClipboard->isChecked()) {
-            KisPaintDeviceSP clip = KisClipboard::instance()->clip();
+            KisPaintDeviceSP clip = KisClipboard::instance()->clip(QPoint(0,0));
             if (clip) {
                 QRect r = clip->exactBounds();
                 KisPainter gc;

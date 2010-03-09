@@ -3,6 +3,7 @@ Name=Krita BMP Import Filter
 Name[pt]=Filtro de Importação de BMP para o Krita
 Name[sv]=Krita BMP-importfilter
 Name[uk]=Фільтр імпорту BMP для Krita
+Name[x-test]=xxKrita BMP Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service

@@ -58,22 +58,20 @@ bool EnhancedPathCommand::execute()
     case 'M':
         if (!pointsCount)
             return false;
-        m_parent->moveTo(m_parent->viewboxToShape(points[0]));
+        m_parent->moveTo(points[0]);
         if (pointsCount > 1)
             for (int i = 1; i < pointsCount; i++)
-                m_parent->lineTo(m_parent->viewboxToShape(points[i]));
+                m_parent->lineTo(points[i]);
         break;
     // line from current point (x y) +
     case 'L':
         foreach(const QPointF &point, points)
-            m_parent->lineTo(m_parent->viewboxToShape(point));
+            m_parent->lineTo(point);
         break;
     // cubic bezier curve from current point (x1 y1 x2 y2 x y) +
     case 'C':
         for (int i = 0; i < pointsCount; i+=3)
-            m_parent->curveTo(m_parent->viewboxToShape(points[i]),
-                               m_parent->viewboxToShape(points[i+1]),
-                               m_parent->viewboxToShape(points[i+2]));
+            m_parent->curveTo(points[i], points[i+1], points[i+2]);
         break;
     // closes the current subpath
     case 'Z':
@@ -98,16 +96,16 @@ bool EnhancedPathCommand::execute()
         bool lineTo = m_command.unicode() == 'T';
 
         for (int i = 0; i < pointsCount; i+=3) {
-            const QPointF &radii = m_parent->viewboxToShape(points[i+1]);
+            const QPointF &radii = points[i+1];
             const QPointF &angles = points[i+2] / rad2deg;
             // compute the ellipses starting point
             QPointF start(radii.x() * cos(angles.x()), radii.y() * sin(angles.x()));
             qreal sweepAngle = degSweepAngle(points[i+2].x(), points[i+2].y(), false);
 
             if (lineTo)
-                m_parent->lineTo(m_parent->viewboxToShape(points[i]) + start);
+                m_parent->lineTo(points[i] + start);
             else
-                m_parent->moveTo(m_parent->viewboxToShape(points[i]) + start);
+                m_parent->moveTo(points[i] + start);
 
             m_parent->arcTo(radii.x(), radii.y(), points[i+2].x(), sweepAngle);
         }
@@ -122,8 +120,8 @@ bool EnhancedPathCommand::execute()
         for (int i = 0; i < pointsCount; i+=4) {
             QRectF bbox = rectFromPoints(points[i], points[i+1]);
             QPointF center = bbox.center();
-            qreal rx = 0.5 * m_parent->viewboxToShape(bbox.width());
-            qreal ry = 0.5 * m_parent->viewboxToShape(bbox.height());
+            qreal rx = 0.5 * bbox.width();
+            qreal ry = 0.5 * bbox.height();
             qreal startAngle = angleFromPoint(points[i+2] - center);
             qreal stopAngle = angleFromPoint(points[i+3] - center);
             // we are moving counter-clockwise to the end angle
@@ -132,9 +130,9 @@ bool EnhancedPathCommand::execute()
             QPointF startPoint(rx * cos(startAngle), ry * sin(2*M_PI - startAngle));
 
             if (lineTo)
-                m_parent->lineTo(m_parent->viewboxToShape(center) + startPoint);
+                m_parent->lineTo(center + startPoint);
             else
-                m_parent->moveTo(m_parent->viewboxToShape(center) + startPoint);
+                m_parent->moveTo(center + startPoint);
 
             m_parent->arcTo(rx, ry, startAngle * rad2deg, sweepAngle * rad2deg);
         }
@@ -149,17 +147,17 @@ bool EnhancedPathCommand::execute()
         for (int i = 0; i < pointsCount; i+=4) {
             QRectF bbox = rectFromPoints(points[i], points[i+1]);
             QPointF center = bbox.center();
-            qreal rx = 0.5 * m_parent->viewboxToShape(bbox.width());
-            qreal ry = 0.5 * m_parent->viewboxToShape(bbox.height());
+            qreal rx = 0.5 * bbox.width();
+            qreal ry = 0.5 * bbox.height();
             qreal startAngle = angleFromPoint(points[i+2] - center);
             qreal stopAngle = angleFromPoint(points[i+3] - center);
             // we are moving clockwise to the end angle
             qreal sweepAngle = radSweepAngle(startAngle, stopAngle, true);
 
             if (lineTo)
-                m_parent->lineTo(m_parent->viewboxToShape(points[i+2]));
+                m_parent->lineTo(points[i+2]);
             else
-                m_parent->moveTo(m_parent->viewboxToShape(points[i+2]));
+                m_parent->moveTo(points[i+2]);
 
             m_parent->arcTo(rx, ry, startAngle * rad2deg, sweepAngle * rad2deg);
         }
@@ -168,8 +166,7 @@ bool EnhancedPathCommand::execute()
     // elliptical quadrant (initial segment tangential to x-axis) (x y) +
     case 'X': {
         KoPathPoint * lastPoint = lastPathPoint();
-        foreach (QPointF point, points) {
-            point = m_parent->viewboxToShape(point);
+        foreach (const QPointF &point, points) {
             qreal rx = point.x() - lastPoint->point().x();
             qreal ry = point.y() - lastPoint->point().y();
             qreal startAngle = ry > 0.0 ? 90.0 : 270.0;
@@ -181,8 +178,7 @@ bool EnhancedPathCommand::execute()
     // elliptical quadrant (initial segment tangential to y-axis) (x y) +
     case 'Y': {
         KoPathPoint * lastPoint = lastPathPoint();
-        foreach (QPointF point, points) {
-            point = m_parent->viewboxToShape(point);
+        foreach (const QPointF &point, points) {
             qreal rx = point.x() - lastPoint->point().x();
             qreal ry = point.y() - lastPoint->point().y();
             qreal startAngle = rx < 0.0 ? 0.0 : 180.0;
@@ -194,8 +190,7 @@ bool EnhancedPathCommand::execute()
     // quadratic bezier curve (x1 y1 x y)+
     case 'Q':
         for (int i = 0; i < pointsCount; i+=2)
-            m_parent->curveTo(m_parent->viewboxToShape(points[i]),
-                               m_parent->viewboxToShape(points[i+1]));
+            m_parent->curveTo(points[i], points[i+1]);
         break;
     default:
         break;

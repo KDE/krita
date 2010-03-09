@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2010 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,7 +47,7 @@ class EnhancedPathShape : public KoParameterShape
 {
 public:
     explicit EnhancedPathShape(const QRectF &viewBox);
-    ~EnhancedPathShape();
+    virtual ~EnhancedPathShape();
 
     /**
      * Evaluates the given reference to a identifier, modifier or formula.
@@ -73,17 +73,21 @@ public:
 
     /// Add formula with given name and textual represenation
     void addFormula(const QString &name, const QString &formula);
+
     /// Add a single handle with format: x y minX maxX minY maxY
     void addHandle(const QMap<QString,QVariant> &handle);
+
     /// Add modifiers with format: modifier0 modifier1 modifier2 ...
     void addModifiers(const QString &modifiers);
+
     /// Add command for instance "M 0 0"
     void addCommand(const QString &command);
+
     /// Returns the viewbox of the enhanced path shape
-    const QRectF & viewBox() const;
+    QRectF viewBox() const;
+
+    /// Converts from shape coordinates to viewbox coordinates
     QPointF shapeToViewbox(const QPointF &point) const;
-    QPointF viewboxToShape(const QPointF &point) const;
-    qreal viewboxToShape(qreal value) const;
 
     /// Sets if the shape is to be mirrored horizontally before aplying any other transformations
     //NOTE: in the standard nothing is mentioned about the priorities of the transformations"
@@ -99,12 +103,14 @@ public:
     EnhancedPathParameter *parameter(const QString &text);
 
 protected:
-    void saveOdf(KoShapeSavingContext &context) const;
+    // from KoShape
+    virtual void saveOdf(KoShapeSavingContext &context) const;
+    // from KoShape
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     // from KoParameterShape
-    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    virtual void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     // from KoParameterShape
-    void updatePath(const QSizeF &size);
+    virtual void updatePath(const QSizeF &size);
 private:
 
     void evaluateHandles();
@@ -116,15 +122,13 @@ private:
     /// Adds a new command
     void addCommand(const QString &command, bool triggerUpdate);
 
-    void setMirroring();
-
     typedef QMap<QString, EnhancedPathFormula*> FormulaStore;
     typedef QList<qreal> ModifierStore;
     typedef QMap<QString, EnhancedPathParameter*> ParameterStore;
 
-    QRectF m_viewBox;
-    QMatrix m_viewMatrix;
-    QMatrix m_flipMatrix;
+    QRectF m_viewBox;     ///< the viewbox rectangle
+    QRectF m_viewBound;   ///< the bounding box of the path in viewbox coordinates
+    QMatrix m_viewMatrix; ///< matrix to convert from viewbox coordinates to shape coordinates
     QPointF m_viewBoxOffset;
     QList<EnhancedPathCommand*> m_commands; ///< the commands creating the outline
     QList<EnhancedPathHandle*> m_enhancedHandles; ///< the handles for modifiying the shape

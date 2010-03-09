@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2010 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2009-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoUnit.h>
 #include <KoOdfWorkaround.h>
+#include <KoPathPoint.h>
 
 EnhancedPathShape::EnhancedPathShape(const QRectF &viewBox)
 : m_viewBox(viewBox), m_viewBoxOffset(0.0, 0.0), m_mirrorVertically(false), m_mirrorHorizontally(false)
@@ -64,7 +65,6 @@ void EnhancedPathShape::moveHandleAction(int handleId, const QPointF & point, Qt
     EnhancedPathHandle *handle = m_enhancedHandles[ handleId ];
     if (handle) {
         handle->changePosition(shapeToViewbox(point));
-        evaluateHandles();
     }
 }
 
@@ -75,31 +75,57 @@ void EnhancedPathShape::updatePath(const QSizeF &)
     foreach (EnhancedPathCommand *cmd, m_commands)
         cmd->execute();
 
+    m_viewBound = outline().boundingRect();
+
+    QMatrix matrix;
+    matrix.translate(m_viewBoxOffset.x(), m_viewBoxOffset.y());
+    matrix = m_viewMatrix * matrix;
+
+    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
+    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+        KoSubpath::const_iterator it((*pathIt)->constBegin());
+        for (; it != (*pathIt)->constEnd(); ++it) {
+            (*it)->map(matrix);
+        }
+    }
+    const int handleCount = m_enhancedHandles.count();
+    QList<QPointF> handles;
+    for (int i = 0; i < handleCount; ++i)
+        handles.append(matrix.map(m_enhancedHandles[i]->position()));
+    setHandles(handles);
+
     normalize();
 }
 
 void EnhancedPathShape::setSize(const QSizeF &newSize)
 {
-    QMatrix matrix(resizeMatrix(newSize));
-
     KoParameterShape::setSize(newSize);
 
-    qreal scaleX = matrix.m11();
-    qreal scaleY = matrix.m22();
-    m_viewBoxOffset.rx() *= scaleX;
-    m_viewBoxOffset.ry() *= scaleY;
-    m_viewMatrix.scale(scaleX, scaleY);
+    // calculate scaling factors from viewbox size to shape size
+    qreal xScale = newSize.width()/m_viewBound.width();
+    qreal yScale = newSize.height()/m_viewBound.height();
 
-    setMirroring();
+    // create view matrix, take mirroring into account
+    m_viewMatrix.reset();
+    m_viewMatrix.translate(m_viewBound.center().x(), m_viewBound.center().y());
+    m_viewMatrix.scale(m_mirrorHorizontally ? -xScale : xScale, m_mirrorVertically ? -yScale : yScale);
+    m_viewMatrix.translate(-m_viewBound.center().x(), -m_viewBound.center().y());
+
+    updatePath(newSize);
 }
-
 
 QPointF EnhancedPathShape::normalize()
 {
-    QPointF offset = KoPathShape::normalize();
+    QPointF offset = KoParameterShape::normalize();
+
     m_viewBoxOffset -= offset;
 
     return offset;
+}
+
+QPointF EnhancedPathShape::shapeToViewbox(const QPointF &point) const
+{
+    return m_viewMatrix.inverted().map( point-m_viewBoxOffset );
 }
 
 void EnhancedPathShape::evaluateHandles()
@@ -107,8 +133,13 @@ void EnhancedPathShape::evaluateHandles()
     const int handleCount = m_enhancedHandles.count();
     QList<QPointF> handles;
     for (int i = 0; i < handleCount; ++i)
-        handles.append(viewboxToShape(m_enhancedHandles[i]->position()));
+        handles.append(m_enhancedHandles[i]->position());
     setHandles(handles);
+}
+
+QRectF EnhancedPathShape::viewBox() const
+{
+    return m_viewBox;
 }
 
 qreal EnhancedPathShape::evaluateReference(const QString &reference)
@@ -290,27 +321,6 @@ void EnhancedPathShape::addCommand(const QString &command, bool triggerUpdate)
         updatePath(size());
 }
 
-const QRectF & EnhancedPathShape::viewBox() const
-{
-    return m_viewBox;
-}
-
-QPointF EnhancedPathShape::shapeToViewbox(const QPointF &point) const
-{
-    //NOTE: m_flipMatrix doesn't need to be inverted since when we flip twice the efect of the flip is inverted.
-    return m_viewMatrix.inverted().map( m_flipMatrix.map(point)-m_viewBoxOffset );
-}
-
-QPointF EnhancedPathShape::viewboxToShape(const QPointF &point) const
-{
-    return m_flipMatrix.map(m_viewMatrix.map(point) + m_viewBoxOffset);
-}
-
-qreal EnhancedPathShape::viewboxToShape(qreal value) const
-{
-    return m_flipMatrix.map(m_viewMatrix.map(QPointF(value, value))).x();
-}
-
 void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
 {
     if (isParametricShape()) {
@@ -367,9 +377,6 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
                 addModifiers(modifiers);
             }
 
-            setMirrorHorizontally( child.attributeNS(KoXmlNS::draw, "mirror-horizontal") == "true");
-            setMirrorVertically( child.attributeNS(KoXmlNS::draw, "mirror-vertical") == "true");
-
             KoXmlElement grandChild;
             forEachElement(grandChild, child) {
                 if (grandChild.namespaceURI() != KoXmlNS::draw)
@@ -397,20 +404,21 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
             if (!path.isEmpty()) {
                 parsePathData(path);
             }
+
+            setMirrorHorizontally( child.attributeNS(KoXmlNS::draw, "mirror-horizontal") == "true");
+            setMirrorVertically( child.attributeNS(KoXmlNS::draw, "mirror-vertical") == "true");
         }
     }
+
+    QSizeF size;
+    size.setWidth(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "width", QString())));
+    size.setHeight(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "height", QString())));
+    setSize(size);
 
     QPointF pos;
     pos.setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x", QString())));
     pos.setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y", QString())));
     setPosition(pos);
-    normalize();
-
-    QSizeF size;
-    size.setWidth(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "width", QString())));
-    size.setHeight(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "height", QString())));
-
-    setSize(size);
 
     loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements);
 
@@ -451,7 +459,6 @@ void EnhancedPathShape::setMirrorHorizontally(bool mirrorHorizontally)
 {
     if( m_mirrorHorizontally != mirrorHorizontally) {
         m_mirrorHorizontally = mirrorHorizontally;
-//         setMirroring();
     }
 }
 
@@ -459,17 +466,5 @@ void EnhancedPathShape::setMirrorVertically(bool mirrorVertically)
 {
     if( m_mirrorVertically != mirrorVertically) {
         m_mirrorVertically = mirrorVertically;
-//         setMirroring();
     }
-}
-
-void EnhancedPathShape::setMirroring()
-{
-    qreal centerX = size().width() * 0.5;
-    qreal centerY = size().height() * 0.5;
-
-    m_flipMatrix.reset();
-    m_flipMatrix.translate(centerX, centerY);
-    m_flipMatrix.scale(m_mirrorHorizontally? -1.0 : 1.0, m_mirrorVertically? -1.0 : 1.0);
-    m_flipMatrix.translate(-centerX, -centerY);
 }

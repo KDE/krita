@@ -73,6 +73,7 @@ private:
     bool m_disableShowChangesOnExit;
     KoTextEditor *m_textEditor;
     KoTextShapeData *m_textShapeData;
+    KoCanvasBase *m_canvas;
     TextShape *m_textShape;
     TrackedChangeModel *m_model;
 

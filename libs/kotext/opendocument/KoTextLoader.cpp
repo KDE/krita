@@ -1032,7 +1032,8 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                         QTextBlockFormat blockFormat = cursor.block().blockFormat();
                         cursor.insertBlock(blockFormat, charFormat);
                     }
-                    cursor.insertText(tag.text());
+                    bool stripLeadingSpace = true;
+                    loadSpan(tag, cursor, &stripLeadingSpace);
                     loadedTags++;
                 }
             }

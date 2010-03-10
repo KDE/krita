@@ -34,6 +34,12 @@
 #include <QPainter>
 #include <KDebug>
 
+#include "changetracker/KoChangeTracker.h"
+#include "changetracker/KoChangeTrackerElement.h"
+#include "styles/KoCharacterStyle.h"
+#include "KoTextDocument.h"
+#include <KoGenChanges.h>
+
 // #define DEBUG_PAINTING
 
 class KoTextAnchorPrivate : public KoInlineObjectPrivate
@@ -123,6 +129,7 @@ public:
     KoTextAnchor::AnchorVertical verticalAlignment;
     const QTextDocument *document;
     int position;
+    QTextCharFormat format;
     KoTextShapeContainerModel *model;
     QPointF distance;
 };
@@ -182,6 +189,7 @@ void KoTextAnchor::updatePosition(const QTextDocument *document, QTextInlineObje
     Q_D(KoTextAnchor);
     d->document = document;
     d->position = posInDocument;
+    d->format = format;
     d->setContainer(dynamic_cast<KoShapeContainer*>(shapeForPosition(document, posInDocument)));
 }
 
@@ -210,6 +218,38 @@ void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument 
 {
     Q_UNUSED(painter);
     Q_UNUSED(rect);
+
+    // This section of code is to indicate changes done to KoTextAnchors. Once the new approach is complete this can be removed
+    // In this approach we draw a rectangle around the shape with the appropriate change indication color.
+    Q_D(KoTextAnchor);
+    int changeId = d->format.property(KoCharacterStyle::ChangeTrackerId).toInt();
+    bool drawChangeRect = false;
+
+    QRectF changeRect = rect;
+    changeRect.adjust(0,0,1,0);
+    QPen changePen;
+    changePen.setWidth(2);
+   
+    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker(); 
+
+    if (!changeTracker)
+        return;
+
+    KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
+    if (changeElement && changeElement->getChangeType() == KoGenChange::deleteChange) {
+        changePen.setColor(changeTracker->getDeletionBgColor());
+        drawChangeRect = true;
+    } else if (changeElement && changeElement->getChangeType() == KoGenChange::insertChange) {
+        changePen.setColor(changeTracker->getInsertionBgColor());
+        drawChangeRect = true;
+    }
+
+    painter.setPen(changePen);
+    if (drawChangeRect && changeTracker->displayChanges())
+        painter.drawRect(changeRect);
+
+    // End of Change Visualization Section. Can be removed once the new approach is finalized
+
     // we never paint ourselves; the shape can do that.
 #ifdef DEBUG_PAINTING
     painter.setOpacity(0.5);

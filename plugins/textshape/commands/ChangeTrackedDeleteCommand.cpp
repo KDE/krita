@@ -28,6 +28,9 @@
 #include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
 #include <KAction>
+#include <KoTextAnchor.h>
+#include <KoCanvasBase.h>
+#include <KoShapeController.h>
 #include <QTextDocumentFragment>
 #include <QUndoCommand>
 
@@ -49,6 +52,9 @@ ChangeTrackedDeleteCommand::ChangeTrackedDeleteCommand(DeleteMode mode, TextTool
 
 void ChangeTrackedDeleteCommand::undo()
 {
+    foreach(QUndoCommand *shapeDeleteCommand, m_shapeDeleteCommands)
+        shapeDeleteCommand->undo();
+
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
 
@@ -65,6 +71,8 @@ void ChangeTrackedDeleteCommand::redo()
 {
     m_undone = false;
     if (!m_first) {
+        foreach(QUndoCommand *shapeDeleteCommand, m_shapeDeleteCommands)
+            shapeDeleteCommand->redo();
         TextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
         QTextDocument *document = m_tool->m_textEditor->document();
@@ -130,6 +138,8 @@ void ChangeTrackedDeleteCommand::deleteSelection(QTextCursor &selection)
     QTextDocument delText;
     QTextCursor delTextCursor(&delText);
 
+    QList<KoShape *> shapesInSelection;
+
     checker.setPosition(selectionBegin);
 
     if (KoTextDocument(document).changeTracker()->displayChanges()) {
@@ -179,6 +189,9 @@ void ChangeTrackedDeleteCommand::deleteSelection(QTextCursor &selection)
                 KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->setValid(false);
                     m_removedElements.push_back(testMarker->changeId());
            } else {
+                KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(layout->inlineTextObjectManager()->inlineTextObject(checker));
+                if (anchor)
+                    shapesInSelection.push_back(anchor->shape());
                 delTextCursor.insertFragment(checker.selection());
            } 
         }
@@ -251,6 +264,12 @@ void ChangeTrackedDeleteCommand::deleteSelection(QTextCursor &selection)
     } else {
         if (backwards)
             selection.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor,1);
+
+        foreach (KoShape *shape, shapesInSelection) {
+            QUndoCommand *shapeDeleteCommand = m_tool->canvas()->shapeController()->removeShape(shape);
+            m_shapeDeleteCommands.push_back(shapeDeleteCommand);
+            shapeDeleteCommand->redo();
+        }
     }
 }
 
@@ -296,6 +315,9 @@ bool ChangeTrackedDeleteCommand::mergeWith( const QUndoCommand *command)
         m_removedElements += other->m_removedElements;
         other->m_removedElements.clear();
 
+        m_shapeDeleteCommands += other->m_shapeDeleteCommands;
+        other->m_shapeDeleteCommands.clear();
+
         for(int i=0; i < command->childCount(); i++)
             new UndoTextCommand(m_tool->m_textEditor->document(), this);
 
@@ -312,6 +334,9 @@ ChangeTrackedDeleteCommand::~ChangeTrackedDeleteCommand()
         foreach (int changeId, m_removedElements) {
            removeChangeElement(changeId);
         }
+        
+        foreach(QUndoCommand *shapeDeleteCommand, m_shapeDeleteCommands)
+            delete shapeDeleteCommand;
     }
 }
 

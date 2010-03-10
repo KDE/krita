@@ -25,8 +25,11 @@
 #include <QList>
 
 class TextTool;
+class QTextDocument;
+class QTextDocumentFragment;
 class QTextCursor;
 class KoChangeTrackerElement;
+class KoInlineTextObjectManager;
 
 class ChangeTrackedDeleteCommand : public TextCommandBase
 {
@@ -51,12 +54,15 @@ private:
     bool m_undone;
     DeleteMode m_mode;
     QList<int> m_removedElements;
+    QList<QUndoCommand *> m_shapeDeleteCommands;
     int m_addedChangeElement;
 
     virtual void deleteChar();
     virtual void deletePreviousChar();
     virtual void deleteSelection(QTextCursor &selection);
     virtual void removeChangeElement(int changeId);
+    virtual QTextDocumentFragment generateDeleteFragment(QTextCursor &cursor, int changeId);
+    virtual void insertFragment(QTextCursor &cursor, QTextDocumentFragment &fragment);
 };
 
 #endif // CHANGETRACKEDDELTECOMMAND_H

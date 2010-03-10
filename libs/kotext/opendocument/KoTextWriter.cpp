@@ -27,6 +27,7 @@
 #include <QTextTable>
 #include <QStack>
 #include <QTextTableCellFormat>
+#include <QBuffer>
 
 #include "KoInlineObject.h"
 #include "KoInlineTextObjectManager.h"
@@ -82,7 +83,7 @@ public:
     void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles);
     void saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc);
     void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextFrame *currentFrame = 0);
-
+    QString generateDeleteChangeXml(KoDeleteChangeMarker *marker);
     KoShapeSavingContext &context;
     KoTextSharedSavingData *sharedData;
     KoXmlWriter *writer;
@@ -131,6 +132,8 @@ void KoTextWriter::Private::saveChange(QTextCharFormat format)
     KoDeleteChangeMarker *changeMarker;
     if (layout && (changeMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(format)))) {
         if (!savedDeleteChanges.contains(changeMarker->changeId())) {
+            QString deleteChangeXml = generateDeleteChangeXml(changeMarker);
+            changeMarker->setDeleteChangeXml(deleteChangeXml);
             changeMarker->saveOdf(context);
             savedDeleteChanges.append(changeMarker->changeId());
         }
@@ -327,11 +330,6 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
                 inlineRdf->saveOdf(context, writer);
             }
-
-            if (changeTracker
-                    && charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt()
-                    && changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() == KoGenChange::deleteChange)
-                continue;
 
             KoInlineObject *inlineObject = layout ? layout->inlineTextObjectManager()->inlineTextObject(charFormat) : 0;
             if (currentFragment.length() == 1 && inlineObject
@@ -596,6 +594,37 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             writer->endElement(); // </text:list-element>
         }
     }
+}
+
+QString KoTextWriter::Private::generateDeleteChangeXml(KoDeleteChangeMarker *marker)
+{
+    //Create a QTextDocument from the Delete Fragment
+    QTextDocument doc;
+    QTextCursor cursor(&doc);
+    cursor.insertFragment(changeTracker->elementById(marker->changeId())->getDeleteData());
+
+    //Save the current writer
+    KoXmlWriter &oldWriter = context.xmlWriter();
+
+    //Create a new KoXmlWriter pointing to a QBuffer
+    QByteArray xmlArray;
+    QBuffer xmlBuffer(&xmlArray);
+    KoXmlWriter newXmlWriter(&xmlBuffer);
+
+    //Set our xmlWriter as the writer to be used
+    writer = &newXmlWriter;
+    context.setXmlWriter(newXmlWriter);
+
+    //Call writeBlocks to generate the xml
+    QHash<QTextList *,QString> listStyles = saveListStyles(doc.firstBlock(), doc.characterCount());
+    writeBlocks(&doc, 0, doc.characterCount(),listStyles);
+
+    //Restore the actual xml writer
+    writer = &oldWriter;
+    context.setXmlWriter(oldWriter);
+
+    QString generatedXmlString(xmlArray);
+    return generatedXmlString;
 }
 
 void KoTextWriter::write(QTextDocument *document, int from, int to)

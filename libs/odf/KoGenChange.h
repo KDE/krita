@@ -26,12 +26,8 @@
 #include "koodf_export.h"
 
 #include <QByteArray>
-#include <QVariant>
-#include <QTextDocumentFragment>
 
 #include <kdebug.h>
-
-Q_DECLARE_METATYPE(QTextDocumentFragment)
 
 class KoGenChanges;
 class KoXmlWriter;
@@ -113,13 +109,7 @@ public:
      * The value of @p elementName isn't used, except that it must be unique.
      */
     void addChildElement(const QString& elementName, const QString& elementContents) {
-        m_literalData.insert(elementName, QVariant(elementContents));
-    }
-
-    void addChildElement(const QString &elementName, const QTextDocumentFragment &textFragment) {
-        QVariant var;
-        var.setValue(textFragment);
-        m_literalData.insert(elementName, var);
+        m_literalData.insert(elementName, elementContents);
     }
 
     /**
@@ -151,17 +141,14 @@ private:
 
     void writeChangeMetaData(KoXmlWriter* writer) const;
 
-    void writeDeleteChange(KoXmlWriter *writer) const;
-
 private:
     // Note that the copy constructor and assignment operator are allowed.
     // Better not use pointers below!
     Type m_type;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
     typedef QMap<QString, QString> ChangeMap;
-    typedef QMap<QString, QVariant> GenericChangeMap;
     ChangeMap m_changeMetaData;
-    GenericChangeMap m_literalData;
+    ChangeMap m_literalData;
 
     short m_unused2;
 };

@@ -47,6 +47,7 @@ public:
     QString text;
     int id;
     int position;
+    QString deleteChangeXml;
 };
 
 KoDeleteChangeMarker::KoDeleteChangeMarker(KoChangeTracker* changeTracker)
@@ -84,6 +85,11 @@ int KoDeleteChangeMarker::changeId() const
 int KoDeleteChangeMarker::position() const
 {
     return d->position;
+}
+
+void KoDeleteChangeMarker::setDeleteChangeXml(QString &deleteChangeXml)
+{
+    d->deleteChangeXml = deleteChangeXml;
 }
 
 bool KoDeleteChangeMarker::loadOdf(const KoXmlElement &element)
@@ -143,6 +149,7 @@ void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext &context)
         }
     }
     d->changeTracker->saveInlineChange(d->id, change);
+    change.addChildElement("deleteChangeXml", d->deleteChangeXml);
     changeName = sharedData->genChanges().insert(change);
 
     context.xmlWriter().startElement("text:change", false);

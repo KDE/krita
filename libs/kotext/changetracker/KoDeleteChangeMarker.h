@@ -65,6 +65,8 @@ public:
     ///reimplemented
     virtual void saveOdf(KoShapeSavingContext &context);
 
+    void setDeleteChangeXml(QString &deleteChangeXml);
+
 protected:
 
     virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);

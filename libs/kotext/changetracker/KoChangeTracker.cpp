@@ -274,9 +274,6 @@ bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)
     if (d->changes.value(changeId)->hasExtraMetaData())
         change.addChildElement("changeMetaData", d->changes.value(changeId)->getExtraMetaData());
 
-    if (d->changes.value(changeId)->hasDeleteData())
-        change.addChildElement("deletedData", d->changes.value(changeId)->getDeleteData());
-
     return true;
 }
 

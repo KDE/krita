@@ -18,9 +18,6 @@
 */
 
 #include <QDateTime>
-#include <QTextDocument>
-#include <QTextCursor>
-#include <QTextBlock>
 
 #include "KoGenChange.h"
 #include <KoXmlWriter.h>
@@ -39,31 +36,6 @@ static int compareMap(const QMap<QString, QString>& map1, const QMap<QString, QS
             return it.value() < oit.value() ? -1 : + 1;
     }
     return 0; // equal
-}
-
-// Return true if equal else false
-static bool compareGenericMap(const QMap<QString, QVariant> &map1, const QMap<QString, QVariant> &map2)
-{
-    QMap<QString, QVariant>::const_iterator it = map1.begin();
-    QMap<QString, QVariant>::const_iterator oit = map2.begin();
-
-    for (; it != map1.end(); ++it, ++oit) {
-        if (it.key() != oit.key())
-            return false;
-        if (it.value().type() != oit.value().type())
-            return false;
-        if (it.value().type() == QVariant::String) {
-            if (it.value().toString() != oit.value().toString())
-                return false;
-        } else {
-            QString itHtml = it.value().value<QTextDocumentFragment>().toHtml();
-            QString oitHtml = oit.value().value<QTextDocumentFragment>().toHtml();
-            if (itHtml != oitHtml)
-                return false;
-        }
-    }
-
-    return true;
 }
 
 
@@ -121,27 +93,14 @@ void KoGenChange::writeChange(KoXmlWriter* writer, const QString& name) const
         writer->startElement("office:change-info");
         writeChangeMetaData(writer);
         if (m_literalData.contains("changeMetaData"))
-            writer->addCompleteElement(m_literalData.value("changeMetaData").toString().toUtf8());
+            writer->addCompleteElement(m_literalData.value("changeMetaData").toUtf8());
         writer->endElement(); // office:change-info
     }
-    if ((m_type == KoGenChange::deleteChange) && m_literalData.contains("deletedData")) {
-        writeDeleteChange(writer);
-    }
+    if ((m_type == KoGenChange::deleteChange) && m_literalData.contains("deleteChangeXml"))
+        writer->addCompleteElement(m_literalData.value("deleteChangeXml").toUtf8());
+    
     writer->endElement(); // text:insertion/format/deletion
     writer->endElement(); // text:change
-}
-
-void KoGenChange::writeDeleteChange(KoXmlWriter *writer) const
-{
-    QTextDocument document;
-    QTextCursor cursor(&document);
-    cursor.insertFragment(m_literalData["deletedData"].value<QTextDocumentFragment>());
-
-    for (QTextBlock block = document.begin(); block.isValid(); block = block.next()) {
-        QString deletedElement;
-        deletedElement = QString("<text:p>") + block.text() + QString("</text:p>");
-        writer->addCompleteElement(deletedElement.toUtf8());
-    }
 }
 
 bool KoGenChange::operator<(const KoGenChange &other) const
@@ -160,6 +119,5 @@ bool KoGenChange::operator==(const KoGenChange &other) const
     if (m_literalData.count() != other.m_literalData.count()) return false;
     int comp = compareMap(m_changeMetaData, other.m_changeMetaData);
     if (comp != 0) return false;
-    bool compResult = compareGenericMap(m_literalData, other.m_literalData);
-    return compResult;
+    return (compareMap(m_literalData, other.m_literalData) == 0);
 }

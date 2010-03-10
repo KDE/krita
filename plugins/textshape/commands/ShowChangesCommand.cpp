@@ -18,7 +18,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-
+#include <iostream>
 #include "ShowChangesCommand.h"
 
 #include <KoChangeTracker.h>
@@ -26,18 +26,25 @@
 #include <KoTextDocument.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextEditor.h>
+#include <KoTextAnchor.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoCanvasBase.h>
+#include <KoShapeController.h>
+#include <KoShapeContainer.h>
 
 #include <KAction>
 #include <klocale.h>
 
 #include <QTextDocument>
 #include <QtAlgorithms>
+#include <QList>
 
-ShowChangesCommand::ShowChangesCommand(bool showChanges, QTextDocument *document, QUndoCommand *parent) :
+ShowChangesCommand::ShowChangesCommand(bool showChanges, QTextDocument *document, KoCanvasBase *canvas, QUndoCommand *parent) :
     TextCommandBase (parent),
     m_document(document),
     m_first(true),
-    m_showChanges(showChanges)
+    m_showChanges(showChanges),
+    m_canvas(canvas)
 {
     Q_ASSERT(document);
     m_changeTracker = KoTextDocument(m_document).changeTracker();
@@ -52,6 +59,8 @@ void ShowChangesCommand::undo()
 {
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
+    foreach (QUndoCommand *shapeCommand, m_shapeCommands)
+        shapeCommand->undo();
     emit toggledShowChange(!m_showChanges);
     enableDisableStates(!m_showChanges);
 }
@@ -61,6 +70,8 @@ void ShowChangesCommand::redo()
     if (!m_first) {
         TextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
+        foreach (QUndoCommand *shapeCommand, m_shapeCommands)
+            shapeCommand->redo();
         emit toggledShowChange(m_showChanges);
         enableDisableStates(m_showChanges);
     } else {
@@ -114,8 +125,41 @@ void ShowChangesCommand::insertDeletedChanges()
             f.setProperty(KoCharacterStyle::ChangeTrackerId, element->getDeleteChangeMarker()->changeId());
             f.clearProperty(KoCharacterStyle::InlineInstanceId);
             caret.setCharFormat(f);
+            int insertPosition = caret.position();
             caret.insertFragment(element->getDeleteData());
+            checkAndAddAnchoredShapes(insertPosition, element->getDeleteData().toPlainText().length());
             numAddedChars += element->getDeleteData().toPlainText().length();
+        }
+    }
+}
+
+void ShowChangesCommand::checkAndAddAnchoredShapes(int position, int length)
+{
+    QTextCursor cursor(m_textEditor->document());
+    for (int i=position;i < (position + length);i++) {
+        if (m_textEditor->document()->characterAt(i) == QChar::ObjectReplacementCharacter) {
+            cursor.setPosition(i+1);
+            KoInlineObject *object = KoTextDocument(m_textEditor->document()).inlineTextObjectManager()->inlineTextObject(cursor);
+            if (!object)
+                continue;
+
+            KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
+            if (!anchor)
+                continue;
+           
+            KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_document->documentLayout());
+            KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(lay->shapeForPosition(i));
+            
+            // a very ugly hack. Since this class is going away soon, it should be okay
+            if (!container)
+                container = dynamic_cast<KoShapeContainer *>((lay->shapes()).at(0));
+
+            if (container) {
+                container->addChild(anchor->shape()); 
+                QUndoCommand *shapeCommand = m_canvas->shapeController()->addShapeDirect(anchor->shape());
+                shapeCommand->redo();
+                m_shapeCommands.push_front(shapeCommand);
+            }
         }
     }
 }
@@ -131,10 +175,33 @@ void ShowChangesCommand::removeDeletedChanges()
         if (element->isValid()) {
             QTextCursor caret(element->getDeleteChangeMarker()->document());
             QTextCharFormat f;
-            caret.setPosition(element->getDeleteChangeMarker()->position() +  1 - numDeletedChars);
+            int deletePosition = element->getDeleteChangeMarker()->position() + 1 - numDeletedChars;
+            caret.setPosition(deletePosition);
             caret.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, element->getDeleteData().toPlainText().length());
+            checkAndRemoveAnchoredShapes(deletePosition, element->getDeleteData().toPlainText().length());
             caret.removeSelectedText();
             numDeletedChars += element->getDeleteData().toPlainText().length();
+        }
+    }
+}
+
+void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)
+{
+    QTextCursor cursor(m_textEditor->document());
+    for (int i=position;i < (position + length);i++) {
+        if (m_textEditor->document()->characterAt(i) == QChar::ObjectReplacementCharacter) {
+            cursor.setPosition(i+1);
+            KoInlineObject *object = KoTextDocument(m_textEditor->document()).inlineTextObjectManager()->inlineTextObject(cursor);
+            if (!object)
+                continue;
+
+            KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
+            if (!anchor)
+                continue;
+            
+            QUndoCommand *shapeCommand = m_canvas->shapeController()->removeShape(anchor->shape());
+            shapeCommand->redo();
+            m_shapeCommands.push_front(shapeCommand);
         }
     }
 }

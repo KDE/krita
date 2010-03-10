@@ -214,7 +214,7 @@ void KisSliderSpinBox::keyPressEvent(QKeyEvent* e)
          break;
       default:
          showEdit();
-         qApp->sendEvent(d->edit, e);
+         d->edit->event(e);
          break;
    }
 }

@@ -241,6 +241,7 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
         d->pointIsDragged = true;
         QPointF offset = snappedPosition - d->activePoint->point();
         d->activePoint->setControlPoint2(d->activePoint->point() + offset);
+        // pressing <alt> stops controls points moving symmetrically
         if ((event->modifiers() & Qt::AltModifier) == 0)
             d->activePoint->setControlPoint1(d->activePoint->point() - offset);
         d->repaintActivePoint();
@@ -271,6 +272,9 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
             lastActivePoint->setProperty(KoPathPoint::IsSymmetric);
     }
     canvas()->snapGuide()->setIgnoredPathPoints( (QList<KoPathPoint*>()<<d->activePoint) );
+    if (d->angleSnapStrategy && lastActivePoint->activeControlPoint2()) {
+        d->angleSnapStrategy->deactivate();
+    }
 }
 
 void KoCreatePathTool::keyPressEvent(QKeyEvent *event)

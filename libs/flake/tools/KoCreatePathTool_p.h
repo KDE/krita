@@ -100,6 +100,10 @@ public:
         return decoration;
     }
 
+    void deactivate()
+    {
+        m_active = false;
+    }
 private:
     QPointF m_startPoint;
     qreal m_angleStep;

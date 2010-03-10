@@ -370,7 +370,7 @@ QMap<QString, QWidget *> KoCreatePathTool::createOptionWidgets()
     layout->addWidget( new QLabel(i18n("Angle snapping delta"), angleWidget), 0, 0);
     KIntNumInput *angleEdit = new KIntNumInput(d->angleSnappingDelta, angleWidget);
     angleEdit->setRange(1, 360, 1);
-    angleEdit->setSuffix(" °");
+    angleEdit->setSuffix(QChar(0x00B0)); // degree sign °
     layout->addWidget( angleEdit, 0, 1);
     map.insert(i18n("Angle Constraints"), angleWidget);
 

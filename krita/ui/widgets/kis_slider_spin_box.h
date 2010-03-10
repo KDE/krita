@@ -32,6 +32,7 @@ class QTimer;
 class  KRITAUI_EXPORT KisSliderSpinBox : public QAbstractSlider
 {
    Q_OBJECT
+   Q_DISABLE_COPY(KisSliderSpinBox)
 public:
    explicit KisSliderSpinBox(QWidget* parent=0);
    virtual ~KisSliderSpinBox();
@@ -81,13 +82,8 @@ protected slots:
    void internalValueChanged(int value);
 
 private:
-   QLineEdit* m_edit;
-   QDoubleValidator* m_validator;
-   bool m_upButtonDown;
-   bool m_downButtonDown;
-   int m_factor;
-   QString m_suffix;
-   qreal m_exponentRatio;
+    struct Private;
+    Private* const d;
 };
 
 #endif //kISSLIDERSPINBOX_H

@@ -73,6 +73,7 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
     d(new Private())
 {
     d->inlineTextObjectManager = new KoInlineTextObjectManager(this);
+    d->rulersVisible = false;
 
     resourceManager()->setUndoStack(undoStack());
     resourceManager()->setOdfDocument(this);

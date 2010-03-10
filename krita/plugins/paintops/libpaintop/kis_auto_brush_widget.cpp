@@ -49,7 +49,9 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
     connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
 
     inputRadius->setRange(0.0, 1000.0, 2);
-    connect(inputRadius, SIGNAL(valueDoubleChanged(double)), this, SLOT(spinBoxRadiusChanged(double)));
+    inputRadius->setExponentRatio(3.0);
+    inputRadius->setDoubleValue(5.0);
+    connect(inputRadius, SIGNAL(doubleValueChanged(qreal)), this, SLOT(spinBoxRadiusChanged(qreal)));
 
     showSlider(inputRatio, 0.1);
     connect(inputRatio, SIGNAL(valueChanged(double)), this, SLOT(spinBoxRatioChanged(double)));
@@ -95,11 +97,11 @@ void KisAutoBrushWidget::paramChanged()
     KisMaskGenerator* kas;
 
     if (comboBoxShape->currentIndex() == 0) { // use index compare instead of comparing a translatable string
-        kas = new KisCircleMaskGenerator(inputRadius->valueDouble(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
+        kas = new KisCircleMaskGenerator(inputRadius->doubleValue(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
         Q_CHECK_PTR(kas);
 
     } else {
-        kas = new KisRectangleMaskGenerator(inputRadius->valueDouble(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
+        kas = new KisRectangleMaskGenerator(inputRadius->doubleValue(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
         Q_CHECK_PTR(kas);
 
     }
@@ -169,7 +171,7 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     m_brush = brush->image();
     // XXX: lock, set and unlock the widgets.
     KisAutoBrush* aBrush = dynamic_cast<KisAutoBrush*>(brush.data());
-    inputRadius->setValueDouble(aBrush->maskGenerator()->radius());
+    inputRadius->setDoubleValue(aBrush->maskGenerator()->radius());
     inputRatio->setValue(aBrush->maskGenerator()->ratio());
     inputHFade->setValue(aBrush->maskGenerator()->horizontalFade());
     inputVFade->setValue(aBrush->maskGenerator()->verticalFade());
@@ -181,7 +183,7 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
 
 void KisAutoBrushWidget::setAutoBrushDiameter(qreal diameter)
 {
-    inputRadius->setValueDouble(diameter);
+    inputRadius->setDoubleValue(diameter);
 }
 
 

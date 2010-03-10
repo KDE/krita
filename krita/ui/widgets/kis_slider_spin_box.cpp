@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright 2010 (C) Justin Noel <justin@ics.com>
+ * Copyright (c) 2010 Justin Noel <justin@ics.com>
+ * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -89,7 +90,7 @@ void KisSliderSpinBox::paintEvent(QPaintEvent* e)
    //Create options to draw spin box parts
    QStyleOptionSpinBox spinOpts = spinBoxOptions();
    
-   //Draw "SpinBox".Clip off the area of the lineEdit to avoid double
+   //Draw "SpinBox".Clip off the area of the lineEdit to avoid qreal
    //borders being drawn
    painter.setClipping(true);
    QRect eraseRect(QPoint(rect().x(), rect().y()),
@@ -313,7 +314,12 @@ QStyleOptionProgressBar KisSliderSpinBox::progressBarOptions() const
    progressOpts.initFrom(this);
    progressOpts.maximum = maximum();
    progressOpts.minimum = minimum();
-   progressOpts.progress = value();
+   
+   qreal minDbl = minimum();
+
+   qreal dValues = (maximum() - minDbl);
+
+   progressOpts.progress = dValues * pow((value() - minDbl) / dValues, 1 / m_exponentRatio) + minDbl;
    progressOpts.text = valueString() + m_suffix;
    progressOpts.textAlignment = Qt::AlignCenter;
    progressOpts.textVisible = !(m_edit->isVisible());
@@ -349,19 +355,19 @@ int KisSliderSpinBox::valueForX(int x) const
    //Adjust for magic number in style code (margins)
    QRect correctedProgRect = progressRect(spinOpts).adjusted(2,2,-2,-2);
       
-   double leftDbl = correctedProgRect.left();
-   double xDbl = x - leftDbl;
-   double rightDbl = correctedProgRect.right();
-   double minDbl = minimum();
-   double maxDbl = maximum();
+   qreal leftDbl = correctedProgRect.left();
+   qreal xDbl = x - leftDbl;
+   qreal rightDbl = correctedProgRect.right();
+   qreal minDbl = minimum();
+   qreal maxDbl = maximum();
 
-   double dValues = (maxDbl - minDbl);
-   double percent = (xDbl / (rightDbl-leftDbl));
+   qreal dValues = (maxDbl - minDbl);
+   qreal percent = (xDbl / (rightDbl-leftDbl));
 
-   return ((dValues * percent) + minDbl);
+   return ((dValues * pow(percent, m_exponentRatio)) + minDbl);
 }
 
-void KisSliderSpinBox::setRange(double minimum, double maximum, int decimals)
+void KisSliderSpinBox::setRange(qreal minimum, qreal maximum, int decimals)
 {
     m_validator->setDecimals(decimals);
     m_factor = pow(10,decimals);
@@ -376,12 +382,12 @@ void KisSliderSpinBox::setSuffix(const QString& suffix)
     m_suffix = suffix;
 }
 
-double KisSliderSpinBox::valueDouble()
+qreal KisSliderSpinBox::doubleValue()
 {
-    return (double)value()/m_factor;
+    return (qreal)value()/m_factor;
 }
 
-void KisSliderSpinBox::setValueDouble(double value)
+void KisSliderSpinBox::setDoubleValue(qreal value)
 {
     setValue(value*m_factor);
     update();
@@ -389,7 +395,13 @@ void KisSliderSpinBox::setValueDouble(double value)
 
 QString KisSliderSpinBox::valueString() const
 {
-    return QString::number((double)value()/m_factor, 'f', 2);
+    return QString::number((qreal)value()/m_factor, 'f', 2);
+}
+
+void KisSliderSpinBox::setExponentRatio(qreal dbl)
+{
+    Q_ASSERT(dbl > 0);
+    m_exponentRatio = dbl;
 }
 
 void KisSliderSpinBox::contextMenuEvent(QContextMenuEvent* event)
@@ -399,5 +411,5 @@ void KisSliderSpinBox::contextMenuEvent(QContextMenuEvent* event)
 
 void KisSliderSpinBox::internalValueChanged(int value)
 {
-    emit valueDoubleChanged(value/m_factor);
+    emit doubleValueChanged(value/m_factor);
 }

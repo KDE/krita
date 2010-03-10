@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright 2010 (C) Justin Noel <justin@ics.com>
+ * Copyright (c) 2010 Justin Noel <justin@ics.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,16 +39,17 @@ public:
    void showEdit();
    void hideEdit();
 
-   void setRange(double minimum, double maximum, int decimals = 0);
+   void setRange(qreal minimum, qreal maximum, int decimals = 0);
    
    void setSuffix(const QString& suffix);
    
    ///Get the value, don't use value()
-   double valueDouble();
+   qreal doubleValue();
 
    ///Set the value, don't use setValue()
-   void setValueDouble(double value);
+   void setDoubleValue(qreal value);
 
+   void setExponentRatio(qreal dbl);   
 protected:
    virtual void paintEvent(QPaintEvent* e);
    virtual void mousePressEvent(QMouseEvent* e);
@@ -72,9 +73,8 @@ protected:
    int valueForX(int x) const;
    
    QString valueString() const;
-   
 signals:
-    void valueDoubleChanged(double value);
+    void doubleValueChanged(qreal value);
    
 protected slots:
    void contextMenuEvent(QContextMenuEvent * event);
@@ -87,6 +87,7 @@ private:
    bool m_downButtonDown;
    int m_factor;
    QString m_suffix;
+   qreal m_exponentRatio;
 };
 
 #endif //kISSLIDERSPINBOX_H

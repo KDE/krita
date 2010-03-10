@@ -56,7 +56,7 @@ public:
 private slots:
 
     void paramChanged();
-    void spinBoxRadiusChanged(double);
+    void spinBoxRadiusChanged(qreal);
     void spinBoxRatioChanged(double);
     void spinBoxHorizontalChanged(double);
     void spinBoxVerticalChanged(double);

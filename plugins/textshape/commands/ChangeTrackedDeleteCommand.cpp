@@ -349,3 +349,6 @@ void ChangeTrackedDeleteCommand::removeChangeElement(int changeId)
     layout->inlineTextObjectManager()->removeInlineObject(marker);
     KoTextDocument(document).changeTracker()->removeById(changeId);
 }
+/* TODO: these are placeholders to fix a link issues introduced in revision 1101475 */
+QTextDocumentFragment ChangeTrackedDeleteCommand::generateDeleteFragment(QTextCursor &cursor, int changeId) { return QTextDocumentFragment(); }
+void ChangeTrackedDeleteCommand::insertFragment(QTextCursor &cursor, QTextDocumentFragment &fragment) {}

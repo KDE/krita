@@ -169,6 +169,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         m_mode = EDIT_BRUSH;
         m_prevMousePos = e->point;
         m_originalPos = e->globalPos();
+        m_originalMousePos = e->point;
         e->accept();
         return;
     } else { // No modifiers
@@ -267,7 +268,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         qreal dx = m_prevMousePos.x() - e->point.x();
         qreal dy = m_prevMousePos.y() - e->point.y();
         currentPaintOpPreset()->settings()->changePaintOpSize(-dx, -dy);
-        QCursor::setPos(m_originalPos);
+        m_prevMousePos = e->point;
     }
     break;
     case PAN: {
@@ -302,7 +303,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     }
 #endif
 
-    m_oldOutlineRect = currentPaintOpPreset()->settings()->paintOutlineRect(m_mousePos, currentImage(), outlineMode);
+    m_oldOutlineRect = currentPaintOpPreset()->settings()->paintOutlineRect(outlinePos(), currentImage(), outlineMode);
     if (!m_oldOutlineRect.isEmpty()) {
         canvas()->updateCanvas(m_oldOutlineRect); // erase the old guy
     }
@@ -327,6 +328,9 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
         break;
     case PAN:
         endPan();
+        break;
+    case EDIT_BRUSH:
+        QCursor::setPos(m_originalPos);
         break;
     default:
         ;
@@ -648,7 +652,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
         qreal zoomX, zoomY;
         converter.zoom(&zoomX, &zoomY);
         gc.scale(zoomX, zoomY);
-        currentPaintOpPreset()->settings()->paintOutline(m_mousePos, currentImage(), gc, outlineMode);
+        currentPaintOpPreset()->settings()->paintOutline(outlinePos(), currentImage(), gc, outlineMode);
 
     }
 }
@@ -723,6 +727,15 @@ void KisToolFreehand::decreaseBrushSize()
 {
     currentPaintOpPreset()->settings()->changePaintOpSize(-1, 0);
     canvas()->updateCanvas(m_oldOutlineRect);
+}
+
+QPointF KisToolFreehand::outlinePos() const
+{
+    if (m_mode == EDIT_BRUSH) {
+        return m_originalMousePos;
+    } else {
+        return m_mousePos;
+    }
 }
 
 #include "kis_tool_freehand.moc"

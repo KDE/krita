@@ -124,7 +124,7 @@ protected:
     double m_magnetism;
 
 private:
-
+    QPointF outlinePos() const;
 #if defined(HAVE_OPENGL)
     qreal m_xTilt;
     qreal m_yTilt;
@@ -138,6 +138,7 @@ private:
 
     QPointF m_mousePos;
     QPointF m_prevMousePos;
+    QPointF m_originalMousePos;
     QPoint  m_originalPos;
 
     // for painting

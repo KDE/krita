@@ -67,6 +67,8 @@ KoPathPoint::KoPathPoint(KoPathShape * path, const QPointF & point, PointPropert
 {
     d->shape = path;
     d->point = point;
+    d->controlPoint1 = point;
+    d->controlPoint2 = point;
     d->properties = properties;
 }
 

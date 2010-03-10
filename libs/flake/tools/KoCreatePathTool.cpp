@@ -175,13 +175,6 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
             point = d->existingStartPoint->parent()->shapeToDocument(d->existingStartPoint->point());
         }
         d->activePoint = pathShape->moveTo(point);
-        // set the control points to be different from the default (0, 0)
-        // to avoid a unnecessary big area being repainted
-        d->activePoint->setControlPoint1(point);
-        d->activePoint->setControlPoint2(point);
-        // remove them immediately so we do not end up having control points on a line start point
-        d->activePoint->removeControlPoint1();
-        d->activePoint->removeControlPoint2();
         d->firstPoint = d->activePoint;
         canvas()->updateCanvas(handlePaintRect(point));
         canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());

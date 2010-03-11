@@ -46,6 +46,7 @@ class QPoint;
 class QWidget;
 class QCheckBox;
 class KComboBox;
+class KisSliderSpinBox;
 
 class KisToolGradient : public KisToolPaint
 {
@@ -111,7 +112,7 @@ private:
     KisOpenGLGradientProgram *m_gradientProgram;
     int m_previewOpacityPercent;
     QLabel *m_lbPreviewOpacity;
-    KoSliderCombo *m_slPreviewOpacity;
+    KisSliderSpinBox *m_slPreviewOpacity;
 #endif
 };
 

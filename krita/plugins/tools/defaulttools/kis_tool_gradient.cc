@@ -59,6 +59,7 @@
 #include <kis_view2.h>
 #include <widgets/kis_cmb_composite.h>
 #include <widgets/kis_double_widget.h>
+#include <widgets/kis_slider_spin_box.h>
 #include <kis_cursor.h>
 #include <kis_config.h>
 
@@ -408,8 +409,8 @@ QWidget* KisToolGradient::createOptionWidget()
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
     m_lbPreviewOpacity = new QLabel(i18n("Preview opacity:"), widget);
-    m_slPreviewOpacity = new KoSliderCombo(widget);
-    m_slPreviewOpacity->setDecimals(0);
+    m_slPreviewOpacity = new KisSliderSpinBox(widget);
+    m_slPreviewOpacity->setRange(0, 100, 0)  ;
     m_slPreviewOpacity->setValue(m_previewOpacityPercent);
     connect(m_slPreviewOpacity, SIGNAL(valueChanged(qreal, bool)), this, SLOT(slotSetPreviewOpacity(qreal, bool)));
 

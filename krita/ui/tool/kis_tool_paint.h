@@ -53,7 +53,7 @@ class QPoint;
 class KoCanvasBase;
 
 class KisCmbComposite;
-class KoSliderCombo;
+class KisSliderSpinBox;
 
 enum enumBrushMode {
     PAINT,
@@ -115,7 +115,7 @@ private slots:
 
     void updateCompositeOpComboBox();
     void slotPopupQuickHelp();
-    void slotSetOpacity(qreal opacityPerCent, bool final);
+    void slotSetOpacity(qreal opacityPerCent);
     void slotSetCompositeMode(const QString& compositeOp);
 
 protected slots:
@@ -133,7 +133,7 @@ private:
     QGridLayout *m_optionWidgetLayout;
 
     QLabel *m_lbOpacity;
-    KoSliderCombo *m_slOpacity;
+    KisSliderSpinBox *m_slOpacity;
     QLabel *m_lbComposite;
     KisCmbComposite *m_cmbComposite;
     KisNodeSP m_previousNode;

@@ -62,7 +62,7 @@
 
 #include "kis_cursor.h"
 #include "widgets/kis_cmb_composite.h"
-#include "KoSliderCombo.h"
+#include "widgets/kis_slider_spin_box.h"
 #include "kis_canvas_resource_provider.h"
 #include <recorder/kis_recorded_paint_action.h>
 
@@ -154,12 +154,10 @@ QWidget * KisToolPaint::createOptionWidget()
     optionWidget->setObjectName(toolId());
 
     m_lbOpacity = new QLabel(i18n("Opacity: "), optionWidget);
-    m_slOpacity = new KoSliderCombo(optionWidget);
-    m_slOpacity->setMinimum(0);
-    m_slOpacity->setMaximum(100);
-    m_slOpacity->setDecimals(0);
+    m_slOpacity = new KisSliderSpinBox(optionWidget);
+    m_slOpacity->setRange(0, 100, 0);
     m_slOpacity->setValue(m_opacity / OPACITY_OPAQUE_U8 * 100);
-    connect(m_slOpacity, SIGNAL(valueChanged(qreal, bool)), this, SLOT(slotSetOpacity(qreal, bool)));
+    connect(m_slOpacity, SIGNAL(doubleValueChanged(qreal)), this, SLOT(slotSetOpacity(qreal)));
 
     m_lbComposite = new QLabel(i18n("Mode: "), optionWidget);
     m_cmbComposite = new KisCmbComposite(optionWidget);
@@ -216,9 +214,8 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 }
 
 
-void KisToolPaint::slotSetOpacity(qreal opacityPerCent, bool final)
+void KisToolPaint::slotSetOpacity(qreal opacityPerCent)
 {
-    Q_UNUSED(final);
     m_opacity = (int)(opacityPerCent * OPACITY_OPAQUE_U8 / 100);
 }
 

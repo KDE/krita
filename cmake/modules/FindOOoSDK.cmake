@@ -42,7 +42,7 @@ if (OOOSDK_DIR)
 else (OOOSDK_DIR)
 	set(OOOSDK_ERROR "Could not find sdk/bin/cppumaker
 		or program/offapi.rdb for OOoSDK.")
-endif (NOT OOOSDK_DIR)
+endif (OOOSDK_DIR)
 
 find_path(OOOSDK_URE_DIR
 	NAMES share/misc/types.rdb 

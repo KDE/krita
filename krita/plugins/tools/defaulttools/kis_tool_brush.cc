@@ -161,7 +161,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderSmoothness->setValue(m_smoothness * MAXIMUM_SMOOTHNESS);
 
     // Drawing assistant configuration
-    m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionWidget);
+    m_chkAssistant = new QCheckBox(i18n("Use Assistant"), optionWidget);
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
     QLabel* labelMagnetism = new QLabel(i18n("Magnetism:"), optionWidget);
     connect(m_chkAssistant, SIGNAL(toggled(bool)), labelMagnetism, SLOT(setEnabled(bool)));

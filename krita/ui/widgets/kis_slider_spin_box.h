@@ -29,6 +29,9 @@ class QLineEdit;
 class QDoubleValidator;
 class QTimer;
 
+/**
+ * XXX: when inactive, also show the progress bar part as inactive!
+ */
 class  KRITAUI_EXPORT KisSliderSpinBox : public QAbstractSlider
 {
    Q_OBJECT
@@ -41,16 +44,16 @@ public:
    void hideEdit();
 
    void setRange(qreal minimum, qreal maximum, int decimals = 0);
-   
+
    void setSuffix(const QString& suffix);
-   
+
    ///Get the value, don't use value()
    qreal doubleValue();
 
    ///Set the value, don't use setValue()
    void setDoubleValue(qreal value);
 
-   void setExponentRatio(qreal dbl);   
+   void setExponentRatio(qreal dbl);
 protected:
    virtual void paintEvent(QPaintEvent* e);
    virtual void mousePressEvent(QMouseEvent* e);
@@ -72,11 +75,11 @@ protected:
    QRect downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
 
    int valueForX(int x) const;
-   
+
    QString valueString() const;
 signals:
     void doubleValueChanged(qreal value);
-   
+
 protected slots:
    void contextMenuEvent(QContextMenuEvent * event);
    void internalValueChanged(int value);

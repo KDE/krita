@@ -68,7 +68,7 @@ private:
     QCheckBox *m_chkAssistant;
     KisSliderSpinBox *m_sliderMagnetism;
     KisSliderSpinBox *m_sliderSmoothness;
-    KoSliderCombo *m_sliderRate;
+    KisSliderSpinBox  *m_sliderRate;
 };
 
 

@@ -46,6 +46,15 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     Q_ASSERT(settings);
     
     m_sizeProperties.readOptionSetting(settings);
+
+    // sensors
+    m_sizeOption.readOptionSetting(settings);
+    m_opacityOption.readOptionSetting(settings);
+    m_rotationOption.readOptionSetting(settings);
+    m_sizeOption.sensor()->reset();
+    m_opacityOption.sensor()->reset();
+    m_rotationOption.sensor()->reset();
+
     
     m_properties.action = settings->getInt(DEFORM_ACTION);
     m_properties.deformAmount = settings->getDouble(DEFORM_AMOUNT);
@@ -90,8 +99,9 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
                 pt.setX(pt.x() + (  ( m_sizeProperties.diameter * drand48() ) - m_sizeProperties.diameter * 0.5) * m_sizeProperties.jitterMovementAmount);
                 pt.setY(pt.y() + (  ( m_sizeProperties.diameter * drand48() ) - m_sizeProperties.diameter * 0.5) * m_sizeProperties.jitterMovementAmount);
         }
-        qreal rotation = m_sizeProperties.rotation;
-        qreal scale = m_sizeProperties.scale;
+
+        qreal rotation = m_sizeProperties.rotation + m_rotationOption.apply(info);
+        qreal scale = m_sizeProperties.scale + KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
 
         QPointF pos = pt - m_deformBrush.hotSpot(scale,rotation);
             
@@ -99,8 +109,10 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         splitCoordinate(pos.y(), &y, &subPixelY);
         
         m_deformBrush.paintMask(dab, m_dev, scale,rotation,info.pos(), subPixelX,subPixelY);
-        
+
+        quint8 origOpacity = m_opacityOption.apply(painter(), info);
         painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
+        painter()->setOpacity(origOpacity);
         return m_spacing;
     }else{
         if (!m_dab) {

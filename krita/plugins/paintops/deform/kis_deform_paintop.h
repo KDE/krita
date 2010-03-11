@@ -19,9 +19,12 @@
 #ifndef KIS_DEFORMPAINTOP_H_
 #define KIS_DEFORMPAINTOP_H_
 
-#include <klocale.h>
 #include <kis_paintop.h>
 #include <kis_types.h>
+
+#include <kis_pressure_size_option.h>
+#include <kis_pressure_opacity_option.h>
+#include <kis_pressure_rotation_option.h>
 
 #include "deform_brush.h"
 
@@ -56,6 +59,11 @@ private:
     DeformBrush m_deformBrush;
     DeformProperties m_properties;
     KisBrushSizeProperties m_sizeProperties;
+
+    KisPressureSizeOption m_sizeOption;
+    KisPressureOpacityOption m_opacityOption;
+    KisPressureRotationOption m_rotationOption;    
+
     
     qreal m_xSpacing;
     qreal m_ySpacing;

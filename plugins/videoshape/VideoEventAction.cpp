@@ -42,11 +42,14 @@ VideoEventAction::~VideoEventAction()
 
 bool VideoEventAction::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    Q_UNUSED(element);
+    Q_UNUSED(context);
     return true;
 }
 
 void VideoEventAction::saveOdf(KoShapeSavingContext &context) const
 {
+    Q_UNUSED(context);
 }
 
 void VideoEventAction::start()

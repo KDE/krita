@@ -40,9 +40,10 @@
 
 VideoShape::VideoShape()
     : KoFrameShape(KoXmlNS::draw, "plugin")
+    , m_videoEventAction(new VideoEventAction(this))
 {
     setKeepAspectRatio(true);
-    addEventAction(new VideoEventAction(this));
+    addEventAction(m_videoEventAction);
 }
 
 VideoShape::~VideoShape()
@@ -82,7 +83,7 @@ void VideoShape::saveOdf(KoShapeSavingContext &context) const
     //qDebug() << "combined " << relHRef;
     writer.addAttribute("xlink:type", "simple");
     writer.addAttribute("xlink:show", "embed");
-    writer.addAttribute("xlink:actuate", "onRequest");
+    writer.addAttribute("xlink:actuate", "onLoad");
     writer.addAttribute("xlink:href", name);
     writer.endElement(); // draw:plugin
     saveOdfCommonChildElements(context);
@@ -99,6 +100,12 @@ bool VideoShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
 
 bool VideoShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    /* the loading of the attributes might set the event actions which removes the m_videoEventAction
+     * when there are other eventactions for the shape. Therefore we need to add it again. It is no
+     * problem to add it again as internally a set is used and so it is not problematic when it is 
+     * already set. */
+    addEventAction(m_videoEventAction);
+
     if (m_videoCollection) {
         const QString href = element.attribute("href");
         // this can happen in case it is a presentation:placeholder
@@ -128,4 +135,9 @@ bool VideoShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoading
 VideoCollection *VideoShape::videoCollection() const
 {
     return m_videoCollection;
+}
+
+void VideoShape::setVideoCollection(VideoCollection *collection)
+{
+    m_videoCollection = collection;
 }

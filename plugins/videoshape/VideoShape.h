@@ -27,6 +27,7 @@
 #define VIDEOSHAPEID "VideoShape"
 
 class VideoCollection;
+class VideoEventAction;
 
 class VideoShape : public KoShape, public KoFrameShape
 {
@@ -48,13 +49,14 @@ public:
     /**
      * Set the collection used in the shape.
      */
-    void setVideoCollection(VideoCollection *collection) { m_videoCollection = collection; }
+    void setVideoCollection(VideoCollection *collection);
 
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
     VideoCollection *m_videoCollection;
+    VideoEventAction *m_videoEventAction;
 };
 
 #endif

@@ -49,6 +49,7 @@
 #include <kis_view2.h>
 #include <canvas/kis_canvas2.h>
 #include <widgets/kis_cmb_composite.h>
+#include <widgets/kis_slider_spin_box.h>
 #include <kis_cursor.h>
 #include <recorder/kis_recorded_fill_paint_action.h>
 #include <recorder/kis_node_query_path.h>
@@ -210,10 +211,10 @@ QWidget* KisToolFill::createOptionWidget()
     QWidget *widget = KisToolPaint::createOptionWidget();
     widget->setObjectName(toolId() + " option widget");
     m_lbThreshold = new QLabel(i18n("Threshold: "), widget);
-    m_slThreshold = new KIntNumInput(widget);
+    m_slThreshold = new KisSliderSpinBox(widget);
     m_slThreshold->setObjectName("int_widget");
-    m_slThreshold->setRange(1, 100);
-    m_slThreshold->setSteps(3, 3);
+    m_slThreshold->setRange(1, 100, 0);
+    m_slThreshold->setPageStep(3);
     m_slThreshold->setValue(m_threshold);
     connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 

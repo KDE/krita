@@ -34,7 +34,7 @@ class KisFillPainter;
 class QWidget;
 class QLabel;
 class QCheckBox;
-class KIntNumInput;
+class KisSliderSpinBox;
 //class KActionCollection;
 
 class KoCanvasBase;
@@ -73,7 +73,7 @@ private:
     KisSelectionSP m_selection;
 
     QLabel *m_lbThreshold;
-    KIntNumInput *m_slThreshold;
+    KisSliderSpinBox *m_slThreshold;
     QCheckBox *m_checkUsePattern;
     QCheckBox *m_checkSampleMerged;
     QCheckBox *m_checkFillSelection;

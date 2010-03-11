@@ -87,7 +87,11 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
 
     QString key(generate_key(imageData->key(), pixmapSize));
     QPixmap pixmap;
+#if QT_VERSION  >= 0x040600
     if (!QPixmapCache::find(key, &pixmap)) { // first check cache.
+#else
+    if (!QPixmapCache::find(key, pixmap)) { // first check cache.
+#endif
         // no? Does the imageData have it then?
         if (!(imageData->hasCachedPixmap() && imageData->pixmap().size() == pixmapSize)) {
             // ok, not what we want.
@@ -122,7 +126,11 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
         return;
     }
 
+#if QT_VERSION  >= 0x040600
     if (!QPixmapCache::find(key, &pixmap)) {
+#else
+    if (!QPixmapCache::find(key, pixmap)) {
+#endif
         m_renderQueue->addSize(pixmapSize);
         QTimer::singleShot(0, m_renderQueue, SLOT(renderImage()));
         if (!imageData->hasCachedPixmap()

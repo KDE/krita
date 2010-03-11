@@ -29,10 +29,10 @@ class QTimer;
 class QCheckBox;
 class QComboBox;
 class QGridLayout;
-class QSlider;
 
 class KoCanvasBase;
 class KoSliderCombo;
+class KisSliderSpinBox;
 
 class KisToolBrush : public KisToolFreehand
 {
@@ -62,13 +62,13 @@ private slots:
 private:
 
     qint32 m_rate;
-    QTimer * m_timer;
-    QGridLayout* m_optionLayout;
-    QCheckBox * m_chkSmooth;
-    QCheckBox * m_chkAssistant;
-    QSlider * m_sliderMagnetism;
-    QSlider * m_sliderSmoothness;
-    KoSliderCombo * m_sliderRate;
+    QTimer *m_timer;
+    QGridLayout *m_optionLayout;
+    QCheckBox *m_chkSmooth;
+    QCheckBox *m_chkAssistant;
+    KisSliderSpinBox *m_sliderMagnetism;
+    KisSliderSpinBox *m_sliderSmoothness;
+    KoSliderCombo *m_sliderRate;
 };
 
 

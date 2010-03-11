@@ -29,7 +29,6 @@
 #include <QRect>
 #include <QCheckBox>
 #include <QGridLayout>
-#include <QSlider>
 #include <QComboBox>
 #include <QSizePolicy>
 
@@ -45,7 +44,7 @@
 #include "kis_paintop_registry.h"
 #include "kis_cursor.h"
 #include "kis_painter.h"
-
+#include "kis_slider_spin_box.h"
 #include "kis_paint_device.h"
 #include "kis_layer.h"
 
@@ -153,10 +152,10 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderRate->setToolTip(QString::number(m_rate) + ' ' + i18n("ms"));
 
 
-    m_sliderSmoothness = new QSlider(Qt::Horizontal, optionWidget);
-    m_sliderSmoothness->setMinimum(0);
-    m_sliderSmoothness->setMaximum(MAXIMUM_SMOOTHNESS);
-    m_sliderSmoothness->setEnabled(false);
+    m_sliderSmoothness = new KisSliderSpinBox(optionWidget);
+    m_sliderSmoothness->setRange(0, MAXIMUM_SMOOTHNESS, 0);
+    m_sliderSmoothness->setExponentRatio(3.0);
+    m_sliderSmoothness->setEnabled(true);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), m_sliderSmoothness, SLOT(setEnabled(bool)));
     connect(m_sliderSmoothness, SIGNAL(valueChanged(int)), SLOT(slotSetSmoothness(int)));
     m_sliderSmoothness->setValue(m_smoothness * MAXIMUM_SMOOTHNESS);
@@ -166,9 +165,10 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
     QLabel* labelMagnetism = new QLabel(i18n("Magnetism:"), optionWidget);
     connect(m_chkAssistant, SIGNAL(toggled(bool)), labelMagnetism, SLOT(setEnabled(bool)));
-    m_sliderMagnetism = new QSlider(Qt::Horizontal, optionWidget);
+    m_sliderMagnetism = new KisSliderSpinBox(optionWidget);
     m_sliderMagnetism->setMinimum(0);
-    m_sliderMagnetism->setMaximum(MAXIMUM_SMOOTHNESS);
+    m_sliderMagnetism->setRange(0, MAXIMUM_SMOOTHNESS, 0);
+    m_sliderMagnetism->setExponentRatio(3.0);
     m_sliderMagnetism->setEnabled(false);
     connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setEnabled(bool)));
     m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);

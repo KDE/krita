@@ -83,11 +83,11 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     QMap<KoShapeLayer*, int> usedLayers;
     forEachElement(child, element) {
         KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
-        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape->parent());
-        if (layer) {
-            usedLayers[layer]++;
-        }
         if (shape) {
+            KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape->parent());
+            if (layer) {
+                usedLayers[layer]++;
+            }
             addChild(shape);
         }
     }

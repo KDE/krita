@@ -45,8 +45,9 @@ QString generate_key(qint64 key, const QSize & size)
 void RenderQueue::renderImage()
 {
     KoImageData *imageData = qobject_cast<KoImageData*>(m_pictureShape->userData());
-    if (m_wantedImageSize.isEmpty() || imageData == 0)
+    if (m_wantedImageSize.isEmpty() || imageData == 0) {
         return;
+    }
     QSize size = m_wantedImageSize.takeFirst();
     QString key(generate_key(imageData->key(), size));
     if (QPixmapCache::find(key) == 0) {
@@ -54,8 +55,9 @@ void RenderQueue::renderImage()
         QPixmapCache::insert(key, pixmap);
         m_pictureShape->update();
     }
-    if (! m_wantedImageSize.isEmpty())
+    if (! m_wantedImageSize.isEmpty()) {
         QTimer::singleShot(0, this, SLOT(renderImage()));
+    }
 }
 
 //////////////
@@ -136,17 +138,20 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
 void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
 {
     KoImageData *imageData = qobject_cast<KoImageData*>(userData());
-    if (imageData == 0)
+    if (imageData == 0) {
         return;
+    }
 
     if (asynchronous) {
         // get pixmap and schedule it if not
         QSize pixels = converter.documentToView(QRectF(QPointF(0,0), size())).size().toSize();
         QImage image = imageData->image();
-        if (image.isNull())
+        if (image.isNull()) {
             return;
-        if (image.size().width() < pixels.width()) // don't scale up.
+        }
+        if (image.size().width() < pixels.width()) { // don't scale up.
             pixels = image.size();
+        }
         m_printQualityImage = image.scaled(pixels, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
     else {
@@ -163,8 +168,9 @@ void PictureShape::saveOdf(KoShapeSavingContext &context) const
 {
     // make sure we have a valid image data pointer before saving
     KoImageData *imageData = qobject_cast<KoImageData*>(userData());
-    if (imageData == 0)
+    if (imageData == 0) {
         return;
+    }
 
     KoXmlWriter &writer = context.xmlWriter();
 

@@ -584,7 +584,7 @@ void KisConfig::setMaxCachedImageSize(quint32 size)
 
 bool KisConfig::showFilterGallery()
 {
-    return m_cfg.readEntry("showFilterGallery", true);
+    return m_cfg.readEntry("showFilterGallery", false);
 }
 
 void KisConfig::setShowFilterGallery(bool showFilterGallery)

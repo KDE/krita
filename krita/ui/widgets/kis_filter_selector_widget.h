@@ -40,7 +40,8 @@ public:
     void setPaintDevice(KisPaintDeviceSP);
     void setImage(KisImageWSP);
     KisFilterConfiguration* configuration();
-    void showSelector(bool visible);
+    void showFilterGallery(bool visible);
+    bool isFilterGalleryVisible() const;
 protected slots:
     void slotBookmarkedFilterConfigurationSelected(int);
     void setFilterIndex(const QModelIndex&);

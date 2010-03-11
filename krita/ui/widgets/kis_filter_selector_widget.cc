@@ -49,6 +49,7 @@ struct KisFilterSelectorWidget::Private {
     KisBookmarkedFilterConfigurationsModel* currentBookmarkedFilterConfigurationsModel;
     KisFiltersModel* filtersModel;
     QGridLayout *widgetLayout;
+    bool visibleSelector;
 };
 
 KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Private)
@@ -76,13 +77,12 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
 
     d->widgetLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum), 1, 0, 0, 2);
     d->widgetLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 1, 2, 1);
+    
+    d->visibleSelector = true;
 }
 
 KisFilterSelectorWidget::~KisFilterSelectorWidget()
 {
-    KisConfig cfg;
-    QList<int> sizes = d->uiFilterSelector.splitter->sizes();
-    cfg.setShowFilterGallery(sizes[0] > 0);
     delete d->filtersModel;
     delete d->currentBookmarkedFilterConfigurationsModel;
     delete d->currentCentralWidget;
@@ -106,15 +106,22 @@ void KisFilterSelectorWidget::setImage(KisImageWSP _image)
     d->image = _image;
 }
 
-void KisFilterSelectorWidget::showSelector(bool visible)
+void KisFilterSelectorWidget::showFilterGallery(bool visible)
 {
     QList<int> sizes;
+    int currentCentralWidgetWidth = d->currentCentralWidget ? d->currentCentralWidget->width() : 0;
     if (visible) {
-        sizes << 200;
+        sizes << d->uiFilterSelector.filtersSelector->sizeHint().width() << currentCentralWidgetWidth;
     } else {
-        sizes << 0;
+        sizes << 0 << currentCentralWidgetWidth;
     }
     d->uiFilterSelector.splitter->setSizes(sizes);
+    d->visibleSelector = visible;
+}
+
+bool KisFilterSelectorWidget::isFilterGalleryVisible() const
+{
+    return d->uiFilterSelector.splitter->sizes()[0] > 0;
 }
 
 void KisFilterSelectorWidget::setFilter(KisFilterSP f)
@@ -156,17 +163,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     d->currentCentralWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     d->widgetLayout->addWidget(d->currentCentralWidget, 0 , 0);
 
-    KisConfig cfg;
-    QList<int> sizes;
-    if (cfg.showFilterGallery()) {
-
-        sizes << d->uiFilterSelector.filtersSelector->sizeHint().width()
-        << d->currentCentralWidget->sizeHint().width();
-    } else {
-        sizes << 0 << d->currentCentralWidget->sizeHint().width();
-    }
-    d->uiFilterSelector.splitter->setSizes(sizes);
-
+    showFilterGallery(d->visibleSelector);
 }
 
 void KisFilterSelectorWidget::setFilterIndex(const QModelIndex& idx)

@@ -35,6 +35,7 @@
 #include "commands/kis_image_layer_add_command.h"
 #include "kis_undo_adapter.h"
 #include "ui_wdgfilterdialog.h"
+#include <kis_config.h>
 
 struct KisFilterDialog::Private {
     Private()
@@ -60,6 +61,7 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP im
     d->node = node;
     d->image = image;
     d->mask = new KisFilterMask();
+    d->uiFilterDialog.filterSelection->showFilterGallery(KisConfig().showFilterGallery());
 
     KisPixelSelectionSP psel = d->mask->selection()->getOrCreatePixelSelection();
     if (selection) {
@@ -137,6 +139,7 @@ void KisFilterDialog::close()
         qobject_cast<KisLayer*>(d->node.data())->removePreviewMask();
     }
     d->node->setDirty(d->node->extent());
+    KisConfig().setShowFilterGallery(d->uiFilterDialog.filterSelection->isFilterGalleryVisible());
 }
 
 void KisFilterDialog::createMask()

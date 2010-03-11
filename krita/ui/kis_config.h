@@ -216,7 +216,6 @@ public:
     bool paintopPopupDetached() const;
     void setPaintopPopupDetached(bool detached);
 
-
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

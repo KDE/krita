@@ -124,8 +124,10 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
         m_renderQueue->addSize(pixmapSize);
         QTimer::singleShot(0, m_renderQueue, SLOT(renderImage()));
         if (!imageData->hasCachedPixmap()
-                || imageData->pixmap().size().width() > pixmapSize.width()) // don't scale down
+            || imageData->pixmap().size().width() > pixmapSize.width()) { // don't scale down
+            update(pixelsF); // schedule another update, by then the renderqueue might have rendered the pixmap
             return;
+        }
         pixmap = imageData->pixmap();
     }
     painter.drawPixmap(pixels, pixmap, QRect(0, 0, pixmap.width(), pixmap.height()));

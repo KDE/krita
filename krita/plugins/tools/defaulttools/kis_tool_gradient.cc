@@ -398,10 +398,9 @@ QWidget* KisToolGradient::createOptionWidget()
 
     m_lbAntiAliasThreshold = new QLabel(i18n("Anti-alias threshold:"), widget);
 
-    m_slAntiAliasThreshold = new KDoubleNumInput(widget);
+    m_slAntiAliasThreshold = new KisSliderSpinBox(widget);
     m_slAntiAliasThreshold->setObjectName("threshold_slider");
-    m_slAntiAliasThreshold->setMinimum(0);
-    m_slAntiAliasThreshold->setMaximum(1);
+    m_slAntiAliasThreshold->setRange(0, 1, 3);
     m_slAntiAliasThreshold->setValue(m_antiAliasThreshold);
     connect(m_slAntiAliasThreshold, SIGNAL(valueChanged(double)), this, SLOT(slotSetAntiAliasThreshold(double)));
 

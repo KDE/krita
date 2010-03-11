@@ -106,7 +106,7 @@ private:
     KComboBox *m_cmbShape;
     KComboBox *m_cmbRepeat;
     QLabel *m_lbAntiAliasThreshold;
-    KDoubleNumInput *m_slAntiAliasThreshold;
+    KisSliderSpinBox *m_slAntiAliasThreshold;
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
     KisOpenGLGradientProgram *m_gradientProgram;

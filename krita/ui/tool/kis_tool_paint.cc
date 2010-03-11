@@ -173,11 +173,11 @@ QWidget * KisToolPaint::createOptionWidget()
     verticalLayout->addLayout(m_optionWidgetLayout);
     m_optionWidgetLayout->setSpacing(6);
 
-    m_optionWidgetLayout->addWidget(m_lbOpacity, 0, 0);
-    m_optionWidgetLayout->addWidget(m_slOpacity, 0, 1);
+    m_optionWidgetLayout->addWidget(m_lbComposite, 0, 0);
+    m_optionWidgetLayout->addWidget(m_cmbComposite, 0, 1);
 
-    m_optionWidgetLayout->addWidget(m_lbComposite, 1, 0);
-    m_optionWidgetLayout->addWidget(m_cmbComposite, 1, 1);
+    m_optionWidgetLayout->addWidget(m_lbOpacity, 1, 0);
+    m_optionWidgetLayout->addWidget(m_slOpacity, 1, 1);
 
     verticalLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
 

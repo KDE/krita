@@ -526,7 +526,6 @@ void KisPainter::bltFixed(qint32 dx, qint32 dy,
                             d->compositeOp,
                             d->channelFlags);
 
-    delete[] selBytes;
 
     d->device->writeBytes(dstBytes, dx, dy, sw, sh);
 

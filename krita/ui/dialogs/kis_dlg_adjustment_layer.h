@@ -62,7 +62,7 @@ public:
                           const QString & caption,
                           QWidget *parent = 0,
                           const char *name = 0);
-
+    ~KisDlgAdjustmentLayer();
     KisFilterConfiguration * filterConfiguration() const;
     QString layerName() const;
 

@@ -36,6 +36,7 @@
 #include "kis_image.h"
 #include "kis_node.h"
 #include "kis_node_filter_interface.h"
+#include <kis_config.h>
 
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
         KisNodeFilterInterface* nfi,
@@ -63,6 +64,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     QWidget * page = new QWidget(this);
     wdgFilterNodeCreation.setupUi(page);
     setMainWidget(page);
+    wdgFilterNodeCreation.filterSelector->showFilterGallery(KisConfig().showFilterGalleryLayerMaskDialog());
 
     connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(kickTimer()));
     connect(m_timer, SIGNAL(timeout()), SLOT(slotConfigChanged()));
@@ -70,6 +72,11 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     wdgFilterNodeCreation.filterSelector->setImage(image);
     wdgFilterNodeCreation.layerName->setText(layerName);
     enableButtonOk(0);
+}
+
+KisDlgAdjustmentLayer::~KisDlgAdjustmentLayer()
+{
+    KisConfig().setShowFilterGalleryLayerMaskDialog(wdgFilterNodeCreation.filterSelector->isFilterGalleryVisible());
 }
 
 void KisDlgAdjustmentLayer::slotNameChanged(const QString & text)

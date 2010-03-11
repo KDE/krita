@@ -592,6 +592,16 @@ void KisConfig::setShowFilterGallery(bool showFilterGallery)
     m_cfg.writeEntry("showFilterGallery", showFilterGallery);
 }
 
+bool KisConfig::showFilterGalleryLayerMaskDialog()
+{
+    return m_cfg.readEntry("showFilterGalleryLayerMaskDialog", true);
+}
+
+void KisConfig::setShowFilterGalleryLayerMaskDialog(bool showFilterGallery)
+{
+    m_cfg.writeEntry("setShowFilterGalleryLayerMaskDialog", showFilterGallery);
+}
+
 QString KisConfig::defaultPainterlyColorModelId()
 {
     return m_cfg.readEntry("defaultpainterlycolormodel", "KS6");

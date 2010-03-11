@@ -203,6 +203,9 @@ public:
     bool showFilterGallery();
     void setShowFilterGallery(bool showFilterGallery);
 
+    bool showFilterGalleryLayerMaskDialog();
+    void setShowFilterGalleryLayerMaskDialog(bool showFilterGallery);
+    
     QString defaultPainterlyColorModelId();
     void setDefaultPainterlyColorModelId(const QString& def);
 

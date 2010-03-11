@@ -20,14 +20,11 @@
 #include "kis_soft_paintop_settings.h"
 
 #include <cmath>
-#include <math.h>
 
 #include <QRect>
 
-
 #include <kis_image.h>
 #include <kis_debug.h>
-
 #include <kis_brush.h>
 #include <kis_global.h>
 #include <kis_paint_device.h>
@@ -183,7 +180,7 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
             pt.setY(pt.y() + (  ( m_sizeProperties.diameter * drand48() ) - m_radius) * m_sizeProperties.jitterMovementAmount);
         }
 
-        qreal scale = m_sizeProperties.scale + KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+        qreal scale = m_sizeProperties.scale * KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
         qreal rotation = m_sizeProperties.rotation + m_rotationOption.apply(info);
         
         QPointF pos = pt - m_curveMask.hotSpot(scale, rotation);

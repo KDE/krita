@@ -136,12 +136,6 @@ QWidget * KisToolBrush::createOptionWidget()
 
     QWidget * optionWidget = KisToolFreehand::createOptionWidget();
     optionWidget->setObjectName(toolId() + "option widget");
-//    optionWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smoothness"), optionWidget);
-    m_chkSmooth->setObjectName("chkSmooth");
-    m_chkSmooth->setChecked(m_smooth);
-    connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
 
     QLabel* labelRate = new QLabel(i18n("Rate:"), optionWidget);
     m_sliderRate = new KisSliderSpinBox (optionWidget);
@@ -150,6 +144,11 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_sliderRate, SIGNAL(valueChanged(qreal, bool)), SLOT(slotSetRate(qreal)));
     m_sliderRate->setValue(m_rate);
     m_sliderRate->setToolTip(QString::number(m_rate) + ' ' + i18n("ms"));
+
+    m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smoothness:"), optionWidget);
+    m_chkSmooth->setObjectName("chkSmooth");
+    m_chkSmooth->setChecked(m_smooth);
+    connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
 
 
     m_sliderSmoothness = new KisSliderSpinBox(optionWidget);
@@ -161,11 +160,10 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderSmoothness->setValue(m_smoothness * MAXIMUM_SMOOTHNESS);
 
     // Drawing assistant configuration
-    m_chkAssistant = new QCheckBox(i18n("Use Assistant"), optionWidget);
+    m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionWidget);
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
-    QLabel* labelMagnetism = new QLabel(i18n("Magnetism:"), optionWidget);
-    connect(m_chkAssistant, SIGNAL(toggled(bool)), labelMagnetism, SLOT(setEnabled(bool)));
     m_sliderMagnetism = new KisSliderSpinBox(optionWidget);
+    m_sliderMagnetism->setToolTip(i18n("Assistant Magnetism"));
     m_sliderMagnetism->setMinimum(0);
     m_sliderMagnetism->setRange(0, MAXIMUM_SMOOTHNESS, 0);
     m_sliderMagnetism->setExponentRatio(3.0);
@@ -186,8 +184,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_optionLayout->addWidget(m_chkSmooth, 2, 0);
     m_optionLayout->addWidget(m_sliderSmoothness, 2, 1, 1, 2);
     m_optionLayout->addWidget(m_chkAssistant, 4, 0);
-    m_optionLayout->addWidget(labelMagnetism, 5, 0);
-    m_optionLayout->addWidget(m_sliderMagnetism, 5, 1, 1, 2);
+    m_optionLayout->addWidget(m_sliderMagnetism, 4, 1, 1, 2);
 
     optionWidget->setFixedHeight(optionWidget->sizeHint().height());
 

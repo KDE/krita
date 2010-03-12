@@ -153,16 +153,18 @@ QWidget * KisToolPaint::createOptionWidget()
     QWidget * optionWidget = new QWidget();
     optionWidget->setObjectName(toolId());
 
+    m_lbComposite = new QLabel(i18n("Mode: "), optionWidget);
+    m_lbComposite->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
+    m_cmbComposite = new KisCmbComposite(optionWidget);
+    updateCompositeOpComboBox();
+    connect(m_cmbComposite, SIGNAL(activated(const QString&)), this, SLOT(slotSetCompositeMode(const QString&)));
+
     m_lbOpacity = new QLabel(i18n("Opacity: "), optionWidget);
+    m_lbOpacity->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     m_slOpacity = new KisSliderSpinBox(optionWidget);
     m_slOpacity->setRange(0, 100, 0);
     m_slOpacity->setValue(m_opacity / OPACITY_OPAQUE_U8 * 100);
     connect(m_slOpacity, SIGNAL(doubleValueChanged(qreal)), this, SLOT(slotSetOpacity(qreal)));
-
-    m_lbComposite = new QLabel(i18n("Mode: "), optionWidget);
-    m_cmbComposite = new KisCmbComposite(optionWidget);
-    updateCompositeOpComboBox();
-    connect(m_cmbComposite, SIGNAL(activated(const QString&)), this, SLOT(slotSetCompositeMode(const QString&)));
 
     QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setObjectName("KisToolPaint::OptionWidget::VerticalLayout");
@@ -207,10 +209,14 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 {
     Q_ASSERT(m_optionWidgetLayout != 0);
     if (label) {
+        if (QLabel *lbl = qobject_cast<QLabel*>(label)) {
+            lbl->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
+        }
         m_optionWidgetLayout->addWidget(label, m_optionWidgetLayout->rowCount(), 0);
         m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount() - 1, 1);
-    } else
+    } else {
         m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount(), 0, 1, 2);
+    }
 }
 
 

@@ -31,7 +31,6 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
-#include <knuminput.h>
 #include <kcolorbutton.h>
 
 #include "KoPointerEvent.h"
@@ -48,6 +47,7 @@
 #include "kis_fill_painter.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
+#include "kis_slider_spin_box.h"
 
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
         : KisToolSelectBase(canvas, KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6))
@@ -126,10 +126,11 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
         hbox->addWidget(lbl);
 
-        KIntNumInput * input = new KIntNumInput(m_optWidget);
+        KisSliderSpinBox *input = new KisSliderSpinBox(m_optWidget);
         Q_CHECK_PTR(input);
         input->setObjectName("fuzziness");
-        input->setRange(0, 200, 10);
+        input->setRange(0, 200, 0);
+        input->setSingleStep(10);
         input->setValue(20);
         hbox->addWidget(input);
         connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));

@@ -45,9 +45,10 @@
 #include <kis_paint_device.h>
 #include <kis_iterators_pixel.h>
 #include <kis_selected_transaction.h>
-#include <canvas/kis_canvas2.h>
+#include "canvas/kis_canvas2.h"
 #include <kis_pixel_selection.h>
 #include "kis_selection_tool_helper.h"
+#include "kis_slider_spin_box.h"
 
 void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 * c, int fuzziness)
 {
@@ -151,9 +152,10 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
     fl->addWidget(lbl);
 
-    KIntNumInput * input = new KIntNumInput(m_optWidget);
+    KisSliderSpinBox* input = new KisSliderSpinBox(m_optWidget);
     input->setObjectName("fuzziness");
-    input->setRange(0, 200, 10);
+    input->setRange(0, 200, 0);
+    input->setPageStep(10);
     input->setValue(m_fuzziness);
     fl->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));

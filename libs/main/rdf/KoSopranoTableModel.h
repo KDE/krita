@@ -35,8 +35,7 @@ class KoDocumentRdf;
  * the triple itself but also the object type, data type,
  * and storage location of the triple.
  */
-class KoSopranoTableModel
-        : public QAbstractTableModel
+class KoSopranoTableModel : public QAbstractTableModel
 {
     KoDocumentRdf *m_rdf;
     /**
@@ -62,15 +61,14 @@ public:
     Soprano::Model *model() const;
 
     enum {
-        // TODO CamelCase
-        COL_ISVALID = 0,  // Is this triple valid
-        COL_SUBJ,         // subject
-        COL_PRED,         // predicate
-        COL_OBJ,          // object
-        COL_OBJ_TYPE,     // string for type, eg, URI, Literal, Blank Node
-        COL_OBJ_XSDTYPE,  // XSD type URI for object
-        COL_CTX,          // Graph context for triple
-        COL_COUNT         // NOT A COLUMN but the size.
+        ColIsValid = 0,  // Is this triple valid
+        ColSubj,         // subject
+        ColPred,         // predicate
+        ColObj,          // object
+        ColObjType,      // string for type, eg, URI, Literal, Blank Node
+        ColObjXsdType,   // XSD type URI for object
+        ColCtx,          // Graph context for triple
+        ColCount         // NOT A COLUMN but the size.
     };
 
     /**
@@ -119,7 +117,7 @@ public:
     /**
      * Find the statement at the given row.
      */
-    Soprano::Statement statementAtIndex(const QModelIndex &mi);
+    Soprano::Statement statementAtIndex(const QModelIndex &mi) const;
 
     /**
      * The number of statements that have been partially or invalidly
@@ -127,14 +125,14 @@ public:
      *
      * @see invalidStatementList()
      */
-    int invalidStatementCount();
+    int invalidStatementCount() const;
 
     /**
      * All the statements in the UI which are not valid Soprano::Statements
      *
      * @see invalidStatementCount()
      */
-    QModelIndexList invalidStatementList();
+    QModelIndexList invalidStatementList() const;
 };
 
 #endif

@@ -92,26 +92,26 @@ if( Soprano_FOUND )
         rdf/KoDocumentRdfEditWidget.cpp
         rdf/KoSopranoTableModelDelegate.cpp
         rdf/KoSopranoTableModel.cpp
-        rdf/RdfPrefixMapping.cpp
-        rdf/SemanticStylesheet.cpp
-        rdf/RdfSemanticItem.cpp
-        rdf/RdfFoaF.cpp
-        rdf/RdfCalendarEvent.cpp
-        rdf/RdfLocationEditWidget.cpp
-        rdf/RdfLocation.cpp
-        rdf/RdfSemanticItemViewSite.cpp
-        rdf/RdfSemanticTree.cpp
-        rdf/RdfSemanticTreeWidgetItem.cpp
+        rdf/KoRdfPrefixMapping.cpp
+        rdf/KoSemanticStylesheet.cpp
+        rdf/KoRdfSemanticItem.cpp
+        rdf/KoRdfFoaF.cpp
+        rdf/KoRdfCalendarEvent.cpp
+        rdf/KoRdfLocationEditWidget.cpp
+        rdf/KoRdfLocation.cpp
+        rdf/KoRdfSemanticItemViewSite.cpp
+        rdf/KoRdfSemanticTree.cpp
+        rdf/KoRdfSemanticTreeWidgetItem.cpp
+        rdf/KoRdfFoaFTreeWidgetItem.cpp
+        rdf/KoRdfCalendarEventTreeWidgetItem.cpp
+        rdf/KoRdfLocationTreeWidgetItem.cpp
+        rdf/KoSemanticStylesheetsEditor.cpp
+        rdf/KoChangeTrackerDisabledRAII.cpp
         rdf/RdfSemanticTreeWidgetAction.cpp
         rdf/RdfSemanticTreeWidgetSelectAction.cpp
         rdf/InsertSemanticObjectActionBase.cpp
         rdf/InsertSemanticObjectCreateAction.cpp
         rdf/InsertSemanticObjectReferenceAction.cpp
-        rdf/RdfFoaFTreeWidgetItem.cpp
-        rdf/RdfCalendarEventTreeWidgetItem.cpp
-        rdf/RdfLocationTreeWidgetItem.cpp
-        rdf/SemanticStylesheetsEditor.cpp
-        rdf/KoChangeTrackerDisabledRAII.cpp
     )
 endif( Soprano_FOUND )
 
@@ -124,11 +124,11 @@ kde4_add_ui_files( komain_LIB_SRCS
 if( Soprano_FOUND )
     kde4_add_ui_files( komain_LIB_SRCS
        rdf/KoDocumentRdfEditWidget.ui
-       rdf/RdfFoaFEditWidget.ui
-       rdf/RdfCalendarEventEditWidget.ui
-       rdf/RdfLocationEditWidget.ui
-       rdf/RdfLocationViewWidget.ui
-       rdf/SemanticStylesheetsEditor.ui
+       rdf/KoRdfFoaFEditWidget.ui
+       rdf/KoRdfCalendarEventEditWidget.ui
+       rdf/KoRdfLocationEditWidget.ui
+       rdf/KoRdfLocationViewWidget.ui
+       rdf/KoSemanticStylesheetsEditor.ui
     )
 endif( Soprano_FOUND )
 
@@ -194,17 +194,17 @@ if( Soprano_FOUND )
         rdf/KoDocumentRdf.h
         rdf/KoSopranoTableModelDelegate.h
         rdf/KoSopranoTableModel.h
-        rdf/SemanticStylesheet.h
-        rdf/RdfSemanticItem.h
-        rdf/RdfSemanticItemViewSite.h
-        rdf/RdfSemanticTree.h
-        rdf/RdfSemanticTreeWidgetItem.h
+        rdf/KoSemanticStylesheet.h
+        rdf/KoRdfSemanticItem.h
+        rdf/KoRdfSemanticItemViewSite.h
+        rdf/KoRdfSemanticTree.h
+        rdf/KoRdfSemanticTreeWidgetItem.h
         rdf/RdfSemanticTreeWidgetAction.h
         rdf/RdfSemanticTreeWidgetSelectAction.h
         rdf/InsertSemanticObjectActionBase.h
         rdf/InsertSemanticObjectCreateAction.h
         rdf/InsertSemanticObjectReferenceAction.h
-        rdf/SemanticStylesheetsEditor.h
+        rdf/KoSemanticStylesheetsEditor.h
     DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 endif( Soprano_FOUND )
 

@@ -23,16 +23,16 @@
 class KoDocumentRdf;
 class KoDocumentRdfEditWidget;
 class KoTextInlineRdf;
-class RdfPrefixMapping;
-class RdfSemanticTreeWidgetItem;
-class RdfFoaFTreeWidgetItem;
+class KoRdfPrefixMapping;
+class KoRdfSemanticTreeWidgetItem;
+class KoRdfFoaFTreeWidgetItem;
 class KoTextEditor;
-class RdfSemanticItem;
-class SemanticStylesheet;
+class KoRdfSemanticItem;
+class KoSemanticStylesheet;
 
 namespace Ui
 {
-    class RdfLocationEditWidget;
+    class KoRdfLocationEditWidget;
 }
 namespace Marble
 {

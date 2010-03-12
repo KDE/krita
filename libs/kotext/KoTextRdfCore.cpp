@@ -21,7 +21,7 @@
 #include <kdebug.h>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
-
+#include <QtCore/QFile>
 using namespace Soprano;
 
 bool KoTextRdfCore::saveRdf(Soprano::Model *model, Soprano::StatementIterator triples, KoStore *store, KoXmlWriter *manifestWriter, const QString &fileName)
@@ -252,3 +252,27 @@ Soprano::Node KoTextRdfCore::getObject(Soprano::Model *model, Soprano::Node s, S
     return all.first().object();
 }
 
+QByteArray KoTextRdfCore::fileToByteArray(const QString &fileName)
+{
+    QFile t(fileName);
+    t.open(QIODevice::ReadOnly);
+    return t.readAll();
+}
+
+QString KoTextRdfCore::getProperty(Soprano::Model *m, Soprano::Node subj, Soprano::Node pred, const QString &defval)
+{
+    StatementIterator it = m->listStatements(subj, pred, Node());
+    QList<Statement> allStatements = it.allElements();
+    foreach (Soprano::Statement s, allStatements) {
+        return s.object().toString();
+    }
+    return defval;
+}
+
+QString KoTextRdfCore::optionalBindingAsString(Soprano::QueryResultIterator &it, const QString &bindingName, const QString &def)
+{
+    if (it.binding(bindingName).isValid()) {
+        return it.binding(bindingName).toString();
+    }
+    return def;
+}

@@ -285,7 +285,7 @@ void KoTextInlineRdf::setXmlId(const QString &id)
     d->id = id;
 }
 
-KoTextInlineRdf *KoTextInlineRdf::tryToGetInlineRdf(QTextFormat &tf)
+KoTextInlineRdf *KoTextInlineRdf::tryToGetInlineRdf(const QTextFormat &tf)
 {
     if (!tf.hasProperty(KoCharacterStyle::InlineRdf)) {
         return 0;

@@ -51,7 +51,7 @@ void InsertSemanticObjectCreateAction::activated()
     widget->setLayout(lay);
     lay->setMargin(0);
     kDebug(30015) << "klass:" << m_klass;
-    RdfSemanticItem *semItem = RdfSemanticItem::createSemanticItem(
+    KoRdfSemanticItem *semItem = KoRdfSemanticItem::createSemanticItem(
                                    m_rdf, m_rdf, m_klass);
     QWidget *w = semItem->createEditor(widget);
     lay->addWidget(w);

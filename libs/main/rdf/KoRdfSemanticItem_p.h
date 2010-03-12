@@ -17,28 +17,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KO_DOCUMENT_Rdf_PRIVATE_H
-#define KO_DOCUMENT_Rdf_PRIVATE_H
+#ifndef __rdf_KoRdfSemanticItem_p_h__
+#define __rdf_KoRdfSemanticItem_p_h__
 
-#include "rdf/KoDocumentRdf.h"
-
-class KoDocumentRdfPrivate
+class KoRdfSemanticItemPrivate
 {
 public:
-    Soprano::Model *m_model; ///< Main Model containing all Rdf for doc
-    typedef QList<KoTextInlineRdf*> m_inlineRdfObjects_t;
-    m_inlineRdfObjects_t m_inlineRdfObjects;  ///< Cache of weak pointers to inline Rdf
-    KoRdfPrefixMapping *m_prefixMapping;     ///< prefix -> URI mapping
+    KoDocumentRdf *m_rdf;    //< For access to the Rdf model during CRUD operations
+    Soprano::Node m_context; //< This determines the Rdf/XML file the Rdf is stored in (see context())
 
-    QList<KoRdfFoaF*> m_foafObjects;
-    QList<KoRdfCalendarEvent*> m_calObjects;
-    QList<KoRdfLocation*> m_locObjects;
-
-    QMap<QString,QList<KoSemanticStylesheet*> > m_userStylesheets;
-
-    KoDocumentRdfPrivate();
-    ~KoDocumentRdfPrivate();
+    KoRdfSemanticItemPrivate (KoDocumentRdf *rdf);
+    KoRdfSemanticItemPrivate (KoDocumentRdf *rdf,Soprano::QueryResultIterator &it);
 };
 
 #endif
-

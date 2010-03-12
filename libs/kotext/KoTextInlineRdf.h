@@ -87,7 +87,7 @@ public:
      * with a text block.
      */
     static KoTextInlineRdf *tryToGetInlineRdf(QTextCursor &cursor);
-    static KoTextInlineRdf *tryToGetInlineRdf(QTextFormat &tf);
+    static KoTextInlineRdf *tryToGetInlineRdf(const QTextFormat &tf);
     static KoTextInlineRdf *tryToGetInlineRdf(KoTextEditor *handler);
     /**
      * The attach() and tryToGetInlineRdf() are used by the ODF load and
@@ -142,8 +142,8 @@ private:
      */
     QString createXmlId(KoXmlWriter *writer = 0);
 
-    friend class RdfSemanticItem;
-    friend class RdfFoaF;
+    friend class KoRdfSemanticItem;
+    friend class KoRdfFoaF;
     friend class KoDocumentRdf;
 
     class Private;

@@ -36,7 +36,7 @@ InsertSemanticObjectActionBase::~InsertSemanticObjectActionBase()
 {
 }
 
-KoTextEditor *InsertSemanticObjectActionBase::editor()
+KoTextEditor *InsertSemanticObjectActionBase::editor() const
 {
     KoTextEditor *ret = qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
     return ret;

@@ -20,7 +20,7 @@
 #include "KoDocumentRdfEditWidget.h"
 #include <ui_KoDocumentRdfEditWidget.h>
 #include "KoDocumentRdf.h"
-#include "RdfPrefixMapping.h"
+#include "KoRdfPrefixMapping.h"
 #include "../KoDocument.h"
 #include "KoSopranoTableModelDelegate.h"
 #include "KoSopranoTableModel.h"
@@ -38,18 +38,17 @@
  * widget. This allows prefixes to be edited and updates the internal
  * data structures accordingly.
  */
-class RdfPrefixMappingTreeWidgetItem : public QTreeWidgetItem
+class KoRdfPrefixMappingTreeWidgetItem : public QTreeWidgetItem
 {
-    RdfPrefixMapping *m_mapping;
+    KoRdfPrefixMapping *m_mapping;
     QString m_key;
 public:
     enum {
-        // TODO CamelCase
-        COL_KEY = 0,
-        COL_VALUE = 1,
-        COL_SIZE
+        ColKey = 0,
+        ColValue = 1,
+        ColSize
     };
-    RdfPrefixMappingTreeWidgetItem(RdfPrefixMapping *mapping, QString key, int type = Type)
+    KoRdfPrefixMappingTreeWidgetItem(KoRdfPrefixMapping *mapping, QString key, int type = Type)
             : QTreeWidgetItem(type)
             , m_mapping(mapping)
             , m_key(key) {
@@ -58,12 +57,12 @@ public:
     virtual void setData(int column, int role, const QVariant &value) {
         m_mapping->dump();
         kDebug(30015) << "m_key:" << m_key << " value:" << value;
-        if (column == COL_KEY) {
+        if (column == ColKey) {
             QString url = m_mapping->prefexToURI(m_key);
             m_mapping->remove(m_key);
             m_key = value.toString();
             m_mapping->insert(m_key, url);
-        } else if (column == COL_VALUE) {
+        } else if (column == ColValue) {
             m_mapping->remove(m_key);
             m_mapping->insert(m_key, value.toString());
         }
@@ -73,9 +72,9 @@ public:
         if (role != Qt::DisplayRole && role != Qt::EditRole) {
             return QVariant();
         }
-        if (column == COL_KEY) {
+        if (column == ColKey) {
             return m_key;
-        } else if (column == COL_VALUE) {
+        } else if (column == ColValue) {
             QString url = m_mapping->prefexToURI(m_key);
             return url;
         }
@@ -95,7 +94,7 @@ public:
     KoSopranoTableModel *m_tripleModel;
     KoSopranoTableModel *m_sparqlResultModel;
     QSortFilterProxyModel *m_tripleProxyModel;
-    RdfSemanticTree m_semanticItemsTree;
+    KoRdfSemanticTree m_semanticItemsTree;
 
     KoDocumentRdfEditWidgetPrivate(KoDocumentRdf *m_rdf)
             : m_rdf(m_rdf) , m_tripleProxyModel(0) {
@@ -114,58 +113,58 @@ public:
         m_tripleProxyModel->setSourceModel(m_tripleModel);
         m_ui->m_tripleView->setModel(m_tripleProxyModel);
         m_ui->m_tripleView->setSelectionBehavior(QAbstractItemView::SelectRows);
-        m_ui->m_tripleView->hideColumn(KoSopranoTableModel::COL_ISVALID);
-        m_ui->m_tripleView->hideColumn(KoSopranoTableModel::COL_OBJ_XSDTYPE);
-        m_ui->m_tripleView->horizontalHeader()->setResizeMode(KoSopranoTableModel::COL_SUBJ, QHeaderView::Stretch);
-        m_ui->m_tripleView->horizontalHeader()->setResizeMode(KoSopranoTableModel::COL_PRED, QHeaderView::Stretch);
-        m_ui->m_tripleView->horizontalHeader()->setResizeMode(KoSopranoTableModel::COL_OBJ,  QHeaderView::Stretch);
-        m_ui->m_tripleView->horizontalHeader()->setResizeMode(KoSopranoTableModel::COL_CTX,  QHeaderView::Stretch);
+        m_ui->m_tripleView->hideColumn(KoSopranoTableModel::ColIsValid);
+        m_ui->m_tripleView->hideColumn(KoSopranoTableModel::ColObjXsdType);
+        m_ui->m_tripleView->horizontalHeader()->setResizeMode(KoSopranoTableModel::ColSubj, QHeaderView::Stretch);
+        m_ui->m_tripleView->horizontalHeader()->setResizeMode(KoSopranoTableModel::ColPred, QHeaderView::Stretch);
+        m_ui->m_tripleView->horizontalHeader()->setResizeMode(KoSopranoTableModel::ColObj,  QHeaderView::Stretch);
+        m_ui->m_tripleView->horizontalHeader()->setResizeMode(KoSopranoTableModel::ColCtx,  QHeaderView::Stretch);
         m_ui->m_tripleView->setItemDelegate(new KoSopranoTableModelDelegate(m_tripleProxyModel));
         // setup namespace page
         QTreeWidget *v = m_ui->m_namespaceView;
-        v->setColumnCount(RdfPrefixMappingTreeWidgetItem::COL_SIZE);
-        v->sortItems(RdfPrefixMappingTreeWidgetItem::COL_VALUE, Qt::DescendingOrder);
-        v->header()->setResizeMode(RdfPrefixMappingTreeWidgetItem::COL_KEY,
+        v->setColumnCount(KoRdfPrefixMappingTreeWidgetItem::ColSize);
+        v->sortItems(KoRdfPrefixMappingTreeWidgetItem::ColValue, Qt::DescendingOrder);
+        v->header()->setResizeMode(KoRdfPrefixMappingTreeWidgetItem::ColKey,
                                    QHeaderView::ResizeToContents);
-        RdfPrefixMapping *mapping = m_rdf->getPrefixMapping();
-        const QMap<QString,QString> &m = m_rdf->getPrefixMapping()->m_mappings;
+        KoRdfPrefixMapping *mapping = m_rdf->prefixMapping();
+        const QMap<QString,QString> &m = m_rdf->prefixMapping()->mappings();
         for (QMap<QString,QString>::const_iterator mi = m.begin(); mi != m.end(); ++mi) {
-            RdfPrefixMappingTreeWidgetItem *item =
-                new RdfPrefixMappingTreeWidgetItem(mapping, mi.key());
+            KoRdfPrefixMappingTreeWidgetItem *item =
+                new KoRdfPrefixMappingTreeWidgetItem(mapping, mi.key());
             v->addTopLevelItem(item);
         }
         // setup semantic page
         v = m_ui->m_semanticView;
-        m_semanticItemsTree = RdfSemanticTree::createTree(v);
+        m_semanticItemsTree = KoRdfSemanticTree::createTree(v);
         m_semanticItemsTree.update(m_rdf);
         // stylesheets page
         buildComboBox(m_ui->m_defaultContactsSheet,
-                      RdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Contact"));
+                      KoRdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Contact"));
         buildComboBox(m_ui->m_defaultEventsSheet,
-                      RdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Event"));
+                      KoRdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Event"));
         buildComboBox(m_ui->m_defaultLocationsSheet,
-                      RdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Location"));
+                      KoRdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Location"));
         kDebug(30015) << "format(), setting up ss page.";
-        QList<RdfFoaF*> foaf = m_rdf->foaf();
+        QList<KoRdfFoaF*> foaf = m_rdf->foaf();
         kDebug(30015) << "format(), setting up ss page, foaf.sz:" << foaf.size();
     }
 
-    void buildComboBox(QComboBox *w, RdfSemanticItem *si) {
+    void buildComboBox(QComboBox *w, KoRdfSemanticItem *si) {
         if (!si) {
             return;
         }
-        SemanticStylesheet *activeSheet = si->defaultStylesheet();
+        KoSemanticStylesheet *activeSheet = si->defaultStylesheet();
         int activeSheetIndex = 0;
         kDebug(30015) << "format(), activeSheet:" << activeSheet->name();
 
-        foreach (SemanticStylesheet *ss, si->stylesheets()) {
+        foreach (KoSemanticStylesheet *ss, si->stylesheets()) {
             QVariant ud = QVariant::fromValue(ss);
             w->addItem(ss->name(), ud);
             if (activeSheet->name() == ss->name()) {
                 activeSheetIndex = w->count() - 1;
             }
         }
-        foreach (SemanticStylesheet *ss, si->userStylesheets()) {
+        foreach (KoSemanticStylesheet *ss, si->userStylesheets()) {
             QVariant ud = QVariant::fromValue(ss);
             w->addItem(ss->name(), ud);
             if (activeSheet->name() == ss->name()) {
@@ -246,8 +245,8 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget(QWidget *parent, KoDocumentRdf 
     connect(d->m_ui->m_defaultEventsSheetButton, SIGNAL(clicked()), this, SLOT(defaultEventsSheetButton()));
     connect(d->m_ui->m_defaultLocationsSheetButton, SIGNAL(clicked()), this, SLOT(defaultLocationsSheetButton()));
     connect(d->m_ui->m_setAllStylesheetsButton, SIGNAL(clicked()), this, SLOT(defaultAllSheetButton()));
-    connect(docRdf, SIGNAL(semanticObjectUpdated(RdfSemanticItem*)),
-            this, SLOT(semanticObjectUpdated(RdfSemanticItem*)));
+    connect(docRdf, SIGNAL(semanticObjectUpdated(KoRdfSemanticItem*)),
+            this, SLOT(semanticObjectUpdated(KoRdfSemanticItem*)));
 }
 
 KoDocumentRdfEditWidget::~KoDocumentRdfEditWidget()
@@ -300,21 +299,21 @@ bool KoDocumentRdfEditWidget::shouldDialogCloseBeVetoed()
 void KoDocumentRdfEditWidget::apply()
 {
     KoDocumentRdf *rdf = d->m_rdf;
-    if (RdfSemanticItem *si = RdfSemanticItem::createSemanticItem(0, rdf, "Contact")) {
+    if (KoRdfSemanticItem *si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Contact")) {
         si->defaultStylesheet(stylesheetFromComboBox(d->m_ui->m_defaultContactsSheet));
         delete si;
     }
-    if (RdfSemanticItem *si = RdfSemanticItem::createSemanticItem(0, rdf, "Event")) {
+    if (KoRdfSemanticItem *si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Event")) {
         si->defaultStylesheet(stylesheetFromComboBox(d->m_ui->m_defaultEventsSheet));
         delete si;
     }
-    if (RdfSemanticItem *si = RdfSemanticItem::createSemanticItem(0, rdf, "Location")) {
+    if (KoRdfSemanticItem *si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Location")) {
         si->defaultStylesheet(stylesheetFromComboBox(d->m_ui->m_defaultLocationsSheet));
         delete si;
     }
 }
 
-void KoDocumentRdfEditWidget::semanticObjectUpdated(RdfSemanticItem *item)
+void KoDocumentRdfEditWidget::semanticObjectUpdated(KoRdfSemanticItem *item)
 {
     Q_UNUSED(item);
     kDebug(30015) << "updating the sem item list view";
@@ -326,7 +325,7 @@ void KoDocumentRdfEditWidget::showSemanticViewContextMenu(const QPoint &position
     QPointer<KMenu> menu = new KMenu(0);
     QList<KAction*> actions;
     if (QTreeWidgetItem *baseitem = d->m_ui->m_semanticView->itemAt(position)) {
-        if (RdfSemanticTreeWidgetItem *item = dynamic_cast<RdfSemanticTreeWidgetItem*>(baseitem)) {
+        if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(baseitem)) {
             actions = item->actions(menu);
         }
     }
@@ -380,16 +379,15 @@ void KoDocumentRdfEditWidget::deleteTriples()
 
 void KoDocumentRdfEditWidget::addNamespace()
 {
-    static int uniqID = 1;
     KoDocumentRdf *m_rdf = d->m_rdf;
     QTreeWidget *v = d->m_ui->m_namespaceView;
-    QString key = QString("newnamespace%1").arg(uniqID++);
+    QString key = QString("newnamespace%1").arg(QDateTime::currentDateTime().toTime_t());
     QString value = "http://www.example.com/fixme#";
-    RdfPrefixMapping *mapping = m_rdf->getPrefixMapping();
+    KoRdfPrefixMapping *mapping = m_rdf->prefixMapping();
     mapping->insert(key, value);
     kDebug(30015) << "adding key:" << key << " value:" << value;
-    RdfPrefixMappingTreeWidgetItem* item =
-        new RdfPrefixMappingTreeWidgetItem(mapping, key);
+    KoRdfPrefixMappingTreeWidgetItem* item =
+        new KoRdfPrefixMappingTreeWidgetItem(mapping, key);
     v->addTopLevelItem(item);
     v->setCurrentItem(item);
     v->editItem(item);
@@ -401,8 +399,8 @@ void KoDocumentRdfEditWidget::deleteNamespace()
     QList<QTreeWidgetItem *> sel = v->selectedItems();
     kDebug(30015) << "selection.sz:" << sel.size();
     foreach (QTreeWidgetItem *item, sel) {
-        if (RdfPrefixMappingTreeWidgetItem *ritem
-                = dynamic_cast<RdfPrefixMappingTreeWidgetItem *>(item)) {
+        if (KoRdfPrefixMappingTreeWidgetItem *ritem
+                = dynamic_cast<KoRdfPrefixMappingTreeWidgetItem *>(item)) {
             ritem->removeFromMapping();
         }
         v->invisibleRootItem()->removeChild(item);
@@ -443,11 +441,11 @@ void KoDocumentRdfEditWidget::sparqlExecute()
     tableWidget->setSortingEnabled(true);
 }
 
-SemanticStylesheet *KoDocumentRdfEditWidget::stylesheetFromComboBox(QComboBox *w)
+KoSemanticStylesheet *KoDocumentRdfEditWidget::stylesheetFromComboBox(QComboBox *w) const
 {
     QAbstractItemModel *m = w->model();
     QVariant ud = m->data(m->index(w->currentIndex(), 0), Qt::UserRole);
-    SemanticStylesheet *ss = ud.value<SemanticStylesheet*>();
+    KoSemanticStylesheet *ss = ud.value<KoSemanticStylesheet*>();
     return ss;
 }
 
@@ -462,14 +460,14 @@ void KoDocumentRdfEditWidget::defaultContactsSheetButton()
     rdf->ensureTextTool();
     QString stylesheetName = d->m_ui->m_defaultContactsSheet->currentText();
     kDebug(30015) << "changing contact default stylesheet to:" << stylesheetName;
-    SemanticStylesheet *ss = stylesheetFromComboBox(d->m_ui->m_defaultContactsSheet);
-    if (RdfSemanticItem *si = RdfSemanticItem::createSemanticItem(0, rdf, "Contact")) {
+    KoSemanticStylesheet *ss = stylesheetFromComboBox(d->m_ui->m_defaultContactsSheet);
+    if (KoRdfSemanticItem *si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Contact")) {
         si->defaultStylesheet(ss);
         delete si;
     }
     QMap<int, KoDocumentRdf::reflowItem> reflowCol;
-    QList<RdfFoaF*> col = rdf->foaf();
-    foreach (RdfSemanticItem* obj, col) {
+    QList<KoRdfFoaF*> col = rdf->foaf();
+    foreach (KoRdfSemanticItem* obj, col) {
         rdf->insertReflow(reflowCol, obj, ss);
     }
     rdf->applyReflow(reflowCol);
@@ -482,14 +480,14 @@ void KoDocumentRdfEditWidget::defaultEventsSheetButton()
     rdf->ensureTextTool();
     QString stylesheetName = d->m_ui->m_defaultEventsSheet->currentText();
     kDebug(30015) << "changing event default stylesheet to:" << stylesheetName;
-    SemanticStylesheet *ss = stylesheetFromComboBox(d->m_ui->m_defaultEventsSheet);
-    if (RdfSemanticItem* si = RdfSemanticItem::createSemanticItem(0, rdf, "Event")) {
+    KoSemanticStylesheet *ss = stylesheetFromComboBox(d->m_ui->m_defaultEventsSheet);
+    if (KoRdfSemanticItem* si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Event")) {
         si->defaultStylesheet(ss);
         delete si;
     }
     QMap<int, KoDocumentRdf::reflowItem> reflowCol;
-    QList<RdfCalendarEvent*> col = rdf->calendarEvents();
-    foreach (RdfSemanticItem* obj, col) {
+    QList<KoRdfCalendarEvent*> col = rdf->calendarEvents();
+    foreach (KoRdfSemanticItem* obj, col) {
         rdf->insertReflow(reflowCol, obj, ss);
     }
     rdf->applyReflow(reflowCol);
@@ -502,14 +500,14 @@ void KoDocumentRdfEditWidget::defaultLocationsSheetButton()
     rdf->ensureTextTool();
     QString stylesheetName = d->m_ui->m_defaultLocationsSheet->currentText();
     kDebug(30015) << stylesheetName;
-    SemanticStylesheet *ss = stylesheetFromComboBox(d->m_ui->m_defaultLocationsSheet);
-    if (RdfSemanticItem* si = RdfSemanticItem::createSemanticItem(0, rdf, "Location")) {
+    KoSemanticStylesheet *ss = stylesheetFromComboBox(d->m_ui->m_defaultLocationsSheet);
+    if (KoRdfSemanticItem* si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Location")) {
         si->defaultStylesheet(ss);
         delete si;
     }
     QMap<int, KoDocumentRdf::reflowItem> reflowCol;
-    QList<RdfLocation*> col = rdf->locations();
-    foreach (RdfSemanticItem *obj, col) {
+    QList<KoRdfLocation*> col = rdf->locations();
+    foreach (KoRdfSemanticItem *obj, col) {
         rdf->insertReflow(reflowCol, obj, ss);
     }
     rdf->applyReflow(reflowCol);

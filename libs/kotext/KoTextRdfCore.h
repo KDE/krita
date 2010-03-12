@@ -133,6 +133,15 @@ void KOTEXT_EXPORT removeStatementsIfTheyExist(Soprano::Model *model,
  */
 Soprano::Node KOTEXT_EXPORT getObject(Soprano::Model *model, Soprano::Node s, Soprano::Node p);
 
+QString KOTEXT_EXPORT getProperty(Soprano::Model* m,
+                                  Soprano::Node subj,
+                                  Soprano::Node pred,
+                                  const QString &defval);
+QString KOTEXT_EXPORT optionalBindingAsString(Soprano::QueryResultIterator& it,
+                                              const QString &bindingName,
+                                              const QString &def = QString());
+QByteArray KOTEXT_EXPORT fileToByteArray(const QString &fileName);
+
 }
 #endif
 

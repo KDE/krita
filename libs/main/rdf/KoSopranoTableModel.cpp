@@ -19,7 +19,7 @@
 
 #include "KoSopranoTableModel.h"
 #include "KoDocumentRdf.h"
-#include "RdfPrefixMapping.h"
+#include "KoRdfPrefixMapping.h"
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -39,11 +39,11 @@ Soprano::Model *KoSopranoTableModel::model() const
 
 QString KoSopranoTableModel::URItoPrefexedLocalname(const QString &uri) const
 {
-    return m_rdf->getPrefixMapping()->URItoPrefexedLocalname(uri);
+    return m_rdf->prefixMapping()->URItoPrefexedLocalname(uri);
 }
 QString KoSopranoTableModel::PrefexedLocalnameToURI(const QString &pname)
 {
-    return m_rdf->getPrefixMapping()->PrefexedLocalnameToURI(pname);
+    return m_rdf->prefixMapping()->PrefexedLocalnameToURI(pname);
 }
 
 QVariant KoSopranoTableModel::data(const QModelIndex &index, int role) const
@@ -52,7 +52,7 @@ QVariant KoSopranoTableModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
     Soprano::Statement st = m_statementIndex[index.row()];
-    if (index.column() == COL_ISVALID && role == Qt::CheckStateRole) {
+    if (index.column() == ColIsValid && role == Qt::CheckStateRole) {
         return st.isValid();
     }
     if (role == Qt::BackgroundRole) {
@@ -64,17 +64,17 @@ QVariant KoSopranoTableModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
     switch (index.column()) {
-    case COL_ISVALID:
+    case ColIsValid:
         return QVariant();
-    case COL_SUBJ:
+    case ColSubj:
         return URItoPrefexedLocalname(st.subject().toString());
-    case COL_PRED:
+    case ColPred:
         return URItoPrefexedLocalname(st.predicate().toString());
-    case COL_OBJ:
+    case ColObj:
         if (st.object().type() == Soprano::Node::ResourceNode)
             return URItoPrefexedLocalname(st.object().toString());
         return st.object().toString();
-    case COL_OBJ_TYPE:
+    case ColObjType:
         switch (st.object().type()) {
         case Soprano::Node::EmptyNode:
             return i18n("Empty");
@@ -86,12 +86,12 @@ QVariant KoSopranoTableModel::data(const QModelIndex &index, int role) const
             return i18n("Blank");
         }
         return QString();
-    case COL_OBJ_XSDTYPE:
+    case ColObjXsdType:
         return st.object().dataType().toString();
-    case COL_CTX: {
+    case ColCtx: {
         QString ctx = st.context().toString();
-        QString RdfPathContextPrefix = m_rdf->getRdfPathContextPrefix();
-        QString InternalContext = m_rdf->getInlineRdfContext().toString();
+        QString RdfPathContextPrefix = m_rdf->rdfPathContextPrefix();
+        QString InternalContext = m_rdf->inlineRdfContext().toString();
 
         kDebug(30015) << "InternalContext:" << InternalContext;
         kDebug(30015) << "ctx:" << ctx;
@@ -117,26 +117,26 @@ int KoSopranoTableModel::rowCount(const QModelIndex &parent) const
 int KoSopranoTableModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return COL_COUNT;
+    return ColCount;
 }
 
 QVariant KoSopranoTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         switch (section) {
-        case COL_ISVALID:
+        case ColIsValid:
             return i18n("Valid");
-        case COL_SUBJ:
+        case ColSubj:
             return i18n("Subject");
-        case COL_PRED:
+        case ColPred:
             return i18n("Predicate");
-        case COL_OBJ:
+        case ColObj:
             return i18n("Object");
-        case COL_OBJ_TYPE:
+        case ColObjType:
             return i18n("Obj Type");
-        case COL_OBJ_XSDTYPE:
+        case ColObjXsdType:
             return i18n("DataType");
-        case COL_CTX:
+        case ColCtx:
             return i18n("Stored In");
         }
     }
@@ -145,21 +145,21 @@ QVariant KoSopranoTableModel::headerData(int section, Qt::Orientation orientatio
 
 bool KoSopranoTableModel::isInlineRdf(Soprano::Statement st) const
 {
-    return (st.context().toString() == m_rdf->getInlineRdfContext().toString());
+    return (st.context().toString() == m_rdf->inlineRdfContext().toString());
 }
 
 Qt::ItemFlags KoSopranoTableModel::flags(const QModelIndex &index) const
 {
     Qt::ItemFlags ret = QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
-    if (index.column() == COL_ISVALID) {
+    if (index.column() == ColIsValid) {
         ret |= Qt::ItemIsUserCheckable;
     }
     if (index.row() >= 0) {
         Soprano::Statement st = m_statementIndex[index.row()];
         if (isInlineRdf(st)) {
-            if (index.column() == COL_SUBJ
-                    || index.column() == COL_OBJ_TYPE
-                    || index.column() == COL_CTX) {
+            if (index.column() == ColSubj
+                    || index.column() == ColObjType
+                    || index.column() == ColCtx) {
                 ret &= (~Qt::ItemIsEditable);
             }
         }
@@ -194,13 +194,13 @@ bool KoSopranoTableModel::setData(const QModelIndex &index, const QVariant &valu
     QString uri = PrefexedLocalnameToURI(value.toString());
     Soprano::Statement n(st.subject(), st.predicate(), st.object(), st.context());
     switch (index.column()) {
-    case COL_SUBJ:
+    case ColSubj:
         n.setSubject(Soprano::Node(QUrl(uri)));
         return setDataUpdateTriple(index, st, n);
-    case COL_PRED:
+    case ColPred:
         n.setPredicate(Soprano::Node(QUrl(uri)));
         return setDataUpdateTriple(index, st, n);
-    case COL_OBJ: {
+    case ColObj: {
         if (st.object().isLiteral()) {
             n.setObject(
                 Soprano::Node(
@@ -210,7 +210,7 @@ bool KoSopranoTableModel::setData(const QModelIndex &index, const QVariant &valu
         }
         return setDataUpdateTriple(index, st, n);
     }
-    case COL_OBJ_TYPE: {
+    case ColObjType: {
         QString v = value.toString();
         if (v == "URI") {
             n.setObject(Soprano::Node(QUrl(st.object().toString())));
@@ -223,15 +223,15 @@ bool KoSopranoTableModel::setData(const QModelIndex &index, const QVariant &valu
         }
         return setDataUpdateTriple(index, st, n);
     }
-    case COL_CTX: {
+    case ColCtx: {
         QString v = value.toString();
         if (v == "inline") {
-            QString InternalContext = m_rdf->getRdfInternalMetadataWithoutSubjectURI();
+            QString InternalContext = m_rdf->rdfInternalMetadataWithoutSubjectURI();
             n.setContext(Soprano::Node(QUrl(InternalContext)));
         } else {
             if (!v.endsWith(".rdf"))
                 v = v + ".rdf";
-            n.setContext(Soprano::Node(QUrl(m_rdf->getRdfPathContextPrefix() + v)));
+            n.setContext(Soprano::Node(QUrl(m_rdf->rdfPathContextPrefix() + v)));
         }
         return setDataUpdateTriple(index, st, n);
     }
@@ -285,7 +285,7 @@ QModelIndexList KoSopranoTableModel::copyTriples(const QModelIndexList &srclist)
                              obj, st.context());
         model()->addStatement(n);
         m_statementIndex << n;
-        QModelIndex newIdx = index(currentNewRowNum, COL_SUBJ);
+        QModelIndex newIdx = index(currentNewRowNum, ColSubj);
         ret << newIdx;
         ++currentNewRowNum;
     }
@@ -326,31 +326,31 @@ void KoSopranoTableModel::deleteTriples(const QModelIndexList &srclist)
     }
 }
 
-Soprano::Statement KoSopranoTableModel::statementAtIndex(const QModelIndex &index)
+Soprano::Statement KoSopranoTableModel::statementAtIndex(const QModelIndex &index) const
 {
     return m_statementIndex[index.row()];
 }
 
-int KoSopranoTableModel::invalidStatementCount()
+int KoSopranoTableModel::invalidStatementCount() const
 {
     return invalidStatementList().size();
 }
 
-QModelIndexList KoSopranoTableModel::invalidStatementList()
+QModelIndexList KoSopranoTableModel::invalidStatementList() const
 {
     QModelIndexList ret;
     for (int r = 0; r < m_statementIndex.size(); ++r)  {
         Soprano::Statement s = m_statementIndex[ r ];
         if (!s.isValid()) {
-            int col = COL_SUBJ;
+            int col = ColSubj;
             if (!s.subject().isValid()) {
-                col = COL_SUBJ;
+                col = ColSubj;
             }
             if (!s.predicate().isValid()) {
-                col = COL_PRED;
+                col = ColPred;
             }
             if (!s.object().isValid()) {
-                col = COL_OBJ;
+                col = ColObj;
             }
             QModelIndex idx = index(r, col);
             ret << idx;

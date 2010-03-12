@@ -36,7 +36,7 @@ QWidget *KoSopranoTableModelDelegate::createEditor(QWidget *parent,
         const QModelIndex &index) const
 {
     QComboBox *comboBox = new QComboBox(parent);
-    if (index.column() == KoSopranoTableModel::COL_OBJ_TYPE) {
+    if (index.column() == KoSopranoTableModel::ColObjType) {
         comboBox->addItem(i18n("URI"));
         comboBox->addItem(i18n("Literal"));
         comboBox->addItem(i18n("Blank"));

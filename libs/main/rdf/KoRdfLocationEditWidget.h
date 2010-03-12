@@ -17,28 +17,27 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KO_DOCUMENT_Rdf_PRIVATE_H
-#define KO_DOCUMENT_Rdf_PRIVATE_H
+#ifndef __rdf_KoRdfLocationEditWidget_h__
+#define __rdf_KoRdfLocationEditWidget_h__
 
-#include "rdf/KoDocumentRdf.h"
+#include "RdfForward.h"
+#include <QObject>
+#include <QWidget>
 
-class KoDocumentRdfPrivate
+
+/**
+ * This class allows the map to adjust the LatLonEdit widgets as the
+ * user drags the map
+ */
+class KoRdfLocationEditWidget : public QWidget
 {
+    Q_OBJECT
 public:
-    Soprano::Model *m_model; ///< Main Model containing all Rdf for doc
-    typedef QList<KoTextInlineRdf*> m_inlineRdfObjects_t;
-    m_inlineRdfObjects_t m_inlineRdfObjects;  ///< Cache of weak pointers to inline Rdf
-    KoRdfPrefixMapping *m_prefixMapping;     ///< prefix -> URI mapping
+    KoRdfLocationEditWidget(QWidget *parent, Ui::KoRdfLocationEditWidget *ew);
 
-    QList<KoRdfFoaF*> m_foafObjects;
-    QList<KoRdfCalendarEvent*> m_calObjects;
-    QList<KoRdfLocation*> m_locObjects;
+public slots:
+    void mouseMoveGeoPosition(QString);
 
-    QMap<QString,QList<KoSemanticStylesheet*> > m_userStylesheets;
-
-    KoDocumentRdfPrivate();
-    ~KoDocumentRdfPrivate();
 };
 
 #endif
-

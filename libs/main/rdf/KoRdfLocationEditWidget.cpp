@@ -17,28 +17,19 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KO_DOCUMENT_Rdf_PRIVATE_H
-#define KO_DOCUMENT_Rdf_PRIVATE_H
+#include "KoRdfLocationEditWidget.h"
+#include "KoDocumentRdf.h"
+#include "KoDocumentRdf_p.h"
 
-#include "rdf/KoDocumentRdf.h"
+#include <kdebug.h>
 
-class KoDocumentRdfPrivate
+KoRdfLocationEditWidget::KoRdfLocationEditWidget(QWidget *parent, Ui::KoRdfLocationEditWidget *ew)
+        : QWidget(parent)
 {
-public:
-    Soprano::Model *m_model; ///< Main Model containing all Rdf for doc
-    typedef QList<KoTextInlineRdf*> m_inlineRdfObjects_t;
-    m_inlineRdfObjects_t m_inlineRdfObjects;  ///< Cache of weak pointers to inline Rdf
-    KoRdfPrefixMapping *m_prefixMapping;     ///< prefix -> URI mapping
+    Q_UNUSED(ew);
+}
 
-    QList<KoRdfFoaF*> m_foafObjects;
-    QList<KoRdfCalendarEvent*> m_calObjects;
-    QList<KoRdfLocation*> m_locObjects;
-
-    QMap<QString,QList<KoSemanticStylesheet*> > m_userStylesheets;
-
-    KoDocumentRdfPrivate();
-    ~KoDocumentRdfPrivate();
-};
-
-#endif
-
+void KoRdfLocationEditWidget::mouseMoveGeoPosition(QString s)
+{
+    kDebug(30015) << "KoRdfLocationEditWidget::mouseMoveGeoPosition() str:" << s;
+}

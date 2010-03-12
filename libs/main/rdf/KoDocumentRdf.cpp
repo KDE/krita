@@ -19,7 +19,7 @@
 
 #include "KoDocumentRdf.h"
 #include "KoDocumentRdf_p.h"
-#include "RdfPrefixMapping.h"
+#include "KoRdfPrefixMapping.h"
 #include "RdfSemanticTreeWidgetSelectAction.h"
 
 #include "../KoView.h"
@@ -47,8 +47,6 @@
 #include <klocale.h>
 #include <kuser.h>
 
-// #define DEBUG_RDF
-
 #ifdef DEBUG_RDF
 #define RDEBUG kDebug(30015)
 #else
@@ -57,51 +55,37 @@
 
 using namespace Soprano;
 
-QByteArray fileToByteArray(const QString &fileName)
-{
-    QFile t(fileName);
-    t.open(QIODevice::ReadOnly);
-    return t.readAll();
-}
-
-QString getProperty(Soprano::Model *m, Soprano::Node subj, Soprano::Node pred, QString defval)
-{
-    StatementIterator it = m->listStatements(subj, pred, Node());
-    QList<Statement> allStatements = it.allElements();
-    foreach (Soprano::Statement s, allStatements) {
-        return s.object().toString();
-    }
-    return defval;
-}
-
-QString optionalBindingAsString(Soprano::QueryResultIterator &it, QString bindingName, QString def)
-{
-    if (it.binding(bindingName).isValid()) {
-        return it.binding(bindingName).toString();
-    }
-    return def;
-}
-
-KoDocumentRdf::KoDocumentRdf(KoDocument *parent)
-        : KoDocumentRdfBase(parent)
-        , m_model(Soprano::createModel())
+KoDocumentRdfPrivate::KoDocumentRdfPrivate()
+        : m_model(Soprano::createModel())
         , m_prefixMapping(0)
 {
-    m_prefixMapping = new RdfPrefixMapping(this);
 }
 
-KoDocumentRdf::~KoDocumentRdf()
+KoDocumentRdfPrivate::~KoDocumentRdfPrivate()
 {
-    RDEBUG;
     delete m_prefixMapping;
     if (m_model) {
         delete m_model;
     }
 }
 
+
+KoDocumentRdf::KoDocumentRdf(KoDocument *parent)
+        : KoDocumentRdfBase(parent)
+        , d (new KoDocumentRdfPrivate())
+{
+    d->m_prefixMapping = new KoRdfPrefixMapping(this);
+}
+
+KoDocumentRdf::~KoDocumentRdf()
+{
+    RDEBUG;
+    delete d;
+}
+
 Soprano::Model *KoDocumentRdf::model() const
 {
-    return m_model;
+    return d->m_model;
 }
 
 KoDocumentRdf *KoDocumentRdf::fromResourceManager(KoCanvasBase *host)
@@ -120,33 +104,33 @@ KoDocument *KoDocumentRdf::document() const
 }
 
 
-RdfPrefixMapping *KoDocumentRdf::getPrefixMapping() const
+KoRdfPrefixMapping *KoDocumentRdf::prefixMapping() const
 {
-    return m_prefixMapping;
+    return d->m_prefixMapping;
 }
 
 /**
  * Graph context used for Rdf stored inline in content.xml
  * in an Rdfa like fashion.
  */
-Soprano::Node KoDocumentRdf::getInlineRdfContext() const
+Soprano::Node KoDocumentRdf::inlineRdfContext() const
 {
     return Node(QUrl("http://www.koffice.org/Rdf/inline-rdf"));
 }
 
-QString KoDocumentRdf::getRdfInternalMetadataWithoutSubjectURI() const
+QString KoDocumentRdf::rdfInternalMetadataWithoutSubjectURI() const
 {
     return "http://www.koffice.org/Rdf/internal/content.xml";
 }
 
-QString KoDocumentRdf::getRdfPathContextPrefix() const
+QString KoDocumentRdf::rdfPathContextPrefix() const
 {
     return "http://www.koffice.org/Rdf/path/";
 }
 
 Soprano::Node KoDocumentRdf::manifestRdfNode() const
 {
-    return Node(QUrl(getRdfPathContextPrefix() + "manifest.rdf"));
+    return Node(QUrl(rdfPathContextPrefix() + "manifest.rdf"));
 }
 
 void KoDocumentRdf::freshenBNodes(Soprano::Model *m)
@@ -165,7 +149,7 @@ void KoDocumentRdf::freshenBNodes(Soprano::Model *m)
             QString nodeStr = subj.toString();
             Soprano::Node n = bnodeMap[ nodeStr ];
             if (!n.isValid()) {
-                n = m_model->createBlankNode();
+                n = d->m_model->createBlankNode();
                 bnodeMap[ nodeStr ] = n;
             }
             removeList << s;
@@ -176,7 +160,7 @@ void KoDocumentRdf::freshenBNodes(Soprano::Model *m)
             QString nodeStr = obj.toString();
             Soprano::Node n = bnodeMap[ nodeStr ];
             if (!n.isValid()) {
-                n = m_model->createBlankNode();
+                n = d->m_model->createBlankNode();
                 bnodeMap[ nodeStr ] = n;
             }
             removeList << s;
@@ -206,7 +190,7 @@ bool KoDocumentRdf::loadRdf(KoStore *store, const Soprano::Parser *parser, const
         return false;
     }
     RDEBUG << "Loading external Rdf/XML from:" << fileName;
-    Soprano::Node context(QUrl(getRdfPathContextPrefix() + fileName));
+    Soprano::Node context(QUrl(rdfPathContextPrefix() + fileName));
     QUrl BaseURI = QUrl(QString());
     QString rdfxmlData(store->device()->readAll());
     Soprano::StatementIterator it = parser->parseString(rdfxmlData, BaseURI,
@@ -230,14 +214,14 @@ bool KoDocumentRdf::loadRdf(KoStore *store, const Soprano::Parser *parser, const
     freshenBNodes(tmpmodel);
     dumpModel(fileName, tmpmodel);
     RDEBUG << "done with freshenBNodes(), tmpmodel.sz:" << tmpmodel->statementCount();
-    m_model->addStatements(tmpmodel->listStatements().allElements());
-    if (fileName == "manifest.rdf" && m_prefixMapping) {
-        m_prefixMapping->load(m_model);
+    d->m_model->addStatements(tmpmodel->listStatements().allElements());
+    if (fileName == "manifest.rdf" && d->m_prefixMapping) {
+        d->m_prefixMapping->load(d->m_model);
 
-        QStringList classNames = RdfSemanticItem::classNames();
+        QStringList classNames = KoRdfSemanticItem::classNames();
         foreach (const QString &klass, classNames) {
-            RdfSemanticItem *si = RdfSemanticItem::createSemanticItem(this, this, klass);
-            si->loadUserStylesheets(m_model);
+            KoRdfSemanticItem *si = KoRdfSemanticItem::createSemanticItem(this, this, klass);
+            si->loadUserStylesheets(d->m_model);
         }
     }
     delete tmpmodel;
@@ -265,7 +249,7 @@ bool KoDocumentRdf::loadOasis(KoStore *store)
                               "  ?subj odfcommon:path ?fileName  \n"
                               " } \n";
         Soprano::QueryResultIterator it =
-            m_model->executeQuery(sparqlQuery,
+            d->m_model->executeQuery(sparqlQuery,
                                   Soprano::Query::QueryLanguageSparql);
         QList< QString > externalRdfFiles;
         //
@@ -289,15 +273,15 @@ bool KoDocumentRdf::saveRdf(KoStore *store, KoXmlWriter *manifestWriter, Soprano
 {
     bool ok = false;
     QString fileName = "manifest.rdf";
-    if (context.toString() == getInlineRdfContext().toString()) {
+    if (context.toString() == inlineRdfContext().toString()) {
         RDEBUG << "found some internal Rdf, this is handled by augmenting the DOM";
         return true;
     }
     //
     // The context contains the filename to save into
     //
-    if (context.toString().startsWith(getRdfPathContextPrefix())) {
-        fileName = context.toString().mid(getRdfPathContextPrefix().size());
+    if (context.toString().startsWith(rdfPathContextPrefix())) {
+        fileName = context.toString().mid(rdfPathContextPrefix().size());
     }
     RDEBUG << "saving external file:" << fileName;
     if (!store->open(fileName)) {
@@ -307,16 +291,16 @@ bool KoDocumentRdf::saveRdf(KoStore *store, KoXmlWriter *manifestWriter, Soprano
     }
     KoStoreDevice dev(store);
     QTextStream oss(&dev);
-    if (fileName == "manifest.rdf" && m_prefixMapping) {
-        m_prefixMapping->save(m_model, context);
+    if (fileName == "manifest.rdf" && d->m_prefixMapping) {
+        d->m_prefixMapping->save(d->m_model, context);
 
-        QStringList classNames = RdfSemanticItem::classNames();
+        QStringList classNames = KoRdfSemanticItem::classNames();
         foreach (const QString &klass, classNames) {
-            RdfSemanticItem *si = RdfSemanticItem::createSemanticItem(this, this, klass);
-            si->saveUserStylesheets(m_model, context);
+            KoRdfSemanticItem *si = KoRdfSemanticItem::createSemanticItem(this, this, klass);
+            si->saveUserStylesheets(d->m_model, context);
         }
     }
-    Soprano::StatementIterator triples = m_model->listStatements(Soprano::Node(),
+    Soprano::StatementIterator triples = d->m_model->listStatements(Soprano::Node(),
             Soprano::Node(), Soprano::Node(), context);
     QString serialization("application/rdf+xml");
     const Soprano::Serializer *serializer = Soprano::PluginManager::instance()->
@@ -328,7 +312,7 @@ bool KoDocumentRdf::saveRdf(KoStore *store, KoXmlWriter *manifestWriter, Soprano
             tss.flush();
             oss << data;
             RDEBUG << "fileName:" << fileName << " data.sz:" << data.size();
-            RDEBUG << "model.sz:" << m_model->statementCount();
+            RDEBUG << "model.sz:" << d->m_model->statementCount();
             ok = true;
         } else {
             RDEBUG << "serialization of Rdf failed!";
@@ -344,7 +328,7 @@ bool KoDocumentRdf::saveOasis(KoStore *store, KoXmlWriter *manifestWriter)
 {
     RDEBUG << "saveOasis() generic";
     bool ok = true;
-    NodeIterator contextier = m_model->listContexts();
+    NodeIterator contextier = d->m_model->listContexts();
     QList<Node> contexts = contextier.allElements();
     foreach (Soprano::Node n, contexts) {
         saveRdf(store, manifestWriter, n);
@@ -358,7 +342,7 @@ void KoDocumentRdf::updateXmlIdReferences(const QMap<QString, QString> &m)
 
     QList<Soprano::Statement> removeList;
     QList<Soprano::Statement> addList;
-    StatementIterator it = m_model->listStatements(
+    StatementIterator it = d->m_model->listStatements(
                                Node(),
                                Node(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")),
                                Node(),
@@ -388,11 +372,11 @@ void KoDocumentRdf::updateXmlIdReferences(const QMap<QString, QString> &m)
     // remove & add the triple lists.
     RDEBUG << "addStatements.size:" << addList.size();
     RDEBUG << " remove.size:" << removeList.size();
-    KoTextRdfCore::removeStatementsIfTheyExist(m_model, removeList);
-    m_model->addStatements(addList);
+    KoTextRdfCore::removeStatementsIfTheyExist(d->m_model, removeList);
+    d->m_model->addStatements(addList);
 }
 
-QList<RdfFoaF*> KoDocumentRdf::foaf(Soprano::Model *m)
+QList<KoRdfFoaF*> KoDocumentRdf::foaf(Soprano::Model *m)
 {
     if (!m) {
         m = model();
@@ -416,9 +400,9 @@ QList<RdfFoaF*> KoDocumentRdf::foaf(Soprano::Model *m)
                         Soprano::Query::QueryLanguageSparql);
     RDEBUG << "1 model().sz:" << model()->statementCount() << " m.sz:" << m->statementCount();
     // lastKnownObjects is used to perform a sematic set diff
-    // at return time m_foafObjects will have any new objects and
+    // at return time d->m_foafObjects will have any new objects and
     // ones that are no longer available will be removed.
-    QList<RdfFoaF*> lastKnownObjects = m_foafObjects;
+    QList<KoRdfFoaF*> lastKnownObjects = d->m_foafObjects;
     // uniqfilter is needed because soprano is not honouring
     // the DISTINCT sparql keyword
     QSet<QString> uniqfilter;
@@ -429,9 +413,9 @@ QList<RdfFoaF*> KoDocumentRdf::foaf(Soprano::Model *m)
             continue;
         uniqfilter += n;
 
-        RdfFoaF *newItem = new RdfFoaF(this, this, it);
+        KoRdfFoaF *newItem = new KoRdfFoaF(this, this, it);
         QString newItemLs = newItem->linkingSubject().toString();
-        foreach (RdfFoaF *semItem, lastKnownObjects) {
+        foreach (KoRdfFoaF *semItem, lastKnownObjects) {
             if (newItemLs == semItem->linkingSubject().toString()) {
                 lastKnownObjects.removeAll(semItem);
                 delete newItem;
@@ -440,15 +424,15 @@ QList<RdfFoaF*> KoDocumentRdf::foaf(Soprano::Model *m)
             }
         }
         if (newItem) {
-            m_foafObjects << newItem;
+            d->m_foafObjects << newItem;
         }
     }
-    foreach (RdfFoaF *semItem, lastKnownObjects) {
-        m_foafObjects.removeAll(semItem);
+    foreach (KoRdfFoaF *semItem, lastKnownObjects) {
+        d->m_foafObjects.removeAll(semItem);
     }
-    RDEBUG << "foaf() size:" << m_foafObjects.size() << endl;
+    RDEBUG << "foaf() size:" << d->m_foafObjects.size() << endl;
 #ifndef NDEBUG
-    if (m_foafObjects.empty() && m->statementCount()) {
+    if (d->m_foafObjects.empty() && m->statementCount()) {
       RDEBUG << "foaf() have data, but no foafs!" << endl;
         QList<Statement> allStatements = m->listStatements().allElements();
         foreach (Soprano::Statement s, allStatements) {
@@ -456,10 +440,10 @@ QList<RdfFoaF*> KoDocumentRdf::foaf(Soprano::Model *m)
         }
     }
 #endif
-    return m_foafObjects;
+    return d->m_foafObjects;
 }
 
-QList<RdfCalendarEvent*> KoDocumentRdf::calendarEvents(Soprano::Model *m)
+QList<KoRdfCalendarEvent*> KoDocumentRdf::calendarEvents(Soprano::Model *m)
 {
     if (!m) {
         m = model();
@@ -487,7 +471,7 @@ QList<RdfCalendarEvent*> KoDocumentRdf::calendarEvents(Soprano::Model *m)
     Soprano::QueryResultIterator it =
         m->executeQuery(sparqlQuery,
                         Soprano::Query::QueryLanguageSparql);
-    QList<RdfCalendarEvent*> lastKnownObjects = m_calObjects;
+    QList<KoRdfCalendarEvent*> lastKnownObjects = d->m_calObjects;
     // uniqfilter is needed because soprano is not honouring
     // the DISTINCT sparql keyword
     QSet<QString> uniqfilter;
@@ -499,9 +483,9 @@ QList<RdfCalendarEvent*> KoDocumentRdf::calendarEvents(Soprano::Model *m)
         RDEBUG << " g:" << it.binding("g").toString();
         RDEBUG << " uid:" << it.binding("uid").toString();
 
-        RdfCalendarEvent *newItem(new RdfCalendarEvent(this, this, it));
+        KoRdfCalendarEvent *newItem(new KoRdfCalendarEvent(this, this, it));
         QString newItemLs = newItem->linkingSubject().toString();
-        foreach (RdfCalendarEvent *semItem, lastKnownObjects) {
+        foreach (KoRdfCalendarEvent *semItem, lastKnownObjects) {
             if (newItemLs == semItem->linkingSubject().toString()) {
                 lastKnownObjects.removeAll(semItem);
                 delete newItem;
@@ -510,14 +494,14 @@ QList<RdfCalendarEvent*> KoDocumentRdf::calendarEvents(Soprano::Model *m)
             }
         }
         if (newItem) {
-            m_calObjects << newItem;
+            d->m_calObjects << newItem;
         }
     }
-    foreach (RdfCalendarEvent *semItem, lastKnownObjects) {
-        m_calObjects.removeAll(semItem);
+    foreach (KoRdfCalendarEvent *semItem, lastKnownObjects) {
+        d->m_calObjects.removeAll(semItem);
     }
-    RDEBUG << "calendarEvents() size:" << m_calObjects.size() << endl;
-    return m_calObjects;
+    RDEBUG << "calendarEvents() size:" << d->m_calObjects.size() << endl;
+    return d->m_calObjects;
 }
 
 /**
@@ -545,8 +529,8 @@ protected:
     QString uniqueID(Soprano::QueryResultIterator it) {
         QString ret;
 
-        foreach (const QString &b, m_bindingsThatMakeID) { // TODO why loop and not use the var?
-            QString n = it.binding("lat").toString();
+        foreach (const QString &b, m_bindingsThatMakeID) {
+            QString n = it.binding(b).toString();
             ret += n;
         }
         return ret;
@@ -554,7 +538,7 @@ protected:
 };
 
 
-void KoDocumentRdf::addLocations(Soprano::Model *m, QList<RdfLocation*> &ret, bool isGeo84,
+void KoDocumentRdf::addLocations(Soprano::Model *m, QList<KoRdfLocation*> &ret, bool isGeo84,
                                  const QString &sparqlQuery)
 {
     Soprano::QueryResultIterator it = m->executeQuery(sparqlQuery,
@@ -565,21 +549,21 @@ void KoDocumentRdf::addLocations(Soprano::Model *m, QList<RdfLocation*> &ret, bo
         if (uniqFilter.shouldSkip(it))
             continue;
 
-        RdfLocation *semObj(new RdfLocation(this, this, it, isGeo84));
+        KoRdfLocation *semObj(new KoRdfLocation(this, this, it, isGeo84));
         ret << semObj;
     }
     RDEBUG << "addLocations() size:" << ret.size() << endl;
 }
 
-QList<RdfLocation*> KoDocumentRdf::locations(Soprano::Model *m)
+QList<KoRdfLocation*> KoDocumentRdf::locations(Soprano::Model *m)
 {
     if (!m) {
         m = model();
     }
-    RDEBUG << "locations(top) full-model.sz:" << m_model->statementCount();
+    RDEBUG << "locations(top) full-model.sz:" << d->m_model->statementCount();
     RDEBUG << " passed model.size:" << m->statementCount();
-    QList<RdfLocation*> currentRdfLocations;
-    addLocations(m, currentRdfLocations, false,
+    QList<KoRdfLocation*> currentKoRdfLocations;
+    addLocations(m, currentKoRdfLocations, false,
         " prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  \n"
         " prefix foaf: <http://xmlns.com/foaf/0.1/>  \n"
         " prefix cal:  <http://www.w3.org/2002/12/cal/icaltzd#>  \n"
@@ -592,8 +576,8 @@ QList<RdfLocation*> KoDocumentRdf::locations(Soprano::Model *m)
         "               ?joiner rdf:first ?long \n"
         "               } \n"
         "  } \n");
-    RDEBUG << "locations(1) currentRdfLocations.size:" << currentRdfLocations.size();
-    addLocations(m, currentRdfLocations, true,
+    RDEBUG << "locations(1) currentKoRdfLocations.size:" << currentKoRdfLocations.size();
+    addLocations(m, currentKoRdfLocations, true,
         " prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
         " prefix foaf: <http://xmlns.com/foaf/0.1/>  \n"
         " prefix geo84: <http://www.w3.org/2003/01/geo/wgs84_pos#> \n"
@@ -608,13 +592,13 @@ QList<RdfLocation*> KoDocumentRdf::locations(Soprano::Model *m)
         "  \n"
         "  } \n"
         " } \n");
-    // add the new, remove the no longer existing between m_locObjects and currentRdfLocations.
+    // add the new, remove the no longer existing between m_locObjects and currentKoRdfLocations.
     // The semantic items have a lifetime of this KoDocumentRDF.
     // If we could use smart pointers then we could just return the new list of locations,
     // As semantic items have a lifetime of this KoDocumentRDF,
     // we don't want to create any more than are needed.
     //
-    // As currentRdfLocations contains all the location semitems we have found to be valid,
+    // As currentKoRdfLocations contains all the location semitems we have found to be valid,
     // we need to transfer any new ones from that list to m_locObjects and delete what
     // remains (which are objects that existed in m_locObjects before and were rediscovered
     // during the query process).
@@ -622,11 +606,11 @@ QList<RdfLocation*> KoDocumentRdf::locations(Soprano::Model *m)
     // Creating a list of locations each time similifies the query and discovery process
     // at the expense of this little mess to merge the new and old with explicit pointer
     // and object lifetime handling
-    QList<RdfLocation*> removeSet;
-    foreach (RdfLocation *oldItem, m_locObjects) {
+    QList<KoRdfLocation*> removeSet;
+    foreach (KoRdfLocation *oldItem, d->m_locObjects) {
         QString oldItemLs = oldItem->linkingSubject().toString();
         bool found = false;
-        foreach (RdfLocation *newItem, currentRdfLocations) {
+        foreach (KoRdfLocation *newItem, currentKoRdfLocations) {
             if (oldItemLs == newItem->linkingSubject().toString()) {
                 found = true;
                 break;
@@ -636,31 +620,31 @@ QList<RdfLocation*> KoDocumentRdf::locations(Soprano::Model *m)
             removeSet << oldItem;
         }
     }
-    foreach (RdfLocation *item, removeSet) {
-        m_locObjects.removeAll(item);
+    foreach (KoRdfLocation *item, removeSet) {
+        d->m_locObjects.removeAll(item);
     }
-    QList<RdfLocation*> addedSet;
-    foreach (RdfLocation *newItem, currentRdfLocations) {
+    QList<KoRdfLocation*> addedSet;
+    foreach (KoRdfLocation *newItem, currentKoRdfLocations) {
         QString newItemLs = newItem->linkingSubject().toString();
         bool found = false;
-        foreach (RdfLocation *oldItem, m_locObjects) {
+        foreach (KoRdfLocation *oldItem, d->m_locObjects) {
             if (newItemLs == oldItem->linkingSubject().toString()) {
                 found = true;
                 break;
             }
         }
         if (!found) {
-            m_locObjects << newItem;
+            d->m_locObjects << newItem;
             addedSet << newItem;
         }
     }
-    foreach (RdfLocation *item, addedSet) {
-        currentRdfLocations.removeAll(item);
+    foreach (KoRdfLocation *item, addedSet) {
+        currentKoRdfLocations.removeAll(item);
     }
-    RDEBUG << "locations(end) deleting duplicates size:" << currentRdfLocations.size() << endl;
-    qDeleteAll(currentRdfLocations);
-    RDEBUG << "locations(end) size:" << m_locObjects.size() << endl;
-    return m_locObjects;
+    RDEBUG << "locations(end) deleting duplicates size:" << currentKoRdfLocations.size() << endl;
+    qDeleteAll(currentKoRdfLocations);
+    RDEBUG << "locations(end) size:" << d->m_locObjects.size() << endl;
+    return d->m_locObjects;
 }
 
 void KoDocumentRdf::dumpModel(const QString &msg, Soprano::Model *m) const
@@ -698,12 +682,12 @@ Soprano::Statement KoDocumentRdf::toStatement(KoTextInlineRdf *inlineRdf) const
         break;
     }
     if (!inlineRdf->subject().size()) {
-        subj = getInlineRdfContext();
+        subj = inlineRdfContext();
     }
     RDEBUG << "subj:"  << subj;
     RDEBUG << " pred:" << pred;
     RDEBUG << " obj:"  << obj;
-    Soprano::Statement ret(subj, pred, obj, getInlineRdfContext());
+    Soprano::Statement ret(subj, pred, obj, inlineRdfContext());
     return ret;
 }
 
@@ -711,7 +695,7 @@ void KoDocumentRdf::addStatements(Soprano::Model *model, const QString &xmlid)
 {
     QString sparqlQuery;
     QTextStream queryss(&sparqlQuery);
-    RDEBUG << "addStatements model.sz:" << m_model->statementCount() << " xmlid:" << xmlid;
+    RDEBUG << "addStatements model.sz:" << d->m_model->statementCount() << " xmlid:" << xmlid;
     queryss << "prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
         << "prefix foaf: <http://xmlns.com/foaf/0.1/> \n"
         << "prefix pkg:  <http://docs.oasis-open.org/opendocument/meta/package/common#> \n"
@@ -724,7 +708,7 @@ void KoDocumentRdf::addStatements(Soprano::Model *model, const QString &xmlid)
         << "}\n";
     queryss.flush();
     RDEBUG << "sparql:" << sparqlQuery;
-    Soprano::QueryResultIterator it = m_model->executeQuery(sparqlQuery,
+    Soprano::QueryResultIterator it = d->m_model->executeQuery(sparqlQuery,
                               Soprano::Query::QueryLanguageSparql);
     while (it.next()) {
         Statement s(it.binding("s"),
@@ -742,7 +726,7 @@ void KoDocumentRdf::expandStatementsReferencingSubject(Soprano::Model *model)
     QList<Statement> addList;
     QList<Statement> allStatements = model->listStatements().allElements();
     foreach (Soprano::Statement s, allStatements) {
-        QList<Statement> all = m_model->listStatements(Node(), Node(), s.subject()).allElements();
+        QList<Statement> all = d->m_model->listStatements(Node(), Node(), s.subject()).allElements();
         foreach (Soprano::Statement e, all) {
             addList << e;
         }
@@ -755,7 +739,7 @@ void KoDocumentRdf::expandStatementsSubjectPointsTo(Soprano::Model *model)
     QList<Statement> addList;
     QList<Statement> allStatements = model->listStatements().allElements();
     foreach (Soprano::Statement s, allStatements) {
-        QList<Statement> all = m_model->listStatements(s.object(), Node(), Node()).allElements();
+        QList<Statement> all = d->m_model->listStatements(s.object(), Node(), Node()).allElements();
         foreach (Soprano::Statement e, all) {
             RDEBUG << "ADD obj:" << s.object() << " adding:" << e;
             addList << e;
@@ -767,7 +751,7 @@ void KoDocumentRdf::expandStatementsSubjectPointsTo(Soprano::Model *model)
 void KoDocumentRdf::expandStatementsSubjectPointsTo(Soprano::Model *model, const Soprano::Node &n)
 {
     QList<Statement> addList;
-    QList<Statement> all = m_model->listStatements(n, Node(), Node()).allElements();
+    QList<Statement> all = d->m_model->listStatements(n, Node(), Node()).allElements();
     foreach (Soprano::Statement e, all) {
         RDEBUG << "n:" << n << " adding:" << e;
         addList << e;
@@ -781,9 +765,9 @@ void KoDocumentRdf::expandStatementsToIncludeRdfListsRecurse(Soprano::Model *mod
     Node rdfFirst = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#first"));
     Node rdfRest  = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"));
     QList<Statement> all;
-    all = m_model->listStatements(n, rdfFirst, Node()).allElements();
+    all = d->m_model->listStatements(n, rdfFirst, Node()).allElements();
     addList << all;
-    all = m_model->listStatements(n, rdfRest, Node()).allElements();
+    all = d->m_model->listStatements(n, rdfRest, Node()).allElements();
     addList << all;
     foreach (Soprano::Statement s, all) {
         expandStatementsToIncludeRdfListsRecurse(model, addList, s.object());
@@ -809,7 +793,7 @@ void KoDocumentRdf::expandStatementsToIncludeOtherPredicates(Soprano::Model *mod
     QList<Statement> addList;
     QList<Statement> allStatements = model->listStatements().allElements();
     foreach (Soprano::Statement s, allStatements) {
-        QList<Statement> all = m_model->listStatements(s.subject(), Node(), Node()).allElements();
+        QList<Statement> all = d->m_model->listStatements(s.subject(), Node(), Node()).allElements();
         foreach (Soprano::Statement e, all) {
             addList << e;
         }
@@ -833,7 +817,7 @@ KAction *KoDocumentRdf::createInsertSemanticObjectReferenceAction(KoCanvasBase *
 QList<KAction*> KoDocumentRdf::createInsertSemanticObjectNewActions(KoCanvasBase *host)
 {
     QList<KAction*> ret;
-    foreach (const QString &klass,  RdfSemanticItem::classNames()) {
+    foreach (const QString &klass,  KoRdfSemanticItem::classNames()) {
         ret.append(new InsertSemanticObjectCreateAction(host, this, klass));
     }
     return ret;
@@ -853,7 +837,7 @@ QPair<int, int> KoDocumentRdf::findExtent(const QString &xmlid)
 QPair<int, int> KoDocumentRdf::findExtent(QTextCursor &cursor)
 {
     QPair<int, int> ret(0, 0);
-    RDEBUG << "model.sz:" << m_model->statementCount();
+    RDEBUG << "model.sz:" << d->m_model->statementCount();
     //
     // Look backwards for enclosing text:meta and bookmark-start tags
     //
@@ -899,7 +883,7 @@ QPair<int, int> KoDocumentRdf::findExtent(QTextCursor &cursor)
 QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler)
 {
     QPair<int, int> ret(0, 0);
-    RDEBUG << "model.sz:" << m_model->statementCount();
+    RDEBUG << "model.sz:" << d->m_model->statementCount();
     //
     // Look backwards for enclosing text:meta and bookmark-start tags
     //
@@ -1060,7 +1044,7 @@ Soprano::Model *KoDocumentRdf::findStatements(QTextCursor &cursor, int depth)
 {
     Soprano::Model *ret(Soprano::createModel());
     KoTextInlineRdf *inlineRdf(0);
-    RDEBUG << "model.sz:" << m_model->statementCount();
+    RDEBUG << "model.sz:" << d->m_model->statementCount();
     //
     // Look backwards for enclosing text:meta and bookmark-start tags
     //
@@ -1116,7 +1100,7 @@ Soprano::Model *KoDocumentRdf::findStatements(QTextCursor &cursor, int depth)
             }
         }
     }
-    RDEBUG << "1 model.sz:" << m_model->statementCount();
+    RDEBUG << "1 model.sz:" << d->m_model->statementCount();
     RDEBUG << " ret.sz:" << ret->statementCount();
     if (inlineRdf) {
         RDEBUG << "have inlineRdf1...xmlid:" << inlineRdf->xmlId();
@@ -1158,7 +1142,7 @@ Soprano::Model *KoDocumentRdf::findStatements(KoTextEditor *handler, int depth)
 {
     Soprano::Model *ret(Soprano::createModel());
     KoTextInlineRdf *inlineRdf(0);
-    RDEBUG << "model.sz:" << m_model->statementCount();
+    RDEBUG << "model.sz:" << d->m_model->statementCount();
     //
     // Look backwards for enclosing text:meta and bookmark-start tags
     //
@@ -1214,7 +1198,7 @@ Soprano::Model *KoDocumentRdf::findStatements(KoTextEditor *handler, int depth)
             }
         }
     }
-    RDEBUG << "1 model.sz:" << m_model->statementCount()
+    RDEBUG << "1 model.sz:" << d->m_model->statementCount()
         << " ret.sz:" << ret->statementCount();
     if (inlineRdf) {
         RDEBUG << "have inlineRdf1...xmlid:" << inlineRdf->xmlId();
@@ -1246,7 +1230,7 @@ Soprano::Model *KoDocumentRdf::findStatements(KoTextEditor *handler, int depth)
 KoTextInlineRdf *KoDocumentRdf::findInlineRdfByID(const QString &xmlid)
 {
     RDEBUG << "xxx xmlid:" << xmlid;
-    foreach (KoTextInlineRdf *sp, m_inlineRdfObjects) {
+    foreach (KoTextInlineRdf *sp, d->m_inlineRdfObjects) {
         RDEBUG << "sp:" << (void*)sp;
         if (sp->xmlId() == xmlid) {
             return sp;
@@ -1261,14 +1245,17 @@ void KoDocumentRdf::rememberNewInlineRdfObject(KoTextInlineRdf *inlineRdf)
     if (!inlineRdf) {
         return;
     }
-    m_inlineRdfObjects << inlineRdf;
+    d->m_inlineRdfObjects << inlineRdf;
 }
 
 void KoDocumentRdf::updateInlineRdfStatements(QTextDocument *qdoc)
 {
     RDEBUG << "top";
     KoInlineTextObjectManager *textObjectManager = KoTextDocument(qdoc).inlineTextObjectManager();
-    m_inlineRdfObjects.clear();
+    d->m_inlineRdfObjects.clear();
+    if(!textObjectManager) {
+        return;
+    }
     //
     // Rdf from inline objects
     //
@@ -1282,40 +1269,40 @@ void KoDocumentRdf::updateInlineRdfStatements(QTextDocument *qdoc)
     // Browse the blocks and see if any of them have Rdf attached
     //
     QVector<QTextFormat> formats = qdoc->allFormats();
-    foreach (QTextFormat tf, formats) { // TODO make this use a const ref
+    foreach (const QTextFormat& tf, formats) {
         if (KoTextInlineRdf *inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(tf)) {
             rememberNewInlineRdfObject(inlineRdf);
         }
     }
-    if (!m_model) {
+    if (!d->m_model) {
         return;
     }
-    Soprano::Node context = getInlineRdfContext();
+    Soprano::Node context = inlineRdfContext();
     RDEBUG << "removing";
     // delete all inline Rdf statements from model
-    m_model->removeAllStatements(Soprano::Node(), Soprano::Node(), Soprano::Node(), context);
-    RDEBUG << "adding, count:" << m_inlineRdfObjects.size();
+    d->m_model->removeAllStatements(Soprano::Node(), Soprano::Node(), Soprano::Node(), context);
+    RDEBUG << "adding, count:" << d->m_inlineRdfObjects.size();
     // add statements from m_inlineRdfObjects to model
-    foreach (KoTextInlineRdf *sp, m_inlineRdfObjects) {
+    foreach (KoTextInlineRdf *sp, d->m_inlineRdfObjects) {
         Soprano::Statement st = toStatement(sp);
         if (st.isValid()) {
-            m_model->addStatement(st);
+            d->m_model->addStatement(st);
         }
     }
     RDEBUG << "done";
 }
 
-void KoDocumentRdf::emitSemanticObjectAdded(RdfSemanticItem *item)
+void KoDocumentRdf::emitSemanticObjectAdded(KoRdfSemanticItem *item)
 {
     emit semanticObjectAdded(item);
 }
 
-void KoDocumentRdf::emitSemanticObjectAddedConst(RdfSemanticItem *const item)
+void KoDocumentRdf::emitSemanticObjectAddedConst(KoRdfSemanticItem *const item)
 {
     emit semanticObjectAdded(item);
 }
 
-void KoDocumentRdf::emitSemanticObjectUpdated(RdfSemanticItem *item)
+void KoDocumentRdf::emitSemanticObjectUpdated(KoRdfSemanticItem *item)
 {
     RDEBUG << "item:" << item;
     if (item) {
@@ -1333,7 +1320,7 @@ void KoDocumentRdf::emitSemanticObjectUpdated(RdfSemanticItem *item)
     emit semanticObjectUpdated(item);
 }
 
-void KoDocumentRdf::emitSemanticObjectViewSiteUpdated(RdfSemanticItem *item, const QString &xmlid)
+void KoDocumentRdf::emitSemanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid)
 {
     RDEBUG << "item:" << item;
     if (item) {
@@ -1353,7 +1340,7 @@ bool KoDocumentRdf::completeSaving(KoStore *, KoXmlWriter *, KoShapeSavingContex
     return true;
 }
 
-KoDocumentRdf::reflowItem::reflowItem(RdfSemanticItem *si, const QString &xmlid, SemanticStylesheet *ss, const QPair< int, int > &extent)
+KoDocumentRdf::reflowItem::reflowItem(KoRdfSemanticItem *si, const QString &xmlid, KoSemanticStylesheet *ss, const QPair< int, int > &extent)
         : m_si(si)
         , m_ss(ss)
         , m_xmlid(xmlid)
@@ -1361,7 +1348,7 @@ KoDocumentRdf::reflowItem::reflowItem(RdfSemanticItem *si, const QString &xmlid,
 {
 }
 
-void KoDocumentRdf::insertReflow(QMap<int, reflowItem> &col, RdfSemanticItem *obj, SemanticStylesheet *ss)
+void KoDocumentRdf::insertReflow(QMap<int, reflowItem> &col, KoRdfSemanticItem *obj, KoSemanticStylesheet *ss)
 {
     RDEBUG << "reflowing object:" << obj->name();
     QStringList xmlidlist = obj->xmlIdList();
@@ -1373,14 +1360,14 @@ void KoDocumentRdf::insertReflow(QMap<int, reflowItem> &col, RdfSemanticItem *ob
     }
 }
 
-void KoDocumentRdf::insertReflow(QMap<int, reflowItem> &col, RdfSemanticItem *obj,
+void KoDocumentRdf::insertReflow(QMap<int, reflowItem> &col, KoRdfSemanticItem *obj,
                                  const QString &sheetType, const QString &stylesheetName)
 {
-    SemanticStylesheet *ss = obj->findStylesheetByName(sheetType, stylesheetName);
+    KoSemanticStylesheet *ss = obj->findStylesheetByName(sheetType, stylesheetName);
     insertReflow(col, obj, ss);
 }
 
-void KoDocumentRdf::insertReflow(QMap<int, reflowItem> &col, RdfSemanticItem *obj)
+void KoDocumentRdf::insertReflow(QMap<int, reflowItem> &col, KoRdfSemanticItem *obj)
 {
     RDEBUG << "reflowing object:" << obj->name();
     foreach (const QString &xmlid, obj->xmlIdList()) {
@@ -1405,11 +1392,21 @@ void KoDocumentRdf::applyReflow(const QMap<int, reflowItem> &col)
         RDEBUG << "format(), semitem:" << item.m_si;
         RDEBUG << "format(), semitem.name:" << item.m_si->name();
         if (item.m_ss) {
-            RdfSemanticItemViewSite vs(item.m_si, item.m_xmlid);
+            KoRdfSemanticItemViewSite vs(item.m_si, item.m_xmlid);
             vs.setStylesheetWithoutReflow(item.m_ss);
         }
         emitSemanticObjectViewSiteUpdated(item.m_si, item.m_xmlid);
     }
+}
+
+QList<KoSemanticStylesheet*> KoDocumentRdf::userStyleSheetList(const QString& className)
+{
+    return d->m_userStylesheets[className];
+}
+
+void KoDocumentRdf::setUserStyleSheetList(const QString& className,const QList<KoSemanticStylesheet*>& l)
+{
+    d->m_userStylesheets[className] = l;
 }
 
 #define TextTool_ID "TextToolFactory_ID"

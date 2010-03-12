@@ -45,21 +45,23 @@ class KoCanvasBase;
 class KoTextEditor;
 
 #include "RdfForward.h"
-#include "SemanticStylesheet.h"
-#include "RdfSemanticItem.h"
-#include "RdfFoaF.h"
-#include "RdfCalendarEvent.h"
-#include "RdfLocation.h"
-#include "RdfSemanticItemViewSite.h"
+#include "KoSemanticStylesheet.h"
+#include "KoRdfSemanticItem.h"
+#include "KoRdfFoaF.h"
+#include "KoRdfCalendarEvent.h"
+#include "KoRdfLocation.h"
+#include "KoRdfSemanticItemViewSite.h"
 #include "RdfSemanticTreeWidgetAction.h"
 #include "InsertSemanticObjectActionBase.h"
 #include "InsertSemanticObjectCreateAction.h"
 #include "InsertSemanticObjectReferenceAction.h"
-#include "RdfSemanticTreeWidgetItem.h"
-#include "RdfFoaFTreeWidgetItem.h"
-#include "RdfCalendarEventTreeWidgetItem.h"
-#include "RdfLocationTreeWidgetItem.h"
-#include "RdfSemanticTree.h"
+#include "KoRdfSemanticTreeWidgetItem.h"
+#include "KoRdfFoaFTreeWidgetItem.h"
+#include "KoRdfCalendarEventTreeWidgetItem.h"
+#include "KoRdfLocationTreeWidgetItem.h"
+#include "KoRdfSemanticTree.h"
+
+class KoDocumentRdfPrivate;
 
 /**
  * @short The central access point for the Rdf metadata of an ODF document.
@@ -79,9 +81,9 @@ class KoTextEditor;
  * ACCESS TO Rdf:
  *
  * You can get at the Rdf information in two main ways: either using
- * Soprano/SPARQL or through RdfSemanticItem objects.
+ * Soprano/SPARQL or through KoRdfSemanticItem objects.
  *
- * Subclasses of RdfSemanticItem exist for locations (foaf,vcard),
+ * Subclasses of KoRdfSemanticItem exist for locations (foaf,vcard),
  * events (ical), and locations (two Rdf geolocation formats). To get
  * a list of these objects use the foaf(), calendarEvents(), and
  * locations() methods of this class. Each of these methods optionally
@@ -97,7 +99,7 @@ class KoTextEditor;
  *
  * QTextCursor cursor = ...;
  * Soprano::Model* model = rdf->findStatements( cursor );
- * RdfFoaFList foaflist = rdf->foaf( model );
+ * KoRdfFoaFList foaflist = rdf->foaf( model );
  *
  * Using the Soprano::Model directly is covered in a latter section of
  * this comment.
@@ -185,7 +187,7 @@ public:
     bool saveOasis(KoStore *store, KoXmlWriter *manifestWriter);
 
     /**
-     * Used by RdfSemanticItem when creating new semantic items so that the
+     * Used by KoRdfSemanticItem when creating new semantic items so that the
      * KoDocumentRdf class can find them.
      */
     void rememberNewInlineRdfObject(KoTextInlineRdf *inlineRdf);
@@ -222,7 +224,7 @@ public:
     /**
      * Get the namespace to URI prefix mapping object.
      */
-    RdfPrefixMapping* getPrefixMapping() const; // TODO rename to remove the get
+    KoRdfPrefixMapping* prefixMapping() const;
 
     /**
      * Get the Soprano::Model that contains all the Rdf
@@ -300,20 +302,20 @@ public:
      * Obtain a list of Contact/FOAF semantic objects, if any, for the Rdf
      * in the default model() or the one you optionally pass in.
      */
-    QList<RdfFoaF*> foaf(Soprano::Model *m = 0);
+    QList<KoRdfFoaF*> foaf(Soprano::Model *m = 0);
 
 
     /**
      * Obtain a list of calendar/vevent semantic objects, if any, for the Rdf
      * in the default model() or the one you optionally pass in.
      */
-    QList<RdfCalendarEvent*> calendarEvents(Soprano::Model *m = 0);
+    QList<KoRdfCalendarEvent*> calendarEvents(Soprano::Model *m = 0);
 
     /**
      * Obtain a list of location semantic objects, if any, for the Rdf
      * in the default model() or the one you optionally pass in.
      */
-    QList<RdfLocation*> locations(Soprano::Model *m = 0);
+    QList<KoRdfLocation*> locations(Soprano::Model *m = 0);
 
     /**
      * For Rdf stored in manifest.rdf or another rdf file referenced
@@ -321,13 +323,13 @@ public:
      * context. The filename.rdf is appended so that the Rdf can be
      * put back into the right file again during save.
      */
-    QString getRdfPathContextPrefix() const;
+    QString rdfPathContextPrefix() const;
 
     /**
      * This is used for triples that do not specify their xhtml:about
      * ie, the subject URI.
      */
-    QString getRdfInternalMetadataWithoutSubjectURI() const;
+    QString rdfInternalMetadataWithoutSubjectURI() const;
 
     /**
      * Soprano::Node that can be used as the model context for
@@ -339,7 +341,7 @@ public:
      * Soprano::Node that can be used as the model context for
      * statements which were stored in the context.xml file.
      */
-    Soprano::Node getInlineRdfContext() const;
+    Soprano::Node inlineRdfContext() const;
 
     /**
      * If model contains ?s ?p ?o
@@ -401,12 +403,12 @@ public:
      * @see applyReflow()
      */
     struct reflowItem {
-        RdfSemanticItem *m_si;
-        SemanticStylesheet *m_ss;
+        KoRdfSemanticItem *m_si;
+        KoSemanticStylesheet *m_ss;
         QString m_xmlid;
         QPair<int, int> m_extent;
     public:
-        reflowItem(RdfSemanticItem *si, const QString &xmlid, SemanticStylesheet *ss, const QPair<int, int> &extent);
+        reflowItem(KoRdfSemanticItem *si, const QString &xmlid, KoSemanticStylesheet *ss, const QPair<int, int> &extent);
     };
 
     /**
@@ -431,9 +433,9 @@ public:
      *
      * @see applyReflow()
      */
-     void insertReflow(QMap<int, reflowItem> &col, RdfSemanticItem *obj, SemanticStylesheet *ss);
-    void insertReflow(QMap<int, reflowItem> &col, RdfSemanticItem *obj, const QString &sheetType, const QString &stylesheetName);
-    void insertReflow(QMap<int, reflowItem> &col, RdfSemanticItem *obj);
+    void insertReflow(QMap<int, reflowItem> &col, KoRdfSemanticItem *obj, KoSemanticStylesheet *ss);
+    void insertReflow(QMap<int, reflowItem> &col, KoRdfSemanticItem *obj, const QString &sheetType, const QString &stylesheetName);
+    void insertReflow(QMap<int, reflowItem> &col, KoRdfSemanticItem *obj);
     /**
      * @short Apply the stylesheets built up with insertReflow().
      *
@@ -497,10 +499,6 @@ private:
      */
     bool saveRdf(KoStore *store, KoXmlWriter *manifestWriter, Soprano::Node &context);
 
-    Soprano::Model *m_model; ///< Main Model containing all Rdf for doc
-    typedef QList<KoTextInlineRdf*> m_inlineRdfObjects_t;
-    m_inlineRdfObjects_t m_inlineRdfObjects;  ///< Cache of weak pointers to inline Rdf
-    RdfPrefixMapping *m_prefixMapping;     ///< prefix -> URI mapping
 
     /**
      * Because there are at least two different ways of associating digital longitude
@@ -509,7 +507,7 @@ private:
      *
      * @see locations()
      */
-    void addLocations(Soprano::Model *m, QList<RdfLocation*> &ret,
+    void addLocations(Soprano::Model *m, QList<KoRdfLocation*> &ret,
                       bool isGeo84, const QString &sparql);
 
 signals:
@@ -519,15 +517,22 @@ signals:
      * semanticObjectViewSiteUpdated is emitted the view will take care
      * of reflowing the semanitc item using it's stylesheet.
      */
-    void semanticObjectAdded(RdfSemanticItem *item);
-    void semanticObjectUpdated(RdfSemanticItem *item);
-    void semanticObjectViewSiteUpdated(RdfSemanticItem *item, const QString &xmlid);
+    void semanticObjectAdded(KoRdfSemanticItem *item);
+    void semanticObjectUpdated(KoRdfSemanticItem *item);
+    void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
 
 public:
-    void emitSemanticObjectAdded(RdfSemanticItem *item);
-    void emitSemanticObjectUpdated(RdfSemanticItem *item);
-    void emitSemanticObjectViewSiteUpdated(RdfSemanticItem *item, const QString &xmlid);
-    void emitSemanticObjectAddedConst(RdfSemanticItem *const item);
+    void emitSemanticObjectAdded(KoRdfSemanticItem *item);
+    void emitSemanticObjectUpdated(KoRdfSemanticItem *item);
+    void emitSemanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
+    void emitSemanticObjectAddedConst(KoRdfSemanticItem *const item);
+
+    /**
+     * You should use the KoRdfSemanticItem::userStylesheets() method instead of this one.
+     * This is mainly an internal method to allow user stylesheets to be managed per document.
+     */
+    QList<KoSemanticStylesheet*> userStyleSheetList(const QString& className);
+    void setUserStyleSheetList(const QString& className,const QList<KoSemanticStylesheet*>& l);
 
 private:
     /// reimplemented
@@ -536,9 +541,7 @@ private:
     /// reimplemented
     virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context);
 
-    QList<RdfFoaF*> m_foafObjects;
-    QList<RdfCalendarEvent*> m_calObjects;
-    QList<RdfLocation*> m_locObjects;
+    KoDocumentRdfPrivate * const d;
 };
 
 #endif

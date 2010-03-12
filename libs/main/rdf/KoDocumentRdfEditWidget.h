@@ -25,7 +25,7 @@
 #include <QWidget>
 
 class KoDocumentRdf;
-class SemanticStylesheet;
+class KoSemanticStylesheet;
 class QComboBox;
 
 /**
@@ -106,7 +106,7 @@ public slots:
 
     /**
      * This methods set the default stylesheet to the
-     * user selection for each type of RdfSemanticItem.
+     * user selection for each type of KoRdfSemanticItem.
      */
     void defaultContactsSheetButton();
     void defaultEventsSheetButton();
@@ -123,11 +123,11 @@ private slots:
     /**
      * The user edited a semantic item, update the view.
      */
-    void semanticObjectUpdated(RdfSemanticItem *item);
+    void semanticObjectUpdated(KoRdfSemanticItem *item);
 
 private:
 
-    SemanticStylesheet *stylesheetFromComboBox(QComboBox *w);
+    KoSemanticStylesheet *stylesheetFromComboBox(QComboBox *w) const;
 
     class KoDocumentRdfEditWidgetPrivate;
     KoDocumentRdfEditWidgetPrivate *const d;

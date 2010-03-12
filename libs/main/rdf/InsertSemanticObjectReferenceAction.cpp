@@ -55,7 +55,7 @@ void InsertSemanticObjectReferenceAction::activated()
     QLabel *label = new QLabel(i18n("Select the object you want to reference"), widget);
     lay->addWidget(label);
     QTreeWidget *tree = new QTreeWidget(widget);
-    RdfSemanticTree td = RdfSemanticTree::createTree(tree);
+    KoRdfSemanticTree td = KoRdfSemanticTree::createTree(tree);
     td.update(const_cast<KoDocumentRdf*>(m_rdf));
     lay->addWidget(tree);
 
@@ -65,7 +65,7 @@ void InsertSemanticObjectReferenceAction::activated()
 
     if (dialog.exec() == KPageDialog::Accepted && tree->currentItem()) {
         QTreeWidgetItem *item = tree->currentItem();
-        if (RdfSemanticTreeWidgetItem *ditem = dynamic_cast<RdfSemanticTreeWidgetItem*>(item)) {
+        if (KoRdfSemanticTreeWidgetItem *ditem = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(item)) {
 
             kDebug(30015) << "InsertSemanticObjectReferenceAction::activated... item:" << item;
             ditem->insert(m_canvas);

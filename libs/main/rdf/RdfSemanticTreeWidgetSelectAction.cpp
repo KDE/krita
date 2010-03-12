@@ -19,14 +19,14 @@
 
 #include "KoDocumentRdf.h"
 #include "RdfSemanticTreeWidgetSelectAction.h"
-#include "RdfSemanticItemViewSite.h"
+#include "KoRdfSemanticItemViewSite.h"
 
 #include <KoTextEditor.h>
 
 #include <kdebug.h>
 
 RdfSemanticTreeWidgetSelectAction::RdfSemanticTreeWidgetSelectAction(QWidget *parent,
-        KoCanvasBase *canvas, RdfSemanticItem* si, QString name)
+        KoCanvasBase *canvas, KoRdfSemanticItem* si, QString name)
     : RdfSemanticTreeWidgetAction(parent, canvas, name)
     , si(si)
 {
@@ -42,7 +42,7 @@ void RdfSemanticTreeWidgetSelectAction::activated()
     KoDocumentRdf *rdf = si->documentRdf();
     QString xmlid = rdf->findXmlId(editor());
     kDebug(30015) << "selecting xmlid:" << xmlid;
-    RdfSemanticItemViewSite vs(si, xmlid);
+    KoRdfSemanticItemViewSite vs(si, xmlid);
     vs.select(m_canvas);
 }
 

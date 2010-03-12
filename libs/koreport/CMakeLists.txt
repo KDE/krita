@@ -42,6 +42,7 @@ set(koreport_LIB_SRCS
 	renderer/KoReportScreenRenderer.cpp
 	renderer/KoReportHTMLTableRenderer.cpp
     renderer/KoReportHTMLCSSRenderer.cpp
+    renderer/KoReportKSpreadRenderer.cpp
     renderer/KoReportRendererBase.cpp
 
 	renderer/scripting/krscripthandler.cpp
@@ -91,11 +92,6 @@ set(koreport_LIB_SRCS
 if (SHOULD_BUILD_KWORD)
   add_definitions(-DHAVE_KWORD)
 endif (SHOULD_BUILD_KWORD)
-
-if (SHOULD_BUILD_KSPREAD)
-  add_definitions(-DHAVE_KSPREAD)
-  set(koreport_LIB_SRCS ${koreport_LIB_SRCS} renderer/KoReportKSpreadRenderer.cpp)
-endif (SHOULD_BUILD_KSPREAD)
 
 kde4_add_ui_files(koreport_LIB_SRCS wrtembed/detailgroupsectiondialog.ui wrtembed/sectioneditor.ui )
 

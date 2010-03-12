@@ -251,7 +251,7 @@ QSize KisSliderSpinBox::sizeHint() const
     QFontMetrics fm(font());
     //We need at least 50 pixels or things start to look bad
     int w = qMax(fm.width(QString::number(maximum())), 50);
-    QSize hint(w, d->edit->sizeHint().height());
+    QSize hint(w, d->edit->sizeHint().height() + 3);
 
     //Getting the size of the buttons is a pain as the calcs require a rect
     //that is "big enough". We run the calc twice to get the "smallest" buttons

@@ -22,19 +22,9 @@
 #define KIS_TOOL_STAR_H_
 
 #include "kis_tool_shape.h"
-#include "ui_wdg_tool_star.h"
 #include "flake/kis_node_shape.h"
 
-
-class WdgToolStar : public QWidget, public Ui::WdgToolStar
-{
-    Q_OBJECT
-
-public:
-    WdgToolStar(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
+class KisSliderSpinBox;
 
 class KisToolStar : public KisToolShape
 {
@@ -67,7 +57,11 @@ private:
 
     qint32 m_innerOuterRatio;
     qint32 m_vertices;
-    WdgToolStar* m_optWidget;
+
+    KisSliderSpinBox *m_verticesSlider;
+    KisSliderSpinBox *m_ratioSlider;
+
+
 };
 
 

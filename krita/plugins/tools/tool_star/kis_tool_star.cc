@@ -48,6 +48,7 @@
 #include <kis_paint_information.h>
 
 #include "kis_selection.h"
+#include "widgets/kis_slider_spin_box.h"
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_path_paint_action.h>
@@ -71,8 +72,8 @@ void KisToolStar::mousePressEvent(KoPointerEvent *event)
         m_dragging = true;
         m_dragStart = convertToPixelCoord(event);
         m_dragEnd = convertToPixelCoord(event);
-        m_vertices = m_optWidget->verticesSpinBox->value();
-        m_innerOuterRatio = m_optWidget->ratioSpinBox->value();
+        m_vertices = m_verticesSlider->value();
+        m_innerOuterRatio = m_ratioSlider->value();
     }
     if(m_dragging && (event->button() == Qt::MidButton || event->button() == Qt::RightButton)) {
         //end painting, if calling the menu or the pop up palette. otherwise there is weird behaviour
@@ -225,18 +226,20 @@ void KisToolStar::updatePreview() {
 QWidget* KisToolStar::createOptionWidget()
 {
     QWidget *widget = KisToolShape::createOptionWidget();
+    widget->setObjectName(toolId() + "option widget");
 
-    m_optWidget = new WdgToolStar(widget);
-    Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setObjectName(toolId() + " option widget");
+    QLabel *lblVertices = new QLabel(i18n("Vertices:"), widget);
+    m_verticesSlider = new KisSliderSpinBox(widget);
+    m_verticesSlider->setRange(2, 100, 0);
+    m_verticesSlider->setValue(5);
+    addOptionWidgetOption(m_verticesSlider, lblVertices);
 
-    m_optWidget->ratioSpinBox->setValue(m_innerOuterRatio);
+    QLabel *lblRatio = new QLabel(i18n("Ratio:"), widget);
+    m_ratioSlider = new KisSliderSpinBox(widget);
+    m_ratioSlider->setValue(m_innerOuterRatio);
 
-    QGridLayout *optionLayout = new QGridLayout(widget);
-    KisToolShape::addOptionWidgetLayout(optionLayout);
+    addOptionWidgetOption(m_ratioSlider, lblRatio);
 
-    optionLayout->addWidget(m_optWidget, 0, 0);
-    widget->setFixedHeight(widget->sizeHint().height());
     return widget;
 }
 

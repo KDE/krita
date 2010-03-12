@@ -62,9 +62,6 @@ KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
     // current selection now (global or local).
     connect(m_timer, SIGNAL(timeout()), this, SLOT(selectionTimerEvent()));
 
-    KoResourceManager *resourceManager = view->canvasBase()->resourceManager();
-    connect(resourceManager, SIGNAL(resourceChanged(int, const QVariant &)),
-            this, SLOT(resourceChanged(int, const QVariant&)));
 }
 
 KisSelectionDecoration::~KisSelectionDecoration()
@@ -250,11 +247,6 @@ void KisSelectionDecoration::updateMaskVisualisation(const QRect & r)
 {
     Q_UNUSED(r);
     Q_ASSERT_X(0, "KisSelectionDecoration.cc", "MASK MODE NOT SUPPORTED YET!");
-}
-
-void KisSelectionDecoration::resourceChanged(int key, const QVariant & v)
-{
-    Q_UNUSED(v);
 }
 
 #include "kis_selection_decoration.moc"

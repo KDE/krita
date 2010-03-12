@@ -42,7 +42,6 @@ protected:
 public slots:
     void selectionChanged();
     void selectionTimerEvent();
-    void resourceChanged(int key, const QVariant & res);
 private:
     bool selectionIsActive();
     void updateSimpleOutline();

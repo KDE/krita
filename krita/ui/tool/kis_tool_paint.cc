@@ -169,11 +169,12 @@ QWidget * KisToolPaint::createOptionWidget()
     QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setObjectName("KisToolPaint::OptionWidget::VerticalLayout");
     verticalLayout->setMargin(0);
-    verticalLayout->setSpacing(3);
+    verticalLayout->setSpacing(1);
 
     m_optionWidgetLayout = new QGridLayout();
     verticalLayout->addLayout(m_optionWidgetLayout);
-    m_optionWidgetLayout->setSpacing(6);
+    m_optionWidgetLayout->setSpacing(1);
+    m_optionWidgetLayout->setMargin(0);
 
     m_optionWidgetLayout->addWidget(m_lbComposite, 0, 0);
     m_optionWidgetLayout->addWidget(m_cmbComposite, 0, 1);

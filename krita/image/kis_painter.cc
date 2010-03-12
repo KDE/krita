@@ -244,6 +244,64 @@ QRegion KisPainter::addDirtyRect(const QRect & rc)
     }
 }
 
+void KisPainter::bitBlt(qint32 dx, qint32 dy, const KisPaintDeviceSP srcdev, const KisFixedPaintDeviceSP selection, qint32 sx, qint32 sy, qint32 sw, qint32 sh)
+{
+    if (sw == 0 || sh == 0) return;
+    if (srcdev.isNull()) return;
+    if (d->device.isNull()) return;
+
+    Q_ASSERT(srcdev->pixelSize() == d->pixelSize);
+    Q_ASSERT(selection->colorSpace() == KoColorSpaceRegistry::instance()->alpha8());
+
+    QRect srcRect = QRect(sx, sy, sw, sh);
+
+    // In case of COMPOSITE_COPY restricting bitblt to extent can
+    // have unexpected behavior since it would reduce the area that
+    // is copied.
+    if (d->compositeOp->id() != COMPOSITE_COPY) {
+        srcRect &= srcdev->extent();
+    }
+
+    if (srcRect.isEmpty()) {
+        return;
+    }
+
+    dx += srcRect.x() - sx;
+    dy += srcRect.y() - sy;
+
+    sx = srcRect.x();
+    sy = srcRect.y();
+    sw = srcRect.width();
+    sh = srcRect.height();
+    
+    quint8 * srcBytes = new quint8[ sw * sh * srcdev->pixelSize()];
+    srcdev->readBytes(srcBytes,sx,sy,sw,sh);
+    
+    quint8 * dstBytes = new quint8[ sw * sh * d->device->pixelSize()];
+    d->device->readBytes(dstBytes, dx,dy, sw, sh);
+    
+    d->colorSpace->bitBlt(dstBytes,
+                        sw * d->device->pixelSize(),
+                        srcdev->colorSpace(),
+                        srcBytes,
+                        sw * srcdev->colorSpace()->pixelSize(),
+                        selection->data(),
+                        sw  * selection->pixelSize(),
+                        d->opacity,
+                        sh,
+                        sw,
+                        d->compositeOp,
+                        d->channelFlags);
+
+    d->device->writeBytes(dstBytes, dx, dy, sw, sh);
+    
+    delete [] srcBytes;
+    delete [] dstBytes;
+
+    addDirtyRect(QRect(dx, dy, sw, sh));
+}
+
+
 
 void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         const KisPaintDeviceSP srcdev,

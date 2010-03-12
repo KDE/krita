@@ -129,6 +129,12 @@ public:
                 qint32 sx, qint32 sy,
                 qint32 sw, qint32 sh);
 
+    void bitBlt(qint32 dx, qint32 dy,
+                const KisPaintDeviceSP srcdev,
+                const KisFixedPaintDeviceSP selection,
+                qint32 sx, qint32 sy,
+                qint32 sw, qint32 sh);
+                
     /**
      * Convenience method that uses QPoint and QRect
      */

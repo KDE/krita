@@ -380,12 +380,11 @@ int KisSliderSpinBox::valueForX(int x) const
 
 void KisSliderSpinBox::setRange(qreal minimum, qreal maximum, int decimals)
 {
-    d->validator->setDecimals(decimals);
     d->factor = pow(10,decimals);
-
+    
     setMinimum(minimum*d->factor);
     setMaximum(maximum*d->factor);
-    d->validator->setRange(minimum, maximum);
+    d->validator->setRange(minimum, maximum, decimals);
 }
 
 void KisSliderSpinBox::setSuffix(const QString& suffix)

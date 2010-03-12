@@ -406,7 +406,7 @@ void KisSliderSpinBox::setDoubleValue(qreal value)
 
 QString KisSliderSpinBox::valueString() const
 {
-    return QString::number((qreal)value()/d->factor, 'f', 2);
+    return QString::number((qreal)value()/d->factor, 'f', d->validator->decimals());
 }
 
 void KisSliderSpinBox::setExponentRatio(qreal dbl)

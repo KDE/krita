@@ -255,7 +255,6 @@ void KisSelectionDecoration::updateMaskVisualisation(const QRect & r)
 void KisSelectionDecoration::resourceChanged(int key, const QVariant & v)
 {
     Q_UNUSED(v);
-    warnKrita << "Mask mode not supported yet";
 }
 
 #include "kis_selection_decoration.moc"

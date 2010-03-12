@@ -48,7 +48,6 @@ public:
 
 private:
     bool m_firstRun;
-    KisPaintDeviceSP m_target;
     KisPaintDeviceSP m_srcdev;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;

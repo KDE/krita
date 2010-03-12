@@ -41,7 +41,6 @@
 KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(settings, painter)
         , m_firstRun(true)
-        , m_target(0)
         , m_srcdev(0)
 {
     Q_UNUSED(image);
@@ -55,8 +54,6 @@ KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainte
     m_rateOption.sensor()->reset();
 
     m_srcdev = new KisPaintDevice(painter->device()->colorSpace());
-    m_target = new KisPaintDevice(painter->device()->colorSpace());
-
 }
 
 KisSmudgeOp::~KisSmudgeOp()
@@ -111,7 +108,8 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
 
     qint32 sw = dab->bounds().width();
     qint32 sh = dab->bounds().height();
-
+    
+    
     /* To smudge, one does the following:
          * at first, initialize a temporary paint device with a copy of the original (dab-sized piece, really).
          * all other times:
@@ -131,8 +129,8 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
             cs->setOpacity(it.rawData(), quint8(cs->opacityF(it.rawData()) * opacity), 1);
             ++it;
         }
-
         opacity = OPACITY_OPAQUE_U8 - opacity;
+        
     } else {
         m_firstRun = false;
     }
@@ -142,27 +140,11 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     copyPainter.bitBlt(0, 0, device, pt.x(), pt.y(), sw, sh);
     copyPainter.end();
 
-    m_target->clear();
-
-    // Looks hacky, but we lost bltMask, or the ability to easily convert alpha8 paintdev to selection?
-    KisSelectionSP dabAsSelection = new KisSelection();
-    copyPainter.begin(dabAsSelection);
-    copyPainter.setOpacity(OPACITY_OPAQUE_U8);
-    copyPainter.setCompositeOp(COMPOSITE_COPY);
-    copyPainter.bltFixed(0, 0, dab, 0, 0, sw, sh);
-    copyPainter.end();
-
-    copyPainter.begin(m_target);
-    copyPainter.setCompositeOp(COMPOSITE_OVER);
-    copyPainter.setSelection(dabAsSelection);
-    copyPainter.bitBlt(0, 0, m_srcdev, 0, 0, sw, sh);
-    copyPainter.end();
-
     qint32 sx = dstRect.x() - x;
     qint32 sy = dstRect.y() - y;
     sw = dstRect.width();
     sh = dstRect.height();
 
-    painter()->bitBlt(dstRect.x(), dstRect.y(), m_target, sx, sy, sw, sh);
+    painter()->bitBlt(dstRect.x(), dstRect.y(), m_srcdev, dab, sx, sy, sw, sh);
     return spacing(scale);
 }

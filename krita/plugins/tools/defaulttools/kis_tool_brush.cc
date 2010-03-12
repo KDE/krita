@@ -145,11 +145,12 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderRate->setValue(m_rate);
     m_sliderRate->setToolTip(QString::number(m_rate) + ' ' + i18n("ms"));
 
+    addOptionWidgetOption(m_sliderRate, labelRate);
+
     m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smoothness:"), optionWidget);
     m_chkSmooth->setObjectName("chkSmooth");
     m_chkSmooth->setChecked(m_smooth);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
-
 
     m_sliderSmoothness = new KisSliderSpinBox(optionWidget);
     m_sliderSmoothness->setRange(0, MAXIMUM_SMOOTHNESS, 0);
@@ -179,12 +180,10 @@ QWidget * KisToolBrush::createOptionWidget()
     m_optionLayout->setSpacing(2);
 
     KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
-    m_optionLayout->addWidget(labelRate, 1, 0);
-    m_optionLayout->addWidget(m_sliderRate, 1, 1, 1, 2);
-    m_optionLayout->addWidget(m_chkSmooth, 2, 0);
-    m_optionLayout->addWidget(m_sliderSmoothness, 2, 1, 1, 2);
-    m_optionLayout->addWidget(m_chkAssistant, 4, 0);
-    m_optionLayout->addWidget(m_sliderMagnetism, 4, 1, 1, 2);
+    m_optionLayout->addWidget(m_chkSmooth, 1, 0);
+    m_optionLayout->addWidget(m_sliderSmoothness, 1, 1, 1, 2);
+    m_optionLayout->addWidget(m_chkAssistant, 2, 0);
+    m_optionLayout->addWidget(m_sliderMagnetism, 2, 1, 1, 2);
 
     optionWidget->setFixedHeight(optionWidget->sizeHint().height());
 

@@ -328,7 +328,14 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
 {
     if (isParametricShape()) {
         context.xmlWriter().startElement("draw:custom-shape");
-        saveOdfAttributes(context, OdfAllAttributes);
+        saveOdfAttributes(context, OdfAllAttributes|~OdfSize);
+
+        // save the right size so that when loading we fit the viewbox
+        // to the right size without getting any wrong scaling
+        // -> calculate the right size from the current size/viewbound ratio
+        const QSizeF currentSize = outline().boundingRect().size();
+        context.xmlWriter().addAttributePt("svg:width", m_viewBox.width()*currentSize.width()/m_viewBound.width());
+        context.xmlWriter().addAttributePt("svg:height", m_viewBox.height()*currentSize.height()/m_viewBound.height());
 
         context.xmlWriter().startElement("draw:enhanced-geometry");
         context.xmlWriter().addAttribute("svg:viewBox", QString("%1 %2 %3 %4").arg(m_viewBox.x()).arg(m_viewBox.y()).arg(m_viewBox.width()).arg(m_viewBox.height()));
@@ -423,6 +430,10 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     QSizeF size;
     size.setWidth(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "width", QString())));
     size.setHeight(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "height", QString())));
+    // the viewbox is to be fitted into the size of the shape, so before setting
+    // the size we just loaded // we set the viewbox to be the basis to calculate
+    // the viewbox matrix from
+    m_viewBound = m_viewBox;
     setSize(size);
 
     QPointF pos;

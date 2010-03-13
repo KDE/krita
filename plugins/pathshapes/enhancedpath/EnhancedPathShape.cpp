@@ -397,7 +397,7 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
                     addFormula(name, formula);
                 } else if (grandChild.localName() == "handle") {
                     EnhancedPathHandle * handle = new EnhancedPathHandle(this);
-                    if (handle->loadOdf(grandChild)) {
+                    if (handle->loadOdf(grandChild, context)) {
                         m_enhancedHandles.append(handle);
                         evaluateHandles();
                     } else {

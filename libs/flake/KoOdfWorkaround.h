@@ -54,6 +54,13 @@ namespace KoOdfWorkaround
      */
     FLAKE_EXPORT void fixEnhancedPath(QString &path, const KoXmlElement &element, KoShapeLoadingContext &context);
 
+    /**
+     * OpenOffice interchanges the position coordinates for polar handles.
+     * According to the specification the first coordinate is the angle, the
+     * second coordinates is the radius. OpenOffice does it the other way around.
+     */
+    FLAKE_EXPORT void fixEnhancedPathPolarHandlePosition(QString &position, const KoXmlElement &element, KoShapeLoadingContext &context);
+    
     FLAKE_EXPORT QColor fixMissingStrokeColor(const KoXmlElement &element, KoShapeLoadingContext &context);
     FLAKE_EXPORT QColor fixMissingFillColor(const KoXmlElement &element, KoShapeLoadingContext &context);
     FLAKE_EXPORT bool   fixMissingStyle_DisplayLabel(const KoXmlElement &element, KoShapeLoadingContext &context);

@@ -24,6 +24,8 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
+#include <KoShapeLoadingContext.h>
+#include <KoOdfWorkaround.h>
 
 #include <math.h>
 
@@ -167,12 +169,15 @@ void EnhancedPathHandle::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().endElement(); // draw:handle
 }
 
-bool EnhancedPathHandle::loadOdf(const KoXmlElement & element)
+bool EnhancedPathHandle::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
     if (element.localName() != "handle" || element.namespaceURI() != KoXmlNS::draw)
         return false;
 
     QString position = element.attributeNS(KoXmlNS::draw, "handle-position");
+#ifndef NWORKAROUND_ODF_BUGS
+    KoOdfWorkaround::fixEnhancedPathPolarHandlePosition(position, element, context);
+#endif
     QStringList tokens = position.simplified().split(' ');
     if (tokens.count() != 2)
         return false;

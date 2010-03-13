@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2009 Johannes Simon <johannes.simon@gmail.com>
+   Copyright (C) 2010 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,6 +50,18 @@ void KoOdfWorkaround::fixEnhancedPath(QString & path, const KoXmlElement &elemen
     if (context.odfLoadingContext().generator().startsWith("OpenOffice.org") ) {
         if (path.isEmpty() && element.attributeNS(KoXmlNS::draw, "type", "") == "ellipse" ) {
             path = "U 10800 10800 10800 10800 0 360 Z N";
+        }
+    }
+}
+
+void KoOdfWorkaround::fixEnhancedPathPolarHandlePosition(QString &position, const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    if (context.odfLoadingContext().generator().startsWith("OpenOffice.org") ) {
+        if (element.hasAttributeNS(KoXmlNS::draw, "handle-polar")) {
+            QStringList tokens = position.simplified().split(' ');
+            if (tokens.count() == 2) {
+                position = tokens[1] + ' ' + tokens[0];
+            }
         }
     }
 }

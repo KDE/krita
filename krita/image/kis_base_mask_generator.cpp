@@ -25,17 +25,6 @@
 #include "kis_circle_mask_generator.h"
 #include "kis_rect_mask_generator.h"
 
-KisMaskGenerator::KisMaskGenerator(double width, double height, double fh, double fv, Type type) : d(new Private)
-{
-    d->m_radius = width;
-    d->m_ratio = height / width;
-    d->m_fh = 2.0 * fh / width;
-    d->m_fv = 2.0 * fv / height;
-    d->m_spikes = 2;
-    d->type = type;
-    init();
-}
-
 KisMaskGenerator::KisMaskGenerator(double radius, double ratio, double fh, double fv, int spikes, Type type) : d(new Private)
 {
     d->m_radius = radius;
@@ -64,8 +53,8 @@ void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
     Q_UNUSED(doc);
     e.setAttribute("radius", d->m_radius);
     e.setAttribute("ratio", d->m_ratio);
-    e.setAttribute("hfade", d->m_fh * 2); // 'cause in init we divide it again
-    e.setAttribute("vfade", d->m_fv * 2); // 'cause in init we divide it again
+    e.setAttribute("hfade", horizontalFade());
+    e.setAttribute("vfade", verticalFade());
     e.setAttribute("spikes", d->m_spikes);
 
 }
@@ -111,12 +100,12 @@ qreal KisMaskGenerator::ratio() const
 
 qreal KisMaskGenerator::horizontalFade() const
 {
-    return d->m_fh;
+    return 2.0 * d->m_fh; // 'cause in init we divide it again
 }
 
 qreal KisMaskGenerator::verticalFade() const
 {
-    return d->m_fv;
+    return 2.0 * d->m_fv; // 'cause in init we divide it again
 }
 
 int KisMaskGenerator::spikes() const

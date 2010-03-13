@@ -37,7 +37,6 @@ public:
     };
 public:
 
-    KDE_DEPRECATED KisMaskGenerator(qreal width, qreal height, qreal fh, qreal fv, Type type);
     /**
      * This function creates an auto brush shape with the following value :
      * @param w width

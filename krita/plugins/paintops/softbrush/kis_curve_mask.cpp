@@ -49,8 +49,6 @@ QPointF KisCurveMask::hotSpot(qreal scale, qreal rotation)
 
 void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal scale, qreal rotation, qreal subPixelX, qreal subPixelY)
 {
-    KoColor dabColor(color);
-    
     qreal cosa = cos(rotation);
     qreal sina = sin(rotation);
     
@@ -69,9 +67,11 @@ void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal sc
     if (w!=dstWidth || h!=dstHeight){
         dab->setRect(m_maskRect.toRect());
         dab->initialize();
-    }else{
-        dab->clear(m_maskRect.toRect());
     }
+     
+    const KoColorSpace * cs = dab->colorSpace();    
+    dab->fill(0,0,dab->bounds().width(), dab->bounds().height(),color.data());
+    cs->setOpacity(dab->data(), OPACITY_TRANSPARENT_U8, dab->bounds().width() * dab->bounds().height());
     
     qreal centerX = dstWidth  * 0.5 - 1.0 + subPixelX;
     qreal centerY = dstHeight * 0.5 - 1.0 + subPixelY;
@@ -96,14 +96,17 @@ void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal sc
             double rmaskX = cosa * maskX - sina * maskY;
             double rmaskY = sina * maskX + cosa * maskY;
 
-
             qreal alpha = valueAt(rmaskX, rmaskY);
-            if (alpha != OPACITY_OPAQUE_F)
+            if (alpha != OPACITY_TRANSPARENT_F)
             {
-                if (m_sizeProperties->density >= drand48()){
-                    dabColor.setOpacity(alpha);
-                    memcpy(dabPointer,dabColor.data(), pixelSize);
+                if (m_sizeProperties->density != 1.0){
+                    if (m_sizeProperties->density >= drand48()){
+                        cs->setOpacity(dabPointer,alpha,1);
+                    }
+                }else{
+                    cs->setOpacity(dabPointer,alpha,1);
                 }
+                
             }
             dabPointer += pixelSize;
         }

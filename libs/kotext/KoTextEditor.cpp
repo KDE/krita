@@ -1080,4 +1080,17 @@ void KoTextEditor::endEditBlock()
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
+void KoTextEditor::finishedLoading()
+{
+    QTextBlock block = d->document->begin();
+    while (!d->isBidiDocument && block.isValid()) {
+        bool rtl = isRightToLeft(block.text());
+        if ((QApplication::isLeftToRight() && rtl) || (QApplication::isRightToLeft() && !rtl)) {
+            d->isBidiDocument = true;
+            emit isBidiUpdated();
+        }
+        block = block.next();
+    }
+}
+
 #include <KoTextEditor.moc>

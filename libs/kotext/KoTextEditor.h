@@ -51,6 +51,8 @@ public:
 
     virtual ~KoTextEditor();
 
+    void finishedLoading();
+
 /*    QTextCursor ()
 QTextCursor ( QTextDocument * document )
 QTextCursor ( QTextFrame * frame )

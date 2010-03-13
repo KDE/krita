@@ -141,7 +141,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderRate = new KisSliderSpinBox (optionWidget);
     m_sliderRate->setRange(0, MAXIMUM_RATE, 0);
     m_sliderRate->setExponentRatio(3.0);
-    connect(m_sliderRate, SIGNAL(valueChanged(qreal, bool)), SLOT(slotSetRate(qreal)));
+    connect(m_sliderRate, SIGNAL(doubleValueChanged(qreal)), SLOT(slotSetRate(qreal)));
     m_sliderRate->setValue(m_rate);
     m_sliderRate->setToolTip(QString::number(m_rate) + ' ' + i18n("ms"));
 

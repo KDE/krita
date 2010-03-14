@@ -61,7 +61,7 @@ QPointF KisDuplicateOpSettings::offset() const
 
 void KisDuplicateOpSettings::mousePressEvent(KoPointerEvent *e)
 {
-    if (e->modifiers() == Qt::ShiftModifier) {
+    if (e->modifiers() == Qt::ControlModifier) {
         m_position = m_image->documentToPixel(e->point);
         m_isOffsetNotUptodate = true;
         e->accept();

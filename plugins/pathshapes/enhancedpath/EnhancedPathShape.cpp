@@ -328,7 +328,7 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
 {
     if (isParametricShape()) {
         context.xmlWriter().startElement("draw:custom-shape");
-        saveOdfAttributes(context, OdfAllAttributes|~OdfSize);
+        saveOdfAttributes(context, OdfAllAttributes&~OdfSize);
 
         // save the right size so that when loading we fit the viewbox
         // to the right size without getting any wrong scaling

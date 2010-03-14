@@ -479,13 +479,6 @@ void KoView::slotClearStatusText()
         sb->clearMessage();
 }
 
-// DCOPObject *KoView::dcopObject()
-// {
-//     if ( !d->m_dcopObject )
-//         d->m_dcopObject = new KoViewIface( this );
-//     return d->m_dcopObject;
-// }
-
 QToolBar* KoView::viewBar()
 {
     if (!d->viewBar) {

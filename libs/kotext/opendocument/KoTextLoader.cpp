@@ -906,7 +906,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
             kDebug(32500) << "  <line-break> Node localName=" << localName;
 #endif
-            cursor.insertText("\n");
+            cursor.insertText(QChar(0x2028));
         }
         else if (isTextNS && localName == "meta") {
             kDebug(30015) << "loading a text:meta";

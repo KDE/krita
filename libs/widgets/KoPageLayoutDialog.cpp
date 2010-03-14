@@ -38,7 +38,7 @@ public:
 };
 
 
-KoPageLayoutDialog::KoPageLayoutDialog(QWidget *parent, const KoPageLayout& layout)
+KoPageLayoutDialog::KoPageLayoutDialog(QWidget *parent, const KoPageLayout &layout)
     : KPageDialog(parent)
     , d(new Private)
 {
@@ -84,21 +84,24 @@ KoPageLayoutDialog::~KoPageLayoutDialog()
     delete d;
 }
 
-const KoPageLayout& KoPageLayoutDialog::pageLayout() const
+KoPageLayout KoPageLayoutDialog::pageLayout() const
 {
     return d->layout;
 }
 
-void KoPageLayoutDialog::setPageLayout(const KoPageLayout &layout) {
+void KoPageLayoutDialog::setPageLayout(const KoPageLayout &layout)
+{
     d->layout = layout;
 }
 
-void KoPageLayoutDialog::accept() {
+void KoPageLayoutDialog::accept()
+{
     KPageDialog::accept();
     deleteLater();
 }
 
-void KoPageLayoutDialog::reject() {
+void KoPageLayoutDialog::reject()
+{
     KPageDialog::reject();
     deleteLater();
 }
@@ -108,7 +111,8 @@ bool KoPageLayoutDialog::applyToDocument() const
     return d->documentCheckBox->isChecked();
 }
 
-void KoPageLayoutDialog::showTextDirection(bool on) {
+void KoPageLayoutDialog::showTextDirection(bool on)
+{
     d->pageLayoutWidget->showTextDirection(on);
 }
 
@@ -122,7 +126,8 @@ void KoPageLayoutDialog::setTextDirection(KoText::Direction direction)
     d->pageLayoutWidget->setTextDirection(direction);
 }
 
-void KoPageLayoutDialog::showPageSpread(bool on) {
+void KoPageLayoutDialog::showPageSpread(bool on)
+{
     d->pageLayoutWidget->showPageSpread(on);
 }
 

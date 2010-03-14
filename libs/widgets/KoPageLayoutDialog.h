@@ -40,7 +40,7 @@ public:
     void setTextDirection(KoText::Direction direction);
     void showPageSpread(bool on);
     void setPageSpread(bool pageSpread);
-    const KoPageLayout& pageLayout() const;
+    KoPageLayout pageLayout() const;
 
 private slots:
     void setPageLayout(const KoPageLayout &layout);

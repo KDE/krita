@@ -28,8 +28,8 @@
 #include <QWidget>
 
 /// the widget that shows the size/margins and other page settings.
-class KOWIDGETS_EXPORT KoPageLayoutWidget : public QWidget {
-
+class KOWIDGETS_EXPORT KoPageLayoutWidget : public QWidget
+{
     Q_OBJECT
 
 public:

@@ -209,12 +209,6 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
     KoTextLoader loader(context);
 
     QTextCursor cursor(document());
-#if 0
-    // TODO if this is really needed we need to keep the format when removing the selection
-    // maybe it should be done in the text shape instead
-    cursor.select(QTextCursor::Document);
-    cursor.removeSelectedText();
-#endif
     loader.loadBody(element, cursor);   // now let's load the body from the ODF KoXmlElement.
     KoTextEditor *editor = KoTextDocument(document()).textEditor();
     if (editor) // at one point we have to get the position from the odf doc instead.

@@ -99,14 +99,7 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return m_spacing;
 
-    if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
-    }
-    else {
-        m_dab->clear();
-    }
-
-    KoColor color(painter()->paintColor());
+    m_color = painter()->paintColor();
 
     if (m_hsvProperties.enabled){
         QHash<QString, QVariant> params;
@@ -161,8 +154,8 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
         }
 
         KoColorTransformation* transfo;
-        transfo = m_dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
-        transfo->transform(color.data(), color.data() , 1);
+        transfo = painter()->device()->colorSpace()->createColorTransformation("hsv_adjustment", params);
+        transfo->transform(m_color.data(), m_color.data() , 1);
         m_amount += 1.0;
     }
     
@@ -188,11 +181,19 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
         splitCoordinate(pos.x(), &x, &subPixelX);
         splitCoordinate(pos.y(), &y, &subPixelY);
         
-        m_curveMask.mask(dab,color,scale,rotation,subPixelX,subPixelY);
+        m_curveMask.mask(dab,m_color,scale,rotation,subPixelX,subPixelY);
         quint8 origOpacity = m_opacityOption.apply(painter(), info);
-        painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
+        QRect rc = dab->bounds();
+        painter()->bltFixed(x,y,dab,rc.x(), rc.y(), rc.width(),rc.height());
         painter()->setOpacity(origOpacity);
         return m_spacing;
+    }
+
+    if (!m_dab) {
+        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+    }
+    else {
+        m_dab->clear();
     }
 
     quint8 alpha = 0;

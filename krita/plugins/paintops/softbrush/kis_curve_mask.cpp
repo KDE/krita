@@ -47,7 +47,7 @@ QPointF KisCurveMask::hotSpot(qreal scale, qreal rotation)
 }
 
 
-void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal scale, qreal rotation, qreal subPixelX, qreal subPixelY)
+void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor &color, qreal scale, qreal rotation, qreal subPixelX, qreal subPixelY)
 {
     qreal cosa = cos(rotation);
     qreal sina = sin(rotation);
@@ -122,11 +122,6 @@ qreal KisCurveMask::valueAt(qreal x, qreal y)
     
         quint16 alphaValue = distance;
         qreal alphaValueF = distance - alphaValue;
-
-        if (m_properties->curveData.size() <= (alphaValue+1)){
-            //kDebug() << "[ " << x << ", " << y << " ] distance: " << distance << "size: " << m_properties->curveData.size();
-            return OPACITY_TRANSPARENT_F;
-        }
            
         qreal alpha = (
             (1.0 - alphaValueF) * m_properties->curveData.at(alphaValue) + 

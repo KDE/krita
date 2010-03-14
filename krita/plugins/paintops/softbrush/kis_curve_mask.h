@@ -44,7 +44,7 @@ class KisCurveMask{
 public:
     KisCurveMask();
     ~KisCurveMask(){};
-    void mask(KisFixedPaintDeviceSP dab, const KoColor color, qreal scale, qreal rotation, qreal xSubpixel, qreal ySubpixel);
+    void mask(KisFixedPaintDeviceSP dab, const KoColor &color, qreal scale, qreal rotation, qreal xSubpixel, qreal ySubpixel);
     
     void setProperties(KisCurveProperties * properties){
         m_properties = properties;

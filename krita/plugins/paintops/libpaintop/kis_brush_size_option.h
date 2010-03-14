@@ -76,7 +76,7 @@ public:
         scale = settings->getDouble(BRUSH_SCALE);    
         density = settings->getDouble(BRUSH_DENSITY) * 0.01;
         spacing = settings->getDouble(BRUSH_SPACING);
-        if (jitterEnabled = settings->getBool(BRUSH_JITTER_MOVEMENT_ENABLED)){
+        if ((jitterEnabled = settings->getBool(BRUSH_JITTER_MOVEMENT_ENABLED))){
             jitterMovementAmount = settings->getDouble(BRUSH_JITTER_MOVEMENT);
         }else{
             jitterMovementAmount = 0.0;

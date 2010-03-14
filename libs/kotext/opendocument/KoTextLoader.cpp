@@ -896,7 +896,6 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 linkCf.setForeground(foreground);
                 linkCf.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
                 linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
-                linkCf.setFontItalic(true);
 
                 cursor.setCharFormat(linkCf);
             }

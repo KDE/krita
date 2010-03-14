@@ -207,7 +207,8 @@ void KisPrescaledProjection::updateSettings()
 
     if (m_d->useNearestNeighbour != cfg.useNearestNeighbour() ||
         m_d->useMipmapping != cfg.useMipmapping() ||
-        m_d->cacheKisImageAsQImage != cfg.cacheKisImageAsQImage()) {
+        m_d->cacheKisImageAsQImage != cfg.cacheKisImageAsQImage() ||
+        m_d->projectionBackend == 0 ) {
 
         m_d->useNearestNeighbour = cfg.useNearestNeighbour();
         m_d->useMipmapping = cfg.useMipmapping();

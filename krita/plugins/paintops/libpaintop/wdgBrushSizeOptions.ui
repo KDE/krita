@@ -202,7 +202,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Aspect</string>
+        <string>Aspect ratio</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -258,7 +258,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Rotation</string>
+        <string>Angle</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

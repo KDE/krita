@@ -80,7 +80,7 @@ QString KoRdfPrefixMapping::canonPrefix(const QString &pname) const
 
 QString KoRdfPrefixMapping::URItoPrefexedLocalname(const QString &uri) const
 {
-    for (QMap<QString,QString>::const_iterator mi = d->m_mappings.begin(); mi != d->m_mappings.end(); ++mi) {
+    for (QMap<QString,QString>::const_iterator mi = d->m_mappings.constBegin(); mi != d->m_mappings.constEnd(); ++mi) {
         if (uri.startsWith(mi.value())) {
             QString ret = mi.key() + uri.mid(mi.value().length());
             return ret;
@@ -95,17 +95,17 @@ QString KoRdfPrefixMapping::PrefexedLocalnameToURI(const QString &pname) const
     if (pfx.isEmpty()) {
         return pname;
     }
-    QMap<QString,QString>::const_iterator mi = d->m_mappings.find(pfx);
-    if (mi == d->m_mappings.end())
+    QMap<QString,QString>::const_iterator mi = d->m_mappings.constFind(pfx);
+    if (mi == d->m_mappings.constEnd())
         return pname;
     return mi.value() + pname.mid(mi.key().length());
 }
 
 QString KoRdfPrefixMapping::prefexToURI(const QString &pfx) const
 {
-    QString prefix = canonPrefix(pfx);
-    QMap<QString,QString>::const_iterator mi = d->m_mappings.find(prefix);
-    if (mi == d->m_mappings.end()) {
+    const QString prefix = canonPrefix(pfx);
+    QMap<QString,QString>::const_iterator mi = d->m_mappings.constFind(prefix);
+    if (mi == d->m_mappings.constEnd()) {
         return QString();
     }
     return mi.value();
@@ -158,8 +158,8 @@ void KoRdfPrefixMapping::save(Soprano::Model *model, Soprano::Node context) cons
     Node rdfRest = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"));
     Soprano::Node dataBNode = model->createBlankNode();
     QList< Soprano::Node > dataBNodeList;
-    QMap<QString,QString>::const_iterator mi = d->m_mappings.begin();
-    QMap<QString,QString>::const_iterator me = d->m_mappings.end();
+    QMap<QString,QString>::const_iterator mi = d->m_mappings.constBegin();
+    QMap<QString,QString>::const_iterator me = d->m_mappings.constEnd();
     for (; mi != me; ++mi) {
         //kDebug(30015) << "saving prefix:" << mi.key() << " url:" << mi.value();
         dataBNode = model->createBlankNode();

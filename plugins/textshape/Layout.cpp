@@ -1840,7 +1840,7 @@ qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
         c1.setPosition(m_block.position() + pos);
         c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
         KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_parent->inlineTextObjectManager()->inlineTextObject(c1));
-        if (note && ((note->type() == KoInlineNote::Footnote) || (note->type() == KoInlineNote::Endnote))) {
+        if (note && note->type() == KoInlineNote::Footnote) {
             QTextCursor cursor(m_textShape->footnoteDocument());
             cursor.setPosition(m_textShape->footnoteDocument()->characterCount()-1);
             if (firstFootnote) {

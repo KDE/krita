@@ -28,25 +28,37 @@ bool KisSprayPaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
-{
-    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
-    qreal width = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_SCALE);
-    qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT) * getDouble(SPRAY_SCALE);
-    width += 10;
-    height += 10;
-    QRectF rc = QRectF(0, 0, width, height);
-    return image->pixelToDocument(rc.translated(- QPoint(width * 0.5, height * 0.5))).translated(pos);
-}
-
 void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return;
     qreal width = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_SCALE);
     qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT) * getDouble(SPRAY_SCALE);
+
+    QRectF brush(0,0,width,height);
+    brush.translate(-brush.center());
+    painter.save();
+    painter.translate( pos);
+    painter.rotate( getDouble(SPRAY_ROTATION));
+    painter.setPen(Qt::black);
     painter.setPen(QColor(255,128,255));
     painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-    painter.drawEllipse(image->pixelToDocument(QRectF(0, 0, width, height).translated(- QPoint(width * 0.5, height * 0.5))).translated(pos));
+    painter.drawEllipse(image->pixelToDocument(brush));
+    painter.restore();
+}
+
+QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
+{
+    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
+    qreal width = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_SCALE);
+    qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT) * getDouble(SPRAY_SCALE);
+    QRectF brush(0,0,width,height);
+    brush.translate(-brush.center());
+    QTransform m;
+    m.reset();
+    m.rotate( getDouble(SPRAY_ROTATION) );
+    brush = m.mapRect(brush);
+    brush.adjust(-1,-1,1,1);
+    return image->pixelToDocument(brush).translated(pos);
 }
 
 QImage KisSprayPaintOpSettings::image() const

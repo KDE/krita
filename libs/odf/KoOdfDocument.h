@@ -37,18 +37,18 @@ class KoEmbeddedDocumentSaver;
  * implementation is still in KoDocument, though that should probably
  * change.
  */
-class KOODF_EXPORT KoOdfDocument {
-
+class KOODF_EXPORT KoOdfDocument
+{
 public:
 
     // context passed on saving to saveOdf
     struct SavingContext {
-        SavingContext(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & embeddedSaver)
+        SavingContext(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embeddedSaver)
                 : odfStore(odfStore)
                 , embeddedSaver(embeddedSaver) {}
 
-        KoOdfWriteStore & odfStore;
-        KoEmbeddedDocumentSaver & embeddedSaver;
+        KoOdfWriteStore &odfStore;
+        KoEmbeddedDocumentSaver &embeddedSaver;
     };
 
     /**
@@ -67,7 +67,7 @@ public:
      *  @see saveExternalChildren if you have external children.
      *  Returns true on success.
      */
-    virtual bool saveChildrenOdf(SavingContext & documentContext);
+    bool saveChildrenOdf(SavingContext &documentContext);
 
     /**
      * Return true if url() is a real filename, false if url() is
@@ -78,9 +78,9 @@ public:
     /**
      * @return the current URL
      */
-    virtual KUrl getOdfUrl() const = 0;
+    virtual KUrl getOdfUrl() const = 0; // TODO rename to not have get*
 
-    virtual void setOdfUrl( const KUrl& url ) = 0;
+    virtual void setOdfUrl(const KUrl &url) = 0;
 
     /**
      * Returns the OASIS OpenDocument mimetype of the document, if supported
@@ -90,10 +90,8 @@ public:
 
     /**
      *  @brief Saves a document to a store.
-     *
-     *  You should not have to reimplement this - but call it in saveChildren().
      */
-    virtual bool saveToStore(KoStore* store, const QString& path) = 0;
+    virtual bool saveToStore(KoStore *store, const QString &path) = 0;
 
     /**
      *  Reimplement this method to load the contents of your %KOffice document,
@@ -101,21 +99,17 @@ public:
      *  you can find them in the odfStore.styles(). The store can be used
      *  to load images and embedded documents.
      */
-    virtual bool loadOdf(KoOdfReadStore & odfStore) = 0;
+    virtual bool loadOdf(KoOdfReadStore &odfStore) = 0;
 
     /**
      *  Reimplement this method to save the contents of your %KOffice document,
      *  using the ODF format.
      */
-    virtual bool saveOdf(SavingContext & documentContext) = 0;
-
+    virtual bool saveOdf(SavingContext &documentContext) = 0;
 
 private:
-
     class Private;
     Private *const d;
-
-
 };
 
 

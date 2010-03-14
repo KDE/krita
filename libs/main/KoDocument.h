@@ -453,19 +453,6 @@ public:
      */
     virtual bool loadXML(const KoXmlDocument & doc, KoStore * store) = 0;
 
-    /**
-     *  Reimplement this method to load the contents of your %KOffice document,
-     *  from the XML document ("content.xml"). The styles have been parsed already,
-     *  you can find them in the odfStore.styles(). The store can be used
-     *  to load images and embedded documents.
-     */
-    virtual bool loadOdf(KoOdfReadStore & odfStore) = 0;
-
-    /**
-     *  Reimplement this method to save the contents of your %KOffice document,
-     *  using the ODF format.
-     */
-    virtual bool saveOdf(SavingContext & documentContext) = 0;
 
     /**
      *  Reimplement this to save the contents of the %KOffice document into

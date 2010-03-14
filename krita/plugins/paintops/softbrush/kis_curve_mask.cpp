@@ -57,9 +57,7 @@ void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor &color, qreal s
     
     int w = dab->bounds().width();
     int h = dab->bounds().height();
-   
-    quint32 pixelSize = dab->colorSpace()->pixelSize();
-    
+
     // clear
     if (w!=dstWidth || h!=dstHeight){
         dab->setRect(m_maskRect.toRect());
@@ -69,6 +67,8 @@ void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor &color, qreal s
     const KoColorSpace * cs = dab->colorSpace();    
     dab->fill(0,0,dstWidth, dstHeight,color.data());
     cs->setOpacity(dab->data(), OPACITY_TRANSPARENT_U8, dstWidth * dstHeight);
+    
+    quint32 pixelSize = cs->pixelSize();
     
     qreal centerX = dstWidth  * 0.5 - 1.0 + subPixelX;
     qreal centerY = dstHeight * 0.5 - 1.0 + subPixelY;

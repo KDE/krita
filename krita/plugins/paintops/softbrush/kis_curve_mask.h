@@ -69,10 +69,11 @@ private:
     KisCurveProperties * m_properties;
     KisBrushSizeProperties * m_sizeProperties;
     
+    qreal m_fWidth;
+    qreal m_fHeight;
     qreal m_majorAxis;
     qreal m_minorAxis;
     qreal m_inverseScale;
-    qreal m_maskRadius;
     QRectF m_maskRect;
     
     inline qreal valueAt(qreal x, qreal y);

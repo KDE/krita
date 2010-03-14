@@ -32,14 +32,14 @@ KisCurveMask::KisCurveMask()
 
 QPointF KisCurveMask::hotSpot(qreal scale, qreal rotation)
 {
-    qreal fWidth = maskWidth(scale);
-    qreal fHeight = maskHeight(scale);
-
+    m_fWidth = maskWidth(scale);
+    m_fHeight = maskHeight(scale);
+    
     QTransform m;
     m.reset();
     m.rotateRadians(rotation);
-
-    m_maskRect = QRect(0,0,fWidth,fHeight);
+    
+    m_maskRect = QRect(0,0,m_fWidth,m_fHeight);
     m_maskRect.translate(-m_maskRect.center());
     m_maskRect = m.mapRect(m_maskRect);
     m_maskRect.translate(-m_maskRect.topLeft());
@@ -51,9 +51,6 @@ void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor &color, qreal s
 {
     qreal cosa = cos(rotation);
     qreal sina = sin(rotation);
-    
-    qreal fWidth = maskWidth(scale);
-    qreal fHeight = maskHeight(scale);
     
     int dstWidth =  qRound( m_maskRect.width() );
     int dstHeight = qRound( m_maskRect.height());
@@ -70,22 +67,20 @@ void KisCurveMask::mask(KisFixedPaintDeviceSP dab, const KoColor &color, qreal s
     }
      
     const KoColorSpace * cs = dab->colorSpace();    
-    dab->fill(0,0,dab->bounds().width(), dab->bounds().height(),color.data());
-    cs->setOpacity(dab->data(), OPACITY_TRANSPARENT_U8, dab->bounds().width() * dab->bounds().height());
+    dab->fill(0,0,dstWidth, dstHeight,color.data());
+    cs->setOpacity(dab->data(), OPACITY_TRANSPARENT_U8, dstWidth * dstHeight);
     
     qreal centerX = dstWidth  * 0.5 - 1.0 + subPixelX;
     qreal centerY = dstHeight * 0.5 - 1.0 + subPixelY;
 
     quint8* dabPointer = dab->data();
-    
+
     // major axis
-    m_majorAxis = 2.0/fWidth;
+    m_majorAxis = 2.0/m_fWidth;
     // minor axis
-    m_minorAxis = 2.0/fHeight;
-    // inverse square
-    m_inverseScale = 1.0 / scale;
-    // amount of precomputed data
-    m_maskRadius = 0.5 * fWidth;
+    m_minorAxis = 2.0/m_fHeight;
+    // inverse square of amount of data in curve
+    m_inverseScale = (0.5 * m_fWidth) / scale;
     
     //srand48(12345678);
     for (int y = 0; y <  dstHeight; y++){
@@ -117,8 +112,7 @@ qreal KisCurveMask::valueAt(qreal x, qreal y)
 {
     qreal dist = norme(x * m_majorAxis, y * m_minorAxis);
     if (dist <= 1.0){
-        qreal distance = dist * m_maskRadius;
-        distance *= m_inverseScale; // apply scale
+        qreal distance = dist * m_inverseScale;
     
         quint16 alphaValue = distance;
         qreal alphaValueF = distance - alphaValue;

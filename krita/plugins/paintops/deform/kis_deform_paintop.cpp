@@ -86,7 +86,7 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     if (!painter()) return m_spacing;
     if (!m_dev) return m_spacing;
  
-    if (true){
+#if 1
         KisFixedPaintDeviceSP dab = cachedDab(painter()->device()->colorSpace());
 
         qint32 x;
@@ -114,7 +114,7 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
         painter()->setOpacity(origOpacity);
         return m_spacing;
-    }else{
+#else  
         if (!m_dab) {
             m_dab = new KisPaintDevice(painter()->device()->colorSpace());
         } else {
@@ -125,7 +125,8 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         QRect rc = m_dab->extent();
         painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
         return m_spacing;
-    }
+#endif
+    
 }
 
 

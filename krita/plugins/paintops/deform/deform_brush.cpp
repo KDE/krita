@@ -279,6 +279,13 @@ void DeformBrush::paintMask(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer, q
                 continue;
             }
             
+            if (m_sizeProperties->density != 1.0){
+                if (m_sizeProperties->density < drand48()){
+                    dabPointer += m_pixelSize;
+                    continue;
+                }
+            }
+            
             m_deformAction->transform( &rmaskX, &rmaskY, distance);
 
             maskX = bcosa * rmaskX - bsina * rmaskY;

@@ -136,11 +136,7 @@ QRectF KisDuplicateOpSettings::duplicateOutlineRect(const QPointF& pos, KisImage
 }
 
 QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
-{
-    KisDuplicateOpSettingsWidget* options = dynamic_cast<KisDuplicateOpSettingsWidget*>(optionsWidget());
-    if(!options)
-        return QRectF();
-    
+{    
     QRectF dubRect = duplicateOutlineRect(pos, image);
     if (_mode == CURSOR_IS_OUTLINE) {
         dubRect |= KisBrushBasedPaintOpSettings::paintOutlineRect(pos, image, _mode);
@@ -150,7 +146,9 @@ QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP 
 
 void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
 {
+    painter.save();
     KisBrushBasedPaintOpSettings::paintOutline(pos, image, painter, _mode);
+    painter.restore();
     QRectF rect2 = duplicateOutlineRect(pos, image);
     painter.drawLine(rect2.topLeft(), rect2.bottomRight());
     painter.drawLine(rect2.topRight(), rect2.bottomLeft());

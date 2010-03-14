@@ -46,18 +46,34 @@ struct KoPageLayout {
     /** Page height in points */
     qreal height;
 
-    /** Left margin in points */
+    /**
+     * margin on left edge
+     * Using a margin >= 0 here indicates this is a single page system and the
+     *  bindingSide + pageEdge variables should be -1 at the same time.
+     */
     qreal leftMargin;
-    /** Right margin in points */
+    /**
+     * margin on right edge
+     * Using a margin >= 0 here indicates this is a single page system and the
+     *  bindingSide + pageEdge variables should be -1 at the same time.
+     */
     qreal rightMargin;
     /** Top margin in points */
     qreal topMargin;
     /** Bottom margin in points */
     qreal bottomMargin;
 
-    /// margin on page edge
+    /**
+     * margin on page edge
+     * Using a margin >= 0 here indicates this is a pageSpread (facing pages) and the
+     *  left + right variables should be -1 at the same time.
+     */
     qreal pageEdge;
-    /// margin on page-binding edge
+    /**
+     * margin on page-binding edge
+     * Using a margin >= 0 here indicates this is a pageSpread (facing pages) and the
+     *  left + right variables should be -1 at the same time.
+     */
     qreal bindingSide;
 
     /** Left padding in points */

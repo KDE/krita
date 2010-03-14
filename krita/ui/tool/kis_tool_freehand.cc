@@ -124,6 +124,14 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
+    if (currentPaintOpPreset() && currentPaintOpPreset()->settings()) {
+        m_paintIncremental = currentPaintOpPreset()->settings()->paintIncremental();
+        currentPaintOpPreset()->settings()->mousePressEvent(e);
+        if (e->isAccepted()) {
+            return;
+        }
+    }
+    
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     if (canvas2->handlePopupPaletteIsVisible(e)) return;
 
@@ -145,7 +153,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         return;
 
     // control-click gets the color at the current point. For now, only with a ratio of 1
-    if (e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
+    if (e->modifiers() & Qt::ControlModifier ) {
         if (e->button() == Qt::LeftButton)
             canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor,
                     KisToolUtils::pick(currentNode()->paintDevice(),
@@ -155,16 +163,6 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
                     KisToolUtils::pick(currentNode()->paintDevice(),
                                        convertToIntPixelCoord(e)));
 
-    } else if (e->modifiers() == Qt::ControlModifier) {
-
-        if (e->button() == Qt::LeftButton)
-            canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor,
-                    KisToolUtils::pick(currentImage()->mergedImage(),
-                                       convertToIntPixelCoord(e)));
-        else
-            canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor,
-                    KisToolUtils::pick(currentImage()->mergedImage(),
-                                       convertToIntPixelCoord(e)));
     } else if (e->modifiers() == Qt::ShiftModifier) {
         m_mode = EDIT_BRUSH;
         m_prevMousePos = e->point;
@@ -173,14 +171,6 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         e->accept();
         return;
     } else { // No modifiers
-
-        if (currentPaintOpPreset() && currentPaintOpPreset()->settings()) {
-            m_paintIncremental = currentPaintOpPreset()->settings()->paintIncremental();
-            currentPaintOpPreset()->settings()->mousePressEvent(e);
-            if (e->isAccepted()) {
-                return;
-            }
-        }
 
         if (e->button() == Qt::LeftButton) {
             initPaint(e);

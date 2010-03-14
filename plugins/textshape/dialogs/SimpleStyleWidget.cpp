@@ -36,6 +36,7 @@
 SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
         : QWidget(parent),
         m_blockSignals(false),
+        m_comboboxHasBidiItems(false),
         m_tool(tool),
         m_directionButtonState(Auto),
         m_quickApplyListStyle(KoListStyle::DiscItem)
@@ -84,6 +85,9 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
 
 void SimpleStyleWidget::fillListsCombobox()
 {
+    if (widget.listType->count() > 0 && (m_comboboxHasBidiItems || !m_tool->isBidiDocument()))
+        return;
+
     widget.listType->clear();
     KoZoomHandler zoomHandler;
     zoomHandler.setZoomAndResolution(160, 72, 72);
@@ -124,6 +128,7 @@ void SimpleStyleWidget::fillListsCombobox()
     if (m_tool->isBidiDocument()) {
         foreach(const Lists::ListStyleItem &item, Lists::otherListStyleItems())
             widget.listType->addItem(item.name, static_cast<int>(item.style));
+        m_comboboxHasBidiItems = true;
     }
 }
 

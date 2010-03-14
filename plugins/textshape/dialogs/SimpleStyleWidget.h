@@ -60,6 +60,7 @@ private:
     Ui::SimpleStyleWidget widget;
     KoStyleManager *m_styleManager;
     bool m_blockSignals;
+    bool m_comboboxHasBidiItems;
     QTextBlock m_currentBlock;
     TextTool *m_tool;
     DirectionButtonState m_directionButtonState;

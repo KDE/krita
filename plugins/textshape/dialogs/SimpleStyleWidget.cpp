@@ -212,10 +212,10 @@ void SimpleStyleWidget::listStyleChanged(int row)
 
 void SimpleStyleWidget::directionChangeRequested()
 {
-    QTextCursor cursor(m_currentBlock);
-    QTextBlockFormat format = cursor.blockFormat();
-    KoText::Direction dir = static_cast<KoText::Direction>(format.intProperty(
-                                KoParagraphStyle::TextProgressionDirection));
+    QTextCursor cursor = m_tool->cursor();
+    QTextBlockFormat format;
+    KoText::Direction dir = static_cast<KoText::Direction>(m_currentBlock.blockFormat()
+            .intProperty(KoParagraphStyle::TextProgressionDirection));
     switch (dir) {
     case KoText::PerhapsLeftRightTopBottom:
     case KoText::LeftRightTopBottom:
@@ -235,7 +235,7 @@ void SimpleStyleWidget::directionChangeRequested()
     case KoText::TopBottomRightLeft: ;// Unhandled.
         break;
     };
-    cursor.setBlockFormat(format);
+    cursor.mergeBlockFormat(format);
     emit doneWithFocus();
 }
 

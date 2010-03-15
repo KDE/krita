@@ -156,9 +156,9 @@ Soprano::Node KoRdfLocation::linkingSubject() const
 void KoRdfLocation::setupStylesheetReplacementMapping(QMap<QString, QString> &m)
 {
     Q_D (KoRdfLocation);
-    m["%DLAT%"] = d->m_dlat;
-    m["%DLONG%"] = d->m_dlong;
-    m["%ISGEO84%"] = d->m_isGeo84;
+    m["%DLAT%"] = QString("%1").arg(d->m_dlat);
+    m["%DLONG%"] = QString("%1").arg(d->m_dlong);
+    m["%ISGEO84%"] = QString("%1").arg(d->m_isGeo84);
 }
 
 void KoRdfLocation::exportToMime(QMimeData *md) const

@@ -20,6 +20,7 @@
 #ifndef __rdf_KoRdfPrefixMapping_h__
 #define __rdf_KoRdfPrefixMapping_h__
 
+#include "komain_export.h"
 #include "RdfForward.h"
 
 #include <QObject>
@@ -42,7 +43,7 @@ class KoRdfPrefixMappingPrivate;
  * For example, to be able to say dc:author for the dublin core author uri
  *
  */
-class KoRdfPrefixMapping : public QObject
+class KOMAIN_EXPORT KoRdfPrefixMapping : public QObject
 {
     Q_OBJECT;
     KoRdfPrefixMappingPrivate * const d;
@@ -91,7 +92,7 @@ public:
 
     /**
      * Save the prefix mapping into the given Rdf model. If there is
-     * already a mapping in the model then those triples are delete
+     * already a mapping in the model then those triples are deleted
      * and fresh triples inserted to represet the this prefix mapping
      * state.
      *

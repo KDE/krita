@@ -81,9 +81,9 @@ KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainte
     m_color = painter->paintColor();
 
     // compute spacing for brush
-    m_xSpacing = qMax(0.5,m_sizeProperties.spacing * 0.5 * m_sizeProperties.diameter * m_sizeProperties.scale);
-    m_ySpacing = qMax(0.5,m_sizeProperties.spacing * 0.5 * m_sizeProperties.diameter * m_sizeProperties.aspect * m_sizeProperties.scale);
-    m_spacing = sqrt(m_xSpacing*m_xSpacing + m_ySpacing*m_ySpacing);
+    m_xSpacing = qMax(0.5,m_sizeProperties.spacing * m_sizeProperties.diameter * m_sizeProperties.scale);
+    m_ySpacing = qMax(0.5,m_sizeProperties.spacing * m_sizeProperties.diameter * m_sizeProperties.aspect * m_sizeProperties.scale);
+    m_spacing = qMax(m_xSpacing, m_ySpacing);
     
 #ifdef BENCHMARK
     m_count = m_total = 0;

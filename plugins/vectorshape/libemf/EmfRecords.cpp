@@ -26,19 +26,19 @@ namespace Libemf
 
 /*****************************************************************************/
 
-DeviceInfoHeader::DeviceInfoHeader( QDataStream &stream )
+BitmapInfoHeader::BitmapInfoHeader( QDataStream &stream )
 {
     stream >> m_headerSize;
     stream >> m_width;
-    // kDebug(33100) << "Width:" << m_width;
+    //kDebug(31000) << "Width:" << m_width;
     stream >> m_height;
-    // kDebug(33100) << "Height:" << m_height;
+    //kDebug(31000) << "Height:" << m_height;
     stream >> m_planes;
     // kDebug(33100) << "planes:" << m_planes;
     stream >> m_bitCount;
     // kDebug(33100) << "BitCount:" << m_bitCount;
     stream >> m_compression;
-    // kDebug(33100) << "Compression:" << m_compression;
+    //kDebug(31000) << "Compression:" << m_compression;
     stream >> m_imageSize;
     // kDebug(33100) << "ImageSize:" << m_imageSize;
     stream >> m_xPelsPerMeter;
@@ -47,7 +47,7 @@ DeviceInfoHeader::DeviceInfoHeader( QDataStream &stream )
     stream >> m_colorImportant;
 }
 
-DeviceInfoHeader::~DeviceInfoHeader()
+BitmapInfoHeader::~BitmapInfoHeader()
 {
 }
 
@@ -67,7 +67,7 @@ BitBltRecord::BitBltRecord( QDataStream &stream )
     stream >> m_yDest;
     stream >> m_cxDest;
     stream >> m_cyDest;
-    kDebug(31000) << "Destination" << m_xDest << m_yDest << m_cxDest << m_cyDest;
+    //kDebug(31000) << "Destination" << m_xDest << m_yDest << m_cxDest << m_cyDest;
 
     stream >> m_BitBltRasterOperation;
     //kDebug(31000) << "bitblt raster operation:" << m_BitBltRasterOperation;
@@ -95,7 +95,7 @@ BitBltRecord::BitBltRecord( QDataStream &stream )
 	return;
     }
     if ( m_cbBmiSrc == 40 ) {
-	m_BmiSrc = new DeviceInfoHeader( stream );
+	m_BmiSrc = new BitmapInfoHeader( stream );
     } else {
 	//kDebug(31000) << "m_cbBmiSrc:" << m_cbBmiSrc;
 	Q_ASSERT( 0 );
@@ -147,8 +147,9 @@ QImage* BitBltRecord::image()
 }
 
 /*****************************************************************************/
-StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream ) :
-    m_BmiSrc( 0 ), m_image( 0 )
+StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream )
+    : m_BmiSrc(0)
+    , m_image(0)
 {
     stream >> m_Bounds;
     stream >> m_xDest;
@@ -166,10 +167,28 @@ StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream ) :
     stream >> m_cxDest;
     stream >> m_cyDest;
 
-    if ( m_cbBmiSrc == 40 ) {
-        m_BmiSrc = new DeviceInfoHeader( stream );
-    } else {
-        Q_ASSERT( 0 );
+#if 0
+    kDebug(31000) << "m_cbBmiSrc =" << m_cbBmiSrc;
+    kDebug(31000) << "m_offBmiSrc =" << m_offBmiSrc;
+    kDebug(31000) << "m_cbBitsSrc  =" << m_cbBitsSrc;
+    kDebug(31000) << "m_offBitsSrc =" << m_offBitsSrc;
+    //kDebug(31000) << "m_BitBltRasterOperation =" << hex << m_BitBltRasterOperation << dec;
+#endif
+
+    // Read away those bytes that preceed the header.  These are undefined
+    // according to the spec.  80 is the size of the record above.
+    qint32 dummy;
+    int    padding = 0;
+    while (m_offBmiSrc - padding > 80) {
+        stream >> dummy;
+        padding += 4;
+    }
+    m_BmiSrc = new BitmapInfoHeader( stream );
+
+    // 40 is the size of the header record.
+    while (m_offBitsSrc - padding > 80 + 40) {
+        stream >> dummy;
+        padding += 4;
     }
     m_imageData.resize( m_cbBitsSrc );
     stream.readRawData( m_imageData.data(), m_cbBitsSrc );
@@ -189,28 +208,57 @@ QRect StretchDiBitsRecord::bounds() const
 QImage* StretchDiBitsRecord::image() 
 {
     if ( m_image != 0 ) {
-        kDebug(33100) << "null image";
         return m_image;
     }
 
     QImage::Format format = QImage::Format_Invalid;
-    if ( m_BmiSrc->bitCount() == BI_BITCOUNT_4 ) {
+    if (m_BmiSrc->bitCount() == BI_BITCOUNT_1) {
+        format = QImage::Format_Mono;
+    } else if ( m_BmiSrc->bitCount() == BI_BITCOUNT_4 ) {
         if ( m_BmiSrc->compression() == BI_RGB ) {
             format = QImage::Format_RGB555;
         } else {
             kDebug(33100) << "Unexpected compression format for BI_BITCOUNT_4:"
-                     << m_BmiSrc->compression();
+                          << m_BmiSrc->compression();
             Q_ASSERT( 0 );
         }
     } else if ( m_BmiSrc->bitCount() == BI_BITCOUNT_5 ) {
         format = QImage::Format_RGB888;
     } else {
-        kDebug(33100) << "Unexpected format:" << m_BmiSrc->bitCount();
-        Q_ASSERT( 0 );
+        kDebug(31000) << "Unexpected format:" << m_BmiSrc->bitCount();
+        //Q_ASSERT(0);
     }
 
-    m_image = new QImage( (const uchar*)m_imageData.constData(),
-                          m_BmiSrc->width(), m_BmiSrc->height(), format );
+    // According to MS-WMF 2.2.2.3, the sign of the height decides if
+    // this is a compressed bitmap or not.
+    if (m_BmiSrc->height() > 0) {
+        // This bitmap is a top-down bitmap without compression.
+        m_image = new QImage( (const uchar*)m_imageData.constData(),
+                              m_BmiSrc->width(), m_BmiSrc->height(), format );
+        // we have to mirror this bitmap in the X axis.
+        *m_image = m_image->mirrored(false, true);
+    } else {
+        // This bitmap is a bottom-up bitmap which uses compression.
+        switch (m_BmiSrc->compression()) {
+        case BI_RGB:
+            m_image = new QImage( (const uchar*)m_imageData.constData(),
+                                  m_BmiSrc->width(), -m_BmiSrc->height(), format );
+            break;
+
+        // These compressions are not yet supported, so return an empty image.
+        case BI_RLE8:
+        case BI_RLE4:
+        case BI_BITFIELDS:
+        case BI_JPEG:
+        case BI_PNG:
+        case BI_CMYK:
+        case BI_CMYKRLE8:
+        case BI_CMYKRLE4:
+        default:
+            m_image = new QImage(m_BmiSrc->width(), m_BmiSrc->height(), format);
+            break;
+        }
+    }
 
     return m_image;
 }

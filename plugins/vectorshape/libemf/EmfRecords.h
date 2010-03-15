@@ -40,11 +40,13 @@ namespace Libemf
 /*****************************************************************************/
 
 /**
-   Simple representation of a DeviceInfoHeader structure
+   Simple representation of a BitmapInfoHeader structure
+
+   FIXME: This is really called BitmapInfoHeader and is MS-WMF 2.2.2.3
    
-   See MS-WMF 2.2.1.2 for details
+   See MS-WMF 2.2.2.3 for details
 */
-class DeviceInfoHeader 
+class BitmapInfoHeader 
 {
 public:
     /**
@@ -54,8 +56,8 @@ public:
 
        \param stream the data stream to read from.
     */
-    DeviceInfoHeader( QDataStream &stream );
-    ~DeviceInfoHeader();
+    BitmapInfoHeader( QDataStream &stream );
+    ~BitmapInfoHeader();
 
     /**
        The width of the bitmap, in pixels
@@ -172,7 +174,7 @@ private:
     quint32 m_cbBmiSrc;
     quint32 m_offBitsSrc;
     quint32 m_cbBitsSrc;
-    DeviceInfoHeader *m_BmiSrc;
+    BitmapInfoHeader *m_BmiSrc; // The source bitmap
     QByteArray m_imageData;
 
     QImage *m_image;
@@ -252,6 +254,11 @@ public:
     QRect sourceRectangle() const { return QRect( xSrc(), ySrc(), cxSrc(), cySrc() ); };
 
     /**
+       The raster operation
+    */
+    qint32 rasterOperation() const { return m_BitBltRasterOperation; };
+
+    /**
        The image to display
     */
     QImage* image();
@@ -272,7 +279,7 @@ private:
     quint32 m_BitBltRasterOperation;
     qint32 m_cxDest;
     qint32 m_cyDest;
-    DeviceInfoHeader *m_BmiSrc;
+    BitmapInfoHeader *m_BmiSrc; // The source bitmap
     QByteArray m_imageData;
 
     QImage *m_image;

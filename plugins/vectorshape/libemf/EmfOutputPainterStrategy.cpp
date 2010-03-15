@@ -1036,21 +1036,23 @@ void OutputPainterStrategy::setStretchBltMode( const quint32 stretchMode )
     }
 }
 
-void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord stretchDiBitsRecord )
+void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord record )
 {
 #if DEBUG_EMFPAINT
-    //kDebug(31000) << hex << stretchDiBitsRecord << dec;  FIXME
+    kDebug(31000) << "Bounds:    " << record.bounds();
+    kDebug(31000) << "Dest rect: " 
+                  << record.xDest() << record.yDest() << record.cxDest() << record.cyDest();
+    kDebug(31000) << "Src rect:  " 
+                  << record.xSrc() << record.ySrc() << record.cxSrc() << record.cySrc();
+    kDebug(31000) << "Raster op: " << hex << record.rasterOperation() << dec;
+                  //<< record.bkColorSrc();
 #endif
 
-    QPoint targetPosition( stretchDiBitsRecord.xDest(),
-                           stretchDiBitsRecord.yDest() );
-    QSize targetSize( stretchDiBitsRecord.cxDest(),
-                      stretchDiBitsRecord.cyDest() );
+    QPoint targetPosition( record.xDest(), record.yDest() );
+    QSize  targetSize( record.cxDest(), record.cyDest() );
 
-    QPoint sourcePosition( stretchDiBitsRecord.xSrc(),
-                           stretchDiBitsRecord.ySrc() );
-    QSize sourceSize( stretchDiBitsRecord.cxSrc(),
-                      stretchDiBitsRecord.cySrc() );
+    QPoint sourcePosition( record.xSrc(), record.ySrc() );
+    QSize  sourceSize( record.cxSrc(), record.cySrc() );
 
     // special cases, from [MS-EMF] Section 2.3.1.7:
     // "This record specifies a mirror-image copy of the source bitmap to the
@@ -1081,7 +1083,11 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord stretchDiBitsReco
         targetPosition.ry() -= targetSize.height();
         target = QRect( targetPosition, targetSize );
     }
-    m_painter->drawImage( target, *(stretchDiBitsRecord.image()), source );
+
+    if (record.rasterOperation() == 0x00cc0020) {
+        // SRCCOPY
+        m_painter->drawImage( target, *(record.image()), source );
+    }
 }
 
 

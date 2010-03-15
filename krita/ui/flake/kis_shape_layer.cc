@@ -373,10 +373,8 @@ bool KisShapeLayer::loadLayer(KoStore* store)
         KoPageLayout pageLayout;
         pageLayout.loadOdf(*style);
         setSize(QSizeF(pageLayout.width, pageLayout.height));
-    } else {
-        kWarning() << "No master page found!";
-        return false;
     }
+    // We work fine without a master page
 
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
     context.setManifestFile(QString("tar:/") + odfStore.store()->currentPath() + "META-INF/manifest.xml");

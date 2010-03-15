@@ -48,12 +48,12 @@ public:
     virtual bool isCheckable() {
         return m_checkable;
     }
-    
+
     virtual bool isChecked() const;
 
     /**
      * Reimplement this to use the image in the option widget
-     */   
+     */
     virtual void setImage(KisImageWSP image);
 
 public slots:
@@ -76,11 +76,6 @@ public slots:
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting) {
         Q_UNUSED(setting);
     }
-
-    /**
-     * re-implement this to handle actuator events.
-     */
-    //virtual void actuate(KRITA_PAINTOP_OPTION_ACTUATOR actuator);
 
 signals:
 

@@ -32,9 +32,6 @@ class QListWidgetItem;
  * A common widget for enabling/disabling and determining
  * the effect of tablet pressure, tilt and rotation and
  * other paintop settings.
- *
- * XXX: For 2.1, put the checkbox in the listwidget.
- *
  */
 class PAINTOP_EXPORT KisPaintOpOptionsWidget : public KisPaintOpSettingsWidget
 {
@@ -54,15 +51,15 @@ public:
 
     /// Reimplemented
     virtual void writeConfiguration(KisPropertiesConfiguration *config) const;
-    
-    ///Reimplemented, sets image on option widgets 
+
+    ///Reimplemented, sets image on option widgets
     virtual void setImage(KisImageWSP image);
 
 private slots:
 
     void changePage(QListWidgetItem *current, QListWidgetItem *previous);
-    
-    void itemChanged(QListWidgetItem *item);  
+
+    void itemChanged(QListWidgetItem *item);
 
 private:
 

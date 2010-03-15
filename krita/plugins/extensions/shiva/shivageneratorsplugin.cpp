@@ -68,7 +68,6 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
         std::list< OpenShiva::Source* > kernels = m_sourceCollection->sources(OpenShiva::Source::GeneratorKernel);
 
         foreach(OpenShiva::Source* kernel, kernels) {
-            dbgPlugins << kernel->metadataCompilationMessages().toString().c_str();
             if (kernel->outputImageType() == OpenShiva::Source::Image || kernel->outputImageType() == OpenShiva::Source::Image4) {
                 manager->add(new ShivaGenerator(kernel));
             }

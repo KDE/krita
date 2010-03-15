@@ -67,8 +67,8 @@ QVariant valueToQVariant(const GTLCore::Value& value)
             GTLCore::Color c = value.asColor();
             return QVariant(QColor(c.red() * 255, c.green() * 255, c.blue() * 255, c.alpha() * 255) );
         }
-    }
 #endif
+    }
     qFatal("Unsupported type: %i", value.type());
 }
 

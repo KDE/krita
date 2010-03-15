@@ -208,8 +208,11 @@ QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame *frame) const
 
 int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
 {
-    return hitTestIterated(document()->rootFrame()->begin(), 
+    int position = hitTestIterated(document()->rootFrame()->begin(),
                         document()->rootFrame()->end(), point, accuracy);
+    if (accuracy != Qt::ExactHit && position == -1)
+        return document()->rootFrame()->lastPosition();
+    return position;
 }
 
 int KoTextDocumentLayout::hitTestIterated(QTextFrame::iterator begin, QTextFrame::iterator end, const QPointF &point, Qt::HitTestAccuracy accuracy) const
@@ -224,12 +227,17 @@ int KoTextDocumentLayout::hitTestIterated(QTextFrame::iterator begin, QTextFrame
         if (table) {
             QTextTableCell cell = m_state->hitTestTable(table, point);
             if (cell.isValid()) {
-                return hitTestIterated(cell.begin(), cell.end(), point,
+                position = hitTestIterated(cell.begin(), cell.end(), point,
                                 accuracy);
+                if (position == -1)
+                    position = cell.lastPosition();
+                return position;
             }
             continue;
         } else if (subFrame) {
-            return hitTestIterated(subFrame->begin(), subFrame->end(), point, accuracy);
+            position = hitTestIterated(subFrame->begin(), subFrame->end(), point, accuracy);
+            if (position != -1)
+                return position;
             continue;
         } else {
             if (!block.isValid())
@@ -238,7 +246,7 @@ int KoTextDocumentLayout::hitTestIterated(QTextFrame::iterator begin, QTextFrame
         // kDebug(32500) <<"hitTest[" << point.x() <<"," << point.y() <<"]";
         QTextLayout *layout = block.layout();
         if (point.y() > layout->boundingRect().bottom()) {
-            position = block.position() + block.length() - 1;
+            // just skip this block. position = block.position() + block.length() - 1;
             continue;
         }
         for (int i = 0; i < layout->lineCount(); i++) {
@@ -259,11 +267,8 @@ int KoTextDocumentLayout::hitTestIterated(QTextFrame::iterator begin, QTextFrame
             }
             return block.position() + line.xToCursor(point.x());
         }
-        
     }
-    if (accuracy == Qt::ExactHit)
-        return -1;
-    return position;
+    return -1;
 }
 
 int KoTextDocumentLayout::pageCount() const

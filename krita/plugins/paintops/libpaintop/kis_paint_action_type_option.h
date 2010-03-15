@@ -31,10 +31,9 @@ enum enumPaintActionType {
 };
 
 /**
- * Allows the user to choose between three types of paint action:
+ * Allows the user to choose between two types of paint action:
  * * incremental (going over the same spot in one stroke makes it darker)
  * * indirect (like photoshop and gimp)
- * * rate (staying in the same spot makes it darker)
  */
 class PAINTOP_EXPORT KisPaintActionTypeOption : public KisPaintOpOption
 {

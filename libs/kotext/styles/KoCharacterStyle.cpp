@@ -1243,6 +1243,8 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
             style.addProperty("fo:country", d->stylesPrivate.value(KoCharacterStyle::Country).toString(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::Language) {
             style.addProperty("fo:language", d->stylesPrivate.value(KoCharacterStyle::Language).toString(), KoGenStyle::TextType);
+        } else if (key == QTextCharFormat::FontLetterSpacing) {
+            style.addProperty("fo:letter-spacing", (int) fontLetterSpacing(), KoGenStyle::TextType);
         } else if (key == QTextFormat::TextOutline) {
             QPen outline = textOutline();
             style.addProperty("style:text-outline", outline.style() == Qt::NoPen ? "false" : "true", KoGenStyle::TextType);

@@ -23,12 +23,14 @@
 #include <QUndoStack>
 #include "TextCommandBase.h"
 #include <QList>
+#include <QTextList>
 
 class TextTool;
 class QTextDocument;
-class QTextDocumentFragment;
 class QTextCursor;
+class QTextDocumentFragment;
 class KoChangeTrackerElement;
+class KoDeleteChangeMarker;
 class KoInlineTextObjectManager;
 
 class ChangeTrackedDeleteCommand : public TextCommandBase
@@ -61,8 +63,10 @@ private:
     virtual void deletePreviousChar();
     virtual void deleteSelection(QTextCursor &selection);
     virtual void removeChangeElement(int changeId);
-    virtual QTextDocumentFragment generateDeleteFragment(QTextCursor &cursor, int changeId);
-    virtual void insertFragment(QTextCursor &cursor, QTextDocumentFragment &fragment);
+    virtual QTextDocumentFragment generateDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
+    virtual void insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
+    virtual int fragmentLength(QTextDocumentFragment &fragment);
+    virtual bool checkListDeletion(QTextList *list, QTextCursor &cursor);
 };
 
 #endif // CHANGETRACKEDDELTECOMMAND_H

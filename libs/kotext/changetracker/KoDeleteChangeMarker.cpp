@@ -48,6 +48,7 @@ public:
     int id;
     int position;
     QString deleteChangeXml;
+    QHash<int, KoListStyle *> deletedListStyles;
 };
 
 KoDeleteChangeMarker::KoDeleteChangeMarker(KoChangeTracker* changeTracker)
@@ -156,3 +157,14 @@ void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext &context)
     context.xmlWriter().addAttribute("text:change-id", changeName);
     context.xmlWriter().endElement();
 }
+
+void KoDeleteChangeMarker::setDeletedListStyle(int id, KoListStyle *style)
+{
+    d->deletedListStyles.insert(id, style);
+}
+
+KoListStyle *KoDeleteChangeMarker::getDeletedListStyle(int id)
+{
+    return d->deletedListStyles.value(id);
+}
+

@@ -23,6 +23,8 @@
 #include "kotext_export.h"
 
 #include <KoInlineObject.h>
+#include <QTextFormat>
+#include <KoListStyle.h>
 
 class KoChangeTracker;
 class KoXmlElement;
@@ -32,6 +34,12 @@ class QTextDocument;
 class KOTEXT_EXPORT KoDeleteChangeMarker : public KoInlineObject
 {
 public:
+    
+    typedef enum {
+        DeletedListItem = QTextFormat::UserProperty + 9999,
+        DeletedList,
+        ListId
+    } listDeleteStatus;
 
     KoDeleteChangeMarker(KoChangeTracker *changeTracker);
 
@@ -66,6 +74,10 @@ public:
     virtual void saveOdf(KoShapeSavingContext &context);
 
     void setDeleteChangeXml(QString &deleteChangeXml);
+
+    KoListStyle *getDeletedListStyle(int id);
+
+    void setDeletedListStyle(int id, KoListStyle *style);
 
 protected:
 

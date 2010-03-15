@@ -26,11 +26,13 @@
 #include <QList>
 
 class KoChangeTracker;
+class KoDeleteChangeMarker;
 class KoTextEditor;
 class KoCanvasBase;
 
 class QTextDocument;
 class QTextDocumentFragment;
+class QTextCursor;
 
 class ShowChangesCommand : public QObject, public TextCommandBase
 {
@@ -53,6 +55,8 @@ private:
     void checkAndAddAnchoredShapes(int position, int length);
     void removeDeletedChanges();
     void checkAndRemoveAnchoredShapes(int position, int length);
+    void insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
+    int fragmentLength(QTextDocumentFragment fragment);
 
     QTextDocument *m_document;
     KoChangeTracker *m_changeTracker;

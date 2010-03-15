@@ -891,7 +891,9 @@ void TextTool::keyPressEvent(QKeyEvent *event)
     int destinationPosition = -1; // for those cases where the moveOperation is not relevant;
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
     if (event->key() == Qt::Key_Backspace) {
-        if (!m_textEditor->hasSelection() && m_textEditor->block().textList() && (m_textEditor->position() == m_textEditor->block().position())) {
+        if (!m_textEditor->hasSelection() && m_textEditor->block().textList() 
+            && (m_textEditor->position() == m_textEditor->block().position())
+            && !(m_actionRecordChanges->isChecked())) {
             if (!m_textEditor->blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
                 // backspace at beginning of numbered list item, makes it unnumbered
                 ListItemNumberingCommand *lin = new ListItemNumberingCommand(m_textEditor->block(), false);
@@ -911,10 +913,15 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             editingPluginEvents();
         }
         ensureCursorVisible();
-    } else if ((event->key() == Qt::Key_Tab || event->key() == Qt::Key_Backtab)
+    } else if ((event->key() == Qt::Key_Tab)
         && ((!m_textEditor->hasSelection() && (m_textEditor->position() == m_textEditor->block().position())) || (m_textEditor->block().document()->findBlock(m_textEditor->anchor()) != m_textEditor->block().document()->findBlock(m_textEditor->position()))) && m_textEditor->block().textList()) {
-        ChangeListLevelCommand::CommandType type =
-            event->key() == Qt::Key_Tab ? ChangeListLevelCommand::IncreaseLevel : ChangeListLevelCommand::DecreaseLevel;
+        ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::IncreaseLevel;
+        ChangeListLevelCommand *cll = new ChangeListLevelCommand(*m_textEditor->cursor(), type, 1);
+        addCommand(cll);
+        editingPluginEvents();
+    } else if ((event->key() == Qt::Key_Backtab)
+        && ((!m_textEditor->hasSelection() && (m_textEditor->position() == m_textEditor->block().position())) || (m_textEditor->block().document()->findBlock(m_textEditor->anchor()) != m_textEditor->block().document()->findBlock(m_textEditor->position()))) && m_textEditor->block().textList() && !(m_actionRecordChanges->isChecked())) {
+        ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::DecreaseLevel;
         ChangeListLevelCommand *cll = new ChangeListLevelCommand(*m_textEditor->cursor(), type, 1);
         addCommand(cll);
         editingPluginEvents();

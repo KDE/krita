@@ -24,7 +24,7 @@
 
 #include "kis_debug.h"
 
-#ifdef OPENSHIVA_13_OR_MORE
+#if OPENSHIVA_13_OR_MORE
 #include <GTLCore/Color.h>
 #endif
 

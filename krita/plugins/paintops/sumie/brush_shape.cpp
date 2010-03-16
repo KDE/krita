@@ -141,9 +141,9 @@ void BrushShape::fromQImageWithDensity(QImage image, qreal density)
     m_width = image.width();
     m_height = image.height();
 
-    int centerX = qRound(m_width * 0.5);
-    int centerY = qRound(m_height * 0.5);
-
+    int centerX = m_width * 0.5;
+    int centerY = m_height * 0.5;
+   
     // make mask 
     Bristle *bristle;
     int a;

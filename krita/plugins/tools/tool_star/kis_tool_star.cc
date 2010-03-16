@@ -230,7 +230,7 @@ QWidget* KisToolStar::createOptionWidget()
 
     QLabel *lblVertices = new QLabel(i18n("Vertices:"), widget);
     m_verticesSlider = new KisSliderSpinBox(widget);
-    m_verticesSlider->setRange(2, 100, 0);
+    m_verticesSlider->setRange(2, 100);
     m_verticesSlider->setValue(5);
     addOptionWidgetOption(m_verticesSlider, lblVertices);
 

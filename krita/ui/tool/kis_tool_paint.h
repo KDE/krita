@@ -115,7 +115,7 @@ private slots:
 
     void updateCompositeOpComboBox();
     void slotPopupQuickHelp();
-    void slotSetOpacity(qreal opacityPerCent);
+    void slotSetOpacity(int opacityPerCent);
     void slotSetCompositeMode(const QString& compositeOp);
 
 protected slots:

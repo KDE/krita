@@ -213,7 +213,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_lbThreshold = new QLabel(i18n("Threshold: "), widget);
     m_slThreshold = new KisSliderSpinBox(widget);
     m_slThreshold->setObjectName("int_widget");
-    m_slThreshold->setRange(1, 100, 0);
+    m_slThreshold->setRange(1, 100);
     m_slThreshold->setPageStep(3);
     m_slThreshold->setValue(m_threshold);
     connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));

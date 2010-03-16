@@ -139,7 +139,7 @@ QWidget * KisToolBrush::createOptionWidget()
 
     QLabel* labelRate = new QLabel(i18n("Rate:"), optionWidget);
     m_sliderRate = new KisSliderSpinBox (optionWidget);
-    m_sliderRate->setRange(0, MAXIMUM_RATE, 0);
+    m_sliderRate->setRange(0, MAXIMUM_RATE);
     m_sliderRate->setExponentRatio(3.0);
     connect(m_sliderRate, SIGNAL(doubleValueChanged(qreal)), SLOT(slotSetRate(qreal)));
     m_sliderRate->setValue(m_rate);
@@ -153,7 +153,7 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
 
     m_sliderSmoothness = new KisSliderSpinBox(optionWidget);
-    m_sliderSmoothness->setRange(0, MAXIMUM_SMOOTHNESS, 0);
+    m_sliderSmoothness->setRange(0, MAXIMUM_SMOOTHNESS);
     m_sliderSmoothness->setExponentRatio(3.0);
     m_sliderSmoothness->setEnabled(true);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), m_sliderSmoothness, SLOT(setEnabled(bool)));
@@ -167,8 +167,7 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
     m_sliderMagnetism = new KisSliderSpinBox(optionWidget);
     m_sliderMagnetism->setToolTip(i18n("Assistant Magnetism"));
-    m_sliderMagnetism->setMinimum(0);
-    m_sliderMagnetism->setRange(0, MAXIMUM_SMOOTHNESS, 0);
+    m_sliderMagnetism->setRange(0, MAXIMUM_SMOOTHNESS);
     m_sliderMagnetism->setExponentRatio(3.0);
     m_sliderMagnetism->setEnabled(false);
     connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setEnabled(bool)));

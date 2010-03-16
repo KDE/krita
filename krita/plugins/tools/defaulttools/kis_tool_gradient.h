@@ -46,7 +46,7 @@ class QPoint;
 class QWidget;
 class QCheckBox;
 class KComboBox;
-class KisSliderSpinBox;
+class KisDoubleSliderSpinBox;
 
 class KisToolGradient : public KisToolPaint
 {
@@ -69,10 +69,10 @@ public slots:
     void slotSetShape(int);
     void slotSetRepeat(int);
     void slotSetReverse(bool);
-    void slotSetAntiAliasThreshold(double);
+    void slotSetAntiAliasThreshold(qreal);
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
-    void slotSetPreviewOpacity(qreal value, bool final);
+    void slotSetPreviewOpacity(qreal value);
     void slotConfigChanged();
 #endif
 
@@ -106,7 +106,7 @@ private:
     KComboBox *m_cmbShape;
     KComboBox *m_cmbRepeat;
     QLabel *m_lbAntiAliasThreshold;
-    KisSliderSpinBox *m_slAntiAliasThreshold;
+    KisDoubleSliderSpinBox *m_slAntiAliasThreshold;
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
     KisOpenGLGradientProgram *m_gradientProgram;

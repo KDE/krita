@@ -19,7 +19,7 @@
 #ifndef KISSLIDERSPINBOX_H
 #define KISSLIDERSPINBOX_H
 
-#include <QAbstractSlider>
+#include <QAbstractSpinBox>
 
 #include <QStyleOptionSpinBox>
 #include <QStyleOptionProgressBar>
@@ -28,65 +28,108 @@
 class QLineEdit;
 class QDoubleValidator;
 class QTimer;
+struct KisAbstractSliderSpinBoxPrivate;
+struct KisSliderSpinBoxPrivate;
+struct KisDoubleSliderSpinBoxPrivate;
 
 /**
  * XXX: when inactive, also show the progress bar part as inactive!
  */
-class  KRITAUI_EXPORT KisSliderSpinBox : public QAbstractSlider
+class KRITAUI_EXPORT KisAbstractSliderSpinBox : public QWidget
 {
-   Q_OBJECT
-   Q_DISABLE_COPY(KisSliderSpinBox)
-public:
-   explicit KisSliderSpinBox(QWidget* parent=0);
-   virtual ~KisSliderSpinBox();
-
-   void showEdit();
-   void hideEdit();
-
-   void setRange(qreal minimum, qreal maximum, int decimals = 0);
-
-   void setSuffix(const QString& suffix);
-
-   ///Get the value, don't use value()
-   qreal doubleValue();
-
-   ///Set the value, don't use setValue()
-   void setDoubleValue(qreal value);
-
-   void setExponentRatio(qreal dbl);
+    Q_OBJECT
+    Q_DISABLE_COPY(KisAbstractSliderSpinBox)
+    Q_DECLARE_PRIVATE(KisAbstractSliderSpinBox)
 protected:
-   virtual void paintEvent(QPaintEvent* e);
-   virtual void mousePressEvent(QMouseEvent* e);
-   virtual void mouseReleaseEvent(QMouseEvent* e);
-   virtual void mouseMoveEvent(QMouseEvent* e);
-   virtual void mouseDoubleClickEvent(QMouseEvent* e);
-   virtual void keyPressEvent(QKeyEvent* e);
+    explicit KisAbstractSliderSpinBox(QWidget* parent, KisAbstractSliderSpinBoxPrivate*);
+public:
+    virtual ~KisAbstractSliderSpinBox();
 
-   virtual bool eventFilter(QObject* recv, QEvent* e);
+    void showEdit();
+    void hideEdit();
 
-   virtual QSize sizeHint() const;
-   virtual QSize minimumSizeHint() const;
+    void setSuffix(const QString& suffix);
 
-   QStyleOptionSpinBox spinBoxOptions() const;
-   QStyleOptionProgressBar progressBarOptions() const;
+    void setExponentRatio(qreal dbl);
 
-   QRect progressRect(const QStyleOptionSpinBox& spinBoxOptions) const;
-   QRect upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
-   QRect downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
+protected:
+    virtual void paintEvent(QPaintEvent* e);
+    virtual void mousePressEvent(QMouseEvent* e);
+    virtual void mouseReleaseEvent(QMouseEvent* e);
+    virtual void mouseMoveEvent(QMouseEvent* e);
+    virtual void mouseDoubleClickEvent(QMouseEvent* e);
+    virtual void keyPressEvent(QKeyEvent* e);
 
-   int valueForX(int x) const;
+    virtual bool eventFilter(QObject* recv, QEvent* e);
 
-   QString valueString() const;
-signals:
-    void doubleValueChanged(qreal value);
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+
+    QStyleOptionSpinBox spinBoxOptions() const;
+    QStyleOptionProgressBar progressBarOptions() const;
+
+    QRect progressRect(const QStyleOptionSpinBox& spinBoxOptions) const;
+    QRect upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
+    QRect downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
+
+    int valueForX(int x) const;
+
+    virtual QString valueString() const = 0;
+    virtual void setInternalValue(int value) = 0;
 
 protected slots:
-   void contextMenuEvent(QContextMenuEvent * event);
-   void internalValueChanged(int value);
+    void contextMenuEvent(QContextMenuEvent * event);
+protected:
+    KisAbstractSliderSpinBoxPrivate* const d_ptr;
+};
 
-private:
-    struct Private;
-    Private* const d;
+class KRITAUI_EXPORT KisSliderSpinBox : public KisAbstractSliderSpinBox
+{
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(KisSliderSpinBox)
+public:
+    KisSliderSpinBox(QWidget* parent = 0);
+    ~KisSliderSpinBox();
+
+    void setRange(int minimum, int maximum);
+
+    ///Get the value, don't use value()
+    int value();
+
+    ///Set the value, don't use setValue()
+    void setValue(int value);
+
+    void setSingleStep(int value);
+    void setPageStep(int value);
+protected:
+    virtual QString valueString() const;
+    virtual void setInternalValue(int value);
+signals:
+    void valueChanged(int value);
+};
+
+class KRITAUI_EXPORT KisDoubleSliderSpinBox : public KisAbstractSliderSpinBox
+{
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(KisDoubleSliderSpinBox)
+public:
+    KisDoubleSliderSpinBox(QWidget* parent = 0);
+    ~KisDoubleSliderSpinBox();
+
+    void setRange(qreal minimum, qreal maximum, int decimals = 0);
+
+    ///Get the value, don't use value()
+    qreal value();
+
+    ///Set the value, don't use setValue()
+    void setValue(qreal value);
+
+    void setSingleStep(qreal value);
+protected:
+    virtual QString valueString() const;
+    virtual void setInternalValue(int value);
+signals:
+    void valueChanged(qreal value);
 };
 
 #endif //kISSLIDERSPINBOX_H

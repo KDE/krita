@@ -398,20 +398,20 @@ QWidget* KisToolGradient::createOptionWidget()
 
     m_lbAntiAliasThreshold = new QLabel(i18n("Anti-alias threshold:"), widget);
 
-    m_slAntiAliasThreshold = new KisSliderSpinBox(widget);
+    m_slAntiAliasThreshold = new KisDoubleSliderSpinBox(widget);
     m_slAntiAliasThreshold->setObjectName("threshold_slider");
     m_slAntiAliasThreshold->setRange(0, 1, 3);
     m_slAntiAliasThreshold->setValue(m_antiAliasThreshold);
-    connect(m_slAntiAliasThreshold, SIGNAL(valueChanged(double)), this, SLOT(slotSetAntiAliasThreshold(double)));
+    connect(m_slAntiAliasThreshold, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAntiAliasThreshold(qreal)));
 
     addOptionWidgetOption(m_slAntiAliasThreshold, m_lbAntiAliasThreshold);
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
     m_lbPreviewOpacity = new QLabel(i18n("Preview opacity:"), widget);
     m_slPreviewOpacity = new KisSliderSpinBox(widget);
-    m_slPreviewOpacity->setRange(0, 100, 0)  ;
+    m_slPreviewOpacity->setRange(0, 100);
     m_slPreviewOpacity->setValue(m_previewOpacityPercent);
-    connect(m_slPreviewOpacity, SIGNAL(valueChanged(qreal, bool)), this, SLOT(slotSetPreviewOpacity(qreal, bool)));
+    connect(m_slPreviewOpacity, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetPreviewOpacity(qreal)));
 
     addOptionWidgetOption(m_slPreviewOpacity, m_lbPreviewOpacity);
 
@@ -444,9 +444,8 @@ void KisToolGradient::slotSetAntiAliasThreshold(double value)
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
 
-void KisToolGradient::slotSetPreviewOpacity(qreal value, bool final)
+void KisToolGradient::slotSetPreviewOpacity(qreal value)
 {
-    Q_UNUSED(final);
     m_previewOpacityPercent = value;
 }
 

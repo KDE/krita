@@ -162,9 +162,9 @@ QWidget * KisToolPaint::createOptionWidget()
     m_lbOpacity = new QLabel(i18n("Opacity: "), optionWidget);
     m_lbOpacity->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     m_slOpacity = new KisSliderSpinBox(optionWidget);
-    m_slOpacity->setRange(0, 100, 0);
+    m_slOpacity->setRange(0, 100);
     m_slOpacity->setValue(m_opacity / OPACITY_OPAQUE_U8 * 100);
-    connect(m_slOpacity, SIGNAL(doubleValueChanged(qreal)), this, SLOT(slotSetOpacity(qreal)));
+    connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
 
     QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setObjectName("KisToolPaint::OptionWidget::VerticalLayout");
@@ -221,9 +221,9 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 }
 
 
-void KisToolPaint::slotSetOpacity(qreal opacityPerCent)
+void KisToolPaint::slotSetOpacity(int opacityPerCent)
 {
-    m_opacity = (int)(opacityPerCent * OPACITY_OPAQUE_U8 / 100);
+    m_opacity = (int)(qreal(opacityPerCent) * OPACITY_OPAQUE_U8 / 100);
 }
 
 

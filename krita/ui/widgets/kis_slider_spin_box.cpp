@@ -32,7 +32,7 @@
 #include <QTimer>
 #include <QtDebug>
 
-struct KisSliderSpinBox::Private {
+struct KisAbstractSliderSpinBoxPrivate {
     QLineEdit* edit;
     QDoubleValidator* validator;
     bool upButtonDown;
@@ -40,11 +40,16 @@ struct KisSliderSpinBox::Private {
     int factor;
     QString suffix;
     qreal exponentRatio;
+    int value;
+    int maximum;
+    int minimum;
+    int singleStep;
 };
 
-KisSliderSpinBox::KisSliderSpinBox(QWidget* parent) :
-        QAbstractSlider(parent), d(new Private)
+KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractSliderSpinBoxPrivate* _d) :
+        QWidget(parent), d_ptr(_d)
 {
+    Q_D(KisAbstractSliderSpinBox);
     d->upButtonDown = false;
     d->downButtonDown = false;
     d->edit = new QLineEdit(this);
@@ -61,22 +66,28 @@ KisSliderSpinBox::KisSliderSpinBox(QWidget* parent) :
 
     d->validator = new QDoubleValidator(d->edit);
     d->edit->setValidator(d->validator);
-    setRange(0.0, 100.0, 0);
+
+    d->minimum = 0;
+    d->maximum = 100;
+    d->factor = 1.0;
+    d->singleStep = 1;
+
     setExponentRatio(1.0);
-    connect(this, SIGNAL(valueChanged(int)), this, SLOT(internalValueChanged(int)));
 
     //Set sane defaults
     setFocusPolicy(Qt::StrongFocus);
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 }
 
-KisSliderSpinBox::~KisSliderSpinBox()
+KisAbstractSliderSpinBox::~KisAbstractSliderSpinBox()
 {
+    Q_D(KisAbstractSliderSpinBox);
     delete d;
 }
 
-void KisSliderSpinBox::showEdit()
+void KisAbstractSliderSpinBox::showEdit()
 {
+    Q_D(KisAbstractSliderSpinBox);
     if (d->edit->isVisible()) return;
     d->edit->setGeometry(progressRect(spinBoxOptions()));
     d->edit->setText(valueString());
@@ -86,14 +97,16 @@ void KisSliderSpinBox::showEdit()
     update();
 }
 
-void KisSliderSpinBox::hideEdit()
+void KisAbstractSliderSpinBox::hideEdit()
 {
+    Q_D(KisAbstractSliderSpinBox);
     d->edit->hide();
     update();
 }
 
-void KisSliderSpinBox::paintEvent(QPaintEvent* e)
+void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
 {
+    Q_D(KisAbstractSliderSpinBox);
     Q_UNUSED(e)
 
     QPainter painter(this);
@@ -118,9 +131,8 @@ void KisSliderSpinBox::paintEvent(QPaintEvent* e)
     style()->drawControl(QStyle::CE_ProgressBar, &progressOpts, &painter, 0);
 
     //Draw focus if necessary
-    if(hasFocus() &&
-       d->edit->hasFocus())
-    {
+    if (hasFocus() &&
+            d->edit->hasFocus()) {
         QStyleOptionFocusRect focusOpts;
         focusOpts.initFrom(this);
         focusOpts.rect = progressOpts.rect;
@@ -130,22 +142,20 @@ void KisSliderSpinBox::paintEvent(QPaintEvent* e)
 
 }
 
-void KisSliderSpinBox::mousePressEvent(QMouseEvent* e)
+void KisAbstractSliderSpinBox::mousePressEvent(QMouseEvent* e)
 {
+    Q_D(KisAbstractSliderSpinBox);
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
     //Depress buttons or highlight slider
     //Also used to emulate mouse grab...
-    if(e->buttons() & Qt::LeftButton) {
-        if(upButtonRect(spinOpts).contains(e->pos()))
-        {
+    if (e->buttons() & Qt::LeftButton) {
+        if (upButtonRect(spinOpts).contains(e->pos())) {
             d->upButtonDown = true;
-        }
-        else if(downButtonRect(spinOpts).contains(e->pos()))
-        {
+        } else if (downButtonRect(spinOpts).contains(e->pos())) {
             d->downButtonDown = true;
         }
-    } else if(e->buttons() & Qt::RightButton){
+    } else if (e->buttons() & Qt::RightButton) {
         showEdit();
     }
 
@@ -153,26 +163,22 @@ void KisSliderSpinBox::mousePressEvent(QMouseEvent* e)
     update();
 }
 
-void KisSliderSpinBox::mouseReleaseEvent(QMouseEvent* e)
+void KisAbstractSliderSpinBox::mouseReleaseEvent(QMouseEvent* e)
 {
+    Q_D(KisAbstractSliderSpinBox);
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
     //Step up/down for buttons
     //Emualting mouse grab too
-    if(upButtonRect(spinOpts).contains(e->pos()) && d->upButtonDown)
-    {
-        setValue(value() + singleStep());
-    }
-    else if(downButtonRect(spinOpts).contains(e->pos()) && d->downButtonDown)
-    {
-        setValue(value() - singleStep());
-    }
-    else if( progressRect(spinOpts).contains(e->pos()) &&
-             !(d->edit->isVisible()) &&
-             !(d->upButtonDown || d->downButtonDown) )
-    {
+    if (upButtonRect(spinOpts).contains(e->pos()) && d->upButtonDown) {
+        setInternalValue(d->value + d->singleStep);
+    } else if (downButtonRect(spinOpts).contains(e->pos()) && d->downButtonDown) {
+        setInternalValue(d->value - d->singleStep);
+    } else if (progressRect(spinOpts).contains(e->pos()) &&
+               !(d->edit->isVisible()) &&
+               !(d->upButtonDown || d->downButtonDown)) {
         //Snap to percentage for progress area
-        setValue(valueForX(e->pos().x()));
+        setInternalValue(valueForX(e->pos().x()));
     }
 
     d->upButtonDown = false;
@@ -180,33 +186,34 @@ void KisSliderSpinBox::mouseReleaseEvent(QMouseEvent* e)
     update();
 }
 
-void KisSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
+void KisAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
 {
+    Q_D(KisAbstractSliderSpinBox);
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
     //Respect emulated mouse grab.
-    if(progressRect(spinOpts).contains(e->pos()) &&
-       e->buttons() & Qt::LeftButton &&
-       !(d->downButtonDown || d->upButtonDown))
-    {
-        setValue(valueForX(e->pos().x()));
+    if (progressRect(spinOpts).contains(e->pos()) &&
+            e->buttons() & Qt::LeftButton &&
+            !(d->downButtonDown || d->upButtonDown)) {
+        setInternalValue(valueForX(e->pos().x()));
     }
 }
 
-void KisSliderSpinBox::mouseDoubleClickEvent(QMouseEvent* e)
+void KisAbstractSliderSpinBox::mouseDoubleClickEvent(QMouseEvent* e)
 {
+    Q_UNUSED(e);
 }
 
-void KisSliderSpinBox::keyPressEvent(QKeyEvent* e)
+void KisAbstractSliderSpinBox::keyPressEvent(QKeyEvent* e)
 {
-    switch(e->key())
-    {
+    Q_D(KisAbstractSliderSpinBox);
+    switch (e->key()) {
     case Qt::Key_Up:
     case Qt::Key_Right:
-        setValue(value() + singleStep());
+        setInternalValue(d->value + d->singleStep);
         break;
     case Qt::Key_Down:
     case Qt::Key_Left:
-        setValue(value() - singleStep());
+        setInternalValue(d->value - d->singleStep);
         break;
     case Qt::Key_Enter: //Line edit isn't "accepting" key strokes..
     case Qt::Key_Return:
@@ -219,18 +226,17 @@ void KisSliderSpinBox::keyPressEvent(QKeyEvent* e)
     }
 }
 
-bool KisSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
+bool KisAbstractSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
 {
-    if(recv == static_cast<QObject*>(d->edit) &&
-       e->type() == QEvent::KeyRelease)
-    {
+    Q_D(KisAbstractSliderSpinBox);
+    if (recv == static_cast<QObject*>(d->edit) &&
+            e->type() == QEvent::KeyRelease) {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
 
-        switch(keyEvent->key())
-        {
+        switch (keyEvent->key()) {
         case Qt::Key_Enter:
         case Qt::Key_Return:
-            setValue(d->edit->text().toDouble()*d->factor);
+            setInternalValue(d->edit->text().toDouble()*d->factor);
             hideEdit();
             return true;
         case Qt::Key_Escape:
@@ -244,13 +250,14 @@ bool KisSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
     return false;
 }
 
-QSize KisSliderSpinBox::sizeHint() const
+QSize KisAbstractSliderSpinBox::sizeHint() const
 {
+    const Q_D(KisAbstractSliderSpinBox);
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
     QFontMetrics fm(font());
     //We need at least 50 pixels or things start to look bad
-    int w = qMax(fm.width(QString::number(maximum())), 50);
+    int w = qMax(fm.width(QString::number(d->maximum)), 50);
     QSize hint(w, d->edit->sizeHint().height() + 3);
 
     //Getting the size of the buttons is a pain as the calcs require a rect
@@ -268,17 +275,18 @@ QSize KisSliderSpinBox::sizeHint() const
 
     spinOpts.rect = rect();
     return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint, 0)
-            .expandedTo(QApplication::globalStrut());
+           .expandedTo(QApplication::globalStrut());
 
 }
 
-QSize KisSliderSpinBox::minimumSizeHint() const
+QSize KisAbstractSliderSpinBox::minimumSizeHint() const
 {
     return sizeHint();
 }
 
-QStyleOptionSpinBox KisSliderSpinBox::spinBoxOptions() const
+QStyleOptionSpinBox KisAbstractSliderSpinBox::spinBoxOptions() const
 {
+    const Q_D(KisAbstractSliderSpinBox);
     QStyleOptionSpinBox opts;
     opts.initFrom(this);
     opts.frame = false;
@@ -286,51 +294,42 @@ QStyleOptionSpinBox KisSliderSpinBox::spinBoxOptions() const
     opts.subControls = QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown;
 
     //Disable non-logical buttons
-    if(value() == minimum())
-    {
+    if (d->value == d->minimum) {
         opts.stepEnabled = QAbstractSpinBox::StepUpEnabled;
-    }
-    else if(value() == maximum())
-    {
+    } else if (d->value == d->maximum) {
         opts.stepEnabled = QAbstractSpinBox::StepDownEnabled;
-    }
-    else
-    {
+    } else {
         opts.stepEnabled = QAbstractSpinBox::StepUpEnabled | QAbstractSpinBox::StepDownEnabled;
     }
 
     //Deal with depressed buttons
-    if(d->upButtonDown)
-    {
+    if (d->upButtonDown) {
         opts.activeSubControls = QStyle::SC_SpinBoxUp;
-    }
-    else if(d->downButtonDown)
-    {
+    } else if (d->downButtonDown) {
         opts.activeSubControls = QStyle::SC_SpinBoxDown;
-    }
-    else
-    {
+    } else {
         opts.activeSubControls = 0;
     }
 
     return opts;
 }
 
-QStyleOptionProgressBar KisSliderSpinBox::progressBarOptions() const
+QStyleOptionProgressBar KisAbstractSliderSpinBox::progressBarOptions() const
 {
+    const Q_D(KisAbstractSliderSpinBox);
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
     //Create opts for drawing the progress portion
     QStyleOptionProgressBar progressOpts;
     progressOpts.initFrom(this);
-    progressOpts.maximum = maximum();
-    progressOpts.minimum = minimum();
+    progressOpts.maximum = d->maximum;
+    progressOpts.minimum = d->minimum;
 
-    qreal minDbl = minimum();
+    qreal minDbl = d->minimum;
 
-    qreal dValues = (maximum() - minDbl);
+    qreal dValues = (d->maximum - minDbl);
 
-    progressOpts.progress = dValues * pow((value() - minDbl) / dValues, 1 / d->exponentRatio) + minDbl;
+    progressOpts.progress = dValues * pow((d->value - minDbl) / dValues, 1 / d->exponentRatio) + minDbl;
     progressOpts.text = valueString() + d->suffix;
     progressOpts.textAlignment = Qt::AlignCenter;
     progressOpts.textVisible = !(d->edit->isVisible());
@@ -341,85 +340,165 @@ QStyleOptionProgressBar KisSliderSpinBox::progressBarOptions() const
     return progressOpts;
 }
 
-QRect KisSliderSpinBox::progressRect(const QStyleOptionSpinBox& spinBoxOptions) const
+QRect KisAbstractSliderSpinBox::progressRect(const QStyleOptionSpinBox& spinBoxOptions) const
 {
     return style()->subControlRect(QStyle::CC_SpinBox, &spinBoxOptions,
                                    QStyle::SC_SpinBoxEditField);
 }
 
-QRect KisSliderSpinBox::upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const
+QRect KisAbstractSliderSpinBox::upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const
 {
     return style()->subControlRect(QStyle::CC_SpinBox, &spinBoxOptions,
                                    QStyle::SC_SpinBoxUp);
 }
 
-QRect KisSliderSpinBox::downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const
+QRect KisAbstractSliderSpinBox::downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const
 {
     return style()->subControlRect(QStyle::CC_SpinBox, &spinBoxOptions,
                                    QStyle::SC_SpinBoxDown);
 }
 
-int KisSliderSpinBox::valueForX(int x) const
+int KisAbstractSliderSpinBox::valueForX(int x) const
 {
+    const Q_D(KisAbstractSliderSpinBox);
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
     //Adjust for magic number in style code (margins)
-    QRect correctedProgRect = progressRect(spinOpts).adjusted(2,2,-2,-2);
+    QRect correctedProgRect = progressRect(spinOpts).adjusted(2, 2, -2, -2);
 
     qreal leftDbl = correctedProgRect.left();
     qreal xDbl = x - leftDbl;
     qreal rightDbl = correctedProgRect.right();
-    qreal minDbl = minimum();
-    qreal maxDbl = maximum();
+    qreal minDbl = d->minimum;
+    qreal maxDbl = d->maximum;
 
     qreal dValues = (maxDbl - minDbl);
-    qreal percent = (xDbl / (rightDbl-leftDbl));
+    qreal percent = (xDbl / (rightDbl - leftDbl));
 
     return ((dValues * pow(percent, d->exponentRatio)) + minDbl);
 }
 
-void KisSliderSpinBox::setRange(qreal minimum, qreal maximum, int decimals)
+void KisAbstractSliderSpinBox::setSuffix(const QString& suffix)
 {
-    d->factor = pow(10,decimals);
-    
-    setMinimum(minimum*d->factor);
-    setMaximum(maximum*d->factor);
-    d->validator->setRange(minimum, maximum, decimals);
-}
-
-void KisSliderSpinBox::setSuffix(const QString& suffix)
-{
+    Q_D(KisAbstractSliderSpinBox);
     d->suffix = suffix;
 }
 
-qreal KisSliderSpinBox::doubleValue()
+void KisAbstractSliderSpinBox::setExponentRatio(qreal dbl)
 {
-    return (qreal)value()/d->factor;
-}
-
-void KisSliderSpinBox::setDoubleValue(qreal value)
-{
-    setValue(value*d->factor);
-    update();
-}
-
-QString KisSliderSpinBox::valueString() const
-{
-    return QString::number((qreal)value()/d->factor, 'f', d->validator->decimals());
-}
-
-void KisSliderSpinBox::setExponentRatio(qreal dbl)
-{
+    Q_D(KisAbstractSliderSpinBox);
     Q_ASSERT(dbl > 0);
     d->exponentRatio = dbl;
 }
 
-void KisSliderSpinBox::contextMenuEvent(QContextMenuEvent* event)
+void KisAbstractSliderSpinBox::contextMenuEvent(QContextMenuEvent* event)
 {
     event->accept();
 }
 
-void KisSliderSpinBox::internalValueChanged(int value)
+struct KisSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
+};
+
+KisSliderSpinBox::KisSliderSpinBox(QWidget* parent) : KisAbstractSliderSpinBox(parent, new KisSliderSpinBoxPrivate)
 {
-    emit doubleValueChanged(value/d->factor);
+}
+
+KisSliderSpinBox::~KisSliderSpinBox()
+{
+}
+
+void KisSliderSpinBox::setRange(int minimum, int maximum)
+{
+    Q_D(KisSliderSpinBox);
+    d->minimum = minimum;
+    d->maximum = maximum;
+    d->validator->setRange(minimum, maximum, 0);
+}
+
+int KisSliderSpinBox::value()
+{
+    Q_D(KisSliderSpinBox);
+    return d->value;
+}
+
+void KisSliderSpinBox::setValue(int value)
+{
+    setInternalValue(value);
+}
+
+QString KisSliderSpinBox::valueString() const
+{
+    const Q_D(KisSliderSpinBox);
+    return QString::number(d->value, 'f', d->validator->decimals());
+}
+
+void KisSliderSpinBox::setSingleStep(int value)
+{
+    Q_D(KisSliderSpinBox);
+    d->singleStep = value;
+}
+
+void KisSliderSpinBox::setPageStep(int value)
+{
+    Q_UNUSED(value);
+}
+
+void KisSliderSpinBox::setInternalValue(int _value)
+{
+    Q_D(KisAbstractSliderSpinBox);
+    d->value = _value;
+    emit(valueChanged(value()));
+}
+
+struct KisDoubleSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
+};
+
+KisDoubleSliderSpinBox::KisDoubleSliderSpinBox(QWidget* parent) : KisAbstractSliderSpinBox(parent, new KisDoubleSliderSpinBoxPrivate)
+{
+}
+
+KisDoubleSliderSpinBox::~KisDoubleSliderSpinBox()
+{
+}
+
+void KisDoubleSliderSpinBox::setRange(qreal minimum, qreal maximum, int decimals)
+{
+    Q_D(KisDoubleSliderSpinBox);
+    d->factor = pow(10, decimals);
+
+    d->minimum = minimum * d->factor;
+    d->maximum = maximum * d->factor;
+    d->validator->setRange(minimum, maximum, decimals);
+}
+
+qreal KisDoubleSliderSpinBox::value()
+{
+    Q_D(KisAbstractSliderSpinBox);
+    return (qreal)d->value / d->factor;
+}
+
+void KisDoubleSliderSpinBox::setValue(qreal value)
+{
+    Q_D(KisAbstractSliderSpinBox);
+    d->value = value * d->factor;
+    update();
+}
+
+void KisDoubleSliderSpinBox::setSingleStep(qreal value)
+{
+    Q_D(KisAbstractSliderSpinBox);
+    d->singleStep = value * d->factor;
+}
+
+QString KisDoubleSliderSpinBox::valueString() const
+{
+    const Q_D(KisAbstractSliderSpinBox);
+    return QString::number((qreal)d->value / d->factor, 'f', d->validator->decimals());
+}
+
+void KisDoubleSliderSpinBox::setInternalValue(int _value)
+{
+    Q_D(KisAbstractSliderSpinBox);
+    d->value = _value;
+    emit(valueChanged(value()));
 }

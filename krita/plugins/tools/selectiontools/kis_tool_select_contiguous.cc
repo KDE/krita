@@ -129,7 +129,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         KisSliderSpinBox *input = new KisSliderSpinBox(m_optWidget);
         Q_CHECK_PTR(input);
         input->setObjectName("fuzziness");
-        input->setRange(0, 200, 0);
+        input->setRange(0, 200);
         input->setSingleStep(10);
         input->setValue(20);
         hbox->addWidget(input);

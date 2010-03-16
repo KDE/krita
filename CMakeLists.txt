@@ -352,6 +352,13 @@ if(NOT KdepimLibs_FOUND)
     set(SHOULD_BUILD_KPLATO FALSE)
 endif(NOT KdepimLibs_FOUND)
 
+### HACK ###
+# Those BUILD_ are illegally used below before they are defined, which cause problem on a first build
+option(BUILD_kchart "Build directory kchart" ON)
+option(BUILD_kexi   "Build directory kexi" ON)
+option(BUILD_kplato "Build directory kplato" ON)
+### HACK ###
+
 if(NOT BUILD_kchart OR NOT SHOULD_BUILD_KCHART)
     message(STATUS "WARNING: KoReport component will not be built because KChart is not available.")
     if(BUILD_kplato AND SHOULD_BUILD_KPLATO)

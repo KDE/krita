@@ -67,6 +67,8 @@ void KisKraSaveXmlVisitorTest::testCreateDomDocument()
 
     QStringList list;
 
+    doc->image()->lock();
+    
     KisCountVisitor cv(list, KoProperties());
     doc->image()->rootLayer()->accept(cv);
 

@@ -124,17 +124,20 @@ KisSelection::KisSelection(const KisSelection& rhs)
         m_d->pixelSelection->dataManager()->setDefaultPixel(rhs.m_d->pixelSelection->dataManager()->defaultPixel());
     }
     m_d->hasPixelSelection = rhs.m_d->hasPixelSelection;
-    m_d->hasShapeSelection = rhs.m_d->hasShapeSelection;
     m_d->isDeselected = rhs.m_d->isDeselected;
     m_d->isVisible = rhs.m_d->isVisible;
 
+    m_d->hasShapeSelection = false;
+
     if (rhs.m_d->hasShapeSelection) {
         Q_ASSERT(rhs.m_d->shapeSelection);
-        m_d->shapeSelection = rhs.m_d->shapeSelection->clone();
+        m_d->shapeSelection = rhs.m_d->shapeSelection->clone(this);
+        Q_ASSERT(m_d->shapeSelection);
         Q_ASSERT(m_d->shapeSelection != rhs.m_d->shapeSelection);
     } else {
         m_d->shapeSelection = 0;
     }
+    m_d->hasShapeSelection = rhs.m_d->hasShapeSelection; // need to be after the cloning of the shape selection otherwise some function of KisSelection are called between the cloning and expect the shape selection
 
 }
 
@@ -312,6 +315,7 @@ void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
 {
     m_d->shapeSelection = shapeSelection;
     m_d->hasShapeSelection = true;
+    Q_ASSERT(m_d->shapeSelection);
     // Unshare the data manager of the pixel selection
     if (m_d->hasPixelSelection && m_datamanager == m_d->pixelSelection->dataManager()) {
         m_datamanager = new KisDataManager(1, m_d->pixelSelection->dataManager()->defaultPixel());

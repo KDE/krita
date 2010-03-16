@@ -30,7 +30,7 @@ class KisShapeSelection;
 class KisShapeSelectionModel: public KoShapeContainerModel
 {
 public:
-    KisShapeSelectionModel(KisImageWSP image, KisSelectionSP selection, KisShapeSelection* shapeSelection);
+    KisShapeSelectionModel(KisImageWSP image, KisSelectionWSP selection, KisShapeSelection* shapeSelection);
     ~KisShapeSelectionModel();
 
     void add(KoShape *child);
@@ -45,11 +45,11 @@ public:
     void containerChanged(KoShapeContainer *);
     void childChanged(KoShape * child, KoShape::ChangeType type);
     bool isChildLocked(const KoShape *child) const;
-
+    void setShapeSelection(KisShapeSelection* selection);
 private:
     QMap<KoShape*, QRectF> m_shapeMap;
     KisImageWSP m_image;
-    KisSelectionSP m_parentSelection;
+    KisSelectionWSP m_parentSelection;
     KisShapeSelection* m_shapeSelection;
 };
 

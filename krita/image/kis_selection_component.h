@@ -29,7 +29,7 @@ public:
     KisSelectionComponent() {}
     virtual ~KisSelectionComponent() {}
 
-    virtual KisSelectionComponent* clone() = 0;
+    virtual KisSelectionComponent* clone(KisSelection* selection) = 0;
 
     virtual void renderToProjection(KisSelection* projection) = 0;
     virtual void renderToProjection(KisSelection* projection, const QRect& r) = 0;

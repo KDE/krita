@@ -59,7 +59,7 @@ public:
 
     virtual ~KisPixelSelection();
 
-    KisSelectionComponent* clone();
+    KisSelectionComponent* clone(KisSelection*);
 
     // Returns selectedness, or 0 if invalid coordinates
     quint8 selected(qint32 x, qint32 y) const;

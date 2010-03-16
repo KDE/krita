@@ -27,7 +27,7 @@
 #include "kis_image.h"
 #include "kis_undo_adapter.h"
 
-KisShapeSelectionModel::KisShapeSelectionModel(KisImageWSP image, KisSelectionSP selection, KisShapeSelection* shapeSelection)
+KisShapeSelectionModel::KisShapeSelectionModel(KisImageWSP image, KisSelectionWSP selection, KisShapeSelection* shapeSelection)
         : m_image(image)
         , m_parentSelection(selection)
         , m_shapeSelection(shapeSelection)
@@ -36,12 +36,8 @@ KisShapeSelectionModel::KisShapeSelectionModel(KisImageWSP image, KisSelectionSP
 
 KisShapeSelectionModel::~KisShapeSelectionModel()
 {
-    qDebug() << "~KisShapeSelectionModel() " << this << kBacktrace();
-    qDebug() << m_image.isValid();
-    if(m_parentSelection)
-        qDebug() << m_parentSelection->refCount();
     m_image = 0;
-    m_parentSelection.clear();
+    m_parentSelection = 0;
 }
 
 void KisShapeSelectionModel::add(KoShape *child)
@@ -76,12 +72,16 @@ void KisShapeSelectionModel::remove(KoShape *child)
     QRect updateRect = child->boundingRect().toAlignedRect();
     m_shapeMap.remove(child);
 
-    m_shapeSelection->setDirty();
+    if (m_shapeSelection) {
+        m_shapeSelection->setDirty();
+    }
 
     QMatrix matrix;
     matrix.scale(m_image->xRes(), m_image->yRes());
     updateRect = matrix.mapRect(updateRect);
-    m_parentSelection->updateProjection(updateRect);
+    if (m_shapeSelection) { // No m_shapeSelection indicates the selection is being deleted
+        m_parentSelection->updateProjection(updateRect);
+    }
 
     m_image->undoAdapter()->emitSelectionChanged();
 }
@@ -134,4 +134,9 @@ void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType t
 bool KisShapeSelectionModel::isChildLocked(const KoShape *child) const
 {
     return child->isGeometryProtected() || child->parent()->isGeometryProtected();
+}
+
+void KisShapeSelectionModel::setShapeSelection(KisShapeSelection* selection)
+{
+    m_shapeSelection = selection;
 }

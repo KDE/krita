@@ -125,6 +125,7 @@ typedef KisWeakSharedPtr<KisGroupLayer> KisGroupLayerWSP;
 
 class KisSelection;
 typedef KisSharedPtr<KisSelection> KisSelectionSP;
+typedef KisWeakSharedPtr<KisSelection> KisSelectionWSP;
 
 class KisBackground;
 typedef KisSharedPtr<KisBackground> KisBackgroundSP;

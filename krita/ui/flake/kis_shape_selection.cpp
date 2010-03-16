@@ -56,8 +56,8 @@
 
 #include <kis_debug.h>
 
-KisShapeSelection::KisShapeSelection(KisImageWSP image, KisSelectionSP selection)
-        : KoShapeLayer(new KisShapeSelectionModel(image, selection, this))
+KisShapeSelection::KisShapeSelection(KisImageWSP image, KisSelectionWSP selection)
+        : KoShapeLayer(m_model = new KisShapeSelectionModel(image, selection, this))
         , m_image(image)
 {
     Q_ASSERT(m_image);
@@ -71,11 +71,12 @@ KisShapeSelection::KisShapeSelection(KisImageWSP image, KisSelectionSP selection
 
 KisShapeSelection::~KisShapeSelection()
 {
+    m_model->setShapeSelection(0);
     delete m_canvas;
 }
 
-KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs)
-        : KoShapeLayer()
+KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection* selection)
+        : KoShapeLayer(m_model = new KisShapeSelectionModel(rhs.m_image, selection, this))
 {
     m_dirty = rhs.m_dirty;
     m_image = rhs.m_image;
@@ -97,9 +98,9 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs)
     }
 }
 
-KisSelectionComponent* KisShapeSelection::clone()
+KisSelectionComponent* KisShapeSelection::clone(KisSelection* selection)
 {
-    return new KisShapeSelection(*this);
+    return new KisShapeSelection(*this, selection);
 }
 
 bool KisShapeSelection::saveSelection(KoStore * store) const

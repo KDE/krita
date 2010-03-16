@@ -28,21 +28,23 @@
 
 class KoStore;
 class KisShapeSelectionCanvas;
+class KisShapeSelectionModel;
 
 /**
  *
  */
 class KRITAUI_EXPORT KisShapeSelection : public KoShapeLayer, public KisSelectionComponent
 {
+    KisShapeSelection(const KisShapeSelection& rhs);
 public:
 
-    KisShapeSelection(KisImageWSP image, KisSelectionSP selection);
+    KisShapeSelection(KisImageWSP image, KisSelectionWSP selection);
 
     virtual ~KisShapeSelection();
 
-    KisShapeSelection(const KisShapeSelection& rhs);
+    KisShapeSelection(const KisShapeSelection& rhs, KisSelection* selection);
 
-    KisSelectionComponent* clone();
+    KisSelectionComponent* clone(KisSelection* selection);
 
     bool saveSelection(KoStore * store) const;
 
@@ -77,6 +79,7 @@ private:
     QPainterPath m_outline;
     bool m_dirty;
     KisShapeSelectionCanvas* m_canvas;
+    KisShapeSelectionModel* m_model;
 
     friend class KisShapeSelectionModel;
 };

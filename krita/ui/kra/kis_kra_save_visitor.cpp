@@ -170,6 +170,10 @@ bool KisKraSaveVisitor::savePaintDevice(KisNode * node)
 
         m_store->close();
     }
+    if (m_store->open(getLocation(node) + ".defaultpixel")) {
+        m_store->write((char*)node->paintDevice()->defaultPixel(), node->paintDevice()->colorSpace()->pixelSize());
+        m_store->close();
+    }
     return true;
 }
 

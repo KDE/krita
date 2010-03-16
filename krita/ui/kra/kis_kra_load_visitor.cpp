@@ -265,6 +265,16 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
         kError() << "No image data: that's an error! " << device << ", " << location;
         return false;
     }
+    if (m_store->open(location + ".defaultpixel")) {
+        int pixelSize = device->colorSpace()->pixelSize();
+        if (m_store->size() == pixelSize) {
+            quint8 *defPixel = new quint8[pixelSize];
+            m_store->read((char*)defPixel, pixelSize);
+            device->setDefaultPixel(defPixel);
+            delete defPixel;
+        }
+        m_store->close();
+    }
     return true;
 }
 

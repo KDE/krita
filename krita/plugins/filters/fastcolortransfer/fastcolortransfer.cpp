@@ -27,6 +27,8 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
+#include <KoFilter.h>
+#include <KoFilterManager.h>
 
 #include <kis_doc2.h>
 #include <filter/kis_filter_registry.h>
@@ -106,12 +108,17 @@ void KisFilterFastColorTransfer::process(KisConstProcessingInformation srcInfo,
         dbgPlugins << "No file name for the reference image was specified.";
         return;
     }
+    
+    if (fileName.isEmpty()) return;
 
     KisPaintDeviceSP ref;
 
     dbgPlugins << "Use as reference file : " << fileName;
     KisDoc2 d;
-    d.importDocument(fileName);
+    KoFilterManager manager(&d);
+    QByteArray nativeFormat = d.nativeFormatMimeType();
+    KoFilter::ConversionStatus status;
+    QString s = manager.importDocument(fileName, status);
     KisImageWSP importedImage = d.image();
 
     if (importedImage) {

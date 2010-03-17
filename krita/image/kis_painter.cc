@@ -1678,12 +1678,7 @@ KisPaintDeviceSP KisPainter::device()
 void KisPainter::setChannelFlags(QBitArray channelFlags)
 {
     d->channelFlags = channelFlags;
-    if (d->alphaLocked) {
-        if (d->channelFlags.isEmpty()) {
-            d->channelFlags = d->colorSpace->channelFlags(true, false, true, true);
-            d->channelFlags = d->colorSpace->setChannelFlagsToPixelOrder(d->channelFlags);
-        }
-    }
+    setLockAlpha(d->alphaLocked);
 }
 
 QBitArray KisPainter::channelFlags()
@@ -1866,17 +1861,15 @@ void KisPainter::setMaskImageSize(qint32 width, qint32 height)
 void KisPainter::setLockAlpha(bool protect)
 {
     d->alphaLocked = protect;
-    if (d->alphaLocked) {
-        if (d->channelFlags.isEmpty()) {
-            d->channelFlags = d->colorSpace->channelFlags(true, false, true, true);
-            d->channelFlags = d->colorSpace->setChannelFlagsToPixelOrder(d->channelFlags);
-        }
-        else {
-            QList<KoChannelInfo*> channels = d->colorSpace->channels();
-            foreach (KoChannelInfo* channel, channels) {
-                if (channel->channelType() == KoChannelInfo::ALPHA) {
-                    d->channelFlags.setBit(channel->pos());
-                }
+    if (d->channelFlags.isEmpty()) {
+        d->channelFlags = d->colorSpace->channelFlags(true, !d->alphaLocked, true, true);
+        d->channelFlags = d->colorSpace->setChannelFlagsToPixelOrder(d->channelFlags);
+    }
+    else {
+        QList<KoChannelInfo*> channels = d->colorSpace->channels();
+        foreach (KoChannelInfo* channel, channels) {
+            if (channel->channelType() == KoChannelInfo::ALPHA) {
+                d->channelFlags.setBit(channel->pos(), !d->alphaLocked);
             }
         }
     }

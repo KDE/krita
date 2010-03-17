@@ -39,6 +39,7 @@ public:
     /// - '*': represents all layers
     /// - '..': represents the parent layer
     /// - number: index of the layer
+    /// - '.': represents the current layer
     ///
     /// For instance: "1/*" return all children of the first layer, "../3" return the third layer of the parent
     /// of the current layer

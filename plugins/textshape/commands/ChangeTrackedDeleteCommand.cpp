@@ -65,7 +65,7 @@ void ChangeTrackedDeleteCommand::undo()
     foreach (int changeId, m_removedElements) {
       KoTextDocument(document).changeTracker()->elementById(changeId)->setValid(true);
     }
-
+    updateListChanges();
     m_undone = true;
 }
 
@@ -121,6 +121,10 @@ void ChangeTrackedDeleteCommand::deletePreviousChar()
 
 void ChangeTrackedDeleteCommand::deleteSelection(QTextCursor &selection)
 {
+    //Store the position and length. Will be used in updateListChanges()
+    m_position = (selection.anchor() < selection.position()) ? selection.anchor():selection.position();
+    m_length = qAbs(selection.anchor() - selection.position());
+
     QTextDocument *document = m_tool->m_textEditor->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     Q_ASSERT(layout);
@@ -210,14 +214,20 @@ void ChangeTrackedDeleteCommand::deleteSelection(QTextCursor &selection)
     element->setDeleteChangeMarker(deleteChangemarker);
     deletedFragment = generateDeleteFragment(selection, deleteChangemarker);
     element->setDeleteData(deletedFragment);
+    updateListIds(selection);
     layout->inlineTextObjectManager()->insertInlineObject(selection, deleteChangemarker);
 
     m_addedChangeElement = changeId;
     
     //Insert the deleted data again after the marker with the charformat set to the change-id
     if (KoTextDocument(document).changeTracker()->displayChanges()) {
+        int startPosition = selection.position();
         insertDeleteFragment(selection, deleteChangemarker);
-
+        QTextCursor tempCursor(selection);
+        tempCursor.setPosition(startPosition);
+        tempCursor.setPosition(selection.position(), QTextCursor::KeepAnchor);
+        //tempCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, fragmentLength(deletedFragment));
+        updateListIds(tempCursor);
         if (backwards)
             selection.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, fragmentLength(deletedFragment) + 1);
     } else {
@@ -231,6 +241,7 @@ void ChangeTrackedDeleteCommand::deleteSelection(QTextCursor &selection)
         }
     }
 }
+
 
 QTextDocumentFragment ChangeTrackedDeleteCommand::generateDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker)
 {
@@ -439,12 +450,60 @@ bool ChangeTrackedDeleteCommand::mergeWith( const QUndoCommand *command)
         m_shapeDeleteCommands += other->m_shapeDeleteCommands;
         other->m_shapeDeleteCommands.clear();
 
+        m_newListIds = other->m_newListIds;
+
         for(int i=0; i < command->childCount(); i++)
             new UndoTextCommand(m_tool->m_textEditor->document(), this);
 
         return true;
     }
     return false;
+}
+
+void ChangeTrackedDeleteCommand::updateListIds(QTextCursor &cursor)
+{
+    m_newListIds.clear();
+    QTextDocument *document = m_tool->m_textEditor->document();
+    QTextCursor tempCursor(document);
+    QTextBlock startBlock = document->findBlock(cursor.anchor());
+    QTextBlock endBlock = document->findBlock(cursor.position());
+    QTextList *currentList;
+
+    for (QTextBlock currentBlock = startBlock; currentBlock != endBlock.next(); currentBlock = currentBlock.next()) {
+        tempCursor.setPosition(currentBlock.position());
+        currentList = tempCursor.currentList();
+        if (currentList) {
+            KoListStyle::ListIdType listId;
+            if (sizeof(KoListStyle::ListIdType) == sizeof(uint))
+                listId = currentList->format().property(KoListStyle::ListId).toUInt();
+            else
+                listId = currentList->format().property(KoListStyle::ListId).toULongLong();
+            
+            m_newListIds.push_back(listId);
+        }
+    }
+}
+void ChangeTrackedDeleteCommand::updateListChanges()
+{
+    QTextDocument *document = m_tool->m_textEditor->document();
+    QTextCursor tempCursor(document);
+    QTextBlock startBlock = document->findBlock(m_position);
+    QTextBlock endBlock = document->findBlock(m_position + m_length);
+    QTextList *currentList;
+    int newListIdsCounter = 0;
+
+    for (QTextBlock currentBlock = startBlock; currentBlock != endBlock.next(); currentBlock = currentBlock.next()) {
+        tempCursor.setPosition(currentBlock.position());
+        currentList = tempCursor.currentList();
+        if (currentList) {
+            int listId = m_newListIds[newListIdsCounter];
+            if (!KoTextDocument(document).list(currentBlock)) {
+                KoList *list = KoTextDocument(document).list(listId);
+                list->updateStoredList(currentBlock);
+            }
+            newListIdsCounter++;
+        }
+    }
 }
 
 ChangeTrackedDeleteCommand::~ChangeTrackedDeleteCommand()

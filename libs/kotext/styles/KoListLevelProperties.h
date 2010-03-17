@@ -104,9 +104,9 @@ public:
     /// set the bullet image key (as from the KoImageData)
     void setBulletImage(KoImageData *imageData);
     /// set the listId used by all list-styles that together make 1 user defined list in an ODF file.
-    void setListId(const QString &listId);
+    void setListId(KoListStyle::ListIdType listId);
     /// return the listId used by all list-styles that together make 1 user defined list in an ODF file.
-    QString listId() const;
+    KoListStyle::ListIdType listId() const;
     /**
      * For alpha-based lists numbers above the 'z' will increase the value of all characters at the same time.
      * If true; we get the sequence 'aa', 'bb', 'cc'. If false; 'aa', 'ab', 'ac'.
@@ -163,6 +163,8 @@ public:
 private:
     void setProperty(int key, const QVariant &value);
     int propertyInt(int key) const;
+    uint propertyUInt(int key) const;
+    qulonglong propertyULongLong(int key) const;
     bool propertyBoolean(int key) const;
     qreal propertyDouble(int key) const;
     QString propertyString(int key) const;

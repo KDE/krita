@@ -97,6 +97,9 @@ public:
     /// Returns the KoList that holds \a list
     KoList *list(QTextList *textList) const;
 
+    /// Return the KoList that holds \a listId
+    KoList *list(KoListStyle::ListIdType listId) const;
+
     /// Returns the KoInlineTextObjectManager
     KoInlineTextObjectManager *inlineTextObjectManager() const;
 

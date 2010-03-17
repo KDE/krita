@@ -78,6 +78,8 @@ public:
     /// Returns the QTextLists that form this list
     QVector<QPointer<QTextList> > textLists() const;
 
+    QVector<KoListStyle::ListIdType> textListIds() const;
+
     void setContinueNumbering(int level, bool enable);
     bool continueNumbering(int level) const;
 

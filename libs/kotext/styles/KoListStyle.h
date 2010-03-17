@@ -59,6 +59,9 @@ class  KOTEXT_EXPORT KoListStyle : public QObject
 {
     Q_OBJECT
 public:
+    // ListIdType will be 32-bit in 32 bit machines and 64 bit in 64 bit machines
+    typedef quintptr ListIdType;
+
     /// This list is used to specify what kind of list-style to use
     enum Style {
         /// Draw a square

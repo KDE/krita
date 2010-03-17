@@ -53,6 +53,11 @@ QVector<QPointer<QTextList> > KoList::textLists() const
     return d->textLists;
 }
 
+QVector<KoListStyle::ListIdType> KoList::textListIds() const
+{
+    return d->textListIds;
+}
+
 KoList *KoList::applyStyle(const QTextBlock &block, KoListStyle *style, int level)
 {
     Q_ASSERT(style);
@@ -100,7 +105,10 @@ void KoList::add(const QTextBlock &block, int level)
         if (continueNumbering(level))
             format.setProperty(KoListStyle::ContinueNumbering, true);
         textList = cursor.createList(format);
+        format.setProperty(KoListStyle::ListId, (KoListStyle::ListIdType)(textList));
+        textList->setFormat(format);
         d->textLists[level-1] = textList;
+        d->textListIds[level-1] = (KoListStyle::ListIdType)textList;
     } else {
         textList->add(block);
     }
@@ -153,6 +161,8 @@ void KoList::setStyle(KoListStyle *style)
         if (!textList)
             continue;
         KoListLevelProperties properties = d->style->levelProperties(i+1);
+        if (properties.listId())
+            d->textListIds[i] = properties.listId();
         QTextListFormat format;
         properties.applyStyle(format);
         textList->setFormat(format);
@@ -168,8 +178,14 @@ KoListStyle *KoList::style() const
 void KoList::updateStoredList(const QTextBlock &block)
 {
     int level = block.textList()->format().property(KoListStyle::Level).toInt();
-    if (block.textList())
-        d->textLists[level-1] = block.textList();
+    if (block.textList()) {
+        QTextList *textList = block.textList();
+        QTextListFormat format = textList->format();
+        format.setProperty(KoListStyle::ListId, (KoListStyle::ListIdType)(textList)); 
+        textList->setFormat(format);
+        d->textLists[level-1] = textList;
+        d->textListIds[level-1] = (KoListStyle::ListIdType)textList;
+    }
 }
 
 bool KoList::contains(QTextList *list) const

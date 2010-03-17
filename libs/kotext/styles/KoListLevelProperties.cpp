@@ -83,6 +83,22 @@ int KoListLevelProperties::propertyInt(int key) const
     return variant.toInt();
 }
 
+uint KoListLevelProperties::propertyUInt(int key) const
+{
+    QVariant variant = d->stylesPrivate.value(key);
+    if (variant.isNull())
+        return 0;
+    return variant.toUInt();
+}
+
+qulonglong KoListLevelProperties::propertyULongLong(int key) const
+{
+    QVariant variant = d->stylesPrivate.value(key);
+    if (variant.isNull())
+        return 0;
+    return variant.toULongLong();
+}
+
 qreal KoListLevelProperties::propertyDouble(int key) const
 {
     QVariant variant = d->stylesPrivate.value(key);
@@ -267,14 +283,17 @@ KoListLevelProperties & KoListLevelProperties::operator=(const KoListLevelProper
     return *this;
 }
 
-void KoListLevelProperties::setListId(const QString &listId)
+void KoListLevelProperties::setListId(KoListStyle::ListIdType listId)
 {
     setProperty(KoListStyle::ListId, listId);
 }
 
-QString KoListLevelProperties::listId() const
+KoListStyle::ListIdType KoListLevelProperties::listId() const
 {
-    return propertyString(KoListStyle::ListId);
+    if (sizeof(KoListStyle::ListIdType) == sizeof(uint))
+        return propertyUInt(KoListStyle::ListId);
+    else
+        return propertyULongLong(KoListStyle::ListId);
 }
 
 bool KoListLevelProperties::letterSynchronization() const

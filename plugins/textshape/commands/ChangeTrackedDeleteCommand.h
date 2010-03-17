@@ -22,6 +22,7 @@
 
 #include <QUndoStack>
 #include "TextCommandBase.h"
+#include <KoListStyle.h>
 #include <QList>
 #include <QTextList>
 
@@ -57,6 +58,8 @@ private:
     DeleteMode m_mode;
     QList<int> m_removedElements;
     QList<QUndoCommand *> m_shapeDeleteCommands;
+    QList<KoListStyle::ListIdType> m_newListIds;
+    int m_position, m_length;
     int m_addedChangeElement;
 
     virtual void deleteChar();
@@ -67,6 +70,8 @@ private:
     virtual void insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
     virtual int fragmentLength(QTextDocumentFragment &fragment);
     virtual bool checkListDeletion(QTextList *list, QTextCursor &cursor);
+    virtual void updateListIds(QTextCursor &cursor);
+    virtual void updateListChanges();
 };
 
 #endif // CHANGETRACKEDDELTECOMMAND_H

@@ -65,6 +65,7 @@ private:
     virtual void deleteInlineObjects(QTextCursor &selection);
     virtual void deleteTextAnchor(KoInlineObject *object);
     virtual bool checkMerge(const QUndoCommand *command);
+    virtual void updateListChanges();
 };
 
 #endif // DELTECOMMAND_H

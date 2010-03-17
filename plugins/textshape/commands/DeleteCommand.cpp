@@ -47,6 +47,7 @@ void DeleteCommand::undo()
 
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
+    updateListChanges();
     m_undone = true;
 }
 
@@ -260,6 +261,32 @@ bool DeleteCommand::checkMerge( const QUndoCommand *command )
         return true;
     }
     return false;
+}
+
+void DeleteCommand::updateListChanges()
+{
+    QTextDocument *document = m_tool->m_textEditor->document();
+    QTextCursor tempCursor(document);
+    QTextBlock startBlock = document->findBlock(m_position);
+    QTextBlock endBlock = document->findBlock(m_position + m_length);
+    QTextList *currentList;
+
+    for (QTextBlock currentBlock = startBlock; currentBlock != endBlock.next(); currentBlock = currentBlock.next()) {
+        tempCursor.setPosition(currentBlock.position());
+        currentList = tempCursor.currentList();
+        if (currentList) {
+            KoListStyle::ListIdType listId;
+            if (sizeof(KoListStyle::ListIdType) == sizeof(uint))
+                listId = currentList->format().property(KoListStyle::ListId).toUInt();
+            else
+                listId = currentList->format().property(KoListStyle::ListId).toULongLong();
+            
+            if (!KoTextDocument(document).list(currentBlock)) {
+                KoList *list = KoTextDocument(document).list(listId);
+                list->updateStoredList(currentBlock);
+            }
+        }
+    }
 }
 
 DeleteCommand::~DeleteCommand()

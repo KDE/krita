@@ -154,7 +154,6 @@ QWidget * KisToolBrush::createOptionWidget()
 
     m_sliderSmoothness = new KisSliderSpinBox(optionWidget);
     m_sliderSmoothness->setRange(0, MAXIMUM_SMOOTHNESS);
-    m_sliderSmoothness->setExponentRatio(3.0);
     m_sliderSmoothness->setEnabled(true);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), m_sliderSmoothness, SLOT(setEnabled(bool)));
     connect(m_sliderSmoothness, SIGNAL(valueChanged(int)), SLOT(slotSetSmoothness(int)));
@@ -168,7 +167,6 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderMagnetism = new KisSliderSpinBox(optionWidget);
     m_sliderMagnetism->setToolTip(i18n("Assistant Magnetism"));
     m_sliderMagnetism->setRange(0, MAXIMUM_SMOOTHNESS);
-    m_sliderMagnetism->setExponentRatio(3.0);
     m_sliderMagnetism->setEnabled(false);
     connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setEnabled(bool)));
     m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);

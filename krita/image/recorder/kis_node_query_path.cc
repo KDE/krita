@@ -66,37 +66,37 @@ struct KisNodeQueryPath::Private {
         elements = newelements;
     }
     void queryLevel(int _level, KisNodeSP _node, QList<KisNodeSP>& _result) {
-//         if (_level > elements.size()) {
+        if (_level > elements.size()) {
             _result.push_back(_node);
-//         } else {
-//             PathElement pe = elements[_level];
-// 
-//             switch (pe.type) {
-//             case PathElement::Wildcard: {
-//                 for (KisNodeSP child = _node->firstChild();
-//                         child != 0; child = child->nextSibling()) {
-//                     queryLevel(_level + 1, child, _result);
-//                 }
-//             }
-//             break;
-//             case PathElement::Parent: {
-//                 if (_node->parent()) {
-//                     queryLevel(_level + 1, _node->parent(), _result);
-//                 } else {
-//                     kWarning() << "No parent";
-//                 }
-//                 break;
-//             }
-//             case PathElement::Index: {
-//                 if (pe.index < _node->childCount()) {
-//                     queryLevel(_level + 1, _node->at(pe.index), _result);
-//                 } else {
-//                     kWarning() << "No parent";
-//                 }
-//                 break;
-//             }
-//             }
-//         }
+        } else {
+            PathElement pe = elements[_level];
+
+            switch (pe.type) {
+            case PathElement::Wildcard: {
+                for (KisNodeSP child = _node->firstChild();
+                        child != 0; child = child->nextSibling()) {
+                    queryLevel(_level + 1, child, _result);
+                }
+            }
+            break;
+            case PathElement::Parent: {
+                if (_node->parent()) {
+                    queryLevel(_level + 1, _node->parent(), _result);
+                } else {
+                    kWarning() << "No parent";
+                }
+                break;
+            }
+            case PathElement::Index: {
+                if (pe.index < _node->childCount()) {
+                    queryLevel(_level + 1, _node->at(pe.index), _result);
+                } else {
+                    kWarning() << "No parent";
+                }
+                break;
+            }
+            }
+        }
     }
 };
 

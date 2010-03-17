@@ -38,7 +38,6 @@ public:
     typedef enum {
         DeletedListItem = QTextFormat::UserProperty + 9999,
         DeletedList,
-        ListId
     } listDeleteStatus;
 
     KoDeleteChangeMarker(KoChangeTracker *changeTracker);
@@ -75,9 +74,9 @@ public:
 
     void setDeleteChangeXml(QString &deleteChangeXml);
 
-    KoListStyle *getDeletedListStyle(int id);
+    KoListStyle *getDeletedListStyle(KoListStyle::ListIdType id);
 
-    void setDeletedListStyle(int id, KoListStyle *style);
+    void setDeletedListStyle(KoListStyle::ListIdType, KoListStyle *style);
 
 protected:
 

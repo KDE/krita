@@ -40,6 +40,20 @@
 //#include <iostream>
 #include <QDebug>
 
+//A convenience function to get a ListIdType from a format
+
+static KoListStyle::ListIdType ListId(const QTextListFormat &format)
+{
+    KoListStyle::ListIdType listId;
+
+    if (sizeof(KoListStyle::ListIdType) == sizeof(uint))
+        listId = format.property(KoListStyle::ListId).toUInt();
+    else
+        listId = format.property(KoListStyle::ListId).toULongLong();
+
+    return listId;
+}
+
 using namespace std;
 ChangeTrackedDeleteCommand::ChangeTrackedDeleteCommand(DeleteMode mode, TextTool *tool, QUndoCommand *parent) :
     TextCommandBase (parent),
@@ -278,8 +292,7 @@ QTextDocumentFragment ChangeTrackedDeleteCommand::generateDeleteFragment(QTextCu
                 QTextListFormat format = editCursor.currentList()->format();
                 format.setProperty(KoDeleteChangeMarker::DeletedList, fullyDeletedList);
                 if (fullyDeletedList) {
-                    int listId = qrand();
-                    format.setProperty(KoDeleteChangeMarker::ListId, listId);
+                    KoListStyle::ListIdType listId = ListId(format);
                     KoList *list = KoTextDocument(document).list(currentBlock);
                     marker->setDeletedListStyle(listId, list->style());
                 }
@@ -324,7 +337,7 @@ void ChangeTrackedDeleteCommand::insertDeleteFragment(QTextCursor &cursor, KoDel
         if (textList) {
             if (textList->format().property(KoDeleteChangeMarker::DeletedList).toBool() && !currentList) {
                 //Found a Deleted List in the fragment. Create a new KoList.
-                int listId = textList->format().property(KoDeleteChangeMarker::ListId).toInt();
+                KoListStyle::ListIdType listId = ListId(textList->format());
                 KoListStyle *style = marker->getDeletedListStyle(listId);
                 currentList = new KoList(cursor.document(), style);    
             }
@@ -473,11 +486,7 @@ void ChangeTrackedDeleteCommand::updateListIds(QTextCursor &cursor)
         tempCursor.setPosition(currentBlock.position());
         currentList = tempCursor.currentList();
         if (currentList) {
-            KoListStyle::ListIdType listId;
-            if (sizeof(KoListStyle::ListIdType) == sizeof(uint))
-                listId = currentList->format().property(KoListStyle::ListId).toUInt();
-            else
-                listId = currentList->format().property(KoListStyle::ListId).toULongLong();
+            KoListStyle::ListIdType listId = ListId(currentList->format());
             
             m_newListIds.push_back(listId);
         }
@@ -496,7 +505,7 @@ void ChangeTrackedDeleteCommand::updateListChanges()
         tempCursor.setPosition(currentBlock.position());
         currentList = tempCursor.currentList();
         if (currentList) {
-            int listId = m_newListIds[newListIdsCounter];
+            KoListStyle::ListIdType listId = m_newListIds[newListIdsCounter];
             if (!KoTextDocument(document).list(currentBlock)) {
                 KoList *list = KoTextDocument(document).list(listId);
                 list->updateStoredList(currentBlock);

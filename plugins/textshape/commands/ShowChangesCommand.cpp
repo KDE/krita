@@ -223,7 +223,11 @@ void ShowChangesCommand::insertDeleteFragment(QTextCursor &cursor, KoDeleteChang
         if (textList) {
             if (textList->format().property(KoDeleteChangeMarker::DeletedList).toBool() && !currentList) {
                 //Found a Deleted List in the fragment. Create a new KoList.
-                int listId = textList->format().property(KoDeleteChangeMarker::ListId).toInt();
+                KoListStyle::ListIdType listId;
+                if (sizeof(KoListStyle::ListIdType) == sizeof(uint))
+                    listId = textList->format().property(KoListStyle::ListId).toUInt();
+                else
+                    listId = textList->format().property(KoListStyle::ListId).toULongLong();
                 KoListStyle *style = marker->getDeletedListStyle(listId);
                 currentList = new KoList(cursor.document(), style);    
             }

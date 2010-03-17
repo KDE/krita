@@ -323,7 +323,7 @@ void ListItemsHelper::recalculate()
                     checkLevel--;
                     for (int i = otherLevel + 1; i < level; i++) {
                         tmpDisplayLevel--;
-                        item += ".0"; // add missing counters.
+                        item += ".1"; // add missing counters.
                     }
                 } else { // just copy previous counter as prefix
                     QString otherPrefix = lf.stringProperty(KoListStyle::ListItemPrefix);
@@ -332,7 +332,7 @@ void ListItemsHelper::recalculate()
                     pureCounter = pureCounter.left(pureCounter.size() - otherSuffix.size());
                     item += pureCounter;
                     for (int i = otherLevel + 1; i < level; i++)
-                        item += ".0"; // add missing counters.
+                        item += ".1"; // add missing counters.
                     tmpDisplayLevel = 0;
                     break;
                 }

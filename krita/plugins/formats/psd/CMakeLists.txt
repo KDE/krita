@@ -42,7 +42,7 @@ install(TARGETS kritapsdimport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  krita_psd_import.desktop 
+#install( FILES  krita_psd_import.desktop 
 #               krita_psd_export.desktop  
-DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  krita_psd.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+#DESTINATION ${SERVICES_INSTALL_DIR})
+#install( FILES  krita_psd.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

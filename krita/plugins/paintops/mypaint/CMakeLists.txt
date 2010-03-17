@@ -27,10 +27,10 @@ kde4_add_plugin(kritamypaintpaintop ${kritamypaintpaintop_PART_SRCS})
 
 target_link_libraries(kritamypaintpaintop kritaui ${GLIB2_LIBRARIES})
 
-install( TARGETS kritamypaintpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
-install( FILES  kritamypaintpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES krita-mypaint.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+#install( TARGETS kritamypaintpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
+#install( FILES  kritamypaintpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+#install( FILES krita-mypaint.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 
-add_subdirectory(brushes)
+#add_subdirectory(brushes)
 
 endif(GLIB2_FOUND)

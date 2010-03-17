@@ -172,6 +172,9 @@ KisNodeQueryPath KisNodeQueryPath::fromString(const QString& _path)
     if (_path.size() == 0) return path;
     path.d->relative = !(_path.at(0) == '/');
     QStringList indexes = _path.split("/");
+    if (!path.d->relative) {
+        indexes.pop_front(); // In case of an absolute path "/1/2", the list is "", "1", "2" which is not good
+    }
     foreach(const QString& index, indexes) {
         if (index == "*") {
             path.d->elements.push_back(PathElement::Wildcard);

@@ -57,12 +57,14 @@ KisNodeQueryPathTest::KisNodeQueryPathTest()
     {                                                                           \
         {                                                                       \
             KisNodeQueryPath path = KisNodeQueryPath::fromString(absoluteStr1); \
+            QCOMPARE(path.toString(), QString(absoluteStr1));                   \
             QList<KisNodeSP> nodes = path.queryNodes(image, current);           \
             QCOMPARE(nodes.size(), 1);                                          \
             QCOMPARE(nodes[0], node);                                           \
         }                                                                       \
         {                                                                       \
             KisNodeQueryPath path = KisNodeQueryPath::fromString(absoluteStr2); \
+            QCOMPARE(path.toString(), QString(absoluteStr2));                   \
             QList<KisNodeSP> nodes = path.queryNodes(image, current);           \
             QCOMPARE(nodes.size(), 1);                                          \
             QCOMPARE(nodes[0], node);                                           \

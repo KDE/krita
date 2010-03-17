@@ -115,9 +115,9 @@ void KisToolBrush::mouseMoveEvent(KoPointerEvent *e)
 }
 
 
-void KisToolBrush::slotSetRate(qreal rate)
+void KisToolBrush::slotSetRate(int rate)
 {
-    m_rate = qRound(rate);
+    m_rate = rate;
     m_sliderRate->setToolTip(QString::number(m_rate) + ' ' + i18n("ms"));
 }
 
@@ -141,7 +141,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderRate = new KisSliderSpinBox (optionWidget);
     m_sliderRate->setRange(0, MAXIMUM_RATE);
     m_sliderRate->setExponentRatio(3.0);
-    connect(m_sliderRate, SIGNAL(doubleValueChanged(qreal)), SLOT(slotSetRate(qreal)));
+    connect(m_sliderRate, SIGNAL(valueChanged(int)), SLOT(slotSetRate(int)));
     m_sliderRate->setValue(m_rate);
     m_sliderRate->setToolTip(QString::number(m_rate) + ' ' + i18n("ms"));
 

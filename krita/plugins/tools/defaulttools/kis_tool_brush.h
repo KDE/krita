@@ -55,7 +55,7 @@ protected:
 private slots:
 
     void timeoutPaint();
-    void slotSetRate(qreal rate);
+    void slotSetRate(int rate);
     void slotSetSmoothness(int smoothness);
     void slotSetMagnetism(int magnetism);
 

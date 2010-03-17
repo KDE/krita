@@ -542,4 +542,10 @@ set(kis_cubic_curve_test_SRCS kis_cubic_curve_test.cpp )
 kde4_add_unit_test(KisCubicCurveTest TESTNAME krita-image-KisCubicCurveTest ${kis_cubic_curve_test_SRCS})
 target_link_libraries(KisCubicCurveTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(kis_node_query_path_test_SRCS kis_node_query_path_test.cpp )
+kde4_add_unit_test(KisNodeQueryPathTest TESTNAME krita-image-KisNodeQueryPathTest ${kis_node_query_path_test_SRCS})
+target_link_libraries(KisNodeQueryPathTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
 

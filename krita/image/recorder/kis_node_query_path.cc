@@ -144,7 +144,7 @@ QString KisNodeQueryPath::toString() const
 {
     QString str = "";
     if (!d->relative) {
-        str = "\\";
+        str = "/";
     }
     for (int i = 0; i < d->elements.count(); ++i) {
         PathElement pe = d->elements[i];
@@ -167,8 +167,8 @@ KisNodeQueryPath KisNodeQueryPath::fromString(const QString& _path)
 {
     KisNodeQueryPath path;
     if (_path.size() == 0) return path;
-    path.d->relative = !(_path.at(0) == '\\');
-    QStringList indexes = _path.split("\\");
+    path.d->relative = !(_path.at(0) == '/');
+    QStringList indexes = _path.split("/");
     foreach(const QString& index, indexes) {
         if (index == "*") {
             path.d->elements.push_back(PathElement::Wildcard);

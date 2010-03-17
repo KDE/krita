@@ -71,7 +71,7 @@ KisNodeQueryPathTest::KisNodeQueryPathTest()
                                                                                 \
     void KisNodeQueryPathTest::test##name##LayerFromAbsolutePath()              \
     {                                                                           \
-        KisNodeQueryPath path = KisNodeQueryPath::absolutePath(current);        \
+        KisNodeQueryPath path = KisNodeQueryPath::absolutePath(node);           \
         QCOMPARE(path.toString(), QString(absoluteStr1));                       \
         QList<KisNodeSP> nodes = path.queryNodes(image, current);               \
         QCOMPARE(nodes.size(), 1);                                              \

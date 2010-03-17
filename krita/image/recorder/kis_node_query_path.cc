@@ -66,7 +66,7 @@ struct KisNodeQueryPath::Private {
         elements = newelements;
     }
     void queryLevel(int _level, KisNodeSP _node, QList<KisNodeSP>& _result) {
-        if (_level > elements.size()) {
+        if (_level >= elements.size()) {
             _result.push_back(_node);
         } else {
             PathElement pe = elements[_level];
@@ -158,6 +158,9 @@ QString KisNodeQueryPath::toString() const
         case PathElement::Index:
             str += QString::number(pe.index);
             break;
+        }
+        if (i != d->elements.count() - 1) {
+            str += "/";
         }
     }
     return str;

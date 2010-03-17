@@ -169,7 +169,13 @@ QString KisNodeQueryPath::toString() const
 KisNodeQueryPath KisNodeQueryPath::fromString(const QString& _path)
 {
     KisNodeQueryPath path;
-    if (_path.size() == 0) return path;
+    if (_path.size() == 0 || _path == ".") {
+        return path;
+    }
+    if (_path == "/") {
+        path.d->relative = false;
+        return path;
+    }
     path.d->relative = !(_path.at(0) == '/');
     QStringList indexes = _path.split("/");
     if (!path.d->relative) {

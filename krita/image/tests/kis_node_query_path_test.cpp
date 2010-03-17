@@ -86,12 +86,14 @@ TESTS(Child2, "1", "/0/1/1", "/*/1/1", child2)
 TESTS(Brother1, "../0", "/0/0", "/*/0", brother1)
 TESTS(Brother2, "../2", "/0/2", "/*/2", brother2)
 TESTS(Parent, "..", "/0", "/*", parent)
-TESTS(Root, "../..", "/", "/*/..", KisNodeSP(image->rootLayer()))
+TESTS(Root, "../..", "/", "/", KisNodeSP(image->rootLayer()))
 
 void KisNodeQueryPathTest::testPathCompression()
 {
     KisNodeQueryPath path = KisNodeQueryPath::fromString("1/../3/../5");
     QCOMPARE(path.toString(), QString("5"));
+    KisNodeQueryPath path2 = KisNodeQueryPath::fromString("/*/..");
+    QCOMPARE(path2.toString(), QString("/"));
 }
 
 QTEST_KDEMAIN(KisNodeQueryPathTest, GUI)

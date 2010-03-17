@@ -121,10 +121,6 @@ void ChangeTrackedDeleteCommand::deletePreviousChar()
 
 void ChangeTrackedDeleteCommand::deleteSelection(QTextCursor &selection)
 {
-    //Store the position and length. Will be used in updateListChanges()
-    m_position = (selection.anchor() < selection.position()) ? selection.anchor():selection.position();
-    m_length = qAbs(selection.anchor() - selection.position());
-
     QTextDocument *document = m_tool->m_textEditor->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     Q_ASSERT(layout);
@@ -214,6 +210,11 @@ void ChangeTrackedDeleteCommand::deleteSelection(QTextCursor &selection)
     element->setDeleteChangeMarker(deleteChangemarker);
     deletedFragment = generateDeleteFragment(selection, deleteChangemarker);
     element->setDeleteData(deletedFragment);
+
+    //Store the position and length. Will be used in updateListChanges()
+    m_position = (selection.anchor() < selection.position()) ? selection.anchor():selection.position();
+    m_length = qAbs(selection.anchor() - selection.position());
+
     updateListIds(selection);
     layout->inlineTextObjectManager()->insertInlineObject(selection, deleteChangemarker);
 
@@ -452,6 +453,9 @@ bool ChangeTrackedDeleteCommand::mergeWith( const QUndoCommand *command)
 
         m_newListIds = other->m_newListIds;
 
+        m_position = other->m_position;
+        m_length = other->m_length;
+
         for(int i=0; i < command->childCount(); i++)
             new UndoTextCommand(m_tool->m_textEditor->document(), this);
 
@@ -478,7 +482,6 @@ void ChangeTrackedDeleteCommand::updateListIds(QTextCursor &cursor)
                 listId = currentList->format().property(KoListStyle::ListId).toUInt();
             else
                 listId = currentList->format().property(KoListStyle::ListId).toULongLong();
-            
             m_newListIds.push_back(listId);
         }
     }

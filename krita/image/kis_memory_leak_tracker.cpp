@@ -178,7 +178,11 @@ void KisMemoryLeakTracker::dumpReferences()
 void KisMemoryLeakTracker::dumpReferences(const void* what)
 {
     QMutexLocker l(&d->m);
-    if (!d->whatWhoWhen.contains(what)) return;
+    if (!d->whatWhoWhen.contains(what)) {
+        errKrita << "Object " << what << " is not tracked";
+        return;
+    }
+    
     WhatInfo& info = d->whatWhoWhen[what];
     dbgKrita << "Object " << what << "(" << info.name << ") is still referenced by " << info.infos.size() << " objects:";
     for (QHash<const void*, BacktraceInfo*>::iterator it2 = info.infos.begin();
@@ -194,7 +198,7 @@ void KisMemoryLeakTracker::dumpReferences(const void* what)
             dbgKrita << "Enable backtrace support in kis_memory_leak_tracker.cpp";
 #endif
     }
-    errKrita << "=====";
+    dbgKrita << "=====";
 }
 
 #else

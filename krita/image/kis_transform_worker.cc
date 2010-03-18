@@ -23,6 +23,7 @@
 
 #include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
+#include <KoCompositeOp.h>
 
 #include "kis_paint_device.h"
 #include "kis_debug.h"
@@ -567,13 +568,8 @@ bool KisTransformWorker::run()
 
 QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* selection)
 {
-    KisPaintDeviceSP dst = dev;
-    bool hasCurrentMemento = dev->dataManager()->hasCurrentMemento();
     int pixelSize = dev->pixelSize();
-
-    if (!hasCurrentMemento) {
-        dst = new KisPaintDevice(dev->colorSpace());
-    }
+    KisPaintDeviceSP dst = new KisPaintDevice(dev->colorSpace());
 
     QRect r;
     if (selection) {
@@ -591,10 +587,7 @@ QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* sele
 
             while (!srcIt.isDone()) {
                 if (srcIt.isSelected()) {
-                    if (hasCurrentMemento)
-                        memcpy(dstIt.rawData(), srcIt.oldRawData(), pixelSize);
-                    else
-                        memcpy(dstIt.rawData(), srcIt.rawData(), pixelSize);
+                    memcpy(dstIt.rawData(), srcIt.rawData(), pixelSize);
                 }
                 ++srcIt;
                 --dstIt;
@@ -604,23 +597,24 @@ QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* sele
             dstIt.nextRow();
         }
     }
-    if (!hasCurrentMemento) {
-        dev->setDataManager(dst->dataManager(), dst->colorSpace());
+    KisPainter gc(dev);
+
+    if (selection) {
+        dev->clearSelection(const_cast<KisSelection*>(selection));
     }
+    else {
+        dev->clear(r);
+    }
+    gc.setCompositeOp(COMPOSITE_OVER);
+    gc.bitBlt(r.topLeft(), dst, r);
 
     return r;
 }
 
 QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, const KisSelection* selection)
 {
-    KisPaintDeviceSP dst = dev;
-    bool hasCurrentMemento = dev->dataManager()->hasCurrentMemento();
-
     int pixelSize = dev->pixelSize();
-
-    if (!hasCurrentMemento) {
-        dst = new KisPaintDevice(dev->colorSpace());
-    }
+    KisPaintDeviceSP dst = new KisPaintDevice(dev->colorSpace());
 
     /* Read a line from bottom to top and and from top to bottom and write their values to each other */
     QRect r;
@@ -633,24 +627,28 @@ QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, const KisSelection* sele
         qint32 y1, y2;
         for (y1 = r.top(), y2 = r.bottom(); y1 <= r.bottom(); ++y1, --y2) {
 
-            KisHLineIteratorPixel itTop = dst->createHLineIterator(r.x(), y1, r.width(), selection);
-            KisHLineConstIteratorPixel itBottom = dev->createHLineConstIterator(r.x(), y2, r.width());
+            KisHLineConstIteratorPixel itTop = dev->createHLineConstIterator(r.x(), y1, r.width(), selection);
+            KisHLineIteratorPixel itBottom = dst->createHLineIterator(r.x(), y2, r.width());
 
             while (!itTop.isDone() && !itBottom.isDone()) {
-                if (itBottom.isSelected()) {
-                    if (hasCurrentMemento)
-                        memcpy(itTop.rawData(), itBottom.oldRawData(), pixelSize);
-                    else
-                        memcpy(itTop.rawData(), itBottom.rawData(), pixelSize);
+                if (itTop.isSelected()) {
+                    memcpy(itBottom.rawData(), itTop.rawData(), pixelSize);
                 }
                 ++itBottom;
                 ++itTop;
             }
         }
     }
-    if (!hasCurrentMemento) {
-        dev->setDataManager(dst->dataManager(), dst->colorSpace());
+    KisPainter gc(dev);
+
+    if (selection) {
+        dev->clearSelection(const_cast<KisSelection*>(selection));
     }
+    else {
+        dev->clear(r);
+    }
+    gc.setCompositeOp(COMPOSITE_OVER);
+    gc.bitBlt(r.topLeft(), dst, r);
 
     return r;
 }

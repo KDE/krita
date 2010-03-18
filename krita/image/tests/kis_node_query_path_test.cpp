@@ -48,6 +48,7 @@ KisNodeQueryPathTest::KisNodeQueryPathTest()
     void KisNodeQueryPathTest::test##name##LayerFromRelativeString()            \
     {                                                                           \
         KisNodeQueryPath path = KisNodeQueryPath::fromString(relativeStr);      \
+        QCOMPARE(path.toString(), QString(relativeStr));                        \
         QList<KisNodeSP> nodes = path.queryNodes(image, current);               \
         QCOMPARE(nodes.size(), 1);                                              \
         QCOMPARE(nodes[0], node);                                               \

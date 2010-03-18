@@ -357,6 +357,7 @@ endif(NOT KdepimLibs_FOUND)
 option(BUILD_kchart "Build directory kchart" ON)
 option(BUILD_kexi   "Build directory kexi" ON)
 option(BUILD_kplato "Build directory kplato" ON)
+option(BUILD_koreport "Build directory libs/koreport" ON)
 ### HACK ###
 
 if(NOT BUILD_kchart OR NOT SHOULD_BUILD_KCHART)

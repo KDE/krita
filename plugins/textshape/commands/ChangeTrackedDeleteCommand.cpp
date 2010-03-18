@@ -304,6 +304,10 @@ QTextDocumentFragment ChangeTrackedDeleteCommand::generateDeleteFragment(QTextCu
                 QTextBlockFormat blockFormat;
                 blockFormat.setProperty(KoDeleteChangeMarker::DeletedListItem, true);
                 editCursor.mergeBlockFormat(blockFormat);
+            } else {
+                QTextBlockFormat blockFormat;
+                blockFormat.setProperty(KoDeleteChangeMarker::DeletedListItem, false);
+                editCursor.mergeBlockFormat(blockFormat);
             }
         }
     }

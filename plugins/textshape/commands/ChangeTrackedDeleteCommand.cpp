@@ -285,6 +285,21 @@ QTextDocumentFragment ChangeTrackedDeleteCommand::generateDeleteFragment(QTextCu
     QTextBlock currentBlock = document->findBlock(cursor.anchor());
     QTextBlock endBlock = document->findBlock(cursor.position()).next();
 
+    // First remove any left-over DeletedList set from previous deletes
+    for (;currentBlock != endBlock; currentBlock = currentBlock.next()) {
+        editCursor.setPosition(currentBlock.position());
+        if (editCursor.currentList()) {
+            if (editCursor.currentList()->format().hasProperty(KoDeleteChangeMarker::DeletedList)) {
+                QTextListFormat format = editCursor.currentList()->format();
+                format.clearProperty(KoDeleteChangeMarker::DeletedList);
+                editCursor.currentList()->setFormat(format);
+            }
+        }
+    }
+
+    currentBlock = document->findBlock(cursor.anchor());
+    endBlock = document->findBlock(cursor.position()).next();
+
     for (;currentBlock != endBlock; currentBlock = currentBlock.next()) {
         editCursor.setPosition(currentBlock.position());
         if (editCursor.currentList()) {

@@ -176,6 +176,8 @@ protected:
     bool write(KoStore *store);
     bool read(KoStore *store);
 
+    void purge(const QRect& area);
+
     inline quint32 pixelSize() const {
         return m_pixelSize;
     }

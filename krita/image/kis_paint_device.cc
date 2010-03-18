@@ -831,20 +831,24 @@ void KisPaintDevice::clearSelection(KisSelectionSP selection)
         KisHLineIterator devIt = createHLineIterator(r.x(), r.y(), r.width());
         KisHLineConstIterator selectionIt = selection->createHLineIterator(r.x(), r.y(), r.width());
 
+        const quint8* defaultPixel_ = defaultPixel();
+        bool transparentDefault = (m_d->colorSpace->opacityU8(defaultPixel_) == OPACITY_TRANSPARENT_U8);
         for (qint32 y = 0; y < r.height(); y++) {
 
             while (!devIt.isDone()) {
                 // XXX: Optimize by using stretches
 
                 m_d->colorSpace->applyInverseAlphaU8Mask(devIt.rawData(), selectionIt.rawData(), 1);
-
+                if (transparentDefault && m_d->colorSpace->opacityU8(devIt.rawData()) == OPACITY_TRANSPARENT_U8) {
+                    memcpy(devIt.rawData(), defaultPixel_, m_d->colorSpace->pixelSize());
+                }
                 ++devIt;
                 ++selectionIt;
             }
             devIt.nextRow();
             selectionIt.nextRow();
         }
-
+        m_datamanager->purge(r.translated(-m_d->x, -m_d->y));
         setDirty(r);
     }
 }

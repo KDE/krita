@@ -128,6 +128,9 @@ public:
         return ACTUAL_DATAMGR::read(store);
     }
 
+    inline void purge(const QRect& area) {
+        ACTUAL_DATAMGR::purge(area);
+    }
 
 public:
 

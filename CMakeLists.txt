@@ -291,12 +291,12 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${CMAKE_SOURCE_DIR}/libs/kotext/changetracker
                    ${CMAKE_SOURCE_DIR}/libs/kotext/styles
                    ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
+                   ${SOPRANO_INCLUDE_DIR}
                    ${FLAKE_INCLUDES}
                    ${KOODF_INCLUDES})
 
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
-                    ${SOPRANO_INCLUDE_DIR}
                     ${KOTEXT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/main

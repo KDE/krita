@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004 Casper Boemann <cbr@boemann.dk>
  *            (c) 2009 Dmitry  Kazakov <dimula73@gmail.com>
+ *            (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -187,6 +188,31 @@ bool KisTiledDataManager::read(KoStore *store)
     }
 
     return true;
+}
+
+void KisTiledDataManager::purge(const QRect& area)
+{
+    QList<KisTileSP> tilesToDelete;
+    {
+        QWriteLocker locker(&m_lock);
+
+        KisTileHashTableIterator iter(m_hashTable);
+        KisTileSP tile;
+        qint32 x, y;
+        qint32 width, height;
+
+        const qint32 tileDataSize = KisTileData::HEIGHT * KisTileData::WIDTH * pixelSize();
+
+        while (tile = iter.tile()) {
+            if (tile->extent().intersects(area) && memcmp(m_defaultTile->data(), tile->data(), tileDataSize) == 0) {
+                tilesToDelete.push_back(tile);
+            }
+            ++iter;
+        }
+    }
+    foreach(KisTileSP tile, tilesToDelete) {
+        m_hashTable->deleteTile(tile);
+    }
 }
 
 quint8* KisTiledDataManager::duplicatePixel(qint32 num, const quint8 *pixel)

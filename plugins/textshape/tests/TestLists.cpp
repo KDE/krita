@@ -315,7 +315,7 @@ void TestDocumentLayout::testNestedLists()
     block = m_doc->begin();
     QVERIFY(block.userData() == 0);
     block = block.next();
-    static const char* texts[] = { "1", "1.1.", "1.1.1", "1.1.2", "1.2.", "2", "2.1.", "2.2.", "3", "3.0.1", "1.1" };
+    static const char* texts[] = { "1", "1.1.", "1.1.1", "1.1.2", "1.2.", "2", "2.1.", "2.2.", "3", "3.1.1", "1.1" };
     int i = 0;
     qreal indent = 0.0;
     while (block.isValid()) {

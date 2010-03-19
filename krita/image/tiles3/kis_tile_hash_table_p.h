@@ -198,8 +198,6 @@ void KisTileHashTableTraits<T>::deleteTile(qint32 col, qint32 row)
 template<class T>
 void KisTileHashTableTraits<T>::deleteTile(TileTypeSP tile)
 {
-    QWriteLocker locker(&m_lock);
-
     deleteTile(tile->col(), tile->row());
 }
 

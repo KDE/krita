@@ -336,8 +336,16 @@ bool ChangeTrackedDeleteCommand::checkListDeletion(QTextList *list, QTextCursor 
     int endOfList = list->item(list->count() -1).position() + list->item(list->count() -1).length() - 1;
     if ((cursor.anchor() <= startOfList) && (cursor.position() >= endOfList))
         return true;
-    else
-        return false;
+    else {
+        /***************************************************************************************************/
+        /*                                    Qt Quirk Work-Around                                         */
+        /***************************************************************************************************/
+        if ((cursor.anchor() == (startOfList + 1)) && (cursor.position() > endOfList))
+            return true;
+        /***************************************************************************************************/
+        else
+            return false;
+    }
 } 
 
 void ChangeTrackedDeleteCommand::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker)

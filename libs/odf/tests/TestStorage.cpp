@@ -184,6 +184,8 @@ void TestStorage::storage()
     store->popDirectory();
     QCOMPARE(store->currentPath(), QString(testDir2Result));
 
+    QVERIFY (store->hasFile("relative/dir.txt"));
+    
     QVERIFY (store->open("root"));
     char buf[29];
     store->read(buf, 28);

@@ -648,7 +648,7 @@ void KoStore::disallowNameExpansion()
 bool KoStore::hasFile(const QString& fileName) const
 {
     Q_D(const KoStore);
-    return fileExists(d->toExternalNaming(currentPath() + fileName));
+    return fileExists(d->toExternalNaming(fileName));
 }
 
 bool KoStore::finalize()

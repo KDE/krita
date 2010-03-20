@@ -110,14 +110,14 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
 
     
 
-    qreal inkDeplation;
+    float inkDeplation;
     QVariant saturationVariant;
 
     m_params[SATURATION] = 0.0;
     KoColorTransformation* transfo;
     transfo = m_dev->colorSpace()->createColorTransformation("hsv_adjustment", m_params);
     int saturationId = transfo->parameterId(SATURATION);
-
+    
     rotateBristles(angle);
     // if this is first time the brush touches the canvas and we use soak the ink from canvas
     if ((m_counter == 1) && m_properties->useSoakInk){
@@ -182,7 +182,6 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
             // add check for hsv transformation
             if (m_properties->useSaturation && transfo != 0) {
                 if (m_properties->useWeights) {
-
                     // new weighted way (experiment)
                     saturationVariant = (
                                             (pressure * m_properties->pressureWeight) +

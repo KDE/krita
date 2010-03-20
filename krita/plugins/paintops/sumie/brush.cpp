@@ -131,7 +131,6 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     QVariant saturationVariant;
     float inkDeplation;
     int inkDepletionSize = m_properties->inkDepletionCurve.size();
-    int bristleCounter;
     int bristleCount = m_bristles.size();
     int bristlePathSize;
     for (int i = 0; i < bristleCount; i++) {
@@ -167,11 +166,10 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
 
         bristleColor = bristle->color();
         for (int i = 0; i < bristlePathSize ; i++) {
-            bristleCounter = bristle->increment();
-            if (bristleCounter >= inkDepletionSize - 1) {
+            if (bristle->counter() >= inkDepletionSize - 1) {
                 inkDeplation = m_properties->inkDepletionCurve[inkDepletionSize - 1];
             } else {
-                inkDeplation = m_properties->inkDepletionCurve[bristleCounter];
+                inkDeplation = m_properties->inkDepletionCurve[bristle->counter()];
             }
 
             // saturation transformation of the bristle ink color

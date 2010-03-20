@@ -46,7 +46,7 @@ public:
         return m_color;
     }
 
-    inline int increment() const{
+    inline int counter() const{
         return m_counter;
     }
 

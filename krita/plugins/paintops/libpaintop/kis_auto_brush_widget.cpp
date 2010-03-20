@@ -51,25 +51,36 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
     inputRadius->setRange(0.0, 1000.0, 2);
     inputRadius->setExponentRatio(3.0);
     inputRadius->setValue(5.0);
-    connect(inputRadius, SIGNAL(valueChanged(qreal)), this, SLOT(spinBoxRadiusChanged(qreal)));
+    connect(inputRadius, SIGNAL(valueChanged(qreal)), this, SLOT(paramChanged()));
 
-    showSlider(inputRatio, 0.1);
-    connect(inputRatio, SIGNAL(valueChanged(double)), this, SLOT(spinBoxRatioChanged(double)));
+    inputRatio->setRange(0.0, 1.0, 2);
+    inputRatio->setSingleStep(0.1);
+    inputRatio->setValue(1.0);
+    connect(inputRatio, SIGNAL(valueChanged(qreal)), this, SLOT(paramChanged()));
 
-    showSlider(inputHFade, 0.1);
-    connect(inputHFade, SIGNAL(valueChanged(double)), this, SLOT(spinBoxHorizontalChanged(double)));
+    inputHFade->setRange(0.0, 1.0, 2);
+    inputHFade->setSingleStep(0.1);
+    inputHFade->setValue(0.5);
+    connect(inputHFade, SIGNAL(valueChanged(qreal)), this, SLOT(spinBoxHorizontalChanged(qreal)));
 
-    showSlider(inputVFade, 0.1);
-    connect(inputVFade, SIGNAL(valueChanged(double)), this, SLOT(spinBoxVerticalChanged(double)));
+    inputVFade->setRange(0.0, 1.0, 2);
+    inputVFade->setSingleStep(0.1);
+    inputVFade->setValue(0.5);
+    connect(inputVFade, SIGNAL(valueChanged(qreal)), this, SLOT(spinBoxVerticalChanged(qreal)));
 
-    inputSpikes->setSliderEnabled(true);
+    inputSpikes->setRange(2, 20);
+    inputSpikes->setValue(2);
     connect(inputSpikes, SIGNAL(valueChanged(int)), this, SLOT(paramChanged()));
 
-    inputAngle->setSliderEnabled(true);
+    inputAngle->setRange(0, 360);
+    inputAngle->setSuffix(QChar(Qt::Key_degree));
+    inputAngle->setValue(0);
     connect(inputAngle, SIGNAL(valueChanged(int)), this, SLOT(paramChanged()));
 
-    showSlider(inputSpacing, 0.1);
-    connect(inputSpacing, SIGNAL(valueChanged(double)), this, SLOT(paramChanged()));
+    inputSpacing->setRange(0.0, 10.0, 2);
+    inputSpacing->setSingleStep(0.1);
+    inputSpacing->setValue(0.1);
+    connect(inputSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(paramChanged()));
 
     m_brush = QImage(1, 1, QImage::Format_RGB32);
 
@@ -129,26 +140,23 @@ void KisAutoBrushWidget::paramChanged()
     emit sigBrushChanged();
 }
 
-void KisAutoBrushWidget::spinBoxRatioChanged(double a)
+void KisAutoBrushWidget::spinBoxHorizontalChanged(qreal a)
 {
-    Q_UNUSED(a);
-    paramChanged();
-}
-void KisAutoBrushWidget::spinBoxRadiusChanged(double a)
-{
-    Q_UNUSED(a);
-    paramChanged();
-}
-void KisAutoBrushWidget::spinBoxHorizontalChanged(double a)
-{
-    if (m_linkFade)
+    if (m_linkFade) {
+        inputVFade->blockSignals(true);
         inputVFade->setValue(a);
+        inputVFade->blockSignals(false);
+    }
     paramChanged();
 }
-void KisAutoBrushWidget::spinBoxVerticalChanged(double a)
+
+void KisAutoBrushWidget::spinBoxVerticalChanged(qreal a)
 {
-    if (m_linkFade)
+    if (m_linkFade) {
+        inputHFade->blockSignals(true);
         inputHFade->setValue(a);
+        inputHFade->blockSignals(false);
+    }
     paramChanged();
 }
 

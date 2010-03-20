@@ -117,18 +117,11 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="KDoubleNumInput" name="inputRatio">
-          <property name="value">
-           <double>1.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>1.000000000000000</double>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="1">
          <widget class="KisDoubleSliderSpinBox" name="inputRadius" native="true"/>
+        </item>
+        <item row="1" column="1">
+         <widget class="KisDoubleSliderSpinBox" name="inputRatio" native="true"/>
         </item>
        </layout>
       </widget>
@@ -159,31 +152,14 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="KDoubleNumInput" name="inputHFade">
-          <property name="value">
-           <double>0.500000000000000</double>
-          </property>
-          <property name="minimum">
-           <double>0.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>1.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="KDoubleNumInput" name="inputVFade">
-          <property name="value">
-           <double>0.500000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>1.000000000000000</double>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="2" rowspan="2">
          <widget class="KoAspectButton" name="aspectButton" native="true"/>
+        </item>
+        <item row="0" column="1">
+         <widget class="KisDoubleSliderSpinBox" name="inputHFade" native="true"/>
+        </item>
+        <item row="1" column="1">
+         <widget class="KisDoubleSliderSpinBox" name="inputVFade" native="true"/>
         </item>
        </layout>
       </widget>
@@ -200,16 +176,6 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="KIntNumInput" name="inputSpikes">
-         <property name="minimum">
-          <number>2</number>
-         </property>
-         <property name="maximum">
-          <number>20</number>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
@@ -217,16 +183,6 @@
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="KDoubleNumInput" name="inputSpacing">
-         <property name="value">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>10.000000000000000</double>
          </property>
         </widget>
        </item>
@@ -241,17 +197,13 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="KIntNumInput" name="inputAngle">
-         <property name="minimum">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <number>360</number>
-         </property>
-         <property name="suffix">
-          <string>°</string>
-         </property>
-        </widget>
+        <widget class="KisSliderSpinBox" name="inputAngle" native="true"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="KisSliderSpinBox" name="inputSpikes" native="true"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="KisDoubleSliderSpinBox" name="inputSpacing" native="true"/>
        </item>
       </layout>
      </item>
@@ -262,16 +214,6 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KDoubleNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KIntNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
-  <customwidget>
    <class>KoAspectButton</class>
    <extends>QWidget</extends>
    <header>KoAspectButton.h</header>
@@ -279,6 +221,12 @@
   </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>

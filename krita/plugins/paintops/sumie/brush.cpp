@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <KoCompositeOps.h>
+
 #include "brush.h"
 #include "brush_shape.h"
 #include "trajectory.h"
@@ -284,20 +286,8 @@ inline void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoC
 
 void Brush::oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color)
 {
-    KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
     m_dabAccessor->moveTo((int)wx, (int)wy);
-    const quint8 *colors[2];
-    colors[0] = color.data();
-    colors[1] = m_dabAccessor->rawData(); // this is always (0,0,0) in RGB
-
-    qint16 colorWeights[2];
-
-    colorWeights[0] = static_cast<quint8>(color.opacityU8());
-    colorWeights[1] = static_cast<quint8>(255 - color.opacityU8());
-    mixOp->mixColors(colors, colorWeights, 2, m_dabAccessor->rawData());
-
-    //memcpy ( m_dabAccessor->rawData(), color.data(), m_pixelSize );
-    // bristle delivered some ink
+    m_dev->colorSpace()->bitBlt(m_dabAccessor->rawData(),1,m_dev->colorSpace(),color.data(),1,0,0,255,1,1,COMPOSITE_OVER);
     bristle->upIncrement();
 }
 

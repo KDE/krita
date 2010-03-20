@@ -71,6 +71,9 @@ KisSumiPaintOp::KisSumiPaintOp(const
     } else {
         m_dev = settings->node()->paintDevice();
     }
+    
+    m_sizeOption.readOptionSetting(settings);
+    m_sizeOption.sensor()->reset();
 }
 
 void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
@@ -138,12 +141,15 @@ KisDistanceInformation KisSumiPaintOp::paintLine(const KisPaintInformation &pi1,
     } else {
         m_dab->clear();
     }
-    m_brush.paintLine(m_dab, m_dev, pi1, pi2);
+    
+    qreal scale = m_properties.scaleFactor * KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
+    
+    m_brush.paintLine(m_dab, m_dev, pi1, pi2, scale);
 
     //QRect rc = m_dab->exactBounds();
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-
+    
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());
     KisVector2D dragVec = end - start;

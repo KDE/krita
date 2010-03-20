@@ -26,6 +26,8 @@
 #include <kis_brush_option_widget.h>
 #include <kis_paint_action_type_option.h>
 #include "kis_sumi_bristle_option.h"
+#include <kis_curve_option_widget.h>
+#include <kis_pressure_size_option.h>
 
 KisSumiPaintOpSettingsWidget:: KisSumiPaintOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
@@ -39,6 +41,7 @@ KisSumiPaintOpSettingsWidget:: KisSumiPaintOpSettingsWidget(QWidget* parent)
     //addPaintOpOption(m_sumiShapeOption);
     addPaintOpOption(m_sumiBristleOption);
     addPaintOpOption(m_sumiInkOption);
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisPaintActionTypeOption());
 }
 

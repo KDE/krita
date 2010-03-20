@@ -28,6 +28,7 @@
 #include "brush.h"
 
 #include "kis_sumi_paintop_settings.h"
+#include <kis_pressure_size_option.h>
 
 
 class QPointF;
@@ -51,6 +52,7 @@ private:
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
     Brush m_brush;
+    KisPressureSizeOption m_sizeOption;
 
     void loadSettings(const KisSumiPaintOpSettings* settings);
 };

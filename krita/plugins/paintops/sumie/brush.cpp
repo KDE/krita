@@ -78,7 +78,7 @@ void Brush::setInkColor(const KoColor &color)
 }
 
 
-void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2)
+void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale)
 {
     m_counter++;
 
@@ -93,14 +93,14 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     
     qreal angle = atan2(dy, dx);
 
-    qreal distance = sqrt(dx * dx + dy * dy);
-
-    qreal pressure = pi2.pressure();
-    if (m_properties->useMousePressure && pi2.pressure() == 0.5) { // it is mouse and want pressure from mouse movement
-        pressure = 1.0 - computeMousePressure(distance);
-    } else if (pi2.pressure() == 0.5) { // if it is mouse
-        pressure = 1.0;
+    qreal mousePressure = 1.0;
+    if (m_properties->useMousePressure) { // want pressure from mouse movement
+        qreal distance = sqrt(dx * dx + dy * dy);
+        mousePressure = (1.0 - computeMousePressure(distance));
+        scale *= mousePressure;
     }
+    // this pressure controls shear and ink depletion
+    qreal pressure = mousePressure * (pi2.pressure() * 2);
 
     Bristle *bristle = 0;
     KoColor bristleColor;
@@ -109,11 +109,6 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     m_pixelSize = dev->colorSpace()->pixelSize();
     m_dabAccessor = &accessor;
     m_dev = dev;
-
-    
-
-    float inkDeplation;
-    QVariant saturationVariant;
 
     m_params[SATURATION] = 0.0;
     KoColorTransformation* transfo;
@@ -128,29 +123,30 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     }
 
     qreal fx1, fy1, fx2, fy2;
-    int size = m_bristles.size();
-     
+    qreal randomX, randomY;
+    qreal shear; 
+    
     QVector<QPointF> bristlePath; // path for single bristle
+    
+    QVariant saturationVariant;
+    float inkDeplation;
     int inkDepletionSize = m_properties->inkDepletionCurve.size();
-    for (int i = 0; i < size; i++) {
+    int bristleCounter;
+    int bristleCount = m_bristles.size();
+    int bristlePathSize;
+    for (int i = 0; i < bristleCount; i++) {
 
         if (!m_bristles.at(i)->enabled()) continue;
         bristle = m_bristles[i];
 
-        qreal randomX = drand48() * 2;
-        qreal randomY = drand48() * 2;
-        randomX -= 1.0;
-        randomY -= 1.0;
-        randomX *= m_properties->randomFactor;
-        randomY *= m_properties->randomFactor;
+        randomX = (drand48() * 2 - 1.0) * m_properties->randomFactor;
+        randomY = (drand48() * 2 - 1.0) * m_properties->randomFactor;
 
-        qreal scale = pressure * m_properties->scaleFactor;
-        qreal shear = pressure * m_properties->shearFactor;
+        shear = pressure * m_properties->shearFactor;
 
         m_transform.reset();
         m_transform.scale(scale, scale);
         m_transform.translate(randomX, randomY);
-
         m_transform.shear(shear, shear);
 
         // transform start dab
@@ -167,12 +163,10 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
 
         // paint between first and last dab
         bristlePath = m_trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
-        int brpathSize = m_trajectory.size();
+        bristlePathSize = m_trajectory.size();
 
         bristleColor = bristle->color();
-        int bristleCounter = 0;
-        
-        for (int i = 0; i < brpathSize ; i++) {
+        for (int i = 0; i < bristlePathSize ; i++) {
             bristleCounter = bristle->increment();
             if (bristleCounter >= inkDepletionSize - 1) {
                 inkDeplation = m_properties->inkDepletionCurve[inkDepletionSize - 1];

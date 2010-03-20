@@ -112,7 +112,7 @@ void KisHistogramDocker::setImage(KisImageWSP image)
             setWidget(m_hview);
         }
         else {
-            QLabel* l = new QLabel(i18n("Histograms are not supported for images in the %1 colorspace.").arg(m_cs->name()),
+            QLabel* l = new QLabel(i18n("Histograms are not supported for images in the %1 colorspace.",m_cs->name()),
                                    m_canvas->view());
             l->setWordWrap(true);
             l->setMargin(4);

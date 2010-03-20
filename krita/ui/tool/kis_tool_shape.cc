@@ -97,15 +97,6 @@ void KisToolShape::setupPainter(KisPainter * painter)
     KisTool::setupPainter(painter);
     painter->setFillStyle(fillStyle());
     painter->setStrokeStyle(strokeStyle());
-    if (currentNode()) {
-        KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(currentNode().data());
-        if (paintLayer) {
-            painter->setChannelFlags(paintLayer->channelFlags());
-            if (paintLayer->alphaLocked()) {
-                painter->setLockAlpha(paintLayer->alphaLocked());
-            }
-        }
-    }
 }
 
 void KisToolShape::setupPaintAction(KisRecordedPaintAction* action)

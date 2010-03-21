@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgGeometryOptions</class>
- <widget class="QWidget" name="WdgGeometryOptions" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgGeometryOptions">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,95 +10,75 @@
     <height>118</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Geometry Options</string>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" colspan="2" >
-    <layout class="QGridLayout" >
-     <item row="0" column="0" >
-      <widget class="QLabel" name="textLabelOutline" >
-       <property name="text" >
+  <layout class="QGridLayout">
+   <item row="0" column="0" colspan="2">
+    <layout class="QGridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="textLabelOutline">
+       <property name="text">
         <string>Outline:</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1" >
-      <widget class="QComboBox" name="cmbOutline" >
+     <item row="0" column="1">
+      <widget class="QComboBox" name="cmbOutline">
        <item>
-        <property name="text" >
+        <property name="text">
          <string>No Outline</string>
         </property>
        </item>
        <item>
-        <property name="text" >
+        <property name="text">
          <string>Brush</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Pattern</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Generator</string>
         </property>
        </item>
       </widget>
      </item>
-     <item row="1" column="0" >
-      <widget class="QLabel" name="textLabelFill" >
-       <property name="text" >
+     <item row="1" column="0">
+      <widget class="QLabel" name="textLabelFill">
+       <property name="text">
         <string>Fill:</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1" >
-      <widget class="QComboBox" name="cmbFill" >
+     <item row="1" column="1">
+      <widget class="QComboBox" name="cmbFill">
        <item>
-        <property name="text" >
+        <property name="text">
          <string>Not Filled</string>
         </property>
        </item>
        <item>
-        <property name="text" >
+        <property name="text">
          <string>Foreground Color</string>
         </property>
        </item>
        <item>
-        <property name="text" >
+        <property name="text">
          <string>Background Color</string>
         </property>
        </item>
        <item>
-        <property name="text" >
+        <property name="text">
          <string>Pattern</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Stroke</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Generator</string>
         </property>
        </item>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="1" column="0" >
+   <item row="1" column="0">
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeType" >
+     <property name="sizeType">
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>69</width>
        <height>31</height>
@@ -105,15 +86,15 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="1" >
+   <item row="1" column="1">
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeType" >
+     <property name="sizeType">
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>111</width>
        <height>41</height>
@@ -123,7 +104,7 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>

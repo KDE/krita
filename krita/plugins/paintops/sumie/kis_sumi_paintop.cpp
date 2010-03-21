@@ -36,11 +36,12 @@
 #include <kis_sumi_shape_option.h>
 #include <kis_sumi_bristle_option.h>
 #include <kis_brush_option.h>
+#include <kis_brush_based_paintop_settings.h>
 
 #include "kis_brush.h"
 
 KisSumiPaintOp::KisSumiPaintOp(const
-                               KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+                               KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
         , m_settings(settings)
         , m_image(image)
@@ -76,7 +77,7 @@ KisSumiPaintOp::KisSumiPaintOp(const
     m_sizeOption.sensor()->reset();
 }
 
-void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
+void KisSumiPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
 {
 /*    m_properties.radius = settings->getInt(SUMI_RADIUS);
     m_properties.sigma = settings->getDouble(SUMI_SIGMA);

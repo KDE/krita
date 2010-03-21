@@ -27,25 +27,24 @@
 
 #include "brush.h"
 
-#include "kis_sumi_paintop_settings.h"
 #include <kis_pressure_size_option.h>
-
 
 class QPointF;
 class KisPainter;
+class KisBrushBasedPaintOpSettings;
 
 class KisSumiPaintOp : public KisPaintOp
 {
 
 public:
-    KisSumiPaintOp(const KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
+    KisSumiPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
 
     double paintAt(const KisPaintInformation& info);
     KisDistanceInformation paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist);
 
 private:
     KisSumiProperties m_properties;
-    const KisSumiPaintOpSettings* m_settings;
+    const KisBrushBasedPaintOpSettings* m_settings;
 
     KisImageWSP m_image;
     bool newStrokeFlag;
@@ -54,7 +53,7 @@ private:
     Brush m_brush;
     KisPressureSizeOption m_sizeOption;
 
-    void loadSettings(const KisSumiPaintOpSettings* settings);
+    void loadSettings(const KisBrushBasedPaintOpSettings* settings);
 };
 
 #endif // KIS_SUMIPAINTOP_H_

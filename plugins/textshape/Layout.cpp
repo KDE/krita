@@ -184,6 +184,10 @@ bool Layout::addLine(QTextLine &line)
     }
 
     qreal height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
+    if (line.textLength() == 1 && m_block.text().at(line.textStart()) == QChar::ObjectReplacementCharacter) {
+        // thats an anchor then, anchors takes no height.
+        height = 0.1;
+    }
     qreal objectHeight = 0.0;
     bool useFixedLineHeight = height != 0.0;
     if (m_dropCapsNChars > 0)
@@ -1768,7 +1772,7 @@ int Layout::cursorPosition() const
     int answer = m_block.position();
     if (!m_newParag && layout && layout->lineCount()) {
         QTextLine tl = layout->lineAt(layout->lineCount() - 1);
-        answer += tl.textStart() + tl.textLength() - 1;
+        answer += tl.textStart() + tl.textLength();
     }
     return answer;
 }

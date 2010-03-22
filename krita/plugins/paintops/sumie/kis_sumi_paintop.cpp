@@ -36,11 +36,12 @@
 #include <kis_sumi_shape_option.h>
 #include <kis_sumi_bristle_option.h>
 #include <kis_brush_option.h>
+#include <kis_brush_based_paintop_settings.h>
 
 #include "kis_brush.h"
 
 KisSumiPaintOp::KisSumiPaintOp(const
-                               KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+                               KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
         , m_settings(settings)
         , m_image(image)
@@ -71,9 +72,12 @@ KisSumiPaintOp::KisSumiPaintOp(const
     } else {
         m_dev = settings->node()->paintDevice();
     }
+    
+    m_sizeOption.readOptionSetting(settings);
+    m_sizeOption.sensor()->reset();
 }
 
-void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
+void KisSumiPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
 {
 /*    m_properties.radius = settings->getInt(SUMI_RADIUS);
     m_properties.sigma = settings->getDouble(SUMI_SIGMA);
@@ -138,12 +142,15 @@ KisDistanceInformation KisSumiPaintOp::paintLine(const KisPaintInformation &pi1,
     } else {
         m_dab->clear();
     }
-    m_brush.paintLine(m_dab, m_dev, pi1, pi2);
+    
+    qreal scale = m_properties.scaleFactor * KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
+    
+    m_brush.paintLine(m_dab, m_dev, pi1, pi2, scale);
 
     //QRect rc = m_dab->exactBounds();
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-
+    
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());
     KisVector2D dragVec = end - start;

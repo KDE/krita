@@ -323,11 +323,11 @@ bool Autocorrect::autoFractions()
     QString trimmed = m_word.trimmed();
 
     if (trimmed == QString("1/2"))
-        m_word.replace(0, 3, QString("½"));
+        m_word.replace(0, 3, QString::fromUtf8("½"));
     else if (trimmed == QString("1/4"))
-        m_word.replace(0, 3, QString("¼"));
+        m_word.replace(0, 3, QString::fromUtf8("¼"));
     else if (trimmed == QString("3/4"))
-        m_word.replace(0, 3, QString("¾"));
+        m_word.replace(0, 3, QString::fromUtf8("¾"));
     else
         return false;
 

@@ -20,21 +20,20 @@
 #ifndef KIS_SUMIPAINTOP_SETTINGS_WIDGET_H_
 #define KIS_SUMIPAINTOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_options_widget.h>
+#include <kis_brush_based_paintop_options_widget.h>
 
 class KisSumiInkOption;
 class KisSumiShapeOption;
 class KisSumiBristleOption;
 class KisBrushOptionWidget;
 
-class KisSumiPaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisSumiPaintOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {
     Q_OBJECT
 
 public:
     KisSumiPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisSumiPaintOpSettingsWidget();
-    virtual void changePaintOpSize(qreal x, qreal y);
 
     KisPropertiesConfiguration* configuration() const;
 
@@ -42,7 +41,6 @@ public:
     KisSumiShapeOption * m_sumiShapeOption;
     KisSumiInkOption * m_sumiInkOption;
     KisSumiBristleOption * m_sumiBristleOption;
-    KisBrushOptionWidget * m_brushOption;
 };
 
 #endif

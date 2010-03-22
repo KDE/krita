@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <KoCompositeOps.h>
+
 #include "brush.h"
 #include "brush_shape.h"
 #include "trajectory.h"
@@ -76,7 +78,7 @@ void Brush::setInkColor(const KoColor &color)
 }
 
 
-void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2)
+void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale)
 {
     m_counter++;
 
@@ -91,14 +93,14 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     
     qreal angle = atan2(dy, dx);
 
-    qreal distance = sqrt(dx * dx + dy * dy);
-
-    qreal pressure = pi2.pressure();
-    if (m_properties->useMousePressure && pi2.pressure() == 0.5) { // it is mouse and want pressure from mouse movement
-        pressure = 1.0 - computeMousePressure(distance);
-    } else if (pi2.pressure() == 0.5) { // if it is mouse
-        pressure = 1.0;
+    qreal mousePressure = 1.0;
+    if (m_properties->useMousePressure) { // want pressure from mouse movement
+        qreal distance = sqrt(dx * dx + dy * dy);
+        mousePressure = (1.0 - computeMousePressure(distance));
+        scale *= mousePressure;
     }
+    // this pressure controls shear and ink depletion
+    qreal pressure = mousePressure * (pi2.pressure() * 2);
 
     Bristle *bristle = 0;
     KoColor bristleColor;
@@ -108,16 +110,11 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     m_dabAccessor = &accessor;
     m_dev = dev;
 
-    
-
-    qreal inkDeplation;
-    QVariant saturationVariant;
-
     m_params[SATURATION] = 0.0;
     KoColorTransformation* transfo;
     transfo = m_dev->colorSpace()->createColorTransformation("hsv_adjustment", m_params);
     int saturationId = transfo->parameterId(SATURATION);
-
+    
     rotateBristles(angle);
     // if this is first time the brush touches the canvas and we use soak the ink from canvas
     if ((m_counter == 1) && m_properties->useSoakInk){
@@ -126,29 +123,29 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     }
 
     qreal fx1, fy1, fx2, fy2;
-    int size = m_bristles.size();
-     
+    qreal randomX, randomY;
+    qreal shear; 
+    
     QVector<QPointF> bristlePath; // path for single bristle
+    
+    QVariant saturationVariant;
+    float inkDeplation;
     int inkDepletionSize = m_properties->inkDepletionCurve.size();
-    for (int i = 0; i < size; i++) {
+    int bristleCount = m_bristles.size();
+    int bristlePathSize;
+    for (int i = 0; i < bristleCount; i++) {
 
         if (!m_bristles.at(i)->enabled()) continue;
         bristle = m_bristles[i];
 
-        qreal randomX = drand48() * 2;
-        qreal randomY = drand48() * 2;
-        randomX -= 1.0;
-        randomY -= 1.0;
-        randomX *= m_properties->randomFactor;
-        randomY *= m_properties->randomFactor;
+        randomX = (drand48() * 2 - 1.0) * m_properties->randomFactor;
+        randomY = (drand48() * 2 - 1.0) * m_properties->randomFactor;
 
-        qreal scale = pressure * m_properties->scaleFactor;
-        qreal shear = pressure * m_properties->shearFactor;
+        shear = pressure * m_properties->shearFactor;
 
         m_transform.reset();
         m_transform.scale(scale, scale);
         m_transform.translate(randomX, randomY);
-
         m_transform.shear(shear, shear);
 
         // transform start dab
@@ -165,24 +162,20 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
 
         // paint between first and last dab
         bristlePath = m_trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
-        int brpathSize = m_trajectory.size();
+        bristlePathSize = m_trajectory.size();
 
         bristleColor = bristle->color();
-        int bristleCounter = 0;
-        
-        for (int i = 0; i < brpathSize ; i++) {
-            bristleCounter = bristle->increment();
-            if (bristleCounter >= inkDepletionSize - 1) {
+        for (int i = 0; i < bristlePathSize ; i++) {
+            if (bristle->counter() >= inkDepletionSize - 1) {
                 inkDeplation = m_properties->inkDepletionCurve[inkDepletionSize - 1];
             } else {
-                inkDeplation = m_properties->inkDepletionCurve[bristleCounter];
+                inkDeplation = m_properties->inkDepletionCurve[bristle->counter()];
             }
 
             // saturation transformation of the bristle ink color
             // add check for hsv transformation
             if (m_properties->useSaturation && transfo != 0) {
                 if (m_properties->useWeights) {
-
                     // new weighted way (experiment)
                     saturationVariant = (
                                             (pressure * m_properties->pressureWeight) +
@@ -285,20 +278,8 @@ inline void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoC
 
 void Brush::oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color)
 {
-    KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
     m_dabAccessor->moveTo((int)wx, (int)wy);
-    const quint8 *colors[2];
-    colors[0] = color.data();
-    colors[1] = m_dabAccessor->rawData(); // this is always (0,0,0) in RGB
-
-    qint16 colorWeights[2];
-
-    colorWeights[0] = static_cast<quint8>(color.opacityU8());
-    colorWeights[1] = static_cast<quint8>(255 - color.opacityU8());
-    mixOp->mixColors(colors, colorWeights, 2, m_dabAccessor->rawData());
-
-    //memcpy ( m_dabAccessor->rawData(), color.data(), m_pixelSize );
-    // bristle delivered some ink
+    m_dev->colorSpace()->bitBlt(m_dabAccessor->rawData(),1,m_dev->colorSpace(),color.data(),1,0,0,255,1,1,COMPOSITE_OVER);
     bristle->upIncrement();
 }
 

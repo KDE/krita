@@ -67,7 +67,7 @@ class Brush
 public:
     Brush();
     ~Brush();
-    void paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
+    void paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale);
 
     void repositionBristles(double angle, double slope);
     void rotateBristles(double angle);

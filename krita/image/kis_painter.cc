@@ -155,7 +155,9 @@ void KisPainter::init()
 
 KisPainter::~KisPainter()
 {
-    delete end();
+    QUndoCommand* cmd = end();
+    Q_ASSERT(cmd == 0);
+    delete cmd;
     delete d->paintOp;
     delete d->maskPainter;
     delete d->fillPainter;

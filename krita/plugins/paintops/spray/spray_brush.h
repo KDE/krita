@@ -60,9 +60,11 @@ public:
     bool fixedRotation;
     bool randomRotation;
     bool followCursor;
+    bool followDrawingAngle;
     quint16 fixedAngle;
     qreal randomRotationWeight;
     qreal followCursorWeigth;
+    qreal followDrawingAngleWeight;
     QImage image;
 };
 

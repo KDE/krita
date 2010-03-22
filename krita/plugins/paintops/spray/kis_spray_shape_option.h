@@ -33,15 +33,17 @@ const QString SPRAYSHAPE_RANDOM_ROTATION = "SprayShape/randomRotation";
 const QString SPRAYSHAPE_RANDOM_ROTATION_WEIGHT = "SprayShape/randomRotationWeight";
 const QString SPRAYSHAPE_FOLLOW_CURSOR = "SprayShape/followCursor";
 const QString SPRAYSHAPE_FOLLOW_CURSOR_WEIGHT = "SprayShape/followCursorWeigth";
+const QString SPRAYSHAPE_DRAWING_ANGLE = "SprayShape/followDrawingAngle";
+const QString SPRAYSHAPE_DRAWING_ANGLE_WEIGHT = "SprayShape/followDrawingAngleWeigth";
 const QString SPRAYSHAPE_IMAGE_URL = "SprayShape/imageUrl";
+
+
 
 class KisShapeOptionsWidget;
 
 class KisSprayShapeOption : public KisPaintOpOption
 {
-
     Q_OBJECT
-
 public:
     KisSprayShapeOption();
     ~KisSprayShapeOption();

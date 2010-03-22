@@ -23,6 +23,7 @@
 #include "KoVariableRegistry.h"
 #include "KoTextLocator.h"
 #include "KoBookmark.h"
+#include "KoInlineNote.h"
 
 #include <QTextCursor>
 #include <QPainter>
@@ -209,6 +210,19 @@ QList<KoTextLocator*> KoInlineTextObjectManager::textLocators() const
     }
     return answers;
 }
+
+QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
+{
+    QList<KoInlineNote*> answers;
+    foreach(KoInlineObject* object, m_objects) {
+        KoInlineNote* note = dynamic_cast<KoInlineNote*>(object);
+        if (note && note->type() == KoInlineNote::Endnote) {
+            answers.append(note);
+        }
+    }
+    return answers;
+}
+
 
 void KoInlineTextObjectManager::documentInformationUpdated(const QString &info, const QString &data)
 {

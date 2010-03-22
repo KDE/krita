@@ -30,6 +30,7 @@
 
 class KoCanvasBase;
 class KoTextLocator;
+class KoInlineNote;
 class QAction;
 
 /**
@@ -135,6 +136,13 @@ public:
     QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
 
     QList<KoTextLocator*> textLocators() const;
+    /**
+     * Note: once document sections are implemented, we need to be able
+     * to retrieve the endnotes for a particular section only.
+     *
+     * @return a list of all inline objects that are endnotes
+     */
+    QList<KoInlineNote*> endNotes() const;
 
 public slots:
     void documentInformationUpdated(const QString &info, const QString &data);

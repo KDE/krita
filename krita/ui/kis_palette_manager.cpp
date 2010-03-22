@@ -55,7 +55,7 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     , m_currentBrushLabel(0)
 
 {
-    setWindowTitle("Krita - Palette Manager");
+    setWindowTitle(tr("Krita - Palette Manager"));
     m_currentBrushLabel = new QLabel ("");
 
     /*SETTING MODEL*/

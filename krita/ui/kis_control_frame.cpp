@@ -119,7 +119,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
         /***TESTING***/
     m_view->canvasBase()->createFavoriteResourceManager(m_paintopBox);
 
-    m_paletteButton = new QPushButton("Save to Palette");
+    m_paletteButton = new QPushButton(i18n("Save to Palette"));
     connect(m_paletteButton, SIGNAL(clicked()), this, SLOT(slotSaveToFavouriteBrushes()));
     action  = new KAction(i18n("&Palette"), this);
     view->actionCollection()->addAction("palette_manager", action);

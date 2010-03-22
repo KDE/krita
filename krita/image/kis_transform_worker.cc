@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de> filters
  *  Copyright (c) 2005-2007 Casper Boemann <cbr@boemann.dk>
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org> right angle rotators
+ *  Copyright (c) 2005, 2010 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

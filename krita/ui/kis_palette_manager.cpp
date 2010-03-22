@@ -28,6 +28,7 @@
 
 #include "kis_palette_manager.h"
 #include <QtGui>
+#include "klocale.h"
 #include <kis_paintop_settings_widget.h>
 
 #include <KoToolManager.h>

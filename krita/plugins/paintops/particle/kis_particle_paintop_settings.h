@@ -27,10 +27,6 @@ class KisParticlePaintOpSettings : public KisPaintOpSettings
 
 public:
     bool paintIncremental();
-    
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
-
 
 #if defined(HAVE_OPENGL)
     QString modelName() const { return "3d-pencil"; }

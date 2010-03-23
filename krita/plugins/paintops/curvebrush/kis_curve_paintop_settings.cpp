@@ -41,17 +41,3 @@ int KisCurvePaintOpSettings::interval() const
 {
     return getInt("interval");
 }
-
-QRectF KisCurvePaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
-{
-    QRectF rect = QRectF(-5, -5, 10, 10);
-    return image->pixelToDocument(rect).translated(pos);
-}
-
-void KisCurvePaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
-{
-    if (_mode != CURSOR_IS_OUTLINE) return;
-    QRectF rect2 = paintOutlineRect(pos, image, _mode);
-    painter.drawLine(rect2.topLeft(), rect2.bottomRight());
-    painter.drawLine(rect2.topRight(), rect2.bottomLeft());
-}

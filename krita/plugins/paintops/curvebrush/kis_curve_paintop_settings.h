@@ -33,6 +33,9 @@ public:
     int minimalDistance() const;
     int curveAction() const;
     int interval() const;
+    
+    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
+    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
 
 #if defined(HAVE_OPENGL)
     inline QString modelName() const {

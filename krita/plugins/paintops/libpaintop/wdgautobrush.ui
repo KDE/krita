@@ -16,7 +16,7 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_2">
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
    <item>
     <layout class="QVBoxLayout">
      <property name="margin">
@@ -77,20 +77,7 @@
     </layout>
    </item>
    <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>292</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
      <item>
       <widget class="QGroupBox" name="grpSize">
        <property name="title">
@@ -118,7 +105,14 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="KisDoubleSliderSpinBox" name="inputRadius" native="true"/>
+         <widget class="KisDoubleSliderSpinBox" name="inputRadius" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item row="1" column="1">
          <widget class="KisDoubleSliderSpinBox" name="inputRatio" native="true"/>

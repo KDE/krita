@@ -22,10 +22,11 @@
 #include <krita_export.h>
 #include <kis_brush.h>
 
+class KisDoubleSliderSpinBox;
 class QLabel;
 class QCheckBox;
 
-class KisDoubleWidget;
+class KisDoubleSliderSpinBox;
 class KoResourceItemChooser;
 class KoResource;
 
@@ -46,7 +47,7 @@ public:
 
 private slots:
 
-    void slotSetItemSpacing(double);
+    void slotSetItemSpacing(qreal);
     void slotSetItemUseColorAsMask(bool);
     void slotActivatedBrush(KoResource *);
     void update(KoResource *);
@@ -58,7 +59,7 @@ signals:
 private:
     QLabel* m_lbName;
     QLabel* m_lbSpacing;
-    KisDoubleWidget* m_slSpacing;
+    KisDoubleSliderSpinBox* m_slSpacing;
     QCheckBox* m_chkColorMask;
     KisBrushSP m_brush;
     KoResourceItemChooser* m_itemChooser;

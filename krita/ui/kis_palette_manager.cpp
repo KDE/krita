@@ -28,6 +28,7 @@
 
 #include "kis_palette_manager.h"
 #include <QtGui>
+#include "klocale.h"
 #include <kis_paintop_settings_widget.h>
 
 #include <KoToolManager.h>
@@ -55,7 +56,7 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     , m_currentBrushLabel(0)
 
 {
-    setWindowTitle("Krita - Palette Manager");
+    setWindowTitle(i18n("Krita - Palette Manager"));
     m_currentBrushLabel = new QLabel ("");
 
     /*SETTING MODEL*/
@@ -66,12 +67,12 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     QFrame *HSeparator = new QFrame();
     HSeparator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
 
-    m_saveButton = new QPushButton (tr("&Save to Palette"));
+    m_saveButton = new QPushButton (i18n("&Save to Palette"));
     m_saveButton->setSizePolicy(QSizePolicy::Fixed , QSizePolicy::Fixed);
 
     /*LEFT LAYOUT*/
     QVBoxLayout *leftLayout = new QVBoxLayout ();
-    leftLayout->addWidget(new QLabel (tr("Current Brush")));
+    leftLayout->addWidget(new QLabel (i18n("Current Brush")));
     leftLayout->addWidget(HSeparator);
     leftLayout->addWidget(m_currentBrushLabel);
 //    leftLayout->addWidget(paintOpSettings->widget());
@@ -86,13 +87,13 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     m_brushList = new QListView;
     m_brushList->setModel(m_model);
     m_brushList->setWordWrap(true);
-    m_removeButton = new QPushButton(tr("Remove Brush"));
+    m_removeButton = new QPushButton(i18n("Remove Brush"));
     m_removeButton->setSizePolicy(QSizePolicy::Fixed , QSizePolicy::Fixed);
     m_removeButton->setEnabled(false);//set the button to center
 
     /*RIGHT LAYOUT*/
     QVBoxLayout *rightLayout = new QVBoxLayout();
-    rightLayout->addWidget(new QLabel(tr("Favorite Brushes")));
+    rightLayout->addWidget(new QLabel(i18n("Favorite Brushes")));
     rightLayout->addWidget(m_brushList);
     rightLayout->addWidget(m_removeButton);
 

@@ -195,6 +195,7 @@ void KisAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
             e->buttons() & Qt::LeftButton &&
             !(d->downButtonDown || d->upButtonDown)) {
         setInternalValue(valueForX(e->pos().x()));
+        update();
     }
 }
 

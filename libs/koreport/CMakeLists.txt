@@ -44,6 +44,7 @@ set(koreport_LIB_SRCS
     renderer/KoReportHTMLCSSRenderer.cpp
     renderer/KoReportKSpreadRenderer.cpp
     renderer/KoReportRendererBase.cpp
+    renderer/KoReportPage.cpp
 
 	renderer/scripting/krscripthandler.cpp
 	renderer/scripting/krscriptconstants.cpp

@@ -78,7 +78,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, bool tools,
     // classes that do painting need to keep track of is resolution
     gc.setRenderHint(QPainter::Antialiasing);
     gc.setRenderHint(QPainter::TextAntialiasing);
-    gc.setRenderHint(QPainter::HighQualityAntialiasing);
+//     gc.setRenderHint(QPainter::HighQualityAntialiasing); // http://www.archivum.info/qt-interest@trolltech.com/2010-01/00481/Re:-(Qt-interest)-Is-QPainter::HighQualityAntialiasing-render-hint-broken-in-Qt-4.6.html <- this option does not do anything anymore with Qt4.6, so don't reenable it since it seems to break display
     gc.setRenderHint(QPainter::SmoothPixmapTransform);
     gc.translate(QPoint(-documentOffset.x(), -documentOffset.y()));
     gc.translate(documentOrigin());

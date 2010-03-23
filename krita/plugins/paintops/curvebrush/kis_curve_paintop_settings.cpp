@@ -27,17 +27,17 @@ bool KisCurvePaintOpSettings::paintIncremental()
     return false;
 }
 
-int KisCurvePaintOpSettings::minimalDistance() const
+QRectF KisCurvePaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
 {
-    return getInt("min_distance");
+    QRectF rect = QRectF(-5, -5, 10, 10);
+    return image->pixelToDocument(rect).translated(pos);
 }
 
-int KisCurvePaintOpSettings::curveAction() const
+void KisCurvePaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
 {
-    return getInt("curve_action");
+    if (_mode != CURSOR_IS_OUTLINE) return;
+    QRectF rect2 = paintOutlineRect(pos, image, _mode);
+    painter.drawLine(rect2.topLeft(), rect2.bottomRight());
+    painter.drawLine(rect2.topRight(), rect2.bottomLeft());
 }
 
-int KisCurvePaintOpSettings::interval() const
-{
-    return getInt("interval");
-}

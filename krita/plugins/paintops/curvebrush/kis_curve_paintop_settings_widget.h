@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +24,10 @@
 #include "ui_wdgcurveoptions.h"
 #include "widgets/kis_popup_button.h"
 
+const QString CURVE_MIN_DISTANCE = "Curve/minimumDistance";
+const QString CURVE_MODE = "Curve/mode";
+const QString CURVE_INTERVAL = "Curve/interval";
+
 class KisCurvePaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
     Q_OBJECT
@@ -35,10 +39,8 @@ public:
     void setConfiguration(const KisPropertiesConfiguration * config);
     KisPropertiesConfiguration* configuration() const;
     void writeConfiguration(KisPropertiesConfiguration *config) const;
-
-    int minimalDistance() const;
-    int curveAction() const;
-    int interval() const;
+    
+    int curveMode() const;
 
 private:
     Ui::WdgCurveOptions* m_options;

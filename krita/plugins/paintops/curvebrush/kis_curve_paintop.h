@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +19,6 @@
 #ifndef KIS_CURVEPAINTOP_H_
 #define KIS_CURVEPAINTOP_H_
 
-#include <klocale.h>
 #include <kis_paintop.h>
 #include <kis_types.h>
 
@@ -28,7 +26,6 @@
 
 #include "kis_curve_paintop_settings.h"
 
-class QPointF;
 class KisPainter;
 
 class KisCurvePaintOp : public KisPaintOp
@@ -45,18 +42,8 @@ public:
     double paintAt(const KisPaintInformation& info);
     KisDistanceInformation paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist);
 
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
-        Q_UNUSED(xSpacing);
-        Q_UNUSED(ySpacing);
-        Q_UNUSED(pressure1);
-        Q_UNUSED(pressure2);
-        // XXX: this is wrong, but that doesn't matter, since paintLine doesn't use spacing.
-        return 0.5;
-    }
-
 
 private:
-    KisImageWSP m_image;
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
     CurveBrush m_curveBrush;

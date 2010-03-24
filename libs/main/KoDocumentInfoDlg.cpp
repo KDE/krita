@@ -122,7 +122,6 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo, K
 
     initAuthorTab();
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
     // Saving encryption implies saving the document, this is done after closing the dialog
     connect(this, SIGNAL(hidden()), this, SLOT(slotSaveEncryption()));
 
@@ -156,6 +155,7 @@ void KoDocumentInfoDlg::slotButtonClicked(int button)
                 return;
             }
         }
+        slotApply();
         accept();
         return;
     }

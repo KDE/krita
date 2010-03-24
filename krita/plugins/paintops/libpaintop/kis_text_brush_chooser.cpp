@@ -40,8 +40,9 @@ KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, cons
     connect((QObject*)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
     m_font = font();
     rebuildTextBrush();
-    showSlider(inputSpacing);
-    connect((QObject*)inputSpacing, SIGNAL(valueChanged(double)), this, SLOT(rebuildTextBrush()));
+    inputSpacing->setRange(0.0, 10, 2);
+    inputSpacing->setValue(0.1);
+    connect(inputSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(rebuildTextBrush()));
 }
 
 

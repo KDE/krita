@@ -81,16 +81,6 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1" colspan="3">
-      <widget class="KDoubleNumInput" name="inputSpacing">
-       <property name="value">
-        <double>0.100000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>10.000000000000000</double>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="1" colspan="2">
       <spacer name="spacer2">
        <property name="orientation">
@@ -123,6 +113,9 @@
        </property>
       </widget>
      </item>
+     <item row="3" column="1" colspan="2">
+      <widget class="KisDoubleSliderSpinBox" name="inputSpacing" native="true"/>
+     </item>
     </layout>
    </item>
   </layout>
@@ -130,14 +123,15 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KDoubleNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
-  <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

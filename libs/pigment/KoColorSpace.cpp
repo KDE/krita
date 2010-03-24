@@ -120,9 +120,10 @@ QBitArray KoColorSpace::setChannelFlagsToPixelOrder(const QBitArray & origChanne
 {
     if (origChannelFlags.isEmpty()) return origChannelFlags;
 
+    Q_ASSERT(origChannelFlags.size() == channelCount());
+
     QBitArray orderedChannelFlags(origChannelFlags.size());
     for (int i = 0; i < origChannelFlags.size(); ++i) {
-
         KoChannelInfo * channel = d->channels.at(i);
         orderedChannelFlags.setBit(channel->pos(), origChannelFlags.testBit(i));
     }

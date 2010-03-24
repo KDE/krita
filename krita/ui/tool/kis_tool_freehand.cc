@@ -122,6 +122,12 @@ KisToolFreehand::~KisToolFreehand()
     delete m_painter;
 }
 
+void KisToolFreehand::deactivate()
+{
+    endPaint();
+    KisToolPaint::deactivate();
+}
+
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
     if (currentPaintOpPreset() && currentPaintOpPreset()->settings()) {
@@ -332,7 +338,10 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 
 void KisToolFreehand::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Space) {
+    if (m_mode != HOVER)
+    {
+        event->accept(); // Make sure nothing disturb the painting
+    } else if (event->key() == Qt::Key_Space) {
         m_mode = PAN;
         useCursor(Qt::OpenHandCursor);
 

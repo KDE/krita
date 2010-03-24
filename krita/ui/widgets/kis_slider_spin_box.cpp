@@ -195,6 +195,7 @@ void KisAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
             e->buttons() & Qt::LeftButton &&
             !(d->downButtonDown || d->upButtonDown)) {
         setInternalValue(valueForX(e->pos().x()));
+        update();
     }
 }
 
@@ -446,7 +447,7 @@ void KisSliderSpinBox::setPageStep(int value)
 void KisSliderSpinBox::setInternalValue(int _value)
 {
     Q_D(KisAbstractSliderSpinBox);
-    d->value = _value;
+    d->value = qBound(d->minimum, _value, d->maximum);
     emit(valueChanged(value()));
 }
 
@@ -499,6 +500,6 @@ QString KisDoubleSliderSpinBox::valueString() const
 void KisDoubleSliderSpinBox::setInternalValue(int _value)
 {
     Q_D(KisAbstractSliderSpinBox);
-    d->value = _value;
+    d->value = qBound(d->minimum, _value, d->maximum);
     emit(valueChanged(value()));
 }

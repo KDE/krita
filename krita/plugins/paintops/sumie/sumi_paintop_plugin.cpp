@@ -31,7 +31,7 @@
 #include "kis_simple_paintop_factory.h"
 #include "kis_sumi_paintop.h"
 #include "kis_sumi_paintop_settings_widget.h"
-#include "kis_brush_based_paintop_settings.h"
+#include "kis_sumi_paintop_settings.h"
 #include "kis_global.h"
 
 K_PLUGIN_FACTORY(SumiPaintOpPluginFactory, registerPlugin<SumiPaintOpPlugin>();)
@@ -44,7 +44,7 @@ SumiPaintOpPlugin::SumiPaintOpPlugin(QObject *parent, const QVariantList &)
 
     //setComponentData(SumiPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisSumiPaintOp, KisBrushBasedPaintOpSettings, KisSumiPaintOpSettingsWidget>("sumibrush", i18n("Sumi-e brush"), "krita-sumi.png"));
+    r->add(new KisSimplePaintOpFactory<KisSumiPaintOp, KisSumiPaintOpSettings, KisSumiPaintOpSettingsWidget>("sumibrush", i18n("Sumi-e brush"), "krita-sumi.png"));
 
 }
 

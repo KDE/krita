@@ -29,4 +29,3 @@ bool KisParticlePaintOpSettings::paintIncremental()
 }
 
 
-

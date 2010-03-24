@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,18 +31,18 @@
 #include "kis_types.h"
 #include "kis_paintop.h"
 
+#include "kis_curve_paintop_settings_widget.h"
 
 KisCurvePaintOp::KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
 {
     Q_ASSERT(settings);
-    m_curveBrush.setImage(image);
+    Q_UNUSED(image);
     m_curveBrush.setPainter(painter);
-
-    m_curveBrush.setInkColor(painter->paintColor());
-    m_curveBrush.setMode(settings->curveAction());
-    m_curveBrush.setMinimalDistance(settings->minimalDistance());
-    m_curveBrush.setInterval(settings->interval());
+    
+    m_curveBrush.setMode( settings->getInt(CURVE_MODE) );
+    m_curveBrush.setMinimalDistance( settings->getInt(CURVE_MIN_DISTANCE) );
+    m_curveBrush.setInterval(settings->getInt(CURVE_INTERVAL) );
 }
 
 KisCurvePaintOp::~KisCurvePaintOp()

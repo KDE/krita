@@ -36,7 +36,7 @@
 
 #include "kis_brush_registry.h"
 #include "kis_brush_server.h"
-#include "widgets/kis_double_widget.h"
+#include "widgets/kis_slider_spin_box.h"
 
 #include "kis_global.h"
 #include "kis_gbr_brush.h"
@@ -91,10 +91,10 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     setObjectName(name);
 
     m_lbSpacing = new QLabel(i18n("Spacing: "), this);
-    m_slSpacing = new KisDoubleWidget(0.0, 10, this, "double_widget");
-    m_slSpacing->setTickPosition(QSlider::TicksBelow);
-    m_slSpacing->setTickInterval(1);
-    QObject::connect(m_slSpacing, SIGNAL(valueChanged(double)), this, SLOT(slotSetItemSpacing(double)));
+    m_slSpacing = new KisDoubleSliderSpinBox(this);
+    m_slSpacing->setRange(0.0, 10, 2);
+    m_slSpacing->setValue(0.1);
+    QObject::connect(m_slSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSpacing(qreal)));
 
     m_chkColorMask = new QCheckBox(i18n("Use color as mask"), this);
     QObject::connect(m_chkColorMask, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
@@ -126,6 +126,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     spacingLayout->addWidget(m_lbSpacing, 0, 0);
     spacingLayout->addWidget(m_slSpacing, 0, 1);
+    spacingLayout->setColumnStretch(1, 1);
 
     spacingLayout->addWidget(m_chkColorMask, 1, 0, 1, 2);
 
@@ -158,7 +159,7 @@ void KisBrushChooser::setBrush(KisBrushSP _brush)
     */
 }
 
-void KisBrushChooser::slotSetItemSpacing(double spacingValue)
+void KisBrushChooser::slotSetItemSpacing(qreal spacingValue)
 {
     KoResource * resource = static_cast<KoResource *>(m_itemChooser->currentResource());
 

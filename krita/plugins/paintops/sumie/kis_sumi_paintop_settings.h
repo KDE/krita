@@ -22,17 +22,15 @@
 
 #include <QList>
 
-#include <kis_paintop_settings.h>
+#include <kis_brush_based_paintop_settings.h>
 #include <kis_types.h>
 
 class QPainter;
 
-class KisSumiPaintOpSettings : public KisPaintOpSettings
+class KisSumiPaintOpSettings : public KisBrushBasedPaintOpSettings
 {
 
 public:
-    bool paintIncremental();
-
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
 };

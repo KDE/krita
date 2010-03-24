@@ -128,7 +128,7 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 
         drawDecorations(gc, drawTools,
                         documentOffset(),
-                        QRect(QPoint(0, 0), QSize(width(), height())),
+                        QRect(QPoint(0, 0), documentSize()),
                         canvas());
     } else {
         restoreGLState();

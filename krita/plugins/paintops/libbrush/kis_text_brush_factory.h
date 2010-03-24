@@ -37,7 +37,7 @@ public:
     virtual ~KisTextBrushFactory() {}
 
     virtual QString id() const {
-        return "text_brush";
+        return "kis_text_brush";
     }
 
 

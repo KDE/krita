@@ -21,32 +21,19 @@
 
 #include "kis_image.h"
 
-#include "kis_paint_action_type_option.h"
 #include "kis_sumi_paintop_settings.h"
 #include "kis_sumi_bristle_option.h"
 #include "kis_sumi_shape_option.h"
 
-bool KisSumiPaintOpSettings::paintIncremental()
-{
-    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
-}
-
-
 void KisSumiPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return;
-    qreal size = getInt(SUMI_RADIUS) * 2 * getDouble(SUMI_BRISTLE_SCALE) + 1;
-    painter.setPen(Qt::black);
-    painter.drawEllipse(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos));
+    KisBrushBasedPaintOpSettings::paintOutline(pos, image, painter, _mode);
 }
 
 
 QRectF KisSumiPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
-    qreal size = getInt(SUMI_RADIUS) * 2 * getDouble(SUMI_BRISTLE_SCALE) + 1;
-    size += 10;
-    return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
+    return KisBrushBasedPaintOpSettings::paintOutlineRect(pos, image, _mode);
 }
 
 

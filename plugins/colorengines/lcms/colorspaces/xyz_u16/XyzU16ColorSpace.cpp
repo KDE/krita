@@ -32,10 +32,10 @@
 XyzU16ColorSpace::XyzU16ColorSpace(KoColorProfile *p) :
         LcmsColorSpace<XyzU16Traits>("XYZA16", i18n("XYZ (16-bit integer/channel)"),  TYPE_XYZA_16, icSigXYZData, p)
 {
-    addChannel(new KoChannelInfo(i18n("X"), XyzU16Traits::x_pos * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::cyan));
-    addChannel(new KoChannelInfo(i18n("Y"), XyzU16Traits::y_pos * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::magenta));
-    addChannel(new KoChannelInfo(i18n("Z"), XyzU16Traits::z_pos * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::yellow));
-    addChannel(new KoChannelInfo(i18n("Alpha"), XyzU16Traits::alpha_pos * sizeof(quint16), KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
+    addChannel(new KoChannelInfo(i18n("X"), XyzU16Traits::x_pos * sizeof(quint16), XyzU16Traits::x_pos, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::cyan));
+    addChannel(new KoChannelInfo(i18n("Y"), XyzU16Traits::y_pos * sizeof(quint16), XyzU16Traits::y_pos, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::magenta));
+    addChannel(new KoChannelInfo(i18n("Z"), XyzU16Traits::z_pos * sizeof(quint16), XyzU16Traits::z_pos, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::yellow));
+    addChannel(new KoChannelInfo(i18n("Alpha"), XyzU16Traits::alpha_pos * sizeof(quint16), XyzU16Traits::alpha_pos, KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
     init();
 
     addCompositeOp(new KoCompositeOpOver<XyzU16Traits>(this));

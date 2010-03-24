@@ -29,18 +29,31 @@ void TestKoColorSpaceSanity::testChannelsInfo()
     {
         qDebug() << colorSpace->id();
         QCOMPARE(colorSpace->channelCount(), quint32(colorSpace->channels().size()));
-        QList<int> poses;
+        QList<int> indexes;
         quint32 colorChannels = 0;
         quint32 size = 0;
         foreach(KoChannelInfo* info, colorSpace->channels())
         {
             if(info->channelType() == KoChannelInfo::COLOR ) {
-              ++colorChannels;
+                ++colorChannels;
             }
+            // Check poses
             quint32 pos = info->pos();
-            QVERIFY(pos < colorSpace->channelCount());
-            QVERIFY(poses.indexOf(pos) == -1);
-            poses.push_back(pos);
+            QVERIFY(pos + info->size() <= colorSpace->pixelSize());
+            foreach(KoChannelInfo* info2, colorSpace->channels())
+            {
+                if( info != info2 )
+                {
+                    QVERIFY( pos >= (info2->pos() + info2->size()) || pos + info->size() <= info2->pos());
+                }
+            }
+
+            // Check index
+            quint32 index = info->index();
+            QVERIFY(index < colorSpace->channelCount());
+            QVERIFY(indexes.indexOf(pos) == -1);
+            indexes.push_back(index);
+            
             size += info->size();
         }
         QCOMPARE(size, colorSpace->pixelSize());

@@ -355,9 +355,9 @@ KoGenericRGBHistogramProducer::KoGenericRGBHistogramProducer()
 {
     /* we set 0 as colorspece, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */
-    m_channelsList.append(new KoChannelInfo(i18n("R"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255, 0, 0)));
-    m_channelsList.append(new KoChannelInfo(i18n("G"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 255, 0)));
-    m_channelsList.append(new KoChannelInfo(i18n("B"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 0, 255)));
+    m_channelsList.append(new KoChannelInfo(i18n("R"), 0, 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255, 0, 0)));
+    m_channelsList.append(new KoChannelInfo(i18n("G"), 1, 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 255, 0)));
+    m_channelsList.append(new KoChannelInfo(i18n("B"), 2, 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 0, 255)));
 }
 
 QList<KoChannelInfo *> KoGenericRGBHistogramProducer::channels()
@@ -423,9 +423,9 @@ KoGenericLabHistogramProducer::KoGenericLabHistogramProducer()
 {
     /* we set 0 as colorspace, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */
-    m_channelsList.append(new KoChannelInfo(i18n("L*"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
-    m_channelsList.append(new KoChannelInfo(i18n("a*"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
-    m_channelsList.append(new KoChannelInfo(i18n("b*"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
+    m_channelsList.append(new KoChannelInfo(i18n("L*"), 0, 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
+    m_channelsList.append(new KoChannelInfo(i18n("a*"), 1, 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
+    m_channelsList.append(new KoChannelInfo(i18n("b*"), 2, 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
 
     if (!m_labCs) {
         m_labCs = KoColorSpaceRegistry::instance()->lab16();

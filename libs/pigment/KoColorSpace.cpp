@@ -125,7 +125,7 @@ QBitArray KoColorSpace::setChannelFlagsToPixelOrder(const QBitArray & origChanne
     QBitArray orderedChannelFlags(origChannelFlags.size());
     for (int i = 0; i < origChannelFlags.size(); ++i) {
         KoChannelInfo * channel = d->channels.at(i);
-        orderedChannelFlags.setBit(channel->pos(), origChannelFlags.testBit(i));
+        orderedChannelFlags.setBit(channel->index(), origChannelFlags.testBit(i));
     }
     return orderedChannelFlags;
 }
@@ -137,7 +137,7 @@ QBitArray KoColorSpace::setChannelFlagsToColorSpaceOrder(const QBitArray & origC
     QBitArray orderedChannelFlags(origChannelFlags.size());
     for (int i = 0; i < orderedChannelFlags.size(); ++i) {
         KoChannelInfo * channel = d->channels.at(i);
-        orderedChannelFlags.setBit(i, origChannelFlags.testBit(channel->pos()));
+        orderedChannelFlags.setBit(i, origChannelFlags.testBit(channel->index()));
     }
     return orderedChannelFlags;
 }

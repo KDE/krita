@@ -1865,7 +1865,6 @@ void KisPainter::setLockAlpha(bool protect)
     d->alphaLocked = protect;
     if (d->channelFlags.isEmpty()) {
         d->channelFlags = d->colorSpace->channelFlags(true, !d->alphaLocked, true, true);
-        d->channelFlags = d->colorSpace->setChannelFlagsToPixelOrder(d->channelFlags);
     }
     else {
         QList<KoChannelInfo*> channels = d->colorSpace->channels();

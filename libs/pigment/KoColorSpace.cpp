@@ -111,35 +111,9 @@ QBitArray KoColorSpace::channelFlags(bool color, bool alpha, bool substance, boo
                 (alpha && channel->channelType() == KoChannelInfo::ALPHA) ||
                 (substrate && channel->channelType() == KoChannelInfo::SUBSTRATE) ||
                 (substance && channel->channelType() == KoChannelInfo::SUBSTANCE))
-            ba.setBit(i, true);
+            ba.setBit(channel->index(), true);
     }
     return ba;
-}
-
-QBitArray KoColorSpace::setChannelFlagsToPixelOrder(const QBitArray & origChannelFlags) const
-{
-    if (origChannelFlags.isEmpty()) return origChannelFlags;
-
-    Q_ASSERT(origChannelFlags.size() == int(channelCount()));
-
-    QBitArray orderedChannelFlags(origChannelFlags.size());
-    for (int i = 0; i < origChannelFlags.size(); ++i) {
-        KoChannelInfo * channel = d->channels.at(i);
-        orderedChannelFlags.setBit(channel->index(), origChannelFlags.testBit(i));
-    }
-    return orderedChannelFlags;
-}
-
-QBitArray KoColorSpace::setChannelFlagsToColorSpaceOrder(const QBitArray & origChannelFlags) const
-{
-    if (origChannelFlags.isEmpty()) return origChannelFlags;
-
-    QBitArray orderedChannelFlags(origChannelFlags.size());
-    for (int i = 0; i < orderedChannelFlags.size(); ++i) {
-        KoChannelInfo * channel = d->channels.at(i);
-        orderedChannelFlags.setBit(i, origChannelFlags.testBit(channel->index()));
-    }
-    return orderedChannelFlags;
 }
 
 void KoColorSpace::addChannel(KoChannelInfo * ci)

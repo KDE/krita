@@ -484,8 +484,6 @@ QUndoCommand* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoCo
 
     setDataManager(dst.m_datamanager, dstColorSpace);
 
-    emit colorSpaceChanged(dstColorSpace);
-
     return cmd;
 }
 
@@ -510,6 +508,8 @@ void KisPaintDevice::setDataManager(KisDataManagerSP data, const KoColorSpace * 
     m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(colorSpace);
     m_d->pixelSize = m_d->colorSpace->pixelSize();
     m_d->nChannels = m_d->colorSpace->channelCount();
+
+    emit colorSpaceChanged(colorSpace);
 }
 
 void KisPaintDevice::convertFromQImage(const QImage& _image, const QString &srcProfileName,

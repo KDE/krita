@@ -51,7 +51,7 @@ void TestKoColorSpaceSanity::testChannelsInfo()
             // Check index
             quint32 index = info->index();
             QVERIFY(index < colorSpace->channelCount());
-            QVERIFY(indexes.indexOf(pos) == -1);
+            QVERIFY(indexes.indexOf(index) == -1);
             indexes.push_back(index);
             
             size += info->size();

@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kis_sumi_bristle_option.h"
+#include "kis_hairy_bristle_option.h"
 #include <klocale.h>
 
 #include "ui_wdgbristleoptions.h"
@@ -29,13 +29,14 @@ public:
     }
 };
 
-KisSumiBristleOption::KisSumiBristleOption()
+KisHairyBristleOption::KisHairyBristleOption()
         : KisPaintOpOption(i18n("Bristle options"), false)
 {
     m_checkable = false;
     m_options = new KisBristleOptionsWidget();
 
     connect(m_options->mousePressureCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->thresholdCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->rndBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->scaleBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->shearBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
@@ -44,29 +45,31 @@ KisSumiBristleOption::KisSumiBristleOption()
     setConfigurationPage(m_options);
 }
 
-KisSumiBristleOption::~KisSumiBristleOption()
+KisHairyBristleOption::~KisHairyBristleOption()
 {
     delete m_options;
 }
 
 
 
-void KisSumiBristleOption::readOptionSetting(const KisPropertiesConfiguration* config)
+void KisHairyBristleOption::readOptionSetting(const KisPropertiesConfiguration* config)
 {
-    m_options->mousePressureCBox->setChecked(config->getBool(SUMI_BRISTLE_USE_MOUSEPRESSURE));
-    m_options->shearBox->setValue(config->getDouble(SUMI_BRISTLE_SHEAR));
-    m_options->rndBox->setValue(config->getDouble(SUMI_BRISTLE_RANDOM));
-    m_options->scaleBox->setValue(config->getDouble(SUMI_BRISTLE_SCALE));
-    m_options->densityBox->setValue(config->getDouble(SUMI_BRISTLE_DENSITY));
+    m_options->thresholdCBox->setChecked(config->getBool(HAIRY_BRISTLE_THRESHOLD));
+    m_options->mousePressureCBox->setChecked(config->getBool(HAIRY_BRISTLE_USE_MOUSEPRESSURE));
+    m_options->shearBox->setValue(config->getDouble(HAIRY_BRISTLE_SHEAR));
+    m_options->rndBox->setValue(config->getDouble(HAIRY_BRISTLE_RANDOM));
+    m_options->scaleBox->setValue(config->getDouble(HAIRY_BRISTLE_SCALE));
+    m_options->densityBox->setValue(config->getDouble(HAIRY_BRISTLE_DENSITY));
 }
 
 
-void KisSumiBristleOption::writeOptionSetting(KisPropertiesConfiguration* config) const
+void KisHairyBristleOption::writeOptionSetting(KisPropertiesConfiguration* config) const
 {
-    config->setProperty(SUMI_BRISTLE_USE_MOUSEPRESSURE,m_options->mousePressureCBox->isChecked());
-    config->setProperty(SUMI_BRISTLE_SCALE,m_options->scaleBox->value());
-    config->setProperty(SUMI_BRISTLE_SHEAR,m_options->shearBox->value());
-    config->setProperty(SUMI_BRISTLE_RANDOM,m_options->rndBox->value());
-    config->setProperty(SUMI_BRISTLE_DENSITY,m_options->densityBox->value());
+    config->setProperty(HAIRY_BRISTLE_THRESHOLD,m_options->thresholdCBox->isChecked());
+    config->setProperty(HAIRY_BRISTLE_USE_MOUSEPRESSURE,m_options->mousePressureCBox->isChecked());
+    config->setProperty(HAIRY_BRISTLE_SCALE,m_options->scaleBox->value());
+    config->setProperty(HAIRY_BRISTLE_SHEAR,m_options->shearBox->value());
+    config->setProperty(HAIRY_BRISTLE_RANDOM,m_options->rndBox->value());
+    config->setProperty(HAIRY_BRISTLE_DENSITY,m_options->densityBox->value());
 }
 

@@ -16,44 +16,44 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kis_sumi_paintop_settings_widget.h"
-#include "kis_sumi_paintop_settings.h"
+#include "kis_hairy_paintop_settings_widget.h"
+#include "kis_hairy_paintop_settings.h"
 
-#include "kis_sumi_shape_option.h"
-#include "kis_sumi_ink_option.h"
+#include "kis_hairy_shape_option.h"
+#include "kis_hairy_ink_option.h"
 
 #include <kis_paint_action_type_option.h>
-#include "kis_sumi_bristle_option.h"
+#include "kis_hairy_bristle_option.h"
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_size_option.h>
 
-KisSumiPaintOpSettingsWidget:: KisSumiPaintOpSettingsWidget(QWidget* parent)
+KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget* parent)
         : KisBrushBasedPaintopOptionWidget(parent)
 {
-    //m_sumiShapeOption = new KisSumiShapeOption();
-    m_sumiBristleOption = new KisSumiBristleOption();
-    m_sumiInkOption = new KisSumiInkOption();
+    //m_hairyShapeOption = new KisHairyShapeOption();
+    m_hairyBristleOption = new KisHairyBristleOption();
+    m_hairyInkOption = new KisHairyInkOption();
 
-    //addPaintOpOption(m_sumiShapeOption);
-    addPaintOpOption(m_sumiBristleOption);
-    addPaintOpOption(m_sumiInkOption);
+    //addPaintOpOption(m_hairyShapeOption);
+    addPaintOpOption(m_hairyBristleOption);
+    addPaintOpOption(m_hairyInkOption);
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisPaintActionTypeOption());
 }
 
-KisSumiPaintOpSettingsWidget::~ KisSumiPaintOpSettingsWidget()
+KisHairyPaintOpSettingsWidget::~ KisHairyPaintOpSettingsWidget()
 {
-    //delete m_sumiShapeOption;
-    delete m_sumiBristleOption;
-    delete m_sumiInkOption;
+    //delete m_hairyShapeOption;
+    delete m_hairyBristleOption;
+    delete m_hairyInkOption;
 }
 
 
-KisPropertiesConfiguration*  KisSumiPaintOpSettingsWidget::configuration() const
+KisPropertiesConfiguration*  KisHairyPaintOpSettingsWidget::configuration() const
 {
-    KisSumiPaintOpSettings* config = new KisSumiPaintOpSettings();
-    config->setOptionsWidget(const_cast<KisSumiPaintOpSettingsWidget*>(this));
-    config->setProperty("paintop", "sumibrush"); // XXX: make this a const id string
+    KisHairyPaintOpSettings* config = new KisHairyPaintOpSettings();
+    config->setOptionsWidget(const_cast<KisHairyPaintOpSettingsWidget*>(this));
+    config->setProperty("paintop", "hairybrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;
 }

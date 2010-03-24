@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_sumi_paintop.h"
-#include "kis_sumi_paintop_settings.h"
+#include "kis_hairy_paintop.h"
+#include "kis_hairy_paintop_settings.h"
 
 #include <cmath>
 #include <QRect>
@@ -29,18 +29,17 @@
 #include "kis_painter.h"
 #include <kis_vec.h>
 
-#include "brush.h"
 #include "brush_shape.h"
 
-#include <kis_sumi_ink_option.h>
-#include <kis_sumi_shape_option.h>
-#include <kis_sumi_bristle_option.h>
+#include <kis_hairy_ink_option.h>
+#include <kis_hairy_shape_option.h>
+#include <kis_hairy_bristle_option.h>
 #include <kis_brush_option.h>
 #include <kis_brush_based_paintop_settings.h>
 
 #include "kis_brush.h"
 
-KisSumiPaintOp::KisSumiPaintOp(const
+KisHairyPaintOp::KisHairyPaintOp(const
                                KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
         , m_settings(settings)
@@ -57,7 +56,7 @@ KisSumiPaintOp::KisSumiPaintOp(const
     
     bs.setColorSpace(painter->device()->colorSpace());
     bs.setHasColor(kisBrush->brushType() != MASK);
-    bs.fromQImageWithDensity(kisBrush->image(), settings->getDouble(SUMI_BRISTLE_DENSITY) * 0.01);
+    bs.fromQImageWithDensity(kisBrush->image(), settings->getDouble(HAIRY_BRISTLE_DENSITY) * 0.01);
     m_brush.setBrushShape(bs);
     
     loadSettings(settings);
@@ -77,16 +76,16 @@ KisSumiPaintOp::KisSumiPaintOp(const
     m_sizeOption.sensor()->reset();
 }
 
-void KisSumiPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
+void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
 {
-/*    m_properties.radius = settings->getInt(SUMI_RADIUS);
-    m_properties.sigma = settings->getDouble(SUMI_SIGMA);
-    m_properties.isbrushDimension1D = settings->getBool(SUMI_IS_DIMENSION_1D);*/
+/*    m_properties.radius = settings->getInt(HAIRY_RADIUS);
+    m_properties.sigma = settings->getDouble(HAIRY_SIGMA);
+    m_properties.isbrushDimension1D = settings->getBool(HAIRY_IS_DIMENSION_1D);*/
     
-    m_properties.inkAmount = settings->getInt(SUMI_INK_AMOUNT);
+    m_properties.inkAmount = settings->getInt(HAIRY_INK_AMOUNT);
     //TODO: wait for the transfer function with variable size
     QList<float> list;
-    KisCubicCurve curve = settings->getCubicCurve(SUMI_INK_DEPLETION_CURVE);
+    KisCubicCurve curve = settings->getCubicCurve(HAIRY_INK_DEPLETION_CURVE);
     for (int i=0;i < m_properties.inkAmount;i++){
         list << curve.value( i/qreal(m_properties.inkAmount-1) );
     }
@@ -94,21 +93,21 @@ void KisSumiPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
 
     m_properties.inkDepletionCurve = list;
 
-    m_properties.useSaturation = settings->getBool(SUMI_INK_USE_SATURATION);
-    m_properties.useOpacity = settings->getBool(SUMI_INK_USE_OPACITY);
-    m_properties.useWeights = settings->getBool(SUMI_INK_USE_WEIGHTS);
+    m_properties.useSaturation = settings->getBool(HAIRY_INK_USE_SATURATION);
+    m_properties.useOpacity = settings->getBool(HAIRY_INK_USE_OPACITY);
+    m_properties.useWeights = settings->getBool(HAIRY_INK_USE_WEIGHTS);
 
-    m_properties.pressureWeight = settings->getDouble(SUMI_INK_PRESSURE_WEIGHT) / 100.0;
-    m_properties.bristleLengthWeight = settings->getDouble(SUMI_INK_BRISTLE_LENGTH_WEIGHT) / 100.0;
-    m_properties.bristleInkAmountWeight = settings->getDouble(SUMI_INK_BRISTLE_INK_AMOUNT_WEIGHT) / 100.0;
-    m_properties.inkDepletionWeight = settings->getDouble(SUMI_INK_DEPLETION_WEIGHT);
-    m_properties.useSoakInk = settings->getBool(SUMI_INK_SOAK);
+    m_properties.pressureWeight = settings->getDouble(HAIRY_INK_PRESSURE_WEIGHT) / 100.0;
+    m_properties.bristleLengthWeight = settings->getDouble(HAIRY_INK_BRISTLE_LENGTH_WEIGHT) / 100.0;
+    m_properties.bristleInkAmountWeight = settings->getDouble(HAIRY_INK_BRISTLE_INK_AMOUNT_WEIGHT) / 100.0;
+    m_properties.inkDepletionWeight = settings->getDouble(HAIRY_INK_DEPLETION_WEIGHT);
+    m_properties.useSoakInk = settings->getBool(HAIRY_INK_SOAK);
 
-    m_properties.useMousePressure = settings->getBool(SUMI_BRISTLE_USE_MOUSEPRESSURE);
-    m_properties.shearFactor = settings->getDouble(SUMI_BRISTLE_SHEAR);
-    m_properties.randomFactor = settings->getDouble(SUMI_BRISTLE_RANDOM);
-    m_properties.scaleFactor = settings->getDouble(SUMI_BRISTLE_SCALE);
-    
+    m_properties.useMousePressure = settings->getBool(HAIRY_BRISTLE_USE_MOUSEPRESSURE);
+    m_properties.shearFactor = settings->getDouble(HAIRY_BRISTLE_SHEAR);
+    m_properties.randomFactor = settings->getDouble(HAIRY_BRISTLE_RANDOM);
+    m_properties.scaleFactor = settings->getDouble(HAIRY_BRISTLE_SCALE);
+    m_properties.threshold = settings->getBool(HAIRY_BRISTLE_THRESHOLD);
 /*    BrushShape brushShape;
     if (m_properties.isbrushDimension1D) 
     {
@@ -123,16 +122,16 @@ void KisSumiPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
 }
 
 
-double KisSumiPaintOp::paintAt(const KisPaintInformation& info)
+double KisHairyPaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
     return 0.5;
 }
 
 
-KisDistanceInformation KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist)
+KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist)
 {
-    // spacing is ignored in sumi-e, maybe todo
+    // spacing is ignored in hairy-e, maybe todo
     Q_UNUSED(savedDist);
 
     if (!painter()) return KisDistanceInformation();

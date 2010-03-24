@@ -17,15 +17,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SUMIPAINTOP_H_
-#define KIS_SUMIPAINTOP_H_
+#ifndef KIS_HAIRYPAINTOP_H_
+#define KIS_HAIRYPAINTOP_H_
 
 #include <klocale.h>
 #include <kis_paintop.h>
 #include <kis_paintop_factory.h>
 #include <kis_types.h>
 
-#include "brush.h"
+#include "hairy_brush.h"
 
 #include <kis_pressure_size_option.h>
 
@@ -33,27 +33,27 @@ class QPointF;
 class KisPainter;
 class KisBrushBasedPaintOpSettings;
 
-class KisSumiPaintOp : public KisPaintOp
+class KisHairyPaintOp : public KisPaintOp
 {
 
 public:
-    KisSumiPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
+    KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
 
     double paintAt(const KisPaintInformation& info);
     KisDistanceInformation paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist);
 
 private:
-    KisSumiProperties m_properties;
+    KisHairyProperties m_properties;
     const KisBrushBasedPaintOpSettings* m_settings;
 
     KisImageWSP m_image;
     bool newStrokeFlag;
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
-    Brush m_brush;
+    HairyBrush m_brush;
     KisPressureSizeOption m_sizeOption;
 
     void loadSettings(const KisBrushBasedPaintOpSettings* settings);
 };
 
-#endif // KIS_SUMIPAINTOP_H_
+#endif // KIS_HAIRYPAINTOP_H_

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Hairy brushes
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritahairypaintop
+X-Krita-Version=3

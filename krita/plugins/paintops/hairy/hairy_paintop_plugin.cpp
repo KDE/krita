@@ -1,5 +1,5 @@
 /*
- * sumi_paintop_plugin.cc -- Part of Krita
+ * hairy_paintop_plugin.cc -- Part of Krita
  *
  * Copyright (c) 2008 Lukáš Tvrdý (lukast.dev@gmail.com)
  *
@@ -18,7 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "sumi_paintop_plugin.h"
+#include "hairy_paintop_plugin.h"
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -29,27 +29,27 @@
 #include <kis_paintop_registry.h>
 
 #include "kis_simple_paintop_factory.h"
-#include "kis_sumi_paintop.h"
-#include "kis_sumi_paintop_settings_widget.h"
-#include "kis_sumi_paintop_settings.h"
+#include "kis_hairy_paintop.h"
+#include "kis_hairy_paintop_settings_widget.h"
+#include "kis_hairy_paintop_settings.h"
 #include "kis_global.h"
 
-K_PLUGIN_FACTORY(SumiPaintOpPluginFactory, registerPlugin<SumiPaintOpPlugin>();)
-K_EXPORT_PLUGIN(SumiPaintOpPluginFactory("krita"))
+K_PLUGIN_FACTORY(HairyPaintOpPluginFactory, registerPlugin<HairyPaintOpPlugin>();)
+K_EXPORT_PLUGIN(HairyPaintOpPluginFactory("krita"))
 
 
-SumiPaintOpPlugin::SumiPaintOpPlugin(QObject *parent, const QVariantList &)
+HairyPaintOpPlugin::HairyPaintOpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
 
-    //setComponentData(SumiPaintOpPluginFactory::componentData());
+    //setComponentData(HairyPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisSumiPaintOp, KisSumiPaintOpSettings, KisSumiPaintOpSettingsWidget>("sumibrush", i18n("Sumi-e brush"), "krita-sumi.png"));
+    r->add(new KisSimplePaintOpFactory<KisHairyPaintOp, KisHairyPaintOpSettings, KisHairyPaintOpSettingsWidget>("hairybrush", i18n("Hairy-e brush"), "krita-hairy.png"));
 
 }
 
-SumiPaintOpPlugin::~SumiPaintOpPlugin()
+HairyPaintOpPlugin::~HairyPaintOpPlugin()
 {
 }
 
-#include "sumi_paintop_plugin.moc"
+#include "hairy_paintop_plugin.moc"

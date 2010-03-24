@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _BRUSH_H_
-#define _BRUSH_H_
+#ifndef _HAIRY_BRUSH_H_
+#define _HAIRY_BRUSH_H_
 
 #include <QVector>
 #include <QList>
@@ -36,7 +36,7 @@
 
 class KoColorSpace;
 
-class KisSumiProperties{
+class KisHairyProperties{
 public:
     quint16 radius;
     quint16 inkAmount;
@@ -58,15 +58,16 @@ public:
     qreal shearFactor;
     qreal randomFactor;
     qreal scaleFactor;
+    qreal threshold;
     
 };
 
-class Brush
+class HairyBrush
 {
 
 public:
-    Brush();
-    ~Brush();
+    HairyBrush();
+    ~HairyBrush();
     void paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale);
 
     void repositionBristles(double angle, double slope);
@@ -75,7 +76,7 @@ public:
 
     void setInkColor(const KoColor &color);
     void setBrushShape(BrushShape brushShape);
-    void setProperties(KisSumiProperties * properties){ m_properties = properties; }
+    void setProperties(KisHairyProperties * properties){ m_properties = properties; }
     
     /// paints single bristle
     void putBristle(Bristle *bristle, float wx, float wy, const KoColor &color);
@@ -86,7 +87,7 @@ public:
     void colorifyBristles(KisRandomConstAccessor& acc, KoColorSpace * cs, QPointF point);
     
 private:
-    const KisSumiProperties * m_properties;
+    const KisHairyProperties * m_properties;
     
     QVector<Bristle*> m_bristles;
     QTransform m_transform;

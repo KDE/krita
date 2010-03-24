@@ -151,6 +151,25 @@ public:
     void splitStack(int id);
 };
 
+bool KoTextLoader::containsRichtext(const KoXmlElement &element)
+{
+    KoXmlElement textParagraphElement;
+    forEachElement(textParagraphElement, element) {
+
+        if (textParagraphElement.localName() != "p" ||
+            textParagraphElement.namespaceURI() != KoXmlNS::text)
+            return true;
+
+        // if any of this nodes children are elements, we're dealing with richtext (exceptions: text:s (space character) and text:tab (tab character)
+        for (KoXmlNode n = textParagraphElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
+            const KoXmlElement e = n.toElement();
+            if (!e.isNull() && (e.namespaceURI() != KoXmlNS::text || (e.localName() != "s" && e.localName() != "tab")))
+                return true;
+        }
+    }
+    return false;
+}
+
 void KoTextLoader::Private::splitStack(int id)
 {
     if (changeStack.isEmpty())

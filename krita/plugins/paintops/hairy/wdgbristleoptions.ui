@@ -41,31 +41,6 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="KDoubleNumInput" name="scaleBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="value">
-        <double>2.000000000000000</double>
-       </property>
-       <property name="minimum">
-        <double>-100.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>100.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="sliderEnabled">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="minimumSize">
@@ -76,31 +51,6 @@
        </property>
        <property name="text">
         <string>Random offset</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="KDoubleNumInput" name="rndBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="value">
-        <double>2.000000000000000</double>
-       </property>
-       <property name="minimum">
-        <double>-100.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>100.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="sliderEnabled">
-        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -120,31 +70,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="KDoubleNumInput" name="shearBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="value">
-        <double>0.000000000000000</double>
-       </property>
-       <property name="minimum">
-        <double>-100.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>100.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="sliderEnabled">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="0">
       <widget class="QLabel" name="density">
        <property name="minimumSize">
@@ -161,36 +86,17 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="rndBox" native="true"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="shearBox" native="true"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="scaleBox" native="true"/>
+     </item>
      <item row="3" column="1">
-      <widget class="KDoubleNumInput" name="densityBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="value">
-        <double>100.000000000000000</double>
-       </property>
-       <property name="minimum">
-        <double>0.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>100.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="suffix">
-        <string>%</string>
-       </property>
-       <property name="decimals">
-        <number>0</number>
-       </property>
-       <property name="sliderEnabled">
-        <bool>true</bool>
-       </property>
-      </widget>
+      <widget class="KisDoubleSliderSpinBox" name="densityBox" native="true"/>
      </item>
     </layout>
    </item>
@@ -231,9 +137,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KDoubleNumInput</class>
+   <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header>knuminput.h</header>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

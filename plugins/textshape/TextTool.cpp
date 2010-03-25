@@ -60,6 +60,8 @@
 #include <KoGlobal.h>
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
+#include <KoBookmark.h>
+#include <KoBookmarkManager.h>
 
 #include <kdebug.h>
 #include <KRun>
@@ -868,21 +870,37 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
     // Is there an anchor here ?
     if (m_textEditor->charFormat().isAnchor() && !m_textEditor->hasSelection()) {
         QString anchor = m_textEditor->charFormat().anchorHref();
-        bool isLocalLink = (anchor.indexOf("file:") == 0);
-        QString type = KMimeType::findByUrl(anchor, 0, isLocalLink)->name();
+        if (!anchor.isEmpty()) {
+            bool isLocalLink = (anchor.indexOf("file:") == 0);
+            QString type = KMimeType::findByUrl(anchor, 0, isLocalLink)->name();
 
-        if (KRun::isExecutableFile(anchor, type)) {
-            QString question = i18n("This link points to the program or script '%1'.\n"
-                                    "Malicious programs can harm your computer. "
-                                    "Are you sure that you want to run this program?", anchor);
-            // this will also start local programs, so adding a "don't warn again"
-            // checkbox will probably be too dangerous
-            int choice = KMessageBox::warningYesNo(0, question, i18n("Open Link?"));
-            if (choice != KMessageBox::Yes)
-                return;
+            if (KRun::isExecutableFile(anchor, type)) {
+                QString question = i18n("This link points to the program or script '%1'.\n"
+                                        "Malicious programs can harm your computer. "
+                                        "Are you sure that you want to run this program?", anchor);
+                // this will also start local programs, so adding a "don't warn again"
+                // checkbox will probably be too dangerous
+                int choice = KMessageBox::warningYesNo(0, question, i18n("Open Link?"));
+                if (choice != KMessageBox::Yes)
+                    return;
+            }
+            event->accept();
+            new KRun(m_textEditor->charFormat().anchorHref(), 0);
+        } else {
+            QStringList anchorList = m_textEditor->charFormat().anchorNames();
+            QString anchorName;
+            if (!anchorList.isEmpty()) {
+                anchorName = anchorList.takeFirst();
+            }
+            KoTextDocument document(m_textShapeData->document());
+            KoBookmark *bookmark = document.inlineTextObjectManager()->bookmarkManager()->retrieveBookmark(anchorName);
+            if (bookmark) {
+                m_textEditor->setPosition(bookmark->position());
+                ensureCursorVisible();
+            } else {
+                kDebug(32500) << "A bookmark should exist but has not been found";
+            }
         }
-        event->accept();
-        new KRun(m_textEditor->charFormat().anchorHref(), 0);
     }
 }
 
@@ -891,7 +909,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
     int destinationPosition = -1; // for those cases where the moveOperation is not relevant;
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
     if (event->key() == Qt::Key_Backspace) {
-        if (!m_textEditor->hasSelection() && m_textEditor->block().textList() 
+        if (!m_textEditor->hasSelection() && m_textEditor->block().textList()
             && (m_textEditor->position() == m_textEditor->block().position())
             && !(m_actionRecordChanges->isChecked())) {
             if (!m_textEditor->blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {

@@ -32,6 +32,7 @@ private slots:
     void testMaskImage();
     void testSelect();
     void testInvert();
+    void testInvertWithImage();
     void testClear();
     void testExtent();
     void testAddSelection();

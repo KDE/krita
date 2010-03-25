@@ -104,6 +104,18 @@ void KisPixelSelectionTest::testInvert()
 
 }
 
+void KisPixelSelectionTest::testInvertWithImage()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 200, 200, cs, "merge test");
+    
+    image->setGlobalSelection();
+    KisPixelSelectionSP selection =  image->globalSelection()->getOrCreatePixelSelection();
+    selection->select(QRect(5, 5, 10, 10));
+    selection->invert();
+    QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 200, 200));
+}
+
 void KisPixelSelectionTest::testClear()
 {
     KisPixelSelectionSP selection = new KisPixelSelection();

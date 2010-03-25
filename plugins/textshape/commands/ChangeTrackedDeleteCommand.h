@@ -55,9 +55,9 @@ private:
     TextTool *m_tool;
     bool m_first;
     bool m_undone;
+    bool m_canMerge;
     DeleteMode m_mode;
     QList<int> m_removedElements;
-    QList<QUndoCommand *> m_shapeDeleteCommands;
     QList<KoListStyle::ListIdType> m_newListIds;
     int m_position, m_length;
     int m_addedChangeElement;
@@ -72,6 +72,7 @@ private:
     virtual bool checkListDeletion(QTextList *list, QTextCursor &cursor);
     virtual void updateListIds(QTextCursor &cursor);
     virtual void updateListChanges();
+    virtual void handleListItemDelete(QTextCursor &cursor);
 };
 
 #endif // CHANGETRACKEDDELTECOMMAND_H

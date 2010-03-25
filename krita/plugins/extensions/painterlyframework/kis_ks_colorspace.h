@@ -126,6 +126,7 @@ KisKSColorSpace<_TYPE_, _N_>::KisKSColorSpace(KoColorProfile *p)
     for (int i = 0; i < 2*_N_; i += 2) {
         parent::addChannel(new KoChannelInfo(i18n("Absorption"),
                                              (i + 0) * channelSize,
+                                             i,
                                              KoChannelInfo::COLOR,
                                              channelValueType,
                                              channelSize,
@@ -133,6 +134,7 @@ KisKSColorSpace<_TYPE_, _N_>::KisKSColorSpace(KoColorProfile *p)
 
         parent::addChannel(new KoChannelInfo(i18n("Scattering"),
                                              (i + 1) * channelSize,
+                                             i + 1,
                                              KoChannelInfo::COLOR,
                                              channelValueType,
                                              channelSize,
@@ -141,6 +143,7 @@ KisKSColorSpace<_TYPE_, _N_>::KisKSColorSpace(KoColorProfile *p)
 
     parent::addChannel(new KoChannelInfo(i18n("Alpha"),
                                          2*_N_ * channelSize,
+                                         2*_N_,
                                          KoChannelInfo::ALPHA,
                                          channelValueType,
                                          channelSize,

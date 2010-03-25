@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef SUMI_PAINTOP_PLUGIN_H_
-#define SUMI_PAINTOP_PLUGIN_H_
+#ifndef HAIRY_PAINTOP_PLUGIN_H_
+#define HAIRY_PAINTOP_PLUGIN_H_
 
 #include <QObject>
 #include <QVariant>
@@ -25,12 +25,12 @@
 /**
  * A plugin wrapper that adds the paintop factories to the paintop registry.
  */
-class SumiPaintOpPlugin : public QObject
+class HairyPaintOpPlugin : public QObject
 {
     Q_OBJECT
 public:
-    SumiPaintOpPlugin(QObject *parent, const QVariantList &);
-    virtual ~SumiPaintOpPlugin();
+    HairyPaintOpPlugin(QObject *parent, const QVariantList &);
+    virtual ~HairyPaintOpPlugin();
 };
 
-#endif // SUMI_PAINTOP_PLUGIN_H_
+#endif // HAIRY_PAINTOP_PLUGIN_H_

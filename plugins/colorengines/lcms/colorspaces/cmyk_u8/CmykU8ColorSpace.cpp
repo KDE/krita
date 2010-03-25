@@ -33,11 +33,11 @@
 CmykU8ColorSpace::CmykU8ColorSpace(KoColorProfile *p) :
         LcmsColorSpace<CmykU8Traits>("CMYK", i18n("CMYK (8-bit integer/channel)"),  TYPE_CMYK5_8, icSigCmykData, p)
 {
-    addChannel(new KoChannelInfo(i18n("Cyan"), 0 * sizeof(quint8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), Qt::cyan));
-    addChannel(new KoChannelInfo(i18n("Magenta"), 1 * sizeof(quint8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), Qt::magenta));
-    addChannel(new KoChannelInfo(i18n("Yellow"), 2 * sizeof(quint8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), Qt::yellow));
-    addChannel(new KoChannelInfo(i18n("Black"), 3 * sizeof(quint8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), Qt::black));
-    addChannel(new KoChannelInfo(i18n("Alpha"), 4 * sizeof(quint8), KoChannelInfo::ALPHA, KoChannelInfo::UINT8, sizeof(quint8)));
+    addChannel(new KoChannelInfo(i18n("Cyan"), 0 * sizeof(quint8), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), Qt::cyan));
+    addChannel(new KoChannelInfo(i18n("Magenta"), 1 * sizeof(quint8), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), Qt::magenta));
+    addChannel(new KoChannelInfo(i18n("Yellow"), 2 * sizeof(quint8), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), Qt::yellow));
+    addChannel(new KoChannelInfo(i18n("Black"), 3 * sizeof(quint8), 3, KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), Qt::black));
+    addChannel(new KoChannelInfo(i18n("Alpha"), 4 * sizeof(quint8), 4, KoChannelInfo::ALPHA, KoChannelInfo::UINT8, sizeof(quint8)));
     init();
 
     addCompositeOp(new KoCompositeOpOver<CmykU8Traits>(this));

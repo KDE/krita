@@ -63,9 +63,8 @@ void KisChannelFlagsWidget::setChannelFlags(const QBitArray & cf)
     dbgUI << "KisChannelFlagsWidget::setChannelFlags " << cf.isEmpty();
     if (cf.isEmpty()) return;
 
-    QBitArray channelFlags = m_colorSpace->setChannelFlagsToColorSpaceOrder(cf);
-    for (int i = 0; i < qMin(m_channelChecks.size(), channelFlags.size()); ++i) {
-        m_channelChecks.at(i)->setChecked(channelFlags.testBit(i));
+    for (int i = 0; i < qMin(m_channelChecks.size(), cf.size()); ++i) {
+        m_channelChecks.at(i)->setChecked(cf.testBit(m_colorSpace->channels()[i]->index()));
     }
 }
 
@@ -78,17 +77,13 @@ QBitArray KisChannelFlagsWidget::channelFlags() const
 
         bool flag = m_channelChecks.at(i)->isChecked();
         if (!flag) allTrue = false;
-
-        ba.setBit(i, flag);
-        dbgUI << " channel " << i << " is " << flag << ", allTrue = " << allTrue << ", so ba.testBit(" << i << ")" << " is " << ba.testBit(i);
+        qint32 idx = m_colorSpace->channels()[i]->index();
+        ba.setBit(idx, flag);
+        dbgUI << " channel " << i << " is " << flag << ", allTrue = " << allTrue << ", so ba.testBit(" << i << ")" << " is " << ba.testBit(idx) << " at " << idx;
     }
     if (allTrue)
         return QBitArray();
     else {
-        QBitArray result = m_colorSpace->setChannelFlagsToPixelOrder(ba);
-        for (int i = 0; i < result.size(); ++i) {
-            dbgUI << "On conversion to the pixel order, flag " << i << " is " << result.testBit(i);
-        }
-        return result;
+        return ba;
     }
 }

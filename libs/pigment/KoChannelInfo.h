@@ -54,14 +54,49 @@ public:
     KoChannelInfo() { }
     /**
      * @param name of the channel
-     * @param npos position of the channel in the pixel
+     * @param npos position of the channel in the pixel (in byte)
+     * @param index index of the channel in the pixel
      * @param channelType type of the channel
      * @param channelValueType type of the numerical data used by the channel
-     * @param size number of bytes (not bits) of the channel
+     * @param size number of bytes (not bits) of the channel (if -1, it is deduced from the channelType)
      * @param color a color to represent that channel (for instance in an histogram)
      */
-    KoChannelInfo(const QString & name, qint32 npos, enumChannelType channelType, enumChannelValueType channelValueType, qint32 size = 1, QColor color = QColor(0, 0, 0))
-            : m_name(name), m_pos(npos), m_channelType(channelType), m_channelValueType(channelValueType), m_size(size), m_color(color) { }
+    KoChannelInfo(const QString & name, qint32 npos, qint32 index, enumChannelType channelType, enumChannelValueType channelValueType, qint32 size = -1, QColor color = QColor(0, 0, 0))
+            : m_name(name), m_pos(npos), m_index(index), m_channelType(channelType), m_channelValueType(channelValueType), m_size(size), m_color(color)
+            {
+              switch(m_channelValueType)
+              {
+                case UINT8:
+                case INT8:
+                  Q_ASSERT(m_size == -1 || m_size == 1);
+                  m_size = 1;
+                  break;
+                case UINT16:
+                case INT16:
+                  Q_ASSERT(m_size == -1 || m_size == 2);
+                  m_size = 2;
+                  break;
+                case UINT32:
+                  Q_ASSERT(m_size == -1 || m_size == 4);
+                  m_size = 4;
+                  break;
+                case FLOAT16:
+                  Q_ASSERT(m_size == -1 || m_size == 2);
+                  m_size = 2;
+                  break;
+                case FLOAT32:
+                  Q_ASSERT(m_size == -1 || m_size == 4);
+                  m_size = 4;
+                  break;
+                case FLOAT64:
+                  Q_ASSERT(m_size == -1 || m_size == 8);
+                  m_size = 8;
+                  break;
+                case OTHER:
+                  Q_ASSERT(m_size != -1);
+              }
+            
+            }
 public:
     /**
      * User-friendly name for this channel for presentation purposes in the gui
@@ -75,6 +110,13 @@ public:
      */
     inline qint32 pos() const {
         return m_pos;
+    }
+
+    /**
+     * @return the index of the channel in pixel
+     */
+    inline qint32 index() const {
+        return m_index;
     }
 
     /**
@@ -115,6 +157,7 @@ private:
 
     QString m_name;
     qint32 m_pos;
+    qint32 m_index;
     enumChannelType m_channelType;
     enumChannelValueType m_channelValueType;
     qint32 m_size;

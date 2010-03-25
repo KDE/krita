@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>WdgSumieOptions</class>
- <widget class="QWidget" name="WdgSumieOptions" >
+ <class>WdgHairyeOptions</class>
+ <widget class="QWidget" name="WdgHairyeOptions" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -23,7 +23,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_6" >
    <item row="0" column="0" >
-    <widget class="QTabWidget" name="sumiTab" >
+    <widget class="QTabWidget" name="hairyTab" >
      <property name="currentIndex" >
       <number>0</number>
      </property>

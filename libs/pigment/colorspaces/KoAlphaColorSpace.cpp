@@ -185,7 +185,7 @@ public:
 KoAlphaColorSpace::KoAlphaColorSpace() :
         KoColorSpaceAbstract<AlphaU8Traits>("ALPHA", i18n("Alpha mask"))
 {
-    addChannel(new KoChannelInfo(i18n("Alpha"), 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
+    addChannel(new KoChannelInfo(i18n("Alpha"), 0, 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
     addCompositeOp(new KoCompositeOpOver<AlphaU8Traits>(this));
     addCompositeOp(new CompositeClear(this));
     addCompositeOp(new KoCompositeOpErase<AlphaU8Traits>(this));

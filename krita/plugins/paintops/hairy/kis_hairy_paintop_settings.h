@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SUMIPAINTOP_SETTINGS_H_
-#define KIS_SUMIPAINTOP_SETTINGS_H_
+#ifndef KIS_HAIRYPAINTOP_SETTINGS_H_
+#define KIS_HAIRYPAINTOP_SETTINGS_H_
 
 #include <QList>
 
@@ -27,7 +27,7 @@
 
 class QPainter;
 
-class KisSumiPaintOpSettings : public KisBrushBasedPaintOpSettings
+class KisHairyPaintOpSettings : public KisBrushBasedPaintOpSettings
 {
 
 public:

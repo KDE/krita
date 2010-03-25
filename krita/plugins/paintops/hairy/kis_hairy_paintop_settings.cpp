@@ -17,35 +17,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SUMIPAINTOP_SETTINGS_WIDGET_H_
-#define KIS_SUMIPAINTOP_SETTINGS_WIDGET_H_
+#include <QPainter>
 
-#include <kis_brush_based_paintop_options_widget.h>
+#include "kis_image.h"
 
-class KisSumiInkOption;
-class KisSumiShapeOption;
-class KisSumiBristleOption;
-class KisBrushOptionWidget;
+#include "kis_hairy_paintop_settings.h"
+#include "kis_hairy_bristle_option.h"
+#include "kis_hairy_shape_option.h"
 
-class KisSumiPaintOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
+void KisHairyPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
 {
-    Q_OBJECT
-
-public:
-    KisSumiPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisSumiPaintOpSettingsWidget();
-
-    KisPropertiesConfiguration* configuration() const;
-
-public:
-    KisSumiShapeOption * m_sumiShapeOption;
-    KisSumiInkOption * m_sumiInkOption;
-    KisSumiBristleOption * m_sumiBristleOption;
-};
-
-#endif
+    KisBrushBasedPaintOpSettings::paintOutline(pos, image, painter, _mode);
+}
 
 
-
+QRectF KisHairyPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
+{
+    return KisBrushBasedPaintOpSettings::paintOutlineRect(pos, image, _mode);
+}
 
 

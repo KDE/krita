@@ -58,6 +58,7 @@ public:
     virtual void keyPressEvent(QKeyEvent *event);
     virtual bool wantsAutoScroll() const;
     virtual void setDirty(const QRegion& region);
+    virtual void deactivate();
 
 signals:
     void sigPainting();

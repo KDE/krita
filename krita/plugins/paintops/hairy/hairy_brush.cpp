@@ -18,7 +18,7 @@
 
 #include <KoCompositeOps.h>
 
-#include "brush.h"
+#include "hairy_brush.h"
 #include "brush_shape.h"
 #include "trajectory.h"
 
@@ -50,7 +50,7 @@ inline double drand48()
 #endif
 
 
-Brush::Brush()
+HairyBrush::HairyBrush()
 {
     srand48(time(0));
     m_counter = 0;
@@ -63,14 +63,14 @@ Brush::Brush()
 }
 
 
-void Brush::setBrushShape(BrushShape brushShape)
+void HairyBrush::setBrushShape(BrushShape brushShape)
 {
     m_initialShape = brushShape;
     m_bristles = brushShape.getBristles();
 }
 
 
-void Brush::setInkColor(const KoColor &color)
+void HairyBrush::setInkColor(const KoColor &color)
 {
     for (int i = 0; i < m_bristles.size(); i++) {
         m_bristles[i]->setColor(color);
@@ -78,7 +78,7 @@ void Brush::setInkColor(const KoColor &color)
 }
 
 
-void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale)
+void HairyBrush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale)
 {
     m_counter++;
 
@@ -133,9 +133,11 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     int inkDepletionSize = m_properties->inkDepletionCurve.size();
     int bristleCount = m_bristles.size();
     int bristlePathSize;
+    qreal treshold = 1.0 - pi2.pressure();
     for (int i = 0; i < bristleCount; i++) {
 
         if (!m_bristles.at(i)->enabled()) continue;
+        if (m_properties->threshold && (m_bristles.at(i)->length() < (treshold))) continue;
         bristle = m_bristles[i];
 
         randomX = (drand48() * 2 - 1.0) * m_properties->randomFactor;
@@ -227,7 +229,7 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
 }
 
 
-void Brush::rotateBristles(double angle)
+void HairyBrush::rotateBristles(double angle)
 {
     qreal tx, ty, x, y;
 
@@ -246,7 +248,7 @@ void Brush::rotateBristles(double angle)
     m_lastAngle = angle;
 }
 
-void Brush::repositionBristles(double angle, double slope)
+void HairyBrush::repositionBristles(double angle, double slope)
 {
     // setX
     srand48((int)slope);
@@ -263,9 +265,9 @@ void Brush::repositionBristles(double angle, double slope)
     }
 }
 
-Brush::~Brush(){}
+HairyBrush::~HairyBrush(){}
 
-inline void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color)
+inline void HairyBrush::addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color)
 {
     int ix = qRound(wx);
     int iy = qRound(wy);
@@ -276,7 +278,7 @@ inline void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoC
     bristle->upIncrement();
 }
 
-void Brush::oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color)
+void HairyBrush::oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color)
 {
     m_dabAccessor->moveTo((int)wx, (int)wy);
     m_dev->colorSpace()->bitBlt(m_dabAccessor->rawData(),1,m_dev->colorSpace(),color.data(),1,0,0,255,1,1,COMPOSITE_OVER);
@@ -284,7 +286,7 @@ void Brush::oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor
 }
 
 
-void Brush::putBristle(Bristle *bristle, float wx, float wy, const KoColor &color)
+void HairyBrush::putBristle(Bristle *bristle, float wx, float wy, const KoColor &color)
 {
     m_dabAccessor->moveTo((int)wx, (int)wy);
     memcpy(m_dabAccessor->rawData(), color.data(), m_pixelSize);
@@ -292,7 +294,7 @@ void Brush::putBristle(Bristle *bristle, float wx, float wy, const KoColor &colo
     bristle->upIncrement();
 }
 
-double Brush::computeMousePressure(double distance)
+double HairyBrush::computeMousePressure(double distance)
 {
     double scale = 20.0;
     double minPressure = 0.02;
@@ -307,7 +309,7 @@ double Brush::computeMousePressure(double distance)
 }
 
 
-void Brush::colorifyBristles(KisRandomConstAccessor& acc, KoColorSpace * cs, QPointF point)
+void HairyBrush::colorifyBristles(KisRandomConstAccessor& acc, KoColorSpace * cs, QPointF point)
 {
     QPoint p = point.toPoint();
     KoColor color(cs);

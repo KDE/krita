@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kis_sumi_shape_option.h"
+#include "kis_hairy_shape_option.h"
 #include <klocale.h>
 
 #include "ui_wdgshapeoptions.h"
@@ -29,7 +29,7 @@ public:
     }
 };
 
-KisSumiShapeOption::KisSumiShapeOption()
+KisHairyShapeOption::KisHairyShapeOption()
         : KisPaintOpOption(i18n("Brush shape"), false)
 {
     m_checkable = false;
@@ -43,28 +43,28 @@ KisSumiShapeOption::KisSumiShapeOption()
     setConfigurationPage(m_options);
 }
 
-KisSumiShapeOption::~KisSumiShapeOption()
+KisHairyShapeOption::~KisHairyShapeOption()
 {
     delete m_options;
 }
 
 
-int KisSumiShapeOption::radius() const
+int KisHairyShapeOption::radius() const
 {
     return m_options->radiusSpinBox->value();
 }
 
-void KisSumiShapeOption::setRadius(int radius) const
+void KisHairyShapeOption::setRadius(int radius) const
 {
     m_options->radiusSpinBox->setValue(radius);
 }
 
 
-void KisSumiShapeOption::readOptionSetting(const KisPropertiesConfiguration* config)
+void KisHairyShapeOption::readOptionSetting(const KisPropertiesConfiguration* config)
 {
-    m_options->radiusSpinBox->setValue(config->getInt(SUMI_RADIUS));
-    m_options->sigmaSpinBox->setValue(config->getDouble(SUMI_SIGMA));
-    if (config->getBool(SUMI_IS_DIMENSION_1D)) {
+    m_options->radiusSpinBox->setValue(config->getInt(HAIRY_RADIUS));
+    m_options->sigmaSpinBox->setValue(config->getDouble(HAIRY_SIGMA));
+    if (config->getBool(HAIRY_IS_DIMENSION_1D)) {
         m_options->oneDimBrushBtn->setChecked(true);
     } else {
         m_options->twoDimBrushBtn->setChecked(true);
@@ -72,10 +72,10 @@ void KisSumiShapeOption::readOptionSetting(const KisPropertiesConfiguration* con
 }
 
 
-void KisSumiShapeOption::writeOptionSetting(KisPropertiesConfiguration* config) const
+void KisHairyShapeOption::writeOptionSetting(KisPropertiesConfiguration* config) const
 {
-    config->setProperty(SUMI_RADIUS,radius());
-    config->setProperty(SUMI_SIGMA,m_options->sigmaSpinBox->value());
-    config->setProperty(SUMI_IS_DIMENSION_1D,m_options->oneDimBrushBtn->isChecked()); 
+    config->setProperty(HAIRY_RADIUS,radius());
+    config->setProperty(HAIRY_SIGMA,m_options->sigmaSpinBox->value());
+    config->setProperty(HAIRY_IS_DIMENSION_1D,m_options->oneDimBrushBtn->isChecked()); 
 }
 

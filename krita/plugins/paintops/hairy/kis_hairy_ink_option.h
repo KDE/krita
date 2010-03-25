@@ -14,30 +14,30 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIS_SUMI_INK_OPTION_H
-#define KIS_SUMI_INK_OPTION_H
+#ifndef KIS_HAIRY_INK_OPTION_H
+#define KIS_HAIRY_INK_OPTION_H
 
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
-const QString SUMI_INK_AMOUNT = "SumiInk/inkAmount";
-const QString SUMI_INK_USE_SATURATION = "SumiInk/useSaturation";
-const QString SUMI_INK_USE_OPACITY = "SumiInk/useOpacity";
-const QString SUMI_INK_USE_WEIGHTS = "SumiInk/useWeights";
-const QString SUMI_INK_PRESSURE_WEIGHT = "SumiInk/pressureWeights";
-const QString SUMI_INK_BRISTLE_LENGTH_WEIGHT = "SumiInk/bristleLengthWeights";
-const QString SUMI_INK_BRISTLE_INK_AMOUNT_WEIGHT = "SumiInk/bristleInkAmountWeight";
-const QString SUMI_INK_DEPLETION_WEIGHT = "SumiInk/inkDepletionWeight";
-const QString SUMI_INK_DEPLETION_CURVE = "SumiInk/inkDepletionCurve";
-const QString SUMI_INK_SOAK = "SumiInk/soak";
+const QString HAIRY_INK_AMOUNT = "HairyInk/inkAmount";
+const QString HAIRY_INK_USE_SATURATION = "HairyInk/useSaturation";
+const QString HAIRY_INK_USE_OPACITY = "HairyInk/useOpacity";
+const QString HAIRY_INK_USE_WEIGHTS = "HairyInk/useWeights";
+const QString HAIRY_INK_PRESSURE_WEIGHT = "HairyInk/pressureWeights";
+const QString HAIRY_INK_BRISTLE_LENGTH_WEIGHT = "HairyInk/bristleLengthWeights";
+const QString HAIRY_INK_BRISTLE_INK_AMOUNT_WEIGHT = "HairyInk/bristleInkAmountWeight";
+const QString HAIRY_INK_DEPLETION_WEIGHT = "HairyInk/inkDepletionWeight";
+const QString HAIRY_INK_DEPLETION_CURVE = "HairyInk/inkDepletionCurve";
+const QString HAIRY_INK_SOAK = "HairyInk/soak";
 
 class KisInkOptionsWidget;
 
-class KisSumiInkOption : public KisPaintOpOption
+class KisHairyInkOption : public KisPaintOpOption
 {
 public:
-    KisSumiInkOption();
-    ~KisSumiInkOption();
+    KisHairyInkOption();
+    ~KisHairyInkOption();
 
     int inkAmount() const;
     QList<float> curve() const;
@@ -59,5 +59,5 @@ private:
     KisInkOptionsWidget * m_options;
 };
 
-#endif // KIS_SUMI_SHAPE_OPTION_H
+#endif // KIS_HAIRY_SHAPE_OPTION_H
 

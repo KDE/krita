@@ -50,6 +50,14 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
 public:
 
     /**
+     * Tries to determine if passing \p element to \a loadBody() would result in rich text
+     *
+     * \param element the element to test for richtext
+     * \return \p true iff richtext was detected
+     */
+    static bool containsRichtext(const KoXmlElement &element);
+
+    /**
     * Constructor.
     *
     * @param context The context the KoTextLoader is called in

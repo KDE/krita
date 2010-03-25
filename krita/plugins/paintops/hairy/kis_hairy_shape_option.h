@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,39 +16,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SUMI_BRISTLE_OPTION_H
-#define KIS_SUMI_BRISTLE_OPTION_H
+#ifndef KIS_HAIRY_SHAPE_OPTION_H
+#define KIS_HAIRY_SHAPE_OPTION_H
 
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
-const QString SUMI_BRISTLE_USE_MOUSEPRESSURE = "SumiBristle/useMousePressure";
-const QString SUMI_BRISTLE_SCALE = "SumiBristle/scale";
-const QString SUMI_BRISTLE_SHEAR = "SumiBristle/shear";
-const QString SUMI_BRISTLE_RANDOM = "SumiBristle/random";
-const QString SUMI_BRISTLE_DENSITY = "SumiBristle/density";
+const QString HAIRY_RADIUS = "Hairy/radius";
+const QString HAIRY_SIGMA = "Hairy/sigma";
+const QString HAIRY_IS_DIMENSION_1D = "Hairy/isDimension1D";
 
-class KisBristleOptionsWidget;
+class KisShapeOptionsWidget;
 
-class KisSumiBristleOption : public KisPaintOpOption
+class KisHairyShapeOption : public KisPaintOpOption
 {
 public:
-    KisSumiBristleOption();
-    ~KisSumiBristleOption();
+    KisHairyShapeOption();
+    ~KisHairyShapeOption();
 
+    void setRadius(int radius) const;
     void setScaleFactor(qreal scale) const;
     
+    int radius() const;
+    double sigma() const;
+    bool isbrushDimension1D() const;
     bool useMousePressure() const;
-
-    double scaleFactor() const;
-    double shearFactor() const;
-    double randomFactor() const;
 
     void writeOptionSetting(KisPropertiesConfiguration* config) const;
     void readOptionSetting(const KisPropertiesConfiguration* config);
 private:
-    KisBristleOptionsWidget * m_options;
+    KisShapeOptionsWidget * m_options;
 };
 
-#endif // KIS_SUMI_BRISTLE_OPTION_H
+#endif // KIS_HAIRY_SHAPE_OPTION_H
 

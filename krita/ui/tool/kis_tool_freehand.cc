@@ -495,7 +495,7 @@ void KisToolFreehand::endPaint()
         m_paintJobs.clear();
     }
 #ifdef ENABLE_RECORDING
-    if (image())
+    if (image() && m_pathPaintAction)
         image()->actionRecorder()->addAction(*m_pathPaintAction);
     delete m_pathPaintAction;
     m_pathPaintAction = 0;

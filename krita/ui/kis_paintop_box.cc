@@ -359,15 +359,17 @@ void KisPaintopBox::slotSaveActivePreset()
 
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
+    
+    QString name = m_presetsPopup->getPresetName();
 
     int i = 1;
     QFileInfo fileInfo;
     do {
-        fileInfo.setFile(saveLocation + QString("PaintOpPreset%1.kpp").arg(i));
+        fileInfo.setFile(saveLocation + name + QString("%1.kpp").arg(i));
         i++;
     } while (fileInfo.exists());
     newPreset->setFilename(fileInfo.filePath());
-    newPreset->setName(m_presetsPopup->getPresetName());
+    newPreset->setName(name);
 
     rServer->addResource(newPreset);
 }

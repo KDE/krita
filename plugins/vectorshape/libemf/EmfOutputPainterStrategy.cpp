@@ -32,6 +32,7 @@ namespace Libemf
 
 
 OutputPainterStrategy::OutputPainterStrategy() :
+    m_header( 0 ),
     m_path( 0 ), 
     m_currentlyBuildingPath( false ), 
     m_image( 0 ), 
@@ -41,7 +42,8 @@ OutputPainterStrategy::OutputPainterStrategy() :
 
 OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size, 
                                              bool keepAspectRatio)
-    : m_path( 0 )
+    : m_header( 0 )
+    , m_path( 0 )
     , m_currentlyBuildingPath( false )
     , m_image( 0 )
     , m_currentCoords()
@@ -54,6 +56,7 @@ OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size,
 
 OutputPainterStrategy::~OutputPainterStrategy()
 {
+    delete m_header;
     //delete m_painter;
     delete m_path;
     delete m_image;
@@ -75,14 +78,20 @@ void OutputPainterStrategy::paintBounds(const Header *header)
 
 void OutputPainterStrategy::init( const Header *header )
 {
-    QSize  emfSize = header->bounds().size();
+    // Save the header since we need the frame and bounds inside the drawing.
+    //
+    // To be precise, it seems that the StretchDiBits record uses the
+    // physical size (stored in header.frame()) to specify where to
+    // draw the picture rather than virtual coordinates.
+    m_header = new Header(*header);
+
+    QSize  outputSize = header->bounds().size();
 
 #if DEBUG_EMFPAINT
     kDebug(31000) << "emfFrame         =" << header->frame().x() << header->frame().y()
                   << header->frame().width() << header->frame().height();
     kDebug(31000) << "emfBounds (size) =" << header->bounds().x() << header->bounds().y()
                   << header->bounds().width() << header->bounds().height();
-    kDebug(31000) << "emfSize          =" << emfSize.width() << emfSize.height();
     kDebug(31000) << "outputSize       =" << m_outputSize.width() << m_outputSize.height();
 
     kDebug(31000) << "Device =" << header->device().width() << header->device().height();
@@ -97,12 +106,10 @@ void OutputPainterStrategy::init( const Header *header )
     // This is restored in cleanup().
     m_painter->save();
 
-    //m_painter->setPen(QColor(255,0,0));
-    //m_painter->drawRect( 0, 0, m_outputSize.width(), m_outputSize.height());// Note possible translation
     // Calculate how much the painter should be resized to fill the
     // outputSize with output.
-    qreal  scaleX = qreal( m_outputSize.width() )  / emfSize.width();
-    qreal  scaleY = qreal( m_outputSize.height() ) / emfSize.height();
+    qreal  scaleX = qreal( m_outputSize.width() )  / outputSize.width();
+    qreal  scaleY = qreal( m_outputSize.height() ) / outputSize.height();
     if ( m_keepAspectRatio ) {
         // Use the smaller value so that we don't get an overflow in
         // any direction.
@@ -122,8 +129,8 @@ void OutputPainterStrategy::init( const Header *header )
     // Calculate translation if we should center the Emf in the
     // area and keep the aspect ratio.
     if ( m_keepAspectRatio ) {
-        m_painter->translate((m_outputSize.width() - emfSize.width() * scaleX) / 2,
-                             (m_outputSize.height() - emfSize.height() * scaleY) / 2);
+        m_painter->translate((m_outputSize.width() - outputSize.width() * scaleX) / 2,
+                             (m_outputSize.height() - outputSize.height() * scaleY) / 2);
     }
 
 #if DEBUG_EMFPAINT
@@ -1084,9 +1091,19 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord record )
         target = QRect( targetPosition, targetSize );
     }
 
+    // SRCCOPY is the simplest case.  TODO: implement the rest.
     if (record.rasterOperation() == 0x00cc0020) {
-        // SRCCOPY
-        m_painter->drawImage( target, *(record.image()), source );
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "target" << target;
+        kDebug(31000) << "source" << source;
+        kDebug(31000) << "image" << record.image()->size();
+#endif
+        qreal scaleX = qreal(m_header->frame().width()) / qreal(m_header->bounds().width());
+        qreal scaleY = qreal(m_header->frame().height()) / qreal(m_header->bounds().height());
+        QRect realTarget(QPoint(target.x() / scaleX, target.y() / scaleY),
+                         QSize(target.width() / scaleX, target.height() / scaleY));
+        m_painter->drawImage(realTarget, *(record.image()), source);
+        //m_painter->drawImage(target, *(record.image()), source);
     }
 }
 

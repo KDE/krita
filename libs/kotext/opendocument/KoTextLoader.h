@@ -53,9 +53,9 @@ public:
      * Tries to determine if passing \p element to \a loadBody() would result in rich text
      *
      * \param element the element to test for richtext
-     * \return \p true iff richtext was detected
+     * \return \p true if rich text was detected
      */
-    static bool containsRichtext(const KoXmlElement &element);
+    static bool containsRichText(const KoXmlElement &element);
 
     /**
     * Constructor.

@@ -253,7 +253,14 @@ public:
          Q_ASSERT(!saveLocation().isEmpty());
 
         QString newFilename = saveLocation() + fi.baseName() + resource->defaultFileExtension();
-        resource->setFilename(newFilename);
+        QFileInfo fileInfo(newFilename);
+
+        int i = 1;
+        while (fileInfo.exists()) {
+            fileInfo.setFile(saveLocation() + fi.baseName() + QString("%1").arg(i) + resource->defaultFileExtension());
+            i++;
+        }
+        resource->setFilename(fileInfo.filePath());
         if(!addResource(resource)) {
             delete resource;
         }

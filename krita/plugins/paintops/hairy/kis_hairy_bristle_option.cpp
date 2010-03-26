@@ -26,6 +26,19 @@ public:
     KisBristleOptionsWidget(QWidget *parent = 0)
             : QWidget(parent) {
         setupUi(this);
+        
+        rndBox->setRange(-100.0, 100.0, 2);
+        rndBox->setValue(2.0);
+
+        scaleBox->setRange(-100.0, 100.0, 2);
+        scaleBox->setValue(2.0);
+
+        shearBox->setRange(-10.0, 10.0, 2);
+        shearBox->setValue(0.0);
+
+        densityBox->setRange(0.0, 100.0, 0);
+        densityBox->setValue(100.0);
+        densityBox->setSuffix(QChar(Qt::Key_Percent));
     }
 };
 
@@ -34,13 +47,14 @@ KisHairyBristleOption::KisHairyBristleOption()
 {
     m_checkable = false;
     m_options = new KisBristleOptionsWidget();
-
+    
+    // signals
     connect(m_options->mousePressureCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->thresholdCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->rndBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->scaleBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->shearBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->densityBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->rndBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_options->scaleBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_options->shearBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_options->densityBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     
     setConfigurationPage(m_options);
 }

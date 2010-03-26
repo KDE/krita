@@ -74,7 +74,7 @@ public:
     }
 
     QString defaultFileExtension() const {
-        return "kpp";
+        return ".kpp";
     }
 
 private:

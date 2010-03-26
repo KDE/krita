@@ -170,6 +170,8 @@ private:
     int convertFontWeight( quint32 emfWeight );
 
 
+    Header                  *m_header;   // Save to be able to retain scaling.
+
     QPainter                *m_painter;
     int                      m_painterSaves; // The number of times that save() was called.
     QSize                    m_outputSize;

@@ -156,19 +156,30 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     }
 
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    if (cfg.noXRender()) {
-        gc.drawPixmap(ev->rect(), m_d->prescaledProjection->prescaledPixmap(), 
-                      ev->rect().translated(-documentOrigin()));
-    } else {
-        gc.drawImage(ev->rect(), m_d->prescaledProjection->prescaledQImage(), 
-                     ev->rect().translated(-documentOrigin()));
+    
+    gc.save();
+    if (canvas()->isCanvasMirrored()){
+        QTransform m = gc.transform();
+        m.translate( documentOrigin().x(), 0);
+        m.scale(-1,1 );
+        m.translate( -documentSize().width(),0 );
+        m.translate( -documentOrigin().x(), 0);
+        gc.setTransform(m);
     }
+        if (cfg.noXRender()) {
+            gc.drawPixmap(ev->rect(), m_d->prescaledProjection->prescaledPixmap(), 
+                        ev->rect().translated(-documentOrigin()));
+        } else {
+            gc.drawImage(ev->rect(), m_d->prescaledProjection->prescaledQImage(), 
+                        ev->rect().translated(-documentOrigin()));
+        }
 
 #ifdef DEBUG_REPAINT
     QColor color = QColor(random() % 255, random() % 255, random() % 255, 150);
     gc.fillRect(ev->rect(), color);
 #endif
     drawDecorations(gc, true, documentOffset(), fillRect.translated(-documentOrigin()), canvas());
+    gc.restore();
     gc.end();
 
 #ifdef INDEPENDENT_CANVAS

@@ -133,6 +133,8 @@ public: // KisCanvas2 methods
     KisView2* view();
 
     bool usingHDRExposureProgram();
+    /// @return true if the canvas image should be displayed in vertically mirrored mode
+    bool isCanvasMirrored();
     void addDecoration(KisCanvasDecoration* deco);
     KisCanvasDecoration* decoration(const QString& id);
 
@@ -163,6 +165,9 @@ public slots:
     /// documentOffset changed, now update the rulers in zoom manager
     void updateRulers();
 
+    /// slot for setting the mirroring
+    void mirrorCanvas(bool mirror);
+    
 private slots:
 
     /**

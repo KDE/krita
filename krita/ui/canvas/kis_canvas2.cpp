@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
+ * Copyright (C) Lukáš Tvrdý <lukast.dev@gmail.com>, (C) 2010
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -80,7 +81,8 @@ public:
         , currentCanvasIsOpenGL(false)
         , currentCanvasUsesOpenGLShaders(false)
         , toolProxy(new KoToolProxy(parent))
-        , favoriteResourceManager(0) {
+        , favoriteResourceManager(0)
+        , mirrorMode(false){
     }
 
     ~KisCanvas2Private() {
@@ -99,6 +101,7 @@ public:
     QPoint documentOffset;
     KoShapeControllerBase *sc;
     KoFavoriteResourceManager *favoriteResourceManager;
+    bool mirrorMode;
 #ifdef HAVE_OPENGL
     KisOpenGLImageTexturesSP openGLImageTextures;
 #endif
@@ -157,6 +160,12 @@ bool KisCanvas2::snapToGrid() const
 {
     return m_d->view->document()->gridData().snapToGrid();
 }
+
+bool KisCanvas2::isCanvasMirrored()
+{
+    return m_d->mirrorMode;
+}
+
 
 void KisCanvas2::addCommand(QUndoCommand *command)
 {
@@ -316,10 +325,19 @@ void KisCanvas2::updateCanvasProjection(const QRect & rc)
 {
     if (m_d->prescaledProjection) {
         QRect vRect = m_d->prescaledProjection->updateCanvasProjection(rc);
+        
+        // attemp to mirror the rectangle in image coordinates, this does not work to fix correct updates in mirroring mode, 
+        // so use full canvas update so far 
+        // kDebug() << vRect;
+        // vRect = QRect(image()->width() - vRect.x() - vRect.width(),vRect.top(),vRect.width(), vRect.height());
+        // kDebug() << vRect;
+        // kDebug();
+        if (m_d->mirrorMode){
+            m_d->canvasWidget->widget()->update();
+        }else
         if (!vRect.isEmpty()) {
-            vRect.translate(m_d->canvasWidget->documentOrigin());
+            vRect.translate( m_d->canvasWidget->documentOrigin());
             m_d->canvasWidget->widget()->update(vRect);
-            //m_d->canvasWidget->widget()->update();
         }
     }
 }
@@ -532,5 +550,12 @@ bool KisCanvas2::handlePopupPaletteIsVisible(KoPointerEvent* e)
     }
     return false;
 }
+
+void KisCanvas2::mirrorCanvas(bool enable)
+{
+    m_d->mirrorMode = enable;
+    updateCanvas();
+}
+
 
 #include "kis_canvas2.moc"

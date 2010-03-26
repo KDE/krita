@@ -212,9 +212,19 @@ void KisCanvasWidgetBase::adjustOrigin()
 
 QPointF KisCanvasWidgetBase::widgetToDocument(const QPointF& p) const
 {
-    return m_d->viewConverter->viewToDocument(widgetToView(p + m_d->documentOffset));
+    if (m_d->canvas->isCanvasMirrored())
+    {   
+        return mirror(m_d->viewConverter->viewToDocument(widgetToView(p + m_d->documentOffset)));
+    }else{
+        return m_d->viewConverter->viewToDocument(widgetToView(p + m_d->documentOffset));
+    }
 }
 
+QPointF KisCanvasWidgetBase::mirror(const QPointF& pos) const
+{
+    QSizeF imageSize = m_d->viewConverter->viewToDocument(documentSize());
+    return QPointF(imageSize.width() - pos.x(), pos.y() );
+}
 
 QPointF KisCanvasWidgetBase::mouseEventWidgetToDocument(const QPoint& mousePosition) const
 {

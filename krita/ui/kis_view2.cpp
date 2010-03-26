@@ -163,6 +163,7 @@ public:
     KisStatusBar * statusBar;
     KAction * totalRefresh;
     KAction* toggleDockers;
+    KAction* mirrorCanvas;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisNodeManager * nodeManager;
@@ -191,8 +192,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
         m_d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
         m_d->toggleDockers->setChecked(true);
         actionCollection()->addAction("toggledockers", m_d->toggleDockers);
-
-
+        
         m_d->toggleDockers->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
         connect(m_d->toggleDockers, SIGNAL(toggled(bool)), shell(), SLOT(toggleDockersVisibility(bool)));
     } else {
@@ -235,7 +235,13 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     createManagers();
     createActions();
 
-
+    m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
+    m_d->mirrorCanvas->setChecked(false);
+    actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
+    
+    m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvas, SLOT(mirrorCanvas(bool)));
+    
     if (shell())
     {
         KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));

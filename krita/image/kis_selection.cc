@@ -52,8 +52,8 @@ struct KisSelection::Private {
     KisSelectionComponent* shapeSelection;
 };
 
-KisSelection::KisSelection(KisPaintDeviceSP dev)
-        : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())
+KisSelection::KisSelection(KisPaintDeviceSP dev, KisDefaultBounds defaultBounds)
+        : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
         , m_d(new Private)
 {
     Q_ASSERT(dev);
@@ -69,8 +69,8 @@ KisSelection::KisSelection(KisPaintDeviceSP dev)
 }
 
 
-KisSelection::KisSelection(KisPaintDeviceSP parent, KisMaskSP mask)
-        : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())
+KisSelection::KisSelection(KisPaintDeviceSP parent, KisMaskSP mask, KisDefaultBounds defaultBounds)
+        : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
         , m_d(new Private)
 {
     m_d->parentPaintDevice = parent;
@@ -191,46 +191,18 @@ bool KisSelection::isProbablyTotallyUnselected(const QRect & r) const
 QRect KisSelection::selectedRect() const
 {
     if (*(m_datamanager->defaultPixel()) == MIN_SELECTED) {
-        if (m_d->parentPaintDevice) {
-            // The selected exact rect is the area of this selection that overlaps
-            // with the parent paint device.
-            return m_d->parentPaintDevice->extent().intersected(extent());
-        } else {
-            return extent();
-        }
+        return extent().intersected(defaultBounds().bounds());
     } else {
-        if (m_d->parentPaintDevice) {
-            // By default all pixels are selected, to the size of the parent paint device.
-            return m_d->parentPaintDevice->extent();
-        } else {
-            // By default all pixels are selected; no matter how many pixels are
-            // marked as deselected, there are always by-default-selected pixels
-            // around the deselected pixels.
-            return QRect(0, 0, qint32_MAX, qint32_MAX);
-        }
+        return defaultBounds().bounds();
     }
 }
 
 QRect KisSelection::selectedExactRect() const
 {
     if (*(m_datamanager->defaultPixel()) == MIN_SELECTED) {
-        if (m_d->parentPaintDevice) {
-            // The selected exact rect is the area of this selection that overlaps
-            // with the parent paint device.
-            return m_d->parentPaintDevice->exactBounds().intersected(exactBounds());
-        } else {
-            return exactBounds();
-        }
+        return exactBounds().intersected(defaultBounds().bounds());
     } else {
-        if (m_d->parentPaintDevice) {
-            // By default all pixels are selected, to the size of the parent paint device.
-            return m_d->parentPaintDevice->exactBounds();
-        } else {
-            // By default all pixels are selected; no matter how many pixels are
-            // marked as deselected, there are always by-default-selected pixels
-            // around the deselected pixels.
-            return QRect(0, 0, qint32_MAX, qint32_MAX);
-        }
+        return defaultBounds().bounds();
     }
 }
 
@@ -289,9 +261,9 @@ KisPixelSelectionSP KisSelection::getOrCreatePixelSelection()
     if (!m_d->hasPixelSelection) {
         KisPixelSelectionSP pixelSelection;
         if (m_d->parentPaintDevice)
-            pixelSelection = new KisPixelSelection(m_d->parentPaintDevice);
+            pixelSelection = new KisPixelSelection(m_d->parentPaintDevice, defaultBounds());
         else
-            pixelSelection = new KisPixelSelection();
+            pixelSelection = new KisPixelSelection(defaultBounds());
         setPixelSelection(pixelSelection);
     }
     // Share the datamanager unless there's a shape selection
@@ -373,5 +345,13 @@ void KisSelection::setVisible(bool visible)
 bool KisSelection::isVisible()
 {
     return m_d->isVisible;
+}
+
+void KisSelection::setDefaultBounds(KisDefaultBounds bounds)
+{
+    KisPaintDevice::setDefaultBounds(bounds);
+    if(m_d->hasPixelSelection) {
+        m_d->pixelSelection->setDefaultBounds(bounds);
+    }
 }
 

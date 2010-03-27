@@ -114,7 +114,12 @@ public:
      * set the default bounds for the paint device when
      * the default pixel in not completely transarent
      */
-    void setDefaultBounds(KisDefaultBounds bounds);
+    virtual void setDefaultBounds(KisDefaultBounds bounds);
+    
+     /**
+     * the default bounds rect of the paint device
+     */
+    KisDefaultBounds defaultBounds() const;
 
     /**
      * Moves the device to these new coordinates (so no incremental move or so)

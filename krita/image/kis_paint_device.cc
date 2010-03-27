@@ -215,6 +215,11 @@ void KisPaintDevice::setDefaultBounds(KisDefaultBounds defaultBounds)
     m_d->defaultBounds = defaultBounds;
 }
 
+KisDefaultBounds KisPaintDevice::defaultBounds() const
+{
+    return m_d->defaultBounds;
+}
+
 void KisPaintDevice::move(qint32 x, qint32 y)
 {
     QRect dirtyRegion = extent();

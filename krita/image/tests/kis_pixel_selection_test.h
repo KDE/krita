@@ -40,7 +40,7 @@ private slots:
     void testIntersectSelection();
     void testTotally();
     void testUpdateProjection();
-    void testExactRectWithParent();
+    void testExactRectWithImage();
 };
 
 #endif

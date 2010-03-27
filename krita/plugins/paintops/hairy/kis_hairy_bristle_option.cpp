@@ -27,13 +27,13 @@ public:
             : QWidget(parent) {
         setupUi(this);
         
-        rndBox->setRange(-100.0, 100.0, 2);
+        rndBox->setRange(-10.0, 10.0, 2);
         rndBox->setValue(2.0);
 
-        scaleBox->setRange(-100.0, 100.0, 2);
+        scaleBox->setRange(-10.0, 10.0, 2);
         scaleBox->setValue(2.0);
 
-        shearBox->setRange(-10.0, 10.0, 2);
+        shearBox->setRange(-2.0, 2.0, 2);
         shearBox->setValue(0.0);
 
         densityBox->setRange(0.0, 100.0, 0);

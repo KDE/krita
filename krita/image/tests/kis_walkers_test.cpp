@@ -74,10 +74,25 @@ protected:
 };
 
 /************** Debug And Verify Code *******************************/
-void reportStartWith(QString nodeName)
+
+struct UpdateTestJob {
+    QString updateAreaName;
+    KisNodeSP startNode;
+    QRect updateRect;
+
+    QString referenceString;
+    QRect accessRect;
+    bool changeRectVaries;
+    bool needRectVaries;
+};
+
+void reportStartWith(QString nodeName, QRect rect = QRect())
 {
     qDebug();
-    qDebug() << "Start with:" << nodeName;
+    if(!rect.isEmpty())
+        qDebug() << "Start with:" << nodeName << rect;
+    else
+        qDebug() << "Start with:" << nodeName;
 }
 
 QString nodeTypeString(KisMergeWalker::NodePosition position)
@@ -134,6 +149,17 @@ QString nodeTypePostfix(KisMergeWalker::NodePosition position)
     return string;
 }
 
+void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, struct UpdateTestJob &job)
+{
+    QStringList list;
+    if(!job.referenceString.isEmpty()) {
+        list = job.referenceString.split(",");
+    }
+
+    verifyResult(walker, list, job.accessRect,
+                 job.changeRectVaries, job.needRectVaries);
+}
+
 void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList reference,
                                   QRect accessRect, bool changeRectVaries,
                                   bool needRectVaries)
@@ -142,7 +168,8 @@ void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList refere
     QStringList::const_iterator iter = reference.constBegin();
 
     if(reference.size() != list.size()) {
-        qDebug() << "*** Seems like the walker returned stack of wrong size";
+        qDebug() << "*** Seems like the walker returned stack of wrong size"
+                 << "( ref:" << reference.size() << "act:" << list.size() << ")";
         qDebug() << "*** We are going to crash soon... just wait...";
     }
 
@@ -535,6 +562,160 @@ void KisWalkersTest::testMasksVisiting()
         reportStartWith("tmask");
         twalker.startTrip(transparencyMask);
         QCOMPARE(twalker.popResult(), orderList);
+    }
+}
+
+    /*
+      +----------+
+      |root      |
+      | paint 2  |
+      | paint 1  |
+      |  fmask2  |
+      |  tmask   |
+      |  fmask1  |
+      +----------+
+     */
+
+void KisWalkersTest::testMasksOverlapping()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
+
+    image->addNode(paintLayer1, image->rootLayer());
+    image->addNode(paintLayer2, image->rootLayer());
+
+    KisFilterMaskSP filterMask1 = new KisFilterMask();
+    KisFilterMaskSP filterMask2 = new KisFilterMask();
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+
+    KisFilterSP blurFilter = KisFilterRegistry::instance()->value("blur");
+    KisFilterSP invertFilter = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT(blurFilter);
+    Q_ASSERT(invertFilter);
+    KisFilterConfiguration *blurConfiguration = blurFilter->defaultConfiguration(0);
+    KisFilterConfiguration *invertConfiguration = invertFilter->defaultConfiguration(0);
+
+    filterMask1->setFilter(invertConfiguration);
+    filterMask2->setFilter(blurConfiguration);
+
+    QRect selection1(0, 0, 128, 128);
+    QRect selection2(128, 0, 128, 128);
+    QRect selection3(0, 64, 256, 128);
+
+    filterMask1->select(selection1, MAX_SELECTED);
+    transparencyMask->select(selection2, MAX_SELECTED);
+    filterMask2->select(selection3, MAX_SELECTED);
+
+    image->addNode(filterMask1, paintLayer1);
+    image->addNode(transparencyMask, paintLayer1);
+    image->addNode(filterMask2, paintLayer1);
+
+    // Empty rect to show we don't need any cropping
+    QRect cropRect;
+
+    QRect IMRect(10,10,50,50);
+    QRect TMRect(135,10,40,40);
+    QRect IMTMRect(10,10,256,40);
+
+    QList<UpdateTestJob> updateList;
+
+    {
+        UpdateTestJob job = {"IM", paintLayer1, IMRect,
+                               "",
+                               QRect(0,0,0,0), true, false};
+        updateList.append(job);
+    }
+
+    {
+        UpdateTestJob job = {"IM", filterMask1, IMRect,
+                             "",
+                             QRect(0,0,0,0), false, false};
+        updateList.append(job);
+    }
+
+    {
+        UpdateTestJob job = {"IM", transparencyMask, IMRect,
+                             "root,paint2,paint1",
+                             QRect(5,10,60,55), false, false};
+        updateList.append(job);
+    }
+
+    {
+        UpdateTestJob job = {"IM", filterMask2, IMRect,
+                             "root,paint2,paint1",
+                             IMRect, false, false};
+        updateList.append(job);
+    }
+
+    /******* Dirty rect: transparency mask *********/
+
+    {
+        UpdateTestJob job = {"TM", paintLayer1, TMRect,
+                             "root,paint2,paint1",
+                             TMRect, false, false};
+        updateList.append(job);
+    }
+
+    {
+        UpdateTestJob job = {"TM", filterMask1, TMRect,
+                             "root,paint2,paint1",
+                             TMRect, false, false};
+        updateList.append(job);
+    }
+
+    {
+        UpdateTestJob job = {"TM", transparencyMask, TMRect,
+                             "root,paint2,paint1",
+                             TMRect, false, false};
+        updateList.append(job);
+    }
+
+    {
+        UpdateTestJob job = {"TM", filterMask2, TMRect,
+                             "root,paint2,paint1",
+                             TMRect, false, false};
+        updateList.append(job);
+    }
+
+    /******* Dirty rect: invert + transparency mask *********/
+
+    {
+        UpdateTestJob job = {"IMTM", paintLayer1, IMTMRect,
+                             "root,paint2,paint1",
+                             IMTMRect & selection2, true, false};
+        updateList.append(job);
+    }
+
+    {
+        UpdateTestJob job = {"IMTM", filterMask1, IMTMRect,
+                             "root,paint2,paint1",
+                             IMTMRect & selection2, true, false};
+        updateList.append(job);
+    }
+
+    {
+        UpdateTestJob job = {"IMTM", transparencyMask, IMTMRect,
+                             "root,paint2,paint1",
+                             IMTMRect, false, false};
+        updateList.append(job);
+    }
+
+    {
+        UpdateTestJob job = {"IMTM", filterMask2, IMTMRect,
+                             "root,paint2,paint1",
+                             IMTMRect, false, false};
+        updateList.append(job);
+    }
+
+    foreach(UpdateTestJob job, updateList) {
+        KisMergeWalker walker(cropRect);
+        reportStartWith(job.startNode->name(), job.updateRect);
+        qDebug() << "Area:" << job.updateAreaName;
+        walker.collectRects(job.startNode, job.updateRect);
+        verifyResult(walker, job);
     }
 }
 

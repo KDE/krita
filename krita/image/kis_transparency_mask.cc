@@ -74,20 +74,18 @@ QRect KisTransparencyMask::exactBounds() const
 QRect KisTransparencyMask::changeRect(const QRect &rect) const
 {
     /**
-     * Selection on transparency masks have special meaning:
-     * They do not crop change area, they crop need area.
-     * It doesn't need any area outside a selection
+     * Selection on transparency masks have no special meaning:
+     * They do crop both: change and need area
      */
-    return rect;
+    return KisMask::changeRect(rect);
 }
 
 QRect KisTransparencyMask::needRect(const QRect &rect, PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
     /**
-     * Selection on transparency masks have special meaning:
-     * They do not crop change area, they crop need area.
-     * It doesn't need any area outside a selection
+     * Selection on transparency masks have no special meaning:
+     * They do crop both: change and need area
      */
     return KisMask::needRect(rect);
 }

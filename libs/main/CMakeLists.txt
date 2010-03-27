@@ -166,6 +166,7 @@ install( FILES
     KoDocument.h
     KoDocumentEntry.h
     KoDocumentInfo.h
+    KoDocumentSectionModel.h
     KoEmbeddingFilter.h
     KoFactory.h
     KoFilter.h
@@ -175,6 +176,8 @@ install( FILES
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h
+    KoProgressUpdater.h
+    KoProgressProxy.h
     KoVersionDialog.h
     KoView.h
     KoViewAdaptor.h

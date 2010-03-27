@@ -139,6 +139,9 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 
         m_d->selection->updateProjection(rc);
 
+        if(!m_d->selection->selectedRect().intersects(rc))
+            return;
+
         KisPaintDeviceSP cacheDevice =
             new KisPaintDevice(projection->colorSpace());
 

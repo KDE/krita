@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Dodge and Burn Filter
+Name[da]=Undvig og brænd-filter
 Name[en_GB]=Dodge and Burn Filter
 Name[et]=Helendamis- ja tumendamisfilter
 Name[nb]=Skygge og belys-filter
@@ -12,6 +13,7 @@ Name[uk]=Фільтр комбінування з вигоранням
 Name[x-test]=xxDodge and Burn Filterxx
 Name[zh_TW]=曝光過濾器
 Comment=Dodge and Burn Filter
+Comment[da]=Undvig og brænd-filter
 Comment[en_GB]=Dodge and Burn Filter
 Comment[et]=Helendamis- ja tumendamisfilter
 Comment[nb]=Skygge og belys-filter

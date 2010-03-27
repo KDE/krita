@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Shiva Kernel Language Support For Filters
+Name[da]=Sprogunderstøttelse af Shiva-kerne til filtre
 Name[en_GB]=Shiva Kernel Language Support For Filters
 Name[et]=Shiva kernelikeele toetus filtrites
 Name[nb]=Shiva-kjernespråkstøtte for fltre
@@ -12,6 +13,7 @@ Name[uk]=Підтримка мови ядра Shiva для фільтрів
 Name[x-test]=xxShiva Kernel Language Support For Filtersxx
 Name[zh_TW]=過濾器使用之 Shiva 核心語言支援
 Comment=Shiva Kernel Language Support For Filters
+Comment[da]=Sprogunderstøttelse af Shiva-kerne til filtre
 Comment[en_GB]=Shiva Kernel Language Support For Filters
 Comment[et]=Shiva kernelikeele toetus filtrites
 Comment[nb]=Shiva-kjernespråkstøtte for fltre

@@ -1,9 +1,9 @@
-    /*
+/*
  *  kis_tool_freehand.cc - part of Krita
  *
  *  Copyright (c) 2003-2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
- *  Copyright (c) 2007-2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007,2008,2010 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -184,7 +184,6 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
                                          e->pressure(), e->xTilt(), e->yTilt(),
                                          KisVector2D::Zero(),
                                          e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed());
-            paintAt(m_previousPaintInformation);
         } else if (m_mode == PAINT && (e->button() == Qt::RightButton || e->button() == Qt::MidButton)) {
             // end painting, if calling the menu or the pop up palette. otherwise there is weird behaviour
             endPaint();
@@ -320,6 +319,10 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
     }
     switch (m_mode) {
     case PAINT:
+        if (!m_hasPaintAtLeastOnce)
+        {
+            paintAt(m_previousPaintInformation);
+        }
         endPaint();
         break;
     case PAN:
@@ -392,7 +395,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
         m_target = device;
     }
     m_painter = new KisPainter(m_target, currentSelection());
-
+    m_hasPaintAtLeastOnce = false;
     m_source = device;
     m_painter->beginTransaction(m_transactionText);
 
@@ -504,6 +507,7 @@ void KisToolFreehand::endPaint()
 
 void KisToolFreehand::paintAt(const KisPaintInformation &pi)
 {
+    m_hasPaintAtLeastOnce = true;
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
     queuePaintJob(new FreehandPaintAtJob(this, m_painter, pi, previousJob), previousJob);
     m_pathPaintAction->addPoint(pi);
@@ -512,6 +516,7 @@ void KisToolFreehand::paintAt(const KisPaintInformation &pi)
 void KisToolFreehand::paintLine(const KisPaintInformation &pi1,
                                 const KisPaintInformation &pi2)
 {
+    m_hasPaintAtLeastOnce = true;
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
     queuePaintJob(new FreehandPaintLineJob(this, m_painter, pi1, pi2, previousJob), previousJob);
     m_pathPaintAction->addLine(pi1, pi2);
@@ -522,6 +527,7 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
                                        const QPointF &control2,
                                        const KisPaintInformation &pi2)
 {
+    m_hasPaintAtLeastOnce = true;
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
     queuePaintJob(new FreehandPaintBezierJob(this, m_painter, pi1, control1, control2, pi2, previousJob), previousJob);
     m_pathPaintAction->addCurve(pi1, control1, control2, pi2);

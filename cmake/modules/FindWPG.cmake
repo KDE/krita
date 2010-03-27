@@ -17,13 +17,25 @@ IF (LIBWPG_INCLUDE_DIR AND LIBWPG_LIBRARIES)
 ELSE (LIBWPG_INCLUDE_DIR AND LIBWPG_LIBRARIES)
 
   IF (NOT WIN32)
-    INCLUDE(FindPkgConfig)
-    pkg_check_modules(LIBWPG libwpg-0.1)
+    INCLUDE(UsePkgConfig)
+    PKGCONFIG(libwpg-0.1 _LibWpgIncDir _LibWpgLinkDir _LibWpgLinkFlags _LibWpgCflags)
+    SET(LIBWPG_DEFINITIONS ${_LibWpgCflags})
   ENDIF (NOT WIN32)
+  
+  FIND_PATH(LIBWPG_INCLUDE_DIR libwpg-0.1/libwpg/libwpg.h
+    PATHS
+    ${_LibWpgIncDir}
+    PATH_SUFFIXES libwpg
+    )
+
+  FIND_LIBRARY(LIBWPG_LIBRARIES NAMES wpg-0.1 libwpg-0.1
+    PATHS
+    ${_LibWpgLinkDir}
+    )
 
   FIND_LIBRARY(LIBWPG_STREAM_LIBRARIES NAMES wpg-stream-0.1 libwpg-stream-0.1
     PATHS
-    ${LIBWPG_LIBRARIES}
+    ${_LibWpgLinkDir}
     )
   
   IF (LIBWPG_INCLUDE_DIR AND LIBWPG_LIBRARIES)
@@ -36,7 +48,7 @@ ELSE (LIBWPG_INCLUDE_DIR AND LIBWPG_LIBRARIES)
     MESSAGE(STATUS "Found libwpg: ${LIBWPG_LIBRARIES}")
     MESSAGE("libwpg found " ${LIBWPG_FOUND})
     MESSAGE("libwpg include dir " ${LIBWPG_INCLUDE_DIR})
-    MESSAGE("libwpg lib dir " ${LIBWPG_LIBRARY_DIRS})
+    MESSAGE("libwpg lib dir " ${_LibWpgLinkDir})
     MESSAGE("libwpg library " ${LIBWPG_LIBRARIES})
     MESSAGE("libwpg stream library " ${LIBWPG_STREAM_LIBRARIES})
     MESSAGE("libwpg cflags " ${LIBWPG_DEFINITIONS})

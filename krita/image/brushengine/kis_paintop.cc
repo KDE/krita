@@ -173,7 +173,13 @@ KisDistanceInformation KisPaintOp::paintLine(const KisPaintInformation &pi1,
 
         double t = currentDist / endDist;
 
-        sp = paintAt(KisPaintInformation::mix(p, t, pi1, pi2, sp * dragVec));
+        KisVector2D movement;
+        if(sp > 0.01) {
+          movement = sp * dragVec;
+        } else {
+          movement = 0.01 * dragVec;
+        }
+        sp = paintAt(KisPaintInformation::mix(p, t, pi1, pi2, movement));
         currentDist += sp;
     }
 

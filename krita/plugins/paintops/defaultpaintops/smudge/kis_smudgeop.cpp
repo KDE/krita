@@ -120,10 +120,12 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
        TODO: what happened exactly in 1.6 (and should happen now) when the dab resizes halfway due to pressure?
     */
     int opacity = OPACITY_OPAQUE_U8;
+    int sw2 = sw / 2;
+    int sh2 = sh / 2;
     if (!m_firstRun) {
         opacity = m_rateOption.apply(opacity, info);
 
-        KisRectIterator it = m_srcdev->createRectIterator(0, 0, sw, sh);
+        KisRectIterator it = m_srcdev->createRectIterator(sw2, sh2, sw, sh);
         KoColorSpace* cs = m_srcdev->colorSpace();
         while (!it.isDone()) {
             cs->setOpacity(it.rawData(), quint8(cs->opacityF(it.rawData()) * opacity), 1);
@@ -137,11 +139,11 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
 
     KisPainter copyPainter(m_srcdev);
     copyPainter.setOpacity(opacity);
-    copyPainter.bitBlt(0, 0, device, pt.x(), pt.y(), sw, sh);
+    copyPainter.bitBlt(sw2, sh2, device, pt.x(), pt.y(), sw, sh);
     copyPainter.end();
 
-    qint32 sx = dstRect.x() - x;
-    qint32 sy = dstRect.y() - y;
+    qint32 sx = dstRect.x() - x + sw2;
+    qint32 sy = dstRect.y() - y + sh2;
     sw = dstRect.width();
     sh = dstRect.height();
 

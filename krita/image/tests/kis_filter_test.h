@@ -31,6 +31,7 @@ private slots:
     void testSingleThreaded();
     void testDifferentSrcAndDst();
     void testOldDataApiAfterCopy();
+    void testBlurFilterApplicationRect();
 };
 
 #endif

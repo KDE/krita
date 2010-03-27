@@ -132,6 +132,12 @@ bool KisFilterMask::accept(KisNodeVisitor &v)
  */
 QRect KisFilterMask::changeRect(const QRect& rect) const
 {
+    /**
+     * FIXME: This check of the emptiness should be done
+     * on the higher/lower level
+     */
+    if(rect.isEmpty()) return rect;
+
     QRect filteredRect = rect;
 
     if (m_d->filterConfig) {
@@ -144,7 +150,6 @@ QRect KisFilterMask::changeRect(const QRect& rect) const
      * KisMask::changeRect to crop actual change area in the end
      */
     filteredRect = KisMask::changeRect(filteredRect);
-
     /**
      * FIXME: Think over this solution
      * Union of rects means that changeRect returns NOT the rect
@@ -158,6 +163,12 @@ QRect KisFilterMask::changeRect(const QRect& rect) const
 QRect KisFilterMask::needRect(const QRect& rect, PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
+
+    /**
+     * FIXME: This check of the emptiness should be done
+     * on the higher/lower level
+     */
+    if(rect.isEmpty()) return rect;
     if (!m_d->filterConfig) return rect;
     KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
 

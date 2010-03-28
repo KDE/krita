@@ -26,9 +26,9 @@ ELSE (LIBWPG_INCLUDE_DIR AND LIBWPG_LIBRARIES)
     ${LIBWPG_LIBRARIES}
     )
 
-  FIND_PATH(LIBWPG_INCLUDE_DIR libwpg-0.1/libwpg/libwpg.h
+  FIND_PATH(LIBWPG_INCLUDE_DIR libwpg/libwpg.h
     PATHS
-    ${_LibWpgIncDir}
+    ${LIBWPG_INCLUDE_DIRS}
     PATH_SUFFIXES libwpg
     )
 

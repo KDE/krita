@@ -40,7 +40,7 @@ VectorShapeFactory::VectorShapeFactory(QObject *parent)
     setToolTip(i18n("A shape that shows a vector image"));
     setIcon( "vector-shape" );
     setOdfElementNames(KoXmlNS::draw, QStringList("image"));
-    setLoadingPriority(1);
+    setLoadingPriority(2);
 }
 
 KoShape *VectorShapeFactory::createDefaultShape(KoResourceManager *documentResources) const

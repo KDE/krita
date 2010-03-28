@@ -506,6 +506,13 @@ void Autocorrect::advancedAutocorrect()
     if (m_autocorrectEntries.contains(word)) {
         int pos = m_word.toLower().indexOf(word);
         QString replacement = m_autocorrectEntries.value(word);
+        // Keep capitalized words capitalized.
+        // (Necessary to make sure the first letters match???)
+        if (word.at(0) == replacement.at(0).toLower()) {
+            if (m_word.at(0).isUpper()) {
+                replacement[0] = replacement[0].toUpper();
+            }
+        }
         m_word.replace(pos, pos + word.length(), replacement);
 
         // We do replacement here, since the length of new word might be different from length of

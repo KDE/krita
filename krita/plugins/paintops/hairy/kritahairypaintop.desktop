@@ -4,6 +4,7 @@ Name[da]=Langhårede pensler
 Name[pt]=Pincéis peludos
 Name[sv]=Hårpenslar
 Name[uk]=Волохатий пензель
+Name[x-test]=xxHairy brushesxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritahairypaintop

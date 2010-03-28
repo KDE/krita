@@ -186,10 +186,13 @@ void KisFixedPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const qui
             dabPointer += pixelSize;
         }
     } else {
-        int y1 = y;
-        for (int row = y1; row < h; row++) {
-            memcpy(dabPointer, fillPixel, w * pixelSize);
-            dabPointer += (row * w * pixelSize) + (y1 * pixelSize);
+        int deviceWidth = bounds().width();
+        quint8* rowPointer = dabPointer + ((y - bounds().y()) * deviceWidth + (x - bounds().x())) * pixelSize;
+        for (int row = 0; row < h; row++) {
+            for (int col = 0; col < w; col++) {
+                memcpy(rowPointer + col * pixelSize , fillPixel, pixelSize);
+            }
+            rowPointer += deviceWidth * pixelSize;
         }
     }
 }

@@ -35,6 +35,7 @@
 #include "kis_painter.h"
 #include "kis_pixel_selection.h"
 #include "kis_fill_painter.h"
+#include <kis_fixed_paint_device.h>
 
 void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoColorSpace*cs))
 {
@@ -275,6 +276,34 @@ void KisPainterTest::testSelectionBltSelectionIrregular()
     QCOMPARE(dst->selectedExactRect(), QRect(10, 10, 10, 10));
     QCOMPARE(dst->selected(13, 13), MIN_SELECTED);
 }
+
+void KisPainterTest::testSelectionBitBltFixedSelection()
+{
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+
+    KisPaintDeviceSP src = new KisPaintDevice(cs);
+    KoColor c(Qt::red, cs);
+    c.setOpacity(quint8(128));
+    src->fill(0, 0, 20, 20, c.data());
+
+    QCOMPARE(src->exactBounds(), QRect(0, 0, 20, 20));
+
+    KisFixedPaintDeviceSP fixedSelection = new KisFixedPaintDevice(cs);
+    fixedSelection->setRect(QRect(0, 0, 20, 20));
+    fixedSelection->initialize();
+    KoColor fill(Qt::black, cs);
+    fixedSelection->fill(5, 5, 10, 10, fill.data());
+    fixedSelection->convertTo(KoColorSpaceRegistry::instance()->alpha8());
+
+    KisPainter painter(dst);
+
+    painter.bitBlt(0, 0, src, fixedSelection, 0, 0, 20, 20);
+    painter.end();
+
+    QCOMPARE(dst->exactBounds(), QRect(5, 5, 10, 10));
+}
+
 
 void KisPainterTest::testSimpleAlphaCopy()
 {

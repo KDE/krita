@@ -302,6 +302,14 @@ void KisPainterTest::testSelectionBitBltFixedSelection()
     painter.end();
 
     QCOMPARE(dst->exactBounds(), QRect(5, 5, 10, 10));
+    
+    dst->clear();
+    painter.begin(dst);
+    
+    painter.bitBlt(0, 0, src, fixedSelection, 0, 0, 10, 20);
+    painter.end();
+    
+    QCOMPARE(dst->exactBounds(), QRect(5, 5, 5, 10));
 }
 
 

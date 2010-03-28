@@ -41,6 +41,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoInputDevice.h>
+#include <KoColorSpaceRegistry.h>
 
 #include <kis_brush.h>
 #include <kis_datamanager.h>
@@ -282,16 +283,19 @@ double KisDuplicateOp::paintAt(const KisPaintInformation& info)
         delete [] matrix;
     }
 
-    KisFixedPaintDeviceSP fixedDab = new KisFixedPaintDevice(m_srcdev->colorSpace());
-    fixedDab->setRect(QRect(0, 0, sw, sh));
-    fixedDab->initialize();
+    KisFixedPaintDeviceSP dab = 0;
+    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
+        dab = brush->paintDevice(m_srcdev->colorSpace(), scale, 0.0, info, xFraction, yFraction);
+        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
+    } else {
+        dab = cachedDab();
+        KoColor color = painter()->paintColor();
+        color.convertTo(dab->colorSpace());
+        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
+        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
+    }
 
-    m_srcdev->readBytes(fixedDab->data(), fixedDab->bounds());
-    brush->mask(fixedDab, scale, scale, 0.0, info, xFraction, yFraction);
-    m_srcdev->writeBytes(fixedDab->data(), fixedDab->bounds());
-
-    QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
-    QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
+    QRect dstRect = QRect(x, y, dab->bounds().width(), dab->bounds().height());
 
     if (painter()->bounds().isValid()) {
         dstRect &= painter()->bounds();
@@ -304,7 +308,7 @@ double KisDuplicateOp::paintAt(const KisPaintInformation& info)
     sw = dstRect.width();
     sh = dstRect.height();
 
-    painter()->bitBlt(dstRect.x(), dstRect.y(), m_srcdev, sx, sy, sw, sh);
+    painter()->bitBlt(dstRect.x(), dstRect.y(), m_srcdev, dab, sx, sy, sw, sh);
 
     return spacing(scale);
 }

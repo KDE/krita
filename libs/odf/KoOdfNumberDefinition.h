@@ -37,8 +37,8 @@ class KOODF_EXPORT KoOdfNumberDefinition
 {
 public:
     explicit KoOdfNumberDefinition();
-    KoOdfNumberDefinition(const KoOdfNumberDefinition &other);
     ~KoOdfNumberDefinition();
+    KoOdfNumberDefinition(const KoOdfNumberDefinition &other);
     KoOdfNumberDefinition &operator=(const KoOdfNumberDefinition &other);
 
     /**

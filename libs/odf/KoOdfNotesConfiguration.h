@@ -55,6 +55,8 @@ public:
 
     KoOdfNotesConfiguration();
     ~KoOdfNotesConfiguration();
+    KoOdfNotesConfiguration(const KoOdfNotesConfiguration &other);
+    KoOdfNotesConfiguration &operator=(const KoOdfNotesConfiguration &other);
 
 
     /**

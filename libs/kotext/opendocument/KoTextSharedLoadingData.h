@@ -40,6 +40,7 @@ class KoSectionStyle;
 class KoStyleManager;
 class KoShape;
 class KoShapeLoadingContext;
+class KoOdfNotesConfiguration;
 
 #define KOTEXT_SHARED_LOADING_ID "KoTextSharedLoadingId"
 
@@ -143,6 +144,20 @@ public:
      */
     KoSectionStyle *sectionStyle(const QString &name, bool stylesDotXml);
 
+
+    /**
+     * Get the document-wide configuration for footnotes -- this contains information
+     * about numbering style, starting number etc.
+     */
+    KoOdfNotesConfiguration footnotesConfiguration() const;
+
+    /**
+     * Get the document-wide configuration for endnotes -- this contains information
+     * about numbering style, starting number etc.
+     */
+    KoOdfNotesConfiguration endnotesConfiguration() const;
+
+
 protected:
     /**
      * This method got called by kotext once a \a KoShape got inserted and an
@@ -200,6 +215,8 @@ private:
     QList<QPair<QString, KoSectionStyle *> > loadSectionStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     void addOutlineStyle(KoShapeLoadingContext & context, KoStyleManager *styleManager);
+
+    void addNotesConfiguration(KoShapeLoadingContext &context);
 
     class Private;
     Private * const d;

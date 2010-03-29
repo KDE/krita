@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
  */
 #include "KoOdfNotesConfiguration.h"
-
+#include <kdebug.h>
 #include <KoXmlNS.h>
 #include "KoUnit.h"
 
@@ -52,11 +52,46 @@ KoOdfNotesConfiguration::~KoOdfNotesConfiguration()
     delete d;
 }
 
+KoOdfNotesConfiguration::KoOdfNotesConfiguration(const KoOdfNotesConfiguration &other)
+    : d(new Private())
+{
+    d->noteClass = other.d->noteClass;
+    d->citationTextStyle = other.d->citationTextStyle;
+    d->citationBodyTextStyle = other.d->citationBodyTextStyle;
+    d->defaultNoteParagraphStyle = other.d->defaultNoteParagraphStyle;
+    d->masterPageName = other.d->masterPageName;
+    d->startValue = other.d->startValue;
+    d->numberFormat = other.d->numberFormat;
+    d->numberingScheme = other.d->numberingScheme;
+    d->footnotesPosition = other.d->footnotesPosition;
+    d->footnotesContinuationForward = other.d->footnotesContinuationForward;
+    d->footnotesContinuationBackward = other.d->footnotesContinuationBackward;
+
+}
+
+KoOdfNotesConfiguration &KoOdfNotesConfiguration::operator=(const KoOdfNotesConfiguration &other)
+{
+    d->noteClass = other.d->noteClass;
+    d->citationTextStyle = other.d->citationTextStyle;
+    d->citationBodyTextStyle = other.d->citationBodyTextStyle;
+    d->defaultNoteParagraphStyle = other.d->defaultNoteParagraphStyle;
+    d->masterPageName = other.d->masterPageName;
+    d->startValue = other.d->startValue;
+    d->numberFormat = other.d->numberFormat;
+    d->numberingScheme = other.d->numberingScheme;
+    d->footnotesPosition = other.d->footnotesPosition;
+    d->footnotesContinuationForward = other.d->footnotesContinuationForward;
+    d->footnotesContinuationBackward = other.d->footnotesContinuationBackward;
+
+    return *this;
+}
+
+
 void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
 {
-    KoXmlElement properties(KoXml::namedItemNS(element, KoXmlNS::text,
-                                                "notes-configuration"));
-    QString noteClass = properties.attributeNS(KoXmlNS::text, "note-class", "footnote");
+
+    QString noteClass = element.attributeNS(KoXmlNS::text, "note-class", "footnote");
+
     if (noteClass == "footnote") {
         d->noteClass = Footnote;
     }
@@ -64,15 +99,15 @@ void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
         d->noteClass = Endnote;
     }
 
-    d->citationTextStyle = properties.attributeNS(KoXmlNS::text, "citation-style-name", QString::null);
-    d->citationBodyTextStyle = properties.attributeNS(KoXmlNS::text, "citation-body-style-name", QString::null);
-    d->defaultNoteParagraphStyle = properties.attributeNS(KoXmlNS::text, "default-style-name", QString::null);
-    d->masterPageName = properties.attributeNS(KoXmlNS::text, "master-page-name", QString::null);
-    d->startValue = KoUnit::parseValue(properties.attributeNS(KoXmlNS::text, "start-value", "0"));
+    d->citationTextStyle = element.attributeNS(KoXmlNS::text, "citation-style-name", QString::null);
+    d->citationBodyTextStyle = element.attributeNS(KoXmlNS::text, "citation-body-style-name", QString::null);
+    d->defaultNoteParagraphStyle = element.attributeNS(KoXmlNS::text, "default-style-name", QString::null);
+    d->masterPageName = element.attributeNS(KoXmlNS::text, "master-page-name", QString::null);
+    d->startValue = KoUnit::parseValue(element.attributeNS(KoXmlNS::text, "start-value", "0"));
 
-    d->numberFormat.loadOdf(properties);
+    d->numberFormat.loadOdf(element);
 
-    QString numberingScheme = properties.attributeNS(KoXmlNS::text, "start-numbering-at", "document");
+    QString numberingScheme = element.attributeNS(KoXmlNS::text, "start-numbering-at", "document");
     if (numberingScheme == "document") {
         d->numberingScheme = BeginAtDocument;
     }
@@ -83,7 +118,7 @@ void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
         d->numberingScheme = BeginAtPage;
     }
 
-    QString footnotesPosition  = properties.attributeNS(KoXmlNS::text, "footnotes-position", "document");
+    QString footnotesPosition  = element.attributeNS(KoXmlNS::text, "footnotes-position", "document");
     if (footnotesPosition == "text") {
         d->footnotesPosition = Text;
     }
@@ -97,16 +132,15 @@ void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
         d->footnotesPosition = Document;
     }
 
-    d->footnotesContinuationForward = properties.attributeNS(KoXmlNS::text, "note-continuation-notice-forward", "...");
-    d->footnotesContinuationBackward = properties.attributeNS(KoXmlNS::text, "note-continuation-notice-backward", "...");
-
+    d->footnotesContinuationForward = element.attributeNS(KoXmlNS::text, "note-continuation-notice-forward", "...");
+    d->footnotesContinuationBackward = element.attributeNS(KoXmlNS::text, "note-continuation-notice-backward", "...");
 }
 
 void KoOdfNotesConfiguration::saveOdf(KoXmlWriter *writer) const
 {
     Q_UNUSED(writer);
 #ifdef __GNUC__
-    #warning Implement saving of text:notes-configuration
+#warning Implement saving of text:notes-configuration
 #endif
 
 }

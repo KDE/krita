@@ -110,7 +110,7 @@ void KisSimpleNoiseReducer::process(KisConstProcessingInformation srcInfo,
     KisConvolutionPainter painter(interm);
     painter.beginTransaction("bouuh");
     painter.applyMatrix(kernel, interm, srcTopLeft, dstTopLeft, size, BORDER_REPEAT);
-    painter.endTransaction();
+    delete painter.endTransaction();
     
     if (progressUpdater && progressUpdater->interrupted()) {
         return;

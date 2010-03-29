@@ -18,6 +18,7 @@
  */
 
 #include <qtest_kde.h>
+#include <QUndoCommand>
 
 #include "kis_benchmark_values.h"
 
@@ -77,7 +78,7 @@ void KisGradientBenchmark::benchmarkGradient()
         fillPainter.paintGradient(QPointF(0,0), QPointF(3000,3000), KisGradientPainter::GradientShapeBiLinear, KisGradientPainter::GradientRepeatNone, true, false, 0, 0, GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT);
 
         dirty = fillPainter.dirtyRegion();
-        fillPainter.endTransaction();
+        delete fillPainter.endTransaction();
     }
     
     // uncomment this to see the output

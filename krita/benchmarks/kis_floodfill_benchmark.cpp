@@ -18,6 +18,7 @@
 
 #include <qtest_kde.h>
 
+#include <QUndoCommand>
 #include "kis_benchmark_values.h"
 
 #include "kis_paint_device.h"
@@ -100,7 +101,7 @@ void KisFloodFillBenchmark::benchmarkFlood()
         fillPainter.fillColor(1, 1, false);
 
         dirty = fillPainter.dirtyRegion();
-        fillPainter.endTransaction();
+        delete fillPainter.endTransaction();
     }
     
     // uncomment this to see the output

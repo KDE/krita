@@ -51,5 +51,6 @@ void KisTextBrush::updateBrush()
     p.end();
     setImage(px.toImage());
     setValid(true);
+    resetBoundary();
 }
 

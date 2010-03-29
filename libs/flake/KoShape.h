@@ -249,7 +249,7 @@ public:
      *
      * The size is in shape coordinates.
      *
-     * @return the size of the shape as set by resize()
+     * @return the size of the shape as set by setSize()
      */
     virtual QSizeF size() const;
 

@@ -324,7 +324,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         // We did our best, but still have no profile: and since csf->grabColorSpace
         // needs the profile to find the colorspace, we have to give up.
         if (!p) {
-            return 0; // XXX: maybe return rgb8?
+            return 0;
         }
         const KoColorSpace *cs = csf->grabColorSpace(p);
         if (!cs) {

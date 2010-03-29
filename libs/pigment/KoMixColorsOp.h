@@ -37,6 +37,21 @@ public:
      * @param weights the coeffient of the source pixels
      * @param nColors the number of pixels in the colors array
      * @param dst the destination pixel
+     *
+     * @code
+     * quint8* colors[nColors];
+     * colors[0] = ptrToFirstPixel;
+     * colors[1] = ptrToSecondPixel;
+     * ...
+     * colors[nColors-1] = ptrToLastPixel;
+     * qint16 weights[nColors];
+     * weights[0] = firstWeight;
+     * weights[1] = secondWeight;
+     * ...
+     * weights[nColors-1] = lastWeight;
+     *
+     * mixColors(colors, weights, nColors, ptrToDestinationPixel);
+     * @endcode
      */
     virtual void mixColors(const quint8 * const*colors, const qint16 *weights, quint32 nColors, quint8 *dst) const = 0;
 };

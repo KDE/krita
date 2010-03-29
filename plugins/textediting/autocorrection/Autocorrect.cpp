@@ -510,18 +510,35 @@ void Autocorrect::advancedAutocorrect()
     int startPos = m_cursor.selectionStart();
     int length = m_word.length();
 
-    QString word = m_word.toLower().trimmed();
-    if (m_autocorrectEntries.contains(word)) {
-        int pos = m_word.toLower().indexOf(word);
-        QString replacement = m_autocorrectEntries.value(word);
+    QString trimmedWord = m_word.toLower().trimmed();
+    QString actualWord = trimmedWord;
+
+    // If the last char is punctuation, drop it for now
+    bool hasPunctuation = false;
+    QChar lastChar = actualWord.at(actualWord.length() - 1);
+    if (lastChar.unicode() == '.' || lastChar.unicode() == '.' || lastChar.unicode() == '?' ||
+          lastChar.unicode() == '!' || lastChar.unicode() == ':' || lastChar.unicode() == ';') {
+        hasPunctuation = true;
+        actualWord.chop(1);
+    }
+
+    if (m_autocorrectEntries.contains(actualWord)) {
+        int pos = m_word.toLower().indexOf(trimmedWord);
+        QString replacement = m_autocorrectEntries.value(actualWord);
         // Keep capitalized words capitalized.
         // (Necessary to make sure the first letters match???)
-        if (word.at(0) == replacement.at(0).toLower()) {
+        if (actualWord.at(0) == replacement.at(0).toLower()) {
             if (m_word.at(0).isUpper()) {
                 replacement[0] = replacement[0].toUpper();
             }
         }
-        m_word.replace(pos, pos + word.length(), replacement);
+
+        // If a punctuation mark was on the end originally, add it back on
+        if (hasPunctuation) {
+            replacement.append(lastChar);
+        }
+
+        m_word.replace(pos, pos + trimmedWord.length(), replacement);
 
         // We do replacement here, since the length of new word might be different from length of
         // the old world. Length difference might affect other type of autocorrection

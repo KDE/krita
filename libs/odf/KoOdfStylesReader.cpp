@@ -244,7 +244,6 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
         QPair<QString, KoOdfNumberStyles::NumericStyleFormat> numberStyle = KoOdfNumberStyles::loadOdfNumberStyle(e);
         d->dataFormats.insert(numberStyle.first, numberStyle.second);
     }
-    // The rest (text:*-configuration and text:outline-style) is to be done by the apps.
 }
 
 const KoXmlElement* KoOdfStylesReader::defaultStyle(const QString& family) const

@@ -241,7 +241,12 @@ install( FILES
     kis_convolution_kernel.h
     kis_convolution_painter.h
     kis_convolution_worker.h
+    kis_cubic_curve.h
     kis_debug.h
+    kis_default_bounds.h
+    kis_distance_information.h
+    filter/kis_filter.h
+    filter/kis_filter_registry.h
     kis_filter_strategy.h
     kis_generic_colorspace.h
     kis_global.h
@@ -249,6 +254,7 @@ install( FILES
     kis_iterator.h
     kis_iterators_pixel.h
     kis_iterator_pixel_trait.h
+    kis_mask.h
     kis_node.h
     kis_node_facade.h
     kis_node_graph_listener.h
@@ -260,6 +266,7 @@ install( FILES
     kis_iterators_pixel.h
     kis_transform_worker.h
     kis_serializable_configuration.h
+    kis_selection.h
     kis_shared.h
     kis_shared_data.h
     kis_shared_ptr.h

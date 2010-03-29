@@ -88,8 +88,10 @@ KisSelectionSP KisMask::selection() const
     if (!m_d->selection) {
         // FIXME: this violates the const
         m_d->selection = new KisSelection();
-        const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
-        m_d->selection->setDefaultBounds(KisDefaultBounds(parentLayer->image()));
+        if (parent()) {
+            const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
+            m_d->selection->setDefaultBounds(KisDefaultBounds(parentLayer->image()));
+        }
         /**
          * FIXME: Add default pixel choice
          * e.g. "Selected by default" or "Deselected by default"
@@ -110,8 +112,10 @@ KisPaintDeviceSP KisMask::paintDevice() const
 void KisMask::setSelection(KisSelectionSP selection)
 {
     m_d->selection = selection;
-    const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
-    m_d->selection->setDefaultBounds(KisDefaultBounds(parentLayer->image()));
+    if (parent()) {
+        const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
+        m_d->selection->setDefaultBounds(KisDefaultBounds(parentLayer->image()));
+    }
 }
 
 void KisMask::select(const QRect & rc, quint8 selectedness)
@@ -138,6 +142,9 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
     if (m_d->selection) {
 
         m_d->selection->updateProjection(rc);
+
+        if(!m_d->selection->selectedRect().intersects(rc))
+            return;
 
         KisPaintDeviceSP cacheDevice =
             new KisPaintDevice(projection->colorSpace());

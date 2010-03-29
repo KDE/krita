@@ -137,6 +137,7 @@ else(OPENGL_FOUND)
 endif(OPENGL_FOUND)
 
 configure_file(config-opengl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-opengl.h )
+install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/config-opengl.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
 
 ##

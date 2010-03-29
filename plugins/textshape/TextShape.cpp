@@ -251,6 +251,7 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
         bool moreText = false;
         qreal max = m_textShapeData->documentOffset() + size().height();
         qreal bottom = 0.0;
+        //TODO optimize this; don't iterate over the whole doc, use findBlock instead.
         QTextBlock block = m_textShapeData->document()->begin();
         while (block.isValid()) {
             QTextLayout *tl = block.layout();

@@ -204,11 +204,13 @@ private slots:
     void testFullRefreshVisiting();
     void testCachedVisiting();
     void testMasksVisiting();
+    void testMasksOverlapping();
 
 private:
     void verifyResult(KisBaseRectsWalker &walker, QStringList reference,
                       QRect accessRect, bool changeRectVaries,
                       bool needRectVaries);
+    void verifyResult(KisBaseRectsWalker &walker, struct UpdateTestJob &job);
 };
 
 #endif

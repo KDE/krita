@@ -212,6 +212,14 @@ protected:
              * ATTENTION: we miss the first mask
              */
 
+            /**
+             * FIXME: check visibility and other stuff like in KisLayer
+             */
+
+            /**
+             * FIXME: add setting changeRectVariesFlag
+             */
+
             do {
                 currentNode = currentNode->nextSibling();
             } while (currentNode && !isMask(currentNode));

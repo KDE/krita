@@ -88,7 +88,9 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
     // Determine whether we convolve border pixels, or not.
     switch (borderOp) {
     case BORDER_REPEAT: {
-        QRect dataRect = src->exactBounds();
+        const QRect boundsRect = src->exactBounds();
+        const QRect requestedRect = QRect(srcPos, areaSize);
+        QRect dataRect = requestedRect | boundsRect;
 
         /**
          * FIXME: Implementation can return empty destination device

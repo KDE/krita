@@ -75,10 +75,10 @@ public:
     */
     virtual QImage image() const;
 
-    virtual KisFixedPaintDeviceSP image(const KoColorSpace * colorSpace,
-                                        double scale, double angle,
-                                        const KisPaintInformation& info,
-                                        double subPixelX = 0, double subPixelY = 0) const;
+    virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
+                                              double scale, double angle,
+                                              const KisPaintInformation& info,
+                                              double subPixelX = 0, double subPixelY = 0) const;
 
     virtual bool useColorAsMask() const;
     virtual void setUseColorAsMask(bool useColorAsMask);

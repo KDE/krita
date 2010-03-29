@@ -231,7 +231,12 @@ QRect KisLayer::masksChangeRect(const QList<KisEffectMaskSP> &masks,
     rectVariesFlag = false;
 
     QRect prevChangeRect = requestedRect;
-    QRect changeRect;
+
+    /**
+     * We set default value of the change rect for the case
+     * when there is no mask at all
+     */
+    QRect changeRect = requestedRect;
 
     foreach(const KisEffectMaskSP& mask, masks) {
         changeRect = mask->changeRect(prevChangeRect);
@@ -290,8 +295,14 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
         bool changeRectVaries;
         bool needRectVaries;
 
-        changeRect = masksChangeRect(masks, requestedRect,
-                                     changeRectVaries);
+        /**
+         * FIXME: Assume that varying of the changeRect has already
+         * been taken into account while preparing walkers
+         */
+        changeRectVaries = false;
+        changeRect = requestedRect;
+        //changeRect = masksChangeRect(masks, requestedRect,
+        //                             changeRectVaries);
 
         needRect = masksNeedRect(masks, changeRect,
                                  applyRects, needRectVaries);
@@ -402,7 +413,7 @@ QRect KisLayer::changeRect(const QRect &rect) const
 
     changeRect = masksChangeRect(effectMasks(), rect, changeRectVaries);
 
-    return rect | changeRect;
+    return changeRect;
 }
 
 QImage KisLayer::createThumbnail(qint32 w, qint32 h)

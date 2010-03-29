@@ -247,9 +247,9 @@ install( FILES
 #    kis_itemchooser.h
 #    kis_label_zoom.h
 #    kis_move_event.h
-#    kis_multi_bool_filter_widget.h
-#    kis_multi_double_filter_widget.h
-#    kis_multi_integer_filter_widget.h
+   widgets/kis_multi_bool_filter_widget.h
+   widgets/kis_multi_double_filter_widget.h
+   widgets/kis_multi_integer_filter_widget.h
 #    kis_paintop_box.h
 #    kis_previewwidget.h
 #    kis_tool_non_paint.h

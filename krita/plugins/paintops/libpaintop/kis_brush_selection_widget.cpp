@@ -72,6 +72,8 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     m_brushesTab->addTab(m_textBrushWidget, i18n("Text Brush"));
 
+    connect(m_brushesTab, SIGNAL(currentChanged(int)), SIGNAL(sigBrushChanged()));
+
     setLayout(l);
 
     // m_brushChooser->itemChooser()->setCurrent(0);

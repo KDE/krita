@@ -321,12 +321,20 @@ bool Autocorrect::autoFractions()
     if (! m_autoFractions) return false;
 
     QString trimmed = m_word.trimmed();
+    if (trimmed.length() > 3) {
+        QChar x = trimmed.at(3);
+        if (!(x.unicode() == '.' || x.unicode() == '.' || x.unicode() == '?' || x.unicode() == '!'
+                || x.unicode() == ':' || x.unicode() == ';'))
+            return false;
+    } else if (trimmed.length() < 3) {
+        return false;
+    }
 
-    if (trimmed == QString("1/2"))
+    if (trimmed.startsWith("1/2"))
         m_word.replace(0, 3, QString::fromUtf8("½"));
-    else if (trimmed == QString("1/4"))
+    else if (trimmed.startsWith("1/4"))
         m_word.replace(0, 3, QString::fromUtf8("¼"));
-    else if (trimmed == QString("3/4"))
+    else if (trimmed.startsWith("3/4"))
         m_word.replace(0, 3, QString::fromUtf8("¾"));
     else
         return false;
@@ -506,6 +514,13 @@ void Autocorrect::advancedAutocorrect()
     if (m_autocorrectEntries.contains(word)) {
         int pos = m_word.toLower().indexOf(word);
         QString replacement = m_autocorrectEntries.value(word);
+        // Keep capitalized words capitalized.
+        // (Necessary to make sure the first letters match???)
+        if (word.at(0) == replacement.at(0).toLower()) {
+            if (m_word.at(0).isUpper()) {
+                replacement[0] = replacement[0].toUpper();
+            }
+        }
         m_word.replace(pos, pos + word.length(), replacement);
 
         // We do replacement here, since the length of new word might be different from length of

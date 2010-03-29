@@ -376,38 +376,40 @@ void KisTiledDataManager::setExtent(QRect newRect)
 
     KisTileSP tile;
     QRect tileRect;
-    KisTileHashTableIterator iter(m_hashTable);
+    {
+        KisTileHashTableIterator iter(m_hashTable);
 
-    while (!iter.isDone()) {
-        tile = iter.tile();
+        while (!iter.isDone()) {
+            tile = iter.tile();
 
-        tileRect = tile->extent();
-        if (newRect.contains(tileRect)) {
-            //do nothing
-            ++iter;
-        } else if (newRect.intersects(tileRect)) {
-            QRect intersection = newRect & tileRect;
-            intersection.translate(- tileRect.topLeft());
+            tileRect = tile->extent();
+            if (newRect.contains(tileRect)) {
+                //do nothing
+                ++iter;
+            } else if (newRect.intersects(tileRect)) {
+                QRect intersection = newRect & tileRect;
+                intersection.translate(- tileRect.topLeft());
 
-            const qint32 pixelSize = this->pixelSize();
+                const qint32 pixelSize = this->pixelSize();
 
-            tile->lockForWrite();
-            quint8* data = tile->data();
-            quint8* ptr;
+                tile->lockForWrite();
+                quint8* data = tile->data();
+                quint8* ptr;
 
-            /* FIXME: make it faster */
-            for (int y = 0; y < KisTileData::HEIGHT; y++) {
-                for (int x = 0; x < KisTileData::WIDTH; x++) {
-                    if (!intersection.contains(x, y)) {
-                        ptr = data + pixelSize * (y * KisTileData::WIDTH + x);
-                        memcpy(ptr, m_defaultPixel, pixelSize);
+                /* FIXME: make it faster */
+                for (int y = 0; y < KisTileData::HEIGHT; y++) {
+                    for (int x = 0; x < KisTileData::WIDTH; x++) {
+                        if (!intersection.contains(x, y)) {
+                            ptr = data + pixelSize * (y * KisTileData::WIDTH + x);
+                            memcpy(ptr, m_defaultPixel, pixelSize);
+                        }
                     }
                 }
+                tile->unlock();
+                ++iter;
+            } else {
+                iter.deleteCurrent();
             }
-            tile->unlock();
-            ++iter;
-        } else {
-            iter.deleteCurrent();
         }
     }
 

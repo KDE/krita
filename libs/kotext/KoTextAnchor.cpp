@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -52,7 +52,8 @@ public:
             verticalAlignment(KoTextAnchor::VerticalOffset),
             document(0),
             position(-1),
-            model(0)
+            model(0),
+            isPositionedInline(false)
     {
         Q_ASSERT(shape);
     }
@@ -132,6 +133,7 @@ public:
     QTextCharFormat format;
     KoTextShapeContainerModel *model;
     QPointF distance;
+    bool isPositionedInline;
 };
 
 KoTextAnchor::KoTextAnchor(KoShape *shape)
@@ -202,12 +204,18 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
     Q_UNUSED(pd);
     Q_D(KoTextAnchor);
 
-    if (horizontalAlignment() == HorizontalOffset && verticalAlignment() == VerticalOffset) {
+    // important detail; top of anchored shape is at the baseline.
+    QFontMetricsF fm(format.font());
+    if (d->horizontalAlignment == HorizontalOffset && d->verticalAlignment == VerticalOffset
+            && d->distance.x() == 0
+            && d->distance.y() < -fm.ascent() + d->shape->size().height() // not above line
+            && d->distance.y() < fm.descent()) { // not below line
+        d->isPositionedInline = true;
         object.setWidth(d->shape->size().width());
         object.setAscent(qMax((qreal) 0, -d->distance.y()));
         object.setDescent(qMax((qreal) 0, d->shape->size().height() + d->distance.y()));
     } else {
-        QFontMetricsF fm(format.font());
+        d->isPositionedInline = false;
         object.setWidth(0);
         object.setAscent(fm.ascent());
         object.setDescent(0);
@@ -404,3 +412,8 @@ bool KoTextAnchor::loadOdfFromShape(const KoXmlElement& element)
     return true;
 }
 
+bool KoTextAnchor::isPositionedInline() const
+{
+    Q_D(const KoTextAnchor);
+    return d->isPositionedInline;
+}

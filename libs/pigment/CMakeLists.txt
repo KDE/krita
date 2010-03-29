@@ -74,9 +74,11 @@ set(PIGMENT_INSTALL_FILES
         KoColorTransformationFactory.h
         KoColorTransformationFactoryRegistry.h
         KoCompositeOp.h
+        KoConvolutionOp.h
         KoFallBackColorTransformation.h
         KoIntegerMaths.h
         KoLabDarkenColorTransformation.h
+        KoMixColorsOp.h
         KoMixColorsOpImpl.h
         KoHistogramProducer.h
 )

@@ -136,6 +136,15 @@ public:
     /// Save the additional attributes.
     void saveOdf(KoShapeSavingContext &context);
 
+    /**
+     * Returns true if the anchored frame is positioned as a big character in the text layout
+     * or false when it will not take any space as an inline object.
+     * An anchor with HorizontalOffset/VerticalOffset as alignment and an offset() that
+     * keeps it inside the text size it is placed on will act as a big character in the
+     * text flow potentially changing the ascent/descent of the line.
+     */
+    bool isPositionedInline() const;
+
 private:
     Q_DECLARE_PRIVATE(KoTextAnchor)
 };

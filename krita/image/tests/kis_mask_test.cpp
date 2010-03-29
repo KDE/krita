@@ -19,15 +19,18 @@
 #include "kis_mask_test.h"
 
 #include <qtest_kde.h>
-
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 
 #include "kis_node.h"
 #include "kis_mask.h"
 #include "kis_selection.h"
 
+
 class TestMask : public KisMask
 {
 public:
+    using KisMask::apply;
 
     TestMask() : KisMask("TestMask") {
     }
@@ -60,6 +63,31 @@ void KisMaskTest::testSelection()
     QCOMPARE(mask.exactBounds(), QRect(0, 0, 1000, 1000));
     QCOMPARE(mask.extent(), QRect(0, 0, 1024, 1024));
 
+}
+
+void KisMaskTest::testCropUpdateBySelection()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    /**
+     * We do not use exact selection bounds for cropping,
+     * so the rects should be covered by different tiles
+     */
+    QRect selectionRect(10, 10, 20, 20);
+    QRect updateRect(64, 64, 20, 20);
+    KisPaintDeviceSP projection = new KisPaintDevice(cs);
+
+    TestMask mask;
+    mask.select(selectionRect, MAX_SELECTED);
+
+    mask.apply(projection, updateRect);
+    // Here we crash! :)
+
+    /**
+     * If you see a crash, it means KisMask tried to update
+     * the area that is outside its selection.
+     * Please consider fixing KisMask::apply() first
+     */
 }
 
 QTEST_KDEMAIN(KisMaskTest, GUI)

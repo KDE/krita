@@ -211,6 +211,54 @@ void KisFilterTest::testOldDataApiAfterCopy()
 
 }
 
+void KisFilterTest::testBlurFilterApplicationRect()
+{
+    QRect filterRect(10,10,40,40);
+    QRect src1Rect(5,5,50,50);
+    QRect src2Rect(0,0,60,60);
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    quint8 *whitePixel = new quint8[cs->pixelSize()];
+    cs->fromQColor(Qt::white, whitePixel);
+    cs->setOpacity(whitePixel, OPACITY_OPAQUE_U8, 1);
+
+    KisPaintDeviceSP src1 = new KisPaintDevice(cs);
+    src1->fill(src1Rect.left(),src1Rect.top(),src1Rect.width(),src1Rect.height(), whitePixel);
+
+    KisPaintDeviceSP src2 = new KisPaintDevice(cs);
+    src2->fill(src2Rect.left(),src2Rect.top(),src2Rect.width(),src2Rect.height(), whitePixel);
+
+    KisPaintDeviceSP dst1 = new KisPaintDevice(cs);
+    KisPaintDeviceSP dst2 = new KisPaintDevice(cs);
+
+    KisFilterSP f = KisFilterRegistry::instance()->value("blur");
+    Q_ASSERT(f);
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    Q_ASSERT(kfc);
+
+    KisConstProcessingInformation src1Cfg(src1,  filterRect.topLeft(), 0);
+    KisProcessingInformation dst1Cfg(dst1, filterRect.topLeft(), 0);
+    KisConstProcessingInformation src2Cfg(src2,  filterRect.topLeft(), 0);
+    KisProcessingInformation dst2Cfg(dst2, filterRect.topLeft(), 0);
+
+    f->process(src1Cfg, dst1Cfg, filterRect.size(), kfc);
+    f->process(src2Cfg, dst2Cfg, filterRect.size(), kfc);
+
+    KisPaintDeviceSP reference = new KisPaintDevice(cs);
+    reference->fill(filterRect.left(),filterRect.top(),filterRect.width(),filterRect.height(), whitePixel);
+
+    QImage refImage = reference->convertToQImage(0,10,10,40,40);
+    QImage dst1Image = dst1->convertToQImage(0,10,10,40,40);
+    QImage dst2Image = dst2->convertToQImage(0,10,10,40,40);
+
+    //dst1Image.save("DST1.png");
+    //dst2Image.save("DST2.png");
+
+    QPoint pt;
+    QVERIFY(TestUtil::compareQImages(pt, refImage, dst1Image));
+    QVERIFY(TestUtil::compareQImages(pt, refImage, dst2Image));
+}
+
 
 QTEST_KDEMAIN(KisFilterTest, GUI)
 #include "kis_filter_test.moc"

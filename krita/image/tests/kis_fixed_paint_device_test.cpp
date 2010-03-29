@@ -192,7 +192,26 @@ void KisFixedPaintDeviceTest::testFill()
     QVERIFY(dev->bounds() == QRect(0, 0, 100, 100));
     QVERIFY(cs->opacityU8(dev->data()) == 128);
     QVERIFY(memcmp(dev->data(), red, cs->pixelSize()) == 0);
+ 
+    //Compare fill will normal paint device
+    dev = new KisFixedPaintDevice(cs);
+    dev->setRect(QRect(0, 0, 150, 150));
+    dev->initialize();
+    dev->fill(50, 50, 50, 50, red);
+    
+    KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
+    dev2->fill(50, 50, 50, 50, red);
+    
+    QImage image = dev->convertToQImage(0);
+    QImage checkImage = dev2->convertToQImage(0, 0, 0, 150, 150);
+    QPoint errpoint;
 
+    if (!TestUtil::compareQImages(errpoint, image, checkImage)) {
+        image.save("kis_fixed_paint_device_filled_result.png");
+        checkImage.save("kis_fixed_paint_device_filled_result_expected.png");
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    } 
+    
     delete[] red;
 }
 

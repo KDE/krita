@@ -45,6 +45,7 @@ private slots:
     void testPaintDeviceBltSelection(); // Square selection
     void testSelectionBltSelection(); // Square selection
     void testSimpleAlphaCopy();
+    void testSelectionBitBltFixedSelection();
 
 };
 

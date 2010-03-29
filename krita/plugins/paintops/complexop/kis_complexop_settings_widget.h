@@ -39,10 +39,6 @@ public:
     virtual ~KisComplexOpSettingsWidget();
 
     KisPropertiesConfiguration* configuration() const;
-
-public:
-    KisBidirectionalMixingOptionWidget * m_bidiOption;
-
 };
 
 

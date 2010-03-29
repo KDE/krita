@@ -30,18 +30,15 @@
 KisChalkPaintOpSettingsWidget:: KisChalkPaintOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
 {
-    m_paintActionTypeOption = new KisPaintActionTypeOption();
     m_chalkOption =  new KisChalkOpOption();
 
-    addPaintOpOption(m_chalkOption);
+    addPaintOpOption(new KisChalkOpOption());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
-    addPaintOpOption(m_paintActionTypeOption);
+    addPaintOpOption(new KisPaintActionTypeOption());
 }
 
 KisChalkPaintOpSettingsWidget::~ KisChalkPaintOpSettingsWidget()
 {
-    delete m_chalkOption;
-    delete m_paintActionTypeOption;
 }
 
 KisPropertiesConfiguration*  KisChalkPaintOpSettingsWidget::configuration() const

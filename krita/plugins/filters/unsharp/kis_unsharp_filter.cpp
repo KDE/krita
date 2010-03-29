@@ -21,6 +21,7 @@
 #include "kis_unsharp_filter.h"
 #include <QBitArray>
 
+#include <QUndoCommand>
 
 #include <kcombobox.h>
 #include <knuminput.h>
@@ -108,7 +109,8 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     painter.setChannelFlags(channelFlags);
     painter.beginTransaction("convolution step");
     painter.applyMatrix(kernel, interm, src.topLeft(), dst.topLeft(), areaSize, BORDER_REPEAT);
-
+    painter.endTransaction();
+    
     if (progressUpdater && progressUpdater->interrupted()) {
         return;
     }

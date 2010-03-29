@@ -18,6 +18,8 @@
 
 #include "kis_simple_noise_reducer.h"
 
+#include <QUndoCommand>
+
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoProgressUpdater.h>
@@ -108,7 +110,8 @@ void KisSimpleNoiseReducer::process(KisConstProcessingInformation srcInfo,
     KisConvolutionPainter painter(interm);
     painter.beginTransaction("bouuh");
     painter.applyMatrix(kernel, interm, srcTopLeft, dstTopLeft, size, BORDER_REPEAT);
-
+    painter.endTransaction();
+    
     if (progressUpdater && progressUpdater->interrupted()) {
         return;
     }

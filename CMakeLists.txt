@@ -16,8 +16,8 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 
 # define the generic version of the KOffice libraries here
 # this makes it easy to advance it when the next KOffice release comes
-set(GENERIC_KOFFICE_LIB_VERSION "6.0.0")
-set(GENERIC_KOFFICE_LIB_SOVERSION "6")
+set(GENERIC_KOFFICE_LIB_VERSION "7.0.0")
+set(GENERIC_KOFFICE_LIB_SOVERSION "7")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
@@ -75,9 +75,16 @@ endif(KDE4_BUILD_TESTS)
 ## Look for KDE and Qt ##
 #########################
 ########################
-set(KDE_MIN_VERSION "4.1.0")
+set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
-find_package(Qt4 4.5.0 REQUIRED)
+
+option(FORCE_COMPILATION_WITH_QT45 "This option force KOffice to accept compilation with Qt4.5, but note that this is not supported by KOffice team" OFF)
+
+if(FORCE_COMPILATION_WITH_QT45)
+  find_package(Qt4 4.5.0 REQUIRED)
+else(FORCE_COMPILATION_WITH_QT45)
+  find_package(Qt4 4.6.0 REQUIRED)
+endif(FORCE_COMPILATION_WITH_QT45)
 
 include(KDE4Defaults)
 include(MacroLibrary)

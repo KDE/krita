@@ -33,11 +33,6 @@ public:
     virtual ~KisDynaPaintOpSettingsWidget();
 
     KisPropertiesConfiguration* configuration() const;
-
-public:
-    KisPaintActionTypeOption* m_paintActionTypeOption;
-    KisDynaOpOption* m_dynaOption;
-
 };
 
 #endif

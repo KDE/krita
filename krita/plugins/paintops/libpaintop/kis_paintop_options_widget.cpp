@@ -71,6 +71,7 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
 
 KisPaintOpOptionsWidget::~KisPaintOpOptionsWidget()
 {
+    qDeleteAll(m_d->paintOpOptions);
     delete m_d;
 }
 

@@ -31,23 +31,17 @@ KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget* parent)
         : KisBrushBasedPaintopOptionWidget(parent)
 {
     //m_hairyShapeOption = new KisHairyShapeOption();
-    m_hairyBristleOption = new KisHairyBristleOption();
-    m_hairyInkOption = new KisHairyInkOption();
 
     //addPaintOpOption(m_hairyShapeOption);
-    addPaintOpOption(m_hairyBristleOption);
-    addPaintOpOption(m_hairyInkOption);
+    addPaintOpOption(new KisHairyBristleOption());
+    addPaintOpOption(new KisHairyInkOption());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisPaintActionTypeOption());
 }
 
 KisHairyPaintOpSettingsWidget::~ KisHairyPaintOpSettingsWidget()
 {
-    //delete m_hairyShapeOption;
-    delete m_hairyBristleOption;
-    delete m_hairyInkOption;
 }
-
 
 KisPropertiesConfiguration*  KisHairyPaintOpSettingsWidget::configuration() const
 {

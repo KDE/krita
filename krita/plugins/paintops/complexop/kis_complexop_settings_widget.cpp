@@ -36,20 +36,17 @@ KisComplexOpSettingsWidget::KisComplexOpSettingsWidget(QWidget* parent)
         : KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("mixing brush option widget");
-
-    m_bidiOption = new KisBidirectionalMixingOptionWidget;
-
+    
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption()));
     addPaintOpOption(new KisPaintActionTypeOption());
-    addPaintOpOption(m_bidiOption);
+    addPaintOpOption(new KisBidirectionalMixingOptionWidget);
 
 }
 
 KisComplexOpSettingsWidget::~KisComplexOpSettingsWidget()
 {
-    delete m_bidiOption;
 }
 
 KisPropertiesConfiguration* KisComplexOpSettingsWidget::configuration() const

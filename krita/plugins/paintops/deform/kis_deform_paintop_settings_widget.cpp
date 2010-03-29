@@ -45,8 +45,6 @@ KisDeformPaintOpSettingsWidget::KisDeformPaintOpSettingsWidget(QWidget* parent)
 
 KisDeformPaintOpSettingsWidget::~ KisDeformPaintOpSettingsWidget()
 {
-    delete m_deformOption;
-    delete m_brushSizeOption;
 }
 
 

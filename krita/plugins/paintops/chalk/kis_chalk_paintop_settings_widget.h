@@ -41,7 +41,6 @@ public:
     void changePaintOpSize(qreal x, qreal y);
 
 public:
-    KisPaintActionTypeOption* m_paintActionTypeOption;
     KisChalkOpOption* m_chalkOption;
 };
 

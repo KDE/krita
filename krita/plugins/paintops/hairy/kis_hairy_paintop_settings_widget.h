@@ -36,11 +36,6 @@ public:
     virtual ~KisHairyPaintOpSettingsWidget();
 
     KisPropertiesConfiguration* configuration() const;
-
-public:
-    KisHairyShapeOption * m_hairyShapeOption;
-    KisHairyInkOption * m_hairyInkOption;
-    KisHairyBristleOption * m_hairyBristleOption;
 };
 
 #endif

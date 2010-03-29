@@ -44,7 +44,6 @@ KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
 
 KisDuplicateOpSettingsWidget::~KisDuplicateOpSettingsWidget()
 {
-    delete m_duplicateOption;
 }
 
 KisPropertiesConfiguration* KisDuplicateOpSettingsWidget::configuration() const

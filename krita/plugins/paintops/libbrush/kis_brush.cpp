@@ -722,7 +722,7 @@ QImage KisBrush::scaleImage(const KisScaledBrush *srcBrush, double scale, double
             QRgb topLeft = (leftX >= 0 && leftX < srcWidth && topY >= 0 && topY < srcHeight) ? srcPixel[leftX] : qRgba(0, 0, 0, 0);
             QRgb bottomLeft = (leftX >= 0 && leftX < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcPixelPlusOne[leftX] : qRgba(0, 0, 0, 0);
             QRgb topRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY >= 0 && topY < srcHeight) ? srcPixel[leftX + 1] : qRgba(0, 0, 0, 0);
-            QRgb bottomRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcPixel[leftX] : qRgba(0, 0, 0, 0);
+            QRgb bottomRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcPixelPlusOne[leftX + 1] : qRgba(0, 0, 0, 0);
 
             double a = 1 - xInterp;
             double b = 1 - yInterp;

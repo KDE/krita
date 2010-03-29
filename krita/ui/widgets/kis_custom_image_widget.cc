@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
+#include <QUndoCommand>
 
 #include <kcolorcombo.h>
 #include <kis_debug.h>
@@ -194,18 +195,17 @@ void KisCustomImageWidget::buttonClicked()
             painter.begin(layer->paintDevice());
             painter.beginTransaction("");
             painter.fillRect(0, 0, width, height, bgColor, OPACITY_OPAQUE_U8);
-            painter.end();
+            delete painter.endTransaction();
 
         }
         if (chkFromClipboard->isChecked()) {
             KisPaintDeviceSP clip = KisClipboard::instance()->clip(QPoint(0,0));
             if (clip) {
                 QRect r = clip->exactBounds();
-                KisPainter gc;
-                gc.begin(layer->paintDevice());
-                gc.setCompositeOp(COMPOSITE_COPY);
-                gc.bitBlt(0, 0, clip, r.x(), r.y(), r.width(), r.height());
-                gc.end();
+                KisPainter painter;
+                painter.begin(layer->paintDevice());
+                painter.setCompositeOp(COMPOSITE_COPY);
+                painter.bitBlt(0, 0, clip, r.x(), r.y(), r.width(), r.height());
             }
         }
         layer->setDirty(QRect(0, 0, width, height));

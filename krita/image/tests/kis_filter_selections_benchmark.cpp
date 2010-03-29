@@ -18,6 +18,8 @@
 
 #include "kis_filter_selections_benchmark.h"
 
+#include <QUndoCommand>
+
 #include "kis_painter.h"
 
 #include <qtest_kde.h>
@@ -250,10 +252,11 @@ void KisFilterSelectionsBenchmark::testBitBltWOSelections(int num)
         KisTransaction transac("", cacheDevice, 0);
         m_filter->process(src, dst, filterRect.size(), m_configuration, 0);
 
-        KisPainter gc(projection);
-        gc.beginTransaction("");
-        gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
-        gc.bitBlt(filterRect.topLeft(), cacheDevice, filterRect);
+        KisPainter painter(projection);
+        painter.beginTransaction("");
+        painter.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
+        painter.bitBlt(filterRect.topLeft(), cacheDevice, filterRect);
+        delete painter.endTransaction();
     }
     avTime = double(timer.elapsed()) / num;
 

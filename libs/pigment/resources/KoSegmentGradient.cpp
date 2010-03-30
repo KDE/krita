@@ -200,7 +200,7 @@ void KoSegmentGradient::colorAt(KoColor& dst, qreal t) const
 
 QGradient* KoSegmentGradient::toQGradient() const
 {
-    QGradient* gradient = new QLinearGradient();;
+    QGradient* gradient = new QLinearGradient();
 
     QColor color;
     foreach(KoGradientSegment* segment, m_segments) {

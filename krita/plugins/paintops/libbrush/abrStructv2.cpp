@@ -118,7 +118,7 @@ static QString p_untf(QDataStream &buf){
 static QString p_bool(QDataStream &buf){
     //# ord converts 1 byte number
     char byte;
-    buf.device()->getChar(&byte);;
+    buf.device()->getChar(&byte);
     if (byte) return QString("1");
     else return QString("0");
 }

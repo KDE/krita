@@ -180,7 +180,7 @@ bool KoColorSet::init()
 
         // Read columns
         if (lines[index].startsWith("Columns: ")) {
-            columns = lines[index].mid(strlen("Columns: ")).trimmed();;
+            columns = lines[index].mid(strlen("Columns: ")).trimmed();
             m_columns = columns.toInt();
             index = 3;
         }

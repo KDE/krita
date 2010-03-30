@@ -318,7 +318,7 @@ bool KoCtlColorProfile::Private::loadFromSource(KoCtlColorProfile* self)
                 colorDepthIDNumber = KoUniqueNumberForIdServer::instance()->numberForId(colorDepthID);
                 colorModelID = e.attribute("colorModel");
                 colorModelIDNumber = KoUniqueNumberForIdServer::instance()->numberForId(colorModelID);
-                dbgPigment << "colorModel = " << e.attribute("colorModel");;
+                dbgPigment << "colorModel = " << e.attribute("colorModel");
             } else if (e.tagName() == "program") {
                 QDomNode nCDATA = e.firstChild();
                 if (!nCDATA.isNull()) {

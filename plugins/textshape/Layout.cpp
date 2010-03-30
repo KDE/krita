@@ -279,7 +279,7 @@ bool Layout::addLine(QTextLine &line)
 
     // add linespacing
     if (! useFixedLineHeight) {
-        qreal linespacing = m_format.doubleProperty(KoParagraphStyle::LineSpacing);;
+        qreal linespacing = m_format.doubleProperty(KoParagraphStyle::LineSpacing);
         if (linespacing == 0.0) { // unset
             int percent = m_format.intProperty(KoParagraphStyle::PercentLineHeight);
             if (percent != 0)

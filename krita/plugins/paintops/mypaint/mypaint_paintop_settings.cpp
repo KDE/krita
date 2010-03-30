@@ -38,5 +38,5 @@ MyPaintSettings::MyPaintSettings()
 
 MyPaintBrushResource* MyPaintSettings::brush() const
 {
-    return m_options->brush();;
+    return m_options->brush();
 }

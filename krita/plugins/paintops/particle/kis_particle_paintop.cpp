@@ -49,7 +49,7 @@ KisParticlePaintOp::KisParticlePaintOp(const KisParticlePaintOpSettings *setting
     m_properties.iterations = settings->getInt(PARTICLE_ITERATIONS);
     m_properties.gravity = settings->getDouble(PARTICLE_GRAVITY);
     m_properties.weight = settings->getDouble(PARTICLE_WEIGHT);
-    m_properties.scale = QPointF(settings->getDouble(PARTICLE_SCALE_X),settings->getDouble(PARTICLE_SCALE_Y));;
+    m_properties.scale = QPointF(settings->getDouble(PARTICLE_SCALE_X),settings->getDouble(PARTICLE_SCALE_Y));
 
     m_particleBrush.setProperties( &m_properties );
     m_particleBrush.initParticles();

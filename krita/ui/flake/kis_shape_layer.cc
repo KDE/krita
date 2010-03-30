@@ -427,7 +427,7 @@ QUndoCommand* KisShapeLayer::transform(double  xscale, double  yscale, double  x
 
     Q_UNUSED(xshear);
     Q_UNUSED(yshear);
-    QPointF transF = m_d->converter->viewToDocument(QPoint(translatex, translatey));;
+    QPointF transF = m_d->converter->viewToDocument(QPoint(translatex, translatey));
     QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
     if(shapes.isEmpty())
         return 0;

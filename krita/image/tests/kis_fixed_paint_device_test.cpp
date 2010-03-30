@@ -183,7 +183,7 @@ void KisFixedPaintDeviceTest::testFill()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     quint8* red = new quint8[cs->pixelSize()];
-    memcpy(red, KoColor(Qt::red, cs).data(), cs->pixelSize());;
+    memcpy(red, KoColor(Qt::red, cs).data(), cs->pixelSize());
     cs->setOpacity(red, quint8(128), 1);
 
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);

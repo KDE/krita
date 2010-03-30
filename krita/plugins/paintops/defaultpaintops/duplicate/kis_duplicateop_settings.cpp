@@ -85,7 +85,7 @@ void KisDuplicateOpSettings::activate()
         options->m_duplicateOption->setHealing(false);
         options->m_duplicateOption->setPerspective(false);
     } else {
-        options->m_duplicateOption->setPerspective(false);;
+        options->m_duplicateOption->setPerspective(false);
     }
 }
 

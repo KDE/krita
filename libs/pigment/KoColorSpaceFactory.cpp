@@ -85,6 +85,7 @@ const KoColorProfile* KoColorSpaceFactory::colorProfile(const QByteArray& rawDat
 
 KoColorSpace* KoColorSpaceFactory::grabColorSpace(const KoColorProfile * profile)
 {
+    Q_ASSERT(profile);
     QList<KoColorSpace*>& csList = d->availableColorspaces[profile->name()];
     if (!csList.isEmpty()) {
         KoColorSpace* cs = csList.back();

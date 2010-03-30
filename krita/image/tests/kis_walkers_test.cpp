@@ -550,7 +550,7 @@ void KisWalkersTest::testMasksVisiting()
 
         reportStartWith("tmask");
         walker.collectRects(transparencyMask, testRect);
-        verifyResult(walker, orderList, accessRect, false, false);
+        verifyResult(walker, orderList, accessRect, true, false);
     }
 
     KisTestWalker twalker;
@@ -632,14 +632,14 @@ void KisWalkersTest::testMasksOverlapping()
     {
         UpdateTestJob job = {"IM", filterMask1, IMRect,
                              "",
-                             QRect(0,0,0,0), false, false};
+                             QRect(0,0,0,0), true, false};
         updateList.append(job);
     }
 
     {
         UpdateTestJob job = {"IM", transparencyMask, IMRect,
                              "root,paint2,paint1",
-                             QRect(5,10,60,55), false, false};
+                             QRect(5,10,60,55), true, false};
         updateList.append(job);
     }
 

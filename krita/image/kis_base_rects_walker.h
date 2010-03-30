@@ -216,16 +216,15 @@ protected:
              * FIXME: check visibility and other stuff like in KisLayer
              */
 
-            /**
-             * FIXME: add setting changeRectVariesFlag
-             */
-
             do {
                 currentNode = currentNode->nextSibling();
             } while (currentNode && !isMask(currentNode));
 
-            if(currentNode)
-                m_resultChangeRect = currentNode->changeRect(m_resultChangeRect);
+            if(currentNode) {
+                QRect changeRect = currentNode->changeRect(m_resultChangeRect);
+                m_changeRectVaries |= changeRect != m_resultChangeRect;
+                m_resultChangeRect = changeRect;
+            }
         }
     }
 

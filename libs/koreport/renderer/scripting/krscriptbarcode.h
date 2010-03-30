@@ -82,17 +82,17 @@ public slots:
 
 
     /**
-     * Get the control source (field name) of the barcode
-     * @return control source
+     * Get the data source (field name) of the barcode
+     * @return data source
      */
     QString source();
 
 
     /**
-     * Set the control source (field name) of the barcode
-     * @param controlsource
+     * Set the data source (field name) of the barcode
+     * @param dataSource
      */
-    void setSource(const QString&);
+    void setSource(const QString& dataSource);
 
 
     /**

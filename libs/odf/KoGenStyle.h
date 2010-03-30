@@ -3,6 +3,7 @@
    Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,7 +36,7 @@ class KoXmlWriter;
 /**
  * A generic style, i.e. basically a collection of properties and a name.
  * Instances of KoGenStyle can either be held in the KoGenStyles collection,
- * or created (e.g. on the stack) and given to KoGenStyles::lookup.
+ * or created (e.g. on the stack) and given to KoGenStyles::insert().
  *
  * @author David Faure <faure@kde.org>
  */
@@ -48,68 +49,90 @@ public:
      *       saving code in all applications.
      */
     enum Type {
-        StylePageLayout,             ///< style:page-layout as in odf 14.3 Page Layout
-        /* twelve style families
-           TODO:
-            - rename StyleUser to StyleParagraph
-            - rename StyleAuto to StyleParagraphAuto
-            - move the 'Auto' to the end for the table style families
-         */
-        StyleText,                   ///< style:style from family "text" as in odf 14.8.1 Text Styles (office:styles)
-        StyleTextAuto,               ///< style:style from family "text" as in odf 14.8.1 Text Styles (office:automatic-styles)
-        StyleUser,                   ///< style:style from family "paragraph" as in odf 14.1 Style Element (office:styles)
-        StyleAuto,                   ///< style:style from family "paragraph" as in odf 14.1 Style Element (office:automatic-styles)
-        StyleSection,                ///< style:style from family "section" as in odf 14.8.3 Section Styles (office:styles)
-        StyleSectionAuto,            ///< style:style from family "section" as in odf 14.8.3 Section Styles (office:automatic-styles)
-        StyleRuby,                   ///< style:style from family "ruby"
-        StyleRubyAuto,               ///< style:style from family "ruby"
-        StyleTable,                  ///< style:style from family "table" as in odf1.2 16.9 Table Formatting Properties (office:style)
-        StyleAutoTable,              ///< style:style from family "table" as in odf 15.8 Table Formatting Properties (office:automatic-styles)
-        StyleTableColumn,            ///< style:style from family "table-column" as in odf 15.9 Column Formatting Properties (office:style)
-        StyleAutoTableColumn,        ///< style:style from family "table-column" as in odf 15.9 Column Formatting Properties (office:automatic-styles)
-        StyleTableRow,               ///< style:style from family "table-row" as in odf 15.10 Table Row Formatting Properties (office:style)
-        StyleAutoTableRow,           ///< style:style from family "table-row" as in odf 15.10 Table Row Formatting Properties (office:automatic-styles)
-        StyleTableCell,              ///< style:style from family "table-cell" as in odf 15.11 Table Cell Formatting Properties (office:style)
-        StyleAutoTableCell,          ///< style:style from family "table-cell" as in odf 15.11 Table Cell Formatting Properties (office:automatic-styles)
-        StyleGraphic,                ///< style:style from family "graphic" as in 14.13.1 Graphic and Presentation Styles (office:automatic-styles)
-        StyleGraphicAuto,            ///< style:style from family "graphic" as in 14.13.1 Graphic and Presentation Styles (office:automatic-styles)
-        StylePresentation,           ///< style:style from family "presentation" as in 14.13.1 Graphic and Presentation Styles (office:automatic-styles)
-        StylePresentationAuto,       ///< style:style from family "presentation" as in 14.13.1 Graphic and Presentation Styles (office:automatic-styles)
-        StyleDrawingPage,            ///< style:style from family "drawing-page" as in odf 14.13.2 Drawing Page Style
-        StyleDrawingPageAuto,        ///< style:style from family "drawing-page" as in odf 14.13.2 Drawing Page Style
-        StyleChart,                  ///< style:style from family "chart"
-        StyleChartAuto,              ///< style:style from family "chart"
+        PageLayoutStyle,             ///< style:page-layout as in odf 14.3 Page Layout
+        TextStyle,                   ///< style:style from family "text" as in odf 14.8.1 Text Styles
+                                     ///<  (office:styles)
+        TextAutoStyle,               ///< style:style from family "text" as in odf 14.8.1 Text Styles
+                                     ///<  (office:automatic-styles)
+        ParagraphStyle,              ///< style:style from family "paragraph" as in odf 14.1 Style Element
+                                     ///<  (office:styles)
+        ParagraphAutoStyle,          ///< style:style from family "paragraph" as in odf 14.1 Style Element
+                                     ///<  (office:automatic-styles)
+        SectionStyle,                ///< style:style from family "section" as in odf 14.8.3 Section Styles
+                                     ///<  (office:styles)
+        SectionAutoStyle,            ///< style:style from family "section" as in odf 14.8.3 Section Styles
+                                     ///<  (office:automatic-styles)
+        RubyStyle,                   ///< style:style from family "ruby" as in odf 14.8.4 Ruby Style
+                                     ///<  (office:styles)
+        RubyAutoStyle,               ///< style:style from family "ruby" as in odf 14.8.4 Ruby Style
+                                     ///<  (office:automatic-styles)
+        TableStyle,                  ///< style:style from family "table" as in odf 14.12 Table Formatting
+                                     ///<  Properties (office:styles)
+        TableAutoStyle,              ///< style:style from family "table" as in odf 14.12 Table Formatting Properties
+                                     ///<  (office:automatic-styles)
+        TableColumnStyle,            ///< style:style from family "table-column" as in odf 15.9 Column Formatting
+                                     ///<  Properties (office:styles)
+        TableColumnAutoStyle,        ///< style:style from family "table-column" as in odf 15.9 Column Formatting
+                                     ///<  Properties (office:automatic-styles)
+        TableRowStyle,               ///< style:style from family "table-row" as in odf 15.10 Table Row Formatting
+                                     ///<  Properties (office:styles)
+        TableRowAutoStyle,           ///< style:style from family "table-row" as in odf 15.10 Table Row Formatting
+                                     ///<  Properties (office:automatic-styles)
+        TableCellStyle,              ///< style:style from family "table-cell" as in odf 15.11 Table Cell Formatting
+                                     ///<  Properties (office:styles)
+        TableCellAutoStyle,          ///< style:style from family "table-cell" as in odf 15.11 Table Cell Formatting
+                                     ///<  Properties (office:automatic-styles)
+        GraphicStyle,                ///< style:style from family "graphic" as in 14.13.1 Graphic and Presentation
+                                     ///<  Styles (office:automatic-styles)
+        GraphicAutoStyle,            ///< style:style from family "graphic" as in 14.13.1 Graphic and Presentation
+                                     ///<  Styles (office:automatic-styles)
+        PresentationStyle,           ///< style:style from family "presentation" as in 14.13.1 Graphic and
+                                     ///<  Presentation Styles (office:styles)
+        PresentationAutoStyle,       ///< style:style from family "presentation" as in 14.13.1 Graphic and
+                                     ///<  Presentation Styles (office:automatic-styles)
+        DrawingPageStyle,            ///< style:style from family "drawing-page" as in odf 14.13.2 Drawing Page Style
+                                     ///<  (office:styles)
+        DrawingPageAutoStyle,        ///< style:style from family "drawing-page" as in odf 14.13.2 Drawing Page Style
+                                     ///<  (office:automatic-styles)
+        ChartStyle,                  ///< style:style from family "chart" as in odf 14.16 Chart Styles
+                                     ///<  (office:styles)
+        ChartAutoStyle,              ///< style:style from family "chart" as in odf 14.16 Chart Styles
+                                     ///<  (office:automatic-styles)
 
-        StyleList,                   ///< text:list-style as in odf 14.10 List Style (office:styles)
-        StyleListAuto,               ///< text:list-style as in odf 14.10 List Style (office:automatic-styles)
-        StyleNumericNumber,          ///< number:number-style as in odf 14.7.1 Number Style
-        StyleNumericDate,            ///< number:date-style as in odf 14.7.4 Date Style
-        StyleNumericTime,            ///< number:time-style as in odf 14.7.5 Time Style
-        StyleNumericFraction,        ///< number:number-style as in odf 14.7.1 Number Style
-        StyleNumericPercentage,      ///< number:percentage-style as in odf 14.7.3 Percentage Style
-        StyleNumericScientific,      ///< number:number-style as in odf 14.7.1 Number Style
-        StyleNumericCurrency,        ///< number:currency-style as in odf 14.7.2 Currency Style
-        StyleNumericText,            ///< number:text-style 14.7.7 Text Style not used
-        StyleHatch,                  ///< draw:hatch as in odf 14.14.3 Hatch (office:styles)
-        StyleStrokeDash,             ///< draw:stroke-dash as in odf 14.14.7 Stroke Dash (office:styles)
-        StyleGradient,               ///< draw:gradient as in odf 14.14.1 Gradient (office:styles)
-        StyleGradientLinear,         ///< svg:linearGradient as in odf 14.14.2 SVG Gradients (office:styles)
-        StyleGradientRadial,         ///< svg:radialGradient as in odf 14.14.2 SVG Gradients (office:styles)
-        StyleGradientConical,        ///< koffice:conicalGradient koffice extension for conical gradients 
-        StyleFillImage,              ///< draw:fill-image as in odf 14.14.4 Fill Image (office:styles)
-        StyleNumericBoolean,         ///< number:boolean 14.7.6 Boolean Style not used
-        StyleOpacity,                ///< draw:opacity as in odf 14.14.5 Opacity Gradient not used
-        StyleMarker,                 ///< draw:marker as in odf 14.14.6 Marker
-        StylePresentationPageLayout, ///< style:presentation-page-layout as in odf 14.15 Presentation Page Layouts
+        ListStyle,                   ///< text:list-style as in odf 14.10 List Style (office:styles)
+        ListAutoStyle,               ///< text:list-style as in odf 14.10 List Style (office:automatic-styles)
+        NumericNumberStyle,          ///< number:number-style as in odf 14.7.1 Number Style
+        NumericDateStyle,            ///< number:date-style as in odf 14.7.4 Date Style
+        NumericTimeStyle,            ///< number:time-style as in odf 14.7.5 Time Style
+        NumericFractionStyle,        ///< number:number-style as in odf 14.7.1 Number Style
+        NumericPercentageStyle,      ///< number:percentage-style as in odf 14.7.3 Percentage Style
+        NumericScientificStyle,      ///< number:number-style as in odf 14.7.1 Number Style
+        NumericCurrencyStyle,        ///< number:currency-style as in odf 14.7.2 Currency Style
+        NumericTextStyle,            ///< number:text-style 14.7.7 Text Style
+                                     ///<  @note unused
+        HatchStyle,                  ///< draw:hatch as in odf 14.14.3 Hatch (office:styles)
+        StrokeDashStyle,             ///< draw:stroke-dash as in odf 14.14.7 Stroke Dash (office:styles)
+        GradientStyle,               ///< draw:gradient as in odf 14.14.1 Gradient (office:styles)
+        LinearGradientStyle,         ///< svg:linearGradient as in odf 14.14.2 SVG Gradients (office:styles)
+        RadialGradientStyle,         ///< svg:radialGradient as in odf 14.14.2 SVG Gradients (office:styles)
+        ConicalGradientStyle,        ///< koffice:conicalGradient koffice extension for conical gradients
+        FillImageStyle,              ///< draw:fill-image as in odf 14.14.4 Fill Image (office:styles)
+        NumericBooleanStyle,         ///< number:boolean 14.7.6 Boolean Style
+                                     ///<  @note unused
+        OpacityStyle,                ///< draw:opacity as in odf 14.14.5 Opacity Gradient
+                                     ///<  @note unused
+        MarkerStyle,                 ///< draw:marker as in odf 14.14.6 Marker
+        PresentationPageLayoutStyle, ///< style:presentation-page-layout as in odf 14.15 Presentation Page Layouts
         //   TODO differently
-        StyleMaster                  ///< 14.4 Master Pages
-        /// style:default-style as in odf 14.2 Default Styles
-        /// 14.5 Table Templates
-        /// 14.6 Font Face Declaration
+        MasterPageStyle,             ///< style:master-page as in odf 14.4 14.4 Master Pages (office:master-styles)
+        // style:default-style as in odf 14.2 Default Styles
+        // 14.5 Table Templates
+        /// @internal @note always update when adding values to this enum
+        LastStyle = MasterPageStyle
     };
 
     /**
-     * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),
+     * Start the definition of a new style. Its name will be set later by KoGenStyles::insert(),
      * but first you must define its properties and attributes.
      *
      * @param type this is a hook for the application to categorize styles
@@ -120,7 +143,7 @@ public:
      *
      * @param parentName If set, name of the parent style from which this one inherits.
      */
-    explicit KoGenStyle(Type type = StylePageLayout, const char* familyName = 0,
+    explicit KoGenStyle(Type type = PageLayoutStyle, const char* familyName = 0,
                         const QString& parentName = QString());
     ~KoGenStyle();
 
@@ -197,7 +220,7 @@ public:
          *  or on the type of style (e.g. page-layout -> page-layout-properties).
          *  (In fact that tag name is the one passed to writeStyle)
          */
-        DefaultType = 0,
+        DefaultType,
         /// TextType is always text-properties.
         TextType,
         /// ParagraphType is always paragraph-properties.
@@ -226,7 +249,8 @@ public:
         /// For elements that are children of the style itself, not any of the properties
         StyleChildElement,
         ChildElement, ///< @internal
-        N_NumTypes ///< @internal - warning, adding items here affects binary compatibility (size of KoGenStyle)
+        /// @internal @note always update when adding values to this enum
+        LastPropertyType = ChildElement
     };
 
     /// Add a property to the style
@@ -316,16 +340,9 @@ public:
     /**
      * @return true if the style has no attributes, no properties, no style map etc.
      * This can be used by applications which do not save all attributes unconditionally,
-     * but only those that differ from the parent. But note that lookup() can't find this out...
+     * but only those that differ from the parent. But note that KoGenStyles::insert() can't find this out...
      */
-    bool isEmpty() const {
-        if (!m_attributes.isEmpty() || ! m_maps.isEmpty())
-            return false;
-        for (uint i = 0 ; i < N_NumTypes ; ++i)
-            if (! m_properties[i].isEmpty())
-                return false;
-        return true;
-    }
+    bool isEmpty() const;
 
     /**
      *  Write the definition of this style to @p writer, using the OASIS format.
@@ -366,15 +383,15 @@ public:
 
 private:
     QString property(const QString& propName, PropertyType type) const {
-        QMap<QString, QString>::const_iterator it = m_properties[type].find(propName);
-        if (it != m_properties[type].end())
+        const QMap<QString, QString>::const_iterator it = m_properties[type].constFind(propName);
+        if (it != m_properties[type].constEnd())
             return it.value();
         return QString();
     }
 
     QString attribute(const QString& propName) const {
-        QMap<QString, QString>::const_iterator it = m_attributes.find(propName);
-        if (it != m_attributes.end())
+        const QMap<QString, QString>::const_iterator it = m_attributes.constFind(propName);
+        if (it != m_attributes.constEnd())
             return it.value();
         return QString();
     }
@@ -393,7 +410,7 @@ private:
     QString m_parentName;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
     typedef QMap<QString, QString> StyleMap;
-    StyleMap m_properties[N_NumTypes];
+    StyleMap m_properties[LastPropertyType+1];
     StyleMap m_attributes;
     QList<StyleMap> m_maps; // we can't really sort the maps between themselves...
 
@@ -401,7 +418,7 @@ private:
     bool m_defaultStyle;
     short m_unused2;
 
-    // For lookup
+    // For insert()
     friend class KoGenStyles;
 };
 

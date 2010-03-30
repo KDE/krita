@@ -98,10 +98,10 @@ KoStyleManager::~KoStyleManager()
 
 void KoStyleManager::saveOdfDefaultStyles(KoGenStyles &mainStyles)
 {
-    KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
+    KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
     style.setDefaultStyle(true);
     d->defaultParagraphStyle->saveOdf(style, mainStyles);
-    mainStyles.lookup(style);
+    mainStyles.insert(style);
 }
 
 void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
@@ -120,9 +120,9 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
             name = 'P';
         }
 
-        KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
+        KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
         paragraphStyle->saveOdf(style, mainStyles);
-        QString newName = mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
+        QString newName = mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
         savedNames.insert(paragraphStyle, newName);
         characterParagraphStyles.insert(paragraphStyle->characterStyle());
     }
@@ -145,9 +145,9 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
             name = 'T';
         }
 
-        KoGenStyle style(KoGenStyle::StyleUser, "text");
+        KoGenStyle style(KoGenStyle::ParagraphStyle, "text");
         characterStyle->saveOdf(style);
-        mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
+        mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
     foreach(KoListStyle *listStyle, d->listStyles) {
@@ -157,9 +157,9 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
         if (name.isEmpty())
             name = 'L';
 
-        KoGenStyle style(KoGenStyle::StyleList);
+        KoGenStyle style(KoGenStyle::ListStyle);
         listStyle->saveOdf(style);
-        mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
+        mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
     foreach(KoTableStyle *tableStyle, d->tableStyles) {
@@ -167,9 +167,9 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
         if (name.isEmpty())
             name = 'T'; //TODO is this correct?
 
-        KoGenStyle style(KoGenStyle::StyleTable);
+        KoGenStyle style(KoGenStyle::TableStyle);
         tableStyle->saveOdf(style);
-        mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
+        mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
     foreach(KoTableColumnStyle *tableColumnStyle, d->tableColumnStyles) {
@@ -177,9 +177,9 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
         if (name.isEmpty())
             name = 'T'; //TODO is this correct?
 
-        KoGenStyle style(KoGenStyle::StyleTableColumn);
+        KoGenStyle style(KoGenStyle::TableColumnStyle);
         tableColumnStyle->saveOdf(style);
-        mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
+        mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
     foreach(KoTableRowStyle *tableRowStyle, d->tableRowStyles) {
@@ -187,9 +187,9 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
         if (name.isEmpty())
             name = 'T'; //TODO is this correct?
 
-        KoGenStyle style(KoGenStyle::StyleTableRow);
+        KoGenStyle style(KoGenStyle::TableRowStyle);
         tableRowStyle->saveOdf(style);
-        mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
+        mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
     foreach(KoTableCellStyle *tableCellStyle, d->tableCellStyles) {
@@ -197,9 +197,9 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
         if (name.isEmpty())
             name = "T."; //TODO is this correct?
 
-        KoGenStyle style(KoGenStyle::StyleTableCell);
+        KoGenStyle style(KoGenStyle::TableCellStyle);
         tableCellStyle->saveOdf(style);
-        mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
+        mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
     foreach(KoSectionStyle *sectionStyle, d->sectionStyles) {
@@ -207,9 +207,9 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
         if (name.isEmpty())
             name = "T."; //TODO is this correct?
 
-        KoGenStyle style(KoGenStyle::StyleSection);
+        KoGenStyle style(KoGenStyle::SectionStyle);
         sectionStyle->saveOdf(style);
-        mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
+        mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 }
 

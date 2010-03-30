@@ -30,7 +30,7 @@
 
 KoGenStyle KoPageLayout::saveOdf() const
 {
-    KoGenStyle style(KoGenStyle::StylePageLayout);
+    KoGenStyle style(KoGenStyle::PageLayoutStyle);
 
     // Save page dimension.
     style.addPropertyPt("fo:page-width", width);

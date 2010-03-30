@@ -199,7 +199,7 @@ bool KoPADocument::saveOdf( SavingContext & documentContext )
     bodyWriter->endElement(); // office:odfTagName()
     bodyWriter->endElement(); // office:body
 
-    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
+    mainStyles.saveOdfStyles( KoGenStyles::DocumentAutomaticStyles, contentWriter );
 
     documentContext.odfStore.closeContentWriter();
 

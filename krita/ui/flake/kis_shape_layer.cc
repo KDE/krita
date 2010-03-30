@@ -259,10 +259,10 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
 
     KoGenStyles mainStyles;
     KoGenStyle pageLayout = page.saveOdf();
-    QString layoutName = mainStyles.lookup(pageLayout, "PL");
-    KoGenStyle masterPage(KoGenStyle::StyleMaster);
+    QString layoutName = mainStyles.insert(pageLayout, "PL");
+    KoGenStyle masterPage(KoGenStyle::MasterPageStyle);
     masterPage.addAttribute("style:page-layout-name", layoutName);
-    mainStyles.lookup(masterPage, "Default", KoGenStyles::DontForceNumbering);
+    mainStyles.insert(masterPage, "Default", KoGenStyles::DontAddNumberToName);
 
     KTemporaryFile contentTmpFile;
     contentTmpFile.open();
@@ -285,7 +285,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     contentTmpWriter.endElement(); // office:drawing
     contentTmpWriter.endElement(); // office:body
 
-    mainStyles.saveOdfAutomaticStyles(docWriter, false);
+    mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, docWriter);
 
     // And now we can copy over the contents from the tempfile to the real one
     contentTmpFile.seek(0);

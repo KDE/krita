@@ -359,14 +359,14 @@ void KoPatternBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &con
             style.addProperty("draw:fill-image-width", QString("%1").arg(targetSize.width()));
     }
 
-    KoGenStyle patternStyle(KoGenStyle::StyleFillImage /*no family name*/);
+    KoGenStyle patternStyle(KoGenStyle::FillImageStyle /*no family name*/);
     patternStyle.addAttribute("xlink:show", "embed");
     patternStyle.addAttribute("xlink:actuate", "onLoad");
     patternStyle.addAttribute("xlink:type", "simple");
     patternStyle.addAttribute("xlink:href", context.imageHref(d->imageData));
 
-    QString patternStyleName = context.mainStyles().lookup(patternStyle, "picture");
-    context.mainStyles().lookup(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
+    QString patternStyleName = context.mainStyles().insert(patternStyle, "picture");
+    context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
     style.addProperty("draw:fill", "bitmap");
     style.addProperty("draw:fill-image-name", patternStyleName);
 

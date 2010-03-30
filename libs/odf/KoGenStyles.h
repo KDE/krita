@@ -2,6 +2,7 @@
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2009 Thomas Zander <zander@kde.org>
+   Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,19 +28,19 @@
 #include <QtCore/QMultiMap>
 #include <QtCore/QSet>
 #include <QtCore/QString>
-#include "koodf_export.h"
-#include "KoGenStyle.h"
+#include <QtCore/QFlags>
+#include <KoGenStyle.h>
 
 class KoStore;
 class KoFontFace;
 
 /**
- * @brief Repository of styles used during saving of OASIS/OOo file.
+ * @brief Repository of styles used during saving ODF documents.
  *
  * Each instance of KoGenStyles is a collection of styles whose names
  * are in the same "namespace".
- * This means there should be one instance for all styles in <office:styles>,
- * and automatic-styles, another instance for number formats, another
+ * This means there should be one instance for all styles in &lt;office:styles&gt;,
+ * and &lt;office:automatic-styles&gt;, another instance for number formats, another
  * one for draw styles, and another one for list styles.
  *
  * "Style" in this context only means "a collection of properties".
@@ -54,7 +55,7 @@ class KoFontFace;
  * Since this is used for saving only, it doesn't feature refcounting, nor
  * removal of individual styles.
  *
- * NOTE: the use of KoGenStyles isn't mandatory, of course. If the application
+ * @note The use of KoGenStyles isn't mandatory, of course. If the application
  * is already designed with user and automatic styles in mind for a given
  * set of properties, it can go ahead and save all styles directly (after
  * ensuring they have unique names).
@@ -64,54 +65,51 @@ class KoFontFace;
 class KOODF_EXPORT KoGenStyles
 {
 public:
+    /// Single style with assigned name
     struct NamedStyle {
         const KoGenStyle* style; ///< @note owned by the collection
         QString name;
     };
 
     typedef QMultiMap<KoGenStyle, QString> StyleMap;
-    typedef QSet<QString> NameMap;
-    typedef QList<NamedStyle> StyleArray;
 
     KoGenStyles();
     ~KoGenStyles();
 
     /**
-     * Those are flags for the lookup() call.
+     * Those are flags for the insert() call.
      *
-     * By default, the generated style names will look like "name1", "name2".
-     * If DontForceNumbering is set, the first name that will be tried is "name", and only if
-     * that one exists, then "name1" is tried. Set DontForceNumbering if the name given as
+     * By default (NoFlag), the generated style names will look like "name1", "name2".
+     * If DontAddNumberToName is set, the first name that will be tried is "name", and only if
+     * that one exists, then "name1" is tried. Set DontAddNumberToName if the name given as
      * argument is supposed to be the full style name.
      * If AllowDuplicates is set, a unique style name is generated even if a similar KoGenStyle
      * already exists. In other words, the collection will now contain two equal KoGenStyle
      * and generate them with different style names.
      */
-    enum Flags { // bitfield
+    enum InsertionFlag {
         NoFlag = 0,
-        ForceNumbering = 0, // it's the default anyway
-        DontForceNumbering = 1,
+        DontAddNumberToName = 1,
         AllowDuplicates = 2
     };
-    // KDE4 TODO: use QFlags and change the arg type in lookup
+    Q_DECLARE_FLAGS(InsertionFlags, InsertionFlag)
 
     /**
      * Look up a style in the collection, inserting it if necessary.
      * This assigns a name to the style and returns it.
      *
      * @param style the style to look up.
-     * @param name proposed (base) name for the style. Note that with the OASIS format,
+     * @param baseName proposed (base) name for the style. Note that with the ODF,
      * the style name is never shown to the user (there's a separate display-name
      * attribute for that). So there are little reasons to use named styles anyway.
      * But this attribute can be used for clarity of the files.
      * If this name is already in use (for another style), then a number is appended
-     * to it until unique.
+     * to it until unused name is found.
      * @param flags see Flags
      *
-     * @return the name for this style
-     * @todo ### rename lookup to insert
+     * @return the name that has been assigned for the inserted style
      */
-    QString lookup(const KoGenStyle& style, const QString& name = QString(), int flags = NoFlag);
+    QString insert(const KoGenStyle& style, const QString& baseName = QString(), InsertionFlags flags = NoFlag);
 
     /**
      * Return the entire collection of styles
@@ -120,25 +118,33 @@ public:
     StyleMap styles() const;
 
     /**
-     * Return all styles of a given type
-     * Use this for saving the styles
+     * Return all styles of a given type (NOT marked for styles.xml).
+     * Use this for saving the styles.
      *
      * @param type the style type, see the KoGenStyle constructor
-     * @param markedForStylesXml if true, return only style marked for styles.xml,
-     * otherwise only those NOT marked for styles.xml.
-     * @see lookup
+     * @see insert()
      */
-    QList<NamedStyle> styles(int type, bool markedForStylesXml = false) const;
+    QList<KoGenStyles::NamedStyle> styles(KoGenStyle::Type type) const;
 
     /**
-     * @return an existing style by name
+     * Return styles of a given type, marked for styles.xml,
+     * Use this for saving the styles.
+     *
+     * @param type the style type, see the KoGenStyle constructor
+     * @see insert()
+     */
+    QList<KoGenStyles::NamedStyle> stylesForStylesXml(KoGenStyle::Type type) const;
+
+    /**
+     * @return an existing style by name. If no such style exists, 0 is returned.
      */
     const KoGenStyle* style(const QString& name) const;
 
     /**
      * @return an existing style by name, which can be modified.
+     * If no such style exists, 0 is returned.
      * @warning This is DANGEROUS.
-     * It basically defeats the purpose of lookup()!
+     * It basically defeats the purpose of insert()!
      * Only do this if you know for sure no other 'user' of that style will
      * be affected.
      */
@@ -149,7 +155,7 @@ public:
      * For instance styles used by headers and footers need to go there, since
      * they are saved in styles.xml, and styles.xml must be independent from content.xml.
      *
-     * Equivalent to using KoGenStyle::setAutoStyleInStylesDotXml() but this can be done after lookup.
+     * Equivalent to using KoGenStyle::setAutoStyleInStylesDotXml() but this can be done after insert().
      *
      * This operation can't be undone; once styles are promoted they can't go back
      * to being content.xml-only.
@@ -159,15 +165,15 @@ public:
     void markStyleForStylesXml(const QString& name);
 
     /**
-     * Add a font face declaration.
+     * Insert a font face declaration.
      * @a face should have non-empty "name" parameter, i.e. should not be null.
      *
-     * Declaration with given name replaces previously added declaration with the same name.
+     * Declaration with given name replaces previously inserted declaration with the same name.
      *
      * See odf 2.6 Font Face Declarations
      * and odf 14.6 Font Face Declaration.
      */
-    void addFontFace(const KoFontFace& face);
+    void insertFontFace(const KoFontFace& face);
 
     /**
      * @return font face declaration for name @a name
@@ -179,11 +185,6 @@ public:
     KoFontFace fontFace(const QString& name) const;
 
     /**
-     * Outputs debug information
-     */
-    void dump();
-
-    /**
      * Save the styles into the styles.xml file
      *
      * This saves all styles and font face declarations to the styles.xml file which
@@ -191,92 +192,77 @@ public:
      *
      * @param store
      * @param mainfestwriter
-     * @return if it was successful
+     * @return true on success
      */
-    bool saveOdfStylesDotXml(KoStore* store, KoXmlWriter* manifestWriter);
+    bool saveOdfStylesDotXml(KoStore* store, KoXmlWriter* manifestWriter) const;
 
     /**
-     * Save automatic styles.
-     *
-     * This creates the office:automatic-styles tag containing all
-     * automatic styles.
-     *
-     * @param xmlWriter
-     * @param stylesDotXml
+     * Placement of styles saved in saveOdfStyles() or inserted in insertRawOdfStyles().
      */
-    void saveOdfAutomaticStyles(KoXmlWriter* xmlWriter, bool stylesDotXml) const;
+    enum StylesPlacement {
+        /**
+         * Creates document's office:styles tag and saves all document styles there
+         * or inserts raw styles into document's office:styles.
+         */
+        DocumentStyles,
+        /**
+         * Creates styles.xml's office:master-styles tag and saves all master styles there
+         * or inserts raw styles into styles.xml's office:automatic-styles.
+         */
+        MasterStyles,
+        /**
+         * Creates document's office:automatic-styles tag and saves all automatic styles there
+         * or inserts raw styles into document's office:automatic-styles.
+         */
+        DocumentAutomaticStyles,
+        /**
+         * Creates styles.xml's office:automatic-styles tag and saves all automatic styles there
+         * or inserts raw styles into style.xml's office:automatic-styles.
+         */
+        StylesXmlAutomaticStyles,
+        /**
+         * Creates document's office:font-face-decls tag and saves all document styles there
+         * or inserts raw styles into document's office:font-face-decls.
+         */
+        FontFaceDecls
+    };
 
     /**
-     * Save document styles.
+     * Save styles of given type.
      *
-     * This creates the office:styles tag containing all document styles.
-     *
-     * @param xmlWriter
+     * @param placement see StylesPlacement
+     * @param xmlWriter target writer
      */
-    void saveOdfDocumentStyles(KoXmlWriter* xmlWriter) const;
+    void saveOdfStyles(StylesPlacement placement, KoXmlWriter* xmlWriter) const;
 
     /**
-     * Save master styles.
+     * Insert extra styles of given type.
      *
-     * This creates the office:master-styles tag containing all master styles.
+     * This inserts extra styles as raw xml into a given placement.
+     * The information is collected and written back when saveOdfStyles() is called.
+     * This method is useful for testing purposes.
      *
-     * @param xmlWriter
+     * @param placement see StylesPlacement
+     * @param xml the raw xml string
      */
-    void saveOdfMasterStyles(KoXmlWriter* xmlWriter) const;
-
-    /**
-     * Save font face declarations
-     *
-     * This creates the office:font-face-decls tag containing all font face
-     * declarations
-     */
-    void saveOdfFontFaceDecls(KoXmlWriter* xmlWriter) const;
+    void insertRawOdfStyles(StylesPlacement placement, const QByteArray& xml);
 
     /**
      * register a relation for a previously inserted style to a previously inserted target style.
-     * This allows you to add a style relation based on generated names.
+     * This allows you to insert a style relation based on generated names.
      */
     void insertStyleRelation(const QString &source, const QString &target, const char *tagName);
 
-    /**
-     * Adds extra document styles.
-     *
-     * This adds extra document styles as raw xml within the office:styles tag.
-     * The information is collected and written back when saveOdfDocumentStyles() is called.
-     * This method is useful for testing purposes.
-     *
-     * @param xml the raw xml string
-     */
-    void addRawOdfDocumentStyles(const QByteArray& xml);
-
-    /**
-     * Adds extra master styles.
-     *
-     * This adds extra master styles as raw xml within the office:master-styles tag.
-     * The information is collected and written back when saveOdfMasterStyles() is called.
-     * This method is useful for testing purposes.
-     *
-     * @param xml the raw xml string
-     */
-    void addRawOdfMasterStyles(const QByteArray& xml);
-
-    /**
-     * Adds extra automatic styles.
-     *
-     * This adds extra master automatic as raw xml within the office:automatic-styles tag.
-     * The information is collected and written back when saveOdfAutomaticStyles() is called.
-     * This method is useful for testing purposes.
-     *
-     * @param xml the raw xml string
-     * @param stylesDotXml true if the xml should go to styles.xml instead of content.xml
-     */
-    void addRawOdfAutomaticStyles(const QByteArray& xml, bool stylesDotXml);
-
 private:
-    QString makeUniqueName(const QString& base, int flags) const;
+    friend QDebug operator<<(QDebug dbg, const KoGenStyles& styles);
 
     class Private;
     Private * const d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoGenStyles::InsertionFlags)
+
+//! Debug stream operator.
+QDebug KOODF_EXPORT operator<<(QDebug dbg, const KoGenStyles& styles);
 
 #endif /* KOGENSTYLES_H */

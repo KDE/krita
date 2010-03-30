@@ -285,7 +285,7 @@ const KoXmlElement* KoOdfStylesReader::findStyle(const QString& styleName, const
 {
     const KoXmlElement* style = findStyleCustomStyle(styleName, family);
     if (!style)
-        style = findStyleAutoStyle(styleName, family);
+        style = findAutoStyleStyle(styleName, family);
     if (!style)
         style = findContentAutoStyle(styleName, family);
     return style;
@@ -298,7 +298,7 @@ const KoXmlElement* KoOdfStylesReader::findStyle(const QString& styleName, const
         style = findContentAutoStyle(styleName, family);
     }
     if (!style && stylesDotXml) {
-        style = findStyleAutoStyle(styleName, family);
+        style = findAutoStyleStyle(styleName, family);
     }
     return style;
 
@@ -317,7 +317,7 @@ const KoXmlElement* KoOdfStylesReader::findStyleCustomStyle(const QString& style
     return style;
 }
 
-const KoXmlElement* KoOdfStylesReader::findStyleAutoStyle(const QString& styleName, const QString& family) const
+const KoXmlElement* KoOdfStylesReader::findAutoStyleStyle(const QString& styleName, const QString& family) const
 {
     const KoXmlElement* style = d->stylesAutoStyles.value(family).value(styleName);
     if (style) {

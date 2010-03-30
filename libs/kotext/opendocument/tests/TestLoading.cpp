@@ -1005,7 +1005,7 @@ QString TestLoading::documentToOdt(QTextDocument *document)
 
     contentTmpFile.close();
 
-    mainStyles.saveOdfAutomaticStyles(contentWriter, false);
+    mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
 
     contentWriter->startElement("office:body");
     contentWriter->startElement("office:text");

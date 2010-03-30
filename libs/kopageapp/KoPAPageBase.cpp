@@ -100,7 +100,7 @@ void KoPAPageBase::saveOdfShapes( KoShapeSavingContext &context ) const
 
 QString KoPAPageBase::saveOdfPageStyle( KoPASavingContext &paContext ) const
 {
-    KoGenStyle style( KoGenStyle::StyleDrawingPage, "drawing-page" );
+    KoGenStyle style( KoGenStyle::DrawingPageStyle, "drawing-page" );
 
     if ( paContext.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
         style.setAutoStyleInStylesDotXml( true );
@@ -108,7 +108,7 @@ QString KoPAPageBase::saveOdfPageStyle( KoPASavingContext &paContext ) const
 
     saveOdfPageStyleData( style, paContext );
 
-    return paContext.mainStyles().lookup( style, "dp" );
+    return paContext.mainStyles().insert( style, "dp" );
 }
 
 void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
@@ -121,7 +121,7 @@ void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &p
         style.setAutoStyleInStylesDotXml( true );
     }
 
-    paContext.mainStyles().lookup( style, paContext.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
+    paContext.mainStyles().insert( style, paContext.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
 }
 
 bool KoPAPageBase::saveOdfAnimations( KoPASavingContext & paContext ) const

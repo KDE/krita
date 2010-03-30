@@ -439,7 +439,7 @@ QString KoOdfNumberStyles::saveOdfTimeStyle(KoGenStyles &mainStyles, const QStri
     Q_UNUSED(_suffix);
     kDebug(30003) << "QString KoOdfNumberStyles::saveOdfTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
-    KoGenStyle currentStyle(KoGenStyle::StyleNumericTime);
+    KoGenStyle currentStyle(KoGenStyle::NumericTimeStyle);
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
@@ -464,7 +464,7 @@ QString KoOdfNumberStyles::saveOdfTimeStyle(KoGenStyles &mainStyles, const QStri
     }
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
-    return mainStyles.lookup(currentStyle, "N");
+    return mainStyles.insert(currentStyle, "N");
 }
 
 //convert klocale string to good format
@@ -561,7 +561,7 @@ QString KoOdfNumberStyles::saveOdfDateStyle(KoGenStyles &mainStyles, const QStri
 
     // Not supported into Qt: "era" "week-of-year" "quarter"
 
-    KoGenStyle currentStyle(KoGenStyle::StyleNumericDate);
+    KoGenStyle currentStyle(KoGenStyle::NumericDateStyle);
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
@@ -689,7 +689,7 @@ QString KoOdfNumberStyles::saveOdfDateStyle(KoGenStyles &mainStyles, const QStri
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
-    return mainStyles.lookup(currentStyle, "N");
+    return mainStyles.insert(currentStyle, "N");
 }
 
 
@@ -699,7 +699,7 @@ QString KoOdfNumberStyles::saveOdfFractionStyle(KoGenStyles &mainStyles, const Q
     kDebug(30003) << "QString saveOdfFractionStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
-    KoGenStyle currentStyle(KoGenStyle::StyleNumericFraction);
+    KoGenStyle currentStyle(KoGenStyle::NumericFractionStyle);
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
@@ -748,7 +748,7 @@ QString KoOdfNumberStyles::saveOdfFractionStyle(KoGenStyles &mainStyles, const Q
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
-    return mainStyles.lookup(currentStyle, "N");
+    return mainStyles.insert(currentStyle, "N");
 }
 
 
@@ -758,7 +758,7 @@ QString KoOdfNumberStyles::saveOdfNumberStyle(KoGenStyles &mainStyles, const QSt
     kDebug(30003) << "QString saveOdfNumberStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
-    KoGenStyle currentStyle(KoGenStyle::StyleNumericNumber);
+    KoGenStyle currentStyle(KoGenStyle::NumericNumberStyle);
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
@@ -792,7 +792,7 @@ QString KoOdfNumberStyles::saveOdfNumberStyle(KoGenStyles &mainStyles, const QSt
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
-    return mainStyles.lookup(currentStyle, "N");
+    return mainStyles.insert(currentStyle, "N");
 }
 
 QString KoOdfNumberStyles::saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString & _format,
@@ -806,7 +806,7 @@ QString KoOdfNumberStyles::saveOdfPercentageStyle(KoGenStyles &mainStyles, const
     kDebug(30003) << "QString saveOdfPercentageStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
-    KoGenStyle currentStyle(KoGenStyle::StyleNumericPercentage);
+    KoGenStyle currentStyle(KoGenStyle::NumericPercentageStyle);
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
@@ -841,7 +841,7 @@ QString KoOdfNumberStyles::saveOdfPercentageStyle(KoGenStyles &mainStyles, const
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
-    return mainStyles.lookup(currentStyle, "N");
+    return mainStyles.insert(currentStyle, "N");
 
 }
 
@@ -856,7 +856,7 @@ QString KoOdfNumberStyles::saveOdfScientificStyle(KoGenStyles &mainStyles, const
     kDebug(30003) << "QString saveOdfScientificStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
-    KoGenStyle currentStyle(KoGenStyle::StyleNumericScientific);
+    KoGenStyle currentStyle(KoGenStyle::NumericScientificStyle);
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     int decimalplace = 0;
@@ -912,7 +912,7 @@ QString KoOdfNumberStyles::saveOdfScientificStyle(KoGenStyles &mainStyles, const
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
-    return mainStyles.lookup(currentStyle, "N");
+    return mainStyles.insert(currentStyle, "N");
 }
 
 QString KoOdfNumberStyles::saveOdfCurrencyStyle(KoGenStyles &mainStyles,
@@ -929,7 +929,7 @@ QString KoOdfNumberStyles::saveOdfCurrencyStyle(KoGenStyles &mainStyles,
     kDebug(30003) << "QString saveOdfCurrencyStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
-    KoGenStyle currentStyle(KoGenStyle::StyleNumericCurrency);
+    KoGenStyle currentStyle(KoGenStyle::NumericCurrencyStyle);
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
@@ -970,7 +970,7 @@ QString KoOdfNumberStyles::saveOdfCurrencyStyle(KoGenStyles &mainStyles,
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
-    return mainStyles.lookup(currentStyle, "N");
+    return mainStyles.insert(currentStyle, "N");
 }
 
 QString KoOdfNumberStyles::saveOdfTextStyle(KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix)
@@ -983,7 +983,7 @@ QString KoOdfNumberStyles::saveOdfTextStyle(KoGenStyles &mainStyles, const QStri
     kDebug(30003) << "QString saveOdfTextStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
-    KoGenStyle currentStyle(KoGenStyle::StyleNumericText);
+    KoGenStyle currentStyle(KoGenStyle::NumericTextStyle);
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
@@ -1003,7 +1003,7 @@ QString KoOdfNumberStyles::saveOdfTextStyle(KoGenStyles &mainStyles, const QStri
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
-    return mainStyles.lookup(currentStyle, "N");
+    return mainStyles.insert(currentStyle, "N");
 }
 
 //This is an extension of numeric style. For the moment we used namespace of

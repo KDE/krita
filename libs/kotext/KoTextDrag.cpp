@@ -110,7 +110,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
         return false;
     }
 
-    mainStyles.saveOdfAutomaticStyles(contentWriter, false);
+    mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
     changes.saveOdfChanges(contentWriter);
 
     odfStore.closeContentWriter();

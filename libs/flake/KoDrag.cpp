@@ -89,7 +89,7 @@ bool KoDrag::setOdf(const char *mimeType, KoDragOdfSaveHelper &helper)
         return false;
     }
 
-    mainStyles.saveOdfAutomaticStyles(contentWriter, false);
+    mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
 
     odfStore.closeContentWriter();
 

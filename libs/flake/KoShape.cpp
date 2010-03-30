@@ -948,7 +948,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         style.addProperty(it.key(), it.value());
     }
 
-    return context.mainStyles().lookup(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
+    return context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
 }
 
 void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -1234,10 +1234,10 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
         KoGenStyle style;
         // all items that should be written to 'draw:frame' and any other 'draw:' object that inherits this shape
         if (context.isSet(KoShapeSavingContext::PresentationShape)) {
-            style = KoGenStyle(KoGenStyle::StylePresentationAuto, "presentation");
+            style = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
             context.xmlWriter().addAttribute("presentation:style-name", saveStyle(style, context));
         } else {
-            style = KoGenStyle(KoGenStyle::StyleGraphicAuto, "graphic");
+            style = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
             context.xmlWriter().addAttribute("draw:style-name", saveStyle(style, context));
         }
     }

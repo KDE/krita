@@ -1415,12 +1415,12 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
         d->charStyle->saveOdf(style);
     }
     if (d->listStyle) {
-        KoGenStyle liststyle(KoGenStyle::StyleList);
+        KoGenStyle liststyle(KoGenStyle::ListStyle);
         d->listStyle->saveOdf(liststyle);
         QString name(QString(QUrl::toPercentEncoding(d->listStyle->name(), "", " ")).replace('%', '_'));
         if (name.isEmpty())
             name = 'L';
-        style.addAttribute("style:list-style-name", mainStyles.lookup(liststyle, name, KoGenStyles::DontForceNumbering));
+        style.addAttribute("style:list-style-name", mainStyles.insert(liststyle, name, KoGenStyles::DontAddNumberToName));
     }
     // only custom style have a displayname. automatic styles don't have a name set.
     if (!d->name.isEmpty() && !style.isDefaultStyle()) {

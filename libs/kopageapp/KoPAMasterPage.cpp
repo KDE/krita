@@ -53,9 +53,9 @@ void KoPAMasterPage::saveOdf( KoShapeSavingContext & context ) const
     KoGenStyle pageLayoutStyle = pageLayout().saveOdf();
     pageLayoutStyle.setAutoStyleInStylesDotXml( true );
     pageLayoutStyle.addAttribute( "style:page-usage", "all" );
-    QString pageLayoutName( paContext.mainStyles().lookup( pageLayoutStyle, "pm" ) );
+    QString pageLayoutName( paContext.mainStyles().insert( pageLayoutStyle, "pm" ) );
 
-    KoGenStyle pageMaster( KoGenStyle::StyleMaster );
+    KoGenStyle pageMaster( KoGenStyle::MasterPageStyle );
     pageMaster.addAttribute( "style:page-layout-name", pageLayoutName );
     pageMaster.addAttribute( "style:display-name", name() );
     pageMaster.addAttribute( "draw:style-name", saveOdfPageStyle( paContext ) );
@@ -74,7 +74,7 @@ void KoPAMasterPage::saveOdf( KoShapeSavingContext & context ) const
 
     QString contentElement = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     pageMaster.addChildElement( paContext.masterPageElementName(), contentElement );
-    paContext.addMasterPage( this, paContext.mainStyles().lookup( pageMaster, "Default" ) );
+    paContext.addMasterPage( this, paContext.mainStyles().insert( pageMaster, "Default" ) );
 }
 
 void KoPAMasterPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )

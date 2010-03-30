@@ -86,7 +86,7 @@ public:
      * \note Searches in styles.xml only!
      * \see findStyle()
      */
-    const KoXmlElement* findStyleAutoStyle(const QString& name, const QString& family) const;
+    const KoXmlElement* findAutoStyleStyle(const QString& name, const QString& family) const;
 
     /**
      * Similar to findStyle but for auto-styles only.

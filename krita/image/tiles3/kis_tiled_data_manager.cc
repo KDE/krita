@@ -297,8 +297,9 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
                  * Emulate like we've written something to the tile
                  * to keep the history clean
                  */
-                KisTileDataWrapper tw(clearedTile, 0,
-                                      KisTileDataWrapper::WRITE);
+                // Trigger artificial memory increase when clearing
+//                 KisTileDataWrapper tw(clearedTile, 0,
+//                                       KisTileDataWrapper::WRITE);
             } else {
                 const qint32 lineSize = clearTileRect.width() * pixelSize;
                 qint32 rowsRemaining = clearTileRect.height();

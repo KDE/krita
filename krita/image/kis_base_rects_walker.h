@@ -212,13 +212,10 @@ protected:
              * ATTENTION: we miss the first mask
              */
 
-            /**
-             * FIXME: check visibility and other stuff like in KisLayer
-             */
-
             do {
                 currentNode = currentNode->nextSibling();
-            } while (currentNode && !isMask(currentNode));
+            } while (currentNode &&
+                     (!isMask(currentNode) || !currentNode->visible()));
 
             if(currentNode) {
                 QRect changeRect = currentNode->changeRect(m_resultChangeRect);

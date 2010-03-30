@@ -34,7 +34,8 @@ public:
     /**
      * Mix the colors.
      * @param colors a pointer toward the source pixels
-     * @param weights the coeffient of the source pixels
+     * @param weights the coeffient of the source pixels (if you want
+     *                to average the sum of weights must be equal to 255)
      * @param nColors the number of pixels in the colors array
      * @param dst the destination pixel
      *

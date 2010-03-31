@@ -24,16 +24,46 @@
 #include "kis_hairy_paintop_settings.h"
 #include "kis_hairy_bristle_option.h"
 #include "kis_hairy_shape_option.h"
+#include "kis_brush_based_paintop_options_widget.h"
+#include "kis_boundary.h"
 
 void KisHairyPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
 {
-    KisBrushBasedPaintOpSettings::paintOutline(pos, image, painter, _mode);
-}
+    double scale = getDouble(HAIRY_BRISTLE_SCALE);
 
-
+    KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
+    if(!options)
+        return;
+    
+    if (_mode != CURSOR_IS_OUTLINE) return;
+    KisBrushSP brush = options->brush();
+    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
+    painter.setPen(Qt::black);
+    painter.setBackground(Qt::black);
+        
+    painter.translate(paintOutlineRect(pos, image, _mode).topLeft());
+    painter.scale(1/image->xRes()*scale, 1/image->yRes()*scale);
+    brush->boundary()->paint(painter);
+    painter.restore();
+ }
+ 
+ 
 QRectF KisHairyPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
 {
-    return KisBrushBasedPaintOpSettings::paintOutlineRect(pos, image, _mode);
+    KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
+    if(!options)
+        return QRectF();
+    
+    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
+    KisBrushSP brush = options->brush();
+    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
+
+    double scale = getDouble(HAIRY_BRISTLE_SCALE);
+    QTransform m;
+    m.reset();
+    m.scale(scale, scale);   
+    
+    QRectF rect = QRectF(0, 0, brush->width(), brush->height()).translated(-(hotSpot + QPointF(0.5, 0.5)));
+    rect = image->pixelToDocument(m.mapRect(rect)).translated(pos);
+    return rect;
 }
-
-

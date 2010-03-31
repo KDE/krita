@@ -252,7 +252,7 @@ void KisCustomImageWidget::clipboardDataChanged()
 
 void KisCustomImageWidget::screenSizeClicked()
 {
-    QSize sz = QApplication::desktop()->availableGeometry(this).size();
+    QSize sz = QApplication::desktop()->screenGeometry(this).size();
     doubleWidth->setValue(sz.width());
     doubleWidth->setDecimals(0);
     doubleHeight->setValue(sz.height());

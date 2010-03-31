@@ -254,7 +254,7 @@ public:
     void insertStyleRelation(const QString &source, const QString &target, const char *tagName);
 
 private:
-    friend QDebug operator<<(QDebug dbg, const KoGenStyles& styles);
+    friend KOODF_EXPORT QDebug operator<<(QDebug dbg, const KoGenStyles& styles);
 
     class Private;
     Private * const d;
@@ -263,6 +263,6 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoGenStyles::InsertionFlags)
 
 //! Debug stream operator.
-QDebug KOODF_EXPORT operator<<(QDebug dbg, const KoGenStyles& styles);
+KOODF_EXPORT QDebug operator<<(QDebug dbg, const KoGenStyles& styles);
 
 #endif /* KOGENSTYLES_H */

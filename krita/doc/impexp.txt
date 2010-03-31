@@ -36,6 +36,6 @@ a file, such as exif data or TIFF tags and that we should be able to save.
 KisAnnotation
 
 	KisAnnotation(QString type, QString annotation);
-	KisAnnotation(QString type, QByteArray annotation);;
+	KisAnnotation(QString type, QByteArray annotation);
 
 

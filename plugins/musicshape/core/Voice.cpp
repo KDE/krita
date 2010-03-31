@@ -41,7 +41,7 @@ Voice::~Voice()
 
 Part* Voice::part()
 {
-    return qobject_cast<Part*>(parent());;
+    return qobject_cast<Part*>(parent());
 }
 
 VoiceBar* Voice::bar(Bar* bar)

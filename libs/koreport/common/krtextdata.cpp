@@ -32,7 +32,7 @@ KRTextData::KRTextData(QDomNode & element) : m_bottomPadding(0.0)
 
     createProperties();
     m_name->setValue(element.toElement().attribute("report:name"));
-    m_controlSource->setValue(element.toElement().attribute("report:control-source"));
+    m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
     Z = element.toElement().attribute("report:z-index").toDouble();
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-align"));
@@ -103,7 +103,7 @@ void KRTextData::createProperties()
     QStringList keys, strings;
 
     //_query = new KoProperty::Property ( "Query", QStringList(), QStringList(), "Data Source", "Query" );
-    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), QString(), i18n("Control Source"));
+    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
 
     keys << "left" << "center" << "right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");

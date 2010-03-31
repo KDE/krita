@@ -33,7 +33,7 @@ KRImageData::KRImageData(QDomNode & element)
     QDomNode node;
 
     m_name->setValue(element.toElement().attribute("report:name"));
-    m_controlSource->setValue(element.toElement().attribute("report:control-source"));
+    m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
     m_resizeMode->setValue(element.toElement().attribute("report:resize-mode", "stretch"));
     Z = element.toElement().attribute("report:z-index").toDouble();
 
@@ -107,7 +107,7 @@ void KRImageData::createProperties()
 {
     m_set = new KoProperty::Set(0, "Image");
 
-    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), QString(), i18n("Control Source"));
+    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
 
     QStringList keys, strings;
     keys << "clip" << "stretch";

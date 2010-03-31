@@ -108,7 +108,7 @@ void ReportEntityChart::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 ReportEntityChart* ReportEntityChart::clone()
 {
     QDomDocument d;
-    QDomElement e = d.createElement("clone");;
+    QDomElement e = d.createElement("clone");
     QDomNode n;
     buildXML(d, e);
     n = e.firstChild();

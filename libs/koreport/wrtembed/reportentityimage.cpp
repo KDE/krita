@@ -73,7 +73,7 @@ ReportEntityImage::ReportEntityImage(QDomNode & element, KoReportDesigner * rw, 
 ReportEntityImage* ReportEntityImage::clone()
 {
     QDomDocument d;
-    QDomElement e = d.createElement("clone");;
+    QDomElement e = d.createElement("clone");
     QDomNode n;
     buildXML(d, e);
     n = e.firstChild();

@@ -78,7 +78,7 @@ ReportEntityLine::ReportEntityLine(QDomNode & entity, KoReportDesigner * d, QGra
 ReportEntityLine* ReportEntityLine::clone()
 {
     QDomDocument d;
-    QDomElement e = d.createElement("clone");;
+    QDomElement e = d.createElement("clone");
     QDomNode n;
     buildXML(d, e);
     n = e.firstChild();

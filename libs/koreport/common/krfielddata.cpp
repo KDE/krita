@@ -34,7 +34,7 @@ KRFieldData::KRFieldData(QDomNode & element)
     QDomNode node;
 
     m_name->setValue(element.toElement().attribute("report:name"));
-    m_controlSource->setValue(element.toElement().attribute("report:control-source"));
+    m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
     Z = element.toElement().attribute("report:z-index").toDouble();
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-align"));
@@ -73,7 +73,7 @@ void KRFieldData::createProperties()
 
     QStringList keys, strings;
 
-    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), QString(), i18n("Control Source"));
+    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
 
     m_controlSource->setOption("extraValueAllowed", "true");
 

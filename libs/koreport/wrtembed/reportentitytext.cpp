@@ -70,7 +70,7 @@ ReportEntityText::ReportEntityText(QDomNode & element, KoReportDesigner * d, QGr
 ReportEntityText* ReportEntityText::clone()
 {
     QDomDocument d;
-    QDomElement e = d.createElement("clone");;
+    QDomElement e = d.createElement("clone");
     QDomNode n;
     buildXML(d, e);
     n = e.firstChild();

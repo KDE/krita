@@ -77,6 +77,13 @@
          </item>
         </layout>
        </item>
+       <item row="5" column="0">
+        <widget class="QPushButton" name="bnDefaultPreset">
+         <property name="text">
+          <string>Default preset</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabChooser">

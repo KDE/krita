@@ -48,9 +48,6 @@ KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
 
 KisSprayPaintOpSettingsWidget::~ KisSprayPaintOpSettingsWidget()
 {
-    delete m_sprayOption;
-    delete m_sprayShapeOption;
-    delete m_ColorOption;
 }
 
 KisPropertiesConfiguration*  KisSprayPaintOpSettingsWidget::configuration() const

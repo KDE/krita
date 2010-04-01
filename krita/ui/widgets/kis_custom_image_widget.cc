@@ -252,11 +252,14 @@ void KisCustomImageWidget::clipboardDataChanged()
 
 void KisCustomImageWidget::screenSizeClicked()
 {
-    QSize sz = QApplication::desktop()->availableGeometry(this).size();
+    QSize sz = QApplication::desktop()->screenGeometry(this).size();
+    cmbWidthUnit->setCurrentIndex(KoUnit::Pixel);
+    cmbHeightUnit->setCurrentIndex(KoUnit::Pixel);
+    widthUnitChanged(cmbWidthUnit->currentIndex());
+    heightUnitChanged(cmbHeightUnit->currentIndex());
+
     doubleWidth->setValue(sz.width());
-    doubleWidth->setDecimals(0);
     doubleHeight->setValue(sz.height());
-    doubleHeight->setDecimals(0);
 }
 
 #include "kis_custom_image_widget.moc"

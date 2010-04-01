@@ -52,9 +52,6 @@ KisSoftPaintOpSettingsWidget:: KisSoftPaintOpSettingsWidget(QWidget* parent)
 
 KisSoftPaintOpSettingsWidget::~ KisSoftPaintOpSettingsWidget()
 {
-    delete m_softOption;
-    delete m_sizeOption;
-    delete m_paintActionTypeOption;
 }
 
 KisPropertiesConfiguration*  KisSoftPaintOpSettingsWidget::configuration() const

@@ -27,6 +27,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoShapeSavingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <KoUnit.h>
 
 #include <QTextInlineObject>
@@ -358,10 +359,15 @@ bool KoTextAnchor::loadOdfFromShape(const KoXmlElement& element)
     if (! shape()->hasAdditionalAttribute("text:anchor-type"))
         return false;
     QString anchorType = shape()->additionalAttribute("text:anchor-type");
-    if (anchorType == "char" || anchorType == "as-char") {
-        // no clue what the difference is between 'char' and 'as-char'...
+    if (anchorType == "as-char") {
+        // 'as-char' means it's completely inline in the text like any other char
         d->horizontalAlignment = HorizontalOffset;
         d->verticalAlignment = VerticalOffset;
+    } else if (anchorType == "char") {
+        // 'char' means it's relative to the paragraph
+        // while 'paragraph' further indicates the anchor is always placed at first char
+        d->horizontalAlignment = Left;
+        d->verticalAlignment = TopOfParagraph;
     }
     else {
         if (anchorType == "paragraph") {

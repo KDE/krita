@@ -203,6 +203,10 @@ public:
 
 signals:
     void shapeAdded(KoShape *shape);
+    /**
+     * Signal is emitted every time a layout run has finished and all text is positioned.
+     */
+    void finishedLayout();
 
 public slots:
     /// make sure we start a layout run (returns immediately)

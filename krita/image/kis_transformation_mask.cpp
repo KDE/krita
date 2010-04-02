@@ -76,8 +76,9 @@ void KisTransformationMask::apply(KisPaintDeviceSP projection, const QRect & rc)
     worker.run();
 }
 
-QRect KisTransformationMask::changeRect(const QRect &rect) const
+QRect KisTransformationMask::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
+    Q_UNUSED(pos);
     //FIXME: selections?
     return rect;
 }

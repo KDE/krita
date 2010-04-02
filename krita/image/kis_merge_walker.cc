@@ -69,16 +69,16 @@ void KisMergeWalker::visitHigherNode(KisNodeSP node, NodePosition positionToFilt
 {
     KisNodeSP nextNode = node->nextSibling();
     KisNodeSP prevNode = node->prevSibling();
+    positionToFilthy |=
+        !nextNode ? N_TOPMOST : !prevNode ? N_BOTTOMMOST : N_NORMAL;
 
-    registerChangeRect(node);
+    registerChangeRect(node, positionToFilthy);
 
     if (nextNode)
         visitHigherNode(nextNode, N_ABOVE_FILTHY);
     else if (node->parent())
         startTrip(node->parent());
 
-    positionToFilthy |=
-        !nextNode ? N_TOPMOST : !prevNode ? N_BOTTOMMOST : N_NORMAL;
     registerNeedRect(node, positionToFilthy);
 }
 

@@ -182,7 +182,7 @@ public:
      */
     QList<KisEffectMaskSP> effectMasks() const;
 
-    QRect changeRect(const QRect &rect) const;
+    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
     /**
      * Set a temporary effect mask on this layer for filter previews.

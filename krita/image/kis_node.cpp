@@ -97,8 +97,9 @@ QRect KisNode::needRect(const QRect &rect, PositionToFilthy pos) const
     return rect;
 }
 
-QRect KisNode::changeRect(const QRect &rect) const
+QRect KisNode::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
+    Q_UNUSED(pos);
     return rect;
 }
 

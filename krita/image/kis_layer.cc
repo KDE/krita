@@ -406,12 +406,14 @@ KisPaintDeviceSP KisLayer::projection() const
     return m_d->projection ? m_d->projection : original();
 }
 
-QRect KisLayer::changeRect(const QRect &rect) const
+QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
-    bool changeRectVaries;
-    QRect changeRect;
+    QRect changeRect = rect;
 
-    changeRect = masksChangeRect(effectMasks(), rect, changeRectVaries);
+    if(pos == KisNode::N_FILTHY) {
+        bool changeRectVaries;
+        changeRect = masksChangeRect(effectMasks(), rect, changeRectVaries);
+    }
 
     return changeRect;
 }

@@ -157,12 +157,13 @@ public:
         return v.visit(this);
     }
 
-    QRect changeRect(const QRect &rect) const {
+    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const {
+        Q_UNUSED(pos);
         const qint32 delta = 3;
         return rect.adjusted(-delta, -delta, delta, delta);
     }
 
-    QRect needRect(const QRect &rect, PositionToFilthy pos = NORMAL) const {
+    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const {
         Q_UNUSED(pos);
         const qint32 delta = 7;
         return rect.adjusted(-delta, -delta, delta, delta);
@@ -181,10 +182,10 @@ public:
     }
 
 
-    QRect needRect(const QRect &rect, PositionToFilthy pos = NORMAL) const {
+    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const {
         QRect retval;
 
-        if(pos == KisNode::NORMAL) {
+        if(pos != KisNode::N_BELOW_FILTHY && pos != N_FILTHY_PROJECTION) {
             const qint32 delta = 7;
             retval = rect.adjusted(-delta, -delta, delta, delta);
         }

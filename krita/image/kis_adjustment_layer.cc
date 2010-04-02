@@ -73,7 +73,7 @@ void KisAdjustmentLayer::setFilter(KisFilterConfiguration * filterConfig)
     m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(filterConfig);
 }
 
-QRect KisAdjustmentLayer::changeRect(const QRect& rect) const
+QRect KisAdjustmentLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
     QRect filteredRect = rect;
 
@@ -87,7 +87,7 @@ QRect KisAdjustmentLayer::changeRect(const QRect& rect) const
      * KisSelectionBasedLayer::changeRect to crop actual change
      * area in the end
      */
-    filteredRect = KisSelectionBasedLayer::changeRect(filteredRect);
+    filteredRect = KisSelectionBasedLayer::changeRect(filteredRect, pos);
 
     return rect | filteredRect;
 }

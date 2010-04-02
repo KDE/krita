@@ -46,6 +46,9 @@ public:
         N_BELOW_FILTHY = 0x40
     };
 
+    #define GRAPH_POSITION_MASK     0x03
+    #define POSITION_TO_FILTHY_MASK 0x7C
+
     struct JobItem {
         KisNodeSP m_node;
         NodePosition m_position;
@@ -115,6 +118,18 @@ protected:
     virtual void startTrip(KisNodeSP startWith) = 0;
 
 protected:
+    static inline KisNode::PositionToFilthy getPositionToFilthy(qint32 position) {
+        qint32 positionToFilthy = position & POSITION_TO_FILTHY_MASK;
+        // We do not use N_FILTHY_ORIGINAL yet, so...
+        Q_ASSERT(!(positionToFilthy & N_FILTHY_ORIGINAL));
+
+        return static_cast<KisNode::PositionToFilthy>(positionToFilthy);
+    }
+
+    static inline qint32 getGraphPosition(qint32 position) {
+        return position & GRAPH_POSITION_MASK;
+    }
+
     static inline bool isLayer(KisNodeSP node) {
         return qobject_cast<KisLayer*>(node.data());
     }
@@ -147,11 +162,12 @@ protected:
     /**
      * Called for every node we meet on a forward way of the trip.
      */
-    virtual void registerChangeRect(KisNodeSP node) {
+    virtual void registerChangeRect(KisNodeSP node, NodePosition position) {
         // We do not work with masks here. It is KisLayer's job.
         if(!isLayer(node)) return;
 
-        QRect currentChangeRect = node->changeRect(m_resultChangeRect);
+        QRect currentChangeRect = node->changeRect(m_resultChangeRect,
+                                                   getPositionToFilthy(position));
         currentChangeRect = cropThisRect(currentChangeRect);
 
         if(!m_changeRectVaries)
@@ -182,7 +198,7 @@ protected:
             //else /* Why push empty rect? */;
 
             m_lastNeedRect = node->needRect(m_lastNeedRect,
-                                            KisNode::NORMAL);
+                                            getPositionToFilthy(position));
             m_lastNeedRect = cropThisRect(m_lastNeedRect);
             m_childNeedRect = m_lastNeedRect;
         }
@@ -190,7 +206,7 @@ protected:
             if(!m_lastNeedRect.isEmpty()) {
                 pushJob(node, position, m_lastNeedRect);
                 m_lastNeedRect = node->needRect(m_lastNeedRect,
-                                                KisNode::BELOW_FILTHY);
+                                                getPositionToFilthy(position));
                 m_lastNeedRect = cropThisRect(m_lastNeedRect);
             }
         }

@@ -150,8 +150,9 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
     gc.bitBlt(rect.topLeft(), original, rect);
 }
 
-QRect KisSelectionBasedLayer::changeRect(const QRect &rect) const
+QRect KisSelectionBasedLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
+    Q_UNUSED(pos);
     /**
      * Warn: we won't call KisNode's copy of changeRect as it's dummy
      */

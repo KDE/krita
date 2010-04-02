@@ -130,7 +130,7 @@ bool KisFilterMask::accept(KisNodeVisitor &v)
 /**
  * FIXME: try to cache filter pointer inside a Private block
  */
-QRect KisFilterMask::changeRect(const QRect& rect) const
+QRect KisFilterMask::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
     /**
      * FIXME: This check of the emptiness should be done
@@ -149,7 +149,7 @@ QRect KisFilterMask::changeRect(const QRect& rect) const
      * We can't paint outside a selection, that is why we call
      * KisMask::changeRect to crop actual change area in the end
      */
-    filteredRect = KisMask::changeRect(filteredRect);
+    filteredRect = KisMask::changeRect(filteredRect, pos);
     /**
      * FIXME: Think over this solution
      * Union of rects means that changeRect returns NOT the rect

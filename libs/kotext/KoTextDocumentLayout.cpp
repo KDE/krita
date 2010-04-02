@@ -408,8 +408,10 @@ void KoTextDocumentLayout::layout()
                 m_state->shape->update(QRectF(0, posY,
                                               m_state->shape->size().width(), m_state->y() - posY));
 
-            if (! moreText)
+            if (! moreText) {
+                emit finishedLayout();
                 return; // done!
+            }
             continue;
         }
         if (m_state->numColumns() > 0)
@@ -420,6 +422,7 @@ void KoTextDocumentLayout::layout()
         while (m_state->addLine(line)) {
             if (m_state->shape == 0) { // shape is full!
                 line.setPosition(QPointF(0, m_state->y() + 20));
+                emit finishedLayout();
                 return; // done!
             }
             line.setLineWidth(m_state->width());

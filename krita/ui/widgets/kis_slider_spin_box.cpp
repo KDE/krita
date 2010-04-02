@@ -191,9 +191,8 @@ void KisAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
     Q_D(KisAbstractSliderSpinBox);
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
     //Respect emulated mouse grab.
-    if (progressRect(spinOpts).contains(e->pos()) &&
-            e->buttons() & Qt::LeftButton &&
-            !(d->downButtonDown || d->upButtonDown)) {
+    if (e->buttons() & Qt::LeftButton &&
+        !(d->downButtonDown || d->upButtonDown)) {
         setInternalValue(valueForX(e->pos().x()));
         update();
     }

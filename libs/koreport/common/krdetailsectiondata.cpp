@@ -29,7 +29,7 @@ KRDetailSectionData::KRDetailSectionData()
     m_detailSection = 0;
 }
 
-KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
+KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource, KoReportReportData *report)
 {
     m_valid = false;
     kDebug() << elemSource.tagName();
@@ -71,14 +71,14 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
             for ( QDomElement e = elemThis.firstChildElement( "report:section" ); ! e.isNull(); e = e.nextSiblingElement( "report:section" ) ) {
                 QString s = e.attribute( "report:section-type" );
                 if ( s == "group-header" ) {
-                    KRSectionData * sd = new KRSectionData(e);
+                    KRSectionData * sd = new KRSectionData(e, report);
                     if (sd->isValid()) {
                         dgsd->m_groupHeader = sd;
                     } else {
                         delete sd;
                     }
                 } else if ( s == "group-footer" ) {
-                    KRSectionData * sd = new KRSectionData(e);
+                    KRSectionData * sd = new KRSectionData(e, report);
                     if (sd->isValid()) {
                         dgsd->m_groupFooter = sd;
                     } else {
@@ -93,7 +93,7 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
             m_sortedFields.append(s);
 	    
         } else if (elemThis.tagName() == "report:section" && elemThis.attribute("report:section-type") == "detail") {
-            KRSectionData * sd = new KRSectionData(elemThis);
+            KRSectionData * sd = new KRSectionData(elemThis, report);
             if (sd->isValid()) {
                 m_detailSection = sd;
                 have_detail = true;

@@ -21,8 +21,8 @@
 #include <QObject>
 #include <kross/core/object.h>
 
-class KRReportData;
-class KRObjectData;
+class KoReportReportData;
+class KoReportItemBase;
 namespace Scripting
 {
 
@@ -33,7 +33,7 @@ class Report : public QObject
 {
     Q_OBJECT
 public:
-    Report(KRReportData*);
+    Report(KoReportReportData*);
 
     ~Report();
 
@@ -51,7 +51,7 @@ public slots:
     void eventOnNewPage();
 
 private:
-    KRReportData *m_reportData;
+    KoReportReportData *m_reportData;
     Kross::Object::Ptr m_scriptObject;
 };
 

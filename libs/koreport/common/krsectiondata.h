@@ -31,7 +31,8 @@
 #include <QObject>
 #include <qdom.h>
 
-class KRObjectData;
+class KoReportItemBase;
+class KoReportReportData;
 
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
@@ -65,7 +66,7 @@ public:
     };
 
     KRSectionData();
-    KRSectionData(const QDomElement &);
+    KRSectionData(const QDomElement &, KoReportReportData* report);
     ~KRSectionData();
     KoProperty::Set* properties() {
         return m_set;
@@ -79,7 +80,7 @@ public:
         return m_height->value().toDouble();
     }
 
-    QList<KRObjectData*> objects() const {
+    QList<KoReportItemBase*> objects() const {
         return m_objects;
     }
 
@@ -108,13 +109,13 @@ public slots:
 private:
     void createProperties();
 
-    QList<KRObjectData*> m_objects;
+    QList<KoReportItemBase*> m_objects;
 
     QString m_name;
     Section m_type;
 
-    static bool zLessThan(KRObjectData* s1, KRObjectData* s2);
-    static bool xLessThan(KRObjectData* s1, KRObjectData* s2);
+    static bool zLessThan(KoReportItemBase* s1, KoReportItemBase* s2);
+    static bool xLessThan(KoReportItemBase* s1, KoReportItemBase* s2);
 
     bool m_valid;
 

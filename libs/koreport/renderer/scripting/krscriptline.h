@@ -22,7 +22,7 @@
 #include <QPointF>
 #include <QColor>
 
-class KRLineData;
+class KoReportItemLine;
 
 namespace Scripting
 {
@@ -34,7 +34,7 @@ class Line : public QObject
 {
     Q_OBJECT
 public:
-    Line(KRLineData *);
+    Line(KoReportItemLine *);
 
     ~Line();
 
@@ -101,7 +101,7 @@ public slots:
     void setLineStyle(int);
 
 private:
-    KRLineData *m_line;
+    KoReportItemLine *m_line;
 
 };
 

@@ -85,6 +85,7 @@ void EditorDataModel::collectIndices() const
     }
     d->indicesForNames.clear();
     for (int row = 0; it.current(); row++, ++it) {
+        // kDebug() << it.current()->name() << "->" << row;
         d->indicesForNames.insert( it.current()->name(), QPersistentModelIndex( createIndex(row, 0, it.current()) ) );
     }
 }

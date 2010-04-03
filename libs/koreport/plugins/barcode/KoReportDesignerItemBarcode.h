@@ -30,7 +30,7 @@
 //
 // ReportEntityBarcode
 //
-class KoReportDesignerItemBarcode : public KoReportItemBarcode, public KoReportDesignerRectItemBase
+class KoReportDesignerItemBarcode : public KoReportItemBarcode, public KoReportDesignerItemRectBase
 {
 public:
     KoReportDesignerItemBarcode(KoReportDesigner *, QGraphicsScene* scene, const QPointF &pos);

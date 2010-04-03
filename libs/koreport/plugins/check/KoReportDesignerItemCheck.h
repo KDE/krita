@@ -25,7 +25,7 @@
 #include <koproperty/Set.h>
 #include "KoReportItemCheck.h"
 
-class KoReportDesignerItemCheck : public KoReportDesignerRectItemBase, public KoReportItemCheck
+class KoReportDesignerItemCheck : public KoReportDesignerItemRectBase, public KoReportItemCheck
 {
 public:
     KoReportDesignerItemCheck(KoReportDesigner *, QGraphicsScene * scene, const QPointF &pos);

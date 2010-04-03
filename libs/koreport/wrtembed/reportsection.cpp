@@ -192,7 +192,7 @@ void ReportSection::initFromXML(QDomNode & section)
             if (plugin) {
                 QObject *obj = plugin->createDesignerInstance(node, m_reportDesigner, m_scene);
                 if (obj) {
-                    KoReportDesignerRectItemBase *entity = dynamic_cast<KoReportDesignerRectItemBase*>(obj);
+                    KoReportDesignerItemRectBase *entity = dynamic_cast<KoReportDesignerItemRectBase*>(obj);
                     if (entity) {
                         entity->setVisible(true);
                     }

@@ -31,7 +31,7 @@
 #include "reportscene.h"
 
 
-KoReportDesignerRectItemBase::KoReportDesignerRectItemBase(KoReportDesigner *r)
+KoReportDesignerItemRectBase::KoReportDesignerItemRectBase(KoReportDesigner *r)
         : QGraphicsRectItem(), KoReportDesignerItemBase(r)
 {
     m_dpiX = KoDpi::dpiX();
@@ -49,29 +49,29 @@ KoReportDesignerRectItemBase::KoReportDesignerRectItemBase(KoReportDesigner *r)
 #endif
 }
 
-void KoReportDesignerRectItemBase::init(KRPos* p, KRSize* s, KoProperty::Set* se)
+void KoReportDesignerItemRectBase::init(KRPos* p, KRSize* s, KoProperty::Set* se)
 {
     m_ppos = p;
     m_psize = s;
     m_pset = se;
 }
 
-KoReportDesignerRectItemBase::~KoReportDesignerRectItemBase()
+KoReportDesignerItemRectBase::~KoReportDesignerItemRectBase()
 {
 }
 
-void KoReportDesignerRectItemBase::setUnit(KoUnit u)
+void KoReportDesignerItemRectBase::setUnit(KoUnit u)
 {
     m_ppos->setUnit(u);
     m_psize->setUnit(u);
 }
 
-QRectF KoReportDesignerRectItemBase::sceneRect()
+QRectF KoReportDesignerItemRectBase::sceneRect()
 {
     return QRectF(m_ppos->toScene(), m_psize->toScene());
 }
 
-QRectF KoReportDesignerRectItemBase::pointRect()
+QRectF KoReportDesignerItemRectBase::pointRect()
 {
     if (m_ppos && m_psize)
         return QRectF(m_ppos->toPoint(), m_psize->toPoint());
@@ -79,12 +79,12 @@ QRectF KoReportDesignerRectItemBase::pointRect()
         return QRectF(0, 0, 0, 0);
 }
 
-void KoReportDesignerRectItemBase::setSceneRect(const QPointF& topLeft, const QSizeF& size, UpdatePropertyFlag update)
+void KoReportDesignerItemRectBase::setSceneRect(const QPointF& topLeft, const QSizeF& size, UpdatePropertyFlag update)
 {
     setSceneRect(QRectF(topLeft, size), update);
 }
 
-void KoReportDesignerRectItemBase::setSceneRect(const QRectF& rect, UpdatePropertyFlag update)
+void KoReportDesignerItemRectBase::setSceneRect(const QRectF& rect, UpdatePropertyFlag update)
 {
     QGraphicsRectItem::setPos(rect.x(), rect.y());
     setRect(0, 0, rect.width(), rect.height());
@@ -95,7 +95,7 @@ void KoReportDesignerRectItemBase::setSceneRect(const QRectF& rect, UpdateProper
     this->update();
 }
 
-void KoReportDesignerRectItemBase::mousePressEvent(QGraphicsSceneMouseEvent * event)
+void KoReportDesignerItemRectBase::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     //Update and show properties
     m_ppos->setScenePos(QPointF(sceneRect().x(), sceneRect().y()));
@@ -106,7 +106,7 @@ void KoReportDesignerRectItemBase::mousePressEvent(QGraphicsSceneMouseEvent * ev
     QGraphicsItem::mousePressEvent(event);
 }
 
-void KoReportDesignerRectItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
+void KoReportDesignerItemRectBase::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     //Keep the size and position in sync
     m_ppos->setScenePos(pos());
@@ -115,7 +115,7 @@ void KoReportDesignerRectItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent * 
     QGraphicsItem::mouseReleaseEvent(event);
 }
 
-void KoReportDesignerRectItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
+void KoReportDesignerItemRectBase::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
     //kDebug() << m_grabAction;
 
@@ -166,7 +166,7 @@ void KoReportDesignerRectItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent * eve
     }
 }
 
-void KoReportDesignerRectItemBase::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
+void KoReportDesignerItemRectBase::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
 {
     //m_grabAction = 0;
 
@@ -204,7 +204,7 @@ void KoReportDesignerRectItemBase::hoverMoveEvent(QGraphicsSceneHoverEvent * eve
     //kDebug() << m_grabAction;
 }
 
-void KoReportDesignerRectItemBase::drawHandles(QPainter *painter)
+void KoReportDesignerItemRectBase::drawHandles(QPainter *painter)
 {
     if (isSelected()) {
         // draw a selected border for visual purposes
@@ -239,7 +239,7 @@ void KoReportDesignerRectItemBase::drawHandles(QPainter *painter)
   8 0 4
   7 6 5
 */
-int KoReportDesignerRectItemBase::grabHandle(QPointF pos)
+int KoReportDesignerItemRectBase::grabHandle(QPointF pos)
 {
     QRectF r = boundingRect();
     int halfW = (int)(r.width() / 2);
@@ -274,7 +274,7 @@ int KoReportDesignerRectItemBase::grabHandle(QPointF pos)
     return 0;
 }
 
-QVariant KoReportDesignerRectItemBase::itemChange(GraphicsItemChange change, const QVariant &value)
+QVariant KoReportDesignerItemRectBase::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     kDebug() << change;
     if (change == ItemPositionChange && scene()) {
@@ -314,7 +314,7 @@ QVariant KoReportDesignerRectItemBase::itemChange(GraphicsItemChange change, con
     return QGraphicsItem::itemChange(change, value);
 }
 
-void KoReportDesignerRectItemBase::propertyChanged(const KoProperty::Set &s, const KoProperty::Property &p)
+void KoReportDesignerItemRectBase::propertyChanged(const KoProperty::Set &s, const KoProperty::Property &p)
 {
     if (p.name() == "Position") {
         m_ppos->setUnitPos(p.value().toPointF(), KRPos::DontUpdateProperty);
@@ -325,7 +325,7 @@ void KoReportDesignerRectItemBase::propertyChanged(const KoProperty::Set &s, con
     setSceneRect(m_ppos->toScene(), m_psize->toScene(), DontUpdateProperty);
 }
 
-void KoReportDesignerRectItemBase::move(const QPointF& m)
+void KoReportDesignerItemRectBase::move(const QPointF& m)
 {
     
 }

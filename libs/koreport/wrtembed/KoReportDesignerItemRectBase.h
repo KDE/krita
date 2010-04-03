@@ -32,12 +32,12 @@ class KRSize;
 /**
  @author
 */
-class KoReportDesignerRectItemBase : public QGraphicsRectItem, public KoReportDesignerItemBase
+class KoReportDesignerItemRectBase : public QGraphicsRectItem, public KoReportDesignerItemBase
 {
 public:
-    KoReportDesignerRectItemBase(KoReportDesigner*);
+    KoReportDesignerItemRectBase(KoReportDesigner*);
 
-    virtual ~KoReportDesignerRectItemBase();
+    virtual ~KoReportDesignerItemRectBase();
     void setUnit(KoUnit u);
 
 protected:

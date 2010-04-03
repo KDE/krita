@@ -30,7 +30,7 @@ class KoReportDesignerItemBase;
 //
 // ReportEntityText
 //
-class KoReportDesignerItemText : public KoReportItemText, public KoReportDesignerRectItemBase
+class KoReportDesignerItemText : public KoReportItemText, public KoReportDesignerItemRectBase
 {
     Q_OBJECT
 public:

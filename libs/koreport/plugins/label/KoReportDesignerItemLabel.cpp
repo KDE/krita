@@ -38,7 +38,7 @@ void KoReportDesignerItemLabel::init(QGraphicsScene * scene)
     if (scene)
         scene->addItem(this);
 
-    KoReportDesignerRectItemBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
 
     connect(properties(), SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
@@ -48,7 +48,7 @@ void KoReportDesignerItemLabel::init(QGraphicsScene * scene)
 
 // methods (constructors)
 KoReportDesignerItemLabel::KoReportDesignerItemLabel(KoReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
-        : KoReportDesignerRectItemBase(d)
+        : KoReportDesignerItemRectBase(d)
 {
     init(scene);
     setSceneRect(getTextRect());
@@ -57,7 +57,7 @@ KoReportDesignerItemLabel::KoReportDesignerItemLabel(KoReportDesigner* d, QGraph
 }
 
 KoReportDesignerItemLabel::KoReportDesignerItemLabel(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
-        : KoReportDesignerRectItemBase(d), KoReportItemLabel(element)
+        : KoReportDesignerItemRectBase(d), KoReportItemLabel(element)
 {
     init(s);
     setSceneRect(m_pos.toScene(), m_size.toScene());
@@ -158,7 +158,7 @@ void KoReportDesignerItemLabel::slotPropertyChanged(KoProperty::Set &s, KoProper
         }
     }
 
-    KoReportDesignerRectItemBase::propertyChanged(s, p);
+    KoReportDesignerItemRectBase::propertyChanged(s, p);
     if (m_reportDesigner) m_reportDesigner->setModified(true);
 
 }

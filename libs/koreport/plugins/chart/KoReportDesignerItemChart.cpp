@@ -43,14 +43,14 @@ void KoReportDesignerItemChart::init(QGraphicsScene* scene, KoReportDesigner *de
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
 
-    KoReportDesignerRectItemBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
     setZValue(Z);
 
     connect(m_reportDesigner, SIGNAL(reportDataChanged()), this, SLOT(slotReportDataChanged()));
 }
 
 KoReportDesignerItemChart::KoReportDesignerItemChart(KoReportDesigner * rd, QGraphicsScene* scene, const QPointF &pos)
-        : KoReportDesignerRectItemBase(rd)
+        : KoReportDesignerItemRectBase(rd)
 {
     init(scene, rd);
     m_size.setSceneSize(QSizeF(m_dpiX, m_dpiY));
@@ -59,7 +59,7 @@ KoReportDesignerItemChart::KoReportDesignerItemChart(KoReportDesigner * rd, QGra
     m_name->setValue(m_reportDesigner->suggestEntityName("chart"));
 }
 
-KoReportDesignerItemChart::KoReportDesignerItemChart(QDomNode & element, KoReportDesigner * rd, QGraphicsScene* scene) : KoReportDesignerRectItemBase(rd), KoReportItemChart(element)
+KoReportDesignerItemChart::KoReportDesignerItemChart(QDomNode & element, KoReportDesigner * rd, QGraphicsScene* scene) : KoReportDesignerItemRectBase(rd), KoReportItemChart(element)
 {
     init(scene, rd);
     populateData();
@@ -174,7 +174,7 @@ void KoReportDesignerItemChart::slotPropertyChanged(KoProperty::Set &s, KoProper
         }
     }
 
-    KoReportDesignerRectItemBase::propertyChanged(s, p);
+    KoReportDesignerItemRectBase::propertyChanged(s, p);
     if (m_reportDesigner) m_reportDesigner->setModified(true);
 }
 
@@ -185,7 +185,7 @@ void KoReportDesignerItemChart::mousePressEvent(QGraphicsSceneMouseEvent * event
         QStringList qn = m_reportDesigner->reportData()->dataSourceNames();
         m_dataSource->setListData(ql, qn);
     }
-    KoReportDesignerRectItemBase::mousePressEvent(event);
+    KoReportDesignerItemRectBase::mousePressEvent(event);
 }
 
 void KoReportDesignerItemChart::slotReportDataChanged()

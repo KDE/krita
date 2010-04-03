@@ -28,7 +28,7 @@
 //
 // ReportEntityLabel
 //
-class KoReportDesignerItemLabel : public KoReportItemLabel, public KoReportDesignerRectItemBase
+class KoReportDesignerItemLabel : public KoReportItemLabel, public KoReportDesignerItemRectBase
 {
     Q_OBJECT
 public:

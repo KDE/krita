@@ -33,7 +33,7 @@
 //
 // ReportEntityLabel
 //
-class KoReportDesignerItemShape : public KoReportDesignerRectItemBase, public KoReportItemShape
+class KoReportDesignerItemShape : public KoReportDesignerItemRectBase, public KoReportItemShape
 {
 public:
     KoReportDesignerItemShape(KoReportDesigner *, QGraphicsScene * scene, const QPointF &pos);

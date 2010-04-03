@@ -25,7 +25,7 @@
 /**
  @author Adam Pigg <adam@piggz.co.uk>
 */
-class KoReportDesignerItemChart : public KoReportDesignerRectItemBase, public KoReportItemChart
+class KoReportDesignerItemChart : public KoReportDesignerItemRectBase, public KoReportItemChart
 {
 public:
     KoReportDesignerItemChart(KoReportDesigner *, QGraphicsScene* scene, const QPointF &pos);

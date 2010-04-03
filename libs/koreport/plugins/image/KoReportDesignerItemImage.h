@@ -29,7 +29,7 @@
 //
 // ReportEntityImage
 //
-class KoReportDesignerItemImage : public KoReportItemImage, public KoReportDesignerRectItemBase
+class KoReportDesignerItemImage : public KoReportItemImage, public KoReportDesignerItemRectBase
 {
  
 public:

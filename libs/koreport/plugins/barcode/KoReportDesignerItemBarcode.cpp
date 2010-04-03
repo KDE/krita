@@ -46,12 +46,12 @@ void KoReportDesignerItemBarcode::init(QGraphicsScene * scene)
             this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
 
     setMaxLength(5);
-    KoReportDesignerRectItemBase::init(&m_pos, &m_size, m_set);
+    KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
     setZValue(Z);
 }
 // methods (constructors)
 KoReportDesignerItemBarcode::KoReportDesignerItemBarcode(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
-        : KoReportDesignerRectItemBase(rw)
+        : KoReportDesignerItemRectBase(rw)
 {
     init(scene);
     m_size.setSceneSize(QSizeF(m_minWidthTotal*m_dpiX, m_minHeight*m_dpiY));
@@ -61,7 +61,7 @@ KoReportDesignerItemBarcode::KoReportDesignerItemBarcode(KoReportDesigner * rw, 
 }
 
 KoReportDesignerItemBarcode::KoReportDesignerItemBarcode(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)
-        : KoReportItemBarcode(element), KoReportDesignerRectItemBase(rw)
+        : KoReportItemBarcode(element), KoReportDesignerItemRectBase(rw)
 {
     init(scene);
     setSceneRect(m_pos.toScene(), m_size.toScene());
@@ -156,13 +156,13 @@ void KoReportDesignerItemBarcode::slotPropertyChanged(KoProperty::Set &s, KoProp
         }
     }
 
-    KoReportDesignerRectItemBase::propertyChanged(s, p);
+    KoReportDesignerItemRectBase::propertyChanged(s, p);
     if (m_reportDesigner) m_reportDesigner->setModified(true);
 }
 
 void KoReportDesignerItemBarcode::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
-    KoReportDesignerRectItemBase::mousePressEvent(event);
+    KoReportDesignerItemRectBase::mousePressEvent(event);
 }
 

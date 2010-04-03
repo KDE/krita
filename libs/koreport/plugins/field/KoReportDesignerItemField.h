@@ -29,7 +29,7 @@
 //
 // ReportEntityField
 //
-class KoReportDesignerItemField : public KoReportDesignerRectItemBase, public KoReportItemField
+class KoReportDesignerItemField : public KoReportDesignerItemRectBase, public KoReportItemField
 {
 public:
     //Used when creating new basic field

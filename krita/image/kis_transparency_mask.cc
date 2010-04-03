@@ -71,23 +71,22 @@ QRect KisTransparencyMask::exactBounds() const
     return parent() ? parent()->exactBounds() : QRect();
 }
 
-QRect KisTransparencyMask::changeRect(const QRect &rect) const
+QRect KisTransparencyMask::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
     /**
      * Selection on transparency masks have no special meaning:
      * They do crop both: change and need area
      */
-    return KisMask::changeRect(rect);
+    return KisMask::changeRect(rect, pos);
 }
 
 QRect KisTransparencyMask::needRect(const QRect &rect, PositionToFilthy pos) const
 {
-    Q_UNUSED(pos);
     /**
      * Selection on transparency masks have no special meaning:
      * They do crop both: change and need area
      */
-    return KisMask::needRect(rect);
+    return KisMask::needRect(rect, pos);
 }
 
 QIcon KisTransparencyMask::icon() const

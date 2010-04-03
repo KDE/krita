@@ -475,7 +475,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
     dlg.resize(dlg.minimumSizeHint());
 
     if (dlg.exec() != QDialog::Accepted) {
-        m_view->image()->removeNode(adjl);
+        m_commandsAdapter->undoLastCommand();
     } else {
         adjl->setName(dlg.layerName());
     }

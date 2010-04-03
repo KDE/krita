@@ -55,9 +55,9 @@ public:
 
 protected:
 
-    void registerChangeRect(KisNodeSP node) {
+    void registerChangeRect(KisNodeSP node, NodePosition position) {
 #ifdef DEBUG_VISITORS
-        qDebug()<< "FW:"<< node->name();
+        qDebug()<< "FW:"<< node->name() <<'\t'<< nodeTypeString(position);
 #endif
         m_order.append(node->name());
     }

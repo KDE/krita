@@ -43,11 +43,16 @@ class KRITAIMAGE_EXPORT KisNode : public KisBaseNode
 
 public:
     /**
-     * FIXME: Find better names
+     * The struct describing the position of the node
+     * against the filthy node.
+     * NOTE: please change KisBaseRectsWalker::getPositionToFilthy
+     *       when changing this struct
      */
     enum PositionToFilthy {
-        NORMAL,
-        BELOW_FILTHY
+        N_ABOVE_FILTHY = 0x04,
+        N_FILTHY_PROJECTION = 0x10,
+        N_FILTHY = 0x20,
+        N_BELOW_FILTHY = 0x40
     };
 
     /**
@@ -110,14 +115,14 @@ public:
      * on the layer will be exaclty 8x8. More than that the needRect for
      * that update will be 14x14. See \ref needeRect.
      */
-    virtual QRect changeRect(const QRect &rect) const;
+    virtual QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
     /**
      * Some filters need pixels outside the current processing rect to
      * compute the new value (for instance, convolution filters)
      * See \ref changeRect
      */
-    virtual QRect needRect(const QRect &rect, PositionToFilthy pos = NORMAL) const;
+    virtual QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
 public: // Graph methods
 

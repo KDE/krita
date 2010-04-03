@@ -28,11 +28,17 @@
 
 #include "kis_paint_device.h"
 #include "kis_filter_mask.h"
+#include "kis_transparency_mask.h"
 
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_image.h"
 #include "kis_group_layer.h"
+#include "kis_paint_layer.h"
+
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
 
 
 void KisLayerTest::testCreation()
@@ -227,6 +233,63 @@ void KisLayerTest::testHasEffectMasks()
     QVERIFY(layer->hasEffectMasks());
     layer->removePreviewMask();
     QVERIFY(layer->hasEffectMasks() == false);
+}
+
+
+    /*
+      +----------+
+      |root      |
+      | paint 1  |
+      |  fmask2  |
+      |  fmask1  |
+      +----------+
+     */
+
+void KisLayerTest::testMasksChangeRect()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+
+    image->addNode(paintLayer1, image->rootLayer());
+
+    KisFilterMaskSP filterMask1 = new KisFilterMask();
+    KisFilterMaskSP filterMask2 = new KisFilterMask();
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
+    Q_ASSERT(filter);
+    KisFilterConfiguration *configuration1 = filter->defaultConfiguration(0);
+    KisFilterConfiguration *configuration2 = filter->defaultConfiguration(0);
+
+    filterMask1->setFilter(configuration1);
+    filterMask2->setFilter(configuration2);
+
+    image->addNode(filterMask1, paintLayer1);
+    image->addNode(filterMask2, paintLayer1);
+
+    QRect testRect(10, 10, 100, 100);
+    QRect resultRect;
+
+    resultRect = paintLayer1->changeRect(testRect, KisNode::N_FILTHY);
+    QVERIFY2(resultRect == QRect(0, 0, 120, 120),
+              "KisNode::N_FILTHY node should take masks into account");
+
+    resultRect = paintLayer1->changeRect(testRect, KisNode::N_ABOVE_FILTHY);
+    QVERIFY2(resultRect == testRect,
+              "KisNode::N_ABOVE_FILTHY node should NOT take "
+              "masks into account");
+
+    /**
+     * KisNode::N_BELOW_FILTHY, KisNode::N_FILTHY_PROJECTION
+     * should not be use by the caller, because the walker
+     * shoult not visit these node on a forward way.
+     * So the the behavoiur here is undefined.
+     *
+     * resultRect = paintLayer1->changeRect(testRect, KisNode::N_BELOW_FILTHY);
+     * resultRect = paintLayer1->changeRect(testRect, KisNode::N_FILTHY_PROJECTION);
+     */
+
 }
 
 

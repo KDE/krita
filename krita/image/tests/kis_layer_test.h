@@ -104,6 +104,7 @@ private slots:
     void testMoveNode();
     void testMoveLayer();
     void testHasEffectMasks();
+    void testMasksChangeRect();
 
 };
 

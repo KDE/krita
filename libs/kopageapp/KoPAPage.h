@@ -73,7 +73,11 @@ protected:
     {
         UseMasterBackground = 1,        ///< Use the background of the master page. See ODF 14.13.2 Drawing Page Style
         DisplayMasterBackground = 2,    ///< If the master page is used this indicated if its backround should be used. See ODF 15.36.13 Background Visible
-        DisplayMasterShapes = 4         ///< Set if the shapes of the master page should be shown. See ODF 15.36.12 Background Objects Visible
+        DisplayMasterShapes = 4,         ///< Set if the shapes of the master page should be shown. See ODF 15.36.12 Background Objects Visible
+        DisplayHeader = 8,       /// set if presentation:display-header is true
+        DisplayFooter = 16,      /// set if presentation:display-footer is true
+        DisplayPageNumber = 32,  /// set if presentation:display-page-number is true
+        DisplayDateTime = 64     /// set if presentation:display-date-time is true
     };
 
     /// Reimplemented from KoPageBase

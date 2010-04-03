@@ -174,8 +174,9 @@ QRect KisMask::needRect(const QRect &rect,  PositionToFilthy pos) const
     return resultRect;
 }
 
-QRect KisMask::changeRect(const QRect &rect) const
+QRect KisMask::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
+    Q_UNUSED(pos);
     QRect resultRect = rect;
     if (m_d->selection)
         resultRect &= m_d->selection->selectedRect();

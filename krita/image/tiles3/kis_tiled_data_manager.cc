@@ -152,7 +152,7 @@ bool KisTiledDataManager::read(KoStore *store)
 
     //clear(); - needed?
 
-    /*nothing*/ m_mementoManager->getMemento();
+    KisMementoSP nothing = m_mementoManager->getMemento();
 
     KisTileSP tile;
     const qint32 tileDataSize = KisTileData::HEIGHT * KisTileData::WIDTH * pixelSize();
@@ -187,6 +187,7 @@ bool KisTiledDataManager::read(KoStore *store)
         tile->unlock();
     }
 
+    nothing->setInvalid();
     return true;
 }
 

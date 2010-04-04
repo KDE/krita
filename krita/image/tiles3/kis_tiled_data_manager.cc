@@ -161,7 +161,10 @@ bool KisTiledDataManager::read(KoStore *store)
     char str[80];
 
     QIODevice *stream = store->device();
-    if (!stream) return false;
+    if (!stream) {
+      nothing->setInvalid();
+      return false;
+    }
 
     quint32 numTiles;
     stream->readLine(str, 79);

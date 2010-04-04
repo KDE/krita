@@ -297,15 +297,19 @@ void KisMementoManager::removeMemento(KisMemento* memento)
     if (memento == m_currentMemento) { // This happen when a memento is not put on the stack
         commit();
     }
+    int lastIndex = -1;
     for (int i = 0; i < m_revisions.size(); ++i) {
         if (m_revisions[i].memento == memento) {
-            foreach(KisMementoItemSP item, m_revisions[i].itemList)
-            {
-                item->setParent(0);
-            }
-            Q_ASSERT(i == 0);
-            m_revisions.takeAt(i);
-            return;
+          lastIndex = i + 1;
+          break;
         }
+    }
+    Q_ASSERT(lastIndex <= 2);
+    for (int i = 0; i < lastIndex; ++i) {
+        foreach(KisMementoItemSP item, m_revisions[i].itemList)
+        {
+            item->setParent(0);
+        }
+        m_revisions.takeAt(0);
     }
 }

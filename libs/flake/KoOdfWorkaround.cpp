@@ -187,6 +187,6 @@ bool KoOdfWorkaround::fixPresentationPlaceholder()
 void KoOdfWorkaround::fixPresentationPlaceholder(KoShape *shape)
 {
     if (s_workaroundPresentationPlaceholderBug && !shape->hasAdditionalAttribute("presentation:placeholder")) {
-        shape->setAdditionalAttribute("presentation::placeholder", "true");
+        shape->setAdditionalAttribute("presentation:placeholder", "true");
     }
 }

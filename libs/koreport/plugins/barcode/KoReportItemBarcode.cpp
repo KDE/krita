@@ -204,4 +204,5 @@ int KoReportItemBarcode::render(OROPage* page, OROSection* section,  QPointF off
     else {
         kDebug() << "Unknown barcode format:" << fmt;
     }
+    return 0;
 }

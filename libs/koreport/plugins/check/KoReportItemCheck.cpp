@@ -113,38 +113,40 @@ QString KoReportItemCheck::typeName() const
 
 int KoReportItemCheck::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
 {
-            OROCheck *chk = new OROCheck();
+    OROCheck *chk = new OROCheck();
 
-            chk->setPosition(m_pos.toScene() + offset);
-            chk->setSize(m_size.toScene());
+    chk->setPosition(m_pos.toScene() + offset);
+    chk->setSize(m_size.toScene());
 
-            chk->setLineStyle(lineStyle());
-            chk->setForegroundColor(m_foregroundColor->value().value<QColor>());
-            chk->setCheckType(m_checkStyle->value().toString());
+    chk->setLineStyle(lineStyle());
+    chk->setForegroundColor(m_foregroundColor->value().value<QColor>());
+    chk->setCheckType(m_checkStyle->value().toString());
 
-            QString str;
+    QString str;
 
-            QString cs = itemDataSource();
-            kDebug() << "EntityCheck CS:" << cs;
+    QString cs = itemDataSource();
+    kDebug() << "EntityCheck CS:" << cs;
 
-            if (cs.left(1) == "=") {
-                str = script->evaluate(cs.mid(1)).toString();
-            } else {
-                str = data.toString();
-            }
+    if (cs.left(1) == "=" && script) {
+        str = script->evaluate(cs.mid(1)).toString();
+    } else {
+        str = data.toString();
+    }
 
-            bool v = false;
+    bool v = false;
 
-            str = str.toLower();
+    str = str.toLower();
 
-            kDebug() << "Check Value:" << str;
-            if (str == "t" || str == "true" || str == "1")
-                v = true;
+    kDebug() << "Check Value:" << str;
+    if (str == "t" || str == "true" || str == "1")
+        v = true;
 
-            chk->setValue(v);
+    chk->setValue(v);
 
-            page->addPrimitive(chk);
-            OROCheck *chk2 = dynamic_cast<OROCheck*>(chk->clone());
-            chk2->setPosition(m_pos.toPoint());
-            section->addPrimitive(chk2);
+    if (page) page->addPrimitive(chk);
+    OROCheck *chk2 = dynamic_cast<OROCheck*>(chk->clone());
+    chk2->setPosition(m_pos.toPoint());
+    if (section) section->addPrimitive(chk2);
+
+    return 0; //Item doesnt stretch the section height
 }

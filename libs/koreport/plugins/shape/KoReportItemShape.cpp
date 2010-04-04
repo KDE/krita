@@ -69,6 +69,6 @@ QString KoReportItemShape::typeName() const
 
 int KoReportItemShape::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
 {
-
+return 0;
 }
 

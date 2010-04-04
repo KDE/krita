@@ -250,11 +250,11 @@ int KoReportItemText::render(OROPage* page, OROSection* section,  QPointF offset
                     tb->setFlags(textFlags());
                     tb->setTextStyle(textStyle());
                     tb->setLineStyle(lineStyle());
-                    page->addPrimitive(tb);
+                    if (page) page->addPrimitive(tb);
 
                     OROTextBox *tb2 = dynamic_cast<OROTextBox*>(tb->clone());
                     tb2->setPosition(m_pos.toPoint());
-                    section->addPrimitive(tb2);
+                    if (section) section->addPrimitive(tb2);
 
                     intStretch += intRectHeight;
                     intLineCounter++;
@@ -275,7 +275,7 @@ int KoReportItemText::render(OROPage* page, OROSection* section,  QPointF offset
                 tb->setFlags(textFlags());
                 tb->setTextStyle(textStyle());
                 tb->setLineStyle(lineStyle());
-                page->addPrimitive(tb);
+                if (page) page->addPrimitive(tb);
 
                 intStretch += intRectHeight;
                 intLineCounter++;
@@ -284,5 +284,5 @@ int KoReportItemText::render(OROPage* page, OROSection* section,  QPointF offset
 
         intStretch += (m_bottomPadding / 100.0);
     }
-    return intStretch;
+    return intStretch; //Item returns its required section height
 }

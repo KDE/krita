@@ -204,7 +204,7 @@ int KoReportItemField::render(OROPage* page, OROSection* section,  QPointF offse
     QString str;
 
     QString ids = itemDataSource();
-    if (ids.left(1) == "=") { //Everything after = is treated as code
+    if (ids.left(1) == "=" && script) { //Everything after = is treated as code
         if (!ids.contains("PageTotal()")) {
             QVariant v = script->evaluate(ids.mid(1));
             str = v.toString();
@@ -219,11 +219,13 @@ int KoReportItemField::render(OROPage* page, OROSection* section,  QPointF offse
     }
     
     tb->setText(str);
-    page->addPrimitive(tb);
+    if (page) page->addPrimitive(tb);
 
     OROPrimitive *clone = tb->clone();
     clone->setPosition(m_pos.toScene());
-    section->addPrimitive(clone);
+    if (section) section->addPrimitive(clone);
+
+    return 0; //Item doesnt stretch the section height
 }
 
 

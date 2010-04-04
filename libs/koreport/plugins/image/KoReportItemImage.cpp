@@ -163,11 +163,12 @@ int KoReportItemImage::render(OROPage* page, OROSection* section,  QPointF offse
 
     id->setPosition(m_pos.toScene() + offset);
     id->setSize(m_size.toScene());
-    page->addPrimitive(id);
+    if (page) page->addPrimitive(id);
 
     OROImage *i2 = dynamic_cast<OROImage*>(id->clone());
     i2->setPosition(m_pos.toPoint());
-    section->addPrimitive(i2);
+    if (section) section->addPrimitive(i2);
+    return 0; //Item doesnt stretch the section height
 }
 
 

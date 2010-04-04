@@ -299,6 +299,10 @@ void KisMementoManager::removeMemento(KisMemento* memento)
     }
     for (int i = 0; i < m_revisions.size(); ++i) {
         if (m_revisions[i].memento == memento) {
+            foreach(KisMementoItemSP item, m_revisions[i].itemList)
+            {
+                item->setParent(0);
+            }
             Q_ASSERT(i == 0);
             m_revisions.takeAt(i);
             return;

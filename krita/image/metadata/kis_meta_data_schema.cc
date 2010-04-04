@@ -133,7 +133,7 @@ void Schema::Private::parseStructure(QDomElement& elt)
         if (!e.isNull()) {
             EntryInfo info;
             QString name;
-            if (parseEltType(e, info, name, true, false)) {
+            if (parseEltType(e, info, name, false, false)) {
                 if (schema->d->types.contains(name)) {
                     errImage << structureName << " already contains a field " << name;
                 } else {

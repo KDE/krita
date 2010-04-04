@@ -228,6 +228,7 @@ install( FILES
     metadata/schemas/tiff.schema
     metadata/schemas/mkn.schema
     metadata/schemas/xmp.schema
+    metadata/schemas/xmpmm.schema
     metadata/schemas/xmprights.schema
     
     DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)

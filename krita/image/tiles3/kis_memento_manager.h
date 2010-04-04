@@ -25,7 +25,14 @@
 #include "kis_tile_hash_table.h"
 
 typedef QList<KisMementoItemSP> KisMementoItemList;
-typedef QList<KisMementoItemList> KisHistoryList;
+
+class KisMemento;
+struct KisHistoryItem {
+    KisMemento* memento;
+    KisMementoItemList itemList;
+};
+
+typedef QList<KisHistoryItem> KisHistoryList;
 
 class KisMemento;
 typedef KisSharedPtr<KisMemento> KisMementoSP;
@@ -91,6 +98,8 @@ public:
     void setDefaultTileData(KisTileData *defaultTileData);
 
     void debugPrintInfo();
+    
+    void removeMemento(KisMemento* memento);
 
 protected:
     /**

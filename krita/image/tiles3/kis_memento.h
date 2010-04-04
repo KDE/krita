@@ -89,6 +89,7 @@ public:
     }
     inline void setInvalid() {
         m_valid = false;
+        m_mementoManager->removeMemento(this);
     }
 
 private:

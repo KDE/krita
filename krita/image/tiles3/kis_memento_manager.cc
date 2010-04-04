@@ -112,7 +112,7 @@ void KisMementoManager::registerTileDeleted(KisTile *tile)
 }
 void KisMementoManager::commit()
 {
-    if (!m_index.size()) return;
+    if (m_index.isEmpty()) return;
 
     KisMementoItemSP mi;
     KisMementoItemSP parentMI;
@@ -124,11 +124,14 @@ void KisMementoManager::commit()
 
         mi->setParent(parentMI);
         mi->commit();
-
         m_headsHashTable.deleteTile(mi->col(), mi->row());
         m_headsHashTable.addTile(mi);
     }
-    m_revisions.append(m_index);
+    KisHistoryItem hItem;
+    hItem.itemList = m_index;
+    hItem.memento = m_currentMemento.data();
+    
+    m_revisions.append(hItem);
     m_index.clear();
 
     // Waking up pooler to prepare copies for us
@@ -172,14 +175,14 @@ void KisMementoManager::rollback(KisTileHashTable *ht)
 
     if (! m_revisions.size()) return;
 
-    KisMementoItemList changeList = m_revisions.takeLast();
+    KisHistoryItem changeList = m_revisions.takeLast();
 
     KisMementoItemSP mi;
     KisMementoItemSP parentMI;
     KisMementoItemList::iterator iter;
 
     saveAndClearMemento(m_currentMemento);
-    forEachReversed(iter, changeList) {
+    forEachReversed(iter, changeList.itemList) {
         mi=*iter;
         parentMI = mi->parent();
 
@@ -219,12 +222,12 @@ void KisMementoManager::rollforward(KisTileHashTable *ht)
 
     if (! m_cancelledRevisions.size()) return;
 
-    KisMementoItemList changeList = m_cancelledRevisions.takeFirst();
+    KisHistoryItem changeList = m_cancelledRevisions.takeFirst();
 
     KisMementoItemSP mi;
 
     saveAndClearMemento(m_currentMemento);
-    foreach(mi, changeList) {
+    foreach(mi, changeList.itemList) {
         if (mi->parent()->type() == KisMementoItem::CHANGED)
             ht->deleteTile(mi->col(), mi->row());
         if (mi->type() == KisMementoItem::CHANGED)
@@ -243,10 +246,11 @@ void KisMementoManager::rollforward(KisTileHashTable *ht)
      * m_currentMemento. All dead tiles are going to /dev/null :)
      */
     //m_index.clear();
-    restoreMemento(m_currentMemento);
 
-    m_index = changeList;
+    m_index = changeList.itemList;
+    m_currentMemento = changeList.memento;
     commit();
+    restoreMemento(m_currentMemento);
     DEBUG_DUMP_MESSAGE("REDONE");
 }
 
@@ -260,7 +264,7 @@ void KisMementoManager::debugPrintInfo()
 {
     printf("KisMementoManager stats:\n");
     printf("Index list\n");
-    KisMementoItemList changeList;
+    KisHistoryItem changeList;
     KisMementoItemSP mi;
     foreach(mi, m_index) {
         mi->debugPrintInfo();
@@ -270,7 +274,7 @@ void KisMementoManager::debugPrintInfo()
     qint32 i = 0;
     foreach(changeList, m_revisions) {
         printf("--- revision #%d ---\n", i++);
-        foreach(mi, changeList) {
+        foreach(mi, changeList.itemList) {
             mi->debugPrintInfo();
         }
     }
@@ -279,7 +283,7 @@ void KisMementoManager::debugPrintInfo()
     i = 0;
     foreach(changeList, m_cancelledRevisions) {
         printf("--- revision #%d ---\n", m_revisions.size() + i++);
-        foreach(mi, changeList) {
+        foreach(mi, changeList.itemList) {
             mi->debugPrintInfo();
         }
     }
@@ -288,4 +292,16 @@ void KisMementoManager::debugPrintInfo()
     m_headsHashTable.debugPrintInfo();
 }
 
-
+void KisMementoManager::removeMemento(KisMemento* memento)
+{
+    if (memento == m_currentMemento) { // This happen when a memento is not put on the stack
+        commit();
+    }
+    for (int i = 0; i < m_revisions.size(); ++i) {
+        if (m_revisions[i].memento == memento) {
+            Q_ASSERT(i == 0);
+            m_revisions.takeAt(i);
+            return;
+        }
+    }
+}

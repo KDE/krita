@@ -69,14 +69,13 @@ class KoTextEditor;
  * FIXME: createXmlId() should consult with the KOffice codebase when
  * generating new xml:id values during save.
  */
-class KOTEXT_EXPORT KoTextInlineRdf : public QObject, public QSharedData
+class KOTEXT_EXPORT KoTextInlineRdf
 {
-    Q_OBJECT
 public:
-    KoTextInlineRdf(QTextDocument *doc, QTextBlock b);
+    KoTextInlineRdf(QTextDocument *doc, const QTextBlock &b);
     KoTextInlineRdf(QTextDocument *doc, KoBookmark *b);
     KoTextInlineRdf(QTextDocument *doc, KoTextMeta *b);
-    KoTextInlineRdf(QTextDocument *doc, QTextTableCell b);
+    KoTextInlineRdf(QTextDocument *doc, const QTextTableCell &b);
 
     virtual ~KoTextInlineRdf();
 

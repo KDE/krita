@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Martin Pfeiffer <hubipete@gmx.net>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -42,9 +43,11 @@ private slots:
     void updateSize();
     void sizeHasChanged();
     void resourceChanged( int key, const QVariant & res );
+    void aspectButtonToggled(bool keepAspect);
 
 private:
     KoInteractionTool* m_tool;
+    bool m_blockSignals;
 };
 
 #endif

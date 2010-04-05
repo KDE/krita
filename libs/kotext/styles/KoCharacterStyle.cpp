@@ -118,9 +118,10 @@ void KoCharacterStyle::Private::ensureMinimalProperties(QTextCursor &cursor, boo
     QTextCharFormat format = cursor.charFormat();
     QList<int> keys = hardCodedDefaultStyle.keys();
     for (int i = 0; i < keys.count(); i++) {
-        QVariant variant = hardCodedDefaultStyle.value(keys.at(i));
-        if (!variant.isNull() && !format.hasProperty(keys.at(i))) {
-            format.setProperty(keys.at(i), variant);
+        const int key = keys.at(i);
+        QVariant variant = hardCodedDefaultStyle.value(key);
+        if (!variant.isNull() && !format.hasProperty(key)) {
+            format.setProperty(key, variant);
         }
     }
     cursor.mergeCharFormat(format);

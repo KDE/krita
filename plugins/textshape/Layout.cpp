@@ -77,7 +77,6 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_y_justBelowDropCaps(0),
         m_restartingAfterTableBreak(false),
         m_restartingFirstCellAfterTableBreak(false)
-        ,m_imageCollection(0)
 {
 }
 

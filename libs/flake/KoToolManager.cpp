@@ -796,7 +796,7 @@ KoCreateShapesTool * KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const
     return 0;
 }
 
-KoToolBase *KoToolManager::toolById(KoCanvasBase *canvas, const QString id) const
+KoToolBase *KoToolManager::toolById(KoCanvasBase *canvas, const QString &id) const
 {
     Q_ASSERT(canvas);
     foreach(KoCanvasController *controller, d->canvasses.keys()) {

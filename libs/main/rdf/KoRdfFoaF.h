@@ -21,7 +21,6 @@
 #define __rdf_KoRdfFoaF_h__
 
 #include "KoRdfSemanticItem.h"
-#include <QSharedPointer>
 
 class KoRdfFoaFPrivate;
 

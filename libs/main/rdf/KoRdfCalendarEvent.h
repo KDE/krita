@@ -21,7 +21,6 @@
 #define __rdf_KoRdfCalendarEvent_h__
 
 #include "KoRdfSemanticItem.h"
-#include <QSharedPointer>
 
 namespace KCal
 {

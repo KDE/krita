@@ -21,7 +21,6 @@
 #define __rdf_KoRdfLocation_h__
 
 #include "rdf/KoRdfSemanticItem.h"
-#include <QSharedPointer>
 
 class KoRdfLocationPrivate;
 

@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "rdf/KoRdfSemanticItemViewSite.h"
-#include "rdf/KoDocumentRdf.h"
-#include "rdf/KoDocumentRdf_p.h"
+#include "KoRdfSemanticItemViewSite.h"
+#include "KoDocumentRdf.h"
+#include "KoDocumentRdf_p.h"
 #include "KoCanvasBase.h"
 #include "KoToolProxy.h"
 #include "KoResourceManager.h"

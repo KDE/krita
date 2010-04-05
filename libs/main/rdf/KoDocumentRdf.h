@@ -21,7 +21,7 @@
 #define KO_DOCUMENT_Rdf_H
 
 #include "komain_export.h"
-#include "rdf/KoDocumentRdfBase.h"
+#include "KoDocumentRdfBase.h"
 
 #include "KoXmlReaderForward.h"
 #include <KoDataCenterBase.h>

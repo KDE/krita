@@ -20,7 +20,7 @@
 #ifndef __rdf_KoRdfLocation_h__
 #define __rdf_KoRdfLocation_h__
 
-#include "rdf/KoRdfSemanticItem.h"
+#include "KoRdfSemanticItem.h"
 
 class KoRdfLocationPrivate;
 

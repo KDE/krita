@@ -20,7 +20,7 @@
 #ifndef KO_DOCUMENT_Rdf_PRIVATE_H
 #define KO_DOCUMENT_Rdf_PRIVATE_H
 
-#include "rdf/KoDocumentRdf.h"
+#include "KoDocumentRdf.h"
 
 class KoDocumentRdfPrivate
 {

@@ -177,6 +177,9 @@ double KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
 #endif
     m_isFirst = false;
     
+    delete m_painter;
+    m_painter = 0;
+    
     return m_spacing;
 }
 

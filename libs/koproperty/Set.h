@@ -108,6 +108,7 @@ public:
 
         friend class Set;
     private:
+        void skipNotAcceptable();
         const Set *m_set;
         QList<Property*>::ConstIterator m_iterator;
         QList<Property*>::ConstIterator m_end;

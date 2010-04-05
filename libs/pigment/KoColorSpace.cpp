@@ -75,6 +75,10 @@ KoColorSpace::~KoColorSpace()
     }
     delete d->mixColorsOp;
     delete d->convolutionOp;
+    delete d->transfoToRGBA16;
+    delete d->transfoFromRGBA16;
+    delete d->transfoToLABA16;
+    delete d->transfoFromLABA16;
     delete d;
 }
 

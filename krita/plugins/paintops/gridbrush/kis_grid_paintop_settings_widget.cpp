@@ -41,9 +41,6 @@ KisGridPaintOpSettingsWidget:: KisGridPaintOpSettingsWidget(QWidget* parent)
 
 KisGridPaintOpSettingsWidget::~ KisGridPaintOpSettingsWidget()
 {
-    delete m_gridOption;
-    delete m_gridShapeOption;
-    delete m_ColorOption;
 }
 
 KisPropertiesConfiguration*  KisGridPaintOpSettingsWidget::configuration() const

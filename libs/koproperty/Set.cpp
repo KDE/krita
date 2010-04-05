@@ -260,15 +260,24 @@ Set::Iterator::Iterator(const Set &set, const PropertySelector& selector)
     , m_selector( selector.clone() )
     , m_order(Set::InsertionOrder)
 {
-    if (current() && !(*m_selector)( *current() )) {
-        // skip first items that are acceptable by the selector
-        ++(*this);
-    }
+    skipNotAcceptable();
 }
 
 Set::Iterator::~Iterator()
 {
     delete m_selector;
+}
+
+void Set::Iterator::skipNotAcceptable()
+{
+    if (!m_selector)
+        return;
+    //kDebug() << "FROM:" << *current();
+    if (current() && !(*m_selector)( *current() )) {
+        // skip first items that not are acceptable by the selector
+        ++(*this);
+    }
+    //kDebug() << "TO:" << *current();
 }
 
 void Set::Iterator::setOrder(Set::Order order)
@@ -311,6 +320,7 @@ void Set::Iterator::setOrder(Set::Order order)
         m_iterator = m_set->d->listConstIterator();
         m_end = m_set->d->listConstEnd();
     }
+    skipNotAcceptable();
 }
 
 void

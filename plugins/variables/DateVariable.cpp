@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008,2010 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -56,9 +56,9 @@ void DateVariable::saveOdf(KoShapeSavingContext & context)
         writer->startElement("text:date", false);
     }
     if (m_type == Fixed) {
-        writer->addAttribute("text:fixed", true);
+        writer->addAttribute("text:fixed", "true");
     } else {
-        writer->addAttribute("text:fixed", false);
+        writer->addAttribute("text:fixed", "false");
     }
     if (m_displayType == Time) {
         writer->addAttribute("text:time-value", m_time.toString(Qt::ISODate));

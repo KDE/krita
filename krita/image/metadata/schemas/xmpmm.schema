@@ -1,0 +1,75 @@
+<schema prefix="xmpMM" uri="http://ns.adobe.com/xap/1.0/mm/">
+  <structures>
+    <structure name="ResourceEvent" prefix="stEvt" uri="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#
+">
+      <openedchoice name="action">
+        <text name="copied" />
+        <text name="created" />
+        <text name="cropped" />
+        <text name="edited" />
+        <text name="filtered" />
+        <text name="formatted" />
+        <text name="version_updated" />
+        <text name="printed" />
+        <text name="published" />
+        <text name="managed" />
+        <text name="produced" />
+        <text name="resized" />
+      </openedchoice>
+      <text name="instanceID" />
+      <text name="parameters" />
+      <text name="softwareAgent" />
+      <date name="when" />
+    </structure>
+    <structure name="ResourceRef" prefix="stRef" uri="http://ns.adobe.com/xap/1.0/sType/ResourceRef#">
+      <text name="instanceID" />
+      <text name="documentID" />
+      <text name="versionID" />
+      <openedchoice name="renditionClass">
+        <text name="default" />
+        <text name="thumbnail" />
+        <text name="screen" />
+        <text name="proof" />
+        <text name="draft" />
+        <text name="low-res" />
+      </openedchoice>
+      <text name="renditionParams" />
+      <text name="manager" />
+      <text name="managerVariant" />
+      <text name="managerTo" />
+      <text name="managerUI" />
+    </structure>
+    <structure name="Version" prefix="stVer" uri="http://ns.adobe.com/xap/1.0/sType/Version#">
+      <text name="comments" />
+      <ResourceEvent name="event" />
+      <date name="modifyDate" />
+      <text name="modifier" />
+      <text name="version" />
+    </structure>
+  </structures>
+  <properties>
+    <ResourceRef name="DerivedFrom" />
+    <text name="DocumentID" />
+    <seq name="History" type="ResourceEvent" />
+    <text name="InstanceID" />
+    <ResourceRef name="ManagedFrom" />
+    <text name="Manager" />
+    <text name="ManagerTo" />
+    <text name="ManageUI" />
+    <text name="ManagerVariant" />
+    <openedchoice name="RenditionClass">
+      <text name="default" />
+      <text name="thumbnail" />
+      <text name="screen" />
+      <text name="proof" />
+      <text name="draft" />
+      <text name="low-res" />
+    </openedchoice>
+    <text name="RenditionParams" />
+    <text name="VersionID" />
+    <seq name="Versions" type="Version" />
+    <text name="LastURL" />
+    <ResourceRef name="RenditionOf" />
+    <integer name="SaveID" />
+  </properties>
+</schema>

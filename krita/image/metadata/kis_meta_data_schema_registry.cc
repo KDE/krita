@@ -69,7 +69,6 @@ SchemaRegistry::SchemaRegistry() : d(new Private)
     }
 
     // DEPRECATED WRITE A SCHEMA FOR EACH OF THEM
-    create(Schema::XMPMediaManagementUri, "xmpMM");
     create(Schema::MakerNoteSchemaUri, "mkn");
     create(Schema::IPTCSchemaUri, "Iptc4xmpCore");
     create(Schema::PhotoshopSchemaUri, "photoshop");

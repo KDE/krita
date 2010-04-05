@@ -150,7 +150,7 @@ void KisBrightnessContrastFilterConfiguration::toXML(QDomDocument& doc, QDomElem
 KisBrightnessContrastFilter::KisBrightnessContrastFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Brightness/Contrast curve..."))
 {
-    setSupportsPainting(true);
+    setSupportsPainting(false);
     setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);

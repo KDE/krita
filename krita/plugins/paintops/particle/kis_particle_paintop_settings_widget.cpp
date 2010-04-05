@@ -36,8 +36,6 @@ KisParticlePaintOpSettingsWidget:: KisParticlePaintOpSettingsWidget(QWidget* par
 
 KisParticlePaintOpSettingsWidget::~ KisParticlePaintOpSettingsWidget()
 {
-    delete m_particleOption;
-    delete m_paintActionTypeOption;
 }
 
 KisPropertiesConfiguration*  KisParticlePaintOpSettingsWidget::configuration() const

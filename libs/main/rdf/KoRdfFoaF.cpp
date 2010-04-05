@@ -91,7 +91,6 @@ KoRdfFoaF::KoRdfFoaF(QObject *parent, KoDocumentRdf *m_rdf, Soprano::QueryResult
 
 KoRdfFoaF::~KoRdfFoaF()
 {
-    Q_D (KoRdfFoaF);
     kDebug(30015) << "~KoRdfFoaF() this:" << this << " name:" << name();
 }
 
@@ -136,7 +135,6 @@ void KoRdfFoaF::updateFromEditorData()
 
 KoRdfSemanticTreeWidgetItem *KoRdfFoaF::createQTreeWidgetItem(QTreeWidgetItem *parent)
 {
-    Q_D (KoRdfFoaF);
     kDebug(30015) << "format(), default stylesheet:" << defaultStylesheet()->name();
     KoRdfFoaFTreeWidgetItem *item = new KoRdfFoaFTreeWidgetItem(parent, this);
     return item;
@@ -178,7 +176,6 @@ void KoRdfFoaF::exportToMime(QMimeData *md) const
 
 QList<KoSemanticStylesheet*> KoRdfFoaF::stylesheets() const
 {
-    Q_D (const KoRdfFoaF);
     QList<KoSemanticStylesheet*> stylesheets;
     stylesheets.append(
         new KoSemanticStylesheet("143c1ba3-d7bb-440b-8528-7f07d2eff5f2", "name", "%NAME%"));

@@ -460,8 +460,8 @@ bool KoGenStyles::saveOdfStylesDotXml(KoStore* store, KoXmlWriter* manifestWrite
     KoStoreDevice stylesDev(store);
     KoXmlWriter* stylesWriter = KoOdfWriteStore::createOasisXmlWriter(&stylesDev, "office:document-styles");
 
-    d->saveOdfDocumentStyles(stylesWriter);
     d->saveOdfFontFaceDecls(stylesWriter);
+    d->saveOdfDocumentStyles(stylesWriter);
     d->saveOdfAutomaticStyles(stylesWriter, d->autoStylesInStylesDotXml, d->rawOdfAutomaticStyles_stylesDotXml);
     d->saveOdfMasterStyles(stylesWriter);
 

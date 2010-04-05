@@ -323,7 +323,7 @@ bool Autocorrect::autoFractions()
     QString trimmed = m_word.trimmed();
     if (trimmed.length() > 3) {
         QChar x = trimmed.at(3);
-        if (!(x.unicode() == '.' || x.unicode() == '.' || x.unicode() == '?' || x.unicode() == '!'
+        if (!(x.unicode() == '.' || x.unicode() == ',' || x.unicode() == '?' || x.unicode() == '!'
                 || x.unicode() == ':' || x.unicode() == ';'))
             return false;
     } else if (trimmed.length() < 3) {
@@ -516,7 +516,7 @@ void Autocorrect::advancedAutocorrect()
     // If the last char is punctuation, drop it for now
     bool hasPunctuation = false;
     QChar lastChar = actualWord.at(actualWord.length() - 1);
-    if (lastChar.unicode() == '.' || lastChar.unicode() == '.' || lastChar.unicode() == '?' ||
+    if (lastChar.unicode() == '.' || lastChar.unicode() == ',' || lastChar.unicode() == '?' ||
           lastChar.unicode() == '!' || lastChar.unicode() == ':' || lastChar.unicode() == ';') {
         hasPunctuation = true;
         actualWord.chop(1);

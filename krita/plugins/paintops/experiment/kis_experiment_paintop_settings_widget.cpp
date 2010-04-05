@@ -48,9 +48,6 @@ KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget*
 
 KisExperimentPaintOpSettingsWidget::~ KisExperimentPaintOpSettingsWidget()
 {
-    delete m_experimentOption;
-    delete m_experimentShapeOption;
-    delete m_ColorOption;
 }
 
 KisPropertiesConfiguration*  KisExperimentPaintOpSettingsWidget::configuration() const

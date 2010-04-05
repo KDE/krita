@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
+   Copyright (C) 2010 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,9 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "rdf/KoRdfSemanticTree.h"
-#include "rdf/KoDocumentRdf.h"
-#include "rdf/KoDocumentRdf_p.h"
+#include "KoRdfSemanticTree.h"
+#include "KoDocumentRdf.h"
+#include "KoDocumentRdf_p.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -28,7 +29,7 @@
 
 using namespace Soprano;
 
-class KoRdfSemanticTreePrivate
+class KoRdfSemanticTreePrivate : public QSharedData
 {
 public:
     QTreeWidget *m_tree;
@@ -39,7 +40,7 @@ public:
     QList<KoRdfCalendarEvent*> m_cals;
     QList<KoRdfLocation*> m_locations;
 
-    KoRdfSemanticTreePrivate(QTreeWidget* tree)
+    KoRdfSemanticTreePrivate(QTreeWidget *tree)
         {
             m_tree = tree;
             if(m_tree)  {
@@ -66,9 +67,17 @@ public:
     void clear(QTreeWidgetItem *parent);
 };
 
-KoRdfSemanticTree::KoRdfSemanticTree(QTreeWidget* tree)
-    :
-    d (new KoRdfSemanticTreePrivate (tree))
+KoRdfSemanticTree::KoRdfSemanticTree()
+    : d(new KoRdfSemanticTreePrivate(0))
+{
+}
+
+KoRdfSemanticTree::KoRdfSemanticTree(QTreeWidget *tree)
+    : d(new KoRdfSemanticTreePrivate (tree))
+{
+}
+KoRdfSemanticTree::KoRdfSemanticTree(const KoRdfSemanticTree &orig)
+    : d(orig.d)
 {
 }
 
@@ -168,3 +177,9 @@ void KoRdfSemanticTree::update(KoDocumentRdf *rdf, Soprano::Model *model)
     d->update (rdf,model);
 }
 
+
+KoRdfSemanticTree &KoRdfSemanticTree::operator=(const KoRdfSemanticTree &other)
+{
+    d = other.d;
+    return *this;
+}

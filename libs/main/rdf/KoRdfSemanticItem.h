@@ -28,8 +28,8 @@
 #include <KDateTime>
 #include <Soprano/Soprano>
 
-#include "rdf/RdfForward.h"
-#include "rdf/KoSemanticStylesheet.h"
+#include "RdfForward.h"
+#include "KoSemanticStylesheet.h"
 
 class KoCanvasBase;
 class QTreeWidgetItem;

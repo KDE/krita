@@ -56,7 +56,7 @@ class FLAKE_EXPORT KoCanvasController : public QAbstractScrollArea
 {
     Q_OBJECT
 public:
-    /// An enum to alter the positioning and size of the canvas insize the canvas controller
+    /// An enum to alter the positioning and size of the canvas inside the canvas controller
     enum CanvasMode {
         AlignTop,     ///< canvas is top aligned if smaller than the viewport
         Centered,     ///< canvas is centered if smaller than the viewport
@@ -93,8 +93,8 @@ public:
      */
     void setCanvas(KoCanvasBase *canvas);
     /**
-     * Return the curently set canvas
-     * @return the curently set canvas
+     * Return the currently set canvas
+     * @return the currently set canvas
      */
     KoCanvasBase *canvas() const;
 

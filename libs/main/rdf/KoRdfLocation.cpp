@@ -140,7 +140,6 @@ void KoRdfLocation::updateFromEditorData()
 
 KoRdfSemanticTreeWidgetItem *KoRdfLocation::createQTreeWidgetItem(QTreeWidgetItem *parent)
 {
-    Q_D (KoRdfLocation);
     KoRdfLocationTreeWidgetItem *item =
         new KoRdfLocationTreeWidgetItem(parent, this);
     return item;
@@ -163,7 +162,6 @@ void KoRdfLocation::setupStylesheetReplacementMapping(QMap<QString, QString> &m)
 
 void KoRdfLocation::exportToMime(QMimeData *md) const
 {
-    Q_D (const KoRdfLocation);
     QTemporaryFile file;
     if (file.open()) {
         QString mimeType = "application/vnd.google-earth.kml+xml";
@@ -181,7 +179,6 @@ void KoRdfLocation::exportToMime(QMimeData *md) const
 
 QList<KoSemanticStylesheet*> KoRdfLocation::stylesheets() const
 {
-    Q_D (const KoRdfLocation);
     QList<KoSemanticStylesheet*> stylesheets;
     stylesheets.append(
         new KoSemanticStylesheet("33314909-7439-4aa1-9a55-116bb67365f0", "name", "%NAME%"));

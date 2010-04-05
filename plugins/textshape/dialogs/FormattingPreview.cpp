@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C)  2008 Pierre Stirnweiss <pstirnweiss@googlemail.com>
- * Copyright (C) 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2009-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,7 +34,6 @@
 #include <QRect>
 #include <QRectF>
 #include <QString>
-#include <QStringList>
 #include <QTextLayout>
 #include <QTextLine>
 #include <QTextOption>
@@ -42,9 +41,9 @@
 #include <math.h>
 
 #include <klocale.h>
-#include "kdebug.h"
+#include <kdebug.h>
 
- FormattingPreview::FormattingPreview(QWidget* parent)
+FormattingPreview::FormattingPreview(QWidget* parent)
         : QFrame(parent),
         m_previewType(FontPreview),
         m_sampleText(i18n("Font")),
@@ -60,16 +59,21 @@
         m_underlineStyle(KoCharacterStyle::NoLineStyle),
         m_underlineColor(QColor(Qt::black)),
         //Paragraph properties
-        m_align(Qt::AlignHCenter | Qt::AlignVCenter),
         m_paragBackgroundColor(QColor(Qt::white)),
         m_firstLineMargin(0),
+        m_fixedLineHeight(0),
         m_horizAlign(Qt::AlignHCenter),
         m_leftMargin(0),
+        m_lineSpacing(0),
+        m_minimumLineHeight(0),
+        m_percentLineHeight(0),
         m_rightMargin(0),
+        m_useFontProperties(false),
         m_vertAlign(Qt::AlignVCenter)
 {
+    m_align = m_vertAlign | m_horizAlign;
     setFrameStyle(QFrame::Box | QFrame::Plain);
-    setMinimumSize( 500, 150 );
+    setMinimumSize(500, 150);
 }
 
 FormattingPreview::~FormattingPreview()
@@ -80,7 +84,6 @@ void FormattingPreview::setPreviewType(FormattingPreview::PreviewType type)
 {
     m_previewType = type;
 }
-
 
 void FormattingPreview::setText(const QString &sampleText)
 {
@@ -109,7 +112,6 @@ void FormattingPreview::setCharacterStyle(const KoCharacterStyle* style)
     m_underlineColor = style->underlineColor();
     update();
 }
-
 
 void FormattingPreview::setBackgroundColor(QColor color)
 {
@@ -214,25 +216,34 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     painter.scale(zoomX, zoomY);
 
     painter.fillRect(contentsRect(), QBrush(QColor(Qt::white)));
-    painter.fillRect(contentsRect(), QBrush(m_paragBackgroundColor.isValid()?m_paragBackgroundColor:QColor(Qt::white)));
+    if (m_paragBackgroundColor.isValid() && m_paragBackgroundColor.alpha() > 1)
+        painter.fillRect(contentsRect(), QBrush(m_paragBackgroundColor.isValid()));
 
 //set up the Font properties
     QFont displayFont = QFont(m_font, paintDevice);
     displayFont.setCapitalization(m_fontCapitalisation);
+    painter.setPen(m_textColor);
+    painter.setFont(displayFont);
 
 //first quickly check if we can draw at least one word
-    QStringList words = m_sampleText.split(' ');
-    painter.setFont(displayFont);
-    QRectF boundingRect = painter.boundingRect(contentsRect(), Qt::AlignCenter, words.at(0));
-    if ((boundingRect.width() > contentsRect().width()) || (boundingRect.height() > contentsRect().height())) {
-        displayFont.setPointSize(12);
+    int index = m_sampleText.indexOf(' ');
+    QString word = m_sampleText;
+    if (index > 0)
+        word = word.left(index-1);
+    while (true) {
+        QRectF boundingRect = painter.boundingRect(contentsRect(), Qt::AlignCenter, word);
+        if (boundingRect.width() > contentsRect().width()
+                || boundingRect.height() > contentsRect().height()) {
+            painter.scale(0.8, 0.8);
+            zoomX *= 0.8;
+            zoomY *= 0.8;
+        } else {
+            break;
+        }
     }
 
-    painter.setFont(displayFont);
-    painter.setPen(m_textColor);
 
 //now start the actual layout
-
     QTextLayout layout(m_sampleText, displayFont);
     layout.setTextOption(QTextOption(m_align));
 
@@ -258,10 +269,8 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
         lineSpacing = qMax(lineSpacing, m_minimumLineHeight);
     }
 
-    lineSpacing = zoomHandler->documentToViewY(lineSpacing);
-
     layout.beginLayout();
-    while (1) {
+    while (true) {
         QTextLine line = layout.createLine();
         if (!line.isValid())
             break;
@@ -280,7 +289,7 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     }
     layout.endLayout();
 
-    boundingRect = layout.boundingRect();
+    QRectF boundingRect = layout.boundingRect();
     QPointF origin = QPointF(xmargin, qMax(ymargin,(contentsRect().height()-boundingRect.height())/2)/zoomY);
     QTextCharFormat charFormat;
     charFormat.setBackground(QBrush(m_backgroundColor));
@@ -296,19 +305,19 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
 //draw decorations
     qreal width;
     switch (m_font.weight()) {
-        case QFont::Light:
-            width = fm.lineWidth() /2;
-            break;
-        case QFont::Normal: //Falltrhough
-        case QFont::DemiBold:
-            width = fm.lineWidth();
-            break;
-        case QFont::Bold: //Fallthrough
-        case QFont::Black:
-            width = fm.lineWidth() * 2;
-            break;
-        default:
-            width = fm.lineWidth();
+    case QFont::Light:
+        width = fm.lineWidth() /2;
+        break;
+    case QFont::Normal: //Fallthrough
+    case QFont::DemiBold:
+        width = fm.lineWidth();
+        break;
+    case QFont::Bold: //Fallthrough
+    case QFont::Black:
+        width = fm.lineWidth() * 2;
+        break;
+    default:
+        width = fm.lineWidth();
     }
 
     for (int i = 0; i <= layout.lineCount() - 1; i++) {

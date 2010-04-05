@@ -20,9 +20,9 @@
 #ifndef __rdf_KoRdfFoaFTreeWidgetItem_h__
 #define __rdf_KoRdfFoaFTreeWidgetItem_h__
 
-#include "rdf/RdfForward.h"
-#include "rdf/KoRdfFoaF.h"
-#include "rdf/KoRdfSemanticTreeWidgetItem.h"
+#include "RdfForward.h"
+#include "KoRdfFoaF.h"
+#include "KoRdfSemanticTreeWidgetItem.h"
 
 class KoCanvasBase;
 

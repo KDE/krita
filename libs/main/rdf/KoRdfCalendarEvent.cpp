@@ -300,7 +300,6 @@ void KoRdfCalendarEvent::setupStylesheetReplacementMapping(QMap<QString, QString
 
 void KoRdfCalendarEvent::exportToMime(QMimeData *md) const
 {
-    Q_D (const KoRdfCalendarEvent);
     QTemporaryFile file;
     if (file.open()) {
         QString fileName = file.fileName();
@@ -325,7 +324,6 @@ void KoRdfCalendarEvent::exportToMime(QMimeData *md) const
 
 QList<KoSemanticStylesheet*> KoRdfCalendarEvent::stylesheets() const
 {
-    Q_D (const KoRdfCalendarEvent);
     // TODO we probably want a namespace for these (like KoXmlNS).
     QList<KoSemanticStylesheet*> stylesheets;
     stylesheets.append(
@@ -405,7 +403,6 @@ static KCal::CalendarResources *StdCalendar()
 
 KCal::Event *KoRdfCalendarEvent::toKEvent() const
 {
-    Q_D (const KoRdfCalendarEvent);
     KCal::Event *event = new KCal::Event();
     event->setDtStart(start());
     event->setDtEnd(end());
@@ -445,7 +442,6 @@ void KoRdfCalendarEvent::fromKEvent(KCal::Event *event)
 
 void KoRdfCalendarEvent::saveToKCal()
 {
-    Q_D (KoRdfCalendarEvent);
 #ifdef KDEPIMLIBS_FOUND
     KCal::CalendarResources *calendarResource = StdCalendar();
     calendarResource->load();
@@ -461,18 +457,16 @@ void KoRdfCalendarEvent::saveToKCal()
 
 void KoRdfCalendarEvent::exportToFile(const QString &fileNameConst) const
 {
-    Q_D (const KoRdfCalendarEvent);
     QString fileName = fileNameConst;
 #ifdef KDEPIMLIBS_FOUND
-
-    if (!fileName.size()) {
+    if (fileName.isEmpty()) {
         fileName = KFileDialog::getSaveFileName(
                        KUrl("kfiledialog:///ExportDialog"),
                        "*.ics|ICalendar files",
                        0,
                        "Export to selected iCal file");
 
-        if (!fileName.size()) {
+        if (fileName.isEmpty()) {
             kDebug(30015) << "no filename given, cancel export..";
             return;
         }

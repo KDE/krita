@@ -172,8 +172,6 @@ private:
     QTextTableCell m_tableCell;  /**< Current table cell. */
     bool m_restartingAfterTableBreak; /** We are in a re-layout that was a result of a break in a table. */
     bool m_restartingFirstCellAfterTableBreak; /** We are in a re-layout that was a result of a break in a table. only true first cell after */
-
-    KoImageCollection *m_imageCollection;
 };
 
 #endif

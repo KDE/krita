@@ -286,16 +286,16 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
         for (qint32 column = firstColumn; column <= lastColumn; ++column) {
 
             QRect tileRect(column*KisTileData::WIDTH, row*KisTileData::HEIGHT,
-                           KisTileData::WIDTH, KisTileData::WIDTH);
+                           KisTileData::WIDTH, KisTileData::HEIGHT);
             QRect clearTileRect = clearRect & tileRect;
 
             if (clearTileRect == tileRect) {
-                // Clear whole tile
-                m_hashTable->deleteTile(column, row);
-
-                KisTileSP clearedTile = new KisTile(column, row, td, m_mementoManager);
-                m_hashTable->addTile(clearedTile);
-                updateExtent(column, row);
+//                 // Clear whole tile
+//                 m_hashTable->deleteTile(column, row);
+// 
+//                 KisTileSP clearedTile = new KisTile(column, row, td, m_mementoManager);
+//                 m_hashTable->addTile(clearedTile);
+//                 updateExtent(column, row);
 
                 /**
                  * Emulate like we've written something to the tile
@@ -304,6 +304,13 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
                 // Trigger artificial memory increase when clearing
 //                 KisTileDataWrapper tw(clearedTile, 0,
 //                                       KisTileDataWrapper::WRITE);
+                const qint32 lineSize = clearTileRect.width() * pixelSize;
+                qint32 rowsRemaining = clearTileRect.height();
+
+                KisTileDataWrapper tw = pixelPtr(clearTileRect.left(),
+                                                 clearTileRect.top(),
+                                                 KisTileDataWrapper::WRITE);
+                memcpy(tw.data(), td->data(), KisTileData::WIDTH * KisTileData::HEIGHT * td->pixelSize());
             } else {
                 const qint32 lineSize = clearTileRect.width() * pixelSize;
                 qint32 rowsRemaining = clearTileRect.height();

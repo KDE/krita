@@ -2,6 +2,7 @@
  * Copyright (C) 2007 Martin Pfeiffer <hubipete@gmx.net>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,13 +46,17 @@
 
 DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
                                     QWidget* parent )
-    : QWidget( parent )
+    : QWidget( parent ),
+    m_tool(tool),
+    m_blockSignals(false)
 {
-    m_tool = tool;
-
     setupUi( this );
 
     setUnit( m_tool->canvas()->unit() );
+
+    aspectButton->setKeepAspectRatio( false );
+    updatePosition();
+    updateSize();
 
     connect( positionSelector, SIGNAL( positionSelected(KoFlake::Position) ), 
         this, SLOT( positionSelected(KoFlake::Position) ) );
@@ -72,10 +77,8 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     connect( m_tool->canvas()->resourceManager(), SIGNAL( resourceChanged( int, const QVariant& ) ),
         this, SLOT( resourceChanged( int, const QVariant& ) ) );
 
-    aspectButton->setKeepAspectRatio( false );
-
-    updatePosition();
-    updateSize();
+    connect (aspectButton, SIGNAL(keepAspectRatioChanged(bool)),
+        this, SLOT(aspectButtonToggled(bool)));
 }
 
 void DefaultToolWidget::positionSelected( KoFlake::Position position )
@@ -96,18 +99,18 @@ void DefaultToolWidget::updatePosition()
     positionXSpinBox->setEnabled( selection->count() );
     positionYSpinBox->setEnabled( selection->count() );
 
-    positionXSpinBox->blockSignals(true);
-    positionYSpinBox->blockSignals(true);
+    if (m_blockSignals)
+        return;
+    m_blockSignals = true;
     positionXSpinBox->changeValue( selPosition.x() );
     positionYSpinBox->changeValue( selPosition.y() );
-    positionXSpinBox->blockSignals(false);
-    positionYSpinBox->blockSignals(false);
 
     QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
     bool aspectLocked = false;
     foreach (KoShape* shape, selectedShapes)
         aspectLocked = aspectLocked | shape->keepAspectRatio();
     aspectButton->setKeepAspectRatio(aspectLocked);
+    m_blockSignals = false;
 }
 
 void DefaultToolWidget::positionHasChanged()
@@ -147,17 +150,19 @@ void DefaultToolWidget::updateSize()
     widthSpinBox->setEnabled( selectionCount );
     heightSpinBox->setEnabled( selectionCount );
 
-    widthSpinBox->blockSignals(true);
-    heightSpinBox->blockSignals(true);
+    if (m_blockSignals)
+        return;
+    m_blockSignals = true;
     widthSpinBox->changeValue( selSize.width() );
     heightSpinBox->changeValue( selSize.height() );
-    widthSpinBox->blockSignals(false);
-    heightSpinBox->blockSignals(false);
+    m_blockSignals = false;
 }
 
 void DefaultToolWidget::sizeHasChanged()
 {
     if (aspectButton->hasFocus())
+        return;
+    if (m_blockSignals)
         return;
 
     QSizeF newSize( widthSpinBox->value(), heightSpinBox->value() );
@@ -230,10 +235,12 @@ void DefaultToolWidget::sizeHasChanged()
 
 void DefaultToolWidget::setUnit( const KoUnit &unit )
 {
+    m_blockSignals = true;
     positionXSpinBox->setUnit( unit );
     positionYSpinBox->setUnit( unit );
     widthSpinBox->setUnit( unit );
     heightSpinBox->setUnit( unit );
+    m_blockSignals = false;
 }
 
 void DefaultToolWidget::resourceChanged( int key, const QVariant & res )
@@ -247,6 +254,16 @@ void DefaultToolWidget::resourceChanged( int key, const QVariant & res )
             positionSelector->setPosition( static_cast<KoFlake::Position>( res.toInt() ) );
             updatePosition();
         }
+    }
+}
+
+void DefaultToolWidget::aspectButtonToggled(bool keepAspect)
+{
+    if (m_blockSignals)
+        return;
+    KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
+    foreach (KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
+        shape->setKeepAspectRatio(keepAspect);
     }
 }
 

@@ -25,9 +25,9 @@
 
 #include <KoShapeUserData.h>
 #include <KoInsets.h>
+#include <KoXmlReaderForward.h>
 
 class QTextDocument;
-#include "KoXmlReaderForward.h"
 class KoXmlWriter;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;

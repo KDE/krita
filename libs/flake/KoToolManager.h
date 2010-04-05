@@ -143,7 +143,7 @@ public:
      *    who's tool you want.
      * @see addController()
      */
-    KoToolBase *toolById(KoCanvasBase *canvas, const QString id) const;
+    KoToolBase *toolById(KoCanvasBase *canvas, const QString &id) const;
 
     /// @return the currently active pointing device
     KoInputDevice currentInputDevice() const;

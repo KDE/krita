@@ -21,7 +21,7 @@
 #define __rdf_KoRdfSemanticItemViewSite_h__
 
 #include "komain_export.h"
-#include "rdf/RdfForward.h"
+#include "RdfForward.h"
 #include <Soprano/Soprano>
 
 class KoCanvasBase;

@@ -26,6 +26,7 @@
  */
 
 #include "KoTextLoader.h"
+#include "KoTextLoader_p.cpp"
 
 #include <KoTextMeta.h>
 #include <KoBookmark.h>
@@ -757,39 +758,6 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
         }
     }
 }
-
-// we cannot use QString::simplifyWhiteSpace() because it removes
-// leading and trailing whitespace, but such whitespace is significant
-// in ODF -- so we use this function to compress sequences of space characters
-// into single spaces
-static QString normalizeWhitespace(const QString &in, bool leadingSpace)
-{
-    QString text = in;
-    int r, w = 0;
-    int len = text.length();
-    for (r = 0; r < len; ++r) {
-        QCharRef ch = text[r];
-        // check for space, tab, line feed, carriage return
-        if (ch == ' ' || ch == '\t' || ch == '\r' ||  ch == '\n') {
-            // if we were lead by whitespace in some parent or previous sibling element,
-            // we completely collapse this space
-            if (r != 0 || !leadingSpace)
-                text[w++] = QChar(' ');
-            // find the end of the whitespace run
-            while (r < len && text[r].isSpace())
-                ++r;
-            // and then record the next non-whitespace character
-            if (r < len)
-                text[w++] = text[r];
-        } else {
-            text[w++] = ch;
-        }
-    }
-    // and now trim off the unused part of the string
-    text.truncate(w);
-    return text;
-}
-
 
 QString KoTextLoader::createUniqueBookmarkName(KoBookmarkManager* bmm, QString bookmarkName, bool isEndMarker)
 {

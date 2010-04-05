@@ -1930,7 +1930,24 @@ void TextTool::setBackgroundColor(const KoColor &color)
 
 void TextTool::shapeAddedToDoc(KoShape *shape)
 {
-    Q_UNUSED(shape);
+    // calling ensureCursorVisible below is a rather intrusive thing to do for the user
+    // so make doube sure we need it!
+    if (!m_textShapeData)
+        return;
+    TextShape *ts = dynamic_cast<TextShape*>(shape);
+    if (!ts)
+        return;
+    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(ts->userData());
+    if (!data)
+        return;
+    if (data->document() != m_textShapeData->document())
+        return;
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    Q_ASSERT(lay);
+    const QList<KoShape*> shapes = lay->shapes();
+    // only when the new one is directly after our current one should we do the move
+    if (shapes.indexOf(ts) - shapes.indexOf(m_textShape) > 1)
+        return;
     // in case the new frame added is a freshly appended frame
     // allow the layouter to do some work and then optionally move the view to follow the cursor
     QTimer::singleShot(0, this, SLOT(ensureCursorVisible()));

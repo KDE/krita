@@ -21,7 +21,7 @@
 #define __rdf_KoRdfSemanticTreeWidgetItem_h__
 
 #include "komain_export.h"
-#include "rdf/RdfForward.h"
+#include "RdfForward.h"
 
 #include <QObject>
 #include <QTreeWidgetItem>

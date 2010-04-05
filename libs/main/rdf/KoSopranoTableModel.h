@@ -20,7 +20,6 @@
 #ifndef __rdf_KoSopranoTableModel_h__
 #define __rdf_KoSopranoTableModel_h__
 
-#include "komain_export.h"
 #include <QAbstractTableModel>
 #include <Soprano/Soprano>
 

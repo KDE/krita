@@ -311,9 +311,8 @@ void ConnectionTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void ConnectionTool::activate(bool temporary)
+void ConnectionTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
-    Q_UNUSED(temporary);
     canvas()->canvasWidget()->setCursor(Qt::PointingHandCursor);
 }
 

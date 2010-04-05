@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "rdf/InsertSemanticObjectCreateAction.h"
-#include "rdf/KoDocumentRdf.h"
+#include "InsertSemanticObjectCreateAction.h"
+#include "KoDocumentRdf.h"
 
 #include "KoCanvasBase.h"
 #include "KoToolProxy.h"

@@ -87,6 +87,10 @@ enum Direction {
     InheritDirection    ///< Direction is unspecified and should come from the container
 };
 
+/**
+ * Text resources per koffice-document.
+ * \sa KoResourceManager KoShapeCollection::resourceManager()
+ */
 enum DocumentResource {
     ChangeTracker = KoDocumentResource::KoTextStart + 1, ///< KoChangeTracker
     InlineTextObjectManager, ///< The KoText inline-text-object manager. KoInlineTextObjectManager

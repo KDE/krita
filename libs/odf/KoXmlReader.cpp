@@ -122,39 +122,55 @@ static inline uint qHash(const KoXmlStringPair &p)
 
 // Older versions of OpenOffice.org used different namespaces. This function
 // does translate the old namespaces into the new ones.
-QString fixNamespace(const QString &nsURI)
+static QString fixNamespace(const QString &nsURI)
 {
-    if (nsURI == "http://openoffice.org/2000/office")
-        return KoXmlNS::office;
-    if (nsURI == "http://openoffice.org/2000/text")
+    static QString office = QString::fromLatin1("http://openoffice.org/2000/office");
+    static QString text = QString::fromLatin1("http://openoffice.org/2000/text");
+    static QString style = QString::fromLatin1("http://openoffice.org/2000/style");
+    static QString fo = QString::fromLatin1("http://www.w3.org/1999/XSL/Format");
+    static QString table = QString::fromLatin1("http://openoffice.org/2000/table");
+    static QString drawing = QString::fromLatin1("http://openoffice.org/2000/drawing");
+    static QString datastyle = QString::fromLatin1("http://openoffice.org/2000/datastyle");
+    static QString svg = QString::fromLatin1("http://www.w3.org/2000/svg");
+    static QString chart = QString::fromLatin1("http://openoffice.org/2000/chart");
+    static QString dr3d = QString::fromLatin1("http://openoffice.org/2000/dr3d");
+    static QString form = QString::fromLatin1("http://openoffice.org/2000/form");
+    static QString script = QString::fromLatin1("http://openoffice.org/2000/script");
+    static QString meta = QString::fromLatin1("http://openoffice.org/2000/meta");
+    static QString config = QString::fromLatin1("http://openoffice.org/2001/config");
+    static QString pres = QString::fromLatin1("http://openoffice.org/2000/presentation");
+    static QString manifest = QString::fromLatin1("http://openoffice.org/2001/manifest");
+    if (nsURI == text)
         return KoXmlNS::text;
-    if (nsURI == "http://openoffice.org/2000/style")
+    if (nsURI == style)
         return KoXmlNS::style;
-    if (nsURI == "http://www.w3.org/1999/XSL/Format")
+    if (nsURI == office)
+        return KoXmlNS::office;
+    if (nsURI == fo)
         return KoXmlNS::fo;
-    if (nsURI == "http://openoffice.org/2000/table")
+    if (nsURI == table)
         return KoXmlNS::table;
-    if (nsURI == "http://openoffice.org/2000/drawing")
+    if (nsURI == drawing)
         return KoXmlNS::draw;
-    if (nsURI == "http://openoffice.org/2000/datastyle")
+    if (nsURI == datastyle)
         return KoXmlNS::number;
-    if (nsURI == "http://www.w3.org/2000/svg")
+    if (nsURI == svg)
         return KoXmlNS::svg;
-    if (nsURI == "http://openoffice.org/2000/chart")
+    if (nsURI == chart)
         return KoXmlNS::chart;
-    if (nsURI == "http://openoffice.org/2000/dr3d")
+    if (nsURI == dr3d)
         return KoXmlNS::dr3d;
-    if (nsURI == "http://openoffice.org/2000/form")
+    if (nsURI == form)
         return KoXmlNS::form;
-    if (nsURI == "http://openoffice.org/2000/script")
+    if (nsURI == script)
         return KoXmlNS::script;
-    if (nsURI == "http://openoffice.org/2000/meta")
+    if (nsURI == meta)
         return KoXmlNS::meta;
-    if (nsURI == "http://openoffice.org/2001/config")
+    if (nsURI == config)
         return KoXmlNS::config;
-    if (nsURI == "http://openoffice.org/2000/presentation")
+    if (nsURI == pres)
         return KoXmlNS::presentation;
-    if (nsURI == "http://openoffice.org/2001/manifest")
+    if (nsURI == manifest)
         return KoXmlNS::manifest;
     return nsURI;
 }

@@ -54,7 +54,7 @@ enum Type {
 class KoTextInlineRdf::Private
 {
 public:
-    Private(QTextDocument *doc, QTextBlock b)
+    Private(QTextDocument *doc, const QTextBlock &b)
             : block(b),
             document(doc),
             bookmark(0),
@@ -79,7 +79,7 @@ public:
         isObjectAttriuteUsed = false;
         sopranoObjectType = LiteralNode;
     }
-    Private(QTextDocument *doc, QTextTableCell c)
+    Private(QTextDocument *doc, const QTextTableCell &c)
             : document(doc),
             bookmark(0),
             kotextmeta(0),
@@ -111,7 +111,7 @@ public:
     bool isObjectAttriuteUsed;
 };
 
-KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, QTextBlock b)
+KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, const QTextBlock &b)
         : d(new Private(doc, b))
 {
 }
@@ -126,7 +126,7 @@ KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, KoTextMeta *b)
 {
 }
 
-KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, QTextTableCell b)
+KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, const QTextTableCell &b)
         : d(new Private(doc, b))
 {
 }

@@ -72,7 +72,7 @@ void KoCanvasController::Private::setDocumentOffset()
     if (pt.y() < margin) pt.setY(0);
     if (pt.x() > documentSize.width()) pt.setX(documentSize.width());
     if (pt.y() > documentSize.height()) pt.setY(documentSize.height());
-    q->emit moveDocumentOffset(pt);
+    emit q->moveDocumentOffset(pt);
 
     QWidget *canvasWidget = canvas->canvasWidget();
 

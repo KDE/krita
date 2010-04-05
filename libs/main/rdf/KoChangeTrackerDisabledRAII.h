@@ -20,8 +20,6 @@
 #ifndef __KoChangeTrackerDisabledRAII_h__
 #define __KoChangeTrackerDisabledRAII_h__
 
-#include "komain_export.h"
-
 class KoChangeTracker;
 
 /**

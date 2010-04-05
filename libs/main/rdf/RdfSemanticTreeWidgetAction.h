@@ -20,7 +20,6 @@
 #ifndef __rdf_RdfSemanticTreeWidgetAction_h__
 #define __rdf_RdfSemanticTreeWidgetAction_h__
 
-#include "komain_export.h"
 #include <QObject>
 #include <KAction>
 

@@ -20,7 +20,6 @@
 #ifndef __rdf_InsertSemanticObjectActionBase_h__
 #define __rdf_InsertSemanticObjectActionBase_h__
 
-#include "komain_export.h"
 #include "RdfForward.h"
 #include <KAction>
 

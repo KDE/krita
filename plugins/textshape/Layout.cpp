@@ -1841,17 +1841,34 @@ qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
     while (pos >= 0 && pos <= line.textStart() + line.textLength()) {
         QTextCursor c1(m_block);
         c1.setPosition(m_block.position() + pos);
+        pos = text.indexOf(QChar(0xFFFC), pos + 1);
         c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
         KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_parent->inlineTextObjectManager()->inlineTextObject(c1));
         if (note && note->type() == KoInlineNote::Footnote) {
+            QTextBlock footnoteBlock = m_textShape->footnoteDocument()->begin();
+            bool alreadyPresent = false;
+            while (footnoteBlock.isValid()) {
+                if (footnoteBlock.blockFormat().property(13471293).value<void*>() == note) {
+                    alreadyPresent = true;
+                    break;
+                }
+                footnoteBlock = footnoteBlock.next();
+            }
+            if (alreadyPresent)
+                continue;
             QTextCursor cursor(m_textShape->footnoteDocument());
-            cursor.setPosition(m_textShape->footnoteDocument()->characterCount()-1);
+            cursor.movePosition(QTextCursor::End);
             if (firstFootnote) {
                 (*oldLength) = cursor.position();
                 firstFootnote = false;
             }
             if (cursor.position() > 1)
-                cursor.insertText("\n");
+                cursor.insertBlock();
+            QTextBlockFormat bf;
+            QVariant variant;
+            variant.setValue<void*>(note);
+            bf.setProperty(13471293, variant);
+            cursor.mergeBlockFormat(bf);
 
             QTextCharFormat cf;
             cf.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
@@ -1861,7 +1878,6 @@ qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
             cursor.mergeCharFormat(cf);
             cursor.insertFragment(note->text());
         }
-        pos = text.indexOf(QChar(0xFFFC), pos + 1);
     }
     if (m_textShape->hasFootnoteDocument())
         return m_textShape->footnoteDocument()->size().height();

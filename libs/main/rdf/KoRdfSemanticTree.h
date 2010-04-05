@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
+   Copyright (C) 2010 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,11 +39,13 @@ class KoRdfSemanticTreePrivate;
  * is created and updated in multiple places, it makes sense to collect
  * the code handling it into a central location for easy global updates.
  */
-struct KOMAIN_EXPORT KoRdfSemanticTree
+class KOMAIN_EXPORT KoRdfSemanticTree
 {
-    QSharedPointer<KoRdfSemanticTreePrivate> d;
 public:
-    KoRdfSemanticTree(QTreeWidget* tree = 0);
+    KoRdfSemanticTree();
+    explicit KoRdfSemanticTree(QTreeWidget *tree);
+    KoRdfSemanticTree(const KoRdfSemanticTree &orig);
+    KoRdfSemanticTree &operator=(const KoRdfSemanticTree &other);
     ~KoRdfSemanticTree();
 
     /**
@@ -57,6 +60,9 @@ public:
      * KoDocumentRdf is used to populate the tree.
      */
     void update(KoDocumentRdf *rdf, Soprano::Model *model = 0);
+
+private:
+    QExplicitlySharedDataPointer<KoRdfSemanticTreePrivate> d;
 };
 
 #endif

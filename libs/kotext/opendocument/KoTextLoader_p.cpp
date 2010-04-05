@@ -30,15 +30,15 @@ static QString normalizeWhitespace(const QString &in, bool leadingSpace)
     int r, w = 0;
     int len = text.length();
     for (r = 0; r < len; ++r) {
-        QCharRef ch = text[r];
+        QChar ch = text.at(r);
         // check for space, tab, line feed, carriage return
-        if (ch == ' ' || ch == '\t' || ch == '\r' ||  ch == '\n') {
+        if (ch.unicode() == ' ' || ch.unicode() == '\t' || ch.unicode() == '\r' ||  ch.unicode() == '\n') {
             // if we were lead by whitespace in some parent or previous sibling element,
             // we completely collapse this space
             if (r != 0 || !leadingSpace)
                 text[w++] = QChar(' ');
             // find the end of the whitespace run
-            while (r < len && text[r].isSpace())
+            while (r < len && text.at(r).isSpace())
                 ++r;
             // and then record the next non-whitespace character
             if (r < len)
@@ -51,4 +51,3 @@ static QString normalizeWhitespace(const QString &in, bool leadingSpace)
     text.truncate(w);
     return text;
 }
-

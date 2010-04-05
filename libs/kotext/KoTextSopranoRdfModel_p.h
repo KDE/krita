@@ -31,7 +31,7 @@ namespace Soprano
     class Model
     {
     };
-};
+}
 #endif
 
 #endif

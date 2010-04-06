@@ -55,6 +55,7 @@ KisHairyBristleOption::KisHairyBristleOption()
     connect(m_options->scaleBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_options->shearBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_options->densityBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_options->connectedCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));    
     
     setConfigurationPage(m_options);
 }
@@ -74,6 +75,7 @@ void KisHairyBristleOption::readOptionSetting(const KisPropertiesConfiguration* 
     m_options->rndBox->setValue(config->getDouble(HAIRY_BRISTLE_RANDOM));
     m_options->scaleBox->setValue(config->getDouble(HAIRY_BRISTLE_SCALE));
     m_options->densityBox->setValue(config->getDouble(HAIRY_BRISTLE_DENSITY));
+    m_options->connectedCBox->setChecked(config->getDouble(HAIRY_BRISTLE_CONNECTED));
 }
 
 
@@ -85,5 +87,6 @@ void KisHairyBristleOption::writeOptionSetting(KisPropertiesConfiguration* confi
     config->setProperty(HAIRY_BRISTLE_SHEAR,m_options->shearBox->value());
     config->setProperty(HAIRY_BRISTLE_RANDOM,m_options->rndBox->value());
     config->setProperty(HAIRY_BRISTLE_DENSITY,m_options->densityBox->value());
+    config->setProperty(HAIRY_BRISTLE_CONNECTED, m_options->connectedCBox->isChecked());
 }
 

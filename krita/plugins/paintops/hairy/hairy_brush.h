@@ -49,6 +49,7 @@ public:
     bool useWeights;
 
     bool useSoakInk;
+    bool connectedPath;
     
     quint8 pressureWeight;
     quint8 bristleLengthWeight;
@@ -109,6 +110,11 @@ private:
 
     double m_angle;
     double m_oldPressure;
+    
+    // I use internal counter to count the calls of paint, the counter is 1 when the first call occurs
+    inline bool firstStroke(){
+        return (m_counter == 1);
+    }
 };
 
 #endif

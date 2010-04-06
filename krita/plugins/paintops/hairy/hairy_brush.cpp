@@ -81,7 +81,7 @@ void HairyBrush::setInkColor(const KoColor &color)
 void HairyBrush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale)
 {
     m_counter++;
-
+    
     qreal x1 = pi1.pos().x();
     qreal y1 = pi1.pos().y();
 
@@ -90,7 +90,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const K
 
     qreal dx = x2 - x1;
     qreal dy = y2 - y1;
-    
+   
     qreal angle = atan2(dy, dx);
 
     qreal mousePressure = 1.0;
@@ -117,7 +117,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const K
     
     rotateBristles(angle);
     // if this is first time the brush touches the canvas and we use soak the ink from canvas
-    if ((m_counter == 1) && m_properties->useSoakInk){
+    if (firstStroke() && m_properties->useSoakInk){
         KisRandomConstAccessor laccessor = layer->createRandomConstAccessor((int)x1, (int)y1);
         colorifyBristles(laccessor,layer->colorSpace() ,pi1.pos());
     }
@@ -137,7 +137,6 @@ void HairyBrush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const K
     for (int i = 0; i < bristleCount; i++) {
 
         if (!m_bristles.at(i)->enabled()) continue;
-        if (m_properties->threshold && (m_bristles.at(i)->length() < (treshold))) continue;
         bristle = m_bristles[i];
 
         randomX = (drand48() * 2 - 1.0) * m_properties->randomFactor;
@@ -150,11 +149,21 @@ void HairyBrush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const K
         m_transform.translate(randomX, randomY);
         m_transform.shear(shear, shear);
 
-        // transform start dab
-        m_transform.map(bristle->x(), bristle->y(), &fx1, &fy1);
-        // transform end dab
-        m_transform.map(bristle->x(), bristle->y(), &fx2, &fy2);
-
+        if (firstStroke() || (!m_properties->connectedPath)){
+            // transform start dab
+            m_transform.map(bristle->x(), bristle->y(), &fx1, &fy1);
+            // transform end dab
+            m_transform.map(bristle->x(), bristle->y(), &fx2, &fy2);
+        }else{
+            // continue the path of the bristle from the previous position
+            fx1 = bristle->prevX();
+            fy1 = bristle->prevY();
+            m_transform.map(bristle->x(), bristle->y(), &fx2, &fy2);
+        }
+        // remember the end point
+        bristle->setPrevX(fx2);
+        bristle->setPrevY(fy2);
+        
         // all coords relative to device position
         fx1 += x1;
         fy1 += y1;
@@ -162,6 +171,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const K
         fx2 += x2;
         fy2 += y2;
 
+        if ( m_properties->threshold && (bristle->length() < treshold) ) continue;
         // paint between first and last dab
         bristlePath = m_trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
         bristlePathSize = m_trajectory.size();

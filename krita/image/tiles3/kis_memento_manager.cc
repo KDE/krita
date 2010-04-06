@@ -306,7 +306,7 @@ void KisMementoManager::removeMemento(KisMemento* memento)
     }
     Q_ASSERT(lastIndex <= 2);
     for (int i = 0; i < lastIndex; ++i) {
-        foreach(KisMementoItemSP item, m_revisions[i].itemList)
+        foreach(KisMementoItemSP item, m_revisions[0].itemList)
         {
             item->setParent(0);
         }

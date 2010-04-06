@@ -76,7 +76,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->layout = new QGridLayout(m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer);
     m_d->layout->setSizeConstraint(QLayout::SetFixedSize);
 
-    m_d->uiWdgPaintOpPresets.scratchPad->setBackgroundColor(Qt::white);
+    m_d->uiWdgPaintOpPresets.scratchPad->setCanvasColor(Qt::white);
     m_d->uiWdgPaintOpPresets.scratchPad->setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
     m_d->uiWdgPaintOpPresets.scratchPad->setCutoutOverlay(QRect(0, 0, 250, 60));
     m_d->uiWdgPaintOpPresets.fillLayer->setIcon(KIcon("newlayer"));
@@ -89,6 +89,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->resourceProvider, SIGNAL(sigFGColorChanged(const KoColor &)),
             m_d->uiWdgPaintOpPresets.scratchPad, SLOT(setPaintColor(const KoColor &)));
+
+    connect(m_d->resourceProvider, SIGNAL(sigBGColorChanged(const KoColor &)),
+            m_d->uiWdgPaintOpPresets.scratchPad, SLOT(setBackgroundColor(const KoColor &)));
 
     connect(m_d->uiWdgPaintOpPresets.fillLayer, SIGNAL(clicked()),
             this, SLOT(fillScratchPadLayer()));

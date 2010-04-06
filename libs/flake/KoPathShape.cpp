@@ -280,9 +280,9 @@ void KoPathShapePrivate::paintDebug(QPainter &painter)
     kDebug(30006) << "nop =" << i;
 }
 
-void KoPathShapePrivate::debugPath()
+void KoPathShapePrivate::debugPath() const
 {
-    Q_Q(KoPathShape);
+    Q_Q(const KoPathShape);
     KoSubpathList::const_iterator pathIt(q->m_subpaths.constBegin());
     for (; pathIt != q->m_subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());

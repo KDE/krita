@@ -81,7 +81,7 @@ public:
     /**
      * @brief print debug information about a the points of the path
      */
-    void debugPath();
+    void debugPath() const;
 #endif
 
     Qt::FillRule fillRule;

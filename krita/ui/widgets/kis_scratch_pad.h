@@ -79,8 +79,11 @@ public slots:
     /// Set the preset to use
     void setPreset(KisPaintOpPresetSP preset);
 
-    /// Set the background color for the paint device.
-    void setBackgroundColor(const QColor& backgroundColor);
+    /// Set the background color for painting.
+    void setBackgroundColor(const KoColor& backgroundColor);
+
+    /// Set the color of the canvas
+    void setCanvasColor(const QColor& canvasColor);
 
     /// Set an image for the paint paint device
     void setBackgroundTile(const QImage& tile);
@@ -141,7 +144,8 @@ private:
     const KoColorSpace* m_colorSpace;
     KoColor m_paintColor;
     QImage m_backgroundTile;
-    QColor m_backgroundColor;
+    KoColor m_backgroundColor;
+    QColor m_canvasColor;
     Mode m_toolMode;
     KisPaintDeviceSP m_paintDevice;
     KisPaintOpPresetSP m_preset;
@@ -149,6 +153,7 @@ private:
     const KoColorProfile* m_displayProfile;
     QCursor m_cursor;
     QPoint m_currentMousePosition;
+    KisDistanceInformation m_distanceInformation;
     KisPaintInformation m_previousPaintInformation;
     KisPainter *m_painter;
     double m_dragDist;

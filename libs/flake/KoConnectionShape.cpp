@@ -390,7 +390,8 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         // which can later be fitted back into the target rect once we have all
         // the required information
         QMatrix viewMatrix;
-        viewMatrix.scale(static_cast<qreal>(1.0) / viewBox.width(), static_cast<qreal>(1.0) / viewBox.height());
+        viewMatrix.scale(viewBox.width() ? static_cast<qreal>(1.0) / viewBox.width() : 1.0,
+                         viewBox.height() ? static_cast<qreal>(1.0) / viewBox.height() : 1.0);
         viewMatrix.translate(-viewBox.left(), -viewBox.top());
         d->map(viewMatrix);
 

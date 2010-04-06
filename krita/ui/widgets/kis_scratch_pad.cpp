@@ -37,7 +37,8 @@
 KisScratchPad::KisScratchPad(QWidget *parent)
     : QWidget(parent)
     , m_colorSpace(0)
-    , m_backgroundColor(Qt::white)
+    , m_backgroundColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8())
+    , m_canvasColor(Qt::white)
     , m_toolMode(HOVERING)
     , m_backgroundMode(SOLID_COLOR)
     , m_displayProfile(0)
@@ -97,9 +98,14 @@ void KisScratchPad::setPreset(KisPaintOpPresetSP preset) {
     m_preset = preset;
 }
 
-void KisScratchPad::setBackgroundColor(const QColor& backgroundColor) {
+void KisScratchPad::setBackgroundColor(const KoColor& backgroundColor) {
 
     m_backgroundColor = backgroundColor;
+}
+
+void KisScratchPad::setCanvasColor(const QColor& canvasColor)
+{
+    m_canvasColor = canvasColor;
     clear();
 }
 
@@ -134,7 +140,7 @@ void KisScratchPad::clear() {
         case SOLID_COLOR:
         default:
             KoColor c(m_paintDevice->colorSpace());
-            c.fromQColor(m_backgroundColor);
+            c.fromQColor(m_canvasColor);
             m_paintDevice->setDefaultPixel(c.data());
         }
     }
@@ -296,6 +302,7 @@ void KisScratchPad::initPainting(QEvent* event) {
     m_painter = new KisPainter(m_paintDevice);
     m_painter->setCompositeOp(m_compositeOp);
     m_painter->setPaintColor(m_paintColor);
+    m_painter->setBackgroundColor(m_backgroundColor);
     m_painter->setPaintOpPreset(m_preset, 0);
     QPointF pos;
     if (QTabletEvent* tabletEvent = dynamic_cast<QTabletEvent*>(event)) {
@@ -312,7 +319,8 @@ void KisScratchPad::initPainting(QEvent* event) {
         pos = mouseEvent->pos();
         m_previousPaintInformation = KisPaintInformation(pos + m_offset);
     }
-    m_painter->paintAt(m_previousPaintInformation);
+    m_distanceInformation.spacing = m_painter->paintAt(m_previousPaintInformation);
+    m_distanceInformation.distance = 0.0;
     QRect rc = m_painter->dirtyRegion().boundingRect();
 
     update(pos.x() - rc.width(), pos.y() - rc.height(), rc.width() * 2, rc.height() *2);
@@ -343,7 +351,7 @@ void KisScratchPad::paint(QEvent* event) {
         info = KisPaintInformation(pos + m_offset);
     }
 
-    m_painter->paintLine(m_previousPaintInformation, info);
+    m_distanceInformation = m_painter->paintLine(m_previousPaintInformation, info, m_distanceInformation);
     m_previousPaintInformation = info;
     QRect rc = m_painter->dirtyRegion().boundingRect();
 

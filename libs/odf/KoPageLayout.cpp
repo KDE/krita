@@ -162,32 +162,23 @@ bool KoPageLayout::operator!=(const KoPageLayout& l) const
 }
 
 KoPageLayout::KoPageLayout()
+: format(KoPageFormat::defaultFormat())
+, orientation(KoPageFormat::Portrait)
+, width(MM_TO_POINT(KoPageFormat::width(format, orientation)))
+, height(MM_TO_POINT(KoPageFormat::height(format, orientation)))
+, leftMargin(MM_TO_POINT(20.0))
+, rightMargin(MM_TO_POINT(20.0))
+, topMargin(MM_TO_POINT(20.0))
+, bottomMargin(MM_TO_POINT(20.0))
+, pageEdge(-1)
+, bindingSide(-1)
+, leftPadding(0)
+, rightPadding(0)
+, topPadding(0)
+, bottomPadding(0)
 {
-    format = KoPageFormat::defaultFormat();
-
-    // orientation and dimensions
-    orientation = KoPageFormat::Portrait;
-    width = MM_TO_POINT(KoPageFormat::width(format, orientation));
-    height = MM_TO_POINT(KoPageFormat::height(format, orientation));
-
-    // margins
-    leftMargin = MM_TO_POINT(20.0);
-    rightMargin = MM_TO_POINT(20.0);
-    topMargin = MM_TO_POINT(20.0);
-    bottomMargin = MM_TO_POINT(20.0);
-
-    // padding.
-    leftPadding = 0;
-    rightPadding = 0;
-    topPadding = 0;
-    bottomPadding = 0;
-
-    // borders
     border.setLeftBorderStyle(KoBorder::BorderNone);
     border.setTopBorderStyle(KoBorder::BorderNone);
     border.setRightBorderStyle(KoBorder::BorderNone);
     border.setBottomBorderStyle(KoBorder::BorderNone);
-
-    pageEdge = -1;
-    bindingSide = -1;
 }

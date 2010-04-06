@@ -108,6 +108,10 @@ struct KoPageLayout {
      */
     static KOODF_EXPORT KDE_DEPRECATED KoPageLayout standardLayout();
 
+    /**
+     * Construct a page layout with the default page size depending on the locale settings,
+     * default margins (2 cm), and portrait orientation.
+     */
     KOODF_EXPORT KoPageLayout();
 };
 

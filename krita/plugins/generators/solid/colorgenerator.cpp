@@ -100,7 +100,11 @@ void KisColorGenerator::generate(KisProcessingInformation dstInfo,
     Q_ASSERT(config);
 
     QVariant value;
-    KoColor c = (config && config->getProperty("color", value)) ? value.value<KoColor>() : KoColor();
+    KoColor c;
+    if(config)
+    {
+        c = config->getColor("color");
+    }
 
     KisFillPainter gc(dst);
     gc.setProgress(progressUpdater);

@@ -23,6 +23,7 @@
 #include <QVariant>
 #include <kis_debug.h>
 #include <kis_cubic_curve.h>
+#include <KoColor.h>
 
 class QDomElement;
 class QDomDocument;
@@ -114,6 +115,8 @@ public:
 
     KisCubicCurve getCubicCurve(const QString & name, const KisCubicCurve & curve = KisCubicCurve()) const;
 
+    KoColor getColor(const QString& name, const KoColor& color = KoColor()) const;
+    
     QMap<QString, QVariant> getProperties() const;
 
     /// Clear the map of properties

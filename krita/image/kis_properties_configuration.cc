@@ -30,6 +30,8 @@
 #include "kis_selection.h"
 #include "KoID.h"
 #include "kis_types.h"
+#include <KoColor.h>
+#include <KoColorModelStandardIds.h>
 
 struct KisPropertiesConfiguration::Private {
     QMap<QString, QVariant> properties;
@@ -89,6 +91,12 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
         QDomText text;
         if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KisCubicCurve>()) {
             text = doc.createCDATASection(v.value<KisCubicCurve>().toString());
+        } else if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
+            QDomDocument doc = QDomDocument("color");
+            QDomElement root = doc.createElement("color");
+            doc.appendChild(root);
+            v.value<KoColor>().toXML(doc, root);
+            text = doc.createCDATASection(doc.toString());
         } else if(v.type() == QVariant::String ) {
             text = doc.createCDATASection(v.toString());  // XXX: Unittest this!
         } else {
@@ -203,6 +211,23 @@ KisCubicCurve KisPropertiesConfiguration::getCubicCurve(const QString & name, co
         }
     } else
         return curve;
+}
+
+KoColor KisPropertiesConfiguration::getColor(const QString& name, const KoColor& color) const
+{
+    QVariant v = getProperty(name);
+    if (v.isValid()) {
+        if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
+            return v.value<KoColor>();
+        } else {
+            QDomDocument doc;
+            doc.setContent(v.toString());
+            QDomElement e = doc.documentElement().firstChild().toElement();
+            return KoColor::fromXML(e, Integer16BitsColorDepthID.id(), QHash<QString, QString>());
+        }
+    } else {
+        return color;
+    }
 }
 
 void KisPropertiesConfiguration::dump() const

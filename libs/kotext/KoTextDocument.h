@@ -107,6 +107,33 @@ public:
     void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
     /**
+     * Enum to describe the text document's automatic resizing behaviour
+     */
+    enum ResizeMethod {
+        /// Makes sure that the text shape takes op only as much space as absolutely necessary
+        /// to fit the entire text into its boundaries.
+        AutoResize,
+        /// Deactivates auto-resizing
+        NoResize
+    };
+
+    /**
+     * Specifies how the document should be resized upon a change in the document.
+     *
+     * If auto-resizing is turned on, text will not be wrapped unless enforced by e.g. a newline.
+     *
+     * By default, NoResize is set.
+     */
+    void setResizeMethod(ResizeMethod method);
+
+    /**
+     * Returns the auto-resizing mode. By default, this is NoResize.
+     *
+     * @see setResizeMethod
+     */
+    ResizeMethod resizeMethod() const;
+
+    /**
      * Clears the text in the document. Unlike QTextDocument::clear(), this
      * function does not clear the resources of the QTextDocument.
      */

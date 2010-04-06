@@ -98,7 +98,8 @@ public:
     Private(KoTextDocumentLayout *parent_)
             : inlineTextObjectManager(0),
             scheduled(false),
-            parent(parent_) {
+            parent(parent_),
+            resizeMethod(KoTextDocument::NoResize) {
     }
 
     void relayoutPrivate() {
@@ -106,12 +107,43 @@ public:
         parent->relayout();
     }
 
+    void adjustSize();
+
     QList<KoShape *> shapes;
     KoInlineTextObjectManager *inlineTextObjectManager;
     bool scheduled;
+    KoTextDocument::ResizeMethod resizeMethod;
     KoTextDocumentLayout *parent;
     KoPostscriptPaintDevice *paintDevice;
 };
+
+void KoTextDocumentLayout::Private::adjustSize()
+{
+    if (parent->resizeMethod() == KoTextDocument::NoResize)
+        return;
+
+    if (parent->shapes().isEmpty())
+        return;
+    // Limit auto-resizing to the first shape only (there won't be more
+    // with auto-resizing turned on, unless specifically set)
+    KoShape *shape = parent->shapes().first();
+
+    // Determine the maximum width of all text lines
+    qreal width = 0;
+    for (QTextBlock block = parent->document()->begin(); block.isValid(); block = block.next()) {
+        // The block layout's wrap mode must be QTextOption::NoWrap, thus the line count
+        // of a valid block must be 1 (otherwise this resizing scheme wouldn't work)
+        Q_ASSERT(block.layout()->lineCount() == 1);
+        QTextLine line = block.layout()->lineAt(0);
+        width = qMax(width, line.naturalTextWidth());
+    }
+
+    // Use position and height of last text line to calculate height
+    QTextLine line = parent->document()->lastBlock().layout()->lineAt(0);
+    qreal height = line.position().y() + line.height();
+
+    shape->setSize(QSizeF(width, height));
+}
 
 // ------------------- KoTextDocumentLayout --------------------
 KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextDocumentLayout::LayoutState *layout)
@@ -123,6 +155,8 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextDocumentLay
     setPaintDevice(d->paintDevice);
     if (m_state == 0)
         m_state = new LayoutStateDummy();
+
+    connect(this, SIGNAL(finishedLayout()), SLOT(adjustSize()));
 }
 
 KoTextDocumentLayout::~KoTextDocumentLayout()
@@ -452,6 +486,19 @@ KoShape* KoTextDocumentLayout::shapeForPosition(int position) const
             return shape;
     }
     return 0;
+}
+
+void KoTextDocumentLayout::setResizeMethod(KoTextDocument::ResizeMethod method)
+{
+    if (d->resizeMethod == method)
+        return;
+    d->resizeMethod = method;
+    scheduleLayout();
+}
+
+KoTextDocument::ResizeMethod KoTextDocumentLayout::resizeMethod() const
+{
+    return d->resizeMethod;
 }
 
 #include <KoTextDocumentLayout.moc>

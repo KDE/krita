@@ -149,6 +149,7 @@ private:
     const KoColorProfile* m_displayProfile;
     QCursor m_cursor;
     QPoint m_currentMousePosition;
+    KisDistanceInformation m_distanceInformation;
     KisPaintInformation m_previousPaintInformation;
     KisPainter *m_painter;
     double m_dragDist;

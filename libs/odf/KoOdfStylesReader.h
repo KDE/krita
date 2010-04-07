@@ -28,6 +28,7 @@
 #include "koodf_export.h"
 #include "KoOdfNumberStyles.h"
 #include "KoOdfNotesConfiguration.h"
+#include "KoOdfLineNumberingConfiguration.h"
 
 /**
  * Repository of styles used during loading of OASIS/OOo file
@@ -130,9 +131,18 @@ public:
     DataFormatsMap dataFormats() const;
 
     /**
-     * Return the notes configration for the given note class (footnote or endnote)
+     * Return the notes configration for the given note class (footnote or endnote).
+     *
+     * Note that ODF supports different notes configurations for sections, but we don't
+     * support that yet.
      */
-    KoOdfNotesConfiguration globalNotesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass);
+    KoOdfNotesConfiguration globalNotesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const;
+
+    /**
+     * return the line numbering configuration for this document.
+     */
+    KoOdfLineNumberingConfiguration lineNumberingConfiguration() const;
+
 
 private:
     enum TypeAndLocation {

@@ -62,6 +62,9 @@ public:
     KoOdfNotesConfiguration globalFootnoteConfiguration;
     KoOdfNotesConfiguration globalEndnoteConfiguration;
     KoOdfNotesConfiguration defaultNoteConfiguration;
+
+    KoOdfLineNumberingConfiguration lineNumberingConfiguration;
+
 };
 
 KoOdfStylesReader::KoOdfStylesReader()
@@ -158,7 +161,7 @@ KoOdfStylesReader::DataFormatsMap KoOdfStylesReader::dataFormats() const
     return d->dataFormats;
 }
 
-KoOdfNotesConfiguration KoOdfStylesReader::globalNotesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass)
+KoOdfNotesConfiguration KoOdfStylesReader::globalNotesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const
 {
     switch (noteClass) {
     case (KoOdfNotesConfiguration::Endnote):
@@ -168,7 +171,11 @@ KoOdfNotesConfiguration KoOdfStylesReader::globalNotesConfiguration(KoOdfNotesCo
     default:
         return d->defaultNoteConfiguration;
     }
+}
 
+KoOdfLineNumberingConfiguration KoOdfStylesReader::lineNumberingConfiguration() const
+{
+    return d->lineNumberingConfiguration;
 }
 
 
@@ -280,7 +287,10 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
         else if (notesConfiguration.noteClass() == KoOdfNotesConfiguration::Endnote) {
             d->globalEndnoteConfiguration = notesConfiguration;
         }
+    } else if (ns == KoXmlNS::text && localName == "linenumbering-configuration") {
+        d->lineNumberingConfiguration.loadOdf(e);
     }
+
 }
 
 const KoXmlElement* KoOdfStylesReader::defaultStyle(const QString& family) const

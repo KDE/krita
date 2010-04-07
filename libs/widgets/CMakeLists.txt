@@ -57,7 +57,7 @@ kde4_add_ui_files( kowidgets_LIB_SRCS
 
 kde4_add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
 
-target_link_libraries(kowidgets kotext pigmentcms)
+target_link_libraries(kowidgets kotext pigmentcms ${KDE4_KNEWSTUFF3_LIBS})
 
 target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms ${KDE4_KDEUI_LIBS})
 

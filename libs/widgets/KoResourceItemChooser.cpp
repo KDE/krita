@@ -2,6 +2,7 @@
    Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+   Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,6 +31,10 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
+
+#include <knewstuff3/downloaddialog.h>
+#include <knewstuff3/uploaddialog.h>
+
 
 #include "KoResourceServerAdapter.h"
 #include "KoResourceItemView.h"
@@ -62,7 +67,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->buttonGroup->setExclusive( false );
 
     QGridLayout* layout = new QGridLayout( this );
-    layout->addWidget( d->view, 0, 0, 1, 3 );
+    layout->addWidget( d->view, 0, 0, 1, 4 );
 
     QPushButton *button = new QPushButton( this );
     button->setIcon( SmallIcon( "list-add" ) );
@@ -78,13 +83,31 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->buttonGroup->addButton( button, Button_Remove );
     layout->addWidget( button, 1, 1 );
 
+    button = new QPushButton( this );
+    button->setIcon( SmallIcon( "bookmarks" ) );
+    button->setToolTip( i18n("Download") );
+    button->setEnabled( true );
+    d->buttonGroup->addButton( button, Button_GhnsDownload );
+    layout->addWidget( button, 1, 2 );
+
+    button = new QPushButton( this );
+    button->setIcon( SmallIcon( "download" ) );
+    button->setToolTip( i18n("Share") );
+    button->setEnabled( false );
+    d->buttonGroup->addButton( button, Button_GhnsUpload);
+    layout->addWidget( button, 1, 3 );
+
+
     connect( d->buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ));
 
     layout->setColumnStretch( 0, 1 );
     layout->setColumnStretch( 1, 1 );
-    layout->setColumnStretch( 2, 2 );
+    layout->setColumnStretch( 2, 1 );
+    layout->setColumnStretch( 3, 1 );
     layout->setSpacing( 0 );
     layout->setMargin( 3 );
+
+    showGetHotNewStuff(false, false);
 
     updateRemoveButtonState();
 }
@@ -113,6 +136,29 @@ void KoResourceItemChooser::slotButtonClicked( int button )
             }
         }
     }
+    else if (button == Button_GhnsDownload) {
+
+        KNS3::DownloadDialog dialog(this);
+        dialog.exec();
+        foreach (const KNS3::Entry& e, dialog.changedEntries()) {
+            qDebug() << "Changed Entry: " << e.name() << e.installedFiles();
+        }
+    }
+    else if (button == Button_GhnsUpload) {
+
+        QModelIndex index = d->view->currentIndex();
+        if( index.isValid() ) {
+
+
+            KoResource * resource = resourceFromModelIndex(index);
+            if( resource ) {
+                KNS3::UploadDialog dialog(this);
+                dialog.setUploadFile(KUrl::fromLocalFile(resource->filename()));
+                dialog.setUploadName(resource->name());
+                dialog.exec();
+            }
+        }
+    }
     updateRemoveButtonState();
 }
 
@@ -121,6 +167,15 @@ void KoResourceItemChooser::showButtons( bool show )
     foreach( QAbstractButton * button, d->buttonGroup->buttons() )
         show ? button->show() : button->hide();
 }
+
+void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUpload )
+{
+    QAbstractButton *button = d->buttonGroup->button(Button_GhnsDownload);
+    showDownload ? button->show() : button->hide();
+    button = d->buttonGroup->button(Button_GhnsUpload);
+    showUpload ? button->show() : button->hide();
+}
+
 
 void KoResourceItemChooser::setColumnCount( int columnCount )
 {
@@ -177,23 +232,25 @@ void KoResourceItemChooser::activated( const QModelIndex & index )
 void KoResourceItemChooser::updateRemoveButtonState()
 {
     QAbstractButton * removeButton = d->buttonGroup->button( Button_Remove );
-    if( ! removeButton )
-        return;
+    QAbstractButton * uploadButton = d->buttonGroup->button( Button_GhnsUpload );
+
 
     KoResource * resource = currentResource();
     if( resource ) {
-        removeButton->setEnabled( resource->removable() );
+        if (removeButton) removeButton->setEnabled( resource->removable() );
+        if (uploadButton) uploadButton->setEnabled(true);
         return;
     }
 
-    removeButton->setEnabled( false );
+    if (removeButton) removeButton->setEnabled( false );
+    if (uploadButton) uploadButton->setEnabled( false );
 }
 
 KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index)
 {
     if(!index.isValid())
         return 0;
-    
+
     const QAbstractProxyModel* proxyModel = dynamic_cast<const QAbstractProxyModel*>(index.model());
     if(proxyModel) {
         //Get original model index, because proxy models destroy the internalPointer

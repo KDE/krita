@@ -735,15 +735,15 @@ void KisToolFreehand::showOutlineTemporary()
 {
     m_showOutline = true;
     m_timer.start(HIDE_OUTLINE_TIMEOUT);
-    canvas()->updateCanvas(m_oldOutlineRect);
-    //canvas()->updateCanvas(QRect(QPoint(0, 0), QSize(currentImage()->width(), currentImage()->height())));
+    //canvas()->updateCanvas(m_oldOutlineRect);
+    canvas()->updateCanvas(QRect(QPoint(0, 0), QSize(currentImage()->width(), currentImage()->height())));
 }
 
 void KisToolFreehand::hideOutline()
 {
     m_showOutline = false;
-    canvas()->updateCanvas(m_oldOutlineRect);
-    //canvas()->updateCanvas(QRect(QPoint(0, 0), QSize(currentImage()->width(), currentImage()->height())));
+    //canvas()->updateCanvas(m_oldOutlineRect);
+    canvas()->updateCanvas(QRect(QPoint(0, 0), QSize(currentImage()->width(), currentImage()->height())));
 }
 
 

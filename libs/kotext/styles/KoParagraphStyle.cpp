@@ -864,6 +864,26 @@ int KoParagraphStyle::defaultOutlineLevel() const
     return propertyInt(DefaultOutlineLevel);
 }
 
+bool KoParagraphStyle::lineNumbering() const
+{
+    return propertyBoolean(LineNumbering);
+}
+
+void KoParagraphStyle::setLineNumbering(bool lineNumbering)
+{
+    setProperty(LineNumbering, lineNumbering);
+}
+
+int KoParagraphStyle::lineNumberStartValue() const
+{
+    return propertyInt(LineNumberStartValue);
+}
+
+void KoParagraphStyle::setLineNumberStartValue(int lineNumberStartValue)
+{
+    setProperty(LineNumberStartValue, lineNumberStartValue);
+}
+
 void KoParagraphStyle::setIsListHeader(bool on)
 {
     setProperty(IsListHeader, on);
@@ -963,7 +983,7 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext 
         if (ok)
             setDefaultOutlineLevel(level);
     }
-    
+
     //1.6: KoTextFormat::load
     KoCharacterStyle *charstyle = characterStyle();
     context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"

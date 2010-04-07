@@ -984,6 +984,18 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext 
             setDefaultOutlineLevel(level);
     }
 
+    // 15.5.30 - 31
+    if (element->hasAttributeNS(KoXmlNS::text, "number-lines")) {
+        setLineNumbering(element->attributeNS(KoXmlNS::text, "number-lines", "false") == "true");
+        if (lineNumbering()) {
+            bool ok;
+            int startValue = element->attributeNS(KoXmlNS::text, "line-number").toInt(&ok);
+            if (ok) {
+                setLineNumberStartValue(startValue);
+            }
+        }
+    }
+
     //1.6: KoTextFormat::load
     KoCharacterStyle *charstyle = characterStyle();
     context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"

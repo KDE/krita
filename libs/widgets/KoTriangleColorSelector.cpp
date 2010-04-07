@@ -188,11 +188,11 @@ void KoTriangleColorSelector::setHSV(int h, int s, int v)
     h = qBound(0, h, 360);
     s = qBound(0, s, 255);
     v = qBound(0, v, 255);
+    d->invalidTriangle = (d->hue != h);
     d->hue = h;
     d->value = v;
     d->saturation = s;
     tellColorChanged();
-    d->invalidTriangle = true;
     update();
 }
 
@@ -242,18 +242,19 @@ void KoTriangleColorSelector::generateTriangle()
     // Length of triangle
     int hue_ = hue();
     
-    for(int y = 0; y < d->sizeColorSelector; y++)
+    for(int y = 0; y < d->sizeColorSelector; ++y)
     {
         qreal ynormalize = ( d->triangleTop - y ) / ( d->triangleTop - d->triangleBottom );
         qreal v = 255 * ynormalize;
         qreal ls_ = (ynormalize) * d->triangleLength;
         qreal startx_ = d->centerColorSelector - 0.5 * ls_;
-        for(int x = 0; x < d->sizeColorSelector; x++)
+        uint* data = reinterpret_cast<uint*>(image.scanLine(y));
+        for(int x = 0; x < d->sizeColorSelector; ++x, ++data)
         {
             qreal s = 255 * (x - startx_) / ls_;
             if(v < -1.0 || v > 256.0 || s < -1.0 || s > 256.0 )
             {
-                image.setPixel(x,y, qRgba(0,0,0,0));
+                *data = qRgba(0,0,0,0);
             } else {
                 qreal va = 1.0, sa = 1.0;
                 if( v < 0.0) { va = 1.0 + v; v = 0; }
@@ -265,9 +266,9 @@ void KoTriangleColorSelector::generateTriangle()
                 qreal coef = va * sa;
                 if( coef < 0.999)
                 {
-                    image.setPixel(x,y, qRgba( (int)(r * coef), (int)(g * coef), (int)(b * coef), (int)(255 * coef)));
+                    *data = qRgba( (int)(r * coef), (int)(g * coef), (int)(b * coef), (int)(255 * coef));
                 } else {
-                    image.setPixel(x,y, qRgba(r, g, b, 255 ));
+                    *data = qRgba(r, g, b, 255 );
                 }
             }
         }

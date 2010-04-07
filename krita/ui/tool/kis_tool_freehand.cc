@@ -74,6 +74,7 @@
 #include "kis_color_picker_utils.h"
 
 #define ENABLE_RECORDING
+static const int HIDE_OUTLINE_TIMEOUT = 800; // ms
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
         : KisToolPaint(canvas, cursor)
@@ -116,6 +117,11 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     KisCanvas2* canvas2 = static_cast<KisCanvas2*>(canvas);
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), canvas2, SIGNAL(favoritePaletteCalled(const QPoint&)));
     connect(this, SIGNAL(sigPainting()), canvas2->view()->resourceProvider(), SLOT(slotPainting()));
+    
+    m_showOutline = false;
+    m_timer.setSingleShot(true);
+    connect(&m_timer, SIGNAL(timeout()), this, SLOT( hideOutline() ));
+    
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -255,7 +261,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;
-    if (m_mode != PAINT && (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || m_mode == EDIT_BRUSH)) {
+    if (m_mode != PAINT && (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || m_mode == EDIT_BRUSH || m_showOutline)) {
         outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
     } else {
         outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
@@ -630,7 +636,8 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 
     {
         KisPaintOpSettings::OutlineMode outlineMode;
-        if (m_mode != PAINT && (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || m_mode == EDIT_BRUSH)) {
+        if (m_mode == PAINT) m_showOutline = false;
+        if (m_mode != PAINT && (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || m_mode == EDIT_BRUSH || m_showOutline)) {
             outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
         } else {
             outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
@@ -706,13 +713,13 @@ void KisToolFreehand::increaseBrushSize()
 {
     currentPaintOpPreset()->settings()->changePaintOpSize(1, 0);
     m_oldOutlineRect.adjust(-1, -1, 1, 1);
-    canvas()->updateCanvas(m_oldOutlineRect);
+    showOutlineTemporary();
 }
 
 void KisToolFreehand::decreaseBrushSize()
 {
     currentPaintOpPreset()->settings()->changePaintOpSize(-1, 0);
-    canvas()->updateCanvas(m_oldOutlineRect);
+    showOutlineTemporary();
 }
 
 QPointF KisToolFreehand::outlinePos() const
@@ -723,6 +730,22 @@ QPointF KisToolFreehand::outlinePos() const
         return m_mousePos;
     }
 }
+
+void KisToolFreehand::showOutlineTemporary()
+{
+    m_showOutline = true;
+    m_timer.start(HIDE_OUTLINE_TIMEOUT);
+    canvas()->updateCanvas(m_oldOutlineRect);
+    //canvas()->updateCanvas(QRect(QPoint(0, 0), QSize(currentImage()->width(), currentImage()->height())));
+}
+
+void KisToolFreehand::hideOutline()
+{
+    m_showOutline = false;
+    canvas()->updateCanvas(m_oldOutlineRect);
+    //canvas()->updateCanvas(QRect(QPoint(0, 0), QSize(currentImage()->width(), currentImage()->height())));
+}
+
 
 #include "kis_tool_freehand.moc"
 

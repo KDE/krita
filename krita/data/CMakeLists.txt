@@ -21,4 +21,5 @@ install( FILES
 
 install( FILES
     kritarc
+    krita.knsrc
     DESTINATION ${CONFIG_INSTALL_DIR} )

@@ -217,35 +217,14 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
                                    e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed());
 
         if (m_smooth) {
-            QPointF newTangent;
-            if (m_previousDrag.y() == 0.0 && m_previousDrag.x() == 0.0) {
-                newTangent = dragVec;
-            } else {
-                double angleTangent = angle(dragVec, m_previousDrag);
-                double cosTangent = cos(angleTangent);
-                double sinTangent = sin(angleTangent);
-                newTangent = QPointF(
-                                 cosTangent * dragVec.x() - sinTangent * dragVec.y(),
-                                 sinTangent * dragVec.x() + cosTangent * dragVec.y());
-            }
+            QPointF newTangent = dragVec;
 
             if (norm(newTangent) != 0) {
                 newTangent /= norm(newTangent) ;
             }
-
-            double cosPreviousNewTangent = cos(angle(newTangent, m_previousTangent));
-            newTangent += m_previousTangent;
-            newTangent *= 0.5 * cosPreviousNewTangent;
-
-            if (norm(dragVec) != 0) {
-                newTangent += (1.0 - cosPreviousNewTangent) * dragVec / norm(dragVec);
-            }
-
-            newTangent *= m_smoothness / norm(newTangent) ;
-            double normVec = 0.5 * norm(dragVec);
+            double normVec = 0.5 * m_smoothness * norm(dragVec);
             QPointF control1 = m_previousPaintInformation.pos() + m_previousTangent * normVec;
             QPointF control2 = info.pos() - newTangent * normVec;
-
             paintBezierCurve(m_previousPaintInformation,
                              control1,
                              control2,

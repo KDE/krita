@@ -689,6 +689,11 @@ void KisView2::slotImageSizeChanged()
     m_d->canvasController->setDocumentSize(documentSize);
 
     m_d->zoomManager->updateGUI();
+
+    //update view
+    canvasBase()->preScale();
+    canvasBase()->adjustOrigin();
+    canvas()->update();
 }
 
 

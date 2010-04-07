@@ -27,13 +27,48 @@
 #include <QtGui>
 #include <math.h>
 
+class PopupColorTriangle : public KoTriangleColorSelector
+{
+public:
+    PopupColorTriangle(QWidget* parent) : KoTriangleColorSelector(parent), m_dragging(false) {}
+    virtual ~PopupColorTriangle() {}
+
+    void tabletEvent(QTabletEvent* event)
+    {
+        event->accept();
+        QMouseEvent* mouseEvent;
+        switch(event->type())
+        {
+            case QEvent::TabletPress: mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
+                                                                Qt::LeftButton, event->modifiers());
+                                      m_dragging = true;
+                                      mousePressEvent(mouseEvent);
+                                      break;
+            case QEvent::TabletMove: mouseEvent = new QMouseEvent(QEvent::MouseMove, event->pos(),
+                                                                  (m_dragging) ? Qt::LeftButton : Qt::NoButton, event->modifiers());
+                                     mouseMoveEvent(mouseEvent);
+                                     break;
+            case QEvent::TabletRelease: mouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, event->pos(),
+                                                                    Qt::LeftButton, event->modifiers());
+                                        m_dragging = false;
+                                        mouseReleaseEvent(mouseEvent);
+                                        break;
+            default: break;
+        }
+        delete mouseEvent;
+    }
+    
+private:
+    bool m_dragging;
+};
+
 KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
     , m_resourceManager (manager)
     , m_triangleColorSelector (0)
     , m_timer(0)
 {
-    m_triangleColorSelector  = new KoTriangleColorSelector(this);
+    m_triangleColorSelector  = new PopupColorTriangle(this);
     m_triangleColorSelector->move(60, 60);
     m_triangleColorSelector->setVisible(true);
 
@@ -403,6 +438,29 @@ void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
     {
         showPopupPalette(false);
     }
+}
+
+void KisPopupPalette::tabletEvent(QTabletEvent* event)
+{
+    event->accept();
+    QMouseEvent* mouseEvent;
+    switch(event->type())
+    {
+        case QEvent::TabletPress: mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
+                                                               Qt::LeftButton, event->modifiers());
+                                  mousePressEvent(mouseEvent);
+                                  break;
+        case QEvent::TabletMove: mouseEvent = new QMouseEvent(QEvent::MouseMove, event->pos(),
+                                                              Qt::NoButton, event->modifiers());
+                                 mouseMoveEvent(mouseEvent);
+                                 break;
+        case QEvent::TabletRelease: mouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, event->pos(),
+                                                                 Qt::LeftButton, event->modifiers());
+                                    mouseReleaseEvent(mouseEvent);
+                                    break;
+        default: break;
+    }
+    delete mouseEvent;
 }
 
 int KisPopupPalette::calculateIndex(QPointF point, int n)

@@ -29,6 +29,7 @@ class KoReportPrintRenderer : public KoReportRendererBase
         KoReportPrintRenderer();
         virtual ~KoReportPrintRenderer();
         virtual bool render(const KoReportRendererContext&, ORODocument*, int page = -1);
+        virtual bool renderPage(int page, const KoReportRendererContext&, ORODocument*);
 
     private:
         bool setupPrinter(ORODocument *, QPrinter *);

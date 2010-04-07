@@ -47,6 +47,10 @@ class KOREPORT_EXPORT KoReportRendererBase
         //! Render the page of the given document within the given context.
         //! If page == -1, renders the entire document.
         virtual bool render(const KoReportRendererContext& context, ORODocument *document, int page = -1) = 0;
+
+        //! Render the page of the given document within the given context.
+        //! Reimplemnt if your renderer supports single page rendering
+        virtual bool renderPage(int page, const KoReportRendererContext& context, ORODocument *document) { return false; }
 };
 
 //! Factory for creating renderers

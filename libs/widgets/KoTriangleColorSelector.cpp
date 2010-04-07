@@ -53,6 +53,7 @@ struct KoTriangleColorSelector::Private {
     CurrentHandle handle;
     qreal triangleHandleSize;
     bool invalidTriangle;
+    int lastX, lastY;
 };
 
 KoTriangleColorSelector::KoTriangleColorSelector(QWidget* parent) : QWidget(parent), d(new Private)
@@ -66,6 +67,8 @@ KoTriangleColorSelector::KoTriangleColorSelector(QWidget* parent) : QWidget(pare
     setMouseTracking( true );
     updateTriangleCircleParameters();
     d->invalidTriangle = true;
+    d->lastX = -1;
+    d->lastY = -1;
 }
 
 KoTriangleColorSelector::~KoTriangleColorSelector()
@@ -340,6 +343,14 @@ void KoTriangleColorSelector::mouseMoveEvent( QMouseEvent * event )
 void KoTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
 {
     Q_UNUSED( checkInWheel );
+    
+    if (d->lastX == _x && d->lastY == _y)
+    {
+        return;
+    }
+    d->lastX = _x;
+    d->lastY = _y;
+    
     qreal x = _x - 0.5*width();
     qreal y = _y - 0.5*height();
     // Check if the click is inside the wheel

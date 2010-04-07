@@ -43,6 +43,7 @@ struct KisSmallColorWidget::Private {
     bool updateAllowed;
     double squareHandleSize;
     CurrentHandle handle;
+    int lastX, lastY;
 };
 
 KisSmallColorWidget::KisSmallColorWidget(QWidget* parent) : QWidget(parent), d(new Private)
@@ -54,6 +55,8 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent) : QWidget(parent), d(n
     d->updateAllowed = true;
     d->handle = NoHandle;
     updateParameters();
+    d->lastX = -1;
+    d->lastY = -1;
 }
 
 KisSmallColorWidget::~KisSmallColorWidget()
@@ -224,6 +227,12 @@ void KisSmallColorWidget::mouseMoveEvent(QMouseEvent * event)
 
 void KisSmallColorWidget::selectColorAt(int _x, int _y)
 {
+    if (d->lastX == _x && d->lastY == _y)
+    {
+        return;
+    }
+    d->lastX = _x;
+    d->lastY = _y;
     if ((_x < d->rubberWidth && d->handle == NoHandle) || d->handle == HueHandle) {
         d->handle = HueHandle;
         setHue((_x * 360.0) / d->rubberWidth);

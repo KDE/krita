@@ -96,12 +96,13 @@ private:
      */
     QPointF adjustPosition(const QPointF& point);
     void queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* previousJob);
-
+    void showOutlineTemporary();
+    
 private slots:
 
     void increaseBrushSize();
     void decreaseBrushSize();
-
+    void hideOutline();
 protected:
 
     KisPaintInformation m_previousPaintInformation;
@@ -159,6 +160,9 @@ private:
     KAction* m_decreaseBrushSize;
     
     bool m_hasPaintAtLeastOnce; ///< this indicates wether mouseReleaseEvent should call paintAt or not
+    
+    QTimer m_timer;
+    bool m_showOutline;
 };
 
 

@@ -52,6 +52,7 @@ void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
     KisCompositeOpsModel* model = new KisCompositeOpsModel(list);
     m_sortModel->setSourceModel(model);
     m_sortModel->sort(0);
+    setMaxVisibleItems(list.size());
 
     delete m_lastModel;
     m_lastModel = model;

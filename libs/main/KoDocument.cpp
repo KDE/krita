@@ -1870,7 +1870,7 @@ QString KoDocument::caption() const
     if (documentInfo()) {
         c = documentInfo()->aboutInfo("title");
     }
-    const QString url(prettyPathOrUrl());
+    const QString url(this->url().fileName());
     if (!c.isEmpty() && !url.isEmpty()) {
         c = QString("%1 - %2").arg(c).arg(url);
     }

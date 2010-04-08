@@ -86,6 +86,18 @@ public:
     quint8* data() const;
 
     /**
+     * Read the bytes representing the rectangle described by x, y, w, h into
+     * data. If data is not big enough, Krita will gladly overwrite the rest
+     * of your precious memory.
+     *
+     * Since this is a copy, you need to make sure you have enough memory.
+     *
+     * The reading is done only if the rectangular area x,y,w,h is inside the bounds of the device
+     * and the device is not empty
+     */
+    void readBytes(quint8 * dstData, qint32 x, qint32 y, qint32 w, qint32 h) const;
+    
+    /**
      *   Converts the paint device to a different colorspace
      */
     void convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);

@@ -45,7 +45,9 @@ class WdgGeneralSettings : public QWidget, public Ui::WdgGeneralSettings
 
 public:
     WdgGeneralSettings(QWidget *parent, const char *name) : QWidget(parent) {
-        setObjectName(name); setupUi(this);
+        setObjectName(name);
+        setupUi(this);
+        chkShowRootLayer->setVisible(false);
     }
 };
 

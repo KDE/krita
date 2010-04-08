@@ -196,3 +196,33 @@ void KisFixedPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const qui
         }
     }
 }
+
+
+void KisFixedPaintDevice::readBytes(quint8* dstData, qint32 x, qint32 y, qint32 w, qint32 h) const
+{
+    if (m_data.isEmpty() || m_bounds.isEmpty()) {
+        return;
+    }
+
+    QRect rc(x, y, w, h);
+    if (!m_bounds.contains(rc)){
+        return;
+    }
+
+    quint8 pixelSize = m_colorSpace->pixelSize();
+    quint8* dabPointer = data();
+
+    if (rc == m_bounds) {
+            memcpy(dstData, dabPointer, pixelSize * w * h);
+    } 
+    else 
+    {
+        int deviceWidth = bounds().width();
+        quint8* rowPointer = dabPointer + ((y - bounds().y()) * deviceWidth + (x - bounds().x())) * pixelSize;
+        for (int row = 0; row < h; row++) {
+            memcpy(dstData,rowPointer, w * pixelSize);
+            rowPointer += deviceWidth * pixelSize;
+            dstData += w * pixelSize;
+        }
+    }
+}

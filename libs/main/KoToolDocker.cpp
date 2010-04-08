@@ -91,7 +91,11 @@ void KoToolDocker::newOptionWidget(QWidget *optionWidget)
     if (d->currentWidget == optionWidget)
         return;
 
+    if (d->currentWidget) {
+        d->currentWidget->setVisible(false);
+    }
     d->currentWidget = optionWidget;
+    d->currentWidget->setVisible(true);
     d->housekeeperLayout->addWidget(optionWidget, 0, 0);
     d->housekeeperLayout->invalidate();
 }

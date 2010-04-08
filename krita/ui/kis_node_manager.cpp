@@ -468,6 +468,11 @@ void KisNodeManager::nodeToBottom()
 void KisNodeManager::removeNode(KisNodeSP node)
 {
 //     QRect bounds = node->exactBounds();
+
+    //do not delete root layer
+    if(node->parent()==0)
+        return;
+
     m_d->commandsAdapter->removeNode(node);
 //     m_image->rootLayer()->setDirty(bounds);
 }

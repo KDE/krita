@@ -871,6 +871,18 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
     if (m_textEditor->charFormat().isAnchor() && !m_textEditor->hasSelection()) {
         QString anchor = m_textEditor->charFormat().anchorHref();
         if (!anchor.isEmpty()) {
+            KoTextDocument document(m_textShapeData->document());
+            QList<QString> bookmarks = document.inlineTextObjectManager()->bookmarkManager()->bookmarkNameList();
+            foreach(QString s, bookmarks) {
+                if (s == anchor)
+                {
+                    KoBookmark *bookmark = document.inlineTextObjectManager()->bookmarkManager()->retrieveBookmark(s);
+                    m_textEditor->setPosition(bookmark->position());
+                    ensureCursorVisible();
+                    return;
+                }
+            }
+
             bool isLocalLink = (anchor.indexOf("file:") == 0);
             QString type = KMimeType::findByUrl(anchor, 0, isLocalLink)->name();
 
@@ -883,9 +895,13 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
                 int choice = KMessageBox::warningYesNo(0, question, i18n("Open Link?"));
                 if (choice != KMessageBox::Yes)
                     return;
+
             }
             event->accept();
             new KRun(m_textEditor->charFormat().anchorHref(), 0);
+            m_textEditor->setPosition(0);
+            ensureCursorVisible();
+            return;
         } else {
             QStringList anchorList = m_textEditor->charFormat().anchorNames();
             QString anchorName;

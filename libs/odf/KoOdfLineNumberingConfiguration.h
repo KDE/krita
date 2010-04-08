@@ -21,6 +21,7 @@
 
 #include <QString>
 #include <QPair>
+#include <QMetaType>
 
 #include "KoXmlReader.h"
 #include "KoXmlWriter.h"
@@ -171,5 +172,7 @@ private:
     Private * const d;
 
 };
+
+Q_DECLARE_METATYPE(KoOdfLineNumberingConfiguration*)
 
 #endif // KOODFLINENUMBERINGCONFIGURATION_H

@@ -39,9 +39,9 @@ KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, cons
     connect((QObject*)lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(rebuildTextBrush()));
     connect((QObject*)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
     m_font = font();
-    rebuildTextBrush();
     inputSpacing->setRange(0.0, 10, 2);
     inputSpacing->setValue(0.1);
+    rebuildTextBrush();
     connect(inputSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(rebuildTextBrush()));
 }
 

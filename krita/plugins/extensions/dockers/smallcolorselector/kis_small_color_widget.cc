@@ -100,11 +100,14 @@ void KisSmallColorWidget::setHSV(int h, int s, int v)
     h = qBound(0, h, 360);
     s = qBound(0, s, 255);
     v = qBound(0, v, 255);
+    bool newH = (d->hue != h);
     d->hue = h;
     d->value = v;
     d->saturation = s;
     tellColorChanged();
-    generateSquare();
+    if(newH) {
+        generateSquare();
+    }
     update();
 }
 
@@ -187,13 +190,14 @@ void KisSmallColorWidget::generateRubber()
 void KisSmallColorWidget::generateSquare()
 {
     QImage image(d->rectangleWidth, d->rectangleHeight, QImage::Format_RGB32);
-    for (int y = 0; y < d->rectangleHeight; y++) {
+    for (int y = 0; y < d->rectangleHeight; ++y) {
         int v = (y * 255) / d->rectangleHeight;
-        for (int x = 0; x < d->rectangleWidth; x++) {
+        uint* data = reinterpret_cast<uint*>(image.scanLine(y));
+        for (int x = 0; x < d->rectangleWidth; ++x, ++data) {
             int s = (x * 255) / d->rectangleWidth;
             int r, g, b;
             hsv_to_rgb(hue(), s, v, &r, &g, &b);
-            image.setPixel(x, y, qRgb(r, g, b));
+            *data = qRgb(r, g, b);
         }
     }
     d->squarePixmap = QPixmap::fromImage(image);

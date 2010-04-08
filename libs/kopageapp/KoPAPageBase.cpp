@@ -79,10 +79,27 @@ void KoPAPageBase::paintBackground( QPainter & painter, const KoViewConverter & 
 
 void KoPAPageBase::saveOdfPageContent( KoPASavingContext & paContext ) const
 {
+    saveOdfLayers(paContext);
     saveOdfShapes( paContext );
     saveOdfAnimations( paContext );
     saveOdfPresentationNotes( paContext );
-    paContext.saveLayerSet( paContext.xmlWriter() );
+}
+
+void KoPAPageBase::saveOdfLayers(KoPASavingContext &paContext) const
+{
+    QList<KoShape*> shapes(childShapes());
+    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+    foreach(KoShape* shape, shapes) {
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
+        if (layer) {
+            paContext.addLayerForSaving(layer);
+        }
+        else {
+            Q_ASSERT(layer);
+            kWarning(30010) << "Page contains non layer where a layer is expected";
+        }
+    }
+    paContext.saveLayerSet(paContext.xmlWriter());
     paContext.clearLayers();
 }
 

@@ -494,7 +494,7 @@ void KisConfig::setUseNearestNeighbour(bool useNearestNeigbour)
 
 bool KisConfig::useMipmapping()
 {
-    return m_cfg.readEntry("useMipmapping", true);
+    return m_cfg.readEntry("useMipmapping", false);
 }
 
 void KisConfig::setUseMipmapping(bool useMipmapping)

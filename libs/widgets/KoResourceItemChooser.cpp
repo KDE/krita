@@ -32,8 +32,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#ifdef GHNS
 #include <knewstuff3/downloaddialog.h>
 #include <knewstuff3/uploaddialog.h>
+#endif
 
 
 #include "KoResourceServerAdapter.h"
@@ -87,6 +89,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     button->setIcon( SmallIcon( "bookmarks" ) );
     button->setToolTip( i18n("Download") );
     button->setEnabled( true );
+    button->hide();
     d->buttonGroup->addButton( button, Button_GhnsDownload );
     layout->addWidget( button, 1, 2 );
 
@@ -94,6 +97,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     button->setIcon( SmallIcon( "download" ) );
     button->setToolTip( i18n("Share") );
     button->setEnabled( false );
+    button->hide();
     d->buttonGroup->addButton( button, Button_GhnsUpload);
     layout->addWidget( button, 1, 3 );
 
@@ -107,7 +111,6 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     layout->setSpacing( 0 );
     layout->setMargin( 3 );
 
-    showGetHotNewStuff(false, false);
 
     updateRemoveButtonState();
 }
@@ -136,6 +139,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
             }
         }
     }
+#ifdef GHNS
     else if (button == Button_GhnsDownload) {
 
         KNS3::DownloadDialog dialog(this);
@@ -159,6 +163,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
             }
         }
     }
+#endif
     updateRemoveButtonState();
 }
 
@@ -170,10 +175,12 @@ void KoResourceItemChooser::showButtons( bool show )
 
 void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUpload )
 {
+#ifdef GHNS
     QAbstractButton *button = d->buttonGroup->button(Button_GhnsDownload);
     showDownload ? button->show() : button->hide();
     button = d->buttonGroup->button(Button_GhnsUpload);
     showUpload ? button->show() : button->hide();
+#endif
 }
 
 

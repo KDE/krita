@@ -29,6 +29,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
 
+option(GHNS "support Get Hot New Stuff" ON)
+configure_file(config-ghns.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ghns.h )
+
 option(TINY "compile a tiny KOffice" OFF)
 
 IF (TINY)

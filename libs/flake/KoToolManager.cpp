@@ -393,6 +393,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
             inputDevice = canvasData->inputDevice;
             canvasData->canvas->priv()->activate();
         } else {
+            canvasData->canvas->setToolOptionWidgets(QMap<QString, QWidget *>());
             // as a last resort just set a blank one
             canvasData = 0;
             // and stop the event filter

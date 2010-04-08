@@ -166,6 +166,11 @@ protected:
     virtual void saveOdfPageContent( KoPASavingContext & paContext ) const;
 
     /**
+     * @brief Save the layers of a page
+     */
+    void saveOdfLayers(KoPASavingContext &paContext) const;
+
+    /**
      * @brief Save the shapes of a page
      *
      * See ODF 9.2 Drawing Shapes

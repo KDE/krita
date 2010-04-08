@@ -61,9 +61,6 @@ QRectF KoShapeLayer::boundingRect() const
 
 void KoShapeLayer::saveOdf(KoShapeSavingContext & context) const
 {
-    // save later according to parag 9.1.3
-    context.addLayerForSaving(this);
-
     QList<KoShape*> shapes = childShapes();
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 

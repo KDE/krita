@@ -107,11 +107,6 @@ void KisBrightnessContrastFilterConfiguration::setCurve(const KisCubicCurve &cur
  */
 //void KisPerChannelFilterConfiguration::fromXML(const QString& s)
 
-void KisBrightnessContrastFilterConfiguration::toLegacyXML(QDomDocument& doc, QDomElement& root) const
-{
-    toXML(doc, root);
-}
-
 void KisBrightnessContrastFilterConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
 {
     /**

@@ -43,10 +43,10 @@ void KisFilterConfigurationTest::testRoundTrip()
     KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1);
     QCOMPARE(kfc->version(), 1);
     QCOMPARE(kfc->name(), QString("test"));
-    QString s = kfc->toLegacyXML();
+    QString s = kfc->toXML();
     delete kfc;
     kfc = new KisFilterConfiguration("test2", 2);
-    kfc->fromLegacyXML(s);
+    kfc->fromXML(s);
     QCOMPARE(kfc->version(), 1);
     QCOMPARE(kfc->name(), QString("test"));
     delete kfc;
@@ -59,13 +59,13 @@ void KisFilterConfigurationTest::testSetGetProperty()
     kfc->setProperty("value2", "foo");
     QCOMPARE(kfc->getInt("value1"), 10);
     QCOMPARE(kfc->getString("value2"), QString("foo"));
-    QString s = kfc->toLegacyXML();
+    QString s = kfc->toXML();
     delete kfc;
     kfc = new KisFilterConfiguration("test2", 2);
-    kfc->fromLegacyXML(s);
+    kfc->fromXML(s);
     QCOMPARE(kfc->getInt("value1"), 10);
     QCOMPARE(kfc->getString("value2"), QString("foo"));
-    delete kfc;   
+    delete kfc;
 }
 
 

@@ -51,11 +51,9 @@ class KisBrightnessContrastFilterConfiguration : public KisFilterConfiguration
 public:
     using KisFilterConfiguration::fromXML;
     using KisFilterConfiguration::toXML;
-    using KisFilterConfiguration::toLegacyXML;
     using KisFilterConfiguration::fromLegacyXML;
 
     virtual void fromLegacyXML(const QDomElement& root);
-    virtual void toLegacyXML(QDomDocument& doc, QDomElement& root) const;
 
     virtual void fromXML(const QDomElement& e);
     virtual void toXML(QDomDocument& doc, QDomElement& root) const;

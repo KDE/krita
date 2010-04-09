@@ -333,11 +333,6 @@ void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
  */
 //void KisPerChannelFilterConfiguration::fromXML(const QString& s)
 
-void KisPerChannelFilterConfiguration::toLegacyXML(QDomDocument& doc, QDomElement& root) const
-{
-    toXML(doc, root);
-}
-
 void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
 {
     /**

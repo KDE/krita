@@ -55,19 +55,7 @@ public:
     /**
      * This function is use to convert from legacy XML as used in .kra file.
      */
-    virtual void fromLegacyXML(const QString &);
-    /**
-     * This function is use to convert from legacy XML as used in .kra file.
-     */
     virtual void fromLegacyXML(const QDomElement&);
-    /**
-     * This function is use to convert to legacy XML as used in .kra file.
-     */
-    virtual QString toLegacyXML() const;
-    /**
-     * This function is use to convert to legacy XML as used in .kra file.
-     */
-    virtual void toLegacyXML(QDomDocument&, QDomElement&) const;
 
     /**
      * Get the unique, language independent name of the filter.

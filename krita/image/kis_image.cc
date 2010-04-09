@@ -55,7 +55,6 @@
 #include "kis_meta_data_merge_strategy_registry.h"
 #include "kis_name_server.h"
 #include "kis_paint_device.h"
-#include "kis_paint_device_action.h"
 #include "kis_paint_layer.h"
 #include "kis_painter.h"
 #include "kis_perspective_grid.h"

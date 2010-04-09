@@ -370,12 +370,6 @@ target_link_libraries(KisNodeVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTT
 
 ########### next target ###############
 
-set(kis_paint_device_action_test_SRCS kis_paint_device_action_test.cpp )
-kde4_add_unit_test(KisPaintDeviceActionTest TESTNAME krita-image-KisPaintDeviceActionTest ${kis_paint_device_action_test_SRCS})
-target_link_libraries(KisPaintDeviceActionTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_paint_information_test_SRCS kis_paint_information_test.cpp )
 kde4_add_unit_test(KisPaintInformationTest TESTNAME krita-image-KisPaintInformationTest ${kis_paint_information_test_SRCS})
 target_link_libraries(KisPaintInformationTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

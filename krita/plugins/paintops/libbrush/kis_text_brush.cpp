@@ -41,6 +41,11 @@ void KisTextBrush::updateBrush()
     QFontMetrics metric(m_font);
     int w = metric.width(m_txt);
     int h = metric.height();
+
+    // don't crash, if there is no text
+    if (w==0) w=1;
+    if (h==0) h=1;
+
     QPixmap px(w, h);
     QPainter p;
     p.begin(&px);

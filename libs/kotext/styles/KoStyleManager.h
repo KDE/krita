@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
- * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>

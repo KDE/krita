@@ -346,7 +346,7 @@ public:
      *
      * @return true if the operation was successful.
      */
-    bool pixel(qint32 x, qint32 y, QColor *c);
+    bool pixel(qint32 x, qint32 y, QColor *c) const;
 
     /**
      * Fill kc with the values found at x and y. This method differs
@@ -357,7 +357,7 @@ public:
      *
      * @return true if the operation was successful.
      */
-    bool pixel(qint32 x, qint32 y, KoColor * kc);
+    bool pixel(qint32 x, qint32 y, KoColor * kc) const;
 
     /**
      * Set the specified pixel to the specified color. Note that this

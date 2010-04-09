@@ -389,6 +389,21 @@ bool TestLoading::compareTableCellFormats(QTextTableCellFormat &actualFormat, QT
 
 bool TestLoading::compareTableCells(QTextTableCell &actualCell, QTextTableCell &expectedCell)
 {
+    //compare row and column spans
+    if (actualCell.rowSpan() != expectedCell.rowSpan()) {
+        qDebug() << "compareTableCells: table cell row span mismatch";
+        qDebug() << "Actual Row Span : " << actualCell.rowSpan();
+        qDebug() << "Expected Row Span : " << expectedCell.rowSpan();
+        return false;
+    }
+
+    if (actualCell.columnSpan() != expectedCell.columnSpan()) {
+        qDebug() << "comparetableCells: table cell column span mismatch";
+        qDebug() << "Actual Column Span : " << actualCell.columnSpan();
+        qDebug() << "Expected Column Span : " << expectedCell.columnSpan();
+        return false;
+    }
+
     // compare cell formats
     QTextTableCellFormat actualFormat = actualCell.format().toTableCellFormat();
     QTextTableCellFormat expectedFormat = expectedCell.format().toTableCellFormat();
@@ -827,6 +842,7 @@ void TestLoading::addData(LoadSave loadSave)
 
     if (loadSave == TestLoadingData) {
         QTest::newRow("simpleTable") << "Tables/simpleTable";
+        QTest::newRow("spanningCells") << "Tables/spanningCells";
         QTest::newRow("tableWidth") << "FormattingProperties/TableFormattingProperties/tableWidth";
         QTest::newRow("tableTopAndBottomMargin") << "FormattingProperties/TableFormattingProperties/tableTopAndBottomMargin";
         QTest::newRow("tableLeftAndRightMargin") << "FormattingProperties/TableFormattingProperties/tableLeftAndRightMargin";

@@ -46,7 +46,6 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_name_server.h>
-#include <kis_paint_device_action.h>
 #include <kis_paint_layer.h>
 #include <kis_selection.h>
 #include <kis_selection_mask.h>

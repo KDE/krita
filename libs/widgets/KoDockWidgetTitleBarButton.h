@@ -28,7 +28,7 @@ class QPaintEvent;
 /**
  * @short A custom title bar button for dock widgets.
  *
- * Used in KoDockWidgetTitleBarButton but can be also used for similar
+ * Used in KoDockWidgetTitleBar but can be also used for similar
  * purposes inside other parents.
  */
 class KOWIDGETS_EXPORT KoDockWidgetTitleBarButton : public QAbstractButton

@@ -1,6 +1,8 @@
 /*
  * Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (c) 2005-2008 Thomas Zander <zander@kde.org>
+ * Copyright (c) 2009 Peter Simonsson <peter.simonsson@gmail.com>
+ * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -90,11 +92,18 @@ public slots:
     /// set the canvas this docker should listen to for changes.
     void setCanvas(KoCanvasBase *canvas);
 
+    /// Set the orientation of the layout to @p orientation
+    void setOrientation(Qt::Orientation orientation);
+    
+    void setFloating(bool v);
+
 private slots:
     void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);
 
 protected:
     void paintEvent(QPaintEvent *event);
+protected:
+    void resizeEvent(QResizeEvent* event);
 
 private:
     class Private;
@@ -103,11 +112,16 @@ private:
 
 class KoToolBoxDocker : public QDockWidget, public KoCanvasObserverBase
 {
+    Q_OBJECT
 public:
     KoToolBoxDocker(KoToolBox *toolBox);
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
+
+protected slots:
+    void updateToolBoxOrientation(Qt::DockWidgetArea area);
+    void updateFloating(bool);
 
 private:
     KoToolBox *m_toolBox;

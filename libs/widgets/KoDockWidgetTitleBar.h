@@ -25,7 +25,9 @@
 /**
  * @short A custom title bar for dock widgets.
  *
- * Used in KoDockWidgetTitleBarButton but can be also used for similar purposes inside other parents.
+ * Allow customization such as collapsable, or hidding text.
+ * 
+ * @see KoDockWidgetTitleBarButton
  */
 class KOWIDGETS_EXPORT KoDockWidgetTitleBar : public QWidget
 {
@@ -38,6 +40,11 @@ public:
     virtual QSize sizeHint() const;  ///< reimplemented from QWidget
 
     void setCollapsed(bool collapsed);
+    
+    void setCollapsable(bool collapsable);
+    void setTextVisible(bool visible);
+    /// Define wether the text size should be ignored in @ref sizeHint
+    void setIgnoreTextSize(bool ignore);
 
 protected:
     virtual void paintEvent(QPaintEvent* event); ///< reimplemented from QWidget

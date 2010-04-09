@@ -49,9 +49,12 @@ void KisSelectionTest::testSelectionComponents()
 
     KisMaskSP mask = new KisTransparencyMask();
     mask->select(QRect(0, 0, 100, 100));
+    QCOMPARE(mask->selection()->selectedRect(), QRect(0,0,128, 128));
+    QCOMPARE(mask->selection()->selectedExactRect(), QRect(0, 0, 100, 100));
     selection = new KisSelection(0, mask);
     selection->updateProjection();
     QVERIFY(selection->hasPixelSelection() == true);
+    QCOMPARE(selection->selectedRect(), QRect(0,0,128, 128));
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 100, 100));
 }
 

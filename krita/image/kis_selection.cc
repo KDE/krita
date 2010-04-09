@@ -84,7 +84,8 @@ KisSelection::KisSelection(KisPaintDeviceSP parent, KisMaskSP mask, KisDefaultBo
 
     clear();
 
-    QRect extent = mask->exactBounds();
+    Q_ASSERT(mask->selection());
+    QRect extent = mask->selection()->exactBounds();
     KisPainter gc(m_d->pixelSelection);
     gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
     gc.bitBlt(extent.topLeft(), mask->selection(), extent);

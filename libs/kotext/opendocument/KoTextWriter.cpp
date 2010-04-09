@@ -30,6 +30,7 @@
 #include <QBuffer>
 
 #include "KoInlineObject.h"
+#include "KoVariable.h"
 #include "KoInlineTextObjectManager.h"
 #include "styles/KoStyleManager.h"
 #include "styles/KoCharacterStyle.h"
@@ -356,8 +357,25 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                         }
                     }
 
+                    bool saveSpan = dynamic_cast<KoVariable*>(inlineObject) != 0;
+
+                    if (saveSpan) {
+                        QString styleName = saveCharacterStyle(charFormat, blockCharFormat);
+                        if (!styleName.isEmpty()) {
+                            writer->startElement("text:span", false);
+                            writer->addAttribute("text:style-name", styleName);
+                        }
+                        else {
+                            saveSpan = false;
+                        }
+                    }
+
                     if (saveInlineObject) {
                         inlineObject->saveOdf(context);
+                    }
+
+                    if (saveSpan) {
+                        writer->endElement();
                     }
                     //
                     // Track the end marker for matched pairs so we produce valid

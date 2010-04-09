@@ -1009,7 +1009,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
     for (it = frame->begin(); !(it.atEnd()); ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
-        QTextFrame *subFrame = qobject_cast<QTextFrame*>(it.currentFrame());
+        QTextFrame *subFrame = it.currentFrame();
 
         if (table) {
             m_tableLayout.setTable(table);

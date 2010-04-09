@@ -45,13 +45,13 @@ public:
     }
 public:
     virtual void redo() {
-        m_config->fromLegacyXML(m_after);
+        m_config->fromXML(m_after);
         m_node->setGenerator(m_config);
         m_node->setDirty();
     }
 
     virtual void undo() {
-        m_config->fromLegacyXML(m_before);
+        m_config->fromXML(m_before);
         m_node->setGenerator(m_config);
         m_node->setDirty();
     }

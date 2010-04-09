@@ -46,14 +46,14 @@ public:
 public:
     virtual void redo() {
         if (m_config)
-            m_config->fromLegacyXML(m_after);
+            m_config->fromXML(m_after);
         m_node->setFilter(m_config);
         m_node->setDirty();
     }
 
     virtual void undo() {
         if (m_config)
-            m_config->fromLegacyXML(m_before);
+            m_config->fromXML(m_before);
         m_node->setFilter(m_config);
         m_node->setDirty();
     }

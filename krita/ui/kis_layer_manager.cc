@@ -243,13 +243,13 @@ void KisLayerManager::layerProperties()
         KisFilterConfiguration* config = dlg.filterConfiguration();
         QString before;
         if (config) {
-            before = config->toLegacyXML();
+            before = config->toXML();
         }
         if (dlg.exec() == QDialog::Accepted) {
 
             QString after;
             if (dlg.filterConfiguration()) {
-                after = dlg.filterConfiguration()->toLegacyXML();
+                after = dlg.filterConfiguration()->toXML();
             }
             if (after != before) {
                 alayer->setName(dlg.layerName());
@@ -269,13 +269,13 @@ void KisLayerManager::layerProperties()
         KisDlgGeneratorLayer dlg(alayer->name(), m_view);
         dlg.setCaption(i18n("Generator Layer Properties"));
 
-        QString before = alayer->generator()->toLegacyXML();
+        QString before = alayer->generator()->toXML();
         dlg.setConfiguration(alayer->generator());
         dlg.resize(dlg.minimumSizeHint());
 
         if (dlg.exec() == QDialog::Accepted) {
 
-            QString after = dlg.configuration()->toLegacyXML();
+            QString after = dlg.configuration()->toXML();
             if (after != before) {
                 KisChangeGeneratorCmd<KisGeneratorLayerSP> * cmd
                 = new KisChangeGeneratorCmd<KisGeneratorLayerSP>(alayer,

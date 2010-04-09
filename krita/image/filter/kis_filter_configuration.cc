@@ -90,6 +90,7 @@ QString KisFilterConfiguration::toLegacyXML() const
 
 void KisFilterConfiguration::fromLegacyXML(const QDomElement& e)
 {
+    clearProperties();
     d->name = e.attribute("name");
     d->version = e.attribute("version").toInt();
 
@@ -118,8 +119,6 @@ void KisFilterConfiguration::fromLegacyXML(const QDomElement& e)
 
 void KisFilterConfiguration::fromLegacyXML(const QString & s)
 {
-    clearProperties();
-
     QDomDocument doc;
     doc.setContent(s);
     QDomElement e = doc.documentElement();

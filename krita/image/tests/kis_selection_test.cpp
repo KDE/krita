@@ -49,9 +49,12 @@ void KisSelectionTest::testSelectionComponents()
 
     KisMaskSP mask = new KisTransparencyMask();
     mask->select(QRect(0, 0, 100, 100));
+    QCOMPARE(mask->selection()->selectedRect(), QRect(0,0,128, 128));
+    QCOMPARE(mask->selection()->selectedExactRect(), QRect(0, 0, 100, 100));
     selection = new KisSelection(0, mask);
     selection->updateProjection();
     QVERIFY(selection->hasPixelSelection() == true);
+    QCOMPARE(selection->selectedRect(), QRect(0,0,128, 128));
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 100, 100));
 }
 
@@ -111,8 +114,8 @@ void KisSelectionTest::testInvertSelection()
     selection->updateProjection();
     selection->convertToQImage(0, 0, 0, 100, 100).save("zzz.png");
 
-    QCOMPARE(selection->selectedExactRect(), QRect(0, 0, qint32_MAX, qint32_MAX));
-    QCOMPARE(selection->selectedRect(), QRect(0, 0, qint32_MAX, qint32_MAX));
+    QCOMPARE(selection->selectedExactRect(), QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX));
+    QCOMPARE(selection->selectedRect(), QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX));
 
     QCOMPARE(selection->selected(100, 100), MAX_SELECTED);
     QCOMPARE(selection->selected(22, 22), MIN_SELECTED);

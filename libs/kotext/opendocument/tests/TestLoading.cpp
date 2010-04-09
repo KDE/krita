@@ -389,6 +389,21 @@ bool TestLoading::compareTableCellFormats(QTextTableCellFormat &actualFormat, QT
 
 bool TestLoading::compareTableCells(QTextTableCell &actualCell, QTextTableCell &expectedCell)
 {
+    //compare row and column spans
+    if (actualCell.rowSpan() != expectedCell.rowSpan()) {
+        qDebug() << "compareTableCells: table cell row span mismatch";
+        qDebug() << "Actual Row Span : " << actualCell.rowSpan();
+        qDebug() << "Expected Row Span : " << expectedCell.rowSpan();
+        return false;
+    }
+
+    if (actualCell.columnSpan() != expectedCell.columnSpan()) {
+        qDebug() << "comparetableCells: table cell column span mismatch";
+        qDebug() << "Actual Column Span : " << actualCell.columnSpan();
+        qDebug() << "Expected Column Span : " << expectedCell.columnSpan();
+        return false;
+    }
+
     // compare cell formats
     QTextTableCellFormat actualFormat = actualCell.format().toTableCellFormat();
     QTextTableCellFormat expectedFormat = expectedCell.format().toTableCellFormat();
@@ -502,6 +517,20 @@ bool TestLoading::compareTables(QTextTable *actualTable, QTextTable *expectedTab
 
     if (!compareTableFormats(actualFormat, expectedFormat)) {
         qDebug() << "compareTables: table properties mismatch at " << actualTable->cellAt(0, 0).firstCursorPosition().block().text();
+        return false;
+    }
+
+    if (actualTable->rows() != expectedTable->rows()) {
+        qDebug() << "compareTables: Rows mismatch";
+        qDebug() << "Actual Rows : " << actualTable->rows();
+        qDebug() << "Expected Rows : " << expectedTable->rows();
+        return false;
+    }
+
+    if (actualTable->columns() != expectedTable->columns()) {
+        qDebug() << "compareTables: Columns mismatch";
+        qDebug() << "Actual Columns : " << actualTable->columns();
+        qDebug() << "Expected Columns : " << expectedTable->columns();
         return false;
     }
 
@@ -812,6 +841,8 @@ void TestLoading::addData(LoadSave loadSave)
     QTest::newRow("fontColors") << "TextContents/TextFormatting/fontColors";
 
     if (loadSave == TestLoadingData) {
+        QTest::newRow("simpleTable") << "Tables/simpleTable";
+        QTest::newRow("spanningCells") << "Tables/spanningCells";
         QTest::newRow("tableWidth") << "FormattingProperties/TableFormattingProperties/tableWidth";
         QTest::newRow("tableTopAndBottomMargin") << "FormattingProperties/TableFormattingProperties/tableTopAndBottomMargin";
         QTest::newRow("tableLeftAndRightMargin") << "FormattingProperties/TableFormattingProperties/tableLeftAndRightMargin";

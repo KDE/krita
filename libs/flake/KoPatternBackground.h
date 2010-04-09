@@ -25,7 +25,9 @@
 #include <QtGui/QMatrix>
 
 class KoImageCollection;
+class KoOdfLoadingContext;
 class KoPatternBackgroundPrivate;
+class KoImageData;
 
 /// A pattern shape background
 class FLAKE_EXPORT KoPatternBackground : public KoShapeBackground
@@ -63,6 +65,10 @@ public:
 
     /// Sets a new pattern
     void setPattern(const QImage &pattern);
+
+    /// Sets a new pattern. imageData memory is deleted inside this class
+    void setPattern(KoImageData *imageData);
+
     /// Returns the pattern
     QImage pattern();
 

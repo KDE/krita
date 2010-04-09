@@ -505,6 +505,20 @@ bool TestLoading::compareTables(QTextTable *actualTable, QTextTable *expectedTab
         return false;
     }
 
+    if (actualTable->rows() != expectedTable->rows()) {
+        qDebug() << "compareTables: Rows mismatch";
+        qDebug() << "Actual Rows : " << actualTable->rows();
+        qDebug() << "Expected Rows : " << expectedTable->rows();
+        return false;
+    }
+
+    if (actualTable->columns() != expectedTable->columns()) {
+        qDebug() << "compareTables: Columns mismatch";
+        qDebug() << "Actual Columns : " << actualTable->columns();
+        qDebug() << "Expected Columns : " << expectedTable->columns();
+        return false;
+    }
+
     for (int row = 0; row < expectedTable->rows(); ++row) {
         for (int col = 0; col < expectedTable->columns(); ++col) {
             QTextTableCell actualCell = actualTable->cellAt(row, col);
@@ -812,6 +826,7 @@ void TestLoading::addData(LoadSave loadSave)
     QTest::newRow("fontColors") << "TextContents/TextFormatting/fontColors";
 
     if (loadSave == TestLoadingData) {
+        QTest::newRow("simpleTable") << "Tables/simpleTable";
         QTest::newRow("tableWidth") << "FormattingProperties/TableFormattingProperties/tableWidth";
         QTest::newRow("tableTopAndBottomMargin") << "FormattingProperties/TableFormattingProperties/tableTopAndBottomMargin";
         QTest::newRow("tableLeftAndRightMargin") << "FormattingProperties/TableFormattingProperties/tableLeftAndRightMargin";

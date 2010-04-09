@@ -127,7 +127,7 @@ void KisTransformWorkerTest::testMirrorTransaction()
     QVERIFY(c2 == Qt::black);
     dev->convertToQImage(0, 0, 0, 1024, 512).save("transaction_before.png");
 
-    KisTransaction t("mirror", dev, 0);
+    KisTransaction* t = new KisTransaction("mirror", dev, 0);
     KisTransformWorker::mirrorX(dev);
 
     dev->pixel(5, 5, &c1);
@@ -149,7 +149,7 @@ void KisTransformWorkerTest::testMirrorTransaction()
     QVERIFY(c1 == Qt::white);
     QVERIFY(c2 == Qt::black);
 
-    KisTransaction t2("mirror", dev, 0);
+    KisTransaction* t2 = new KisTransaction("mirror", dev, 0);
     KisTransformWorker::mirrorY(dev);
     dev->convertToQImage(0, 0, 0, 1024, 512).save("transaction_mirror_y.png");
 
@@ -168,6 +168,8 @@ void KisTransformWorkerTest::testMirrorTransaction()
         KisTransformWorker::mirrorX(dev2);
         dev2->convertToQImage(0, 0, 0, image.width(), image.height()).save("mirror_test_t_2.png");
     }
+    delete t;
+    delete t2;
 }
 
 

@@ -31,6 +31,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
+#include <KoXmlWriter.h>
 
 #include <KDebug>
 
@@ -154,6 +155,15 @@ void KoPatternBackground::setPattern(const QImage &pattern)
         delete d->imageData;
 
     d->imageData = d->imageCollection->createImageData(pattern);
+}
+
+void KoPatternBackground::setPattern(KoImageData *imageData)
+{
+    Q_D(KoPatternBackground);
+    if (d->imageData)
+        delete d->imageData;
+
+    d->imageData = imageData;
 }
 
 QImage KoPatternBackground::pattern()

@@ -291,6 +291,7 @@ void KisFilterSelectionsBenchmark::testBitBltSelections(int num)
         gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
         gc.setSelection(m_selection);
         gc.bitBlt(filterRect.topLeft(), cacheDevice, filterRect);
+        delete gc.endTransaction();
     }
     avTime = double(timer.elapsed()) / num;
 

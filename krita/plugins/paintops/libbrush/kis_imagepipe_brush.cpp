@@ -229,7 +229,7 @@ void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceS
     Q_UNUSED(angle);
     if (m_d->brushes.isEmpty()) return;
     selectNextBrush(info);
-    m_d->brushes.at(m_d->currentBrush)->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, 1.0, 1.0, 0.0, info, subPixelX, subPixelY);
+    m_d->brushes.at(m_d->currentBrush)->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, 0.0, info, subPixelX, subPixelY);
 }
 
 KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
@@ -238,7 +238,7 @@ KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(const KoColorSpace * colorS
     Q_UNUSED(angle);
     if (m_d->brushes.isEmpty()) return KisFixedPaintDeviceSP(0);
     selectNextBrush(info);
-    return m_d->brushes.at(m_d->currentBrush)->paintDevice(colorSpace, 1.0, 0.0, info, subPixelX, subPixelY);
+    return m_d->brushes.at(m_d->currentBrush)->paintDevice(colorSpace, scale, 0.0, info, subPixelX, subPixelY);
 }
 
 void KisImagePipeBrush::setParasiteString(const QString& parasite)

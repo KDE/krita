@@ -217,6 +217,8 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
         selection = static_cast<KisMask*>(node)->selection();
     } else if (node->inherits("KisAdjustmentLayer")) {
         selection = static_cast<KisAdjustmentLayer*>(node)->selection();
+    } else if (node->inherits("KisGeneratorLayer")) {
+        selection = static_cast<KisGeneratorLayer*>(node)->selection();
     } else {
         return false;
     }
@@ -258,6 +260,8 @@ bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
         filter = static_cast<KisFilterMask*>(node)->filter();
     } else if (node->inherits("KisAdjustmentLayer")) {
         filter = static_cast<KisAdjustmentLayer*>(node)->filter();
+    } else if (node->inherits("KisGeneratorLayer")) {
+        filter = static_cast<KisGeneratorLayer*>(node)->filter();
     }
     if (filter) {
         QString location = getLocation(node, DOT_FILTERCONFIG);

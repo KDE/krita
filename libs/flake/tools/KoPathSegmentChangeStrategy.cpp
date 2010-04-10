@@ -26,6 +26,7 @@
 #include "commands/KoPathSegmentTypeCommand.h"
 #include <KoCanvasBase.h>
 #include <KLocale>
+#include <limits>
 
 KoPathSegmentChangeStrategy::KoPathSegmentChangeStrategy( KoPathTool *tool, const QPointF &pos, const KoPathPointData &segment, qreal segmentParam)
 : KoInteractionStrategy(tool)
@@ -36,6 +37,10 @@ KoPathSegmentChangeStrategy::KoPathSegmentChangeStrategy( KoPathTool *tool, cons
 , m_pointData1(segment)
 , m_pointData2(segment)
 {
+    const qreal eps = std::numeric_limits<qreal>::epsilon();
+    // force segment parameter range to avoid division by zero
+    qBound(eps, m_segmentParam, 1.0-eps);
+    
     m_path = segment.pathShape;
     m_segment = m_path->segmentByIndex(segment.pointIndex);
     m_pointData2.pointIndex = m_path->pathPointIndex(m_segment.second());
@@ -68,7 +73,9 @@ void KoPathSegmentChangeStrategy::handleMouseMove( const QPointF &mouseLocation,
                                                          localPos,
                                                          m_segment.second()->point(),
                                                          m_segmentParam );
-        move1 = move2 = ipol.controlPoints()[1] - m_segment.controlPoints()[1];
+        if (ipol.isValid()) {
+            move1 = move2 = ipol.controlPoints()[1] - m_segment.controlPoints()[1];
+        }
     }
     else if (m_segment.degree() == 3) {
         /*

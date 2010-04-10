@@ -179,7 +179,7 @@ void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
     setting->setProperty(FILTER_ID, m_currentFilter->id());
     setting->setProperty(FILTER_IGNORE_ALPHA, ignoreAlpha());
     if(filterConfig()) {
-        setting->setProperty(FILTER_CONFIGURATION, filterConfig()->toLegacyXML());
+        setting->setProperty(FILTER_CONFIGURATION, filterConfig()->toXML());
     }
 }
 
@@ -190,7 +190,7 @@ void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* settin
     m_options->checkBoxIgnoreAlpha->setChecked(setting->getBool(FILTER_IGNORE_ALPHA));
     KisFilterConfiguration* configuration = filterConfig();
     if(configuration) {
-        configuration->fromLegacyXML(setting->getString(FILTER_CONFIGURATION));
+        configuration->fromXML(setting->getString(FILTER_CONFIGURATION));
         m_currentFilterConfigWidget->setConfiguration(configuration);
     }
 }

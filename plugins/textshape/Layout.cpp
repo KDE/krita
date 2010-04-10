@@ -456,10 +456,13 @@ bool Layout::nextParag()
     QList<QTextOption::Tab> tabs;
     QVariant variant = m_format.property(KoParagraphStyle::TabPositions);
     if (!variant.isNull()) {
+        const qreal tabOffset = x();
         foreach(const QVariant &tv, qvariant_cast<QList<QVariant> >(variant)) {
             KoText::Tab koTab = tv.value<KoText::Tab>();
             QTextOption::Tab tab;
-            tab.position = koTab.position * qt_defaultDpiY() / 72.; // convertion here is required because Qt thinks in device units and we don't
+
+            // convertion here is required because Qt thinks in device units and we don't
+            tab.position = (koTab.position - tabOffset) * qt_defaultDpiY() / 72.;
             tab.type = koTab.type;
             tab.delimiter = koTab.delimiter;
             tabs.append(tab);
@@ -1012,7 +1015,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
     for (it = frame->begin(); !(it.atEnd()); ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
-        QTextFrame *subFrame = qobject_cast<QTextFrame*>(it.currentFrame());
+        QTextFrame *subFrame = it.currentFrame();
 
         if (table) {
             m_tableLayout.setTable(table);

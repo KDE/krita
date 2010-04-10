@@ -262,7 +262,7 @@ bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
     if (filter) {
         QString location = getLocation(node, DOT_FILTERCONFIG);
         if (m_store->open(location)) {
-            QString s = filter->toLegacyXML();
+            QString s = filter->toXML();
             m_store->write(s.toUtf8(), qstrlen(s.toUtf8()));
             m_store->close();
             return true;

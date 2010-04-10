@@ -44,6 +44,11 @@
 #include <KDebug>
 #include <QtGui/QPainter>
 
+#include <qnumeric.h> // for qIsNaN
+static bool qIsNaNPoint(const QPointF &p) {
+    return qIsNaN(p.x()) || qIsNaN(p.y());
+}
+
 KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
     : KoShapePrivate(q),
     fillRule(Qt::OddEvenFill)
@@ -319,23 +324,31 @@ QPainterPath KoPathShape::outline() const
             KoPathPoint::PointProperties currProperties = currPoint->properties();
             if (currPoint == subpath->first()) {
                 if (currProperties & KoPathPoint::StartSubpath) {
+                    Q_ASSERT(!qIsNaNPoint(currPoint->point()));
                     path.moveTo(currPoint->point());
                 }
             } else if (activeCP && currPoint->activeControlPoint1()) {
+                Q_ASSERT(!qIsNaNPoint(lastPoint->controlPoint2()));
+                Q_ASSERT(!qIsNaNPoint(currPoint->controlPoint1()));
+                Q_ASSERT(!qIsNaNPoint(currPoint->point()));
                 path.cubicTo(
                     lastPoint->controlPoint2(),
                     currPoint->controlPoint1(),
                     currPoint->point());
             } else if( activeCP || currPoint->activeControlPoint1()) {
+                Q_ASSERT(!qIsNaNPoint(lastPoint->controlPoint2()));
+                Q_ASSERT(!qIsNaNPoint(currPoint->controlPoint1()));
                 path.quadTo(
                     activeCP ? lastPoint->controlPoint2() : currPoint->controlPoint1(),
                     currPoint->point());
             } else {
+                Q_ASSERT(!qIsNaNPoint(currPoint->point()));
                 path.lineTo(currPoint->point());
             }
             if (currProperties & KoPathPoint::CloseSubpath && currProperties & KoPathPoint::StopSubpath) {
                 // add curve when there is a curve on the way to the first point
                 KoPathPoint * firstPoint = subpath->first();
+                Q_ASSERT(!qIsNaNPoint(firstPoint->point()));
                 if (currPoint->activeControlPoint2() && firstPoint->activeControlPoint1()) {
                     path.cubicTo(
                         currPoint->controlPoint2(),
@@ -343,6 +356,8 @@ QPainterPath KoPathShape::outline() const
                         firstPoint->point());
                 }
                 else if(currPoint->activeControlPoint2() || firstPoint->activeControlPoint1()) {
+                    Q_ASSERT(!qIsNaNPoint(currPoint->point()));
+                    Q_ASSERT(!qIsNaNPoint(currPoint->controlPoint1()));
                     path.quadTo(
                         currPoint->activeControlPoint2() ? currPoint->controlPoint2() : firstPoint->controlPoint1(),
                         firstPoint->point());

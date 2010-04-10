@@ -881,9 +881,9 @@ void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
     }
 }
 
-bool KisPaintDevice::pixel(qint32 x, qint32 y, QColor *c)
+bool KisPaintDevice::pixel(qint32 x, qint32 y, QColor *c) const
 {
-    KisHLineConstIteratorPixel iter = createHLineIterator(x, y, 1);
+    KisHLineConstIteratorPixel iter = createHLineConstIterator(x, y, 1);
 
     const quint8 *pix = iter.rawData();
 
@@ -895,11 +895,11 @@ bool KisPaintDevice::pixel(qint32 x, qint32 y, QColor *c)
 }
 
 
-bool KisPaintDevice::pixel(qint32 x, qint32 y, KoColor * kc)
+bool KisPaintDevice::pixel(qint32 x, qint32 y, KoColor * kc) const
 {
-    KisHLineIteratorPixel iter = createHLineIterator(x, y, 1);
+    KisHLineConstIteratorPixel iter = createHLineConstIterator(x, y, 1);
 
-    quint8 *pix = iter.rawData();
+    const quint8 *pix = iter.rawData();
 
     if (!pix) return false;
 

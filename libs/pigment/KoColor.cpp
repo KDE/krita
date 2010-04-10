@@ -158,12 +158,15 @@ void KoColor::convertTo(const KoColorSpace * cs)
 }
 
 
-void KoColor::setColor(quint8 * data, const KoColorSpace * colorSpace)
+void KoColor::setColor(const quint8 * data, const KoColorSpace * colorSpace)
 {
     Q_ASSERT(data);
     Q_ASSERT(colorSpace);
-    delete [] d->data;
-    d->data = new quint8[colorSpace->pixelSize()];
+    if(d->colorSpace->pixelSize() != colorSpace->pixelSize())
+    {
+        delete [] d->data;
+        d->data = new quint8[colorSpace->pixelSize()];
+    }
     memcpy(d->data, data, colorSpace->pixelSize());
     d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
 }

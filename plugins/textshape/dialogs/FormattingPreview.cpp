@@ -217,7 +217,7 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
 
     painter.fillRect(contentsRect(), QBrush(QColor(Qt::white)));
     if (m_paragBackgroundColor.isValid() && m_paragBackgroundColor.alpha() > 1)
-        painter.fillRect(contentsRect(), QBrush(m_paragBackgroundColor.isValid()));
+        painter.fillRect(contentsRect(), QBrush(m_paragBackgroundColor));
 
 //set up the Font properties
     QFont displayFont = QFont(m_font, paintDevice);

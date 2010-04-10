@@ -308,7 +308,15 @@ bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfiguration* kfc, con
         data = m_store->read(m_store->size());
         m_store->close();
         if (!data.isEmpty()) {
-            kfc->fromLegacyXML(QString(data));
+            QString xml(data);
+            QDomDocument doc;
+            doc.setContent(data);
+            QDomElement e = doc.documentElement();
+            if (e.tagName() == "filterconfig") {
+                kfc->fromLegacyXML(e);
+            } else {
+                kfc->fromXML(e);
+            }
             return true;
         }
     }

@@ -60,36 +60,9 @@ KisFilterConfiguration::~KisFilterConfiguration()
     delete d;
 }
 
-void KisFilterConfiguration::toLegacyXML(QDomDocument& doc, QDomElement& root) const
-{
-    root.setAttribute("name", d->name);
-    root.setAttribute("version", d->version);
-
-    QMap<QString, QVariant> properties = getProperties();
-    QMap<QString, QVariant>::Iterator it;
-    for (it = properties.begin(); it != properties.end(); ++it) {
-        QDomElement e = doc.createElement("property");
-        e.setAttribute("name", QString(it.key().toLatin1()));
-        QVariant v = it.value();
-        e.setAttribute("type", v.typeName());
-        QString s = v.toString();
-        QDomText text = doc.createCDATASection(v.toString());  // XXX: Unittest this!
-        e.appendChild(text);
-        root.appendChild(e);
-    }
-}
-
-QString KisFilterConfiguration::toLegacyXML() const
-{
-    QDomDocument doc = QDomDocument("filterconfig");
-    QDomElement root = doc.createElement("filterconfig");
-    doc.appendChild(root);
-    toLegacyXML(doc, root);
-    return doc.toString();
-}
-
 void KisFilterConfiguration::fromLegacyXML(const QDomElement& e)
 {
+    clearProperties();
     d->name = e.attribute("name");
     d->version = e.attribute("version").toInt();
 
@@ -114,16 +87,6 @@ void KisFilterConfiguration::fromLegacyXML(const QDomElement& e)
         }
         n = n.nextSibling();
     }
-}
-
-void KisFilterConfiguration::fromLegacyXML(const QString & s)
-{
-    clearProperties();
-
-    QDomDocument doc;
-    doc.setContent(s);
-    QDomElement e = doc.documentElement();
-    fromLegacyXML(e);
 }
 
 const QString & KisFilterConfiguration::name() const

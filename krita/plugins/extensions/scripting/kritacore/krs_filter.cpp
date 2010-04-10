@@ -79,12 +79,12 @@ QVariantMap Filter::properties()
 
 void Filter::fromXML(const QString& xml)
 {
-    config()->fromLegacyXML(xml);
+    config()->fromXML(xml);
 }
 
 const QString Filter::toXML()
 {
-    return config()->toLegacyXML();
+    return config()->toXML();
 }
 
 bool Filter::process(QObject* layer)

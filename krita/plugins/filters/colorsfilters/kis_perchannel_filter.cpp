@@ -244,10 +244,10 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
 
         KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
                 m_dev->colorSpace()->colorChannelCount());
-    } else if (cfg->m_curves.size() != m_dev->colorSpace()->colorChannelCount()) {
+    } else if (cfg->m_curves.size() != int(m_dev->colorSpace()->colorChannelCount())) {
         return;
     } else {
-        for (unsigned int ch = 0; ch < cfg->m_curves.size(); ch++)
+        for (int ch = 0; ch < cfg->m_curves.size(); ch++)
             m_curves[ch] = cfg->m_curves[ch];
     }
 
@@ -333,11 +333,6 @@ void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
  */
 //void KisPerChannelFilterConfiguration::fromXML(const QString& s)
 
-void KisPerChannelFilterConfiguration::toLegacyXML(QDomDocument& doc, QDomElement& root) const
-{
-    toXML(doc, root);
-}
-
 void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
 {
     /**
@@ -405,7 +400,7 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
     KisPerChannelFilterConfiguration* configBC =
         const_cast<KisPerChannelFilterConfiguration*>(dynamic_cast<const KisPerChannelFilterConfiguration*>(config)); // Somehow, this shouldn't happen
     Q_ASSERT(configBC);
-    if (configBC->m_curves.size() != cs->colorChannelCount()) {
+    if (configBC->m_curves.size() != int(cs->colorChannelCount())) {
         // We got an illegal number of colorchannels.KisFilter
         return 0;
     }

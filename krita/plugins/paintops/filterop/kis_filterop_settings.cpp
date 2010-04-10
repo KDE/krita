@@ -75,7 +75,7 @@ KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
         Q_ASSERT(filter);
         if(filter) {
             KisFilterConfiguration* configuration = filter->factoryConfiguration(0);
-            configuration->fromLegacyXML(getString(FILTER_CONFIGURATION));
+            configuration->fromXML(getString(FILTER_CONFIGURATION));
             return configuration;
         }
     }
@@ -104,7 +104,7 @@ void KisFilterOpSettings::fromXML(const QDomElement& e)
         if(filter) {
             KisFilterConfiguration* configuration = filter->factoryConfiguration(0);
             configuration->fromXML(element);
-            setProperty(FILTER_CONFIGURATION, configuration->toLegacyXML());
+            setProperty(FILTER_CONFIGURATION, configuration->toXML());
             delete configuration;
         }
     }

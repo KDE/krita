@@ -39,6 +39,12 @@ ToCGenerator::ToCGenerator(QTextFrame *tocFrame)
     m_ToCFrame(tocFrame)
 {
     Q_ASSERT(tocFrame);
+/*
+    // do a generate right now to have a ToC with placeholder numbers.
+    QTimer::singleShot(0, this, SLOT(documentLayoutFinished()));
+
+    // disabled for now as this requires us to update the list items in 'update' too
+*/
 }
 
 void ToCGenerator::documentLayoutFinished()
@@ -70,8 +76,8 @@ void ToCGenerator::generate()
     cursor.setPosition(m_ToCFrame->firstPosition(), QTextCursor::KeepAnchor);
     cursor.beginEditBlock();
     // Add the title
-    cursor.insertText("Table of Contents");
-    KoParagraphStyle *titleStyle = styleManager->paragraphStyle("Contents Heading");
+    cursor.insertText("Table of Contents"); // TODO i18n
+    KoParagraphStyle *titleStyle = styleManager->paragraphStyle("Contents Heading"); // TODO don't hardcode this!
     if(titleStyle) {
         QTextBlock block = cursor.block();
         titleStyle->applyStyle(block);
@@ -85,11 +91,11 @@ void ToCGenerator::generate()
 
         if (outlineLevel > 0) {
             cursor.insertBlock();
-            KoParagraphStyle *currentStyle = styleManager->paragraphStyle("Contents "+QString::number(outlineLevel));
+            KoParagraphStyle *currentStyle = styleManager->paragraphStyle("Contents "+QString::number(outlineLevel)); // TODO don't hardcode this!
             if (currentStyle == 0) {
                 KoParagraphStyle *newStyle = new KoParagraphStyle();
                 newStyle->setName("Contents " + QString::number(outlineLevel));
-                newStyle->setParent(styleManager->paragraphStyle("Standard"));
+                newStyle->setParent(styleManager->paragraphStyle("Standard")); // TODO don't hardcode this!
 
                 newStyle->setLeftMargin(8 * (outlineLevel-1));
 
@@ -97,7 +103,7 @@ void ToCGenerator::generate()
                 struct KoText::Tab aTab;
                 aTab.type = QTextOption::RightTab;
                 aTab.leaderText = '.';
-                aTab.position = 490 - outlineLevel * 8;
+                aTab.position = 490 - outlineLevel * 8; // TODO don't hardcode this
                 tabList.append(aTab);
                 newStyle->setTabPositions(tabList);
 
@@ -106,6 +112,13 @@ void ToCGenerator::generate()
             QTextBlock tocBlock = cursor.block();
             currentStyle->applyStyle(tocBlock);
 
+            KoTextBlockData *bd = dynamic_cast<KoTextBlockData *>(block.userData());
+            if (bd && bd->hasCounterData()) {
+                // TODO instead of using plain text we likely want to use a text list
+                // which makes all paragraphs be properly aligned
+                cursor.insertText(bd->counterText());
+                cursor.insertText(QLatin1String(" "));
+            }
             // Wrong page number, it will be corrected in the update
             // note that the fact that I use 4 chars is reused in the update method!
             cursor.insertText(block.text() + "\t0000");

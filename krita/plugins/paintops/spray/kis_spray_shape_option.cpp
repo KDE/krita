@@ -114,8 +114,7 @@ void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting
     setting->setProperty(SPRAYSHAPE_FOLLOW_CURSOR_WEIGHT, m_options->followCursorWeight->value());
     setting->setProperty(SPRAYSHAPE_DRAWING_ANGLE, m_options->drawingAngle->isChecked());
     setting->setProperty(SPRAYSHAPE_DRAWING_ANGLE_WEIGHT, m_options->drawingAngleWeight->value());
-    setting->setProperty(SPRAYSHAPE_IMAGE_URL,m_options->imageUrl->text());
-    static_cast<KisSprayPaintOpSettings*>(setting)->setQImage(m_image);
+    setting->setProperty(SPRAYSHAPE_IMAGE_URL,m_options->imageUrl->url().toLocalFile());
 }
 
 
@@ -142,13 +141,13 @@ void KisSprayShapeOption::prepareImage()
 {
     QString path = m_options->imageUrl->url().toLocalFile();
     if (QFile::exists(path)){
-        m_image = QImage(path);
-        if (!m_image.isNull())
+        QImage image(path);
+        if (!image.isNull())
         {
             m_options->heightSpin->blockSignals(true);
             m_options->widthSpin->blockSignals(true);
-            m_options->widthSpin->setValue( m_image.width() );
-            m_options->heightSpin->setValue( m_image.height() );
+            m_options->widthSpin->setValue( image.width() );
+            m_options->heightSpin->setValue( image.height() );
             computeAspect();
             m_options->heightSpin->blockSignals(false);
             m_options->widthSpin->blockSignals(false);

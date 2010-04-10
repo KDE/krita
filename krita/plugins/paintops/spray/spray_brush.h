@@ -26,48 +26,13 @@
 #include "kis_paint_information.h"
 
 #include "kis_color_option.h"
+#include "kis_spray_shape_option.h"
+#include "kis_sprayop_option.h"
 
 #include "random_gauss.h"
 
-
 #include <QImage>
-
-
 class QRect;
-
-class KisSprayProperties{
-public:
-    quint16 diameter;
-    quint16 radius;
-    quint16 particleCount;
-    qreal aspect;
-    qreal coverage;
-    qreal amount;
-    qreal spacing;
-    qreal scale;
-    qreal brushRotation;
-    bool jitterMovement;
-    bool useDensity;
-    // particle type size
-    quint8 shape;
-    quint16 width;
-    quint16 height;
-    bool randomSize;
-    bool proportional;
-    // distribution
-    bool gaussian;
-    // rotation
-    bool fixedRotation;
-    bool randomRotation;
-    bool followCursor;
-    bool followDrawingAngle;
-    quint16 fixedAngle;
-    qreal randomRotationWeight;
-    qreal followCursorWeigth;
-    qreal followDrawingAngleWeight;
-    QImage image;
-};
-
 
 class SprayBrush
 {
@@ -77,9 +42,10 @@ public:
     ~SprayBrush();
 
     void paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, qreal rotation, qreal scale, const KoColor &color, const KoColor &bgColor);
-    void setProperties(KisSprayProperties * properties, KisColorProperties * colorProperties){
+    void setProperties(KisSprayProperties * properties, KisColorProperties * colorProperties, KisShapeProperties * shapeProperties){
         m_properties = properties;
         m_colorProperties = colorProperties;
+        m_shapeProperties = shapeProperties;
     }
     
 private:
@@ -96,6 +62,7 @@ private:
 
     const KisSprayProperties * m_properties;
     const KisColorProperties * m_colorProperties;
+    const KisShapeProperties * m_shapeProperties;
 
 private:
     /// rotation in radians according the settings (gauss distribution, uniform distribution or fixed angle)

@@ -20,7 +20,6 @@
 #define KIS_SPRAY_SHAPE_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <QImage>
 
 const QString SPRAYSHAPE_SHAPE = "SprayShape/shape";
 const QString SPRAYSHAPE_PROPORTIONAL = "SprayShape/proportional";
@@ -37,8 +36,6 @@ const QString SPRAYSHAPE_DRAWING_ANGLE = "SprayShape/followDrawingAngle";
 const QString SPRAYSHAPE_DRAWING_ANGLE_WEIGHT = "SprayShape/followDrawingAngleWeigth";
 const QString SPRAYSHAPE_IMAGE_URL = "SprayShape/imageUrl";
 
-
-
 class KisShapeOptionsWidget;
 
 class KisSprayShapeOption : public KisPaintOpOption
@@ -51,19 +48,15 @@ public:
     /// 0 - ellipse, 1 - rectangle, 2 - anti-aliased pixel, 2 - pixel
     int shape() const;
     
-    /// size settings
-    QImage image() const { return m_image; }
-
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
 private:
     KisShapeOptionsWidget * m_options;
-    QImage m_image;
     bool m_useAspect;
     qreal m_aspect;
-    
     int m_maxSize;
+    
 private:
     void setupBrushPreviewSignals();
     void computeAspect();
@@ -75,6 +68,58 @@ private slots:
     void updateWidth(int value);
     
     void changeSizeUI(bool proportionalSize);
+};
+
+#include <QImage>
+
+class KisShapeProperties{
+public:
+    // particle type size
+    quint8 shape;
+    quint16 width;
+    quint16 height;
+    bool randomSize;
+    bool proportional;
+    // distribution
+    bool gaussian;
+    // rotation
+    bool fixedRotation;
+    bool randomRotation;
+    bool followCursor;
+    bool followDrawingAngle;
+    quint16 fixedAngle;
+    qreal randomRotationWeight;
+    qreal followCursorWeigth;
+    qreal followDrawingAngleWeight;
+    QImage image;
+public:
+    
+    void loadSettings(const KisPropertiesConfiguration* settings, qreal proportionalWidth, qreal proportionalHeight){
+        proportional = settings->getBool(SPRAYSHAPE_PROPORTIONAL);
+        width = settings->getInt(SPRAYSHAPE_WIDTH);
+        height = settings->getInt(SPRAYSHAPE_HEIGHT);
+        if (proportional)
+        {   
+            width = (width / 100.0) * proportionalWidth;
+            height = (height / 100.0) * proportionalHeight;
+        }
+    
+        // particle type size
+        shape = settings->getInt(SPRAYSHAPE_SHAPE);
+        randomSize = settings->getBool(SPRAYSHAPE_RANDOM_SIZE);
+    
+        // rotation
+        fixedRotation = settings->getBool(SPRAYSHAPE_FIXED_ROTATION);
+        randomRotation = settings->getBool(SPRAYSHAPE_RANDOM_ROTATION);
+        followCursor = settings->getBool(SPRAYSHAPE_FOLLOW_CURSOR);
+        followDrawingAngle = settings->getBool(SPRAYSHAPE_DRAWING_ANGLE);
+        fixedAngle = settings->getInt(SPRAYSHAPE_FIXED_ANGEL);
+        randomRotationWeight = settings->getDouble(SPRAYSHAPE_RANDOM_ROTATION_WEIGHT);
+        followCursorWeigth = settings->getDouble(SPRAYSHAPE_FOLLOW_CURSOR_WEIGHT);
+        followDrawingAngleWeight = settings->getDouble(SPRAYSHAPE_DRAWING_ANGLE_WEIGHT);
+        // you have to check if the image is null in client
+        image = QImage(settings->getString(SPRAYSHAPE_IMAGE_URL));
+    }
 };
 
 #endif // KIS_SPRAY_SHAPE_OPTION_H

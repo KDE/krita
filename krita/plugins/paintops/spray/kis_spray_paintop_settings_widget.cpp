@@ -61,13 +61,6 @@ KisPropertiesConfiguration*  KisSprayPaintOpSettingsWidget::configuration() cons
 
 void KisSprayPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
 {
-    if (qAbs(x) > qAbs(y)){
-            // recoginze the left/right movement
-            if (x > 0){
-                m_sprayOption->setDiamter( m_sprayOption->diameter() + qRound(x) );
-            }else{
-                m_sprayOption->setDiamter( m_sprayOption->diameter() + qRound(x) );
-            }
-    }else{
-    }
+    Q_UNUSED(y);
+    m_sprayOption->setDiameter( m_sprayOption->diameter() + qRound(x) );
 }

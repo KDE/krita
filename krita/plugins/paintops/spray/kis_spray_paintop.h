@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,8 +19,6 @@
 #ifndef KIS_SPRAY_PAINTOP_H_
 #define KIS_SPRAY_PAINTOP_H_
 
-//#define BENCHMARK
-
 #include <kis_paintop.h>
 #include <kis_types.h>
 
@@ -30,7 +27,6 @@
 
 class QPointF;
 class KisPainter;
-//class KisColorProperties;
 
 class KisSprayPaintOp : public KisPaintOp
 {
@@ -47,24 +43,18 @@ public:
     }
 
 private:
+    KisShapeProperties m_shapeProperties;
     KisSprayProperties m_properties;
     KisColorProperties m_colorProperties;
     
     const KisSprayPaintOpSettings *m_settings;
 
-    KisImageWSP m_image;
     KisPaintDeviceSP m_dab;
     SprayBrush m_sprayBrush;
     double m_xSpacing, m_ySpacing, m_spacing;
     KisPressureRotationOption m_rotationOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
-    
-    void loadSettings(const KisSprayPaintOpSettings *settings);
-#ifdef BENCHMARK
-    int m_total;
-    int m_count;
-#endif
 
 };
 

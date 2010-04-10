@@ -36,18 +36,13 @@
 #include <kis_spray_shape_option.h>
 #include <kis_color_option.h>
 
-#ifdef BENCHMARK
-#include <QTime>
-#endif
-
-
 KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
         , m_settings(settings)
-        , m_image(image)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
+    Q_UNUSED(image);
 
     m_rotationOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
@@ -56,8 +51,11 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
 
-    loadSettings(settings);
-    m_sprayBrush.setProperties( &m_properties, &m_colorProperties);
+    m_colorProperties.fillProperties(settings);
+    m_properties.loadSettings(settings);
+    // first load tip properties as shape properties are dependent on diameter/scale/aspect
+    m_shapeProperties.loadSettings(settings,m_properties.diameter * m_properties.scale, m_properties.diameter * m_properties.aspect * m_properties.scale );
+    m_sprayBrush.setProperties( &m_properties, &m_colorProperties, &m_shapeProperties);
     
     // spacing
     if ((m_properties.diameter * 0.5) > 1) {
@@ -66,57 +64,7 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
         m_ySpacing = m_xSpacing = 1.0;
     }
     m_spacing = m_xSpacing;
-    
-#ifdef BENCHMARK
-    m_count = m_total = 0;
-#endif
 }
-
-void KisSprayPaintOp::loadSettings(const KisSprayPaintOpSettings* settings)
-{
-    m_colorProperties.fillProperties(settings);
-    
-    // read the properties into primitive datatypes (just once)
-    // spray
-    m_properties.diameter = settings->getInt(SPRAY_DIAMETER);
-    m_properties.radius =  qRound(0.5 * m_properties.diameter);
-    m_properties.aspect = settings->getDouble(SPRAY_ASPECT);
-    m_properties.particleCount = settings->getDouble(SPRAY_PARTICLE_COUNT);
-    m_properties.coverage = (settings->getDouble(SPRAY_COVERAGE) / 100.0);
-    m_properties.amount = settings->getDouble(SPRAY_JITTER_MOVE_AMOUNT);
-    m_properties.spacing = settings->getDouble(SPRAY_SPACING);
-    m_properties.scale = settings->getDouble(SPRAY_SCALE);
-    m_properties.brushRotation = settings->getDouble(SPRAY_ROTATION);
-    m_properties.jitterMovement = settings->getBool(SPRAY_JITTER_MOVEMENT);
-    m_properties.useDensity = settings->getBool(SPRAY_USE_DENSITY);
-    m_properties.gaussian = settings->getBool(SPRAY_GAUSS_DISTRIBUTION);
-
-    // sprayshape
-    m_properties.proportional = settings->getBool(SPRAYSHAPE_PROPORTIONAL);
-    m_properties.width = settings->getInt(SPRAYSHAPE_WIDTH);
-    m_properties.height = settings->getInt(SPRAYSHAPE_HEIGHT);
-    if (m_properties.proportional)
-    {
-        m_properties.width = (m_properties.width / 100.0) * m_properties.diameter * m_properties.scale;
-        m_properties.height = (m_properties.height / 100.0) * m_properties.diameter * m_properties.aspect * m_properties.scale;
-    }
-    
-    // particle type size
-    m_properties.shape = settings->getInt(SPRAYSHAPE_SHAPE);
-    m_properties.randomSize = settings->getBool(SPRAYSHAPE_RANDOM_SIZE);
-    
-    // rotation
-    m_properties.fixedRotation = settings->getBool(SPRAYSHAPE_FIXED_ROTATION);
-    m_properties.randomRotation = settings->getBool(SPRAYSHAPE_RANDOM_ROTATION);
-    m_properties.followCursor = settings->getBool(SPRAYSHAPE_FOLLOW_CURSOR);
-    m_properties.followDrawingAngle = settings->getBool(SPRAYSHAPE_DRAWING_ANGLE);
-    m_properties.fixedAngle = settings->getInt(SPRAYSHAPE_FIXED_ANGEL);
-    m_properties.randomRotationWeight = settings->getDouble(SPRAYSHAPE_RANDOM_ROTATION_WEIGHT);
-    m_properties.followCursorWeigth = settings->getDouble(SPRAYSHAPE_FOLLOW_CURSOR_WEIGHT);
-    m_properties.followDrawingAngleWeight = settings->getDouble(SPRAYSHAPE_DRAWING_ANGLE_WEIGHT);
-    m_properties.image = settings->image();
-}
-
 
 KisSprayPaintOp::~KisSprayPaintOp()
 {
@@ -124,11 +72,6 @@ KisSprayPaintOp::~KisSprayPaintOp()
 
 double KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 {
-#ifdef BENCHMARK
-    QTime time;
-    time.start();
-#endif
-
     if (!painter()) return m_spacing;
 
     if (!m_dab) {
@@ -153,12 +96,6 @@ double KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
     painter()->setOpacity(origOpacity);
 
-#ifdef BENCHMARK
-    int msec = time.elapsed();
-    kDebug() << msec << " ms/dab " << "[average: " << m_total / (qreal)m_count << "]";
-    m_total += msec;
-    m_count++;
-#endif
     return m_spacing;
 }
 

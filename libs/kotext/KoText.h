@@ -98,6 +98,10 @@ enum DocumentResource {
     PageProvider            ///< The KoPageProvider
 };
 
+enum KoTextFrameProperty {
+    TableOfContents = QTextFormat::UserProperty + 1,
+};
+
 /// convert the string version of directions (as specified in XSL and ODF) to the Direction enum
 KOTEXT_EXPORT Direction directionFromString(const QString &direction);
 }

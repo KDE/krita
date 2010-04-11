@@ -228,10 +228,21 @@ void SimpleStyleWidget::directionChangeRequested()
         format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::LeftRightTopBottom);
         break;
     case KoText::PerhapsRightLeftTopBottom:
-    case KoText::RightLeftTopBottom:
+    case KoText::RightLeftTopBottom: {
         updateDirection(Auto);
-        format.clearProperty(KoParagraphStyle::TextProgressionDirection);
-        break;
+        // clearProperty won't have any effect on merge below.
+        int start = qMin(cursor.position(), cursor.anchor());
+        int end = qMax(cursor.position(), cursor.anchor());
+        cursor.setPosition(start);
+        while (cursor.position() <= end) {
+            QTextBlockFormat bf = cursor.blockFormat();
+            bf.clearProperty(KoParagraphStyle::TextProgressionDirection);
+            cursor.setBlockFormat(bf);
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+        emit doneWithFocus();
+        return;
+    }
     case KoText::TopBottomRightLeft: ;// Unhandled.
         break;
     };

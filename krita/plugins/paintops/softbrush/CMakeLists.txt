@@ -27,7 +27,7 @@ install(TARGETS kritasoftpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  kritasoftpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-#install( FILES
-#    krita-softbrush.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+install( FILES
+    krita-softbrush.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 
 

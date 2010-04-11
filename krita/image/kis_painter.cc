@@ -283,7 +283,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy, const KisPaintDeviceSP srcdev, con
     d->device->readBytes(dstBytes, dx,dy, sw, sh);
 
     quint8 * selectionBytes = new quint8[ sw * sh * selection->pixelSize()];
-    selection->readBytes(selectionBytes, sx, sy, sw, sh);
+    selection->readBytes(selectionBytes, 0, 0, sw, sh);
     
     d->colorSpace->bitBlt(dstBytes,
                         sw * d->device->pixelSize(),

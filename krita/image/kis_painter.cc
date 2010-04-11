@@ -1682,6 +1682,7 @@ KisPaintDeviceSP KisPainter::device()
 
 void KisPainter::setChannelFlags(QBitArray channelFlags)
 {
+    Q_ASSERT(d->channelFlags.isEmpty() || d->channelFlags.size() == d->colorSpace->channelCount());
     d->channelFlags = channelFlags;
     setLockAlpha(d->alphaLocked);
 }
@@ -1870,10 +1871,11 @@ void KisPainter::setLockAlpha(bool protect)
         d->channelFlags = d->colorSpace->channelFlags(true, !d->alphaLocked, true, true);
     }
     else {
+        Q_ASSERT(d->channelFlags.size() == d->colorSpace->channelCount());
         QList<KoChannelInfo*> channels = d->colorSpace->channels();
         foreach (KoChannelInfo* channel, channels) {
             if (channel->channelType() == KoChannelInfo::ALPHA) {
-                d->channelFlags.setBit(channel->pos(), !d->alphaLocked);
+                d->channelFlags.setBit(channel->index(), !d->alphaLocked);
             }
         }
     }

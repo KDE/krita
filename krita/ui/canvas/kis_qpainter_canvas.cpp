@@ -57,6 +57,7 @@
 #include "kis_selection.h"
 #include "kis_perspective_grid_manager.h"
 #include "kis_config_notifier.h"
+#include "kis_group_layer.h"
 
 //#define DEBUG_REPAINT
 #include <KoCanvasController.h>
@@ -129,12 +130,8 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     // already should contain checks.
     QRect documentRect = QRect(QPoint(0, 0), documentSize());
     QRect fillRect = documentRect.translated(documentOrigin());
-
     if (!cfg.noXRender()) {
-
         if (cfg.scrollCheckers()) {
-
-
             if (documentOffset().x() > 0) {
                 fillRect.adjust(0, 0, documentOffset().x(), 0);
             } else {
@@ -155,13 +152,15 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
         }
     }
 
-    gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    if (cfg.noXRender()) {
-        gc.drawPixmap(ev->rect(), m_d->prescaledProjection->prescaledPixmap(), 
-                      ev->rect().translated(-documentOrigin()));
-    } else {
-        gc.drawImage(ev->rect(), m_d->prescaledProjection->prescaledQImage(), 
-                     ev->rect().translated(-documentOrigin()));
+    if(canvas()->image()->rootLayer()->childCount()>0) {
+        gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
+        if (cfg.noXRender()) {
+            gc.drawPixmap(ev->rect(), m_d->prescaledProjection->prescaledPixmap(),
+                          ev->rect().translated(-documentOrigin()));
+        } else {
+            gc.drawImage(ev->rect(), m_d->prescaledProjection->prescaledQImage(),
+                         ev->rect().translated(-documentOrigin()));
+        }
     }
 
 #ifdef DEBUG_REPAINT

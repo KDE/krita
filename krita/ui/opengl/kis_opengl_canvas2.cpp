@@ -50,6 +50,7 @@
 #include "kis_config.h"
 #include "kis_debug.h"
 #include "kis_selection_manager.h"
+#include "kis_group_layer.h"
 
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
@@ -119,7 +120,9 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 
     if (canvas()->image()) {
         drawBackground();
-        drawImage();
+        if(canvas()->image()->rootLayer()->childCount()>0) {
+            drawImage();
+        }
 
         restoreGLState();
 

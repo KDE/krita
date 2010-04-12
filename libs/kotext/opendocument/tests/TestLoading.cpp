@@ -462,9 +462,24 @@ bool TestLoading::compareTableCells(QTextTableCell &actualCell, QTextTableCell &
 
 bool TestLoading::compareTableFormats(QTextTableFormat &actualFormat, QTextTableFormat &expectedFormat)
 {
-    if (actualFormat.background() != expectedFormat.background()
-            || actualFormat.alignment() != expectedFormat.alignment()
-            || actualFormat.width() != expectedFormat.width()) {
+    if (actualFormat.background() != expectedFormat.background()) {
+        qDebug() << "compareTableFormats: Background mismatch";
+        qDebug() << "Expected Background: " << expectedFormat.background();
+        qDebug() << "Actual Background: " << actualFormat.background();
+        return false;
+    }
+
+    if (actualFormat.alignment() != expectedFormat.alignment()) {
+        qDebug() << "compareTableFormats: Alignment mismatch";
+        qDebug() << "Expected Alignment: " << expectedFormat.alignment();
+        qDebug() << "Actual Alignment: " << actualFormat.alignment();
+        return false;
+    }
+
+    if (actualFormat.width() != expectedFormat.width()) {
+        qDebug() << "compareTableFormats: Width mismatch";
+        qDebug() << "Expected Width: " << expectedFormat.width();
+        qDebug() << "Actual Width: " << actualFormat.width();
         return false;
     }
 
@@ -843,7 +858,8 @@ void TestLoading::addData(LoadSave loadSave)
     if (loadSave == TestLoadingData) {
         QTest::newRow("simpleTable") << "Tables/simpleTable";
         QTest::newRow("spanningCells") << "Tables/spanningCells";
-        QTest::newRow("tableWidth") << "FormattingProperties/TableFormattingProperties/tableWidth";
+        QTest::newRow("tableWidth") << "Tables/tableWidth";
+        QTest::newRow("tableWidth") << "Tables/tableAlignment";
         QTest::newRow("tableTopAndBottomMargin") << "FormattingProperties/TableFormattingProperties/tableTopAndBottomMargin";
         QTest::newRow("tableLeftAndRightMargin") << "FormattingProperties/TableFormattingProperties/tableLeftAndRightMargin";
     }

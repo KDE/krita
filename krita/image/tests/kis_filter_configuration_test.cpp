@@ -48,7 +48,6 @@ void KisFilterConfigurationTest::testRoundTrip()
     kfc = new KisFilterConfiguration("test2", 2);
     kfc->fromXML(s);
     QCOMPARE(kfc->version(), 1);
-    QCOMPARE(kfc->name(), QString("test"));
     delete kfc;
 }
 

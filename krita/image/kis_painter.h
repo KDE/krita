@@ -129,6 +129,10 @@ public:
                 qint32 sx, qint32 sy,
                 qint32 sw, qint32 sh);
 
+    /**
+     * Blast the specific region from src to the current paint device using a \ref KisFixedPaintDevice
+     * @param selection the selection will be used between (0,0) and (sw-1,sh-1).
+     */
     void bitBlt(qint32 dx, qint32 dy,
                 const KisPaintDeviceSP srcdev,
                 const KisFixedPaintDeviceSP selection,

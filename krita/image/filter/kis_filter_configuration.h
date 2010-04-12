@@ -57,6 +57,12 @@ public:
      */
     virtual void fromLegacyXML(const QDomElement&);
 
+    using KisPropertiesConfiguration::fromXML;
+    using KisPropertiesConfiguration::toXML;
+
+    virtual void fromXML(const QDomElement&);
+    virtual void toXML(QDomDocument&, QDomElement&) const;
+
     /**
      * Get the unique, language independent name of the filter.
      */

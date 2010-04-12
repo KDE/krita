@@ -96,7 +96,7 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
     }
     else if(!(*m_d->paintDevice->colorSpace() == *colorSpace)) {
 
-        KisPaintDeviceSP dev = new KisPaintDevice(colorSpace);
+        KisPaintDeviceSP dev = new KisPaintDevice(this, colorSpace, KisDefaultBounds(image()));
         quint8* defaultPixel = colorSpace->allocPixelBuffer(1);
         colorSpace->convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1);
         dev->setDefaultPixel(defaultPixel);

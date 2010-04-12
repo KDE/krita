@@ -89,6 +89,19 @@ void KisFilterConfiguration::fromLegacyXML(const QDomElement& e)
     }
 }
 
+void KisFilterConfiguration::fromXML(const QDomElement& elt)
+{
+    d->version = elt.attribute("version").toInt();
+    KisPropertiesConfiguration::fromXML(elt);
+}
+
+void KisFilterConfiguration::toXML(QDomDocument& doc, QDomElement& elt) const
+{
+    elt.setAttribute("version", d->version);
+    KisPropertiesConfiguration::toXML(doc, elt);
+}
+
+
 const QString & KisFilterConfiguration::name() const
 {
     return d->name;

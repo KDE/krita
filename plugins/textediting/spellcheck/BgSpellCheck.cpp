@@ -149,7 +149,10 @@ QString BgSpellCheck::fetchMoreText()
     if (m_currentLanguage != language || m_currentCountry != country) {
         kDebug(31000) << "switching to language" << language << country;
         // hmm, seems we can't set country. *shrug*
+#if 0
+     Disabling this as sonnet crashes on this. See https://bugs.kde.org/228271
         changeLanguage(language);
+#endif
         m_currentLanguage = language;
         m_currentCountry = country;
     }

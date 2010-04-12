@@ -36,6 +36,9 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoPointerEvent.h>
+#include <KoPathShape.h>
+#include <KoShapeController.h>
+#include <KoLineBorder.h>
 
 #include <kis_debug.h>
 #include <kis_selection.h>
@@ -145,43 +148,63 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 m_endPos = pos;
             }
 
-            KisPaintDeviceSP device;
-
-            if (currentNode() && (device = currentNode()->paintDevice())) {
-                delete m_painter;
-                m_painter = new KisPainter(device, currentSelection());
-                Q_CHECK_PTR(m_painter);
-
-                m_painter->beginTransaction(i18nc("a straight drawn line", "Line"));
-
-                m_painter->setPaintColor(currentFgColor());
-                m_painter->setOpacity(m_opacity);
-                m_painter->setCompositeOp(m_compositeOp);
-                m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
-                if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
-                    m_painter->setChannelFlags(l->channelFlags());
-                    if (l->alphaLocked()) {
-                        m_painter->setLockAlpha(l->alphaLocked());
-                    }
-                }
-
-                m_painter->paintLine(m_startPos, m_endPos);
-
-                QRegion dirtyRegion = m_painter->dirtyRegion();
-                device->setDirty(dirtyRegion);
-                notifyModified();
-
 #ifdef ENABLE_RECORDING
-                if (image()) {
-                    KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
-                    setupPaintAction(&linePaintAction);
-                    linePaintAction.addLine(m_startPos, m_endPos);
-                    image()->actionRecorder()->addAction(linePaintAction);
-                }
+            if (image()) {
+                KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
+                setupPaintAction(&linePaintAction);
+                linePaintAction.addLine(m_startPos, m_endPos);
+                image()->actionRecorder()->addAction(linePaintAction);
+            }
 #endif
-                canvas()->addCommand(m_painter->endTransaction());
-                delete m_painter;
-                m_painter = 0;
+
+            if (!currentNode()->inherits("KisShapeLayer")) {
+                KisPaintDeviceSP device;
+
+                if (currentNode() && (device = currentNode()->paintDevice())) {
+                    delete m_painter;
+                    m_painter = new KisPainter(device, currentSelection());
+                    Q_CHECK_PTR(m_painter);
+
+                    m_painter->beginTransaction(i18nc("a straight drawn line", "Line"));
+
+                    m_painter->setPaintColor(currentFgColor());
+                    m_painter->setOpacity(m_opacity);
+                    m_painter->setCompositeOp(m_compositeOp);
+                    m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
+                    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
+                        m_painter->setChannelFlags(l->channelFlags());
+                        if (l->alphaLocked()) {
+                            m_painter->setLockAlpha(l->alphaLocked());
+                        }
+                    }
+
+                    m_painter->paintLine(m_startPos, m_endPos);
+
+                    QRegion dirtyRegion = m_painter->dirtyRegion();
+                    device->setDirty(dirtyRegion);
+                    notifyModified();
+
+
+                    canvas()->addCommand(m_painter->endTransaction());
+                    delete m_painter;
+                    m_painter = 0;
+                }
+            }
+            else {
+                KoPathShape* path = new KoPathShape();
+                path->setShapeId(KoPathShapeId);
+
+                QMatrix resolutionMatrix;
+                resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
+                path->moveTo(resolutionMatrix.map(m_startPos));
+                path->lineTo(resolutionMatrix.map(m_endPos));
+                path->normalize();
+
+                KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
+                path->setBorder(border);
+
+                QUndoCommand * cmd = canvas()->shapeController()->addShape(path);
+                canvas()->addCommand(cmd);
             }
         }
     } else {

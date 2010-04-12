@@ -20,6 +20,7 @@
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
+const QString HAIRY_INK_DEPLETION_ENABLED = "HairyInk/enabled";
 const QString HAIRY_INK_AMOUNT = "HairyInk/inkAmount";
 const QString HAIRY_INK_USE_SATURATION = "HairyInk/useSaturation";
 const QString HAIRY_INK_USE_OPACITY = "HairyInk/useOpacity";

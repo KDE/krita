@@ -33,7 +33,7 @@ public:
 KisHairyInkOption::KisHairyInkOption()
         : KisPaintOpOption(i18n("Ink depletion"), false)
 {
-    m_checkable = false;
+    m_checkable = true;
     m_options = new KisInkOptionsWidget();
 
     connect(m_options->inkAmountSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
@@ -58,6 +58,7 @@ KisHairyInkOption::~KisHairyInkOption()
 
 void KisHairyInkOption::readOptionSetting(const KisPropertiesConfiguration* settings)
 {
+    setChecked(settings->getBool(HAIRY_INK_DEPLETION_ENABLED));
     m_options->inkAmountSpinBox->setValue(settings->getInt(HAIRY_INK_AMOUNT));
     m_options->saturationCBox->setChecked(settings->getBool(HAIRY_INK_USE_SATURATION));
     m_options->opacityCBox->setChecked(settings->getBool(HAIRY_INK_USE_OPACITY));
@@ -72,12 +73,7 @@ void KisHairyInkOption::readOptionSetting(const KisPropertiesConfiguration* sett
 
 void KisHairyInkOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
 {
-  /*  QList<float> c = curve();
-    config->setProperty("curve_count", c.count());
-    for (int i = 0; i < c.count(); ++i) {
-        config->setProperty(QString("ink_curve_%1").arg(i), c[i]);
-    }
- */
+    settings->setProperty(HAIRY_INK_DEPLETION_ENABLED, isChecked() );
     settings->setProperty(HAIRY_INK_AMOUNT, inkAmount());
     settings->setProperty(HAIRY_INK_USE_SATURATION, useSaturation());
     settings->setProperty(HAIRY_INK_USE_OPACITY, useOpacity());

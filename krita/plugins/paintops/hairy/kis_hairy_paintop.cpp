@@ -92,7 +92,7 @@ void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
     curve.floatTransfer(m_properties.inkAmount);
 
     m_properties.inkDepletionCurve = list;
-
+    m_properties.inkDepletionEnabled = settings->getBool(HAIRY_INK_DEPLETION_ENABLED);
     m_properties.useSaturation = settings->getBool(HAIRY_INK_USE_SATURATION);
     m_properties.useOpacity = settings->getBool(HAIRY_INK_USE_OPACITY);
     m_properties.useWeights = settings->getBool(HAIRY_INK_USE_WEIGHTS);

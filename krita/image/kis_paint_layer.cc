@@ -116,7 +116,7 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         const QRect& rect) const
 {
     KisPainter gc(projection);
-    gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+    gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_COPY));
     gc.bitBlt(rect.topLeft(), original, rect);
 
     if (hasTemporaryTarget()) {

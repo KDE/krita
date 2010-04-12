@@ -70,18 +70,17 @@ public:
     QIcon icon() const;
     KoDocumentSectionModel::PropertyList sectionModelProperties() const;
 
-public slots:
-    // KisIndirectPaintingSupport
-    KisLayer* layer() {
-        return this;
-    }
-
-protected:
     /**
      * re-run the generator. This happens over the bounds
      * of the associated selection.
      */
     void update();
+    
+public slots:
+    // KisIndirectPaintingSupport
+    KisLayer* layer() {
+        return this;
+    }
 
 private:
     class Private;

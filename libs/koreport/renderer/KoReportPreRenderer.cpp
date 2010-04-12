@@ -690,8 +690,7 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
             QString uudata;
             QByteArray imgdata;
             if (!im->isInline()) {
-//TODO load images from database
-
+                imgdata = m_kodata->value(im->controlSource()).toByteArray();
             } else {
                 uudata = im->inlineImageData();
                 imgdata = KCodecs::base64Decode(uudata.toLatin1());

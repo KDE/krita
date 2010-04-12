@@ -61,7 +61,7 @@ public:
         setToolTip(i18n("Draw a rectangle"));
 
         setToolType(TOOL_TYPE_SHAPE);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("krita_tool_rectangle");
         //setShortcut( Qt::Key_F6 );
         setPriority(2);

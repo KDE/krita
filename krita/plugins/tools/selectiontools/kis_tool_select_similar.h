@@ -61,7 +61,7 @@ public:
             : KoToolFactoryBase(parent, "KisToolSelectSimilar") {
         setToolTip(i18n("Select similar colors"));
         setToolType(TOOL_TYPE_SELECTED);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("tool_similar_selection");
         setShortcut(KShortcut(Qt::CTRL + Qt::Key_E));
         setPriority(57);

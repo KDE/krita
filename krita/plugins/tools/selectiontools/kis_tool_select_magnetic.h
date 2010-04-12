@@ -107,7 +107,7 @@ public:
             : KoToolFactoryBase(parent, "KisToolSelectMagnetic") {
         setToolTip(i18n("Magnetic selection tool"));
         setToolType(TOOL_TYPE_SELECTED);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("tool_magneticoutline_selection");
         setShortcut(KShortcut(Qt::CTRL + Qt::Key_E));
         setPriority(57);

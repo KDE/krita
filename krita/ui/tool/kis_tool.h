@@ -48,6 +48,12 @@ static const QString TOOL_TYPE_FILL = "3 Krita/Fill";                // Tools th
 static const QString TOOL_TYPE_VIEW = "4 Krita/View";                // Tools that affect the canvas: pan, zoom, etc.
 static const QString TOOL_TYPE_SELECTED = "5 Krita/Select";          // Tools that select pixels
 
+//these activation ids are kind of a workaround untile the toolbox has a better design and should be set in the tool factory
+//activation id for showing tools always, but deactivating if layer is locked
+static const QString KRITA_TOOL_ACTIVATION_ID = "flake/dud";
+//activation id for showing always and not deactivating
+static const QString KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE = "flake/always";
+
 class  KRITAUI_EXPORT KisTool
         : public KoToolBase
 {

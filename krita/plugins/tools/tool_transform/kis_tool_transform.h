@@ -141,8 +141,7 @@ public:
         setToolType(TOOL_TYPE_TRANSFORM);
         setIcon("krita_tool_transform");
         setPriority(11);
-
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
     virtual ~KisToolTransformFactory() {}

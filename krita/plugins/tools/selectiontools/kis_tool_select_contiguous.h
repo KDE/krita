@@ -63,7 +63,7 @@ public:
         setToolType(TOOL_TYPE_SELECTED);
         setIcon("tool_contiguous_selection");
         setPriority(56);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
     virtual ~KisToolSelectContiguousFactory() {}

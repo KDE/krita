@@ -68,7 +68,7 @@ public:
             : KoToolFactoryBase(parent, "KisToolSelectElliptical") {
         setToolTip(i18n("Select an elliptical area"));
         setToolType(TOOL_TYPE_SELECTED);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("tool_elliptical_selection");
         setShortcut(KShortcut(Qt::Key_J));
         setPriority(53);

@@ -54,7 +54,7 @@ public:
             : KoToolFactoryBase(parent, "KritaShape/KisToolEllipse") {
         setToolTip(i18n("Draw an ellipse"));
         setToolType(TOOL_TYPE_SHAPE);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("krita_tool_ellipse");
         setPriority(3);
         setInputDeviceAgnostic(false);

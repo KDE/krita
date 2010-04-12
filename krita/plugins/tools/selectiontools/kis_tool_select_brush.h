@@ -73,7 +73,7 @@ public:
             : KoToolFactoryBase(parent, "KisToolSelectBrush") {
         setToolTip(i18n("Select by brush"));
         setToolType(TOOL_TYPE_SELECTED);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("tool_brush_selection");
         //setShortcut(KShortcut(Qt::Key_B));
         setPriority(53);

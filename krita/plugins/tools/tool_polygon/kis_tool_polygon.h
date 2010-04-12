@@ -49,7 +49,7 @@ public:
             : KoToolFactoryBase(parent, "KisToolPolygon") {
         setToolTip(i18n("Draw a polygon. Shift-mouseclick ends the polygon."));
         setToolType(TOOL_TYPE_SHAPE);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("tool_polygon");
         setPriority(4);
         setInputDeviceAgnostic(false);

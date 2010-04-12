@@ -139,7 +139,7 @@ public:
             : KoToolFactoryBase(parent, "KisToolCrop") {
         setToolTip(i18n("Crop the image to an area"));
         setToolType(TOOL_TYPE_TRANSFORM);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(10);
         setIcon("tool_crop");
     }

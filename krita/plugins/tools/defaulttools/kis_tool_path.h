@@ -49,7 +49,7 @@ public:
             : KoToolFactoryBase(parent, "KisToolPath") {
         setToolTip(i18n("Draw a path."));
         setToolType(TOOL_TYPE_SHAPE);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("krita_draw_path");
         setPriority(7);
     }

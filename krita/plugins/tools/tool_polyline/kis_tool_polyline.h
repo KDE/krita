@@ -53,7 +53,7 @@ public:
             : KoToolFactoryBase(parent, "KisToolPolyline") {
         setToolTip(i18n("Draw a polyline. Shift-mouseclick ends the polyline."));
         setToolType(TOOL_TYPE_SHAPE);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("polyline");
         setPriority(5);
         setInputDeviceAgnostic(false);

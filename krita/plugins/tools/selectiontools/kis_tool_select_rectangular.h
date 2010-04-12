@@ -66,7 +66,7 @@ public:
             : KoToolFactoryBase(parent, "KisToolSelectRectangular") {
         setToolTip(i18n("Select a rectangular area"));
         setToolType(TOOL_TYPE_SELECTED);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("tool_rect_selection");
         setShortcut(KShortcut(Qt::Key_R));
         setPriority(52);

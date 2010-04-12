@@ -75,6 +75,16 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
         validateSelection();
         updateCanvasPixelRect(image()->bounds());
     }
+
+    if(m_optWidget==0 || m_optWidget->cmbType==0) return;
+    //pixel layer
+    if(currentNode() && currentNode()->paintDevice()) {
+        m_optWidget->cmbType->setEnabled(true);
+    }
+    //shape layer
+    else {
+        m_optWidget->cmbType->setEnabled(false);
+    }
 }
 
 void KisToolCrop::deactivate()
@@ -84,6 +94,22 @@ void KisToolCrop::deactivate()
     m_rectCrop = QRect(0, 0, 0, 0);
     updateWidgetValues();
     updateCanvasPixelRect(image()->bounds());
+}
+
+void KisToolCrop::resourceChanged(int key, const QVariant &res)
+{
+    KisTool::resourceChanged(key, res);
+
+    if(m_optWidget==0 || m_optWidget->cmbType==0) return;
+    //pixel layer
+    if(currentNode() && currentNode()->paintDevice()) {
+        m_optWidget->cmbType->setEnabled(true);
+    }
+    //shape layer
+    else {
+        m_optWidget->cmbType->setCurrentIndex(1);
+        m_optWidget->cmbType->setEnabled(false);
+    }
 }
 
 void KisToolCrop::paint(QPainter &painter, const KoViewConverter &converter)
@@ -99,7 +125,7 @@ void KisToolCrop::mousePressEvent(KoPointerEvent *e)
         if (!currentNode())
             return;
 
-        if (currentImage() && currentNode()->paintDevice() && e->button() == Qt::LeftButton) {
+        if (currentImage() && e->button() == Qt::LeftButton) {
 
             QPoint pos = convertToIntPixelCoord(e);
 
@@ -413,7 +439,7 @@ void KisToolCrop::crop()
     QRect cropRect = m_rectCrop.normalized();
 
     // The visitor adds the undo steps to the macro
-    if (m_optWidget->cmbType->currentIndex() == 0) {
+    if (m_optWidget->cmbType->currentIndex() == 0 && currentNode()->paintDevice()) {
         // The layer(s) under the current layer will take care of adding
         // undo information to the Crop macro.
         if (currentImage()->undo())

@@ -66,6 +66,7 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
     virtual void mouseDoubleClickEvent(KoPointerEvent *e);
+    virtual void resourceChanged(int key, const QVariant &res);
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 

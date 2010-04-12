@@ -9,8 +9,6 @@ include("common.qs");
 
 var firstTableFormat = QTextTableFormat.clone(defaultTableFormat);
 firstTableFormat.setProperty(KoTableStyle.BreakAfter, true);
-var id = KoTableStyle.BreakAfter + 1;
-print("The id is ", id);
 
 var secondTableFormat = QTextTableFormat.clone(defaultTableFormat);
 secondTableFormat.setProperty(KoTableStyle.BreakBefore, true);

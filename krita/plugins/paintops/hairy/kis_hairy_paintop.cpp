@@ -108,8 +108,12 @@ void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
     m_properties.randomFactor = settings->getDouble(HAIRY_BRISTLE_RANDOM);
     m_properties.scaleFactor = settings->getDouble(HAIRY_BRISTLE_SCALE);
     m_properties.threshold = settings->getBool(HAIRY_BRISTLE_THRESHOLD);
+    m_properties.antialias = settings->getBool(HAIRY_BRISTLE_ANTI_ALIASING);
+    m_properties.useCompositing = settings->getBool(HAIRY_BRISTLE_USE_COMPOSITING);
     m_properties.connectedPath = settings->getBool(HAIRY_BRISTLE_CONNECTED);
-/*    BrushShape brushShape;
+
+    
+    /*    BrushShape brushShape;
     if (m_properties.isbrushDimension1D) 
     {
         brushShape.fromLine(m_properties.radius, m_properties.sigma);

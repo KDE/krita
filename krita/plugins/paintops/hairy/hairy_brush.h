@@ -73,7 +73,7 @@ public:
     HairyBrush();
     ~HairyBrush();
 
-    void paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale);
+    void paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale, qreal rotation);
     /// set ink color for the whole bristle shape
     void setInkColor(const KoColor &color);
     /// set the bristles

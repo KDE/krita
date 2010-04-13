@@ -72,8 +72,13 @@ KisHairyPaintOp::KisHairyPaintOp(const
         m_dev = settings->node()->paintDevice();
     }
     
+    m_rotationOption.readOptionSetting(settings);
+    m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
+    m_rotationOption.sensor()->reset();
+    m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
+
 }
 
 void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
@@ -148,15 +153,19 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
     }
     
     qreal scale = m_properties.scaleFactor * KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
+    qreal rotation = m_rotationOption.apply(pi2);
+    quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
     
-    m_brush.paintLine(m_dab, m_dev, pi1, pi2, scale);
+    m_brush.paintLine(m_dab, m_dev, pi1, pi2, scale, rotation);
 
     //QRect rc = m_dab->exactBounds();
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-    
+    painter()->setOpacity(origOpacity);
+
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());
     KisVector2D dragVec = end - start;
+    
     return KisDistanceInformation(0, dragVec.norm());
 }

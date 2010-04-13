@@ -28,6 +28,8 @@
 #include "hairy_brush.h"
 
 #include <kis_pressure_size_option.h>
+#include <kis_pressure_rotation_option.h>
+#include <kis_pressure_opacity_option.h>
 
 class QPointF;
 class KisPainter;
@@ -51,8 +53,11 @@ private:
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
     HairyBrush m_brush;
+    KisPressureRotationOption m_rotationOption;
     KisPressureSizeOption m_sizeOption;
+    KisPressureOpacityOption m_opacityOption;
 
+    
     void loadSettings(const KisBrushBasedPaintOpSettings* settings);
 };
 

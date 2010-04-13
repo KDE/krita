@@ -85,7 +85,7 @@ void HairyBrush::setInkColor(const KoColor &color)
 }
 
 
-void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale)
+void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale, qreal rotation)
 {
     m_counter++;
     
@@ -98,7 +98,10 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     qreal dx = x2 - x1;
     qreal dy = y2 - y1;
    
-    qreal angle = atan2(dy, dx);
+    // TODO:this angle is different from the drawing angle in sensor (info.angle()). The bug is caused probably due to
+    // not computing the drag vector properly in paintBezierLine when smoothing is used 
+    //qreal angle = atan2(dy, dx); 
+    qreal angle = rotation;
 
     qreal mousePressure = 1.0;
     if (m_properties->useMousePressure) { // want pressure from mouse movement
@@ -128,7 +131,6 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
         m_saturationId = m_transfo->parameterId(SATURATION);
     }
     
-    rotateBristles(angle);
     // if this is first time the brush touches the canvas and we use soak the ink from canvas
     if (firstStroke() && m_properties->useSoakInk){
         KisRandomConstAccessor laccessor = layer->createRandomConstAccessor((int)x1, (int)y1);
@@ -157,6 +159,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
         shear = pressure * m_properties->shearFactor;
 
         m_transform.reset();
+        m_transform.rotateRadians(-angle);
         m_transform.scale(scale, scale);
         m_transform.translate(randomX, randomY);
         m_transform.shear(shear, shear);
@@ -212,7 +215,6 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
         }
 
     }
-    rotateBristles(-angle);
     //repositionBristles(angle,slope);
     m_dab = 0;
     m_dabAccessor = 0;
@@ -267,25 +269,6 @@ void HairyBrush::opacityDepletion(Bristle* bristle, KoColor& bristleColor, qreal
             bristle->inkAmount();
     }
     bristleColor.setOpacity(opacity);
-}
-
-void HairyBrush::rotateBristles(double angle)
-{
-    qreal tx, ty, x, y;
-
-    m_transform.reset();
-    m_transform.rotateRadians(angle);
-
-    for (int i = 0; i < m_bristles.size(); i++) {
-        if (m_bristles.at(i)->enabled()){
-            x = m_bristles.at(i)->x();
-            y = m_bristles.at(i)->y();
-            m_transform.map(x, y, &tx, &ty);
-            m_bristles[i]->setX(tx);
-            m_bristles[i]->setY(ty);
-        }
-    }
-    m_lastAngle = angle;
 }
 
 void HairyBrush::repositionBristles(double angle, double slope)

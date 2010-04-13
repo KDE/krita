@@ -144,8 +144,7 @@ int KoReportItemImage::render(OROPage* page, OROSection* section,  QPointF offse
     QString uudata;
     QByteArray imgdata;
     if (!isInline()) {
-        //TODO load images from database
-
+        imgdata = data.toByteArray();
     } else {
         uudata = inlineImageData();
         imgdata = KCodecs::base64Decode(uudata.toLatin1());

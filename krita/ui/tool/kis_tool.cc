@@ -429,7 +429,7 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 
             glBegin(GL_LINE_STRIP);
             for(int j=0; j<polygon.count(); j++) {
-                QPointF p = /*pixelToView*/(polygon.at(j));
+                QPointF p = polygon.at(j);
                 glVertex2f(p.x(), p.y());
             }
             glEnd();

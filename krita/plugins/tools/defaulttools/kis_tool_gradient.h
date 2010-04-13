@@ -127,7 +127,7 @@ public:
         setIcon("krita_tool_gradient");
         setShortcut(KShortcut(Qt::Key_G));
         setPriority(15);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setInputDeviceAgnostic(false);
     }
 

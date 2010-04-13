@@ -96,6 +96,7 @@ public:
         setToolType(TOOL_TYPE_VIEW);
         setIcon("tool_perspectivegrid");
         setPriority(16);
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     };
 
 

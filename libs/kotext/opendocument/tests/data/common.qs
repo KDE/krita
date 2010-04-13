@@ -220,3 +220,14 @@ QTextTableFormat.clone = function(fmt) {
 };
 
 var defaultTableFormat = new QTextTableFormat;
+
+var KoTableStyle = {};
+i = QTextFormat.UserProperty + 1;
+KoTableStyle.StyleId = i++;
+KoTableStyle.KeepWithNext = i++;
+KoTableStyle.BreakBefore = i++;
+KoTableStyle.BreakAfter = i++;
+KoTableStyle.MayBreakBetweenRows = i++;
+KoTableStyle.ColumnAndRowStylemanager = i++;
+KoTableStyle.CollapsingBorders = i++;
+KoTableStyle.MasterPageName = i++;

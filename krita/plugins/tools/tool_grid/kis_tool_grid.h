@@ -69,7 +69,7 @@ public:
         setToolType(TOOL_TYPE_VIEW);
         setIcon("krita_tool_grid");
         setPriority(17);
-        setActivationShapeId("krita/always");
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE);
     };
 
 

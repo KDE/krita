@@ -169,7 +169,7 @@ public:
         // TODO
         //setShortcut(KShortcut(Qt::Key_F));
         setPriority(10);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setInputDeviceAgnostic(false);
     }
 

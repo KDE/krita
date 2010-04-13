@@ -68,7 +68,7 @@ public:
         setToolType(TOOL_TYPE_SELECTED);
         setIcon("tool_outline_selection");
         setPriority(55);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
     virtual ~KisToolSelectOutlineFactory() {}

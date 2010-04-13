@@ -69,6 +69,7 @@ public:
         setToolType(TOOL_TYPE_VIEW);
         setIcon("krita_tool_ruler_assistant");
         setPriority(0);
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     };
 
 

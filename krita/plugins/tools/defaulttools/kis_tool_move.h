@@ -92,7 +92,7 @@ public:
             : KoToolFactoryBase(parent, "KritaTransform/KisToolMove") {
         setToolTip(i18n("Move a layer"));
         setToolType(TOOL_TYPE_TRANSFORM);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(11);
         setIcon("krita_tool_move");
         //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );

@@ -77,7 +77,7 @@ public:
         setToolType(TOOL_TYPE_SHAPE);
         setPriority(6);
         setIcon("tool_star");
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setInputDeviceAgnostic(false);
     }
 

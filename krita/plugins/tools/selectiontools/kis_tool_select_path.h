@@ -73,7 +73,7 @@ public:
             : KoToolFactoryBase(parent, "KisToolSelectPath") {
         setToolTip(i18n("Select an area of the image with path."));
         setToolType(TOOL_TYPE_SELECTED);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("tool_path_selection");
         setPriority(58);
     }

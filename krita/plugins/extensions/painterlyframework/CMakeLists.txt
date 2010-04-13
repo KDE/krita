@@ -1,7 +1,7 @@
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(illuminants)
-#add_subdirectory(tests)
+add_subdirectory(tests)
 
 #################################################
 # Painterly Common Libraries

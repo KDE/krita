@@ -34,7 +34,6 @@
 #include "KoCtlCompositeOp.h"
 #include "KoCtlMixColorsOp.h"
 #include "KoCtlConvolutionOp.h"
-#include <boost/graph/graph_concepts.hpp>
 
 struct KoCtlColorSpace::Private {
     Private() : alphaCtlChannel(0) {}

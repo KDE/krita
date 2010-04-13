@@ -76,6 +76,9 @@ public:
         FontCharset,
         DropCapsAdditionalFormatting, // to identify the purpose of the additionalFormatting
         // set on the layout. is not copied during applyStyle().
+        TextRotationAngle,
+        TextRotationScale,
+        TextScale,
         InlineRdf,  ///< KoTextInlineRdf for this block
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550 // Internal: Reserved for ChangeTracker
@@ -117,6 +120,17 @@ public:
         NoLineMode,
         ContinuousLineMode,
         SkipWhiteSpaceLineMode
+    };
+
+    enum RotationAngle {
+        Zero,
+        Ninety = 90,
+        TwoHundredSeventy = 270
+    };
+
+    enum RotationScale {
+        Fixed,
+        LineHeight
     };
 
     /**
@@ -245,6 +259,23 @@ public:
     void setUnderlineMode(LineMode mode);
     /// Get the current underline mode of this KoCharacterStyle
     LineMode underlineMode() const;
+
+    /// Apply text rotation angle to this KoCharacterStyle
+    void setTextRotationAngle(RotationAngle angle);
+    /// Get the current text rotation angle of this KoCharacterStyle
+    RotationAngle textRotationAngle() const;
+    /** 
+     *  RotationScale pecifies whether for rotated text the width of the text
+     *  should be scaled to fit into the current line height or the width of the text
+     *  should remain fixed, therefore changing the current line height
+     */
+    void setTextRotationScale(RotationScale scale);
+    /// Get the current text rotation scale of this KoCharacterStyle
+    RotationScale textRotationScale() const;
+    /// Apply text scale to this KoCharacterStyle
+    void setTextScale(int scale);
+    /// Get the current text scale of this KoCharacterStyle
+    int textScale() const;
 
     /// Set the country
     void setCountry(const QString &country);

@@ -45,6 +45,9 @@ public:
     int diameter() const;
     void setDiameter(int diameter);
     
+    void setSpacing(qreal spacing);
+    qreal spacing() const;
+    
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 

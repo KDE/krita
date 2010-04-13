@@ -39,6 +39,7 @@ KisSoftPaintOpSettingsWidget:: KisSoftPaintOpSettingsWidget(QWidget* parent)
     m_paintActionTypeOption = new KisPaintActionTypeOption();
     m_softOption =  new KisSoftOpOption();
     m_sizeOption = new KisBrushSizeOption();
+    m_sizeOption->setSpacing(0.1);
     m_hsvOption = new KisHSVOption();
     
     addPaintOpOption(m_sizeOption);

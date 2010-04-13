@@ -41,6 +41,7 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor(ki18n("Alan Horkan"), KLocalizedString(), "", "http://www.openclipart.org");
     aboutData->addAuthor(ki18n("Bart Coppens"), KLocalizedString(), "kde@bartcoppens.be");
     aboutData->addAuthor(ki18n("Boudewijn Rempt"), ki18n("Maintainer"), "boud@valdyas.org", "http://www.valdyas.org/fading/index.cgi");
+    aboutData->addAuthor(ki18n("David Revoy"), ki18n("Brush and palette set"), "", "http://http://www.davidrevoy.com/");
     aboutData->addAuthor(ki18n("Carsten Pfeiffer"), KLocalizedString(), "carpdjih@cetus.zrz.tu-berlin.de");
     aboutData->addAuthor(ki18n("Casper Boemann"), KLocalizedString(), "cbr@boemann.dk");
     aboutData->addAuthor(ki18n("Clarence Dang"), KLocalizedString(), "dang@kde.org");

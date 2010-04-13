@@ -231,3 +231,31 @@ KoTableStyle.MayBreakBetweenRows = i++;
 KoTableStyle.ColumnAndRowStylemanager = i++;
 KoTableStyle.CollapsingBorders = i++;
 KoTableStyle.MasterPageName = i++;
+
+// Default table formatting
+QTextTableCellFormat.clone = function(fmt) {
+    var newFormat = new QTextTableCellFormat;
+    copyFormatProperties(newFormat, fmt);
+    return newFormat;
+};
+
+var defaultTableCellFormat = new QTextTableCellFormat;
+
+var KoTableCellStyle = {};
+i = QTextFormat.UserProperty + 7001;
+KoTableCellStyle.StyleId = i++,
+KoTableCellStyle.TopBorderOuterPen = i++;
+KoTableCellStyle.TopBorderSpacing = i++;
+KoTableCellStyle.TopBorderInnerPen = i++;
+KoTableCellStyle.LeftBorderOuterPen = i++;
+KoTableCellStyle.LeftBorderSpacing = i++;
+KoTableCellStyle.LeftBorderInnerPen = i++;
+KoTableCellStyle.BottomBorderOuterPen = i++;
+KoTableCellStyle.BottomBorderSpacing = i++;
+KoTableCellStyle.BottomBorderInnerPen = i++;
+KoTableCellStyle.RightBorderOuterPen = i++;
+KoTableCellStyle.RightBorderSpacing = i++;
+KoTableCellStyle.RightBorderInnerPen = i++;
+KoTableCellStyle.CellBackgroundBrush = i++;
+KoTableCellStyle.MasterPageName = i++;
+KoTableCellStyle.InlineRdf = i++;       

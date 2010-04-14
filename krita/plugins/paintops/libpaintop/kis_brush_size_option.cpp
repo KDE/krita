@@ -97,3 +97,13 @@ void KisBrushSizeOption::readOptionSetting(const KisPropertiesConfiguration* set
     
 }
 
+void KisBrushSizeOption::setSpacing(qreal spacing)
+{
+    m_options->spacing->setValue(spacing);
+}
+
+qreal KisBrushSizeOption::spacing() const
+{
+    return m_options->spacing->value();
+}
+

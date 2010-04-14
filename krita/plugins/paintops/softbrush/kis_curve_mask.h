@@ -36,6 +36,7 @@ class KisFixedPaintDevice;
 struct KisCurveProperties{
     QVector<qreal> curveData;
     KisCubicCurve curve;
+    bool controlByPressure;
 };
 
 

@@ -31,6 +31,7 @@ const QString SOFT_SIGMA = "Soft/sigma";
 const QString SOFT_SOFTNESS =  "Soft/softness";
 
 const QString SOFTCURVE_CURVE = "SoftCurve/curve";
+const QString SOFTCURVE_CONTROL_BY_PRESSURE = "SoftCurve/controlByPressure";
 
 class KisSoftOpOption : public KisPaintOpOption
 {

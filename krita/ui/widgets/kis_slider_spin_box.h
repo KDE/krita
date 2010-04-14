@@ -79,6 +79,7 @@ protected:
 
 protected slots:
     void contextMenuEvent(QContextMenuEvent * event);
+    void editLostFocus();
 protected:
     KisAbstractSliderSpinBoxPrivate* const d_ptr;
 };

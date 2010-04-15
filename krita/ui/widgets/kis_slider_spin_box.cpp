@@ -63,6 +63,8 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     QPalette pal = d->edit->palette();
     pal.setColor(QPalette::Base, Qt::transparent);
     d->edit->setPalette(pal);
+    
+    connect(d->edit, SIGNAL(lostFocus()), this, SLOT(editLostFocus()));
 
     d->validator = new QDoubleValidator(d->edit);
     d->edit->setValidator(d->validator);
@@ -394,6 +396,11 @@ void KisAbstractSliderSpinBox::setExponentRatio(qreal dbl)
 void KisAbstractSliderSpinBox::contextMenuEvent(QContextMenuEvent* event)
 {
     event->accept();
+}
+
+void KisAbstractSliderSpinBox::editLostFocus()
+{
+    hideEdit();
 }
 
 struct KisSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {

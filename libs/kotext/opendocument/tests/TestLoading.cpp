@@ -328,6 +328,17 @@ bool TestLoading::compareTableCellFormats(QTextTableCellFormat &actualFormat, QT
             || actualFormat.rightPadding() != expectedFormat.rightPadding()
             || actualFormat.topPadding() != expectedFormat.topPadding()
             || actualFormat.bottomPadding() != expectedFormat.bottomPadding()) {
+        qDebug() << "Background or Padding mismatch";
+        qDebug() << "Actual Background: " << actualFormat.background();
+        qDebug() << "Expected background: " << expectedFormat.background();
+        qDebug() << "Actual Left Padding: " << actualFormat.leftPadding();
+        qDebug() << "Expected Left Padding: " << expectedFormat.leftPadding();
+        qDebug() << "Actual Right Padding: " << actualFormat.rightPadding();
+        qDebug() << "Expected Right Padding: " << expectedFormat.rightPadding();
+        qDebug() << "Actual Top Padding: " << actualFormat.topPadding();
+        qDebug() << "Expected Top Padding: " << expectedFormat.topPadding();
+        qDebug() << "Actual Bottom Padding: " << actualFormat.bottomPadding();
+        qDebug() << "Expected Bottom Padding: " << expectedFormat.bottomPadding();
         return false;
     }
 
@@ -345,8 +356,12 @@ bool TestLoading::compareTableCellFormats(QTextTableCellFormat &actualFormat, QT
         case KoTableCellStyle::RightBorderSpacing:
         case KoTableCellStyle::TopBorderSpacing:
         case KoTableCellStyle::BottomBorderSpacing:
-            if (abs(actualProperty[id].toDouble() - expectedProperty[id].toDouble()) > 1e-10)
+            if (abs(actualProperty[id].toDouble() - expectedProperty[id].toDouble()) > 1e-10) {
+                qDebug() << "Cell Border Spacing Mismatch";
+                qDebug() << "Expected Spacing: " << expectedProperty[id].toDouble();
+                qDebug() << "Actual Spacing: " << actualProperty[id].toDouble();
                 match = false;
+            }
             break;
         // string properties
         case KoTableCellStyle::MasterPageName:
@@ -364,8 +379,12 @@ bool TestLoading::compareTableCellFormats(QTextTableCellFormat &actualFormat, QT
         case KoTableCellStyle::BottomBorderInnerPen: {
             QPen actualPen = qvariant_cast<QPen>(actualProperty[id]);
             QPen expectedPen = qvariant_cast<QPen>(expectedProperty[id]);
-            if (actualPen != expectedPen)
+            if (actualPen != expectedPen) {
+                qDebug() << "Cell Border Pen MisMatch";
+                qDebug() << "Actual Pen:" << actualPen;
+                qDebug() << "Expected Pen:" << expectedPen;
                 match = false;
+            }
             break;
         }
         // brush properties
@@ -859,9 +878,20 @@ void TestLoading::addData(LoadSave loadSave)
         QTest::newRow("simpleTable") << "Tables/simpleTable";
         QTest::newRow("spanningCells") << "Tables/spanningCells";
         QTest::newRow("tableWidth") << "Tables/tableWidth";
-        QTest::newRow("tableWidth") << "Tables/tableAlignment";
-        QTest::newRow("tableTopAndBottomMargin") << "FormattingProperties/TableFormattingProperties/tableTopAndBottomMargin";
-        QTest::newRow("tableLeftAndRightMargin") << "FormattingProperties/TableFormattingProperties/tableLeftAndRightMargin";
+        QTest::newRow("tableAlignment") << "Tables/tableAlignment";
+        QTest::newRow("tableTopAndBottomMargin") << "Tables/tableTopAndBottomMargin";
+        QTest::newRow("tableLeftAndRightMargin") << "Tables/tableLeftAndRightMargin";
+        QTest::newRow("tableMargins") << "Tables/tableMargins";
+        QTest::newRow("breakBeforeAndBreakAfter") << "Tables/breakBeforeAndBreakAfter";
+        QTest::newRow("mayBreakBetweenRows") << "Tables/mayBreakBetweenRows";
+        QTest::newRow("tableBackground") << "Tables/tableBackground";
+        QTest::newRow("borderModelProperty") << "Tables/borderModelProperty";
+        QTest::newRow("keepWithNext") << "Tables/keepWithNext";
+        QTest::newRow("cellBackground") << "Tables/cellBackground";
+        QTest::newRow("cellPadding") << "Tables/cellPadding";
+        QTest::newRow("cellBorder") << "Tables/cellBorder";
+        QTest::newRow("cellBorderStyle") << "Tables/cellBorderStyle";
+        QTest::newRow("cellBorderSpacing") << "Tables/cellBorderSpacing";
     }
 
     // TODO: Write tests for these.

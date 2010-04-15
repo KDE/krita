@@ -47,9 +47,9 @@ void RectangleShapeConfigWidget::open(KoShape *shape)
     QSizeF size = m_rectangle->size();
 
     widget.cornerRadiusX->setMaximum(0.5 * size.width());
-    widget.cornerRadiusX->setValue(0.01 * m_rectangle->cornerRadiusX() * 0.5 * size.width());
+    widget.cornerRadiusX->changeValue(0.01 * m_rectangle->cornerRadiusX() * 0.5 * size.width());
     widget.cornerRadiusY->setMaximum(0.5 * size.height());
-    widget.cornerRadiusY->setValue(0.01 * m_rectangle->cornerRadiusY() * 0.5 * size.height());
+    widget.cornerRadiusY->changeValue(0.01 * m_rectangle->cornerRadiusY() * 0.5 * size.height());
 
     widget.cornerRadiusX->blockSignals(false);
     widget.cornerRadiusY->blockSignals(false);

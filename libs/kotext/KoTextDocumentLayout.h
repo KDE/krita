@@ -118,6 +118,9 @@ public:
     /// stop layouting the text document until manually restarted.
     void interruptLayout();
 
+    /// get the isInterrupted state from the LayoutState
+    bool isInterrupted() const;
+
     /// Add a shape to the list of shapes that the text can run into.
     void addShape(KoShape *shape);
 
@@ -140,7 +143,7 @@ public:
         /// Asks the layout to stop and restart from the beginning.
         virtual void reset() = 0;
         /// returns true if reset has been called.
-        virtual bool interrupted() = 0;
+        virtual bool isInterrupted() const = 0;
         /// return the number of columns of the line to be layouted
         virtual int numColumns() {
             return 0;

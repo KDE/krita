@@ -47,7 +47,7 @@ public:
     }
     void end() {}
     void reset() {}
-    bool interrupted() {
+    bool isInterrupted() const {
         return false;
     }
     int numColumns() {
@@ -377,6 +377,11 @@ void KoTextDocumentLayout::relayout()
 void KoTextDocumentLayout::interruptLayout()
 {
     m_state->reset();
+}
+
+bool KoTextDocumentLayout::isInterrupted() const
+{
+    return m_state->isInterrupted();
 }
 
 void KoTextDocumentLayout::layout()

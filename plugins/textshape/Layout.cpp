@@ -104,7 +104,7 @@ void Layout::reset()
     m_reset = true;
 }
 
-bool Layout::interrupted()
+bool Layout::isInterrupted() const
 {
     return m_reset;
 }

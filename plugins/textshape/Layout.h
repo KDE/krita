@@ -51,7 +51,7 @@ public:
     virtual void end();
     virtual void reset();
     /// returns true if reset has been called.
-    virtual bool interrupted();
+    virtual bool isInterrupted() const;
     virtual qreal width();
     virtual qreal x();
     virtual qreal y();

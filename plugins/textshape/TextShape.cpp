@@ -162,7 +162,8 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
             }
 
             if (lay) {
-                while (m_textShapeData->isDirty()){
+                while (m_textShapeData->isDirty() || lay->isInterrupted()){
+                    m_textShapeData->foul();
                     lay->layout();
                 }
             }

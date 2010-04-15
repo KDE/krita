@@ -109,6 +109,8 @@ void ToCGenerator::generate()
 
                 styleManager->add(newStyle);
             }
+
+            currentStyle = styleManager->paragraphStyle("Contents "+QString::number(outlineLevel)); // TODO don't hardcode this!
             QTextBlock tocBlock = cursor.block();
             currentStyle->applyStyle(tocBlock);
 

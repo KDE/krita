@@ -101,7 +101,6 @@ private:
 
     QHBoxLayout* m_layout;
     KisPaintOpSettingsWidget* m_optionWidget;
-    KisPresetWidget* m_presetWidget;
     KisPaintOpPresetsPopup* m_presetsPopup;
     KisView2* m_view;
 

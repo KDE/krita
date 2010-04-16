@@ -230,12 +230,8 @@ bool DeleteCommand::mergeWith( const QUndoCommand *command)
     m_invalidInlineObjects += other->m_invalidInlineObjects;
     other->m_invalidInlineObjects.clear();
 
-    //Normally one would expect the code below to be present. But in this case we reach here only if checkMerge return true.
-    //And checkMerge checks the same conditions that QTextDocument checks before it merges commands in its internal undo stack.
-    //So for 4.6.0 and above the number of children would be 0. So the loop even if present would be useless
-    //And for Qt 4.5.x because of a bug in Qt there will be a child present. But it should not be processed. So no loop needed.
-    //for(int i=0; i < command->childCount(); i++)
-    //    new UndoTextCommand(m_tool->m_textEditor->document(), this);
+    for(int i=0; i < command->childCount(); i++)
+        new UndoTextCommand(m_tool->m_textEditor->document(), this);
 
     return true;
 }
@@ -271,7 +267,7 @@ void DeleteCommand::updateListChanges()
     QTextBlock endBlock = document->findBlock(m_position + m_length);
     QTextList *currentList;
 
-    for (QTextBlock currentBlock = startBlock; currentBlock != endBlock; currentBlock = currentBlock.next()) {
+    for (QTextBlock currentBlock = startBlock; currentBlock != endBlock.next(); currentBlock = currentBlock.next()) {
         tempCursor.setPosition(currentBlock.position());
         currentList = tempCursor.currentList();
         if (currentList) {

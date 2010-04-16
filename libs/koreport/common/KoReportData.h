@@ -59,10 +59,10 @@ public:
     virtual bool moveLast() = 0;
 
     //!Return the current position in the dataset
-    virtual long at() const = 0;
+    virtual qint64 at() const = 0;
 
     //!Return the total number of records
-    virtual long recordCount() const = 0;
+    virtual qint64 recordCount() const = 0;
 
     //!Return the index number of the field given by nane field
     virtual unsigned int fieldNumber(const QString &field) const = 0;

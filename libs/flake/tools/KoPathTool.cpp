@@ -641,7 +641,9 @@ void KoPathTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_Alt:
         case Qt::Key_Shift:
         case Qt::Key_Meta:
-            m_currentStrategy->handleMouseMove(m_lastPoint, event->modifiers());
+            if (! event->isAutoRepeat()) {
+                m_currentStrategy->handleMouseMove(m_lastPoint, event->modifiers());
+            }
             break;
         case Qt::Key_Escape:
             m_currentStrategy->cancelInteraction();
@@ -695,7 +697,9 @@ void KoPathTool::keyReleaseEvent(QKeyEvent *event)
         case Qt::Key_Alt:
         case Qt::Key_Shift:
         case Qt::Key_Meta:
-            m_currentStrategy->handleMouseMove(m_lastPoint, Qt::NoModifier);
+            if (! event->isAutoRepeat()) {
+                m_currentStrategy->handleMouseMove(m_lastPoint, Qt::NoModifier);
+            }
             break;
         default:
             break;

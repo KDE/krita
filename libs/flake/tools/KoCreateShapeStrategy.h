@@ -38,7 +38,6 @@ public:
     /**
      * Constructor that starts to create a new shape.
      * @param tool the parent tool which controls this strategy
-     * @param canvas the canvas interface which will supply things like a selection object
      * @param clicked the initial point that the user depressed (in pt).
      */
     KoCreateShapeStrategy(KoCreateShapesTool *tool, const QPointF &clicked);

@@ -46,8 +46,7 @@ public:
     /**
      * Creates filter effect from given xml element.
      * @param element the xml element to load form
-     * @param matrix the matrix for converting number attributes
-     * @return the created filter effect if successful, else 0
+     * @return the created filter effect if successful, otherwise returns 0
      */
     KoFilterEffect *createFilterEffectFromXml(const KoXmlElement &element, const KoFilterEffectLoadingContext &context);
 

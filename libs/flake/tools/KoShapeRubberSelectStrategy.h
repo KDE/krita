@@ -43,7 +43,6 @@ public:
      * from @p clicked to a point later provided in the handleMouseMove() continuously
      * showing a semi-transarant 'rubber-mat' over the objects it is about to select.
      * @param tool the parent tool which controls this strategy
-     * @param canvas The canvas that owns the tool for this strategy.
      * @param clicked the initial point that the user depressed (in pt).
      * @param useSnapToGrid use the snap-to-grid settings while doing the rubberstamp.
      */

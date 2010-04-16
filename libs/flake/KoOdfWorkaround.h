@@ -36,9 +36,11 @@ class KoShapeBackground;
  * new namespace in the application you need it in
  * All calls to methods of this class should be wrapped into ifndefs like e.g.
  *
+ * @code
  * #ifndef NWORKAROUND_ODF_BUGS
  *     KoOdfWorkaround::fixPenWidth(pen, context);
  * #endif
+ * @endcode
  */
 namespace KoOdfWorkaround
 {

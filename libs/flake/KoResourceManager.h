@@ -123,7 +123,6 @@ enum DocumentResource {
  *  QVariant var = resourceManager->resource(KoText::CurrentTextDocument);
  *  document = static_cast<QTextDocument*>(var.value<void*>());
  * @endcode
- * @code
  */
 class FLAKE_EXPORT KoResourceManager : public QObject
 {

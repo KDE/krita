@@ -81,6 +81,10 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     if (layout.format == 0) // make sure we always call this during startup, even if the A3 (index=0) was chosen
         sizeChanged(layout.format);
     showTextDirection(false);
+/* disable page spreads for now */
+    d->widget.facingPageLabel->setVisible(false);
+    d->widget.facingPages->setVisible(false);
+    d->widget.singleSided->setVisible(false);
 }
 
 KoPageLayoutWidget::~KoPageLayoutWidget()

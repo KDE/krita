@@ -48,7 +48,7 @@ PointFComposedProperty::PointFComposedProperty(Property *property)
         QVariant(), i18n("Y"), i18n("Y"), Double, property);
 }
 
-void PointFComposedProperty::setValue(Property *property, 
+void PointFComposedProperty::setValue(Property *property,
     const QVariant &value, bool rememberOldValue)
 {
     const QPointF p( value.toPointF() );
@@ -59,6 +59,7 @@ void PointFComposedProperty::setValue(Property *property,
 void PointFComposedProperty::childValueChanged(Property *child,
     const QVariant &value, bool rememberOldValue)
 {
+    Q_UNUSED(rememberOldValue);
     QPointF p( child->parent()->value().toPointF() );
 
     if (child->name() == "x")

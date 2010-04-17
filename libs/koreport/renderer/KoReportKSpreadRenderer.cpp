@@ -37,6 +37,7 @@ KoReportKSpreadRenderer::~KoReportKSpreadRenderer()
 
 bool KoReportKSpreadRenderer::render(const KoReportRendererContext& context, ORODocument* document, int page)
 {
+    Q_UNUSED(page);
     KoSimpleOdsDocument *doc = new KoSimpleOdsDocument();
     KoSimpleOdsSheet *sht = new KoSimpleOdsSheet();
 
@@ -104,7 +105,7 @@ bool KoReportKSpreadRenderer::render(const KoReportRendererContext& context, ORO
     }
 
     doc->addSheet(sht);
-    
+
     bool status;
     if (doc->saveDocument(context.destinationUrl.path()) == QFile::NoError) {
         status = true;

@@ -48,7 +48,7 @@ QFile::FileError KoSimpleOdsDocument::saveDocument(const QString& path)
     }
 
     KoOdfWriteStore oasisStore(m_store);
-    KoXmlWriter* manifestWriter = oasisStore.manifestWriter("application/vnd.oasis.opendocument.spreadsheet");
+    //KoXmlWriter* manifestWriter = oasisStore.manifestWriter("application/vnd.oasis.opendocument.spreadsheet");
 
     if (!createContent(&oasisStore)) {
         delete m_store;
@@ -57,7 +57,7 @@ QFile::FileError KoSimpleOdsDocument::saveDocument(const QString& path)
 
     delete m_store;
     return QFile::NoError;
-        
+
 }
 
 // Writes the spreadsheet content into the content.xml
@@ -90,6 +90,6 @@ bool KoSimpleOdsDocument::createContent(KoOdfWriteStore* store)
         bodyWriter->endElement();
     }
     bodyWriter->endElement();  // office:body
-    
+
     return store->closeContentWriter() && store->closeManifestWriter();
 }

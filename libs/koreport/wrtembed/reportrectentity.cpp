@@ -215,8 +215,8 @@ void ReportRectEntity::drawHandles(QPainter *painter)
         double halfH = (r.height() / 2);
         QPointF center = r.center();
 
-	center += QPointF(0.75,0.75);
-	
+        center += QPointF(0.75,0.75);
+
         painter->fillRect(center.x() - halfW, center.y() - halfH , 5, 5, QColor(128, 128, 255));
         painter->fillRect(center.x() - 2, center.y() - halfH , 5, 5, QColor(128, 128, 255));
         painter->fillRect(center.x() + halfW - 4, center.y() - halfH, 5, 5, QColor(128, 128, 255));
@@ -314,6 +314,7 @@ QVariant ReportRectEntity::itemChange(GraphicsItemChange change, const QVariant 
 
 void ReportRectEntity::propertyChanged(const KoProperty::Set &s, const KoProperty::Property &p)
 {
+    Q_UNUSED(s);
     if (p.name() == "Position") {
         m_ppos->setUnitPos(p.value().toPointF(), KRPos::DontUpdateProperty);
     } else if (p.name() == "Size") {

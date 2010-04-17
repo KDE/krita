@@ -61,7 +61,7 @@ void KoCtlConvolutionOp::convolveColors(const quint8* const* colors, const qreal
     Q_ASSERT(allChannels || channelFlags.size() == channelsNb);
     if (totalWeightTransparent == 0) {
         for (int i = 0; i < channelsNb; i++) {
-            if ((allChannels && i != (uint)alphaPos)
+            if ((allChannels && i != alphaPos)
                     || (!allChannels && channelFlags.testBit(i))) {
                 m_accumulators[i]->affect(dst, factor, offset);
             }
@@ -71,7 +71,7 @@ void KoCtlConvolutionOp::convolveColors(const quint8* const* colors, const qreal
             qint64 a = (totalWeight - totalWeightTransparent);
             for (int i = 0; i < channelsNb; i++) {
                 if (allChannels || channelFlags.testBit(i)) {
-                    if (i == (uint)alphaPos) {
+                    if (i == alphaPos) {
                         m_accumulators[i]->affect(dst, totalWeight, offset);
                     } else {
                         m_accumulators[i]->affect(dst, a, offset);
@@ -82,7 +82,7 @@ void KoCtlConvolutionOp::convolveColors(const quint8* const* colors, const qreal
             qreal a = totalWeight / (factor * (totalWeight - totalWeightTransparent));     // use qreal as it easily saturate
             for (int i = 0; i < channelsNb; i++) {
                 if (allChannels || channelFlags.testBit(i)) {
-                    if (i == (uint)alphaPos) {
+                    if (i == alphaPos) {
                         m_accumulators[i]->affect(dst, factor, offset);
                     } else {
                         m_accumulators[i]->affect(dst, a, offset);

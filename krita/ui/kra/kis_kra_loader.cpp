@@ -156,14 +156,8 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
 
         image = new KisImage(m_d->document->undoAdapter(), width, height, cs, name);
-
-#ifdef __GNUC__
-#warning "KisKraLoader::loadXML: check whether image->lock still works with the top-down update "
-#endif
         image->lock();
-
         image->setResolution(xres, yres);
-
 
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
 

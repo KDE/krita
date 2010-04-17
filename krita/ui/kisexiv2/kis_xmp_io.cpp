@@ -182,7 +182,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             // Decrypt key
             QString structName = "";
             QString tagName = key.tagName().c_str();
-            int arrayIndex;
+            int arrayIndex = -1;
             const KisMetaData::TypeInfo* typeInfo = 0;
             bool isStructureEntry = false;
             bool isStructureInArrayEntry = false;

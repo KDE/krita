@@ -51,7 +51,7 @@ void KisShapeSelectionTest::testAddChild()
     QRect rect(50, 50, 100, 100);
     QMatrix matrix;
     matrix.scale(1 / image->xRes(), 1 / image->yRes());
-    rect = matrix.map(rect);
+    rect = matrix.mapRect(rect);
 
     KoPathShape* shape = new KoPathShape();
     shape->setShapeId(KoPathShapeId);

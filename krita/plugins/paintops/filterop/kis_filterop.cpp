@@ -47,6 +47,7 @@ KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painte
         , settings(settings)
         , m_filterConfiguration(0)
 {
+    Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     m_tmpDevice = new KisPaintDevice(source()->colorSpace());

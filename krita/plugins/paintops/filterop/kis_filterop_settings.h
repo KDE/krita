@@ -45,11 +45,11 @@ public:
     void setImage(KisImageWSP image);
 
     KisFilterConfiguration* filterConfig() const;
-        
-    ///Reimplemented
+
+    using KisPaintOpSettings::toXML;
     void toXML(QDomDocument& doc, QDomElement& root) const;
-    
-    ///Reimplemented
+
+    using KisPaintOpSettings::fromXML;
     void fromXML(const QDomElement& e);
 
 };

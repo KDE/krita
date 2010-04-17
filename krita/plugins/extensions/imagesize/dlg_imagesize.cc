@@ -130,7 +130,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     connect(m_page->cmbHeightUnit, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotHeightUnitChanged(int)));
-            
+
     connect(m_page->doubleResolution, SIGNAL(valueChanged(double)),
             this, SLOT(slotResolutionChanged(double)));
 
@@ -377,6 +377,7 @@ void DlgImageSize::slotHeightUnitChanged(int index)
 
 void DlgImageSize::slotResolutionChanged(double r)
 {
+    Q_UNUSED(r);
     blockAll();
 
     if (m_page->lock_print->isLocked()) {

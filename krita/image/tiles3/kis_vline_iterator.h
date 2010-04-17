@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
@@ -37,17 +37,17 @@ public:
     };
 
 
-public:    
+public:
     KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 h, qint32 offsetX, qint32 offsetY, bool writable);
     ~KisVLineIterator2();
-    
+
     virtual bool nextPixel();
     virtual void nextColumn();
     virtual const quint8* oldRawData() const;
     virtual quint8* rawData();
     virtual qint32 nConseqPixels() const;
     virtual bool nextPixels(qint32 n);
-    
+
 private:
     qint32 m_x;        // current x position
     qint32 m_y;        // current y position
@@ -58,7 +58,7 @@ private:
     quint8 *m_dataBottom;
     quint8 *m_oldData;
     bool m_havePixels;
-    
+
     qint32 m_top;
     qint32 m_bottom;
     qint32 m_topRow;
@@ -69,8 +69,8 @@ private:
     qint32 m_lineStride;
 
     QVector<KisTileInfo> m_tilesCache;
-    quint32 m_tilesCacheSize;
-    
+    qint32 m_tilesCacheSize;
+
 private:
 
     void switchToTile(qint32 xInTile);

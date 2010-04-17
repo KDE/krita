@@ -195,9 +195,9 @@ public:
     KisEffectMaskSP previewMask() const;
 
     /**
-     * XXX
+     * Get the group layer that contains this layer.
      */
-    KisLayerSP KDE_DEPRECATED parentLayer() const;
+    KisLayerSP parentLayer() const;
 
     /**
      * Remove the temporary effect mask.

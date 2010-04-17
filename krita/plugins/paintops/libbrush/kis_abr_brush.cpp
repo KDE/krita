@@ -62,6 +62,7 @@ bool KisAbrBrush::save()
 
 bool KisAbrBrush::saveToDevice(QIODevice* dev) const
 {
+    Q_UNUSED(dev);
     return false;
 }
 

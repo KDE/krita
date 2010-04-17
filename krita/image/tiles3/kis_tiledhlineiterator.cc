@@ -47,8 +47,8 @@ KisTiledHLineIterator::KisTiledHLineIterator(KisTiledDataManager *dataManager,
 
     m_leftCol = xToCol(m_left);
     m_rightCol = xToCol(m_right);
-    
-    
+
+
     m_row = yToRow(m_y);
     m_yInTile = calcYInTile(m_y, m_row);
 
@@ -57,12 +57,12 @@ KisTiledHLineIterator::KisTiledHLineIterator(KisTiledDataManager *dataManager,
     m_tilesCacheSize = m_rightCol - m_leftCol + 1;
     m_tilesCache.resize(m_tilesCacheSize);
     Q_ASSERT(m_tilesCacheSize == m_tilesCache.size());
-    
-    // let's prealocate first row 
+
+    // let's prealocate first row
     for (int i = 0; i < m_tilesCacheSize; i++){
         m_tilesCache[i] = fetchTileDataForCache(m_leftCol + i, m_row);
     }
-    
+
     switchToTile(m_leftCol, leftInLeftmostTile);
 }
 
@@ -106,7 +106,7 @@ KisTiledHLineIterator& KisTiledHLineIterator::operator=(const KisTiledHLineItera
 KisTiledHLineIterator::~KisTiledHLineIterator()
 {
     Q_ASSERT(m_tilesCacheSize == m_tilesCache.size());
-    for (uint i = 0; i < m_tilesCacheSize; i++) {
+    for (int i = 0; i < m_tilesCacheSize; i++) {
         unlockTile(m_tilesCache[i].tile);
         unlockTile(m_tilesCache[i].oldtile);
     }
@@ -217,9 +217,10 @@ void KisTiledHLineIterator::nextRow()
 }
 
 void KisTiledHLineIterator::fetchTileData(qint32 col, qint32 row){
+    Q_UNUSED(row)
     // check if we have the cached column and row
     int index = col - m_leftCol;
-    
+
     // setup correct data
     m_data = m_tilesCache[index].data;
     m_oldData = m_tilesCache[index].oldData;

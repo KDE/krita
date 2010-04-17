@@ -78,7 +78,7 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
     qint32 depth = src->colorSpace()->colorChannelCount();
     QList<KoChannelInfo *> cis = src->colorSpace()->channels();
     // remove non-color channels
-    for (quint32 c = 0; c < cis.count(); ++c) {
+    for (qint32 c = 0; c < cis.count(); ++c) {
         if (cis[c]->channelType() != KoChannelInfo::COLOR)
             cis.removeAt(c--);
     }
@@ -142,7 +142,7 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentatio
     qint32 depth = dst->colorSpace()->colorChannelCount();
     QList<KoChannelInfo *> cis = dst->colorSpace()->channels();
     // remove non-color channels
-    for (quint32 c = 0; c < cis.count(); ++c) {
+    for (qint32 c = 0; c < cis.count(); ++c) {
         if (cis[c]->channelType() != KoChannelInfo::COLOR)
             cis.removeAt(c--);
     }

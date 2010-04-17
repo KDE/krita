@@ -54,7 +54,7 @@ public:
     /// the origin of the image rect
     QPoint origin;
     QTimer blockMouseEvent;
-    
+
     bool ignorenextMouseEventExceptRightMiddleClick; // HACK work around Qt bug not sending tablet right/dblclick http://bugreports.qt.nokia.com/browse/QTBUG-8598
 };
 
@@ -264,6 +264,7 @@ void KisCanvasWidgetBase::processMouseMoveEvent(QMouseEvent *e)
 
 void KisCanvasWidgetBase::processContextMenuEvent(QContextMenuEvent *e)
 {
+    Q_UNUSED(e);
 //    m_d->canvas->view()->unplugActionList("flake_tool_actions");
 //    m_d->canvas->view()->plugActionList("flake_tool_actions",
 //                                        m_d->toolProxy->popupActionList());
@@ -357,7 +358,7 @@ void KisCanvasWidgetBase::processTabletEvent(QTabletEvent *e)
 
     const QPointF pos = e->hiResGlobalPos() - widget()->mapToGlobal(QPoint(0, 0));
     m_d->toolProxy->tabletEvent(e, widgetToDocument(pos));
-    
+
     // HACK
     e->ignore();
     m_d->ignorenextMouseEventExceptRightMiddleClick = true;

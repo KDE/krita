@@ -60,7 +60,7 @@ static QImage convertToQImage(char * buffer,qint32 width, qint32 height)
             value = 255 - buffer[pos];
             pixel[x] = qRgb(value, value ,value);
         }
-        
+
     }
 
     return img;
@@ -368,7 +368,7 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6 (QDataStream & abr, AbrInfo *ab
     // filename - filename of the file , e.g. test.abr
     // name - test_number_of_the_brush, e.g test_1, test_2
     KisAbrBrush* abrBrush = new KisAbrBrush(name);
-    
+
     abrBrush->setImage(convertToQImage(buffer, width, height));
     // XXX: call extra setters on abrBrush for other options of ABR brushes
     abrBrush->setValid(true);
@@ -552,6 +552,7 @@ bool KisAbrBrushCollection::save()
 
 bool KisAbrBrushCollection::saveToDevice(QIODevice* dev) const
 {
+    Q_UNUSED(dev);
     return false;
 }
 
@@ -562,6 +563,8 @@ QImage KisAbrBrushCollection::image() const
 
 void KisAbrBrushCollection::toXML(QDomDocument& d, QDomElement& e) const
 {
+    Q_UNUSED(d);
+    Q_UNUSED(e);
     // Do nothing...
 }
 

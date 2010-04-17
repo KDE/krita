@@ -126,7 +126,7 @@ KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
 KisShapeController::~KisShapeController()
 {
     dbgUI << "Deleting the KisShapeController " << this << " There are" << m_d->nodeShapes.size() << " shapes";
-    
+
     for(KisNodeMap::iterator it = m_d->nodeShapes.begin(); it != m_d->nodeShapes.end(); ++it)
     {
         dbgUI << it.key() << it.key()->name() << it.value();
@@ -135,7 +135,7 @@ KisShapeController::~KisShapeController()
             delete it.value();
         }
     }
-    
+
     // XXX: deleting the undoStack of the document while the document is being deleted is dangerous
     m_d->dataCenterMap.remove("UndoStack");
     qDeleteAll(m_d->dataCenterMap);
@@ -160,12 +160,6 @@ void KisShapeController::setImage(KisImageWSP image)
         {
             m_d->removeShapeAndChildrenFromMap(shape);
         }
-#ifndef NDEBUG
-        for(KisNodeMap::iterator it = m_d->nodeShapes.begin(); it != m_d->nodeShapes.end(); ++it)
-        {
-            dbgUI << it.key() << " " << it.data();
-        }
-#endif
         Q_ASSERT(m_d->nodeShapes.empty());
         m_d->nodeShapes.clear();
 
@@ -429,7 +423,7 @@ void KisShapeController::slotNodeRemoved(KisNode* parent, int index)
 void KisShapeController::slotLayersChanged(KisGroupLayerSP rootLayer)
 {
     Q_UNUSED(rootLayer);
-    
+
     setImage(m_d->image);
 }
 

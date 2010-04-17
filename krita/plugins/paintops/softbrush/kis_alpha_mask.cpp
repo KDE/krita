@@ -111,8 +111,6 @@ void KisCircleAlphaMask::generateGaussMap ( bool invert )
         pyy = py*py;
     }
 
-    qreal minLen = m_data[m_size-1];
-    qreal maxLen = m_data[0];
     //qreal dist = maxLen - minLen;
 
 // normalize?

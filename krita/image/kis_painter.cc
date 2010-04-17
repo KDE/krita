@@ -275,16 +275,16 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy, const KisPaintDeviceSP srcdev, con
     sy = srcRect.y();
     sw = srcRect.width();
     sh = srcRect.height();
-    
+
     quint8 * srcBytes = new quint8[ sw * sh * srcdev->pixelSize()];
     srcdev->readBytes(srcBytes,sx,sy,sw,sh);
-    
+
     quint8 * dstBytes = new quint8[ sw * sh * d->device->pixelSize()];
     d->device->readBytes(dstBytes, dx,dy, sw, sh);
 
     quint8 * selectionBytes = new quint8[ sw * sh * selection->pixelSize()];
     selection->readBytes(selectionBytes, 0, 0, sw, sh);
-    
+
     d->colorSpace->bitBlt(dstBytes,
                         sw * d->device->pixelSize(),
                         srcdev->colorSpace(),
@@ -299,7 +299,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy, const KisPaintDeviceSP srcdev, con
                         d->channelFlags);
 
     d->device->writeBytes(dstBytes, dx, dy, sw, sh);
-    
+
     delete [] srcBytes;
     delete [] dstBytes;
 
@@ -1682,7 +1682,7 @@ KisPaintDeviceSP KisPainter::device()
 
 void KisPainter::setChannelFlags(QBitArray channelFlags)
 {
-    Q_ASSERT(d->channelFlags.isEmpty() || d->channelFlags.size() == d->colorSpace->channelCount());
+    Q_ASSERT(d->channelFlags.isEmpty() || (uint)d->channelFlags.size() == d->colorSpace->channelCount());
     d->channelFlags = channelFlags;
     setLockAlpha(d->alphaLocked);
 }
@@ -1871,7 +1871,7 @@ void KisPainter::setLockAlpha(bool protect)
         d->channelFlags = d->colorSpace->channelFlags(true, !d->alphaLocked, true, true);
     }
     else {
-        Q_ASSERT(d->channelFlags.size() == d->colorSpace->channelCount());
+        Q_ASSERT((uint)d->channelFlags.size() == d->colorSpace->channelCount());
         QList<KoChannelInfo*> channels = d->colorSpace->channels();
         foreach (KoChannelInfo* channel, channels) {
             if (channel->channelType() == KoChannelInfo::ALPHA) {

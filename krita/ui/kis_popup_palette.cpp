@@ -36,7 +36,7 @@ public:
     void tabletEvent(QTabletEvent* event)
     {
         event->accept();
-        QMouseEvent* mouseEvent;
+        QMouseEvent* mouseEvent = 0;
         switch(event->type())
         {
             case QEvent::TabletPress: mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
@@ -57,7 +57,7 @@ public:
         }
         delete mouseEvent;
     }
-    
+
 private:
     bool m_dragging;
 };
@@ -443,7 +443,7 @@ void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
 void KisPopupPalette::tabletEvent(QTabletEvent* event)
 {
     event->accept();
-    QMouseEvent* mouseEvent;
+    QMouseEvent* mouseEvent = 0;
     switch(event->type())
     {
         case QEvent::TabletPress: mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),

@@ -380,13 +380,13 @@ public:
      * Return the number of layers (not other nodes) that are in this
      * image.
      */
-    qint32 KDE_DEPRECATED nlayers() const;
+    qint32 nlayers() const;
 
     /**
      * Return the number of layers (not other node types) that are in
      * this image and that are hidden.
      */
-    qint32 KDE_DEPRECATED nHiddenLayers() const;
+    qint32 nHiddenLayers() const;
 
     /**
      * Merge all visible layers and discard hidden ones.
@@ -511,7 +511,7 @@ signals:
      * Inform the model we're about to move a layer.
      */
     void sigAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
-    
+
     /**
      * Inform the model we're done moving a layer.
      */

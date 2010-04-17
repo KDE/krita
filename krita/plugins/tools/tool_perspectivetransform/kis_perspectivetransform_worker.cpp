@@ -58,7 +58,6 @@ KisPerspectiveTransformWorker::~KisPerspectiveTransformWorker()
 
 void KisPerspectiveTransformWorker::run()
 {
-    KoColorSpace * cs = m_dev->colorSpace();
     KisRectIteratorPixel dstIt = m_dev->createRectIterator(m_r.x(), m_r.y(), m_r.width(), m_r.height());
     KisPaintDeviceSP srcdev = new KisPaintDevice(*m_dev.data());
 

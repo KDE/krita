@@ -120,10 +120,9 @@ QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShape
     return color;
 }
 
-QColor KoOdfWorkaround::fixMissingStrokeColor(const KoXmlElement &element, KoShapeLoadingContext &context)
+bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    // Default to an invalid color
-    QColor color;
+    bool fixed = false;
 
     if ( element.prefix() == "chart" ) {
         KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
@@ -138,7 +137,8 @@ QColor KoOdfWorkaround::fixMissingStrokeColor(const KoXmlElement &element, KoSha
         if (context.odfLoadingContext().generator().startsWith("OpenOffice.org")) {
             if (hasStyle && styleStack.hasProperty(KoXmlNS::draw, "stroke") &&
                             !styleStack.hasProperty(KoXmlNS::draw, "stroke-color")) {
-                color = Qt::black;
+                fixed = true;
+                pen.setColor( Qt::black );
             } else if (!hasStyle) {
                 KoXmlElement plotAreaElement = element.parentNode().toElement();
                 KoXmlElement chartElement = plotAreaElement.parentNode().toElement();
@@ -148,9 +148,14 @@ QColor KoOdfWorkaround::fixMissingStrokeColor(const KoXmlElement &element, KoSha
                         QString chartType = chartElement.attributeNS(KoXmlNS::chart, "class");
                         // TODO: Check what default backgrounds for surface, stock and gantt charts are
                         if ( chartType == "chart:line" ||
-                             chartType == "chart:scatter" )
-                            color = QColor(0x99ccff);
+                             chartType == "chart:scatter" ) {
+                            fixed = true;
+                            pen = QPen( 0x99ccff );
+                        }
                     }
+                } else if (element.tagName() == "legend") {
+                    fixed = true;
+                    pen = QPen( Qt::black );
                 }
             }
         }
@@ -158,7 +163,7 @@ QColor KoOdfWorkaround::fixMissingStrokeColor(const KoXmlElement &element, KoSha
         styleStack.restore();
     }
 
-    return color;
+    return fixed;
 }
 
 bool KoOdfWorkaround::fixMissingStyle_DisplayLabel(const KoXmlElement &element, KoShapeLoadingContext &context)

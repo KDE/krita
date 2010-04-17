@@ -1122,9 +1122,27 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
         border->setLineStyle(pen.style(), pen.dashPattern());
 
         return border;
-    } else {
-        return 0;
+#ifndef NWORKAROUND_ODF_BUGS
+    } else if (stroke.isEmpty()) {
+        QPen pen;
+        if (KoOdfWorkaround::fixMissingStroke(pen, element, context)) {
+            KoLineBorder *border = new KoLineBorder();
+
+            // FIXME: (make it possible to) use a cosmetic pen
+            if (pen.widthF() == 0.0)
+                border->setLineWidth(0.5);
+            else
+                border->setLineWidth(pen.widthF());
+            border->setJoinStyle(pen.joinStyle());
+            border->setLineStyle(pen.style(), pen.dashPattern());
+            border->setLineBrush(pen.brush());
+
+            return border;
+        }
+#endif
     }
+
+    return 0;
 }
 
 KoShapeShadow *KoShape::loadOdfShadow(const KoXmlElement &element, KoShapeLoadingContext &context) const

@@ -74,7 +74,6 @@ set(kotext_LIB_SRCS
     opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextSharedSavingData.cpp
     opendocument/KoTextLoader.cpp
-    opendocument/KoTextLoader_p.cpp
     opendocument/KoTextWriter.cpp
 
     changetracker/KoChangeTracker.cpp

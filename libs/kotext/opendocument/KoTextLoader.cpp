@@ -26,7 +26,6 @@
  */
 
 #include "KoTextLoader.h"
-#include "KoTextLoader_p.cpp"
 
 #include <KoTextMeta.h>
 #include <KoBookmark.h>
@@ -72,6 +71,7 @@
 #include "styles/KoSectionStyle.h"
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <QList>
 #include <QMap>
@@ -82,9 +82,10 @@
 #include <QTextList>
 #include <QTextTable>
 #include <QTime>
+#include <QString>
 
-#include <kdebug.h>
 
+#include "KoTextLoader_p.h"
 // if defined then debugging is enabled
 // #define KOOPENDOCUMENTLOADER_DEBUG
 
@@ -316,7 +317,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                             textObjectManager->insertInlineObject(cursor, deleteChangemarker);
                         }
                     }
-                    
+
                     loadDeleteChangeOutsidePorH(id, cursor);
                     usedParagraph = false;
                 } else if (localName == "p") {    // text paragraph
@@ -479,13 +480,13 @@ void KoTextLoader::loadDeleteChangeOutsidePorH(QString id, QTextCursor &cursor)
     if (changeId) {
         KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
         KoXmlElement element = d->deleteChangeTable.value(id);
-        
+
         //Call loadBody with this element
         loadBody(element, cursor);
-            
+
         int endPosition = cursor.position();
-            
-        //Set the char format to the changeId 
+
+        //Set the char format to the changeId
         cursor.setPosition(startPosition);
         cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
         QTextCharFormat format;
@@ -801,7 +802,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             kDebug(32500) << "  <text> localName=" << localName << " parent.localName=" << element.localName() << " text=" << text
             << text.length();
 #endif
-            text = normalizeWhitespace(text, *stripLeadingSpace);
+            text = KoTextLoaderP::normalizeWhitespace(text, *stripLeadingSpace);
 
             if (!text.isEmpty()) {
                 // if present text ends with a space,
@@ -845,7 +846,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
                     textObjectManager->insertInlineObject(cursor, deleteChangemarker);
                 }
-                
+
                 loadDeleteChangeWithinPorH(id, cursor);
             }
         } else if (isTextNS && localName == "span") { // text:span
@@ -1030,10 +1031,10 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     loadedTags++;
                 }
             }
-            
+
             int endPosition = cursor.position();
-            
-            //Set the char format to the changeId 
+
+            //Set the char format to the changeId
             cursor.setPosition(startPosition);
             cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
             QTextCharFormat format;
@@ -1196,7 +1197,7 @@ void KoTextLoader::storeDeleteChanges(KoXmlElement &element)
                     if (!region.isNull()) {
                         if (region.localName() == "deletion") {
                             QString id = tag.attributeNS(KoXmlNS::text, "id");
-                            d->deleteChangeTable.insert(id, region); 
+                            d->deleteChangeTable.insert(id, region);
                         }
                     }
                 }

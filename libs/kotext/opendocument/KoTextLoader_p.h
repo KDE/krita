@@ -24,6 +24,8 @@
 // leading and trailing whitespace, but such whitespace is significant
 // in ODF -- so we use this function to compress sequences of space characters
 // into single spaces
+class KoTextLoaderP {
+public:
 static QString normalizeWhitespace(const QString &in, bool leadingSpace)
 {
     QString text = in;
@@ -51,3 +53,4 @@ static QString normalizeWhitespace(const QString &in, bool leadingSpace)
     text.truncate(w);
     return text;
 }
+};

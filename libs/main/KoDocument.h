@@ -465,9 +465,8 @@ public:
      *  including processing instruction, complete DOCTYPE tag (with systemId and publicId), and root element.
      *  @param tagName the name of the tag for the root element
      *  @param version the DTD version (usually the application's version).
-     *  @deprecated use KoOdfWriteStore::createOasisXmlWriter instead
      */
-    KDE_DEPRECATED QDomDocument createDomDocument(const QString& tagName, const QString& version) const;
+    QDomDocument createDomDocument(const QString& tagName, const QString& version) const;
 
     /**
      *  Return a correctly created QDomDocument for an old (1.3-style) %KOffice document,

@@ -196,7 +196,13 @@ QString KoRdfLocation::className() const
 
 void KoRdfLocation::importFromData(const QByteArray& ba, KoDocumentRdf* m_rdf, KoCanvasBase* host)
 {
-    // FIXME
+    Q_UNUSED(ba);
+    Q_UNUSED(m_rdf);
+    Q_UNUSED(host);
+#ifdef __GNUC__
+    #warning FIXME: implement importFromData
+#endif
+
 }
 
 QString KoRdfLocation::name() const

@@ -40,7 +40,6 @@ KoPagePreviewWidget::KoPagePreviewWidget(QWidget *parent)
 {
     d->columns.columns = 1;
     d->columns.columnSpacing = 0;
-    d->pageLayout = KoPageLayout::standardLayout();
     setMinimumSize( 100, 100 );
 }
 

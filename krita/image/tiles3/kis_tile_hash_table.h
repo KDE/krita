@@ -74,6 +74,7 @@ private:
 
     inline qint32 debugChainLen(qint32 idx);
     void debugListLengthDistibution();
+    void sanityChecksumCheck();
 private:
     template<class U> friend class KisTileHashTableIteratorTraits;
 
@@ -84,7 +85,7 @@ private:
     KisTileData *m_defaultTileData;
     KisMementoManager *m_mementoManager;
 
-    QReadWriteLock m_lock;
+    mutable QReadWriteLock m_lock;
 };
 
 #include "kis_tile_hash_table_p.h"

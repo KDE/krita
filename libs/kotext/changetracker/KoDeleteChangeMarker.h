@@ -39,6 +39,15 @@ public:
         DeletedListItem = QTextFormat::UserProperty + 9999,
         DeletedList,
     } listDeleteStatus;
+    
+    /************************************ODF Bug (List Delete Changes) Workaround code *****************************/
+    static const QString RDFListName;
+    static const QString RDFListItemName;
+    static const QString RDFListValidity;
+    static const QString RDFListItemValidity;
+    static const QString RDFListLevel;
+    static const QString RDFDeleteChangeContext;
+    /****************************************************************************************************************/
 
     KoDeleteChangeMarker(KoChangeTracker *changeTracker);
 

@@ -30,6 +30,7 @@ class QTextDocument;
 class QTextTable;
 
 class KoChangeTracker;
+class KoDocumentRdf;
 
 #include <QTextBlock>
 
@@ -44,7 +45,7 @@ public:
     *
     * @param context The context the KoTextWriter is called in
     */
-    explicit KoTextWriter(KoShapeSavingContext &context);
+    explicit KoTextWriter(KoShapeSavingContext &context, KoDocumentRdf *rdfData = 0);
 
     /**
     * Destructor.

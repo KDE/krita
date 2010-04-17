@@ -37,6 +37,15 @@
 #include <QTextInlineObject>
 #include <QPainter>
 
+/*********************************** ODF Bug Work-around code **********************************************/
+const QString KoDeleteChangeMarker::RDFListName("http://www.koffice.org/list#");
+const QString KoDeleteChangeMarker::RDFListItemName("http://www.koffice.org/list-item#");
+const QString KoDeleteChangeMarker::RDFListValidity("http://www.kofficde.org/list-status#valid");
+const QString KoDeleteChangeMarker::RDFListItemValidity("http://www.koffice.org/list-item-status#valid");
+const QString KoDeleteChangeMarker::RDFListLevel("http://www.koffice.org/list-status#level");
+const QString KoDeleteChangeMarker::RDFDeleteChangeContext("http://www.koffice.org/deleteChangeMetadata");
+/***********************************************************************************************************/
+
 class KoDeleteChangeMarker::Private
 {
 public:

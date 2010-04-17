@@ -1574,6 +1574,11 @@ bool KoDocument::loadNativeFormatFromStore(QByteArray &data)
 bool KoDocument::loadNativeFormatFromStoreInternal(KoStore * store)
 {
     bool oasis = true;
+
+    if (oasis && store->hasFile("manifest.rdf") && d->docRdf) {
+        d->docRdf->loadOasis(store);
+    }
+
     // OASIS/OOo file format?
     if (store->hasFile("content.xml")) {
         store->disallowNameExpansion();
@@ -1619,10 +1624,6 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore * store)
         //kDebug( 30003 ) <<"cannot open document info";
         delete d->docInfo;
         d->docInfo = new KoDocumentInfo(this);
-    }
-
-    if (oasis && store->hasFile("manifest.rdf") && d->docRdf) {
-        d->docRdf->loadOasis(store);
     }
 
     if (oasis && store->hasFile("VersionList.xml")) {

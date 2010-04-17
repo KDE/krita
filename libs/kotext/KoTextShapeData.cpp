@@ -38,6 +38,7 @@
 #include <KoGenStyles.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include <rdf/KoDocumentRdf.h>
 
 #include <KoXmlWriter.h>
 
@@ -204,9 +205,9 @@ KoTextPage* KoTextShapeData::page() const
     return d->textpage;
 }
 
-bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
+bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context, KoDocumentRdf *rdfData)
 {
-    KoTextLoader loader(context);
+    KoTextLoader loader(context, rdfData);
 
     QTextCursor cursor(document());
     loader.loadBody(element, cursor);   // now let's load the body from the ODF KoXmlElement.
@@ -218,9 +219,9 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
     return true;
 }
 
-void KoTextShapeData::saveOdf(KoShapeSavingContext &context, int from, int to) const
+void KoTextShapeData::saveOdf(KoShapeSavingContext &context, int from, int to, KoDocumentRdf *rdfData) const
 {
-    KoTextWriter writer(context);
+    KoTextWriter writer(context, rdfData);
     writer.write(d->document, from, to);
 }
 

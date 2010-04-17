@@ -43,8 +43,8 @@ private:
     qint32 m_progressStep;
     double m_xcenter, m_ycenter, m_p, m_q;
     KisPaintDeviceSP m_dev;
-    KisSelectionSP m_selection;
     KoUpdater *m_progress;
+    KisSelectionSP m_selection;
     double m_matrix[3][3];
     QRect m_r;
 };

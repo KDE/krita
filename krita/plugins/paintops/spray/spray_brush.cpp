@@ -63,37 +63,37 @@ SprayBrush::~SprayBrush()
 qreal SprayBrush::rotationAngle()
 {
     qreal rotation = 0.0;
-    
+
     if ( m_shapeProperties->fixedRotation ){
         rotation = deg2rad( m_shapeProperties->fixedAngle );
     }
-    
+
     if ( m_shapeProperties->randomRotation ){
-        
+
         if ( m_properties->gaussian ) {
                 rotation = linearInterpolation(rotation ,M_PI * 2.0 * qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0), m_shapeProperties->randomRotationWeight );
         } else {
                 rotation = linearInterpolation(rotation, M_PI * 2.0 * drand48(), m_shapeProperties->randomRotationWeight );
         }
     }
- 
+
     return rotation;
 }
 
 
 
-void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  
+void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                        const KisPaintInformation& info,qreal rotation, qreal scale,
                        const KoColor &color, const KoColor &bgColor)
 {
     // initializing painter
-    
+
     if (!m_painter) {
         m_painter = new KisPainter(dab);
         m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);
         m_painter->setMaskImageSize(m_shapeProperties->width, m_shapeProperties->height );
         m_pixelSize = dab->colorSpace()->pixelSize();
-        
+
         m_brushQImage = m_shapeProperties->image;
         if (!m_brushQImage.isNull()){
             m_brushQImage = m_brushQImage.scaled(m_shapeProperties->width, m_shapeProperties->height);
@@ -106,10 +106,10 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
     qreal y = info.pos().y();
     KisRandomAccessor accessor = dab->createRandomAccessor(qRound(x), qRound(y));
     KisRandomSubAccessorPixel subAcc = source->createRandomSubAccessor();
-    
+
     m_inkColor = color;
 
-    // apply size sensor 
+    // apply size sensor
     m_radius = m_properties->radius * scale;
 
     // jitter movement
@@ -118,9 +118,9 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         y = y + ((2 * m_radius * drand48()) - m_radius) * m_properties->amount;
     }
 
-    // this is wrong for every shape except pixel and anti-aliased pixel 
-    
-    
+    // this is wrong for every shape except pixel and anti-aliased pixel
+
+
     if (m_properties->useDensity) {
         m_particlesCount = (m_properties->coverage * (M_PI * m_radius * m_radius));
     }else{
@@ -151,7 +151,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         // generate random angle
         angle = drand48() * M_PI * 2;
 
-        // generate random length 
+        // generate random length
         if ( m_properties->gaussian ) {
             length = qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0);
         } else {
@@ -160,7 +160,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
         // rotation
         rotationZ = rotationAngle();
-        
+
         if (m_shapeProperties->followCursor){
             
             rotationZ = linearInterpolation( rotationZ,angle,m_shapeProperties->followCursorWeigth );
@@ -181,7 +181,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
         // transform
         m.map(nx,ny, &nx,&ny);
-        
+
         // color transformation
         if (shouldColor){
             if (m_colorProperties->sampleInputColor){
@@ -194,7 +194,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
             // mix the color with background color
             if (m_colorProperties->mixBgColor)
-            {       
+            {
                 KoMixColorsOp * mixOp = source->colorSpace()->mixColorsOp();
 
                 const quint8 *colors[2];
@@ -205,8 +205,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                 int MAX_16BIT = 255;
                 qreal blend = info.pressure();
 
-                colorWeights[0] = static_cast<quint16>( blend * MAX_16BIT); 
-                colorWeights[1] = static_cast<quint16>( (1.0 - blend) * MAX_16BIT); 
+                colorWeights[0] = static_cast<quint16>( blend * MAX_16BIT);
+                colorWeights[1] = static_cast<quint16>( (1.0 - blend) * MAX_16BIT);
                 mixOp->mixColors(colors, colorWeights, 2, m_inkColor.data() );
             }
 
@@ -219,7 +219,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                 transfo = dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
                 transfo->transform(m_inkColor.data(), m_inkColor.data() , 1);
             }
-                
+
             if (m_colorProperties->useRandomOpacity){
                 quint8 alpha = qRound(drand48() * OPACITY_OPAQUE_U8);
                 m_inkColor.setOpacity( alpha );
@@ -234,7 +234,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
         qreal random = drand48();
         qreal jitteredWidth;
-        qreal jitteredHeight; 
+        qreal jitteredHeight;
 
         if (m_shapeProperties->randomSize){
             jitteredWidth = m_shapeProperties->width * random + 1;
@@ -250,7 +250,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                 if (m_shapeProperties->width == m_shapeProperties->height){
                     paintCircle(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5) , steps);
                 }else
-                { 
+                {
                     paintEllipse(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5) , qRound(jitteredHeight * 0.5), rotationZ , steps);
                 }
                 break;
@@ -280,7 +280,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             {
                 if ( !m_brushQImage.isNull() )
                 {
-                    
+
                     QMatrix m;
                     m.rotate(rad2deg(rotationZ));
 
@@ -303,7 +303,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                         for (int y = rc.y(); y< rc.y()+rc.height(); y++){
                             for (int x = rc.x(); x < rc.x()+rc.width();x++){
                                 ac.moveTo(x,y);
-                                transfo->transform(ac.rawData(), ac.rawData() , 1);    
+                                transfo->transform(ac.rawData(), ac.rawData() , 1);
                             }
                         }
                     }
@@ -316,7 +316,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                 }
             }
         }
-        
+
     }
     // hidden code for outline detection
     //m_inkColor.setOpacity(128);
@@ -424,7 +424,7 @@ void SprayBrush::paintRectangle(KisPainter* painter, qreal x, qreal y, int width
     qreal halfWidth = width * 0.5;
     qreal halfHeight = height * 0.5;
     qreal tx, ty;
-    
+
 
     transform.reset();
     transform.rotateRadians(angle);

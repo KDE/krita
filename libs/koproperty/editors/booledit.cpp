@@ -61,7 +61,7 @@ static QString stateName(int index, const Property* prop)
 }
 
 //! Sets up @a data list data with keys and names for true, false, none values, respectively
-static void setupThreeStateListData(Property::ListData &data, 
+static void setupThreeStateListData(Property::ListData &data,
     const Property* prop)
 {
     data.keys << true << false << QVariant();
@@ -122,7 +122,7 @@ BoolEdit::BoolEdit(const Property *prop, QWidget *parent)
 //    setFocusWidget(m_toggle);
 //    setStyleSheet(
 //        QLatin1String(" QPushButton { border: none; padding:0;background-color: red; }") );
-    
+
     connect(this, SIGNAL(toggled(bool)), this, SLOT(slotValueChanged(bool)));
 }
 
@@ -177,8 +177,8 @@ void BoolEdit::draw(QPainter *p, const QRect &r, const QVariant &value,
             // draw true or false icon regardless of the 2 or 3 state version
             icon = value.toBool() ? g_boolEdit->yesIcon : g_boolEdit->noIcon;
         }
-/*        
-        if (threeState 
+/*
+        if (threeState
             if (value.isNull() || !value.isValid())
             //draw text state for Three-State editor
             if (value.isNull() || !value.isValid())
@@ -200,7 +200,7 @@ void BoolEdit::paintEvent( QPaintEvent * event )
     QToolButton::paintEvent(event);
     QPainter p(this);
     const QVariant v( value() );
-    BoolEdit::draw(&p, rect(), v, 
+    BoolEdit::draw(&p, rect(), v,
         v.toBool() ? m_yesText : m_noText, false /*2state*/);
 }
 
@@ -275,7 +275,7 @@ ComboBox::Options initThreeStateBoolOptions()
 }
 
 ThreeStateBoolEdit::ThreeStateBoolEdit(
-    const Property::ListData& listData, 
+    const Property::ListData& listData,
     QWidget *parent)
         : ComboBox(listData, initThreeStateBoolOptions(), parent)
 {
@@ -326,9 +326,11 @@ BoolDelegate::BoolDelegate()
     options.removeBorders = false;
 }
 
-QWidget * BoolDelegate::createEditor( int type, QWidget *parent, 
+QWidget * BoolDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+    Q_UNUSED(type);
+    Q_UNUSED(option);
     const EditorDataModel *editorModel
         = dynamic_cast<const EditorDataModel*>(index.model());
     Property *prop = editorModel->propertyForItem(index);
@@ -344,7 +346,7 @@ QWidget * BoolDelegate::createEditor( int type, QWidget *parent,
     }
 }
 
-void BoolDelegate::paint( QPainter * painter, 
+void BoolDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();
@@ -361,14 +363,14 @@ void BoolDelegate::paint( QPainter * painter,
             listIndex = 2;
         QRect r( option.rect );
         r.setLeft(1+r.left()+2+iconSize);
-        painter->drawText(r, Qt::AlignVCenter | Qt::AlignLeft, 
+        painter->drawText(r, Qt::AlignVCenter | Qt::AlignLeft,
             threeStateListData.names[listIndex] ); */
         BoolEdit::draw(painter, rect, value, stateName(listIndex, prop), true/*3state*/);
     }
     else
     {
         if (value.isNull() && !prop->option("nullName", QString()).toString().isEmpty()) {
-            BoolEdit::draw(painter, rect, value, 
+            BoolEdit::draw(painter, rect, value,
                 prop->option("nullName", QString()).toString(), false/*2state*/);
         }
         else {

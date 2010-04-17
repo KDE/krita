@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
@@ -27,7 +27,7 @@ KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint
     y -= offsetY;
     Q_ASSERT(dataManager != 0);
     m_lineStride = m_pixelSize * KisTileData::WIDTH;
-    
+
     m_x = x;
     m_y = y;
 
@@ -42,7 +42,7 @@ KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint
 
     m_topRow = yToRow(m_top);
     m_bottomRow = yToRow(m_bottom);
-    
+
     m_column = xToCol(m_x);
     m_xInTile = calcXInTile(m_x, m_column);
 
@@ -52,9 +52,9 @@ KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint
     m_tilesCache.resize(m_tilesCacheSize);
 
     m_tileSize = m_lineStride * KisTileData::HEIGHT;
-    
-    // let's prealocate first row 
-    for (quint32 i = 0; i < m_tilesCacheSize; i++){
+
+    // let's prealocate first row
+    for (int i = 0; i < m_tilesCacheSize; i++){
         fetchTileDataForCache(m_tilesCache[i], m_column, m_topRow + i);
     }
     m_index = 0;
@@ -133,7 +133,7 @@ bool KisVLineIterator2::nextPixels(qint32 n)
 
 KisVLineIterator2::~KisVLineIterator2()
 {
-    for (uint i = 0; i < m_tilesCacheSize; i++) {
+    for (int i = 0; i < m_tilesCacheSize; i++) {
         unlockTile(m_tilesCache[i].tile);
         unlockTile(m_tilesCache[i].oldtile);
     }
@@ -179,7 +179,7 @@ void KisVLineIterator2::fetchTileDataForCache(KisTileInfo& kti, qint32 col, qint
 
 void KisVLineIterator2::preallocateTiles()
 {
-    for (quint32 i = 0; i < m_tilesCacheSize; ++i){
+    for (int i = 0; i < m_tilesCacheSize; ++i){
         unlockTile(m_tilesCache[i].tile);
         unlockTile(m_tilesCache[i].oldtile);
         fetchTileDataForCache(m_tilesCache[i], m_column, m_topRow + i );

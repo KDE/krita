@@ -150,6 +150,9 @@ void KoTextRdfCore::dumpModel(const QString &msg, Soprano::Model *m)
     foreach (Soprano::Statement s, allStatements) {
         kDebug(30015) << s;
     }
+#else
+    Q_UNUSED(msg);
+    Q_UNUSED(m);
 #endif
 }
 

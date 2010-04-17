@@ -50,7 +50,7 @@ KRSectionData::KRSectionData(const QDomElement & elemSource, KoReportReportData*
         return;
     }
     m_height->setValue(KoUnit::parseValue(elemSource.attribute("svg:height", "2.0cm")));
-    
+
     m_backgroundColor->setValue(QColor(elemSource.attribute("fo:background-color")));
 
     QDomNodeList section = elemSource.childNodes();
@@ -162,6 +162,8 @@ QString KRSectionData::sectionTypeString(KRSectionData::Section s)
     case KRSectionData::Detail:
         sectiontype = "detail";
         break;
+    default:
+        ;
     }
 
     return sectiontype;

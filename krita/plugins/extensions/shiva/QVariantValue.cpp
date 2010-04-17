@@ -69,7 +69,8 @@ QVariant valueToQVariant(const GTLCore::Value& value)
         }
 #endif
     }
-    qFatal("Unsupported type: %i", value.type());
+    errKrita << "Unsupported type:" << value.type();
+    qFatal("exiting on fatal error");
 }
 
 GTLCore::Value qvariantToValue(const QVariant& variant, const GTLCore::Type* _type)

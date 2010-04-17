@@ -47,7 +47,7 @@ PointComposedProperty::PointComposedProperty(Property *property)
         QVariant(), i18n("Y"), i18n("Y"), Int, property);
 }
 
-void PointComposedProperty::setValue(Property *property, 
+void PointComposedProperty::setValue(Property *property,
     const QVariant &value, bool rememberOldValue)
 {
     const QPoint p( value.toPoint() );
@@ -58,6 +58,7 @@ void PointComposedProperty::setValue(Property *property,
 void PointComposedProperty::childValueChanged(Property *child,
     const QVariant &value, bool rememberOldValue)
 {
+    Q_UNUSED(rememberOldValue);
     QPoint p( child->parent()->value().toPoint() );
 
     if (child->name() == "x")

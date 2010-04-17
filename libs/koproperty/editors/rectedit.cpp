@@ -64,6 +64,7 @@ void RectComposedProperty::setValue(Property *property,
 void RectComposedProperty::childValueChanged(Property *child,
     const QVariant &value, bool rememberOldValue)
 {
+    Q_UNUSED(rememberOldValue);
     QRect r( child->parent()->value().toRect() );
 
     if (child->name() == "x")

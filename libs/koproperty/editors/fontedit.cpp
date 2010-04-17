@@ -106,13 +106,16 @@ protected:
 
 // -----------
 
-QWidget * FontDelegate::createEditor( int type, QWidget *parent, 
+QWidget * FontDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+    Q_UNUSED(type);
+    Q_UNUSED(option);
+    Q_UNUSED(index);
     return new FontEditRequester(parent);
 }
 
-void FontDelegate::paint( QPainter * painter, 
+void FontDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();
@@ -130,12 +133,12 @@ void FontDelegate::paint( QPainter * painter,
     QRect rect( option.rect );
     rect.setLeft( rect.left() + 1 );
     const QString txt( i18nc("Font sample for property editor item, typically \"Abc\"", "Abc") );
-    painter->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter, 
+    painter->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter,
         i18nc("Font sample for property editor item, typically \"Abc\"", "Abc") );
 
     rect.setLeft(rect.left() + 5 + painter->fontMetrics().width( txt ));
     painter->setFont(origFont);
-    painter->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter, 
+    painter->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter,
         i18nc("Font family and size, e.g. Arial, 2pt", "%1, %2pt", f.family(), size) );
     painter->restore();
 }

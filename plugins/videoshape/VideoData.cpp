@@ -49,6 +49,7 @@ VideoData::VideoData()
 VideoData::VideoData(const VideoData &videoData)
     : KoShapeUserData()
 {
+    Q_UNUSED(videoData);
     //TODO copy the videodata - this is a copy constructor
 }
 
@@ -133,11 +134,13 @@ bool VideoData::isValid() const
 
 bool VideoData::operator==(const VideoData &other) const
 {
+    Q_UNUSED(other);
     return false;
 }
 
 VideoData &VideoData::operator=(const VideoData &other)
 {
+    Q_UNUSED(other);
     return *this;
 }
 

@@ -889,6 +889,7 @@
     <item find="suceed" replace="succeed" />
     <item find="suop" replace="soup" />
     <item find="syndrom e" replace="syndrome" />
+    <item find="symbian" replace="Symbian" />
     <item find="tath" replace="that" />
     <item find="tatics" replace="tactics" />
     <item find="techician" replace="technician" />

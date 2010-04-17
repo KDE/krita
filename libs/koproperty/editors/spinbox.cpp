@@ -83,7 +83,7 @@ IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent, int itemHeight)
     QString css = cssForSpinBox("QSpinBox", font(), itemHeight);
     Factory::setTopAndBottomBordersUsingStyleSheet(spinBox(), parent, css);
     setStyleSheet(css);
-    
+
     QVariant minVal(prop->option("min", m_unsigned ? 0 : -INT_MAX));
     QVariant maxVal(prop->option("max", INT_MAX));
     setMinimum(minVal.toInt());
@@ -508,9 +508,11 @@ QString IntSpinBoxDelegate::displayTextForProperty( const Property* prop ) const
     return QString::number(prop->value().toInt());
 }
 
-QWidget* IntSpinBoxDelegate::createEditor( int type, QWidget *parent, 
+QWidget* IntSpinBoxDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+    Q_UNUSED(type);
+
     const EditorDataModel *editorModel
         = dynamic_cast<const EditorDataModel*>(index.model());
     Property *prop = editorModel->propertyForItem(index);
@@ -540,7 +542,7 @@ QString DoubleSpinBoxDelegate::displayTextForProperty( const Property* prop ) co
                 return minValueText + " " + unit;
         }
     }
-//! @todo precision? 
+//! @todo precision?
 //! @todo rounding using KLocale::formatNumber(const QString &numStr, bool round = true,int precision = 2)?
     QString display;
 #ifdef KOPROPERTY_USE_KOLIBS
@@ -551,9 +553,10 @@ QString DoubleSpinBoxDelegate::displayTextForProperty( const Property* prop ) co
     return KGlobal::locale()->formatNumber(prop->value().toDouble());
 }
 
-QWidget* DoubleSpinBoxDelegate::createEditor( int type, QWidget *parent, 
+QWidget* DoubleSpinBoxDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+    Q_UNUSED(type);
     const EditorDataModel *editorModel
         = dynamic_cast<const EditorDataModel*>(index.model());
     Property *prop = editorModel->propertyForItem(index);

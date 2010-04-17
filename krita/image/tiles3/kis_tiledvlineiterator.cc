@@ -48,16 +48,16 @@ KisTiledVLineIterator::KisTiledVLineIterator(KisTiledDataManager *dataManager,
     m_xInTile = calcXInTile(m_x, m_col);
 
     qint32 topInTopmostTile = calcTopInTile(m_topRow);
-    
+
     m_tilesCacheSize = m_bottomRow - m_topRow + 1;
-    
+
     m_tilesCache.resize(m_tilesCacheSize);
-    
-    // let's prealocate first row 
+
+    // let's prealocate first row
     for (quint32 i = 0; i < m_tilesCacheSize; i++){
         m_tilesCache[i] = fetchTileDataForCache( m_col, m_topRow + i);
     }
-    
+
     switchToTile(m_topRow, topInTopmostTile);
 }
 
@@ -159,9 +159,11 @@ void KisTiledVLineIterator::nextCol()
 }
 
 void KisTiledVLineIterator::fetchTileData(qint32 col, qint32 row){
+
+    Q_UNUSED(col);
     // check if we have the cached column and row
     int index = row - m_topRow;
-    
+
     // setup correct data
     m_data = m_tilesCache[index].data;
     m_oldData = m_tilesCache[index].oldData;
@@ -183,7 +185,7 @@ KisTiledVLineIterator::KisTileInfo KisTiledVLineIterator::fetchTileDataForCache(
 
 void KisTiledVLineIterator::preallocateTiles(qint32 col)
 {
-    for (int i = 0; i < m_tilesCacheSize; i++){
+    for (uint i = 0; i < m_tilesCacheSize; i++){
         unlockTile(m_tilesCache[i].tile);
         unlockTile(m_tilesCache[i].oldtile);
         m_tilesCache[i] = fetchTileDataForCache(col , m_topRow + i);

@@ -29,6 +29,7 @@ bool KisCurvePaintOpSettings::paintIncremental()
 
 QRectF KisCurvePaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
 {
+    Q_UNUSED(_mode);
     QRectF rect = QRectF(-5, -5, 10, 10);
     return image->pixelToDocument(rect).translated(pos);
 }

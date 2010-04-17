@@ -202,8 +202,6 @@ void KisTiledDataManager::purge(const QRect& area)
 
         KisTileHashTableIterator iter(m_hashTable);
         KisTileSP tile;
-        qint32 x, y;
-        qint32 width, height;
 
         const qint32 tileDataSize = KisTileData::HEIGHT * KisTileData::WIDTH * pixelSize();
 
@@ -292,7 +290,7 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
             if (clearTileRect == tileRect) {
 //                 // Clear whole tile
 //                 m_hashTable->deleteTile(column, row);
-// 
+//
 //                 KisTileSP clearedTile = new KisTile(column, row, td, m_mementoManager);
 //                 m_hashTable->addTile(clearedTile);
 //                 updateExtent(column, row);
@@ -304,8 +302,8 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
                 // Trigger artificial memory increase when clearing
 //                 KisTileDataWrapper tw(clearedTile, 0,
 //                                       KisTileDataWrapper::WRITE);
-                const qint32 lineSize = clearTileRect.width() * pixelSize;
-                qint32 rowsRemaining = clearTileRect.height();
+//                const qint32 lineSize = clearTileRect.width() * pixelSize;
+//                qint32 rowsRemaining = clearTileRect.height();
 
                 KisTileDataWrapper tw = pixelPtr(clearTileRect.left(),
                                                  clearTileRect.top(),

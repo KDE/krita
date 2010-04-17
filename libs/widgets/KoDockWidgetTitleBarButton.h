@@ -33,6 +33,8 @@ class QPaintEvent;
  */
 class KOWIDGETS_EXPORT KoDockWidgetTitleBarButton : public QAbstractButton
 {
+    Q_OBJECT
+
 public:
     KoDockWidgetTitleBarButton(QWidget *parent = 0);
     ~KoDockWidgetTitleBarButton();

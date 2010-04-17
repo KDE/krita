@@ -46,6 +46,7 @@ KoReportHTMLTableRenderer::~KoReportHTMLTableRenderer()
 
 bool KoReportHTMLTableRenderer::render(const KoReportRendererContext& context, ORODocument *document, int page)
 {
+    Q_UNUSED(page);
     KTemporaryFile tempHtmlFile; // auto removed by default on destruction
     if (!tempHtmlFile.open()) {
         kDebug() << "Couldn't create temporary file to write into";

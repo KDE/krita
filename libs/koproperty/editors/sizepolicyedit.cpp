@@ -75,7 +75,7 @@ static const char *SIZEPOLICY_MASK = "%1, %2, %3, %4";
 QString SizePolicyDelegate::displayText( const QVariant& value ) const
 {
     const QSizePolicy sp(value.value<QSizePolicy>());
-    
+
     return QString::fromLatin1(SIZEPOLICY_MASK)
         .arg(s_sizePolicyListData->nameForPolicy(sp.horizontalPolicy()))
         .arg(s_sizePolicyListData->nameForPolicy(sp.verticalPolicy()))
@@ -104,7 +104,7 @@ SizePolicyComposedProperty::SizePolicyComposedProperty(Property *property)
         i18n("Vert. Stretch"), i18n("Vertical Stretch"), UInt, property);
 }
 
-void SizePolicyComposedProperty::setValue(Property *property, 
+void SizePolicyComposedProperty::setValue(Property *property,
     const QVariant &value, bool rememberOldValue)
 {
     const QSizePolicy sp( value.value<QSizePolicy>() );
@@ -117,6 +117,7 @@ void SizePolicyComposedProperty::setValue(Property *property,
 void SizePolicyComposedProperty::childValueChanged(Property *child,
     const QVariant &value, bool rememberOldValue)
 {
+    Q_UNUSED(rememberOldValue);
     QSizePolicy sp( child->parent()->value().value<QSizePolicy>() );
     if (child->name() == "hor_policy")
         sp.setHorizontalPolicy(static_cast<QSizePolicy::Policy>(value.toInt()));

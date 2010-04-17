@@ -62,7 +62,10 @@ GTLCore::PixelDescription csToPD(const KoColorSpace* cs)
             types.push_back(GTLCore::Type::Float64);
 #endif
             break;
+        default:
+            errKrita << "Channeltype OTHER encountered";
         }
+
     }
     GTLCore::PixelDescription pd(types);
     if(cs->colorModelId() == RGBAColorModelID )
@@ -89,12 +92,16 @@ ConstPaintDeviceImage::~ConstPaintDeviceImage()
 
 char* ConstPaintDeviceImage::data(int _x, int _y)
 {
+    Q_UNUSED(_x);
+    Q_UNUSED(_y);
     qFatal("Accessing non const data in a ConstPaintDevice");
     return 0;
 }
 
 char* ConstPaintDeviceImage::rawData( int _x, int _y )
 {
+    Q_UNUSED(_x);
+    Q_UNUSED(_y);
     qFatal("Accessing non const data in a ConstPaintDevice");
     return 0;
 }

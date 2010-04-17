@@ -134,7 +134,7 @@ KoColorTransformation* KoCtlColorTransformationFactory::createTransformation(con
     GTLCore::PixelDescription pixelDescription = createPixelDescription(colorSpace);
     dbgPlugins << pixelDescription.bitsSize() << " " << colorSpace->pixelSize();
 
-    Q_ASSERT(pixelDescription.bitsSize() / 8 == colorSpace->pixelSize());
+    Q_ASSERT(pixelDescription.bitsSize() / 8 == (int)colorSpace->pixelSize());
 
     QMutexLocker lock2(&m_mutex);
 

@@ -46,14 +46,14 @@ public:
 
     /**
      * Sets the shapes to be painted.
-     * @param shape the shapes to paint
+     * @param shapes the shapes to paint
      */
     void setShapes(const QList<KoShape*> &shapes);
 
     /**
      * Paints the shapes on the given painter and using the zoom handler.
      * @param painter the painter to paint on
-     * @param converted the view converter defining the zoom to use
+     * @param converter the view converter defining the zoom to use
      */
     void paint(QPainter &painter, KoViewConverter &converter);
 

@@ -324,7 +324,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
             saveChange(charFormat);
 
-            kDebug(30015) << "from:" << from << " to:" << to;
+            //kDebug(30015) << "from:" << from << " to:" << to;
             if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
                 // Write xml:id here for Rdf
                 kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
@@ -423,7 +423,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         } // if (fragment.valid())
     } // foreach(fragment)
 
-    kDebug(30015) << "pairedInlineObjectStack.sz:" << pairedInlineObjectStack.size();
+    //kDebug(30015) << "pairedInlineObjectStack.sz:" << pairedInlineObjectStack.size();
     foreach (KoInlineObject* inlineObject, pairedInlineObjectStack) {
         inlineObject->saveOdf(context);
     }

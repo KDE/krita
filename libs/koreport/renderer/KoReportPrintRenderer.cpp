@@ -52,6 +52,7 @@ bool KoReportPrintRenderer::setupPrinter( ORODocument * document, QPrinter * pPr
 
 bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODocument *document, int page)
 {
+    Q_UNUSED(page);
     if (document == 0 || context.printer == 0 || context.painter == 0)
         return false;
 

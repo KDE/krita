@@ -48,7 +48,10 @@ class DeformBase{
         DeformBase(){}
         virtual ~DeformBase(){}
         virtual void transform(qreal * x, qreal * y, qreal distance){
-        };
+            Q_UNUSED(x);
+            Q_UNUSED(y);
+            Q_UNUSED(distance);
+        }
 };
 
 /// Inverse weighted inverse scaling - grow&shrink
@@ -76,7 +79,7 @@ public:
             distance = 1.0 - distance;
             qreal rotX = cos(-m_alpha * distance) * (*maskX) - sin(-m_alpha * distance) * (*maskY);
             qreal rotY = sin(-m_alpha * distance) * (*maskX) + cos(-m_alpha * distance) * (*maskY);
-            
+
             *maskX = rotX;
             *maskY = rotY;
     }
@@ -107,8 +110,9 @@ public:
     void setLensFactor(qreal k1, qreal k2){ m_k1 = k1; m_k2 = k2; }
     void setMaxDistance(qreal maxX, qreal maxY){ m_maxX = maxX; m_maxY = maxY;}
     void setMode(bool out){ m_out = out; }
-    
+
     virtual void transform(qreal* maskX, qreal* maskY, qreal distance){
+            Q_UNUSED(distance);
             //normalize
             qreal normX = *maskX / m_maxX;
             qreal normY = *maskY / m_maxY;
@@ -138,9 +142,10 @@ private:
 class DeformColor : public DeformBase {
 public:
     DeformColor(){ srand48(time(0)); }
-    
+
     void setFactor(qreal factor){ m_factor = factor; }
     virtual void transform(qreal* x, qreal* y, qreal distance){
+        Q_UNUSED(distance);
         qreal randomX = m_factor * ((drand48() * 2.0) - 1.0);
         qreal randomY = m_factor * ((drand48() * 2.0) - 1.0);
         *x += randomX;
@@ -161,11 +166,11 @@ class DeformBrush
 public:
     DeformBrush();
     ~DeformBrush();
-    
+
     void paintMask(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer,
                    qreal scale,qreal rotation,QPointF pos,
                    qreal subPixelX,qreal subPixelY);
-                   
+
     void oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF pos);
     void setSizeProperties(KisBrushSizeProperties * properties){ m_sizeProperties = properties; }
     void setProperties(DeformProperties * properties){ m_properties = properties; }
@@ -182,13 +187,13 @@ private:
     qreal maskWidth(qreal scale){
         return m_sizeProperties->diameter * scale;
     }
-    
+
     qreal maskHeight(qreal scale){
         return m_sizeProperties->diameter * m_sizeProperties->aspect  * scale;
     }
 
     inline qreal norme(qreal x,qreal y){
-        return x*x + y*y; 
+        return x*x + y*y;
     }
 
 
@@ -208,7 +213,7 @@ private:
     QRectF m_maskRect;
 
     DeformBase * m_deformAction;
-    
+
     DeformProperties * m_properties;
     KisBrushSizeProperties * m_sizeProperties;
 };

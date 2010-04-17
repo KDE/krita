@@ -1133,6 +1133,7 @@ void TestLoading::testLoading()
 
     bool documentsEqual = compareDocuments(actualDocument, expectedDocument);
 
+    Q_UNUSED(showDocument);
 //    showDocument(actualDocument);
 //    showDocument(expectedDocument);
     if (!documentsEqual) {

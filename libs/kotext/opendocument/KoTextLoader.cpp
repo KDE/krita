@@ -26,7 +26,6 @@
  */
 
 #include "KoTextLoader.h"
-#include "KoTextLoader_p.cpp"
 
 #include <KoTextMeta.h>
 #include <KoBookmark.h>
@@ -71,6 +70,7 @@
 #include "styles/KoSectionStyle.h"
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <QList>
 #include <QMap>
@@ -81,9 +81,10 @@
 #include <QTextList>
 #include <QTextTable>
 #include <QTime>
+#include <QString>
 
-#include <kdebug.h>
 
+#include "KoTextLoader_p.h"
 // if defined then debugging is enabled
 // #define KOOPENDOCUMENTLOADER_DEBUG
 
@@ -818,7 +819,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             kDebug(32500) << "  <text> localName=" << localName << " parent.localName=" << element.localName() << " text=" << text
             << text.length();
 #endif
-            text = normalizeWhitespace(text, *stripLeadingSpace);
+            text = KoTextLoaderP::normalizeWhitespace(text, *stripLeadingSpace);
 
             if (!text.isEmpty()) {
                 // if present text ends with a space,

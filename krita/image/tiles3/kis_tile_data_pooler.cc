@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
-
+#include "kis_debug.h"
 #include "kis_tile_data_pooler.h"
 
 const qint32 KisTileDataPooler::MAX_NUM_CLONES = 16;
@@ -206,6 +206,5 @@ void KisTileDataPooler::debugTileStatistics()
         totalTiles++;
         preallocatedTiles += iter->m_clonesList.size();
     }
-
-    printf("Tiles statistics:\t total: %ld\t preallocated: %ld\n", totalTiles, preallocatedTiles);
+    dbgTiles << "Tiles statistics:\t total:" << totalTiles << "\t preallocated:"<< preallocatedTiles;
 }

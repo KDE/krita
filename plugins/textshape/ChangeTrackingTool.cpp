@@ -96,7 +96,7 @@ void ChangeTrackingTool::mousePressEvent(KoPointerEvent* event)
     QTextCursor cursor(m_textShapeData->document());
     cursor.setPosition(position);
 
-    KoChangeTracker *changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
+    //KoChangeTracker *changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
     int changeId = cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
     QModelIndex index = m_model->indexForChangeId(changeId);
     m_changesTreeView->setCurrentIndex(index);
@@ -274,7 +274,7 @@ void ChangeTrackingTool::setShapeData(KoTextShapeData *data)
     bool docChanged = data == 0 || m_textShapeData == 0 || m_textShapeData->document() != data->document();
     if (m_textShapeData) {
 //        disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+//        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
 //        if (lay)
 //            disconnect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
     }
@@ -374,6 +374,7 @@ void ChangeTrackingTool::rejectChange()
 
 void ChangeTrackingTool::selectedChangeChanged(QModelIndex newItem, QModelIndex previousItem)
 {
+    Q_UNUSED(newItem);
     Q_UNUSED(previousItem);
     canvas()->updateCanvas(m_textShape->boundingRect());
 }

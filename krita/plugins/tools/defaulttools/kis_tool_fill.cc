@@ -102,10 +102,6 @@ bool KisToolFill::flood(int startX, int startY)
     QRegion dirty;
 
     if (m_fillOnlySelection && selection) {
-#ifdef __GNUC__
-#warning Port the fixes for filling the selection from 1.6!
-#endif
-
         QRect rc = selection->selectedRect();
         KisPaintDeviceSP filled = new KisPaintDevice(device->colorSpace());
         KisFillPainter fillPainter(filled);

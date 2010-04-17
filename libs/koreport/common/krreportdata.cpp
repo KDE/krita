@@ -64,7 +64,7 @@ KoReportReportData::KoReportReportData(const QDomElement & elemSource)
 {
     m_valid = false;
     init();
-    bool valid; //used for local unit conversions
+    //bool valid; //used for local unit conversions
 
     kDebug();
 
@@ -74,7 +74,7 @@ KoReportReportData::KoReportReportData(const QDomElement & elemSource)
         return;
     }
 
-    qreal d = 0.0;
+    //qreal d = 0.0;
 
     QDomNodeList sections = elemSource.childNodes();
     for (int nodeCounter = 0; nodeCounter < sections.count(); nodeCounter++) {
@@ -159,6 +159,8 @@ KoReportReportData::KoReportReportData(const QDomElement & elemSource)
                             case KRSectionData::PageFooterAny:
                                 m_pageFooterAny = sd;
                                 break;
+                            default:
+                                ;
                             }
                         }
 

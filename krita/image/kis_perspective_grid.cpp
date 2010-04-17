@@ -34,7 +34,10 @@ KisPerspectiveGridNode::KisPerspectiveGridNode(QPointF p) : QPointF(p), d(new Pr
 {
 }
 
-KisPerspectiveGridNode::KisPerspectiveGridNode(const KisPerspectiveGridNode& rhs) : QPointF(rhs), d(new Private())
+KisPerspectiveGridNode::KisPerspectiveGridNode(const KisPerspectiveGridNode& rhs)
+    : QPointF(rhs)
+    , KisShared()
+    , d(new Private())
 {
 }
 

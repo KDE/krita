@@ -62,7 +62,7 @@ inline void DeformBrush::movePixel(qreal newX, qreal newY, quint8 *dst)
     } else {
         m_srcAcc->sampledRawData(dst);
     }
-    
+
 }
 
 void DeformBrush::oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF pos)
@@ -70,7 +70,7 @@ void DeformBrush::oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF 
     KisRandomSubAccessorPixel srcAcc = layer->createRandomSubAccessor();
     m_srcAcc = &srcAcc;
     m_pixelSize = layer->pixelSize();
-    
+
     if (!setupAction(pos)){ return; }
 
     int curXi = static_cast<int>(pos.x() + 0.5);
@@ -79,9 +79,6 @@ void DeformBrush::oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF 
     qreal maskX, maskY;
     qreal distance;
 
-    qint32 x;
-    qint32 y;
-
     int radius = m_sizeProperties->diameter * 0.5;
     int left = curXi - radius;
     int top = curYi - radius;
@@ -89,7 +86,7 @@ void DeformBrush::oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF 
     int h = w;
     qreal m_majorAxis = 2.0/radius;
     qreal m_minorAxis = 2.0/radius;
-    
+
     KisRectIterator m_srcIt = dab->createRectIterator(left, top, w , h);
     for (; !m_srcIt.isDone(); ++m_srcIt) {
         maskX = m_srcIt.x() - curXi;
@@ -113,7 +110,7 @@ void DeformBrush::initDeformAction()
 {
     switch(m_properties->action){
         case 1:
-        case 2: 
+        case 2:
         {
             m_deformAction = new DeformScale();
             break;
@@ -124,7 +121,7 @@ void DeformBrush::initDeformAction()
             m_deformAction = new DeformRotation();
             break;
         }
-        
+
         case 5:
         {
             m_deformAction = new DeformMove();
@@ -134,7 +131,7 @@ void DeformBrush::initDeformAction()
         case 6:
         case 7:
         {
-            m_deformAction = new DeformLens(); 
+            m_deformAction = new DeformLens();
             static_cast<DeformLens*>(m_deformAction)->setLensFactor(m_properties->deformAmount,0.0);
             static_cast<DeformLens*>(m_deformAction)->setMode(m_properties->action == 7);
             break;
@@ -154,10 +151,10 @@ void DeformBrush::initDeformAction()
 
 bool DeformBrush::setupAction(QPointF pos)
 {
-    
+
     switch(m_properties->action){
         case 1:
-        case 2: 
+        case 2:
         {
             // grow or shrink, the sign decide
             qreal sign = (m_properties->action == 1) ? 1.0 : -1.0;
@@ -207,7 +204,7 @@ bool DeformBrush::setupAction(QPointF pos)
         }
         case 8:
         {
-            // no run-time setup 
+            // no run-time setup
             break;
         }
         default:{
@@ -222,13 +219,13 @@ void DeformBrush::paintMask(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer, q
     KisRandomSubAccessorPixel srcAcc = layer->createRandomSubAccessor();
     m_srcAcc = &srcAcc;
     m_pixelSize = layer->colorSpace()->pixelSize();
-    
+
     qreal fWidth = maskWidth(scale);
     qreal fHeight = maskHeight(scale);
-    
+
     int dstWidth =  qRound( m_maskRect.width() );
     int dstHeight = qRound( m_maskRect.height());
-  
+
     // clear
     if (dab->bounds().width() != dstWidth || dab->bounds().height() != dstHeight){
         dab->setRect(m_maskRect.toRect());
@@ -236,12 +233,12 @@ void DeformBrush::paintMask(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer, q
     }else{
         dab->clear(m_maskRect.toRect());
     }
-    
+
     m_centerX = dstWidth  * 0.5  + subPixelX;
     m_centerY = dstHeight * 0.5  + subPixelY;
 
     quint8* dabPointer = dab->data();
-    
+
     // major axis
     m_majorAxis = 2.0/fWidth;
     // minor axis
@@ -257,13 +254,13 @@ void DeformBrush::paintMask(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer, q
 
     // if can't paint, stop
     if (!setupAction(pos)) return;
-    
+
     qreal cosa = cos(-rotation);
     qreal sina = sin(-rotation);
 
     qreal bcosa = cos(rotation);
     qreal bsina = sin(rotation);
-    
+
     for (int y = 0; y <  dstHeight; y++){
         for (int x = 0; x < dstWidth; x++){
             maskX = x - m_centerX;
@@ -271,33 +268,33 @@ void DeformBrush::paintMask(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer, q
             double rmaskX = cosa * maskX - sina * maskY;
             double rmaskY = sina * maskX + cosa * maskY;
 
-            
+
             distance = norme(rmaskX * m_majorAxis, rmaskY * m_minorAxis);
             if (distance > 1.0){
                 // leave there OPACITY TRANSPARENT pixel (default pixel)
                 dabPointer += m_pixelSize;
                 continue;
             }
-            
+
             if (m_sizeProperties->density != 1.0){
                 if (m_sizeProperties->density < drand48()){
                     dabPointer += m_pixelSize;
                     continue;
                 }
             }
-            
+
             m_deformAction->transform( &rmaskX, &rmaskY, distance);
 
             maskX = bcosa * rmaskX - bsina * rmaskY;
             maskY = bsina * rmaskX + bcosa * rmaskY;
-            
+
             maskX += pos.x();
             maskY += pos.y();
-            
-            movePixel(maskX, maskY, dabPointer);    
+
+            movePixel(maskX, maskY, dabPointer);
             dabPointer += m_pixelSize;
         }
-    }    
+    }
     m_counter++;
 }
 
@@ -316,34 +313,34 @@ void DeformBrush::debugColor(const quint8* data, KoColorSpace * cs)
 // void DeformBrush::bilinear_interpolation(double x, double y, quint8 *dst)
 // {
 //     KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
-// 
+//
 //     int ix = (int)floor(x);
 //     int iy = (int)floor(y);
-//     
+//
 //     const quint8 *colors[4];
 //     m_readAccessor->moveTo(ix, iy);
 //     colors[0] = m_readAccessor->rawData(); //11
-// 
+//
 //     m_readAccessor->moveTo(ix + 1, iy);
 //     colors[1] = m_readAccessor->rawData(); //12
-// 
+//
 //     m_readAccessor->moveTo(ix, iy + 1);
 //     colors[2] = m_readAccessor->rawData(); //21
-// 
+//
 //     m_readAccessor->moveTo(ix + 1, iy + 1);
 //     colors[3] = m_readAccessor->rawData();  //22
-// 
+//
 //     double x_frac = x - (double)ix;
 //     double y_frac = y - (double)iy;
-// 
+//
 //     qint16 colorWeights[4];
 //     int MAX_16BIT = 255;
-// 
+//
 //     colorWeights[0] = static_cast<quint16>((1.0 - y_frac) * (1.0 - x_frac) * MAX_16BIT);
 //     colorWeights[1] = static_cast<quint16>((1.0 - y_frac) *  x_frac * MAX_16BIT);
 //     colorWeights[2] = static_cast<quint16>(y_frac * (1.0 - x_frac) * MAX_16BIT);
 //     colorWeights[3] = static_cast<quint16>(y_frac * x_frac * MAX_16BIT);
-// 
+//
 //     mixOp->mixColors(colors, colorWeights, 4, dst);
 // }
 
@@ -351,29 +348,29 @@ void DeformBrush::debugColor(const quint8* data, KoColorSpace * cs)
 // void DeformBrush::bilinear_interpolation_old(double x, double y , quint8 *dst)
 // {
 //     KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
-// 
+//
 //     int ix = (int)floor(x);
 //     int iy = (int)floor(y);
-//     
+//
 //     const quint8 *colors[4];
 //     m_readAccessor->moveTo(ix, iy);
 //     colors[0] = m_readAccessor->oldRawData(); //11
-// 
+//
 //     m_readAccessor->moveTo(ix + 1, iy);
 //     colors[1] = m_readAccessor->oldRawData(); //12
-// 
+//
 //     m_readAccessor->moveTo(ix, iy + 1);
 //     colors[2] = m_readAccessor->oldRawData(); //21
-// 
+//
 //     m_readAccessor->moveTo(ix + 1, iy + 1);
 //     colors[3] = m_readAccessor->oldRawData();  //22
-// 
+//
 //     double x_frac = x - (double)ix;
 //     double y_frac = y - (double)iy;
-// 
+//
 //     qint16 colorWeights[4];
 //     int MAX_16BIT = 255;
-// 
+//
 //     colorWeights[0] = static_cast<quint16>((1.0 - y_frac) * (1.0 - x_frac) * MAX_16BIT);
 //     colorWeights[1] = static_cast<quint16>((1.0 - y_frac) *  x_frac * MAX_16BIT);
 //     colorWeights[2] = static_cast<quint16>(y_frac * (1.0 - x_frac) * MAX_16BIT);

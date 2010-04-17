@@ -39,13 +39,13 @@ QString SizeFDelegate::displayText( const QVariant& value ) const
 SizeFComposedProperty::SizeFComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
-    (void)new Property("width", 
+    (void)new Property("width",
         QVariant(), i18n("Width"), i18n("Width"), Double, property);
-    (void)new Property("height", 
+    (void)new Property("height",
         QVariant(), i18n("Height"), i18n("Height"), Double, property);
 }
 
-void SizeFComposedProperty::setValue(Property *property, 
+void SizeFComposedProperty::setValue(Property *property,
     const QVariant &value, bool rememberOldValue)
 {
     const QSizeF s( value.toSizeF() );
@@ -56,6 +56,7 @@ void SizeFComposedProperty::setValue(Property *property,
 void SizeFComposedProperty::childValueChanged(Property *child,
     const QVariant &value, bool rememberOldValue)
 {
+    Q_UNUSED(rememberOldValue);
     QSizeF s( child->parent()->value().toSizeF() );
     if (child->name() == "width")
         s.setWidth(value.toDouble());

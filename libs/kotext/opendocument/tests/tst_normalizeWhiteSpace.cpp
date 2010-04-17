@@ -1,6 +1,6 @@
 #include <qtest.h>
 
-#include "../KoTextLoader_p.cpp"
+#include "../KoTextLoader_p.h"
 
 #define ITERATION_COUNT 1000
 
@@ -32,8 +32,8 @@ void tst_normalizeWhiteSpace::normalizeWhiteSpace()
     QFETCH(QString, input);
     QBENCHMARK {
         for (int i = 0; i < ITERATION_COUNT; ++i) {
-            QString answer = normalizeWhitespace(input, true);
-            answer = normalizeWhitespace(input, false);
+            QString answer = KoTextLoaderP::normalizeWhitespace(input, true);
+            answer = KoTextLoaderP::normalizeWhitespace(input, false);
         }
     }
 }

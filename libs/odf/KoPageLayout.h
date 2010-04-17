@@ -102,13 +102,6 @@ struct KoPageLayout {
     KOODF_EXPORT void loadOdf(const KoXmlElement &style);
 
     /**
-     * @return a page layout with the default page size depending on the locale settings,
-     * default margins (2 cm), and portrait orientation.
-     * Deprecated; just use the constructor
-     */
-    static KOODF_EXPORT KDE_DEPRECATED KoPageLayout standardLayout();
-
-    /**
      * Construct a page layout with the default page size depending on the locale settings,
      * default margins (2 cm), and portrait orientation.
      */

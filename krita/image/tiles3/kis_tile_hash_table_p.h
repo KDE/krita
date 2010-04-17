@@ -40,6 +40,8 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits(const KisTileHashTableTraits<T
         KisMementoManager *mm)
         : m_lock(QReadWriteLock::NonRecursive)
 {
+    QReadLocker locker(&ht.m_lock);
+
     m_mementoManager = mm;
 
     m_defaultTileData = 0;
@@ -314,4 +316,33 @@ void KisTileHashTableTraits<T>::debugListLengthDistibution()
         dbgTiles << QString("      %1:\t%2\n").arg(i + min, array[i]);
 
     delete[] array;
+}
+
+template<class T>
+void KisTileHashTableTraits<T>::sanityChecksumCheck()
+{
+    /**
+     * We assume that the lock should have already been taken
+     * by the code that was going to change the table
+     */
+    Q_ASSERT(!m_lock.tryLockForWrite());
+
+    TileTypeSP tile = 0;
+    qint32 exactNumTiles = 0;
+
+    for (qint32 i = 0; i < TABLE_SIZE; i++) {
+        tile = m_hashTable[i];
+        while (tile) {
+            exactNumTiles++;
+            tile = tile->next();
+        }
+    }
+
+    if (exactNumTiles != m_numTiles) {
+        qDebug() << "Sanity check failed!";
+        qDebug() << ppVar(exactNumTiles);
+        qDebug() << ppVar(m_numTiles);
+        qDebug() << "Wrong tiles checksum!";
+        Q_ASSERT(0); // not qFatal() for a backtrace support
+    }
 }

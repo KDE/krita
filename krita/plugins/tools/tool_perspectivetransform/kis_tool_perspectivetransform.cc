@@ -262,8 +262,8 @@ bool KisToolPerspectiveTransform::isConvex(QPolygonF ptList)
 {
     QLineF l1(ptList[0], ptList[2]);
     QLineF l2(ptList[1], ptList[3]);
-
-    QLineF::IntersectType interType = l1.intersect(l2, &QPointF());
+    QPointF point;
+    QLineF::IntersectType interType = l1.intersect(l2, &point);
 
     return (interType == QLineF::BoundedIntersection);
 }
@@ -280,6 +280,7 @@ QLineF::IntersectType KisToolPerspectiveTransform::middleHandlePos(QPolygonF ptL
 
 void KisToolPerspectiveTransform::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(converter);
     paintOutline(painter, QRect());
 }
 
@@ -561,7 +562,7 @@ void KisToolPerspectiveTransform::paintOutline(QPainter& gc, const QRect&)
 
 QPolygonF KisToolPerspectiveTransform::midpointHandles(QPolygonF vertexList)
 {
-    
+
     QPolygonF midHandlesList;
 
     if (isConvex(vertexList)) {
@@ -723,7 +724,9 @@ QWidget* KisToolPerspectiveTransform::optionWidget()
 }
 
 void KisToolPerspectiveTransform::setup(KActionCollection *collection)
-{/*
+{
+    Q_UNUSED(collection);
+/*
     m_action = collection->action(objectName());
 
     if (m_action == 0) {

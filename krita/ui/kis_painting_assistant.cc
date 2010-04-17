@@ -30,7 +30,10 @@ KisPaintingAssistantHandle::KisPaintingAssistantHandle(QPointF p) : QPointF(p), 
 {
 }
 
-KisPaintingAssistantHandle::KisPaintingAssistantHandle(const KisPaintingAssistantHandle& rhs) : QPointF(rhs), d(new Private)
+KisPaintingAssistantHandle::KisPaintingAssistantHandle(const KisPaintingAssistantHandle& rhs)
+    : QPointF(rhs)
+    , KisShared()
+    , d(new Private)
 {
 }
 

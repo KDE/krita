@@ -40,7 +40,6 @@ public:
      * Contructor
      *
      * @param canvas The canvas on which the paste is done
-     * @param zIndex The highest currently existing zIndex.
      * @param parentLayer The layer on which the shapes will be pasted
      */
     KoShapePaste(KoCanvasBase *canvas, KoShapeLayer *parentLayer);

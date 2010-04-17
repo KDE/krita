@@ -258,9 +258,11 @@ PixmapDelegate::PixmapDelegate()
 //    options.removeBorders = false;
 }
 
-QWidget* PixmapDelegate::createEditor( int type, QWidget *parent, 
+QWidget* PixmapDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+    Q_UNUSED(type);
+    Q_UNUSED(option);
     const EditorDataModel *editorModel
         = dynamic_cast<const EditorDataModel*>(index.model());
     Property *property = editorModel->propertyForItem(index);
@@ -268,7 +270,7 @@ QWidget* PixmapDelegate::createEditor( int type, QWidget *parent,
     return pe;
 }
 
-void PixmapDelegate::paint( QPainter * painter, 
+void PixmapDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     QPixmap pm( index.data(Qt::EditRole).value<QPixmap>() );

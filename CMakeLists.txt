@@ -301,7 +301,8 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
                    ${SOPRANO_INCLUDE_DIR}
                    ${FLAKE_INCLUDES}
-                   ${KOODF_INCLUDES})
+                   ${KOODF_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/main)
 
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}

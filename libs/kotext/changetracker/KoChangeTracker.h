@@ -42,6 +42,8 @@ class QTextFormat;
 class QString;
 //#include <QList>
 class QTextDocumentFragment;
+class QTextList;
+class KoDeleteChangeMarker;
 
 class KOTEXT_EXPORT KoChangeTracker : public QObject
 {
@@ -96,8 +98,9 @@ public:
     void loadOdfChanges(const KoXmlElement& element);
     int getLoadedChangeId(QString odfId);
 
+    static QTextDocumentFragment generateDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
 private:
-
+    static bool checkListDeletion(QTextList *list, QTextCursor &cursor);
     class Private;
     Private* const d;
 };

@@ -28,6 +28,7 @@
 #include <QStack>
 #include <QTextTableCellFormat>
 #include <QBuffer>
+#include <QUuid>
 
 #include "KoInlineObject.h"
 #include "KoVariable.h"
@@ -58,6 +59,8 @@
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
 
+#include <rdf/KoDocumentRdf.h>
+
 class KoTextWriter::Private
 {
 public:
@@ -67,7 +70,8 @@ public:
     writer(0),
     layout(0),
     styleManager(0),
-    changeTracker(0)
+    changeTracker(0),
+    rdfData(0)
     {
         writer = &context.xmlWriter();
     }
@@ -82,8 +86,14 @@ public:
     void saveParagraph(const QTextBlock &block, int from, int to);
     void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles);
     void saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc);
-    void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextFrame *currentFrame = 0);
+    void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextFrame *currentFrame = 0, bool deleteChangeBlocks = false);
     QString generateDeleteChangeXml(KoDeleteChangeMarker *marker);
+    /******************** ODF Bug Work-around code that uses RDF*******************/
+    QString getXmlId();
+    void writeListItemValidityRDF(const QString& xmlId, bool isValid);
+    void writeListValidityRDF(const QString& xmlId, bool isValid);
+    void writeListLevelRDF(const QString& xmlId, int level);
+    /******************************************************************************/
     KoShapeSavingContext &context;
     KoTextSharedSavingData *sharedData;
     KoXmlWriter *writer;
@@ -91,11 +101,75 @@ public:
     KoTextDocumentLayout *layout;
     KoStyleManager *styleManager;
     KoChangeTracker *changeTracker;
+    KoDocumentRdf *rdfData;
+    QTextDocument *document;
 
     QStack<int> changeStack;
     QMap<int, QString> changeTransTable;
     QList<int> savedDeleteChanges;
 };
+
+QString KoTextWriter::Private::getXmlId()
+{
+    QString uuid = QUuid::createUuid().toString();
+    uuid.remove('{');
+    uuid.remove('}');
+    QString ret = "rdfid-" + uuid;
+    return ret;
+}
+
+/*************************** ODF Bug Work-around code that uses RDF *******************************/
+void KoTextWriter::Private::writeListItemValidityRDF(const QString& xmlId, bool isValid)
+{
+    #ifdef SHOULD_BUILD_RDF
+    Soprano::Model *rdfModel = rdfData->model();
+    Soprano::Node subject, object, predicate, context;
+    subject = QUrl(KoDeleteChangeMarker::RDFListItemName + xmlId);
+    context = QUrl(KoDeleteChangeMarker::RDFDeleteChangeContext);
+
+    predicate = QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref");
+    object = Soprano::LiteralValue(xmlId);
+    rdfModel->addStatement(Soprano::Statement(subject, predicate, object, context));
+
+    predicate = QUrl(KoDeleteChangeMarker::RDFListItemValidity);
+    object = Soprano::LiteralValue(isValid);
+    rdfModel->addStatement(Soprano::Statement(subject, predicate, object, context));
+    #endif
+}
+
+/*************************** ODF Bug Work-around code that uses RDF *******************************/
+void KoTextWriter::Private::writeListValidityRDF(const QString& xmlId, bool isValid)
+{
+    #ifdef SHOULD_BUILD_RDF
+    Soprano::Model *rdfModel = rdfData->model();
+    Soprano::Node subject, object, predicate, context;
+    subject = QUrl(KoDeleteChangeMarker::RDFListName + xmlId);
+    context = QUrl(KoDeleteChangeMarker::RDFDeleteChangeContext);
+
+    predicate = QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref");
+    object = Soprano::LiteralValue(xmlId);
+    rdfModel->addStatement(Soprano::Statement(subject, predicate, object, context));
+
+    predicate = QUrl(KoDeleteChangeMarker::RDFListValidity);
+    object = Soprano::LiteralValue(isValid);
+    rdfModel->addStatement(Soprano::Statement(subject, predicate, object, context));
+    #endif
+}
+
+/*************************** ODF Bug Work-around code that uses RDF *******************************/
+void KoTextWriter::Private::writeListLevelRDF(const QString& xmlId, int level)
+{
+    #ifdef SHOULD_BUILD_RDF
+    Soprano::Model *rdfModel = rdfData->model();
+    Soprano::Node subject, object, predicate, context;
+    subject = QUrl(KoDeleteChangeMarker::RDFListName + xmlId);
+    context = QUrl(KoDeleteChangeMarker::RDFDeleteChangeContext);
+
+    predicate = QUrl(KoDeleteChangeMarker::RDFListLevel);
+    object = Soprano::LiteralValue(level);
+    rdfModel->addStatement(Soprano::Statement(subject, predicate, object, context));
+    #endif
+}
 
 void KoTextWriter::Private::saveChange(QTextCharFormat format)
 {
@@ -140,9 +214,10 @@ void KoTextWriter::Private::saveChange(QTextCharFormat format)
     }
 }
 
-KoTextWriter::KoTextWriter(KoShapeSavingContext &context)
+KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdf *rdfData)
     : d(new Private(context))
 {
+    d->rdfData = rdfData;
     KoSharedSavingData *sharedData = context.sharedData(KOTEXT_SHARED_SAVING_ID);
     if (sharedData) {
         d->sharedData = dynamic_cast<KoTextSharedSavingData *>(sharedData);
@@ -241,17 +316,30 @@ QString KoTextWriter::Private::saveCharacterStyle(const QTextCharFormat &charFor
     return generatedName;
 }
 
+// A convinience function to get a listId from a list-format
+static KoListStyle::ListIdType ListId(const QTextListFormat &format)
+{
+    KoListStyle::ListIdType listId;
+
+    if (sizeof(KoListStyle::ListIdType) == sizeof(uint))
+        listId = format.property(KoListStyle::ListId).toUInt();
+    else
+        listId = format.property(KoListStyle::ListId).toULongLong();
+
+    return listId;
+}
+
 QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock block, int to)
 {
     QHash<KoList *, QString> generatedLists;
     QHash<QTextList *, QString> listStyles;
-    KoTextDocument document(block.document());
 
     for (;block.isValid() && ((to == -1) || (block.position() < to)); block = block.next()) {
         QTextList *textList = block.textList();
         if (!textList)
             continue;
-        if (KoList *list = document.list(block)) {
+        KoListStyle::ListIdType listId = ListId(textList->format());
+        if (KoList *list = KoTextDocument(document).list(listId)) {
             if (generatedLists.contains(list)) {
                 if (!listStyles.contains(textList))
                     listStyles.insert(textList, generatedLists.value(list));
@@ -494,7 +582,7 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int fro
     writer->endElement(); // table:table-of-content
 }
 
-void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *currentFrame)
+void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *currentFrame, bool deleteChangeBlocks)
 {
     KoTextDocument textDocument(document);
     QTextBlock block = document->findBlock(from);
@@ -527,6 +615,13 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             headingLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
             numberedParagraphLevel = blockFormat.intProperty(KoParagraphStyle::ListLevel);
         }
+        
+        bool isValidListItem = true, isValidList = true;
+        if (textList && deleteChangeBlocks) {
+            isValidListItem = block.blockFormat().property(KoDeleteChangeMarker::DeletedListItem).toBool();
+            isValidList = textList->format().property(KoDeleteChangeMarker::DeletedList).toBool();
+        }
+        
         if (textList && !headingLevel && !numberedParagraphLevel) {
             if (!textLists.contains(textList)) {
                 KoList *list = textDocument.list(block);
@@ -539,9 +634,27 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                         }
                     }
                     currentList = list;
-                } else if (!textLists.isEmpty()) // sublists should be written within a list-item
+                } else if (!textLists.isEmpty()) { // sublists should be written within a list-item
                     writer->startElement("text:list-item", false);
+                    /******************** ODF Bug Work-around code that uses RDF*******************/
+                    if (deleteChangeBlocks && rdfData) {
+                        QString xmlId = getXmlId();
+                        writer->addAttribute("xml:id", xmlId);
+                        writeListItemValidityRDF(xmlId, true);
+                    }
+                    /******************************************************************************/
+                }
+
                 writer->startElement("text:list", false);
+                /******************** ODF Bug Work-around code that uses RDF*******************/
+                if (deleteChangeBlocks && rdfData) {
+                    QString xmlId = getXmlId();
+                    writer->addAttribute("xml:id", xmlId);
+                    writeListValidityRDF(xmlId, isValidList);
+                    writeListLevelRDF(xmlId, KoList::level(block));
+                }
+                /******************************************************************************/
+
                 writer->addAttribute("text:style-name", listStyles[textList]);
                 if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
                     writer->addAttribute("text:continue-numbering",
@@ -557,6 +670,12 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             const bool listHeader = blockFormat.boolProperty(KoParagraphStyle::IsListHeader)
                                     || blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem);
                 writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
+            if (deleteChangeBlocks && rdfData) {
+                QString xmlId = getXmlId();
+                writer->addAttribute("xml:id", xmlId);
+                writeListItemValidityRDF(xmlId, isValidListItem);
+            }
+
             if (KoListStyle::isNumberingStyle(textList->format().style())) {
                 if (KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData())) {
                     writer->startElement("text:number", false);
@@ -634,7 +753,7 @@ QString KoTextWriter::Private::generateDeleteChangeXml(KoDeleteChangeMarker *mar
 
     //Call writeBlocks to generate the xml
     QHash<QTextList *,QString> listStyles = saveListStyles(doc.firstBlock(), doc.characterCount());
-    writeBlocks(&doc, 0, doc.characterCount(),listStyles);
+    writeBlocks(&doc, 0, doc.characterCount(),listStyles, 0, 0, true);
 
     //Restore the actual xml writer
     writer = &oldWriter;
@@ -645,7 +764,8 @@ QString KoTextWriter::Private::generateDeleteChangeXml(KoDeleteChangeMarker *mar
 }
 
 void KoTextWriter::write(QTextDocument *document, int from, int to)
-{
+{ 
+    d->document = document;  
     d->styleManager = KoTextDocument(document).styleManager();
     d->layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
 

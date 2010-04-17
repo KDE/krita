@@ -288,7 +288,7 @@ void ChangeTrackedDeleteCommand::deleteSelection(QTextCursor &selection)
     deleteChangemarker = new KoDeleteChangeMarker(KoTextDocument(document).changeTracker());
     deleteChangemarker->setChangeId(changeId);
     element->setDeleteChangeMarker(deleteChangemarker);
-    deletedFragment = generateDeleteFragment(selection, deleteChangemarker);
+    deletedFragment = KoChangeTracker::generateDeleteFragment(selection, deleteChangemarker);
     element->setDeleteData(deletedFragment);
 
     //Store the position and length. Will be used in updateListChanges()
@@ -322,97 +322,6 @@ void ChangeTrackedDeleteCommand::deleteSelection(QTextCursor &selection)
         }
     }
 }
-
-
-QTextDocumentFragment ChangeTrackedDeleteCommand::generateDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker)
-{
-    int changeId = marker->changeId();
-    QTextCursor editCursor(cursor);
-    QTextDocument *document = cursor.document();
-    
-    QTextDocument deletedDocument;
-    QTextDocument deleteCursor(&deletedDocument);
-
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
-    
-    for (int i = cursor.anchor();i <= cursor.position(); i++) {
-        if (document->characterAt(i) == QChar::ObjectReplacementCharacter) {
-            editCursor.setPosition(i+1);
-            KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(editCursor));
-            if (testMarker)
-                editCursor.deletePreviousChar();
-        }
-    }
-
-    QTextCharFormat format;
-    format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-    cursor.mergeCharFormat(format);
-
-    QTextBlock currentBlock = document->findBlock(cursor.anchor());
-    QTextBlock endBlock = document->findBlock(cursor.position()).next();
-
-    // First remove any left-over DeletedList set from previous deletes
-    for (;currentBlock != endBlock; currentBlock = currentBlock.next()) {
-        editCursor.setPosition(currentBlock.position());
-        if (editCursor.currentList()) {
-            if (editCursor.currentList()->format().hasProperty(KoDeleteChangeMarker::DeletedList)) {
-                QTextListFormat format = editCursor.currentList()->format();
-                format.clearProperty(KoDeleteChangeMarker::DeletedList);
-                editCursor.currentList()->setFormat(format);
-            }
-        }
-    }
-
-    currentBlock = document->findBlock(cursor.anchor());
-    endBlock = document->findBlock(cursor.position()).next();
-
-    for (;currentBlock != endBlock; currentBlock = currentBlock.next()) {
-        editCursor.setPosition(currentBlock.position());
-        if (editCursor.currentList()) {
-            if (!editCursor.currentList()->format().hasProperty(KoDeleteChangeMarker::DeletedList)) {
-                bool fullyDeletedList = checkListDeletion(editCursor.currentList(), cursor);
-                QTextListFormat format = editCursor.currentList()->format();
-                format.setProperty(KoDeleteChangeMarker::DeletedList, fullyDeletedList);
-                if (fullyDeletedList) {
-                    KoListStyle::ListIdType listId = ListId(format);
-                    KoList *list = KoTextDocument(document).list(currentBlock);
-                    marker->setDeletedListStyle(listId, list->style());
-                }
-                editCursor.currentList()->setFormat(format);
-            }
-            if (cursor.anchor() <= (currentBlock.position() - 1)) {
-                //Then the list-item has been deleted. Set the block-format to indicate that this is a deleted list-item.
-                QTextBlockFormat blockFormat;
-                blockFormat.setProperty(KoDeleteChangeMarker::DeletedListItem, true);
-                editCursor.mergeBlockFormat(blockFormat);
-            } else {
-                QTextBlockFormat blockFormat;
-                blockFormat.setProperty(KoDeleteChangeMarker::DeletedListItem, false);
-                editCursor.mergeBlockFormat(blockFormat);
-            }
-        }
-    }
-    
-    return cursor.selection();
-}
-
-bool ChangeTrackedDeleteCommand::checkListDeletion(QTextList *list, QTextCursor &cursor)
-{
-    int startOfList = (list->item(0).position() - 1);
-    int endOfList = list->item(list->count() -1).position() + list->item(list->count() -1).length() - 1;
-    if ((cursor.anchor() <= startOfList) && (cursor.position() >= endOfList))
-        return true;
-    else {
-        /***************************************************************************************************/
-        /*                                    Qt Quirk Work-Around                                         */
-        /***************************************************************************************************/
-        if ((cursor.anchor() == (startOfList + 1)) && (cursor.position() > endOfList))
-            return true;
-        /***************************************************************************************************/
-        else
-            return false;
-    }
-} 
 
 void ChangeTrackedDeleteCommand::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker)
 {

@@ -33,6 +33,7 @@ class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoTextShapeDataPrivate;
 class KoTextPage;
+class KoDocumentRdf;
 
 /**
  * The data store that is held by each KoTextShape instance.
@@ -144,12 +145,12 @@ public:
     * @see the @a KoTextLoader::loadBody() method which got called by this method
     * to load the ODF.
     */
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context, KoDocumentRdf *rdfData = 0);
     /**
     * Store the TextShape data as ODF.
     * @see TextShape::saveOdf()
     */
-    void saveOdf(KoShapeSavingContext & context, int from = 0, int to = -1) const;
+    void saveOdf(KoShapeSavingContext & context, int from = 0, int to = -1, KoDocumentRdf *rdfData = 0) const;
 
     /**
      * Set the page direction.

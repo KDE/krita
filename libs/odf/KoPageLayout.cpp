@@ -137,12 +137,6 @@ void KoPageLayout::loadOdf(const KoXmlElement &style)
     }
 }
 
-KoPageLayout KoPageLayout::standardLayout()
-{
-    KoPageLayout layout;
-    return layout;
-}
-
 bool KoPageLayout::operator==(const KoPageLayout &l) const
 {
     return qFuzzyCompare(width,l.width)

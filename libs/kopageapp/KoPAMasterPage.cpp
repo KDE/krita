@@ -38,7 +38,6 @@
 KoPAMasterPage::KoPAMasterPage()
 : KoPAPageBase()
 {
-    m_pageLayout = KoPageLayout::standardLayout();
     setName( "Standard" );
 }
 
@@ -89,7 +88,7 @@ void KoPAMasterPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingCon
     QString pageLayoutName = element.attributeNS( KoXmlNS::style, "page-layout-name" );
     const KoOdfStylesReader& styles = loadingContext.odfLoadingContext().stylesReader();
     const KoXmlElement* masterPageStyle = styles.findStyle( pageLayoutName );
-    KoPageLayout pageLayout = KoPageLayout::standardLayout();
+    KoPageLayout pageLayout;
 
     if ( masterPageStyle ) {
         pageLayout.loadOdf( *masterPageStyle );

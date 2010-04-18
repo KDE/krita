@@ -71,7 +71,12 @@
 #include "styles/KoSectionStyle.h"
 
 #include <klocale.h>
-#include <rdf/KoDocumentRdf.h>
+
+#include <rdf/KoDocumentRdfBase.h>
+#ifdef SHOULD_BUILD_RDF
+#include <Soprano/Soprano>
+#endif
+
 #include <kdebug.h>
 
 #include <QList>
@@ -116,7 +121,7 @@ public:
 
     KoChangeTracker *changeTracker;
 
-    KoDocumentRdf *rdfData;
+    KoDocumentRdfBase *rdfData;
 
     int loadSpanLevel;
     int loadSpanInitialPos;
@@ -231,7 +236,7 @@ KoList *KoTextLoader::Private::list(const QTextDocument *document, KoListStyle *
 
 /////////////KoTextLoader
 
-KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoDocumentRdf *rdfData)
+KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData)
         : QObject()
         , d(new Private(context))
 {

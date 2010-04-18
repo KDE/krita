@@ -32,7 +32,7 @@
 class KoShapeLoadingContext;
 class QTextCursor;
 class KoBookmarkManager;
-class KoDocumentRdf;
+class KoDocumentRdfBase;
 
 /**
  * The KoTextLoader loads is use to load text for one and only one textdocument or shape
@@ -63,7 +63,7 @@ public:
     *
     * @param context The context the KoTextLoader is called in
     */
-    explicit KoTextLoader(KoShapeLoadingContext &context, KoDocumentRdf *rdfData = 0);
+    explicit KoTextLoader(KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData = 0);
 
     /**
     * Destructor.

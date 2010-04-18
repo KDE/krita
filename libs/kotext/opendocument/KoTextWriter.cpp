@@ -59,8 +59,11 @@
 #include <changetracker/KoDeleteChangeMarker.h>
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
+#include <rdf/KoDocumentRdfBase.h>
 
-#include <rdf/KoDocumentRdf.h>
+#ifdef SHOULD_BUILD_RDF
+#include <Soprano/Soprano>
+#endif
 
 class KoTextWriter::Private
 {
@@ -102,7 +105,7 @@ public:
     KoTextDocumentLayout *layout;
     KoStyleManager *styleManager;
     KoChangeTracker *changeTracker;
-    KoDocumentRdf *rdfData;
+    KoDocumentRdfBase *rdfData;
     QTextDocument *document;
 
     QStack<int> changeStack;
@@ -215,7 +218,7 @@ void KoTextWriter::Private::saveChange(QTextCharFormat format)
     }
 }
 
-KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdf *rdfData)
+KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData)
     : d(new Private(context))
 {
     d->rdfData = rdfData;

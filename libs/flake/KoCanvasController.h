@@ -258,7 +258,7 @@ public:
 
     /**
      * Set the position of the scrollbar
-     * @param value the new values of the sroll bars
+     * @param value the new values of the scroll bars
      */
     void setScrollBarValue(const QPoint &value);
 

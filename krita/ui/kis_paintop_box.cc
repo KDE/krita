@@ -111,7 +111,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     presetMenuButton->setToolTip(i18n("Edit brush preset"));
     presetMenuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     presetMenuButton->setIconSize(QSize(24, 24));
-    presetMenuButton->setIcon(KIcon("document-properties"));
+    presetMenuButton->setIcon(KIcon("paintop_settings_01"));
     presetMenuButton->setPopupMode(QToolButton::InstantPopup);
 
     DummyMenu* popupMenu = new DummyMenu(this);

@@ -70,7 +70,12 @@
 #include "styles/KoSectionStyle.h"
 
 #include <klocale.h>
-#include <rdf/KoDocumentRdf.h>
+
+#include <rdf/KoDocumentRdfBase.h>
+#ifdef SHOULD_BUILD_RDF
+#include <Soprano/Soprano>
+#endif
+
 #include <kdebug.h>
 
 #include <QList>
@@ -115,7 +120,7 @@ public:
 
     KoChangeTracker *changeTracker;
 
-    KoDocumentRdf *rdfData;
+    KoDocumentRdfBase *rdfData;
 
     int loadSpanLevel;
     int loadSpanInitialPos;
@@ -230,7 +235,7 @@ KoList *KoTextLoader::Private::list(const QTextDocument *document, KoListStyle *
 
 /////////////KoTextLoader
 
-KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoDocumentRdf *rdfData)
+KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData)
         : QObject()
         , d(new Private(context))
 {
@@ -1259,6 +1264,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         }
     }
 
+
     void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
     {
         KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(element, d->context);
@@ -1295,7 +1301,6 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
 
     void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
     {
-
         // Add a frame to the current layout
         QTextFrameFormat tocFormat;
         tocFormat.setProperty(KoText::TableOfContents, true);
@@ -1303,7 +1308,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         // Get the cursor of the frame
         QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
 
-        // We'll just try to find dispalayable elements and add them as paragraphs
+        // We'll just try to find displayable elements and add them as paragraphs
         KoXmlElement e;
         forEachElement(e, element) {
             if (e.isNull() || e.namespaceURI() != KoXmlNS::text)
@@ -1311,7 +1316,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
 
             //TODO look at table-of-content-source
 
-            // We look at the index body now :
+            // We look at the index body now
             if (e.localName() == "index-body") {
                 KoXmlElement p;
                 bool firstTime = true;
@@ -1331,22 +1336,14 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     QTextBlock current = cursorFrame.block();
                     QTextBlockFormat blockFormat;
 
-
-                    // p
                     if (p.localName() == "p") {
-
                         loadParagraph(p, cursorFrame);
-
-                        // index title
                     } else if (p.localName() == "index-title") {
                         loadBody(p, cursorFrame);
                     }
 
                     QTextCursor c(current);
                     c.mergeBlockFormat(blockFormat);
-                    while (c.block() != cursorFrame.block()) {
-                        c.movePosition(QTextCursor::NextBlock);
-                    }
                 }
             }
         }

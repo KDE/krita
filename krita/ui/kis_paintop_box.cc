@@ -25,9 +25,6 @@
 #include <QPixmap>
 #include <QLayout>
 #include <QHBoxLayout>
-#include <QToolButton>
-#include <QMenu>
-#include <QGridLayout>
 
 #include <kactioncollection.h>
 #include <kis_debug.h>
@@ -58,32 +55,17 @@
 #include "kis_layer_manager.h"
 #include "kis_view2.h"
 #include "kis_factory2.h"
-#include "widgets/kis_preset_widget.h"
+#include "widgets/kis_popup_button.h"
 #include "widgets/kis_paintop_presets_popup.h"
 #include <kis_paintop_settings_widget.h>
 
 #include "ko_favorite_resource_manager.h"
 
-class DummyMenu : public QMenu
-{
-    public:
-        DummyMenu(QWidget * parent = 0);
-        virtual QSize sizeHint() const;
-};
-
-DummyMenu::DummyMenu(QWidget * parent)
- : QMenu(parent)
-{
-}
-QSize DummyMenu::sizeHint() const
-{
-    return layout()->sizeHint();
-}
-
 KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name)
         : QWidget(parent)
         , m_resourceProvider(view->resourceProvider())
         , m_optionWidget(0)
+        , m_presetWidget(0)
         , m_view(view)
         , m_activePreset(0)
 {
@@ -107,26 +89,18 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_cmbPaintops->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
 
-    QToolButton* presetMenuButton = new QToolButton(this);
-    presetMenuButton->setToolTip(i18n("Edit brush preset"));
-    presetMenuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    presetMenuButton->setIconSize(QSize(24, 24));
-    presetMenuButton->setIcon(KIcon("paintop_settings_01"));
-    presetMenuButton->setPopupMode(QToolButton::InstantPopup);
-
-    DummyMenu* popupMenu = new DummyMenu(this);
-    presetMenuButton->setMenu(popupMenu);
-    
-    QHBoxLayout * popupLayout = new QHBoxLayout(popupMenu);
-    popupLayout->setMargin(3);
-    
-    m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
-    popupLayout->addWidget(m_presetsPopup);
-    m_presetsPopup->switchDetached();
+    m_presetWidget = new KisPopupButton(this);
+    m_presetWidget->setIcon(KIcon("paintop_settings_01"));
+    m_presetWidget->setToolTip(i18n("Edit brush preset"));
+    m_presetWidget->setFixedSize(32, 32);
 
     m_layout = new QHBoxLayout(this);
     m_layout->addWidget(m_cmbPaintops);
-    m_layout->addWidget(presetMenuButton);
+    m_layout->addWidget(m_presetWidget);
+
+    m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
+    m_presetWidget->setPopupWidget(m_presetsPopup);
+    m_presetsPopup->switchDetached();
 
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
     for (QList<KoID>::Iterator it = keys.begin(); it != keys.end(); ++it) {
@@ -296,7 +270,9 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 {
     if (m_activePreset && m_optionWidget) {
         m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
+        m_optionWidget->disconnect(m_presetWidget);
         m_presetsPopup->setPaintOpSettingsWidget(0);
+        m_optionWidget->hide();
     }
 
     m_currentID[KoToolManager::instance()->currentInputDevice()] = paintop;
@@ -319,6 +295,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
         m_presetsPopup->setPresetFilter(paintop);
         Q_ASSERT(m_optionWidget);
+        Q_ASSERT(m_presetWidget);
         connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotUpdatePreset()));
         m_presetsPopup->setPreset(preset);
     } else {
@@ -338,7 +315,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 
     m_cmbPaintops->setCurrentIndex(index);
     m_activePreset = preset;
-    //m_presetsPopup->presetPreview()->setPreset(m_activePreset);
 
     emit signalPaintopChanged(preset);
 }
@@ -386,7 +362,7 @@ void KisPaintopBox::slotSaveActivePreset()
 
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
-    
+
     QString name = m_presetsPopup->getPresetName();
 
     int i = 1;

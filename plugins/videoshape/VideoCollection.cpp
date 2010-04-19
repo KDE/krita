@@ -66,6 +66,7 @@ bool VideoCollection::completeLoading(KoStore *store)
 
 bool VideoCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context)
 {
+    Q_UNUSED(context);
     QMap<qint64, VideoData *>::iterator dataIt(d->videos.begin());
 
     while (dataIt != d->videos.end()) {

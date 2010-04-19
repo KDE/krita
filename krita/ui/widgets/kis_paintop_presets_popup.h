@@ -27,7 +27,6 @@ class QString;
 class KoResource;
 class KisPaintOpPreset;
 class KisPropertiesConfiguration;
-class KisPresetWidget;
 class KisCanvasResourceProvider;
 
 /**

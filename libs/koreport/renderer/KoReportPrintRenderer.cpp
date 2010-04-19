@@ -75,7 +75,7 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
         toPage = document->pages();
     for (int copy = 0; copy < context.printer->numCopies(); copy++) {
         for (int page = fromPage; page < toPage; page++) {
-            if (page > 0)
+            if (page > fromPage)
                 context.printer->newPage();
 
             OROPage * p = document->page(page);

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008-2010 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,6 +34,73 @@
 #include "KoSnapStrategy.h"
 #include "KoToolBase_p.h"
 
+/// Small helper to keep track of a path point and its parent path shape
+struct PathConnectionPoint {
+    PathConnectionPoint()
+    : path(0), point(0)
+    {
+    }
+
+    // reset state to invalid
+    void reset()
+    {
+        path = 0;
+        point = 0;
+    }
+
+    PathConnectionPoint& operator =(KoPathPoint * pathPoint)
+    {
+        if (!pathPoint || ! pathPoint->parent()) {
+            reset();
+        } else {
+            path = pathPoint->parent();
+            point = pathPoint;
+        }
+        return *this;
+    }
+
+    bool operator != (const PathConnectionPoint &rhs) const
+    {
+        return rhs.path != path || rhs.point != point;
+    }
+
+    bool operator == (const PathConnectionPoint &rhs) const
+    {
+        return rhs.path == path && rhs.point == point;
+    }
+
+    bool isValid() const
+    {
+        return path && point;
+    }
+
+    // checks if the path and point are still valid
+    void validate(KoCanvasBase *canvas)
+    {
+        // no point in validating an already invalid state
+        if (!isValid()) {
+            return;
+        }
+        // we need canvas to validate
+        if (!canvas) {
+            reset();
+            return;
+        }
+        // check if path is still part of the docment
+        if (!canvas->shapeManager()->shapes().contains(path)) {
+            reset();
+            return;
+        }
+        // check if point is still part of the path
+        if (path->pathPointIndex(point) == KoPathPointIndex(-1,-1)) {
+            reset();
+            return;
+        }
+    }
+
+    KoPathShape * path;
+    KoPathPoint * point;
+};
 
 inline qreal squareDistance( const QPointF &p1, const QPointF &p2)
 {
@@ -123,8 +190,6 @@ public:
         handleRadius(3),
         mouseOverFirstPoint(false),
         pointIsDragged(false),
-        existingStartPoint(0),
-        existingEndPoint(0),
         hoveredPoint(0),
         angleSnapStrategy(0),
         angleSnappingDelta(15)
@@ -137,8 +202,8 @@ public:
     int handleRadius;
     bool mouseOverFirstPoint;
     bool pointIsDragged;
-    KoPathPoint *existingStartPoint; ///< an existing path point we started a new path at
-    KoPathPoint *existingEndPoint;   ///< an existing path point we finished a new path at
+    PathConnectionPoint existingStartPoint; ///< an existing path point we started a new path at
+    PathConnectionPoint existingEndPoint;   ///< an existing path point we finished a new path at
     KoPathPoint *hoveredPoint; ///< an existing path end point the mouse is hovering on
 
     AngleSnapStrategy *angleSnapStrategy;
@@ -220,14 +285,28 @@ public:
     }
 
     /// Connects given path with the ones we hit when starting/finishing
-    bool connectPaths( KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd ) const
+    bool connectPaths( KoPathShape *pathShape, const PathConnectionPoint &pointAtStart, const PathConnectionPoint &pointAtEnd ) const
     {
+        KoPathShape * startShape = 0;
+        KoPathShape * endShape = 0;
+        KoPathPoint * startPoint = 0;
+        KoPathPoint * endPoint = 0;
+
+        if (pointAtStart.isValid()) {
+            startShape = pointAtStart.path;
+            startPoint = pointAtStart.point;
+        }
+        if (pointAtEnd.isValid()) {
+            endShape = pointAtEnd.path;
+            endPoint = pointAtEnd.point;
+        }
+
         // at least one point must be valid
-        if (!pointAtStart && !pointAtEnd)
+        if (!startPoint && !endPoint)
             return false;
         // do not allow connecting to the same point twice
-        if (pointAtStart == pointAtEnd)
-            pointAtEnd = 0;
+        if (startPoint == endPoint)
+            endPoint = 0;
 
         // we have hit an existing path point on start/finish
         // what we now do is:
@@ -240,20 +319,17 @@ public:
         KoPathPoint * newStartPoint = pathShape->pointByIndex(newStartPointIndex);
         KoPathPoint * newEndPoint = pathShape->pointByIndex(newEndPointIndex);
 
-        KoPathShape * startShape = pointAtStart ? pointAtStart->parent() : 0;
-        KoPathShape * endShape = pointAtEnd ? pointAtEnd->parent() : 0;
-
         // combine with the path we hit on start
         KoPathPointIndex startIndex(-1,-1);
-        if (pointAtStart) {
-            startIndex = startShape->pathPointIndex(pointAtStart);
+        if (startShape && startPoint) {
+            startIndex = startShape->pathPointIndex(startPoint);
             pathShape->combine(startShape);
             pathShape->moveSubpath(0, pathShape->subpathCount()-1);
         }
         // combine with the path we hit on finish
         KoPathPointIndex endIndex(-1,-1);
-        if (pointAtEnd) {
-            endIndex = endShape->pathPointIndex(pointAtEnd);
+        if (endShape && endPoint) {
+            endIndex = endShape->pathPointIndex(endPoint);
             if (endShape != startShape) {
                 endIndex.first += pathShape->subpathCount();
                 pathShape->combine(endShape);

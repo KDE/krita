@@ -1,4 +1,4 @@
-project(koffice)
+project(koffice-ko)
 
 cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 

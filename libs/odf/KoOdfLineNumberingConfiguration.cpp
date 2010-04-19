@@ -90,8 +90,7 @@ KoOdfLineNumberingConfiguration &KoOdfLineNumberingConfiguration::operator=(cons
 
 void KoOdfLineNumberingConfiguration::loadOdf(const KoXmlElement &element)
 {
-
-    d->lineNumberingEnabled = element.attributeNS(KoXmlNS::text, "number-lines", "false") == "true";
+    d->lineNumberingEnabled = element.attributeNS(KoXmlNS::text, "number-lines", "true") == "true";
     d->numberFormat.loadOdf(element);
     d->textStyle = element.attributeNS(KoXmlNS::text, "style-name", QString::null);
     d->increment = KoUnit::parseValue(element.attributeNS(KoXmlNS::text, "increment", "1"));

@@ -51,13 +51,14 @@
 #include <QVBoxLayout>
 
 ChangeTrackingTool::ChangeTrackingTool(KoCanvasBase* canvas): KoToolBase(canvas),
+    m_disableShowChangesOnExit(false),
     m_textEditor(0),
     m_textShapeData(0),
+    m_canvas(canvas),
     m_textShape(0),
     m_model(0),
     m_trackedChangeManager(0),
-    m_changesTreeView(0),
-    m_canvas(canvas)
+    m_changesTreeView(0)
 {
     KAction *action;
     action = new KAction(i18n("Tracked change manager"), this);
@@ -272,12 +273,14 @@ void ChangeTrackingTool::activate(ToolActivation toolActivation, const QSet<KoSh
 void ChangeTrackingTool::setShapeData(KoTextShapeData *data)
 {
     bool docChanged = data == 0 || m_textShapeData == 0 || m_textShapeData->document() != data->document();
+/*
     if (m_textShapeData) {
 //        disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
-//        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
 //        if (lay)
 //            disconnect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
     }
+*/
     if (!data) {
         if (m_disableShowChangesOnExit) {
             ShowChangesCommand *command = new ShowChangesCommand(false, m_textShapeData->document(), m_canvas);

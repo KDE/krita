@@ -73,12 +73,11 @@ private:
     bool m_disableShowChangesOnExit;
     KoTextEditor *m_textEditor;
     KoTextShapeData *m_textShapeData;
+    KoCanvasBase *m_canvas;
     TextShape *m_textShape;
     TrackedChangeModel *m_model;
     TrackedChangeManager *m_trackedChangeManager;
     QTreeView *m_changesTreeView;
-    KoCanvasBase *m_canvas;
-
 };
 
 #endif // CHANGETRACKINGTOOL_H

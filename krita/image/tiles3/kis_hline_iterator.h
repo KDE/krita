@@ -51,8 +51,8 @@ private:
     qint32 m_x;        // current x position
     qint32 m_y;        // current y position
     qint32 m_row;    // current row in tilemgr
-    qint32 m_index;    // current col in tilemgr
-    qint32 m_tileWidth;
+    quint32 m_index;    // current col in tilemgr
+    quint32 m_tileWidth;
     quint8 *m_data;
     quint8 *m_dataRight;
     quint8 *m_oldData;

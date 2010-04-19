@@ -55,7 +55,7 @@
 #include "kis_layer_manager.h"
 #include "kis_view2.h"
 #include "kis_factory2.h"
-#include "widgets/kis_preset_widget.h"
+#include "widgets/kis_popup_button.h"
 #include "widgets/kis_paintop_presets_popup.h"
 #include <kis_paintop_settings_widget.h>
 
@@ -87,9 +87,10 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_cmbPaintops->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
 
-    m_presetWidget = new KisPresetWidget(this, "presetwidget");
+    m_presetWidget = new KisPopupButton(this);
+    m_presetWidget->setIcon(KIcon("paintop_settings_01"));
     m_presetWidget->setToolTip(i18n("Edit brush preset"));
-    m_presetWidget->setFixedSize(120, 26);
+    m_presetWidget->setFixedSize(32, 32);
 
     m_layout = new QHBoxLayout(this);
     m_layout->addWidget(m_cmbPaintops);
@@ -310,8 +311,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 
     m_cmbPaintops->setCurrentIndex(index);
     m_activePreset = preset;
-    m_presetWidget->setPreset(m_activePreset);
-    //m_presetsPopup->presetPreview()->setPreset(m_activePreset);
 
     emit signalPaintopChanged(preset);
 }
@@ -359,7 +358,7 @@ void KisPaintopBox::slotSaveActivePreset()
 
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
-    
+
     QString name = m_presetsPopup->getPresetName();
 
     int i = 1;
@@ -377,8 +376,6 @@ void KisPaintopBox::slotSaveActivePreset()
 void KisPaintopBox::slotUpdatePreset()
 {
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
-    m_presetWidget->updatePreview();
-    //m_presetsPopup->presetPreview()->updatePreview();
 }
 
 #include "kis_paintop_box.moc"

@@ -37,7 +37,6 @@
 
 #include <kis_paintop_preset.h>
 #include <kis_canvas_resource_provider.h>
-#include <widgets/kis_preset_widget.h>
 #include <widgets/kis_preset_chooser.h>
 
 #include <ui_wdgpaintoppresets.h>

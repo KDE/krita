@@ -35,7 +35,6 @@
 #include <KoID.h>
 #include <kglobal.h>
 #include "kis_paintop_box.h"
-#include "widgets/kis_preset_widget.h"
 #include "KoID.h"
 #include "KoInputDevice.h"
 #include "kis_image.h"

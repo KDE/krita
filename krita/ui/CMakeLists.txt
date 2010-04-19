@@ -141,7 +141,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_pattern_chooser.cc
     widgets/kis_popup_button.cc 
     widgets/kis_preset_chooser.cpp
-    widgets/kis_preset_widget.cpp 
     widgets/kis_progress_widget.cpp
     widgets/kis_selection_options.cc 
     widgets/kis_scratch_pad.cpp

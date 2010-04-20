@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008-2010 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -146,8 +146,8 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 
             // check whether we hit an start/end node of an existing path
             d->existingEndPoint = d->endPointAtPosition(point);
-            if (d->existingEndPoint && d->existingEndPoint != d->existingStartPoint) {
-                point = d->existingEndPoint->parent()->shapeToDocument(d->existingEndPoint->point());
+            if (d->existingEndPoint.isValid() && d->existingEndPoint != d->existingStartPoint) {
+                point = d->existingEndPoint.path->shapeToDocument(d->existingEndPoint.point->point());
                 d->activePoint->setPoint(point);
                 // finish path
                 d->addPathShape();
@@ -171,8 +171,8 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 
         // check whether we hit an start/end node of an existing path
         d->existingStartPoint = d->endPointAtPosition(point);
-        if (d->existingStartPoint) {
-            point = d->existingStartPoint->parent()->shapeToDocument(d->existingStartPoint->point());
+        if (d->existingStartPoint.isValid()) {
+            point = d->existingStartPoint.path->shapeToDocument(d->existingStartPoint.point->point());
         }
         d->activePoint = pathShape->moveTo(point);
         d->firstPoint = d->activePoint;
@@ -333,11 +333,15 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
     KoPathShape *endShape = 0;
     pathShape->normalize();
 
+    // check if existing start/end points are still valid
+    d->existingStartPoint.validate(canvas());
+    d->existingEndPoint.validate(canvas());
+
     if (d->connectPaths(pathShape, d->existingStartPoint, d->existingEndPoint)) {
-        if (d->existingStartPoint)
-            startShape = d->existingStartPoint->parent();
-        if (d->existingEndPoint && d->existingEndPoint != d->existingStartPoint)
-            endShape = d->existingEndPoint->parent();
+        if (d->existingStartPoint.isValid())
+            startShape = d->existingStartPoint.path;
+        if (d->existingEndPoint.isValid() && d->existingEndPoint != d->existingStartPoint)
+            endShape = d->existingEndPoint.path;
     }
 
     QUndoCommand *cmd = canvas()->shapeController()->addShape(pathShape);

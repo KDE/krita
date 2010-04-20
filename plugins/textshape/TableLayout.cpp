@@ -294,7 +294,7 @@ void TableLayout::layoutRow(int row)
     m_tableLayoutData->m_rowHeights[row] = rowHeight;
 
     // Adjust Y position of NEXT row.
-    // This is nice since the outside layout routine relies on the next row having a correct y posiition
+    // This is nice since the outside layout routine relies on the next row having a correct y position
     // the first row y position is set in createFirstLayoutRect()
     if (row+1 <  m_table->rows()) {
         m_tableLayoutData->m_rowPositions[row+1] =
@@ -304,7 +304,8 @@ void TableLayout::layoutRow(int row)
 
     // Adjust table rect height for new height.
     m_tableLayoutData->m_tableRects.last().rect.setHeight(m_tableLayoutData->m_rowPositions[row]
- + m_tableLayoutData->m_rowHeights[row] - m_tableLayoutData->m_rowPositions[m_tableLayoutData->m_tableRects.last().fromRow]);//FIXME review when breaking inside a row
+        + m_tableLayoutData->m_rowHeights[row]
+        - m_tableLayoutData->m_rowPositions[m_tableLayoutData->m_tableRects.last().fromRow]);//FIXME review when breaking inside a row
 }
 
 void TableLayout::drawBackground(QPainter *painter) const
@@ -524,8 +525,10 @@ void TableLayout::calculateCellContentHeight(const QTextTableCell &cell)
 
     // Content height is the difference between bottomLine and topLine.
     qreal contentHeight = (bottomLine.y() + bottomLine.height()) - topLine.y();
+        // FIXME; using 'height()' above is wrong since it uses the font specs unconditionally
+        //        see Layout::addLine() for the gory details on how to calculate the line height
     Q_ASSERT(contentHeight >= 0); // Sanity check.
-    contentHeight = qMax(contentHeight, (qreal)0.);
+    contentHeight = qMax(contentHeight, (qreal)0);
 
     // Update content height value of the cell.
     m_tableLayoutData->m_contentHeights[cell.row()][cell.column()] = contentHeight;

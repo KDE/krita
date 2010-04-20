@@ -84,14 +84,14 @@ public:
      * @param element element which represents the shape in odf.
      * @return false if loading failed.
      */
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /**
      * From KoShape reimplemented method to store the TextShape data as ODF.
      *
      * @param context the KoShapeSavingContext used for saving.
      */
-    virtual void saveOdf(KoShapeSavingContext & context) const;
+    virtual void saveOdf(KoShapeSavingContext &context) const;
 
     KoTextShapeData *textShapeData() {
         return m_textShapeData;
@@ -112,7 +112,7 @@ public:
     void setPageProvider(KoPageProvider *provider) { m_pageProvider = provider; }
 
 protected:
-    virtual bool loadOdfFrameElement(const KoXmlElement & element, KoShapeLoadingContext & context);
+    virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
     void shapeChanged(ChangeType type, KoShape *shape = 0);

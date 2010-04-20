@@ -142,7 +142,7 @@ public:
      * The table layout will be in an invalid state until a table has
      * been set using setTable(). Calls to layout will return
      * immediately until this has been done.
-     * 
+     *
      * \sa setTable()
      */
     TableLayout();
@@ -210,7 +210,7 @@ public:
      * @return the cell that is hit (can be invalid if no hit).
      */
     QTextTableCell hitTestTable(const QPointF &point) const;
-    
+
     /**
      * Get the list of rectangles that the table occupies.
      * This is the the effective areas so table margins have been subtracted,

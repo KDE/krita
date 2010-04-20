@@ -149,7 +149,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     Q_ASSERT(lay);
 
     if (m_pageProvider) {
-        KoTextPage* page = m_pageProvider->page(this);
+        KoTextPage *page = m_pageProvider->page(this);
         if (page) {
             // this is used to not trigger repaints if layout during the painting is done
             // this enbales to use the same shapes on different pages showing different page numbers
@@ -313,7 +313,7 @@ void TextShape::saveOdf(KoShapeSavingContext &context) const
     int index = -1;
     if (lay) {
         int i = 0;
-        foreach (KoShape* shape, lay->shapes()) {
+        foreach (KoShape *shape, lay->shapes()) {
             if (shape == this) {
                 index = i;
             } else if (index >= 0) {
@@ -337,7 +337,7 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
     loadOdfAttributes(element, context, OdfAllAttributes);
 
     // load the (text) style of the frame
-    const KoXmlElement * style = 0;
+    const KoXmlElement *style = 0;
     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
         style = context.odfLoadingContext().stylesReader().findStyle(
                     element.attributeNS(KoXmlNS::draw, "style-name"), "graphic",
@@ -359,7 +359,7 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
         KoParagraphStyle paragraphStyle;
         paragraphStyle.loadOdf(style, context.odfLoadingContext());
 
-        QTextDocument * document = m_textShapeData->document();
+        QTextDocument *document = m_textShapeData->document();
         QTextCursor cursor(document);
         QTextBlock block = cursor.block();
         paragraphStyle.applyStyle(block, false);

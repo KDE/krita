@@ -367,7 +367,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
             painter.restore();
         }
     } else {
-        // There are filter effets, then we need to prerender the shape on an image, to filter it
+        // There are filter effects, then we need to prerender the shape on an image, to filter it
         QRectF shapeBound(QPointF(), shape->size());
         // First step, compute the rectangle used for the image
         QRectF clipRegion = shape->filterEffectStack()->clipRectForBoundingRect(shapeBound);

@@ -196,6 +196,8 @@ KoAlphaColorSpace::KoAlphaColorSpace() :
 
 KoAlphaColorSpace::~KoAlphaColorSpace()
 {
+    delete m_profile;
+    m_profile = 0;
 }
 
 void KoAlphaColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const

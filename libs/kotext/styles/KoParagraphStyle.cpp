@@ -1581,11 +1581,12 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
         if (bottomBorderStyle() == KoBorder::BorderDouble)
             style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, KoGenStyle::ParagraphType);
     }
+    const int indentation = 4; // indentation for children of office:styles/style:style/style:paragraph-properties
     // drop-caps
     if (dropCaps()) {
         QBuffer buf;
         buf.open(QIODevice::WriteOnly);
-        KoXmlWriter elementWriter(&buf);
+        KoXmlWriter elementWriter(&buf, indentation);
         elementWriter.startElement("style:drop-cap");
         elementWriter.addAttribute("style:lines", QString::number(dropCapsLines()));
         elementWriter.addAttribute("style:length", dropCapsLength() < 0 ? "word" : QString::number(dropCapsLength()));
@@ -1622,7 +1623,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
 
         QBuffer buf;
         buf.open(QIODevice::WriteOnly);
-        KoXmlWriter elementWriter(&buf);
+        KoXmlWriter elementWriter(&buf, indentation);
         elementWriter.startElement("style:tab-stops");
         foreach(const KoText::Tab &tab, tabPositions()) {
             elementWriter.startElement("style:tab-stop");
@@ -1650,6 +1651,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             elementWriter.endElement();
         }
         elementWriter.endElement();
+        buf.close();
         QString elementContents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
         style.addChildElement("style:tab-stops", elementContents);
 

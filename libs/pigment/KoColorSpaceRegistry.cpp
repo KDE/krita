@@ -134,10 +134,6 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
     delete d->colorConversionCache;
     d->colorConversionCache = 0;
 
-    foreach(KoColorSpaceFactory* item, d->colorsSpaceFactoryRegistry.values()) {
-       delete item;
-    } 
-
     // Do not explicitly delete d->rgbU8sRGB and d->lab16sLAB, since they are contained in the d->csMap
     delete d;
 }

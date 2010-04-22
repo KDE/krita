@@ -40,10 +40,10 @@ KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(m_sprayOption);
     addPaintOpOption(m_sprayShapeOption);
     addPaintOpOption(m_ColorOption);
-    addPaintOpOption(new KisPaintActionTypeOption());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    addPaintOpOption(new KisPaintActionTypeOption());
 }
 
 KisSprayPaintOpSettingsWidget::~ KisSprayPaintOpSettingsWidget()

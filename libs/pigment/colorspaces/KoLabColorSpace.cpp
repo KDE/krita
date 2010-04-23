@@ -30,11 +30,7 @@
 #include "KoID.h"
 #include "KoIntegerMaths.h"
 
-#include "../compositeops/KoCompositeOpOver.h"
-#include "../compositeops/KoCompositeOpErase.h"
-#include "../compositeops/KoCompositeOpMultiply.h"
-#include "../compositeops/KoCompositeOpDivide.h"
-#include "../compositeops/KoCompositeOpBurn.h"
+#include "../compositeops/KoCompositeOps.h"
 
 KoLabColorSpace::KoLabColorSpace() :
         KoSimpleColorSpace<KoLabU16Traits>(colorSpaceId(),
@@ -47,11 +43,8 @@ KoLabColorSpace::KoLabColorSpace() :
     addChannel(new KoChannelInfo(i18n("b*"),        CHANNEL_B     * sizeof(quint16), CHANNEL_B, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(200, 200, 200)));
     addChannel(new KoChannelInfo(i18n("Alpha"),     CHANNEL_ALPHA * sizeof(quint16), CHANNEL_ALPHA, KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
 
-    addCompositeOp(new KoCompositeOpOver<KoLabU16Traits>(this));
-    addCompositeOp(new KoCompositeOpErase<KoLabU16Traits>(this));
-    addCompositeOp(new KoCompositeOpMultiply<KoLabU16Traits>(this));
-    addCompositeOp(new KoCompositeOpDivide<KoLabU16Traits>(this));
-    addCompositeOp(new KoCompositeOpBurn<KoLabU16Traits>(this));
+    // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
+    addStandardCompositeOps<KoLabU16Traits>(this);
 
 }
 

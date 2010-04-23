@@ -23,11 +23,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "compositeops/KoCompositeOpOver.h"
-#include "compositeops/KoCompositeOpErase.h"
-#include "compositeops/KoCompositeOpMultiply.h"
-#include "compositeops/KoCompositeOpDivide.h"
-#include "compositeops/KoCompositeOpBurn.h"
+#include "compositeops/KoCompositeOps.h"
 
 XyzU16ColorSpace::XyzU16ColorSpace(KoColorProfile *p) :
         LcmsColorSpace<XyzU16Traits>("XYZA16", i18n("XYZ (16-bit integer/channel)"),  TYPE_XYZA_16, icSigXYZData, p)
@@ -38,11 +34,8 @@ XyzU16ColorSpace::XyzU16ColorSpace(KoColorProfile *p) :
     addChannel(new KoChannelInfo(i18n("Alpha"), XyzU16Traits::alpha_pos * sizeof(quint16), XyzU16Traits::alpha_pos, KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
     init();
 
-    addCompositeOp(new KoCompositeOpOver<XyzU16Traits>(this));
-    addCompositeOp(new KoCompositeOpErase<XyzU16Traits>(this));
-    addCompositeOp(new KoCompositeOpMultiply<XyzU16Traits>(this));
-    addCompositeOp(new KoCompositeOpDivide<XyzU16Traits>(this));
-    addCompositeOp(new KoCompositeOpBurn<XyzU16Traits>(this));
+    // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
+    addStandardCompositeOps<XyzU16Traits>(this);
 }
 
 bool XyzU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const

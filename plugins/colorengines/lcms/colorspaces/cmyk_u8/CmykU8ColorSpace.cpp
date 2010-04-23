@@ -24,11 +24,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "compositeops/KoCompositeOpOver.h"
-#include "compositeops/KoCompositeOpErase.h"
-#include "compositeops/KoCompositeOpMultiply.h"
-#include "compositeops/KoCompositeOpDivide.h"
-#include "compositeops/KoCompositeOpBurn.h"
+#include "compositeops/KoCompositeOps.h"
 
 CmykU8ColorSpace::CmykU8ColorSpace(KoColorProfile *p) :
         LcmsColorSpace<CmykU8Traits>("CMYK", i18n("CMYK (8-bit integer/channel)"),  TYPE_CMYK5_8, icSigCmykData, p)
@@ -40,11 +36,8 @@ CmykU8ColorSpace::CmykU8ColorSpace(KoColorProfile *p) :
     addChannel(new KoChannelInfo(i18n("Alpha"), 4 * sizeof(quint8), 4, KoChannelInfo::ALPHA, KoChannelInfo::UINT8, sizeof(quint8)));
     init();
 
-    addCompositeOp(new KoCompositeOpOver<CmykU8Traits>(this));
-    addCompositeOp(new KoCompositeOpErase<CmykU8Traits>(this));
-    addCompositeOp(new KoCompositeOpMultiply<CmykU8Traits>(this));
-    addCompositeOp(new KoCompositeOpDivide<CmykU8Traits>(this));
-    addCompositeOp(new KoCompositeOpBurn<CmykU8Traits>(this));
+    // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
+    addStandardCompositeOps<CmykU8Traits>(this);
 }
 
 bool CmykU8ColorSpace::willDegrade(ColorSpaceIndependence independence) const

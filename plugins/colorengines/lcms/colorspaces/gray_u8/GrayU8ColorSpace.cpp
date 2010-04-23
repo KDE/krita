@@ -25,11 +25,7 @@
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>
 
-#include "compositeops/KoCompositeOpOver.h"
-#include "compositeops/KoCompositeOpErase.h"
-#include "compositeops/KoCompositeOpMultiply.h"
-#include "compositeops/KoCompositeOpDivide.h"
-#include "compositeops/KoCompositeOpBurn.h"
+#include "compositeops/KoCompositeOps.h"
 
 KoGrayAU8ColorSpace ::KoGrayAU8ColorSpace(KoColorProfile *p) :
         LcmsColorSpace<GrayAU8Traits>("GRAYA", i18n("Grayscale (8-bit integer/channel)"), TYPE_GRAYA_8, icSigGrayData, p)
@@ -39,11 +35,8 @@ KoGrayAU8ColorSpace ::KoGrayAU8ColorSpace(KoColorProfile *p) :
 
     init();
 
-    addCompositeOp(new KoCompositeOpOver<GrayAU8Traits>(this));
-    addCompositeOp(new KoCompositeOpErase<GrayAU8Traits>(this));
-    addCompositeOp(new KoCompositeOpMultiply<GrayAU8Traits>(this));
-    addCompositeOp(new KoCompositeOpDivide<GrayAU8Traits>(this));
-    addCompositeOp(new KoCompositeOpBurn<GrayAU8Traits>(this));
+    // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
+    addStandardCompositeOps<GrayAU8Traits>(this);
 }
 
 KoColorSpace* KoGrayAU8ColorSpace::clone() const

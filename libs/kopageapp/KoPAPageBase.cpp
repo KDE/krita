@@ -218,7 +218,7 @@ void KoPAPageBase::loadOdfPageTag( const KoXmlElement &element,
     KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
 
     if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
-        setBackground( loadOdfFill( element, loadingContext ) );
+        setBackground(loadOdfFill(loadingContext));
     }
 }
 

@@ -159,9 +159,8 @@ void KoShapePrivate::removeShapeManager(KoShapeManager *manager)
     shapeManagers.remove(manager);
 }
 // static
-QString KoShapePrivate::getStyleProperty(const char *property, const KoXmlElement &element, KoShapeLoadingContext &context)
+QString KoShapePrivate::getStyleProperty(const char *property, KoShapeLoadingContext &context)
 {
-    Q_UNUSED(element);
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     QString value;
 
@@ -979,9 +978,9 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
         delete d->shadow;
         d->shadow = 0;
     }
-    setBackground(loadOdfFill(element, context));
+    setBackground(loadOdfFill(context));
     setBorder(loadOdfStroke(element, context));
-    setShadow(loadOdfShadow(element, context));
+    setShadow(d->loadOdfShadow(context));
 
     styleStack.restore();
 }
@@ -1071,9 +1070,9 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
     return true;
 }
 
-KoShapeBackground *KoShape::loadOdfFill(const KoXmlElement &element, KoShapeLoadingContext &context) const
+KoShapeBackground *KoShape::loadOdfFill(KoShapeLoadingContext &context) const
 {
-    QString fill = KoShapePrivate::getStyleProperty("fill", element, context);
+    QString fill = KoShapePrivate::getStyleProperty("fill", context);
     KoShapeBackground *bg = 0;
     if (fill == "solid" || fill == "hatch") {
         bg = new KoColorBackground();
@@ -1100,7 +1099,7 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
 
-    QString stroke = KoShapePrivate::getStyleProperty("stroke", element, context);
+    QString stroke = KoShapePrivate::getStyleProperty("stroke", context);
     if (stroke == "solid" || stroke == "dash") {
         QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, stroke, stylesReader);
 
@@ -1145,10 +1144,10 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
     return 0;
 }
 
-KoShapeShadow *KoShape::loadOdfShadow(const KoXmlElement &element, KoShapeLoadingContext &context) const
+KoShapeShadow *KoShapePrivate::loadOdfShadow(KoShapeLoadingContext &context) const
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    QString shadowStyle = KoShapePrivate::getStyleProperty("shadow", element, context);
+    QString shadowStyle = KoShapePrivate::getStyleProperty("shadow", context);
     if (shadowStyle == "visible" || shadowStyle == "hidden") {
         KoShapeShadow *shadow = new KoShapeShadow();
         QColor shadowColor(styleStack.property(KoXmlNS::draw, "shadow-color"));

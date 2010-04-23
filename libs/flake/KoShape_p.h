@@ -38,7 +38,10 @@ public:
     /**
      * Fills the style stack and returns the value of the given style property (e.g fill, stroke).
      */
-    static QString getStyleProperty(const char *property, const KoXmlElement &element, KoShapeLoadingContext &context);
+    static QString getStyleProperty(const char *property, KoShapeLoadingContext &context);
+
+    /// Loads the shadow style
+    KoShapeShadow *loadOdfShadow(KoShapeLoadingContext &context) const;
 
     /// calls update on the shape where the border is.
     void updateBorder();

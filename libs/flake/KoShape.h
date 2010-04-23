@@ -929,14 +929,11 @@ protected:
      */
     virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
 
-    /// Loads the fill style
-    KoShapeBackground *loadOdfFill(const KoXmlElement &element, KoShapeLoadingContext &context) const;
-
     /// Loads the stroke style
     KoShapeBorderModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /// Loads the shadow style
-    KoShapeShadow *loadOdfShadow(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    KoShapeBackground *loadOdfFill(KoShapeLoadingContext &context) const;
 
     /* ** end loading saving */
 

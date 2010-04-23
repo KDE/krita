@@ -202,8 +202,9 @@ struct KoIntegerToFloat {
   }
 };
 
-static const Ko::FullLut< KoIntegerToFloat<quint16>, float, quint16> uint16ToFloatLut;
-static const Ko::FullLut< KoIntegerToFloat<quint8>, float, quint8> uint8ToFloatLut;
+
+extern PIGMENTCMS_EXPORT const Ko::FullLut< KoIntegerToFloat<quint16>, float, quint16> KoUint16ToFloatLut;
+extern PIGMENTCMS_EXPORT const Ko::FullLut< KoIntegerToFloat<quint8>, float, quint8> KoUint8ToFloatLut;
 
 
 /**
@@ -271,7 +272,7 @@ inline quint8 KoColorSpaceMaths<double, quint8>::scaleToA(double a)
 template<>
 inline double KoColorSpaceMaths<quint8, double>::scaleToA(quint8 a)
 {
-    return uint8ToFloatLut(a);
+    return KoUint8ToFloatLut(a);
 }
 
 template<>
@@ -284,7 +285,7 @@ inline quint16 KoColorSpaceMaths<double, quint16>::scaleToA(double a)
 template<>
 inline double KoColorSpaceMaths<quint16, double>::scaleToA(quint16 a)
 {
-    return uint16ToFloatLut(a);
+    return KoUint16ToFloatLut(a);
 }
 
 template<>
@@ -317,7 +318,7 @@ inline quint16 KoColorSpaceMaths<float, quint16>::scaleToA(float a)
 template<>
 inline float KoColorSpaceMaths<quint16, float>::scaleToA(quint16 a)
 {
-    return uint16ToFloatLut(a);
+    return KoUint16ToFloatLut(a);
 }
 
 template<>
@@ -330,7 +331,7 @@ inline quint8 KoColorSpaceMaths<float, quint8>::scaleToA(float a)
 template<>
 inline float KoColorSpaceMaths<quint8, float>::scaleToA(quint8 a)
 {
-    return uint8ToFloatLut(a);
+    return KoUint8ToFloatLut(a);
 }
 
 template<>

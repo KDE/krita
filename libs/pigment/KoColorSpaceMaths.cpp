@@ -50,3 +50,6 @@ const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<quint8>::chann
 const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<quint16>::channelValueType = KoChannelInfo::UINT16;
 const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<qint16>::channelValueType = KoChannelInfo::INT16;
 const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<quint32>::channelValueType = KoChannelInfo::UINT32;
+
+const Ko::FullLut< KoIntegerToFloat<quint16>, float, quint16> KoUint16ToFloatLut;
+const Ko::FullLut< KoIntegerToFloat<quint8>, float, quint8> KoUint8ToFloatLut;

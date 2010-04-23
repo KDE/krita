@@ -30,6 +30,7 @@
 #include <QTextBlock>
 #include <QTextTableCell>
 #include <QHash>
+#include <QWeakPointer>
 
 class KoStyleManager;
 class KoTextBlockData;
@@ -37,6 +38,7 @@ class KoTextShapeData;
 class TextShape;
 class KoChangeTracker;
 class KoImageCollection;
+class ToCGenerator;
 
 /**
  * The document layouter for KoText style docs.
@@ -158,6 +160,7 @@ private:
     QHash<int, qreal> m_inlineObjectHeights; // maps text-position to whole-line-height of an inline object
     TextShape *m_textShape;
     QVector<QTextFrame *> m_frameStack;
+    QList<QWeakPointer<ToCGenerator> > m_tocGenerators;
 
     // demoText feature
     bool m_demoText, m_endOfDemoText;

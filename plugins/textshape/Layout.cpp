@@ -26,6 +26,7 @@
 #include "TableLayout.h"
 #include "ListItemsHelper.h"
 #include "TextShape.h"
+#include "ToCGenerator.h"
 
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
@@ -1920,6 +1921,7 @@ void Layout::updateFrameStack()
     if (m_frameStack.isEmpty())
         m_frameStack.append(m_parent->document()->rootFrame());
 
+    int changedFrameFrom = m_frameStack.count();
     /* repeatedly check the deepest nested frame childFrames() and add one if it contains our current block */
     while (true) {
         QTextFrame *frame = m_frameStack.last();
@@ -1931,5 +1933,33 @@ void Layout::updateFrameStack()
         }
         if (frame == m_frameStack.last())
             break;
+    }
+
+    for (int i = changedFrameFrom ; i < m_frameStack.count(); ++i) {
+        QTextFrame *frame = m_frameStack.at(i);
+        QTextFrameFormat ff = frame->frameFormat();
+        if (ff.hasProperty(KoText::TableOfContents) && ff.property(KoText::TableOfContents).toBool() == true) {
+            // this frame is a TOC
+            bool found = false;
+            QList<QWeakPointer<ToCGenerator> >::Iterator iter = m_tocGenerators.begin();
+            while (iter != m_tocGenerators.end()) {
+                QWeakPointer<ToCGenerator> item = *iter;
+                if (item.isNull()) {
+                    iter = m_tocGenerators.erase(iter);
+                    continue;
+                }
+                if (item.data()->tocFrame() == frame) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                ToCGenerator *tg = new ToCGenerator(frame);
+                m_tocGenerators.append(QWeakPointer<ToCGenerator>(tg));
+                // connect to FinishedLayout
+                QObject::connect(m_parent, SIGNAL(finishedLayout()),
+                        tg, SLOT(documentLayoutFinished()));
+            }
+        }
     }
 }

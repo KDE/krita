@@ -19,6 +19,7 @@ SET ( textshape_SRCS
     TextTool.cpp
     TextEditingPluginContainer.cpp
     TextToolFactory.cpp
+    ToCGenerator.cpp
     Layout.cpp
     ListItemsHelper.cpp
 

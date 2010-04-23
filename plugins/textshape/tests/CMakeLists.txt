@@ -18,6 +18,7 @@ set(TestDocumentLayout_test_SRCS
     ../ListItemsHelper.cpp
     ../TableLayout.cpp
     ../TableLayoutData.cpp
+    ../ToCGenerator.cpp
 )
 
 kde4_add_unit_test(TestDocumentLayout TESTNAME shapes-text-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
@@ -74,6 +75,7 @@ set(TestChangeListCommand_test_SRCS
     ../Layout.cpp
     ../TableLayout.cpp
     ../TableLayoutData.cpp
+    ../ToCGenerator.cpp
 )
 
 
@@ -108,6 +110,7 @@ set(TestTableLayout_test_SRCS
     ../Layout.cpp
     ../TextShape.cpp
     ../ListItemsHelper.cpp
+    ../ToCGenerator.cpp
 )
 kde4_add_unit_test(TestTableLayout TESTNAME shapes-text-TestTableLayout ${TestTableLayout_test_SRCS})
 target_link_libraries(TestTableLayout kotext komain ${QT_QTTEST_LIBRARY})
@@ -121,6 +124,7 @@ set(TestSections_test_SRCS
     ../Layout.cpp
     ../TextShape.cpp
     ../ListItemsHelper.cpp
+    ../ToCGenerator.cpp
 )
 kde4_add_unit_test(TestSections TESTNAME shapes-text-TestSections ${TestSections_test_SRCS})
 target_link_libraries(TestSections kotext ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})

@@ -54,7 +54,7 @@ signals:
 
 private slots:
     void setName(const QString &name);
-    void backgroundColorChanged(QColor);
+    void backgroundColorChanged(const QColor&);
     void horizontalAlignmentChanged(Qt::Alignment);
 
 private:

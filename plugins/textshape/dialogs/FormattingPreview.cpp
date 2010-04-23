@@ -154,15 +154,10 @@ void FormattingPreview::setUnderline(KoCharacterStyle::LineType underlineType, K
 }
 
 //Paragraph properties
-void FormattingPreview::setParagraphBackgroundColor(QColor color)
+void FormattingPreview::setParagraphBackgroundColor(const QColor &color)
 {
     m_paragBackgroundColor = color;
     update();
-}
-
-void FormattingPreview::setParagraphStyle(const KoParagraphStyle* style)
-{
-    m_align = style->alignment();
 }
 
 void FormattingPreview::setFirstLineMargin(qreal margin)

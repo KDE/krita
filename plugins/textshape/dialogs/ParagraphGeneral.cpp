@@ -65,7 +65,8 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 
     m_paragraphDecorations = new ParagraphDecorations(this);
     widget.tabs->addTab(m_paragraphDecorations, i18n("Decorations"));
-    connect(m_paragraphDecorations, SIGNAL(backgroundColorChanged(QColor)), this, SLOT(backgroundColorChanged(QColor)));
+    connect(m_paragraphDecorations, SIGNAL(backgroundColorChanged(const QColor&)),
+        this, SLOT(backgroundColorChanged(const QColor&)));
 
     widget.preview->setText(QString("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
@@ -88,7 +89,7 @@ void ParagraphGeneral::setName(const QString &name)
     m_style->setName(name);
 }
 
-void ParagraphGeneral::backgroundColorChanged(QColor color)
+void ParagraphGeneral::backgroundColorChanged(const QColor &color)
 {
     widget.preview->setParagraphBackgroundColor(color);
 }

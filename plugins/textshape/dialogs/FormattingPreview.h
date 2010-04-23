@@ -57,9 +57,7 @@ public slots:
     void setUnderline(KoCharacterStyle::LineType underlineType, KoCharacterStyle::LineStyle underlineStyle, const QColor &underlineColor);
 
     ///Paragraph properties
-    void setParagraphStyle(const KoParagraphStyle *style);
-
-    void setParagraphBackgroundColor(QColor color);
+    void setParagraphBackgroundColor(const QColor &color);
     void setFirstLineMargin(qreal margin);
     void setHorizontalAlign(Qt::Alignment);
     void setLeftMargin(qreal margin);

@@ -37,7 +37,7 @@ public:
     void save(KoParagraphStyle *style) const;
 
 signals:
-    void backgroundColorChanged(QColor);
+    void backgroundColorChanged(const QColor&);
 
 private slots:
     void clearBackgroundColor();

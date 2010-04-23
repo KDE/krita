@@ -662,7 +662,7 @@ public:
      * is a notable exclusion.
      * @param shape the shape to use as original
      */
-    virtual void copySettings(const KoShape *shape);
+    void copySettings(const KoShape *shape);
 
     /**
      * Convenience method that allows people implementing paint() to use the shape

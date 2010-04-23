@@ -40,7 +40,7 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     QList<KoShape*> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
     QRectF boundingRect;
     foreach(KoShape *shape, selectedShapes) {
-        if( ! shape->isEditable() )
+        if (! shape->isEditable())
             continue;
         m_selectedShapes << shape;
         m_previousPositions << shape->position();
@@ -52,7 +52,7 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     m_initialSelectionPosition = selection->position();
     tool->canvas()->snapGuide()->setIgnoredShapes( selection->selectedShapes( KoFlake::FullSelection ) );
 
-    tool->setStatusText( i18n("Press ALT to hold x- or y-position.") );
+    tool->setStatusText(i18n("Press ALT to hold x- or y-position."));
 }
 
 void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
@@ -61,15 +61,13 @@ void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifi
         return;
     QPointF diff = point - m_start;
 
-    if(modifiers & (Qt::AltModifier | Qt::ControlModifier)) {
+    if (modifiers & (Qt::AltModifier | Qt::ControlModifier)) {
         // keep x or y position unchanged
         if(qAbs(diff.x()) < qAbs(diff.y()))
             diff.setX(0);
         else
             diff.setY(0);
-    }
-    else
-    {
+    } else {
         QPointF positionToSnap = point + m_initialOffset;
         tool()->canvas()->updateCanvas( tool()->canvas()->snapGuide()->boundingRect() );
         QPointF snappedPosition = tool()->canvas()->snapGuide()->snap( positionToSnap, modifiers );
@@ -79,14 +77,14 @@ void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifi
 
     m_diff = diff;
 
-    moveBy( diff );
+    moveSelection();
 }
 
-void ShapeMoveStrategy::handleCustomEvent( KoPointerEvent * event )
+void ShapeMoveStrategy::handleCustomEvent(KoPointerEvent *event)
 {
-    QPointF diff = tool()->canvas()->viewConverter()->viewToDocument( event->pos() );
+    QPointF diff = tool()->canvas()->viewConverter()->viewToDocument(event->pos());
 
-    if( event->modifiers() & (Qt::AltModifier | Qt::ControlModifier)) {
+    if (event->modifiers() & (Qt::AltModifier | Qt::ControlModifier)) {
         // keep x or y position unchanged
         if(qAbs(diff.x()) < qAbs(diff.y()))
             diff.setX(0);
@@ -96,12 +94,11 @@ void ShapeMoveStrategy::handleCustomEvent( KoPointerEvent * event )
 
     m_diff += 0.1 * diff ;
 
-    moveBy( diff );
+    moveSelection();
 }
 
-void ShapeMoveStrategy::moveBy( const QPointF &diff )
+void ShapeMoveStrategy::moveSelection()
 {
-    Q_UNUSED(diff);
     Q_ASSERT(m_newPositions.count());
 
     int i=0;

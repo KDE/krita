@@ -52,7 +52,7 @@ public:
     virtual void paint( QPainter &painter, const KoViewConverter &converter);
     virtual void handleCustomEvent( KoPointerEvent * event );
 private:
-    void moveBy( const QPointF &diff );
+    void moveSelection();
     QList<QPointF> m_previousPositions;
     QList<QPointF> m_newPositions;
     QPointF m_start, m_diff, m_initialSelectionPosition, m_initialOffset;

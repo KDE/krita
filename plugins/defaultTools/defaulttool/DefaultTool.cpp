@@ -1169,7 +1169,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
     if ((event->buttons() & Qt::LeftButton) == 0)
         return 0;  // Nothing to do for middle/right mouse button
 
-    KoShape *shape(shapeManager->shapeAt(event->point, selectNextInStack ? KoFlake::NextUnselected : KoFlake::ShapeOnTop));
+    KoShape *shape = shapeManager->shapeAt(event->point, selectNextInStack ? KoFlake::NextUnselected : KoFlake::ShapeOnTop);
 
     if (!shape && handle == KoFlake::NoHandle) {
         // check if we have hit a guide

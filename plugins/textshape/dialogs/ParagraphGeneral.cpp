@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -62,6 +62,8 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 
     m_paragraphBulletsNumbers = new ParagraphBulletsNumbers(this);
     widget.tabs->addTab(m_paragraphBulletsNumbers, i18n("Bullets/Numbers"));
+    connect(m_paragraphBulletsNumbers, SIGNAL(bulletListItemChanged(const QString&)),
+        this, SLOT(bulletListItemChanged(const QString&)));
 
     m_paragraphDecorations = new ParagraphDecorations(this);
     widget.tabs->addTab(m_paragraphDecorations, i18n("Decorations"));
@@ -92,6 +94,11 @@ void ParagraphGeneral::setName(const QString &name)
 void ParagraphGeneral::backgroundColorChanged(const QColor &color)
 {
     widget.preview->setParagraphBackgroundColor(color);
+}
+
+void ParagraphGeneral::bulletListItemChanged(const QString &text)
+{
+    widget.preview->setListItemText(text);
 }
 
 void ParagraphGeneral::horizontalAlignmentChanged(Qt::Alignment align)

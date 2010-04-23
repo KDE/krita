@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -56,6 +56,7 @@ private slots:
     void setName(const QString &name);
     void backgroundColorChanged(const QColor&);
     void horizontalAlignmentChanged(Qt::Alignment);
+    void bulletListItemChanged(const QString&);
 
 private:
     Ui::ParagraphGeneral widget;

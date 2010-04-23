@@ -179,6 +179,12 @@ void FormattingPreview::setLeftMargin(qreal margin)
     update();
 }
 
+void FormattingPreview::setListItemText(const QString &text)
+{
+    m_listItemText = text;
+    update();
+}
+
 void FormattingPreview::setLineSpacing(qreal fixedLineHeight, qreal lineSpacing, qreal minimumLineHeight, int percentLineSpacing, bool useFontProperties)
 {
     m_fixedLineHeight = fixedLineHeight;
@@ -237,14 +243,21 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
         }
     }
 
+// list item
+    qreal xmargin = 5; //leave a tiny space on borders
+    qreal ymargin = 5;
+    QTextLayout listItemLayout(m_listItemText, displayFont);
+    QFontMetricsF fm = QFontMetrics(displayFont, paintDevice);
+    listItemLayout.beginLayout();
+    QTextLine listItem = listItemLayout.createLine();
+    listItem.setPosition(QPointF(xmargin, ymargin));
+    listItemLayout.endLayout();
 
 //now start the actual layout
     QTextLayout layout(m_sampleText, displayFont);
     layout.setTextOption(QTextOption(m_align));
 
-    QFontMetricsF fm = QFontMetrics(displayFont, paintDevice);
-    qreal xmargin = 5; //leave a tiny space on borders
-    qreal ymargin = 5;
+    xmargin += listItem.naturalTextWidth();
     qreal height = 0;
     qreal lineWidth = (contentsRect().width() - 2*xmargin)/zoomX;
     bool firstLine = true;
@@ -285,7 +298,6 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     layout.endLayout();
 
     QRectF boundingRect = layout.boundingRect();
-    QPointF origin = QPointF(xmargin, qMax(ymargin,(contentsRect().height()-boundingRect.height())/2)/zoomY);
     QTextCharFormat charFormat;
     charFormat.setBackground(QBrush(m_backgroundColor));
     QVector<QTextLayout::FormatRange> selections;
@@ -295,7 +307,8 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     fr.format = charFormat;
     selections.append(fr);
 
-    layout.draw(&painter, origin, selections);
+    listItemLayout.draw(&painter, QPointF());
+    layout.draw(&painter, QPointF(xmargin, ymargin), selections);
 
 //draw decorations
     qreal width;
@@ -318,9 +331,9 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     for (int i = 0; i <= layout.lineCount() - 1; i++) {
         QTextLine line = layout.lineAt(i);
 
-        qreal xstart = line.naturalTextRect().x() + origin.x();
-        qreal xend = line.naturalTextRect().x() + origin.x() + line.naturalTextWidth();
-        qreal y = line.naturalTextRect().y() + origin.y() + line.ascent();
+        qreal xstart = line.naturalTextRect().x() + xmargin;
+        qreal xend = line.naturalTextRect().x() + xmargin + line.naturalTextWidth();
+        qreal y = line.naturalTextRect().y() + ymargin + line.ascent();
 
         if ((m_underlineType != KoCharacterStyle::NoLineType) && (m_underlineStyle != KoCharacterStyle::NoLineStyle))
             drawLine(painter, xstart, xend, y + fm.underlinePos() + 1, width, fm.underlinePos(), m_underlineType, m_underlineStyle, (m_underlineColor.isValid())?m_underlineColor:m_textColor);

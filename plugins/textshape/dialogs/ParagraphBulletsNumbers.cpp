@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
@@ -47,6 +47,11 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     connect(widget.listTypes, SIGNAL(currentRowChanged(int)), this, SLOT(styleChanged(int)));
     connect(widget.customCharacter, SIGNAL(clicked(bool)), this, SLOT(customCharButtonPressed()));
     connect(widget.letterSynchronization, SIGNAL(toggled(bool)), widget.startValue, SLOT(setLetterSynchronization(bool)));
+    connect(widget.prefix, SIGNAL(textChanged(const QString&)), this, SLOT(recalcPreview()));
+    connect(widget.suffix, SIGNAL(textChanged(const QString&)), this, SLOT(recalcPreview()));
+    connect(widget.depth, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));
+    connect(widget.levels, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));
+    connect(widget.startValue, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));
 }
 
 int ParagraphBulletsNumbers::addStyle(const Lists::ListStyleItem &lsi)
@@ -99,6 +104,7 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level)
     // character style
     // relative bullet size (percent)
     // minimum label width
+    recalcPreview();
 }
 
 void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
@@ -171,6 +177,7 @@ void ParagraphBulletsNumbers::styleChanged(int index)
     widget.customCharacter->setEnabled(style == KoListStyle::CustomCharItem && index != m_blankCharIndex);
     widget.letterSynchronization->setVisible(showLetterSynchronization);
     widget.listPropertiesPane->setEnabled(style != KoListStyle::None);
+    recalcPreview();
 }
 
 void ParagraphBulletsNumbers::customCharButtonPressed()
@@ -198,6 +205,38 @@ void ParagraphBulletsNumbers::customCharButtonPressed()
         }
     }
     delete dialog;
+    recalcPreview();
+}
+
+void ParagraphBulletsNumbers::recalcPreview()
+{
+    // TODO use startValue
+    // use custom char
+    // use type
+    const int currentRow = widget.listTypes->currentRow();
+    KoListStyle::Style style = m_mapping[currentRow];
+    QString answer;
+    if (style != KoListStyle::None) {
+        QString suffix = widget.suffix->text();
+        if (suffix.isEmpty())
+            suffix = ".";
+        const int depth = widget.depth->value();
+        const int displayLevels = qMin(widget.levels->value(), depth);
+        for (int i = 1; i <= depth; ++i) {
+            if (depth - displayLevels >= i)
+                continue;
+            if (i == depth)
+                answer += widget.prefix->text();
+            answer += QString::number(i);
+            if (i == depth)
+                answer += suffix;
+            else
+                answer += '.';
+        }
+        if (!answer.isEmpty())
+            answer += ' ';
+    }
+    emit bulletListItemChanged(answer);
 }
 
 #include <ParagraphBulletsNumbers.moc>

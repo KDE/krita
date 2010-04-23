@@ -63,6 +63,7 @@ public slots:
     void setLeftMargin(qreal margin);
     void setLineSpacing(qreal fixedLineHeight, qreal lineSpacing, qreal minimumLineHeight, int percentLineSpacing, bool useFontProperties);
     void setRightMargin(qreal margin);
+    void setListItemText(const QString &text);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -72,6 +73,7 @@ private:
     PreviewType m_previewType;
 
     QString m_sampleText;
+    QString m_listItemText;
 
     ///Character properties
     QColor m_backgroundColor;

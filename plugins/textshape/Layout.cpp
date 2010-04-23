@@ -78,6 +78,7 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_restartingAfterTableBreak(false),
         m_restartingFirstCellAfterTableBreak(false)
 {
+    m_frameStack.reserve(5); // avoid reallocs
 }
 
 bool Layout::start()
@@ -329,6 +330,7 @@ bool Layout::nextParag()
     if (layout && !m_restartingFirstCellAfterTableBreak) { // guard against first time or first time after table relayout
         layout->endLayout();
         m_block = m_block.next();
+        updateFrameStack();
         if (m_endOfDemoText) {
             layout = 0;
             m_blockData = 0;
@@ -713,6 +715,7 @@ void Layout::handleTableBreak(QTextTableCell &previousCell, QTextTable *table)
         QTextCursor cur = previousCell.firstCursorPosition();
         cur = table->rowStart(cur);
         m_block = cur.block().next();
+        updateFrameStack();
         kDebug(32500) << "pos" << m_data->position() << " and block position" << m_block.position() << "and shape" << shape;
         if (!m_newShape && m_block.position() > m_data->position()) {
             m_data->setEndPosition(m_block.position() - 1);
@@ -830,6 +833,7 @@ void Layout::resetPrivate()
     m_blockData = 0;
     m_newParag = true;
     m_block = m_parent->document()->begin();
+    updateFrameStack();
     m_currentMasterPage.clear();
 
     shapeNumber = 0;
@@ -842,6 +846,7 @@ void Layout::resetPrivate()
             // this shape needs to be recalculated.
             data->setPosition(lastPos + 1);
             m_block = m_parent->document()->findBlock(lastPos + 1);
+            updateFrameStack();
             m_format = m_block.blockFormat();
             if (data->documentOffset() > 0)
                 m_y = data->documentOffset();
@@ -1788,6 +1793,7 @@ bool Layout::previousParag()
     if (layout->lineCount() == 0) {
         m_block = m_block.previous();
         layout = m_block.layout();
+        updateFrameStack();
     }
     QTextLine tl = layout->lineAt(0);
     Q_ASSERT(tl.isValid());
@@ -1891,4 +1897,39 @@ QTextTableCell Layout::hitTestTable(QTextTable *table, const QPointF &point)
 {
     m_tableLayout.setTable(table);
     return m_tableLayout.hitTestTable(point);
+}
+
+void Layout::updateFrameStack()
+{
+    if (!m_block.isValid()) {
+        m_frameStack.clear();
+        m_frameStack.append(m_parent->document()->rootFrame());
+        return;
+    }
+    /* for each frame stack item (top first) check if the current block is out of range
+        and if so discard it.  */
+    for (int i = m_frameStack.count() -1; i >= 0; --i) {
+        QTextFrame *frame = m_frameStack.at(i);
+        if (frame->firstPosition() > m_block.position() + m_block.length()
+                || frame->lastPosition() < m_block.position()) {
+            m_frameStack.remove(i);
+        } else {
+            break;
+        }
+    }
+    if (m_frameStack.isEmpty())
+        m_frameStack.append(m_parent->document()->rootFrame());
+
+    /* repeatedly check the deepest nested frame childFrames() and add one if it contains our current block */
+    while (true) {
+        QTextFrame *frame = m_frameStack.last();
+        foreach (QTextFrame *child, frame->childFrames()) {
+            if (child->firstPosition() <= m_block.position() && child->lastPosition() > m_block.position()) {
+                m_frameStack.append(child);
+                break;
+            }
+        }
+        if (frame == m_frameStack.last())
+            break;
+    }
 }

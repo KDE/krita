@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -137,6 +137,8 @@ private:
             const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock,
             const int fragmentToLineOffset) const;
 
+    void updateFrameStack();
+
 private:
     KoStyleManager *m_styleManager;
 
@@ -155,6 +157,7 @@ private:
     KoTextDocumentLayout *m_parent;
     QHash<int, qreal> m_inlineObjectHeights; // maps text-position to whole-line-height of an inline object
     TextShape *m_textShape;
+    QVector<QTextFrame *> m_frameStack;
 
     // demoText feature
     bool m_demoText, m_endOfDemoText;

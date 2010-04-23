@@ -38,6 +38,10 @@ KoShapeGroup::KoShapeGroup()
     setSize(QSizeF(0, 0));
 }
 
+KoShapeGroup::~KoShapeGroup()
+{
+}
+
 void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(painter);

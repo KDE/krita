@@ -47,11 +47,11 @@ public:
     /// Constructor
     KoShapeGroup();
     /// destructor
-    ~KoShapeGroup() {}
+    virtual ~KoShapeGroup();
     /// This implementation is empty since a group is itself not visible.
-    void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
     /// always returns false since the group itself can't be selected or hit
-    bool hitTest(const QPointF &position) const;
+    virtual bool hitTest(const QPointF &position) const;
     /// reimplemented from KoShape
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented
@@ -60,7 +60,6 @@ public:
 private:
     void childCountChanged();
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
-
 };
 
 #endif

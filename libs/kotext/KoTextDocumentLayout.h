@@ -239,6 +239,7 @@ protected:
 
 private:
     Q_PRIVATE_SLOT(d, void relayoutPrivate())
+    Q_PRIVATE_SLOT(d, void postLayoutHook())
 
     class Private;
     Private * const d;

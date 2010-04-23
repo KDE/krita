@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007, 2009-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -106,6 +106,24 @@ public:
         parent->relayout();
     }
 
+    void postLayoutHook() {
+        Q_ASSERT(parent);
+        Q_ASSERT(parent->m_state);
+        KoShape *shape = parent->m_state->shape;
+        if (shape == 0)
+            return;
+        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
+        qreal offset = 0;
+        if (data->verticalAlignment() == Qt::AlignVCenter) {
+            offset = (shape->size().height() - (parent->m_state->y() - data->documentOffset())) / 2.;
+        } else if (data->verticalAlignment() == Qt::AlignBottom) {
+            offset = shape->size().height() - (parent->m_state->y() - data->documentOffset());
+        }
+        if (offset != 0) {
+            data->setDocumentOffset(data->documentOffset() - offset);
+        }
+    }
+
     QList<KoShape *> shapes;
     KoInlineTextObjectManager *inlineTextObjectManager;
     bool scheduled;
@@ -123,6 +141,7 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextDocumentLay
     setPaintDevice(d->paintDevice);
     if (m_state == 0)
         m_state = new LayoutStateDummy();
+    connect (this, SIGNAL(finishedLayout()), this, SLOT(postLayoutHook()));
 }
 
 KoTextDocumentLayout::~KoTextDocumentLayout()

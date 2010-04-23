@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2009-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
@@ -60,7 +60,8 @@ public:
             position(-1),
             endPosition(-1),
             direction(KoText::AutoDirection),
-            textpage(0)
+            textpage(0),
+            textAlignment(Qt::AlignLeft | Qt::AlignTop)
     {
     }
 
@@ -71,6 +72,7 @@ public:
     KoInsets margins;
     KoText::Direction direction;
     KoTextPage *textpage;
+    Qt::Alignment textAlignment;
 };
 
 
@@ -236,6 +238,17 @@ void KoTextShapeData::relayoutFor(KoTextPage &textPage)
     layout->interruptLayout();
     layout->layout();
     d->textpage = oldPage;
+}
+
+void KoTextShapeData::setVerticalAlignment(Qt::Alignment alignment)
+{
+    d->textAlignment = (d->textAlignment & Qt::AlignHorizontal_Mask)
+        | (alignment & Qt::AlignVertical_Mask);
+}
+
+Qt::Alignment KoTextShapeData::verticalAlignment() const
+{
+    return d->textAlignment & Qt::AlignVertical_Mask;
 }
 
 #include <KoTextShapeData.moc>

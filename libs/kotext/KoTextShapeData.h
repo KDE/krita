@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2009-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -164,6 +164,11 @@ public:
      * new paragraphs default direction.
      */
     KoText::Direction pageDirection() const;
+
+    /** Sets the vertical alignment of all the text inside the shape. */
+    void setVerticalAlignment(Qt::Alignment alignment);
+    /** Returns the vertical alignment of all the text in the shape */
+    Qt::Alignment verticalAlignment() const;
 
 signals:
     /**

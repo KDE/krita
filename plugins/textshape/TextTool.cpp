@@ -935,15 +935,15 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         else
           m_textEditor->addCommand(new DeleteCommand(DeleteCommand::NextChar, this));
         editingPluginEvents();
-    } else if ((event->key() == Qt::Key_Left) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
+    } else if ((event->key() == Qt::Key_Left) && (event->modifiers() & Qt::ControlModifier) == 0) {
         moveOperation = QTextCursor::Left;
-    else if ((event->key() == Qt::Key_Right) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
+    } else if ((event->key() == Qt::Key_Right) && (event->modifiers() & Qt::ControlModifier) == 0) {
         moveOperation = QTextCursor::Right;
-    else if ((event->key() == Qt::Key_Up) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
+    } else if ((event->key() == Qt::Key_Up) && (event->modifiers() & Qt::ControlModifier) == 0) {
         moveOperation = QTextCursor::Up;
-    else if ((event->key() == Qt::Key_Down) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
+    } else if ((event->key() == Qt::Key_Down) && (event->modifiers() & Qt::ControlModifier) == 0) {
         moveOperation = QTextCursor::Down;
-    else {
+    } else {
         // check for shortcuts.
         QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
         if (hit(item, KStandardShortcut::Begin))

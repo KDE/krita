@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.bet
+ *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.bet
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,16 +17,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KO_COLOR_SPACE_CONSTANTS_H_
-#define _KO_COLOR_SPACE_CONSTANTS_H_
+// The file lut.h comes from http://bitbucket.org/cyrille/lut, keep it as much untouched as possible for easier sync
 
-#include <climits>
+#ifndef _KO_LUT_H_
+#define _KO_LUT_H_
+
 #include <qglobal.h>
 
-// TODO: find a better place or way to define those stuff
-const quint8 OPACITY_TRANSPARENT_U8 = 0;
-const quint8 OPACITY_OPAQUE_U8 = UCHAR_MAX;
-const qreal OPACITY_TRANSPARENT_F = 0.0;
-const qreal OPACITY_OPAQUE_F = 1.0;
+#define _USE_QT_TYPES_
+
+namespace Ko {
+  #include "lut.h"
+}
 
 #endif

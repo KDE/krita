@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.bet
+ *  Copyright (c) 2006,2007,2010 Cyrille Berger <cberger@cberger.bet
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,7 @@
 #include "pigment_export.h"
 #include <KoIntegerMaths.h>
 #include "KoChannelInfo.h"
+#include "KoLut.h"
 
 #undef _T
 
@@ -151,6 +152,60 @@ public:
     static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
+#ifdef Q_CC_MSVC
+// MSVC do not have lrint
+
+const double _double2fixmagic = 68719476736.0*1.5;
+const int32 _shiftamt        = 16;                    //16.16 fixed point representation,
+
+#if Q_BYTE_ORDER == Q_BIG_ENDIAN
+        #define iexp_                           0
+        #define iman_                           1
+#else
+        #define iexp_                           1
+        #define iman_                           0
+#endif //BigEndian_
+
+inline int float2int(double val)
+{
+    val = val + _double2fixmagic;
+    return ((int*)&val)[iman_] >> _shiftamt; 
+}
+
+inline int float2int(float val)
+{
+    return float2int((double)val);
+}
+
+#else
+#include <cmath>
+
+inline int float2int(float x)
+{
+    return lrintf(x);
+}
+
+inline int float2int(double x)
+{
+    return lrint(x);
+}
+
+#endif
+
+#include <KoLut.h>
+
+template<typename _T_>
+struct KoIntegerToFloat {
+  inline float operator()(_T_ f) const
+  {
+    return f / float(KoColorSpaceMathsTraits<_T_>::max);
+  }
+};
+
+static const Ko::FullLut< KoIntegerToFloat<quint16>, float, quint16> uint16ToFloatLut;
+static const Ko::FullLut< KoIntegerToFloat<quint8>, float, quint8> uint8ToFloatLut;
+
+
 /**
  * This class defines some elementary operations used by various color
  * space. It's intended to be generic, but some specialization exists
@@ -210,26 +265,26 @@ template<>
 inline quint8 KoColorSpaceMaths<double, quint8>::scaleToA(double a)
 {
     double v = a * 255;
-    return (quint8)(CLAMP(v, 0, 255));
+    return float2int(CLAMP(v, 0, 255));
 }
 
 template<>
 inline double KoColorSpaceMaths<quint8, double>::scaleToA(quint8 a)
 {
-    return a *(1.0 / 255.0);
+    return uint8ToFloatLut(a);
 }
 
 template<>
 inline quint16 KoColorSpaceMaths<double, quint16>::scaleToA(double a)
 {
     double v = a * 0xFFFF;
-    return (quint16)(CLAMP(v, 0, 0xFFFF));
+    return float2int(CLAMP(v, 0, 0xFFFF));
 }
 
 template<>
 inline double KoColorSpaceMaths<quint16, double>::scaleToA(quint16 a)
 {
-    return a *(1.0 / 0xFFFF);
+    return uint16ToFloatLut(a);
 }
 
 template<>
@@ -256,26 +311,26 @@ template<>
 inline quint16 KoColorSpaceMaths<float, quint16>::scaleToA(float a)
 {
     float v = a * 0xFFFF;
-    return (quint16)(CLAMP(v, 0, 0xFFFF));
+    return (quint16)float2int(CLAMP(v, 0, 0xFFFF));
 }
 
 template<>
 inline float KoColorSpaceMaths<quint16, float>::scaleToA(quint16 a)
 {
-    return a *(1.0 / 0xFFFF);
+    return uint16ToFloatLut(a);
 }
 
 template<>
 inline quint8 KoColorSpaceMaths<float, quint8>::scaleToA(float a)
 {
     float v = a * 255;
-    return (quint8)(CLAMP(v, 0, 255));
+    return (quint8)float2int(CLAMP(v, 0, 255));
 }
 
 template<>
 inline float KoColorSpaceMaths<quint8, float>::scaleToA(quint8 a)
 {
-    return a *(1.0 / 255.0);
+    return uint8ToFloatLut(a);
 }
 
 template<>

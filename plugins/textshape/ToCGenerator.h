@@ -20,6 +20,8 @@
 #define TOCGENERATOR_H
 
 #include <QObject>
+#include <QList>
+#include <QTextBlock>
 
 class QTextFrame;
 
@@ -40,6 +42,9 @@ public slots:
     // know when the TOC is dirty.
 
 private:
+    void generate();
+    void update();
+
     enum State {
         DirtyState,
         NeverGeneratedState,
@@ -48,8 +53,8 @@ private:
     };
 
     State m_state;
-
     QTextFrame *m_ToCFrame;
+    QList<QTextBlock> m_originalBlocksInToc;
 };
 
 #endif

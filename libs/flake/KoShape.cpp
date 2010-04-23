@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
-   Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2006-2010 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007-2009 Jan Hambrecht <jaham@gmx.net>
 
@@ -947,6 +947,23 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         style.addProperty(it.key(), it.value());
     }
 
+    if (parent() && parent()->childClipped(this)) {
+        /*
+         * In KOffice clipping is done using a parent shape which can be rotated, sheared etc
+         * and even non-square.  So the ODF interoperability version we write here is really
+         * just a very simple version of that...
+         */
+        qreal top = -position().y();
+        qreal left = -position().x();
+        qreal right = parent()->size().width() - size().width() - left;
+        qreal bottom = parent()->size().height() - size().height() - top;
+
+        style.addProperty("fo:clip", QString("rect(%1pt, %2pt, %3pt, %4pt)")
+                .arg(top, 10, 'f').arg(right, 10, 'f')
+                .arg(bottom, 10, 'f').arg(left, 10, 'f'));
+
+    }
+
     return context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
 }
 
@@ -1282,7 +1299,17 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
     }
 
     if (attributes & OdfSize) {
-        const QSizeF s(size());
+        QSizeF s(size());
+        if (parent() && parent()->childClipped(this)) { // being clipped shrinks our visible size
+            // clipping in ODF is done using a combination of visual size and content cliprect.
+            // A picture of 10cm x 10cm displayed in a box of 2cm x 4cm will be scaled (out
+            // of proportion in this case).  If we then add a fo:clip like;
+            // fo:clip="rect(2cm, 3cm, 4cm, 5cm)" (top, right, bottom, left)
+            // our original 10x10 is clipped to 2cm x 4cm  and *then* fitted in that box.
+
+            // TODO do this properly by subtracting rects
+            s = parent()->size();
+        }
         context.xmlWriter().addAttributePt("svg:width", s.width());
         context.xmlWriter().addAttributePt("svg:height", s.height());
     }

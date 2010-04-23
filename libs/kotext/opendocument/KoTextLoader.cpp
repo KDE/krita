@@ -1146,194 +1146,194 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 kDebug(32500) << "Node '" << localName << "' unhandled";
             }
 #endif
-            }
         }
-        --d->loadSpanLevel;
     }
+    --d->loadSpanLevel;
+}
 
-    void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
-    {
-        int startPosition = cursor.position();
-        int changeId = d->changeTracker->getLoadedChangeId(id);
-        int loadedTags = 0;
+void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
+{
+    int startPosition = cursor.position();
+    int changeId = d->changeTracker->getLoadedChangeId(id);
+    int loadedTags = 0;
 
-        QTextCharFormat charFormat = cursor.block().charFormat();
-        QTextBlockFormat blockFormat = cursor.block().blockFormat();
-        
-        if (changeId) {
-            KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
-            KoXmlElement element = d->deleteChangeTable.value(id);
-            KoXmlElement tag;
-            forEachElement(tag, element) {
-                QString localName = tag.localName();
-                if (localName == "p") {
-                    if (loadedTags)
-                        cursor.insertBlock(blockFormat, charFormat);
-                    bool stripLeadingSpace = true;
-                    loadSpan(tag, cursor, &stripLeadingSpace);
-                    loadedTags++;
-                } else if (localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
-                           || localName == "list" || localName == "numbered-paragraph") {  // OASIS
-                    /********************** ODF Bug Work-around code that uses RDF ***************************/
-                    bool listValid = true;
-                    int deletedListLevel = 0;
-                    if (tag.hasAttribute("id")) {
-                        QString xmlId = tag.attribute("id", QString());
-                        listValid = isValidList(xmlId);
-                        deletedListLevel = listLevel(xmlId);
-                    }
-
-                    if (listValid || (deletedListLevel && (deletedListLevel != (d->currentListLevel - 1))))
-                        cursor.insertBlock(blockFormat, charFormat);
-                    /******************************************************************************************/
-                    loadList(tag, cursor, true);
+    QTextCharFormat charFormat = cursor.block().charFormat();
+    QTextBlockFormat blockFormat = cursor.block().blockFormat();
+    
+    if (changeId) {
+        KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
+        KoXmlElement element = d->deleteChangeTable.value(id);
+        KoXmlElement tag;
+        forEachElement(tag, element) {
+            QString localName = tag.localName();
+            if (localName == "p") {
+                if (loadedTags)
+                    cursor.insertBlock(blockFormat, charFormat);
+                bool stripLeadingSpace = true;
+                loadSpan(tag, cursor, &stripLeadingSpace);
+                loadedTags++;
+            } else if (localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
+                       || localName == "list" || localName == "numbered-paragraph") {  // OASIS
+                /********************** ODF Bug Work-around code that uses RDF ***************************/
+                bool listValid = true;
+                int deletedListLevel = 0;
+                if (tag.hasAttribute("id")) {
+                    QString xmlId = tag.attribute("id", QString());
+                    listValid = isValidList(xmlId);
+                    deletedListLevel = listLevel(xmlId);
                 }
+
+                if (listValid || (deletedListLevel && (deletedListLevel != (d->currentListLevel - 1))))
+                    cursor.insertBlock(blockFormat, charFormat);
+                /******************************************************************************************/
+                loadList(tag, cursor, true);
             }
-
-            int endPosition = cursor.position();
-
-            //Set the char format to the changeId
-            cursor.setPosition(startPosition);
-            cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
-            QTextCharFormat format;
-            format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-            cursor.mergeCharFormat(format);
-
-            //Get the QTextDocumentFragment from the selection and store it in the changeElement
-            QTextDocumentFragment deletedFragment = KoChangeTracker::generateDeleteFragment(cursor, changeElement->getDeleteChangeMarker());
-            changeElement->setDeleteData(deletedFragment);
-
-            //Now Remove this from the document. Will be re-inserted whenever changes have to be seen
-            cursor.removeSelectedText();
         }
+
+        int endPosition = cursor.position();
+
+        //Set the char format to the changeId
+        cursor.setPosition(startPosition);
+        cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+        QTextCharFormat format;
+        format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+        cursor.mergeCharFormat(format);
+
+        //Get the QTextDocumentFragment from the selection and store it in the changeElement
+        QTextDocumentFragment deletedFragment = KoChangeTracker::generateDeleteFragment(cursor, changeElement->getDeleteChangeMarker());
+        changeElement->setDeleteData(deletedFragment);
+
+        //Now Remove this from the document. Will be re-inserted whenever changes have to be seen
+        cursor.removeSelectedText();
+    }
+}
+
+void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
+{
+    KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(tableElem, d->context);
+    if (!shape) {
+        return;
     }
 
-    void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
-    {
-        KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(tableElem, d->context);
-        if (!shape) {
-            return;
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+    if (layout) {
+        KoTextAnchor *anchor = new KoTextAnchor(shape);
+        anchor->loadOdfFromShape(tableElem);
+        d->textSharedData->shapeInserted(shape, tableElem, d->context);
+
+        KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
+        if (textObjectManager) {
+            textObjectManager->insertInlineObject(cursor, anchor);
         }
+    }
+}
+
+
+void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
+{
+    KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(element, d->context);
+    if (!shape) {
+        kDebug(32500) << "shape '" << element.localName() << "' unhandled";
+        return;
+    }
+
+    QString anchorType;
+    if (shape->hasAdditionalAttribute("text:anchor-type"))
+        anchorType = shape->additionalAttribute("text:anchor-type");
+    else if (element.hasAttributeNS(KoXmlNS::text, "anchor-type"))
+        anchorType = element.attributeNS(KoXmlNS::text, "anchor-type");
+    else
+        anchorType = "as-char"; // default value
+
+    // page anchored shapes are handled differently
+    if (anchorType != "page") {
+        KoTextAnchor *anchor = new KoTextAnchor(shape);
+        anchor->loadOdfFromShape(element);
+        d->textSharedData->shapeInserted(shape, element, d->context);
 
         KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
         if (layout) {
-            KoTextAnchor *anchor = new KoTextAnchor(shape);
-            anchor->loadOdfFromShape(tableElem);
-            d->textSharedData->shapeInserted(shape, tableElem, d->context);
-
             KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
             if (textObjectManager) {
                 textObjectManager->insertInlineObject(cursor, anchor);
             }
         }
+    } else {
+        d->textSharedData->shapeInserted(shape, element, d->context);
     }
+}
 
+void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
+{
+    // Add a frame to the current layout
+    QTextFrameFormat tocFormat;
+    tocFormat.setProperty(KoText::TableOfContents, true);
+    cursor.insertFrame(tocFormat);
+    // Get the cursor of the frame
+    QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
 
-    void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
-    {
-        KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(element, d->context);
-        if (!shape) {
-            kDebug(32500) << "shape '" << element.localName() << "' unhandled";
-            return;
-        }
+    // We'll just try to find displayable elements and add them as paragraphs
+    KoXmlElement e;
+    forEachElement(e, element) {
+        if (e.isNull() || e.namespaceURI() != KoXmlNS::text)
+            continue;
 
-        QString anchorType;
-        if (shape->hasAdditionalAttribute("text:anchor-type"))
-            anchorType = shape->additionalAttribute("text:anchor-type");
-        else if (element.hasAttributeNS(KoXmlNS::text, "anchor-type"))
-            anchorType = element.attributeNS(KoXmlNS::text, "anchor-type");
-        else
-            anchorType = "as-char"; // default value
+        //TODO look at table-of-content-source
 
-        // page anchored shapes are handled differently
-        if (anchorType != "page") {
-            KoTextAnchor *anchor = new KoTextAnchor(shape);
-            anchor->loadOdfFromShape(element);
-            d->textSharedData->shapeInserted(shape, element, d->context);
+        // We look at the index body now
+        if (e.localName() == "index-body") {
+            KoXmlElement p;
+            bool firstTime = true;
+            forEachElement(p, e) {
+                // All elem will be "p" instead of the title, which is particular
+                if (p.isNull() || p.namespaceURI() != KoXmlNS::text)
+                    continue;
 
-            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-            if (layout) {
-                KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
-                if (textObjectManager) {
-                    textObjectManager->insertInlineObject(cursor, anchor);
+                if (!firstTime) {
+                    // use empty formats to not inherit from the prev parag
+                    QTextBlockFormat bf;
+                    QTextCharFormat cf;
+                    cursorFrame.insertBlock(bf, cf);
                 }
-            }
-        } else {
-            d->textSharedData->shapeInserted(shape, element, d->context);
-        }
-    }
+                firstTime = false;
 
-    void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
-    {
-        // Add a frame to the current layout
-        QTextFrameFormat tocFormat;
-        tocFormat.setProperty(KoText::TableOfContents, true);
-        cursor.insertFrame(tocFormat);
-        // Get the cursor of the frame
-        QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
+                QTextBlock current = cursorFrame.block();
+                QTextBlockFormat blockFormat;
 
-        // We'll just try to find displayable elements and add them as paragraphs
-        KoXmlElement e;
-        forEachElement(e, element) {
-            if (e.isNull() || e.namespaceURI() != KoXmlNS::text)
-                continue;
-
-            //TODO look at table-of-content-source
-
-            // We look at the index body now
-            if (e.localName() == "index-body") {
-                KoXmlElement p;
-                bool firstTime = true;
-                forEachElement(p, e) {
-                    // All elem will be "p" instead of the title, which is particular
-                    if (p.isNull() || p.namespaceURI() != KoXmlNS::text)
-                        continue;
-
-                    if (!firstTime) {
-                        // use empty formats to not inherit from the prev parag
-                        QTextBlockFormat bf;
-                        QTextCharFormat cf;
-                        cursorFrame.insertBlock(bf, cf);
-                    }
-                    firstTime = false;
-
-                    QTextBlock current = cursorFrame.block();
-                    QTextBlockFormat blockFormat;
-
-                    if (p.localName() == "p") {
-                        loadParagraph(p, cursorFrame);
-                    } else if (p.localName() == "index-title") {
-                        loadBody(p, cursorFrame);
-                    }
-
-                    QTextCursor c(current);
-                    c.mergeBlockFormat(blockFormat);
+                if (p.localName() == "p") {
+                    loadParagraph(p, cursorFrame);
+                } else if (p.localName() == "index-title") {
+                    loadBody(p, cursorFrame);
                 }
+
+                QTextCursor c(current);
+                c.mergeBlockFormat(blockFormat);
             }
         }
-        // Get out of the frame
-        cursor.movePosition(QTextCursor::End);
     }
+    // Get out of the frame
+    cursor.movePosition(QTextCursor::End);
+}
 
-    void KoTextLoader::startBody(int total)
-    {
-        d->bodyProgressTotal += total;
-    }
+void KoTextLoader::startBody(int total)
+{
+    d->bodyProgressTotal += total;
+}
 
-    void KoTextLoader::processBody()
-    {
-        d->bodyProgressValue++;
-        if (d->dt.elapsed() >= d->lastElapsed + 1000) {  // update only once per second
-            d->lastElapsed = d->dt.elapsed();
-            Q_ASSERT(d->bodyProgressTotal > 0);
-            const int percent = d->bodyProgressValue * 100 / d->bodyProgressTotal;
-            emit sigProgress(percent);
-        }
+void KoTextLoader::processBody()
+{
+    d->bodyProgressValue++;
+    if (d->dt.elapsed() >= d->lastElapsed + 1000) {  // update only once per second
+        d->lastElapsed = d->dt.elapsed();
+        Q_ASSERT(d->bodyProgressTotal > 0);
+        const int percent = d->bodyProgressValue * 100 / d->bodyProgressTotal;
+        emit sigProgress(percent);
     }
+}
 
-    void KoTextLoader::endBody()
-    {
-    }
+void KoTextLoader::endBody()
+{
+}
 
 void KoTextLoader::storeDeleteChanges(KoXmlElement &element)
 {

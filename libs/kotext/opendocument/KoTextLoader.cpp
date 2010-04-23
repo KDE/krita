@@ -33,7 +33,6 @@
 #include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
 #include "KoList.h"
-#include "KoTableOfContents.h"
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoProperties.h>
@@ -1268,7 +1267,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
     {
         // Add a frame to the current layout
         QTextFrameFormat tocFormat;
-        tocFormat.setProperty(tocType, true);
+        tocFormat.setProperty(KoText::TableOfContents, true);
         cursor.insertFrame(tocFormat);
         // Get the cursor of the frame
         QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();

@@ -43,7 +43,6 @@
 #include "KoTextBlockData.h"
 #include "KoTextDocument.h"
 #include "KoTextInlineRdf.h"
-#include "KoTableOfContents.h"
 
 #include "KoTextMeta.h"
 #include "KoBookmark.h"
@@ -596,7 +595,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
         QTextCursor cursor(block);
         QTextFrame *cursorFrame = cursor.currentFrame();
-        if (cursorFrame != currentFrame && cursorFrame->format().hasProperty(tocType)) {
+        if (cursorFrame != currentFrame && cursorFrame->format().hasProperty(KoText::TableOfContents)) {
             int frameBegin = cursorFrame->firstPosition();
             int frameEnd = cursorFrame->lastPosition();
             saveTableOfContents(document, frameBegin, frameEnd, listStyles, currentTable, cursor.currentFrame());

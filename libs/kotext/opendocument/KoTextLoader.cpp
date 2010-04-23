@@ -106,7 +106,7 @@ public:
 
     int bodyProgressTotal;
     int bodyProgressValue;
-    int lastElapsed;
+    int nextProgressReportMs;
     QTime dt;
 
     KoList *currentList;
@@ -138,7 +138,7 @@ public:
             stylesDotXml(context.odfLoadingContext().useStylesAutoStyles()),
             bodyProgressTotal(0),
             bodyProgressValue(0),
-            lastElapsed(0),
+            nextProgressReportMs(0),
             currentList(0),
             currentListStyle(0),
             currentListLevel(1),
@@ -1323,8 +1323,8 @@ void KoTextLoader::startBody(int total)
 void KoTextLoader::processBody()
 {
     d->bodyProgressValue++;
-    if (d->dt.elapsed() >= d->lastElapsed + 1000) {  // update only once per second
-        d->lastElapsed = d->dt.elapsed();
+    if (d->dt.elapsed() >= d->nextProgressReportMs) {  // update based on elapsed time, don't saturate the queue
+        d->nextProgressReportMs = d->dt.elapsed() + 333; // report 3 times per second
         Q_ASSERT(d->bodyProgressTotal > 0);
         const int percent = d->bodyProgressValue * 100 / d->bodyProgressTotal;
         emit sigProgress(percent);

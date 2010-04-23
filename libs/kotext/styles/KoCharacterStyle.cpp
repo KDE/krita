@@ -1143,7 +1143,8 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     }
 
     if (styleStack.hasProperty(KoXmlNS::style, "text-scale")) {
-        const int scale = styleStack.property(KoXmlNS::style, "text-scale").toInt();
+        const QString scaleString(styleStack.property(KoXmlNS::style, "text-scale"));
+        const int scale = (scaleString.endsWith('%') ? scaleString.left(scaleString.length()-1) : scaleString).toInt();
         setTextScale(scale);
     }
 
@@ -1344,7 +1345,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
             style.addProperty("style:text-rotation-scale", rotationScaleToString(scale), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::TextScale) {
             int scale = textScale();
-            style.addProperty("style:text-scale", scale, KoGenStyle::TextType);
+            style.addProperty("style:text-scale", QString::number(scale) + '%', KoGenStyle::TextType);
         }
     }
     //TODO: font name and family

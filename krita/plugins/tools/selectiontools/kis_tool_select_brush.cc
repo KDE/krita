@@ -121,6 +121,7 @@ void KisToolSelectBrush::mouseMoveEvent(KoPointerEvent *e)
 
         //randomise the point to workaround a bug in QPainterPath::operator|=()
         //FIXME: http://bugreports.qt.nokia.com/browse/QTBUG-8035
+        //will be fixed in version 4.7.0
         qreal randomX=rand()%100;
         randomX/=1000.;
         qreal randomY=rand()%100;

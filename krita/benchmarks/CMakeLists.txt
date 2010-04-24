@@ -20,6 +20,7 @@ set(kis_stroke_benchmark_SRCS kis_stroke_benchmark.cpp)
 set(kis_fast_math_benchmark_SRCS kis_fast_math_benchmark.cpp)
 set(kis_floodfill_benchmark_SRCS kis_floodfill_benchmark.cpp)
 set(kis_gradient_benchmark_SRCS kis_gradient_benchmark.cpp)
+set(kis_mask_generator_benchmark_SRCS kis_mask_generator_benchmark.cpp)
 
 kde4_add_unit_test(KisDatamanagerBenchmark TESTNAME krita-benchmarks-KisDataManager ${kis_datamanager_benchmark_SRCS})
 kde4_add_unit_test(KisHLineIteratorBenchmark TESTNAME krita-benchmarks-KisHLineIterator ${kis_hiterator_benchmark_SRCS})
@@ -34,6 +35,7 @@ kde4_add_unit_test(KisStrokeBenchmark TESTNAME krita-benchmarks-KisStrokeBenchma
 kde4_add_unit_test(KisFastMathBenchmark TESTNAME krita-benchmarks-KisFastMath ${kis_fast_math_benchmark_SRCS})
 kde4_add_unit_test(KisFloodfillBenchmark TESTNAME krita-benchmarks-KisFloodFill ${kis_floodfill_benchmark_SRCS})
 kde4_add_unit_test(KisGradientBenchmark TESTNAME krita-benchmarks-KisGradientFill ${kis_gradient_benchmark_SRCS})
+kde4_add_unit_test(KisMaskGeneratorBenchmark TESTNAME krita-benchmarks-KisMaskGenerator ${kis_mask_generator_benchmark_SRCS})
 
 target_link_libraries(KisDatamanagerBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisHLineIteratorBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -48,3 +50,4 @@ target_link_libraries(KisStrokeBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTE
 target_link_libraries(KisFastMathBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisFloodfillBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisGradientBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisMaskGeneratorBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

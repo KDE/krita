@@ -21,7 +21,7 @@
 #define KOCOMPOSITEOPALPHADARKEN_H_
 
 #include "KoColorSpaceMaths.h"
-#include "KoCompositeOp.h"
+#include "KoCompositeOpOver.h"
 #include "KoColorSpaceConstants.h"
 
 #define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::unitValue
@@ -57,7 +57,7 @@ public:
                    const QBitArray & channelFlags) const {
         qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
 
-        bool testChannelFlags = !channelFlags.isEmpty();
+        bool allChannelFlags = channelFlags.isEmpty();
         while (rows-- > 0) {
 
             const channels_type *s = reinterpret_cast<const channels_type *>(srcRowStart);
@@ -89,7 +89,7 @@ public:
                 if (srcAlpha != NATIVE_OPACITY_TRANSPARENT )
                 {
                     if (srcAlpha >= dstAlpha) {
-                      if (!testChannelFlags) {
+                      if (allChannelFlags) {
                           for (uint i = 0; i < _CSTraits::channels_nb; i++) {
                               if ((int)i != _CSTraits::alpha_pos) {
                                   d[i] = s[i];
@@ -105,19 +105,7 @@ public:
                       d[_CSTraits::alpha_pos] = srcAlpha;
                   } else {
                       channels_type srcBlend = KoColorSpaceMaths<channels_type>::divide(srcAlpha, dstAlpha);
-                      if (!testChannelFlags) {
-                          for (uint i = 0; i < _CSTraits::channels_nb; i++) {
-                              if ((int)i != _CSTraits::alpha_pos) {
-                                  d[i] = KoColorSpaceMaths<channels_type>::blend(s[i], d[i], srcBlend);
-                              }
-                          }
-                      } else {
-                          for (uint i = 0; i < _CSTraits::channels_nb; i++) {
-                              if ((int)i != _CSTraits::alpha_pos && channelFlags.testBit(i)) {
-                                  d[i] = KoColorSpaceMaths<channels_type>::blend(s[i], d[i], srcBlend);
-                              }
-                          }
-                      }
+                      KoCompositeOpOverCompositor<_CSTraits, _CSTraits::channels_nb-1>::composeColorChannels(srcBlend, s, d, allChannelFlags, channelFlags);
                   }
                 }
             }

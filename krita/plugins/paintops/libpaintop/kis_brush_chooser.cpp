@@ -94,6 +94,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     m_slSpacing = new KisDoubleSliderSpinBox(this);
     m_slSpacing->setRange(0.0, 10, 2);
     m_slSpacing->setValue(0.1);
+    m_slSpacing->setExponentRatio(3.0);
     QObject::connect(m_slSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSpacing(qreal)));
 
     m_chkColorMask = new QCheckBox(i18n("Use color as mask"), this);

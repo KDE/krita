@@ -190,6 +190,7 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     inputAngle->setValue(aBrush->angle() * 180 / M_PI);
     inputSpikes->setValue(aBrush->maskGenerator()->spikes());
     inputSpacing->setValue(aBrush->spacing());
+    inputSpacing->setExponentRatio(3.0);
 }
 
 

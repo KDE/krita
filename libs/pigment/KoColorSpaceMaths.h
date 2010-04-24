@@ -420,6 +420,40 @@ inline double KoColorSpaceMaths<half>::clamp(double a)
 
 #endif
 
+//------------------------------ quint8 specialization ------------------------------//
+
+template<>
+inline qint32 KoColorSpaceMaths<quint8>::multiply(qint32 a, qint32 b)
+{
+    return UINT8_MULT(a, b);
+}
+
+template<>
+inline quint8 KoColorSpaceMaths<quint8>::divide(quint8 a, quint8 b)
+{
+    return UINT8_DIVIDE(a, b);
+}
+
+template<>
+inline quint8 KoColorSpaceMaths<quint8>::blend(quint8 a, quint8 b, quint8 c)
+{
+    return UINT8_BLEND(a, b, c);
+}
+
+//------------------------------ quint16 specialization ------------------------------//
+
+template<>
+inline qint64 KoColorSpaceMaths<quint16>::multiply(qint64 a, qint64 b)
+{
+    return UINT16_MULT(a, b);
+}
+
+template<>
+inline quint16 KoColorSpaceMaths<quint16>::divide(quint16 a, quint16 b)
+{
+    return UINT16_DIVIDE(a, b);
+}
+
 //------------------------------ various specialization ------------------------------//
 
 

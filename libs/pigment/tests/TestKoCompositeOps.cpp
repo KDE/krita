@@ -129,7 +129,7 @@ void TestKoCompositeOps::testCompositeOver()
     QCOMPAREui(p16f1.red, 11666);
     QCOMPAREui(p16f1.green, 10333);
     QCOMPAREui(p16f1.blue, 18666);
-    QCOMPAREui(p16f1.alpha, 49150);
+    QCOMPAREui(p16f1.alpha, 49151);
 
     // Test no mask, full opacity, quarter-transparent src, half-transparent dst
     p16f.red = 10000; p16f.green = 15000; p16f.blue = 20000; p16f.alpha = QUARTER_OPACITY;
@@ -138,7 +138,7 @@ void TestKoCompositeOps::testCompositeOver()
     QCOMPAREui(p16f1.red, 13000);
     QCOMPAREui(p16f1.green, 6599);
     QCOMPAREui(p16f1.blue, 17599);
-    QCOMPAREui(p16f1.alpha, 40958);
+    QCOMPAREui(p16f1.alpha, 40959);
 
     // Test no mask, full opacity, quarter-transparent dst, half-transparent src
     p16f.red = 10000; p16f.green = 15000; p16f.blue = 20000; p16f.alpha = HALF_OPACITY;
@@ -147,7 +147,7 @@ void TestKoCompositeOps::testCompositeOver()
     QCOMPAREui(p16f1.red, 11000);
     QCOMPAREui(p16f1.green, 12199);
     QCOMPAREui(p16f1.blue, 19199);
-    QCOMPAREui(p16f1.alpha, 40958);
+    QCOMPAREui(p16f1.alpha, 40959);
 }
 #if 0
 void TestKoCompositeOps::testCompositeAlphaDarken()

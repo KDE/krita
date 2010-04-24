@@ -72,6 +72,10 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
     inputSpikes->setValue(2);
     connect(inputSpikes, SIGNAL(valueChanged(int)), this, SLOT(paramChanged()));
 
+    inputRandomness->setRange(0, 100);
+    inputRandomness->setValue(0);
+    connect(inputRandomness, SIGNAL(valueChanged(qreal)), this, SLOT(paramChanged()));
+
     inputAngle->setRange(0, 360);
     inputAngle->setSuffix(QChar(Qt::Key_degree));
     inputAngle->setValue(0);
@@ -116,7 +120,7 @@ void KisAutoBrushWidget::paramChanged()
         Q_CHECK_PTR(kas);
 
     }
-    m_autoBrush = new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI);
+    m_autoBrush = new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI, inputRandomness->value() / 100.0);
     m_autoBrush->setSpacing(inputSpacing->value());
     m_brush = m_autoBrush->image();
 

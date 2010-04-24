@@ -36,15 +36,17 @@
 struct KisAutoBrush::Private {
     KisMaskGenerator* shape;
     qreal angle;
+    qreal randomness;
     mutable QVector<quint8> precomputedQuarter;
 };
 
-KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, double angle)
+KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness)
         : KisBrush()
         , d(new Private)
 {
     d->shape = as;
     d->angle = angle;
+    d->randomness = randomness;
     QImage image = createBrushPreview();
     setImage(image);
     setBrushType(MASK);
@@ -164,7 +166,8 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                         coloringInformation->nextColumn();
                     }
                 }
-                cs->setOpacity(dabPointer, quint8( OPACITY_OPAQUE_U8 - interpolatedValueAt(maskX, maskY,d->precomputedQuarter,halfWidth) ), 1);
+                double random = (1.0 - d->randomness) + d->randomness * float(rand()) / RAND_MAX;
+                cs->setOpacity(dabPointer,quint8( ( OPACITY_OPAQUE_U8 - interpolatedValueAt(maskX, maskY,d->precomputedQuarter,halfWidth) ) * random), 1);
                 dabPointer += pixelSize;
             }//endfor x
             //printf("\n");
@@ -202,7 +205,8 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                     }
                 }
                 
-                cs->setOpacity(dabPointer, quint8(OPACITY_OPAQUE_U8 - d->shape->valueAt(maskX, maskY)), 1);
+                double random = (1.0 - d->randomness) + d->randomness * float(rand()) / RAND_MAX;
+                cs->setOpacity(dabPointer, quint8( (OPACITY_OPAQUE_U8 - d->shape->valueAt(maskX, maskY)) * random), 1);
                 dabPointer += pixelSize;
             }//endfor x
             if (!color && coloringInformation) {
@@ -225,6 +229,7 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
     e.setAttribute("type", "auto_brush");
     e.setAttribute("spacing", spacing());
     e.setAttribute("angle", d->angle);
+    e.setAttribute("randomness", d->randomness);
 }
 
 QImage KisAutoBrush::createBrushPreview()
@@ -238,7 +243,8 @@ QImage KisAutoBrush::createBrushPreview()
     for (int j = 0; j < height; ++j) {
         QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(j));
         for (int i = 0; i < width; ++i) {
-            qint8 v = d->shape->valueAt(i - centerX, j - centerY);
+            double random = (1.0 - d->randomness) + d->randomness * float(rand()) / RAND_MAX;
+            qint8 v = 255 - (255 - d->shape->valueAt(i - centerX, j - centerY)) * random;
             pixel[i] = qRgb(v, v, v);
         }
     }

@@ -32,7 +32,7 @@ class BRUSH_EXPORT KisAutoBrush : public KisBrush
 
 public:
 
-    KisAutoBrush(KisMaskGenerator* image, double angle);
+    KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness);
 
     virtual ~KisAutoBrush();
 

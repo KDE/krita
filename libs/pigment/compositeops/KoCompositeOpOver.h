@@ -23,6 +23,31 @@
 #include "KoCompositeOpAlphaBase.h"
 #include <klocale.h>
 
+template<class _CSTraits, int channel>
+struct KoCompositeOpOverCompositor {
+    typedef typename _CSTraits::channels_type channels_type;
+    inline static void composeColorChannels(channels_type srcBlend,
+                                            const channels_type* srcN,
+                                            channels_type* dstN,
+                                            bool allChannelFlags,
+                                            const QBitArray & channelFlags) {
+        if (channel != _CSTraits::alpha_pos && (allChannelFlags || channelFlags.testBit(channel)))
+            dstN[channel] = KoColorSpaceMaths<channels_type>::blend(srcN[channel], dstN[channel], srcBlend);
+        KoCompositeOpOverCompositor<_CSTraits, channel - 1>::composeColorChannels(srcBlend, srcN, dstN, allChannelFlags, channelFlags);
+    }
+};
+
+template<class _CSTraits>
+struct KoCompositeOpOverCompositor<_CSTraits, -1> {
+    typedef typename _CSTraits::channels_type channels_type;
+    inline static void composeColorChannels(channels_type /*srcBlend*/,
+                                            const channels_type* /*srcN*/,
+                                            channels_type* /*dstN*/,
+                                            bool /*allChannelFlags*/,
+                                            const QBitArray & /*channelFlags*/) {
+    }
+};
+
 /**
  * A template version of the over composite operation to use in colorspaces.
  */
@@ -54,10 +79,7 @@ public:
                     dstN[i] = srcN[i];
             }
         } else {
-            for (int i = 0; (uint)i <  _CSTraits::channels_nb; i++) {
-                if (i != _CSTraits::alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
-                    dstN[i] = KoColorSpaceMaths<channels_type>::blend(srcN[i], dstN[i], srcBlend);
-            }
+            KoCompositeOpOverCompositor<_CSTraits, _CSTraits::channels_nb-1>::composeColorChannels(srcBlend, srcN, dstN, allChannelFlags, channelFlags);
         }
     }
 

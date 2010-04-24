@@ -104,21 +104,20 @@ public:
                       }
                       d[_CSTraits::alpha_pos] = srcAlpha;
                   } else {
-                      qreal blend1 = srcAlpha / qreal(dstAlpha);
-                      qreal blend0 = 1.0 - blend1;
+                      channels_type srcBlend = KoColorSpaceMaths<channels_type>::divide(srcAlpha, dstAlpha);
                       if (!testChannelFlags) {
                           for (uint i = 0; i < _CSTraits::channels_nb; i++) {
                               if ((int)i != _CSTraits::alpha_pos) {
-                                  d[i] = d[i] * blend0 + s[i] * blend1;
+                                  d[i] = KoColorSpaceMaths<channels_type>::blend(s[i], d[i], srcBlend);
                               }
                           }
                       } else {
                           for (uint i = 0; i < _CSTraits::channels_nb; i++) {
                               if ((int)i != _CSTraits::alpha_pos && channelFlags.testBit(i)) {
-                                  d[i] = d[i] * blend0 + s[i] * blend1;
+                                  d[i] = KoColorSpaceMaths<channels_type>::blend(s[i], d[i], srcBlend);
                               }
                           }
-                      }                      
+                      }
                   }
                 }
             }

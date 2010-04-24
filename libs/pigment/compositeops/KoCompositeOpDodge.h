@@ -44,10 +44,8 @@ public:
     inline static void composeColorChannels(channels_type srcBlend,
                                             const channels_type* src,
                                             channels_type* dst,
-                                            qint32 pixelSize,
                                             bool allChannelFlags,
                                             const QBitArray & channelFlags) {
-        Q_UNUSED(pixelSize);
         for (uint channel = 0; channel < _CSTraits::channels_nb; channel++) {
             if ((int)channel != _CSTraits::alpha_pos && (allChannelFlags || channelFlags.testBit(channel))) {
                 compositetype srcColor = src[channel];

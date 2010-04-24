@@ -28,7 +28,7 @@ class TestKoCompositeOps : public QObject
 private slots:
 
     void testCompositeOver();
-/*    void testCompositeAlphaDarken();
+    void testCompositeAlphaDarken();
     void testCompositeAdd();
     void testCompositeBurn();
     void testCompositeDivide();
@@ -37,7 +37,7 @@ private slots:
     void testCompositeMulitply();
     void testCompositeOverlay();
     void testCompositeScreen();
-    void testCompositeSubtract();*/
+    void testCompositeSubtract();
 };
 
 #endif

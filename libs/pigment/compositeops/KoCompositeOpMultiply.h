@@ -43,10 +43,8 @@ public:
     inline static void composeColorChannels(channels_type srcBlend,
                                             const channels_type* src,
                                             channels_type* dst,
-                                            qint32 pixelSize,
                                             bool allChannelFlags,
                                             const QBitArray & channelFlags) {
-        Q_UNUSED(pixelSize);
         for (uint i = 0; i < _CSTraits::channels_nb; i++) {
             if ((int)i != _CSTraits::alpha_pos  && (allChannelFlags || channelFlags.testBit(i))) {
                 channels_type srcChannel = src[i];

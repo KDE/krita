@@ -149,7 +149,7 @@ void TestKoCompositeOps::testCompositeOver()
     QCOMPAREui(p16f1.blue, 19199);
     QCOMPAREui(p16f1.alpha, 40958);
 }
-
+#if 0
 void TestKoCompositeOps::testCompositeAlphaDarken()
 {
     KoRgbU16Traits::Pixel p16f;
@@ -1249,6 +1249,6 @@ void TestKoCompositeOps::testCompositeSubtract()
     QCOMPAREui(p16f1.blue, 6857);
     QCOMPAREui(p16f1.alpha, QUARTER_OPACITY);
 }
-
+#endif
 QTEST_KDEMAIN(TestKoCompositeOps, NoGUI)
 #include "TestKoCompositeOps.moc"

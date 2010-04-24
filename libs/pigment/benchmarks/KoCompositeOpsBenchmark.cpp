@@ -84,85 +84,85 @@ void KoCompositeOpsBenchmark::benchmarkCompositeOver()
     }
 }
 
-void KoCompositeOpsBenchmark::benchmarkCompositeAdd()
-{
-    KoCompositeOpAdd<KoRgbU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}    
-
-void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarken()
-{
-    KoCompositeOpAlphaDarken<KoRgbU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeBurn()
-{
-    KoCompositeOpBurn<KoRgbU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeDivide()
-{
-    KoCompositeOpDivide<KoRgbU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeDodge()
-{
-    KoCompositeOpDodge<KoRgbU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeInversedSubtract()
-{
-    KoCompositeOpInversedSubtract<KoRgbU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeMulitply()
-{
-    KoCompositeOpMultiply<KoRgbU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeOverlay()
-{
-    KoCompositeOpOverlay<KoRgbU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeScreen()
-{
-    KoCompositeOpScreen<KoRgbU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeSubtract()
-{
-    KoCompositeOpSubtract<KoRgbU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
+// void KoCompositeOpsBenchmark::benchmarkCompositeAdd()
+// {
+//     KoCompositeOpAdd<KoRgbU16Traits> compositeOp(0);
+//     QBENCHMARK{
+//         COMPOSITE_BENCHMARK
+//     }
+// }    
+// 
+// void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarken()
+// {
+//     KoCompositeOpAlphaDarken<KoRgbU16Traits> compositeOp(0);
+//     QBENCHMARK{
+//         COMPOSITE_BENCHMARK
+//     }
+// }
+// 
+// void KoCompositeOpsBenchmark::benchmarkCompositeBurn()
+// {
+//     KoCompositeOpBurn<KoRgbU16Traits> compositeOp(0);
+//     QBENCHMARK{
+//         COMPOSITE_BENCHMARK
+//     }
+// }
+// 
+// void KoCompositeOpsBenchmark::benchmarkCompositeDivide()
+// {
+//     KoCompositeOpDivide<KoRgbU16Traits> compositeOp(0);
+//     QBENCHMARK{
+//         COMPOSITE_BENCHMARK
+//     }
+// }
+// 
+// void KoCompositeOpsBenchmark::benchmarkCompositeDodge()
+// {
+//     KoCompositeOpDodge<KoRgbU16Traits> compositeOp(0);
+//     QBENCHMARK{
+//         COMPOSITE_BENCHMARK
+//     }
+// }
+// 
+// void KoCompositeOpsBenchmark::benchmarkCompositeInversedSubtract()
+// {
+//     KoCompositeOpInversedSubtract<KoRgbU16Traits> compositeOp(0);
+//     QBENCHMARK{
+//         COMPOSITE_BENCHMARK
+//     }
+// }
+// 
+// void KoCompositeOpsBenchmark::benchmarkCompositeMulitply()
+// {
+//     KoCompositeOpMultiply<KoRgbU16Traits> compositeOp(0);
+//     QBENCHMARK{
+//         COMPOSITE_BENCHMARK
+//     }
+// }
+// 
+// void KoCompositeOpsBenchmark::benchmarkCompositeOverlay()
+// {
+//     KoCompositeOpOverlay<KoRgbU16Traits> compositeOp(0);
+//     QBENCHMARK{
+//         COMPOSITE_BENCHMARK
+//     }
+// }
+// 
+// void KoCompositeOpsBenchmark::benchmarkCompositeScreen()
+// {
+//     KoCompositeOpScreen<KoRgbU16Traits> compositeOp(0);
+//     QBENCHMARK{
+//         COMPOSITE_BENCHMARK
+//     }
+// }
+// 
+// void KoCompositeOpsBenchmark::benchmarkCompositeSubtract()
+// {
+//     KoCompositeOpSubtract<KoRgbU16Traits> compositeOp(0);
+//     QBENCHMARK{
+//         COMPOSITE_BENCHMARK
+//     }
+// }
 
 QTEST_KDEMAIN(KoCompositeOpsBenchmark, NoGUI)
 #include "KoCompositeOpsBenchmark.moc"

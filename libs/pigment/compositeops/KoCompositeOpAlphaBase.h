@@ -64,118 +64,71 @@ public:
 
         qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
         bool allChannelFlags = channelFlags.isEmpty();
-        if (_CSTraits::alpha_pos == -1) {
+        bool alphaLocked = false;
+        if (!channelFlags.isEmpty()) {
+            if (_CSTraits::alpha_pos == -1 || !channelFlags.testBit(_CSTraits::alpha_pos)) {
+                alphaLocked = true;
+            }
+        }
 
-            qint32 pixelSize = _CSTraits::pixelSize;
+        channels_type opacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_opacity);
 
-            // XXX: if cols == (dststride/dstPixelSize) == (srcstride/srcPixelSize) == maskstride/maskpixelsize)
-            // then don't loop through rows and cols, but composite everything in one go
-            while (rows > 0) {
-                const channels_type *srcN = reinterpret_cast<const channels_type *>(srcRowStart);
-                channels_type *dstN = reinterpret_cast<channels_type *>(dstRowStart);
-                const quint8 *mask = maskRowStart;
+        while (rows > 0) {
+            const channels_type *srcN = reinterpret_cast<const channels_type *>(srcRowStart);
+            channels_type *dstN = reinterpret_cast<channels_type *>(dstRowStart);
+            const quint8 *mask = maskRowStart;
 
-                qint32 columns = cols;
+            qint32 columns = cols;
 
-                while (columns > 0) {
+            while (columns > 0) {
 
+                channels_type srcAlpha = _CSTraits::alpha_pos == -1 ? NATIVE_OPACITY_OPAQUE : _compositeOp::selectAlpha(srcN[_CSTraits::alpha_pos], dstN[_CSTraits::alpha_pos]);
 
-                    // Don't blend dst with src if the mask is fully
-                    // transparent
+                // apply the alphamask
+                if (mask != 0) {
+                    if (*mask != OPACITY_OPAQUE_U8) {
+                        srcAlpha = KoColorSpaceMaths<channels_type, quint8>::multiply(srcAlpha, *mask);
+                    }
+                    mask++;
+                }
 
-                    if (mask != 0) {
-                        if (*mask == OPACITY_TRANSPARENT_U8) {
-                            mask++;
-                            columns--;
-                            srcN += _CSTraits::channels_nb;
-                            dstN += _CSTraits::channels_nb;
-                            continue;
-                        }
-                        mask++;
+                if (srcAlpha != NATIVE_OPACITY_TRANSPARENT) {
+
+                    if (opacity != NATIVE_OPACITY_OPAQUE) {
+                        srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, opacity);
                     }
 
-                    _compositeOp::composeColorChannels(NATIVE_OPACITY_OPAQUE, srcN, dstN, pixelSize, allChannelFlags, channelFlags);
+                    channels_type dstAlpha = _CSTraits::alpha_pos == -1 ? NATIVE_OPACITY_OPAQUE : dstN[_CSTraits::alpha_pos];
 
-                    columns--;
-                    srcN += srcInc;
-                    dstN += _CSTraits::channels_nb;
-                }
+                    channels_type srcBlend;
 
-                rows--;
-                srcRowStart += srcstride;
-                dstRowStart += dststride;
-                if (maskRowStart) {
-                    maskRowStart += maskstride;
-                }
-            }
-        } else {
-            bool alphaLocked = false;
-            if (!channelFlags.isEmpty()) {
-                if (!channelFlags.testBit(_CSTraits::alpha_pos)) {
-                    alphaLocked = true;
-                }
-            }
-
-            channels_type opacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_opacity);
-            qint32 pixelSize = _CSTraits::pixelSize;
-
-            while (rows > 0) {
-                const channels_type *srcN = reinterpret_cast<const channels_type *>(srcRowStart);
-                channels_type *dstN = reinterpret_cast<channels_type *>(dstRowStart);
-                const quint8 *mask = maskRowStart;
-
-                qint32 columns = cols;
-
-                while (columns > 0) {
-
-                    channels_type srcAlpha = _compositeOp::selectAlpha(srcN[_CSTraits::alpha_pos], dstN[_CSTraits::alpha_pos]);
-
-                    // apply the alphamask
-                    if (mask != 0) {
-                        if (*mask != OPACITY_OPAQUE_U8) {
-                            srcAlpha = KoColorSpaceMaths<channels_type, quint8>::multiply(srcAlpha, *mask);
-                        }
-                        mask++;
-                    }
-
-                    if (srcAlpha != NATIVE_OPACITY_TRANSPARENT) {
-
-                        if (opacity != NATIVE_OPACITY_OPAQUE) {
-                            srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, opacity);
+                    if (dstAlpha == NATIVE_OPACITY_OPAQUE) {
+                        srcBlend = srcAlpha;
+                    } else {
+                        channels_type newAlpha = dstAlpha + KoColorSpaceMaths<channels_type>::multiply(NATIVE_OPACITY_OPAQUE - dstAlpha, srcAlpha);
+                        if (!alphaLocked && !_alphaLocked) { // No need to check for _CSTraits::alpha_pos == -1 since it is contained in alphaLocked
+                            dstN[_CSTraits::alpha_pos] = newAlpha;
                         }
 
-                        channels_type dstAlpha = dstN[_CSTraits::alpha_pos];
-
-                        channels_type srcBlend;
-
-                        if (dstAlpha == NATIVE_OPACITY_OPAQUE) {
-                            srcBlend = srcAlpha;
+                        if (newAlpha != 0) {
+                            srcBlend = KoColorSpaceMaths<channels_type>::divide(srcAlpha, newAlpha);
                         } else {
-                            channels_type newAlpha = dstAlpha + KoColorSpaceMaths<channels_type>::multiply(NATIVE_OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                            if (!alphaLocked && !_alphaLocked) {
-                                dstN[_CSTraits::alpha_pos] = newAlpha;
-                            }
-
-                            if (newAlpha != 0) {
-                                srcBlend = KoColorSpaceMaths<channels_type>::divide(srcAlpha, newAlpha);
-                            } else {
-                                srcBlend = srcAlpha;
-                            }
+                            srcBlend = srcAlpha;
                         }
-                        _compositeOp::composeColorChannels(srcBlend, srcN, dstN, pixelSize, allChannelFlags, channelFlags);
-
                     }
-                    columns--;
-                    srcN += srcInc;
-                    dstN += _CSTraits::channels_nb;
-                }
+                    _compositeOp::composeColorChannels(srcBlend, srcN, dstN, allChannelFlags, channelFlags);
 
-                rows--;
-                srcRowStart += srcstride;
-                dstRowStart += dststride;
-                if (maskRowStart) {
-                    maskRowStart += maskstride;
                 }
+                columns--;
+                srcN += srcInc;
+                dstN += _CSTraits::channels_nb;
+            }
+
+            rows--;
+            srcRowStart += srcstride;
+            dstRowStart += dststride;
+            if (maskRowStart) {
+                maskRowStart += maskstride;
             }
         }
     }

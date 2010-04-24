@@ -42,13 +42,12 @@ public:
         return srcAlpha;
     }
 
-    inline static void composeColorChannels(channels_type srcBlend,
+public:
+   inline static void composeColorChannels(channels_type srcBlend,
                                             const channels_type* srcN,
                                             channels_type* dstN,
-                                            qint32 pixelSize,
                                             bool allChannelFlags,
                                             const QBitArray & channelFlags) {
-        Q_UNUSED(pixelSize);
         if (srcBlend == NATIVE_OPACITY_OPAQUE) {
             for (int i = 0; (uint)i <  _CSTraits::channels_nb; i++) {
                 if (i != _CSTraits::alpha_pos && (allChannelFlags || channelFlags.testBit(i)))

@@ -38,12 +38,28 @@
 #include <kis_color_source.h>
 
 KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
-        : KisBrushBasedPaintOp(settings, painter)
+        : KisBrushBasedPaintOp(settings, painter), m_hsvTransfo(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-       
+
+    m_colorSource = new KisPlainColorSource(painter->backgroundColor(), painter->paintColor());
+    
+    m_hsvOptions.append(KisPressureHSVOption::createHueOption());
+    m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
+    m_hsvOptions.append(KisPressureHSVOption::createValueOption());
+    
+    foreach(KisPressureHSVOption* option, m_hsvOptions)
+    {
+        option->readOptionSetting(settings);
+        option->sensor()->reset();
+        if(option->isChecked() && !m_hsvTransfo)
+        {
+            m_hsvTransfo = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
+        }
+    }
+    
     m_sizeOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_darkenOption.readOptionSetting(settings);
@@ -53,13 +69,13 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_opacityOption.sensor()->reset();
     m_darkenOption.sensor()->reset();
     m_rotationOption.sensor()->reset();
-
-    m_colorSource = new KisPlainColorSource(painter->backgroundColor(), painter->paintColor());
 }
 
 KisBrushOp::~KisBrushOp()
 {
+    qDeleteAll(m_hsvOptions);
     delete m_colorSource;
+    delete m_hsvTransfo;
 }
 
 double KisBrushOp::paintAt(const KisPaintInformation& info)
@@ -99,7 +115,17 @@ double KisBrushOp::paintAt(const KisPaintInformation& info)
     m_colorSource->selectColor(m_mixOption.apply(info) );
     KoColor origColor = painter()->paintColor();
     m_darkenOption.apply(m_colorSource, info);
-    painter()->setPaintColor( m_colorSource->uniformColor() ); 
+
+    if(m_hsvTransfo)
+    {
+        foreach(KisPressureHSVOption* option, m_hsvOptions)
+        {
+            option->apply(m_hsvTransfo, info);
+        }
+        m_colorSource->applyColorTransformation(m_hsvTransfo);
+    }
+
+    painter()->setPaintColor( m_colorSource->uniformColor() );
 
     KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {

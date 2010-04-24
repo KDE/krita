@@ -29,6 +29,7 @@
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_mix_option.h>
+#include <kis_pressure_hsv_option.h>
 
 class KisBrushBasedPaintOpSettings;
 
@@ -55,6 +56,8 @@ private:
     KisPressureDarkenOption m_darkenOption;
     KisPressureRotationOption m_rotationOption;
     KisPressureMixOption m_mixOption;
+    QList<KisPressureHSVOption*> m_hsvOptions;
+    KoColorTransformation* m_hsvTransfo;
 };
 
 #endif // KIS_BRUSHOP_H_

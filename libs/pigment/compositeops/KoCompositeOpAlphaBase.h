@@ -51,6 +51,7 @@ public:
 public:
     using KoCompositeOp::composite;
 
+    template<bool alphaLocked, bool allChannelFlags>
     void composite(quint8 *dstRowStart,
                    qint32 dststride,
                    const quint8 *srcRowStart,
@@ -63,13 +64,6 @@ public:
                    const QBitArray & channelFlags) const {
 
         qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
-        bool allChannelFlags = channelFlags.isEmpty();
-        bool alphaLocked = false;
-        if (!channelFlags.isEmpty()) {
-            if (_CSTraits::alpha_pos == -1 || !channelFlags.testBit(_CSTraits::alpha_pos)) {
-                alphaLocked = true;
-            }
-        }
 
         channels_type opacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_opacity);
 
@@ -130,6 +124,50 @@ public:
             if (maskRowStart) {
                 maskRowStart += maskstride;
             }
+        }
+    }
+    template<bool alphaLocked>
+    void composite(quint8 *dstRowStart,
+                   qint32 dststride,
+                   const quint8 *srcRowStart,
+                   qint32 srcstride,
+                   const quint8 *maskRowStart,
+                   qint32 maskstride,
+                   qint32 rows,
+                   qint32 cols,
+                   quint8 U8_opacity,
+                   const QBitArray & channelFlags) const
+    {
+        bool allChannelFlags = channelFlags.isEmpty();
+        if(allChannelFlags)
+        {
+            composite<alphaLocked, true>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
+        } else {
+            composite<alphaLocked, false>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
+        }
+    }
+    void composite(quint8 *dstRowStart,
+                   qint32 dststride,
+                   const quint8 *srcRowStart,
+                   qint32 srcstride,
+                   const quint8 *maskRowStart,
+                   qint32 maskstride,
+                   qint32 rows,
+                   qint32 cols,
+                   quint8 U8_opacity,
+                   const QBitArray & channelFlags) const
+    {
+        bool alphaLocked = false;
+        if (!channelFlags.isEmpty()) {
+            if (_CSTraits::alpha_pos == -1 || !channelFlags.testBit(_CSTraits::alpha_pos)) {
+                alphaLocked = true;
+            }
+        }
+        if(alphaLocked)
+        {
+            composite<true>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
+        } else {
+            composite<false>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
         }
     }
 };

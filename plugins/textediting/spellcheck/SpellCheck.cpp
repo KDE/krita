@@ -97,6 +97,8 @@ void SpellCheck::checkSection(QTextDocument *document, int startPosition, int en
             return;
         // TODO also check if we should replace an existing queued item with a longer span
     }
+    disconnect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
+    connect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
 
     SpellSections ss(document, startPosition, endPosition);
     m_documentsQueue.enqueue(ss);
@@ -190,6 +192,39 @@ static_cast<MyThread*>(QThread::currentThread())->mySleep(400);
     range.length = word.trimmed().length();
     block.ranges << range;
     m_misspellings[blockIndex] = block;
+}
+
+void SpellCheck::documentChanged(int from, int min, int plus)
+{
+    if (min == plus)
+        return;
+    if (m_isChecking)
+        return;
+    QTextDocument *document = qobject_cast<QTextDocument*>(sender());
+    if (document == 0)
+        return;
+    QTextBlock block = document->findBlock(from);
+    if (!block.isValid())
+        return;
+    QList<QTextLayout::FormatRange> ranges = block.layout()->additionalFormats();
+    bool changed = false;
+    for (int i=0; i < ranges.count(); ++i) {
+        const QTextLayout::FormatRange &range = ranges.at(i);
+        if (range.start > from && range.format == m_defaultMisspelledFormat) {
+            QTextLayout::FormatRange newRange = range;
+            newRange.start += plus - min;
+            ranges[i] = newRange;
+            changed = true;
+        } else if ((range.start > from || range.start + range.length > from)
+                && range.format == m_defaultMisspelledFormat) {
+            ranges.removeAt(i);
+            --i;
+            changed = true;
+        }
+    }
+    if (changed) {
+        block.layout()->setAdditionalFormats(ranges);
+    }
 }
 
 void SpellCheck::runQueue()

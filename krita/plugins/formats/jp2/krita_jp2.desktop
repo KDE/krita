@@ -110,7 +110,6 @@ Name[zh_TW]=繪圖_Krita
 Path=
 StartupNotify=true
 Terminal=false
-TerminalOptions=
 Type=Application
 X-DBUS-StartupType=multi
 X-DBUS-ServiceName=org.koffice.krita

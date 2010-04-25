@@ -20,11 +20,13 @@
 #include "SpellCheckFactory.h"
 #include "SpellCheck.h"
 
+#include <KLocale>
+
 SpellCheckFactory::SpellCheckFactory(QObject *parent)
     : KoTextEditingFactory(parent, "spellcheck")
 {
-    setShowInMenu(false);
-    setTitle("Spell check...");
+    setShowInMenu(true);
+    setTitle(i18n("Spell Check"));
 }
 
 KoTextEditingPlugin *SpellCheckFactory::create() const

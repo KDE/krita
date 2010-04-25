@@ -87,8 +87,6 @@ void SpellCheck::finishedParagraph(QTextDocument *document, int cursorPosition)
 
 void SpellCheck::checkSection(QTextDocument *document, int startPosition, int endPosition)
 {
-    if (!m_enableSpellCheck)
-        return;
     if (startPosition >= endPosition) // no work
         return;
 

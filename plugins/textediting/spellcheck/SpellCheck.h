@@ -46,7 +46,6 @@ public:
     QStringList availableBackends() const;
     QStringList availableLanguages() const;
 
-    void setBackgroundSpellChecking(bool b);
     void setSkipAllUppercaseWords(bool b);
     void setSkipRunTogetherWords(bool b);
 
@@ -63,6 +62,7 @@ private slots:
     void finishedRun();
     void configureSpellCheck();
     void runQueue();
+    void setBackgroundSpellChecking(bool b);
 
 private:
     Sonnet::Speller m_speller;

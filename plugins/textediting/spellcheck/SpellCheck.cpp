@@ -27,6 +27,7 @@
 #include <KLocale>
 #include <KDebug>
 #include <KAction>
+#include <KToggleAction>
 #include <sonnet/configdialog.h>
 
 #include <QTextBlock>
@@ -47,7 +48,12 @@ SpellCheck::SpellCheck()
     connect(configureAction, SIGNAL(triggered()), this, SLOT(configureSpellCheck()));
     addAction("tool_configure_spellcheck", configureAction);
 
+    KToggleAction *spellCheck = new KToggleAction(i18n("Auto Spell Check"), this);
+    addAction("tool_auto_spellcheck", spellCheck);
+
     KConfigGroup spellConfig = KGlobal::config()->group("Spelling");
+    m_enableSpellCheck = spellConfig.readEntry("autoSpellCheck", m_enableSpellCheck);
+    spellCheck->setChecked(m_enableSpellCheck);
     m_speller = Sonnet::Speller(spellConfig.readEntry("defaultLanguage", "en_US"));
     m_bgSpellCheck = new BgSpellCheck(m_speller, this);
 
@@ -57,6 +63,7 @@ SpellCheck::SpellCheck()
     connect(m_bgSpellCheck, SIGNAL(misspelledWord(const QString &,int,bool)),
             this, SLOT(highlightMisspelled(const QString &,int,bool)));
     connect(m_bgSpellCheck, SIGNAL(done()), this, SLOT(finishedRun()));
+    connect(spellCheck, SIGNAL(toggled(bool)), this, SLOT(setBackgroundSpellChecking(bool)));
 }
 
 void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
@@ -116,7 +123,9 @@ void SpellCheck::setBackgroundSpellChecking(bool on)
 {
     if (m_enableSpellCheck == on)
         return;
+    KConfigGroup spellConfig = KGlobal::config()->group("Spelling");
     m_enableSpellCheck = on;
+    spellConfig.writeEntry("autoSpellCheck", m_enableSpellCheck);
     if (!m_enableSpellCheck) {
         // TODO remove all misspellings.
     }

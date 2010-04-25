@@ -39,7 +39,9 @@
 #include "KoColorSpace.h"
 #include <KoColorModelStandardIds.h>
 
-KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : super(parent), m_showOpacitySlider(opacitySlider)
+KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider)
+    : QWidget(parent),
+    m_showOpacitySlider(opacitySlider)
 {
     m_xycolorselector = new KoXYColorSelector(rgbColorSpace(), this);
     m_xycolorselector->setFixedSize(137, 137);

@@ -71,6 +71,8 @@ public:
     /**
     * Loads the content of the draw:frame element and it's children. This
     * method calls the abstract loadOdfFrameElement() method.
+    *
+    * @return false if loading failed
     */
     virtual bool loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context);
 
@@ -79,6 +81,7 @@ protected:
     /**
     * Abstract method to handle loading of the defined inner element like
     * e.g. the draw:image element.
+    * @return false if loading failed
     */
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
 

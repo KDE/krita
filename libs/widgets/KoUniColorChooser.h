@@ -37,8 +37,6 @@ class KOWIDGETS_EXPORT KoUniColorChooser
      : public QWidget
 {
     Q_OBJECT
-    typedef QWidget super;
-
 public:
     enum LayoutType{
         ComplexLayout, ///< complex, with all bells and whistles

@@ -37,6 +37,7 @@ class KoToolSelection;
 class KoToolBase;
 class KoCanvasBase;
 class KoCanvasController;
+class KoToolProxyPrivate;
 class QInputMethodEvent;
 
 /**
@@ -111,6 +112,9 @@ public:
     /// Set the new active tool.
     void setActiveTool(KoToolBase *tool);
 
+    /// \internal
+    KoToolProxyPrivate *priv();
+
 signals:
     /**
      * A tool can have a selection that is copy-able, this signal is emitted when that status changes.
@@ -125,19 +129,12 @@ signals:
      */
     void toolChanged(const QString &toolId);
 
-protected:
-    friend class KoToolManager;
-    friend class KoToolManager::Private;
-    /// the toolManager tells us which KoCanvasController this toolProxy is working for.
-    void setCanvasController(KoCanvasController *controller);
-
 private:
     Q_PRIVATE_SLOT(d, void timeout())
     Q_PRIVATE_SLOT(d, void selectionChanged(bool))
 
-    class Private;
-    Private * const d;
+    friend class KoToolProxyPrivate;
+    KoToolProxyPrivate * const d;
 };
-
 
 #endif // _KO_TOOL_PROXY_H_

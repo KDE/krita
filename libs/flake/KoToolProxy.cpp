@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoToolProxy.h"
+#include "KoToolProxy_p.h"
 
 #include "KoToolBase.h"
 #include "KoPointerEvent.h"
@@ -33,90 +34,74 @@
 #include <kdebug.h>
 #include <QTimer>
 
-class KoToolProxy::Private
+KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
+    : activeTool(0),
+    tabletPressed(false),
+    hasSelection(false),
+    controller(0),
+    parent(p)
 {
-public:
-    Private(KoToolProxy *p)
-        : activeTool(0),
-        tabletPressed(false),
-        hasSelection(false),
-        controller(0),
-        parent(p)
-    {
-        scrollTimer.setInterval(100);
-        mouseLeaveWorkaround = false;
-    }
+    scrollTimer.setInterval(100);
+    mouseLeaveWorkaround = false;
+}
 
-    void timeout() // Auto scroll the canvas
-    {
-        Q_ASSERT(controller);
-        int offsetX = controller->canvasOffsetX();
-        int offsetY = controller->canvasOffsetY();
-        // get the points version of 10 pixels offset.
-        QPointF offset = controller->canvas()->viewConverter()->viewToDocument(QPointF(10, 10));
-        QRectF mouseArea(scrollEdgePoint, QSizeF(offset.x(), offset.y()));
-        mouseArea.setTopLeft(mouseArea.center());
+void KoToolProxyPrivate::timeout() // Auto scroll the canvas
+{
+    Q_ASSERT(controller);
+    int offsetX = controller->canvasOffsetX();
+    int offsetY = controller->canvasOffsetY();
+    // get the points version of 10 pixels offset.
+    QPointF offset = controller->canvas()->viewConverter()->viewToDocument(QPointF(10, 10));
+    QRectF mouseArea(scrollEdgePoint, QSizeF(offset.x(), offset.y()));
+    mouseArea.setTopLeft(mouseArea.center());
 
-        controller->ensureVisible(mouseArea, true);
+    controller->ensureVisible(mouseArea, true);
 
-        QPoint moved(offsetX - controller->canvasOffsetX(), offsetY - controller->canvasOffsetY());
-        if (moved.x() == 0 && moved.y() == 0)
-            return;
-        scrollEdgePoint += controller->canvas()->viewConverter()->viewToDocument(moved);
+    QPoint moved(offsetX - controller->canvasOffsetX(), offsetY - controller->canvasOffsetY());
+    if (moved.x() == 0 && moved.y() == 0)
+        return;
+    scrollEdgePoint += controller->canvas()->viewConverter()->viewToDocument(moved);
 
-        QMouseEvent event(QEvent::MouseMove, scrollEdgePoint.toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
-        KoPointerEvent ev(&event, scrollEdgePoint);
-        activeTool->mouseMoveEvent(&ev);
-    }
+    QMouseEvent event(QEvent::MouseMove, scrollEdgePoint.toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
+    KoPointerEvent ev(&event, scrollEdgePoint);
+    activeTool->mouseMoveEvent(&ev);
+}
 
-    void checkAutoScroll(const KoPointerEvent &event)
-    {
-        if (controller == 0) return;
-        if (!activeTool) return;
-        if (!activeTool->wantsAutoScroll()) return;
-        if (!event.isAccepted()) return;
-        if (event.buttons() != Qt::LeftButton) return;
-        scrollEdgePoint = event.point;
-        if (! scrollTimer.isActive())
-            scrollTimer.start();
-    }
+void KoToolProxyPrivate::checkAutoScroll(const KoPointerEvent &event)
+{
+    if (controller == 0) return;
+    if (!activeTool) return;
+    if (!activeTool->wantsAutoScroll()) return;
+    if (!event.isAccepted()) return;
+    if (event.buttons() != Qt::LeftButton) return;
+    scrollEdgePoint = event.point;
+    if (! scrollTimer.isActive())
+        scrollTimer.start();
+}
 
-    void selectionChanged(bool newSelection)
-    {
-        if (hasSelection == newSelection)
-            return;
-        hasSelection = newSelection;
-        emit parent->selectionChanged(hasSelection);
-    }
+void KoToolProxyPrivate::selectionChanged(bool newSelection)
+{
+    if (hasSelection == newSelection)
+        return;
+    hasSelection = newSelection;
+    emit parent->selectionChanged(hasSelection);
+}
 
-    bool isActiveLayerEditable()
-    {
-        if (!activeTool)
-            return false;
+bool KoToolProxyPrivate::isActiveLayerEditable()
+{
+    if (!activeTool)
+        return false;
 
-        KoShapeManager * shapeManager = activeTool->canvas()->shapeManager();
-        KoShapeLayer * activeLayer = shapeManager->selection()->activeLayer();
-        if (activeLayer && !activeLayer->isEditable())
-            return false;
-        return true;
-    }
-
-    KoToolBase *activeTool;
-    bool tabletPressed;
-    bool hasSelection;
-    QTimer scrollTimer;
-    QPointF scrollEdgePoint;
-    KoCanvasController *controller;
-    KoToolProxy *parent;
-
-    QPoint mouseDownPoint; // used to determine if the mouse-release is after a drag or a simple click
-
-    bool mouseLeaveWorkaround; // up until at least 4.3.0 we get a mouse move event when the tablet leaves the canvas.
-};
+    KoShapeManager * shapeManager = activeTool->canvas()->shapeManager();
+    KoShapeLayer * activeLayer = shapeManager->selection()->activeLayer();
+    if (activeLayer && !activeLayer->isEditable())
+        return false;
+    return true;
+}
 
 KoToolProxy::KoToolProxy(KoCanvasBase *canvas, QObject *parent)
         : QObject(parent),
-        d(new Private(this))
+        d(new KoToolProxyPrivate(this))
 {
     KoToolManager::instance()->priv()->registerToolProxy(this, canvas);
 
@@ -318,9 +303,9 @@ void KoToolProxy::setActiveTool(KoToolBase *tool)
     }
 }
 
-void KoToolProxy::setCanvasController(KoCanvasController *controller)
+void KoToolProxyPrivate::setCanvasController(KoCanvasController *c)
 {
-    d->controller = controller;
+    controller = c;
 }
 
 QHash<QString, KAction*> KoToolProxy::actions() const
@@ -368,6 +353,11 @@ void KoToolProxy::deleteSelection()
 {
     if (d->activeTool)
         return d->activeTool->deleteSelection();
+}
+
+KoToolProxyPrivate *KoToolProxy::priv()
+{
+    return d;
 }
 
 #include <KoToolProxy.moc>

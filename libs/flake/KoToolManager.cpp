@@ -25,6 +25,7 @@
 #include "KoToolManager_p.h"
 #include "KoToolRegistry.h"
 #include "KoToolProxy.h"
+#include "KoToolProxy_p.h"
 #include "KoSelection.h"
 #include "tools/KoCreatePathToolFactory.h"
 #include "tools/KoCreateShapesToolFactory.h"
@@ -436,7 +437,7 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
 
     KoToolProxy *tp = proxies[controller->canvas()];
     if (tp)
-        tp->setCanvasController(controller);
+        tp->priv()->setCanvasController(controller);
 
     if (cd->activeTool == 0) {
         // no active tool, so we activate the highest priority main tool
@@ -651,7 +652,7 @@ void KoToolManager::Private::registerToolProxy(KoToolProxy *proxy, KoCanvasBase 
     proxies.insert(canvas, proxy);
     foreach(KoCanvasController *controller, canvasses.keys()) {
         if (controller->canvas() == canvas) {
-            proxy->setCanvasController(controller);
+            proxy->priv()->setCanvasController(controller);
             break;
         }
     }

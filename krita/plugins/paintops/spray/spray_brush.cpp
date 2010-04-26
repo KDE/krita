@@ -64,16 +64,16 @@ qreal SprayBrush::rotationAngle()
 {
     qreal rotation = 0.0;
 
-    if ( m_properties->fixedRotation ){
-        rotation = deg2rad( m_properties->fixedAngle );
+    if ( m_shapeProperties->fixedRotation ){
+        rotation = deg2rad( m_shapeProperties->fixedAngle );
     }
 
-    if ( m_properties->randomRotation ){
+    if ( m_shapeProperties->randomRotation ){
 
         if ( m_properties->gaussian ) {
-                rotation = linearInterpolation(rotation ,M_PI * 2.0 * qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0), m_properties->randomRotationWeight );
+                rotation = linearInterpolation(rotation ,M_PI * 2.0 * qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0), m_shapeProperties->randomRotationWeight );
         } else {
-                rotation = linearInterpolation(rotation, M_PI * 2.0 * drand48(), m_properties->randomRotationWeight );
+                rotation = linearInterpolation(rotation, M_PI * 2.0 * drand48(), m_shapeProperties->randomRotationWeight );
         }
     }
 
@@ -91,12 +91,12 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
     if (!m_painter) {
         m_painter = new KisPainter(dab);
         m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);
-        m_painter->setMaskImageSize(m_properties->width, m_properties->height );
+        m_painter->setMaskImageSize(m_shapeProperties->width, m_shapeProperties->height );
         m_pixelSize = dab->colorSpace()->pixelSize();
 
-        m_brushQImage = m_properties->image;
+        m_brushQImage = m_shapeProperties->image;
         if (!m_brushQImage.isNull()){
-            m_brushQImage = m_brushQImage.scaled(m_properties->width, m_properties->height);
+            m_brushQImage = m_brushQImage.scaled(m_shapeProperties->width, m_shapeProperties->height);
         }
         m_imageDevice = new KisPaintDevice( dab->colorSpace() );
     }
@@ -161,15 +161,15 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         // rotation
         rotationZ = rotationAngle();
 
-        if (m_properties->followCursor){
+        if (m_shapeProperties->followCursor){
             
-            rotationZ = linearInterpolation( rotationZ,angle,m_properties->followCursorWeigth );
+            rotationZ = linearInterpolation( rotationZ,angle,m_shapeProperties->followCursorWeigth );
         }
 
         
-        if (m_properties->followDrawingAngle){
+        if (m_shapeProperties->followDrawingAngle){
             
-            rotationZ = linearInterpolation( rotationZ,info.angle(),m_properties->followDrawingAngleWeight );
+            rotationZ = linearInterpolation( rotationZ,info.angle(),m_shapeProperties->followDrawingAngleWeight );
         }
 
         // generate polar coordinate
@@ -236,18 +236,18 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         qreal jitteredWidth;
         qreal jitteredHeight;
 
-        if (m_properties->randomSize){
-            jitteredWidth = m_properties->width * random + 1;
-            jitteredHeight = m_properties->height * random + 1;
+        if (m_shapeProperties->randomSize){
+            jitteredWidth = m_shapeProperties->width * random + 1;
+            jitteredHeight = m_shapeProperties->height * random + 1;
         }else{
-            jitteredWidth = m_properties->width;
-            jitteredHeight = m_properties->height;
+            jitteredWidth = m_shapeProperties->width;
+            jitteredHeight = m_shapeProperties->height;
         }
-        switch (m_properties->shape){
+        switch (m_shapeProperties->shape){
             // ellipse
             case 0:
             {
-                if (m_properties->width == m_properties->height){
+                if (m_shapeProperties->width == m_shapeProperties->height){
                     paintCircle(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5) , steps);
                 }else
                 {
@@ -284,7 +284,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                     QMatrix m;
                     m.rotate(rad2deg(rotationZ));
 
-                    if (m_properties->randomSize){
+                    if (m_shapeProperties->randomSize){
                         m.scale(random,random);
                     }
                     m_transformed = m_brushQImage.transformed(m, Qt::SmoothTransformation);

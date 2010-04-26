@@ -60,9 +60,3 @@ QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
     brush.adjust(-1,-1,1,1);
     return image->pixelToDocument(brush).translated(pos);
 }
-
-QImage KisSprayPaintOpSettings::image() const
-{
-    return m_image;
-}
-

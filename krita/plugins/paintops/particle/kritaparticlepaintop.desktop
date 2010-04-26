@@ -15,6 +15,7 @@ Name[sv]=Partikelpensel
 Name[uk]=Пензель для малювання часток
 Name[wa]=Pincea pårticule
 Name[x-test]=xxParticle brushxx
+Name[zh_TW]=粒子筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritaparticlepaintop

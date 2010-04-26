@@ -86,8 +86,14 @@ private:
     KisPressureOpacityOption m_opacityOption;
     KisPressureRotationOption m_rotationOption;    
     
+    QList<QPointF> m_points;
+    
     qreal m_amount;
     HsvProperties m_hsvProperties;
+
+private:
+    /// scale the curve's y end points to get different softness
+    void transformSoftness(qreal scaleY);
     
 };
 

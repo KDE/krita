@@ -63,9 +63,11 @@ KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainte
     if (m_brushType == CURVE){
         srand48(time(0));
         
+        m_curveMaskProperties.controlByPressure = settings->getBool(SOFTCURVE_CONTROL_BY_PRESSURE);
         m_curveMaskProperties.curve = settings->getCubicCurve(SOFTCURVE_CURVE);
         m_curveMaskProperties.curveData = m_curveMaskProperties.curve.floatTransfer(m_radius+2);
-
+        m_points = m_curveMaskProperties.curve.points();
+        
         m_curveMask.setProperties(&m_curveMaskProperties);
         m_curveMask.setSizeProperties(&m_sizeProperties);
 
@@ -172,6 +174,10 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
             pt.setX(pt.x() + (  ( m_sizeProperties.diameter * drand48() ) - m_radius) * m_sizeProperties.jitterMovementAmount);
             pt.setY(pt.y() + (  ( m_sizeProperties.diameter * drand48() ) - m_radius) * m_sizeProperties.jitterMovementAmount);
         }
+    
+        if ( m_curveMaskProperties.controlByPressure ){
+            transformSoftness( info.pressure() );
+        }
 
         qreal scale = m_sizeProperties.scale * KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
         qreal rotation = m_sizeProperties.rotation + m_rotationOption.apply(info);
@@ -243,3 +249,16 @@ double KisSoftPaintOp::paintAt(const KisPaintInformation& info)
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     return m_spacing;
 }
+
+void KisSoftPaintOp::transformSoftness(qreal scaleY)
+{
+    int size = m_curveMaskProperties.curve.points().size();
+    QPointF tmp;
+    for (int i = 0; i < size;i++){
+        tmp = m_points.at(i);
+        tmp.ry() *= scaleY;
+        m_curveMaskProperties.curve.setPoint(i,tmp);
+    }
+    m_curveMaskProperties.curveData = m_curveMaskProperties.curve.floatTransfer(m_radius+2);
+}
+

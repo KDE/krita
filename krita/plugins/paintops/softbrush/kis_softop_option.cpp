@@ -33,6 +33,7 @@ KisSoftOpOption::KisSoftOpOption()
     connect(m_options->m_gaussBrushTip->flowSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
 
     connect(m_options->m_curveBrushTip->softCurve, SIGNAL(modified()),SIGNAL(sigSettingChanged()));
+    connect(m_options->m_curveBrushTip->pressureCBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     
     connect(m_options->m_brushesTab, SIGNAL(currentChanged(int)),SIGNAL(sigSettingChanged()));
     
@@ -55,7 +56,7 @@ void KisSoftOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
     setting->setProperty( SOFT_SOFTNESS, m_options->m_gaussBrushTip->flowSPBox->value() );
     
     setting->setProperty( SOFTCURVE_CURVE, qVariantFromValue(m_options->m_curveBrushTip->softCurve->curve()) );
-    
+    setting->setProperty( SOFTCURVE_CONTROL_BY_PRESSURE, m_options->m_curveBrushTip->pressureCBox->isChecked() );
 }
 
 void KisSoftOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -72,5 +73,6 @@ void KisSoftOpOption::readOptionSetting(const KisPropertiesConfiguration* settin
     m_options->m_gaussBrushTip->flowSPBox->setValue( setting->getDouble(SOFT_SOFTNESS) );
     
     m_options->m_curveBrushTip->softCurve->setCurve( setting->getCubicCurve(SOFTCURVE_CURVE) );
+    m_options->m_curveBrushTip->pressureCBox->setChecked( setting->getBool(SOFTCURVE_CONTROL_BY_PRESSURE) );
 }
 

@@ -32,6 +32,19 @@
     </rect>
    </property>
   </widget>
+  <widget class="QCheckBox" name="pressureCBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>270</y>
+     <width>151</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Pressure</string>
+   </property>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>

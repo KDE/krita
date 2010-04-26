@@ -21,7 +21,6 @@
 #include <QImage>
 
 #include "ui_wdgshapeoptions.h"
-#include "kis_spray_paintop_settings.h"
 
 class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
 {

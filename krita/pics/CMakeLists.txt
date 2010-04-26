@@ -24,6 +24,8 @@ install(FILES
     select_shape.png
     local_selection_active.png
     local_selection_inactive.png
+    paintop_settings_01.png
+    paintop_settings_02.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )

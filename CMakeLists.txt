@@ -91,6 +91,12 @@ include(MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
+option(GHNS "support Get Hot New Stuff" ON)
+if(KDE_VERSION LESS "4.4.0")
+    set(GHNS FALSE)
+endif(KDE_VERSION LESS "4.4.0")
+configure_file(config-ghns.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ghns.h )
+
  ###########################
 ############################
 ## Required dependencies  ##

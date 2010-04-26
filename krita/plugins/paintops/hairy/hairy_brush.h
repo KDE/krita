@@ -50,6 +50,8 @@ public:
 
     bool useSoakInk;
     bool connectedPath;
+    bool antialias;
+    bool useCompositing;
     
     quint8 pressureWeight;
     quint8 bristleLengthWeight;
@@ -69,24 +71,36 @@ class HairyBrush
 public:
     HairyBrush();
     ~HairyBrush();
-    void paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale);
 
-    void repositionBristles(double angle, double slope);
-    void rotateBristles(double angle);
-    double computeMousePressure(double distance);
-
+    void paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale);
+    /// set ink color for the whole bristle shape
     void setInkColor(const KoColor &color);
+    /// set the bristles
     void setBrushShape(BrushShape brushShape);
+    /// set parameters for the brush engine
     void setProperties(KisHairyProperties * properties){ m_properties = properties; }
-    
-    /// paints single bristle
-    void putBristle(Bristle *bristle, float wx, float wy, const KoColor &color);
-    void addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
-    void oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
 
+private:
+    /// paints single bristle
+    void addBristleInk(Bristle *bristle, QPointF pos, const KoColor &color);
+    /// composite single pixel to dab
+    void plotPixel(int wx, int wy, const KoColor &color);
+    /// check the opacity of dab pixel and if the opacity is less then color, it will copy color to dab
+    void darkenPixel(int wx, int wy, const KoColor &color);
+    /// paint wu particle by copying the color and setup just the opacity, weight is complementary to opacity of the color
+    void paintParticle(QPointF pos, const KoColor& color,qreal weight);
+    /// paint wu particle using composite operation 
+    void paintParticle(QPointF pos, const KoColor& color);
     /// similar to sample input color in spray
     void colorifyBristles(KisRandomConstAccessor& acc, KoColorSpace * cs, QPointF point);
     
+    void repositionBristles(double angle, double slope);
+    /// rotate every enabled bristle
+    void rotateBristles(double angle);
+    /// compute mouse pressure according distance
+    double computeMousePressure(double distance);
+
+
 private:
     const KisHairyProperties * m_properties;
     
@@ -99,8 +113,9 @@ private:
     Trajectory m_trajectory;
     QHash<QString, QVariant> m_params;    
     // temporary device
-    KisPaintDeviceSP m_dev;
+    KisPaintDeviceSP m_dab;
     KisRandomAccessor * m_dabAccessor;
+    const KoCompositeOp * m_compositeOp;
     quint32 m_pixelSize;
 
     int m_counter;
@@ -110,8 +125,9 @@ private:
 
     double m_angle;
     double m_oldPressure;
+    KoColor m_color;
     
-    // I use internal counter to count the calls of paint, the counter is 1 when the first call occurs
+    // internal counter counts the calls of paint, the counter is 1 when the first call occurs
     inline bool firstStroke(){
         return (m_counter == 1);
     }

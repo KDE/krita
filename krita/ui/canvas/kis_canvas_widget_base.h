@@ -101,6 +101,8 @@ protected:
     /// Convert widget coords to document, taking into account document origin and offset.
     QPointF widgetToDocument(const QPointF& p) const;
 
+    QPointF mirror(const QPointF& pos) const;
+    
     /**
      * Convert a mouse event widget coordinate to a document 
      * coordinate, applying an offset to convert the integer 

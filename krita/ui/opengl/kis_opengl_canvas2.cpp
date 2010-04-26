@@ -120,6 +120,7 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 
     if (canvas()->image()) {
         drawBackground();
+
         if(canvas()->image()->rootLayer()->childCount()>0) {
             drawImage();
         }
@@ -129,10 +130,22 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
         // XXX: make settable
         bool drawTools = true;
 
+        gc.save();
+        if (canvas()->isCanvasMirrored()){
+            QTransform m = gc.transform();
+            m.translate( documentOrigin().x(), 0);
+            m.scale(-1,1 );
+            m.translate( -documentSize().width(),0 );
+            m.translate( -documentOrigin().x(), 0);
+            gc.setTransform(m);
+        }
+
         drawDecorations(gc, drawTools,
                         documentOffset(),
                         QRect(QPoint(0, 0), documentSize()),
                         canvas());
+                        
+        gc.restore();
     } else {
         restoreGLState();
     }
@@ -144,8 +157,7 @@ void KisOpenGLCanvas2::drawBorder()
 {
     QColor widgetBackgroundColor = borderColor();
 
-    glClearColor(widgetBackgroundColor.red() / 255.0, widgetBackgroundColor.green() / 255.0, 
-                 widgetBackgroundColor.blue() / 255.0, 1.0);
+    glClearColor(widgetBackgroundColor.redF(),widgetBackgroundColor.greenF(),widgetBackgroundColor.blueF(),1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
@@ -237,6 +249,11 @@ void KisOpenGLCanvas2::drawImage()
 
     makeCurrent();
 
+    if (canvas()->isCanvasMirrored()){
+        glScalef(-1,1,1);
+        glTranslatef(-image->width(),0,0);
+    }
+    
     for (int x = (wr.left() / m_d->openGLImageTextures->imageTextureTileWidth()) * m_d->openGLImageTextures->imageTextureTileWidth();
         x <= wr.right();
         x += m_d->openGLImageTextures->imageTextureTileWidth()) {

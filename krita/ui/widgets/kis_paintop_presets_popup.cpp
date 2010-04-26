@@ -106,6 +106,10 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresets.bnSave, SIGNAL(clicked()),
             this, SIGNAL(savePresetClicked()));
+            
+    connect(m_d->uiWdgPaintOpPresets.bnDefaultPreset, SIGNAL(clicked()),
+            this, SIGNAL(defaultPresetClicked()));
+            
 
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));

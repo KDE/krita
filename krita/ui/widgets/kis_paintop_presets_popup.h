@@ -71,6 +71,7 @@ public slots:
 
 signals:
     void savePresetClicked();
+    void defaultPresetClicked();
     void resourceSelected( KoResource * resource );
 
 private slots:

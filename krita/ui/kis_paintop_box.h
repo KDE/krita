@@ -81,6 +81,7 @@ public slots:
     void slotCurrentNodeChanged(KisNodeSP node);
     void slotSaveActivePreset();
     void slotUpdatePreset();
+    void slotSetupDefaultPreset();
 
 private:
 

@@ -70,7 +70,9 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
         , m_activePreset(0)
 {
     Q_ASSERT(view != 0);
-
+    
+    KGlobal::mainComponent().dirs()->addResourceType("kis_defaultpresets", "data", "krita/defaultpresets/");
+    
     setObjectName(name);
 
     KAcceleratorManager::setNoAccel(this);
@@ -112,6 +114,8 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
 
     connect(m_presetsPopup, SIGNAL(savePresetClicked()), this, SLOT(slotSaveActivePreset()));
+    
+    connect(m_presetsPopup, SIGNAL(defaultPresetClicked()), this, SLOT(slotSetupDefaultPreset()));
 
     connect(m_presetsPopup, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
@@ -376,6 +380,24 @@ void KisPaintopBox::slotSaveActivePreset()
 void KisPaintopBox::slotUpdatePreset()
 {
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
+}
+
+void KisPaintopBox::slotSetupDefaultPreset(){
+    QString defaultName = m_activePreset->paintOp().id() + ".kpp";
+    QString path = KGlobal::mainComponent().dirs()->findResource("kis_defaultpresets", defaultName);
+    KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
+    
+    if ( !preset->load() ){
+        kWarning() << preset->filename() << "could not be found.";
+        kWarning() << "I was looking for " << defaultName;
+        return;
+    }
+    
+    preset->settings()->setNode( m_activePreset->settings()->node() );
+    preset->settings()->setOptionsWidget(m_optionWidget);
+    m_optionWidget->setConfiguration(preset->settings());
+    m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>( preset->settings().data() ));
+    m_presetWidget->updatePreview();
 }
 
 #include "kis_paintop_box.moc"

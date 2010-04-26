@@ -86,19 +86,22 @@ BitBltRecord::BitBltRecord( QDataStream &stream )
     //kDebug(31000) << m_XFormSrc;
 
     stream >> m_red >> m_green >> m_blue >> m_reserved;
+
     stream >> m_UsageSrc;
     stream >> m_offBmiSrc;
-    stream >> m_cbBmiSrc;
+    stream >> m_cbBmiSrc;       // Size of source bitmap header
     stream >> m_offBitsSrc;
-    stream >> m_cbBitsSrc;
+    stream >> m_cbBitsSrc;      // Size of source bitmap itself
+
+    // Some basic checks
     if ( ( m_cbBmiSrc == 0 ) && ( m_cbBmiSrc == 0 ) ) {
 	return;
     }
     if ( m_cbBmiSrc == 40 ) {
 	m_BmiSrc = new BitmapInfoHeader( stream );
     } else {
-	//kDebug(31000) << "m_cbBmiSrc:" << m_cbBmiSrc;
-	Q_ASSERT( 0 );
+	kDebug(31000) << "BUG!!! m_cbBmiSrc:" << m_cbBmiSrc;
+	//Q_ASSERT( 0 );
     }
 
     m_imageData.resize( m_cbBitsSrc );
@@ -111,12 +114,12 @@ BitBltRecord::~BitBltRecord()
 
 bool BitBltRecord::hasImage() const
 {
+    // FIXME: Check the same twice??
     return ( ( m_cbBmiSrc != 0 ) && ( m_cbBmiSrc != 0 ) );
 }
 
 QImage* BitBltRecord::image() 
 {
-
     if ( ! hasImage() ) {
         return 0;
     }

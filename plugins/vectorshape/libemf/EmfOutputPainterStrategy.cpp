@@ -82,17 +82,17 @@ void OutputPainterStrategy::init( const Header *header )
     //
     // To be precise, it seems that the StretchDiBits record uses the
     // physical size (stored in header.frame()) to specify where to
-    // draw the picture rather than virtual coordinates.
+    // draw the picture rather than logical coordinates.
     m_header = new Header(*header);
 
     QSize  outputSize = header->bounds().size();
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << "emfFrame         =" << header->frame().x() << header->frame().y()
+    kDebug(31000) << "emfFrame (phys size) =" << header->frame().x() << header->frame().y()
                   << header->frame().width() << header->frame().height();
-    kDebug(31000) << "emfBounds (size) =" << header->bounds().x() << header->bounds().y()
+    kDebug(31000) << "emfBounds (log size) =" << header->bounds().x() << header->bounds().y()
                   << header->bounds().width() << header->bounds().height();
-    kDebug(31000) << "outputSize       =" << m_outputSize.width() << m_outputSize.height();
+    kDebug(31000) << "outputSize           =" << m_outputSize.width() << m_outputSize.height();
 
     kDebug(31000) << "Device =" << header->device().width() << header->device().height();
     kDebug(31000) << "Millimeters =" << header->millimeters().width() 
@@ -1098,6 +1098,11 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord record )
         kDebug(31000) << "source" << source;
         kDebug(31000) << "image" << record.image()->size();
 #endif
+        // For some reason, the target coordinates for the picture are
+        // expressed in physical coordinates (Frame in the header)
+        // instead of logical coordinates like all the other types of
+        // records.  Therefore we have to rescale the target from
+        // physical to logical coordinates.
         qreal scaleX = qreal(m_header->frame().width()) / qreal(m_header->bounds().width());
         qreal scaleY = qreal(m_header->frame().height()) / qreal(m_header->bounds().height());
         QRect realTarget(QPoint(target.x() / scaleX, target.y() / scaleY),

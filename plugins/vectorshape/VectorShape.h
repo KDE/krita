@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2009-2010 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +28,9 @@
 #include <KoFrameShape.h>
 
 
+#define DEBUG_VECTORSHAPE 0
+
+
 class QPainter;
 
 #define VectorShape_SHAPEID "VectorShapeID"
@@ -38,7 +41,7 @@ public:
     VectorShape();
     virtual ~VectorShape();
 
-    /// reimplemented to be empty (this shape is fully non-printing)
+    /// reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter);
     /// reimplemented
     void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);

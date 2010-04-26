@@ -24,6 +24,9 @@
 
 #include <kdebug.h>
 
+#include "VectorShape.h"  // For DEBUG_VECTORSHAPE
+
+
 WmfPainter::WmfPainter()
     : KoWmfPaint()
 {
@@ -92,6 +95,7 @@ void WmfPainter::setWindowExt(int width, int height)
     mExtWidth  = width;
     mExtHeight = height;
 
+#if 1
     // Unscale the scale done last time (the first time, this code is a noop).
     qreal dx = mInternalWorldMatrix.dx();
     qreal dy = mInternalWorldMatrix.dy();
@@ -104,8 +108,10 @@ void WmfPainter::setWindowExt(int width, int height)
     mScaleX = (width < 0)  ? -1.0 : 1.0;
     mScaleY = (height < 0) ? -1.0 : 1.0;
 
-    //kDebug(31000) << "Origin =" << mOrgX << mOrgY;
-    //kDebug(31000) << "size   =" << width << height;
+#if DEBUG_VECTORSHAPE
+    kDebug(31000) << "Origin =" << mOrgX << mOrgY;
+    kDebug(31000) << "size   =" << width << height;
+#endif
 
     // Now scale to the new values (=flip), and we want to flip in place.
     qreal dx2 = (mOrgX + mOrgX + width) / 2.0;
@@ -116,9 +122,10 @@ void WmfPainter::setWindowExt(int width, int height)
     mPainter->translate(dx2, dy2);
     mPainter->scale(mScaleX, mScaleY);
     mPainter->translate(-dx2, -dy2);
-
+#endif
 #if 0
-    // Debug code.
+    // Debug code.  Draw a rectangle with some decoration to show see
+    // if all the transformations work.
     mPainter->save();
 
     mPainter->setPen(Qt::black);

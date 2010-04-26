@@ -168,8 +168,10 @@ void VectorShape::drawWmf(QPainter &painter) const
     QRect   wmfBoundingRect = wmfPainter.boundingRect(); // FIXME: Should this be made QRectF?
     QSizeF  shapeSize       = size();
 
-    //kDebug(31000) << "wmfBoundingRect: " << wmfBoundingRect;
-    //kDebug(31000) << "shapeSize: "       << shapeSize;
+#if DEBUG_VECTORSHAPE
+    kDebug(31000) << "wmfBoundingRect: " << wmfBoundingRect;
+    kDebug(31000) << "shapeSize: "       << shapeSize;
+#endif
 
     // Create a transformation that makes the Wmf fit perfectly into the shape size.
     painter.scale(shapeSize.width() / wmfBoundingRect.width(),

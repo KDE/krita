@@ -60,6 +60,8 @@ HairyBrush::HairyBrush()
     m_params[HUE] = 0.0;
     m_params[SATURATION] = 0.0;
     m_params[VALUE] = 0.0;
+    m_saturationId = 0;
+    m_transfo = 0;
 }
 
 HairyBrush::~HairyBrush()
@@ -120,13 +122,11 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     }
     
     m_params[SATURATION] = 0.0;
-    KoColorTransformation * transfo = 0;
-    int saturationId = 0;
-    if (m_properties->useSaturation){
-        transfo = m_dab->colorSpace()->createColorTransformation("hsv_adjustment", m_params);
-        saturationId = transfo->parameterId(SATURATION);
-    }
     
+    if (m_properties->useSaturation){
+        m_transfo = m_dab->colorSpace()->createColorTransformation("hsv_adjustment", m_params);
+        m_saturationId = m_transfo->parameterId(SATURATION);
+    }
     
     rotateBristles(angle);
     // if this is first time the brush touches the canvas and we use soak the ink from canvas
@@ -141,8 +141,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     
     QVector<QPointF> bristlePath; // path for single bristle
     
-    QVariant saturationVariant;
-    float inkDeplation;
+    float inkDeplation = 0.0;
     int inkDepletionSize = m_properties->inkDepletionCurve.size();
     int bristleCount = m_bristles.size();
     int bristlePathSize;
@@ -191,53 +190,22 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
 
         bristleColor = bristle->color();
         for (int i = 0; i < bristlePathSize ; i++) {
-            if (bristle->counter() >= inkDepletionSize - 1) {
-                inkDeplation = m_properties->inkDepletionCurve[inkDepletionSize - 1];
-            } else {
-                inkDeplation = m_properties->inkDepletionCurve[bristle->counter()];
-            }
-
-            // saturation transformation of the bristle ink color
-            // add check for hsv transformation
-            if (m_properties->useSaturation && transfo != 0) {
-                if (m_properties->useWeights) {
-                    // new weighted way (experiment)
-                    saturationVariant = (
-                                            (pressure * m_properties->pressureWeight) +
-                                            (bristle->length() * m_properties->bristleLengthWeight) +
-                                            (bristle->inkAmount() * m_properties->bristleInkAmountWeight) +
-                                            ((1.0 - inkDeplation) * m_properties->inkDepletionWeight)) - 1.0;
-                } else {
-                    // old way of computing saturation
-                    saturationVariant = (
-                                            pressure *
-                                            bristle->length() *
-                                            bristle->inkAmount() *
-                                            (1.0 - inkDeplation)) - 1.0;
-
+            
+            if (m_properties->inkDepletionEnabled){
+                inkDeplation = fetchInkDepletion(bristle,inkDepletionSize);
+                
+                if (m_properties->useSaturation && m_transfo != 0) {
+                    saturationDepletion(bristle, bristleColor, pressure, inkDeplation);
                 }
-                transfo->setParameter(saturationId, saturationVariant);
-                transfo->transform(bristleColor.data(), bristleColor.data() , 1);
-            }
-
-            // opacity transformation of the bristle color
-            if (m_properties->useOpacity) {
-                qreal opacity = OPACITY_OPAQUE_F;
-                if (m_properties->useWeights) {
-                    opacity = qBound(0.0,
-                                  (pressure * m_properties->pressureWeight) +
-                                  (bristle->length() * m_properties->bristleLengthWeight) +
-                                  (bristle->inkAmount() * m_properties->bristleInkAmountWeight) +
-                                  ((1.0 - inkDeplation) * m_properties->inkDepletionWeight),1.0);
-
-                } else {
-                    opacity =
-                        bristle->length() *
-                        bristle->inkAmount();
+                
+                if (m_properties->useOpacity) {
+                    opacityDepletion(bristle, bristleColor, pressure, inkDeplation);
                 }
-                bristleColor.setOpacity(opacity);
+                
+            }else{
+                bristleColor.setOpacity(bristle->length());
             }
-
+            
             addBristleInk(bristle, bristlePath.at(i), bristleColor);
             bristle->setInkAmount(1.0 - inkDeplation);
             bristle->upIncrement();
@@ -250,6 +218,56 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     m_dabAccessor = 0;
 }
 
+
+inline qreal HairyBrush::fetchInkDepletion(Bristle* bristle, int inkDepletionSize)
+{
+    if (bristle->counter() >= inkDepletionSize - 1) {
+        return m_properties->inkDepletionCurve[inkDepletionSize - 1];
+    } else {
+        return m_properties->inkDepletionCurve[bristle->counter()];
+    }
+}
+
+
+void HairyBrush::saturationDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation)
+{
+    if (m_properties->useWeights) {
+    // new weighted way (experiment)
+        m_saturationVariant = (
+                            (pressure * m_properties->pressureWeight) +
+                            (bristle->length() * m_properties->bristleLengthWeight) +
+                            (bristle->inkAmount() * m_properties->bristleInkAmountWeight) +
+                            ((1.0 - inkDeplation) * m_properties->inkDepletionWeight)) - 1.0;
+    } else {
+        // old way of computing saturation
+        m_saturationVariant = (
+                                pressure *
+                                bristle->length() *
+                                bristle->inkAmount() *
+                                (1.0 - inkDeplation)) - 1.0;
+
+    }
+    m_transfo->setParameter(m_saturationId, m_saturationVariant);
+    m_transfo->transform(bristleColor.data(), bristleColor.data() , 1);
+}
+
+void HairyBrush::opacityDepletion(Bristle* bristle, KoColor& bristleColor, qreal pressure, qreal inkDeplation)
+{
+    qreal opacity = OPACITY_OPAQUE_F;
+    if (m_properties->useWeights) {
+        opacity = qBound(0.0,
+                    (pressure * m_properties->pressureWeight) +
+                    (bristle->length() * m_properties->bristleLengthWeight) +
+                    (bristle->inkAmount() * m_properties->bristleInkAmountWeight) +
+                    ((1.0 - inkDeplation) * m_properties->inkDepletionWeight),1.0);
+
+    } else {
+        opacity =
+            bristle->length() *
+            bristle->inkAmount();
+    }
+    bristleColor.setOpacity(opacity);
+}
 
 void HairyBrush::rotateBristles(double angle)
 {

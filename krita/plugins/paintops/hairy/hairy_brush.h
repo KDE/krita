@@ -42,6 +42,7 @@ public:
     quint16 inkAmount;
     qreal sigma;
     QList<float> inkDepletionCurve;
+    bool inkDepletionEnabled;
     bool isbrushDimension1D;
     bool useMousePressure;
     bool useSaturation;
@@ -100,7 +101,13 @@ private:
     /// compute mouse pressure according distance
     double computeMousePressure(double distance);
 
-
+    /// simulate running out of saturation 
+    void saturationDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation);
+    /// simulate running out of ink through opacity decreasing
+    void opacityDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation);
+    /// fetch actaul ink status according depletion curve
+    qreal fetchInkDepletion(Bristle * bristle, int inkDepletionSize);
+    
 private:
     const KisHairyProperties * m_properties;
     
@@ -126,6 +133,10 @@ private:
     double m_angle;
     double m_oldPressure;
     KoColor m_color;
+    
+    int m_saturationId;
+    QVariant m_saturationVariant;
+    KoColorTransformation * m_transfo;
     
     // internal counter counts the calls of paint, the counter is 1 when the first call occurs
     inline bool firstStroke(){

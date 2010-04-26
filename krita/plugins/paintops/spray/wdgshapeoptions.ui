@@ -313,6 +313,29 @@
         </property>
        </widget>
       </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="drawingAngle">
+        <property name="text">
+         <string>Drawing angle</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" colspan="2">
+       <widget class="KDoubleNumInput" name="drawingAngleWeight">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="value">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="sliderEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

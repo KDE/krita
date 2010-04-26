@@ -109,9 +109,11 @@ void KisSprayPaintOp::loadSettings(const KisSprayPaintOpSettings* settings)
     m_properties.fixedRotation = settings->getBool(SPRAYSHAPE_FIXED_ROTATION);
     m_properties.randomRotation = settings->getBool(SPRAYSHAPE_RANDOM_ROTATION);
     m_properties.followCursor = settings->getBool(SPRAYSHAPE_FOLLOW_CURSOR);
+    m_properties.followDrawingAngle = settings->getBool(SPRAYSHAPE_DRAWING_ANGLE);
     m_properties.fixedAngle = settings->getInt(SPRAYSHAPE_FIXED_ANGEL);
     m_properties.randomRotationWeight = settings->getDouble(SPRAYSHAPE_RANDOM_ROTATION_WEIGHT);
     m_properties.followCursorWeigth = settings->getDouble(SPRAYSHAPE_FOLLOW_CURSOR_WEIGHT);
+    m_properties.followDrawingAngleWeight = settings->getDouble(SPRAYSHAPE_DRAWING_ANGLE_WEIGHT);
     m_properties.image = settings->image();
 }
 

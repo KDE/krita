@@ -146,7 +146,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
     m.reset();
     m.rotateRadians(-rotation + deg2rad(m_properties->brushRotation) );
     m.scale( m_properties->scale, m_properties->scale);
-
+    
     for (quint32 i = 0; i < m_particlesCount; i++){
         // generate random angle
         angle = drand48() * M_PI * 2;
@@ -162,7 +162,14 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         rotationZ = rotationAngle();
 
         if (m_properties->followCursor){
+            
             rotationZ = linearInterpolation( rotationZ,angle,m_properties->followCursorWeigth );
+        }
+
+        
+        if (m_properties->followDrawingAngle){
+            
+            rotationZ = linearInterpolation( rotationZ,info.angle(),m_properties->followDrawingAngleWeight );
         }
 
         // generate polar coordinate

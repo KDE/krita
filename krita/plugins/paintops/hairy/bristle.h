@@ -38,6 +38,14 @@ public:
         return m_y;
     }
 
+    inline float prevX() const{
+        return m_prevX;
+    }
+
+    inline float prevY() const{
+        return m_prevY;
+    }
+
     inline float length() const{
         return m_length;
     }
@@ -69,6 +77,14 @@ public:
         m_y = y;
     }
 
+    inline void setPrevX(float prevX){
+        m_prevX = prevX;
+    }
+    
+    inline void setPrevY(float prevY){
+        m_prevY = prevY;
+    }
+    
     inline bool enabled() const{
         return m_enabled;
     }
@@ -88,6 +104,8 @@ private:
     // coordinates of bristle
     float m_x;
     float m_y;
+    float m_prevX;
+    float m_prevY;
     float m_length; // z - coordinate
     KoColor m_color;
     float m_inkAmount;

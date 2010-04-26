@@ -32,6 +32,8 @@ void Bristle::init(float x, float y, float length)
 {
     m_x = x;
     m_y = y;
+    m_prevX = x;
+    m_prevY = y;
     m_length = length;
     m_counter = 0;
     m_enabled = true;

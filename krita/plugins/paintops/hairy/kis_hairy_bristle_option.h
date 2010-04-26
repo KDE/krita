@@ -28,6 +28,7 @@ const QString HAIRY_BRISTLE_SHEAR = "HairyBristle/shear";
 const QString HAIRY_BRISTLE_RANDOM = "HairyBristle/random";
 const QString HAIRY_BRISTLE_DENSITY = "HairyBristle/density";
 const QString HAIRY_BRISTLE_THRESHOLD = "HairyBristle/threshold";
+const QString HAIRY_BRISTLE_CONNECTED = "HairyBristle/isConnected";
 class KisBristleOptionsWidget;
 
 class KisHairyBristleOption : public KisPaintOpOption

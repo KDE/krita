@@ -1,5 +1,7 @@
 /*
  * Copyright (c) 2005-2009 Thomas Zander <zander@kde.org>
+ * Copyright (c) 2009 Peter Simonsson <peter.simonsson@gmail.com>
+ * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,14 +34,16 @@
 #include <QHash>
 #include <QPainter>
 #include <QRect>
+#include <QTimer>
 
 #include "math.h"
+#include <KoDockWidgetTitleBar.h>
 
 class SectionLayout : public QLayout
 {
 public:
     SectionLayout(QWidget *parent)
-        : QLayout(parent)
+        : QLayout(parent), m_orientation(Qt::Vertical)
     {
     }
 
@@ -83,14 +87,27 @@ public:
         int x = 0;
         int y = 0;
         const QSize &size = buttonSize();
-        foreach (QWidgetItem* w, m_items) {
-            if (w->isEmpty())
-                continue;
-            w->widget()->setGeometry(QRect(x, y, size.width(), size.height()));
-            x += size.width();
-            if (x + size.width() > rect.width()) {
-                x = 0;
+        if (m_orientation == Qt::Vertical) {
+            foreach (QWidgetItem* w, m_items) {
+                if (w->isEmpty())
+                    continue;
+                w->widget()->setGeometry(QRect(x, y, size.width(), size.height()));
+                x += size.width();
+                if (x + size.width() > rect.width()) {
+                    x = 0;
+                    y += size.height();
+                }
+            }
+        } else {
+            foreach (QWidgetItem* w, m_items) {
+                if (w->isEmpty())
+                    continue;
+                w->widget()->setGeometry(QRect(x, y, size.width(), size.height()));
                 y += size.height();
+                if (y + size.height() > rect.height()) {
+                    x += size.width();
+                    y = 0;
+                }
             }
         }
     }
@@ -101,16 +118,24 @@ public:
             const_cast<SectionLayout*> (this)->m_buttonSize = m_items[0]->widget()->sizeHint();
         return m_buttonSize;
     }
-
+    void setOrientation (Qt::Orientation orientation)
+    {
+        m_orientation = orientation;
+    }
 private:
     QSize m_buttonSize;
     QMap<QAbstractButton*, int> m_priorities;
     QList<QWidgetItem*> m_items;
+    Qt::Orientation m_orientation;
 };
 
 class Section : public QWidget
 {
 public:
+    enum SeperatorFlag {
+        SeperatorTop = 0x0001,/* SeperatorBottom = 0x0002, SeperatorRight = 0x0004,*/ SeperatorLeft = 0x0008
+    };
+    Q_DECLARE_FLAGS(Seperators, SeperatorFlag);
     Section(QWidget *parent = 0)
         : QWidget(parent),
         m_layout(new SectionLayout(this))
@@ -147,27 +172,31 @@ public:
         }
         return count;
     }
-
+    void setSeperator(Seperators seperators)
+    {
+        m_seperators = seperators;
+    }
+    Seperators seperators() const
+    {
+        return m_seperators;
+    }
+    void setOrientation (Qt::Orientation orientation)
+    {
+        m_layout->setOrientation(orientation);
+    }
 private:
     SectionLayout *m_layout;
     QString m_name;
+    Seperators m_seperators;
 };
 
-// Priorities for a specific columnwidth for section depending on the width of the docker.
-static const int rowPriorities[][6] = {
-    { 1, 1, 1, 1, 1 }, // values used when the docker has 1 column
-    { 2, 1, 1, 1, 1 }, // values used when the docker has 2 columns
-    { 3, 2, 1, 1, 1 }, // 3
-    { 2, 4, 1, 1, 1 }, // 4
-    { 5, 3, 2, 4, 1 }, // 5
-    { 6, 3, 2, 4, 1 }  // 6
-};
+Q_DECLARE_OPERATORS_FOR_FLAGS(Section::Seperators)
 
 class ToolBoxLayout : public QLayout
 {
 public:
     ToolBoxLayout(QWidget *parent)
-        : QLayout(parent)
+        : QLayout(parent), m_orientation(Qt::Vertical), m_currentHeight(0), m_currentWidth(0)
     {
         setSpacing(6);
     }
@@ -183,11 +212,17 @@ public:
         if (m_sections.isEmpty())
             return QSize();
         QSize oneIcon = static_cast<Section*> (m_sections[0]->widget())->iconSize();
-        return QSize(oneIcon.width() * 2, oneIcon.height() * 2);
+        return oneIcon;
     }
     QSize minimumSize() const
     {
-        return sizeHint();
+        QSize s = sizeHint();
+        if (m_orientation == Qt::Vertical) {
+            s.setHeight(m_currentHeight);
+        } else {
+            s.setWidth(m_currentWidth);
+        }
+        return s;
     }
 
     void addSection(Section *section)
@@ -217,16 +252,14 @@ public:
     }
     QLayoutItem* takeAt(int i) { return m_sections.takeAt(i); }
     int count() const { return m_sections.count(); }
-    bool hasHeightForWidth () const { return true; }
 
     void setGeometry (const QRect &rect)
     {
-        tryPlaceItems(rect.width(), true);
-    }
-
-    int heightForWidth (int width) const
-    {
-        return tryPlaceItems(width, false);
+        if (m_orientation == Qt::Vertical) {
+            tryPlaceItems(rect.width(), true);
+        } else {
+            tryPlaceItems(rect.height(), true);
+        }
     }
 
     /// returns height
@@ -236,13 +269,11 @@ public:
             return 0;
         QSize iconSize = static_cast<Section*> (m_sections[0]->widget())->iconSize();
         const int maxColumns = qMax(1, width / iconSize.width());
-        const int prioIndex = qMin(6, maxColumns) - 1;
-        // kDebug() << "tryPlaceItems w:" << width << "prioIndex:" << prioIndex << "max:" << maxColumns;
 
         int x = 0;
         int y = 0;
-        int rowHeight = 0; // height of the current row, in icons.
-        int colsLeft = maxColumns;
+        int unusedButtons = 0;
+        bool firstSection = true;
         foreach (QWidgetItem *wi, m_sections) {
             Section *section = static_cast<Section*> (wi->widget());
             const int buttonCount = section->visibleButtonCount();
@@ -252,66 +283,79 @@ public:
                 continue;
             }
             // kDebug() << " + section" << buttonCount;
-            int rows = 0;
-            int preferredColumnWidth = 0; // in buttons
-            for (int i = 0; i < maxColumns; ++i) {
-                const int suggestedColumnWidth = rowPriorities[prioIndex][ qMin (4, i) ];
-                // kDebug() << "   + " << i << suggestedColumnWidth;
-                rows = (int) ceilf(buttonCount / (float) suggestedColumnWidth);
-                if (suggestedColumnWidth > buttonCount) // would leave empty space.
-                    continue;
-                if (suggestedColumnWidth > colsLeft)
-                    continue; // won't fit.
-                if (x > 0) {
-                    // check if it would be better to go to the next line;
-                    const int wastedSpace = rows - rowHeight;
-                    if (wastedSpace > ceilf(buttonCount / (float) maxColumns)) { // this would be a bad solution.
-                        if (colsLeft <= buttonCount / rowHeight) { // no better place expected, go to next row
-                            colsLeft = maxColumns;
-                            y += rowHeight * iconSize.height() + spacing();
-                            x = 0;
-                            i = -1;
-                            rowHeight = 0;
-                            continue;
-                        }
-                    }
+            int rows = (int) ceilf(buttonCount / (float) maxColumns);
+            
+            int length = 0;
+            if (firstSection) {
+                firstSection = false;
+                unusedButtons = rows * maxColumns;
+            } else if (buttonCount > unusedButtons) {
+                if (m_orientation == Qt::Vertical) {
+                    y += iconSize.height() + spacing();
+                    section->setSeperator(Section::SeperatorTop);
+                } else {
+                    x += iconSize.height() + spacing();
+                    section->setSeperator(Section::SeperatorLeft);
                 }
-
-                preferredColumnWidth = suggestedColumnWidth;
-                break;
+                unusedButtons = rows * maxColumns;
+            } else {
+                if (m_orientation == Qt::Vertical) {
+                    length = (maxColumns - unusedButtons) * iconSize.width();
+                    x = length + spacing();
+                    section->setSeperator(Section::SeperatorTop | Section::SeperatorLeft);
+                } else {
+                    length = (maxColumns - unusedButtons) * iconSize.height();
+                    y = length + spacing();
+                    section->setSeperator(Section::SeperatorTop | Section::SeperatorLeft);
+                }
             }
-            // kDebug() << " + preferredColumnWidth" << preferredColumnWidth;
-            Q_ASSERT(preferredColumnWidth > 0);
-            if (rows > rowHeight)
-                rowHeight = rows;
-            if (actuallyPlace)
-                section->setGeometry(QRect(x, y, preferredColumnWidth * iconSize.width(),
-                            rowHeight * iconSize.height()));
-            x += preferredColumnWidth * iconSize.width() + spacing();
-            colsLeft = (width - x) / iconSize.width();
-            if (colsLeft == 0) {
-                colsLeft = maxColumns;
-                y += rowHeight * iconSize.height() + spacing();
+            
+            if (actuallyPlace) {
+                if (m_orientation == Qt::Vertical) {
+                    section->setGeometry(QRect(x, y, maxColumns * iconSize.width() - length,
+                                               rows * iconSize.height()));
+                } else {
+                    section->setGeometry(QRect(x, y, rows * iconSize.width(),
+                                               maxColumns * iconSize.height() - length));
+                }
+            }
+            
+            unusedButtons -= buttonCount;
+
+            if (m_orientation == Qt::Vertical) {
                 x = 0;
-                rowHeight = 0;
+                y += (rows - 1) * iconSize.height();
+            } else {
+                y = 0;
+                x += (rows - 1) * iconSize.height();
             }
         }
-        return y;
+        m_currentWidth = x;
+        m_currentHeight = y;
+        if (m_orientation == Qt::Vertical) {
+            m_currentHeight += iconSize.height();
+        } else {
+            m_currentWidth += iconSize.height();
+        }
+        return m_currentHeight;
     }
 
-    int minimumHeightForWidth (int width) const
+    void setOrientation (Qt::Orientation orientation)
     {
-        return heightForWidth(width);
+        m_orientation = orientation;
+        invalidate();
     }
 
 private:
     QList <QWidgetItem*> m_sections;
+    Qt::Orientation m_orientation;
+    mutable int m_currentHeight, m_currentWidth;
 };
 
 class KoToolBox::Private
 {
 public:
-    Private(KoCanvasController *c) : layout(0), buttonGroup(0), canvas(c->canvas()) { }
+    Private(KoCanvasController *c) : layout(0), buttonGroup(0), canvas(c->canvas()), floating(false) { }
 
     void addSection(Section *section, const QString &name);
 
@@ -320,6 +364,7 @@ public:
     QButtonGroup *buttonGroup;
     KoCanvasBase *canvas;
     QHash<QToolButton*, QString> visibilityCodes;
+    bool floating;
 };
 
 void KoToolBox::Private::addSection(Section *section, const QString &name)
@@ -409,6 +454,8 @@ void KoToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<
         else
             button->setVisible( codes.contains(code) );
     }
+    layout()->invalidate();
+    update();
 }
 
 void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *layer)
@@ -428,9 +475,11 @@ void KoToolBox::setCanvas(KoCanvasBase *canvas)
     d->canvas = canvas;
 }
 
-void KoToolBox::paintEvent(QPaintEvent *)
+void KoToolBox::paintEvent(QPaintEvent * e)
 {
     QPainter painter(this);
+    painter.eraseRect(e->rect());
+    
     painter.setBrush(palette().shadow());
 
     const QList<Section*> sections = d->sections.values();
@@ -440,33 +489,15 @@ void KoToolBox::paintEvent(QPaintEvent *)
         halfSpacing /= 2;
     while(iterator != sections.end()) {
         Section *section = *iterator;
-        const int bottom = section->y() + section->height();
-        const int right = section->x() + section->width();
-        QList<Section*>::const_iterator iter = iterator;
-        ++iter;
-        while (iter != sections.end()) {
-            Section *other = *iter;
-            const bool rightOf = (other->x() - right - layout()->spacing() == 0);
-            const bool leftOf = (other->x() + other->width() - section->x() + layout()->spacing() == 0);
-            const bool above = (other->y() + other->height() - section->y() + layout()->spacing() == 0);
-            const bool below = (other->y() - bottom - layout()->spacing() == 0);
-            if (leftOf || rightOf) { // lets check how much overlap we have
-                const int y1 = qMax(section->y(), other->y()) - halfSpacing;
-                const int y2 = qMin(bottom, other->y() + other->height()) + halfSpacing;
-                if (y2 > y1) { // we have overlap, so lets draw.
-                    const int x = leftOf ? section->x() - halfSpacing : right + halfSpacing;
-                    painter.drawLine(x, y1, x, y2);
-                }
-            }
-            else if (above || below) {
-                const int x1 = qMax(section->x(), other->x()) - halfSpacing;
-                const int x2 = qMin(right, other->x() + other->width()) + halfSpacing;
-                if (x2 > x1) { // we have overlap, so lets draw.
-                    const int y = above ? section->y() - halfSpacing : bottom + halfSpacing;
-                    painter.drawLine(x1, y, x2, y);
-                }
-            }
-            ++iter;
+        if (section->seperators() & Section::SeperatorTop)
+        {
+            int y = section->y() - halfSpacing;
+            painter.drawLine(section->x(), y, section->x() + section->width(), y);
+        }
+        if (section->seperators() & Section::SeperatorLeft)
+        {
+            int x = section->x() - halfSpacing;
+            painter.drawLine(x, section->y(), x, section->y() + section->height());
         }
         ++iterator;
     }
@@ -474,16 +505,65 @@ void KoToolBox::paintEvent(QPaintEvent *)
     painter.end();
 }
 
+void KoToolBox::resizeEvent(QResizeEvent* event)
+{
+    QWidget::resizeEvent(event);
+    if (!d->floating)
+    {
+        setMinimumSize(layout()->minimumSize()); // This enfoce the minimum size on the widget
+    }
+}
+
+void KoToolBox::setOrientation(Qt::Orientation orientation)
+{
+    d->layout->setOrientation(orientation);
+    QTimer::singleShot(0, this, SLOT(update()));
+    foreach(Section* section, d->sections) {
+        section->setOrientation(orientation);
+    }
+}
+
+void KoToolBox::setFloating(bool v)
+{
+    setMinimumSize(QSize(1,1));
+    d->floating = v;
+}
+
+
 KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     : m_toolBox(toolBox)
 {
     setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     setWidget(toolBox);
+
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
+            this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));
+    connect(this, SIGNAL(topLevelChanged(bool)),
+            this, SLOT(updateFloating(bool)));
+    KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);
+    titleBar->setIgnoreTextSize(false);
+    setTitleBarWidget(titleBar);
 }
 
 void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)
 {
     m_toolBox->setCanvas(canvas);
 }
+
+void KoToolBoxDocker::updateToolBoxOrientation(Qt::DockWidgetArea area)
+{
+    if (area == Qt::TopDockWidgetArea || area == Qt::BottomDockWidgetArea) {
+        m_toolBox->setOrientation(Qt::Horizontal);
+    } else {
+        m_toolBox->setOrientation(Qt::Vertical);
+    }
+    m_toolBox->setFloating(area == Qt::NoDockWidgetArea);
+}
+
+void KoToolBoxDocker::updateFloating(bool v)
+{
+    m_toolBox->setFloating(v);
+}
+
 
 #include <KoToolBox_p.moc>

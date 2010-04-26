@@ -90,6 +90,18 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 {
     setObjectName(name);
 
+    m_lbScale = new QLabel(i18n("Scale: "), this);
+    m_slScale = new KisDoubleSliderSpinBox(this);
+    m_slScale->setRange(0.0, 2.0, 2);
+    m_slScale->setValue(1.0);
+    QObject::connect(m_slScale, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemScale(qreal)));
+
+    m_lbRotation = new QLabel(i18n("Rotation: "), this);
+    m_slRotation = new KisDoubleSliderSpinBox(this);
+    m_slRotation->setRange(0.0, 360, 2);
+    m_slRotation->setValue(0.0);
+    QObject::connect(m_slRotation, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
+
     m_lbSpacing = new QLabel(i18n("Spacing: "), this);
     m_slSpacing = new KisDoubleSliderSpinBox(this);
     m_slSpacing->setRange(0.0, 10, 2);
@@ -125,11 +137,15 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     mainLayout->addLayout(spacingLayout, 1);
 
-    spacingLayout->addWidget(m_lbSpacing, 0, 0);
-    spacingLayout->addWidget(m_slSpacing, 0, 1);
-    spacingLayout->setColumnStretch(1, 1);
+    spacingLayout->addWidget(m_lbScale, 0, 0);
+    spacingLayout->addWidget(m_slScale, 0, 1);
+    spacingLayout->addWidget(m_lbRotation, 1, 0);
+    spacingLayout->addWidget(m_slRotation, 1, 1);
+    spacingLayout->addWidget(m_lbSpacing, 2, 0);
+    spacingLayout->addWidget(m_slSpacing, 2, 1);
+    spacingLayout->setColumnStretch(1, 3);
 
-    spacingLayout->addWidget(m_chkColorMask, 1, 0, 1, 2);
+    spacingLayout->addWidget(m_chkColorMask, 3, 0, 1, 2);
 
     slotActivatedBrush(m_itemChooser->currentResource());
 }
@@ -158,6 +174,31 @@ void KisBrushChooser::setBrush(KisBrushSP _brush)
 
         m_brush = brush;
     */
+}
+
+void KisBrushChooser::slotSetItemScale(qreal scaleValue)
+{
+    KoResource * resource = static_cast<KoResource *>(m_itemChooser->currentResource());
+
+    if (resource) {
+        KisBrush *brush = static_cast<KisBrush *>(resource);
+        brush->setScale(scaleValue);
+        slotActivatedBrush(brush);
+
+        emit sigBrushChanged();
+    }
+}
+void KisBrushChooser::slotSetItemRotation(qreal rotationValue)
+{
+    KoResource * resource = static_cast<KoResource *>(m_itemChooser->currentResource());
+
+    if (resource) {
+        KisBrush *brush = static_cast<KisBrush *>(resource);
+        brush->setAngle(rotationValue);
+        slotActivatedBrush(brush);
+
+        emit sigBrushChanged();
+    }
 }
 
 void KisBrushChooser::slotSetItemSpacing(qreal spacingValue)
@@ -197,6 +238,8 @@ void KisBrushChooser::update(KoResource * resource)
 
     m_lbName->setText(text);
     m_slSpacing->setValue(brush->spacing());
+    m_slRotation->setValue(brush->angle());
+    m_slScale->setValue(brush->scale());
     
     
     // useColorAsMask support is only in gimp brush so far

@@ -47,6 +47,8 @@ public:
 
 private slots:
 
+    void slotSetItemScale(qreal);
+    void slotSetItemRotation(qreal);
     void slotSetItemSpacing(qreal);
     void slotSetItemUseColorAsMask(bool);
     void slotActivatedBrush(KoResource *);
@@ -58,7 +60,11 @@ signals:
 
 private:
     QLabel* m_lbName;
+    QLabel* m_lbRotation;
+    QLabel* m_lbScale;
     QLabel* m_lbSpacing;
+    KisDoubleSliderSpinBox* m_slRotation;
+    KisDoubleSliderSpinBox* m_slScale;
     KisDoubleSliderSpinBox* m_slSpacing;
     QCheckBox* m_chkColorMask;
     KisBrushSP m_brush;

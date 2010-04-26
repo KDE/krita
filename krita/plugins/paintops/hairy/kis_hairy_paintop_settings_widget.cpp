@@ -26,6 +26,8 @@
 #include "kis_hairy_bristle_option.h"
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_size_option.h>
+#include <kis_pressure_rotation_option.h>
+#include <kis_pressure_opacity_option.h>
 
 KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget* parent)
         : KisBrushBasedPaintopOptionWidget(parent)
@@ -36,6 +38,8 @@ KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisHairyBristleOption());
     addPaintOpOption(new KisHairyInkOption());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisPaintActionTypeOption());
 }
 

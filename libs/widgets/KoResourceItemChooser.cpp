@@ -31,6 +31,11 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#ifdef GHNS
+#include <knewstuff3/downloaddialog.h>
+#include <knewstuff3/uploaddialog.h>
+#endif
+
 #include "KoResourceServerAdapter.h"
 #include "KoResourceItemView.h"
 #include "KoResourceItemDelegate.h"
@@ -78,6 +83,23 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->buttonGroup->addButton( button, Button_Remove );
     layout->addWidget( button, 1, 1 );
 
+    button = new QPushButton( this );
+    button->setIcon( SmallIcon( "bookmarks" ) );
+    button->setToolTip( i18n("Download") );
+    button->setEnabled( true );
+    button->hide();
+    d->buttonGroup->addButton( button, Button_GhnsDownload );
+    layout->addWidget( button, 1, 2 );
+
+    button = new QPushButton( this );
+    button->setIcon( SmallIcon( "download" ) );
+    button->setToolTip( i18n("Share") );
+    button->setEnabled( false );
+    button->hide();
+    d->buttonGroup->addButton( button, Button_GhnsUpload);
+    layout->addWidget( button, 1, 3 );
+
+
     connect( d->buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ));
 
     layout->setColumnStretch( 0, 1 );
@@ -113,6 +135,31 @@ void KoResourceItemChooser::slotButtonClicked( int button )
             }
         }
     }
+#ifdef GHNS
+    else if (button == Button_GhnsDownload) {
+
+        KNS3::DownloadDialog dialog(this);
+        dialog.exec();
+        foreach (const KNS3::Entry& e, dialog.changedEntries()) {
+            qDebug() << "Changed Entry: " << e.name() << e.installedFiles();
+        }
+    }
+    else if (button == Button_GhnsUpload) {
+
+        QModelIndex index = d->view->currentIndex();
+        if( index.isValid() ) {
+
+
+            KoResource * resource = resourceFromModelIndex(index);
+            if( resource ) {
+                KNS3::UploadDialog dialog(this);
+                dialog.setUploadFile(KUrl::fromLocalFile(resource->filename()));
+                dialog.setUploadName(resource->name());
+                dialog.exec();
+            }
+        }
+    }
+#endif
     updateRemoveButtonState();
 }
 
@@ -120,6 +167,16 @@ void KoResourceItemChooser::showButtons( bool show )
 {
     foreach( QAbstractButton * button, d->buttonGroup->buttons() )
         show ? button->show() : button->hide();
+}
+
+void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUpload )
+{
+#ifdef GHNS
+    QAbstractButton *button = d->buttonGroup->button(Button_GhnsDownload);
+    showDownload ? button->show() : button->hide();
+    button = d->buttonGroup->button(Button_GhnsUpload);
+    showUpload ? button->show() : button->hide();
+#endif
 }
 
 void KoResourceItemChooser::setColumnCount( int columnCount )

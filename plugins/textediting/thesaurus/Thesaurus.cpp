@@ -637,8 +637,8 @@ void Thesaurus::findTermWordnet(const QString &term)
         m_resultTextBrowser->setHtml(i18n("<b>Error:</b> Failed to execute WordNet program 'wn'. "
                     "WordNet has to be installed on your computer if you want to use it, "
                     "and 'wn' has to be in your PATH. "
-                    "You can get WordNet at <a href=\"http://www.cogsci.princeton.edu/~wn/\">"
-                    "http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet only supports "
+                    "You can get WordNet at <a href=\"http://wordnet.princeton.edu/\">"
+                    "http://wordnet.princeton.edu/</a>. Note that WordNet only supports "
                     "the English language."));
         m_wnComboBox->setEnabled(false);
         return;

@@ -21,7 +21,7 @@ add_subdirectory( dockers )
 add_subdirectory( extensionsmanager )
 
 if(OPENEXR_FOUND)
-#  add_subdirectory( painterlyframework )
+  add_subdirectory( painterlyframework )
 endif(OPENEXR_FOUND)
 
 find_package(OpenShiva)

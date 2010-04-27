@@ -1,7 +1,7 @@
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(illuminants)
-#add_subdirectory(tests)
+add_subdirectory(tests)
 
 #################################################
 # Painterly Common Libraries
@@ -12,8 +12,8 @@ set(kritakscolorspacesplugin_PART_SRCS
 
 kde4_add_plugin(kritakscolorspacesplugin ${kritakscolorspacesplugin_PART_SRCS})
 target_link_libraries(kritakscolorspacesplugin pigmentcms ${OPENEXR_LIBRARIES})
-#install(TARGETS kritakscolorspacesplugin DESTINATION ${PLUGIN_INSTALL_DIR})
-#install( FILES  kritakscolorspacesplugin.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS kritakscolorspacesplugin DESTINATION ${PLUGIN_INSTALL_DIR})
+install( FILES  kritakscolorspacesplugin.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 #################################################
 
@@ -33,9 +33,9 @@ set(kritapainterlymixer_PART_SRCS
 kde4_add_ui_files(kritapainterlymixer_PART_SRCS kis_painterlymixer.ui)
 kde4_add_plugin(kritapainterlymixer ${kritapainterlymixer_PART_SRCS})
 target_link_libraries(kritapainterlymixer kritaui ${OPENEXR_LIBRARIES})
-#install(TARGETS kritapainterlymixer DESTINATION ${PLUGIN_INSTALL_DIR})
-#install(FILES kritapainterlymixer.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-#install( FILES
-#    krita_tool_knife.png
-#DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+install(TARGETS kritapainterlymixer DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES kritapainterlymixer.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES
+    krita_tool_knife.png
+DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 

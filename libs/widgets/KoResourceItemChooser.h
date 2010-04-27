@@ -2,6 +2,7 @@
    Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+   Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@
 #include <QModelIndex>
 
 #include "kowidgets_export.h"
+#include <config-ghns.h>
 
 class QAbstractProxyModel;
 class QButtonGroup;
@@ -66,7 +68,9 @@ public:
     void setCurrentItem(int row, int column);
 
     void showButtons( bool show );
-    
+
+    void showGetHotNewStuff( bool showDownload, bool showUpload);
+
     ///Set a proxy model with will be used to filter the resources
     void setProxyModel( QAbstractProxyModel* proxyModel );
 signals:
@@ -78,7 +82,7 @@ private slots:
     void activated ( const QModelIndex & index );
 
 private:
-    enum Buttons { Button_Import, Button_Remove };
+    enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
 
     void updateRemoveButtonState();
 

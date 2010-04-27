@@ -1,0 +1,4 @@
+[KNewStuff3]
+ProvidersUrl=http://download.kde.org/ocs/providers.xml
+TargetDir=paintoppresets
+Categories=Krita Brush Presets

@@ -184,6 +184,7 @@ void KoReportDesigner::init()
 
 KoReportDesigner::~KoReportDesigner()
 {
+    delete d;
 }
 
 ///The loading Code

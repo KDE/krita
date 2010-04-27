@@ -359,8 +359,27 @@ void ChangeTrackedDeleteCommand::insertDeleteFragment(QTextCursor &cursor, KoDel
                 } 
                 currentList->add(cursor.block(), deletedListItemLevel);
             }
+        } else if (tempCursor.currentTable()) {
+            QTextTable *deletedTable = tempCursor.currentTable();
+            int numRows = deletedTable->rows();
+            int numColumns = deletedTable->columns();
+            QTextTable *insertedTable = cursor.insertTable(numRows, numColumns, deletedTable->format());
+            for (int i=0; i<numRows; i++) {
+                for (int j=0; j<numColumns; j++) {
+                    tempCursor.setPosition(deletedTable->cellAt(i,j).firstCursorPosition().position());
+                    tempCursor.setPosition(deletedTable->cellAt(i,j).lastCursorPosition().position(), QTextCursor::KeepAnchor);
+                    insertedTable->cellAt(i,j).setFormat(deletedTable->cellAt(i,j).format().toTableCellFormat());
+                    cursor.setPosition(insertedTable->cellAt(i,j).firstCursorPosition().position());
+                    cursor.insertFragment(tempCursor.selection());
+                }
+            }
+            tempCursor.setPosition(deletedTable->cellAt(numRows-1,numColumns-1).lastCursorPosition().position());
+            currentBlock = tempCursor.block();
+            //Move the cursor outside of table
+            cursor.setPosition(cursor.position() + 1);
+            continue;
         } else {
-            // This block does not contain a list. So no special work here. 
+            // This block does not contain a list. So no special work here.
             if (currentBlock != tempDoc.begin())
                 cursor.insertBlock(currentBlock.blockFormat(), currentBlock.charFormat());
         }
@@ -404,6 +423,20 @@ int ChangeTrackedDeleteCommand::fragmentLength(QTextDocumentFragment &fragment)
             deletedListItem = currentBlock.blockFormat().property(KoDeleteChangeMarker::DeletedListItem).toBool();
             if (currentBlock != tempDoc.begin() && deletedListItem)
                 length += 1; //For the Block separator
+        } else if (tempCursor.currentTable()) {
+            QTextTable *deletedTable = tempCursor.currentTable();
+            int numRows = deletedTable->rows();
+            int numColumns = deletedTable->columns();
+            for (int i=0; i<numRows; i++) {
+                for (int j=0; j<numColumns; j++) {
+                    length += 1;
+                    length += (deletedTable->cellAt(i,j).lastCursorPosition().position() - deletedTable->cellAt(i,j).firstCursorPosition().position());
+                }
+            }
+            tempCursor.setPosition(deletedTable->cellAt(numRows-1,numColumns-1).lastCursorPosition().position());
+            currentBlock = tempCursor.block();
+            length += 1;
+            continue;
         } else {
             if (currentBlock != tempDoc.begin())
                 length += 1; //For the Block Separator

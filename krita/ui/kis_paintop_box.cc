@@ -397,7 +397,6 @@ void KisPaintopBox::slotSetupDefaultPreset(){
     preset->settings()->setOptionsWidget(m_optionWidget);
     m_optionWidget->setConfiguration(preset->settings());
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>( preset->settings().data() ));
-    m_presetWidget->updatePreview();
 }
 
 #include "kis_paintop_box.moc"

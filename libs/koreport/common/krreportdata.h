@@ -27,6 +27,7 @@
 #include "reportpageoptions.h"
 
 class KRDetailSectionData;
+class KoReportPluginInterface;
 
 namespace Scripting
 {
@@ -35,14 +36,14 @@ class Report;
 /**
  @author Adam Pigg <adam@piggz.co.uk>
 */
-class KRReportData : public QObject
+class KoReportReportData : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit KRReportData(const QDomElement & elemSource);
-    KRReportData();
-    ~KRReportData();
+    explicit KoReportReportData(const QDomElement & elemSource);
+    KoReportReportData();
+    ~KoReportReportData();
 
     bool isValid() const {
         return m_valid;
@@ -51,12 +52,12 @@ public:
     /**
     \return a list of all objects in the report
     */
-    QList<KRObjectData*> objects() const;
+    QList<KoReportItemBase*> objects() const;
 
     /**
     \return a report object given its name
     */
-    KRObjectData* object(const QString&) const;
+    KoReportItemBase* object(const QString&) const;
 
     /**
     \return all the sections, including groups and detail
@@ -98,6 +99,10 @@ public:
         return m_name;
     }
 
+    //!Temporary until created a plugin manager
+    KoReportPluginInterface* plugin(const QString&);
+    
+
 protected:
     QString m_title;
     QString m_name;
@@ -124,6 +129,8 @@ protected:
     KRSectionData * m_pageFooterAny;
 
     KRDetailSectionData* m_detailSection;
+
+    QMap<QString, KoReportPluginInterface*> m_plugins;
 private:
     bool m_valid;
     void init();

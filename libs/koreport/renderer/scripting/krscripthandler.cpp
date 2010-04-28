@@ -16,23 +16,24 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "krscripthandler.h"
-#include <kdebug.h>
 
-#include <krsectiondata.h>
 #include "krscriptsection.h"
 #include "krscriptdebug.h"
-#include <krobjectdata.h>
-#include <krfielddata.h>
-#include <krcheckdata.h>
-#include <kmessagebox.h>
+#include "krscriptreport.h"
+#include "krscriptdraw.h"
 #include "krscriptconstants.h"
+
+#include <kdebug.h>
+#include <kmessagebox.h>
+
+#include <krsectiondata.h>
+#include <KoReportItemBase.h>
 #include <krreportdata.h>
 #include <krdetailsectiondata.h>
-#include "krscriptreport.h"
 #include <renderobjects.h>
-#include "krscriptdraw.h"
 
-KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
+
+KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KoReportReportData* d)
 {
     m_reportData = d;
     m_koreportData = kodata;
@@ -74,13 +75,10 @@ KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
     m_action->addObject(m_report, m_reportData->name());
     kDebug() << "Report name is" << m_reportData->name();
 
-   QString code = m_koreportData->scriptCode(m_reportData->script(), m_reportData->interpreter());
+    QString code = m_koreportData->scriptCode(m_reportData->script(), m_reportData->interpreter());
 
-#if KDE_IS_VERSION(4,2,88)
     m_action->setCode(code.toLocal8Bit());
-#else
-    m_action->setCode(fieldFunctions().toLocal8Bit() + '\n' + code.toLocal8Bit());
-#endif
+
 }
 
 void KRScriptHandler::trigger()
@@ -140,41 +138,6 @@ void KRScriptHandler::slotEnteredSection(KRSectionData *section, OROPage* cp, QP
     }
 }
 
-#if !KDE_IS_VERSION(4,2,88)
-QString KRScriptHandler::fieldFunctions()
-{
-    QString funcs;
-    QString func;
-
-    QList<KRObjectData *>obs = m_reportData->objects();
-    foreach(KRObjectData* o, obs) {
-        //The field or check contains an expression
-        //TODO this is a horrible hack, need to get a similar feature into kross
-        if (o->type() == KRObjectData::EntityField) {
-            KRFieldData* fld = o->toField();
-            if (fld->controlSource()[0] == '=') {
-                func = QString("function %1_onrender_(){return %2;}").arg(fld->entityName().toLower()).arg(fld->controlSource().mid(1));
-
-                funcs += func + '\n';
-            }
-        }
-        if (o->type() == KRObjectData::EntityCheck) {
-            KRCheckData* chk = o->toCheck();
-            if (chk->controlSource()[0] == '=') {
-                func = QString("function %1_onrender_(){return %2;}").arg(chk->entityName().toLower()).arg(chk->controlSource().mid(1));
-
-                funcs += func + '\n';
-            }
-
-        }
-    }
-
-
-    return funcs;
-}
-#endif
-
-#if KDE_IS_VERSION(4,2,88)
 QVariant KRScriptHandler::evaluate(const QString &code)
 {
     if (!m_action->hadError()) {
@@ -183,19 +146,6 @@ QVariant KRScriptHandler::evaluate(const QString &code)
         return QVariant();
     }
 }
-#else
-QVariant KRScriptHandler::evaluate(const QString &field)
-{
-    QString func = field.toLower() + "_onrender_";
-
-    if (!m_action->hadError() && m_action->functionNames().contains(func)) {
-        return m_action->callFunction(func);
-    } else {
-        return QVariant();
-    }
-}
-#endif
-
 
 void KRScriptHandler::displayErrors()
 {
@@ -216,10 +166,6 @@ QString KRScriptHandler::where()
     kDebug() << w;
     return w;
 }
-
-#if 0
-
-#endif
 
 void KRScriptHandler::registerScriptObject(QObject* obj, const QString& name)
 {

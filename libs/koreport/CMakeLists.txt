@@ -7,6 +7,7 @@ ${CMAKE_SOURCE_DIR}/libs/
 ${CMAKE_SOURCE_DIR}/libs/koreport
 ${CMAKE_SOURCE_DIR}/libs/koreport/common
 ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
+${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
 ${CMAKE_SOURCE_DIR}/kchart/kdchart/include
 
 )
@@ -16,27 +17,16 @@ set(koreport_LIB_SRCS
 	common/krutils.cpp
 	common/krpos.cpp
 	common/krsize.cpp
-	common/krobjectdata.cpp
-	common/krchartdata.cpp
-	common/krlabeldata.cpp
-	common/krfielddata.cpp
-	common/krtextdata.cpp
-	common/krbarcodedata.cpp
-	common/krimagedata.cpp
-	common/krlinedata.cpp
-	common/krshapedata.cpp
-	common/krcheckdata.cpp
+	common/KoReportItemBase.cpp
 	common/krsectiondata.cpp
 	common/labelsizeinfo.cpp
 	common/reportpageoptions.cpp
 	common/krreportdata.cpp
 	common/krdetailsectiondata.cpp
-	
-	renderer/3of9.cpp
-	renderer/code128.cpp
-	renderer/codeean.cpp
-	renderer/ext3of9.cpp
-	renderer/renderobjects.cpp
+    common/KoReportPluginInterface.cpp
+    common/KoReportItemLine.cpp
+	common/renderobjects.cpp
+
 	renderer/KoReportPrintRenderer.cpp
 	renderer/KoReportPreRenderer.cpp
 	renderer/KoReportScreenRenderer.cpp
@@ -44,6 +34,7 @@ set(koreport_LIB_SRCS
     renderer/KoReportHTMLCSSRenderer.cpp
     renderer/KoReportKSpreadRenderer.cpp
     renderer/KoReportRendererBase.cpp
+    renderer/KoReportPage.cpp
 
 	renderer/scripting/krscripthandler.cpp
 	renderer/scripting/krscriptconstants.cpp
@@ -51,30 +42,16 @@ set(koreport_LIB_SRCS
 	renderer/scripting/krscriptdraw.cpp
 	renderer/scripting/krscriptreport.cpp
 	renderer/scripting/krscriptsection.cpp
-	renderer/scripting/krscriptlabel.cpp
-	renderer/scripting/krscriptfield.cpp
-	renderer/scripting/krscripttext.cpp
-	renderer/scripting/krscriptbarcode.cpp
 	renderer/scripting/krscriptline.cpp
-	renderer/scripting/krscriptimage.cpp
-	renderer/scripting/krscriptchart.cpp
 
 	renderer/ods/KoSimpleOdsDocument.cpp
 	renderer/ods/KoSimpleOdsSheet.cpp
 	renderer/ods/KoSimpleOdsCell.cpp
 
 	wrtembed/detailgroupsectiondialog.cpp
-	wrtembed/reportentities.cpp
-	wrtembed/reportrectentity.cpp
-	wrtembed/reportentitylabel.cpp
-	wrtembed/reportentityfield.cpp
-	wrtembed/reportentitytext.cpp
-	wrtembed/reportentityline.cpp
-	wrtembed/reportentitybarcode.cpp
-	wrtembed/reportentityimage.cpp
-	wrtembed/reportentitychart.cpp
-	wrtembed/reportentityshape.cpp
-	wrtembed/reportentitycheck.cpp
+	wrtembed/KoReportDesignerItemBase.cpp
+	wrtembed/KoReportDesignerItemRectBase.cpp
+	wrtembed/KoReportDesignerItemLine.cpp
 	wrtembed/reportsection.cpp
 	wrtembed/reportsectiondetailgroup.cpp
 	wrtembed/reportsectiondetail.cpp
@@ -83,10 +60,54 @@ set(koreport_LIB_SRCS
 	wrtembed/KoReportDesigner.cpp
 	wrtembed/reportpropertiesbutton.cpp
 	wrtembed/sectioneditor.cpp
-	wrtembed/3of9paint.cpp
-	wrtembed/ext3of9paint.cpp
-	wrtembed/codeeanpaint.cpp
-	wrtembed/code128paint.cpp
+
+    plugins/barcode/KoReportItemBarcode.cpp
+    plugins/barcode/KoReportDesignerItemBarcode.cpp
+    plugins/barcode/krscriptbarcode.cpp
+    plugins/barcode/3of9.cpp
+    plugins/barcode/code128.cpp
+    plugins/barcode/codeean.cpp
+    plugins/barcode/ext3of9.cpp
+    plugins/barcode/3of9paint.cpp
+    plugins/barcode/ext3of9paint.cpp
+    plugins/barcode/codeeanpaint.cpp
+    plugins/barcode/code128paint.cpp
+    plugins/barcode/KoReportBarcodePlugin.cpp
+
+    plugins/chart/KoReportItemChart.cpp
+    plugins/chart/KoReportDesignerItemChart.cpp
+    plugins/chart/krscriptchart.cpp
+    plugins/chart/KoReportChartPlugin.cpp
+
+    plugins/check/KoReportItemCheck.cpp
+    plugins/check/KoReportDesignerItemCheck.cpp
+#    plugins/check/krscriptcheck.cpp
+    plugins/check/KoReportCheckPlugin.cpp
+
+    plugins/field/KoReportItemField.cpp
+    plugins/field/KoReportDesignerItemField.cpp
+    plugins/field/krscriptfield.cpp
+    plugins/field/KoReportFieldPlugin.cpp
+
+    plugins/image/KoReportItemImage.cpp
+    plugins/image/KoReportDesignerItemImage.cpp
+    plugins/image/krscriptimage.cpp
+    plugins/image/KoReportImagePlugin.cpp
+
+    plugins/label/KoReportItemLabel.cpp
+    plugins/label/KoReportDesignerItemLabel.cpp
+    plugins/label/krscriptlabel.cpp
+    plugins/label/KoReportLabelPlugin.cpp
+
+    plugins/shape/KoReportItemShape.cpp
+    plugins/shape/KoReportDesignerItemShape.cpp
+#    plugins/shape/krscriptshape.cpp
+    plugins/shape/KoReportShapePlugin.cpp
+
+    plugins/text/KoReportItemText.cpp
+    plugins/text/KoReportDesignerItemText.cpp
+    plugins/text/krscripttext.cpp
+    plugins/text/KoReportTextPlugin.cpp
 	)
 
 if (SHOULD_BUILD_KWORD)

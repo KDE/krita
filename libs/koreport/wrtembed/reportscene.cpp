@@ -24,7 +24,7 @@
 
 #include "reportscene.h"
 #include <reportpageoptions.h>
-#include "reportrectentity.h"
+#include "KoReportDesignerItemRectBase.h"
 #include "KoReportDesigner.h"
 
 #include <labelsizeinfo.h>

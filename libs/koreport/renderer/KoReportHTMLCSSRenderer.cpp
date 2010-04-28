@@ -19,7 +19,6 @@
 
 #include "KoReportHTMLCSSRenderer.h"
 #include "renderobjects.h"
-#include "barcodes.h"
 #include <kdebug.h>
 #include <QDir>
 #include <QPainter>
@@ -27,7 +26,6 @@
 #include <QRectF>
 #include <QString>
 #include <QFont>
-
 
 #include <ktemporaryfile.h>
 #include <kio/netaccess.h>

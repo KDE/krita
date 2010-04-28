@@ -27,7 +27,7 @@
 
 class KRScriptFunctions;
 class KRScriptDebug;
-class KRReportData;
+class KoReportReportData;
 class OROPage;
 class KRScriptDraw;
 
@@ -40,7 +40,7 @@ class KRScriptHandler : public QObject
 {
     Q_OBJECT
 public:
-    KRScriptHandler(const KoReportData *, KRReportData*);
+    KRScriptHandler(const KoReportData *, KoReportReportData*);
     ~KRScriptHandler();
 
     QVariant evaluate(const QString&);
@@ -71,14 +71,10 @@ private:
 
     Scripting::Report *m_report;
 
-#if !KDE_IS_VERSION(4,2,88)
-    QString fieldFunctions();
-#endif
-
     const KoReportData *m_koreportData;
 
     QString m_source;
-    KRReportData  *m_reportData;
+    KoReportReportData  *m_reportData;
 
     Kross::Action* m_action;
 

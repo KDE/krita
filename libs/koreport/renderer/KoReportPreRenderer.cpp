@@ -20,38 +20,19 @@
 #include "KoReportPreRenderer.h"
 #include "renderobjects.h"
 #include "KoReportData.h"
-#include "barcodes.h"
+
 #include <kdeversion.h>
-
-#include <QPrinter>
 #include <QFontMetrics>
-#include <QPainter>
-
 #include <labelsizeinfo.h>
-#include <kcodecs.h>
 #include <KoPageFormat.h>
 #include <kdebug.h>
 #include <KoDpi.h>
 
-#include <krobjectdata.h>
-#include <krtextdata.h>
-#include <krbarcodedata.h>
-#include <krfielddata.h>
-#include <krimagedata.h>
-#include <krlabeldata.h>
-#include <krlinedata.h>
-#include <krchartdata.h>
-#include <krcheckdata.h>
+#include <KoReportItemBase.h>
 
 #include "scripting/krscripthandler.h"
 #include <krreportdata.h>
 #include <krdetailsectiondata.h>
-#include <QResizeEvent>
-#include <QApplication>
-
-#include <KDChartAbstractDiagram>
-#include <KDChartAbstractCoordinatePlane>
-#include <KDChartChart>
 
 //
 // KoReportPreRendererPrivate
@@ -71,7 +52,7 @@ public:
 
     ORODocument* m_document;
     OROPage*     m_page;
-    KRReportData* m_reportData;
+    KoReportReportData* m_reportData;
 
     qreal m_yOffset;      // how far down the current page are we
     qreal m_topMargin;    // value stored in the correct units
@@ -360,71 +341,22 @@ qreal KoReportPreRendererPrivate::renderSectionSize(const KRSectionData & sectio
 {
     qreal intHeight = POINT_TO_INCH(sectionData.height()) * KoDpi::dpiY();
 
+    int itemHeight = 0;
+    
     if (sectionData.objects().count() == 0)
         return intHeight;
 
-    QList<KRObjectData*> objects = sectionData.objects();
-    KRObjectData * elemThis;
-    foreach(KRObjectData *ob, objects) {
+    QList<KoReportItemBase*> objects = sectionData.objects();
+    KoReportItemBase * elemThis;
+    foreach(KoReportItemBase *ob, objects) {
         elemThis = ob;
-        //++it;
-        // TODO: See if this can be simplified anymore than it already is.
-        //       All we need to know is how much stretch we are going to get.
-        if (elemThis->type() == KRObjectData::EntityText) {
-            KRTextData * t = elemThis->toText();
+        QPointF offset(m_leftMargin, m_yOffset);
+        QVariant itemData = m_kodata->value(ob->itemDataSource());
 
-            QPointF pos = t->m_pos.toScene();
-            QSizeF size = t->m_size.toScene();
-            pos += QPointF(m_leftMargin, m_yOffset);
+        itemHeight = ob->render(0, 0, offset, itemData, m_scriptHandler);
 
-            QRectF trf(pos, size);
-
-            QString qstrValue;
-            qreal   intStretch      = trf.top() - m_yOffset;
-            qreal   intRectHeight   = trf.height();
-
-            QFont f = t->m_font->value().value<QFont>();
-
-            qstrValue = m_kodata->value(t->m_controlSource->value().toString()).toString();
-            if (qstrValue.length()) {
-                int pos = 0;
-                int idx;
-                QChar separator;
-                QRegExp re("\\s");
-                QPrinter prnt(QPrinter::HighResolution);
-                QFontMetrics fm(f, &prnt);
-
-                int   intRectWidth    = (int)((t->m_size.toPoint().width() / 72) * prnt.resolution());
-
-                while (qstrValue.length()) {
-                    idx = re.indexIn(qstrValue, pos);
-                    if (idx == -1) {
-                        idx = qstrValue.length();
-                        separator = QChar('\n');
-                    } else
-                        separator = qstrValue.at(idx);
-
-                    if (fm.boundingRect(qstrValue.left(idx)).width() < intRectWidth || pos == 0) {
-                        pos = idx + 1;
-                        if (separator == '\n') {
-                            qstrValue = qstrValue.mid(idx + 1, qstrValue.length());
-                            pos = 0;
-
-                            intStretch += intRectHeight;
-                        }
-                    } else {
-                        qstrValue = qstrValue.mid(pos, qstrValue.length());
-                        pos = 0;
-
-                        intStretch += intRectHeight;
-                    }
-                }
-
-                intStretch += (t->m_bottomPadding / 100.0);
-
-                if (intStretch > intHeight)
-                    intHeight = intStretch;
-            }
+        if (itemHeight > intHeight) {
+            intHeight = itemHeight;
         }
     }
 
@@ -433,10 +365,10 @@ qreal KoReportPreRendererPrivate::renderSectionSize(const KRSectionData & sectio
 
 qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionData)
 {
-    qreal intHeight = POINT_TO_INCH(sectionData.height()) * KoDpi::dpiY();
-    kDebug() << "Name: " << sectionData.name() << " Height: " << intHeight << "Objects: " << sectionData.objects().count();
-
-    //_handler->populateEngineParameters(_query->getQuery());
+    qreal sectionHeight = POINT_TO_INCH(sectionData.height()) * KoDpi::dpiY();
+    int itemHeight = 0;
+    
+    kDebug() << "Name: " << sectionData.name() << " Height: " << sectionHeight << "Objects: " << sectionData.objects().count();
 
     emit(renderingSection(const_cast<KRSectionData*>(&sectionData), m_page, QPointF(m_leftMargin, m_yOffset)));
 
@@ -453,78 +385,29 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
     bg->setBrush(sectionData.backgroundColor());
     qreal w = m_page->document()->pageOptions().widthPx() - m_page->document()->pageOptions().getMarginRight() - m_leftMargin;
 
-    bg->setRect(QRectF(m_leftMargin, m_yOffset, w, intHeight));
+    bg->setRect(QRectF(m_leftMargin, m_yOffset, w, sectionHeight));
     m_page->addPrimitive(bg, true);
 
-    QList<KRObjectData*> objects = sectionData.objects();
-    KRObjectData * elemThis;
-    foreach(KRObjectData *ob, objects) {
+    QList<KoReportItemBase*> objects = sectionData.objects();
+    KoReportItemBase * elemThis;
+    foreach(KoReportItemBase *ob, objects) {
         elemThis = ob;
-        if (elemThis->type() == KRObjectData::EntityLabel) {
-            KRLabelData * l = elemThis->toLabel();
-            QPointF pos = l->m_pos.toScene();
-            //QSizeF size = l->_size.toScene();
+        QPointF offset(m_leftMargin, m_yOffset);
+        QVariant itemData = m_kodata->value(ob->itemDataSource());
+        
+        itemHeight = ob->render(m_page, sec, offset, itemData, m_scriptHandler);
 
-            pos += QPointF(m_leftMargin, m_yOffset);
-
-            OROTextBox * tb = new OROTextBox();
-            tb->setPosition(pos);
-            tb->setSize(l->m_size.toScene());
-            tb->setFont(l->font());
-            tb->setText(l->text());
-            tb->setFlags(l->textFlags());
-            tb->setTextStyle(l->textStyle());
-            tb->setLineStyle(l->lineStyle());
-            m_page->addPrimitive(tb);
-
-            OROTextBox *tb2 = dynamic_cast<OROTextBox*>(tb->clone());
-            tb2->setPosition(l->m_pos.toPoint());
-            sec->addPrimitive(tb2);
-        } else if (elemThis->type() == KRObjectData::EntityField) {
-            KRFieldData* f = elemThis->toField();
-
-            QPointF pos = f->m_pos.toScene();
-            QSizeF size = f->m_size.toScene();
-            pos += QPointF(m_leftMargin, m_yOffset);
-
-            OROTextBox * tb = new OROTextBox();
-            tb->setPosition(pos);
-            tb->setSize(size);
-            tb->setFont(f->font());
-            tb->setFlags(f->textFlags());
-            tb->setTextStyle(f->textStyle());
-            tb->setLineStyle(f->lineStyle());
-
-            QString str;
-
-            QString cs = f->m_controlSource->value().toString();
-            if (cs.left(1) == "=") { //Everything after = is treated as code
-                if (!cs.contains("PageTotal()")) {
-#if KDE_IS_VERSION(4,2,88)
-                    QVariant v = m_scriptHandler->evaluate(cs.mid(1));
-#else
-                    QVariant v = m_scriptHandler->evaluate(f->entityName());
-#endif
-
-                    str = v.toString();
-                } else {
-#if KDE_IS_VERSION(4,2,88)
-                    str = cs.mid(1);
-#else
-                    str = f->entityName();
-#endif
-                    m_postProcText.append(tb);
-                }
-            } else if (cs.left(1) == "$") { //Everything past $ is treated as a string
-                str = cs.mid(1);
-            } else {
-                //QString qry = "Data Source";
-                QString clm = f->m_controlSource->value().toString();
-
-                //populateData(f->data(), dataThis);
-                //str = dataThis.getValue();
-                str = m_kodata->value(clm).toString();
+        if (itemHeight > sectionHeight) {
+            sectionHeight = itemHeight;
+        }
+        
+#if 0 //!TODO Handle post processing of text data
+        if (primitive->type() == OROTextBox::TextBox) {
+            OROTextBox *text = dynamic_cast<OROTextBox*>(primitive);
+            if (text->requiresPostProcessing()) {
+                m_postProcText.append(text);
             }
+
             tb->setText(str);
             m_page->addPrimitive(tb);
 
@@ -797,12 +680,12 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
         } else {
             kDebug() << "Encountered an unknown element while rendering a section.";
         }
+        #endif
     }
 
-    m_yOffset += intHeight;
+    m_yOffset += sectionHeight;
 
-    kDebug() << m_yOffset;
-    return intHeight;
+    return sectionHeight;
 }
 
 void KoReportPreRendererPrivate::initEngine()
@@ -1048,7 +931,7 @@ bool KoReportPreRenderer::setDom(const QDomElement &docReport)
 		return false;
 	}
 	
-        d->m_reportData = new KRReportData(docReport);
+        d->m_reportData = new KoReportReportData(docReport);
         d->m_valid = d->m_reportData->isValid();
     }
     return isValid();

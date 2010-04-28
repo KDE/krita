@@ -18,20 +18,15 @@
  */
 #include "krscriptreport.h"
 #include <krreportdata.h>
-#include <krobjectdata.h>
-#include "krscriptlabel.h"
-#include "krscriptfield.h"
-#include "krscripttext.h"
-#include "krscriptbarcode.h"
-#include "krscriptimage.h"
+#include <KoReportItemBase.h>
+
 #include "krscriptline.h"
-#include "krscriptchart.h"
 #include "krscriptsection.h"
 
 namespace Scripting
 {
 
-Report::Report(KRReportData *r)
+Report::Report(KoReportReportData *r)
 {
     m_reportData = r;
     m_scriptObject = 0;
@@ -60,8 +55,9 @@ QString Report::recordSource()
 
 QObject* Report::objectByName(const QString &n)
 {
-    QList<KRObjectData *>obs = m_reportData->objects();
-    foreach(KRObjectData *o, obs) {
+    QList<KoReportItemBase *>obs = m_reportData->objects();
+    foreach(KoReportItemBase *o, obs) {
+        #if 0 //TODO Scripting
         if (o->entityName() == n) {
             switch (o->type()) {
             case KRObjectData::EntityLabel:
@@ -89,6 +85,7 @@ QObject* Report::objectByName(const QString &n)
                 return new QObject();
             }
         }
+        #endif
     }
     return 0;
 }

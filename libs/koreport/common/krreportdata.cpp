@@ -20,22 +20,46 @@
 #include <KoUnit.h>
 #include <KoDpi.h>
 #include "krdetailsectiondata.h"
-#include "krobjectdata.h"
+#include "KoReportItemBase.h"
 
-void KRReportData::init()
+//!Temp load all plugins here until the loaded is created
+#include "../plugins/barcode/KoReportBarcodePlugin.h"
+#include "../plugins/chart/KoReportChartPlugin.h"
+#include "../plugins/check/KoReportCheckPlugin.h"
+#include "../plugins/field/KoReportFieldPlugin.h"
+#include "../plugins/image/KoReportImagePlugin.h"
+#include "../plugins/label/KoReportLabelPlugin.h"
+#include "../plugins/shape/KoReportShapePlugin.h"
+#include "../plugins/text/KoReportTextPlugin.h"
+
+void KoReportReportData::init()
 {
     m_pageHeaderFirst = m_pageHeaderOdd = m_pageHeaderEven = m_pageHeaderLast = m_pageHeaderAny = 0;
     m_pageFooterFirst = m_pageFooterOdd = m_pageFooterEven = m_pageFooterLast = m_pageFooterAny = 0;
     m_reportHeader = m_reportFooter = 0;
+
+    //!Temp - Add Plugins Here
+
+    m_plugins.insert("report:barcode", new KoReportBarcodePlugin());
+    m_plugins.insert("report:chart", new KoReportChartPlugin());
+    m_plugins.insert("report:check", new KoReportCheckPlugin());
+    m_plugins.insert("report:field", new KoReportFieldPlugin());
+    m_plugins.insert("report:image", new KoReportImagePlugin());
+    m_plugins.insert("report:label", new KoReportLabelPlugin());
+    m_plugins.insert("report:shape", new KoReportShapePlugin());
+    m_plugins.insert("report:text", new KoReportTextPlugin());
+
+    //!End Add Plugins
+    
 }
-KRReportData::KRReportData()
+KoReportReportData::KoReportReportData()
         : m_detailSection(0)
 {
     init();
     m_valid = true;
 }
 
-KRReportData::KRReportData(const QDomElement & elemSource)
+KoReportReportData::KoReportReportData(const QDomElement & elemSource)
         : m_detailSection(0)
 {
     m_valid = false;
@@ -91,7 +115,7 @@ KRReportData::KRReportData(const QDomElement & elemSource)
                     QString sn = sec.nodeName().toLower();
                     kDebug() << sn;
                     if (sn == "report:section") {
-                        KRSectionData * sd = new KRSectionData(sec.toElement());
+                        KRSectionData * sd = new KRSectionData(sec.toElement(), this);
                         if (!sd->isValid()) {
                             kDebug() << "Invalid section";
                             delete sd;
@@ -141,7 +165,7 @@ KRReportData::KRReportData(const QDomElement & elemSource)
                         }
 
                     } else if (sn == "report:detail") {
-                        KRDetailSectionData * dsd = new KRDetailSectionData(sec.toElement());
+                        KRDetailSectionData * dsd = new KRDetailSectionData(sec.toElement(), this);
 
                         if (dsd->isValid()) {
                             m_detailSection = dsd;
@@ -161,13 +185,13 @@ KRReportData::KRReportData(const QDomElement & elemSource)
 }
 
 
-KRReportData::~KRReportData()
+KoReportReportData::~KoReportReportData()
 {
 }
 
-QList<KRObjectData*> KRReportData::objects() const
+QList<KoReportItemBase*> KoReportReportData::objects() const
 {
-    QList<KRObjectData*> obs;
+    QList<KoReportItemBase*> obs;
     KRSectionData *sec;
 
     for (int i = 1; i <= KRSectionData::PageFooterAny; i++) {
@@ -192,17 +216,17 @@ QList<KRObjectData*> KRReportData::objects() const
     }
 
     kDebug() << "Object List:";
-    foreach(KRObjectData* o, obs) {
+    foreach(KoReportItemBase* o, obs) {
         kDebug() << o->entityName();
     }
     return obs;
 }
 
-KRObjectData* KRReportData::object(const QString& n) const
+KoReportItemBase* KoReportReportData::object(const QString& n) const
 {
-    QList<KRObjectData*> obs = objects();
+    QList<KoReportItemBase*> obs = objects();
 
-    foreach(KRObjectData* o, obs) {
+    foreach(KoReportItemBase* o, obs) {
         if (o->entityName() == n) {
             return o;
         }
@@ -210,7 +234,7 @@ KRObjectData* KRReportData::object(const QString& n) const
     return 0;
 }
 
-QList<KRSectionData*> KRReportData::sections() const
+QList<KRSectionData*> KoReportReportData::sections() const
 {
     QList<KRSectionData*> secs;
     KRSectionData *sec;
@@ -238,7 +262,7 @@ QList<KRSectionData*> KRReportData::sections() const
     return secs;
 }
 
-KRSectionData* KRReportData::section(const QString& sn) const
+KRSectionData* KoReportReportData::section(const QString& sn) const
 {
     QList<KRSectionData*> secs = sections();
 
@@ -250,7 +274,7 @@ KRSectionData* KRReportData::section(const QString& sn) const
     return 0;
 }
 
-KRSectionData* KRReportData::section(KRSectionData::Section s) const
+KRSectionData* KoReportReportData::section(KRSectionData::Section s) const
 {
     KRSectionData *sec;
     switch (s) {
@@ -296,3 +320,10 @@ KRSectionData* KRReportData::section(KRSectionData::Section s) const
     return sec;
 }
 
+KoReportPluginInterface* KoReportReportData::plugin(const QString& p)
+{
+    if (m_plugins.contains(p)) {
+        return m_plugins[p];
+    }
+    return 0;
+}

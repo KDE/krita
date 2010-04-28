@@ -25,21 +25,15 @@
 #include <kdebug.h>
 #include <QColor>
 
-#include "krlinedata.h"
-#include "krfielddata.h"
-#include "krtextdata.h"
-#include "krbarcodedata.h"
-#include "krimagedata.h"
-#include "krlabeldata.h"
-#include "krchartdata.h"
-#include "krcheckdata.h"
+#include <KoReportPluginInterface.h>
+#include "KoReportItemLine.h"
 
 KRSectionData::KRSectionData()
 {
     createProperties();
 }
 
-KRSectionData::KRSectionData(const QDomElement & elemSource)
+KRSectionData::KRSectionData(const QDomElement & elemSource, KoReportReportData* report)
 {
     createProperties();
     m_name = elemSource.tagName();
@@ -63,32 +57,25 @@ KRSectionData::KRSectionData(const QDomElement & elemSource)
     for (int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++) {
         QDomElement elemThis = section.item(nodeCounter).toElement();
 
-        if (elemThis.tagName() == "report:label") {
-            KRLabelData * label = new KRLabelData(elemThis);
-            m_objects.append(label);
-        } else if (elemThis.tagName() == "report:field") {
-            KRFieldData * field = new KRFieldData(elemThis);
-            m_objects.append(field);
-        } else if (elemThis.tagName() == "report:text") {
-            KRTextData * text = new KRTextData(elemThis);
-            m_objects.append(text);
-        } else if (elemThis.tagName() == "report:line") {
-            KRLineData * line = new KRLineData(elemThis);
+        if (elemThis.tagName() == "report:line") {
+            KoReportItemLine * line = new KoReportItemLine(elemThis);
             m_objects.append(line);
-        } else if (elemThis.tagName() == "report:barcode") {
-            KRBarcodeData * bc = new KRBarcodeData(elemThis);
-            m_objects.append(bc);
-        } else if (elemThis.tagName() == "report:image") {
-            KRImageData * img = new KRImageData(elemThis);
-            m_objects.append(img);
-        } else if (elemThis.tagName() == "report:chart") {
-            KRChartData * chart = new KRChartData(elemThis);
-            m_objects.append(chart);
-        } else if (elemThis.tagName() == "report:check") {
-            KRCheckData * check = new KRCheckData(elemThis);
-            m_objects.append(check);
-        } else
-            kDebug() << "While parsing section encountered an unknown element: " << elemThis.tagName();
+        } else {
+            KoReportPluginInterface *plugin = report->plugin(elemThis.tagName());
+            if (plugin) {
+                QObject *obj = plugin->createRendererInstance(elemThis);
+                
+                if (obj) {
+                    KoReportItemBase *krobj = dynamic_cast<KoReportItemBase*>(obj);
+                    if (krobj) {
+                        m_objects.append(krobj);
+                    }
+                }
+            }
+            else {
+                kDebug() << "While parsing section encountered an unknown element: " << elemThis.tagName();
+            }
+        }
     }
     qSort(m_objects.begin(), m_objects.end(), zLessThan);
     m_valid = true;
@@ -99,12 +86,12 @@ KRSectionData::~KRSectionData()
 
 }
 
-bool KRSectionData::zLessThan(KRObjectData* s1, KRObjectData* s2)
+bool KRSectionData::zLessThan(KoReportItemBase* s1, KoReportItemBase* s2)
 {
     return s1->Z < s2->Z;
 }
 
-bool KRSectionData::xLessThan(KRObjectData* s1, KRObjectData* s2)
+bool KRSectionData::xLessThan(KoReportItemBase* s1, KoReportItemBase* s2)
 {
     return s1->position().toPoint().x() < s2->position().toPoint().x();
 }

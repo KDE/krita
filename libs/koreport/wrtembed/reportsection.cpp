@@ -19,16 +19,12 @@
 
 #include "reportsection.h"
 #include "KoReportDesigner.h"
-#include "reportentities.h"
-#include "reportentitylabel.h"
-#include "reportentityfield.h"
-#include "reportentitytext.h"
-#include "reportentityline.h"
-#include "reportentitybarcode.h"
-#include "reportentityimage.h"
-#include "reportentitychart.h"
-#include "reportentitycheck.h"
-#include "reportentityshape.h"
+#include "KoReportDesignerItemBase.h"
+
+#include "KoReportPluginInterface.h"
+#include "KoReportDesignerItemRectBase.h"
+#include "KoReportDesignerItemLine.h"
+#include <KLocalizedString>
 
 #include "reportscene.h"
 #include "reportsceneview.h"
@@ -162,7 +158,7 @@ void ReportSection::buildXML(QDomDocument &doc, QDomElement &section)
     QGraphicsItemList list = m_scene->items();
     for (QGraphicsItemList::iterator it = list.begin();
             it != list.end(); ++it) {
-        ReportEntity::buildXML((*it), doc, section);
+        KoReportDesignerItemBase::buildXML((*it), doc, section);
     }
 }
 
@@ -186,27 +182,25 @@ void ReportSection::initFromXML(QDomNode & section)
         node = nl.item(i);
         n = node.nodeName();
 
-        //Objects
-        if (n == "report:label") {
-            (new ReportEntityLabel(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "report:field") {
-            (new ReportEntityField(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "report:text") {
-            (new ReportEntityText(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "report:line") {
-            (new ReportEntityLine(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "report:barcode") {
-            (new ReportEntityBarcode(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "report:image") {
-            (new ReportEntityImage(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "report:chart") {
-            (new ReportEntityChart(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "report:check") {
-            (new ReportEntityCheck(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "report:shape") {
-            (new ReportEntityShape(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else {
-            kDebug() << "Encountered unknown node while parsing section: " << n;
+        //Load objects
+        //report:line is a special case as it is not a plugin
+        if (n == "report:line") {
+            (new KoReportDesignerItemLine(node, m_sceneView->designer(), m_scene))->setVisible(true);
+        }
+        else {
+            KoReportPluginInterface *plugin = m_reportDesigner->plugin(n);
+            if (plugin) {
+                QObject *obj = plugin->createDesignerInstance(node, m_reportDesigner, m_scene);
+                if (obj) {
+                    KoReportDesignerItemRectBase *entity = dynamic_cast<KoReportDesignerItemRectBase*>(obj);
+                    if (entity) {
+                        entity->setVisible(true);
+                    }
+                }
+            }
+            else {
+                kDebug() << "Encountered unknown node while parsing section: " << n;
+            }
         }
     }
 }
@@ -227,13 +221,9 @@ void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
     //update items position with unit
     QList<QGraphicsItem*> itms = m_scene->items();
     for (int i = 0; i < itms.size(); ++i) {
-	int typ = dynamic_cast<KRObjectData*>(itms[i])->type();
-	
-        if ( typ >= KRObjectData::EntityLabel && typ < KRObjectData::EntityLast) {
-            dynamic_cast<ReportRectEntity*>(itms[i])->setUnit(unit);
-        }
-        if (typ == KRObjectData::EntityLine) {
-            dynamic_cast<ReportEntityLine*>(itms[i])->setUnit(unit);
+        KoReportItemBase *obj = dynamic_cast<KoReportItemBase*>(itms[i]);
+        if (obj) {
+            obj->setUnit(unit);
         }
     }
 

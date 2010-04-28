@@ -19,7 +19,6 @@
 
 #include "KoReportHTMLTableRenderer.h"
 #include "renderobjects.h"
-#include "barcodes.h"
 #include <kdebug.h>
 #include <QDir>
 #include <QPainter>
@@ -28,9 +27,9 @@
 #include <QString>
 #include <QFont>
 
-
 #include <ktemporaryfile.h>
 #include <kio/netaccess.h>
+
 //
 // KRHtmlRender
 //

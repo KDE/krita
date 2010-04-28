@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2007-2010 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,12 +16,12 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "krscriptline.h"
-#include <krlinedata.h>
+#include "KoReportItemLine.h"
 
 namespace Scripting
 {
 
-Line::Line(KRLineData* l)
+Line::Line(KoReportItemLine* l)
 {
     m_line = l;
 }

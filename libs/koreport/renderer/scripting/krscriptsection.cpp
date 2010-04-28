@@ -16,13 +16,10 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "krscriptsection.h"
-#include "krscriptlabel.h"
-#include "krscriptfield.h"
-#include "krscripttext.h"
-#include "krscriptbarcode.h"
-#include "krscriptimage.h"
+
 #include "krscriptline.h"
-#include "krscriptchart.h"
+#include <KoReportItemBase.h>
+
 #include <kdebug.h>
 
 namespace Scripting
@@ -66,6 +63,7 @@ QString Section::name()
 
 QObject* Section::objectByNumber(int i)
 {
+    #if 0 //TODO Scripting
     switch (m_section->m_objects[i]->type()) {
     case KRObjectData::EntityLabel:
         return new Scripting::Label(m_section->m_objects[i]->toLabel());
@@ -91,6 +89,7 @@ QObject* Section::objectByNumber(int i)
     default:
         return new QObject();
     }
+    #endif
 
 }
 

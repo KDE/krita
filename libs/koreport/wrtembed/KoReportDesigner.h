@@ -31,7 +31,7 @@
 #include <koproperty/Set.h>
 #include <koproperty/Property.h>
 #include <kdebug.h>
-#include <krobjectdata.h>
+#include <KoReportItemBase.h>
 #include "koreport_export.h"
 #include "KoReportData.h"
 
@@ -49,7 +49,7 @@ class QGraphicsSceneMouseEvent;
 class QGraphicsSceneContextMenuEvent;
 class ReportSceneView;
 class ReportWriterSectionData;
-class KexiView;
+class KoReportPluginInterface;
 
 //
 // Class ReportDesigner
@@ -239,14 +239,19 @@ public:
     /**
     @brief Checks if the supplied name is unique among all entities
     */
-    bool isEntityNameUnique(const QString &, KRObjectData* = 0) const;
+    bool isEntityNameUnique(const QString &, KoReportItemBase* = 0) const;
 
     /**
     @brief Return a list of actions that represent the netities that can be inserted into the report
     @return QList of QActions
     */
+
     static QList<QAction*> actions();
 
+    KoReportPluginInterface* plugin(const QString&);
+
+    const QMap<QString, KoReportPluginInterface*> plugins() { return m_plugins; }
+    
 public slots:
 
     void slotEditDelete();
@@ -255,7 +260,6 @@ public slots:
     void slotEditPaste();
     void slotEditPaste(QGraphicsScene *);
 
-    void slotItem(KRObjectData::EntityTypes);
     void slotItem(const QString&);
 
     void slotSectionEditor();
@@ -330,6 +334,8 @@ private:
 
     ReportWriterSectionData *m_sectionData;
     unsigned int selectionCount() const;
+
+    QMap<QString, KoReportPluginInterface*> m_plugins;
 
 private slots:
     void slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p);

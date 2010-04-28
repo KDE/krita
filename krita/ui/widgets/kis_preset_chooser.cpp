@@ -61,7 +61,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     const QAbstractProxyModel* proxyModel = dynamic_cast<const QAbstractProxyModel*>(index.model());
     QModelIndex originalIndex = proxyModel->mapToSource(index);
     KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(originalIndex.internalPointer());
-    
+
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
         painter->fillRect(option.rect, option.palette.highlight());
@@ -69,10 +69,10 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
     painter->setPen(Qt::black);
     painter->drawText(option.rect.x() + 255, option.rect.y() + option.rect.height() - 5, preset->name());
-    
+
     QRect previewRect = QRect(option.rect.x(), option.rect.y(), 250, option.rect.height());
     QImage preview = preset->image();
-    
+
     if(preview.isNull()) {
         return;
     }
@@ -92,29 +92,29 @@ public:
     {
         if(m_paintopID.id().isEmpty())
             return true;
-        
+
         QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
         if(!index.isValid())
             return false;
-        
+
         KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(index.internalPointer());
         return ((preset->paintOp() == m_paintopID || m_showAll) &&
                 preset->name().contains(m_nameFilter, Qt::CaseInsensitive));
     }
-    
+
     ///Set id for paintop to be accept by the proxy model, if not filter is set all
     ///presets will be shown.
     void setPresetFilter(const KoID &paintopID)
     {
         m_paintopID = paintopID;
     }
-    
+
     /// Set a filter for preset name, only presets with name containing the string will be shown
     void setPresetNameFilter(const QString &nameFilter)
     {
         m_nameFilter = nameFilter;
     }
-    
+
     void setShowAll(bool show)
     {
         m_showAll = show;
@@ -130,17 +130,18 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
         : QWidget(parent)
 {
     setObjectName(name);
-    QVBoxLayout * layout = new QVBoxLayout(this);  
+    QVBoxLayout * layout = new QVBoxLayout(this);
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisPaintOpPreset>(rserver);
     m_chooser = new KoResourceItemChooser(adapter, this);
+    m_chooser->showGetHotNewStuff(true, true);
     m_presetProxy = new KisPresetProxyModel(this);
     m_chooser->setProxyModel(m_presetProxy);
     m_chooser->setColumnCount(1);
     m_chooser->setRowHeight(60);
     m_chooser->setItemDelegate(new KisPresetDelegate(this));
     layout->addWidget(m_chooser);
-        
+
     connect(m_chooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
 }

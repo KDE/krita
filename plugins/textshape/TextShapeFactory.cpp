@@ -40,7 +40,10 @@ TextShapeFactory::TextShapeFactory(QObject *parent)
         : KoShapeFactoryBase(parent, TextShape_SHAPEID, i18n("Text"))
 {
     setToolTip(i18n("A shape that shows text"));
-    setOdfElementNames(KoXmlNS::draw, QStringList("text-box"));
+    QList<QPair<QString, QStringList> > odfElements;
+    odfElements.append(QPair<QString, QStringList>(KoXmlNS::draw, QStringList("text-box")));
+    odfElements.append(QPair<QString, QStringList>(KoXmlNS::table, QStringList("table")));
+    setOdfElements(odfElements);
     setLoadingPriority(1);
 
     KoShapeTemplate t;
@@ -103,7 +106,8 @@ KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceMan
 
 bool TextShapeFactory::supports(const KoXmlElement & e) const
 {
-    return (e.localName() == "text-box" && e.namespaceURI() == KoXmlNS::draw);
+    return (e.localName() == "text-box" && e.namespaceURI() == KoXmlNS::draw) ||
+        (e.localName() == "table" && e.namespaceURI() == KoXmlNS::table);
 }
 
 void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
@@ -118,7 +122,7 @@ void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
     }
     variant.setValue(new KoStyleManager(manager));
     manager->setResource(KoText::StyleManager, variant);
-    
+
     if (!manager->imageCollection())
         manager->setImageCollection(new KoImageCollection(manager));
 }

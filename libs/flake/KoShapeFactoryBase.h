@@ -168,13 +168,10 @@ public:
     /// lower prio means the shape is more generic and will be checked later
     int loadingPriority() const;
 
-    /// The namespace that the elements supported by the shape created
-    /// by this factory should be in.
-    QString odfNameSpace() const;
-
-    /// the name used for quick checking if this shapeFactory is able to
-    /// load Odf data identified by the element name.
-    QStringList odfElementNames() const;
+    /**
+     * The list of namespaces to the supported elements the factory supports.
+     */
+    QList<QPair<QString, QStringList> > odfElements() const;
 
     /// returns true if this shapeFactory is able to load the ODF type
     /// started at argument element. ('draw:line' / 'draw:frame' / etc)
@@ -263,7 +260,7 @@ protected:
     void setLoadingPriority(int priority);
 
     /**
-     * Set the name used for quick checking whether this shapefactory
+     * Set the namespace and element tags used for quick checking whether this shapefactory
      * is able to create a shape from xml identified by this element
      * name.
      *
@@ -274,6 +271,17 @@ protected:
      *
      */
     void setOdfElementNames(const QString &nameSpace, const QStringList &elementNames);
+
+    /**
+     * Set the namespaces and according element tags used for quick checking whether this shapefactory
+     * is able to create a shape from xml identified by this element
+     * name.
+     *
+     * @param elementNamesList containing a list of namespace (like
+     * urn:oasis:names:tc:opendocument:xmlns:text:1.0,
+     * take it from KoXmlNS.h) to a list of elementName of the element itself, like "draw"
+     */
+    void setOdfElements(const QList<QPair<QString, QStringList> > &elementNamesList);
 
     /**
      * The hidden boolean requests if the shape should be hidden in the

@@ -370,6 +370,21 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
     return answer;
 }
 
+bool TextShape::loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    // if the loadOdfFrame from the base class for draw:text-box failes check for table:table
+    if (!KoFrameShape::loadOdfFrame(element, context)) {
+        const KoXmlElement & frameElement(KoXml::namedItemNS(element, KoXmlNS::table, "table"));
+        if (frameElement.isNull()) {
+            return false;
+        }
+        else {
+            return loadOdfFrameElement(frameElement, context);
+        }
+    }
+    return true;
+}
+
 bool TextShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     return m_textShapeData->loadOdf(element, context);

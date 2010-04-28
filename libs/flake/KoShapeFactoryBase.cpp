@@ -51,8 +51,7 @@ public:
     QString tooltip;
     QString iconName;
     int loadingPriority;
-    QString odfNameSpace;
-    QStringList odfElementNames;
+    QList<QPair<QString, QStringList> > odfElements; // odf name space -> odf element names
     bool hidden;
 };
 
@@ -93,14 +92,9 @@ int KoShapeFactoryBase::loadingPriority() const
     return d->loadingPriority;
 }
 
-QStringList KoShapeFactoryBase::odfElementNames() const
+QList<QPair<QString, QStringList> > KoShapeFactoryBase::odfElements() const
 {
-    return d->odfElementNames;
-}
-
-QString KoShapeFactoryBase::odfNameSpace() const
-{
-    return d->odfNameSpace;
+    return d->odfElements;
 }
 
 bool KoShapeFactoryBase::supports(const KoXmlElement & e) const
@@ -160,8 +154,13 @@ void KoShapeFactoryBase::setLoadingPriority(int priority)
 
 void KoShapeFactoryBase::setOdfElementNames(const QString & nameSpace, const QStringList & names)
 {
-    d->odfNameSpace = nameSpace;
-    d->odfElementNames = names;
+    d->odfElements.clear();
+    d->odfElements.append(QPair<QString, QStringList>(nameSpace, names));
+}
+
+void KoShapeFactoryBase::setOdfElements(const QList<QPair<QString, QStringList> > &elementNamesList)
+{
+    d->odfElements = elementNamesList;
 }
 
 bool KoShapeFactoryBase::hidden() const

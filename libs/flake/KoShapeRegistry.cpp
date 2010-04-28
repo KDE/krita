@@ -109,21 +109,26 @@ void KoShapeRegistry::addFactory(KoShapeFactoryBase * factory)
 
 void KoShapeRegistry::Private::insertFactory(KoShapeFactoryBase *factory)
 {
-    if (factory->odfNameSpace().isEmpty() || factory->odfElementNames().isEmpty()) {
+    const QList<QPair<QString, QStringList> > odfElements(factory->odfElements());
+
+    if (odfElements.isEmpty()) {
         kDebug(30006) << "Shape factory" << factory->id() << " does not have OdfNamespace defined, ignoring";
-    } else {
-        foreach (const QString &elementName, factory->odfElementNames()) {
+    }
+    else {
+        int priority = factory->loadingPriority();
+        for (QList<QPair<QString, QStringList> >::const_iterator it(odfElements.begin()); it != odfElements.end(); ++it) {
+            foreach (const QString &elementName, (*it).second) {
+                QPair<QString, QString> p((*it).first, elementName);
 
-            QPair<QString, QString> p(factory->odfNameSpace(), elementName);
+                QMultiMap<int, KoShapeFactoryBase*> & priorityMap = factoryMap[p];
 
-            QMultiMap<int, KoShapeFactoryBase*> & priorityMap = factoryMap[p];
+                priorityMap.insert(priority, factory);
 
-            priorityMap.insert(factory->loadingPriority(), factory);
-
-            kDebug(30006) << "Inserting factory" << factory->id() << " for"
-                << p << " with priority "
-                << factory->loadingPriority() << " into factoryMap making "
-                << priorityMap.size() << " entries. ";
+                kDebug(30006) << "Inserting factory" << factory->id() << " for"
+                    << p << " with priority "
+                    << priority << " into factoryMap making "
+                    << priorityMap.size() << " entries. ";
+            }
         }
     }
 }
@@ -189,6 +194,7 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
 {
     QPair<QString, QString> p = QPair<QString, QString>(element.namespaceURI(), element.tagName());
 
+    // remove duplicate lookup
     if (!factoryMap.contains(p)) return 0;
 
     QMultiMap<int, KoShapeFactoryBase*> priorityMap = factoryMap.value(p);

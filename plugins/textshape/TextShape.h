@@ -111,6 +111,9 @@ public:
     // required for kpresenter hack
     void setPageProvider(KoPageProvider *provider) { m_pageProvider = provider; }
 
+    /// reimplemented
+    virtual bool loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context);
+
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
 

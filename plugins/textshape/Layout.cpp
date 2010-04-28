@@ -5,7 +5,6 @@
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  * Copyright (C) 2009-2010 Casper Boemann <cbo@boemann.dk>
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -51,9 +50,8 @@
 #include <KoTextBlockPaintStrategyBase.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
-#include <KoOdfLineNumberingConfiguration.h>
-#include <KDebug>
 
+#include <KDebug>
 #include <QTextList>
 #include <QStyle>
 #include <QFontMetrics>
@@ -166,7 +164,6 @@ qreal Layout::docOffsetInShape() const
 
 bool Layout::addLine(QTextLine &line)
 {
-
     if (m_blockData && m_block.textList() && m_block.layout()->lineCount() == 1) {
         // first line, lets check where the line ended up and adjust the positioning of the counter.
         QTextBlockFormat fmt = m_block.blockFormat();
@@ -1531,21 +1528,6 @@ void Layout::drawUnderlines(QPainter *painter, const QTextFragment &currentFragm
     }
 }
 
-
-void Layout::drawLineNumbers(QPainter *painter, const QTextFragment &currentFragment,
-        const QTextLine &line, qreal x1, qreal x2) const
-{
-    KoOdfLineNumberingConfiguration *lineNumberingConfiguration
-            = KoTextDocument(m_parent->document()).lineNumberingConfiguration();
-    if (lineNumberingConfiguration && lineNumberingConfiguration->enabled()) {
-        // Set the font to the right style
-        // Calculate x, based on the place of the line numbers (depending on page number and setting)
-        // Get the right line-number
-        painter->drawText(line.position().x() - 20, line.position().y(), QString("%1").arg(line.lineNumber()));
-    }
-}
-
-
 void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter)
 {
     Q_UNUSED(selectionStart);
@@ -1586,7 +1568,6 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
                     drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                     drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                     decorateTabs(painter, tabList, line, currentFragment, startOfBlock);
-                    drawLineNumbers(painter, currentFragment, line, x1, x2);
 
                     bool misspelled = fmt.boolProperty(KoCharacterStyle::Spelling);
                     if (misspelled) {

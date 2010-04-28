@@ -177,7 +177,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     context.imageCollection = m_imageCollection;
 
     QRectF rect(0, 0, size().width(), size().height());
-    rect.adjust(-25, -25, 5, 0);
+    rect.adjust(-5, 0, 5, 0);
     painter.setClipRect(rect, Qt::IntersectClip);
     painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());

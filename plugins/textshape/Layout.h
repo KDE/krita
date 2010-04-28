@@ -138,8 +138,6 @@ private:
     void drawUnderlines(QPainter *painter, const QTextFragment &currentFragment,
             const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock,
             const int fragmentToLineOffset) const;
-    void drawLineNumbers(QPainter *painter, const QTextFragment &currentFragment,
-            const QTextLine &line, qreal x1, qreal x2) const;
 
     void updateFrameStack();
 

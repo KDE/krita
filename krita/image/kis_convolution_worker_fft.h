@@ -74,10 +74,8 @@ public:
 
         m_fftWidth = areaSize.width() + kernel->width() - 1;
         m_fftHeight = areaSize.height() + kernel->height() - 1;
+        optimumDimensions(m_fftWidth, m_fftHeight);
 
-        // to simplify things, force width and height to be the same
-        if (m_fftWidth > m_fftHeight) m_fftHeight = m_fftWidth;
-        if (m_fftHeight > m_fftWidth) m_fftWidth = m_fftHeight;
         m_fftLength = m_fftHeight * (m_fftWidth / 2 + 1);
         m_extraMem = m_fftWidth % 2 ? 1 : 2;
 
@@ -86,7 +84,7 @@ public:
         memset(kernelFFT, 0, sizeof(fftw_complex) * m_fftLength);
         fftFillKernelMatrix(kernel, kernelFFT);
 
-        // find out which channels need be convolved
+        // find out which channels need convolving
         QList<KoChannelInfo *> convChannelList = this->convolvableChannelList(src);
         const quint32 noOfChannels = convChannelList.count();
 
@@ -100,9 +98,12 @@ public:
         KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(src->colorSpace()->mathToolboxId().id());
         if (!mathToolbox->getToDoubleChannelPtr(convChannelList, toDoubleFuncPtr))
             return;
+        
+        double** channelPtr = new double*[noOfChannels];
+        for (quint32 k = 0; k < noOfChannels; ++k)
+            channelPtr[k] = (double*)channelFFT[k];
 
         typename _IteratorFactory_::HLineConstIterator hitSrc = _IteratorFactory_::createHLineConstIterator(src, srcPos.x() - halfKernelWidth, srcPos.y() - halfKernelHeight, m_fftWidth, dataRect);
-        quint32 pixelNo = 0;
 
         for (quint32 srcRow = 0; srcRow < m_fftHeight; ++srcRow)
         {
@@ -110,16 +111,17 @@ public:
             {
                 const quint8* data = hitSrc.oldRawData();
 
-                for (quint32 k = 0; k < noOfChannels; ++k)
-                {
-                    ((double*)channelFFT[k])[pixelNo] = toDoubleFuncPtr[k](data, convChannelList[k]->pos());
+                for (quint32 k = 0; k < noOfChannels; ++k) {
+                    *channelPtr[k]++ = toDoubleFuncPtr[k](data, convChannelList[k]->pos());
                 }
 
-                ++pixelNo;
                 ++hitSrc;
             }
 
-            pixelNo += m_extraMem;
+            for (quint32 k = 0; k < noOfChannels; ++k) {
+                channelPtr[k] += m_extraMem;
+            }
+
             hitSrc.nextRow();
         }
 
@@ -151,7 +153,6 @@ public:
         const quint32 areaWidth = areaSize.width();
         const quint32 areaHeight = areaSize.height();
 
-        double** channelPtr = new double*[noOfChannels];
         // offset pointers
         const quint32 rowOffsetPtr = m_fftWidth - areaSize.width() + m_extraMem;
         const quint32 offsetPtr = (2 * (m_fftWidth/2 + 1)) * halfKernelHeight + halfKernelWidth;
@@ -267,6 +268,28 @@ public:
 
             ++channelPtr;
             ++kernelPtr;
+        }
+    }
+
+    void optimumDimensions(quint32& w, quint32& h)
+    {
+        // FFTW is most efficient when array size is a factor of 2, 3, 5 or 7
+        quint32 optW = w, optH = h;
+
+        while ((optW % 2 != 0) || (optW % 3 != 0) || (optW % 5 != 0) || (optW % 7 != 0))
+            ++optW;
+
+        while ((optH % 2 != 0) || (optH % 3 != 0) || (optH % 5 != 0) || (optH % 7 != 0))
+            ++optH;
+
+        quint32 optAreaW = optW * h;
+        quint32 optAreaH = optH * w;
+
+        if (optAreaW < optAreaH) {
+            w = optW;
+        }
+        else {
+            h = optH;
         }
     }
 private:

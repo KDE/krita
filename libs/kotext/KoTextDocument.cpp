@@ -201,3 +201,17 @@ KoInlineTextObjectManager *KoTextDocument::inlineTextObjectManager() const
             InlineObjectTextManagerURL);
     return resource.value<KoInlineTextObjectManager *>();
 }
+
+void KoTextDocument::setResizeMethod(KoTextDocument::ResizeMethod method)
+{
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
+    Q_ASSERT(layout);
+    layout->setResizeMethod(method);
+}
+
+KoTextDocument::ResizeMethod KoTextDocument::resizeMethod() const
+{
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
+    Q_ASSERT(layout);
+    return layout->resizeMethod();
+}

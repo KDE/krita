@@ -22,6 +22,8 @@
 
 #include "kotext_export.h"
 
+#include "KoTextDocument.h"
+
 #include <QAbstractTextDocumentLayout>
 #include <QRectF>
 #include <QSizeF>
@@ -204,6 +206,16 @@ public:
     /// reimplemented from QAbstractTextDocumentLayout
     virtual void documentChanged(int position, int charsRemoved, int charsAdded);
 
+    /**
+     * Sets the document's resizing method. @see KoTextDocument::setResizeMethod
+     */
+    void setResizeMethod(KoTextDocument::ResizeMethod mode);
+
+    /**
+     * Returns the document's resizing method. @see KoTextDocument::resizeMethod
+     */
+    KoTextDocument::ResizeMethod resizeMethod() const;
+
 signals:
     void shapeAdded(KoShape *shape);
     /**
@@ -238,6 +250,8 @@ protected:
 
 
 private:
+    // Takes care of auto-resizing the text shape
+    Q_PRIVATE_SLOT(d, void adjustSize())
     Q_PRIVATE_SLOT(d, void relayoutPrivate())
     Q_PRIVATE_SLOT(d, void postLayoutHook())
 

@@ -131,8 +131,8 @@ public:
     QList<KoShape *> shapes;
     KoInlineTextObjectManager *inlineTextObjectManager;
     bool scheduled;
-    KoTextDocument::ResizeMethod resizeMethod;
     KoTextDocumentLayout *parent;
+    KoTextDocument::ResizeMethod resizeMethod;
     KoPostscriptPaintDevice *paintDevice;
 };
 

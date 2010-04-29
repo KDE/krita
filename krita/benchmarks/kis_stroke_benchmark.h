@@ -22,11 +22,13 @@
 #include <QtTest/QtTest>
 #include <kis_types.h>
 #include <KoColor.h>
+#include <kis_painter.h>
+#include <kis_paint_information.h>
 
 class KisPaintDevice;
 class KoColorSpace;
 
-const QString presetFileName = "AutoBrush_70px_rotated.kpp";
+const QString PRESET_FILE_NAME = "hairy-benchmark1.kpp";
 
 class KisStrokeBenchmark : public QObject
 {
@@ -35,16 +37,75 @@ private:
     const KoColorSpace * m_colorSpace;
     KisPaintDeviceSP m_device;
     KoColor m_color;
+    KisImageSP m_image;
+    KisLayerSP m_layer;
+    
+    KisPainter * m_painter;
+
+    KisPaintInformation m_pi1;
+    KisPaintInformation m_pi2;
+    KisPaintInformation m_pi3;
+    
+    QPointF m_c1;
+    QPointF m_c2;
+
+    QVector<QPointF> m_startPoints;
+    QVector<QPointF> m_endPoints;
+
+    void initCurvePoints(int width, int height);
+    void initLines(int width, int height);
+    
+    QString m_dataPath;
+    QString m_outputPath;
+    
+    private:
+        inline void benchmarkRandomLines(QString presetFileName);
+        inline void benchmarkStroke(QString presetFileName);
+        inline void benchmarkLine(QString presetFileName);
     
 private slots:
     void initTestCase();
     void cleanupTestCase();
     
-    // benchmarks the preview stroke
-    void benchmarkStroke();
-    // benchmark random lines
-    void benchmarkRandomLines();
+    void init();
     
+    // Soft brush benchmarks
+    void softbrushDefault30();
+    void softbrushDefault30RL();
+    void softbrushFullFeatures30();
+    void softbrushFullFeatures30RL();
+    
+    void softbrushSoftness();
+    void softbrushOpacity();
+    
+    // Hairy brush benchmarks
+    void hairy30pxDefault();
+    void hairy30pxDefaultRL();
+    
+    void hairy30pxAntiAlias();
+    void hairy30pxAntiAliasRL();
+
+    void hairy30px30density();
+    void hairy30px30densityRL();
+    
+    void hairy30InkDepletion();
+    void hairy30InkDepletionRL();
+    
+    // Spray brush benchmark1
+    void spray30px21particles();
+    void spray30px21particlesRL();
+    
+    void sprayPencil();
+    void sprayPencilRL();
+    
+    void sprayPixels();
+    void sprayPixelsRL();
+    
+    void sprayTexture();
+    void sprayTextureRL();
+    
+    void benchmarkRand();
+    void benchmarkRand48();
 };
 
 #endif

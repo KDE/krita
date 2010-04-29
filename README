@@ -28,15 +28,15 @@ More information about Krita can be found at http://www.krita.org
 
 Management:
 - KPlato     -  Project planning
+- Kexi       -  Integrated data management
 
 Advanced plugins:
 - KChart     -  Graphic data visualization
 - KFormula   -  Mathematical formulas
 
-Applications that are not yet part of the official release, but will
-be included in the next version:
+The applications not yet part of the official release, but will
+be included in a next version:
 
-- Kexi       -  Integrated data management
 - Kivio      -  Flowcharting program
 
 More information can be found at http://www.koffice.org
@@ -48,20 +48,21 @@ Building and running
 KOffice is based on the KDE libraries ( http://www.kde.org ) which are
 needed to run KOffice.  Note that you don't have to actually run the
 KDE desktop environment in order to use KOffice.  KOffice works fine
-on any desktop based on X11, and at this point also on Windows and Mac
-OS X, although with some glitches.
+on any desktop or platform.
 
-You will need kdesupport, kdelibs, kdepimlibs and kdebase/runtime
-installed if you want to compile and run KOffice.  For importing some
-external file formats or other plugins, you may also need some other
-dependencies.  For more details on how to build KOffice from the
-sources, see http://wiki.koffice.org/index.php?title=Build_KOffice
+You will need kdesupport, kdelibs and kdebase/runtime
+installed if you want to compile and run KOffice. Installing kdepimlibs
+gives more functionality.
+For importing some external file formats or other plugins, you may
+also need some other dependencies.  For more details on how to build
+KOffice from the sources, see
+http://wiki.koffice.org/index.php?title=Build_KOffice
 
 
 Developers
 ----------
 
-KOffice is created by the KDE team, consisting of Open Source
+KOffice is created by the KDE community, consisting of Open Source
 programmers around the world.  All developers give their time/code to
 the community for everyone to benefit.
 

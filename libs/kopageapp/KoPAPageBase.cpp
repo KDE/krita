@@ -117,7 +117,7 @@ void KoPAPageBase::saveOdfShapes( KoShapeSavingContext &context ) const
 
 QString KoPAPageBase::saveOdfPageStyle( KoPASavingContext &paContext ) const
 {
-    KoGenStyle style( KoGenStyle::DrawingPageStyle, "drawing-page" );
+    KoGenStyle style( KoGenStyle::DrawingPageAutoStyle, "drawing-page" );
 
     if ( paContext.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
         style.setAutoStyleInStylesDotXml( true );

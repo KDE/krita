@@ -81,13 +81,7 @@ endif(KDE4_BUILD_TESTS)
 set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
 
-option(FORCE_COMPILATION_WITH_QT45 "This option force KOffice to accept compilation with Qt4.5, but note that this is not supported by KOffice team" OFF)
-
-if(FORCE_COMPILATION_WITH_QT45)
-  find_package(Qt4 4.5.0 REQUIRED)
-else(FORCE_COMPILATION_WITH_QT45)
-  find_package(Qt4 4.6.0 REQUIRED)
-endif(FORCE_COMPILATION_WITH_QT45)
+find_package(Qt4 4.6.0 REQUIRED)
 
 include(KDE4Defaults)
 include(MacroLibrary)

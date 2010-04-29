@@ -1099,6 +1099,8 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
                     cursor.insertBlock(blockFormat, charFormat);
                 /******************************************************************************************/
                 loadList(tag, cursor, true);
+            } else if (localName == "table") {
+                loadTable(tag, cursor);
             }
         }
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2009 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2010 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -133,12 +133,6 @@ void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &p
     KoShapeBackground * bg = background();
     if( bg )
         bg->fillStyle( style, paContext );
-
-    if ( paContext.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
-        style.setAutoStyleInStylesDotXml( true );
-    }
-
-    paContext.mainStyles().insert( style, paContext.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
 }
 
 bool KoPAPageBase::saveOdfAnimations( KoPASavingContext & paContext ) const

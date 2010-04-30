@@ -246,6 +246,7 @@ private slots:
 #ifndef NDEBUG
 protected:
     explicit TextTool(MockCanvas *canvas);
+    friend class TestChangeTrackedDelete;
 #endif
 
 private:

@@ -129,3 +129,58 @@ set(TestSections_test_SRCS
 kde4_add_unit_test(TestSections TESTNAME shapes-text-TestSections ${TestSections_test_SRCS})
 target_link_libraries(TestSections kotext ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestChangeTrackedDelete_test_SRCS
+    TestChangeTrackedDelete.cpp
+    ../commands/ChangeListCommand.cpp
+    ../commands/ChangeListLevelCommand.cpp
+    ../commands/ListItemNumberingCommand.cpp
+    ../commands/TextCommandBase.cpp
+    ../commands/TextPasteCommand.cpp
+    ../commands/TextCutCommand.cpp
+    ../commands/ChangeTrackedDeleteCommand.cpp
+    ../commands/DeleteCommand.cpp
+    ../commands/ShowChangesCommand.cpp
+    ../commands/AcceptChangeCommand.cpp
+    ../commands/RejectChangeCommand.cpp
+    ../TextTool.cpp
+    ../TextEditingPluginContainer.cpp
+    ../ChangeTracker.cpp
+    ../dialogs/FontDia.cpp
+    ../dialogs/InsertCharacter.cpp
+    ../dialogs/StyleManagerDialog.cpp
+    ../dialogs/ParagraphSettingsDialog.cpp
+    ../dialogs/SimpleStyleWidget.cpp
+    ../dialogs/StylesWidget.cpp
+    ../dialogs/FontTab.cpp
+    ../dialogs/CharacterHighlighting.cpp
+    ../dialogs/FontDecorations.cpp
+    ../dialogs/FontLayoutTab.cpp
+    ../dialogs/LanguageTab.cpp
+    ../dialogs/StyleManager.cpp
+    ../dialogs/ParagraphIndentSpacing.cpp
+    ../dialogs/ParagraphLayout.cpp
+    ../dialogs/ParagraphDecorations.cpp
+    ../dialogs/ParagraphBulletsNumbers.cpp
+    ../dialogs/ListsSpinBox.cpp
+    ../dialogs/StylesModel.cpp
+    ../dialogs/ParagraphGeneral.cpp
+    ../dialogs/CharacterGeneral.cpp
+    ../dialogs/NewStyleWidget.cpp
+    ../dialogs/FormattingPreview.cpp
+    ../dialogs/StyleManagerWelcome.cpp
+    ../dialogs/TableDialog.cpp
+    ../dialogs/TrackedChangeManager.cpp
+    ../dialogs/TrackedChangeModel.cpp
+    ../dialogs/ChangeConfigureDialog.cpp
+    ../ListItemsHelper.cpp
+    ../TextShape.cpp
+    ../Layout.cpp
+    ../TableLayout.cpp
+    ../TableLayoutData.cpp
+    ../ToCGenerator.cpp
+)
+kde4_add_unit_test(TestChangeTrackedDelete TESTNAME shapes-text-TestChangeTrackedDelete ${TestChangeTrackedDelete_test_SRCS})
+target_link_libraries(TestChangeTrackedDelete ${EXTRA_LIBS} komain kotext ${QT_QTTEST_LIBRARY})
+

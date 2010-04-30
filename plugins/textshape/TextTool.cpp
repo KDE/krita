@@ -420,6 +420,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
 #ifndef NDEBUG
 #include "tests/MockShapes.h"
+#include <KUndoStack>
+
 TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     : KoToolBase(canvas),
     m_textShape(0),
@@ -441,6 +443,17 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     m_changeTipCursorPos(0)
 {
     // we could init some vars here, but we probably don't have to
+    KGlobal::setLocale(new KLocale("en"));
+    QTextDocument *document = new QTextDocument();
+    KoTextDocumentLayout *layout = new KoTextDocumentLayout(document);
+    KoInlineTextObjectManager *inlineManager = new KoInlineTextObjectManager();
+    layout->setInlineTextObjectManager(inlineManager);
+    document->setDocumentLayout(layout);
+    m_textEditor = new KoTextEditor(document);
+    m_changeTracker = new KoChangeTracker();
+    KoTextDocument(document).setChangeTracker(m_changeTracker);
+    KoTextDocument(document).setUndoStack(new KUndoStack());
+    KoTextDocument(document).setTextEditor(m_textEditor);
 }
 #endif
 

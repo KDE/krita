@@ -60,6 +60,8 @@ public:
 
     /**
     * Constructor.
+    * Notice that dispite this being a QObject there is no 'parent' available for
+    * memory management here.
     *
     * @param context The context the KoTextLoader is called in
     */

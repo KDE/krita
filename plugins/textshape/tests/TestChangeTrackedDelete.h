@@ -6,6 +6,7 @@
 
 class QTextDocument;
 class KoTextEditor;
+class TextTool;
 
 class TestChangeTrackedDelete : public QObject
 {
@@ -15,7 +16,9 @@ public:
     ~TestChangeTrackedDelete();
 
 private slots:
-    void testSimpleDelete();
+    void testDeletePreviousChar();
+    void testDeleteNextChar();
+    void testDeleteSelection();
 };
 
 #endif

@@ -18,18 +18,38 @@ TestChangeTrackedDelete::~TestChangeTrackedDelete()
 {
 }
 
-void TestChangeTrackedDelete::testSimpleDelete()
+void TestChangeTrackedDelete::testDeletePreviousChar()
 {
-    TextTool *tool = new TextTool(new MockCanvas);
-    QTextDocument *document = tool->m_textEditor->document();
-    QTextCursor *cursor = tool->m_textEditor->cursor();
+    TextTool *textTool = new TextTool(new MockCanvas);
+    QTextDocument *document = textTool->m_textEditor->document();
+    QTextCursor *cursor = textTool->m_textEditor->cursor();
     cursor->insertText("Hello World");
     cursor->setPosition(4);
-    ChangeTrackedDeleteCommand *delCommand = new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar, tool);
-    tool->m_textEditor->addCommand(delCommand);
+    ChangeTrackedDeleteCommand *delCommand = new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar, textTool);
+    textTool->m_textEditor->addCommand(delCommand);
     QCOMPARE(document->characterAt(3).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
     delCommand->undo();
     QCOMPARE(document->characterAt(3), QChar('l'));
+    delete textTool;
+}
+
+void TestChangeTrackedDelete::testDeleteNextChar()
+{
+    TextTool *textTool = new TextTool(new MockCanvas);
+    QTextDocument *document = textTool->m_textEditor->document();
+    QTextCursor *cursor = textTool->m_textEditor->cursor();
+    cursor->insertText("Hello World");
+    cursor->setPosition(4);
+    ChangeTrackedDeleteCommand *delCommand = new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, textTool);
+    textTool->m_textEditor->addCommand(delCommand);
+    QCOMPARE(document->characterAt(4).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
+    delCommand->undo();
+    QCOMPARE(document->characterAt(4), QChar('o'));
+    delete textTool;
+}
+
+void TestChangeTrackedDelete::testDeleteSelection()
+{
 }
 
 QTEST_MAIN(TestChangeTrackedDelete)

@@ -187,8 +187,8 @@ bool Layout::addLine(QTextLine &line)
     }
 
     qreal height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
-    if (line.textLength() == 1 && m_block.text().at(line.textStart()) == QChar::ObjectReplacementCharacter) {
-        // thats an anchor then, anchors takes no height.
+    if (line.textLength() == 1 && m_block.text().at(line.textStart()) == QChar::ObjectReplacementCharacter && line.descent() == 0.0) {
+        // thats an (non inline) anchor then, anchors takes no height.
         height = 0.1;
     }
     qreal objectHeight = 0.0;

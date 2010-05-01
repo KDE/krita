@@ -32,30 +32,39 @@
 
 #include "fftw3.h"
 
-template <class _IteratorFactory_> class KisConvolutionWorkerFFT;
+template<class _IteratorFactory_> class KisConvolutionWorkerFFT;
 class KisConvolutionWorkerFFTLock
 {
 private:
     static QMutex fftwMutex;
-    template <class _IteratorFactory_> friend class KisConvolutionWorkerFFT;
+    template<class _IteratorFactory_> friend class KisConvolutionWorkerFFT;
 };
 
 QMutex KisConvolutionWorkerFFTLock::fftwMutex;
 
 
-template <class _IteratorFactory_>
+template<class _IteratorFactory_>
 class KisConvolutionWorkerFFT : public KisConvolutionWorker<_IteratorFactory_>
 {
 public:
-    KisConvolutionWorkerFFT ( KisPainter *painter, KoUpdater *progress ) : KisConvolutionWorker<_IteratorFactory_> ( painter, progress )
+    KisConvolutionWorkerFFT(KisPainter *painter, KoUpdater *progress) : KisConvolutionWorker<_IteratorFactory_>(painter, progress),
+            m_currentProgress(0)
     {
+        m_kernelFFT = 0;
+        m_channelFFT = 0;
+
+        m_minClamp = 0;
+        m_maxClamp = 0;
+        m_absoluteOffset = 0;
+
+        m_channelPtr = 0;
     }
 
     ~KisConvolutionWorkerFFT()
     {
     }
 
-    virtual void execute (const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, const QRect& dataRect)
+    virtual void execute(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, const QRect& dataRect)
     {
         // Make the area we cover as small as possible
         if (this->m_painter->selection())
@@ -69,6 +78,9 @@ public:
         if (areaSize.width() == 0 || areaSize.height() == 0)
             return;
 
+        addToProgress(0);
+        if (isInterrupted()) return;
+
         const quint32 halfKernelWidth = (kernel->width() - 1) / 2;
         const quint32 halfKernelHeight = (kernel->height() - 1) / 2;
 
@@ -80,28 +92,28 @@ public:
         m_extraMem = m_fftWidth % 2 ? 1 : 2;
 
         // create and fill kernel
-        fftw_complex *kernelFFT = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * m_fftLength);
-        memset(kernelFFT, 0, sizeof(fftw_complex) * m_fftLength);
-        fftFillKernelMatrix(kernel, kernelFFT);
+        m_kernelFFT = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * m_fftLength);
+        memset(m_kernelFFT, 0, sizeof(fftw_complex) * m_fftLength);
+        fftFillKernelMatrix(kernel, m_kernelFFT);
 
         // find out which channels need convolving
         QList<KoChannelInfo *> convChannelList = this->convolvableChannelList(src);
-        const quint32 noOfChannels = convChannelList.count();
+        m_noOfChannels = convChannelList.count();
 
-        fftw_complex** channelFFT = new fftw_complex*[noOfChannels];
-        for (quint32 i = 0; i < noOfChannels; ++i)
-            channelFFT[i] = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * m_fftLength);
+        m_channelFFT = new fftw_complex*[m_noOfChannels];
+        for (quint32 i = 0; i < m_noOfChannels; ++i)
+            m_channelFFT[i] = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * m_fftLength);
 
         // fill in data
-        QVector<PtrToDouble> toDoubleFuncPtr(noOfChannels);
+        QVector<PtrToDouble> toDoubleFuncPtr(m_noOfChannels);
 
         KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(src->colorSpace()->mathToolboxId().id());
         if (!mathToolbox->getToDoubleChannelPtr(convChannelList, toDoubleFuncPtr))
             return;
-        
-        double** channelPtr = new double*[noOfChannels];
-        for (quint32 k = 0; k < noOfChannels; ++k)
-            channelPtr[k] = (double*)channelFFT[k];
+
+        m_channelPtr = new double*[m_noOfChannels];
+        for (quint32 k = 0; k < m_noOfChannels; ++k)
+            m_channelPtr[k] = (double*)m_channelFFT[k];
 
         typename _IteratorFactory_::HLineConstIterator hitSrc = _IteratorFactory_::createHLineConstIterator(src, srcPos.x() - halfKernelWidth, srcPos.y() - halfKernelHeight, m_fftWidth, dataRect);
 
@@ -111,35 +123,49 @@ public:
             {
                 const quint8* data = hitSrc.oldRawData();
 
-                for (quint32 k = 0; k < noOfChannels; ++k) {
-                    *channelPtr[k]++ = toDoubleFuncPtr[k](data, convChannelList[k]->pos());
+                for (quint32 k = 0; k < m_noOfChannels; ++k) {
+                    *m_channelPtr[k]++ = toDoubleFuncPtr[k](data, convChannelList[k]->pos());
                 }
 
                 ++hitSrc;
             }
 
-            for (quint32 k = 0; k < noOfChannels; ++k) {
-                channelPtr[k] += m_extraMem;
+            for (quint32 k = 0; k < m_noOfChannels; ++k) {
+                m_channelPtr[k] += m_extraMem;
             }
 
             hitSrc.nextRow();
         }
 
+        addToProgress(10);
+        if (isInterrupted()) return;
+        
+        // calculate number off fft operations required for progress reporting
+        const float progressPerFFT = (100 - 30) / (double)(m_noOfChannels * 2 + 1);
+
         // perform FFT
         fftw_plan fftwPlanForward, fftwPlanBackward;
 
         KisConvolutionWorkerFFTLock::fftwMutex.lock();
-        fftwPlanForward = fftw_plan_dft_r2c_2d(m_fftHeight, m_fftWidth, (double*)kernelFFT, kernelFFT, FFTW_ESTIMATE);
-        fftwPlanBackward = fftw_plan_dft_c2r_2d(m_fftHeight, m_fftWidth, kernelFFT, (double*)kernelFFT, FFTW_ESTIMATE);
+        fftwPlanForward = fftw_plan_dft_r2c_2d(m_fftHeight, m_fftWidth, (double*)m_kernelFFT, m_kernelFFT, FFTW_ESTIMATE);
+        fftwPlanBackward = fftw_plan_dft_c2r_2d(m_fftHeight, m_fftWidth, m_kernelFFT, (double*)m_kernelFFT, FFTW_ESTIMATE);
         KisConvolutionWorkerFFTLock::fftwMutex.unlock();
 
         fftw_execute(fftwPlanForward);
+        addToProgress(progressPerFFT);
+        if (isInterrupted()) return;
 
-        for (quint32 k = 0; k < noOfChannels; ++k)
+        for (quint32 k = 0; k < m_noOfChannels; ++k)
         {
-            fftw_execute_dft_r2c(fftwPlanForward, (double*)(channelFFT[k]), channelFFT[k]);
-            fftMultiply(channelFFT[k], kernelFFT);
-            fftw_execute_dft_c2r(fftwPlanBackward, channelFFT[k], (double*)channelFFT[k]);
+            fftw_execute_dft_r2c(fftwPlanForward, (double*)(m_channelFFT[k]), m_channelFFT[k]);
+            addToProgress(progressPerFFT);
+            if (isInterrupted()) return;
+
+            fftMultiply(m_channelFFT[k], m_kernelFFT);
+
+            fftw_execute_dft_c2r(fftwPlanBackward, m_channelFFT[k], (double*)m_channelFFT[k]);
+            addToProgress(progressPerFFT);
+            if (isInterrupted()) return;
         }
 
         KisConvolutionWorkerFFTLock::fftwMutex.lock();
@@ -156,10 +182,10 @@ public:
         // offset pointers
         const quint32 rowOffsetPtr = m_fftWidth - areaSize.width() + m_extraMem;
         const quint32 offsetPtr = (2 * (m_fftWidth/2 + 1)) * halfKernelHeight + halfKernelWidth;
-        for (quint32 k = 0; k < noOfChannels; ++k)
-            channelPtr[k] = (double*)channelFFT[k] + offsetPtr;
+        for (quint32 k = 0; k < m_noOfChannels; ++k)
+            m_channelPtr[k] = (double*)m_channelFFT[k] + offsetPtr;
 
-        QVector<PtrFromDouble> fromDoubleFuncPtr(noOfChannels);
+        QVector<PtrFromDouble> fromDoubleFuncPtr(m_noOfChannels);
         if (!mathToolbox->getFromDoubleChannelPtr(convChannelList, fromDoubleFuncPtr))
             return;
 
@@ -168,14 +194,14 @@ public:
 
         double channelPixelValue;
 
-        double *maxClamp = new double[convChannelList.count()];
-        double *minClamp = new double[convChannelList.count()];
-        double *absoluteOffset = new double[convChannelList.count()];
+        double *m_maxClamp = new double[convChannelList.count()];
+        double *m_minClamp = new double[convChannelList.count()];
+        m_absoluteOffset = new double[convChannelList.count()];
         for (quint16 i = 0; i < convChannelList.count(); ++i)
         {
-            minClamp[i] = mathToolbox->minChannelValue(convChannelList[i]);
-            maxClamp[i] = mathToolbox->maxChannelValue(convChannelList[i]);
-            absoluteOffset[i] = (maxClamp[i] - minClamp[i]) * kernel->offset();
+            m_minClamp[i] = mathToolbox->minChannelValue(convChannelList[i]);
+            m_maxClamp[i] = mathToolbox->maxChannelValue(convChannelList[i]);
+            m_absoluteOffset[i] = (m_maxClamp[i] - m_minClamp[i]) * kernel->offset();
         }
 
         const quint32 pixelSize = src->colorSpace()->pixelSize();
@@ -187,46 +213,38 @@ public:
                 quint8 *data = hitDst.rawData();
                 memcpy(hitDst.rawData(), hitSrcCpy.oldRawData(), pixelSize);
 
-                for (quint32 k = 0; k < noOfChannels; ++k)
+                for (quint32 k = 0; k < m_noOfChannels; ++k)
                 {
-                    channelPixelValue = *(channelPtr[k]) * fftScale + absoluteOffset[k];
+                    channelPixelValue = *(m_channelPtr[k]) * fftScale + m_absoluteOffset[k];
 
                     // clamp values
-                    if (channelPixelValue > maxClamp[k])
-                        channelPixelValue = maxClamp[k];
-                    else if (channelPixelValue < minClamp[k])
-                        channelPixelValue = minClamp[k];
+                    if (channelPixelValue > m_maxClamp[k])
+                        channelPixelValue = m_maxClamp[k];
+                    else if (channelPixelValue < m_minClamp[k])
+                        channelPixelValue = m_minClamp[k];
 
                     fromDoubleFuncPtr[k](data, convChannelList[k]->pos(), channelPixelValue + 0.5);
 
-                    ++channelPtr[k];
+                    ++m_channelPtr[k];
                 }
 
                 ++hitDst;
                 ++hitSrcCpy;
             }
 
-            for (quint32 k = 0; k < noOfChannels; ++k)
-                channelPtr[k] += rowOffsetPtr;
+            for (quint32 k = 0; k < m_noOfChannels; ++k)
+                m_channelPtr[k] += rowOffsetPtr;
 
             hitDst.nextRow();
             hitSrcCpy.nextRow();
         }
 
-        // free memory
-        fftw_free(kernelFFT);
-        for (quint32 k = 0; k < noOfChannels; ++k) {
-            fftw_free(channelFFT[k]);
-        }
-
-        delete[] channelFFT;
-        delete[] channelPtr;
-        delete[] minClamp;
-        delete[] maxClamp;
-        delete[] absoluteOffset;
+        addToProgress(20);
+        cleanUp();
     }
 
-    void fftFillKernelMatrix(const KisConvolutionKernelSP kernel, fftw_complex *kernelFFT)
+private:
+    void fftFillKernelMatrix(const KisConvolutionKernelSP kernel, fftw_complex *m_kernelFFT)
     {
         // find central item
         QPoint offset((kernel->width() - 1) / 2, (kernel->height() - 1) / 2);
@@ -245,7 +263,7 @@ public:
                 if (absXpos < 0)
                     absXpos = m_fftWidth + absXpos;
 
-                ((double*)kernelFFT)[(m_fftWidth + m_extraMem) * absYpos + absXpos] = (*(kernel->data()))(y, x);
+                ((double*)m_kernelFFT)[(m_fftWidth + m_extraMem) * absYpos + absXpos] = (*(kernel->data()))(y, x);
             }
         }
     }
@@ -253,20 +271,20 @@ public:
     void fftMultiply(fftw_complex* channel, fftw_complex* kernel)
     {
         // perform complex multiplication
-        fftw_complex *channelPtr = channel;
+        fftw_complex *m_channelPtr = channel;
         fftw_complex *kernelPtr = kernel;
 
         fftw_complex tmp;
 
         for (quint32 pixelPos = 0; pixelPos < m_fftLength; ++pixelPos)
         {
-            tmp[0] = ((*channelPtr)[0] * (*kernelPtr)[0]) - ((*channelPtr)[1] * (*kernelPtr)[1]);
-            tmp[1] = ((*channelPtr)[0] * (*kernelPtr)[1]) + ((*channelPtr)[1] * (*kernelPtr)[0]);
+            tmp[0] = ((*m_channelPtr)[0] * (*kernelPtr)[0]) - ((*m_channelPtr)[1] * (*kernelPtr)[1]);
+            tmp[1] = ((*m_channelPtr)[0] * (*kernelPtr)[1]) + ((*m_channelPtr)[1] * (*kernelPtr)[0]);
 
-            (*channelPtr)[0] = tmp[0];
-            (*channelPtr)[1] = tmp[1];
+            (*m_channelPtr)[0] = tmp[0];
+            (*m_channelPtr)[1] = tmp[1];
 
-            ++channelPtr;
+            ++m_channelPtr;
             ++kernelPtr;
         }
     }
@@ -292,7 +310,7 @@ public:
             h = optH;
         }
     }
-private:
+
     void fftLogMatrix(double* channel, QString f)
     {
         KisConvolutionWorkerFFTLock::fftwMutex.lock();
@@ -322,8 +340,54 @@ private:
         KisConvolutionWorkerFFTLock::fftwMutex.unlock();
     }
 
+    void addToProgress(float amount)
+    {
+        m_currentProgress += amount;
+
+        if (this->m_progress) {
+            this->m_progress->setProgress((int)m_currentProgress);
+        }
+    }
+
+    bool isInterrupted()
+    {
+        if (this->m_progress && this->m_progress->interrupted()) {
+            cleanUp();
+            return true;
+        }
+
+        return false;
+    }
+
+    void cleanUp()
+    {
+        // free kernel fft data
+        if (m_kernelFFT) {
+            fftw_free(m_kernelFFT);
+        }
+
+        // free channel fft data
+        if (m_channelFFT) {
+            for (uint i = 0; i < m_noOfChannels; ++i) {
+                fftw_free(m_channelFFT[i]);
+            }
+
+            delete[] m_channelFFT;
+        }
+
+        if (m_minClamp) delete[] m_minClamp;
+        if (m_maxClamp) delete[] m_maxClamp;
+        if (m_absoluteOffset) delete[] m_absoluteOffset;
+        if (m_channelPtr) delete[] m_channelPtr;
+    }
 private:
-    quint32 m_fftWidth, m_fftHeight, m_fftLength, m_extraMem;
+    quint32 m_fftWidth, m_fftHeight, m_fftLength, m_noOfChannels, m_extraMem;
+    float m_currentProgress;
+
+    fftw_complex* m_kernelFFT;
+    fftw_complex** m_channelFFT;
+    double* m_minClamp, *m_maxClamp, *m_absoluteOffset;
+    double** m_channelPtr;
 };
 
 #endif

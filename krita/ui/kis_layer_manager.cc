@@ -248,12 +248,12 @@ void KisLayerManager::layerProperties()
         if (dlg.exec() == QDialog::Accepted) {
 
             QString after;
+            alayer->setName(dlg.layerName());
+
             if (dlg.filterConfiguration()) {
                 after = dlg.filterConfiguration()->toXML();
             }
             if (after != before) {
-                alayer->setName(dlg.layerName());
-
                 KisChangeFilterCmd<KisAdjustmentLayerSP> * cmd
                 = new KisChangeFilterCmd<KisAdjustmentLayerSP>(alayer,
                         dlg.filterConfiguration(),

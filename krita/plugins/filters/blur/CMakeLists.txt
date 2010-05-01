@@ -6,11 +6,14 @@ set(kritablurfilter_PART_SRCS
     kis_wdg_blur.cpp
     kis_gaussian_blur_filter.cpp
     kis_wdg_gaussian_blur.cpp
+    kis_motion_blur_filter.cpp
+    kis_wdg_motion_blur.cpp
     )
 
 kde4_add_ui_files(kritablurfilter_PART_SRCS
     wdgblur.ui
     wdg_gaussian_blur.ui
+    wdg_motion_blur.ui
     )
 
 kde4_add_plugin(kritablurfilter ${kritablurfilter_PART_SRCS})

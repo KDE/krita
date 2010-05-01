@@ -36,7 +36,9 @@ public:
     }
     virtual void setConfiguration(const KisPropertiesConfiguration*);
     virtual KisPropertiesConfiguration* configuration() const;
-
+public slots:
+    void angleSliderChanged(int);
+    void angleDialChanged(int);
 private:
     Ui_WdgMotionBlur* m_widget;
 };

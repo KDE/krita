@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>365</width>
-    <height>313</height>
+    <height>172</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="3" column="0" colspan="2">
+   <item row="2" column="0" colspan="2">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -36,13 +36,13 @@
       </sizepolicy>
      </property>
      <property name="label">
-      <string>Blur Length</string>
+      <string>Length</string>
      </property>
      <property name="minimum">
       <number>0</number>
      </property>
      <property name="maximum">
-      <number>100</number>
+      <number>256</number>
      </property>
      <property name="sliderEnabled">
       <bool>true</bool>
@@ -50,7 +50,7 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="KIntNumInput" name="blurAngle">
+    <widget class="KIntNumInput" name="blurAngleSlider">
      <property name="label">
       <string>Angle</string>
      </property>
@@ -68,13 +68,37 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QWidget" name="widget" native="true">
+   <item row="0" column="1">
+    <widget class="QDial" name="blurAngleDial">
      <property name="minimumSize">
       <size>
-       <width>100</width>
-       <height>100</height>
+       <width>50</width>
+       <height>50</height>
       </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>50</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="maximum">
+      <number>360</number>
+     </property>
+     <property name="value">
+      <number>274</number>
+     </property>
+     <property name="sliderPosition">
+      <number>274</number>
+     </property>
+     <property name="invertedAppearance">
+      <bool>false</bool>
+     </property>
+     <property name="wrapping">
+      <bool>true</bool>
+     </property>
+     <property name="notchesVisible">
+      <bool>false</bool>
      </property>
     </widget>
    </item>

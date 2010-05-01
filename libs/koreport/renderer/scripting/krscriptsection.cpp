@@ -91,6 +91,7 @@ QObject* Section::objectByNumber(int i)
     }
     #endif
 
+    return new QObject();
 }
 
 QObject* Section::objectByName(const QString& n)

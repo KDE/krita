@@ -119,5 +119,7 @@ int KoReportItemLine::render(OROPage* page, OROSection* section,  QPointF offset
     l2->setStartPoint(m_start.toPoint());
     l2->setEndPoint(m_end.toPoint());
     section->addPrimitive(l2);
+
+    return 0;
 }
 

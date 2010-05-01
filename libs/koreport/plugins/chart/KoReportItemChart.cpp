@@ -390,4 +390,6 @@ int KoReportItemChart::render(OROPage* page, OROSection* section,  QPointF offse
         sec->addPrimitive(p2);
     }
     #endif
+
+    return 0;
 }

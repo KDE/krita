@@ -105,8 +105,8 @@ void KisMotionBlurFilter::process(KisConstProcessingInformation srcInfo,
     qreal angleRadians = blurAngle / 360.0 * 2 * M_PI;
 
     // construct image
-    qreal halfWidth = blurLength * cos(angleRadians);
-    qreal halfHeight = blurLength * sin(angleRadians);
+    qreal halfWidth = blurLength / 2.0 * cos(angleRadians);
+    qreal halfHeight = blurLength / 2.0 * sin(angleRadians);
 
     int kernelWidth = ceil(fabs(halfWidth)) * 2;
     int kernelHeight = ceil(fabs(halfHeight)) * 2;
@@ -121,7 +121,8 @@ void KisMotionBlurFilter::process(KisConstProcessingInformation srcInfo,
     QPainter imagePainter(&kernelRepresentation);
     imagePainter.setRenderHint(QPainter::Antialiasing);
     imagePainter.setPen(QPen(QColor::fromRgb(255, 255, 255), 1.0));
-    imagePainter.drawLine(QPointF(kernelWidth / 2, kernelHeight / 2), QPointF(kernelWidth / 2 + halfWidth, kernelHeight / 2 - halfHeight));
+    imagePainter.drawLine(QPointF(kernelWidth / 2 - halfWidth, kernelHeight / 2 + halfHeight), 
+                          QPointF(kernelWidth / 2 + halfWidth, kernelHeight / 2 - halfHeight));
 
     // construct kernel from image
     Matrix<qreal, Dynamic, Dynamic> motionBlurKernel(kernelHeight, kernelWidth);
@@ -147,8 +148,8 @@ QRect KisMotionBlurFilter::neededRect(const QRect & rect, const KisFilterConfigu
     uint blurLength = (_config->getProperty("blurLength", value)) ? value.toUInt() : 5;
 
     qreal angleRadians = blurAngle / 360.0 * 2 * M_PI;
-    uint halfWidth = ceil(fabs(blurLength * cos(angleRadians)));
-    uint halfHeight = ceil(fabs(blurLength * cos(angleRadians)));
+    uint halfWidth = ceil(fabs(blurLength / 2.0 * cos(angleRadians)));
+    uint halfHeight = ceil(fabs(blurLength / 2.0 * cos(angleRadians)));
 
     return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
 }

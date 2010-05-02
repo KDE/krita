@@ -20,12 +20,12 @@
 
 QString KoReportBarcodePlugin::userName()
 {
-    return "Barcode";
+    return i18n("Barcode");
 }
 
 QString KoReportBarcodePlugin::iconName()
 {
-    return ("insert-barcode"); //TODO Doesnt exist yet
+    return "view-barcode";
 }
 
 QString KoReportBarcodePlugin::entityName()

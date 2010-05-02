@@ -26,7 +26,7 @@ QString KoReportLabelPlugin::entityName()
 
 QString KoReportLabelPlugin::iconName()
 {
-    return "feed-subscribe";
+    return "label";
 }
 
 QString KoReportLabelPlugin::userName()

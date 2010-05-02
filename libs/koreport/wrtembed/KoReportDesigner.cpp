@@ -1200,7 +1200,7 @@ QList<QAction*> KoReportDesigner::actions()
         actList << act;
     }
 
-    act = new QAction(KIcon("draw-freehand"), i18n("Line"), 0);
+    act = new QAction(KIcon("line"), i18n("Line"), 0);
     act->setObjectName("report:line");
     actList << act;
     

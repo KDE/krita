@@ -25,7 +25,7 @@ QString KoReportCheckPlugin::userName()
 
 QString KoReportCheckPlugin::iconName()
 {
-    return "draw-cross";
+    return "checkbox";
 }
 
 QString KoReportCheckPlugin::entityName()

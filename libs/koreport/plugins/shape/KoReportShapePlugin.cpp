@@ -25,7 +25,7 @@ QString KoReportShapePlugin::userName()
 
 QString KoReportShapePlugin::iconName()
 {
-    return "view-statistics"; //TODO new icon
+    return "shapes"; //TODO new icon
 }
 
 QString KoReportShapePlugin::entityName()

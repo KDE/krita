@@ -27,7 +27,7 @@ KoZoomToolFactory::KoZoomToolFactory(QObject *parent)
         : KoToolFactoryBase(parent, "KoZoomToolId")
 {
     setToolTip(i18n("Zoom"));
-    setToolType(mainToolType());
+    setToolType(navigationToolType());
     setPriority(5);
     setIcon("zoom-original");
     setActivationShapeId("flake/always");

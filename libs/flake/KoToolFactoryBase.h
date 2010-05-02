@@ -180,6 +180,18 @@ public:
         return "main";
     }
     /**
+     * Returns the navigation toolType
+     * Each tool has a toolType which it uses to be grouped in the toolbox.
+     * The predefined areas are main and dynamic. "navigation" tools are always
+     * shown and are for tools that change the settings of the canvas, zoom, pan...
+     *
+     * @see toolType()
+     * @see setToolType()
+     */
+    static QString navigationToolType() {
+        return "navigation";
+    }
+    /**
      * Returns the dynamic toolType
      * Each tool has a toolType which it uses to be grouped in the toolbox.
      * The predefined areas are main and dynamic. Dynamic tools are hidden

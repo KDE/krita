@@ -27,7 +27,7 @@ KoPanToolFactory::KoPanToolFactory(QObject *parent)
         : KoToolFactoryBase(parent, KoPanTool_ID)
 {
     setToolTip(i18n("Pan"));
-    setToolType(mainToolType());
+    setToolType(navigationToolType());
     setPriority(5);
     setIcon("hand");
     setActivationShapeId("flake/always");

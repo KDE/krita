@@ -44,7 +44,7 @@ public:
 
 public:
 
-    KisPaintOpOption(const QString & label, const QString& category, bool checked = true);
+    KisPaintOpOption(const QString & label, const QString& category, bool checked );
     virtual ~KisPaintOpOption();
 
     QString label() const;

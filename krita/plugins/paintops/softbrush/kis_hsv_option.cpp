@@ -32,7 +32,7 @@ public:
 
 
 KisHSVOption::KisHSVOption()
-        : KisPaintOpOption(i18n("HSV dynamics"), false)
+        : KisPaintOpOption(i18n("HSV dynamics"), KisPaintOpOption::colorCategory(), false)
 {
     m_checkable = true;
     m_options = new KisHsvOptionsWidget();

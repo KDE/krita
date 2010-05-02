@@ -22,7 +22,7 @@
 #include <QRadioButton>
 
 KisSoftOpOption::KisSoftOpOption()
-        : KisPaintOpOption(i18n("Softness"), false)
+        : KisPaintOpOption(i18n("Softness"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisSoftBrushSelectionWidget();

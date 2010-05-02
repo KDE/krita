@@ -31,7 +31,7 @@ public:
 };
 
 KisGridShapeOption::KisGridShapeOption()
-        : KisPaintOpOption(i18n("Particle type"), false)
+        : KisPaintOpOption(i18n("Particle type"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();

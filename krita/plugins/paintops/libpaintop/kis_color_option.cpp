@@ -32,7 +32,7 @@ public:
 };
 
 KisColorOption::KisColorOption()
-        : KisPaintOpOption(i18n("Color options"), false)
+        : KisPaintOpOption(i18n("Color options"), KisPaintOpOption::colorCategory(), false)
 {
     m_checkable = false;
     m_options = new KisColorOptionsWidget();

@@ -24,7 +24,7 @@
 #include <KoColorSpace.h>
 
 KisPressureSizeOption::KisPressureSizeOption()
-        : KisCurveOption(i18n("Size"), "Size", KisPaintOpOption::brushCategory() )
+        : KisCurveOption(i18n("Size"), "Size", KisPaintOpOption::brushCategory(), true )
 {
 }
 

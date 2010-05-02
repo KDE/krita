@@ -28,7 +28,7 @@ public:
 };
 
 KisDeformOption::KisDeformOption()
-        : KisPaintOpOption(i18n("Deform Options"), false)
+        : KisPaintOpOption(i18n("Deform Options"), KisPaintOpOption::colorCategory(), false)
 {
     m_checkable = false;
     m_options = new KisDeformOptionsWidget();

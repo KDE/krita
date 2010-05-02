@@ -31,7 +31,7 @@ public:
 };
 
 KisHairyInkOption::KisHairyInkOption()
-        : KisPaintOpOption(i18n("Ink depletion"), false)
+        : KisPaintOpOption(i18n("Ink depletion"), KisPaintOpOption::colorCategory(), false)
 {
     m_checkable = true;
     m_options = new KisInkOptionsWidget();

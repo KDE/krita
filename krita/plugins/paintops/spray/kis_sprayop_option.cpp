@@ -34,7 +34,7 @@ public:
 };
 
 KisSprayOpOption::KisSprayOpOption()
-        : KisPaintOpOption(i18n("Brush size"), false)
+        : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisSprayOpOptionsWidget();

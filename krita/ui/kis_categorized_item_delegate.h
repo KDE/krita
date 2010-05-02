@@ -19,12 +19,13 @@
 #ifndef _KIS_CATEGORIZED_ITEM_DELEGATE_H_
 #define _KIS_CATEGORIZED_ITEM_DELEGATE_H_
 
+#include <krita_export.h>
 #include <QAbstractItemDelegate>
 
 /**
  * This delegate draw categories using information from a \ref KCategorizedSortFilterProxyModel .
  */
-class KisCategorizedItemDelegate : public QAbstractItemDelegate
+class KRITAUI_EXPORT KisCategorizedItemDelegate : public QAbstractItemDelegate
 {
 public:
     /**

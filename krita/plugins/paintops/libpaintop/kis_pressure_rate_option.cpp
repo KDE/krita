@@ -29,7 +29,7 @@
 #include <KoColorSpace.h>
 
 KisPressureRateOption::KisPressureRateOption()
-        : KisCurveOption(i18n("Rate"), "Rate")
+        : KisCurveOption(i18n("Rate"), "Rate", KisPaintOpOption::brushCategory())
 {
 }
 

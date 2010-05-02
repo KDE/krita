@@ -24,7 +24,7 @@
 #include "kis_color_source.h"
 
 KisPressureDarkenOption::KisPressureDarkenOption()
-        : KisCurveOption(i18n("Darken"), "Darken", false)
+        : KisCurveOption(i18n("Darken"), "Darken", KisPaintOpOption::colorCategory(), false)
 {
 }
 

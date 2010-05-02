@@ -38,16 +38,16 @@ class KisDynamicSensor;
  */
 class PAINTOP_EXPORT KisCurveOption
 {
-
 public:
 
-    KisCurveOption(const QString & label, const QString& name, bool checked = true);
+    KisCurveOption(const QString & label, const QString& name, const QString& category, bool checked = true);
     virtual ~KisCurveOption();
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
     const QString & label() const;
+    const QString& category() const;
 
     KisCubicCurve curve() const;
     void setCurve(const KisCubicCurve& curve);
@@ -80,7 +80,7 @@ protected:
     }
 
 protected:
-    QString m_label;
+    QString m_label, m_category;
     KisDynamicSensor* m_sensor;
     bool m_customCurve;
     KisCubicCurve m_curve;

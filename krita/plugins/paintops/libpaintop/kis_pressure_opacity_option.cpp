@@ -24,7 +24,7 @@
 
 
 KisPressureOpacityOption::KisPressureOpacityOption()
-        : KisCurveOption(i18n("Opacity"), "Opacity", true)
+        : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::brushCategory(), true)
 {
 }
 

@@ -20,16 +20,21 @@
 #include "kis_paintop_options_widget.h"
 #include "kis_paintop_option.h"
 
+#include <QHBoxLayout>
+#include <QItemDelegate>
 #include <QList>
+#include <QListView>
 #include <QLabel>
 #include <QMap>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QListWidget>
-#include <QCheckBox>
 #include <QStackedWidget>
+#include <QVBoxLayout>
+
 #include <klocale.h>
+#include <KCategorizedSortFilterProxyModel>
+
 #include <kis_paintop_preset.h>
+#include "kis_paintop_options_model.h"
+#include <kis_categorized_item_delegate.h>
 
 class KisPaintOpOptionsWidget::Private
 {
@@ -37,8 +42,9 @@ class KisPaintOpOptionsWidget::Private
 public:
 
     QList<KisPaintOpOption*> paintOpOptions;
-    QMap<QListWidgetItem*, KisPaintOpOption*> checkBoxMap;
-    QListWidget * optionsList;
+    QListView* optionsList;
+    KisPaintOpOptionsModel* model;
+    KCategorizedSortFilterProxyModel* proxyModel;
     QStackedWidget * optionsStack;
 };
 
@@ -48,7 +54,14 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
 {
     setObjectName("KisPaintOpPresetsWidget");
     QHBoxLayout * layout = new QHBoxLayout(this);
-    m_d->optionsList = new QListWidget(this);
+    m_d->optionsList = new QListView(this);
+    m_d->model = new KisPaintOpOptionsModel;
+    m_d->proxyModel = new KCategorizedSortFilterProxyModel;
+    m_d->proxyModel->setSourceModel(m_d->model);
+    m_d->proxyModel->setCategorizedModel(true);
+    m_d->proxyModel->setSortRole(KisPaintOpOptionsModel::SortingRole);
+    m_d->optionsList->setModel(m_d->proxyModel);
+    m_d->optionsList->setItemDelegate(new KisCategorizedItemDelegate(new QItemDelegate));
     m_d->optionsList->setFixedWidth(128);
     QSizePolicy policy =  QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     policy.setHorizontalStretch(0);
@@ -62,50 +75,40 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
     layout->addWidget(m_d->optionsStack);
 
     connect(m_d->optionsList,
-            SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
-            this, SLOT(changePage(QListWidgetItem *, QListWidgetItem*)));
-            
-    connect(m_d->optionsList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(itemChanged(QListWidgetItem*)));
+            SIGNAL(activated(const QModelIndex&)),
+            this, SLOT(changePage(const QModelIndex&)));
+    connect(m_d->optionsList,
+            SIGNAL(clicked(QModelIndex)),
+            this, SLOT(changePage(const QModelIndex&)));
 }
 
 
 KisPaintOpOptionsWidget::~KisPaintOpOptionsWidget()
 {
     qDeleteAll(m_d->paintOpOptions);
+    delete m_d->model;
     delete m_d;
 }
 
 void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
 {
     if (!option->configurationPage()) return;
-
-    m_d->paintOpOptions << option;
+    
+    m_d->model->addPaintOpOption(option, m_d->optionsStack->count());
 
     connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
 
     m_d->optionsStack->addWidget(option->configurationPage());
-        
-    QListWidgetItem * item = new QListWidgetItem(m_d->optionsList);
-    item->setText(option->label());
-    Qt::ItemFlags flags = item->flags();
-    flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
-    if (option->isCheckable()) {
-
-        flags |= Qt::ItemIsUserCheckable;
-        item->setCheckState((option->isChecked()) ? Qt::Checked : Qt::Unchecked);
-        m_d->checkBoxMap[item] = option;
-    }
-    item->setFlags(flags);
+    m_d->paintOpOptions << option;
+    m_d->proxyModel->sort(0);
 }
 
 void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
     Q_ASSERT(!config->getString("paintop").isEmpty());
+    m_d->model->reset();
     foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
         option->readOptionSetting(config);
-    }
-    foreach(QListWidgetItem* checkableItem, m_d->checkBoxMap.keys()) {
-        checkableItem->setCheckState((m_d->checkBoxMap[checkableItem]->isChecked()) ? Qt::Checked : Qt::Unchecked);
     }
 }
 
@@ -123,18 +126,10 @@ void KisPaintOpOptionsWidget::setImage(KisImageWSP image)
     }
 }
 
-void KisPaintOpOptionsWidget::changePage(QListWidgetItem *current, QListWidgetItem *previous)
+void KisPaintOpOptionsWidget::changePage(const QModelIndex& index)
 {
-    Q_UNUSED(previous);
-    m_d->optionsStack->setCurrentIndex(m_d->optionsList->row(current));
-}
-
-void KisPaintOpOptionsWidget::itemChanged(QListWidgetItem* item)
-{
-    if(m_d->checkBoxMap.contains(item)) {
-        m_d->checkBoxMap[item]->setChecked(item->checkState() == Qt::Checked);
-        emit sigConfigurationItemChanged();
-    }
+    m_d->optionsStack->setCurrentIndex( m_d->proxyModel->data(index, KisPaintOpOptionsModel::WidgetIndexRole).toInt());
+    emit sigConfigurationItemChanged();
 }
 
 #include "kis_paintop_options_widget.moc"

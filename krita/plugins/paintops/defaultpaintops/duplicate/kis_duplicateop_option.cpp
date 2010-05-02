@@ -42,7 +42,7 @@ protected:
 
 
 KisDuplicateOpOption::KisDuplicateOpOption()
-        : KisPaintOpOption(i18n("Painting Mode"), false)
+        : KisPaintOpOption(i18n("Painting Mode"), KisPaintOpOption::colorCategory(), false)
 {
     m_checkable = false;
     m_optionWidget = new KisDuplicateOpOptionsWidget();

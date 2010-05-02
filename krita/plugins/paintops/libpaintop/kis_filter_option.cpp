@@ -48,7 +48,7 @@ public:
 };
 
 KisFilterOption::KisFilterOption()
-        : KisPaintOpOption(i18n("Filter"))
+        : KisPaintOpOption(i18n("Filter"), i18n("Filter"))
 {
     m_image = 0;
     m_checkable = false;

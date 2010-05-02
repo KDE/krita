@@ -42,7 +42,7 @@ struct KisPressureHSVOption::Private
 };
 
 KisPressureHSVOption::KisPressureHSVOption(const QString& name, const QString& parameterName, double min, double max)
-        : KisCurveOption(name, parameterName, false), d(new Private)
+        : KisCurveOption(name, parameterName, KisPaintOpOption::colorCategory(), false), d(new Private)
 {
     d->parameterName = parameterName;
     d->paramId = -1;

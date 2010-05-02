@@ -38,13 +38,17 @@ class QString;
 class PAINTOP_EXPORT KisPaintOpOption : public QObject
 {
     Q_OBJECT
+public:
+    static QString brushCategory();
+    static QString colorCategory();
 
 public:
 
-    KisPaintOpOption(const QString & label, bool checked = true);
+    KisPaintOpOption(const QString & label, const QString& category, bool checked = true);
     virtual ~KisPaintOpOption();
 
-    QString & label() const;
+    QString label() const;
+    QString category() const;
     virtual bool isCheckable() {
         return m_checkable;
     }

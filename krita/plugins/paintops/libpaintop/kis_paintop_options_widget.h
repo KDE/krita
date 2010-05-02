@@ -57,9 +57,7 @@ public:
 
 private slots:
 
-    void changePage(QListWidgetItem *current, QListWidgetItem *previous);
-
-    void itemChanged(QListWidgetItem *item);
+    void changePage(const QModelIndex&);
 
 private:
 

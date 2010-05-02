@@ -19,20 +19,34 @@
 
 #include "kis_paintop_option.h"
 
+#include <klocale.h>
+
+QString KisPaintOpOption::brushCategory()
+{
+    return i18n("Brush");
+}
+
+QString KisPaintOpOption::colorCategory()
+{
+    return i18n("Color");
+}
+
 class KisPaintOpOption::Private
 {
 public:
     bool checked;
     QString label;
+    QString category;
     QWidget * configurationPage;
 };
 
-KisPaintOpOption::KisPaintOpOption(const QString & label, bool checked)
+KisPaintOpOption::KisPaintOpOption(const QString & label, const QString& category, bool checked)
         : m_checkable(true)
         , m_d(new Private())
 {
     m_d->checked = checked;
     m_d->label = label;
+    m_d->category = category;
     m_d->configurationPage = 0;
 }
 
@@ -41,9 +55,14 @@ KisPaintOpOption::~KisPaintOpOption()
     delete m_d;
 }
 
-QString & KisPaintOpOption::label() const
+QString KisPaintOpOption::label() const
 {
     return m_d->label;
+}
+
+QString KisPaintOpOption::category() const
+{
+    return m_d->category;
 }
 
 bool KisPaintOpOption::isChecked() const

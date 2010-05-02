@@ -18,9 +18,9 @@
  */
 #include "kis_curve_option.h"
 
-
-KisCurveOption::KisCurveOption(const QString & label, const QString& name, bool checked)
+KisCurveOption::KisCurveOption(const QString & label, const QString& name, const QString & category, bool checked)
         : m_label(label)
+        , m_category(category)
         , m_sensor(0)
         , m_customCurve(false)
         , m_name(name)
@@ -37,6 +37,11 @@ KisCurveOption::~KisCurveOption()
 const QString & KisCurveOption::label() const
 {
     return m_label;
+}
+
+const QString& KisCurveOption::category() const
+{
+    return m_category;
 }
 
 KisCubicCurve KisCurveOption::curve() const

@@ -23,7 +23,7 @@
 #include <KoColorSpace.h>
 
 KisPressureMixOption::KisPressureMixOption()
-        : KisCurveOption(i18n("Mix"), "Mix", false)
+        : KisCurveOption(i18n("Mix"), "Mix", KisPaintOpOption::colorCategory(), false)
 {
 }
 

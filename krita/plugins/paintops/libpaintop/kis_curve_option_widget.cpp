@@ -27,7 +27,7 @@
 #include "kis_curve_option.h"
 
 KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption)
-        : KisPaintOpOption(curveOption->label(), curveOption->isChecked())
+        : KisPaintOpOption(curveOption->label(), curveOption->category(), curveOption->isChecked())
         , m_widget(new QWidget)
         , m_curveOptionWidget(new Ui_WdgCurveOption())
         , m_curveOption(curveOption)

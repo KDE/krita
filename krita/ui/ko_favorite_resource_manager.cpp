@@ -273,6 +273,7 @@ void KoFavoriteResourceManager::slotChangeFGColorSelector(KoColor c)
     QColor color;
     color = c.toQColor();
 
+    //qDebug() << "[KoFavoriteResourceManager] slotChangeFGColorSelector | color " << color ;
     emit sigChangeFGColorSelector(color);
 }
 

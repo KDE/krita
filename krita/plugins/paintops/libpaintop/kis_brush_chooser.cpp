@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -194,7 +195,7 @@ void KisBrushChooser::slotSetItemRotation(qreal rotationValue)
 
     if (resource) {
         KisBrush *brush = static_cast<KisBrush *>(resource);
-        brush->setAngle(rotationValue);
+        brush->setAngle(rotationValue / 180.0 * M_PI);
         slotActivatedBrush(brush);
 
         emit sigBrushChanged();

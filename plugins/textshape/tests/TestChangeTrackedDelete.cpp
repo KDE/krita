@@ -58,7 +58,7 @@ void TestChangeTrackedDelete::testDeleteSelection()
 {
     TextTool *textTool = new TextTool(new MockCanvas);
     QTextDocument *document = textTool->m_textEditor->document();
-    KoTextDocument(document).changeTracker()->setDisplayChanges(true);
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     QTextCursor *cursor = textTool->m_textEditor->cursor();
     cursor->insertText("Hello World");
     cursor->setPosition(2);
@@ -66,10 +66,64 @@ void TestChangeTrackedDelete::testDeleteSelection()
     ChangeTrackedDeleteCommand *delCommand = new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, textTool);
     textTool->m_textEditor->addCommand(delCommand);
     QCOMPARE(document->characterAt(2).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
+    // This is wierd. Without this loop present the succeeding call to inlineTextObject returs NULL. Why ??????
+    for (int i=0; i<document->characterCount(); i++) {
+        cursor->setPosition(i);
+    }
     cursor->setPosition(3);
-    int changeId = cursor->charFormat().intProperty(KoCharacterStyle::ChangeTrackerId);
-    QTextDocumentFragment deleteData = KoTextDocument(document).changeTracker()->elementById(changeId)->getDeleteData();
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(*cursor));
+    QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
     QCOMPARE(deleteData.toPlainText(), QString("llo Wo"));
+    delete textTool;
+}
+
+void TestChangeTrackedDelete::testPrefixMerge()
+{
+    TextTool *textTool = new TextTool(new MockCanvas);
+    QTextDocument *document = textTool->m_textEditor->document();
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+    QTextCursor *cursor = textTool->m_textEditor->cursor();
+    cursor->insertText("Hello World");
+    cursor->setPosition(3);
+    ChangeTrackedDeleteCommand *delCommand = new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, textTool);
+    textTool->m_textEditor->addCommand(delCommand);
+    QCOMPARE(document->characterAt(3).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
+    cursor->setPosition(4);
+    delCommand = new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, textTool);
+    textTool->m_textEditor->addCommand(delCommand);
+    // This is wierd. Without this loop present the succeeding call to inlineTextObject returs NULL. Why ??????
+    for (int i=0; i<document->characterCount(); i++) {
+        cursor->setPosition(i);
+    }
+    cursor->setPosition(4);
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(*cursor));
+    QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
+    QCOMPARE(deleteData.toPlainText(), QString("lo"));
+    delete textTool;
+}
+
+void TestChangeTrackedDelete::testSuffixMerge()
+{
+    TextTool *textTool = new TextTool(new MockCanvas);
+    QTextDocument *document = textTool->m_textEditor->document();
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+    QTextCursor *cursor = textTool->m_textEditor->cursor();
+    cursor->insertText("Hello World");
+    cursor->setPosition(3);
+    ChangeTrackedDeleteCommand *delCommand = new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, textTool);
+    textTool->m_textEditor->addCommand(delCommand);
+    QCOMPARE(document->characterAt(3).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
+    cursor->setPosition(2);
+    delCommand = new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, textTool);
+    textTool->m_textEditor->addCommand(delCommand);
+    // This is wierd. Without this loop present the succeeding call to inlineTextObject returs NULL. Why ??????
+    for (int i=0; i<document->characterCount(); i++) {
+        cursor->setPosition(i);
+    }
+    cursor->setPosition(3);
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(*cursor));
+    QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
+    QCOMPARE(deleteData.toPlainText(), QString("ll"));
     delete textTool;
 }
 

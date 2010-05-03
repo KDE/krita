@@ -19,6 +19,8 @@ private slots:
     void testDeletePreviousChar();
     void testDeleteNextChar();
     void testDeleteSelection();
+    void testPrefixMerge();
+    void testSuffixMerge();
 };
 
 #endif

@@ -21,6 +21,7 @@ private slots:
     void testDeleteSelection();
     void testPrefixMerge();
     void testSuffixMerge();
+    void testInterMerge();
 };
 
 #endif

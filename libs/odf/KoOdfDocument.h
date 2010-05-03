@@ -94,10 +94,9 @@ public:
     virtual bool saveToStore(KoStore *store, const QString &path) = 0;
 
     /**
-     *  Reimplement this method to load the contents of your %KOffice document,
-     *  from the XML document ("content.xml"). The styles have been parsed already,
-     *  you can find them in the odfStore.styles(). The store can be used
-     *  to load images and embedded documents.
+     *  Reimplement this method to load the odf document. Take care to
+     *  make sure styles are loaded before body text is loaded by the
+     *  text shape.
      */
     virtual bool loadOdf(KoOdfReadStore &odfStore) = 0;
 

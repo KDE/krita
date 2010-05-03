@@ -113,12 +113,12 @@ int KoReportItemLine::render(OROPage* page, OROSection* section,  QPointF offset
     ln->setStartPoint(s);
     ln->setEndPoint(e);
     ln->setLineStyle(lineStyle());
-    page->addPrimitive(ln);
+    if (page) page->addPrimitive(ln);
 
     OROLine *l2 = dynamic_cast<OROLine*>(ln->clone());
     l2->setStartPoint(m_start.toPoint());
     l2->setEndPoint(m_end.toPoint());
-    section->addPrimitive(l2);
+    if (section) section->addPrimitive(l2);
 
     return 0;
 }

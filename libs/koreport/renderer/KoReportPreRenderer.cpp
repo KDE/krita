@@ -111,6 +111,7 @@ KoReportPreRendererPrivate::~KoReportPreRendererPrivate()
 
 void KoReportPreRendererPrivate::createNewPage()
 {
+    kDebug();
     if (m_pageCounter > 0)
         finishCurPage();
 
@@ -232,9 +233,11 @@ void KoReportPreRendererPrivate::renderDetailSection(KRDetailSectionData & detai
             while (status) {
                 long l = m_kodata->at();
 
-                kDebug() << "At:" << l << "Y:" << m_yOffset;
+                kDebug() << "At:" << l << "Y:" << m_yOffset << "Max Height:" << m_maxHeight;
 
                 if (renderSectionSize(*(detailData.m_detailSection)) + finishCurPageSize((l + 1 == m_recordCount)) + m_bottomMargin + m_yOffset >= m_maxHeight) {
+                    kDebug() << "Next section is too big for this page";
+                    
                     if (l > 0) {
                         kDebug() << "...moving prev";
                         m_kodata->movePrevious();
@@ -402,285 +405,14 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
         }
         
 #if 0 //!TODO Handle post processing of text data
-        if (primitive->type() == OROTextBox::TextBox) {
-            OROTextBox *text = dynamic_cast<OROTextBox*>(primitive);
+        if (ob->type() == OROTextBox::TextBox) {
+            OROTextBox *text = dynamic_cast<OROTextBox*>(ob);
             if (text->requiresPostProcessing()) {
                 m_postProcText.append(text);
             }
 
-            tb->setText(str);
-            m_page->addPrimitive(tb);
-
-            OROTextBox *tb2 = dynamic_cast<OROTextBox*>(tb->clone());
-            tb2->setPosition(f->m_pos.toPoint());
-            sec->addPrimitive(tb2);
-
-
-        } else if (elemThis->type() == KRObjectData::EntityText) {
-            QString qstrValue;
-            KRTextData * t = elemThis->toText();
-
-            QString cs = t->m_controlSource->value().toString();
-
-            kDebug() << cs;
-
-            if (cs.left(1) == "$") { //Everything past $ is treated as a string
-                qstrValue = cs.mid(1);
-            } else {
-                qstrValue = m_kodata->value(t->m_controlSource->value().toString()).toString();
-            }
-
-            QPointF pos = t->m_pos.toScene();
-            QSizeF size = t->m_size.toScene();
-            pos += QPointF(m_leftMargin, m_yOffset);
-
-            QRectF trf(pos, size);
-
-            int     intLineCounter  = 0;
-            qreal   intStretch      = trf.top() - m_yOffset;
-            qreal   intBaseTop      = trf.top();
-            qreal   intRectHeight   = trf.height();
-
-            QFont f = t->font();
-
-            kDebug() << qstrValue;
-
-            if (qstrValue.length()) {
-                QRectF rect = trf;
-
-                int pos = 0;
-                int idx;
-                QChar separator;
-                QRegExp re("\\s");
-                QPrinter prnt(QPrinter::HighResolution);
-                QFontMetrics fm(f, &prnt);
-
-//                int   intRectWidth    = (int)(trf.width() * prnt.resolution()) - 10;
-                int   intRectWidth    = (int)((t->m_size.toPoint().width() / 72) * prnt.resolution());
-
-                while (qstrValue.length()) {
-                    idx = re.indexIn(qstrValue, pos);
-                    if (idx == -1) {
-                        idx = qstrValue.length();
-                        separator = QChar('\n');
-                    } else
-                        separator = qstrValue.at(idx);
-
-                    if (fm.boundingRect(qstrValue.left(idx)).width() < intRectWidth || pos == 0) {
-                        pos = idx + 1;
-                        if (separator == '\n') {
-                            QString line = qstrValue.left(idx);
-                            qstrValue = qstrValue.mid(idx + 1, qstrValue.length());
-                            pos = 0;
-
-                            rect.setTop(intBaseTop + (intLineCounter * intRectHeight));
-                            rect.setBottom(rect.top() + intRectHeight);
-
-                            OROTextBox * tb = new OROTextBox();
-                            tb->setPosition(rect.topLeft());
-                            tb->setSize(rect.size());
-                            tb->setFont(t->font());
-                            tb->setText(line);
-                            tb->setFlags(t->textFlags());
-                            tb->setTextStyle(t->textStyle());
-                            tb->setLineStyle(t->lineStyle());
-                            m_page->addPrimitive(tb);
-
-                            OROTextBox *tb2 = dynamic_cast<OROTextBox*>(tb->clone());
-                            tb2->setPosition(t->m_pos.toPoint());
-                            sec->addPrimitive(tb2);
-
-                            intStretch += intRectHeight;
-                            intLineCounter++;
-                        }
-                    } else {
-                        QString line = qstrValue.left(pos - 1);
-                        qstrValue = qstrValue.mid(pos, qstrValue.length());
-                        pos = 0;
-
-                        rect.setTop(intBaseTop + (intLineCounter * intRectHeight));
-                        rect.setBottom(rect.top() + intRectHeight);
-
-                        OROTextBox * tb = new OROTextBox();
-                        tb->setPosition(rect.topLeft());
-                        tb->setSize(rect.size());
-                        tb->setFont(t->font());
-                        tb->setText(line);
-                        tb->setFlags(t->textFlags());
-                        tb->setTextStyle(t->textStyle());
-                        tb->setLineStyle(t->lineStyle());
-                        m_page->addPrimitive(tb);
-
-                        intStretch += intRectHeight;
-                        intLineCounter++;
-                    }
-                }
-
-                intStretch += (t->m_bottomPadding / 100.0);
-
-                if (intStretch > intHeight)
-                    intHeight = intStretch;
-            }
-        } else if (elemThis->type() == KRObjectData::EntityLine) {
-            KRLineData * l = elemThis->toLine();
-            OROLine * ln = new OROLine();
-            QPointF s = l->m_start.toScene();
-            QPointF e = l->m_end.toScene();
-            QPointF offset(m_leftMargin, m_yOffset);
-            s += offset;
-            e += offset;
-
-            ln->setStartPoint(s);
-            ln->setEndPoint(e);
-            ln->setLineStyle(l->lineStyle());
-            m_page->addPrimitive(ln);
-
-            OROLine *l2 = dynamic_cast<OROLine*>(ln->clone());
-            l2->setStartPoint(l->m_start.toPoint());
-            l2->setEndPoint(l->m_end.toPoint());
-            sec->addPrimitive(l2);
-        } else if (elemThis->type() == KRObjectData::EntityBarcode) {
-            KRBarcodeData * bc = elemThis->toBarcode();
-
-            QPointF pos = bc->m_pos.toScene();
-            QSizeF size = bc->m_size.toScene();
-            pos += QPointF(m_leftMargin, m_yOffset);
-
-            QRectF rect = QRectF(pos, size);
-
-            QString val = m_kodata->value(bc->m_controlSource->value().toString()).toString();
-            QString fmt = bc->m_format->value().toString();
-            int align = bc->alignment();
-            if (fmt == "3of9")
-                render3of9(m_page, rect, val, align);
-            else if (fmt == "3of9+")
-                renderExtended3of9(m_page, rect, val, align);
-            else if (fmt == "128")
-                renderCode128(m_page, rect, val, align);
-            else if (fmt == "ean13")
-                renderCodeEAN13(m_page, rect, val, align);
-            else if (fmt == "ean8")
-                renderCodeEAN8(m_page, rect, val, align);
-            else if (fmt == "upc-a")
-                renderCodeUPCA(m_page, rect, val, align);
-            else if (fmt == "upc-e")
-                renderCodeUPCE(m_page, rect, val, align);
-            else {
-                //logMessage("Encountered unknown barcode format: %s",(const char*)bc->format);
-            }
-        } else if (elemThis->type() == KRObjectData::EntityImage) {
-            KRImageData * im = elemThis->toImage();
-            QString uudata;
-            QByteArray imgdata;
-            if (!im->isInline()) {
-                imgdata = m_kodata->value(im->controlSource()).toByteArray();
-            } else {
-                uudata = im->inlineImageData();
-                imgdata = KCodecs::base64Decode(uudata.toLatin1());
-            }
-
-            QImage img;
-            img.loadFromData(imgdata);
-            OROImage * id = new OROImage();
-            id->setImage(img);
-            if (im->mode().toLower() == "stretch") {
-                id->setScaled(true);
-                id->setAspectRatioMode(Qt::KeepAspectRatio);
-                id->setTransformationMode(Qt::SmoothTransformation);
-            }
-            QPointF pos = im->m_pos.toScene();
-            QSizeF size = im->m_size.toScene();
-
-            pos += QPointF(m_leftMargin, m_yOffset);
-
-            id->setPosition(pos);
-            id->setSize(size);
-            m_page->addPrimitive(id);
-
-            OROImage *i2 = dynamic_cast<OROImage*>(id->clone());
-            i2->setPosition(im->m_pos.toPoint());
-            sec->addPrimitive(i2);
-        } else if (elemThis->type() == KRObjectData::EntityChart) {
-            KRChartData * ch = elemThis->toChart();
-            ch->setConnection(m_kodata);
-
-            QStringList masterFields = ch->masterFields();
-            for (int i = 0; i < masterFields.size(); ++i) {
-                if (!masterFields[i].simplified().isEmpty()) {
-                    //            ch->setLinkData(masterFields[i], _query->getQuery()->value(_query->fieldNumber(masterFields[i])));
-                }
-            }
-            ch->populateData();
-            if (ch->widget()) {
-                OROPicture * id = new OROPicture();
-                ch->widget()->setFixedSize(ch->m_size.toScene().toSize());
-
-                QPainter p(id->picture());
-
-                ch->widget()->diagram()->coordinatePlane()->parent()->paint(&p, QRect(QPoint(0, 0), ch->m_size.toScene().toSize()));
-
-                QPointF pos = ch->m_pos.toScene();
-                QSizeF size = ch->m_size.toScene();
-
-                pos += QPointF(m_leftMargin, m_yOffset);
-
-                id->setPosition(pos);
-                id->setSize(size);
-                m_page->addPrimitive(id);
-
-                OROPicture *p2 = dynamic_cast<OROPicture*>(id->clone());
-                p2->setPosition(ch->m_pos.toPoint());
-                sec->addPrimitive(p2);
-            }
-        } else if (elemThis->type() == KRObjectData::EntityCheck) {
-            KRCheckData *cd = elemThis->toCheck();
-            OROCheck *chk = new OROCheck();
-
-            QPointF pos = cd->m_pos.toScene();
-            QSizeF size = cd->m_size.toScene();
-            pos += QPointF(m_leftMargin, m_yOffset);
-
-            chk->setPosition(pos);
-            chk->setSize(size);
-
-            chk->setLineStyle(cd->lineStyle());
-            chk->setForegroundColor(cd->m_foregroundColor->value().value<QColor>());
-            chk->setCheckType(cd->m_checkStyle->value().toString());
-
-            QString str;
-
-            QString cs = cd->controlSource();
-            kDebug() << "EntityCheck CS:" << cs;
-
-            if (cs.left(1) == "=") {
-#if KDE_IS_VERSION(4,2,88)
-                str = m_scriptHandler->evaluate(cs.mid(1)).toString();
-#else
-                str = m_scriptHandler->evaluate(cd->entityName()).toString();
 #endif
-            } else {
-                QString clm = cd->m_controlSource->value().toString();
-                str = m_kodata->value(clm).toString();
-            }
-
-            bool v = false;
-
-            str = str.toLower();
-
-            kDebug() << "Check Value:" << str;
-            if (str == "t" || str == "true" || str == "1")
-                v = true;
-
-            chk->setValue(v);
-
-            m_page->addPrimitive(chk);
-            OROCheck *chk2 = dynamic_cast<OROCheck*>(chk->clone());
-            chk2->setPosition(cd->m_pos.toPoint());
-            sec->addPrimitive(chk2);
-        } else {
-            kDebug() << "Encountered an unknown element while rendering a section.";
-        }
-        #endif
+ 
     }
 
     m_yOffset += sectionHeight;
@@ -699,9 +431,7 @@ void KoReportPreRendererPrivate::initEngine()
     connect(this, SIGNAL(renderingSection(KRSectionData*, OROPage*, QPointF)), m_scriptHandler, SLOT(slotEnteredSection(KRSectionData*, OROPage*, QPointF)));
 }
 
-//
-// ORPreRender
-//
+//===========================KoReportPreRenderer===============================
 
 KoReportPreRenderer::KoReportPreRenderer(const QDomElement & pDocument)
 {

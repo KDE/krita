@@ -120,7 +120,6 @@ KoReportDesigner::KoReportDesigner(QWidget * parent)
         : QWidget(parent), d(new Private())
 {
     m_kordata = 0;
-    m_pluginManager = &(KoReportPluginManager::self());
     init();
 }
 
@@ -130,6 +129,8 @@ void KoReportDesigner::init()
     m_detail = 0;
     d->hruler = 0;
 
+    m_pluginManager = &(KoReportPluginManager::self());
+    
     m_sectionData = new ReportWriterSectionData();
     createProperties();
 

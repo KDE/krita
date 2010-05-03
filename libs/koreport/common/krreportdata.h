@@ -99,10 +99,6 @@ public:
         return m_name;
     }
 
-    //!Temporary until created a plugin manager
-    KoReportPluginInterface* plugin(const QString&);
-    
-
 protected:
     QString m_title;
     QString m_name;
@@ -130,7 +126,6 @@ protected:
 
     KRDetailSectionData* m_detailSection;
 
-    QMap<QString, KoReportPluginInterface*> m_plugins;
 private:
     bool m_valid;
     void init();

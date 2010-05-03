@@ -22,6 +22,7 @@
 #include "KoReportDesignerItemBase.h"
 
 #include "KoReportPluginInterface.h"
+#include "KoReportPluginManager.h"
 #include "KoReportDesignerItemRectBase.h"
 #include "KoReportDesignerItemLine.h"
 #include <KLocalizedString>
@@ -188,7 +189,8 @@ void ReportSection::initFromXML(QDomNode & section)
             (new KoReportDesignerItemLine(node, m_sceneView->designer(), m_scene))->setVisible(true);
         }
         else {
-            KoReportPluginInterface *plugin = m_reportDesigner->plugin(n);
+            KoReportPluginManager &manager = KoReportPluginManager::self();
+            KoReportPluginInterface *plugin = manager.plugin(n);
             if (plugin) {
                 QObject *obj = plugin->createDesignerInstance(node, m_reportDesigner, m_scene);
                 if (obj) {

@@ -30,15 +30,7 @@
 #include "KoReportPluginInterface.h"
 #include "KoReportDesignerItemLine.h"
 
-//!Temp load all plugins here until the loaded is created
-#include "../plugins/barcode/KoReportBarcodePlugin.h"
-#include "../plugins/chart/KoReportChartPlugin.h"
-#include "../plugins/check/KoReportCheckPlugin.h"
-#include "../plugins/field/KoReportFieldPlugin.h"
-#include "../plugins/image/KoReportImagePlugin.h"
-#include "../plugins/label/KoReportLabelPlugin.h"
-#include "../plugins/shape/KoReportShapePlugin.h"
-#include "../plugins/text/KoReportTextPlugin.h"
+#include "KoReportPluginManager.h"
 
 #include <QLayout>
 #include <qdom.h>
@@ -128,6 +120,7 @@ KoReportDesigner::KoReportDesigner(QWidget * parent)
         : QWidget(parent), d(new Private())
 {
     m_kordata = 0;
+    m_pluginManager = &(KoReportPluginManager::self());
     init();
 }
 
@@ -186,23 +179,11 @@ void KoReportDesigner::init()
 
     changeSet(m_set);
 
-    //!Temp - Add Plugins Here
 
-    m_plugins.insert("report:barcode", new KoReportBarcodePlugin());
-    m_plugins.insert("report:chart", new KoReportChartPlugin());
-    m_plugins.insert("report:check", new KoReportCheckPlugin());
-    m_plugins.insert("report:field", new KoReportFieldPlugin());
-    m_plugins.insert("report:image", new KoReportImagePlugin());
-    m_plugins.insert("report:label", new KoReportLabelPlugin());
-    m_plugins.insert("report:shape", new KoReportShapePlugin());
-    m_plugins.insert("report:text", new KoReportTextPlugin());
-
-    //!End Add Plugins
 }
 
 KoReportDesigner::~KoReportDesigner()
 {
-    qDeleteAll(m_plugins);
     delete d;
 }
 
@@ -883,7 +864,7 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
                 item = new KoReportDesignerItemLine(v->designer(), v->scene(), pos);
             }
             else {
-                KoReportPluginInterface *plug = plugin(m_sectionData->insertItem);
+                KoReportPluginInterface *plug = m_pluginManager->plugin(m_sectionData->insertItem);
                 if (plug) {
                     QObject *obj = plug->createDesignerInstance(v->designer(), v->scene(), pos);
                     if (obj) {
@@ -1188,30 +1169,16 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
 
 QList<QAction*> KoReportDesigner::actions()
 {
-    QList<QAction*> actList;
+    KoReportPluginManager &manager = KoReportPluginManager::self();
     QAction *act;
+    QList<QAction*> actList;
 
-    KoReportDesigner designer(0);
-    const QMap<QString, KoReportPluginInterface*> plugins = designer.plugins();
+    actList = manager.actions();
     
-    foreach(KoReportPluginInterface* plugin, plugins) {
-        act = new QAction(KIcon(plugin->iconName()), plugin->userName(), 0);
-        act->setObjectName(plugin->entityName());
-        actList << act;
-    }
-
     act = new QAction(KIcon("line"), i18n("Line"), 0);
     act->setObjectName("report:line");
     actList << act;
     
     return actList;
-
 }
 
-KoReportPluginInterface* KoReportDesigner::plugin(const QString& p)
-{
-    if (m_plugins.contains(p)) {
-        return m_plugins[p];
-    }
-    return 0;
-}

@@ -22,36 +22,13 @@
 #include "krdetailsectiondata.h"
 #include "KoReportItemBase.h"
 
-//!Temp load all plugins here until the loaded is created
-#include "../plugins/barcode/KoReportBarcodePlugin.h"
-#include "../plugins/chart/KoReportChartPlugin.h"
-#include "../plugins/check/KoReportCheckPlugin.h"
-#include "../plugins/field/KoReportFieldPlugin.h"
-#include "../plugins/image/KoReportImagePlugin.h"
-#include "../plugins/label/KoReportLabelPlugin.h"
-#include "../plugins/shape/KoReportShapePlugin.h"
-#include "../plugins/text/KoReportTextPlugin.h"
-
 void KoReportReportData::init()
 {
     m_pageHeaderFirst = m_pageHeaderOdd = m_pageHeaderEven = m_pageHeaderLast = m_pageHeaderAny = 0;
     m_pageFooterFirst = m_pageFooterOdd = m_pageFooterEven = m_pageFooterLast = m_pageFooterAny = 0;
     m_reportHeader = m_reportFooter = 0;
-
-    //!Temp - Add Plugins Here
-
-    m_plugins.insert("report:barcode", new KoReportBarcodePlugin());
-    m_plugins.insert("report:chart", new KoReportChartPlugin());
-    m_plugins.insert("report:check", new KoReportCheckPlugin());
-    m_plugins.insert("report:field", new KoReportFieldPlugin());
-    m_plugins.insert("report:image", new KoReportImagePlugin());
-    m_plugins.insert("report:label", new KoReportLabelPlugin());
-    m_plugins.insert("report:shape", new KoReportShapePlugin());
-    m_plugins.insert("report:text", new KoReportTextPlugin());
-
-    //!End Add Plugins
-    
 }
+
 KoReportReportData::KoReportReportData()
         : m_detailSection(0)
 {
@@ -318,12 +295,4 @@ KRSectionData* KoReportReportData::section(KRSectionData::Section s) const
         sec = 0;
     }
     return sec;
-}
-
-KoReportPluginInterface* KoReportReportData::plugin(const QString& p)
-{
-    if (m_plugins.contains(p)) {
-        return m_plugins[p];
-    }
-    return 0;
 }

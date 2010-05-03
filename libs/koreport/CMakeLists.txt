@@ -26,6 +26,7 @@ set(koreport_LIB_SRCS
     common/KoReportPluginInterface.cpp
     common/KoReportItemLine.cpp
 	common/renderobjects.cpp
+    common/KoReportPluginManager.cpp
 
 	renderer/KoReportPrintRenderer.cpp
 	renderer/KoReportPreRenderer.cpp

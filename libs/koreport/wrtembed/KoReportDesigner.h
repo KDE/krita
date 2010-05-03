@@ -50,6 +50,7 @@ class QGraphicsSceneContextMenuEvent;
 class ReportSceneView;
 class ReportWriterSectionData;
 class KoReportPluginInterface;
+class KoReportPluginManager;
 
 //
 // Class ReportDesigner
@@ -248,9 +249,6 @@ public:
 
     static QList<QAction*> actions();
 
-    KoReportPluginInterface* plugin(const QString&);
-
-    const QMap<QString, KoReportPluginInterface*> plugins() { return m_plugins; }
     
 public slots:
 
@@ -335,7 +333,7 @@ private:
     ReportWriterSectionData *m_sectionData;
     unsigned int selectionCount() const;
 
-    QMap<QString, KoReportPluginInterface*> m_plugins;
+    KoReportPluginManager *m_pluginManager;
 
 private slots:
     void slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p);

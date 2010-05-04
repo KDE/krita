@@ -1367,7 +1367,7 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
         context.xmlWriter().endElement();
     }
 
-    // save glue points see ODF 9.2.19 Glue Points
+    // TODO: save glue points see ODF 9.2.19 Glue Points
 }
 
 // end loading & saving methods

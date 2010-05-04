@@ -15,6 +15,9 @@ public:
     TestChangeTrackedDelete();
     ~TestChangeTrackedDelete();
 
+private:
+    void insertSampleList(QTextDocument *documet);
+
 private slots:
     void testDeletePreviousChar();
     void testDeleteNextChar();
@@ -22,6 +25,9 @@ private slots:
     void testPrefixMerge();
     void testSuffixMerge();
     void testInterMerge();
+    void testPartialListItemDelete();
+    void testListItemDelete();
+    void testListDelete();
 };
 
 #endif

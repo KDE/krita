@@ -17,6 +17,7 @@ public:
 
 private:
     void insertSampleList(QTextDocument *documet);
+    void insertSampleTable(QTextDocument *document);
 
 private slots:
     void testDeletePreviousChar();
@@ -28,6 +29,7 @@ private slots:
     void testPartialListItemDelete();
     void testListItemDelete();
     void testListDelete();
+    void testTableDelete();
 };
 
 #endif

@@ -307,6 +307,70 @@ void TestChangeTrackedDelete::testListDelete()
     delete textTool;
 }
 
+void TestChangeTrackedDelete::testTableDelete()
+{
+    TextTool *textTool = new TextTool(new MockCanvas);
+    QTextDocument *document = textTool->m_textEditor->document();
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+    QTextCursor *cursor = textTool->m_textEditor->cursor();
+    insertSampleTable(document);    
+
+    cursor->setPosition(13);
+    cursor->setPosition(102, QTextCursor::KeepAnchor);
+    ChangeTrackedDeleteCommand *delCommand = new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, textTool);
+    textTool->m_textEditor->addCommand(delCommand);
+    QCOMPARE(document->characterAt(13).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
+    
+    // This is wierd. Without this loop present the succeeding call to inlineTextObject returs NULL. Why ??????
+    for (int i=0; i<document->characterCount(); i++) {
+        cursor->setPosition(i);
+    }
+  
+    cursor->setPosition(14);
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(*cursor));
+    QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
+
+    QTextDocument deleteDocument;
+    QTextCursor deleteCursor(&deleteDocument);
+
+    deleteCursor.insertFragment(deleteData);
+    bool tableFound = false;
+
+    for (int i=0; i < deleteDocument.characterCount(); i++) {
+        deleteCursor.setPosition(i);
+        if (deleteCursor.currentTable()) {
+            tableFound = true;
+            break;
+        }
+    }
+    QVERIFY(tableFound == true);
+    QTextTable *table = deleteCursor.currentTable();
+    QVERIFY(table->rows() == 3);
+    QVERIFY(table->columns() == 3);
+    
+    tableFound = false;
+    for (int i=0; i < document->characterCount(); i++) {
+        deleteCursor.setPosition(i);
+        if (deleteCursor.currentTable()) {
+            tableFound = true;
+            break;
+        }
+    }
+    QVERIFY(tableFound == false);
+
+    delCommand->undo();
+    tableFound = false;
+    for (int i=0; i < document->characterCount(); i++) {
+        deleteCursor.setPosition(i);
+        if (deleteCursor.currentTable()) {
+            tableFound = true;
+            break;
+        }
+    }
+    QVERIFY(tableFound == true);
+    delete textTool;
+}
+
 void TestChangeTrackedDelete::insertSampleList(QTextDocument *document)
 {
     QTextCursor cursor(document);
@@ -327,6 +391,22 @@ void TestChangeTrackedDelete::insertSampleList(QTextDocument *document)
     cursor.insertBlock();
     list->add(cursor.block(), 1);
     cursor.insertText("This is a list-item 5");
+}
+
+void TestChangeTrackedDelete::insertSampleTable(QTextDocument *document)
+{
+    QTextCursor cursor(document);
+    cursor.insertText("This is a paragraph of text before a table.");
+    QTextTable *table = cursor.insertTable(3,3);
+    table->cellAt(0,0).firstCursorPosition().insertText("first");
+    table->cellAt(0,1).firstCursorPosition().insertText("second");
+    table->cellAt(0,2).firstCursorPosition().insertText("third");
+    table->cellAt(1,0).firstCursorPosition().insertText("fourth");
+    table->cellAt(1,1).firstCursorPosition().insertText("fifth");
+    table->cellAt(1,2).firstCursorPosition().insertText("sixth");
+    table->cellAt(2,0).firstCursorPosition().insertText("seventh");
+    table->cellAt(2,1).firstCursorPosition().insertText("eigth");
+    table->cellAt(2,2).firstCursorPosition().insertText("ninth");
 }
 
 QTEST_MAIN(TestChangeTrackedDelete)

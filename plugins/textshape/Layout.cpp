@@ -125,7 +125,8 @@ qreal Layout::width()
         ptWidth -= m_blockData->counterWidth() + m_blockData->counterSpacing();
     ptWidth -= m_format.leftMargin() + m_format.rightMargin();
     ptWidth -= m_borderInsets.left + m_borderInsets.right + m_shapeBorder.right;
-    ptWidth -= m_dropCapsAffectedLineWidthAdjust;
+    if (m_block.layout()->lineCount() > 1)
+        ptWidth -= m_dropCapsAffectedLineWidthAdjust;
     return ptWidth;
 }
 
@@ -137,7 +138,8 @@ qreal Layout::x()
     }
     result += m_isRtl ? m_format.rightMargin() : (m_format.leftMargin() + listIndent());
     result += m_borderInsets.left + m_shapeBorder.left;
-    result += m_dropCapsAffectedLineWidthAdjust;
+    if (m_block.layout()->lineCount() > 1)
+        result += m_dropCapsAffectedLineWidthAdjust;
     return result;
 }
 
@@ -872,6 +874,8 @@ void Layout::resetPrivate()
     m_block = m_parent->document()->begin();
     updateFrameStack();
     m_currentMasterPage.clear();
+    m_dropCapsPositionAdjust = 0;
+    m_dropCapsAffectedLineWidthAdjust = 0;
 
     shapeNumber = 0;
     int lastPos = -1;

@@ -824,12 +824,24 @@ void TestDocumentLayout::testDropCaps()
     QVERIFY(m_blockLayout->lineCount() > 2);
     line = m_blockLayout->lineAt(0);
     QCOMPARE(line.textLength(), 1);
-    QCOMPARE(line.position(), QPointF(0, 0));
-    qreal w = line.naturalTextWidth();
+
+    QCOMPARE(line.position().x(), 0.0);
+    QVERIFY(line.position().y() <= 0.0); // can't get a tight-boundingrect here.
 
     line = m_blockLayout->lineAt(1);
     QVERIFY(line.textLength() > 2);
-    QCOMPARE(line.position(), QPointF(w + 10.0 , 0));
+    qreal heightNormalLine = line.height();
+    QCOMPARE(line.position().y(), 0.0); // aligned top
+
+    style.setDropCaps(false); // remove it
+    style.applyStyle(block);
+    m_layout->layout();
+
+    // test that the first text line is no longer dropcaps
+    QVERIFY(m_blockLayout->lineCount() > 2);
+    line = m_blockLayout->lineAt(0);
+    QVERIFY(line.textLength() > 1);
+    QCOMPARE(line.height(), heightNormalLine);
 }
 
 void TestDocumentLayout::testNonBreakableLines()

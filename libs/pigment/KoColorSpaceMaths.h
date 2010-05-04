@@ -156,7 +156,7 @@ public:
 // MSVC do not have lrint
 
 const double _double2fixmagic = 68719476736.0*1.5;
-const int32 _shiftamt        = 16;                    //16.16 fixed point representation,
+const qint32 _shiftamt        = 16;                    //16.16 fixed point representation,
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
         #define iexp_                           0

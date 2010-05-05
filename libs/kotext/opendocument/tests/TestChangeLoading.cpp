@@ -196,7 +196,6 @@ QString TestChangeLoading::documentToOdt(QTextDocument *document)
     }
 
     textShapeData->saveOdf(context, 0, -1, rdf);
-    rdf->saveOasis(store, manifestWriter);
 
     contentTmpFile.close();
 
@@ -219,6 +218,8 @@ QString TestChangeLoading::documentToOdt(QTextDocument *document)
 
     if (!store->close())
         qWarning() << "Failed to close the store";
+
+    rdf->saveOasis(store, manifestWriter);
 
     mainStyles.saveOdfStylesDotXml(store, manifestWriter);
 
@@ -291,6 +292,45 @@ void TestChangeLoading::verifyMultiParaDelete(QTextDocument *document)
     QCOMPARE(block.text(), QString(""));
     block = block.next();
     QCOMPARE(block.text(), QString("This is a line of deleted text from the second paragraph."));
+}
+
+void TestChangeLoading::testPartialListItemDeleteLoading()
+{
+    QString fileName = QString(FILES_DATA_DIR) + QString("TrackedChanges/PartialListItemDelete.odt");
+    QTextDocument *document = documentFromOdt(fileName);
+    verifyPartialListItemDelete(document);
+}
+
+void TestChangeLoading::verifyPartialListItemDelete(QTextDocument *document)
+{
+    QTextCursor cursor(document);
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+    QCOMPARE(document->characterAt(48).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
+    cursor.setPosition(49);
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(cursor));
+    QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
+    
+    QTextDocument deleteDocument;
+    QTextCursor deleteCursor(&deleteDocument);
+    
+    deleteCursor.insertFragment(deleteData);
+    bool listFound = false;
+
+    for (int i=0; i < deleteDocument.characterCount(); i++) {
+        deleteCursor.setPosition(i);
+        if (deleteCursor.currentList()) {
+            listFound = true;
+            continue;
+        }
+    }
+
+    QVERIFY(listFound == true);
+    QTextList *deletedList = deleteCursor.currentList();
+    bool deletedListStatus = deletedList->format().boolProperty(KoDeleteChangeMarker::DeletedList);
+    QVERIFY (deletedListStatus == false);
+    bool deletedListItemStatus;
+    deletedListItemStatus  = deletedList->item(0).blockFormat().boolProperty(KoDeleteChangeMarker::DeletedListItem);
+    QVERIFY(deletedListItemStatus == false);
 }
 
 int main(int argc, char *argv[])

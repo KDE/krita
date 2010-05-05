@@ -38,9 +38,12 @@ private slots:
     void cleanup();
     void testSimpleDeleteLoading();
     void testSimpleDeleteSaving();
+    void testMultiParaDeleteLoading();
+    void testMultiParaDeleteSaving();
 
 private:
     void verifySimpleDelete(QTextDocument *document);
+    void verifyMultiParaDelete(QTextDocument *document);
 
 private:
     QTextDocument *documentFromOdt(const QString &odt);

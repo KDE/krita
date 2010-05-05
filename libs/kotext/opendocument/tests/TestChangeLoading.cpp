@@ -258,6 +258,41 @@ void TestChangeLoading::verifySimpleDelete(QTextDocument *document)
     QCOMPARE(deleteData.toPlainText(), QString("This is a deleted text."));
 }
 
+void TestChangeLoading::testMultiParaDeleteLoading()
+{
+    QString fileName = QString(FILES_DATA_DIR) + QString("TrackedChanges/MultiParaDelete.odt");
+    QTextDocument *document = documentFromOdt(fileName);
+    verifyMultiParaDelete(document);
+}
+
+void TestChangeLoading::testMultiParaDeleteSaving()
+{
+    QString fileName = QString(FILES_DATA_DIR) + QString("TrackedChanges/MultiParaDelete.odt");
+    QTextDocument *document = documentFromOdt(fileName);
+    QString savedFileName = documentToOdt(document);
+    QTextDocument *savedDocument = documentFromOdt(savedFileName);
+    verifyMultiParaDelete(savedDocument);
+}
+
+void TestChangeLoading::verifyMultiParaDelete(QTextDocument *document)
+{
+    QTextCursor cursor(document);
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+    QCOMPARE(document->characterAt(81).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
+    cursor.setPosition(82);
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(cursor));
+    QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
+    QTextDocument deletedDocument;
+    QTextCursor deletedCursor(&deletedDocument);
+    deletedCursor.insertFragment(deleteData);
+    QTextBlock block = deletedDocument.begin();
+    QCOMPARE(block.text(), QString(" This is a line of deleted text from the first paragraph."));
+    block = block.next();
+    QCOMPARE(block.text(), QString(""));
+    block = block.next();
+    QCOMPARE(block.text(), QString("This is a line of deleted text from the second paragraph."));
+}
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);

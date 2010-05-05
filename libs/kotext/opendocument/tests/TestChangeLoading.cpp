@@ -333,6 +333,49 @@ void TestChangeLoading::verifyPartialListItemDelete(QTextDocument *document)
     QVERIFY(deletedListItemStatus == false);
 }
 
+void TestChangeLoading::testListItemDeleteLoading()
+{
+    QString fileName = QString(FILES_DATA_DIR) + QString("TrackedChanges/ListItemDelete.odt");
+    QTextDocument *document = documentFromOdt(fileName);
+    verifyListItemDelete(document);
+}
+
+
+void TestChangeLoading::verifyListItemDelete(QTextDocument *document)
+{
+    QTextCursor cursor(document);
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+    QCOMPARE(document->characterAt(52).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
+    cursor.setPosition(53);
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(cursor));
+    QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
+
+    QTextDocument deleteDocument;
+    QTextCursor deleteCursor(&deleteDocument);
+
+    deleteCursor.insertFragment(deleteData);
+    bool listFound = false;
+
+    for (int i=0; i < deleteDocument.characterCount(); i++) {
+        deleteCursor.setPosition(i);
+        if (deleteCursor.currentList()) {
+            listFound = true;
+            continue;
+        }
+    }
+
+    QVERIFY(listFound == true);
+    QTextList *deletedList = deleteCursor.currentList();
+    bool deletedListStatus = deletedList->format().boolProperty(KoDeleteChangeMarker::DeletedList);
+    QVERIFY (deletedListStatus == false);
+    bool deletedListItemStatus;
+    deletedListItemStatus  = deletedList->item(0).blockFormat().boolProperty(KoDeleteChangeMarker::DeletedListItem);
+    QVERIFY(deletedListItemStatus == false);
+    deletedListItemStatus  = deletedList->item(1).blockFormat().boolProperty(KoDeleteChangeMarker::DeletedListItem);
+    QVERIFY(deletedListItemStatus == true);
+}
+
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);

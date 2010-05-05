@@ -190,6 +190,7 @@ KoTextDocumentLayout::~KoTextDocumentLayout()
 void KoTextDocumentLayout::setLayout(LayoutState *layout)
 {
     Q_ASSERT(layout);
+    delete m_state;
     m_state = layout;
     scheduleLayout();
 }

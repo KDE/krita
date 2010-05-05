@@ -234,6 +234,34 @@ KoImageCollection *PictureShape::imageCollection() const
     return m_imageCollection;
 }
 
+bool PictureShape::loadOdfColorTransformations(const KoXmlElement& element, KoShapeLoadingContext& context)
+{
+//     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+//     styleStack.save();
+//     context.odfLoadingContext().fillStyleStack(element, KoXmlNS::draw, "style-name", "graphic");
+//     styleStack.setTypeProperties("graphic");
+// 
+//     //FIXME: are there other applicable properties?
+//     if( styleStack.hasProperty(KoXmlNS::draw, "color-mode") ) {
+//         QString colorMode = styleStack.property(KoXmlNS::draw, "color-mode");
+//         KoFilterEffect* colorModeEffect = 0;
+//         if( colorMode == "greyscale" ) {
+//             ColorMatrixEffect* colorMatrixEfect = new ColorMatrixEffect();
+//             colorMatrixEfect->setSaturate(0);
+//             colorModeEffect = colorMatrixEfect;
+//         }
+//         else if( colorMode == "mono" )
+//             ;
+//         else if( colorMode == "watermark" )
+//             ;
+//         if( colorModeEffect );
+//             filterEffectStack()->appendFilterEffect(colorModeEffect);
+//     }
+//
+//     styleStack.restore();
+    return true;
+}
+
 PictureShape::PictureMode PictureShape::mode() const
 {
     return m_mode;

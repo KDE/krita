@@ -65,6 +65,7 @@ protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
+    bool loadOdfColorTransformations(const KoXmlElement& element, KoShapeLoadingContext& context);
 
     KoImageCollection *m_imageCollection;
     RenderQueue *m_renderQueue;

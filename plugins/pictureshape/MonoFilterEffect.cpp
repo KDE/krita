@@ -47,11 +47,11 @@ QImage MonoFilterEffect::processImage(const QImage& image, const KoFilterEffectR
     const int width = result.width();
     for( int row = context.filterRegion().top(); row < bottom; ++row ) {
         for( int col = context.filterRegion().left(); col < right; ++col ){
-            QRgb currentPixel = pixel[row * width + col];
-            int red = qRed(currentPixel);
-            int green = qGreen(currentPixel);
-            int blue = qBlue(currentPixel);
-            int monoValue = ( (red * 11 + green * 16 + blue * 5) / 32 ) / 127 * 255;
+            const QRgb currentPixel = pixel[row * width + col];
+            const int red = qRed(currentPixel);
+            const int green = qGreen(currentPixel);
+            const int blue = qBlue(currentPixel);
+            const int monoValue = ( (red * 11 + green * 16 + blue * 5) / 32 ) / 127 * 255;
             pixel[row * width + col] = qRgb(monoValue, monoValue, monoValue);
         }
     }

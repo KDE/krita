@@ -42,12 +42,14 @@ private slots:
     void testMultiParaDeleteSaving();
     void testPartialListItemDeleteLoading();
     void testListItemDeleteLoading();
+    void testListDeleteLoading();
 
 private:
     void verifySimpleDelete(QTextDocument *document);
     void verifyMultiParaDelete(QTextDocument *document);
     void verifyPartialListItemDelete(QTextDocument *document);
     void verifyListItemDelete(QTextDocument *document);
+    void verifyListDelete(QTextDocument *document);
 
 private:
     QTextDocument *documentFromOdt(const QString &odt);

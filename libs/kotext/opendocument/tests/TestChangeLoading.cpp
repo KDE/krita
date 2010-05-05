@@ -360,7 +360,7 @@ void TestChangeLoading::verifyListItemDelete(QTextDocument *document)
         deleteCursor.setPosition(i);
         if (deleteCursor.currentList()) {
             listFound = true;
-            continue;
+            break;
         }
     }
 
@@ -375,6 +375,51 @@ void TestChangeLoading::verifyListItemDelete(QTextDocument *document)
     QVERIFY(deletedListItemStatus == true);
 }
 
+void TestChangeLoading::testListDeleteLoading()
+{
+    QString fileName = QString(FILES_DATA_DIR) + QString("TrackedChanges/ListDelete.odt");
+    QTextDocument *document = documentFromOdt(fileName);
+    verifyListDelete(document);
+}
+
+
+void TestChangeLoading::verifyListDelete(QTextDocument *document)
+{
+    QTextCursor cursor(document);
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+    QCOMPARE(document->characterAt(9).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
+    cursor.setPosition(10);
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(cursor));
+    QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
+
+    QTextDocument deleteDocument;
+    QTextCursor deleteCursor(&deleteDocument);
+
+    deleteCursor.insertFragment(deleteData);
+    bool listFound = false;
+
+    for (int i=0; i < deleteDocument.characterCount(); i++) {
+        deleteCursor.setPosition(i);
+        if (deleteCursor.currentList()) {
+            listFound = true;
+            break;
+        }
+    }
+
+    QVERIFY(listFound == true);
+    QTextList *deletedList = deleteCursor.currentList();
+    bool deletedListStatus = deletedList->format().boolProperty(KoDeleteChangeMarker::DeletedList);
+    QVERIFY (deletedListStatus == true);
+    bool deletedListItemStatus;
+    deletedListItemStatus  = deletedList->item(0).blockFormat().boolProperty(KoDeleteChangeMarker::DeletedListItem);
+    QVERIFY(deletedListItemStatus == true);
+    deletedListItemStatus  = deletedList->item(1).blockFormat().boolProperty(KoDeleteChangeMarker::DeletedListItem);
+    QVERIFY(deletedListItemStatus == true);
+    deletedListItemStatus  = deletedList->item(2).blockFormat().boolProperty(KoDeleteChangeMarker::DeletedListItem);
+    QVERIFY(deletedListItemStatus == true);
+    deletedListItemStatus  = deletedList->item(3).blockFormat().boolProperty(KoDeleteChangeMarker::DeletedListItem);
+    QVERIFY(deletedListItemStatus == true);
+}
 
 int main(int argc, char *argv[])
 {

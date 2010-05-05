@@ -269,5 +269,8 @@ PictureShape::PictureMode PictureShape::mode() const
 
 void PictureShape::setMode(PictureShape::PictureMode mode)
 {
-    m_mode = mode;
+    if( mode != m_mode ) {
+        m_mode = mode;
+        update();
+    }
 }

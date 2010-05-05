@@ -52,7 +52,7 @@ public:
 
     QMatrix localMatrix; ///< the shapes local transformation matrix
 
-    QVector<QPointF> connectors; // in pt
+    QVector<QPointF> connectors; ///< glue points in percent of size [0..1]
 
     KoShapeContainer *parent;
     QSet<KoShapeManager *> shapeManagers;
@@ -68,7 +68,7 @@ public:
     QMap<QByteArray, QString> additionalStyleAttributes;
     QSet<KoEventAction *> eventActions; ///< list of event actions the shape has
     KoFilterEffectStack *filterEffectStack; ///< stack of filter effects applied to the shape
-    qreal transparency; ///< the shapes tranparency
+    qreal transparency; ///< the shapes transparency
 
     static const int MaxZIndex = 32767;
     int zIndex : 16; // keep maxZIndex in sync!

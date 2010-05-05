@@ -36,8 +36,11 @@ public:
 private slots:
     void init();
     void cleanup();
-    void testLoading();
-    void testSaving();
+    void testSimpleDeleteLoading();
+    void testSimpleDeleteSaving();
+
+private:
+    void verifySimpleDelete(QTextDocument *document);
 
 private:
     QTextDocument *documentFromOdt(const QString &odt);

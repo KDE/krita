@@ -60,6 +60,8 @@
 
 #include <KoGenChanges.h>
 #include <KoChangeTracker.h>
+#include <KoDeleteChangeMarker.h>
+#include <KoChangeTrackerElement.h>
 #include <rdf/KoDocumentRdf.h>
 
 TestChangeLoading::TestChangeLoading()
@@ -192,8 +194,6 @@ QString TestChangeLoading::documentToOdt(QTextDocument *document)
         KoStyleManager *styleManager = new KoStyleManager;
         KoTextDocument(textShapeData->document()).setStyleManager(styleManager);
     }
-    KoChangeTracker* changeTracker = new KoChangeTracker;
-    KoTextDocument(textShapeData->document()).setChangeTracker(changeTracker);
 
     textShapeData->saveOdf(context, 0, -1, rdf);
     rdf->saveOasis(store, manifestWriter);
@@ -205,7 +205,7 @@ QString TestChangeLoading::documentToOdt(QTextDocument *document)
     contentWriter->startElement("office:body");
     contentWriter->startElement("office:text");
 
-//    changes.saveOdfChanges(contentWriter, false);
+    changes.saveOdfChanges(contentWriter);
 
     contentWriter->addCompleteElement(&contentTmpFile);
 
@@ -231,12 +231,31 @@ QString TestChangeLoading::documentToOdt(QTextDocument *document)
     return odt;
 }
 
-void TestChangeLoading::testLoading()
+void TestChangeLoading::testSimpleDeleteLoading()
 {
+    QString fileName = QString(FILES_DATA_DIR) + QString("TrackedChanges/SimpleDelete.odt");
+    QTextDocument *document = documentFromOdt(fileName);
+    verifySimpleDelete(document);
 }
 
-void TestChangeLoading::testSaving()
+void TestChangeLoading::testSimpleDeleteSaving()
 {
+    QString fileName = QString(FILES_DATA_DIR) + QString("TrackedChanges/SimpleDelete.odt");
+    QTextDocument *document = documentFromOdt(fileName);
+    QString savedFileName = documentToOdt(document);
+    QTextDocument *savedDocument = documentFromOdt(savedFileName);
+    verifySimpleDelete(savedDocument);
+}
+
+void TestChangeLoading::verifySimpleDelete(QTextDocument *document)
+{
+    QTextCursor cursor(document);
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+    QCOMPARE(document->characterAt(45).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
+    cursor.setPosition(46);
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(cursor));
+    QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
+    QCOMPARE(deleteData.toPlainText(), QString("This is a deleted text."));
 }
 
 int main(int argc, char *argv[])

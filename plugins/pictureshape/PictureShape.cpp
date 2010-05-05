@@ -36,6 +36,9 @@
 #include <QTimer>
 #include <QPixmapCache>
 #include <kdebug.h>
+#include <KoFilterEffectStack.h>
+#include "GreyscaleFilterEffect.h"
+#include "MonoFilterEffect.h"
 
 QString generate_key(qint64 key, const QSize & size)
 {
@@ -64,9 +67,11 @@ void RenderQueue::renderImage()
 PictureShape::PictureShape()
     : KoFrameShape(KoXmlNS::draw, "image"),
     m_imageCollection(0),
-    m_renderQueue(new RenderQueue(this))
+    m_renderQueue(new RenderQueue(this)),
+    m_mode(Standard)
 {
     setKeepAspectRatio(true);
+    setFilterEffectStack(new KoFilterEffectStack());
 }
 
 PictureShape::~PictureShape()
@@ -200,6 +205,7 @@ void PictureShape::saveOdf(KoShapeSavingContext &context) const
 
 bool PictureShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    loadOdfColorTransformations(element, context);
     loadOdfAttributes(element, context, OdfAllAttributes);
     return loadOdfFrame(element, context);
 }
@@ -236,29 +242,25 @@ KoImageCollection *PictureShape::imageCollection() const
 
 bool PictureShape::loadOdfColorTransformations(const KoXmlElement& element, KoShapeLoadingContext& context)
 {
-//     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-//     styleStack.save();
-//     context.odfLoadingContext().fillStyleStack(element, KoXmlNS::draw, "style-name", "graphic");
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    styleStack.save();
+    context.odfLoadingContext().fillStyleStack(element, KoXmlNS::draw, "style-name", "graphic");
 //     styleStack.setTypeProperties("graphic");
-// 
-//     //FIXME: are there other applicable properties?
-//     if( styleStack.hasProperty(KoXmlNS::draw, "color-mode") ) {
-//         QString colorMode = styleStack.property(KoXmlNS::draw, "color-mode");
-//         KoFilterEffect* colorModeEffect = 0;
-//         if( colorMode == "greyscale" ) {
-//             ColorMatrixEffect* colorMatrixEfect = new ColorMatrixEffect();
-//             colorMatrixEfect->setSaturate(0);
-//             colorModeEffect = colorMatrixEfect;
-//         }
-//         else if( colorMode == "mono" )
-//             ;
+
+    //FIXME: are there other applicable properties?
+    if( styleStack.hasProperty(KoXmlNS::draw, "color-mode") ) {
+        QString colorMode = styleStack.property(KoXmlNS::draw, "color-mode");
+        if( colorMode == "greyscale" ) {
+            setMode(Greyscale);
+        }
+        else if( colorMode == "mono" ) {
+            setMode(Mono);
+        }
 //         else if( colorMode == "watermark" )
 //             ;
-//         if( colorModeEffect );
-//             filterEffectStack()->appendFilterEffect(colorModeEffect);
-//     }
-//
-//     styleStack.restore();
+    }
+
+    styleStack.restore();
     return true;
 }
 
@@ -271,6 +273,20 @@ void PictureShape::setMode(PictureShape::PictureMode mode)
 {
     if( mode != m_mode ) {
         m_mode = mode;
+        KoFilterEffect* filterMode = filterEffectStack()->takeFilterEffect(0);
+        delete filterMode;
+        switch( mode ) {
+            case Greyscale:
+                filterMode = new GreyscaleFilterEffect();
+                break;
+            case Mono:
+                filterMode = new MonoFilterEffect();
+                break;
+            default:
+                break;
+        }
+        if( filterMode )
+            filterEffectStack()->appendFilterEffect(filterMode);
         update();
     }
 }

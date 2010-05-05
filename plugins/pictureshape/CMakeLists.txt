@@ -10,6 +10,8 @@ SET (pictureshape_LIB_SRCS
     Plugin.cpp
     PictureShapeConfigWidget.cpp
     ChangeImageCommand.cpp
+    GreyscaleFilterEffect.cpp
+    MonoFilterEffect.cpp
 )
 
 kde4_add_plugin(pictureshape ${pictureshape_LIB_SRCS})

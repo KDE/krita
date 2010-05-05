@@ -121,7 +121,7 @@ KoPageFormat::Format KoPageFormat::guessFormat(qreal width, qreal height)
         // We have some tolerance. 1pt is a third of a mm, this is
         // barely noticeable for a page size.
         if (qAbs(width - pageFormatInfo[i].width) < 1.0 && qAbs(height - pageFormatInfo[i].height) < 1.0)
-            return static_cast<Format>(i);
+            return pageFormatInfo[i].format;
     }
     return CustomSize;
 }

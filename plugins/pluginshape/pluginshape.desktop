@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Plugin Shape
+Name[x-test]=xxPlugin Shapexx
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=pluginshape

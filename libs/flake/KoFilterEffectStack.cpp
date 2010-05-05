@@ -23,6 +23,7 @@
 
 #include <QtCore/QAtomicInt>
 #include <QtCore/QSet>
+#include <QDebug>
 
 class KoFilterEffectStack::Private
 {
@@ -76,12 +77,14 @@ void KoFilterEffectStack::appendFilterEffect(KoFilterEffect *filter)
 
 void KoFilterEffectStack::removeFilterEffect(int index)
 {
-    KoFilterEffect * filter = d->filterEffects.takeAt(index);
+    KoFilterEffect * filter = takeFilterEffect(index);
     delete filter;
 }
 
 KoFilterEffect* KoFilterEffectStack::takeFilterEffect(int index)
 {
+    if( index >= d->filterEffects.size() )
+        return 0;
     return d->filterEffects.takeAt(index);
 }
 

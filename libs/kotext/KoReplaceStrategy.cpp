@@ -36,6 +36,8 @@ KoReplaceStrategy::KoReplaceStrategy(QWidget * parent)
 
 KoReplaceStrategy::~KoReplaceStrategy()
 {
+    if(m_dialog->parent()==0)
+        delete m_dialog;
 }
 
 KFindDialog * KoReplaceStrategy::dialog()

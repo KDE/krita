@@ -51,8 +51,8 @@ QImage MonoFilterEffect::processImage(const QImage& image, const KoFilterEffectR
             int red = qRed(currentPixel);
             int green = qGreen(currentPixel);
             int blue = qBlue(currentPixel);
-            int grayValue = ( (red * 11 + green * 16 + blue * 5) / 32 ) / 127 * 255;
-            pixel[row * width + col] = qRgb(grayValue, grayValue, grayValue);
+            int monoValue = ( (red * 11 + green * 16 + blue * 5) / 32 ) / 127 * 255;
+            pixel[row * width + col] = qRgb(monoValue, monoValue, monoValue);
         }
     }
     return result;

@@ -22,6 +22,7 @@
 #include <QGraphicsScene>
 #include <KLocalizedString>
 
+class KoReportPluginInfo;
 class KoReportPluginInterface : public QObject
 {
     Q_OBJECT
@@ -32,9 +33,12 @@ class KoReportPluginInterface : public QObject
         virtual QObject* createDesignerInstance(KoReportDesigner *, QGraphicsScene * scene, const QPointF &pos) = 0;
         virtual QObject* createDesignerInstance(QDomNode & element, KoReportDesigner *, QGraphicsScene * scene) = 0;
         virtual QObject* createRendererInstance(QDomNode & element) = 0;
-        virtual QString entityName() = 0;
-        virtual QString iconName() = 0;
-        virtual QString userName() = 0;
+
+        void setInfo(KoReportPluginInfo *);
+        KoReportPluginInfo* info();
+
+    private:
+        KoReportPluginInfo *m_pluginInfo;
         
 };
 

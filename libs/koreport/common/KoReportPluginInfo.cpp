@@ -14,21 +14,45 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOREPORTIMAGEPLUGIN_H
-#define KOREPORTIMAGEPLUGIN_H
+#include "KoReportPluginInfo.h"
 
-#include <KoReportPluginInterface.h>
-
-
-class KoReportImagePlugin : public KoReportPluginInterface
+KoReportPluginInfo::KoReportPluginInfo()
 {
-    public:
-    KoReportImagePlugin();
-    virtual ~KoReportImagePlugin();
 
-    virtual QObject* createRendererInstance(QDomNode& element);
-    virtual QObject* createDesignerInstance(QDomNode& element, KoReportDesigner* , QGraphicsScene* scene);
-    virtual QObject* createDesignerInstance(KoReportDesigner* , QGraphicsScene* scene, const QPointF& pos);
-};
+}
 
-#endif // KOREPORTIMAGEPLUGIN_H
+KoReportPluginInfo::~KoReportPluginInfo()
+{
+
+}
+
+void KoReportPluginInfo::setEntityName(const QString& e)
+{
+    m_entityName = e;
+}
+
+void KoReportPluginInfo::setIconName(const QString& i)
+{
+    m_iconName = i;
+}
+
+void KoReportPluginInfo::setUserName(const QString& u)
+{
+    m_userName = u;
+}
+
+QString KoReportPluginInfo::entityName()
+{
+    return m_entityName;
+}
+
+QString KoReportPluginInfo::iconName()
+{
+    return m_iconName;
+}
+
+QString KoReportPluginInfo::userName()
+{
+    return m_userName;
+}
+

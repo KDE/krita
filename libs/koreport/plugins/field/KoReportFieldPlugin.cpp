@@ -17,20 +17,21 @@
 #include "KoReportFieldPlugin.h"
 #include "KoReportItemField.h"
 #include "KoReportDesignerItemField.h"
+#include "KoReportPluginInfo.h"
 
-QString KoReportFieldPlugin::userName()
+KoReportFieldPlugin::KoReportFieldPlugin()
 {
-    return i18n("Field");
+    KoReportPluginInfo *info = new KoReportPluginInfo();
+    info->setEntityName("report:field");
+    info->setIconName("edit-rename");
+    info->setUserName(i18n("Field"));
+
+    setInfo(info);
 }
 
-QString KoReportFieldPlugin::iconName()
+KoReportFieldPlugin::~KoReportFieldPlugin()
 {
-    return "edit-rename";
-}
 
-QString KoReportFieldPlugin::entityName()
-{
-    return "report:field";
 }
 
 QObject* KoReportFieldPlugin::createRendererInstance(QDomNode& element)

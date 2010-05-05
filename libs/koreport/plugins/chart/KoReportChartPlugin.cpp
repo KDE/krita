@@ -17,20 +17,21 @@
 #include "KoReportChartPlugin.h"
 #include "KoReportItemChart.h"
 #include "KoReportDesignerItemChart.h"
+#include "KoReportPluginInfo.h"
 
-QString KoReportChartPlugin::userName()
+KoReportChartPlugin::KoReportChartPlugin()
 {
-    return i18n("Chart");
+    KoReportPluginInfo *info = new KoReportPluginInfo();
+    info->setEntityName("report:chart");
+    info->setIconName("office-chart-area");
+    info->setUserName(i18n("Chart"));
+
+    setInfo(info);
 }
 
-QString KoReportChartPlugin::iconName()
+KoReportChartPlugin::~KoReportChartPlugin()
 {
-    return "office-chart-area";
-}
 
-QString KoReportChartPlugin::entityName()
-{
-    return "report:chart";
 }
 
 QObject* KoReportChartPlugin::createRendererInstance(QDomNode& element)

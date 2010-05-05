@@ -17,20 +17,21 @@
 #include "KoReportShapePlugin.h"
 #include "KoReportItemShape.h"
 #include "KoReportDesignerItemShape.h"
+#include "KoReportPluginInfo.h"
 
-QString KoReportShapePlugin::userName()
+KoReportShapePlugin::KoReportShapePlugin()
 {
-    return i18n("Shape");
+    KoReportPluginInfo *info = new KoReportPluginInfo();
+    info->setEntityName("report:shape");
+    info->setIconName("shapes");
+    info->setUserName(i18n("Shape"));
+
+    setInfo(info);
 }
 
-QString KoReportShapePlugin::iconName()
+KoReportShapePlugin::~KoReportShapePlugin()
 {
-    return "shapes"; //TODO new icon
-}
 
-QString KoReportShapePlugin::entityName()
-{
-    return "report:shape";
 }
 
 QObject* KoReportShapePlugin::createRendererInstance(QDomNode& element)

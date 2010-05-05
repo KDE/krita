@@ -18,6 +18,7 @@
 
 #include <kicon.h>
 #include <QAction>
+#include "KoReportPluginInfo.h"
 
 //!Temp load all plugins here until the loader is created
 #include "../plugins/barcode/KoReportBarcodePlugin.h"
@@ -63,9 +64,12 @@ QList<QAction*> KoReportPluginManager::actions()
     const QMap<QString, KoReportPluginInterface*> plugins = d->m_plugins;
 
     foreach(KoReportPluginInterface* plugin, plugins) {
-        act = new QAction(KIcon(plugin->iconName()), plugin->userName(), 0);
-        act->setObjectName(plugin->entityName());
-        actList << act;
+        KoReportPluginInfo *info = plugin->info();
+        if (info) {
+            act = new QAction(KIcon(info->iconName()), info->userName(), 0);
+            act->setObjectName(info->entityName());
+            actList << act;
+        }
     }
 
     return actList;
@@ -79,14 +83,32 @@ KoReportPluginManager::Private::Private()
 {
     //!Temp - Add Plugins Here
 
-    m_plugins.insert("report:barcode", new KoReportBarcodePlugin());
-    m_plugins.insert("report:chart", new KoReportChartPlugin());
-    m_plugins.insert("report:check", new KoReportCheckPlugin());
-    m_plugins.insert("report:field", new KoReportFieldPlugin());
-    m_plugins.insert("report:image", new KoReportImagePlugin());
-    m_plugins.insert("report:label", new KoReportLabelPlugin());
-    m_plugins.insert("report:shape", new KoReportShapePlugin());
-    m_plugins.insert("report:text", new KoReportTextPlugin());
+    KoReportPluginInfo *info = 0;
+    KoReportPluginInterface *plugin = 0;
+
+    plugin = new KoReportBarcodePlugin;
+    m_plugins.insert(plugin->info()->entityName(), plugin);
+
+    plugin = new KoReportChartPlugin();
+    m_plugins.insert(plugin->info()->entityName(), plugin);
+
+    plugin = new KoReportCheckPlugin();
+    m_plugins.insert(plugin->info()->entityName(), plugin);
+
+    plugin = new KoReportFieldPlugin();
+    m_plugins.insert(plugin->info()->entityName(), plugin);
+
+    plugin = new KoReportImagePlugin();
+    m_plugins.insert(plugin->info()->entityName(), plugin);
+
+    plugin = new KoReportLabelPlugin();
+    m_plugins.insert(plugin->info()->entityName(), plugin);
+
+    plugin = new KoReportShapePlugin();
+    m_plugins.insert(plugin->info()->entityName(), plugin);
+
+    plugin = new KoReportTextPlugin();
+    m_plugins.insert(plugin->info()->entityName(), plugin);
 
     //!End Add Plugins
 }

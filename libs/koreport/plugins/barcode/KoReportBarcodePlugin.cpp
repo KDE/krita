@@ -17,20 +17,21 @@
 #include "KoReportBarcodePlugin.h"
 #include "KoReportItemBarcode.h"
 #include "KoReportDesignerItemBarcode.h"
+#include "KoReportPluginInfo.h"
 
-QString KoReportBarcodePlugin::userName()
+KoReportBarcodePlugin::KoReportBarcodePlugin()
 {
-    return i18n("Barcode");
+    KoReportPluginInfo *info = new KoReportPluginInfo();
+    info->setEntityName("report:barcode");
+    info->setIconName("view-barcode");
+    info->setUserName(i18n("Barcode"));
+
+    setInfo(info);
 }
 
-QString KoReportBarcodePlugin::iconName()
+KoReportBarcodePlugin::~KoReportBarcodePlugin()
 {
-    return "view-barcode";
-}
 
-QString KoReportBarcodePlugin::entityName()
-{
-    return "report:barcode";
 }
 
 QObject* KoReportBarcodePlugin::createRendererInstance(QDomNode& element)

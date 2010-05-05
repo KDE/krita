@@ -17,20 +17,21 @@
 #include "KoReportCheckPlugin.h"
 #include "KoReportItemCheck.h"
 #include "KoReportDesignerItemCheck.h"
+#include "KoReportPluginInfo.h"
 
-QString KoReportCheckPlugin::userName()
+KoReportCheckPlugin::KoReportCheckPlugin()
 {
-    return i18n("Check");
+    KoReportPluginInfo *info = new KoReportPluginInfo();
+    info->setEntityName("report:check");
+    info->setIconName("checkbox");
+    info->setUserName(i18n("Check"));
+
+    setInfo(info);
 }
 
-QString KoReportCheckPlugin::iconName()
+KoReportCheckPlugin::~KoReportCheckPlugin()
 {
-    return "checkbox";
-}
 
-QString KoReportCheckPlugin::entityName()
-{
-    return "report:check";
 }
 
 QObject* KoReportCheckPlugin::createRendererInstance(QDomNode& element)

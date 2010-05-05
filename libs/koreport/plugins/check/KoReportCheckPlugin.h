@@ -22,12 +22,13 @@
 
 class KoReportCheckPlugin : public KoReportPluginInterface
 {
-    virtual QString userName();
-    virtual QString iconName();
-    virtual QString entityName();
-    virtual QObject* createRendererInstance(QDomNode& element);
-    virtual QObject* createDesignerInstance(QDomNode& element, KoReportDesigner* , QGraphicsScene* scene);
-    virtual QObject* createDesignerInstance(KoReportDesigner* , QGraphicsScene* scene, const QPointF& pos);
+    public:
+        KoReportCheckPlugin();
+        virtual ~KoReportCheckPlugin();
+
+        virtual QObject* createRendererInstance(QDomNode& element);
+        virtual QObject* createDesignerInstance(QDomNode& element, KoReportDesigner* , QGraphicsScene* scene);
+        virtual QObject* createDesignerInstance(KoReportDesigner* , QGraphicsScene* scene, const QPointF& pos);
 };
 
 #endif // KOREPORTCHECKPLUGIN_H

@@ -18,12 +18,25 @@
 
 KoReportPluginInterface::KoReportPluginInterface()
 {
-
+    m_pluginInfo = 0;
 }
 
 KoReportPluginInterface::~KoReportPluginInterface()
 {
-
+    if (m_pluginInfo) {
+        delete m_pluginInfo;
+    }
 }
+
+void KoReportPluginInterface::setInfo(KoReportPluginInfo* p)
+{
+    m_pluginInfo = p;
+}
+
+KoReportPluginInfo* KoReportPluginInterface::info()
+{
+    return m_pluginInfo;
+}
+
 
 #include "moc_KoReportPluginInterface.cpp"

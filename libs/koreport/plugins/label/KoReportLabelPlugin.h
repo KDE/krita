@@ -23,12 +23,9 @@
 class KoReportLabelPlugin : public KoReportPluginInterface
 {
     public:
-    KoReportLabelPlugin(){};
-    virtual ~KoReportLabelPlugin(){};
+    KoReportLabelPlugin();
+    virtual ~KoReportLabelPlugin();
 
-    virtual QString entityName();
-    virtual QString iconName();
-    virtual QString userName();
     virtual QObject* createRendererInstance(QDomNode&);
     virtual QObject* createDesignerInstance(KoReportDesigner* , QGraphicsScene* scene, const QPointF&);
     virtual QObject* createDesignerInstance(QDomNode & element, KoReportDesigner *, QGraphicsScene * scene);

@@ -17,20 +17,21 @@
 #include "KoReportImagePlugin.h"
 #include "KoReportItemImage.h"
 #include "KoReportDesignerItemImage.h"
+#include "KoReportPluginInfo.h"
 
-QString KoReportImagePlugin::userName()
+KoReportImagePlugin::KoReportImagePlugin()
 {
-    return i18n("Image");
+    KoReportPluginInfo *info = new KoReportPluginInfo();
+    info->setEntityName("report:image");
+    info->setIconName("insert-image");
+    info->setUserName(i18n("Image"));
+
+    setInfo(info);
 }
 
-QString KoReportImagePlugin::iconName()
+KoReportImagePlugin::~KoReportImagePlugin()
 {
-    return "insert-image";
-}
 
-QString KoReportImagePlugin::entityName()
-{
-    return "report:image";
 }
 
 QObject* KoReportImagePlugin::createRendererInstance(QDomNode& element)

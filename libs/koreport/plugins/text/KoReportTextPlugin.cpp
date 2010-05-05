@@ -17,20 +17,21 @@
 #include "KoReportTextPlugin.h"
 #include "KoReportItemText.h"
 #include "KoReportDesignerItemText.h"
+#include "KoReportPluginInfo.h"
 
-QString KoReportTextPlugin::userName()
+KoReportTextPlugin::KoReportTextPlugin()
 {
-        return i18n("Text");
+    KoReportPluginInfo *info = new KoReportPluginInfo();
+    info->setEntityName("report:text");
+    info->setIconName("insert-text");
+    info->setUserName(i18n("Text"));
+
+    setInfo(info);
 }
 
-QString KoReportTextPlugin::iconName()
+KoReportTextPlugin::~KoReportTextPlugin()
 {
-    return "insert-text";
-}
 
-QString KoReportTextPlugin::entityName()
-{   
-    return "report:text";
 }
 
 QObject* KoReportTextPlugin::createRendererInstance(QDomNode& element)

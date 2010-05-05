@@ -17,21 +17,22 @@
 #include "KoReportLabelPlugin.h"
 #include "KoReportItemLabel.h"
 #include "KoReportDesignerItemLabel.h"
-#include <KoReportDesigner.h>
+#include "KoReportDesigner.h"
+#include "KoReportPluginInfo.h"
 
-QString KoReportLabelPlugin::entityName()
+KoReportLabelPlugin::KoReportLabelPlugin()
 {
-    return "report:label";
+    KoReportPluginInfo *info = new KoReportPluginInfo();
+    info->setEntityName("report:label");
+    info->setIconName("label");
+    info->setUserName(i18n("Label"));
+
+    setInfo(info);
 }
 
-QString KoReportLabelPlugin::iconName()
+KoReportLabelPlugin::~KoReportLabelPlugin()
 {
-    return "label";
-}
 
-QString KoReportLabelPlugin::userName()
-{
-    return i18n("Label");
 }
 
 QObject* KoReportLabelPlugin::createRendererInstance(QDomNode &elem)

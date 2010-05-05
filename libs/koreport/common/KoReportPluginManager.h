@@ -39,6 +39,7 @@ class KoReportPluginManager : public QObject
                 QMap<QString, KoReportPluginInterface*> m_plugins;
         };
 
+        
         Private *d;
 
         KoReportPluginManager();

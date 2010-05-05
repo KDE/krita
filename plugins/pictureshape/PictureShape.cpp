@@ -39,6 +39,7 @@
 #include <KoFilterEffectStack.h>
 #include "GreyscaleFilterEffect.h"
 #include "MonoFilterEffect.h"
+#include "WatermarkFilterEffect.h"
 
 QString generate_key(qint64 key, const QSize & size)
 {
@@ -245,7 +246,7 @@ bool PictureShape::loadOdfColorTransformations(const KoXmlElement& element, KoSh
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
     context.odfLoadingContext().fillStyleStack(element, KoXmlNS::draw, "style-name", "graphic");
-//     styleStack.setTypeProperties("graphic");
+    styleStack.setTypeProperties("graphic");
 
     //FIXME: are there other applicable properties?
     if( styleStack.hasProperty(KoXmlNS::draw, "color-mode") ) {
@@ -256,8 +257,9 @@ bool PictureShape::loadOdfColorTransformations(const KoXmlElement& element, KoSh
         else if( colorMode == "mono" ) {
             setMode(Mono);
         }
-//         else if( colorMode == "watermark" )
-//             ;
+        else if( colorMode == "watermark" ) {
+            setMode(Watermark);
+        }
     }
 
     styleStack.restore();
@@ -283,6 +285,7 @@ void PictureShape::setMode(PictureShape::PictureMode mode)
                 filterMode = new MonoFilterEffect();
                 break;
             default:
+                filterMode = new WatermarkFilterEffect();
                 break;
         }
         if( filterMode )

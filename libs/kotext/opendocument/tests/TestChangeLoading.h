@@ -43,6 +43,8 @@ private slots:
     void testPartialListItemDeleteLoading();
     void testListItemDeleteLoading();
     void testListDeleteLoading();
+    void testTableDeleteLoading();
+    void testTableDeleteSaving();
 
 private:
     void verifySimpleDelete(QTextDocument *document);
@@ -50,6 +52,7 @@ private:
     void verifyPartialListItemDelete(QTextDocument *document);
     void verifyListItemDelete(QTextDocument *document);
     void verifyListDelete(QTextDocument *document);
+    void verifyTableDelete(QTextDocument *document);
 
 private:
     QTextDocument *documentFromOdt(const QString &odt);

@@ -421,6 +421,49 @@ void TestChangeLoading::verifyListDelete(QTextDocument *document)
     QVERIFY(deletedListItemStatus == true);
 }
 
+void TestChangeLoading::testTableDeleteLoading()
+{
+    QString fileName = QString(FILES_DATA_DIR) + QString("TrackedChanges/TableDelete.odt");
+    QTextDocument *document = documentFromOdt(fileName);
+    verifyTableDelete(document);
+}
+
+void TestChangeLoading::testTableDeleteSaving()
+{
+    QString fileName = QString(FILES_DATA_DIR) + QString("TrackedChanges/TableDelete.odt");
+    QTextDocument *document = documentFromOdt(fileName);
+    QString savedFileName = documentToOdt(document);
+    QTextDocument *savedDocument = documentFromOdt(savedFileName);
+    verifyTableDelete(savedDocument);
+}
+
+void TestChangeLoading::verifyTableDelete(QTextDocument *document)
+{
+    QTextCursor cursor(document);
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+    QCOMPARE(document->characterAt(23).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
+    cursor.setPosition(24);
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(cursor));
+    QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
+        QTextDocument deleteDocument;
+    QTextCursor deleteCursor(&deleteDocument);
+
+    deleteCursor.insertFragment(deleteData);
+    bool tableFound = false;
+
+    for (int i=0; i < deleteDocument.characterCount(); i++) {
+        deleteCursor.setPosition(i);
+        if (deleteCursor.currentTable()) {
+            tableFound = true;
+            break;
+        }
+    }
+    QVERIFY(tableFound == true);
+    QTextTable *table = deleteCursor.currentTable();
+    QVERIFY(table->rows() == 3);
+    QVERIFY(table->columns() == 3);
+}
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);

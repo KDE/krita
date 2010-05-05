@@ -53,21 +53,11 @@ KisFilterJob::KisFilterJob(const KisFilter* filter,
 
 void KisFilterJob::run()
 {
-    KisPaintDeviceSP dst = new KisPaintDevice(m_dev->colorSpace());
-    QRect marginRect = m_filter->neededRect(m_rc, m_config);
-
-    m_filter->process(KisConstProcessingInformation(m_dev, marginRect.topLeft(), m_selection),
-                      KisProcessingInformation(dst, marginRect.topLeft(), m_selection),
-                      marginRect.size(),
+    m_filter->process(KisConstProcessingInformation(m_dev, m_rc.topLeft(), m_selection),
+                      KisProcessingInformation(m_dev, m_rc.topLeft(), m_selection),
+                      m_rc.size(),
                       m_config,
                       m_updater);
-
-    // blt back onto the original
-    KisPainter p2(m_dev);
-    p2.setCompositeOp(m_dev->colorSpace()->compositeOp(COMPOSITE_COPY));
-    p2.setSelection(m_selection);
-    p2.bitBlt(m_rc.topLeft(), dst, m_rc);
-    p2.end();
 
     m_updater->setProgress(100);
     m_interrupted = m_updater->interrupted();

@@ -32,6 +32,13 @@ class RenderQueue;
 class PictureShape : public KoShape, public KoFrameShape
 {
 public:
+    enum PictureMode {
+        Standard,
+        Greyscale,
+        Mono,
+        Watermark
+    };
+
     PictureShape();
     virtual ~PictureShape();
 
@@ -51,13 +58,18 @@ public:
 
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
 
+    void setMode( PictureMode mode );
+    PictureMode mode() const;
+
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
+
     KoImageCollection *m_imageCollection;
     RenderQueue *m_renderQueue;
     mutable QImage m_printQualityImage;
+    PictureMode m_mode;
 };
 
 class RenderQueue : public QObject

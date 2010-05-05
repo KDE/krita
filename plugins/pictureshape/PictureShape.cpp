@@ -233,3 +233,13 @@ KoImageCollection *PictureShape::imageCollection() const
 {
     return m_imageCollection;
 }
+
+PictureShape::PictureMode PictureShape::mode() const
+{
+    return m_mode;
+}
+
+void PictureShape::setMode(PictureShape::PictureMode mode)
+{
+    m_mode = mode;
+}

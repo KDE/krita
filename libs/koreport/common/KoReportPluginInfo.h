@@ -25,17 +25,20 @@ class KoReportPluginInfo
         KoReportPluginInfo();
         ~KoReportPluginInfo();
 
-        QString entityName();
-        QString iconName();
-        QString userName();
-
+        QString entityName() const;
+        QString iconName() const;
+        QString userName() const;
+        int priority() const;
+        
         void setEntityName(const QString&);
         void setIconName(const QString&);
         void setUserName(const QString&);
+        void setPriority(int);
     private:
         QString m_entityName;
         QString m_iconName;
         QString m_userName;
+        int m_priority;
     
 };
 

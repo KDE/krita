@@ -335,6 +335,8 @@ private:
 
     KoReportPluginManager *m_pluginManager;
 
+    static bool actionPriortyLessThan(QAction* act1, QAction* act2);
+
 private slots:
     void slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p);
 

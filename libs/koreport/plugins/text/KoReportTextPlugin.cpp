@@ -25,7 +25,7 @@ KoReportTextPlugin::KoReportTextPlugin()
     info->setEntityName("report:text");
     info->setIconName("insert-text");
     info->setUserName(i18n("Text"));
-
+    info->setPriority(3);
     setInfo(info);
 }
 

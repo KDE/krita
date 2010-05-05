@@ -25,7 +25,7 @@ KoReportFieldPlugin::KoReportFieldPlugin()
     info->setEntityName("report:field");
     info->setIconName("edit-rename");
     info->setUserName(i18n("Field"));
-
+    info->setPriority(2);
     setInfo(info);
 }
 

@@ -25,7 +25,7 @@ KoReportChartPlugin::KoReportChartPlugin()
     info->setEntityName("report:chart");
     info->setIconName("office-chart-area");
     info->setUserName(i18n("Chart"));
-
+    info->setPriority(10);
     setInfo(info);
 }
 

@@ -68,10 +68,13 @@ QList<QAction*> KoReportPluginManager::actions()
         if (info) {
             act = new QAction(KIcon(info->iconName()), info->userName(), 0);
             act->setObjectName(info->entityName());
+
+            //Store the order priority in the user data field
+            act->setData(info->priority());
             actList << act;
         }
     }
-
+    
     return actList;
 
 }

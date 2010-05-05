@@ -18,7 +18,8 @@
 
 KoReportPluginInfo::KoReportPluginInfo()
 {
-
+    //default priority is low
+    m_priority = 100;
 }
 
 KoReportPluginInfo::~KoReportPluginInfo()
@@ -41,18 +42,27 @@ void KoReportPluginInfo::setUserName(const QString& u)
     m_userName = u;
 }
 
-QString KoReportPluginInfo::entityName()
+void KoReportPluginInfo::setPriority(int p)
+{
+    m_priority = p;
+}
+
+QString KoReportPluginInfo::entityName() const
 {
     return m_entityName;
 }
 
-QString KoReportPluginInfo::iconName()
+QString KoReportPluginInfo::iconName() const
 {
     return m_iconName;
 }
 
-QString KoReportPluginInfo::userName()
+QString KoReportPluginInfo::userName() const
 {
     return m_userName;
 }
 
+int KoReportPluginInfo::priority() const
+{
+    return m_priority;
+}

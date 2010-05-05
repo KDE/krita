@@ -1178,8 +1178,19 @@ QList<QAction*> KoReportDesigner::actions()
     
     act = new QAction(KIcon("line"), i18n("Line"), 0);
     act->setObjectName("report:line");
+    act->setData(9);
     actList << act;
-    
+
+    qSort(actList.begin(), actList.end(), actionPriortyLessThan);
     return actList;
+}
+
+bool KoReportDesigner::actionPriortyLessThan(QAction* act1, QAction* act2)
+{
+    if (act1->data().toInt() > 0 && act1->data().toInt() > 0) {
+        return act1->data().toInt() < act2->data().toInt();
+    }
+
+    return false;
 }
 

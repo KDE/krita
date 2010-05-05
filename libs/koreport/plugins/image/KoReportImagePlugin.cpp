@@ -25,7 +25,7 @@ KoReportImagePlugin::KoReportImagePlugin()
     info->setEntityName("report:image");
     info->setIconName("insert-image");
     info->setUserName(i18n("Image"));
-
+    info->setPriority(4);
     setInfo(info);
 }
 

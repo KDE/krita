@@ -25,7 +25,7 @@ KoReportCheckPlugin::KoReportCheckPlugin()
     info->setEntityName("report:check");
     info->setIconName("checkbox");
     info->setUserName(i18n("Check"));
-
+    info->setPriority(5);
     setInfo(info);
 }
 

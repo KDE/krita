@@ -25,7 +25,7 @@ KoReportBarcodePlugin::KoReportBarcodePlugin()
     info->setEntityName("report:barcode");
     info->setIconName("view-barcode");
     info->setUserName(i18n("Barcode"));
-
+    info->setPriority(50);
     setInfo(info);
 }
 

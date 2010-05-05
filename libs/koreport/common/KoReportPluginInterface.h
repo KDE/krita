@@ -35,7 +35,7 @@ class KoReportPluginInterface : public QObject
         virtual QObject* createRendererInstance(QDomNode & element) = 0;
 
         void setInfo(KoReportPluginInfo *);
-        KoReportPluginInfo* info();
+        KoReportPluginInfo* info() const;
 
     private:
         KoReportPluginInfo *m_pluginInfo;

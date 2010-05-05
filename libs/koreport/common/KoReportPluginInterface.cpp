@@ -15,6 +15,7 @@
 */
 
 #include "KoReportPluginInterface.h"
+#include "KoReportPluginInfo.h"
 
 KoReportPluginInterface::KoReportPluginInterface()
 {
@@ -33,7 +34,7 @@ void KoReportPluginInterface::setInfo(KoReportPluginInfo* p)
     m_pluginInfo = p;
 }
 
-KoReportPluginInfo* KoReportPluginInterface::info()
+KoReportPluginInfo* KoReportPluginInterface::info() const
 {
     return m_pluginInfo;
 }

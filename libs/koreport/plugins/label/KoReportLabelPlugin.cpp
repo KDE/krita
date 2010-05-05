@@ -26,6 +26,7 @@ KoReportLabelPlugin::KoReportLabelPlugin()
     info->setEntityName("report:label");
     info->setIconName("label");
     info->setUserName(i18n("Label"));
+    info->setPriority(1);
 
     setInfo(info);
 }

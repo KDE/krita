@@ -1,0 +1,28 @@
+include_directories( ${KOMAIN_INCLUDES}
+${KOODF_INCLUDES}
+${CMAKE_SOURCE_DIR}/libs/
+${CMAKE_SOURCE_DIR}/libs/koreport
+${CMAKE_SOURCE_DIR}/libs/koreport/common
+${CMAKE_SOURCE_DIR}/libs/koreport/renderer
+${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
+${CMAKE_SOURCE_DIR}/kchart/kdchart/include
+)
+
+#build a shared library
+set(koreport_chartplugin_LIB_SRCS
+    KoReportItemChart.cpp
+    KoReportDesignerItemChart.cpp
+    krscriptchart.cpp
+    KoReportChartPlugin.cpp
+)
+
+kde4_add_plugin(koreport_chartplugin ${koreport_chartplugin_LIB_SRCS})
+
+target_link_libraries(koreport_chartplugin ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} koreport kdchart ${KOPROPERTY_LIBS})
+
+install(TARGETS koreport_chartplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
+
+
+########### install files ###############
+
+install( FILES  koreport_chartplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

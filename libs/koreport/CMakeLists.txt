@@ -8,8 +8,6 @@ ${CMAKE_SOURCE_DIR}/libs/koreport
 ${CMAKE_SOURCE_DIR}/libs/koreport/common
 ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
 ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
-${CMAKE_SOURCE_DIR}/kchart/kdchart/include
-
 )
 
 #build a shared library
@@ -76,11 +74,6 @@ set(koreport_LIB_SRCS
     plugins/barcode/code128paint.cpp
     plugins/barcode/KoReportBarcodePlugin.cpp
 
-    plugins/chart/KoReportItemChart.cpp
-    plugins/chart/KoReportDesignerItemChart.cpp
-    plugins/chart/krscriptchart.cpp
-    plugins/chart/KoReportChartPlugin.cpp
-
     plugins/check/KoReportItemCheck.cpp
     plugins/check/KoReportDesignerItemCheck.cpp
 #    plugins/check/krscriptcheck.cpp
@@ -116,7 +109,7 @@ kde4_add_ui_files(koreport_LIB_SRCS wrtembed/detailgroupsectiondialog.ui wrtembe
 kde4_add_library(koreport SHARED ${koreport_LIB_SRCS})
 
 target_link_libraries(koreport ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY}
-  ${KOPROPERTY_LIBS} kdchart ${KDE4_KROSSCORE_LIBS} komain ${QT_QT3SUPPORT_LIBRARY})
+  ${KOPROPERTY_LIBS} ${KDE4_KROSSCORE_LIBS} komain ${QT_QT3SUPPORT_LIBRARY})
 if (SHOULD_BUILD_KSPREAD)
     target_link_libraries(koreport kspreadcommon)
 endif (SHOULD_BUILD_KSPREAD)

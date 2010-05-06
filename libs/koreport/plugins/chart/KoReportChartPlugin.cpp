@@ -23,7 +23,9 @@
 #include "KoReportDesignerItemChart.h"
 #include "KoReportPluginInfo.h"
 
-KoReportChartPlugin::KoReportChartPlugin()
+K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportChartPlugin, chartplugin)
+
+KoReportChartPlugin::KoReportChartPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setEntityName("report:chart");

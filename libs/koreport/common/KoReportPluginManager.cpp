@@ -97,9 +97,6 @@ KoReportPluginManagerPrivate::KoReportPluginManagerPrivate()
     plugin = new KoReportBarcodePlugin;
     m_plugins.insert(plugin->info()->entityName(), plugin);
 
-    plugin = new KoReportChartPlugin();
-    m_plugins.insert(plugin->info()->entityName(), plugin);
-
     plugin = new KoReportCheckPlugin();
     m_plugins.insert(plugin->info()->entityName(), plugin);
 

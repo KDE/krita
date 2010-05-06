@@ -14,21 +14,23 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOREPORTLABELPLUGIN_H
-#define KOREPORTLABELPLUGIN_H
+#ifndef KOREPORTPLUGINMANAGERP_H
+#define KOREPORTPLUGINMANAGERP_H
 
-#include <KoReportPluginInterface.h>
+#include <QObject>
+#include <QMap>
 
-class KoReportLabelPlugin : public KoReportPluginInterface
-{
+class KoReportPluginInterface;
+
+class KoReportPluginManagerPrivate : public QObject {
+    Q_OBJECT
     public:
-    KoReportLabelPlugin(QObject *parent, const QVariantList &args = QVariantList());
-    
-    virtual ~KoReportLabelPlugin();
-
-    virtual QObject* createRendererInstance(QDomNode&);
-    virtual QObject* createDesignerInstance(KoReportDesigner* , QGraphicsScene* scene, const QPointF&);
-    virtual QObject* createDesignerInstance(QDomNode & element, KoReportDesigner *, QGraphicsScene * scene);
+        KoReportPluginManagerPrivate();
+        ~KoReportPluginManagerPrivate();
+        void loadPlugins();
+        //!Map of name -> plugin instances
+        QMap<QString, KoReportPluginInterface*> m_plugins;
 };
 
-#endif // KOREPORTLABELPLUGIN_H
+
+#endif

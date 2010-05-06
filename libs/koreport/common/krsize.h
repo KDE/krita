@@ -20,11 +20,12 @@
 #include <KoUnit.h>
 #include <QSizeF>
 #include <koproperty/Property.h>
+#include "koreport_export.h"
 
 /**
  @author
 */
-class KRSize
+class KOREPORT_EXPORT KRSize
 {
 public:
     KRSize(const KoUnit& unit = KoUnit(KoUnit::Centimeter));

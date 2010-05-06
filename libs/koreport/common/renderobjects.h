@@ -32,6 +32,7 @@
 #include <reportpageoptions.h>
 #include "krreportdata.h"
 #include "KoReportItemBase.h"
+#include "koreport_export.h"
 
 class ORODocument;
 class OROPage;
@@ -45,7 +46,7 @@ class OROSection;
 // ORODocument
 // This object is a single document containing one or more OROPage elements
 //
-class ORODocument
+class KOREPORT_EXPORT ORODocument
 {
     friend class OROPage;
     friend class OROSection;
@@ -88,7 +89,7 @@ protected:
 // OROPrimitive objects all of which represent some form of mark to made on
 // a page.
 //
-class OROPage
+class KOREPORT_EXPORT OROPage
 {
     friend class ORODocument;
     friend class OROPrimitive;
@@ -117,7 +118,7 @@ protected:
 // This object is a single row in a document and may contain zero or more
 // OROPrimitives
 //
-class OROSection
+class KOREPORT_EXPORT OROSection
 {
     friend class ORODocument;
     friend class OROPrimitive;
@@ -176,7 +177,7 @@ private:
 // Other primitives are subclasses with a defined type and any additional
 // information they require to define that primitive.
 //
-class OROPrimitive
+class KOREPORT_EXPORT OROPrimitive
 {
     friend class OROPage;
 
@@ -213,7 +214,7 @@ protected:
 // be rendered inside that region. It also contains information for font
 // and positioning of the text.
 //
-class OROTextBox : public OROPrimitive
+class KOREPORT_EXPORT OROTextBox : public OROPrimitive
 {
 public:
     OROTextBox();
@@ -266,7 +267,7 @@ protected:
 // OROLine
 // This primitive defines a line with a width/weight.
 //
-class OROLine : public OROPrimitive
+class KOREPORT_EXPORT OROLine : public OROPrimitive
 {
 public:
     OROLine();
@@ -298,7 +299,7 @@ protected:
 // OROImage
 // This primitive defines an image
 //
-class OROImage: public OROPrimitive
+class KOREPORT_EXPORT OROImage: public OROPrimitive
 {
 public:
     OROImage();
@@ -340,7 +341,7 @@ protected:
     int m_aspectFlags;
 };
 
-class OROPicture: public OROPrimitive
+class KOREPORT_EXPORT OROPicture: public OROPrimitive
 {
 public:
     OROPicture();
@@ -369,7 +370,7 @@ protected:
 // ORORect
 // This primitive defines a drawn rectangle
 //
-class ORORect: public OROPrimitive
+class KOREPORT_EXPORT ORORect: public OROPrimitive
 {
 public:
     ORORect();
@@ -407,7 +408,7 @@ protected:
 // ORORect
 // This primitive defines a drawn rectangle
 //
-class OROEllipse: public OROPrimitive
+class KOREPORT_EXPORT OROEllipse: public OROPrimitive
 {
 public:
     OROEllipse();
@@ -442,7 +443,7 @@ protected:
     QBrush m_brush;
 };
 
-class OROCheck : public OROPrimitive
+class KOREPORT_EXPORT OROCheck : public OROPrimitive
 {
 public:
     OROCheck();

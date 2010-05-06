@@ -96,11 +96,6 @@ set(koreport_LIB_SRCS
     plugins/image/krscriptimage.cpp
     plugins/image/KoReportImagePlugin.cpp
 
-    plugins/label/KoReportItemLabel.cpp
-    plugins/label/KoReportDesignerItemLabel.cpp
-    plugins/label/krscriptlabel.cpp
-    plugins/label/KoReportLabelPlugin.cpp
-
     plugins/shape/KoReportItemShape.cpp
     plugins/shape/KoReportDesignerItemShape.cpp
 #    plugins/shape/krscriptshape.cpp
@@ -129,4 +124,8 @@ endif (SHOULD_BUILD_KSPREAD)
 set_target_properties(koreport PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS koreport  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+install(FILES  koreport_itemplugin.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
+
 add_subdirectory(pics)
+add_subdirectory(plugins)
+

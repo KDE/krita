@@ -22,6 +22,11 @@ KoReportPluginInterface::KoReportPluginInterface()
     m_pluginInfo = 0;
 }
 
+KoReportPluginInterface::KoReportPluginInterface(QObject* parent, const QVariantList& args): QObject(parent)
+{
+
+}
+
 KoReportPluginInterface::~KoReportPluginInterface()
 {
     if (m_pluginInfo) {

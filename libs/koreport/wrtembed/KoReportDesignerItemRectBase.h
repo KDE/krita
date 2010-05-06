@@ -24,6 +24,7 @@
 #include "KoReportDesignerItemBase.h"
 #include <koproperty/Set.h>
 #include <KoUnit.h>
+#include "koreport_export.h"
 
 class KoReportDesigner;
 class KRPos;
@@ -32,7 +33,7 @@ class KRSize;
 /**
  @author
 */
-class KoReportDesignerItemRectBase : public QGraphicsRectItem, public KoReportDesignerItemBase
+class KOREPORT_EXPORT KoReportDesignerItemRectBase : public QGraphicsRectItem, public KoReportDesignerItemBase
 {
 public:
     KoReportDesignerItemRectBase(KoReportDesigner*);

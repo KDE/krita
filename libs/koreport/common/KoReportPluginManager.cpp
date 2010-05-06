@@ -15,10 +15,13 @@
 */
 
 #include "KoReportPluginManager.h"
+#include "KoReportPluginManagerPrivate.h"
 
 #include <kicon.h>
 #include <QAction>
 #include "KoReportPluginInfo.h"
+#include <KService>
+#include <KServiceTypeTrader>
 
 //!Temp load all plugins here until the loader is created
 #include "../plugins/barcode/KoReportBarcodePlugin.h"
@@ -26,11 +29,10 @@
 #include "../plugins/check/KoReportCheckPlugin.h"
 #include "../plugins/field/KoReportFieldPlugin.h"
 #include "../plugins/image/KoReportImagePlugin.h"
-#include "../plugins/label/KoReportLabelPlugin.h"
 #include "../plugins/shape/KoReportShapePlugin.h"
 #include "../plugins/text/KoReportTextPlugin.h"
 
-
+        
 KoReportPluginManager& KoReportPluginManager::self()
 {
   static KoReportPluginManager instance; // only instantiated when self() is called
@@ -39,7 +41,7 @@ KoReportPluginManager& KoReportPluginManager::self()
 
 KoReportPluginManager::KoReportPluginManager()
 {
-    d = new Private();
+    d = new KoReportPluginManagerPrivate();
 }
 
 KoReportPluginManager::~KoReportPluginManager()
@@ -82,11 +84,10 @@ QList<QAction*> KoReportPluginManager::actions()
 
 //===============================Private========================================
 
-KoReportPluginManager::Private::Private()
+KoReportPluginManagerPrivate::KoReportPluginManagerPrivate()
 {
     //!Temp - Add Plugins Here
 
-    KoReportPluginInfo *info = 0;
     KoReportPluginInterface *plugin = 0;
 
     plugin = new KoReportBarcodePlugin;
@@ -104,19 +105,52 @@ KoReportPluginManager::Private::Private()
     plugin = new KoReportImagePlugin();
     m_plugins.insert(plugin->info()->entityName(), plugin);
 
-    plugin = new KoReportLabelPlugin();
-    m_plugins.insert(plugin->info()->entityName(), plugin);
-
     plugin = new KoReportShapePlugin();
     m_plugins.insert(plugin->info()->entityName(), plugin);
 
     plugin = new KoReportTextPlugin();
     m_plugins.insert(plugin->info()->entityName(), plugin);
 
+    loadPlugins();
     //!End Add Plugins
 }
 
-KoReportPluginManager::Private::~Private()
+void KoReportPluginManagerPrivate::loadPlugins()
+{
+    kDebug() << "Load all plugins";
+    KService::List offers = KServiceTypeTrader::self()->query("KoReport/ItemPlugin");
+
+    KService::List::const_iterator iter;
+    for(iter = offers.begin(); iter < offers.end(); ++iter)
+    {
+       QString error;
+       KService::Ptr service = *iter;
+
+        KPluginFactory *factory = KPluginLoader(service->library()).factory();
+
+        if (!factory)
+        {
+            kDebug() << "KPluginFactory could not load the plugin:" << service->library();
+            continue;
+        }
+
+       KoReportPluginInterface *plugin = factory->create<KoReportPluginInterface>(this);
+
+       if (plugin) {
+           kDebug() << "Load plugin:" << service->name();
+
+           m_plugins.insert(plugin->info()->entityName(), plugin);
+       } else {
+           kDebug() << error;
+       }
+    }
+
+}
+
+KoReportPluginManagerPrivate::~KoReportPluginManagerPrivate()
 {
 
 }
+
+#include "moc_KoReportPluginManager.cpp"
+#include "moc_KoReportPluginManagerPrivate.cpp"

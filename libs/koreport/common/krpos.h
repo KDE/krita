@@ -21,11 +21,11 @@
 #include <KoUnit.h>
 #include <QPointF>
 #include <koproperty/Property.h>
-
+#include "koreport_export.h"
 /**
  @author
 */
-class KRPos
+class KOREPORT_EXPORT KRPos
 {
 public:
     enum UpdatePropertyFlag {

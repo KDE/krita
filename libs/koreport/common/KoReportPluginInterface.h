@@ -21,13 +21,19 @@
 #include <KoReportDesigner.h>
 #include <QGraphicsScene>
 #include <KLocalizedString>
+#include "koreport_export.h"
+#include <KPluginFactory>
 
+class KService;
 class KoReportPluginInfo;
-class KoReportPluginInterface : public QObject
+
+class KOREPORT_EXPORT KoReportPluginInterface : public QObject
 {
     Q_OBJECT
     public:
+        KoReportPluginInterface(QObject *parent, const QVariantList &args = QVariantList());
         KoReportPluginInterface();
+    
         virtual ~KoReportPluginInterface();
         
         virtual QObject* createDesignerInstance(KoReportDesigner *, QGraphicsScene * scene, const QPointF &pos) = 0;
@@ -41,5 +47,13 @@ class KoReportPluginInterface : public QObject
         KoReportPluginInfo *m_pluginInfo;
         
 };
+
+//! Implementation of driver's static version information and plugin entry point.
+
+    
+#define K_EXPORT_KOREPORT_ITEMPLUGIN( class_name, internal_name ) \
+    K_PLUGIN_FACTORY(factory, registerPlugin<class_name>();) \
+    K_EXPORT_PLUGIN(factory("koreport_" # internal_name)) \
+    K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(0, 0, 1))
 
 #endif // KOREPORTPLUGININTERFACE_H

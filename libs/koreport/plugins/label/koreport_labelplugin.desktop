@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=KoReport_Label
+Comment=KoReport Label PLugin
+X-KDE-Library=koreport_labelplugin
+X-KDE-ServiceTypes=KoReport/ItemPlugin
+Type=Service

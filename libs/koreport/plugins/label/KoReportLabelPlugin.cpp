@@ -20,7 +20,9 @@
 #include "KoReportDesigner.h"
 #include "KoReportPluginInfo.h"
 
-KoReportLabelPlugin::KoReportLabelPlugin()
+K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportLabelPlugin, labelplugin)
+
+KoReportLabelPlugin::KoReportLabelPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent, args)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setEntityName("report:label");
@@ -50,5 +52,6 @@ QObject* KoReportLabelPlugin::createDesignerInstance(QDomNode & element, KoRepor
 {
     return new KoReportDesignerItemLabel(element, designer, scene);
 }
+
 
 #include "moc_KoReportLabelPlugin.cpp"

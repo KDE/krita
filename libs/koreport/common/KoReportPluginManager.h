@@ -20,6 +20,8 @@
 #include <QObject>
 #include <KoReportPluginInterface.h>
 
+class KoReportPluginManagerPrivate;
+ 
 class KoReportPluginManager : public QObject
 {
     Q_OBJECT
@@ -30,17 +32,8 @@ class KoReportPluginManager : public QObject
         QList<QAction*> actions();
         
     private:
-        class Private {
-            public:
-                Private();
-                ~Private();
-
-                //!Map of name -> plugin instances
-                QMap<QString, KoReportPluginInterface*> m_plugins;
-        };
-
-        
-        Private *d;
+       
+        KoReportPluginManagerPrivate *d;
 
         KoReportPluginManager();
         ~KoReportPluginManager();

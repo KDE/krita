@@ -29,7 +29,7 @@
 #include <QGraphicsItem>
 // common
 #include <KoReportItemBase.h>
-
+#include "koreport_export.h"
 
 // forward declarations
 class ReportWindow;
@@ -49,7 +49,7 @@ class Editor;
 //
 // ReportEntity
 //
-class KoReportDesignerItemBase
+class KOREPORT_EXPORT KoReportDesignerItemBase
 {
 public:
     static void buildXML(QGraphicsItem * item, QDomDocument & doc, QDomElement & parent);

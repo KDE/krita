@@ -23,6 +23,7 @@
 #include <QDomElement>
 #include <QFont>
 #include <QColor>
+#include "koreport_export.h"
 
 #include "krpos.h"
 #include "krsize.h"
@@ -62,7 +63,7 @@ public:
 /**
  @author
 */
-class KoReportItemBase : public QObject
+class KOREPORT_EXPORT KoReportItemBase : public QObject
 {
     Q_OBJECT
 public:

@@ -18,8 +18,9 @@
 #define KOREPORTPLUGININFO_H
 
 #include <QString>
+#include "koreport_export.h"
 
-class KoReportPluginInfo
+class KOREPORT_EXPORT KoReportPluginInfo
 {
     public:
         KoReportPluginInfo();

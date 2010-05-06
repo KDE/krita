@@ -276,7 +276,6 @@ int KoReportDesignerItemRectBase::grabHandle(QPointF pos)
 
 QVariant KoReportDesignerItemRectBase::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    kDebug() << change;
     if (change == ItemPositionChange && scene()) {
         QPointF newPos = value.toPointF();
 

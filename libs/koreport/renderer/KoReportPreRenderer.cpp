@@ -195,8 +195,6 @@ qreal KoReportPreRendererPrivate::finishCurPage(bool lastPage)
 
 void KoReportPreRendererPrivate::renderDetailSection(KRDetailSectionData & detailData)
 {
-    kDebug();
-
     if (detailData.m_detailSection) {
         if (m_kodata/* && !curs->eof()*/) {
             QStringList keys;
@@ -239,20 +237,15 @@ void KoReportPreRendererPrivate::renderDetailSection(KRDetailSectionData & detai
                     kDebug() << "Next section is too big for this page";
                     
                     if (l > 0) {
-                        kDebug() << "...moving prev";
                         m_kodata->movePrevious();
-                        kDebug() << "...creating new page";
                         createNewPage();
-                        kDebug() << "...moving next";
                         m_kodata->moveNext();
                     }
                 }
 
                 renderSection(*(detailData.m_detailSection));
-                kDebug() << "...moving next";
                 if (m_kodata)
                     status = m_kodata->moveNext();
-                kDebug() << "...done";
 
                 if (status == true && keys.count() > 0) {
                     // check to see where it is we need to start

@@ -45,7 +45,7 @@ public:
         qDeleteAll(optionWidgets);
     }
 
-    QMap<QString, QWidget *> optionWidgets; ///< the optionwidgets associated witth this tool
+    QMap<QString, QWidget *> optionWidgets; ///< the optionwidgets associated with this tool
     QCursor currentCursor;
     QHash<QString, KAction*> actionCollection;
     QString toolId;

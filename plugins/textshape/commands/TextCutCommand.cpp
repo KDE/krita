@@ -46,9 +46,12 @@ void TextCutCommand::redo()
     } else {
         m_first = false;
         m_tool->copy();
-        if(m_tool->m_actionShowChanges->isChecked())
-            m_tool->m_textEditor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_tool));
+        KoTextEditor *te = m_tool->m_textEditor.data();
+        if (te == 0)
+            return;
+        if (m_tool->m_actionShowChanges->isChecked())
+            te->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_tool));
         else
-            m_tool->m_textEditor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_tool));
+            te->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_tool));
     }
 }

@@ -31,7 +31,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTimer>
-#include <QPointer>
+#include <QWeakPointer>
 
 class TextEditingPluginContainer;
 class InsertCharacter;
@@ -277,7 +277,7 @@ private:
     friend class DeleteCommand;
     TextShape *m_textShape;
     KoTextShapeData *m_textShapeData;
-    QPointer<KoTextEditor> m_textEditor;
+    QWeakPointer<KoTextEditor> m_textEditor;
     KoChangeTracker *m_changeTracker;
     bool m_allowActions;
     bool m_allowAddUndoCommand;

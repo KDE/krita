@@ -2,6 +2,7 @@
  This file is part of the KDE project
  * Copyright (C) 2009 Ganesh Paramasivam <ganesh@crystalfab.com>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -58,24 +59,30 @@ void DeleteCommand::redo()
     m_undone = false;
     if (!m_first) {
         foreach (QUndoCommand *command, m_shapeDeleteCommands)
-            command->redo();        
+            command->redo();
 
         TextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
     } else {
         m_first = false;
-        m_tool->m_textEditor->beginEditBlock();
-        if(m_mode == PreviousChar)
-            deletePreviousChar();
-        else
-            deleteChar();
-        m_tool->m_textEditor->endEditBlock();
+        KoTextEditor *textEditor = m_tool->m_textEditor.data();
+        if (textEditor) {
+            textEditor->beginEditBlock();
+            if(m_mode == PreviousChar)
+                deletePreviousChar();
+            else
+                deleteChar();
+            textEditor->endEditBlock();
+        }
     }
 }
 
 void DeleteCommand::deleteChar()
 {
-    QTextCursor *caret = m_tool->m_textEditor->cursor();
+    KoTextEditor *textEditor = m_tool->m_textEditor.data();
+    if (textEditor == 0)
+        return;
+    QTextCursor *caret = textEditor->cursor();
 
     if (caret->atEnd() && !caret->hasSelection())
         return;
@@ -88,7 +95,10 @@ void DeleteCommand::deleteChar()
 
 void DeleteCommand::deletePreviousChar()
 {
-    QTextCursor *caret = m_tool->m_textEditor->cursor();
+    KoTextEditor *textEditor = m_tool->m_textEditor.data();
+    if (textEditor == 0)
+        return;
+    QTextCursor *caret = textEditor->cursor();
 
     if (caret->atStart() && !caret->hasSelection())
         return;
@@ -110,13 +120,13 @@ void DeleteCommand::deleteSelection(QTextCursor &selection)
     //Store the charFormat. If the selection has multiple charFormats set m_multipleFormatDeletion to true.Will be used in checkMerge
     QTextCharFormat currFormat;
     QTextCharFormat firstFormat;
-    
+
     m_multipleFormatDeletion = false;
 
     for (int i = m_position; i < (m_position + m_length); i++) {
         cursor.setPosition(i+1);
         currFormat = cursor.charFormat();
-        
+
         if ( i == m_position ) {
             firstFormat = currFormat;
             continue;
@@ -133,15 +143,18 @@ void DeleteCommand::deleteSelection(QTextCursor &selection)
 
     //Delete any inline objects present within the selection
     deleteInlineObjects(selection);
-    
+
     //Now finally Delete the selected text
     selection.deleteChar();
 }
 
 void DeleteCommand::deleteInlineObjects(QTextCursor &selection)
 {
+    KoTextEditor *textEditor = m_tool->m_textEditor.data();
+    if (textEditor == 0)
+        return;
     QTextCursor cursor(selection);
-    QTextDocument *document = m_tool->m_textEditor->document();
+    QTextDocument *document = textEditor->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     Q_ASSERT(layout);
 
@@ -218,6 +231,10 @@ bool DeleteCommand::mergeWith( const QUndoCommand *command)
         QWeakPointer<QTextDocument> m_document;
     };
 
+    KoTextEditor *textEditor = m_tool->m_textEditor.data();
+    if (textEditor == 0)
+        return false;
+
     if (command->id() != id())
         return false;
 
@@ -232,8 +249,8 @@ bool DeleteCommand::mergeWith( const QUndoCommand *command)
     m_invalidInlineObjects += other->m_invalidInlineObjects;
     other->m_invalidInlineObjects.clear();
 
-    for(int i=0; i < command->childCount(); i++)
-        new UndoTextCommand(m_tool->m_textEditor->document(), this);
+    for (int i=0; i < command->childCount(); i++)
+        new UndoTextCommand(textEditor->document(), this);
 
     return true;
 }
@@ -241,19 +258,18 @@ bool DeleteCommand::mergeWith( const QUndoCommand *command)
 bool DeleteCommand::checkMerge( const QUndoCommand *command )
 {
     DeleteCommand *other = const_cast<DeleteCommand *>(static_cast<const DeleteCommand *>(command));
-    
+
     if (m_multipleFormatDeletion || other->m_multipleFormatDeletion)
         return false;
 
     if (m_position == other->m_position
-        && m_format == other->m_format) {
+            && m_format == other->m_format) {
         m_length += other->m_length;
         return true;
     }
 
-    
     if ( (other->m_position + other->m_length == m_position)
-        && (m_format == other->m_format)) {
+            && (m_format == other->m_format)) {
         m_position = other->m_position;
         m_length += other->m_length;
         return true;
@@ -263,7 +279,10 @@ bool DeleteCommand::checkMerge( const QUndoCommand *command )
 
 void DeleteCommand::updateListChanges()
 {
-    QTextDocument *document = m_tool->m_textEditor->document();
+    KoTextEditor *textEditor = m_tool->m_textEditor.data();
+    if (textEditor == 0)
+        return;
+    QTextDocument *document = textEditor->document();
     QTextCursor tempCursor(document);
     QTextBlock startBlock = document->findBlock(m_position);
     QTextBlock endBlock = document->findBlock(m_position + m_length);
@@ -278,7 +297,7 @@ void DeleteCommand::updateListChanges()
                 listId = currentList->format().property(KoListStyle::ListId).toUInt();
             else
                 listId = currentList->format().property(KoListStyle::ListId).toULongLong();
-            
+
             if (!KoTextDocument(document).list(currentBlock)) {
                 KoList *list = KoTextDocument(document).list(listId);
                 list->updateStoredList(currentBlock);
@@ -290,8 +309,11 @@ void DeleteCommand::updateListChanges()
 DeleteCommand::~DeleteCommand()
 {
     if (!m_undone) {
+        KoTextEditor *textEditor = m_tool->m_textEditor.data();
+        if (textEditor == 0)
+            return;
         foreach (KoInlineObject *object, m_invalidInlineObjects) {
-            QTextDocument *document = m_tool->m_textEditor->document();
+            QTextDocument *document = textEditor->document();
             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
             KoInlineTextObjectManager *manager = layout->inlineTextObjectManager();
             manager->removeInlineObject(object);

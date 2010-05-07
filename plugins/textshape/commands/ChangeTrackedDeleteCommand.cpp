@@ -2,6 +2,7 @@
  This file is part of the KDE project
  * Copyright (C) 2009 Ganesh Paramasivam <ganesh@crystalfab.com>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -80,7 +81,7 @@ void ChangeTrackedDeleteCommand::undo()
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
 
-    QTextDocument *document = m_tool->m_textEditor->document();
+    QTextDocument *document = m_tool->m_textEditor.data()->document();
     KoTextDocument(document).changeTracker()->elementById(m_addedChangeElement)->setValid(false);
     foreach (int changeId, m_removedElements) {
       KoTextDocument(document).changeTracker()->elementById(changeId)->setValid(true);
@@ -95,25 +96,25 @@ void ChangeTrackedDeleteCommand::redo()
     if (!m_first) {
         TextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
-        QTextDocument *document = m_tool->m_textEditor->document();
+        QTextDocument *document = m_tool->m_textEditor.data()->document();
         KoTextDocument(document).changeTracker()->elementById(m_addedChangeElement)->setValid(true);
         foreach (int changeId, m_removedElements) {
           KoTextDocument(document).changeTracker()->elementById(changeId)->setValid(false);
         }
     } else {
         m_first = false;
-        m_tool->m_textEditor->beginEditBlock();
+        m_tool->m_textEditor.data()->beginEditBlock();
         if(m_mode == PreviousChar)
             deletePreviousChar();
         else
             deleteChar();
-        m_tool->m_textEditor->endEditBlock();
+        m_tool->m_textEditor.data()->endEditBlock();
     }
 }
 
 void ChangeTrackedDeleteCommand::deleteChar()
 {
-    QTextCursor *caret = m_tool->m_textEditor->cursor();
+    QTextCursor *caret = m_tool->m_textEditor.data()->cursor();
 
     if (caret->atEnd() && !caret->hasSelection())
         return;
@@ -126,7 +127,7 @@ void ChangeTrackedDeleteCommand::deleteChar()
 
 void ChangeTrackedDeleteCommand::deletePreviousChar()
 {
-    QTextCursor *caret = m_tool->m_textEditor->cursor();
+    QTextCursor *caret = m_tool->m_textEditor.data()->cursor();
 
     if (caret->atStart() && !caret->hasSelection())
         return;
@@ -178,7 +179,7 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(QTextCursor &selection)
     selection.insertBlock();
     // Mark it as inserted content
     QTextCharFormat format = selection.charFormat();
-    m_tool->m_textEditor->registerTrackedChange(selection, KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
+    m_tool->m_textEditor.data()->registerTrackedChange(selection, KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
     //Paste the selected text
     TextPasteCommand *pasteCommand = new TextPasteCommand(QClipboard::Clipboard, m_tool, this);
     pasteCommand->redo();
@@ -198,7 +199,7 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(QTextCursor &selection)
 
 void ChangeTrackedDeleteCommand::deleteSelection(QTextCursor &selection)
 {
-    QTextDocument *document = m_tool->m_textEditor->document();
+    QTextDocument *document = m_tool->m_textEditor.data()->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineTextObjectManager());
@@ -507,7 +508,7 @@ bool ChangeTrackedDeleteCommand::mergeWith( const QUndoCommand *command)
         m_length = other->m_length;
 
         for(int i=0; i < command->childCount(); i++)
-            new UndoTextCommand(m_tool->m_textEditor->document(), this);
+            new UndoTextCommand(m_tool->m_textEditor.data()->document(), this);
 
         return true;
     }
@@ -517,7 +518,7 @@ bool ChangeTrackedDeleteCommand::mergeWith( const QUndoCommand *command)
 void ChangeTrackedDeleteCommand::updateListIds(QTextCursor &cursor)
 {
     m_newListIds.clear();
-    QTextDocument *document = m_tool->m_textEditor->document();
+    QTextDocument *document = m_tool->m_textEditor.data()->document();
     QTextCursor tempCursor(document);
     QTextBlock startBlock = document->findBlock(cursor.anchor());
     QTextBlock endBlock = document->findBlock(cursor.position());
@@ -534,7 +535,7 @@ void ChangeTrackedDeleteCommand::updateListIds(QTextCursor &cursor)
 }
 void ChangeTrackedDeleteCommand::updateListChanges()
 {
-    QTextDocument *document = m_tool->m_textEditor->document();
+    QTextDocument *document = m_tool->m_textEditor.data()->document();
     QTextCursor tempCursor(document);
     QTextBlock startBlock = document->findBlock(m_position);
     QTextBlock endBlock = document->findBlock(m_position + m_length);
@@ -569,7 +570,7 @@ ChangeTrackedDeleteCommand::~ChangeTrackedDeleteCommand()
 
 void ChangeTrackedDeleteCommand::removeChangeElement(int changeId)
 {
-    QTextDocument *document = m_tool->m_textEditor->document();
+    QTextDocument *document = m_tool->m_textEditor.data()->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     KoChangeTrackerElement *element = KoTextDocument(document).changeTracker()->elementById(changeId);
     KoDeleteChangeMarker *marker = element->getDeleteChangeMarker();

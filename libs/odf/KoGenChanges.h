@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+   Copyright (C) 2010 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,11 +21,6 @@
 #ifndef KOGENCHANGES_H
 #define KOGENCHANGES_H
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QMultiMap>
-#include <QtCore/QSet>
-#include <QtCore/QString>
 #include "koodf_export.h"
 #include "KoGenStyle.h"
 
@@ -42,17 +38,6 @@
 class KOODF_EXPORT KoGenChanges
 {
 public:
-
-    struct NamedChange {
-        const KoGenChange* change; ///< @note owned by the collection
-        QString name;
-    };
-
-
-    typedef QMap<KoGenChange, QString> ChangeMap;
-    typedef QSet<QString> NameMap;
-    typedef QList<NamedChange> ChangeArray;
-
     KoGenChanges();
     ~KoGenChanges();
 
@@ -73,7 +58,7 @@ public:
      * Return the entire collection of styles
      * Use this for saving the styles
      */
-    ChangeMap changes() const;
+    QMap<KoGenChange, QString> changes() const;
 
     /**
      * @return an existing change by name
@@ -92,8 +77,6 @@ public:
     void saveOdfChanges(KoXmlWriter *xmlWriter) const;
 
 private:
-    QString makeUniqueName(const QString &base) const;
-
     class Private;
     Private * const d;
 };

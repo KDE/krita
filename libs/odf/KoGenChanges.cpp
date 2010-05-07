@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+   Copyright (C) 2010 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +21,12 @@
 #include "KoGenChanges.h"
 #include <KoXmlWriter.h>
 
+#include <QtCore/QList>
+#include <QtCore/QMap>
+#include <QtCore/QMultiMap>
+#include <QtCore/QSet>
+#include <QtCore/QString>
+
 #include <kdebug.h>
 
 class KoGenChanges::Private
@@ -27,16 +34,23 @@ class KoGenChanges::Private
 public:
     Private(KoGenChanges *q) : q(q) { }
 
+    QString makeUniqueName(const QString &base) const;
+
+    struct NamedChange {
+        const KoGenChange* change; ///< @note owned by the collection
+        QString name;
+    };
+
     /// style definition -> name
-    ChangeMap changeMap;
+    QMap<KoGenChange, QString>  changeMap;
 
     /// Map with the change name as key.
     /// This map is mainly used to check for name uniqueness
-    NameMap changeNames;
+    QSet<QString> changeNames;
 
     /// List of styles (used to preserve ordering)
-    ChangeArray changeArray;
-    ChangeMap::iterator insertChange(const KoGenChange &change, const QString &name);
+    QList<NamedChange> changeArray;
+    QMap<KoGenChange, QString> ::iterator insertChange(const KoGenChange &change, const QString &name);
 
     KoGenChanges *q;
 };
@@ -53,14 +67,14 @@ KoGenChanges::~KoGenChanges()
 
 QString KoGenChanges::insert(const KoGenChange& change, const QString& name)
 {
-    ChangeMap::iterator it = d->changeMap.find(change);
+    QMap<KoGenChange, QString> ::iterator it = d->changeMap.find(change);
     if (it == d->changeMap.end()) {
         it = d->insertChange(change, name);
     }
     return it.value();
 }
 
-KoGenChanges::ChangeMap::iterator KoGenChanges::Private::insertChange(const KoGenChange &change, const QString &name)
+QMap<KoGenChange, QString>::iterator KoGenChanges::Private::insertChange(const KoGenChange &change, const QString &name)
 {
     QString changeName(name);
     if (changeName.isEmpty()) {
@@ -72,9 +86,9 @@ KoGenChanges::ChangeMap::iterator KoGenChanges::Private::insertChange(const KoGe
             changeName = 'C';
         }
     }
-    changeName = q->makeUniqueName(changeName);
+    changeName = makeUniqueName(changeName);
     changeNames.insert(changeName);
-    KoGenChanges::ChangeMap::iterator it = changeMap.insert(change, changeName);
+    QMap<KoGenChange, QString>::iterator it = changeMap.insert(change, changeName);
     NamedChange s;
     s.change = &it.key();
     s.name = changeName;
@@ -83,28 +97,28 @@ KoGenChanges::ChangeMap::iterator KoGenChanges::Private::insertChange(const KoGe
     return it;
 }
 
-KoGenChanges::ChangeMap KoGenChanges::changes() const
+QMap<KoGenChange, QString> KoGenChanges::changes() const
 {
     return d->changeMap;
 }
 
-QString KoGenChanges::makeUniqueName(const QString& base) const
+QString KoGenChanges::Private::makeUniqueName(const QString& base) const
 {
-    if (! d->changeNames.contains(base))
+    if (!changeNames.contains(base))
         return base;
     int num = 1;
     QString name;
     do {
         name = base;
         name += QString::number(num++);
-    } while (d->changeNames.contains(name));
+    } while (changeNames.contains(name));
     return name;
 }
 
 const KoGenChange* KoGenChanges::change(const QString& name) const
 {
-    ChangeArray::const_iterator it = d->changeArray.constBegin();
-    const ChangeArray::const_iterator end = d->changeArray.constEnd();
+    QList<KoGenChanges::Private::NamedChange>::const_iterator it = d->changeArray.constBegin();
+    const QList<KoGenChanges::Private::NamedChange>::const_iterator end = d->changeArray.constEnd();
     for (; it != end ; ++it) {
         if ((*it).name == name)
             return (*it).change;
@@ -116,8 +130,8 @@ void KoGenChanges::saveOdfChanges(KoXmlWriter* xmlWriter) const
 {
     xmlWriter->startElement("text:tracked-changes");
 
-    ChangeMap changesList = changes();
-    KoGenChanges::ChangeMap::const_iterator it = changesList.constBegin();
+    QMap<KoGenChange, QString> changesList = changes();
+    QMap<KoGenChange, QString>::const_iterator it = changesList.constBegin();
     for (; it != changesList.constEnd() ; ++it) {
         it.key().writeChange(xmlWriter, it.value());
     }

@@ -24,7 +24,7 @@
 
 #include <QObject>
 #include <QTextDocument>
-#include <QPointer>
+#include <QWeakPointer>
 
 /**
  * This object dies when the parent QTextDocument dies and in the destructor
@@ -69,7 +69,7 @@ public:
 
 private:
     QTextDocument *m_document;
-    QPointer<KoStyleManager> m_styleManager;
+    QWeakPointer<KoStyleManager> m_styleManager;
 };
 
 #endif

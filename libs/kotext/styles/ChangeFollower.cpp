@@ -36,13 +36,15 @@ ChangeFollower::ChangeFollower(QTextDocument *parent, KoStyleManager *manager)
 
 ChangeFollower::~ChangeFollower()
 {
-    if (m_styleManager)
-        m_styleManager->remove(this);
+    KoStyleManager *sm = m_styleManager.data();
+    if (sm)
+        sm->remove(this);
 }
 
 void ChangeFollower::processUpdates(const QList<int> &changedStyles)
 {
-    if (m_styleManager == 0) {
+    KoStyleManager *sm = m_styleManager.data();
+    if (sm) {
         // since the stylemanager would be the one calling this method, I doubt this
         // will ever happen.  But better safe than sorry..
         deleteLater();
@@ -61,7 +63,7 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles)
         int id = bf.intProperty(KoParagraphStyle::StyleId);
         if (id > 0 && changedStyles.contains(id)) {
             cursor.setPosition(block.position());
-            KoParagraphStyle *style = m_styleManager->paragraphStyle(id);
+            KoParagraphStyle *style = sm->paragraphStyle(id);
             Q_ASSERT(style);
 
             style->applyStyle(bf);
@@ -70,7 +72,7 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles)
         QTextCharFormat cf = block.charFormat();
         id = cf.intProperty(KoCharacterStyle::StyleId);
         if (id > 0 && changedStyles.contains(id)) {
-            KoCharacterStyle *style = m_styleManager->characterStyle(id);
+            KoCharacterStyle *style = sm->characterStyle(id);
             Q_ASSERT(style);
             style->applyStyle(block);
         }
@@ -84,7 +86,7 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles)
                 // create selection
                 cursor.setPosition(fragment.position());
                 cursor.setPosition(fragment.position() + fragment.length(), QTextCursor::KeepAnchor);
-                KoCharacterStyle *style = m_styleManager->characterStyle(id);
+                KoCharacterStyle *style = sm->characterStyle(id);
                 Q_ASSERT(style);
 
                 style->applyStyle(cf);

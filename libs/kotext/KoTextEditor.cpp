@@ -107,18 +107,20 @@ void KoTextEditor::Private::documentCommandAdded()
         {}
 
         void undo() {
-            if (m_document.isNull())
+            QTextDocument *doc = m_document.data();
+            if (doc == 0)
                 return;
-            m_document->undo(KoTextDocument(m_document).textEditor()->cursor());
+            doc->undo(KoTextDocument(doc).textEditor()->cursor());
         }
 
         void redo() {
-            if (m_document.isNull())
+            QTextDocument *doc = m_document.data();
+            if (doc == 0)
                 return;
-            m_document->redo(KoTextDocument(m_document).textEditor()->cursor());
+            doc->redo(KoTextDocument(doc).textEditor()->cursor());
         }
 
-        QPointer<QTextDocument> m_document;
+        QWeakPointer<QTextDocument> m_document;
     };
 
     //kDebug() << "editor state: " << editorState << " headcommand: " << headCommand;

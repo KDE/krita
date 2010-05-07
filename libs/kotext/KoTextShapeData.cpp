@@ -30,7 +30,6 @@
 #include <QUrl>
 #include <QTextDocument>
 #include <QTextBlock>
-#include <QPointer>
 #include <QMetaObject>
 #include <QTextCursor>
 

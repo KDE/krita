@@ -122,7 +122,7 @@ void KoReportPluginManagerPrivate::loadPlugins()
     KService::List offers = KServiceTypeTrader::self()->query("KoReport/ItemPlugin");
 
     KService::List::const_iterator iter;
-    for(iter = offers.begin(); iter < offers.end(); ++iter)
+    for(iter = offers.constBegin(); iter < offers.constEnd(); ++iter)
     {
        QString error;
        KService::Ptr service = *iter;

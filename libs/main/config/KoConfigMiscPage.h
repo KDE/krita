@@ -43,6 +43,7 @@ signals:
 
 public slots:
     void slotDefault();
+    void slotUnitChanged(int);
 
 private:
     class Private;

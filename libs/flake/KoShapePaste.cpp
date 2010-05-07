@@ -36,6 +36,10 @@
 #include "KoShapeRegistry.h"
 #include "commands/KoShapeCreateCommand.h"
 
+#include <KGlobal>
+#include <KConfig>
+#include <KConfigGroup>
+
 class KoShapePaste::Private
 {
 public:
@@ -76,6 +80,14 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
 
     QUndoCommand *cmd = 0;
 
+    QPointF copyOffset(10.0, 10.0);
+    // read copy offset from settings
+    KSharedConfigPtr config = KGlobal::config();
+    if (config->hasGroup("Misc")) {
+        const qreal offset = config->group("Misc").readEntry("CopyOffset", 10.0);
+        copyOffset = QPointF(offset, offset);
+    }
+
     // TODO if this is a text create a text shape and load the text inside the new shape.
     KoXmlElement element;
     forEachElement(element, body) {
@@ -108,7 +120,7 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
                     if (qAbs(s->size().height() - shape->size().height()) > 0.001)
                         continue;
                     // move it and redo our iteration.
-                    QPointF move(10, 10);
+                    QPointF move(copyOffset);
                     d->canvas->clipToDocument(shape, move);
                     if (move.x() != 0 || move.y() != 0) {
                         shape->setPosition(shape->position() + move);

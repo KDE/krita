@@ -23,6 +23,7 @@
 
 #include <KoUnit.h>
 #include <KoDocument.h>
+#include <KoUnitDoubleSpinBox.h>
 
 #include <kcomponentdata.h>
 #include <kcombobox.h>
@@ -51,6 +52,8 @@ public:
     uint oldHandleRadius;
     KIntNumInput * grabSensitivity;
     uint oldGrabSensitivity;
+    KoUnitDoubleSpinBox* copyOffset;
+    qreal oldCopyOffset;
 };
 
 KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, char* name)
@@ -62,12 +65,14 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, char* name)
 
     d->oldGrabSensitivity = 3;
     d->oldHandleRadius = 3;
+    d->oldCopyOffset = 10.0;
 
     if (d->config->hasGroup("Misc")) {
         KConfigGroup miscGroup = d->config->group("Misc");
 
         d->oldGrabSensitivity = miscGroup.readEntry("GrabSensitivity", d->oldGrabSensitivity);
         d->oldHandleRadius = miscGroup.readEntry("HandleRadius", d->oldHandleRadius);
+        d->oldCopyOffset = miscGroup.readEntry("CopyOffset", d->oldCopyOffset);
     }
 
     KoUnit unit = d->doc->unit();
@@ -107,11 +112,20 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, char* name)
     d->grabSensitivity->setValue(d->oldGrabSensitivity);
     grid->addWidget(d->grabSensitivity, 2, 1);
 
-    grid->setRowStretch(3, 1);
+    grid->addWidget(new QLabel(i18n("Copy offset:"), tmpQGroupBox), 3, 0);
+
+    d->copyOffset = new KoUnitDoubleSpinBox(tmpQGroupBox);
+    d->copyOffset->setMinMaxStep(-1000, 1000, 0.1);
+    d->copyOffset->setValue(d->oldCopyOffset);
+    d->copyOffset->setUnit(unit);
+    grid->addWidget(d->copyOffset, 3, 1);
+
+    grid->setRowStretch(4, 1);
 
     tmpQGroupBox->setLayout(grid);
 
     connect(d->unit, SIGNAL(activated(int)), SIGNAL(unitChanged(int)));
+    connect(d->unit, SIGNAL(activated(int)), SLOT(slotUnitChanged(int)));
 }
 
 KoConfigMiscPage::~KoConfigMiscPage()
@@ -139,12 +153,26 @@ void KoConfigMiscPage::apply()
     if (currentGrabSensitivity != d->oldGrabSensitivity) {
         miscGroup.writeEntry("GrabSensitivity", currentGrabSensitivity);
     }
+
+    qreal currentCopyOffset = d->copyOffset->value();
+    if (currentCopyOffset != d->oldCopyOffset) {
+        miscGroup.writeEntry("CopyOffset", currentCopyOffset);
+    }
+
     // FIXME how is the handle radius and grap sensitivitiy set?
 }
 
 void KoConfigMiscPage::slotDefault()
 {
     d->unit->setCurrentIndex(0);
+}
+
+void KoConfigMiscPage::slotUnitChanged(int u)
+{
+    KoUnit unit = KoUnit((KoUnit::Unit) u);
+    d->copyOffset->blockSignals(true);
+    d->copyOffset->setUnit(unit);
+    d->copyOffset->blockSignals(false);
 }
 
 #include <KoConfigMiscPage.moc>

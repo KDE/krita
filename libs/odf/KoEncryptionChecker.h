@@ -21,12 +21,11 @@
 
 #include "koodf_export.h"
 
-class KOODF_EXPORT KoEncryptionChecker {
+namespace KoEncryptionChecker
+{
 
-public:
+KOODF_EXPORT bool isEncryptionSupported();
 
-    static bool isEncryptionSupported();
-
-};
+}
 
 #endif

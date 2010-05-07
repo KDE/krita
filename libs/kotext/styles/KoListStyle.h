@@ -24,7 +24,6 @@
 
 #include <QTextFormat>
 #include <QMap>
-#include <QPointer>
 #include <QTextList>
 
 #include <KoXmlReader.h>

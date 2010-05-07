@@ -20,8 +20,6 @@
 #ifndef KOEMBEDDEDDOCUMENTSAVER_H
 #define KOEMBEDDEDDOCUMENTSAVER_H
 
-#include <QList>
-
 #include "KoOdfDocument.h"
 #include "koodf_export.h"
 
@@ -50,8 +48,8 @@ public:
     bool saveEmbeddedDocuments(KoOdfDocument::SavingContext &documentContext);
 
 private:
-    QList<KoOdfDocument*> m_documents;
-    int m_objectId;
+    class Private;
+    Private *d;
 };
 
 #endif /* KOEMBEDDEDDOCUMENTSAVER_H */

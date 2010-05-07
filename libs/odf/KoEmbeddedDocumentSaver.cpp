@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2010 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,25 +29,40 @@
 
 #include "KoOdfDocument.h"
 
+#include <QList>
+
 #define INTERNAL_PROTOCOL "intern"
 
+class KoEmbeddedDocumentSaver::Private
+{
+public:
+    Private()
+        : objectId(0)
+    {
+    }
+
+    QList<KoOdfDocument*> documents;
+    int objectId;
+};
+
 KoEmbeddedDocumentSaver::KoEmbeddedDocumentSaver()
-        : m_objectId(0)
+        : d(new Private())
 {
 }
 
 KoEmbeddedDocumentSaver::~KoEmbeddedDocumentSaver()
 {
+    delete d;
 }
 
 void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoOdfDocument * doc)
 {
     Q_ASSERT(doc);
-    m_documents.append(doc);
+    d->documents.append(doc);
 
     QString ref;
     if (!doc->isStoredExtern()) {
-        const QString name = QString("Object_%1").arg(++m_objectId);
+        const QString name = QString("Object_%1").arg(++d->objectId);
         // set URL in document so that saveEmbeddedDocuments will save
         // the actual embedded object with the right name in the store.
         KUrl u;
@@ -71,7 +87,7 @@ void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoOdfDocument *
 bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoOdfDocument::SavingContext & documentContext)
 {
     KoStore * store = documentContext.odfStore.store();
-    foreach(KoOdfDocument * doc, m_documents) {
+    foreach(KoOdfDocument * doc, d->documents) {
         QString path;
         if (doc->isStoredExtern()) {
             kDebug(30003) << " external (don't save) url:" << doc->getOdfUrl().url();

@@ -376,7 +376,8 @@ KoPAPageBase* KoPAView::activePage() const
 
 void KoPAView::updateReadWrite( bool readwrite )
 {
-    Q_UNUSED( readwrite );
+    d->canvas->setReadWrite(readwrite);
+    KoToolManager::instance()->updateReadWrite(d->canvasController, readwrite);
 }
 
 KoViewConverter* KoPAView::viewConverter( KoPACanvas * canvas )

@@ -46,6 +46,7 @@
 #include <KDebug>
 //#include <iostream>
 #include <QDebug>
+#include <QWeakPointer>
 
 //A convenience function to get a ListIdType from a format
 
@@ -470,18 +471,18 @@ bool ChangeTrackedDeleteCommand::mergeWith( const QUndoCommand *command)
         {}
 
         void undo() {
-            if (m_document.isNull())
-                return;
-            m_document->undo(KoTextDocument(m_document).textEditor()->cursor());
+            QTextDocument *doc = m_document.data();
+            if (doc)
+                doc->undo(KoTextDocument(doc).textEditor()->cursor());
         }
 
         void redo() {
-            if (m_document.isNull())
-                return;
-            m_document->redo(KoTextDocument(m_document).textEditor()->cursor());
+            QTextDocument *doc = m_document.data();
+            if (doc)
+                doc->redo(KoTextDocument(doc).textEditor()->cursor());
         }
 
-        QPointer<QTextDocument> m_document;
+        QWeakPointer<QTextDocument> m_document;
     };
 
     if (command->id() != id())

@@ -30,6 +30,8 @@
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 
+#include <QWeakPointer>
+
 DeleteCommand::DeleteCommand(DeleteMode mode, TextTool *tool, QUndoCommand *parent) :
     TextCommandBase (parent),
     m_tool(tool),
@@ -202,18 +204,18 @@ bool DeleteCommand::mergeWith( const QUndoCommand *command)
         {}
 
         void undo() {
-            if (m_document.isNull())
-                return;
-            m_document->undo(KoTextDocument(m_document).textEditor()->cursor());
+            QTextDocument *doc = m_document.data();
+            if (doc)
+                doc->undo(KoTextDocument(doc).textEditor()->cursor());
         }
 
         void redo() {
-            if (m_document.isNull())
-                return;
-            m_document->redo(KoTextDocument(m_document).textEditor()->cursor());
+            QTextDocument *doc = m_document.data();
+            if (doc)
+                doc->redo(KoTextDocument(doc).textEditor()->cursor());
         }
 
-        QPointer<QTextDocument> m_document;
+        QWeakPointer<QTextDocument> m_document;
     };
 
     if (command->id() != id())
@@ -223,7 +225,7 @@ bool DeleteCommand::mergeWith( const QUndoCommand *command)
         return false;
 
     DeleteCommand *other = const_cast<DeleteCommand *>(static_cast<const DeleteCommand *>(command));
-    
+
     m_shapeDeleteCommands += other->m_shapeDeleteCommands;
     other->m_shapeDeleteCommands.clear();
 

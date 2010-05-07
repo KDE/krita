@@ -76,7 +76,7 @@ public:
     bool contains(QTextList *textList) const;
 
     /// Returns the QTextLists that form this list
-    QVector<QPointer<QTextList> > textLists() const;
+    QVector<QWeakPointer<QTextList> > textLists() const;
 
     QVector<KoListStyle::ListIdType> textListIds() const;
 

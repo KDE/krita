@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,7 +28,7 @@
 #include <KDebug>
 
 #include <QTextCursor>
-#include <QPointer>
+#include <QWeakPointer>
 #include <QBitArray>
 
 #include "KoList_p.h"
@@ -48,7 +49,7 @@ KoList::~KoList()
     delete d;
 }
 
-QVector<QPointer<QTextList> > KoList::textLists() const
+QVector<QWeakPointer<QTextList> > KoList::textLists() const
 {
     return d->textLists;
 }
@@ -98,7 +99,7 @@ void KoList::add(const QTextBlock &block, int level)
     }
     remove(block);
 
-    QTextList *textList = d->textLists.value(level-1);
+    QTextList *textList = d->textLists.value(level-1).data();
     if (!textList) {
         QTextCursor cursor(block);
         QTextListFormat format = d->style->listFormat(level);
@@ -157,7 +158,7 @@ void KoList::setStyle(KoListStyle *style)
     }
 
     for (int i = 0; i < d->textLists.count(); i++) {
-        QTextList *textList = d->textLists[i];
+        QTextList *textList = d->textLists.value(i).data();
         if (!textList)
             continue;
         KoListLevelProperties properties = d->style->levelProperties(i+1);
@@ -204,7 +205,7 @@ void KoList::setContinueNumbering(int level, bool enable)
     bitArray.setBit(level-1, enable);
     d->properties[ContinueNumbering] = bitArray;
 
-    QTextList *textList = d->textLists[level-1];
+    QTextList *textList = d->textLists.value(level-1).data();
     if (!textList)
         return;
     QTextListFormat format = textList->format();

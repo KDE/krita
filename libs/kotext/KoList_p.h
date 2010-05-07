@@ -29,7 +29,7 @@
 #include <QTextDocument>
 #include <QTextBlock>
 #include <QVector>
-#include <QPointer>
+#include <QWeakPointer>
 #include <QVariant>
 #include <QTextList>
 
@@ -70,7 +70,7 @@ public:
     KoList *q;
     KoList::Type type;
     KoListStyle *style;
-    QVector<QPointer<QTextList> > textLists;
+    QVector<QWeakPointer<QTextList> > textLists;
     QVector<KoListStyle::ListIdType> textListIds;
     const QTextDocument *document;
     QMap<int, QVariant> properties;

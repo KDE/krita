@@ -27,7 +27,7 @@
 class KoReportCheckPlugin : public KoReportPluginInterface
 {
     public:
-        KoReportCheckPlugin();
+        KoReportCheckPlugin(QObject *parent, const QVariantList &args = QVariantList());
         virtual ~KoReportCheckPlugin();
 
         virtual QObject* createRendererInstance(QDomNode& element);

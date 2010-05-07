@@ -24,8 +24,6 @@
 #include "KoReportDesigner.h"
 #include "KoReportPluginInfo.h"
 
-K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportLabelPlugin, labelplugin)
-
 KoReportLabelPlugin::KoReportLabelPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent, args)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();

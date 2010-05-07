@@ -1182,6 +1182,22 @@ QList<QAction*> KoReportDesigner::actions()
     actList << act;
 
     qSort(actList.begin(), actList.end(), actionPriortyLessThan);
+    int i = 0;
+
+    //TODO maybe this is a bit hackish
+    //It finds the first plugin based on the priority in userdata
+    //The lowest oriority a plugin can have is 10
+    //And inserts a separator before it.
+    foreach(QAction *a, actList) {
+        ++i;
+        if(a->data().toInt() >= 10) {
+            QAction *sep = new QAction("separator", 0);
+            sep->setSeparator(true);
+            actList.insert(i-1, sep);
+            break;
+        }
+    }
+    
     return actList;
 }
 

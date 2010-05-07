@@ -23,7 +23,7 @@
 #include "KoReportDesignerItemText.h"
 #include "KoReportPluginInfo.h"
 
-KoReportTextPlugin::KoReportTextPlugin()
+KoReportTextPlugin::KoReportTextPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setEntityName("report:text");

@@ -61,18 +61,10 @@ set(koreport_LIB_SRCS
 	wrtembed/reportpropertiesbutton.cpp
 	wrtembed/sectioneditor.cpp
 
-    plugins/barcode/KoReportItemBarcode.cpp
-    plugins/barcode/KoReportDesignerItemBarcode.cpp
-    plugins/barcode/krscriptbarcode.cpp
-    plugins/barcode/3of9.cpp
-    plugins/barcode/code128.cpp
-    plugins/barcode/codeean.cpp
-    plugins/barcode/ext3of9.cpp
-    plugins/barcode/3of9paint.cpp
-    plugins/barcode/ext3of9paint.cpp
-    plugins/barcode/codeeanpaint.cpp
-    plugins/barcode/code128paint.cpp
-    plugins/barcode/KoReportBarcodePlugin.cpp
+    plugins/label/KoReportItemLabel.cpp
+    plugins/label/KoReportDesignerItemLabel.cpp
+    plugins/label/krscriptlabel.cpp
+    plugins/label/KoReportLabelPlugin.cpp
 
     plugins/check/KoReportItemCheck.cpp
     plugins/check/KoReportDesignerItemCheck.cpp

@@ -27,16 +27,13 @@
 #include <KService>
 #include <KServiceTypeTrader>
 
-//!Temp load all plugins here until the loader is created
-#include "../plugins/barcode/KoReportBarcodePlugin.h"
-#include "../plugins/chart/KoReportChartPlugin.h"
+//Include the static items
+#include "../plugins/label/KoReportLabelPlugin.h"
 #include "../plugins/check/KoReportCheckPlugin.h"
 #include "../plugins/field/KoReportFieldPlugin.h"
 #include "../plugins/image/KoReportImagePlugin.h"
-#include "../plugins/shape/KoReportShapePlugin.h"
 #include "../plugins/text/KoReportTextPlugin.h"
 
-        
 KoReportPluginManager& KoReportPluginManager::self()
 {
   static KoReportPluginManager instance; // only instantiated when self() is called
@@ -90,30 +87,27 @@ QList<QAction*> KoReportPluginManager::actions()
 
 KoReportPluginManagerPrivate::KoReportPluginManagerPrivate()
 {
-    //!Temp - Add Plugins Here
+    //Create the static items here
 
     KoReportPluginInterface *plugin = 0;
 
-    plugin = new KoReportBarcodePlugin;
+    plugin = new KoReportLabelPlugin(this);
+    m_plugins.insert(plugin->info()->entityName(), plugin);
+    
+    plugin = new KoReportCheckPlugin(this);
     m_plugins.insert(plugin->info()->entityName(), plugin);
 
-    plugin = new KoReportCheckPlugin();
+    plugin = new KoReportFieldPlugin(this);
     m_plugins.insert(plugin->info()->entityName(), plugin);
 
-    plugin = new KoReportFieldPlugin();
+    plugin = new KoReportImagePlugin(this);
     m_plugins.insert(plugin->info()->entityName(), plugin);
 
-    plugin = new KoReportImagePlugin();
+    plugin = new KoReportTextPlugin(this);
     m_plugins.insert(plugin->info()->entityName(), plugin);
 
-    plugin = new KoReportShapePlugin();
-    m_plugins.insert(plugin->info()->entityName(), plugin);
-
-    plugin = new KoReportTextPlugin();
-    m_plugins.insert(plugin->info()->entityName(), plugin);
-
+    //And then load the plugins
     loadPlugins();
-    //!End Add Plugins
 }
 
 void KoReportPluginManagerPrivate::loadPlugins()
@@ -140,6 +134,7 @@ void KoReportPluginManagerPrivate::loadPlugins()
        if (plugin) {
            kDebug() << "Load plugin:" << service->name();
 
+           plugin->info()->setPriority(plugin->info()->priority() + 10); //Ensure plugins always have a higher prioroty than built-in types
            m_plugins.insert(plugin->info()->entityName(), plugin);
        } else {
            kDebug() << error;

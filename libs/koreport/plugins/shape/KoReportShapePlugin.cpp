@@ -23,13 +23,15 @@
 #include "KoReportDesignerItemShape.h"
 #include "KoReportPluginInfo.h"
 
-KoReportShapePlugin::KoReportShapePlugin()
+K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportShapePlugin, shapeplugin)
+
+KoReportShapePlugin::KoReportShapePlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setEntityName("report:shape");
     info->setIconName("shapes");
     info->setUserName(i18n("Shape"));
-
+    info->setPriority(0);
     setInfo(info);
 }
 

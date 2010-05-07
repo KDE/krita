@@ -23,7 +23,7 @@
 #include "KoReportDesignerItemCheck.h"
 #include "KoReportPluginInfo.h"
 
-KoReportCheckPlugin::KoReportCheckPlugin()
+KoReportCheckPlugin::KoReportCheckPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setEntityName("report:check");

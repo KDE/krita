@@ -48,7 +48,12 @@ void KoReportPluginInfo::setUserName(const QString& u)
 
 void KoReportPluginInfo::setPriority(int p)
 {
-    m_priority = p;
+    if (p >= 0){
+        m_priority = p;
+    }
+    else {
+        m_priority = 0;
+    }
 }
 
 QString KoReportPluginInfo::entityName() const

@@ -27,7 +27,7 @@
 class KoReportFieldPlugin : public KoReportPluginInterface
 {
     public:
-    KoReportFieldPlugin();
+    KoReportFieldPlugin(QObject *parent, const QVariantList &args = QVariantList());
     virtual ~KoReportFieldPlugin();
     
     virtual QObject* createRendererInstance(QDomNode& element);

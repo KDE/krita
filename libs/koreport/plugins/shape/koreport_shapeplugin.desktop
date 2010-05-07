@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=KoReport_Shape
+Comment=KoReport Shape PLugin
+X-KDE-Library=koreport_shapeplugin
+X-KDE-ServiceTypes=KoReport/ItemPlugin
+Type=Service

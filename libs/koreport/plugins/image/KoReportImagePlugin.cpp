@@ -23,7 +23,7 @@
 #include "KoReportDesignerItemImage.h"
 #include "KoReportPluginInfo.h"
 
-KoReportImagePlugin::KoReportImagePlugin()
+KoReportImagePlugin::KoReportImagePlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setEntityName("report:image");

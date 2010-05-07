@@ -27,7 +27,7 @@
 class KoReportShapePlugin : public KoReportPluginInterface
 {
     public:
-    KoReportShapePlugin();
+    KoReportShapePlugin(QObject *parent, const QVariantList &args = QVariantList());
     virtual ~KoReportShapePlugin();
 
     virtual QObject* createRendererInstance(QDomNode& element);

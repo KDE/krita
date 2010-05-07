@@ -23,7 +23,7 @@
 #include "KoReportDesignerItemField.h"
 #include "KoReportPluginInfo.h"
 
-KoReportFieldPlugin::KoReportFieldPlugin()
+KoReportFieldPlugin::KoReportFieldPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setEntityName("report:field");

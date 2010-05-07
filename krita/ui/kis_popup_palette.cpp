@@ -256,7 +256,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     for (int pos = 0; pos < m_resourceManager->recentColorsTotal(); pos++)
     {
-        QPainterPath path(drawDonutPathAngle(colorInnerRadius , colorOuterRadius, m_resourceManager->recentColorsTotal()));
+        QPainterPath path(drawDonutPathAngle(colorInnerRadius, colorOuterRadius, m_resourceManager->recentColorsTotal()));
 
         //accessing recent color of index pos
         kcolor = m_resourceManager->recentColorAt(pos);
@@ -289,7 +289,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         else
         {
             painter.rotate((m_resourceManager->recentColorsTotal() + hoveredColor()) *rotationAngle);
-            QPainterPath path(drawDonutPathAngle(colorInnerRadius,colorOuterRadius, m_resourceManager->recentColorsTotal()));
+            QPainterPath path(drawDonutPathAngle(colorInnerRadius, colorOuterRadius, m_resourceManager->recentColorsTotal()));
             painter.drawPath(path);
             painter.rotate(hoveredColor() *-1 *rotationAngle);
         }
@@ -338,9 +338,8 @@ QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, 
 QPainterPath KisPopupPalette::drawDonutPathAngle(int inner_radius, int outer_radius, int limit)
 {
     QPainterPath path;
-    path.moveTo(-1*outer_radius * sin(M_PI/limit),
-                outer_radius * cos(M_PI/limit));
-    path.arcTo((-1*outer_radius), -1*outer_radius, 2*outer_radius,2*outer_radius,-90.0 - 180.0/limit,
+    path.moveTo(-0.999 * outer_radius * sin(M_PI/limit), 0.999 * outer_radius * cos(M_PI/limit));
+    path.arcTo(-1*outer_radius, -1*outer_radius, 2*outer_radius,2*outer_radius,-90.0 - 180.0/limit,
                360.0/limit);
     path.arcTo(-1*inner_radius, -1*inner_radius, 2*inner_radius,2*inner_radius,-90.0 + 180.0/limit,
                - 360.0/limit);

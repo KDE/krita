@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCHILDRENDATA_H
-#define KOCHILDRENDATA_H
+#ifndef KOSHAPECONTAINERDEFAULTMODEL_H
+#define KOSHAPECONTAINERDEFAULTMODEL_H
 
 #include "KoShapeContainerModel.h"
 
@@ -28,11 +28,11 @@
 /**
  * A default implementation of the KoShapeContainerModel.
  */
-class FLAKE_EXPORT KoChildrenData : public KoShapeContainerModel
+class FLAKE_EXPORT KoShapeContainerDefaultModel : public KoShapeContainerModel
 {
 public:
-    KoChildrenData();
-    virtual ~KoChildrenData();
+    KoShapeContainerDefaultModel();
+    virtual ~KoShapeContainerDefaultModel();
 
     /// reimplemented
     virtual void add(KoShape *child);

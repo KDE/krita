@@ -19,11 +19,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoChildrenData.h"
+#include "KoShapeContainerDefaultModel.h"
 
 #include "KoShapeContainer.h"
 
-class KoChildrenData::Private
+class KoShapeContainerDefaultModel::Private
 {
 public:
     class Relation
@@ -65,23 +65,23 @@ public:
     QList<Relation *> relations;
 };
 
-KoChildrenData::KoChildrenData()
+KoShapeContainerDefaultModel::KoShapeContainerDefaultModel()
 : d( new Private() )
 {
 }
 
-KoChildrenData::~KoChildrenData()
+KoShapeContainerDefaultModel::~KoShapeContainerDefaultModel()
 {
     delete d;
 }
 
-void KoChildrenData::add(KoShape *child)
+void KoShapeContainerDefaultModel::add(KoShape *child)
 {
     Private::Relation *r = new Private::Relation(child);
     d->relations.append(r);
 }
 
-void KoChildrenData::proposeMove(KoShape *shape, QPointF &move)
+void KoShapeContainerDefaultModel::proposeMove(KoShape *shape, QPointF &move)
 {
     KoShapeContainer *parent = shape->parent();
     bool allowedToMove = true;
@@ -96,7 +96,7 @@ void KoChildrenData::proposeMove(KoShape *shape, QPointF &move)
 }
 
 
-void KoChildrenData::setClipping(const KoShape *child, bool clipping)
+void KoShapeContainerDefaultModel::setClipping(const KoShape *child, bool clipping)
 {
     Private::Relation *relation = d->findRelation(child);
     if (relation == 0)
@@ -109,13 +109,13 @@ void KoChildrenData::setClipping(const KoShape *child, bool clipping)
     relation->child()->update();
 }
 
-bool KoChildrenData::childClipped(const KoShape *child) const
+bool KoShapeContainerDefaultModel::childClipped(const KoShape *child) const
 {
     Private::Relation *relation = d->findRelation(child);
     return relation ? relation->m_inside: false;
 }
 
-void KoChildrenData::remove(KoShape *child)
+void KoShapeContainerDefaultModel::remove(KoShape *child)
 {
     Private::Relation *relation = d->findRelation(child);
     if (relation == 0)
@@ -123,12 +123,12 @@ void KoChildrenData::remove(KoShape *child)
     d->relations.removeAll(relation);
 }
 
-int KoChildrenData::count() const
+int KoShapeContainerDefaultModel::count() const
 {
     return d->relations.count();
 }
 
-QList<KoShape*> KoChildrenData::childShapes() const
+QList<KoShape*> KoShapeContainerDefaultModel::childShapes() const
 {
     QList<KoShape*> answer;
     foreach(Private::Relation *relation, d->relations) {
@@ -137,11 +137,11 @@ QList<KoShape*> KoChildrenData::childShapes() const
     return answer;
 }
 
-bool KoChildrenData::isChildLocked(const KoShape *child) const
+bool KoShapeContainerDefaultModel::isChildLocked(const KoShape *child) const
 {
     return child->isGeometryProtected();
 }
 
-void KoChildrenData::containerChanged(KoShapeContainer *)
+void KoShapeContainerDefaultModel::containerChanged(KoShapeContainer *)
 {
 }

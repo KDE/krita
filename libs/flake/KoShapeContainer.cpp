@@ -21,7 +21,7 @@
 #include "KoShapeContainer_p.h"
 #include "KoShapeContainerModel.h"
 #include "KoShapeBorderModel.h"
-#include "KoChildrenData.h"
+#include "KoShapeContainerDefaultModel.h"
 
 #include <QPointF>
 #include <QPainter>
@@ -71,7 +71,7 @@ void KoShapeContainer::addChild(KoShape *shape)
     if (shape->parent() == this && childShapes().contains(shape))
         return;
     if (d->children == 0)
-        d->children = new KoChildrenData();
+        d->children = new KoShapeContainerDefaultModel();
     if (shape->parent() && shape->parent() != this)
         shape->parent()->removeChild(shape);
     d->children->add(shape);

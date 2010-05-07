@@ -74,22 +74,21 @@ public:
     /**
      * Normal KoOasisSettings constructor, for an OASIS settings.xml
      */
-    explicit KoOasisSettings(const KoXmlDocument& doc);
+    explicit KoOasisSettings(const KoXmlDocument &doc);
 
     /**
      * KoOasisSettings constructor for an OpenOffice-1.1 file
      */
-    KoOasisSettings(const KoXmlDocument& doc, const char* officeNSURI, const char* configNSURI);
+    KoOasisSettings(const KoXmlDocument &doc, const char *officeNsUri, const char *configNsUri);
 
     ~KoOasisSettings();
 
     class Items;
-
     /**
      * Returns the toplevel item-set named @p itemSetName.
      * If not found, the returned items instance is null.
      */
-    Items itemSet(const QString& itemSetName) const;
+    Items itemSet(const QString &itemSetName) const;
 
     class IndexedMap;
     class NamedMap;
@@ -112,7 +111,7 @@ public:
          * An indexed map is an array (or sequence), i.e. items are supposed to
          * be retrieved by index. This is useful for e.g. "view 0", "view 1" etc.
          */
-        IndexedMap indexedMap(const QString& itemMapName) const;
+        IndexedMap indexedMap(const QString &itemMapName) const;
 
         /**
          * Look for the config-item-map-named named @p mapItemName and return it.
@@ -120,19 +119,19 @@ public:
          * A named map is a map where items are retrieved by entry name, @see selectItemMapEntry
          * @return false if no such map was found
          */
-        NamedMap namedMap(const QString& itemMapName) const;
+        NamedMap namedMap(const QString &itemMapName) const;
 
-        int parseConfigItemInt(const QString& configName, int defValue = 0) const;
-        qreal parseConfigItemDouble(const QString& configName, qreal defValue = 0) const;
-        QString parseConfigItemString(const QString& configName, const QString& defValue = QString()) const;
-        bool parseConfigItemBool(const QString& configName, bool defValue = false) const;
-        short parseConfigItemShort(const QString& configName, short defValue = 0) const;
-        long parseConfigItemLong(const QString& configName, long defValue = 0) const;
+        int parseConfigItemInt(const QString &configName, int defaultValue = 0) const;
+        qreal parseConfigItemDouble(const QString &configName, qreal defaultValue = 0) const;
+        QString parseConfigItemString(const QString &configName, const QString &defaultValue = QString()) const;
+        bool parseConfigItemBool(const QString &configName, bool defaultValue = false) const;
+        short parseConfigItemShort(const QString &configName, short defaultValue = 0) const;
+        long parseConfigItemLong(const QString &configName, long defaultValue = 0) const;
     private:
         /// @internal
-        QString findConfigItem(const QString& item, bool* ok) const;
+        QString findConfigItem(const QString &item, bool *ok) const;
         /// @internal
-        QString findConfigItem(const KoXmlElement& element, const QString& item, bool* ok) const;
+        QString findConfigItem(const KoXmlElement &element, const QString &item, bool *ok) const;
 
         KoXmlElement m_element;
         const KoOasisSettings* m_settings;
@@ -146,28 +145,28 @@ public:
             return m_element.isNull();
         }
     protected:
-        Map(const KoXmlElement& elem, const KoOasisSettings* settings)
+        Map(const KoXmlElement &elem, const KoOasisSettings *settings)
                 : m_element(elem), m_settings(settings) {}
         const KoXmlElement m_element;
-        const KoOasisSettings* m_settings;
+        const KoOasisSettings *m_settings;
     };
 
-class KOODF_EXPORT IndexedMap : public Map
+    class KOODF_EXPORT IndexedMap : public Map
     {
         friend class Items;
         IndexedMap(const KoXmlElement& elem, const KoOasisSettings* settings)
                 : Map(elem, settings) {}
-    public:
+      public:
         /// Returns an entry in an indexed map
         Items entry(int entryIndex) const;
     };
 
-class KOODF_EXPORT NamedMap : public Map
+    class KOODF_EXPORT NamedMap : public Map
     {
         friend class Items;
-        NamedMap(const KoXmlElement& elem, const KoOasisSettings* settings)
+        NamedMap(const KoXmlElement &elem, const KoOasisSettings *settings)
                 : Map(elem, settings) {}
-    public:
+      public:
         /// Returns an entry in a named map
         Items entry(const QString& entryName) const;
     };
@@ -177,7 +176,7 @@ private:
     friend class IndexedMap;
     friend class NamedMap;
     const KoXmlElement m_settingsElement;
-    const char* m_configNSURI;
+    const char *m_configNsUri;
 
     class Private;
     Private * const d;

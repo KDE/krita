@@ -72,7 +72,7 @@ void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoOdfDocument *
         doc->setOdfUrl(u);
         ref = "./" + name;
     } else {
-        ref = doc->getOdfUrl().url();
+        ref = doc->odfUrl().url();
     }
 
     //<draw:object draw:style-name="standard" draw:id="1" draw:layer="layout" svg:width="14.973cm" svg:height="4.478cm" svg:x="11.641cm" svg:y="14.613cm" xlink:href="#./Object 1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
@@ -90,12 +90,12 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoOdfDocument::SavingContext
     foreach(KoOdfDocument * doc, d->documents) {
         QString path;
         if (doc->isStoredExtern()) {
-            kDebug(30003) << " external (don't save) url:" << doc->getOdfUrl().url();
-            path = doc->getOdfUrl().url();
+            kDebug(30003) << " external (don't save) url:" << doc->odfUrl().url();
+            path = doc->odfUrl().url();
         } else {
             // The name comes from addEmbeddedDocument (which was set while saving the document).
-            Q_ASSERT(doc->getOdfUrl().protocol() == INTERNAL_PROTOCOL);
-            const QString name = doc->getOdfUrl().path();
+            Q_ASSERT(doc->odfUrl().protocol() == INTERNAL_PROTOCOL);
+            const QString name = doc->odfUrl().path();
             kDebug(30003) << "saving" << name;
 
             if (doc->nativeOasisMimeType().isEmpty()) {
@@ -118,12 +118,12 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoOdfDocument::SavingContext
                 store->popDirectory();
             }
 
-            Q_ASSERT(doc->getOdfUrl().protocol() == INTERNAL_PROTOCOL);
+            Q_ASSERT(doc->odfUrl().protocol() == INTERNAL_PROTOCOL);
             path = store->currentDirectory();
             if (!path.isEmpty()) {
                 path += '/';
             }
-            path += doc->getOdfUrl().path();
+            path += doc->odfUrl().path();
             if (path.startsWith('/')) {
                 path = path.mid(1);   // remove leading '/', no wanted in manifest
             }

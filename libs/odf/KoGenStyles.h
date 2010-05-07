@@ -109,7 +109,7 @@ public:
      *
      * @return the name that has been assigned for the inserted style
      */
-    QString insert(const KoGenStyle& style, const QString& baseName = QString(), InsertionFlags flags = NoFlag);
+    QString insert(const KoGenStyle &style, const QString &baseName = QString(), InsertionFlags flags = NoFlag);
 
     /**
      * Return the entire collection of styles
@@ -138,7 +138,7 @@ public:
     /**
      * @return an existing style by name. If no such style exists, 0 is returned.
      */
-    const KoGenStyle* style(const QString& name) const;
+    const KoGenStyle *style(const QString& name) const;
 
     /**
      * @return an existing style by name, which can be modified.
@@ -148,7 +148,7 @@ public:
      * Only do this if you know for sure no other 'user' of that style will
      * be affected.
      */
-    KoGenStyle* styleForModification(const QString& name);
+    KoGenStyle* styleForModification(const QString &name);
 
     /**
      * Mark a given automatic style as being needed in styles.xml.
@@ -162,7 +162,7 @@ public:
      *
      * @see styles, KoGenStyle::setAutoStyleInStylesDotXml
      */
-    void markStyleForStylesXml(const QString& name);
+    void markStyleForStylesXml(const QString &name);
 
     /**
      * Insert a font face declaration.
@@ -173,7 +173,7 @@ public:
      * See odf 2.6 Font Face Declarations
      * and odf 14.6 Font Face Declaration.
      */
-    void insertFontFace(const KoFontFace& face);
+    void insertFontFace(const KoFontFace &face);
 
     /**
      * @return font face declaration for name @a name
@@ -182,7 +182,7 @@ public:
      * See odf 2.6 Font Face Declarations
      * and odf 14.6 Font Face Declaration.
      */
-    KoFontFace fontFace(const QString& name) const;
+    KoFontFace fontFace(const QString &name) const;
 
     /**
      * Save the styles into the styles.xml file
@@ -194,7 +194,7 @@ public:
      * @param mainfestwriter
      * @return true on success
      */
-    bool saveOdfStylesDotXml(KoStore* store, KoXmlWriter* manifestWriter) const;
+    bool saveOdfStylesDotXml(KoStore *store, KoXmlWriter *manifestWriter) const;
 
     /**
      * Placement of styles saved in saveOdfStyles() or inserted in insertRawOdfStyles().
@@ -233,7 +233,7 @@ public:
      * @param placement see StylesPlacement
      * @param xmlWriter target writer
      */
-    void saveOdfStyles(StylesPlacement placement, KoXmlWriter* xmlWriter) const;
+    void saveOdfStyles(StylesPlacement placement, KoXmlWriter *xmlWriter) const;
 
     /**
      * Insert extra styles of given type.
@@ -245,7 +245,7 @@ public:
      * @param placement see StylesPlacement
      * @param xml the raw xml string
      */
-    void insertRawOdfStyles(StylesPlacement placement, const QByteArray& xml);
+    void insertRawOdfStyles(StylesPlacement placement, const QByteArray &xml);
 
     /**
      * register a relation for a previously inserted style to a previously inserted target style.

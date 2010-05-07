@@ -27,7 +27,7 @@ class KoOasisSettings::Private
 
 KoOasisSettings::KoOasisSettings(const KoXmlDocument& doc)
         : m_settingsElement(KoXml::namedItemNS(doc.documentElement(), KoXmlNS::office, "settings")),
-        m_configNSURI(KoXmlNS::config)
+        m_configNsUri(KoXmlNS::config)
         , d(0)
 {
     const KoXmlElement contents = doc.documentElement();
@@ -37,7 +37,7 @@ KoOasisSettings::KoOasisSettings(const KoXmlDocument& doc)
 
 KoOasisSettings::KoOasisSettings(const KoXmlDocument& doc, const char* officeNSURI, const char* configNSURI)
         : m_settingsElement(KoXml::namedItemNS(doc.documentElement(), officeNSURI, "settings")),
-        m_configNSURI(configNSURI)
+        m_configNsUri(configNSURI)
         , d(0)
 {
     const KoXmlElement contents = doc.documentElement();
@@ -55,8 +55,8 @@ KoOasisSettings::Items KoOasisSettings::itemSet(const QString& itemSetName) cons
     KoXmlElement e;
     forEachElement(e, m_settingsElement) {
         if (e.localName() == "config-item-set" &&
-                e.namespaceURI() == m_configNSURI &&
-                e.attributeNS(m_configNSURI, "name", QString()) == itemSetName) {
+                e.namespaceURI() == m_configNsUri &&
+                e.attributeNS(m_configNsUri, "name", QString()) == itemSetName) {
             return Items(e, this);
         }
     }
@@ -69,8 +69,8 @@ KoOasisSettings::IndexedMap KoOasisSettings::Items::indexedMap(const QString& it
     KoXmlElement configItem;
     forEachElement(configItem, m_element) {
         if (configItem.localName() == "config-item-map-indexed" &&
-                configItem.namespaceURI() == m_settings->m_configNSURI &&
-                configItem.attributeNS(m_settings->m_configNSURI, "name", QString()) == itemMapName) {
+                configItem.namespaceURI() == m_settings->m_configNsUri &&
+                configItem.attributeNS(m_settings->m_configNsUri, "name", QString()) == itemMapName) {
             return IndexedMap(configItem, m_settings);
         }
     }
@@ -82,8 +82,8 @@ KoOasisSettings::NamedMap KoOasisSettings::Items::namedMap(const QString& itemMa
     KoXmlElement configItem;
     forEachElement(configItem, m_element) {
         if (configItem.localName() == "config-item-map-named" &&
-                configItem.namespaceURI() == m_settings->m_configNSURI &&
-                configItem.attributeNS(m_settings->m_configNSURI, "name", QString()) == itemMapName) {
+                configItem.namespaceURI() == m_settings->m_configNsUri &&
+                configItem.attributeNS(m_settings->m_configNsUri, "name", QString()) == itemMapName) {
             return NamedMap(configItem, m_settings);
         }
     }
@@ -96,7 +96,7 @@ KoOasisSettings::Items KoOasisSettings::IndexedMap::entry(int entryIndex) const
     KoXmlElement entry;
     forEachElement(entry, m_element) {
         if (entry.localName() == "config-item-map-entry" &&
-                entry.namespaceURI() == m_settings->m_configNSURI) {
+                entry.namespaceURI() == m_settings->m_configNsUri) {
             if (i == entryIndex)
                 return Items(entry, m_settings);
             else
@@ -111,8 +111,8 @@ KoOasisSettings::Items KoOasisSettings::NamedMap::entry(const QString& entryName
     KoXmlElement entry;
     forEachElement(entry, m_element) {
         if (entry.localName() == "config-item-map-entry" &&
-                entry.namespaceURI() == m_settings->m_configNSURI &&
-                entry.attributeNS(m_settings->m_configNSURI, "name", QString()) == entryName) {
+                entry.namespaceURI() == m_settings->m_configNsUri &&
+                entry.attributeNS(m_settings->m_configNsUri, "name", QString()) == entryName) {
             return Items(entry, m_settings);
         }
     }
@@ -126,8 +126,8 @@ QString KoOasisSettings::Items::findConfigItem(const KoXmlElement& element,
     KoXmlElement it;
     forEachElement(it, element) {
         if (it.localName() == "config-item" &&
-                it.namespaceURI() == m_settings->m_configNSURI &&
-                it.attributeNS(m_settings->m_configNSURI, "name", QString()) == item) {
+                it.namespaceURI() == m_settings->m_configNsUri &&
+                it.attributeNS(m_settings->m_configNsUri, "name", QString()) == item) {
             *ok = true;
             return it.text();
         }

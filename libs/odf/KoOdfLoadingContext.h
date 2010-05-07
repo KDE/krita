@@ -48,36 +48,27 @@ public:
      * @param styles reference to the KoOdfStylesReader parsed by KoDocument
      * @param store pointer to store, if available, for e.g. loading images.
      */
-    explicit KoOdfLoadingContext(KoOdfStylesReader& stylesReader, KoStore* store, const KComponentData & componentData = KComponentData() );
+    explicit KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStore *store, const KComponentData &componentData = KComponentData());
     virtual ~KoOdfLoadingContext();
 
     /**
     * Set different manifest
     * @param fileName file name of the manifest file
     */
-    void setManifestFile(const QString& fileName);
+    void setManifestFile(const QString &fileName);
 
-    KoStore* store() {
-        return m_store;
-    }
+    KoStore *store() const;
 
-    KoOdfStylesReader& stylesReader() {
-        return m_stylesReader;
-    }
+    KoOdfStylesReader &stylesReader();
+
     /**
     * Get the application default styles styleReader
     */
-    KoOdfStylesReader & defaultStylesReader() {
-        return m_defaultStylesReader;
-    }
+    KoOdfStylesReader &defaultStylesReader();
 
-    KoStyleStack& styleStack() {
-        return m_styleStack;
-    }
+    KoStyleStack &styleStack() const;
 
-    const KoXmlDocument& manifestDocument() const {
-        return m_manifestDoc;
-    }
+    const KoXmlDocument &manifestDocument() const;
 
     /// Return the <meta:generator> of the document, e.g. "KOffice/1.4.0a"
     QString generator() const;
@@ -94,7 +85,7 @@ public:
      * @param attrName the name of the attribute to read
      * @param family the style family used for this object
      */
-    void fillStyleStack(const KoXmlElement& element, const char* nsURI, const char* attrName, const char* family);
+    void fillStyleStack(const KoXmlElement &element, const char *nsURI, const char *attrName, const char *family);
 
     /**
      * Add @p style to the stack, as well as all its parent styles
@@ -110,39 +101,19 @@ public:
      *
      * Usually you would call fillStyleStack() instead.
      */
-    void addStyles(const KoXmlElement* style, const char* family, bool usingStylesAutoStyles = false);
+    void addStyles(const KoXmlElement *style, const char *family, bool usingStylesAutoStyles = false);
 
     /// Set to true while loading headers and footers, to remember to use auto styles
     /// from styles.xml
-    void setUseStylesAutoStyles(bool useStylesAutoStyles) {
-        m_useStylesAutoStyles = useStylesAutoStyles;
-    }
-    bool useStylesAutoStyles() const {
-        return m_useStylesAutoStyles;
-    }
+    void setUseStylesAutoStyles(bool useStylesAutoStyles);
+    bool useStylesAutoStyles() const;
 
 private:
     void parseMeta() const;
 
 private:
-    KoStore* m_store;
-    KoOdfStylesReader& m_stylesReader;
-    KoStyleStack m_styleStack;
-
-    mutable QString m_generator;
-    mutable bool m_metaXmlParsed;
-    bool m_useStylesAutoStyles;
-    bool m_unused1; // padding, can be used later
-    bool m_unused2; // padding, can be used later
-
-    KoXmlDocument m_manifestDoc;
-
     class Private;
     Private * const d;
-
-    KoOdfStylesReader m_defaultStylesReader;
-    KoXmlDocument m_doc; // the doc needs to be kept around so it is possible to access the styles
 };
 
 #endif /* KOOASISLOADINGCONTEXT_H */
-

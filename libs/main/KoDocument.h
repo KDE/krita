@@ -969,7 +969,7 @@ protected:
 
 
     /// to satisfy KoOdfDocument where it overlaps with kparts
-    virtual KUrl getOdfUrl() const {
+    virtual KUrl odfUrl() const {
         return url();
     }
 

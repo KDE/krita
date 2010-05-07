@@ -140,7 +140,7 @@ void KoGradientBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &co
     KoOdfGraphicStyles::saveOdfFillStyle(style, context.mainStyles(), brush);
 }
 
-bool KoGradientBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize)
+bool KoGradientBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize)
 {
     Q_D(KoGradientBackground);
     KoStyleStack &styleStack = context.styleStack();

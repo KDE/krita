@@ -280,7 +280,7 @@ qreal percent(const KoXmlElement &element, const char *ns, const char *type, con
     return tmp;
 }
 
-QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader & stylesReader, const QString styleName, const QSizeF &size)
+QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader &stylesReader, const QString &styleName, const QSizeF &size)
 {
     KoXmlElement* e = stylesReader.drawStyles()[styleName];
     if (! e)

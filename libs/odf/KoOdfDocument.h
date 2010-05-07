@@ -78,7 +78,7 @@ public:
     /**
      * @return the current URL
      */
-    virtual KUrl getOdfUrl() const = 0; // TODO rename to not have get*
+    virtual KUrl odfUrl() const = 0;
 
     virtual void setOdfUrl(const KUrl &url) = 0;
 

@@ -62,7 +62,7 @@ namespace KoDom
  *
  * Note: do *NOT* use getElementsByTagNameNS, it's recursive!
  */
-KOODF_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node, const char* nsURI, const char* localName);
+KOODF_EXPORT KoXmlElement namedItemNS(const KoXmlNode &node, const char *nsURI, const char *localName);
 
 }
 #if 0

@@ -226,7 +226,7 @@ bool Layout::addLine(QTextLine &line)
                         || !m_changeTracker->displayChanges()
                         || !m_changeTracker->containsInlineChanges(m_fragmentIterator.fragment().charFormat())
                         || !m_changeTracker->elementById(m_fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
-                        || (m_changeTracker->elementById(m_fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::deleteChange)
+                        || (m_changeTracker->elementById(m_fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
                         || m_changeTracker->displayChanges()) {
                         height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
                         objectHeight = qMax(objectHeight, inlineCharHeight(m_fragmentIterator.fragment()));
@@ -1116,7 +1116,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
                     || m_changeTracker->displayChanges()
                     || !m_changeTracker->containsInlineChanges(selection.format)
                     || !m_changeTracker->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
-                    || (m_changeTracker->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::deleteChange)) {
+                    || (m_changeTracker->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)) {
                     QTextLayout::FormatRange fr;
                     selection.format.property(KoCharacterStyle::ChangeTrackerId);
                     fr.start = begin - block.position();
@@ -1396,15 +1396,15 @@ void Layout::drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int sel
                             qreal x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - startOfBlock);
 
                             switch(changeElement->getChangeType()) {
-                                case (KoGenChange::insertChange):
+                                case (KoGenChange::InsertChange):
                                     if (m_changeTracker->displayChanges())
                                         painter->fillRect(x1, line.y(), x2-x1, line.height(), m_changeTracker->getInsertionBgColor());
                                     break;
-                                case (KoGenChange::formatChange):
+                                case (KoGenChange::FormatChange):
                                     if (m_changeTracker->displayChanges())
                                         painter->fillRect(x1, line.y(), x2-x1, line.height(), m_changeTracker->getFormatChangeBgColor());
                                     break;
-                                case (KoGenChange::deleteChange):
+                                case (KoGenChange::DeleteChange):
                                     if (m_changeTracker->displayChanges())
                                         painter->fillRect(x1, line.y(), x2-x1, line.height(), m_changeTracker->getDeletionBgColor());
                                     break;

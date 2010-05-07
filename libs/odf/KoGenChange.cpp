@@ -25,7 +25,7 @@
 #include <kdebug.h>
 
 // Returns -1, 0 (equal) or 1
-static int compareMap(const QMap<QString, QString>& map1, const QMap<QString, QString>& map2)
+static int compareMap(const QMap<QString, QString> &map1, const QMap<QString, QString> &map2)
 {
     QMap<QString, QString>::const_iterator it = map1.begin();
     QMap<QString, QString>::const_iterator oit = map2.begin();
@@ -49,44 +49,43 @@ KoGenChange::~KoGenChange()
 
 void KoGenChange::writeChangeMetaData(KoXmlWriter* writer) const
 {
-  QMap<QString, QString>::const_iterator it = m_changeMetaData.begin();
-  const QMap<QString, QString>::const_iterator end = m_changeMetaData.end();
-  for (; it != end; ++it) {
+    QMap<QString, QString>::const_iterator it = m_changeMetaData.begin();
+    const QMap<QString, QString>::const_iterator end = m_changeMetaData.end();
+    for (; it != end; ++it) {
+    //FIXME: if the propName is passed directly as it.key().toUtf8(), the opening tag is correct but the closing tag becomes undefined
+    //FIXME: example: <dc-creator>.......</`ok>
 
-//FIXME: if the propName is passed directly as it.key().toUtf8(), the opening tag is correct but the closing tag becomes undefined
-//FIXME: example: <dc-creator>.......</`ok>
-
-    if (it.key() == "dc-creator") {
-      writer->startElement("dc:creator");
-      writer->addTextNode(it.value());
-      writer->endElement();
+        if (it.key() == "dc-creator") {
+            writer->startElement("dc:creator");
+            writer->addTextNode(it.value());
+            writer->endElement();
+        }
+        if (it.key() == "dc-date") {
+            writer->startElement("dc:date");
+            writer->addTextNode(it.value());
+            writer->endElement();
+        }
     }
-    if (it.key() == "dc-date") {
-      writer->startElement("dc:date");
-      writer->addTextNode(it.value());
-      writer->endElement();
-    }
-  }
 }
 
-void KoGenChange::writeChange(KoXmlWriter* writer, const QString& name) const
+void KoGenChange::writeChange(KoXmlWriter *writer, const QString &name) const
 {
     writer->startElement("text:changed-region");
     writer->addAttribute("text:id", name);
 
     const char* elementName;
     switch (m_type) {
-        case KoGenChange::deleteChange:
-            elementName = "text:deletion";
-            break;
-        case KoGenChange::formatChange:
-            elementName = "text:format-change";
-            break;
-        case KoGenChange::insertChange:
-            elementName = "text:insertion";
-            break;
-        default:
-            elementName = "text:format-change"; //should not happen, format-change is probably the most harmless of the three.
+    case KoGenChange::DeleteChange:
+        elementName = "text:deletion";
+        break;
+    case KoGenChange::FormatChange:
+        elementName = "text:format-change";
+        break;
+    case KoGenChange::InsertChange:
+        elementName = "text:insertion";
+        break;
+    default:
+        elementName = "text:format-change"; //should not happen, format-change is probably the most harmless of the three.
     }
     writer->startElement(elementName);
     if (!m_changeMetaData.isEmpty()) {
@@ -96,9 +95,9 @@ void KoGenChange::writeChange(KoXmlWriter* writer, const QString& name) const
             writer->addCompleteElement(m_literalData.value("changeMetaData").toUtf8());
         writer->endElement(); // office:change-info
     }
-    if ((m_type == KoGenChange::deleteChange) && m_literalData.contains("deleteChangeXml"))
+    if ((m_type == KoGenChange::DeleteChange) && m_literalData.contains("deleteChangeXml"))
         writer->addCompleteElement(m_literalData.value("deleteChangeXml").toUtf8());
-    
+
     writer->endElement(); // text:insertion/format/deletion
     writer->endElement(); // text:change
 }

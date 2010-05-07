@@ -31,10 +31,10 @@ public:
     ~KoDirectoryStore();
 protected:
     virtual bool init(Mode _mode);
-    virtual bool openWrite(const QString& name) {
+    virtual bool openWrite(const QString &name) {
         return openReadOrWrite(name, QIODevice::WriteOnly);
     }
-    virtual bool openRead(const QString& name) {
+    virtual bool openRead(const QString &name) {
         return openReadOrWrite(name, QIODevice::ReadOnly);
     }
     virtual bool closeRead() {
@@ -43,11 +43,11 @@ protected:
     virtual bool closeWrite() {
         return true;
     }
-    virtual bool enterRelativeDirectory(const QString& dirName);
-    virtual bool enterAbsoluteDirectory(const QString& path);
-    virtual bool fileExists(const QString& absPath) const;
+    virtual bool enterRelativeDirectory(const QString &dirName);
+    virtual bool enterAbsoluteDirectory(const QString &path);
+    virtual bool fileExists(const QString &absPath) const;
 
-    bool openReadOrWrite(const QString& name, QIODevice::OpenModeFlag iomode);
+    bool openReadOrWrite(const QString &name, QIODevice::OpenModeFlag ioMode);
 private:
     // Path to base directory (== the ctor argument)
     QString m_basePath;

@@ -59,7 +59,7 @@ void RejectChangeCommand::redo()
     if (m_first) {
         m_first = false;
         QTextCursor cursor(m_document);
-        if (m_changeTracker->elementById(m_changeId)->getChangeType() == KoGenChange::insertChange) {
+        if (m_changeTracker->elementById(m_changeId)->getChangeType() == KoGenChange::InsertChange) {
             QList<QPair<int, int> >::const_iterator it;
             QStack<QPair<int, int> > deleteRanges;
             for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); it++) {
@@ -72,7 +72,7 @@ void RejectChangeCommand::redo()
                 cursor.deleteChar();
             }
         }
-        else if (m_changeTracker->elementById(m_changeId)->getChangeType() == KoGenChange::formatChange) {
+        else if (m_changeTracker->elementById(m_changeId)->getChangeType() == KoGenChange::FormatChange) {
             QList<QPair<int, int> >::const_iterator it;
             for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); it++) {
                 cursor.setPosition((*it).first);
@@ -89,7 +89,7 @@ void RejectChangeCommand::redo()
                     cursor.setCharFormat(format);
                 }
             }
-        } else if (m_changeTracker->elementById(m_changeId)->getChangeType() == KoGenChange::deleteChange){
+        } else if (m_changeTracker->elementById(m_changeId)->getChangeType() == KoGenChange::DeleteChange){
             QList<QPair<int, int> >::const_iterator it;
             QStack<QPair<int, int> > deleteRanges;
             for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); it++) {

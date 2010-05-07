@@ -56,7 +56,7 @@ void AcceptChangeCommand::redo()
     if (m_first) {
         m_first = false;
         QTextCursor cursor(m_document);
-        if (m_changeTracker->elementById(m_changeId)->getChangeType() != KoGenChange::deleteChange) {
+        if (m_changeTracker->elementById(m_changeId)->getChangeType() != KoGenChange::DeleteChange) {
             QList<QPair<int, int> >::const_iterator it;
             for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); it++) {
                 cursor.setPosition((*it).first);

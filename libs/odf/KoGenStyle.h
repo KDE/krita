@@ -143,8 +143,8 @@ public:
      *
      * @param parentName If set, name of the parent style from which this one inherits.
      */
-    explicit KoGenStyle(Type type = PageLayoutStyle, const char* familyName = 0,
-                        const QString& parentName = QString());
+    explicit KoGenStyle(Type type = PageLayoutStyle, const char *familyName = 0,
+                        const QString &parentName = QString());
     ~KoGenStyle();
 
     /**
@@ -187,7 +187,7 @@ public:
     }
 
     /// Sets the name of style's parent.
-    void setParentName(const QString& name) {
+    void setParentName(const QString &name) {
         m_parentName = name;
     }
 
@@ -254,19 +254,19 @@ public:
     };
 
     /// Add a property to the style
-    void addProperty(const QString& propName, const QString& propValue, PropertyType type = DefaultType) {
+    void addProperty(const QString &propName, const QString &propValue, PropertyType type = DefaultType) {
         m_properties[type].insert(propName, propValue);
     }
     /// Overloaded version of addProperty that takes a char*, usually for "..."
-    void addProperty(const QString& propName, const char* propValue, PropertyType type = DefaultType) {
+    void addProperty(const QString &propName, const char *propValue, PropertyType type = DefaultType) {
         m_properties[type].insert(propName, QString::fromUtf8(propValue));
     }
     /// Overloaded version of addProperty that converts an int to a string
-    void addProperty(const QString& propName, int propValue, PropertyType type = DefaultType) {
+    void addProperty(const QString &propName, int propValue, PropertyType type = DefaultType) {
         m_properties[type].insert(propName, QString::number(propValue));
     }
     /// Overloaded version of addProperty that converts a bool to a string (false/true)
-    void addProperty(const QString& propName, bool propValue, PropertyType type = DefaultType) {
+    void addProperty(const QString &propName, bool propValue, PropertyType type = DefaultType) {
         m_properties[type].insert(propName, propValue ? "true" : "false");
     }
 
@@ -276,27 +276,27 @@ public:
      *  (unlike QString::number and setNum, which default to 6 digits),
      *  and the unit name ("pt") is appended to it.
      */
-    void addPropertyPt(const QString& propName, qreal propValue, PropertyType type = DefaultType);
+    void addPropertyPt(const QString &propName, qreal propValue, PropertyType type = DefaultType);
 
     /**
      *  Add an attribute to the style
      *  The difference between property and attributes is a bit oasis-format-specific:
      *  attributes are for the style element itself, and properties are in the style:properties child element
      */
-    void addAttribute(const QString& attrName, const QString& attrValue) {
+    void addAttribute(const QString &attrName, const QString& attrValue) {
         m_attributes.insert(attrName, attrValue);
     }
     /// Overloaded version of addAttribute that takes a char*, usually for "..."
-    void addAttribute(const QString& attrName, const char* attrValue) {
+    void addAttribute(const QString &attrName, const char* attrValue) {
         m_attributes.insert(attrName, QString::fromUtf8(attrValue));
     }
     /// Overloaded version of addAttribute that converts an int to a string
-    void addAttribute(const QString& attrName, int attrValue) {
+    void addAttribute(const QString &attrName, int attrValue) {
         m_attributes.insert(attrName, QString::number(attrValue));
     }
 
     /// Overloaded version of addAttribute that converts a bool to a string
-    void addAttribute(const QString& attrName, bool attrValue) {
+    void addAttribute(const QString &attrName, bool attrValue) {
         m_attributes.insert(attrName, attrValue ? "true" : "false");
     }
 
@@ -306,7 +306,7 @@ public:
      *  (unlike QString::number and setNum, which default to 6 digits),
      *  and the unit name ("pt") is appended to it.
      */
-    void addAttributePt(const QString& attrName, qreal attrValue);
+    void addAttributePt(const QString &attrName, qreal attrValue);
 
     /**
      * @brief Add a child element to the style properties.
@@ -327,7 +327,7 @@ public:
      *
      * The value of @p elementName isn't used, except that it must be unique.
      */
-    void addChildElement(const QString& elementName, const QString& elementContents) {
+    void addChildElement(const QString &elementName, const QString& elementContents) {
         m_properties[ChildElement].insertMulti(elementName, elementContents);
     }
 
@@ -335,7 +335,7 @@ public:
      * @brief Add a style:map to the style.
      * @param styleMap the attributes for the map, associated as (name,value).
      */
-    void addStyleMap(const QMap<QString, QString>& styleMap);
+    void addStyleMap(const QMap<QString, QString> &styleMap);
 
     /**
      * @return true if the style has no attributes, no properties, no style map etc.
@@ -357,8 +357,8 @@ public:
      *  @param closeElement set it to false to be able to add more child elements to the style element
      *  @param drawElement set it to true to add "draw:name" (used for gradient/hatch style) otherwise add "style:name"
      */
-    void writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, const char* elementName, const QString& name,
-                    const char* propertiesElementName, bool closeElement = true, bool drawElement = false) const;
+    void writeStyle(KoXmlWriter *writer, const KoGenStyles &styles, const char *elementName, const QString &name,
+                    const char *propertiesElementName, bool closeElement = true, bool drawElement = false) const;
 
     /**
      *  Write the definition of these style properties to @p writer, using the OASIS format.
@@ -366,8 +366,8 @@ public:
      *  @param type the type of properties to write
      *  @param parentStyle the parent to this style
      */
-    void writeStyleProperties(KoXmlWriter* writer, PropertyType type,
-                              const KoGenStyle* parentStyle = 0) const;
+    void writeStyleProperties(KoXmlWriter *writer, PropertyType type,
+                              const KoGenStyle *parentStyle = 0) const;
 
     /**
      *  QMap requires a complete sorting order.
@@ -382,14 +382,14 @@ public:
     bool operator==(const KoGenStyle &other) const;
 
 private:
-    QString property(const QString& propName, PropertyType type) const {
+    QString property(const QString &propName, PropertyType type) const {
         const QMap<QString, QString>::const_iterator it = m_properties[type].constFind(propName);
         if (it != m_properties[type].constEnd())
             return it.value();
         return QString();
     }
 
-    QString attribute(const QString& propName) const {
+    QString attribute(const QString &propName) const {
         const QMap<QString, QString>::const_iterator it = m_attributes.constFind(propName);
         if (it != m_attributes.constEnd())
             return it.value();

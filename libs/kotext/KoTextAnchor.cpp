@@ -238,17 +238,17 @@ void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument 
     changeRect.adjust(0,0,1,0);
     QPen changePen;
     changePen.setWidth(2);
-   
+
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker(); 
 
     if (!changeTracker)
         return;
 
     KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
-    if (changeElement && changeElement->getChangeType() == KoGenChange::deleteChange) {
+    if (changeElement && changeElement->getChangeType() == KoGenChange::DeleteChange) {
         changePen.setColor(changeTracker->getDeletionBgColor());
         drawChangeRect = true;
-    } else if (changeElement && changeElement->getChangeType() == KoGenChange::insertChange) {
+    } else if (changeElement && changeElement->getChangeType() == KoGenChange::InsertChange) {
         changePen.setColor(changeTracker->getInsertionBgColor());
         drawChangeRect = true;
     }

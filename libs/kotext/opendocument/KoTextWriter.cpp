@@ -192,7 +192,7 @@ void KoTextWriter::Private::saveChange(QTextCharFormat format)
     }
 
     if (changeId) { //There is a tracked change
-        if (changeTracker->elementById(changeId)->getChangeType() != KoGenChange::deleteChange) {
+        if (changeTracker->elementById(changeId)->getChangeType() != KoGenChange::DeleteChange) {
             //Now start a new change region if not already done
             if (!changeStack.contains(changeId)) {
                 KoGenChange change;

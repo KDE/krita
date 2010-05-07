@@ -67,7 +67,7 @@ public:
      *
      * @return the name for this change
      */
-    QString insert(const KoGenChange& change, const QString& name = QString());
+    QString insert(const KoGenChange &change, const QString &name = QString());
 
     /**
      * Return the entire collection of styles
@@ -78,7 +78,7 @@ public:
     /**
      * @return an existing change by name
      */
-    const KoGenChange* change(const QString& name) const;
+    const KoGenChange *change(const QString &name) const;
 
     /**
      * Save changes.
@@ -89,10 +89,10 @@ public:
      * @param xmlWriter
      * @param stylesDotXml
      */
-    void saveOdfChanges(KoXmlWriter* xmlWriter) const;
+    void saveOdfChanges(KoXmlWriter *xmlWriter) const;
 
 private:
-    QString makeUniqueName(const QString& base) const;
+    QString makeUniqueName(const QString &base) const;
 
     class Private;
     Private * const d;

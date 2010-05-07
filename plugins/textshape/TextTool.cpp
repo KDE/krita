@@ -471,9 +471,9 @@ void TextTool::showChangeTip()
         KoChangeTrackerElement *element = m_changeTracker->elementById(c.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt());
         if (element->isEnabled()) {
             QString changeType;
-            if (element->getChangeType() == KoGenChange::insertChange)
+            if (element->getChangeType() == KoGenChange::InsertChange)
                 changeType = i18n("Insertion");
-            else if (element->getChangeType() == KoGenChange::deleteChange)
+            else if (element->getChangeType() == KoGenChange::DeleteChange)
                 changeType = i18n("Deletion");
             else
                 changeType = i18n("Formatting");

@@ -65,9 +65,9 @@ KoGenChanges::ChangeMap::iterator KoGenChanges::Private::insertChange(const KoGe
     QString changeName(name);
     if (changeName.isEmpty()) {
         switch (change.type()) {
-        case KoGenChange::insertChange: changeName = 'I'; break;
-        case KoGenChange::formatChange: changeName = 'F'; break;
-        case KoGenChange::deleteChange: changeName = 'D'; break;
+        case KoGenChange::InsertChange: changeName = 'I'; break;
+        case KoGenChange::FormatChange: changeName = 'F'; break;
+        case KoGenChange::DeleteChange: changeName = 'D'; break;
         default:
             changeName = 'C';
         }

@@ -37,9 +37,9 @@ struct KoEncryptedStore_EncryptionData;
 class KoEncryptedStore : public KoStore
 {
 public:
-    KoEncryptedStore(const QString & filename, Mode mode, const QByteArray & appIdentification);
-    KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification);
-    KoEncryptedStore(QWidget* window, const KUrl& url, const QString & filename, Mode _mode, const QByteArray & appIdentification);
+    KoEncryptedStore(const QString &filename, Mode mode, const QByteArray &appIdentification);
+    KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray &appIdentification);
+    KoEncryptedStore(QWidget *window, const KUrl &url, const QString &filename, Mode mode, const QByteArray &appIdentification);
     ~KoEncryptedStore();
 
     /*
@@ -52,7 +52,7 @@ public:
      *
      * @return  True if the password was set
      */
-    virtual bool setPassword(const QString& password);
+    virtual bool setPassword(const QString &password);
 
     /*
      * Returns whether a store opened for reading is actually encrypted.
@@ -66,15 +66,15 @@ protected:
 
     using KoStore::init;
 
-    virtual bool init(Mode mode, const QByteArray& appIdentification);
+    virtual bool init(Mode mode, const QByteArray &appIdentification);
     virtual bool doFinalize();
-    virtual bool openWrite(const QString& name);
-    virtual bool openRead(const QString& name);
+    virtual bool openWrite(const QString &name);
+    virtual bool openRead(const QString &name);
     virtual bool closeWrite();
     virtual bool closeRead();
-    virtual bool enterRelativeDirectory(const QString& dirName);
-    virtual bool enterAbsoluteDirectory(const QString& path);
-    virtual bool fileExists(const QString& absPath) const;
+    virtual bool enterRelativeDirectory(const QString &dirName);
+    virtual bool enterAbsoluteDirectory(const QString &path);
+    virtual bool fileExists(const QString &absPath) const;
 
     /**
      * Tries and find a password for this document in KWallet.
@@ -101,7 +101,7 @@ private:
     QCA::SecureArray decryptFile(QCA::SecureArray & encryptedFile, KoEncryptedStore_EncryptionData & encData, QCA::SecureArray & password);
 
     /** returns true if the file should be encrypted, false otherwise **/
-    bool isToBeEncrypted(const QString& fullpath);
+    bool isToBeEncrypted(const QString &fullpath);
 
 protected:
     QCA::Initializer m_qcaInit;
@@ -116,7 +116,7 @@ protected:
 
     /** In "Read" mode this pointer is pointing to the
     current directory in the archive to speed up the verification process */
-    const KArchiveDirectory* m_currentDir;
+    const KArchiveDirectory *m_currentDir;
 private:
     Q_DECLARE_PRIVATE(KoStore)
 };

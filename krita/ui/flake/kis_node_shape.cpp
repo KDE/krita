@@ -49,7 +49,7 @@ KisNodeShape::KisNodeShape(KoShapeContainer * parent, KisNodeSP node)
 
     setShapeId(KIS_NODE_SHAPE_ID);
     KoShape::setParent(parent);
-    parent->addChild(this);
+    parent->addShape(this);
 
     connect(node, SIGNAL(visibilityChanged(bool)), SLOT(setNodeVisible(bool)));
     connect(node, SIGNAL(userLockingChanged(bool)), SLOT(editabilityChanged()));
@@ -131,7 +131,7 @@ void KisNodeShape::addChild(KoShape * shape)
 
     if (!m_d->node->allowAsChild(nodeShape->node())) return;
 
-    KoShapeContainer::addChild(shape);
+    KoShapeContainer::addShape(shape);
 }
 
 void KisNodeShape::saveOdf(KoShapeSavingContext & /*context*/) const

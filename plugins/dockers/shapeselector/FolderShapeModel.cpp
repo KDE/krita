@@ -32,11 +32,11 @@ void FolderShapeModel::remove(KoShape *child)
     m_icons.removeAll(child);
 }
 
-void FolderShapeModel::setClipping(const KoShape *, bool )
+void FolderShapeModel::setClipped(const KoShape *, bool )
 {
 }
 
-bool FolderShapeModel::childClipped(const KoShape *) const
+bool FolderShapeModel::isClipped(const KoShape *) const
 {
     return true;
 }
@@ -51,7 +51,7 @@ int FolderShapeModel::count() const
     return m_icons.count();
 }
 
-QList<KoShape *> FolderShapeModel::childShapes() const
+QList<KoShape *> FolderShapeModel::shapes() const
 {
     return m_icons;
 }

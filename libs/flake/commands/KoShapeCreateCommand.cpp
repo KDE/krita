@@ -63,7 +63,7 @@ void KoShapeCreateCommand::redo()
     Q_ASSERT(d->shape);
     Q_ASSERT(d->controller);
     if (d->shapeParent)
-        d->shapeParent->addChild(d->shape);
+        d->shapeParent->addShape(d->shape);
     // the parent has to be there when it is added to the KoShapeControllerBase
     d->controller->addShape(d->shape);
     d->shapeParent = d->shape->parent(); // update parent if the 'addShape' changed it
@@ -78,6 +78,6 @@ void KoShapeCreateCommand::undo()
     // the parent has to be there when it is removed from the KoShapeControllerBase
     d->controller->removeShape(d->shape);
     if (d->shapeParent)
-        d->shapeParent->removeChild(d->shape);
+        d->shapeParent->removeShape(d->shape);
     d->deleteShape = true;
 }

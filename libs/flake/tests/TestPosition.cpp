@@ -27,8 +27,8 @@ void TestPosition::init()
     childShape1->setSize(QSize(50, 50));
     container = new MockContainer();
     container->setPosition(QPointF(100, 100));
-    container->addChild(childShape1);
-    container->setClipping(childShape1, false);
+    container->addShape(childShape1);
+    container->setClipped(childShape1, false);
 
     childShape2 = new MockShape();
     childShape2->setPosition(QPointF(25, 25));
@@ -37,7 +37,7 @@ void TestPosition::init()
     container2->setPosition(QPointF(100, 200));
     container2->setSize(QSizeF(100, 100));
     container2->rotate(90);
-    container2->addChild(childShape2);
+    container2->addShape(childShape2);
 }
 
 void TestPosition::cleanup()
@@ -68,10 +68,10 @@ void TestPosition::testAbsolutePosition()
     QCOMPARE(childShape1->absolutePosition(), QPointF(100 + 20 + 25, 100 + 20 + 25));
 
     // rotated
-    container2->setClipping(childShape2, false);
+    container2->setClipped(childShape2, false);
     QCOMPARE(container2->absolutePosition(), QPointF(150, 250));
     QCOMPARE(childShape2->absolutePosition(), QPointF(130, 232.5));
-    container2->setClipping(childShape2, true);
+    container2->setClipped(childShape2, true);
     QCOMPARE(childShape2->absolutePosition(), QPointF(167.5, 230));
 
     shape1->rotate(90);
@@ -100,12 +100,12 @@ void TestPosition::testSetAbsolutePosition()
     QCOMPARE(childShape1->absolutePosition(), QPointF(0, 0));
 
     QCOMPARE(container2->position(), QPointF(100, 200));  // make sure nobody changed it
-    container2->setClipping(childShape2, false);
+    container2->setClipped(childShape2, false);
     childShape2->setAbsolutePosition(QPointF(0, 0));
     QCOMPARE(childShape2->position(), QPointF(-100 - 5, -200 - 7.5));
     QCOMPARE(childShape2->absolutePosition(), QPointF(0, 0));
 
-    container2->setClipping(childShape2, true);
+    container2->setClipped(childShape2, true);
     childShape2->setAbsolutePosition(QPointF(0, 0));
     QCOMPARE(childShape2->absolutePosition(), QPointF(0, 0));
     QCOMPARE(childShape2->position(), QPointF(-200 - 5, 200 - 7.5));
@@ -129,7 +129,7 @@ void TestPosition::testSetAbsolutePosition2()
     childShape1->setAbsolutePosition(QPointF(0, 0), KoFlake::TopRightCorner);
     QCOMPARE(childShape1->position(), QPointF(-150, -100));
 
-    container2->setClipping(childShape2, true);
+    container2->setClipped(childShape2, true);
     childShape2->setAbsolutePosition(QPointF(0, 0), KoFlake::TopLeftCorner);
     QCOMPARE(childShape2->position(), QPointF(-200, 200));
 }

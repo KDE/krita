@@ -33,8 +33,8 @@ void TestSelection::testSelectedShapes()
     QCOMPARE(selection.selectedShapes(KoFlake::TopLevelSelection).count(), 3);
 
     MockGroup group1;
-    group1.addChild(&shape1);
-    group1.addChild(&shape2);
+    group1.addShape(&shape1);
+    group1.addShape(&shape2);
     selection.select(&group1);
     QCOMPARE(selection.count(), 3);  // don't return the grouping shape.
     // Stripped returns no groups, so simply all 3 shapes
@@ -45,8 +45,8 @@ void TestSelection::testSelectedShapes()
     QCOMPARE(selection.selectedShapes(KoFlake::TopLevelSelection).count(), 2);
 
     MockGroup group2;
-    group2.addChild(&shape3);
-    group2.addChild(&group1);
+    group2.addShape(&shape3);
+    group2.addShape(&group1);
     selection.select(&group2);
     QCOMPARE(selection.count(), 3);  // thats 5 minus 2 grouping shapes.
     // Stripped returns no groups, so simply all 3 shapes
@@ -57,11 +57,11 @@ void TestSelection::testSelectedShapes()
     QCOMPARE(selection.selectedShapes(KoFlake::TopLevelSelection).count(), 1);
 
 
-    group1.removeChild(&shape1);
-    group1.removeChild(&shape2);
+    group1.removeShape(&shape1);
+    group1.removeShape(&shape2);
     MockContainer container;
-    container.addChild(&shape1);
-    container.addChild(&shape2);
+    container.addShape(&shape1);
+    container.addShape(&shape2);
     selection.select(&container);
     QCOMPARE(selection.count(), 4);  // thats 6 minus 2 grouping shapes.
     // Stripped returns no groups, so simply all 3 shapes + container

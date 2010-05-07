@@ -43,13 +43,13 @@ public:
     /// reimplemented from KoShapeContainerModel
     virtual void remove(KoShape *child);
     /// reimplemented from KoShapeContainerModel
-    virtual void setClipping(const KoShape *child, bool clipping);
+    virtual void setClipped(const KoShape *child, bool clipping);
     /// reimplemented from KoShapeContainerModel
-    virtual bool childClipped(const KoShape *child) const;
+    virtual bool isClipped(const KoShape *child) const;
     /// reimplemented from KoShapeContainerModel
     virtual int count() const;
     /// reimplemented from KoShapeContainerModel
-    virtual QList<KoShape*> childShapes() const;
+    virtual QList<KoShape*> shapes() const;
     /// reimplemented from KoShapeContainerModel
     virtual void containerChanged(KoShapeContainer *container);
     /// reimplemented from KoShapeContainerModel

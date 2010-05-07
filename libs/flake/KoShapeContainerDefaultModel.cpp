@@ -96,7 +96,7 @@ void KoShapeContainerDefaultModel::proposeMove(KoShape *shape, QPointF &move)
 }
 
 
-void KoShapeContainerDefaultModel::setClipping(const KoShape *child, bool clipping)
+void KoShapeContainerDefaultModel::setClipped(const KoShape *child, bool clipping)
 {
     Private::Relation *relation = d->findRelation(child);
     if (relation == 0)
@@ -109,7 +109,7 @@ void KoShapeContainerDefaultModel::setClipping(const KoShape *child, bool clippi
     relation->child()->update();
 }
 
-bool KoShapeContainerDefaultModel::childClipped(const KoShape *child) const
+bool KoShapeContainerDefaultModel::isClipped(const KoShape *child) const
 {
     Private::Relation *relation = d->findRelation(child);
     return relation ? relation->m_inside: false;
@@ -128,7 +128,7 @@ int KoShapeContainerDefaultModel::count() const
     return d->relations.count();
 }
 
-QList<KoShape*> KoShapeContainerDefaultModel::childShapes() const
+QList<KoShape*> KoShapeContainerDefaultModel::shapes() const
 {
     QList<KoShape*> answer;
     foreach(Private::Relation *relation, d->relations) {

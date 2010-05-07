@@ -152,6 +152,6 @@ void KoPAMasterPage::paintPage( QPainter & painter, KoZoomHandler & zoomHandler 
     paintBackground( painter, zoomHandler );
 
     KoShapePainter shapePainter;
-    shapePainter.setShapes( childShapes() );
+    shapePainter.setShapes( shapes() );
     shapePainter.paint(painter, zoomHandler);
 }

@@ -110,7 +110,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
     KoShapeContainer::setParent(_rhs.KoShapeContainer::parent());
     initShapeLayer(_rhs.m_d->controller);
 
-    KoShapeOdfSaveHelper saveHelper(_rhs.childShapes());
+    KoShapeOdfSaveHelper saveHelper(_rhs.shapes());
     KoDrag drag;
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
     QMimeData* mimeData = drag.mimeData();
@@ -157,7 +157,7 @@ void KisShapeLayer::addChild(KoShape *object)
 {
     QRect updatedRect = m_d->converter->documentToView(object->boundingRect()).toRect();
 
-    KoShapeLayer::addChild(object);
+    KoShapeLayer::addShape(object);
     m_d->canvas->shapeManager()->add(object);
 
     setDirty(updatedRect);
@@ -168,7 +168,7 @@ void KisShapeLayer::removeChild(KoShape *object)
     QRect updatedRect = m_d->converter->documentToView(object->boundingRect()).toRect();
 
     m_d->canvas->shapeManager()->remove(object);
-    KoShapeLayer::removeChild(object);
+    KoShapeLayer::removeShape(object);
 
     setDirty(updatedRect);
 }

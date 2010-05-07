@@ -47,7 +47,7 @@ KoPAPageBase::KoPAPageBase()
 {
     // Add a default layer
     KoShapeLayer* layer = new KoShapeLayer;
-    addChild(layer);
+    addShape(layer);
 }
 
 KoPAPageBase::~KoPAPageBase()
@@ -87,7 +87,7 @@ void KoPAPageBase::saveOdfPageContent( KoPASavingContext & paContext ) const
 
 void KoPAPageBase::saveOdfLayers(KoPASavingContext &paContext) const
 {
-    QList<KoShape*> shapes(childShapes());
+    QList<KoShape*> shapes(this->shapes());
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
     foreach(KoShape* shape, shapes) {
         KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
@@ -105,7 +105,7 @@ void KoPAPageBase::saveOdfLayers(KoPASavingContext &paContext) const
 
 void KoPAPageBase::saveOdfShapes( KoShapeSavingContext &context ) const
 {
-    QList<KoShape*> shapes( childShapes() );
+    QList<KoShape*> shapes(this->shapes());
     QList<KoShape*> tlshapes( shapes );
 
     qSort( tlshapes.begin(), tlshapes.end(), KoShape::compareShapeZIndex );
@@ -171,12 +171,12 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
         KoShapeLayer * layer = 0;
         if ( first ) {
             first = false;
-            layer = dynamic_cast<KoShapeLayer *>( childShapes().first() );
+            layer = dynamic_cast<KoShapeLayer *>( shapes().first() );
             Q_ASSERT( layer );
         }
         else {
             layer = new KoShapeLayer();
-            addChild( layer );
+            addShape( layer );
         }
         if ( layer ) {
             layer->setZIndex( layerZIndex++ );
@@ -184,7 +184,7 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
         }
     }
 
-    KoShapeLayer * layer = dynamic_cast<KoShapeLayer *>( childShapes().first() );
+    KoShapeLayer * layer = dynamic_cast<KoShapeLayer *>( shapes().first() );
     if ( layer )
     {
         KoXmlElement child;
@@ -195,7 +195,7 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
             KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, loadingContext );
             if ( shape ) {
                 if( ! shape->parent() ) {
-                    layer->addChild( shape );
+                    layer->addShape( shape );
                 }
             }
         }
@@ -237,7 +237,7 @@ QRectF KoPAPageBase::boundingRect() const
 QRectF KoPAPageBase::contentRect() const
 {
     QRectF bb;
-    foreach (KoShape* layer, childShapes()) {
+    foreach (KoShape* layer, shapes()) {
         if (bb.isNull()) {
             bb = layer->boundingRect();
         }

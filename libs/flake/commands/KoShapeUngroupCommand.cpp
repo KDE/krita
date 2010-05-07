@@ -32,7 +32,7 @@ KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const 
     qSort(orderdShapes.begin(), orderdShapes.end(), KoShape::compareShapeZIndex);
     d->shapes = orderdShapes;
 
-    QList<KoShape*> ancestors = d->container->parent()? d->container->parent()->childShapes(): topLevelShapes;
+    QList<KoShape*> ancestors = d->container->parent()? d->container->parent()->shapes(): topLevelShapes;
     qSort(ancestors.begin(), ancestors.end(), KoShape::compareShapeZIndex);
     QList<KoShape*>::const_iterator it(qFind(ancestors, d->container));
 
@@ -43,9 +43,9 @@ KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const 
 
     int zIndex = d->container->zIndex();
     foreach(KoShape *shape, d->shapes) {
-        d->clipped.append(d->container->childClipped(shape));
+        d->clipped.append(d->container->isClipped(shape));
         d->oldParents.append(d->container->parent());
-        d->oldClipped.append(d->container->childClipped(shape));
+        d->oldClipped.append(d->container->isClipped(shape));
         // TODO this might also need to change the children of the parent but that is very problematic if the parent is 0
         d->oldZIndex.append(zIndex++);
     }

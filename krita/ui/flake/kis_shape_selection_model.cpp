@@ -86,13 +86,13 @@ void KisShapeSelectionModel::remove(KoShape *child)
     m_image->undoAdapter()->emitSelectionChanged();
 }
 
-void KisShapeSelectionModel::setClipping(const KoShape *child, bool clipping)
+void KisShapeSelectionModel::setClipped(const KoShape *child, bool clipping)
 {
     Q_UNUSED(child);
     Q_UNUSED(clipping);
 }
 
-bool KisShapeSelectionModel::childClipped(const KoShape *child) const
+bool KisShapeSelectionModel::isClipped(const KoShape *child) const
 {
     Q_UNUSED(child);
     return false;
@@ -103,7 +103,7 @@ int KisShapeSelectionModel::count() const
     return m_shapeMap.count();
 }
 
-QList<KoShape*> KisShapeSelectionModel::childShapes() const
+QList<KoShape*> KisShapeSelectionModel::shapes() const
 {
     return QList<KoShape*>(m_shapeMap.keys());
 }

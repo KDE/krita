@@ -83,7 +83,7 @@ void KoSelectionPrivate::selectGroupChildren(KoShapeGroup *group)
     if (! group)
         return;
 
-    foreach(KoShape *shape, group->childShapes()) {
+    foreach(KoShape *shape, group->shapes()) {
         if (selectedShapes.contains(shape))
             continue;
         selectedShapes << shape;
@@ -99,7 +99,7 @@ void KoSelectionPrivate::deselectGroupChildren(KoShapeGroup *group)
     if (! group)
         return;
 
-    foreach(KoShape *shape, group->childShapes()) {
+    foreach(KoShape *shape, group->shapes()) {
         if (selectedShapes.contains(shape))
             selectedShapes.removeAll(shape);
 

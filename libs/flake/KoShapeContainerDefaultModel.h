@@ -41,10 +41,10 @@ public:
     void proposeMove(KoShape *shape, QPointF &move);
 
     /// reimplemented
-    virtual void setClipping(const KoShape *child, bool clipping);
+    virtual void setClipped(const KoShape *child, bool clipping);
 
     /// reimplemented
-    virtual bool childClipped(const KoShape *child) const;
+    virtual bool isClipped(const KoShape *child) const;
 
     // reimplemented
     virtual void remove(KoShape *child);
@@ -53,7 +53,7 @@ public:
     virtual int count() const;
 
     /// reimplemented
-    virtual QList<KoShape*> childShapes() const;
+    virtual QList<KoShape*> shapes() const;
 
     /// reimplemented
     virtual bool isChildLocked(const KoShape *child) const;

@@ -36,11 +36,11 @@ public:
     void add(KoShape *child);
     void remove(KoShape *child);
 
-    void setClipping(const KoShape *child, bool clipping);
-    bool childClipped(const KoShape *child) const;
+    void setClipped(const KoShape *child, bool clipping);
+    bool isClipped(const KoShape *child) const;
 
     int count() const;
-    QList<KoShape*> childShapes() const;
+    QList<KoShape*> shapes() const;
 
     void containerChanged(KoShapeContainer *);
     void childChanged(KoShape * child, KoShape::ChangeType type);

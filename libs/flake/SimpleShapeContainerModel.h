@@ -32,8 +32,8 @@ public:
             return;
         m_members.append(child);
     }
-    void setClipping(const KoShape *, bool) { }
-    bool childClipped(const KoShape *) const {
+    void setClipped(const KoShape *, bool) { }
+    bool isClipped(const KoShape *) const {
         return false;
     }
     void remove(KoShape *child) {
@@ -42,7 +42,7 @@ public:
     int count() const {
         return m_members.count();
     }
-    QList<KoShape*> childShapes() const {
+    QList<KoShape*> shapes() const {
         return QList<KoShape*>(m_members);
     }
     void containerChanged(KoShapeContainer *) { }

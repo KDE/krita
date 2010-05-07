@@ -994,7 +994,7 @@ void DefaultTool::selectionUngroup()
         KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
         if (group) {
             cmd = cmd ? cmd : new QUndoCommand(i18n("Ungroup shapes"));
-            new KoShapeUngroupCommand(group, group->childShapes(),
+            new KoShapeUngroupCommand(group, group->shapes(),
                                       group->parent()? QList<KoShape*>(): canvas()->shapeManager()->topLevelShapes(),
                                       cmd);
             canvas()->shapeController()->removeShape(group, cmd);

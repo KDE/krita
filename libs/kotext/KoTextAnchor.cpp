@@ -84,8 +84,8 @@ public:
                 model->removeAnchor(parent);
             if (shape->parent() != container) {
                 if (shape->parent())
-                    shape->parent()->removeChild(shape);
-                container->addChild(shape);
+                    shape->parent()->removeShape(shape);
+                container->addShape(shape);
             }
             model = theModel;
             model->addAnchor(parent);

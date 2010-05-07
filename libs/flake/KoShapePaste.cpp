@@ -67,7 +67,7 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
     KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
     KoShapeLoadingContext context(loadingContext, d->canvas->shapeController()->resourceManager());
 
-    QList<KoShape*> shapes(d->layer ? d->layer->childShapes(): d->canvas->shapeManager()->topLevelShapes());
+    QList<KoShape*> shapes(d->layer ? d->layer->shapes(): d->canvas->shapeManager()->topLevelShapes());
 
     int zIndex = 0;
     if (!shapes.isEmpty()) {

@@ -291,9 +291,9 @@ void TestShapeReorderCommand::testSendToBackChildren()
     shape3.setZIndex(3);
     
     MockContainer container;
-    container.addChild(&shape1);
-    container.addChild(&shape2);
-    container.addChild(&shape3);
+    container.addShape(&shape1);
+    container.addShape(&shape2);
+    container.addShape(&shape3);
     
     QList<KoShape*> shapes;
     shapes.append(&shape1);

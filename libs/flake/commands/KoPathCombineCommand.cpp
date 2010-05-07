@@ -87,12 +87,12 @@ void KoPathCombineCommand::redo()
         foreach(KoPathShape* p, d->paths) {
             d->controller->removeShape(p);
             if (*parentIt)
-                (*parentIt)->removeChild(p);
+                (*parentIt)->removeShape(p);
             parentIt++;
 
         }
         if (d->combinedPathParent)
-            d->combinedPathParent->addChild(d->combinedPath);
+            d->combinedPathParent->addShape(d->combinedPath);
         d->controller->addShape(d->combinedPath);
     }
 }
@@ -107,7 +107,7 @@ void KoPathCombineCommand::undo()
     if (d->controller) {
         d->controller->removeShape(d->combinedPath);
         if (d->combinedPath->parent())
-            d->combinedPath->parent()->removeChild(d->combinedPath);
+            d->combinedPath->parent()->removeShape(d->combinedPath);
         QList<KoShapeContainer*>::iterator parentIt = d->oldParents.begin();
         foreach(KoPathShape* p, d->paths) {
             d->controller->addShape(p);

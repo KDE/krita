@@ -155,7 +155,7 @@ void ShowChangesCommand::checkAndAddAnchoredShapes(int position, int length)
                 container = dynamic_cast<KoShapeContainer *>((lay->shapes()).at(0));
 
             if (container) {
-                container->addChild(anchor->shape()); 
+                container->addShape(anchor->shape());
                 QUndoCommand *shapeCommand = m_canvas->shapeController()->addShapeDirect(anchor->shape());
                 shapeCommand->redo();
                 m_shapeCommands.push_front(shapeCommand);

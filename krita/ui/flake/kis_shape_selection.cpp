@@ -83,7 +83,7 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
     m_canvas = new KisShapeSelectionCanvas();
     m_canvas->shapeManager()->add(this);
 
-    KoShapeOdfSaveHelper saveHelper(rhs.childShapes());
+    KoShapeOdfSaveHelper saveHelper(rhs.shapes());
     KoDrag drag;
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
     QMimeData* mimeData = drag.mimeData();
@@ -280,20 +280,20 @@ bool KisShapeSelection::loadSelection(KoStore* store)
 
 void KisShapeSelection::addChild(KoShape *object)
 {
-    KoShapeLayer::addChild(object);
+    KoShapeLayer::addShape(object);
     m_canvas->shapeManager()->add(object);
 }
 
 void KisShapeSelection::removeChild(KoShape *object)
 {
     m_canvas->shapeManager()->remove(object);
-    KoShapeLayer::removeChild(object);
+    KoShapeLayer::removeShape(object);
 }
 
 QPainterPath KisShapeSelection::selectionOutline()
 {
     if (m_dirty) {
-        QList<KoShape*> shapesList = childShapes();
+        QList<KoShape*> shapesList = shapes();
 
         QPainterPath outline;
         foreach(KoShape * shape, shapesList) {

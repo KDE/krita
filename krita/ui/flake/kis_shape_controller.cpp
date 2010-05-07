@@ -103,7 +103,7 @@ void KisShapeController::Private::removeShapeAndChildrenFromMap(KoShape* shape)
 {
     KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>(shape);
     if (parent) {
-        foreach(KoShape * child, parent->childShapes()) {
+        foreach(KoShape * child, parent->shapes()) {
             removeShapeAndChildrenFromMap(child);
         }
     }
@@ -203,7 +203,7 @@ void KisShapeController::removeShape(KoShape* shape)
     {
         KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>(shape);
         if (parent) {
-            foreach(KoShape * child, parent->childShapes()) {
+            foreach(KoShape * child, parent->shapes()) {
                 dbgUI << "Removing " << child << " as child of " << parent;
                 removeShape(child);
             }
@@ -399,7 +399,7 @@ void KisShapeController::slotNodeAdded(KisNode* parentNode, int index)
 
     // Put the layer in the right place in the hierarchy
     shape->setParent(parent);
-    parent->addChild(shape);
+    parent->addShape(shape);
 
     m_d->nodeShapes[node] = shape;
 

@@ -80,7 +80,7 @@ int KoPADocumentModel::rowCount( const QModelIndex &parent ) const
     if( ! parentShape )
         return 0;
 
-    return parentShape->childCount();
+    return parentShape->shapeCount();
 }
 
 int KoPADocumentModel::columnCount( const QModelIndex & ) const
@@ -109,7 +109,7 @@ QModelIndex KoPADocumentModel::index( int row, int column, const QModelIndex &pa
     if( ! parentShape )
         return QModelIndex();
 
-    if( row < parentShape->childCount() )
+    if( row < parentShape->shapeCount() )
         return createIndex( row, column, childFromIndex( parentShape, row ) );
     else
         return QModelIndex();
@@ -214,7 +214,7 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
             if( container )
             {
                 bbox = QRectF();
-                foreach( KoShape* shape, container->childShapes() )
+                foreach( KoShape* shape, container->shapes() )
                     bbox = bbox.united( shape->outline().boundingRect() );
             }
             return qreal(bbox.width()) / bbox.height();
@@ -330,7 +330,7 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
     shapes.append( shape );
     KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
     if( container )
-        shapes = container->childShapes();
+        shapes = container->shapes();
 
     shapePainter.setShapes( shapes );
 
@@ -344,12 +344,12 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
 
 KoShape * KoPADocumentModel::childFromIndex( KoShapeContainer *parent, int row ) const
 {
-    return parent->childShapes().at(row);
+    return parent->shapes().at(row);
 
     if( parent != m_lastContainer )
     {
         m_lastContainer = parent;
-        m_childs = parent->childShapes();
+        m_childs = parent->shapes();
         qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
     }
     return m_childs.at( row );
@@ -360,12 +360,12 @@ int KoPADocumentModel::indexFromChild( KoShapeContainer *parent, KoShape *child 
     if ( !m_document )
         return 0;
 
-    return parent->childShapes().indexOf( child );
+    return parent->shapes().indexOf( child );
 
     if( parent != m_lastContainer )
     {
         m_lastContainer = parent;
-        m_childs = parent->childShapes();
+        m_childs = parent->shapes();
         qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
     }
     return m_childs.indexOf( child );
@@ -499,7 +499,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
                 return false;
 
             emit layoutAboutToBeChanged();
-            beginInsertRows( parent, group->childCount(), group->childCount()+toplevelShapes.count() );
+            beginInsertRows( parent, group->shapeCount(), group->shapeCount()+toplevelShapes.count() );
 
             QUndoCommand * cmd = new QUndoCommand();
             cmd->setText( i18n("Reparent shapes") );
@@ -520,7 +520,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             if( toplevelShapes.count() )
             {
                 emit layoutAboutToBeChanged();
-                beginInsertRows( parent, container->childCount(), container->childCount()+toplevelShapes.count() );
+                beginInsertRows( parent, container->shapeCount(), container->shapeCount()+toplevelShapes.count() );
 
                 QUndoCommand * cmd = new QUndoCommand();
                 cmd->setText( i18n("Reparent shapes") );
@@ -534,7 +534,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
                         continue;
                     }
 
-                    clipped.append( shape->parent()->childClipped( shape ) );
+                    clipped.append( shape->parent()->isClipped( shape ) );
                     new KoShapeUngroupCommand( shape->parent(), QList<KoShape*>() << shape, QList<KoShape*>(), cmd );
                 }
                 // shapes are dropped on a container, so add them to the container

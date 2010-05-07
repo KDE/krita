@@ -15,14 +15,14 @@ void TestShapePainting::testPaintShape()
 
     KComponentData componentData("TestShapePainting");    // we need an instance for that canvas
 
-    container.addChild(&shape1);
-    container.addChild(&shape2);
+    container.addShape(&shape1);
+    container.addShape(&shape2);
     QCOMPARE(shape1.parent(), &container);
     QCOMPARE(shape2.parent(), &container);
-    container.setClipping(&shape1, false);
-    container.setClipping(&shape2, false);
-    QCOMPARE(container.childClipped(&shape1), false);
-    QCOMPARE(container.childClipped(&shape2), false);
+    container.setClipped(&shape1, false);
+    container.setClipped(&shape2, false);
+    QCOMPARE(container.isClipped(&shape1), false);
+    QCOMPARE(container.isClipped(&shape2), false);
 
     MockCanvas canvas;
     KoShapeManager manager(&canvas);
@@ -49,10 +49,10 @@ void TestShapePainting::testPaintShape()
     QCOMPARE(container.paintedCount, 1);
 
 
-    container.setClipping(&shape1, false);
-    container.setClipping(&shape2, true);
-    QCOMPARE(container.childClipped(&shape1), false);
-    QCOMPARE(container.childClipped(&shape2), true);
+    container.setClipped(&shape1, false);
+    container.setClipped(&shape2, true);
+    QCOMPARE(container.isClipped(&shape1), false);
+    QCOMPARE(container.isClipped(&shape2), true);
 
     shape1.paintedCount = 0;
     shape2.paintedCount = 0;
@@ -75,10 +75,10 @@ void TestShapePainting::testPaintHiddenShape()
     MockContainer second;
     MockContainer top;
 
-    top.addChild(&second);
-    second.addChild(&thirth);
-    thirth.addChild(&fourth);
-    fourth.addChild(&shape);
+    top.addShape(&second);
+    second.addShape(&thirth);
+    thirth.addShape(&fourth);
+    fourth.addShape(&shape);
 
     second.setVisible(false);
 
@@ -127,8 +127,8 @@ void TestShapePainting::testPaintOrder()
     shape1.setZIndex(5);
     OrderedMockShape shape2(order);
     shape2.setZIndex(0);
-    top.addChild(&shape1);
-    top.addChild(&shape2);
+    top.addShape(&shape1);
+    top.addShape(&shape2);
 
     MockContainer bottom;
     bottom.setZIndex(1);
@@ -136,8 +136,8 @@ void TestShapePainting::testPaintOrder()
     shape3.setZIndex(-1);
     OrderedMockShape shape4(order);
     shape4.setZIndex(9);
-    bottom.addChild(&shape3);
-    bottom.addChild(&shape4);
+    bottom.addShape(&shape3);
+    bottom.addShape(&shape4);
 
     MockCanvas canvas;
     KoShapeManager manager(&canvas);
@@ -190,8 +190,8 @@ void TestShapePainting::testPaintOrder()
     child1_1.setZIndex(1);
     OrderedMockShape child1_2(order);
     child1_2.setZIndex(2);
-    branch1.addChild(&child1_1);
-    branch1.addChild(&child1_2);
+    branch1.addShape(&child1_1);
+    branch1.addShape(&child1_2);
     
     MockContainer branch2;
     branch2.setZIndex(2);
@@ -199,18 +199,18 @@ void TestShapePainting::testPaintOrder()
     child2_1.setZIndex(1);
     OrderedMockShape child2_2(order);
     child2_2.setZIndex(2);
-    branch2.addChild(&child2_1);
-    branch2.addChild(&child2_2);
+    branch2.addShape(&child2_1);
+    branch2.addShape(&child2_2);
  
-    root.addChild(&branch1);
-    root.addChild(&branch2);
+    root.addShape(&branch1);
+    root.addShape(&branch2);
     
     QList<KoShape*> sortedShapes;
     sortedShapes.append(&root);
     sortedShapes.append(&branch1);
     sortedShapes.append(&branch2);
-    sortedShapes.append(branch1.childShapes());
-    sortedShapes.append(branch2.childShapes());
+    sortedShapes.append(branch1.shapes());
+    sortedShapes.append(branch2.shapes());
     
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     QCOMPARE(sortedShapes.count(), 7);

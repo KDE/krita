@@ -249,7 +249,7 @@ QRectF ItemStore::loadShapeTypes()
             int line, column;
             if (doc.setContent(children, false, &error, &line, &column)) {
                 folder->load(doc);
-                foreach(KoShape *child, folder->childShapes())
+                foreach(KoShape *child, folder->shapes())
                     s_itemStorePrivate()->addShape(child);
             } else {
                 kWarning(31000) << "ERROR: Could not parse xml for folder" << i << "at Line" << line << "Column" << column;
@@ -296,13 +296,13 @@ QRectF ItemStore::loadShapeTypes()
             }
             if (ts) {
                 s_itemStorePrivate()->addShape(ts);
-                mainFolder->addChild(ts);
+                mainFolder->addShape(ts);
                 maxHeight = qMax(maxHeight, ts->size().height());
             }
         }
         if (!oneAdded) {
             KoShape *group = new GroupShape(factory);
-            mainFolder->addChild(group);
+            mainFolder->addShape(group);
             s_itemStorePrivate()->addShape(group);
         }
     }

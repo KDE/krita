@@ -1327,7 +1327,7 @@ KoPathShape * KoPathShape::createShapeFromPainterPath(const QPainterPath &path)
 
 bool KoPathShape::hitTest(const QPointF &position) const
 {
-    if (parent() && parent()->childClipped(this) && ! parent()->hitTest(position))
+    if (parent() && parent()->isClipped(this) && ! parent()->hitTest(position))
         return false;
 
     QPointF point = absoluteTransformation(0).inverted().map(position);

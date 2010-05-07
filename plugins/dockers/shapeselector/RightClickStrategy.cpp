@@ -125,7 +125,7 @@ void RightClickStrategy::createNewFolder()
         oldFolder->setSize(size);
         if (oldFolder->model()->count()) {
             // Make sure we don't resize the folder to small for its contents.
-            QPointF bottom = oldFolder->model()->childShapes().last()->absolutePosition(KoFlake::BottomRightCorner);
+            QPointF bottom = oldFolder->model()->shapes().last()->absolutePosition(KoFlake::BottomRightCorner);
             if (bottom.y() > size.height())
                 oldFolder->setSize(QSizeF(size.width(), bottom.y()));
         }

@@ -122,9 +122,9 @@ public:
     }
 
     /// reimplemented
-    void setClipping(const KoShape *, bool) { }  // ignored
+    void setClipped(const KoShape *, bool) { }  // ignored
     /// reimplemented
-    bool childClipped(const KoShape *) const {
+    bool isClipped(const KoShape *) const {
         return false;
     }// ignored
     /// reimplemented
@@ -136,7 +136,7 @@ public:
         return m_children.count();
     }
     /// reimplemented
-    QList<KoShape*> childShapes() const {
+    QList<KoShape*> shapes() const {
         return m_children;
     }
     /// reimplemented

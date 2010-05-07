@@ -99,7 +99,7 @@ KoShapePrivate::~KoShapePrivate()
 {
     Q_Q(KoShape);
     if (parent)
-        parent->removeChild(q);
+        parent->removeShape(q);
     foreach(KoShapeManager *manager, shapeManagers) {
         manager->remove(q);
         manager->removeAdditional(q);
@@ -286,7 +286,7 @@ void KoShape::setPosition(const QPointF &newPosition)
 bool KoShape::hitTest(const QPointF &position) const
 {
     Q_D(const KoShape);
-    if (d->parent && d->parent->childClipped(this) && !d->parent->hitTest(position))
+    if (d->parent && d->parent->isClipped(this) && !d->parent->hitTest(position))
         return false;
 
     QPointF point = absoluteTransformation(0).inverted().map(position);
@@ -342,7 +342,7 @@ QMatrix KoShape::absoluteTransformation(const KoViewConverter *converter) const
     // apply parents matrix to inherit any transformations done there.
     KoShapeContainer * container = d->parent;
     if (container) {
-        if (container->childClipped(this)) {
+        if (container->isClipped(this)) {
             // We do need to pass the converter here, otherwise the parent's
             // translation is not inherited.
             matrix = container->absoluteTransformation(converter);
@@ -437,10 +437,10 @@ void KoShape::setParent(KoShapeContainer *parent)
     KoShapeContainer *oldParent = d->parent;
     d->parent = 0; // avoids recursive removing
     if (oldParent)
-        oldParent->removeChild(this);
+        oldParent->removeShape(this);
     if (parent && parent != this) {
         d->parent = parent;
-        parent->addChild(this);
+        parent->addShape(this);
     }
     notifyChanged();
     d->shapeChanged(ParentChanged);
@@ -949,7 +949,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         style.addProperty(it.key(), it.value());
     }
 
-    if (parent() && parent()->childClipped(this)) {
+    if (parent() && parent()->isClipped(this)) {
         /*
          * In KOffice clipping is done using a parent shape which can be rotated, sheared etc
          * and even non-square.  So the ODF interoperability version we write here is really
@@ -1306,7 +1306,7 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
 
     if (attributes & OdfSize) {
         QSizeF s(size());
-        if (parent() && parent()->childClipped(this)) { // being clipped shrinks our visible size
+        if (parent() && parent()->isClipped(this)) { // being clipped shrinks our visible size
             // clipping in ODF is done using a combination of visual size and content cliprect.
             // A picture of 10cm x 10cm displayed in a box of 2cm x 4cm will be scaled (out
             // of proportion in this case).  If we then add a fo:clip like;

@@ -149,9 +149,9 @@ void KoShapeManager::Private::updateTree()
 
 void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, bool forPrint)
 {
-    QList<KoShape*> childShapes = group->childShapes();
-    qSort(childShapes.begin(), childShapes.end(), KoShape::compareShapeZIndex);
-    foreach(KoShape *child, childShapes) {
+    QList<KoShape*> shapes = group->shapes();
+    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+    foreach(KoShape *child, shapes) {
         // we paint recursively here, so we do not have to check recursively for visibility
         if (!child->isVisible())
             continue;
@@ -226,7 +226,7 @@ void KoShapeManager::add(KoShape *shape, Repaint repaint)
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
 
     if (container) {
-        foreach (KoShape *containerShape, container->childShapes()) {
+        foreach (KoShape *containerShape, container->shapes()) {
             add(containerShape, repaint);
         }
     }
@@ -263,7 +263,7 @@ void KoShapeManager::remove(KoShape *shape)
     // remove the children of a KoShapeContainer
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
-        foreach (KoShape *containerShape, container->childShapes()) {
+        foreach (KoShape *containerShape, container->shapes()) {
             remove(containerShape);
         }
     }
@@ -321,7 +321,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
     foreach (KoShape *shape, sortedShapes) {
-        if (shape->parent() != 0 && shape->parent()->childClipped(shape))
+        if (shape->parent() != 0 && shape->parent()->isClipped(shape))
             continue;
 
         painter.save();
@@ -573,7 +573,7 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
 
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
-        foreach(KoShape *child, container->childShapes())
+        foreach(KoShape *child, container->shapes())
             d->aggregate4update.insert(child);
     }
 }

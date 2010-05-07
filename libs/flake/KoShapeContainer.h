@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -94,33 +94,33 @@ public:
      * Add a child to this container.
      * @param shape the child to be managed in the container.
      */
-    void addChild(KoShape *shape);
+    void addShape(KoShape *shape);
 
     /**
      * Remove a child to be completely separated from the container.
      * @param shape the child to be removed.
      */
-    void removeChild(KoShape *shape);
+    void removeShape(KoShape *shape);
 
     /**
      * Return the current number of children registered.
      * @return the current number of children registered.
      */
-    int childCount() const;
+    int shapeCount() const;
 
     /**
      * Set the argument child to have its 'clipping' property set.
      * @param child the child for which the property will be changed.
      * @param clipping the property
      */
-    void setClipping(const KoShape *child, bool clipping);
+    void setClipped(const KoShape *child, bool clipping);
 
     /**
      * Returns if the argument child has its 'clipping' property set.
      * @return if the argument child has its 'clipping' property set.
      * @param child the child for which the property will be returned.
      */
-    bool childClipped(const KoShape *child) const;
+    bool isClipped(const KoShape *child) const;
 
     /**
      * Return wheather the child has the effective state of being locked for user modifications.
@@ -151,7 +151,7 @@ public:
      * Create and return an iterator over all child shapes.
      * @return an interator over all child shapes.
      */
-    QList<KoShape*> childShapes() const;
+    QList<KoShape*> shapes() const;
 
     /**
      * return the model for this container
@@ -165,7 +165,7 @@ protected:
      * This method will be called just after the child has been added/removed.
      * The default implementation is empty.
      */
-    virtual void childCountChanged() { }
+    virtual void shapeCountChanged() { }
 
     /// constructor
     KoShapeContainer(KoShapeContainerPrivate &);

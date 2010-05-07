@@ -42,7 +42,7 @@ public:
             KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
             if (shape) {
                 kDebug() << "Adding " << shape << "with parent" << shape->parent() << "to container" << m_container;
-                m_container->addChild(shape);
+                m_container->addShape(shape);
             }
         }
         return true;

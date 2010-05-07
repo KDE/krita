@@ -176,7 +176,7 @@ void TestShapeGroupCommand::testSublevelGroup()
     QCOMPARE(sublevelGroup->size(), QSizeF(150, 50));
 
     // check that the shapes are added in the correct order
-    QList<KoShape*> childOrder(sublevelGroup->childShapes());
+    QList<KoShape*> childOrder(sublevelGroup->shapes());
     qSort(childOrder.begin(), childOrder.end(), KoShape::compareShapeZIndex);
     QList<KoShape*> expectedOrder;
     expectedOrder << sublevelShape2 << sublevelShape1;

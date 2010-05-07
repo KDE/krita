@@ -92,14 +92,14 @@ void KoTextShapeContainerModel::remove(KoShape *child)
     delete relation;
 }
 
-void KoTextShapeContainerModel::setClipping(const KoShape *child, bool clipping)
+void KoTextShapeContainerModel::setClipped(const KoShape *child, bool clipping)
 {
     Relation *relation = d->children.value(const_cast<KoShape*>(child));
     Q_ASSERT(relation);
     relation->nested = clipping;
 }
 
-bool KoTextShapeContainerModel::childClipped(const KoShape *child) const
+bool KoTextShapeContainerModel::isClipped(const KoShape *child) const
 {
     Relation *relation = d->children.value(const_cast<KoShape*>(child));
     Q_ASSERT(relation);
@@ -111,7 +111,7 @@ int KoTextShapeContainerModel::count() const
     return d->children.count();
 }
 
-QList<KoShape*> KoTextShapeContainerModel::childShapes() const
+QList<KoShape*> KoTextShapeContainerModel::shapes() const
 {
     return d->children.keys();
 }

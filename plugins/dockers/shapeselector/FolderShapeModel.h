@@ -30,11 +30,11 @@ public:
 
     virtual void add(KoShape *child);
     virtual void remove(KoShape *child);
-    virtual void setClipping(const KoShape *child, bool clipping);
-    virtual bool childClipped(const KoShape *child) const;
+    virtual void setClipped(const KoShape *child, bool clipping);
+    virtual bool isClipped(const KoShape *child) const;
     virtual bool isChildLocked(const KoShape *child) const;
     virtual int count() const;
-    virtual QList<KoShape *> childShapes() const;
+    virtual QList<KoShape *> shapes() const;
     virtual void containerChanged(KoShapeContainer *container);
     virtual void childChanged(KoShape *child, KoShape::ChangeType type);
 

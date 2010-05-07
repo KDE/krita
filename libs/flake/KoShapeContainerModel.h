@@ -63,7 +63,7 @@ public:
      * @param clipping the property; see KoShapeContainerModel for an explenation of what
      *        this bool is for.
      */
-    virtual void setClipping(const KoShape *child, bool clipping) = 0;
+    virtual void setClipped(const KoShape *child, bool clipping) = 0;
 
     /**
      * Returns if the argument child has its 'clipping' property set.
@@ -71,7 +71,7 @@ public:
      * @return if the argument child has its 'clipping' property set.
      * @param child the child for which the property will be returned.
      */
-    virtual bool childClipped(const KoShape *child) const = 0;
+    virtual bool isClipped(const KoShape *child) const = 0;
 
     /**
      * Return wheather the child has the effective state of being locked for user modifications.
@@ -91,7 +91,7 @@ public:
      * Create and return an iterator over all child objects.
      * @return an interator over all child objects.
      */
-    virtual QList<KoShape*> childShapes() const = 0;
+    virtual QList<KoShape*> shapes() const = 0;
 
     /**
      * This method is called as a notification that one of the properties of the

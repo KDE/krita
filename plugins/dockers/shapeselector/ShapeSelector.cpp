@@ -96,7 +96,7 @@ void ShapeSelector::addItems(QFile &file, FolderShape *targetFolder)
         while (!element.isNull()) {
             if (element.tagName() == "template") {
                 TemplateShape *ts = TemplateShape::createShape(element);
-                targetFolder->addChild(ts);
+                targetFolder->addShape(ts);
                 m_canvas->itemStore()->addShape(ts);
             }
             element = root.nextSiblingElement();

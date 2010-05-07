@@ -333,7 +333,7 @@ void KoPADocumentStructureDocker::addLayer()
         if ( canvas ) {
             layer->setParent( canvas->koPAView()->activePage() );
             layer->setName( name );
-            QList<KoShape*> layers( canvas->koPAView()->activePage()->childShapes() );
+            QList<KoShape*> layers( canvas->koPAView()->activePage()->shapes() );
             if ( !layers.isEmpty() ) {
                 qSort( layers.begin(), layers.end(), KoShape::compareShapeZIndex );
                 layer->setZIndex( layers.last()->zIndex() + 1 );
@@ -364,7 +364,7 @@ void KoPADocumentStructureDocker::deleteItem()
             QList<KoShape*> deleteShapes;
             foreach( KoPAPageBase* page, selectedPages )
             {
-                deleteShapes += page->childShapes();
+                deleteShapes += page->shapes();
                 deleteShapes.append( page );
             }
             cmd = new KoShapeDeleteCommand( m_doc, deleteShapes );

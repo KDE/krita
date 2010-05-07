@@ -83,7 +83,7 @@ static void prepare(KoShape *s, QMap<KoShape*, QList<KoShape*> > &newOrder, KoSh
     if ( it == newOrder.end() ) {
         QList<KoShape*> children;
         if ( parent != 0 ) {
-            children = parent->childShapes();
+            children = parent->shapes();
         }
         else {
             // get all toplevel shapes

@@ -52,7 +52,7 @@ public:
      * @param container the container to group the shapes under.
      * @param shapes a list of all the shapes that should be grouped.
      * @param clipped a list of the same length as the shapes list with one bool for each shape.
-     *      See KoShapeContainer::childClipped()
+     *      See KoShapeContainer::isClipped()
      * @param parent the parent command used for macro commands
      */
     KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,

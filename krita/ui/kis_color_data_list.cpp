@@ -33,7 +33,6 @@ KisColorDataList::~KisColorDataList()
 {
     delete m_priorityList;
     m_priorityList = 0 ;
-//    delete m_guiList;
 }
 
 void KisColorDataList::appendNew(const KoColor& data)

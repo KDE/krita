@@ -47,10 +47,6 @@ public:
     int findPos (const KoColor&);
 
 private:
-//    KisMinHeap <QColor, MAX_RECENT_COLOR> *m_priorityList;
-//    QList <PriorityNode <QColor>*> m_guiList;
-
-//    KoColor* test;
     KisMinHeap <KoColor, MAX_RECENT_COLOR> *m_priorityList;
     QList <PriorityNode <KoColor>*> m_guiList;
 

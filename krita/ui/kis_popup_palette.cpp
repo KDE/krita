@@ -231,7 +231,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         painter.drawPixmap(QPoint(pointTemp.x()-pixmapOffset.x(), pointTemp.y()-pixmapOffset.y()), pixmap);
     }
 
-    QColor currColor, lightCurrColor;
     //painting currently used color as color selector background
     if (selectedColor() > -1)
     {
@@ -241,14 +240,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         path.addEllipse(QPoint(0,0), colorInnerRadius-5, colorInnerRadius-5);
         painter.fillPath(path, currColor);
         painter.drawPath(path);
-        //lightCurrColor = currColor.lighter(150);
-        //currColor = currColor.darker(180);
     }
-//    else
-//    {
-        lightCurrColor = Qt::white;
-        currColor = Qt::darkGray;
-//    }
 
     //painting recent colors : bevel (raised)
     float radius = 51.0;
@@ -261,9 +253,9 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     //inner radius
     radius = 34;
     drawArcRisen
-            (painter, lightCurrColor, radius, 45, cos(M_PI/4)*radius, -1*sin(M_PI/4)*radius, 2*radius+0.5, 2*radius+0.5);
+            (painter, Qt::white, radius, 45, cos(M_PI/4)*radius, -1*sin(M_PI/4)*radius, 2*radius+0.5, 2*radius+0.5);
     drawArcRisen
-            (painter, currColor, radius, 180+45, -1*cos(M_PI/4)*radius, sin(M_PI/4)*radius, 2*radius, 2*radius);
+            (painter, Qt::darkGray, radius, 180+45, -1*cos(M_PI/4)*radius, sin(M_PI/4)*radius, 2*radius, 2*radius);
 
 
     //painting recent colors

@@ -69,7 +69,7 @@ void ItemStorePrivate::addFolder(FolderShape *folder)
     if (folders.count() > 1)
         mainFolder = 0;
     foreach (KoShapeManager *sm, shapeManagers)
-        sm->add(folder);
+        sm->addShape(folder);
 }
 
 void ItemStorePrivate::removeFolder(FolderShape *folder)
@@ -88,7 +88,7 @@ void ItemStorePrivate::addShape(KoShape *shape)
     if (shapes.contains(shape))
         return;
     foreach (KoShapeManager *sm, shapeManagers)
-        sm->add(shape);
+        sm->addShape(shape);
     shapes.append(shape);
 }
 

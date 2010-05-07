@@ -158,7 +158,7 @@ void KisShapeLayer::addChild(KoShape *object)
     QRect updatedRect = m_d->converter->documentToView(object->boundingRect()).toRect();
 
     KoShapeLayer::addShape(object);
-    m_d->canvas->shapeManager()->add(object);
+    m_d->canvas->shapeManager()->addShape(object);
 
     setDirty(updatedRect);
 }

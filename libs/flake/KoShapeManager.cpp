@@ -204,11 +204,11 @@ void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
     d->tree.clear();
     d->shapes.clear();
     foreach(KoShape *shape, shapes) {
-        add(shape, repaint);
+        addShape(shape, repaint);
     }
 }
 
-void KoShapeManager::add(KoShape *shape, Repaint repaint)
+void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
 {
     if (d->shapes.contains(shape))
         return;
@@ -227,7 +227,7 @@ void KoShapeManager::add(KoShape *shape, Repaint repaint)
 
     if (container) {
         foreach (KoShape *containerShape, container->shapes()) {
-            add(containerShape, repaint);
+            addShape(containerShape, repaint);
         }
     }
 

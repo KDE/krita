@@ -156,7 +156,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
             m_draggedShape->setShapeId(factory->id());
         m_draggedShape->setZIndex(KoShapePrivate::MaxZIndex);
 
-        m_parent->canvas()->shapeManager()->add(m_draggedShape);
+        m_parent->canvas()->shapeManager()->addShape(m_draggedShape);
     }
     else if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))) {
         KoShapeManager *sm = m_parent->canvas()->shapeManager();

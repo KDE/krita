@@ -65,7 +65,7 @@ KisShapeSelection::KisShapeSelection(KisImageWSP image, KisSelectionWSP selectio
     setSelectable(false);
     m_dirty = false;
     m_canvas = new KisShapeSelectionCanvas();
-    m_canvas->shapeManager()->add(this);
+    m_canvas->shapeManager()->addShape(this);
 
 }
 
@@ -81,7 +81,7 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
     m_dirty = rhs.m_dirty;
     m_image = rhs.m_image;
     m_canvas = new KisShapeSelectionCanvas();
-    m_canvas->shapeManager()->add(this);
+    m_canvas->shapeManager()->addShape(this);
 
     KoShapeOdfSaveHelper saveHelper(rhs.shapes());
     KoDrag drag;
@@ -281,7 +281,7 @@ bool KisShapeSelection::loadSelection(KoStore* store)
 void KisShapeSelection::addChild(KoShape *object)
 {
     KoShapeLayer::addShape(object);
-    m_canvas->shapeManager()->add(object);
+    m_canvas->shapeManager()->addShape(object);
 }
 
 void KisShapeSelection::removeChild(KoShape *object)

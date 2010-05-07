@@ -180,7 +180,7 @@ void ConnectionTool::mousePressEvent(KoPointerEvent *event)
             m_connectionShape->moveHandle(1, event->point);
             // The connection is now done, so update for apply
             m_connectionShape->updateConnections();
-            canvas()->shapeManager()->add(m_connectionShape);
+            canvas()->shapeManager()->addShape(m_connectionShape);
         }
     } else {
     // Second click

@@ -26,7 +26,7 @@ void TestShapePainting::testPaintShape()
 
     MockCanvas canvas;
     KoShapeManager manager(&canvas);
-    manager.add(&container);
+    manager.addShape(&container);
     QCOMPARE(manager.shapes().count(), 3);
 
     QImage image(100, 100,  QImage::Format_Mono);
@@ -84,7 +84,7 @@ void TestShapePainting::testPaintHiddenShape()
 
     MockCanvas canvas;
     KoShapeManager manager(&canvas);
-    manager.add(&top);
+    manager.addShape(&top);
     QCOMPARE(manager.shapes().count(), 5);
 
     QImage image(100, 100,  QImage::Format_Mono);
@@ -141,8 +141,8 @@ void TestShapePainting::testPaintOrder()
 
     MockCanvas canvas;
     KoShapeManager manager(&canvas);
-    manager.add(&top);
-    manager.add(&bottom);
+    manager.addShape(&top);
+    manager.addShape(&bottom);
     QCOMPARE(manager.shapes().count(), 6);
 
     QImage image(100, 100,  QImage::Format_Mono);

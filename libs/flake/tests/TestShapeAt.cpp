@@ -22,7 +22,7 @@ void TestShapeAt::test()
     shape1.setPosition(QPointF(100, 100));
     shape1.setSize(QSizeF(50, 50));
     shape1.setZIndex(0);
-    manager.add(&shape1);
+    manager.addShape(&shape1);
 
     QVERIFY(manager.shapeAt(QPointF(90, 90)) == 0);
     QVERIFY(manager.shapeAt(QPointF(110, 140)) != 0);
@@ -34,7 +34,7 @@ void TestShapeAt::test()
     shape2.setPosition(QPointF(80, 80));
     shape2.setSize(QSizeF(50, 50));
     shape2.setZIndex(1);
-    manager.add(&shape2);
+    manager.addShape(&shape2);
 
     QVERIFY(manager.shapeAt(QPointF(200, 200)) == 0);
     QCOMPARE(manager.shapeAt(QPointF(90, 90)), &shape2);
@@ -56,7 +56,7 @@ void TestShapeAt::test()
     shape3.setPosition(QPointF(120, 80));
     shape3.setSize(QSizeF(50, 50));
     shape3.setZIndex(2);
-    manager.add(&shape3);
+    manager.addShape(&shape3);
 
     QVERIFY(manager.shapeAt(QPointF(200, 200)) == 0);
     QCOMPARE(manager.shapeAt(QPointF(90, 90)), &shape2);

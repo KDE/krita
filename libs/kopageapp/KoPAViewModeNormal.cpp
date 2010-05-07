@@ -171,11 +171,11 @@ void KoPAViewModeNormal::addShape( KoShape *shape )
 
     KoPAPage * p;
     if ( page == m_view->activePage() ) {
-        m_view->kopaCanvas()->shapeManager()->add( shape );
+        m_view->kopaCanvas()->shapeManager()->addShape( shape );
     }
     else if ( isMaster && ( p = dynamic_cast<KoPAPage*>( m_view->activePage() ) ) != 0 ) {
         if ( p->masterPage() == page ) {
-            m_view->kopaCanvas()->masterShapeManager()->add( shape );
+            m_view->kopaCanvas()->masterShapeManager()->addShape( shape );
         }
     }
 }

@@ -231,6 +231,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         painter.drawPixmap(QPoint(pointTemp.x()-pixmapOffset.x(), pointTemp.y()-pixmapOffset.y()), pixmap);
     }
 
+    QColor currColor;
     //painting currently used color as color selector background
     if (selectedColor() > -1)
     {

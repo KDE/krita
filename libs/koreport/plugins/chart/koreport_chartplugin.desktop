@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=KoReport_Chart
+Name[x-test]=xxKoReport_Chartxx
 Comment=KoReport Chart PLugin
+Comment[x-test]=xxKoReport Chart PLuginxx
 X-KDE-Library=koreport_chartplugin
 X-KDE-ServiceTypes=KoReport/ItemPlugin
 Type=Service

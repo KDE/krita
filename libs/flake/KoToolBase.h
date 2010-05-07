@@ -59,6 +59,12 @@ public:
         TemporaryActivation, ///< The tool is activated temporarily and works 'in-place' of another one.
         DefaultActivation   ///< The tool is activated normally and emitting 'done' goes to the defaultTool
     };
+    /// Action information
+    enum ReadWrite {
+        ReadOnlyAction, ///< Used for actions that do not alter the content
+        ReadWriteAction ///< Used to signify actions that can change document content
+    };
+
 
     /**
      * Constructor, normally only called by the factory (see KoToolFactoryBase)
@@ -108,7 +114,7 @@ public:
     /**
      * Retrieves the entire collection of actions for the tool.
      */
-    QHash<QString, KAction*> actions() const;
+    QHash<QString, KAction*> actions(ReadWrite readWrite = ReadWriteAction) const;
 
     /**
      * Retrieve an action by name.
@@ -270,6 +276,25 @@ public:
     /// Returns the canvas the tool is working on
     KoCanvasBase *canvas() const;
 
+    /**
+     * Calling this will turn the tool into a read/write or a read-only tool.
+     * Note that upon calling this method no actions will be enabled/disabled
+     * as that is the responsibility of the KoToolManager. The KoToolManager
+     * should use this variable at next tool switch.
+     *
+     * @param readWrite if true all available actions will be enabled, if false
+     *   only actions that do not change the content will be available.
+     * @see KoToolManager::updateReadWrite(), isReadWrite()
+     */
+    void setReadWrite(bool readWrite);
+
+    /**
+     * @return returns true if all available actions are be enabled, if false
+     *   only actions that do not change the content are be available.
+     * @see setReadWrite()
+     */
+    bool isReadWrite() const;
+
 public slots:
 
     /**
@@ -381,8 +406,10 @@ protected:
      *
      * @param name The name by which the action be retrieved again from the collection.
      * @param action The action to add.
+     * @param readWrite set this to ReadOnlyAction to keep the action available on
+     *      read-only documents
      */
-    void addAction(const QString &name, KAction *action);
+    void addAction(const QString &name, KAction *action, ReadWrite readWrite = ReadWriteAction);
 
     /**
      * Set the list of actions to be used as popup menu.

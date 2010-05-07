@@ -180,6 +180,8 @@ public:
     /// Returns the toolId of the currently active tool
     QString activeToolId() const;
 
+    void updateReadWrite(KoCanvasController *cc, bool readWrite);
+
     class Private;
     /**
      * \internal return the private object for the toolmanager.

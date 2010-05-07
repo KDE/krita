@@ -33,7 +33,7 @@
 class KoCanvasBase::Private
 {
 public:
-    Private() : shapeController(0), resourceManager(0), controller(0) {}
+    Private() : shapeController(0), resourceManager(0), controller(0), readWrite(true) {}
     ~Private() {
         delete shapeController;
         delete resourceManager;
@@ -43,6 +43,7 @@ public:
     KoResourceManager *resourceManager;
     KoCanvasController *controller;
     KoSnapGuide *snapGuide;
+    bool readWrite;
 };
 
 KoCanvasBase::KoCanvasBase(KoShapeControllerBase *shapeControllerBase)
@@ -102,4 +103,14 @@ KoGuidesData * KoCanvasBase::guidesData()
 QWidget *KoCanvasBase::createSnapGuideConfigWidget() const
 {
     return new SnapGuideConfigWidget(d->snapGuide);
+}
+
+void KoCanvasBase::setReadWrite(bool readWrite)
+{
+    d->readWrite = readWrite;
+}
+
+bool KoCanvasBase::isReadWrite() const
+{
+    return d->readWrite;
 }

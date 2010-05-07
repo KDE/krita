@@ -24,6 +24,7 @@
 #include <QHash>
 #include <QWidget>
 #include <QString>
+#include <QSet>
 
 class QWidget;
 class KAction;
@@ -36,7 +37,8 @@ public:
     KoToolBasePrivate(KoToolBase *qq, KoCanvasBase *canvas_)
         : currentCursor(Qt::ArrowCursor),
         q(qq),
-        canvas(canvas_)
+        canvas(canvas_),
+        readWrite(true)
     {
     }
 
@@ -50,8 +52,10 @@ public:
     QHash<QString, KAction*> actionCollection;
     QString toolId;
     QList<QAction*> popupActionList;
+    QSet<KAction*> readOnlyActions;
     KoToolBase *q;
     KoCanvasBase *canvas; ///< the canvas interface this tool will work for.
+    bool readWrite;
 };
 
 #endif

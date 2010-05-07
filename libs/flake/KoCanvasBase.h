@@ -214,6 +214,22 @@ public:
      */
     virtual KoGuidesData *guidesData();
 
+    /**
+     * Calling this will turn the canvas into a read/write or a read-only canvas.
+     * Note that upon calling this method no actions will be enabled/disabled
+     * as that is the responsibility of the KoToolManager. The KoToolManager
+     * should use this variable at next tool switch.
+     *
+     * @see KoToolManager::updateReadWrite(), isReadWrite()
+     */
+    void setReadWrite(bool readWrite);
+
+    /**
+     * @return returns true if this canvas is marked as allowing content changing actions
+     * @see setReadWrite(), KoToolManager::updateReadWrite()
+     */
+    bool isReadWrite() const;
+
 protected:
     friend class KoCanvasController;
     /// called by KoCanvasController to set the controller that handles this canvas.

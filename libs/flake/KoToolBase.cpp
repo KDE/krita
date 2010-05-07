@@ -142,16 +142,28 @@ QMap<QString, QWidget *> KoToolBase::optionWidgets()
     return d->optionWidgets;
 }
 
-void KoToolBase::addAction(const QString &name, KAction *action)
+void KoToolBase::addAction(const QString &name, KAction *action, ReadWrite readWrite)
 {
     Q_D(KoToolBase);
     d->actionCollection.insert(name, action);
+    if (readWrite == ReadOnlyAction)
+        d->readOnlyActions.insert(action);
 }
 
-QHash<QString, KAction*> KoToolBase::actions() const
+QHash<QString, KAction*> KoToolBase::actions(ReadWrite readWrite) const
 {
     Q_D(const KoToolBase);
-    return d->actionCollection;
+    QHash<QString, KAction*> answer = d->actionCollection;
+    if (readWrite == ReadOnlyAction) {
+        QHash<QString, KAction*>::Iterator iter = answer.begin();
+        while (iter != answer.end()) {
+            if (d->readOnlyActions.contains(iter.value()))
+                iter = answer.erase(iter);
+            else
+                ++iter;
+        }
+    }
+    return answer;
 }
 
 KAction *KoToolBase::action(const QString &name) const
@@ -269,6 +281,18 @@ KoToolSelection *KoToolBase::selection()
 
 void KoToolBase::repaintDecorations()
 {
+}
+
+void KoToolBase::setReadWrite(bool readWrite)
+{
+    Q_D(KoToolBase);
+    d->readWrite = readWrite;
+}
+
+bool KoToolBase::isReadWrite() const
+{
+    Q_D(const KoToolBase);
+    return d->readWrite;
 }
 
 #include <KoToolBase.moc>

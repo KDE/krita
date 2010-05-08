@@ -1,7 +1,13 @@
 [Desktop Entry]
 Name=KoReport_Chart
+Name[pt]=KoReport_Chart
+Name[sv]=Koffice rapportdiagram
+Name[uk]=Діаграма KoReport
 Name[x-test]=xxKoReport_Chartxx
 Comment=KoReport Chart PLugin
+Comment[pt]='Plugin' de Gráficos do KoReport
+Comment[sv]=Insticksprogram för Koffice rapportdiagram
+Comment[uk]=Додаток діаграм KoReport
 Comment[x-test]=xxKoReport Chart PLuginxx
 X-KDE-Library=koreport_chartplugin
 X-KDE-ServiceTypes=KoReport/ItemPlugin

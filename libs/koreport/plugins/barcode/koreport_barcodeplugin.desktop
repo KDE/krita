@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=KoReport_Barcode
+Name[x-test]=xxKoReport_Barcodexx
 Comment=KoReport Barcode PLugin
+Comment[x-test]=xxKoReport Barcode PLuginxx
 X-KDE-Library=koreport_barcodeplugin
 X-KDE-ServiceTypes=KoReport/ItemPlugin
 Type=Service

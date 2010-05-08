@@ -286,33 +286,101 @@ void KisToolSelectMagnetic::LocalTool::computeOutline(const QPainterPath &pixelP
 
 }
 
+//void KisToolSelectMagnetic::LocalTool::computeEdge(const QVector2D &startPoint, const QVector2D &direction, KisRandomConstAccessor pixelAccessor)
+//{
+//    QVector2D currentPoint = startPoint;
+//    KoColor transformedColor(m_colorSpace);
+//
+//    pixelAccessor.moveTo(currentPoint.x(), currentPoint.y());
+//    m_colorTransformation->transform(pixelAccessor.rawData(), transformedColor.data(), 1);
+//
+//    int value = transformedColor.toQColor().value();
+//
+//    while((currentPoint - startPoint).length() < m_selectingTool->radius()*2) {
+//        m_debugScannedPoints.append(currentPoint.toPoint());
+//
+//        pixelAccessor.moveTo(currentPoint.x(), currentPoint.y());
+//        m_colorTransformation->transform(pixelAccessor.rawData(), transformedColor.data(), 1);
+//
+//        int currentValue = transformedColor.toQColor().value();
+//        if(std::abs(value-currentValue)>m_selectingTool->threshold()) {
+//            m_detectedBorder.append(currentPoint.toPoint());
+//            return;
+//        }
+//        else {
+//        }
+//        //move to next pixel
+//        currentPoint+=direction*1;
+//    }
+////    m_detectedBorder.append(currentPoint.toPoint());
+//}
+
+#include <iostream>
+
 void KisToolSelectMagnetic::LocalTool::computeEdge(const QVector2D &startPoint, const QVector2D &direction, KisRandomConstAccessor pixelAccessor)
 {
     QVector2D currentPoint = startPoint;
-    KoColor transformedColor(m_colorSpace);
-
-    pixelAccessor.moveTo(currentPoint.x(), currentPoint.y());
-    m_colorTransformation->transform(pixelAccessor.rawData(), transformedColor.data(), 1);
-
-    int value = transformedColor.toQColor().value();
+    QVector2D bestPoint = startPoint;
+    FilterMatrix horizontalFMatrix = getHorizontalFilterMatrix();
+    FilterMatrix verticalFMatrix = getVerticalFilterMatrix();
+    float sum = -1;
 
     while((currentPoint - startPoint).length() < m_selectingTool->radius()*2) {
-        m_debugScannedPoints.append(currentPoint.toPoint());
+//        m_debugScannedPoints.append(currentPoint.toPoint());
 
-        pixelAccessor.moveTo(currentPoint.x(), currentPoint.y());
-        m_colorTransformation->transform(pixelAccessor.rawData(), transformedColor.data(), 1);
+        FilterMatrix pointValues = getMatrixForPoint(currentPoint, pixelAccessor);
+//        std::cout<<pointValues;
+        FilterMatrix horizontalPoints = pointValues.cwise() * horizontalFMatrix;
+        FilterMatrix verticalPoints = pointValues.cwise() * verticalFMatrix;
 
-        int currentValue = transformedColor.toQColor().value();
-        if(std::abs(value-currentValue)>m_selectingTool->threshold()) {
-            m_detectedBorder.append(currentPoint.toPoint());
-            return;
+        float tmpSum = fabs(horizontalPoints.sum()+verticalPoints.sum());
+        if(tmpSum>sum) {
+            sum=tmpSum;
+            bestPoint = currentPoint;
         }
-        else {
-        }
+        
+
         //move to next pixel
         currentPoint+=direction*1;
     }
-//    m_detectedBorder.append(currentPoint.toPoint());
+
+    if(qFuzzyCompare(sum, 0)) bestPoint = direction*m_selectingTool->radius();
+
+    m_detectedBorder.append(bestPoint.toPoint());
+}
+
+
+FilterMatrix KisToolSelectMagnetic::LocalTool::getMatrixForPoint(const QVector2D &point, KisRandomConstAccessor pixelAccessor) const
+{
+    QVector2D currentPoint(point.x()-1, point.y()-1);
+    KoColor transformedColor(m_colorSpace);
+
+    double coeff[3][3];
+    for(int i=0; i<3; i++) {
+        for(int j=0; j<3; j++) {
+            pixelAccessor.moveTo(currentPoint.x()+i, currentPoint.y()+j);
+            m_colorTransformation->transform(pixelAccessor.rawData(), transformedColor.data(), 1);
+            coeff[i][j]=transformedColor.toQColor().valueF();
+        }
+    }
+
+    return (FilterMatrix() << coeff[0][0], coeff[0][1], coeff[0][2],
+                          coeff[1][0], coeff[1][1], coeff[1][2],
+                          coeff[2][0], coeff[2][1], coeff[2][2]).finished();
+}
+
+FilterMatrix KisToolSelectMagnetic::LocalTool::getHorizontalFilterMatrix() const
+{
+    return (Matrix3d() <<-1, 0, 1,
+                         -2, 0, 2,
+                         -1, 0, 1).finished();
+}
+
+FilterMatrix KisToolSelectMagnetic::LocalTool::getVerticalFilterMatrix() const
+{
+    return (Matrix3d() <<-1,-2,-1,
+                          0, 0, 0,
+                          1, 2, 1).finished();
 }
 
 void KisToolSelectMagnetic::LocalTool::addPathShape(KoPathShape* pathShape)

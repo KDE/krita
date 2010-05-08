@@ -21,6 +21,7 @@
 
 #include <QPainter>
 #include <QPolygonF>
+#include <QTransform>
 
 #include <KoToolFactoryBase.h>
 #include <KoCreatePathTool.h>
@@ -39,6 +40,12 @@ class KoColorSpace;
 namespace Ui {
     class KisToolSelectMagneticOptionWidget;
 }
+
+#include <Eigen/Core>
+USING_PART_OF_NAMESPACE_EIGEN
+
+typedef Eigen::Matrix3d FilterMatrix;
+
 
 /**
  * Tool to select colors by pointing at a color on the image.
@@ -84,6 +91,10 @@ private:
         virtual void addPathShape(KoPathShape* pathShape);
         void computeOutline(const QPainterPath &pixelPath);
         void computeEdge(const QVector2D &startPoint, const QVector2D &direction, KisRandomConstAccessor pixelAccessor);
+        FilterMatrix getMatrixForPoint(const QVector2D &point, KisRandomConstAccessor pixelAccessor) const;
+        FilterMatrix getHorizontalFilterMatrix() const;
+        FilterMatrix getVerticalFilterMatrix() const;
+
     private:
         KisToolSelectMagnetic* const m_selectingTool;
         KoLineBorder* m_borderBackup;

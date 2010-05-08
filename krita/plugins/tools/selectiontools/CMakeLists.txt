@@ -10,7 +10,7 @@ set(kritaselectiontools_PART_SRCS
     kis_tool_select_path.cc
     kis_tool_select_similar.cc
     kis_tool_select_brush.cc
-#    kis_tool_select_magnetic.cc
+    kis_tool_select_magnetic.cc
     kis_tool_select_magnetic_option_widget.cpp
     )
 

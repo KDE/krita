@@ -19,6 +19,7 @@
 
 #include <QtGlobal>
 #include "kis_debug.h"
+#include "kis_global.h"
 
 
 //#define SANITY_CHECKS
@@ -34,7 +35,6 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits(KisMementoManager *mm)
         m_hashTable[i] = 0;
 
     m_numTiles = 0;
-    m_defaultTileData = 0;
     m_mementoManager = mm;
 }
 
@@ -47,8 +47,7 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits(const KisTileHashTableTraits<T
 
     m_mementoManager = mm;
 
-    m_defaultTileData = 0;
-    setDefaultTileData(ht.m_defaultTileData);
+    setDefaultTileData(ht.defaultTileData());
 
     m_hashTable = new TileTypeSP [TABLE_SIZE];
     Q_CHECK_PTR(m_hashTable);
@@ -180,7 +179,7 @@ KisTileHashTableTraits<T>::getTileLazy(qint32 col, qint32 row,
     newTile = false;
     TileTypeSP tile = getTile(col, row);
     if (!tile) {
-        tile = new TileType(col, row, m_defaultTileData, m_mementoManager);
+        tile = new TileType(col, row, defaultTileData(), m_mementoManager);
         linkTile(tile);
         newTile = true;
     }
@@ -246,21 +245,18 @@ void KisTileHashTableTraits<T>::clear()
 template<class T>
 void KisTileHashTableTraits<T>::setDefaultTileData(KisTileData *defaultTileData)
 {
-    if (m_defaultTileData) {
-        globalTileDataStore.releaseTileData(m_defaultTileData);
-        m_defaultTileData = 0;
-    }
+    // delete old tile
+    m_defaultTile = 0;
 
-    if (defaultTileData) {
-        globalTileDataStore.acquireTileData(defaultTileData);
-        m_defaultTileData = defaultTileData;
-    }
+    if (defaultTileData)
+        m_defaultTile = new TileType(qint32_MIN, qint32_MIN,
+                                     defaultTileData, 0);
 }
 
 template<class T>
-KisTileData* KisTileHashTableTraits<T>::defaultTileData()
+KisTileData* KisTileHashTableTraits<T>::defaultTileData() const
 {
-    return m_defaultTileData;
+    return m_defaultTile ? m_defaultTile->tileData() : 0;
 }
 
 
@@ -271,7 +267,7 @@ void KisTileHashTableTraits<T>::debugPrintInfo()
 {
     dbgTiles << "==========================\n"
              << "TileHashTable:"
-             << "\n   def. data:\t\t" << m_defaultTileData
+             << "\n   def. data:\t\t" << defaultTileData()
              << "\n   numTiles:\t\t" << m_numTiles;
     debugListLengthDistibution();
     dbgTiles << "==========================\n";

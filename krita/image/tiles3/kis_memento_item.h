@@ -156,14 +156,17 @@ public:
     inline void setNext(KisMementoItemSP next) {
         m_next = next;
     }
-    inline KisMementoItemSP next() {
+    inline KisMementoItemSP next() const {
         return m_next;
     }
-    inline qint32 col() {
+    inline qint32 col() const {
         return m_col;
     }
-    inline qint32 row() {
+    inline qint32 row() const {
         return m_row;
+    }
+    inline KisTileData* tileData() const {
+        return m_tileData;
     }
 
     void debugPrintInfo() {

@@ -60,7 +60,7 @@ public:
     void clear();
 
     void setDefaultTileData(KisTileData *defaultTileData);
-    KisTileData* defaultTileData();
+    KisTileData* defaultTileData() const;
 
     qint32 numTiles() {
         return m_numTiles;
@@ -86,7 +86,7 @@ private:
     TileTypeSP *m_hashTable;
     qint32 m_numTiles;
 
-    KisTileData *m_defaultTileData;
+    TileTypeSP m_defaultTile;
     KisMementoManager *m_mementoManager;
 
     mutable QReadWriteLock m_lock;

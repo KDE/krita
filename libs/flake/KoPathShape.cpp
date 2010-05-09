@@ -190,21 +190,12 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
     KoShape::loadStyle(element, context);
 
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    styleStack.save();
-
-    // fill the style stack with the shapes style
-    if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
-        context.odfLoadingContext().fillStyleStack(element, KoXmlNS::draw, "style-name", "graphic");
-    } else if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
-        context.odfLoadingContext().fillStyleStack(element, KoXmlNS::presentation, "style-name", "presentation");
-    }
     styleStack.setTypeProperties("graphic");
 
     if (styleStack.hasProperty(KoXmlNS::svg, "fill-rule")) {
         QString rule = styleStack.property(KoXmlNS::svg, "fill-rule");
         d->fillRule = rule == "nonzero" ?  Qt::WindingFill : Qt::OddEvenFill;
     }
-    styleStack.restore();
 }
 
 QRectF KoPathShape::loadOdfViewbox(const KoXmlElement & element) const

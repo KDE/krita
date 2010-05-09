@@ -974,16 +974,7 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
     Q_D(KoShape);
 
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    styleStack.save();
-
-    // fill the style stack with the shapes style
-    if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
-        context.odfLoadingContext().fillStyleStack(element, KoXmlNS::draw, "style-name", "graphic");
-        styleStack.setTypeProperties("graphic");
-    } else if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
-        context.odfLoadingContext().fillStyleStack(element, KoXmlNS::presentation, "style-name", "presentation");
-        styleStack.setTypeProperties("graphic");
-    }
+    styleStack.setTypeProperties("graphic");
 
     if (d->fill && !d->fill->deref()) {
         delete d->fill;
@@ -1004,8 +995,6 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
     QString protect(styleStack.property(KoXmlNS::style, "protect"));
     setGeometryProtected(protect.contains("position") || protect.contains("size"));
     setContentProtected(protect.contains("content"));
-
-    styleStack.restore();
 }
 
 bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingContext &context, int attributes)
@@ -1062,7 +1051,16 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
     }
 
     if (attributes & OdfStyle) {
+        KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+        styleStack.save();
+        if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
+            context.odfLoadingContext().fillStyleStack(element, KoXmlNS::draw, "style-name", "graphic");
+        }
+        else if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
+            context.odfLoadingContext().fillStyleStack(element, KoXmlNS::presentation, "style-name", "presentation");
+        }
         loadStyle(element, context);
+        styleStack.restore();
     }
 
     if (attributes & OdfTransformation) {

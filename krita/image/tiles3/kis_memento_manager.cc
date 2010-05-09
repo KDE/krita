@@ -152,8 +152,6 @@ void KisMementoManager::commit()
     KisMementoItemHashTableIterator iter(&m_index);
     while ((mi = iter.tile())) {
         parentMI = m_headsHashTable.getTileLazy(mi->col(), mi->row(), newTile);
-        if(newTile)
-            parentMI->commit();
 
         mi->setParent(parentMI);
         mi->commit();

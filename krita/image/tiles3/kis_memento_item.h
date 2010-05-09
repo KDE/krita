@@ -59,20 +59,28 @@ public:
     }
 
     /**
-     * Automatically called by Kis..HashTable. It means that this mementoItem
-     * is a root item of parental hierarchy. So m_parent should be NULL.
+     * Automatically called by Kis..HashTable. It means that
+     * this mementoItem is a root item of parental hierarchy.
+     * So m_parent should be NULL.
+     * This memmento item is considered as commited, so we acquire
+     * the tile data right at the beginning.
      */
     KisMementoItem(qint32 col, qint32 row, KisTileData* defaultTileData, KisMementoManager *mm) {
         Q_UNUSED(mm);
         m_tileData = defaultTileData;
-        /* Setting counter: m_refCount++ */
-        globalTileDataStore.refTileData(m_tileData);
+        /* acquire the tileData deliberately and completely */
+        globalTileDataStore.acquireTileData(m_tileData);
         m_col = col;
         m_row = row;
         m_type = CHANGED;
         m_parent = 0;
-        m_commitedFlag = false;
+        m_commitedFlag = true; /* yes, we've commited it */
     }
+
+    /**
+     * FIXME: Not sure this function has any particular usecase.
+     * Just leave it for compatibility with a hash table
+     */
     KisMementoItem(const KisMementoItem &rhs, KisMementoManager *mm) {
         Q_UNUSED(mm);
         m_tileData = rhs.m_tileData;

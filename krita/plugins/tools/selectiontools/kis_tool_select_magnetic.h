@@ -85,6 +85,8 @@ private:
         ~LocalTool();
         void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
         void deactivate();
+
+        void mouseReleaseEvent(KoPointerEvent *event);
     protected:
         void paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter);
         void paintOutline(QPainter* painter, const QPainterPath &path, qreal zoom);
@@ -102,6 +104,8 @@ private:
         const KoColorSpace* m_colorSpace;
         KoColorTransformation* m_colorTransformation;
         QPolygon m_detectedBorder;
+        QPolygon m_tmpDetectedBorder;
+        int m_accuracy;
 
         //debuging
         QPolygonF m_debugPolyline;

@@ -64,8 +64,8 @@ KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResourc
         manager = variant.value<KoInlineTextObjectManager*>();
     }
     TextShape *text = new TextShape(manager);
-    KoTextDocument document(text->textShapeData()->document());
     if (documentResources) {
+        KoTextDocument document(text->textShapeData()->document());
         document.setUndoStack(documentResources->undoStack());
 
         if (documentResources->hasResource(KoText::StyleManager)) {
@@ -80,7 +80,7 @@ KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResourc
             KoChangeTracker *changeTracker = documentResources->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
             document.setChangeTracker(changeTracker);
         }
-        
+
         text->setImageCollection(documentResources->imageCollection());
     }
 
@@ -90,6 +90,7 @@ KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResourc
 KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
 {
     TextShape *shape = static_cast<TextShape*>(createDefaultShape(documentResources));
+    shape->textShapeData()->document()->setUndoRedoEnabled(false);
     shape->setSize(QSizeF(300, 200));
     shape->setDemoText(params->boolProperty("demo"));
     QString text("text");
@@ -101,6 +102,7 @@ KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceMan
     if (documentResources) {
         shape->setImageCollection(documentResources->imageCollection());
     }
+    shape->textShapeData()->document()->setUndoRedoEnabled(true);
     return shape;
 }
 

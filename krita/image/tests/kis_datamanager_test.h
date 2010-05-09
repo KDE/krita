@@ -28,7 +28,7 @@ private slots:
 
     void testCreation();
     void testDefaultPixel();
-//    void testMemento();
+    void testMemento();
 //    void testReadWrite();
 //    void testExtent();
 //    void testClear();
@@ -42,6 +42,8 @@ private slots:
 //    void testThreadedWriteAccess();
 //    void testThreadedReadWriteAccess();
 
+private:
+    bool memoryIsFilled(quint8 c, quint8 *mem, qint32 size);
 };
 
 #endif

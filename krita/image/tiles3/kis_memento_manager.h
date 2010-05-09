@@ -42,7 +42,7 @@ typedef KisTileHashTableTraits<KisMementoItem> KisMementoItemHashTable;
 typedef KisTileHashTableIteratorTraits<KisMementoItem> KisMementoItemHashTableIterator;
 
 
-class KisMementoManager
+class KRITAIMAGE_EXPORT KisMementoManager
 {
 public:
     KisMementoManager();

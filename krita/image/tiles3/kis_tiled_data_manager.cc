@@ -74,7 +74,6 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm)
      * has already been made shared in m_hashTable(dm->m_hashTable)
      */
     memcpy(m_defaultPixel, dm.m_defaultPixel, m_pixelSize);
-    m_defaultTile = new KisTile(-1,-1, m_hashTable->defaultTileData(), 0);
 
     m_extentMinX = dm.m_extentMinX;
     m_extentMinY = dm.m_extentMinY;
@@ -106,7 +105,6 @@ void KisTiledDataManager::setDefaultPixel(const quint8 *defaultPixel)
                       defaultPixel);
     m_hashTable->setDefaultTileData(td);
     m_mementoManager->setDefaultTileData(td);
-    m_defaultTile = new KisTile(-1,-1, td, 0);
 
     memcpy(m_defaultPixel, defaultPixel, pixelSize());
 }
@@ -204,9 +202,10 @@ void KisTiledDataManager::purge(const QRect& area)
         KisTileSP tile;
 
         const qint32 tileDataSize = KisTileData::HEIGHT * KisTileData::WIDTH * pixelSize();
+        const quint8 *defaultData = m_hashTable->defaultTileData()->data();
 
         while (tile = iter.tile()) {
-            if (tile->extent().intersects(area) && memcmp(m_defaultTile->data(), tile->data(), tileDataSize) == 0) {
+            if (tile->extent().intersects(area) && memcmp(defaultData, tile->data(), tileDataSize) == 0) {
                 tilesToDelete.push_back(tile);
             }
             ++iter;

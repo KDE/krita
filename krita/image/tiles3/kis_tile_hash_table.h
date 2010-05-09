@@ -51,8 +51,34 @@ public:
     }
 
     bool tileExists(qint32 col, qint32 row);
-    TileTypeSP getTileLazy(qint32 col, qint32 row, bool& newTile);
+
+    /**
+     * Returns a tile in position (col,row). If no tile exists,
+     * returns null.
+     * \param col column of the tile
+     * \param row row of the tile
+     */
     TileTypeSP getExistedTile(qint32 col, qint32 row);
+
+    /**
+     * Returns a tile in position (col,row). If no tile exists,
+     * creates a new one, attaches it to the list and returns.
+     * \param col column of the tile
+     * \param row row of the tile
+     * \param newTile out-parameter, returns true if a new tile
+     *                was created
+     */
+    TileTypeSP getTileLazy(qint32 col, qint32 row, bool& newTile);
+
+    /**
+     * Returns a tile in position (col,row). If no tile exists,
+     * creates nothing, but returns shared default tile object
+     * of the table. Be careful, this object has column and row
+     * parameters set to (qint32_MIN, qint32_MIN).
+     * \param col column of the tile
+     * \param row row of the tile
+     */
+    TileTypeSP getReadOnlyTileLazy(qint32 col, qint32 row);
     void addTile(TileTypeSP tile);
     void deleteTile(TileTypeSP tile);
     void deleteTile(qint32 col, qint32 row);

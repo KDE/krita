@@ -73,9 +73,58 @@ void KisDataManagerTest::testDefaultPixel()
 
     }
 }
-//
-//void KisDataManagerTest::testMemento() {}
-//
+
+bool KisDataManagerTest::memoryIsFilled(quint8 c, quint8 *mem, qint32 size)
+{
+    for(; size > 0; size--)
+        if(*(mem++) != c)
+            return false;
+
+    return true;
+}
+
+#define TILESIZE 64*64
+
+void KisDataManagerTest::testMemento()
+{
+    quint8 defaultPixel = 0;
+    KisDataManager dm(1, &defaultPixel);
+
+    quint8 oddPixel = 128;
+
+    dm.clear(0, 0, 64, 64, &oddPixel);
+    KisMementoSP memento1 = dm.getMemento();
+
+    dm.clear(64, 0, 64, 64, &oddPixel);
+
+
+    KisTileSP tile00 = dm.getTile(0, 0, false);
+    KisTileSP tile10 = dm.getTile(1, 0, false);
+    KisTileSP oldTile00 = dm.getOldTile(0, 0);
+    KisTileSP oldTile10 = dm.getOldTile(1, 0);
+
+    qDebug()<<ppVar(tile10)<<ppVar(oldTile10);
+
+    QVERIFY(memoryIsFilled(oddPixel, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(oddPixel, tile10->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(oddPixel, oldTile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(defaultPixel, oldTile10->data(), TILESIZE));
+
+
+    KisMementoSP memento2 = dm.getMemento();
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    oldTile00 = dm.getOldTile(0, 0);
+    oldTile10 = dm.getOldTile(1, 0);
+
+    QVERIFY(memoryIsFilled(oddPixel, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(oddPixel, tile10->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(oddPixel, oldTile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(oddPixel, oldTile10->data(), TILESIZE));
+
+}
+
 //void KisDataManagerTest::testReadWrite() {}
 //
 //void KisDataManagerTest::testExtent() {}

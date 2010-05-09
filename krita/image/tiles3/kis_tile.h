@@ -45,7 +45,7 @@ class KisMementoManager;
  * + Actual tile data is stored in KisTileData that can be
  *   shared between many tiles
  */
-class KisTile : public KisShared
+class KRITAIMAGE_EXPORT KisTile : public KisShared
 {
 public:
     KisTile(qint32 col, qint32 row,

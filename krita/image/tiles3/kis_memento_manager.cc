@@ -177,16 +177,16 @@ void KisMementoManager::commit()
 KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row)
 {
     /**
-     * Our getOldTile  mechanism is supposed to return  current tile, if
-     * no history  exists. So we return  zero here if  nothing is found,
-     * but data manager  will make all work on  getting current tile for
-     * us
+     * Our getOldTile mechanism is supposed to return current tile, if
+     * the history is disabled. So we return zero if no transaction
+     * is in progress.
      */
     if(!m_currentMemento || !m_currentMemento->valid())
         return 0;
 
-    KisMementoItemSP mi = m_headsHashTable.getExistedTile(col, row);
-    return mi ? mi->tile(0) : 0;
+    KisMementoItemSP mi = m_headsHashTable.getReadOnlyTileLazy(col, row);
+    Q_ASSERT(mi);
+    return mi->tile(0);
 }
 
 KisMementoSP KisMementoManager::getMemento()

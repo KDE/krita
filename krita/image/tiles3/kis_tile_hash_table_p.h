@@ -188,6 +188,19 @@ KisTileHashTableTraits<T>::getTileLazy(qint32 col, qint32 row,
 }
 
 template<class T>
+typename KisTileHashTableTraits<T>::TileTypeSP
+KisTileHashTableTraits<T>::getReadOnlyTileLazy(qint32 col, qint32 row)
+{
+    QReadLocker locker(&m_lock);
+
+    TileTypeSP tile = getTile(col, row);
+    if (!tile)
+        tile = m_defaultTile;
+
+    return tile;
+}
+
+template<class T>
 void KisTileHashTableTraits<T>::addTile(TileTypeSP tile)
 {
     QWriteLocker locker(&m_lock);

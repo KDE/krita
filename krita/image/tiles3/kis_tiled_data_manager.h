@@ -126,13 +126,10 @@ public:
             if (newTile)
                 updateExtent(tile->col(), tile->row());
             return tile;
+
         } else {
-            KisTileSP tile = m_hashTable->getExistedTile(col, row);
-            if (tile) {
-                return tile;
-            } else {
-                return m_defaultTile;
-            }
+
+            return m_hashTable->getReadOnlyTileLazy(col,row);
         }
     }
 
@@ -260,7 +257,6 @@ private:
     KisTileHashTable *m_hashTable;
     KisMementoManager *m_mementoManager;
     quint8* m_defaultPixel;
-    KisTileSP m_defaultTile;
     qint32 m_pixelSize;
 
     /**

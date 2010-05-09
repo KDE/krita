@@ -35,7 +35,7 @@ public:
     virtual void accept() {}
 };
 
-KoFindStrategy::KoFindStrategy(QWidget * parent)
+KoFindStrategy::KoFindStrategy(QWidget *parent)
         : m_dialog(new NonClosingFindDialog(parent))
         , m_matches(0)
 {
@@ -44,11 +44,11 @@ KoFindStrategy::KoFindStrategy(QWidget * parent)
 
 KoFindStrategy::~KoFindStrategy()
 {
-    if(m_dialog->parent() == 0)
+    if (m_dialog->parent() == 0)
         delete m_dialog;
 }
 
-KFindDialog * KoFindStrategy::dialog()
+KFindDialog *KoFindStrategy::dialog()
 {
     return m_dialog;
 }
@@ -64,7 +64,7 @@ void KoFindStrategy::displayFinalDialog()
     reset();
 }
 
-bool KoFindStrategy::foundMatch(QTextCursor & cursor, FindDirection * findDirection)
+bool KoFindStrategy::foundMatch(QTextCursor &cursor, FindDirection *findDirection)
 {
     ++m_matches;
     findDirection->select(cursor);

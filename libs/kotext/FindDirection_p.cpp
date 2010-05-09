@@ -25,7 +25,7 @@
 #include "KoText.h"
 #include "KoFind_p.h"
 
-FindDirection::FindDirection(KoResourceManager * provider)
+FindDirection::FindDirection(KoResourceManager *provider)
         : m_provider(provider)
 {
 }
@@ -34,7 +34,7 @@ FindDirection::~FindDirection()
 {
 }
 
-FindForward::FindForward(KoResourceManager * provider)
+FindForward::FindForward(KoResourceManager *provider)
         : FindDirection(provider)
 {
 }
@@ -43,28 +43,28 @@ FindForward::~FindForward()
 {
 }
 
-bool FindForward::positionReached(const QTextCursor & currentPos, const QTextCursor & endPos)
+bool FindForward::positionReached(const QTextCursor &currentPos, const QTextCursor &endPos)
 {
     return currentPos > endPos;
 }
 
-void FindForward::positionCursor(QTextCursor & currentPos)
+void FindForward::positionCursor(QTextCursor &currentPos)
 {
     currentPos.movePosition(QTextCursor::Start);
 }
 
-void FindForward::select(const QTextCursor & cursor)
+void FindForward::select(const QTextCursor &cursor)
 {
     m_provider->setResource(KoText::CurrentTextPosition, cursor.position());
     m_provider->setResource(KoText::CurrentTextAnchor, cursor.anchor());
 }
 
-void FindForward::nextDocument(QTextDocument * document, KoFindPrivate * findPrivate)
+void FindForward::nextDocument(QTextDocument *document, KoFindPrivate *findPrivate)
 {
     findPrivate->findDocumentSetNext(document);
 }
 
-FindBackward::FindBackward(KoResourceManager * provider)
+FindBackward::FindBackward(KoResourceManager *provider)
         : FindDirection(provider)
 {
 }
@@ -73,23 +73,23 @@ FindBackward::~FindBackward()
 {
 }
 
-bool FindBackward::positionReached(const QTextCursor & currentPos, const QTextCursor & endPos)
+bool FindBackward::positionReached(const QTextCursor &currentPos, const QTextCursor &endPos)
 {
     return currentPos < endPos;
 }
 
-void FindBackward::positionCursor(QTextCursor & currentPos)
+void FindBackward::positionCursor(QTextCursor &currentPos)
 {
     currentPos.movePosition(QTextCursor::End);
 }
 
-void FindBackward::select(const QTextCursor & cursor)
+void FindBackward::select(const QTextCursor &cursor)
 {
     m_provider->setResource(KoText::CurrentTextPosition, cursor.anchor());
     m_provider->setResource(KoText::CurrentTextAnchor, cursor.position());
 }
 
-void FindBackward::nextDocument(QTextDocument * document, KoFindPrivate * findPrivate)
+void FindBackward::nextDocument(QTextDocument *document, KoFindPrivate *findPrivate)
 {
     findPrivate->findDocumentSetPrevious(document);
 }

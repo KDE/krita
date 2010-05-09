@@ -36,11 +36,11 @@ KoReplaceStrategy::KoReplaceStrategy(QWidget * parent)
 
 KoReplaceStrategy::~KoReplaceStrategy()
 {
-    if(m_dialog->parent()==0)
+    if (m_dialog->parent()==0)
         delete m_dialog;
 }
 
-KFindDialog * KoReplaceStrategy::dialog()
+KFindDialog *KoReplaceStrategy::dialog()
 {
     return m_dialog;
 }
@@ -62,7 +62,7 @@ void KoReplaceStrategy::displayFinalDialog()
     reset();
 }
 
-bool KoReplaceStrategy::foundMatch(QTextCursor & cursor, FindDirection * findDirection)
+bool KoReplaceStrategy::foundMatch(QTextCursor &cursor, FindDirection *findDirection)
 {
     bool replace = true;
     if ((m_dialog->options() & KReplaceDialog::PromptOnReplace) != 0) {

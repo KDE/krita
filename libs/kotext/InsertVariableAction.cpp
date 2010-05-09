@@ -39,7 +39,7 @@ InsertVariableAction::InsertVariableAction(KoCanvasBase *base, KoVariableFactory
 
 KoVariable *InsertVariableAction::createVariable()
 {
-    KoVariable * variable = m_factory->createVariable(m_properties);
+    KoVariable *variable = m_factory->createVariable(m_properties);
     QWidget *widget = variable->createOptionsWidget();
     if (widget) {
         if (widget->layout()) {
@@ -47,7 +47,7 @@ KoVariable *InsertVariableAction::createVariable()
         }
         KPageDialog *dialog = new KPageDialog(m_canvas->canvasWidget());
         dialog->setCaption(i18n("%1 Options", m_templateName));
-        dialog->addPage(widget, "");
+        dialog->addPage(widget, QString());
         if (dialog->exec() != KPageDialog::Accepted) {
             delete variable;
             variable = 0;

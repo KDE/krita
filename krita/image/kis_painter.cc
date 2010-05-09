@@ -101,6 +101,7 @@ struct KisPainter::Private {
     QImage                      polygonMaskImage;
     QPainter*                   maskPainter;
     KisFillPainter*             fillPainter;
+    KisPaintDeviceSP            polygon;
     qint32                      maskImageWidth;
     qint32                      maskImageHeight;
     bool                        alphaLocked;
@@ -845,15 +846,14 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     // Fill the polygon bounding rectangle with the required contents then we'll
     // create a mask for the actual polygon coverage.
 
-    KisPaintDeviceSP polygon = new KisPaintDevice(d->device->colorSpace());
-    Q_CHECK_PTR(polygon);
-
     if (!d->fillPainter) {
-        d->fillPainter = new KisFillPainter(polygon);
+        d->polygon = new KisPaintDevice(d->device->colorSpace());
+        d->fillPainter = new KisFillPainter(d->polygon);
     } else {
-        d->fillPainter->begin(polygon);
+        d->polygon->clear();
     }
 
+    Q_CHECK_PTR(d->polygon);
 
     QRectF boundingRect = path.boundingRect();
     QRect fillRect;
@@ -915,14 +915,14 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
             qint32 rectWidth = qMin(fillRect.x() + fillRect.width() - x, d->maskImageWidth);
             qint32 rectHeight = qMin(fillRect.y() + fillRect.height() - y, d->maskImageHeight);
 
-            KisHLineIterator lineIt = polygon->createHLineIterator(x, y, rectWidth);
+            KisHLineIterator lineIt = d->polygon->createHLineIterator(x, y, rectWidth);
 
             quint8 tmp;
             for (int row = y; row < y + rectHeight; row++) {
                 QRgb* line = reinterpret_cast<QRgb*>(d->polygonMaskImage.scanLine(row - y));
                 while (!lineIt.isDone()) {
                     tmp = qRed(line[lineIt.x() - x]);
-                    polygon->colorSpace()->applyAlphaU8Mask(lineIt.rawData(),
+                    d->polygon->colorSpace()->applyAlphaU8Mask(lineIt.rawData(),
                                                             &tmp, 1);
                     ++lineIt;
                 }
@@ -932,11 +932,11 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
         }
     }
 
-    QRect r = polygon->extent();
+    QRect r = d->polygon->extent();
 
     // The strokes for the outline may have already added updated the dirtyrect, but it can't hurt,
     // and if we're painting without outlines, then there will be no dirty rect. Let's do it ourselves...
-    bitBlt(r.x(), r.y(), polygon, r.x(), r.y(), r.width(), r.height());
+    bitBlt(r.x(), r.y(), d->polygon, r.x(), r.y(), r.width(), r.height());
 }
 
 void KisPainter::drawLine(const QPointF & start, const QPointF & end)

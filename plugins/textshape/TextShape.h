@@ -117,6 +117,12 @@ public:
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
 
+    /// reimplemented
+    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    /// reimplemented
+    virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
+
 private:
     void shapeChanged(ChangeType type, KoShape *shape = 0);
 

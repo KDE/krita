@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008-2010 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -331,6 +331,42 @@ void TextShape::saveOdf(KoShapeSavingContext &context) const
     writer.endElement(); // draw:frame
 }
 
+QString TextShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
+{
+    Qt::Alignment vAlign(m_textShapeData->verticalAlignment());
+    QString verticalAlign = "top";
+    if (vAlign == Qt::AlignBottom) {
+        verticalAlign = "bottom";
+    }
+    else if ( vAlign == Qt::AlignVCenter ) {
+        verticalAlign = "middle";
+    }
+    style.addProperty("draw:textarea-vertical-align", verticalAlign);
+
+    return KoShape::saveStyle(style, context);
+}
+
+void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    KoShape::loadStyle(element, context);
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    styleStack.setTypeProperties("graphic");
+    QString verticalAlign(styleStack.property(KoXmlNS::draw, "textarea-vertical-align"));
+    Qt::Alignment alignment(Qt::AlignTop);
+    if (verticalAlign == "bottom") {
+        alignment = Qt::AlignBottom;
+    }
+    else if (verticalAlign == "justify") {
+        // not yet supported
+        alignment = Qt::AlignVCenter;
+    }
+    else if (verticalAlign == "middle") {
+        alignment = Qt::AlignVCenter;
+    }
+
+    m_textShapeData->setVerticalAlignment(alignment);
+}
+
 bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     m_textShapeData->document()->setUndoRedoEnabled(false);
@@ -363,6 +399,7 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
         QTextCursor cursor(document);
         QTextBlock block = cursor.block();
         paragraphStyle.applyStyle(block, false);
+
     }
 
     bool answer = loadOdfFrame(element, context);

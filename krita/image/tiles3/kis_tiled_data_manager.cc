@@ -289,11 +289,10 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
 
             if (clearTileRect == tileRect) {
 //                 // Clear whole tile
-//                 m_hashTable->deleteTile(column, row);
-//
-//                 KisTileSP clearedTile = new KisTile(column, row, td, m_mementoManager);
-//                 m_hashTable->addTile(clearedTile);
-//                 updateExtent(column, row);
+                 m_hashTable->deleteTile(column, row);
+                 KisTileSP clearedTile = new KisTile(column, row, td, m_mementoManager);
+                 m_hashTable->addTile(clearedTile);
+                 updateExtent(column, row);
 
                 /**
                  * Emulate like we've written something to the tile

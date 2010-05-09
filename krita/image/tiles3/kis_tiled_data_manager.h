@@ -137,12 +137,6 @@ public:
     }
 
     inline KisTileSP getOldTile(qint32 col, qint32 row) {
-        /**
-         * FIXME: A kind of optimization
-         */
-//  if(!hasCurrentMemento())
-//      return getTile(col, row);
-
         KisTileSP tile = m_mementoManager->getCommitedTile(col, row);
         return tile ? tile : getTile(col, row, false);
     }
@@ -151,6 +145,7 @@ public:
         QWriteLocker locker(&m_lock);
         return m_mementoManager->getMemento();
     }
+
     void rollback(KisMementoSP memento) {
         Q_UNUSED(memento);
         QWriteLocker locker(&m_lock);

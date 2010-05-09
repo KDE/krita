@@ -46,6 +46,10 @@ public:
     /* virtual? */
     ~KisTileHashTableTraits();
 
+    bool isEmpty() {
+        return !m_numTiles;
+    }
+
     bool tileExists(qint32 col, qint32 row);
     TileTypeSP getTileLazy(qint32 col, qint32 row, bool& newTile);
     TileTypeSP getExistedTile(qint32 col, qint32 row);
@@ -151,6 +155,14 @@ public:
         TileTypeSP tile = m_tile;
         next();
         m_hashTable->unlinkTile(tile->col(), tile->row());
+    }
+
+    void moveCurrentToHashTable(KisTileHashTableTraits<T> *newHashTable) {
+        TileTypeSP tile = m_tile;
+        next();
+        m_hashTable->unlinkTile(tile->col(), tile->row());
+
+        newHashTable->addTile(tile);
     }
 
     void destroy() {

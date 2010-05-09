@@ -20,6 +20,9 @@
 #include <QtGlobal>
 #include "kis_debug.h"
 
+
+//#define SANITY_CHECKS
+
 template<class T>
 KisTileHashTableTraits<T>::KisTileHashTableTraits(KisMementoManager *mm)
         : m_lock(QReadWriteLock::NonRecursive)
@@ -109,6 +112,11 @@ void KisTileHashTableTraits<T>::linkTile(TileTypeSP tile)
     qint32 idx = calculateHash(tile->col(), tile->row());
     TileTypeSP firstTile = m_hashTable[idx];
 
+#ifdef SANITY_CHECKS
+    Q_ASSERT_X(!tile->next(), "KisTileHashTableTraits<T>::linkTile",
+               "A tile can't be shared by several hash tables, sorry.");
+#endif
+
     tile->setNext(firstTile);
     m_hashTable[idx] = tile;
     m_numTiles++;
@@ -132,6 +140,9 @@ KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row)
                 /* optimize here*/
                 m_hashTable[idx] = tile->next();
 
+#ifdef SANITY_CHECKS
+            tile->setNext(0);
+#endif
             m_numTiles--;
             return tile;
         }
@@ -208,19 +219,23 @@ void KisTileHashTableTraits<T>::clear()
 {
     QWriteLocker locker(&m_lock);
     TileTypeSP tile = 0;
-//    KisTile* tmp;
     qint32 i;
 
     for (i = 0; i < TABLE_SIZE; i++) {
         tile = m_hashTable[i];
 
         while (tile) {
-            //tmp = tile;
+#ifdef SANITY_CHECKS
+            TileTypeSP tmp = tile;
             tile = tile->next();
-            /* done by KisShared */
-            //delete tmp;
+            tmp->setNext(0);
+#else
+            tile = tile->next();
+#endif
+
             m_numTiles--;
         }
+
         m_hashTable[i] = 0;
     }
 

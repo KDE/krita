@@ -86,12 +86,13 @@ public:
     }
 
     ~KisMementoItem() {
-        if (m_tileData) {
-            if (m_commitedFlag)
-                globalTileDataStore.releaseTileData(m_tileData);
-            else
-                globalTileDataStore.derefTileData(m_tileData);
-        }
+        releaseTileData();
+    }
+
+    void reset() {
+        releaseTileData();
+        m_tileData = 0;
+        m_commitedFlag = false;
     }
 
     void deleteTile(KisTile* tile, KisTileData* defaultTileData) {
@@ -177,6 +178,16 @@ public:
     }
 
 protected:
+    void releaseTileData() {
+        if (m_tileData) {
+            if (m_commitedFlag)
+                globalTileDataStore.releaseTileData(m_tileData);
+            else
+                globalTileDataStore.derefTileData(m_tileData);
+        }
+    }
+
+protected:
     KisTileData *m_tileData;
     bool m_commitedFlag;
     enumType m_type;
@@ -188,7 +199,6 @@ protected:
     KisMementoItemSP m_parent;
 private:
 };
-
 
 
 #endif /* KIS_MEMENTO_ITEM_H_ */

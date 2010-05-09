@@ -38,7 +38,6 @@
         debugPrintInfo();                                               \
         printf("##################################################################\n\n"); \
     } while(0)
-
 #else
 
 #define DEBUG_LOG_TILE_ACTION(action, tile, col, row)
@@ -48,7 +47,8 @@
 
 
 KisMementoManager::KisMementoManager()
-        : m_headsHashTable(0)
+    : m_index(0),
+      m_headsHashTable(0)
 {
     /**
      * Get an initial memento to show we want history for ALL the devices.
@@ -62,7 +62,7 @@ KisMementoManager::KisMementoManager()
 }
 
 KisMementoManager::KisMementoManager(const KisMementoManager& rhs)
-        : m_index(rhs.m_index),
+    : m_index(rhs.m_index, 0),
         m_revisions(rhs.m_revisions),
         m_cancelledRevisions(rhs.m_cancelledRevisions),
         m_headsHashTable(rhs.m_headsHashTable, 0),
@@ -81,10 +81,23 @@ KisMementoManager::~KisMementoManager()
 }
 
 /**
- *  TODO: We assume that a tile won't be COWed until commit.
- *        So to  say,  we assume  that  registerTileChange()
- *        will be called once a commit
+ * NOTE: We don't assume that the registerTileChange/Delete
+ * can be called once a commit only. Reverse can happen when we
+ * do sequential clears of the device. In such a case the tiles
+ * will be removed and added several times during a commit.
+ *
+ * TODO: There is an 'uncomfortable' state for the tile possible
+ * 1) Imagine we have a clear device
+ * 2) Then we painted something in a tile
+ * 3) It registered itself using registerTileChange()
+ * 4) Then we called clear() and getMemento() [==commit()]
+ * 5) The tile will be registered as deleted and successfully
+ *    committed to a revision. That means the states of the memento
+ *    manager at stages 1 and 5 do not coinside.
+ * This will not lead to any memory leaks or bugs seen, it just
+ * not good from a theoretical perspective.
  */
+
 void KisMementoManager::registerTileChange(KisTile *tile)
 {
     if (!m_currentMemento) return;
@@ -92,10 +105,18 @@ void KisMementoManager::registerTileChange(KisTile *tile)
 
     DEBUG_LOG_TILE_ACTION("reg. [C]", tile, tile->col(), tile->row());
 
-    KisMementoItemSP mi = new KisMementoItem();
-    mi->changeTile(tile);
-    m_index.append(mi);
-    m_currentMemento->updateExtent(mi->col(), mi->row());
+    KisMementoItemSP mi = m_index.getExistedTile(tile->col(), tile->row());
+
+    if(!mi) {
+        mi = new KisMementoItem();
+        mi->changeTile(tile);
+        m_index.addTile(mi);
+        m_currentMemento->updateExtent(mi->col(), mi->row());
+    }
+    else {
+        mi->reset();
+        mi->changeTile(tile);
+    }
 }
 
 void KisMementoManager::registerTileDeleted(KisTile *tile)
@@ -105,34 +126,51 @@ void KisMementoManager::registerTileDeleted(KisTile *tile)
 
     DEBUG_LOG_TILE_ACTION("reg. [D]", tile, tile->col(), tile->row());
 
-    KisMementoItemSP mi = new KisMementoItem();
-    mi->deleteTile(tile, m_headsHashTable.defaultTileData());
-    m_index.append(mi);
-    m_currentMemento->updateExtent(mi->col(), mi->row());
+    KisMementoItemSP mi = m_index.getExistedTile(tile->col(), tile->row());
+
+    if(!mi) {
+        mi = new KisMementoItem();
+        mi->deleteTile(tile, m_headsHashTable.defaultTileData());
+        m_index.addTile(mi);
+        m_currentMemento->updateExtent(mi->col(), mi->row());
+    }
+    else {
+        mi->reset();
+        mi->deleteTile(tile, m_headsHashTable.defaultTileData());
+    }
 }
+
 void KisMementoManager::commit()
 {
     if (m_index.isEmpty()) return;
 
+    KisMementoItemList revisionList;
     KisMementoItemSP mi;
     KisMementoItemSP parentMI;
     bool newTile;
-    foreach(mi, m_index) {
+
+    KisMementoItemHashTableIterator iter(&m_index);
+    while ((mi = iter.tile())) {
         parentMI = m_headsHashTable.getTileLazy(mi->col(), mi->row(), newTile);
         if(newTile)
             parentMI->commit();
 
         mi->setParent(parentMI);
         mi->commit();
+        revisionList.append(mi);
+
         m_headsHashTable.deleteTile(mi->col(), mi->row());
-        m_headsHashTable.addTile(mi);
+
+        iter.moveCurrentToHashTable(&m_headsHashTable);
+        //++iter; // previous line does this for us
     }
+
     KisHistoryItem hItem;
-    hItem.itemList = m_index;
+    hItem.itemList = revisionList;
     hItem.memento = m_currentMemento.data();
-    
     m_revisions.append(hItem);
-    m_index.clear();
+
+    Q_ASSERT(m_index.isEmpty());
 
     // Waking up pooler to prepare copies for us
     globalTileDataStore.kickPooler();
@@ -198,18 +236,16 @@ void KisMementoManager::rollback(KisTileHashTable *ht)
         //mi->setParent(0);
     }
     /**
-     * FIXME: tricky hack alert.
+     * NOTE: tricky hack alert.
      * We have  just deleted some tiles  from original hash  table.  And they
-     * accurately reported to us about  their death, adding their bodies into
-     * m_index list. We don't need them actually... :)
+     * accurately reported to us about  their death. Should have reported...
+     * But we   prevented   addition   of  their   bodies   with   zeroing
+     * m_currentMemento. All dead tiles are going to /dev/null :)
      *
      * PS: It could cause some race condition... But for now we can insist on
      * serialization  of rollback()/rollforward()  requests.Speaking  truly i
      * can't see sny sense in calling rollback() concurrently.
-     * PPS:   We   prevented   addition   of  their   bodies   with   zeroing
-     * m_currentMemento. All dead tiles are going to /dev/null :)
      */
-    //m_index.clear();
     restoreMemento(m_currentMemento);
 
     m_cancelledRevisions.prepend(changeList);
@@ -232,22 +268,21 @@ void KisMementoManager::rollforward(KisTileHashTable *ht)
             ht->deleteTile(mi->col(), mi->row());
         if (mi->type() == KisMementoItem::CHANGED)
             ht->addTile(mi->tile(this));
+
+        m_index.addTile(mi);
     }
     /**
-     * FIXME: tricky hack alert.
+     * NOTE: tricky hack alert.
      * We have  just deleted some tiles  from original hash  table.  And they
-     * accurately reported to us about  their death, adding their bodies into
-     * m_index list. We don't need them actually... :)
+     * accurately reported to us about  their death. Should have reported...
+     * But we   prevented   addition   of  their   bodies   with   zeroing
+     * m_currentMemento. All dead tiles are going to /dev/null :)
      *
      * PS: It could cause some race condition... But for now we can insist on
      * serialization  of rollback()/rollforward()  requests.Speaking  truly i
      * can't see sny sense in calling rollback() concurrently.
-     * PPS:   We   prevented   addition   of  their   bodies   with   zeroing
-     * m_currentMemento. All dead tiles are going to /dev/null :)
      */
-    //m_index.clear();
 
-    m_index = changeList.itemList;
     m_currentMemento = changeList.memento;
     commit();
     restoreMemento(m_currentMemento);
@@ -257,8 +292,8 @@ void KisMementoManager::rollforward(KisTileHashTable *ht)
 void KisMementoManager::setDefaultTileData(KisTileData *defaultTileData)
 {
     m_headsHashTable.setDefaultTileData(defaultTileData);
+    m_index.setDefaultTileData(defaultTileData);
 }
-
 
 void KisMementoManager::debugPrintInfo()
 {
@@ -266,8 +301,11 @@ void KisMementoManager::debugPrintInfo()
     printf("Index list\n");
     KisHistoryItem changeList;
     KisMementoItemSP mi;
-    foreach(mi, m_index) {
+    KisMementoItemHashTableIterator iter(&m_index);
+
+    while ((mi = iter.tile())) {
         mi->debugPrintInfo();
+        ++iter;
     }
 
     printf("Revisions list:\n");

@@ -25,6 +25,7 @@
 #include "kis_tile_hash_table.h"
 
 typedef QList<KisMementoItemSP> KisMementoItemList;
+typedef QListIterator<KisMementoItemSP> KisMementoItemListIterator;
 
 class KisMemento;
 struct KisHistoryItem {
@@ -38,7 +39,8 @@ class KisMemento;
 typedef KisSharedPtr<KisMemento> KisMementoSP;
 
 typedef KisTileHashTableTraits<KisMementoItem> KisMementoItemHashTable;
-//typedef KisTileHashTableIteratorTraits<KisMementoItem> KisMementoItemHashTableIterator;
+typedef KisTileHashTableIteratorTraits<KisMementoItem> KisMementoItemHashTableIterator;
+
 
 class KisMementoManager
 {
@@ -94,18 +96,20 @@ public:
         return m_currentMemento;
     }
 
-
     void setDefaultTileData(KisTileData *defaultTileData);
 
     void debugPrintInfo();
-    
+
     void removeMemento(KisMemento* memento);
 
 protected:
     /**
      * INDEX of tiles to be committed with next commit()
+     * We use a hash table to be able to check that
+     * we have the only memento item for a tile
+     * per commit efficiently
      */
-    KisMementoItemList m_index;
+    KisMementoItemHashTable m_index;
 
     /**
      * Main list that stores every commit ever done

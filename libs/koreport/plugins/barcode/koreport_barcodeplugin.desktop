@@ -1,7 +1,13 @@
 [Desktop Entry]
 Name=KoReport_Barcode
+Name[pt]=KoReport_Barcode
+Name[sv]=Koffice rapportstreckkod
+Name[uk]=Штрихкод KoReport
 Name[x-test]=xxKoReport_Barcodexx
 Comment=KoReport Barcode PLugin
+Comment[pt]='Plugin' de Códigos de Barras do KoReport
+Comment[sv]=Insticksprogram för Koffice rapportstreckkod
+Comment[uk]=Додаток штрихкодів KoReport
 Comment[x-test]=xxKoReport Barcode PLuginxx
 X-KDE-Library=koreport_barcodeplugin
 X-KDE-ServiceTypes=KoReport/ItemPlugin

@@ -206,7 +206,6 @@ void PictureShape::saveOdf(KoShapeSavingContext &context) const
 
 bool PictureShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    loadOdfColorTransformations(element, context);
     loadOdfAttributes(element, context, OdfAllAttributes);
     return loadOdfFrame(element, context);
 }
@@ -241,29 +240,25 @@ KoImageCollection *PictureShape::imageCollection() const
     return m_imageCollection;
 }
 
-bool PictureShape::loadOdfColorTransformations(const KoXmlElement& element, KoShapeLoadingContext& context)
+void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context)
 {
+    KoShape::loadStyle(element, context);
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    styleStack.save();
-    context.odfLoadingContext().fillStyleStack(element, KoXmlNS::draw, "style-name", "graphic");
     styleStack.setTypeProperties("graphic");
 
     //FIXME: are there other applicable properties?
-    if( styleStack.hasProperty(KoXmlNS::draw, "color-mode") ) {
+    if (styleStack.hasProperty(KoXmlNS::draw, "color-mode")) {
         QString colorMode = styleStack.property(KoXmlNS::draw, "color-mode");
-        if( colorMode == "greyscale" ) {
+        if (colorMode == "greyscale") {
             setMode(Greyscale);
         }
-        else if( colorMode == "mono" ) {
+        else if (colorMode == "mono") {
             setMode(Mono);
         }
-        else if( colorMode == "watermark" ) {
+        else if (colorMode == "watermark") {
             setMode(Watermark);
         }
     }
-
-    styleStack.restore();
-    return true;
 }
 
 PictureShape::PictureMode PictureShape::mode() const

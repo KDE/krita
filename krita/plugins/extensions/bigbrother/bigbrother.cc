@@ -32,6 +32,7 @@
 #include <kis_debug.h>
 #include <kis_global.h>
 #include <kis_image.h>
+#include <kis_pattern.h>
 #include <recorder/kis_play_info.h>
 #include <recorder/kis_recorded_action.h>
 #include <recorder/kis_recorded_action_factory_registry.h>

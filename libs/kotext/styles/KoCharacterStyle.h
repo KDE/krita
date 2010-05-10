@@ -70,7 +70,6 @@ public:
         UnderlineWidth,
         UnderlineWeight,
         UnderlineMode,
-        Spelling,
         Language,
         Country,
         FontCharset,

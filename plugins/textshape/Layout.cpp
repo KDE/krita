@@ -1605,13 +1605,6 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
                     drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                     drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                     decorateTabs(painter, tabList, line, currentFragment, startOfBlock);
-
-                    bool misspelled = fmt.boolProperty(KoCharacterStyle::Spelling);
-                    if (misspelled) {
-                        qreal y = line.position().y() + line.ascent() + painter->fontMetrics().underlinePos();
-                        drawDecorationLine(painter, QColor(255, 0, 0), KoCharacterStyle::SingleLine,
-                                KoCharacterStyle::WaveLine, painter->fontMetrics().lineWidth(), x1, x2, y);
-                    }
                 }
             }
         }

@@ -39,8 +39,8 @@ KoPathSegmentChangeStrategy::KoPathSegmentChangeStrategy( KoPathTool *tool, cons
 {
     const qreal eps = std::numeric_limits<qreal>::epsilon();
     // force segment parameter range to avoid division by zero
-    m_segmentParam = qBound(eps, m_segmentParam, 1.0-eps);
-    
+    m_segmentParam = qBound(eps, m_segmentParam, qreal(1.0)-eps);
+
     m_path = segment.pathShape;
     m_segment = m_path->segmentByIndex(segment.pointIndex);
     m_pointData2.pointIndex = m_path->pathPointIndex(m_segment.second());

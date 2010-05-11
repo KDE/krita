@@ -39,6 +39,9 @@ void KisTile::init(qint32 col, qint32 row,
     globalTileDataStore.acquireTileData(m_tileData);
 
     m_mementoManager = mm;
+
+    if (m_mementoManager)
+        m_mementoManager->registerTileChange(this);
 }
 
 KisTile::KisTile(qint32 col, qint32 row,

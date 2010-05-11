@@ -25,6 +25,7 @@
 
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_transaction.h"
 #include "kis_paint_layer.h"
 
 #include "kis_threaded_applicator.h"
@@ -91,6 +92,8 @@ void KisThreadedApplicatorTest::testApplication()
     quint8 *bytes = test->colorSpace()->allocPixelBuffer(1);
     memset(bytes, 128, test->colorSpace()->pixelSize());
     test->fill(0, 0, 1000, 1000, bytes);
+
+    KisTransaction transaction("", test);
 
     KisThreadedApplicator applicator(test, QRect(0, 0, 1000, 1000), &factory, &updater);
     applicator.execute();

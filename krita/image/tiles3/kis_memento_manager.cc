@@ -184,9 +184,19 @@ KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row)
     if(!m_currentMemento || !m_currentMemento->valid())
         return 0;
 
-    KisMementoItemSP mi = m_headsHashTable.getReadOnlyTileLazy(col, row);
-    Q_ASSERT(mi);
-    return mi->tile(0);
+//    KisMementoItemSP mi = m_headsHashTable.getReadOnlyTileLazy(col, row);
+//    Q_ASSERT(mi);
+//    return mi->tile(0);
+
+    /**
+     * FIXME: We emulate unversioned devices here
+     * It means that if there is no history present,
+     * we return null, instead of a default tile.
+     * This may lead to wrong results in filters
+     * I guess, should be fixed after transaction refactor...
+     */
+    KisMementoItemSP mi = m_headsHashTable.getExistedTile(col, row);
+    return mi ? mi->tile(0) : 0;
 }
 
 KisMementoSP KisMementoManager::getMemento()

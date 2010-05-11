@@ -23,13 +23,14 @@
 #include "KoReportDesignerItemLabel.h"
 #include "KoReportDesigner.h"
 #include "KoReportPluginInfo.h"
+#include <KIcon>
 
 KoReportLabelPlugin::KoReportLabelPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent, args)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
-    info->setEntityName("report:label");
-    info->setIconName("label");
-    info->setUserName(i18n("Label"));
+    info->setClassName("report:label");
+    info->setIcon(KIcon("label"));
+    info->setName(i18n("Label"));
     info->setPriority(1);
 
     setInfo(info);

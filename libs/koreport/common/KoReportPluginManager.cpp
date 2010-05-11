@@ -40,9 +40,8 @@ KoReportPluginManager& KoReportPluginManager::self()
   return instance;
 }
 
-KoReportPluginManager::KoReportPluginManager()
+KoReportPluginManager::KoReportPluginManager() : d(new KoReportPluginManagerPrivate())
 {
-    d = new KoReportPluginManagerPrivate();
 }
 
 KoReportPluginManager::~KoReportPluginManager()
@@ -69,8 +68,8 @@ QList<QAction*> KoReportPluginManager::actions()
     foreach(KoReportPluginInterface* plugin, plugins) {
         KoReportPluginInfo *info = plugin->info();
         if (info) {
-            act = new QAction(KIcon(info->iconName()), info->userName(), 0);
-            act->setObjectName(info->entityName());
+            act = new QAction(KIcon(info->icon()), info->name(), 0);
+            act->setObjectName(info->className());
 
             //Store the order priority in the user data field
             act->setData(info->priority());
@@ -92,19 +91,19 @@ KoReportPluginManagerPrivate::KoReportPluginManagerPrivate()
     KoReportPluginInterface *plugin = 0;
 
     plugin = new KoReportLabelPlugin(this);
-    m_plugins.insert(plugin->info()->entityName(), plugin);
+    m_plugins.insert(plugin->info()->className(), plugin);
     
     plugin = new KoReportCheckPlugin(this);
-    m_plugins.insert(plugin->info()->entityName(), plugin);
+    m_plugins.insert(plugin->info()->className(), plugin);
 
     plugin = new KoReportFieldPlugin(this);
-    m_plugins.insert(plugin->info()->entityName(), plugin);
+    m_plugins.insert(plugin->info()->className(), plugin);
 
     plugin = new KoReportImagePlugin(this);
-    m_plugins.insert(plugin->info()->entityName(), plugin);
+    m_plugins.insert(plugin->info()->className(), plugin);
 
     plugin = new KoReportTextPlugin(this);
-    m_plugins.insert(plugin->info()->entityName(), plugin);
+    m_plugins.insert(plugin->info()->className(), plugin);
 
     //And then load the plugins
     loadPlugins();
@@ -135,7 +134,7 @@ void KoReportPluginManagerPrivate::loadPlugins()
            kDebug() << "Load plugin:" << service->name();
 
            plugin->info()->setPriority(plugin->info()->priority() + 10); //Ensure plugins always have a higher prioroty than built-in types
-           m_plugins.insert(plugin->info()->entityName(), plugin);
+           m_plugins.insert(plugin->info()->className(), plugin);
        } else {
            kDebug() << error;
        }

@@ -22,13 +22,14 @@
 #include "KoReportItemImage.h"
 #include "KoReportDesignerItemImage.h"
 #include "KoReportPluginInfo.h"
+#include <KIcon>
 
 KoReportImagePlugin::KoReportImagePlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
-    info->setEntityName("report:image");
-    info->setIconName("insert-image");
-    info->setUserName(i18n("Image"));
+    info->setClassName("report:image");
+    info->setIcon(KIcon("insert-image"));
+    info->setName(i18n("Image"));
     info->setPriority(4);
     setInfo(info);
 }

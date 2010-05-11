@@ -333,8 +333,6 @@ private:
     ReportWriterSectionData *m_sectionData;
     unsigned int selectionCount() const;
 
-    KoReportPluginManager *m_pluginManager;
-
     static bool actionPriortyLessThan(QAction* act1, QAction* act2);
 
 private slots:

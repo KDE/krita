@@ -23,6 +23,7 @@
 
 #include <QString>
 #include "koreport_export.h"
+#include <QIcon>
 
 class KOREPORT_EXPORT KoReportPluginInfo
 {
@@ -30,19 +31,19 @@ class KOREPORT_EXPORT KoReportPluginInfo
         KoReportPluginInfo();
         ~KoReportPluginInfo();
 
-        QString entityName() const;
-        QString iconName() const;
-        QString userName() const;
+        QByteArray className() const;
+        QIcon icon() const;
+        QString name() const;
         int priority() const;
         
-        void setEntityName(const QString&);
-        void setIconName(const QString&);
-        void setUserName(const QString&);
+        void setClassName(QByteArray);
+        void setIcon(const QIcon&);
+        void setName(const QString&);
         void setPriority(int);
     private:
-        QString m_entityName;
-        QString m_iconName;
-        QString m_userName;
+        QByteArray m_className;
+        QIcon m_icon;
+        QString m_name;
         int m_priority;
     
 };

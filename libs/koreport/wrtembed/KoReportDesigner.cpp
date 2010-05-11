@@ -129,8 +129,6 @@ void KoReportDesigner::init()
     m_detail = 0;
     d->hruler = 0;
 
-    m_pluginManager = &(KoReportPluginManager::self());
-    
     m_sectionData = new ReportWriterSectionData();
     createProperties();
 
@@ -865,7 +863,8 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
                 item = new KoReportDesignerItemLine(v->designer(), v->scene(), pos);
             }
             else {
-                KoReportPluginInterface *plug = m_pluginManager->plugin(m_sectionData->insertItem);
+                KoReportPluginManager &pluginManager =  KoReportPluginManager::self();
+                KoReportPluginInterface *plug = pluginManager.plugin(m_sectionData->insertItem);
                 if (plug) {
                     QObject *obj = plug->createDesignerInstance(v->designer(), v->scene(), pos);
                     if (obj) {

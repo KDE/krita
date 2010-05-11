@@ -37,7 +37,7 @@ class KoReportPluginManager : public QObject
         
     private:
        
-        KoReportPluginManagerPrivate *d;
+        KoReportPluginManagerPrivate *const d;
 
         KoReportPluginManager();
         ~KoReportPluginManager();

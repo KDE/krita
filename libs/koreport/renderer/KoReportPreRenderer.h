@@ -59,7 +59,7 @@ public:
 protected:
 
 private:
-    KoReportPreRendererPrivate* d;
+    KoReportPreRendererPrivate *const d;
     bool setDom(const QDomElement &);
     QMap<QString, QObject*> m_scriptObjects;
 };

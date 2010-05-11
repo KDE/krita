@@ -426,9 +426,8 @@ void KoReportPreRendererPrivate::initEngine()
 
 //===========================KoReportPreRenderer===============================
 
-KoReportPreRenderer::KoReportPreRenderer(const QDomElement & pDocument)
+KoReportPreRenderer::KoReportPreRenderer(const QDomElement & pDocument) : d(new KoReportPreRendererPrivate())
 {
-    d = new KoReportPreRendererPrivate();
     setDom(pDocument);
 }
 

@@ -22,13 +22,14 @@
 #include "KoReportItemCheck.h"
 #include "KoReportDesignerItemCheck.h"
 #include "KoReportPluginInfo.h"
+#include <KIcon>
 
 KoReportCheckPlugin::KoReportCheckPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
-    info->setEntityName("report:check");
-    info->setIconName("checkbox");
-    info->setUserName(i18n("Check"));
+    info->setClassName("report:check");
+    info->setIcon(KIcon("checkbox"));
+    info->setName(i18n("Check"));
     info->setPriority(5);
     setInfo(info);
 }

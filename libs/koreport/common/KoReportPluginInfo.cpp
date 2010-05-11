@@ -31,19 +31,19 @@ KoReportPluginInfo::~KoReportPluginInfo()
 
 }
 
-void KoReportPluginInfo::setEntityName(const QString& e)
+void KoReportPluginInfo::setClassName(QByteArray e)
 {
-    m_entityName = e;
+    m_className = e;
 }
 
-void KoReportPluginInfo::setIconName(const QString& i)
+void KoReportPluginInfo::setIcon(const QIcon& i)
 {
-    m_iconName = i;
+    m_icon = i;
 }
 
-void KoReportPluginInfo::setUserName(const QString& u)
+void KoReportPluginInfo::setName(const QString& u)
 {
-    m_userName = u;
+    m_name = u;
 }
 
 void KoReportPluginInfo::setPriority(int p)
@@ -56,19 +56,19 @@ void KoReportPluginInfo::setPriority(int p)
     }
 }
 
-QString KoReportPluginInfo::entityName() const
+QByteArray KoReportPluginInfo::className() const
 {
-    return m_entityName;
+    return m_className;
 }
 
-QString KoReportPluginInfo::iconName() const
+QIcon KoReportPluginInfo::icon() const
 {
-    return m_iconName;
+    return m_icon;
 }
 
-QString KoReportPluginInfo::userName() const
+QString KoReportPluginInfo::name() const
 {
-    return m_userName;
+    return m_name;
 }
 
 int KoReportPluginInfo::priority() const

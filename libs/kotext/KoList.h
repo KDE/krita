@@ -23,6 +23,11 @@
 #include "styles/KoListStyle.h"
 
 #include <QMetaType>
+#include <QVector>
+#include <QWeakPointer>
+#include <QTextList>
+#include <QTextBlock>
+#include <QTextDocument>
 
 class KoListPrivate;
 

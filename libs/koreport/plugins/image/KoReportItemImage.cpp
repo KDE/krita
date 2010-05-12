@@ -54,12 +54,12 @@ KoReportItemImage::KoReportItemImage(QDomNode & element)
 
 }
 
-bool KoReportItemImage::isInline()
+bool KoReportItemImage::isInline() const
 {
     return !(inlineImageData().isEmpty());
 }
 
-QString KoReportItemImage::inlineImageData()
+QByteArray KoReportItemImage::inlineImageData() const
 {
     QPixmap pixmap = m_staticImage->value().value<QPixmap>();
     QByteArray ba;
@@ -74,8 +74,6 @@ QString KoReportItemImage::inlineImageData()
 
 void KoReportItemImage::setInlineImageData(QByteArray dat, const QString &fn)
 {
-
-
     if (!fn.isEmpty()) {
         QPixmap pix(fn);
         if (!pix.isNull())
@@ -93,11 +91,12 @@ void KoReportItemImage::setInlineImageData(QByteArray dat, const QString &fn)
 
 }
 
-QString KoReportItemImage::mode()
+QString KoReportItemImage::mode() const
 {
     return m_resizeMode->value().toString();
 }
-void KoReportItemImage::setMode(QString m)
+
+void KoReportItemImage::setMode(const QString &m)
 {
     if (mode() != m) {
         m_resizeMode->setValue(m);
@@ -124,7 +123,7 @@ void KoReportItemImage::createProperties()
 }
 
 
-void KoReportItemImage::setColumn(QString c)
+void KoReportItemImage::setColumn(const QString &c)
 {
     m_controlSource->setValue(c);
 }

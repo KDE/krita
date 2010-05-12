@@ -59,7 +59,7 @@ KoReportDesignerItemShape::KoReportDesignerItemShape(KoReportDesigner* d, QGraph
 }
 
 KoReportDesignerItemShape::KoReportDesignerItemShape(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
-        : KoReportDesignerItemRectBase(d), KoReportItemShape(element)
+        : KoReportItemShape(element), KoReportDesignerItemRectBase(d)
 {
     init(s);
     setSceneRect(m_pos.toScene(), m_size.toScene());

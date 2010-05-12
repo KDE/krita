@@ -29,8 +29,9 @@
 //
 // ReportEntityField
 //
-class KoReportDesignerItemField : public KoReportDesignerItemRectBase, public KoReportItemField
+class KoReportDesignerItemField : public KoReportItemField, public KoReportDesignerItemRectBase 
 {
+  Q_OBJECT
 public:
     //Used when creating new basic field
     KoReportDesignerItemField(KoReportDesigner *, QGraphicsScene * scene, const QPointF &pos);

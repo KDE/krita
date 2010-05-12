@@ -72,8 +72,7 @@ public:
     virtual ~KoReportItemBase();
 
     virtual QString typeName() const = 0;
-    virtual void setUnit(const KoUnit&);
-    virtual void createProperties() = 0;
+    
 
     /**
     @brief Render the item into a primitive which is used by the second stage renderer
@@ -99,6 +98,8 @@ public:
         return m_name->value().toString();
     }
 
+    virtual void setUnit(const KoUnit& u);
+
     qreal Z;
 protected:
     KoProperty::Set *m_set;
@@ -110,6 +111,8 @@ protected:
 
     void addDefaultProperties();
 
+    virtual void createProperties() = 0;
+    
     static bool parseReportRect(const QDomElement &, KRPos *pos, KRSize *siz);
     static bool parseReportTextStyleData(const QDomElement &, KRTextStyleData &);
     static bool parseReportLineStyleData(const QDomElement &, KRLineStyleData &);

@@ -56,15 +56,14 @@ protected:
     KoProperty::Property* m_resizeMode;
     KoProperty::Property* m_staticImage;
 
-    void setMode(QString);
+    void setMode(const QString&);
     void setInlineImageData(QByteArray, const QString& = QString());
-    void setColumn(QString);
-    QString mode();
-    bool isInline();
-    QString inlineImageData();
+    void setColumn(const QString&);
+    QString mode() const;
+    bool isInline() const;
+    QByteArray inlineImageData() const;
     
 private:
-    static int RTTI;
     virtual void createProperties();
 
     friend class Scripting::Image;

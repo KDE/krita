@@ -71,12 +71,12 @@ void KRSize::setUnit(KoUnit u)
     m_property->setValue(toUnit());
 }
 
-QSizeF KRSize::toPoint()
+QSizeF KRSize::toPoint() const
 {
     return m_pointSize;
 }
 
-QSizeF KRSize::toScene()
+QSizeF KRSize::toScene() const
 {
     qreal w, h;
     w = POINT_TO_INCH(m_pointSize.width()) * KoDpi::dpiX();
@@ -84,7 +84,7 @@ QSizeF KRSize::toScene()
     return QSizeF(w, h);
 }
 
-QSizeF KRSize::toUnit()
+QSizeF KRSize::toUnit() const
 {
     qreal w, h;
     w = m_unit.toUserValue(m_pointSize.width());

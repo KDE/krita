@@ -31,7 +31,7 @@
 //
 class KoReportDesignerItemImage : public KoReportItemImage, public KoReportDesignerItemRectBase
 {
- 
+  Q_OBJECT
 public:
     KoReportDesignerItemImage(KoReportDesigner *, QGraphicsScene* scene, const QPointF &pos);
     KoReportDesignerItemImage(QDomNode & element, KoReportDesigner *, QGraphicsScene* scene);

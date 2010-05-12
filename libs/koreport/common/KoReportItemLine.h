@@ -43,7 +43,9 @@ public:
 
     virtual QString typeName() const;
     virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script);
-
+  
+    virtual void setUnit(const KoUnit&);
+    
 protected:
     KRPos m_start;
     KRPos m_end;

@@ -28,18 +28,18 @@
 class KOREPORT_EXPORT KRSize
 {
 public:
-    KRSize(const KoUnit& unit = KoUnit(KoUnit::Centimeter));
+    explicit KRSize(const KoUnit& unit = KoUnit(KoUnit::Centimeter));
 
     ~KRSize();
-    QSizeF toUnit();
-    QSizeF toPoint();
-    QSizeF toScene();
+    QSizeF toUnit() const;
+    QSizeF toPoint() const;
+    QSizeF toScene() const;
     void setSceneSize(const QSizeF&, bool update= true);
     void setUnitSize(const QSizeF&, bool update = true);
     void setPointSize(const QSizeF&, bool update = true);
     void setUnit(KoUnit);
 
-    KoProperty::Property* property() {
+    KoProperty::Property* property() const {
         return m_property;
     }
 private:

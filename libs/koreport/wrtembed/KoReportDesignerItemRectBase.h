@@ -39,7 +39,6 @@ public:
     KoReportDesignerItemRectBase(KoReportDesigner*);
 
     virtual ~KoReportDesignerItemRectBase();
-    void setUnit(KoUnit u);
 
 protected:
     void init(KRPos*, KRSize*, KoProperty::Set*);

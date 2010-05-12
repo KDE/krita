@@ -60,12 +60,6 @@ KoReportDesignerItemRectBase::~KoReportDesignerItemRectBase()
 {
 }
 
-void KoReportDesignerItemRectBase::setUnit(KoUnit u)
-{
-    m_ppos->setUnit(u);
-    m_psize->setUnit(u);
-}
-
 QRectF KoReportDesignerItemRectBase::sceneRect()
 {
     return QRectF(m_ppos->toScene(), m_psize->toScene());

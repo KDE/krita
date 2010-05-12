@@ -46,7 +46,7 @@ public:
     void setName(const QString& name);
     KoUnit unit() const { return m_unit; }
 
-    KoProperty::Property* property() {
+    KoProperty::Property* property() const {
         return m_property;
     }
 private:

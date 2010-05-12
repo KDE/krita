@@ -57,7 +57,7 @@ KoReportDesignerItemLabel::KoReportDesignerItemLabel(KoReportDesigner* d, QGraph
 }
 
 KoReportDesignerItemLabel::KoReportDesignerItemLabel(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
-        : KoReportDesignerItemRectBase(d), KoReportItemLabel(element)
+        : KoReportItemLabel(element), KoReportDesignerItemRectBase(d)
 {
     init(s);
     setSceneRect(m_pos.toScene(), m_size.toScene());

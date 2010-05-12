@@ -123,3 +123,8 @@ int KoReportItemLine::render(OROPage* page, OROSection* section,  QPointF offset
     return 0;
 }
 
+void KoReportItemLine::setUnit(const KoUnit &u)
+{
+    m_start.setUnit(u);
+    m_end.setUnit(u);
+}

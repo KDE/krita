@@ -32,7 +32,7 @@ class KoReportDesignerItemBase;
 //
 class KoReportDesignerItemText : public KoReportItemText, public KoReportDesignerItemRectBase
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
     KoReportDesignerItemText(KoReportDesigner *, QGraphicsScene * scene, const QPointF &pos);
     KoReportDesignerItemText(QDomNode & element, KoReportDesigner *, QGraphicsScene * scene);

@@ -30,7 +30,7 @@
 //
 class KoReportDesignerItemLabel : public KoReportItemLabel, public KoReportDesignerItemRectBase
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
     KoReportDesignerItemLabel(KoReportDesigner *, QGraphicsScene * scene, const QPointF &pos);
     KoReportDesignerItemLabel(QDomNode & element, KoReportDesigner *, QGraphicsScene * scene);

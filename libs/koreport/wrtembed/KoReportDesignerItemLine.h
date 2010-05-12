@@ -43,7 +43,6 @@ public:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget = 0);
     virtual KoReportDesignerItemLine* clone();
 
-    void setUnit(KoUnit u);
     void setLineScene(QLineF);
     
     virtual void move(const QPointF&);
@@ -60,7 +59,7 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-
+    
 private slots:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 };

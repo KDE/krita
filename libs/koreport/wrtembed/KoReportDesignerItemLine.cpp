@@ -250,12 +250,6 @@ void KoReportDesignerItemLine::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
     }
 }
 
-void KoReportDesignerItemLine::setUnit(KoUnit u)
-{
-    m_start.setUnit(u);
-    m_end.setUnit(u);
-}
-
 void KoReportDesignerItemLine::setLineScene(QLineF l)
 {
     m_start.setScenePos(l.p1(), KRPos::DontUpdateProperty);

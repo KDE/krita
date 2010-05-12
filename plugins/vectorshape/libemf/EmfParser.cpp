@@ -27,6 +27,9 @@
 #include <KDebug>
 
 
+// 0 - No debug
+// 1 - Print a lot of debug info
+// 2 - Just print all the records instead of parsing them
 #define DEBUG_EMFPARSER 0
 
 
@@ -348,6 +351,9 @@ bool Parser::readRecord( QDataStream &stream )
 #endif
     }
 
+#if DEBUG_EMFPARSER == 2
+    soakBytes(stream, size - 8);
+#else
     switch ( type ) {
         case EMR_POLYLINE:
         {
@@ -956,6 +962,7 @@ bool Parser::readRecord( QDataStream &stream )
 	soakBytes( stream, size-8 ); // because we already took 8.
 	Q_ASSERT( type );
     }
+#endif
 
     return true;
 }

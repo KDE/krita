@@ -25,6 +25,7 @@
 #include <QRect> // also provides QSize
 #include <QString>
 
+#include "Bitmap.h"
 /**
    \file
 
@@ -37,66 +38,7 @@
 namespace Libemf
 {
 
-/*****************************************************************************/
 
-/**
-   Simple representation of a BitmapInfoHeader structure
-
-   FIXME: This is really called BitmapInfoHeader and is MS-WMF 2.2.2.3
-   
-   See MS-WMF 2.2.2.3 for details
-*/
-class BitmapInfoHeader 
-{
-public:
-    /**
-       Standard constructor
-
-       The header structure is built from the specified stream.
-
-       \param stream the data stream to read from.
-    */
-    BitmapInfoHeader( QDataStream &stream );
-    ~BitmapInfoHeader();
-
-    /**
-       The width of the bitmap, in pixels
-    */
-    qint32 width() { return m_width; };
-
-    /**
-       The height of the bitmap, in pixels
-    */
-    qint32 height() { return m_height; };
-
-    /**
-       The number of bits that make up a pixel
-
-       This is an enumerated type - see the BitCount enum
-    */
-    quint16 bitCount() { return m_bitCount; };
-
-    /**
-       The type of compression used in the image
-
-       This is an enumerated type
-    */
-    quint32 compression() { return m_compression; };
-
-private:
-    quint32 m_headerSize;
-    qint32 m_width;
-    qint32 m_height;
-    quint16 m_planes;
-    quint16 m_bitCount;
-    quint32 m_compression;
-    quint32 m_imageSize;
-    qint32 m_xPelsPerMeter;
-    qint32 m_yPelsPerMeter;
-    quint32 m_colorUsed;
-    quint32 m_colorImportant;
-};
- 
 /*****************************************************************************/
 
 /** 
@@ -155,7 +97,7 @@ public:
     bool hasImage() const;
 
 private:
-    QRect m_Bounds;
+    QRect m_bounds;
     qint32 m_xDest;
     qint32 m_yDest;
     qint32 m_cxDest;
@@ -164,17 +106,23 @@ private:
     qint32 m_xSrc;
     qint32 m_ySrc;
     QMatrix m_XFormSrc;
-    // ColorRef - BkColorSrc - elements below
+
+    // Background color - elements below
     quint8 m_red;
     quint8 m_green;
     quint8 m_blue;
     quint8 m_reserved;
+
+    // Color table interpretation
     quint32 m_UsageSrc;
+
+    // The source bitmap meta data
     quint32 m_offBmiSrc;
     quint32 m_cbBmiSrc;
     quint32 m_offBitsSrc;
     quint32 m_cbBitsSrc;
-    BitmapInfoHeader *m_BmiSrc; // The source bitmap
+
+    BitmapHeader *m_BmiSrc; // The source bitmap
     QByteArray m_imageData;
 
     QImage *m_image;
@@ -279,7 +227,7 @@ private:
     quint32 m_BitBltRasterOperation;
     qint32 m_cxDest;
     qint32 m_cyDest;
-    BitmapInfoHeader *m_BmiSrc; // The source bitmap
+    BitmapHeader *m_BmiSrc; // The source bitmap
     QByteArray m_imageData;
 
     QImage *m_image;

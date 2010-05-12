@@ -10,6 +10,7 @@ add_subdirectory(demo)
 set(libemf_LIB_SRCS 
      EmfRecords.cpp
      EmfHeader.cpp
+     Bitmap.cpp
      EmfParser.cpp
      EmfOutput.cpp
      EmfOutputDebugStrategy.cpp
@@ -32,6 +33,7 @@ set(libemf_LIB_SRCS
 #    EmfEnums.h
 #    EmfRecords.h
 #    EmfHeader.h
+#    Bitmap.h
 #    EmfParser.h
 #    EmfOutput.h
 #    EmfOutputDebugStrategy.h

@@ -18,38 +18,12 @@
 
 #include "EmfEnums.h"
 #include "EmfRecords.h"
+#include "Bitmap.h"
 
 #include <KDebug>
 
 namespace Libemf
 {
-
-/*****************************************************************************/
-
-BitmapInfoHeader::BitmapInfoHeader( QDataStream &stream )
-{
-    stream >> m_headerSize;
-    stream >> m_width;
-    //kDebug(31000) << "Width:" << m_width;
-    stream >> m_height;
-    //kDebug(31000) << "Height:" << m_height;
-    stream >> m_planes;
-    // kDebug(33100) << "planes:" << m_planes;
-    stream >> m_bitCount;
-    // kDebug(33100) << "BitCount:" << m_bitCount;
-    stream >> m_compression;
-    //kDebug(31000) << "Compression:" << m_compression;
-    stream >> m_imageSize;
-    // kDebug(33100) << "ImageSize:" << m_imageSize;
-    stream >> m_xPelsPerMeter;
-    stream >> m_yPelsPerMeter;
-    stream >> m_colorUsed;
-    stream >> m_colorImportant;
-}
-
-BitmapInfoHeader::~BitmapInfoHeader()
-{
-}
 
 
 /*****************************************************************************/
@@ -59,21 +33,22 @@ BitBltRecord::BitBltRecord( QDataStream &stream )
     qint32 x, y, width, height;
     stream >> x >> y >> width >> height;
     kDebug(31000) << "Bounds" << x << y << width << height;
-    m_Bounds = QRect( QPoint(x, y), QSize(width, height));
+    m_bounds = QRect( QPoint(x, y), QSize(width, height));
 #else
-    stream >> m_Bounds;
+    stream >> m_bounds;
 #endif
     stream >> m_xDest;
     stream >> m_yDest;
     stream >> m_cxDest;
     stream >> m_cyDest;
-    //kDebug(31000) << "Destination" << m_xDest << m_yDest << m_cxDest << m_cyDest;
+    kDebug(31000) << "Destination" << m_xDest << m_yDest << m_cxDest << m_cyDest;
 
     stream >> m_BitBltRasterOperation;
-    //kDebug(31000) << "bitblt raster operation:" << m_BitBltRasterOperation;
+    kDebug(31000) << "bitblt raster operation:" << hex << m_BitBltRasterOperation << dec;
+
     stream >> m_xSrc;
     stream >> m_ySrc;
-    //kDebug(31000) << "Sourcd" << m_xSrc << m_ySrc;
+    kDebug(31000) << "Source" << m_xSrc << m_ySrc;
 
     float M11, M12, M21, M22, Dx, Dy;
     stream >> M11;
@@ -83,22 +58,22 @@ BitBltRecord::BitBltRecord( QDataStream &stream )
     stream >> Dx;
     stream >> Dy;
     m_XFormSrc = QMatrix( M11, M12, M21, M22, Dx, Dy );
-    //kDebug(31000) << m_XFormSrc;
+    kDebug(31000) << "Matrix" << m_XFormSrc;
 
     stream >> m_red >> m_green >> m_blue >> m_reserved;
+    kDebug(31000) << "Background color" << m_red << m_green << m_blue << m_reserved;
 
     stream >> m_UsageSrc;
-    stream >> m_offBmiSrc;
-    stream >> m_cbBmiSrc;       // Size of source bitmap header
-    stream >> m_offBitsSrc;
-    stream >> m_cbBitsSrc;      // Size of source bitmap itself
+    kDebug(31000) << "Color table interpretation" << m_UsageSrc;
 
-    // Some basic checks
-    if ( ( m_cbBmiSrc == 0 ) && ( m_cbBmiSrc == 0 ) ) {
-	return;
-    }
+    stream >> m_offBmiSrc;      // Offset to bitmap header
+    stream >> m_cbBmiSrc;       // Size of source bitmap header
+    stream >> m_offBitsSrc;     // Offset to source bitmap
+    stream >> m_cbBitsSrc;      // Size of source bitmap
+    kDebug(31000) << "Bitmap metadata" << m_offBmiSrc << m_cbBmiSrc << m_offBitsSrc << m_cbBitsSrc;
+
     if ( m_cbBmiSrc == 40 ) {
-	m_BmiSrc = new BitmapInfoHeader( stream );
+	m_BmiSrc = new BitmapHeader( stream, m_cbBmiSrc );
     } else {
 	kDebug(31000) << "BUG!!! m_cbBmiSrc:" << m_cbBmiSrc;
 	//Q_ASSERT( 0 );
@@ -114,8 +89,7 @@ BitBltRecord::~BitBltRecord()
 
 bool BitBltRecord::hasImage() const
 {
-    // FIXME: Check the same twice??
-    return ( ( m_cbBmiSrc != 0 ) && ( m_cbBmiSrc != 0 ) );
+    return ( ( m_cbBmiSrc != 0 ) && ( m_cbBitsSrc != 0 ) );
 }
 
 QImage* BitBltRecord::image() 
@@ -186,7 +160,7 @@ StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream )
         stream >> dummy;
         padding += 4;
     }
-    m_BmiSrc = new BitmapInfoHeader( stream );
+    m_BmiSrc = new BitmapHeader( stream, m_cbBmiSrc );
 
     // 40 is the size of the header record.
     while (m_offBitsSrc - padding > 80 + 40) {

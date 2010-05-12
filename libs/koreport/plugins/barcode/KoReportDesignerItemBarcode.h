@@ -32,6 +32,7 @@
 //
 class KoReportDesignerItemBarcode : public KoReportItemBarcode, public KoReportDesignerItemRectBase
 {
+    Q_OBJECT
 public:
     KoReportDesignerItemBarcode(KoReportDesigner *, QGraphicsScene* scene, const QPointF &pos);
     KoReportDesignerItemBarcode(QDomNode & element, KoReportDesigner *, QGraphicsScene* scene);

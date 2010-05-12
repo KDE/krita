@@ -66,7 +66,7 @@ KoReportDesignerItemImage::KoReportDesignerItemImage(KoReportDesigner * rw, QGra
 }
 
 KoReportDesignerItemImage::KoReportDesignerItemImage(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)
-        : KoReportDesignerItemRectBase(rw), KoReportItemImage(element)
+        : KoReportItemImage(element), KoReportDesignerItemRectBase(rw)
 {
     init(scene);
     setSceneRect(m_pos.toScene(), m_size.toScene());

@@ -57,7 +57,7 @@ KoReportDesignerItemCheck::KoReportDesignerItemCheck(KoReportDesigner* d, QGraph
 }
 
 KoReportDesignerItemCheck::KoReportDesignerItemCheck(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
-        : KoReportDesignerItemRectBase(d), KoReportItemCheck(element)
+        : KoReportItemCheck(element), KoReportDesignerItemRectBase(d)
 {
     init(s);
     setSceneRect(m_pos.toScene(), m_size.toScene());

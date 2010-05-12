@@ -57,7 +57,7 @@ KoReportDesignerItemField::KoReportDesignerItemField(KoReportDesigner * rw, QGra
 }
 
 KoReportDesignerItemField::KoReportDesignerItemField(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
-        : KoReportDesignerItemRectBase(d), KoReportItemField(element)
+        : KoReportItemField(element), KoReportDesignerItemRectBase(d)
 {
     init(s);
     setSceneRect(m_pos.toScene(), m_size.toScene());

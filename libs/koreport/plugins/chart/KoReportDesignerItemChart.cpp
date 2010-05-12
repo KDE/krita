@@ -59,7 +59,8 @@ KoReportDesignerItemChart::KoReportDesignerItemChart(KoReportDesigner * rd, QGra
     m_name->setValue(m_reportDesigner->suggestEntityName("chart"));
 }
 
-KoReportDesignerItemChart::KoReportDesignerItemChart(QDomNode & element, KoReportDesigner * rd, QGraphicsScene* scene) : KoReportDesignerItemRectBase(rd), KoReportItemChart(element)
+KoReportDesignerItemChart::KoReportDesignerItemChart(QDomNode & element, KoReportDesigner * rd, QGraphicsScene* scene) :
+       KoReportItemChart(element),  KoReportDesignerItemRectBase(rd)
 {
     init(scene, rd);
     populateData();

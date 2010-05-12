@@ -4,6 +4,7 @@
     <Menu name="Select"><text>Select</text>
 	<Separator/>
 	<Action name="colorrange"/>
+	<Action name="selectopaque"/>
 	<Separator/>
     </Menu>
 </MenuBar>

@@ -45,8 +45,11 @@
 #include "kis_view2.h"
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
+#include "kis_selection_tool_helper.h"
+#include "kis_canvas2.h"
 
 #include "dlg_colorrange.h"
+#include <KoColorSpace.h>
 
 K_PLUGIN_FACTORY(ColorRangeFactory, registerPlugin<ColorRange>();)
 K_EXPORT_PLUGIN(ColorRangeFactory("krita"))
@@ -64,6 +67,11 @@ ColorRange::ColorRange(QObject *parent, const QVariantList &)
         actionCollection()->addAction("colorrange", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
         m_view->selectionManager()->addSelectionAction(action);
+
+        action  = new KAction(i18n("Select Opaque"), this);
+        actionCollection()->addAction("selectopaque", action);
+        connect(action, SIGNAL(triggered()), this, SLOT(selectOpaque()));
+        m_view->selectionManager()->addSelectionAction(action);
     }
 }
 
@@ -80,6 +88,45 @@ void ColorRange::slotActivated()
     Q_CHECK_PTR(dlgColorRange);
 
     dlgColorRange->exec();
+}
+
+void ColorRange::selectOpaque()
+{
+    KisCanvas2 * canvas = m_view->canvasBase();
+    if (!canvas)
+        return;
+    
+    KisLayerSP layer = m_view->activeLayer();
+    if(!layer)
+        return;
+    
+    KisPaintDeviceSP device = layer->paintDevice();
+    if (!device) return;
+    
+    KisSelectionToolHelper helper(canvas, layer, i18n("Select Opaque"));
+    
+    qint32 x, y, w, h;
+    device->exactBounds(x, y, w, h);
+    const KoColorSpace * cs = device->colorSpace();
+    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+
+    KisHLineConstIterator deviter = device->createHLineConstIterator(x, y, w);
+    KisHLineIterator selIter = tmpSel ->createHLineIterator(x, y, w);
+
+    for (int row = y; row < h - y; ++row) {
+        while (!deviter.isDone()) {
+            *selIter.rawData() = cs->opacityU8(deviter.rawData());
+            
+            ++deviter;
+            ++selIter;            
+        }      
+        deviter.nextRow();
+        selIter.nextRow();
+    }
+
+    QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, SELECTION_ADD);
+    canvas->addCommand(cmd);
+    
 }
 
 #include "colorrange.moc"

@@ -36,6 +36,7 @@ public:
 
 private slots:
     void slotActivated();
+    void selectOpaque();
 
 private:
     KisView2 * m_view;

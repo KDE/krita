@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2010 KO GmbH <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,7 +45,14 @@ public:
 
     ~KoToolBasePrivate()
     {
-        qDeleteAll(optionWidgets);
+        foreach(QWidget *optionWidget, optionWidgets) {
+            // Only delete the option widget if it hasn't got a parent; if it has,
+            // the parent will delete it.
+            if (optionWidget->parent() == 0) {
+                delete optionWidget;
+            }
+        }
+        optionWidgets.clear();
     }
 
     QMap<QString, QWidget *> optionWidgets; ///< the optionwidgets associated with this tool

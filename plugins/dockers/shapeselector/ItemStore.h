@@ -32,7 +32,7 @@ class ItemStore
 {
 public:
     ItemStore();
-    ItemStore(KoShapeManager *shapeManager);
+    explicit ItemStore(KoShapeManager *shapeManager);
     ~ItemStore();
 
     void addFolder(FolderShape *folder);

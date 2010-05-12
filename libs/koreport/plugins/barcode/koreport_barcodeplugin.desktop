@@ -1,10 +1,12 @@
 [Desktop Entry]
 Name=KoReport_Barcode
+Name[nds]=KoReport_Streekkode
 Name[pt]=KoReport_Barcode
 Name[sv]=Koffice rapportstreckkod
 Name[uk]=Штрихкод KoReport
 Name[x-test]=xxKoReport_Barcodexx
 Comment=KoReport Barcode PLugin
+Comment[nds]=Streekkode-Moduul för KoReport
 Comment[pt]='Plugin' de Códigos de Barras do KoReport
 Comment[sv]=Insticksprogram för Koffice rapportstreckkod
 Comment[uk]=Додаток штрихкодів KoReport

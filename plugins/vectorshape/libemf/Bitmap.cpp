@@ -56,9 +56,11 @@ BitmapHeader::BitmapHeader( QDataStream &stream, int size )
     kDebug(33100) << "BitCount:" << m_bitCount;
     kDebug(31000) << "Compression:" << m_compression;
     kDebug(33100) << "ImageSize:" << m_imageSize;
+    kDebug(33100) << "Colors used:" << m_colorUsed;
 
     // BitmapV4Header (size 40+68 = 108)
     if (size >= 108) {
+        m_headerType = BitmapV4Header;
         read = 108;
 
         stream >> m_redMask;
@@ -78,6 +80,7 @@ BitmapHeader::BitmapHeader( QDataStream &stream, int size )
 
     // BitmapV5Header (size 108+16 = 124)
     if (size >= 124) {
+        m_headerType = BitmapV5Header;
         read = 124;
 
         stream >> m_intent;
@@ -86,8 +89,17 @@ BitmapHeader::BitmapHeader( QDataStream &stream, int size )
         stream >> m_reserved;
     }
 
+    kDebug(33100) << "header type:" << m_headerType;
+    kDebug(33100) << "header size:" << size;
+    kDebug(33100) << "read bytes: " << read;
+
     // Read away the overshot from the size parameter;
-    // FIXME
+    qint8 dummy;
+    int   rest = size - read;
+    while (rest > 0) {
+        stream >> dummy;
+        --rest;
+    }
 }
 
 BitmapHeader::~BitmapHeader()

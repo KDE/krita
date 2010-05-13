@@ -38,17 +38,13 @@ namespace Libemf
 {
 
 /**
- * @class Bitmapheader
+ * @class BitmapHeader
  *
  * Representation of a bitmap header, including the following formats:
  *  - BitmapInfoHeader [MS-WMF].pdf 2.2.2.3
  *  - BitmapV4Header   [MS-WMF].pdf 2.2.2.4
  *  - BitmapV5Header   [MS-WMF].pdf 2.2.2.5
- *
- * FIXME: This is really called BitmapInfoHeader and is MS-WMF 2.2.2.3
- * 
- * See MS-WMF 2.2.2.3 for details
-*/
+ */
 class BitmapHeader 
 {
 public:

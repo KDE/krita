@@ -1053,6 +1053,7 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord record )
                   << record.xSrc() << record.ySrc() << record.cxSrc() << record.cySrc();
     kDebug(31000) << "Raster op: " << hex << record.rasterOperation() << dec;
                   //<< record.bkColorSrc();
+    kDebug(31000) << "usageSrc: " << record.usageSrc();
 #endif
 
     QPoint targetPosition( record.xDest(), record.yDest() );

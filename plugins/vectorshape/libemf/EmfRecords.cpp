@@ -189,6 +189,8 @@ QImage* StretchDiBitsRecord::image()
     }
 
     QImage::Format format = QImage::Format_Invalid;
+
+    // Start by determining which QImage format we are going to use.
     if (m_BmiSrc->bitCount() == BI_BITCOUNT_1) {
         format = QImage::Format_Mono;
     } else if ( m_BmiSrc->bitCount() == BI_BITCOUNT_4 ) {
@@ -212,6 +214,11 @@ QImage* StretchDiBitsRecord::image()
         // This bitmap is a top-down bitmap without compression.
         m_image = new QImage( (const uchar*)m_imageData.constData(),
                               m_BmiSrc->width(), m_BmiSrc->height(), format );
+
+        // The WMF images are in the BGR color order.
+        if (format == QImage::Format_RGB888)
+            *m_image = m_image->rgbSwapped();
+
         // we have to mirror this bitmap in the X axis.
         *m_image = m_image->mirrored(false, true);
     } else {
@@ -220,6 +227,8 @@ QImage* StretchDiBitsRecord::image()
         case BI_RGB:
             m_image = new QImage( (const uchar*)m_imageData.constData(),
                                   m_BmiSrc->width(), -m_BmiSrc->height(), format );
+            // The WMF images are in the BGR color order.
+            *m_image = m_image->rgbSwapped();
             break;
 
         // These compressions are not yet supported, so return an empty image.

@@ -206,6 +206,7 @@ public:
     */
     qint32 rasterOperation() const { return m_BitBltRasterOperation; };
 
+    quint32 usageSrc() const { return m_UsageSrc; };
     /**
        The image to display
     */

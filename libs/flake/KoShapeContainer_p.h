@@ -29,7 +29,7 @@ public:
     KoShapeContainerPrivate(KoShapeContainer *q);
     virtual ~KoShapeContainerPrivate();
 
-    KoShapeContainerModel *children;
+    KoShapeContainerModel *model;
 };
 
 #endif

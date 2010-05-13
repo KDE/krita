@@ -552,8 +552,8 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
             d->currentList = d->list(cursor.block().document(), listStyle);
         d->currentListStyle = listStyle;
         level = element.attributeNS(KoXmlNS::text, "level", "1").toInt();
-    } 
-    
+    }
+
     if (!numberedParagraph && (!isDeleteChange || listValid)) {
         if (!listStyle)
             listStyle = d->currentListStyle;
@@ -561,7 +561,7 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
             d->currentList = d->list(cursor.block().document(), listStyle);
         level = d->currentListLevel++;
         d->currentListStyle = listStyle;
-    } 
+    }
 
     /************************************ODF Bug Work-Around Code that uses RDF****************************************/
     if (!numberedParagraph && isDeleteChange && !d->currentList) {
@@ -571,7 +571,7 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
         level = d->currentListLevel++;
         levelIncreased = true;
         d->currentListStyle = listStyle;
-    } 
+    }
 
     if (!numberedParagraph && isDeleteChange && deletedListLevel && (deletedListLevel == d->currentListLevel)) {
         level = d->currentListLevel++;
@@ -606,7 +606,7 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
 
         if (!numberedParagraph && e.tagName() != "list-item" && !listHeader)
             continue;
-        
+
         bool listItemValid = false;
         if (e.hasAttribute("id")) {
             QString xmlId = e.attribute("id", QString());
@@ -658,12 +658,12 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
         }
         kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
     }
-    
-    /*******************************ODF Bug Work-Around Code Changes***********************************/ 
+
+    /*******************************ODF Bug Work-Around Code Changes***********************************/
     if (!isDeleteChange || (isDeleteChange && (listValid || levelIncreased)))
         d->currentListLevel--;
-    
-    if ((!isDeleteChange && (numberedParagraph || d->currentListLevel == 1)) || 
+
+    if ((!isDeleteChange && (numberedParagraph || d->currentListLevel == 1)) ||
         (isDeleteChange && listValid && (numberedParagraph || d->currentListLevel == 1))) {
         d->currentListStyle = 0;
         d->currentList = 0;
@@ -677,11 +677,11 @@ bool KoTextLoader::isValidList(const QString& xmlId) const
     #ifdef SHOULD_BUILD_RDF
     Soprano::Model *model = d->rdfData->model();
     Soprano::Node wildCardNode;
-    
+
     // Find the Subject with this xmlId
     Soprano::Node xmlIdNode = Soprano::Node::createLiteralNode(Soprano::LiteralValue(xmlId));
     Soprano::StatementIterator stmtIt = model->listStatements(wildCardNode, wildCardNode, xmlIdNode, wildCardNode);
-    
+
     //Store the subject Node
     QList<Soprano::Statement> allStatements = stmtIt.allElements();
     if (!allStatements.size())
@@ -695,7 +695,7 @@ bool KoTextLoader::isValidList(const QString& xmlId) const
 
     if(!allStatements.size())
         return true;
-    
+
     return allStatements.at(0).object().literal().toBool();
     #else
     return true;
@@ -708,11 +708,11 @@ bool KoTextLoader::isValidListItem(const QString& xmlId) const
     #ifdef SHOULD_BUILD_RDF
     Soprano::Model *model = d->rdfData->model();
     Soprano::Node wildCardNode;
-    
+
     // Find the Subject with this xmlId
     Soprano::Node xmlIdNode = Soprano::Node::createLiteralNode(Soprano::LiteralValue(xmlId));
     Soprano::StatementIterator stmtIt = model->listStatements(wildCardNode, wildCardNode, xmlIdNode, wildCardNode);
-    
+
     //Store the subject Node
     QList<Soprano::Statement> allStatements = stmtIt.allElements();
     if (!allStatements.size())
@@ -726,7 +726,7 @@ bool KoTextLoader::isValidListItem(const QString& xmlId) const
 
     if(!allStatements.size())
         return true;
-    
+
     return allStatements.at(0).object().literal().toBool();
     #else
     return true;
@@ -739,11 +739,11 @@ int KoTextLoader::listLevel(const QString& xmlId) const
     #ifdef SHOULD_BUILD_RDF
     Soprano::Model *model = d->rdfData->model();
     Soprano::Node wildCardNode;
-    
+
     // Find the Subject with this xmlId
     Soprano::Node xmlIdNode = Soprano::Node::createLiteralNode(Soprano::LiteralValue(xmlId));
     Soprano::StatementIterator stmtIt = model->listStatements(wildCardNode, wildCardNode, xmlIdNode, wildCardNode);
-    
+
     //Store the subject Node
     QList<Soprano::Statement> allStatements = stmtIt.allElements();
     if (!allStatements.size())
@@ -757,7 +757,7 @@ int KoTextLoader::listLevel(const QString& xmlId) const
 
     if(!allStatements.size())
         return true;
-    
+
     return allStatements.at(0).object().literal().toInt();
     #else
     return 0;
@@ -927,7 +927,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 // TODO make configurable ? Ho, and it will interfere with saving :/
                 QBrush foreground = linkCf.foreground();
                 foreground.setColor(Qt::blue);
-                foreground.setStyle(Qt::Dense1Pattern);
+//                 foreground.setStyle(Qt::Dense1Pattern);
                 linkCf.setForeground(foreground);
                 linkCf.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
                 linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
@@ -1057,7 +1057,7 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
 
     QTextCharFormat charFormat = cursor.block().charFormat();
     QTextBlockFormat blockFormat = cursor.block().blockFormat();
-    
+
     if (changeId) {
         KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
         KoXmlElement element = d->deleteChangeTable.value(id);

@@ -28,8 +28,16 @@
 
 class KoToolDocker::Private {
 public:
-    Private(KoToolDocker *dock) : currentWidget(0), q(dock) {}
-    QPointer<QWidget> currentWidget;
+    Private(KoToolDocker *dock) : q(dock) {}
+
+    ~Private()
+    {
+        QWidget *widget = currentWidget.data();
+        if (widget)
+            widget->setParent(0);
+    }
+
+    QWeakPointer<QWidget> currentWidget;
     QWidget *housekeeperWidget;
     QGridLayout *housekeeperLayout;
     QSpacerItem *bottomRightSpacer;
@@ -83,19 +91,20 @@ KoToolDocker::~KoToolDocker()
 
 bool KoToolDocker::hasOptionWidget()
 {
-    return d->currentWidget != 0;
+    return !d->currentWidget.isNull();
 }
 
 void KoToolDocker::newOptionWidget(QWidget *optionWidget)
 {
-    if (d->currentWidget == optionWidget)
+    if (d->currentWidget.data() == optionWidget)
         return;
 
-    if (d->currentWidget) {
-        d->currentWidget->setVisible(false);
+    QWidget *currentWidget = d->currentWidget.data();
+    if (currentWidget) {
+        currentWidget->setVisible(false);
     }
     d->currentWidget = optionWidget;
-    d->currentWidget->setVisible(true);
+    optionWidget->setVisible(true);
     d->housekeeperLayout->addWidget(optionWidget, 0, 0);
     d->housekeeperLayout->invalidate();
 }

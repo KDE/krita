@@ -155,7 +155,7 @@ private:
     qreal angleFromArc( const QPoint &centrePoint, const QPoint &radialPoint );
 
     /**
-      Calculate the anglular difference (span) between two angles
+      Calculate the angular difference (span) between two angles
       
       This should always be positive.
     */
@@ -197,6 +197,10 @@ private:
     */
     enum Qt::FillRule m_fillRule;
 
+    /**
+       The current map mode
+    */
+    MapMode  m_mapMode;
     /**
         The current text alignment mode
     */

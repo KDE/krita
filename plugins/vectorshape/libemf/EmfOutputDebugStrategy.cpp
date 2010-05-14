@@ -156,16 +156,28 @@ void OutputDebugStrategy::setMapMode( quint32 mapMode )
 {
     QString modeAsText;
     switch ( mapMode ) {
-    case 0x1:
+    case MM_TEXT:
 	modeAsText = QString( "map mode - text" );
 	break;
-    case 0x6:
+    case MM_LOMETRIC:
+	modeAsText = QString( "map mode - lometric" );
+	break;
+    case MM_HIMETRIC:
+	modeAsText = QString( "map mode - himetric" );
+	break;
+    case MM_LOENGLISH:
+	modeAsText = QString( "map mode - loenglish" );
+	break;
+    case MM_HIENGLISH:
+	modeAsText = QString( "map mode - hienglish" );
+	break;
+    case MM_TWIPS:
 	modeAsText = QString( "map mode - twips" );
 	break;
-    case 0x7:
+    case MM_ISOTROPIC:
 	modeAsText = QString( "map mode - isotropic" );
 	break;
-    case 0x8:
+    case MM_ANISOTROPIC:
 	modeAsText = QString( "map mode - anisotropic" );
 	break;
     default:

@@ -219,7 +219,7 @@ QImage* StretchDiBitsRecord::image()
         if (format == QImage::Format_RGB888)
             *m_image = m_image->rgbSwapped();
 
-        // we have to mirror this bitmap in the X axis.
+        // We have to mirror this bitmap in the X axis since WMF images are stored bottom-up.
         *m_image = m_image->mirrored(false, true);
     } else {
         // This bitmap is a bottom-up bitmap which uses compression.

@@ -88,6 +88,7 @@ void OutputPainterStrategy::init( const Header *header )
     QSize  outputSize = header->bounds().size();
 
 #if DEBUG_EMFPAINT
+    kDebug(31000) << "----------------------------------------------------------------------";
     kDebug(31000) << "emfFrame (phys size) =" << header->frame().x() << header->frame().y()
                   << header->frame().width() << header->frame().height();
     kDebug(31000) << "emfBounds (log size) =" << header->bounds().x() << header->bounds().y()
@@ -97,10 +98,6 @@ void OutputPainterStrategy::init( const Header *header )
     kDebug(31000) << "Device =" << header->device().width() << header->device().height();
     kDebug(31000) << "Millimeters =" << header->millimeters().width() 
                   << header->millimeters().height();
-#endif
-
-#if DEBUG_EMFPAINT
-    //paintBounds(header);
 #endif
 
     // This is restored in cleanup().
@@ -269,6 +266,7 @@ void OutputPainterStrategy::setViewportOrgEx( const QPoint &origin )
     kDebug(31000) << origin;
 #endif
 
+    return;
     QSize viewportSize = m_painter->viewport().size();
     m_painter->setViewport( QRect( origin, viewportSize ) );
 }
@@ -279,6 +277,7 @@ void OutputPainterStrategy::setViewportExtEx( const QSize &size )
     kDebug(31000) << size;
 #endif
 
+    return;
     QPoint viewportOrigin = m_painter->viewport().topLeft();
     m_painter->setViewport( QRect( viewportOrigin, size ) );
 }
@@ -597,7 +596,11 @@ void OutputPainterStrategy::rectangle( const QRect &box )
 
 void OutputPainterStrategy::setMapMode( const quint32 mapMode )
 {
-    kDebug(33100) << "Set map mode not yet implemented" << mapMode;
+#if DEBUG_EMFPAINT
+    kDebug(33100) << "Set map mode:" << mapMode;
+#endif
+
+    m_mapMode = (MapMode)mapMode;
 }
 
 void OutputPainterStrategy::setBkMode( const quint32 backgroundMode )
@@ -1071,6 +1074,12 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord record )
     //  bitmap along the y-axis."
     QRect target( targetPosition, targetSize );
     QRect source( sourcePosition, sourceSize );
+#if DEBUG_EMFPAINT
+    kDebug(31000) << "image size" << record.image()->size();
+    kDebug(31000) << "Before transformation:";
+    kDebug(31000) << "    target" << target;
+    kDebug(31000) << "    source" << source;
+#endif
     if ( source.width() < 0 && target.width() > 0 ) {
         sourceSize.rwidth() *= -1;
         sourcePosition.rx() -= sourceSize.width();
@@ -1095,9 +1104,9 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord record )
     // SRCCOPY is the simplest case.  TODO: implement the rest.
     if (record.rasterOperation() == 0x00cc0020) {
 #if DEBUG_EMFPAINT
-        kDebug(31000) << "target" << target;
-        kDebug(31000) << "source" << source;
-        kDebug(31000) << "image" << record.image()->size();
+        kDebug(31000) << "After transformation:";
+        kDebug(31000) << "    target" << target;
+        kDebug(31000) << "    source" << source;
 #endif
         // For some reason, the target coordinates for the picture are
         // expressed in physical coordinates (Frame in the header)
@@ -1106,8 +1115,12 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord record )
         // physical to logical coordinates.
         qreal scaleX = qreal(m_header->frame().width()) / qreal(m_header->bounds().width());
         qreal scaleY = qreal(m_header->frame().height()) / qreal(m_header->bounds().height());
+        //kDebug(31000) << "Scale = " << scaleX << scaleY;
         QRect realTarget(QPoint(target.x() / scaleX, target.y() / scaleY),
                          QSize(target.width() / scaleX, target.height() / scaleY));
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "    realTarget" << realTarget;
+#endif
         m_painter->drawImage(realTarget, *(record.image()), source);
         //m_painter->drawImage(target, *(record.image()), source);
     }

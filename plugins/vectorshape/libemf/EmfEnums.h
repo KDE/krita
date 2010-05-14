@@ -36,9 +36,25 @@ namespace Libemf
 {
 
     /**
+       MapModes
+
+       See [MS-EMF] Section 2.1.21
+    */
+    typedef enum {
+        MM_TEXT        = 0x01,
+        MM_LOMETRIC    = 0x02,
+        MM_HIMETRIC    = 0x03,
+        MM_LOENGLISH   = 0x04,
+        MM_HIENGLISH   = 0x05,
+        MM_TWIPS       = 0x06,
+        MM_ISOTROPIC   = 0x07,
+        MM_ANISOTROPIC = 0x08
+    } MapMode;
+
+    /**
        World Transform modification modes
 
-    See [MS-EMF] Section 2.1.24
+       See [MS-EMF] Section 2.1.24
     */
     enum ModifyWorldTransformMode {
         MWT_IDENTITY            = 0x01,

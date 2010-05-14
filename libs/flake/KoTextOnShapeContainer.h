@@ -25,6 +25,7 @@
 #include "flake_export.h"
 
 class KoTextOnShapeContainerPrivate;
+class KoResourceManager;
 
 /**
  * Container that is used to wrap a shape with a text on top.
@@ -34,7 +35,7 @@ class KoTextOnShapeContainerPrivate;
 class FLAKE_EXPORT KoTextOnShapeContainer : public KoShapeContainer
 {
 public:
-    explicit KoTextOnShapeContainer(KoShape *childShape);
+    explicit KoTextOnShapeContainer(KoShape *childShape, KoResourceManager *documentResources = 0);
 
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);

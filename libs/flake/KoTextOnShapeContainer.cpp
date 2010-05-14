@@ -73,7 +73,15 @@ KoTextOnShapeContainerModel::KoTextOnShapeContainerModel(KoTextOnShapeContainer 
 
 void KoTextOnShapeContainerModel::containerChanged(KoShapeContainer *container)
 {
-    // TODO
+    if (lock)
+        return;
+    lock = true;
+    Q_ASSERT(container == q);
+    containerData->content->setSize(q->size());
+    KoShape *text = containerData->textShape;
+    if (text)
+        text->setSize(q->size());
+    lock = false;
 }
 
 void KoTextOnShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
@@ -89,47 +97,15 @@ void KoTextOnShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeTy
     if (lock)
         return;
     lock = true;
-    // the 'content' object matrix is leading
-    /*
-        To make this working correctly while interacting with the shape we need to have
-        user input support in the model as we can't change the parent or child properties here
-        otherwise.
-     */
-    if (child == containerData->content) {
-        KoShape *text = containerData->textShape;
+    // the container is leading in size, so the only reason we get here is when
+    // one of the child shapes decided to resize itself. This would probably be
+    // the text shape deciding it needs more space.
+    KoShape *text = containerData->textShape;
+    if (child == text) {
         switch (type) {
-        case KoShape::PositionChanged:
-//           q->setPosition(child->position());
-//           child->setPosition(QPointF());
-            if (text)
-                text->setPosition(child->position());
-            break;
         case KoShape::SizeChanged:
-            q->setSize(child->size());
-            if (text)
-                text->setSize(child->size());
+            q->setSize(text->size()); // should have a policy to decide what to do
             break;
-        case KoShape::RotationChanged:
-        case KoShape::ScaleChanged:
-        case KoShape::ShearChanged:
-        case KoShape::GenericMatrixChange: {
-            //q->setTransformation(child->transformation());
-            //child->setTransformation(QMatrix());
-            if (text)
-                text->setTransformation(child->transformation());
-            break;
-        }
-        case KoShape::ParentChanged: // TODO panic :)
-            break;
-
-        case KoShape::Deleted: // TODO panic :)
-            break;
-
-        case KoShape::ShadowChanged:
-        case KoShape::BorderChanged:
-        case KoShape::ParameterChanged:
-            break;
-
         default: // the others are not interesting for us
             break;
         }
@@ -138,26 +114,29 @@ void KoTextOnShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeTy
 }
 
 /// KoTextOnShapeContainer
-KoTextOnShapeContainer::KoTextOnShapeContainer(KoShape *childShape)
+KoTextOnShapeContainer::KoTextOnShapeContainer(KoShape *childShape, KoResourceManager *documentResources)
     : KoShapeContainer(*(new KoTextOnShapeContainerPrivate(this)))
 {
     Q_D(KoTextOnShapeContainer);
     Q_ASSERT(childShape);
     d->content = childShape;
-    d->model = new KoTextOnShapeContainerModel(this, d);
 
-    //setPosition(childShape->position());
+    setPosition(childShape->position());
     setSize(childShape->size());
     setZIndex(childShape->zIndex());
     setTransformation(childShape->transformation());
-    //childShape->setPosition(QPointF()); // since its relative to my position, this won't move it
-    setTransformation(QMatrix());
+
+    childShape->setPosition(QPointF()); // since its relative to my position, this won't move it
+    childShape->setSelectable(false);
+
+    d->model = new KoTextOnShapeContainerModel(this, d);
+    addShape(childShape);
 
     QSet<KoShape*> delegates;
     delegates << childShape;
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get("TextShapeID");
     if (factory) { // not installed, thats too bad, but allowed
-        d->textShape = factory->createDefaultShape(0);
+        d->textShape = factory->createDefaultShape(documentResources);
         Q_ASSERT(d->textShape); // would be a bug in the text shape;
         d->textShape->setSize(size());
         d->textShape->setPosition(childShape->position());
@@ -167,11 +146,11 @@ KoTextOnShapeContainer::KoTextOnShapeContainer(KoShape *childShape)
         shapeData->setVerticalAlignment(Qt::AlignVCenter);
         addShape(d->textShape);
         d->textShape->setZIndex(childShape->zIndex() + 1);
+        d->textShape->setSelectable(false);
         delegates << d->textShape;
     } else {
         kWarning(30006) << "Text shape factory not found";
     }
-    addShape(childShape);
     setToolDelegates(delegates);
 }
 

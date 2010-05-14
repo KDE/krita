@@ -215,7 +215,6 @@ void KoTextEditor::Private::deleteSelection()
 #ifndef NDEBUG
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     Q_ASSERT(layout);
-    Q_ASSERT(layout->inlineTextObjectManager());
 #endif
     QTextCursor delText = QTextCursor(caret);
     if (!delText.hasSelection())
@@ -320,22 +319,26 @@ void KoTextEditor::addCommand(QUndoCommand *command)
     d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty())?command->text():i18n("Text"));
     //kDebug() << "will push the custom command: " << command->text();
     d->headCommand = command;
-    KoTextDocument(d->document).undoStack()->push(command);
+    QUndoStack *stack = KoTextDocument(d->document).undoStack();
+    if (stack)
+        stack->push(command);
+    else
+        command->redo();
     //kDebug() << "custom command pushed";
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
 {
+    if (!KoTextDocument(d->document).changeTracker() || !KoTextDocument(d->document).changeTracker()->recordChanges()) {
+        d->clearCharFormatProperty(KoCharacterStyle::ChangeTrackerId);
+        return;
+    }
 #ifndef NDEBUG
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->document->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineTextObjectManager());
 #endif
-    if (!KoTextDocument(d->document).changeTracker() || !KoTextDocument(d->document).changeTracker()->recordChanges()) {
-        d->clearCharFormatProperty(KoCharacterStyle::ChangeTrackerId);
-        return;
-    }
 
     if (changeType != KoGenChange::DeleteChange) {
         //first check if there already is an identical change registered just before or just after the selection. If so, merge appropriatly.

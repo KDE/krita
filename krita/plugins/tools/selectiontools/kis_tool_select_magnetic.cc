@@ -22,6 +22,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QVector2D>
+#include <QLinkedList>
 #include <KIntNumInput>
 #include <cmath>
 #include <cstdlib>
@@ -47,6 +48,8 @@
 
 #include <iostream>
 #include <QDebug>
+
+const qreal pi = 3.1415926535897932384626433832795;
 
 inline qreal dist(const QPointF &p1, const QPointF &p2)
 {
@@ -206,8 +209,9 @@ void KisToolSelectMagnetic::LocalTool::paintPath(KoPathShape &pathShape, QPainte
     painter.drawPoints(m_selectingTool->pixelToView(QPolygonF(m_debugScannedPoints)));
 
     painter.setPen(QPen(QColor(255,0,0), 5));
-//    painter.drawPolyline(m_selectingTool->pixelToView(QPolygonF(m_detectedBorder)));
-    painter.drawPolyline(m_selectingTool->pixelToView(QPolygonF(m_tmpDetectedBorder)));
+    cleanDetectedBorder();
+    painter.drawPolyline(m_selectingTool->pixelToView(QPolygonF(m_detectedBorder)));
+//    painter.drawPolyline(m_selectingTool->pixelToView(QPolygonF(m_tmpDetectedBorder)));
 }
 
 void KisToolSelectMagnetic::LocalTool::paintOutline(QPainter *painter, const QPainterPath &path, qreal width)
@@ -223,13 +227,13 @@ void KisToolSelectMagnetic::LocalTool::paintOutline(QPainter *painter, const QPa
 void KisToolSelectMagnetic::LocalTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoCreatePathTool::mouseReleaseEvent(event);
-    m_detectedBorder+=m_tmpDetectedBorder;
-    m_tmpDetectedBorder.clear();
-    if(m_detectedBorder.size()>1) {
-        m_tmpDetectedBorder.append(m_detectedBorder.last());
-        m_detectedBorder.remove(m_detectedBorder.size()-1);
-    }
-    qDebug()<<m_detectedBorder.size();
+//    m_detectedBorder+=m_tmpDetectedBorder;
+//    m_tmpDetectedBorder.clear();
+//    if(m_detectedBorder.size()>1) {
+//        m_tmpDetectedBorder.append(m_detectedBorder.last());
+//        m_detectedBorder.remove(m_detectedBorder.size()-1);
+//    }
+//    qDebug()<<m_detectedBorder.size();
 }
 
 void KisToolSelectMagnetic::LocalTool::computeOutline(const QPainterPath &pixelPath)
@@ -277,7 +281,8 @@ void KisToolSelectMagnetic::LocalTool::computeOutline(const QPainterPath &pixelP
 
 
     m_debugScannedPoints = QPolygon();
-    m_tmpDetectedBorder.clear();;
+//    m_tmpDetectedBorder.clear();
+    m_detectedBorder.clear();
     if(m_selectingTool->searchStartPoint() == KisToolSelectMagneticOptionWidget::SearchFromLeft) {
         for(int i=1; i<points.count(); i++) {
             QVector2D tangent = tangentAt(points, i);
@@ -341,7 +346,8 @@ inline bool pointCandidateLessThan(const QPair<QVector2D, QHash<int, qreal> >& v
 void KisToolSelectMagnetic::LocalTool::computeEdge(const QVector2D &startPoint, const QVector2D &direction, KisRandomConstAccessor pixelAccessor)
 {
     QVector2D currentPoint = startPoint;
-    QVector2D lastPoint = m_tmpDetectedBorder.size()>0?QVector2D(m_tmpDetectedBorder.last()):QVector2D(-1, -1);
+//    QVector2D lastPoint = m_tmpDetectedBorder.size()>0?QVector2D(m_tmpDetectedBorder.last()):QVector2D(-1, -1);
+    QVector2D lastPoint = m_detectedBorder.size()>0?QVector2D(m_detectedBorder.last()):QVector2D(-1, -1);
     QVector2D centerPoint = startPoint+direction*m_selectingTool->radius();
     FilterMatrix horizontalFMatrix = getHorizontalFilterMatrix();
     FilterMatrix verticalFMatrix = getVerticalFilterMatrix();
@@ -376,7 +382,8 @@ void KisToolSelectMagnetic::LocalTool::computeEdge(const QVector2D &startPoint, 
 
 //    if(qFuzzyCompare(sum, 0)) bestPoint = startPoint+direction*m_selectingTool->radius();
 
-    m_tmpDetectedBorder.append(pointCandidates.first().first.toPoint());
+//    m_tmpDetectedBorder.append(pointCandidates.first().first.toPoint());
+    m_detectedBorder.append(pointCandidates.first().first.toPoint());
 }
 
 
@@ -411,6 +418,45 @@ FilterMatrix KisToolSelectMagnetic::LocalTool::getVerticalFilterMatrix() const
     return (Matrix3d() <<-1,-2,-1,
                           0, 0, 0,
                           1, 2, 1).finished();
+}
+
+void KisToolSelectMagnetic::LocalTool::cleanDetectedBorder()
+{
+    //load the points into a linked list, because removing on a vector is expensive
+    QLinkedList<QPoint> detectedBorder;
+    foreach(QPoint point, m_detectedBorder) {
+        detectedBorder << point;
+    }
+
+    QLinkedList<QPoint>::iterator iter = detectedBorder.begin();
+
+    while ((iter+2) != detectedBorder.end() && (iter+1) != detectedBorder.end() && iter != detectedBorder.end()) {
+        QPoint current = *iter;
+        QPoint next = *(iter+1);
+        QPoint afterNext = *(iter+2);
+
+        QVector2D relativeVectorToNext = QVector2D(next)-QVector2D(current);
+        QVector2D relativeVectorToAfterNext = QVector2D(afterNext)-QVector2D(current);
+
+        qreal distToNext = relativeVectorToNext.length();
+        qreal distToAfterNext = relativeVectorToAfterNext.length();
+
+        qreal angleToNext = std::atan2((qreal)relativeVectorToNext.y(), (qreal) relativeVectorToNext.x());
+        qreal angleToAfterNext = std::atan2((qreal)relativeVectorToAfterNext.y(), (qreal) relativeVectorToAfterNext.x());
+
+        if(fabs((angleToAfterNext-angleToNext)*distToNext)<1) {
+            qDebug()<<"dleting: "<<(angleToAfterNext-angleToNext)*distToNext;
+            iter = detectedBorder.erase(iter);
+        }
+        else {
+            iter++;
+        }
+    }
+
+    m_detectedBorder.clear();
+    foreach(QPoint point, detectedBorder) {
+        m_detectedBorder << point;
+    }
 }
 
 void KisToolSelectMagnetic::LocalTool::addPathShape(KoPathShape* pathShape)

@@ -97,6 +97,9 @@ private:
         FilterMatrix getHorizontalFilterMatrix() const;
         FilterMatrix getVerticalFilterMatrix() const;
 
+        /// this function removes unneeded points in m_detectedBorder, so that it is faster to paint
+        void cleanDetectedBorder();
+
     private:
         KisToolSelectMagnetic* const m_selectingTool;
         KoLineBorder* m_borderBackup;

@@ -20,6 +20,7 @@ Name[sv]=Krita GIF-importfilter
 Name[uk]=Фільтр імпорту GIF для Krita
 Name[wa]=Passete d' abagaedje Gif di Krita
 Name[x-test]=xxKrita Gif Import Filterxx
+Name[zh_CN]=Krita Gif 导入过滤器
 Name[zh_TW]=Krita Gif 匯入過濾程式
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/gif

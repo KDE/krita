@@ -19,6 +19,7 @@ Name[sv]=Krita PPM-exportfilter
 Name[uk]=Фільтр експорту PPM для Krita
 Name[wa]=Passete d' ebagaedje PPM di Krita
 Name[x-test]=xxKrita PPM Export Filterxx
+Name[zh_CN]=Krita PPM 导出过滤器
 Name[zh_TW]=Krita PPM 匯出過濾程式
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service

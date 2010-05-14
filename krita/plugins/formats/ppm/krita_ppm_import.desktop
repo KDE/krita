@@ -19,6 +19,7 @@ Name[sv]=Krita PPM-importfilter
 Name[uk]=Фільтр імпорту PPM для Krita
 Name[wa]=Passete d' abagaedje PPM di Krita
 Name[x-test]=xxKrita PPM Import Filterxx
+Name[zh_CN]=Krita PPM 导入过滤器
 Name[zh_TW]=Krita PPM 匯入過濾程式
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service

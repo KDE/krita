@@ -15,6 +15,7 @@ Name[sv]=Krita BMP-importfilter
 Name[uk]=Фільтр імпорту BMP для Krita
 Name[wa]=Passete d' abagaedje BMP di Krita
 Name[x-test]=xxKrita BMP Import Filterxx
+Name[zh_CN]=Krita BMP 导入过滤器
 Name[zh_TW]=Krita BMP 匯入過濾程式
 X-KDE-Export=application/x-krita
 X-KDE-ServiceTypes=KOfficeFilter

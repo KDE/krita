@@ -231,10 +231,10 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     QString word = m_sampleText;
     if (index > 0)
         word = word.left(index-1);
+    QRectF boundingRect = painter.boundingRect(contentsRect(), Qt::AlignCenter, word);
     while (true) {
-        QRectF boundingRect = painter.boundingRect(contentsRect(), Qt::AlignCenter, word);
-        if (boundingRect.width() > contentsRect().width()
-                || boundingRect.height() > contentsRect().height()) {
+        if (boundingRect.width() * zoomX > contentsRect().width()
+                || boundingRect.height() * zoomY > contentsRect().height()) {
             painter.scale(0.8, 0.8);
             zoomX *= 0.8;
             zoomY *= 0.8;
@@ -297,7 +297,7 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     }
     layout.endLayout();
 
-    QRectF boundingRect = layout.boundingRect();
+    boundingRect = layout.boundingRect();
     QTextCharFormat charFormat;
     charFormat.setBackground(QBrush(m_backgroundColor));
     QVector<QTextLayout::FormatRange> selections;

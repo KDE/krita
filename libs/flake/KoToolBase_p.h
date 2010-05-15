@@ -45,14 +45,15 @@ public:
 
     ~KoToolBasePrivate()
     {
+#if QT_VERSION < 0x040603        
         foreach(QWidget *optionWidget, optionWidgets) {
-            // Only delete the option widget if it hasn't got a parent; if it has,
-            // the parent will delete it.
-            if (optionWidget->parent() == 0) {
-                delete optionWidget;
-            }
+            optionWidget->setParent(0);
+            delete optionWidget;
         }
         optionWidgets.clear();
+#else
+        qDeleteAll(optionWidgets);
+#endif
     }
 
     QMap<QString, QWidget *> optionWidgets; ///< the optionwidgets associated with this tool

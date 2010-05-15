@@ -44,7 +44,7 @@ ChangeFollower::~ChangeFollower()
 void ChangeFollower::processUpdates(const QList<int> &changedStyles)
 {
     KoStyleManager *sm = m_styleManager.data();
-    if (sm) {
+    if (!sm) {
         // since the stylemanager would be the one calling this method, I doubt this
         // will ever happen.  But better safe than sorry..
         deleteLater();

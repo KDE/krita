@@ -31,8 +31,7 @@ install( FILES
     A-fur.gih
     A-herbs.gih
     A-leaves.gih
-    A\ -lucky_star.gbr
-    A\ -lucky_star.xcf
+    A-lucky_star.gbr
     A-mineral-cristal.gih
     A-provencal.gih
     A-Rake.gih

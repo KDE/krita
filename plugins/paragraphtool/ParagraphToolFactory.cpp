@@ -27,7 +27,7 @@ ParagraphToolFactory::ParagraphToolFactory(QObject *parent)
 {
     setToolTip(i18n("Paragraph tool"));
     setToolType(dynamicToolType());
-    setIcon("draw-text");
+    setIcon("tool-paragraph");
     setPriority(2);
     setActivationShapeId("TextShapeID");
 }

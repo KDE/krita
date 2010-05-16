@@ -32,7 +32,7 @@ ChangeTrackingToolFactory::ChangeTrackingToolFactory(QObject *parent)
 {
     setToolTip(i18n("Change Tracking tool"));
     setToolType(dynamicToolType());
-    setIcon("draw-text");
+    setIcon("tool-changetracking");
     setPriority(3);
     setActivationShapeId(TextShape_SHAPEID);
 }

@@ -1,5 +1,7 @@
 project( paragraphPlugin )
 
+add_subdirectory( pics )
+
 include_directories(  ${KOTEXT_INCLUDES} )
 
 ########### Flake Plugin library ###############

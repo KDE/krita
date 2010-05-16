@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KoReport_Shape
+Name[it]=KoReport_Forma
 Name[nds]=KoReport_Form
 Name[nl]=KoReport_Shape
 Name[pt]=KoReport_Shape
@@ -9,6 +10,7 @@ Name[uk]=Форма KoReport
 Name[x-test]=xxKoReport_Shapexx
 Name[zh_CN]=KoReport_Shape
 Comment=KoReport Shape PLugin
+Comment[it]=Estensione per le forme di KoReport
 Comment[nds]=Form-Moduul för KoReport
 Comment[nl]=Plugin voor KoReport-label
 Comment[pt]='Plugin' de Formas Gráficas do KoReport

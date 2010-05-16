@@ -61,7 +61,7 @@ void KoShapeShearCommand::redo()
     QUndoCommand::redo();
     for (int i = 0; i < d->shapes.count(); i++) {
         d->shapes.at(i)->update();
-        d->shapes.at(i)->setShear(d->newShearXs.at(i), d->newShearYs.at(i));
+        d->shapes.at(i)->shear(d->newShearXs.at(i), d->newShearYs.at(i));
         d->shapes.at(i)->update();
     }
 }
@@ -71,7 +71,7 @@ void KoShapeShearCommand::undo()
     QUndoCommand::undo();
     for (int i = 0; i < d->shapes.count(); i++) {
         d->shapes.at(i)->update();
-        d->shapes.at(i)->setShear(d->previousShearXs.at(i), d->previousShearYs.at(i));
+        d->shapes.at(i)->shear(d->previousShearXs.at(i), d->previousShearYs.at(i));
         d->shapes.at(i)->update();
     }
 }

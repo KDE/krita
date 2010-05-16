@@ -112,7 +112,7 @@ public:
         PositionChanged, ///< used after a setPosition()
         RotationChanged, ///< used after a setRotation()
         ScaleChanged,   ///< used after a setScale()
-        ShearChanged,   ///< used after a setShear()
+        ShearChanged,   ///< used after a shear()
         SizeChanged,    ///< used after a setSize()
         GenericMatrixChange,    ///< used after the matrix was changed without knowing which property explicitly changed
         ParentChanged,   ///< used after a setParent()
@@ -231,7 +231,7 @@ public:
      * @param sx shear in x direction
      * @param sy shear in y direction
      */
-    void setShear(qreal sx, qreal sy);
+    void shear(qreal sx, qreal sy);
 
     /**
      * @brief Resize the shape

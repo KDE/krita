@@ -242,7 +242,7 @@ void KoShape::rotate(qreal angle)
     d->shapeChanged(RotationChanged);
 }
 
-void KoShape::setShear(qreal sx, qreal sy)
+void KoShape::shear(qreal sx, qreal sy)
 {
     Q_D(KoShape);
     QPointF pos = position();

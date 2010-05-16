@@ -103,11 +103,6 @@ public:
             resizeMethod(KoTextDocument::NoResize) {
     }
 
-    ~Private()
-    {
-        delete paintDevice;
-    }
-
     void relayoutPrivate() {
         scheduled = false;
         parent->relayout();
@@ -186,6 +181,7 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextDocumentLay
 
 KoTextDocumentLayout::~KoTextDocumentLayout()
 {
+    delete d->paintDevice;
     delete d;
     delete m_state;
     m_state = 0;

@@ -74,7 +74,6 @@ void KoSelectionPrivate::requestSelectionChangedEvent()
 void KoSelectionPrivate::selectionChangedEvent()
 {
     eventTriggered = false;
-    q->setScale(1, 1);
     emit q->selectionChanged();
 }
 

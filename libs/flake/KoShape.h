@@ -111,7 +111,7 @@ public:
     enum ChangeType {
         PositionChanged, ///< used after a setPosition()
         RotationChanged, ///< used after a setRotation()
-        ScaleChanged,   ///< used after a setScale()
+        ScaleChanged,   ///< used after a scale()
         ShearChanged,   ///< used after a shear()
         SizeChanged,    ///< used after a setSize()
         GenericMatrixChange,    ///< used after the matrix was changed without knowing which property explicitly changed
@@ -206,7 +206,7 @@ public:
      * @param sx scale in x direction
      * @param sy scale in y direction
      */
-    void setScale(qreal sx, qreal sy);
+    void scale(qreal sx, qreal sy);
 
     /**
      * @brief Rotate the shape (relative)

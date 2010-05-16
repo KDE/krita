@@ -214,7 +214,7 @@ void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &convert
         }*/
 }
 
-void KoShape::setScale(qreal sx, qreal sy)
+void KoShape::scale(qreal sx, qreal sy)
 {
     Q_D(KoShape);
     QPointF pos = position();

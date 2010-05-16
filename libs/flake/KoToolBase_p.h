@@ -26,6 +26,7 @@
 #include <QWidget>
 #include <QString>
 #include <QSet>
+#include <string.h> // for the qt version check
 
 class QWidget;
 class KAction;
@@ -45,15 +46,16 @@ public:
 
     ~KoToolBasePrivate()
     {
-#if QT_VERSION < 0x040603        
-        foreach(QWidget *optionWidget, optionWidgets) {
-            optionWidget->setParent(0);
-            delete optionWidget;
+        bool badQt = strcmp(qVersion(), "4.6.2") <= 0;
+        if (badQt) { // In <= Qt462 we do a bit more to avoid a crash
+            foreach(QWidget *optionWidget, optionWidgets) {
+                optionWidget->setParent(0);
+                delete optionWidget;
+            }
+            optionWidgets.clear();
+        } else {
+            qDeleteAll(optionWidgets);
         }
-        optionWidgets.clear();
-#else
-        qDeleteAll(optionWidgets);
-#endif
     }
 
     QMap<QString, QWidget *> optionWidgets; ///< the optionwidgets associated with this tool

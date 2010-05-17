@@ -87,11 +87,6 @@ void ChangeTrackingTool::mousePressEvent(KoPointerEvent* event)
 {
     if (event->button() != Qt::RightButton)
         updateSelectedShape(event->point);
-    KoSelection *selection = canvas()->shapeManager()->selection();
-    if (!selection->isSelected(m_textShape)) {
-        selection->deselectAll();
-        selection->select(m_textShape);
-    }
 
     int position = pointToPosition(event->point);
     QTextCursor cursor(m_textShapeData->document());
@@ -248,7 +243,6 @@ void ChangeTrackingTool::keyPressEvent(QKeyEvent* event)
 void ChangeTrackingTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     Q_UNUSED(toolActivation);
-    KoSelection *selection = canvas()->shapeManager()->selection();
     foreach(KoShape *shape, shapes) {
         m_textShape = dynamic_cast<TextShape*>(shape);
         if (m_textShape)
@@ -257,11 +251,6 @@ void ChangeTrackingTool::activate(ToolActivation toolActivation, const QSet<KoSh
     if (m_textShape == 0) { // none found
         emit done();
         return;
-    }
-    foreach(KoShape *shape, selection->selectedShapes()) {
-        // deselect others.
-        if (m_textShape == shape) continue;
-        selection->deselect(shape);
     }
     setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
     useCursor(Qt::ArrowCursor);

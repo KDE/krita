@@ -35,7 +35,7 @@ public:
     virtual bool isChildLocked(const KoShape *child) const;
     virtual int count() const;
     virtual QList<KoShape *> shapes() const;
-    virtual void containerChanged(KoShapeContainer *container);
+    virtual void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
     virtual void childChanged(KoShape *child, KoShape::ChangeType type);
 
     void folderResized();

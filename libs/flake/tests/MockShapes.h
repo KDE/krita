@@ -140,7 +140,7 @@ public:
         return m_children;
     }
     /// reimplemented
-    void containerChanged(KoShapeContainer *) {
+    void containerChanged(KoShapeContainer *, KoShape::ChangeType) {
         m_containerChangedCalled++;
     }
     /// reimplemented

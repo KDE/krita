@@ -59,7 +59,7 @@ public:
     virtual bool isChildLocked(const KoShape *child) const;
 
     /// empty implementation.
-    virtual void containerChanged(KoShapeContainer *container);
+    virtual void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
 
 private:
     class Private;

@@ -142,6 +142,6 @@ bool KoShapeContainerDefaultModel::isChildLocked(const KoShape *child) const
     return child->isGeometryProtected();
 }
 
-void KoShapeContainerDefaultModel::containerChanged(KoShapeContainer *)
+void KoShapeContainerDefaultModel::containerChanged(KoShapeContainer *, KoShape::ChangeType)
 {
 }

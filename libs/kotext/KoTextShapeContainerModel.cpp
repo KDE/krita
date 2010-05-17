@@ -120,12 +120,10 @@ QList<KoShape*> KoTextShapeContainerModel::shapes() const
     return answer;
 }
 
-void KoTextShapeContainerModel::containerChanged(KoShapeContainer *container)
+void KoTextShapeContainerModel::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
 {
     Q_UNUSED(container);
-    kDebug(32500) << "KoTextShapeContainerModel::containerChanged";
-    // TODO
-    // For children which are aligned to the side of the page we may need to update the position so they will stay at the same vertical position.
+    Q_UNUSED(type);
 }
 
 void KoTextShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType type)

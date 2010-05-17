@@ -112,8 +112,9 @@ public:
      * Note that clipped children will automatically get all these changes, the model
      * does not have to do anything for that.
      * @param container the actual container that changed.
+     * @param type this enum shows which change the container has had.
      */
-    virtual void containerChanged(KoShapeContainer *container) = 0;
+    virtual void containerChanged(KoShapeContainer *container, KoShape::ChangeType type) = 0;
 
     /**
      * This method is called when the user tries to move a shape that is a shape of the

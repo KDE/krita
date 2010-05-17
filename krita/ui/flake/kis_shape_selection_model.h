@@ -42,7 +42,7 @@ public:
     int count() const;
     QList<KoShape*> shapes() const;
 
-    void containerChanged(KoShapeContainer *);
+    void containerChanged(KoShapeContainer *, KoShape::ChangeType);
     void childChanged(KoShape * child, KoShape::ChangeType type);
     bool isChildLocked(const KoShape *child) const;
     void setShapeSelection(KisShapeSelection* selection);

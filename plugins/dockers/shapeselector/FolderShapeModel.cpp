@@ -56,9 +56,8 @@ QList<KoShape *> FolderShapeModel::shapes() const
     return m_icons;
 }
 
-void FolderShapeModel::containerChanged(KoShapeContainer *container)
+void FolderShapeModel::containerChanged(KoShapeContainer *, KoShape::ChangeType)
 {
-    Q_UNUSED(container);
 }
 
 void FolderShapeModel::folderResized()

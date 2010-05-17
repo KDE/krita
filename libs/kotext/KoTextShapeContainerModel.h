@@ -51,7 +51,7 @@ public:
     /// reimplemented from KoShapeContainerModel
     virtual QList<KoShape*> shapes() const;
     /// reimplemented from KoShapeContainerModel
-    virtual void containerChanged(KoShapeContainer *container);
+    virtual void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
     /// reimplemented from KoShapeContainerModel
     virtual void proposeMove(KoShape *child, QPointF &move);
     /// reimplemented from KoShapeContainerModel

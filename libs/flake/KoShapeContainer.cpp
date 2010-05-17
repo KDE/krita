@@ -178,7 +178,7 @@ void KoShapeContainer::shapeChanged(ChangeType type, KoShape *shape)
     if (!(type == RotationChanged || type == ScaleChanged || type == ShearChanged
             || type == SizeChanged || type == PositionChanged || type == GenericMatrixChange))
         return;
-    d->model->containerChanged(this);
+    d->model->containerChanged(this, type);
     foreach(KoShape *shape, d->model->shapes())
         shape->notifyChanged();
 }

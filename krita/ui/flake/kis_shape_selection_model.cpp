@@ -107,7 +107,7 @@ QList<KoShape*> KisShapeSelectionModel::shapes() const
 {
     return QList<KoShape*>(m_shapeMap.keys());
 }
-void KisShapeSelectionModel::containerChanged(KoShapeContainer *)
+void KisShapeSelectionModel::containerChanged(KoShapeContainer *, KoShape::ChangeType)
 {
 }
 

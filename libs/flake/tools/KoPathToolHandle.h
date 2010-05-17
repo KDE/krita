@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007,2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -26,11 +26,14 @@
 #include <KoPathPoint.h>
 #include "KoInteractionStrategy.h"
 
+#include <QList>
+
 class KoPathTool;
 class KoParameterShape;
 class KoViewConverter;
 class KoPointerEvent;
 class QPainter;
+class KoPathShape;
 
 class KoPathToolHandle
 {
@@ -41,7 +44,7 @@ public:
     virtual void repaint() const = 0;
     virtual KoInteractionStrategy * handleMousePress(KoPointerEvent *event) = 0;
     // test if handle is still valid
-    virtual bool check() = 0;
+    virtual bool check(const QList<KoPathShape*> &selectedShapes) = 0;
 
 protected:
     KoPathTool *m_tool;
@@ -54,7 +57,7 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter);
     void repaint() const;
     KoInteractionStrategy *handleMousePress(KoPointerEvent *event);
-    bool check();
+    virtual bool check(const QList<KoPathShape*> &selectedShapes);
     KoPathPoint *activePoint() const;
     KoPathPoint::PointType activePointType() const;
 private:
@@ -69,7 +72,7 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter);
     void repaint() const;
     KoInteractionStrategy *handleMousePress(KoPointerEvent *event);
-    bool check();
+    virtual bool check(const QList<KoPathShape*> &selectedShapes);
 protected:
     KoParameterShape *m_parameterShape;
     int m_handleId;

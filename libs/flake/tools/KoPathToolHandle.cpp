@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007,2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -128,9 +128,9 @@ KoInteractionStrategy * PointHandle::handleMousePress(KoPointerEvent *event)
     return 0;
 }
 
-bool PointHandle::check()
+bool PointHandle::check(const QList<KoPathShape*> &selectedShapes)
 {
-    if (m_tool->canvas()->shapeManager()->selection()->isSelected(m_activePoint->parent())) {
+    if (selectedShapes.contains(m_activePoint->parent())) {
         return m_activePoint->parent()->pathPointIndex(m_activePoint) != KoPathPointIndex(-1, -1);
     }
     return false;
@@ -179,9 +179,9 @@ KoInteractionStrategy * ParameterHandle::handleMousePress(KoPointerEvent *event)
     return 0;
 }
 
-bool ParameterHandle::check()
+bool ParameterHandle::check(const QList<KoPathShape*> &selectedShapes)
 {
-    return m_tool->canvas()->shapeManager()->selection()->isSelected(m_parameterShape);
+    return selectedShapes.contains(m_parameterShape);
 }
 
 

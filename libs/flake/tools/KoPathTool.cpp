@@ -432,7 +432,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
     painter.setPen(Qt::blue);
 
     if (m_activeHandle) {
-        if (m_activeHandle->check()) {
+        if (m_activeHandle->check(m_pointSelection.selectedShapes())) {
             m_activeHandle->paint(painter, converter);
         } else {
             delete m_activeHandle;

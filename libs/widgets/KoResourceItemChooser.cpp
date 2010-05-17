@@ -67,7 +67,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->buttonGroup->setExclusive( false );
 
     QGridLayout* layout = new QGridLayout( this );
-    layout->addWidget( d->view, 0, 0, 1, 3 );
+    layout->addWidget( d->view, 0, 0, 1, 5 );
 
     QPushButton *button = new QPushButton( this );
     button->setIcon( SmallIcon( "list-add" ) );
@@ -89,7 +89,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     button->setEnabled( true );
     button->hide();
     d->buttonGroup->addButton( button, Button_GhnsDownload );
-    layout->addWidget( button, 1, 2 );
+    layout->addWidget( button, 1, 3 );
 
     button = new QPushButton( this );
     button->setIcon( SmallIcon( "download" ) );
@@ -97,7 +97,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     button->setEnabled( false );
     button->hide();
     d->buttonGroup->addButton( button, Button_GhnsUpload);
-    layout->addWidget( button, 1, 3 );
+    layout->addWidget( button, 1, 4 );
 
 
     connect( d->buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ));

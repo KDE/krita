@@ -143,19 +143,18 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     m.scale(zoomX, zoomY);
     painter.setClipPath(m.map(outline()));
 
+    QRectF toPaintRect = converter.viewToDocument(painter.clipRegion().boundingRect());
+    toPaintRect = matrix().mapRect(toPaintRect);
+
     foreach(KoShape *shape, sortedObjects) {
         //kDebug(30006) <<"KoShapeContainer::painting shape:" << shape->shapeId() <<"," << shape->boundingRect();
-        if (! shape->isVisible())
+        if (!shape->isVisible())
             continue;
-        if (! isClipped(shape))  // the shapeManager will have to draw those, or else we can't do clipRects
+        if (!isClipped(shape))  // the shapeManager will have to draw those, or else we can't do clipRects
             continue;
-        if (painter.hasClipping()) {
-            QRectF rect = converter.viewToDocument(painter.clipRegion().boundingRect());
-            rect = matrix().mapRect(rect);
-            // don't try to draw a child shape that is not in the clipping rect of the painter.
-            if (! rect.intersects(shape->boundingRect()))
-                continue;
-        }
+        // don't try to draw a child shape that is not in the clipping rect of the painter.
+        if (!toPaintRect.intersects(shape->boundingRect()))
+            continue;
 
         painter.save();
         painter.setMatrix(shape->absoluteTransformation(&converter) * baseMatrix);

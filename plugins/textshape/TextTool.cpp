@@ -602,6 +602,8 @@ void TextTool::updateSelectedShape(const QPointF &point)
         else
             repaintCaret();
         foreach (KoShape *shape, canvas()->shapeManager()->shapesAt(area, true)) {
+            if (shape->isContentProtected())
+                continue;
             TextShape *textShape = dynamic_cast<TextShape*>(shape);
             if (textShape) {
                 KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
@@ -622,7 +624,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
     if (event->button() != Qt::RightButton)
         updateSelectedShape(event->point);
     KoSelection *selection = canvas()->shapeManager()->selection();
-    if (!selection->isSelected(m_textShape)) {
+    if (!selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
         selection->deselectAll();
         selection->select(m_textShape);
     }

@@ -608,8 +608,20 @@ void KoShapeManager::suggestChangeTool(KoPointerEvent *event)
         }
         shapes.append(clicked);
     }
+
+    QList<KoShape*> shapes2;
+    foreach (KoShape *shape, shapes) {
+        QSet<KoShape*> delegates = shape->toolDelegates();
+        if (delegates.isEmpty()) {
+            shapes2.append(shape);
+        } else {
+            foreach (KoShape *delegatedShape, delegates) {
+                shapes2.append(delegatedShape);
+            }
+        }
+    }
     KoToolManager::instance()->switchToolRequested(
-        KoToolManager::instance()->preferredToolForSelection(shapes));
+        KoToolManager::instance()->preferredToolForSelection(shapes2));
 }
 
 void KoShapeManager::setPaintingStrategy(KoShapeManagerPaintingStrategy *strategy)

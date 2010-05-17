@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
 
@@ -626,8 +626,21 @@ void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
         }
     }
 
+    QList<KoShape*> shapes2;
+    foreach (KoShape *shape, shapes) {
+        QSet<KoShape*> delegates = shape->toolDelegates();
+        if (delegates.isEmpty()) {
+            shapes2.append(shape);
+        } else {
+            foreach (KoShape *delegatedShape, delegates) {
+                shapes2.append(delegatedShape);
+            }
+        }
+    }
+
+
     KoToolManager::instance()->switchToolRequested(
-            KoToolManager::instance()->preferredToolForSelection(shapes));
+            KoToolManager::instance()->preferredToolForSelection(shapes2));
 }
 
 bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)

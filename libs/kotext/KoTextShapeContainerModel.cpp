@@ -47,8 +47,7 @@ Relation::~Relation()
 class KoTextShapeContainerModel::Private
 {
 public:
-    Private(){}
-    QHash<KoShape*, Relation*> children;
+    QHash<const KoShape*, Relation*> children;
     QList<KoTextAnchor *> shapeRemovedAnchors;
 };
 
@@ -94,14 +93,14 @@ void KoTextShapeContainerModel::remove(KoShape *child)
 
 void KoTextShapeContainerModel::setClipped(const KoShape *child, bool clipping)
 {
-    Relation *relation = d->children.value(const_cast<KoShape*>(child));
+    Relation *relation = d->children.value(child);
     Q_ASSERT(relation);
     relation->nested = clipping;
 }
 
 bool KoTextShapeContainerModel::isClipped(const KoShape *child) const
 {
-    Relation *relation = d->children.value(const_cast<KoShape*>(child));
+    Relation *relation = d->children.value(child);
     Q_ASSERT(relation);
     return relation->nested;
 }
@@ -113,7 +112,12 @@ int KoTextShapeContainerModel::count() const
 
 QList<KoShape*> KoTextShapeContainerModel::shapes() const
 {
-    return d->children.keys();
+    QList<KoShape*> answer;
+    answer.reserve(d->children.count());
+    foreach (Relation *relation, d->children) {
+        answer << relation->child;
+    }
+    return answer;
 }
 
 void KoTextShapeContainerModel::containerChanged(KoShapeContainer *container)

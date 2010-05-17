@@ -238,7 +238,8 @@ void SimpleStyleWidget::directionChangeRequested()
             QTextBlockFormat bf = cursor.blockFormat();
             bf.clearProperty(KoParagraphStyle::TextProgressionDirection);
             cursor.setBlockFormat(bf);
-            cursor.movePosition(QTextCursor::NextBlock);
+            if (!cursor.movePosition(QTextCursor::NextBlock))
+                break;
         }
         emit doneWithFocus();
         return;

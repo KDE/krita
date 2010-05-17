@@ -113,7 +113,7 @@ int KoTextShapeContainerModel::count() const
 QList<KoShape*> KoTextShapeContainerModel::shapes() const
 {
     QList<KoShape*> answer;
-    answer.reserve(d->children.count());
+    // when Qt 4.7 is more widespread, use answer.reserve(d->children.count());
     foreach (Relation *relation, d->children) {
         answer << relation->child;
     }

@@ -176,7 +176,7 @@ void KoShapeContainer::shapeChanged(ChangeType type, KoShape *shape)
     if (d->model == 0)
         return;
     if (!(type == RotationChanged || type == ScaleChanged || type == ShearChanged
-            || type == SizeChanged || type == PositionChanged))
+            || type == SizeChanged || type == PositionChanged || type == GenericMatrixChange))
         return;
     d->model->containerChanged(this);
     foreach(KoShape *shape, d->model->shapes())

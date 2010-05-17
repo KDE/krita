@@ -21,10 +21,10 @@
 #define PARAGRAPHFRAGMENT_H
 
 #include <QRectF>
-#include <QTextBlock>
 
 class KoParagraphStyle;
 class KoShape;
+class QTextBlock;
 
 /* ParagraphFragment is used by ParagraphTool to store information about a
  * paragraph which is specific to a shape. As the width of shapes may be
@@ -35,7 +35,7 @@ class ParagraphFragment
 {
 public:
     ParagraphFragment() {};
-    ParagraphFragment(KoShape *shape, QTextBlock textBlock, KoParagraphStyle *style);
+    ParagraphFragment(KoShape *shape, const QTextBlock &textBlock, KoParagraphStyle *style);
 
     ~ParagraphFragment() {};
 

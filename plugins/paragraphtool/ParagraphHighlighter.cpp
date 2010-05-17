@@ -22,10 +22,8 @@
 #include <KoShape.h>
 #include <KoTextShapeData.h>
 
-#include <QAbstractTextDocumentLayout>
 #include <QPainter>
-
-#include <assert.h>
+#include <QTextLayout>
 
 
 ParagraphHighlighter::ParagraphHighlighter(QObject *parent, KoCanvasBase *canvas)
@@ -46,7 +44,7 @@ void ParagraphHighlighter::paint(QPainter &painter, const KoViewConverter &conve
     foreach (const ParagraphFragment &fragment, fragments()) {
         KoShape *shape = fragment.shape();
         KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData*>(shape->userData());
-        assert(textShapeData != NULL);
+        Q_ASSERT(textShapeData);
 
         painter.save();
 

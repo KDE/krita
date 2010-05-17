@@ -19,10 +19,6 @@
 
 #include "Label.h"
 
-#include <KoViewConverter.h>
-
-#include <KDebug>
-
 #include <QFontMetrics>
 #include <QPainter>
 

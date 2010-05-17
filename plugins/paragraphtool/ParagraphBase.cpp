@@ -24,14 +24,9 @@
 #include <KoShapeManager.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
+#include <KoParagraphStyle.h>
 
-#include <KDebug>
-#include <KLocalizedString>
-
-#include <QAbstractTextDocumentLayout>
-#include <QTextDocument>
-
-#include <assert.h>
+#include <KLocale>
 
 ParagraphBase::ParagraphBase(QObject *parent, KoCanvasBase *canvas)
         : QObject(parent),
@@ -81,7 +76,7 @@ void ParagraphBase::activateTextBlockAt(const QPointF &point)
     }
 
     QTextBlock newBlock(document->findBlock(position));
-    assert(newBlock.isValid());
+    Q_ASSERT(newBlock.isValid());
 
     activateTextBlock(newBlock, document);
 }
@@ -122,7 +117,7 @@ void ParagraphBase::activateTextBlock(QTextBlock newBlock, QTextDocument *docume
         // easy way to get from the cursor to a non-const document pointer
         // but it doesn't make any sense to pass in a document pointer which is
         // different to the document the text block belongs to
-        assert(newBlock.document() == document);
+        Q_ASSERT(newBlock.document() == document);
         m_document = document;
     }
 
@@ -153,7 +148,7 @@ void ParagraphBase::addFragments()
     m_fragments.clear();
 
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
-    assert(layout != NULL);
+    Q_ASSERT(layout);
 
     QList<KoShape*> shapes = layout->shapes();
     foreach(KoShape *shape, shapes) {
@@ -177,7 +172,7 @@ bool ParagraphBase::shapeContainsBlock(const KoShape *shape)
 qreal ParagraphBase::shapeTop(const KoShape *shape) const
 {
     KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData*>(shape->userData());
-    assert(textShapeData != NULL);
+    Q_ASSERT(textShapeData);
 
     return textShapeData->documentOffset();
 }

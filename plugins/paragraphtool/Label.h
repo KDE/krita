@@ -24,23 +24,22 @@
 #include <QColor>
 #include <QObject>
 #include <QPointF>
-#include <QRectF>
 #include <QString>
-#include <Qt>
 
 class QPainter;
+class QRectF;
 
 /* simple label for displaying text */
 class Label : public QObject
 {
     Q_OBJECT
 public:
-    Label(QObject *parent = NULL);
+    Label(QObject *parent = 0);
     ~Label();
 
     void setColor(const QColor& color);
     void setText(const QString& text);
-    void setPosition(const QPointF& position, Qt::Alignment alignment = 0x0);
+    void setPosition(const QPointF& position, Qt::Alignment alignment = 0);
 
     QRectF boundingRect() const;
     void paint(QPainter &painter) const;

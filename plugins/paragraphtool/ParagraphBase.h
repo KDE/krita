@@ -22,15 +22,9 @@
 
 #include "ParagraphFragment.h"
 
-#include <KoParagraphStyle.h>
-
-#include <QObject>
-#include <QPainter>
-#include <QRectF>
-#include <QTextBlock>
-#include <QTextBlockFormat>
 #include <QTextCursor>
 #include <QList>
+#include <QTextBlock>
 
 class KoCanvasBase;
 class KoShape;

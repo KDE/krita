@@ -19,16 +19,8 @@
 
 #include "Ruler.h"
 
-#include <KDebug>
-#include <KLocalizedString>
-
-#include <QColor>
-#include <QPointF>
-#include <QPainter>
-#include <QRectF>
-
+#include <KLocale>
 #include <limits>
-#include <cmath>
 
 
 Ruler::Ruler(QObject *parent)

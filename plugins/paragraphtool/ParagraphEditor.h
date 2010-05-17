@@ -22,13 +22,7 @@
 #define PARAGRAPHEDITOR_H
 
 #include "ParagraphBase.h"
-#include "ParagraphFragment.h"
 #include "Ruler.h"
-
-#include <QRectF>
-#include <QTextCursor>
-#include <QTextBlock>
-#include <QVector>
 
 class KoParagraphStyle;
 class KoCanvasBase;

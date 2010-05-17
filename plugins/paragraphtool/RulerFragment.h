@@ -20,13 +20,13 @@
 #ifndef RULERCONTROL_H
 #define RULERCONTROL_H
 
-#include <QLineF>
 #include <QMatrix>
 
 class Ruler;
 
 class QPainter;
 class QPointF;
+class QLineF;
 
 /* The RulerFragment class represents a Ruler on a specific shape. This class
  * takes care of mapping input and output between the ruler coordinates to

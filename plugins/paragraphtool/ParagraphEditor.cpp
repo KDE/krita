@@ -20,28 +20,17 @@
 
 #include "ParagraphEditor.h"
 #include "Label.h"
-#include "dialogs/OptionWidget.h"
 
 #include <KoCanvasBase.h>
-#include <KoParagraphStyle.h>
 #include <KoShape.h>
-#include <KoShapeBorderModel.h>
-#include <KoShapeManager.h>
-#include <KoStyleManager.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
-#include <KoUnit.h>
 #include <KoViewConverter.h>
+#include <KoParagraphStyle.h>
 
-#include <KLocalizedString>
-
-#include <QAbstractTextDocumentLayout>
-#include <QColor>
 #include <QPainter>
-#include <QString>
-#include <QTextBlock>
-#include <QTextDocument>
-#include <QTextLine>
+
+#include <KLocale>
 
 ParagraphEditor::ParagraphEditor(QObject *parent, KoCanvasBase *canvas)
         : ParagraphBase(parent, canvas),

@@ -25,14 +25,12 @@
 #include <KoUnit.h>
 
 #include <QColor>
-#include <QLineF>
 #include <QList>
-#include <QMatrix>
 #include <QObject>
-#include <QString>
 
 class QPainter;
 class QPointF;
+class QString;
 
 /* A Ruler manages several values like the minimum value, the maximum value
  * the current value and the old value of a ruler, which can then be used

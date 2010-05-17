@@ -24,14 +24,6 @@
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 
-#include <KDebug>
-
-#include <QKeyEvent>
-
-class KoViewConverter;
-
-class QPainter;
-
 ParagraphTool::ParagraphTool(KoCanvasBase *canvas)
         : KoToolBase(canvas),
         m_paragraphEditor(this, canvas),

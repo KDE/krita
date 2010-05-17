@@ -26,7 +26,7 @@
 #include <QTextBlock>
 #include <QTextLayout>
 
-ParagraphFragment::ParagraphFragment(KoShape *shape, QTextBlock textBlock, KoParagraphStyle *style)
+ParagraphFragment::ParagraphFragment(KoShape *shape, const QTextBlock &textBlock, KoParagraphStyle *style)
         : m_shape(shape)
 {
     QTextLayout *layout = textBlock.layout();

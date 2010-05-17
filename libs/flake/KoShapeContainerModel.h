@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,10 +31,11 @@ class KoShapeContainer;
 
 /**
  * The interface for the container model.
- * This class has no implementation, but only pure virtual methods. Extending this
+ * This class has no implementation, but only pure virtual methods. You can find a
+ * fully implemented model using KoShapeContainerDefaultModel.  Extending this
  * class and implementing all methods allows you to implement a custom data-backend
  * for the KoShapeContainer.
- * @see KoShapeContainer
+ * @see KoShapeContainer, KoShapeContainerDefaultModel
  */
 class FLAKE_EXPORT KoShapeContainerModel
 {
@@ -46,32 +47,44 @@ public:
     virtual ~KoShapeContainerModel();
 
     /**
-     * Add a child to this models store.
-     * @param child the child to be managed in the container.
+     * Add a shape to this models store.
+     * @param shape the shape to be managed in the container.
      */
-    virtual void add(KoShape *child) = 0;
+    virtual void add(KoShape *shape) = 0;
 
     /**
-     * Remove a child to be completely separated from the model.
-     * @param child the child to be removed.
+     * Remove a shape to be completely separated from the model.
+     * @param shape the shape to be removed.
      */
-    virtual void remove(KoShape *child) = 0;
+    virtual void remove(KoShape *shape) = 0;
 
     /**
-     * Set the argument child to have its 'clipping' property set.
-     * @param child the child for which the property will be changed.
-     * @param clipping the property; see KoShapeContainerModel for an explenation of what
-     *        this bool is for.
+     * Set the argument shape to have its 'clipping' property set.
+     *
+     * A shape that is clipped by the container will have its visible portion
+     * limited to the area where it intersects with the container.
+     * If a shape is positioned or sized such that it would be painted outside
+     * of the KoShape::outline() of its parent container, setting this property
+     * to true will clip the shape painting to the container outline.
+     *
+     * @param shape the shape for which the property will be changed.
+     * @param clipping the new value
      */
-    virtual void setClipped(const KoShape *child, bool clipping) = 0;
+    virtual void setClipped(const KoShape *shape, bool clipping) = 0;
 
     /**
-     * Returns if the argument child has its 'clipping' property set.
-     * See KoShapeContainerModel for an explenation of what this bool is for.
-     * @return if the argument child has its 'clipping' property set.
-     * @param child the child for which the property will be returned.
+     * Returns if the argument shape has its 'clipping' property set.
+     *
+     * A shape that is clipped by the container will have its visible portion
+     * limited to the area where it intersects with the container.
+     * If a shape is positioned or sized such that it would be painted outside
+     * of the KoShape::outline() of its parent container, setting this property
+     * to true will clip the shape painting to the container outline.
+     *
+     * @return if the argument shape has its 'clipping' property set.
+     * @param shape the shape for which the property will be returned.
      */
-    virtual bool isClipped(const KoShape *child) const = 0;
+    virtual bool isClipped(const KoShape *shape) const = 0;
 
     /**
      * Return wheather the child has the effective state of being locked for user modifications.
@@ -88,8 +101,8 @@ public:
     virtual int count() const = 0;
 
     /**
-     * Create and return an iterator over all child objects.
-     * @return an interator over all child objects.
+     * Create and return an iterator over all shapes added to this model
+     * @return an interator over all shapes
      */
     virtual QList<KoShape*> shapes() const = 0;
 
@@ -103,29 +116,29 @@ public:
     virtual void containerChanged(KoShapeContainer *container) = 0;
 
     /**
-     * This method is called when the user tries to move a shape that is a child of the
+     * This method is called when the user tries to move a shape that is a shape of the
      * container this model represents.
-     * The child itself is not yet moved; it is proposed to be moved over the param move distance.
+     * The shape itself is not yet moved; it is proposed to be moved over the param move distance.
      * You can alter the value of the move to affect the actual distance moved.
      * The default implementation does nothing.
-     * @param child the child of this container that the user is trying to move.
-     * @param move the distance that the user proposes to move child from the current position.
+     * @param shape the shape of this container that the user is trying to move.
+     * @param move the distance that the user proposes to move shape from the current position.
      */
-    virtual void proposeMove(KoShape *child, QPointF &move);
+    virtual void proposeMove(KoShape *shape, QPointF &move);
 
     /**
-     * This method is called when one of the child shapes has been modified.
-     * When a child shape is rotated, moved or scaled/skewed this method will be called
+     * This method is called when one of the shape shapes has been modified.
+     * When a shape shape is rotated, moved or scaled/skewed this method will be called
      * to inform the container of such a change.  The change has already happened at the
      * time this method is called.
-     * The base implementation notifies the grand parent of the child that there was a
-     * change in a child. A reimplentation if this function should call this method when
+     * The base implementation notifies the grand parent of the shape that there was a
+     * change in a shape. A reimplentation if this function should call this method when
      * overwriding the function.
      *
-     * @param child the child that has been changed
-     * @param type this enum shows which change the child has had.
+     * @param shape the shape that has been changed
+     * @param type this enum shows which change the shape has had.
      */
-    virtual void childChanged(KoShape *child, KoShape::ChangeType type);
+    virtual void childChanged(KoShape *shape, KoShape::ChangeType type);
 };
 
 #endif

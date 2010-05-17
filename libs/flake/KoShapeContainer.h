@@ -110,6 +110,13 @@ public:
 
     /**
      * Set the argument child to have its 'clipping' property set.
+     *
+     * A shape that is clipped by the container will have its visible portion
+     * limited to the area where it intersects with the container.
+     * If a shape is positioned or sized such that it would be painted outside
+     * of the KoShape::outline() of its parent container, setting this property
+     * to true will clip the shape painting to the container outline.
+     *
      * @param child the child for which the property will be changed.
      * @param clipping the property
      */
@@ -117,6 +124,13 @@ public:
 
     /**
      * Returns if the argument child has its 'clipping' property set.
+     *
+     * A shape that is clipped by the container will have its visible portion
+     * limited to the area where it intersects with the container.
+     * If a shape is positioned or sized such that it would be painted outside
+     * of the KoShape::outline() of its parent container, setting this property
+     * to true will clip the shape painting to the container outline.
+     *
      * @return if the argument child has its 'clipping' property set.
      * @param child the child for which the property will be returned.
      */

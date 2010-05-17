@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Florian Merz <florianmerz@gmx.de>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -49,23 +50,25 @@ bool ParagraphBase::hasActiveTextBlock() const {
 
 void ParagraphBase::activateTextBlockAt(const QPointF &point)
 {
-    KoShape *shape = dynamic_cast<KoShape*>(m_canvas->shapeManager()->shapeAt(point));
-    if (shape == NULL) {
-        // there is no shape below the mouse position
-        deactivateTextBlock();
-        return;
-    }
 
-    KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData*>(shape->userData());
-    if (textShapeData == NULL) {
-        // the shape below the mouse position is not a text shape
+    KoShape *shape = 0;
+    KoTextShapeData *textShapeData = 0;
+    foreach (KoShape *s, m_canvas->shapeManager()->shapesAt(QRectF(point, QSizeF(4, 4)))) {
+        textShapeData = qobject_cast<KoTextShapeData*>(s->userData());
+        if (textShapeData) { // found it!
+            shape = s;
+            break;
+        }
+    }
+    if (shape == 0 || textShapeData == 0) {
+        // there is no shape below the mouse position
         deactivateTextBlock();
         return;
     }
 
     QTextDocument *document = textShapeData->document();
 
-    QPointF p = shape->transformation().inverted().map(point);
+    QPointF p = shape->absoluteTransformation(0).inverted().map(point);
     p += QPointF(0.0, textShapeData->documentOffset());
 
     int position = document->documentLayout()->hitTest(p, Qt::ExactHit);

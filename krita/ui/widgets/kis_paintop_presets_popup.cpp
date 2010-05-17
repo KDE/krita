@@ -39,7 +39,7 @@
 #include <kis_canvas_resource_provider.h>
 #include <widgets/kis_preset_chooser.h>
 
-#include <ui_wdgpaintoppresets.h>
+#include <ui_wdgpaintopsettings.h>
 #include <kis_node.h>
 #include "kis_config.h"
 
@@ -48,7 +48,7 @@ class KisPaintOpPresetsPopup::Private
 
 public:
 
-    Ui_WdgPaintOpPresets uiWdgPaintOpPresets;
+    Ui_WdgPaintOpSettings uiWdgPaintOpPresetSettings;
     QGridLayout *layout;
     QWidget *settingsWidget;
     QFont smallFont;
@@ -70,56 +70,46 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     m_d->resourceProvider = resourceProvider;
 
-    m_d->uiWdgPaintOpPresets.setupUi(this);
+    m_d->uiWdgPaintOpPresetSettings.setupUi(this);
 
-    m_d->layout = new QGridLayout(m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer);
+    m_d->layout = new QGridLayout(m_d->uiWdgPaintOpPresetSettings.frmOptionWidgetContainer);
     m_d->layout->setSizeConstraint(QLayout::SetFixedSize);
 
-    m_d->uiWdgPaintOpPresets.scratchPad->setCanvasColor(Qt::white);
-    m_d->uiWdgPaintOpPresets.scratchPad->setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
-    m_d->uiWdgPaintOpPresets.scratchPad->setCutoutOverlay(QRect(0, 0, 250, 60));
-    m_d->uiWdgPaintOpPresets.fillLayer->setIcon(KIcon("newlayer"));
-    m_d->uiWdgPaintOpPresets.fillGradient->setIcon(KIcon("krita_tool_gradient"));
-    m_d->uiWdgPaintOpPresets.fillSolid->setIcon(KIcon("krita_tool_color_fill"));
-    m_d->uiWdgPaintOpPresets.eraseScratchPad->setIcon(KIcon("list-remove"));
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->setCanvasColor(Qt::white);
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->setCutoutOverlay(QRect(0, 0, 250, 60));
+    m_d->uiWdgPaintOpPresetSettings.fillLayer->setIcon(KIcon("newlayer"));
+    m_d->uiWdgPaintOpPresetSettings.fillGradient->setIcon(KIcon("krita_tool_gradient"));
+    m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KIcon("krita_tool_color_fill"));
+    m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KIcon("list-remove"));
 
-    connect(m_d->uiWdgPaintOpPresets.eraseScratchPad, SIGNAL(clicked()),
-            m_d->uiWdgPaintOpPresets.scratchPad, SLOT(clear()));
+    connect(m_d->uiWdgPaintOpPresetSettings.eraseScratchPad, SIGNAL(clicked()),
+            m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(clear()));
 
     connect(m_d->resourceProvider, SIGNAL(sigFGColorChanged(const KoColor &)),
-            m_d->uiWdgPaintOpPresets.scratchPad, SLOT(setPaintColor(const KoColor &)));
+            m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(setPaintColor(const KoColor &)));
 
     connect(m_d->resourceProvider, SIGNAL(sigBGColorChanged(const KoColor &)),
-            m_d->uiWdgPaintOpPresets.scratchPad, SLOT(setBackgroundColor(const KoColor &)));
+            m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(setBackgroundColor(const KoColor &)));
 
-    connect(m_d->uiWdgPaintOpPresets.fillLayer, SIGNAL(clicked()),
+    connect(m_d->uiWdgPaintOpPresetSettings.fillLayer, SIGNAL(clicked()),
             this, SLOT(fillScratchPadLayer()));
 
-    connect(m_d->uiWdgPaintOpPresets.fillGradient, SIGNAL(clicked()),
+    connect(m_d->uiWdgPaintOpPresetSettings.fillGradient, SIGNAL(clicked()),
             this, SLOT(fillScratchPadGradient()));
 
-    connect(m_d->uiWdgPaintOpPresets.fillSolid, SIGNAL(clicked()),
+    connect(m_d->uiWdgPaintOpPresetSettings.fillSolid, SIGNAL(clicked()),
             this, SLOT(fillScratchPadSolid()));
 
     m_d->settingsWidget = 0;
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 
-    connect(m_d->uiWdgPaintOpPresets.bnSave, SIGNAL(clicked()),
+    connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
             this, SIGNAL(savePresetClicked()));
             
-    connect(m_d->uiWdgPaintOpPresets.bnDefaultPreset, SIGNAL(clicked()),
+    connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
             this, SIGNAL(defaultPresetClicked()));
             
-
-    connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SIGNAL(resourceSelected(KoResource*)));
-
-    connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(textChanged(const QString&)),
-            m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(searchTextChanged(const QString&)));
-
-    connect(m_d->uiWdgPaintOpPresets.showAllCheckBox, SIGNAL(toggled(bool)),
-            m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(setShowAll(bool)));
-
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
 
@@ -142,7 +132,7 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
 {
     if (m_d->settingsWidget) {
         m_d->layout->removeWidget(m_d->settingsWidget);
-        m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer->updateGeometry();
+        m_d->uiWdgPaintOpPresetSettings.frmOptionWidgetContainer->updateGeometry();
     }
     m_d->layout->update();
     updateGeometry();
@@ -163,32 +153,27 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
 
 QString KisPaintOpPresetsPopup::getPresetName() const
 {
-    return m_d->uiWdgPaintOpPresets.txtPreset->text();
-}
-
-void KisPaintOpPresetsPopup::setPresetFilter(const KoID& paintopID)
-{
-    m_d->uiWdgPaintOpPresets.wdgPresetChooser->setPresetFilter(paintopID);
+    return m_d->uiWdgPaintOpPresetSettings.txtPreset->text();
 }
 
 void KisPaintOpPresetsPopup::setPreset(KisPaintOpPresetSP preset)
 {
-    m_d->uiWdgPaintOpPresets.scratchPad->setPreset(preset);
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->setPreset(preset);
 }
 
 QImage KisPaintOpPresetsPopup::cutOutOverlay()
 {
-    return m_d->uiWdgPaintOpPresets.scratchPad->cutoutOverlay();
+    return m_d->uiWdgPaintOpPresetSettings.scratchPad->cutoutOverlay();
 }
 
 void KisPaintOpPresetsPopup::fillScratchPadGradient()
 {
-    m_d->uiWdgPaintOpPresets.scratchPad->fillGradient(m_d->resourceProvider->currentGradient());
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->fillGradient(m_d->resourceProvider->currentGradient());
 }
 
 void KisPaintOpPresetsPopup::fillScratchPadSolid()
 {
-    m_d->uiWdgPaintOpPresets.scratchPad->fillSolid(m_d->resourceProvider->bgColor());
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->fillSolid(m_d->resourceProvider->bgColor());
 }
 
 void KisPaintOpPresetsPopup::fillScratchPadLayer()

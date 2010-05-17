@@ -45,6 +45,7 @@ class KisView2;
 class KisCanvasResourceProvider;
 class KisPopupButton;
 class KisPaintOpPresetsPopup;
+class KisPaintOpPresetsChooserPopup;
 class KisPaintOpSettingsWidget;
 
 /**
@@ -102,8 +103,10 @@ private:
 
     QHBoxLayout* m_layout;
     KisPaintOpSettingsWidget* m_optionWidget;
+    KisPopupButton* m_settingsWidget;
     KisPopupButton* m_presetWidget;
     KisPaintOpPresetsPopup* m_presetsPopup;
+    KisPaintOpPresetsChooserPopup* m_presetsChooserPopup;
     KisView2* m_view;
 
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;

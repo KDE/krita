@@ -138,6 +138,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_multi_double_filter_widget.cc
     widgets/kis_multi_integer_filter_widget.cc
     widgets/kis_paintop_presets_popup.cpp 
+    widgets/kis_paintop_presets_chooser_popup.cpp
     widgets/kis_pattern_chooser.cc
     widgets/kis_popup_button.cc 
     widgets/kis_preset_chooser.cpp
@@ -197,6 +198,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgfilterdialog.ui
     forms/wdgmetadatamergestrategychooser.ui
     forms/wdgpaintoppresets.ui
+    forms/wdgpaintopsettings.ui
     forms/wdgdlggeneratorlayer.ui
     forms/wdgfilterselector.ui
     forms/wdgfilternodecreation.ui

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KoReport_Chart
+Name[et]=KoReport_Chart
 Name[it]=KoReport_Grafico
 Name[nds]=KoReport_Diagramm
 Name[nl]=KoReport-grafiek
@@ -10,10 +11,12 @@ Name[uk]=Діаграма KoReport
 Name[x-test]=xxKoReport_Chartxx
 Name[zh_CN]=KoReport_Chart
 Comment=KoReport Chart PLugin
+Comment[et]=KoReporti diagrammi plugin
 Comment[it]=Estensione per i grafici di KoReport
 Comment[nds]=Diagramm-Moduul för KoReport
 Comment[nl]=Plugin voor KoReport-grafiek
 Comment[pt]='Plugin' de Gráficos do KoReport
+Comment[pt_BR]=Plug-in de gráficos do KoReport
 Comment[sv]=Insticksprogram för Koffice rapportdiagram
 Comment[uk]=Додаток діаграм KoReport
 Comment[x-test]=xxKoReport Chart PLuginxx

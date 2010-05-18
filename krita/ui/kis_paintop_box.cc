@@ -99,7 +99,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     
     m_presetWidget = new KisPopupButton(this);
     m_presetWidget->setIcon(KIcon("paintop_settings_01"));
-    m_presetWidget->setToolTip(i18n("Chose brush preset"));
+    m_presetWidget->setToolTip(i18n("Choose brush preset"));
     m_presetWidget->setFixedSize(32, 32);
 
     m_layout = new QHBoxLayout(this);

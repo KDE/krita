@@ -21,8 +21,6 @@
 #ifndef SHAPESELECTOR_H
 #define SHAPESELECTOR_H
 
-#include "ItemStore.h"
-
 #include <QDockWidget>
 
 class FolderShape;

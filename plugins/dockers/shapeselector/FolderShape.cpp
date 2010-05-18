@@ -44,7 +44,7 @@ void FolderShape::setSize(const QSizeF &size)
     static_cast<FolderShapeModel*>(model())->folderResized();
 }
 
-QDomDocument FolderShape::save()
+QDomDocument FolderShape::save() const
 {
     QDomDocument doc;
     QDomElement element = doc.createElement("book");

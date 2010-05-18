@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,6 +24,17 @@
 class KoCreateShapesTool;
 class QDomElement;
 
+/**
+ * The shape selector uses IconShapes to represent a shape factory.
+ * The shape selector is meant to allow the user to insert any type of flake shape
+ * and the way that works in Flake is that there is a KoShapeFactoryBase per shape-type.
+ * Each factory is capable of inserting at least one type of shape into a KOffice
+ * document. To visualize the shape without having to actually ask the factory to
+ * create one (which may be expensive) either the TemplateShape or the GroupShape is used
+ * to show the icon (KoShapeFactoryBase::icon()) and things like a tooltip.
+ * The TemplateShape is used for a KoShapeTemplate, when the factory has none (so only
+ * KoShapeFactoryBase::createDefaultShape() can be called) the GroupShape is used instead.
+ */
 class IconShape : public KoShape
 {
 public:

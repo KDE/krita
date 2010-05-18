@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +27,16 @@ class Canvas;
 class KoShape;
 class KoPointerEvent;
 
+/**
+ * A strategy for handling a left click on a selectable shape.
+ * The shape selector allows mouse and keyboard interaction by having the Canvas
+ * use different InteractionStrategy classes to handle an 'interaction'
+ * (mouse down till mouse release)
+ * This is the strategy that detects the user selecting an item that can be inserted
+ * onto a KOffice canvas.
+ * itemSelected will be emitted after the canvas' KoSelection has been updated to
+ * select the appropriate shape.
+ */
 class SelectStrategy : public QObject, public InteractionStrategy
 {
     Q_OBJECT

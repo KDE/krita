@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,6 +24,14 @@
 class Canvas;
 class KoPointerEvent;
 
+/**
+ * A strategy for handling dragging the mouse to drag the canvas around.
+ * The shape selector allows mouse and keyboard interaction by having the Canvas
+ * use different InteractionStrategy classes to handle an 'interaction'
+ * (mouse down till mouse release)
+ * This is the strategy that allows moving the whole canvas around when its too
+ * big for the viewport.
+ */
 class DragCanvasStrategy : public InteractionStrategy
 {
 public:

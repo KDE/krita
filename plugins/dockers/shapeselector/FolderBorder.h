@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,14 +21,25 @@
 
 #include <KoShapeBorderModel.h>
 
+/**
+ * The shapeselector allows multiple 'folders' and this is the border to show the edges.
+ * In the startup phase there is only one folder, which has no border. If the user adds
+ * more folders the FolderShape gets a FolderBorder assigned to it which draws the outline
+ * and the title of the folder shape.
+ */
 class FolderBorder : public KoShapeBorderModel
 {
 public:
     FolderBorder();
+    /// reimplemented from KoShapeBorderModel
     virtual void fillStyle(KoGenStyle &, KoShapeSavingContext &) {}
+    /// reimplemented from KoShapeBorderModel
     virtual void borderInsets(const KoShape *shape, KoInsets &insets);
+    /// reimplemented from KoShapeBorderModel
     virtual bool hasTransparency();
+    /// reimplemented from KoShapeBorderModel
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
+    /// reimplemented from KoShapeBorderModel
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color);
 };
 

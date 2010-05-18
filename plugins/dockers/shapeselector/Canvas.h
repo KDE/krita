@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -46,21 +46,41 @@ public:
     virtual void removeShape( KoShape* ) {}
 };
 
+/**
+ * The shape selector docker essentially embeds a flake canvas, this is the canvas.
+ * The shape selector is meant to show any flake shape and what better way to do that
+ * then to implement a flake canvas. Much like any KOffice application does.
+ * This class is the widget that is the main canvas as shown by the docker.
+ */
 class Canvas : public QWidget, public KoCanvasBase
 {
     Q_OBJECT
 public:
+    /// constructor
     Canvas(ShapeSelector *parent);
-    void gridSize(qreal *horizontal, qreal *vertical) const;
-    bool snapToGrid() const { return false; }
-    void addCommand(QUndoCommand *command);
-    KoShapeManager * shapeManager() const;
-    void updateCanvas(const QRectF &rc);
-    KoToolProxy *toolProxy() const { return 0; }
-    const KoViewConverter * viewConverter() const { return &m_converter; }
-    QWidget *canvasWidget();
-    KoUnit unit() const { return KoUnit(KoUnit::Millimeter); }
-    void updateInputMethodInfo() {}
+    /// implementing KoCanvasBase
+    virtual void gridSize(qreal *horizontal, qreal *vertical) const;
+    /// implementing KoCanvasBase
+    virtual bool snapToGrid() const { return false; }
+    /// implementing KoCanvasBase
+    virtual void addCommand(QUndoCommand *command);
+    /// implementing KoCanvasBase
+    virtual KoShapeManager * shapeManager() const;
+    /// implementing KoCanvasBase
+    virtual void updateCanvas(const QRectF &rc);
+    /// implementing KoCanvasBase
+    virtual KoToolProxy *toolProxy() const { return 0; }
+    /// implementing KoCanvasBase
+    virtual const KoViewConverter * viewConverter() const { return &m_converter; }
+    /// implementing KoCanvasBase
+    virtual QWidget *canvasWidget();
+    /// implementing KoCanvasBase
+    virtual KoUnit unit() const { return KoUnit(KoUnit::Millimeter); }
+    /// implementing KoCanvasBase
+    virtual void updateInputMethodInfo() {}
+    /// implementing KoCanvasBase
+    virtual const QWidget* canvasWidget() const { return 0; }
+
     ItemStore *itemStore() { return &m_itemStore; }
 
     /**
@@ -78,10 +98,10 @@ public:
 
     QAction *popup(QMenu *menu, const QPointF &docCoordinate);
 
+    /// used to pan around the canvas
     void moveDocumentOffset(const QPointF &offset);
+    /// reset to show the original position of the shapeSelector document
     void resetDocumentOffset();
-
-    const QWidget* canvasWidget() const { return 0; }
 
 signals:
     void resized(const QSize &newSize);

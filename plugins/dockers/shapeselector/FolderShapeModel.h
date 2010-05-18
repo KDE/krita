@@ -28,16 +28,25 @@ class FolderShapeModel : public KoShapeContainerModel
 public:
     FolderShapeModel(FolderShape *parent);
 
+    /// add a content item to the folder
     virtual void add(KoShape *child);
+    /// remove a content item from the folder
     virtual void remove(KoShape *child);
+    /// ignored.
     virtual void setClipped(const KoShape *child, bool clipping);
+    /// always returns true clipping any child to the folder outline
     virtual bool isClipped(const KoShape *child) const;
     virtual bool isChildLocked(const KoShape *child) const;
+    /// return content item count
     virtual int count() const;
+    /// returns content items added earlier
     virtual QList<KoShape *> shapes() const;
+    /// reimplemented from KoShapeContainerModel
     virtual void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
+    /// reimplemented from KoShapeContainerModel
     virtual void childChanged(KoShape *child, KoShape::ChangeType type);
 
+    /// called by the folder shape to allow us to reorganize the items in the folder
     void folderResized();
 
 private:

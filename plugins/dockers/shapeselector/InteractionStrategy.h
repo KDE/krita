@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,6 +22,12 @@
 #include <QPointF>
 
 
+/**
+ * Baseclass for interaction handling.
+ * The shape selector allows mouse and keyboard interaction by having the Canvas
+ * use different InteractionStrategy classes to handle an 'interaction'
+ * (mouse down till mouse release)
+ */
 class InteractionStrategy
 {
 public:

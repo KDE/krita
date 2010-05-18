@@ -513,6 +513,8 @@ void Autocorrect::advancedAutocorrect()
     QString trimmedWord = m_word.toLower().trimmed();
     QString actualWord = trimmedWord;
 
+    if (actualWord.isEmpty()) return;
+
     // If the last char is punctuation, drop it for now
     bool hasPunctuation = false;
     QChar lastChar = actualWord.at(actualWord.length() - 1);

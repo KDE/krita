@@ -268,14 +268,14 @@ bool KoDocumentRdfEditWidget::shouldDialogCloseBeVetoed()
     if (int invalidCount = d->m_tripleModel->invalidStatementCount()) {
         kDebug(30015) << "invalidCount:" << invalidCount;
         int dialogRet = KMessageBox::warningContinueCancel(
-                            this,
-                            i18nc("triple is a Rdf related term", "<qt>Partially edited Rdf will be lost if you proceed."
-                                 "<p>There are %1 invalid triples in the dialog.</qt>",
-                                 QString("<b>%1</b>").arg(invalidCount)),
-                            i18nc("triple is a Rdf related term", "Lose invalid triples?"),
-                            KStandardGuiItem::cont(),
-                            KStandardGuiItem::cancel(),
-                            "InvalidTriplesInDocInfoDialog");
+            this, i18ncp("statement is an Rdf related term",
+                "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>",
+                "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>",
+                invalidCount),
+            i18nc("statement is an Rdf related term", "Discard invalid statements?"),
+            KStandardGuiItem::cont(),
+            KStandardGuiItem::cancel(),
+            "InvalidTriplesInDocInfoDialog");
         if (dialogRet == KMessageBox::Cancel) {
             ret = true;
             QModelIndexList invalidList = d->m_tripleModel->invalidStatementList();

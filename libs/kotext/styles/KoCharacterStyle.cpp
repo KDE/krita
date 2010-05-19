@@ -1096,14 +1096,18 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::style, "use-window-font-color")) {
         if (styleStack.property(KoXmlNS::style, "use-window-font-color") == "true") {
             // Do like OpenOffice.org : change the foreground font if its color is too close to the background color...
+            
             QColor back = background().color();
             QColor front = foreground().color();
-            if ((abs(qGray(back.rgb()) - qGray(front.rgb())) < 10) && (background().style() != Qt::NoBrush) && (foreground().style() != Qt::NoBrush)) {
+            if ((abs(qGray(back.rgb()) - qGray(front.rgb())) < 10) && (background().style() != Qt::NoBrush)) {
                 front.setRed(255 - front.red());
                 front.setGreen(255 - front.green());
                 front.setBlue(255 - front.blue());
                 QBrush frontBrush = foreground();
                 frontBrush.setColor(front);
+                if (frontBrush.style() == Qt::NoBrush) {
+                    frontBrush.setStyle(Qt::SolidPattern);
+                }
                 setForeground(frontBrush);
             }
         }

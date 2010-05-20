@@ -1001,6 +1001,19 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 }
                 textObjectManager->insertInlineObject(cursor, bookmark);
             }
+        } else if (isTextNS && localName == "bookmark-ref") {
+            QString bookmarkName = ts.attribute("ref-name");
+            QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
+            if (!bookmarkName.isEmpty()) {
+                QTextCharFormat linkCf(cf); // and copy it to alter it
+                linkCf.setAnchor(true);
+                QStringList anchorName;
+                anchorName << bookmarkName;
+                linkCf.setAnchorNames(anchorName);
+                cursor.setCharFormat(linkCf);
+            }
+            bool stripLeadingSpace = true;
+            loadSpan(ts, cursor, &stripLeadingSpace);   // recurse
         } else if (isTextNS && localName == "number") { // text:number
             /*                ODF Spec, §4.1.1, Formatted Heading Numbering
             If a heading has a numbering applied, the text of the formatted number can be included in a

@@ -21,14 +21,17 @@
 class QIODevice;
 
 #include <QString>
-
+#include "kis_annotation.h"
 #include "psd_resource_section.h"
 
 
 /**
  * Contains the unparsed contents of the image resource blocks
+ *
+ * XXX: make KisAnnotations out of the resource blocks so we can load/save them. Need to
+ *      expand KisAnnotation to make that work.
  */
-class PSDResourceBlock
+class PSDResourceBlock //: public KisAnnotation
 {
 
 public:

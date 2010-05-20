@@ -104,6 +104,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         dbgFile << "failed reading layer section: " << layerSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
+    // XXX: add all the image resource blocks as annotations to the image
 
     dbgFile << "Read layer section. " << layerSection.nLayers << "layers. pos:" << f.pos();
 
@@ -119,6 +120,8 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                                                                        colorSpaceId.second,
                                                                        profileData);
     }
+
+    // Create the colorspace
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile);
     if (!cs) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
 
@@ -134,6 +137,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                                                        colorModeBlock.m_data);
         m_image->addAnnotation(annotation);
     }
+
 
     // read the projection into our single layer
     if (layerSection.nLayers == 0) {

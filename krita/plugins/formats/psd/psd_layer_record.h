@@ -34,7 +34,7 @@ class PSDLayerRecord
 {
 public:
 
-    PSDLayerRecord(const PSDHeader &header, bool hasTransparency);
+    PSDLayerRecord(const PSDHeader &header);
 
     ~PSDLayerRecord()
     {
@@ -55,7 +55,7 @@ public:
     quint16 nChannels;
 
     struct ChannelInfo {
-        qint16 channelId;
+        qint16 channelId; // 0 red, 1 green, 2 blue, -1 transparency, -2 user-supplied layer mask
         Compression::CompressionType compressionType;
         quint64 channelDataStart;
         quint64 channelDataLength;
@@ -112,7 +112,6 @@ public:
 private:
 
     const PSDHeader m_header;
-    bool            m_hasTransparency;
 };
 
 QDebug operator<<(QDebug dbg, const PSDLayerRecord& layer);

@@ -31,6 +31,7 @@ PSDLayerSection::PSDLayerSection(const PSDHeader& header)
     , m_header(header)
 {
     hasTransparency = false;
+    layerMaskBlockSize = 0;
     layerInfoSize = 0;
     nLayers = 0;
 }
@@ -44,29 +45,31 @@ bool PSDLayerSection::read(QIODevice* io)
 {
     dbgFile << "reading layer section. Pos:" << io->pos() <<  "bytes left:" << io->bytesAvailable();
 
-    layerSectionSize = 0;
+    layerMaskBlockSize = 0;
     if (m_header.version == 1) {
-        quint32 _layerSectionSize = 0;
-        if (!psdread(io, &_layerSectionSize) || _layerSectionSize > (quint64)io->bytesAvailable()) {
-            error = QString("Could not read layer section size. Got %1. Bytes left %2")
-                    .arg(_layerSectionSize).arg(io->bytesAvailable());
+        quint32 _layerMaskBlockSize = 0;
+        if (!psdread(io, &_layerMaskBlockSize) || _layerMaskBlockSize > (quint64)io->bytesAvailable()) {
+            error = QString("Could not read layer + mask block size. Got %1. Bytes left %2")
+                    .arg(_layerMaskBlockSize).arg(io->bytesAvailable());
             return false;
         }
-        layerSectionSize = _layerSectionSize;
+        layerMaskBlockSize = _layerMaskBlockSize;
     }
     else if (m_header.version == 2) {
-        if (!psdread(io, &layerSectionSize) || layerSectionSize > (quint64)io->bytesAvailable()) {
-            error = QString("Could not read layer section size. Got %1. Bytes left %2")
-                    .arg(layerSectionSize).arg(io->bytesAvailable());
+        if (!psdread(io, &layerMaskBlockSize) || layerMaskBlockSize > (quint64)io->bytesAvailable()) {
+            error = QString("Could not read layer + mask block size. Got %1. Bytes left %2")
+                    .arg(layerMaskBlockSize).arg(io->bytesAvailable());
             return false;
         }
     }
+    dbgFile << "layer + mask section size" << layerMaskBlockSize;
 
-    dbgFile << "layer section size" << layerSectionSize;
+    if (layerMaskBlockSize == 0) {
+        dbgFile << "No layer + mask info, so no layers, only a background layer";
+        return true;
+    }
 
     dbgFile << "reading layer info block. Bytes left" << io->bytesAvailable() << "position" << io->pos();
-
-    layerInfoSize = 0;
     if (m_header.version == 1) {
         quint32 _layerInfoSize;
         if (!psdread(io, &_layerInfoSize) || _layerInfoSize > (quint64)io->bytesAvailable()) {
@@ -81,9 +84,8 @@ bool PSDLayerSection::read(QIODevice* io)
             return false;
         }
     }
-
     dbgFile << "Layer info block size" << layerInfoSize;
-    nLayers = 0;
+
 
     if (layerInfoSize > 0 ) {
 
@@ -91,7 +93,6 @@ bool PSDLayerSection::read(QIODevice* io)
         if ((layerInfoSize & 0x01) != 0) {
             layerInfoSize++;
         }
-
         dbgFile << "Layer info block size after rounding" << layerInfoSize;
 
         if (!psdread(io, &nLayers) || nLayers == 0) {
@@ -106,7 +107,6 @@ bool PSDLayerSection::read(QIODevice* io)
         else {
             hasTransparency = false;
         }
-
         dbgFile << "transparency" << hasTransparency;
 
         dbgFile << "Number of layers" << nLayers << "transparency" << hasTransparency;
@@ -114,7 +114,7 @@ bool PSDLayerSection::read(QIODevice* io)
         for (int i = 0; i < nLayers; ++i) {
 
             dbgFile << "Going to read layer " << i << "pos" << io->pos();
-            PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header, hasTransparency);
+            PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
             if (!layerRecord->read(io)) {
                 error = QString("Could not load layer %1: %2").arg(i).arg(layerRecord->error);
                 return false;
@@ -134,14 +134,14 @@ bool PSDLayerSection::read(QIODevice* io)
             error = QString("Expected layer %1, but only have %2 layers").arg(i).arg(layers.size());
             return false;
         }
-        // save the current location so we can jump beyond this block later on.
-        quint64 channelStartPos = io->pos();
 
         PSDLayerRecord *layerRecord = layers.at(i);
 
         for (int j = 0; j < layerRecord->nChannels; ++j) {
+            // save the current location so we can jump beyond this block later on.
+            quint64 channelStartPos = io->pos();
 
-            dbgFile << "Reading channel image data for" << j << "from pos" << io->pos();
+            dbgFile << "\tReading channel image data for" << j << "from pos" << io->pos();
 
             Q_ASSERT(j < layerRecord->channelInfoRecords.size());
             if (j > layerRecord->channelInfoRecords.size()) {
@@ -160,13 +160,13 @@ bool PSDLayerSection::read(QIODevice* io)
                 return false;
             }
             channelInfo->compressionType = (Compression::CompressionType)compressionType;
-            dbgFile << "Channel" << channelInfo->channelId << "at" << j << "has compression type" << compressionType;
+            dbgFile << "\t\tChannel" << j << "has compression type" << compressionType;
 
             // read the rle row lengths;
             if (channelInfo->compressionType == Compression::RLE) {
                 for(quint64 row = 0; row < (layerRecord->bottom - layerRecord->top); ++row) {
 
-                    dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io->pos();
+                    //dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io->pos();
 
                     quint32 byteCount;
                     if (m_header.version == 1) {
@@ -183,7 +183,7 @@ bool PSDLayerSection::read(QIODevice* io)
                             return 0;
                         }
                     }
-                    qDebug() << "rle byte count" << byteCount;
+                    //qDebug() << "rle byte count" << byteCount;
                     channelInfo->rleRowLengths << byteCount;
                 }
             }
@@ -192,7 +192,7 @@ bool PSDLayerSection::read(QIODevice* io)
             // location of the real pixel data
             channelInfo->channelDataStart = io->pos();
 
-            dbgFile << "start" << channelStartPos
+            dbgFile << "\t\tstart" << channelStartPos
                     << "data start" << channelInfo->channelDataStart
                     << "data length" << channelInfo->channelDataLength
                     << "pos" << io->pos();
@@ -203,7 +203,7 @@ bool PSDLayerSection::read(QIODevice* io)
             // this is the length of the actual channel data bytes
             channelInfo->channelDataLength = channelInfo->channelDataLength - (channelInfo->channelDataStart - channelStartPos);
 
-            dbgFile << "channel record" << j << "for layer" << i
+            dbgFile << "\t\tchannel record" << j << "for layer" << i << "with id" << channelInfo->channelId
                     << "starting postion" << channelInfo->channelDataStart
                     << "with length" << channelInfo->channelDataLength
                     << "and has compression type" << channelInfo->compressionType;

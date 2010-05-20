@@ -149,6 +149,7 @@ QByteArray unzip(quint32 nPixels, QByteArray bytes)
     psdwrite(&buf, nPixels);
     b.append(bytes);
 
+    // and let's hope that this is sufficient...
     return qUncompress(bytes);
 }
 

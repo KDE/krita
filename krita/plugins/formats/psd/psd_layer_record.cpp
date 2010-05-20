@@ -28,10 +28,10 @@
 
 #include "psd_utils.h"
 #include "psd_header.h"
+#include "compression.h"
 
-PSDLayerRecord::PSDLayerRecord(const PSDHeader& header, bool hasTransparency)
+PSDLayerRecord::PSDLayerRecord(const PSDHeader& header)
     : m_header(header)
-    , m_hasTransparency(hasTransparency)
 {
 }
 
@@ -49,7 +49,7 @@ bool PSDLayerRecord::read(QIODevice* io)
         return false;
     }
 
-    dbgFile << "top" << top << "left" << left << "bottom" << bottom << "right" << right << "number of channels" << nChannels;
+    dbgFile << "\ttop" << top << "left" << left << "bottom" << bottom << "right" << right << "number of channels" << nChannels;
 
     switch(m_header.colormode) {
     case(Bitmap):
@@ -57,7 +57,7 @@ bool PSDLayerRecord::read(QIODevice* io)
     case(DuoTone):
     case(Grayscale):
     case(MultiChannel):
-        if ((m_hasTransparency && nChannels < 2) || (!m_hasTransparency && nChannels < 1)) {
+        if (nChannels < 1) {
             error = QString("Not enough channels. Got: %1").arg(nChannels);
             return false;
         }
@@ -66,11 +66,10 @@ bool PSDLayerRecord::read(QIODevice* io)
     case(CMYK):
     case(Lab):
     default:
-        if ((m_hasTransparency && nChannels < 4) || (!m_hasTransparency && nChannels < 3)) {
+        if (nChannels < 3) {
             error = QString("Not enough channels. Got: %1").arg(nChannels);
             return false;
         }
-        break;
         break;
     };
 
@@ -110,7 +109,7 @@ bool PSDLayerRecord::read(QIODevice* io)
             return false;
         }
 
-        dbgFile << "channel" << i << "id" << info->channelId << "length" << info->channelDataLength;
+        dbgFile << "\tchannel" << i << "id" << info->channelId << "length" << info->channelDataLength;
         channelInfoRecords << info;
     }
 
@@ -128,37 +127,36 @@ bool PSDLayerRecord::read(QIODevice* io)
         return false;
     }
 
-    dbgFile << "Blend mode" << blendModeKey << "pos" << io->pos();
+    dbgFile << "\tBlend mode" << blendModeKey << "pos" << io->pos();
 
     if (!psdread(io, &opacity)) {
         error = "Could not read opacity";
         return false;
     }
 
-    dbgFile << "Opacity" << opacity << io->pos();
+    dbgFile << "\tOpacity" << opacity << io->pos();
 
     if (!psdread(io, &clipping)) {
         error = "Could not read clipping";
         return false;
     }
 
-    dbgFile << "clipping" << clipping << io->pos();
+    dbgFile << "\tclipping" << clipping << io->pos();
 
     quint8 flags;
     if (!psdread(io, &flags)) {
         error = "Could not read flags";
         return false;
     }
-
-    dbgFile << "flags" << flags << io->pos();
+    dbgFile << "\tflags" << flags << io->pos();
 
     transparencyProtected = flags & 1 ? true : false;
 
-    dbgFile << "transparency protected" << transparencyProtected;
+    dbgFile << "\ttransparency protected" << transparencyProtected;
 
     visible = flags & 2 ? true : false;
 
-    dbgFile << "visible" << visible;
+    dbgFile << "\tvisible" << visible;
 
     if (flags & 8) {
         irrelevant = flags & 16 ? true : false;
@@ -167,9 +165,9 @@ bool PSDLayerRecord::read(QIODevice* io)
         irrelevant = false;
     }
 
-    dbgFile << "irrelevant" << irrelevant;
+    dbgFile << "\tirrelevant" << irrelevant;
 
-    dbgFile << "filler at " << io->pos();
+    dbgFile << "\tfiller at " << io->pos();
 
     quint8 filler;
     if (!psdread(io, &filler) || filler != 0) {
@@ -177,7 +175,7 @@ bool PSDLayerRecord::read(QIODevice* io)
         return false;
     }
 
-    dbgFile << "Going to read layer mask block" << io->pos();
+    dbgFile << "\tGoing to read extra data length" << io->pos();
 
     quint32 extraDataLength;
     if (!psdread(io, &extraDataLength) || io->bytesAvailable() < extraDataLength) {
@@ -185,73 +183,80 @@ bool PSDLayerRecord::read(QIODevice* io)
         return false;
     }
 
+    dbgFile << "\tExtra data length" << extraDataLength;
 
-    dbgFile << "Extra data length" << extraDataLength;
+    if (extraDataLength > 0) {
 
-    quint32 layerMaskLength = 1; // invalid...
-    if (!psdread(io, &layerMaskLength) ||
-        io->bytesAvailable() < layerMaskLength ||
-        !(layerMaskLength == 0 || layerMaskLength == 20 || layerMaskLength == 36)) {
-        error = QString("Could not read layer mask info-> Length: %1").arg(layerMaskLength);
-        return false;
-    }
+        dbgFile << "Going to read extra data field. Bytes available: "
+                << io->bytesAvailable()
+                << "pos" << io->pos();
 
-    memset(&layerMask, 0, sizeof(LayerMaskData));
-
-    if (layerMaskLength == 20 || layerMaskLength == 36) {
-        if (!psdread(io, &layerMask.top)  ||
-            !psdread(io, &layerMask.left) ||
-            !psdread(io, &layerMask.bottom) ||
-            !psdread(io, &layerMask.top) ||
-            !psdread(io, &layerMask.defaultColor) ||
-            !psdread(io, &flags)) {
-
-            error = "could not read mask record";
+        quint32 layerMaskLength = 1; // invalid...
+        if (!psdread(io, &layerMaskLength) ||
+            io->bytesAvailable() < layerMaskLength ||
+            !(layerMaskLength == 0 || layerMaskLength == 20 || layerMaskLength == 36)) {
+            error = QString("Could not read layer mask length: %1").arg(layerMaskLength);
             return false;
         }
-    }
-    if (layerMaskLength == 20) {
-        quint16 padding;
-        if (!psdread(io, &padding)) {
-            error = "Could not read layer mask padding";
+
+        memset(&layerMask, 0, sizeof(LayerMaskData));
+
+        if (layerMaskLength == 20 || layerMaskLength == 36) {
+            if (!psdread(io, &layerMask.top)  ||
+                !psdread(io, &layerMask.left) ||
+                !psdread(io, &layerMask.bottom) ||
+                !psdread(io, &layerMask.top) ||
+                !psdread(io, &layerMask.defaultColor) ||
+                !psdread(io, &flags)) {
+
+                error = "could not read mask record";
+                return false;
+            }
+        }
+        if (layerMaskLength == 20) {
+            quint16 padding;
+            if (!psdread(io, &padding)) {
+                error = "Could not read layer mask padding";
+                return false;
+            }
+        }
+
+
+        if (layerMaskLength == 36 ) {
+            if (!psdread(io, &flags) ||
+                !psdread(io, &layerMask.defaultColor) ||
+                !psdread(io, &layerMask.top)  ||
+                !psdread(io, &layerMask.left) ||
+                !psdread(io, &layerMask.bottom) ||
+                !psdread(io, &layerMask.top)) {
+
+                error = "could not read 'real' mask record";
+                return false;
+            }
+        }
+
+        layerMask.positionedRelativeToLayer = flags & 1 ? true : false;
+        layerMask.disabled = flags & 2 ? true : false;
+        layerMask.invertLayerMaskWhenBlending = flags & 4 ? true : false;
+
+        dbgFile << "\tRead layer mask/adjustment layer data. Length of block:"
+                << layerMaskLength << "pos" << io->pos();
+
+        // layer blending thingies
+        quint32 blendingDataLength;
+        if (!psdread(io, &blendingDataLength) || io->bytesAvailable() < blendingDataLength) {
+            error = "Could not read extra blending data.";
             return false;
         }
-    }
-    if (layerMaskLength == 36 ) {
-        if (!psdread(io, &flags) ||
-            !psdread(io, &layerMask.defaultColor) ||
-            !psdread(io, &layerMask.top)  ||
-            !psdread(io, &layerMask.left) ||
-            !psdread(io, &layerMask.bottom) ||
-            !psdread(io, &layerMask.top)) {
 
-            error = "could not read 'real' mask record";
-            return false;
+        qDebug() << "blending block data length" << blendingDataLength << ", pos" << io->pos();
+
+        blendingRanges.data = io->read(blendingDataLength);
+        if ((quint32)blendingRanges.data.size() != blendingDataLength) {
+            error = QString("Got %1 bytes for the blending range block, needed %2").arg(blendingRanges.data.size(), blendingDataLength);
         }
-    }
-
-    layerMask.positionedRelativeToLayer = flags & 1 ? true : false;
-    layerMask.disabled = flags & 2 ? true : false;
-    layerMask.invertLayerMaskWhenBlending = flags & 4 ? true : false;
-
-    dbgFile << "Read layer mask/adjustment layer data. Length of block:"
-            << layerMaskLength << "pos" << io->pos();
-
-    // layer blending thingies
-    quint32 blendingDataLength;
-    if (!psdread(io, &blendingDataLength) || io->bytesAvailable() < blendingDataLength) {
-        error = "Could not read extra blending data.";
-        return false;
-    }
-
-    qDebug() << "blending block data length" << blendingDataLength << ", pos" << io->pos();
-
-    blendingRanges.data = io->read(blendingDataLength);
-    if ((quint32)blendingRanges.data.size() != blendingDataLength) {
-        error = QString("Got %1 bytes for the blending range block, needed %2").arg(blendingRanges.data.size(), blendingDataLength);
-    }
-    /*
-   // XXX: reading this block correctly failed, I have more channel ranges than I'd expected.
+        /*
+    // XXX: reading this block correctly failed, I have more channel ranges than I'd expected.
 
     if (!psdread(io, &blendingRanges.blackValues[0]) ||
         !psdread(io, &blendingRanges.blackValues[1]) ||
@@ -270,75 +275,79 @@ bool PSDLayerRecord::read(QIODevice* io)
             error = QString("could not read src/dst range for channel %1").arg(i);
             return false;
         }
-        dbgFile << "read range " << src << "to" << dst << "for channel" << i;
+        dbgFile << "\tread range " << src << "to" << dst << "for channel" << i;
         blendingRanges.sourceDestinationRanges << QPair<quint32, quint32>(src, dst);
     }
     */
-    dbgFile << "Going to read layer name at" << io->pos();
-    quint8 layerNameLength;
-    if (!psdread(io, &layerNameLength)) {
-        error = "Could not read layer name length";
-        return false;
-    }
-
-    dbgFile << "layer name length unpadded" << layerNameLength << "pos" << io->pos();
-
-    layerNameLength = ((layerNameLength + 1 + 3) & ~0x03) - 1;
-
-    dbgFile << "layer name length padded" << layerNameLength << "pos" << io->pos();
-
-    layerName = io->read(layerNameLength);
-
-    dbgFile << "layer name" << layerName << io->pos();
-
-    QStringList longBlocks;
-    if (m_header.version > 1) {
-        longBlocks << "LMsk" << "Lr16" << "Layr" << "Mt16" << "Mtrn" << "Alph";
-    }
-
-    while(!io->atEnd()) {
-
-        // read all the additional layer info 8BIM blocks
-        QByteArray b;
-        b = io->peek(4);
-        if(b.size() != 4 || QString(b) != "8BIM") {
-            break;
-        }
-        else {
-            io->seek(io->pos() + 4); // skip the 8BIM header we peeked ahead for
-        }
-
-        QString key(io->read(4));
-        if (key.size() != 4) {
-            error = "Could not read key for additional layer info block";
+        dbgFile << "\tGoing to read layer name at" << io->pos();
+        quint8 layerNameLength;
+        if (!psdread(io, &layerNameLength)) {
+            error = "Could not read layer name length";
             return false;
         }
 
-        if (infoBlocks.contains(key)) {
-            error = QString("Duplicate layer info block with key %1").arg(key);
-            return false;
+        dbgFile << "\tlayer name length unpadded" << layerNameLength << "pos" << io->pos();
+
+        layerNameLength = ((layerNameLength + 1 + 3) & ~0x03) - 1;
+
+        dbgFile << "\tlayer name length padded" << layerNameLength << "pos" << io->pos();
+
+        layerName = io->read(layerNameLength);
+
+        dbgFile << "\tlayer name" << layerName << io->pos();
+
+        QStringList longBlocks;
+        if (m_header.version > 1) {
+            longBlocks << "LMsk" << "Lr16" << "Layr" << "Mt16" << "Mtrn" << "Alph";
         }
 
-        quint64 size;
-        if (longBlocks.contains(key)) {
-            psdread(io, &size);
-        }
-        else {
-            quint32 _size;
-            psdread(io, &_size);
-            size = _size;
+        while(!io->atEnd()) {
+
+            // read all the additional layer info 8BIM blocks
+            QByteArray b;
+            b = io->peek(4);
+            if(b.size() != 4 || QString(b) != "8BIM") {
+                break;
+            }
+            else {
+                io->seek(io->pos() + 4); // skip the 8BIM header we peeked ahead for
+            }
+
+            QString key(io->read(4));
+            if (key.size() != 4) {
+                error = "Could not read key for additional layer info block";
+                return false;
+            }
+
+            if (infoBlocks.contains(key)) {
+                error = QString("Duplicate layer info block with key %1").arg(key);
+                return false;
+            }
+
+            quint64 size;
+            if (longBlocks.contains(key)) {
+                psdread(io, &size);
+            }
+            else {
+                quint32 _size;
+                psdread(io, &_size);
+                size = _size;
+            }
+
+            LayerInfoBlock* infoBlock = new LayerInfoBlock();
+            infoBlock->data = io->read(size);
+            if (infoBlock->data.size() != (qint64)size) {
+                error = QString("Could not read full info block for key %1 for layer %2").arg(key).arg(layerName);
+                return false;
+            }
+
+            dbgFile << "\tRead layer info block" << infoBlock->data.size();
+
+            infoBlocks[key] = infoBlock;
         }
 
-        LayerInfoBlock* infoBlock = new LayerInfoBlock();
-        infoBlock->data = io->read(size);
-        if (infoBlock->data.size() != (qint64)size) {
-            error = QString("Could not read full info block for key %1 for layer %2").arg(key).arg(layerName);
-            return false;
-        }
+        return true;
 
-        dbgFile << "Read layer info block" << infoBlock->data.size();
-
-        infoBlocks[key] = infoBlock;
     }
 
     return valid();

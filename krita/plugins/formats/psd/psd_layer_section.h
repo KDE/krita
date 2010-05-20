@@ -39,7 +39,7 @@ public:
 
     QString error;
 
-    quint64 layerSectionSize;
+    quint64 layerMaskBlockSize;
 
     // layer info
     bool    hasTransparency; // if nLayers is < 0, then the image has transparency, and the

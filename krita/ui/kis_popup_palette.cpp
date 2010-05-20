@@ -244,20 +244,8 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     }
 
     //painting recent colors : bevel (raised)
-    float radius = 51.0;
-    //outer radius
-    drawArcRisen
-            (painter, Qt::darkGray, radius, 45, cos(M_PI/4)*radius, -1*sin(M_PI/4)*radius, 2*radius+0.5, 2*radius+0.5);
-    drawArcRisen
-            (painter, Qt::white, radius, 180+45, -1*cos(M_PI/4)*radius, sin(M_PI/4)*radius, 2*radius+0.5, 2*radius+0.5);
-
-    //inner radius
-    radius = 34;
-    drawArcRisen
-            (painter, Qt::white, radius, 45, cos(M_PI/4)*radius, -1*sin(M_PI/4)*radius, 2*radius+0.5, 2*radius+0.5);
-    drawArcRisen
-            (painter, Qt::darkGray, radius, 180+45, -1*cos(M_PI/4)*radius, sin(M_PI/4)*radius, 2*radius, 2*radius);
-
+    drawArcRisen (painter, Qt::darkGray, Qt::white, 51);
+    drawArcRisen (painter, Qt::white, Qt::darkGray, 34);
 
     //painting recent colors
     painter.setPen(Qt::NoPen);
@@ -327,14 +315,14 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     }
 }
 
-void KisPopupPalette::drawArcRisen
-        (QPainter& painter, QColor color, int radius, int startAngle, float x, float y, float w, float h)
+void KisPopupPalette::drawArcRisen (QPainter& painter, const QColor& color1, const QColor& color2, int radius)
 {
-    painter.setPen(QPen(color ,2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
-    QPainterPath path;
-    path.moveTo(x,y);
-    path.arcTo(-1*radius, -1*radius, w, h, startAngle, 180);
-    painter.drawPath(path);
+    QRadialGradient gradient;
+    gradient.setColorAt(1, color1);
+    gradient.setColorAt(0, color2);
+    gradient.setFocalPoint(sin(M_PI/4)*radius, cos(M_PI/4)*radius);
+    painter.setPen(QPen(QBrush(gradient), 3, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+    painter.drawEllipse(-1*radius+0.5, -1*radius+0.5, 2*radius+0.5, 2*radius+0.5);
 }
 
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)

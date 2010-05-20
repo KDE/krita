@@ -1,4 +1,5 @@
 /*
+ *  Copyright (c) 2007 by John Marshall
  *  Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,10 +18,158 @@
  */
 #include "compression.h"
 
-QByteArray Compression::uncompress(QByteArray bytes, Compression::CompressionType compressionType)
+#include <QBuffer>
+#include "psd_utils.h"
+#include "kis_debug.h"
+
+// from gimp's psd-util.c
+quint32 decode_packbits(const char *src, char* dst, quint16 packed_len, quint32 unpacked_len)
+{
+    /*
+     *  Decode a PackBits chunk.
+     */
+    qint32    n;
+    char      dat;
+    qint32    unpack_left = unpacked_len;
+    qint32    pack_left = packed_len;
+    qint32    error_code = 0;
+    qint32    return_val = 0;
+
+    while (unpack_left > 0 && pack_left > 0)
+    {
+        n = *src;
+        src++;
+        pack_left--;
+
+        if (n == 128)     /* nop */
+            continue;
+        else if (n > 128)
+            n -= 256;
+
+        if (n < 0)        /* replicate next gchar |n|+ 1 times */
+        {
+            n  = 1 - n;
+            if (! pack_left)
+            {
+                dbgFile << "Input buffer exhausted in replicate";
+                error_code = 1;
+                break;
+            }
+            if (n > unpack_left)
+            {
+                dbgFile << "Overrun in packbits replicate of" << n - unpack_left << "chars";
+                error_code = 2;
+            }
+            dat = *src;
+            for (; n > 0; --n)
+            {
+                if (! unpack_left)
+                    break;
+                *dst = dat;
+                dst++;
+                unpack_left--;
+            }
+            if (unpack_left)
+            {
+                src++;
+                pack_left--;
+            }
+        }
+        else              /* copy next n+1 gchars literally */
+        {
+            n++;
+            for (; n > 0; --n)
+            {
+                if (! pack_left)
+                {
+                    dbgFile << "Input buffer exhausted in copy";
+                    error_code = 3;
+                    break;
+                }
+                if (! unpack_left)
+                {
+                    dbgFile << "Output buffer exhausted in copy";
+                    error_code = 4;
+                    break;
+                }
+                *dst = *src;
+                dst++;
+                unpack_left--;
+                src++;
+                pack_left--;
+            }
+        }
+    }
+
+    if (unpack_left > 0)
+    {
+        /* Pad with zeros to end of output buffer */
+        for (n = 0; n < pack_left; ++n)
+        {
+            *dst = 0;
+            dst++;
+        }
+    }
+
+    if (unpack_left)
+    {
+        dbgFile << "Packbits decode - unpack left" << unpack_left;
+        return_val -= unpack_left;
+    }
+    if (pack_left)
+    {
+        /* Some images seem to have a pad byte at the end of the packed data */
+        if (error_code || pack_left != 1)
+        {
+            dbgFile << "Packbits decode - pack left" << pack_left;
+            return_val = pack_left;
+        }
+    }
+
+    if (error_code)
+       dbgFile << "Error code" <<  error_code;
+
+    return return_val;
+}
+
+
+QByteArray unRLE(int nPixels, QByteArray bytes)
+{
+    char * dst = new char[nPixels];
+    decode_packbits(bytes.constData(), dst, bytes.length(), nPixels);
+    return QByteArray(dst);
+}
+
+QByteArray unzip(quint32 nPixels, QByteArray bytes)
+{
+    // prepend the expected length of the pixels in big-endian
+    // format to the byte array as qUncompress expects...
+    QByteArray b;
+    QBuffer buf(&b);
+    psdwrite(&buf, nPixels);
+    b.append(bytes);
+
+    return qUncompress(bytes);
+}
+
+
+QByteArray Compression::uncompress(quint32 nPixels, QByteArray bytes, Compression::CompressionType compressionType)
 {
     Q_UNUSED(bytes);
     Q_UNUSED(compressionType);
+
+    switch(compressionType) {
+    case Uncompressed:
+        return bytes;
+    case RLE:
+        return unRLE(nPixels, bytes);
+    case ZIP:
+    case ZIPWithPrediction:
+        return unzip(nPixels, bytes);
+    default:
+        qFatal("Cannot uncompress layer data");
+    }
+
 
     return QByteArray();
 }

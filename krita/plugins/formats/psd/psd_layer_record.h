@@ -26,6 +26,8 @@
 #include "psd.h"
 #include "psd_header.h"
 
+#include "compression.h"
+
 class QIODevice;
 
 class PSDLayerRecord

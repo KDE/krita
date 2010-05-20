@@ -73,16 +73,6 @@ enum PSDColorSamplers {
 };
 };
 
-namespace Compression {
-enum CompressionType {
-    Uncompressed = 0,
-    RLE,
-    ZIP,
-    ZIPWithPrediction,
-    Unknown
-};
-};
-
 /**
  * Convert PsdColorMode to pigment colormodelid and colordepthid.
  * @see KoColorModelStandardIds

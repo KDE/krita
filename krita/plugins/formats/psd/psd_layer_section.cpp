@@ -24,6 +24,8 @@
 #include "psd_header.h"
 #include "psd_utils.h"
 
+#include "compression.h"
+
 PSDLayerSection::PSDLayerSection(const PSDHeader& header)
     : error(QString::null)
     , m_header(header)

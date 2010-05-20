@@ -16,6 +16,8 @@ set(LIB_PSD_SRCS
     psd_resource_block.cpp
     psd_layer_section.cpp
     psd_layer_record.cpp
+
+    compression.cpp
 )
 
 set(kritapsdimport_PART_SRCS

@@ -46,6 +46,7 @@
 #include "psd_utils.h"
 #include "psd_resource_section.h"
 #include "psd_layer_section.h"
+#include "psd_resource_block.h"
 
 PSDLoader::PSDLoader(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
@@ -110,8 +111,14 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     QPair<QString, QString> colorSpaceId = psd_colormode_to_colormodelid(header.m_colormode, header.m_channelDepth);
     if (colorSpaceId.first.isNull()) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
 
-    // XXX: get the icc profile!
-    KoColorProfile* profile = 0;
+    // Get the icc profile!
+    const KoColorProfile* profile = 0;
+    if (resourceSection.m_resources.contains(PSDResourceSection::ICC_PROFILE)) {
+        QByteArray profileData = resourceSection.m_resources[PSDResourceSection::ICC_PROFILE]->m_data;
+        profile = KoColorSpaceRegistry::instance()->createColorProfile(colorSpaceId.first,
+                                                                       colorSpaceId.second,
+                                                                       profileData);
+    }
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile);
     if (!cs) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
 

@@ -25,6 +25,9 @@ class QIODevice;
 #include "psd_resource_section.h"
 
 
+/**
+ * Contains the unparsed contents of the image resource blocks
+ */
 class PSDResourceBlock
 {
 

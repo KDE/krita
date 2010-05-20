@@ -83,7 +83,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     dbgFile << header;
     dbgFile << "Read header. pos:" << f.pos();
 
-    PSDColorModeBlock colorModeBlock(header.m_colormode);
+    PSDColorModeBlock colorModeBlock(header.colormode);
     if (!colorModeBlock.read(&f)) {
         dbgFile << "failed reading colormode block: " << colorModeBlock.error;
         return KisImageBuilder_RESULT_FAILURE;
@@ -109,13 +109,14 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     dbgFile << "Read layer section. " << layerSection.nLayers << "layers. pos:" << f.pos();
 
     // Get the right colorspace
-    QPair<QString, QString> colorSpaceId = psd_colormode_to_colormodelid(header.m_colormode, header.m_channelDepth);
+    QPair<QString, QString> colorSpaceId = psd_colormode_to_colormodelid(header.colormode,
+                                                                         header.channelDepth);
     if (colorSpaceId.first.isNull()) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
 
     // Get the icc profile!
     const KoColorProfile* profile = 0;
-    if (resourceSection.m_resources.contains(PSDResourceSection::ICC_PROFILE)) {
-        QByteArray profileData = resourceSection.m_resources[PSDResourceSection::ICC_PROFILE]->m_data;
+    if (resourceSection.resources.contains(PSDResourceSection::ICC_PROFILE)) {
+        QByteArray profileData = resourceSection.resources[PSDResourceSection::ICC_PROFILE]->data;
         profile = KoColorSpaceRegistry::instance()->createColorProfile(colorSpaceId.first,
                                                                        colorSpaceId.second,
                                                                        profileData);
@@ -126,15 +127,15 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     if (!cs) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
 
     // Creating the KisImageWSP
-    m_image = new KisImage(m_doc->undoAdapter(),  header.m_width, header.m_height, cs, "built image");
+    m_image = new KisImage(m_doc->undoAdapter(),  header.width, header.height, cs, "built image");
     Q_CHECK_PTR(m_image);
     m_image->lock();
 
     // Preserve the duotone colormode block for saving back to psd
-    if (header.m_colormode == DuoTone) {
-        KisAnnotationSP annotation = new KisAnnotation("Duotone Colormode Block",
+    if (header.colormode == DuoTone) {
+        KisAnnotationSP annotation = new KisAnnotation("DuotoneColormodeBlock",
                                                        i18n("Duotone Colormode Block"),
-                                                       colorModeBlock.m_data);
+                                                       colorModeBlock.data);
         m_image->addAnnotation(annotation);
     }
 
@@ -144,7 +145,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         dbgFile << "Position" << f.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
         KisPaintLayerSP layer = new KisPaintLayer(m_image, i18n("Background"), OPACITY_OPAQUE_U8);
         KisTransaction("", layer -> paintDevice());
-        //readLayerData(&f, layer->paintDevice(), f.pos(), QRect(0, 0, header.m_width, header.m_height));
+        //readLayerData(&f, layer->paintDevice(), f.pos(), QRect(0, 0, header.width, header.height));
         m_image->addNode(layer, m_image->rootLayer());
     }
     else {

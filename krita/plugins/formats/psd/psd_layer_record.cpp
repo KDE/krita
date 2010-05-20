@@ -51,7 +51,7 @@ bool PSDLayerRecord::read(QIODevice* io)
 
     dbgFile << "top" << top << "left" << left << "bottom" << bottom << "right" << right << "number of channels" << nChannels;
 
-    switch(m_header.m_colormode) {
+    switch(m_header.colormode) {
     case(Bitmap):
     case(Indexed):
     case(DuoTone):
@@ -97,7 +97,7 @@ bool PSDLayerRecord::read(QIODevice* io)
             return false;
         }
         bool r;
-        if (m_header.m_version == 1) {
+        if (m_header.version == 1) {
             quint32 channelDataLength;
             r = psdread(io, &channelDataLength);
             info->channelDataLength = (quint64)channelDataLength;
@@ -292,7 +292,7 @@ bool PSDLayerRecord::read(QIODevice* io)
     dbgFile << "layer name" << layerName << io->pos();
 
     QStringList longBlocks;
-    if (m_header.m_version > 1) {
+    if (m_header.version > 1) {
         longBlocks << "LMsk" << "Lr16" << "Layr" << "Mt16" << "Mtrn" << "Alph";
     }
 
@@ -378,7 +378,7 @@ quint8* PSDLayerRecord::readChannelData(QIODevice* io, quint64 row, quint16 chan
     ChannelInfo* channelInfo = channelInfoRecords.at(channel);
 
     if (channelInfo->compressionType == Compression::Uncompressed) {
-        switch(m_header.m_channelDepth){
+        switch(m_header.channelDepth){
         case 1:
             {
                 dbgFile << "channel depth of 1 bit, we use 8 bits";

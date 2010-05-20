@@ -45,7 +45,7 @@ bool PSDLayerSection::read(QIODevice* io)
     dbgFile << "reading layer section. Pos:" << io->pos() <<  "bytes left:" << io->bytesAvailable();
 
     layerSectionSize = 0;
-    if (m_header.m_version == 1) {
+    if (m_header.version == 1) {
         quint32 _layerSectionSize = 0;
         if (!psdread(io, &_layerSectionSize) || _layerSectionSize > (quint64)io->bytesAvailable()) {
             error = QString("Could not read layer section size. Got %1. Bytes left %2")
@@ -54,7 +54,7 @@ bool PSDLayerSection::read(QIODevice* io)
         }
         layerSectionSize = _layerSectionSize;
     }
-    else if (m_header.m_version == 2) {
+    else if (m_header.version == 2) {
         if (!psdread(io, &layerSectionSize) || layerSectionSize > (quint64)io->bytesAvailable()) {
             error = QString("Could not read layer section size. Got %1. Bytes left %2")
                     .arg(layerSectionSize).arg(io->bytesAvailable());
@@ -67,7 +67,7 @@ bool PSDLayerSection::read(QIODevice* io)
     dbgFile << "reading layer info block. Bytes left" << io->bytesAvailable() << "position" << io->pos();
 
     layerInfoSize = 0;
-    if (m_header.m_version == 1) {
+    if (m_header.version == 1) {
         quint32 _layerInfoSize;
         if (!psdread(io, &_layerInfoSize) || _layerInfoSize > (quint64)io->bytesAvailable()) {
             error = "Could not read layer section size";
@@ -75,7 +75,7 @@ bool PSDLayerSection::read(QIODevice* io)
         }
         layerInfoSize = _layerInfoSize;
     }
-    else if (m_header.m_version == 2) {
+    else if (m_header.version == 2) {
         if (!psdread(io, &layerInfoSize) || layerInfoSize > (quint64)io->bytesAvailable()) {
             error = "Could not read layer section size";
             return false;
@@ -169,7 +169,7 @@ bool PSDLayerSection::read(QIODevice* io)
                     dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io->pos();
 
                     quint32 byteCount;
-                    if (m_header.m_version == 1) {
+                    if (m_header.version == 1) {
                         quint16 _byteCount;
                         if (!psdread(io, &_byteCount)) {
                             error = QString("Could not read byteCount for rle-encoded channel");

@@ -24,7 +24,7 @@
 #include "psd_utils.h"
 
 PSDResourceBlock::PSDResourceBlock()
-    : m_identifier(PSDResourceSection::UNKNOWN)
+    : identifier(PSDResourceSection::UNKNOWN)
 {
 }
 
@@ -44,35 +44,35 @@ bool PSDResourceBlock::read(QIODevice* io)
         return false;
     }
 
-    if (!psdread(io, &m_identifier)) {
+    if (!psdread(io, &identifier)) {
         error = "Could not read resource block identifier";
         return false;
     }
 
-    dbgFile << "\tresource block identifier" << m_identifier;
+    dbgFile << "\tresource block identifier" << identifier;
 
-    if (!psdread_pascalstring(io, m_name)) {
+    if (!psdread_pascalstring(io, name)) {
         error = "Could not read name of resource block";
         return false;
     }
 
-    dbgFile << "\tresource block name" << m_name;
+    dbgFile << "\tresource block name" << name;
 
-    if (!psdread(io, &m_dataSize)) {
-        error = QString("Could not read datasize for resource block with name %1 of type %2").arg(m_name).arg(m_identifier);
+    if (!psdread(io, &dataSize)) {
+        error = QString("Could not read datasize for resource block with name %1 of type %2").arg(name).arg(identifier);
         return false;
     }
 
 
-    if ((m_dataSize & 0x01) != 0) {
-        m_dataSize++;
+    if ((dataSize & 0x01) != 0) {
+        dataSize++;
     }
 
-    dbgFile << "\tresource block size" << m_dataSize;
+    dbgFile << "\tresource block size" << dataSize;
 
-    m_data = io->read(m_dataSize);
-    if (!m_data.size() == m_dataSize) {
-        error = QString("Could not read data for resource block with name %1 of type %2").arg(m_name).arg(m_identifier);
+    data = io->read(dataSize);
+    if (!data.size() == dataSize) {
+        error = QString("Could not read data for resource block with name %1 of type %2").arg(name).arg(identifier);
         return false;
     }
 
@@ -93,12 +93,12 @@ bool PSDResourceBlock::write(QIODevice* io)
 
 bool PSDResourceBlock::valid()
 {
-    if (m_identifier == PSDResourceSection::UNKNOWN) {
-        error = QString("Unknown ID: %1").arg(m_identifier);
+    if (identifier == PSDResourceSection::UNKNOWN) {
+        error = QString("Unknown ID: %1").arg(identifier);
         return false;
     }
-    if (!m_data.size() == m_dataSize) {
-        error = QString("Needed %1 bytes, got %2 bytes of data").arg(m_dataSize).arg(m_data.length());
+    if (!data.size() == dataSize) {
+        error = QString("Needed %1 bytes, got %2 bytes of data").arg(dataSize).arg(data.length());
         return false;
     }
     return true;

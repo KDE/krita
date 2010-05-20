@@ -1,4 +1,4 @@
-/*
+m/*
  * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -41,13 +41,13 @@ void PSDHeaderTest::testLoading()
     PSDHeader header;
     header.read(&f);
 
-    QVERIFY(header.m_signature == QString("8BPS"));
-    QVERIFY(header.m_version == 1);
-    QVERIFY(header.m_nChannels == 3);
-    QVERIFY(header.m_width == 100 );
-    QVERIFY(header.m_height == 100);
-    QVERIFY(header.m_channelDepth == 16);
-    QVERIFY(header.m_colormode == RGB);
+    QVERIFY(header.signature == QString("8BPS"));
+    QVERIFY(header.version == 1);
+    QVERIFY(header.nChannels == 3);
+    QVERIFY(header.width == 100 );
+    QVERIFY(header.height == 100);
+    QVERIFY(header.channelDepth == 16);
+    QVERIFY(header.colormode == RGB);
 
 }
 
@@ -58,13 +58,13 @@ void PSDHeaderTest::testRoundTripping()
     f.open(QIODevice::ReadWrite);
     PSDHeader header;
     Q_ASSERT(!header.valid());
-    header.m_signature = "8BPS";
-    header.m_version = 1;
-    header.m_nChannels = 3;
-    header.m_width = 1000;
-    header.m_height = 1000;
-    header.m_channelDepth = 8;
-    header.m_colormode = RGB;
+    header.signature = "8BPS";
+    header.version = 1;
+    header.nChannels = 3;
+    header.width = 1000;
+    header.height = 1000;
+    header.channelDepth = 8;
+    header.colormode = RGB;
     Q_ASSERT(header.valid());
     bool retval = header.write(&f);
     Q_ASSERT(retval);
@@ -75,13 +75,13 @@ void PSDHeaderTest::testRoundTripping()
     retval = header2.read(&f);
     Q_ASSERT(retval);
 
-    QCOMPARE(header.m_signature, header2.m_signature);
-    QVERIFY(header.m_version == header2.m_version);
-    QVERIFY(header.m_nChannels == header2.m_nChannels);
-    QVERIFY(header.m_width == header2.m_width);
-    QVERIFY(header.m_height == header2.m_height);
-    QVERIFY(header.m_channelDepth == header2.m_channelDepth);
-    QVERIFY(header.m_colormode == header2.m_colormode);
+    QCOMPARE(header.signature, header2.signature);
+    QVERIFY(header.version == header2.version);
+    QVERIFY(header.nChannels == header2.nChannels);
+    QVERIFY(header.width == header2.width);
+    QVERIFY(header.height == header2.height);
+    QVERIFY(header.channelDepth == header2.channelDepth);
+    QVERIFY(header.colormode == header2.colormode);
 }
 
 

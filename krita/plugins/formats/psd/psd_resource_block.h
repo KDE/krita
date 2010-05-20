@@ -41,10 +41,10 @@ public:
     bool write(QIODevice* io);
     bool valid();
 
-    quint16     m_identifier;
-    QString     m_name;
-    quint32     m_dataSize;
-    QByteArray  m_data;
+    quint16     identifier;
+    QString     name;
+    quint32     dataSize;
+    QByteArray  data;
 
     QString error;
 };

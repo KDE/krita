@@ -32,7 +32,7 @@ PSDResourceSection::PSDResourceSection()
 
 PSDResourceSection::~PSDResourceSection()
 {
-    qDeleteAll(m_resources);
+    qDeleteAll(resources);
 }
 
 bool PSDResourceSection::read(QIODevice* io)
@@ -61,10 +61,10 @@ bool PSDResourceSection::read(QIODevice* io)
             error = "Error reading block: " + block->error;
             return false;
         }
-        dbgFile << "resource block created. Type:" << block->m_identifier << "size"
-                << block->m_dataSize
+        dbgFile << "resource block created. Type:" << block->identifier << "size"
+                << block->dataSize
                 << "," << buf.bytesAvailable() << "bytes to go";
-        m_resources[(PSDResourceID)block->m_identifier] = block;
+        resources[(PSDResourceID)block->identifier] = block;
     }
     return valid();
 }

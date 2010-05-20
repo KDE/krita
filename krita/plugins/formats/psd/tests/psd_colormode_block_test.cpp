@@ -49,9 +49,9 @@ void PSDColorModeBlockTest::testLoadingRGB()
     PSDHeader header;
     header.read(&f);
 
-    QVERIFY(header.m_colormode == RGB);
+    QVERIFY(header.colormode == RGB);
 
-    PSDColorModeBlock colorModeBlock(header.m_colormode);
+    PSDColorModeBlock colorModeBlock(header.colormode);
     bool retval = colorModeBlock.read(&f);
     Q_ASSERT(retval);
     Q_ASSERT(colorModeBlock.valid());
@@ -66,9 +66,9 @@ void PSDColorModeBlockTest::testLoadingIndexed()
     PSDHeader header;
     header.read(&f);
 
-    QVERIFY(header.m_colormode == Indexed);
+    QVERIFY(header.colormode == Indexed);
 
-    PSDColorModeBlock colorModeBlock(header.m_colormode);
+    PSDColorModeBlock colorModeBlock(header.colormode);
     bool retval = colorModeBlock.read(&f);
     Q_ASSERT(retval);
     Q_ASSERT(colorModeBlock.valid());

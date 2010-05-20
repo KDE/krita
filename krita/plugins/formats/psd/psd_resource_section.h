@@ -102,7 +102,7 @@ class PSDResourceSection
     bool write(QIODevice* io);
     bool valid();
 
-    QMap<PSDResourceID, PSDResourceBlock*> m_resources;
+    QMap<PSDResourceID, PSDResourceBlock*> resources;
 
     QString error;
 };

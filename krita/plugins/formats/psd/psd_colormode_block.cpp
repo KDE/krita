@@ -21,18 +21,18 @@
 #include "psd_utils.h"
 
 PSDColorModeBlock::PSDColorModeBlock(PSDColorMode colormode)
-    : m_blocksize(0)
-    , m_colormode(colormode)
+    : blocksize(0)
+    , colormode(colormode)
 {
 }
 
 bool PSDColorModeBlock::read(QIODevice* io)
 {
     // get length
-    psdread(io, &m_blocksize);
+    psdread(io, &blocksize);
 
-    if (m_blocksize == 0) {
-        if (m_colormode == Indexed || m_colormode == DuoTone) {
+    if (blocksize == 0) {
+        if (colormode == Indexed || colormode == DuoTone) {
             error = "Blocksize of 0 and Indexed or DuoTone colormode";
             return false;
         }
@@ -40,15 +40,15 @@ bool PSDColorModeBlock::read(QIODevice* io)
             return true;
         }
     }
-    if (m_colormode == Indexed && m_blocksize != 768) {
-        error = QString("Indexed mode, but block size is %1.").arg(m_blocksize);
+    if (colormode == Indexed && blocksize != 768) {
+        error = QString("Indexed mode, but block size is %1.").arg(blocksize);
         return false;
     }
 
-    m_data = io->read(m_blocksize);
-    if ((quint32)m_data.size() != m_blocksize) return false;
+    data = io->read(blocksize);
+    if ((quint32)data.size() != blocksize) return false;
 
-    if (m_colormode == Indexed) {
+    if (colormode == Indexed) {
         qFatal("TODO: Compute the colormap");
         return false;
     }
@@ -71,20 +71,20 @@ bool PSDColorModeBlock::write(QIODevice* io)
 
 bool PSDColorModeBlock::valid()
 {
-    if (m_blocksize == 0 && (m_colormode == Indexed || m_colormode == DuoTone)) {
+    if (blocksize == 0 && (colormode == Indexed || colormode == DuoTone)) {
         error = "Blocksize of 0 and Indexed or DuoTone colormode";
         return false;
     }
-    if (m_colormode == Indexed && m_blocksize != 768) {
-        error = QString("Indexed mode, but block size is %1.").arg(m_blocksize);
+    if (colormode == Indexed && blocksize != 768) {
+        error = QString("Indexed mode, but block size is %1.").arg(blocksize);
         return false;
     }
-    if (m_colormode == DuoTone && m_blocksize == 0) {
+    if (colormode == DuoTone && blocksize == 0) {
         error == QString("DuoTone mode, but data block is empty");
         return false;
     }
-    if ((quint32)m_data.size() != m_blocksize) {
-        error = QString("Data size is %1, but block size is %2").arg(m_data.size()).arg(m_blocksize);
+    if ((quint32)data.size() != blocksize) {
+        error = QString("Data size is %1, but block size is %2").arg(data.size()).arg(blocksize);
         return false;
     }
     return true;

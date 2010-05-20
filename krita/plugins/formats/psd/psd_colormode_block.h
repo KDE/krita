@@ -32,9 +32,9 @@ public:
     bool write(QIODevice* io);
     bool valid();
 
-    quint32 m_blocksize;
-    PSDColorMode m_colormode;
-    QByteArray m_data;
+    quint32 blocksize;
+    PSDColorMode colormode;
+    QByteArray data;
 
     QString error;
 };

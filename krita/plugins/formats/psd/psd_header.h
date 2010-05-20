@@ -50,13 +50,13 @@ public:
 
     bool valid();
 
-    QString m_signature; // 8PBS
-    quint16 m_version;   // 1 or 2
-    quint16 m_nChannels; // 1 - 56
-    quint32 m_height;    // 1-30,000 or 1 - 300,000
-    quint32 m_width;     // 1-30,000 or 1 - 300,000
-    quint16 m_channelDepth; // 1, 8, 16. XXX: check whether 32 is used!
-    PSDColorMode m_colormode;
+    QString signature; // 8PBS
+    quint16 version;   // 1 or 2
+    quint16 nChannels; // 1 - 56
+    quint32 height;    // 1-30,000 or 1 - 300,000
+    quint32 width;     // 1-30,000 or 1 - 300,000
+    quint16 channelDepth; // 1, 8, 16. XXX: check whether 32 is used!
+    PSDColorMode colormode;
 
     QString error;
 

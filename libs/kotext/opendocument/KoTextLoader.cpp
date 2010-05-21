@@ -1014,6 +1014,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             }
             bool stripLeadingSpace = true;
             loadSpan(ts, cursor, &stripLeadingSpace);   // recurse
+            cursor.setCharFormat(cf);   // restore the cursor char format
         } else if (isTextNS && localName == "number") { // text:number
             /*                ODF Spec, §4.1.1, Formatted Heading Numbering
             If a heading has a numbering applied, the text of the formatted number can be included in a

@@ -33,6 +33,7 @@ class OROPage;
 class OROSection;
 class KRSize;
 class KRScriptHandler;
+class KoReportData;
 
 namespace KoProperty
 {
@@ -70,18 +71,36 @@ public:
 
     KoReportItemBase();
     virtual ~KoReportItemBase();
-
-    virtual QString typeName() const = 0;
     
+    /**
+    @brief Return the item type as a string.  Required by all items
+    @return Item type
+    */
+    virtual QString typeName() const = 0;
 
     /**
     @brief Render the item into a primitive which is used by the second stage renderer
     @return the height required by the object
     */
-    virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script) = 0;
+    virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script) { return 0; }
 
-    //!Override if the item supports data
+    /**
+    @brief Render a complex item that uses a sub query as a data source
+    @return the height required by the object
+    */
+    virtual int render(OROPage* page, OROSection* section,  QPointF offset, KoReportData *data, KRScriptHandler *script) { return 0; }
+    
+    /**
+    @brief Override if the item supports a simple data source, such as a field
+    @return The field name or expression for the data source
+    */
     virtual QString itemDataSource() const {return QString();}
+
+    /**
+    @brief Override if the item uses a sub query and linked fields, such as a chart or sub-report
+    @return True if uses a sub query
+    */
+    virtual bool supportsSubQuery() { return false; }
 
     KoProperty::Set* properties() {
         return m_set;

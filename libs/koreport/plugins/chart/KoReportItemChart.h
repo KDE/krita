@@ -43,7 +43,8 @@ public:
     ~KoReportItemChart();
 
     virtual QString typeName() const;
-    virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script);
+
+    virtual int render(OROPage* page, OROSection* section,  QPointF offset, KoReportData *data, KRScriptHandler *script);
     
     KDChart::Widget *widget() {
         return m_chartWidget;
@@ -68,6 +69,12 @@ public:
     at that stage in the report
     */
     QStringList masterFields();
+
+    /**
+    @brief The chart object is a complex object that uses its own data source
+    @return true
+    */
+    virtual bool supportsSubQuery() { return true; }
 
 protected:
 

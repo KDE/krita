@@ -21,6 +21,7 @@
 #include <KDebug>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
+#include "renderobjects.h"
 
 #include <KDChartBarDiagram>
 #include <KDChartThreeDBarAttributes>
@@ -213,6 +214,14 @@ void KoReportItemChart::populateData()
 
         if (!src.isEmpty()) {
             KoReportData *curs = m_reportData->data(src);
+            if (curs) {
+                QStringList keys = m_links.keys();
+                foreach(QString field, keys) {
+                    kDebug() << "Adding Expression:" << field << m_links[field];
+                    curs->addExpression(field, m_links[field], '=');
+                }
+            }
+            
             if (curs && curs->open()) {
                 fn = curs->fieldNames();
                 //resize the data lists to match the number of columns
@@ -262,6 +271,7 @@ void KoReportItemChart::populateData()
                 kDebug() << "Unable to open data set";
             }
             delete curs;
+            curs = 0;
         } else {
             kDebug() << "No source set";
         }
@@ -356,40 +366,38 @@ QString KoReportItemChart::typeName() const
     return "chart";
 }
 
-int KoReportItemChart::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemChart::render(OROPage* page, OROSection* section,  QPointF offset, KoReportData *data, KRScriptHandler *script)
 {
-    #if 0 //TODO Chart rendering
-    ch->setConnection(m_kodata);
+    setConnection(data);
 
-    QStringList masterFields = ch->masterFields();
-    for (int i = 0; i < masterFields.size(); ++i) {
-        if (!masterFields[i].simplified().isEmpty()) {
-            //            ch->setLinkData(masterFields[i], _query->getQuery()->value(_query->fieldNumber(masterFields[i])));
+    QStringList masters = masterFields();
+    for (int i = 0; i < masters.size(); ++i) {
+        if (!masters[i].simplified().isEmpty()) {
+            setLinkData(masters[i], data->value(masters[i]));
         }
     }
-    ch->populateData();
-    if (ch->widget()) {
-        OROPicture * id = new OROPicture();
-        ch->widget()->setFixedSize(ch->m_size.toScene().toSize());
+    populateData();
+    if (widget()) {
+        OROPicture * pic = new OROPicture();
+        widget()->setFixedSize(m_size.toScene().toSize());
 
-        QPainter p(id->picture());
+        QPainter p(pic->picture());
 
-        ch->widget()->diagram()->coordinatePlane()->parent()->paint(&p, QRect(QPoint(0, 0), ch->m_size.toScene().toSize()));
+        widget()->diagram()->coordinatePlane()->parent()->paint(&p, QRect(QPoint(0, 0), m_size.toScene().toSize()));
 
-        QPointF pos = ch->m_pos.toScene();
-        QSizeF size = ch->m_size.toScene();
+        QPointF pos = m_pos.toScene();
+        QSizeF size = m_size.toScene();
 
-        pos += QPointF(m_leftMargin, m_yOffset);
+        pos += offset;
 
-        id->setPosition(pos);
-        id->setSize(size);
-        m_page->addPrimitive(id);
+        pic->setPosition(pos);
+        pic->setSize(size);
+        page->addPrimitive(pic);
 
-        OROPicture *p2 = dynamic_cast<OROPicture*>(id->clone());
-        p2->setPosition(ch->m_pos.toPoint());
-        sec->addPrimitive(p2);
+        OROPicture *p2 = dynamic_cast<OROPicture*>(pic->clone());
+        p2->setPosition(m_pos.toPoint());
+        section->addPrimitive(p2);
     }
-    #endif
 
     return 0;
 }

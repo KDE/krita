@@ -390,9 +390,13 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
         elemThis = ob;
         QPointF offset(m_leftMargin, m_yOffset);
         QVariant itemData = m_kodata->value(ob->itemDataSource());
-        
-        itemHeight = ob->render(m_page, sec, offset, itemData, m_scriptHandler);
 
+        if (ob->supportsSubQuery()) {
+            itemHeight = ob->render(m_page, sec, offset, m_kodata, m_scriptHandler);
+        } else {
+            itemHeight = ob->render(m_page, sec, offset, itemData, m_scriptHandler);
+        }
+        
         if (itemHeight > sectionHeight) {
             sectionHeight = itemHeight;
         }

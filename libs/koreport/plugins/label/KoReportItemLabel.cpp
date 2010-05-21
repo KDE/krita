@@ -22,7 +22,7 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-#include <renderobjects.h>
+#include "renderobjects.h"
 
 KoReportItemLabel::KoReportItemLabel(QDomNode & element)
 {

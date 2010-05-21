@@ -87,6 +87,11 @@ public:
     //!Default impl does nothing
     virtual void setSorting(const QList<SortedField>& sorting) { Q_UNUSED(sorting); }
 
+    /**
+    @brief Adds an expression to the data source
+    */
+    virtual void addExpression(const QString &field, const QVariant &value, int relation = '='){}
+
     //!Utility Functions
     //!TODO These are probably eligable to be moved into a new class
 

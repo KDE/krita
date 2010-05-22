@@ -104,10 +104,10 @@ void KoShapeContainerDefaultModel::setClipped(const KoShape *child, bool clippin
         return;
     if (relation->inside == clipping)
         return;
+    relation->child()->update(); // mark old canvas-location as in need of repaint (aggregated)
     relation->inside = clipping;
-    relation->child()->update();
     relation->child()->notifyChanged();
-    relation->child()->update();
+    relation->child()->update(); // mark new area as in need of repaint
 }
 
 bool KoShapeContainerDefaultModel::isClipped(const KoShape *child) const
@@ -154,10 +154,10 @@ void KoShapeContainerDefaultModel::setInheritsTransform(const KoShape *shape, bo
         return;
     if (relation->inheritsTransform == inherit)
         return;
+    relation->child()->update(); // mark old canvas-location as in need of repaint (aggregated)
     relation->inheritsTransform = inherit;
-    relation->child()->update();
     relation->child()->notifyChanged();
-    relation->child()->update();
+    relation->child()->update(); // mark new area as in need of repaint
 }
 
 bool KoShapeContainerDefaultModel::inheritsTransform(const KoShape *shape) const

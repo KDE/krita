@@ -30,8 +30,9 @@ public:
     {
     public:
         explicit Relation(KoShape *child)
-        : inside(false)
-        , m_child(child)
+        : inside(false),
+        inheritsTransform(false),
+        m_child(child)
         {}
 
         KoShape* child()

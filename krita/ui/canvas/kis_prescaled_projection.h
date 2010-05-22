@@ -219,7 +219,8 @@ private:
      *
      * @param dirtyImageRect the part of the KisImage that is dirty
      */
-    UpdateInformation getUpdateInformation(const QRect &dirtyImageRect);
+    UpdateInformation getUpdateInformation(const QRect &viewportRect,
+                                           const QRect &dirtyImageRect);
 
 
     void retrieveImageData(const QRect &dirtyRect, UpdateInformation &info);

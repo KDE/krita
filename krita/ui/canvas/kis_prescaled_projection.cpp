@@ -290,7 +290,7 @@ void KisPrescaledProjection::documentOffsetMoved(const QPoint &documentOffset)
                 // enough image to draw in them.
                 gc.fillRect(r, QColor(0, 0, 0, 0));
                 dbgRender << "render on rect" << r;
-                UpdateInformation info = getUpdateInformation(r);
+                UpdateInformation info = getUpdateInformation(r, QRect());
                 drawUsingBackend(gc, info);
             }
         }
@@ -343,7 +343,8 @@ QRect KisPrescaledProjection::updateCanvasProjection(const QRect & rc)
 
     m_d->projectionBackend->setDirty(rc);
 
-    UpdateInformation info = getUpdateInformation(rc);
+    QRect rawViewRect = toAlignedRectWorkaround(viewRectFromImagePixels(rc));
+    UpdateInformation info = getUpdateInformation(rawViewRect, rc);
 
     QRect viewportRect = toAlignedRectWorkaround(info.viewportRect);
 
@@ -362,13 +363,14 @@ void KisPrescaledProjection::preScale()
 QRect KisPrescaledProjection::preScale(const QRect & rc)
 {
     if (!rc.isEmpty() && m_d->image) {
-        /**
-         * FIXME: Too many conversions view<->image
-         */
-        QRect imageRect = imageRectFromViewPortPixels(toFloatRectWorkaround(rc));
-        UpdateInformation info = getUpdateInformation(imageRect);
-        updateScaledImage(info);
-        return toAlignedRectWorkaround(info.viewportRect);
+        UpdateInformation info = getUpdateInformation(rc, QRect());
+
+        QPainter gc(&m_d->prescaledQImage);
+        gc.setCompositionMode(QPainter::CompositionMode_Source);
+        gc.fillRect(rc, QColor(0, 0, 0, 0));
+        drawUsingBackend(gc, info);
+        //FIXME: leave one of those rects, probably, first.
+        return rc | toAlignedRectWorkaround(info.viewportRect);
     }
     return QRect();
 }
@@ -415,7 +417,7 @@ void KisPrescaledProjection::resizePrescaledImage(const QSize & newSize)
 }
 
 UpdateInformation
-KisPrescaledProjection::getUpdateInformation(const QRect &dirtyImageRect)
+KisPrescaledProjection::getUpdateInformation(const QRect &viewportRect, const QRect &dirtyImageRect)
 {
     Q_ASSERT(m_d->viewConverter);
 
@@ -433,15 +435,15 @@ KisPrescaledProjection::getUpdateInformation(const QRect &dirtyImageRect)
     info.scaleX = zoomX / resX;
     info.scaleY = zoomY / resY;
 
+    // save it for future
     info.dirtyImageRect = dirtyImageRect;
 
-    // first, crop the part of image rect that is outside of the canvas
-    QRect rawViewRect = toAlignedRectWorkaround(viewRectFromImagePixels(info.dirtyImageRect));
-    rawViewRect = rawViewRect.intersected(QRect(QPoint(0, 0), m_d->canvasSize));
+    // first, crop the part of the view rect that is outside of the canvas
+    QRect croppedViewRect = viewportRect.intersected(QRect(QPoint(0, 0), m_d->canvasSize));
 
     // second, align this rect to the KisImage's pixels and pixels
     // of projection backend
-    info.imageRect = imageRectFromViewPortPixels(toFloatRectWorkaround(rawViewRect));
+    info.imageRect = imageRectFromViewPortPixels(toFloatRectWorkaround(croppedViewRect));
     m_d->projectionBackend->alignSourceRect(info.imageRect, info.scaleX);
 
     // finally, compute the dirty rect of the canvas
@@ -468,7 +470,7 @@ KisPrescaledProjection::getUpdateInformation(const QRect &dirtyImageRect)
     dbgRender << ppVar(info.borderWidth) << ppVar(info.renderHints);
     dbgRender << ppVar(info.transfer);
     dbgRender << ppVar(dirtyImageRect);
-    dbgRender << "Not aligned rect of the canvas (raw):\t" << rawViewRect;
+    dbgRender << "Not aligned rect of the canvas (raw):\t" << croppedViewRect;
     dbgRender << "Update rect in KisImage's pixels:\t" << info.imageRect;
     dbgRender << "Update rect in canvas' pixels:\t" << info.viewportRect;
     dbgRender << "#####################################";
@@ -480,7 +482,7 @@ void KisPrescaledProjection::updateScaledImage(UpdateInformation &info)
 {
     QPainter gc(&m_d->prescaledQImage);
     gc.setCompositionMode(QPainter::CompositionMode_Source);
-    gc.fillRect(info.viewportRect, QColor(255, 0, 0, 255));
+//    gc.fillRect(toAlignedRectWorkaround(viewRectFromImagePixels(info.dirtyImageRect)), QColor(255, 0, 0, 255));
     drawUsingBackend(gc, info);
 }
 

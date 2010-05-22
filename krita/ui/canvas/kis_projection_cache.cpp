@@ -101,12 +101,9 @@ void KisProjectionCache::setDirty(KisPPUpdateInfoSP info)
          * The only way out left is to create a patch and store
          * a dirty piece of image there
          */
-        /* if(info->transfer == KisPPUpdateInfo::DIRECT) */
-        info->transfer = KisPPUpdateInfo::PATCH;
-    }
-
-    if (info->transfer == KisPPUpdateInfo::PATCH)
+        info->transfer = KisPPUpdateInfo::DIRECT;
         info->patch = getNearestPatch(info);
+    }
 }
 
 void KisProjectionCache::updateCachedQImage(const QRect &rect)
@@ -148,7 +145,16 @@ void KisProjectionCache::drawFromOriginalImage(QPainter& gc, KisPPUpdateInfoSP i
         gc.drawImage(info->viewportRect, m_unscaledCache, info->imageRect);
         gc.restore();
     } else {
-        Q_ASSERT(info->patch.isValid());
+        /**
+         * FIXME: In case this function is called from preScale() there
+         * will be no patch prepared. It means we need a direct access
+         * to the KisImage's data. That is not really what we wanted
+         * to achieve.
+         */
+        if(!info->patch.isValid()) {
+            info->patch = getNearestPatch(info);
+        }
+
         info->patch.drawMe(gc, info->viewportRect, info->renderHints);
     }
 }

@@ -238,6 +238,9 @@ void KisPrescaledProjection::documentOffsetMoved(const QPoint &documentOffset)
                 // enough image to draw in them.
                 gc.fillRect(r, QColor(0, 0, 0, 0));
                 dbgRender << "render on rect" << r;
+                /**
+                 * FIXME: It can happen that we will need access to KisImage here
+                 */
                 KisPPUpdateInfoSP info = getUpdateInformation(r, QRect());
                 drawUsingBackend(gc, info);
             }
@@ -311,6 +314,9 @@ void KisPrescaledProjection::preScale()
 QRect KisPrescaledProjection::preScale(const QRect & rc)
 {
     if (!rc.isEmpty() && m_d->image) {
+        /**
+         * FIXME: It can happen that we will need access to KisImage here
+         */
         KisPPUpdateInfoSP info = getUpdateInformation(rc, QRect());
 
         QPainter gc(&m_d->prescaledQImage);

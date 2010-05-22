@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006,2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -53,10 +53,12 @@ public:
      * @param shapes a list of all the shapes that should be grouped.
      * @param clipped a list of the same length as the shapes list with one bool for each shape.
      *      See KoShapeContainer::isClipped()
+     * @param inheritTransform a list of the same length as the shapes list with one bool for each shape.
+     *      See KoShapeContainer::inheritsTransform()
      * @param parent the parent command used for macro commands
      */
     KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
-            const QList<bool> &clipped, QUndoCommand *parent = 0);
+            const QList<bool> &clipped, const QList<bool> &inheritTransform, QUndoCommand *parent = 0);
     /**
      * Command to group a set of shapes into a predefined container.
      * Convenience constructor since KoShapeGroup does not allow clipping.

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006,2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006,2009,2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006,2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -26,15 +26,17 @@
 class KoShapeGroupCommandPrivate
 {
 public:
-    KoShapeGroupCommandPrivate(KoShapeContainer *container, const QList<KoShape *> &shapes, const QList<bool> &clipped = QList<bool>());
+    KoShapeGroupCommandPrivate(KoShapeContainer *container, const QList<KoShape *> &shapes, const QList<bool> &clipped = QList<bool>(), const QList<bool> &inheritTransform = QList<bool>());
     void init(QUndoCommand *q);
     QRectF containerBoundingRect();
 
     QList<KoShape*> shapes; ///<list of shapes to be grouped
-    QList<bool> clipped; ///< list of booleas to specify the shape of the same index to eb clipped
+    QList<bool> clipped; ///< list of booleans to specify the shape of the same index to be clipped
+    QList<bool> inheritTransform; ///< list of booleans to specify the shape of the same index to inherit transform
     KoShapeContainer *container; ///< the container where the grouping should be for.
     QList<KoShapeContainer*> oldParents; ///< the old parents of the shapes
     QList<bool> oldClipped; ///< if the shape was clipped in the old parent
+    QList<bool> oldInheritTransform; ///< if the shape was inheriting transform in the old parent
     QList<int> oldZIndex; ///< the old z-index of the shapes
 
     QList<QPair<KoShape*, int> > oldAncestorsZIndex; // only used by the ungroup command

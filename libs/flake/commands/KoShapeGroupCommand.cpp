@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006,2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006,2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -40,19 +40,21 @@ KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeGroup *container
     return new KoShapeGroupCommand(container, orderedShapes, parent);
 }
 
-KoShapeGroupCommandPrivate::KoShapeGroupCommandPrivate(KoShapeContainer *c, const QList<KoShape *> &s, const QList<bool> &clip)
+KoShapeGroupCommandPrivate::KoShapeGroupCommandPrivate(KoShapeContainer *c, const QList<KoShape *> &s, const QList<bool> &clip, const QList<bool> &it)
     : shapes(s),
     clipped(clip),
+    inheritTransform(it),
     container(c)
 {
 }
 
 
-KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, const QList<bool> &clipped, QUndoCommand *parent)
+KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, const QList<bool> &clipped, const QList<bool> &inheritTransform, QUndoCommand *parent)
     : QUndoCommand(parent),
-    d(new KoShapeGroupCommandPrivate(container,shapes, clipped))
+    d(new KoShapeGroupCommandPrivate(container,shapes, clipped, inheritTransform))
 {
     Q_ASSERT(d->clipped.count() == d->shapes.count());
+    Q_ASSERT(d->inheritTransform.count() == d->shapes.count());
     d->init(this);
 }
 
@@ -62,6 +64,7 @@ KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroup *container, const QList<Ko
 {
     for (int i = 0; i < shapes.count(); ++i) {
         d->clipped.append(false);
+        d->inheritTransform.append(false);
     }
     d->init(this);
 }
@@ -82,6 +85,7 @@ void KoShapeGroupCommandPrivate::init(QUndoCommand *q)
     foreach(KoShape* shape, shapes) {
         oldParents.append(shape->parent());
         oldClipped.append(shape->parent() && shape->parent()->isClipped(shape));
+        oldInheritTransform.append(shape->parent() && shape->parent()->inheritsTransform(shape));
         oldZIndex.append(shape->zIndex());
     }
 
@@ -127,6 +131,7 @@ void KoShapeGroupCommand::redo()
         shape->applyAbsoluteTransformation(groupTransform);
         d->container->addShape(shape);
         d->container->setClipped(shape, d->clipped[i]);
+        d->container->setInheritsTransform(shape, d->inheritTransform[i]);
     }
 }
 
@@ -141,6 +146,7 @@ void KoShapeGroupCommand::undo()
         if (d->oldParents.at(i)) {
             d->oldParents.at(i)->addShape(shape);
             d->oldParents.at(i)->setClipped(shape, d->oldClipped.at(i));
+            d->oldParents.at(i)->setInheritsTransform(shape, d->oldInheritTransform.at(i));
         }
         shape->applyAbsoluteTransformation(ungroupTransform);
         shape->setZIndex(d->oldZIndex[i]);

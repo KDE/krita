@@ -526,19 +526,22 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
                 cmd->setText( i18n("Reparent shapes") );
 
                 QList<bool> clipped;
+                QList<bool> inheritsTransform;
                 foreach( KoShape * shape, toplevelShapes )
                 {
                     if( ! shape->parent() )
                     {
                         clipped.append( false );
+                        inheritsTransform.append(false);
                         continue;
                     }
 
                     clipped.append( shape->parent()->isClipped( shape ) );
+                    inheritsTransform.append(shape->parent()->inheritsTransform(shape));
                     new KoShapeUngroupCommand( shape->parent(), QList<KoShape*>() << shape, QList<KoShape*>(), cmd );
                 }
                 // shapes are dropped on a container, so add them to the container
-                new KoShapeGroupCommand( container, toplevelShapes, clipped, cmd );
+                new KoShapeGroupCommand(container, toplevelShapes, clipped, inheritsTransform, cmd);
                 KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
                 canvasController->canvas()->addCommand( cmd );
 

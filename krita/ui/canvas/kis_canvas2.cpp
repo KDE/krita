@@ -306,22 +306,12 @@ void KisCanvas2::connectCurrentImage()
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
 
-        connect(m_d->view->image(), SIGNAL(sigImageUpdated(const QRect &)),
-                SLOT(startUpdateCanvasProjection(const QRect &)),
-                Qt::DirectConnection);
-        connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
-                this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
         connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)),
                 m_d->openGLImageTextures, SLOT(slotImageSizeChanged(qint32, qint32)));
 #else
         qFatal() << "Bad use of connectCurrentImage(). It shouldn't have happened =(";
 #endif
     } else {
-        connect(m_d->view->image(), SIGNAL(sigImageUpdated(const QRect &)),
-                SLOT(startUpdateCanvasProjection(const QRect &)),
-                Qt::DirectConnection);
-        connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
-                this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
         connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)),
                 SLOT(setImageSize(qint32, qint32)));
 
@@ -330,18 +320,31 @@ void KisCanvas2::connectCurrentImage()
 
     }
 
+    connect(m_d->view->image(), SIGNAL(sigImageUpdated(const QRect &)),
+            SLOT(startUpdateCanvasProjection(const QRect &)),
+            Qt::DirectConnection);
+    connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
+            this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
+
     emit imageChanged(m_d->view->image());
 }
 
 void KisCanvas2::disconnectCurrentImage()
 {
-#ifdef HAVE_OPENGL
     if (m_d->currentCanvasIsOpenGL) {
+#ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
         m_d->openGLImageTextures->disconnect(this);
-    }
+        m_d->openGLImageTextures->disconnect(m_d->view->image());
+#else
+        qFatal() << "Bad use of disconnectCurrentImage(). It shouldn't have happened =(";
 #endif
+    }
 
+    disconnect(SIGNAL(sigImageUpdated(const QRect &)));
+    disconnect(SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)));
+
+    // for sigSizeChanged()
     m_d->view->image()->disconnect(this);
 }
 

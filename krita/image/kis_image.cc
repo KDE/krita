@@ -842,6 +842,17 @@ void KisImage::renderToPainter(qint32 srcX,
     painter.drawImage(dstX, dstY, image, 0, 0, width, height);
 }
 
+QImage KisImage::convertToQImage(QRect imageRect,
+                                 const KoColorProfile * profile)
+{
+    qint32 x;
+    qint32 y;
+    qint32 w;
+    qint32 h;
+    imageRect.getRect(&x, &y, &w, &h);
+    return convertToQImage(x, y, w, h, profile);
+}
+
 QImage KisImage::convertToQImage(qint32 x,
                                  qint32 y,
                                  qint32 w,

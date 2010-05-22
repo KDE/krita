@@ -99,6 +99,13 @@ public:
                            qint32 height,
                            const KoColorProfile * profile);
 
+    /**
+     * Render the projection onto a QImage.
+     * (this is an overloaded function)
+     */
+    QImage convertToQImage(QRect imageRect,
+                           const KoColorProfile * profile);
+
 
     /**
      * XXX: docs!

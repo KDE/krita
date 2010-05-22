@@ -217,9 +217,9 @@ private:
      * Prepare all the information about rects needed during
      * projection updating
      *
-     * @param viewportRect The desired rect. It's in viewport pixels
+     * @param dirtyImageRect the part of the KisImage that is dirty
      */
-    UpdateInformation getUpdateInformation(const QRect & viewportRect);
+    UpdateInformation getUpdateInformation(const QRect &dirtyImageRect);
 
 
     void retrieveImageData(const QRect &dirtyRect, UpdateInformation &info);

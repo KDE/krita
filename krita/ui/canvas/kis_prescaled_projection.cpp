@@ -343,23 +343,14 @@ QRect KisPrescaledProjection::updateCanvasProjection(const QRect & rc)
 
     m_d->projectionBackend->setDirty(rc);
 
-    QRect viewRect = toAlignedRectWorkaround(viewRectFromImagePixels(rc));
-    viewRect = viewRect.intersected(QRect(QPoint(0, 0), m_d->canvasSize));
-    QRect newViewRect;
+    UpdateInformation info = getUpdateInformation(rc);
 
-    if (!viewRect.isEmpty()) {
-        UpdateInformation info = getUpdateInformation(viewRect);
+    QRect viewportRect = toAlignedRectWorkaround(info.viewportRect);
+
+    if(!viewportRect.isEmpty())
         updateScaledImage(info);
 
-        newViewRect = toAlignedRectWorkaround(info.viewportRect);
-        if (newViewRect != viewRect) {
-            dbgRender << "canvas size:" << m_d->canvasSize;
-            dbgRender << "viewRect before alignment:" << viewRect;
-            dbgRender << "viewRect after alignment: " << newViewRect;
-        }
-    }
-
-    return newViewRect;
+    return viewportRect;
 }
 
 void KisPrescaledProjection::preScale()
@@ -371,7 +362,11 @@ void KisPrescaledProjection::preScale()
 QRect KisPrescaledProjection::preScale(const QRect & rc)
 {
     if (!rc.isEmpty() && m_d->image) {
-        UpdateInformation info = getUpdateInformation(rc);
+        /**
+         * FIXME: Too many conversions view<->image
+         */
+        QRect imageRect = imageRectFromViewPortPixels(toFloatRectWorkaround(rc));
+        UpdateInformation info = getUpdateInformation(imageRect);
         updateScaledImage(info);
         return toAlignedRectWorkaround(info.viewportRect);
     }
@@ -420,9 +415,11 @@ void KisPrescaledProjection::resizePrescaledImage(const QSize & newSize)
 }
 
 UpdateInformation
-KisPrescaledProjection::getUpdateInformation(const QRect & viewportRect)
+KisPrescaledProjection::getUpdateInformation(const QRect &dirtyImageRect)
 {
     Q_ASSERT(m_d->viewConverter);
+
+    UpdateInformation info;
 
     // get the x and y zoom level of the canvas
     qreal zoomX, zoomY;
@@ -432,15 +429,22 @@ KisPrescaledProjection::getUpdateInformation(const QRect & viewportRect)
     qreal resX = m_d->image->xRes();
     qreal resY = m_d->image->yRes();
 
-    UpdateInformation info;
-
     // Compute the scale factors
     info.scaleX = zoomX / resX;
     info.scaleY = zoomY / resY;
 
-    info.imageRect = imageRectFromViewPortPixels(toFloatRectWorkaround(viewportRect));
+    info.dirtyImageRect = dirtyImageRect;
+
+    // first, crop the part of image rect that is outside of the canvas
+    QRect rawViewRect = toAlignedRectWorkaround(viewRectFromImagePixels(info.dirtyImageRect));
+    rawViewRect = rawViewRect.intersected(QRect(QPoint(0, 0), m_d->canvasSize));
+
+    // second, align this rect to the KisImage's pixels and pixels
+    // of projection backend
+    info.imageRect = imageRectFromViewPortPixels(toFloatRectWorkaround(rawViewRect));
     m_d->projectionBackend->alignSourceRect(info.imageRect, info.scaleX);
 
+    // finally, compute the dirty rect of the canvas
     info.viewportRect = viewRectFromImagePixels(info.imageRect);
 
     info.borderWidth = 0;
@@ -457,14 +461,14 @@ KisPrescaledProjection::getUpdateInformation(const QRect & viewportRect)
         info.transfer = UpdateInformation::PATCH;
     }
 
-
     dbgRender << "#####################################";
     dbgRender << ppVar(resX) << ppVar(resY);
     dbgRender << ppVar(zoomX) << ppVar(zoomY);
     dbgRender << ppVar(info.scaleX) << ppVar(info.scaleY);
     dbgRender << ppVar(info.borderWidth) << ppVar(info.renderHints);
     dbgRender << ppVar(info.transfer);
-    dbgRender << ppVar(viewportRect);
+    dbgRender << ppVar(dirtyImageRect);
+    dbgRender << "Not aligned rect of the canvas (raw):\t" << rawViewRect;
     dbgRender << "Update rect in KisImage's pixels:\t" << info.imageRect;
     dbgRender << "Update rect in canvas' pixels:\t" << info.viewportRect;
     dbgRender << "#####################################";
@@ -476,7 +480,7 @@ void KisPrescaledProjection::updateScaledImage(UpdateInformation &info)
 {
     QPainter gc(&m_d->prescaledQImage);
     gc.setCompositionMode(QPainter::CompositionMode_Source);
-//    gc.fillRect(info.viewportRect, QColor(255, 0, 0, 255));
+    gc.fillRect(info.viewportRect, QColor(255, 0, 0, 255));
     drawUsingBackend(gc, info);
 }
 

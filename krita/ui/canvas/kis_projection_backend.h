@@ -139,7 +139,13 @@ public:
     };
 
     /**
-     * Rect of KisImage corresponding to @viewportRect
+     * The rect that was reported by KisImage as dirty
+     */
+    QRect dirtyImageRect;
+
+    /**
+     * Rect of KisImage corresponding to @viewportRect.
+     * It is cropped and aligned corresponding to the canvas.
      */
     QRect imageRect;
 

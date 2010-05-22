@@ -96,9 +96,7 @@ void KisProjectionCache::setDirty(const QRect & rc)
     if (!m_cacheKisImageAsQImage) return;
 
     if (m_unscaledCache.isNull()) {
-
         m_unscaledCache = QImage(m_image->width(), m_image->height(), QImage::Format_ARGB32);
-
     }
 
     QPainter p(&m_unscaledCache);

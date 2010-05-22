@@ -304,12 +304,10 @@ void KisImagePyramid::alignSourceRect(QRect& rect, qreal scale)
     dbgRender << "After alignment:\t" << rect;
 }
 
-KisImagePatch KisImagePyramid::getNearestPatch(qreal scaleX, qreal scaleY,
-        const QRect& requestedRect,
-        qint32 borderWidth)
+KisImagePatch KisImagePyramid::getNearestPatch(UpdateInformation &info)
 {
-    qint32 index = findFirstGoodPlaneIndex(qMax(scaleX, scaleY),
-                                           requestedRect.size());
+    qint32 index = findFirstGoodPlaneIndex(qMax(info.scaleX, info.scaleY),
+                                           info.imageRect.size());
     qreal planeScale = SCALE_FROM_INDEX(index);
     qint32 alignment = 1 << index;
 
@@ -318,16 +316,16 @@ KisImagePatch KisImagePyramid::getNearestPatch(qreal scaleX, qreal scaleY,
     patch.m_scaleX = planeScale;
     patch.m_scaleY = planeScale;
 
-    alignByPow2Hi(borderWidth, alignment);
+    alignByPow2Hi(info.borderWidth, alignment);
 
     patch.m_interestRect = toFloatRectWorkaround(
-                               QRect(borderWidth, borderWidth,
-                                     requestedRect.width(),
-                                     requestedRect.height())
+                               QRect(info.borderWidth, info.borderWidth,
+                                     info.imageRect.width(),
+                                     info.imageRect.height())
                            );
 
-    QRect adjustedRect = requestedRect.adjusted(-borderWidth, -borderWidth,
-                         borderWidth, borderWidth);
+    QRect adjustedRect = info.imageRect.adjusted(-info.borderWidth, -info.borderWidth,
+                                                 info.borderWidth, info.borderWidth);
     patch.m_patchRect = adjustedRect;
 
     scaleRect(patch.m_interestRect, planeScale, planeScale);
@@ -343,14 +341,10 @@ KisImagePatch KisImagePyramid::getNearestPatch(qreal scaleX, qreal scaleY,
     return patch;
 }
 
-void KisImagePyramid::drawFromOriginalImage(QPainter& gc,
-        const QRect& imageRect,
-        const QRectF& viewportRect,
-        qint32 borderWidth,
-        QPainter::RenderHints renderHints)
+void KisImagePyramid::drawFromOriginalImage(QPainter& gc, UpdateInformation &info)
 {
-    KisImagePatch patch = getNearestPatch(1, 1, imageRect, borderWidth);
-    patch.drawMe(gc, viewportRect, renderHints);
+    KisImagePatch patch = getNearestPatch(info);
+    patch.drawMe(gc, info.viewportRect, info.renderHints);
 }
 
 QImage KisImagePyramid::convertToQImageFast(KisPaintDeviceSP paintDevice,

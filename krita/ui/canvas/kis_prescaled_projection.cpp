@@ -46,11 +46,19 @@
 #include "kis_selection_mask.h"
 #include "kis_types.h"
 
+#include "kis_projection_backend.h"
 #include "kis_projection_cache.h"
 #include "kis_image_pyramid.h"
 
 
 #define EPSILON 1e-10
+
+#define ceiledSize(sz) QSize(ceil((sz).width()), ceil((sz).height()))
+#define SCALE_LESS_THAN(scX, scY, value) \
+    (scX < (value) - EPSILON && scY < (value) - EPSILON)
+#define SCALE_MORE_OR_EQUAL_TO(scX, scY, value) \
+    (scX > (value) - EPSILON && scY > (value) - EPSILON)
+#define BORDER_SIZE(scale) (ceil(scale * 2))
 
 inline void copyQImageBuffer(uchar* dst, const uchar* src , qint32 deltaX, qint32 width)
 {
@@ -282,7 +290,8 @@ void KisPrescaledProjection::documentOffsetMoved(const QPoint &documentOffset)
                 // enough image to draw in them.
                 gc.fillRect(r, QColor(0, 0, 0, 0));
                 dbgRender << "render on rect" << r;
-                drawScaledImage(r , gc);
+                UpdateInformation info = getUpdateInformation(r);
+                drawUsingBackend(gc, info);
             }
         }
         m_d->prescaledQImage = image;
@@ -305,6 +314,13 @@ void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
     if (!vRect.isEmpty()) {
         preScale(vRect);
     }
+}
+
+void KisPrescaledProjection::retrieveImageData(const QRect &dirtyRect,
+                                               UpdateInformation &info)
+{
+    Q_UNUSED(dirtyRect);
+    Q_UNUSED(info);
 }
 
 QRect KisPrescaledProjection::updateCanvasProjection(const QRect & rc)
@@ -332,8 +348,10 @@ QRect KisPrescaledProjection::updateCanvasProjection(const QRect & rc)
     QRect newViewRect;
 
     if (!viewRect.isEmpty()) {
-        newViewRect = preScale(viewRect);
+        UpdateInformation info = getUpdateInformation(viewRect);
+        updateScaledImage(info);
 
+        newViewRect = toAlignedRectWorkaround(info.viewportRect);
         if (newViewRect != viewRect) {
             dbgRender << "canvas size:" << m_d->canvasSize;
             dbgRender << "viewRect before alignment:" << viewRect;
@@ -344,6 +362,21 @@ QRect KisPrescaledProjection::updateCanvasProjection(const QRect & rc)
     return newViewRect;
 }
 
+void KisPrescaledProjection::preScale()
+{
+    Q_ASSERT(m_d->canvasSize.isValid());
+    preScale(QRect(QPoint(0, 0), m_d->canvasSize));
+}
+
+QRect KisPrescaledProjection::preScale(const QRect & rc)
+{
+    if (!rc.isEmpty() && m_d->image) {
+        UpdateInformation info = getUpdateInformation(rc);
+        updateScaledImage(info);
+        return toAlignedRectWorkaround(info.viewportRect);
+    }
+    return QRect();
+}
 
 void KisPrescaledProjection::setMonitorProfile(const KoColorProfile * profile)
 {
@@ -359,25 +392,6 @@ void KisPrescaledProjection::setCurrentNode(const KisNodeSP node)
 void KisPrescaledProjection::showCurrentMask(bool showMask)
 {
     m_d->showMask = showMask;
-}
-
-
-void KisPrescaledProjection::preScale()
-{
-    Q_ASSERT(m_d->canvasSize.isValid());
-    preScale(QRect(QPoint(0, 0), m_d->canvasSize));
-}
-
-QRect KisPrescaledProjection::preScale(const QRect & rc)
-{
-    QRect retval;
-    if (!rc.isEmpty()) {
-        QPainter gc(&m_d->prescaledQImage);
-        gc.setCompositionMode(QPainter::CompositionMode_Source);
-        gc.fillRect(rc, QColor(0, 0, 0, 0));
-        retval = drawScaledImage(rc, gc);
-    }
-    return retval;
 }
 
 void KisPrescaledProjection::resizePrescaledImage(const QSize & newSize)
@@ -396,43 +410,18 @@ void KisPrescaledProjection::resizePrescaledImage(const QSize & newSize)
     QImage image = QImage(newSize, QImage::Format_ARGB32);
 //     m_d->prescaledQImage.fill( QColor( 255, 0, 0, 128 ).rgba() );
 
-// Let someone else figure out the optimization where we copy the
+// FIXME: Let someone else figure out the optimization where we copy the
 // still visible part of the image after moving the offset and then
 // only draw the newly visible parts
-#if 0
-    QPainter gc(&image);
-    gc.setCompositionMode(QPainter::CompositionMode_Source);
 
-    if (newSize.width() > oldSize.width() || newSize.height() > oldSize.height()) {
-
-        gc.drawImage(0, 0,
-                     m_d->prescaledQImage,
-                     0, 0, m_d->prescaledQImage.width(), m_d->prescaledQImage.height());
-
-        QRegion r(QRect(0, 0, newSize.width(), newSize.height()));
-        r -= QRegion(QRect(0, 0, m_d->prescaledQImage.width(), m_d->prescaledQImage.height()));
-        foreach(QRect rc, r.rects()) {
-            drawScaledImage(rc, gc);
-        }
-    } else {
-        gc.drawImage(0, 0, m_d->prescaledQImage,
-                     0, 0, m_d->prescaledQImage.width(), m_d->prescaledQImage.height());
-    }
-#endif
-
-#if 1
     m_d->prescaledQImage = image;
     m_d->canvasSize = newSize;
     preScale();
-#endif
-
 }
 
-QRect KisPrescaledProjection::drawScaledImage(const QRect & rc,  QPainter & gc)
+UpdateInformation
+KisPrescaledProjection::getUpdateInformation(const QRect & viewportRect)
 {
-    if (!m_d->image)
-        return QRect();
-
     Q_ASSERT(m_d->viewConverter);
 
     // get the x and y zoom level of the canvas
@@ -443,68 +432,65 @@ QRect KisPrescaledProjection::drawScaledImage(const QRect & rc,  QPainter & gc)
     qreal resX = m_d->image->xRes();
     qreal resY = m_d->image->yRes();
 
+    UpdateInformation info;
+
     // Compute the scale factors
-    qreal scaleX = zoomX / resX;
-    qreal scaleY = zoomY / resY;
+    info.scaleX = zoomX / resX;
+    info.scaleY = zoomY / resY;
 
-    QRect updateRectInImagePixels = imageRectFromViewPortPixels(toFloatRectWorkaround(rc));
+    info.imageRect = imageRectFromViewPortPixels(toFloatRectWorkaround(viewportRect));
+    m_d->projectionBackend->alignSourceRect(info.imageRect, info.scaleX);
 
-    m_d->projectionBackend->alignSourceRect(updateRectInImagePixels, scaleX);
+    info.viewportRect = viewRectFromImagePixels(info.imageRect);
 
-    QRectF updateRect = viewRectFromImagePixels(updateRectInImagePixels);
+    info.borderWidth = 0;
+    if (SCALE_MORE_OR_EQUAL_TO(info.scaleX, info.scaleY, 1.0)) {
+        if (SCALE_LESS_THAN(info.scaleX, info.scaleY, 2.0)) {
+            dbgRender << "smoothBetween100And200Percent" << endl;
+            info.renderHints = QPainter::SmoothPixmapTransform;
+            info.borderWidth = BORDER_SIZE(qMax(info.scaleX, info.scaleY));
+        }
+        info.transfer = UpdateInformation::DIRECT;
+    } else { // <100%
+        info.renderHints = QPainter::SmoothPixmapTransform;
+        info.borderWidth = BORDER_SIZE(qMax(info.scaleX, info.scaleY));
+        info.transfer = UpdateInformation::PATCH;
+    }
 
-
-    drawUsingBackend(m_d->projectionBackend, gc, scaleX, scaleY,
-                     updateRectInImagePixels, updateRect);
 
     dbgRender << "#####################################";
     dbgRender << ppVar(resX) << ppVar(resY);
     dbgRender << ppVar(zoomX) << ppVar(zoomY);
-    dbgRender << ppVar(scaleX) << ppVar(scaleY);
-    dbgRender << ppVar(rc);
-    dbgRender << "Update rect in KisImage's pixels:\t" << updateRectInImagePixels;
-    dbgRender << "Update rect in canvas' pixels:\t" << updateRect;
+    dbgRender << ppVar(info.scaleX) << ppVar(info.scaleY);
+    dbgRender << ppVar(info.borderWidth) << ppVar(info.renderHints);
+    dbgRender << ppVar(info.transfer);
+    dbgRender << ppVar(viewportRect);
+    dbgRender << "Update rect in KisImage's pixels:\t" << info.imageRect;
+    dbgRender << "Update rect in canvas' pixels:\t" << info.viewportRect;
     dbgRender << "#####################################";
 
-    return toAlignedRectWorkaround(updateRect);
+    return info;
 }
 
-
-#define ceiledSize(sz) QSize(ceil((sz).width()), ceil((sz).height()))
-#define SCALE_LESS_THAN(scX, scY, value) \
-    (scX < (value) - EPSILON && scY < (value) - EPSILON)
-#define SCALE_MORE_OR_EQUAL_TO(scX, scY, value) \
-    (scX > (value) - EPSILON && scY > (value) - EPSILON)
-#define BORDER_SIZE(scale) (ceil(scale * 2))
-
-void KisPrescaledProjection::drawUsingBackend(KisProjectionBackend *backend,
-        QPainter &gc,
-        qreal &scaleX, qreal &scaleY,
-        const QRect   &imageRect,
-        const QRectF  &viewportRect)
+void KisPrescaledProjection::updateScaledImage(UpdateInformation &info)
 {
-    if (imageRect.isEmpty()) return;
+    QPainter gc(&m_d->prescaledQImage);
+    gc.setCompositionMode(QPainter::CompositionMode_Source);
+//    gc.fillRect(info.viewportRect, QColor(255, 0, 0, 255));
+    drawUsingBackend(gc, info);
+}
 
-    if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 1.0)) {
-        QPainter::RenderHints renderHints;
-        qint32 borderWidth = 0;
+void KisPrescaledProjection::drawUsingBackend(QPainter &gc, UpdateInformation &info)
+{
+    if (info.imageRect.isEmpty()) return;
 
-        if (SCALE_LESS_THAN(scaleX, scaleY, 2.0)) {
-            dbgRender << "smoothBetween100And200Percent" << endl;
-            renderHints = QPainter::SmoothPixmapTransform;
-            borderWidth = BORDER_SIZE(qMax(scaleX, scaleY));
-        }
-        backend->drawFromOriginalImage(gc, imageRect, viewportRect,
-                                       borderWidth,
-                                       renderHints);
-    } else { // <100%
-        KisImagePatch patch =
-            backend->getNearestPatch(scaleX, scaleY,
-                                     imageRect,
-                                     BORDER_SIZE(qMax(scaleX, scaleY)));
+    if (info.transfer == UpdateInformation::DIRECT) {
+        m_d->projectionBackend->drawFromOriginalImage(gc, info);
+    } else /* if info.transfer == UpdateInformation::PATCH */ {
+        KisImagePatch patch = m_d->projectionBackend->getNearestPatch(info);
 
         //patch.prescaleWithBlitz(viewportRect);
-        patch.drawMe(gc, viewportRect, QPainter::SmoothPixmapTransform);
+        patch.drawMe(gc, info.viewportRect, info.renderHints);
     }
 }
 

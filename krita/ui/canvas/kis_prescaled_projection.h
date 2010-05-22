@@ -34,7 +34,7 @@ class QPainter;
 class KoViewConverter;
 class KoColorProfile;
 
-class KisProjectionBackend;
+class UpdateInformation;
 
 #include <kis_types.h>
 
@@ -72,7 +72,6 @@ typedef KisSharedPtr<KisPrescaledProjection> KisPrescaledProjectionSP;
 class KRITAUI_EXPORT KisPrescaledProjection : public QObject, public KisShared
 {
     Q_OBJECT
-
 public:
 
     KisPrescaledProjection();
@@ -190,13 +189,6 @@ public slots:
      */
     void preScale();
 
-    /**
-     * preScale and draw onto the scaled projection the specified rect,
-     * in canvas view pixels.
-     */
-    QRect preScale(const QRect & rc);
-
-
 signals:
 
     /**
@@ -216,31 +208,36 @@ private:
     KisPrescaledProjection operator=(const KisPrescaledProjection &);
 
     /**
-     * Draw the prescaled image onto the painter.
-     *
-     * @param rc The desired rect (NOT in KisImage pixels)
-     * It's in viewport pixels
-     * @param gc The painter we draw on
-     * directly to the blitz code
-     * @return a rect actually updated during drawing
-     * it can be greater that @rc do to KisImage alignment
+     * preScale and draw onto the scaled projection the specified rect,
+     * in canvas view pixels.
      */
-    QRect drawScaledImage(const QRect & rc,  QPainter & gc);
+    QRect preScale(const QRect & rc);
+
+    /**
+     * Prepare all the information about rects needed during
+     * projection updating
+     *
+     * @param viewportRect The desired rect. It's in viewport pixels
+     */
+    UpdateInformation getUpdateInformation(const QRect & viewportRect);
+
+
+    void retrieveImageData(const QRect &dirtyRect, UpdateInformation &info);
 
 
     /**
-     * Actual drawing is done here
-     * @param imageRect - region of the KisImage to read from
-     * (in KisImage pixels)
-     * @param viewportRect - region of @gc to draw to. Of course
-     * it is in @gc's pixels. Actual image will be scaled down to
-     * fit viewportRect
+     * Initiates the process of prescaled image update
+     *
+     * @param info prepared information
      */
-    void drawUsingBackend(KisProjectionBackend *backend,
-                          QPainter &gc,
-                          qreal &scaleX, qreal &scaleY,
-                          const QRect   &imageRect,
-                          const QRectF  &viewportRect);
+    void updateScaledImage(UpdateInformation &info);
+
+    /**
+     * Atual drawing is done here
+     * @param info prepared information
+     * @param gc The painter we draw on
+     */
+    void drawUsingBackend(QPainter &gc, UpdateInformation &info);
 
     /**
      * Converts image pixels into widget pixels

@@ -26,6 +26,7 @@
 #include <kis_types.h>
 
 class KoColorProfile;
+class UpdateInformation;
 struct KisImagePatch;
 
 /**
@@ -60,37 +61,31 @@ public:
     virtual void alignSourceRect(QRect& rect, qreal scale);
 
     /**
-     * Get a patch from a backend that can draw a @requestedRect on some
-     * QPainter in future. @scaleX and @scaleY are the scales of planned
-     * drawing, btw, it doesn't mean that an QImage inside the patch will
-     * have these scales - it'll have the nearest suitable scale or even
-     * original scale (e.g. KisProjectionCache)
+     * Gets a patch from a backend that can draw a info.imageRect on some
+     * QPainter in future. info.scaleX and info.scaleY are the scales
+     * of planned drawing, btw, it doesn't mean that an QImage inside
+     * the patch will have these scales - it'll have the nearest suitable
+     * scale or even original scale (e.g. KisProjectionCache)
      *
-     * If @borderWidth is non-zero, @requestedRect will be axpended by
-     * @borderWidth pixels to all directions and image of this rect will
-     * actually be written to the patch's QImage. That is done to eliminate
-     * border effects in smooth scaling.
+     * If info.borderWidth is non-zero, info.requestedRect will
+     * be axpended by info.borderWidth pixels to all directions and
+     * image of this rect will actually be written to the patch's QImage.
+     * That is done to eliminate border effects in smooth scaling.
      */
-    virtual KisImagePatch getNearestPatch(qreal scaleX, qreal scaleY,
-                                          const QRect& requestedRect,
-                                          qint32 borderWidth) = 0;
+    virtual KisImagePatch getNearestPatch(UpdateInformation &info) = 0;
 
     /**
      * Draws a piece of original image onto @gc's canvas
-     * @imageRect - area in KisImage pixels where to read from
-     * @viewportRect - area in canvas pixels where to write to
-     * If @imageRect and @viewportRect don't agree, the image
+     * @param info.imageRect - area in KisImage pixels where to read from
+     * @param info.viewportRect - area in canvas pixels where to write to
+     * If info.imageRect and info.viewportRect don't agree, the image
      * will be scaled
-     * @borderWidth has the same meaning as in getNearestPatch
-     * @renderHints - hints, transmitted to QPainter during darwing
+     * @param info.borderWidth has the same meaning as in getNearestPatch
+     * @param info.renderHints - hints, transmitted to QPainter during darwing
      */
     virtual void drawFromOriginalImage(QPainter& gc,
-                                       const QRect& imageRect,
-                                       const QRectF& viewportRect,
-                                       qint32 borderWidth,
-                                       QPainter::RenderHints renderHints) = 0;
+                                       UpdateInformation &info) = 0;
 };
-
 
 struct KisImagePatch {
     /**
@@ -133,6 +128,51 @@ struct KisImagePatch {
      * tested, so - FIXME
      */
     void prescaleWithBlitz(QRectF dstRect);
+};
+
+class UpdateInformation
+{
+public:
+    enum TransferType {
+        DIRECT,
+        PATCH
+    };
+
+    /**
+     * Rect of KisImage corresponding to @viewportRect
+     */
+    QRect imageRect;
+
+    /**
+     * Rect of canvas widget corresponding to @imageRect
+     */
+    QRectF viewportRect;
+
+    qreal scaleX;
+    qreal scaleY;
+
+    /**
+     * Defines the way the source image is painted onto
+     * prescaled QImage
+     */
+    TransferType transfer;
+
+    /**
+     * Render hints for painting the direct painting/patch painting
+     */
+    QPainter::RenderHints renderHints;
+
+    /**
+     * The number of additional pixels those should be added
+     * to the patch
+     */
+    qint32 borderWidth;
+
+    /**
+     * Used for temporary sorage of KisImage's data
+     * by KisPrescaledCache
+     */
+    KisImagePatch patch;
 };
 
 inline void scaleRect(QRectF &rc, qreal scaleX, qreal scaleY)

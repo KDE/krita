@@ -42,15 +42,8 @@ public:
     void setMonitorProfile(const KoColorProfile* monitorProfile);
     void setDirty(const QRect& rc);
 
-    KisImagePatch getNearestPatch(qreal scaleX, qreal scaleY,
-                                  const QRect& requestedRect,
-                                  qint32 borderWidth);
-
-    void drawFromOriginalImage(QPainter& gc,
-                               const QRect& imageRect,
-                               const QRectF& viewportRect,
-                               qint32 borderWidth,
-                               QPainter::RenderHints renderHints);
+    KisImagePatch getNearestPatch(UpdateInformation &info);
+    void drawFromOriginalImage(QPainter& gc, UpdateInformation &info);
 
     /**
      * Render the projection onto a QImage.

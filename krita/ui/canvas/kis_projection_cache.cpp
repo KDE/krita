@@ -107,52 +107,26 @@ void KisProjectionCache::setDirty(const QRect & rc)
     QImage updateImage = m_image->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
                          m_monitorProfile);
 
-//     if (m_showMask && m_drawMaskVisualisationOnUnscaledCanvasCache) {
-//
-//         // XXX: Also visualize the global selection
-//
-//         KisSelectionSP selection = 0;
-//
-//         if (m_currentNode) {
-//             if (m_currentNode->inherits("KisMask")) {
-//
-//                 selection = dynamic_cast<const KisMask*>(m_currentNode.data())->selection();
-//             } else if (m_currentNode->inherits("KisLayer")) {
-//
-//                 KisLayerSP layer = dynamic_cast<KisLayer*>(m_currentNode.data());
-//                 if (KisSelectionMaskSP selectionMask = layer->selectionMask()) {
-//                     selection = selectionMask->selection();
-//                 }
-//             }
-//         }
-//         selection->paint(&updateImage, rc);
-//     }
-
-
     p.drawImage(rc.x(), rc.y(), updateImage, 0, 0, rc.width(), rc.height());
     p.end();
 
 }
-#include <QtDebug>
-KisImagePatch KisProjectionCache::getNearestPatch(qreal scaleX, qreal scaleY,
-        const QRect& requestedRect,
-        qint32 borderWidth)
+
+KisImagePatch KisProjectionCache::getNearestPatch(UpdateInformation &info)
 {
-    Q_UNUSED(scaleX);
-    Q_UNUSED(scaleY);
     KisImagePatch patch;
 
     patch.m_scaleX = 1.;
     patch.m_scaleY = 1.;
 
     patch.m_interestRect = toFloatRectWorkaround(
-                               QRect(borderWidth, borderWidth,
-                                     requestedRect.width(),
-                                     requestedRect.height())
+                               QRect(info.borderWidth, info.borderWidth,
+                                     info.imageRect.width(),
+                                     info.imageRect.height())
                            );
 
-    QRect adjustedRect = requestedRect.adjusted(-borderWidth, -borderWidth,
-                         borderWidth, borderWidth);
+    QRect adjustedRect = info.imageRect.adjusted(-info.borderWidth, -info.borderWidth,
+                                                 info.borderWidth, info.borderWidth);
     patch.m_patchRect = adjustedRect;
 
     if (m_cacheKisImageAsQImage) {
@@ -162,26 +136,22 @@ KisImagePatch KisProjectionCache::getNearestPatch(qreal scaleX, qreal scaleY,
         patch.m_patchRect.getRect(&x, &y, &w, &h);
 
         patch.m_image = m_image->convertToQImage(x, y, w, h,
-                        m_monitorProfile);
+                                                 m_monitorProfile);
     }
 
     return patch;
 }
 
-void KisProjectionCache::drawFromOriginalImage(QPainter& gc,
-        const QRect& imageRect,
-        const QRectF& viewportRect,
-        qint32 borderWidth,
-        QPainter::RenderHints renderHints)
+void KisProjectionCache::drawFromOriginalImage(QPainter& gc, UpdateInformation &info)
 {
     if (m_cacheKisImageAsQImage) {
         gc.save();
         gc.setCompositionMode(QPainter::CompositionMode_Source);
-        gc.setRenderHints(renderHints, true);
-        gc.drawImage(viewportRect, m_unscaledCache, imageRect);
+        gc.setRenderHints(info.renderHints, true);
+        gc.drawImage(info.viewportRect, m_unscaledCache, info.imageRect);
         gc.restore();
     } else {
-        KisImagePatch patch = getNearestPatch(1, 1, imageRect, borderWidth);
-        patch.drawMe(gc, viewportRect, renderHints);
+        KisImagePatch patch = getNearestPatch(info);
+        patch.drawMe(gc, info.viewportRect, info.renderHints);
     }
 }

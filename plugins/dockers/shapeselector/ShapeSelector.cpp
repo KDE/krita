@@ -38,11 +38,9 @@
 // ************** ShapeSelector ************
 ShapeSelector::ShapeSelector(QWidget *parent)
     : QDockWidget(i18n("Shapes"), parent),
-    m_canvas(new Canvas(this))
+    m_itemStore(this)
 {
     setObjectName("ShapeSelector");
-    setWidget(m_canvas);
-    connect(m_canvas, SIGNAL(resized(const QSize&)), this, SLOT(setSize(const QSize &)));
 }
 
 ShapeSelector::~ShapeSelector()
@@ -51,7 +49,7 @@ ShapeSelector::~ShapeSelector()
 
 void ShapeSelector::itemSelected()
 {
-    KoShape *koShape = m_canvas->itemStore()->shapeManager()->selection()->firstSelectedShape();
+    KoShape *koShape = m_itemStore.shapeManager()->selection()->firstSelectedShape();
     if (koShape == 0)
         return;
     IconShape *shape= dynamic_cast<IconShape*>(koShape);
@@ -68,8 +66,8 @@ void ShapeSelector::itemSelected()
 
 void ShapeSelector::setSize(const QSize &size)
 {
-    if (m_canvas->itemStore()->mainFolder())
-        m_canvas->itemStore()->mainFolder()->setSize(QSizeF(size));
+    if (m_itemStore.mainFolder())
+        m_itemStore.mainFolder()->setSize(QSizeF(size));
 }
 
 void ShapeSelector::addItems(const KUrl &url, FolderShape *targetFolder)
@@ -89,7 +87,7 @@ void ShapeSelector::addItems(QFile &file, FolderShape *targetFolder)
     QDomDocument doc;
     if (doc.setContent(&file)) {
         if (targetFolder == 0)
-            targetFolder = m_canvas->itemStore()->folders()[0];
+            targetFolder = m_itemStore.folders()[0];
 
         QDomElement root = doc.firstChildElement();
         QDomElement element = root.firstChildElement();
@@ -97,7 +95,7 @@ void ShapeSelector::addItems(QFile &file, FolderShape *targetFolder)
             if (element.tagName() == "template") {
                 TemplateShape *ts = TemplateShape::createShape(element);
                 targetFolder->addShape(ts);
-                m_canvas->itemStore()->addShape(ts);
+                m_itemStore.addShape(ts);
             }
             element = root.nextSiblingElement();
         }

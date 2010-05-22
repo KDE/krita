@@ -43,6 +43,53 @@
 #include <KGlobal>
 #include <KDebug>
 
+class DummyShapeController : public KoShapeControllerBase
+{
+public:
+    DummyShapeController() {}
+
+    virtual void addShape( KoShape* ) {}
+    virtual void removeShape( KoShape* ) {}
+};
+
+/**
+ * This class holds the actual data that the ItemStore provides getters for.
+ * The ItemStorePrivate is referenced via a global static and thus there is
+ * at most one instance in memory at any time. (singleton pattern)
+ * When there is more than one shape selector docker present in a process
+ * they will implicitly share the ItemStorePrivate instance and thus any
+ * changes in folders or even in the clipboard shape made will only be done
+ * exactly one time for all the dockers. This has the immediate advantage that
+ * adding or removing a folder will be synchorized accross all docker instances.
+ */
+class ItemStorePrivate : public QObject
+{
+    Q_OBJECT
+public:
+    ItemStorePrivate();
+    void addFolder(FolderShape *folder);
+    void removeFolder(FolderShape *folder);
+    void addShape(KoShape *shape);
+    void removeShape(KoShape *shape);
+    /// register a KoShapeManager as a user of this store so repaints can be made.
+    void addUser(KoShapeManager *sm);
+    /// remove a KoShapeManager as a user of this store to no longer report repaints to it.
+    void removeUser(KoShapeManager *sm);
+    void setClipboardShape(ClipboardProxyShape *shape);
+
+private slots:
+    void clipboardChanged();
+
+public:
+    QList<KoShape*> shapes;
+    QList<FolderShape *> folders;
+    QList<KoShapeManager*> shapeManagers;
+    FolderShape *mainFolder;
+    ClipboardProxyShape *currentClipboard;
+    DummyShapeController shapeController;
+};
+
+
 Q_GLOBAL_STATIC(ItemStorePrivate, s_itemStorePrivate)
 
 /// ItemStorePrivate
@@ -167,17 +214,16 @@ void ItemStorePrivate::setClipboardShape(ClipboardProxyShape *shape)
     addShape(currentClipboard);
 }
 
-ItemStore::ItemStore()
-    : m_shapeManager(0)
-{
-}
-
 /// ItemStore
-ItemStore::ItemStore(KoShapeManager *shapeManager)
-    : m_shapeManager(shapeManager)
+ItemStore::ItemStore(ShapeSelector *parent)
 {
-    Q_ASSERT(shapeManager);
-    s_itemStorePrivate()->addUser(shapeManager);
+    m_canvas = new Canvas(parent, this);
+    m_shapeManager = new KoShapeManager(m_canvas);
+
+    parent->setWidget(m_canvas);
+    QObject::connect(m_canvas, SIGNAL(resized(const QSize&)), parent, SLOT(setSize(const QSize &)));
+
+    s_itemStorePrivate()->addUser(m_shapeManager);
     if (s_itemStorePrivate()->shapeManagers.count() > 1) {
         KoShapeManager *other = s_itemStorePrivate()->shapeManagers.first();
         m_shapeManager->setShapes(other->shapes());
@@ -325,7 +371,7 @@ void ItemStore::setClipboardShape(ClipboardProxyShape *shape)
 
 
 // static
-KoShape *ItemStore::createShapeFromPaste(QByteArray &bytes)
+KoShape *ItemStore::createShapeFromPaste(const QByteArray &bytes)
 {
     class Paster : public KoOdfPaste {
       public:
@@ -355,10 +401,14 @@ KoShape *ItemStore::createShapeFromPaste(QByteArray &bytes)
         KoShapeControllerBase *m_shapeController;
     };
 
-    DummyShapeController dsc;
-    Paster paster(&dsc);
+    Paster paster(&s_itemStorePrivate()->shapeController);
     paster.paste(KoOdf::Text, bytes);
     return paster.shape();
+}
+
+KoShapeControllerBase *ItemStore::shapeController()
+{
+    return &s_itemStorePrivate()->shapeController;
 }
 
 #include <ItemStore.moc>

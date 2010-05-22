@@ -21,6 +21,8 @@
 #ifndef SHAPESELECTOR_H
 #define SHAPESELECTOR_H
 
+#include "ItemStore.h"
+
 #include <QDockWidget>
 
 class FolderShape;
@@ -43,12 +45,14 @@ public:
     void addItems(QFile &file, FolderShape *targetFolder = 0);
     void setMainFolder(FolderShape *main);
 
+    ItemStore *itemStore() { return &m_itemStore; }
+
 private slots:
     void setSize(const QSize &size);
     void itemSelected();
 
 private:
-    Canvas *m_canvas;
+    ItemStore m_itemStore;
 };
 
 #endif

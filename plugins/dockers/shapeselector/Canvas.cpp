@@ -43,17 +43,12 @@
 
 #include <KUrl>
 
-DummyShapeController::DummyShapeController()
-{
-}
-
-Canvas::Canvas(ShapeSelector *parent)
+Canvas::Canvas(ShapeSelector *parent, ItemStore *itemStore)
     : QWidget(parent),
-    KoCanvasBase(&m_shapeController),
+    KoCanvasBase(itemStore->shapeController()),
     m_parent(parent),
     m_currentStrategy(0),
     m_zoomIndex(1),
-    m_itemStore(new KoShapeManager(this)),
     m_previousFocusOwner(0)
 {
     setAutoFillBackground(true);
@@ -127,7 +122,7 @@ void Canvas::mousePressEvent(QMouseEvent *event)
     KoShape *clickedShape = 0;
     foreach(KoShape *shape, shapeManager()->shapesAt(QRectF(pe.point, QSizeF(1,1)))) {
         FolderShape *folder = dynamic_cast<FolderShape*>(shape);
-        if ((event->buttons() & Qt::LeftButton) && m_itemStore.mainFolder() == 0 && folder) {
+        if ((event->buttons() & Qt::LeftButton) && itemStore()->mainFolder() == 0 && folder) {
             QPointF localPoint = pe.point - folder->position();
             KoInsets insets = folder->borderInsets();
             if (localPoint.x() <= 5 || localPoint.x() >= folder->size().width() - 10
@@ -155,7 +150,7 @@ void Canvas::mousePressEvent(QMouseEvent *event)
             SelectStrategy *ss = new SelectStrategy(this, clickedShape, pe);
             connect (ss, SIGNAL(itemSelected()), m_parent, SLOT(itemSelected()));
             m_currentStrategy = ss;
-        } else if (m_itemStore.mainFolder() == 0) {
+        } else if (itemStore()->mainFolder() == 0) {
             m_currentStrategy = new DragCanvasStrategy(this, pe);
         }
     } else if (event->buttons() == Qt::RightButton) {
@@ -388,7 +383,7 @@ void Canvas::focusChanged(QWidget *old, QWidget *now)
 // getters
 KoShapeManager * Canvas::shapeManager() const
 {
-    return m_itemStore.shapeManager();
+    return itemStore()->shapeManager();
 }
 
 QWidget *Canvas::canvasWidget()
@@ -404,10 +399,10 @@ int Canvas::zoomIndex()
 // slots
 void Canvas::loadShapeTypes()
 {
-    QRectF bounds = m_itemStore.loadShapeTypes();
-    if (m_itemStore.mainFolder()) {
-        m_itemStore.mainFolder()->setPosition(QPointF());
-        m_itemStore.mainFolder()->setSize(size());
+    QRectF bounds = itemStore()->loadShapeTypes();
+    if (itemStore()->mainFolder()) {
+        itemStore()->mainFolder()->setPosition(QPointF());
+        itemStore()->mainFolder()->setSize(size());
     } else if (!bounds.contains(0, 0)) {
         m_displayOffset = bounds.topLeft();
         update();

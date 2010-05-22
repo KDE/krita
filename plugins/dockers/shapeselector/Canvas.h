@@ -22,7 +22,7 @@
 #define CANVAS_H
 
 #include "ZoomHandler.h"
-#include "ItemStore.h"
+#include "ShapeSelector.h"
 
 #include <KoCanvasBase.h>
 #include <KoShapeControllerBase.h>
@@ -30,21 +30,13 @@
 #include <QList>
 
 class ShapeSelector;
+class ItemStore;
 class InteractionStrategy;
 class KoShapeManager;
 class QUndoCommand;
 class QPointF;
 class QAction;
 class QMenu;
-
-class DummyShapeController : public KoShapeControllerBase
-{
-public:
-    DummyShapeController();
-
-    virtual void addShape( KoShape* ) {}
-    virtual void removeShape( KoShape* ) {}
-};
 
 /**
  * The shape selector docker essentially embeds a flake canvas, this is the canvas.
@@ -57,7 +49,7 @@ class Canvas : public QWidget, public KoCanvasBase
     Q_OBJECT
 public:
     /// constructor
-    Canvas(ShapeSelector *parent);
+    explicit Canvas(ShapeSelector *parent, ItemStore *itemStore);
     /// implementing KoCanvasBase
     virtual void gridSize(qreal *horizontal, qreal *vertical) const;
     /// implementing KoCanvasBase
@@ -81,7 +73,7 @@ public:
     /// implementing KoCanvasBase
     virtual const QWidget* canvasWidget() const { return 0; }
 
-    ItemStore *itemStore() { return &m_itemStore; }
+    ItemStore *itemStore() const { return m_parent->itemStore(); }
 
     /**
      * zooms in to a higher magnification level
@@ -124,13 +116,11 @@ protected: // event handlers
     virtual void keyReleaseEvent(QKeyEvent *e);
 
 private:
-    DummyShapeController m_shapeController;
     ZoomHandler m_converter;
     ShapeSelector *m_parent;
     InteractionStrategy *m_currentStrategy;
     QPointF m_lastPoint, m_displayOffset;
     int m_zoomIndex;
-    ItemStore m_itemStore;
     QWidget *m_previousFocusOwner;
 };
 

@@ -27,6 +27,9 @@ class KoShapeManager;
 class KoShape;
 class FolderShape;
 class ClipboardProxyShape;
+class KoShapeControllerBase;
+class ShapeSelector;
+class Canvas;
 
 /**
  * This is the data storage for a shape selector.
@@ -48,8 +51,7 @@ class ClipboardProxyShape;
 class ItemStore
 {
 public:
-    ItemStore();
-    explicit ItemStore(KoShapeManager *shapeManager);
+    explicit ItemStore(ShapeSelector *parent = 0);
     ~ItemStore();
 
     void addFolder(FolderShape *folder);
@@ -74,46 +76,14 @@ public:
     QRectF loadShapeTypes();
     KoShapeManager *shapeManager() const { return m_shapeManager; }
 
-    static KoShape *createShapeFromPaste(QByteArray &bytes);
+    static KoShape *createShapeFromPaste(const QByteArray &bytes);
+
+    KoShapeControllerBase *shapeController();
 
 private:
     KoShapeManager *m_shapeManager;
+    Canvas *m_canvas;
 };
 
-/**
- * This class holds the actual data that the ItemStore provides getters for.
- * The ItemStorePrivate is referenced via a global static and thus there is
- * at most one instance in memory at any time. (singleton pattern)
- * When there is more than one shape selector docker present in a process
- * they will implicitly share the ItemStorePrivate instance and thus any
- * changes in folders or even in the clipboard shape made will only be done
- * exactly one time for all the dockers. This has the immediate advantage that
- * adding or removing a folder will be synchorized accross all docker instances.
- */
-class ItemStorePrivate : public QObject
-{
-    Q_OBJECT
-public:
-    ItemStorePrivate();
-    void addFolder(FolderShape *folder);
-    void removeFolder(FolderShape *folder);
-    void addShape(KoShape *shape);
-    void removeShape(KoShape *shape);
-    /// register a KoShapeManager as a user of this store so repaints can be made.
-    void addUser(KoShapeManager *sm);
-    /// remove a KoShapeManager as a user of this store to no longer report repaints to it.
-    void removeUser(KoShapeManager *sm);
-    void setClipboardShape(ClipboardProxyShape *shape);
-
-private slots:
-    void clipboardChanged();
-
-public:
-    QList<KoShape*> shapes;
-    QList<FolderShape *> folders;
-    QList<KoShapeManager*> shapeManagers;
-    FolderShape *mainFolder;
-    ClipboardProxyShape *currentClipboard;
-};
 
 #endif

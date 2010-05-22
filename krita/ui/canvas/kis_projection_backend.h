@@ -51,7 +51,7 @@ public:
     /**
      * Updates @rc (in KisImage pixels) from the base image
      */
-    virtual void setDirty(const QRect& rc) = 0;
+    virtual void setDirty(UpdateInformation &info) = 0;
 
     /**
      * Some backends cannot work with arbitrary areas due to
@@ -112,6 +112,11 @@ struct KisImagePatch {
     QRectF m_interestRect;
 
     QImage m_image;
+
+    /**
+     * Checks whether the patch can be used for drawing the image
+     */
+    bool isValid();
 
     /**
      * Darws an m_interestRect of the patch onto @gc
@@ -176,7 +181,7 @@ public:
 
     /**
      * Used for temporary sorage of KisImage's data
-     * by KisPrescaledCache
+     * by KisProjectionCache
      */
     KisImagePatch patch;
 };

@@ -131,7 +131,7 @@ void KisImagePyramid::setImage(KisImageWSP newImage)
 
         clearPyramid();
         setImageSize(m_originalImage->width(), m_originalImage->height());
-        setDirty(m_originalImage->projection()->exactBounds());
+        retrieveImageData(m_originalImage->projection()->exactBounds());
     }
 }
 
@@ -142,19 +142,28 @@ void KisImagePyramid::setImageSize(qint32 w, qint32 h)
     /* nothing interesting */
 }
 
-void KisImagePyramid::setDirty(const QRect &rc)
+void KisImagePyramid::setDirty(UpdateInformation &info)
+{
+    retrieveImageData(info.dirtyImageRect);
+    prescalePyramid(info);
+}
+
+void KisImagePyramid::retrieveImageData(const QRect &rect)
 {
     KisPaintDeviceSP originalProjection = m_originalImage->projection();
 
     KisPainter gc(m_pyramid[ORIGINAL_INDEX]);
     gc.setCompositeOp(m_monitorColorSpace->compositeOp(COMPOSITE_COPY));
     gc.setOpacity(OPACITY_OPAQUE_U8);
-    gc.bitBlt(rc.topLeft(), originalProjection, rc);
+    gc.bitBlt(rect.topLeft(), originalProjection, rect);
     gc.end();
+}
 
+void KisImagePyramid::prescalePyramid(UpdateInformation &info)
+{
     KisPaintDevice *src;
     KisPaintDevice *dst;
-    QRect currentSrcRect = rc;
+    QRect currentSrcRect = info.dirtyImageRect;
 
     for (int i = FIRST_NOT_ORIGINAL_INDEX; i < m_pyramidHeight; i++) {
         src = m_pyramid[i-1].data();

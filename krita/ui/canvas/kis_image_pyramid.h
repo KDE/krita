@@ -40,7 +40,7 @@ public:
     void setImage(KisImageWSP newImage);
     void setImageSize(qint32 w, qint32 h);
     void setMonitorProfile(const KoColorProfile* monitorProfile);
-    void setDirty(const QRect& rc);
+    void setDirty(UpdateInformation &info);
 
     KisImagePatch getNearestPatch(UpdateInformation &info);
     void drawFromOriginalImage(QPainter& gc, UpdateInformation &info);
@@ -84,6 +84,8 @@ private:
     qint32 m_pyramidHeight;
 
 private:
+    void retrieveImageData(const QRect &rect);
+    void prescalePyramid(UpdateInformation &info);
     void rebuildPyramid();
     void clearPyramid();
 

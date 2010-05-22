@@ -36,6 +36,11 @@ void KisProjectionBackend::alignSourceRect(QRect& rect, qreal scale)
     Q_UNUSED(scale);
 }
 
+bool KisImagePatch::isValid()
+{
+    return !m_image.isNull();
+}
+
 void KisImagePatch::drawMe(QPainter &gc,
                            const QRectF &dstRect,
                            QPainter::RenderHints renderHints)

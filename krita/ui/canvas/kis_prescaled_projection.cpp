@@ -288,13 +288,12 @@ QRect KisPrescaledProjection::updateCanvasProjection(const QRect & rc)
     if (!rc.intersects(m_d->image->bounds()))
         return QRect();
 
-    m_d->projectionBackend->setDirty(rc);
-
     QRect rawViewRect = toAlignedRectWorkaround(viewRectFromImagePixels(rc));
     UpdateInformation info = getUpdateInformation(rawViewRect, rc);
 
-    QRect viewportRect = toAlignedRectWorkaround(info.viewportRect);
+    m_d->projectionBackend->setDirty(info);
 
+    QRect viewportRect = toAlignedRectWorkaround(info.viewportRect);
     if(!viewportRect.isEmpty())
         updateScaledImage(info);
 

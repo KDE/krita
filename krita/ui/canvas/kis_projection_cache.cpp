@@ -49,7 +49,7 @@ void KisProjectionCache::setCacheKisImageAsQImage(bool toggle)
     if (toggle != m_cacheKisImageAsQImage) {
         if (toggle) {
             m_cacheKisImageAsQImage = true;
-            setDirty(QRect(0, 0, m_imageSize.width(), m_imageSize.height()));
+            updateCachedQImage(QRect(0, 0, m_imageSize.width(), m_imageSize.height()));
         } else {
             m_cacheKisImageAsQImage = false;
             m_unscaledCache = QImage();
@@ -76,7 +76,12 @@ void KisProjectionCache::setImageSize(qint32 w,  qint32 h)
 #endif
 
         m_unscaledCache = QImage(w, h, QImage::Format_ARGB32);
-        setDirty(QRect(0, 0, w, h));
+        /**
+         * FIXME: Check why not use m_image->bounds()
+         * instead of QRect(0, 0, w, h)
+         */
+        if (m_cacheKisImageAsQImage)
+            updateCachedQImage(QRect(0, 0, w, h));
 
 #ifndef ALWAYS_CACHE_AS_QIMAGE
     }
@@ -88,26 +93,42 @@ void KisProjectionCache::setMonitorProfile(const KoColorProfile* monitorProfile)
     m_monitorProfile = monitorProfile;
 }
 
-void KisProjectionCache::setDirty(const QRect & rc)
+void KisProjectionCache::setDirty(UpdateInformation &info)
 {
-
-
     if (!m_image) return;
-    if (!m_cacheKisImageAsQImage) return;
-
-    if (m_unscaledCache.isNull()) {
-        m_unscaledCache = QImage(m_image->width(), m_image->height(), QImage::Format_ARGB32);
+    if (m_cacheKisImageAsQImage) {
+        updateCachedQImage(info.dirtyImageRect);
+    }
+    else {
+        /**
+         * We can neither draw the image directly from the KisImage
+         * nor cache it in the internal QImage.
+         * The only way out left is to create a patch and store
+         * a dirty piece of image there
+         */
+        /* if(info.transfer == UpdateInformation::DIRECT) */
+        info.transfer = UpdateInformation::PATCH;
     }
 
-    QPainter p(&m_unscaledCache);
-    p.setCompositionMode(QPainter::CompositionMode_Source);
+    if (info.transfer == UpdateInformation::PATCH)
+        info.patch = getNearestPatch(info);
+}
 
-    QImage updateImage = m_image->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
-                         m_monitorProfile);
+void KisProjectionCache::updateCachedQImage(const QRect &rect)
+{
+    if (m_unscaledCache.isNull())
+        m_unscaledCache = QImage(m_image->width(), m_image->height(), QImage::Format_ARGB32);
 
-    p.drawImage(rc.x(), rc.y(), updateImage, 0, 0, rc.width(), rc.height());
-    p.end();
+    QPainter gc(&m_unscaledCache);
+    gc.setCompositionMode(QPainter::CompositionMode_Source);
 
+    QImage updateImage = m_image->convertToQImage(rect,
+                                                  m_monitorProfile);
+
+    gc.drawImage(rect.x(), rect.y(),
+                 updateImage, 0, 0,
+                 rect.width(), rect.height());
+    gc.end();
 }
 
 KisImagePatch KisProjectionCache::getNearestPatch(UpdateInformation &info)
@@ -127,15 +148,11 @@ KisImagePatch KisProjectionCache::getNearestPatch(UpdateInformation &info)
                                                  info.borderWidth, info.borderWidth);
     patch.m_patchRect = adjustedRect;
 
-    if (m_cacheKisImageAsQImage) {
+    if (m_cacheKisImageAsQImage)
         patch.m_image = m_unscaledCache.copy(patch.m_patchRect);
-    } else {
-        qint32 x, y, w, h;
-        patch.m_patchRect.getRect(&x, &y, &w, &h);
-
-        patch.m_image = m_image->convertToQImage(x, y, w, h,
+    else
+        patch.m_image = m_image->convertToQImage(patch.m_patchRect,
                                                  m_monitorProfile);
-    }
 
     return patch;
 }
@@ -149,7 +166,7 @@ void KisProjectionCache::drawFromOriginalImage(QPainter& gc, UpdateInformation &
         gc.drawImage(info.viewportRect, m_unscaledCache, info.imageRect);
         gc.restore();
     } else {
-        KisImagePatch patch = getNearestPatch(info);
-        patch.drawMe(gc, info.viewportRect, info.renderHints);
+        Q_ASSERT(info.patch.isValid());
+        info.patch.drawMe(gc, info.viewportRect, info.renderHints);
     }
 }

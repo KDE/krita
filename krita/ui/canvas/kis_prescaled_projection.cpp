@@ -266,7 +266,7 @@ void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
     }
 }
 
-KisPPUpdateInfoSP
+KisUpdateInfoSP
 KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
 {
     if (!m_d->image) {
@@ -290,19 +290,15 @@ KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
     return info;
 }
 
-void KisPrescaledProjection::recalculateCache(KisPPUpdateInfoSP info)
+void KisPrescaledProjection::recalculateCache(KisUpdateInfoSP info)
 {
-    m_d->projectionBackend->recalculateCache(info);
+    KisPPUpdateInfoSP ppInfo = dynamic_cast<KisPPUpdateInfo*>(info.data());
+    if(!ppInfo) return;
+
+    m_d->projectionBackend->recalculateCache(ppInfo);
 
     if(!info->dirtyViewportRect().isEmpty())
-        updateScaledImage(info);
-}
-
-QRect KisPrescaledProjection::updateCanvasProjection(const QRect & rc)
-{
-    KisPPUpdateInfoSP info = updateCache(rc);
-    recalculateCache(info);
-    return info->dirtyViewportRect();
+        updateScaledImage(ppInfo);
 }
 
 void KisPrescaledProjection::preScale()

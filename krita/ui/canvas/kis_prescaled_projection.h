@@ -104,6 +104,23 @@ public:
 public slots:
 
     /**
+     * Retrieves image's data from KisImage object and updates
+     * internal cache
+     * @param dirtyImageRect the rect changed on the image
+     * @return prefilled info object that should be used in
+     * the second stage of the update
+     * @see recalculateCache
+     */
+    KisUpdateInfoSP updateCache(const QRect &dirtyImageRect);
+
+    /**
+     * Updates the prescaled cache at current zoom level
+     * @param prefilled update structure returned by updateCache
+     * @see updateCache
+     */
+    void recalculateCache(KisUpdateInfoSP info);
+
+    /**
      * Called whenever the configuration settings change.
      */
     void updateSettings();
@@ -121,15 +138,6 @@ public slots:
      * @param documentOffset the offset in widget pixels
      */
     void documentOffsetMoved(const QPoint &documentOffset);
-
-    /**
-     * The image projection has changed, now update the canvas
-     * representation of it.
-     *
-     * @param rc the are to be updated in image pixels
-     * @return a rect to be updated in widget pixels
-     */
-    QRect updateCanvasProjection(const QRect & rc);
 
     /**
      * Called whenever the size of the KisImage changes
@@ -174,15 +182,6 @@ private:
      */
     KisPPUpdateInfoSP getUpdateInformation(const QRect &viewportRect,
                                            const QRect &dirtyImageRect);
-
-
-    KisPPUpdateInfoSP updateCache(const QRect &dirtyImageRect);
-    void recalculateCache(KisPPUpdateInfoSP info);
-
-    void retrieveImageData(const QRect &dirtyImageRect,
-                           KisPPUpdateInfoSP info);
-
-    void updatePrescaledCache(KisPPUpdateInfoSP info);
 
     /**
      * Initiates the process of prescaled image update

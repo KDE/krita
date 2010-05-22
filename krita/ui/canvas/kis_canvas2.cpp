@@ -362,7 +362,10 @@ void KisCanvas2::updateCanvasProjection(const QRect & rc)
     // This function is called for qpainter canvas only
     Q_ASSERT(m_d->prescaledProjection);
 
-    QRect vRect = m_d->prescaledProjection->updateCanvasProjection(rc);
+    KisUpdateInfoSP info = m_d->prescaledProjection->updateCache(rc);
+    m_d->prescaledProjection->recalculateCache(info);
+
+    QRect vRect = info->dirtyViewportRect();
     if (m_d->mirrorMode){
         m_d->canvasWidget->widget()->update();
     }else if (!vRect.isEmpty()) {

@@ -22,13 +22,11 @@
 #include <math.h>
 
 #include <QImage>
-#include <QPixmap>
 #include <QColor>
 #include <QRect>
 #include <QPoint>
 #include <QSize>
 #include <QPainter>
-#include <QTimer>
 
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
@@ -37,14 +35,6 @@
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_image.h"
-#include "kis_layer.h"
-#include "kis_mask.h"
-#include "kis_node.h"
-#include "kis_paint_device.h"
-#include "kis_paint_layer.h"
-#include "kis_selection.h"
-#include "kis_selection_mask.h"
-#include "kis_types.h"
 
 #include "kis_projection_backend.h"
 #include "kis_projection_cache.h"
@@ -92,37 +82,25 @@ void copyQImage(qint32 deltaX, qint32 deltaY, QImage* dstImage, const QImage& sr
 struct KisPrescaledProjection::Private {
     Private()
             : useNearestNeighbour(false)
-            , usePixmapNotQImage(false)
-            , drawCheckers(false)
-            , scrollCheckers(false)
-            , drawMaskVisualisationOnUnscaledCanvasCache(false)
-            , showMask(true)
             , cacheKisImageAsQImage(true)
-            , checkSize(32)
             , documentOffset(0, 0)
             , documentOrigin(0, 0)
             , canvasSize(0, 0)
             , imageSize(0, 0)
             , viewConverter(0)
             , monitorProfile(0)
-            , counter(0)
             , projectionBackend(0) {
     }
 
+    /**
+     * TODO: useNearestNeighbour is not used at the moment
+     * thought this option worth implementing (ok, yeah.. reimplementing)
+     */
     bool useNearestNeighbour;
-    bool usePixmapNotQImage;
     bool useMipmapping;
-    bool drawCheckers;
-    bool scrollCheckers;
-    bool drawMaskVisualisationOnUnscaledCanvasCache;
-    bool showMask;
     bool cacheKisImageAsQImage;
 
-    QColor checkersColor;
-    qint32 checkSize;
     QImage prescaledQImage;
-    QPixmap prescaledPixmap;
-
 
     QPoint documentOffset; // in view pixels
     QPoint documentOrigin; // in view pixels too
@@ -131,10 +109,7 @@ struct KisPrescaledProjection::Private {
     QSize imageSize; // in kisimage pixels
     KisImageWSP image;
     KoViewConverter * viewConverter;
-    KisNodeSP currentNode;
-    QRegion rectsToSmooth;
     const KoColorProfile* monitorProfile;
-    int counter;
     KisProjectionBackend* projectionBackend;
 };
 
@@ -162,23 +137,6 @@ void KisPrescaledProjection::setImage(KisImageWSP image)
     m_d->projectionBackend->setImage(image);
 
     setImageSize(image->width(), image->height());
-}
-
-
-bool KisPrescaledProjection::drawCheckers() const
-{
-    return m_d->drawCheckers;
-}
-
-
-void KisPrescaledProjection::setDrawCheckers(bool drawCheckers)
-{
-    m_d->drawCheckers = drawCheckers;
-}
-
-QPixmap KisPrescaledProjection::prescaledPixmap() const
-{
-    return m_d->prescaledPixmap;
 }
 
 QImage KisPrescaledProjection::prescaledQImage() const
@@ -212,7 +170,6 @@ void KisPrescaledProjection::updateSettings()
 {
     KisConfig cfg;
 
-
     if (m_d->useNearestNeighbour != cfg.useNearestNeighbour() ||
         m_d->useMipmapping != cfg.useMipmapping() ||
         m_d->cacheKisImageAsQImage != cfg.cacheKisImageAsQImage() ||
@@ -224,15 +181,6 @@ void KisPrescaledProjection::updateSettings()
 
         initBackend(m_d->useMipmapping, m_d->cacheKisImageAsQImage);
     }
-
-    m_d->usePixmapNotQImage = cfg.noXRender();
-
-    // If any of the above are true, we don't use our own smooth scaling
-    m_d->scrollCheckers = cfg.scrollCheckers();
-    m_d->checkSize = cfg.checkSize();
-    m_d->checkersColor = cfg.checkersColor();
-
-    m_d->drawMaskVisualisationOnUnscaledCanvasCache = cfg.drawMaskVisualisationOnUnscaledCanvasCache();
 
     setMonitorProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
 }
@@ -304,7 +252,6 @@ void KisPrescaledProjection::documentOffsetMoved(const QPoint &documentOffset)
 
 void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
 {
-
     m_d->projectionBackend->setImageSize(w, h);
 
     m_d->imageSize = QSize(w, h);
@@ -379,16 +326,6 @@ void KisPrescaledProjection::setMonitorProfile(const KoColorProfile * profile)
 {
     m_d->monitorProfile = profile;
     m_d->projectionBackend->setMonitorProfile(profile);
-}
-
-void KisPrescaledProjection::setCurrentNode(const KisNodeSP node)
-{
-    m_d->currentNode = node;
-}
-
-void KisPrescaledProjection::showCurrentMask(bool showMask)
-{
-    m_d->showMask = showMask;
 }
 
 void KisPrescaledProjection::resizePrescaledImage(const QSize & newSize)
@@ -580,7 +517,6 @@ QRect toAlignedRectWorkaround(const QRectF& rc)
 
     return ret;
 }
-
 
 
 #include "kis_prescaled_projection.moc"

@@ -151,10 +151,10 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
             gc.fillRect(fillRect, m_d->checkBrush);
         }
     }
-        
+
     if(canvas()->image()->rootLayer()->childCount()>0) {
         gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    
+
         gc.save();
         if (canvas()->isCanvasMirrored()){
             QTransform m = gc.transform();
@@ -164,14 +164,15 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
             m.translate( -documentOrigin().x(), 0);
             gc.setTransform(m);
         }
-            if (cfg.noXRender()) {
-                gc.drawPixmap(ev->rect(), m_d->prescaledProjection->prescaledPixmap(), 
-                            ev->rect().translated(-documentOrigin()));
-            } else {
+//            if (cfg.noXRender()) {
+//                gc.drawPixmap(ev->rect(), m_d->prescaledProjection->prescaledPixmap(), 
+//                            ev->rect().translated(-documentOrigin()));
+//            } else {
                 gc.drawImage(ev->rect(), m_d->prescaledProjection->prescaledQImage(), 
                             ev->rect().translated(-documentOrigin()));
-            }
+//            }
     }
+
 #ifdef DEBUG_REPAINT
     QColor color = QColor(random() % 255, random() % 255, random() % 255, 150);
     gc.fillRect(ev->rect(), color);
@@ -275,6 +276,12 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 void KisQPainterCanvas::slotConfigChanged()
 {
     KisConfig cfg;
+
+    /**
+     * FIXME: Please pay attention to these options:
+     *   - cfg.checkSize();
+     *   - cfg.checkersColor();
+     */
 
     m_d->checkBrush = QBrush(checkImage(cfg.checkSize()));
 }

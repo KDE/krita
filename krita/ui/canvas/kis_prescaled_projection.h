@@ -23,7 +23,6 @@
 #include <krita_export.h>
 #include <kis_shared.h>
 
-class QPixmap;
 class QImage;
 class QPoint;
 class QRect;
@@ -46,11 +45,13 @@ typedef KisSharedPtr<KisPrescaledProjection> KisPrescaledProjectionSP;
  * prescaled QImage representation that is always suitable for
  * painting onto the canvas.
  *
+ * [deprecated]
  * Optionally, the KisPrescaledProjection can also provide a QPixmap
  * with the checkered background blended in.
  *
  * Optionally, the projection can also draw the mask and selection
  * masks and the selection outline.
+ * [/deprecated]
  *
  * The following scaling methods are supported:
  *
@@ -78,29 +79,6 @@ public:
     virtual ~KisPrescaledProjection();
 
     void setImage(KisImageWSP image);
-
-    /**
-     * @return true if the prescaled projection is set to draw the
-     * checkers, too. In that case, prescaledPixmap returns a complete
-     * pixmap (which doesn't have transparency) and prescaledQImage
-     * returns an empty QImage. This setting is <i>false</i>
-     * initially.
-     */
-    bool drawCheckers() const;
-
-    /**
-     * Set the drawCheckers variable to @param drawCheckers. @see
-     * drawCheckers.
-     */
-    void setDrawCheckers(bool drawCheckers);
-
-    /**
-     * The pre-scaled pixmap includes the underlying checker
-     * represenation. It is only generated when the drawCheckers() is
-     * true, otherwise it is empty. The prescaled pixmal is exactly as
-     * big as the canvas widget in pixels.
-     */
-    QPixmap prescaledPixmap() const;
 
     /**
      * Return the prescaled QImage. This image has a transparency
@@ -170,36 +148,11 @@ public slots:
     void setMonitorProfile(const KoColorProfile * profile);
 
     /**
-     * Set the current node
-     */
-    void setCurrentNode(const KisNodeSP node);
-
-    /**
-     * Toggle whether the selection should be displayed as a mask.
-     * (The display as ants should be a toggle, too, but is done
-     * elsewhere.)
-     */
-    void showCurrentMask(bool showMask);
-
-
-    /**
      * Called whenever the zoom level changes or another chunk of the
      * image becomes visible. The currently visible area of the image
      * is complete scaled again.
      */
     void preScale();
-
-signals:
-
-    /**
-     * emitted whenever the prescaled image is ready for painting.
-     * This can happen in two stages: a coarse first stage and a
-     * smooth second stage.
-     *
-     * @param rc the updated area in image pixels
-     */
-    // FIXME: seems to be not used
-    //void sigPrescaledProjectionUpdated(const QRect & rc);
 
 private:
     friend class KisPrescaledProjectionTest;

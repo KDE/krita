@@ -149,8 +149,6 @@ void KisPrescaledProjectionTest::testCreation()
     KisPrescaledProjection * prescaledProjection = 0;
     prescaledProjection = new KisPrescaledProjection();
     QVERIFY(prescaledProjection != 0);
-    QVERIFY(prescaledProjection->drawCheckers() == false);
-    QVERIFY(prescaledProjection->prescaledPixmap().isNull());
     QVERIFY(prescaledProjection->prescaledQImage().isNull());
     delete prescaledProjection;
 }

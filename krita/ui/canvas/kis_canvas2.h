@@ -196,14 +196,14 @@ public:
     void disconnectCurrentImage();
     void resetCanvas(bool useOpenGL);
 
+    void createFavoriteResourceManager(KisPaintopBox*);
+    KoFavoriteResourceManager* favoriteResourceManager();
+    bool handlePopupPaletteIsVisible(KoPointerEvent *);
+
 private:
     void createCanvas(bool useOpenGL);
     void createQPainterCanvas();
     void createOpenGLCanvas();
-    void createFavoriteResourceManager(KisPaintopBox*);
-
-    KoFavoriteResourceManager* favoriteResourceManager();
-    bool handlePopupPaletteIsVisible(KoPointerEvent *);
 
     /**
      * Returns a rect in widget pixels that is translated for document

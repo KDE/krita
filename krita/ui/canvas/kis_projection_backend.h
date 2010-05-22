@@ -45,9 +45,19 @@ public:
     virtual void setMonitorProfile(const KoColorProfile* monitorProfile) = 0;
 
     /**
-     * Updates @rc (in KisImage pixels) from the base image
+     * Updates the cache of the backend by reading from
+     * an accociated image. All data transfers with
+     * KisImage should happen here
      */
-    virtual void setDirty(KisPPUpdateInfoSP info) = 0;
+    virtual void updateCache(KisPPUpdateInfoSP info) = 0;
+
+    /**
+     * Prescales the cache of the backend. It is intended to be
+     * called from a separate thread where you can easily
+     * do the calculations. No data transfers with KisImage
+     * should happen during this phase
+     */
+    virtual void recalculateCache(KisPPUpdateInfoSP info) = 0;
 
     /**
      * Some backends cannot work with arbitrary areas due to

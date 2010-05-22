@@ -176,8 +176,8 @@ private:
                                            const QRect &dirtyImageRect);
 
 
-    KisPPUpdateInfoSP retrieveImageData(const QRect &dirtyImageRect);
-    QRect updateViewportCache(KisPPUpdateInfoSP info);
+    KisPPUpdateInfoSP updateCache(const QRect &dirtyImageRect);
+    void recalculateCache(KisPPUpdateInfoSP info);
 
     void retrieveImageData(const QRect &dirtyImageRect,
                            KisPPUpdateInfoSP info);

@@ -88,7 +88,7 @@ void KisProjectionCache::setMonitorProfile(const KoColorProfile* monitorProfile)
     m_monitorProfile = monitorProfile;
 }
 
-void KisProjectionCache::setDirty(KisPPUpdateInfoSP info)
+void KisProjectionCache::updateCache(KisPPUpdateInfoSP info)
 {
     if (!m_image) return;
     if (m_cacheKisImageAsQImage) {
@@ -104,6 +104,12 @@ void KisProjectionCache::setDirty(KisPPUpdateInfoSP info)
         info->transfer = KisPPUpdateInfo::DIRECT;
         info->patch = getNearestPatch(info);
     }
+}
+
+void KisProjectionCache::recalculateCache(KisPPUpdateInfoSP info)
+{
+    Q_UNUSED(info);
+    /* nothing to do, happily */
 }
 
 void KisProjectionCache::updateCachedQImage(const QRect &rect)

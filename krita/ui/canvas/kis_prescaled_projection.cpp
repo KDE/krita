@@ -267,42 +267,42 @@ void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
 }
 
 KisPPUpdateInfoSP
-KisPrescaledProjection::retrieveImageData(const QRect &dirtyImageRect)
-{
-    Q_UNUSED(dirtyImageRect);
-    return 0;
-}
-
-QRect KisPrescaledProjection::updateViewportCache(KisPPUpdateInfoSP info)
-{
-    Q_UNUSED(info);
-    return QRect();
-}
-
-QRect KisPrescaledProjection::updateCanvasProjection(const QRect & rc)
+KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
 {
     if (!m_d->image) {
-        dbgRender << "Calling updateCanvasProjection without an image: " << kBacktrace() << endl;
-        return QRect();
+        dbgRender << "Calling updateCache without an image: " << kBacktrace() << endl;
+        // return invalid info
+        return new KisPPUpdateInfo();
     }
 
     /**
      * We needn't this stuff ouside KisImage's area. Lets user
      * paint there, anyway we won't show him anything =)
      */
-    if (!rc.intersects(m_d->image->bounds()))
-        return QRect();
+    if (!dirtyImageRect.intersects(m_d->image->bounds()))
+        return new KisPPUpdateInfo();
 
-    QRect rawViewRect = viewRectFromImagePixels(rc).toAlignedRect();
-    KisPPUpdateInfoSP info = getUpdateInformation(rawViewRect, rc);
+    QRect rawViewRect = viewRectFromImagePixels(dirtyImageRect).toAlignedRect();
+    KisPPUpdateInfoSP info = getUpdateInformation(rawViewRect, dirtyImageRect);
 
-    m_d->projectionBackend->setDirty(info);
+    m_d->projectionBackend->updateCache(info);
 
-    QRect viewportRect = info->viewportRect.toAlignedRect();
-    if(!viewportRect.isEmpty())
+    return info;
+}
+
+void KisPrescaledProjection::recalculateCache(KisPPUpdateInfoSP info)
+{
+    m_d->projectionBackend->recalculateCache(info);
+
+    if(!info->dirtyViewportRect().isEmpty())
         updateScaledImage(info);
+}
 
-    return viewportRect;
+QRect KisPrescaledProjection::updateCanvasProjection(const QRect & rc)
+{
+    KisPPUpdateInfoSP info = updateCache(rc);
+    recalculateCache(info);
+    return info->dirtyViewportRect();
 }
 
 void KisPrescaledProjection::preScale()

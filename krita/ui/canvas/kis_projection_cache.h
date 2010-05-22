@@ -37,8 +37,8 @@ public:
     void setImage(KisImageWSP image);
     void setImageSize(qint32 w, qint32 h);
     void setMonitorProfile(const KoColorProfile* monitorProfile);
-    void setDirty(KisPPUpdateInfoSP info);
-
+    void updateCache(KisPPUpdateInfoSP info);
+    void recalculateCache(KisPPUpdateInfoSP info);
 
     KisImagePatch getNearestPatch(KisPPUpdateInfoSP info);
     void drawFromOriginalImage(QPainter& gc, KisPPUpdateInfoSP info);

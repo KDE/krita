@@ -129,6 +129,7 @@ void KisImagePyramid::setImage(KisImageWSP newImage)
         clearPyramid();
         setImageSize(m_originalImage->width(), m_originalImage->height());
         retrieveImageData(m_originalImage->projection()->exactBounds());
+        //TODO: check whether there is needed recalculateCache()
     }
 }
 
@@ -139,10 +140,9 @@ void KisImagePyramid::setImageSize(qint32 w, qint32 h)
     /* nothing interesting */
 }
 
-void KisImagePyramid::setDirty(KisPPUpdateInfoSP info)
+void KisImagePyramid::updateCache(KisPPUpdateInfoSP info)
 {
     retrieveImageData(info->dirtyImageRect);
-    prescalePyramid(info);
 }
 
 void KisImagePyramid::retrieveImageData(const QRect &rect)
@@ -156,7 +156,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
     gc.end();
 }
 
-void KisImagePyramid::prescalePyramid(KisPPUpdateInfoSP info)
+void KisImagePyramid::recalculateCache(KisPPUpdateInfoSP info)
 {
     KisPaintDevice *src;
     KisPaintDevice *dst;

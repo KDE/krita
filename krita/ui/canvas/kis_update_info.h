@@ -35,6 +35,8 @@ class KisUpdateInfo : public KisShared
 public:
     KisUpdateInfo() {}
     virtual ~KisUpdateInfo() {}
+
+    virtual QRect dirtyViewportRect() = 0;
 };
 
 
@@ -45,6 +47,10 @@ public:
         DIRECT,
         PATCH
     };
+
+    QRect dirtyViewportRect() {
+        return viewportRect.toAlignedRect();
+    }
 
     /**
      * The rect that was reported by KisImage as dirty

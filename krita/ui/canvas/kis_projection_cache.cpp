@@ -22,10 +22,6 @@
 #include "kis_config.h"
 #include <kis_image.h>
 
-// for toAlignedRectWorkaround()
-#include "kis_prescaled_projection.h"
-
-
 KisProjectionCache::KisProjectionCache()
         : m_cacheKisImageAsQImage(true)
         , m_monitorProfile(0)
@@ -138,11 +134,9 @@ KisImagePatch KisProjectionCache::getNearestPatch(UpdateInformation &info)
     patch.m_scaleX = 1.;
     patch.m_scaleY = 1.;
 
-    patch.m_interestRect = toFloatRectWorkaround(
-                               QRect(info.borderWidth, info.borderWidth,
-                                     info.imageRect.width(),
-                                     info.imageRect.height())
-                           );
+    patch.m_interestRect = QRectF(info.borderWidth, info.borderWidth,
+                                  info.imageRect.width(),
+                                  info.imageRect.height());
 
     QRect adjustedRect = info.imageRect.adjusted(-info.borderWidth, -info.borderWidth,
                                                  info.borderWidth, info.borderWidth);

@@ -41,8 +41,6 @@
 #include "kis_image_pyramid.h"
 
 
-#define EPSILON 1e-10
-
 #define ceiledSize(sz) QSize(ceil((sz).width()), ceil((sz).height()))
 #define SCALE_LESS_THAN(scX, scY, value) \
     (scX < (value) - EPSILON && scY < (value) - EPSILON)
@@ -256,7 +254,7 @@ void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
 
     m_d->imageSize = QSize(w, h);
 
-    QRect vRect = toAlignedRectWorkaround(viewRectFromImagePixels(QRect(0, 0, w, h)));
+    QRect vRect = viewRectFromImagePixels(QRect(0, 0, w, h)).toAlignedRect();
     vRect = vRect.intersected(QRect(QPoint(0, 0), m_d->canvasSize));
     if (!vRect.isEmpty()) {
         preScale(vRect);
@@ -278,22 +276,18 @@ QRect KisPrescaledProjection::updateCanvasProjection(const QRect & rc)
     }
 
     /**
-     * FIXME: leave only one of these intersections: canvas or image
-     */
-
-    /**
      * We needn't this stuff ouside KisImage's area. Lets user
      * paint there, anyway we won't show him anything =)
      */
     if (!rc.intersects(m_d->image->bounds()))
         return QRect();
 
-    QRect rawViewRect = toAlignedRectWorkaround(viewRectFromImagePixels(rc));
+    QRect rawViewRect = viewRectFromImagePixels(rc).toAlignedRect();
     UpdateInformation info = getUpdateInformation(rawViewRect, rc);
 
     m_d->projectionBackend->setDirty(info);
 
-    QRect viewportRect = toAlignedRectWorkaround(info.viewportRect);
+    QRect viewportRect = info.viewportRect.toAlignedRect();
     if(!viewportRect.isEmpty())
         updateScaledImage(info);
 
@@ -316,7 +310,7 @@ QRect KisPrescaledProjection::preScale(const QRect & rc)
         gc.fillRect(rc, QColor(0, 0, 0, 0));
         drawUsingBackend(gc, info);
         //FIXME: leave one of those rects, probably, first.
-        return rc | toAlignedRectWorkaround(info.viewportRect);
+        return rc | info.viewportRect.toAlignedRect();
     }
     return QRect();
 }
@@ -379,7 +373,7 @@ KisPrescaledProjection::getUpdateInformation(const QRect &viewportRect, const QR
 
     // second, align this rect to the KisImage's pixels and pixels
     // of projection backend
-    info.imageRect = imageRectFromViewPortPixels(toFloatRectWorkaround(croppedViewRect));
+    info.imageRect = imageRectFromViewPortPixels(QRectF(croppedViewRect));
     m_d->projectionBackend->alignSourceRect(info.imageRect, info.scaleX);
 
     // finally, compute the dirty rect of the canvas
@@ -418,7 +412,7 @@ void KisPrescaledProjection::updateScaledImage(UpdateInformation &info)
 {
     QPainter gc(&m_d->prescaledQImage);
     gc.setCompositionMode(QPainter::CompositionMode_Source);
-//    gc.fillRect(toAlignedRectWorkaround(viewRectFromImagePixels(info.dirtyImageRect)), QColor(255, 0, 0, 255));
+//    gc.fillRect(viewRectFromImagePixels(info.dirtyImageRect).toAlignedRect(), QColor(255, 0, 0, 255));
     drawUsingBackend(gc, info);
 }
 
@@ -443,7 +437,7 @@ QRectF KisPrescaledProjection::viewRectFromImagePixels(const QRect& rc)
     qreal xRes = m_d->image->xRes();
     qreal yRes = m_d->image->yRes();
 
-    QRectF imageRect = toFloatRectWorkaround(rc);
+    QRectF imageRect(rc);
 
     QRectF docRect;
     docRect.setCoords(imageRect.left() / xRes, imageRect.top() / yRes,
@@ -470,7 +464,7 @@ QRect KisPrescaledProjection::imageRectFromViewPortPixels(const QRectF& viewport
     QRectF translatedRect = intersectedRect.translated(m_d->documentOffset);
     QRectF docRect = m_d->viewConverter->viewToDocument(translatedRect);
 
-    return toAlignedRectWorkaround(m_d->image->documentToPixel(docRect)).intersected(m_d->image->bounds());
+    return m_d->image->documentToPixel(docRect).toAlignedRect().intersected(m_d->image->bounds());
 }
 
 
@@ -478,44 +472,5 @@ void KisPrescaledProjection::updateDocumentOrigin(const QPoint& documentOrigin)
 {
     m_d->documentOrigin = documentOrigin;
 }
-
-
-QRectF toFloatRectWorkaround(const QRect& rc)
-{
-    QRectF temp;
-
-    /**
-     * We can't use setCoords here due to "history reasons",
-     * mentioned in Qt documentation.
-     * More than that we make rounding process more stable
-     * with cropping the rect by EPSILON
-     */
-    temp.setRect(rc.left() + EPSILON, rc.top() + EPSILON,
-                 rc.width() - 2 * EPSILON, rc.height() - 2 * EPSILON);
-
-    return temp;
-}
-
-QRect toAlignedRectWorkaround(const QRectF& rc)
-{
-    qreal x1, y1, x2, y2;
-    rc.getCoords(&x1, &y1, &x2, &y2);
-
-    x1 = floor(x1);
-    y1 = floor(y1);
-    x2 = ceil(x2);
-    y2 = ceil(y2);
-
-    QRect ret;
-
-    /**
-     * We can't use setCoords here due to "history reasons",
-     * mentioned in Qt documentation
-     */
-    ret.setRect(x1, y1, x2 - x1, y2 - y1);
-
-    return ret;
-}
-
 
 #include "kis_prescaled_projection.moc"

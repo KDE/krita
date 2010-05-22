@@ -215,24 +215,4 @@ private:
     Private * const m_d;
 };
 
-/**
- * A workaroung for Qt's strange behavior of QRect::toAlignedRect()
- */
-KRITAUI_EXPORT QRect toAlignedRectWorkaround(const QRectF& rc);
-
-/**
- * Heh.. "Due to hitory reasons" [1] Qt's QRect::right() doesn't return
- * the coordinate of rightmost side of the rect, it returns
- * the position of the last (rightmost) pixel owned by the rect.
- * However QRectF implements the former case.
- * We workaround it here AND help rounding process a bit.
- * Returned QRectF is ~2e-10 pixels smaller, than original @rc.
- * It doesn't play any role in drawing, but it helps to round up
- * back to @rc afterwards.
- *
- * [1] - see Qt documentation for more
- */
-KRITAUI_EXPORT QRectF toFloatRectWorkaround(const QRect& rc);
-
-
 #endif

@@ -23,9 +23,6 @@
 #include "kis_iterators_pixel.h"
 #include "kis_datamanager.h"
 
-// for toAlignedRectWorkaround()
-#include "kis_prescaled_projection.h"
-
 #include "kis_debug.h"
 
 //#define DEBUG_PYRAMID
@@ -327,11 +324,9 @@ KisImagePatch KisImagePyramid::getNearestPatch(UpdateInformation &info)
 
     alignByPow2Hi(info.borderWidth, alignment);
 
-    patch.m_interestRect = toFloatRectWorkaround(
-                               QRect(info.borderWidth, info.borderWidth,
-                                     info.imageRect.width(),
-                                     info.imageRect.height())
-                           );
+    patch.m_interestRect = QRectF(info.borderWidth, info.borderWidth,
+                                 info.imageRect.width(),
+                                 info.imageRect.height());
 
     QRect adjustedRect = info.imageRect.adjusted(-info.borderWidth, -info.borderWidth,
                                                  info.borderWidth, info.borderWidth);

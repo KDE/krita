@@ -19,15 +19,11 @@
 #ifndef KIS_PROJECTION_BACKEND
 #define KIS_PROJECTION_BACKEND
 
-#include <QPainter>
-#include <QImage>
-#include <QSize>
-#include <QRect>
-#include <kis_types.h>
+#include "kis_update_info.h"
 
 class KoColorProfile;
 class UpdateInformation;
-struct KisImagePatch;
+class KisImagePatch;
 
 /**
  * KisProjectionBackend ia an abstract class represinting
@@ -51,7 +47,7 @@ public:
     /**
      * Updates @rc (in KisImage pixels) from the base image
      */
-    virtual void setDirty(UpdateInformation &info) = 0;
+    virtual void setDirty(KisPPUpdateInfoSP info) = 0;
 
     /**
      * Some backends cannot work with arbitrary areas due to
@@ -72,7 +68,7 @@ public:
      * image of this rect will actually be written to the patch's QImage.
      * That is done to eliminate border effects in smooth scaling.
      */
-    virtual KisImagePatch getNearestPatch(UpdateInformation &info) = 0;
+    virtual KisImagePatch getNearestPatch(KisPPUpdateInfoSP info) = 0;
 
     /**
      * Draws a piece of original image onto @gc's canvas
@@ -84,132 +80,7 @@ public:
      * @param info.renderHints - hints, transmitted to QPainter during darwing
      */
     virtual void drawFromOriginalImage(QPainter& gc,
-                                       UpdateInformation &info) = 0;
+                                       KisPPUpdateInfoSP info) = 0;
 };
-
-struct KisImagePatch {
-    /**
-     * The scale of the image stored in the patch
-     */
-    qreal m_scaleX;
-    qreal m_scaleY;
-
-    /**
-     * The rect of KisImage covered by the image
-     * of the patch (in KisImage pixels)
-     */
-    QRect m_patchRect;
-
-    /**
-     * The rect that was requested during creation
-     * of the patch. It equals to patchRect withount
-     * borders
-     * These borders are introdused for more accurate
-     * smooth scaling to reduce border effects
-     * (IN m_image PIXELS, relative to m_image's topLeft);
-
-     */
-    QRectF m_interestRect;
-
-    QImage m_image;
-
-    /**
-     * Checks whether the patch can be used for drawing the image
-     */
-    bool isValid();
-
-    /**
-     * Darws an m_interestRect of the patch onto @gc
-     * By the way it fits this rect into @dstRect
-     * @renderHints are directly tranmitted to QPainter
-     */
-    void drawMe(QPainter &gc,
-                const QRectF &dstRect,
-                QPainter::RenderHints renderHints);
-
-    /**
-     * Prescales an interestRect a bit with Blitz
-     * It's usefulness is dispulable and should be
-     * tested, so - FIXME
-     */
-    void prescaleWithBlitz(QRectF dstRect);
-};
-
-class UpdateInformation
-{
-public:
-    enum TransferType {
-        DIRECT,
-        PATCH
-    };
-
-    /**
-     * The rect that was reported by KisImage as dirty
-     */
-    QRect dirtyImageRect;
-
-    /**
-     * Rect of KisImage corresponding to @viewportRect.
-     * It is cropped and aligned corresponding to the canvas.
-     */
-    QRect imageRect;
-
-    /**
-     * Rect of canvas widget corresponding to @imageRect
-     */
-    QRectF viewportRect;
-
-    qreal scaleX;
-    qreal scaleY;
-
-    /**
-     * Defines the way the source image is painted onto
-     * prescaled QImage
-     */
-    TransferType transfer;
-
-    /**
-     * Render hints for painting the direct painting/patch painting
-     */
-    QPainter::RenderHints renderHints;
-
-    /**
-     * The number of additional pixels those should be added
-     * to the patch
-     */
-    qint32 borderWidth;
-
-    /**
-     * Used for temporary sorage of KisImage's data
-     * by KisProjectionCache
-     */
-    KisImagePatch patch;
-};
-
-inline void scaleRect(QRectF &rc, qreal scaleX, qreal scaleY)
-{
-    qreal x, y, w, h;
-    rc.getRect(&x, &y, &w, &h);
-
-    x *= scaleX;
-    y *= scaleY;
-    w *= scaleX;
-    h *= scaleY;
-
-    rc.setRect(x, y, w, h);
-}
-
-inline void scaleRect(QRect &rc, qreal scaleX, qreal scaleY)
-{
-    qint32 x, y, w, h;
-    rc.getRect(&x, &y, &w, &h);
-
-    x *= scaleX;
-    y *= scaleY;
-    w *= scaleX;
-    h *= scaleY;
-
-    rc.setRect(x, y, w, h);
-}
 
 #endif /* KIS_PROJECTION_BACKEND */

@@ -139,9 +139,9 @@ void KisImagePyramid::setImageSize(qint32 w, qint32 h)
     /* nothing interesting */
 }
 
-void KisImagePyramid::setDirty(UpdateInformation &info)
+void KisImagePyramid::setDirty(KisPPUpdateInfoSP info)
 {
-    retrieveImageData(info.dirtyImageRect);
+    retrieveImageData(info->dirtyImageRect);
     prescalePyramid(info);
 }
 
@@ -156,11 +156,11 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
     gc.end();
 }
 
-void KisImagePyramid::prescalePyramid(UpdateInformation &info)
+void KisImagePyramid::prescalePyramid(KisPPUpdateInfoSP info)
 {
     KisPaintDevice *src;
     KisPaintDevice *dst;
-    QRect currentSrcRect = info.dirtyImageRect;
+    QRect currentSrcRect = info->dirtyImageRect;
 
     for (int i = FIRST_NOT_ORIGINAL_INDEX; i < m_pyramidHeight; i++) {
         src = m_pyramid[i-1].data();
@@ -310,45 +310,27 @@ void KisImagePyramid::alignSourceRect(QRect& rect, qreal scale)
     dbgRender << "After alignment:\t" << rect;
 }
 
-KisImagePatch KisImagePyramid::getNearestPatch(UpdateInformation &info)
+KisImagePatch KisImagePyramid::getNearestPatch(KisPPUpdateInfoSP info)
 {
-    qint32 index = findFirstGoodPlaneIndex(qMax(info.scaleX, info.scaleY),
-                                           info.imageRect.size());
+    qint32 index = findFirstGoodPlaneIndex(qMax(info->scaleX, info->scaleY),
+                                           info->imageRect.size());
     qreal planeScale = SCALE_FROM_INDEX(index);
     qint32 alignment = 1 << index;
 
-    KisImagePatch patch;
+    alignByPow2Hi(info->borderWidth, alignment);
 
-    patch.m_scaleX = planeScale;
-    patch.m_scaleY = planeScale;
+    KisImagePatch patch(info->imageRect, info->borderWidth,
+                        planeScale, planeScale);
 
-    alignByPow2Hi(info.borderWidth, alignment);
-
-    patch.m_interestRect = QRectF(info.borderWidth, info.borderWidth,
-                                 info.imageRect.width(),
-                                 info.imageRect.height());
-
-    QRect adjustedRect = info.imageRect.adjusted(-info.borderWidth, -info.borderWidth,
-                                                 info.borderWidth, info.borderWidth);
-    patch.m_patchRect = adjustedRect;
-
-    scaleRect(patch.m_interestRect, planeScale, planeScale);
-    scaleRect(patch.m_patchRect, planeScale, planeScale);
-
-    patch.m_image = convertToQImageFast(m_pyramid[index],
-                                        patch.m_patchRect);
-
-    dbgRender << ppVar(planeScale);
-    dbgRender << ppVar(patch.m_interestRect);
-    dbgRender << ppVar(patch.m_patchRect);
-
+    patch.setImage(convertToQImageFast(m_pyramid[index],
+                                       patch.patchRect()));
     return patch;
 }
 
-void KisImagePyramid::drawFromOriginalImage(QPainter& gc, UpdateInformation &info)
+void KisImagePyramid::drawFromOriginalImage(QPainter& gc, KisPPUpdateInfoSP info)
 {
     KisImagePatch patch = getNearestPatch(info);
-    patch.drawMe(gc, info.viewportRect, info.renderHints);
+    patch.drawMe(gc, info->viewportRect, info->renderHints);
 }
 
 QImage KisImagePyramid::convertToQImageFast(KisPaintDeviceSP paintDevice,

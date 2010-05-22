@@ -28,7 +28,6 @@
 #include <kis_paint_device.h>
 #include "kis_projection_backend.h"
 
-
 class KisImagePyramid : QObject, public KisProjectionBackend
 {
     Q_OBJECT
@@ -40,10 +39,10 @@ public:
     void setImage(KisImageWSP newImage);
     void setImageSize(qint32 w, qint32 h);
     void setMonitorProfile(const KoColorProfile* monitorProfile);
-    void setDirty(UpdateInformation &info);
+    void setDirty(KisPPUpdateInfoSP info);
 
-    KisImagePatch getNearestPatch(UpdateInformation &info);
-    void drawFromOriginalImage(QPainter& gc, UpdateInformation &info);
+    KisImagePatch getNearestPatch(KisPPUpdateInfoSP info);
+    void drawFromOriginalImage(QPainter& gc, KisPPUpdateInfoSP info);
 
     /**
      * Render the projection onto a QImage.
@@ -85,7 +84,7 @@ private:
 
 private:
     void retrieveImageData(const QRect &rect);
-    void prescalePyramid(UpdateInformation &info);
+    void prescalePyramid(KisPPUpdateInfoSP info);
     void rebuildPyramid();
     void clearPyramid();
 

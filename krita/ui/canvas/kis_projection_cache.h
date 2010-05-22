@@ -20,11 +20,6 @@
 #ifndef KIS_PROJECTION_CACHE
 #define KIS_PROJECTION_CACHE
 
-#include <QImage>
-#include <QSize>
-#include <QRect>
-#include <kis_types.h>
-
 #include "kis_projection_backend.h"
 
 /**
@@ -42,11 +37,11 @@ public:
     void setImage(KisImageWSP image);
     void setImageSize(qint32 w, qint32 h);
     void setMonitorProfile(const KoColorProfile* monitorProfile);
-    void setDirty(UpdateInformation &info);
+    void setDirty(KisPPUpdateInfoSP info);
 
 
-    KisImagePatch getNearestPatch(UpdateInformation &info);
-    void drawFromOriginalImage(QPainter& gc, UpdateInformation &info);
+    KisImagePatch getNearestPatch(KisPPUpdateInfoSP info);
+    void drawFromOriginalImage(QPainter& gc, KisPPUpdateInfoSP info);
 
     void setCacheKisImageAsQImage(bool toggle);
 

@@ -359,7 +359,7 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
 
 void KisCanvas2::updateCanvasProjection(const QRect & rc)
 {
-    // This function is not called for qpainter canvas only
+    // This function is called for qpainter canvas only
     Q_ASSERT(m_d->prescaledProjection);
 
     QRect vRect = m_d->prescaledProjection->updateCanvasProjection(rc);

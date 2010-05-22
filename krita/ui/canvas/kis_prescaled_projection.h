@@ -23,6 +23,8 @@
 #include <krita_export.h>
 #include <kis_shared.h>
 
+#include "kis_update_info.h"
+
 class QImage;
 class QPoint;
 class QRect;
@@ -32,8 +34,6 @@ class QPainter;
 
 class KoViewConverter;
 class KoColorProfile;
-
-class UpdateInformation;
 
 #include <kis_types.h>
 
@@ -172,26 +172,31 @@ private:
      *
      * @param dirtyImageRect the part of the KisImage that is dirty
      */
-    UpdateInformation getUpdateInformation(const QRect &viewportRect,
+    KisPPUpdateInfoSP getUpdateInformation(const QRect &viewportRect,
                                            const QRect &dirtyImageRect);
 
 
-    void retrieveImageData(const QRect &dirtyRect, UpdateInformation &info);
+    KisPPUpdateInfoSP retrieveImageData(const QRect &dirtyImageRect);
+    QRect updateViewportCache(KisPPUpdateInfoSP info);
 
+    void retrieveImageData(const QRect &dirtyImageRect,
+                           KisPPUpdateInfoSP info);
+
+    void updatePrescaledCache(KisPPUpdateInfoSP info);
 
     /**
      * Initiates the process of prescaled image update
      *
      * @param info prepared information
      */
-    void updateScaledImage(UpdateInformation &info);
+    void updateScaledImage(KisPPUpdateInfoSP info);
 
     /**
      * Atual drawing is done here
      * @param info prepared information
      * @param gc The painter we draw on
      */
-    void drawUsingBackend(QPainter &gc, UpdateInformation &info);
+    void drawUsingBackend(QPainter &gc, KisPPUpdateInfoSP info);
 
     /**
      * Converts image pixels into widget pixels

@@ -28,3 +28,13 @@ QRect KisUpdateInfo::dirtyViewportRect()
 QRect KisPPUpdateInfo::dirtyViewportRect() {
     return viewportRect.toAlignedRect();
 }
+
+
+#ifdef HAVE_OPENGL
+
+QRect KisOpenGLUpdateInfo::dirtyViewportRect() {
+    qFatal("Not implemented yet!");
+    return viewportRect.toAlignedRect();
+}
+
+#endif /* HAVE_OPENGL */

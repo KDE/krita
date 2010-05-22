@@ -19,6 +19,8 @@
 #define KIS_OPENGL_IMAGE_TEXTURES_H_
 
 #include <opengl/kis_opengl.h>
+#include "canvas/kis_update_info.h"
+#include "opengl/kis_texture_tile_update_info.h"
 
 #ifdef HAVE_OPENGL
 
@@ -168,7 +170,6 @@ protected:
     void createImageTextureTiles();
     void destroyImageTextureTiles();
     int imageTextureTileIndex(int x, int y) const;
-    void updateImageTextureTiles(const QRect& rect);
 
     void setImageTextureFormat();
 
@@ -176,8 +177,11 @@ protected:
     static bool imageCanUseHDRExposureProgram(KisImageWSP image);
     static bool imageCanShareTextures(KisImageWSP image);
 
-protected slots:
-    void slotImageUpdated(const QRect &);
+public slots:
+    KisOpenGLUpdateInfoSP updateCache(const QRect& rect);
+    void recalculateCache(KisUpdateInfoSP info);
+
+    void slotImageUpdated(const QRect &rc);
     void slotImageSizeChanged(qint32 w, qint32 h);
 
 private:

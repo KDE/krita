@@ -22,6 +22,7 @@
 #include <QPainter>
 #include "kis_shared.h"
 #include "kis_image_patch.h"
+#include <opengl/kis_opengl.h>
 
 
 class KisUpdateInfo;
@@ -40,6 +41,22 @@ public:
 };
 
 Q_DECLARE_METATYPE(KisUpdateInfoSP);
+
+#ifdef HAVE_OPENGL
+#include "opengl/kis_texture_tile_update_info.h"
+
+class KisOpenGLUpdateInfo;
+typedef KisSharedPtr<KisOpenGLUpdateInfo> KisOpenGLUpdateInfoSP;
+
+class KisOpenGLUpdateInfo : public KisUpdateInfo
+{
+public:
+    KisTextureTileUpdateInfoList tileList;
+    QRect dirtyViewportRect();
+
+    QRectF viewportRect;
+};
+#endif /* HAVE_OPENGL */
 
 class KisPPUpdateInfo : public KisUpdateInfo
 {

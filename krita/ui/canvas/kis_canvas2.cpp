@@ -305,8 +305,14 @@ void KisCanvas2::connectCurrentImage()
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
-        connect(m_d->openGLImageTextures, SIGNAL(sigImageUpdated(const QRect &)), SLOT(updateCanvas()));
-        connect(m_d->openGLImageTextures, SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(setImageSize(qint32, qint32)));
+
+        connect(m_d->view->image(), SIGNAL(sigImageUpdated(const QRect &)),
+                SLOT(startUpdateCanvasProjection(const QRect &)),
+                Qt::DirectConnection);
+        connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
+                this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
+        connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)),
+                m_d->openGLImageTextures, SLOT(slotImageSizeChanged(qint32, qint32)));
 #else
         qFatal() << "Bad use of connectCurrentImage(). It shouldn't have happened =(";
 #endif
@@ -368,26 +374,55 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
 
 void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 {
-    // This function is called for qpainter canvas only
-    Q_ASSERT(m_d->prescaledProjection);
-    KisUpdateInfoSP info = m_d->prescaledProjection->updateCache(rc);
+    if (m_d->currentCanvasIsOpenGL) {
+#ifdef HAVE_OPENGL
+        Q_ASSERT(m_d->openGLImageTextures);
+        KisUpdateInfoSP info = m_d->openGLImageTextures->updateCache(rc);
 
-    emit sigCanvasCacheUpdated(info);
+        emit sigCanvasCacheUpdated(info);
+#else
+        Q_ASSERT_X(0, "startUpdateCanvasProjection()", "Bad use of startUpdateCanvasProjection(). It shouldn't have happened =(");
+#endif
+    } else {
+        Q_ASSERT(m_d->prescaledProjection);
+        KisUpdateInfoSP info = m_d->prescaledProjection->updateCache(rc);
+
+        emit sigCanvasCacheUpdated(info);
+    }
+
+
 }
 
 void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
 {
-    // See comment in startUpdateCanvasProjection()
-    Q_ASSERT(m_d->prescaledProjection);
+    if (m_d->currentCanvasIsOpenGL) {
+#ifdef HAVE_OPENGL
+        Q_ASSERT(m_d->openGLImageTextures);
+        m_d->openGLImageTextures->recalculateCache(info);
 
-    m_d->prescaledProjection->recalculateCache(info);
-
-    QRect vRect = info->dirtyViewportRect();
-    if (m_d->mirrorMode){
+        /**
+         * FIXME: Please not update entire canvas
+         * Implement info->dirtyViewportRect()
+         */
         m_d->canvasWidget->widget()->update();
-    }else if (!vRect.isEmpty()) {
-        vRect.translate(m_d->canvasWidget->documentOrigin());
-        m_d->canvasWidget->widget()->update(vRect);
+#else
+        Q_ASSERT_X(0, "updateCanvasProjection()", "Bad use of updateCanvasProjection(). It shouldn't have happened =(");
+#endif
+    }
+    else {
+
+        // See comment in startUpdateCanvasProjection()
+        Q_ASSERT(m_d->prescaledProjection);
+
+        m_d->prescaledProjection->recalculateCache(info);
+
+        QRect vRect = info->dirtyViewportRect();
+        if (m_d->mirrorMode){
+            m_d->canvasWidget->widget()->update();
+        }else if (!vRect.isEmpty()) {
+            vRect.translate(m_d->canvasWidget->documentOrigin());
+            m_d->canvasWidget->widget()->update(vRect);
+        }
     }
 }
 

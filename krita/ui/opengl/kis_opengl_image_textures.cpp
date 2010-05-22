@@ -98,10 +98,8 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image, KoColorProfile
 
     createImageTextureTiles();
 
-    connect(m_image, SIGNAL(sigImageUpdated(QRect)), SLOT(slotImageUpdated(QRect)));
-    connect(m_image, SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
-
-    updateImageTextureTiles(m_image->bounds());
+    KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
+    recalculateCache(info);
 }
 
 KisOpenGLImageTextures::~KisOpenGLImageTextures()
@@ -205,107 +203,93 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
     }
 }
 
-void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
+KisOpenGLUpdateInfoSP
+KisOpenGLImageTextures::updateCache(const QRect& rect)
 {
-    //dbgUI << "updateImageTextureTiles" << rect;
+    KisOpenGLUpdateInfoSP info = new KisOpenGLUpdateInfo();
 
     QRect updateRect = rect & m_image->bounds();
+    if (updateRect.isEmpty()) return info;
 
-    if (!updateRect.isEmpty()) {
+    int firstColumn = updateRect.left() / m_imageTextureTileWidth;
+    int lastColumn = updateRect.right() / m_imageTextureTileWidth;
+    int firstRow = updateRect.top() / m_imageTextureTileHeight;
+    int lastRow = updateRect.bottom() / m_imageTextureTileHeight;
 
-        KisOpenGL::makeContextCurrent();
+    qint32 numItems = (lastColumn - firstColumn + 1) * (lastRow - firstRow + 1);
+    info->tileList.reserve(numItems);
 
-        KIS_OPENGL_CLEAR_ERROR();
+    for (int col = firstColumn; col <= lastColumn; col++) {
+        for (int row = firstRow; row <= lastRow; row++) {
 
-        int firstColumn = updateRect.left() / m_imageTextureTileWidth;
-        int lastColumn = updateRect.right() / m_imageTextureTileWidth;
-        int firstRow = updateRect.top() / m_imageTextureTileHeight;
-        int lastRow = updateRect.bottom() / m_imageTextureTileHeight;
+            QRect tileRect(col * m_imageTextureTileWidth, row * m_imageTextureTileHeight,
+                           m_imageTextureTileWidth, m_imageTextureTileHeight);
 
-        for (int column = firstColumn; column <= lastColumn; column++) {
-            for (int row = firstRow; row <= lastRow; row++) {
-
-                QRect tileRect(column * m_imageTextureTileWidth, row * m_imageTextureTileHeight,
-                               m_imageTextureTileWidth, m_imageTextureTileHeight);
-
-                QRect tileUpdateRect = tileRect & updateRect;
-
-                glBindTexture(GL_TEXTURE_2D, imageTextureTile(tileRect.x(), tileRect.y()));
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);//GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-                glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-                QImage tileUpdateImage;
-                quint8 *pixels;
-                bool deletePixelsAfterUse = false;
-
-                if (m_imageTextureInternalFormat == GL_RGBA8) {
-                    tileUpdateImage = m_image->convertToQImage(tileUpdateRect.x(), tileUpdateRect.y(),
-                                                               tileUpdateRect.width(), tileUpdateRect.height(),
-                                                               m_monitorProfile);
-
-                    pixels = tileUpdateImage.bits();
-                }
-                else {
-                    pixels = new quint8[tileUpdateRect.width() * tileUpdateRect.height() * m_image->colorSpace()->pixelSize()];
-                    Q_CHECK_PTR(pixels);
-                    deletePixelsAfterUse = true;
-
-                    m_image->projection()->readBytes(pixels, tileUpdateRect.x(), tileUpdateRect.y(),
-                                                      tileUpdateRect.width(), tileUpdateRect.height());
-
-#if defined(HAVE_GLEW) && defined(HAVE_OPENEXR)
-
-                    if (m_imageTextureInternalFormat == GL_RGBA16) {
-                        // Convert to 16 bit rgba from the current colorspace (which is integer 16, float 16 or float 32, but not rgba)
-                        const KoColorSpace* rgb16 = KoColorSpaceRegistry::instance()->rgb16(m_monitorProfile);
-                        quint8* rgb16pixels = rgb16->allocPixelBuffer(tileUpdateRect.width() * tileUpdateRect.height());
-                        m_image->colorSpace()->convertPixelsTo(pixels, rgb16pixels, rgb16, tileUpdateRect.width() * tileUpdateRect.height());
-                        delete[] pixels;
-                        pixels = rgb16pixels;
-                    }
-                    else if (m_image->colorSpace()->colorDepthId() == Float16BitsColorDepthID && m_imageTextureType == GL_FLOAT) {
-                        // Convert half to float as we don't have ARB_half_float_pixel
-                        const int NUM_RGBA_COMPONENTS = 4;
-                        qint32 halfCount = tileUpdateRect.width() * tileUpdateRect.height() * NUM_RGBA_COMPONENTS;
-                        GLfloat *pixels_as_floats = new GLfloat[halfCount];
-                        const half *half_pixel = reinterpret_cast<const half *>(pixels);
-                        GLfloat *float_pixel = pixels_as_floats;
-
-                        while (halfCount > 0) {
-                            *float_pixel = *half_pixel;
-                            ++float_pixel;
-                            ++half_pixel;
-                            --halfCount;
-                        }
-                        delete [] pixels;
-                        pixels = reinterpret_cast<quint8 *>(pixels_as_floats);
-                    }
-#endif
-                }
-
-                if (tileUpdateRect.width() == m_imageTextureTileWidth && tileUpdateRect.height() == m_imageTextureTileHeight) {
-
-                    glTexImage2D(GL_TEXTURE_2D, 0, m_imageTextureInternalFormat, m_imageTextureTileWidth, m_imageTextureTileHeight, 0,
-                                 GL_BGRA, m_imageTextureType, pixels);
-                } else {
-                    int xOffset = tileUpdateRect.x() - tileRect.x();
-                    int yOffset = tileUpdateRect.y() - tileRect.y();
-
-                    glTexSubImage2D(GL_TEXTURE_2D, 0, xOffset, yOffset, tileUpdateRect.width(), tileUpdateRect.height(),
-                                    GL_BGRA, m_imageTextureType, pixels);
-                }
-
-                if (deletePixelsAfterUse) {
-                    delete [] pixels;
-                }
-
-                KIS_OPENGL_PRINT_ERROR();
-            }
+            KisTextureTileUpdateInfo tile(tileRect, updateRect);
+            tile.retrieveData(m_image);
+            info->tileList.append(tile);
         }
+    }
+    return info;
+}
+
+void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
+{
+    KisOpenGLUpdateInfoSP glInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
+    if(!glInfo) return;
+
+    KisOpenGL::makeContextCurrent();
+
+    KIS_OPENGL_CLEAR_ERROR();
+
+    KisTextureTileUpdateInfo tile;
+
+    foreach(tile, glInfo->tileList) {
+        glBindTexture(GL_TEXTURE_2D, imageTextureTile(tile.tileRect().x(), tile.tileRect().y()));
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);//GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+        const KoColorSpace *dstCS;
+
+        switch(m_imageTextureType) {
+        case GL_UNSIGNED_BYTE:
+            dstCS = KoColorSpaceRegistry::instance()->rgb8(m_monitorProfile);
+            break;
+#if defined(HAVE_GLEW) && defined(HAVE_OPENEXR)
+        case GL_UNSIGNED_SHORT:
+            dstCS = KoColorSpaceRegistry::instance()->rgb16(m_monitorProfile);
+            break;
+        case GL_HALF_FLOAT_ARB:
+            dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", m_monitorProfile);
+            break;
+        case GL_FLOAT:
+            dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", m_monitorProfile);
+            break;
+#endif
+        default:
+            qFatal("Unknown m_imageTextureType");
+        }
+
+        tile.convertTo(dstCS);
+
+        if (tile.isEntireTileUpdated()) {
+            glTexImage2D(GL_TEXTURE_2D, 0, m_imageTextureInternalFormat, m_imageTextureTileWidth, m_imageTextureTileHeight, 0,
+                         GL_BGRA, m_imageTextureType, tile.data());
+        } else {
+            QPoint patchOffset = tile.patchOffset();
+            QSize patchSize = tile.patchSize();
+            glTexSubImage2D(GL_TEXTURE_2D, 0, patchOffset.x(), patchOffset.y(),
+                            patchSize.width(), patchSize.height(),
+                            GL_BGRA, m_imageTextureType, tile.data());
+        }
+
+        tile.destroy();
+
+        KIS_OPENGL_PRINT_ERROR();
     }
 }
 
@@ -363,7 +347,8 @@ int KisOpenGLImageTextures::imageTextureTileHeight() const
 
 void KisOpenGLImageTextures::update(const QRect& imageRect)
 {
-    updateImageTextureTiles(imageRect);
+    KisOpenGLUpdateInfoSP info = updateCache(imageRect);
+    recalculateCache(info);
 }
 
 void KisOpenGLImageTextures::setSelectionDisplayEnabled(bool enable)
@@ -375,14 +360,17 @@ void KisOpenGLImageTextures::slotImageUpdated(const QRect &rc)
 {
     QRect r = rc & m_image->bounds();
 
-    updateImageTextureTiles(r);
+    KisOpenGLUpdateInfoSP info = updateCache(r);
+    recalculateCache(info);
+
     emit sigImageUpdated(r);
 }
 
 void KisOpenGLImageTextures::slotImageSizeChanged(qint32 w, qint32 h)
 {
     createImageTextureTiles();
-    updateImageTextureTiles(m_image->bounds());
+    KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
+    recalculateCache(info);
 
     emit sigSizeChanged(w, h);
 }
@@ -391,7 +379,8 @@ void KisOpenGLImageTextures::setMonitorProfile(KoColorProfile *monitorProfile)
 {
     if (monitorProfile != m_monitorProfile) {
         m_monitorProfile = monitorProfile;
-        updateImageTextureTiles(m_image->bounds());
+        KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
+        recalculateCache(info);
     }
 }
 
@@ -407,7 +396,8 @@ void KisOpenGLImageTextures::setHDRExposure(float exposure)
             } else {
 #endif
                 QApplication::setOverrideCursor(Qt::WaitCursor);
-                updateImageTextureTiles(m_image->bounds());
+                KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
+                recalculateCache(info);
                 QApplication::restoreOverrideCursor();
 #ifdef HAVE_GLEW
             }
@@ -553,7 +543,6 @@ bool KisOpenGLImageTextures::imageCanUseHDRExposureProgram(KisImageWSP image)
               && (GLEW_ARB_texture_float || GLEW_ATI_texture_float))) {
         return false;
     }
-
     return true;
 #else
     Q_UNUSED(image);

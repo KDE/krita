@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Lukáš Tvrdý lukast.dev@gmail.com
+ *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,23 +16,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_PROJECTION_BENCHMARK_H
-#define KIS_PROJECTION_BENCHMARK_H
+#include "kis_wait_update_done.h"
 
-#include <QtTest/QtTest>
-
-/// loads the image, computes the projection and saves it to another file
-class KisProjectionBenchmark : public QObject
+KisWaitUpdateDone::KisWaitUpdateDone(KisImageWSP image, qint32 numToWait)
 {
-    Q_OBJECT
+    connect(image, SIGNAL(sigImageUpdated(const QRect &)),
+            SLOT(slotImageUpdated(const QRect &)),
+            Qt::DirectConnection);
+    m_numToWait = numToWait;
+    m_image = image;
+}
 
-private slots:
-    
-    void initTestCase();
-    void cleanupTestCase();
-    
-    void benchmarkProjection();
-    void benchmarkOverlapping();
-};
+KisWaitUpdateDone::~KisWaitUpdateDone()
+{
+    disconnect(m_image, SIGNAL(sigImageUpdated(const QRect &)));
+}
 
-#endif
+void KisWaitUpdateDone::wait()
+{
+    m_semaphore.acquire(m_numToWait);
+}
+
+void KisWaitUpdateDone::slotImageUpdated(const QRect &rect) {
+    // qDebug()<< "Got one updated";
+    m_semaphore.release();
+}
+
+#include "kis_wait_update_done.moc"

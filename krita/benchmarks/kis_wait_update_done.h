@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Lukáš Tvrdý lukast.dev@gmail.com
+ *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,23 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_PROJECTION_BENCHMARK_H
-#define KIS_PROJECTION_BENCHMARK_H
+#ifndef KIS_WAIT_UPDATE_DONE_H_
+#define KIS_WAIT_UPDATE_DONE_H_
 
-#include <QtTest/QtTest>
+#include <QObject>
+#include <QSemaphore>
+#include "kis_image.h"
 
-/// loads the image, computes the projection and saves it to another file
-class KisProjectionBenchmark : public QObject
+
+class KisWaitUpdateDone : public QObject
 {
     Q_OBJECT
 
+public:
+    KisWaitUpdateDone(KisImageWSP image, qint32 numToWait);
+    ~KisWaitUpdateDone();
+    void wait();
 private slots:
-    
-    void initTestCase();
-    void cleanupTestCase();
-    
-    void benchmarkProjection();
-    void benchmarkOverlapping();
+    void slotImageUpdated(const QRect &rect);
+
+private:
+    KisImageWSP m_image;
+    QSemaphore m_semaphore;
+    qint32 m_numToWait;
 };
 
-#endif
+#endif /* KIS_WAIT_UPDATE_DONE_H_ */

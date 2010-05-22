@@ -50,6 +50,33 @@ void KisProjectionBenchmark::benchmarkProjection()
     }
 }
 
+#include "kis_wait_update_done.h"
+
+void KisProjectionBenchmark::benchmarkOverlapping()
+{
+    KisDoc2 doc;
+    doc.loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
+    KisLayerSP rootLayer = doc.image()->rootLayer();
+    KisNodeSP dirtyLayer = rootLayer->firstChild()->nextSibling()->firstChild();
+    qint32 xShift = 100;
+    qint32 yShift = 0;
+    qint32 numShifts = 9;
+
+
+    QBENCHMARK{
+        QRect dirtyRect(10, 10, 200,512);
+        KisWaitUpdateDone waiter(doc.image(), numShifts);
+        for(int i = 0; i < numShifts; i++) {
+            // qDebug() << dirtyRect;
+            dirtyLayer->setDirty(dirtyRect);
+            dirtyRect.translate(xShift, yShift);
+        }
+        waiter.wait();
+    }
+    qDebug()<<"DONE";
+//    QTest::qSleep(3000);
+}
+
 
 
 QTEST_KDEMAIN(KisProjectionBenchmark, GUI)

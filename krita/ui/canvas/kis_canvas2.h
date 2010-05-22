@@ -64,6 +64,7 @@ public:
      *                       window and document coordinates.
      */
     KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc);
+    KisCanvas2(const KisCanvas2&);
 
     virtual ~KisCanvas2();
 
@@ -118,10 +119,7 @@ public: // KoCanvasBase implementation
      */
     void preScale();
 
-    void connectCurrentImage();
-
-    void disconnectCurrentImage();
-
+    // FIXME:
     // Temporary! Either get the current layer and image from the
     // resource provider, or use this, which gets them from the
     // current shape selection.
@@ -191,14 +189,15 @@ private slots:
     void slotCanvasDestroyed(QWidget* w);
 
 public:
+//    friend class KisView2;
 
-    friend class KisView2;
-
+    // interface for KisView2 only
+    void connectCurrentImage();
+    void disconnectCurrentImage();
     void resetCanvas(bool useOpenGL);
 
-    KisCanvas2(const KisCanvas2&);
-
-    void createCanvas();
+private:
+    void createCanvas(bool useOpenGL);
     void createQPainterCanvas();
     void createOpenGLCanvas();
     void createFavoriteResourceManager(KisPaintopBox*);

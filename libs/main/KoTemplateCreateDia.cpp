@@ -350,7 +350,7 @@ void KoTemplateCreateDia::slotOk() {
             if( KIO::NetAccess::exists(orig, KIO::NetAccess::SourceSide, this) ) {
                 dest.setPath( dir+"/.directory" );
                 // We copy the file with overwrite
-                KIO::FileCopyJob *job = KIO::file_copy( orig, dest,KIO::Overwrite | KIO::HideProgressInfo);
+                KIO::FileCopyJob *job = KIO::file_copy( orig, dest, -1, KIO::Overwrite | KIO::HideProgressInfo);
                 job->exec();
 
                 ready=true;

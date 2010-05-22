@@ -104,7 +104,7 @@ void KisCanvasResourceProvider::setHDRExposure(float exposure)
     m_view->image()->projection()->colorSpace()->profile()->setProperty("exposure", exposure);
     m_view->image()->rootLayer()->accept(eV);
     m_view->canvasBase()->updateCanvas();
-    m_view->canvasBase()->updateCanvasProjection(m_view->image()->bounds());
+    m_view->canvasBase()->startUpdateCanvasProjection(m_view->image()->bounds());
 }
 
 

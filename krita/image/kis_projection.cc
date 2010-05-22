@@ -65,8 +65,11 @@ KisProjection::KisProjection(KisImageWSP image)
             m_d->updater, SLOT(startFullRefresh(KisNodeSP, QRect)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(sigUpdateProjection(KisNodeSP, QRect, QRect)), m_d->updater, SLOT(startUpdate(KisNodeSP, QRect, QRect)));
-    connect(m_d->updater, SIGNAL(updateDone(QRect)), m_d->image, SLOT(slotProjectionUpdated(QRect)));
+    connect(this, SIGNAL(sigUpdateProjection(KisNodeSP, QRect, QRect)),
+            m_d->updater, SLOT(startUpdate(KisNodeSP, QRect, QRect)));
+    connect(m_d->updater, SIGNAL(updateDone(QRect)),
+            m_d->image, SLOT(slotProjectionUpdated(QRect)),
+            Qt::DirectConnection);
 }
 
 

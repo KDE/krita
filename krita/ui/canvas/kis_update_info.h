@@ -33,12 +33,13 @@ typedef KisSharedPtr<KisPPUpdateInfo> KisPPUpdateInfoSP;
 class KisUpdateInfo : public KisShared
 {
 public:
-    KisUpdateInfo() {}
-    virtual ~KisUpdateInfo() {}
+    KisUpdateInfo();
+    virtual ~KisUpdateInfo();
 
-    virtual QRect dirtyViewportRect() = 0;
+    virtual QRect dirtyViewportRect();
 };
 
+Q_DECLARE_METATYPE(KisUpdateInfoSP);
 
 class KisPPUpdateInfo : public KisUpdateInfo
 {
@@ -48,9 +49,7 @@ public:
         PATCH
     };
 
-    QRect dirtyViewportRect() {
-        return viewportRect.toAlignedRect();
-    }
+    QRect dirtyViewportRect();
 
     /**
      * The rect that was reported by KisImage as dirty

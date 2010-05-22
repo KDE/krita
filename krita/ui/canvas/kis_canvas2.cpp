@@ -307,8 +307,13 @@ void KisCanvas2::connectCurrentImage()
         qFatal() << "Bad use of connectCurrentImage(). It shouldn't have happened =(";
 #endif
     } else {
-        connect(m_d->view->image(), SIGNAL(sigImageUpdated(const QRect &)), SLOT(updateCanvasProjection(const QRect &)));
-        connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(setImageSize(qint32, qint32)));
+        connect(m_d->view->image(), SIGNAL(sigImageUpdated(const QRect &)),
+                SLOT(startUpdateCanvasProjection(const QRect &)),
+                Qt::DirectConnection);
+        connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
+                this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
+        connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)),
+                SLOT(setImageSize(qint32, qint32)));
 
         Q_ASSERT(m_d->prescaledProjection);
         m_d->prescaledProjection->setImage(m_d->view->image());
@@ -349,7 +354,7 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
         m_d->openGLImageTextures->setMonitorProfile(monitorProfile());
     } else {
         if (image()) {
-            updateCanvasProjection(image()->bounds());
+            startUpdateCanvasProjection(image()->bounds());
         }
     }
 
@@ -357,12 +362,20 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     m_d->canvasWidget->widget()->update();
 }
 
-void KisCanvas2::updateCanvasProjection(const QRect & rc)
+void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 {
     // This function is called for qpainter canvas only
     Q_ASSERT(m_d->prescaledProjection);
-
     KisUpdateInfoSP info = m_d->prescaledProjection->updateCache(rc);
+
+    emit sigCanvasCacheUpdated(info);
+}
+
+void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
+{
+    // See comment in startUpdateCanvasProjection()
+    Q_ASSERT(m_d->prescaledProjection);
+
     m_d->prescaledProjection->recalculateCache(info);
 
     QRect vRect = info->dirtyViewportRect();

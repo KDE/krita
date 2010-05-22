@@ -29,6 +29,8 @@
 #include <kis_types.h>
 #include <KoPointerEvent.h>
 
+#include "kis_prescaled_projection.h"
+
 class KoToolProxy;
 class KoColorProfile;
 
@@ -146,14 +148,18 @@ signals:
 
     void favoritePaletteCalled(const QPoint&);
 
+    void sigCanvasCacheUpdated(KisUpdateInfoSP);
+
 public slots:
 
     /// Update the entire canvas area
     void updateCanvas();
 
-    /// The image projection has changed, now update the canvas
-    /// representation of it.
-    void updateCanvasProjection(const QRect & rc);
+    /// The image projection has changed, now start an update
+    /// of the canvas representation.
+    void startUpdateCanvasProjection(const QRect & rc);
+
+    void updateCanvasProjection(KisUpdateInfoSP info);
 
     void setImageSize(qint32 w, qint32 h);
 

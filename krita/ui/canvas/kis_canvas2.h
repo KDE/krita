@@ -66,7 +66,6 @@ public:
      *                       window and document coordinates.
      */
     KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc);
-    KisCanvas2(const KisCanvas2&);
 
     virtual ~KisCanvas2();
 
@@ -207,6 +206,8 @@ public:
     bool handlePopupPaletteIsVisible(KoPointerEvent *);
 
 private:
+    Q_DISABLE_COPY(KisCanvas2);
+
     void createCanvas(bool useOpenGL);
     void createQPainterCanvas();
     void createOpenGLCanvas();

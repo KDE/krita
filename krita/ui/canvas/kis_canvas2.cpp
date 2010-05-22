@@ -291,6 +291,10 @@ void KisCanvas2::createCanvas(bool useOpenGL)
         createQPainterCanvas();
 #endif
     } else {
+#ifdef HAVE_OPENGL
+        // Free shared pointer
+        m_d->openGLImageTextures = 0;
+#endif
         createQPainterCanvas();
     }
 }

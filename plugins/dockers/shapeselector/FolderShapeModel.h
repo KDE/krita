@@ -37,7 +37,9 @@ public:
     /// always returns true clipping any child to the folder outline
     virtual bool isClipped(const KoShape *child) const;
     virtual bool isChildLocked(const KoShape *child) const;
+    /// always returns true, but thats irrelevant since folders don't rotate.
     virtual bool inheritsTransform(const KoShape *shape) const;
+    /// ignored
     virtual void setInheritsTransform(const KoShape *shape, bool inherit);
     /// return content item count
     virtual int count() const;

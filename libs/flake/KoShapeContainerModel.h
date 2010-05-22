@@ -87,6 +87,34 @@ public:
     virtual bool isClipped(const KoShape *shape) const = 0;
 
     /**
+     * Set the shape to inherit the container transform.
+     *
+     * A shape that inherits the transform of the parent container will have its
+     * share / rotation / skew etc be calculated as being the product of both its
+     * own local transformation and also that of its parent container.
+     * If you set this to true and rotate the container, the shape will get that
+     * rotation as well automatically.
+     *
+     * @param shape the shape for which the property will be changed.
+     * @param inherit the new value
+     */
+    virtual void setInheritsTransform(const KoShape *shape, bool inherit) = 0;
+
+    /**
+     * Returns if the shape inherits the container transform.
+     *
+     * A shape that inherits the transform of the parent container will have its
+     * share / rotation / skew etc be calculated as being the product of both its
+     * own local transformation and also that of its parent container.
+     * If you set this to true and rotate the container, the shape will get that
+     * rotation as well automatically.
+     *
+     * @return if the argument shape has its 'inherits transform' property set.
+     * @param shape the shape for which the property will be returned.
+     */
+    virtual bool inheritsTransform(const KoShape *shape) const = 0;
+
+    /**
      * Return wheather the child has the effective state of being locked for user modifications.
      * The model has to call KoShape::isGeometryProtected() and base its return value upon that, it can
      *  additionally find rules on wheather the child is locked based on the container state.

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
  *
@@ -30,7 +30,7 @@ public:
     {
     public:
         explicit Relation(KoShape *child)
-        : m_inside(false)
+        : inside(false)
         , m_child(child)
         {}
 
@@ -39,7 +39,8 @@ public:
             return m_child;
         }
 
-        bool m_inside; ///< if true, the child will be clipped by the parent.
+        uint inside : 1; ///< if true, the child will be clipped by the parent.
+        uint inheritsTransform : 1;
 
     private:
         KoShape *m_child;
@@ -101,9 +102,9 @@ void KoShapeContainerDefaultModel::setClipped(const KoShape *child, bool clippin
     Private::Relation *relation = d->findRelation(child);
     if (relation == 0)
         return;
-    if (relation->m_inside == clipping)
+    if (relation->inside == clipping)
         return;
-    relation->m_inside = clipping;
+    relation->inside = clipping;
     relation->child()->update();
     relation->child()->notifyChanged();
     relation->child()->update();
@@ -112,7 +113,7 @@ void KoShapeContainerDefaultModel::setClipped(const KoShape *child, bool clippin
 bool KoShapeContainerDefaultModel::isClipped(const KoShape *child) const
 {
     Private::Relation *relation = d->findRelation(child);
-    return relation ? relation->m_inside: false;
+    return relation ? relation->inside: false;
 }
 
 void KoShapeContainerDefaultModel::remove(KoShape *child)
@@ -145,3 +146,23 @@ bool KoShapeContainerDefaultModel::isChildLocked(const KoShape *child) const
 void KoShapeContainerDefaultModel::containerChanged(KoShapeContainer *, KoShape::ChangeType)
 {
 }
+
+void KoShapeContainerDefaultModel::setInheritsTransform(const KoShape *shape, bool inherit)
+{
+    Private::Relation *relation = d->findRelation(shape);
+    if (relation == 0)
+        return;
+    if (relation->inheritsTransform == inherit)
+        return;
+    relation->inheritsTransform = inherit;
+    relation->child()->update();
+    relation->child()->notifyChanged();
+    relation->child()->update();
+}
+
+bool KoShapeContainerDefaultModel::inheritsTransform(const KoShape *shape) const
+{
+    Private::Relation *relation = d->findRelation(shape);
+    return relation ? relation->inheritsTransform: false;
+}
+

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -45,6 +45,12 @@ public:
 
     /// reimplemented
     virtual bool isClipped(const KoShape *child) const;
+
+    /// reimplemented
+    virtual void setInheritsTransform(const KoShape *shape, bool inherit);
+
+    /// reimplemented
+    virtual bool inheritsTransform(const KoShape *shape) const;
 
     // reimplemented
     virtual void remove(KoShape *child);

@@ -342,7 +342,7 @@ QMatrix KoShape::absoluteTransformation(const KoViewConverter *converter) const
     // apply parents matrix to inherit any transformations done there.
     KoShapeContainer * container = d->parent;
     if (container) {
-        if (container->isClipped(this)) {
+        if (container->inheritsTransform(this)) {
             // We do need to pass the converter here, otherwise the parent's
             // translation is not inherited.
             matrix = container->absoluteTransformation(converter);

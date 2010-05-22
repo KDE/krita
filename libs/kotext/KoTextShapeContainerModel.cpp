@@ -32,11 +32,12 @@
 class Relation
 {
 public:
-    Relation(KoShape *shape) : child(shape), anchor(0), nested(false) {}
+    Relation(KoShape *shape) : child(shape), anchor(0), nested(false), inheritsTransform(false) {}
     ~Relation();
     KoShape *child;
     KoTextAnchor *anchor;
-    bool nested;
+    uint nested : 1;
+    uint inheritsTransform :1;
 };
 
 
@@ -104,6 +105,21 @@ bool KoTextShapeContainerModel::isClipped(const KoShape *child) const
     Q_ASSERT(relation);
     return relation->nested;
 }
+
+void KoTextShapeContainerModel::setInheritsTransform(const KoShape *shape, bool inherit)
+{
+    Relation *relation = d->children.value(shape);
+    Q_ASSERT(relation);
+    relation->inheritsTransform = inherit;
+}
+
+bool KoTextShapeContainerModel::inheritsTransform(const KoShape *shape) const
+{
+    Relation *relation = d->children.value(shape);
+    Q_ASSERT(relation);
+    return relation->inheritsTransform;
+}
+
 
 int KoTextShapeContainerModel::count() const
 {

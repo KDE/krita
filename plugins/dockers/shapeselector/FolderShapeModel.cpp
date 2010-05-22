@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,6 +39,15 @@ void FolderShapeModel::setClipped(const KoShape *, bool )
 bool FolderShapeModel::isClipped(const KoShape *) const
 {
     return true;
+}
+
+bool FolderShapeModel::inheritsTransform(const KoShape *shape) const
+{
+    return true;
+}
+
+void FolderShapeModel::setInheritsTransform(const KoShape *, bool)
+{
 }
 
 bool FolderShapeModel::isChildLocked(const KoShape *) const

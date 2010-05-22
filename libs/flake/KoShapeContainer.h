@@ -143,6 +143,36 @@ public:
      */
     bool isChildLocked(const KoShape *child) const;
 
+
+    /**
+     * Set the shape to inherit the container transform.
+     *
+     * A shape that inherits the transform of the parent container will have its
+     * share / rotation / skew etc be calculated as being the product of both its
+     * own local transformation and also that of its parent container.
+     * If you set this to true and rotate the container, the shape will get that
+     * rotation as well automatically.
+     *
+     * @param shape the shape for which the property will be changed.
+     * @param inherit the new value
+     */
+    void setInheritsTransform(const KoShape *shape, bool inherit);
+
+    /**
+     * Returns if the shape inherits the container transform.
+     *
+     * A shape that inherits the transform of the parent container will have its
+     * share / rotation / skew etc be calculated as being the product of both its
+     * own local transformation and also that of its parent container.
+     * If you set this to true and rotate the container, the shape will get that
+     * rotation as well automatically.
+     *
+     * @return if the argument shape has its 'inherits transform' property set.
+     * @param shape the shape for which the property will be returned.
+     */
+    bool inheritsTransform(const KoShape *shape) const;
+
+
     /// reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 

@@ -38,6 +38,8 @@ public:
 
     void setClipped(const KoShape *child, bool clipping);
     bool isClipped(const KoShape *child) const;
+    virtual void setInheritsTransform(const KoShape *shape, bool inherit);
+    virtual bool inheritsTransform(const KoShape *shape) const;
 
     int count() const;
     QList<KoShape*> shapes() const;

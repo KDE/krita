@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,6 +37,8 @@ public:
     /// always returns true clipping any child to the folder outline
     virtual bool isClipped(const KoShape *child) const;
     virtual bool isChildLocked(const KoShape *child) const;
+    virtual bool inheritsTransform(const KoShape *shape) const;
+    virtual void setInheritsTransform(const KoShape *shape, bool inherit);
     /// return content item count
     virtual int count() const;
     /// returns content items added earlier

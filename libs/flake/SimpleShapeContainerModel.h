@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -49,6 +49,10 @@ public:
     bool isChildLocked(const KoShape *child) const {
         Q_ASSERT(child->parent());
         return child->isGeometryProtected() || child->parent()->isGeometryProtected();
+    }
+    void setInheritsTransform(const KoShape *, bool ) { }
+    bool inheritsTransform(const KoShape *) const {
+        return false;
     }
 
 private: // members

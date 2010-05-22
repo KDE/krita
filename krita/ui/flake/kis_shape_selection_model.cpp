@@ -98,6 +98,18 @@ bool KisShapeSelectionModel::isClipped(const KoShape *child) const
     return false;
 }
 
+void KisShapeSelectionModel::setInheritsTransform(const KoShape *shape, bool inherit)
+{
+    Q_UNUSED(shape);
+    Q_UNUSED(inherit);
+}
+
+bool KisShapeSelectionModel::inheritsTransform(const KoShape *shape) const
+{
+    Q_UNUSED(shape);
+    return false;
+}
+
 int KisShapeSelectionModel::count() const
 {
     return m_shapeMap.count();

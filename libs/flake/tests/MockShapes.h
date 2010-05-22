@@ -151,6 +151,11 @@ public:
     void childChanged(KoShape *, KoShape::ChangeType) {
         m_childChangedCalled++;
     }
+    void setInheritsTransform(const KoShape *, bool) {
+    }
+    bool inheritsTransform(const KoShape *) const {
+        return false;
+    }
 
     int containerChangedCalled() const {
         return m_containerChangedCalled;

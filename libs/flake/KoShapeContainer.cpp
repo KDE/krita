@@ -119,6 +119,22 @@ void KoShapeContainer::setClipped(const KoShape *child, bool clipping)
     d->model->setClipped(child, clipping);
 }
 
+void KoShapeContainer::setInheritsTransform(const KoShape *shape, bool inherit)
+{
+    Q_D(KoShapeContainer);
+    if (d->model == 0)
+        return;
+    d->model->setInheritsTransform(shape, inherit);
+}
+
+bool KoShapeContainer::inheritsTransform(const KoShape *shape) const
+{
+    Q_D(const KoShapeContainer);
+    if (d->model == 0)
+        return false;
+    return d->model->inheritsTransform(shape);
+}
+
 void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_D(KoShapeContainer);

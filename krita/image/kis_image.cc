@@ -155,9 +155,11 @@ KisImage::KisImage(const KisImage& rhs)
 KisImage::~KisImage()
 {
     dbgImage << "deleting kisimage" << objectName();
+
     if (m_d->projection) {
         m_d->projection->stop();
-        m_d->projection->deleteLater();
+        m_d->projection->wait();
+        delete m_d->projection;
     }
     delete m_d->perspectiveGrid;
     delete m_d->nserver;

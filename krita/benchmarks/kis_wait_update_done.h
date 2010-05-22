@@ -31,7 +31,12 @@ class KisWaitUpdateDone : public QObject
 public:
     KisWaitUpdateDone(KisImageWSP image, qint32 numToWait);
     ~KisWaitUpdateDone();
+
+    void startCollectingEvents();
+    void stopCollectingEvents();
+
     void wait();
+
 private slots:
     void slotImageUpdated(const QRect &rect);
 

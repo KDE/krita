@@ -20,16 +20,25 @@
 
 KisWaitUpdateDone::KisWaitUpdateDone(KisImageWSP image, qint32 numToWait)
 {
-    connect(image, SIGNAL(sigImageUpdated(const QRect &)),
-            SLOT(slotImageUpdated(const QRect &)),
-            Qt::DirectConnection);
     m_numToWait = numToWait;
     m_image = image;
 }
 
 KisWaitUpdateDone::~KisWaitUpdateDone()
 {
-    disconnect(m_image, SIGNAL(sigImageUpdated(const QRect &)));
+}
+
+void KisWaitUpdateDone::startCollectingEvents()
+{
+    m_semaphore.acquire(m_semaphore.available());
+    connect(m_image, SIGNAL(sigImageUpdated(const QRect &)),
+            SLOT(slotImageUpdated(const QRect &)),
+            Qt::DirectConnection);
+}
+
+void KisWaitUpdateDone::stopCollectingEvents()
+{
+    disconnect(m_image, SIGNAL(sigImageUpdated(const QRect &)), 0, 0);
 }
 
 void KisWaitUpdateDone::wait()
@@ -38,7 +47,6 @@ void KisWaitUpdateDone::wait()
 }
 
 void KisWaitUpdateDone::slotImageUpdated(const QRect &rect) {
-    // qDebug()<< "Got one updated";
     m_semaphore.release();
 }
 

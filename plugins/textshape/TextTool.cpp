@@ -994,7 +994,12 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             textEditor->setPosition(c.position());
         }
 #endif
+#ifdef Q_WS_MAC
+        // Don't reject "alt" key, it may be used for typing text on Mac OS
+        else if ((event->modifiers() & Qt::ControlModifier) || event->text().length() == 0) {
+#else
         else if ((event->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) || event->text().length() == 0) {
+#endif
             event->ignore();
             return;
         } else if (rw && (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)) {

@@ -20,14 +20,16 @@
 #ifndef KOODFPASTE_H
 #define KOODFPASTE_H
 
-#include <KoOdf.h>
-
+#include "KoOdf.h"
 #include "koodf_export.h"
 #include "KoXmlReaderForward.h"
 
 class QMimeData;
 class KoOdfReadStore;
 
+/**
+ * This is a helper class to help you paste odf snippets.
+ */
 class KOODF_EXPORT KoOdfPaste
 {
 public:
@@ -42,7 +44,7 @@ public:
     bool paste(KoOdf::DocumentType documentType, const QByteArray &data);
 
 protected:
-    virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore) = 0;
+    virtual bool process(const KoXmlElement &body, KoOdfReadStore &odfStore) = 0;
 };
 
 #endif /* KOODFPASTE_H */

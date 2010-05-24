@@ -29,9 +29,13 @@
 #include "KoOdfStylesReader.h"
 #include "KoXmlNS.h"
 
-struct KoOdfReadStore::Private {
-    Private(KoStore * store)
-            : store(store) {}
+class KoOdfReadStore::Private
+{
+public:
+    Private(KoStore *s)
+            : store(s)
+    {
+    }
 
     KoStore * store;
     KoOdfStylesReader stylesReader;
@@ -41,7 +45,7 @@ struct KoOdfReadStore::Private {
     KoXmlDocument settingsDoc;
 };
 
-KoOdfReadStore::KoOdfReadStore(KoStore* store)
+KoOdfReadStore::KoOdfReadStore(KoStore *store)
         : d(new Private(store))
 {
 }
@@ -51,7 +55,7 @@ KoOdfReadStore::~KoOdfReadStore()
     delete d;
 }
 
-void KoOdfReadStore::setupXmlReader(QXmlSimpleReader& reader, bool namespaceProcessing)
+void KoOdfReadStore::setupXmlReader(QXmlSimpleReader &reader, bool namespaceProcessing)
 {
     if (namespaceProcessing) {
         reader.setFeature("http://xml.org/sax/features/namespaces", true);
@@ -68,22 +72,22 @@ KoStore * KoOdfReadStore::store() const
     return d->store;
 }
 
-KoOdfStylesReader & KoOdfReadStore::styles()
+KoOdfStylesReader &KoOdfReadStore::styles()
 {
     return d->stylesReader;
 }
 
-const KoXmlDocument & KoOdfReadStore::contentDoc() const
+KoXmlDocument KoOdfReadStore::contentDoc() const
 {
     return d->contentDoc;
 }
 
-const KoXmlDocument & KoOdfReadStore::settingsDoc() const
+KoXmlDocument KoOdfReadStore::settingsDoc() const
 {
     return d->settingsDoc;
 }
 
-bool KoOdfReadStore::loadAndParse(QString & errorMessage)
+bool KoOdfReadStore::loadAndParse(QString &errorMessage)
 {
     if (!loadAndParse("content.xml", d->contentDoc, errorMessage)) {
         return false;
@@ -105,7 +109,7 @@ bool KoOdfReadStore::loadAndParse(QString & errorMessage)
     return true;
 }
 
-bool KoOdfReadStore::loadAndParse(const QString& fileName, KoXmlDocument& doc, QString& errorMessage)
+bool KoOdfReadStore::loadAndParse(const QString &fileName, KoXmlDocument &doc, QString &errorMessage)
 {
     //kDebug(30003) <<"loadAndParse: Trying to open" << fileName;
     if (!d->store) {
@@ -125,7 +129,7 @@ bool KoOdfReadStore::loadAndParse(const QString& fileName, KoXmlDocument& doc, Q
     return ok;
 }
 
-bool KoOdfReadStore::loadAndParse(QIODevice* fileDevice, KoXmlDocument& doc, QString& errorMessage, const QString& fileName)
+bool KoOdfReadStore::loadAndParse(QIODevice *fileDevice, KoXmlDocument &doc, QString &errorMessage, const QString &fileName)
 {
     // Error variables for QDomDocument::setContent
     QString errorMsg;

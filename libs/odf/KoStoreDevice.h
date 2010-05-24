@@ -58,28 +58,6 @@ public:
             return 0xffffffff;
     }
 
-#if 0
-    int getch() {
-        char c[2];
-        if (m_store->read(c, 1) == -1)
-            return -1;
-        else
-            return c[0];
-    }
-    int putch(int _c) {
-        char c[2];
-        c[0] = _c;
-        c[1] = 0;
-        if (m_store->write(c, 1) == 1)
-            return _c;
-        else
-            return -1;
-    }
-    int ungetch(int) {
-        return -1;
-    } // unsupported
-#endif
-
     // See QIODevice
     virtual qint64 pos() const {
         return m_store->pos();
@@ -92,7 +70,7 @@ public:
     }
 
 protected:
-    KoStore * m_store;
+    KoStore *m_store;
 
     virtual qint64 readData(char *data, qint64 maxlen) {
         return m_store->read(data, maxlen);

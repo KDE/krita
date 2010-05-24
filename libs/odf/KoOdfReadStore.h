@@ -21,6 +21,7 @@
 #define KOODFREADSTORE_H
 
 #include "KoXmlReaderForward.h"
+#include "koodf_export.h"
 
 class QString;
 class QIODevice;
@@ -35,8 +36,6 @@ class KoOdfStylesReader;
  *
  * @author: David Faure <faure@kde.org>
  */
-#include "koodf_export.h"
-
 class KOODF_EXPORT KoOdfReadStore
 {
 public:
@@ -62,7 +61,7 @@ public:
      *
      * @return styles
      */
-    KoOdfStylesReader & styles();
+    KoOdfStylesReader &styles();
 
     /**
      * Get the content document
@@ -71,7 +70,7 @@ public:
      *
      * This gives you the content of the content.xml file
      */
-    const KoXmlDocument & contentDoc() const;
+    KoXmlDocument contentDoc() const;
 
     /**
      * Get the settings document
@@ -80,7 +79,7 @@ public:
      *
      * This gives you the content of the settings.xml file
      */
-    const KoXmlDocument & settingsDoc() const;
+    KoXmlDocument settingsDoc() const;
 
     /**
      * Load and parse
@@ -97,26 +96,26 @@ public:
      * @return true if loading and parsing was successful, false otherwise. In case of an error
      * the errorMessage is updated accordingly.
      */
-    bool loadAndParse(QString & errorMessage);
+    bool loadAndParse(QString &errorMessage);
 
     /**
      * Load a file from an odf store
      */
-    bool loadAndParse(const QString& fileName, KoXmlDocument& doc, QString& errorMessage);
+    bool loadAndParse(const QString &fileName, KoXmlDocument &doc, QString &errorMessage);
 
     /**
      * Load a file and parse from a QIODevice
      * filename argument is just used for debug message
      */
-    static bool loadAndParse(QIODevice* fileDevice, KoXmlDocument& doc, QString& errorMessage, const QString& fileName);
+    static bool loadAndParse(QIODevice *fileDevice, KoXmlDocument &doc, QString &errorMessage, const QString& fileName);
 
     /**
      * Get mimetype from full path, using the manifest
      */
-    static QString mimeForPath(const KoXmlDocument& doc, const QString& fullPath);
+    static QString mimeForPath(const KoXmlDocument &doc, const QString &fullPath);
 
 private:
-    struct Private;
+    class Private;
     Private * const d;
 };
 

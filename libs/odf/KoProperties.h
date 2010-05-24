@@ -41,9 +41,9 @@ public:
     KoProperties();
 
     /**
-     * Deep copy the properties object
+     * Copy constructor
      */
-    KoProperties(const KoProperties & rhs);
+    KoProperties(const KoProperties &other);
 
     ~KoProperties();
 
@@ -85,26 +85,26 @@ public:
      * Create a serialized version of this properties as XML.
      * @return the string version of this properties object
      */
-    QString store();
+    KOODF_EXPORT_DEPRECATED QString store() const;
 
     /**
      * @brief Create a serialized version of these properties (as XML) with root as the root element.
      * @param root as the root element in the generated XML.
      */
-    QString store(const QString & root);
+    QString store(const QString &root) const;
 
     void save(QDomElement &root) const;
 
     /**
      * Set the property with name to value.
      */
-    void setProperty(const QString & name, const QVariant & value);
+    void setProperty(const QString &name, const QVariant &value);
 
     /**
      * Set value to the value associated with property name
      * @return false if the specified property did not exist.
      */
-    bool property(const QString & name, QVariant & value) const;
+    bool property(const QString &name, QVariant &value) const;
 
     /**
      * Return a property by name, wrapped in a QVariant.
@@ -120,7 +120,7 @@ public:
      * @param name the name (or key) with which the variant was registered.
      * @see intProperty() stringProperty()
      */
-    QVariant property(const QString & name) const;
+    QVariant property(const QString &name) const;
 
     /**
      * Return an integer property by name.
@@ -132,22 +132,25 @@ public:
      *  @endcode
      * @return an integer property by name
      * @param name the name (or key) with which the variant was registered.
-     * @param def the default value, should there not be any property by the name this will be returned.
+     * @param defaultValue the default value, should there not be any property by the name this will be returned.
      * @see property() stringProperty()
      */
-    int intProperty(const QString & name, int def = 0) const;
+    int intProperty(const QString &name, int defaultValue = 0) const;
+
     /**
      * Return a qreal property by name.
      * @param name the name (or key) with which the variant was registered.
-     * @param def the default value, should there not be any property by the name this will be returned.
+     * @param defaultValue the default value, should there not be any property by the name this will be returned.
      */
-    qreal doubleProperty(const QString & name, qreal def = 0.0) const;
+    qreal doubleProperty(const QString &name, qreal defaultValue = 0.0) const;
+
     /**
      * Return a boolean property by name.
      * @param name the name (or key) with which the variant was registered.
-     * @param def the default value, should there not be any property by the name this will be returned.
+     * @param defaultValue the default value, should there not be any property by the name this will be returned.
      */
-    bool boolProperty(const QString & name, bool def = false) const;
+    bool boolProperty(const QString &name, bool defaultValue = false) const;
+
     /**
      * Return an QString property by name.
      * A typical usage:
@@ -159,22 +162,22 @@ public:
      * @return an QString property by name
      * @param name the name (or key) with which the variant was registered.
      * @see property() intProperty()
-     * @param def the default value, should there not be any property by the name this will be returned.
+     * @param defaultValue the default value, should there not be any property by the name this will be returned.
      */
-    QString stringProperty(const QString & name, const QString & def = QString()) const;
+    QString stringProperty(const QString &name, const QString &defaultValue = QString()) const;
 
     /**
      * Returns true if the specified key is present in this properties
      * object.
      */
-    bool contains(const QString & key) const;
+    bool contains(const QString &key) const;
 
     /**
      * Returns the value assocatied with the specified key if this
      * properties object contains the specified key; otherwise return
      * an empty QVariant.
      */
-    QVariant value(const QString & key) const;
+    QVariant value(const QString &key) const;
 
     bool operator==(const KoProperties &other) const;
 

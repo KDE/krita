@@ -22,13 +22,11 @@
 
 class KoStore;
 
-#include <QtCore/QMap>
-#include <QtCore/QString>
 #include "koodf_export.h"
-#include <QtCore/QStringList>
-#include <KoStyleStack.h>
-#include <KoXmlReader.h>
-#include <KoOdfStylesReader.h>
+#include "KoStyleStack.h"
+#include "KoOdfStylesReader.h"
+
+#include <QtCore/QString>
 #include <kcomponentdata.h>
 
 /**

@@ -50,7 +50,7 @@ class KOODF_EXPORT KoOdfWriteStore
 {
 public:
     /// @param store recontents the property of the caller
-    explicit KoOdfWriteStore(KoStore* store);
+    explicit KoOdfWriteStore(KoStore *store);
 
     ~KoOdfWriteStore();
 
@@ -70,20 +70,20 @@ public:
      * Once done with writing the contents of the root element, you
      * will need to call endElement(); endDocument(); before destroying the KoXmlWriter.
      */
-    static KoXmlWriter* createOasisXmlWriter(QIODevice* dev, const char* rootElementName);
+    static KoXmlWriter *createOasisXmlWriter(QIODevice *dev, const char *rootElementName);
 
-    KoStore* store() const;
+    KoStore *store() const;
 
     /**
      * Open contents.xml for writing and return the KoXmlWriter
      */
-    KoXmlWriter* contentWriter();
+    KoXmlWriter *contentWriter();
 
     /**
      * Open another KoXmlWriter for writing out the contents
      * into a temporary file, to collect automatic styles while doing that.
      */
-    KoXmlWriter* bodyWriter();
+    KoXmlWriter *bodyWriter();
 
     /**
      * This will copy the body into the content writer,
@@ -97,13 +97,13 @@ public:
     /**
      * Create and return a manifest writer. It will write to a memory buffer.
      */
-    KoXmlWriter* manifestWriter(const char* mimeType);
+    KoXmlWriter *manifestWriter(const char *mimeType);
 
     /**
      * Return the manifest writer. It has to be created by manifestWriter( mimeType ) before you can use
      * this function.
      */
-    KoXmlWriter* manifestWriter();
+    KoXmlWriter *manifestWriter();
 
     /**
      * Close the manifest writer, writing its contents to manifest.xml

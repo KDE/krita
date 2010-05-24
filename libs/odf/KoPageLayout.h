@@ -85,7 +85,7 @@ struct KoPageLayout {
     /** Bottom padding in points */
     qreal bottomPadding;
 
-    /// borders
+    /// page border definition
     KoBorder  border;
 
     KOODF_EXPORT bool operator==(const KoPageLayout &l) const;

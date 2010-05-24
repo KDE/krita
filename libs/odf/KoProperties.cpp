@@ -111,7 +111,7 @@ void KoProperties::save(QDomElement &root) const
     }
 }
 
-QString KoProperties::store(const QString & s)
+QString KoProperties::store(const QString &s) const
 {
     QDomDocument doc = QDomDocument(s);
     QDomElement root = doc.createElement(s);
@@ -121,7 +121,7 @@ QString KoProperties::store(const QString & s)
     return doc.toString();
 }
 
-QString KoProperties::store()
+QString KoProperties::store() const
 {
     // Legacy...
     return store("filterconfig");

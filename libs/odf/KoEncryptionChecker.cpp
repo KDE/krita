@@ -24,8 +24,8 @@
 #include <QtCrypto>
 #include <kdebug.h>
 
-bool KoEncryptionChecker::isEncryptionSupported() {
-
+bool KoEncryptionChecker::isEncryptionSupported()
+{
     QCA::Initializer* initializer = new QCA::Initializer();
     bool supported = QCA::isSupported("sha1") && QCA::isSupported("pbkdf2(sha1)") && QCA::isSupported("blowfish-cfb");
     if (!supported) {
@@ -35,7 +35,8 @@ bool KoEncryptionChecker::isEncryptionSupported() {
     return supported;
 }
 #else
-bool KoEncryptionChecker::isEncryptionSupported() {
+bool KoEncryptionChecker::isEncryptionSupported()
+{
 
     return false;
 }

@@ -69,11 +69,13 @@ public:
     /// Holds data about one border line.
     struct BorderData {
         BorderData();
-        BorderStyle  style; ///< The border style. (see BorderStyle)
-        qreal        width; ///< The thickness of the border, or 0 if there is no border
-        QColor       color; ///< The border Color
-        qreal        innerWidth; ///< In case of style being 'double' the thickness of the inner border line
-        qreal        spacing;      ///< In case of style being 'double' the space between the inner and outer border lines
+        BorderStyle  style; ///< The border style. (see KoBorder::BorderStyle)
+        qreal width; ///< The thickness of the border, or 0 if there is no border
+        QColor color; ///< The border Color
+        /// In case of style being 'double' the thickness of the inner border line
+        qreal innerWidth;
+        /// In case of style being 'double' the space between the inner and outer border lines
+        qreal spacing;
     };
 
 

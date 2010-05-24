@@ -66,7 +66,7 @@ public:
     /**
      * Create a style stack based on other namespaces than OASIS - used for OOo-1.1 import.
      */
-    KoStyleStack(const char* styleNSURI, const char* foNSURI);
+    explicit KoStyleStack(const char* styleNSURI, const char* foNSURI);
     virtual ~KoStyleStack();
 
     /**

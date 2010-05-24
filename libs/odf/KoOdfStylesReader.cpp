@@ -246,17 +246,17 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
     }
 }
 
-const KoXmlElement* KoOdfStylesReader::defaultStyle(const QString& family) const
+KoXmlElement *KoOdfStylesReader::defaultStyle(const QString &family) const
 {
     return d->defaultStyles[family];
 }
 
-const KoXmlElement& KoOdfStylesReader::officeStyle() const
+KoXmlElement KoOdfStylesReader::officeStyle() const
 {
     return d->officeStyle;
 }
 
-const KoXmlElement& KoOdfStylesReader::layerSet() const
+KoXmlElement KoOdfStylesReader::layerSet() const
 {
     return d->layerSet;
 }

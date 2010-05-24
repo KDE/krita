@@ -33,9 +33,8 @@ class KoGenStyle;
 /**
  * Loading and saving of number styles
  */
-class KOODF_EXPORT KoOdfNumberStyles
+namespace KoOdfNumberStyles
 {
-public:
     enum Format {
         Number,
         Scientific,
@@ -59,31 +58,16 @@ public:
         QList<QPair<QString,QString> > styleMaps; // conditional formatting, first=condition, second=applyStyleName
     };
 
-    static QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement& parent);
+    KOODF_EXPORT QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent);
 
-    static QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
-                                    const QString &_prefix = QString() , const QString &_suffix = QString());
-    static QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
-                                    const QString &_prefix = QString() , const QString &_suffix = QString());
-    static QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString & _format,
-                                        const QString &_prefix = QString() , const QString &_suffix = QString());
-    static QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString & _format,
-                                          const QString &_prefix = QString() , const QString &_suffix = QString());
-    static QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString & _format,
-                                      const QString &_prefix = QString() , const QString &_suffix = QString());
-    static QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString & _format,
-                                          const QString &_prefix = QString() , const QString &_suffix = QString());
-    static QString saveOdfCurrencyStyle(KoGenStyles &mainStyles, const QString & _format, const QString &symbol,
-                                        const QString &_prefix = QString() , const QString &_suffix = QString());
-    static QString saveOdfTextStyle(KoGenStyles &mainStyles, const QString & _format,
-                                    const QString &_prefix = QString() , const QString &_suffix = QString());
-
-private:
-    static bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString & format, QString & text, bool &antislash);
-    static void parseOdfDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text);
-    static bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString & format, QString & text);
-    static void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text);
-    static void addKofficeNumericStyleExtension(KoXmlWriter & elementWriter, const QString &_suffix, const QString &_prefix);
-};
+    KOODF_EXPORT QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &format, bool klocaleFormat, const QString &prefix = QString(), const QString &suffix = QString());
+    KOODF_EXPORT QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString &format, bool klocaleFormat, const QString &prefix = QString(), const QString &suffix = QString());
+    KOODF_EXPORT QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &format, const QString &prefix = QString(), const QString &suffix = QString());
+    KOODF_EXPORT QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &format, const QString &prefix = QString(), const QString &suffix = QString());
+    KOODF_EXPORT QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &format, const QString &prefix = QString(), const QString &suffix = QString());
+    KOODF_EXPORT QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &format, const QString &prefix = QString(), const QString &suffix = QString());
+    KOODF_EXPORT QString saveOdfCurrencyStyle(KoGenStyles &mainStyles, const QString &format, const QString &symbol, const QString &prefix = QString(), const QString &suffix = QString());
+    KOODF_EXPORT QString saveOdfTextStyle(KoGenStyles &mainStyles, const QString &format, const QString &prefix = QString(), const QString &suffix = QString());
+}
 
 #endif // KOODFNUMBERSTYLES_H

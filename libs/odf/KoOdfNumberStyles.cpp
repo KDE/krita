@@ -30,10 +30,20 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
+namespace KoOdfNumberStyles
+{
+
+    static bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &text, bool &antislash);
+    static void parseOdfDateKlocale(KoXmlWriter &elementWriter, QString &format, QString &text);
+    static bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &text);
+    static void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &text);
+    static void addKofficeNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix);
+
+
 // OO spec 2.5.4. p68. Conversion to Qt format: see qdate.html
 // OpenCalcImport::loadFormat has similar code, but slower, intermixed with other stuff,
 // lacking long-textual forms.
-QPair<QString, KoOdfNumberStyles::NumericStyleFormat> KoOdfNumberStyles::loadOdfNumberStyle(const KoXmlElement& parent)
+QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent)
 {
     NumericStyleFormat dataStyle;
 
@@ -259,9 +269,9 @@ QPair<QString, KoOdfNumberStyles::NumericStyleFormat> KoOdfNumberStyles::loadOdf
     }
 
     const QString styleName = parent.attributeNS(KoXmlNS::style, "name", QString());
-    
+
 kDebug()<<"99 *****************************************************************************";
-//Q_ASSERT(false);    
+//Q_ASSERT(false);
     kDebug(30003) << "data style:" << styleName << " qt format=" << format;
     if (!prefix.isEmpty()) {
         kDebug(30003) << " format.left( prefix.length() ) :" << format.left(prefix.length()) << " prefix :" << prefix;
@@ -296,7 +306,7 @@ kDebug()<<"99 ******************************************************************
         } \
     }
 
-void KoOdfNumberStyles::parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text)
+void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &text)
 {
     kDebug(30003) << "parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :" << format;
     do {
@@ -308,7 +318,7 @@ void KoOdfNumberStyles::parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString 
     addTextNumber(text, elementWriter);
 }
 
-bool KoOdfNumberStyles::saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString & format, QString & text)
+bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &text)
 {
     bool changed = false;
     if (format.startsWith("%H")) {   //hh
@@ -364,7 +374,7 @@ bool KoOdfNumberStyles::saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QSt
 }
 
 
-bool KoOdfNumberStyles::saveOdfTimeFormat(KoXmlWriter &elementWriter, QString & format, QString & text, bool &antislash)
+bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &text, bool &antislash)
 {
     bool changed = false;
     //we can also add time to date.
@@ -432,8 +442,8 @@ bool KoOdfNumberStyles::saveOdfTimeFormat(KoXmlWriter &elementWriter, QString & 
     return changed;
 }
 
-QString KoOdfNumberStyles::saveOdfTimeStyle(KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
-        const QString & _prefix, const QString & _suffix)
+QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString &_format, bool klocaleFormat,
+        const QString &_prefix, const QString &_suffix)
 {
     Q_UNUSED(_prefix);
     Q_UNUSED(_suffix);
@@ -468,9 +478,9 @@ QString KoOdfNumberStyles::saveOdfTimeStyle(KoGenStyles &mainStyles, const QStri
 }
 
 //convert klocale string to good format
-void KoOdfNumberStyles::parseOdfDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text)
+void parseOdfDateKlocale(KoXmlWriter &elementWriter, QString &format, QString &text)
 {
-    kDebug(30003) << "KoOdfNumberStyles::parseOdfDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :" << format;
+    kDebug(30003) << format;
     do {
         if (format.startsWith("%Y")) {
             addTextNumber(text, elementWriter);
@@ -551,12 +561,12 @@ void KoOdfNumberStyles::parseOdfDateKlocale(KoXmlWriter &elementWriter, QString 
     addTextNumber(text, elementWriter);
 }
 
-QString KoOdfNumberStyles::saveOdfDateStyle(KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
-        const QString & _prefix, const QString & _suffix)
+QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool klocaleFormat,
+        const QString &_prefix, const QString &_suffix)
 {
     Q_UNUSED(_prefix);
     Q_UNUSED(_suffix);
-    kDebug(30003) << "QString KoOdfNumberStyles::saveOdfDateStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    kDebug(30003) << _format;
     QString format(_format);
 
     // Not supported into Qt: "era" "week-of-year" "quarter"
@@ -693,7 +703,7 @@ QString KoOdfNumberStyles::saveOdfDateStyle(KoGenStyles &mainStyles, const QStri
 }
 
 
-QString KoOdfNumberStyles::saveOdfFractionStyle(KoGenStyles &mainStyles, const QString & _format,
+QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &_format,
         const QString &_prefix, const QString &_suffix)
 {
     kDebug(30003) << "QString saveOdfFractionStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
@@ -752,7 +762,7 @@ QString KoOdfNumberStyles::saveOdfFractionStyle(KoGenStyles &mainStyles, const Q
 }
 
 
-QString KoOdfNumberStyles::saveOdfNumberStyle(KoGenStyles &mainStyles, const QString & _format,
+QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &_format,
         const QString &_prefix, const QString &_suffix)
 {
     kDebug(30003) << "QString saveOdfNumberStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
@@ -795,7 +805,7 @@ QString KoOdfNumberStyles::saveOdfNumberStyle(KoGenStyles &mainStyles, const QSt
     return mainStyles.insert(currentStyle, "N");
 }
 
-QString KoOdfNumberStyles::saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString & _format,
+QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &_format,
         const QString &_prefix, const QString &_suffix)
 {
     //<number:percentage-style style:name="N11">
@@ -845,7 +855,7 @@ QString KoOdfNumberStyles::saveOdfPercentageStyle(KoGenStyles &mainStyles, const
 
 }
 
-QString KoOdfNumberStyles::saveOdfScientificStyle(KoGenStyles &mainStyles, const QString & _format,
+QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
         const QString &_prefix, const QString &_suffix)
 {
     //<number:number-style style:name="N60">
@@ -915,8 +925,8 @@ QString KoOdfNumberStyles::saveOdfScientificStyle(KoGenStyles &mainStyles, const
     return mainStyles.insert(currentStyle, "N");
 }
 
-QString KoOdfNumberStyles::saveOdfCurrencyStyle(KoGenStyles &mainStyles,
-        const QString & _format, const QString &symbol,
+QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
+        const QString &_format, const QString &symbol,
         const QString &_prefix, const QString &_suffix)
 {
 
@@ -973,7 +983,7 @@ QString KoOdfNumberStyles::saveOdfCurrencyStyle(KoGenStyles &mainStyles,
     return mainStyles.insert(currentStyle, "N");
 }
 
-QString KoOdfNumberStyles::saveOdfTextStyle(KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix)
+QString saveOdfTextStyle(KoGenStyles &mainStyles, const QString &_format, const QString &_prefix, const QString &_suffix)
 {
 
     //<number:text-style style:name="N100">
@@ -1008,7 +1018,7 @@ QString KoOdfNumberStyles::saveOdfTextStyle(KoGenStyles &mainStyles, const QStri
 
 //This is an extension of numeric style. For the moment we used namespace of
 //oasis format for specific koffice extension. Change it for the future.
-void KoOdfNumberStyles::addKofficeNumericStyleExtension(KoXmlWriter & elementWriter, const QString &_suffix, const QString &_prefix)
+void addKofficeNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix)
 {
     if (!_suffix.isEmpty()) {
         elementWriter.startElement("number:suffix");
@@ -1020,4 +1030,5 @@ void KoOdfNumberStyles::addKofficeNumericStyleExtension(KoXmlWriter & elementWri
         elementWriter.addTextNode(_prefix);
         elementWriter.endElement();
     }
+}
 }

@@ -109,9 +109,6 @@ public:
     bool useStylesAutoStyles() const;
 
 private:
-    void parseMeta() const;
-
-private:
     class Private;
     Private * const d;
 };

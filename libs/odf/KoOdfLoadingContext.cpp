@@ -138,12 +138,6 @@ void KoOdfLoadingContext::addStyles(const KoXmlElement* style, const char* famil
 
 QString KoOdfLoadingContext::generator() const
 {
-    parseMeta();
-    return d->generator;
-}
-
-void KoOdfLoadingContext::parseMeta() const
-{
     if (!d->metaXmlParsed && d->store) {
         // Regardless of whether we cd into the parent directory
         // or not to find a meta.xml, restore the directory that
@@ -172,6 +166,7 @@ void KoOdfLoadingContext::parseMeta() const
 
         d->store->popDirectory();
     }
+    return d->generator;
 }
 
 KoStore *KoOdfLoadingContext::store() const

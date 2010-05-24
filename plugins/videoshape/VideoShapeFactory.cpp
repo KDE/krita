@@ -43,9 +43,11 @@ KoShape *VideoShapeFactory::createDefaultShape(KoResourceManager *documentResour
 {
     VideoShape * defaultShape = new VideoShape();
     defaultShape->setShapeId(VIDEOSHAPEID);
-    Q_ASSERT(documentResources->hasResource(VideoCollection::ResourceId));
-    QVariant vc = documentResources->resource(VideoCollection::ResourceId);
-    defaultShape->setVideoCollection(static_cast<VideoCollection*>(vc.value<void*>()));
+    if (documentResources) {
+          Q_ASSERT(documentResources->hasResource(VideoCollection::ResourceId));
+          QVariant vc = documentResources->resource(VideoCollection::ResourceId);
+          defaultShape->setVideoCollection(static_cast<VideoCollection*>(vc.value<void*>()));
+    }
     return defaultShape;
 }
 

@@ -22,9 +22,8 @@
 
 #include "koodf_export.h"
 
-class KOODF_EXPORT KoOdf
+namespace KoOdf
 {
-public:
     enum DocumentType {
         Text,
         Graphics,
@@ -41,7 +40,7 @@ public:
      * @param documentType the document type
      * @return the mime type used for the given document type
      */
-    static const char * mimeType(DocumentType documentType);
+    KOODF_EXPORT const char * mimeType(DocumentType documentType);
 
     /**
      * Get the mime type
@@ -49,7 +48,7 @@ public:
      * @param documentType the document type
      * @return the mime type used for templates of the given document type
      */
-    static const char * templateMimeType(DocumentType documentType);
+    KOODF_EXPORT const char * templateMimeType(DocumentType documentType);
 
     /**
      * Get the mime type
@@ -59,16 +58,7 @@ public:
      *                      if false only the element is returned
      * @return the body element name for the given document type
      */
-    static const char * bodyContentElement(DocumentType documentType, bool withNamespace);
-
-private:
-    struct DocumentData {
-        const char * mimeType;
-        const char * templateMimeType;
-        const char * bodyContentElement;
-    };
-
-    static DocumentData sm_documentData[];
-};
+    KOODF_EXPORT const char * bodyContentElement(DocumentType documentType, bool withNamespace);
+}
 
 #endif /* KOODF_H */

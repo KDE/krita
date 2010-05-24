@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2010 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,7 +20,15 @@
 
 #include "KoOdf.h"
 
-KoOdf::DocumentData KoOdf::sm_documentData[] = {
+namespace KoOdf
+{
+struct DocumentData {
+    const char * mimeType;
+    const char * templateMimeType;
+    const char * bodyContentElement;
+};
+
+DocumentData s_documentData[] = {
     { "application/vnd.oasis.opendocument.text", "application/vnd.oasis.opendocument.text-template", "office:text" },
     { "application/vnd.oasis.opendocument.graphics", "application/vnd.oasis.opendocument.graphics-template", "office:drawing" },
     { "application/vnd.oasis.opendocument.presentation", "application/vnd.oasis.opendocument.presentation-template", "office:presentation" },
@@ -32,17 +41,19 @@ KoOdf::DocumentData KoOdf::sm_documentData[] = {
 //"application/vnd.oasis.opendocument.text-master"
 //"application/vnd.oasis.opendocument.text-web"
 
-const char * KoOdf::mimeType(DocumentType documentType)
+const char * mimeType(DocumentType documentType)
 {
-    return sm_documentData[documentType].mimeType;
+    return s_documentData[documentType].mimeType;
 }
 
-const char * KoOdf::templateMimeType(DocumentType documentType)
+const char * templateMimeType(DocumentType documentType)
 {
-    return sm_documentData[documentType].templateMimeType;
+    return s_documentData[documentType].templateMimeType;
 }
 
-const char * KoOdf::bodyContentElement(DocumentType documentType, bool withNamespace)
+const char * bodyContentElement(DocumentType documentType, bool withNamespace)
 {
-    return withNamespace ? sm_documentData[documentType].bodyContentElement : sm_documentData[documentType].bodyContentElement + 7;
+    return withNamespace ? s_documentData[documentType].bodyContentElement : s_documentData[documentType].bodyContentElement + 7;
+}
+
 }

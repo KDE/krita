@@ -108,15 +108,5 @@ struct KoPageLayout {
     KOODF_EXPORT KoPageLayout();
 };
 
-/** structure for header-footer */
-struct KoHeadFoot {
-    QString headLeft;
-    QString headMid;
-    QString headRight;
-    QString footLeft;
-    QString footMid;
-    QString footRight;
-};
-
 #endif /* KOPAGELAYOUT_H */
 

@@ -93,7 +93,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 #endif
 
     m_settingsWidget = new KisPopupButton(this);
-    m_settingsWidget->setIcon(KIcon("paintop_settings_01"));
+    m_settingsWidget->setIcon(KIcon("paintop_settings_02"));
     m_settingsWidget->setToolTip(i18n("Edit brush settings"));
     m_settingsWidget->setFixedSize(32, 32);
     

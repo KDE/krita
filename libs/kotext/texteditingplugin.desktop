@@ -20,6 +20,7 @@ Name[tr]=KOffice metin aracı için Metin Düzenleme eklentisi
 Name[uk]=Додаток редагування тексту для текстового редактора KOffice
 Name[wa]=Tchôke-divins d' aspougnaedje di tecse po l' usteye tecse di KOffice
 Name[x-test]=xxText Editing plugin for the KOffice text toolxx
+Name[zh_CN]=KOffice 文本工具的文本编辑插件
 Name[zh_TW]=KOffice 文字工具的文字編輯外掛程式。
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-EditingPlugin
@@ -52,6 +53,7 @@ Comment[tr]=Metin düzenleme eklentisi tanımı
 Comment[uk]=Визначення додатка для зміни тексту
 Comment[wa]=Definixha d' on tchôke-divins d' aspougnaedje di tecse
 Comment[x-test]=xxDefinition of a text-editing pluginxx
+Comment[zh_CN]=文本编辑插件的定义
 Comment[zh_TW]=文字編輯外掛程式定義
 [PropertyDef::X-KoText-MinVersion]
 Type=int

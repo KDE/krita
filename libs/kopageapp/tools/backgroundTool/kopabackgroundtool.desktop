@@ -22,6 +22,7 @@ Name[tr]=Sayfa Uygulama Arkaplan Aracı
 Name[uk]=Програма для роботи з тлом сторінки
 Name[wa]=Usteye pol fond di l' aplicåcion del pådje
 Name[x-test]=xxPage Application Background Toolxx
+Name[zh_CN]=页面应用程序背景工具
 Name[zh_TW]=頁面應用程式背景工具
 X-KDE-ServiceTypes=KOffice/Tool
 Type=Service

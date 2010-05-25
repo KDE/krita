@@ -27,6 +27,7 @@ Name[tr]=Satır Metni Nesnesi Eklentisi
 Name[uk]=Додаток рядкового текстового об’єкта
 Name[wa]=Tchôke-divins di cayets tecse dins l' messaedje
 Name[x-test]=xxInline Text Object Pluginxx
+Name[zh_CN]=内联文本对象插件
 Name[zh_TW]=內含文字物件外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-InlineObject
@@ -59,6 +60,7 @@ Comment[tr]=Bir metin nesnesinin tanımı
 Comment[uk]=Визначення текстового об’єкта
 Comment[wa]=Definixha d' on cayet tecse
 Comment[x-test]=xxDefinition of a text objectxx
+Comment[zh_CN]=文本对象的定义
 Comment[zh_TW]=定義文字物件
 [PropertyDef::X-KoText-MinVersion]
 Type=int

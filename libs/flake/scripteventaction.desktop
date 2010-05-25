@@ -51,6 +51,7 @@ Comment[tr]=Betik olay durumunu içeren bir eklenti
 Comment[uk]=Додаток, що містить сценарій реакції на подію
 Comment[wa]=On tchôke-divins k' a ene accion d' envenmint do scripe
 Comment[x-test]=xxA plugin that contains a script event actionxx
+Comment[zh_CN]=包含脚本事件动作的插件
 Comment[zh_TW]=包含文稿事件動作的外掛程式
 [PropertyDef::X-ScriptEventAction-MinVersion]
 Type=int

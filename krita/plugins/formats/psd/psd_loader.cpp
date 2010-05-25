@@ -177,7 +177,6 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                                                        layerRecord->right - layerRecord->left,
                                                        layerRecord->bottom - layerRecord->top);
                 qDeleteAll(planes);
-
             }
             m_image->addNode(layer, m_image->rootLayer());
         }

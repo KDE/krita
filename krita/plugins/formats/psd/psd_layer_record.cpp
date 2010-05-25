@@ -30,6 +30,123 @@
 #include "psd_header.h"
 #include "compression.h"
 
+QString channelIdToChannelType(int channelId, PSDColorMode colormode)
+{
+    switch(channelId) {
+    case -2:
+        return "User Supplied Layer Mask";
+    case -1:
+        return "Transparency mask";
+    case  0:
+        switch(colormode) {
+        case Bitmap:
+        case Indexed:
+            return QString("bitmap or indexed: %1").arg(channelId);
+        case Grayscale:
+        case Gray16:
+            return "gray";
+        case RGB:
+        case RGB48:
+            return "red";
+        case Lab:
+        case Lab48:
+            return "L";
+        case CMYK:
+        case CMYK64:
+            return "cyan";
+        case MultiChannel:
+        case DeepMultichannel:
+            return QString("multichannel channel %1").arg(channelId);
+        case DuoTone:
+        case Duotone16:
+            return QString("duotone channel %1").arg(channelId);
+        default:
+            return QString("unknown: %1").arg(channelId);
+        };
+    case 1:
+        switch(colormode) {
+        case Bitmap:
+        case Indexed:
+            return QString("WARNING bitmap or indexed: %1").arg(channelId);
+        case Grayscale:
+        case Gray16:
+            return QString("WARNING: %1").arg(channelId);
+        case RGB:
+        case RGB48:
+            return "green";
+        case Lab:
+        case Lab48:
+            return "a";
+        case CMYK:
+        case CMYK64:
+            return "Magenta";
+        case MultiChannel:
+        case DeepMultichannel:
+            return QString("multichannel channel %1").arg(channelId);
+        case DuoTone:
+        case Duotone16:
+            return QString("duotone channel %1").arg(channelId);
+        default:
+            return QString("unknown: %1").arg(channelId);
+        };
+    case 2:
+        switch(colormode) {
+        case Bitmap:
+        case Indexed:
+            return QString("WARNING bitmap or indexed: %1").arg(channelId);
+        case Grayscale:
+        case Gray16:
+            return QString("WARNING: %1").arg(channelId);
+        case RGB:
+        case RGB48:
+            return "blue";
+        case Lab:
+        case Lab48:
+            return "b";
+        case CMYK:
+        case CMYK64:
+            return "yellow";
+        case MultiChannel:
+        case DeepMultichannel:
+            return QString("multichannel channel %1").arg(channelId);
+        case DuoTone:
+        case Duotone16:
+            return QString("duotone channel %1").arg(channelId);
+        default:
+            return QString("unknown: %1").arg(channelId);
+        };
+    case 3:
+        switch(colormode) {
+        case Bitmap:
+        case Indexed:
+            return QString("WARNING bitmap or indexed: %1").arg(channelId);
+        case Grayscale:
+        case Gray16:
+            return QString("WARNING: %1").arg(channelId);
+        case RGB:
+        case RGB48:
+            return QString("WARNING: %1").arg(channelId);
+        case Lab:
+        case Lab48:
+            return QString("WARNING: %1").arg(channelId);
+        case CMYK:
+        case CMYK64:
+            return "Key";
+        case MultiChannel:
+        case DeepMultichannel:
+            return QString("multichannel channel %1").arg(channelId);
+        case DuoTone:
+        case Duotone16:
+            return QString("duotone channel %1").arg(channelId);
+        default:
+            return QString("unknown: %1").arg(channelId);
+        };
+    default:
+        return QString("unknown: %1").arg(channelId);
+    };
+
+}
+
 PSDLayerRecord::PSDLayerRecord(const PSDHeader& header)
     : m_header(header)
 {
@@ -109,7 +226,7 @@ bool PSDLayerRecord::read(QIODevice* io)
             return false;
         }
 
-        dbgFile << "\tchannel" << i << "id" << info->channelId << "length" << info->channelDataLength;
+        dbgFile << "\tchannel" << i << "id" << channelIdToChannelType(info->channelId, m_header.colormode) << "length" << info->channelDataLength;
         channelInfoRecords << info;
     }
 
@@ -345,9 +462,6 @@ bool PSDLayerRecord::read(QIODevice* io)
 
             infoBlocks[key] = infoBlock;
         }
-
-        return true;
-
     }
 
     return valid();
@@ -469,7 +583,7 @@ QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)
     dbg.nospace() << ", visible: " << layer.visible;
     dbg.nospace() << ", irrelevant: " << layer.irrelevant << "\n";
     foreach(const PSDLayerRecord::ChannelInfo* channel, layer.channelInfoRecords) {
-        dbg.space() << "\tChannel" << channel->channelId
+        dbg.space() << "\tChannel" << channelIdToChannelType(channel->channelId, layer.m_header.colormode)
                 << "size: " << channel->channelDataLength
                 << "compression type" << channel->compressionType << "\n";
     }

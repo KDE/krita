@@ -373,7 +373,7 @@ bool PSDLayerRecord::valid()
 
 quint8* PSDLayerRecord::readChannelData(QIODevice* io, quint64 row, quint16 channel)
 {
-    dbgFile << "Going to read channel data for " << channel
+    dbgFile << "Going to read channel data for channel " << channel
             << "at row" << row
             << "from io with current pos" << io->pos();
 
@@ -387,7 +387,7 @@ quint8* PSDLayerRecord::readChannelData(QIODevice* io, quint64 row, quint16 chan
     ChannelInfo* channelInfo = channelInfoRecords.at(channel);
 
     if (channelInfo->compressionType == Compression::Uncompressed) {
-        switch(m_header.channelDepth){
+        switch(m_header.channelDepth) {
         case 1:
             {
                 dbgFile << "channel depth of 1 bit, we use 8 bits";
@@ -457,15 +457,15 @@ QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)
 #ifndef NODEBUG
     dbg.nospace() << "valid: " << const_cast<PSDLayerRecord*>(&layer)->valid();
     dbg.nospace() << ", name: " << layer.layerName;
-    dbg.nospace() << ", \ntop: " << layer.top;
+    dbg.nospace() << ", top: " << layer.top;
     dbg.nospace() << ", left:" << layer.left;
     dbg.nospace() << ", bottom: " << layer.bottom;
     dbg.nospace() << ", right: " << layer.right;
-    dbg.nospace() << ", \nnumber of channels: " << layer.nChannels;
-    dbg.nospace() << ", \nblendModeKey: " << layer.blendModeKey;
+    dbg.nospace() << ", number of channels: " << layer.nChannels;
+    dbg.nospace() << ", blendModeKey: " << layer.blendModeKey;
     dbg.nospace() << ", opacity: " << layer.opacity;
     dbg.nospace() << ", clipping: " << layer.clipping;
-    dbg.nospace() << ", \ntransparency protected: " << layer.transparencyProtected;
+    dbg.nospace() << ", transparency protected: " << layer.transparencyProtected;
     dbg.nospace() << ", visible: " << layer.visible;
     dbg.nospace() << ", irrelevant: " << layer.irrelevant << "\n";
     foreach(const PSDLayerRecord::ChannelInfo* channel, layer.channelInfoRecords) {

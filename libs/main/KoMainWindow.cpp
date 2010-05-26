@@ -423,10 +423,8 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
     if (d->docToOpen && d->docToOpen != doc) {
         d->docToOpen->removeShell(this);
         delete d->docToOpen;
-        d->docToOpen = 0;
-    } else {
-        d->docToOpen = 0;
     }
+    d->docToOpen = 0;
 
     //kDebug(30003) <<"KoMainWindow::setRootDocument this =" << this <<" doc =" << doc;
     QList<KoView*> oldRootViews = d->rootViews;

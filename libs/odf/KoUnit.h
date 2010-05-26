@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>, Torben Weis <weis@kde.org>
+   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2004, Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2010 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -183,9 +185,14 @@ public:
     static QString unitDescription(KoUnit unit);
     static QStringList listOfUnitName(bool hidePixel = true);
 
+    /// PixelVisibility for indexInList()
+    enum PixelVisibility {
+        ShowAll,
+        HidePixel
+    };
     /// Get the index of this unit in the list of names
     /// @param hidePixel count as if the Pixel unit hadn't been shown in the list
-    uint indexInList(bool hidePixel = true) const;
+    int indexInList(PixelVisibility visibility = HidePixel) const;
 
     /// parse common %KOffice and Odf values, like "10cm", "5mm" to pt
     static qreal parseValue(const QString &value, qreal defaultVal = 0.0);

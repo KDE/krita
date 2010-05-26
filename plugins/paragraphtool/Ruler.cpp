@@ -43,7 +43,7 @@ void Ruler::setUnit(KoUnit unit)
     m_unit = unit;
 
     // approximately 15 points seems to be a good value for the step size
-    switch (m_unit.indexInList(false)) {
+    switch (m_unit.indexInList(KoUnit::ShowAll)) {
     case KoUnit::Millimeter:
         setStepValue(14.17325288515625502486); // 5.0 mm
         break;

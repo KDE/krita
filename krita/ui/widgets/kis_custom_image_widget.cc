@@ -111,12 +111,12 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
 
 void KisCustomImageWidget::resolutionChanged(double res)
 {
-    if (m_widthUnit.indexInList(false) == KoUnit::Pixel) {
+    if (m_widthUnit.indexInList(KoUnit::ShowAll) == KoUnit::Pixel) {
         m_widthUnit = KoUnit(KoUnit::Pixel, res / 72.0);
         m_width = m_widthUnit.fromUserValue(doubleWidth->value());
     }
 
-    if (m_heightUnit.indexInList(false) == KoUnit::Pixel) {
+    if (m_heightUnit.indexInList(KoUnit::ShowAll) == KoUnit::Pixel) {
         m_heightUnit = KoUnit(KoUnit::Pixel, res / 72.0);
         m_height = m_heightUnit.fromUserValue(doubleHeight->value());
     }

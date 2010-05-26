@@ -73,7 +73,11 @@ void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting
         setChecked(setting->getBool("Pressure" + m_name, false));
     }
     m_customCurve = setting->getBool("Custom" + m_name, false);
-    setSensor(KisDynamicSensor::createFromXML(setting->getString(QString(m_name + "Sensor"))));
+    
+    KisDynamicSensor* sensor = KisDynamicSensor::createFromXML(setting->getString(QString(m_name + "Sensor")));
+    if(sensor) {
+        setSensor(sensor);
+    }
     if (m_customCurve) {
         m_curve = setting->getCubicCurve("Curve" + m_name);
     }
@@ -82,6 +86,7 @@ void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting
 void KisCurveOption::setSensor(KisDynamicSensor* sensor)
 {
     delete m_sensor;
+    Q_ASSERT(sensor);
     m_sensor = sensor;
 }
 

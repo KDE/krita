@@ -24,19 +24,19 @@
 
 class KoCanvasBase;
 class KoProperties;
-class KoVariableFactory;
-struct KoVariableTemplate;
+class KoInlineObjectFactory;
+struct KoInlineObjectTemplate;
 
 /// \internal
 class InsertVariableAction : public InsertVariableActionBase
 {
 public:
-    InsertVariableAction(KoCanvasBase *base, KoVariableFactory *factory, const KoVariableTemplate &templ);
+    InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactory *factory, const KoInlineObjectTemplate &templ);
 
 private:
     virtual KoVariable * createVariable();
 
-    KoVariableFactory *const m_factory;
+    KoInlineObjectFactory *const m_factory;
     const QString m_templateId;
     const KoProperties *const m_properties;
     QString m_templateName;

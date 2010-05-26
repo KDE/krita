@@ -23,8 +23,8 @@ set(kotext_LIB_SRCS
     KoTextEditingPlugin.cpp
 
     KoInlineTextObjectManager.cpp
-#    KoInlineObjectFactory.cpp
-#    KoInlineObjectRegistry.cpp
+    KoInlineObjectFactory.cpp
+    KoInlineObjectRegistry.cpp
     InsertVariableActionBase.cpp
     InsertVariableAction.cpp
     InsertNamedVariableAction.cpp
@@ -33,8 +33,6 @@ set(kotext_LIB_SRCS
     KoVariable.cpp
     KoVariableManager.cpp
     KoNamedVariable.cpp
-    KoVariableFactory.cpp
-    KoVariableRegistry.cpp
     KoTextLocator.cpp
     KoTextReference.cpp
     KoTextAnchor.cpp
@@ -126,10 +124,8 @@ install(
     KoTextPage.h
     KoTextPaste.h
     KoTextShapeData.h
-    KoVariableFactory.h
     KoVariable.h
     KoVariableManager.h
-    KoVariableRegistry.h
     KoTextRdfCore.h
     KoTextInlineRdf.h
     KoTextMeta.h

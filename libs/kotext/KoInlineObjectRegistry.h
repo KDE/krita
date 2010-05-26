@@ -26,8 +26,11 @@
 #include <QList>
 
 class KoInlineObjectFactory;
+class KoInlineObject;
 class KoCanvasBase;
 class QAction;
+class KoXmlElement;
+class KoShapeLoadingContext;
 
 /**
  * This singleton class keeps a register of all available InlineObject factories.
@@ -40,7 +43,7 @@ class KOTEXT_EXPORT KoInlineObjectRegistry : public QObject,  public KoGenericRe
 {
     Q_OBJECT
 public:
-    ~KoInlineObjectRegistry() {}
+    ~KoInlineObjectRegistry();
 
     /**
      * Return an instance of the KoInlineObjectRegistry
@@ -61,9 +64,21 @@ public:
      */
     QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
 
+    /**
+     * Use the element to find out which variable plugin can load it, and returns the loaded
+     * variable. The element expected is one of 'text:subject', 'text:date' / etc.
+     *
+     * @returns the variable or 0 if no variable could be created
+     */
+    KoInlineObject *createFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+
 private:
-    KoInlineObjectRegistry() {}
-    void init();
+    KoInlineObjectRegistry();
+    KoInlineObjectRegistry(const KoInlineObjectRegistry&);
+    KoInlineObjectRegistry operator=(const KoInlineObjectRegistry&);
+
+    class Private;
+    Private *d;
 };
 
 #endif

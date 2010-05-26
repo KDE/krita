@@ -21,6 +21,8 @@
 
 #include <KoProperties.h>
 
+#include <QStringList>
+
 class InlineObjectFactoryPrivate
 {
 public:
@@ -29,13 +31,15 @@ public:
     }
 
     ~InlineObjectFactoryPrivate() {
-        foreach(const KoInlineObjectTemplate & t, templates)
+        foreach(const KoInlineObjectTemplate &t, templates)
             delete t.properties;
         templates.clear();
     }
 
     const QString id;
     QString iconName;
+    QString odfNameSpace;
+    QStringList odfElementNames;
     QList<KoInlineObjectTemplate> templates;
 };
 
@@ -50,12 +54,12 @@ KoInlineObjectFactory::~KoInlineObjectFactory()
     delete d;
 }
 
-const QString &KoInlineObjectFactory::id() const
+QString KoInlineObjectFactory::id() const
 {
     return d->id;
 }
 
-const QList<KoInlineObjectTemplate> KoInlineObjectFactory::templates() const
+QList<KoInlineObjectTemplate> KoInlineObjectFactory::templates() const
 {
     return d->templates;
 }
@@ -63,6 +67,22 @@ const QList<KoInlineObjectTemplate> KoInlineObjectFactory::templates() const
 void KoInlineObjectFactory::addTemplate(const KoInlineObjectTemplate &params)
 {
     d->templates.append(params);
+}
+
+QStringList KoInlineObjectFactory::odfElementNames() const
+{
+    return d->odfElementNames;
+}
+
+QString KoInlineObjectFactory::odfNameSpace() const
+{
+    return d->odfNameSpace;
+}
+
+void KoInlineObjectFactory::setOdfElementNames(const QString & nameSpace, const QStringList & names)
+{
+    d->odfNameSpace = nameSpace;
+    d->odfElementNames = names;
 }
 
 #include <KoInlineObjectFactory.moc>

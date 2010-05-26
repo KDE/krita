@@ -165,6 +165,11 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     layout.draw(&painter, rect.topLeft());
 }
 
+bool KoInlineNote::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    return loadOdf(element, context, 0, 0);
+}
+
 bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context, KoStyleManager *styleManager, KoChangeTracker *changeTracker)
 {
     QTextDocument *document = new QTextDocument();

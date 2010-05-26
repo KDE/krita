@@ -102,9 +102,10 @@ void KoDeleteChangeMarker::setDeleteChangeXml(QString &deleteChangeXml)
     d->deleteChangeXml = deleteChangeXml;
 }
 
-bool KoDeleteChangeMarker::loadOdf(const KoXmlElement &element)
+bool KoDeleteChangeMarker::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_UNUSED(element)
+    Q_UNUSED(context);
     return false;
 }
 

@@ -109,6 +109,8 @@ public:
     /// @return true if this bookmark has selection (type is StartBookmark of EndBookmark)
     bool hasSelection();
 
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+
 private:
     class Private;
     Private *const d;

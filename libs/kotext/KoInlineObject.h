@@ -35,6 +35,8 @@ class KoInlineTextObjectManager;
 class KoInlineObjectPrivate;
 class KoShapeSavingContext;
 class KoTextInlineRdf;
+class KoXmlElement;
+class KoShapeLoadingContext;
 
 /**
  * Base class for all inline-text-objects.
@@ -208,6 +210,16 @@ public:
      * This object continues to own the object, do not delete it.
      */
     KoTextInlineRdf *inlineRdf() const;
+
+    /**
+     * Load a variable from odf.
+     *
+     * @param element element which represents the shape in odf
+     * @param context the KoShapeLoadingContext used for loading
+     *
+     * @return false if loading failed
+     */
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) =  0;
 
 protected:
     explicit KoInlineObject(KoInlineObjectPrivate &, bool propertyChangeListener = false);

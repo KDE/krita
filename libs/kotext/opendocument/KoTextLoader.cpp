@@ -51,7 +51,7 @@
 #include <KoUnit.h>
 #include <KoVariable.h>
 #include <KoVariableManager.h>
-#include <KoVariableRegistry.h>
+#include <KoInlineObjectRegistry.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include "KoTextInlineRdf.h"
@@ -343,15 +343,15 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
                     } else if (localName == "table-of-content") {
                         loadTableOfContents(tag, cursor);
                     } else {
-                        KoVariable *var = KoVariableRegistry::instance()->createFromOdf(tag, d->context);
-                        if (var) {
+                        KoInlineObject *obj = KoInlineObjectRegistry::instance()->createFromOdf(tag, d->context);
+                        if (obj) {
                             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
                             if (layout) {
                                 KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
                                 if (textObjectManager) {
                                     KoVariableManager *varManager = textObjectManager->variableManager();
                                     if (varManager) {
-                                        textObjectManager->insertInlineObject(cursor, var);
+                                        textObjectManager->insertInlineObject(cursor, obj);
                                     }
                                 }
                             }
@@ -1023,16 +1023,16 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         } else if (isDrawNS) {
             loadShape(ts, cursor);
         } else {
-            KoVariable *var = KoVariableRegistry::instance()->createFromOdf(ts, d->context);
+            KoInlineObject *obj = KoInlineObjectRegistry::instance()->createFromOdf(ts, d->context);
 
-            if (var) {
+            if (obj) {
                 KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
                 if (layout) {
                     KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
                     if (textObjectManager) {
                         KoVariableManager *varManager = textObjectManager->variableManager();
                         if (varManager) {
-                            textObjectManager->insertInlineObject(cursor, var);
+                            textObjectManager->insertInlineObject(cursor, obj);
                         }
                     }
                 }
@@ -1253,7 +1253,7 @@ void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
     // page anchored shapes are handled differently
     if (anchorType != "page") {
         KoTextAnchor *anchor = new KoTextAnchor(shape);
-        anchor->loadOdfFromShape(element, d->context);
+        anchor->loadOdf(element, d->context);
         d->textSharedData->shapeInserted(shape, element, d->context);
 
         KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());

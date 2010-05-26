@@ -34,8 +34,6 @@ class KoProperties;
 struct KOTEXT_EXPORT KoInlineObjectTemplate {
     QString id;         ///< The id of the inlineObject
     QString name;       ///< The name to be shown for this template
-    //QString toolTip;    ///< The tooltip text for the template
-    //QString icon;       ///< Icon name
     /**
      * The properties which, when passed to the KoInlineObjectFactory::createInlineObject() method
      * result in the object this template represents.
@@ -92,7 +90,13 @@ public:
      * Return all the templates this factory knows about.
      * Each template shows a different way to create an object this factory is specialized in.
      */
-    const QList<KoInlineObjectTemplate> templates() const;
+    QList<KoInlineObjectTemplate> templates() const;
+
+    QStringList odfElementNames() const;
+
+    QString odfNameSpace() const;
+
+    void setOdfElementNames(const QString &nameSpace, const QStringList &names);
 
 protected:
     /**

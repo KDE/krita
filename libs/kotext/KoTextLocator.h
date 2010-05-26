@@ -65,6 +65,8 @@ public:
     /// Remove a reference from the listeners.
     void removeListener(KoTextReference *reference);
 
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+
 private:
     class Private;
     Private * const d;

@@ -20,7 +20,7 @@
 
 #include "InsertVariableActionBase_p.h"
 #include "KoVariable.h"
-#include "KoVariableFactory.h"
+#include "KoInlineObjectFactory.h"
 #include "KoTextEditor.h"
 
 #include <KoToolProxy.h>

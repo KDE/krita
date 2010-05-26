@@ -77,7 +77,7 @@ public:
     ///Return the document this marker belongs to.
     QTextDocument* document() const;
 
-    bool loadOdf(const KoXmlElement &element);
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     ///reimplemented
     virtual void saveOdf(KoShapeSavingContext &context);
 

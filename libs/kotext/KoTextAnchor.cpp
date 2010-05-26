@@ -304,7 +304,7 @@ void KoTextAnchor::setOffset(const QPointF &offset)
     d->relayout();
 }
 
-void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
+void KoTextAnchor::saveOdf(KoShapeSavingContext &context)
 {
     Q_D(KoTextAnchor);
     // the anchor type determines where in the stream the shape is to be saved.
@@ -375,8 +375,9 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
     }
 }
 
-bool KoTextAnchor::loadOdfFromShape(const KoXmlElement& element, KoShapeLoadingContext &context)
+bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    Q_UNUSED(context);
     Q_D(KoTextAnchor);
     d->distance = shape()->position();
     if (! shape()->hasAdditionalAttribute("text:anchor-type"))

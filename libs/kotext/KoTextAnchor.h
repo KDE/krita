@@ -49,10 +49,10 @@ class KoShapeLoadingContext;
  *
  * Steps to use a KoTextAnchor are; <ol>
  * <li> Create a new instance with e.g. new KoTextAnchor(myshape);
- * <li> Use loadOdfFromShape() to load additional attributes like the "text:anchor-type"
+ * <li> Use loadOdf() to load additional attributes like the "text:anchor-type"
  * <li> Position the anchor with updatePosition() what will attach the KoTextAnchor-instance to
  *    the TextShape's \a KoTextShapeContainerModel . </ol>
- * The position of the shape relative to the anchor is called the offset. It's loaded by loadOdfFromShape().
+ * The position of the shape relative to the anchor is called the offset. It's loaded by loadOdf().
  * @see KWAnchorStrategy for more information about the layout of anchors/shapes in KWord.
  */
 class KOTEXT_EXPORT KoTextAnchor : public KoInlineObject
@@ -139,7 +139,7 @@ public:
     void setOffset(const QPointF &offset);
 
     /// Load the additional attributes.
-    bool loadOdfFromShape(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     /// Save the additional attributes.
     void saveOdf(KoShapeSavingContext &context);
 

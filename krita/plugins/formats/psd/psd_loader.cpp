@@ -159,23 +159,22 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
 
             KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
 
-            QVector<quint8*> planes;
+            QMap<int, quint8*> planes;
             for (quint64 row = layerRecord->top; row < layerRecord->bottom; ++row) {
-                for (quint16 channel = 0; channel < layerRecord->nChannels; ++channel) {
+                foreach(PSDLayerRecord::ChannelInfo *channel, layerRecord->channelInfoRecords) {
                     quint8* bytes = layerRecord->readChannelData(&f, row, channel);
                     if (bytes == 0) {
                         dbgFile << layerRecord->error;
                         return KisImageBuilder_RESULT_BAD_FETCH;
                     }
-
                     // XXX: make sure the order is ok. In photoshop, the first channel is alpha
-                    planes << bytes;
+                    planes[channel->channelId] = bytes;
                 }
-                layer->paintDevice()->writePlanarBytes(planes,
-                                                       layerRecord->left,
-                                                       row,
-                                                       layerRecord->right - layerRecord->left,
-                                                       layerRecord->bottom - layerRecord->top);
+//                layer->paintDevice()->writePlanarBytes(planes.values(),
+//                                                       layerRecord->left,
+//                                                       row,
+//                                                       layerRecord->right - layerRecord->left,
+//                                                       layerRecord->bottom - layerRecord->top);
                 qDeleteAll(planes);
             }
             m_image->addNode(layer, m_image->rootLayer());

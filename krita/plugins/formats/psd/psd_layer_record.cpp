@@ -485,20 +485,15 @@ bool PSDLayerRecord::valid()
     return true;
 }
 
-quint8* PSDLayerRecord::readChannelData(QIODevice* io, quint64 row, quint16 channel)
+quint8* PSDLayerRecord::readChannelData(QIODevice* io, quint64 row, PSDLayerRecord::ChannelInfo *channelInfo)
 {
-    dbgFile << "Going to read channel data for channel " << channel
+    dbgFile << "Going to read channel data for channel " << channelInfo
             << "at row" << row
             << "from io with current pos" << io->pos();
 
-    if (channel >= channelInfoRecords.size()) {
-        error = "Tried to read non-existent channel";
-        return 0;
-    }
-
     quint64 savedPos = io->pos();
     quint8* bytes = 0;
-    ChannelInfo* channelInfo = channelInfoRecords.at(channel);
+
 
     if (channelInfo->compressionType == Compression::Uncompressed) {
         switch(m_header.channelDepth) {
@@ -566,6 +561,8 @@ quint8* PSDLayerRecord::readChannelData(QIODevice* io, quint64 row, quint16 chan
     return bytes;
 }
 
+
+
 QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)
 {
 #ifndef NODEBUG
@@ -583,10 +580,19 @@ QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)
     dbg.nospace() << ", visible: " << layer.visible;
     dbg.nospace() << ", irrelevant: " << layer.irrelevant << "\n";
     foreach(const PSDLayerRecord::ChannelInfo* channel, layer.channelInfoRecords) {
-        dbg.space() << "\tChannel" << channelIdToChannelType(channel->channelId, layer.m_header.colormode)
-                << "size: " << channel->channelDataLength
-                << "compression type" << channel->compressionType << "\n";
+        dbg.space() << channel;
     }
+#endif
+    return dbg.nospace();
+}
+
+
+QDebug operator<<(QDebug dbg, const PSDLayerRecord::ChannelInfo &channel)
+{
+#ifndef NODEBUG
+    dbg.nospace() << "\tChannel type" << channel.channelId
+                << "size: " << channel.channelDataLength
+                << "compression type" << channel.compressionType << "\n";
 #endif
     return dbg.nospace();
 }

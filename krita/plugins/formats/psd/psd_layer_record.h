@@ -105,11 +105,12 @@ public:
 
     QMap<QString, LayerInfoBlock*> infoBlocks;
 
-    quint8* readChannelData(QIODevice* io, quint64 row, quint16 channel);
+    quint8* readChannelData(QIODevice* io, quint64 row, ChannelInfo *channel);
 
     const PSDHeader m_header;
 };
 
 QDebug operator<<(QDebug dbg, const PSDLayerRecord& layer);
+QDebug operator<<(QDebug dbg, const PSDLayerRecord::ChannelInfo& layer);
 
 #endif // PSD_LAYER_RECORD_H

@@ -21,6 +21,8 @@
 #include "KoInlineObject_p.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextShapeContainerModel.h"
+#include "KoStyleStack.h"
+#include "KoOdfLoadingContext.h"
 
 #include <KoShapeContainer.h>
 #include <KoXmlWriter.h>
@@ -112,6 +114,10 @@ public:
         case KoTextAnchor::BottomOfParagraph: answer = "BottomOfParagraph"; break;
         case KoTextAnchor::BottomOfFrame: answer = "BottomOfFrame"; break;
         case KoTextAnchor::VerticalOffset: answer = "VerticalOffset"; break;
+        case KoTextAnchor::TopOfPage: answer = "TopOfPage"; break;
+        case KoTextAnchor::BottomOfPage: answer = "BottomOfPage"; break;
+        case KoTextAnchor::TopOfPageContent: answer = "TopOfPageContent"; break;
+        case KoTextAnchor::BottomOfPageContent: answer = "BottomOfPageContent"; break;
         }
         answer += '|';
         switch(horizontalAlignment) {
@@ -121,6 +127,8 @@ public:
         case KoTextAnchor::ClosestToBinding: answer+= "ClosestToBinding"; break;
         case KoTextAnchor::FurtherFromBinding: answer+= "FurtherFromBinding"; break;
         case KoTextAnchor::HorizontalOffset: answer+= "HorizontalOffset"; break;
+        case KoTextAnchor::LeftOfPage: answer+= "LeftOfPage"; break;
+        case KoTextAnchor::RightOfPage: answer+= "RightOfPage"; break;
         }
         return answer;
     }
@@ -317,6 +325,10 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
     case KoTextAnchor::AboveCurrentLine:
     case KoTextAnchor::BelowCurrentLine:
     case KoTextAnchor::BottomOfParagraph:
+    case KoTextAnchor::TopOfPage:
+    case KoTextAnchor::BottomOfPage:
+    case KoTextAnchor::TopOfPageContent:
+    case KoTextAnchor::BottomOfPageContent:
         odfAnchorType = Paragraph;
         break;
     case KoTextAnchor::VerticalOffset:
@@ -345,20 +357,94 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
         else
             type = "paragraph";
         shape()->setAdditionalAttribute("text:anchor-type", type);
-        if (shape()->parent()) // an anchor may not yet have been layout-ed
-            context.addShapeOffset(shape(), shape()->parent()->absoluteTransformation(0).inverted());
+        if (shape()->parent()) {// an anchor may not yet have been layout-ed
+            QMatrix parentMatrix = shape()->parent()->absoluteTransformation(0).inverted();
+            QMatrix shapeMatrix = shape()->absoluteTransformation(0);;
+
+            qreal dx = d->distance.x() - shapeMatrix.dx()*parentMatrix.m11()
+                                       - shapeMatrix.dy()*parentMatrix.m21();
+            qreal dy = d->distance.y() - shapeMatrix.dx()*parentMatrix.m12()
+                                       - shapeMatrix.dy()*parentMatrix.m22();
+            context.addShapeOffset(shape(), QMatrix(parentMatrix.m11(),parentMatrix.m12(),
+                                                    parentMatrix.m21(),parentMatrix.m22(),
+                                                    dx,dy));
+        }
+
         shape()->saveOdf(context);
         context.removeShapeOffset(shape());
     }
 }
 
-bool KoTextAnchor::loadOdfFromShape(const KoXmlElement& element)
+bool KoTextAnchor::loadOdfFromShape(const KoXmlElement& element, KoShapeLoadingContext &context)
 {
     Q_D(KoTextAnchor);
     d->distance = shape()->position();
     if (! shape()->hasAdditionalAttribute("text:anchor-type"))
         return false;
     QString anchorType = shape()->additionalAttribute("text:anchor-type");
+
+    // load settings from graphic style
+     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+     styleStack.save();
+     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
+         context.odfLoadingContext().fillStyleStack(element, KoXmlNS::draw, "style-name", "graphic");
+         styleStack.setTypeProperties("graphic");
+     }
+     QString verticalPos = styleStack.property(KoXmlNS::style, "vertical-pos");
+     QString verticalRel = styleStack.property(KoXmlNS::style, "vertical-rel");
+     QString horizontalPos = styleStack.property(KoXmlNS::style, "horizontal-pos");
+     QString horizontalRel = styleStack.property(KoXmlNS::style, "horizontal-rel");
+     styleStack.restore();
+
+     if (element.hasAttributeNS(KoXmlNS::koffice, "anchor-type")) {
+         anchorType = element.attributeNS(KoXmlNS::koffice, "anchor-type"); // our enriched properties
+         QStringList types = anchorType.split('|');
+         if (types.count() > 1) {
+             QString vertical = types[0];
+             QString horizontal = types[1];
+             if (vertical == "TopOfFrame")
+                 d->verticalAlignment = TopOfFrame;
+             else if (vertical == "TopOfParagraph")
+                 d->verticalAlignment = TopOfParagraph;
+             else if (vertical == "AboveCurrentLine")
+                 d->verticalAlignment = AboveCurrentLine;
+             else if (vertical == "BelowCurrentLine")
+                 d->verticalAlignment = BelowCurrentLine;
+             else if (vertical == "BottomOfParagraph")
+                 d->verticalAlignment = BottomOfParagraph;
+             else if (vertical == "BottomOfFrame")
+                 d->verticalAlignment = BottomOfFrame;
+             else if (vertical == "VerticalOffset")
+                 d->verticalAlignment = VerticalOffset;
+             else if (vertical == "TopOfPage")
+                 d->verticalAlignment = TopOfPage;
+             else if (vertical == "BottomOfPage")
+                 d->verticalAlignment = BottomOfPage;
+             else if (vertical == "TopOfPageContent")
+                 d->verticalAlignment = TopOfPageContent;
+             else if (vertical == "BottomOfPageContent")
+                 d->verticalAlignment = BottomOfPageContent;
+
+             if (horizontal == "Left")
+                 d->horizontalAlignment = Left;
+             else if (horizontal == "Right")
+                 d->horizontalAlignment = Right;
+             else if (horizontal == "Center")
+                 d->horizontalAlignment = Center;
+             else if (horizontal == "ClosestToBinding")
+                 d->horizontalAlignment = ClosestToBinding;
+             else if (horizontal == "FurtherFromBinding")
+                 d->horizontalAlignment = FurtherFromBinding;
+             else if (horizontal == "HorizontalOffset")
+                 d->horizontalAlignment = HorizontalOffset;
+             else if (horizontal == "LeftOfPage")
+                 d->horizontalAlignment = LeftOfPage;
+             else if (horizontal == "RightOfPage")
+                 d->horizontalAlignment = RightOfPage;
+             return true;
+        }
+    }
+
     if (anchorType == "as-char") {
         // 'as-char' means it's completely inline in the text like any other char
         d->horizontalAlignment = HorizontalOffset;
@@ -368,51 +454,267 @@ bool KoTextAnchor::loadOdfFromShape(const KoXmlElement& element)
         // while 'paragraph' further indicates the anchor is always placed at first char
         d->horizontalAlignment = Left;
         d->verticalAlignment = TopOfParagraph;
+
+        // vertical alignment - conversion from style:vertical-rel,pos to koffice:anchor-type
+         if (verticalRel == "char") {
+             if (verticalPos == "below") { //svg:y attribute is ignored
+                 d->verticalAlignment = BelowCurrentLine;
+                 d->distance.setY(-shape()->size().height());
+             } else if (verticalPos == "bottom") { //svg:y attribute is ignored
+                 d->verticalAlignment = BelowCurrentLine;
+                 d->distance.setY(0);
+             } else if (verticalPos == "from-top") {
+                 d->verticalAlignment = AboveCurrentLine;
+             } else if (verticalPos == "middle") { //svg:y attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (verticalPos == "top") { //svg:y attribute is ignored
+                 d->verticalAlignment = AboveCurrentLine;
+                 d->distance.setY(0);
+             }
+         } else if (verticalRel == "page") {
+             if (verticalPos == "below") { //svg:y attribute is ignored
+                 d->verticalAlignment = BottomOfPage;
+                 d->distance.setY(-shape()->size().height());
+             } else if (verticalPos == "bottom") { //svg:y attribute is ignored
+                 d->verticalAlignment = BottomOfPage;
+                 d->distance.setY(0);
+             } else if (verticalPos == "from-top") {
+                 d->verticalAlignment = TopOfPage;
+             } else if (verticalPos == "middle") { //svg:y attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (verticalPos == "top") { //svg:y attribute is ignored
+                 d->verticalAlignment = TopOfPage;
+                 d->distance.setY(0);
+             }
+         } else if (verticalRel == "page-content") {
+             if (verticalPos == "below") { //svg:y attribute is ignored
+                 d->verticalAlignment = BottomOfPageContent;
+                 d->distance.setY(-shape()->size().height());
+             } else if (verticalPos == "bottom") { //svg:y attribute is ignored
+                 d->verticalAlignment = BottomOfPageContent;
+                 d->distance.setY(0);
+             } else if (verticalPos == "from-top") {
+                 d->verticalAlignment = TopOfPageContent;
+             } else if (verticalPos == "middle") { //svg:y attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (verticalPos == "top") { //svg:y attribute is ignored
+                 d->verticalAlignment = TopOfPageContent;
+                 d->distance.setY(0);
+             }
+         } else if (verticalRel == "paragraph") {
+             if (verticalPos == "below") { //svg:y attribute is ignored
+                 d->verticalAlignment = BottomOfParagraph;
+                 d->distance.setY(-shape()->size().height());
+             } else if (verticalPos == "bottom") { //svg:y attribute is ignored
+                 d->verticalAlignment = BottomOfParagraph;
+                 d->distance.setY(0);
+             } else if (verticalPos == "from-top") {
+                 d->verticalAlignment = TopOfParagraph;
+             } else if (verticalPos == "middle") { //svg:y attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (verticalPos == "top") { //svg:y attribute is ignored
+                 d->verticalAlignment = TopOfParagraph;
+                 d->distance.setY(0);
+             }
+         } else { //TODO another types if needed
+             return false;
+         }
+
+         //horizontal alignment - conversion from style:horizontal-rel,pos to koffice:anchor-type
+         if (horizontalRel == "char") {
+             if (horizontalPos == "center") { //svg:x attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "from-inside") {
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "from-left") {
+                 d->horizontalAlignment = HorizontalOffset;
+             } else if (horizontalPos == "inside") { //svg:x attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "left") { //svg:x attribute is ignored
+                 d->horizontalAlignment = HorizontalOffset;
+                 d->distance.setX(0);
+             } else if (horizontalPos == "outside") { //svg:x attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "right") { //svg:x attribute is ignored
+                 d->horizontalAlignment = HorizontalOffset;
+                 d->distance.setX(-shape()->size().width());
+             }
+         } else if (horizontalRel == "page") {
+             if (horizontalPos == "center") { //svg:x attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "from-inside") {
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "from-left") {
+                 d->horizontalAlignment = LeftOfPage;
+             } else if (horizontalPos == "inside") { //svg:x attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "left") { //svg:x attribute is ignored
+                 d->horizontalAlignment = LeftOfPage;
+                 d->distance.setX(0);
+             } else if (horizontalPos == "outside") { //svg:x attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "right") { //svg:x attribute is ignored
+                 d->horizontalAlignment = RightOfPage;
+                 d->distance.setX(0);
+             }
+         } else if (verticalRel == "page-content") {
+             if (horizontalPos == "center") { //svg:x attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "from-inside") {
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "from-left") {
+                 d->horizontalAlignment = Left;
+             } else if (horizontalPos == "inside") { //svg:x attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "left") { //svg:x attribute is ignored
+                 d->horizontalAlignment = Left;
+                 d->distance.setX(0);
+             } else if (horizontalPos == "outside") { //svg:x attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "right") { //svg:x attribute is ignored
+                 d->horizontalAlignment = Right;
+                 d->distance.setX(0);
+             }
+         } else if (horizontalRel == "paragraph") {
+             if (horizontalPos == "center") { //svg:x attribute is ignored
+                 d->horizontalAlignment = Center;
+                 d->distance.setX(-(shape()->size().width()/2));
+             } else if (horizontalPos == "from-inside") {
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "from-left") {
+                 d->horizontalAlignment = Left;
+             } else if (horizontalPos == "inside") { //svg:x attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "left") { //svg:x attribute is ignored
+                 d->horizontalAlignment = Left;
+                 d->distance.setX(0);
+             } else if (horizontalPos == "outside") { //svg:x attribute is ignored
+                 return false; // not posible to do it with koffice:anchor-type
+             } else if (horizontalPos == "right") { //svg:x attribute is ignored
+                 d->horizontalAlignment = Right;
+                 d->distance.setX(0);
+             }
+         } else { //TODO another types if needed
+             return false;
+         }
     }
     else {
         if (anchorType == "paragraph") {
             d->horizontalAlignment = Left;
             d->verticalAlignment = TopOfParagraph;
+
+            // vertical alignment - conversion from style:vertical-rel,pos to koffice:anchor-type
+            if (verticalRel == "page") {
+                 if (verticalPos == "below") { //svg:y attribute is ignored
+                     d->verticalAlignment = BottomOfPage;
+                     d->distance.setY(-shape()->size().height());
+                 } else if (verticalPos == "bottom") { //svg:y attribute is ignored
+                     d->verticalAlignment = BottomOfPage;
+                     d->distance.setY(0);
+                 } else if (verticalPos == "from-top") {
+                     d->verticalAlignment = TopOfPage;
+                 } else if (verticalPos == "middle") { //svg:y attribute is ignored
+                     return false; // not posible to do it with koffice:anchor-type
+                 } else if (verticalPos == "top") { //svg:y attribute is ignored
+                     d->verticalAlignment = TopOfPage;
+                     d->distance.setY(0);
+                 }
+             } else if (verticalRel == "page-content") {
+                 if (verticalPos == "below") { //svg:y attribute is ignored
+                     d->verticalAlignment = BottomOfPageContent;
+                     d->distance.setY(-shape()->size().height());
+                 } else if (verticalPos == "bottom") { //svg:y attribute is ignored
+                     d->verticalAlignment = BottomOfPageContent;
+                     d->distance.setY(0);
+                 } else if (verticalPos == "from-top") {
+                     d->verticalAlignment = TopOfPageContent;
+                 } else if (verticalPos == "middle") { //svg:y attribute is ignored
+                     return false; // not posible to do it with koffice:anchor-type
+                 } else if (verticalPos == "top") { //svg:y attribute is ignored
+                     d->verticalAlignment = TopOfPageContent;
+                     d->distance.setY(0);
+                 }
+             } else if (verticalRel == "paragraph") {
+                 if (verticalPos == "below") { //svg:y attribute is ignored
+                     d->verticalAlignment = BottomOfParagraph;
+                     d->distance.setY(-shape()->size().height());
+                 } else if (verticalPos == "bottom") { //svg:y attribute is ignored
+                     d->verticalAlignment = BottomOfParagraph;
+                     d->distance.setY(0);
+                 } else if (verticalPos == "from-top") {
+                     d->verticalAlignment = TopOfParagraph;
+                 } else if (verticalPos == "middle") { //svg:y attribute is ignored
+                     return false; // not posible to do it with koffice:anchor-type
+                 } else if (verticalPos == "top") { //svg:y attribute is ignored
+                     d->verticalAlignment = TopOfParagraph;
+                     d->distance.setY(0);
+                 }
+             } else { //TODO another types if needed
+                 return false;
+             }
+
+             //horizontal alignment - conversion from style:horizontal-rel,pos to koffice:anchor-type
+            if (horizontalRel == "page") {
+                 if (horizontalPos == "center") { //svg:x attribute is ignored
+                     return false; // not posible to do it with koffice:anchor-type
+                 } else if (horizontalPos == "from-inside") {
+                     return false; // not posible to do it with koffice:anchor-type
+                 } else if (horizontalPos == "from-left") {
+                     d->horizontalAlignment = LeftOfPage;
+                 } else if (horizontalPos == "inside") { //svg:x attribute is ignored
+                     return false; // not posible to do it with koffice:anchor-type
+                 } else if (horizontalPos == "left") { //svg:x attribute is ignored
+                     d->horizontalAlignment = LeftOfPage;
+                     d->distance.setX(0);
+                 } else if (horizontalPos == "outside") { //svg:x attribute is ignored
+                     return false; // not posible to do it with koffice:anchor-type
+                 } else if (horizontalPos == "right") { //svg:x attribute is ignored
+                     d->horizontalAlignment = RightOfPage;
+                     d->distance.setX(0);
+                 }
+             } else if (verticalRel == "page-content") {
+                 if (horizontalPos == "center") { //svg:x attribute is ignored
+                     return false; // not posible to do it with koffice:anchor-type
+                 } else if (horizontalPos == "from-inside") {
+                     return false; // not posible to do it with koffice:anchor-type
+                 } else if (horizontalPos == "from-left") {
+                     d->horizontalAlignment = Left;
+                 } else if (horizontalPos == "inside") { //svg:x attribute is ignored
+                     return false; // not posible to do it with koffice:anchor-type
+                 } else if (horizontalPos == "left") { //svg:x attribute is ignored
+                     d->horizontalAlignment = Left;
+                     d->distance.setX(0);
+                 } else if (horizontalPos == "outside") { //svg:x attribute is ignored
+                     return false; // not posible to do it with koffice:anchor-type
+                 } else if (horizontalPos == "right") { //svg:x attribute is ignored
+                     d->horizontalAlignment = Right;
+                     d->distance.setX(0);
+                 }
+             } else if (horizontalRel == "paragraph") {
+                 if (horizontalPos == "center") { //svg:x attribute is ignored
+                     d->horizontalAlignment = Center;
+                     d->distance.setX(-(shape()->size().width()/2));
+                 } else if (horizontalPos == "from-inside") {
+                     return false; // not posible to do it with koffice:anchor-type
+                 } else if (horizontalPos == "from-left") {
+                     d->horizontalAlignment = Left;
+                 } else if (horizontalPos == "inside") { //svg:x attribute is ignored
+                     return false; // not posible to do it with koffice:anchor-type
+                 } else if (horizontalPos == "left") { //svg:x attribute is ignored
+                     d->horizontalAlignment = Left;
+                     d->distance.setX(0);
+                 } else if (horizontalPos == "outside") { //svg:x attribute is ignored
+                     return false; // not posible to do it with koffice:anchor-type
+                 } else if (horizontalPos == "right") { //svg:x attribute is ignored
+                     d->horizontalAlignment = Right;
+                     d->distance.setX(0);
+                 }
+             } else { //TODO another types if needed
+                 return false;
+             }
         } else if (anchorType == "frame") {
             d->horizontalAlignment = Left;
             d->verticalAlignment = TopOfFrame;
-        }
-
-        if (element.hasAttributeNS(KoXmlNS::koffice, "anchor-type")) {
-            anchorType = element.attributeNS(KoXmlNS::koffice, "anchor-type"); // our enriched properties
-            QStringList types = anchorType.split('|');
-            if (types.count() > 1) {
-                QString vertical = types[0];
-                QString horizontal = types[1];
-                if (vertical == "TopOfFrame")
-                    d->verticalAlignment = TopOfFrame;
-                else if (vertical == "TopOfParagraph")
-                    d->verticalAlignment = TopOfParagraph;
-                else if (vertical == "AboveCurrentLine")
-                    d->verticalAlignment = AboveCurrentLine;
-                else if (vertical == "BelowCurrentLine")
-                    d->verticalAlignment = BelowCurrentLine;
-                else if (vertical == "BottomOfParagraph")
-                    d->verticalAlignment = BottomOfParagraph;
-                else if (vertical == "BottomOfFrame")
-                    d->verticalAlignment = BottomOfFrame;
-                else if (vertical == "VerticalOffset")
-                    d->verticalAlignment = VerticalOffset;
-
-                if (horizontal == "Left")
-                    d->horizontalAlignment = Left;
-                else if (horizontal == "Right")
-                    d->horizontalAlignment = Right;
-                else if (horizontal == "Center")
-                    d->horizontalAlignment = Center;
-                else if (horizontal == "ClosestToBinding")
-                    d->horizontalAlignment = ClosestToBinding;
-                else if (horizontal == "FurtherFromBinding")
-                    d->horizontalAlignment = FurtherFromBinding;
-                else if (horizontal == "HorizontalOffset")
-                    d->horizontalAlignment = HorizontalOffset;
-            }
-            d->distance = QPointF();
         }
     }
     return true;

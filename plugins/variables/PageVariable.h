@@ -44,7 +44,7 @@ public:
      */
     PageVariable();
 
-    void setProperties(const KoProperties *props);
+    void readProperties(const KoProperties *props);
 
     void propertyChanged(Property property, const QVariant &value);
 

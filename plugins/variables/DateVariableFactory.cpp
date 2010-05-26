@@ -26,10 +26,10 @@
 
 #include <klocale.h>
 
-DateVariableFactory::DateVariableFactory()
-        : KoVariableFactory("date")
+DateVariableFactory::DateVariableFactory(QObject *parent)
+        : KoInlineObjectFactoryBase(parent, "date")
 {
-    KoVariableTemplate var;
+    KoInlineObjectTemplate var;
     var.id = "fixed";
     var.name = i18n("Fixed");
     KoProperties *props = new KoProperties();
@@ -43,20 +43,14 @@ DateVariableFactory::DateVariableFactory()
     setOdfElementNames(KoXmlNS::text, elementNames);
 }
 
-DateVariableFactory::~DateVariableFactory()
+KoInlineObject *DateVariableFactory::createInlineObject(const KoProperties *properties) const
 {
-}
+    DateVariable::DateType dt = DateVariable::Fixed;
+    if (properties)
+        dt = static_cast<DateVariable::DateType>(properties->intProperty("id", dt));
 
-KoVariable * DateVariableFactory::createVariable(const KoProperties *properties) const
-{
-    DateVariable *var = new DateVariable(static_cast<DateVariable::DateType>
-                                         (properties->intProperty("id", DateVariable::Fixed)));
-    var->setProperties(properties);
-    return var;
-}
-
-KoVariable * DateVariableFactory::createVariable() const
-{
-    DateVariable *var = new DateVariable(DateVariable::Fixed);
+    DateVariable *var = new DateVariable(dt);
+    if (properties)
+        var->readProperties(properties);
     return var;
 }

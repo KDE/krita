@@ -39,7 +39,7 @@ PageVariable::PageVariable()
 {
 }
 
-void PageVariable::setProperties(const KoProperties *props)
+void PageVariable::readProperties(const KoProperties *props)
 {
     switch (props->intProperty("vartype")) {
     case 1:

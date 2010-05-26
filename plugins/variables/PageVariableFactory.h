@@ -21,18 +21,14 @@
 #ifndef KO_PAGE_VARIABLE_FACTORY
 #define KO_PAGE_VARIABLE_FACTORY
 
-#include <KoVariableFactory.h>
+#include <KoInlineObjectFactoryBase.h>
 
-class PageVariableFactory : public KoVariableFactory
+class PageVariableFactory : public KoInlineObjectFactoryBase
 {
 public:
-    PageVariableFactory();
-    ~PageVariableFactory();
+    PageVariableFactory(QObject *parent = 0);
 
-    /// reimplemented
-    KoVariable * createVariable(const KoProperties *properties) const;
-    /// reimplemented
-    KoVariable * createVariable() const;
+    virtual KoInlineObject *createInlineObject(const KoProperties *properties = 0) const;
 };
 
 #endif

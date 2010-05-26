@@ -21,19 +21,14 @@
 #ifndef KO_DATE_VARIABLE_FACTORY
 #define KO_DATE_VARIABLE_FACTORY
 
-#include <KoVariableFactory.h>
+#include <KoInlineObjectFactoryBase.h>
 
-class DateVariableFactory : public KoVariableFactory
+class DateVariableFactory : public KoInlineObjectFactoryBase
 {
 public:
-    DateVariableFactory();
-    ~DateVariableFactory();
+    DateVariableFactory(QObject *parent = 0);
 
-    /// reimplemented
-    KoVariable * createVariable(const KoProperties *properties) const;
-
-    /// reimplemented
-    KoVariable * createVariable() const;
+    virtual KoInlineObject *createInlineObject(const KoProperties *properties = 0) const;
 };
 
 #endif

@@ -28,26 +28,18 @@
 
 #include "InfoVariable.h"
 
-InfoVariableFactory::InfoVariableFactory()
-        : KoVariableFactory("info")
+InfoVariableFactory::InfoVariableFactory(QObject *parent)
+        : KoInlineObjectFactoryBase(parent, "info")
 {
     QStringList elementNames;
     elementNames << "keywords" << "subject" << "title";
     setOdfElementNames(KoXmlNS::text, elementNames);
 }
 
-InfoVariableFactory::~InfoVariableFactory()
-{
-}
-
-KoVariable * InfoVariableFactory::createVariable(const KoProperties *properties) const
+KoInlineObject *InfoVariableFactory::createInlineObject(const KoProperties *properties) const
 {
     InfoVariable *var = new InfoVariable();
-    var->setProperties(properties);
+    if (properties)
+        var->readProperties(properties);
     return var;
-}
-
-KoVariable * InfoVariableFactory::createVariable() const
-{
-    return new InfoVariable();
 }

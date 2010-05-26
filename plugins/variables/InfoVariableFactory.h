@@ -21,20 +21,16 @@
 #ifndef KO_INFO_VARIABLE_FACTORY
 #define KO_INFO_VARIABLE_FACTORY
 
-#include <KoVariableFactory.h>
+#include <KoInlineObjectFactoryBase.h>
 
 class KoVariable;
 
-class InfoVariableFactory : public KoVariableFactory
+class InfoVariableFactory : public KoInlineObjectFactoryBase
 {
 public:
-    InfoVariableFactory();
-    ~InfoVariableFactory();
+    InfoVariableFactory(QObject *parent = 0);
 
-    /// reimplemented
-    KoVariable * createVariable(const KoProperties *properties) const;
-    /// reimplemented
-    KoVariable * createVariable() const;
+    virtual KoInlineObject *createInlineObject(const KoProperties *properties = 0) const;
 };
 
 #endif

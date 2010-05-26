@@ -57,7 +57,7 @@ public:
     ///reimplemented
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
 
-    void setProperties(const KoProperties *props);
+    void readProperties(const KoProperties *props);
 
     QWidget *createOptionsWidget();
 

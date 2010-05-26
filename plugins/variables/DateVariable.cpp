@@ -116,7 +116,7 @@ bool DateVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     return true;
 }
 
-void DateVariable::setProperties(const KoProperties *props)
+void DateVariable::readProperties(const KoProperties *props)
 {
     m_definition = props->stringProperty("definition");
     if (!props->stringProperty("time").isEmpty())

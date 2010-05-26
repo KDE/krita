@@ -32,7 +32,7 @@ InfoVariable::InfoVariable()
 {
 }
 
-void InfoVariable::setProperties(const KoProperties *props)
+void InfoVariable::readProperties(const KoProperties *props)
 {
     m_type = (Property) props->property("property").value<int>();
 }

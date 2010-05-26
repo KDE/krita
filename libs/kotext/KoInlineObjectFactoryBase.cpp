@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoInlineObjectFactory.h"
+#include "KoInlineObjectFactoryBase.h"
 
 #include <KoProperties.h>
 
@@ -43,46 +43,46 @@ public:
     QList<KoInlineObjectTemplate> templates;
 };
 
-KoInlineObjectFactory::KoInlineObjectFactory(QObject *parent, const QString &id)
+KoInlineObjectFactoryBase::KoInlineObjectFactoryBase(QObject *parent, const QString &id)
         : QObject(parent)
         , d(new InlineObjectFactoryPrivate(id))
 {
 }
 
-KoInlineObjectFactory::~KoInlineObjectFactory()
+KoInlineObjectFactoryBase::~KoInlineObjectFactoryBase()
 {
     delete d;
 }
 
-QString KoInlineObjectFactory::id() const
+QString KoInlineObjectFactoryBase::id() const
 {
     return d->id;
 }
 
-QList<KoInlineObjectTemplate> KoInlineObjectFactory::templates() const
+QList<KoInlineObjectTemplate> KoInlineObjectFactoryBase::templates() const
 {
     return d->templates;
 }
 
-void KoInlineObjectFactory::addTemplate(const KoInlineObjectTemplate &params)
+void KoInlineObjectFactoryBase::addTemplate(const KoInlineObjectTemplate &params)
 {
     d->templates.append(params);
 }
 
-QStringList KoInlineObjectFactory::odfElementNames() const
+QStringList KoInlineObjectFactoryBase::odfElementNames() const
 {
     return d->odfElementNames;
 }
 
-QString KoInlineObjectFactory::odfNameSpace() const
+QString KoInlineObjectFactoryBase::odfNameSpace() const
 {
     return d->odfNameSpace;
 }
 
-void KoInlineObjectFactory::setOdfElementNames(const QString & nameSpace, const QStringList & names)
+void KoInlineObjectFactoryBase::setOdfElementNames(const QString & nameSpace, const QStringList & names)
 {
     d->odfNameSpace = nameSpace;
     d->odfElementNames = names;
 }
 
-#include <KoInlineObjectFactory.moc>
+#include <KoInlineObjectFactoryBase.moc>

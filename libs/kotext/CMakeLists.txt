@@ -23,7 +23,7 @@ set(kotext_LIB_SRCS
     KoTextEditingPlugin.cpp
 
     KoInlineTextObjectManager.cpp
-    KoInlineObjectFactory.cpp
+    KoInlineObjectFactoryBase.cpp
     KoInlineObjectRegistry.cpp
     InsertVariableActionBase.cpp
     InsertVariableAction.cpp

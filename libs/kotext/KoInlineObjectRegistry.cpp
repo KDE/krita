@@ -18,7 +18,7 @@
  */
 
 #include "KoInlineObjectRegistry.h"
-#include "KoInlineObjectFactory.h"
+#include "KoInlineObjectFactoryBase.h"
 #include "InsertVariableAction_p.h"
 
 #include <KoCanvasBase.h>
@@ -32,10 +32,10 @@
 class KoInlineObjectRegistry::Private
 {
 public:
-    void insertFactory(KoInlineObjectFactory *factory);
+    void insertFactory(KoInlineObjectFactoryBase *factory);
     void init(KoInlineObjectRegistry *q);
 
-    QHash<QPair<QString, QString>, KoInlineObjectFactory *> factories;
+    QHash<QPair<QString, QString>, KoInlineObjectFactoryBase *> factories;
 };
 
 void KoInlineObjectRegistry::Private::init(KoInlineObjectRegistry *q)
@@ -47,7 +47,7 @@ void KoInlineObjectRegistry::Private::init(KoInlineObjectRegistry *q)
     KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Text-InlineObject"),
                                      QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
 
-    foreach (KoInlineObjectFactory *factory, q->values()) {
+    foreach (KoInlineObjectFactoryBase *factory, q->values()) {
         QString nameSpace = factory->odfNameSpace();
         if (nameSpace.isEmpty() || factory->odfElementNames().isEmpty()) {
             kDebug(32500) << "Variable factory" << factory->id() << " does not have odfNameSpace defined, ignoring";
@@ -75,8 +75,8 @@ QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase
 {
     QList<QAction*> answer;
     foreach(const QString & key, keys()) {
-        KoInlineObjectFactory *factory = value(key);
-        if (factory->type() == KoInlineObjectFactory::TextVariable) {
+        KoInlineObjectFactoryBase *factory = value(key);
+        if (factory->type() == KoInlineObjectFactoryBase::TextVariable) {
             foreach (const KoInlineObjectTemplate &templ, factory->templates()) {
                 answer.append(new InsertVariableAction(host, factory, templ));
             }
@@ -89,7 +89,7 @@ KoInlineObject *KoInlineObjectRegistry::createFromOdf(const KoXmlElement &elemen
 {
     kDebug(32500) << "Going to check for" << element.namespaceURI() << ":" << element.tagName();
 
-    KoInlineObjectFactory *factory = d->factories.value(
+    KoInlineObjectFactoryBase *factory = d->factories.value(
             QPair<QString, QString>(element.namespaceURI(), element.tagName()));
     if (factory == 0)
         return 0;

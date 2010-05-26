@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QList>
 
-class KoInlineObjectFactory;
+class KoInlineObjectFactoryBase;
 class KoInlineObject;
 class KoCanvasBase;
 class QAction;
@@ -34,12 +34,12 @@ class KoShapeLoadingContext;
 
 /**
  * This singleton class keeps a register of all available InlineObject factories.
- * @see KoInlineObjectFactory
+ * @see KoInlineObjectFactoryBase
  * @see KoInlineTextObjectManager
  * @see KoInlineObject
  * @see KoVariable
  */
-class KOTEXT_EXPORT KoInlineObjectRegistry : public QObject,  public KoGenericRegistry<KoInlineObjectFactory*>
+class KOTEXT_EXPORT KoInlineObjectRegistry : public QObject,  public KoGenericRegistry<KoInlineObjectFactoryBase*>
 {
     Q_OBJECT
 public:

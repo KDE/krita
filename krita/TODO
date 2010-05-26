@@ -147,16 +147,10 @@ Post 2.0
       visualisation for masks)
     * use generic flake shape tool for moving and transforming masks and layers
 
-* Filters
-
-   * Cimg filter
-
-
 * Colorspaces
 
     * LMS (is now dependent on OpenCTL)
     * Wet (may be deprecated definitively given EmanueleT's color work)
-
 
 * Bugs
 
@@ -236,10 +230,6 @@ Post 2.0
 * Paintops
 
     * implement paintops that take painterly overlays into account
-    * Create architecture that lets paintop re-use the painting algorithm of other paintops
-      without having to daisy-chain other paintops.
-    * "bloat" and "pinch" paintop
-
 
 * View Plugins
 
@@ -265,28 +255,10 @@ Post 2.0
 
 * Import/Export
 
-    * XCF filter
     * PSD filter (there is a GPL library now, but the legal status of that
       library is uncertain)
-    * Import photoshop brushes and palettes
+    * Import photoshop palettes
     * CREATE swatch spec support
-    * OpenEXR:
-        * Implement layers
-        * Implement support for Blender multichannel, including full 32-bit float/int support
-        * borrow the profile creation code from cinepaint
-        * Add OpenEXR native format HDR YCbCr colourspaces
-
-* OpenGL
-
-    * Colour transformations using 3D textures
-    * Implement glsl-based filters
-
-
-* Other
-
-    * a kimgio slave so other kde apps can show .kra images
-    * a kimgio slave so other kde apps can show .ora images
-
 
 
 Remarks by Enkhitan

@@ -105,7 +105,7 @@ public:
 
     QMap<QString, LayerInfoBlock*> infoBlocks;
 
-    quint8* readChannelData(QIODevice* io, quint64 row, ChannelInfo *channel);
+    QByteArray readChannelData(QIODevice* io, ChannelInfo *channel);
 
     const PSDHeader m_header;
 };

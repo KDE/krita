@@ -485,80 +485,48 @@ bool PSDLayerRecord::valid()
     return true;
 }
 
-quint8* PSDLayerRecord::readChannelData(QIODevice* io, quint64 row, PSDLayerRecord::ChannelInfo *channelInfo)
+QByteArray PSDLayerRecord::readChannelData(QIODevice* io, PSDLayerRecord::ChannelInfo *channelInfo)
 {
     dbgFile << "Going to read channel data for channel " << channelInfo
-            << "at row" << row
             << "from io with current pos" << io->pos();
 
-    quint64 savedPos = io->pos();
-    quint8* bytes = 0;
-
-
-    if (channelInfo->compressionType == Compression::Uncompressed) {
-        switch(m_header.channelDepth) {
-        case 1:
-            {
-                dbgFile << "channel depth of 1 bit, we use 8 bits";
-                // quint8* bytes = new quint8[right - left];
-                error = "1 bit channels not supported";
-                return 0;
-            }
-            break;
-        case 8:
-            {
-                dbgFile << "channel depth of 8 bit";
-                bytes = new quint8[right - left];
-                quint64 bytesRead = io->read((char*)bytes, right - left);
-                if (bytesRead != right - left) {
-                    error = "Could not read enough bytes for 8-bit channel";
-                    return 0;
-                }
-            }
-            break;
-        case 16:
-            {
-                dbgFile << "channel depth of 16 bit";
-                quint64 length = (right - left) * 2;
-                quint8* bytes = new quint8[length];
-                quint64 bytesRead = io->read((char*)bytes, length);
-                if (bytesRead != length) {
-                    error = "Could not read enough bytes for 16-bit channel";
-                    return 0;
-                }
-                for (quint64 i = 0; i < right - left && i * 2 < length; ++i) {
-                    bytes[i * 2] = ntohs((quint16)bytes[i*2]);
-                }
-            }
-            break;
-        case 32:
-            {
-                dbgFile << "channel depth of 32 bit";
-                quint64 length = (right - left) * 4;
-                quint8* bytes = new quint8[length];
-                quint64 bytesRead = io->read((char*)bytes, length);
-                if (bytesRead != length) {
-                    error = "Could not read enough bytes for 32-bit channel";
-                    return 0;
-                }
-                for (quint64 i = 0; i < right - left && i * 4 < length; ++i) {
-                    bytes[i * 4] = ntohl((quint32)bytes[i*4]);
-                }
-            }
-            break;
-        default:
-            error = QString("Unsupported channel depth");
-            return false;
+    QByteArray unCompressedBytes;
+    io->seek(channelInfo->channelDataStart);
+    switch(channelInfo->compressionType) {
+    case Compression::Uncompressed:
+        {
+            unCompressedBytes = io->read(channelInfo->channelDataLength);
         }
+        break;
+    case Compression::RLE:
+        {
+            QByteArray compressedBytes;
+            QBuffer buf(&unCompressedBytes);
+            int uncompressedLength = (right - left) * (m_header.channelDepth / 8);
+            foreach(int rleRowLength, channelInfo->rleRowLengths) {
+                compressedBytes = io->read(rleRowLength);
+                if (compressedBytes.length() == 0) {
+                    error = QString("Could not read enough RLE bytes");
+                    return QByteArray();
+                }
+                buf.write(Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType));
+            }
+        }
+        break;
+    case Compression::ZIP:
+    case Compression::ZIPWithPrediction:
+        {
+            io->seek(channelInfo->channelDataStart);
+            int unCompressedLength = (right - left) * (bottom - top) * (m_header.channelDepth / 8);
+            QByteArray compressedBytes = io->read(channelInfo->channelDataLength);
+            unCompressedBytes = Compression::uncompress(unCompressedLength, compressedBytes, channelInfo->compressionType);
+        }
+        break;
+    default:
+        error = QString("Unknown compression type: %1").arg(channelInfo->compressionType);
+        return QByteArray();
     }
-    else if (channelInfo->compressionType == Compression::RLE) {
-        io->seek(savedPos);
-    }
-    else {
-        error = QString("Unsupported compression type: %1").arg(channelInfo->compressionType);
-        return 0;
-    }
-    return bytes;
+    return unCompressedBytes;
 }
 
 
@@ -591,8 +559,8 @@ QDebug operator<<(QDebug dbg, const PSDLayerRecord::ChannelInfo &channel)
 {
 #ifndef NODEBUG
     dbg.nospace() << "\tChannel type" << channel.channelId
-                << "size: " << channel.channelDataLength
-                << "compression type" << channel.compressionType << "\n";
+            << "size: " << channel.channelDataLength
+            << "compression type" << channel.compressionType << "\n";
 #endif
     return dbg.nospace();
 }

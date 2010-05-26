@@ -133,20 +133,20 @@ quint32 decode_packbits(const char *src, char* dst, quint16 packed_len, quint32 
 }
 
 
-QByteArray unRLE(int nPixels, QByteArray bytes)
+QByteArray unRLE(int nBytes, QByteArray bytes)
 {
-    char * dst = new char[nPixels];
-    decode_packbits(bytes.constData(), dst, bytes.length(), nPixels);
+    char * dst = new char[nBytes];
+    decode_packbits(bytes.constData(), dst, bytes.length(), nBytes);
     return QByteArray(dst);
 }
 
-QByteArray unzip(quint32 nPixels, QByteArray bytes)
+QByteArray unzip(quint32 nBytes, QByteArray bytes)
 {
     // prepend the expected length of the pixels in big-endian
     // format to the byte array as qUncompress expects...
     QByteArray b;
     QBuffer buf(&b);
-    psdwrite(&buf, nPixels);
+    psdwrite(&buf, nBytes);
     b.append(bytes);
 
     // and let's hope that this is sufficient...
@@ -154,19 +154,16 @@ QByteArray unzip(quint32 nPixels, QByteArray bytes)
 }
 
 
-QByteArray Compression::uncompress(quint32 nPixels, QByteArray bytes, Compression::CompressionType compressionType)
+QByteArray Compression::uncompress(quint32 nBytes, QByteArray bytes, Compression::CompressionType compressionType)
 {
-    Q_UNUSED(bytes);
-    Q_UNUSED(compressionType);
-
     switch(compressionType) {
     case Uncompressed:
         return bytes;
     case RLE:
-        return unRLE(nPixels, bytes);
+        return unRLE(nBytes, bytes);
     case ZIP:
     case ZIPWithPrediction:
-        return unzip(nPixels, bytes);
+        return unzip(nBytes, bytes);
     default:
         qFatal("Cannot uncompress layer data");
     }

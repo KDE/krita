@@ -159,24 +159,22 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
 
             KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
 
-            QMap<int, quint8*> planes;
-            for (quint64 row = layerRecord->top; row < layerRecord->bottom; ++row) {
-                foreach(PSDLayerRecord::ChannelInfo *channel, layerRecord->channelInfoRecords) {
-                    quint8* bytes = layerRecord->readChannelData(&f, row, channel);
-                    if (bytes == 0) {
-                        dbgFile << layerRecord->error;
-                        return KisImageBuilder_RESULT_BAD_FETCH;
-                    }
-                    // XXX: make sure the order is ok. In photoshop, the first channel is alpha
-                    planes[channel->channelId] = bytes;
+            QMap<int, QByteArray> planes;
+            foreach(PSDLayerRecord::ChannelInfo *channel, layerRecord->channelInfoRecords) {
+                planes[channel->channelId] = layerRecord->readChannelData(&f, channel);
+                if (planes[channel->channelId].length() == 0) {
+                    dbgFile << layerRecord->error;
+                    return KisImageBuilder_RESULT_BAD_FETCH;
                 }
-//                layer->paintDevice()->writePlanarBytes(planes.values(),
-//                                                       layerRecord->left,
-//                                                       row,
-//                                                       layerRecord->right - layerRecord->left,
-//                                                       layerRecord->bottom - layerRecord->top);
-                qDeleteAll(planes);
+                // XXX: make sure the order is ok. In photoshop, the first channel is alpha
+
             }
+            //                layer->paintDevice()->writePlanarBytes(planes.values(),
+            //                                                       layerRecord->left,
+            //                                                       row,
+            //                                                       layerRecord->right - layerRecord->left,
+            //                                                       layerRecord->bottom - layerRecord->top);
+
             m_image->addNode(layer, m_image->rootLayer());
         }
     }

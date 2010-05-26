@@ -1,48 +1,62 @@
 /**
  * \mainpage
  *
- * KoText is a library for general use that extends the QText framework (codenamed scribe) with an
- * enhanced text-layout which adds features required by ODF and general word-processing applications.
+ * KoText is a library for general use that extends the QText framework
+ * (codenamed scribe) with an enhanced text-layout which adds features
+ * required by ODF and general word-processing applications.
  *
- * You can use KoText at all places where you would normally use a QTextDocument as
- * the main text layout class in scribe can be replaced on any QTextDocument
- * instance using QTextDocument::setDocumentLayout().  This means you can use the
- * Qt API as normal, but you will be able to use extra features like the
- * plugins, the variables and the ODF loading and saving for all the ODF
- * text-layout features.
+ * You can use KoText at all places where you would normally use a
+ * QTextDocument as the main text layout class in scribe can be replaced
+ * on any QTextDocument instance using QTextDocument::setDocumentLayout().
+ * This means you can use the Qt API as normal, but you will be
+ * able to use extra features like the plugins, the variables and the
+ * ODF loading and saving for all the ODF text-layout features.
  *
  * TextShape Flake-Plugin
  *
- * Closely coupled with the kotext library is the text plugin that is build on flake technology.
- * All the user interaction dialogs and code will reside in that plugin, and the actual heavy lifting of the layout
- * also is present only in that plugin.  In other words; this library will supply you with the APIs but
- * without having the text shape plugin loaded you can't show or layout the text.  The goal is
- * to keep it cheap to link to this library and only provide the bare minimum of functionality is the
- * way to get there.  The feature-package will be completed by the text-plugin.
+ * Closely coupled with the kotext library is the text plugin that is
+ * build on flake technology.  All the user interaction dialogs and code
+ * will reside in that plugin, and the actual heavy lifting of the
+ * layout also is present only in that plugin.  In other words; this
+ * library will supply you with the APIs but without having the text
+ * shape plugin loaded you can't show or layout the text.  The goal is
+ * to keep it cheap to link to this library and only provide the bare
+ * minimum of functionality is the way to get there.  The feature-
+ * package will be completed by the optional text-plugin.
  *
  * QTextDocument compatibility
  *
- * The actual content is stored in the QTextDocument, as mentioned before.  In KoText we support a lot more
- * features than Qt does in its layout and this library will allow you to enrich your document with those
- * features.  The core design goal is that you can use an externally created QTextDocument with KoText. This
- * has the implication that all the extra content is stored inside the document.  We add QTextFormat based
- * properties for that as can be seen in the styles (see KoParagraphStyle::Properities for instance), and we
- * allow managers to be stored on the document too.  So for example a KoStyleManager will be stored as a
- * property on the QTextDocument and you can access that using the KoTextDocument API.  Note that you can use
- * the KoTextDocument class while using only a QTextDocument instance.
+ * The actual content is stored in the QTextDocument, as mentioned before.
+ * In KoText we support a lot more features than Qt does in its layout
+ * and this library will allow you to enrich your document with those
+ * features.  The core design goal is that you can use an externally
+ * created QTextDocument with KoText. This has the implication that all
+ * the extra content is stored inside the document.  We add QTextFormat
+ * based properties for that as can be seen in the styles (see
+ * KoParagraphStyle::Properities for instance), and we allow managers to
+ * be stored on the document too.  So for example a KoStyleManager will
+ * be stored as a property on the QTextDocument and you can access that
+ * using the KoTextDocument API.  Note that you can use the
+ * KoTextDocument class while using only a QTextDocument instance.
  *
  * Plugins
  *
- * There are various plugins for KoText that make it possible for 3rd parties to extend the kotext functionality, see the techbase page; http://techbase.kde.org/Development/Tutorials/KOffice_Overview#Text_Plugins
+ * There are various plugins for KoText that make it possible for 3rd
+ * parties to extend the KoText functionality, see the techbase page;
+ * http://techbase.kde.org/Development/Tutorials/KOffice_Overview#Text_Plugins
  *
  * ODF compatibility
  *
- * Loading and saving of documents can be done to and from ODF using the open document classes.
+ * Loading and saving of documents can be done to and from ODF using the
+ * open document classes.
  *
  * Important classes;
  *
  * KoTextDocumentLayout the main layout class to be set on the QTextDocument.
+ *
  * KoInlineTextObject plugin base for inline objects (and variables)
+ *
  * KoTextEditingPlugin plugin base for text editing plugins.
+ *
  * KoText namespace.
  */

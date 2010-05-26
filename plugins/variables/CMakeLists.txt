@@ -15,8 +15,6 @@ set(textvariables_SRCS
     PageVariableFactory.cpp
     InfoVariable.cpp
     InfoVariableFactory.cpp
-    TOCVariable.cpp
-    TOCVariableFactory.cpp
 )
 
 

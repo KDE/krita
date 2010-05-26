@@ -21,7 +21,6 @@
 #include "DateVariableFactory.h"
 #include "PageVariableFactory.h"
 #include "InfoVariableFactory.h"
-#include "TOCVariableFactory.h"
 #include <kgenericfactory.h>
 
 #include <KoVariableRegistry.h>

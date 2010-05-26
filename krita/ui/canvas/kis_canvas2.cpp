@@ -126,7 +126,7 @@ KisCanvas2::~KisCanvas2()
 
 void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
-    connect(widget, SIGNAL(documentOriginChanged(const QPoint&)), this, SLOT(updateRulers())); 
+    connect(widget, SIGNAL(documentOriginChanged(const QPoint&)), this, SLOT(updateRulers()));
 
     KisAbstractCanvasWidget * tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
     Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
@@ -341,7 +341,6 @@ void KisCanvas2::disconnectCurrentImage()
 #endif
     }
 
-    disconnect(SIGNAL(sigImageUpdated(const QRect &)));
     disconnect(SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)));
 
     // for sigSizeChanged()

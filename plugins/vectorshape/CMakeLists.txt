@@ -22,7 +22,7 @@ SET ( VectorShape_SRCS
 
     libemf/EmfRecords.cpp
     libemf/EmfHeader.cpp
-    libemf/Bitmap.cpp
+    libemf/BitmapHeader.cpp
     libemf/EmfParser.cpp
     libemf/EmfOutput.cpp
     libemf/EmfOutputDebugStrategy.cpp

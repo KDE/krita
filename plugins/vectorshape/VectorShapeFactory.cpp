@@ -35,7 +35,7 @@
 
 
 VectorShapeFactory::VectorShapeFactory(QObject *parent)
-    : KoShapeFactoryBase(parent, VectorShape_SHAPEID, i18n("Vector"))
+    : KoShapeFactoryBase(parent, VectorShape_SHAPEID, i18n("Vector image"))
 {
     setToolTip(i18n("A shape that shows a vector image"));
     setIcon( "vector-shape" );

@@ -30,9 +30,9 @@
 
 
 VectorToolFactory::VectorToolFactory(QObject *parent)
-  : KoToolFactoryBase(parent, "VectorToolFactory_ID", i18n("Vector tool"))
+  : KoToolFactoryBase(parent, "VectorToolFactory_ID", i18n("Vector image tool"))
 {
-    setToolTip (i18n("EMF editing tool"));
+    setToolTip (i18n("Vector image selection tool"));
     setToolType (dynamicToolType());
 
     //setIcon ("");

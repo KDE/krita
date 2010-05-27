@@ -18,7 +18,7 @@
 
 #include "EmfEnums.h"
 #include "EmfRecords.h"
-#include "Bitmap.h"
+#include "BitmapHeader.h"
 
 #include <KDebug>
 
@@ -27,31 +27,27 @@ namespace Libemf
 
 
 /*****************************************************************************/
-BitBltRecord::BitBltRecord( QDataStream &stream )
+
+
+BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
 {
-#if 0
-    qint32 x, y, width, height;
-    stream >> x >> y >> width >> height;
-    kDebug(31000) << "Bounds" << x << y << width << height;
-    m_bounds = QRect( QPoint(x, y), QSize(width, height));
-#else
     stream >> m_bounds;
-#endif
-    stream >> m_xDest;
+
+    stream >> m_xDest;          // x, y of upper left corner of the destination.
     stream >> m_yDest;
-    stream >> m_cxDest;
+    stream >> m_cxDest;         // width, height of the rectangle in logical coords.
     stream >> m_cyDest;
     kDebug(31000) << "Destination" << m_xDest << m_yDest << m_cxDest << m_cyDest;
 
     stream >> m_BitBltRasterOperation;
     kDebug(31000) << "bitblt raster operation:" << hex << m_BitBltRasterOperation << dec;
 
-    stream >> m_xSrc;
+    stream >> m_xSrc;           // x, y of the source
     stream >> m_ySrc;
     kDebug(31000) << "Source" << m_xSrc << m_ySrc;
 
     float M11, M12, M21, M22, Dx, Dy;
-    stream >> M11;
+    stream >> M11;              // Transformation matrix
     stream >> M12;
     stream >> M21;
     stream >> M22;
@@ -66,9 +62,9 @@ BitBltRecord::BitBltRecord( QDataStream &stream )
     stream >> m_UsageSrc;
     kDebug(31000) << "Color table interpretation" << m_UsageSrc;
 
-    stream >> m_offBmiSrc;      // Offset to bitmap header
+    stream >> m_offBmiSrc;      // Offset to start of bitmap header from start of record
     stream >> m_cbBmiSrc;       // Size of source bitmap header
-    stream >> m_offBitsSrc;     // Offset to source bitmap
+    stream >> m_offBitsSrc;     // Offset to source bitmap from start of record
     stream >> m_cbBitsSrc;      // Size of source bitmap
     kDebug(31000) << "Bitmap metadata" << m_offBmiSrc << m_cbBmiSrc << m_offBitsSrc << m_cbBitsSrc;
 
@@ -124,7 +120,7 @@ QImage* BitBltRecord::image()
 }
 
 /*****************************************************************************/
-StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream )
+StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSize )
     : m_BmiSrc(0)
     , m_image(0)
 {

@@ -25,7 +25,7 @@
 #include <QRect> // also provides QSize
 #include <QString>
 
-#include "Bitmap.h"
+#include "BitmapHeader.h"
 /**
    \file
 
@@ -54,7 +54,7 @@ public:
 
        \param stream the stream to read the record structure from
     */
-    BitBltRecord( QDataStream &stream );
+    BitBltRecord( QDataStream &stream, quint32 recordSize );
     ~BitBltRecord();
 
    /**
@@ -143,7 +143,7 @@ public:
 
        \param stream the stream to read the record structure from
     */
-    StretchDiBitsRecord( QDataStream &stream );
+    StretchDiBitsRecord( QDataStream &stream, quint32 recordSize );
     ~StretchDiBitsRecord();
 
     /**

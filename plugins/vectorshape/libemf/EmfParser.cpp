@@ -740,13 +740,13 @@ bool Parser::readRecord( QDataStream &stream )
     case EMR_BITBLT:
 	{
             //kDebug(31000) << "Found BitBlt record";
-	    BitBltRecord bitBltRecord( stream );
+	    BitBltRecord bitBltRecord( stream, size );
 	    mOutput->bitBlt( bitBltRecord );
 	}
 	break;
     case EMR_STRETCHDIBITS:
 	{
-	    StretchDiBitsRecord stretchDiBitsRecord( stream );
+	    StretchDiBitsRecord stretchDiBitsRecord( stream, size );
 	    mOutput->stretchDiBits( stretchDiBitsRecord );
 	}
 	break;

@@ -15,7 +15,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Bitmap.h"
+#include "BitmapHeader.h"
 
 #include <QDataStream>
 //#include <QColor>

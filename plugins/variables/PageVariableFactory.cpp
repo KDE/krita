@@ -28,7 +28,7 @@
 #include <kdebug.h>
 
 PageVariableFactory::PageVariableFactory(QObject *parent)
-        : KoInlineObjectFactoryBase(parent, "page")
+        : KoInlineObjectFactoryBase(parent, "page", TextVariable)
 {
     KoInlineObjectTemplate var1;
     var1.id = "pagecount";

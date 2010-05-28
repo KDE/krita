@@ -27,7 +27,7 @@
 #include <klocale.h>
 
 DateVariableFactory::DateVariableFactory(QObject *parent)
-        : KoInlineObjectFactoryBase(parent, "date")
+        : KoInlineObjectFactoryBase(parent, "date", TextVariable)
 {
     KoInlineObjectTemplate var;
     var.id = "fixed";

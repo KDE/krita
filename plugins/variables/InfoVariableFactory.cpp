@@ -29,7 +29,7 @@
 #include "InfoVariable.h"
 
 InfoVariableFactory::InfoVariableFactory(QObject *parent)
-        : KoInlineObjectFactoryBase(parent, "info")
+        : KoInlineObjectFactoryBase(parent, "info", TextVariable)
 {
     QStringList elementNames;
     elementNames << "keywords" << "subject" << "title";

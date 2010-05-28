@@ -63,7 +63,7 @@ public:
      * @param parent the parent QObject for memory management usage.
      * @param id a string that will be used internally for referencing the variable-type.
      */
-    KoInlineObjectFactoryBase(QObject *parent, const QString &id);
+    KoInlineObjectFactoryBase(QObject *parent, const QString &id, ObjectType type);
     virtual ~KoInlineObjectFactoryBase();
 
     /**
@@ -80,11 +80,8 @@ public:
     /**
      * Returns the type of object this factory creates.
      * The main purpose is to group plugins per type in, for example, a menu.
-     * The default returns Other which means it will not be shown in any menu.
      */
-    virtual ObjectType type() const {
-        return Other;
-    }
+    ObjectType type() const;
 
     /**
      * Return all the templates this factory knows about.

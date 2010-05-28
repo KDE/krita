@@ -41,12 +41,14 @@ public:
     QString odfNameSpace;
     QStringList odfElementNames;
     QList<KoInlineObjectTemplate> templates;
+    KoInlineObjectFactoryBase::ObjectType type;
 };
 
-KoInlineObjectFactoryBase::KoInlineObjectFactoryBase(QObject *parent, const QString &id)
+KoInlineObjectFactoryBase::KoInlineObjectFactoryBase(QObject *parent, const QString &id, ObjectType type)
         : QObject(parent)
         , d(new InlineObjectFactoryPrivate(id))
 {
+    d->type = type;
 }
 
 KoInlineObjectFactoryBase::~KoInlineObjectFactoryBase()
@@ -79,10 +81,15 @@ QString KoInlineObjectFactoryBase::odfNameSpace() const
     return d->odfNameSpace;
 }
 
-void KoInlineObjectFactoryBase::setOdfElementNames(const QString & nameSpace, const QStringList & names)
+void KoInlineObjectFactoryBase::setOdfElementNames(const QString & nameSpace, const QStringList &names)
 {
     d->odfNameSpace = nameSpace;
     d->odfElementNames = names;
+}
+
+KoInlineObjectFactoryBase::ObjectType KoInlineObjectFactoryBase::type() const
+{
+    return d->type;
 }
 
 #include <KoInlineObjectFactoryBase.moc>

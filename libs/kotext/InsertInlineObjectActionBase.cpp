@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "InsertVariableActionBase_p.h"
-#include "KoVariable.h"
+#include "InsertInlineObjectActionBase_p.h"
+#include "KoInlineObject.h"
 #include "KoInlineObjectFactoryBase.h"
 #include "KoTextEditor.h"
 
@@ -28,28 +28,28 @@
 
 #include <KDebug>
 
-InsertVariableActionBase::InsertVariableActionBase(KoCanvasBase *canvas, const QString &name)
+InsertInlineObjectActionBase::InsertInlineObjectActionBase(KoCanvasBase *canvas, const QString &name)
         : KAction(name, canvas->canvasWidget()),
         m_canvas(canvas)
 {
     connect(this, SIGNAL(triggered(bool)), this, SLOT(activated()));
 }
 
-InsertVariableActionBase::~InsertVariableActionBase()
+InsertInlineObjectActionBase::~InsertInlineObjectActionBase()
 {
 }
 
-void InsertVariableActionBase::activated()
+void InsertInlineObjectActionBase::activated()
 {
     Q_ASSERT(m_canvas->toolProxy());
     KoTextEditor *handler = qobject_cast<KoTextEditor*> (m_canvas->toolProxy()->selection());
     if (handler) {
-        KoVariable *variable = createVariable();
-        if (variable)
-            handler->insertInlineObject(variable);
+        KoInlineObject *obj = createInlineObject();
+        if (obj)
+            handler->insertInlineObject(obj);
     } else {
         kWarning(32500) << "InsertVariableAction: No texttool selected while trying to insert variable";
     }
 }
 
-#include <InsertVariableActionBase_p.moc>
+#include <InsertInlineObjectActionBase_p.moc>

@@ -29,7 +29,7 @@
 #include <QLayout>
 
 InsertVariableAction::InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactoryBase *factory, const KoInlineObjectTemplate &templ)
-        : InsertVariableActionBase(base, templ.name)
+        : InsertInlineObjectActionBase(base, templ.name)
         , m_factory(factory)
         , m_templateId(templ.id)
         , m_properties(templ.properties)
@@ -37,7 +37,7 @@ InsertVariableAction::InsertVariableAction(KoCanvasBase *base, KoInlineObjectFac
 {
 }
 
-KoVariable *InsertVariableAction::createVariable()
+KoInlineObject *InsertVariableAction::createInlineObject()
 {
     KoInlineObject *io = m_factory->createInlineObject(m_properties);
     KoVariable *variable = dynamic_cast<KoVariable*>(io);

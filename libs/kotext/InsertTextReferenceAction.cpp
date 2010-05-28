@@ -32,12 +32,12 @@
 #include <QLabel>
 
 InsertTextReferenceAction::InsertTextReferenceAction(KoCanvasBase *canvas, const KoInlineTextObjectManager *manager)
-        : InsertVariableActionBase(canvas, i18n("Text Reference")),
+        : InsertInlineObjectActionBase(canvas, i18n("Text Reference")),
         m_manager(manager)
 {
 }
 
-KoVariable *InsertTextReferenceAction::createVariable()
+KoInlineObject *InsertTextReferenceAction::createInlineObject()
 {
     const QList<KoTextLocator*> textLocators = m_manager->textLocators();
     if (textLocators.isEmpty()) {

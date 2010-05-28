@@ -17,30 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INSERTVARIABLEACTIONBASE_H
-#define INSERTVARIABLEACTIONBASE_H
+#ifndef INSERTINLINEOBJECTCTIONBASE_H
+#define INSERTINLINEOBJECTCTIONBASE_H
 
 #include <kaction.h>
 #include <QString>
 
 class KoCanvasBase;
-class KoVariable;
+class KoInlineObject;
 
 /**
  * helper class
  */
-class InsertVariableActionBase : public KAction
+class InsertInlineObjectActionBase : public KAction
 {
     Q_OBJECT
 public:
-    InsertVariableActionBase(KoCanvasBase *canvas, const QString &name);
-    virtual ~InsertVariableActionBase();
+    InsertInlineObjectActionBase(KoCanvasBase *canvas, const QString &name);
+    virtual ~InsertInlineObjectActionBase();
 
 private slots:
     void activated();
 
 protected:
-    virtual KoVariable *createVariable() = 0;
+    virtual KoInlineObject *createInlineObject() = 0;
 
     KoCanvasBase *m_canvas;
 };

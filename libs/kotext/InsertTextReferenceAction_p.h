@@ -20,20 +20,20 @@
 #ifndef INSERTTEXTREFERENCEACTION_H
 #define INSERTTEXTREFERENCEACTION_H
 
-#include "InsertVariableActionBase_p.h"
+#include "InsertInlineObjectActionBase_p.h"
 
 class KoInlineTextObjectManager;
 
 /**
  * helper class
  */
-class InsertTextReferenceAction : public InsertVariableActionBase
+class InsertTextReferenceAction : public InsertInlineObjectActionBase
 {
 public:
     InsertTextReferenceAction(KoCanvasBase *canvas, const KoInlineTextObjectManager *manager);
 
 private:
-    virtual KoVariable *createVariable();
+    virtual KoInlineObject *createInlineObject();
 
     const KoInlineTextObjectManager *m_manager;
 };

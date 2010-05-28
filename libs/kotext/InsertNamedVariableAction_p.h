@@ -20,7 +20,7 @@
 #ifndef INSERTNAMEDVARIABLEACTION_H
 #define INSERTNAMEDVARIABLEACTION_H
 
-#include "InsertVariableActionBase_p.h"
+#include "InsertInlineObjectActionBase_p.h"
 
 #include <QString>
 
@@ -30,13 +30,13 @@ class KoInlineTextObjectManager;
 /**
  * helper class
  */
-class InsertNamedVariableAction : public InsertVariableActionBase
+class InsertNamedVariableAction : public InsertInlineObjectActionBase
 {
 public:
     InsertNamedVariableAction(KoCanvasBase *canvas, const KoInlineTextObjectManager *manager, const QString &name);
 
 private:
-    virtual KoVariable *createVariable();
+    virtual KoInlineObject *createInlineObject();
 
     const KoInlineTextObjectManager *m_manager;
     QString m_name;

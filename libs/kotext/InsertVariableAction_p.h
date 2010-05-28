@@ -20,7 +20,7 @@
 #ifndef INSERTVARIABLEACTION_H
 #define INSERTVARIABLEACTION_H
 
-#include "InsertVariableActionBase_p.h"
+#include "InsertInlineObjectActionBase_p.h"
 
 class KoCanvasBase;
 class KoProperties;
@@ -28,13 +28,13 @@ class KoInlineObjectFactoryBase;
 struct KoInlineObjectTemplate;
 
 /// \internal
-class InsertVariableAction : public InsertVariableActionBase
+class InsertVariableAction : public InsertInlineObjectActionBase
 {
 public:
     InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactoryBase *factory, const KoInlineObjectTemplate &templ);
 
 private:
-    virtual KoVariable * createVariable();
+    virtual KoInlineObject *createInlineObject();
 
     KoInlineObjectFactoryBase *const m_factory;
     const QString m_templateId;

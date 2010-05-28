@@ -31,7 +31,7 @@ DateVariableFactory::DateVariableFactory(QObject *parent)
 {
     KoInlineObjectTemplate var;
     var.id = "fixed";
-    var.name = i18n("Fixed");
+    var.name = i18nc("date that can not be changed later", "Date (Fixed)");
     KoProperties *props = new KoProperties();
     props->setProperty("id", DateVariable::Fixed);
     props->setProperty("definition", "dd/MM/yy");

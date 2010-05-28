@@ -37,10 +37,10 @@ class FLAKE_EXPORT KoShapeGroupCommand : public QUndoCommand
 public:
     /**
      * Create command to group a set of shapes into a predefined container.
-     * This used the KoShapeGroupCommand( KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent = 0 );
+     * This uses the KoShapeGroupCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, QUndoCommand *parent = 0);
      * constructor.
      * The createCommand will make sure that the group will have the z-index and the parent of the top most shape in the group.
-     * 
+     *
      * @param container the group to group the shapes under.
      * @param parent the parent command if the resulting command is a compound undo command.
      * @param shapes a list of all the shapes that should be grouped.

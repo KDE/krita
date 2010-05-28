@@ -40,12 +40,10 @@ InsertTextReferenceAction::InsertTextReferenceAction(KoCanvasBase *canvas, const
 KoVariable *InsertTextReferenceAction::createVariable()
 {
     const QList<KoTextLocator*> textLocators = m_manager->textLocators();
-/* TODO re-enable this check when the string-freeze is lifted.
     if (textLocators.isEmpty()) {
         KMessageBox::information(m_canvas->canvasWidget(), i18n("Please create an index to reference first."));
         return 0;
     }
-*/
 
     QWidget *widget = new QWidget();
     QVBoxLayout *lay = new QVBoxLayout(widget);

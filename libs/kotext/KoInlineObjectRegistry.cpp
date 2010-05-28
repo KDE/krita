@@ -74,12 +74,17 @@ KoInlineObjectRegistry* KoInlineObjectRegistry::instance()
 QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase *host) const
 {
     QList<QAction*> answer;
-    foreach(const QString & key, keys()) {
+    foreach (const QString &key, keys()) {
         KoInlineObjectFactoryBase *factory = value(key);
         if (factory->type() == KoInlineObjectFactoryBase::TextVariable) {
             foreach (const KoInlineObjectTemplate &templ, factory->templates()) {
                 answer.append(new InsertVariableAction(host, factory, templ));
             }
+#ifndef NDEBUG
+           if (factory->templates().isEmpty()) {
+                kWarning(32500) << "Variable factory" << factory->id() << "has no templates, skipping.";
+           }
+#endif
         }
     }
     return answer;

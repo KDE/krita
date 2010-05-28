@@ -20,6 +20,7 @@
 #include "KoInlineTextObjectManager.h"
 #include "InsertNamedVariableAction_p.h"
 #include "InsertTextReferenceAction_p.h"
+#include "InsertTextLocator_p.h"
 #include "KoInlineObjectRegistry.h"
 #include "KoTextLocator.h"
 #include "KoBookmark.h"
@@ -195,6 +196,7 @@ QList<QAction*> KoInlineTextObjectManager::createInsertVariableActions(KoCanvasB
         answer.insert(i++, new InsertNamedVariableAction(host, this, name));
     }
 
+    answer.append(new InsertTextLocator(host));
     answer.append(new InsertTextReferenceAction(host, this));
     return answer;
 }

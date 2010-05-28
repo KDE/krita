@@ -29,6 +29,7 @@ set(kotext_LIB_SRCS
     InsertVariableAction.cpp
     InsertNamedVariableAction.cpp
     InsertTextReferenceAction.cpp
+    InsertTextLocator.cpp
     KoInlineObject.cpp
     KoVariable.cpp
     KoVariableManager.cpp

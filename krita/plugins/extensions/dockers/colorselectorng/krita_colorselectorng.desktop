@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=ColorSelectorNG
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritacolorselectorng
+X-Krita-Version=3

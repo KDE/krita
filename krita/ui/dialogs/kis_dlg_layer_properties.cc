@@ -77,8 +77,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
         m_page->lblProfile->setText(profile->name());
     }
 
-    m_page->intOpacity->setMinimum(0);
-    m_page->intOpacity->setMaximum(100);
+    m_page->intOpacity->setRange(0, 100);
     m_page->intOpacity->setValue(opacity);
 
     m_page->cmbComposite->setCompositeOpList(colorSpace->compositeOps());

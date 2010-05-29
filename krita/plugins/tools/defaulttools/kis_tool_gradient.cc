@@ -67,7 +67,7 @@
 #include <opengl/kis_opengl_gradient_program.h>
 #include <opengl/kis_opengl_canvas2.h>
 #include <canvas/kis_canvas2.h>
-#include <KoSliderCombo.h>
+#include <kis_slider_spin_box.h>
 #include <kis_config_notifier.h>
 #endif
 

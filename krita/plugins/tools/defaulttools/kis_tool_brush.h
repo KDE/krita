@@ -31,7 +31,6 @@ class QComboBox;
 class QGridLayout;
 
 class KoCanvasBase;
-class KoSliderCombo;
 class KisSliderSpinBox;
 
 class KisToolBrush : public KisToolFreehand

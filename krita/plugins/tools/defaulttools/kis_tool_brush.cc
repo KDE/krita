@@ -37,7 +37,7 @@
 
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
-#include "KoSliderCombo.h"
+#include "kis_slider_spin_box.h"
 
 #include "kis_config.h"
 #include "kis_paintop_preset.h"

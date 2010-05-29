@@ -51,7 +51,6 @@
 #include <khbox.h>
 #include <kicon.h>
 
-#include "KoSliderCombo.h"
 #include <KoDocumentSectionView.h>
 #include "KoColorSpace.h"
 
@@ -64,6 +63,7 @@
 #include <kis_node.h>
 
 #include "widgets/kis_cmb_composite.h"
+#include "widgets/kis_slider_spin_box.h"
 #include "kis_view2.h"
 #include "kis_node_manager.h"
 #include "kis_node_model.h"
@@ -81,6 +81,7 @@ KisLayerBox::KisLayerBox()
 
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
+    m_delayTimer.setSingleShot(true);
 
     m_wdgLayerBox->setupUi(mainWidget);
 
@@ -156,7 +157,8 @@ KisLayerBox::KisLayerBox()
 
     connect(m_wdgLayerBox->bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
     connect(m_wdgLayerBox->bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
-    connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal, bool)), SLOT(slotOpacityChanged(qreal, bool)));
+    connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
+    connect(&m_delayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(const QString&)), SLOT(slotCompositeOpChanged(const QString&)));
 
 }
@@ -223,7 +225,7 @@ void KisLayerBox::updateUI()
     m_wdgLayerBox->bnLower->setEnabled(m_nodeManager->activeNode() && m_nodeManager->activeNode()->prevSibling());
 
     m_wdgLayerBox->doubleOpacity->setEnabled(m_nodeManager->activeNode());
-    m_wdgLayerBox->doubleOpacity->setDecimals(0);
+    m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
 
     m_wdgLayerBox->cmbComposite->setEnabled(m_nodeManager->activeNode());
 
@@ -420,9 +422,17 @@ void KisLayerBox::slotCompositeOpChanged(const QString& _compositeOp)
     m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(_compositeOp));
 }
 
-void KisLayerBox::slotOpacityChanged(qreal opacity, bool final)
+void KisLayerBox::slotOpacityChanged()
 {
-    m_nodeManager->nodeOpacityChanged(opacity, final);
+    m_nodeManager->nodeOpacityChanged(m_newOpacity, true);
 }
+
+void KisLayerBox::slotOpacitySliderMoved(qreal opacity)
+{
+    m_newOpacity = opacity;
+    m_delayTimer.start(200);
+}
+
+
 
 #include "kis_layer_box.moc"

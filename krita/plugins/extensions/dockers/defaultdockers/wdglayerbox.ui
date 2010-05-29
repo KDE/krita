@@ -36,7 +36,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KoSliderCombo" name="doubleOpacity" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -255,9 +255,9 @@
    <header>widgets/kis_cmb_composite.h</header>
   </customwidget>
   <customwidget>
-   <class>KoSliderCombo</class>
+   <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header>KoSliderCombo.h</header>
+   <header>kis_slider_spin_box.h</header>
   </customwidget>
   <customwidget>
    <class>KoDocumentSectionView</class>

@@ -76,7 +76,7 @@
                         <cstring>isbWidth</cstring>
                     </property>
                 </widget>
-                <widget class="KoSliderCombo">
+                <widget class="KisSliderSpinBox">
                     <property name="name">
                         <cstring>ratioSpinBox</cstring>
                     </property>
@@ -98,22 +98,11 @@
     <tabstop>ratioSpinBox</tabstop>
 </tabstops>
 <customwidgets>
-<customwidget>
-    <class>KoSliderCombo</class>
-    <header location="global">KoSliderCombo.h</header>
-    <sizehint>
-        <width>-1</width>
-        <height>-1</height>
-    </sizehint>
-    <container>0</container>
-    <sizepolicy>
-        <hordata>5</hordata>
-        <verdata>5</verdata>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-    </sizepolicy>
-    <pixmap>image4</pixmap>
-</customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+  </customwidget>
 </customwidgets>
 <images>
     <image name="image4">

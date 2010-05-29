@@ -27,6 +27,7 @@
 #include <QList>
 #include <QDockWidget>
 #include <QPointer>
+#include <QTimer>
 
 #include <kis_debug.h>
 
@@ -101,7 +102,8 @@ private slots:
     void slotNewTransformationMask();
     void slotNewSelectionMask();
     void slotCompositeOpChanged(const QString&);
-    void slotOpacityChanged(qreal opacity, bool final);
+    void slotOpacityChanged();
+    void slotOpacitySliderMoved(qreal opacity);
     void slotNodeActivated(const QModelIndex &);
 
 private:
@@ -113,6 +115,8 @@ private:
     QPointer<KisNodeModel> m_nodeModel;
     QPointer<KisNodeManager> m_nodeManager;
     Ui_WdgLayerBox* m_wdgLayerBox;
+    QTimer m_delayTimer;
+    int m_newOpacity;
 
 };
 

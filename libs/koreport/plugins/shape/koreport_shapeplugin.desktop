@@ -2,7 +2,6 @@
 Name=KoReport_Shape
 Name[es]=Forma de KoReport
 Name[et]=KoReport_Shape
-Name[it]=KoReport_Forma
 Name[ja]=KoReport_シェイプ
 Name[nds]=KoReport_Form
 Name[nl]=KoReport_Shape
@@ -14,7 +13,6 @@ Name[x-test]=xxKoReport_Shapexx
 Comment=KoReport Shape PLugin
 Comment[es]=Complemento de formas de KoReport
 Comment[et]=KoReporti kujundi plugin
-Comment[it]=Estensione per le forme di KoReport
 Comment[ja]=KoReport シェイププラグイン
 Comment[nds]=Form-Moduul för KoReport
 Comment[nl]=Plugin voor KoReport-label

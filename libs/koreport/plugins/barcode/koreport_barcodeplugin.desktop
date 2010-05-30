@@ -2,7 +2,6 @@
 Name=KoReport_Barcode
 Name[es]=Código de barras de KoReport
 Name[et]=KoReport_Barcode
-Name[it]=KoReport_codiceAbarre
 Name[ja]=KoReport_バーコード
 Name[nds]=KoReport_Streekkode
 Name[nl]=KoReport_Barcode
@@ -14,7 +13,6 @@ Name[x-test]=xxKoReport_Barcodexx
 Comment=KoReport Barcode PLugin
 Comment[es]=Complemento de código de barras de KoReport
 Comment[et]=KoReporti ribakoodi plugin
-Comment[it]=Estensione per i codici a barre di KoReport
 Comment[ja]=KoReport バーコードプラグイン
 Comment[nds]=Streekkode-Moduul för KoReport
 Comment[nl]=Plugin voor KoReport Barcode

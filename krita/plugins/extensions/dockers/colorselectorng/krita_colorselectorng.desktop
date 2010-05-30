@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=ColorSelectorNG
+Name[pt]=Selector de Cores NG
+Name[uk]=НовийВибірКольору
 Name[x-test]=xxColorSelectorNGxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service

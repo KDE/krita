@@ -112,7 +112,7 @@ private:
     KisOpenGLGradientProgram *m_gradientProgram;
     int m_previewOpacityPercent;
     QLabel *m_lbPreviewOpacity;
-    KisSliderSpinBox *m_slPreviewOpacity;
+    KisDoubleSliderSpinBox *m_slPreviewOpacity;
 #endif
 };
 

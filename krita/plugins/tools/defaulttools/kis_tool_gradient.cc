@@ -408,8 +408,8 @@ QWidget* KisToolGradient::createOptionWidget()
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
     m_lbPreviewOpacity = new QLabel(i18n("Preview opacity:"), widget);
-    m_slPreviewOpacity = new KisSliderSpinBox(widget);
-    m_slPreviewOpacity->setRange(0, 100);
+    m_slPreviewOpacity = new KisDoubleSliderSpinBox(widget);
+    m_slPreviewOpacity->setRange(0, 100, 0);
     m_slPreviewOpacity->setValue(m_previewOpacityPercent);
     connect(m_slPreviewOpacity, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetPreviewOpacity(qreal)));
 

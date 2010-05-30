@@ -62,6 +62,9 @@ public:
     virtual void setDisplayMasterBackground( bool display );
 
     /// reimplemented
+    virtual bool displayShape(KoShape *shape) const;
+
+    /// reimplemented
     virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler );
 
 protected:

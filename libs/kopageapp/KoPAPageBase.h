@@ -108,6 +108,16 @@ public:
 
     virtual void setDisplayMasterBackground( bool display ) = 0;
 
+    /**
+     * Get if the shape should be displayed or not
+     * 
+     * This is used for hiding special objects e.g. presentation:display-page-number="false"
+     * 
+     * @param shape for which to check if it should be shown or not.
+     * @return true if the shape should be shown, otherwise false. 
+     */
+    virtual bool displayShape(KoShape *shape) const = 0;
+
     QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) );
 
     /**

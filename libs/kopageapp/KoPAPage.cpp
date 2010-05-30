@@ -155,6 +155,12 @@ void KoPAPage::setDisplayMasterBackground( bool display )
     }
 }
 
+bool KoPAPage::displayShape(KoShape *shape) const
+{
+    Q_UNUSED(shape);
+    return true;
+}
+
 QPixmap KoPAPage::generateThumbnail( const QSize& size )
 {
     // don't paint null pixmap

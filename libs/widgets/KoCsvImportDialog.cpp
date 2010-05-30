@@ -89,8 +89,6 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     d->codec = QTextCodec::codecForName("UTF-8");
 
     setButtons( KDialog::Ok|KDialog::Cancel );
-    setDefaultButton( KDialog::Cancel );
-
     setCaption( i18n( "Import Data" ) );
 
     QStringList encodings;

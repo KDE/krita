@@ -1018,7 +1018,7 @@ void OutputPainterStrategy::bitBlt( BitBltRecord bitBltRecord )
         m_painter->fillRect(target, brush);
     }
     else if ( bitBltRecord.hasImage() ) {
-        m_painter->drawImage( target, *(bitBltRecord.image()) );
+        m_painter->drawImage( target, bitBltRecord.image() );
     }
 }
 
@@ -1075,7 +1075,7 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord record )
     QRect target( targetPosition, targetSize );
     QRect source( sourcePosition, sourceSize );
 #if DEBUG_EMFPAINT
-    kDebug(31000) << "image size" << record.image()->size();
+    //kDebug(31000) << "image size" << record.image()->size();
     kDebug(31000) << "Before transformation:";
     kDebug(31000) << "    target" << target;
     kDebug(31000) << "    source" << source;
@@ -1100,14 +1100,14 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord record )
         targetPosition.ry() -= targetSize.height();
         target = QRect( targetPosition, targetSize );
     }
+#if DEBUG_EMFPAINT
+    kDebug(31000) << "After transformation:";
+    kDebug(31000) << "    target" << target;
+    kDebug(31000) << "    source" << source;
+#endif
 
     // SRCCOPY is the simplest case.  TODO: implement the rest.
     if (record.rasterOperation() == 0x00cc0020) {
-#if DEBUG_EMFPAINT
-        kDebug(31000) << "After transformation:";
-        kDebug(31000) << "    target" << target;
-        kDebug(31000) << "    source" << source;
-#endif
         // For some reason, the target coordinates for the picture are
         // expressed in physical coordinates (Frame in the header)
         // instead of logical coordinates like all the other types of
@@ -1115,14 +1115,15 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord record )
         // physical to logical coordinates.
         qreal scaleX = qreal(m_header->frame().width()) / qreal(m_header->bounds().width());
         qreal scaleY = qreal(m_header->frame().height()) / qreal(m_header->bounds().height());
-        //kDebug(31000) << "Scale = " << scaleX << scaleY;
-        QRect realTarget(QPoint(target.x() / scaleX, target.y() / scaleY),
-                         QSize(target.width() / scaleX, target.height() / scaleY));
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "Scale = " << scaleX << scaleY;
+#endif
+        QRectF realTarget(QPoint(target.x() / scaleX, target.y() / scaleY),
+                          QSize(target.width() / scaleX, target.height() / scaleY));
 #if DEBUG_EMFPAINT
         kDebug(31000) << "    realTarget" << realTarget;
 #endif
-        m_painter->drawImage(realTarget, *(record.image()), source);
-        //m_painter->drawImage(target, *(record.image()), source);
+        m_painter->drawImage(realTarget, record.image(), source);
     }
 }
 

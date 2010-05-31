@@ -28,7 +28,7 @@
 #include <KoFrameShape.h>
 
 
-#define DEBUG_VECTORSHAPE 0
+#define DEBUG_VECTORSHAPE 1
 
 
 class QPainter;

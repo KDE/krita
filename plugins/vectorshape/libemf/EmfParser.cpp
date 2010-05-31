@@ -30,7 +30,7 @@
 // 0 - No debug
 // 1 - Print a lot of debug info
 // 2 - Just print all the records instead of parsing them
-#define DEBUG_EMFPARSER 0
+#define DEBUG_EMFPARSER 1
 
 
 namespace Libemf
@@ -88,6 +88,10 @@ bool Parser::loadFromStream( QDataStream &stream )
     }
 
     mOutput->init( header );
+
+#if DEBUG_EMFPARSER
+    kDebug(31000) << "========================================================== Starting EMF";
+#endif
 
     int numRecords = header->recordCount();
     for ( int i = 1; i < numRecords; ++i ) {
@@ -347,7 +351,7 @@ bool Parser::readRecord( QDataStream &stream )
         else
             name = "(out of bounds)";
 #if DEBUG_EMFPARSER
-        kDebug(31000) << "Record type " << hex << type << "(" << dec << type << ")" << name;
+        kDebug(31000) << "Record length" << size << "type " << hex << type << "(" << dec << type << ")" << name;
 #endif
     }
 

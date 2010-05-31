@@ -34,7 +34,7 @@
 #include "EmfOutput.h"
 
 
-#define DEBUG_EMFPAINT 0
+#define DEBUG_EMFPAINT 1
 
 /**
    \file

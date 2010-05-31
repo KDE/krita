@@ -16,8 +16,8 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef EMFBITMAP_H
-#define EMFBITMAP_H
+#ifndef EMFBITMAPHEADER_H
+#define EMFBITMAPHEADER_H
 
 
 #include <Qt>                   // For qint, etc.
@@ -90,7 +90,7 @@ public:
     */
     quint32 compression() { return m_compression; };
 
-private:
+//private:
     Type  m_headerType;         /// Which header type that is represented.
 
     // Data to be found in a BitmapInfoHeader

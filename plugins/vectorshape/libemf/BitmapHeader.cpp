@@ -29,6 +29,14 @@
 namespace Libemf
 {
 
+static void soakBytes( QDataStream &stream, int numBytes )
+{
+    quint8 scratch;
+    for ( int i = 0; i < numBytes; ++i ) {
+        stream >> scratch;
+    }
+}
+
 
 BitmapHeader::BitmapHeader( QDataStream &stream, int size )
 {
@@ -94,12 +102,8 @@ BitmapHeader::BitmapHeader( QDataStream &stream, int size )
     kDebug(33100) << "read bytes: " << read;
 
     // Read away the overshot from the size parameter;
-    qint8 dummy;
-    int   rest = size - read;
-    while (rest > 0) {
-        stream >> dummy;
-        --rest;
-    }
+    if (size > read)
+        soakBytes(stream, size - read);
 }
 
 BitmapHeader::~BitmapHeader()

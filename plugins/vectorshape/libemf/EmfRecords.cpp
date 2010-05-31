@@ -18,7 +18,7 @@
 
 #include "EmfEnums.h"
 #include "EmfRecords.h"
-#include "BitmapHeader.h"
+#include "Bitmap.h"
 
 #include <KDebug>
 
@@ -30,7 +30,10 @@ namespace Libemf
 
 
 BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
+    : m_bitmap(0)
 {
+    kDebug(31000) << "stream position at the start: " << stream.device()->pos();
+    kDebug(31000) << "record size: " << recordSize;
     stream >> m_bounds;
 
     stream >> m_xDest;          // x, y of upper left corner of the destination.
@@ -46,6 +49,8 @@ BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
     stream >> m_ySrc;
     kDebug(31000) << "Source" << m_xSrc << m_ySrc;
 
+    kDebug(31000) << "position before the matrix: " << stream.device()->pos();
+#if 0 // it seems that the floats all use 8 bytes instead of the wanted 4.
     float M11, M12, M21, M22, Dx, Dy;
     stream >> M11;              // Transformation matrix
     stream >> M12;
@@ -55,9 +60,21 @@ BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
     stream >> Dy;
     m_XFormSrc = QMatrix( M11, M12, M21, M22, Dx, Dy );
     kDebug(31000) << "Matrix" << m_XFormSrc;
+#else
+    quint32 M11, M12, M21, M22, Dx, Dy;
+    stream >> M11;              // Transformation matrix
+    stream >> M12;
+    stream >> M21;
+    stream >> M22;
+    stream >> Dx;
+    stream >> Dy;
+    //m_XFormSrc = QMatrix( M11, M12, M21, M22, Dx, Dy );
+#endif
+    kDebug(31000) << "position after the matrix: " << stream.device()->pos();
 
     stream >> m_red >> m_green >> m_blue >> m_reserved;
     kDebug(31000) << "Background color" << m_red << m_green << m_blue << m_reserved;
+    kDebug(31000) << "position after background color: " << stream.device()->pos();
 
     stream >> m_UsageSrc;
     kDebug(31000) << "Color table interpretation" << m_UsageSrc;
@@ -66,17 +83,23 @@ BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
     stream >> m_cbBmiSrc;       // Size of source bitmap header
     stream >> m_offBitsSrc;     // Offset to source bitmap from start of record
     stream >> m_cbBitsSrc;      // Size of source bitmap
-    kDebug(31000) << "Bitmap metadata" << m_offBmiSrc << m_cbBmiSrc << m_offBitsSrc << m_cbBitsSrc;
+#if 1
+    kDebug(31000) << "header offset:" << m_offBmiSrc;
+    kDebug(31000) << "header size:  " << m_cbBmiSrc;
+    kDebug(31000) << "bitmap offset:" << m_offBitsSrc;
+    kDebug(31000) << "bitmap size:  " << m_cbBitsSrc;
+#endif
 
-    if ( m_cbBmiSrc == 40 ) {
-	m_BmiSrc = new BitmapHeader( stream, m_cbBmiSrc );
-    } else {
-	kDebug(31000) << "BUG!!! m_cbBmiSrc:" << m_cbBmiSrc;
-	//Q_ASSERT( 0 );
+    kDebug(31000) << "stream position before the image: " << stream.device()->pos();
+    if (m_cbBmiSrc > 0) {
+        m_bitmap = new Bitmap( stream, recordSize, 8 + 23 * 4, // header + 23 ints
+                               m_offBmiSrc, m_cbBmiSrc,
+                               m_offBitsSrc, m_cbBitsSrc );
     }
 
-    m_imageData.resize( m_cbBitsSrc );
-    stream.readRawData( m_imageData.data(), m_cbBitsSrc );
+    kDebug(31000) << "stream position at the end: " << stream.device()->pos();
+    //m_imageData.resize( m_cbBitsSrc );
+    //stream.readRawData( m_imageData.data(), m_cbBitsSrc );
 }
 
 BitBltRecord::~BitBltRecord()
@@ -85,11 +108,14 @@ BitBltRecord::~BitBltRecord()
 
 bool BitBltRecord::hasImage() const
 {
-    return ( ( m_cbBmiSrc != 0 ) && ( m_cbBitsSrc != 0 ) );
+    return m_bitmap && m_bitmap->hasImage();
+    //return ( ( m_cbBmiSrc != 0 ) && ( m_cbBitsSrc != 0 ) );
 }
 
-QImage* BitBltRecord::image() 
+QImage BitBltRecord::image() 
 {
+    return m_bitmap->image();
+#if 0
     if ( ! hasImage() ) {
         return 0;
     }
@@ -117,13 +143,16 @@ QImage* BitBltRecord::image()
                           m_BmiSrc->width(), m_BmiSrc->height(), format );
 
     return m_image;
+#endif
 }
 
 /*****************************************************************************/
 StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSize )
-    : m_BmiSrc(0)
-    , m_image(0)
+    : m_bitmap(0)
 {
+    kDebug(31000) << "stream position at the start: " << stream.device()->pos();
+    kDebug(31000) << "recordSize =" << recordSize;
+
     stream >> m_Bounds;
     stream >> m_xDest;
     stream >> m_yDest;
@@ -140,14 +169,24 @@ StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSiz
     stream >> m_cxDest;
     stream >> m_cyDest;
 
-#if 0
-    kDebug(31000) << "m_cbBmiSrc =" << m_cbBmiSrc;
-    kDebug(31000) << "m_offBmiSrc =" << m_offBmiSrc;
-    kDebug(31000) << "m_cbBitsSrc  =" << m_cbBitsSrc;
-    kDebug(31000) << "m_offBitsSrc =" << m_offBitsSrc;
-    //kDebug(31000) << "m_BitBltRasterOperation =" << hex << m_BitBltRasterOperation << dec;
+#if 1
+    kDebug(31000) << "header offset:" << m_offBmiSrc;
+    kDebug(31000) << "header size:  " << m_cbBmiSrc;
+    kDebug(31000) << "bitmap offset:" << m_offBitsSrc;
+    kDebug(31000) << "bitmap size:  " << m_cbBitsSrc;
+
+    kDebug(31000) << "m_BitBltRasterOperation =" << hex << m_BitBltRasterOperation << dec;
 #endif
 
+    kDebug(31000) << "stream position before the image: " << stream.device()->pos();
+    if (m_cbBmiSrc > 0) {
+        m_bitmap = new Bitmap( stream, recordSize, 8 + 18 * 4, // header + 18 ints
+                               m_offBmiSrc, m_cbBmiSrc,
+                               m_offBitsSrc, m_cbBitsSrc );
+    }
+
+    kDebug(31000) << "stream position at the end: " << stream.device()->pos();
+#if 0
     // Read away those bytes that preceed the header.  These are undefined
     // according to the spec.  80 is the size of the record above.
     qint32 dummy;
@@ -165,11 +204,13 @@ StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSiz
     }
     m_imageData.resize( m_cbBitsSrc );
     stream.readRawData( m_imageData.data(), m_cbBitsSrc );
+#endif
 }
 
 StretchDiBitsRecord::~StretchDiBitsRecord()
 {
-    delete m_image;
+    delete m_bitmap;
+    //delete m_image;
     // delete m_BmiSrc;
 }
 
@@ -178,8 +219,10 @@ QRect StretchDiBitsRecord::bounds() const
     return m_Bounds;
 }
 
-QImage* StretchDiBitsRecord::image() 
+QImage StretchDiBitsRecord::image() 
 {
+    return m_bitmap->image();
+#if 0
     if ( m_image != 0 ) {
         return m_image;
     }
@@ -243,6 +286,7 @@ QImage* StretchDiBitsRecord::image()
     }
 
     return m_image;
+#endif
 }
 
 /*****************************************************************************/

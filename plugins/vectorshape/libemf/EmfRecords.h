@@ -25,7 +25,7 @@
 #include <QRect> // also provides QSize
 #include <QString>
 
-#include "BitmapHeader.h"
+#include "Bitmap.h"
 /**
    \file
 
@@ -89,7 +89,7 @@ public:
     /**
        The image to display
     */
-    QImage* image();
+    QImage image();
 
     /**
        Whether there is a valid image in this BitBlt record
@@ -122,10 +122,10 @@ private:
     quint32 m_offBitsSrc;
     quint32 m_cbBitsSrc;
 
-    BitmapHeader *m_BmiSrc; // The source bitmap
-    QByteArray m_imageData;
+    Bitmap *m_bitmap; // The source bitmap
 
-    QImage *m_image;
+    //QByteArray m_imageData;
+    //QImage *m_image;
 };
 
 /*****************************************************************************/
@@ -210,7 +210,7 @@ public:
     /**
        The image to display
     */
-    QImage* image();
+    QImage image();
 
 private:
     QRect m_Bounds;
@@ -228,10 +228,11 @@ private:
     quint32 m_BitBltRasterOperation;
     qint32 m_cxDest;
     qint32 m_cyDest;
-    BitmapHeader *m_BmiSrc; // The source bitmap
-    QByteArray m_imageData;
+    //BitmapHeader *m_BmiSrc; // The source bitmap
+    //QByteArray m_imageData;
 
-    QImage *m_image;
+    Bitmap *m_bitmap; // The source bitmap
+    //QImage *m_image;
 };
 
 /*****************************************************************************/

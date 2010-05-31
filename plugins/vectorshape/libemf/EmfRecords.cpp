@@ -50,7 +50,8 @@ BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
     kDebug(31000) << "Source" << m_xSrc << m_ySrc;
 
     kDebug(31000) << "position before the matrix: " << stream.device()->pos();
-#if 0 // it seems that the floats all use 8 bytes instead of the wanted 4.
+#if 1 // it seems that the floats all use 8 bytes instead of the wanted 4.
+    stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
     float M11, M12, M21, M22, Dx, Dy;
     stream >> M11;              // Transformation matrix
     stream >> M12;

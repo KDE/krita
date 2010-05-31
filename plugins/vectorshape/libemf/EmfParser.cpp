@@ -68,7 +68,12 @@ bool Parser::load( const QString &fileName )
         return false;
     }
 
+    // Use version 11, which makes floats always be 32 bits without
+    // the need to call setFloatingPointPrecision().
     QDataStream stream( file );
+    stream.setVersion(QDataStream::Qt_4_6);
+    stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
+
     bool result = loadFromStream( stream );
 
     delete file;
@@ -520,6 +525,7 @@ bool Parser::readRecord( QDataStream &stream )
     break;
     case EMR_SETWORLDTRANSFORM:
 	{
+            stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
 	    float M11, M12, M21, M22, Dx, Dy;
 	    stream >> M11;
 	    stream >> M12;
@@ -533,6 +539,9 @@ bool Parser::readRecord( QDataStream &stream )
 	break;
     case EMR_MODIFYWORLDTRANSFORM:
 	{
+            stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
+            kDebug(31000) << "stream position before the matrix: " << stream.device()->pos()
+                          << "precision: " << stream.floatingPointPrecision();
 	    float M11, M12, M21, M22, Dx, Dy;
 	    stream >> M11;
 	    stream >> M12;
@@ -540,6 +549,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> M22;
 	    stream >> Dx;
 	    stream >> Dy;
+            kDebug(31000) << "stream position after the matrix: " << stream.device()->pos();
 	    quint32 ModifyWorldTransformMode;
 	    stream >> ModifyWorldTransformMode;
 	    mOutput->modifyWorldTransform( ModifyWorldTransformMode, M11, M12,
@@ -648,6 +658,7 @@ bool Parser::readRecord( QDataStream &stream )
     break;
     case EMR_SETMITERLIMIT:
         {
+            stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
             float miterLimit;
             stream >> miterLimit;
             kDebug(33100) << "EMR_SETMITERLIMIT" << miterLimit;

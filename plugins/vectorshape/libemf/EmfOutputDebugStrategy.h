@@ -113,9 +113,9 @@ public:
     void strokeAndFillPath( const QRect &bounds );
     void strokePath( const QRect &bounds );
     void setClipPath( const quint32 regionMode );
-    void bitBlt( BitBltRecord bitBltRecord );
+    void bitBlt( BitBltRecord &bitBltRecord );
     void setStretchBltMode( const quint32 stretchMode );
-    void stretchDiBits( StretchDiBitsRecord stretchDiBitsRecord );
+    void stretchDiBits( StretchDiBitsRecord &stretchDiBitsRecord );
 };
 
 

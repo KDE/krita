@@ -351,7 +351,7 @@ void OutputDebugStrategy::setClipPath( quint32 regionMode )
    kDebug(33100) << "EMR_SETCLIPPATH:" << regionMode;
 }
 
-void OutputDebugStrategy::bitBlt( BitBltRecord bitBltRecord )
+void OutputDebugStrategy::bitBlt( BitBltRecord &bitBltRecord )
 {
     kDebug(33100) << "EMR_BITBLT:" << bitBltRecord.destinationRectangle();
 }
@@ -376,7 +376,7 @@ void OutputDebugStrategy::setStretchBltMode( const quint32 stretchMode )
     }
 }
 
-void OutputDebugStrategy::stretchDiBits( StretchDiBitsRecord stretchDiBitsRecord )
+void OutputDebugStrategy::stretchDiBits( StretchDiBitsRecord &stretchDiBitsRecord )
 {
     kDebug(33100) << "EMR_STRETCHDIBITS:" << stretchDiBitsRecord.sourceRectangle()
                   << "," << stretchDiBitsRecord.destinationRectangle();

@@ -996,7 +996,7 @@ void OutputPainterStrategy::setClipPath( const quint32 regionMode )
     }
 }
 
-void OutputPainterStrategy::bitBlt( BitBltRecord bitBltRecord )
+void OutputPainterStrategy::bitBlt( BitBltRecord &bitBltRecord )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << bitBltRecord.xDest() << bitBltRecord.yDest()
@@ -1046,7 +1046,7 @@ void OutputPainterStrategy::setStretchBltMode( const quint32 stretchMode )
     }
 }
 
-void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord record )
+void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << "Bounds:    " << record.bounds();

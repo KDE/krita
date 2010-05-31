@@ -540,7 +540,7 @@ public:
 
        \param bitBltRecord contents of the record type
     */
-    virtual void bitBlt( BitBltRecord bitBltRecord ) = 0;
+    virtual void bitBlt( BitBltRecord &bitBltRecord ) = 0;
 
     /**
        Handler for the EMR_STRETCHBLTMODE record type
@@ -554,7 +554,7 @@ public:
 
        \param stretchDiBitsRecord contents of the record type
     */
-    virtual void stretchDiBits( StretchDiBitsRecord stretchDiBitsRecord ) = 0;
+    virtual void stretchDiBits( StretchDiBitsRecord &stretchDiBitsRecord ) = 0;
 };
 
 

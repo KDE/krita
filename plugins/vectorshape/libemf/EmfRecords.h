@@ -97,6 +97,12 @@ public:
     bool hasImage() const;
 
 private:
+    // No copying for now, because we will get into trouble with the pointers.
+    // The remedy is to write a real operator=() and BitBltRecord(BitBltRecord&).
+    BitBltRecord(BitBltRecord&);
+    BitBltRecord &operator=(BitBltRecord&);
+
+private:
     QRect m_bounds;
     qint32 m_xDest;
     qint32 m_yDest;
@@ -211,6 +217,12 @@ public:
        The image to display
     */
     QImage image();
+
+private:
+    // No copying for now, because we will get into trouble with the pointers.
+    // The remedy is to write a real operator=() and StretchDiBitsRecord(StretchDiBitsRecord&).
+    StretchDiBitsRecord(StretchDiBitsRecord&);
+    StretchDiBitsRecord &operator=(StretchDiBitsRecord&);
 
 private:
     QRect m_Bounds;

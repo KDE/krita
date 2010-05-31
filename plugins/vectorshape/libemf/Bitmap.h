@@ -88,6 +88,12 @@ public:
     QImage image();
 
 private:
+    // No copying for now, because we will get into trouble with the pointers.
+    // The remedy is to write a real operator=() and Bitmap(Bitmap&).
+    Bitmap(Bitmap&);
+    Bitmap &operator=(Bitmap&);
+
+private:
     bool          m_hasImage;
     BitmapHeader *m_header;
 

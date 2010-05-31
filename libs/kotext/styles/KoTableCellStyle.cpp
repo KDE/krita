@@ -39,7 +39,7 @@
 #include <KoXmlWriter.h>
 
 struct Edge {
-    Edge() : spacing(0.0) { }
+    Edge() : innerPen(), outerPen(), spacing(0.0) { }
     QPen innerPen;
     QPen outerPen;
     qreal spacing;
@@ -58,6 +58,7 @@ public:
     }
 
     Edge edges[4];
+    BorderStyle borderstyle[4];
     QString name;
     KoTableCellStyle *parentStyle;
     int next;
@@ -70,18 +71,33 @@ KoTableCellStyle::KoTableCellStyle(QObject *parent)
     //d->edges[Top].outerPen = format.penProperty(TopBorderOuterPen);
     d->edges[Top].spacing = 0;
    // d->edges[Top].innerPen = format.penProperty(TopBorderInnerPen);
+    d->borderstyle[Top] = BorderNone;
 
    // d->edges[Left].outerPen = format.penProperty(LeftBorderOuterPen);
     d->edges[Left].spacing = 0;
    // d->edges[Left].innerPen = format.penProperty(LeftBorderInnerPen);
+    d->borderstyle[Left] = BorderNone;
 
     //d->edges[Bottom].outerPen =format.penProperty(BottomBorderOuterPen);
     d->edges[Bottom].spacing = 0;
     //d->edges[Bottom].innerPen = format.penProperty(BottomBorderInnerPen);
+    d->borderstyle[Bottom] = BorderNone;
 
     //d->edges[Right].outerPen = format.penProperty(RightBorderOuterPen);
     d->edges[Right].spacing = 0;
     //d->edges[Right].innerPen = format.penProperty(RightBorderInnerPen);
+    d->borderstyle[Right] = BorderNone;
+}
+
+bool KoTableCellStyle::isDrawn(BorderStyle style) const
+{
+    if (style == BorderWave)
+        return true;
+    if (style == BorderDoubleWave)
+        return true;
+    if (style == BorderSlash)
+        return true;
+    return false;
 }
 
 KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *parent)
@@ -93,18 +109,22 @@ KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *
     d->edges[Top].outerPen = format.penProperty(TopBorderOuterPen);
     d->edges[Top].spacing = format.doubleProperty(TopBorderSpacing);
     d->edges[Top].innerPen = format.penProperty(TopBorderInnerPen);
+    d->borderstyle[Top] = BorderStyle(format.intProperty(TopBorderStyle));
 
     d->edges[Left].outerPen = format.penProperty(LeftBorderOuterPen);
     d->edges[Left].spacing = format.doubleProperty(LeftBorderSpacing);
     d->edges[Left].innerPen = format.penProperty(LeftBorderInnerPen);
+    d->borderstyle[Left] = BorderStyle(format.intProperty(LeftBorderStyle));
 
     d->edges[Bottom].outerPen =format.penProperty(BottomBorderOuterPen);
     d->edges[Bottom].spacing = format.doubleProperty(BottomBorderSpacing);
     d->edges[Bottom].innerPen = format.penProperty(BottomBorderInnerPen);
+    d->borderstyle[Bottom] = BorderStyle(format.intProperty(BottomBorderStyle));
 
     d->edges[Right].outerPen = format.penProperty(RightBorderOuterPen);
     d->edges[Right].spacing = format.doubleProperty(RightBorderSpacing);
     d->edges[Right].innerPen = format.penProperty(RightBorderInnerPen);
+    d->borderstyle[Right] = BorderStyle(format.intProperty(RightBorderStyle));
 }
 
 KoTableCellStyle *KoTableCellStyle::fromTableCell(const QTextTableCell &tableCell, QObject *parent)
@@ -141,7 +161,7 @@ QRectF KoTableCellStyle::boundingRect(const QRectF &contentRect) const
 void KoTableCellStyle::setEdge(Side side, BorderStyle style, qreal width, QColor color)
 {
     Edge edge;
-    qreal innerWidth = 0.0, space = 0.0;
+    qreal innerWidth = 0.0, middleWidth = 0.0, space = 0.0;
     switch (style) {
     case BorderNone:
         width = 0.0;
@@ -157,8 +177,37 @@ void KoTableCellStyle::setEdge(Side side, BorderStyle style, qreal width, QColor
     case BorderDashed:
         edge.outerPen.setStyle(Qt::DashLine);
         break;
+    case BorderDashedLong: {
+        QVector<qreal> dashes;
+        dashes << 6 << 6;
+        edge.outerPen.setDashPattern(dashes);
+        break;
+    }
+    case BorderTriple:
+        innerWidth = middleWidth = space = width/6;
+        width -= (space + innerWidth);
+        edge.outerPen.setStyle(Qt::SolidLine);
+        break;
+    case BorderDashDot:
+        edge.outerPen.setStyle(Qt::DashDotLine);
+        break;
+    case BorderDashDotDot:
+        edge.outerPen.setStyle(Qt::DashDotDotLine);
+        break;
+    case BorderWave:
+        edge.outerPen.setStyle(Qt::SolidLine);
+        break;
+    case BorderSlash:
+        edge.outerPen.setStyle(Qt::SolidLine);
+        break;
+    case BorderDoubleWave:
+        innerWidth = space = width/4; //some nice default look
+        width -= (space + innerWidth);
+        edge.outerPen.setStyle(Qt::SolidLine);
+        break;
     default:
         edge.outerPen.setStyle(Qt::SolidLine);
+        break;
     }
     edge.outerPen.setColor(color);
     edge.outerPen.setJoinStyle(Qt::MiterJoin);
@@ -168,14 +217,18 @@ void KoTableCellStyle::setEdge(Side side, BorderStyle style, qreal width, QColor
     edge.spacing = space;
     edge.innerPen = edge.outerPen;
     edge.innerPen.setWidthF(innerWidth);
+    QPen middlePen;
+    middlePen = edge.outerPen;
+    middlePen.setWidthF(middleWidth);
 
     d->edges[side] = edge;
+    d->borderstyle[side] = style;
 }
 
 void KoTableCellStyle::setEdgeDoubleBorderValues(Side side, qreal innerWidth, qreal space)
 {
     qreal totalWidth = d->edges[side].outerPen.widthF() + d->edges[side].spacing + d->edges[side].innerPen.widthF();
-    if(d->edges[side].innerPen.widthF() > 0.0) {
+    if (d->edges[side].innerPen.widthF() > 0.0) {
         d->edges[side].outerPen.setWidthF(totalWidth - innerWidth - space);
         d->edges[side].spacing = space;
         d->edges[side].innerPen.setWidthF(innerWidth);
@@ -194,8 +247,48 @@ void KoTableCellStyle::paintBackground(QPainter &painter, const QRectF &bounds) 
 {
     QRectF innerBounds = bounds;
 
-    if(hasProperty(CellBackgroundBrush)) {
+    if (hasProperty(CellBackgroundBrush)) {
         painter.fillRect(bounds, background());
+    }
+}
+
+void KoTableCellStyle::drawHorizontalWave(BorderStyle style, QPainter &painter, qreal x, qreal w, qreal t) const
+{
+    QPen pen = painter.pen();
+    const qreal linewidth = pen.width();
+    const qreal penwidth = linewidth/6;
+    pen.setWidth(penwidth);
+    painter.setPen(pen);
+    if (style == BorderSlash) {
+        for (qreal sx=x; sx<x+w-linewidth; sx+=linewidth*0.5) {
+            painter.drawLine(QLineF(sx, t-penwidth*2, sx+linewidth, t+penwidth*2));
+        }
+    } else {
+        for (qreal sx=x; sx<x+w-2*linewidth; sx+=linewidth) {
+            painter.drawLine(QLineF(sx, t-penwidth*2, sx+linewidth, t+penwidth*2));
+            sx+=linewidth;
+            painter.drawLine(QLineF(sx, t+penwidth*2, sx+linewidth, t-penwidth*2));
+        }
+    }
+}
+
+void KoTableCellStyle::drawVerticalWave(BorderStyle style, QPainter &painter, qreal y, qreal h, qreal t) const
+{
+    QPen pen = painter.pen();
+    const qreal linewidth = pen.width();
+    const qreal penwidth = linewidth/6;
+    pen.setWidth(penwidth);
+    painter.setPen(pen);
+    if (style == BorderSlash) {
+        for (qreal sy=y; sy<y+h-linewidth; sy+=linewidth*0.5) {
+            painter.drawLine(QLineF(t-penwidth*2, sy, t+penwidth*2, sy+linewidth));
+        }
+    } else {
+        for (qreal sy=y; sy<y+h-2*linewidth; sy+=linewidth) {
+            painter.drawLine(QLineF(t-penwidth*2, sy, t+penwidth*2, sy+linewidth));
+            sy+=linewidth;
+            painter.drawLine(QLineF(t+penwidth*2, sy, t-penwidth*2, sy+linewidth));
+        }
     }
 }
 
@@ -209,7 +302,13 @@ void KoTableCellStyle::paintBorders(QPainter &painter, const QRectF &bounds) con
         painter.setPen(pen);
         const qreal t = bounds.top() + pen.widthF() / 2.0;
         innerBounds.setTop(bounds.top() + d->edges[Top].spacing + pen.widthF());
-        painter.drawLine(QLineF(bounds.left(), t, bounds.right(), t));
+        if(isDrawn(d->borderstyle[Top])) {
+            const qreal width = pen.widthF()/6;
+            qreal x;
+            //for (
+        } else {
+            painter.drawLine(QLineF(bounds.left(), t, bounds.right(), t));
+        }
     }
     if (d->edges[Bottom].outerPen.widthF() > 0) {
         QPen pen = d->edges[Bottom].outerPen;
@@ -267,7 +366,11 @@ void KoTableCellStyle::drawTopHorizontalBorder(QPainter &painter, qreal x, qreal
 
         painter.setPen(pen);
         t += pen.widthF() / 2.0;
-        painter.drawLine(QLineF(x, t, x+w, t));
+        if(isDrawn(d->borderstyle[Top])) {
+                drawHorizontalWave(d->borderstyle[Top], painter,x,w,t);
+        } else {
+            painter.drawLine(QLineF(x, t, x+w, t));
+        }
         t = y + d->edges[Top].spacing + pen.widthF();
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
@@ -280,7 +383,11 @@ void KoTableCellStyle::drawTopHorizontalBorder(QPainter &painter, qreal x, qreal
         QPen pen = d->edges[Top].innerPen;
         painter.setPen(pen);
         t += pen.widthF() / 2.0;
-        painter.drawLine(QLineF(x, t, x+w, t));
+        if(isDrawn(d->borderstyle[Top])) {
+                drawHorizontalWave(d->borderstyle[Top], painter,x,w,t);
+        } else {
+            painter.drawLine(QLineF(x, t, x+w, t));
+        }
     }
 }
 
@@ -290,17 +397,21 @@ void KoTableCellStyle::drawSharedHorizontalBorder(QPainter &painter, const KoTab
     qreal thisWidth = d->edges[Bottom].outerPen.widthF() + d->edges[Bottom].spacing + d->edges[Bottom].innerPen.widthF();
     qreal thatWidth = styleBelow.d->edges[Top].outerPen.widthF() + styleBelow.d->edges[Top].spacing
                                     + styleBelow.d->edges[Top].innerPen.widthF();
-
     if(thisWidth >= thatWidth) {
-        // top style wins
+        // bottom style wins
        qreal t=y;
         if (d->edges[Bottom].outerPen.widthF() > 0) {
             QPen pen = d->edges[Bottom].outerPen;
+            const qreal linewidth = pen.widthF();
 
             painter.setPen(pen);
-            t += pen.widthF() / 2.0;
-            painter.drawLine(QLineF(x, t, x+w, t));
-            t = y + d->edges[Bottom].spacing + pen.widthF();
+            t += linewidth / 2.0;
+            if(isDrawn(d->borderstyle[Bottom])) {
+                drawHorizontalWave(d->borderstyle[Bottom], painter,x,w,t);
+            } else {
+                painter.drawLine(QLineF(x, t, x+w, t));
+            }
+            t = y + d->edges[Bottom].spacing + linewidth;
         } else if (accumulatedBlankBorders) {
             // No border but we'd like to draw one for user convenience when on screen
             accumulatedBlankBorders->moveTo(x, t);
@@ -312,17 +423,25 @@ void KoTableCellStyle::drawSharedHorizontalBorder(QPainter &painter, const KoTab
             QPen pen = d->edges[Bottom].innerPen;
             painter.setPen(pen);
             t += pen.widthF() / 2.0;
-            painter.drawLine(QLineF(x, t, x+w, t));
+            if(isDrawn(d->borderstyle[Bottom])) {
+                drawHorizontalWave(d->borderstyle[Bottom], painter,x,w,t);
+            } else {
+                painter.drawLine(QLineF(x, t, x+w, t));
+            }
         }
     } else {
-        // bottom style wins
+        // top style wins
         qreal t=y;
         if (styleBelow.d->edges[Top].outerPen.widthF() > 0) {
             QPen pen = styleBelow.d->edges[Top].outerPen;
 
             painter.setPen(pen);
             t += pen.widthF() / 2.0;
-            painter.drawLine(QLineF(x, t, x+w, t));
+            if(isDrawn(d->borderstyle[Top])) {
+                drawHorizontalWave(d->borderstyle[Top], painter,x,w,t);
+            } else {
+                painter.drawLine(QLineF(x, t, x+w, t));
+            }
             t = y + styleBelow.d->edges[Top].spacing + pen.widthF();
         }
         // inner line
@@ -330,7 +449,11 @@ void KoTableCellStyle::drawSharedHorizontalBorder(QPainter &painter, const KoTab
             QPen pen = styleBelow.d->edges[Top].innerPen;
             painter.setPen(pen);
             t += pen.widthF() / 2.0;
-            painter.drawLine(QLineF(x, t, x+w, t));
+            if(isDrawn(d->borderstyle[Top])) {
+                drawHorizontalWave(d->borderstyle[Top], painter,x,w,t);
+            } else {
+                painter.drawLine(QLineF(x, t, x+w, t));
+            }
         }
     }
 }
@@ -343,7 +466,11 @@ void KoTableCellStyle::drawBottomHorizontalBorder(QPainter &painter, qreal x, qr
 
         painter.setPen(pen);
         t -= pen.widthF() / 2.0;
-        painter.drawLine(QLineF(x, t, x+w, t));
+        if(isDrawn(d->borderstyle[Bottom])) {
+            drawHorizontalWave(d->borderstyle[Bottom], painter,x,w,t);
+        } else {
+            painter.drawLine(QLineF(x, t, x+w, t));
+        }
         t = y - d->edges[Bottom].spacing - pen.widthF();
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
@@ -357,7 +484,11 @@ void KoTableCellStyle::drawBottomHorizontalBorder(QPainter &painter, qreal x, qr
         QPen pen = d->edges[Bottom].innerPen;
         painter.setPen(pen);
         t -= pen.widthF() / 2.0;
-        painter.drawLine(QLineF(x, t, x+w, t));
+        if(isDrawn(d->borderstyle[Bottom])) {
+            drawHorizontalWave(d->borderstyle[Bottom], painter,x,w,t);
+        } else {
+            painter.drawLine(QLineF(x, t, x+w, t));
+        }
     }
 }
 
@@ -371,7 +502,11 @@ void KoTableCellStyle::drawLeftmostVerticalBorder(QPainter &painter, qreal x, qr
 
         painter.setPen(pen);
         l += pen.widthF() / 2.0;
-        painter.drawLine(QLineF(l, y, l, y+h));
+        if(isDrawn(d->borderstyle[Left])) {
+            drawVerticalWave(d->borderstyle[Left], painter,y,h,l);
+        } else {
+            painter.drawLine(QLineF(l, y, l, y+h));
+        }
         l += d->edges[Left].spacing + pen.widthF() / 2.0;
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
@@ -385,7 +520,11 @@ void KoTableCellStyle::drawLeftmostVerticalBorder(QPainter &painter, qreal x, qr
         QPen pen = d->edges[Left].innerPen;
         painter.setPen(pen);
         l += pen.widthF() / 2.0;
-        painter.drawLine(QLineF(l, y, l, y+h));
+        if(isDrawn(d->borderstyle[Left])) {
+            drawVerticalWave(d->borderstyle[Left], painter,y,h,l);
+        } else {
+            painter.drawLine(QLineF(l, y, l, y+h));
+        }
     }
 }
 
@@ -406,7 +545,11 @@ void KoTableCellStyle::drawSharedVerticalBorder(QPainter &painter, const KoTable
 
             painter.setPen(pen);
             l += pen.widthF() / 2.0;
-            painter.drawLine(QLineF(l, y, l, y+h));
+            if(isDrawn(d->borderstyle[Right])) {
+                drawVerticalWave(d->borderstyle[Right], painter,y,h,l);
+            } else {
+                painter.drawLine(QLineF(l, y, l, y+h));
+            }
             l += d->edges[Right].spacing + pen.widthF() / 2.0;
         } else if (accumulatedBlankBorders) {
             // No border but we'd like to draw one for user convenience when on screen
@@ -420,7 +563,11 @@ void KoTableCellStyle::drawSharedVerticalBorder(QPainter &painter, const KoTable
             QPen pen = d->edges[Right].innerPen;
             painter.setPen(pen);
             l += pen.widthF() / 2.0;
-            painter.drawLine(QLineF(l, y, l, y+h));
+            if(isDrawn(d->borderstyle[Right])) {
+                drawVerticalWave(d->borderstyle[Right], painter,y,h,l);
+            } else {
+                painter.drawLine(QLineF(l, y, l, y+h));
+            }
         }
     } else {
         // right style wins
@@ -430,7 +577,11 @@ void KoTableCellStyle::drawSharedVerticalBorder(QPainter &painter, const KoTable
 
             painter.setPen(pen);
             l += pen.widthF() / 2.0;
-            painter.drawLine(QLineF(l, y, l, y+h));
+            if(isDrawn(d->borderstyle[Left])) {
+                drawVerticalWave(d->borderstyle[Left], painter,y,h,l);
+            } else {
+                painter.drawLine(QLineF(l, y, l, y+h));
+            }
             l += styleRight.d->edges[Left].spacing + pen.widthF() / 2.0;
         }
         // inner line
@@ -438,7 +589,11 @@ void KoTableCellStyle::drawSharedVerticalBorder(QPainter &painter, const KoTable
             QPen pen = styleRight.d->edges[Left].innerPen;
             painter.setPen(pen);
             l += pen.widthF() / 2.0;
-            painter.drawLine(QLineF(l, y, l, y+h));
+            if(isDrawn(d->borderstyle[Left])) {
+                drawVerticalWave(d->borderstyle[Left], painter,y,h,l);
+            } else {
+                painter.drawLine(QLineF(l, y, l, y+h));
+            }
         }
     }
 }
@@ -453,7 +608,11 @@ void KoTableCellStyle::drawRightmostVerticalBorder(QPainter &painter, qreal x, q
 
         painter.setPen(pen);
         l += pen.widthF() / 2.0;
-        painter.drawLine(QLineF(l, y, l, y+h));
+        if(isDrawn(d->borderstyle[Right])) {
+            drawVerticalWave(d->borderstyle[Right], painter,y,h,l);
+        } else {
+            painter.drawLine(QLineF(l, y, l, y+h));
+        }
         l += d->edges[Right].spacing - pen.widthF() / 2.0;
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
@@ -467,7 +626,11 @@ void KoTableCellStyle::drawRightmostVerticalBorder(QPainter &painter, qreal x, q
         QPen pen = d->edges[Right].innerPen;
         painter.setPen(pen);
         l += pen.widthF() / 2.0;
-        painter.drawLine(QLineF(l, y, l, y+h));
+        if(isDrawn(d->borderstyle[Right])) {
+            drawVerticalWave(d->borderstyle[Right], painter,y,h,l);
+        } else {
+            painter.drawLine(QLineF(l, y, l, y+h));
+        }
     }
 }
 
@@ -481,6 +644,18 @@ KoTableCellStyle::BorderStyle KoTableCellStyle::oasisBorderStyle(const QString &
         return BorderDotted;
     if (borderstyle == "dashed")
         return BorderDashed;
+    if (borderstyle == "dash-largegap")
+        return BorderDashedLong;
+    if (borderstyle == "dot-dash") // not offficially odf, but we suppport it anyway
+        return BorderDashDot;
+    if (borderstyle == "dot-dot-dash") // not offficially odf, but we suppport it anyway
+        return BorderDashDotDot;
+    if (borderstyle == "slash") // not offficially odf, but we suppport it anyway
+        return BorderSlash;
+    if (borderstyle == "wave") // not offficially odf, but we suppport it anyway
+        return BorderWave;
+    if (borderstyle == "double-wave") // not offficially odf, but we suppport it anyway
+        return BorderDoubleWave;
     return BorderSolid; // not needed to handle "solid" since it's the default
 }
 
@@ -611,15 +786,19 @@ void KoTableCellStyle::applyStyle(QTextTableCellFormat &format) const
     format.setProperty(TopBorderOuterPen, d->edges[Top].outerPen);
     format.setProperty(TopBorderSpacing,  d->edges[Top].spacing);
     format.setProperty(TopBorderInnerPen, d->edges[Top].innerPen);
+    format.setProperty(TopBorderStyle, d->borderstyle[Top]);
     format.setProperty(LeftBorderOuterPen, d->edges[Left].outerPen);
     format.setProperty(LeftBorderSpacing,  d->edges[Left].spacing);
     format.setProperty(LeftBorderInnerPen, d->edges[Left].innerPen);
+    format.setProperty(LeftBorderStyle, d->borderstyle[Left]);
     format.setProperty(BottomBorderOuterPen, d->edges[Bottom].outerPen);
     format.setProperty(BottomBorderSpacing,  d->edges[Bottom].spacing);
     format.setProperty(BottomBorderInnerPen, d->edges[Bottom].innerPen);
+    format.setProperty(BottomBorderStyle, d->borderstyle[Bottom]);
     format.setProperty(RightBorderOuterPen, d->edges[Right].outerPen);
     format.setProperty(RightBorderSpacing,  d->edges[Right].spacing);
     format.setProperty(RightBorderInnerPen, d->edges[Right].innerPen);
+    format.setProperty(RightBorderStyle, d->borderstyle[Right]);
 }
 
 void KoTableCellStyle::setBackground(const QBrush &brush)
@@ -718,26 +897,43 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     // Borders
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "left")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "left");
+        QString style = border.section(' ', 1, 1);
+        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "left")) {
+            style = styleStack.property(KoXmlNS::koffice, "specialborder", "left");
+        }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
-            setEdge(Left, oasisBorderStyle(border.section(' ', 1, 1)), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
+            setEdge(Left, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
         }
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "top")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "top");
+        QString style = border.section(' ', 1, 1);
+        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "top")) {
+            style = styleStack.property(KoXmlNS::koffice, "specialborder", "top");
+        }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
-            setEdge(Top, oasisBorderStyle(border.section(' ', 1, 1)), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
+            setEdge(Top, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
         }
     }
+
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "right")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "right");
+        QString style = border.section(' ', 1, 1);
+        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "right")) {
+            style = styleStack.property(KoXmlNS::koffice, "specialborder", "right");
+        }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
-            setEdge(Right, oasisBorderStyle(border.section(' ', 1, 1)), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
+            setEdge(Right, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
         }
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "bottom")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "bottom");
+        QString style = border.section(' ', 1, 1);
+        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "bottom")) {
+            style = styleStack.property(KoXmlNS::koffice, "specialborder", "bottom");
+        }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
-            setEdge(Bottom, oasisBorderStyle(border.section(' ', 1, 1)), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
+            setEdge(Bottom, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
         }
     }
 

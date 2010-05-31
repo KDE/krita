@@ -61,15 +61,19 @@ public:
         TopBorderOuterPen, ///< the top border pen
         TopBorderSpacing,          ///< the top border spacing between inner and outer border
         TopBorderInnerPen,       ///< the top border inner pen
+        TopBorderStyle,       ///< the top border borderstyle
         LeftBorderOuterPen,      ///< the left border outer pen
         LeftBorderSpacing,         ///< the left border spacing between inner and outer border
         LeftBorderInnerPen,      ///< the left border inner pen
+        LeftBorderStyle,       ///< the left border borderstyle
         BottomBorderOuterPen,    ///< the bottom border outer pen
         BottomBorderSpacing,       ///< the bottom border spacing between inner and outer border
         BottomBorderInnerPen,    ///< the bottom border inner pen
+        BottomBorderStyle,       ///< the bottom border borderstyle
         RightBorderOuterPen,     ///< the right border outer pen
         RightBorderSpacing,        ///< the right border spacing between inner and outer border
         RightBorderInnerPen,     ///< the right border inner pen
+        RightBorderStyle,       ///< the right border borderstyle
         CellBackgroundBrush,     ///< the cell background brush, as QTextFormat::BackgroundBrush is used by paragraphs
         MasterPageName,         ///< Optional name of the master-page
         InlineRdf               ///< Optional KoTextInlineRdf object
@@ -87,8 +91,15 @@ public:
         BorderNone = 0, ///< No line border
         BorderSolid,    ///< Solid line border
         BorderDotted,    ///< Dotted single border
+        BorderDashDot,    ///< Dot Dashsingle border
+        BorderDashDotDot,    ///< Dot Dot Dash single border
         BorderDashed,    ///< Dashed single border
-        BorderDouble    ///< Double lined border
+        BorderDashedLong,    ///< Dashed single border with long spaces
+        BorderDouble,    ///< Double lined border
+        BorderTriple,    ///< Triple lined border
+        BorderSlash,    ///< slash border
+        BorderWave,    ///< wave border
+        BorderDoubleWave    ///< double wave border
     };
 
 
@@ -104,6 +115,15 @@ public:
 
     /// creates a clone of this style with the specified parent
     KoTableCellStyle *clone(QObject *parent = 0);
+
+    /// returns if the borderstyle needs to be specially drawn
+    bool isDrawn(BorderStyle style) const;
+
+    /// draws a horizontal wave line
+    void drawHorizontalWave(BorderStyle style, QPainter &painter, qreal x, qreal w, qreal t) const;
+
+    /// draws a vertical wave line
+    void drawVerticalWave(BorderStyle style, QPainter &painter, qreal y, qreal h, qreal t) const;
 
     /**
      * Get the bounding rectange \boundingRect adjusted according to the paddings and margins
@@ -127,7 +147,7 @@ public:
     QRectF boundingRect(const QRectF &contentRect) const;
 
     /**
-     * Set the properties of an edge based on a paragraph format.
+     * Set the properties of an edge.
      *
      * @param side defines which edge this is for.
      * @param style the border style for this side.

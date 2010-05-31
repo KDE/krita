@@ -912,7 +912,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 howmany = ts.attributeNS(KoXmlNS::text, "c", QString()).toInt();
             }
             cursor.insertText(QString().fill(32, howmany));
-        } else if ( (isOfficeNS && localName  == "annotation") || (isTextNS && localName == "note")) { // text:note or office:annotation
+        } else if ( (isTextNS && localName == "note")) { // text:note
             loadNote(ts, cursor);
         } else if (isTextNS && localName == "tab") { // text:tab
             cursor.insertText("\t");

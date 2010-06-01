@@ -328,6 +328,12 @@ target_link_libraries(KisAsyncMergerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTT
 
 ########### next target ###############
 
+set(kis_updater_context_test_SRCS kis_updater_context_test.cpp )
+kde4_add_unit_test(KisUpdaterContextTest TESTNAME krita-image-KisUpdaterContextTest ${kis_updater_context_test_SRCS})
+target_link_libraries(KisUpdaterContextTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_macro_test_SRCS kis_macro_test.cpp )
 kde4_add_unit_test(KisMacroTest TESTNAME krita-image-KisMacroTest ${kis_macro_test_SRCS})
 target_link_libraries(KisMacroTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

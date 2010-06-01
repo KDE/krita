@@ -23,7 +23,10 @@
 #include "kis_types.h"
 #include "kis_base_rects_walker.h"
 
-class KRITAIMAGE_EXPORT KisMergeWalker : public KisBaseRectsWalker
+class KisMergeWalker;
+typedef KisSharedPtr<KisMergeWalker> KisMergeWalkerSP;
+
+class KRITAIMAGE_EXPORT KisMergeWalker : public KisBaseRectsWalker, public KisShared
 {
 
 public:

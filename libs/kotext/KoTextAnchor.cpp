@@ -231,7 +231,7 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
     }
 }
 
-void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument *, const QRectF &rect, QTextInlineObject , int , const QTextCharFormat &)
+void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument *document, const QRectF &rect, QTextInlineObject , int , const QTextCharFormat &)
 {
     Q_UNUSED(painter);
     Q_UNUSED(rect);
@@ -247,8 +247,16 @@ void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument 
     QPen changePen;
     changePen.setWidth(2);
 
-    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker(); 
+    // we never paint ourselves; the shape can do that.
+#ifdef DEBUG_PAINTING
+    painter.setOpacity(0.5);
+    QRectF charSpace = rect;
+    if (charSpace.width() < 10)
+        charSpace.adjust(-5, 0, 5, 0);
+    painter.fillRect(charSpace, QColor(Qt::green));
+#endif
 
+    KoChangeTracker *changeTracker = KoTextDocument(document).changeTracker();
     if (!changeTracker)
         return;
 
@@ -266,15 +274,6 @@ void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument 
         painter.drawRect(changeRect);
 
     // End of Change Visualization Section. Can be removed once the new approach is finalized
-
-    // we never paint ourselves; the shape can do that.
-#ifdef DEBUG_PAINTING
-    painter.setOpacity(0.5);
-    QRectF charSpace = rect;
-    if (charSpace.width() < 10)
-        charSpace.adjust(-5, 0, 5, 0);
-    painter.fillRect(charSpace, QColor(Qt::green));
-#endif
 }
 
 int KoTextAnchor::positionInDocument() const

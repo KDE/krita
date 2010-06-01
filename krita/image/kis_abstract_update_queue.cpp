@@ -54,5 +54,19 @@ void KisAbstractUpdateQueue::blockProcessing(KisUpdaterContext &updaterContext)
     updaterContext.waitForDone();
 }
 
+void KisAbstractUpdateQueue::executeJobSync(KisMergeWalkerSP walker,
+                                            KisUpdaterContext &updaterContext)
+{
+    updaterContext.lock();
 
+    blockProcessing(updaterContext);
+
+    Q_ASSERT(updaterContext.isJobAllowed(walker));
+    updaterContext.addJob(walker);
+    updaterContext.waitForDone();
+
+    startProcessing(updaterContext);
+
+    updaterContext.unlock();
+}
 

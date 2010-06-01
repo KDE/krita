@@ -61,6 +61,15 @@ public:
      */
     void processQueue(KisUpdaterContext &updaterContext);
 
+
+    /**
+     * Execute a job synchronously. It will first wait until all
+     * running jobs are finished, then will execute the given
+     * job and return.
+     */
+    void executeJobSync(KisMergeWalkerSP walker,
+                        KisUpdaterContext &updaterContext);
+
     /**
      * Append a new job into the queue.
      * Must be overriden by the descendants.

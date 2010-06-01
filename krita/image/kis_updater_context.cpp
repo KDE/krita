@@ -22,14 +22,23 @@
 #include <QThreadPool>
 
 
-KisUpdaterContext::KisUpdaterContext()
+KisUpdaterContext::KisUpdaterContext(qint32 threadCount)
 {
-    qint32 idealThreadCount = QThread::idealThreadCount();
-    idealThreadCount = idealThreadCount > 0 ? idealThreadCount : 1;
+    if(threadCount <= 0) {
+        threadCount = QThread::idealThreadCount();
+        threadCount = threadCount > 0 ? threadCount : 1;
+    }
 
-    m_jobs.resize(idealThreadCount);
+    m_jobs.resize(threadCount);
     for(qint32 i = 0; i < m_jobs.size(); i++) {
         m_jobs[i] = new KisUpdateJobItem();
+        connect(m_jobs[i], SIGNAL(sigContinueUpdate(const QRect&)),
+                SIGNAL(sigContinueUpdate(const QRect&)),
+                Qt::DirectConnection);
+
+        connect(m_jobs[i], SIGNAL(sigDoSomeUsefulWork()),
+                SIGNAL(sigDoSomeUsefulWork()), Qt::DirectConnection);
+
         connect(m_jobs[i], SIGNAL(sigJobFinished()),
                 SLOT(slotJobFinished()), Qt::DirectConnection);
     }
@@ -116,7 +125,7 @@ qint32 KisUpdaterContext::findSpareThread()
 void KisUpdaterContext::slotJobFinished()
 {
     // Be careful. This slot can be called asynchronously without locks.
-    emit wantSomeWork();
+    emit sigSpareThreadAppeared();
 }
 
 void KisUpdaterContext::lock()
@@ -130,14 +139,8 @@ void KisUpdaterContext::unlock()
 }
 
 KisTestableUpdaterContext::KisTestableUpdaterContext(qint32 threadCount)
+    : KisUpdaterContext(threadCount)
 {
-    m_jobs.clear();
-    m_jobs.resize(threadCount);
-    for(qint32 i = 0; i < m_jobs.size(); i++) {
-        m_jobs[i] = new KisUpdateJobItem();
-        connect(m_jobs[i], SIGNAL(sigJobFinished()),
-                SLOT(slotJobFinished()), Qt::DirectConnection);
-    }
 }
 
 const QVector<KisUpdateJobItem*> KisTestableUpdaterContext::getJobs()

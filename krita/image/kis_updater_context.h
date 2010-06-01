@@ -37,7 +37,11 @@ public:
     void run() {
         m_merger.startMerge(*m_walker);
 
+        QRect changeRect = m_walker->changeRect();
         setWalker(0);
+
+        emit sigContinueUpdate(changeRect);
+        emit sigDoSomeUsefulWork();
         emit sigJobFinished();
     }
 
@@ -54,6 +58,8 @@ public:
     }
 
 signals:
+    void sigContinueUpdate(const QRect& rc);
+    void sigDoSomeUsefulWork();
     void sigJobFinished();
 
 private:
@@ -67,7 +73,7 @@ class KRITAIMAGE_EXPORT KisUpdaterContext : public QObject
     Q_OBJECT
 
 public:
-    KisUpdaterContext();
+    KisUpdaterContext(qint32 threadCount = -1);
     ~KisUpdaterContext();
 
 
@@ -118,7 +124,9 @@ public:
     void unlock();
 
 signals:
-    void wantSomeWork();
+    void sigContinueUpdate(const QRect& rc);
+    void sigDoSomeUsefulWork();
+    void sigSpareThreadAppeared();
 
 protected slots:
     void slotJobFinished();

@@ -70,6 +70,13 @@ public:
     KisUpdaterContext();
     ~KisUpdaterContext();
 
+
+    /**
+     * Check whether there is a spare thread for running
+     * one more job
+     */
+    bool hasSpareThread();
+
     /**
      * Checks whether the walker intersects with any
      * of currently executing walkers. If it does,
@@ -83,14 +90,19 @@ public:
     /**
      * Registers the job and starts executing it.
      * The caller must ensure that the context is locked
-     * with lock(), job is allowed with isWalkerAllowed()
+     * with lock(), job is allowed with isWalkerAllowed() and
+     * there is a spare thread for running it with hasSpareThread()
      *
      * \see lock()
      * \see isWalkerAllowed()
-     * \return true if the walker was successfully added and false
-     * if there is no spare thread present
+     * \see hasSpareThread()
      */
-    bool addJob(KisMergeWalkerSP walker);
+    virtual void addJob(KisMergeWalkerSP walker);
+
+    /**
+     * Block execution of the caller until all the jobs are finished
+     */
+    void waitForDone();
 
     /**
      * Locks the context to guarantee an exclusive access
@@ -126,10 +138,18 @@ class KRITAIMAGE_EXPORT KisTestableUpdaterContext : public KisUpdaterContext
 {
 public:
     /**
+     * Creates an explicit number of threads
+     */
+    KisTestableUpdaterContext(qint32 threadCount);
+
+    /**
      * The only difference - it doesn't start execution
      * of the job
      */
-    bool addJob(KisMergeWalkerSP walker);
+    void addJob(KisMergeWalkerSP walker);
+
+    const QVector<KisUpdateJobItem*> getJobs();
+    void clear();
 };
 
 

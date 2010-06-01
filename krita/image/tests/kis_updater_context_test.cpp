@@ -26,7 +26,7 @@
 
 void KisUpdaterContextTest::testJobInterference()
 {
-    KisTestableUpdaterContext context;
+    KisTestableUpdaterContext context(3);
 
     QRect imageRect(0,0,100,100);
 

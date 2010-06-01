@@ -126,6 +126,8 @@ set(kritaimage_LIB_SRCS
    kis_iterator_ng.cpp
    kis_merge_walker.cc
    kis_updater_context.cpp
+   kis_abstract_update_queue.cpp
+   kis_simple_update_queue.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
    kis_histogram.cc

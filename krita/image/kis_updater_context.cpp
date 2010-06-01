@@ -21,6 +21,7 @@
 #include <QThread>
 #include <QThreadPool>
 
+
 KisUpdaterContext::KisUpdaterContext()
 {
     qint32 idealThreadCount = QThread::idealThreadCount();
@@ -41,12 +42,27 @@ KisUpdaterContext::~KisUpdaterContext()
         delete m_jobs[i];
 }
 
+bool KisUpdaterContext::hasSpareThread()
+{
+    bool found = false;
+
+    foreach(const KisUpdateJobItem *item, m_jobs) {
+        if(!item->isRunning()) {
+            found = true;
+            break;
+        }
+    }
+    return found;
+}
+
 bool KisUpdaterContext::isJobAllowed(KisMergeWalkerSP walker)
 {
     bool intersects = false;
 
     foreach(const KisUpdateJobItem *item, m_jobs) {
-        if(walkersIntersect(walker, item->walker())) {
+        KisMergeWalkerSP currentWalker = item->walker();
+
+        if(currentWalker && walkersIntersect(walker, currentWalker)) {
             intersects = true;
             break;
         }
@@ -55,29 +71,30 @@ bool KisUpdaterContext::isJobAllowed(KisMergeWalkerSP walker)
     return !intersects;
 }
 
-bool KisUpdaterContext::addJob(KisMergeWalkerSP walker)
+void KisUpdaterContext::addJob(KisMergeWalkerSP walker)
 {
     qint32 jobIndex = findSpareThread();
-    if(jobIndex < 0) return false;
+    Q_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setWalker(walker);
     m_threadPool.start(m_jobs[jobIndex]);
-
-    return true;
 }
 
 /**
  * This variant is for use in a testing suite only
  */
-bool KisTestableUpdaterContext::addJob(KisMergeWalkerSP walker)
+void KisTestableUpdaterContext::addJob(KisMergeWalkerSP walker)
 {
     qint32 jobIndex = findSpareThread();
-    if(jobIndex < 0) return false;
+    Q_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setWalker(walker);
     // HINT: Not calling start() here
+}
 
-    return true;
+void KisUpdaterContext::waitForDone()
+{
+    m_threadPool.waitForDone();
 }
 
 bool KisUpdaterContext::walkersIntersect(KisMergeWalkerSP walker1,
@@ -111,3 +128,26 @@ void KisUpdaterContext::unlock()
 {
     m_lock.unlock();
 }
+
+KisTestableUpdaterContext::KisTestableUpdaterContext(qint32 threadCount)
+{
+    m_jobs.clear();
+    m_jobs.resize(threadCount);
+    for(qint32 i = 0; i < m_jobs.size(); i++) {
+        m_jobs[i] = new KisUpdateJobItem();
+        connect(m_jobs[i], SIGNAL(sigJobFinished()),
+                SLOT(slotJobFinished()), Qt::DirectConnection);
+    }
+}
+
+const QVector<KisUpdateJobItem*> KisTestableUpdaterContext::getJobs()
+{
+    return m_jobs;
+}
+
+void KisTestableUpdaterContext::clear()
+{
+    foreach(KisUpdateJobItem *item, m_jobs)
+        item->setWalker(0);
+}
+

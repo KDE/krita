@@ -65,8 +65,8 @@ void KisAbstractUpdateQueue::executeJobSync(KisBaseRectsWalkerSP walker,
     updaterContext.addJob(walker);
     updaterContext.waitForDone();
 
-    startProcessing(updaterContext);
-
     updaterContext.unlock();
+
+    startProcessing(updaterContext);
 }
 

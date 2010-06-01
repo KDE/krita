@@ -22,6 +22,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
+#include "kis_merge_walker.h"
 #include "kis_simple_update_queue.h"
 
 void KisSimpleUpdateQueueTest::testJobProcessing()

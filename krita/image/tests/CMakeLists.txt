@@ -340,6 +340,12 @@ target_link_libraries(KisSimpleUpdateQueueTest  ${KDE4_KDEUI_LIBS} kritaimage ${
 
 ########### next target ###############
 
+set(kis_update_scheduler_test_SRCS kis_update_scheduler_test.cpp )
+kde4_add_unit_test(KisUpdateSchedulerTest TESTNAME krita-image-KisUpdateSchedulerTest ${kis_update_scheduler_test_SRCS})
+target_link_libraries(KisUpdateSchedulerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_macro_test_SRCS kis_macro_test.cpp )
 kde4_add_unit_test(KisMacroTest TESTNAME krita-image-KisMacroTest ${kis_macro_test_SRCS})
 target_link_libraries(KisMacroTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

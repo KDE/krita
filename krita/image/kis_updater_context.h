@@ -22,7 +22,7 @@
 #include <QMutex>
 #include <QRunnable>
 
-#include "kis_merge_walker.h"
+#include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
 
 class KisUpdateJobItem :  public QObject, public QRunnable
@@ -35,6 +35,7 @@ public:
     }
 
     void run() {
+        qDebug() << "Executing job" << m_walker->changeRect() << "on thread" << QThread::currentThreadId();
         m_merger.startMerge(*m_walker);
 
         QRect changeRect = m_walker->changeRect();
@@ -74,7 +75,7 @@ class KRITAIMAGE_EXPORT KisUpdaterContext : public QObject
 
 public:
     KisUpdaterContext(qint32 threadCount = -1);
-    ~KisUpdaterContext();
+    virtual ~KisUpdaterContext();
 
 
     /**

@@ -24,7 +24,10 @@
 #include "kis_layer.h"
 #include "kis_mask.h"
 
-class KRITAIMAGE_EXPORT KisBaseRectsWalker
+class KisBaseRectsWalker;
+typedef KisSharedPtr<KisBaseRectsWalker> KisBaseRectsWalkerSP;
+
+class KRITAIMAGE_EXPORT KisBaseRectsWalker : public KisShared
 {
 public:
     typedef qint32 NodePosition;

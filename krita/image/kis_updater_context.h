@@ -45,11 +45,11 @@ public:
         emit sigJobFinished();
     }
 
-    inline void setWalker(KisMergeWalkerSP walker) {
+    inline void setWalker(KisBaseRectsWalkerSP walker) {
         m_walker = walker;
     }
 
-    inline KisMergeWalkerSP walker() const {
+    inline KisBaseRectsWalkerSP walker() const {
         return m_walker;
     }
 
@@ -63,7 +63,7 @@ signals:
     void sigJobFinished();
 
 private:
-    KisMergeWalkerSP m_walker;
+    KisBaseRectsWalkerSP m_walker;
     KisAsyncMerger m_merger;
 };
 
@@ -91,7 +91,7 @@ public:
      *
      * \see lock()
      */
-    bool isJobAllowed(KisMergeWalkerSP walker);
+    bool isJobAllowed(KisBaseRectsWalkerSP walker);
 
     /**
      * Registers the job and starts executing it.
@@ -103,7 +103,7 @@ public:
      * \see isWalkerAllowed()
      * \see hasSpareThread()
      */
-    virtual void addJob(KisMergeWalkerSP walker);
+    virtual void addJob(KisBaseRectsWalkerSP walker);
 
     /**
      * Block execution of the caller until all the jobs are finished
@@ -132,8 +132,8 @@ protected slots:
     void slotJobFinished();
 
 protected:
-    static bool walkersIntersect(KisMergeWalkerSP walker1,
-                          KisMergeWalkerSP walker2);
+    static bool walkersIntersect(KisBaseRectsWalkerSP walker1,
+                          KisBaseRectsWalkerSP walker2);
     qint32 findSpareThread();
 
 protected:
@@ -154,7 +154,7 @@ public:
      * The only difference - it doesn't start execution
      * of the job
      */
-    void addJob(KisMergeWalkerSP walker);
+    void addJob(KisBaseRectsWalkerSP walker);
 
     const QVector<KisUpdateJobItem*> getJobs();
     void clear();

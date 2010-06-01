@@ -23,9 +23,9 @@
 
 #include <QMutex>
 
-typedef QList<KisMergeWalkerSP> KisWalkersList;
-typedef QListIterator<KisMergeWalkerSP> KisWalkersListIterator;
-typedef QMutableListIterator<KisMergeWalkerSP> KisMutableWalkersListIterator;
+typedef QList<KisBaseRectsWalkerSP> KisWalkersList;
+typedef QListIterator<KisBaseRectsWalkerSP> KisWalkersListIterator;
+typedef QMutableListIterator<KisBaseRectsWalkerSP> KisMutableWalkersListIterator;
 
 class KRITAIMAGE_EXPORT KisSimpleUpdateQueue : public KisAbstractUpdateQueue
 {
@@ -33,7 +33,7 @@ public:
     KisSimpleUpdateQueue();
     ~KisSimpleUpdateQueue();
 
-    void addJob(KisMergeWalkerSP walker);
+    void addJob(KisBaseRectsWalkerSP walker);
     void optimize();
 
 protected:

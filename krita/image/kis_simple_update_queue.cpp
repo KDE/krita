@@ -32,7 +32,7 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
 {
     QMutexLocker locker(&m_lock);
 
-    KisMergeWalkerSP item;
+    KisBaseRectsWalkerSP item;
     KisMutableWalkersListIterator iter(m_list);
     bool jobAdded = false;
 
@@ -49,7 +49,7 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
     return jobAdded;
 }
 
-void KisSimpleUpdateQueue::addJob(KisMergeWalkerSP walker)
+void KisSimpleUpdateQueue::addJob(KisBaseRectsWalkerSP walker)
 {
     QMutexLocker locker(&m_lock);
     m_list.append(walker);

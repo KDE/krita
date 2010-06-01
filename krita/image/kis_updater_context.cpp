@@ -64,12 +64,12 @@ bool KisUpdaterContext::hasSpareThread()
     return found;
 }
 
-bool KisUpdaterContext::isJobAllowed(KisMergeWalkerSP walker)
+bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
 {
     bool intersects = false;
 
     foreach(const KisUpdateJobItem *item, m_jobs) {
-        KisMergeWalkerSP currentWalker = item->walker();
+        KisBaseRectsWalkerSP currentWalker = item->walker();
 
         if(currentWalker && walkersIntersect(walker, currentWalker)) {
             intersects = true;
@@ -80,7 +80,7 @@ bool KisUpdaterContext::isJobAllowed(KisMergeWalkerSP walker)
     return !intersects;
 }
 
-void KisUpdaterContext::addJob(KisMergeWalkerSP walker)
+void KisUpdaterContext::addJob(KisBaseRectsWalkerSP walker)
 {
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
@@ -92,7 +92,7 @@ void KisUpdaterContext::addJob(KisMergeWalkerSP walker)
 /**
  * This variant is for use in a testing suite only
  */
-void KisTestableUpdaterContext::addJob(KisMergeWalkerSP walker)
+void KisTestableUpdaterContext::addJob(KisBaseRectsWalkerSP walker)
 {
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
@@ -106,8 +106,8 @@ void KisUpdaterContext::waitForDone()
     m_threadPool.waitForDone();
 }
 
-bool KisUpdaterContext::walkersIntersect(KisMergeWalkerSP walker1,
-                                        KisMergeWalkerSP walker2)
+bool KisUpdaterContext::walkersIntersect(KisBaseRectsWalkerSP walker1,
+                                        KisBaseRectsWalkerSP walker2)
 {
     return (walker1->accessRect().intersects(walker2->changeRect())) ||
         (walker2->accessRect().intersects(walker1->changeRect()));

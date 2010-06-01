@@ -26,7 +26,7 @@
 class KisMergeWalker;
 typedef KisSharedPtr<KisMergeWalker> KisMergeWalkerSP;
 
-class KRITAIMAGE_EXPORT KisMergeWalker : public KisBaseRectsWalker, public KisShared
+class KRITAIMAGE_EXPORT KisMergeWalker : public KisBaseRectsWalker
 {
 
 public:

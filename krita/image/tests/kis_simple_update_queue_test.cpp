@@ -40,19 +40,19 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
     image->unlock();
 
     QRect dirtyRect1(0,0,50,100);
-    KisMergeWalkerSP walker1 = new KisMergeWalker(imageRect);
+    KisBaseRectsWalkerSP walker1 = new KisMergeWalker(imageRect);
     walker1->collectRects(paintLayer, dirtyRect1);
 
     QRect dirtyRect2(0,0,100,100);
-    KisMergeWalkerSP walker2 = new KisMergeWalker(imageRect);
+    KisBaseRectsWalkerSP walker2 = new KisMergeWalker(imageRect);
     walker2->collectRects(paintLayer, dirtyRect2);
 
     QRect dirtyRect3(50,0,50,100);
-    KisMergeWalkerSP walker3 = new KisMergeWalker(imageRect);
+    KisBaseRectsWalkerSP walker3 = new KisMergeWalker(imageRect);
     walker3->collectRects(paintLayer, dirtyRect3);
 
     QRect dirtyRect4(150,150,50,50);
-    KisMergeWalkerSP walker4 = new KisMergeWalker(imageRect);
+    KisBaseRectsWalkerSP walker4 = new KisMergeWalker(imageRect);
     walker4->collectRects(paintLayer, dirtyRect4);
 
     QVector<KisUpdateJobItem*> jobs;
@@ -99,8 +99,8 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
     queue.addJob(walker4);
 
     jobs = context.getJobs();
-    QCOMPARE(jobs[0]->walker(), KisMergeWalkerSP(0));
-    QCOMPARE(jobs[1]->walker(), KisMergeWalkerSP(0));
+    QCOMPARE(jobs[0]->walker(), KisBaseRectsWalkerSP(0));
+    QCOMPARE(jobs[1]->walker(), KisBaseRectsWalkerSP(0));
 
     queue.startProcessing(context);
 

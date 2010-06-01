@@ -39,11 +39,11 @@ void KisUpdaterContextTest::testJobInterference()
     image->addNode(paintLayer);
 
     QRect dirtyRect1(0,0,50,100);
-    KisMergeWalkerSP walker1 = new KisMergeWalker(imageRect);
+    KisBaseRectsWalkerSP walker1 = new KisMergeWalker(imageRect);
     walker1->collectRects(paintLayer, dirtyRect1);
 
     QRect dirtyRect2(30,0,100,100);
-    KisMergeWalkerSP walker2 = new KisMergeWalker(imageRect);
+    KisBaseRectsWalkerSP walker2 = new KisMergeWalker(imageRect);
     walker2->collectRects(paintLayer, dirtyRect2);
 
     context.lock();

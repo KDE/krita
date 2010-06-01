@@ -54,7 +54,7 @@ void KisAbstractUpdateQueue::blockProcessing(KisUpdaterContext &updaterContext)
     updaterContext.waitForDone();
 }
 
-void KisAbstractUpdateQueue::executeJobSync(KisMergeWalkerSP walker,
+void KisAbstractUpdateQueue::executeJobSync(KisBaseRectsWalkerSP walker,
                                             KisUpdaterContext &updaterContext)
 {
     updaterContext.lock();

@@ -67,14 +67,14 @@ public:
      * running jobs are finished, then will execute the given
      * job and return.
      */
-    void executeJobSync(KisMergeWalkerSP walker,
+    void executeJobSync(KisBaseRectsWalkerSP walker,
                         KisUpdaterContext &updaterContext);
 
     /**
      * Append a new job into the queue.
      * Must be overriden by the descendants.
      */
-    virtual void addJob(KisMergeWalkerSP walker) = 0;
+    virtual void addJob(KisBaseRectsWalkerSP walker) = 0;
 
     /**
      * Optimize the queue's jobs.

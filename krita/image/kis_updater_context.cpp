@@ -27,6 +27,12 @@ KisUpdaterContext::KisUpdaterContext(qint32 threadCount)
     if(threadCount <= 0) {
         threadCount = QThread::idealThreadCount();
         threadCount = threadCount > 0 ? threadCount : 1;
+
+        /**
+         * FIXME: Due to non-reentrancy of some krita code
+         * we limit the number of threads by 1
+         */
+        threadCount = 1;
     }
 
     m_jobs.resize(threadCount);

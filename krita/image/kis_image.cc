@@ -42,7 +42,6 @@
 #include "recorder/kis_action_recorder.h"
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
-#include "kis_projection.h"
 #include "kis_background.h"
 #include "kis_change_profile_visitor.h"
 #include "kis_colorspace_convert_visitor.h"
@@ -65,6 +64,25 @@
 #include "kis_types.h"
 #include "kis_crop_visitor.h"
 #include "kis_meta_data_merge_strategy.h"
+
+#include "kis_projection.h"
+#include "kis_update_scheduler.h"
+
+
+//#define USE_UPDATE_SCHEDULER
+
+
+KisAbstractUpdateScheduler* createUpdateScheduler(KisImageWSP image)
+{
+#ifdef USE_UPDATE_SCHEDULER
+    dbgImage<<"Creating KisUpdateScheduler";
+    return new KisUpdateScheduler(image);
+#else
+    dbgImage<<"Created KisProjection";
+    return new KisProjection(image);
+#endif
+}
+
 
 class KisImage::KisImagePrivate
 {
@@ -96,7 +114,7 @@ public:
     KisSelectionSP globalSelection;
     KisSelectionSP deselectedGlobalSelection;
 
-    KisProjection* projection;
+    KisAbstractUpdateScheduler* projection;
 
     bool startProjection;
 
@@ -146,8 +164,7 @@ KisImage::KisImage(const KisImage& rhs)
 
         m_d->projection = 0;
         if (m_d->startProjection) {
-            m_d->projection = new KisProjection(this);
-            m_d->projection->start();
+            m_d->projection = createUpdateScheduler(this);
         }
     }
 }
@@ -157,15 +174,12 @@ KisImage::~KisImage()
     dbgImage << "deleting kisimage" << objectName();
 
     if (m_d->projection) {
-        m_d->projection->stop();
-        m_d->projection->wait();
         delete m_d->projection;
     }
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
     delete m_d;
 }
-
 
 void KisImage::aboutToAddANode(KisNode *parent, int index)
 {
@@ -283,8 +297,7 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const 
 
     m_d->projection = 0;
     if (m_d->startProjection) {
-        m_d->projection = new KisProjection(this);
-        m_d->projection->start();
+        m_d->projection = createUpdateScheduler(this);
     }
 }
 

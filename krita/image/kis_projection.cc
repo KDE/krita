@@ -47,18 +47,18 @@ public:
     QRect roi; // Region of interest
     bool useRegionOfInterest; // If false, update all dirty bits, if
     // true, update only region of interest.
+    QThread thread;
 };
 
 KisProjection::KisProjection(KisImageWSP image)
-        : QThread()
-        , m_d(new Private)
+    : m_d(new Private)
 {
     m_d->image = image;
     m_d->updater = 0;
     updateSettings();
 
     m_d->updater = new KisImageUpdater();
-    m_d->updater->moveToThread(this);
+    m_d->updater->moveToThread(&m_d->thread);
 
     // Full refresh should be synchronous
     connect(this, SIGNAL(sigFullRefresh(KisNodeSP, QRect)),
@@ -70,23 +70,17 @@ KisProjection::KisProjection(KisImageWSP image)
     connect(m_d->updater, SIGNAL(updateDone(QRect)),
             m_d->image, SLOT(slotProjectionUpdated(QRect)),
             Qt::DirectConnection);
+    m_d->thread.start();
 }
 
 
 KisProjection::~KisProjection()
 {
+    m_d->thread.quit();
+    m_d->thread.wait();
+
     m_d->updater->deleteLater();
     delete m_d;
-}
-
-void KisProjection::stop()
-{
-    quit();
-}
-
-void KisProjection::run()
-{
-    exec(); // start the event loop
 }
 
 void KisProjection::lock()

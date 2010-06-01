@@ -67,6 +67,10 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root)
     m_workQueue->executeJobSync(walker, m_updaterContext);
 }
 
+void KisUpdateScheduler::updateSettings()
+{
+}
+
 void KisUpdateScheduler::lock()
 {
     m_workQueue->blockProcessing(m_updaterContext);

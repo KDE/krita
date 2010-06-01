@@ -35,7 +35,7 @@ public:
     }
 
     void run() {
-        qDebug() << "Executing job" << m_walker->changeRect() << "on thread" << QThread::currentThreadId();
+//        qDebug() << "Executing job" << m_walker->changeRect() << "on thread" << QThread::currentThreadId();
         m_merger.startMerge(*m_walker);
 
         QRect changeRect = m_walker->changeRect();

@@ -37,9 +37,11 @@ class QRect;
  * thread delivers the signal to the updater, and when
  * the updater is done, it delivers another signal to KisImage.
  */
-class KRITAIMAGE_EXPORT KisProjection : public QThread
-{
 
+#include "kis_abstract_update_scheduler.h"
+
+class KRITAIMAGE_EXPORT KisProjection : public KisAbstractUpdateScheduler
+{
     Q_OBJECT
 
 public:
@@ -47,7 +49,9 @@ public:
     KisProjection(KisImageWSP image);
     virtual ~KisProjection();
 
-    virtual void run();
+    /**
+     * Public interface from KisAbstractUpdateScheduler
+     */
 
     void lock();
     void unlock();
@@ -58,10 +62,11 @@ public:
      */
     void updateProjection(KisNodeSP node, const QRect& rc);
     void fullRefresh(KisNodeSP root);
-
-    void setRegionOfInterest(const QRect & roi);
     void updateSettings();
-    void stop();
+
+protected:
+    // FIXME: still not used
+    void setRegionOfInterest(const QRect & roi);
 
 signals:
 
@@ -75,7 +80,6 @@ private:
 
     class Private;
     Private * const m_d;
-
 };
 
 /**

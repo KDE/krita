@@ -16,38 +16,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_UPDATE_SCHEDULER_H
-#define __KIS_UPDATE_SCHEDULER_H
+#ifndef __KIS_ABSTRACT_UPDATE_SCHEDULER_H
+#define __KIS_ABSTRACT_UPDATE_SCHEDULER_H
 
-#include "kis_abstract_update_scheduler.h"
-#include "kis_updater_context.h"
-#include "kis_abstract_update_queue.h"
+#include "kis_node.h"
 
-class KRITAIMAGE_EXPORT KisUpdateScheduler : public KisAbstractUpdateScheduler
+
+class KRITAIMAGE_EXPORT KisAbstractUpdateScheduler : public QObject
 {
     Q_OBJECT
 
 public:
-    KisUpdateScheduler(KisImageWSP image);
-    virtual ~KisUpdateScheduler();
+    virtual ~KisAbstractUpdateScheduler();
+    virtual void lock() = 0;
+    virtual void unlock() = 0;
 
-    void lock();
-    void unlock();
+    virtual void updateProjection(KisNodeSP node, const QRect& rc) = 0;
+    virtual void fullRefresh(KisNodeSP root) = 0;
 
-    void updateProjection(KisNodeSP node, const QRect& rc);
-    void fullRefresh(KisNodeSP root);
-
-    void updateSettings();
-
-protected slots:
-    void doSomeUsefulWork();
-    void spareThreadAppeared();
-
-protected:
-    KisImageWSP m_image;
-    KisAbstractUpdateQueue* m_workQueue;
-    KisUpdaterContext m_updaterContext;
+    virtual void updateSettings() = 0;
 };
 
-#endif /* __KIS_UPDATE_SCHEDULER_H */
+#endif /* __KIS_ABSTRACT_UPDATE_SCHEDULER_H */
 

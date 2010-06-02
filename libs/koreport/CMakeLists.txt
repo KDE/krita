@@ -100,11 +100,11 @@ kde4_add_ui_files(koreport_LIB_SRCS wrtembed/detailgroupsectiondialog.ui wrtembe
 
 kde4_add_library(koreport SHARED ${koreport_LIB_SRCS})
 
-target_link_libraries(koreport ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY}
-  ${KOPROPERTY_LIBS} ${KDE4_KROSSCORE_LIBS} komain ${QT_QT3SUPPORT_LIBRARY})
-if (SHOULD_BUILD_KSPREAD)
-    target_link_libraries(koreport kspreadcommon)
-endif (SHOULD_BUILD_KSPREAD)
+target_link_libraries(koreport
+  ${KOPROPERTY_LIBS} ${KDE4_KROSSCORE_LIBS} komain)
+
+target_link_libraries(koreport LINK_INTERFACE_LIBRARIES
+  ${KOPROPERTY_LIBS} ${KDE4_KROSSCORE_LIBS} komain)
 
 set_target_properties(koreport PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS koreport  ${INSTALL_TARGETS_DEFAULT_ARGS})

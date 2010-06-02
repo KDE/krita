@@ -53,6 +53,7 @@
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
+#include <ktemporaryfile.h>
 
 #include <KoMainWindow.h>
 #include <KoCanvasController.h>
@@ -66,6 +67,7 @@
 #include <KoDockRegistry.h>
 #include <KoResourceServerProvider.h>
 #include <KoCompositeOp.h>
+#include <KoTemplateCreateDia.h>
 
 #include <kactioncollection.h>
 
@@ -164,6 +166,7 @@ public:
     KAction * totalRefresh;
     KAction* toggleDockers;
     KAction* mirrorCanvas;
+    KAction* createTemplate;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisNodeManager * nodeManager;
@@ -188,11 +191,15 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
     connect(m_d->totalRefresh, SIGNAL(triggered()), this, SLOT(slotTotalRefresh()));
 
+    m_d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
+    actionCollection()->addAction("createTemplate", m_d->createTemplate);
+    connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
+
     if (shell()) {
         m_d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
         m_d->toggleDockers->setChecked(true);
         actionCollection()->addAction("toggledockers", m_d->toggleDockers);
-        
+
         m_d->toggleDockers->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
         connect(m_d->toggleDockers, SIGNAL(toggled(bool)), shell(), SLOT(toggleDockersVisibility(bool)));
     } else {
@@ -238,10 +245,10 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
-    
+
     m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
     connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvas, SLOT(mirrorCanvas(bool)));
-    
+
     if (shell())
     {
         KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));
@@ -765,5 +772,29 @@ void KisView2::resizeEvent ( QResizeEvent * event )
 //     }
 }
 
+
+void KisView2::slotCreateTemplate()
+{
+    int width = 60;
+    int height = 60;
+    QPixmap pix = m_d->doc->generatePreview(QSize(width, height));
+
+    KTemporaryFile tempFile;
+    tempFile.setSuffix(".kra");
+
+    //Check that creation of temp file was successful
+    if (!tempFile.open()) {
+        qWarning("Creation of temporary file to store template failed.");
+        return;
+    }
+
+    m_d->doc->saveNativeFormat(tempFile.fileName());
+
+    KoTemplateCreateDia::createTemplate("krita_template", KisFactory2::componentData(),
+                                        tempFile.fileName(), pix, this);
+
+    KisFactory2::componentData().dirs()->addResourceType("krita_template", "data", "krita/templates/");
+
+}
 
 #include "kis_view2.moc"

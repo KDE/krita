@@ -509,6 +509,8 @@ void TextTool::blinkCaret()
 
 void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    if (m_textEditor.isNull())
+        return;
     if (canvas()->canvasWidget()->hasFocus() && !m_caretTimer.isActive()) // make sure we blink
         m_caretTimer.start();
     QTextBlock block = m_textEditor.data()->block();
@@ -623,6 +625,8 @@ void TextTool::updateSelectedShape(const QPointF &point)
 
 void TextTool::mousePressEvent(KoPointerEvent *event)
 {
+    if (m_textEditor.isNull())
+        return;
     if (event->button() != Qt::RightButton)
         updateSelectedShape(event->point);
     KoSelection *selection = canvas()->shapeManager()->selection();
@@ -730,7 +734,7 @@ void TextTool::updateSelectionHandler()
 
     KoResourceManager *p = canvas()->resourceManager();
     m_allowResourceManagerUpdates = false;
-    if (m_textShapeData) {
+    if (m_textEditor && m_textShapeData) {
         p->setResource(KoText::CurrentTextPosition, m_textEditor.data()->position());
         p->setResource(KoText::CurrentTextAnchor, m_textEditor.data()->anchor());
         QVariant variant;
@@ -746,7 +750,8 @@ void TextTool::updateSelectionHandler()
 
 void TextTool::copy() const
 {
-    if (m_textShapeData == 0 || !m_textEditor.data()->hasSelection()) return;
+    if (m_textShapeData == 0 || m_textEditor.isNull() || !m_textEditor.data()->hasSelection())
+        return;
     int from = m_textEditor.data()->position();
     int to = m_textEditor.data()->anchor();
     KoTextOdfSaveHelper saveHelper(m_textShapeData, from, to);
@@ -1594,31 +1599,31 @@ void TextTool::strikeOut(bool strikeOut)
 
 void TextTool::nonbreakingSpace()
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     m_textEditor.data()->insertText(QString(QChar(Qt::Key_nobreakspace)));
 }
 
 void TextTool::nonbreakingHyphen()
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     m_textEditor.data()->insertText(QString(QChar(0x2013)));
 }
 
 void TextTool::softHyphen()
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     m_textEditor.data()->insertText(QString(QChar(Qt::Key_hyphen)));
 }
 
 void TextTool::lineBreak()
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     m_textEditor.data()->insertText(QString(QChar(0x2028)));
 }
 
 void TextTool::alignLeft()
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     Qt::Alignment align = Qt::AlignLeading;
     if (m_textEditor.data()->block().layout()->textOption().textDirection() != Qt::LeftToRight)
         align |= Qt::AlignTrailing;
@@ -1627,7 +1632,7 @@ void TextTool::alignLeft()
 
 void TextTool::alignRight()
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     Qt::Alignment align = Qt::AlignTrailing;
     if (m_textEditor.data()->block().layout()->textOption().textDirection() == Qt::RightToLeft)
         align = Qt::AlignLeading;
@@ -1636,19 +1641,19 @@ void TextTool::alignRight()
 
 void TextTool::alignCenter()
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     m_textEditor.data()->setHorizontalTextAlignment(Qt::AlignHCenter);
 }
 
 void TextTool::alignBlock()
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     m_textEditor.data()->setHorizontalTextAlignment(Qt::AlignJustify);
 }
 
 void TextTool::superScript(bool on)
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     if (on)
         m_actionFormatSub->setChecked(false);
     m_textEditor.data()->setVerticalTextAlignment(on ? Qt::AlignTop : Qt::AlignVCenter);
@@ -1656,7 +1661,7 @@ void TextTool::superScript(bool on)
 
 void TextTool::subScript(bool on)
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     if (on)
         m_actionFormatSuper->setChecked(false);
     m_textEditor.data()->setVerticalTextAlignment(on ? Qt::AlignBottom : Qt::AlignVCenter);
@@ -1664,39 +1669,39 @@ void TextTool::subScript(bool on)
 
 void TextTool::increaseIndent()
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     m_textEditor.data()->increaseIndent();
     m_actionFormatDecreaseIndent->setEnabled(m_textEditor.data()->blockFormat().leftMargin() > 0.);
 }
 
 void TextTool::decreaseIndent()
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     m_textEditor.data()->decreaseIndent();
     m_actionFormatDecreaseIndent->setEnabled(m_textEditor.data()->blockFormat().leftMargin() > 0.);
 }
 
 void TextTool::decreaseFontSize()
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     m_textEditor.data()->decreaseFontSize();
 }
 
 void TextTool::increaseFontSize()
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     m_textEditor.data()->increaseFontSize();
 }
 
 void TextTool::setFontFamily(const QString &font)
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     m_textEditor.data()->setFontFamily(font);
 }
 
 void TextTool::setFontSize (int size)
 {
-    if (!m_allowActions) return;
+    if (!m_allowActions || !m_textEditor.data()) return;
     m_textEditor.data()->setFontSize(size);
 }
 

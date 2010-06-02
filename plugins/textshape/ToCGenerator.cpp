@@ -93,11 +93,11 @@ void ToCGenerator::generate()
             cursor.insertBlock();
             KoParagraphStyle *currentStyle = styleManager->paragraphStyle("Contents "+QString::number(outlineLevel));
             if (currentStyle == 0) {
-                KoParagraphStyle *newStyle = new KoParagraphStyle();
-                newStyle->setName("Contents " + QString::number(outlineLevel));
-                newStyle->setParent(styleManager->paragraphStyle("Standard"));
+                currentStyle = new KoParagraphStyle();
+                currentStyle->setName("Contents " + QString::number(outlineLevel));
+                currentStyle->setParent(styleManager->paragraphStyle("Standard"));
 
-                newStyle->setLeftMargin(8 * (outlineLevel-1));
+                currentStyle->setLeftMargin(8 * (outlineLevel-1));
 
                 QList<KoText::Tab> tabList;
                 struct KoText::Tab aTab;
@@ -105,9 +105,9 @@ void ToCGenerator::generate()
                 aTab.leaderText = '.';
                 aTab.position = 490 - outlineLevel * 8;
                 tabList.append(aTab);
-                newStyle->setTabPositions(tabList);
+                currentStyle->setTabPositions(tabList);
 
-                styleManager->add(newStyle);
+                styleManager->add(currentStyle);
             }
             QTextBlock tocBlock = cursor.block();
             currentStyle->applyStyle(tocBlock);

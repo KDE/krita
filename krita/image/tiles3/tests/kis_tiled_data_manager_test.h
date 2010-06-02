@@ -31,6 +31,7 @@ private:
 private slots:
     void testMemento();
     void testPurgeHistory();
+    void stressTest();
 };
 
 #endif /* KIS_TILED_DATA_MANAGER_TEST_H */

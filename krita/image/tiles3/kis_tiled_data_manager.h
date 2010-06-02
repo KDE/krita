@@ -109,6 +109,7 @@ protected:
     friend class KisBaseIterator;
     friend class KisTiledRandomAccessor;
     friend class KisRandomAccessor2;
+    friend class KisStressJob;
 protected:
 
     void setDefaultPixel(const quint8 *defPixel);

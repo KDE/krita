@@ -100,7 +100,18 @@ public:
 
     void debugPrintInfo();
 
-    void removeMemento(KisMemento* memento);
+
+    /**
+     * Removes all the history that preceds the revision
+     * pointed by oldestMemento. That is after calling to
+     * purgeHistory(someMemento) you won't be able to do
+     * rollback(someMemento) anymore.
+     */
+    void purgeHistory(KisMementoSP oldestMemento);
+
+protected:
+    qint32 findRevisionByMemento(KisMementoSP memento) const;
+    void resetRevisionHistory(KisMementoItemList list);
 
 protected:
     /**

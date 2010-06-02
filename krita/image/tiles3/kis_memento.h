@@ -54,11 +54,6 @@ public:
     inline ~KisMemento() {
     }
 
-    inline void reportEndTransaction() {
-        if (m_mementoManager)
-            m_mementoManager->commit();
-    }
-
     inline void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) {
         x = m_extentMinX;
         y = m_extentMinY;
@@ -89,7 +84,6 @@ public:
     }
     inline void setInvalid() {
         m_valid = false;
-        m_mementoManager->removeMemento(this);
     }
 
 private:

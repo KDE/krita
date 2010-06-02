@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,20 +15,23 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_TILED_DATA_TESTER_H
-#define KIS_TILED_DATA_TESTER_H
-
+#ifndef KIS_TILED_DATA_MANAGER_TEST_H
+#define KIS_TILED_DATA_MANAGER_TEST_H
 
 #include <QtTest/QtTest>
 
 
-class KisTiledDataTester : public QObject
+class KisTiledDataManagerTest : public QObject
 {
     Q_OBJECT
 
+private:
+    bool memoryIsFilled(quint8 c, quint8 *mem, qint32 size);
+
 private slots:
-    void allTests();
+    void testMemento();
+    void testPurgeHistory();
 };
 
-#endif
+#endif /* KIS_TILED_DATA_MANAGER_TEST_H */
 

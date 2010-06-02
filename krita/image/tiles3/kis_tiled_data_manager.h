@@ -160,6 +160,17 @@ public:
         //return true;
     }
 
+    /**
+     * Removes all the history that preceds the revision
+     * pointed by oldestMemento. That is after calling to
+     * purgeHistory(someMemento) you won't be able to do
+     * rollback(someMemento) anymore.
+     */
+    void purgeHistory(KisMementoSP oldestMemento) {
+        QWriteLocker locker(&m_lock);
+        m_mementoManager->purgeHistory(oldestMemento);
+    }
+
 protected:
     /**
      * Reads and writes the tiles from/onto a KoStore

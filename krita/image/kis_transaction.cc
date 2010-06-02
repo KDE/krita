@@ -50,6 +50,7 @@ KisTransaction::~KisTransaction()
 {
     if (m_d->memento) {
         m_d->memento->setInvalid();
+        m_d->device->dataManager()->purgeHistory(m_d->memento);
     }
     delete m_d;
 }

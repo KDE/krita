@@ -338,24 +338,47 @@ void KisMementoManager::debugPrintInfo()
     m_headsHashTable.debugPrintInfo();
 }
 
-void KisMementoManager::removeMemento(KisMemento* memento)
+void KisMementoManager::resetRevisionHistory(KisMementoItemList list)
 {
-    if (memento == m_currentMemento) { // This happen when a memento is not put on the stack
-        commit();
+    KisMementoItemSP parentMI;
+    KisMementoItemSP mi;
+
+    foreach(mi, list) {
+        parentMI = mi->parent();
+        if(!parentMI) continue;
+
+        while (parentMI->parent()) {
+            parentMI = parentMI->parent();
+        }
+        mi->setParent(parentMI);
     }
-    int lastIndex = -1;
-    for (int i = 0; i < m_revisions.size(); ++i) {
+}
+
+qint32 KisMementoManager::findRevisionByMemento(KisMementoSP memento) const
+{
+    qint32 index = -1;
+    for(qint32 i = 0; i < m_revisions.size(); i++) {
         if (m_revisions[i].memento == memento) {
-          lastIndex = i + 1;
-          break;
+            index = i;
+            break;
         }
     }
-    Q_ASSERT(lastIndex <= 2);
-    for (int i = 0; i < lastIndex; ++i) {
-        foreach(KisMementoItemSP item, m_revisions[0].itemList)
-        {
-            item->setParent(0);
-        }
-        m_revisions.takeAt(0);
+    return index;
+}
+
+void KisMementoManager::purgeHistory(KisMementoSP oldestMemento)
+{
+    if (m_currentMemento == oldestMemento)
+        commit();
+
+    qint32 revisionIndex = findRevisionByMemento(oldestMemento);
+    if (revisionIndex < 0) return;
+
+    for(; revisionIndex > 0; revisionIndex--) {
+        resetRevisionHistory(m_revisions.first().itemList);
+        m_revisions.removeFirst();
     }
+
+    Q_ASSERT(m_revisions.first().memento == oldestMemento);
+    resetRevisionHistory(m_revisions.first().itemList);
 }

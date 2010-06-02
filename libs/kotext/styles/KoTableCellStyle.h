@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
@@ -80,10 +80,10 @@ public:
     };
 
     enum Side {
-        Top = 0, ///< References the border at the top of the paragraph
-        Left,    ///< References the border at the left side of the paragraph
-        Bottom,  ///< References the border at the bottom of the paragraph
-        Right    ///< References the border at the right side of the paragraph
+        Top = 0, ///< References the border at the top of the cell
+        Left,    ///< References the border at the left side of the cell
+        Bottom,  ///< References the border at the bottom of the cell
+        Right    ///< References the border at the right side of the cell
     };
 
     /// Enum used to differentiate between the 3 types of border styles
@@ -126,7 +126,7 @@ public:
     void drawVerticalWave(BorderStyle style, QPainter &painter, qreal y, qreal h, qreal t) const;
 
     /**
-     * Get the bounding rectange \boundingRect adjusted according to the paddings and margins
+     * Adjust the bounding rectange \boundingRect according to the paddings and margins
      * of this border data. The inverse of this function is boundingRect().
      *
      * \sa boundingRect()
@@ -270,6 +270,16 @@ public:
     void setRightPadding(qreal padding);
     void setBottomPadding(qreal padding);
     void setPadding(qreal padding);
+
+    qreal leftPadding() const;
+    qreal rightPadding() const;
+    qreal topPadding() const;
+    qreal bottomPadding() const;
+
+    qreal leftBorderWidth() const;
+    qreal rightBorderWidth() const;
+    qreal topBorderWidth() const;
+    qreal bottomBorderWidth() const;
 
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableCellStyle *parent);

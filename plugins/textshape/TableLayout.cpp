@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 Elvis Stansvik <elvstone@gmail.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -53,11 +54,11 @@ TableLayout::TableLayout() :
 void TableLayout::setTable(QTextTable *table)
 {
     Q_ASSERT(table);
-    TableLayoutData *tableLayoutData;
 
     if (table == m_table)
         return; // we are already set
 
+    TableLayoutData *tableLayoutData;
     if (!m_tableLayoutDataMap.contains(table)) {
         // Set up new table layout data.
         tableLayoutData = new TableLayoutData();
@@ -497,41 +498,21 @@ QRectF TableLayout::rowBoundingRect(int row) const
                 tableRect.rect.width(),  m_tableLayoutData->m_rowHeights[row]);
 }
 
-void TableLayout::calculateCellContentHeight(const QTextTableCell &cell)
+void TableLayout::setCellContentHeight(const QTextTableCell &cell, qreal bottom)
 {
     Q_ASSERT(isValid());
     Q_ASSERT(cell.isValid());
 
-    if (!isValid() || !cell.isValid()) {
+    if (!isValid() || !cell.isValid())
         return;
-    }
 
-    // Get the first line in the first block in the cell.
-    QTextFrame::iterator cellIterator = cell.begin();
-    Q_ASSERT(cellIterator.currentFrame() == 0); // TODO: Nested tables?
-    QTextBlock firstBlock = cellIterator.currentBlock();
-    Q_ASSERT(firstBlock.isValid());
-    QTextLine topLine = firstBlock.layout()->lineAt(0);
-    Q_ASSERT(topLine.isValid());
-
-    // Get the last line in the last block in the cell.
-    cellIterator = cell.end();
-    cellIterator--;
-    Q_ASSERT(cellIterator.currentFrame() == 0); // TODO: Nested tables?
-    QTextBlock lastBlock = cellIterator.currentBlock();
-    Q_ASSERT(lastBlock.isValid());
-    QTextLine bottomLine = lastBlock.layout()->lineAt(lastBlock.layout()->lineCount() - 1);
-    Q_ASSERT(bottomLine.isValid());
-
-    // Content height is the difference between bottomLine and topLine.
-    qreal contentHeight = (bottomLine.y() + bottomLine.height()) - topLine.y();
-        // FIXME; using 'height()' above is wrong since it uses the font specs unconditionally
-        //        see Layout::addLine() for the gory details on how to calculate the line height
-    Q_ASSERT(contentHeight >= 0); // Sanity check.
-    contentHeight = qMax(contentHeight, (qreal)0);
+    KoTableCellStyle cellStyle(cell.format().toTableCellFormat());
+    qreal top = m_tableLayoutData->m_rowPositions[cell.row()]
+        + cellStyle.topPadding() + cellStyle.topBorderWidth();
+    Q_ASSERT(bottom >= top);
 
     // Update content height value of the cell.
-    m_tableLayoutData->m_contentHeights[cell.row()][cell.column()] = contentHeight;
+    m_tableLayoutData->m_contentHeights[cell.row()][cell.column()] = bottom - top;
 }
 
 QTextTableCell TableLayout::cellAt(int position) const

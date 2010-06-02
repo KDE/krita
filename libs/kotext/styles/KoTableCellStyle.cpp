@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
@@ -161,7 +161,9 @@ QRectF KoTableCellStyle::boundingRect(const QRectF &contentRect) const
 void KoTableCellStyle::setEdge(Side side, BorderStyle style, qreal width, QColor color)
 {
     Edge edge;
-    qreal innerWidth = 0.0, middleWidth = 0.0, space = 0.0;
+    qreal innerWidth = 0;
+    qreal middleWidth = 0;
+    qreal space = 0;
     switch (style) {
     case BorderNone:
         width = 0.0;
@@ -700,6 +702,51 @@ void KoTableCellStyle::setBottomPadding(qreal padding)
 {
     setProperty(QTextFormat::TableCellBottomPadding, padding);
 }
+
+qreal KoTableCellStyle::leftPadding() const
+{
+    return propertyDouble(QTextFormat::TableCellLeftPadding);
+}
+
+qreal KoTableCellStyle::rightPadding() const
+{
+    return propertyDouble(QTextFormat::TableCellRightPadding);
+}
+
+qreal KoTableCellStyle::topPadding() const
+{
+    return propertyDouble(QTextFormat::TableCellTopPadding);
+}
+
+qreal KoTableCellStyle::bottomPadding() const
+{
+    return propertyDouble(QTextFormat::TableCellBottomPadding);
+}
+
+qreal KoTableCellStyle::leftBorderWidth() const
+{
+    const Edge &edge = d->edges[Left];
+    return edge.spacing + edge.innerPen.widthF() + edge.outerPen.widthF();
+}
+
+qreal KoTableCellStyle::rightBorderWidth() const
+{
+    const Edge &edge = d->edges[Right];
+    return edge.spacing + edge.innerPen.widthF() + edge.outerPen.widthF();
+}
+
+qreal KoTableCellStyle::topBorderWidth() const
+{
+    const Edge &edge = d->edges[Top];
+    return edge.spacing + edge.innerPen.widthF() + edge.outerPen.widthF();
+}
+
+qreal KoTableCellStyle::bottomBorderWidth() const
+{
+    const Edge &edge = d->edges[Bottom];
+    return edge.spacing + edge.innerPen.widthF() + edge.outerPen.widthF();
+}
+
 
 void KoTableCellStyle::setPadding(qreal padding)
 {

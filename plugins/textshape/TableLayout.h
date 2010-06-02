@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 Elvis Stansvik <elvstone@gmail.org>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -249,17 +250,7 @@ public:
      */
     QRectF rowBoundingRect(int row) const;
 
-    /**
-     * Calculate the content height of a given cell.
-     *
-     * Call this when the content of the cell has changed.
-     *
-     * @note Make sure that all blocks in the cell have been laid out before calling
-     * this function.
-     *
-     * @param cell the cell.
-     */
-    void calculateCellContentHeight(const QTextTableCell &cell);
+    void setCellContentHeight(const QTextTableCell &cell, qreal bottom);
 
     /**
      * Get the cell that contains the character at the given position in the document.

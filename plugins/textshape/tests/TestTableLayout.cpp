@@ -195,86 +195,91 @@ void TestTableLayout::testBasicLayout()
      *   x = 0 (no borders/margins/paddings)
      *   y = 0 (no borders/margins/paddings)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell1 = m_table->cellAt(0, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(0, 0, 100, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(0, 0, 100, 14.4));
 
     /*
      * Cell 0, 1 rules:
      *   x = 100 (table width/column count)
      *   y = 0 (no borders/margins/paddings)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell2 = m_table->cellAt(0, 1);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell2), QRectF(100, 0, 100, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell2), QRectF(100, 0, 100, 14.4));
 
     /*
      * Cell 1, 0 rules:
      *   x = 0 (no borders/margins/paddings)
-     *   y = 16 (line height)
+     *   y = 14.4 (line height)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell3 = m_table->cellAt(1, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell3), QRectF(0, 16, 100, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell3), QRectF(0, 14.4, 100, 14.4));
 
     /*
      * Cell 1, 1 rules:
      *   x = 100 (table width/column count)
-     *   y = 16 (line height)
+     *   y = 14.4 (line height)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell4 = m_table->cellAt(1, 1);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell4), QRectF(100, 16, 100, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell4), QRectF(100, 14.4, 100, 14.4));
 
     // Check position of blocks in cells.
 
-    /*
-     * Blocks in cell 0,0 rules:
-     *   Position      Content      Layout bounding rect
-     *   1             "Cell 1"     0, 0 100x16
-     */
     QTextBlock block1 = cell1.firstCursorPosition().block();
     QCOMPARE(block1.position(), 1);
     QVERIFY(block1.layout());
     QCOMPARE(block1.layout()->lineCount(), 1);
-    QCOMPARE(block1.layout()->boundingRect(), QRectF(0, 0, 100, 16));
+    QTextLine line = block1.layout()->lineAt(0);
+    QCOMPARE(line.width(), 100.);
+    QCOMPARE(line.position(), QPointF());
 
     /*
      * Blocks in cell 0,1 rules:
      *   Position      Content      Layout bounding rect
-     *   8             "Cell 2"     100, 0 100x16
+     *   8             "Cell 2"     100, 0 100x?
      */
     QTextBlock block2 = cell2.firstCursorPosition().block();
     QCOMPARE(block2.position(), 8);
     QVERIFY(block2.layout());
     QCOMPARE(block2.layout()->lineCount(), 1);
-    QCOMPARE(block2.layout()->boundingRect(), QRectF(100, 0, 100, 16));
+    line = block2.layout()->lineAt(0);
+    QCOMPARE(line.width(), 100.);
+    QCOMPARE(line.position(), QPointF(100, 0));
 
     /*
      * Blocks in cell 1,0 rules:
      *   Position      Content      Layout bounding rect
-     *   15            "Cell 3"     0, 16 100x16
+     *   15            "Cell 3"     0, 14.4 100x?
      */
     QTextBlock block3 = cell3.firstCursorPosition().block();
     QCOMPARE(block3.position(), 15);
     QVERIFY(block3.layout());
     QCOMPARE(block3.layout()->lineCount(), 1);
-    QCOMPARE(block3.layout()->boundingRect(), QRectF(0, 16, 100, 16));
+    line = block3.layout()->lineAt(0);
+    QCOMPARE(line.width(), 100.);
+    QCOMPARE(line.position().x(), 0.);
+    QVERIFY(qAbs(line.position().y() - 14.4) < 0.156);
 
     /*
      * Blocks in cell 1,1 rules:
      *   Position      Content      Layout bounding rect
-     *   22            "Cell 4"     100, 16 100x16
+     *   22            "Cell 4"     100, 14.4 100x?
      */
     QTextBlock block4 = cell4.firstCursorPosition().block();
     QCOMPARE(block4.position(), 22);
     QVERIFY(block4.layout());
     QCOMPARE(block4.layout()->lineCount(), 1);
-    QCOMPARE(block4.layout()->boundingRect(), QRectF(100, 16, 100, 16));
+    line = block4.layout()->lineAt(0);
+    QCOMPARE(line.width(), 100.);
+    QCOMPARE(line.position().x(), 100.);
+    QVERIFY(qAbs(line.position().y() - 14.4) < 0.156);
 
     /*
      * TODO: Insert/remove rows/columns.
@@ -283,7 +288,8 @@ void TestTableLayout::testBasicLayout()
     cleanupTest();
 }
 
-void TestTableLayout::testTableMargin() {
+void TestTableLayout::testTableMargin()
+{
     KoTableStyle *tableStyle = new KoTableStyle();
     Q_ASSERT(tableStyle);
     tableStyle->setMargin(2.0);
@@ -298,47 +304,48 @@ void TestTableLayout::testTableMargin() {
      *   x = 2 (only the table margin)
      *   y = 2 (only the table margin)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell1 = m_table->cellAt(0, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(2, 2, 100, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(2, 2, 100, 14.4));
 
     /*
      * Cell 0, 1 rules:
      *   x = 102 (table margin + (table width/column count)))
      *   y = 2 (table margin)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell2 = m_table->cellAt(0, 1);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell2), QRectF(102, 2, 100, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell2), QRectF(102, 2, 100, 14.4));
 
     /*
      * Cell 1, 0 rules:
      *   x = 2 (only the table margin)
-     *   y = 2 + 16 = 18 (table margin + line height)
+     *   y = 2 + 14.4 = 16.4 (table margin + line height)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell3 = m_table->cellAt(1, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell3), QRectF(2, 18, 100, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell3), QRectF(2, 16.4, 100, 14.4));
 
     /*
      * Cell 1, 1 rules:
      *   x = 102 (table margin + (table width/column count)))
-     *   y = 2 + 16 = 18 (table margin + line height)
+     *   y = 2 + 14.4 = 16.4 (table margin + line height)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell4 = m_table->cellAt(1, 1);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell4), QRectF(102, 18, 100, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell4), QRectF(102, 16.4, 100, 14.4));
 
     // TODO: Check block positions.
 
     cleanupTest();
 }
 
-void TestTableLayout::testIndividualTableMargin() {
+void TestTableLayout::testIndividualTableMargin()
+{
     KoTableStyle *tableStyle = new KoTableStyle();
     Q_ASSERT(tableStyle);
     tableStyle->setTopMargin(1.0);
@@ -356,40 +363,40 @@ void TestTableLayout::testIndividualTableMargin() {
      *   x = 8 (only the table margin)
      *   y = 1 (only the table margin)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell1 = m_table->cellAt(0, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(8, 1, 100, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(8, 1, 100, 14.4));
 
     /*
      * Cell 0, 1 rules:
      *   x = 108 (table margin + (table width/column count)))
      *   y = 1 (table margin)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell2 = m_table->cellAt(0, 1);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell2), QRectF(108, 1, 100, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell2), QRectF(108, 1, 100, 14.4));
 
     /*
      * Cell 1, 0 rules:
      *   x = 8 (only the table margin)
-     *   y = 1 + 16 = 17 (table margin + line height)
+     *   y = 1 + 14.4 = 15.4 (table margin + line height)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell3 = m_table->cellAt(1, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell3), QRectF(8, 17, 100, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell3), QRectF(8, 15.4, 100, 14.4));
 
     /*
      * Cell 1, 1 rules:
      *   x = 108 (table margin + (table width/column count)))
-     *   y = 1 + 16 = 17 (table margin + line height)
+     *   y = 1 + 14.4 = 15.4 (table margin + line height)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell4 = m_table->cellAt(1, 1);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell4), QRectF(108, 17, 100, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell4), QRectF(108, 15.4, 100, 14.4));
 
     // TODO: Check block positions.
 
@@ -429,11 +436,11 @@ void TestTableLayout::testCellStyles()
      *   x = 1 + 2 + 4 (border) + 8 (padding) = 15
      *   y = 1 + 2 + 4 (border) + 8 (padding) = 15
      *   width = 100 - (2 * 7) (border) - (2 * 8) (padding) = 70
-     *   height = 16 (one line)
+     *   height = 14.4 (one line)
      */
     QTextTableCell cell1 = m_table->cellAt(0, 0);
     QTextTableCellFormat cell1Format = cell1.format().toTableCellFormat();
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(15, 15, 70, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(15, 15, 70, 14.4));
 
     /*
      * TODO:
@@ -457,10 +464,10 @@ void TestTableLayout::testCellColumnSpanning()
      *   x = 0 (no borders/margins/paddings)
      *   y = 0 (no borders/margins/paddings)
      *   width = 100*2 = 200 (column span 2)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     cell1 = m_table->cellAt(0, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(0, 0, 200, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(0, 0, 200, 14.4));
 
     cleanupTest();
 }
@@ -478,10 +485,10 @@ void TestTableLayout::testCellRowSpanning()
      *   x = 0 (no borders/margins/paddings)
      *   y = 0 (no borders/margins/paddings)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 2 * 16 = 32 (row span 2)
+     *   height = 2 * 14.4 = 28.8 (row span 2)
      */
     cell1 = m_table->cellAt(0, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(0, 0, 100, 32));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(0, 0, 100, 28.8));
 
     cleanupTest();
 }
@@ -504,9 +511,9 @@ void TestTableLayout::testCellRowAndColumnSpanning()
      *   x = 0 (no borders/margins/paddings)
      *   y = 0 (no borders/margins/paddings)
      *   width = 100*2 = 200 (column span 2)
-     *   height = 2 * 16 = 32 (row span 2)
+     *   height = 2 * 14.4 = 28.8 (row span 2)
      */
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(0, 0, 200, 32));
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(0, 0, 200, 28.8));
 
     cleanupTest();
 }
@@ -530,7 +537,7 @@ void TestTableLayout::testCellRowSpanningCellHeight()
      * | A                 |                   |
      * |                   +-------------------+
      * | B                 | x = 100 (200/2)   |
-     * | C                 | y = 16 (1*16)     |
+     * | C                 | y = 14.4 (1*14.4) |
      * | D                 | w = 100 (200/2)   |
      * | E                 | h = 57.6 (4*14.4) |
      * +-------------------+-------------------+
@@ -539,7 +546,7 @@ void TestTableLayout::testCellRowSpanningCellHeight()
     // We have to check the geometries of the rect individually, as there
     // are rounding to consider in the height.
     QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell4).x(), 100.0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell4).y(), 16.0);
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell4).y(), 14.4);
     QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell4).width(), 100.0);
     QVERIFY((m_textLayout->m_tableLayout.cellBoundingRect(cell4).height() - 57.6) < 0.125);
 
@@ -603,7 +610,7 @@ void TestTableLayout::testMinimumRowHeight()
      *   x = 0 (no borders/margins/paddings)
      *   y = 0 (no borders/margins/paddings)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 16 + (3 * 14.4) = 59.2 (+- 0.125 for rounding).
+     *   height = 14.4 + (3 * 14.4) = 59.2 (+- 0.125 for rounding).
      */
     QTextTableCell cell1 = m_table->cellAt(0, 0);
     QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1).x(), 0.0);
@@ -616,7 +623,7 @@ void TestTableLayout::testMinimumRowHeight()
      *   x = 200/2 = 100 (table width/column count)
      *   y = 0 (no borders/margins/paddings)
      *   width = 200/2 = 100 (table width/column count)
-     *   height = 16 + (3 * 14.4) = 59.2 (+- 0.125 for rounding)
+     *   height = 14.4 + (3 * 14.4) = 59.2 (+- 0.125 for rounding)
      */
     QTextTableCell cell2 = m_table->cellAt(0, 1);
     QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2).x(), 100.0);
@@ -675,20 +682,20 @@ void TestTableLayout::testVariableColumnWidth()
      *   x = 0 (no borders/margins/paddings)
      *   y = 0 (no borders/margins/paddings)
      *   width = 40 (20% of width of shape (200 pt))
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell1 = m_table->cellAt(0, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(0, 0, 40, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(0, 0, 40, 14.4));
 
     /*
      * Cell 0,1 rules:
      *   x = 40 (width of column 0)
      *   y = 0 (no borders/margins/paddings)
      *   width = 160 (80% of width of shape (200 pt))
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell2 = m_table->cellAt(0, 1);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(40, 0, 160, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(40, 0, 160, 14.4));
 }
 
 void TestTableLayout::testColumnWidth()
@@ -715,20 +722,20 @@ void TestTableLayout::testColumnWidth()
      *   x = 0 (no borders/margins/paddings)
      *   y = 0 (no borders/margins/paddings)
      *   width = 20 (fixed width)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell1 = m_table->cellAt(0, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(0, 0, 20, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(0, 0, 20, 14.4));
 
     /*
      * Cell 0,1 rules:
      *   x = 20 (width of column 0)
      *   y = 0 (no borders/margins/paddings)
      *   width = 180 (fixed width)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell2 = m_table->cellAt(0, 1);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(20, 0, 180, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(20, 0, 180, 14.4));
 }
 
 void TestTableLayout::testTableAlignment()
@@ -747,20 +754,20 @@ void TestTableLayout::testTableAlignment()
      *   x = 150 = 200 - 50 (shape width - table width)
      *   y = 0 (no borders/margins/paddings)
      *   width = 50 / 2 = 25 (table width / number of columns)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell1 = m_table->cellAt(0, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(150, 0, 25, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(150, 0, 25, 14.4));
 
     /*
      * Cell 0,1 rules:
      *   x = 175 = (200 - 50) + 25 ((shape width - table width) + column width)
      *   y = 0 (no borders/margins/paddings)
      *   width = 50 / 2 = 25 (table width / number of columns)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     QTextTableCell cell2 = m_table->cellAt(0, 1);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(175, 0, 25, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(175, 0, 25, 14.4));
 
     // Centered.
 
@@ -775,20 +782,20 @@ void TestTableLayout::testTableAlignment()
      *   x = 75 = (200 - 50) / 2 ((shape width - table width) / 2)
      *   y = 0 (no borders/margins/paddings)
      *   width = 50 / 2 = 25 (table width / number of columns)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     cell1 = m_table->cellAt(0, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(75, 0, 25, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(75, 0, 25, 14.4));
 
     /*
      * Cell 0,1 rules:
      *   x = 100 = ((200 - 50) / 2) + 25 (((shape width - table width) / 2) + column width)
      *   y = 0 (no borders/margins/paddings)
      *   width = 50 / 2 = 25 (table width / number of columns)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     cell2 = m_table->cellAt(0, 1);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(100, 0, 25, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(100, 0, 25, 14.4));
 
     // Left aligned.
 
@@ -803,20 +810,20 @@ void TestTableLayout::testTableAlignment()
      *   x = 0 (no borders/margins/paddings)
      *   y = 0 (no borders/margins/paddings)
      *   width = 50 / 2 = 25 (table width / number of columns)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     cell1 = m_table->cellAt(0, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(0, 0, 25, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(0, 0, 25, 14.4));
 
     /*
      * Cell 0,1 rules:
      *   x = 50 / 2 = 25 (table width / number of columns)
      *   y = 0 (no borders/margins/paddings)
      *   width = 50 / 2 = 25 (table width / number of columns)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     cell2 = m_table->cellAt(0, 1);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(25, 0, 25, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(25, 0, 25, 14.4));
 
     // Justify aligned.
 
@@ -831,20 +838,20 @@ void TestTableLayout::testTableAlignment()
      *   x = 0 (no borders/margins/paddings)
      *   y = 0 (no borders/margins/paddings)
      *   width = 200 / 2 = 100 (shape width / number of columns)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     cell1 = m_table->cellAt(0, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(0, 0, 100, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(0, 0, 100, 14.4));
 
     /*
      * Cell 0,1 rules:
      *   x = 200 / 2 = 100 (shape width / number of columns)
      *   y = 0 (no borders/margins/paddings)
      *   width = 200 / 2 = 100 (shape width / number of columns)
-     *   height = 1 * 16 = 16 (number of lines * line height)
+     *   height = 1 * 14.4 = 14.4 (number of lines * line height)
      */
     cell2 = m_table->cellAt(0, 1);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(100, 0, 100, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(100, 0, 100, 14.4));
 
     cleanupTest();
 }
@@ -935,35 +942,35 @@ void TestTableLayout::testFeatureCombination()
     m_table->mergeCells(1, 0, 2, 2);
 
     /* Top row should be as high as the max required cell height
-     * 1st cell requires row to be 12+8+8+16=44
-     * 2nd cell requires row to be 12+16=28
-     * 3rd cell requires row to be 4+16=20
+     * 1st cell requires row to be 12+8+8+14.4=42.4
+     * 2nd cell requires row to be 12+14.4=26.4
+     * 3rd cell requires row to be 4+14.4=16.4
      *
-     * Next row hight depends only on last column 4+16
+     * Next row hight depends only on last column 4+14.4
      *
-     * Last row hight depends only on last column 4+16
+     * Last row hight depends only on last column 4+14.4
      *
-     * Thus the merged cell have a combined height of 40 at it's disposal
+     * Thus the merged cell (bottom 2 rows) have a combined height of 36.6 at it's disposal
      *
      * When testing we need to subtract the margins and paddings to get the cellContentRect
      */
     QTextTableCell cell = m_table->cellAt(0, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(13, 12, 23, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(13, 12, 23, 14.4));
 
     cell = m_table->cellAt(0, 1);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(55, 8, 89, 32));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(55, 8, 89, 30.4));
 
     cell = m_table->cellAt(0, 2);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(152, 2, 146, 40));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(152, 2, 146, 38.4));
 
     cell = m_table->cellAt(1, 0);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(2, 28+16+2, 146, 4+2*16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(2, 28+14.4+2, 146, 4+2*14.4));
 
     cell = m_table->cellAt(1, 2);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(152, 28+16+2, 146, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(152, 28+14.4+2, 146, 14.4));
 
     cell = m_table->cellAt(2, 2);
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(152, 32+2*16+2, 146, 16));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell), QRectF(152, 32+2*14.4+2, 146, 14.4));
 
     cleanupTest();
 }

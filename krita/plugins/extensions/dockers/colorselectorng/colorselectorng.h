@@ -15,8 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _SMALLCOLORSELECTOR_H_
-#define _SMALLCOLORSELECTOR_H_
+#ifndef _COLORSELECTORNG_H_
+#define _COLORSELECTORNG_H_
 
 #include <QObject>
 #include <QVariant>

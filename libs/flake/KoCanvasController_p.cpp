@@ -230,8 +230,8 @@ void Viewport::repaint(KoShape *shape)
     QRect rect = m_parent->canvas()->viewConverter()->documentToView(shape->boundingRect()).toRect();
     QWidget *canvasWidget = m_parent->canvas()->canvasWidget();
     Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
-    rect.moveLeft(rect.left() + canvasWidget->x());
-    rect.moveTop(rect.top() + canvasWidget->y());
+    rect.moveLeft(rect.left() + canvasWidget->x() - m_documentOffset.x());
+    rect.moveTop(rect.top() + canvasWidget->y() - m_documentOffset.y());
     rect.adjust(-2, -2, 2, 2); // adjust for antialias
     update(rect);
 }
@@ -265,7 +265,8 @@ void Viewport::handlePaintEvent(QPainter &painter, QPaintEvent *event)
         painter.save();
         QWidget *canvasWidget = m_parent->canvas()->canvasWidget();
         Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
-        painter.translate(canvasWidget->x(), canvasWidget->y());
+        painter.translate(canvasWidget->x() - m_documentOffset.x(),
+                canvasWidget->y() - m_documentOffset.y());
         QPointF offset = vc->documentToView(m_draggedShape->position());
         painter.setOpacity(0.6);
         painter.translate(offset.x(), offset.y());
@@ -273,7 +274,6 @@ void Viewport::handlePaintEvent(QPainter &painter, QPaintEvent *event)
         m_draggedShape->paint(painter, *vc);
         painter.restore();
     }
-
 }
 
 void Viewport::resetLayout()

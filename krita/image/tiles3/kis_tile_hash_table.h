@@ -100,6 +100,9 @@ private:
     void linkTile(TileTypeSP tile);
     TileTypeSP unlinkTile(qint32 col, qint32 row);
 
+    inline void setDefaultTileDataImp(KisTileData *defaultTileData);
+    inline KisTileData* defaultTileDataImp() const;
+
     static inline quint32 calculateHash(qint32 col, qint32 row);
 
     inline qint32 debugChainLen(qint32 idx);

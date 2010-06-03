@@ -141,7 +141,8 @@ void KisTiledDataManagerTest::testPurgeHistory()
     dm.purgeHistory(memento4);
 }
 
-#define NUM_CYCLES 1000
+#define NUM_CYCLES 10000
+//#define NUM_CYCLES 100000
 #define NUM_TYPES 13
 
 #define TILE_DIMENSION 64
@@ -162,9 +163,9 @@ public:
             quint8 *buf;
             KisTileSP tile;
             QRect newRect;
-            bool b;
+//            bool b;
 
-            qDebug() << ppVar(QThread::currentThreadId()) << ppVar(type);
+//            qDebug() << ppVar(QThread::currentThreadId()) << ppVar(type);
             switch(type) {
             case 0:
                 buf = new quint8[dm.pixelSize()];
@@ -190,22 +191,22 @@ public:
                 break;
             case 3:
             case 4:
-                m_memento = dm.getMemento();
+//                m_memento = dm.getMemento();
                 break;
             case 5:
-                if(m_memento) {
-                    dm.rollback(m_memento);
-                    m_memento = 0;
-                }
+//                if(m_memento) {
+//                    dm.rollback(m_memento);
+//                    m_memento = 0;
+//                }
                 break;
             case 6:
-                if(m_memento) {
-                    dm.purgeHistory(m_memento);
-                    m_memento = 0;
-                }
+//                if(m_memento) {
+//                    dm.purgeHistory(m_memento);
+//                    m_memento = 0;
+//                }
                 break;
             case 7:
-                b = dm.hasCurrentMemento();
+//                b = dm.hasCurrentMemento();
                 break;
             case 8:
                 newRect = dm.extent();

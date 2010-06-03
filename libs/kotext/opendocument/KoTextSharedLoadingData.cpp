@@ -532,42 +532,47 @@ void KoTextSharedLoadingData::addOutlineStyle(KoShapeLoadingContext &context, Ko
     }
 }
 
-KoParagraphStyle *KoTextSharedLoadingData::paragraphStyle(const QString &name, bool stylesDotXml)
+KoParagraphStyle *KoTextSharedLoadingData::paragraphStyle(const QString &name, bool stylesDotXml) const
 {
     return stylesDotXml ? d->paragraphStylesDotXmlStyles.value(name) : d->paragraphContentDotXmlStyles.value(name);
 }
 
-KoCharacterStyle *KoTextSharedLoadingData::characterStyle(const QString &name, bool stylesDotXml)
+KoCharacterStyle *KoTextSharedLoadingData::characterStyle(const QString &name, bool stylesDotXml) const
 {
     return stylesDotXml ? d->characterStylesDotXmlStyles.value(name) : d->characterContentDotXmlStyles.value(name);
 }
 
-KoListStyle *KoTextSharedLoadingData::listStyle(const QString &name, bool stylesDotXml)
+QList<KoCharacterStyle*> KoTextSharedLoadingData::characterStyles(bool stylesDotXml) const
+{
+    return stylesDotXml ? d->characterStylesDotXmlStyles.values() : d->characterContentDotXmlStyles.values();
+}
+
+KoListStyle *KoTextSharedLoadingData::listStyle(const QString &name, bool stylesDotXml) const
 {
     return stylesDotXml ? d->listStylesDotXmlStyles.value(name) : d->listContentDotXmlStyles.value(name);
 }
 
-KoTableStyle *KoTextSharedLoadingData::tableStyle(const QString &name, bool stylesDotXml)
+KoTableStyle *KoTextSharedLoadingData::tableStyle(const QString &name, bool stylesDotXml) const
 {
     return stylesDotXml ? d->tableStylesDotXmlStyles.value(name) : d->tableContentDotXmlStyles.value(name);
 }
 
-KoTableColumnStyle *KoTextSharedLoadingData::tableColumnStyle(const QString &name, bool stylesDotXml)
+KoTableColumnStyle *KoTextSharedLoadingData::tableColumnStyle(const QString &name, bool stylesDotXml) const
 {
     return stylesDotXml ? d->tableColumnStylesDotXmlStyles.value(name) : d->tableColumnContentDotXmlStyles.value(name);
 }
 
-KoTableRowStyle *KoTextSharedLoadingData::tableRowStyle(const QString &name, bool stylesDotXml)
+KoTableRowStyle *KoTextSharedLoadingData::tableRowStyle(const QString &name, bool stylesDotXml) const
 {
     return stylesDotXml ? d->tableRowStylesDotXmlStyles.value(name) : d->tableRowContentDotXmlStyles.value(name);
 }
 
-KoTableCellStyle *KoTextSharedLoadingData::tableCellStyle(const QString &name, bool stylesDotXml)
+KoTableCellStyle *KoTextSharedLoadingData::tableCellStyle(const QString &name, bool stylesDotXml) const
 {
     return stylesDotXml ? d->tableCellStylesDotXmlStyles.value(name) : d->tableCellContentDotXmlStyles.value(name);
 }
 
-KoSectionStyle *KoTextSharedLoadingData::sectionStyle(const QString &name, bool stylesDotXml)
+KoSectionStyle *KoTextSharedLoadingData::sectionStyle(const QString &name, bool stylesDotXml) const
 {
     return stylesDotXml ? d->sectionStylesDotXmlStyles.value(name) : d->sectionContentDotXmlStyles.value(name);
 }

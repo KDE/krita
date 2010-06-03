@@ -21,14 +21,14 @@
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
-class ColorSelectorNgWidget;
+class KisColSelNgWidget;
 class KoColor;
 
-class ColorSelectorNgDock : public QDockWidget, public KoCanvasObserverBase
+class KisColSelNgDock : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
-    ColorSelectorNgDock();
+    KisColSelNgDock();
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
@@ -36,7 +36,7 @@ public slots:
     void colorChangedProxy(const QColor&);
     void resourceChanged(int, const QVariant&);
 private:
-    ColorSelectorNgWidget* m_colorSelectorNgWidget;
+    KisColSelNgWidget* m_colorSelectorNgWidget;
     KoCanvasBase* m_canvas;
 };
 

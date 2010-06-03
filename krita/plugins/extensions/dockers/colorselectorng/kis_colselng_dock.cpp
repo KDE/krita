@@ -15,30 +15,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "colorselectorng_dock.h"
+#include "kis_colselng_dock.h"
 
 #include <klocale.h>
 #include <KoCanvasBase.h>
 
-#include "colorselectorngwidget.h"
+#include "kis_colselng_widget.h"
 #include "kis_canvas_resource_provider.h"
 
 #include <KoColorSpaceRegistry.h>
 
-ColorSelectorNgDock::ColorSelectorNgDock()
+KisColSelNgDock::KisColSelNgDock()
         : QDockWidget()
         , m_canvas(0)
 {
-    m_colorSelectorNgWidget = new ColorSelectorNgWidget(this);
+    m_colorSelectorNgWidget = new KisColSelNgWidget(this);
     setWidget(m_colorSelectorNgWidget);
-    m_colorSelectorNgWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+    m_colorSelectorNgWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 //    connect(m_colorSelectorNgWidget, SIGNAL(colorChanged(const QColor&)),
 //            this, SLOT(colorChangedProxy(const QColor&)));
 
     setWindowTitle(i18n("Color Selector Ng"));
 }
 
-void ColorSelectorNgDock::setCanvas(KoCanvasBase * canvas)
+void KisColSelNgDock::setCanvas(KoCanvasBase * canvas)
 {
 //    m_canvas = canvas;
 //    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
@@ -46,17 +46,17 @@ void ColorSelectorNgDock::setCanvas(KoCanvasBase * canvas)
 //    m_colorSelectorNgWidget->setQColor(m_canvas->resourceManager()->foregroundColor().toQColor());
 }
 
-void ColorSelectorNgDock::colorChangedProxy(const QColor& c)
+void KisColSelNgDock::colorChangedProxy(const QColor& c)
 {
 //    if (m_canvas)
 //        m_canvas->resourceManager()->setForegroundColor(KoColor(c , KoColorSpaceRegistry::instance()->rgb8()));
 }
 
-void ColorSelectorNgDock::resourceChanged(int key, const QVariant& v)
+void KisColSelNgDock::resourceChanged(int key, const QVariant& v)
 {
 //    if (key == KoCanvasResource::ForegroundColor) {
 //        m_colorSelectorNgWidget->setQColor(v.value<KoColor>().toQColor());
 //    }
 }
 
-#include "colorselectorng_dock.moc"
+#include "kis_colselng_dock.moc"

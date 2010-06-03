@@ -3,15 +3,17 @@
 
 #include <QWidget>
 
-class ColorSelectorNgWidget : public QWidget
+class KisColSelNgWidget : public QWidget
 {
 Q_OBJECT
 public:
-    explicit ColorSelectorNgWidget(QWidget *parent = 0);
+    explicit KisColSelNgWidget(QWidget *parent = 0);
 
 signals:
 
 public slots:
+protected:
+    void paintEvent(QPaintEvent *);
 
 };
 

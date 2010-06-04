@@ -194,15 +194,15 @@ bool KisTiledDataManager::read(KoStore *store)
 
 void KisTiledDataManager::purge(const QRect& area)
 {
+    QWriteLocker locker(&m_lock);
+
     QList<KisTileSP> tilesToDelete;
     {
-        QWriteLocker locker(&m_lock);
+        const qint32 tileDataSize = KisTileData::HEIGHT * KisTileData::WIDTH * pixelSize();
+        const quint8 *defaultData = m_hashTable->defaultTileData()->data();
 
         KisTileHashTableIterator iter(m_hashTable);
         KisTileSP tile;
-
-        const qint32 tileDataSize = KisTileData::HEIGHT * KisTileData::WIDTH * pixelSize();
-        const quint8 *defaultData = m_hashTable->defaultTileData()->data();
 
         while (tile = iter.tile()) {
             if (tile->extent().intersects(area) && memcmp(defaultData, tile->data(), tileDataSize) == 0) {

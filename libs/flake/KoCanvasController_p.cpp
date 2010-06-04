@@ -360,6 +360,8 @@ void Viewport::resetLayout()
             m_canvas->update();
         }
     }
+    if (m_drawShadow)
+      update();
 
 #if 0
      kDebug(30006) <<"View port geom:" << geometry();

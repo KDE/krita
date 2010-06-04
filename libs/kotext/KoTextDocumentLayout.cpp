@@ -492,12 +492,6 @@ void KoTextDocumentLayout::layout()
             line.setLineWidth(m_state->width());
             line.setPosition(QPointF(m_state->x(), m_state->y()));
         }
-
-        QRectF repaintRect = line.rect();
-        repaintRect.moveTop(repaintRect.y() - m_state->docOffsetInShape());
-        repaintRect.setX(0.0); // just take full width since we can't force a repaint of
-        repaintRect.setWidth(m_state->shape->size().width()); // where lines were before layout.
-        m_state->shape->update(repaintRect);
     }
 }
 

@@ -322,6 +322,29 @@ bool Layout::addLine(QTextLine &line)
         }
     }
 
+    // call update to repaint the new line
+    QRectF repaintRect = line.rect();
+    if (layout->lineCount() > 1) { // cover big linespacing.
+        QTextLine prevLine = layout->lineAt(layout->lineCount()-2);
+        const qreal bottom = prevLine.y() + prevLine.height();
+        if (repaintRect.top() > bottom) {
+            repaintRect.setTop(bottom); //expand to cover space between lines.
+        }
+    } else { // cover space between paragraphs
+        QTextBlock prev = m_block.previous();
+        if (prev.isValid() && prev.layout()->lineCount() > 0) {
+            QTextLine prevLine = prev.layout()->lineAt(layout->lineCount()-1);
+            const qreal bottom = prevLine.y() + prevLine.height();
+            if (repaintRect.top() > bottom) {
+                repaintRect.setTop(bottom); //expand to cover space between paragraphs.
+            }
+        }
+    }
+    repaintRect.moveTop(repaintRect.y() - docOffsetInShape());
+    repaintRect.setX(0.0); // just take full width since we can't force a repaint of
+    repaintRect.setWidth(shape->size().width()); // where lines were before layout.
+    shape->update(repaintRect);
+
     return false;
 }
 

@@ -50,6 +50,7 @@ public:
 private:
     class Private;
     Private *d;
+    Q_DISABLE_COPY(KoEmbeddedDocumentSaver)
 };
 
 #endif /* KOEMBEDDEDDOCUMENTSAVER_H */

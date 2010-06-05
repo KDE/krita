@@ -19,7 +19,8 @@
 
 #include "KoShapeUserData.h"
 
-KoShapeUserData::KoShapeUserData()
+KoShapeUserData::KoShapeUserData(QObject *parent)
+    : QObject(parent)
 {
 }
 

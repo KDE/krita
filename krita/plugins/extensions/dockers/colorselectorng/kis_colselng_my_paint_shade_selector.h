@@ -22,16 +22,20 @@
 #ifndef KIS_COLSELNG_MY_PAINT_SHADE_SELECTOR_H
 #define KIS_COLSELNG_MY_PAINT_SHADE_SELECTOR_H
 
+#include <QWidget>
+
 class QImage;
 class QColor;
 
-class KisColSelNgMyPaintShadeSelector
+class KisColSelNgMyPaintShadeSelector : public QWidget
 {
 public:
-    KisColSelNgMyPaintShadeSelector();
+    KisColSelNgMyPaintShadeSelector(QWidget *parent = 0);
 
 public:
     QImage getSelector(const QColor& color);
+protected:
+    void paintEvent(QPaintEvent *);
 private:
     void precalcData();
     static const int m_size = 256;

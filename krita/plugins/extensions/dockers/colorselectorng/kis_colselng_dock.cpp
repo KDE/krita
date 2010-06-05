@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -30,6 +31,7 @@ KisColSelNgDock::KisColSelNgDock()
         , m_canvas(0)
 {
     m_colorSelectorNgWidget = new KisColSelNgWidget(this);
+
     setWidget(m_colorSelectorNgWidget);
     m_colorSelectorNgWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 //    connect(m_colorSelectorNgWidget, SIGNAL(colorChanged(const QColor&)),

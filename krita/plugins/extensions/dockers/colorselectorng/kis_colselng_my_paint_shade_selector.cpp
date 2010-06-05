@@ -24,26 +24,28 @@
 #include "kis_colselng_my_paint_shade_selector.h"
 #include <QImage>
 #include <QColor>
+#include <QPainter>
 
 #include <QtGlobal>
 
-inline int sqr(int x) {
-    return x*x;
-}
-
-inline qreal sqr2(qreal x) {
-    return (x*x)/2+x/2;
-}
-
-inline int signedSqr(int x) {
-    int sign = x>0?1:-1;
-    return x*x*sign;
-}
+inline int sqr(int x);
+inline qreal sqr2(qreal x);
+inline int signedSqr(int x);
 
 
-KisColSelNgMyPaintShadeSelector::KisColSelNgMyPaintShadeSelector()
+KisColSelNgMyPaintShadeSelector::KisColSelNgMyPaintShadeSelector(QWidget *parent) :
+        QWidget(parent)
 {
     precalcData();
+    setMinimumSize(100, 100);
+}
+
+void KisColSelNgMyPaintShadeSelector::paintEvent(QPaintEvent *) {
+    QPainter painter(this);
+
+    int size = qMin(width(), height());
+
+    painter.drawImage(0,0, getSelector(QColor(200,30,30)).scaled(size, size));
 }
 
 void KisColSelNgMyPaintShadeSelector::precalcData() {
@@ -153,4 +155,17 @@ QColor KisColSelNgMyPaintShadeSelector::getColor(int x, int y)
     fv = qBound(0.1, fv, 1.0);
 
     return QColor::fromHsvF(fh, fs, fv);
+}
+
+inline int sqr(int x) {
+    return x*x;
+}
+
+inline qreal sqr2(qreal x) {
+    return (x*x)/2+x/2;
+}
+
+inline int signedSqr(int x) {
+    int sign = x>0?1:-1;
+    return x*x*sign;
 }

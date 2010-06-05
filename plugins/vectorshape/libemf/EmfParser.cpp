@@ -30,7 +30,7 @@
 // 0 - No debug
 // 1 - Print a lot of debug info
 // 2 - Just print all the records instead of parsing them
-#define DEBUG_EMFPARSER 1
+#define DEBUG_EMFPARSER 0
 
 
 namespace Libemf

@@ -376,7 +376,6 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext &context)
 
 bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    Q_UNUSED(context);
     Q_D(KoTextAnchor);
     d->distance = shape()->position();
     if (! shape()->hasAdditionalAttribute("text:anchor-type"))
@@ -693,7 +692,6 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
              } else if (horizontalRel == "paragraph") {
                  if (horizontalPos == "center") { //svg:x attribute is ignored
                      d->horizontalAlignment = Center;
-                     d->distance.setX(-(shape()->size().width()/2));
                  } else if (horizontalPos == "from-inside") {
                      return false; // not posible to do it with koffice:anchor-type
                  } else if (horizontalPos == "from-left") {

@@ -11,7 +11,7 @@ KisColSelNgColorPatches::KisColSelNgColorPatches(QWidget *parent) :
 
 //    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 //    resize(m_numCols*m_patchWidth, m_numRows*m_patchHeight);
-    setMinimumSize(m_numCols*m_patchWidth, m_numRows*m_patchHeight);
+    setMinimumSize(m_numCols*m_patchWidth, 5*m_patchHeight);
 }
 
 void KisColSelNgColorPatches::paintEvent(QPaintEvent *)

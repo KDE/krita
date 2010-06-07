@@ -1,3 +1,20 @@
+/*
+ *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; version 2 of the License.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
 #include "kis_colselng_common_colors.h"
 #include <cmath>
 #include <QPixmap>
@@ -13,45 +30,28 @@
 
 
 KisColSelNgCommonColors::KisColSelNgCommonColors(QWidget *parent) :
-    QWidget(parent), m_numColors(30), m_patchWidth(25), m_patchHeight(25)
+    KisColSelNgColorPatches(parent), m_numColors(30), m_patchWidth(25), m_patchHeight(25)
 {
     m_extractedColors = extractColors();
+    setColors(m_extractedColors);
+    setPatchLayout(Horizontal, false, 2);
 //    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 }
 
-void KisColSelNgCommonColors::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-
-    int widgetWidth = width();
-    int numPatchesInARow = widgetWidth/m_patchWidth;
-
-    for(int i=0; i<m_extractedColors.size(); i++) {
-        int row = i/numPatchesInARow;
-        int col = i%numPatchesInARow;
-        painter.fillRect(col*m_patchWidth, row*m_patchHeight, m_patchWidth, m_patchHeight, m_extractedColors.at(i));
-    }
-}
-
-int KisColSelNgCommonColors::heightForWidth(int width) const
-{
-    int numPatchesInARow = width/m_patchWidth;
-    int numRows = m_numColors/numPatchesInARow;
-    return numRows*m_patchHeight;
-}
-
-QSize KisColSelNgCommonColors::sizeHint() const
-{
-    return QSize(m_patchWidth, m_patchHeight);
-}
-
-void KisColSelNgCommonColors::resizeEvent(QResizeEvent* event)
-{
-    if(event->oldSize() != event->size()) {
-        setMaximumHeight(heightForWidth(width()));
-        setMinimumHeight(heightForWidth(width()));
-    }
-}
+//void KisColSelNgCommonColors::paintEvent(QPaintEvent *)
+//{
+//    QPainter painter(this);
+//
+//    int widgetWidth = width();
+//    int numPatchesInARow = widgetWidth/m_patchWidth;
+//
+//    for(int i=0; i<m_extractedColors.size(); i++) {
+//        int row = i/numPatchesInARow;
+//        int col = i%numPatchesInARow;
+//        painter.fillRect(col*m_patchWidth, row*m_patchHeight, m_patchWidth, m_patchHeight, m_extractedColors.at(i));
+//    }
+//}
+//
 
 
 enum ColorAxis {RedAxis=0, GreenAxis, BlueAxis};
@@ -221,10 +221,8 @@ QList<QColor> KisColSelNgCommonColors::extractColors()
 
 QList<QRgb> KisColSelNgCommonColors::getColors()
 {
-//    QPixmap pixmap("/home/damdam/Pictures/backgrounds/mareeeee.jpg");
+    QPixmap pixmap("/home/damdam/Pictures/backgrounds/mare.jpg");
 //    QPixmap pixmap("/home/damdam/progn/kde/ImageColorsExtractor/testimgs/sanduhr.jpg");
-    QPixmap pixmap(10,10);
-    pixmap.fill(QColor(255,255,255));
     int width = pixmap.width();
     int height = pixmap.height();
 

@@ -225,8 +225,8 @@ QList<QRgb> KisColSelNgCommonColors::getColors()
     int height = pixmap.height();
 
     int pixelCount = height*width;
-    if(pixelCount>std::pow(2, 16)) {
-        qreal factor = sqrt(std::pow(2, 16)/(qreal) pixelCount);
+    if(pixelCount> (1<<16)) {
+        qreal factor = sqrt((1<<16)/(qreal) pixelCount);
         pixmap=pixmap.scaledToWidth(width*factor);
         width=pixmap.width();
         height=pixmap.height();

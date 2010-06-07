@@ -26,7 +26,7 @@ void KisColSelNgCommonColors::paintEvent(QPaintEvent *)
     int widgetWidth = width();
     int numPatchesInARow = widgetWidth/m_patchWidth;
 
-    for(int i=0; i<m_numColors; i++) {
+    for(int i=0; i<m_extractedColors.size(); i++) {
         int row = i/numPatchesInARow;
         int col = i%numPatchesInARow;
         painter.fillRect(col*m_patchWidth, row*m_patchHeight, m_patchWidth, m_patchHeight, m_extractedColors.at(i));
@@ -171,7 +171,10 @@ private:
 
 QList<QColor> KisColSelNgCommonColors::extractColors()
 {
-    VBox startBox(getColors());
+    QList<QRgb> colors = getColors();
+    if(colors.size()<m_numColors) return QList<QColor>();
+
+    VBox startBox(colors);
     QList<VBox> boxes;
     boxes.append(startBox);
 
@@ -218,9 +221,10 @@ QList<QColor> KisColSelNgCommonColors::extractColors()
 
 QList<QRgb> KisColSelNgCommonColors::getColors()
 {
-    QPixmap pixmap("/home/damdam/Pictures/backgrounds/mare.jpg");
+//    QPixmap pixmap("/home/damdam/Pictures/backgrounds/mareeeee.jpg");
 //    QPixmap pixmap("/home/damdam/progn/kde/ImageColorsExtractor/testimgs/sanduhr.jpg");
-    QImage image;
+    QPixmap pixmap(10,10);
+    pixmap.fill(QColor(255,255,255));
     int width = pixmap.width();
     int height = pixmap.height();
 
@@ -232,7 +236,7 @@ QList<QRgb> KisColSelNgCommonColors::getColors()
         height=pixmap.height();
     }
 
-    image = pixmap.toImage();
+    QImage image = pixmap.toImage();
     QSet<QRgb> colorList;
 
     for (int i=0; i<width; i++) {

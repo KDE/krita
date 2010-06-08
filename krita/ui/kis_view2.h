@@ -183,10 +183,6 @@ signals:
 
     void sigLoadingFinished();
 
-protected:
-
-    void resizeEvent ( QResizeEvent * event );
-
 private slots:
 
     void slotLoadingFinished();

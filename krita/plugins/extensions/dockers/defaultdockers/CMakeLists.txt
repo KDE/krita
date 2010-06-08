@@ -1,5 +1,3 @@
-include_directories(  )
-
 set(kritadefaultdockers_PART_SRCS 
     kis_palette_docker.cc
     kis_birdeye_box.cc

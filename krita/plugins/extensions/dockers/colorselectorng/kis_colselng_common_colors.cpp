@@ -28,31 +28,31 @@
 #include <QDebug>
 #include <iostream>
 
+#include "kis_canvas2.h"
+#include "kis_image.h"
+
 
 KisColSelNgCommonColors::KisColSelNgCommonColors(QWidget *parent) :
-    KisColSelNgColorPatches(parent), m_numColors(30), m_patchWidth(25), m_patchHeight(25)
+    KisColSelNgColorPatches(parent), m_numColors(30), m_canvas(0)
 {
+    setPatchLayout(Horizontal, false, 2);
     m_extractedColors = extractColors();
     setColors(m_extractedColors);
-    setPatchLayout(Horizontal, false, 2);
 //    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 }
 
-//void KisColSelNgCommonColors::paintEvent(QPaintEvent *)
-//{
-//    QPainter painter(this);
-//
-//    int widgetWidth = width();
-//    int numPatchesInARow = widgetWidth/m_patchWidth;
-//
-//    for(int i=0; i<m_extractedColors.size(); i++) {
-//        int row = i/numPatchesInARow;
-//        int col = i%numPatchesInARow;
-//        painter.fillRect(col*m_patchWidth, row*m_patchHeight, m_patchWidth, m_patchHeight, m_extractedColors.at(i));
-//    }
-//}
-//
+void KisColSelNgCommonColors::setCanvas(KoCanvasBase *canvas)
+{
+    /// todo: make clean
+    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    connect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()));
+}
 
+void KisColSelNgCommonColors::recalculate()
+{
+    m_extractedColors = extractColors();
+    setColors(m_extractedColors);
+}
 
 enum ColorAxis {RedAxis=0, GreenAxis, BlueAxis};
 
@@ -117,7 +117,6 @@ public:
         }
         int size = m_colors.size();
         Q_ASSERT(size>0);
-//        qDebug()<<size;
 
         return qRgb(r/size, g/size, b/size);
     }
@@ -172,31 +171,37 @@ private:
 QList<QColor> KisColSelNgCommonColors::extractColors()
 {
     QList<QRgb> colors = getColors();
-    if(colors.size()<m_numColors) return QList<QColor>();
+    if(colors.size()<m_numColors && false) {
+        QList<QColor> colorList;
+        for(int i=0; i<m_numColors-colorList.size(); i++)
+            colorList.append(QColor(255,255,255));
+
+        return colorList;
+    };
 
     VBox startBox(colors);
     QList<VBox> boxes;
     boxes.append(startBox);
 
-    while (boxes.size()<m_numColors*3/5) {
+    while (boxes.size()<m_numColors*3/5 && colors.size()>m_numColors*3/5) {
         int biggestBox=-1;
         int biggestBoxPopulation=-1;
 
         for(int i=0; i<boxes.size(); i++) {
             if(boxes.at(i).population()>biggestBoxPopulation) {
-                if(boxes.at(i).axisSize(boxes.at(i).biggestAxis())>10) {
-                    biggestBox=i;
-                    biggestBoxPopulation=boxes.at(i).population();
-                }
+                biggestBox=i;
+                biggestBoxPopulation=boxes.at(i).population();
             }
         }
 
+        if(boxes[biggestBox].population()<=3)
+            break;
         VBox newBox = boxes[biggestBox].divide();
         boxes.append(newBox);
     }
 
 
-    while (boxes.size()<m_numColors) {
+    while (boxes.size()<m_numColors && colors.size()>m_numColors) {
         int biggestBox=-1;
         int biggestBoxAxisSize=-1;
 
@@ -207,22 +212,36 @@ QList<QColor> KisColSelNgCommonColors::extractColors()
             }
         }
 
+        if(boxes[biggestBox].population()<=3)
+            break;
         VBox newBox = boxes[biggestBox].divide();
         boxes.append(newBox);
     }
 
     QList<QColor> colorList;
     for(int i=0; i<boxes.size(); i++) {
-        colorList.append(QColor(boxes.at(i).mean()));
+        if(boxes.at(i).population()>=1)
+            colorList.append(QColor(boxes.at(i).mean()));
     }
+
+    while(m_numColors>colorList.size())
+        colorList.append(QColor(0,0,0,0));
 
     return colorList;
 }
 
 QList<QRgb> KisColSelNgCommonColors::getColors()
 {
-    QPixmap pixmap("/home/damdam/Pictures/backgrounds/mare.jpg");
+//    QPixmap pixmap("/home/damdam/Pictures/backgrounds/mare.jpg");
 //    QPixmap pixmap("/home/damdam/progn/kde/ImageColorsExtractor/testimgs/sanduhr.jpg");
+
+    if(m_canvas == 0) return QList<QRgb>();
+    KisImageWSP kisImage = m_canvas->image();
+
+    QImage qImage = kisImage->convertToQImage(0,0, kisImage->width(), kisImage->height(), kisImage->profile());
+
+    QPixmap pixmap = QPixmap::fromImage(qImage);
+
     int width = pixmap.width();
     int height = pixmap.height();
 

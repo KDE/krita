@@ -19,6 +19,8 @@
 #include <QPainter>
 #include <QWheelEvent>
 
+#include <QDebug>
+
 KisColSelNgColorPatches::KisColSelNgColorPatches(QWidget *parent) :
     QWidget(parent), m_scrollValue(0)
 {
@@ -44,8 +46,10 @@ KisColSelNgColorPatches::KisColSelNgColorPatches(QWidget *parent) :
 
 void KisColSelNgColorPatches::setColors(QList<QColor>colors)
 {
+    qDebug()<<"KisColSelNgPatches::setColors() -> size:"<<colors.size();
     m_colors = colors;
     m_numPatches = colors.size();
+    update();
 }
 
 void KisColSelNgColorPatches::paintEvent(QPaintEvent *)

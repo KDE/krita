@@ -20,12 +20,15 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+#include <KoCanvasBase.h>
+
 #include "kis_colselng_my_paint_shade_selector.h"
 
 #include "kis_colselng_bar.h"
 #include "kis_colselng_my_paint_shade_selector.h"
 #include "kis_colselng_color_selector.h"
 #include "kis_colselng_color_patches.h"
+#include "kis_colselng_shade_selector.h"
 #include "kis_colselng_common_colors.h"
 
 KisColSelNgWidget::KisColSelNgWidget(QWidget *parent) :
@@ -35,13 +38,15 @@ KisColSelNgWidget::KisColSelNgWidget(QWidget *parent) :
     QWidget* bar = new KisColSelNgBar(this);
     QWidget* colorSelector = new KisColSelNgColorSelector(this);
     QWidget* myPaintShadeSel = new KisColSelNgMyPaintShadeSelector(this);
+    QWidget* shadeSel = new KisColSelNgShadeSelector(this);
     QWidget* colorPatches = new KisColSelNgColorPatches(this);
-    QWidget* commonColors = new KisColSelNgCommonColors(this);
+    m_commonColorsWidget = new KisColSelNgCommonColors(this);
 
     QVBoxLayout* verticalLayout = new QVBoxLayout();
     verticalLayout->addWidget(bar);
     verticalLayout->addWidget(colorSelector);
     verticalLayout->addWidget(myPaintShadeSel);
+    verticalLayout->addWidget(shadeSel);
 
     QHBoxLayout* horizontalLayout = new QHBoxLayout();
     horizontalLayout->addLayout(verticalLayout);
@@ -49,6 +54,10 @@ KisColSelNgWidget::KisColSelNgWidget(QWidget *parent) :
 
     QVBoxLayout* overallLayout = new QVBoxLayout(this);
     overallLayout->addLayout(horizontalLayout);
-    overallLayout->addWidget(commonColors);
+    overallLayout->addWidget(m_commonColorsWidget);
 }
 
+void KisColSelNgWidget::setCanvas(KoCanvasBase *canvas)
+{
+    m_commonColorsWidget->setCanvas(canvas);
+}

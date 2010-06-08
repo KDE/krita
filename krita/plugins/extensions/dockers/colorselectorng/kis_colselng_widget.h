@@ -21,16 +21,18 @@
 
 #include <QWidget>
 
+class KoCanvasBase;
+class KisColSelNgCommonColors;
+
 class KisColSelNgWidget : public QWidget
 {
 Q_OBJECT
 public:
     explicit KisColSelNgWidget(QWidget *parent = 0);
+    void setCanvas(KoCanvasBase* canvas);
 
-signals:
-
-public slots:
-
+private:
+    KisColSelNgCommonColors* m_commonColorsWidget;
 };
 
 #endif // COLORSELECTORNGWIDGET_H

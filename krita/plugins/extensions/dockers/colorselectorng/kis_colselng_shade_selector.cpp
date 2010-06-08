@@ -17,7 +17,28 @@
 
 #include "kis_colselng_shade_selector.h"
 
+#include <QPainter>
+
 KisColSelNgShadeSelector::KisColSelNgShadeSelector(QWidget *parent) :
     QWidget(parent)
 {
+    setMinimumHeight(30);
+    setMaximumHeight(30);
+}
+
+void KisColSelNgShadeSelector::paintEvent(QPaintEvent *) {
+    QPainter painter(this);
+
+    QLinearGradient g1(0,0, width(), 0);
+    g1.setColorAt(0, QColor(100,0,0));
+    g1.setColorAt(0.5, QColor(255,0,0));
+    g1.setColorAt(1, QColor(255,155,155));
+
+    QLinearGradient g2(0,0, width(), 0);
+    g2.setColorAt(0, QColor(155, 100, 0));
+    g2.setColorAt(0.5, QColor(255, 0, 0));
+    g2.setColorAt(1, QColor(155, 0, 100));
+
+    painter.fillRect(0,0,width(), height()/2, QBrush(g1));
+    painter.fillRect(0, height()/2, width(), height()/2, QBrush(g2));
 }

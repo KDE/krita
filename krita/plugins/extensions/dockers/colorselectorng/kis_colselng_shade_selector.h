@@ -25,11 +25,8 @@ class KisColSelNgShadeSelector : public QWidget
 Q_OBJECT
 public:
     explicit KisColSelNgShadeSelector(QWidget *parent = 0);
-
-signals:
-
-public slots:
-
+protected:
+    void paintEvent(QPaintEvent *);
 };
 
 #endif // KIS_COLSELNG_SHADE_SELECTOR_H

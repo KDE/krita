@@ -184,7 +184,7 @@ macro_log_feature(BLITZ_FOUND "QImageBlitz" "Image effect library" "http://www.k
 ## Test for QCA2
 ##
 macro_optional_find_package(QCA2)
-macro_log_feature(QCA2_FOUND "QCA" "Qt Cryptographic Architecture" "http://delta.affinix.com/qca" FALSE "2.0" "Required for encrypted OpenDocument files support (available as a module in kdesupport)")
+macro_log_feature(QCA2_FOUND "QCA" "Qt Cryptographic Architecture" "http://delta.affinix.com/qca" FALSE "2.0" "Required for encrypted OpenDocument files and encrypted xls files support (available as a module in kdesupport)")
 
 ##
 ## Test for exiv2
@@ -431,7 +431,7 @@ endif (SHOULD_BUILD_KIVIO)
 
 if (SHOULD_BUILD_KOUNAVAIL)
     macro_optional_add_subdirectory(kounavail)
-endif (SHOULD_BUILD_KOUNAVAIL)    
+endif (SHOULD_BUILD_KOUNAVAIL)
 
 if (SHOULD_BUILD_KPLATO)
     macro_optional_add_subdirectory(kdgantt)

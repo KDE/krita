@@ -34,6 +34,9 @@
 #include "kis_group_layer.h"
 #include "kis_external_layer_iface.h"
 
+/**
+ * This will convert all layers to the destination color space.
+ */
 class KRITAIMAGE_EXPORT KisColorSpaceConvertVisitor : public KisNodeVisitor
 {
 public:

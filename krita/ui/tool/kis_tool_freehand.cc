@@ -167,7 +167,6 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 
     // control-click gets the color at the current point. For now, only with a ratio of 1
     if (e->modifiers() & Qt::AltModifier && e->modifiers() & Qt::ControlModifier) {
-        qDebug() << "Alt!";
         if (e->button() == Qt::LeftButton)
             canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor,
                                                      KisToolUtils::pick(currentNode()->paintDevice(),

@@ -77,10 +77,10 @@
 static const int HIDE_OUTLINE_TIMEOUT = 800; // ms
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
-        : KisToolPaint(canvas, cursor)
-        , m_dragDist(0)
-        , m_transactionText(transactionText)
-        , m_mode(HOVER)
+    : KisToolPaint(canvas, cursor)
+    , m_dragDist(0)
+    , m_transactionText(transactionText)
+    , m_mode(HOVER)
 {
     m_painter = 0;
     m_tempLayer = 0;
@@ -117,11 +117,11 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     KisCanvas2* canvas2 = static_cast<KisCanvas2*>(canvas);
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), canvas2, SIGNAL(favoritePaletteCalled(const QPoint&)));
     connect(this, SIGNAL(sigPainting()), canvas2->view()->resourceProvider(), SLOT(slotPainting()));
-    
+
     m_showOutline = false;
     m_timer.setSingleShot(true);
     connect(&m_timer, SIGNAL(timeout()), this, SLOT( hideOutline() ));
-    
+
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -144,7 +144,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
             return;
         }
     }
-    
+
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     if (canvas2->handlePopupPaletteIsVisible(e)) return;
 
@@ -166,15 +166,26 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         return;
 
     // control-click gets the color at the current point. For now, only with a ratio of 1
-    if (e->modifiers() & Qt::ControlModifier ) {
+    if (e->modifiers() & Qt::AltModifier && e->modifiers() & Qt::ControlModifier) {
+        qDebug() << "Alt!";
         if (e->button() == Qt::LeftButton)
             canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor,
-                    KisToolUtils::pick(currentNode()->paintDevice(),
-                                       convertToIntPixelCoord(e)));
+                                                     KisToolUtils::pick(currentNode()->paintDevice(),
+                                                                        convertToIntPixelCoord(e)));
         else
             canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor,
-                    KisToolUtils::pick(currentNode()->paintDevice(),
-                                       convertToIntPixelCoord(e)));
+                                                     KisToolUtils::pick(currentNode()->paintDevice(),
+                                                                        convertToIntPixelCoord(e)));
+    } else if ( e->modifiers() & Qt::ControlModifier ) {
+        // get the current color of the project, as per Deevad's suggestion.
+        // this shouldn't be changed back to the current node :-)
+        KisPaintDeviceSP projection = image()->projection();
+        if (e->button() == Qt::LeftButton)
+            canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor,
+                                                     KisToolUtils::pick(projection, convertToIntPixelCoord(e)));
+        else
+            canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor,
+                                                     KisToolUtils::pick(projection, convertToIntPixelCoord(e)));
 
     } else if (e->modifiers() == Qt::ShiftModifier) {
         m_mode = EDIT_BRUSH;
@@ -188,9 +199,9 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         if (e->button() == Qt::LeftButton) {
             initPaint(e);
             m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point)),
-                                         e->pressure(), e->xTilt(), e->yTilt(),
-                                         KisVector2D::Zero(),
-                                         e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed());
+                                                             e->pressure(), e->xTilt(), e->yTilt(),
+                                                             KisVector2D::Zero(),
+                                                             e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed());
         } else if (m_mode == PAINT && (e->button() == Qt::RightButton || e->button() == Qt::MidButton)) {
             // end painting, if calling the menu or the pop up palette. otherwise there is weird behaviour
             endPaint();
@@ -214,47 +225,47 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     //    dbgUI << "mouseMoveEvent " << m_mode << " " << e->button() << " " << e->buttons();
     switch (m_mode) {
     case PAINT: {
-        QPointF pos = convertToPixelCoord(adjustPosition(e->point));
-        QPointF dragVec = pos - m_previousPaintInformation.pos();
+            QPointF pos = convertToPixelCoord(adjustPosition(e->point));
+            QPointF dragVec = pos - m_previousPaintInformation.pos();
 
-        KisPaintInformation info = KisPaintInformation(pos,
-                                   e->pressure(), e->xTilt(), e->yTilt(),
-                                   toKisVector2D(dragVec),
-                                   e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed());
+            KisPaintInformation info = KisPaintInformation(pos,
+                                                           e->pressure(), e->xTilt(), e->yTilt(),
+                                                           toKisVector2D(dragVec),
+                                                           e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed());
 
-        if (m_smooth) {
-            QPointF newTangent = dragVec;
+            if (m_smooth) {
+                QPointF newTangent = dragVec;
 
-            if (norm(newTangent) != 0) {
-                newTangent /= norm(newTangent) ;
+                if (norm(newTangent) != 0) {
+                    newTangent /= norm(newTangent) ;
+                }
+                double normVec = 0.5 * m_smoothness * norm(dragVec);
+                QPointF control1 = m_previousPaintInformation.pos() + m_previousTangent * normVec;
+                QPointF control2 = info.pos() - newTangent * normVec;
+                paintBezierCurve(m_previousPaintInformation,
+                                 control1,
+                                 control2,
+                                 info);
+                m_previousTangent = newTangent;
+                m_previousDrag = dragVec;
+            } else {
+                paintLine(m_previousPaintInformation, info);
             }
-            double normVec = 0.5 * m_smoothness * norm(dragVec);
-            QPointF control1 = m_previousPaintInformation.pos() + m_previousTangent * normVec;
-            QPointF control2 = info.pos() - newTangent * normVec;
-            paintBezierCurve(m_previousPaintInformation,
-                             control1,
-                             control2,
-                             info);
-            m_previousTangent = newTangent;
-            m_previousDrag = dragVec;
-        } else {
-            paintLine(m_previousPaintInformation, info);
-        }
 
-        m_previousPaintInformation = info;
-    }
-    break;
+            m_previousPaintInformation = info;
+        }
+        break;
     case EDIT_BRUSH: {
-        useCursor(KisCursor::blankCursor());
-        qreal dx = m_prevMousePos.x() - e->point.x();
-        qreal dy = m_prevMousePos.y() - e->point.y();
-        currentPaintOpPreset()->settings()->changePaintOpSize(-dx, -dy);
-        m_prevMousePos = e->point;
-    }
-    break;
+            useCursor(KisCursor::blankCursor());
+            qreal dx = m_prevMousePos.x() - e->point.x();
+            qreal dy = m_prevMousePos.y() - e->point.y();
+            currentPaintOpPreset()->settings()->changePaintOpSize(-dx, -dy);
+            m_prevMousePos = e->point;
+        }
+        break;
     case PAN: {
-        pan(e);
-    }
+            pan(e);
+        }
     default:
         ;
     }
@@ -420,7 +431,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     m_pathPaintAction = new KisRecordedPathPaintAction(
             KisNodeQueryPath::absolutePath(currentNode()),
             currentPaintOpPreset()
-        );
+            );
     m_pathPaintAction->setPaintIncremental(m_paintIncremental);
     setupPaintAction(m_pathPaintAction);
 #endif
@@ -441,7 +452,7 @@ void KisToolFreehand::endPaint()
 
         if (layer && !m_paintIncremental) {
             KisTransaction *incrementalTransaction =
-                dynamic_cast<KisTransaction*>(m_painter->endTransaction());
+                    dynamic_cast<KisTransaction*>(m_painter->endTransaction());
 
             KisPainter painter(m_source, currentSelection());
             painter.setCompositeOp(m_compositeOp);

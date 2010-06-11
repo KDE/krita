@@ -57,6 +57,7 @@ const qint32 KisTileDataPooler::TIMEOUT_FACTOR = 2;
 #define DEBUG_TILE_STATISTICS()
 #endif
 
+
 KisTileDataPooler::KisTileDataPooler(KisTileDataStore *store)
         : QThread()
 {
@@ -206,5 +207,5 @@ void KisTileDataPooler::debugTileStatistics()
         totalTiles++;
         preallocatedTiles += iter->m_clonesList.size();
     }
-    dbgTiles << "Tiles statistics:\t total:" << totalTiles << "\t preallocated:"<< preallocatedTiles;
+    qDebug() << "Tiles statistics:\t total:" << totalTiles << "\t preallocated:"<< preallocatedTiles;
 }

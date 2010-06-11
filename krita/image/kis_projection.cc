@@ -57,6 +57,8 @@ KisProjection::KisProjection(KisImageWSP image)
     m_d->updater = 0;
     updateSettings();
 
+    m_d->thread.start();
+
     m_d->updater = new KisImageUpdater();
     m_d->updater->moveToThread(&m_d->thread);
 
@@ -70,7 +72,6 @@ KisProjection::KisProjection(KisImageWSP image)
     connect(m_d->updater, SIGNAL(updateDone(QRect)),
             m_d->image, SLOT(slotProjectionUpdated(QRect)),
             Qt::DirectConnection);
-    m_d->thread.start();
 }
 
 

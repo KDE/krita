@@ -408,6 +408,7 @@ struct KisSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
 
 KisSliderSpinBox::KisSliderSpinBox(QWidget* parent) : KisAbstractSliderSpinBox(parent, new KisSliderSpinBoxPrivate)
 {
+  setRange(0,99);
 }
 
 KisSliderSpinBox::~KisSliderSpinBox()

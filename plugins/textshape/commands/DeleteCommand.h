@@ -24,6 +24,7 @@
 #include "TextCommandBase.h"
 #include <QTextCharFormat>
 #include <QList>
+#include <QSet>
 
 class TextTool;
 class QTextCursor;
@@ -50,7 +51,7 @@ public:
 private:
     TextTool *m_tool;
     QList<QUndoCommand *> m_shapeDeleteCommands;
-    QList<KoInlineObject *> m_invalidInlineObjects;
+    QSet<KoInlineObject *> m_invalidInlineObjects;
     bool m_first;
     bool m_undone;
     DeleteMode m_mode;

@@ -43,6 +43,18 @@ void KisUndoAdapter::removeCommandHistoryListener(KisCommandHistoryListener * l)
         m_undoListeners.remove(index);
 }
 
+void KisUndoAdapter::notifyCommandAdded(const QUndoCommand *command)
+{
+    if (!command) {
+        kWarning() << "Empty command!";
+        return;
+    }
+    foreach(KisCommandHistoryListener*  l, m_undoListeners) {
+        l->notifyCommandAdded(command);
+    }
+
+}
+
 void KisUndoAdapter::notifyCommandExecuted(const QUndoCommand *command)
 {
     if (!command) {
@@ -63,9 +75,7 @@ const QUndoCommand * KisUndoAdapter::presentCommand()
 void KisUndoAdapter::addCommand(QUndoCommand *command)
 {
     m_doc->addCommand(command);
-    foreach(KisCommandHistoryListener*  l, m_undoListeners) {
-        l->notifyCommandAdded(command);
-    }
+    notifyCommandAdded(command);
 }
 
 void KisUndoAdapter::undoLastCommand()

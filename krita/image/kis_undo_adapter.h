@@ -57,6 +57,11 @@ public:
 
     virtual void setCommandHistoryListener(KisCommandHistoryListener * l);
     virtual void removeCommandHistoryListener(KisCommandHistoryListener * l);
+
+    /**
+     * FIXME: Are both of these functions really used?
+     */
+    virtual void notifyCommandAdded(const QUndoCommand *command);
     virtual void notifyCommandExecuted(const QUndoCommand *command);
 
     virtual const QUndoCommand * presentCommand();

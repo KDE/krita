@@ -74,11 +74,25 @@ KisProjection::KisProjection(KisImageWSP image)
             Qt::DirectConnection);
 }
 
+#define WAIT_TIME 200 // ms
 
 KisProjection::~KisProjection()
 {
     m_d->thread.quit();
-    m_d->thread.wait();
+    if(!m_d->thread.wait(WAIT_TIME)) {
+        /**
+         * We've got a race condition: the thread hasn't started
+         * processing events when we sent him quit().
+         * So, let's do that once again.
+         */
+
+        m_d->thread.quit();
+        if(!m_d->thread.wait(WAIT_TIME)) {
+            // Hmm.. at least it was warned...
+            m_d->thread.terminate();
+            m_d->thread.wait();
+        }
+    }
 
     m_d->updater->deleteLater();
     delete m_d;

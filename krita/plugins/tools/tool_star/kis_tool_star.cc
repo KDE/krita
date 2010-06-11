@@ -236,6 +236,7 @@ QWidget* KisToolStar::createOptionWidget()
 
     QLabel *lblRatio = new QLabel(i18n("Ratio:"), widget);
     m_ratioSlider = new KisSliderSpinBox(widget);
+    m_ratioSlider->setRange(0, 100);
     m_ratioSlider->setValue(m_innerOuterRatio);
 
     addOptionWidgetOption(m_ratioSlider, lblRatio);

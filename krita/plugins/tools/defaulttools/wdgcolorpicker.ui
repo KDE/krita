@@ -87,7 +87,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="cmbPalette"/>
+      <widget class="SqueezedComboBox" name="cmbPalette"/>
      </item>
     </layout>
    </item>
@@ -133,6 +133,13 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>SqueezedComboBox</class>
+   <extends>QComboBox</extends>
+   <header>squeezedcombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

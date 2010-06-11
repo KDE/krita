@@ -251,7 +251,7 @@ QWidget* KisToolColorPicker::createOptionWidget()
 
     foreach(KoColorSet *palette, palettes) {
         if (palette) {
-            m_optionsWidget->cmbPalette->addItem(palette->name());
+            m_optionsWidget->cmbPalette->addSqueezedItem(palette->name());
             m_palettes.append(palette);
         }
     }
@@ -294,7 +294,7 @@ void KisToolColorPicker::slotAddPalette(KoResource* resource)
 {
     KoColorSet* palette = dynamic_cast<KoColorSet*>(resource);
     if (palette) {
-        m_optionsWidget->cmbPalette->addItem(palette->name());
+        m_optionsWidget->cmbPalette->addSqueezedItem(palette->name());
         m_palettes.append(palette);
     }
 }

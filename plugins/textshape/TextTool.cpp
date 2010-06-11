@@ -1846,6 +1846,8 @@ void TextTool::stopMacro()
 
 void TextTool::showStyleManager()
 {
+    if (m_textShapeData == 0)
+        return;
     KoStyleManager *styleManager = KoTextDocument(m_textShapeData->document()).styleManager();
     Q_ASSERT(styleManager);
     if (!styleManager)

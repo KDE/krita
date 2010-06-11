@@ -104,6 +104,7 @@ KoXmlWriter* KoOdfWriteStore::createOasisXmlWriter(QIODevice* dev, const char* r
         writer->addAttribute("xmlns:math", KoXmlNS::math);
         writer->addAttribute("xmlns:svg", KoXmlNS::svg);
         writer->addAttribute("xmlns:fo", KoXmlNS::fo);
+        writer->addAttribute("xmlns:anim", KoXmlNS::anim);
         writer->addAttribute("xmlns:smil", KoXmlNS::smil);
         writer->addAttribute("xmlns:koffice", KoXmlNS::koffice);
     }

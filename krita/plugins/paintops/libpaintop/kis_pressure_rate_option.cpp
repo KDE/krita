@@ -46,13 +46,19 @@ int KisPressureRateOption::rate() const
 void KisPressureRateOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
-    setting->setProperty("PressureRate", m_rate);
+    setting->setProperty("RateValue", m_rate);
+    setting->setProperty("RateVersion", "2");
 }
 
 void KisPressureRateOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     KisCurveOption::readOptionSetting(setting);
-    m_rate = setting->getInt("PressureRate");
+    if (setting->getString("RateVersion", "1") == "1") {
+        m_rate = setting->getInt("RatePressure");
+        setChecked(true);
+    } else {
+        m_rate = setting->getInt("RateValue");
+    }
 }
 
 quint8 KisPressureRateOption::apply(quint8 opacity, const KisPaintInformation& info) const

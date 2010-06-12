@@ -3,6 +3,7 @@
    Copyright (C) 2002-2003 Rob Buis <buis@kde.org>
    Copyright (C) 2002,2003,2005 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2010 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,7 +52,6 @@ StylePreview::StylePreview(QWidget * parent)
     setMaximumHeight(int(PANEL_SIZEY));
 
     installEventFilter(this);
-
     update(m_stroke, m_background);
 }
 
@@ -136,14 +136,17 @@ bool StylePreview::eventFilter(QObject *, QEvent *event)
 
 void StylePreview::update(KoShapeBorderModel * stroke, KoShapeBackground * fill)
 {
+    bool updateNeeded = false;
     if (fill != m_background) {
         if (m_background && !m_background->deref())
             delete m_background;
 
         m_background = fill;
 
-        if (m_background)
+        if (m_background) {
             m_background->ref();
+        }
+        updateNeeded = true;
     }
 
     if (stroke != m_stroke) {
@@ -152,11 +155,15 @@ void StylePreview::update(KoShapeBorderModel * stroke, KoShapeBackground * fill)
 
         m_stroke = stroke;
 
-        if (m_stroke)
+        if (m_stroke) {
             m_stroke->ref();
+        }
+        updateNeeded = true;
     }
 
-    QFrame::update();
+    if (updateNeeded) {
+        QFrame::update();
+    }
 }
 
 void StylePreview::drawFill(QPainter & painter, const KoShapeBackground * fill)

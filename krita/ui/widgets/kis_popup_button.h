@@ -63,6 +63,8 @@ public slots:
 
     void hidePopupWidget();
 protected:
+    void paintEvent(QPaintEvent* event);
+    
     void paintPopupArrow();
 private:
     struct Private;

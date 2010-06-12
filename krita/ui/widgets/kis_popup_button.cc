@@ -115,6 +115,12 @@ void KisPopupButton::hidePopupWidget()
     }
 }
 
+void KisPopupButton::paintEvent ( QPaintEvent * event  )
+{
+    QPushButton::paintEvent(event);
+    paintPopupArrow();
+}
+
 void KisPopupButton::paintPopupArrow()
 {
     QStylePainter p(this);

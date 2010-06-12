@@ -223,5 +223,5 @@ QString KoStyleStack::userStyleDisplayName(const QString& family) const
 
 void KoStyleStack::setTypeProperties(const char* typeProperties)
 {
-    m_propertiesTagName = typeProperties == 0 ? QByteArray("properties") : (QByteArray(typeProperties) + "-properties");
+    m_propertiesTagName = typeProperties == 0 ? QString("properties") : (QString(typeProperties) + "-properties");
 }

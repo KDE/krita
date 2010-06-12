@@ -363,7 +363,7 @@ namespace KoXml
  * Note: do *NOT* use getElementsByTagNameNS, it's recursive!
  */
 KOODF_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
-                                        const char* nsURI, const char* localName);
+                                        const QString& nsURI, const QString& localName);
 
 /**
  * Explicitly load child nodes of specified node, up to given depth.

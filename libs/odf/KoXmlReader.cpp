@@ -2800,8 +2800,8 @@ QString KoXmlInputSource::fromRawData(const QByteArray &data, bool beginning)
 //
 // ==================================================================
 
-KoXmlElement KoXml::namedItemNS(const KoXmlNode& node, const char* nsURI,
-                                const char* localName)
+KoXmlElement KoXml::namedItemNS(const KoXmlNode& node, const QString& nsURI,
+                                const QString& localName)
 {
 #ifdef KOXML_USE_QDOM
     // David's solution for namedItemNS, only for QDom stuff

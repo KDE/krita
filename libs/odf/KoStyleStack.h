@@ -161,10 +161,10 @@ private:
      */
     QList<KoXmlElement> m_stack;
 
-    QByteArray m_propertiesTagName;
+    QString m_propertiesTagName;
 
-    const char* m_styleNSURI;
-    const char* m_foNSURI;
+    QString m_styleNSURI;
+    QString m_foNSURI;
 
     class KoStyleStackPrivate;
     KoStyleStackPrivate * const d;

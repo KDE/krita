@@ -170,7 +170,12 @@ void KisMementoManager::registerTileDeleted(KisTile *tile)
 
 void KisMementoManager::commit()
 {
-    if (m_index.isEmpty()) return;
+    if (m_index.isEmpty()) {
+        if(namedTransactionInProgress())
+            warnTiles << "Named Transaction is empty";
+        m_currentMemento = 0;
+        return;
+    }
 
     KisMementoItemList revisionList;
     KisMementoItemSP mi;

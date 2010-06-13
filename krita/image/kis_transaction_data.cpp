@@ -25,6 +25,15 @@
 #include KIS_MEMENTO_HEADER
 
 
+//#define DEBUG_TRANSACTIONS
+
+#ifdef DEBUG_TRANSACTIONS
+    #define DEBUG_ACTION(action) qDebug() << action << "for" << m_d->device->dataManager()
+#else
+    #define DEBUG_ACTION(action)
+#endif
+
+
 class KisTransactionData::Private
 {
 public:
@@ -40,6 +49,7 @@ KisTransactionData::KisTransactionData(const QString& name, KisPaintDeviceSP dev
         , m_d(new Private())
 {
     m_d->device = device;
+    DEBUG_ACTION("Transaction started");
     m_d->memento = device->dataManager()->getMemento();
     m_d->firstRedo = true;
     m_d->transactionFinished = false;
@@ -57,6 +67,7 @@ KisTransactionData::~KisTransactionData()
 void KisTransactionData::endTransaction()
 {
     if(!m_d->transactionFinished) {
+        DEBUG_ACTION("Transaction ended");
         m_d->transactionFinished = true;
         m_d->device->dataManager()->commit();
     }
@@ -69,6 +80,8 @@ void KisTransactionData::redo()
         m_d->firstRedo = false;
         return;
     }
+
+    DEBUG_ACTION("Redo()");
 
     Q_ASSERT(m_d->memento);
     m_d->device->dataManager()->rollforward(m_d->memento);
@@ -83,6 +96,8 @@ void KisTransactionData::redo()
 
 void KisTransactionData::undo()
 {
+    DEBUG_ACTION("Undo()");
+
     Q_ASSERT(m_d->memento);
     m_d->device->dataManager()->rollback(m_d->memento);
 

@@ -374,21 +374,20 @@ QRect KisPaintDevice::exactBounds() const
 
 void KisPaintDevice::crop(qint32 x, qint32 y, qint32 w, qint32 h)
 {
-    m_datamanager->setExtent(x - m_d->x, y - m_d->y, w, h);
+    crop(QRect(x, y, w, h));
 }
 
 
-void KisPaintDevice::crop(const QRect & r)
+void KisPaintDevice::crop(const QRect &rect)
 {
-    QRect rc(r);
-    rc.translate(-m_d->x, -m_d->y);
-    m_datamanager->setExtent(rc);
+    m_datamanager->setExtent(rect.translated(-m_d->x, -m_d->y));
+    m_d->cache.invalidate();
 }
 
 void KisPaintDevice::setDefaultPixel(const quint8 *defPixel)
 {
-    m_d->cache.invalidate();
     m_datamanager->setDefaultPixel(defPixel);
+    m_d->cache.invalidate();
 }
 
 const quint8 *KisPaintDevice::defaultPixel() const
@@ -398,21 +397,21 @@ const quint8 *KisPaintDevice::defaultPixel() const
 
 void KisPaintDevice::clear()
 {
-    m_d->cache.invalidate();
     m_datamanager->clear();
+    m_d->cache.invalidate();
 }
 
 void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel)
 {
-    m_d->cache.invalidate();
     m_datamanager->clear(x, y, w, h, fillPixel);
+    m_d->cache.invalidate();
 }
 
 
 void KisPaintDevice::clear(const QRect & rc)
 {
-    m_d->cache.invalidate();
     m_datamanager->clear(rc.x(), rc.y(), rc.width(), rc.height(), m_datamanager->defaultPixel());
+    m_d->cache.invalidate();
 }
 
 bool KisPaintDevice::write(KoStore *store)
@@ -425,10 +424,10 @@ bool KisPaintDevice::write(KoStore *store)
 
 bool KisPaintDevice::read(KoStore *store)
 {
-    m_d->cache.invalidate();
     bool retval = m_datamanager->read(store);
-    emit ioProgress(100);
+    m_d->cache.invalidate();
 
+    emit ioProgress(100);
     return retval;
 }
 

@@ -18,45 +18,26 @@
  */
 
 #include "kis_image_commands.h"
-#include <QString>
-#include <QBitArray>
+#include "kis_image.h"
 
 #include <klocale.h>
 
-#include "KoColorSpaceRegistry.h"
-#include "KoColor.h"
-#include "KoColorProfile.h"
-#include "KoColorSpace.h"
 
-
-#include "kis_image.h"
-#include "kis_layer.h"
-#include "kis_group_layer.h"
-#include "kis_undo_adapter.h"
-
-KisImageResizeCommand::KisImageResizeCommand(KisImageWSP image, qint32 width, qint32 height, qint32 oldWidth, qint32 oldHeight)
+KisImageResizeCommand::KisImageResizeCommand(KisImageWSP image,
+                                             const QSize& newSize)
         : KisImageCommand(i18n("Resize Image"), image)
 {
-    m_before = QSize(oldWidth, oldHeight);
-    m_after = QSize(width, height);
+    // do we really need a translatable name for the command?
+    m_sizeBefore = image->size();
+    m_sizeAfter = newSize;
 }
 
 void KisImageResizeCommand::redo()
 {
-    setUndo(false);
-    m_image->lock();
-    m_image->resize(m_after.width(), m_after.height());
-    m_image->unlock();
-    m_image->refreshGraph();
-    setUndo(true);
+    m_image->setSize(m_sizeAfter);
 }
 
 void KisImageResizeCommand::undo()
 {
-    setUndo(false);
-    m_image->lock();
-    m_image->resize(m_before.width(), m_before.height());
-    m_image->unlock();
-    m_image->refreshGraph();
-    setUndo(true);
+    m_image->setSize(m_sizeBefore);
 }

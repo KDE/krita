@@ -19,7 +19,6 @@
 #ifndef KIS_TRANSACTION_DATA_H_
 #define KIS_TRANSACTION_DATA_H_
 
-//#include <QString>
 #include <QUndoCommand>
 
 #include "kis_types.h"

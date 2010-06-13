@@ -540,6 +540,9 @@ private:
     void emitSizeChanged();
     void preparePaintLayerAfterAdding(KisLayerSP layer);
 
+    friend class KisImageResizeCommand;
+    void setSize(const QSize& size);
+
 private:
     class KisImagePrivate;
     KisImagePrivate * const m_d;

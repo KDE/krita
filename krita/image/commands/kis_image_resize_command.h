@@ -35,16 +35,15 @@ class KoColorProfile;
 
 class KisImageResizeCommand : public KisImageCommand
 {
-
 public:
-    KisImageResizeCommand(KisImageWSP image, qint32 width, qint32 height, qint32 oldWidth, qint32 oldHeight);
+    KisImageResizeCommand(KisImageWSP image, const QSize& newRect);
 
-    virtual void redo();
-    virtual void undo();
+    void redo();
+    void undo();
 
 private:
-    QSize m_before;
-    QSize m_after;
+    QSize m_sizeBefore;
+    QSize m_sizeAfter;
 };
 
 #endif

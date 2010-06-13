@@ -350,67 +350,42 @@ void KisImage::notifyLayerUpdated(KisLayerSP layer)
     }
 }
 
-
-void KisImage::resize(const QRect& rc, bool cropLayers)
+void KisImage::setSize(const QSize& size)
 {
-    resize(rc.width(), rc.height(), rc.x(), rc.y(), cropLayers);
+    m_d->width = size.width();
+    m_d->height = size.height();
+    emitSizeChanged();
+}
+
+void KisImage::resize(const QRect& newRect, bool cropLayers)
+{
+    if(newRect == bounds())
+        return;
+
+    QString macroName = cropLayers ? i18n("Crop Image") : i18n("Resize Image");
+    m_d->adapter->beginMacro(macroName);
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
+    m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), newRect.size()));
+
+    if(cropLayers) {
+        KisCropVisitor visitor(newRect, m_d->adapter);
+        m_d->rootLayer->accept(visitor);
+    }
+
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
+    m_d->adapter->endMacro();
+
+    setModified();
 }
 
 void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
 {
-    if (w != width() || h != height()) {
-
-        if (undo()) {
-            if (cropLayers)
-                m_d->adapter->beginMacro(i18n("Crop Image"));
-            else
-                m_d->adapter->beginMacro(i18n("Resize Image"));
-
-            m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-            m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), w, h, width(), height()));
-        }
-
-        m_d->width = w;
-        m_d->height = h;
-
-        if (cropLayers) {
-            KisCropVisitor v(QRect(x, y, w, h), m_d->adapter);
-            m_d->rootLayer->accept(v);
-        }
-
-        emitSizeChanged();
-
-        if (undo()) {
-            m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-            m_d->adapter->endMacro();
-        }
-    }
+    resize(QRect(x, y, w, h), cropLayers);
 }
 
 void KisImage::resizeWithOffset(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset)
 {
-    if (w == width() && h == height() && xOffset == 0 && yOffset == 0)
-        return;
-
-    lock();
-    if (undo()) {
-        m_d->adapter->beginMacro(i18n("Size Canvas"));
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-        m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), w, h, width(), height()));
-    }
-
-    KisCropVisitor v(QRect(-xOffset, -yOffset, w, h), m_d->adapter);
-    m_d->rootLayer->accept(v);
-
-    emitSizeChanged();
-
-    unlock();
-
-    if (undo()) {
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-        m_d->adapter->endMacro();
-    }
-
+    resize(QRect(-xOffset, -yOffset, w, h), true);
 }
 
 void KisImage::emitSizeChanged()
@@ -453,7 +428,7 @@ void KisImage::scale(double sx, double sy, KoUpdater *progress, KisFilterStrateg
         }
 
         if (undo()) {
-            m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), w, h, width(), height()));
+            m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), QSize(w,h)));
         }
 
         m_d->width = w;
@@ -492,7 +467,7 @@ void KisImage::rotate(double radians, KoUpdater *progress)
     KisTransformVisitor visitor(KisImageWSP(this), 1.0, 1.0, 0, 0, radians, -tx, -ty, progress, filter);
     m_d->rootLayer->accept(visitor);
 
-    if (undo()) m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), w, h, width(), height()));
+    if (undo()) m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), QSize(w,h)));
 
     m_d->width = w;
     m_d->height = h;
@@ -544,7 +519,7 @@ void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
         v.setUndoAdapter(m_d->adapter);
         rootLayer()->accept(v);
 
-        if (undo()) m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), w, h, width(), height()));
+        if (undo()) m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), QSize(w,h)));
 
         m_d->width = w;
         m_d->height = h;

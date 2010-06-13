@@ -197,14 +197,7 @@ void KisLayerManager::imageResizeToActiveLayer()
     if (image && (layer = activeLayer())) {
 
         undoAdapter->beginMacro(i18n("Resize Image to Size of Current Layer"));
-
-        image->lock();
-
-        QRect r = layer->exactBounds();
-        image->resize(r.width(), r.height(), r.x(), r.y(), true);
-
-        image->unlock();
-
+        image->resize(layer->exactBounds(), true);
         undoAdapter->endMacro();
     }
 }

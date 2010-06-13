@@ -400,54 +400,28 @@ void KisImage::emitSizeChanged()
 
 void KisImage::scale(double sx, double sy, KoUpdater *progress, KisFilterStrategy *filterStrategy)
 {
-    QStringList list;
-    list << "KisLayer";
-
-    KisCountVisitor visitor(list, KoProperties());
-    m_d->rootLayer->accept(visitor);
-
-    if (visitor.count() == 0) return; // Nothing to scale
-
     // New image size. XXX: Pass along to discourage rounding errors?
     qint32 w, h;
     w = (qint32)((width() * sx) + 0.5);
     h = (qint32)((height() * sy) + 0.5);
 
-    if (w != width() || h != height()) {
+    QSize newSize(w, h);
+    if(newSize == size()) return;
 
-        lock();
+    m_d->adapter->beginMacro(i18n("Scale Image"));
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
+    m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), newSize));
 
-        if (undo()) {
-            m_d->adapter->beginMacro(i18n("Scale Image"));
-            m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-        }
+    KisTransformVisitor visitor(KisImageWSP(this), sx, sy, 0.0, 0.0, 0.0, 0, 0, progress, filterStrategy);
+    m_d->rootLayer->accept(visitor);
 
-        {
-            KisTransformVisitor visitor(KisImageWSP(this), sx, sy, 0.0, 0.0, 0.0, 0, 0, progress, filterStrategy);
-            m_d->rootLayer->accept(visitor);
-        }
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
+    m_d->adapter->endMacro();
 
-        if (undo()) {
-            m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), QSize(w,h)));
-        }
-
-        m_d->width = w;
-        m_d->height = h;
-
-        emitSizeChanged();
-
-        unlock();
-
-        if (undo()) {
-            m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-            m_d->adapter->endMacro();
-        }
-    }
+    setModified();
 }
 void KisImage::rotate(double radians, KoUpdater *progress)
 {
-    lock();
-
     qint32 w = width();
     qint32 h = height();
     qint32 tx = qint32((w * cos(radians) - h * sin(radians) - w) / 2 + 0.5);
@@ -458,28 +432,19 @@ void KisImage::rotate(double radians, KoUpdater *progress)
     tx -= (w - width()) / 2;
     ty -= (h - height()) / 2;
 
-    if (undo()) {
-        m_d->adapter->beginMacro(i18n("Rotate Image"));
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-    }
+    m_d->adapter->beginMacro(i18n("Rotate Image"));
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
+    m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), QSize(w,h)));
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
+
     KisTransformVisitor visitor(KisImageWSP(this), 1.0, 1.0, 0, 0, radians, -tx, -ty, progress, filter);
     m_d->rootLayer->accept(visitor);
 
-    if (undo()) m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), QSize(w,h)));
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
+    m_d->adapter->endMacro();
 
-    m_d->width = w;
-    m_d->height = h;
-
-    emitSizeChanged();
-
-    unlock();
-
-    if (undo()) {
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-        m_d->adapter->endMacro();
-    }
+    setModified();
 }
 
 void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
@@ -506,33 +471,21 @@ void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
             h = (qint32)(height() + qAbs(w * tan(angleY * pi / 180)));
     }
 
-    if (w != width() || h != height()) {
+    QSize newSize(w, h);
+    if(newSize == size()) return;
 
-        lock();
+    m_d->adapter->beginMacro(i18n("Shear Image"));
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
+    m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), newSize));
 
-        if (undo()) {
-            m_d->adapter->beginMacro(i18n("Shear Image"));
-            m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-        }
+    KisShearVisitor visitor(angleX, angleY, progress);
+    visitor.setUndoAdapter(m_d->adapter);
+    rootLayer()->accept(visitor);
 
-        KisShearVisitor v(angleX, angleY, progress);
-        v.setUndoAdapter(m_d->adapter);
-        rootLayer()->accept(v);
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
+    m_d->adapter->endMacro();
 
-        if (undo()) m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), QSize(w,h)));
-
-        m_d->width = w;
-        m_d->height = h;
-
-        emitSizeChanged();
-
-        unlock();
-
-        if (undo()) {
-            m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-            m_d->adapter->endMacro();
-        }
-    }
+    setModified();
 }
 
 void KisImage::convertTo(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)

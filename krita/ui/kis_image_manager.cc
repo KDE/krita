@@ -130,8 +130,6 @@ void KisImageManager::scaleCurrentImage(double sx, double sy, KisFilterStrategy 
     KoUpdaterPtr up = updater->startSubtask();
 
     m_view->image()->scale(sx, sy, up, filterStrategy);
-    m_view->image()->setModified();
-    m_view->layerManager()->layersUpdated();
     updater->deleteLater();
 }
 
@@ -144,8 +142,6 @@ void KisImageManager::rotateCurrentImage(double radians)
     KoUpdaterPtr up = updater->startSubtask();
 
     m_view->image()->rotate(radians, up);
-    m_view->image()->setModified();
-    m_view->layerManager()->layersUpdated();
 
     m_view->statusBar()->progress()->detachUpdater(updater);
     updater->deleteLater();
@@ -160,8 +156,6 @@ void KisImageManager::shearCurrentImage(double angleX, double angleY)
     KoUpdaterPtr up = updater->startSubtask();
 
     m_view->image()->shear(angleX, angleY, up);
-    m_view->image()->setModified();
-    m_view->layerManager()->layersUpdated();
 
     m_view->statusBar()->progress()->detachUpdater(updater);
     updater->deleteLater();

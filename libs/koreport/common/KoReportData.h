@@ -27,17 +27,16 @@ class KOREPORT_EXPORT KoReportData
 {
 
 public:
-    virtual ~KoReportData() {}
+    virtual ~KoReportData();
 
     //! Describes sorting for single field
     /*! By default the order is ascending. */
     class KOREPORT_EXPORT SortedField
     {
     public:
-        SortedField() : order(Qt::AscendingOrder) {}
+        SortedField();
         QString field;
         Qt::SortOrder order;
-        //bool group; //probably not required?
     };
 
     //!Open the dataset
@@ -69,10 +68,10 @@ public:
 
     //!Return the list of field names
     virtual QStringList fieldNames() const = 0;
-    
+
     //!Return the list of field keys. Returns fieldNames() by default
-    virtual QStringList fieldKeys() const { return fieldNames(); }
-    
+    virtual QStringList fieldKeys() const;
+
     //!Return the value of the field at the given position for the current record
     virtual QVariant value(unsigned int) const = 0;
 
@@ -80,44 +79,38 @@ public:
     virtual QVariant value(const QString &field) const = 0;
 
     //!Return the name of this source
-    virtual QString sourceName() const {return QString();}
+    virtual QString sourceName() const;
 
     //!Sets the sorting for the data
     //!Should be called before open() so that the data source can be edited accordingly
     //!Default impl does nothing
-    virtual void setSorting(const QList<SortedField>& sorting) { Q_UNUSED(sorting); }
+    virtual void setSorting(const QList<SortedField> &sorting);
 
     /**
     @brief Adds an expression to the data source
     */
-    virtual void addExpression(const QString &field, const QVariant &value, int relation = '='){}
+    virtual void addExpression(const QString &field, const QVariant &value, int relation = '=');
 
     //!Utility Functions
     //!TODO These are probably eligable to be moved into a new class
 
     //!Allow the reportdata implementation to return a list of possible scripts for a given language
-    virtual QStringList scriptList(const QString& language) const {
-        Q_UNUSED(language); return QStringList();
-    }
+    virtual QStringList scriptList(const QString& language) const;
 
     //!Allow the reportdata implementation to return some script code based on a specific script name
     //!and a language, as set in the report
-    virtual QString scriptCode(const QString& script, const QString& language) const {
-        Q_UNUSED(script); Q_UNUSED(language); return QString();
-    }
+    virtual QString scriptCode(const QString& script, const QString& language) const;
 
     //!Return a list of data sources possible for advanced controls
-    virtual QStringList dataSources() const { return QStringList(); }
+    virtual QStringList dataSources() const;
     //!Return a list of data source names possible for advanced controls.
     //!Returns dataSources() by default
-    virtual QStringList dataSourceNames() const { return dataSources(); }
+    virtual QStringList dataSourceNames() const;
 
     //!Allow a driver to create a new instance with a new data source
     //!source is a driver specific identifier
     //!Owner of the returned pointer is the caller
-    virtual KoReportData* data(const QString &source) {
-        Q_UNUSED(source); return 0;
-    }
+    virtual KoReportData* data(const QString &source);
 };
 
 #endif

@@ -28,8 +28,9 @@ public:
 
 signals:
     void openSettings();
-public slots:
-
+private:
+    QWidget* m_pipetteButton;
+    QWidget* m_settingsButton;
 };
 
 #endif // KIS_COLSELNG_BAR_H

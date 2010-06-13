@@ -33,9 +33,11 @@ public:
     KisColSelNgMyPaintShadeSelector(QWidget *parent = 0);
 
 public:
-    QImage getSelector(const QColor& color);
+    QImage getSelector();
 protected:
     void paintEvent(QPaintEvent *);
+    void mousePressEvent(QMouseEvent *);
+    void setColor(const QColor& c);
 private:
     void precalcData();
     static const int m_size = 256;

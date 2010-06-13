@@ -25,6 +25,7 @@
 #include <QImage>
 #include <QColor>
 #include <QPainter>
+#include <QMouseEvent>
 
 #include <QtGlobal>
 
@@ -37,7 +38,8 @@ KisColSelNgMyPaintShadeSelector::KisColSelNgMyPaintShadeSelector(QWidget *parent
         QWidget(parent)
 {
     precalcData();
-    setMinimumSize(100, 100);
+    setMinimumSize(120, 120);
+    setColor(QColor(200,30,30));
 }
 
 void KisColSelNgMyPaintShadeSelector::paintEvent(QPaintEvent *) {
@@ -45,7 +47,25 @@ void KisColSelNgMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 
     int size = qMin(width(), height());
 
-    painter.drawImage(0,0, getSelector(QColor(200,30,30)).scaled(size, size));
+    painter.drawImage(0,0, getSelector().scaled(size, size));
+}
+
+void KisColSelNgMyPaintShadeSelector::setColor(const QColor &c) {
+    m_colorH=c.hsvHueF();
+    m_colorS=c.hsvSaturationF();
+    m_colorV=c.valueF();
+}
+
+void KisColSelNgMyPaintShadeSelector::mousePressEvent(QMouseEvent* event)
+{
+    int x = event->x();
+    int y = event->y();
+
+    qreal wdgSize = qMin(width(), height());
+    qreal ratio = 256.0/wdgSize;
+
+    setColor(getColor(x*ratio, y*ratio));
+    update();
 }
 
 void KisColSelNgMyPaintShadeSelector::precalcData() {
@@ -125,13 +145,8 @@ void KisColSelNgMyPaintShadeSelector::precalcData() {
     }
 }
 
-QImage KisColSelNgMyPaintShadeSelector::getSelector(const QColor &color) {
+QImage KisColSelNgMyPaintShadeSelector::getSelector() {
     QImage result(m_size,m_size,QImage::Format_RGB32);
-
-    m_colorH = color.hsvHueF();
-    m_colorS = color.hsvSaturationF();
-    m_colorV = color.valueF();
-
 
     for(int i=0; i<m_size; i++) {
         for(int j=0; j<m_size; j++) {

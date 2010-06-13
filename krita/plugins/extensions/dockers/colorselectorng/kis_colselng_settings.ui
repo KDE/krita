@@ -31,7 +31,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -123,12 +123,12 @@
           <string>Type</string>
          </property>
          <property name="buddy">
-          <cstring>comboBox_4</cstring>
+          <cstring>shadeSelectorType</cstring>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QComboBox" name="comboBox_4">
+        <widget class="QComboBox" name="shadeSelectorType">
          <item>
           <property name="text">
            <string>MyPaint</string>
@@ -144,6 +144,16 @@
            <string>No</string>
           </property>
          </item>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QCheckBox" name="shadeSelectorHideable">
+         <property name="text">
+          <string>Shade Selector is hideable</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
       </layout>
@@ -447,8 +457,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>256</x>
-     <y>541</y>
+     <x>260</x>
+     <y>299</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -463,8 +473,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>324</x>
-     <y>541</y>
+     <x>328</x>
+     <y>299</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -479,11 +489,11 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>590</x>
-     <y>131</y>
+     <x>416</x>
+     <y>150</y>
     </hint>
     <hint type="destinationlabel">
-     <x>461</x>
+     <x>391</x>
      <y>210</y>
     </hint>
    </hints>
@@ -495,11 +505,11 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>590</x>
-     <y>131</y>
+     <x>416</x>
+     <y>150</y>
     </hint>
     <hint type="destinationlabel">
-     <x>657</x>
+     <x>497</x>
      <y>210</y>
     </hint>
    </hints>
@@ -511,11 +521,11 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>590</x>
-     <y>131</y>
+     <x>416</x>
+     <y>150</y>
     </hint>
     <hint type="destinationlabel">
-     <x>461</x>
+     <x>391</x>
      <y>238</y>
     </hint>
    </hints>
@@ -527,11 +537,11 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>590</x>
-     <y>131</y>
+     <x>416</x>
+     <y>150</y>
     </hint>
     <hint type="destinationlabel">
-     <x>657</x>
+     <x>497</x>
      <y>238</y>
     </hint>
    </hints>
@@ -543,11 +553,11 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>723</x>
-     <y>131</y>
+     <x>500</x>
+     <y>150</y>
     </hint>
     <hint type="destinationlabel">
-     <x>461</x>
+     <x>391</x>
      <y>210</y>
     </hint>
    </hints>
@@ -559,11 +569,11 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>723</x>
-     <y>131</y>
+     <x>500</x>
+     <y>150</y>
     </hint>
     <hint type="destinationlabel">
-     <x>657</x>
+     <x>497</x>
      <y>210</y>
     </hint>
    </hints>
@@ -575,11 +585,11 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>723</x>
-     <y>131</y>
+     <x>500</x>
+     <y>150</y>
     </hint>
     <hint type="destinationlabel">
-     <x>461</x>
+     <x>391</x>
      <y>238</y>
     </hint>
    </hints>
@@ -591,11 +601,11 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>723</x>
-     <y>131</y>
+     <x>500</x>
+     <y>150</y>
     </hint>
     <hint type="destinationlabel">
-     <x>657</x>
+     <x>497</x>
      <y>238</y>
     </hint>
    </hints>
@@ -671,7 +681,7 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>294</x>
+     <x>247</x>
      <y>150</y>
     </hint>
     <hint type="destinationlabel">
@@ -687,7 +697,7 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>294</x>
+     <x>247</x>
      <y>150</y>
     </hint>
     <hint type="destinationlabel">
@@ -703,7 +713,7 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>294</x>
+     <x>247</x>
      <y>150</y>
     </hint>
     <hint type="destinationlabel">
@@ -719,7 +729,7 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>294</x>
+     <x>247</x>
      <y>150</y>
     </hint>
     <hint type="destinationlabel">
@@ -767,12 +777,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>512</x>
-     <y>164</y>
+     <x>501</x>
+     <y>178</y>
     </hint>
     <hint type="destinationlabel">
-     <x>536</x>
-     <y>239</y>
+     <x>501</x>
+     <y>242</y>
     </hint>
    </hints>
   </connection>

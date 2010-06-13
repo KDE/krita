@@ -41,6 +41,8 @@ public:
 
 public slots:
     void openSettings();
+protected:
+    void resizeEvent(QResizeEvent* e=0);
 
 private:
     void updateLayout();
@@ -48,13 +50,18 @@ private:
     KisColSelNgBar* m_barWidget;
     KisColSelNgColorSelector* m_colorSelectorWidget;
     KisColSelNgMyPaintShadeSelector* m_myPaintShadeWidget;
-    KisColSelNgShadeSelector* m_shadeSelectionWidget;
+    KisColSelNgShadeSelector* m_minimalShadeWidget;
     KisColSelNgColorPatches* m_lastColorsWidget;
     KisColSelNgCommonColors* m_commonColorsWidget;
+    QWidget* m_bigWidgetsParent;
 
-    QVBoxLayout* m_bigWidgetsLayout;
-    QHBoxLayout* m_horizontalColorPatchesLayout;
-    QVBoxLayout* m_verticalColorPathcesLayout;
+    QHBoxLayout* m_verticalColorPatchesLayout; // vertical color patches should be added here
+    QVBoxLayout* m_horizontalColorPatchesLayout;//horizontal ----------"----------------------
+    QVBoxLayout* m_standardBarLayout;
+
+    //shade selector options
+    QWidget* m_shadeWidget;
+    bool m_shadeSelectorHideable;
 
     //color patches options
     bool m_lastColorsShow;

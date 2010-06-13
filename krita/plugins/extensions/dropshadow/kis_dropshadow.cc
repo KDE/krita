@@ -88,9 +88,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
     KisPaintDeviceSP dev = m_view->activeDevice();
     if (!dev) return;
 
-    if (image->undo()) {
-        image->undoAdapter()->beginMacro(i18n("Add Drop Shadow"));
-    }
+    image->undoAdapter()->beginMacro(i18n("Add Drop Shadow"));
 
     KisPaintDeviceSP shadowDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     KisPaintDeviceSP bShadowDev;
@@ -166,9 +164,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
         m_view->image()->setModified();
     }
 
-    if (image->undo()) {
-        image->undoAdapter()->endMacro();
-    }
+    image->undoAdapter()->endMacro();
 
     progressUpdater->setProgress(100);
 }

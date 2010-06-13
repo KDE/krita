@@ -275,11 +275,6 @@ public:
     KisActionRecorder* actionRecorder() const;
 
     /**
-     * Returns true if this image wants undo information, false otherwise
-     */
-    bool undo() const;
-
-    /**
      * Tell the image it's modified; this emits the sigImageModified
      * signal. This happens when the image needs to be saved
      */

@@ -74,7 +74,7 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
 
         if (device) {
             KisPainter painter(device, currentSelection());
-            if (currentImage()->undo()) painter.beginTransaction(i18n("Polygon"));
+            painter.beginTransaction(i18n("Polygon"));
             setupPainter(&painter);
             painter.setOpacity(m_opacity);
             painter.setCompositeOp(m_compositeOp);

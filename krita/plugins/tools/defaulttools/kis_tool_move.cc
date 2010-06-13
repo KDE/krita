@@ -149,9 +149,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
             node = currentNode();
         }
 
-        if (currentImage()->undo()) {
-            currentImage()->undoAdapter()->beginMacro(i18n("Move"));
-        }
+        currentImage()->undoAdapter()->beginMacro(i18n("Move"));
 
         if (selection && !selection->isTotallyUnselected(image->bounds())) {
             //selection->convertToQImage(0).save("selection.png");

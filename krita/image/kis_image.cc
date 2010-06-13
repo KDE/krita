@@ -965,11 +965,6 @@ KisActionRecorder* KisImage::actionRecorder() const
     return m_d->recorder;
 }
 
-bool KisImage::undo() const
-{
-    return (m_d->adapter && m_d->adapter->undo());
-}
-
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
     if(m_d->rootLayer)

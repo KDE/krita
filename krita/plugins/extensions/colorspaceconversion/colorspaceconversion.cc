@@ -132,16 +132,12 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
 
         const KoColorSpace * cs = dlgColorSpaceConversion->m_page->colorSpaceSelector->currentColorSpace();
 
-        if (image->undo()) {
-            image->undoAdapter()->beginMacro(i18n("Convert Layer Type"));
-        }
+        image->undoAdapter()->beginMacro(i18n("Convert Layer Type"));
 
         KisColorSpaceConvertVisitor visitor(image, cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
         layer->accept(visitor);
 
-        if (image->undo()) {
-            image->undoAdapter()->endMacro();
-        }
+        image->undoAdapter()->endMacro();
 
         QApplication::restoreOverrideCursor();
         m_view->nodeManager()->nodesUpdated();

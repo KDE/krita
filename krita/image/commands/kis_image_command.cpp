@@ -18,21 +18,11 @@
  */
 
 #include "kis_image_commands.h"
-#include <QString>
-#include <QBitArray>
-
 #include <klocale.h>
-
-#include "KoColorSpaceRegistry.h"
-#include "KoColor.h"
-#include "KoColorProfile.h"
-#include "KoColorSpace.h"
-
 
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_group_layer.h"
-#include "kis_undo_adapter.h"
+
 
 KisImageCommand::KisImageCommand(const QString& name, KisImageWSP image)
         : QUndoCommand(name)
@@ -42,13 +32,6 @@ KisImageCommand::KisImageCommand(const QString& name, KisImageWSP image)
 
 KisImageCommand::~KisImageCommand()
 {
-}
-
-void KisImageCommand::setUndo(bool undo)
-{
-    if (m_image->undoAdapter()) {
-        m_image->undoAdapter()->setUndo(undo);
-    }
 }
 
 static inline bool isLayer(KisNodeSP node) {

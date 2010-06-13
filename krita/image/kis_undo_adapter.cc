@@ -24,7 +24,6 @@
 
 KisUndoAdapter::KisUndoAdapter(KoDocument* doc): m_doc(doc)
 {
-    m_undo = true;
 }
 
 KisUndoAdapter::~KisUndoAdapter()
@@ -94,16 +93,6 @@ void KisUndoAdapter::undoLastCommand()
      * to the undoStack
      */
     m_doc->undoStack()->undo();
-}
-
-void KisUndoAdapter::setUndo(bool undo)
-{
-    m_undo = undo;
-}
-
-bool KisUndoAdapter::undo() const
-{
-    return m_undo;
 }
 
 void KisUndoAdapter::beginMacro(const QString& macroName)

@@ -25,12 +25,8 @@
 #include <QUndoCommand>
 #include <QSize>
 #include <QRect>
-#include <QBitArray>
 #include "kis_types.h"
 
-class KoCompositeOp;
-class KoColorSpace;
-class KoColorProfile;
 
 /// the base command for commands altering a KisImage
 class KisImageCommand : public QUndoCommand
@@ -67,13 +63,6 @@ protected:
     };
 
 protected:
-    /**
-     * Lock/Unlocks the undoAdapter for undo operations.
-     * Set this at start and end of commands, which use recursion.
-     * @param undo State the undoAdapter will be set to.
-     */
-    void setUndo(bool undo);
-
     KisImageWSP m_image;
 };
 

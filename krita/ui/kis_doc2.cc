@@ -175,20 +175,16 @@ void KisDoc2::slotLoadingFinished() {
 
 void KisDoc2::openExistingFile(const KUrl& url)
 {
-    setUndo(false);
     qApp->setOverrideCursor(Qt::BusyCursor);
     KoDocument::openExistingFile(url);
     qApp->restoreOverrideCursor();
-    setUndo(true);
 }
 
 void KisDoc2::openTemplate(const KUrl& url)
 {
-    setUndo(false);
     qApp->setOverrideCursor(Qt::BusyCursor);
     KoDocument::openTemplate(url);
     qApp->restoreOverrideCursor();
-    setUndo(true);
 }
 
 bool KisDoc2::init()
@@ -206,8 +202,6 @@ bool KisDoc2::init()
     m_d->undoAdapter = new KisUndoAdapter(this);
     connect(undoStack(), SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
     Q_CHECK_PTR(m_d->undoAdapter);
-
-    setUndo(true);
 
     m_d->nserver = new KisNameServer(1);
     Q_CHECK_PTR(m_d->nserver);
@@ -271,7 +265,6 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
         return false;
     }
 
-    setUndo(false);
     Q_ASSERT(m_d->kraLoader == 0);
     m_d->kraLoader = new KisKraLoader(this, syntaxVersion);
 
@@ -321,7 +314,6 @@ bool KisDoc2::completeLoading(KoStore *store)
     m_d->kraLoader = 0;
 
     setModified(false);
-    setUndo(true);
     m_d->image->setUndoAdapter(m_d->undoAdapter);
     m_d->shapeController->setImage(m_d->image);
     m_d->nodeModel->setImage(m_d->image);
@@ -389,8 +381,6 @@ bool KisDoc2::newImage(const QString& name,
 
     qApp->setOverrideCursor(Qt::BusyCursor);
 
-    setUndo(false);
-
     image = new KisImage(m_d->undoAdapter, width, height, cs, name);
     Q_CHECK_PTR(image);
     image->lock();
@@ -414,7 +404,6 @@ bool KisDoc2::newImage(const QString& name,
     cfg.defImageHeight(height);
     cfg.defImageResolution(imageResolution);
 
-    setUndo(true);
 
     qApp->restoreOverrideCursor();
     return true;
@@ -480,16 +469,6 @@ QPixmap KisDoc2::generatePreview(const QSize& size)
     return QPixmap(size);
 }
 
-void KisDoc2::setUndo(bool undo)
-{
-    m_d->undoAdapter->setUndo(undo);
-}
-
-bool KisDoc2::undo() const
-{
-    return m_d->undoAdapter->undo();
-}
-
 KoShapeControllerBase * KisDoc2::shapeController() const
 {
     return m_d->shapeController;
@@ -516,7 +495,6 @@ void KisDoc2::prepareForImport()
 {
     if (m_d->nserver == 0)
         init();
-    setUndo(false);
 }
 
 KisImageWSP KisDoc2::image() const
@@ -536,7 +514,6 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
     m_d->shapeController->setImage(image);
     m_d->nodeModel->setImage(image);
 
-    setUndo(true);
     setModified(false);
 
     connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setModified()));

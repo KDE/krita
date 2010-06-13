@@ -93,9 +93,6 @@ public:
     /// Generate a scaled-down pixmap of the image projection that fits in size
     virtual QPixmap generatePreview(const QSize& size);
 
-    virtual void setUndo(bool undo);
-    virtual bool undo() const;
-
 public slots:
 
     /**

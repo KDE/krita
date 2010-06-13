@@ -207,8 +207,8 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
     if (!progressUpdater->interrupted()) {
 
-        KisUndoAdapter * undo = 0;
-        if (outputOps == TO_LAYERS && (undo = image->undoAdapter()) && undo->undo()) {
+        KisUndoAdapter * undo = image->undoAdapter();
+        if (outputOps == TO_LAYERS) {
             undo->beginMacro(i18n("Separate Image"));
         }
 
@@ -233,11 +233,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
             if (outputOps == TO_LAYERS) {
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
-                if (undo && undo->undo()) {
-                    adapter.addNode(l.data(), image->rootLayer(), 0);
-                } else {
-                    image->addNode(l.data(), image->rootLayer());
-                }
+                adapter.addNode(l.data(), image->rootLayer(), 0);
             } else {
                 QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
                 QString mimelist = listMimeFilter.join(" ");
@@ -279,7 +275,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
             ++deviceIt;
         }
 
-        if (outputOps == TO_LAYERS && undo && undo->undo()) {
+        if (outputOps == TO_LAYERS) {
             undo->endMacro();
         }
         m_view->image()->unlock();

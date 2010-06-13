@@ -428,7 +428,7 @@ void KisToolCurve::paintCurve()
     if (!device) return;
 
     KisPainter painter(device);
-    if (m_currentImage->undo()) painter.beginTransaction(m_transactionMessage);
+    painter.beginTransaction(m_transactionMessage);
     painter.setBounds(m_currentImage->bounds());
     painter.setPaintColor(m_subject->fgColor());
     painter.setBrush(m_subject->currentBrush());
@@ -446,9 +446,7 @@ void KisToolCurve::paintCurve()
     device->setDirty(painter.dirtyRegion());
     notifyModified();
 
-    if (m_currentImage->undo()) {
-        m_currentImage->undoAdapter()->addCommandOld(painter.endTransaction());
-    }
+    m_currentImage->undoAdapter()->addCommandOld(painter.endTransaction());
 
     draw(false);
 }
@@ -489,8 +487,8 @@ void KisToolCurve::selectCurve()
     QApplication::setOverrideCursor(KisCursor::waitCursor());
     KisPaintDeviceSP dev = currentNode()->paintDevice();
     bool hasSelection = dev->hasSelection();
-    KisSelectedTransaction *t = 0;
-    if (m_currentImage->undo() && hasSelection) t = new KisSelectedTransaction(m_transactionMessage, dev);
+    KisSelectedTransaction *transaction = 0;
+    if (hasSelection) transaction = new KisSelectedTransaction(m_transactionMessage, currentNode());
     KisSelectionSP selection = dev->selection();
 
     if (!hasSelection) {
@@ -527,10 +525,11 @@ void KisToolCurve::selectCurve()
     } else {
         dev->setDirty();
     }
-    /*
-        if (m_currentImage->undo())
-            m_currentImage->undoAdapter()->addCommandOld(t);
-    */
+
+    if (transaction) {
+        transaction->commit(m_currentImage->undoAdapter());
+        delete transaction;
+    }
     QApplication::restoreOverrideCursor();
 
     draw(false);

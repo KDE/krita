@@ -67,8 +67,6 @@ public:
     virtual const QUndoCommand * presentCommand();
     virtual void addCommand(QUndoCommand *cmd);
     virtual void undoLastCommand();
-    virtual void setUndo(bool undo);
-    virtual bool undo() const;
 
     /// XXX: is this actually threadsafe?
     virtual void beginMacro(const QString& macroName);
@@ -87,7 +85,6 @@ private:
 
     QVector<KisCommandHistoryListener*> m_undoListeners;
     KoDocument* m_doc;
-    bool m_undo;
 };
 
 

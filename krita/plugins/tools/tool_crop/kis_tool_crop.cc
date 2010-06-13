@@ -441,15 +441,13 @@ void KisToolCrop::crop()
     if (m_optWidget->cmbType->currentIndex() == 0 && currentNode()->paintDevice()) {
         // The layer(s) under the current layer will take care of adding
         // undo information to the Crop macro.
-        if (currentImage()->undo())
-            currentImage()->undoAdapter()->beginMacro(i18n("Crop"));
+        currentImage()->undoAdapter()->beginMacro(i18n("Crop"));
 
         KisCropVisitor v(cropRect, false);
         KisNodeSP node = currentNode();
         node->accept(v);
 
-        if (currentImage()->undo())
-            currentImage()->undoAdapter()->endMacro();
+        currentImage()->undoAdapter()->endMacro();
 
     } else {
         // Resize creates the undo macro itself

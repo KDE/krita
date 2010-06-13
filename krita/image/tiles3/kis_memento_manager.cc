@@ -46,19 +46,42 @@
 #endif
 
 
+/**
+ * The class is supposed to store the changes of the paint device
+ * it is associated with. The history of changes is presented in form
+ * of transactions (revisions). If you purge the history of one
+ * transaction (revision) with purgeHistory() we won't be able to undo
+ * the changes made by this transactions.
+ *
+ * The Memento Manager can be in two states:
+ *     - Named Transaction is in progress - it means the caller
+ *       has explicitly requested creation of a new transaction.
+ *       The handle for the transaction is stored on a side of
+ *       the caller. And the history will be automatically purged
+ *       when the handler dies.
+ *     - Anonymous Transaction is in progress - the caller isn't
+ *       bothered about transactions at all. We pretend as we do
+ *       not support any versioning and do not have any historical
+ *       information. The history of such transactions is not purged
+ *       automatically, but it is free'd when younger named transaction
+ *       is purged.
+ */
+
+#define blockRegistration() (m_registrationBlocked = true)
+#define unblockRegistration() (m_registrationBlocked = false)
+#define registrationBlocked() (m_registrationBlocked)
+
+#define namedTransactionInProgress() ((bool)m_currentMemento)
+
 KisMementoManager::KisMementoManager()
     : m_index(0),
-      m_headsHashTable(0)
+      m_headsHashTable(0),
+      m_registrationBlocked(false)
 {
     /**
-     * Get an initial memento to show we want history for ALL the devices.
-     * If we don't do it, we won't be able to start history later,
-     * as we don't have any special api for this.
-     * It shouldn't create much overhead for unversioned devices as
-     * no tile-duplication accurs without calling a commit()
-     * method regularily.
+     * Tile change/delete registration is enabled for all
+     * devices by default. It can't be delayed.
      */
-    (void) getMemento();
 }
 
 KisMementoManager::KisMementoManager(const KisMementoManager& rhs)
@@ -66,11 +89,12 @@ KisMementoManager::KisMementoManager(const KisMementoManager& rhs)
         m_revisions(rhs.m_revisions),
         m_cancelledRevisions(rhs.m_cancelledRevisions),
         m_headsHashTable(rhs.m_headsHashTable, 0),
-        m_currentMemento(rhs.m_currentMemento)
+        m_currentMemento(rhs.m_currentMemento),
+        m_registrationBlocked(rhs.m_registrationBlocked)
 {
-    Q_ASSERT_X(m_currentMemento,
+    Q_ASSERT_X(!m_registrationBlocked,
                "KisMementoManager", "(impossible happened) "
-               "Seems like a device was created without history support");
+               "The device has been copied while registration was blocked");
 }
 
 KisMementoManager::~KisMementoManager()
@@ -100,7 +124,7 @@ KisMementoManager::~KisMementoManager()
 
 void KisMementoManager::registerTileChange(KisTile *tile)
 {
-    if (!m_currentMemento) return;
+    if (registrationBlocked()) return;
     m_cancelledRevisions.clear();
 
     DEBUG_LOG_TILE_ACTION("reg. [C]", tile, tile->col(), tile->row());
@@ -111,7 +135,9 @@ void KisMementoManager::registerTileChange(KisTile *tile)
         mi = new KisMementoItem();
         mi->changeTile(tile);
         m_index.addTile(mi);
-        m_currentMemento->updateExtent(mi->col(), mi->row());
+
+        if(namedTransactionInProgress())
+            m_currentMemento->updateExtent(mi->col(), mi->row());
     }
     else {
         mi->reset();
@@ -121,7 +147,7 @@ void KisMementoManager::registerTileChange(KisTile *tile)
 
 void KisMementoManager::registerTileDeleted(KisTile *tile)
 {
-    if (!m_currentMemento) return;
+    if (registrationBlocked()) return;
     m_cancelledRevisions.clear();
 
     DEBUG_LOG_TILE_ACTION("reg. [D]", tile, tile->col(), tile->row());
@@ -132,7 +158,9 @@ void KisMementoManager::registerTileDeleted(KisTile *tile)
         mi = new KisMementoItem();
         mi->deleteTile(tile, m_headsHashTable.defaultTileData());
         m_index.addTile(mi);
-        m_currentMemento->updateExtent(mi->col(), mi->row());
+
+        if(namedTransactionInProgress())
+            m_currentMemento->updateExtent(mi->col(), mi->row());
     }
     else {
         mi->reset();
@@ -168,7 +196,10 @@ void KisMementoManager::commit()
     hItem.memento = m_currentMemento.data();
     m_revisions.append(hItem);
 
+    m_currentMemento = 0;
     Q_ASSERT(m_index.isEmpty());
+
+    DEBUG_DUMP_MESSAGE("COMMIT_DONE");
 
     // Waking up pooler to prepare copies for us
     globalTileDataStore.kickPooler();
@@ -177,34 +208,29 @@ void KisMementoManager::commit()
 KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row)
 {
     /**
-     * Our getOldTile mechanism is supposed to return current tile, if
-     * the history is disabled. So we return zero if no transaction
-     * is in progress.
+     * Our getOldTile mechanism is supposed to return current
+     * tile, if the history is disabled. So we return zero if
+     * no named transaction is in progress.
      */
-    if(!m_currentMemento || !m_currentMemento->valid())
+    if(!namedTransactionInProgress())
         return 0;
 
-//    KisMementoItemSP mi = m_headsHashTable.getReadOnlyTileLazy(col, row);
-//    Q_ASSERT(mi);
-//    return mi->tile(0);
-
-    /**
-     * FIXME: We emulate unversioned devices here
-     * It means that if there is no history present,
-     * we return null, instead of a default tile.
-     * This may lead to wrong results in filters
-     * I guess, should be fixed after transaction refactor...
-     */
-    KisMementoItemSP mi = m_headsHashTable.getExistedTile(col, row);
-    return mi ? mi->tile(0) : 0;
+    KisMementoItemSP mi = m_headsHashTable.getReadOnlyTileLazy(col, row);
+    Q_ASSERT(mi);
+    return mi->tile(0);
 }
 
 KisMementoSP KisMementoManager::getMemento()
 {
+    /**
+     * We do not allow nested transactions
+     */
+    Q_ASSERT(!namedTransactionInProgress());
+
     commit();
     m_currentMemento = new KisMemento(this);
 
-    DEBUG_DUMP_MESSAGE("GET_MEMENTO");
+    DEBUG_LOG_SIMPLE_ACTION("GET_MEMENTO_DONE");
 
     return m_currentMemento;
 }
@@ -212,8 +238,6 @@ KisMementoSP KisMementoManager::getMemento()
 #define forEachReversed(iter, list) \
         for(iter=list.end(); iter-- != list.begin();)
 
-#define saveAndClearMemento(memento) KisMementoSP _mem = (memento); memento=0
-#define restoreMemento(memento) (memento) = _mem
 
 void KisMementoManager::rollback(KisTileHashTable *ht)
 {
@@ -227,7 +251,7 @@ void KisMementoManager::rollback(KisTileHashTable *ht)
     KisMementoItemSP parentMI;
     KisMementoItemList::iterator iter;
 
-    saveAndClearMemento(m_currentMemento);
+    blockRegistration();
     forEachReversed(iter, changeList.itemList) {
         mi=*iter;
         parentMI = mi->parent();
@@ -245,16 +269,20 @@ void KisMementoManager::rollback(KisTileHashTable *ht)
     }
     /**
      * NOTE: tricky hack alert.
-     * We have  just deleted some tiles  from original hash  table.  And they
-     * accurately reported to us about  their death. Should have reported...
-     * But we   prevented   addition   of  their   bodies   with   zeroing
-     * m_currentMemento. All dead tiles are going to /dev/null :)
+     * We have just deleted some tiles from the original hash table.
+     * And they accurately reported to us about their death. Should
+     * have reported... But we have prevented their registration with
+     * explicitly blocking the process. So all the dead tiles are
+     * going to /dev/null :)
      *
-     * PS: It could cause some race condition... But for now we can insist on
-     * serialization  of rollback()/rollforward()  requests.Speaking  truly i
-     * can't see sny sense in calling rollback() concurrently.
+     * PS: It could cause some race condition... But we insist on
+     * serialization  of rollback()/rollforward() requests. There is
+     * not much sense in calling rollback() concurrently.
      */
-    restoreMemento(m_currentMemento);
+    unblockRegistration();
+
+    // We have just emulated a commit so:
+    Q_ASSERT(!namedTransactionInProgress());
 
     m_cancelledRevisions.prepend(changeList);
     DEBUG_DUMP_MESSAGE("UNDONE");
@@ -270,7 +298,7 @@ void KisMementoManager::rollforward(KisTileHashTable *ht)
 
     KisMementoItemSP mi;
 
-    saveAndClearMemento(m_currentMemento);
+    blockRegistration();
     foreach(mi, changeList.itemList) {
         if (mi->parent()->type() == KisMementoItem::CHANGED)
             ht->deleteTile(mi->col(), mi->row());
@@ -279,21 +307,11 @@ void KisMementoManager::rollforward(KisTileHashTable *ht)
 
         m_index.addTile(mi);
     }
-    /**
-     * NOTE: tricky hack alert.
-     * We have  just deleted some tiles  from original hash  table.  And they
-     * accurately reported to us about  their death. Should have reported...
-     * But we   prevented   addition   of  their   bodies   with   zeroing
-     * m_currentMemento. All dead tiles are going to /dev/null :)
-     *
-     * PS: It could cause some race condition... But for now we can insist on
-     * serialization  of rollback()/rollforward()  requests.Speaking  truly i
-     * can't see sny sense in calling rollback() concurrently.
-     */
+    // see comment in rollback()
 
     m_currentMemento = changeList.memento;
     commit();
-    restoreMemento(m_currentMemento);
+    unblockRegistration();
     DEBUG_DUMP_MESSAGE("REDONE");
 }
 
@@ -312,6 +330,8 @@ void KisMementoManager::purgeHistory(KisMementoSP oldestMemento)
 
     Q_ASSERT(m_revisions.first().memento == oldestMemento);
     resetRevisionHistory(m_revisions.first().itemList);
+
+    DEBUG_DUMP_MESSAGE("PURGE_HISTORY");
 }
 
 qint32 KisMementoManager::findRevisionByMemento(KisMementoSP memento) const

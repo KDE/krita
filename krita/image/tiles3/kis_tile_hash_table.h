@@ -38,6 +38,7 @@ class KisTileHashTableTraits
 public:
     typedef T               TileType;
     typedef KisSharedPtr<T> TileTypeSP;
+    typedef KisWeakSharedPtr<T> TileTypeWSP;
 
     KisTileHashTableTraits(KisMementoManager *mm);
     KisTileHashTableTraits(const KisTileHashTableTraits<T> &ht,

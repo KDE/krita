@@ -144,6 +144,14 @@ public:
         return m_mementoManager->getMemento();
     }
 
+    /**
+     * Finishes having already started transaction
+     */
+    void commit() {
+        QWriteLocker locker(&m_lock);
+        m_mementoManager->commit();
+    }
+
     void rollback(KisMementoSP memento) {
         Q_UNUSED(memento);
         QWriteLocker locker(&m_lock);

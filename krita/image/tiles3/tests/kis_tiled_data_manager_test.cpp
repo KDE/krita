@@ -34,43 +34,54 @@ bool KisTiledDataManagerTest::memoryIsFilled(quint8 c, quint8 *mem, qint32 size)
 
 #define TILESIZE 64*64
 
-void KisTiledDataManagerTest::testMemento()
+void KisTiledDataManagerTest::testTransactions()
 {
     quint8 defaultPixel = 0;
     KisTiledDataManager dm(1, &defaultPixel);
 
-    quint8 oddPixel = 128;
+    quint8 oddPixel1 = 128;
+    quint8 oddPixel2 = 129;
+    quint8 oddPixel3 = 130;
 
-    dm.clear(0, 0, 64, 64, &oddPixel);
+    KisTileSP tile00;
+    KisTileSP oldTile00;
+
+    // Create a named transaction: versioning is enabled
     KisMementoSP memento1 = dm.getMemento();
-
-    dm.clear(64, 0, 64, 64, &oddPixel);
-
-
-    KisTileSP tile00 = dm.getTile(0, 0, false);
-    KisTileSP tile10 = dm.getTile(1, 0, false);
-    KisTileSP oldTile00 = dm.getOldTile(0, 0);
-    KisTileSP oldTile10 = dm.getOldTile(1, 0);
-
-    qDebug()<<ppVar(tile10)<<ppVar(oldTile10);
-
-    QVERIFY(memoryIsFilled(oddPixel, tile00->data(), TILESIZE));
-    QVERIFY(memoryIsFilled(oddPixel, tile10->data(), TILESIZE));
-    QVERIFY(memoryIsFilled(oddPixel, oldTile00->data(), TILESIZE));
-    QVERIFY(memoryIsFilled(defaultPixel, oldTile10->data(), TILESIZE));
-
-
-    KisMementoSP memento2 = dm.getMemento();
+    dm.clear(0, 0, 64, 64, &oddPixel1);
 
     tile00 = dm.getTile(0, 0, false);
-    tile10 = dm.getTile(1, 0, false);
     oldTile00 = dm.getOldTile(0, 0);
-    oldTile10 = dm.getOldTile(1, 0);
+    QVERIFY(memoryIsFilled(oddPixel1, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(defaultPixel, oldTile00->data(), TILESIZE));
+    tile00 = oldTile00 = 0;
 
-    QVERIFY(memoryIsFilled(oddPixel, tile00->data(), TILESIZE));
-    QVERIFY(memoryIsFilled(oddPixel, tile10->data(), TILESIZE));
-    QVERIFY(memoryIsFilled(oddPixel, oldTile00->data(), TILESIZE));
-    QVERIFY(memoryIsFilled(oddPixel, oldTile10->data(), TILESIZE));
+    // Create an anonymous transaction: versioning is disabled
+    dm.commit();
+    tile00 = dm.getTile(0, 0, false);
+    oldTile00 = dm.getOldTile(0, 0);
+    QVERIFY(memoryIsFilled(oddPixel1, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(oddPixel1, oldTile00->data(), TILESIZE));
+    tile00 = oldTile00 = 0;
+
+    dm.clear(0, 0, 64, 64, &oddPixel2);
+
+    // Versioning is disabled, i said! >:)
+    tile00 = dm.getTile(0, 0, false);
+    oldTile00 = dm.getOldTile(0, 0);
+    QVERIFY(memoryIsFilled(oddPixel2, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(oddPixel2, oldTile00->data(), TILESIZE));
+    tile00 = oldTile00 = 0;
+
+    // And the last round: named transaction:
+    KisMementoSP memento2 = dm.getMemento();
+    dm.clear(0, 0, 64, 64, &oddPixel3);
+
+    tile00 = dm.getTile(0, 0, false);
+    oldTile00 = dm.getOldTile(0, 0);
+    QVERIFY(memoryIsFilled(oddPixel3, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(oddPixel2, oldTile00->data(), TILESIZE));
+    tile00 = oldTile00 = 0;
 
 }
 
@@ -86,10 +97,10 @@ void KisTiledDataManagerTest::testPurgeHistory()
 
     KisMementoSP memento1 = dm.getMemento();
     dm.clear(0, 0, 64, 64, &oddPixel1);
+    dm.commit();
 
     KisMementoSP memento2 = dm.getMemento();
     dm.clear(0, 0, 64, 64, &oddPixel2);
-
 
     KisTileSP tile00;
     KisTileSP oldTile00;
@@ -109,6 +120,8 @@ void KisTiledDataManagerTest::testPurgeHistory()
     oldTile00 = dm.getOldTile(0, 0);
     QVERIFY(memoryIsFilled(oddPixel2, tile00->data(), TILESIZE));
     QVERIFY(memoryIsFilled(oddPixel1, oldTile00->data(), TILESIZE));
+
+    dm.commit();
 
     dm.purgeHistory(memento2);
 
@@ -131,9 +144,11 @@ void KisTiledDataManagerTest::testPurgeHistory()
 
     KisMementoSP memento3 = dm.getMemento();
     dm.clear(0, 0, 64, 64, &oddPixel3);
+    dm.commit();
 
     KisMementoSP memento4 = dm.getMemento();
     dm.clear(0, 0, 64, 64, &oddPixel4);
+    dm.commit();
 
     dm.rollback(memento4);
 

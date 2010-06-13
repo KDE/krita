@@ -29,7 +29,7 @@ private:
     bool memoryIsFilled(quint8 c, quint8 *mem, qint32 size);
 
 private slots:
-    void testMemento();
+    void testTransactions();
     void testPurgeHistory();
     void stressTest();
 };

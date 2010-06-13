@@ -141,6 +141,16 @@ KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row)
 
 #ifdef SANITY_CHECKS
             tile->setNext(0);
+            TileTypeWSP checkTile = tile;
+            tile = 0;
+            Q_ASSERT_X(!m_mementoManager || !checkTile.isValid(),
+                       "KisTileHashTableTraits::unlinkTile()",
+                       "sanity check failed: "
+                       "the tile is going to be unlinked from "
+                       "the hash table, while still being accessed "
+                       "from the outer world. It can (will) lead to wrong "
+                       "history registered by KisMementoManager. "
+                       "We'll better crash right now!");
 #endif
             m_numTiles--;
             return tile;

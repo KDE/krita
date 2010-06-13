@@ -140,10 +140,19 @@ protected:
 
     /**
      * Stores extent of current INDEX.
-     *
-     * Used for reporting to the stuff at the top about our work
+     * It is the "name" of current named transaction
      */
     KisMementoSP m_currentMemento;
+
+    /**
+     * The flag that blocks registration of changes on tiles.
+     * This is a temporary state of the memento manager, that
+     * is used for travelling in history
+     *
+     * \see rollback()
+     * \see rollforward()
+     */
+    bool m_registrationBlocked;
 };
 
 #endif /* KIS_MEMENTO_MANAGER_ */

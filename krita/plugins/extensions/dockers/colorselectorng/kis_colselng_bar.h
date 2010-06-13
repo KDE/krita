@@ -27,7 +27,7 @@ public:
     explicit KisColSelNgBar(QWidget *parent = 0);
 
 signals:
-
+    void openSettings();
 public slots:
 
 };

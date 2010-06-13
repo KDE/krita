@@ -20,9 +20,17 @@
 #define COLORSELECTORNGWIDGET_H
 
 #include <QWidget>
+#include "kis_colselng_color_patches.h"
 
 class KoCanvasBase;
 class KisColSelNgCommonColors;
+class KisColSelNgBar;
+class KisColSelNgColorSelector;
+class KisColSelNgMyPaintShadeSelector;
+class KisColSelNgShadeSelector;
+
+class QVBoxLayout;
+class QHBoxLayout;
 
 class KisColSelNgWidget : public QWidget
 {
@@ -31,8 +39,35 @@ public:
     explicit KisColSelNgWidget(QWidget *parent = 0);
     void setCanvas(KoCanvasBase* canvas);
 
+public slots:
+    void openSettings();
+
 private:
+    void updateLayout();
+
+    KisColSelNgBar* m_barWidget;
+    KisColSelNgColorSelector* m_colorSelectorWidget;
+    KisColSelNgMyPaintShadeSelector* m_myPaintShadeWidget;
+    KisColSelNgShadeSelector* m_shadeSelectionWidget;
+    KisColSelNgColorPatches* m_lastColorsWidget;
     KisColSelNgCommonColors* m_commonColorsWidget;
+
+    QVBoxLayout* m_bigWidgetsLayout;
+    QHBoxLayout* m_horizontalColorPatchesLayout;
+    QVBoxLayout* m_verticalColorPathcesLayout;
+
+    //color patches options
+    bool m_lastColorsShow;
+    KisColSelNgColorPatches::Direction m_lastColorsDirection;
+    bool m_lastColorsScrolling;
+    int m_lastColorsColCount;
+    int m_lastColorsRowCount;
+
+    bool m_commonColorsShow;
+    KisColSelNgColorPatches::Direction m_commonColorsDirection;
+    bool m_commonColorsScrolling;
+    int m_commonColorsColCount;
+    int m_commonColorsRowCount;
 };
 
 #endif // COLORSELECTORNGWIDGET_H

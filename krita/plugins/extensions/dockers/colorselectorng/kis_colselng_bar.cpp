@@ -51,4 +51,5 @@ KisColSelNgBar::KisColSelNgBar(QWidget *parent) :
     layout->addStretch(2);
     layout->addWidget(settingsButton);
 
+    connect(settingsButton, SIGNAL(clicked()), this, SIGNAL(openSettings()));
 }

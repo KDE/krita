@@ -11,11 +11,11 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
         kis_colselng_shade_selector.cpp
 	kis_colselng_settings.cpp)
 
-kde4_add_plugin(kritacolorselectorng ${KRITA_COLORSELECTORNG_PART_SRCS})
-
 kde4_add_ui_files(KRITA_COLORSELECTORNG_PART_SRCS
     kis_colselng_settings.ui
 )
+
+kde4_add_plugin(kritacolorselectorng ${KRITA_COLORSELECTORNG_PART_SRCS})
 
 target_link_libraries(kritacolorselectorng kritaui)
 

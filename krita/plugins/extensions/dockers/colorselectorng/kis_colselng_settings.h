@@ -31,11 +31,9 @@ public:
     KisColSelNgSettings(QWidget *parent = 0);
     ~KisColSelNgSettings();
 
+    Ui::KisColSelNgSettings *ui;
 protected:
     void changeEvent(QEvent *e);
-
-private:
-    Ui::KisColSelNgSettings *ui;
 };
 
 #endif // KIS_COLSELNG_SETTINGS_H

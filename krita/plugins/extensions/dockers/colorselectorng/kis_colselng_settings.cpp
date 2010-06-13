@@ -24,6 +24,12 @@ KisColSelNgSettings::KisColSelNgSettings(QWidget *parent) :
     ui(new Ui::KisColSelNgSettings)
 {
     ui->setupUi(this);
+    ui->lbl_lastUsedNumRows->hide();
+    ui->lastUsedColorsNumRows->hide();
+
+    ui->lbl_commonColorsNumCols->hide();
+    ui->commonColorsNumCols->hide();
+    resize(minimumSize());
 }
 
 KisColSelNgSettings::~KisColSelNgSettings()

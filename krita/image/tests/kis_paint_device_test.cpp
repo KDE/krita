@@ -120,17 +120,17 @@ void KisPaintDeviceTest::testGeometry()
     cs->fromQColor(Qt::white, pixel);
     dev->fill(0, 0, 512, 512, pixel);
 
-    QVERIFY(dev->exactBounds() == QRect(0, 0, 512, 512));
-    QVERIFY(dev->extent() == QRect(0, 0, 512, 512));
+    QCOMPARE(dev->exactBounds(), QRect(0, 0, 512, 512));
+    QCOMPARE(dev->extent(), QRect(0, 0, 512, 512));
 
     dev->move(10, 10);
 
-    QVERIFY(dev->exactBounds() == QRect(10, 10, 512, 512));
-    QVERIFY(dev->extent() == QRect(10, 10, 512, 512));
+    QCOMPARE(dev->exactBounds(), QRect(10, 10, 512, 512));
+    QCOMPARE(dev->extent(), QRect(10, 10, 512, 512));
 
     dev->crop(50, 50, 50, 50);
-    QVERIFY(dev->exactBounds() == QRect(50, 50, 50, 50));
-    QVERIFY(dev->extent() == QRect(50, 50, 50, 50));
+    QCOMPARE(dev->exactBounds(), QRect(50, 50, 50, 50));
+    QCOMPARE(dev->extent(), QRect(10, 10, 128, 128));
 
     QColor c;
 
@@ -147,11 +147,8 @@ void KisPaintDeviceTest::testGeometry()
     dev->pixel(80, 80, &c);
     QVERIFY(c.alpha() == OPACITY_TRANSPARENT_U8);
 
-    // XXX: No idea why we get this extent and bounds after a clear --
-    // but I want to know as soon as possible if this behaviour
-    // changes in any way.
-    QVERIFY(dev->extent() == QRect(74, 74, 64, 64));
-    QVERIFY(dev->exactBounds() == QRect(74, 74, 64, 64));
+    QVERIFY(dev->extent().isEmpty());
+    QVERIFY(dev->exactBounds().isEmpty());
 
 }
 
@@ -290,11 +287,49 @@ void KisPaintDeviceTest::testThumbnail()
     }
     {
         QImage thumb = dev->createThumbnail(50, 50);
+        QVERIFY(!thumb.isNull());
         QVERIFY(thumb.width() <= 50);
         QVERIFY(thumb.height() <= 50);
         image.save("kis_paint_device_test_test_thumbnail.png");
     }
+}
 
+void KisPaintDeviceTest::testCaching()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    quint8* whitePixel = cs->allocPixelBuffer(1);
+    cs->fromQColor(Qt::white, whitePixel);
+
+    quint8* blackPixel = cs->allocPixelBuffer(1);
+    cs->fromQColor(Qt::black, blackPixel);
+
+    dev->fill(0, 0, 512, 512, whitePixel);
+    QImage thumb1 = dev->createThumbnail(50, 50);
+    QRect exactBounds1 = dev->exactBounds();
+
+    dev->fill(0, 0, 768, 768, blackPixel);
+    QImage thumb2 = dev->createThumbnail(50, 50);
+    QRect exactBounds2 = dev->exactBounds();
+
+    dev->move(10, 10);
+    QImage thumb3 = dev->createThumbnail(50, 50);
+    QRect exactBounds3 = dev->exactBounds();
+
+    dev->crop(50, 50, 50, 50);
+    QImage thumb4 = dev->createThumbnail(50, 50);
+    QRect exactBounds4 = dev->exactBounds();
+
+    QVERIFY(thumb1 != thumb2);
+    QVERIFY(thumb2 == thumb3); // Cache miss, but image is the same
+    QVERIFY(thumb3 != thumb4);
+    QVERIFY(thumb4 != thumb1);
+
+    QCOMPARE(exactBounds1, QRect(0,0,512,512));
+    QCOMPARE(exactBounds2, QRect(0,0,768,768));
+    QCOMPARE(exactBounds3, QRect(10,10,768,768));
+    QCOMPARE(exactBounds4, QRect(50,50,50,50));
 }
 
 void KisPaintDeviceTest::testPixel()

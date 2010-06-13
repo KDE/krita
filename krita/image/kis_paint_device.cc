@@ -57,10 +57,83 @@
 #include "tiles3/kis_rect_iterator.h"
 #include "tiles3/kis_random_accessor.h"
 
+
+class PaintDeviceCache
+{
+public:
+    PaintDeviceCache(KisPaintDevice *paintDevice) {
+        m_paintDevice = paintDevice;
+        invalidate();
+    }
+
+    void invalidate() {
+        m_thumbnailsValid = false;
+        m_exactBoundsValid = false;
+    }
+
+    QRect exactBounds() {
+        if(m_exactBoundsValid)
+            return m_exactBounds;
+
+        m_exactBounds = m_paintDevice->calculateExactBounds();
+        m_exactBoundsValid = true;
+        return m_exactBounds;
+    }
+
+    QImage createThumbnail(qint32 w, qint32 h) {
+        QImage thumbnail;
+
+        if(m_thumbnailsValid) {
+            thumbnail = findThumbnail(w, h);
+        }
+        else {
+            m_thumbnails.clear();
+            m_thumbnailsValid = true;
+        }
+
+        if(thumbnail.isNull()) {
+            thumbnail = m_paintDevice->createThumbnail(w, h, 0, QRect());
+            cacheThumbnail(w, h, thumbnail);
+        }
+
+        Q_ASSERT(!thumbnail.isNull());
+        return thumbnail;
+    }
+
+private:
+    inline QImage findThumbnail(qint32 w, qint32 h) {
+        QImage resultImage;
+        if (m_thumbnails.contains(w) && m_thumbnails[w].contains(h)) {
+            resultImage = m_thumbnails[w][h];
+        }
+        return resultImage;
+    }
+
+    inline void cacheThumbnail(qint32 w, qint32 h, QImage image) {
+        m_thumbnails[w][h] = image;
+    }
+
+private:
+    KisPaintDevice *m_paintDevice;
+
+    bool m_thumbnailsValid;
+    QMap<int, QMap<int, QImage> > m_thumbnails;
+
+    bool m_exactBoundsValid;
+    QRect m_exactBounds;
+};
+
+
 class KisPaintDevice::Private
 {
 
 public:
+
+    Private(KisPaintDevice *paintDevice)
+        : cache(paintDevice)
+    {
+    }
+
     KisNodeWSP parent;
     KisDefaultBounds defaultBounds;
     qint32 x;
@@ -69,40 +142,18 @@ public:
     qint32 pixelSize;
     qint32 nChannels;
 
-
-    struct Cache {
-
-        Cache() : self(0) {
-            invalidate();
-        }
-
-        KisPaintDevice* self;
-        bool thumbnailsValid;
-
-        QMap<int, QMap<int, QImage> > thumbnails;
-
-
-        void invalidate() {
-            thumbnailsValid = false;
-            if (self)
-                self->dataManager()->invalidateExactBounds();
-        }
-
-    };
-
-    Cache cache;
-
+    PaintDeviceCache cache;
 };
+
 
 KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& name)
         : QObject(0)
-        , m_d(new Private())
+        , m_d(new Private(this))
 {
     setObjectName(name);
 
     Q_ASSERT(colorSpace);
 
-    m_d->cache.self = this;
     m_d->x = 0;
     m_d->y = 0;
 
@@ -124,12 +175,11 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
 
 KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBounds defaultBounds, const QString& name)
         : QObject(0)
-        , m_d(new Private())
+        , m_d(new Private(this))
 {
     setObjectName(name);
     Q_ASSERT(colorSpace);
 
-    m_d->cache.self = this;
     m_d->x = 0;
     m_d->y = 0;
 
@@ -157,9 +207,8 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         : QObject()
         , KisShared()
-        , m_d(new Private())
+        , m_d(new Private(this))
 {
-    m_d->cache.self = this;
     if (this != &rhs) {
         m_d->parent = 0;
         if (rhs.m_datamanager) {
@@ -274,16 +323,16 @@ void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) con
     h = rc.height();
 }
 
-
 QRect KisPaintDevice::exactBounds() const
+{
+    return m_d->cache.exactBounds();
+}
+
+QRect KisPaintDevice::calculateExactBounds() const
 {
     quint8 defaultOpacity = colorSpace()->opacityU8(defaultPixel());
     if(defaultOpacity != OPACITY_TRANSPARENT_U8) {
         return m_d->defaultBounds.bounds();
-    }
-
-    if (m_datamanager->validExactBounds()) {
-        return m_datamanager->exactBounds();
     }
 
     // Solution n°2
@@ -366,9 +415,8 @@ QRect KisPaintDevice::exactBounds() const
             if (found) break;
         }
     }
-    m_datamanager->setExactBounds(QRect(boundX2, boundY2, boundW2, boundH2));
 
-    return m_datamanager->exactBounds();
+    return QRect(boundX2, boundY2, boundW2, boundH2);
 }
 
 
@@ -590,7 +638,6 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
 KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection, QRect rect) const
 {
     KisPaintDeviceSP thumbnail = new KisPaintDevice(colorSpace());
-    thumbnail->clear();
 
     int srcWidth, srcHeight;
     int srcX0, srcY0;
@@ -635,25 +682,14 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, const
 
 QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, const KisSelection *selection, QRect rect)
 {
-    if (m_d->cache.thumbnailsValid) {
-        if (m_d->cache.thumbnails.contains(w) && m_d->cache.thumbnails[w].contains(h)) {
-            QImage thumbnail = m_d->cache.thumbnails[w][h];
-            if (!thumbnail.isNull()) {
-                return thumbnail;
-            }
-        }
-    } else {
-        m_d->cache.thumbnails.clear();
-    }
-
     KisPaintDeviceSP dev = createThumbnailDevice(w, h, selection, rect);
-
     QImage thumbnail = dev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());
-
-    m_d->cache.thumbnails[w][h] = thumbnail;
-    m_d->cache.thumbnailsValid = true;
-
     return thumbnail;
+}
+
+QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h)
+{
+    return m_d->cache.createThumbnail(w, h);
 }
 
 KisRectIteratorPixel KisPaintDevice::createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h, const KisSelection * selection)
@@ -978,7 +1014,6 @@ void KisPaintDevice::writeBytes(const quint8 * data, qint32 x, qint32 y, qint32 
 void KisPaintDevice::writeBytes(const quint8 * data, const QRect &rect)
 {
     writeBytes(data, rect.x(), rect.y(), rect.width(), rect.height());
-    m_d->cache.invalidate();
 }
 
 QVector<quint8*> KisPaintDevice::readPlanarBytes(qint32 x, qint32 y, qint32 w, qint32 h)

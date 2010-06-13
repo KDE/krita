@@ -157,19 +157,23 @@ public:
      * For instance, the tiled datamanager keeps the extent to the nearest
      * multiple of 64.
      */
-    void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
-
-    /// Convience method for the above
     virtual QRect extent() const;
 
+    /// Convience method for the above
+    void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
+
     /**
-     * Get the exact bounds of this paint device. This may be very slow,
-     * especially on larger paint devices because it does a linear scanline search.
+     * Get the exact bounds of this paint device. The real solution is
+     * very slow because it does a linear scanline search, but it
+     * uses caching, so calling to this function without changing
+     * the device is quite cheap.
+     *
+     * \see calculateExactBounds()
      */
-    void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
+    virtual QRect exactBounds() const;
 
     /// Convience method for the above
-    virtual QRect exactBounds() const;
+    void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
 
     /**
      * Cut the paint device down to the specified rect. If the crop
@@ -336,7 +340,12 @@ public:
      * The width and height of the returned QImage won't exceed \p maxw and \p maxw, but they may be smaller.
      * The colors are not corrected for display!
      */
-    virtual QImage createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection = 0, QRect rect = QRect());
+    virtual QImage createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect = QRect());
+
+    /**
+     * Cached version of createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect)
+     */
+    virtual QImage createThumbnail(qint32 maxw, qint32 maxh);
 
     /**
      * Fill c and opacity with the values found at x and y.
@@ -541,6 +550,19 @@ signals:
     void ioProgress(qint8 percentage);
     void profileChanged(const KoColorProfile *  profile);
     void colorSpaceChanged(const KoColorSpace *colorspace);
+
+private:
+    friend class PaintDeviceCache;
+
+    /**
+     * Caclculates exact bounds of the device. Used internally
+     * by a transparent caching system. The solution is very slow
+     * because it does a linear scanline search. So the complexity
+     * is n*n at worst.
+     *
+     * \see exactBounds()
+     */
+    QRect calculateExactBounds() const;
 
 private:
 

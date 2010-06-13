@@ -22,16 +22,9 @@
 
 #include <krita_export.h>
 
-#include <QUndoCommand>
-#include <QSize>
-#include <QBitArray>
 #include "kis_types.h"
 #include "kis_image_command.h"
 
-
-class KoCompositeOp;
-class KoColorSpace;
-class KoColorProfile;
 
 /// The command for removing a layer
 class KRITAIMAGE_EXPORT KisImageLayerRemoveCommand : public KisImageCommand

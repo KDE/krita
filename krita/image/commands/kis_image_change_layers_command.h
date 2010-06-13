@@ -21,16 +21,8 @@
 #define KIS_IMAGE_CHANGE_LAYERS_COMMAND_H_
 
 #include <krita_export.h>
-
-#include <QUndoCommand>
-#include <QSize>
-#include <QBitArray>
 #include "kis_types.h"
 #include "kis_image_command.h"
-
-class KoCompositeOp;
-class KoColorSpace;
-class KoColorProfile;
 
 class KisImageChangeLayersCommand : public KisImageCommand
 {

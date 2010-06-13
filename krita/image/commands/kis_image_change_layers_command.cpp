@@ -18,21 +18,11 @@
  */
 
 #include "kis_image_commands.h"
-#include <QString>
-#include <QBitArray>
+#include "kis_image.h"
+#include "kis_group_layer.h"
 
 #include <klocale.h>
 
-#include "KoColorSpaceRegistry.h"
-#include "KoColor.h"
-#include "KoColorProfile.h"
-#include "KoColorSpace.h"
-
-
-#include "kis_image.h"
-#include "kis_layer.h"
-#include "kis_group_layer.h"
-#include "kis_undo_adapter.h"
 
 KisImageChangeLayersCommand::KisImageChangeLayersCommand(KisImageWSP image, KisNodeSP oldRootLayer, KisNodeSP newRootLayer, const QString& name)
         : KisImageCommand(name, image)
@@ -43,22 +33,18 @@ KisImageChangeLayersCommand::KisImageChangeLayersCommand(KisImageWSP image, KisN
 
 void KisImageChangeLayersCommand::redo()
 {
-    setUndo(false);
     m_image->lock();
     m_image->setRootLayer(static_cast<KisGroupLayer*>(m_newRootLayer.data()));
     m_image->unlock();
     m_image->refreshGraph();
     m_image->notifyLayersChanged();
-    setUndo(true);
 }
 
 void KisImageChangeLayersCommand::undo()
 {
-    setUndo(false);
     m_image->lock();
     m_image->setRootLayer(static_cast<KisGroupLayer*>(m_oldRootLayer.data()));
     m_image->unlock();
     m_image->refreshGraph();
     m_image->notifyLayersChanged();
-    setUndo(true);
 }

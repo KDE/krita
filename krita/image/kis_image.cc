@@ -523,7 +523,6 @@ void KisImage::assignImageProfile(const KoColorProfile *profile)
     m_d->adapter->endMacro();
 
     setModified();
-    //emit(sigProfileChanged(const_cast<KoColorProfile*>(profile)));
     emit sigProfileChanged(profile);
 }
 
@@ -677,16 +676,14 @@ void KisImage::flatten()
         new KisPaintLayer(this, nextLayerName(), OPACITY_OPAQUE_U8, projectionCopy);
     Q_CHECK_PTR(flattenLayer);
 
-    m_d->adapter->beginMacro(i18n("Flatten Image"));
-    m_d->adapter->addCommand(new KisImageChangeLayersCommand(KisImageWSP(this), oldRootLayer, newRootLayer, ""));
-
     addNode(flattenLayer, newRootLayer, 0);
 
-    // notify once again to be sure tools have set
-    // their current paint devices
-    notifyLayersChanged();
-
+    m_d->adapter->beginMacro(i18n("Flatten Image"));
+    // NOTE: KisImageChangeLayersCommand performs all the locking for us
+    m_d->adapter->addCommand(new KisImageChangeLayersCommand(KisImageWSP(this), oldRootLayer, newRootLayer, ""));
     m_d->adapter->endMacro();
+
+    setModified();
 }
 
 // FIXME: Rename to Merge Down?
@@ -715,7 +712,6 @@ KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrate
 
     KisPaintLayerSP mergedLayer = new KisPaintLayer(this, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
     Q_CHECK_PTR(mergedLayer);
-
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;
@@ -750,7 +746,13 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
 
     undoAdapter()->beginMacro(i18n("Flatten Layer"));
 
+    /**
+     * Make the copy operation synchronous
+     */
+    lock();
     KisPaintDeviceSP mergedDevice = new KisPaintDevice(*layer->projection());
+    unlock();
+
     KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), layer->opacity(), mergedDevice);
     newLayer->setCompositeOp(layer->compositeOp()->id());
 

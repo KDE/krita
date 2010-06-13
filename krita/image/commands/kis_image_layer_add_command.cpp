@@ -18,20 +18,10 @@
  */
 
 #include "kis_image_commands.h"
-#include <QString>
-#include <QBitArray>
+#include "kis_image.h"
 
 #include <klocale.h>
 
-#include "KoColorSpaceRegistry.h"
-#include "KoColor.h"
-#include "KoColorProfile.h"
-#include "KoColorSpace.h"
-
-#include "kis_image.h"
-#include "kis_layer.h"
-#include "kis_group_layer.h"
-#include "kis_undo_adapter.h"
 
 KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, KisNodeSP aboveThis)
         : KisImageCommand(i18n("Add Layer"), image), m_index(-1)

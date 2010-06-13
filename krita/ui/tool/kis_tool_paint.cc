@@ -68,14 +68,12 @@
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
-        : KisTool(canvas, cursor), m_previousNode(0)
+        : KisTool(canvas, cursor)
 {
     m_optionWidgetLayout = 0;
 
     m_lbOpacity = 0;
     m_slOpacity = 0;
-    m_lbComposite = 0;
-    m_cmbComposite = 0;
 
     m_opacity = OPACITY_OPAQUE_U8;
     m_compositeOp = 0;
@@ -92,23 +90,8 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
 {
     KisTool::resourceChanged(key, v);
 
-    switch (key) {
-    case(KisCanvasResourceProvider::CurrentKritaNode):
-        updateCompositeOpComboBox();
-        // Deconnect colorspace change of previous node
-        if (m_previousNode) {
-            if (m_previousNode->paintDevice()) {
-                disconnect(m_previousNode->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(updateCompositeOpComboBox()));
-            }
-        }
-        // Reconnect colorspace change of node
-        m_previousNode = currentNode();
-        if (m_previousNode && m_previousNode->paintDevice()) {
-            connect(m_previousNode->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), SLOT(updateCompositeOpComboBox()));
-        }
-        break;
-    default:
-        ; // Do nothing
+    if(KisCanvasResourceProvider::CurrentCompositeOp){
+        slotSetCompositeMode(v.toString());
     }
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
@@ -153,12 +136,6 @@ QWidget * KisToolPaint::createOptionWidget()
     QWidget * optionWidget = new QWidget();
     optionWidget->setObjectName(toolId());
 
-    m_lbComposite = new QLabel(i18n("Mode: "), optionWidget);
-    m_lbComposite->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
-    m_cmbComposite = new KisCmbComposite(optionWidget);
-    updateCompositeOpComboBox();
-    connect(m_cmbComposite, SIGNAL(activated(const QString&)), this, SLOT(slotSetCompositeMode(const QString&)));
-
     m_lbOpacity = new QLabel(i18n("Opacity: "), optionWidget);
     m_lbOpacity->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     m_slOpacity = new KisSliderSpinBox(optionWidget);
@@ -175,9 +152,6 @@ QWidget * KisToolPaint::createOptionWidget()
     verticalLayout->addLayout(m_optionWidgetLayout);
     m_optionWidgetLayout->setSpacing(1);
     m_optionWidgetLayout->setMargin(0);
-
-    m_optionWidgetLayout->addWidget(m_lbComposite, 0, 0);
-    m_optionWidgetLayout->addWidget(m_cmbComposite, 0, 1);
 
     m_optionWidgetLayout->addWidget(m_lbOpacity, 1, 0);
     m_optionWidgetLayout->addWidget(m_slOpacity, 1, 1);
@@ -234,27 +208,6 @@ void KisToolPaint::slotSetCompositeMode(const QString& compositeOp)
 
         if (device) {
             m_compositeOp = device->colorSpace()->compositeOp(compositeOp);
-        }
-    }
-}
-
-
-void KisToolPaint::updateCompositeOpComboBox()
-{
-    if (m_cmbComposite && currentNode()) {
-        KisPaintDeviceSP device = currentNode()->paintDevice();
-
-        if (device) {
-            QList<KoCompositeOp*> compositeOps = device->colorSpace()->compositeOps();
-            m_cmbComposite->setCompositeOpList(compositeOps);
-
-            if (m_compositeOp == 0 || compositeOps.indexOf(const_cast<KoCompositeOp*>(m_compositeOp)) < 0) {
-                m_compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
-            }
-            m_cmbComposite->setCurrent(m_compositeOp);
-            m_cmbComposite->setEnabled(true);
-        } else {
-            m_cmbComposite->setEnabled(false);
         }
     }
 }

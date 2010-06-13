@@ -56,7 +56,8 @@ public:
         CurrentImage,
         CurrentKritaNode,
         CurrentPaintOpPreset,
-        CurrentGeneratorConfiguration
+        CurrentGeneratorConfiguration,
+        CurrentCompositeOp
     };
 
 
@@ -92,6 +93,9 @@ public:
     KisFilterConfiguration* currentGeneratorConfiguration() const;
 
     static const KoColorProfile* getScreenProfile(int screen = -1);
+    
+    void setCurrentCompositeOp(const QString& compositeOp);
+    QString currentCompositeOp() const;
 
 
 public slots:
@@ -134,6 +138,7 @@ signals:
     void sigDisplayProfileChanged(const KoColorProfile *);
     void sigGeneratorConfigurationChanged(KisFilterConfiguration * generatorConfiguration);
     void sigFGColorUsed(const KoColor&);
+    void sigCompositeOpChanged(const QString &);
 
 private:
 

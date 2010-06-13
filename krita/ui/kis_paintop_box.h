@@ -33,6 +33,7 @@
 #include <kis_types.h>
 #include <kis_paintop_settings.h>
 
+class QPushButton;
 class QString;
 class QHBoxLayout;
 
@@ -40,6 +41,7 @@ class KoID;
 class KoColorSpace;
 class KoResourceSelector;
 class KoResource;
+class KoCompositeOp;
 
 class KisView2;
 class KisCanvasResourceProvider;
@@ -47,6 +49,7 @@ class KisPopupButton;
 class KisPaintOpPresetsPopup;
 class KisPaintOpPresetsChooserPopup;
 class KisPaintOpSettingsWidget;
+class KisCmbComposite;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -89,10 +92,14 @@ private:
     KoID defaultPaintop(const KoInputDevice & inputDevice);
     KisPaintOpPresetSP activePreset(const KoID & paintop, const KoInputDevice & inputDevice);
 
+    void updateCompositeOpComboBox();
+
 private slots:
 
     void updatePaintops();
     void resourceSelected( KoResource * resource );
+    void nodeChanged(const KisNodeSP node);
+    void eraseModeToggled(bool toggle);
 
 private:
 
@@ -105,6 +112,8 @@ private:
     KisPaintOpSettingsWidget* m_optionWidget;
     KisPopupButton* m_settingsWidget;
     KisPopupButton* m_presetWidget;
+    KisCmbComposite* m_cmbComposite;
+    QPushButton* m_eraseModeButton;
     KisPaintOpPresetsPopup* m_presetsPopup;
     KisPaintOpPresetsChooserPopup* m_presetsChooserPopup;
     KisView2* m_view;
@@ -113,6 +122,8 @@ private:
     QList<KoID> m_paintops;
     QList<KoID> m_displayedOps;
     KisPaintOpPresetSP m_activePreset;
+    const KoCompositeOp* m_compositeOp;
+    KisNodeSP m_previousNode;
 
     typedef QHash<KoInputDevice, KoID> InputDevicePaintopMap;
     InputDevicePaintopMap m_currentID;

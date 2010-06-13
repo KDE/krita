@@ -281,6 +281,9 @@ void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & re
         break;
     case(CurrentKritaNode) :
         emit sigNodeChanged(currentNode());
+        break;
+    case(CurrentCompositeOp) :
+        emit sigCompositeOpChanged(currentCompositeOp());
     default:
         ;
         // Do nothing
@@ -324,6 +327,19 @@ const KoColorProfile *KisCanvasResourceProvider::getScreenProfile(int screen)
     return 0;
 
 #endif
+}
+
+void KisCanvasResourceProvider::setCurrentCompositeOp(const QString& compositeOp)
+{
+    QVariant v;
+    v.setValue(compositeOp);
+    m_resourceManager->setResource(CurrentCompositeOp, v);
+    emit sigCompositeOpChanged(compositeOp);
+}
+
+QString KisCanvasResourceProvider::currentCompositeOp() const
+{
+    return m_resourceManager->resource(CurrentCompositeOp).value<QString>();
 }
 
 void KisCanvasResourceProvider::slotPainting()

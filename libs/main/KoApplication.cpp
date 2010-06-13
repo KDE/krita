@@ -75,6 +75,7 @@ bool KoApplication::initHack()
     options.add("dpi <dpiX,dpiY>", ki18n("Override display DPI"));
     options.add("export-pdf", ki18n("Only export to PDF and exit"));
     options.add("export-filename <filename>", ki18n("Filename for export-pdf"));
+    options.add("benchmark-loading", ki18n("just load the file and then exit"));
     KCmdLineArgs::addCmdLineOptions(options, ki18n("KOffice"), "koffice", "kde");
     return true;
 }
@@ -155,6 +156,7 @@ bool KoApplication::start()
         const bool exportAsPdf = koargs->isSet("export-pdf");
         QString pdfFileName = koargs->getOption("export-filename");
         const bool doTemplate = koargs->isSet("template");
+        const bool benchmarkLoading = koargs->isSet("benchmark-loading");
         koargs->clear();
 
         // Loop through arguments
@@ -214,7 +216,10 @@ bool KoApplication::start()
                     // now try to load
                 }
                 else if (shell->openDocument(doc, args->url(i))) {
-                    if (print) {
+                    if (benchmarkLoading) {
+                        shell->slotFileQuit();
+                    }
+                    else if (print) {
                         shell->slotFilePrint();
                         // delete shell; done by ~KoDocument
                         nPrinted++;
@@ -234,6 +239,9 @@ bool KoApplication::start()
                     // delete shell; done by ~KoDocument
                 }
             }
+        }
+        if (benchmarkLoading) {
+            return nPrinted > 0;
         }
         if (print || exportAsPdf)
             return nPrinted > 0;

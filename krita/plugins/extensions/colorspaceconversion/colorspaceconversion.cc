@@ -106,8 +106,7 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
         const KoColorSpace * cs = dlgColorSpaceConversion->m_page->colorSpaceSelector->currentColorSpace();
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-        image->convertTo(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
-        image->rootLayer()->setDirty();
+        image->convertImageColorSpace(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
         QApplication::restoreOverrideCursor();
     }
     delete dlgColorSpaceConversion;

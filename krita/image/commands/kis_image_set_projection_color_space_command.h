@@ -17,25 +17,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_IMAGE_CONVERT_TYPE_COMMAND_H_
-#define KIS_IMAGE_CONVERT_TYPE_COMMAND_H_
+#ifndef KIS_IMAGE_SET_PROJECTION_COLOR_SPACE_COMMAND_H_
+#define KIS_IMAGE_SET_PROJECTION_COLOR_SPACE_COMMAND_H_
 
 #include <krita_export.h>
-
-#include <QUndoCommand>
-#include <QSize>
-#include <QBitArray>
-#include "kis_types.h"
 #include "kis_image_command.h"
 
-class KoCompositeOp;
 class KoColorSpace;
-class KoColorProfile;
-class KisImageConvertTypeCommand : public KisImageCommand
-{
 
+class KisImageSetProjectionColorSpaceCommand : public KisImageCommand
+{
 public:
-    KisImageConvertTypeCommand(KisImageWSP image, const KoColorSpace * beforeColorSpace, const KoColorSpace * afterColorSpace);
+    KisImageSetProjectionColorSpaceCommand(KisImageWSP image, const KoColorSpace * afterColorSpace);
 
     virtual void redo();
     virtual void undo();
@@ -46,4 +39,4 @@ private:
 };
 
 
-#endif
+#endif /* KIS_IMAGE_SET_PROJECTION_COLOR_SPACE_COMMAND_H_ */

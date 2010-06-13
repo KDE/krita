@@ -233,20 +233,29 @@ public:
     /**
      * Convert the image and all its layers to the dstColorSpace
      */
-    void convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+    void convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+
+    /**
+     * Set the color space of  the projection (and the root layer)
+     * to dstColorSpace. No conversion is done for other layers,
+     * their colorspace can differ.
+     * NOTE: Note conversion is done, only regeneration, so no rendering
+     * intent needed
+     */
+    void convertProjectionColorSpace(const KoColorSpace *dstColorSpace);
 
     // Get the profile associated with this image
     const KoColorProfile *  profile() const;
 
     /**
      * Set the profile of the image to the new profile and do the same for
-     * all layers that have the same colorspace and profile as the image.
+     * all layers that have the same colorspace and profile of the image.
      * It doesn't do any pixel conversion.
      *
      * This is essential if you have loaded an image that didn't
      * have an embedded profile to which you want to attach the right profile.
      */
-    void setProfile(const KoColorProfile * profile);
+    void assignImageProfile(const KoColorProfile *profile);
 
     /**
      * Replace the current undo adapter with the specified undo adapter.
@@ -433,8 +442,6 @@ public:
     */
     void notifyLayerUpdated(KisLayerSP layer);
 
-    void setColorSpace(const KoColorSpace * colorSpace);
-
     void setRootLayer(KisGroupLayerSP rootLayer);
 
     /**
@@ -490,7 +497,7 @@ signals:
     void sigImageModified();
 
     void sigSizeChanged(qint32 w, qint32 h);
-    void sigProfileChanged(KoColorProfile *  profile);
+    void sigProfileChanged(const KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
     void sigResolutionChanged(double xRes, double yRes);
 
@@ -543,6 +550,8 @@ private:
     friend class KisImageResizeCommand;
     void setSize(const QSize& size);
 
+    friend class KisImageSetProjectionColorSpaceCommand;
+    void setProjectionColorSpace(const KoColorSpace * colorSpace);
 private:
     class KisImagePrivate;
     KisImagePrivate * const m_d;

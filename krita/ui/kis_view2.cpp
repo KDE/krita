@@ -620,7 +620,7 @@ void KisView2::connectCurrentImage()
     if (image()) {
         if (m_d->statusBar) {
             connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
-            connect(image(), SIGNAL(sigProfileChanged(KoColorProfile *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+            connect(image(), SIGNAL(sigProfileChanged(const KoColorProfile *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
             connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->statusBar, SLOT(imageSizeChanged(qint32, qint32)));
 
         }

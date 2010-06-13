@@ -488,62 +488,73 @@ void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
     setModified();
 }
 
-void KisImage::convertTo(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
+void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
 {
-    if (*m_d->colorSpace == *dstColorSpace) {
-        return;
-    }
+    if (*m_d->colorSpace == *dstColorSpace) return;
 
-    lock();
-
-    const KoColorSpace * oldCs = m_d->colorSpace;
-
-    if (undo()) {
-        m_d->adapter->beginMacro(i18n("Convert Image Type"));
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-    }
+    m_d->adapter->beginMacro(i18n("Convert Image Color Space"));
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
+    m_d->adapter->addCommand(new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstColorSpace));
 
     KisColorSpaceConvertVisitor visitor(this, dstColorSpace, renderingIntent);
     m_d->rootLayer->accept(visitor);
 
-    if (undo()) {
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
+    m_d->adapter->endMacro();
 
-        m_d->adapter->addCommand(new KisImageConvertTypeCommand(KisImageWSP(this), oldCs, dstColorSpace));
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-        m_d->adapter->endMacro();
-    } else {
-        setColorSpace(dstColorSpace);
-    }
+    setModified();
+}
 
-    unlock();
-    refreshGraph();
+void KisImage::assignImageProfile(const KoColorProfile *profile)
+{
+    if(!profile) return;
+
+    m_d->adapter->beginMacro(i18n("Assign Profile"));
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
+
+    const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
+    const KoColorSpace *srcCs = colorSpace();
+
+    KisChangeProfileVisitor visitor(srcCs, dstCs);
+    m_d->rootLayer->accept(visitor);
+
+    m_d->adapter->addCommand(new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstCs));
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
+    m_d->adapter->endMacro();
+
+    setModified();
+    //emit(sigProfileChanged(const_cast<KoColorProfile*>(profile)));
+    emit sigProfileChanged(profile);
+}
+
+void KisImage::convertProjectionColorSpace(const KoColorSpace *dstColorSpace)
+{
+    if (*m_d->colorSpace == *dstColorSpace) return;
+
+    m_d->adapter->beginMacro(i18n("Convert Projection Color Space"));
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
+    m_d->adapter->addCommand(new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstColorSpace));
+    m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
+    m_d->adapter->endMacro();
+
+    setModified();
+}
+
+void KisImage::setProjectionColorSpace(const KoColorSpace * colorSpace)
+{
+    m_d->colorSpace = colorSpace;
+    m_d->rootLayer->resetCache();
+    emit sigColorSpaceChanged(colorSpace);
+}
+
+const KoColorSpace * KisImage::colorSpace() const
+{
+    return m_d->colorSpace;
 }
 
 const KoColorProfile * KisImage::profile() const
 {
     return colorSpace()->profile();
-}
-
-void KisImage::setProfile(const KoColorProfile *profile)
-{
-    if (profile == 0) return;
-
-    kDebug() << profile;
-
-    const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
-    if (dstCs) {
-
-        lock();
-
-        const KoColorSpace *oldCs = colorSpace();
-        setColorSpace(dstCs);
-        emit(sigProfileChanged(const_cast<KoColorProfile*>(profile)));
-
-        KisChangeProfileVisitor visitor(oldCs, dstCs);
-        m_d->rootLayer->accept(visitor);
-
-        unlock();
-    }
 }
 
 double KisImage::xRes() const
@@ -955,18 +966,6 @@ KisActionRecorder* KisImage::actionRecorder() const
 bool KisImage::undo() const
 {
     return (m_d->adapter && m_d->adapter->undo());
-}
-
-const KoColorSpace * KisImage::colorSpace() const
-{
-    return m_d->colorSpace;
-}
-
-void KisImage::setColorSpace(const KoColorSpace * colorSpace)
-{
-    m_d->colorSpace = colorSpace;
-    m_d->rootLayer->resetCache();
-    emit sigColorSpaceChanged(colorSpace);
 }
 
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)

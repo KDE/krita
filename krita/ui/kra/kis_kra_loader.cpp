@@ -201,7 +201,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         QByteArray data; data.resize(store->size());
         store->read(data.data(), store->size());
         store->close();
-        image->setProfile(KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data));
+        image->assignImageProfile(KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data));
     }
 
 

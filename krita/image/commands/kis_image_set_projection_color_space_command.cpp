@@ -18,41 +18,26 @@
  */
 
 #include "kis_image_commands.h"
-#include <QString>
-#include <QBitArray>
+
+#include "KoColorSpace.h"
+#include "kis_image.h"
 
 #include <klocale.h>
 
-#include "KoColorSpaceRegistry.h"
-#include "KoColor.h"
-#include "KoColorProfile.h"
-#include "KoColorSpace.h"
 
-
-#include "kis_image.h"
-#include "kis_layer.h"
-#include "kis_group_layer.h"
-#include "kis_undo_adapter.h"
-
-KisImageConvertTypeCommand::KisImageConvertTypeCommand(KisImageWSP image, const KoColorSpace * beforeColorSpace, const KoColorSpace * afterColorSpace)
-        : KisImageCommand(i18n("Convert Image Type"), image)
+KisImageSetProjectionColorSpaceCommand::KisImageSetProjectionColorSpaceCommand(KisImageWSP image, const KoColorSpace * afterColorSpace)
+    : KisImageCommand(i18n("Convert Image Type"), image)
 {
-    m_beforeColorSpace = beforeColorSpace;
+    m_beforeColorSpace = image->colorSpace();
     m_afterColorSpace = afterColorSpace;
 }
 
-void KisImageConvertTypeCommand::redo()
+void KisImageSetProjectionColorSpaceCommand::redo()
 {
-    setUndo(false);
-    m_image->setColorSpace(m_afterColorSpace);
-    m_image->setProfile(m_afterColorSpace->profile());
-    setUndo(true);
+    m_image->setProjectionColorSpace(m_afterColorSpace);
 }
 
-void KisImageConvertTypeCommand::undo()
+void KisImageSetProjectionColorSpaceCommand::undo()
 {
-    setUndo(false);
-    m_image->setColorSpace(m_beforeColorSpace);
-    m_image->setProfile(m_beforeColorSpace->profile());
-    setUndo(true);
+    m_image->setProjectionColorSpace(m_beforeColorSpace);
 }

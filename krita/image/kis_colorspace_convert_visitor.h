@@ -18,21 +18,15 @@
 #ifndef KIS_COLORSPACE_CONVERT_VISITOR_H_
 #define KIS_COLORSPACE_CONVERT_VISITOR_H_
 
-#include <QBitArray>
 
 #include <KoColorConversionTransformation.h>
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
 
 #include <krita_export.h>
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_node_visitor.h"
-#include "kis_paint_layer.h"
-#include "kis_paint_device.h"
-#include "kis_adjustment_layer.h"
-#include "kis_group_layer.h"
-#include "kis_external_layer_iface.h"
+
 
 /**
  * This will convert all layers to the destination color space.

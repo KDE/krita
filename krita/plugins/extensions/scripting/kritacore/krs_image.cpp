@@ -70,7 +70,7 @@ bool Image::convertToColorSpace(const QString& model, const QString& depth)
         warnScript << QString("ColorSpace %1 %2 is not available, please check your installation.").arg(model).arg(depth) << endl;
         return false;
     }
-    m_image->convertTo(dstCS);
+    m_image->convertImageColorSpace(dstCS);
     return true;
 }
 

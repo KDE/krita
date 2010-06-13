@@ -171,8 +171,7 @@ void KisImageManager::slotImageProperties()
     KisDlgImageProperties dlg(image, m_view);
 
     if (dlg.exec() == QDialog::Accepted) {
-        QUndoCommand* cmd = new KisImagePropsCommand(image, dlg.colorSpace());
-        m_view->document()->addCommand(cmd);
+        image->convertProjectionColorSpace(dlg.colorSpace());
     }
 }
 

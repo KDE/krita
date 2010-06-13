@@ -73,7 +73,7 @@ set(kritaimage_LIB_SRCS
    commands/kis_deselect_global_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_command.cpp
-   commands/kis_image_convert_type_command.cpp
+   commands/kis_image_set_projection_color_space_command.cpp
    commands/kis_image_layer_add_command.cpp
    commands/kis_image_layer_move_command.cpp
    commands/kis_image_layer_remove_command.cpp
@@ -82,7 +82,6 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_node_to_bottom_command.cpp
    commands/kis_image_node_to_top_command.cpp
    commands/kis_image_lock_command.cpp
-   commands/kis_image_props_command.cpp
    commands/kis_image_resize_command.cpp
    commands/kis_layer_command.cpp
    commands/kis_layer_props_command.cpp

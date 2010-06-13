@@ -17,10 +17,14 @@
  */
 
 #include "kis_colorspace_convert_visitor.h"
-#include "kis_transaction.h"
 #include "kis_image.h"
+#include "kis_paint_device.h"
 #include "kis_undo_adapter.h"
 #include "commands/kis_layer_props_command.h"
+#include "kis_adjustment_layer.h"
+#include "kis_paint_layer.h"
+#include "kis_group_layer.h"
+#include "kis_external_layer_iface.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter.h"
@@ -102,43 +106,31 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
             layer->name(), layer->name(),
             layer->channelFlags(), m_emptyChannelFlags);
 
-    if (m_image && m_image->undoAdapter()) {
-        m_image->undoAdapter()->addCommand(propsCommand);
-    }
+    m_image->undoAdapter()->addCommand(propsCommand);
 
     if (layer->original()) {
         QUndoCommand* cmd = layer->original()->convertTo(m_dstColorSpace, m_renderingIntent);
-        if (m_image->undoAdapter()) {
-            if (cmd) {
-                m_image->undoAdapter()->addCommand(cmd);
-            }
-        }
-        else {
+        if (cmd)
+            m_image->undoAdapter()->addCommand(cmd);
+        else
             delete cmd;
-        }
     }
 
     if (layer->paintDevice()) {
         QUndoCommand* cmd = layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
-        if (m_image->undoAdapter()) {
-            if (cmd) {
-                m_image->undoAdapter()->addCommand(cmd);
-            }
-        }
-        else {
+        if (cmd)
+            m_image->undoAdapter()->addCommand(cmd);
+        else
             delete cmd;
-        }    }
+    }
 
     if (layer->projection()) {
         QUndoCommand* cmd = layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent);
-        if (m_image->undoAdapter()) {
-            if (cmd) {
-                m_image->undoAdapter()->addCommand(cmd);
-            }
-        }
-        else {
+        if (cmd)
+            m_image->undoAdapter()->addCommand(cmd);
+        else
             delete cmd;
-        }    }
+    }
 
     layer->setDirty();
 

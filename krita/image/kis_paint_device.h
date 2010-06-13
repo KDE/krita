@@ -176,6 +176,13 @@ public:
     void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
 
     /**
+     * Returns a rough approximation of region covered by device.
+     * For tiled data manager, it region will consist of a number
+     * of rects each corresponding to a tile.
+     */
+    virtual QRegion region() const;
+
+    /**
      * Cut the paint device down to the specified rect. If the crop
      * area is bigger than the paint device, nothing will happen.
      */

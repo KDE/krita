@@ -456,7 +456,19 @@ QRect KisTiledDataManager::extent() const
     return QRect(x, y, w, h);
 }
 
+QRegion KisTiledDataManager::region() const
+{
+    QRegion region;
 
+    KisTileHashTableIterator iter(m_hashTable);
+    KisTileSP tile;
+
+    while ((tile = iter.tile())) {
+        region += tile->extent();
+        ++iter;
+    }
+    return region;
+}
 
 KisTileDataWrapper KisTiledDataManager::pixelPtr(qint32 x, qint32 y,
         enum KisTileDataWrapper::accessType type)

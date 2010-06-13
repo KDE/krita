@@ -69,6 +69,7 @@ public:
     void invalidate() {
         m_thumbnailsValid = false;
         m_exactBoundsValid = false;
+        m_regionValid = false;
     }
 
     QRect exactBounds() {
@@ -78,6 +79,16 @@ public:
         m_exactBounds = m_paintDevice->calculateExactBounds();
         m_exactBoundsValid = true;
         return m_exactBounds;
+    }
+
+    QRegion region() {
+        if(m_regionValid)
+            return m_region;
+
+        m_region = m_paintDevice->dataManager()->region();
+        m_regionValid = true;
+        return m_region;
+
     }
 
     QImage createThumbnail(qint32 w, qint32 h) {
@@ -121,6 +132,9 @@ private:
 
     bool m_exactBoundsValid;
     QRect m_exactBounds;
+
+    bool m_regionValid;
+    QRegion m_region;
 };
 
 
@@ -312,6 +326,11 @@ QRect KisPaintDevice::extent() const
     }
 
     return extent;
+}
+
+QRegion KisPaintDevice::region() const
+{
+    return m_d->cache.region();
 }
 
 void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const

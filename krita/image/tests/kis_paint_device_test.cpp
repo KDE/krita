@@ -332,6 +332,29 @@ void KisPaintDeviceTest::testCaching()
     QCOMPARE(exactBounds4, QRect(50,50,50,50));
 }
 
+void KisPaintDeviceTest::testRegion()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    quint8* whitePixel = cs->allocPixelBuffer(1);
+    cs->fromQColor(Qt::white, whitePixel);
+
+    dev->fill(0, 0, 10, 10, whitePixel);
+    dev->fill(70, 70, 10, 10, whitePixel);
+    dev->fill(129, 0, 10, 10, whitePixel);
+    dev->fill(0, 1030, 10, 10, whitePixel);
+
+    QRegion referenceRegion;
+    referenceRegion += QRect(0,0,64,64);
+    referenceRegion += QRect(64,64,64,64);
+    referenceRegion += QRect(128,0,64,64);
+    referenceRegion += QRect(0,1024,64,64);
+
+    QCOMPARE(dev->exactBounds(), QRect(0,0,139,1040));
+    QCOMPARE(dev->region(), referenceRegion);
+}
+
 void KisPaintDeviceTest::testPixel()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();

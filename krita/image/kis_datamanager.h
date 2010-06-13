@@ -152,6 +152,10 @@ public:
         return ACTUAL_DATAMGR::extent();
     }
 
+    QRegion region() const {
+        return ACTUAL_DATAMGR::region();
+    }
+
 public:
 
     /**

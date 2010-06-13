@@ -34,6 +34,7 @@ private slots:
     void testCrop();
     void testThumbnail();
     void testCaching();
+    void testRegion();
     void testPixel();
     void testRoundtripReadWrite();
     void testPlanarReadWrite();

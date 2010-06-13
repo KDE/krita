@@ -21,6 +21,7 @@
 
 #include <QtGlobal>
 #include <QVector>
+#include <QRegion>
 
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>
@@ -36,11 +37,9 @@
 class KisTiledDataManager;
 typedef KisSharedPtr<KisTiledDataManager> KisTiledDataManagerSP;
 
-
 class KisTiledIterator;
 class KisTiledRandomAccessor;
 class KoStore;
-
 
 class KisTileDataWrapper
 {
@@ -203,6 +202,7 @@ public:
     QRect extent() const;
     void  setExtent(QRect newRect);
 
+    QRegion region() const;
 
     void clear(QRect clearRect, quint8 clearValue);
     void clear(QRect clearRect, const quint8 *clearPixel);

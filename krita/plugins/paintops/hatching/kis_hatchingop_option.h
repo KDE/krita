@@ -21,6 +21,12 @@
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
+const QString HATCHING_ANGLE = "Hatching/angle";
+const QString HATCHING_WIDTH = "Hatching/width";
+const QString HATCHING_HEIGHT = "Hatching/height";
+const QString HATCHING_SEPARATION = "Hatching/separation";
+const QString HATCHING_THICKNESS = "Hatching/thickness";
+
 class KisHatchingOpOptionsWidget;
 
 class KisHatchingOpOption : public KisPaintOpOption
@@ -29,13 +35,7 @@ public:
     KisHatchingOpOption();
     ~KisHatchingOpOption();
 
-    void setRadius(int radius) const;
-    int radius() const;
-
-    bool inkDepletion() const; 
-    bool saturation() const;
-    bool opacity() const;
-    
+   
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 

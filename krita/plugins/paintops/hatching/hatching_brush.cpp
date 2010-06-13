@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -30,14 +30,9 @@
 #include <cmath>
 #include <time.h>
 
-
-
 HatchingBrush::HatchingBrush(const KisHatchingPaintOpSettings* settings)
 {
-    /*m_counter = 0;
-    m_settings = settings;
-    m_radius = settings->radius();
-    init();*/
+    m_attributes.loadSettings(settings);
 }
 
 
@@ -66,11 +61,12 @@ void HatchingBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor 
   /*naiveangle is what I receive from the controls. For now, I have no use for angles
   belonging to the 2nd and 3rd quadrant, the controls were then made such that the user
   sees the least ambiguous possible settings (no angles from the 2nd and 3rd quadrant)*/
-  angle = naiveangle;  //for now
-  thickness = 1;
-  s = 8*sqrt(2);
-  h = 100;
-  w = 100;
+  angle = m_attributes.angle;  //for now
+  thickness = m_attributes.thickness;
+  //s = 8*sqrt(2);
+  s = m_attributes.separation;
+  h = m_attributes.height;
+  w = m_attributes.width;
   xcoor = 0;
   ycoor = 0;
   dx = dy = b = p = last_b = cursor_b = 0;  //inicializar

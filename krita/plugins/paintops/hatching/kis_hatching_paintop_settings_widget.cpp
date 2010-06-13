@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ void KisHatchingPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
 {
     // if the movement is more left<->right then up<->down
     if (qAbs(x) > qAbs(y)){
-        m_hatchingOption->setRadius( m_hatchingOption->radius() + qRound(x) );
+        // TODO: change width and height of the dab?
     }
     else // vice-versa
     {

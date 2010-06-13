@@ -29,6 +29,25 @@
 #include <kis_paint_device.h>
 #include <kis_paint_information.h>
 
+#include "kis_hatchingop_option.h"
+class HatchingAttributes{
+    public:
+        double angle;
+        int width;
+        int height;
+        double separation;
+        double thickness;
+    public:
+        void loadSettings(const KisHatchingPaintOpSettings* settings){
+            angle = settings->getDouble(HATCHING_ANGLE);
+            width = settings->getInt( HATCHING_WIDTH);
+            height = settings->getInt( HATCHING_HEIGHT);
+            separation = settings->getDouble( HATCHING_SEPARATION);
+            thickness = settings->getDouble( HATCHING_THICKNESS);
+        }
+};
+
+
 class HatchingBrush
 {
 
@@ -46,6 +65,7 @@ private:
     int m_radius;
     const KisHatchingPaintOpSettings * m_settings;
     KisPainter m_painter;  //added by JLVT
+    HatchingAttributes m_attributes;
 };
 
 #endif

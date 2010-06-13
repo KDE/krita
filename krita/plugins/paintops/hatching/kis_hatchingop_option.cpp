@@ -17,9 +17,9 @@
  */
 #include "kis_hatchingop_option.h"
 
-#include "ui_wdghatchingoptions.h"
+#include "ui_newhatchingoptions.h"
 
-class KisHatchingOpOptionsWidget: public QWidget, public Ui::WdgHatchingOptions
+class KisHatchingOpOptionsWidget: public QWidget, public Ui::NewHatchingOptions
 {
 public:
     KisHatchingOpOptionsWidget(QWidget *parent = 0)
@@ -33,11 +33,12 @@ KisHatchingOpOption::KisHatchingOpOption()
 {
     m_checkable = false;
     m_options = new KisHatchingOpOptionsWidget();
-    connect(m_options->radiusSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->inkDepletionCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->opacity, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->saturation, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-
+    connect(m_options->w_angle, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->w_w, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->w_h, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->w_s, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->w_thickness, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+   
     setConfigurationPage(m_options);
 }
 
@@ -46,54 +47,23 @@ KisHatchingOpOption::~KisHatchingOpOption()
     // delete m_options;
 }
 
-int KisHatchingOpOption::radius() const
-{
-    return m_options->radiusSpinBox->value();
-}
-
-
-void KisHatchingOpOption::setRadius(int radius) const
-{
-    m_options->radiusSpinBox->blockSignals(true);
-    m_options->radiusSpinBox->setValue( radius );
-    m_options->radiusSpinBox->blockSignals(false);
-}
-
-
-
-bool KisHatchingOpOption::inkDepletion() const
-{
-    return m_options->inkDepletionCHBox->isChecked();
-}
-
-
-
-bool KisHatchingOpOption::opacity() const
-{
-    return m_options->opacity->isChecked();
-}
-
-
-bool KisHatchingOpOption::saturation() const
-{
-    return m_options->saturation->isChecked();
-}
-
 
 void KisHatchingOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty("Hatching/radius", radius());
-    setting->setProperty("Hatching/inkDepletion", inkDepletion());
-    setting->setProperty("Hatching/opacity", opacity());
-    setting->setProperty("Hatching/saturation", saturation());
+    setting->setProperty(HATCHING_ANGLE, m_options->w_angle->value());
+    setting->setProperty(HATCHING_WIDTH, m_options->w_w->value());
+    setting->setProperty(HATCHING_HEIGHT, m_options->w_h->value());
+    setting->setProperty(HATCHING_SEPARATION, m_options->w_s->value());
+    setting->setProperty(HATCHING_THICKNESS, m_options->w_thickness->value());
 }
 
 void KisHatchingOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->radiusSpinBox->setValue(setting->getInt("Hatching/radius"));
-    m_options->inkDepletionCHBox->setChecked(setting->getBool("Hatching/inkDepletion"));
-    m_options->opacity->setChecked(setting->getBool("Hatching/opacity"));
-    m_options->saturation->setChecked(setting->getBool("Hatching/saturation"));
+    m_options->w_angle->setValue( setting->getDouble(HATCHING_ANGLE) );
+    m_options->w_w->setValue( setting->getInt(HATCHING_WIDTH) ); 
+    m_options->w_h->setValue( setting->getInt(HATCHING_HEIGHT) );
+    m_options->w_s->setValue( setting->getDouble(HATCHING_SEPARATION)); 
+    m_options->w_thickness->setValue( setting->getDouble(HATCHING_THICKNESS) ); 
 }
 
 

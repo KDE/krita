@@ -8,7 +8,7 @@ set(kritahatchingpaintop_PART_SRCS
     hatching_brush.cpp	
     )
 
-kde4_add_ui_files(kritahatchingpaintop_PART_SRCS wdghatchingoptions.ui newhatchingoptions.ui)
+kde4_add_ui_files(kritahatchingpaintop_PART_SRCS newhatchingoptions.ui)
 
 kde4_add_plugin(kritahatchingpaintop ${kritahatchingpaintop_PART_SRCS})
 

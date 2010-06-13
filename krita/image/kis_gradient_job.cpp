@@ -58,7 +58,7 @@ void KisGradientJob::run()
     painter.setCompositeOp(m_config->compositeOp);
     painter.setGradient(m_config->gradient);
     painter.setPaintColor(m_config->fgColor);
-    painter.beginTransaction(m_config->transaction);
+    painter.putTransaction(m_config->transaction);
 
     painter.paintGradient(m_config->vectorStart, m_config->vectorEnd,
                           m_config->shape, m_config->repeat,
@@ -66,7 +66,7 @@ void KisGradientJob::run()
                           m_config->reverse,
                           m_rc.x(), m_rc.y(), m_rc.width(), m_rc.height());
 
-    painter.endTransaction();
+    painter.takeTransaction();
 
     m_updater->setProgress(100);
 }

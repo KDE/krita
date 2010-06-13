@@ -41,13 +41,13 @@ public:
     using KisNodeVisitor::visit;
 
     KisShearVisitor(double xshear, double yshear, KoUpdater *progress)
-            : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undo(0) {}
+            : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undoAdapter(0) {}
 
     void setStrategy(KisFilterStrategy* strategy) {
         m_strategy = strategy;
     }
-    void setUndoAdapter(KisUndoAdapter* undo) {
-        m_undo = undo;
+    void setUndoAdapter(KisUndoAdapter* undoAdapter) {
+        m_undoAdapter = undoAdapter;
     }
 public:
 
@@ -66,10 +66,7 @@ public:
         else
             strategy = new KisMitchellFilterStrategy;
 
-        KisTransaction* t = 0;
-
-        if (m_undo && m_undo->undo())
-            t = new KisTransaction("", dev);
+        KisTransaction transaction("", dev);
 
         //Doesn't do anything, internally transforms x and y shear to 0 each :-///
         //KisTransformWorker w(dev, 1.0, 1.0, m_xshear, m_yshear, 0, 0, 0, m_progress, strategy);
@@ -77,8 +74,10 @@ public:
 
         shear(dev, m_xshear, m_yshear, m_progress);
 
-        if (m_undo && m_undo->undo())
-            m_undo->addCommand(t);
+        if (m_undoAdapter)
+            transaction.commit(m_undoAdapter);
+        else
+            transaction.end();
 
         if (!m_strategy)
             delete strategy;
@@ -133,7 +132,7 @@ private:
     double m_yshear;
     KoUpdater* m_progress;
     KisFilterStrategy* m_strategy;
-    KisUndoAdapter* m_undo;
+    KisUndoAdapter* m_undoAdapter;
 };
 
 #endif // KIS_SHEAR_VISITOR_H_

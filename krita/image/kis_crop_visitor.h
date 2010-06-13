@@ -29,7 +29,6 @@
 #include "kis_paint_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_transaction.h"
-#include "kis_selected_transaction.h"
 #include "kis_selection.h"
 #include "kis_external_layer_iface.h"
 #include "kis_undo_adapter.h"
@@ -57,12 +56,10 @@ public:
     }
 
     bool visit(KisExternalLayer *layer) {
-        KisUndoAdapter* undoAdapter = layer->image()->undoAdapter();
-        
-        QUndoCommand* cmd = layer->crop(m_rect);
-        if (cmd && undoAdapter && undoAdapter->undo()) {
-            undoAdapter->addCommand(cmd);
-        }
+        KisUndoAdapter *undoAdapter = layer->image()->undoAdapter();
+        QUndoCommand* command = layer->crop(m_rect);
+        if (command)
+            undoAdapter->addCommand(command);
         return true;
     }
 
@@ -119,28 +116,17 @@ public:
 private:
 
     bool cropPaintDeviceLayer(KisLayer * layer) {
+        KisUndoAdapter *undoAdapter = layer->image()->undoAdapter();
 
-        KisPaintDeviceSP dev = layer->paintDevice();
-        KisUndoAdapter* undoAdapter = layer->image()->undoAdapter();
-
-        KisSelectedTransaction * t = 0;
-        if (undoAdapter && undoAdapter->undo())
-            t = new KisSelectedTransaction(i18n("Crop"), layer);
-
-        layer->setDirty();
-        dev->crop(m_rect);
-
-        if (undoAdapter && undoAdapter->undo()) {
-            undoAdapter->addCommand(t);
-        }
+        KisSelectedTransaction transaction(i18n("Crop"), layer);
+        layer->paintDevice()->crop(m_rect);
+        transaction.commit(undoAdapter);
 
         if (m_movelayers) {
-            if (undoAdapter && undoAdapter->undo()) {
-                QPoint oldPos(layer->x(), layer->y());
-                QPoint newPos(layer->x() - m_rect.x(), layer->y() - m_rect.y());
-                QUndoCommand * cmd = new KisNodeMoveCommand(layer, oldPos, newPos);
-                undoAdapter->addCommand(cmd);
-            }
+            QPoint oldPos(layer->x(), layer->y());
+            QPoint newPos(layer->x() - m_rect.x(), layer->y() - m_rect.y());
+            QUndoCommand *cmd = new KisNodeMoveCommand(layer, oldPos, newPos);
+            undoAdapter->addCommand(cmd);
         }
         return true;
     }

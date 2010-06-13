@@ -162,14 +162,14 @@ set(kritaimage_LIB_SRCS
    kis_random_generator.cc
    kis_random_sub_accessor.cpp
    kis_shear_visitor.cpp
-   kis_selected_transaction.cc
+   kis_selected_transaction_data.cpp
    kis_selection.cc
    kis_selection_mask.cpp
-   kis_selection_transaction.cc
+   kis_selection_transaction_data.cpp
    kis_serializable_configuration.cc
    kis_shared.cc
    kis_threaded_applicator.cpp
-   kis_transaction.cc
+   kis_transaction_data.cpp
    kis_transform_worker.cc
    kis_transformation_mask.cpp
    kis_transparency_mask.cc

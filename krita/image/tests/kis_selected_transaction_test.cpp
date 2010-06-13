@@ -19,7 +19,7 @@
 #include "kis_selected_transaction_test.h"
 
 #include <qtest_kde.h>
-#include "kis_selected_transaction.h"
+#include "kis_transaction.h"
 #include <KoColorSpace.h>
 #include "kis_image.h"
 #include "kis_paint_layer.h"
@@ -38,7 +38,6 @@ void KisSelectedTransactionTest::testCreation()
     KisSelectedTransaction test("bla", node, cmd);
 
 }
-
 
 QTEST_KDEMAIN(KisSelectedTransactionTest, GUI)
 #include "kis_selected_transaction_test.moc"

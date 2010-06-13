@@ -282,6 +282,7 @@ void KisMementoManager::rollback(KisTileHashTable *ht)
     unblockRegistration();
 
     // We have just emulated a commit so:
+    m_currentMemento = 0;
     Q_ASSERT(!namedTransactionInProgress());
 
     m_cancelledRevisions.prepend(changeList);

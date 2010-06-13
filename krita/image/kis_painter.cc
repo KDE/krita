@@ -156,9 +156,10 @@ void KisPainter::init()
 
 KisPainter::~KisPainter()
 {
-    QUndoCommand* cmd = end();
-    Q_ASSERT(cmd == 0);
-    delete cmd;
+    // TODO: Maybe, don't be that strict?
+    // deleteTransaction();
+    end();
+
     delete d->paintOp;
     delete d->maskPainter;
     delete d->fillPainter;
@@ -176,43 +177,67 @@ void KisPainter::begin(KisPaintDeviceSP device, KisSelectionSP selection)
     d->selection = selection;
     Q_ASSERT(device->colorSpace());
 
-    delete d->transaction;
-    d->transaction = 0;
+    end();
 
     d->device = device;
     d->colorSpace = device->colorSpace();
     d->compositeOp = d->colorSpace->compositeOp(COMPOSITE_OVER);
     d->pixelSize = device->pixelSize();
 }
-QUndoCommand *KisPainter::end()
+
+void KisPainter::end()
 {
-    return endTransaction();
+    Q_ASSERT_X(!d->transaction, "KisPainter::end()",
+               "end() was called for the painter having a transaction. "
+               "Please use end/deleteTransaction() instead");
 }
 
-void KisPainter::beginTransaction(const QString& customName)
+void KisPainter::beginTransaction(const QString& transactionName)
 {
-    delete d->transaction;
-    d->transaction = new KisTransaction(customName, d->device);
+    Q_ASSERT_X(!d->transaction, "KisPainter::beginTransaction()",
+               "You asked for a new transaction while still having "
+               "another one. Please finish the first one with "
+               "end/deleteTransaction() first");
+
+    d->transaction = new KisTransaction(transactionName, d->device);
     Q_CHECK_PTR(d->transaction);
 }
 
-void KisPainter::beginTransaction(KisTransaction* command)
+void KisPainter::endTransaction(KisUndoAdapter *undoAdapter)
 {
+    Q_ASSERT_X(d->transaction, "KisPainter::endTransaction()",
+               "No transaction is in progress");
+
+    d->transaction->commit(undoAdapter);
     delete d->transaction;
-    d->transaction = command;
+    d->transaction = 0;
 }
 
-
-QUndoCommand* KisPainter::endTransaction()
+void KisPainter::deleteTransaction()
 {
-    if (!d->transaction) return 0;
+    if (!d->transaction) return;
 
-    if (d->device)
-        d->device->disconnect(d->transaction);
-
-    QUndoCommand *command = d->transaction;
+    delete d->transaction;
     d->transaction = 0;
-    return command;
+}
+
+void KisPainter::putTransaction(KisTransaction* transaction)
+{
+    Q_ASSERT_X(!d->transaction, "KisPainter::putTransaction()",
+               "You asked for a new transaction while still having "
+               "another one. Please finish the first one with "
+               "end/deleteTransaction() first");
+
+    d->transaction = transaction;
+}
+
+KisTransaction* KisPainter::takeTransaction()
+{
+    Q_ASSERT_X(d->transaction, "KisPainter::takeTransaction()",
+               "No transaction is in progress");
+    KisTransaction *temp = d->transaction;
+    d->transaction = 0;
+    return temp;
 }
 
 QRegion KisPainter::dirtyRegion()

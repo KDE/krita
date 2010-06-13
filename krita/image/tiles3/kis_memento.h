@@ -75,16 +75,16 @@ public:
         return false; // Compiller would be happy! =)
     }
 
+
     /**
-     * Some tricky equivalet to 'commit()'
-     * FIXME: do a usual commit instead
+     * Not used, happily
      */
-    inline bool valid() const {
-        return m_valid;
-    }
-    inline void setInvalid() {
-        m_valid = false;
-    }
+//    inline bool valid() const {
+//        return m_valid;
+//    }
+//    inline void setInvalid() {
+//        m_valid = false;
+//    }
 
 private:
     friend class KisMementoManager;

@@ -160,8 +160,8 @@ bool KisTiledDataManager::read(KoStore *store)
 
     QIODevice *stream = store->device();
     if (!stream) {
-      nothing->setInvalid();
-      return false;
+        m_mementoManager->commit();
+        return false;
     }
 
     quint32 numTiles;
@@ -188,7 +188,7 @@ bool KisTiledDataManager::read(KoStore *store)
         tile->unlock();
     }
 
-    nothing->setInvalid();
+    m_mementoManager->commit();
     return true;
 }
 

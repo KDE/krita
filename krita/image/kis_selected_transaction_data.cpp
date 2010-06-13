@@ -16,9 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_selected_transaction.h"
-#include "kis_types.h"
-#include "kis_global.h"
+#include "kis_selected_transaction_data.h"
 
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
@@ -26,8 +24,8 @@
 #include "kis_layer.h"
 #include "kis_undo_adapter.h"
 
-KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisNodeSP node, QUndoCommand* parent)
-        : KisTransaction(name, node->paintDevice(), parent)
+KisSelectedTransactionData::KisSelectedTransactionData(const QString& name, KisNodeSP node, QUndoCommand* parent)
+        : KisTransactionData(name, node->paintDevice(), parent)
         , m_selTransaction(0)
         , m_hadSelection(false /*device->hasSelection()*/)
 {
@@ -38,21 +36,21 @@ KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisNodeSP no
     }
 
     if (m_layer->selection())
-        m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(m_layer->selection()->getOrCreatePixelSelection().data()));
+        m_selTransaction = new KisTransactionData(name, KisPaintDeviceSP(m_layer->selection()->getOrCreatePixelSelection().data()));
 //     if(! m_hadSelection) {
 //         m_device->deselect(); // let us not be the cause of select
 //     }
 }
 
-KisSelectedTransaction::~KisSelectedTransaction()
+KisSelectedTransactionData::~KisSelectedTransactionData()
 {
     delete m_selTransaction;
 }
 
-void KisSelectedTransaction::redo()
+void KisSelectedTransactionData::redo()
 {
     // Both transactions will block on the first redo
-    KisTransaction::redo();
+    KisTransactionData::redo();
 
     if (m_selTransaction)
         m_selTransaction->redo();
@@ -65,11 +63,11 @@ void KisSelectedTransaction::redo()
     m_layer->image()->undoAdapter()->emitSelectionChanged();
 }
 
-void KisSelectedTransaction::undo()
+void KisSelectedTransactionData::undo()
 {
 //     m_redoHasSelection = m_device->hasSelection();
 
-    KisTransaction::undo();
+    KisTransactionData::undo();
 
     if (m_selTransaction)
         m_selTransaction->undo();
@@ -82,11 +80,11 @@ void KisSelectedTransaction::undo()
     m_layer->image()->undoAdapter()->emitSelectionChanged();
 }
 
-void KisSelectedTransaction::undoNoUpdate()
+void KisSelectedTransactionData::undoNoUpdate()
 {
 //     m_redoHasSelection = m_device->hasSelection();
 //
-//     KisTransaction::undoNoUpdate();
+//     KisTransactionData::undoNoUpdate();
 //     m_selTransaction->undoNoUpdate();
 //     if(m_hadSelection)
 //         m_device->selection();
@@ -94,7 +92,14 @@ void KisSelectedTransaction::undoNoUpdate()
 //         m_device->deselect();
 }
 
-KisLayerSP KisSelectedTransaction::layer()
+void KisSelectedTransactionData::endTransaction()
+{
+    KisTransactionData::endTransaction();
+    if(m_selTransaction)
+        m_selTransaction->endTransaction();
+}
+
+KisLayerSP KisSelectedTransactionData::layer()
 {
     return m_layer;
 }

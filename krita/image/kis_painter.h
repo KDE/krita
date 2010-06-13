@@ -42,6 +42,7 @@ class KoUpdater;
 class KoColor;
 class KoCompositeOp;
 
+class KisUndoAdapter;
 class KisTransaction;
 class KisPattern;
 class KisFilterConfiguration;
@@ -93,7 +94,7 @@ public:
     /**
      * Finish painting on the current device
      */
-    QUndoCommand *end();
+    void end();
 
     /**
      * If set, the painter action is cancelable, if the action supports that.
@@ -101,13 +102,23 @@ public:
     void setProgress(KoUpdater * progressUpdater);
 
     /// Begin an undoable paint operation
-    void beginTransaction(const QString& customName = "");
+    void beginTransaction(const QString& transactionName = "");
 
     /// Finish the undoable paint operation
-    QUndoCommand *endTransaction();
+    void endTransaction(KisUndoAdapter *undoAdapter);
 
-    /// begin a transaction with the given command
-    void beginTransaction(KisTransaction* command);
+    /**
+     * Finish the transaction and delete it's undo information.
+     * NOTE: Be careful, because all the previous transactions
+     * will become non-undoable after execution of this method.
+     */
+    void deleteTransaction();
+
+    /// continue a transaction started somewhere else
+    void putTransaction(KisTransaction* transaction);
+
+    /// take transaction out of the reach of KisPainter
+    KisTransaction* takeTransaction();
 
     /// Returns the current paint device.
     const KisPaintDeviceSP device() const;

@@ -16,11 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_transaction.h"
+#include "kis_transaction_data.h"
 
-
-#include "kis_types.h"
-#include "kis_global.h"
 #include "kis_paint_device.h"
 #include "kis_datamanager.h"
 
@@ -28,34 +25,44 @@
 #include KIS_MEMENTO_HEADER
 
 
-class KisTransaction::Private
+class KisTransactionData::Private
 {
 public:
     QString name;
     KisPaintDeviceSP device;
     KisMementoSP memento;
     bool firstRedo;
+    bool transactionFinished;
 };
 
-KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent)
+KisTransactionData::KisTransactionData(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent)
         : QUndoCommand(name, parent)
         , m_d(new Private())
 {
     m_d->device = device;
     m_d->memento = device->dataManager()->getMemento();
     m_d->firstRedo = true;
+    m_d->transactionFinished = false;
 }
 
-KisTransaction::~KisTransaction()
+KisTransactionData::~KisTransactionData()
 {
-    if (m_d->memento) {
-        m_d->memento->setInvalid();
-        m_d->device->dataManager()->purgeHistory(m_d->memento);
-    }
+    Q_ASSERT(m_d->memento);
+    endTransaction();
+    m_d->device->dataManager()->purgeHistory(m_d->memento);
+
     delete m_d;
 }
 
-void KisTransaction::redo()
+void KisTransactionData::endTransaction()
+{
+    if(!m_d->transactionFinished) {
+        m_d->transactionFinished = true;
+        m_d->device->dataManager()->commit();
+    }
+}
+
+void KisTransactionData::redo()
 {
     //QUndoStack calls redo(), so the first call needs to be blocked
     if (m_d->firstRedo) {
@@ -63,8 +70,7 @@ void KisTransaction::redo()
         return;
     }
 
-    Q_ASSERT(!m_d->memento.isNull());
-
+    Q_ASSERT(m_d->memento);
     m_d->device->dataManager()->rollforward(m_d->memento);
 
     QRect rc;
@@ -75,9 +81,9 @@ void KisTransaction::redo()
     m_d->device->setDirty(rc);
 }
 
-void KisTransaction::undo()
+void KisTransactionData::undo()
 {
-    Q_ASSERT(!m_d->memento.isNull());
+    Q_ASSERT(m_d->memento);
     m_d->device->dataManager()->rollback(m_d->memento);
 
     QRect rc;
@@ -88,10 +94,8 @@ void KisTransaction::undo()
     m_d->device->setDirty(rc);
 }
 
-void KisTransaction::undoNoUpdate()
+void KisTransactionData::undoNoUpdate()
 {
-    Q_ASSERT(!m_d->memento.isNull());
+    Q_ASSERT(m_d->memento);
     m_d->device->dataManager()->rollback(m_d->memento);
 }
-
-#include "kis_transaction.moc"

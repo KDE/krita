@@ -92,10 +92,8 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& info) cons
     foreach(KisNodeSP node, nodes) {
         KisPaintDeviceSP dev = node->paintDevice();
         KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
-        KisTransaction * cmd = 0;
-        if (info.undoAdapter()) cmd = new KisTransaction(d->filter->name(), dev);
-
         QRect r1 = dev->extent();
+        KisTransaction transaction(d->filter->name(), dev);
 
         // Ugly hack to get at the image without bloating the node interface
         KisImageWSP image;
@@ -108,7 +106,8 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& info) cons
 
         d->filter->process(dev, r1, kfc);
         node->setDirty(r1);
-        if (info.undoAdapter()) info.undoAdapter()->addCommand(cmd);
+
+        transaction.commit(info.undoAdapter());
     }
 }
 

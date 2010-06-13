@@ -17,16 +17,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_selection_transaction.h"
+#include "kis_selection_transaction_data.h"
 
-#include "kis_types.h"
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #include "kis_image.h"
 #include "kis_undo_adapter.h"
 
-KisSelectionTransaction::KisSelectionTransaction(const QString& name, KisImageWSP image, KisSelectionSP selection, QUndoCommand* parent) :
-        KisTransaction(name, selection->getOrCreatePixelSelection().data(), parent)
+KisSelectionTransactionData::KisSelectionTransactionData(const QString& name, KisImageWSP image, KisSelectionSP selection, QUndoCommand* parent) :
+        KisTransactionData(name, selection->getOrCreatePixelSelection().data(), parent)
         , m_image(image)
         , m_selection(selection)
         , m_wasDeselected(selection->isDeselected())
@@ -37,20 +36,20 @@ KisSelectionTransaction::KisSelectionTransaction(const QString& name, KisImageWS
     }
 }
 
-KisSelectionTransaction::~KisSelectionTransaction()
+KisSelectionTransactionData::~KisSelectionTransactionData()
 {
 }
 
-void KisSelectionTransaction::redo()
+void KisSelectionTransactionData::redo()
 {
-    KisTransaction::redo();
+    KisTransactionData::redo();
     m_selection->setDirty(m_image->bounds());
     m_image->undoAdapter()->emitSelectionChanged();
 }
 
-void KisSelectionTransaction::undo()
+void KisSelectionTransactionData::undo()
 {
-    KisTransaction::undo();
+    KisTransactionData::undo();
     m_selection->setDirty(m_image->bounds());
     m_selection->setDeselected(m_wasDeselected);
     m_image->undoAdapter()->emitSelectionChanged();

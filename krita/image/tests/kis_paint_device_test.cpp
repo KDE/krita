@@ -418,7 +418,9 @@ void KisPaintDeviceTest::testDeviceDuplication()
     KisTransaction transaction1("", device);
 //    qDebug()<<"CLEARING";
     device->clear(clearRect);
-    transaction1.undo();
+
+    transaction1.revert();
+
     resultImage = device->convertToQImage(0);
     QVERIFY(resultImage == referenceImage);
 
@@ -427,7 +429,9 @@ void KisPaintDeviceTest::testDeviceDuplication()
     KisTransaction transaction("", clone);
 //    qDebug()<<"CLEARING";
     clone->clear(clearRect);
-    transaction.undo();
+
+    transaction.revert();
+
     resultImage = clone->convertToQImage(0);
     QVERIFY(resultImage == referenceImage);
 

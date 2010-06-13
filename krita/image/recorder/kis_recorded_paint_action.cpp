@@ -270,8 +270,7 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
     QList<KisNodeSP> nodes = nodeQueryPath().queryNodes(info.image(), info.currentNode());
     foreach(KisNodeSP node, nodes) {
         dbgUI << "Play recorded paint action on node : " << node->name() ;
-        KisTransaction * cmd = 0;
-        if (info.undoAdapter()) cmd = new KisTransaction("", node->paintDevice());
+        KisTransaction transaction("", node->paintDevice());
 
         KisPaintDeviceSP target = 0;
         if (d->paintIncremental) {
@@ -326,9 +325,11 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
             node->setDirty(painter->dirtyRegion());
         }
         delete painter;
-        if (info.undoAdapter()) info.undoAdapter()->addCommand(cmd);
+
         if (d->paintOpPreset)
             d->paintOpPreset->settings()->setNode(0);
+
+        transaction.commit(info.undoAdapter());
     }
 }
 

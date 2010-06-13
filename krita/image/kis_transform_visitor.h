@@ -28,9 +28,8 @@
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_adjustment_layer.h"
-#include "kis_transaction.h"
 #include "kis_transform_worker.h"
-#include "kis_selected_transaction.h"
+#include "kis_transaction.h"
 #include "kis_external_layer_iface.h"
 #include "kis_undo_adapter.h"
 #include "kis_image.h"
@@ -66,11 +65,10 @@ public:
 
     bool visit(KisExternalLayer * layer) {
         KisUndoAdapter* undoAdapter = layer->image()->undoAdapter();
-        
-        QUndoCommand* cmd = layer->transform(m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty);
-        if (cmd && undoAdapter && undoAdapter->undo()) {
-            undoAdapter->addCommand(cmd);
-        }
+
+        QUndoCommand* command = layer->transform(m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty);
+        if (command)
+            undoAdapter->addCommand(command);
         return true;
     }
 
@@ -131,18 +129,12 @@ private:
     void transformPaintDevice(KisNode * node) {
         KisPaintDeviceSP dev = node->paintDevice();
 
-        KisTransaction * t = 0;
-        if (m_image->undo()) {
-            t = new KisTransaction(i18n("Rotate Node"), dev);
-            Q_CHECK_PTR(t);
-        }
+        KisTransaction transaction(i18n("Rotate Node"), dev);
 
         KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter, true);
         tw.run();
 
-        if (m_image->undo()) {
-            m_image->undoAdapter()->addCommand(t);
-        }
+        transaction.commit(m_image->undoAdapter());
         node->setDirty();
     }
 

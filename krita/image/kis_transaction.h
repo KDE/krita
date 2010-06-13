@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,40 +19,99 @@
 #ifndef KIS_TRANSACTION_H_
 #define KIS_TRANSACTION_H_
 
-#include <QString>
 #include <QUndoCommand>
 
 #include "kis_types.h"
 #include <krita_export.h>
 
-/**
- * A tile based undo command.
- *
- * Ordinary QUndoCommand subclasses store parameters and apply the action in
- * the redo() command, however, Krita doesn't work like this. Undo replaces
- * the current tiles in a paint device with the old tiles, redo replaces them
- * again with the new tiles without actually executing the command that changed
- * the image data again.
- */
-class KRITAIMAGE_EXPORT KisTransaction : public QObject, public QUndoCommand
+#include "kis_transaction_data.h"
+#include "kis_selection_transaction_data.h"
+#include "kis_selected_transaction_data.h"
+#include "kis_paint_device.h"
+
+#include "kis_undo_adapter.h"
+
+class KisTransaction
 {
-
-    Q_OBJECT
-
 public:
+    KisTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent = 0) {
+        m_transactionData = new KisTransactionData(name, device, parent);
+    }
 
-    KisTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent = 0);
-    virtual ~KisTransaction();
+    virtual ~KisTransaction() {
+        if(m_transactionData) {
+            m_transactionData->endTransaction();
+            delete m_transactionData;
+        }
+    }
 
-public:
-    virtual void redo();
-    virtual void undo();
-    virtual void undoNoUpdate();
+    QUndoCommand* undoCommand() {
+        return m_transactionData;
+    }
 
-private:
-    class Private;
-    Private * const m_d;
+    void commit(KisUndoAdapter* undoAdapter) {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::commit()",
+                   "the transaction has been tried to be committed twice");
+
+        m_transactionData->endTransaction();
+        undoAdapter->addCommand(m_transactionData);
+        m_transactionData = 0;
+    }
+
+    void end() {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::end()",
+                   "nothing to end!");
+        m_transactionData->endTransaction();
+        delete m_transactionData;
+        m_transactionData = 0;
+    }
+
+    void revert() {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::reverted()",
+                   "the transaction is tried to be reverted()"
+                   "after it has already been added to undo adapter");
+
+        m_transactionData->endTransaction();
+        /**
+         * FIXME: Should we emulate first redo() here?
+         */
+        m_transactionData->undo();
+        delete m_transactionData;
+        m_transactionData = 0;
+    }
+/*
+    QUndoCommand* endAndTakeUndoCommand() {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::endAndTakeUndoCommand()",
+                   "the transaction has been tried to be ended twice");
+
+        m_transactionData->endTransaction();
+        QUndoCommand *command = m_transactionData;
+        m_transactionData = 0;
+        return command;
+    }
+*/
+protected:
+    KisTransaction() {}
+    KisTransactionData* m_transactionData;
 };
 
-#endif // KIS_TILE_COMMAND_H_
+class KisSelectedTransaction : public KisTransaction
+{
+public:
+    KisSelectedTransaction(const QString& name, KisNodeSP node, QUndoCommand* parent = 0)
+    {
+        m_transactionData = new KisSelectedTransactionData(name, node, parent);
+    }
+};
+
+class KisSelectionTransaction : public KisTransaction
+{
+public:
+    KisSelectionTransaction(const QString& name, KisImageWSP image, KisSelectionSP selection, QUndoCommand* parent = 0)
+    {
+        m_transactionData = new KisSelectionTransactionData(name, image, selection, parent);
+    }
+};
+
+#endif /* KIS_TRANSACTION_H_ */
 

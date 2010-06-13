@@ -29,9 +29,32 @@
 #include "kis_paint_device.h"
 #include "kis_transaction.h"
 
+class KisTestingUndoAdapter : public KisUndoAdapter
+{
+public:
+    KisTestingUndoAdapter()
+        : KisUndoAdapter(0)
+    {}
+
+    void addCommand(QUndoCommand *command) {
+        m_stack.push(command);
+    }
+
+    void undo() {
+        m_stack.undo();
+    }
+
+    void redo() {
+        m_stack.redo();
+    }
+
+private:
+    QUndoStack m_stack;
+};
+
 void KisTransactionTest::testUndo()
 {
-    QUndoStack stack;
+    KisTestingUndoAdapter undoAdapter;
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -50,9 +73,8 @@ void KisTransactionTest::testUndo()
     QVERIFY(c1 == Qt::white);
     QVERIFY(c2 == Qt::black);
 
-    KisTransaction* t = new KisTransaction("mirror", dev, 0);
+    KisTransaction transaction("mirror", dev, 0);
     KisTransformWorker::mirrorX(dev);
-    stack.push(t);
 
     dev->pixel(5, 5, &c1);
     dev->pixel(517, 5, &c2);
@@ -60,7 +82,8 @@ void KisTransactionTest::testUndo()
     QVERIFY(c1 == Qt::black);
     QVERIFY(c2 == Qt::white);
 
-    t->undo();
+    transaction.commit(&undoAdapter);
+    undoAdapter.undo();
 
     dev->pixel(5, 5, &c1);
     dev->pixel(517, 5, &c2);
@@ -72,7 +95,7 @@ void KisTransactionTest::testUndo()
 
 void KisTransactionTest::testRedo()
 {
-    QUndoStack stack;
+    KisTestingUndoAdapter undoAdapter;
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -91,9 +114,8 @@ void KisTransactionTest::testRedo()
     QVERIFY(c1 == Qt::white);
     QVERIFY(c2 == Qt::black);
 
-    KisTransaction* t = new KisTransaction("mirror", dev, 0);
+    KisTransaction transaction("mirror", dev, 0);
     KisTransformWorker::mirrorX(dev);
-    stack.push(t);
 
     dev->pixel(5, 5, &c1);
     dev->pixel(517, 5, &c2);
@@ -101,7 +123,8 @@ void KisTransactionTest::testRedo()
     QVERIFY(c1 == Qt::black);
     QVERIFY(c2 == Qt::white);
 
-    t->undo();
+    transaction.commit(&undoAdapter);
+    undoAdapter.undo();
 
     dev->pixel(5, 5, &c1);
     dev->pixel(517, 5, &c2);
@@ -109,7 +132,7 @@ void KisTransactionTest::testRedo()
     QVERIFY(c1 == Qt::white);
     QVERIFY(c2 == Qt::black);
 
-    t->redo();
+    undoAdapter.redo();
 
     dev->pixel(5, 5, &c1);
     dev->pixel(517, 5, &c2);

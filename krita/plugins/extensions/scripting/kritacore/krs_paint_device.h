@@ -182,7 +182,7 @@ public:
     }
 private:
     KisPaintDeviceSP m_device;
-    KisTransaction* m_cmd;
+    KisTransaction* m_transaction;
 };
 
 }

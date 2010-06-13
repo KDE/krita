@@ -43,7 +43,6 @@
 #include "kis_paintop_registry.h"
 #include "kis_layer.h"
 #include "kis_selection_options.h"
-#include "kis_selected_transaction.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
@@ -93,8 +92,7 @@ void KisToolSelectElliptical::LocalTool::finishEllipse(const QRectF &rect)
 
         painter.paintEllipse(rect);
 
-        QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
-        canvas()->addCommand(cmd);
+        helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
     } else {
         QRectF ptRect = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createEllipseShape(ptRect);

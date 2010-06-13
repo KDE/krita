@@ -101,7 +101,7 @@ void KisFloodFillBenchmark::benchmarkFlood()
         fillPainter.fillColor(1, 1, false);
 
         dirty = fillPainter.dirtyRegion();
-        delete fillPainter.endTransaction();
+        fillPainter.deleteTransaction();
     }
     
     // uncomment this to see the output

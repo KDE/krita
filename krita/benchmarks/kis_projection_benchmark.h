@@ -27,11 +27,11 @@ class KisProjectionBenchmark : public QObject
     Q_OBJECT
 
 private slots:
-    
     void initTestCase();
     void cleanupTestCase();
-    
+
     void benchmarkProjection();
+    void benchmarkLoading();
     void benchmarkOverlapping();
 };
 

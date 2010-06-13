@@ -45,7 +45,6 @@
 #include <kis_cursor.h>
 #include <kis_image.h>
 
-#include "kis_selected_transaction.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
 #include "canvas/kis_canvas2.h"
@@ -128,8 +127,7 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                 painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
                 painter.paintPolygon(m_points);
 
-                QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
-                canvas()->addCommand(cmd);
+                helper.selectPixelSelection(tmpSel, m_selectAction);
             } else {
 
                 KoPathShape* path = new KoPathShape();

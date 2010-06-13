@@ -53,7 +53,7 @@
 #include <kis_cursor.h>
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
-#include <kis_selected_transaction.h>
+#include <kis_transaction.h>
 #include <kis_selection.h>
 #include <kis_filter_strategy.h>
 #include <widgets/kis_cmb_idlist.h>
@@ -73,12 +73,12 @@
 
 namespace
 {
-class TransformCmd : public KisSelectedTransaction
+class TransformCmdData : public KisSelectedTransactionData
 {
 
 public:
-    TransformCmd(KisToolTransform *tool, KisNodeSP node, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos);
-    virtual ~TransformCmd();
+    TransformCmdData(KisToolTransform *tool, KisNodeSP node, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos);
+    virtual ~TransformCmdData();
 
 public:
     virtual void redo();
@@ -98,8 +98,8 @@ private:
     QPoint m_newPosition;
 };
 
-TransformCmd::TransformCmd(KisToolTransform *tool, KisNodeSP node, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint originalTopLeft, QPoint originalBottomRight)
-        : KisSelectedTransaction(i18n("Transform"), node)
+TransformCmdData::TransformCmdData(KisToolTransform *tool, KisNodeSP node, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint originalTopLeft, QPoint originalBottomRight)
+        : KisSelectedTransactionData(i18n("Transform"), node)
         , m_scaleX(scaleX)
         , m_scaleY(scaleY)
         , m_translate(translate)
@@ -111,11 +111,11 @@ TransformCmd::TransformCmd(KisToolTransform *tool, KisNodeSP node, double scaleX
 {
 }
 
-TransformCmd::~TransformCmd()
+TransformCmdData::~TransformCmdData()
 {
 }
 
-void TransformCmd::transformArgs(double &sx, double &sy, QPointF &translate, double &a) const
+void TransformCmdData::transformArgs(double &sx, double &sy, QPointF &translate, double &a) const
 {
     sx = m_scaleX;
     sy = m_scaleY;
@@ -123,30 +123,44 @@ void TransformCmd::transformArgs(double &sx, double &sy, QPointF &translate, dou
     a = m_a;
 }
 
-KisSelectionSP TransformCmd::origSelection(QPoint &originalTopLeft, QPoint &originalBottomRight) const
+KisSelectionSP TransformCmdData::origSelection(QPoint &originalTopLeft, QPoint &originalBottomRight) const
 {
     originalTopLeft = m_originalTopLeft;
     originalBottomRight = m_originalBottomRight;
     return m_origSelection;
 }
 
-void TransformCmd::redo()
+void TransformCmdData::redo()
 {
-    KisSelectedTransaction::redo();
+    KisSelectedTransactionData::redo();
     layer()->paintDevice()->move(m_newPosition);
 }
 
-void TransformCmd::undo()
+void TransformCmdData::undo()
 {
-    KisSelectedTransaction::undo();
+    KisSelectedTransactionData::undo();
     layer()->paintDevice()->move(m_originalTopLeft);
 }
 
-void TransformCmd::setNewPosition(int x, int y)
+void TransformCmdData::setNewPosition(int x, int y)
 {
     m_newPosition.setX(x);
     m_newPosition.setY(y);
 }
+
+class TransformCmd : public KisTransaction
+{
+public:
+    TransformCmd(KisToolTransform *tool, KisNodeSP node,
+                 double scaleX, double scaleY,
+                 QPointF translate, double a, KisSelectionSP origSel,
+                 QPoint originalTopLeft, QPoint originalBottomRight)
+    {
+        m_transactionData =
+            new TransformCmdData(tool, node, scaleX, scaleY, translate,
+                                 a, origSel, originalTopLeft, originalBottomRight);
+    }
+};
 
 }
 
@@ -193,10 +207,10 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
     if (currentNode() && currentNode()->paintDevice()) {
         image()->undoAdapter()->setCommandHistoryListener(this);
 
-        const TransformCmd * cmd = 0;
+        const TransformCmdData * cmd = 0;
 
         if (image()->undoAdapter()->presentCommand())
-            cmd = dynamic_cast<const TransformCmd*>(image()->undoAdapter()->presentCommand());
+            cmd = dynamic_cast<const TransformCmdData*>(image()->undoAdapter()->presentCommand());
 
         if (cmd == 0) {
             initHandles();
@@ -656,8 +670,9 @@ void KisToolTransform::transform()
     KoUpdaterPtr progress = updater->startSubtask();
 
     // This mementoes the current state of the active device.
-    TransformCmd * transaction = new TransformCmd(this, currentNode(), m_scaleX,
-            m_scaleY, m_translate, m_a, m_origSelection, m_originalTopLeft, m_originalBottomRight);
+    TransformCmd transaction(this, currentNode(), m_scaleX,
+                             m_scaleY, m_translate, m_a, m_origSelection,
+                             m_originalTopLeft, m_originalBottomRight);
 
 
     //Copy the original state back.
@@ -720,7 +735,7 @@ void KisToolTransform::transform()
                 m_oldMatrixList << shape->transformation();
                 m_newMatrixList << shape->transformation()*matrix;
             }
-            KoShapeTransformCommand* cmd = new KoShapeTransformCommand(shapes, m_oldMatrixList, m_newMatrixList, transaction);
+            KoShapeTransformCommand* cmd = new KoShapeTransformCommand(shapes, m_oldMatrixList, m_newMatrixList, transaction.undoCommand());
             cmd->redo();
         }
 
@@ -737,8 +752,7 @@ void KisToolTransform::transform()
 //     // If canceled, go back to the memento
 //     if(worker.isCanceled())
 //     {
-//         transaction->undo();
-//         delete transaction;
+//         transaction.revert();
 //         return;
 //     }
 
@@ -751,20 +765,16 @@ void KisToolTransform::transform()
     // Else add the command -- this will have the memento from the previous state,
     // and the transformed state from the original device we cached in our activated()
     // method.
-    if (transaction) {
-        transaction->setNewPosition(currentNode()->paintDevice()->x(), currentNode()->paintDevice()->y());
-        if (image()->undo())
-            image()->undoAdapter()->addCommand(transaction);
-        else
-            delete transaction;
-    }
-    updater->deleteLater();
+    TransformCmdData* undoCommand = static_cast<TransformCmdData*>(transaction.undoCommand());
+    undoCommand->setNewPosition(currentNode()->paintDevice()->x(), currentNode()->paintDevice()->y());
+    transaction.commit(image()->undoAdapter());
 
+    updater->deleteLater();
 }
 
 void KisToolTransform::notifyCommandAdded(const QUndoCommand * command)
 {
-    const TransformCmd * cmd = dynamic_cast<const TransformCmd*>(command);
+    const TransformCmdData * cmd = dynamic_cast<const TransformCmdData*>(command);
     if (cmd == 0) {
         // The last added command wasn't one of ours;
         // we should reset to the new state of the canvas.
@@ -776,10 +786,10 @@ void KisToolTransform::notifyCommandAdded(const QUndoCommand * command)
 void KisToolTransform::notifyCommandExecuted(const QUndoCommand * command)
 {
     Q_UNUSED(command);
-    const TransformCmd * cmd = 0;
+    const TransformCmdData * cmd = 0;
 
     if (image()->undoAdapter()->presentCommand())
-        cmd = dynamic_cast<const TransformCmd*>(image()->undoAdapter()->presentCommand());
+        cmd = dynamic_cast<const TransformCmdData*>(image()->undoAdapter()->presentCommand());
 
     if (cmd == 0) {
         // The command now on the top of the stack isn't one of ours

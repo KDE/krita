@@ -42,7 +42,7 @@ using namespace Scripting;
 PaintDevice::PaintDevice(KisPaintDeviceSP device, KisDoc2* doc)
         : ConstPaintDevice(device, doc)
         , m_device(device)
-        , m_cmd(0)
+        , m_transaction(0)
 {
     setObjectName("KritaLayer");
 }
@@ -89,11 +89,11 @@ QObject* PaintDevice::createPainter()
 
 void PaintDevice::beginPainting(const QString& name)
 {
-    if (m_cmd != 0) {
-        delete m_cmd;
+    if (m_transaction) {
+        delete m_transaction;
     }
-    m_cmd = new KisTransaction(name, paintDevice());
-    Q_CHECK_PTR(m_cmd);
+    m_transaction = new KisTransaction(name, paintDevice());
+    Q_CHECK_PTR(m_transaction);
 }
 
 void PaintDevice::endPainting()
@@ -102,8 +102,9 @@ void PaintDevice::endPainting()
         doc()->setModified(true);
         m_device->setDirty();
     }
-    if (m_cmd != 0) {
-        doc()->image()->undoAdapter()->addCommand(m_cmd);
+    if (m_transaction) {
+        m_transaction->commit(doc()->image()->undoAdapter());
+        delete m_transaction;
     }
 }
 

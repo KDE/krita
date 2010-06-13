@@ -439,13 +439,14 @@ void KisToolSelectMagnetic::LocalTool::cleanDetectedBorder()
         QVector2D relativeVectorToAfterNext = QVector2D(afterNext)-QVector2D(current);
 
         qreal distToNext = relativeVectorToNext.length();
-        qreal distToAfterNext = relativeVectorToAfterNext.length();
+        // FIXME: seems to be unused!
+        //qreal distToAfterNext = relativeVectorToAfterNext.length();
 
         qreal angleToNext = std::atan2((qreal)relativeVectorToNext.y(), (qreal) relativeVectorToNext.x());
         qreal angleToAfterNext = std::atan2((qreal)relativeVectorToAfterNext.y(), (qreal) relativeVectorToAfterNext.x());
 
         if(fabs((angleToAfterNext-angleToNext)*distToNext)<1) {
-            qDebug()<<"dleting: "<<(angleToAfterNext-angleToNext)*distToNext;
+            qDebug()<<"deleting: "<<(angleToAfterNext-angleToNext)*distToNext;
             iter = detectedBorder.erase(iter);
         }
         else {
@@ -487,8 +488,7 @@ void KisToolSelectMagnetic::LocalTool::addPathShape(KoPathShape* pathShape)
 
     painter.paintPolygon(QPolygonF(m_detectedBorder));
 
-    QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
-    canvas()->addCommand(cmd);
+    helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
 
     m_detectedBorder.clear();
     m_tmpDetectedBorder.clear();

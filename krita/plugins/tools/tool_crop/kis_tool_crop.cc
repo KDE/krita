@@ -44,7 +44,6 @@
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
 #include <KoPointerEvent.h>
-#include <kis_selected_transaction.h>
 #include <kis_selection.h>
 #include <kis_layer.h>
 #include <kis_crop_visitor.h>

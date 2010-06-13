@@ -168,8 +168,7 @@ void KisToolSelectPath::LocalTool::addPathShape(KoPathShape* pathShape)
         matrix.translate(pathShape->position().x(), pathShape->position().y());
         painter.fillPainterPath(matrix.map(pathShape->outline()));
 
-        QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
-        canvas()->addCommand(cmd);
+        helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
 
         delete pathShape;
     } else {

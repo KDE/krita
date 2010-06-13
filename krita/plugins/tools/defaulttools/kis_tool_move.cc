@@ -174,12 +174,15 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
                 gc.bitBlt(rc.topLeft(), oldLayer->paintDevice(), rc);
                 gc.end();
 
-                // clear the old layer
-                currentImage()->undoAdapter()->addCommand(new KisTransaction("cut", oldLayer->paintDevice()));
-                oldLayer->paintDevice()->clearSelection(selection);
+                {
+                    KisTransaction transaction("cut", oldLayer->paintDevice());
+                    // clear the old layer
+                    oldLayer->paintDevice()->clearSelection(selection);
+                    transaction.commit(image->undoAdapter());
 
-                // deselect away the selection???
-                selection->clear();
+                    // deselect away the selection???
+                    selection->clear();
+                }
 
                 KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
                 KisView2* view = 0;

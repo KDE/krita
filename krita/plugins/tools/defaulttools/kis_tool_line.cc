@@ -185,7 +185,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                     notifyModified();
 
 
-                    canvas()->addCommand(m_painter->endTransaction());
+                    m_painter->endTransaction(image()->undoAdapter());
                     delete m_painter;
                     m_painter = 0;
                 }

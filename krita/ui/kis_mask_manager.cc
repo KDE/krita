@@ -358,16 +358,12 @@ void KisMaskManager::mirrorMaskX()
     KisPaintDeviceSP dev = m_activeMask->selection()->getOrCreatePixelSelection();
     if (!dev) return;
 
-    KisTransaction * t = 0;
-    if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        t = new KisTransaction(i18n("Mirror Mask X"), dev);
-        Q_CHECK_PTR(t);
-    }
+    KisTransaction transaction(i18n("Mirror Mask X"), dev);
 
     QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection());
     m_activeMask->setDirty(dirty);
 
-    if (t) m_view->undoAdapter()->addCommand(t);
+    transaction.commit(m_view->image()->undoAdapter());
 
     m_view->document()->setModified(true);
     m_activeMask->selection()->updateProjection();
@@ -384,17 +380,12 @@ void KisMaskManager::mirrorMaskY()
     KisPaintDeviceSP dev = m_activeMask->selection()->getOrCreatePixelSelection();
     if (!dev) return;
 
-    KisTransaction * t = 0;
-    if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        t = new KisTransaction(i18n("Mirror Layer Y"), dev);
-        Q_CHECK_PTR(t);
-    }
+    KisTransaction transaction(i18n("Mirror Layer Y"), dev);
 
     QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection());
     m_activeMask->setDirty(dirty);
 
-
-    if (t) m_view->undoAdapter()->addCommand(t);
+    transaction.commit(m_view->image()->undoAdapter());
 
     m_view->document()->setModified(true);
     m_activeMask->selection()->updateProjection();

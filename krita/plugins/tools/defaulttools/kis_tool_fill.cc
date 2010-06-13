@@ -140,7 +140,7 @@ bool KisToolFill::flood(int startX, int startY)
             ++it;
         }
 
-        canvas->addCommand(m_painter->endTransaction());
+        m_painter->endTransaction(image()->undoAdapter());
 
     } else {
 
@@ -162,8 +162,8 @@ bool KisToolFill::flood(int startX, int startY)
         else
             fillPainter.fillColor(startX, startY, currentImage()->mergedImage());
 
+        fillPainter.endTransaction(image()->undoAdapter());
         dirty = fillPainter.dirtyRegion();
-        canvas->addCommand(fillPainter.endTransaction());
     }
     device->setDirty(dirty);
     delete updater;

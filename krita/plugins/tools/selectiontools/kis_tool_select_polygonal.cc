@@ -97,8 +97,7 @@ void KisToolSelectPolygonal::LocalTool::finishPolyline(const QVector<QPointF> &p
         painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
         painter.paintPolygon(points);
 
-        QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
-        canvas()->addCommand(cmd);
+        helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
     } else {
         KoPathShape* path = new KoPathShape();
         path->setShapeId(KoPathShapeId);

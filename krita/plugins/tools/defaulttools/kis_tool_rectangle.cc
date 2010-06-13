@@ -81,13 +81,12 @@ void KisToolRectangle::finishRect(const QRectF &rect)
         setupPainter(&painter);
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
-
         painter.paintRect(rect);
+        painter.endTransaction(image()->undoAdapter());
+
         QRegion bound = painter.dirtyRegion();
         device->setDirty(bound);
         notifyModified();
-
-        canvas()->addCommand(painter.endTransaction());
     } else {
         QRectF r = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createRectangleShape(r);

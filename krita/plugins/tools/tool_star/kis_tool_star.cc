@@ -142,7 +142,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
             notifyModified();
             updatePreview();
 
-            canvas()->addCommand(painter.endTransaction());
+            painter.endTransaction(image()->undoAdapter());
         } else {
             KoPathShape* path = new KoPathShape();
             path->setShapeId(KoPathShapeId);

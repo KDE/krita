@@ -47,7 +47,7 @@
 #include <kis_types.h>
 #include <kis_undo_adapter.h>
 #include <kis_view2.h>
-#include <kis_selected_transaction.h>
+#include <kis_transaction.h>
 #include <kis_cursor.h>
 
 namespace
@@ -184,8 +184,10 @@ DlgColorRange::DlgColorRange(KisView2 * view, KisPaintDeviceSP dev, QWidget *  p
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    // XXX_SELECTION
-    // if (m_view->image()->undo()) m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_dev);
+
+#warning "Activate transactions for colorrange selections!"
+//    XXX_SELECTION
+//    m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_dev);
 
     KisSelectionSP selection = m_view->selection();
 
@@ -246,9 +248,9 @@ void DlgColorRange::updatePreview()
 
 void DlgColorRange::okClicked()
 {
-    if (m_view && m_view->undoAdapter() && m_transaction) {
-        m_view->undoAdapter()->addCommand(m_transaction);
-    }
+//    m_transaction->commit(m_view->image()->undoAdapter());
+//    delete m_transaction;
+
     accept();
 }
 
@@ -256,9 +258,10 @@ void DlgColorRange::cancelClicked()
 {
     if (!m_view) return;
     if (!m_view->image()) return;
-    if (!m_transaction) return;
+//    if (!m_transaction) return;
 
-    if (m_view->image()->undo()) m_transaction->undo();
+//    m_transaction->revert();
+//    delete m_transaction;
 
     m_view->canvas()->update();
     reject();

@@ -50,6 +50,14 @@ void KisProjectionBenchmark::benchmarkProjection()
     }
 }
 
+void KisProjectionBenchmark::benchmarkLoading()
+{
+    QBENCHMARK{
+        KisDoc2 doc;
+        doc.loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
+    }
+}
+
 #include "kis_wait_update_done.h"
 
 void KisProjectionBenchmark::benchmarkOverlapping()

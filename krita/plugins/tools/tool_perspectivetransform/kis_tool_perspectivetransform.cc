@@ -53,7 +53,7 @@
 #include <kis_cursor.h>
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
-#include <kis_selected_transaction.h>
+#include <kis_transaction.h>
 #include <kis_selection.h>
 #include <kis_filter_strategy.h>
 #include <kis_perspectivetransform_worker.h>
@@ -63,11 +63,11 @@
 
 namespace
 {
-class PerspectiveTransformCmd : public KisSelectedTransaction
+class PerspectiveTransformCmdData : public KisSelectedTransactionData
 {
 public:
-    PerspectiveTransformCmd(KisToolPerspectiveTransform *tool, KisNodeSP node, KisPaintDeviceSP device, KisPaintDeviceSP origDevice,  QPointF topleft, QPointF topright, QPointF bottomleft, QPointF bottomright, KisSelectionSP origSel, QRect initialRect);
-    virtual ~PerspectiveTransformCmd();
+    PerspectiveTransformCmdData(KisToolPerspectiveTransform *tool, KisNodeSP node, KisPaintDeviceSP device, KisPaintDeviceSP origDevice,  QPointF topleft, QPointF topright, QPointF bottomleft, QPointF bottomright, KisSelectionSP origSel, QRect initialRect);
+    virtual ~PerspectiveTransformCmdData();
 
 public:
     virtual void redo();
@@ -86,8 +86,8 @@ private:
     KisPaintDeviceSP m_origDevice;
 };
 
-PerspectiveTransformCmd::PerspectiveTransformCmd(KisToolPerspectiveTransform *tool, KisNodeSP node, KisPaintDeviceSP device, KisPaintDeviceSP origDevice, QPointF topleft, QPointF topright, QPointF bottomleft, QPointF bottomright, KisSelectionSP origSel, QRect initialRect) :
-        KisSelectedTransaction(i18n("Perspective Transform"), node)
+PerspectiveTransformCmdData::PerspectiveTransformCmdData(KisToolPerspectiveTransform *tool, KisNodeSP node, KisPaintDeviceSP device, KisPaintDeviceSP origDevice, QPointF topleft, QPointF topright, QPointF bottomleft, QPointF bottomright, KisSelectionSP origSel, QRect initialRect) :
+        KisSelectedTransactionData(i18n("Perspective Transform"), node)
         , m_initialRect(initialRect)
         , m_topleft(topleft), m_topright(topright), m_bottomleft(bottomleft), m_bottomright(bottomright)
         , m_tool(tool)
@@ -97,11 +97,11 @@ PerspectiveTransformCmd::PerspectiveTransformCmd(KisToolPerspectiveTransform *to
 {
 }
 
-PerspectiveTransformCmd::~PerspectiveTransformCmd()
+PerspectiveTransformCmdData::~PerspectiveTransformCmdData()
 {
 }
 
-void PerspectiveTransformCmd::transformArgs(QPointF &topleft, QPointF &topright, QPointF &bottomleft, QPointF& bottomright) const
+void PerspectiveTransformCmdData::transformArgs(QPointF &topleft, QPointF &topright, QPointF &bottomleft, QPointF& bottomright) const
 {
     topleft = m_topleft;
     topright = m_topright;
@@ -109,32 +109,48 @@ void PerspectiveTransformCmd::transformArgs(QPointF &topleft, QPointF &topright,
     bottomright = m_bottomright;
 }
 
-KisSelectionSP PerspectiveTransformCmd::origSelection(QRect& initialRect) const
+KisSelectionSP PerspectiveTransformCmdData::origSelection(QRect& initialRect) const
 {
     initialRect = m_initialRect;
     return m_origSelection;
 }
 
-void PerspectiveTransformCmd::redo()
+void PerspectiveTransformCmdData::redo()
 {
-    KisSelectedTransaction::redo();
+    KisSelectedTransactionData::redo();
 }
 
-void PerspectiveTransformCmd::undo()
+void PerspectiveTransformCmdData::undo()
 {
-    KisSelectedTransaction::undo();
+    KisSelectedTransactionData::undo();
 }
 
-KisPaintDeviceSP PerspectiveTransformCmd::theDevice()
+KisPaintDeviceSP PerspectiveTransformCmdData::theDevice()
 {
     return m_device;
 }
 
-KisPaintDeviceSP PerspectiveTransformCmd::origDevice()
+KisPaintDeviceSP PerspectiveTransformCmdData::origDevice()
 {
     return m_origDevice;
 }
 }
+
+class PerspectiveTransformCmd : public KisTransaction
+{
+public:
+    PerspectiveTransformCmd(KisToolPerspectiveTransform *tool, KisNodeSP node,
+                            KisPaintDeviceSP device, KisPaintDeviceSP origDevice,
+                            QPointF topleft, QPointF topright,
+                            QPointF bottomleft, QPointF bottomright,
+                            KisSelectionSP origSel, QRect initialRect)
+    {
+        m_transactionData =
+            new PerspectiveTransformCmdData(tool, node, device, origDevice,
+                                            topleft, topright, bottomleft, bottomright,
+                                            origSel, initialRect);
+    }
+};
 
 KisToolPerspectiveTransform::KisToolPerspectiveTransform(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::load("tool_perspectivetransform_cursor.png", 6, 6)), m_optWidget(0), m_optForm(0)
@@ -174,10 +190,10 @@ void KisToolPerspectiveTransform::activate(ToolActivation toolActivation, const 
     if (image() && currentImage() && currentNode()->paintDevice()) {
         image()->undoAdapter()->setCommandHistoryListener(this);
 
-        const PerspectiveTransformCmd *cmd = 0;
+        const PerspectiveTransformCmdData *cmd = 0;
 
         if (image()->undoAdapter()->presentCommand())
-            cmd = dynamic_cast<const PerspectiveTransformCmd*>(image()->undoAdapter()->presentCommand());
+            cmd = dynamic_cast<const PerspectiveTransformCmdData*>(image()->undoAdapter()->presentCommand());
 
         if (cmd == 0) {
             m_interractionMode = DRAWRECTINTERRACTION;
@@ -624,7 +640,7 @@ void KisToolPerspectiveTransform::transform()
     KoUpdater *progress = updater->startSubtask();
 
     // This mementoes the current state of the active device.
-    PerspectiveTransformCmd * transaction = new PerspectiveTransformCmd(this, currentNode(), currentNode()->paintDevice(), m_origDevice,
+    PerspectiveTransformCmd transaction (this, currentNode(), currentNode()->paintDevice(), m_origDevice,
             m_topleft, m_topright, m_bottomleft, m_bottomright, m_origSelection, m_initialRect);
 
     // Copy the original state back.
@@ -658,8 +674,7 @@ void KisToolPerspectiveTransform::transform()
     /*
         // If canceled, go back to the memento
         if (worker.isCanceled()) {
-            transaction->undo();
-            delete transaction;
+            transaction.revert()
             return;
         }
     */
@@ -668,17 +683,12 @@ void KisToolPerspectiveTransform::transform()
     // Else add the command -- this will have the memento from the previous state,
     // and the transformed state from the original device we cached in our activated()
     // method.
-    if (transaction) {
-        if (currentImage()->undo())
-            currentImage()->undoAdapter()->addCommand(transaction);
-        else
-            delete transaction;
-    }
+    transaction.commit(image()->undoAdapter());
 }
 
 void KisToolPerspectiveTransform::notifyCommandAdded(const QUndoCommand * command)
 {
-    const PerspectiveTransformCmd * cmd = dynamic_cast<const PerspectiveTransformCmd*>(command);
+    const PerspectiveTransformCmdData* cmd = dynamic_cast<const PerspectiveTransformCmdData*>(command);
     if (cmd == 0) {
         // The last added command wasn't one of ours;
         // we should reset to the new state of the canvas.
@@ -691,10 +701,10 @@ void KisToolPerspectiveTransform::notifyCommandAdded(const QUndoCommand * comman
 void KisToolPerspectiveTransform::notifyCommandExecuted(const QUndoCommand * command)
 {
     Q_UNUSED(command);
-    const PerspectiveTransformCmd * cmd = 0;
+    const PerspectiveTransformCmdData* cmd = 0;
 
     if (image()->undoAdapter()->presentCommand())
-        cmd = dynamic_cast<const PerspectiveTransformCmd*>(image()->undoAdapter()->presentCommand());
+        cmd = dynamic_cast<const PerspectiveTransformCmdData*>(image()->undoAdapter()->presentCommand());
 
     if (cmd == 0) {
         // The command now on the top of the stack isn't one of ours

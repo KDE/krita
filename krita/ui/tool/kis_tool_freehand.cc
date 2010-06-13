@@ -450,8 +450,7 @@ void KisToolFreehand::endPaint()
         KisLayerSP layer = dynamic_cast<KisLayer*>(currentNode().data());
 
         if (layer && !m_paintIncremental) {
-            KisTransaction *incrementalTransaction =
-                    dynamic_cast<KisTransaction*>(m_painter->endTransaction());
+            m_painter->deleteTransaction();
 
             KisPainter painter(m_source, currentSelection());
             painter.setCompositeOp(m_compositeOp);
@@ -475,12 +474,12 @@ void KisToolFreehand::endPaint()
                 indirect->setTemporaryTarget(0);
             }
             m_source->setDirty(painter.dirtyRegion());
-            delete incrementalTransaction;
 
             m_incrementalDirtyRegion = QRegion();
-            canvas()->addCommand(painter.endTransaction());
+
+            painter.endTransaction(image()->undoAdapter());
         } else {
-            canvas()->addCommand(m_painter->endTransaction());
+            m_painter->endTransaction(image()->undoAdapter());
         }
     }
     delete m_painter;

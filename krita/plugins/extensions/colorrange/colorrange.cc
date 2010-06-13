@@ -124,9 +124,7 @@ void ColorRange::selectOpaque()
         selIter.nextRow();
     }
 
-    QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, SELECTION_ADD);
-    canvas->addCommand(cmd);
-    
+    helper.selectPixelSelection(tmpSel, SELECTION_ADD);
 }
 
 #include "colorrange.moc"

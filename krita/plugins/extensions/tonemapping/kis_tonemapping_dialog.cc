@@ -79,33 +79,25 @@ KisToneMappingDialog::KisToneMappingDialog(QWidget* parent, KisLayerSP _layer) :
 
 void KisToneMappingDialog::apply()
 {
+    KisUndoAdapter *undoAdapter = d->layer->image()->undoAdapter();
+
     d->layer->image()->lock();
     KisPropertiesConfiguration* config = (d->currentConfigurationWidget) ? d->currentConfigurationWidget->configuration() : new KisPropertiesConfiguration;
     const KoColorSpace* colorSpace = d->currentOperator->colorSpace();
 
-    if (d->layer->image()->undo()) {
-        d->layer->image()->undoAdapter()->beginMacro(d->currentOperator->name());
-    }
+    undoAdapter->beginMacro(d->currentOperator->name());
+
     if (!(*d->layer->paintDevice()->colorSpace() == *colorSpace)) {
         QUndoCommand* cmd = d->layer->paintDevice()->convertTo(colorSpace);
-        if (d->layer->image()->undo()) {
-            d->layer->image()->undoAdapter()->addCommand(cmd);
-        } else {
-            delete cmd;
-        }
+        undoAdapter->addCommand(cmd);
     }
-    KisTransaction * cmd = 0;
 
-    if (d->layer->image()->undo()) cmd = new KisTransaction(d->currentOperator->name(), d->layer->paintDevice());
+    KisTransaction transaction(d->currentOperator->name(), d->layer->paintDevice());
     d->currentOperator->toneMap(d->layer->paintDevice(), config);
-    if (cmd) d->layer->image()->undoAdapter()->addCommand(cmd);
+    transaction.commit(undoAdapter);
+    undoAdapter->endMacro();
 
     d->currentOperator->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(), config);
-
-    if (d->layer->image()->undo()) {
-        d->layer->image()->undoAdapter()->endMacro();
-    }
-
     d->layer->setDirty();
     d->layer->image()->unlock();
     delete config;

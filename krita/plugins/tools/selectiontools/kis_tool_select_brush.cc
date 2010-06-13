@@ -192,8 +192,7 @@ void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
 
         painter.fillPainterPath(selection);
 
-        QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
-        canvas()->addCommand(cmd);
+        helper.selectPixelSelection(tmpSel, m_selectAction);
 
         resetSelection();
     }

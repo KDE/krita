@@ -53,7 +53,7 @@
 #include <kis_layer.h>
 #include <kis_paint_device.h>
 #include <kis_paint_layer.h>
-#include <kis_selected_transaction.h>
+#include <kis_transaction.h>
 #include <kis_selection.h>
 #include <flake/kis_shape_layer.h>
 #include <kis_shear_visitor.h>
@@ -196,9 +196,7 @@ void KisLayerManager::imageResizeToActiveLayer()
 
     if (image && (layer = activeLayer())) {
 
-        if (undoAdapter && undoAdapter->undo()) {
-            undoAdapter->beginMacro(i18n("Resize Image to Size of Current Layer"));
-        }
+        undoAdapter->beginMacro(i18n("Resize Image to Size of Current Layer"));
 
         image->lock();
 
@@ -207,9 +205,7 @@ void KisLayerManager::imageResizeToActiveLayer()
 
         image->unlock();
 
-        if (undoAdapter && undoAdapter->undo()) {
-            undoAdapter->endMacro();
-        }
+        undoAdapter->endMacro();
     }
 }
 
@@ -655,16 +651,12 @@ void KisLayerManager::mirrorLayerX()
     KisPaintDeviceSP dev = activeDevice();
     if (!dev) return;
 
-    KisTransaction * t = 0;
-    if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        t = new KisTransaction(i18n("Mirror Layer X"), dev);
-        Q_CHECK_PTR(t);
-    }
+    KisTransaction transaction(i18n("Mirror Layer X"), dev);
 
     QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection());
     m_activeLayer->setDirty(dirty);
 
-    if (t) m_view->undoAdapter()->addCommand(t);
+    transaction.commit(m_view->image()->undoAdapter());
 
     m_doc->setModified(true);
     layersUpdated();
@@ -676,16 +668,12 @@ void KisLayerManager::mirrorLayerY()
     KisPaintDeviceSP dev = activeDevice();
     if (!dev) return;
 
-    KisTransaction * t = 0;
-    if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        t = new KisTransaction(i18n("Mirror Layer Y"), dev);
-        Q_CHECK_PTR(t);
-    }
+    KisTransaction transaction(i18n("Mirror Layer Y"), dev);
 
     QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection());
     m_activeLayer->setDirty(dirty);
 
-    if (t) m_view->undoAdapter()->addCommand(t);
+    transaction.commit(m_view->image()->undoAdapter());
 
     m_doc->setModified(true);
     layersUpdated();
@@ -699,11 +687,7 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    KisSelectedTransaction * t = 0;
-    if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        t = new KisSelectedTransaction(i18n("Scale Layer"), layer);
-        Q_CHECK_PTR(t);
-    }
+    KisSelectedTransaction transaction(i18n("Scale Layer"), layer);
 
     KoProgressUpdater* updater = m_view->createProgressUpdater();
     KoUpdaterPtr u = updater->startSubtask();
@@ -711,7 +695,8 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
     KisTransformWorker worker(layer->paintDevice(), sx, sy, 0, 0, 0.0, 0, 0, u, filterStrategy);
     worker.run();
 
-    if (t) m_view->undoAdapter()->addCommand(t);
+    transaction.commit(m_view->image()->undoAdapter());
+
     m_doc->setModified(true);
     layersUpdated();
     m_view->canvas()->update();
@@ -726,9 +711,8 @@ void KisLayerManager::rotateLayer(double radians)
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        m_view->undoAdapter()->beginMacro(i18n("Rotate Layer"));
-    }
+    KisUndoAdapter * undoAdapter = m_view->image()->undoAdapter();
+    undoAdapter->beginMacro(i18n("Rotate Layer"));
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
     QRect r;
@@ -744,8 +728,7 @@ void KisLayerManager::rotateLayer(double radians)
     KisTransformVisitor visitor(m_view->image(), 1.0, 1.0, 0, 0, radians, -tx, -ty, 0, filter);
     layer->accept(visitor);
 
-    if (m_view->undoAdapter() && m_view->undoAdapter()->undo())
-        m_view->undoAdapter()->endMacro();
+    undoAdapter->endMacro();
 
     m_doc->setModified(true);
     layersUpdated();
@@ -759,20 +742,18 @@ void KisLayerManager::shearLayer(double angleX, double angleY)
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    KisUndoAdapter * undo = 0;
-    if ((undo = m_view->image()->undoAdapter())) {
-        undo->beginMacro(i18n("Shear layer"));
-    }
+    KisUndoAdapter * undoAdapter = m_view->image()->undoAdapter();
+    undoAdapter->beginMacro(i18n("Shear layer"));
 
     KoProgressUpdater* updater = m_view->statusBar()->progress()->createUpdater();
     updater->start(100, i18n("Shear layer"));
     KoUpdaterPtr up = updater->startSubtask();
 
     KisShearVisitor v(angleX, angleY, up);
-    v.setUndoAdapter(undo);
+    v.setUndoAdapter(undoAdapter);
     layer->accept(v);
 
-    if (undo) undo->endMacro();
+    undoAdapter->endMacro();
 
     m_doc->setModified(true);
     layersUpdated();

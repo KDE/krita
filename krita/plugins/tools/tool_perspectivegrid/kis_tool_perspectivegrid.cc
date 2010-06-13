@@ -39,7 +39,6 @@
 #include <KoViewConverter.h>
 #include <canvas/kis_perspective_grid_manager.h>
 #include <kis_canvas_resource_provider.h>
-#include <kis_selected_transaction.h>
 #include <kis_painter.h>
 #include <kis_paintop_registry.h>
 #include <kis_view2.h>

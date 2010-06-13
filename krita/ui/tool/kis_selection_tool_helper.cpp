@@ -31,7 +31,7 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_view2.h"
 #include "kis_selection_manager.h"
-#include "kis_selection_transaction.h"
+#include "kis_transaction.h"
 #include "commands/kis_selection_commands.h"
 #include "kis_shape_controller.h"
 
@@ -52,52 +52,52 @@ KisSelectionToolHelper::~KisSelectionToolHelper()
 {
 }
 
-QUndoCommand* KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection, selectionAction action)
+void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection, selectionAction action)
 {
+    KisUndoAdapter *undoAdapter = m_layer->image()->undoAdapter();
+    undoAdapter->beginMacro(m_name);
+
     bool hasSelection = m_layer->selection();
 
-    QUndoCommand* selectionCmd = new QUndoCommand(m_name);
-
     if (!hasSelection)
-        new KisSetGlobalSelectionCommand(m_image, selectionCmd);
+        undoAdapter->addCommand(new KisSetGlobalSelectionCommand(m_image));
 
-    new KisSelectionTransaction(m_name, m_image, m_layer->selection(), selectionCmd);
+    KisSelectionTransaction transaction(m_name, m_image, m_layer->selection());
 
-    KisPixelSelectionSP getOrCreatePixelSelection = m_layer->selection()->getOrCreatePixelSelection();
+    KisPixelSelectionSP pixelSelection = m_layer->selection()->getOrCreatePixelSelection();
 
     if (! hasSelection || action == SELECTION_REPLACE) {
-        getOrCreatePixelSelection->clear();
+        pixelSelection->clear();
         if (action == SELECTION_SUBTRACT)
-            getOrCreatePixelSelection->invert();
+            pixelSelection->invert();
     }
-    getOrCreatePixelSelection->applySelection(selection, action);
+    pixelSelection->applySelection(selection, action);
 
+    QRect dirtyRect = m_image->bounds();
     if (hasSelection && action != SELECTION_REPLACE && action != SELECTION_INTERSECT) {
-        QRect rc = selection->selectedRect();
-        getOrCreatePixelSelection->setDirty(rc);
-        m_layer->selection()->updateProjection(rc);
-        m_canvas->view()->selectionManager()->selectionChanged();
-    } else {
-        getOrCreatePixelSelection->setDirty(m_image->bounds());
-        m_layer->selection()->updateProjection(m_image->bounds());
-        m_canvas->view()->selectionManager()->selectionChanged();
+        dirtyRect = selection->selectedRect();
     }
-    return selectionCmd;
+    m_layer->selection()->updateProjection(dirtyRect);
+
+    transaction.commit(undoAdapter);
+    undoAdapter->endMacro();
+
+    pixelSelection->setDirty(dirtyRect);
+    m_canvas->view()->selectionManager()->selectionChanged();
 }
 
 void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
 {
+    KisUndoAdapter *undoAdapter = m_layer->image()->undoAdapter();
+    undoAdapter->beginMacro(m_name);
+
     bool hasSelection = m_layer->selection();
 
-    m_canvas->startMacro(m_name);
-
     if (!hasSelection)
-        m_canvas->addCommand(new KisSetGlobalSelectionCommand(m_image, 0));
+        undoAdapter->addCommand(new KisSetGlobalSelectionCommand(m_image, 0));
 
     KisSelectionSP selection = m_layer->selection();
-
-    if (selection->isDeselected())
-        new KisSelectionTransaction(m_name, m_image, m_layer->selection());
+    KisSelectionTransaction transaction(m_name, m_image, m_layer->selection());
 
     KisShapeSelection* shapeSelection;
     if (!selection->hasShapeSelection()) {
@@ -111,9 +111,10 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
     if (kiscontroller)
         kiscontroller->prepareAddingSelectionShape();
 
-    QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
-    m_canvas->addCommand(cmd);
+    transaction.commit(undoAdapter);
 
-    m_canvas->stopMacro();
+    QUndoCommand *cmd = m_canvas->shapeController()->addShape(shape);
+    undoAdapter->addCommand(cmd);
+    undoAdapter->endMacro();
 }
 

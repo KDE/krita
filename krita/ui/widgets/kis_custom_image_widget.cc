@@ -193,9 +193,10 @@ void KisCustomImageWidget::buttonClicked()
         if (layer && backgroundOpacity() < OPACITY_OPAQUE_U8) {
             KisFillPainter painter;
             painter.begin(layer->paintDevice());
+#warning "Why transaction here? FIXME: remove it!"
             painter.beginTransaction("");
             painter.fillRect(0, 0, width, height, bgColor, OPACITY_OPAQUE_U8);
-            delete painter.endTransaction();
+            painter.deleteTransaction();
 
         }
         if (chkFromClipboard->isChecked()) {

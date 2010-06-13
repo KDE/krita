@@ -90,8 +90,7 @@ void KisToolSelectRectangular::LocalTool::finishRect(const QRectF& rect)
             KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
             tmpSel->select(rc);
 
-            QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
-            canvas()->addCommand(cmd);
+            helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
         }
     } else {
         QRectF documentRect = convertToPt(rect);

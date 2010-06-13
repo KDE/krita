@@ -37,7 +37,7 @@ public:
     KisSelectionToolHelper(KisCanvas2* canvas, KisNodeSP node, const QString& name);
     virtual ~KisSelectionToolHelper();
 
-    QUndoCommand* selectPixelSelection(KisPixelSelectionSP selection, selectionAction action);
+    void selectPixelSelection(KisPixelSelectionSP selection, selectionAction action);
     void addSelectionShape(KoShape* shape);
 
 private:

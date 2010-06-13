@@ -76,7 +76,7 @@ struct KisFilterHandler::Private {
     KisPaintDeviceSP dev;
     KoProgressUpdater* updater;
     KisThreadedApplicator* applicator;
-    KisTransaction* cmd;
+    KisTransaction* transaction;
     KisSystemLocker* locker;
 };
 
@@ -91,7 +91,7 @@ KisFilterHandler::KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisV
     m_d->lastConfiguration = 0;
     m_d->updater = 0;
     m_d->applicator = 0;
-    m_d->cmd = 0;
+    m_d->transaction = 0;
     m_d->locker = 0;
 }
 
@@ -169,9 +169,7 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
     // also deletes all old updaters
     m_d->updater->start(100, m_d->currentFilter->name());
 
-    if (m_d->view->image()->undo()) {
-        m_d->cmd = new KisTransaction(m_d->currentFilter->name(), m_d->dev);
-    }
+    m_d->transaction = new KisTransaction(m_d->currentFilter->name(), m_d->dev);
 
     KisProcessingInformation src(m_d->dev, rect.topLeft(), selection);
     KisProcessingInformation dst(m_d->dev, rect.topLeft(), selection);
@@ -206,15 +204,13 @@ void KisFilterHandler::areaDone(const QRect & rc)
 void KisFilterHandler::filterDone(bool interrupted)
 {
     if (interrupted) {
-        if (m_d->cmd) {
-            m_d->cmd->undo();
-            delete m_d->cmd;
-        }
-
+        m_d->transaction->revert();
+        delete m_d->transaction;
     } else  {
-        if (m_d->cmd) {
-            m_d->view->document()->addCommand(m_d->cmd);
-        }
+        KisUndoAdapter *undoAdapter = m_d->view->image()->undoAdapter();
+        m_d->transaction->commit(undoAdapter);
+        delete m_d->transaction;
+
         if (m_d->filter->bookmarkManager()) {
             m_d->filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(),
                                                  m_d->currentConfiguration);

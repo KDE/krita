@@ -44,7 +44,6 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_iterators_pixel.h>
-#include <kis_selected_transaction.h>
 #include "canvas/kis_canvas2.h"
 #include <kis_pixel_selection.h>
 #include "kis_selection_tool_helper.h"
@@ -128,9 +127,8 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *e)
         selectByColor(dev, tmpSel, c.data(), m_fuzziness);
 
         KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Similar Selection"));
-        QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
+        helper.selectPixelSelection(tmpSel, m_selectAction);
 
-        canvas()->addCommand(cmd);
         QApplication::restoreOverrideCursor();
     }
 }

@@ -133,11 +133,11 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
         painter.setPaintOpPreset(preset, image);
 
         painter.paintPainterPath(mapedOutline);
+        painter.endTransaction(image->undoAdapter());
+
         QRegion dirtyRegion = painter.dirtyRegion();
         dev->setDirty(dirtyRegion);
         image->setModified();
-
-        kiscanvas->addCommand(painter.endTransaction());
 
     } else {
         pathShape->normalize();

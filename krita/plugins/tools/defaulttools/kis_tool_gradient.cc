@@ -291,12 +291,12 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
             painter.setProgress(updater->startSubtask());
 
             painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());
-            canvas->addCommand(painter.endTransaction());
+            painter.endTransaction(image()->undoAdapter());
 
             qApp->restoreOverrideCursor();
 #else
             // XXX: figure out why threaded gradients give weird noise
-            KisTransaction* transaction = new KisTransaction(i18n("Gradient"), device);
+            KisTransaction transaction(i18n("Gradient"), device);
 
             KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(canvas());
             KoProgressUpdater * updater = canvas->view()->createProgressUpdater();
@@ -321,7 +321,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
             applicator.execute();
 
-            canvas()->addCommand(transaction);
+            transaction.commit(image()->undoAdapter());
 #endif
             currentNode()->setDirty();
             notifyModified();

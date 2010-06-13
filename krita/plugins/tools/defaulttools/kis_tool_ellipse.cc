@@ -69,13 +69,12 @@ void KisToolEllipse::finishEllipse(const QRectF& rect)
         setupPainter(&painter);
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
-
         painter.paintEllipse(rect);
+        painter.endTransaction(image()->undoAdapter());
+
         QRegion bound = painter.dirtyRegion();
         device->setDirty(bound);
         notifyModified();
-
-        canvas()->addCommand(painter.endTransaction());
     } else {
         QRectF r = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createEllipseShape(r);

@@ -91,8 +91,7 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
             return;
 
         KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Contiguous Area Selection"));
-        QUndoCommand* cmd = helper.selectPixelSelection(selection->pixelSelection(), m_selectAction);
-        canvas()->addCommand(cmd);
+        helper.selectPixelSelection(selection->pixelSelection(), m_selectAction);
 
         QApplication::restoreOverrideCursor();
     }

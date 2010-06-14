@@ -23,7 +23,7 @@ install(TARGETS kritahatchingpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kritahatchingpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES
     krita-hatching.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
-install( FILES  3d-pencil.obj DESTINATION ${DATA_INSTALL_DIR}/krita/brushmodels )
-install( FILES  3d-pencil.mtl DESTINATION ${DATA_INSTALL_DIR}/krita/brushmodels )
+install( FILES  3d-hatching.obj DESTINATION ${DATA_INSTALL_DIR}/krita/brushmodels )
+install( FILES  3d-hatching.mtl DESTINATION ${DATA_INSTALL_DIR}/krita/brushmodels )
 
 

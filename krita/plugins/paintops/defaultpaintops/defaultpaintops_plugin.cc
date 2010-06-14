@@ -30,8 +30,6 @@
 #include "kis_brushop.h"
 #include "kis_brushop_settings_widget.h"
 #include "kis_duplicateop_factory.h"
-#include "kis_eraseop.h"
-#include "kis_eraseop_settings_widget.h"
 #include "kis_penop.h"
 #include "kis_penop_settings_widget.h"
 #include "kis_smudgeop.h"
@@ -52,7 +50,6 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QVariantList
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSimplePaintOpFactory<KisBrushOp, KisBrushBasedPaintOpSettings, KisBrushOpSettingsWidget>("paintbrush", i18n("Pixel Brush"), "krita-paintbrush.png"));
     r->add(new KisDuplicateOpFactory);
-    r->add(new KisSimplePaintOpFactory<KisEraseOp, KisBrushBasedPaintOpSettings, KisEraseOpSettingsWidget>("eraser", i18n("Pixel Eraser"), "krita-eraser.png"));
     r->add(new KisSimplePaintOpFactory<KisPenOp, KisBrushBasedPaintOpSettings, KisPenOpSettingsWidget>("pencil", "Pixel Pencil", "krita-pencil.png"));
     r->add(new KisSimplePaintOpFactory<KisSmudgeOp, KisBrushBasedPaintOpSettings, KisSmudgeOpSettingsWidget>("smudge", i18n("Smudge Brush"), "krita-smudgebrush.png","smudge-finger"));
 }

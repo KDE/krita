@@ -90,7 +90,7 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
 {
     KisTool::resourceChanged(key, v);
 
-    if(KisCanvasResourceProvider::CurrentCompositeOp){
+    if(key == KisCanvasResourceProvider::CurrentCompositeOp){
         slotSetCompositeMode(v.toString());
     }
 
@@ -203,6 +203,7 @@ void KisToolPaint::slotSetOpacity(int opacityPerCent)
 
 void KisToolPaint::slotSetCompositeMode(const QString& compositeOp)
 {
+    Q_ASSERT(!compositeOp.isEmpty());
     if (currentNode()) {
         KisPaintDeviceSP device = currentNode()->paintDevice();
 

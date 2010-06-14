@@ -33,6 +33,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoAbstractGradient.h>
+#include <KoCompositeOp.h>
 
 #include <kis_pattern.h>
 #include <kis_paint_device.h>
@@ -69,6 +70,7 @@ void KisCanvasResourceProvider::setResourceManager(KoResourceManager *resourceMa
     v.setValue(KoColor(Qt::white, m_view->image()->colorSpace()));
     m_resourceManager->setResource(KoCanvasResource::BackgroundColor, v);
 
+    setCurrentCompositeOp(COMPOSITE_OVER);
     resetDisplayProfile();
 
     connect(m_resourceManager, SIGNAL(resourceChanged(int, const QVariant &)),

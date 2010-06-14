@@ -76,6 +76,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
         , m_activePreset(0)
         , m_compositeOp(0)
         , m_previousNode(0)
+        , m_eraseMode(false)
 {
     Q_ASSERT(view != 0);
     
@@ -458,9 +459,11 @@ void KisPaintopBox::eraseModeToggled(bool toggle)
     if(toggle) {
         m_resourceProvider->setCurrentCompositeOp(COMPOSITE_ERASE);
         m_cmbComposite->setEnabled(false);
+        m_eraseMode = true;
     } else {
         m_resourceProvider->setCurrentCompositeOp(m_cmbComposite->currentItem());
         m_cmbComposite->setEnabled(true);
+        m_eraseMode = false;
     }
 }
 
@@ -481,11 +484,19 @@ void KisPaintopBox::updateCompositeOpComboBox()
                 m_compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
             }
             m_cmbComposite->setCurrent(m_compositeOp);
-            m_cmbComposite->setEnabled(true);
+            if(!m_eraseMode){
+                m_cmbComposite->setEnabled(true);
+                m_resourceProvider->setCurrentCompositeOp(m_cmbComposite->currentItem());
+            }
         } else {
             m_cmbComposite->setEnabled(false);
         }
     }
+}
+
+void KisPaintopBox::slotSetCompositeMode(const QString& compositeOp)
+{
+    m_resourceProvider->setCurrentCompositeOp(compositeOp);
 }
 
 #include "kis_paintop_box.moc"

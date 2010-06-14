@@ -92,14 +92,14 @@ private:
     KoID defaultPaintop(const KoInputDevice & inputDevice);
     KisPaintOpPresetSP activePreset(const KoID & paintop, const KoInputDevice & inputDevice);
 
-    void updateCompositeOpComboBox();
-
 private slots:
 
     void updatePaintops();
     void resourceSelected( KoResource * resource );
     void nodeChanged(const KisNodeSP node);
     void eraseModeToggled(bool toggle);
+    void updateCompositeOpComboBox();
+    void slotSetCompositeMode(const QString& compositeOp);
 
 private:
 
@@ -124,6 +124,7 @@ private:
     KisPaintOpPresetSP m_activePreset;
     const KoCompositeOp* m_compositeOp;
     KisNodeSP m_previousNode;
+    bool m_eraseMode;
 
     typedef QHash<KoInputDevice, KoID> InputDevicePaintopMap;
     InputDevicePaintopMap m_currentID;

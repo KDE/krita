@@ -21,6 +21,8 @@
 
 #include "DebugPigment.h"
 
+#include <QMutexLocker>
+
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
@@ -29,6 +31,7 @@ struct KoColorSpaceFactory::Private {
     QList<KoColorProfile*> colorprofiles;
     QList<KoColorSpace*> colorspaces;
     QHash<QString, QList<KoColorSpace*> > availableColorspaces;
+    QMutex mutex;
 #ifndef NDEBUG
     QHash<KoColorSpace*, QString> stackInformation;
 #endif
@@ -85,6 +88,7 @@ const KoColorProfile* KoColorSpaceFactory::colorProfile(const QByteArray& rawDat
 
 KoColorSpace* KoColorSpaceFactory::grabColorSpace(const KoColorProfile * profile)
 {
+    QMutexLocker l(&d->mutex);
     Q_ASSERT(profile);
     QList<KoColorSpace*>& csList = d->availableColorspaces[profile->name()];
     if (!csList.isEmpty()) {
@@ -103,6 +107,7 @@ KoColorSpace* KoColorSpaceFactory::grabColorSpace(const KoColorProfile * profile
 
 void KoColorSpaceFactory::releaseColorSpace(KoColorSpace * colorspace)
 {
+    QMutexLocker l(&d->mutex);
     // TODO it is probably worth to avoid caching too many color spaces
     const KoColorProfile* profile = colorspace->profile();
     Q_ASSERT(d->colorspaces.contains(colorspace));

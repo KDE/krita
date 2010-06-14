@@ -34,11 +34,15 @@
 
 #include "ui_kis_colselng_settings.h"
 
+
+#include <QDebug>
+
 KisColSelNgWidget::KisColSelNgWidget(QWidget *parent) :
     QWidget(parent), m_verticalColorPatchesLayout(0), m_horizontalColorPatchesLayout(0)
 {
-    setMinimumHeight(50);
     m_bigWidgetsParent = new QWidget(this);
+//    m_bigWidgetsParent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+//    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
     m_barWidget = new KisColSelNgBar(this);
     m_colorSelectorWidget = new KisColSelNgColorSelector(m_bigWidgetsParent);
     m_myPaintShadeWidget = new KisColSelNgMyPaintShadeSelector(m_bigWidgetsParent);
@@ -106,6 +110,8 @@ void KisColSelNgWidget::setCanvas(KoCanvasBase *canvas)
 
 void KisColSelNgWidget::openSettings()
 {
+    qDebug()<<"minimumHeight()="<<minimumHeight()<<"   \n"<<"sizeHint()"<<sizeHint().height();
+    
     KisColSelNgSettings settings;
     if(settings.exec()==QDialog::Accepted) {
         //shade selectors
@@ -141,8 +147,12 @@ void KisColSelNgWidget::resizeEvent(QResizeEvent* e)
 
     if(m_shadeWidget!=0) {
         height -= m_shadeWidget->minimumHeight();
-        if(height<0) m_shadeWidget->hide();
-        else m_shadeWidget->show();
+        if(height<0 && m_shadeSelectorHideable)
+            m_shadeWidget->hide();
+//        else if (height<0 && m_shadeSelectorHideable==false)
+//            setMinimumHeight(this->height()-height);
+        else
+            m_shadeWidget->show();
     }
 
     if(e!=0)

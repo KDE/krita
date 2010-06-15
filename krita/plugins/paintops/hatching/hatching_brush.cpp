@@ -30,6 +30,10 @@
 #include <cmath>
 #include <time.h>
 
+void inline myround (double *x) {
+    *x = ((*x - floor(*x)) >= 0.5) ? ceil(*x) : floor(*x);
+}
+
 HatchingBrush::HatchingBrush(const KisHatchingPaintOpSettings* settings)
 {
     m_attributes.loadSettings(settings);
@@ -49,7 +53,8 @@ void HatchingBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor 
   m_painter.begin(dev);
   m_painter.setFillStyle(KisPainter::FillStyleForegroundColor);
   m_painter.setPaintColor(color);
-
+  m_painter.setBackgroundColor(color);
+  
   double PI = 3.141592653589793238462643383279;
 
   //std::clog << m_settings->proeba() << " ";
@@ -72,6 +77,8 @@ void HatchingBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor 
   dx = dy = b = p = last_b = cursor_b = 0;  //inicializar
   
   m_painter.setMaskImageSize(h, w);
+  QRect limits(QPoint(0,0), QPoint(w, h));
+  m_painter.setBounds(limits);
   
   //</PSEUDOSETTINGS>
 
@@ -83,6 +90,9 @@ void HatchingBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor 
   dy = fabs(s / cos(angle*PI/180));  // sec = 1/cos(angle), ABSOLUTE VALUE please
   //always positive because I don't need negatives confusing everything later
 
+  //testing sub-pixel precision OFF
+  //modf(dy, &dy);
+  
   //****EXCEPTION FOR VERTICAL LINES, FOR WHICH A TANGENT DOES NOT EXIST****
   if ((angle == 90) || (angle == -90))
   {
@@ -182,10 +192,22 @@ void HatchingBrush::iteratelines (int thickness, double h, double w, double p, d
       //std::clog << "I AM EMO \n";
       break;
     }
-      
+    
+    //Testing subpixel precision OFF
+    /*
+    modf(xdraw[0], &xdraw[0]);
+    modf(xdraw[1], &xdraw[1]);
+    modf(ydraw[0], &ydraw[0]);
+    modf(ydraw[1], &ydraw[1]);
+    */
+    /*myround(&xdraw[0]);
+    myround(&xdraw[1]);
+    myround(&ydraw[0]);
+    myround(&ydraw[1]);
+    */
     //std::clog << "a modf(xdraw[0]) le entra " << xdraw[0] << "\n";
     A.setX(xdraw[0]);
-    
+
     //std::clog << "a modf(ydraw[0]) le entra " << ydraw[0] << "\n";
     A.setY(ydraw[0]);
     
@@ -200,6 +222,8 @@ void HatchingBrush::iteratelines (int thickness, double h, double w, double p, d
       
       m_painter.drawThickLine(A, B, thickness, thickness);
       
+      //m_painter.drawDDALine(A, B);  //testing no subpixel
+      
       if (oneline) {
         //std::clog << "I AM STOPID \n";
         break;
@@ -212,7 +236,7 @@ void HatchingBrush::iteratelines (int thickness, double h, double w, double p, d
       therefore if I have only 1 intersection (= corner), don't draw*/
       continue;
     }
-    //printf ("Punto A: %f, %f . Punto B: %f, %f. \n", xdraw[0], ydraw[0], xdraw[1], ydraw[1]);
+    printf ("Punto A: %f, %f . Punto B: %f, %f. \n", xdraw[0], ydraw[0], xdraw[1], ydraw[1]);
     
   } //endwhile
 }

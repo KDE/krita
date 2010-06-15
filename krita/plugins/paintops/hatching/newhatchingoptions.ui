@@ -38,11 +38,14 @@
       <property name="decimals">
        <number>1</number>
       </property>
+      <property name="minimum">
+       <double>-90.000000000000000</double>
+      </property>
       <property name="maximum">
        <double>90.000000000000000</double>
       </property>
       <property name="value">
-       <double>-45.000000000000000</double>
+       <double>0.000000000000000</double>
       </property>
      </widget>
     </item>

@@ -48,6 +48,7 @@ private:
     KisPaintDeviceSP m_dab;
     HatchingBrush * m_hatchingBrush;
     KisPressureOpacityOption m_opacityOption;
+    HatchingAttributes m_attributes;
 };
 
 #endif // KIS_HATCHING_PAINTOP_H_

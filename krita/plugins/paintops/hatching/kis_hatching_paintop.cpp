@@ -46,6 +46,7 @@ KisHatchingPaintOp::KisHatchingPaintOp(const KisHatchingPaintOpSettings *setting
 
     m_opacityOption.readOptionSetting(settings);
     m_opacityOption.sensor()->reset();
+    m_attributes.loadSettings(settings);
 }
 
 KisHatchingPaintOp::~KisHatchingPaintOp()
@@ -68,12 +69,24 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     x1 = info.pos().x();
     y1 = info.pos().y();
 
+    //Testing subpixel precision OFF
+    //modf(x1, &x1);
+    //modf(y1, &y1);
+    
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
     m_hatchingBrush->paint(m_dab, x1, y1, painter()->paintColor());
 
     QRect rc = m_dab->extent();
-
-    painter()->bitBlt(x1, y1, m_dab, rc.x(), rc.y(), rc.width(), rc.height());
+    QRect limits(QPoint(0,0), QPoint(m_attributes.width, m_attributes.height));
+    
+    KoColor aersh = painter()->backgroundColor();
+    painter()->device()->fill((x1), (y1), (limits.width()-1), (limits.height()-1), aersh.data()); //this plus yellow background = french fry brush
+    painter()->bitBlt(x1, y1, m_dab, 0, 0, limits.width(), limits.height());
+    
+    printf ("Ancho: %i . Alto: %i. \n", limits.width(), limits.height());
     painter()->setOpacity(origOpacity);
     return 1;
 }
+
+
+

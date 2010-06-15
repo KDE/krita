@@ -77,7 +77,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 
     m_opacity = OPACITY_OPAQUE_U8;
     m_compositeOp = 0;
-
+    
     m_supportOutline = false;
 }
 
@@ -90,8 +90,15 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
 {
     KisTool::resourceChanged(key, v);
 
-    if(key == KisCanvasResourceProvider::CurrentCompositeOp){
-        slotSetCompositeMode(v.toString());
+    switch(key){
+        case(KisCanvasResourceProvider::CurrentKritaNode):
+            slotSetCompositeMode(canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentCompositeOp).toString());
+            break;
+        case(KisCanvasResourceProvider::CurrentCompositeOp):
+            slotSetCompositeMode(v.toString());
+            break;
+        default: //nothing
+            break;
     }
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));

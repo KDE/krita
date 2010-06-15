@@ -105,7 +105,7 @@ public:
     static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
-#include <config-openexr.h>
+#include <KoConfig.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
 

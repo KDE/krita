@@ -35,7 +35,7 @@ QString KoCtlChannelImpl<float>::normalisedChannelValueText(const quint8* pixel)
     return QString::number(double(scaleToF32(pixel)));
 }
 
-#include <config-openexr.h>
+#include <KoConfig.h>
 #ifdef HAVE_OPENEXR
 
 template<>

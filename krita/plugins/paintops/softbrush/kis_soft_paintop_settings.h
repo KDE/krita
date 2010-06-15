@@ -24,7 +24,7 @@
 
 #include "kis_soft_paintop_settings_widget.h"
 
-#include <config-opengl.h>
+#include <KoConfig.h>
 
 #if defined(_WIN32) || defined(_WIN64)
 # include <windows.h>

@@ -20,7 +20,7 @@
 
 #include "KoGlobal.h"
 
-#include <config-prefix.h>
+#include <KoConfig.h>
 
 #include <QtGui/QPaintDevice>
 #include <QtGui/QFont>

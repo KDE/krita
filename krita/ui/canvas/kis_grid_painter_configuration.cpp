@@ -55,7 +55,7 @@ QPen KisGridPainterConfiguration::subdivisionPen()
 
 #if 0
 
-#include <config-opengl.h>
+#include <KoConfig.h>
 
 #ifdef HAVE_OPENGL
 #include <qgl.h>

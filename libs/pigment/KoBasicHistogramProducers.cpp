@@ -21,7 +21,7 @@
 #include <QString>
 #include <klocale.h>
 
-#include <config-openexr.h>
+#include <KoConfig.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
 #endif

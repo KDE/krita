@@ -20,7 +20,7 @@
 
 /** @file */
 
-#include <config-opengl.h>
+#include <KoConfig.h>
 #include <config-glew.h>
 
 #ifdef HAVE_OPENGL

@@ -24,7 +24,7 @@
 #include <kglobal.h>
 #include <kofficeversion.h>
 
-#include <config-opengl.h>
+#include <KoConfig.h>
 
 #define KRITA_VERSION KOFFICE_VERSION
 

@@ -43,7 +43,7 @@
 #include <QtGui/QDockWidget>
 #include <QtCore/QTimer>
 
-#include <config-opengl.h>
+#include <KoConfig.h>
 
 #ifdef HAVE_OPENGL
 #include <QtOpenGL/QGLWidget>

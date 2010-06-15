@@ -26,7 +26,7 @@
 #define PNG_MAX_UINT UINT_MAX
 #endif
 
-#include <config-endian.h> // WORDS_BIGENDIAN
+#include <KoConfig.h> // WORDS_BIGENDIAN
 
 #include <limits.h>
 #include <stdio.h>

@@ -19,7 +19,7 @@
 
 #include "kis_image.h"
 
-#include <config-endian.h> // WORDS_BIGENDIAN
+#include <KoConfig.h> // WORDS_BIGENDIAN
 
 #include <stdlib.h>
 #include <math.h>

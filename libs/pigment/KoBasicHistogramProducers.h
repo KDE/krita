@@ -24,7 +24,7 @@
 #include <QtCore/QVector>
 #include <klocale.h>
 
-#include <config-openexr.h>
+#include <KoConfig.h>
 
 #include "KoColorSpace.h"
 #include "KoID.h"

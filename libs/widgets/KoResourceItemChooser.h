@@ -27,7 +27,7 @@
 #include <QModelIndex>
 
 #include "kowidgets_export.h"
-#include <config-ghns.h>
+#include <KoConfig.h>
 
 class QAbstractProxyModel;
 class QButtonGroup;

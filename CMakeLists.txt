@@ -30,7 +30,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
 
 option(GHNS "support Get Hot New Stuff" ON)
-configure_file(config-ghns.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ghns.h )
 
 option(TINY "compile a tiny KOffice" OFF)
 
@@ -92,7 +91,6 @@ option(GHNS "support Get Hot New Stuff" ON)
 if(KDE_VERSION LESS "4.4.0")
     set(GHNS FALSE)
 endif(KDE_VERSION LESS "4.4.0")
-configure_file(config-ghns.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ghns.h )
 
  ###########################
 ############################
@@ -117,8 +115,6 @@ endif (APPLE)
 
 macro_optional_find_package(OpenEXR)
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
-configure_file(config-openexr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h )
-install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
 
  ###########################
@@ -146,7 +142,6 @@ else(OPENGL_FOUND)
     message(STATUS "Did NOT find OpenGL libraries")
 endif(OPENGL_FOUND)
 
-configure_file(config-opengl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-opengl.h )
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
 
 ##
@@ -251,12 +246,10 @@ endif(WIN32)
 ##
 include (TestBigEndian)
 TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
-configure_file(config-endian.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-endian.h )
 
 ##
 ## Generate a file for prefix information
 ##
-configure_file(config-prefix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-prefix.h )
 
  ####################
 #####################
@@ -507,3 +500,6 @@ macro_display_application_enabled(koreport ${SHOULD_BUILD_KOREPORT})
 message(STATUS "--------------------------------------------------------------------------" )
 
 add_custom_target(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
+install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)

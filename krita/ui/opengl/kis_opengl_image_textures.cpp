@@ -26,7 +26,7 @@
 #include <QImage>
 #include <QApplication>
 
-#include <config-openexr.h>
+#include <KoConfig.h>
 
 #ifdef HAVE_OPENEXR
 #include <half.h>

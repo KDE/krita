@@ -112,17 +112,17 @@ public:
         return true;
     }
 
+    /**
+     * Split the coordinate into whole + fraction, where fraction is always >= 0.
+     */
+    static void splitCoordinate(double coordinate, qint32 *whole, double *fraction);
+
 protected:
 
     static double scaleForPressure(double pressure);
 
     KisFixedPaintDeviceSP cachedDab();
     KisFixedPaintDeviceSP cachedDab(const KoColorSpace *cs);
-
-    /**
-     * Split the coordinate into whole + fraction, where fraction is always >= 0.
-     */
-    virtual void splitCoordinate(double coordinate, qint32 *whole, double *fraction)const ;
 
     /**
      * Return the painter this paintop is owned by

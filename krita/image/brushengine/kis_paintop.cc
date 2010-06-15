@@ -84,7 +84,7 @@ KisFixedPaintDeviceSP KisPaintOp::cachedDab(const KoColorSpace *cs)
     return d->dab;
 }
 
-void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fraction) const
+void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fraction)
 {
     qint32 i = static_cast<qint32>(coordinate);
 

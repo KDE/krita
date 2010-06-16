@@ -53,6 +53,7 @@ int main(int argc, char** argv)
     for (int i = 0; i < 8; i++) {
         MusicCore::Chord* chord = new MusicCore::Chord(MusicCore::HalfNote);
         MusicCore::Note* note = chord->addNote(staff, i); // central C
+        Q_ASSERT(note);
         bar->voice(voice)->addElement(chord);
     }
     w.setSheet(sheet);

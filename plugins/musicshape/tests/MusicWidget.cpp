@@ -56,7 +56,7 @@ void MusicWidget::engrave()
     }
 }
 
-void MusicWidget::paintEvent(QPaintEvent* event)
+void MusicWidget::paintEvent(QPaintEvent*)
 {
     if (!m_sheet) return;
     QPainter painter(this);
@@ -67,7 +67,7 @@ void MusicWidget::paintEvent(QPaintEvent* event)
     m_renderer.renderSheet(painter, m_sheet, 0, m_lastSystem);
 }
 
-void MusicWidget::resizeEvent(QResizeEvent* event)
+void MusicWidget::resizeEvent(QResizeEvent*)
 {
     engrave();
 }

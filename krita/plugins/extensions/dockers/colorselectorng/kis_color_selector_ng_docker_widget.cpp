@@ -22,43 +22,28 @@
 
 #include <KoCanvasBase.h>
 
-#include "kis_colselng_bar.h"
-#include "kis_my_paint_shade_selector.h"
-#include "kis_color_selector.h"
 #include "kis_color_patches.h"
-#include "kis_minimal_shade_selector.h"
 #include "kis_common_colors.h"
-#include "kis_color_selector_ng_settings.h"
+#include "kis_color_selector_settings.h"
+#include "kis_color_selector_container.h"
 
-#include "ui_wdg_color_selector_ng_settings.h"
+#include "ui_wdg_color_selector_settings.h"
 
 #include <KDebug>
 
 KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) :
     QWidget(parent), m_verticalColorPatchesLayout(0), m_horizontalColorPatchesLayout(0)
 {
-    m_bigWidgetsParent = new QWidget(this);
-//    m_bigWidgetsParent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
-//    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
     setAutoFillBackground(true);
 
-
-    m_barWidget = new KisColSelNgBar(this);
-    m_colorSelectorWidget = new KisColorSelector(m_bigWidgetsParent);
-    m_myPaintShadeWidget = new KisMyPaintShadeSelector(m_bigWidgetsParent);
-    m_minimalShadeWidget = new KisMinimalShadeSelector(m_bigWidgetsParent);
+    m_colorSelectorContainer = new KisColorSelectorContainer(this);
     m_lastColorsWidget = new KisColorPatches(this);
     m_commonColorsWidget = new KisCommonColors(this);
-
-    m_myPaintShadeWidget->hide();
-    m_minimalShadeWidget->hide();
 
     //default settings
     //remember to also change the default in the ui
 
     //shade selector
-    m_shadeWidget = m_myPaintShadeWidget;   //0, if it shouldn't be shown
-    m_shadeSelectorHideable = true;
 
     //color patches
     m_lastColorsShow=true;
@@ -74,38 +59,20 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     m_commonColorsRowCount=3;
 
 
-    QVBoxLayout* bwpLayout = new QVBoxLayout(m_bigWidgetsParent);
-    bwpLayout->setSpacing(0);
-    bwpLayout->setMargin(0);
-    bwpLayout->addWidget(m_colorSelectorWidget);
-    bwpLayout->addWidget(m_myPaintShadeWidget);
-    bwpLayout->addWidget(m_minimalShadeWidget);
-
-    QHBoxLayout* horzLayout = new QHBoxLayout();
-    horzLayout->setSpacing(0);
-    horzLayout->setMargin(0);
-    horzLayout->addWidget(m_bigWidgetsParent);
-
-
-    m_standardBarLayout = new QVBoxLayout();
-    m_standardBarLayout->setSpacing(0);
-    m_standardBarLayout->setMargin(0);
-    m_standardBarLayout->addWidget(m_barWidget);
-    horzLayout->addLayout(m_standardBarLayout);
-
+    //layout
     m_verticalColorPatchesLayout = new QHBoxLayout();
     m_verticalColorPatchesLayout->setSpacing(0);
     m_verticalColorPatchesLayout->setMargin(0);
-    m_standardBarLayout->addLayout(m_verticalColorPatchesLayout);
+    m_verticalColorPatchesLayout->addWidget(m_colorSelectorContainer);
 
     m_horizontalColorPatchesLayout = new QVBoxLayout(this);
     m_horizontalColorPatchesLayout->setSpacing(0);
     m_horizontalColorPatchesLayout->setMargin(0);
-    m_horizontalColorPatchesLayout->addLayout(horzLayout);
+    m_horizontalColorPatchesLayout->addLayout(m_verticalColorPatchesLayout);
 
     updateLayout();
 
-    connect(m_barWidget, SIGNAL(openSettings()), this, SLOT(openSettings()));
+    connect(m_colorSelectorContainer, SIGNAL(openSettings()), this, SLOT(openSettings()));
 }
 
 void KisColorSelectorNgDockerWidget::setCanvas(KoCanvasBase *canvas)
@@ -115,17 +82,12 @@ void KisColorSelectorNgDockerWidget::setCanvas(KoCanvasBase *canvas)
 
 void KisColorSelectorNgDockerWidget::openSettings()
 {
-    KisColorSelectorNgSettings settings;
+    KisColorSelectorSettings settings;
     if(settings.exec()==QDialog::Accepted) {
         //shade selectors
-        int shadeSelector = settings.ui->shadeSelectorType->currentIndex();
-        if(shadeSelector==0)
-            m_shadeWidget = m_myPaintShadeWidget;
-        else if(shadeSelector==1)
-            m_shadeWidget = m_minimalShadeWidget;
-        else m_shadeWidget = 0;
-
-        m_shadeSelectorHideable = settings.ui->shadeSelectorHideable->isChecked();
+        m_colorSelectorContainer->setShadeSelectorType(settings.ui->shadeSelectorType->currentIndex());
+        m_colorSelectorContainer->setShadeSelectorHideable(settings.ui->shadeSelectorHideable->isChecked());
+        m_colorSelectorContainer->setAllowHorizontalLayout(settings.ui->allowHorizontalLayout->isChecked());
 
         //color patches
         m_lastColorsShow = settings.ui->lastUsedColorsShow->isChecked();
@@ -144,55 +106,9 @@ void KisColorSelectorNgDockerWidget::openSettings()
     }
 }
 
-void KisColorSelectorNgDockerWidget::resizeEvent(QResizeEvent* e)
-{
-    int colselH = m_colorSelectorWidget->height();
-    int colselMinH = m_colorSelectorWidget->minimumHeight();
-    int shadeselH = m_shadeWidget->height();
-    int shadeselMinH = m_shadeWidget->minimumHeight();
-
-    kDebug()<<"####"<<colselH<<"#"<<colselMinH;
-
-    if(m_shadeWidget!=0) {
-        if(colselH+shadeselH-colselMinH-shadeselMinH<=20 && m_shadeSelectorHideable)
-            m_shadeWidget->hide();
-//        else if (height<0 && m_shadeSelectorHideable==false)
-//            setMinimumHeight(this->height()-height);
-        else if(colselH+shadeselH-colselMinH-shadeselMinH>20)
-            m_shadeWidget->show();
-    }
-
-    if(e!=0)
-        QWidget::resizeEvent(e);
-}
 
 void KisColorSelectorNgDockerWidget::updateLayout()
 {
-    //bar (color picker and settings)
-    if((m_commonColorsDirection==KisColorPatches::Horizontal || m_commonColorsShow==false)
-       && (m_lastColorsDirection==KisColorPatches::Horizontal || m_lastColorsShow==false)) {
-        m_standardBarLayout->removeWidget(m_barWidget);
-        m_barWidget->setParent(m_bigWidgetsParent);
-        m_barWidget->setMaximumWidth(QWIDGETSIZE_MAX);
-        m_barWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-        Q_ASSERT(dynamic_cast<QVBoxLayout*>(m_bigWidgetsParent->layout()));
-        dynamic_cast<QVBoxLayout*>(m_bigWidgetsParent->layout())->insertWidget(0, m_barWidget);
-    }
-    else {
-        Q_ASSERT(dynamic_cast<QVBoxLayout*>(m_bigWidgetsParent->layout()));
-        dynamic_cast<QVBoxLayout*>(m_bigWidgetsParent->layout())->removeWidget(m_barWidget);
-        m_barWidget->setParent(this);
-        m_barWidget->setMaximumWidth(m_barWidget->minimumWidth());
-        m_barWidget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-        m_standardBarLayout->insertWidget(0, m_barWidget);
-    }
-
-    //shade selector
-    m_myPaintShadeWidget->hide();
-    m_minimalShadeWidget->hide();
-    if(m_shadeWidget!=0)
-        m_shadeWidget->show();
-
     //color patches
     m_lastColorsWidget->setPatchLayout(m_lastColorsDirection, m_lastColorsScrolling, m_lastColorsRowCount, m_lastColorsColCount);
     m_commonColorsWidget->setPatchLayout(m_commonColorsDirection, m_commonColorsScrolling, m_commonColorsRowCount, m_commonColorsColCount);

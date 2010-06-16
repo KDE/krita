@@ -24,10 +24,7 @@
 
 class KoCanvasBase;
 class KisCommonColors;
-class KisColSelNgBar;
-class KisColorSelector;
-class KisMyPaintShadeSelector;
-class KisMinimalShadeSelector;
+class KisColorSelectorContainer;
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -42,26 +39,16 @@ public:
 public slots:
     void openSettings();
 protected:
-    void resizeEvent(QResizeEvent* e=0);
 
 private:
     void updateLayout();
 
-    KisColSelNgBar* m_barWidget;
-    KisColorSelector* m_colorSelectorWidget;
-    KisMyPaintShadeSelector* m_myPaintShadeWidget;
-    KisMinimalShadeSelector* m_minimalShadeWidget;
+    KisColorSelectorContainer* m_colorSelectorContainer;
     KisColorPatches* m_lastColorsWidget;
     KisCommonColors* m_commonColorsWidget;
-    QWidget* m_bigWidgetsParent;
 
     QHBoxLayout* m_verticalColorPatchesLayout; // vertical color patches should be added here
     QVBoxLayout* m_horizontalColorPatchesLayout;//horizontal ----------"----------------------
-    QVBoxLayout* m_standardBarLayout;
-
-    //shade selector options
-    QWidget* m_shadeWidget;
-    bool m_shadeSelectorHideable;
 
     //color patches options
     bool m_lastColorsShow;

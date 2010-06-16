@@ -16,24 +16,35 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_COLSELNG_SETTINGS_H
-#define KIS_COLSELNG_SETTINGS_H
+#include "kis_color_selector_settings.h"
+#include "ui_wdg_color_selector_settings.h"
 
-#include <QDialog>
+KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::KisColorSelectorSettings)
+{
+    ui->setupUi(this);
+    ui->lbl_lastUsedNumRows->hide();
+    ui->lastUsedColorsNumRows->hide();
 
-namespace Ui {
-    class KisColorSelectorNgSettings;
+    ui->lbl_commonColorsNumCols->hide();
+    ui->commonColorsNumCols->hide();
+    resize(minimumSize());
 }
 
-class KisColorSelectorNgSettings : public QDialog {
-    Q_OBJECT
-public:
-    KisColorSelectorNgSettings(QWidget *parent = 0);
-    ~KisColorSelectorNgSettings();
+KisColorSelectorSettings::~KisColorSelectorSettings()
+{
+    delete ui;
+}
 
-    Ui::KisColorSelectorNgSettings *ui;
-protected:
-    void changeEvent(QEvent *e);
-};
-
-#endif // KIS_COLSELNG_SETTINGS_H
+void KisColorSelectorSettings::changeEvent(QEvent *e)
+{
+    QDialog::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}

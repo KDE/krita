@@ -38,7 +38,7 @@ KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
         QWidget(parent)
 {
     precalculateData();
-    setMinimumSize(120, 120);
+    setMinimumSize(80, 80);
     setColor(QColor(200,30,30));
 }
 

@@ -4,15 +4,15 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
         kis_color_selector_ng_dock.cpp
         kis_color_selector_ng_docker_widget.cpp
         kis_my_paint_shade_selector.cpp
-        kis_colselng_bar.cpp
         kis_color_patches.cpp
         kis_color_selector.cpp
         kis_common_colors.cpp
         kis_minimal_shade_selector.cpp
-	kis_color_selector_ng_settings.cpp)
+        kis_color_selector_settings.cpp
+        kis_color_selector_container.cpp)
 
 kde4_add_ui_files(KRITA_COLORSELECTORNG_PART_SRCS
-    wdg_color_selector_ng_settings.ui
+    wdg_color_selector_settings.ui
 )
 
 kde4_add_plugin(kritacolorselectorng ${KRITA_COLORSELECTORNG_PART_SRCS})

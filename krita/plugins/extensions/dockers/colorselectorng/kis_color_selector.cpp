@@ -31,4 +31,5 @@ KisColorSelector::KisColorSelector(QWidget* parent) : QWidget(parent)
     layout->addWidget(triangleSelector);
 
     setMinimumSize(80, 80);
+    triangleSelector->setMinimumSize(80,80);
 }

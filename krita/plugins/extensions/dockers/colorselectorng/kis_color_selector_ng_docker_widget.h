@@ -20,23 +20,23 @@
 #define COLORSELECTORNGWIDGET_H
 
 #include <QWidget>
-#include "kis_colselng_color_patches.h"
+#include "kis_color_patches.h"
 
 class KoCanvasBase;
-class KisColSelNgCommonColors;
+class KisCommonColors;
 class KisColSelNgBar;
-class KisColSelNgColorSelector;
-class KisColSelNgMyPaintShadeSelector;
-class KisColSelNgShadeSelector;
+class KisColorSelector;
+class KisMyPaintShadeSelector;
+class KisMinimalShadeSelector;
 
 class QVBoxLayout;
 class QHBoxLayout;
 
-class KisColSelNgWidget : public QWidget
+class KisColorSelectorNgDockerWidget : public QWidget
 {
 Q_OBJECT
 public:
-    explicit KisColSelNgWidget(QWidget *parent = 0);
+    explicit KisColorSelectorNgDockerWidget(QWidget *parent = 0);
     void setCanvas(KoCanvasBase* canvas);
 
 public slots:
@@ -48,11 +48,11 @@ private:
     void updateLayout();
 
     KisColSelNgBar* m_barWidget;
-    KisColSelNgColorSelector* m_colorSelectorWidget;
-    KisColSelNgMyPaintShadeSelector* m_myPaintShadeWidget;
-    KisColSelNgShadeSelector* m_minimalShadeWidget;
-    KisColSelNgColorPatches* m_lastColorsWidget;
-    KisColSelNgCommonColors* m_commonColorsWidget;
+    KisColorSelector* m_colorSelectorWidget;
+    KisMyPaintShadeSelector* m_myPaintShadeWidget;
+    KisMinimalShadeSelector* m_minimalShadeWidget;
+    KisColorPatches* m_lastColorsWidget;
+    KisCommonColors* m_commonColorsWidget;
     QWidget* m_bigWidgetsParent;
 
     QHBoxLayout* m_verticalColorPatchesLayout; // vertical color patches should be added here
@@ -65,13 +65,13 @@ private:
 
     //color patches options
     bool m_lastColorsShow;
-    KisColSelNgColorPatches::Direction m_lastColorsDirection;
+    KisColorPatches::Direction m_lastColorsDirection;
     bool m_lastColorsScrolling;
     int m_lastColorsColCount;
     int m_lastColorsRowCount;
 
     bool m_commonColorsShow;
-    KisColSelNgColorPatches::Direction m_commonColorsDirection;
+    KisColorPatches::Direction m_commonColorsDirection;
     bool m_commonColorsScrolling;
     int m_commonColorsColCount;
     int m_commonColorsRowCount;

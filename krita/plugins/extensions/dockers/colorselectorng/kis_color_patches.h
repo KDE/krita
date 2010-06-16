@@ -20,11 +20,11 @@
 
 #include <QWidget>
 
-class KisColSelNgColorPatches : public QWidget
+class KisColorPatches : public QWidget
 {
 Q_OBJECT
 public:
-    explicit KisColSelNgColorPatches(QWidget *parent = 0);
+    explicit KisColorPatches(QWidget *parent = 0);
     enum Direction { Horizontal, Vertical };
 
     void setColors(QList<QColor> colors);

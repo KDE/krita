@@ -25,7 +25,7 @@
 #include <KoDockRegistry.h>
 #include <KoResourceManager.h>
 
-#include "kis_colselng_dock.h"
+#include "kis_color_selector_ng_dock.h"
 
 K_PLUGIN_FACTORY(ColorSelectorNgPluginFactory, registerPlugin<ColorSelectorNgPlugin>();)
 K_EXPORT_PLUGIN(ColorSelectorNgPluginFactory("krita"))
@@ -45,7 +45,7 @@ public:
     }
 
     virtual QDockWidget* createDockWidget() {
-        KisColSelNgDock * dockWidget = new KisColSelNgDock();
+        KisColorSelectorNgDock * dockWidget = new KisColorSelectorNgDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;

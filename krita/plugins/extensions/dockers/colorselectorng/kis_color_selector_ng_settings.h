@@ -22,16 +22,16 @@
 #include <QDialog>
 
 namespace Ui {
-    class KisColSelNgSettings;
+    class KisColorSelectorNgSettings;
 }
 
-class KisColSelNgSettings : public QDialog {
+class KisColorSelectorNgSettings : public QDialog {
     Q_OBJECT
 public:
-    KisColSelNgSettings(QWidget *parent = 0);
-    ~KisColSelNgSettings();
+    KisColorSelectorNgSettings(QWidget *parent = 0);
+    ~KisColorSelectorNgSettings();
 
-    Ui::KisColSelNgSettings *ui;
+    Ui::KisColorSelectorNgSettings *ui;
 protected:
     void changeEvent(QEvent *e);
 };

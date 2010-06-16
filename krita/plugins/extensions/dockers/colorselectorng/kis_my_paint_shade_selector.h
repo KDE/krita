@@ -27,10 +27,10 @@
 class QImage;
 class QColor;
 
-class KisColSelNgMyPaintShadeSelector : public QWidget
+class KisMyPaintShadeSelector : public QWidget
 {
 public:
-    KisColSelNgMyPaintShadeSelector(QWidget *parent = 0);
+    KisMyPaintShadeSelector(QWidget *parent = 0);
 
 public:
     QImage getSelector();

@@ -16,21 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_colselng_dock.h"
+#include "kis_color_selector_ng_dock.h"
 
 #include <klocale.h>
 #include <KoCanvasBase.h>
 
-#include "kis_colselng_widget.h"
+#include "kis_color_selector_ng_docker_widget.h"
 #include "kis_canvas_resource_provider.h"
 
 #include <KoColorSpaceRegistry.h>
 
-KisColSelNgDock::KisColSelNgDock()
+KisColorSelectorNgDock::KisColorSelectorNgDock()
         : QDockWidget()
         , m_canvas(0)
 {
-    m_colorSelectorNgWidget = new KisColSelNgWidget(this);
+    m_colorSelectorNgWidget = new KisColorSelectorNgDockerWidget(this);
 
     setWidget(m_colorSelectorNgWidget);
     m_colorSelectorNgWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -40,7 +40,7 @@ KisColSelNgDock::KisColSelNgDock()
     setWindowTitle(i18n("Color Selector Ng"));
 }
 
-void KisColSelNgDock::setCanvas(KoCanvasBase * canvas)
+void KisColorSelectorNgDock::setCanvas(KoCanvasBase * canvas)
 {
     m_colorSelectorNgWidget->setCanvas(canvas);
 //    m_canvas = canvas;
@@ -49,17 +49,17 @@ void KisColSelNgDock::setCanvas(KoCanvasBase * canvas)
 //    m_colorSelectorNgWidget->setQColor(m_canvas->resourceManager()->foregroundColor().toQColor());
 }
 
-void KisColSelNgDock::colorChangedProxy(const QColor& c)
+void KisColorSelectorNgDock::colorChangedProxy(const QColor& c)
 {
 //    if (m_canvas)
 //        m_canvas->resourceManager()->setForegroundColor(KoColor(c , KoColorSpaceRegistry::instance()->rgb8()));
 }
 
-void KisColSelNgDock::resourceChanged(int key, const QVariant& v)
+void KisColorSelectorNgDock::resourceChanged(int key, const QVariant& v)
 {
 //    if (key == KoCanvasResource::ForegroundColor) {
 //        m_colorSelectorNgWidget->setQColor(v.value<KoColor>().toQColor());
 //    }
 }
 
-#include "kis_colselng_dock.moc"
+#include "kis_color_selector_ng_dock.moc"

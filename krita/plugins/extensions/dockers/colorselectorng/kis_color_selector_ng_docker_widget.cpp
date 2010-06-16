@@ -15,28 +15,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_colselng_widget.h"
+#include "kis_color_selector_ng_docker_widget.h"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
 #include <KoCanvasBase.h>
 
-#include "kis_colselng_my_paint_shade_selector.h"
-
 #include "kis_colselng_bar.h"
-#include "kis_colselng_my_paint_shade_selector.h"
-#include "kis_colselng_color_selector.h"
-#include "kis_colselng_color_patches.h"
-#include "kis_colselng_shade_selector.h"
-#include "kis_colselng_common_colors.h"
-#include "kis_colselng_settings.h"
+#include "kis_my_paint_shade_selector.h"
+#include "kis_color_selector.h"
+#include "kis_color_patches.h"
+#include "kis_minimal_shade_selector.h"
+#include "kis_common_colors.h"
+#include "kis_color_selector_ng_settings.h"
 
-#include "ui_kis_colselng_settings.h"
+#include "ui_wdg_color_selector_ng_settings.h"
 
 #include <KDebug>
 
-KisColSelNgWidget::KisColSelNgWidget(QWidget *parent) :
+KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) :
     QWidget(parent), m_verticalColorPatchesLayout(0), m_horizontalColorPatchesLayout(0)
 {
     m_bigWidgetsParent = new QWidget(this);
@@ -46,11 +44,11 @@ KisColSelNgWidget::KisColSelNgWidget(QWidget *parent) :
 
 
     m_barWidget = new KisColSelNgBar(this);
-    m_colorSelectorWidget = new KisColSelNgColorSelector(m_bigWidgetsParent);
-    m_myPaintShadeWidget = new KisColSelNgMyPaintShadeSelector(m_bigWidgetsParent);
-    m_minimalShadeWidget = new KisColSelNgShadeSelector(m_bigWidgetsParent);
-    m_lastColorsWidget = new KisColSelNgColorPatches(this);
-    m_commonColorsWidget = new KisColSelNgCommonColors(this);
+    m_colorSelectorWidget = new KisColorSelector(m_bigWidgetsParent);
+    m_myPaintShadeWidget = new KisMyPaintShadeSelector(m_bigWidgetsParent);
+    m_minimalShadeWidget = new KisMinimalShadeSelector(m_bigWidgetsParent);
+    m_lastColorsWidget = new KisColorPatches(this);
+    m_commonColorsWidget = new KisCommonColors(this);
 
     m_myPaintShadeWidget->hide();
     m_minimalShadeWidget->hide();
@@ -64,13 +62,13 @@ KisColSelNgWidget::KisColSelNgWidget(QWidget *parent) :
 
     //color patches
     m_lastColorsShow=true;
-    m_lastColorsDirection=KisColSelNgColorPatches::Vertical;
+    m_lastColorsDirection=KisColorPatches::Vertical;
     m_lastColorsScrolling=true;
     m_lastColorsColCount=2;
     m_lastColorsRowCount=3;
 
     m_commonColorsShow=true;
-    m_commonColorsDirection=KisColSelNgColorPatches::Horizontal;
+    m_commonColorsDirection=KisColorPatches::Horizontal;
     m_commonColorsScrolling=false;
     m_commonColorsColCount=2;
     m_commonColorsRowCount=3;
@@ -110,14 +108,14 @@ KisColSelNgWidget::KisColSelNgWidget(QWidget *parent) :
     connect(m_barWidget, SIGNAL(openSettings()), this, SLOT(openSettings()));
 }
 
-void KisColSelNgWidget::setCanvas(KoCanvasBase *canvas)
+void KisColorSelectorNgDockerWidget::setCanvas(KoCanvasBase *canvas)
 {
     m_commonColorsWidget->setCanvas(canvas);
 }
 
-void KisColSelNgWidget::openSettings()
+void KisColorSelectorNgDockerWidget::openSettings()
 {
-    KisColSelNgSettings settings;
+    KisColorSelectorNgSettings settings;
     if(settings.exec()==QDialog::Accepted) {
         //shade selectors
         int shadeSelector = settings.ui->shadeSelectorType->currentIndex();
@@ -131,13 +129,13 @@ void KisColSelNgWidget::openSettings()
 
         //color patches
         m_lastColorsShow = settings.ui->lastUsedColorsShow->isChecked();
-        m_lastColorsDirection = settings.ui->lastUsedColorsAlignVertical->isChecked()?KisColSelNgColorPatches::Vertical:KisColSelNgColorPatches::Horizontal;
+        m_lastColorsDirection = settings.ui->lastUsedColorsAlignVertical->isChecked()?KisColorPatches::Vertical:KisColorPatches::Horizontal;
         m_lastColorsScrolling = settings.ui->lastUsedColorsAllowScrolling->isChecked();
         m_lastColorsColCount = settings.ui->lastUsedColorsNumCols->value();
         m_lastColorsRowCount = settings.ui->lastUsedColorsNumRows->value();
 
         m_commonColorsShow = settings.ui->commonColorsShow->isChecked();
-        m_commonColorsDirection = settings.ui->commonColorsAlignVertical->isChecked()?KisColSelNgColorPatches::Vertical:KisColSelNgColorPatches::Horizontal;
+        m_commonColorsDirection = settings.ui->commonColorsAlignVertical->isChecked()?KisColorPatches::Vertical:KisColorPatches::Horizontal;
         m_commonColorsScrolling = settings.ui->commonColorsAllowScrolling->isChecked();
         m_commonColorsColCount = settings.ui->commonColorsNumCols->value();
         m_commonColorsRowCount = settings.ui->commonColorsNumRows->value();
@@ -146,7 +144,7 @@ void KisColSelNgWidget::openSettings()
     }
 }
 
-void KisColSelNgWidget::resizeEvent(QResizeEvent* e)
+void KisColorSelectorNgDockerWidget::resizeEvent(QResizeEvent* e)
 {
     int colselH = m_colorSelectorWidget->height();
     int colselMinH = m_colorSelectorWidget->minimumHeight();
@@ -168,11 +166,11 @@ void KisColSelNgWidget::resizeEvent(QResizeEvent* e)
         QWidget::resizeEvent(e);
 }
 
-void KisColSelNgWidget::updateLayout()
+void KisColorSelectorNgDockerWidget::updateLayout()
 {
     //bar (color picker and settings)
-    if((m_commonColorsDirection==KisColSelNgColorPatches::Horizontal || m_commonColorsShow==false)
-       && (m_lastColorsDirection==KisColSelNgColorPatches::Horizontal || m_lastColorsShow==false)) {
+    if((m_commonColorsDirection==KisColorPatches::Horizontal || m_commonColorsShow==false)
+       && (m_lastColorsDirection==KisColorPatches::Horizontal || m_lastColorsShow==false)) {
         m_standardBarLayout->removeWidget(m_barWidget);
         m_barWidget->setParent(m_bigWidgetsParent);
         m_barWidget->setMaximumWidth(QWIDGETSIZE_MAX);
@@ -214,16 +212,16 @@ void KisColSelNgWidget::updateLayout()
     else
         m_commonColorsWidget->show();
 
-    if(m_lastColorsShow && m_lastColorsDirection==KisColSelNgColorPatches::Vertical)
+    if(m_lastColorsShow && m_lastColorsDirection==KisColorPatches::Vertical)
         m_verticalColorPatchesLayout->addWidget(m_lastColorsWidget);
 
-    if(m_commonColorsShow && m_commonColorsDirection==KisColSelNgColorPatches::Vertical)
+    if(m_commonColorsShow && m_commonColorsDirection==KisColorPatches::Vertical)
         m_verticalColorPatchesLayout->addWidget(m_commonColorsWidget);
 
-    if(m_lastColorsShow && m_lastColorsDirection==KisColSelNgColorPatches::Horizontal)
+    if(m_lastColorsShow && m_lastColorsDirection==KisColorPatches::Horizontal)
         m_horizontalColorPatchesLayout->addWidget(m_lastColorsWidget);
 
-    if(m_commonColorsShow && m_commonColorsDirection==KisColSelNgColorPatches::Horizontal)
+    if(m_commonColorsShow && m_commonColorsDirection==KisColorPatches::Horizontal)
         m_horizontalColorPatchesLayout->addWidget(m_commonColorsWidget);
 
     updateGeometry();

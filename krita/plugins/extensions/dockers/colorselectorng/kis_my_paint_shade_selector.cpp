@@ -21,7 +21,7 @@
 
 #include <cmath>
 #include <cstdlib>
-#include "kis_colselng_my_paint_shade_selector.h"
+#include "kis_my_paint_shade_selector.h"
 #include <QImage>
 #include <QColor>
 #include <QPainter>
@@ -34,7 +34,7 @@ inline qreal sqr2(qreal x);
 inline int signedSqr(int x);
 
 
-KisColSelNgMyPaintShadeSelector::KisColSelNgMyPaintShadeSelector(QWidget *parent) :
+KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
         QWidget(parent)
 {
     precalculateData();
@@ -42,7 +42,7 @@ KisColSelNgMyPaintShadeSelector::KisColSelNgMyPaintShadeSelector(QWidget *parent
     setColor(QColor(200,30,30));
 }
 
-void KisColSelNgMyPaintShadeSelector::paintEvent(QPaintEvent *) {
+void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
     QPainter painter(this);
 
     int size = qMin(width(), height());
@@ -50,13 +50,13 @@ void KisColSelNgMyPaintShadeSelector::paintEvent(QPaintEvent *) {
     painter.drawImage(0,0, getSelector().scaled(size, size));
 }
 
-void KisColSelNgMyPaintShadeSelector::setColor(const QColor &c) {
+void KisMyPaintShadeSelector::setColor(const QColor &c) {
     m_colorH=c.hsvHueF();
     m_colorS=c.hsvSaturationF();
     m_colorV=c.valueF();
 }
 
-void KisColSelNgMyPaintShadeSelector::mousePressEvent(QMouseEvent* event)
+void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* event)
 {
     int x = event->x();
     int y = event->y();
@@ -67,14 +67,14 @@ void KisColSelNgMyPaintShadeSelector::mousePressEvent(QMouseEvent* event)
     setColor(getColor(x*ratio, y*ratio));
     update();
 }
-void KisColSelNgMyPaintShadeSelector::mouseDoubleClickEvent(QMouseEvent * event) {
-    KisColSelNgMyPaintShadeSelector* duud = new KisColSelNgMyPaintShadeSelector();
+void KisMyPaintShadeSelector::mouseDoubleClickEvent(QMouseEvent * event) {
+    KisMyPaintShadeSelector* duud = new KisMyPaintShadeSelector();
     duud->show();
     duud->resize(256,256);
     duud->move(mapToGlobal(QPoint(-256,-256)));
 }
 
-void KisColSelNgMyPaintShadeSelector::precalculateData() {
+void KisMyPaintShadeSelector::precalculateData() {
     // Hint to the casual reader: some of the calculation here do not
     // what Martin Renold originally intended. Not everything here will make sense.
     // It does not matter in the end, as long as the result looks good.
@@ -151,7 +151,7 @@ void KisColSelNgMyPaintShadeSelector::precalculateData() {
     }
 }
 
-QImage KisColSelNgMyPaintShadeSelector::getSelector() {
+QImage KisMyPaintShadeSelector::getSelector() {
     QImage result(m_size,m_size,QImage::Format_RGB32);
 
     for(int i=0; i<m_size; i++) {
@@ -164,7 +164,7 @@ QImage KisColSelNgMyPaintShadeSelector::getSelector() {
     return result;
 }
 
-QColor KisColSelNgMyPaintShadeSelector::getColor(int x, int y)
+QColor KisMyPaintShadeSelector::getColor(int x, int y)
 {
     PrecalcData& pre = m_precalcData[x][y];
     qreal fh = m_colorH + pre.h/360.0;

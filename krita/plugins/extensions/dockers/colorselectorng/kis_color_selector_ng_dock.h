@@ -1,4 +1,5 @@
 /*
+ *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -15,18 +16,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_COLSELNG_SHADE_SELECTOR_H
-#define KIS_COLSELNG_SHADE_SELECTOR_H
+#ifndef _SMALLCOLORSELECTOR_DOCK_H_
+#define _SMALLCOLORSELECTOR_DOCK_H_
 
-#include <QWidget>
+#include <QDockWidget>
+#include <KoCanvasObserverBase.h>
 
-class KisColSelNgShadeSelector : public QWidget
+class KisColorSelectorNgDockerWidget;
+class KoColor;
+
+class KisColorSelectorNgDock : public QDockWidget, public KoCanvasObserverBase
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    explicit KisColSelNgShadeSelector(QWidget *parent = 0);
-protected:
-    void paintEvent(QPaintEvent *);
+    KisColorSelectorNgDock();
+
+    /// reimplemented from KoCanvasObserverBase
+    virtual void setCanvas(KoCanvasBase *canvas);
+public slots:
+    void colorChangedProxy(const QColor&);
+    void resourceChanged(int, const QVariant&);
+private:
+    KisColorSelectorNgDockerWidget* m_colorSelectorNgWidget;
+    KoCanvasBase* m_canvas;
 };
 
-#endif // KIS_COLSELNG_SHADE_SELECTOR_H
+
+#endif

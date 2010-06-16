@@ -15,7 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_colselng_common_colors.h"
+#include "kis_common_colors.h"
 #include <cmath>
 #include <QPixmap>
 #include <QHash>
@@ -32,8 +32,8 @@
 #include "kis_image.h"
 
 
-KisColSelNgCommonColors::KisColSelNgCommonColors(QWidget *parent) :
-    KisColSelNgColorPatches(parent), m_numColors(30), m_canvas(0)
+KisCommonColors::KisCommonColors(QWidget *parent) :
+    KisColorPatches(parent), m_numColors(30), m_canvas(0)
 {
     setPatchLayout(Horizontal, false, 2);
     m_extractedColors = extractColors();
@@ -41,14 +41,14 @@ KisColSelNgCommonColors::KisColSelNgCommonColors(QWidget *parent) :
 //    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 }
 
-void KisColSelNgCommonColors::setCanvas(KoCanvasBase *canvas)
+void KisCommonColors::setCanvas(KoCanvasBase *canvas)
 {
     /// todo: make clean
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     connect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()));
 }
 
-void KisColSelNgCommonColors::recalculate()
+void KisCommonColors::recalculate()
 {
     m_extractedColors = extractColors();
     setColors(m_extractedColors);
@@ -168,7 +168,7 @@ private:
 };
 
 
-QList<QColor> KisColSelNgCommonColors::extractColors()
+QList<QColor> KisCommonColors::extractColors()
 {
     QList<QRgb> colors = getColors();
     if(colors.size()<m_numColors && false) {
@@ -230,7 +230,7 @@ QList<QColor> KisColSelNgCommonColors::extractColors()
     return colorList;
 }
 
-QList<QRgb> KisColSelNgCommonColors::getColors()
+QList<QRgb> KisCommonColors::getColors()
 {
 //    QPixmap pixmap("/home/damdam/Pictures/backgrounds/mare.jpg");
 //    QPixmap pixmap("/home/damdam/progn/kde/ImageColorsExtractor/testimgs/sanduhr.jpg");

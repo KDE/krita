@@ -15,13 +15,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_colselng_color_patches.h"
+#include "kis_color_patches.h"
 #include <QPainter>
 #include <QWheelEvent>
 
 #include <QDebug>
 
-KisColSelNgColorPatches::KisColSelNgColorPatches(QWidget *parent) :
+KisColorPatches::KisColorPatches(QWidget *parent) :
     QWidget(parent), m_scrollValue(0)
 {
     m_patchWidth = 20;
@@ -44,7 +44,7 @@ KisColSelNgColorPatches::KisColSelNgColorPatches(QWidget *parent) :
     setPatchLayout(Vertical, false);
 }
 
-void KisColSelNgColorPatches::setColors(QList<QColor>colors)
+void KisColorPatches::setColors(QList<QColor>colors)
 {
     qDebug()<<"KisColSelNgPatches::setColors() -> size:"<<colors.size();
     m_colors = colors;
@@ -52,7 +52,7 @@ void KisColSelNgColorPatches::setColors(QList<QColor>colors)
     update();
 }
 
-void KisColSelNgColorPatches::paintEvent(QPaintEvent *)
+void KisColorPatches::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     if(m_direction == Vertical)
@@ -83,7 +83,7 @@ void KisColSelNgColorPatches::paintEvent(QPaintEvent *)
     }
 }
 
-void KisColSelNgColorPatches::wheelEvent(QWheelEvent* event)
+void KisColorPatches::wheelEvent(QWheelEvent* event)
 {
     m_scrollValue+=event->delta()/2;
     if(m_direction == Vertical) {
@@ -100,7 +100,7 @@ void KisColSelNgColorPatches::wheelEvent(QWheelEvent* event)
     update();
 }
 
-void KisColSelNgColorPatches::resizeEvent(QResizeEvent* event)
+void KisColorPatches::resizeEvent(QResizeEvent* event)
 {
     QWheelEvent* dummyWheelEvent = new QWheelEvent(QPoint(), 0, Qt::NoButton, Qt::NoModifier);
     wheelEvent(dummyWheelEvent);
@@ -120,7 +120,7 @@ void KisColSelNgColorPatches::resizeEvent(QResizeEvent* event)
     QWidget::resizeEvent(event);
 }
 
-void KisColSelNgColorPatches::setPatchLayout(Direction dir, bool allowScrolling, int numRows, int numCols)
+void KisColorPatches::setPatchLayout(Direction dir, bool allowScrolling, int numRows, int numCols)
 {
     m_direction = dir;
     m_allowScrolling = allowScrolling;
@@ -150,24 +150,24 @@ void KisColSelNgColorPatches::setPatchLayout(Direction dir, bool allowScrolling,
     }
 }
 
-int KisColSelNgColorPatches::widthOfAllPatches()
+int KisColorPatches::widthOfAllPatches()
 {
     return (m_numPatches/m_numRows)*m_patchWidth;
 }
 
-int KisColSelNgColorPatches::heightOfAllPatches()
+int KisColorPatches::heightOfAllPatches()
 {
     return (m_numPatches/m_numCols)*m_patchHeight;
 }
 
-int KisColSelNgColorPatches::heightForWidth(int width) const
+int KisColorPatches::heightForWidth(int width) const
 {
     int numPatchesInARow = width/m_patchWidth;
     int numRows = (m_numPatches-1)/numPatchesInARow+1;
     return numRows*m_patchHeight;
 }
 
-int KisColSelNgColorPatches::widthForHeight(int height) const
+int KisColorPatches::widthForHeight(int height) const
 {
     int numPatchesInACol = height/m_patchHeight;
     int numCols = (m_numPatches-1)/numPatchesInACol+1;

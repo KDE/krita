@@ -15,32 +15,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_COLSELNG_COMMON_COLORS_H
-#define KIS_COLSELNG_COMMON_COLORS_H
+#include "kis_color_selector.h"
 
-#include "kis_colselng_color_patches.h"
-#include "KoCanvasObserverBase.h"
+#include <QHBoxLayout>
 
-class KoCanvasBase;
-class KisCanvas2;
+#include <KoTriangleColorSelector.h>
 
-class KisColSelNgCommonColors : public KisColSelNgColorPatches
+KisColorSelector::KisColorSelector(QWidget* parent) : QWidget(parent)
 {
-Q_OBJECT
-public:
-    explicit KisColSelNgCommonColors(QWidget *parent = 0);
-//    int heightForWidth(int) const;
-//    QSize sizeHint() const;
-    void setCanvas(KoCanvasBase *canvas);
-private:
-    QList<QColor> extractColors();
-    QList<QRgb> getColors();
+    QWidget* triangleSelector = new KoTriangleColorSelector(this);
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->setSpacing(0);
+    layout->setMargin(0);
 
-    int m_numColors;
-    QList<QColor> m_extractedColors;
-    KisCanvas2* m_canvas;
-public slots:
-    void recalculate();
-};
+    layout->addWidget(triangleSelector);
 
-#endif // KIS_COLSELNG_COMMON_COLORS_H
+    setMinimumSize(80, 80);
+}

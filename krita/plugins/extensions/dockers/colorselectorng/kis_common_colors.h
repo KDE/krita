@@ -15,30 +15,32 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_colselng_shade_selector.h"
+#ifndef KIS_COLSELNG_COMMON_COLORS_H
+#define KIS_COLSELNG_COMMON_COLORS_H
 
-#include <QPainter>
+#include "kis_color_patches.h"
+#include "KoCanvasObserverBase.h"
 
-KisColSelNgShadeSelector::KisColSelNgShadeSelector(QWidget *parent) :
-    QWidget(parent)
+class KoCanvasBase;
+class KisCanvas2;
+
+class KisCommonColors : public KisColorPatches
 {
-    setMinimumHeight(30);
-    setMaximumHeight(30);
-}
+Q_OBJECT
+public:
+    explicit KisCommonColors(QWidget *parent = 0);
+//    int heightForWidth(int) const;
+//    QSize sizeHint() const;
+    void setCanvas(KoCanvasBase *canvas);
+private:
+    QList<QColor> extractColors();
+    QList<QRgb> getColors();
 
-void KisColSelNgShadeSelector::paintEvent(QPaintEvent *) {
-    QPainter painter(this);
+    int m_numColors;
+    QList<QColor> m_extractedColors;
+    KisCanvas2* m_canvas;
+public slots:
+    void recalculate();
+};
 
-    QLinearGradient g1(0,0, width(), 0);
-    g1.setColorAt(0, QColor(100,0,0));
-    g1.setColorAt(0.5, QColor(255,0,0));
-    g1.setColorAt(1, QColor(255,155,155));
-
-    QLinearGradient g2(0,0, width(), 0);
-    g2.setColorAt(0, QColor(155, 100, 0));
-    g2.setColorAt(0.5, QColor(255, 0, 0));
-    g2.setColorAt(1, QColor(155, 0, 100));
-
-    painter.fillRect(0,0,width(), height()/2, QBrush(g1));
-    painter.fillRect(0, height()/2, width(), height()/2, QBrush(g2));
-}
+#endif // KIS_COLSELNG_COMMON_COLORS_H

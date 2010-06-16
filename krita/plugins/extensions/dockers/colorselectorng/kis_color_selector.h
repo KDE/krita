@@ -20,10 +20,10 @@
 
 #include <QWidget>
 
-class KisColSelNgColorSelector : public QWidget
+class KisColorSelector : public QWidget
 {
 public:
-    KisColSelNgColorSelector(QWidget* parent = 0);
+    KisColorSelector(QWidget* parent = 0);
 };
 
 #endif // KIS_COLSELNG_COLOR_SELECTOR_H

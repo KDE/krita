@@ -16,12 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_colselng_settings.h"
-#include "ui_kis_colselng_settings.h"
+#include "kis_color_selector_ng_settings.h"
+#include "ui_wdg_color_selector_ng_settings.h"
 
-KisColSelNgSettings::KisColSelNgSettings(QWidget *parent) :
+KisColorSelectorNgSettings::KisColorSelectorNgSettings(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::KisColSelNgSettings)
+    ui(new Ui::KisColorSelectorNgSettings)
 {
     ui->setupUi(this);
     ui->lbl_lastUsedNumRows->hide();
@@ -32,12 +32,12 @@ KisColSelNgSettings::KisColSelNgSettings(QWidget *parent) :
     resize(minimumSize());
 }
 
-KisColSelNgSettings::~KisColSelNgSettings()
+KisColorSelectorNgSettings::~KisColorSelectorNgSettings()
 {
     delete ui;
 }
 
-void KisColSelNgSettings::changeEvent(QEvent *e)
+void KisColorSelectorNgSettings::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
     switch (e->type()) {

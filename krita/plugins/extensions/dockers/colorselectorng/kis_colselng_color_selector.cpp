@@ -25,8 +25,10 @@ KisColSelNgColorSelector::KisColSelNgColorSelector(QWidget* parent) : QWidget(pa
 {
     QWidget* triangleSelector = new KoTriangleColorSelector(this);
     QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->setSpacing(0);
+    layout->setMargin(0);
 
     layout->addWidget(triangleSelector);
 
-    setMinimumSize(100, 100);
+    setMinimumSize(80, 80);
 }

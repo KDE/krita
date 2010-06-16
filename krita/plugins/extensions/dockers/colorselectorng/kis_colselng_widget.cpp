@@ -34,8 +34,7 @@
 
 #include "ui_kis_colselng_settings.h"
 
-
-#include <QDebug>
+#include <KDebug>
 
 KisColSelNgWidget::KisColSelNgWidget(QWidget *parent) :
     QWidget(parent), m_verticalColorPatchesLayout(0), m_horizontalColorPatchesLayout(0)
@@ -43,6 +42,9 @@ KisColSelNgWidget::KisColSelNgWidget(QWidget *parent) :
     m_bigWidgetsParent = new QWidget(this);
 //    m_bigWidgetsParent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
 //    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+    setAutoFillBackground(true);
+
+
     m_barWidget = new KisColSelNgBar(this);
     m_colorSelectorWidget = new KisColSelNgColorSelector(m_bigWidgetsParent);
     m_myPaintShadeWidget = new KisColSelNgMyPaintShadeSelector(m_bigWidgetsParent);
@@ -76,26 +78,31 @@ KisColSelNgWidget::KisColSelNgWidget(QWidget *parent) :
 
     QVBoxLayout* bwpLayout = new QVBoxLayout(m_bigWidgetsParent);
     bwpLayout->setSpacing(0);
+    bwpLayout->setMargin(0);
     bwpLayout->addWidget(m_colorSelectorWidget);
     bwpLayout->addWidget(m_myPaintShadeWidget);
     bwpLayout->addWidget(m_minimalShadeWidget);
 
     QHBoxLayout* horzLayout = new QHBoxLayout();
     horzLayout->setSpacing(0);
+    horzLayout->setMargin(0);
     horzLayout->addWidget(m_bigWidgetsParent);
 
 
     m_standardBarLayout = new QVBoxLayout();
     m_standardBarLayout->setSpacing(0);
+    m_standardBarLayout->setMargin(0);
     m_standardBarLayout->addWidget(m_barWidget);
     horzLayout->addLayout(m_standardBarLayout);
 
     m_verticalColorPatchesLayout = new QHBoxLayout();
-    m_verticalColorPatchesLayout->setSpacing(2);
+    m_verticalColorPatchesLayout->setSpacing(0);
+    m_verticalColorPatchesLayout->setMargin(0);
     m_standardBarLayout->addLayout(m_verticalColorPatchesLayout);
 
     m_horizontalColorPatchesLayout = new QVBoxLayout(this);
-    m_horizontalColorPatchesLayout->setSpacing(2);
+    m_horizontalColorPatchesLayout->setSpacing(0);
+    m_horizontalColorPatchesLayout->setMargin(0);
     m_horizontalColorPatchesLayout->addLayout(horzLayout);
 
     updateLayout();
@@ -110,8 +117,6 @@ void KisColSelNgWidget::setCanvas(KoCanvasBase *canvas)
 
 void KisColSelNgWidget::openSettings()
 {
-    qDebug()<<"minimumHeight()="<<minimumHeight()<<"   \n"<<"sizeHint()"<<sizeHint().height();
-    
     KisColSelNgSettings settings;
     if(settings.exec()==QDialog::Accepted) {
         //shade selectors
@@ -143,15 +148,19 @@ void KisColSelNgWidget::openSettings()
 
 void KisColSelNgWidget::resizeEvent(QResizeEvent* e)
 {
-    int height = m_bigWidgetsParent->height()-m_colorSelectorWidget->minimumHeight();
+    int colselH = m_colorSelectorWidget->height();
+    int colselMinH = m_colorSelectorWidget->minimumHeight();
+    int shadeselH = m_shadeWidget->height();
+    int shadeselMinH = m_shadeWidget->minimumHeight();
+
+    kDebug()<<"####"<<colselH<<"#"<<colselMinH;
 
     if(m_shadeWidget!=0) {
-        height -= m_shadeWidget->minimumHeight();
-        if(height<0 && m_shadeSelectorHideable)
+        if(colselH+shadeselH-colselMinH-shadeselMinH<=20 && m_shadeSelectorHideable)
             m_shadeWidget->hide();
 //        else if (height<0 && m_shadeSelectorHideable==false)
 //            setMinimumHeight(this->height()-height);
-        else
+        else if(colselH+shadeselH-colselMinH-shadeselMinH>20)
             m_shadeWidget->show();
     }
 

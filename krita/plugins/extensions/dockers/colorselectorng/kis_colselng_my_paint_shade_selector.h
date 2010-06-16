@@ -37,9 +37,10 @@ public:
 protected:
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *);
+    void mouseDoubleClickEvent(QMouseEvent *);
     void setColor(const QColor& c);
 private:
-    void precalcData();
+    void precalculateData();
     static const int m_size = 256;
     float m_colorH, m_colorS, m_colorV;
     struct PrecalcData {

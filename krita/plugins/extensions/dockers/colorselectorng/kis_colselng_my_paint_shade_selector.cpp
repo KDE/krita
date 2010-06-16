@@ -37,7 +37,7 @@ inline int signedSqr(int x);
 KisColSelNgMyPaintShadeSelector::KisColSelNgMyPaintShadeSelector(QWidget *parent) :
         QWidget(parent)
 {
-    precalcData();
+    precalculateData();
     setMinimumSize(120, 120);
     setColor(QColor(200,30,30));
 }
@@ -67,8 +67,14 @@ void KisColSelNgMyPaintShadeSelector::mousePressEvent(QMouseEvent* event)
     setColor(getColor(x*ratio, y*ratio));
     update();
 }
+void KisColSelNgMyPaintShadeSelector::mouseDoubleClickEvent(QMouseEvent * event) {
+    KisColSelNgMyPaintShadeSelector* duud = new KisColSelNgMyPaintShadeSelector();
+    duud->show();
+    duud->resize(256,256);
+    duud->move(mapToGlobal(QPoint(-256,-256)));
+}
 
-void KisColSelNgMyPaintShadeSelector::precalcData() {
+void KisColSelNgMyPaintShadeSelector::precalculateData() {
     // Hint to the casual reader: some of the calculation here do not
     // what Martin Renold originally intended. Not everything here will make sense.
     // It does not matter in the end, as long as the result looks good.

@@ -1,0 +1,16 @@
+VERSION
+{
+	local:
+	extern "C++"
+	{
+		KDChart::*::Private::*;
+		KDChart::*::Private?virtual?table;
+		KDChart::*::Private?type_info?node;
+		KDChart::*::Private?type_info?name;
+		KDChart::*::Private?type_info?function;
+		vtable?for?KDChart::*::Private;
+		typeinfo?for?KDChart::*::Private;
+		typeinfo?name?for?KDChart::*::Private;
+		non-virtual?thunk?to?KDChart::*::Private;
+	};
+};

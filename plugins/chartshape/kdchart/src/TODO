@@ -1,0 +1,12 @@
+cleanup:
+--------
+
+KDChartArea -> KDChart::Area
+
+KDChartAxis?
+
+KDChartCustomArea?
+
+KDTextDocument ?
+
+KDChartMeasure ?

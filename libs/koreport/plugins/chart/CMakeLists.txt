@@ -5,7 +5,7 @@ ${CMAKE_SOURCE_DIR}/libs/koreport
 ${CMAKE_SOURCE_DIR}/libs/koreport/common
 ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
 ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
-${CMAKE_SOURCE_DIR}/kchart/kdchart/include
+${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
 )
 
 #build a shared library

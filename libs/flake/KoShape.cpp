@@ -1103,6 +1103,11 @@ KoShapeBackground *KoShape::loadOdfFill(KoShapeLoadingContext &context) const
         bg = new KoGradientBackground(gradient);
     } else if (fill == "bitmap") {
         bg = new KoPatternBackground(context.imageCollection());
+#ifndef NWORKAROUND_ODF_BUGS
+    } else if (fill.isEmpty()) {
+         bg = KoOdfWorkaround::fixBackgroundColor(this, context);
+         return bg;
+#endif
     } else {
         return 0;
     }

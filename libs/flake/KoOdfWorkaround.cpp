@@ -23,6 +23,7 @@
 
 #include "KoShapeLoadingContext.h"
 #include "KoShape.h"
+#include <KoPathShape.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
@@ -194,4 +195,25 @@ void KoOdfWorkaround::fixPresentationPlaceholder(KoShape *shape)
     if (s_workaroundPresentationPlaceholderBug && !shape->hasAdditionalAttribute("presentation:placeholder")) {
         shape->setAdditionalAttribute("presentation:placeholder", "true");
     }
+}
+
+KoColorBackground *KoOdfWorkaround::fixBackgroundColor(const KoShape *shape, KoShapeLoadingContext &context)
+{
+    KoColorBackground *colorBackground = 0;
+    const KoPathShape *pathShape = dynamic_cast<const KoPathShape*>(shape);
+    //check shape type
+    if (pathShape) {
+        KoOdfLoadingContext &odfContext = context.odfLoadingContext();
+        KoStyleStack &styleStack = odfContext.styleStack();
+        //check if it's created by OO only if necessery
+        if (odfContext.generator().startsWith("OpenOffice.org")) {
+            const QString color(styleStack.property(KoXmlNS::draw, "fill-color"));
+            if (color.isEmpty()) {
+                colorBackground = new KoColorBackground(Qt::cyan);
+            } else {
+                colorBackground = new KoColorBackground(color);
+            }
+        }
+    }
+    return colorBackground;
 }

@@ -29,6 +29,7 @@ class QPen;
 class QColor;
 class QString;
 class KoShapeBackground;
+class KoColorBackground;
 
 /**
  * This class should contain all workarounds to correct problems with different ODF
@@ -62,10 +63,12 @@ namespace KoOdfWorkaround
      * second coordinates is the radius. OpenOffice does it the other way around.
      */
     FLAKE_EXPORT void fixEnhancedPathPolarHandlePosition(QString &position, const KoXmlElement &element, KoShapeLoadingContext &context);
-    
+
     FLAKE_EXPORT bool   fixMissingStroke(QPen &pen, const KoXmlElement &element, KoShapeLoadingContext &context);
     FLAKE_EXPORT QColor fixMissingFillColor(const KoXmlElement &element, KoShapeLoadingContext &context);
     FLAKE_EXPORT bool   fixMissingStyle_DisplayLabel(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    FLAKE_EXPORT KoColorBackground *fixBackgroundColor(const KoShape *shape, KoShapeLoadingContext &context);
 
     /**
      * Old versions of ooimpress does not set the placeholder for shapes that should have it set

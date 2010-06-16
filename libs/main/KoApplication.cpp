@@ -170,7 +170,8 @@ bool KoApplication::start()
             if (doc) {
                 // show a shell asap
                 KoMainWindow *shell = new KoMainWindow(doc->componentData());
-                shell->show();
+                if (!benchmarkLoading)
+                    shell->show();
                 // are we just trying to open a template?
                 if (doTemplate) {
                     QStringList paths;
@@ -218,6 +219,7 @@ bool KoApplication::start()
                 else if (shell->openDocument(doc, args->url(i))) {
                     if (benchmarkLoading) {
                         shell->slotFileQuit();
+                        return true; // only load one document!
                     }
                     else if (print) {
                         shell->slotFilePrint();
@@ -241,7 +243,7 @@ bool KoApplication::start()
             }
         }
         if (benchmarkLoading) {
-            return nPrinted > 0;
+            return false; // no valid urls found.
         }
         if (print || exportAsPdf)
             return nPrinted > 0;

@@ -11,6 +11,7 @@ Name[pt_BR]=Forma do Plugin
 Name[sv]=Insticksform
 Name[uk]=Форма додатка
 Name[x-test]=xxPlugin Shapexx
+Name[zh_TW]=外掛程式元件 
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=pluginshape

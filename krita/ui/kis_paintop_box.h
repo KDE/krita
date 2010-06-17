@@ -91,13 +91,21 @@ private:
 
     KoID defaultPaintop(const KoInputDevice & inputDevice);
     KisPaintOpPresetSP activePreset(const KoID & paintop, const KoInputDevice & inputDevice);
+    
+    ///Sets the current composite op in the canvas resource provide
+    ///Composite op will be set to eraser if the erase mode of the input device is active
+    void compositeOpChanged();
+    
+    ///Sets the internal composite op, without emitting
+    /// @param id id of the composite op, when empty COMPOSITE_OVER will be used
+    void setCompositeOpInternal(const QString & id);
 
 private slots:
 
     void updatePaintops();
     void resourceSelected( KoResource * resource );
     void nodeChanged(const KisNodeSP node);
-    void eraseModeToggled(bool toggle);
+    void eraseModeToggled(bool checked);
     void updateCompositeOpComboBox();
     void slotSetCompositeMode(const QString& compositeOp);
 
@@ -132,6 +140,9 @@ private:
     typedef QHash<QString, KisPaintOpPresetSP> PresetMap;
     typedef QHash<KoInputDevice, PresetMap > InputDevicePresetsMap;
     InputDevicePresetsMap m_inputDevicePresets;
+    
+    QHash<KoInputDevice, bool> m_inputDeviceEraseModes;
+    QHash<KoInputDevice, QString> m_inputDeviceCompositeModes;
 };
 
 

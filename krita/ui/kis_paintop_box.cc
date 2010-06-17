@@ -282,6 +282,10 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
 
     m_cmbPaintops->setCurrentIndex(index);
     setCurrentPaintop(paintop);
+
+    m_eraseModeButton->setChecked(m_inputDeviceEraseModes[KoToolManager::instance()->currentInputDevice()]);
+    setCompositeOpInternal(m_inputDeviceCompositeModes[KoToolManager::instance()->currentInputDevice()]);
+    updateCompositeOpComboBox();
 }
 
 void KisPaintopBox::slotCurrentNodeChanged(KisNodeSP node)
@@ -454,17 +458,11 @@ void KisPaintopBox::nodeChanged(const KisNodeSP node)
     updateCompositeOpComboBox();
 }
 
-void KisPaintopBox::eraseModeToggled(bool toggle)
+void KisPaintopBox::eraseModeToggled(bool checked)
 {
-    if(toggle) {
-        m_resourceProvider->setCurrentCompositeOp(COMPOSITE_ERASE);
-        m_cmbComposite->setEnabled(false);
-        m_eraseMode = true;
-    } else {
-        m_resourceProvider->setCurrentCompositeOp(m_cmbComposite->currentItem());
-        m_cmbComposite->setEnabled(true);
-        m_eraseMode = false;
-    }
+    m_cmbComposite->setEnabled(!checked);
+    m_inputDeviceEraseModes[KoToolManager::instance()->currentInputDevice()] = checked;
+    compositeOpChanged();
 }
 
 void KisPaintopBox::updateCompositeOpComboBox()
@@ -484,18 +482,44 @@ void KisPaintopBox::updateCompositeOpComboBox()
                 m_compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
             }
             m_cmbComposite->setCurrent(m_compositeOp);
-            if(!m_eraseMode){
+            if(!m_inputDeviceEraseModes[KoToolManager::instance()->currentInputDevice()]){
                 m_cmbComposite->setEnabled(true);
-                m_resourceProvider->setCurrentCompositeOp(m_cmbComposite->currentItem());
             }
+            compositeOpChanged();
         } else {
             m_cmbComposite->setEnabled(false);
         }
     }
 }
 
+void KisPaintopBox::compositeOpChanged()
+{
+    if(m_inputDeviceEraseModes[KoToolManager::instance()->currentInputDevice()]) {
+        m_resourceProvider->setCurrentCompositeOp(COMPOSITE_ERASE);
+    } else {
+        m_resourceProvider->setCurrentCompositeOp(m_compositeOp->id());
+    }
+}
+
+void KisPaintopBox::setCompositeOpInternal(const QString& id)
+{
+    QString compositeID = id;
+    if(compositeID.isEmpty()) {
+        compositeID = COMPOSITE_OVER;
+    }
+    KisNodeSP node = m_resourceProvider->currentNode();
+    if(node) {
+        KisPaintDeviceSP device = node->paintDevice();
+        if (device) {
+            m_compositeOp = device->colorSpace()->compositeOp(compositeID);
+        }
+    }
+}
+
 void KisPaintopBox::slotSetCompositeMode(const QString& compositeOp)
 {
+    m_inputDeviceCompositeModes[KoToolManager::instance()->currentInputDevice()] = compositeOp;
+    setCompositeOpInternal(compositeOp);
     m_resourceProvider->setCurrentCompositeOp(compositeOp);
 }
 

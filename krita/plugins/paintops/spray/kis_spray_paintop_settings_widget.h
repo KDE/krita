@@ -23,7 +23,9 @@
 
 class KisSprayOpOption;
 class KisSprayShapeOption;
+class KisSprayShapeDynamicsOption;
 class KisColorOption;
+class KisBrushOptionWidget;
 
 class KisSprayPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {
@@ -40,7 +42,9 @@ public:
 public:
     KisSprayOpOption* m_sprayOption;
     KisSprayShapeOption* m_sprayShapeOption;
+    KisSprayShapeDynamicsOption * m_sprayShapeDynamicOption;
     KisColorOption* m_ColorOption;
+    KisBrushOptionWidget * m_brushOption;
 };
 
 #endif

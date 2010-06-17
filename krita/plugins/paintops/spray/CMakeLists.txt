@@ -2,6 +2,7 @@ set(kritaspraypaintop_PART_SRCS
     spray_paintop_plugin.cpp
     kis_spray_paintop.cpp
     kis_sprayop_option.cpp
+    kis_spray_shape_dynamics.cpp
     kis_spray_shape_option.cpp
     kis_spray_paintop_settings.cpp
     kis_spray_paintop_settings_widget.cpp
@@ -9,7 +10,7 @@ set(kritaspraypaintop_PART_SRCS
     random_gauss.cpp
     )
 
-kde4_add_ui_files(kritaspraypaintop_PART_SRCS wdgsprayoptions.ui wdgshapeoptions.ui )
+kde4_add_ui_files(kritaspraypaintop_PART_SRCS wdgsprayoptions.ui wdgshapeoptions.ui wdgshapedynamicsoptions.ui )
 
 kde4_add_plugin(kritaspraypaintop ${kritaspraypaintop_PART_SRCS})
 

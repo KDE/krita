@@ -24,6 +24,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
 
+#include "kis_paintop.h"
 
 #include <QVariant>
 #include <QHash>
@@ -64,16 +65,16 @@ qreal SprayBrush::rotationAngle()
 {
     qreal rotation = 0.0;
 
-    if ( m_shapeProperties->fixedRotation ){
-        rotation = deg2rad( m_shapeProperties->fixedAngle );
+    if ( m_shapeDynamicsProperties->fixedRotation ){
+        rotation = deg2rad( m_shapeDynamicsProperties->fixedAngle );
     }
 
-    if ( m_shapeProperties->randomRotation ){
+    if ( m_shapeDynamicsProperties->randomRotation ){
 
         if ( m_properties->gaussian ) {
-                rotation = linearInterpolation(rotation ,M_PI * 2.0 * qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0), m_shapeProperties->randomRotationWeight );
+                rotation = linearInterpolation(rotation ,M_PI * 2.0 * qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0), m_shapeDynamicsProperties->randomRotationWeight );
         } else {
-                rotation = linearInterpolation(rotation, M_PI * 2.0 * drand48(), m_shapeProperties->randomRotationWeight );
+                rotation = linearInterpolation(rotation, M_PI * 2.0 * drand48(), m_shapeDynamicsProperties->randomRotationWeight );
         }
     }
 
@@ -133,7 +134,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
     qreal angle;
     qreal length;
-    qreal rotationZ;
+    qreal rotationZ = 0.0;
+    qreal particleScale = 1.0;
 
     int steps = 118;
     bool shouldColor = true;
@@ -158,20 +160,26 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             length = drand48();
         }
 
-        // rotation
-        rotationZ = rotationAngle();
+        if (m_shapeDynamicsProperties->enabled){
+            // rotation
+            rotationZ = rotationAngle();
 
-        if (m_shapeProperties->followCursor){
+            if (m_shapeDynamicsProperties->followCursor){
+                
+                rotationZ = linearInterpolation( rotationZ,angle,m_shapeDynamicsProperties->followCursorWeigth );
+            }
+
             
-            rotationZ = linearInterpolation( rotationZ,angle,m_shapeProperties->followCursorWeigth );
-        }
+            if (m_shapeDynamicsProperties->followDrawingAngle){
+                
+                rotationZ = linearInterpolation( rotationZ,info.angle(),m_shapeDynamicsProperties->followDrawingAngleWeight );
+            }
 
-        
-        if (m_shapeProperties->followDrawingAngle){
-            
-            rotationZ = linearInterpolation( rotationZ,info.angle(),m_shapeProperties->followDrawingAngleWeight );
+            // random size - scale
+            if (m_shapeDynamicsProperties->randomSize){
+                particleScale = drand48();
+            }
         }
-
         // generate polar coordinate
         nx = (m_radius * cos(angle)  * length);
         ny = (m_radius * sin(angle)  * length);
@@ -232,17 +240,10 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             m_painter->setPaintColor(m_inkColor);
         }
 
-        qreal random = drand48();
-        qreal jitteredWidth;
-        qreal jitteredHeight;
+        qreal jitteredWidth = qMax(1.0,m_shapeProperties->width * particleScale);
+        qreal jitteredHeight = qMax(1.0,m_shapeProperties->height * particleScale);
 
-        if (m_shapeProperties->randomSize){
-            jitteredWidth = m_shapeProperties->width * random + 1;
-            jitteredHeight = m_shapeProperties->height * random + 1;
-        }else{
-            jitteredWidth = m_shapeProperties->width;
-            jitteredHeight = m_shapeProperties->height;
-        }
+        if (m_shapeProperties->enabled){
         switch (m_shapeProperties->shape){
             // ellipse
             case 0:
@@ -284,8 +285,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                     QMatrix m;
                     m.rotate(rad2deg(rotationZ));
 
-                    if (m_shapeProperties->randomSize){
-                        m.scale(random,random);
+                    if (m_shapeDynamicsProperties->randomSize){
+                        m.scale(particleScale,particleScale);
                     }
                     m_transformed = m_brushQImage.transformed(m, Qt::SmoothTransformation);
                     m_imageDevice->convertFromQImage(m_transformed, "");
@@ -316,7 +317,30 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                 }
             }
         }
+        // Auto-brush
+        }else{
+            QPointF hotSpot = m_brush->hotSpot(particleScale, particleScale, -rotationZ);
+            QPointF pos(nx + x, ny + y);
+            QPointF pt = pos - hotSpot;
 
+            qint32 ix;
+            double xFraction;
+            qint32 iy;
+            double yFraction;
+
+            KisPaintOp::splitCoordinate(pt.x(), &ix, &xFraction);
+            KisPaintOp::splitCoordinate(pt.y(), &iy, &yFraction);
+
+            //KisFixedPaintDeviceSP dab;
+            if (m_brush->brushType() == IMAGE || 
+                m_brush->brushType() == PIPE_IMAGE) 
+            {
+                m_fixedDab = m_brush->paintDevice(m_fixedDab->colorSpace(), particleScale, -rotationZ, info, xFraction, yFraction);
+            } else {
+                m_brush->mask(m_fixedDab, m_inkColor, particleScale, particleScale, -rotationZ, info, xFraction, yFraction);
+            }
+            m_painter->bltFixed(QPoint(ix, iy), m_fixedDab, m_fixedDab->bounds());
+        }
     }
     // hidden code for outline detection
     //m_inkColor.setOpacity(128);

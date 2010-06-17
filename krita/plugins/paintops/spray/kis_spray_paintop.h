@@ -24,9 +24,11 @@
 
 #include "spray_brush.h"
 #include "kis_spray_paintop_settings.h"
+#include "kis_brush_option.h"
 
 class QPointF;
 class KisPainter;
+
 
 class KisSprayPaintOp : public KisPaintOp
 {
@@ -45,7 +47,9 @@ public:
 private:
     KisShapeProperties m_shapeProperties;
     KisSprayProperties m_properties;
+    KisShapeDynamicsProperties m_shapeDynamicsProperties;
     KisColorProperties m_colorProperties;
+    KisBrushOption m_brushOption;
     
     const KisSprayPaintOpSettings *m_settings;
 

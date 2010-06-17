@@ -1,4 +1,6 @@
-/*
+
+class KisBrush;
+class KisBrushOption;/*
  *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -27,11 +29,14 @@
 
 #include "kis_color_option.h"
 #include "kis_spray_shape_option.h"
+#include "kis_spray_shape_dynamics.h"
 #include "kis_sprayop_option.h"
+
 
 #include "random_gauss.h"
 
 #include <QImage>
+#include <kis_brush.h>
 class QRect;
 
 class SprayBrush
@@ -42,10 +47,20 @@ public:
     ~SprayBrush();
 
     void paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, qreal rotation, qreal scale, const KoColor &color, const KoColor &bgColor);
-    void setProperties(KisSprayProperties * properties, KisColorProperties * colorProperties, KisShapeProperties * shapeProperties){
+    void setProperties(KisSprayProperties * properties, 
+                       KisColorProperties * colorProperties, 
+                       KisShapeProperties * shapeProperties, 
+                       KisShapeDynamicsProperties * shapeDynamicsProperties,
+                       KisBrushSP brush){
         m_properties = properties;
         m_colorProperties = colorProperties;
         m_shapeProperties = shapeProperties;
+        m_shapeDynamicsProperties = shapeDynamicsProperties;
+        m_brush = brush;
+    }
+   
+    void setFixedDab(KisFixedPaintDeviceSP dab){
+        m_fixedDab = dab;
     }
     
 private:
@@ -63,7 +78,11 @@ private:
     const KisSprayProperties * m_properties;
     const KisColorProperties * m_colorProperties;
     const KisShapeProperties * m_shapeProperties;
-
+    const KisShapeDynamicsProperties * m_shapeDynamicsProperties;
+    
+    const KisBrushSP m_brush;
+    KisFixedPaintDeviceSP m_fixedDab;
+    
 private:
     /// rotation in radians according the settings (gauss distribution, uniform distribution or fixed angle)
     qreal rotationAngle();

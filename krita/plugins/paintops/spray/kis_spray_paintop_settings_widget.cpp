@@ -29,17 +29,24 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_curve_option_widget.h>
+#include <kis_brush_option_widget.h>
+#include "kis_spray_shape_dynamics.h"
 
 KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
 {
     m_sprayOption =  new KisSprayOpOption();
     m_sprayShapeOption = new KisSprayShapeOption();
+    m_sprayShapeDynamicOption = new KisSprayShapeDynamicsOption();
     m_ColorOption = new KisColorOption();
+    m_brushOption = new KisBrushOptionWidget();
     
     addPaintOpOption(m_sprayOption);
+    addPaintOpOption(m_brushOption);
     addPaintOpOption(m_sprayShapeOption);
+    addPaintOpOption(m_sprayShapeDynamicOption);
     addPaintOpOption(m_ColorOption);
+
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));

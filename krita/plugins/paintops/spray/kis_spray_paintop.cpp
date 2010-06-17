@@ -32,6 +32,7 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 
+#include <kis_brush_option.h>
 #include <kis_sprayop_option.h>
 #include <kis_spray_shape_option.h>
 #include <kis_color_option.h>
@@ -51,11 +52,20 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
 
+    m_brushOption.readOptionSetting(settings);
+    
     m_colorProperties.fillProperties(settings);
     m_properties.loadSettings(settings);
     // first load tip properties as shape properties are dependent on diameter/scale/aspect
     m_shapeProperties.loadSettings(settings,m_properties.diameter * m_properties.scale, m_properties.diameter * m_properties.aspect * m_properties.scale );
-    m_sprayBrush.setProperties( &m_properties, &m_colorProperties, &m_shapeProperties);
+
+    // TODO: what to do with proportional sizes?
+    m_shapeDynamicsProperties.loadSettings(settings);
+    
+    m_sprayBrush.setProperties( &m_properties,&m_colorProperties, 
+                                &m_shapeProperties, &m_shapeDynamicsProperties,m_brushOption.brush());
+    
+    m_sprayBrush.setFixedDab( cachedDab() );
     
     // spacing
     if ((m_properties.diameter * 0.5) > 1) {

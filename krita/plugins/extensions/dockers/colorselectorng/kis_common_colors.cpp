@@ -232,9 +232,6 @@ QList<QColor> KisCommonColors::extractColors()
 
 QList<QRgb> KisCommonColors::getColors()
 {
-//    QPixmap pixmap("/home/damdam/Pictures/backgrounds/mare.jpg");
-//    QPixmap pixmap("/home/damdam/progn/kde/ImageColorsExtractor/testimgs/sanduhr.jpg");
-
     if(m_canvas == 0) return QList<QRgb>();
     KisImageWSP kisImage = m_canvas->image();
 
@@ -258,8 +255,7 @@ QList<QRgb> KisCommonColors::getColors()
 
     for (int i=0; i<width; i++) {
         for (int j=0; j<height; j++) {
-//            if(!colorList.contains(image.pixel(i, j)))
-                colorList.insert(image.pixel(i, j));
+                colorList.insert(image.pixel(i, j)|qRgba(0,0,0,255));
         }
     }
 

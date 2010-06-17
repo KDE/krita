@@ -30,6 +30,8 @@ public:
     explicit KisColorSelectorBase(QWidget *parent = 0);
     ~KisColorSelectorBase();
 
+    void setPopupBehaviour(bool onMouseOver, bool onMouseClick);
+
 protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
@@ -43,6 +45,8 @@ private:
     KisColorSelectorBase* m_popup;
     int m_hideDistance;
     QTimer* m_timer;
+    bool m_popupOnMouseOver;
+    bool m_popupOnMouseClick;
 
 };
 

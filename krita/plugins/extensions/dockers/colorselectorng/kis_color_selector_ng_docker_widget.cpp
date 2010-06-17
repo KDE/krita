@@ -84,10 +84,12 @@ void KisColorSelectorNgDockerWidget::openSettings()
 {
     KisColorSelectorSettings settings;
     if(settings.exec()==QDialog::Accepted) {
-        //shade selectors
+        //general
         m_colorSelectorContainer->setShadeSelectorType(settings.ui->shadeSelectorType->currentIndex());
         m_colorSelectorContainer->setShadeSelectorHideable(settings.ui->shadeSelectorHideable->isChecked());
         m_colorSelectorContainer->setAllowHorizontalLayout(settings.ui->allowHorizontalLayout->isChecked());
+
+        m_colorSelectorContainer->setPopupBehaviour(settings.ui->popupOnMouseOver->isChecked(), settings.ui->popupOnMouseClick->isChecked());
 
         //color patches
         m_lastColorsShow = settings.ui->lastUsedColorsShow->isChecked();

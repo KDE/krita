@@ -36,6 +36,7 @@ public:
     void setShadeSelectorType(int type);
     void setShadeSelectorHideable(bool hideable);
     void setAllowHorizontalLayout(bool allow);
+    void setPopupBehaviour(bool onMouseOver, bool onMouseClick);
 
 signals:
     void openSettings();

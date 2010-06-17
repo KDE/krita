@@ -106,6 +106,12 @@ void KisColorSelectorContainer::setAllowHorizontalLayout(bool allow)
     m_allowHorizontalLayout = allow;
 }
 
+void KisColorSelectorContainer::setPopupBehaviour(bool onMouseOver, bool onMouseClick)
+{
+    m_myPaintShadeSelector->setPopupBehaviour(onMouseOver, onMouseClick);
+    m_colorSelector->setPopupBehaviour(onMouseOver, onMouseClick);
+}
+
 void KisColorSelectorContainer::resizeEvent(QResizeEvent * e)
 {
     if(m_shadeSelector!=0) {

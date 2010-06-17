@@ -22,15 +22,22 @@
 #include <QDesktopWidget>
 #include <QTimer>
 
+#include <KDebug>
+
 KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     QWidget(parent),
     m_popup(0),
     m_hideDistance(40),
-    m_timer(new QTimer(this))
+    m_timer(new QTimer(this)),
+    m_popupOnMouseOver(false),
+    m_popupOnMouseClick(true)
 {
     m_timer->setInterval(350);
     m_timer->setSingleShot(true);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(hidePopup()));
+
+    if(parent==0 || m_popupOnMouseOver)
+        setMouseTracking(true);
 }
 
 KisColorSelectorBase::~KisColorSelectorBase()
@@ -39,15 +46,27 @@ KisColorSelectorBase::~KisColorSelectorBase()
         delete m_popup;
 }
 
+void KisColorSelectorBase::setPopupBehaviour(bool onMouseOver, bool onMouseClick)
+{
+    m_popupOnMouseClick = onMouseClick;
+    m_popupOnMouseOver = onMouseOver;
+    if(onMouseClick) {
+        m_popupOnMouseOver = false;
+    }
+    setMouseTracking(false);
+    if(m_popupOnMouseOver) {
+        setMouseTracking(true);
+    }
+}
+
 void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 {
-    if((event->buttons()&(Qt::RightButton|Qt::MidButton))>0 && parent()!=0) {
+    if(m_popupOnMouseClick && (event->buttons()&(Qt::RightButton|Qt::MidButton))>0 && parent()!=0) {
         //open popup
         if(m_popup==0) {
             m_popup = createPopup();
             Q_ASSERT(m_popup);
             m_popup->setWindowFlags(Qt::Popup);
-            m_popup->setMouseTracking(true);
         }
 
         int x = event->globalX();
@@ -91,8 +110,52 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
         e->accept();
         return;
     }
-    else {
+    else if (parent()==0){
         m_timer->stop();
+        e->accept();
+        return;
+    }
+    else if(parent()!=0 && m_popupOnMouseOver && this->rect().contains(e->pos()) && (m_popup==0 || m_popup->isHidden())) {
+        //open popup
+        if(m_popup==0) {
+            m_popup = createPopup();
+            Q_ASSERT(m_popup);
+            m_popup->setWindowFlags(Qt::Popup);
+        }
+
+        QRect availRect = QApplication::desktop()->availableGeometry(this);
+        QRect forbiddenRect = QRect(parentWidget()->mapToGlobal(QPoint(0,0)),
+                                    parentWidget()->mapToGlobal(QPoint(parentWidget()->width(), parentWidget()->height())));
+
+        kDebug()<<"availRect="<<availRect;
+        kDebug()<<"forbiddenRect="<<forbiddenRect;
+        kDebug()<<"popup="<<m_popup->geometry();
+
+        int x,y;
+        if(forbiddenRect.y()+forbiddenRect.height()/2 > availRect.height()/2) {
+            //popup above forbiddenRect
+            y = forbiddenRect.y()-m_popup->height();
+        }
+        else {
+            //popup below forbiddenRect
+            y = forbiddenRect.y()+forbiddenRect.height();
+        }
+
+        if(forbiddenRect.x()+forbiddenRect.width()/2 < availRect.width()/2) {
+            //left edge of popup justified with left edge of popup
+            x = forbiddenRect.x();
+            kDebug()<<"1 forbiddenRect.x="<<forbiddenRect.x();
+        }
+        else {
+            //the other way round
+            x = forbiddenRect.x()+forbiddenRect.width()-m_popup->width();
+            kDebug()<<"2 forbiddenRect.x="<<m_popup->width();
+        }
+
+        m_popup->move(x, y);
+        m_popup->show();
+        e->accept();
+        return;
     }
 
     QWidget::mouseMoveEvent(e);

@@ -18,10 +18,11 @@
 #include "kis_color_selector.h"
 
 #include <QHBoxLayout>
+#include <QColor>
 
 #include <KoTriangleColorSelector.h>
 
-KisColorSelector::KisColorSelector(QWidget* parent) : QWidget(parent)
+KisColorSelector::KisColorSelector(QWidget* parent) : KisColorSelectorBase(parent)
 {
     QWidget* triangleSelector = new KoTriangleColorSelector(this);
     QHBoxLayout* layout = new QHBoxLayout(this);
@@ -32,4 +33,16 @@ KisColorSelector::KisColorSelector(QWidget* parent) : QWidget(parent)
 
     setMinimumSize(80, 80);
     triangleSelector->setMinimumSize(80,80);
+}
+
+QColor KisColorSelector::pickColorAt(int x, int y)
+{
+    return QColor();
+}
+
+KisColorSelectorBase* KisColorSelector::createPopup()
+{
+    KisColorSelectorBase* popup = new KisColorSelector(0);
+    popup->resize(256,256);
+    return popup;
 }

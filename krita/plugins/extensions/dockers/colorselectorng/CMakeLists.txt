@@ -9,7 +9,8 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
         kis_common_colors.cpp
         kis_minimal_shade_selector.cpp
         kis_color_selector_settings.cpp
-        kis_color_selector_container.cpp)
+        kis_color_selector_container.cpp
+        kis_color_selector_base.cpp)
 
 kde4_add_ui_files(KRITA_COLORSELECTORNG_PART_SRCS
     wdg_color_selector_settings.ui

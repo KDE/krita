@@ -22,12 +22,12 @@
 #ifndef KIS_COLSELNG_MY_PAINT_SHADE_SELECTOR_H
 #define KIS_COLSELNG_MY_PAINT_SHADE_SELECTOR_H
 
-#include <QWidget>
+#include "kis_color_selector_base.h"
 
 class QImage;
 class QColor;
 
-class KisMyPaintShadeSelector : public QWidget
+class KisMyPaintShadeSelector : public KisColorSelectorBase
 {
 public:
     KisMyPaintShadeSelector(QWidget *parent = 0);
@@ -36,10 +36,10 @@ public:
     QImage getSelector();
 protected:
     void paintEvent(QPaintEvent *);
-    void mousePressEvent(QMouseEvent *);
-    void mouseDoubleClickEvent(QMouseEvent *);
-    void setColor(const QColor& c);
+    QColor pickColorAt(int x, int y);
+    KisColorSelectorBase* createPopup();
 private:
+    void setColor(const QColor& c);
     void precalculateData();
     static const int m_size = 256;
     float m_colorH, m_colorS, m_colorV;

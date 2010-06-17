@@ -19,15 +19,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_my_paint_shade_selector.h"
 #include <cmath>
 #include <cstdlib>
-#include "kis_my_paint_shade_selector.h"
 #include <QImage>
 #include <QColor>
 #include <QPainter>
 #include <QMouseEvent>
-
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QtGlobal>
+
+#include <KDebug>
 
 inline int sqr(int x);
 inline qreal sqr2(qreal x);
@@ -35,7 +38,7 @@ inline int signedSqr(int x);
 
 
 KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
-        QWidget(parent)
+        KisColorSelectorBase(parent)
 {
     precalculateData();
     setMinimumSize(80, 80);
@@ -50,28 +53,29 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
     painter.drawImage(0,0, getSelector().scaled(size, size));
 }
 
+QColor KisMyPaintShadeSelector::pickColorAt(int x, int y)
+{
+    qreal wdgSize = qMin(width(), height());
+    qreal ratio = 256.0/wdgSize;
+
+    QColor c = getColor(x*ratio, y*ratio);
+    setColor(c);
+    update();
+
+    return c;
+}
+
+KisColorSelectorBase* KisMyPaintShadeSelector::createPopup()
+{
+    KisColorSelectorBase* popup = new KisMyPaintShadeSelector(0);
+    popup->resize(256,256);
+    return popup;
+}
+
 void KisMyPaintShadeSelector::setColor(const QColor &c) {
     m_colorH=c.hsvHueF();
     m_colorS=c.hsvSaturationF();
     m_colorV=c.valueF();
-}
-
-void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* event)
-{
-    int x = event->x();
-    int y = event->y();
-
-    qreal wdgSize = qMin(width(), height());
-    qreal ratio = 256.0/wdgSize;
-
-    setColor(getColor(x*ratio, y*ratio));
-    update();
-}
-void KisMyPaintShadeSelector::mouseDoubleClickEvent(QMouseEvent * event) {
-    KisMyPaintShadeSelector* duud = new KisMyPaintShadeSelector();
-    duud->show();
-    duud->resize(256,256);
-    duud->move(mapToGlobal(QPoint(-256,-256)));
 }
 
 void KisMyPaintShadeSelector::precalculateData() {

@@ -18,12 +18,16 @@
 #ifndef KIS_COLSELNG_COLOR_SELECTOR_H
 #define KIS_COLSELNG_COLOR_SELECTOR_H
 
-#include <QWidget>
+#include "kis_color_selector_base.h"
 
-class KisColorSelector : public QWidget
+class QColor;
+
+class KisColorSelector : public KisColorSelectorBase
 {
 public:
     KisColorSelector(QWidget* parent = 0);
+    QColor pickColorAt(int x, int y);
+    KisColorSelectorBase* createPopup();
 };
 
 #endif // KIS_COLSELNG_COLOR_SELECTOR_H

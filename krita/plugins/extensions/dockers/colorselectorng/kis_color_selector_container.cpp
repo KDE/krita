@@ -1,3 +1,20 @@
+/*
+ *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ */
+
 #include "kis_color_selector_container.h"
 
 #include "kis_color_selector.h"
@@ -30,17 +47,23 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     pipetteButton->setMaximumWidth(24);
     settingsButton->setMaximumWidth(24);
 
-    QHBoxLayout* buttonLayout = new QHBoxLayout();
-    buttonLayout->addStretch(1);
-    buttonLayout->addWidget(pipetteButton);
-    buttonLayout->addWidget(settingsButton);
-    buttonLayout->setMargin(0);
-    buttonLayout->setSpacing(0);
-    m_buttonLayout = buttonLayout;
+    m_buttonLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    m_buttonLayout->addStretch(1);
+    m_buttonLayout->addWidget(pipetteButton);
+    m_buttonLayout->addWidget(settingsButton);
+    m_buttonLayout->setMargin(0);
+    m_buttonLayout->setSpacing(0);
 
     connect(settingsButton, SIGNAL(clicked()), this, SIGNAL(openSettings()));
 
-    setNewLayout(Vertical);
+    m_widgetLayout = new QBoxLayout(QBoxLayout::TopToBottom, this);
+    m_widgetLayout->setSpacing(0);
+    m_widgetLayout->setMargin(0);
+
+    m_widgetLayout->addLayout(m_buttonLayout);
+    m_widgetLayout->addWidget(m_colorSelector);
+    m_widgetLayout->addWidget(m_myPaintShadeSelector);
+    m_widgetLayout->addWidget(m_minimalShadeSelector);
 
     m_myPaintShadeSelector->hide();
     m_minimalShadeSelector->hide();
@@ -88,47 +111,21 @@ void KisColorSelectorContainer::resizeEvent(QResizeEvent * e)
     if(m_shadeSelector!=0) {
         int minimumHeightForBothWidgets = m_colorSelector->minimumHeight()+m_shadeSelector->minimumHeight()+30; //+30 for the buttons (temporarily)
 
-        if(height()<minimumHeightForBothWidgets) {
-            if(m_shadeSelectorHideable) {
-                m_shadeSelector->hide();
-            }
-            else {
-                m_shadeSelector->show();
-            }
-
-            if(m_allowHorizontalLayout) {
-                setNewLayout(Horizontal);
-            }
-
+        if(height()<minimumHeightForBothWidgets && m_shadeSelectorHideable) {
+            m_shadeSelector->hide();
         }
         else {
-            setNewLayout(Vertical);
+            m_shadeSelector->show();
+        }
+        if(height()<minimumHeightForBothWidgets && m_allowHorizontalLayout) {
+            m_widgetLayout->setDirection(QBoxLayout::LeftToRight);
+            m_buttonLayout->setDirection(QBoxLayout::BottomToTop);
+        }
+        else {
+            m_widgetLayout->setDirection(QBoxLayout::TopToBottom);
+            m_buttonLayout->setDirection(QBoxLayout::LeftToRight);
         }
     }
 
     QWidget::resizeEvent(e);
-}
-
-void KisColorSelectorContainer::setNewLayout(Direction direction)
-{
-    if(layout()) {
-        layout()->removeItem(m_buttonLayout);
-        m_buttonLayout->setParent(0);
-        delete layout();
-    }
-
-    QBoxLayout* l;
-    if(direction==Horizontal)
-        l = new QHBoxLayout(this);
-    else
-        l = new QVBoxLayout(this);
-
-    l->setSpacing(0);
-    l->setMargin(0);
-
-    m_buttonLayout->setParent(0);
-    l->addLayout(m_buttonLayout);
-    l->addWidget(m_colorSelector);
-    l->addWidget(m_myPaintShadeSelector);
-    l->addWidget(m_minimalShadeSelector);
 }

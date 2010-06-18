@@ -132,7 +132,6 @@ private:
     KisPaintOpPresetSP m_activePreset;
     const KoCompositeOp* m_compositeOp;
     KisNodeSP m_previousNode;
-    bool m_eraseMode;
 
     typedef QHash<KoInputDevice, KoID> InputDevicePaintopMap;
     InputDevicePaintopMap m_currentID;
@@ -143,6 +142,7 @@ private:
     
     QHash<KoInputDevice, bool> m_inputDeviceEraseModes;
     QHash<KoInputDevice, QString> m_inputDeviceCompositeModes;
+    bool m_eraserUsed;
 };
 
 

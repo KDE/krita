@@ -76,7 +76,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
         , m_activePreset(0)
         , m_compositeOp(0)
         , m_previousNode(0)
-        , m_eraseMode(false)
+        , m_eraserUsed(false)
 {
     Q_ASSERT(view != 0);
     
@@ -282,6 +282,11 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
 
     m_cmbPaintops->setCurrentIndex(index);
     setCurrentPaintop(paintop);
+    
+    if(inputDevice.device() == QTabletEvent::Stylus && inputDevice.pointer() == QTabletEvent::Eraser && !m_eraserUsed) {
+        m_inputDeviceEraseModes[inputDevice] = true;
+        m_eraserUsed = true;
+    }
 
     m_eraseModeButton->setChecked(m_inputDeviceEraseModes[KoToolManager::instance()->currentInputDevice()]);
     setCompositeOpInternal(m_inputDeviceCompositeModes[KoToolManager::instance()->currentInputDevice()]);

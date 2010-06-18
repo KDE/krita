@@ -295,8 +295,8 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 #endif
 
     m_oldOutlineRect = currentPaintOpPreset()->settings()->paintOutlineRect(outlinePos(), currentImage(), outlineMode);
-    m_oldOutlineRect.adjust(-2, -2, 2, 2);
     if (!m_oldOutlineRect.isEmpty()) {
+        m_oldOutlineRect.adjust(-2, -2, 2, 2);
         canvas()->updateCanvas(m_oldOutlineRect); // erase the old guy
     }
 

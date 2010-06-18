@@ -1,5 +1,6 @@
 /*
- *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,51 +21,40 @@
 #define KIS_HATCHING_PAINTOP_SETTINGS_H_
 
 #include <kis_paintop_settings.h>
-#include <kis_types.h>
 
 #include "kis_hatching_paintop_settings_widget.h"
-
-#include <kis_pressure_opacity_option.h>
-
-#include <opengl/kis_opengl.h>
-
-#if defined(_WIN32) || defined(_WIN64)
-# include <windows.h>
-#endif
-
-class QWidget;
-class QString;
-
-class QDomElement;
-class QDomDocument;
 
 
 class KisHatchingPaintOpSettings : public KisPaintOpSettings
 {
-
+    
 public:
     KisHatchingPaintOpSettings();
-    virtual ~KisHatchingPaintOpSettings() {}
-
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, OutlineMode _mode) const;
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
+    virtual ~KisHatchingPaintOpSettings();
     
-    bool paintIncremental();
-
-    // boiler-plate code
-    int radius() const;
-    bool inkDepletion() const;
-    bool opacity() const;
-    bool saturation() const;
-    int proeba() const;
+    //Hatching Options
+    double angle;
+    double separation;
+    double thickness;
+    double origin_x;
+    double origin_y;
+    bool nocrosshatching;
+    bool perpendicular;
+    bool minusthenplus;
+    bool plusthenminus;
+    bool moirepattern;
+    int crosshatchingstyle;
     
-    KisPressureOpacityOption * opacityOption() const;
+    //Hatching Preferences
+    bool trigonometryalgebra;
+    bool scratchoff;
+    bool antialias;
+    bool subpixelprecision;
+    bool opaquebackground;
     
     
-#if defined(HAVE_OPENGL)
-    QString modelName() const;
-#endif
-
+    void initializeTwin(KisHatchingPaintOpSettings* convenienttwin) const;
+        
 };
 
 #endif

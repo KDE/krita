@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,24 +30,7 @@
 #include <kis_paint_device.h>
 #include <kis_paint_information.h>
 
-#include "kis_hatchingop_option.h"
-class HatchingAttributes{
-    public:
-        double angle;
-        int width;
-        int height;
-        double separation;
-        double thickness;
-    public:
-        void loadSettings(const KisHatchingPaintOpSettings* settings){
-            angle = settings->getDouble(HATCHING_ANGLE);
-            width = settings->getInt( HATCHING_WIDTH);
-            height = settings->getInt( HATCHING_HEIGHT);
-            separation = settings->getDouble( HATCHING_SEPARATION);
-            thickness = settings->getDouble( HATCHING_THICKNESS);
-        }
-};
-
+#include "kis_hatching_options.h"
 
 class HatchingBrush
 {
@@ -64,8 +48,7 @@ private:
     int m_counter;
     int m_radius;
     const KisHatchingPaintOpSettings * m_settings;
-    KisPainter m_painter;  //added by JLVT
-    HatchingAttributes m_attributes;
+    KisPainter m_painter;
 };
 
 #endif

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,10 +19,13 @@
 
 #include "kis_hatching_paintop_settings_widget.h"
 
-#include "kis_hatchingop_option.h"
+#include "kis_hatching_options.h"
+#include "kis_hatching_preferences.h"
 #include "kis_hatching_paintop_settings.h"
 
-#include "kis_newhatchingoptions.h"
+#include "kis_hatching_pressure_crosshatching_option.h"
+#include "kis_hatching_pressure_separation_option.h"
+#include "kis_hatching_pressure_thickness_option.h"
 
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_opacity_option.h>
@@ -30,17 +34,15 @@
 #include <kis_paint_action_type_option.h>
 
 KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* parent)
-        : KisPaintOpOptionsWidget(parent)
+        : KisBrushBasedPaintopOptionWidget(parent)
 {
-    m_hatchingOption = new KisHatchingOpOption();
-
-    addPaintOpOption(new KisHatchingOpOption());
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    addPaintOpOption(new KisHatchingOptions());
+    addPaintOpOption(new KisHatchingPreferences());
+    //addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisPaintActionTypeOption());
-    
-    //propio
-    m_hatchingNewOption = new KisNewHatchingOptions();
-    addPaintOpOption(m_hatchingNewOption);
+    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureSeparationOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureThicknessOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureCrosshatchingOption()));
 }
 
 KisHatchingPaintOpSettingsWidget::~ KisHatchingPaintOpSettingsWidget()
@@ -54,17 +56,4 @@ KisPropertiesConfiguration*  KisHatchingPaintOpSettingsWidget::configuration() c
     config->setProperty("paintop", "hatchingbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;
-}
-
-void KisHatchingPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
-{
-    // if the movement is more left<->right then up<->down
-    if (qAbs(x) > qAbs(y)){
-        // TODO: change width and height of the dab?
-    }
-    else // vice-versa
-    {
-        // we can do something different
-    }
-
 }

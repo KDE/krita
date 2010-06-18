@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +17,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_HATCHINGPAINTOP_SETTINGS_WIDGET_H_
-#define KIS_HATCHINGPAINTOP_SETTINGS_WIDGET_H_
+#ifndef KIS_HATCHING_PAINTOP_SETTINGS_WIDGET_H_
+#define KIS_HATCHING_PAINTOP_SETTINGS_WIDGET_H_
 
 #include <kis_paintop_options_widget.h>
+#include <kis_brush_based_paintop_options_widget.h>
 
 #include "ui_wdghatchingoptions.h"
-#include "ui_newhatchingoptions.h"
+#include "ui_wdghatchingpreferences.h"
 
 class KisPaintActionTypeOption;
-class KisHatchingOpOption;
-class KisNewHatchingOptions;
+class KisHatchingOptions;
+class KisHatchingPreferences;
 class KisPressureOpacityOption;
+class KisHatchingPressureCrosshatchingOption;
+class KisHatchingPressureSeparationOption;
+class KisHatchingPressureThicknessOption;
 
-class KisHatchingPaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisHatchingPaintOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {
     Q_OBJECT
 
@@ -38,13 +43,6 @@ public:
     virtual ~KisHatchingPaintOpSettingsWidget();
 
     KisPropertiesConfiguration* configuration() const;
-    
-    ///Reimplemented
-    void changePaintOpSize(qreal x, qreal y);
-
-public:
-    KisHatchingOpOption* m_hatchingOption;
-    KisNewHatchingOptions* m_hatchingNewOption;
 };
 
 #endif

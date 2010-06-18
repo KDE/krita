@@ -1,5 +1,6 @@
 /*
- *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,60 +25,43 @@ KisHatchingPaintOpSettings::KisHatchingPaintOpSettings()
 {
 }
 
-bool KisHatchingPaintOpSettings::paintIncremental()
+KisHatchingPaintOpSettings::~KisHatchingPaintOpSettings()
 {
-    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-void KisHatchingPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
+void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* convenienttwin) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return;
-    qreal size = radius() * 2 * + 1;
-    painter.setPen(Qt::black);
-    painter.drawEllipse(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos));
-}
-
-
-QRectF KisHatchingPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
-{
-    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
-    qreal size = radius() * 2;
-    size += 10;
-    return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
-}
-
-int KisHatchingPaintOpSettings::proeba() const
-{
-    return 5;
-}
-
-int KisHatchingPaintOpSettings::radius() const
-{
-    return getInt("Hatching/radius");
-}
-
-bool KisHatchingPaintOpSettings::inkDepletion() const
-{
-    return getBool("Hatching/inkDepletion");
-}
-
-
-bool KisHatchingPaintOpSettings::opacity() const
-{
-    return getBool("Hatching/opacity");
+    convenienttwin->angle = getDouble("Hatching/angle");
+    convenienttwin->separation = getDouble("Hatching/separation");
+    convenienttwin->thickness = getDouble("Hatching/thickness");
+    convenienttwin->origin_x = getDouble("Hatching/origin_x");
+    convenienttwin->origin_y = getDouble("Hatching/origin_y");
+    
+    convenienttwin->nocrosshatching = getBool("Hatching/bool_nocrosshatching");
+    convenienttwin->perpendicular = getBool("Hatching/bool_perpendicular");
+    convenienttwin->minusthenplus = getBool("Hatching/bool_minusthenplus");
+    convenienttwin->plusthenminus = getBool("Hatching/bool_plusthenminus");
+    convenienttwin->moirepattern = getBool("Hatching/bool_moirepattern");
+    
+    convenienttwin->trigonometryalgebra = getBool("Hatching/bool_trigonometryalgebra");
+    convenienttwin->scratchoff = getBool("Hatching/bool_scratchoff");
+    convenienttwin->antialias = getBool("Hatching/bool_antialias");
+    convenienttwin->opaquebackground = getBool("Hatching/bool_opaquebackground");
+    convenienttwin->subpixelprecision = getBool("Hatching/bool_subpixelprecision");
+                         
+    if (getBool("Hatching/bool_nocrosshatching"))
+        convenienttwin->crosshatchingstyle = 1;
+    else if (getBool("Hatching/bool_perpendicular"))
+        convenienttwin->crosshatchingstyle = 2;
+    else if (getBool("Hatching/bool_minusthenplus"))
+        convenienttwin->crosshatchingstyle = 3;
+    else if (getBool("Hatching/bool_plusthenminus"))
+        convenienttwin->crosshatchingstyle = 4;
+    if (getBool("Hatching/bool_moirepattern"))
+        convenienttwin->crosshatchingstyle = 5;
+    
 }
 
 
-bool KisHatchingPaintOpSettings::saturation() const
-{
-    return getBool("Hatching/saturation");
-}
 
-
-#if defined(HAVE_OPENGL)
-QString KisHatchingPaintOpSettings::modelName() const
-{
-    return "3d-pencil";
-}
-#endif
 

@@ -43,12 +43,12 @@ public:
     }
 
 private:
-    const KisHatchingPaintOpSettings* m_settings;
+    KisHatchingPaintOpSettings* m_settings;
     KisImageWSP m_image;
     KisPaintDeviceSP m_dab;
     HatchingBrush * m_hatchingBrush;
-    KisPressureOpacityOption m_opacityOption;
-    HatchingAttributes m_attributes;
+    //KisPressureOpacityOption m_opacityOption;
+    //HatchingAttributes m_attributes;
 };
 
 #endif // KIS_HATCHING_PAINTOP_H_

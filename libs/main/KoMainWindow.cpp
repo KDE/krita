@@ -476,7 +476,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
     d->closeFile->setEnabled(enable);
     updateCaption();
 
-    d->manager->setActivePart(d->rootDoc, currentView());
+    d->manager->setActivePart(d->rootDoc, doc ? d->rootViews.first() : 0);
     emit restoringDone();
 
     while(!oldRootViews.isEmpty()) {

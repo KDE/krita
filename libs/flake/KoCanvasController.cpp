@@ -36,6 +36,7 @@
 #include <ksharedconfig.h>
 #include <KDebug>
 #include <kconfiggroup.h>
+#include <QtGui/QApplication>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QScrollBar>
@@ -79,7 +80,11 @@ void KoCanvasController::Private::setDocumentOffset()
     if (canvasWidget) {
         if (!q->isCanvasOpenGL()) {
             QPoint diff = documentOffset - pt;
-            canvasWidget->scroll(diff.x(), diff.y());
+            if (canvasMode == Spreadsheet && canvasWidget->layoutDirection() == Qt::RightToLeft) {
+                canvasWidget->scroll(-diff.x(), diff.y());
+            } else {
+                canvasWidget->scroll(diff.x(), diff.y());
+            }
         }
     }
 
@@ -299,6 +304,7 @@ void KoCanvasController::setCanvasMode(CanvasMode mode)
         break;
     case Infinite:
     case Presentation:
+    case Spreadsheet:
         d->preferredCenterFractionX = 0;
         d->preferredCenterFractionY = 0;
         break;

@@ -76,6 +76,7 @@ bool KoApplication::initHack()
     options.add("export-pdf", ki18n("Only export to PDF and exit"));
     options.add("export-filename <filename>", ki18n("Filename for export-pdf"));
     options.add("benchmark-loading", ki18n("just load the file and then exit"));
+    options.add("benchmark-loading-show-window", ki18n("load the file, show the window and progressbar and then exit"));
     KCmdLineArgs::addCmdLineOptions(options, ki18n("KOffice"), "koffice", "kde");
     return true;
 }
@@ -156,7 +157,8 @@ bool KoApplication::start()
         const bool exportAsPdf = koargs->isSet("export-pdf");
         QString pdfFileName = koargs->getOption("export-filename");
         const bool doTemplate = koargs->isSet("template");
-        const bool benchmarkLoading = koargs->isSet("benchmark-loading");
+        const bool benchmarkLoading = koargs->isSet("benchmark-loading") || koargs->isSet("benchmark-loading-show-window");
+        const bool showShell = koargs->isSet("benchmark-loading-show-window");;
         koargs->clear();
 
         // Loop through arguments
@@ -170,8 +172,10 @@ bool KoApplication::start()
             if (doc) {
                 // show a shell asap
                 KoMainWindow *shell = new KoMainWindow(doc->componentData());
-                if (!benchmarkLoading)
+                if (showShell || !benchmarkLoading) {
                     shell->show();
+                }
+
                 // are we just trying to open a template?
                 if (doTemplate) {
                     QStringList paths;

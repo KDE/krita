@@ -37,6 +37,7 @@ class KoStore;
 class KOODF_EXPORT KoOdfLoadingContext
 {
 public:
+    enum GeneratorType { KOffice, OpenOffice, MicrosoftOffice };
     /**
      * Stores reference to the KoOdfStylesReader and stored passed by
      * KoDocument. Make sure that the KoOdfStylesReader instance outlives
@@ -70,6 +71,8 @@ public:
 
     /// Return the <meta:generator> of the document, e.g. "KOffice/1.4.0a"
     QString generator() const;
+    /// Return the GeneratorType of the document, e.g. KOffice
+    GeneratorType generatorType() const;
 
     /**
      * Convenience method for loading the style of an object
@@ -109,6 +112,8 @@ public:
 private:
     class Private;
     Private * const d;
+    /// Parse and set generator and generatorType attributes from <meta:generator> attribute of meta.xml file
+    void parseGenerator() const;
 };
 
 #endif /* KOOASISLOADINGCONTEXT_H */

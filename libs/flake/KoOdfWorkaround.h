@@ -28,7 +28,6 @@ class KoShapeLoadingContext;
 class QPen;
 class QColor;
 class QString;
-class KoShapeBackground;
 class KoColorBackground;
 
 /**

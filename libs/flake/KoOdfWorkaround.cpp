@@ -37,10 +37,9 @@
 
 static bool s_workaroundPresentationPlaceholderBug = false;
 
-// TODO only parse the generator string once so we don't have a string compare for every loaded shape
 void KoOdfWorkaround::fixPenWidth(QPen & pen, KoShapeLoadingContext &context)
 {
-    if (context.odfLoadingContext().generator().startsWith("OpenOffice.org") && pen.widthF() == 0.0) {
+    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice && pen.widthF() == 0.0) {
         pen.setWidthF(0.5);
         kDebug(30003) << "Work around OO bug with pen width 0";
     }
@@ -48,7 +47,7 @@ void KoOdfWorkaround::fixPenWidth(QPen & pen, KoShapeLoadingContext &context)
 
 void KoOdfWorkaround::fixEnhancedPath(QString & path, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    if (context.odfLoadingContext().generator().startsWith("OpenOffice.org") ) {
+    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
         if (path.isEmpty() && element.attributeNS(KoXmlNS::draw, "type", "") == "ellipse" ) {
             path = "U 10800 10800 10800 10800 0 360 Z N";
         }
@@ -57,7 +56,7 @@ void KoOdfWorkaround::fixEnhancedPath(QString & path, const KoXmlElement &elemen
 
 void KoOdfWorkaround::fixEnhancedPathPolarHandlePosition(QString &position, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    if (context.odfLoadingContext().generator().startsWith("OpenOffice.org") ) {
+    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
         if (element.hasAttributeNS(KoXmlNS::draw, "handle-polar")) {
             QStringList tokens = position.simplified().split(' ');
             if (tokens.count() == 2) {
@@ -82,7 +81,7 @@ QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShape
             styleStack.setTypeProperties("graphic");
         }
 
-        if (context.odfLoadingContext().generator().startsWith("OpenOffice.org")) {
+        if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
             if (hasStyle && !styleStack.hasProperty(KoXmlNS::draw, "fill") &&
                              styleStack.hasProperty(KoXmlNS::draw, "fill-color")) {
                 color = QColor(styleStack.property(KoXmlNS::draw, "fill-color"));
@@ -135,7 +134,7 @@ bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, K
             styleStack.setTypeProperties("graphic");
         }
 
-        if (context.odfLoadingContext().generator().startsWith("OpenOffice.org")) {
+        if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
             if (hasStyle && styleStack.hasProperty(KoXmlNS::draw, "stroke") &&
                             !styleStack.hasProperty(KoXmlNS::draw, "stroke-color")) {
                 fixed = true;
@@ -171,7 +170,7 @@ bool KoOdfWorkaround::fixMissingStyle_DisplayLabel(const KoXmlElement &element, 
 {
     Q_UNUSED(element);
     // If no axis style is specified, OpenOffice.org hides the axis' data labels
-    if (context.odfLoadingContext().generator().startsWith("OpenOffice.org"))
+    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice)
         return false;
 
     // In all other cases, they're visible
@@ -180,7 +179,7 @@ bool KoOdfWorkaround::fixMissingStyle_DisplayLabel(const KoXmlElement &element, 
 
 void KoOdfWorkaround::setFixPresentationPlaceholder(bool fix, KoShapeLoadingContext &context)
 {
-    if (context.odfLoadingContext().generator().startsWith("OpenOffice.org")) {
+    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
         s_workaroundPresentationPlaceholderBug = fix;
     }
 }
@@ -200,13 +199,12 @@ void KoOdfWorkaround::fixPresentationPlaceholder(KoShape *shape)
 KoColorBackground *KoOdfWorkaround::fixBackgroundColor(const KoShape *shape, KoShapeLoadingContext &context)
 {
     KoColorBackground *colorBackground = 0;
-    const KoPathShape *pathShape = dynamic_cast<const KoPathShape*>(shape);
-    //check shape type
-    if (pathShape) {
-        KoOdfLoadingContext &odfContext = context.odfLoadingContext();
-        KoStyleStack &styleStack = odfContext.styleStack();
-        //check if it's created by OO only if necessery
-        if (odfContext.generator().startsWith("OpenOffice.org")) {
+    KoOdfLoadingContext &odfContext = context.odfLoadingContext();
+    if (odfContext.generatorType() == KoOdfLoadingContext::OpenOffice) {
+        const KoPathShape *pathShape = dynamic_cast<const KoPathShape*>(shape);
+        //check shape type
+        if (pathShape) {
+            KoStyleStack &styleStack = odfContext.styleStack();
             const QString color(styleStack.property(KoXmlNS::draw, "fill-color"));
             if (color.isEmpty()) {
                 colorBackground = new KoColorBackground(Qt::cyan);

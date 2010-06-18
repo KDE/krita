@@ -43,6 +43,7 @@ public:
     KoStyleStack styleStack;
 
     mutable QString generator;
+    GeneratorType generatorType;
     mutable bool metaXmlParsed;
     bool useStylesAutoStyles;
 
@@ -136,37 +137,58 @@ void KoOdfLoadingContext::addStyles(const KoXmlElement* style, const char* famil
     d->styleStack.push(*style);
 }
 
+void KoOdfLoadingContext::parseGenerator() const
+{
+    // Regardless of whether we cd into the parent directory
+    // or not to find a meta.xml, restore the directory that
+    // we were in afterwards.
+    d->store->pushDirectory();
+
+    // Some embedded documents to not contain their own meta.xml
+    // Use the parent directory's instead.
+    if (!d->store->hasFile("meta.xml"))
+        // Only has an effect if there is a parent directory
+        d->store->leaveDirectory();
+
+    if (d->store->hasFile("meta.xml")) {
+        KoXmlDocument metaDoc;
+        KoOdfReadStore oasisStore(d->store);
+        QString errorMsg;
+        if (oasisStore.loadAndParse("meta.xml", metaDoc, errorMsg)) {
+            KoXmlNode meta   = KoXml::namedItemNS(metaDoc, KoXmlNS::office, "document-meta");
+            KoXmlNode office = KoXml::namedItemNS(meta, KoXmlNS::office, "meta");
+            KoXmlElement generator = KoXml::namedItemNS(office, KoXmlNS::meta, "generator");
+            if (!generator.isNull()) {
+                d->generator = generator.text();
+                if (d->generator.startsWith("KOffice")) {
+                    d->generatorType = KOffice;
+                } else if (d->generator.startsWith("OpenOffice.org")) {
+                    d->generatorType = OpenOffice;
+                } else if (d->generator.startsWith("MicrosoftOffice")) {
+                    d->generatorType = MicrosoftOffice;
+                }
+            }
+        }
+    }
+    d->metaXmlParsed = true;
+
+    d->store->popDirectory();
+}
+
 QString KoOdfLoadingContext::generator() const
 {
     if (!d->metaXmlParsed && d->store) {
-        // Regardless of whether we cd into the parent directory
-        // or not to find a meta.xml, restore the directory that
-        // we were in afterwards.
-        d->store->pushDirectory();
-
-        // Some embedded documents to not contain their own meta.xml
-        // Use the parent directory's instead.
-        if (!d->store->hasFile("meta.xml"))
-            // Only has an effect if there is a parent directory
-            d->store->leaveDirectory();
-
-        if (d->store->hasFile("meta.xml")) {
-            KoXmlDocument metaDoc;
-            KoOdfReadStore oasisStore(d->store);
-            QString errorMsg;
-            if (oasisStore.loadAndParse("meta.xml", metaDoc, errorMsg)) {
-                KoXmlNode meta   = KoXml::namedItemNS(metaDoc, KoXmlNS::office, "document-meta");
-                KoXmlNode office = KoXml::namedItemNS(meta, KoXmlNS::office, "meta");
-                KoXmlElement generator = KoXml::namedItemNS(office, KoXmlNS::meta, "generator");
-                if (!generator.isNull())
-                    d->generator = generator.text();
-            }
-        }
-        d->metaXmlParsed = true;
-
-        d->store->popDirectory();
+        parseGenerator();
     }
     return d->generator;
+}
+
+KoOdfLoadingContext::GeneratorType KoOdfLoadingContext::generatorType() const
+{
+    if (!d->metaXmlParsed && d->store) {
+        parseGenerator();
+    }
+    return d->generatorType;
 }
 
 KoStore *KoOdfLoadingContext::store() const

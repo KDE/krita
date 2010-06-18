@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Hatching brush
+Name[pt]=Pincel intercruzado
+Name[pt_BR]=Pincel fino
+Name[uk]=Штриховий пензель
+Name[x-test]=xxHatching brushxx
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritahatchingpaintop
+X-Krita-Version=3

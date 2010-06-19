@@ -96,13 +96,6 @@ public:
                                     const KisPaintInformation &pi2,
                                     const KisDistanceInformation& savedDist = KisDistanceInformation());
 
-    /**
-     * Whether this paintop wants to deposit paint even when not moving, i.e. the
-     * tool needs to activate its timer.
-     */
-    virtual bool incremental() const {
-        return false;
-    }
     
      /**
      * Whether this paintop can paint. Can be false in case that some setting isn't read correctly.

@@ -99,6 +99,21 @@ public:
     }
 
     /**
+     * Whether this paintop wants to deposit paint even when not moving, i.e. the
+     * tool needs to activate its timer.
+     */
+    virtual bool isAirbrushing() const {
+        return false;
+    }
+
+    /**
+    * If this paintop deposit the paint even when not moving, the tool needs to know the rate of it in miliseconds
+    */
+    virtual int rate() const{
+        return 100; 
+    }
+
+    /**
      * @return a sample stroke that fits in @param size.
      */
     QImage sampleStroke(const QSize& size);

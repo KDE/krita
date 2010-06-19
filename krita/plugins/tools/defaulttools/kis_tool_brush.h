@@ -54,12 +54,11 @@ protected:
 private slots:
 
     void timeoutPaint();
-    void slotSetRate(int rate);
     void slotSetSmoothness(int smoothness);
     void slotSetMagnetism(int magnetism);
 
 private:
-
+    bool m_isAirbrushing;
     qint32 m_rate;
     QTimer *m_timer;
     QGridLayout *m_optionLayout;
@@ -67,7 +66,6 @@ private:
     QCheckBox *m_chkAssistant;
     KisSliderSpinBox *m_sliderMagnetism;
     KisSliderSpinBox *m_sliderSmoothness;
-    KisSliderSpinBox  *m_sliderRate;
 };
 
 

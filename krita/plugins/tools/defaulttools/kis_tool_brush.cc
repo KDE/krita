@@ -58,7 +58,8 @@ KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
 {
     setObjectName("tool_brush");
 
-    m_rate = 100; // Conveniently hardcoded for now
+    m_isAirbrushing = false;
+    m_rate = 100;
     m_timer = new QTimer(this);
     Q_CHECK_PTR(m_timer);
 
@@ -73,7 +74,7 @@ KisToolBrush::~KisToolBrush()
 
 void KisToolBrush::timeoutPaint()
 {
-    Q_ASSERT(m_painter->paintOp()->incremental());
+    Q_ASSERT(currentPaintOpPreset()->settings()->isAirbrushing());
     if (currentImage() && m_painter) {
         paintAt(m_previousPaintInformation);
         QRegion r = m_painter->dirtyRegion();
@@ -87,13 +88,16 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
 {
     KisToolFreehand::initPaint(e);
 
+    m_rate = currentPaintOpPreset()->settings()->rate();
+    m_isAirbrushing = currentPaintOpPreset()->settings()->isAirbrushing();
+    
     if (!m_painter) {
         warnKrita << "Didn't create a painter! Something is wrong!";
         return;
     }
 
     m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
-    if (m_painter->paintOp()->incremental()) {
+    if (m_isAirbrushing) {
         m_timer->start(m_rate);
     }
 }
@@ -109,17 +113,11 @@ void KisToolBrush::endPaint()
 void KisToolBrush::mouseMoveEvent(KoPointerEvent *e)
 {
     KisToolFreehand::mouseMoveEvent(e);
-    if (m_painter && m_painter->paintOp() && m_painter->paintOp()->incremental()) {
+    if (m_painter && m_painter->paintOp() && m_isAirbrushing) {
         m_timer->start(m_rate);
     }
 }
 
-
-void KisToolBrush::slotSetRate(int rate)
-{
-    m_rate = rate;
-    m_sliderRate->setToolTip(QString::number(m_rate) + ' ' + i18n("ms"));
-}
 
 void KisToolBrush::slotSetSmoothness(int smoothness)
 {
@@ -136,16 +134,6 @@ QWidget * KisToolBrush::createOptionWidget()
 
     QWidget * optionWidget = KisToolFreehand::createOptionWidget();
     optionWidget->setObjectName(toolId() + "option widget");
-
-    QLabel* labelRate = new QLabel(i18n("Rate:"), optionWidget);
-    m_sliderRate = new KisSliderSpinBox (optionWidget);
-    m_sliderRate->setRange(0, MAXIMUM_RATE);
-    m_sliderRate->setExponentRatio(3.0);
-    connect(m_sliderRate, SIGNAL(valueChanged(int)), SLOT(slotSetRate(int)));
-    m_sliderRate->setValue(m_rate);
-    m_sliderRate->setToolTip(QString::number(m_rate) + ' ' + i18n("ms"));
-
-    addOptionWidgetOption(m_sliderRate, labelRate);
 
     m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smoothness:"), optionWidget);
     m_chkSmooth->setObjectName("chkSmooth");

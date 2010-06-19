@@ -63,6 +63,8 @@ KisToolDyna::KisToolDyna(KoCanvasBase * canvas)
     Q_CHECK_PTR(m_timer);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
 
+    
+    
     initDyna();
 }
 
@@ -90,7 +92,7 @@ KisToolDyna::~KisToolDyna()
 
 void KisToolDyna::timeoutPaint()
 {
-    Q_ASSERT(m_painter->paintOp()->incremental());
+    Q_ASSERT(currentPaintOpPreset()->settings()->isAirbrushing());
 
     if (currentImage() && m_painter) {
         paintAt(m_previousPaintInformation);
@@ -107,6 +109,7 @@ void KisToolDyna::initPaint(KoPointerEvent *e)
     //initDyna();
     first = false;
     initMouse(convertToPixelCoord(e->point));
+    m_rate = currentPaintOpPreset()->settings()->rate();
 
     KisToolFreehand::initPaint(e);
 
@@ -116,7 +119,7 @@ void KisToolDyna::initPaint(KoPointerEvent *e)
     }
 
     m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
-    if (m_painter->paintOp()->incremental()) {
+    if (currentPaintOpPreset()->settings()->isAirbrushing()) {
         m_timer->start(m_rate);
     }
 }
@@ -155,7 +158,7 @@ void KisToolDyna::mouseMoveEvent(KoPointerEvent *e)
     }
 
     //KisToolFreehand::mouseMoveEvent(e);
-    if (m_painter && m_painter->paintOp() && m_painter->paintOp()->incremental()) {
+    if (m_painter && m_painter->paintOp() && currentPaintOpPreset()->settings()->isAirbrushing()) {
         m_timer->start(m_rate);
     }
 }

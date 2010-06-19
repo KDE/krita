@@ -18,6 +18,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_dynamic_sensor.cc
     kis_filter_option.cpp
     kis_paint_action_type_option.cpp
+    kis_airbrush_option.cpp
     kis_paintop_option.cpp
     kis_paintop_options_model.cpp
     kis_paintop_options_widget.cpp
@@ -45,6 +46,7 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     wdgcustombrush.ui
     wdgtextbrush.ui
     wdgincremental.ui
+    wdgairbrush.ui
     wdgfilteroption.ui
     wdgcoloroptions.ui
     sensors/SensorDistanceConfiguration.ui

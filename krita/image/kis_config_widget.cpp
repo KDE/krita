@@ -39,7 +39,8 @@ void KisConfigWidget::slotConfigChanged()
 
 void KisConfigWidget::kickTimer()
 {
-    m_timer.start(500);
+    //Timer isn't really used at the moment, needs to moved once the preset preview is back
+    m_timer.start(10);
 }
 
 #include "kis_config_widget.moc"

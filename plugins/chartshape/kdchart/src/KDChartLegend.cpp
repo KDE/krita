@@ -379,8 +379,9 @@ void Legend::removeDiagram( AbstractDiagram* oldDiagram )
 
 void Legend::removeDiagrams()
 {
-    for (int i = 0; i < d->observers.size(); ++i)
-        removeDiagram( d->observers.at(i)->diagram() );
+    const DiagramList diags = diagrams();
+    KDAB_FOREACH( AbstractDiagram* diag, diags )
+        removeDiagram( diag );
 }
 
 void Legend::replaceDiagram( AbstractDiagram* newDiagram,

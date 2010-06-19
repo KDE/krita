@@ -40,10 +40,6 @@ public:
 
     double paintAt(const KisPaintInformation& info);
 
-    virtual bool incremental() const {
-        return true;
-    }
-
 private:
     KisShapeProperties m_shapeProperties;
     KisSprayProperties m_properties;

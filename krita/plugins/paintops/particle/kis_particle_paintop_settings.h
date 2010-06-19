@@ -27,7 +27,9 @@ class KisParticlePaintOpSettings : public KisPaintOpSettings
 
 public:
     bool paintIncremental();
-
+    bool isAirbrushing() const;
+    int rate() const;
+    
 #if defined(HAVE_OPENGL)
     QString modelName() const { return "3d-pencil"; }
 #endif

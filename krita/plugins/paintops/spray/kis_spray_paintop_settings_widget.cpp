@@ -31,6 +31,7 @@
 #include <kis_curve_option_widget.h>
 #include <kis_brush_option_widget.h>
 #include "kis_spray_shape_dynamics.h"
+#include <kis_airbrush_option.h>
 
 KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
@@ -50,6 +51,7 @@ KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    addPaintOpOption(new KisAirbrushOption());
     addPaintOpOption(new KisPaintActionTypeOption());
 }
 

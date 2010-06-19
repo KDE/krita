@@ -40,10 +40,6 @@ public:
     virtual double paintAt(const KisPaintInformation& info);
     virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
     
-    virtual bool incremental() const {
-        return true;
-    }
-
 private:
     const KisParticlePaintOpSettings* m_settings;
     KisParticleBrushProperties m_properties;

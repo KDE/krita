@@ -45,6 +45,8 @@ public:
     }
     
     bool paintIncremental();
+    bool isAirbrushing() const;
+    int rate() const;
 };
 
 #endif

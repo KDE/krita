@@ -19,6 +19,7 @@
 #include "kis_brush_based_paintop_settings.h"
 
 #include <kis_paint_action_type_option.h>
+#include <kis_airbrush_option.h>
 #include "kis_brush_based_paintop_options_widget.h"
 #include <kis_boundary.h>
 
@@ -29,6 +30,18 @@ bool KisBrushBasedPaintOpSettings::paintIncremental()
     }
     return true;
 }
+
+bool KisBrushBasedPaintOpSettings::isAirbrushing() const
+{
+    return getBool(AIRBRUSH_ENABLED);
+}
+
+
+int KisBrushBasedPaintOpSettings::rate() const
+{
+    return getInt(AIRBRUSH_RATE);
+}
+
 
 QRectF KisBrushBasedPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
 {

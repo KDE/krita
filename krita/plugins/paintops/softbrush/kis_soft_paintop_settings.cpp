@@ -19,6 +19,7 @@
 #include "kis_softop_option.h"
 #include "kis_brush_size_option.h"
 #include <kis_paint_action_type_option.h>
+#include <kis_airbrush_option.h>
 
 
 bool KisSoftPaintOpSettings::paintIncremental()
@@ -26,6 +27,15 @@ bool KisSoftPaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
+bool KisSoftPaintOpSettings::isAirbrushing() const
+{
+    return getBool(AIRBRUSH_ENABLED);
+}
+
+int KisSoftPaintOpSettings::rate() const
+{
+    return getInt(AIRBRUSH_RATE);
+}
 
 void KisSoftPaintOpSettings::paintOutline ( const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode ) const
 {

@@ -19,6 +19,7 @@
 #include "kis_chalk_paintop_settings.h"
 
 #include <kis_paint_action_type_option.h>
+#include <kis_airbrush_option.h>
 
 KisChalkPaintOpSettings::KisChalkPaintOpSettings()
 {
@@ -28,6 +29,17 @@ bool KisChalkPaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
+
+bool KisChalkPaintOpSettings::isAirbrushing() const
+{
+    return getBool(AIRBRUSH_ENABLED);
+}
+
+int KisChalkPaintOpSettings::rate() const
+{
+    return getInt(AIRBRUSH_RATE);
+}
+
 
 void KisChalkPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
 {

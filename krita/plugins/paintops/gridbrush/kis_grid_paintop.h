@@ -60,10 +60,6 @@ public:
 
     double paintAt(const KisPaintInformation& info);
 
-    virtual bool incremental() const {
-        return false;
-    }
-
 private:
     const KisGridPaintOpSettings* m_settings;
     KisImageWSP         m_image;

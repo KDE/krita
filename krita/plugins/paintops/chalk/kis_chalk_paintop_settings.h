@@ -50,6 +50,9 @@ public:
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     
     bool paintIncremental();
+    bool isAirbrushing() const;
+    int rate() const;
+    
 
     // boiler-plate code
     int radius() const;

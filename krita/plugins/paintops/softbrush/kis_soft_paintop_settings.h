@@ -44,6 +44,9 @@ public:
     virtual ~KisSoftPaintOpSettings() {}
 
     bool paintIncremental();
+    bool isAirbrushing() const;
+    int rate() const;
+    
 
     virtual void paintOutline ( const QPointF& pos, KisImageWSP image, QPainter& painter, OutlineMode _mode ) const;
     virtual QRectF paintOutlineRect ( const QPointF& pos, KisImageWSP image, OutlineMode _mode ) const;

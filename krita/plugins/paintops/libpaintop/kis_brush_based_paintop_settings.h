@@ -27,6 +27,12 @@ class PAINTOP_EXPORT KisBrushBasedPaintOpSettings : public KisPaintOpSettings
 public:
     ///Reimplemented
     virtual bool paintIncremental();
+
+    ///Reimplemented
+    virtual bool isAirbrushing() const;
+
+    ///Reimplemented
+    virtual int rate() const;
     
     ///Reimplemented
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const;

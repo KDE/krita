@@ -21,6 +21,7 @@
 #include "kis_particleop_option.h"
 
 #include <kis_paint_action_type_option.h>
+#include <kis_airbrush_option.h>
 
 
 bool KisParticlePaintOpSettings::paintIncremental()
@@ -28,4 +29,12 @@ bool KisParticlePaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
+bool KisParticlePaintOpSettings::isAirbrushing() const
+{
+    return getBool(AIRBRUSH_ENABLED);
+}
 
+int KisParticlePaintOpSettings::rate() const
+{
+    return getInt(AIRBRUSH_RATE);
+}

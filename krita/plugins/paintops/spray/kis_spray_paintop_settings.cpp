@@ -22,11 +22,24 @@
 #include "kis_spray_paintop_settings.h"
 #include "kis_sprayop_option.h"
 #include "kis_spray_shape_option.h"
+#include <kis_airbrush_option.h>
 
 bool KisSprayPaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
+
+bool KisSprayPaintOpSettings::isAirbrushing() const
+{
+    return getBool(AIRBRUSH_ENABLED);
+}
+
+int KisSprayPaintOpSettings::rate() const
+{
+    return getInt(AIRBRUSH_RATE);
+}
+
+
 
 void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
 {

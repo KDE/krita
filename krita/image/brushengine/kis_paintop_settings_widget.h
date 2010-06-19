@@ -34,7 +34,7 @@ class KRITAIMAGE_EXPORT KisPaintOpSettingsWidget : public KisConfigWidget
 public:
 
     KisPaintOpSettingsWidget(QWidget * parent = 0, Qt::WFlags f = 0)
-            : KisConfigWidget(parent, f) {
+            : KisConfigWidget(parent, f, 10) {
     }
 
     virtual ~KisPaintOpSettingsWidget() {

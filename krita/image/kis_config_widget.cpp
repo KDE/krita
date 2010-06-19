@@ -20,8 +20,9 @@
 #include "kis_debug.h"
 #include <QTimer>
 
-KisConfigWidget::KisConfigWidget(QWidget * parent, Qt::WFlags f)
+KisConfigWidget::KisConfigWidget(QWidget * parent, Qt::WFlags f, int delay)
         : QWidget(parent, f)
+        , m_delay(delay)
 {
     m_timer.setSingleShot(true);
     connect(&m_timer, SIGNAL(timeout()), SLOT(slotConfigChanged()));
@@ -39,8 +40,7 @@ void KisConfigWidget::slotConfigChanged()
 
 void KisConfigWidget::kickTimer()
 {
-    //Timer isn't really used at the moment, needs to moved once the preset preview is back
-    m_timer.start(10);
+    m_timer.start(m_delay);
 }
 
 #include "kis_config_widget.moc"

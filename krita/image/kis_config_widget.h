@@ -41,7 +41,7 @@ class KRITAIMAGE_EXPORT KisConfigWidget : public QWidget
 
 protected:
 
-    KisConfigWidget(QWidget * parent = 0, Qt::WFlags f = 0);
+    KisConfigWidget(QWidget * parent = 0, Qt::WFlags f = 0, int delay = 500);
 
 public:
     virtual ~KisConfigWidget();
@@ -78,6 +78,7 @@ private slots:
 
 private:
     QTimer m_timer;
+    int m_delay;
 };
 
 

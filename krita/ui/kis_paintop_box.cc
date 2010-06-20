@@ -490,9 +490,10 @@ void KisPaintopBox::updateCompositeOpComboBox()
             if(!m_inputDeviceEraseModes[KoToolManager::instance()->currentInputDevice()]){
                 m_cmbComposite->setEnabled(true);
             }
+            setEnabled(true);
             compositeOpChanged();
         } else {
-            m_cmbComposite->setEnabled(false);
+            setEnabled(false);
         }
     }
 }

@@ -89,3 +89,9 @@ target_link_libraries(KisExiv2Test  ${KDE4_KDEUI_LIBS} kritaimage kritaui ${QT_Q
 set(kis_recorded_action_editor_test_SRCS kis_recorded_action_editor_test.cpp )
 kde4_add_unit_test(KisRecordedActionEditorTest TESTNAME krita-ui-KisRecordedActionEditor ${kis_recorded_action_editor_test_SRCS})
 target_link_libraries(KisRecordedActionEditorTest  ${KDE4_KDEUI_LIBS} kritaimage kritaui ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_doc2_test_SRCS kis_doc2_test.cpp )
+kde4_add_unit_test(KisDoc2Test TESTNAME krita-ui-KisDoc2Test  ${kis_doc2_test_SRCS})
+target_link_libraries(KisDoc2Test  ${KDE4_KDEUI_LIBS}  komain kritaui kritaimage ${QT_QTTEST_LIBRARY})

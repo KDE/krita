@@ -97,7 +97,7 @@ void KoShapeDeleteCommand::undo()
 
     for (int i = 0; i < d->shapes.count(); i++) {
         if (d->oldParents.at(i))
-            d->oldParents.at(i)->removeShape(d->shapes[i]);
+            d->oldParents.at(i)->addShape(d->shapes[i]);
         // the parent has to be there when it is added to the KoShapeControllerBase
         d->controller->addShape(d->shapes[i]);
     }

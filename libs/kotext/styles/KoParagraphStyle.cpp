@@ -1235,34 +1235,33 @@ void KoParagraphStyle::loadOdfProperties(KoStyleStack &styleStack)
     // Borders
     const QString borderLeft(styleStack.property(KoXmlNS::fo, "border", "left"));
     if (!borderLeft.isEmpty() && borderLeft != "none" && borderLeft != "hidden") {
-        // ## isn't it faster to use QStringList::split than parse it 3 times?
-        QString borderwidth = borderLeft.section(' ', 0, 0);
-        QString borderstyle = borderLeft.section(' ', 1, 1);
-        QString bordercolor = borderLeft.section(' ', 2, 2);
-
-        setLeftBorderWidth(KoUnit::parseValue(borderwidth, 1.0));
+        QStringList bv = borderLeft.split(' ', QString::SkipEmptyParts);
+        setLeftBorderWidth(KoUnit::parseValue(bv[0], 1.0));
+        setLeftBorderStyle(KoBorder::odfBorderStyle(bv[1]));
+        setLeftBorderColor(QColor(bv[2]));
         //setLeftInnerBorderWidth(qreal width);
         //setLeftBorderSpacing(qreal width);
-        setLeftBorderStyle(KoBorder::odfBorderStyle(borderstyle));
-        setLeftBorderColor(QColor(bordercolor));
     }
     const QString borderTop(styleStack.property(KoXmlNS::fo, "border", "top"));
     if (!borderTop.isEmpty() && borderTop != "none" && borderTop != "hidden") {
-        setTopBorderWidth(KoUnit::parseValue(borderTop.section(' ', 0, 0), 1.0));
-        setTopBorderStyle(KoBorder::odfBorderStyle(borderTop.section(' ', 1, 1)));
-        setTopBorderColor(QColor(borderTop.section(' ', 2, 2)));
+        QStringList bv = borderTop.split(' ', QString::SkipEmptyParts);
+        setTopBorderWidth(KoUnit::parseValue(bv[0], 1.0));
+        setTopBorderStyle(KoBorder::odfBorderStyle(bv[1]));
+        setTopBorderColor(QColor(bv[2]));
     }
     const QString borderRight(styleStack.property(KoXmlNS::fo, "border", "right"));
     if (!borderRight.isEmpty() && borderRight != "none" && borderRight != "hidden") {
-        setRightBorderWidth(KoUnit::parseValue(borderRight.section(' ', 0, 0), 1.0));
-        setRightBorderStyle(KoBorder::odfBorderStyle(borderRight.section(' ', 1, 1)));
-        setRightBorderColor(QColor(borderRight.section(' ', 2, 2)));
+        QStringList bv = borderRight.split(' ', QString::SkipEmptyParts);
+        setRightBorderWidth(KoUnit::parseValue(bv[0], 1.0));
+        setRightBorderStyle(KoBorder::odfBorderStyle(bv[1]));
+        setRightBorderColor(QColor(bv[2]));
     }
     const QString borderBottom(styleStack.property(KoXmlNS::fo, "border", "bottom"));
     if (!borderBottom.isEmpty() && borderBottom != "none" && borderBottom != "hidden") {
-        setBottomBorderWidth(KoUnit::parseValue(borderBottom.section(' ', 0, 0), 1.0));
-        setBottomBorderStyle(KoBorder::odfBorderStyle(borderBottom.section(' ', 1, 1)));
-        setBottomBorderColor(QColor(borderBottom.section(' ', 2, 2)));
+        QStringList bv = borderBottom.split(' ', QString::SkipEmptyParts);
+        setBottomBorderWidth(KoUnit::parseValue(bv[0], 1.0));
+        setBottomBorderStyle(KoBorder::odfBorderStyle(bv[1]));
+        setBottomBorderColor(QColor(bv[2]));
     }
     const QString borderLineWidthLeft(styleStack.property(KoXmlNS::style, "border-line-width", "left"));
     if (!borderLineWidthLeft.isEmpty() && borderLineWidthLeft != "none" && borderLineWidthLeft != "hidden") {

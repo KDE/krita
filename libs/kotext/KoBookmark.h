@@ -26,6 +26,7 @@
 class KoShape;
 class QTextDocument;
 class KoShapeSavingContext;
+class KoShapeLoadingContext;
 
 /**
  * A document can store a set of cursor positions/selected cursor locations which can be

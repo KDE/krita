@@ -24,6 +24,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoTextShapeSavingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <opendocument/KoTextSharedSavingData.h>
 #include "KoChangeTrackerElement.h"
 #include "KoChangeTracker.h"

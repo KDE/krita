@@ -20,7 +20,9 @@
 #include "KoBookmark.h"
 
 #include <KoShapeSavingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <KoTextInlineRdf.h>
 
 #include <QTextDocument>

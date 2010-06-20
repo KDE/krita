@@ -25,6 +25,7 @@
 #include "styles/KoListStyle.h"
 
 #include <KoShape.h>
+#include <KoShapeLoadingContext.h>
 
 #include <KDebug>
 #include <QTextDocument>

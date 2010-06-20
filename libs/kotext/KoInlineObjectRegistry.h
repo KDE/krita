@@ -21,11 +21,11 @@
 #define KOINLINEOBJECTREGISTRY_H
 
 #include <KoGenericRegistry.h>
+#include <KoInlineObjectFactoryBase.h>
 #include "kotext_export.h"
 #include <QObject>
 #include <QList>
 
-class KoInlineObjectFactoryBase;
 class KoInlineObject;
 class KoCanvasBase;
 class QAction;

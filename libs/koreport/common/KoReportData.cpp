@@ -17,6 +17,8 @@
 
 #include "KoReportData.h"
 
+#include <QVariant>
+
 KoReportData::~KoReportData()
 {
 }

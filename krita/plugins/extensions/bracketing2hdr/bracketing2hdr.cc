@@ -18,7 +18,7 @@
 
 #include "bracketing2hdr.h"
 #include <stdlib.h>
-#include <cmath>
+#include <math.h>
 
 #include <kis_debug.h>
 #include <kfiledialog.h>
@@ -464,9 +464,9 @@ void Bracketing2HDRPlugin::computeCameraResponse(QList<BracketingFrame> frames)
             DIFF(m_intensityB, iBOld);
         }
 #undef DIFF
-        dbgPlugins << "Optimization delta =" << (sumdiff / count) << " =" << sumdiff << " /" << count << " " << std::isnan(sumdiff) << " " << std::isinf(sumdiff);
-        Q_ASSERT(std::isnan(sumdiff) != 0);
-        Q_ASSERT(std::isinf(sumdiff) != 0);
+        dbgPlugins << "Optimization delta =" << (sumdiff / count) << " =" << sumdiff << " /" << count << " " << isnan(sumdiff) << " " << isinf(sumdiff);
+        Q_ASSERT(isnan(sumdiff) != 0);
+        Q_ASSERT(isinf(sumdiff) != 0);
         if (sumdiff / count < epsilonOptimization)
             break;
     }
@@ -516,7 +516,7 @@ bool Bracketing2HDRPlugin::loadImagesInMemory()
         f.apexBrightness = 2.0 * log(f.aperture) + log(1.0 / f.exposure) - log(f.sensitivity / 3.125);
         f.apexBrightness /= log(2.0);
         f.apexBrightness = 1.0 / (powf(2.0, f.apexBrightness));  // * ( 1.0592f * 11.4f / 3.125f ) ); // TODO: the magic number is apparrently dependent of the camera, this value is taken from pfscalibrate, this need to be configurable (it is the reflected-light meter calibration constant)
-        if(f.apexBrightness == 0.0 || std::isnan(f.apexBrightness) == 1 || std::isinf(f.apexBrightness) == 1 )
+        if(f.apexBrightness == 0.0 || isnan(f.apexBrightness) == 1 || isinf(f.apexBrightness) == 1 )
         {
             return false;
         }

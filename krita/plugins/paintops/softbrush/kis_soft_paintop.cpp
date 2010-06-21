@@ -20,6 +20,7 @@
 #include "kis_soft_paintop_settings.h"
 
 #include <cmath>
+#include <time.h>
 
 #include <QRect>
 
@@ -39,6 +40,14 @@
 #include <kis_softop_option.h>
 #include <kis_brush_size_option.h>
 #include "kis_hsv_option.h"
+
+#if defined(_WIN32) || defined(_WIN64)
+#define srand48 srand
+inline double drand48()
+{
+    return double(rand()) / RAND_MAX;
+}
+#endif
 
 KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp( painter )

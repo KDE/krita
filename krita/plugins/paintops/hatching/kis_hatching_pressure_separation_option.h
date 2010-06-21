@@ -28,7 +28,7 @@
  * calculate the effect of pressure (or other parameters) on
  * separation in the hatching brush
  */
- class PAINTOP_EXPORT KisHatchingPressureSeparationOption : public KisCurveOption
+ class KisHatchingPressureSeparationOption : public KisCurveOption
  {
      public:
          KisHatchingPressureSeparationOption();

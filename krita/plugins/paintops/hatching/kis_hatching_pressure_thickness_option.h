@@ -28,7 +28,7 @@
  * calculate the effect of pressure (or other parameters) on
  * thickness in the hatching brush
  */
- class PAINTOP_EXPORT KisHatchingPressureThicknessOption : public KisCurveOption
+ class KisHatchingPressureThicknessOption : public KisCurveOption
  {
      public:
          KisHatchingPressureThicknessOption();

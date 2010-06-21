@@ -36,7 +36,7 @@ double KisDynamicSensorTime::parameter(const KisPaintInformation&  pi)
     m_lastTime = pi.currentTime();
     if (m_time > m_length) {
         if (m_periodic) {
-            m_time = fmod(m_time, m_length);
+            m_time = (int)fmod((float)m_time, (float)m_length);
         } else {
             m_time = m_length;
         }

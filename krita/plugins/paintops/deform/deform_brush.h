@@ -24,6 +24,8 @@
 
 #include <kis_brush_size_option.h>
 
+#include <time.h>
+
 #if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand
 inline double drand48()

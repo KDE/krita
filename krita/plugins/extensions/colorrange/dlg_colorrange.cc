@@ -185,7 +185,9 @@ DlgColorRange::DlgColorRange(KisView2 * view, KisPaintDeviceSP dev, QWidget *  p
     resize(m_page->sizeHint());
 
 
+#ifdef __GNUC__
 #warning "Activate transactions for colorrange selections!"
+#endif
 //    XXX_SELECTION
 //    m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_dev);
 

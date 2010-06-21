@@ -24,6 +24,10 @@
 #include <cmath>
 #include "kis_debug.h"
 
+#if defined(_WIN32) || defined(_WIN64)
+#define srand48 srand
+#endif
+
 BrushShape::BrushShape()
 {
     m_hasColor = false;

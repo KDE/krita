@@ -28,7 +28,7 @@
  * calculate the effect of pressure (or other parameters) on
  * crosshatching in the hatching brush
  */
-class PAINTOP_EXPORT KisHatchingPressureCrosshatchingOption : public KisCurveOption
+class KisHatchingPressureCrosshatchingOption : public KisCurveOption
 {
 public:
     KisHatchingPressureCrosshatchingOption();

@@ -41,6 +41,8 @@ public:
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
 
     bool paintIncremental();
+    bool isAirbrushing() const;
+    int rate() const;
 
 #if defined(HAVE_OPENGL)
     inline QString modelName() const {

@@ -41,11 +41,6 @@ public:
     KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisDeformPaintOp();
 
-    // Do we want to spray even when no movement?
-    virtual bool incremental() const {
-        return m_useMovementPaint;
-    }
-
     double paintAt(const KisPaintInformation& info);
     double spacing(double pressure) const;
 

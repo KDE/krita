@@ -21,10 +21,33 @@
 
 #include <kis_brush_size_option.h>
 
+#include <kis_airbrush_option.h>
+#include <kis_deform_option.h>
+
 bool KisDeformPaintOpSettings::paintIncremental()
 {
     return true;
 }
+
+bool KisDeformPaintOpSettings::isAirbrushing() const
+{
+    // version 2.3
+    if (hasProperty(AIRBRUSH_ENABLED)){
+        return getBool(AIRBRUSH_ENABLED);
+    }else{
+        return getBool(DEFORM_USE_MOVEMENT_PAINT);
+    }
+}
+
+int KisDeformPaintOpSettings::rate() const
+{
+    if (hasProperty(AIRBRUSH_RATE)){
+        return getInt(AIRBRUSH_RATE);
+    }else{
+        return KisPaintOpSettings::rate();
+    }
+}
+
 
 
 QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const

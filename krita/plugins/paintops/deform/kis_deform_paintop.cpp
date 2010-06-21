@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,7 +55,6 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     m_opacityOption.sensor()->reset();
     m_rotationOption.sensor()->reset();
 
-    
     m_properties.action = settings->getInt(DEFORM_ACTION);
     m_properties.deformAmount = settings->getDouble(DEFORM_AMOUNT);
     m_properties.useBilinear = settings->getBool(DEFORM_USE_BILINEAR);
@@ -66,7 +65,6 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     m_deformBrush.setSizeProperties( &m_sizeProperties );
     m_deformBrush.initDeformAction();
     
-    m_useMovementPaint = settings->getBool(DEFORM_USE_MOVEMENT_PAINT);
     m_dev = source();
     
     if ((m_sizeProperties.diameter * 0.5) > 1) {

@@ -35,7 +35,6 @@ KisDeformOption::KisDeformOption()
 
     connect(m_options->deformAmountSPBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->interpolationChBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->addPaintChBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->useCounter, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->useOldData, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
 
@@ -60,7 +59,6 @@ void  KisDeformOption::readOptionSetting(const KisPropertiesConfiguration * conf
 {
     m_options->deformAmountSPBox->setValue(config->getDouble(DEFORM_AMOUNT));
     m_options->interpolationChBox->setChecked(config->getBool(DEFORM_USE_BILINEAR));
-    m_options->addPaintChBox->setChecked(config->getBool(DEFORM_USE_MOVEMENT_PAINT));
     m_options->useCounter->setChecked(config->getBool(DEFORM_USE_COUNTER));
     m_options->useOldData->setChecked(config->getBool(DEFORM_USE_OLD_DATA));
 
@@ -90,7 +88,6 @@ void KisDeformOption::writeOptionSetting(KisPropertiesConfiguration* config) con
     config->setProperty(DEFORM_AMOUNT, m_options->deformAmountSPBox->value());
     config->setProperty(DEFORM_ACTION, deformAction());
     config->setProperty(DEFORM_USE_BILINEAR, m_options->interpolationChBox->isChecked());
-    config->setProperty(DEFORM_USE_MOVEMENT_PAINT, m_options->addPaintChBox->isChecked());
     config->setProperty(DEFORM_USE_COUNTER, m_options->useCounter->isChecked());
     config->setProperty(DEFORM_USE_OLD_DATA, m_options->useOldData->isChecked());
 }

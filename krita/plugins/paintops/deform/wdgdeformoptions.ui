@@ -134,31 +134,21 @@
      </property>
     </widget>
    </item>
-   <item row="14" column="0" colspan="2">
-    <widget class="QCheckBox" name="addPaintChBox">
-     <property name="text">
-      <string>Paint when not moving the brush</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="15" column="0">
+   <item row="14" column="0">
     <widget class="QCheckBox" name="useCounter">
      <property name="text">
       <string>Use counter</string>
      </property>
     </widget>
    </item>
-   <item row="16" column="0" colspan="2">
+   <item row="15" column="0" colspan="2">
     <widget class="QCheckBox" name="useOldData">
      <property name="text">
       <string>Use undeformed image</string>
      </property>
     </widget>
    </item>
-   <item row="18" column="1">
+   <item row="17" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

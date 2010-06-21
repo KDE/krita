@@ -409,6 +409,41 @@ void KisTiledDataManager::bitBlt(KisTiledDataManager *srcDM, const QRect &rect)
     }
 }
 
+void KisTiledDataManager::bitBltRough(KisTiledDataManager *srcDM, const QRect &rect)
+{
+    QWriteLocker locker(&m_lock);
+
+    if (rect.isEmpty()) return;
+
+    qint32 firstColumn = xToCol(rect.left());
+    qint32 lastColumn = xToCol(rect.right());
+
+    qint32 firstRow = yToRow(rect.top());
+    qint32 lastRow = yToRow(rect.bottom());
+
+    for (qint32 row = firstRow; row <= lastRow; ++row) {
+        for (qint32 column = firstColumn; column <= lastColumn; ++column) {
+
+            /**
+             * We are cloning whole tiles here so let's not be so boring
+             * to check any borders :)
+             */
+
+            KisTileSP srcTile = srcDM->getOldTile(column, row);
+
+            m_hashTable->deleteTile(column, row);
+
+            srcTile->lockForRead();
+            KisTileData *td = srcTile->tileData();
+            KisTileSP clonedTile = new KisTile(column, row, td, m_mementoManager);
+            srcTile->unlock();
+
+            m_hashTable->addTile(clonedTile);
+            updateExtent(column, row);
+        }
+    }
+}
+
 void KisTiledDataManager::setExtent(qint32 x, qint32 y, qint32 w, qint32 h)
 {
     setExtent(QRect(x, y, w, h));

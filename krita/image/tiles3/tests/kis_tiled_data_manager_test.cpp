@@ -112,6 +112,7 @@ void KisTiledDataManagerTest::testUnversionedBitBlt()
 
     QRect rect(0,0,512,512);
     QRect cloneRect(81,80,250,250);
+    QRect tilesRect(2,2,3,3);
 
     srcDM.clear(rect, &oddPixel1);
     dstDM.clear(rect, &oddPixel2);
@@ -128,7 +129,6 @@ void KisTiledDataManagerTest::testUnversionedBitBlt()
     delete[] buffer;
 
     // Test whether tiles became shared
-    QRect tilesRect(2,2,3,3);
     QVERIFY(checkTilesShared(&srcDM, &dstDM, false, false, tilesRect));
 }
 
@@ -188,6 +188,38 @@ void KisTiledDataManagerTest::testVersionedBitBlt()
     QVERIFY(checkTilesShared(&srcDM2, &dstDM, true, true, tilesRect));
     QVERIFY(checkTilesShared(&dstDM, &dstDM, true, false, tilesRect));
     QVERIFY(checkTilesNotShared(&srcDM1, &srcDM1, true, false, tilesRect));
+}
+
+void KisTiledDataManagerTest::testBitBltRough()
+{
+    quint8 defaultPixel = 0;
+    KisTiledDataManager srcDM(1, &defaultPixel);
+    KisTiledDataManager dstDM(1, &defaultPixel);
+
+    quint8 oddPixel1 = 128;
+    quint8 oddPixel2 = 129;
+
+    QRect rect(0,0,512,512);
+    QRect cloneRect(81,80,250,250);
+    QRect actualCloneRect(64,64,320,320);
+    QRect tilesRect(1,1,4,4);
+
+    srcDM.clear(rect, &oddPixel1);
+    dstDM.clear(rect, &oddPixel2);
+
+    dstDM.bitBltRough(&srcDM, cloneRect);
+
+    quint8 *buffer = new quint8[rect.width()*rect.height()];
+
+    dstDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+
+    QVERIFY(checkHole(buffer, oddPixel1, actualCloneRect,
+                      oddPixel2, rect));
+
+    delete[] buffer;
+
+    // Test whether tiles became shared
+    QVERIFY(checkTilesShared(&srcDM, &dstDM, false, false, tilesRect));
 }
 
 void KisTiledDataManagerTest::testTransactions()

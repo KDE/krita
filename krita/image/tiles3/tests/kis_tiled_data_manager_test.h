@@ -45,6 +45,7 @@ private:
 private slots:
     void testUnversionedBitBlt();
     void testVersionedBitBlt();
+    void testBitBltRough();
     void testTransactions();
     void testPurgeHistory();
     void stressTest();

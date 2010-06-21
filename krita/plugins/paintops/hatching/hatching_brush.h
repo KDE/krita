@@ -39,7 +39,7 @@ public:
     HatchingBrush(const KisHatchingPaintOpSettings *settings);
     ~HatchingBrush();
     HatchingBrush(KoColor inkColor);
-    void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color);
+    void paint(KisPaintDeviceSP dev, qreal x, qreal y, double width, double height, const KoColor &color);
     void iteratelines(int thickness, double h, double w, double p, double dy, double last_b, int lineindex, bool oneline);
 
 private:

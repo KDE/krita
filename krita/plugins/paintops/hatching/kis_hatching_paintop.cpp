@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,12 +34,13 @@
 #include <kis_painter.h>
 #include <kis_types.h>
 #include <kis_paintop.h>
+#include <kis_brush_based_paintop.h>
 #include <kis_paint_information.h>
 
 #include <kis_pressure_opacity_option.h>
 
 KisHatchingPaintOp::KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-        : KisPaintOp(painter)
+        : KisBrushBasedPaintOp(settings, painter)
         , m_image(image)
 {
     m_settings = new KisHatchingPaintOpSettings();
@@ -57,21 +59,33 @@ KisHatchingPaintOp::~KisHatchingPaintOp()
 
 double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()) return 1; /*
-    if (!painter()->device()) return 1;
-    if (!m_hatchingBrush) return 1;
-   */ 
+    if (!painter()) return 1;
+    
+    //blatant copy of BrushOp.cpp
+    KisBrushSP brush = m_brush;
+    Q_ASSERT(brush);
+    if (!brush)
+        return 1.0;
+    
+    if (!brush->canPaintFor(info))
+        return 1.0;
+    
+    KisPaintDeviceSP device = painter()->device();
+    
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
     } else {
         m_dab->clear();
     }
-    /*
+    
+    double scale = 1;
+    
     KisFixedPaintDeviceSP dab = cachedDab();
     KoColor color = painter()->paintColor();
     color.convertTo(dab->colorSpace());
-    //brush->mask(dab, color, scale, scale, 0.0, info);
-    */
+    brush->mask(dab, color, scale, scale, 0.0, info);
+    
+    //printf("maskWidth es %li y maskHeight es %li", brush->width(), brush->height());
     
     qreal x1, y1;
 
@@ -85,10 +99,10 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     }
     
     //quint8 origOpacity = m_opacityOption.apply(painter(), info);
-    m_hatchingBrush->paint(m_dab, x1, y1, painter()->paintColor());
+    m_hatchingBrush->paint(m_dab, x1, y1, brush->width(), brush->height(), painter()->paintColor());
 
     QRect rc = m_dab->extent();
-    QRect limits(QPoint(0,0), QPoint(fabs(m_settings->origin_x), fabs(m_settings->origin_y)));
+    QRect limits(QPoint(0,0), QPoint(brush->width(), brush->height()));
     
     if (m_settings->opaquebackground)
     {
@@ -97,9 +111,10 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     }
     painter()->bitBlt(x1, y1, m_dab, 0, 0, limits.width(), limits.height());
     
-    printf ("Ancho: %i . Alto: %i. \n", limits.width(), limits.height());
+    //printf ("Ancho: %i . Alto: %i. \n", limits.width(), limits.height());
     //painter()->setOpacity(origOpacity);
-    return 1;
+    
+    return 20;
 }
 
 

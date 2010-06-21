@@ -21,11 +21,12 @@
 #define KIS_HATCHING_PAINTOP_SETTINGS_H_
 
 #include <kis_paintop_settings.h>
+#include <kis_brush_based_paintop_settings.h>
 
 #include "kis_hatching_paintop_settings_widget.h"
 
 
-class KisHatchingPaintOpSettings : public KisPaintOpSettings
+class KisHatchingPaintOpSettings : public KisBrushBasedPaintOpSettings
 {
     
 public:

@@ -52,7 +52,7 @@ void HatchingBrush::init()
 {
 }
 
-void HatchingBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
+void HatchingBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, double width, double height, const KoColor &color)
 {
     m_painter.begin(dev);
     m_painter.setFillStyle(KisPainter::FillStyleForegroundColor);
@@ -71,10 +71,10 @@ void HatchingBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor 
     angle = naiveangle;
     thickness = m_settings->thickness;
     s = m_settings->separation;
-    h = fabs(m_settings->origin_y);
-    w = fabs(m_settings->origin_x);
-    xcoor = 0; //m_settings->origin_x;
-    ycoor = 0; //m_settings->origin_y;
+    h = height; //fabs(m_settings->origin_y);
+    w = width; //fabs(m_settings->origin_x);
+    xcoor = m_settings->origin_x;
+    ycoor = m_settings->origin_y;
     dx = dy = b = p = last_b = cursor_b = 0;    //inicializar
     
     m_painter.setMaskImageSize(w, h);

@@ -21,6 +21,7 @@
 #define KIS_HATCHING_PAINTOP_H_
 
 #include <kis_paintop.h>
+#include <kis_brush_based_paintop.h>
 #include <kis_types.h>
 
 #include "hatching_brush.h"
@@ -28,7 +29,7 @@
 
 class KisPainter;
 
-class KisHatchingPaintOp : public KisPaintOp
+class KisHatchingPaintOp : public KisBrushBasedPaintOp
 {
 
 public:

@@ -215,20 +215,19 @@ public:
     void clear();
 
     /**
-     * Clones rect from source datamanager into *this. The cloned
-     * area will be shared between both datamanagers as much as
-     * possible using copy-on-write. Parts of the rect that cannot be
-     * shared (crosses a tile) are deep-copied,
+     * Clones rect from another datamanager. The cloned area will be
+     * shared between both datamanagers as much as possible using
+     * copy-on-write. Parts of the rect that cannot be shared
+     * (cross tiles) are deep-copied,
      */
     void bitBlt(KisTiledDataManager *srcDM, const QRect &rect);
 
     /**
-     * Clones rect from source datamanager into *this in a rough
-     * and fast way. All the tiles touched by rect will be shared,
-     * between both devices, that means it will copy a bigger area
-     * than was requested.
-     * This method is supposed to be used for bitBlt'ing into
-     * temporary paint devices.
+     * Clones rect from another datamanager in a rough and fast way.
+     * All the tiles touched by rect will be shared, between both
+     * managers, that means it will copy a bigger area than was
+     * requested. This method is supposed to be used for bitBlt'ing
+     * into temporary paint devices.
      */
     void bitBltRough(KisTiledDataManager *srcDM, const QRect &rect);
 

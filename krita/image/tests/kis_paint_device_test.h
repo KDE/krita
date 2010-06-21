@@ -39,6 +39,7 @@ private slots:
     void testRoundtripReadWrite();
     void testPlanarReadWrite();
     void testRoundtripConversion();
+    void testFastBitBlt();
     void testBltPerformance();
     void testColorSpaceConversion();
     void testDeviceDuplication();

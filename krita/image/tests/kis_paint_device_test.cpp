@@ -273,6 +273,47 @@ void KisPaintDeviceTest::testRoundtripConversion()
     }
 }
 
+void KisPaintDeviceTest::testFastBitBlt()
+{
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dstDev = new KisPaintDevice(cs);
+    KisPaintDeviceSP srcDev = new KisPaintDevice(cs);
+    srcDev->convertFromQImage(image, "");
+
+    QRect cloneRect(100,100,200,200);
+    QPoint errpoint;
+
+
+    QVERIFY(dstDev->fastBitBltPossible(srcDev));
+    dstDev->fastBitBlt(srcDev, cloneRect);
+
+    QImage srcImage = srcDev->convertToQImage(0, cloneRect.x(), cloneRect.y(),
+                                               cloneRect.width(), cloneRect.height());
+    QImage dstImage = dstDev->convertToQImage(0, cloneRect.x(), cloneRect.y(),
+                                              cloneRect.width(), cloneRect.height());
+
+    if (!TestUtil::compareQImages(errpoint, srcImage, dstImage)) {
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+
+    // Test Rough version
+    dstDev->clear();
+    dstDev->fastBitBltRough(srcDev, cloneRect);
+
+    srcImage = srcDev->convertToQImage(0, cloneRect.x(), cloneRect.y(),
+                                       cloneRect.width(), cloneRect.height());
+    dstImage = dstDev->convertToQImage(0, cloneRect.x(), cloneRect.y(),
+                                       cloneRect.width(), cloneRect.height());
+
+    if (!TestUtil::compareQImages(errpoint, srcImage, dstImage)) {
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+
+    srcDev->move(10,10);
+    QVERIFY(!dstDev->fastBitBltPossible(srcDev));
+}
+
 void KisPaintDeviceTest::testThumbnail()
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");

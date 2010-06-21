@@ -222,6 +222,44 @@ public:
 
 public:
     /**
+     * Checks whether a src paint device can be used as source
+     * of fast bitBlt operation. The result of the check may
+     * depend on whether color spaces coinside, whether there is
+     * any shift of tiles between the devices and etc.
+     *
+     * WARNING: This check must be done <i>before</i> performing any
+     * fast bitBlt operation!
+     *
+     * \see fastBitBlt
+     * \see fastBitBltRough
+     */
+    bool fastBitBltPossible(KisPaintDeviceSP src);
+
+    /**
+     * Clones rect from another paint device. The cloned area will be
+     * shared between both paint devices as much as possible using
+     * copy-on-write. Parts of the rect that cannot be shared
+     * (cross tiles) are deep-copied,
+     *
+     * \see fastBitBltPossible
+     * \see fastBitBltRough
+     */
+    void fastBitBlt(KisPaintDeviceSP src, const QRect &rect);
+
+    /**
+     * Clones rect from another paint device in a rough and fast way.
+     * All the tiles touched by rect will be shared, between both
+     * devices, that means it will copy a bigger area than was
+     * requested. This method is supposed to be used for bitBlt'ing
+     * into temporary paint devices.
+     *
+     * \see fastBitBltPossible
+     * \see fastBitBlt
+     */
+    void fastBitBltRough(KisPaintDeviceSP src, const QRect &rect);
+
+public:
+    /**
      * Read the bytes representing the rectangle described by x, y, w, h into
      * data. If data is not big enough, Krita will gladly overwrite the rest
      * of your precious memory.

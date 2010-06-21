@@ -1013,6 +1013,27 @@ void KisPaintDevice::setY(qint32 y)
     m_d->y = y;
 }
 
+bool KisPaintDevice::fastBitBltPossible(KisPaintDeviceSP src)
+{
+    return m_d->x == src->x() && m_d->y == src->y() &&
+        *colorSpace() == *src->colorSpace();
+}
+
+void KisPaintDevice::fastBitBlt(KisPaintDeviceSP src, const QRect &rect)
+{
+    Q_ASSERT(fastBitBltPossible(src));
+
+    m_datamanager->bitBlt(src->dataManager(), rect);
+    m_d->cache.invalidate();
+}
+
+void KisPaintDevice::fastBitBltRough(KisPaintDeviceSP src, const QRect &rect)
+{
+    Q_ASSERT(fastBitBltPossible(src));
+
+    m_datamanager->bitBltRough(src->dataManager(), rect);
+    m_d->cache.invalidate();
+}
 
 void KisPaintDevice::readBytes(quint8 * data, qint32 x, qint32 y, qint32 w, qint32 h) const
 {

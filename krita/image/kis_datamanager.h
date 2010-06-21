@@ -200,6 +200,29 @@ public:
 public:
 
     /**
+     * Clones rect from another datamanager. The cloned area will be
+     * shared between both datamanagers as much as possible using
+     * copy-on-write. Parts of the rect that cannot be shared
+     * (cross tiles) are deep-copied,
+     */
+    inline void bitBlt(KisTiledDataManagerSP srcDM, const QRect &rect) {
+        ACTUAL_DATAMGR::bitBlt(const_cast<KisTiledDataManager*>(srcDM.data()), rect);
+    }
+
+    /**
+     * Clones rect from another datamanager in a rough and fast way.
+     * All the tiles touched by rect will be shared, between both
+     * devices, that means it will copy a bigger area than was
+     * requested. This method is supposed to be used for bitBlt'ing
+     * into temporary paint devices.
+     */
+    inline void bitBltRough(KisTiledDataManagerSP srcDM, const QRect &rect) {
+        ACTUAL_DATAMGR::bitBltRough(const_cast<KisTiledDataManager*>(srcDM.data()), rect);
+    }
+
+public:
+
+    /**
      * Write the specified data to x, y. There is no checking on pixelSize!
      */
     inline void setPixel(qint32 x, qint32 y, const quint8 * data) {

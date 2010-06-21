@@ -150,6 +150,7 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
     init();
     connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     undoStack()->setUndoLimit(KisConfig().undoStackLimit());
+    setBackupFile(KisConfig().backupFile());
 }
 
 KisDoc2::~KisDoc2()

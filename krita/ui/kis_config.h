@@ -194,6 +194,9 @@ public:
 
     int autoSaveInterval();
     void setAutoSaveInterval(int seconds);
+    
+    bool backupFile();
+    void setBackupFile(bool backupFile);
 
     // in megapixels -- above 5, we will no longer use the
     // memory-guzzling qimage canvas cache

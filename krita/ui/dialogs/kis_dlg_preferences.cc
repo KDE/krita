@@ -88,6 +88,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_autosaveSpinBox->setValue(autosaveInterval / 60);
     m_autosaveCheckBox->setChecked(autosaveInterval > 0);
     m_undoStackSize->setValue(cfg.undoStackLimit());
+    m_backupFileCheckBox->setChecked(cfg.backupFile());
 }
 
 void GeneralTab::setDefault()
@@ -100,6 +101,7 @@ void GeneralTab::setDefault()
     //convert to minutes
     m_autosaveSpinBox->setValue(KoDocument::defaultAutoSave() / 60);
     m_undoStackSize->setValue(30);
+    m_backupFileCheckBox->setChecked(true);
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -527,8 +529,10 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
 
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
+        cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         foreach(KoDocument* doc, *KoDocument::documentList()) {
             doc->setAutoSave(dialog->m_general->autoSaveInterval());
+            doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         }
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
 

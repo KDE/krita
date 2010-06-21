@@ -571,6 +571,16 @@ void KisConfig::setAutoSaveInterval(int seconds) {
     return m_cfg.writeEntry("AutoSaveInterval", seconds);
 }
 
+bool KisConfig::backupFile()
+{
+    return m_cfg.readEntry("CreateBackupFile", true);
+}
+
+void KisConfig::setBackupFile(bool backupFile)
+{
+     m_cfg.writeEntry("CreateBackupFile", backupFile);
+}
+
 quint32 KisConfig::maxCachedImageSize()
 {
     // Let's say, 5 megapixels

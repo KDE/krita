@@ -20,6 +20,7 @@
 
 #include <QtTest/QtTest>
 
+class KisTiledDataManager;
 
 class KisTiledDataManagerTest : public QObject
 {
@@ -28,7 +29,22 @@ class KisTiledDataManagerTest : public QObject
 private:
     bool memoryIsFilled(quint8 c, quint8 *mem, qint32 size);
 
+    bool checkHole(quint8* buffer, quint8 holeColor, QRect holeRect,
+                   quint8 backgroundColor, QRect backgroundRect);
+
+    bool checkTilesShared(KisTiledDataManager *srcDM,
+                          KisTiledDataManager *dstDM,
+                          bool takeOldSrc, bool takeOldDst,
+                          QRect tilesRect);
+
+    bool checkTilesNotShared(KisTiledDataManager *srcDM,
+                             KisTiledDataManager *dstDM,
+                             bool takeOldSrc, bool takeOldDst,
+                             QRect tilesRect);
+
 private slots:
+    void testUnversionedBitBlt();
+    void testVersionedBitBlt();
     void testTransactions();
     void testPurgeHistory();
     void stressTest();

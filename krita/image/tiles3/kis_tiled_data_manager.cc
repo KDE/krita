@@ -350,6 +350,64 @@ void KisTiledDataManager::clear()
     m_extentMaxY = qint32_MIN;
 }
 
+void KisTiledDataManager::bitBlt(KisTiledDataManager *srcDM, const QRect &rect)
+{
+    QWriteLocker locker(&m_lock);
+
+    if (rect.isEmpty()) return;
+
+    const qint32 pixelSize = this->pixelSize();
+    const quint32 rowStride = KisTileData::WIDTH * pixelSize;
+
+    qint32 firstColumn = xToCol(rect.left());
+    qint32 lastColumn = xToCol(rect.right());
+
+    qint32 firstRow = yToRow(rect.top());
+    qint32 lastRow = yToRow(rect.bottom());
+
+    for (qint32 row = firstRow; row <= lastRow; ++row) {
+        for (qint32 column = firstColumn; column <= lastColumn; ++column) {
+
+            KisTileSP srcTile = srcDM->getOldTile(column, row);
+            QRect tileRect(column*KisTileData::WIDTH, row*KisTileData::HEIGHT,
+                           KisTileData::WIDTH, KisTileData::HEIGHT);
+            QRect cloneTileRect = rect & tileRect;
+
+            if (cloneTileRect == tileRect) {
+                 // Clone whole tile
+                 m_hashTable->deleteTile(column, row);
+
+                 srcTile->lockForRead();
+                 KisTileData *td = srcTile->tileData();
+                 KisTileSP clonedTile = new KisTile(column, row, td, m_mementoManager);
+                 srcTile->unlock();
+
+                 m_hashTable->addTile(clonedTile);
+                 updateExtent(column, row);
+            } else {
+                const qint32 lineSize = cloneTileRect.width() * pixelSize;
+                qint32 rowsRemaining = cloneTileRect.height();
+
+                KisTileDataWrapper tw = pixelPtr(cloneTileRect.left(),
+                                                 cloneTileRect.top(),
+                                                 KisTileDataWrapper::WRITE);
+                srcTile->lockForRead();
+                // We suppose that the shift in both tiles is the same
+                const quint8* srcTileIt = srcTile->data() + tw.offset();
+                quint8* dstTileIt = tw.data();
+
+                while (rowsRemaining > 0) {
+                    memcpy(dstTileIt, srcTileIt, lineSize);
+                    srcTileIt += rowStride;
+                    dstTileIt += rowStride;
+                    rowsRemaining--;
+                }
+
+                srcTile->unlock();
+            }
+        }
+    }
+}
 
 void KisTiledDataManager::setExtent(qint32 x, qint32 y, qint32 w, qint32 h)
 {

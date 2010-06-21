@@ -60,6 +60,10 @@ public:
         m_tile->unlock();
     }
 
+    inline qint32 offset() const {
+        return m_offset;
+    }
+
     inline KisTileSP& tile() {
         return m_tile;
     }
@@ -210,6 +214,7 @@ public:
     void clear(qint32 x, qint32 y,  qint32 w, qint32 h, const quint8 *clearPixel);
     void clear();
 
+    void bitBlt(KisTiledDataManager *srcDM, const QRect &rect);
 
     /**
      * write the specified data to x, y. There is no checking on pixelSize!

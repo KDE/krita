@@ -19,6 +19,9 @@
 
 #include "VideoEventAction.h"
 
+#include <KoXmlReader.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <kdebug.h>
 
 #include <QUrl>

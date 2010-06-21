@@ -346,7 +346,7 @@ void KisTiledDataManagerTest::testPurgeHistory()
 
 #define NUM_CYCLES 10000
 //#define NUM_CYCLES 100000
-#define NUM_TYPES 13
+#define NUM_TYPES 14
 
 #define TILE_DIMENSION 64
 
@@ -431,6 +431,13 @@ public:
                              m_accessRect.width(), m_accessRect.height());
                 dm.writeBytes(buf, m_accessRect.x(), m_accessRect.y(),
                               m_accessRect.width(), m_accessRect.height());
+                break;
+            case 13:
+            {
+                quint8 defaultPixel = 2;
+                KisTiledDataManager srcDM(1, &defaultPixel);
+                dm.bitBlt(&srcDM, m_accessRect);
+            }
                 break;
             }
         }

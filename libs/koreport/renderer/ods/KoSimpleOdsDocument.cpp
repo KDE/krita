@@ -68,7 +68,9 @@ bool KoSimpleOdsDocument::createContent(KoOdfWriteStore* store)
 {
     KoXmlWriter* bodyWriter = store->bodyWriter();
     KoXmlWriter* contentWriter = store->contentWriter();
-    if (!bodyWriter || !contentWriter) {
+    KoXmlWriter* manifestWriter = store->manifestWriter("application/vnd.oasis.opendocument.spreadsheet");
+
+    if (!bodyWriter || !contentWriter || !manifestWriter) {
         kDebug() << "Bad things happened";
         return false;
     }

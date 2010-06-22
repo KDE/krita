@@ -28,11 +28,11 @@
 #include <KServiceTypeTrader>
 
 //Include the static items
-#include "../plugins/label/KoReportLabelPlugin.h"
-#include "../plugins/check/KoReportCheckPlugin.h"
-#include "../plugins/field/KoReportFieldPlugin.h"
-#include "../plugins/image/KoReportImagePlugin.h"
-#include "../plugins/text/KoReportTextPlugin.h"
+#include "../items/label/KoReportLabelPlugin.h"
+#include "../items/check/KoReportCheckPlugin.h"
+#include "../items/field/KoReportFieldPlugin.h"
+#include "../items/image/KoReportImagePlugin.h"
+#include "../items/text/KoReportTextPlugin.h"
 
 KoReportPluginManager& KoReportPluginManager::self()
 {

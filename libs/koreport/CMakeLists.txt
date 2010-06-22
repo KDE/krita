@@ -2,7 +2,6 @@
 #project(reports)
 
 add_subdirectory(pics)
-add_subdirectory(plugins)
 
 include_directories( ${KOMAIN_INCLUDES}
     ${KOODF_INCLUDES}
@@ -37,6 +36,7 @@ set(koreport_LIB_SRCS
     renderer/KoReportHTMLTableRenderer.cpp
     renderer/KoReportHTMLCSSRenderer.cpp
     renderer/KoReportKSpreadRenderer.cpp
+    renderer/KoReportODTRenderer.cpp
     renderer/KoReportRendererBase.cpp
     renderer/KoReportPage.cpp
 
@@ -65,35 +65,30 @@ set(koreport_LIB_SRCS
     wrtembed/reportpropertiesbutton.cpp
     wrtembed/sectioneditor.cpp
 
-    plugins/label/KoReportItemLabel.cpp
-    plugins/label/KoReportDesignerItemLabel.cpp
-    plugins/label/krscriptlabel.cpp
-    plugins/label/KoReportLabelPlugin.cpp
+    items/label/KoReportItemLabel.cpp
+    items/label/KoReportDesignerItemLabel.cpp
+    items/label/krscriptlabel.cpp
+    items/label/KoReportLabelPlugin.cpp
 
-    plugins/check/KoReportItemCheck.cpp
-    plugins/check/KoReportDesignerItemCheck.cpp
-#    plugins/check/krscriptcheck.cpp
-    plugins/check/KoReportCheckPlugin.cpp
+    items/check/KoReportItemCheck.cpp
+    items/check/KoReportDesignerItemCheck.cpp
+#    items/check/krscriptcheck.cpp
+    items/check/KoReportCheckPlugin.cpp
 
-    plugins/field/KoReportItemField.cpp
-    plugins/field/KoReportDesignerItemField.cpp
-    plugins/field/krscriptfield.cpp
-    plugins/field/KoReportFieldPlugin.cpp
+    items/field/KoReportItemField.cpp
+    items/field/KoReportDesignerItemField.cpp
+    items/field/krscriptfield.cpp
+    items/field/KoReportFieldPlugin.cpp
 
-    plugins/image/KoReportItemImage.cpp
-    plugins/image/KoReportDesignerItemImage.cpp
-    plugins/image/krscriptimage.cpp
-    plugins/image/KoReportImagePlugin.cpp
+    items/image/KoReportItemImage.cpp
+    items/image/KoReportDesignerItemImage.cpp
+    items/image/krscriptimage.cpp
+    items/image/KoReportImagePlugin.cpp
 
-    plugins/shape/KoReportItemShape.cpp
-    plugins/shape/KoReportDesignerItemShape.cpp
-#    plugins/shape/krscriptshape.cpp
-    plugins/shape/KoReportShapePlugin.cpp
-
-    plugins/text/KoReportItemText.cpp
-    plugins/text/KoReportDesignerItemText.cpp
-    plugins/text/krscripttext.cpp
-    plugins/text/KoReportTextPlugin.cpp
+    items/text/KoReportItemText.cpp
+    items/text/KoReportDesignerItemText.cpp
+    items/text/krscripttext.cpp
+    items/text/KoReportTextPlugin.cpp
     )
 
 kde4_add_ui_files(koreport_LIB_SRCS wrtembed/detailgroupsectiondialog.ui wrtembed/sectioneditor.ui )

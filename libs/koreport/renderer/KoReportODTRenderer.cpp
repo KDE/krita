@@ -48,7 +48,9 @@ bool KoReportODTRenderer::render(const KoReportRendererContext& context, ORODocu
         OROSection *section = document->section(s);
         section->sortPrimatives(OROSection::SortX);
 
-        if (section->type() == KRSectionData::GroupHeader || section->type() == KRSectionData::GroupFooter || section->type() == KRSectionData::Detail){
+        if (section->type() == KRSectionData::GroupHeader || section->type() == KRSectionData::GroupFooter ||
+            section->type() == KRSectionData::ReportHeader || section->type() == KRSectionData::ReportFooter ||
+            section->type() == KRSectionData::Detail){
             //Add this section to the document
 
             if (s > 0) {
@@ -60,9 +62,9 @@ bool KoReportODTRenderer::render(const KoReportRendererContext& context, ORODocu
                 table->appendColumns(section->primitives() - table->columns());
             }
 
-            
             m_cursor.movePosition(QTextCursor::PreviousRow);
-                
+            
+            
             //Render the objects in each section
             for (int i = 0; i < section->primitives(); i++) {
                 OROPrimitive * prim = section->primitive(i);

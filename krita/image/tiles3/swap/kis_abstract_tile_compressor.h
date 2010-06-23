@@ -19,7 +19,7 @@
 #ifndef __KIS_ABSTRACT_TILE_COMPRESSOR_H
 #define __KIS_ABSTRACT_TILE_COMPRESSOR_H
 
-#include <QIODevice>
+#include <KoStore.h>
 
 #include "krita_export.h"
 #include "../kis_tile.h"
@@ -35,13 +35,15 @@ public:
     KisAbstractTileCompressor();
     virtual ~KisAbstractTileCompressor();
 
+public:
+
     /**
      * Compresses the \a tile and writes it into the \a stream.
      * Used by datamanager in load/save routines
      *
      * \see compressTile()
      */
-    virtual void writeTile(KisTileSP tile, QIODevice *stream) = 0;
+    virtual void writeTile(KisTileSP tile, KoStore *store) = 0;
 
     /**
      * Decompresses the \a tile from the \a stream.
@@ -49,7 +51,7 @@ public:
      *
      * \see decompressTile()
      */
-    virtual void readTile(QIODevice *stream, KisTiledDataManager *dm) = 0;
+    virtual void readTile(KoStore *store, KisTiledDataManager *dm) = 0;
 
     /**
      * Compresses a \a tileData and writes it into the \a buffer.

@@ -22,6 +22,39 @@
 #include "tiles3/kis_tiled_data_manager.h"
 #include "tiles3/swap/kis_legacy_tile_compressor.h"
 
+#include <KoStore_p.h>
+
+class KoStoreFake : public KoStore
+{
+public:
+    KoStoreFake() {
+        d_ptr->stream = &m_buffer;
+        d_ptr->isOpen = true;
+        d_ptr->mode = KoStore::Write;
+        m_buffer.open(QIODevice::ReadWrite);
+    }
+    ~KoStoreFake() {
+        // Oh, no, please do not clean anything! :)
+        d_ptr->stream = 0;
+        d_ptr->isOpen = false;
+    }
+
+    void startReading() {
+        m_buffer.seek(0);
+        d_ptr->mode = KoStore::Read;
+    }
+
+    bool openWrite(const QString&) { return true; }
+    bool openRead(const QString&) { return true; }
+    bool closeRead() { return true; }
+    bool closeWrite() { return true; }
+    bool enterRelativeDirectory(const QString&) { return true; }
+    bool enterAbsoluteDirectory(const QString&) { return true; }
+    bool fileExists(const QString&) const { return true; }
+private:
+    QBuffer m_buffer;
+};
+
 bool KisLegacyTileCompressorTest::memoryIsFilled(quint8 c, quint8 *mem, qint32 size)
 {
     for(; size > 0; size--)
@@ -48,14 +81,13 @@ void KisLegacyTileCompressorTest::testRoundTrip()
     tile00 = dm.getTile(0, 0, false);
     QVERIFY(memoryIsFilled(oddPixel1, tile00->data(), TILESIZE));
 
-    QBuffer buffer;
-    buffer.open(QBuffer::ReadWrite);
+    KoStoreFake fakeStore;
 
     KisLegacyTileCompressor compressor;
-    compressor.writeTile(tile00, &buffer);
+    compressor.writeTile(tile00, &fakeStore);
     tile00 = 0;
 
-    buffer.seek(0);
+    fakeStore.startReading();
 
     dm.clear();
 
@@ -63,7 +95,7 @@ void KisLegacyTileCompressorTest::testRoundTrip()
     QVERIFY(memoryIsFilled(defaultPixel, tile00->data(), TILESIZE));
     tile00 = 0;
 
-    compressor.readTile(&buffer, &dm);
+    compressor.readTile(&fakeStore, &dm);
 
     tile00 = dm.getTile(0, 0, false);
     QVERIFY(memoryIsFilled(oddPixel1, tile00->data(), TILESIZE));
@@ -81,7 +113,7 @@ void KisLegacyTileCompressorTest::testLowLevelRoundTrip()
      * globalTileDataStore is not exported out of kritaimage.so,
      * so we get it from the data manager
      */
-    KisTiledDataManager dm(1, &oddPixel1);
+    KisTiledDataManager dm(pixelSize, &oddPixel1);
     KisTileSP tile = dm.getTile(0, 0, true);
     tile->lockForWrite();
 

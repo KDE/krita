@@ -18,6 +18,7 @@
 
 #include "kis_legacy_tile_compressor.h"
 
+#include <QIODevice>
 
 #define TILE_DATA_SIZE(pixelSize) ((pixelSize) * KisTileData::WIDTH * KisTileData::HEIGHT)
 
@@ -29,7 +30,7 @@ KisLegacyTileCompressor::~KisLegacyTileCompressor()
 {
 }
 
-void KisLegacyTileCompressor::writeTile(KisTileSP tile, QIODevice *stream)
+void KisLegacyTileCompressor::writeTile(KisTileSP tile, KoStore *store)
 {
     const qint32 tileDataSize = TILE_DATA_SIZE(tile->pixelSize());
 
@@ -38,16 +39,16 @@ void KisLegacyTileCompressor::writeTile(KisTileSP tile, QIODevice *stream)
 
     writeHeader(tile, headerBuffer);
 
-    stream->write((char *)headerBuffer, strlen((char *)headerBuffer));
+    store->write((char *)headerBuffer, strlen((char *)headerBuffer));
 
     tile->lockForRead();
-    stream->write((char *)tile->data(), tileDataSize);
+    store->write((char *)tile->data(), tileDataSize);
     tile->unlock();
 
     delete[] headerBuffer;
 }
 
-void KisLegacyTileCompressor::readTile(QIODevice *stream, KisTiledDataManager *dm)
+void KisLegacyTileCompressor::readTile(KoStore *store, KisTiledDataManager *dm)
 {
     const qint32 tileDataSize = TILE_DATA_SIZE(pixelSize(dm));
 
@@ -57,6 +58,7 @@ void KisLegacyTileCompressor::readTile(QIODevice *stream, KisTiledDataManager *d
     qint32 x, y;
     qint32 width, height;
 
+    QIODevice *stream = store->device();
     stream->readLine((char *)headerBuffer, bufferSize);
     sscanf((char *) headerBuffer, "%d,%d,%d,%d", &x, &y, &width, &height);
 

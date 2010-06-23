@@ -124,8 +124,8 @@ bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, K
 {
     bool fixed = false;
 
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     if ( element.prefix() == "chart" ) {
-        KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
         styleStack.save();
 
         bool hasStyle = element.hasAttributeNS(KoXmlNS::chart, "style-name");
@@ -161,6 +161,14 @@ bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, K
         }
 
         styleStack.restore();
+    } else {
+        const QString strokeColor(styleStack.property(KoXmlNS::draw, "stroke-color"));
+        if(strokeColor.isEmpty()) {
+            pen.setColor( Qt::black );
+        } else {
+            pen.setColor(styleStack.property(KoXmlNS::svg, "stroke-color"));
+        }
+        fixed = true;
     }
 
     return fixed;

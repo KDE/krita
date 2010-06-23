@@ -310,8 +310,13 @@ private:
     mutable QReadWriteLock m_lock;
 
 private:
+    // Allow compression routines to calculate (col,row) coordinates
+    // and pixel size
+    friend class KisAbstractTileCompressor;
     qint32 xToCol(qint32 x) const;
     qint32 yToRow(qint32 y) const;
+
+private:
     qint32 divideRoundDown(qint32 x, const qint32 y) const;
     KisTileDataWrapper pixelPtr(qint32 x, qint32 y,
                                 enum KisTileDataWrapper::accessType type);

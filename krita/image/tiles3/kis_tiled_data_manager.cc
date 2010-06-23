@@ -140,7 +140,6 @@ bool KisTiledDataManager::write(KoStore *store)
         ++iter;
     }
 
-    printf("*** KisTiledDataManager::write called \n");
     return true;
 }
 bool KisTiledDataManager::read(KoStore *store)

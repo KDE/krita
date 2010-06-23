@@ -40,7 +40,7 @@ HatchingBrush::HatchingBrush(const KisHatchingPaintOpSettings* settings)
     m_settings = new KisHatchingPaintOpSettings();
     m_settings = settings;
     //settings->initializeTwin(m_settings);
-    std::clog << "AERSH " << m_settings->crosshatchingstyle << "\n";
+    //std::clog << "AERSH " << m_settings->crosshatchingstyle << "\n";
 }
 
 
@@ -83,9 +83,6 @@ void HatchingBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, double width, 
     
     //</PSEUDOSETTINGS>
 
-    //****DESCRIBING THE FIRST (BASE) LINE****
-    //QPoint origin(xcoor, ycoor);
-
     //****dx and dy are the separation between lines in the x and y axis
     //dx = s / sin(angle*M_PI/180);    // csc = 1/sin(angle)
     dy = fabs(s / cos(angle*M_PI/180));    // sec = 1/cos(angle), ABSOLUTE VALUE please
@@ -103,7 +100,7 @@ void HatchingBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, double width, 
     {
         //****TURN ANGLE+POINT INTO AN ALGEBRAIC LINE****
         p = tan(angle*M_PI/180);     //angle into slope
-        b = ycoor - p*xcoor;         //slope and point into intercept
+        b = ycoor - p*xcoor;         //slope and point of the Base Line into intercept
         cursor_b = y - p*x;
         //printf ("The tangent of %lf degrees is %lf.\n", angle, p );     //debug line
         //    %    is the modulus operator, fmod is the float modulus operator
@@ -242,7 +239,7 @@ void HatchingBrush::iteratelines (int thickness, double h, double w, double p, d
             therefore if I have only 1 intersection (= corner), don't draw*/
             continue;
         }
-        printf ("Punto A: %f, %f . Punto B: %f, %f. \n", xdraw[0], ydraw[0], xdraw[1], ydraw[1]);
+        //printf ("Punto A: %f, %f . Punto B: %f, %f. \n", xdraw[0], ydraw[0], xdraw[1], ydraw[1]);
         
     }  //endwhile
 }

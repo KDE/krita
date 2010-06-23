@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
- *  Copyright (c) 2008,2009 José Luis Vergara <pentalis@gmail.com>
+ *  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,6 +39,8 @@
 
 #include <kis_pressure_opacity_option.h>
 
+#include <KoColorSpaceRegistry.h>
+
 KisHatchingPaintOp::KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisBrushBasedPaintOp(settings, painter)
         , m_image(image)
@@ -59,63 +61,93 @@ KisHatchingPaintOp::~KisHatchingPaintOp()
 
 double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()) return 1;
+    //------START SIMPLE ERROR CATCHING-------
+    if (!painter()->device()) return 1;
     
-    //blatant copy of BrushOp.cpp
+    //Simple convenience renaming, I'm thinking of removing these inherited quirks
     KisBrushSP brush = m_brush;
-    Q_ASSERT(brush);
-    if (!brush)
-        return 1.0;
-    
-    if (!brush->canPaintFor(info))
-        return 1.0;
-    
     KisPaintDeviceSP device = painter()->device();
     
-    if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+    //Macro to catch errors
+    Q_ASSERT(brush);
+    
+    //----------SIMPLE error catching code, maybe it's not even needed------
+    if (!brush) return 1;
+    if (!brush->canPaintFor(info)) return 1;
+    
+    //DECLARING EMPTY pixel-only paint devices, note that those are smart pointers
+    KisFixedPaintDeviceSP maskDab, hatchedDab = 0;
+    
+    //Declare a variable to store input-based scaling of the brush dab
+    double scale = 1;   // TODO: use actual scale
+    
+    /* DEPENDS ON PRESSURE
+    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+    */
+    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 1.0;
+    
+    
+    //-----------POSITIONING code----------
+    QPointF hotSpot = brush->hotSpot(scale, scale);
+    QPointF pt = info.pos() - hotSpot;
+    
+    qint32 x, y;
+    double xFraction, yFraction;
+    
+    splitCoordinate(pt.x(), &x, &xFraction);
+    splitCoordinate(pt.y(), &y, &yFraction);
+    
+    if (!m_settings->subpixelprecision) {
+        xFraction = 0;
+        yFraction = 0;
+    }
+    //--------END POSITIONING CODE-----------
+    
+    /*--------VERY UGLY LOOKING IF-ELSE block, copypasted from SmudgeOp-------
+    ---This IF-ELSE block is used to turn the mask created in the BrushTip dialogue
+    into a beautiful SELECTION MASK (it's an opacity multiplier), intended to give
+    the brush a "brush feel" (soft borders, round shape) despite it comes from a
+    simple, ugly, hatched rectangle.
+    The MASK is -----> maskDab
+    The HATCHED part is -----> hatchedDab */
+    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
+        maskDab = brush->paintDevice(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
+        maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     } else {
-        m_dab->clear();
+        maskDab = cachedDab();
+        KoColor color = painter()->paintColor();
+        color.convertTo(maskDab->colorSpace());
+        brush->mask(maskDab, color, scale, scale, 0.0, info, xFraction, yFraction);
+        maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     }
     
-    double scale = 1;
-    
-    KisFixedPaintDeviceSP dab = cachedDab();
-    KoColor color = painter()->paintColor();
-    color.convertTo(dab->colorSpace());
-    brush->mask(dab, color, scale, scale, 0.0, info);
+    /*-----Convenient renaming for the limits of the maskDab, this will be used
+    to hatch a dab of just the right size------*/
+    qint32 sw = maskDab->bounds().width();
+    qint32 sh = maskDab->bounds().height();
     
     //printf("maskWidth es %li y maskHeight es %li", brush->width(), brush->height());
     
-    qreal x1, y1;
-
-    x1 = info.pos().x();
-    y1 = info.pos().y();
-
-    if (!m_settings->subpixelprecision)
-    {
-        modf(x1, &x1);
-        modf(y1, &y1);
-    }
-    
     //quint8 origOpacity = m_opacityOption.apply(painter(), info);
-    m_hatchingBrush->paint(m_dab, x1, y1, brush->width(), brush->height(), painter()->paintColor());
-
-    QRect rc = m_dab->extent();
-    QRect limits(QPoint(0,0), QPoint(brush->width(), brush->height()));
     
-    if (m_settings->opaquebackground)
-    {
+    //------This If_block pre-fills the future hatchedDab with a pretty backgroundColor
+    if (m_settings->opaquebackground) {
         KoColor aersh = painter()->backgroundColor();
-        painter()->device()->fill((x1), (y1), (limits.width()-1), (limits.height()-1), aersh.data()); //this plus yellow background = french fry brush
+        hatchedDab->fill(0, 0, (sw-1), (sh-1), aersh.data()); //this plus yellow background = french fry brush
     }
-    painter()->bitBlt(x1, y1, m_dab, 0, 0, limits.width(), limits.height());
+    
+    /*-----This is the 2nd most important line, it's the line that creates the hatching
+    but it doesn't paint anything visible in the user screen----------*/
+    m_hatchingBrush->paint(hatchedDab, x, y, sw, sh, painter()->paintColor());
+    
+    //------THIS IS THE MOST IMPORTANT LINE, IT'S THE LINE THAT ACTUALLY PAINTS-------
+    painter()->bitBlt(x, y, hatchedDab, maskDab, 0, 0, sw, sh);
     
     //printf ("Ancho: %i . Alto: %i. \n", limits.width(), limits.height());
     //painter()->setOpacity(origOpacity);
     
-    return 20;
+    /*-----It took me very long to realize the importance of this line, this is
+    the line that makes all brushes be slow, even if they're small, yay!-------*/
+    //TODO: change default scale setting to have a faster brush.
+    return spacing(scale);
 }
-
-
-

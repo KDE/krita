@@ -95,6 +95,9 @@ private:
 
 class KRITAIMAGE_EXPORT KisTiledDataManager : public KisShared
 {
+private:
+    static const qint32 LEGACY_VERSION = 1;
+    static const qint32 CURRENT_VERSION = 1;
 
 protected:
     /*FIXME:*/

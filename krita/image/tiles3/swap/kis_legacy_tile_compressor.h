@@ -22,7 +22,7 @@
 #include "kis_abstract_tile_compressor.h"
 
 
-class KRITAIMAGE_EXPORT KisLegacyTileCompressor : KisAbstractTileCompressor
+class KRITAIMAGE_EXPORT KisLegacyTileCompressor : public KisAbstractTileCompressor
 {
 public:
     KisLegacyTileCompressor();

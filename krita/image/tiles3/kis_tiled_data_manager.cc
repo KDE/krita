@@ -27,6 +27,7 @@
 #include "kis_tiled_data_manager_p.h"
 #include "kis_memento_manager.h"
 #include "swap/kis_legacy_tile_compressor.h"
+#include "swap/kis_tile_compressor_factory.h"
 
 #include <KoStore.h>
 
@@ -124,10 +125,11 @@ bool KisTiledDataManager::write(KoStore *store)
     KisTileHashTableIterator iter(m_hashTable);
     KisTileSP tile;
 
-    KisLegacyTileCompressor compressor;
+    KisAbstractTileCompressorSP compressor =
+        KisTileCompressorFactory::create(CURRENT_VERSION);
 
     while (tile = iter.tile()) {
-        compressor.writeTile(tile, store);
+        compressor->writeTile(tile, store);
         ++iter;
     }
 
@@ -150,13 +152,22 @@ bool KisTiledDataManager::read(KoStore *store)
     char str[80];
     quint32 numTiles;
     stream->readLine(str, 79);
-    sscanf(str, "%u", &numTiles);
 
+    qint32 tilesVersion = LEGACY_VERSION;
 
-    KisLegacyTileCompressor compressor;
+    if (str[0] == 'V') {
+        sscanf(str, "VERSION %u", &tilesVersion);
+        qFatal("Version %u is not implemented yet", tilesVersion);
+    }
+    else {
+        sscanf(str, "%u", &numTiles);
+    }
+
+    KisAbstractTileCompressorSP compressor =
+        KisTileCompressorFactory::create(tilesVersion);
 
     for (quint32 i = 0; i < numTiles; i++) {
-        compressor.readTile(store, this);
+        compressor->readTile(store, this);
     }
 
     m_mementoManager->commit();

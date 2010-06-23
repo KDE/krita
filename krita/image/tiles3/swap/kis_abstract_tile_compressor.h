@@ -29,7 +29,10 @@
  * Base class for compressing a tile and wrapping it with a header
  */
 
-class KRITAIMAGE_EXPORT KisAbstractTileCompressor
+class KisAbstractTileCompressor;
+typedef KisSharedPtr<KisAbstractTileCompressor> KisAbstractTileCompressorSP;
+
+class KRITAIMAGE_EXPORT KisAbstractTileCompressor : public KisShared
 {
 public:
     KisAbstractTileCompressor();

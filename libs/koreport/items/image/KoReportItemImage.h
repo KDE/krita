@@ -49,6 +49,8 @@ public:
 
     virtual QString typeName() const;
     virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script);
+    using KoReportItemBase::render;
+
     virtual QString itemDataSource() const;
 
 protected:

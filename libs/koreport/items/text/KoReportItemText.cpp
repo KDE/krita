@@ -188,6 +188,8 @@ QString KoReportItemText::typeName() const
 
 int KoReportItemText::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
 {
+    Q_UNUSED(script);
+    
     QString qstrValue;
 
     QString cs = itemDataSource();

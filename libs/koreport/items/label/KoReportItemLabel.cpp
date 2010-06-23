@@ -168,6 +168,9 @@ QString KoReportItemLabel::typeName() const
 
 int KoReportItemLabel::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
 {
+    Q_UNUSED(data)
+    Q_UNUSED(script)
+    
     OROTextBox * tb = new OROTextBox();
     tb->setPosition(m_pos.toScene() + offset);
     tb->setSize(m_size.toScene());

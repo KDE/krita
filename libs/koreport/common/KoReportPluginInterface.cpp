@@ -28,7 +28,7 @@ KoReportPluginInterface::KoReportPluginInterface()
 
 KoReportPluginInterface::KoReportPluginInterface(QObject* parent, const QVariantList& args): QObject(parent)
 {
-
+    Q_UNUSED(args)
 }
 
 KoReportPluginInterface::~KoReportPluginInterface()

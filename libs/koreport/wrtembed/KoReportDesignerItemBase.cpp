@@ -62,6 +62,7 @@ void KoReportDesignerItemBase::buildXML(QGraphicsItem * item, QDomDocument & doc
 
 void KoReportDesignerItemBase::buildXMLRect(QDomDocument & doc, QDomElement & entity, KRPos *pos, KRSize *siz)
 {
+    Q_UNUSED(doc)
     KoUnit unit = pos->unit();
     
     entity.setAttribute("svg:x", QString::number(pos->toUnit().x()) + KoUnit::unitName(unit));

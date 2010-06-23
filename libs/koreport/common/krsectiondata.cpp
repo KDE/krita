@@ -36,6 +36,8 @@ KRSectionData::KRSectionData()
 
 KRSectionData::KRSectionData(const QDomElement & elemSource, KoReportReportData* report)
 {
+    Q_UNUSED(report)
+    
     createProperties();
     m_name = elemSource.tagName();
     setObjectName(m_name);

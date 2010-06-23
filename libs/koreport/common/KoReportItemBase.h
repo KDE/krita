@@ -82,40 +82,32 @@ public:
     @brief Render the item into a primitive which is used by the second stage renderer
     @return the height required by the object
     */
-    virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script) { return 0; }
+    virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script);
 
     /**
     @brief Render a complex item that uses a sub query as a data source
     @return the height required by the object
     */
-    virtual int render(OROPage* page, OROSection* section,  QPointF offset, KoReportData *data, KRScriptHandler *script) { return 0; }
+    virtual int render(OROPage* page, OROSection* section,  QPointF offset, KoReportData *data, KRScriptHandler *script);
     
     /**
     @brief Override if the item supports a simple data source, such as a field
     @return The field name or expression for the data source
     */
-    virtual QString itemDataSource() const {return QString();}
+    virtual QString itemDataSource() const;
 
     /**
     @brief Override if the item uses a sub query and linked fields, such as a chart or sub-report
     @return True if uses a sub query
     */
-    virtual bool supportsSubQuery() { return false; }
+    virtual bool supportsSubQuery();
 
-    KoProperty::Set* properties() {
-        return m_set;
-    }
+    KoProperty::Set* properties();
 
-    KRPos position() {
-        return m_pos;
-    }
+    KRPos position();
 
-    void setEntityName(const QString& n) {
-        m_name->setValue(n);
-    }
-    QString entityName() {
-        return m_name->value().toString();
-    }
+    void setEntityName(const QString& n);
+    QString entityName();
 
     virtual void setUnit(const KoUnit& u);
 

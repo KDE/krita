@@ -309,6 +309,8 @@ QVariant KoReportDesignerItemRectBase::itemChange(GraphicsItemChange change, con
 
 void KoReportDesignerItemRectBase::propertyChanged(const KoProperty::Set &s, const KoProperty::Property &p)
 {
+    Q_UNUSED(s)
+    
     if (p.name() == "Position") {
         m_ppos->setUnitPos(p.value().toPointF(), KRPos::DontUpdateProperty);
     } else if (p.name() == "Size") {
@@ -320,6 +322,6 @@ void KoReportDesignerItemRectBase::propertyChanged(const KoProperty::Set &s, con
 
 void KoReportDesignerItemRectBase::move(const QPointF& m)
 {
-    
+//! TODO    
 }
 

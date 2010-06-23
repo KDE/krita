@@ -103,6 +103,9 @@ QString KoReportItemLine::typeName() const
 
 int KoReportItemLine::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
 {
+    Q_UNUSED(script)
+    Q_UNUSED(data)
+    
     OROLine * ln = new OROLine();
     QPointF s = m_start.toScene();
     QPointF e = m_end.toScene();

@@ -26,6 +26,7 @@
 
 KoReportTextPlugin::KoReportTextPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
+    Q_UNUSED(args)
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:text");
     info->setIcon(KIcon("insert-text"));

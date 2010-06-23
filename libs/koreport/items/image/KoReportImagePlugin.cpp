@@ -26,6 +26,8 @@
 
 KoReportImagePlugin::KoReportImagePlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
+    Q_UNUSED(args)
+    
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:image");
     info->setIcon(KIcon("insert-image"));

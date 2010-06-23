@@ -106,3 +106,53 @@ void KoReportItemBase::setUnit(const KoUnit& u)
     m_pos.setUnit(u);
     m_size.setUnit(u);
 }
+
+int KoReportItemBase::render(OROPage* page, OROSection* section, QPointF offset, QVariant data, KRScriptHandler* script)
+{
+    Q_UNUSED(page)
+    Q_UNUSED(section)
+    Q_UNUSED(offset)
+    Q_UNUSED(data)
+    Q_UNUSED(script)
+    return 0;
+}
+
+int KoReportItemBase::render(OROPage* page, OROSection* section, QPointF offset, KoReportData* data, KRScriptHandler* script)
+{
+    Q_UNUSED(page)
+    Q_UNUSED(section)
+    Q_UNUSED(offset)
+    Q_UNUSED(data)
+    Q_UNUSED(script)
+    return 0;
+}
+
+QString KoReportItemBase::itemDataSource() const
+{
+    return QString();
+}
+
+KRPos KoReportItemBase::position()
+{
+    return m_pos;
+}
+
+KoProperty::Set* KoReportItemBase::properties()
+{
+ return m_set;
+}
+
+bool KoReportItemBase::supportsSubQuery()
+{
+    return false;
+}
+
+QString KoReportItemBase::entityName()
+{
+    return m_name->value().toString();
+}
+
+void KoReportItemBase::setEntityName(const QString& n)
+{
+    m_name->setValue(n);
+}

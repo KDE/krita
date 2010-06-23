@@ -140,6 +140,8 @@ QString KoReportItemImage::typeName() const
 
 int KoReportItemImage::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
 {
+    Q_UNUSED(script)
+    
     QString uudata;
     QByteArray imgdata;
     if (!isInline()) {

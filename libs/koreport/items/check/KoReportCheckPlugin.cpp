@@ -26,6 +26,8 @@
 
 KoReportCheckPlugin::KoReportCheckPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
+    Q_UNUSED(args)
+    
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:check");
     info->setIcon(KIcon("checkbox"));

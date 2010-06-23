@@ -27,15 +27,70 @@
 #include "kis_hatching_pressure_separation_option.h"
 #include "kis_hatching_pressure_thickness_option.h"
 
+#include <kis_brush_option_widget.h>
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_opacity_option.h>
 
 #include <kis_paintop_options_widget.h>
 #include <kis_paint_action_type_option.h>
 
+#include <QDomDocument>
+#include <QDomElement>
+
 KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* parent)
-        : KisBrushBasedPaintopOptionWidget(parent)
+        : KisPaintOpOptionsWidget(parent)
 {
+    //-----READ THIS COMMENT BLOCK FIRST------
+    /*
+    Below you will encounter a reasonably correct solution to the problem of changing
+    the default presets of the "BrushTip" popup configuration dialgoue.
+    In my (Pentalis) opinion, the best solution is code refactoring. On the meanwhile,
+    copypasting this code won't give your class a charisma penalty.
+    In kis_hatching_paintop_settings.cpp you will find a wise snippet of code to
+    discover the structure of your XML config tree if you need to edit it at build
+    time like here.    
+    */
+    
+    //---------START ALTERING DEFAULT VALUES-----------
+    
+    //As the name implies, reconfigurationCourier is the KisPropertiesConfiguration*
+    //we'll use as an intermediary to edit the default settings
+    KisPropertiesConfiguration* reconfigurationCourier = new KisPropertiesConfiguration();
+    
+    //This is the widget whose configuration we will edit to change the
+    //default settings
+    KisBrushOptionWidget* m_brushOption = new KisBrushOptionWidget();
+    
+    //Fill the configuration of the widget with our EMPTY config called reconfigurationCourier
+    m_brushOption->writeOptionSetting(reconfigurationCourier);
+    
+    /*xMLAnalyzer is an empty document we'll use to analyze and edit the config string part by part
+    I know the important string is "brush_definition" because I read the tree with the wise snippet
+    in kis_hatching_paintop_settings.cpp */
+    QDomDocument xMLAnalyzer("");
+    xMLAnalyzer.setContent( reconfigurationCourier->getString("brush_definition") );
+    
+    /*More things I know by reading the XML tree. At this point you can just read it with:
+    qDebug() << xMLAnalyzer.toString() ;
+    those QDomElements are the way to navigate the XML tree, read
+    http://doc.qt.nokia.com/latest/qdomdocument.html for more information */
+    QDomElement firstTag = xMLAnalyzer.documentElement();
+    QDomElement firstTagsChild = firstTag.elementsByTagName("MaskGenerator").item(0).toElement();
+    
+    //Set the default values at last
+    firstTag.attributeNode("spacing").setValue("0.4");
+    firstTagsChild.attributeNode("radius").setValue("30");
+    
+    //Write them into the intermediary config file
+    reconfigurationCourier->setProperty("brush_definition", xMLAnalyzer.toString() );
+    
+    //Put that file to good use and feed m_brushOption with this modified configuration
+    m_brushOption->readOptionSetting(reconfigurationCourier);
+    
+    //---------END OF ALTERING DEFAULT VALUES-----------
+    
+    //-------Adding widgets to the screen------------
+    addPaintOpOption(m_brushOption);
     addPaintOpOption(new KisHatchingOptions());
     addPaintOpOption(new KisHatchingPreferences());
     //addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
@@ -51,9 +106,11 @@ KisHatchingPaintOpSettingsWidget::~ KisHatchingPaintOpSettingsWidget()
 
 KisPropertiesConfiguration*  KisHatchingPaintOpSettingsWidget::configuration() const
 {
+    //---------CODE THAT WON'T BE EXECUTED ANYWAY--------
     KisHatchingPaintOpSettings* config = new KisHatchingPaintOpSettings();
     config->setOptionsWidget(const_cast<KisHatchingPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "hatchingbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;
+    //------END CODE THAT DOESN'T GET EXECUTED ANYWAY-------
 }

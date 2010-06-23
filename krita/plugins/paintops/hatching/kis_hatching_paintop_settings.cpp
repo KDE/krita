@@ -21,6 +21,9 @@
 
 #include <kis_paint_action_type_option.h>
 
+#include <QDomDocument>
+#include <QDomElement>
+
 KisHatchingPaintOpSettings::KisHatchingPaintOpSettings()
 {
 }
@@ -31,6 +34,14 @@ KisHatchingPaintOpSettings::~KisHatchingPaintOpSettings()
 
 void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* convenienttwin) const
 {
+    /*--------DO NOT REMOVE THIS WISE PIECE OF TEXT, USE WHEN DEBUGGING TO SEE THE XML CONFIG TREE
+    QMap<QString, QVariant> rofl = QMap<QString, QVariant>(getProperties());
+   
+    QMap<QString, QVariant>::const_iterator i;
+    for (i = rofl.constBegin(); i != rofl.constEnd(); ++i)
+        qDebug() << i.key() << ":" << i.value();
+    ---------DO NOT REMOVE-------DO NOT REMOVE---------*/
+    
     convenienttwin->angle = getDouble("Hatching/angle");
     convenienttwin->separation = getDouble("Hatching/separation");
     convenienttwin->thickness = getDouble("Hatching/thickness");

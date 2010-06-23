@@ -56,5 +56,3 @@ QObject* KoReportLabelPlugin::createDesignerInstance(QDomNode & element, KoRepor
     return new KoReportDesignerItemLabel(element, designer, scene);
 }
 
-
-#include "moc_KoReportLabelPlugin.cpp"

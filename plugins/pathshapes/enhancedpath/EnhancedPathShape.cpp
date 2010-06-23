@@ -380,51 +380,54 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
 {
     reset();
 
-    KoXmlElement child;
-    forEachElement(child, element) {
-        if (child.localName() == "enhanced-geometry" && child.namespaceURI() == KoXmlNS::draw) {
-            // load the viewbox
-            QRectF viewBox = loadOdfViewbox(child);
-            if (! viewBox.isEmpty())
-                m_viewBox = viewBox;
-
-            // load the modifiers
-            QString modifiers = child.attributeNS(KoXmlNS::draw, "modifiers", "");
-            if (! modifiers.isEmpty()) {
-                addModifiers(modifiers);
-            }
-
-            KoXmlElement grandChild;
-            forEachElement(grandChild, child) {
-                if (grandChild.namespaceURI() != KoXmlNS::draw)
-                    continue;
-                if (grandChild.localName() == "equation") {
-                    QString name = grandChild.attributeNS(KoXmlNS::draw, "name");
-                    QString formula = grandChild.attributeNS(KoXmlNS::draw, "formula");
-                    addFormula(name, formula);
-                } else if (grandChild.localName() == "handle") {
-                    EnhancedPathHandle * handle = new EnhancedPathHandle(this);
-                    if (handle->loadOdf(grandChild, context)) {
-                        m_enhancedHandles.append(handle);
-                        evaluateHandles();
-                    } else {
-                        delete handle;
-                    }
-                }
-
-            }
-            // load the enhanced path data
-            QString path = child.attributeNS(KoXmlNS::draw, "enhanced-path", "");
-#ifndef NWORKAROUND_ODF_BUGS
-            KoOdfWorkaround::fixEnhancedPath(path, child, context);
-#endif
-            if (!path.isEmpty()) {
-                parsePathData(path);
-            }
-
-            setMirrorHorizontally( child.attributeNS(KoXmlNS::draw, "mirror-horizontal") == "true");
-            setMirrorVertically( child.attributeNS(KoXmlNS::draw, "mirror-vertical") == "true");
+    const KoXmlElement enhancedGeometry(KoXml::namedItemNS(element, KoXmlNS::draw, "enhanced-geometry" ) );
+    if (!enhancedGeometry.isNull() ) {
+        // load the modifiers
+        QString modifiers = enhancedGeometry.attributeNS(KoXmlNS::draw, "modifiers", "");
+        if (! modifiers.isEmpty()) {
+            addModifiers(modifiers);
         }
+
+        KoXmlElement grandChild;
+        forEachElement(grandChild, enhancedGeometry) {
+            if (grandChild.namespaceURI() != KoXmlNS::draw)
+                continue;
+            if (grandChild.localName() == "equation") {
+                QString name = grandChild.attributeNS(KoXmlNS::draw, "name");
+                QString formula = grandChild.attributeNS(KoXmlNS::draw, "formula");
+                addFormula(name, formula);
+            } else if (grandChild.localName() == "handle") {
+                EnhancedPathHandle * handle = new EnhancedPathHandle(this);
+                if (handle->loadOdf(grandChild, context)) {
+                    m_enhancedHandles.append(handle);
+                    evaluateHandles();
+                } else {
+                    delete handle;
+                }
+            }
+
+        }
+        // load the enhanced path data
+        QString path = enhancedGeometry.attributeNS(KoXmlNS::draw, "enhanced-path", "");
+#ifndef NWORKAROUND_ODF_BUGS
+        KoOdfWorkaround::fixEnhancedPath(path, enhancedGeometry, context);
+#endif
+        if (!path.isEmpty()) {
+            parsePathData(path);
+        }
+
+        // load the viewbox
+        QRectF viewBox = loadOdfViewbox(enhancedGeometry);
+        if (! viewBox.isEmpty()) {
+            m_viewBox = viewBox;
+        }
+        else {
+            // if there is no view box defined make it is big as the path.
+            m_viewBox = m_viewBound;
+        }
+
+        setMirrorHorizontally(enhancedGeometry.attributeNS(KoXmlNS::draw, "mirror-horizontal") == "true");
+        setMirrorVertically(enhancedGeometry.attributeNS(KoXmlNS::draw, "mirror-vertical") == "true");
     }
 
     QSizeF size;

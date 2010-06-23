@@ -215,7 +215,7 @@ KoColorBackground *KoOdfWorkaround::fixBackgroundColor(const KoShape *shape, KoS
             KoStyleStack &styleStack = odfContext.styleStack();
             const QString color(styleStack.property(KoXmlNS::draw, "fill-color"));
             if (color.isEmpty()) {
-                colorBackground = new KoColorBackground(Qt::cyan);
+                colorBackground = new KoColorBackground("#99ccff");
             } else {
                 colorBackground = new KoColorBackground(color);
             }

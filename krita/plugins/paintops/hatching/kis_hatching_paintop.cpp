@@ -63,6 +63,10 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
 {
     //------START SIMPLE ERROR CATCHING-------
     if (!painter()->device()) return 1;
+    if (!m_hatchedDab)
+        m_hatchedDab = new KisPaintDevice(painter()->device()->colorSpace());
+    else
+        m_hatchedDab->clear();
     
     //Simple convenience renaming, I'm thinking of removing these inherited quirks
     KisBrushSP brush = m_brush;
@@ -75,8 +79,8 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     if (!brush) return 1;
     if (!brush->canPaintFor(info)) return 1;
     
-    //DECLARING EMPTY pixel-only paint devices, note that those are smart pointers
-    KisFixedPaintDeviceSP maskDab, hatchedDab = 0;
+    //DECLARING EMPTY pixel-only paint device, note that it is a smart pointer
+    KisFixedPaintDeviceSP maskDab = 0;
     
     //Declare a variable to store input-based scaling of the brush dab
     double scale = 1;   // TODO: use actual scale
@@ -109,7 +113,7 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     the brush a "brush feel" (soft borders, round shape) despite it comes from a
     simple, ugly, hatched rectangle.
     The MASK is -----> maskDab
-    The HATCHED part is -----> hatchedDab */
+    The HATCHED part is -----> m_hatchedDab */
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         maskDab = brush->paintDevice(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
         maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
@@ -130,18 +134,18 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     
     //quint8 origOpacity = m_opacityOption.apply(painter(), info);
     
-    //------This If_block pre-fills the future hatchedDab with a pretty backgroundColor
+    //------This If_block pre-fills the future m_hatchedDab with a pretty backgroundColor
     if (m_settings->opaquebackground) {
         KoColor aersh = painter()->backgroundColor();
-        hatchedDab->fill(0, 0, (sw-1), (sh-1), aersh.data()); //this plus yellow background = french fry brush
+        m_hatchedDab->fill(0, 0, (sw-1), (sh-1), aersh.data()); //this plus yellow background = french fry brush
     }
     
     /*-----This is the 2nd most important line, it's the line that creates the hatching
     but it doesn't paint anything visible in the user screen----------*/
-    m_hatchingBrush->paint(hatchedDab, x, y, sw, sh, painter()->paintColor());
+    m_hatchingBrush->paint(m_hatchedDab, x, y, sw, sh, painter()->paintColor());
     
     //------THIS IS THE MOST IMPORTANT LINE, IT'S THE LINE THAT ACTUALLY PAINTS-------
-    painter()->bitBlt(x, y, hatchedDab, maskDab, 0, 0, sw, sh);
+    painter()->bitBlt(x, y, m_hatchedDab, maskDab, 0, 0, sw, sh);
     
     //printf ("Ancho: %i . Alto: %i. \n", limits.width(), limits.height());
     //painter()->setOpacity(origOpacity);

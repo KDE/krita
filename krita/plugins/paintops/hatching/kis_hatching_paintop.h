@@ -43,6 +43,7 @@ private:
     KisHatchingPaintOpSettings* m_settings;
     KisImageWSP m_image;
     HatchingBrush * m_hatchingBrush;
+    KisPaintDeviceSP m_hatchedDab;
     //KisPressureOpacityOption m_opacityOption;
     //HatchingAttributes m_attributes;
 };

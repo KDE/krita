@@ -31,6 +31,7 @@
 #include <KoXmlNS.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
+#include <KoGenStyle.h>
 
 #include <QPainter>
 #include <QTimer>
@@ -240,6 +241,14 @@ KoImageCollection *PictureShape::imageCollection() const
     return m_imageCollection;
 }
 
+QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const
+{
+    if(transparency() > 0.0) {
+        style.addProperty("draw:image-opacity", QString("%1%").arg((1.0 - transparency()) * 100.0));
+    }
+    return KoShape::saveStyle(style, context);
+}
+
 void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context)
 {
     KoShape::loadStyle(element, context);
@@ -258,6 +267,10 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
         else if (colorMode == "watermark") {
             setMode(Watermark);
         }
+    }
+    const QString opacity(styleStack.property(KoXmlNS::draw, "image-opacity"));
+    if (! opacity.isEmpty() && opacity.right(1) == "%") {
+        setTransparency(1.0 - (opacity.left(opacity.length() - 1).toFloat() / 100.0));
     }
 }
 

@@ -36,7 +36,7 @@
 #include <KoPathPoint.h>
 
 EnhancedPathShape::EnhancedPathShape(const QRectF &viewBox)
-    : m_viewBox(viewBox), m_viewBoxOffset(0.0, 0.0), m_mirrorVertically(false), m_mirrorHorizontally(false)
+: m_viewBox(viewBox), m_viewBoxOffset(0.0, 0.0), m_mirrorVertically(false), m_mirrorHorizontally(false)
 {
 }
 
@@ -363,7 +363,6 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
 
         context.xmlWriter().endElement(); // draw:enhanced-geometry
         saveOdfCommonChildElements(context);
-        saveText(context);
         context.xmlWriter().endElement(); // draw:custom-shape
 
         if (m_mirrorHorizontally) {
@@ -446,7 +445,6 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     setPosition(pos);
 
     loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements);
-    loadText(element, context);
 
     return true;
 }

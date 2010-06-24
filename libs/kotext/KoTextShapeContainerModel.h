@@ -27,8 +27,7 @@
 class KoTextAnchor;
 
 /**
- * A model to position children of the text shape.
- *
+ *  A model to position children of the text shape.
  * All anchored frames are children of the text shape, and they get positioned
  * by the text layouter (only KWord at this time).
  */

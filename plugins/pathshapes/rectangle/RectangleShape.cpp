@@ -66,7 +66,7 @@ bool RectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext 
     updateHandles();
 
     loadOdfAttributes(element, context, OdfTransformation);
-    loadText(element, context);
+
     return true;
 }
 
@@ -80,7 +80,6 @@ void RectangleShape::saveOdf(KoShapeSavingContext & context) const
             context.xmlWriter().addAttributePt("svg:ry", m_cornerRadiusY * (0.5*size().height()) / 100.0);
         }
         saveOdfCommonChildElements(context);
-        saveText(context);
         context.xmlWriter().endElement();
     } else {
         KoPathShape::saveOdf(context);

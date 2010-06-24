@@ -23,7 +23,7 @@
 #include "KoText.h"
 #include "kotext_export.h"
 
-#include <KoTextShapeDataBase.h>
+#include <KoShapeUserData.h>
 #include <KoInsets.h>
 #include <KoXmlReaderForward.h>
 
@@ -44,7 +44,7 @@ class KoDocumentRdfBase;
  * multiple instances of this shape data) can share one QTextDocument by providing a
  * different view on (a different part of) the QTextDocument.
  */
-class KOTEXT_EXPORT KoTextShapeData : public KoTextShapeDataBase
+class KOTEXT_EXPORT KoTextShapeData : public KoShapeUserData
 {
     Q_OBJECT
 public:
@@ -59,6 +59,8 @@ public:
      *    of this data and the doc will be deleted when this shapeData dies.
      */
     void setDocument(QTextDocument *document, bool transferOwnership = true);
+    /// return the document
+    QTextDocument *document();
 
     /**
      * return the amount of points into the document (y) this shape will display.
@@ -109,6 +111,18 @@ public:
     void fireResizeEvent();
 
     /**
+     * Set the margins that will make the shapes text area smaller.
+     * The shape that owns this textShapeData object will layout text in an area
+     * confined by the shape size made smaller by the margins set here.
+     * @param margins the margins that shrink the text area.
+     */
+    void setShapeMargins(const KoInsets &margins);
+    /**
+     * returns the currently set margins for the shape.
+     */
+    KoInsets shapeMargins() const;
+
+    /**
      * Calling this method will do a layout run of the text for this shape using the
      * provided textPage. The currently set page() will not be touched.
      * This is a special method designed for small texts that are used on more than
@@ -125,6 +139,20 @@ public:
     KoTextPage* page() const;
 
     /**
+    * Load the TextShape from ODF.
+    *
+    * @see the @a TextShape::loadOdf() method which calls this method.
+    * @see the @a KoTextLoader::loadBody() method which got called by this method
+    * to load the ODF.
+    */
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context, KoDocumentRdfBase *rdfData = 0);
+    /**
+    * Store the TextShape data as ODF.
+    * @see TextShape::saveOdf()
+    */
+    void saveOdf(KoShapeSavingContext & context, int from = 0, int to = -1, KoDocumentRdfBase *rdfData = 0) const;
+
+    /**
      * Set the page direction.
      * The page direction will determine behavior on the insertion of new text and those
      * new paragraphs default direction.
@@ -137,22 +165,10 @@ public:
      */
     KoText::Direction pageDirection() const;
 
-    /**
-     * Load the TextShape from ODF.
-     *
-     * @see the @a TextShape::loadOdf() method which calls this method.
-     * @see the @a KoTextLoader::loadBody() method which got called by this method
-     * to load the ODF.
-     */
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context, KoDocumentRdfBase *rdfData);
-
-    /**
-     * Store the TextShape data as ODF.
-     * @see TextShape::saveOdf()
-     */
-    void saveOdf(KoShapeSavingContext & context, int from = 0, int to = -1) const;
-    void saveOdf(KoShapeSavingContext & context, int from, int to, KoDocumentRdfBase *rdfData) const;
+    /** Sets the vertical alignment of all the text inside the shape. */
+    void setVerticalAlignment(Qt::Alignment alignment);
+    /** Returns the vertical alignment of all the text in the shape */
+    Qt::Alignment verticalAlignment() const;
 
 signals:
     /**
@@ -164,7 +180,7 @@ signals:
     void relayout();
 
 private:
-    Q_DECLARE_PRIVATE(KoTextShapeData)
+    KoTextShapeDataPrivate *const d;
 };
 
 #endif

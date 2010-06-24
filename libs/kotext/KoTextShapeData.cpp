@@ -20,8 +20,6 @@
  */
 
 #include "KoTextShapeData.h"
-#include <KoTextShapeDataBase.h>
-#include <KoTextShapeDataBase_p.h>
 #include "KoTextDocument.h"
 #include "KoTextEditor.h"
 #include "KoTextDocumentLayout.h"
@@ -50,50 +48,49 @@
 
 #include "KoTextDebug.h"
 
-class KoTextShapeDataPrivate : public KoTextShapeDataBasePrivate
+class KoTextShapeDataPrivate
 {
 public:
     KoTextShapeDataPrivate()
-            : ownsDocument(true),
+            : document(0),
+            ownsDocument(true),
             dirty(true),
             offset(0.0),
             position(-1),
             endPosition(-1),
             direction(KoText::AutoDirection),
-            textpage(0)
+            textpage(0),
+            textAlignment(Qt::AlignLeft | Qt::AlignTop)
     {
     }
 
-    virtual ~KoTextShapeDataPrivate()
-    {
-        if (ownsDocument) {
-            delete document;
-        }
-        delete textpage;
-    }
-
-    bool ownsDocument;
-    bool dirty;
+    QTextDocument *document;
+    bool ownsDocument, dirty;
     qreal offset;
     int position, endPosition;
+    KoInsets margins;
     KoText::Direction direction;
     KoTextPage *textpage;
+    Qt::Alignment textAlignment;
 };
 
 
 KoTextShapeData::KoTextShapeData()
-    : KoTextShapeDataBase(*(new KoTextShapeDataPrivate()))
+        : d(new KoTextShapeDataPrivate())
 {
     setDocument(new QTextDocument, true);
 }
 
 KoTextShapeData::~KoTextShapeData()
 {
+    delete d->textpage;
+    if (d->ownsDocument)
+        delete d->document;
+    delete d;
 }
 
 void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnership)
 {
-    Q_D(KoTextShapeData);
     Q_ASSERT(document);
     if (d->ownsDocument && document != d->document)
         delete d->document;
@@ -123,57 +120,53 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
         kodoc.setTextEditor(new KoTextEditor(d->document));
 }
 
+QTextDocument *KoTextShapeData::document()
+{
+    return d->document;
+}
+
 qreal KoTextShapeData::documentOffset() const
 {
-    Q_D(const KoTextShapeData);
     return d->offset;
 }
 
 void KoTextShapeData::setDocumentOffset(qreal offset)
 {
-    Q_D(KoTextShapeData);
     d->offset = offset;
 }
 
 int KoTextShapeData::position() const
 {
-    Q_D(const KoTextShapeData);
     return d->position;
 }
 
 void KoTextShapeData::setPosition(int position)
 {
-    Q_D(KoTextShapeData);
     d->position = position;
 }
 
 int KoTextShapeData::endPosition() const
 {
-    Q_D(const KoTextShapeData);
     return d->endPosition;
 }
 
 void KoTextShapeData::setEndPosition(int position)
 {
-    Q_D(KoTextShapeData);
     d->endPosition = position;
 }
 
 void KoTextShapeData::foul()
 {
-    Q_D(KoTextShapeData);
     d->dirty = true;
 }
 
 void KoTextShapeData::wipe()
 {
-    Q_D(KoTextShapeData);
     d->dirty = false;
 }
 
 bool KoTextShapeData::isDirty() const
 {
-    Q_D(const KoTextShapeData);
     return d->dirty;
 }
 
@@ -182,34 +175,35 @@ void KoTextShapeData::fireResizeEvent()
     emit relayout();
 }
 
+void KoTextShapeData::setShapeMargins(const KoInsets &margins)
+{
+    d->margins = margins;
+}
+
+KoInsets KoTextShapeData::shapeMargins() const
+{
+    return d->margins;
+}
+
 void KoTextShapeData::setPageDirection(KoText::Direction direction)
 {
-    Q_D(KoTextShapeData);
     d->direction = direction;
 }
 
 KoText::Direction KoTextShapeData::pageDirection() const
 {
-    Q_D(const KoTextShapeData);
     return d->direction;
 }
 
 void KoTextShapeData::setPage(KoTextPage* textpage)
 {
-    Q_D(KoTextShapeData);
     delete d->textpage;
     d->textpage = textpage;
 }
 
 KoTextPage* KoTextShapeData::page() const
 {
-    Q_D(const KoTextShapeData);
     return d->textpage;
-}
-
-bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
-{
-    loadOdf(element, context, 0);
 }
 
 bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context, KoDocumentRdfBase *rdfData)
@@ -226,21 +220,14 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
     return true;
 }
 
-void KoTextShapeData::saveOdf(KoShapeSavingContext &context, int from, int to) const
-{
-    saveOdf(context, from, to, 0);
-}
-
 void KoTextShapeData::saveOdf(KoShapeSavingContext &context, int from, int to, KoDocumentRdfBase *rdfData) const
 {
-    Q_D(const KoTextShapeData);
     KoTextWriter writer(context, rdfData);
     writer.write(d->document, from, to);
 }
 
 void KoTextShapeData::relayoutFor(KoTextPage &textPage)
 {
-    Q_D(KoTextShapeData);
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->document->documentLayout());
     if (layout == 0)
         return;
@@ -250,6 +237,17 @@ void KoTextShapeData::relayoutFor(KoTextPage &textPage)
     layout->interruptLayout();
     layout->layout();
     d->textpage = oldPage;
+}
+
+void KoTextShapeData::setVerticalAlignment(Qt::Alignment alignment)
+{
+    d->textAlignment = (d->textAlignment & Qt::AlignHorizontal_Mask)
+        | (alignment & Qt::AlignVertical_Mask);
+}
+
+Qt::Alignment KoTextShapeData::verticalAlignment() const
+{
+    return d->textAlignment & Qt::AlignVertical_Mask;
 }
 
 #include <KoTextShapeData.moc>

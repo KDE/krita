@@ -481,7 +481,11 @@ void KisTool::resetCursorStyle()
         break;
 #if defined(HAVE_OPENGL)
     case CURSOR_STYLE_3D_MODEL:
-        useCursor(d->cursor);
+        if(isCanvasOpenGL()) {
+            useCursor(d->cursor);
+        } else {
+            useCursor(KisCursor::upArrowCursor());
+        }
         break;
 #endif
     case CURSOR_STYLE_OUTLINE:

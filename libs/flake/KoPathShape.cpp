@@ -50,7 +50,7 @@ static bool qIsNaNPoint(const QPointF &p) {
 }
 
 KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
-    : KoShapePrivate(q),
+    : KoTextOnShapeContainerPrivate(q),
     fillRule(Qt::OddEvenFill)
 {
 }
@@ -90,12 +90,12 @@ void KoPathShapePrivate::applyViewboxTransformation(const KoXmlElement &element)
 
 /////////////////////////
 KoPathShape::KoPathShape()
-    :KoShape(*(new KoPathShapePrivate(this)))
+    : KoTextOnShapeContainer(*(new KoPathShapePrivate(this)))
 {
 }
 
 KoPathShape::KoPathShape(KoPathShapePrivate &dd)
-    : KoShape(dd)
+    : KoTextOnShapeContainer(dd)
 {
 }
 
@@ -114,6 +114,7 @@ void KoPathShape::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().addAttribute("koffice:nodeTypes", d->nodeTypes());
 
     saveOdfCommonChildElements(context);
+    saveText(context);
     context.xmlWriter().endElement();
 }
 
@@ -172,7 +173,7 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
     setPosition(pos);
 
     loadOdfAttributes(element, context, OdfTransformation);
-
+    loadText(element, context);
     return true;
 }
 

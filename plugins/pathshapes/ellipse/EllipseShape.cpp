@@ -75,6 +75,7 @@ void EllipseShape::saveOdf(KoShapeSavingContext &context) const
             context.xmlWriter().addAttribute("draw:end-angle", m_endAngle);
         }
         saveOdfCommonChildElements(context);
+        saveText(context);
         context.xmlWriter().endElement();
     } else {
         KoPathShape::saveOdf(context);
@@ -124,14 +125,14 @@ bool EllipseShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     setStartAngle(element.attributeNS(KoXmlNS::draw, "start-angle", "0").toDouble());
     setEndAngle(element.attributeNS(KoXmlNS::draw, "end-angle", "360").toDouble());
     if (!radiusGiven) {
-        // is the size was given by width and height we have to reset the data as the size of the 
+        // is the size was given by width and height we have to reset the data as the size of the
         // part of the cut/pie is given.
         setSize(size);
         setPosition(pos);
     }
 
     loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements);
-
+    loadText(element, context);
     return true;
 }
 

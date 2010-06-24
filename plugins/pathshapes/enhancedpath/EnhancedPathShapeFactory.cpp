@@ -50,6 +50,7 @@ EnhancedPathShapeFactory::EnhancedPathShapeFactory(QObject *parent)
 
 KoShape *EnhancedPathShapeFactory::createDefaultShape(KoResourceManager *) const
 {
+
     EnhancedPathShape *shape = new EnhancedPathShape(QRectF(0, 0, 100, 100));
     shape->setBorder(new KoLineBorder(1.0));
     shape->setShapeId(KoPathShapeId);

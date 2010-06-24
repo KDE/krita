@@ -28,6 +28,7 @@
 
 #include "KoShape.h"
 #include "KoPathSegment.h"
+#include "KoTextOnShapeContainer.h"
 
 #define KoPathShapeId "KoPathShape"
 
@@ -35,12 +36,13 @@ class KoPathShape;
 class KoPathPoint;
 class KoPathShapePrivate;
 
+/// The position of a path point within a path shape
 typedef QPair<int, int> KoPathPointIndex;
 
 /// a KoSubpath contains a path from a moveTo until a close or a new moveTo
 typedef QList<KoPathPoint *> KoSubpath;
 typedef QList<KoSubpath *> KoSubpathList;
-/// The position of a path point within a path shape
+
 /**
  * @brief This is the base for all graphical objects.
  *
@@ -68,8 +70,10 @@ typedef QList<KoSubpath *> KoSubpathList;
  * Not the segments are stored but the points. Out of the points the segments are
  * generated. See the outline method. The reason for storing it like that is that
  * it is the points that are modified by the user and not the segments.
+ *
+ * Since ODF supports text on all sorts of path shapes, KoPathShape inherits KoTextOnShapeContainer.
  */
-class FLAKE_EXPORT KoPathShape : public KoShape
+class FLAKE_EXPORT KoPathShape : public KoTextOnShapeContainer
 {
 public:
     /**

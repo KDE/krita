@@ -19,9 +19,10 @@
 #ifndef KOPATHSHAPEPRIVATE_H
 #define KOPATHSHAPEPRIVATE_H
 
-#include "KoShape_p.h"
+#include "KoPathShape.h"
+#include "KoTextOnShapeContainer_p.h"
 
-class KoPathShapePrivate : public KoShapePrivate
+class KoPathShapePrivate : public KoTextOnShapeContainerPrivate
 {
 public:
     KoPathShapePrivate(KoPathShape *q);

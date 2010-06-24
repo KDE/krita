@@ -341,6 +341,7 @@ bool StarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & co
     setTransformation(QMatrix());
 
     loadOdfAttributes(element, context, OdfAllAttributes);
+    loadText(element, context);
 
     return true;
 }
@@ -386,6 +387,7 @@ void StarShape::saveOdf(KoShapeSavingContext & context) const
             context.xmlWriter().endElement(); // draw:enhanced-geometry
 
             saveOdfCommonChildElements(context);
+            saveText(context);
             context.xmlWriter().endElement(); // draw:custom-shape
         }
         else {
@@ -401,6 +403,7 @@ void StarShape::saveOdf(KoShapeSavingContext & context) const
                 context.xmlWriter().addAttribute("draw:sharpness", QString("%1%").arg(percent));
             }
             saveOdfCommonChildElements(context);
+            saveText(context);
             context.xmlWriter().endElement();
         }
     } else {

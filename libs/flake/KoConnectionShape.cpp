@@ -310,7 +310,7 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
     saveOdfAttributes(context, OdfViewbox);
 
     saveOdfCommonChildElements(context);
-
+    saveText(context);
     context.xmlWriter().endElement();
 }
 
@@ -318,6 +318,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
 {
     Q_D(KoConnectionShape);
     loadOdfAttributes(element, context, OdfMandatories | OdfCommonChildElements | OdfAdditionalAttributes);
+    loadText(element, context);
 
     QString type = element.attributeNS(KoXmlNS::draw, "type", "standard");
     if (type == "lines")

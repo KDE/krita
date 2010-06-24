@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Mind Tree
+X-KDE-ServiceTypes=KOffice/Shape
+Type=Service
+X-KDE-Library=tree
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

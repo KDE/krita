@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="25">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="26">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -31,7 +31,7 @@
  <Menu name="View"><text>&amp;View</text>
   <Action name="view_fullscreen"/>
   <Action name="mirror_canvas"/>
-  <Action name="toggledockers"/>
+  <Action name="view_toggledockers"/>
   <Separator/>
   <Action name="view_newview"/>    
   <ActionList name="view_closeallviews"/>   

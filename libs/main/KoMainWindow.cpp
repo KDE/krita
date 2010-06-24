@@ -197,6 +197,7 @@ public:
     KAction *showFileVersions;
     KAction *importFile;
     KAction *exportFile;
+    KAction* toggleDockers;
     KRecentFilesAction *recent;
 
     bool isImporting;
@@ -337,6 +338,13 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     QAction *sep = new QAction(this);
     sep->setSeparator(true);
     d->splitViewActionList.append(sep);
+            
+    d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
+    d->toggleDockers->setChecked(true);
+    actionCollection()->addAction("view_toggledockers", d->toggleDockers);
+
+    d->toggleDockers->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
+    connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
     d->dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);

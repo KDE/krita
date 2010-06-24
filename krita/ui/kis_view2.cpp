@@ -164,7 +164,6 @@ public:
     KisFilterManager * filterManager;
     KisStatusBar * statusBar;
     KAction * totalRefresh;
-    KAction* toggleDockers;
     KAction* mirrorCanvas;
     KAction* createTemplate;
     KisSelectionManager *selectionManager;
@@ -194,17 +193,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
     actionCollection()->addAction("createTemplate", m_d->createTemplate);
     connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
-
-    if (shell()) {
-        m_d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
-        m_d->toggleDockers->setChecked(true);
-        actionCollection()->addAction("toggledockers", m_d->toggleDockers);
-
-        m_d->toggleDockers->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
-        connect(m_d->toggleDockers, SIGNAL(toggled(bool)), shell(), SLOT(toggleDockersVisibility(bool)));
-    } else {
-        m_d->toggleDockers = 0;
-    }
 
     setComponentData(KisFactory2::componentData(), false);
 

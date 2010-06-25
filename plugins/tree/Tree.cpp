@@ -52,6 +52,8 @@ Tree::Tree(KoShape *shape): KoShapeContainer(new Layout(this))
 {
     shape->setParent(this);
     layout()->setRoot(shape);
+    layout()->layout();
+    update();
 }
 
 Tree::~Tree()
@@ -66,6 +68,7 @@ void Tree::addNewChild()
     KoShape *child = new Tree(shape);
     addShape(child);
     layout()->layout();
+    update();
     kDebug() << "end";
 }
 

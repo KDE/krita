@@ -45,7 +45,6 @@ public:
     virtual void saveOdf(KoShapeSavingContext &context) const;
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
-
 private:
 //     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
     virtual Layout *layout() const;

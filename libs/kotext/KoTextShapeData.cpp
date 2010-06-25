@@ -195,7 +195,7 @@ KoText::Direction KoTextShapeData::pageDirection() const
     return d->direction;
 }
 
-void KoTextShapeData::setPage(KoTextPage* textpage)
+void KoTextShapeData::setPage(KoTextPage *textpage)
 {
     delete d->textpage;
     d->textpage = textpage;
@@ -206,7 +206,7 @@ KoTextPage* KoTextShapeData::page() const
     return d->textpage;
 }
 
-bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context, KoDocumentRdfBase *rdfData)
+bool KoTextShapeData::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData)
 {
     KoTextLoader loader(context, rdfData);
 

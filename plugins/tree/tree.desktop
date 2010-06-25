@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Mind Tree
+Name[x-test]=xxMind Treexx
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=tree

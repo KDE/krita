@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="26">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="27">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -75,6 +75,7 @@
   <Separator/>
   <DefineGroup name="canvas_resize_merge" append="canvas_resize_merge"/>
   <Action name="resizeimagetolayer"/>
+  <Action name="resizeimagetoselection"/>
   <Separator/>
   <DefineGroup name="image_transform_merge" append="image_transform_merge"/>
 </Menu>

@@ -73,7 +73,7 @@ class BaseLut {
       init();
     }
     inline ~BaseLut() {
-      delete m_table;
+      delete[] m_table;
     }
   public:
     /**

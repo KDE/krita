@@ -44,6 +44,8 @@ bool KoReportODTRenderer::render(const KoReportRendererContext& context, ORODocu
     tableFormat.setWidth(QTextLength(QTextLength::PercentageLength, 100));
     QTextTable *table = m_cursor.insertTable(1, 1, tableFormat);
 
+    long renderedSections = 0;
+    
     for (long s = 0; s < document->sections(); s++) {
         OROSection *section = document->section(s);
         section->sortPrimatives(OROSection::SortX);
@@ -53,23 +55,23 @@ bool KoReportODTRenderer::render(const KoReportRendererContext& context, ORODocu
             section->type() == KRSectionData::Detail){
             //Add this section to the document
 
-            if (s > 0) {
-                table->appendRows(1);
-            }
-            
             //Resize the table to accomodate all the primitives in the section
             if (table->columns() < section->primitives()) {
                 table->appendColumns(section->primitives() - table->columns());
             }
 
-            m_cursor.movePosition(QTextCursor::PreviousRow);
-            
-            
+            if (renderedSections > 0) {
+                //We need to back a row, then forward a row to get at the start cell
+                m_cursor.movePosition(QTextCursor::PreviousRow);
+                m_cursor.movePosition(QTextCursor::NextRow);
+            } else {
+                //On the first row, ensure we are in the first cell after expanding the table
+                while (m_cursor.movePosition(QTextCursor::PreviousCell)){}
+            }
             //Render the objects in each section
             for (int i = 0; i < section->primitives(); i++) {
                 OROPrimitive * prim = section->primitive(i);
-                m_cursor.movePosition(QTextCursor::NextCell);
-
+                
                 if (prim->type() == OROTextBox::TextBox) {
                     OROTextBox * tb = (OROTextBox*) prim;
                     m_cursor.insertText(tb->text());
@@ -90,8 +92,14 @@ bool KoReportODTRenderer::render(const KoReportRendererContext& context, ORODocu
                 } else {
                     kDebug() << "unhandled primitive type";
                 }
+                m_cursor.movePosition(QTextCursor::NextCell);
                 
             }
+            if (s < document->sections() - 1) {
+                table->appendRows(1);
+            }
+            
+            renderedSections++;
         }
     }
 

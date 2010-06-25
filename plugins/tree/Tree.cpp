@@ -60,7 +60,7 @@ Tree::~Tree()
 {
 }
 
-void Tree::addNewChild()
+KoShape* Tree::addNewChild()
 {
     kDebug() << "start";
     KoShape *shape = KoShapeRegistry::instance()->value("EllipseShape")->createDefaultShape();
@@ -70,6 +70,7 @@ void Tree::addNewChild()
     layout()->layout();
     update();
     kDebug() << "end";
+    return child;
 }
 
 void Tree::paintComponent(QPainter &painter, const KoViewConverter &converter)

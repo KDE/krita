@@ -556,7 +556,7 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
                  d->horizontalAlignment = RightOfPage;
                  d->distance.setX(0);
              }
-         } else if (verticalRel == "page-content") {
+         } else if (horizontalPos == "page-content") {
              if (horizontalPos == "center") { //svg:x attribute is ignored
                  return false; // not posible to do it with koffice:anchor-type
              } else if (horizontalPos == "from-inside") {
@@ -577,7 +577,7 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
          } else if (horizontalRel == "paragraph") {
              if (horizontalPos == "center") { //svg:x attribute is ignored
                  d->horizontalAlignment = Center;
-                 d->distance.setX(-(shape()->size().width()/2));
+                 d->distance.setX(0);
              } else if (horizontalPos == "from-inside") {
                  return false; // not posible to do it with koffice:anchor-type
              } else if (horizontalPos == "from-left") {
@@ -692,6 +692,7 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
              } else if (horizontalRel == "paragraph") {
                  if (horizontalPos == "center") { //svg:x attribute is ignored
                      d->horizontalAlignment = Center;
+                     d->distance.setX(0);
                  } else if (horizontalPos == "from-inside") {
                      return false; // not posible to do it with koffice:anchor-type
                  } else if (horizontalPos == "from-left") {

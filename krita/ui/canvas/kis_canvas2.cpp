@@ -269,7 +269,7 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
     setCanvasWidget(canvasWidget);
 #else
-    qFatal() << "Bad use of createOpenGLCanvas(). It shouldn't have happened =(";
+    qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");
 #endif
 }
 
@@ -309,7 +309,7 @@ void KisCanvas2::connectCurrentImage()
         connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)),
                 m_d->openGLImageTextures, SLOT(slotImageSizeChanged(qint32, qint32)));
 #else
-        qFatal() << "Bad use of connectCurrentImage(). It shouldn't have happened =(";
+        qFatal("Bad use of connectCurrentImage(). It shouldn't have happened =(");
 #endif
     } else {
         connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)),
@@ -337,7 +337,7 @@ void KisCanvas2::disconnectCurrentImage()
         m_d->openGLImageTextures->disconnect(this);
         m_d->openGLImageTextures->disconnect(m_d->view->image());
 #else
-        qFatal() << "Bad use of disconnectCurrentImage(). It shouldn't have happened =(";
+        qFatal("Bad use of disconnectCurrentImage(). It shouldn't have happened =(");
 #endif
     }
 

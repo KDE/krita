@@ -152,6 +152,9 @@ public:
      */
     bool isPositionedInline() const;
 
+    /// \internal make sure that the anchor has no KoTextShapeContainerModel references anymore.
+    void detachFromModel();
+
 private:
     Q_DECLARE_PRIVATE(KoTextAnchor)
 };

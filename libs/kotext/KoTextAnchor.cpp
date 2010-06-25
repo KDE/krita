@@ -97,14 +97,17 @@ public:
             model = theModel;
             model->addAnchor(parent);
         }
+        Q_ASSERT(model == container->model());
     }
 
     QDebug printDebug(QDebug dbg) const
     {
+#ifndef NDEBUG
         dbg.nospace() << "KoTextAnchor";
         dbg.space() << anchorPosition();
         dbg.space() << "offset:" << distance;
         dbg.space() << "shape:" << shape->name();
+#endif
         return dbg.space();
     }
 
@@ -728,4 +731,10 @@ bool KoTextAnchor::isPositionedInline() const
 {
     Q_D(const KoTextAnchor);
     return d->isPositionedInline;
+}
+
+void KoTextAnchor::detachFromModel()
+{
+    Q_D(KoTextAnchor);
+    d->model = 0;
 }

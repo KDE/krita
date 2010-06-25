@@ -31,8 +31,8 @@ public:
             break;
         default:
             qFatal("Unknown version of the tiles");
+            return 0;
         };
-
     }
 
 private:

@@ -102,7 +102,8 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
         m_save(0),
         m_fillForegroundColor(0),
         m_fillBackgroundColor(0),
-        m_fillPattern(0)
+        m_fillPattern(0),
+        m_imageResizeToSelection(0)
 {
     m_clipboard = KisClipboard::instance();
 
@@ -194,6 +195,10 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_smooth  = new KAction(i18n("Smooth..."), this);
     collection->addAction("smooth", m_smooth);
     connect(m_smooth, SIGNAL(triggered()), this, SLOT(smooth()));
+    
+    m_imageResizeToSelection  = new KAction(i18n("Size Canvas to Size of Selection"), this);
+    collection->addAction("resizeimagetoselection", m_imageResizeToSelection);
+    connect(m_imageResizeToSelection, SIGNAL(triggered()), this, SLOT(imageResizeToSelection()));
 
 //     m_load
 //         = new KAction(i18n("Load..."),
@@ -289,6 +294,7 @@ void KisSelectionManager::updateGUI()
     else
         m_reselect->setEnabled(false);
 
+    m_imageResizeToSelection->setEnabled(m_view->selection() && !m_view->selection()->isDeselected());
     if (!m_pluginActions.isEmpty()) {
         QListIterator<QAction *> i(m_pluginActions);
 
@@ -1547,6 +1553,21 @@ void KisSelectionManager::shapeSelectionChanged()
             else
                 shape->setBorder(0);
         }
+    }
+}
+
+void KisSelectionManager::imageResizeToSelection()
+{
+    KisSelectionSP selection = m_view->selection();
+    KisUndoAdapter * undoAdapter = m_view->undoAdapter();
+
+    KisImageWSP image = m_view->image();
+
+    if (image && selection) {
+
+        undoAdapter->beginMacro(i18n("Resize Image to Size of Selection"));
+        image->resize(selection->selectedExactRect(), true);
+        undoAdapter->endMacro();
     }
 }
 

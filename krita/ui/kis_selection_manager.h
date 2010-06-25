@@ -87,6 +87,7 @@ public slots:
     void toggleDisplaySelection();
 
     void shapeSelectionChanged();
+    void imageResizeToSelection();
 
 signals:
     void currentSelectionChanged();
@@ -138,6 +139,7 @@ private:
     KAction *m_fillForegroundColor;
     KAction *m_fillBackgroundColor;
     KAction *m_fillPattern;
+    KAction *m_imageResizeToSelection;
     KToggleAction *m_toggleDisplaySelection;
 
     QList<QAction*> m_pluginActions;

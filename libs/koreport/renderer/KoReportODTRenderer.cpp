@@ -70,7 +70,12 @@ bool KoReportODTRenderer::render(const KoReportRendererContext& context, ORODocu
             }
             //Render the objects in each section
             for (int i = 0; i < section->primitives(); i++) {
+                //Colour the cell using hte section background colour
                 OROPrimitive * prim = section->primitive(i);
+                QTextTableCell cell = table->cellAt(m_cursor);
+                QTextCharFormat format = cell.format();
+                format.setBackground(section->backgroundColor());
+                cell.setFormat(format);
                 
                 if (prim->type() == OROTextBox::TextBox) {
                     OROTextBox * tb = (OROTextBox*) prim;

@@ -120,7 +120,7 @@ QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShape
     return color;
 }
 
-bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, KoShapeLoadingContext &context)
+bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, KoShapeLoadingContext &context, const KoShape *shape)
 {
     bool fixed = false;
 
@@ -162,13 +162,16 @@ bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, K
 
         styleStack.restore();
     } else {
-        const QString strokeColor(styleStack.property(KoXmlNS::draw, "stroke-color"));
-        if(strokeColor.isEmpty()) {
-            pen.setColor( Qt::black );
-        } else {
-            pen.setColor(styleStack.property(KoXmlNS::svg, "stroke-color"));
+        const KoPathShape *pathShape = dynamic_cast<const KoPathShape*>(shape);
+        if (pathShape) {
+            const QString strokeColor(styleStack.property(KoXmlNS::draw, "stroke-color"));
+            if(strokeColor.isEmpty()) {
+                pen.setColor( Qt::black );
+            } else {
+                pen.setColor(styleStack.property(KoXmlNS::svg, "stroke-color"));
+            }
+            fixed = true;
         }
-        fixed = true;
     }
 
     return fixed;

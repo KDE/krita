@@ -1150,7 +1150,7 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
 #ifndef NWORKAROUND_ODF_BUGS
     } else if (stroke.isEmpty()) {
         QPen pen;
-        if (KoOdfWorkaround::fixMissingStroke(pen, element, context)) {
+        if (KoOdfWorkaround::fixMissingStroke(pen, element, context, this)) {
             KoLineBorder *border = new KoLineBorder();
 
             // FIXME: (make it possible to) use a cosmetic pen

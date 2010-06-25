@@ -151,7 +151,7 @@ public:
     * Store the TextShape data as ODF.
     * @see TextShape::saveOdf()
     */
-    void saveOdf(KoShapeSavingContext & context, int from = 0, int to = -1, KoDocumentRdfBase *rdfData = 0) const;
+    void saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData, int from = 0, int to = -1) const;
 
     /**
      * Set the page direction.

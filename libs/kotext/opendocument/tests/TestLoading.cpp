@@ -1078,7 +1078,7 @@ QString TestLoading::documentToOdt(QTextDocument *document)
     KoChangeTracker* changeTracker = new KoChangeTracker;
     KoTextDocument(textShapeData->document()).setChangeTracker(changeTracker);
 
-    textShapeData->saveOdf(context);
+    textShapeData->saveOdf(context, 0);
 
     contentTmpFile.close();
 

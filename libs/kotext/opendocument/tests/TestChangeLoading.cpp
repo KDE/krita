@@ -195,7 +195,7 @@ QString TestChangeLoading::documentToOdt(QTextDocument *document)
         KoTextDocument(textShapeData->document()).setStyleManager(styleManager);
     }
 
-    textShapeData->saveOdf(context, 0, -1, rdf);
+    textShapeData->saveOdf(context,rdf);
 
     contentTmpFile.close();
 

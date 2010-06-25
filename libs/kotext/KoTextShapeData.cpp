@@ -220,7 +220,7 @@ bool KoTextShapeData::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
     return true;
 }
 
-void KoTextShapeData::saveOdf(KoShapeSavingContext &context, int from, int to, KoDocumentRdfBase *rdfData) const
+void KoTextShapeData::saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData, int from, int to) const
 {
     KoTextWriter writer(context, rdfData);
     writer.write(d->document, from, to);

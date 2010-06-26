@@ -1,6 +1,9 @@
 [Desktop Entry]
 Name=Mind Tree
+Name[pt]=Árvore Mental
+Name[uk]=Дерево запам’ятовування
 Name[x-test]=xxMind Treexx
+Name[zh_TW]=心智圖
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=tree

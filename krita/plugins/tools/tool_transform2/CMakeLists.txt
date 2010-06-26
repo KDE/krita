@@ -2,6 +2,7 @@
 
 set(kritatooltransform_PART_SRCS
     tool_transform.cc
+    tool_transform_args.cc
     kis_tool_transform.cc
     )
 

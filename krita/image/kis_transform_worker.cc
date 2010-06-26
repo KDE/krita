@@ -50,7 +50,7 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
     m_xshear = xshear;
     m_yshear = yshear;
     m_rotation = rotation,
-                 m_xtranslate = xtranslate;
+	m_xtranslate = xtranslate;
     m_ytranslate = ytranslate;
     m_progressUpdater = progress;
     m_filter = filter;
@@ -447,6 +447,20 @@ bool KisTransformWorker::run()
     qint32 xtranslate = m_xtranslate;
     qint32 ytranslate = m_ytranslate;
 
+	m_progressTotalSteps = (r.width() + r.height() * m_xshear);
+	m_progressTotalSteps += r.height() + m_progressTotalSteps  * m_yshear;
+    m_lastProgressReport = 0;
+
+	//apply shear X and Y
+	if (xshear != 0) {
+		transformPass <KisHLineIteratorPixel>(srcdev.data(), srcdev.data(), xscale, yscale *  m_xshear, - int((r.top() + (double)r.height() / 2) * yscale * m_xshear), m_filter, m_fixBorderAlpha);
+		xscale = 1.;
+	}
+	if (yshear != 0) {
+		transformPass <KisVLineIteratorPixel>(srcdev.data(), srcdev.data(), yscale, m_yshear, - int((r.left() + (double)r.width() / 2) * xscale * m_yshear), m_filter, m_fixBorderAlpha);
+		yscale = 1.;
+	}
+
     if (rotation < 0.0)
         rotation = -fmod(-rotation, 2 * M_PI) + 2 * M_PI;
     else
@@ -480,7 +494,7 @@ bool KisTransformWorker::run()
         break;
     }
 
-    // Calculate some auxillary values
+    //// Calculate some auxillary values
     yshear = sin(rotation);
     xshear = -tan(rotation / 2);
     xtranslate -= int(xshear * ytranslate);
@@ -488,8 +502,6 @@ bool KisTransformWorker::run()
     // Calculate progress steps
     m_progressTotalSteps += int(yscale * r.width() * r.height());
     m_progressTotalSteps += int(xscale * r.width() * (r.height() * yscale + r.width() * yshear));
-
-    m_lastProgressReport = 0;
 
     // Now that we have everything in place it's time to do the actual right angle rotations
     switch (rotQuadrant) {
@@ -513,7 +525,8 @@ bool KisTransformWorker::run()
         break;
     }
 
-    // Handle simple move case possibly with rotation of 90,180,270
+
+    //// Handle simple move case possibly with rotation of 90,180,270
     if (rotation == 0.0 && xscale == 1.0 && yscale == 1.0) {
         if (rotQuadrant == 0) {
             // When we didn't move the m_dev to a temp device we can simply just move its coords
@@ -548,9 +561,9 @@ bool KisTransformWorker::run()
         return false;
     }
 
-    if (xshear != 0.0)
+    if (xshear != 0.0) {
         transformPass <KisHLineIteratorPixel>(srcdev.data(), m_dev.data(), 1.0, xshear, xtranslate, m_filter, m_fixBorderAlpha);
-    else {
+    } else {
         // No need to filter again when we are only scaling
         srcdev->move(srcdev->x() + xtranslate, srcdev->y());
         if (rotQuadrant != 0)  // no need to copy back if we have not copied the device in the first place

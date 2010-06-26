@@ -85,7 +85,7 @@ public:
      * Create a serialized version of this properties as XML.
      * @return the string version of this properties object
      */
-    KDE_DEPRECATED QString store() const;
+    QString store() const;
 
     /**
      * @brief Create a serialized version of these properties (as XML) with root as the root element.

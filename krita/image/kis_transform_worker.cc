@@ -452,13 +452,11 @@ bool KisTransformWorker::run()
     m_lastProgressReport = 0;
 
 	//apply shear X and Y
-	if (xshear != 0) {
+	if (xshear != 0 || yshear != 0) {
 		transformPass <KisHLineIteratorPixel>(srcdev.data(), srcdev.data(), xscale, yscale *  m_xshear, - int((r.top() + (double)r.height() / 2) * yscale * m_xshear), m_filter, m_fixBorderAlpha);
-		xscale = 1.;
-	}
-	if (yshear != 0) {
 		transformPass <KisVLineIteratorPixel>(srcdev.data(), srcdev.data(), yscale, m_yshear, - int((r.left() + (double)r.width() / 2) * xscale * m_yshear), m_filter, m_fixBorderAlpha);
 		yscale = 1.;
+		xscale = 1.;
 	}
 
     if (rotation < 0.0)

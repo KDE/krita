@@ -46,7 +46,7 @@ int KisChalkPaintOpSettings::rate() const
 void KisChalkPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return;
-    qreal size = radius() * 2 * + 1;
+    qreal size = getInt(CHALK_RADIUS) * 2 + 1;
     painter.setPen(Qt::black);
     painter.drawEllipse(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos));
 }
@@ -55,10 +55,12 @@ void KisChalkPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image
 QRectF KisChalkPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return QRectF();
-    qreal size = radius() * 2;
+    qreal size = getInt(CHALK_RADIUS) * 2 + 1;
     size += 10;
     return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
 }
+
+
 
 #if defined(HAVE_OPENGL)
 QString KisChalkPaintOpSettings::modelName() const

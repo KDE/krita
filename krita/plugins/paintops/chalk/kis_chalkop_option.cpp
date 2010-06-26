@@ -54,9 +54,7 @@ int KisChalkOpOption::radius() const
 
 void KisChalkOpOption::setRadius(int radius) const
 {
-    m_options->radiusSpinBox->blockSignals(true);
     m_options->radiusSpinBox->setValue( radius );
-    m_options->radiusSpinBox->blockSignals(false);
 }
 
 

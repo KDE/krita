@@ -53,16 +53,6 @@ public:
     bool isAirbrushing() const;
     int rate() const;
     
-
-    // boiler-plate code
-    int radius() const;
-    bool inkDepletion() const;
-    bool opacity() const;
-    bool saturation() const;
-    
-    KisPressureOpacityOption * opacityOption() const;
-    
-    
 #if defined(HAVE_OPENGL)
     QString modelName() const;
 #endif

@@ -33,7 +33,7 @@ KisChalkPaintOpSettingsWidget:: KisChalkPaintOpSettingsWidget(QWidget* parent)
 {
     m_chalkOption =  new KisChalkOpOption();
 
-    addPaintOpOption(new KisChalkOpOption());
+    addPaintOpOption(m_chalkOption);
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisAirbrushOption(false));
     addPaintOpOption(new KisPaintActionTypeOption());
@@ -58,9 +58,4 @@ void KisChalkPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
     if (qAbs(x) > qAbs(y)){
         m_chalkOption->setRadius( m_chalkOption->radius() + qRound(x) );
     }
-    else // vice-versa
-    {
-        // we can do something different
-    }
-
 }

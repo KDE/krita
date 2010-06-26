@@ -159,7 +159,7 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
     loadOdfPageTag(element, paContext);
     styleStack.restore();
 
-    // load layers and shapes 
+    // load layers and shapes
     const KoXmlElement & pageLayerSet = KoXml::namedItemNS( element, KoXmlNS::draw, "layer-set" );
 
     const KoXmlElement & usedPageLayerSet = pageLayerSet.isNull() ? loadingContext.odfLoadingContext().stylesReader().layerSet(): pageLayerSet;
@@ -209,6 +209,7 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
 void KoPAPageBase::loadOdfPageTag( const KoXmlElement &element,
                                    KoPALoadingContext &loadingContext )
 {
+    Q_UNUSED(element);
     KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
 
     if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {

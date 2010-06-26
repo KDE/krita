@@ -32,7 +32,7 @@ double V1(int x, int y, int level);
 
 int div2(const unsigned int n)
 {
-    const int q = n / 2;
+    const unsigned int q = n / 2;
     return(2*q < n ? q + 1 : q);
 }
 

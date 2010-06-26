@@ -38,16 +38,16 @@
 
 void KisFloodFillBenchmark::initTestCase()
 {
-    m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();    
+    m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     m_device = new KisPaintDevice(m_colorSpace);
     m_color = KoColor(m_colorSpace);
-    
+
     QColor qcolor(Qt::red);
     srand(31524744);
-    
+
     int tilew = 38;
     int tileh = 56;
-    
+
     m_color.fromQColor(QColor(0,0,0,0)); // default pixel
     m_device->fill( 0,0,GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT,m_color.data() );
 
@@ -63,9 +63,9 @@ void KisFloodFillBenchmark::initTestCase()
         x = rand() % GMP_IMAGE_WIDTH;
         y = rand() % GMP_IMAGE_HEIGHT;
         // plus 10 so that we don't fill the ellipse
-        painter.paintEllipse(x+ 10, y+ 10, tilew, tileh);    
+        painter.paintEllipse(x+ 10, y+ 10, tilew, tileh);
     }
-    
+
 
 }
 
@@ -75,7 +75,7 @@ void KisFloodFillBenchmark::benchmarkFlood()
     KoColor bg(m_colorSpace);
     fg.fromQColor(Qt::blue);
     bg.fromQColor(Qt::black);
-    
+
     QBENCHMARK
     {
         QRegion dirty;
@@ -98,12 +98,12 @@ void KisFloodFillBenchmark::benchmarkFlood()
         fillPainter.setHeight(GMP_IMAGE_HEIGHT);
 
         // fill twice
-        fillPainter.fillColor(1, 1, false);
+        fillPainter.fillColor(1, 1, 0);
 
         dirty = fillPainter.dirtyRegion();
         fillPainter.deleteTransaction();
     }
-    
+
     // uncomment this to see the output
     //QImage out = m_device->convertToQImage(m_colorSpace->profile(),0,0,GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT);
     //out.save("fill_output.png");

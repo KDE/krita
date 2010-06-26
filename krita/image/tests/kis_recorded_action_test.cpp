@@ -31,7 +31,7 @@ public:
             : KisRecordedAction(id, name, path) {
     }
 
-    void play(KisNodeSP node, const KisPlayInfo&) const {
+    void play(KisNodeSP /*node*/, const KisPlayInfo&) const {
     }
 
     KisRecordedAction* clone() const {

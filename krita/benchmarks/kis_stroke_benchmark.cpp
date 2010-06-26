@@ -51,20 +51,20 @@ void KisStrokeBenchmark::initTestCase()
 {
     m_dataPath = QString(FILES_DATA_DIR) + QDir::separator();
     m_outputPath = QString(FILES_OUTPUT_DIR) + QDir::separator();
-    
-    m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();    
+
+    m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     m_color = KoColor(m_colorSpace);
 
     int width = TEST_IMAGE_WIDTH;
     int height = TEST_IMAGE_HEIGHT;
-    
+
     m_image = new KisImage(0, width, height, m_colorSpace, "stroke sample image", false);
     m_layer = new KisPaintLayer(m_image, "temporary for stroke sample", OPACITY_OPAQUE_U8, m_colorSpace);
 
 
     m_painter = new KisPainter(m_layer->paintDevice());
     m_painter->setPaintColor(KoColor(Qt::black, m_colorSpace));
-    
+
     // for bezier curve test
     initCurvePoints(width, height);
     // for the lines test
@@ -261,25 +261,25 @@ void KisStrokeBenchmark::benchmarkLine(QString presetFileName)
 
     QPointF startPoint(0.10 * TEST_IMAGE_WIDTH, 0.5 * TEST_IMAGE_HEIGHT);
     QPointF endPoint(0.90 * TEST_IMAGE_WIDTH, 0.5 * TEST_IMAGE_HEIGHT);
-    
+
     KisPaintInformation pi1(startPoint, 0.0);
     KisPaintInformation pi2(endPoint, 1.0);
-    
+
     QBENCHMARK{
         m_painter->paintLine(pi1,pi2);
     }
-    
+
 #ifdef SAVE_OUTPUT
     m_layer->paintDevice()->convertToQImage(0).save(m_outputPath + presetFileName + "_line" + OUTPUT_FORMAT);
 #endif
-   
+
 }
 
 
 void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
 {
     qDebug() << "preset : " << presetFileName;
-    
+
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
     preset->load();
     preset->settings()->setNode(m_layer);
@@ -301,17 +301,17 @@ void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
 void KisStrokeBenchmark::benchmarkStroke(QString presetFileName)
 {
     qDebug() << "preset : " << presetFileName;
-    
+
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
     preset->load();
     preset->settings()->setNode(m_layer);
     m_painter->setPaintOpPreset(preset, m_image);
-    
+
     QBENCHMARK{
         m_painter->paintBezierCurve(m_pi1, m_c1, m_c1, m_pi2, KisDistanceInformation());
         m_painter->paintBezierCurve(m_pi2, m_c2, m_c2, m_pi3, KisDistanceInformation());
     }
-    
+
 #ifdef SAVE_OUTPUT
     qDebug() << "Saving output " << m_outputPath + presetFileName + ".png";
     m_layer->paintDevice()->convertToQImage(0).save(m_outputPath + presetFileName + OUTPUT_FORMAT);
@@ -324,7 +324,7 @@ void KisStrokeBenchmark::benchmarkRand48()
 QBENCHMARK
     {
         for (int i = 0 ; i < COUNT; i++){
-            float f = drand48();
+            drand48();
         }
     }
 }
@@ -333,7 +333,7 @@ void KisStrokeBenchmark::benchmarkRand()
 {
     QBENCHMARK{
         for (int i = 0 ; i < COUNT; i++){
-            float f = rand() / (float)RAND_MAX;
+            rand() / (float)RAND_MAX;
         }
     }
 }

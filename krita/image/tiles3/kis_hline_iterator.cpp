@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
     x -= offsetX;
     y -= offsetY;
     Q_ASSERT(dataManager != 0);
-    
+
     m_x = x;
     m_y = y;
 
@@ -39,7 +39,7 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
 
     m_leftCol = xToCol(m_left);
     m_rightCol = xToCol(m_right);
-    
+
     m_row = yToRow(m_y);
     m_yInTile = calcYInTile(m_y, m_row);
 
@@ -49,8 +49,8 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
     m_tilesCache.resize(m_tilesCacheSize);
 
     m_tileWidth = m_pixelSize * KisTileData::HEIGHT;
-    
-    // let's prealocate first row 
+
+    // let's prealocate first row
     for (quint32 i = 0; i < m_tilesCacheSize; i++){
         fetchTileDataForCache(m_tilesCache[i], m_leftCol + i, m_row);
     }
@@ -154,7 +154,6 @@ void KisHLineIterator2::switchToTile(qint32 xInTile)
 {
     // The caller must ensure that we are not out of bounds
     Q_ASSERT(m_index < m_tilesCacheSize);
-    Q_ASSERT(m_index >= 0);
 
     m_data = m_tilesCache[m_index].data;
     m_oldData = m_tilesCache[m_index].oldData;

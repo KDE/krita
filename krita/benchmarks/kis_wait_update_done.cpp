@@ -46,7 +46,7 @@ void KisWaitUpdateDone::wait()
     m_semaphore.acquire(m_numToWait);
 }
 
-void KisWaitUpdateDone::slotImageUpdated(const QRect &rect) {
+void KisWaitUpdateDone::slotImageUpdated(const QRect &/*rect*/) {
     m_semaphore.release();
 }
 

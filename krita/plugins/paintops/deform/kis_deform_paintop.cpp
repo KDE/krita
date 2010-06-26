@@ -44,7 +44,7 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
-    
+
     m_sizeProperties.readOptionSetting(settings);
 
     // sensors
@@ -60,13 +60,13 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     m_properties.useBilinear = settings->getBool(DEFORM_USE_BILINEAR);
     m_properties.useCounter = settings->getBool(DEFORM_USE_COUNTER);
     m_properties.useOldData = settings->getBool(DEFORM_USE_OLD_DATA);
-    
+
     m_deformBrush.setProperties( &m_properties );
     m_deformBrush.setSizeProperties( &m_sizeProperties );
     m_deformBrush.initDeformAction();
-    
+
     m_dev = source();
-    
+
     if ((m_sizeProperties.diameter * 0.5) > 1) {
         m_ySpacing = m_xSpacing = m_sizeProperties.diameter * 0.5 * m_sizeProperties.spacing;
     } else {
@@ -83,7 +83,7 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return m_spacing;
     if (!m_dev) return m_spacing;
- 
+
 #if 1
         KisFixedPaintDeviceSP dab = cachedDab(painter()->device()->colorSpace());
 
@@ -91,7 +91,7 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         double subPixelX;
         qint32 y;
         double subPixelY;
-        
+
         QPointF pt = info.pos();
         if (m_sizeProperties.jitterEnabled){
                 pt.setX(pt.x() + (  ( m_sizeProperties.diameter * drand48() ) - m_sizeProperties.diameter * 0.5) * m_sizeProperties.jitterMovementAmount);
@@ -102,17 +102,17 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         qreal scale = m_sizeProperties.scale * KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
 
         QPointF pos = pt - m_deformBrush.hotSpot(scale,rotation);
-            
+
         splitCoordinate(pos.x(), &x, &subPixelX);
         splitCoordinate(pos.y(), &y, &subPixelY);
-        
+
         m_deformBrush.paintMask(dab, m_dev, scale,rotation,info.pos(), subPixelX,subPixelY);
 
         quint8 origOpacity = m_opacityOption.apply(painter(), info);
         painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
         painter()->setOpacity(origOpacity);
         return m_spacing;
-#else  
+#else
         if (!m_dab) {
             m_dab = new KisPaintDevice(painter()->device()->colorSpace());
         } else {
@@ -124,11 +124,11 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
         return m_spacing;
 #endif
-    
+
 }
 
 
-double KisDeformPaintOp::spacing(double pressure) const
+double KisDeformPaintOp::spacing(double /*pressure*/) const
 {
     return m_spacing;
 }

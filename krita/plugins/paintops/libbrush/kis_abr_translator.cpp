@@ -34,7 +34,7 @@ void KisAbrTranslator::init()
 {
     m_currentObjectName = "";
     m_root = m_doc.createElement("Preset");
-    m_root.setAttribute("paintopid","spraybrush");
+    m_root.setAttribute("paintopid","paintbrush");
 }
 
 void KisAbrTranslator::addEntry(const QString& attributeName, const QString& type, const QString& value)
@@ -56,14 +56,17 @@ void KisAbrTranslator::addEntry(const QString& attributeName, const QString& typ
         {
             m_root.setAttribute("name",value);
         }else{
-            qDebug() << "--Unknown attribute: " << attributeName;
+            //qDebug() << "--Unknown attribute: " << attributeName;
         }
     }else
     if (m_currentObjectName == OBJECT_NAME_BRUSH){
         m_abrBrushProperties.setupProperty(attributeName,type,value);
     }else{
-            qDebug() << "+Unsupported object type " << m_currentObjectName;
+            //qDebug() << "+Unsupported object type " << m_currentObjectName;
     }
+
+
+
 }
 
 void KisAbrTranslator::finishPreset()

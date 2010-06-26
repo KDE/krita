@@ -281,7 +281,7 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KoFilterManager::Direction
 
     // partly copied from build graph, but I don't see any other
     // way without crude hacks, as we have to obey the direction here
-    QList<KoDocumentEntry> parts(KoDocumentEntry::query(false, QString()));
+    QList<KoDocumentEntry> parts(KoDocumentEntry::query(QFlag(KoDocumentEntry::AllEntries), QString()));
     QList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
     QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
@@ -442,7 +442,7 @@ QStringList KoFilterManager::mimeFilter()
     QHash<QByteArray, Vertex*> vertices;
     buildGraph(vertices, KoFilterManager::Import);
 
-    QList<KoDocumentEntry> parts(KoDocumentEntry::query(false, QString()));
+    QList<KoDocumentEntry> parts(KoDocumentEntry::query(QFlag(KoDocumentEntry::AllEntries), QString()));
     QList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
     QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 

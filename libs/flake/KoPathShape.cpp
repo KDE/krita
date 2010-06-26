@@ -44,10 +44,12 @@
 #include <KDebug>
 #include <QtGui/QPainter>
 
+#ifndef QT_NO_DEBUG
 #include <qnumeric.h> // for qIsNaN
 static bool qIsNaNPoint(const QPointF &p) {
     return qIsNaN(p.x()) || qIsNaN(p.y());
 }
+#endif
 
 KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
     : KoShapePrivate(q),

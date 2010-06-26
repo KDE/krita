@@ -21,6 +21,7 @@
 #include "KoShape.h"
 #include "KoShapeContainer.h"
 #include "KoShapeContainerModel.h"
+#include "KoConnectionShape.h"
 #include "KoShapeLayer.h"
 #include "SimpleShapeContainerModel.h"
 #include "KoShapeSavingContext.h"
@@ -40,7 +41,7 @@
 Tree::Tree(): KoShapeContainer(new Layout(this))
 {
     KoShape *root = KoShapeRegistry::instance()->value("EllipseShape")->createDefaultShape();
-    root->setSize(QSizeF(70,70));
+    root->setSize(QSizeF(50,50));
     root->setParent(this);
     layout()->setRoot(root);
     for (int i=0; i<3; i++){
@@ -50,7 +51,7 @@ Tree::Tree(): KoShapeContainer(new Layout(this))
 
 Tree::Tree(KoShape *shape): KoShapeContainer(new Layout(this))
 {
-    shape->setParent(this);
+    addShape(shape);
     layout()->setRoot(shape);
     layout()->layout();
     update();
@@ -60,17 +61,28 @@ Tree::~Tree()
 {
 }
 
-KoShape* Tree::addNewChild()
+QList<KoShape*> Tree::addNewChild()
 {
     kDebug() << "start";
-    KoShape *shape = KoShapeRegistry::instance()->value("EllipseShape")->createDefaultShape();
-    shape->setSize(QSizeF(40,40));
-    KoShape *child = new Tree(shape);
+    QList<KoShape*> shapes;
+
+    KoShape *root = KoShapeRegistry::instance()->value("EllipseShape")->createDefaultShape();
+    root->setSize(QSizeF(30,30));
+    KoShape *child = new Tree(root);
     addShape(child);
+    shapes.append(child);
+    kDebug() << "Child added";
+
+    KoShape *connector = KoShapeRegistry::instance()->value("KoConnectionShape")->createDefaultShape();
+    addShape(connector);
+    shapes.append(connector);
+    kDebug() << "Connector added";
+
+    layout()->attachConnector(child, dynamic_cast<KoConnectionShape*>(connector));
     layout()->layout();
     update();
     kDebug() << "end";
-    return child;
+    return shapes;
 }
 
 void Tree::paintComponent(QPainter &painter, const KoViewConverter &converter)

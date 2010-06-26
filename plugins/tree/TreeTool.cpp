@@ -60,7 +60,9 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
                 Tree *tree = dynamic_cast<Tree*>(root->parent());
                 if (tree){
                     kDebug() << "Adding child...";
-                    canvas()->shapeManager()->addShape(tree->addNewChild());
+                    foreach(KoShape* shape, tree->addNewChild()){
+                        canvas()->shapeManager()->addShape(shape);
+                    }
                 }
             }
             event->accept();

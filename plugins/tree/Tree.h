@@ -29,6 +29,7 @@ class KoViewConverter;
 class KoShapeSavingContext;
 class KoShapeLoadingContext;
 class KoShape;
+class KoConnectionShape;
 class Layout;
 class QPainter;
 
@@ -39,7 +40,7 @@ public:
     Tree();
     Tree(KoShape *root);
     virtual ~Tree();
-    virtual KoShape *addNewChild();
+    virtual QList<KoShape*> addNewChild();
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
     virtual bool hitTest(const QPointF &position) const;
     virtual void saveOdf(KoShapeSavingContext &context) const;

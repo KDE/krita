@@ -16,14 +16,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-// Qt
 #include <QSizeF>
 #include <QPointF>
+#include <QMap>
 
 #include "Layout.h"
 #include "Tree.h"
 
+#include "KoShape.h"
 #include <KoShapeContainer.h>
+#include "KoConnectionShape.h"
 #include "kdebug.h"
 
 Layout::Layout(KoShapeContainer *container)
@@ -40,8 +42,15 @@ Layout::~Layout()
 
 void Layout::add(KoShape *shape)
 {
+    kDebug() << "children: " << m_children.contains(shape);
     Q_ASSERT(!m_children.contains(shape));
-    m_children.append(shape);
+    KoConnectionShape *connector = dynamic_cast<KoConnectionShape*>(shape);
+    if (connector){
+        kDebug() << "connectors: " << m_connectors.contains(connector);
+        Q_ASSERT(!m_connectors.contains(connector));
+        m_connectors.append(shape);
+    }
+    else m_children.append(shape);
     scheduleRelayout();
 }
 
@@ -52,12 +61,19 @@ void Layout::add(KoShape *shape, uint pos)
     scheduleRelayout();
 }
 
+void Layout::attachConnector(KoShape* shape, KoConnectionShape *connector)
+{
+    Q_ASSERT(m_children.contains(shape));
+    Q_ASSERT(m_connectors.contains(connector));
+    m_bonds[shape] = connector;
+    //scheduleRelayout();
+}
+
 void Layout::setRoot(KoShape *shape)
 {
     m_root = shape;
     m_container->setSize(m_root->size());
     m_lastWidth = m_container->size().width();
-    //m_root->setSelectable(false);
 
     // shape was added to children by setParent() method
     m_children.removeOne(m_root);
@@ -100,7 +116,7 @@ bool Layout::inheritsTransform(const KoShape *shape) const
 
 int Layout::count() const
 {
-    return m_children.size()+1; // don't forget m_root
+    return m_children.size()+m_connectors.size()+1;
 }
 
 QList<KoShape*> Layout::shapes() const
@@ -108,6 +124,7 @@ QList<KoShape*> Layout::shapes() const
     kDebug() << "";
     QList<KoShape*> all;
     all.append(m_children);
+    all.append(m_connectors);
     all.append(m_root);
     return all;
 }
@@ -190,12 +207,12 @@ void Layout::layout()
     }
     kDebug() << width;
     //spacing
-    width += 10*(m_children.count()-1);
+    width += 5*(m_children.count()-1);
     if (m_root->size().width()>width)
         width = m_root->size().width();
 
     QSizeF s = m_container->size();
-    s.setHeight(m_root->size().height()+50+maxHeight);
+    s.setHeight(m_root->size().height()+70+maxHeight);
     s.setWidth(width);
     m_container->setSize(s);
 
@@ -207,8 +224,12 @@ void Layout::layout()
 
     qreal x = 0;
     foreach (KoShape *child, m_children){
-        child->setPosition(QPointF(x, 50+m_root->size().height()));
-        x += child->size().width() + 10;
+        child->setPosition(QPointF(x, 70+m_root->size().height()));
+        KoConnectionShape *connector = m_bonds[child];
+        connector->connectFirst(m_root,2);
+        connector->connectSecond(child,0);
+        connector->updateConnections();
+        x += child->size().width() + 5;
     }
 
     m_doingLayout = false;

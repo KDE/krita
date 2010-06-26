@@ -27,6 +27,7 @@
 #include <KoShapeContainerModel.h>
 
 class QSizeF;
+class KoConnectionShape;
 
 class Layout : public KoShapeContainerModel
 {
@@ -53,6 +54,11 @@ public:
      * Returns a pointer to root shape.
      */
     KoShape* root() const;
+
+    /**
+     * Attaches given connector to given shape.
+     */
+    void attachConnector(KoShape* shape, KoConnectionShape *connector);
 
     /**
      * Removes a shape from the layout.
@@ -132,6 +138,8 @@ private:
     bool m_relayoutScheduled;
     KoShape *m_root;
     QList<KoShape*> m_children;
+    QList<KoShape*> m_connectors;
+    QMap<KoShape*, KoConnectionShape*> m_bonds;
 };
 
 #endif // KTREE_LAYOUT_H

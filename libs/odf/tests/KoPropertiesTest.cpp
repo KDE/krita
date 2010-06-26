@@ -54,7 +54,7 @@ void KoPropertiesTest::testRoundTrip()
     props.setProperty("bool",  false);
     props.setProperty("qreal",  1.38);
 
-    QString stored = props.store();
+    QString stored = props.store("KoPropertiesTest");
     KoProperties restored;
     restored.load(stored);
 

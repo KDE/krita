@@ -82,12 +82,6 @@ public:
     bool isEmpty() const;
 
     /**
-     * Create a serialized version of this properties as XML.
-     * @return the string version of this properties object
-     */
-    QString store() const;
-
-    /**
      * @brief Create a serialized version of these properties (as XML) with root as the root element.
      * @param root as the root element in the generated XML.
      */

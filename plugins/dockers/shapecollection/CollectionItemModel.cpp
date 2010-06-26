@@ -87,7 +87,7 @@ QMimeData* CollectionItemModel::mimeData(const QModelIndexList& indexes) const
     KoProperties *props = m_shapeTemplateList[index.row()].properties;
 
     if(props)
-        dataStream << props->store(); // is a QString
+        dataStream << props->store("shapes");
     else
         dataStream << QString();
 

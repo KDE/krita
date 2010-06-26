@@ -121,13 +121,6 @@ QString KoProperties::store(const QString &s) const
     return doc.toString();
 }
 
-QString KoProperties::store() const
-{
-    // Legacy...
-    return store("filterconfig");
-}
-
-
 void KoProperties::setProperty(const QString & name, const QVariant & value)
 {
     // If there's an existing value for this name already, replace it.

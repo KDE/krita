@@ -175,7 +175,7 @@ QString KoReportItemBarcode::typeName() const
     return "barcode";
 }
 
-int KoReportItemBarcode::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemBarcode::render(OROPage* page, OROSection* /*section*/,  QPointF offset, QVariant data, KRScriptHandler */*script*/)
 {
     QPointF pos = m_pos.toScene();
     QSizeF size = m_size.toScene();
@@ -184,7 +184,7 @@ int KoReportItemBarcode::render(OROPage* page, OROSection* section,  QPointF off
     QRectF rect = QRectF(pos, size);
 
     QString val = data.toString();
-    
+
     QString fmt = m_format->value().toString();
     int align = alignment();
     if (fmt == "3of9")

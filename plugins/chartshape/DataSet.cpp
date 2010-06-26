@@ -71,7 +71,7 @@ class DataSet::Private
 public:
     Private( DataSet *parent );
     ~Private();
-    
+
     void         updateSize();
     bool         hasOwnChartType() const;
     ChartType    effectiveChartType() const;
@@ -87,9 +87,9 @@ public:
     void sectionsInRect( const CellRegion &region, const QRect &rect,
                          int &start, int &end ) const;
     void dataChanged( KDChartModel::DataRole role, const QRect &rect ) const;
-    
+
     DataSet      *parent;
-    
+
     ChartType     chartType;
     ChartSubtype  chartSubType;
 
@@ -136,13 +136,13 @@ public:
     // FIXME: Remove category region from DataSet - this is not the place
     // it belongs to.
     CellRegion categoryDataRegion; // x labels -- same for all datasets
-    
+
     ChartProxyModel *model;
     KDChart::AbstractDiagram *kdDiagram;
     int kdDataSetNumber;
-    
+
     KDChartModel *kdChartModel;
-    
+
     int size;
     bool blockSignals;
 };
@@ -264,15 +264,15 @@ bool DataSet::Private::isValidDataPoint( const QPoint &point ) const
 QVariant DataSet::Private::data( const CellRegion &region, int index ) const
 {
     if ( !region.isValid() )
-        return QVariant(); 
+        return QVariant();
 
     QAbstractItemModel *model = this->model->sourceModel();
     if ( !model )
         return QVariant();
-    
+
     // The result
     QVariant data;
-    
+
     // Convert the given index in this dataset to a data point in the
     // source model.
     QPoint dataPoint = region.pointAtIndex( index );
@@ -288,7 +288,7 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     // a 1x1 cell region.
     //Q_ASSERT( validDataPoint );
     if ( !validDataPoint )
-        return QVariant();    
+        return QVariant();
 
     // The top-left point is (1,1). (0,y) or (x,0) refers to header data.
     const int row = dataPoint.y() - 1;
@@ -305,7 +305,7 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
         if ( index.isValid() )
             data = model->data( index );
     }
-    
+
     return data;
 }
 
@@ -445,7 +445,7 @@ bool DataSet::showMeanValue() const
 
 QPen DataSet::meanValuePen() const
 {
-    return d->meanValuePen;   
+    return d->meanValuePen;
 }
 
 bool DataSet::showLowerErrorIndicator() const
@@ -475,7 +475,7 @@ qreal DataSet::errorPercentage() const
 
 qreal DataSet::errorMargin() const
 {
-    return d->errorMargin;   
+    return d->errorMargin;
 }
 
 qreal DataSet::lowerErrorLimit() const
@@ -493,13 +493,13 @@ void DataSet::setChartType( ChartType type )
 {
     if ( type == d->chartType )
         return;
-    
+
     Axis  *axis = d->attachedAxis;
     if ( axis )
         axis->detachDataSet( this );
-    
+
     d->chartType = type;
-    
+
     if ( axis )
         axis->attachDataSet( this );
 }
@@ -508,12 +508,12 @@ void DataSet::setChartSubType( ChartSubtype subType )
 {
     if ( subType == d->chartSubType )
         return;
-    
+
     Axis *axis = d->attachedAxis;
     axis->detachDataSet( this );
-    
+
     d->chartSubType = subType;
-    
+
     axis->attachDataSet( this );
 }
 
@@ -652,9 +652,9 @@ void DataSet::setNumber( int num )
 {
     if ( !d->blockSignals && d->attachedAxis )
         d->attachedAxis->detachDataSet( this );
-    
+
     d->num = num;
-    
+
     if ( !d->blockSignals && d->attachedAxis )
         d->attachedAxis->attachDataSet( this );
 }
@@ -736,9 +736,9 @@ QVariant DataSet::categoryData( int index ) const
     // (i.e., the region is either too short or simply empty)
     if ( !d->categoryDataRegion.hasPointAtIndex( index ) )
         return QString::number( index + 1 );
- 
+
     const QVariant data = d->data( d->categoryDataRegion, index );
-    // The cell contains valid data 
+    // The cell contains valid data
     if ( data.isValid() )
         return data;
     // The cell is empty
@@ -748,11 +748,11 @@ QVariant DataSet::categoryData( int index ) const
 QVariant DataSet::labelData() const
 {
     QString label;
-    
+
     const int cellCount = d->labelDataRegion.cellCount();
     for ( int i = 0; i < cellCount; i++ )
         label += d->data( d->labelDataRegion, i ).toString();
-    
+
     if ( label.isEmpty() )
         label = i18n( "Series %1", number() + 1 );
 
@@ -824,7 +824,7 @@ void DataSet::setYDataRegion( const CellRegion &region )
 {
     d->yDataRegion = region;
     d->updateSize();
-    
+
     if ( !d->blockSignals && d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::YDataRole, 0, size() - 1 );
 }
@@ -910,6 +910,7 @@ void DataSet::Private::dataChanged( KDChartModel::DataRole role, const QRect &re
     case KDChartModel::ZDataRole:
     case KDChartModel::BrushDataRole:
     case KDChartModel::PenDataRole:
+    case KDChartModel::PieAttributesRole:
         return;
     }
 
@@ -955,25 +956,25 @@ int DataSet::dimension() const
     case CircleChartType:
     case RadarChartType:
     case SurfaceChartType:
-	return 1;
+        return 1;
 
     case RingChartType:
     case ScatterChartType:
     case GanttChartType:
-	return 2;
+        return 2;
 
     case BubbleChartType:
-	return 3;
+        return 3;
 
     case StockChartType:
         return 4;
 
-	// We can only determine the dimension if
-	// a chart type is set
+        // We can only determine the dimension if
+        // a chart type is set
     case LastChartType:
-	return 0;
+        return 0;
     }
-	
+
     // Avoid warnings from the compiler.
     return 0;
 }
@@ -1089,7 +1090,7 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
 
         styleStack.restore();
     }
-    
+
 #ifndef NWORKAROUND_ODF_BUGS
     if( ! penLoaded) {
         penLoaded = KoOdfWorkaround::fixMissingStroke( pen, n, context );

@@ -31,11 +31,11 @@ WatermarkFilterEffect::~WatermarkFilterEffect()
 {
 }
 
-void WatermarkFilterEffect::save(KoXmlWriter& writer)
+void WatermarkFilterEffect::save(KoXmlWriter& /*writer*/)
 {
 }
 
-bool WatermarkFilterEffect::load(const KoXmlElement& element, const KoFilterEffectLoadingContext& context)
+bool WatermarkFilterEffect::load(const KoXmlElement& /*element*/, const KoFilterEffectLoadingContext& /*context*/)
 {
     return true;
 }

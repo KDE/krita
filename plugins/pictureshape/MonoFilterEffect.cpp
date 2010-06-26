@@ -29,11 +29,11 @@ MonoFilterEffect::~MonoFilterEffect()
 {
 }
 
-void MonoFilterEffect::save(KoXmlWriter& writer)
+void MonoFilterEffect::save(KoXmlWriter& /*writer*/)
 {
 }
 
-bool MonoFilterEffect::load(const KoXmlElement& element, const KoFilterEffectLoadingContext& context)
+bool MonoFilterEffect::load(const KoXmlElement& /*element*/, const KoFilterEffectLoadingContext& /*context*/)
 {
     return true;
 }

@@ -14,12 +14,12 @@
  ** your option) use any later version of the GNU General Public
  ** License if such license has been publicly approved by
  ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
+ **
  ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
  ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
  ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
  ** not expressly granted herein.
- ** 
+ **
  ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
  ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  **
@@ -113,7 +113,7 @@ void NormalLineDiagram::paint( PaintContext* ctx )
         LineAttributesInfoList lineList;
         LineAttributes laPreviousCell;
         CartesianDiagramDataCompressor::DataPoint lastPoint;
-        qreal lastAreaBoundingValue;
+        qreal lastAreaBoundingValue = 0.0;
 
         // Get min. y value, used as lower or upper bounding for area highlighting
         const qreal minYValue = plane->visibleDataRange().bottom();

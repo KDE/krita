@@ -14,12 +14,12 @@
  ** your option) use any later version of the GNU General Public
  ** License if such license has been publicly approved by
  ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
+ **
  ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
  ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
  ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
  ** not expressly granted herein.
- ** 
+ **
  ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
  ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  **
@@ -42,7 +42,7 @@ void BarDiagram::BarDiagramType::paintBars( PaintContext* ctx, const QModelIndex
     QRectF isoRect;
     QPolygonF topPoints, sidePoints;
     ThreeDBarAttributes threeDAttrs = diagram()->threeDBarAttributes( index );
-    double usedDepth;
+    double usedDepth = 0.0;
 
     //Pending Michel: configure threeDBrush settings - shadowColor etc...
     QBrush indexBrush ( diagram()->brush( index ) );

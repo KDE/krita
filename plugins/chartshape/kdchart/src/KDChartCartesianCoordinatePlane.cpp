@@ -10,12 +10,12 @@
  ** your option) use any later version of the GNU General Public
  ** License if such license has been publicly approved by
  ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
+ **
  ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
  ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
  ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
  ** not expressly granted herein.
- ** 
+ **
  ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
  ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  **
@@ -152,7 +152,7 @@ void CartesianCoordinatePlane::slotLayoutChanged ( AbstractDiagram* )
 QRectF CartesianCoordinatePlane::getRawDataBoundingRectFromDiagrams() const
 {
     // determine unit of the rectangles of all involved diagrams:
-    qreal minX, maxX, minY, maxY;
+    qreal minX, maxX, minY, maxY = 0.0;
     bool bStarting = true;
     Q_FOREACH( const AbstractDiagram* diagram, diagrams() )
     {
@@ -267,14 +267,14 @@ DataDimensionsList CartesianCoordinatePlane::getDataDimensionsList() const
     const AbstractCartesianDiagram* dgr
         = diagrams().isEmpty() ? 0 : dynamic_cast<const AbstractCartesianDiagram*> (diagrams().first() );
     if( dgr && dgr->referenceDiagram() )
-    	dgr = dgr->referenceDiagram();
-	const BarDiagram *barDiagram = qobject_cast< const BarDiagram* >( dgr );
+        dgr = dgr->referenceDiagram();
+        const BarDiagram *barDiagram = qobject_cast< const BarDiagram* >( dgr );
 
-	// note:
-	// It does make sense to retrieve the orientation from the first diagram. This is because
-	// a coordinate plane can either be for horizontal *or* for vertical diagrams. Both at the
-	// same time won't work, and thus the orientation for all diagrams is the same as for the first one.
-	const Qt::Orientation diagramOrientation = barDiagram != 0 ? barDiagram->orientation() : Qt::Vertical;
+        // note:
+        // It does make sense to retrieve the orientation from the first diagram. This is because
+        // a coordinate plane can either be for horizontal *or* for vertical diagrams. Both at the
+        // same time won't work, and thus the orientation for all diagrams is the same as for the first one.
+        const Qt::Orientation diagramOrientation = barDiagram != 0 ? barDiagram->orientation() : Qt::Vertical;
 
     const bool diagramIsVertical = diagramOrientation == Qt::Vertical;
 

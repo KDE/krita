@@ -41,7 +41,7 @@ bool FolderShapeModel::isClipped(const KoShape *) const
     return true;
 }
 
-bool FolderShapeModel::inheritsTransform(const KoShape *shape) const
+bool FolderShapeModel::inheritsTransform(const KoShape */*shape*/) const
 {
     return true;
 }

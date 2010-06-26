@@ -29,11 +29,11 @@ GreyscaleFilterEffect::~GreyscaleFilterEffect()
 {
 }
 
-void GreyscaleFilterEffect::save(KoXmlWriter& writer)
+void GreyscaleFilterEffect::save(KoXmlWriter& /*writer*/)
 {
 }
 
-bool GreyscaleFilterEffect::load(const KoXmlElement& element, const KoFilterEffectLoadingContext& context)
+bool GreyscaleFilterEffect::load(const KoXmlElement& /*element*/, const KoFilterEffectLoadingContext& /*context*/)
 {
     return true;
 }

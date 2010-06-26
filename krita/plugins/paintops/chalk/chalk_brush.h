@@ -25,7 +25,7 @@
 
 #include "bristle.h"
 #include "brush_shape.h"
-#include "kis_chalk_paintop_settings.h"
+#include "kis_chalkop_option.h"
 
 #include "kis_paint_device.h"
 
@@ -33,7 +33,7 @@ class ChalkBrush
 {
 
 public:
-    ChalkBrush(const KisChalkPaintOpSettings *settings);
+    ChalkBrush(const ChalkProperties * properties);
     ~ChalkBrush();
     ChalkBrush(KoColor inkColor, BrushShape shape);
     void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color);
@@ -44,8 +44,7 @@ private:
     BrushShape m_initialShape;
     KoColor m_inkColor;
     int m_counter;
-    int m_radius;
-    const KisChalkPaintOpSettings * m_settings;
+    const ChalkProperties * m_properties;
 
 };
 

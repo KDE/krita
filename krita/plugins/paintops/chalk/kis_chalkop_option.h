@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,11 @@
 
 #include <kis_paintop_option.h>
 #include <krita_export.h>
+
+const QString CHALK_RADIUS = "Chalk/radius";
+const QString CHALK_INK_DEPLETION = "Chalk/inkDepletion";
+const QString CHALK_USE_OPACITY = "Chalk/opacity";
+const QString CHALK_USE_SATURATION = "Chalk/saturation";
 
 class KisChalkOpOptionsWidget;
 
@@ -44,6 +49,21 @@ private:
 
     KisChalkOpOptionsWidget * m_options;
 
+};
+
+class ChalkProperties{
+public:
+    int radius;
+    bool inkDepletion;
+    bool useOpacity;
+    bool useSaturation;
+    
+    void readOptionSetting(const KisPropertiesConfiguration* settings){
+            radius = settings->getInt(CHALK_RADIUS);
+            inkDepletion = settings->getBool(CHALK_INK_DEPLETION);
+            useOpacity = settings->getBool(CHALK_USE_OPACITY);
+            useSaturation = settings->getBool(CHALK_USE_SATURATION);
+    }
 };
 
 #endif

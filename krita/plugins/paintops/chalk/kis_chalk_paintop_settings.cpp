@@ -18,6 +18,8 @@
 
 #include "kis_chalk_paintop_settings.h"
 
+#include <kis_chalkop_option.h>
+
 #include <kis_paint_action_type_option.h>
 #include <kis_airbrush_option.h>
 
@@ -57,29 +59,6 @@ QRectF KisChalkPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
     size += 10;
     return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
 }
-
-int KisChalkPaintOpSettings::radius() const
-{
-    return getInt("Chalk/radius");
-}
-
-bool KisChalkPaintOpSettings::inkDepletion() const
-{
-    return getBool("Chalk/inkDepletion");
-}
-
-
-bool KisChalkPaintOpSettings::opacity() const
-{
-    return getBool("Chalk/opacity");
-}
-
-
-bool KisChalkPaintOpSettings::saturation() const
-{
-    return getBool("Chalk/saturation");
-}
-
 
 #if defined(HAVE_OPENGL)
 QString KisChalkPaintOpSettings::modelName() const

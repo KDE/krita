@@ -39,11 +39,10 @@ public:
     double paintAt(const KisPaintInformation& info);
 
 private:
-    const KisChalkPaintOpSettings* m_settings;
-    KisImageWSP m_image;
     KisPaintDeviceSP m_dab;
     ChalkBrush * m_chalkBrush;
     KisPressureOpacityOption m_opacityOption;
+    ChalkProperties m_properties;
 };
 
 #endif // KIS_CHALK_PAINTOP_H_

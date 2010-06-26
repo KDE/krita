@@ -39,12 +39,10 @@ inline double drand48()
 #endif
 
 
-
-ChalkBrush::ChalkBrush(const KisChalkPaintOpSettings* settings)
+ChalkBrush::ChalkBrush(const ChalkProperties* properties)
 {
     m_counter = 0;
-    m_settings = settings;
-    m_radius = settings->radius();
+    m_properties = properties;
     init();
 }
 
@@ -57,7 +55,7 @@ void ChalkBrush::init()
 {
     BrushShape bs;
     // some empiric values
-    bs.fromGaussian(m_radius, 1.0f, 0.9f);
+    bs.fromGaussian(m_properties->radius, 1.0f, 0.9f);
     m_bristles = bs.getBristles();
     srand48(time(0));
 }
@@ -73,12 +71,12 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
     KisRandomAccessor accessor = dev->createRandomAccessor((int)x, (int)y);
 
     qreal result;
-    if (m_settings->inkDepletion()){
+    if (m_properties->inkDepletion){
         //count decrementing of saturation and opacity
         result = log((qreal)m_counter);
         result = -(result * 10) / 100.0;
 
-        if ( m_settings->saturation() ){
+        if ( m_properties->useSaturation ){
             QHash<QString, QVariant> params;
             params["h"] = 0.0;
             params["s"] = result;
@@ -88,7 +86,7 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
             transfo->transform(m_inkColor.data(), m_inkColor.data(), 1);
         }
 
-        if ( m_settings->opacity() ){
+        if ( m_properties->useOpacity ){
             qreal opacity = (1.0f + result);
             m_inkColor.setOpacity(opacity);
         }
@@ -101,7 +99,7 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
 
         // let's call that noise from ground to chalk :)
         dirt = drand48();
-        if (bristle->distanceCenter() > m_radius || dirt < 0.5) {
+        if (bristle->distanceCenter() > m_properties->radius || dirt < 0.5) {
             continue;
         }
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -82,18 +82,18 @@ bool KisChalkOpOption::saturation() const
 
 void KisChalkOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty("Chalk/radius", radius());
-    setting->setProperty("Chalk/inkDepletion", inkDepletion());
-    setting->setProperty("Chalk/opacity", opacity());
-    setting->setProperty("Chalk/saturation", saturation());
+    setting->setProperty(CHALK_RADIUS, radius());
+    setting->setProperty(CHALK_INK_DEPLETION, inkDepletion());
+    setting->setProperty(CHALK_USE_OPACITY, opacity());
+    setting->setProperty(CHALK_USE_SATURATION, saturation());
 }
 
 void KisChalkOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->radiusSpinBox->setValue(setting->getInt("Chalk/radius"));
-    m_options->inkDepletionCHBox->setChecked(setting->getBool("Chalk/inkDepletion"));
-    m_options->opacity->setChecked(setting->getBool("Chalk/opacity"));
-    m_options->saturation->setChecked(setting->getBool("Chalk/saturation"));
+    m_options->radiusSpinBox->setValue(setting->getInt(CHALK_RADIUS));
+    m_options->inkDepletionCHBox->setChecked(setting->getBool(CHALK_INK_DEPLETION));
+    m_options->opacity->setChecked(setting->getBool(CHALK_USE_OPACITY));
+    m_options->saturation->setChecked(setting->getBool(CHALK_USE_SATURATION));
 }
 
 

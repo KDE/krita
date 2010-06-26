@@ -39,13 +39,14 @@
 
 KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
-        , m_settings(settings)
-        , m_image(image)
 {
-    m_chalkBrush = new ChalkBrush(settings);
-
+    Q_UNUSED(image);
     m_opacityOption.readOptionSetting(settings);
     m_opacityOption.sensor()->reset();
+
+    m_properties.readOptionSetting(settings);
+    
+    m_chalkBrush = new ChalkBrush( &m_properties );
 }
 
 KisChalkPaintOp::~KisChalkPaintOp()
@@ -55,7 +56,7 @@ KisChalkPaintOp::~KisChalkPaintOp()
 
 double KisChalkPaintOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()) return 1;
+    if (!painter()) return 1.0;
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
@@ -75,5 +76,5 @@ double KisChalkPaintOp::paintAt(const KisPaintInformation& info)
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->setOpacity(origOpacity);
-    return 1;
+    return 1.0;
 }

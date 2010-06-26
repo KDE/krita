@@ -34,7 +34,7 @@ class KisHatchingPressureCrosshatchingOption;
 class KisHatchingPressureSeparationOption;
 class KisHatchingPressureThicknessOption;
 
-class KisHatchingPaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisHatchingPaintOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {
     Q_OBJECT
 

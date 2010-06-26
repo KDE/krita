@@ -37,8 +37,7 @@ KoScriptingOdfReader::KoScriptingOdfReader(KoScriptingOdfStore *store, const KoX
     : QObject(store),
     m_store(store),
     m_doc(doc),
-    m_level(0),
-    m_filterRegExp(false)
+    m_level(0)
 {
 }
 

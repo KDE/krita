@@ -305,9 +305,11 @@ void KoTableCellStyle::paintBorders(QPainter &painter, const QRectF &bounds) con
         const qreal t = bounds.top() + pen.widthF() / 2.0;
         innerBounds.setTop(bounds.top() + d->edges[Top].spacing + pen.widthF());
         if(isDrawn(d->borderstyle[Top])) {
+#if 0 // Unfinished code?
             const qreal width = pen.widthF()/6;
             qreal x;
             //for (
+#endif
         } else {
             painter.drawLine(QLineF(bounds.left(), t, bounds.right(), t));
         }

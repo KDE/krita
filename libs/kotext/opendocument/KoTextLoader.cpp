@@ -834,7 +834,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         const QString localName(ts.localName());
         const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
         const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
-
+//        const bool isOfficeNS = ts.namespaceURI() == KoXmlNS::office;
         if (node.isText()) {
             QString text = node.toText().data();
 #ifdef KOOPENDOCUMENTLOADER_DEBUG

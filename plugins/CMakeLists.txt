@@ -41,6 +41,6 @@ add_subdirectory( tree )
 macro_optional_add_subdirectory( vectorshape )
 
 # only build the reporting plugins if building koreport
-if (SHOULD_BUILD_KOREPORT)
+if (BUILD_koreport AND SHOULD_BUILD_KOREPORT)
     macro_optional_add_subdirectory( reporting )
-endif (SHOULD_BUILD_KOREPORT)
+endif (BUILD_koreport AND SHOULD_BUILD_KOREPORT)

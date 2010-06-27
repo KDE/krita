@@ -1109,7 +1109,8 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         m_caretTimer.stop();
         m_caretTimer.start();
         m_caretTimerState = moveOperation != QTextCursor::NoMove; // turn caret off while typing
-        if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) // except the enter key
+        if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return
+                || event->key() == Qt::Key_Backspace) // except the enter/backspace key
             m_caretTimerState = true;
     }
 

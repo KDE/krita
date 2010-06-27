@@ -39,10 +39,8 @@ public:
     }
 
     virtual ~KisTransaction() {
-        if(m_transactionData) {
-            m_transactionData->endTransaction();
+        if(m_transactionData)
             delete m_transactionData;
-        }
     }
 
     QUndoCommand* undoCommand() {
@@ -61,7 +59,11 @@ public:
     void end() {
         Q_ASSERT_X(m_transactionData, "KisTransaction::end()",
                    "nothing to end!");
-        m_transactionData->endTransaction();
+        /**
+         * We will not call endTransaction for m_transactionData,
+         * we'll just kill it, and it'll report about it's death to
+         * the memento manager, so no commit will be made
+         */
         delete m_transactionData;
         m_transactionData = 0;
     }
@@ -79,17 +81,7 @@ public:
         delete m_transactionData;
         m_transactionData = 0;
     }
-/*
-    QUndoCommand* endAndTakeUndoCommand() {
-        Q_ASSERT_X(m_transactionData, "KisTransaction::endAndTakeUndoCommand()",
-                   "the transaction has been tried to be ended twice");
 
-        m_transactionData->endTransaction();
-        QUndoCommand *command = m_transactionData;
-        m_transactionData = 0;
-        return command;
-    }
-*/
 protected:
     KisTransaction() {}
     KisTransactionData* m_transactionData;

@@ -58,7 +58,6 @@ KisTransactionData::KisTransactionData(const QString& name, KisPaintDeviceSP dev
 KisTransactionData::~KisTransactionData()
 {
     Q_ASSERT(m_d->memento);
-    endTransaction();
     m_d->device->dataManager()->purgeHistory(m_d->memento);
 
     delete m_d;

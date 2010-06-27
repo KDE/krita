@@ -111,6 +111,7 @@ public:
 
 protected:
     qint32 findRevisionByMemento(KisMementoSP memento) const;
+    void resetIndex();
     void resetRevisionHistory(KisMementoItemList list);
 
 protected:

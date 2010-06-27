@@ -323,8 +323,10 @@ void KisMementoManager::rollforward(KisTileHashTable *ht)
 
 void KisMementoManager::purgeHistory(KisMementoSP oldestMemento)
 {
-    if (m_currentMemento == oldestMemento)
-        commit();
+    if (m_currentMemento == oldestMemento) {
+        resetIndex();
+        oldestMemento = m_revisions.size() ? m_revisions.last().memento : 0;
+    }
 
     qint32 revisionIndex = findRevisionByMemento(oldestMemento);
     if (revisionIndex < 0) return;
@@ -350,6 +352,12 @@ qint32 KisMementoManager::findRevisionByMemento(KisMementoSP memento) const
         }
     }
     return index;
+}
+
+void KisMementoManager::resetIndex()
+{
+    m_index.clear();
+    m_currentMemento = 0;
 }
 
 void KisMementoManager::resetRevisionHistory(KisMementoItemList list)

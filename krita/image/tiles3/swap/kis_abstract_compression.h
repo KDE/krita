@@ -32,16 +32,30 @@ public:
     virtual ~KisAbstractCompression();
 
     /**
-     * Compresses \a input buffer into \a outbut buffer.
-     * \return false if output buffer is too short, otherwise true.
+     * Compresses \a input buffer into \a output buffer.
+     * WARNING: Be careful, output buffer must be at least
+     * outputBufferSize(inputLength) size!
+     * \param outputLength is not used!
+     * \return number of bytes written to the output buffer
+     * and 0 if error occured.
+     *
+     * \see outputBufferSize()
      */
-    virtual bool compress(quint8* input, qint32 inputLength, quint8* output, qint32 outputLength) = 0;
+    virtual qint32 compress(const quint8* input, qint32 inputLength, quint8* output, qint32 outputLength) = 0;
 
     /**
-     * Decompresses \a input buffer into \a outbut buffer.
-     * \return false if output buffer is too short, otherwise true.
+     * Decompresses \a input buffer into \a output buffer.
+     * WARNING: ouput buffer must be able to fit the input data
+     * \param outputLength is not used!
+     * \return number of bytes read from the input buffer and 0
+     * if error occured.
      */
-    virtual bool decompress(quint8* input, qint32 inputLength, quint8* output, qint32 outputLength) = 0;
+    virtual qint32 decompress(const quint8* input, qint32 inputLength, quint8* output, qint32 outputLength) = 0;
+
+    /**
+     * Returns minimal allowed size of output buffer for compression
+     */
+    virtual qint32 outputBufferSize(qint32 dataSize) = 0;
 
     /**
      * Some algorithms may decide to optimize them work depending on
@@ -49,6 +63,24 @@ public:
      * Default implementation of KisAbstractCompression class does nothing.
      */
     virtual void adjustForDataSize(qint32 dataSize);
+
+public:
+    /**
+     * Additional interface for jumbling color channels order
+     */
+
+    /**
+     * e.g. RGBARGBARGBA -> RRRGGGBBBAAA
+     * NOTE: performs mixing of bytes, not channels!
+     */
+    static void linearizeColors(quint8 *input, quint8 *output,
+                                qint32 dataSize, qint32 pixelSize);
+    /**
+     * e.g. RRRGGGBBBAAA -> RGBARGBARGBA
+     * NOTE: performs mixing of bytes, not channels!
+     */
+    static void delinearizeColors(quint8 *input, quint8 *output,
+                                  qint32 dataSize, qint32 pixelSize);
 };
 
 #endif /* __KIS_ABSTRACT_COMPRESSION_H */

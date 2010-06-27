@@ -21,18 +21,7 @@
 
 #include "tiles3/kis_tiled_data_manager.h"
 
-bool KisTiledDataManagerTest::memoryIsFilled(quint8 c, quint8 *mem, qint32 size)
-{
-    for(; size > 0; size--)
-        if(*(mem++) != c) {
-            qDebug() << "Expected" << c << "but found" << *(mem-1);
-            return false;
-        }
-
-    return true;
-}
-
-#define TILESIZE 64*64
+#include "tiles_test_utils.h"
 
 bool KisTiledDataManagerTest::checkHole(quint8* buffer,
                                         quint8 holeColor, QRect holeRect,

@@ -27,8 +27,6 @@ class KisTiledDataManagerTest : public QObject
     Q_OBJECT
 
 private:
-    bool memoryIsFilled(quint8 c, quint8 *mem, qint32 size);
-
     bool checkHole(quint8* buffer, quint8 holeColor, QRect holeRect,
                    quint8 backgroundColor, QRect backgroundRect);
 

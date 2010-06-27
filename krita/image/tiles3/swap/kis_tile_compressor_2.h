@@ -16,17 +16,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_LEGACY_TILE_COMPRESSOR_H
-#define __KIS_LEGACY_TILE_COMPRESSOR_H
+#ifndef __KIS_TILE_COMPRESSOR_2_H
+#define __KIS_TILE_COMPRESSOR_2_H
 
 #include "kis_abstract_tile_compressor.h"
 
+class KisAbstractCompression;
 
-class KRITAIMAGE_EXPORT KisLegacyTileCompressor : public KisAbstractTileCompressor
+class KRITAIMAGE_EXPORT KisTileCompressor2 : public KisAbstractTileCompressor
 {
 public:
-    KisLegacyTileCompressor();
-    virtual ~KisLegacyTileCompressor();
+    KisTileCompressor2();
+    virtual ~KisTileCompressor2();
 
     void writeTile(KisTileSP tile, KoStore *store);
     void readTile(KoStore *store, KisTiledDataManager *dm);
@@ -43,13 +44,22 @@ private:
      */
     qint32 maxHeaderLength();
 
-    /**
-     * Writes header into the buffer. Buffer size
-     * should be maxHeaderLength() + 1 bytes at least
-     * (to fit terminating '\0')
-     */
-    void writeHeader(KisTileSP tile, quint8 *buffer);
+    QString getHeader(KisTileSP tile, qint32 compressedSize);
+
+    void prepareWorkBuffers(qint32 tileDataSize);
+    void prepareStreamingBuffer(qint32 tileDataSize);
+
+private:
+    static const qint8 RAW_DATA_FLAG = 0;
+    static const qint8 COMPRESSED_DATA_FLAG = 1;
+
+private:
+    QByteArray m_linearizationBuffer;
+    QByteArray m_compressionBuffer;
+    QByteArray m_streamingBuffer;
+    KisAbstractCompression *m_compression;
+    static const QString m_compressionName;
 };
 
-#endif /* __KIS_LEGACY_TILE_COMPRESSOR_H */
+#endif /* __KIS_TILE_COMPRESSOR_2_H */
 

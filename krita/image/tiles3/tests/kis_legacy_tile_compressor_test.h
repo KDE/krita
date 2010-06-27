@@ -20,17 +20,24 @@
 
 #include <QtTest/QtTest>
 
+class KisAbstractTileCompressor;
 
 class KisLegacyTileCompressorTest : public QObject
 {
     Q_OBJECT
-
 private:
-    bool memoryIsFilled(quint8 c, quint8 *mem, qint32 size);
+    void doRoundTrip(KisAbstractTileCompressor *compressor);
+    void doLowLevelRoundTrip(KisAbstractTileCompressor *compressor);
+    void doLowLevelRoundTripIncompressible(KisAbstractTileCompressor *compressor);
+
 
 private slots:
-    void testRoundTrip();
-    void testLowLevelRoundTrip();
+    void testRoundTripLegacy();
+    void testLowLevelRoundTripLegacy();
+
+    void testRoundTrip2();
+    void testLowLevelRoundTrip2();
+    void testLowLevelRoundTripIncompressible2();
 };
 
 #endif /* KIS_LEGACY_TILE_COMPRESSOR_TEST_H */

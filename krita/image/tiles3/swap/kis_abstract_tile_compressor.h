@@ -71,18 +71,15 @@ public:
                                   qint32 bufferSize, qint32 &bytesWritten) = 0;
 
     /**
-     * Decompresses a \a tileData from a given \a buffer. Actual number
-     * of bytes read is returned using out-parameter \a bytesRead.
-     * But this number can't be bigger than tileDataBufferSize()
+     * Decompresses a \a tileData from a given \a buffer.
      *
      * \param tileData an existing tile data wrere the result
      * will be written to. It should be created and acquired
      * by the caller.
      *
-     * \see tileDataBufferSize()
      */
     virtual void decompressTileData(quint8 *buffer, qint32 bufferSize,
-                                    KisTileData *tileData, qint32 &bytesRead) = 0;
+                                    KisTileData *tileData) = 0;
 
     /**
      * Return the number of bytes needed for compressing one tile

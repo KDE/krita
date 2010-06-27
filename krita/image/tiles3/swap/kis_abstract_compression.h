@@ -47,8 +47,8 @@ public:
      * Decompresses \a input buffer into \a output buffer.
      * WARNING: ouput buffer must be able to fit the input data
      * \param outputLength is not used!
-     * \return number of bytes read from the input buffer and 0
-     * if error occured.
+     * \return number of bytes written to the output buffer
+     * and 0 if error occured.
      */
     virtual qint32 decompress(const quint8* input, qint32 inputLength, quint8* output, qint32 outputLength) = 0;
 

@@ -53,6 +53,10 @@ public:
     bool subpixelprecision;
     bool opaquebackground;
     
+    //Crosshatching, Separation and Thickness curves
+    double crosshatchingSensorValue;
+    double separationSensorValue;
+    double thicknessSensorValue;
     
     void initializeTwin(KisHatchingPaintOpSettings* convenienttwin) const;
         

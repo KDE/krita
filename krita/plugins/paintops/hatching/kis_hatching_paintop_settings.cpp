@@ -34,13 +34,13 @@ KisHatchingPaintOpSettings::~KisHatchingPaintOpSettings()
 
 void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* convenienttwin) const
 {
-    /*--------DO NOT REMOVE THIS WISE PIECE OF TEXT, USE WHEN DEBUGGING TO SEE THE XML CONFIG TREE
+    /*--------DO NOT REMOVE please, use this to review the XML config tree
     QMap<QString, QVariant> rofl = QMap<QString, QVariant>(getProperties());
    
     QMap<QString, QVariant>::const_iterator i;
     for (i = rofl.constBegin(); i != rofl.constEnd(); ++i)
         qDebug() << i.key() << ":" << i.value();
-    ---------DO NOT REMOVE-------DO NOT REMOVE---------*/
+    /----------DO NOT REMOVE----------------*/
     
     convenienttwin->angle = getDouble("Hatching/angle");
     convenienttwin->separation = getDouble("Hatching/separation");

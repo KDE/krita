@@ -39,187 +39,151 @@ HatchingBrush::HatchingBrush(const KisHatchingPaintOpSettings* settings)
 {
     m_settings = new KisHatchingPaintOpSettings();
     m_settings = settings;
-    //settings->initializeTwin(m_settings);
-    //std::clog << "AERSH " << m_settings->crosshatchingstyle << "\n";
 }
 
 
 HatchingBrush::~HatchingBrush()
 {
+    delete m_settings;
 }
 
 void HatchingBrush::init()
 {
 }
 
-void HatchingBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, double width, double height, const KoColor &color)
+void HatchingBrush::hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, double height, double givenangle, const KoColor &color)
 {
     m_painter.begin(dev);
     m_painter.setFillStyle(KisPainter::FillStyleForegroundColor);
     m_painter.setPaintColor(color);
     m_painter.setBackgroundColor(color);
     
-    //std::clog << m_settings->proeba() << " ";
-
-    double naiveangle, angle, s, h, w, xcoor, ycoor, b, p, dx, dy, last_b, cursor_b;
-    int thickness;
-    //*****PSEUDOSETTINGS****
-    naiveangle = m_settings->angle;
-    /*naiveangle is what I receive from the controls. For now, I have no use for angles
-    belonging to the 2nd and 3rd quadrant, the controls were then made such that the user
-    sees the least ambiguous possible settings (no angles from the 2nd and 3rd quadrant)*/
-    angle = naiveangle;
-    thickness = m_settings->thickness;
-    s = m_settings->separation;
-    h = height; //fabs(m_settings->origin_y);
-    w = width; //fabs(m_settings->origin_x);
-    xcoor = m_settings->origin_x;
-    ycoor = m_settings->origin_y;
-    dx = dy = b = p = last_b = cursor_b = 0;    //inicializar
+    angle = givenangle;
+    thickness = m_settings->thickness * m_settings->thicknessSensorValue;
+    separation = separationAsFunctionOfParameter(m_settings->separationSensorValue, m_settings->separation);
+    height_ = height;
+    width_ = width;
+    origin_x = m_settings->origin_x;
+    origin_y = m_settings->origin_y;
+    dx = dy = scanIntercept = baseLineIntercept = slope = hotIntercept = cursorLineIntercept = 0;    // Initializing
     
-    m_painter.setMaskImageSize(w, h);
-    QRect limits(QPoint(0,0), QPoint(w, h));
+    m_painter.setMaskImageSize(width_, height_);
+    QRect limits(QPoint(0,0), QPoint(width_, height_));
     m_painter.setBounds(limits);
     
-    //</PSEUDOSETTINGS>
-
-    //****dx and dy are the separation between lines in the x and y axis
-    //dx = s / sin(angle*M_PI/180);    // csc = 1/sin(angle)
-    dy = fabs(s / cos(angle*M_PI/180));    // sec = 1/cos(angle), ABSOLUTE VALUE please
-    //always positive because I don't need negatives confusing everything later
+    /*  dx and dy are the separation between lines in the x and y axis
+    dx = separation / sin(angle*M_PI/180);     csc = 1/sin(angle)  */
+    dy = fabs(separation / cos(angle*M_PI/180));    // sec = 1/cos(angle)
+    // I took the absolute value to avoid confusions with negative numbers
 
     if (!m_settings->subpixelprecision)
         modf(dy, &dy);
     
-    //****EXCEPTION FOR VERTICAL LINES, FOR WHICH A TANGENT DOES NOT EXIST****
+    // Exception for vertical lines, for which a tangent does not exist
     if ((angle == 90) || (angle == -90))
     {
-        //vertical line procedure
+        verticalHotX = fmod((origin_x - x), separation);
+        
+        iterateVerticalLines (true, 1, false);   // Forward
+        iterateVerticalLines (true, 0, true);    // In Between both
+        iterateVerticalLines (false, 1, false);  // Backward
     }
     else
     {
-        //****TURN ANGLE+POINT INTO AN ALGEBRAIC LINE****
-        p = tan(angle*M_PI/180);     //angle into slope
-        b = ycoor - p*xcoor;         //slope and point of the Base Line into intercept
-        cursor_b = y - p*x;
-        //printf ("The tangent of %lf degrees is %lf.\n", angle, p );     //debug line
-        //    %    is the modulus operator, fmod is the float modulus operator
+        // Turn Angle + Point into Slope + Intercept
+        slope = tan(angle*M_PI/180);                    // Angle into slope
+        baseLineIntercept = origin_y - slope*origin_x;  // Slope and Point of the Base Line into Intercept
+        cursorLineIntercept = y - slope*x;
+        hotIntercept = fmod((baseLineIntercept - cursorLineIntercept), dy);  // This hotIntercept belongs to a line that intersects with the hatching area
 
-        last_b = fmod((b - cursor_b), dy);     // last_b is the historical name for the b to start iterating
-
-        //printf ("The result of my last_b = fmod(b, dy) is last_b = %lf, b = %lf and dy = %lf.\n", last_b, b, dy ); //debug
-        //std::clog << "p is worth " << p << " and b is worth " << b << "\n";
-        //std::clog << "dx is worth " << dx << " and dy is worth " << dy << "\n";
-
-        //I tried to make this cleaner but there's too many possibilities to be worth
-        //the micromanagement to optimize
-        iteratelines (thickness, h, w, p, dy, last_b, 1, false);    //forward, include base line
-        iteratelines (thickness, h, w, p, dy, last_b, 0, true); //do the line between both iterations
-        iteratelines (thickness, h, w, p, -dy, last_b, 1, false);    //backward
+        iterateLines (true, 1, false);   // Forward
+        iterateLines (true, 0, true);    // In Between both
+        iterateLines (false, 1, false);  // Backward
+        // I tried to make this cleaner but there's too many possibilities to be
+        // worth the micromanagement to optimize
     }
 }
 
 
-void HatchingBrush::iteratelines (int thickness, double h, double w, double p, double dy, double last_b, int lineindex, bool oneline)
+void HatchingBrush::iterateLines(bool forward, int lineindex, bool oneline)
 {
-    double b;
+    //---Preparations before the loop---
     
-    //Declarations before the loop
     double xdraw[2] = {0, 0};
     double ydraw[2] = {0, 0};
+    //points A and B of the segments to trace
+    QPointF A, B;             
     int append_index = 0;
     bool remaininginnerlines = true;
-    QPointF A, B;    //points A and B of the segments to trace
     
-    while (remaininginnerlines)
-    { 
-    //****INTERSECTION POINT VERIFICATION****
-    
-    //--Preamble
-    append_index = 0;
-    remaininginnerlines = false; //we assume there's no more lines unless proven contrary
-    
-    //b will now represent the intercept of the current line
-    b = last_b + dy*lineindex;
-    //std::clog << "b is NOW worth " << b << "and lineindex is..." << lineindex << "\n";
-    lineindex++;
-    //we're descending vertically out of convenience, see blog entry at pentalis.org/kritablog
-    
-    /*explanation: only 2 out of the 4 segments can include limit values
-    to verify intersections, otherwise we could encounter a situation where
-    our new lines intersect with all 4 segments and is still considered an
-    inner line (for example, a line that goes from corner to corner), thus
-    triggering an error. The idea is of the algorithm is that only 2 intersections
-    at most are considered at a time. Graphically this is indistinguishable, it's
-    just there to avoid making unnecesary control structures (like additional "ifs").
-    */
+    while (remaininginnerlines) { 
         
-        if ((b >= 0) && (b <= h)) {
-            xdraw[append_index] = 0;    //interseccion at left
-            ydraw[append_index] = b;
-            remaininginnerlines = true;
-            append_index++;
-            //std::clog << "INTERSECTION LEFT \n" ;
-        }
+        //---------START INTERSECTION POINT VERIFICATION--------
         
-        if ((p*w + b <= h) && (p*w + b >= 0)) {
-            xdraw[append_index] = w;
-            ydraw[append_index] = b + p*w; //interseccion at right
-            remaininginnerlines = true;
-            append_index++;
-            //std::clog << "INTERSECTION RIGHT \n" ;
-        }
+        append_index = 0;
+        remaininginnerlines = false; // We assume there's no more lines unless proven contrary
+        if (forward)
+            scanIntercept = hotIntercept + dy*lineindex;   // scanIntercept will represent the Intercept of the current line
+        else
+            scanIntercept = hotIntercept - dy*lineindex;    // scanIntercept will represent the Intercept of the current line
+
+        lineindex++; // We are descending vertically out of convenience, see blog entry at pentalis.org/kritablog
         
-        if ((-b/p > 0) && (-b/p < w)) {
-            xdraw[append_index] = -b/p;
-            ydraw[append_index] = 0; //interseccion at top
-            remaininginnerlines = true;
-            append_index++;
-            //std::clog << "INTERSECTION TOP \n" ;
-        }
-            
-        if (((h-b)/p > 0) && ((h-b)/p < w)) {
-            xdraw[append_index] = (h-b)/p;
-            ydraw[append_index] = h;     //interseccion at bottom
-            remaininginnerlines = true;
-            append_index++;
-            //std::clog << "INTERSECTION BOTTOM \n" ;
-        }
-        
-        if (!remaininginnerlines) {
-            //std::clog << "I AM EMO \n";
-            break;
-        }
-        
-        //Testing subpixel precision OFF
         /*
-        modf(xdraw[0], &xdraw[0]);
-        modf(xdraw[1], &xdraw[1]);
-        modf(ydraw[0], &ydraw[0]);
-        modf(ydraw[1], &ydraw[1]);
+        Explanation: only 2 out of the 4 segments can include limit values
+        to verify intersections, otherwise we could encounter a situation where
+        our new lines intersect with all 4 segments and is still considered an
+        inner line (for example, a line that goes from corner to corner), thus
+        triggering an error. The idea is of the algorithm is that only 2 intersections
+        at most are considered at a time. Graphically this is indistinguishable, it's
+        just there to avoid making unnecesary control structures (like additional "ifs").
         */
         
-        if (!m_settings->subpixelprecision)
-        {
+        if ((scanIntercept >= 0) && (scanIntercept <= height_)) {
+            xdraw[append_index] = 0;
+            ydraw[append_index] = scanIntercept;       //interseccion at left
+            remaininginnerlines = true;
+            append_index++;
+        }
+        
+        if ((slope*width_ + scanIntercept <= height_) && (slope*width_ + scanIntercept >= 0)) {
+            xdraw[append_index] = width_;
+            ydraw[append_index] = scanIntercept + slope*width_; //interseccion at right
+            remaininginnerlines = true;
+            append_index++;
+        }
+        
+        if ((-scanIntercept/slope > 0) && (-scanIntercept/slope < width_)) {
+            xdraw[append_index] = -scanIntercept/slope;
+            ydraw[append_index] = 0;       //interseccion at top
+            remaininginnerlines = true;
+            append_index++;
+        }
+
+        if (((height_-scanIntercept)/slope > 0) && ((height_-scanIntercept)/slope < width_)) {
+            xdraw[append_index] = (height_-scanIntercept)/slope;
+            ydraw[append_index] = height_;       //interseccion at bottom
+            remaininginnerlines = true;
+            append_index++;
+        }
+        //--------END INTERSECTION POINT VERIFICATION---------
+        
+        if (!remaininginnerlines)
+            break;
+        
+        if (!m_settings->subpixelprecision) {
             myround(&xdraw[0]);
             myround(&xdraw[1]);
             myround(&ydraw[0]);
             myround(&ydraw[1]);
         }
         
-        //std::clog << "a modf(xdraw[0]) le entra " << xdraw[0] << "\n";
         A.setX(xdraw[0]);
-
-        //std::clog << "a modf(ydraw[0]) le entra " << ydraw[0] << "\n";
         A.setY(ydraw[0]);
         
-        /*this control structure is here to handle special situations, like
-        lines that intersect only at 1 point right in the corners*/
+        // If 2 lines intersect with the dab square
         if (append_index == 2) {
-            //std::clog << "a modf(xdraw[1]) le entra " << xdraw[1] << "\n";
             B.setX(xdraw[1]);
-            
-            //std::clog << "a modf(ydraw[1]) le entra " << ydraw[1] << "\n";
             B.setY(ydraw[1]);
             
             if (m_settings->antialias)
@@ -227,19 +191,89 @@ void HatchingBrush::iteratelines (int thickness, double h, double w, double p, d
             else        
                 m_painter.drawDDALine(A, B);    //testing no subpixel;
             
-            if (oneline) {
-                //std::clog << "I AM STOPID \n";
+            if (oneline)
                 break;
-            }
         }
         else
         {
+            continue;
             /*Drawing points at the vertices causes incosistent results due to
             floating point calculations not being quite in sync with algebra,
-            therefore if I have only 1 intersection (= corner), don't draw*/
-            continue;
+            therefore if I have only 1 intersection (= corner = this case),
+            don't draw*/
         }
-        //printf ("Punto A: %f, %f . Punto B: %f, %f. \n", xdraw[0], ydraw[0], xdraw[1], ydraw[1]);
-        
-    }  //endwhile
+    }
 }
+
+void HatchingBrush::iterateVerticalLines(bool forward, int lineindex, bool oneline)
+{
+    //---Preparations before the loop---
+    
+    double xdraw = 0;
+    double ydraw[2] = {0, height_};
+    //points A and B of the segments to trace
+    QPointF A, B;
+    bool remaininginnerlines = true;
+    
+    while (remaininginnerlines) { 
+        
+        //---------START INTERSECTION POINT VERIFICATION--------
+        remaininginnerlines = false;     // We assume there's no more lines unless proven contrary
+        if (forward)
+            verticalScanX = verticalHotX + separation*lineindex;
+        else
+            verticalScanX = verticalHotX - separation*lineindex;
+        
+        lineindex++;
+        
+        /*Read the explanation in HatchingBrush::iterateLines for more information*/
+        
+        if ((verticalScanX >= 0) && (verticalScanX <= width_)) {
+            xdraw = verticalScanX;
+            remaininginnerlines = true;
+        }
+        //--------END INTERSECTION POINT VERIFICATION---------
+        
+        if (!remaininginnerlines)
+            break;
+        
+        if (!m_settings->subpixelprecision) {
+            myround(&xdraw);
+            myround(&ydraw[1]);
+        }
+        
+        A.setX(xdraw);
+        A.setY(ydraw[0]);
+        B.setX(xdraw);
+        B.setY(ydraw[1]);
+        
+        if (m_settings->antialias)
+            m_painter.drawThickLine(A, B, thickness, thickness);
+        else        
+            m_painter.drawDDALine(A, B);    //testing no subpixel;
+            
+        if (oneline)
+            break;
+        else
+            continue;
+    }
+}
+
+double HatchingBrush::separationAsFunctionOfParameter(double parameter, double separation)
+{
+    if ((parameter >= 0) && (parameter < 0.2))
+        return (separation * 4); 
+    else if ((parameter >= 0.2) && (parameter < 0.4))
+        return (separation * 2);
+    else if ((parameter >= 0.4) && (parameter < 0.6))
+        return (separation);
+    else if ((parameter >= 0.6) && (parameter < 0.8))
+        return (separation / 2);
+    else if ((parameter >= 0.8) && (parameter <= 1.0))
+        return (separation / 4);
+    else {
+        qDebug() << "Fix your function \n";
+        return separation;
+    }
+}
+;

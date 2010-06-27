@@ -42,16 +42,25 @@
 #include <KoColorSpaceRegistry.h>
 
 KisHatchingPaintOp::KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-        : KisBrushBasedPaintOp(settings, painter)
-        , m_image(image)
+                   : KisBrushBasedPaintOp(settings, painter)
+                   , m_image(image)
 {
     m_settings = new KisHatchingPaintOpSettings();
     settings->initializeTwin(m_settings);
     
     m_hatchingBrush = new HatchingBrush(m_settings);
-    //m_opacityOption.readOptionSetting(settings);
-    //m_opacityOption.sensor()->reset();
-    //m_attributes.loadSettings(settings);
+    
+    m_crosshatchingOption.readOptionSetting(settings);
+    m_separationOption.readOptionSetting(settings);
+    m_thicknessOption.readOptionSetting(settings);
+    m_opacityOption.readOptionSetting(settings);
+    m_sizeOption.readOptionSetting(settings);
+    m_crosshatchingOption.sensor()->reset();
+    m_separationOption.sensor()->reset();
+    m_thicknessOption.sensor()->reset();
+    m_opacityOption.sensor()->reset();
+    m_sizeOption.sensor()->reset();
+
 }
 
 KisHatchingPaintOp::~KisHatchingPaintOp()
@@ -81,15 +90,14 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     
     //DECLARING EMPTY pixel-only paint device, note that it is a smart pointer
     KisFixedPaintDeviceSP maskDab = 0;
+
+    //SENSOR-depending settings
+    m_settings->crosshatchingSensorValue = KisPaintOp::scaleForPressure(m_crosshatchingOption.apply(info));
+    m_settings->separationSensorValue = m_separationOption.apply(info);
+    m_settings->thicknessSensorValue = KisPaintOp::scaleForPressure(m_thicknessOption.apply(info));
     
-    //Declare a variable to store input-based scaling of the brush dab
-    double scale = 1;   // TODO: use actual scale
-    
-    /* DEPENDS ON PRESSURE
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
-    */
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 1.0;
-    
     
     //-----------POSITIONING code----------
     QPointF hotSpot = brush->hotSpot(scale, scale);
@@ -140,18 +148,40 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
         m_hatchedDab->fill(0, 0, (sw-1), (sh-1), aersh.data()); //this plus yellow background = french fry brush
     }
     
-    /*-----This is the 2nd most important line, it's the line that creates the hatching
-    but it doesn't paint anything visible in the user screen----------*/
-    m_hatchingBrush->paint(m_hatchedDab, x, y, sw, sh, painter()->paintColor());
+    /*-----This is the 2nd most important line(s).
+    This or these lines create the hatching but nothing visible is painted to the screen----------*/
+    // CROSSHATCHING MODE ON, SURPRISE!, soon you'll be able to control this from the GUI
+    m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, m_settings->angle, painter()->paintColor());
+    m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor());
+    m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
     
     //------THIS IS THE MOST IMPORTANT LINE, IT'S THE LINE THAT ACTUALLY PAINTS-------
     painter()->bitBlt(x, y, m_hatchedDab, maskDab, 0, 0, sw, sh);
     
-    //printf ("Ancho: %i . Alto: %i. \n", limits.width(), limits.height());
     //painter()->setOpacity(origOpacity);
     
     /*-----It took me very long to realize the importance of this line, this is
     the line that makes all brushes be slow, even if they're small, yay!-------*/
-    //TODO: change default scale setting to have a faster brush.
     return spacing(scale);
 }
+
+double KisHatchingPaintOp::spinAngle(double spin)
+{
+    double tempangle = m_settings->angle + spin;
+    qint8 factor = 1;
+    
+    if (tempangle < 0)
+        factor = -1;
+    
+    tempangle = fabs(fmod(tempangle, 180));
+    
+    if ((tempangle >= 0) && (tempangle <= 90))
+        return factor * tempangle;
+    else if ((tempangle > 90) && (tempangle <= 180))
+        return factor * -(180 - tempangle);
+    
+    return 0;   // this should never be executed except if NAN
+}
+
+
+;

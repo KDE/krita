@@ -40,7 +40,7 @@ public:
         originYKisDoubleSliderSpinBox   -> setRange(-3000, 3000, 0);
         
         angleKisDoubleSliderSpinBox     -> setValue(-60);
-        separationKisDoubleSliderSpinBox-> setValue(4);
+        separationKisDoubleSliderSpinBox-> setValue(6);
         thicknessKisDoubleSliderSpinBox -> setValue(1);
         originXKisDoubleSliderSpinBox   -> setValue(50);
         originYKisDoubleSliderSpinBox   -> setValue(50);

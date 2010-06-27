@@ -97,7 +97,7 @@ public:
             model = theModel;
             model->addAnchor(parent);
         }
-        Q_ASSERT(model == container->model());
+        Q_ASSERT(model == theModel);
     }
 
     QDebug printDebug(QDebug dbg) const

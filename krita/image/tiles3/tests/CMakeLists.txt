@@ -8,9 +8,9 @@ kde4_add_unit_test(KisTiledDataManagerTest TESTNAME krita-image-KisTiledDataMana
 target_link_libraries(KisTiledDataManagerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
-set(kis_legacy_tile_compressor_test_SRCS kis_legacy_tile_compressor_test.cpp )
-kde4_add_unit_test(KisLegacyTileCompressorTest TESTNAME krita-image-KisLegacyTileCompressorTest  ${kis_legacy_tile_compressor_test_SRCS})
-target_link_libraries(KisLegacyTileCompressorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+set(kis_tile_compressors_test_SRCS kis_tile_compressors_test.cpp )
+kde4_add_unit_test(KisTileCompressorsTest TESTNAME krita-image-KisTileCompressorsTest  ${kis_tile_compressors_test_SRCS})
+target_link_libraries(KisTileCompressorsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 set(kis_compression_tests_SRCS kis_compression_tests.cpp )

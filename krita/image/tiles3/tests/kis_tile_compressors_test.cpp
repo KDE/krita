@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_legacy_tile_compressor_test.h"
+#include "kis_tile_compressors_test.h"
 #include <qtest_kde.h>
 
 #include "tiles3/kis_tiled_data_manager.h"
@@ -25,7 +25,7 @@
 
 #include "tiles_test_utils.h"
 
-void KisLegacyTileCompressorTest::doRoundTrip(KisAbstractTileCompressor *compressor)
+void KisTileCompressorsTest::doRoundTrip(KisAbstractTileCompressor *compressor)
 {
     quint8 defaultPixel = 0;
     KisTiledDataManager dm(1, &defaultPixel);
@@ -58,7 +58,7 @@ void KisLegacyTileCompressorTest::doRoundTrip(KisAbstractTileCompressor *compres
     tile11 = 0;
 }
 
-void KisLegacyTileCompressorTest::doLowLevelRoundTrip(KisAbstractTileCompressor *compressor)
+void KisTileCompressorsTest::doLowLevelRoundTrip(KisAbstractTileCompressor *compressor)
 {
     const qint32 pixelSize = 1;
     quint8 oddPixel1 = 128;
@@ -95,7 +95,7 @@ void KisLegacyTileCompressorTest::doLowLevelRoundTrip(KisAbstractTileCompressor 
     tile->unlock();
 }
 
-void KisLegacyTileCompressorTest::doLowLevelRoundTripIncompressible(KisAbstractTileCompressor *compressor)
+void KisTileCompressorsTest::doLowLevelRoundTripIncompressible(KisAbstractTileCompressor *compressor)
 {
     const qint32 pixelSize = 1;
     quint8 oddPixel1 = 128;
@@ -141,35 +141,35 @@ void KisLegacyTileCompressorTest::doLowLevelRoundTripIncompressible(KisAbstractT
     tile->unlock();
 }
 
-void KisLegacyTileCompressorTest::testRoundTripLegacy()
+void KisTileCompressorsTest::testRoundTripLegacy()
 {
     KisAbstractTileCompressor *compressor = new KisLegacyTileCompressor();
     doRoundTrip(compressor);
     delete compressor;
 }
 
-void KisLegacyTileCompressorTest::testLowLevelRoundTripLegacy()
+void KisTileCompressorsTest::testLowLevelRoundTripLegacy()
 {
     KisAbstractTileCompressor *compressor = new KisLegacyTileCompressor();
     doLowLevelRoundTrip(compressor);
     delete compressor;
 }
 
-void KisLegacyTileCompressorTest::testRoundTrip2()
+void KisTileCompressorsTest::testRoundTrip2()
 {
     KisAbstractTileCompressor *compressor = new KisTileCompressor2();
     doRoundTrip(compressor);
     delete compressor;
 }
 
-void KisLegacyTileCompressorTest::testLowLevelRoundTrip2()
+void KisTileCompressorsTest::testLowLevelRoundTrip2()
 {
     KisAbstractTileCompressor *compressor = new KisTileCompressor2();
     doLowLevelRoundTrip(compressor);
     delete compressor;
 }
 
-void KisLegacyTileCompressorTest::testLowLevelRoundTripIncompressible2()
+void KisTileCompressorsTest::testLowLevelRoundTripIncompressible2()
 {
     KisAbstractTileCompressor *compressor = new KisTileCompressor2();
     doLowLevelRoundTripIncompressible(compressor);
@@ -177,6 +177,6 @@ void KisLegacyTileCompressorTest::testLowLevelRoundTripIncompressible2()
 }
 
 
-QTEST_KDEMAIN(KisLegacyTileCompressorTest, NoGUI)
-#include "kis_legacy_tile_compressor_test.moc"
+QTEST_KDEMAIN(KisTileCompressorsTest, NoGUI)
+#include "kis_tile_compressors_test.moc"
 

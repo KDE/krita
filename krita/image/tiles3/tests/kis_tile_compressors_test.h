@@ -15,14 +15,14 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_LEGACY_TILE_COMPRESSOR_TEST_H
-#define KIS_LEGACY_TILE_COMPRESSOR_TEST_H
+#ifndef KIS_TILE_COMPRESSORS_TEST_H
+#define KIS_TILE_COMPRESSORS_TEST_H
 
 #include <QtTest/QtTest>
 
 class KisAbstractTileCompressor;
 
-class KisLegacyTileCompressorTest : public QObject
+class KisTileCompressorsTest : public QObject
 {
     Q_OBJECT
 private:
@@ -40,5 +40,5 @@ private slots:
     void testLowLevelRoundTripIncompressible2();
 };
 
-#endif /* KIS_LEGACY_TILE_COMPRESSOR_TEST_H */
+#endif /* KIS_TILE_COMPRESSORS_TEST_H */
 

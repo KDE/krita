@@ -76,8 +76,14 @@ public:
     using KisNodeVisitor::visit;
 
     bool visit(KisAdjustmentLayer* layer) {
-        Q_ASSERT(m_projection);
         if (!layer->visible()) return true;
+
+        if (!m_projection) {
+            warnImage << "ObligeChild mechanism has been activated for "
+                "an adjustment layer! Do nothing...";
+            layer->original()->clear();
+            return true;
+        }
 
         KisFilterConfiguration *filterConfig = layer->filter();
         if (!filterConfig) return true;

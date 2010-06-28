@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Sketch brush
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritasketchpaintop
+X-Krita-Version=3

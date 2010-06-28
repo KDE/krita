@@ -242,8 +242,11 @@ private:
 
         if (parentOriginal != currentNode->projection()) {
             if (useTempProjection) {
-                m_currentProjection =
-                    new KisPaintDevice(parentOriginal->colorSpace());
+                if(!m_cachedPaintDevice)
+                    m_cachedPaintDevice = new KisPaintDevice(parentOriginal->colorSpace());
+
+                m_currentProjection = m_cachedPaintDevice;
+                m_currentProjection->prepareClone(parentOriginal);
             }
             else {
                 parentOriginal->clear(rect);
@@ -299,6 +302,14 @@ private:
 
 private:
     KisPaintDeviceSP m_currentProjection;
+
+    /**
+     * Creation of the paint device is quite expensive, so we'll just
+     * save the pointer to our temporary device here and will get it when
+     * needed. This variable must not be used anywhere out of
+     * setupProjection()
+     */
+    KisPaintDeviceSP m_cachedPaintDevice;
 };
 
 

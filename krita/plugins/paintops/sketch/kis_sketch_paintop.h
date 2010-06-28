@@ -26,6 +26,7 @@
 #include "kis_sketch_paintop_settings.h"
 
 #include "kis_painter.h"
+#include <kis_pressure_size_option.h>
 
 class KisSketchPaintOp : public KisPaintOp
 {
@@ -41,6 +42,7 @@ private:
     // pixel buffer
     KisPaintDeviceSP m_dab;
     KisPressureOpacityOption m_opacityOption;
+    KisPressureSizeOption m_sizeOption;
     SketchProperties m_sketchProperties;
     
     QVector<QPointF> m_points;

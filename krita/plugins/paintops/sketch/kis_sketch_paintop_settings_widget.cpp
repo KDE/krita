@@ -27,6 +27,7 @@
 #include <kis_paintop_options_widget.h>
 #include <kis_paint_action_type_option.h>
 #include <kis_airbrush_option.h>
+#include <kis_pressure_size_option.h>
 
 KisSketchPaintOpSettingsWidget:: KisSketchPaintOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
@@ -34,9 +35,10 @@ KisSketchPaintOpSettingsWidget:: KisSketchPaintOpSettingsWidget(QWidget* parent)
     m_sketchOption =  new KisSketchOpOption();
         
     addPaintOpOption(m_sketchOption);
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisAirbrushOption(false));
-
+    
     m_paintActionType = new KisPaintActionTypeOption();
     KisPropertiesConfiguration defaultSetting;
     defaultSetting.setProperty("PaintOpAction",BUILDUP);

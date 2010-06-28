@@ -46,9 +46,11 @@ KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, Kis
 {
     Q_UNUSED(image);
     m_opacityOption.readOptionSetting(settings);
-    m_opacityOption.sensor()->reset();
-
+    m_sizeOption.readOptionSetting(settings);
     m_sketchProperties.readOptionSetting(settings);
+    
+    m_opacityOption.sensor()->reset();
+    m_sizeOption.sensor()->reset();
     
     m_painter = 0;
     m_count = 0;
@@ -89,7 +91,9 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     QPointF diff;
     int size = m_points.size();
     
-    qreal thresholdDistance = m_sketchProperties.radius * m_sketchProperties.radius;
+    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
+    qreal radius = m_sketchProperties.radius * scale;
+    qreal thresholdDistance =  radius * radius;
     // shaded: probabity : paint always - 0.0 density
     qreal density = thresholdDistance * m_sketchProperties.probability;
     
@@ -127,9 +131,9 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     m_count++;
 
     QRect rc = m_dab->extent();
-    quint8 origOpacity = painter()->opacity();
+    quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
     if (m_sketchProperties.useLowOpacity){
-        painter()->setOpacity(origOpacity * opacity);
+        painter()->setOpacity(painter()->opacity() * opacity);
     }
     
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());

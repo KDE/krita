@@ -90,8 +90,9 @@ public:
             if (model)
                 model->removeAnchor(parent);
             if (shape->parent() != container) {
-                if (shape->parent())
+                if (shape->parent()) {
                     shape->parent()->removeShape(shape);
+                }
                 container->addShape(shape);
             }
             model = theModel;
@@ -137,6 +138,7 @@ public:
         case KoTextAnchor::HorizontalOffset: answer+= "HorizontalOffset"; break;
         case KoTextAnchor::LeftOfPage: answer+= "LeftOfPage"; break;
         case KoTextAnchor::RightOfPage: answer+= "RightOfPage"; break;
+        case KoTextAnchor::CenterOfPage: answer+= "CenterOfPage"; break;
         }
         return answer;
     }
@@ -448,6 +450,8 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
                  d->horizontalAlignment = LeftOfPage;
              else if (horizontal == "RightOfPage")
                  d->horizontalAlignment = RightOfPage;
+             else if (horizontal == "CenterOfPage")
+                 d->horizontalAlignment = CenterOfPage;
              return true;
         }
     }
@@ -548,7 +552,8 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
              }
          } else if (horizontalRel == "page") {
              if (horizontalPos == "center") { //svg:x attribute is ignored
-                 return false; // not posible to do it with koffice:anchor-type
+                 d->horizontalAlignment = CenterOfPage;
+                 d->distance.setX(0);
              } else if (horizontalPos == "from-inside") {
                  return false; // not posible to do it with koffice:anchor-type
              } else if (horizontalPos == "from-left") {
@@ -663,7 +668,8 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
              //horizontal alignment - conversion from style:horizontal-rel,pos to koffice:anchor-type
             if (horizontalRel == "page") {
                  if (horizontalPos == "center") { //svg:x attribute is ignored
-                     return false; // not posible to do it with koffice:anchor-type
+                     d->horizontalAlignment = CenterOfPage;
+                     d->distance.setX(0);
                  } else if (horizontalPos == "from-inside") {
                      return false; // not posible to do it with koffice:anchor-type
                  } else if (horizontalPos == "from-left") {

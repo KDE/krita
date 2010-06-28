@@ -82,6 +82,7 @@ public:
         HorizontalOffset,   ///< Move the anchor to be an exact horizontal distance from the the anchor.
         LeftOfPage,         ///< Align the anchors left to the left of the page
         RightOfPage,        ///< Align the anchors right to the right of the page
+        CenterOfPage        ///< Align the anchors center to the center of the page
     };
 
     /**

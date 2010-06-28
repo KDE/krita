@@ -91,6 +91,9 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
                                   const QRect & rc) const
 {
     Q_ASSERT(nodeProgressProxy());
+    Q_ASSERT_X(src != dst, "KisFilterMask::decorateRect",
+               "src must be != dst, because we cant create transactions "
+               "during merge, as it breaks reentrancy");
 
     if (!m_d->filterConfig) {
         warnKrita << "No filter configuration present";
@@ -113,7 +116,6 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
 
     QPointer<KoUpdater> updaterPtr = updater.startSubtask();
 
-    KisTransaction transaction("", dst);
     filter->process(srcInfo, dstInfo, rc.size(),
                     m_d->filterConfig, updaterPtr);
 

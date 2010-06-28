@@ -35,7 +35,23 @@
 #include "kis_layer.h"
 
 struct KisMask::Private {
+    class PerThreadPaintDevice {
+    public:
+        KisPaintDeviceSP device(KisPaintDeviceSP projection) {
+            if(!m_storage.hasLocalData())
+                m_storage.setLocalData(new KisPaintDeviceSP(new KisPaintDevice(projection->colorSpace())));
+
+            KisPaintDeviceSP device = *m_storage.localData();
+            device->prepareClone(projection);
+
+            return device;
+        }
+    private:
+        QThreadStorage<KisPaintDeviceSP *> m_storage;
+    };
+
     KisSelectionSP selection;
+    PerThreadPaintDevice paintDeviceCache;
 };
 
 KisMask::KisMask(const QString & name)
@@ -146,21 +162,21 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
         if(!m_d->selection->selectedRect().intersects(rc))
             return;
 
-        KisPaintDeviceSP cacheDevice =
-            new KisPaintDevice(projection->colorSpace());
+        KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.device(projection);
 
         QRect updatedRect = decorateRect(projection, cacheDevice, rc);
 
-        /**
-         * FIXME: ALPHA_DARKEN vs OVER
-         */
         KisPainter gc(projection);
         gc.setCompositeOp(compositeOp());
         gc.setOpacity(opacity());
         gc.setSelection(m_d->selection);
         gc.bitBlt(updatedRect.topLeft(), cacheDevice, updatedRect);
     } else {
-        decorateRect(projection, projection, rc);
+        KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.device(projection);
+        cacheDevice->makeCloneFromRough(projection, rc);
+        projection->clear(rc);
+        // FIXME: how about opacity and compositeOp?
+        decorateRect(cacheDevice, projection, rc);
     }
 }
 

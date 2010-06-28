@@ -223,6 +223,14 @@ public:
 public:
 
     /**
+     * Prepares the device for fastBitBlt opreration. It clears
+     * the device, switches x,y shifts and colorspace if needed.
+     * After this call fastBitBlt will return true.
+     * May be used for initialization of temporary devices.
+     */
+    void prepareClone(KisPaintDeviceSP src);
+
+    /**
      * Make this device to become a clone of \a src. It will have the same
      * x,y shifts, colorspace and will share pixels inside \a rect.
      * After calling this function:
@@ -243,13 +251,6 @@ public:
 
 protected:
     friend class KisPaintDeviceTest;
-
-    /**
-     * Prepares the device for fastBitBlt opreration. It switches
-     * x,y shifts and colorspace if needed. After this call
-     * fastBitBlt will return true
-     */
-    void prepareClone(KisPaintDeviceSP src);
 
     /**
      * Checks whether a src paint device can be used as source

@@ -104,11 +104,9 @@ public:
         updater.start(100, filter->name());
         QPointer<KoUpdater> updaterPtr = updater.startSubtask();
 
-        KisTransaction* transaction =
-            new KisTransaction("", originalDevice);
+        // We do not create a transaction here, as srcDevice != dstDevice
         filter->process(srcCfg, dstCfg, applyRect.size(),
                         filterConfig, updaterPtr);
-        delete transaction;
 
         updaterPtr->setProgress(100);
 

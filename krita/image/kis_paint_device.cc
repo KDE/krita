@@ -233,11 +233,12 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         }
         m_d->x = rhs.m_d->x;
         m_d->y = rhs.m_d->y;
+
         m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(rhs.m_d->colorSpace);
-
         m_d->pixelSize = rhs.m_d->pixelSize;
-
         m_d->nChannels = rhs.m_d->nChannels;
+
+        setDefaultBounds(rhs.defaultBounds());
     }
 }
 
@@ -245,6 +246,44 @@ KisPaintDevice::~KisPaintDevice()
 {
     KoColorSpaceRegistry::instance()->releaseColorSpace(m_d->colorSpace);
     delete m_d;
+}
+
+void KisPaintDevice::prepareClone(KisPaintDeviceSP src)
+{
+    clear();
+    m_d->parent = 0;
+    m_d->x = src->x();
+    m_d->y = src->y();
+
+    setDefaultBounds(src->defaultBounds());
+
+    if(!(*colorSpace() == *src->colorSpace())) {
+        KoColorSpaceRegistry::instance()->releaseColorSpace(m_d->colorSpace);
+        m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(src->colorSpace());
+        m_d->nChannels = m_d->colorSpace->channelCount();
+
+        if (m_d->pixelSize != m_d->colorSpace->pixelSize()) {
+            m_datamanager = 0;
+            m_datamanager = new KisDataManager(src->pixelSize(), src->defaultPixel());
+            m_d->pixelSize = src->pixelSize();
+        }
+        else {
+            setDefaultPixel(src->defaultPixel());
+        }
+    }
+    Q_ASSERT(fastBitBltPossible(src));
+}
+
+void KisPaintDevice::makeCloneFrom(KisPaintDeviceSP src, const QRect &rect)
+{
+    prepareClone(src);
+    fastBitBlt(src, rect);
+}
+
+void KisPaintDevice::makeCloneFromRough(KisPaintDeviceSP src, const QRect &minimalRect)
+{
+    prepareClone(src);
+    fastBitBltRough(src, minimalRect);
 }
 
 void KisPaintDevice::setDirty(const QRect & rc)
@@ -1023,7 +1062,7 @@ void KisPaintDevice::fastBitBlt(KisPaintDeviceSP src, const QRect &rect)
 {
     Q_ASSERT(fastBitBltPossible(src));
 
-    m_datamanager->bitBlt(src->dataManager(), rect);
+    m_datamanager->bitBlt(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
     m_d->cache.invalidate();
 }
 
@@ -1031,7 +1070,7 @@ void KisPaintDevice::fastBitBltRough(KisPaintDeviceSP src, const QRect &rect)
 {
     Q_ASSERT(fastBitBltPossible(src));
 
-    m_datamanager->bitBltRough(src->dataManager(), rect);
+    m_datamanager->bitBltRough(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
     m_d->cache.invalidate();
 }
 

@@ -221,6 +221,36 @@ public:
     void fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel);
 
 public:
+
+    /**
+     * Make this device to become a clone of \a src. It will have the same
+     * x,y shifts, colorspace and will share pixels inside \a rect.
+     * After calling this function:
+     * (this->extent() >= this->exactBounds() == rect).
+     */
+    void makeCloneFrom(KisPaintDeviceSP src, const QRect &rect);
+
+    /**
+     * Make this device to become a clone of \a src. It will have the same
+     * x,y shifts, colorspace and will share pixels inside \a rect.
+     * Be careful, this function will copy *at least* \a rect
+     * of pixels. Actual copy area will be a bigger - it will
+     * be aligned by tiles borders. So after calling this function:
+     * (this->extent() == this->exactBounds() >= rect).
+     */
+    void makeCloneFromRough(KisPaintDeviceSP src, const QRect &minimalRect);
+
+
+protected:
+    friend class KisPaintDeviceTest;
+
+    /**
+     * Prepares the device for fastBitBlt opreration. It switches
+     * x,y shifts and colorspace if needed. After this call
+     * fastBitBlt will return true
+     */
+    void prepareClone(KisPaintDeviceSP src);
+
     /**
      * Checks whether a src paint device can be used as source
      * of fast bitBlt operation. The result of the check may

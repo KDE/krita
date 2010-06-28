@@ -314,6 +314,41 @@ void KisPaintDeviceTest::testFastBitBlt()
     QVERIFY(!dstDev->fastBitBltPossible(srcDev));
 }
 
+void KisPaintDeviceTest::testMakeClone()
+{
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP srcDev = new KisPaintDevice(cs);
+    srcDev->convertFromQImage(image, "");
+    srcDev->move(10,10);
+
+    const KoColorSpace * weirdCS = KoColorSpaceRegistry::instance()->lab16();
+    KisPaintDeviceSP dstDev = new KisPaintDevice(weirdCS);
+    dstDev->move(1000,1000);
+
+    QVERIFY(!dstDev->fastBitBltPossible(srcDev));
+
+    QRect cloneRect(100,100,200,200);
+    QPoint errpoint;
+
+    dstDev->makeCloneFrom(srcDev, cloneRect);
+
+    QVERIFY(*dstDev->colorSpace() == *srcDev->colorSpace());
+    QCOMPARE(dstDev->pixelSize(), srcDev->pixelSize());
+    QCOMPARE(dstDev->x(), srcDev->x());
+    QCOMPARE(dstDev->y(), srcDev->y());
+    QCOMPARE(dstDev->exactBounds(), cloneRect);
+
+    QImage srcImage = srcDev->convertToQImage(0, cloneRect.x(), cloneRect.y(),
+                                              cloneRect.width(), cloneRect.height());
+    QImage dstImage = dstDev->convertToQImage(0, cloneRect.x(), cloneRect.y(),
+                                              cloneRect.width(), cloneRect.height());
+    if (!TestUtil::compareQImages(errpoint, dstImage, srcImage)) {
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+}
+
 void KisPaintDeviceTest::testThumbnail()
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");

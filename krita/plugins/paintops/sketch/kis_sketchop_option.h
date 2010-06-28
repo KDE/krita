@@ -67,7 +67,7 @@ public:
         offset = settings->getDouble(SKETCH_OFFSET) * 0.01;
         useLowOpacity = settings->getBool(SKETCH_LOW_OPACITY);
         makeConnection = settings->getBool(SKETCH_MAKE_CONNECTION);
-        makeConnection = settings->getBool(SKETCH_MAGNETIFY);
+        magnetify = settings->getBool(SKETCH_MAGNETIFY);
         lineWidth = settings->getInt(SKETCH_LINE_WIDTH);
     }
 };

@@ -473,7 +473,7 @@ void KisToolFreehand::endPaint()
             if (indirect) {
                 indirect->setTemporaryTarget(0);
             }
-            m_source->setDirty(painter.dirtyRegion());
+            // m_source->setDirty(painter.dirtyRegion());
 
             m_incrementalDirtyRegion = QRegion();
 

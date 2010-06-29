@@ -27,8 +27,6 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#include "kdebug.h"
-
 KoShapeContainerPrivate::KoShapeContainerPrivate(KoShapeContainer *q)
     : KoShapePrivate(q),
     model(0)

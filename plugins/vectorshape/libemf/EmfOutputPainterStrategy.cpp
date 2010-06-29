@@ -33,14 +33,14 @@ namespace Libemf
 
 OutputPainterStrategy::OutputPainterStrategy() :
     m_header( 0 ),
-    m_path( 0 ), 
-    m_currentlyBuildingPath( false ), 
-    m_image( 0 ), 
+    m_path( 0 ),
+    m_currentlyBuildingPath( false ),
+    m_image( 0 ),
     m_currentCoords()
 {
 }
 
-OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size, 
+OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size,
                                              bool keepAspectRatio)
     : m_header( 0 )
     , m_path( 0 )
@@ -96,7 +96,7 @@ void OutputPainterStrategy::init( const Header *header )
     kDebug(31000) << "outputSize           =" << m_outputSize.width() << m_outputSize.height();
 
     kDebug(31000) << "Device =" << header->device().width() << header->device().height();
-    kDebug(31000) << "Millimeters =" << header->millimeters().width() 
+    kDebug(31000) << "Millimeters =" << header->millimeters().width()
                   << header->millimeters().height();
 #endif
 
@@ -126,8 +126,8 @@ void OutputPainterStrategy::init( const Header *header )
     // Calculate translation if we should center the Emf in the
     // area and keep the aspect ratio.
     if ( m_keepAspectRatio ) {
-        m_painter->translate((m_outputSize.width() - outputSize.width() * scaleX) / 2,
-                             (m_outputSize.height() - outputSize.height() * scaleY) / 2);
+        m_painter->translate((m_outputSize.width() / scaleX - outputSize.width()) / 2,
+                             (m_outputSize.height() / scaleY - outputSize.height()) / 2);
     }
 
 #if DEBUG_EMFPAINT
@@ -177,7 +177,7 @@ QImage* OutputPainterStrategy::image()
     return m_image;
 }
 
-   
+
 void OutputPainterStrategy::beginPath()
 {
 #if DEBUG_EMFPAINT
@@ -337,7 +337,7 @@ void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 
         kDebug(33100) << "unexpected pen type, using SolidLine" << (penStyle & 0xF);
         pen.setStyle( Qt::SolidLine );
     }
-   
+
     switch ( penStyle & PS_ENDCAP_FLAT ) {
     case PS_ENDCAP_ROUND:
         pen.setCapStyle( Qt::RoundCap );
@@ -357,7 +357,7 @@ void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 
     m_objectTable.insert( ihPen,  pen );
 }
 
-void OutputPainterStrategy:: createBrushIndirect( quint32 ihBrush, quint32 brushStyle, 
+void OutputPainterStrategy:: createBrushIndirect( quint32 ihBrush, quint32 brushStyle,
                                                   quint8 red, quint8 green, quint8 blue,
                                                   quint8 reserved,
                                                   quint32 brushHatch )
@@ -558,7 +558,7 @@ void OutputPainterStrategy::chord( const QRect &box, const QPoint &start, const 
     qreal endAngle   = angleFromArc( centrePoint, end );
     qreal spanAngle  = angularSpan( startAngle, endAngle );
 
-    m_painter->drawChord( box, startAngle*16, spanAngle*16 ); 
+    m_painter->drawChord( box, startAngle*16, spanAngle*16 );
 }
 
 void OutputPainterStrategy::pie( const QRect &box, const QPoint &start, const QPoint &end )
@@ -749,7 +749,7 @@ void OutputPainterStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )
 
     m_painter->drawText( position, extTextOutA.textString() );
 
-    kDebug(33100) << "extTextOutA: ref.point = " 
+    kDebug(33100) << "extTextOutA: ref.point = "
                   << extTextOutA.referencePoint().x() << extTextOutA.referencePoint().y()
                   << ", Text = " << extTextOutA.textString().toLatin1().data();
 
@@ -782,7 +782,7 @@ void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QSt
     else if ((m_textAlignMode & TA_RIGHT) == TA_RIGHT)
         x -= width;
 
-    // Vertical align. 
+    // Vertical align.
     if ((m_textAlignMode & TA_BASELINE) == TA_BASELINE)
         y -= fm.ascent();  // (height - fm.descent()) is used in qwmf.  This should be the same.
     else if ((m_textAlignMode & TA_BOTTOM) == TA_BOTTOM) {
@@ -991,7 +991,7 @@ void OutputPainterStrategy::setClipPath( const quint32 regionMode )
         m_painter->setClipPath( *m_path, Qt::ReplaceClip );
         break;
     default:
-        qWarning() <<  "Unexpected / unsupported clip region mode:" << regionMode; 
+        qWarning() <<  "Unexpected / unsupported clip region mode:" << regionMode;
         Q_ASSERT( 0 );
     }
 }
@@ -1050,9 +1050,9 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << "Bounds:    " << record.bounds();
-    kDebug(31000) << "Dest rect: " 
+    kDebug(31000) << "Dest rect: "
                   << record.xDest() << record.yDest() << record.cxDest() << record.cyDest();
-    kDebug(31000) << "Src rect:  " 
+    kDebug(31000) << "Src rect:  "
                   << record.xSrc() << record.ySrc() << record.cxSrc() << record.cySrc();
     kDebug(31000) << "Raster op: " << hex << record.rasterOperation() << dec;
                   //<< record.bkColorSrc();
@@ -1143,11 +1143,11 @@ qreal OutputPainterStrategy::angleFromArc( const QPoint &centrePoint, const QPoi
 qreal OutputPainterStrategy::angularSpan( const qreal startAngle, const qreal endAngle )
 {
     qreal spanAngle = endAngle - startAngle;
-    
+
     if ( spanAngle <= 0 ) {
         spanAngle += 360;
     }
-    
+
     return spanAngle;
 }
 

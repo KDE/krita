@@ -32,8 +32,8 @@ const QString ABR_BRUSH_ANGLE = "Angl";
 const QString ABR_BRUSH_ROUNDNESS = "Rndn";
 const QString ABR_BRUSH_SPACING = "Spcn";
 const QString ABR_BRUSH_INTR = "Intr";
-const QString ABR_BRUSH_FLIP_X = "flipX";
-const QString ABR_BRUSH_FLIP_Y = "flipY";
+const QString ABR_FLIP_X = "flipX";
+const QString ABR_FLIP_Y = "flipY";
 const QString ABR_USE_TIP_DYNAMICS = "useTipDynamics";
 const QString ABR_TIP_DYNAMICS_MINUMUM_DIAMETER = "minimumDiameter";
 const QString ABR_TIP_DYNAMICS_MINUMUM_ROUNDNESS = "minimumRoundness";
@@ -80,6 +80,7 @@ class AbrBrushProperties{
 public:
     void toXML(QDomDocument& , QDomElement&) const;
     void setupProperty(const QString &attributeName,const QString &type,const  QString &value);
+    void reset();
 private:
     double m_diameter;
     double m_hardness;
@@ -93,41 +94,41 @@ private:
     QString m_brushType;
 };
 
-class AbrShapeDynamicsProperties{
-public:
-    bool useTipDynamics;
-    bool flipX;
-    bool flipY;
-    double minumumDiameter;
-    double minumumRoundness;
-    double tiltScale;
-public:
-    void toXML(QDomDocument& , QDomElement&) const;
-};
-
 
 class AbrGroupProperties{
-public:
-    enumAbrControllers bVTy;
-    int fadeStep;
-    double sizeJitter;
 public:    
-    void toXML(QDomDocument& , QDomElement&) const;
+    void setupProperty(const QString &attributeName,const QString &type,const  QString &value);
+
+    enumAbrControllers m_bVTy;
+    int m_fadeStep;
+    double m_sizeJitter;
 };
 
+#include <QHash>
 
-class AbrAngleDynamicsProperties{
+class AbrTipDynamicsProperties{
 public:
-    AbrGroupProperties group;
+    AbrTipDynamicsProperties();
     void toXML(QDomDocument& , QDomElement&) const;
+    void setupProperty(const QString &attributeName,const QString &type,const  QString &value);
+    void reset(){ m_groupType = QString::null; }
+private:
+    bool m_useTipDynamics;
+    bool m_flipX;
+    bool m_flipY;
+    double m_minumumDiameter;
+    double m_minumumRoundness;
+    double m_tiltScale;
+    
+    AbrGroupProperties m_sizeVarianceProperties;
+    AbrGroupProperties m_angleProperties;
+    AbrGroupProperties m_RoundnessProperties;
+    
+    QString m_groupType;
+
+    QHash<QString,AbrGroupProperties*> m_groups;
 };
 
-class AbrRoundnessDynamicsProperties{
-public:
-    AbrGroupProperties group;
-    bool useScatter;
-    void toXML(QDomDocument& , QDomElement&) const;
-};
 
 class AbrDualBrushProperties{
 public:
@@ -168,7 +169,7 @@ class KisAbrTranslator{
         QDomElement m_root;
         QString m_currentObjectName;
         AbrBrushProperties m_abrBrushProperties;
-        
+        AbrTipDynamicsProperties m_abrTipDynamics;
 };
 
 #endif

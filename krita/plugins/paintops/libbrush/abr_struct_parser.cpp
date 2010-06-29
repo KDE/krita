@@ -222,7 +222,7 @@ quint32 AbrStructParser::parseEntry(QDataStream &buf){
             }
             
             QString attributeName = QString::fromLatin1(name);
-            qDebug() << attributeName << key << value;
+            //qDebug() << attributeName << key << value;
             m_translator.addEntry(attributeName, key, value);
             
             // airbrush is the last parsed attribute of the preset

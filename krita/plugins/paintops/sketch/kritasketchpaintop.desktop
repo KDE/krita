@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Sketch brush
+Name[x-test]=xxSketch brushxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritasketchpaintop

@@ -91,6 +91,7 @@ void Chart::Private::slotUnregisterDestroyedHeaderFooter( HeaderFooter* hf )
 
 void Chart::Private::slotUnregisterDestroyedPlane( AbstractCoordinatePlane* plane )
 {
+    plane->setReferenceCoordinatePlane(0);
     coordinatePlanes.removeAll( plane );
     Q_FOREACH ( AbstractCoordinatePlane* p, coordinatePlanes )
     {
@@ -961,13 +962,10 @@ void Chart::takeCoordinatePlane( AbstractCoordinatePlane* plane )
 {
     const int idx = d->coordinatePlanes.indexOf( plane );
     if( idx != -1 ){
-        d->coordinatePlanes.takeAt( idx );
         disconnect( plane, SIGNAL( destroyedCoordinatePlane( AbstractCoordinatePlane* ) ),
                     d, SLOT( slotUnregisterDestroyedPlane( AbstractCoordinatePlane* ) ) );
-        plane->removeFromParentLayout();
-        plane->setParent( 0 );
+        d->slotUnregisterDestroyedPlane( plane );
     }
-    d->slotLayoutPlanes();
     // Need to emit the signal: In case somebody has connected the signal
     // to her own slot for e.g. calling update() on a widget containing the chart.
     emit propertiesChanged();

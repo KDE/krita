@@ -17,11 +17,12 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "krscriptreport.h"
-#include <krreportdata.h>
-#include <KoReportItemBase.h>
-
+#include "krreportdata.h"
+#include "KoReportItemBase.h"
+#include "KoReportPluginManager.h"
 #include "krscriptline.h"
 #include "krscriptsection.h"
+#include "KoReportItemLine.h"
 
 namespace Scripting
 {
@@ -57,35 +58,25 @@ QObject* Report::objectByName(const QString &n)
 {
     QList<KoReportItemBase *>obs = m_reportData->objects();
     foreach(KoReportItemBase *o, obs) {
-        #if 0 //TODO Scripting
         if (o->entityName() == n) {
-            switch (o->type()) {
-            case KRObjectData::EntityLabel:
-                return new Scripting::Label(o->toLabel());
-                break;
-            case KRObjectData::EntityField:
-                return new Scripting::Field(o->toField());
-                break;
-            case KRObjectData::EntityText:
-                return new Scripting::Text(o->toText());
-                break;
-            case KRObjectData::EntityBarcode:
-                return new Scripting::Barcode(o->toBarcode());
-                break;
-            case KRObjectData::EntityLine:
-                return new Scripting::Line(o->toLine());
-                break;
-            case KRObjectData::EntityChart:
-                return new Scripting::Chart(o->toChart());
-                break;
-            case KRObjectData::EntityImage:
-                return new Scripting::Image(o->toImage());
-                break;
-            default:
-                return new QObject();
+                    
+            if (o->typeName() == "report:line") {
+                        return new Scripting::Line(dynamic_cast<KoReportItemLine*>(o));
+            }
+            else {
+                KoReportPluginManager &manager = KoReportPluginManager::self();
+                KoReportPluginInterface *plugin = manager.plugin(o->typeName());
+                if (plugin) {
+                    QObject *obj = plugin->createScriptInstance(o);
+                    if (obj) {
+                        return obj;
+                    }
+                }
+                else {
+                    kDebug() << "Encountered unknown node while parsing section: " << o->typeName();
+                }
             }
         }
-        #endif
     }
     return 0;
 }

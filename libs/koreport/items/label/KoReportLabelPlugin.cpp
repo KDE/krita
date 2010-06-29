@@ -23,6 +23,7 @@
 #include "KoReportDesignerItemLabel.h"
 #include "KoReportDesigner.h"
 #include "KoReportPluginInfo.h"
+#include "krscriptlabel.h"
 #include <KIcon>
 
 KoReportLabelPlugin::KoReportLabelPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent, args)
@@ -54,5 +55,14 @@ QObject* KoReportLabelPlugin::createDesignerInstance(KoReportDesigner* designer,
 QObject* KoReportLabelPlugin::createDesignerInstance(QDomNode & element, KoReportDesigner *designer, QGraphicsScene * scene)
 {
     return new KoReportDesignerItemLabel(element, designer, scene);
+}
+
+QObject* KoReportLabelPlugin::createScriptInstance(KoReportItemBase *item)
+{
+    KoReportItemLabel *label = dynamic_cast<KoReportItemLabel*>(item);
+    if (label) {
+        return new Scripting::Label(label);
+    }
+    return 0;
 }
 

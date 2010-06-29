@@ -43,6 +43,7 @@ class KOREPORT_EXPORT KoReportPluginInterface : public QObject
         virtual QObject* createDesignerInstance(KoReportDesigner *, QGraphicsScene * scene, const QPointF &pos) = 0;
         virtual QObject* createDesignerInstance(QDomNode & element, KoReportDesigner *, QGraphicsScene * scene) = 0;
         virtual QObject* createRendererInstance(QDomNode & element) = 0;
+        virtual QObject* createScriptInstance(KoReportItemBase* item) = 0;
 
         void setInfo(KoReportPluginInfo *);
         KoReportPluginInfo* info() const;

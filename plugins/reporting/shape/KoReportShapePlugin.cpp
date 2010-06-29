@@ -22,6 +22,7 @@
 #include "KoReportItemShape.h"
 #include "KoReportDesignerItemShape.h"
 #include "KoReportPluginInfo.h"
+
 #include <KIcon>
 
 K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportShapePlugin, shapeplugin)
@@ -56,3 +57,7 @@ QObject* KoReportShapePlugin::createDesignerInstance(KoReportDesigner* designer,
     return new KoReportDesignerItemShape(designer, scene, pos);
 }
 
+QObject* KoReportShapePlugin::createScriptInstance(KoReportItemBase* item)
+{
+    return 0;
+}

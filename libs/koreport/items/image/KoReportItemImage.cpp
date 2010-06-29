@@ -135,7 +135,7 @@ QString KoReportItemImage::itemDataSource() const
 
 QString KoReportItemImage::typeName() const
 {
-    return "image";
+    return "report:image";
 }
 
 int KoReportItemImage::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)

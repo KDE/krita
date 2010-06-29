@@ -22,6 +22,7 @@
 #include "KoReportItemField.h"
 #include "KoReportDesignerItemField.h"
 #include "KoReportPluginInfo.h"
+#include "krscriptfield.h"
 #include <KIcon>
 
 KoReportFieldPlugin::KoReportFieldPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
@@ -54,5 +55,14 @@ QObject* KoReportFieldPlugin::createDesignerInstance(QDomNode& element, KoReport
 QObject* KoReportFieldPlugin::createDesignerInstance(KoReportDesigner* designer, QGraphicsScene* scene, const QPointF& pos)
 {
     return new KoReportDesignerItemField(designer, scene, pos);
+}
+
+QObject* KoReportFieldPlugin::createScriptInstance(KoReportItemBase* item)
+{
+    KoReportItemField *field = dynamic_cast<KoReportItemField*>(item);
+    if (field) {
+        return new Scripting::Field(field);
+    }
+    return 0;
 }
 

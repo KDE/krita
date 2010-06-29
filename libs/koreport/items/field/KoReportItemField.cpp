@@ -188,7 +188,7 @@ KRLineStyleData KoReportItemField::lineStyle()
 // RTTI
 QString KoReportItemField::typeName() const
 {
-    return "field";
+    return "report:field";
 }
 
 int KoReportItemField::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)

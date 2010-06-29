@@ -22,6 +22,8 @@
 #include "KoReportItemChart.h"
 #include "KoReportDesignerItemChart.h"
 #include "KoReportPluginInfo.h"
+#include "krscriptchart.h"
+
 #include <KIcon>
 
 K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportChartPlugin, chartplugin)
@@ -56,3 +58,11 @@ QObject* KoReportChartPlugin::createDesignerInstance(KoReportDesigner* designer,
     return new KoReportDesignerItemChart(designer, scene, pos);
 }
 
+QObject* KoReportChartPlugin::createScriptInstance(KoReportItemBase* item)
+{
+    KoReportItemChart *chart = dynamic_cast<KoReportItemChart*>(item);
+    if (chart) {
+        return new Scripting::Chart(chart);
+    }
+    return 0;
+}

@@ -18,7 +18,9 @@
 #include "krscriptsection.h"
 
 #include "krscriptline.h"
-#include <KoReportItemBase.h>
+#include "KoReportItemBase.h"
+#include "KoReportPluginManager.h"
+#include "KoReportItemLine.h"
 
 #include <kdebug.h>
 
@@ -63,33 +65,22 @@ QString Section::name()
 
 QObject* Section::objectByNumber(int i)
 {
-    #if 0 //TODO Scripting
-    switch (m_section->m_objects[i]->type()) {
-    case KRObjectData::EntityLabel:
-        return new Scripting::Label(m_section->m_objects[i]->toLabel());
-        break;
-    case KRObjectData::EntityField:
-        return new Scripting::Field(m_section->m_objects[i]->toField());
-        break;
-    case KRObjectData::EntityText:
-        return new Scripting::Field(m_section->m_objects[i]->toField());
-        break;
-    case KRObjectData::EntityBarcode:
-        return new Scripting::Barcode(m_section->m_objects[i]->toBarcode());
-        break;
-    case KRObjectData::EntityLine:
-        return new Scripting::Line(m_section->m_objects[i]->toLine());
-        break;
-    case KRObjectData::EntityChart:
-        return new Scripting::Chart(m_section->m_objects[i]->toChart());
-        break;
-    case KRObjectData::EntityImage:
-        return new Scripting::Image(m_section->m_objects[i]->toImage());
-        break;
-    default:
-        return new QObject();
+    if (m_section->m_objects[i]->typeName() == "report:line") {
+                return new Scripting::Line(dynamic_cast<KoReportItemLine*>(m_section->m_objects[i]));
     }
-    #endif
+    else {
+        KoReportPluginManager &manager = KoReportPluginManager::self();
+        KoReportPluginInterface *plugin = manager.plugin(m_section->m_objects[i]->typeName());
+        if (plugin) {
+            QObject *obj = plugin->createScriptInstance(m_section->m_objects[i]);
+            if (obj) {
+                return obj;
+            }
+        }
+        else {
+            kDebug() << "Encountered unknown node while parsing section: " << m_section->m_objects[i]->typeName();
+        }
+    }
 
     return new QObject();
 }

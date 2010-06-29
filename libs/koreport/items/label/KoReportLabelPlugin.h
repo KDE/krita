@@ -33,6 +33,7 @@ class KoReportLabelPlugin : public KoReportPluginInterface
     virtual QObject* createRendererInstance(QDomNode&);
     virtual QObject* createDesignerInstance(KoReportDesigner* , QGraphicsScene* scene, const QPointF&);
     virtual QObject* createDesignerInstance(QDomNode & element, KoReportDesigner *, QGraphicsScene * scene);
+    virtual QObject* createScriptInstance(KoReportItemBase* item);
 };
 
 #endif // KOREPORTLABELPLUGIN_H

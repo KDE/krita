@@ -33,6 +33,7 @@ class KoReportFieldPlugin : public KoReportPluginInterface
     virtual QObject* createRendererInstance(QDomNode& element);
     virtual QObject* createDesignerInstance(QDomNode& element, KoReportDesigner* , QGraphicsScene* scene);
     virtual QObject* createDesignerInstance(KoReportDesigner* , QGraphicsScene* scene, const QPointF& pos);
+    virtual QObject* createScriptInstance(KoReportItemBase* item);
 };
 
 #endif // KOREPORTFIELDPLUGIN_H

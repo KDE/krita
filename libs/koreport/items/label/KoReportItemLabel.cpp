@@ -163,7 +163,7 @@ KRLineStyleData KoReportItemLabel::lineStyle()
 // RTTI
 QString KoReportItemLabel::typeName() const
 {
-    return "label";
+    return "report:label";
 }
 
 int KoReportItemLabel::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)

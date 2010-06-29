@@ -28,7 +28,7 @@ class TreeFactory : public KoShapeFactoryBase
 {
 public:
     TreeFactory(QObject *parent);
-    ~TreeFactory() {}
+    ~TreeFactory();
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
     virtual bool supports(const KoXmlElement &e) const;

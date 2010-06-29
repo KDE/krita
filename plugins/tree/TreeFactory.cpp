@@ -36,6 +36,8 @@ TreeFactory::TreeFactory(QObject *parent)
     setLoadingPriority(2);
 }
 
+TreeFactory::~TreeFactory() {}
+
 KoShape *TreeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
     Q_UNUSED(documentResources);

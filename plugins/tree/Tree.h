@@ -21,7 +21,6 @@
 
 #include "KoShapeContainer.h"
 
-#include "flake_export.h"
 
 #define TREEID "Tree"
 
@@ -33,7 +32,7 @@ class KoConnectionShape;
 class Layout;
 class QPainter;
 
-class FLAKE_EXPORT Tree : public KoShapeContainer
+class Tree : public KoShapeContainer
 {
 
 public:

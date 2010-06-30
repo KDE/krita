@@ -23,7 +23,7 @@
 // http://www.libpng.org/pub/png/libpng-1.2.5-manual.html
 
 #ifndef PNG_MAX_UINT // Removed in libpng 1.4
-#define PNG_MAX_UINT UINT_MAX
+#define PNG_MAX_UINT PNG_UINT_31_MAX
 #endif
 
 #include <KoConfig.h> // WORDS_BIGENDIAN

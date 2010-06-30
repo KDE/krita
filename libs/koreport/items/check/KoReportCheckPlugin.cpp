@@ -22,6 +22,8 @@
 #include "KoReportItemCheck.h"
 #include "KoReportDesignerItemCheck.h"
 #include "KoReportPluginInfo.h"
+#include "KoReportScriptCheck.h"
+
 #include <KIcon>
 
 KoReportCheckPlugin::KoReportCheckPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
@@ -60,7 +62,7 @@ QObject* KoReportCheckPlugin::createScriptInstance(KoReportItemBase* item)
 {
     KoReportItemCheck *check = dynamic_cast<KoReportItemCheck*>(item);
     if (check) {
-//TODO        return new Scripting::Check(check);
+       return new Scripting::Check(check);
     }
     return 0;
 }

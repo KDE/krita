@@ -24,8 +24,9 @@
 #include <klocalizedstring.h>
 #include <renderobjects.h>
 #include "renderer/scripting/krscripthandler.h"
+#include <KoLut.h>
 
-KoReportItemCheck::KoReportItemCheck(QDomNode &element)
+KoReportItemCheck::KoReportItemCheck(QDomNode &element) : m_value(false)
 {
     createProperties();
     QDomNodeList nl = element.childNodes();
@@ -123,23 +124,27 @@ int KoReportItemCheck::render(OROPage* page, OROSection* section,  QPointF offse
     chk->setCheckType(m_checkStyle->value().toString());
 
     QString str;
-
-    QString cs = itemDataSource();
-    kDebug() << "EntityCheck CS:" << cs;
-
-    if (cs.left(1) == "=" && script) {
-        str = script->evaluate(cs.mid(1)).toString();
-    } else {
-        str = data.toString();
-    }
-
     bool v = false;
+    QString cs = itemDataSource();
 
-    str = str.toLower();
+    kDebug() << "ControlSource:" << cs;
 
-    kDebug() << "Check Value:" << str;
-    if (str == "t" || str == "true" || str == "1")
-        v = true;
+    if (!cs.isEmpty()) {
+        if (cs.left(1) == "=" && script) {
+            str = script->evaluate(cs.mid(1)).toString();
+        } else {
+            str = data.toString();
+        }
+
+        str = str.toLower();
+
+        kDebug() << "Check Value:" << str;
+        if (str == "t" || str == "true" || str == "1")
+            v = true;
+    
+    } else {
+        v = value();
+    }
 
     chk->setValue(v);
 
@@ -149,4 +154,14 @@ int KoReportItemCheck::render(OROPage* page, OROSection* section,  QPointF offse
     if (section) section->addPrimitive(chk2);
 
     return 0; //Item doesnt stretch the section height
+}
+
+bool KoReportItemCheck::value()
+{
+    return m_value;
+}
+
+void KoReportItemCheck::setValue(bool v)
+{
+    m_value = v;
 }

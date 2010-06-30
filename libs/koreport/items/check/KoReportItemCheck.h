@@ -61,6 +61,7 @@ protected:
     
 private:
     virtual void createProperties();
+    bool m_value;
     
     friend class Scripting::Check;
 };

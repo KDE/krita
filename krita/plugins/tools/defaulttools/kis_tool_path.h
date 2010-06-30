@@ -23,12 +23,12 @@
 #include <KoToolFactoryBase.h>
 
 #include "flake/kis_node_shape.h"
-#include "kis_tool.h"
+#include "kis_tool_shape.h"
 
 class KisSelectionOptions;
 class KoCanvasBase;
 
-class KisToolPath : public KoCreatePathTool
+class KisToolPath : public KisToolShape
 {
 
     Q_OBJECT
@@ -37,7 +37,32 @@ public:
     KisToolPath(KoCanvasBase * canvas);
     virtual ~KisToolPath();
 
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void mousePressEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event);
+    
     void addPathShape(KoPathShape* pathShape);
+
+public slots:
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void deactivate();
+
+private:
+    /// reimplemented
+    virtual QMap<QString, QWidget *> createOptionWidgets();
+
+    class LocalTool : public KoCreatePathTool {
+        friend class KisToolPath;
+    public:
+        LocalTool(KoCanvasBase * canvas, KisToolPath* selectingTool);
+        virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
+        virtual void addPathShape(KoPathShape* pathShape);
+    private:
+        KisToolPath* const m_parentTool;
+    };
+    LocalTool* const m_localTool;
 
 };
 

@@ -35,18 +35,57 @@
 #include <kis_canvas_resource_provider.h>
 #include <kis_paintop_registry.h>
 #include <kis_selection.h>
+#include <kis_cursor.h>
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
+
 KisToolPath::KisToolPath(KoCanvasBase * canvas)
-        : KoCreatePathTool(canvas)
+        : KisToolShape(canvas, Qt::ArrowCursor), m_localTool(new LocalTool(canvas, this))
 {
 }
 
 KisToolPath::~KisToolPath()
 {
+    delete m_localTool;
+}
+
+void KisToolPath::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+{
+    KisToolShape::activate(toolActivation, shapes);
+    m_localTool->activate(toolActivation, shapes);
+}
+
+void KisToolPath::deactivate()
+{
+    KisToolShape::deactivate();
+    m_localTool->deactivate();
+}
+
+void KisToolPath::mousePressEvent(KoPointerEvent *event)
+{
+    Q_ASSERT(m_localTool);
+    m_localTool->mousePressEvent(event);
+}
+
+void KisToolPath::mouseDoubleClickEvent(KoPointerEvent *event)
+{
+    Q_ASSERT(m_localTool);
+    m_localTool->mouseDoubleClickEvent(event);
+}
+
+void KisToolPath::mouseMoveEvent(KoPointerEvent *event)
+{
+    Q_ASSERT(m_localTool);
+    m_localTool->mouseMoveEvent(event);
+}
+
+void KisToolPath::mouseReleaseEvent(KoPointerEvent *event)
+{
+    Q_ASSERT(m_localTool);
+    m_localTool->mouseReleaseEvent(event);
 }
 
 void KisToolPath::addPathShape(KoPathShape* pathShape)
@@ -119,19 +158,9 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
         KisPainter painter(dev, selection);
         painter.beginTransaction(i18n("Path"));
 
-        if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode.data())) {
-            painter.setChannelFlags(l->channelFlags());
-            if (l->alphaLocked()) {
-                painter.setLockAlpha(l->alphaLocked());
-            }
-        }
-        painter.setPaintColor(paintColor);
-        painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-        painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-        painter.setOpacity(OPACITY_OPAQUE_U8);
-        painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_OVER));
-        painter.setPaintOpPreset(preset, image);
-
+        setupPainter(&painter);
+        painter.setOpacity(m_opacity);
+        painter.setCompositeOp(m_compositeOp);
         painter.paintPainterPath(mapedOutline);
         painter.endTransaction(image->undoAdapter());
 
@@ -144,6 +173,40 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
         QUndoCommand * cmd = canvas()->shapeController()->addShape(pathShape);
         canvas()->addCommand(cmd);
     }
+}
+
+void KisToolPath::paint(QPainter &painter, const KoViewConverter &converter)
+{
+    Q_ASSERT(m_localTool);
+    m_localTool->paint(painter, converter);
+}
+
+QMap<QString, QWidget *> KisToolPath::createOptionWidgets()
+{
+    QMap<QString, QWidget *> map = KisToolShape::createOptionWidgets();
+    map.unite(m_localTool->createOptionWidgets());
+    return map;
+}
+
+KisToolPath::LocalTool::LocalTool(KoCanvasBase * canvas, KisToolPath* selectingTool)
+        : KoCreatePathTool(canvas), m_parentTool(selectingTool) {}
+
+void KisToolPath::LocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
+{
+    Q_UNUSED(converter);
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    if (!kisCanvas)
+        return;
+
+    QMatrix matrix;
+    matrix.scale(kisCanvas->image()->xRes(), kisCanvas->image()->yRes());
+    matrix.translate(pathShape.position().x(), pathShape.position().y());
+    m_parentTool->paintToolOutline(&painter, m_parentTool->pixelToView(matrix.map(pathShape.outline())));
+}
+
+void KisToolPath::LocalTool::addPathShape(KoPathShape* pathShape)
+{
+    m_parentTool->addPathShape(pathShape);
 }
 
 #include "kis_tool_path.moc"

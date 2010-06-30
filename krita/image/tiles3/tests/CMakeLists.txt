@@ -16,3 +16,8 @@ target_link_libraries(KisTileCompressorsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT
 set(kis_compression_tests_SRCS kis_compression_tests.cpp )
 kde4_add_unit_test(KisCompressionTests TESTNAME krita-image-KisCompressionTests  ${kis_compression_tests_SRCS})
 target_link_libraries(KisCompressionTests  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+set(kis_lockless_stack_test_SRCS kis_lockless_stack_test.cpp )
+kde4_add_unit_test(KisLocklessStackTest TESTNAME krita-image-KisLocklessStackTest  ${kis_lockless_stack_test_SRCS})
+target_link_libraries(KisLocklessStackTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

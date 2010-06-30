@@ -72,7 +72,7 @@ set(koreport_LIB_SRCS
 
     items/check/KoReportItemCheck.cpp
     items/check/KoReportDesignerItemCheck.cpp
-#    items/check/krscriptcheck.cpp
+    items/check/KoReportScriptCheck.cpp
     items/check/KoReportCheckPlugin.cpp
 
     items/field/KoReportItemField.cpp

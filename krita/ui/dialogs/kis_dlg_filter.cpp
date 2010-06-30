@@ -87,8 +87,8 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP im
     d->uiFilterDialog.filterSelection->setPaintDevice(d->node->paintDevice());
     d->uiFilterDialog.filterSelection->setImage(d->image);
 
-    connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
+    connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiFilterDialog.pushButtonApply, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
 

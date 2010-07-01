@@ -143,8 +143,8 @@ void KoResourceModel::resourceRemoved(KoResource *resource)
 void KoResourceModel::resourceChanged(KoResource* resource)
 {
     int resourceIndex = m_resourceAdapter->resources().indexOf(resource);
-    int row = resourceIndex / rowCount();
-    int column = resourceIndex % rowCount();
+    int row = resourceIndex / columnCount();
+    int column = resourceIndex % columnCount();
 
     QModelIndex modelIndex = index(row, column);
     if (!modelIndex.isValid()) {

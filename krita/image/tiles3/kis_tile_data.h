@@ -26,7 +26,8 @@
 class KisTileData;
 class KisTileDataStore;
 
-typedef QList<KisTileData*> KisTileDataCache;
+#include "kis_lockless_stack.h"
+typedef KisLocklessStack<KisTileData*> KisTileDataCache;
 
 /**
  * Stores actual tile's data
@@ -71,9 +72,9 @@ private:
     /**
      * A list of pre-duplicated tiledatas.
      * To make a COW faster, KisTileDataPooler thread duplicates
-     * a tile beforehand and stores clones here, in this list
+     * a tile beforehand and stores clones here, in this stack
      */
-    KisTileDataCache m_clonesList;
+    KisTileDataCache m_clonesStack;
 
 private:
     friend class KisTile;

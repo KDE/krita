@@ -33,7 +33,7 @@ const qint32 KisTileDataPooler::TIMEOUT_FACTOR = 2;
 #ifdef DEBUG_POOLER
 #define DEBUG_CLONE_ACTION(td, numClones)                               \
     printf("Cloned (%d):\t\t\t\t0x%X (clones: %d, users: %d, refs: %d)\n", \
-           numClones, td, td->m_clonesList.size(),                      \
+           numClones, td, td->m_clonesStack.size(),                      \
            (int)td->m_usersCount, (int)td->m_refCount)
 #define DEBUG_SIMPLE_ACTION(action)     \
     printf("pooler: %s\n", action)
@@ -41,7 +41,7 @@ const qint32 KisTileDataPooler::TIMEOUT_FACTOR = 2;
 #define RUNTIME_SANITY_CHECK(td) do {                                   \
         if(td->m_usersCount < td->m_refCount) {                         \
             qDebug("**** Suspicious tiledata: 0x%X (clones: %d, users: %d, refs: %d) ****", \
-                   td, td->m_clonesList.size(),                         \
+                   td, td->m_clonesStack.size(),                         \
                    (int)td->m_usersCount, (int)td->m_refCount);         \
         }                                                               \
         if(td->m_usersCount <= 0) {                                     \
@@ -87,7 +87,7 @@ qint32 KisTileDataPooler::numClonesNeeded(KisTileData *td) const
 {
     RUNTIME_SANITY_CHECK(td);
     qint32 numUsers = td->m_usersCount;
-    qint32 numPresentClones = td->m_clonesList.size();
+    qint32 numPresentClones = td->m_clonesStack.size();
     qint32 totalClones = qMin(numUsers - 1, MAX_NUM_CLONES);
 
     return totalClones - numPresentClones;
@@ -97,21 +97,16 @@ void KisTileDataPooler::cloneTileData(KisTileData *td, qint32 numClones) const
 {
     if (numClones > 0) {
         for (qint32 i = 0; i < numClones; i++)
-            td->m_clonesList.prepend(new KisTileData(*td));
+            td->m_clonesStack.push(new KisTileData(*td));
     } else {
         qint32 numUnnededClones = qAbs(numClones);
         for (qint32 i = 0; i < numUnnededClones; i++) {
-            /**
-             * Dirty hack alert!
-             * There is a race condition against clones list. It is
-             * a temporary "solution".
-             * FIXME: Implement a lockless list (or stack) for this.
-             */
-            if(!td->m_clonesList.isEmpty()) {
-                KisTileData *clone;
-                clone = td->m_clonesList.takeFirst();
-                delete clone;
-            }
+            KisTileData *clone;
+
+            bool result = td->m_clonesStack.pop(clone);
+            if(!result) break;
+
+            delete clone;
         }
     }
 
@@ -152,7 +147,7 @@ inline bool KisTileDataPooler::interestingTileData(KisTileData* td)
      */
 
     return td->m_state == KisTileData::NORMAL &&
-           (td->m_usersCount > 1 || !td->m_clonesList.isEmpty());
+           (td->m_usersCount > 1 || !td->m_clonesStack.isEmpty());
 }
 
 void KisTileDataPooler::run()
@@ -205,7 +200,7 @@ void KisTileDataPooler::debugTileStatistics()
 
     tileListForEach(iter, tileListHead(), tileListTail()) {
         totalTiles++;
-        preallocatedTiles += iter->m_clonesList.size();
+        preallocatedTiles += iter->m_clonesStack.size();
     }
     qDebug() << "Tiles statistics:\t total:" << totalTiles << "\t preallocated:"<< preallocatedTiles;
 }

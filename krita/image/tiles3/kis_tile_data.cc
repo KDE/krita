@@ -73,9 +73,11 @@ KisTileData::~KisTileData()
 
     /* Free clones list */
     KisTileData *td;
-    foreach(td, m_clonesList) {
+    while(m_clonesStack.pop(td)) {
         delete td;
     }
+
+    Q_ASSERT(m_clonesStack.isEmpty());
 }
 
 void KisTileData::fillWithPixel(const quint8 *defPixel)

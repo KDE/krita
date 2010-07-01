@@ -124,9 +124,7 @@ KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
 {
     KisTileData *td;
 
-    /* FIXME: race condition in QList */
-    if (!rhs->m_clonesList.isEmpty()) {
-        td = rhs->m_clonesList.takeFirst();
+    if (rhs->m_clonesStack.pop(td)) {
         DEBUG_PRECLONE_ACTION("+ Pre-clone HIT", rhs, td);
     } else {
         td = new KisTileData(*rhs);

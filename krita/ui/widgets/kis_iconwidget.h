@@ -23,6 +23,7 @@
 #include <widgets/kis_popup_button.h>
 
 class KoResource;
+class KoAbstractResourceServerAdapter;
 
 class KisIconWidget : public KisPopupButton
 {
@@ -36,8 +37,13 @@ class KisIconWidget : public KisPopupButton
 public:
     KisIconWidget(QWidget *parent = 0, const char *name = 0);
 
+    /**
+     * Set an resource server adapter that the widgit will observe.
+     */
+    void setResourceAdapter(KoAbstractResourceServerAdapter* adapter);
 public slots:
     void slotSetItem(KoResource * resource);
+    void slotAdapterResourceChanged(KoResource * resource);
 
 protected:
     virtual void paintEvent(QPaintEvent *);

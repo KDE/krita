@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <QIcon>
 #include <KoResource.h>
+#include <KoResourceServerAdapter.h>
 
 
 KisIconWidget::KisIconWidget(QWidget *parent, const char *name)
@@ -52,6 +53,20 @@ void KisIconWidget::paintEvent(QPaintEvent *)
     p.drawRect(0, 0, cw + 1, ch + 1);
     (void)p.end();
     paintPopupArrow();
+}
+
+void KisIconWidget::setResourceAdapter(KoAbstractResourceServerAdapter* adapter)
+{
+    adapter->setParent(this);
+    adapter->connectToResourceServer();
+    connect(adapter, SIGNAL(resourceChanged(KoResource*)), this, SLOT(slotAdapterResourceChanged(KoResource*)));
+}
+
+void KisIconWidget::slotAdapterResourceChanged(KoResource* resource)
+{
+    if (m_resource == resource) {
+        update();
+    }
 }
 
 #include "kis_iconwidget.moc"

@@ -91,6 +91,10 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     action  = new KAction(i18n("&Gradients"), this);
     view->actionCollection()->addAction("gradients", action);
     action->setDefaultWidget(m_gradientWidget);
+    
+    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
+    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
+    m_gradientWidget->setResourceAdapter(adapter);
 
     /**** Temporary hack to test the KoDualColorButton ***/
     KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), view, view);

@@ -23,7 +23,6 @@
 
 #include <KoXmlNS.h>
 #include "KoShapeControllerBase.h"
-#include "KoImageCollection.h"
 
 #include <klocale.h>
 #include <kdebug.h>

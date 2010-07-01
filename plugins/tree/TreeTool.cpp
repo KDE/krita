@@ -32,6 +32,9 @@
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoGradientBackground.h>
+#include <KoShapeController.h>
+#include <QUndoCommand>
+
 #include <kdebug.h>
 
 TreeTool::TreeTool(KoCanvasBase* canvas)
@@ -60,9 +63,12 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
                 Tree *tree = dynamic_cast<Tree*>(root->parent());
                 if (tree){
                     kDebug() << "Adding child...";
+                    KoShapeController *controller = canvas()->shapeController();
+                    QUndoCommand *command = new QUndoCommand;
                     foreach(KoShape* shape, tree->addNewChild()){
-                        canvas()->shapeManager()->addShape(shape);
+                        controller->addShapeDirect(shape, command);
                     }
+                    canvas()->addCommand(command);
                 }
             }
             event->accept();

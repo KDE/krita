@@ -51,6 +51,7 @@ Tree::Tree(): KoShapeContainer(new Layout(this))
 
 Tree::Tree(KoShape *shape): KoShapeContainer(new Layout(this))
 {
+    setShapeId("Tree");
     addShape(shape);
     layout()->setRoot(shape);
     layout()->layout();

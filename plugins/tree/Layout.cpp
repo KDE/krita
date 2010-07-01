@@ -63,8 +63,8 @@ void Layout::add(KoShape *shape, uint pos)
 
 void Layout::attachConnector(KoShape* shape, KoConnectionShape *connector)
 {
-    Q_ASSERT(m_children.contains(shape));
-    Q_ASSERT(m_connectors.contains(connector));
+    //Q_ASSERT(m_children.contains(shape));
+    //Q_ASSERT(m_connectors.contains(connector));
     m_bonds[shape] = connector;
     //scheduleRelayout();
 }
@@ -86,8 +86,12 @@ KoShape* Layout::root() const
 
 void Layout::remove(KoShape *shape)
 {
-    if (m_children.removeOne(shape))
+    if (m_children.removeOne(shape)) {
         scheduleRelayout();
+    }
+    else if (m_connectors.removeOne(shape)) {
+        scheduleRelayout();
+    }
 }
 
 void Layout::setClipped(const KoShape *shape, bool clipping)

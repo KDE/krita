@@ -298,7 +298,6 @@ QDomElement KoReportDesigner::document() const
     content.appendChild(scr);
 
     QDomElement grd = doc.createElement("report:grid");
-#include <KoReportPluginInterface.h>
     KoReportDesignerItemBase::addPropertyAsAttribute(&grd, m_showGrid);
     KoReportDesignerItemBase::addPropertyAsAttribute(&grd, m_gridDivisions);
     KoReportDesignerItemBase::addPropertyAsAttribute(&grd, m_gridSnap);

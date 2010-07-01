@@ -42,6 +42,12 @@ public:
      * @param resource the resource which is going to be removed
      */
     virtual void removingResource(T* resource) = 0;
+    
+    /**
+     * Will be called by the resource server when a resource is changed
+     * @param resource the resource which is going to be removed
+     */
+    virtual void resourceChanged(T* resource) = 0;
 };
 
 #endif // KORESOURCESERVEROBSERVER_H

@@ -27,6 +27,7 @@
 #include <QDomDocument>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "KoColorSpaceRegistry.h"
 
@@ -240,6 +241,12 @@ KoStopGradient * KoStopGradient::fromQGradient(QGradient * gradient)
     }
 
     return newGradient;
+}
+
+void KoStopGradient::setStops(QList< KoGradientStop > stops)
+{
+    m_stops = stops;
+    updatePreview();
 }
 
 void KoStopGradient::loadKarbonGradient(QFile* file)

@@ -43,10 +43,12 @@ public:
 signals:
     void resourceAdded(KoResource*);
     void removingResource(KoResource*);
+    void resourceChanged(KoResource*);
 
 protected:
     void emitResourceAdded(KoResource* resource);
     void emitRemovingResource(KoResource* resource);
+    void emitResourceChanged(KoResource* resource);
 };
 
 /**
@@ -127,6 +129,11 @@ public:
     void removingResource(T* resource)
     {
         emitRemovingResource(resource);
+    }
+    
+    void resourceChanged(T* resource)
+    {
+        emitResourceChanged(resource);
     }
 
     QString extensions()

@@ -31,6 +31,7 @@
 
 #include "KoSegmentGradient.h"
 #include "KoStopGradient.h"
+#include "KoColorSpaceRegistry.h"
 
 class GradientResourceServer : public KoResourceServer<KoAbstractGradient> {
 
@@ -39,6 +40,26 @@ public:
     GradientResourceServer(const QString& type, const QString& extensions) :
             KoResourceServer<KoAbstractGradient>(type, extensions)
     {
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+        KoStopGradient* gradient = new KoStopGradient("");
+        gradient->setType(QGradient::LinearGradient);
+        gradient->setName("Foreground to Background");
+        
+        QList<KoGradientStop> stops;
+        stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(Qt::white, cs));
+        gradient->setStops(stops);
+        gradient->setValid(true);
+        addResource(gradient, false);
+        
+        gradient = new KoStopGradient("");
+        gradient->setType(QGradient::LinearGradient);
+        gradient->setName("Foreground to Transparent");
+        
+        stops.clear();
+        stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs));
+        gradient->setStops(stops);
+        gradient->setValid(true);
+        addResource(gradient, false);
     }
 
 private:

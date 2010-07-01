@@ -65,6 +65,10 @@ public:
         m_brushes.removeAll(brush);
     }
     
+    virtual void resourceChanged(KisBrush* resource) {
+        
+    }
+    
     ///Reimplemented
     void importResourceFile( const QString & filename ) {
         QFileInfo fi( filename );

@@ -34,6 +34,8 @@
 #include <KoColorProfile.h>
 #include <KoAbstractGradient.h>
 #include <KoCompositeOp.h>
+#include <KoResourceServerProvider.h>
+#include <KoStopGradient.h>
 
 #include <kis_pattern.h>
 #include <kis_paint_device.h>
@@ -52,7 +54,7 @@
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
         : m_view(view)
 {
-    m_fGChanged = true;
+    m_fGChanged = true;  
 }
 
 KisCanvasResourceProvider::~KisCanvasResourceProvider()
@@ -262,6 +264,24 @@ void KisCanvasResourceProvider::slotSetDisplayProfile(const KoColorProfile * pro
 
 void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & res)
 {
+    if(key == KoCanvasResource::ForegroundColor || key == KoCanvasResource::BackgroundColor) {
+        KoAbstractGradient* resource = KoResourceServerProvider::instance()->gradientServer()->resources()[0];
+        KoStopGradient* stopGradient = dynamic_cast<KoStopGradient*>(resource);
+        if(stopGradient) {
+            QList<KoGradientStop> stops;
+            stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0, bgColor());
+            stopGradient->setStops(stops);
+            KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
+        }
+        resource = KoResourceServerProvider::instance()->gradientServer()->resources()[1];
+        stopGradient = dynamic_cast<KoStopGradient*>(resource);
+        if(stopGradient) {
+            QList<KoGradientStop> stops;
+            stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0,  KoColor(QColor(0, 0, 0, 0), fgColor().colorSpace()));
+            stopGradient->setStops(stops);
+            KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
+        }
+    }
     switch (key) {
     case(KoCanvasResource::ForegroundColor):
         m_fGChanged = true;

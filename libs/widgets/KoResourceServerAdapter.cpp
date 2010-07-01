@@ -38,4 +38,9 @@ void KoAbstractResourceServerAdapter::emitRemovingResource(KoResource* resource)
     emit removingResource(resource);
 }
 
+void KoAbstractResourceServerAdapter::emitResourceChanged(KoResource* resource)
+{
+    emit resourceChanged(resource);
+}
+
 #include <KoResourceServerAdapter.moc>

@@ -52,6 +52,9 @@ public:
 
     /// Creates KoStopGradient from a QGradient
     static KoStopGradient * fromQGradient(QGradient * gradient);
+    
+    /// Sets the gradient stops
+    void setStops(QList<KoGradientStop> stops);
 
     /// reimplemented
     QString defaultFileExtension() const;

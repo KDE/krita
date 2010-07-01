@@ -56,6 +56,7 @@ public:
 private slots:
     void resourceAdded(KoResource *resource);
     void resourceRemoved(KoResource *resource);
+    void resourceChanged(KoResource *resource);
 
 private:
     KoAbstractResourceServerAdapter * m_resourceAdapter;

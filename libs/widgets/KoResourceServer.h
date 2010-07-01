@@ -154,12 +154,12 @@ public:
 
 
     /// Adds an already loaded resource to the server
-    bool addResource(T* resource) {
+    bool addResource(T* resource, bool save = true) {
         if (!resource->valid()) {
             kWarning(30009) << "Tried to add an invalid resource!";
             return false;
         }
-        if( ! resource->save() ) {
+        if( save && ! resource->save()) {
             kWarning(30009) << "Could not save resource!";
             return false;
         }
@@ -318,6 +318,15 @@ public:
         return m_resourcesByName[name];
     }
 
+    /**
+     * Call after changing the content of a resource;
+     * Notifies the connected views.
+     */
+    void updateResource( T* resource )
+    {
+        notifyResourceChanged(resource);
+    }
+
 protected:
 
     /**
@@ -343,10 +352,17 @@ protected:
 
     void notifyRemovingResource(T* resource)
     {
-        foreach(KoResourceServerObserver<T>* observer, m_observers)
+        foreach(KoResourceServerObserver<T>* observer, m_observers) {
             observer->removingResource(resource);
+        }
     }
 
+    void notifyResourceChanged(T* resource)
+    {
+        foreach(KoResourceServerObserver<T>* observer, m_observers) {
+            observer->resourceChanged(resource);
+        }
+    }
 
 private:
 

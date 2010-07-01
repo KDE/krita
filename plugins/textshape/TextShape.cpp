@@ -424,7 +424,7 @@ bool TextShape::loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext 
 
 bool TextShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    return m_textShapeData->loadOdf(element, context);
+    return m_textShapeData->loadOdf(element, context, 0, this);
 }
 
 QTextDocument *TextShape::footnoteDocument()

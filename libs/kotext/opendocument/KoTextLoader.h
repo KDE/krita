@@ -30,6 +30,7 @@
 #include "KoXmlReaderForward.h"
 
 class KoShapeLoadingContext;
+class KoShape;
 class QTextCursor;
 class KoBookmarkManager;
 class KoDocumentRdfBase;
@@ -65,7 +66,7 @@ public:
     *
     * @param context The context the KoTextLoader is called in
     */
-    explicit KoTextLoader(KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData = 0);
+    explicit KoTextLoader(KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData = 0, KoShape *shape = 0);
 
     /**
     * Destructor.

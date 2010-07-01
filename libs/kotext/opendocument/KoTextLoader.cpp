@@ -122,13 +122,15 @@ public:
 
     KoDocumentRdfBase *rdfData;
 
+    KoShape *shape;
+
     int loadSpanLevel;
     int loadSpanInitialPos;
     QStack<int> changeStack;
     QMap<QString, int> changeTransTable;
     QMap<QString, KoXmlElement> deleteChangeTable;
 
-    explicit Private(KoShapeLoadingContext &context)
+    explicit Private(KoShapeLoadingContext &context, KoShape *shape)
             : context(context),
             textSharedData(0),
             // stylesDotXml says from where the office:automatic-styles are to be picked from:
@@ -144,8 +146,11 @@ public:
             currentListLevel(1),
             styleManager(0),
             changeTracker(0),
+            rdfData(0),
+            shape(shape),
             loadSpanLevel(0),
-            loadSpanInitialPos(0) {
+            loadSpanInitialPos(0)
+    {
         dt.start();
     }
 
@@ -235,9 +240,9 @@ KoList *KoTextLoader::Private::list(const QTextDocument *document, KoListStyle *
 
 /////////////KoTextLoader
 
-KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData)
+KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData, KoShape *shape)
         : QObject()
-        , d(new Private(context))
+        , d(new Private(context, shape))
 {
     d->rdfData = rdfData;
     KoSharedLoadingData *sharedData = context.sharedData(KOTEXT_SHARED_LOADING_ID);
@@ -439,14 +444,14 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
 
     // Some paragraph have id's defined which we need to store so that we can eg
     // attach text animations to this specific paragraph later on
-    if (element.hasAttributeNS(KoXmlNS::text, "id")) {
+    if (element.hasAttributeNS(KoXmlNS::text, "id") && d->shape) {
         QTextBlock block = cursor.block();
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
         if (!data) {
             data = new KoTextBlockData();
             block.setUserData(data);
         }
-        d->context.addShapeSubItemId(0, qVariantFromValue(data), element.attributeNS(KoXmlNS::text, "id"));
+        d->context.addShapeSubItemId(d->shape, qVariantFromValue(data), element.attributeNS(KoXmlNS::text, "id"));
     }
 
     // attach Rdf to cursor.block()

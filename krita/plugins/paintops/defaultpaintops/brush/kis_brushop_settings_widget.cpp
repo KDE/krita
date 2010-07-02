@@ -31,6 +31,7 @@
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_hsv_option.h>
 #include <kis_airbrush_option.h>
+#include <kis_pressure_mirror_option_widget.h>
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
         : KisBrushBasedPaintopOptionWidget(parent)
@@ -38,6 +39,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     setObjectName("brush option widget");
 
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
+    addPaintOpOption(new KisPressureMirrorOptionWidget());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));

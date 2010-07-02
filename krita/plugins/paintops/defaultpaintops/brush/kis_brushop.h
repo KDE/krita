@@ -30,6 +30,7 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_mix_option.h>
 #include <kis_pressure_hsv_option.h>
+#include <kis_pressure_mirror_option.h>
 
 class KisBrushBasedPaintOpSettings;
 
@@ -52,6 +53,7 @@ public:
 private:
     KisColorSource* m_colorSource;
     KisPressureSizeOption m_sizeOption;
+    KisPressureMirrorOption m_mirrorOption;
     KisPressureOpacityOption m_opacityOption;
     KisPressureDarkenOption m_darkenOption;
     KisPressureRotationOption m_rotationOption;

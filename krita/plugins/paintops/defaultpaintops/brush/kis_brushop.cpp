@@ -61,11 +61,13 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     }
     
     m_sizeOption.readOptionSetting(settings);
+    m_mirrorOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_darkenOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
     m_mixOption.readOptionSetting(settings);
     m_sizeOption.sensor()->reset();
+    m_mirrorOption.sensor()->reset();
     m_opacityOption.sensor()->reset();
     m_darkenOption.sensor()->reset();
     m_rotationOption.sensor()->reset();
@@ -135,7 +137,10 @@ double KisBrushOp::paintAt(const KisPaintInformation& info)
         color.convertTo(dab->colorSpace());
         brush->mask(dab, color, scale, scale, rotation, info, xFraction, yFraction);
     }
-
+    
+    MirrorProperties mirrors = m_mirrorOption.apply(info);
+    dab->mirror(mirrors.horizontalMirror, mirrors.verticalMirror);
+    
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);

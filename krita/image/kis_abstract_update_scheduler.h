@@ -30,6 +30,7 @@ public:
     virtual ~KisAbstractUpdateScheduler();
     virtual void lock() = 0;
     virtual void unlock() = 0;
+    virtual void waitForDone() = 0;
 
     virtual void updateProjection(KisNodeSP node, const QRect& rc) = 0;
     virtual void fullRefresh(KisNodeSP root) = 0;

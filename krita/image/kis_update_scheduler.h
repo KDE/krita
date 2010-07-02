@@ -33,6 +33,7 @@ public:
 
     void lock();
     void unlock();
+    void waitForDone();
 
     void updateProjection(KisNodeSP node, const QRect& rc);
     void fullRefresh(KisNodeSP root);

@@ -21,12 +21,18 @@
 
 #include <QtTest/QtTest>
 
+#include "kis_types.h"
+
 class KisUpdateSchedulerTest : public QObject
 {
     Q_OBJECT
 
+private:
+    KisImageSP buildTestingImage();
+
 private slots:
     void testMerge();
+    void benchmarkOverlappedMerge();
 };
 
 #endif /* KIS_UPDATE_SCHEDULER_TEST_H */

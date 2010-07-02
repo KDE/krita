@@ -77,10 +77,22 @@ public:
     virtual void addJob(KisBaseRectsWalkerSP walker) = 0;
 
     /**
+     * Try to merge the job into existing one in the queue.
+     * It should be called by the update scheduler before
+     * creation and execution of additional walker.
+     */
+    virtual bool tryMergeJob(KisNodeSP node, const QRect& rc) = 0;
+
+    /**
      * Optimize the queue's jobs.
      * Must be overriden by the descendants.
      */
     virtual void optimize() = 0;
+
+    /**
+     * Aren't there any jobs left?
+     */
+    virtual bool isEmpty() = 0;
 
 protected:
     /**

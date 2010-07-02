@@ -48,6 +48,8 @@ KisUpdateScheduler::~KisUpdateScheduler()
 
 void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect& rc)
 {
+    if(m_workQueue->tryMergeJob(node, rc)) return;
+
     const QRect cropRect = m_image->bounds();
     KisBaseRectsWalkerSP walker = new KisMergeWalker(cropRect);
 
@@ -79,6 +81,12 @@ void KisUpdateScheduler::lock()
 void KisUpdateScheduler::unlock()
 {
     m_workQueue->startProcessing(m_updaterContext);
+}
+
+void KisUpdateScheduler::waitForDone()
+{
+    m_updaterContext.waitForDone();
+    Q_ASSERT(m_workQueue->isEmpty());
 }
 
 void KisUpdateScheduler::doSomeUsefulWork()

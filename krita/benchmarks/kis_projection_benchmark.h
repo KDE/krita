@@ -32,7 +32,6 @@ private slots:
 
     void benchmarkProjection();
     void benchmarkLoading();
-    void benchmarkOverlapping();
 };
 
 #endif

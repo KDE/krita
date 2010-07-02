@@ -116,6 +116,15 @@ void KisProjection::unlock()
     blockSignals(false);
 }
 
+void KisProjection::waitForDone()
+{
+    /**
+     * Note: is it possible to control whether all the signals
+     * have beed delivered?
+     */
+    qFatal("Not implemented!");
+}
+
 void KisProjection::setRegionOfInterest(const QRect & roi)
 {
     m_d->roi = roi;

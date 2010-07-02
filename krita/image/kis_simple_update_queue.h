@@ -34,10 +34,18 @@ public:
     ~KisSimpleUpdateQueue();
 
     void addJob(KisBaseRectsWalkerSP walker);
+    bool tryMergeJob(KisNodeSP node, const QRect& rc);
+
     void optimize();
+
+    bool isEmpty();
 
 protected:
     bool processOneJob(KisUpdaterContext &updaterContext);
+
+    void collectJobs(KisBaseRectsWalkerSP &baseWalker, QRect baseRect,
+                     const KisNodeSP &baseNode, const qreal maxAlpha);
+    bool joinRects(QRect& baseRect, const QRect& newRect, qreal maxAlpha);
 
 protected:
     QMutex m_lock;

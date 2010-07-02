@@ -26,7 +26,8 @@
 
 #include "../../sdk/tests/testutil.h"
 
-void KisUpdateSchedulerTest::testMerge()
+
+KisImageSP KisUpdateSchedulerTest::buildTestingImage()
 {
     QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage sourceImage2(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
@@ -54,17 +55,26 @@ void KisUpdateSchedulerTest::testMerge()
     image->addNode(blur1);
     image->unlock();
 
+    return image;
+}
+
+void KisUpdateSchedulerTest::testMerge()
+{
+    KisImageSP image = buildTestingImage();
+    QRect imageRect = image->bounds();
+    KisNodeSP rootLayer = image->rootLayer();
+    KisNodeSP paintLayer1 = rootLayer->firstChild();
+
+    QCOMPARE(paintLayer1->name(), QString("paint1"));
+
 
     KisUpdateScheduler scheduler(image);
-    KisLayerSP rootLayer;
 
     /**
      * Test synchronous Full Refresh
      */
 
-    scheduler.fullRefresh(image->rootLayer());
-
-    rootLayer = image->rootLayer();
+    scheduler.fullRefresh(rootLayer);
     QCOMPARE(rootLayer->exactBounds(), image->bounds());
 
     QImage resultFRProjection = rootLayer->projection()->convertToQImage(0);
@@ -95,7 +105,7 @@ void KisUpdateSchedulerTest::testMerge()
         scheduler.updateProjection(paintLayer1, dirtyRects[i]);
     }
 
-    QTest::qSleep(1000);
+    scheduler.waitForDone();
 
     QCOMPARE(rootLayer->exactBounds(), image->bounds());
 
@@ -106,6 +116,34 @@ void KisUpdateSchedulerTest::testMerge()
     QVERIFY(TestUtil::compareQImages(pt, resultFRProjection, resultDirtyProjection));
 }
 
+void KisUpdateSchedulerTest::benchmarkOverlappedMerge()
+{
+    KisImageSP image = buildTestingImage();
+    KisNodeSP rootLayer = image->rootLayer();
+    KisNodeSP paintLayer1 = rootLayer->firstChild();
+    QRect imageRect = image->bounds();
+
+    QCOMPARE(paintLayer1->name(), QString("paint1"));
+    QCOMPARE(imageRect, QRect(0,0,640,441));
+
+    KisUpdateScheduler scheduler(image);
+
+    const qint32 xShift = 10;
+    const qint32 yShift = 0;
+    const qint32 numShifts = 64;
+
+    QBENCHMARK{
+        QRect dirtyRect(0, 0, 200, imageRect.height());
+
+        for(int i = 0; i < numShifts; i++) {
+            // qDebug() << dirtyRect;
+            scheduler.updateProjection(paintLayer1, dirtyRect);
+            dirtyRect.translate(xShift, yShift);
+        }
+
+        scheduler.waitForDone();
+    }
+}
 
 QTEST_KDEMAIN(KisUpdateSchedulerTest, NoGUI)
 #include "kis_update_scheduler_test.moc"

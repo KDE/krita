@@ -55,6 +55,7 @@ public:
 
     void lock();
     void unlock();
+    void waitForDone();
 
     /**
      * called from the main thread, this divides rc in chunks and emits a signal

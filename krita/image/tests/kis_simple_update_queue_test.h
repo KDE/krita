@@ -27,6 +27,7 @@ class KisSimpleUpdateQueueTest : public QObject
 
 private slots:
     void testJobProcessing();
+    void testOptimization();
 };
 
 #endif /* KIS_SIMPLE_UPDATE_QUEUE_TEST_H */

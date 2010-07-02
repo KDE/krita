@@ -20,6 +20,37 @@
 
 #include <QMutexLocker>
 
+#define MAX_COLLECT_ALPHA 2.5
+#define MAX_MERGE_ALPHA 1
+#define MAX_MERGE_COLLECT_ALPHA 1.5
+
+//#define ENABLE_DEBUG_JOIN
+//#define ENABLE_ACCUMULATOR
+
+#ifdef ENABLE_DEBUG_JOIN
+    #define DEBUG_JOIN(baseRect, newRect, alpha)                     \
+        qDebug() << "Two rects were joined:\t"                       \
+                 << (baseRect) << "+" << (newRect) << "->"           \
+                 << ((baseRect) | (newRect)) << "(" << alpha << ")"
+
+#else
+    #define DEBUG_JOIN(baseRect, newRect, alpha)
+#endif /* ENABLE_DEBUG_JOIN */
+
+
+#ifdef ENABLE_ACCUMULATOR
+    #define DECLARE_ACCUMULATOR() static qreal _baseAmount=0, _newAmount=0
+    #define ACCUMULATOR_ADD(baseAmount, newAmount) \
+        do {_baseAmount += baseAmount; _newAmount += newAmount;} while (0)
+    #define ACCUMULATOR_DEBUG() \
+        qDebug() << "Accumulated alpha:" << _newAmount / _baseAmount
+#else
+    #define DECLARE_ACCUMULATOR()
+    #define ACCUMULATOR_ADD(baseAmount, newAmount)
+    #define ACCUMULATOR_DEBUG()
+#endif /* ENABLE_ACCUMULATOR */
+
+
 KisSimpleUpdateQueue::KisSimpleUpdateQueue()
 {
 }
@@ -55,8 +86,107 @@ void KisSimpleUpdateQueue::addJob(KisBaseRectsWalkerSP walker)
     m_list.append(walker);
 }
 
+bool KisSimpleUpdateQueue::isEmpty()
+{
+    QMutexLocker locker(&m_lock);
+    return m_list.isEmpty();
+}
+
+bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc)
+{
+    QMutexLocker locker(&m_lock);
+
+    QRect baseRect = rc;
+
+    KisBaseRectsWalkerSP goodCandidate;
+    KisBaseRectsWalkerSP item;
+    KisWalkersListIterator iter(m_list);
+
+    /**
+     * We usually add items to the tail of the queue,
+     * so it's more probable to find a good candidate there.
+     */
+    iter.toBack();
+
+    while(iter.hasPrevious()) {
+        item = iter.previous();
+
+        if(item->startNode() != node) continue;
+
+        if(joinRects(baseRect, item->requestedRect(), MAX_MERGE_ALPHA)) {
+            goodCandidate = item;
+            break;
+        }
+    }
+
+    if(goodCandidate)
+        collectJobs(goodCandidate, baseRect, node, MAX_MERGE_COLLECT_ALPHA);
+
+    return (bool)goodCandidate;
+}
+
 void KisSimpleUpdateQueue::optimize()
 {
+    QMutexLocker locker(&m_lock);
+
+    if(m_list.size() <= 1) return;
+
+    KisBaseRectsWalkerSP baseWalker = m_list.first();
+    QRect baseRect = baseWalker->requestedRect();
+    KisNodeSP baseNode = baseWalker->startNode();
+
+    collectJobs(baseWalker, baseRect, baseNode, MAX_COLLECT_ALPHA);
+}
+
+void KisSimpleUpdateQueue::collectJobs(KisBaseRectsWalkerSP &baseWalker,
+                                       QRect baseRect,
+                                       const KisNodeSP &baseNode,
+                                       const qreal maxAlpha)
+{
+    KisBaseRectsWalkerSP item;
+    KisMutableWalkersListIterator iter(m_list);
+
+    while(iter.hasNext()) {
+        item = iter.next();
+
+        if(item == baseWalker) continue;
+        if(item->startNode() != baseNode) continue;
+
+        if(joinRects(baseRect, item->requestedRect(), maxAlpha)) {
+            iter.remove();
+        }
+    }
+
+    if(baseWalker->requestedRect() != baseRect) {
+        baseWalker->collectRects(baseNode, baseRect);
+    }
+}
+
+bool KisSimpleUpdateQueue::joinRects(QRect& baseRect,
+                                     const QRect& newRect, qreal maxAlpha)
+{
+    bool result = false;
+    QRect unitedRect = baseRect | newRect;
+
+    qint64 baseWork = baseRect.width() * baseRect.height() +
+        newRect.width() * newRect.height();
+
+    qint64 newWork = unitedRect.width() * unitedRect.height();
+
+    qreal alpha = qreal(newWork) / baseWork;
+
+    if(alpha < maxAlpha) {
+        DEBUG_JOIN(baseRect, newRect, alpha);
+
+        DECLARE_ACCUMULATOR();
+        ACCUMULATOR_ADD(baseWork, newWork);
+        ACCUMULATOR_DEBUG();
+
+        baseRect = unitedRect;
+        result = true;
+    }
+
+    return result;
 }
 
 KisWalkersList& KisTestableSimpleUpdateQueue::getWalkersList()

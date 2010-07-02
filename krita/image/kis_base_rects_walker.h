@@ -112,6 +112,14 @@ public:
         return m_changeRectVaries;
     }
 
+    inline KisNodeSP startNode() const {
+        return m_startNode;
+    }
+
+    inline const QRect& requestedRect() const {
+        return m_requestedRect;
+    }
+
 protected:
 
     /**
@@ -257,10 +265,14 @@ private:
     NodeStack m_mergeTask;
 
     /**
-     * Temporary variables
+     * Used by update optimization framework
      */
     KisNodeSP m_startNode;
     QRect m_requestedRect;
+
+    /**
+     * Temporary variables
+     */
     QRect m_cropRect;
 
     QRect m_childNeedRect;

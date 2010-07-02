@@ -66,6 +66,11 @@ public:
     void remove(KoShape *shape);
 
     /**
+     * Returns a pointer to connector attached to given shape
+     */
+    KoShape* connector(KoShape *shape);
+
+    /**
      * Turns clipping of a shape on or off.
      */
     void setClipped(const KoShape *shape, bool clipping);

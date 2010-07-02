@@ -94,6 +94,12 @@ void Layout::remove(KoShape *shape)
     }
 }
 
+KoShape* Layout::connector(KoShape *shape)
+{
+    Q_ASSERT(m_children.contains(shape));
+    return dynamic_cast<KoShape*>(m_bonds[shape]);
+}
+
 void Layout::setClipped(const KoShape *shape, bool clipping)
 {
     Q_UNUSED(shape);

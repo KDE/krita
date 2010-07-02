@@ -69,12 +69,40 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
                         controller->addShapeDirect(shape, command);
                     }
                     canvas()->addCommand(command);
+//                     canvas()->updateCanvas(tree->boundingRect().normalized());
+//                     kDebug() << tree->boundingRect().normalized();
                 }
             }
             event->accept();
             break;
-        case Qt::Key_Enter:
-            kDebug() << "<Enter> pressed";
+        case Qt::Key_Return:
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+                Tree *tree = dynamic_cast<Tree*>(root->parent());
+                if (tree)
+                    if (tree = dynamic_cast<Tree*>(tree->parent())){
+                        kDebug() << "Adding child...";
+                        KoShapeController *controller = canvas()->shapeController();
+                        QUndoCommand *command = new QUndoCommand;
+                        foreach(KoShape* shape, tree->addNewChild()){
+                            controller->addShapeDirect(shape, command);
+                        }
+                        canvas()->addCommand(command);
+                    }
+            }
+            event->accept();
+            break;
+        case Qt::Key_Delete:
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+                Tree *tree = dynamic_cast<Tree*>(root->parent());
+                if (tree){
+                    KoShapeController *controller = canvas()->shapeController();
+                    Tree *grandparent = dynamic_cast<Tree*>(tree->parent());
+                    QUndoCommand *command = new QUndoCommand;
+                    controller->removeShape(tree,command);
+                    controller->removeShape(grandparent->connector(tree),command);
+                    canvas()->addCommand(command);
+                }
+            }
             event->accept();
             break;
         default:

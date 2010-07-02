@@ -62,6 +62,13 @@ Tree::~Tree()
 {
 }
 
+KoShape* Tree::connector(KoShape *shape)
+{
+    Layout *layout = dynamic_cast<Layout*>(KoShapeContainer::model());
+    Q_ASSERT(layout);
+    return layout->connector(shape);
+}
+
 QList<KoShape*> Tree::addNewChild()
 {
     kDebug() << "start";
@@ -123,6 +130,6 @@ bool Tree::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 Layout* Tree::layout() const
 {
     Layout *l = dynamic_cast<Layout*>(KoShapeContainer::model());
-    Q_ASSERT( l );
+    Q_ASSERT(l);
     return l;
 }

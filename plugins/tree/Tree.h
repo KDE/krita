@@ -39,6 +39,7 @@ public:
     Tree();
     Tree(KoShape *root);
     virtual ~Tree();
+    virtual KoShape* connector(KoShape *shape);
     virtual QList<KoShape*> addNewChild();
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
     virtual bool hitTest(const QPointF &position) const;

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +21,8 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 #include <KoColorModelStandardIds.h>
+
+#include "kis_debug.h"
 
 KisFixedPaintDevice::KisFixedPaintDevice(const KoColorSpace* colorSpace)
         : m_colorSpace(colorSpace)
@@ -225,4 +228,57 @@ void KisFixedPaintDevice::readBytes(quint8* dstData, qint32 x, qint32 y, qint32 
             dstData += w * pixelSize;
         }
     }
+}
+
+void KisFixedPaintDevice::mirror(bool horizontal, bool vertical)
+{
+    if (!horizontal && !vertical){
+        return;
+    }
+    
+    int pixelSize = m_colorSpace->pixelSize();
+    int w = m_bounds.width();
+    int h = m_bounds.height();
+
+    if (horizontal){
+        int rowSize = pixelSize * w;
+        
+        quint8 * dabPointer = data();
+        quint8 * row = new quint8[ rowSize ];
+        quint8 * mirror = 0;
+
+        for (int y = 0; y < h ; y++){
+            memcpy(row, dabPointer, rowSize);
+            mirror = row;
+            mirror += (w-1) * pixelSize;
+            for (int x = 0; x < w; x++){
+                memcpy(dabPointer,mirror,pixelSize);
+                dabPointer += pixelSize;
+                mirror -= pixelSize;
+            }
+        }
+        
+        delete [] row;
+    }
+
+    if (vertical){
+        int rowsToMove = h / 2;
+        int rowSize = pixelSize * w;
+        
+        quint8 * startRow = data();
+        quint8 * endRow = data() + (h-1) * w * pixelSize;
+        quint8 * row = new quint8[ rowSize ];
+        
+        for (int y = 0; y < rowsToMove; y++){
+            memcpy(row, startRow, rowSize);
+            memcpy(startRow, endRow, rowSize);
+            memcpy(endRow, row, rowSize);
+            
+            startRow += rowSize;
+            endRow -= rowSize;
+        }
+     
+        delete [] row;
+    }
+    
 }

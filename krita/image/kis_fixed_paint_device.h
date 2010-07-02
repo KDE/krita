@@ -149,6 +149,12 @@ public:
      */
     void fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel);
 
+    
+    /**
+     * Mirrors the device.
+     */
+    void mirror( bool horizontal = false, bool vertical = true );
+    
 private:
 
     KisFixedPaintDevice& operator=(const KisFixedPaintDevice& rhs);

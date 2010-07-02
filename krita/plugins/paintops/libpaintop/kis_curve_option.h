@@ -71,7 +71,7 @@ protected:
     }
 
     double scaleToCurve(double pressure) const {
-        int offset = int(255.0 * pressure);
+        int offset = qRound(255.0 * pressure);
         return m_curve.floatTransfer()[qBound(0, offset, 255)];
     }
 

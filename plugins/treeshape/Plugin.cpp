@@ -16,25 +16,24 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "Plugin.h"
+#include "TreeShapeFactory.h"
+#include "TreeToolFactory.h"
 
-#ifndef TREEFACTORY_H
-#define TREEFACTORY_H
+#include <KoToolRegistry.h>
+#include <KoShapeRegistry.h>
+#include <kgenericfactory.h>
+#include "kdebug.h"
 
-#include <KoShapeFactoryBase.h>
 
-class KoShape;
+K_EXPORT_COMPONENT_FACTORY( treeshape, KGenericFactory<Plugin>( "TreeShape" ) )
 
-class TreeFactory : public KoShapeFactoryBase
+Plugin::Plugin(QObject *parent, const QStringList &)
+    : QObject(parent)
 {
-public:
-    TreeFactory(QObject *parent);
-    ~TreeFactory();
+    KoShapeRegistry::instance()->add(new TreeShapeFactory(parent));
+    KoToolRegistry::instance()->add(new TreeToolFactory(parent));
+}
 
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement &e) const;
+#include <Plugin.moc>
 
-    /// reimplemented
-    //virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
-};
-
-#endif

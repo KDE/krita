@@ -17,7 +17,7 @@
 */
 
 #include "TreeTool.h"
-#include "Tree.h"
+#include "TreeShape.h"
 
 #include <QToolButton>
 #include <QGridLayout>
@@ -60,7 +60,7 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
     switch (event->key()) {
         case Qt::Key_Tab:
             foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
-                Tree *tree = dynamic_cast<Tree*>(root->parent());
+                TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
                 if (tree){
                     kDebug() << "Adding child...";
                     KoShapeController *controller = canvas()->shapeController();
@@ -77,9 +77,9 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
             break;
         case Qt::Key_Return:
             foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
-                Tree *tree = dynamic_cast<Tree*>(root->parent());
+                TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
                 if (tree)
-                    if (tree = dynamic_cast<Tree*>(tree->parent())){
+                    if (tree = dynamic_cast<TreeShape*>(tree->parent())){
                         kDebug() << "Adding child...";
                         KoShapeController *controller = canvas()->shapeController();
                         QUndoCommand *command = new QUndoCommand;
@@ -93,10 +93,10 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
             break;
         case Qt::Key_Delete:
             foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
-                Tree *tree = dynamic_cast<Tree*>(root->parent());
+                TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
                 if (tree){
                     KoShapeController *controller = canvas()->shapeController();
-                    Tree *grandparent = dynamic_cast<Tree*>(tree->parent());
+                    TreeShape *grandparent = dynamic_cast<TreeShape*>(tree->parent());
                     QUndoCommand *command = new QUndoCommand;
                     controller->removeShape(tree,command);
                     controller->removeShape(grandparent->connector(tree),command);
@@ -115,7 +115,7 @@ void TreeTool::mousePressEvent(KoPointerEvent* event)
     canvas()->shapeManager()->selection()->deselectAll();
     KoShape *root = canvas()->shapeManager()->shapeAt(event->point);
     if (root)
-        if (dynamic_cast<Tree*>(root->parent())){
+        if (dynamic_cast<TreeShape*>(root->parent())){
             canvas()->shapeManager()->selection()->select(root,false);
             QRadialGradient *gradient = new QRadialGradient(QPointF(0.5,0.5), 0.5, QPointF(0.25,0.25));
             gradient->setCoordinateMode(QGradient::ObjectBoundingMode);

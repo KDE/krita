@@ -7,6 +7,6 @@ Name[x-test]=xxMind Treexx
 Name[zh_TW]=心智圖
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
-X-KDE-Library=tree
+X-KDE-Library=treeshape
 X-Flake-MinVersion=0
 X-Flake-PluginVersion=1

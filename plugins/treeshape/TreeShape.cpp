@@ -16,7 +16,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "Tree.h"
+#include "TreeShape.h"
 #include "Layout.h"
 #include "KoShape.h"
 #include "KoShapeContainer.h"
@@ -38,7 +38,7 @@
 
 #include "kdebug.h"
 
-Tree::Tree(): KoShapeContainer(new Layout(this))
+TreeShape::TreeShape(): KoShapeContainer(new Layout(this))
 {
     m_nextShape = 0;
     KoShape *root = KoShapeRegistry::instance()->value("EllipseShape")->createDefaultShape();
@@ -50,35 +50,35 @@ Tree::Tree(): KoShapeContainer(new Layout(this))
     }
 }
 
-Tree::Tree(KoShape *shape): KoShapeContainer(new Layout(this))
+TreeShape::TreeShape(KoShape *shape): KoShapeContainer(new Layout(this))
 {
     m_nextShape = 0;
-    setShapeId("Tree");
+    setShapeId("TreeShape");
     addShape(shape);
     layout()->setRoot(shape);
     layout()->layout();
     update();
 }
 
-Tree::~Tree()
+TreeShape::~TreeShape()
 {
 }
 
-KoShape* Tree::connector(KoShape *shape)
+KoShape* TreeShape::connector(KoShape *shape)
 {
     Layout *layout = dynamic_cast<Layout*>(KoShapeContainer::model());
     Q_ASSERT(layout);
     return layout->connector(shape);
 }
 
-QList<KoShape*> Tree::addNewChild()
+QList<KoShape*> TreeShape::addNewChild()
 {
     kDebug() << "start";
     QList<KoShape*> shapes;
 
     KoShape *root = KoShapeRegistry::instance()->value("EllipseShape")->createDefaultShape();
     root->setSize(QSizeF(30,30));
-    KoShape *child = new Tree(root);
+    KoShape *child = new TreeShape(root);
     addShape(child);
     shapes.append(child);
     kDebug() << "Child added";
@@ -95,17 +95,17 @@ QList<KoShape*> Tree::addNewChild()
     return shapes;
 }
 
-void Tree::setNextShape(KoShape* shape)
+void TreeShape::setNextShape(KoShape* shape)
 {
     m_nextShape = shape;
 }
 
-KoShape* Tree::nextShape()
+KoShape* TreeShape::nextShape()
 {
     return m_nextShape;
 }
 
-void Tree::paintComponent(QPainter &painter, const KoViewConverter &converter)
+void TreeShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
     kDebug() << "start";
     Q_UNUSED(painter);
@@ -115,31 +115,31 @@ void Tree::paintComponent(QPainter &painter, const KoViewConverter &converter)
     kDebug() << "end";
 }
 
-bool Tree::hitTest(const QPointF &position) const
+bool TreeShape::hitTest(const QPointF &position) const
 {
     return layout()->root()->hitTest(position);
 }
 
-// void Tree::shapeChanged(ChangeType type, KoShape *shape)
+// void TreeShape::shapeChanged(ChangeType type, KoShape *shape)
 // {
 //     Q_UNUSED(shape);
 //     Q_UNUSED(type);
 //     kDebug() << "";
 // }
 
-void Tree::saveOdf(KoShapeSavingContext &context) const
+void TreeShape::saveOdf(KoShapeSavingContext &context) const
 {
     Q_UNUSED(context);
 }
 
-bool Tree::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+bool TreeShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_UNUSED(element);
     Q_UNUSED(context);
     return true;
 }
 
-Layout* Tree::layout() const
+Layout* TreeShape::layout() const
 {
     Layout *l = dynamic_cast<Layout*>(KoShapeContainer::model());
     Q_ASSERT(l);

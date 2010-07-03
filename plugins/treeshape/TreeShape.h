@@ -16,13 +16,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef TREE_H
-#define TREE_H
+#ifndef TREESHAPE_H
+#define TREESHAPE_H
 
 #include "KoShapeContainer.h"
 
 
-#define TREEID "Tree"
+#define TREESHAPEID "TreeShape"
 
 class KoViewConverter;
 class KoShapeSavingContext;
@@ -32,13 +32,13 @@ class KoConnectionShape;
 class Layout;
 class QPainter;
 
-class Tree : public KoShapeContainer
+class TreeShape : public KoShapeContainer
 {
 
 public:
-    Tree();
-    Tree(KoShape *root);
-    virtual ~Tree();
+    TreeShape();
+    TreeShape(KoShape *root);
+    virtual ~TreeShape();
     virtual KoShape* connector(KoShape *shape);
     virtual QList<KoShape*> addNewChild();
     virtual void setNextShape(KoShape *shape);
@@ -56,4 +56,4 @@ private:
     uint m_structure;
 };
 
-#endif // KOTREE_H
+#endif // KOTREESHAPE_H

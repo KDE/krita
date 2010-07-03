@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,38 +17,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TreeFactory.h"
+#ifndef TREESHAPEFACTORY_H
+#define TREESHAPEFACTORY_H
 
-#include "Tree.h"
-//#include "TreeConfigWidget.h"
+#include <KoShapeFactoryBase.h>
 
-#include <KoXmlNS.h>
-#include "KoShapeControllerBase.h"
+class KoShape;
 
-#include <klocale.h>
-#include <kdebug.h>
-
-TreeFactory::TreeFactory(QObject *parent)
-    : KoShapeFactoryBase(parent, TREEID, i18n("Tree"))
+class TreeShapeFactory : public KoShapeFactoryBase
 {
-    setToolTip(i18n("Tree for mind maps"));
-    setIcon("x-shape-image");
-    setLoadingPriority(2);
-}
+public:
+    TreeShapeFactory(QObject *parent);
+    ~TreeShapeFactory();
 
-TreeFactory::~TreeFactory() {}
+    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
+    virtual bool supports(const KoXmlElement &e) const;
 
-KoShape *TreeFactory::createDefaultShape(KoResourceManager *documentResources) const
-{
-    Q_UNUSED(documentResources);
-    Tree * defaultShape = new Tree();
-    defaultShape->setShapeId(TREEID);
+    /// reimplemented
+    //virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+};
 
-    return defaultShape;
-}
-
-bool TreeFactory::supports(const KoXmlElement &e) const
-{
-    Q_UNUSED(e);
-    return false;
-}
+#endif

@@ -21,7 +21,7 @@
 
 #include <KoToolBase.h>
 
-class Tree;
+class TreeShape;
 
 class TreeTool : public KoToolBase
 {

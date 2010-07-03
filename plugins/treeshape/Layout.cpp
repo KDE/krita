@@ -21,7 +21,7 @@
 #include <QMap>
 
 #include "Layout.h"
-#include "Tree.h"
+#include "TreeShape.h"
 
 #include "KoShape.h"
 #include <KoShapeContainer.h>
@@ -43,19 +43,19 @@ Layout::~Layout()
 void Layout::add(KoShape *shape)
 {
     Q_ASSERT(!m_children.contains(shape));
-    Tree *tree = dynamic_cast<Tree*>(shape);
+    TreeShape *tree = dynamic_cast<TreeShape*>(shape);
     if (tree){
         if (tree->nextShape()){
             Q_ASSERT(m_children.contains(tree->nextShape()));
             int pos = m_children.indexOf(tree->nextShape());
             if (pos != 0){
-                Tree *prev = dynamic_cast<Tree*>(m_children[pos-1]);
+                TreeShape *prev = dynamic_cast<TreeShape*>(m_children[pos-1]);
                 prev->setNextShape(shape);
             }
             m_children.insert(pos, shape);
         } else {
             if (!m_children.isEmpty()){
-                Tree *prev = dynamic_cast<Tree*>(m_children.last());
+                TreeShape *prev = dynamic_cast<TreeShape*>(m_children.last());
                 prev->setNextShape(shape);
             }
             m_children.append(shape);
@@ -99,7 +99,7 @@ void Layout::remove(KoShape *shape)
     int pos = m_children.indexOf(shape);
     if (pos != -1) {
         if (pos != 0){
-            Tree *prev = dynamic_cast<Tree*>(m_children[pos-1]);
+            TreeShape *prev = dynamic_cast<TreeShape*>(m_children[pos-1]);
             KoShape *next = (shape==m_children.last()) ? 0 :m_children[pos+1];
             prev->setNextShape(next);
         }

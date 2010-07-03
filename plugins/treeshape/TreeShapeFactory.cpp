@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,24 +15,39 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include "TreeFactory.h"
-#include "TreeToolFactory.h"
 
-#include <KoToolRegistry.h>
-#include <KoShapeRegistry.h>
-#include <kgenericfactory.h>
-#include "kdebug.h"
+#include "TreeShapeFactory.h"
 
+#include "TreeShape.h"
+//#include "TreeConfigWidget.h"
 
-K_EXPORT_COMPONENT_FACTORY( tree, KGenericFactory<Plugin>( "Tree" ) )
+#include <KoXmlNS.h>
+#include "KoShapeControllerBase.h"
 
-Plugin::Plugin(QObject *parent, const QStringList &)
-    : QObject(parent)
+#include <klocale.h>
+#include <kdebug.h>
+
+TreeShapeFactory::TreeShapeFactory(QObject *parent)
+    : KoShapeFactoryBase(parent, TREESHAPEID, i18n("TreeShape"))
 {
-    KoShapeRegistry::instance()->add(new TreeFactory(parent));
-    KoToolRegistry::instance()->add(new TreeToolFactory(parent));
+    setToolTip(i18n("Tree for mind maps"));
+    setIcon("x-shape-image");
+    setLoadingPriority(2);
 }
 
-#include <Plugin.moc>
+TreeShapeFactory::~TreeShapeFactory() {}
 
+KoShape *TreeShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+{
+    Q_UNUSED(documentResources);
+    TreeShape * defaultShape = new TreeShape();
+    defaultShape->setShapeId(TREESHAPEID);
+
+    return defaultShape;
+}
+
+bool TreeShapeFactory::supports(const KoXmlElement &e) const
+{
+    Q_UNUSED(e);
+    return false;
+}

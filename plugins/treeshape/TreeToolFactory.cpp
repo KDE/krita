@@ -18,7 +18,7 @@
 
 #include <klocale.h>
 
-#include "Tree.h"
+#include "TreeShape.h"
 #include "TreeTool.h"
 
 #include "TreeToolFactory.h"
@@ -28,7 +28,6 @@ TreeToolFactory::TreeToolFactory(QObject* parent)
     : KoToolFactoryBase(parent, "TreeToolFactoryId")
 {
     setToolTip(i18n("Tree editing tool"));
-    setIcon("pictureshape");
     setToolType(mainToolType());
     setPriority(1);
     setActivationShapeId("flake/always");

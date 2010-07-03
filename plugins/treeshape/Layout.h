@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KTREE_LAYOUT_H
-#define KTREE_LAYOUT_H
+#ifndef TREE_LAYOUT_H
+#define TREE_LAYOUT_H
 
 #include <QList>
 #include <QMap>
@@ -92,7 +92,7 @@ public:
     QList<KoShape*> shapes() const;
 
     /**
-     * Called whenever a property of the container (i.e. the Tree) is changed.
+     * Called whenever a property of the container (i.e. the TreeShape) is changed.
      */
     void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
 
@@ -143,4 +143,4 @@ private:
     QMap<KoShape*, KoConnectionShape*> m_bonds;
 };
 
-#endif // KTREE_LAYOUT_H
+#endif // TREE_LAYOUT_H

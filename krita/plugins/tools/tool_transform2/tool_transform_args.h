@@ -41,6 +41,7 @@ public:
 	double scaleY();
 	double shearX();
 	double shearY();
+
 	void setTranslate(QPointF translate);
 	void setRotationCenterOffset(QPointF rotationCenterOffset);
 	void setAX(double aX);

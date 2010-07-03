@@ -22,8 +22,8 @@
 
 ToolTransformArgs::ToolTransformArgs()
 {
-	m_translate = QPointF(0,0);
-	m_rotationCenterOffset = QPointF(0,0);
+	m_translate = QPointF(0, 0);
+	m_rotationCenterOffset = QPointF(0, 0);
 	m_aX = 0;
 	m_aY = 0;
 	m_aZ = 0;

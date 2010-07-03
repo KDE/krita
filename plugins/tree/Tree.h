@@ -41,6 +41,8 @@ public:
     virtual ~Tree();
     virtual KoShape* connector(KoShape *shape);
     virtual QList<KoShape*> addNewChild();
+    virtual void setNextShape(KoShape *shape);
+    virtual KoShape* nextShape();
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
     virtual bool hitTest(const QPointF &position) const;
     virtual void saveOdf(KoShapeSavingContext &context) const;
@@ -50,6 +52,7 @@ private:
 //     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
     virtual Layout *layout() const;
 
+    KoShape *m_nextShape;
     uint m_structure;
 };
 

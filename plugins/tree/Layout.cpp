@@ -42,22 +42,32 @@ Layout::~Layout()
 
 void Layout::add(KoShape *shape)
 {
-    kDebug() << "children: " << m_children.contains(shape);
     Q_ASSERT(!m_children.contains(shape));
+    Tree *tree = dynamic_cast<Tree*>(shape);
+    if (tree){
+        if (tree->nextShape()){
+            Q_ASSERT(m_children.contains(tree->nextShape()));
+            int pos = m_children.indexOf(tree->nextShape());
+            if (pos != 0){
+                Tree *prev = dynamic_cast<Tree*>(m_children[pos-1]);
+                prev->setNextShape(shape);
+            }
+            m_children.insert(pos, shape);
+        } else {
+            if (!m_children.isEmpty()){
+                Tree *prev = dynamic_cast<Tree*>(m_children.last());
+                prev->setNextShape(shape);
+            }
+            m_children.append(shape);
+        }
+    }
+
     KoConnectionShape *connector = dynamic_cast<KoConnectionShape*>(shape);
     if (connector){
-        kDebug() << "connectors: " << m_connectors.contains(connector);
         Q_ASSERT(!m_connectors.contains(connector));
         m_connectors.append(shape);
     }
-    else m_children.append(shape);
-    scheduleRelayout();
-}
 
-void Layout::add(KoShape *shape, uint pos)
-{
-    Q_ASSERT(!m_children.contains(shape));
-    m_children.insert(pos,shape);
     scheduleRelayout();
 }
 
@@ -86,9 +96,17 @@ KoShape* Layout::root() const
 
 void Layout::remove(KoShape *shape)
 {
-    if (m_children.removeOne(shape)) {
+    int pos = m_children.indexOf(shape);
+    if (pos != -1) {
+        if (pos != 0){
+            Tree *prev = dynamic_cast<Tree*>(m_children[pos-1]);
+            KoShape *next = (shape==m_children.last()) ? 0 :m_children[pos+1];
+            prev->setNextShape(next);
+        }
+        m_children.removeOne(shape);
         scheduleRelayout();
     }
+
     else if (m_connectors.removeOne(shape)) {
         scheduleRelayout();
     }

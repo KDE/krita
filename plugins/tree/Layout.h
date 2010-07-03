@@ -37,13 +37,9 @@ public:
 
     /**
      * Adds a shape to the layout.
+     * Shape will be disposed before the shape->nextShape().
      */
     void add(KoShape *shape);
-
-    /**
-     * Adds a shape to the layout in the defined position.
-     */
-    void add(KoShape *shape, uint position);
 
     /**
      * Adds a root shape to the layout.

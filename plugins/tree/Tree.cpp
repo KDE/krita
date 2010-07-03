@@ -40,6 +40,7 @@
 
 Tree::Tree(): KoShapeContainer(new Layout(this))
 {
+    m_nextShape = 0;
     KoShape *root = KoShapeRegistry::instance()->value("EllipseShape")->createDefaultShape();
     root->setSize(QSizeF(50,50));
     root->setParent(this);
@@ -51,6 +52,7 @@ Tree::Tree(): KoShapeContainer(new Layout(this))
 
 Tree::Tree(KoShape *shape): KoShapeContainer(new Layout(this))
 {
+    m_nextShape = 0;
     setShapeId("Tree");
     addShape(shape);
     layout()->setRoot(shape);
@@ -91,6 +93,16 @@ QList<KoShape*> Tree::addNewChild()
     update();
     kDebug() << "end";
     return shapes;
+}
+
+void Tree::setNextShape(KoShape* shape)
+{
+    m_nextShape = shape;
+}
+
+KoShape* Tree::nextShape()
+{
+    return m_nextShape;
 }
 
 void Tree::paintComponent(QPainter &painter, const KoViewConverter &converter)

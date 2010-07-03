@@ -96,10 +96,12 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
                 TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
                 if (tree){
                     KoShapeController *controller = canvas()->shapeController();
-                    TreeShape *grandparent = dynamic_cast<TreeShape*>(tree->parent());
                     QUndoCommand *command = new QUndoCommand;
                     controller->removeShape(tree,command);
-                    controller->removeShape(grandparent->connector(tree),command);
+                    TreeShape *grandparent = dynamic_cast<TreeShape*>(tree->parent());
+                    if (grandparent){
+                        controller->removeShape(grandparent->connector(tree),command);
+                    }
                     canvas()->addCommand(command);
                 }
             }

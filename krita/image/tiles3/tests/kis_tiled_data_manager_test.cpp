@@ -333,6 +333,29 @@ void KisTiledDataManagerTest::testPurgeHistory()
     dm.purgeHistory(memento4);
 }
 
+//#include <valgrind/callgrind.h>
+
+void KisTiledDataManagerTest::benchmarkReadOnlyTileLazy()
+{
+    quint8 defaultPixel = 0;
+    KisTiledDataManager dm(1, &defaultPixel);
+
+    const qint32 numTilesToTest = 1000000;
+
+    //CALLGRIND_START_INSTRUMENTATION;
+
+    QBENCHMARK_ONCE {
+        for(qint32 i = 0; i < numTilesToTest; i++) {
+            KisTileSP tile = dm.getTile(i, i, false);
+        }
+    }
+
+    //CALLGRIND_STOP_INSTRUMENTATION;
+}
+
+
+/******************* Stress job ***********************/
+
 #define NUM_CYCLES 10000
 //#define NUM_CYCLES 100000
 #define NUM_TYPES 14

@@ -46,6 +46,8 @@ private slots:
     void testBitBltRough();
     void testTransactions();
     void testPurgeHistory();
+    void benchmarkReadOnlyTileLazy();
+
     void stressTest();
 };
 

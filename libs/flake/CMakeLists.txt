@@ -260,6 +260,13 @@ install(
     KoToolFactoryBase.h
     KoToolProxy.h
     KoToolRegistry.h
+    KoFilterEffect.h
+    KoFilterEffectStack.h
+    KoFilterEffectFactoryBase.h
+    KoFilterEffectRegistry.h
+    KoFilterEffectConfigWidgetBase.h
+    KoFilterEffectRenderContext.h
+    KoFilterEffectLoadingContext.h
     commands/KoEventActionAddCommand.h
     commands/KoEventActionRemoveCommand.h
     commands/KoParameterToPathCommand.h

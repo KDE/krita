@@ -21,6 +21,7 @@
 #define KOINLINEOBJECTFACTORY_H
 
 #include <QString>
+#include <QObject>
 
 #include "kotext_export.h"
 

@@ -40,10 +40,10 @@ public:
     }
 
     QGradient * gradient;
-    QMatrix matrix;
+    QTransform matrix;
 };
 
-KoGradientBackground::KoGradientBackground(QGradient * gradient, const QMatrix &matrix)
+KoGradientBackground::KoGradientBackground(QGradient * gradient, const QTransform &matrix)
     : KoShapeBackground(*(new KoGradientBackgroundPrivate()))
 {
     Q_D(KoGradientBackground);
@@ -53,7 +53,7 @@ KoGradientBackground::KoGradientBackground(QGradient * gradient, const QMatrix &
     Q_ASSERT(d->gradient->coordinateMode() == QGradient::ObjectBoundingMode);
 }
 
-KoGradientBackground::KoGradientBackground(const QGradient & gradient, const QMatrix &matrix)
+KoGradientBackground::KoGradientBackground(const QGradient & gradient, const QTransform &matrix)
     : KoShapeBackground(*(new KoGradientBackgroundPrivate()))
 {
     Q_D(KoGradientBackground);
@@ -67,13 +67,13 @@ KoGradientBackground::~KoGradientBackground()
 {
 }
 
-void KoGradientBackground::setMatrix(const QMatrix &matrix)
+void KoGradientBackground::setTransform(const QTransform &matrix)
 {
     Q_D(KoGradientBackground);
     d->matrix = matrix;
 }
 
-QMatrix KoGradientBackground::matrix() const
+QTransform KoGradientBackground::transform() const
 {
     Q_D(const KoGradientBackground);
     return d->matrix;
@@ -126,7 +126,7 @@ void KoGradientBackground::paint(QPainter &painter, const QPainterPath &fillPath
 {
     Q_D(const KoGradientBackground);
     QBrush brush(*d->gradient);
-    brush.setMatrix(d->matrix);
+    brush.setTransform(d->matrix);
 
     painter.setBrush(brush);
     painter.drawPath(fillPath);
@@ -136,7 +136,7 @@ void KoGradientBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &co
 {
     Q_D(KoGradientBackground);
     QBrush brush(*d->gradient);
-    brush.setMatrix(d->matrix);
+    brush.setTransform(d->matrix);
     KoOdfGraphicStyles::saveOdfFillStyle(style, context.mainStyles(), brush);
 }
 
@@ -153,7 +153,7 @@ bool KoGradientBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF 
         const QGradient * gradient = brush.gradient();
         if (gradient) {
             d->gradient = KoFlake::cloneGradient(gradient);
-            d->matrix = brush.matrix();
+            d->matrix = brush.transform();
             return true;
         }
     }

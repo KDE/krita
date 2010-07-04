@@ -143,13 +143,13 @@ void OutputDebugStrategy::rectangle( const QRect &box )
 void OutputDebugStrategy::modifyWorldTransform( quint32 mode, float M11, float M12,
 					float M21, float M22, float Dx, float Dy )
 {
-    kDebug(33100) << "EMR_MODIFYWORLDTRANSFORM:" << mode << QMatrix ( M11, M12, M21, M22, Dx, Dy );
+    kDebug(33100) << "EMR_MODIFYWORLDTRANSFORM:" << mode << QTransform ( M11, M12, M21, M22, Dx, Dy );
 }
 
 void OutputDebugStrategy::setWorldTransform( float M11, float M12, float M21,
 				     float M22, float Dx, float Dy )
 {
-    kDebug(33100) << "EMR_SETWORLDTRANSFORM:" << QMatrix ( M11, M12, M21, M22, Dx, Dy );
+    kDebug(33100) << "EMR_SETWORLDTRANSFORM:" << QTransform ( M11, M12, M21, M22, Dx, Dy );
 }
 
 void OutputDebugStrategy::setMapMode( quint32 mapMode )

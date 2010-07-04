@@ -23,7 +23,7 @@
 #include <KoGenericRegistry.h>
 #include <KoFilterEffectFactoryBase.h>
 #include <QtCore/QObject>
-#include <QtGui/QMatrix>
+#include <QtGui/QTransform>
 
 #include "flake_export.h"
 

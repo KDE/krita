@@ -69,10 +69,10 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
         return;
 
     // calculate the shadow offset independent of shape transformation
-    QMatrix tm;
+    QTransform tm;
     tm.translate(d->offset.x(), d->offset.y());
-    QMatrix tr = shape->absoluteTransformation(&converter);
-    QMatrix offsetMatrix = tr * tm * tr.inverted();
+    QTransform tr = shape->absoluteTransformation(&converter);
+    QTransform offsetMatrix = tr * tm * tr.inverted();
 
     if (shape->background()) {
         painter.save();
@@ -81,7 +81,7 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
 
         // the shadow direction is independent of the shapes transformation
         // please only change if you know what you are doing
-        painter.setMatrix(offsetMatrix * painter.matrix());
+        painter.setTransform(offsetMatrix * painter.transform());
         painter.setBrush(QBrush(d->color));
 
         QPainterPath path(shape->outline());
@@ -93,17 +93,17 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     }
 
     if (shape->border()) {
-        QMatrix oldPainterMatrix = painter.matrix();
+        QTransform oldPainterMatrix = painter.transform();
         KoShape::applyConversion(painter, converter);
-        QMatrix newPainterMatrix = painter.matrix();
+        QTransform newPainterMatrix = painter.transform();
 
         // the shadow direction is independent of the shapes transformation
         // please only change if you know what you are doing
-        painter.setMatrix(offsetMatrix * painter.matrix());
+        painter.setTransform(offsetMatrix * painter.transform());
 
         // compensate applyConversion call in paint
-        QMatrix scaleMatrix = newPainterMatrix * oldPainterMatrix.inverted();
-        painter.setMatrix(scaleMatrix.inverted() * painter.matrix());
+        QTransform scaleMatrix = newPainterMatrix * oldPainterMatrix.inverted();
+        painter.setTransform(scaleMatrix.inverted() * painter.transform());
 
         shape->border()->paint(shape, painter, converter, d->color);
     }

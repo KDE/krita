@@ -59,7 +59,7 @@ BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
     stream >> M22;
     stream >> Dx;
     stream >> Dy;
-    m_XFormSrc = QMatrix( M11, M12, M21, M22, Dx, Dy );
+    m_XFormSrc = QTransform( M11, M12, M21, M22, Dx, Dy );
     kDebug(31000) << "Matrix" << m_XFormSrc;
 #else
     quint32 M11, M12, M21, M22, Dx, Dy;
@@ -69,7 +69,7 @@ BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
     stream >> M22;
     stream >> Dx;
     stream >> Dy;
-    //m_XFormSrc = QMatrix( M11, M12, M21, M22, Dx, Dy );
+    //m_XFormSrc = QTransform( M11, M12, M21, M22, Dx, Dy );
 #endif
     kDebug(31000) << "position after the matrix: " << stream.device()->pos();
 

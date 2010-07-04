@@ -60,7 +60,7 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
     Q_Q(const KoConnectionShape);
     QPointF direction;
     if (handleConnected(handleId)) {
-        QMatrix absoluteMatrix = q->absoluteTransformation(0);
+        QTransform absoluteMatrix = q->absoluteTransformation(0);
         QPointF handlePoint = absoluteMatrix.map(handles[handleId]);
         QPointF centerPoint;
         if (handleId == StartHandle)
@@ -82,7 +82,7 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
             direction = QPointF(1.0, 0.0);
 
         // transform escape direction by using our own transformation matrix
-        QMatrix invMatrix = absoluteMatrix.inverted();
+        QTransform invMatrix = absoluteMatrix.inverted();
         direction = invMatrix.map(direction) - invMatrix.map(QPointF());
         direction /= sqrt(direction.x() * direction.x() + direction.y() * direction.y());
     }
@@ -387,7 +387,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
             // if there is none, use the bounding rectangle of the parsed path
             viewBox = outline().boundingRect();
         }
-        QMatrix viewMatrix;
+        QTransform viewMatrix;
         viewMatrix.translate(-viewBox.left(), -viewBox.top());
         d->map(viewMatrix);
 
@@ -444,7 +444,7 @@ void KoConnectionShape::finishLoadingConnection()
 
             QRectF targetRect = QRectF(p1, p2).normalized();
             // transform the normalized coordinates back to our target rectangle
-            QMatrix viewMatrix;
+            QTransform viewMatrix;
             viewMatrix.translate(targetRect.x(), targetRect.y());
             viewMatrix.scale(kX, kY);
             d->map(viewMatrix);

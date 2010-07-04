@@ -25,7 +25,7 @@
 #include "flake_export.h"
 
 #include <QImage>
-#include <QMatrix>
+#include <QTransform>
 
 class KoShape;
 class KoXmlWriter;
@@ -245,7 +245,7 @@ public:
      * @param shape The shape for which the offset should be added.
      * @param matrix The offset which should be applied on saving the position.
      */
-    void addShapeOffset(const KoShape *shape, const QMatrix &matrix);
+    void addShapeOffset(const KoShape *shape, const QTransform &matrix);
 
     /**
      * Remove an offset from the saved offset list
@@ -258,9 +258,9 @@ public:
      * Get the offest that will be applied to the shape position when saved.
      *
      * @param shape The shape for which the offset should be get.
-     * @return the saved offset or QMatrix() when offset is not set.
+     * @return the saved offset or QTransform() when offset is not set.
      */
-    QMatrix shapeOffset(const KoShape *shape) const;
+    QTransform shapeOffset(const KoShape *shape) const;
 
 private:
     KoShapeSavingContextPrivate *d;

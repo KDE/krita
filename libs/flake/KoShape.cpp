@@ -218,7 +218,7 @@ void KoShape::scale(qreal sx, qreal sy)
 {
     Q_D(KoShape);
     QPointF pos = position();
-    QMatrix scaleMatrix;
+    QTransform scaleMatrix;
     scaleMatrix.translate(pos.x(), pos.y());
     scaleMatrix.scale(sx, sy);
     scaleMatrix.translate(-pos.x(), -pos.y());
@@ -232,7 +232,7 @@ void KoShape::rotate(qreal angle)
 {
     Q_D(KoShape);
     QPointF center = d->localMatrix.map(QPointF(0.5 * size().width(), 0.5 * size().height()));
-    QMatrix rotateMatrix;
+    QTransform rotateMatrix;
     rotateMatrix.translate(center.x(), center.y());
     rotateMatrix.rotate(angle);
     rotateMatrix.translate(-center.x(), -center.y());
@@ -246,7 +246,7 @@ void KoShape::shear(qreal sx, qreal sy)
 {
     Q_D(KoShape);
     QPointF pos = position();
-    QMatrix shearMatrix;
+    QTransform shearMatrix;
     shearMatrix.translate(pos.x(), pos.y());
     shearMatrix.shear(sx, sy);
     shearMatrix.translate(-pos.x(), -pos.y());
@@ -275,7 +275,7 @@ void KoShape::setPosition(const QPointF &newPosition)
     QPointF currentPos = position();
     if (newPosition == currentPos)
         return;
-    QMatrix translateMatrix;
+    QTransform translateMatrix;
     translateMatrix.translate(newPosition.x() - currentPos.x(), newPosition.y() - currentPos.y());
     d->localMatrix = d->localMatrix * translateMatrix;
 
@@ -314,7 +314,7 @@ QRectF KoShape::boundingRect() const
 {
     Q_D(const KoShape);
     QSizeF mySize = size();
-    QMatrix transform = absoluteTransformation(0);
+    QTransform transform = absoluteTransformation(0);
     QRectF bb(QPointF(0, 0), mySize);
     if (d->border) {
         KoInsets insets;
@@ -335,10 +335,10 @@ QRectF KoShape::boundingRect() const
     return bb;
 }
 
-QMatrix KoShape::absoluteTransformation(const KoViewConverter *converter) const
+QTransform KoShape::absoluteTransformation(const KoViewConverter *converter) const
 {
     Q_D(const KoShape);
-    QMatrix matrix;
+    QTransform matrix;
     // apply parents matrix to inherit any transformations done there.
     KoShapeContainer * container = d->parent;
     if (container) {
@@ -364,17 +364,17 @@ QMatrix KoShape::absoluteTransformation(const KoViewConverter *converter) const
     return d->localMatrix * matrix;
 }
 
-void KoShape::applyAbsoluteTransformation(const QMatrix &matrix)
+void KoShape::applyAbsoluteTransformation(const QTransform &matrix)
 {
-    QMatrix globalMatrix = absoluteTransformation(0);
+    QTransform globalMatrix = absoluteTransformation(0);
     // the transformation is relative to the global coordinate system
     // but we want to change the local matrix, so convert the matrix
     // to be relative to the local coordinate system
-    QMatrix transformMatrix = globalMatrix * matrix * globalMatrix.inverted();
+    QTransform transformMatrix = globalMatrix * matrix * globalMatrix.inverted();
     applyTransformation(transformMatrix);
 }
 
-void KoShape::applyTransformation(const QMatrix &matrix)
+void KoShape::applyTransformation(const QTransform &matrix)
 {
     Q_D(KoShape);
     d->localMatrix = matrix * d->localMatrix;
@@ -382,7 +382,7 @@ void KoShape::applyTransformation(const QMatrix &matrix)
     d->shapeChanged(GenericMatrixChange);
 }
 
-void KoShape::setTransformation(const QMatrix &matrix)
+void KoShape::setTransformation(const QTransform &matrix)
 {
     Q_D(KoShape);
     d->localMatrix = matrix;
@@ -390,7 +390,7 @@ void KoShape::setTransformation(const QMatrix &matrix)
     d->shapeChanged(GenericMatrixChange);
 }
 
-QMatrix KoShape::transformation() const
+QTransform KoShape::transformation() const
 {
     Q_D(const KoShape);
     return d->localMatrix;
@@ -499,7 +499,7 @@ void KoShape::setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor)
     Q_D(KoShape);
     QPointF currentAbsPosition = absolutePosition(anchor);
     QPointF translate = newPosition - currentAbsPosition;
-    QMatrix translateMatrix;
+    QTransform translateMatrix;
     translateMatrix.translate(translate.x(), translate.y());
     applyAbsoluteTransformation(translateMatrix);
     notifyChanged();
@@ -851,7 +851,7 @@ KoShapeShadow *KoShape::shadow() const
     return d->shadow;
 }
 
-QMatrix KoShape::matrix() const
+QTransform KoShape::transform() const
 {
     Q_D(const KoShape);
     return d->localMatrix;
@@ -1192,9 +1192,9 @@ KoShapeShadow *KoShapePrivate::loadOdfShadow(KoShapeLoadingContext &context) con
     return 0;
 }
 
-QMatrix KoShape::parseOdfTransform(const QString &transform)
+QTransform KoShape::parseOdfTransform(const QString &transform)
 {
-    QMatrix matrix;
+    QTransform matrix;
 
     // Split string for handling 1 transform statement at a time
     QStringList subtransforms = transform.split(')', QString::SkipEmptyParts);
@@ -1214,7 +1214,7 @@ QMatrix KoShape::parseOdfTransform(const QString &transform)
         QString cmd = subtransform[0].toLower();
 
         if (cmd == "rotate") {
-            QMatrix rotMatrix;
+            QTransform rotMatrix;
             if (params.count() == 3) {
                 qreal x = KoUnit::parseValue(params[1]);
                 qreal y = KoUnit::parseValue(params[2]);
@@ -1229,7 +1229,7 @@ QMatrix KoShape::parseOdfTransform(const QString &transform)
             }
             matrix = matrix * rotMatrix;
         } else if (cmd == "translate") {
-            QMatrix moveMatrix;
+            QTransform moveMatrix;
             if (params.count() == 2) {
                 qreal x = KoUnit::parseValue(params[0]);
                 qreal y = KoUnit::parseValue(params[1]);
@@ -1238,7 +1238,7 @@ QMatrix KoShape::parseOdfTransform(const QString &transform)
                 moveMatrix.translate(KoUnit::parseValue(params[0]) , 0);
             matrix = matrix * moveMatrix;
         } else if (cmd == "scale") {
-            QMatrix scaleMatrix;
+            QTransform scaleMatrix;
             if (params.count() == 2)
                 scaleMatrix.scale(params[0].toDouble(), params[1].toDouble());
             else    // Spec : if only one param given, assume uniform scaling
@@ -1246,23 +1246,25 @@ QMatrix KoShape::parseOdfTransform(const QString &transform)
             matrix = matrix * scaleMatrix;
         } else if (cmd == "skewx") {
             QPointF p = absolutePosition(KoFlake::TopLeftCorner);
-            QMatrix shearMatrix;
+            QTransform shearMatrix;
             shearMatrix.translate(p.x(), p.y());
             shearMatrix.shear(tan(-params[0].toDouble()), 0.0F);
             shearMatrix.translate(-p.x(), -p.y());
             matrix = matrix * shearMatrix;
         } else if (cmd == "skewy") {
             QPointF p = absolutePosition(KoFlake::TopLeftCorner);
-            QMatrix shearMatrix;
+            QTransform shearMatrix;
             shearMatrix.translate(p.x(), p.y());
             shearMatrix.shear(0.0F, tan(-params[0].toDouble()));
             shearMatrix.translate(-p.x(), -p.y());
             matrix = matrix * shearMatrix;
         } else if (cmd == "matrix") {
-            QMatrix m;
-            if (params.count() >= 6)
-                m.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(),
-                        KoUnit::parseValue(params[4]), KoUnit::parseValue(params[5]));
+            QTransform m;
+            if (params.count() >= 6) {
+                m.setMatrix(params[0].toDouble(), params[1].toDouble(), 0,
+                        params[2].toDouble(), params[3].toDouble(), 0,
+                        KoUnit::parseValue(params[4]), KoUnit::parseValue(params[5]), 1);
+            }
             matrix = matrix * m;
         }
     }
@@ -1332,7 +1334,7 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
     }
 
     if (attributes & OdfTransformation) {
-        QMatrix matrix = absoluteTransformation(0) * context.shapeOffset(this);
+        QTransform matrix = absoluteTransformation(0) * context.shapeOffset(this);
         if (! matrix.isIdentity()) {
             if (qAbs(matrix.m11() - 1) < 1E-5           // 1
                     && qAbs(matrix.m12()) < 1E-5        // 0

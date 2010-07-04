@@ -42,7 +42,7 @@
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QList>
-#include <QMatrix>
+#include <QTransform>
 
 DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
                                     QWidget* parent )
@@ -184,32 +184,32 @@ void DefaultToolWidget::sizeHasChanged()
         // get the scale/resize center from the position selector
         QPointF scaleCenter = selection->absolutePosition( positionSelector->position() );
 
-        QMatrix resizeMatrix;
+        QTransform resizeMatrix;
         resizeMatrix.translate( scaleCenter.x(), scaleCenter.y() );
         resizeMatrix.scale( newSize.width() / rect.width(), newSize.height() / rect.height() );
         resizeMatrix.translate( -scaleCenter.x(), -scaleCenter.y() );
 
         QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::StrippedSelection );
         QList<QSizeF> oldSizes, newSizes;
-        QList<QMatrix> oldState;
-        QList<QMatrix> newState;
+        QList<QTransform> oldState;
+        QList<QTransform> newState;
 
         foreach( KoShape* shape, selectedShapes )
         {
             shape->update();
             QSizeF oldSize = shape->size();
             oldState << shape->transformation();
-            QMatrix shapeMatrix = shape->absoluteTransformation(0);
+            QTransform shapeMatrix = shape->absoluteTransformation(0);
 
             // calculate the matrix we would apply to the local shape matrix
             // that tells us the effective scale values we have to use for the resizing
-            QMatrix localMatrix = shapeMatrix * resizeMatrix * shapeMatrix.inverted();
+            QTransform localMatrix = shapeMatrix * resizeMatrix * shapeMatrix.inverted();
             // save the effective scale values
             qreal scaleX = localMatrix.m11();
             qreal scaleY = localMatrix.m22();
 
             // calculate the scale matrix which is equivalent to our resizing above
-            QMatrix scaleMatrix = (QMatrix().scale( scaleX, scaleY ));
+            QTransform scaleMatrix = (QTransform().scale( scaleX, scaleY ));
             scaleMatrix =  shapeMatrix.inverted() * scaleMatrix * shapeMatrix;
 
             // calculate the new size of the shape, using the effective scale values

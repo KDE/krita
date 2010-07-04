@@ -562,9 +562,9 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
             continue;
 
         painter.save();
-        QMatrix shapeMatrix = ts->absoluteTransformation(&converter);
+        QTransform shapeMatrix = ts->absoluteTransformation(&converter);
         shapeMatrix.scale(zoomX, zoomY);
-        painter.setMatrix(shapeMatrix * painter.matrix());
+        painter.setTransform(shapeMatrix * painter.transform());
         painter.setClipRect(QRectF(QPointF(), ts->size()), Qt::IntersectClip);
         painter.translate(0, -data->documentOffset());
         if ((data->endPosition() >= selectStart && data->position() <= selectEnd)
@@ -1127,7 +1127,7 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
         // The rectangle covering the area of the input cursor in widget coordinates.
         QRectF rect = textRect(textEditor->position(), textEditor->position());
         rect.moveTop(rect.top() - m_textShapeData->documentOffset());
-        QMatrix shapeMatrix = m_textShape->absoluteTransformation(&converter);
+        QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
         qreal zoomX, zoomY;
         converter.zoom(&zoomX, &zoomY);
         shapeMatrix.scale(zoomX, zoomY);

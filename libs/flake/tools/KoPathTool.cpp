@@ -405,7 +405,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 
     foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
         painter.save();
-        painter.setMatrix(shape->absoluteTransformation(&converter) * painter.matrix());
+        painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
 
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
         if (parameterShape && parameterShape->isParametricShape()) {

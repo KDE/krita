@@ -75,12 +75,12 @@ void ShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
         angle += (angle>0?-1:1)*modula;
     }
 
-    QMatrix matrix;
+    QTransform matrix;
     matrix.translate(m_rotationCenter.x(), m_rotationCenter.y());
     matrix.rotate(angle);
     matrix.translate(-m_rotationCenter.x(), -m_rotationCenter.y());
 
-    QMatrix applyMatrix = matrix * m_rotationMatrix.inverted();
+    QTransform applyMatrix = matrix * m_rotationMatrix.inverted();
     m_rotationMatrix = matrix;
     foreach( KoShape * shape, m_selectedShapes ) {
         shape->update();
@@ -92,7 +92,7 @@ void ShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
 
 void ShapeRotateStrategy::handleCustomEvent( KoPointerEvent * event )
 {
-    QMatrix matrix;
+    QTransform matrix;
     matrix.translate(m_rotationCenter.x(), m_rotationCenter.y());
     matrix.rotate( 0.1 * event->rotationZ() );
     matrix.translate(-m_rotationCenter.x(), -m_rotationCenter.y());
@@ -108,12 +108,12 @@ void ShapeRotateStrategy::handleCustomEvent( KoPointerEvent * event )
 
 void ShapeRotateStrategy::rotateBy( qreal angle )
 {
-    QMatrix matrix;
+    QTransform matrix;
     matrix.translate(m_rotationCenter.x(), m_rotationCenter.y());
     matrix.rotate(angle);
     matrix.translate(-m_rotationCenter.x(), -m_rotationCenter.y());
 
-    QMatrix applyMatrix = matrix * m_rotationMatrix.inverted();
+    QTransform applyMatrix = matrix * m_rotationMatrix.inverted();
     m_rotationMatrix = matrix;
     foreach( KoShape * shape, m_selectedShapes ) {
         shape->update();
@@ -139,7 +139,7 @@ void ShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &conve
 }
 
 QUndoCommand* ShapeRotateStrategy::createCommand() {
-    QList<QMatrix> newTransforms;
+    QList<QTransform> newTransforms;
     foreach( KoShape* shape, m_selectedShapes )
         newTransforms << shape->transformation();
 

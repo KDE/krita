@@ -19,7 +19,7 @@
 #include "kis_shear_visitor.h"
 #include <math.h>
 #include <QApplication>
-#include <QMatrix>
+#include <QTransform>
 #include <QRect>
 
 #include <kis_debug.h>

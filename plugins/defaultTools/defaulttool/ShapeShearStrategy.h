@@ -25,7 +25,7 @@
 
 #include <QPointF>
 #include <QSizeF>
-#include <QMatrix>
+#include <QTransform>
 
 class KoCanvasBase;
 class KoToolBase;
@@ -59,10 +59,10 @@ private:
     QSizeF m_initialSize;
     bool m_top, m_left, m_bottom, m_right;
     qreal m_initialSelectionAngle;
-    QMatrix m_shearMatrix;
+    QTransform m_shearMatrix;
     bool m_isMirrored;
-    QList<QMatrix> m_oldTransforms;
-    QMatrix m_initialSelectionMatrix;
+    QList<QTransform> m_oldTransforms;
+    QTransform m_initialSelectionMatrix;
     QList<KoShape*> m_selectedShapes;
 };
 

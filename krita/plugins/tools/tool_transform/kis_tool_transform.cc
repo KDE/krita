@@ -718,19 +718,19 @@ void KisToolTransform::transform()
 
 
         if (currentSelection()->hasShapeSelection()) {
-            QMatrix resolutionMatrix;
+            QTransform resolutionMatrix;
             resolutionMatrix.scale(1 / image()->xRes(), 1 / image()->yRes());
             QPointF center = resolutionMatrix.map(m_originalCenter);
 
-            QMatrix matrix;
+            QTransform matrix;
             matrix.translate(center.x(), center.y());
             matrix.rotate(m_a / M_PI*180);
             matrix.translate(-center.x(), -center.y());
 
             KisShapeSelection* shapeSelection = static_cast<KisShapeSelection*>(currentSelection()->shapeSelection());
             QList<KoShape *> shapes = shapeSelection->shapeManager()->shapes();
-            QList<QMatrix> m_oldMatrixList;
-            QList<QMatrix> m_newMatrixList;
+            QList<QTransform> m_oldMatrixList;
+            QList<QTransform> m_newMatrixList;
             foreach(KoShape *shape, shapes) {
                 m_oldMatrixList << shape->transformation();
                 m_newMatrixList << shape->transformation()*matrix;

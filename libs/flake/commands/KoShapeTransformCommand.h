@@ -25,7 +25,7 @@
 #include <QtGui/QUndoCommand>
 
 class KoShape;
-class QMatrix;
+class QTransform;
 
 /**
  * A command to transform a selection of shapes with the same transformation.
@@ -43,7 +43,7 @@ public:
      * @see KoShape::transformation()
      * @see KoShape::setTransformation()
      */
-    KoShapeTransformCommand(const QList<KoShape*> &shapes, const QList<QMatrix> &oldState, const QList<QMatrix> &newState, QUndoCommand * parent = 0);
+    KoShapeTransformCommand(const QList<KoShape*> &shapes, const QList<QTransform> &oldState, const QList<QTransform> &newState, QUndoCommand * parent = 0);
     ~KoShapeTransformCommand();
     /// redo the command
     void redo();

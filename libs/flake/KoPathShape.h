@@ -422,7 +422,7 @@ public:
     virtual QString pathShapeId() const;
 
     /// Returns a odf/svg string represenatation of the path data with the given matrix applied.
-    QString toString(const QMatrix &matrix = QMatrix()) const;
+    QString toString(const QTransform &matrix = QTransform()) const;
 
     /// Returns the fill rule for the path object
     Qt::FillRule fillRule() const;
@@ -467,7 +467,7 @@ protected:
      * This makes sure that also if the newSize isNull that there will be a
      * very small size of 0.000001 pixels
      */
-    QMatrix resizeMatrix( const QSizeF &newSize ) const;
+    QTransform resizeMatrix( const QSizeF &newSize ) const;
 
     KoSubpathList m_subpaths;
 

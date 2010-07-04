@@ -50,7 +50,7 @@ void RulerFragment::paint(QPainter &painter) const
 
     painter.save();
 
-    painter.setWorldMatrix(m_matrix, true);
+    painter.setWorldTransform(m_matrix, true);
 
     qreal value = m_ruler->value();
 

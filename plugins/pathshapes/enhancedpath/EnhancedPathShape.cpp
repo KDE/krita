@@ -80,7 +80,7 @@ void EnhancedPathShape::updatePath(const QSizeF &)
 
     m_viewBound = outline().boundingRect();
 
-    QMatrix matrix;
+    QTransform matrix;
     matrix.translate(m_viewBoxOffset.x(), m_viewBoxOffset.y());
     matrix = m_viewMatrix * matrix;
 

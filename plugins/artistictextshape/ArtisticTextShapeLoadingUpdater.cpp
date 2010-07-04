@@ -35,7 +35,7 @@ void ArtisticTextShapeLoadingUpdater::update(KoShape * shape)
 {
     // we have already loaded the correct transformation, so save it here
     // and apply after putting us on the path shape
-    QMatrix matrix = m_artisticTextShape->transformation();
+    QTransform matrix = m_artisticTextShape->transformation();
     
     // putting us on the path shape resulting in a changed transformation
     m_artisticTextShape->putOnPath(dynamic_cast<KoPathShape*>(shape));

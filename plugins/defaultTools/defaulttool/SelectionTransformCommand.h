@@ -21,7 +21,7 @@
 #define SELECTION_TRANSFORM_COMMAND_H
 
 #include <QtGui/QUndoCommand>
-#include <QtGui/QMatrix>
+#include <QtGui/QTransform>
 
 class KoSelection;
 class KoShape;
@@ -29,7 +29,7 @@ class KoShape;
 class SelectionTransformCommand : public QUndoCommand
 {
 public:
-    SelectionTransformCommand( KoSelection * selection, const QMatrix &oldTransformation, const QMatrix &newTransformation, QUndoCommand * parent = 0 );
+    SelectionTransformCommand( KoSelection * selection, const QTransform &oldTransformation, const QTransform &newTransformation, QUndoCommand * parent = 0 );
 
     /// reimplemented from QUndoCommand
     virtual void redo();
@@ -38,8 +38,8 @@ public:
 private:
     KoSelection * m_selection;
     QList<KoShape*> m_selectedShapes;
-    QMatrix m_oldTransformation;
-    QMatrix m_newTransformation;
+    QTransform m_oldTransformation;
+    QTransform m_newTransformation;
 };
 
 #endif // SELECTION_TRANSFORM_COMMAND_H

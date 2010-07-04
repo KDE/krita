@@ -357,7 +357,7 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
         // now loop over all shapes
         while (shape) {
             painter.save();
-            painter.setMatrix( shape->absoluteTransformation(&viewConverter) * painter.matrix() );
+            painter.setTransform(shape->absoluteTransformation(&viewConverter) * painter.transform());
             KoShape::applyConversion( painter, viewConverter );
             painter.setClipRect(QRectF(QPointF(0, 0), shape->size()));            
 
@@ -393,7 +393,7 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
         }
     }
 
-    painter.setMatrix( m_musicshape->absoluteTransformation(&viewConverter) * painter.matrix() );
+    painter.setTransform(m_musicshape->absoluteTransformation(&viewConverter) * painter.transform());
     KoShape::applyConversion( painter, viewConverter );
     painter.setClipRect(QRectF(QPointF(0, 0), m_musicshape->size()));
         

@@ -126,7 +126,7 @@ void ShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModif
     Q_UNUSED(modifiers);
     QPointF shearVector = point - m_start;
 
-    QMatrix m;
+    QTransform m;
     m.rotate(-m_initialSelectionAngle);
     shearVector = m.map(shearVector);
 
@@ -146,14 +146,14 @@ void ShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModif
         shearY *= -1.0;
     }
 
-    QMatrix matrix;
+    QTransform matrix;
     matrix.translate(m_solidPoint.x(), m_solidPoint.y());
     matrix.rotate(m_initialSelectionAngle);
     matrix.shear(shearX, shearY);
     matrix.rotate(-m_initialSelectionAngle);
     matrix.translate(-m_solidPoint.x(), -m_solidPoint.y());
 
-    QMatrix applyMatrix = matrix * m_shearMatrix.inverted();
+    QTransform applyMatrix = matrix * m_shearMatrix.inverted();
 
     foreach( KoShape *shape, m_selectedShapes )
     {
@@ -173,7 +173,7 @@ void ShapeShearStrategy::paint( QPainter &painter, const KoViewConverter &conver
 }
 
 QUndoCommand* ShapeShearStrategy::createCommand() {
-    QList<QMatrix> newTransforms;
+    QList<QTransform> newTransforms;
     foreach( KoShape* shape, m_selectedShapes )
         newTransforms << shape->transformation();
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );

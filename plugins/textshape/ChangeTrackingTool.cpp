@@ -183,9 +183,9 @@ void ChangeTrackingTool::paint(QPainter& painter, const KoViewConverter& convert
                 continue;
 
             painter.save();
-            QMatrix shapeMatrix = ts->absoluteTransformation(&converter);
+            QTransform shapeMatrix = ts->absoluteTransformation(&converter);
             shapeMatrix.scale(zoomX, zoomY);
-            painter.setMatrix(shapeMatrix * painter.matrix());
+            painter.setTransform(shapeMatrix * painter.transform());
             painter.setClipRect(QRectF(QPointF(), ts->size()), Qt::IntersectClip);
             painter.translate(0, -data->documentOffset());
             if ((data->endPosition() >= start && data->position() <= end)

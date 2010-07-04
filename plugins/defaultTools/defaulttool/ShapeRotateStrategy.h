@@ -24,7 +24,7 @@
 
 #include <QPointF>
 #include <QRectF>
-#include <QMatrix>
+#include <QTransform>
 #include <QList>
 
 class KoCanvasBase;
@@ -57,9 +57,9 @@ private:
     void rotateBy( qreal angle );
     QRectF m_initialBoundingRect;
     QPointF m_start;
-    QMatrix m_rotationMatrix;
-    QMatrix m_initialSelectionMatrix;
-    QList<QMatrix> m_oldTransforms;
+    QTransform m_rotationMatrix;
+    QTransform m_initialSelectionMatrix;
+    QList<QTransform> m_oldTransforms;
     QPointF m_rotationCenter;
     QList<KoShape*> m_selectedShapes;
 };

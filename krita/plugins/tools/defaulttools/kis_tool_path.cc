@@ -103,7 +103,7 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
 
     // Compute the outline
     KisImageWSP image = kiscanvas->view()->image();
-    QMatrix matrix;
+    QTransform matrix;
     matrix.scale(image->xRes(), image->yRes());
     matrix.translate(pathShape->position().x(), pathShape->position().y());
     QPainterPath mapedOutline = matrix.map(pathShape->outline());
@@ -198,7 +198,7 @@ void KisToolPath::LocalTool::paintPath(KoPathShape &pathShape, QPainter &painter
     if (!kisCanvas)
         return;
 
-    QMatrix matrix;
+    QTransform matrix;
     matrix.scale(kisCanvas->image()->xRes(), kisCanvas->image()->yRes());
     matrix.translate(pathShape.position().x(), pathShape.position().y());
     m_parentTool->paintToolOutline(&painter, m_parentTool->pixelToView(matrix.map(pathShape.outline())));

@@ -194,7 +194,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 KoPathShape* path = new KoPathShape();
                 path->setShapeId(KoPathShapeId);
 
-                QMatrix resolutionMatrix;
+                QTransform resolutionMatrix;
                 resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
                 path->moveTo(resolutionMatrix.map(m_startPos));
                 path->lineTo(resolutionMatrix.map(m_endPos));

@@ -20,7 +20,7 @@
 #include "SelectionTransformCommand.h"
 #include <KoSelection.h>
 
-SelectionTransformCommand::SelectionTransformCommand( KoSelection * selection, const QMatrix &oldTransformation, const QMatrix &newTransformation, QUndoCommand * parent )
+SelectionTransformCommand::SelectionTransformCommand( KoSelection * selection, const QTransform &oldTransformation, const QTransform &newTransformation, QUndoCommand * parent )
 : QUndoCommand( parent )
 , m_selection( selection )
 , m_oldTransformation( oldTransformation )

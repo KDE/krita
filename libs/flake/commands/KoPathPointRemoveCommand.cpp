@@ -152,7 +152,7 @@ void KoPathPointRemoveCommand::redo()
             if (lastPathShape) {
                 QPointF offset = lastPathShape->normalize();
 
-                QMatrix matrix;
+                QTransform matrix;
                 matrix.translate(-offset.x(), -offset.y());
                 for (int j = i + 1; j < updateBefore; ++j) {
                     d->points.at(j)->map(matrix);
@@ -167,7 +167,7 @@ void KoPathPointRemoveCommand::redo()
     if (lastPathShape) {
         QPointF offset = lastPathShape->normalize();
 
-        QMatrix matrix;
+        QTransform matrix;
         matrix.translate(-offset.x(), -offset.y());
         for (int j = 0; j < updateBefore; ++j) {
             d->points.at(j)->map(matrix);

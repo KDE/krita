@@ -88,7 +88,7 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
         KoPathShape* path = new KoPathShape();
         path->setShapeId(KoPathShapeId);
 
-        QMatrix resolutionMatrix;
+        QTransform resolutionMatrix;
         resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
         path->moveTo(resolutionMatrix.map(points[0]));
         for (int i = 1; i < points.count(); i++)

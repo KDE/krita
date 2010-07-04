@@ -45,7 +45,7 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool,
         m_selectedShapes << shape;
         m_startPositions << shape->position();
         m_oldTransforms << shape->transformation();
-        m_transformations << QMatrix();
+        m_transformations << QTransform();
         m_startSizes << shape->size();
     }
     m_start = clicked;
@@ -155,7 +155,7 @@ void ShapeResizeStrategy::handleCustomEvent( KoPointerEvent * event )
 
 void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zoomY )
 {
-    QMatrix matrix;
+    QTransform matrix;
     matrix.translate(center.x(), center.y()); // translate to 
     matrix.scale(zoomX, zoomY);
     matrix.translate(-center.x(), -center.y()); // and back
@@ -164,13 +164,13 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
     matrix = m_unwindMatrix * matrix * m_windMatrix;
 
     // the resizing transformation without the mirroring part
-    QMatrix resizeMatrix;
+    QTransform resizeMatrix;
     resizeMatrix.translate(center.x(), center.y()); // translate to 
     resizeMatrix.scale( qAbs(zoomX), qAbs(zoomY) );
     resizeMatrix.translate(-center.x(), -center.y()); // and back
 
     // the mirroring part of the resizing transformation
-    QMatrix mirrorMatrix;
+    QTransform mirrorMatrix;
     mirrorMatrix.translate(center.x(), center.y()); // translate to 
     mirrorMatrix.scale( zoomX < 0 ? -1 : 1, zoomY < 0 ? -1 : 1 );
     mirrorMatrix.translate(-center.x(), -center.y()); // and back
@@ -193,17 +193,17 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
         shape->applyAbsoluteTransformation( m_transformations[i].inverted() );
 
         // save the shapes transformation matrix
-        QMatrix shapeMatrix = shape->absoluteTransformation(0);
+        QTransform shapeMatrix = shape->absoluteTransformation(0);
 
         // calculate the matrix we would apply to the local shape matrix
         // that tells us the effective scale values we have to use for the resizing
-        QMatrix localMatrix = shapeMatrix * resizeMatrix * shapeMatrix.inverted();
+        QTransform localMatrix = shapeMatrix * resizeMatrix * shapeMatrix.inverted();
         // save the effective scale values
         qreal scaleX = localMatrix.m11();
         qreal scaleY = localMatrix.m22();
 
         // calculate the scale matrix which is equivalent to our resizing above
-        QMatrix scaleMatrix = (QMatrix().scale( scaleX, scaleY ));
+        QTransform scaleMatrix = (QTransform().scale( scaleX, scaleY ));
         scaleMatrix =  shapeMatrix.inverted() * scaleMatrix * shapeMatrix;
 
         // calculate the new size of the shape, using the effective scale values
@@ -230,7 +230,7 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
 QUndoCommand* ShapeResizeStrategy::createCommand()
 {
     QList<QSizeF> newSizes;
-    QList<QMatrix> transformations;
+    QList<QTransform> transformations;
     const int shapeCount = m_selectedShapes.count();
     for ( int i = 0; i < shapeCount; ++i )
     {

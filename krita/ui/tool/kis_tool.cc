@@ -21,7 +21,7 @@
 #include <QLabel>
 #include <QWidget>
 #include <QPolygonF>
-#include <QMatrix>
+#include <QTransform>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -253,7 +253,7 @@ QRectF KisTool::pixelToView(const QRectF &pixelRect) const
 
 QPainterPath KisTool::pixelToView(const QPainterPath &pixelPolygon) const
 {
-    QMatrix matrix;
+    QTransform matrix;
     qreal zoomX, zoomY;
     canvas()->viewConverter()->zoom(&zoomX, &zoomY);
     matrix.scale(zoomX/image()->xRes(), zoomY/ image()->yRes());
@@ -262,7 +262,7 @@ QPainterPath KisTool::pixelToView(const QPainterPath &pixelPolygon) const
 
 QPolygonF KisTool::pixelToView(const QPolygonF &pixelPath) const
 {
-    QMatrix matrix;
+    QTransform matrix;
     qreal zoomX, zoomY;
     canvas()->viewConverter()->zoom(&zoomX, &zoomY);
     matrix.scale(zoomX/image()->xRes(), zoomY/ image()->yRes());

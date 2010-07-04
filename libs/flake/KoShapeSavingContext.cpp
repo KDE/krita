@@ -47,7 +47,7 @@ public:
     QMap<qint64, QString> imageNames;
     int imageId;
     QMap<QString, QImage> images;
-    QHash<const KoShape *, QMatrix> shapeOffsets;
+    QHash<const KoShape *, QTransform> shapeOffsets;
 
     KoGenStyles& mainStyles;
     KoEmbeddedDocumentSaver& embeddedSaver;
@@ -253,7 +253,7 @@ KoSharedSavingData * KoShapeSavingContext::sharedData(const QString & id) const
     return data;
 }
 
-void KoShapeSavingContext::addShapeOffset(const KoShape * shape, const QMatrix & m)
+void KoShapeSavingContext::addShapeOffset(const KoShape * shape, const QTransform & m)
 {
     d->shapeOffsets.insert(shape, m);
 }
@@ -263,7 +263,7 @@ void KoShapeSavingContext::removeShapeOffset(const KoShape * shape)
     d->shapeOffsets.remove(shape);
 }
 
-QMatrix KoShapeSavingContext::shapeOffset(const KoShape * shape) const
+QTransform KoShapeSavingContext::shapeOffset(const KoShape * shape) const
 {
-    return d->shapeOffsets.value(shape, QMatrix());
+    return d->shapeOffsets.value(shape, QTransform());
 }

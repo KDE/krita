@@ -79,7 +79,7 @@ void KoPathShapePrivate::applyViewboxTransformation(const KoXmlElement &element)
         pos.setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y", QString())));
 
         // create matrix to transform original path data into desired size and position
-        QMatrix viewMatrix;
+        QTransform viewMatrix;
         viewMatrix.translate(-viewBox.left(), -viewBox.top());
         viewMatrix.scale(size.width() / viewBox.width(), size.height() / viewBox.height());
         viewMatrix.translate(pos.x(), pos.y());
@@ -164,7 +164,7 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
 
     d->applyViewboxTransformation(element);
     QPointF pos = normalize();
-    setTransformation(QMatrix());
+    setTransformation(QTransform());
 
     if (element.hasAttributeNS(KoXmlNS::svg, "x") || element.hasAttributeNS(KoXmlNS::svg, "y")) {
         pos.setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x", QString())));
@@ -371,7 +371,7 @@ QPainterPath KoPathShape::outline() const
 
 QRectF KoPathShape::boundingRect() const
 {
-    QMatrix transform = absoluteTransformation(0);
+    QTransform transform = absoluteTransformation(0);
     // calculate the bounding rect of the transformed outline
     QRectF bb(transform.map(outline()).boundingRect());
     if (border()) {
@@ -410,13 +410,13 @@ QSizeF KoPathShape::size() const
 void KoPathShape::setSize(const QSizeF &newSize)
 {
     Q_D(KoPathShape);
-    QMatrix matrix(resizeMatrix(newSize));
+    QTransform matrix(resizeMatrix(newSize));
 
     KoShape::setSize(newSize);
     d->map(matrix);
 }
 
-QMatrix KoPathShape::resizeMatrix( const QSizeF & newSize ) const
+QTransform KoPathShape::resizeMatrix( const QSizeF & newSize ) const
 {
     QSizeF oldSize = size();
     if (oldSize.width() == 0.0) {
@@ -434,7 +434,7 @@ QMatrix KoPathShape::resizeMatrix( const QSizeF & newSize ) const
         sizeNew.setHeight(0.000001);
     }
 
-    return QMatrix(sizeNew.width() / oldSize.width(), 0, 0, sizeNew.height() / oldSize.height(), 0, 0);
+    return QTransform(sizeNew.width() / oldSize.width(), 0, 0, sizeNew.height() / oldSize.height(), 0, 0);
 }
 
 KoPathPoint * KoPathShape::moveTo(const QPointF &p)
@@ -593,7 +593,7 @@ QPointF KoPathShape::normalize()
 {
     Q_D(KoPathShape);
     QPointF tl(outline().boundingRect().topLeft());
-    QMatrix matrix;
+    QTransform matrix;
     matrix.translate(-tl.x(), -tl.y());
     d->map(matrix);
 
@@ -603,7 +603,7 @@ QPointF KoPathShape::normalize()
     return tl;
 }
 
-void KoPathShapePrivate::map(const QMatrix &matrix)
+void KoPathShapePrivate::map(const QTransform &matrix)
 {
     Q_Q(KoPathShape);
     KoSubpathList::const_iterator pathIt(q->m_subpaths.constBegin());
@@ -1045,8 +1045,8 @@ bool KoPathShape::combine(KoPathShape *path)
     if (! path)
         return false;
 
-    QMatrix pathMatrix = path->absoluteTransformation(0);
-    QMatrix myMatrix = absoluteTransformation(0).inverted();
+    QTransform pathMatrix = path->absoluteTransformation(0);
+    QTransform myMatrix = absoluteTransformation(0).inverted();
 
     foreach(KoSubpath* subpath, path->m_subpaths) {
         KoSubpath *newSubpath = new KoSubpath();
@@ -1069,7 +1069,7 @@ bool KoPathShape::separate(QList<KoPathShape*> & separatedPaths)
     if (! m_subpaths.size())
         return false;
 
-    QMatrix myMatrix = absoluteTransformation(0);
+    QTransform myMatrix = absoluteTransformation(0);
 
     foreach(KoSubpath* subpath, m_subpaths) {
         KoPathShape *shape = new KoPathShape();
@@ -1142,7 +1142,7 @@ QString KoPathShape::pathShapeId() const
     return KoPathShapeId;
 }
 
-QString KoPathShape::toString(const QMatrix &matrix) const
+QString KoPathShape::toString(const QTransform &matrix) const
 {
     QString d;
 

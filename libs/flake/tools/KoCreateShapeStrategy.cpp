@@ -113,7 +113,7 @@ void KoCreateShapeStrategy::paint(QPainter &painter, const KoViewConverter &conv
 
         qreal xscale = paintRect.width() / m_outlineBoundingRect.width();
         qreal yscale = paintRect.height() / m_outlineBoundingRect.height();
-        QMatrix matrix;
+        QTransform matrix;
         matrix.translate(-m_outlineBoundingRect.left(), -m_outlineBoundingRect.top());
         matrix.scale(xscale, yscale);
         painter.translate(paintRect.left(), paintRect.top());
@@ -121,7 +121,7 @@ void KoCreateShapeStrategy::paint(QPainter &painter, const KoViewConverter &conv
         if (painter.hasClipping())
             paintRect = paintRect.intersect(painter.clipRegion().boundingRect());
 
-        painter.setMatrix(matrix, true);
+        painter.setTransform(matrix, true);
         painter.drawPath(m_outline);
         painter.restore();
     }

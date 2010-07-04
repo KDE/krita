@@ -61,7 +61,7 @@ bool SpiralShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &/*
 
 void SpiralShape::setSize(const QSizeF &newSize)
 {
-    QMatrix matrix(resizeMatrix(newSize));
+    QTransform matrix(resizeMatrix(newSize));
     m_center = matrix.map(m_center);
     m_radii = matrix.map(m_radii);
     KoParameterShape::setSize(newSize);
@@ -70,7 +70,7 @@ void SpiralShape::setSize(const QSizeF &newSize)
 QPointF SpiralShape::normalize()
 {
     QPointF offset(KoParameterShape::normalize());
-    QMatrix matrix;
+    QTransform matrix;
     matrix.translate(-offset.x(), -offset.y());
     m_center = matrix.map(m_center);
     return offset;

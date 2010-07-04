@@ -30,7 +30,7 @@
 #include <QHash>
 #include <QTransform>
 #include <QImage>
-#include <QMatrix>
+#include <QTransform>
 
 #include <kis_random_accessor.h>
 #include <kis_random_sub_accessor.h>
@@ -282,7 +282,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                 if ( !m_brushQImage.isNull() )
                 {
 
-                    QMatrix m;
+                    QTransform m;
                     m.rotate(rad2deg(rotationZ));
 
                     if (m_shapeDynamicsProperties->randomSize){

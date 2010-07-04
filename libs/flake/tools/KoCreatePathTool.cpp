@@ -56,7 +56,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 
         painter.save();
 
-        painter.setMatrix(d->shape->absoluteTransformation(&converter) * painter.matrix());
+        painter.setTransform(d->shape->absoluteTransformation(&converter) * painter.transform());
 
         KoShape::applyConversion(painter, converter);
 
@@ -87,7 +87,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 
     if (d->hoveredPoint) {
         painter.save();
-        painter.setMatrix(d->hoveredPoint->parent()->absoluteTransformation(&converter), true);
+        painter.setTransform(d->hoveredPoint->parent()->absoluteTransformation(&converter), true);
         KoShape::applyConversion(painter, converter);
         painter.setPen(Qt::blue);
         painter.setBrush(Qt::white);   //TODO make configurable
@@ -103,7 +103,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter)
 {
     Q_D(KoCreatePathTool);
-    painter.setMatrix(pathShape.absoluteTransformation(&converter) * painter.matrix());
+    painter.setTransform(pathShape.absoluteTransformation(&converter) * painter.transform());
     painter.save();
     pathShape.paint(painter, converter);
     painter.restore();

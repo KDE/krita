@@ -56,12 +56,12 @@ private:
     QList<QPointF> m_startPositions;
     QList<QSizeF> m_startSizes;
     bool m_top, m_left, m_bottom, m_right;
-    QMatrix m_unwindMatrix, m_windMatrix;
+    QTransform m_unwindMatrix, m_windMatrix;
     QSizeF m_initialSize;
     QPointF m_initialPosition;
-    QMatrix m_scaleMatrix;
-    QList<QMatrix> m_oldTransforms;
-    QList<QMatrix> m_transformations;
+    QTransform m_scaleMatrix;
+    QList<QTransform> m_oldTransforms;
+    QList<QTransform> m_transformations;
     QPointF m_lastScale;
     QList<KoShape*> m_selectedShapes;
 };

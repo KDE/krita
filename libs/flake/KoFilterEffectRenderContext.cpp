@@ -21,7 +21,7 @@
 #include "KoViewConverter.h"
 
 #include <QtCore/QRectF>
-#include <QtGui/QMatrix>
+#include <QtGui/QTransform>
 
 class KoFilterEffectRenderContext::Private
 {

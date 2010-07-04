@@ -84,7 +84,7 @@ void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation
                 continue;
 
             bool alreadyPresent = true;
-            QMatrix m = shape->absoluteTransformation(0);
+            QTransform m = shape->absoluteTransformation(0);
             QList<QPointF> connectionPoints = shape->connectionPoints();
             if (! connectionPoints.count()) {
                 QSizeF size = shape->size();

@@ -21,7 +21,7 @@
 #include "KoPathPoint.h"
 #include <kdebug.h>
 #include <QtGui/QPainterPath>
-#include <QtGui/QMatrix>
+#include <QtGui/QTransform>
 #include <math.h>
 
 /// Maximal recursion depth for finding root params
@@ -961,7 +961,7 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
     return isects;
 }
 
-KoPathSegment KoPathSegment::mapped(const QMatrix &matrix) const
+KoPathSegment KoPathSegment::mapped(const QTransform &matrix) const
 {
     if (!isValid())
         return *this;
@@ -1123,7 +1123,7 @@ bool KoPathSegment::isFlat(qreal tolerance) const
     QPointF chord = d->second->point() - d->first->point();
     // calculate angle of chord to the x-axis
     qreal chordAngle = atan2(chord.y(), chord.x());
-    QMatrix m;
+    QTransform m;
     m.translate(d->first->point().x(), d->first->point().y());
     m.rotate(chordAngle * M_PI / 180.0);
     m.translate(-d->first->point().x(), -d->first->point().y());

@@ -115,7 +115,7 @@ void KoShapeGroupCommand::redo()
         }
     }
 
-    QMatrix groupTransform = d->container->absoluteTransformation(0).inverted();
+    QTransform groupTransform = d->container->absoluteTransformation(0).inverted();
 
     int zIndex=0;
     QList<KoShape*> shapes(d->container->shapes());
@@ -139,7 +139,7 @@ void KoShapeGroupCommand::undo()
 {
     QUndoCommand::undo();
 
-    QMatrix ungroupTransform = d->container->absoluteTransformation(0);
+    QTransform ungroupTransform = d->container->absoluteTransformation(0);
     for (int i = 0; i < d->shapes.count(); i++) {
         KoShape * shape = d->shapes[i];
         d->container->removeShape(shape);

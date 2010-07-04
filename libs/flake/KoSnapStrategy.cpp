@@ -187,7 +187,7 @@ bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pro
         if (! path)
             continue;
 
-        QMatrix matrix = path->absoluteTransformation(0);
+        QTransform matrix = path->absoluteTransformation(0);
 
         int subpathCount = path->subpathCount();
         for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {
@@ -293,7 +293,7 @@ QPainterPath ExtensionSnapStrategy::decoration(const KoViewConverter &converter)
     return decoration;
 }
 
-bool ExtensionSnapStrategy::snapToExtension(QPointF &position, KoPathPoint * point, const QMatrix &matrix)
+bool ExtensionSnapStrategy::snapToExtension(QPointF &position, KoPathPoint * point, const QTransform &matrix)
 {
     QPointF direction = extensionDirection(point, matrix);
     if (direction.isNull())
@@ -323,7 +323,7 @@ qreal ExtensionSnapStrategy::project(const QPointF &lineStart, const QPointF &li
     return scalar /= diffLength;
 }
 
-QPointF ExtensionSnapStrategy::extensionDirection(KoPathPoint * point, const QMatrix &matrix)
+QPointF ExtensionSnapStrategy::extensionDirection(KoPathPoint * point, const QTransform &matrix)
 {
     KoPathShape * path = point->parent();
     KoPathPointIndex index = path->pathPointIndex(point);

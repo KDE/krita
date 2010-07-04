@@ -315,7 +315,7 @@ QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack, KoOdfLoading
     QBrush resultBrush(QPixmap::fromImage(data.image()).scaled(imageSize));
 
     if (style == "repeat") {
-        QMatrix matrix;
+        QTransform matrix;
         if (styleStack.hasProperty(KoXmlNS::draw, "fill-image-ref-point")) {
             // align pattern to the given size
             QString align = styleStack.property(KoXmlNS::draw, "fill-image-ref-point");
@@ -347,7 +347,7 @@ QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack, KoOdfLoading
             QString pointY = styleStack.property(KoXmlNS::draw, "fill-image-ref-point-y");
             matrix.translate(0, 0.01 * pointY.remove('%').toDouble() * imageSize.height());
         }
-        resultBrush.setMatrix(matrix);
+        resultBrush.setTransform(matrix);
     }
 
     return resultBrush;

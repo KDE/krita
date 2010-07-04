@@ -30,7 +30,7 @@ public:
     /// Applies the viewbox transformation defined in the given element
     void applyViewboxTransformation(const KoXmlElement &element);
 
-    void map(const QMatrix &matrix);
+    void map(const QTransform &matrix);
 
     void updateLast(KoPathPoint **lastPoint);
 

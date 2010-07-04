@@ -186,11 +186,11 @@ void KisSelectionDecoration::drawDecoration(QPainter& painter, const QPoint& doc
     }
     if (m_mode == Ants && selection && selection->hasPixelSelection()) {
 
-        QMatrix matrix;
+        QTransform matrix;
         matrix.scale(sx / view()->image()->xRes(), sy / view()->image()->yRes());
 
-        QMatrix oldWorldMatrix = painter.worldMatrix();
-        painter.setWorldMatrix(matrix, true);
+        QTransform oldWorldMatrix = painter.worldTransform();
+        painter.setWorldTransform(matrix, true);
 
         QTime t;
         t.start();
@@ -214,7 +214,7 @@ void KisSelectionDecoration::drawDecoration(QPainter& painter, const QPoint& doc
         dbgRender << "Polygons :" << i;
         dbgRender << "Painting marching ants :" << t.elapsed();
 
-        painter.setWorldMatrix(oldWorldMatrix);
+        painter.setWorldTransform(oldWorldMatrix);
     }
     if (m_mode == Ants && selection && selection->hasShapeSelection()) {
         KisShapeSelection* shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
@@ -231,7 +231,7 @@ void KisSelectionDecoration::drawDecoration(QPainter& painter, const QPoint& doc
         painter.setRenderHint(QPainter::Antialiasing);
         QColor outlineColor = Qt::black;
 
-        QMatrix zoomMatrix;
+        QTransform zoomMatrix;
         zoomMatrix.scale(sx, sy);
 
         QPen backgroundPen(Qt::white);

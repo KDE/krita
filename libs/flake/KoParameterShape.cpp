@@ -81,10 +81,10 @@ void KoParameterShape::paintHandles(QPainter & painter, const KoViewConverter & 
     Q_D(KoParameterShape);
     applyConversion(painter, converter);
 
-    QMatrix worldMatrix = painter.worldMatrix();
-    painter.setMatrix(QMatrix());
+    QTransform worldMatrix = painter.worldTransform();
+    painter.setTransform(QTransform());
 
-    QMatrix matrix;
+    QTransform matrix;
     matrix.rotate(45.0);
     QPolygonF poly(d->handleRect(QPointF(0, 0), handleRadius));
     poly = matrix.map(poly);
@@ -103,10 +103,10 @@ void KoParameterShape::paintHandle(QPainter & painter, const KoViewConverter & c
     Q_D(KoParameterShape);
     applyConversion(painter, converter);
 
-    QMatrix worldMatrix = painter.worldMatrix();
-    painter.setMatrix(QMatrix());
+    QTransform worldMatrix = painter.worldTransform();
+    painter.setTransform(QTransform());
 
-    QMatrix matrix;
+    QTransform matrix;
     matrix.rotate(45.0);
     QPolygonF poly(d->handleRect(QPointF(0, 0), handleRadius));
     poly = matrix.map(poly);
@@ -117,7 +117,7 @@ void KoParameterShape::paintHandle(QPainter & painter, const KoViewConverter & c
 void KoParameterShape::setSize(const QSizeF &newSize)
 {
     Q_D(KoParameterShape);
-    QMatrix matrix(resizeMatrix(newSize));
+    QTransform matrix(resizeMatrix(newSize));
 
     for (int i = 0; i < d->handles.size(); ++i) {
         d->handles[i] = matrix.map(d->handles[i]);
@@ -130,7 +130,7 @@ QPointF KoParameterShape::normalize()
 {
     Q_D(KoParameterShape);
     QPointF offset(KoPathShape::normalize());
-    QMatrix matrix;
+    QTransform matrix;
     matrix.translate(-offset.x(), -offset.y());
 
     for (int i = 0; i < d->handles.size(); ++i) {

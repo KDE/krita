@@ -27,7 +27,7 @@
 #include <QtCore/QRectF>
 
 class KoPathPoint;
-class QMatrix;
+class QTransform;
 
 /// A KoPathSegment consist of two neighboring KoPathPoints
 class FLAKE_EXPORT KoPathSegment
@@ -96,7 +96,7 @@ public:
     QRectF controlPointRect() const;
 
     /// Returns transformed segment
-    KoPathSegment mapped(const QMatrix &matrix) const;
+    KoPathSegment mapped(const QTransform &matrix) const;
 
     /// Returns cubic bezier curve segment of this segment
     KoPathSegment toCubic() const;

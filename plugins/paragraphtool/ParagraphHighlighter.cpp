@@ -52,7 +52,7 @@ void ParagraphHighlighter::paint(QPainter &painter, const KoViewConverter &conve
         qreal shapeBottom = textShapeData->documentOffset() + shape->size().height();
 
         painter.setPen(Qt::black);
-        painter.setMatrix(shape->absoluteTransformation(&converter) * painter.matrix());
+        painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
         KoShape::applyConversion(painter, converter);
         painter.translate(0.0, -shapeTop);
 

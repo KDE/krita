@@ -604,7 +604,7 @@ KoShapeBackground *StyleDocker::applyFillGradientStops(KoShape *shape, const QGr
         QGradient *g = KoFlake::cloneGradient(oldGradient->gradient());
         g->setStops(stops);
         newGradient = new KoGradientBackground(g);
-        newGradient->setMatrix(oldGradient->matrix());
+        newGradient->setTransform(oldGradient->transform());
     }
     else {
         // no gradient yet, so create a new one

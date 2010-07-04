@@ -183,7 +183,7 @@ void KisToolSelectMagnetic::LocalTool::paintPath(KoPathShape &pathShape, QPainte
     if (!kisCanvas)
         return;
 
-    QMatrix matrix;
+    QTransform matrix;
     matrix.scale(kisCanvas->image()->xRes(), kisCanvas->image()->yRes());
     matrix.translate(pathShape.position().x(), pathShape.position().y());
 

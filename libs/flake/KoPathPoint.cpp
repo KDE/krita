@@ -248,7 +248,7 @@ bool KoPathPoint::activeControlPoint2() const
     return d->activeControlPoint2;
 }
 
-void KoPathPoint::map(const QMatrix &matrix, bool mapGroup)
+void KoPathPoint::map(const QTransform &matrix, bool mapGroup)
 {
     if (d->pointGroup && mapGroup) {
         d->pointGroup->map(matrix);
@@ -276,16 +276,16 @@ void KoPathPoint::paint(QPainter &painter, int handleRadius, PointTypes types, b
         painter.drawLine(point(), controlPoint1());
 
 
-    QMatrix worldMatrix = painter.worldMatrix();
+    QTransform worldMatrix = painter.worldTransform();
 
-    painter.setWorldMatrix(QMatrix());
+    painter.setWorldTransform(QTransform());
 
     // the point is lowest
     if (types & Node) {
         if (properties() & IsSmooth)
             painter.drawRect(handle.translated(worldMatrix.map(point())));
         else if (properties() & IsSymmetric) {
-            QMatrix matrix;
+            QTransform matrix;
             matrix.rotate(45.0);
             QPolygonF poly(handle);
             poly = matrix.map(poly);
@@ -303,7 +303,7 @@ void KoPathPoint::paint(QPainter &painter, int handleRadius, PointTypes types, b
     if (drawControlPoint1)
         painter.drawEllipse(handle.translated(worldMatrix.map(controlPoint1())));
 
-    painter.setWorldMatrix(worldMatrix);
+    painter.setWorldTransform(worldMatrix);
 }
 
 void KoPathPoint::setParent(KoPathShape* parent)

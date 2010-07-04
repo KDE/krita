@@ -432,15 +432,15 @@ QUndoCommand* KisShapeLayer::transform(double  xscale, double  yscale, double  x
     if(shapes.isEmpty())
         return 0;
 
-    QMatrix matrix;
+    QTransform matrix;
     matrix.translate(transF.x(), transF.y());
     matrix.scale(xscale,yscale);
     matrix.rotate(angle*180/M_PI);
 
-    QList<QMatrix> oldTransformations;
-    QList<QMatrix> newTransformations;
+    QList<QTransform> oldTransformations;
+    QList<QTransform> newTransformations;
     foreach(const KoShape* shape, shapes) {
-        QMatrix oldTransform = shape->transformation();
+        QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
 
         newTransformations.append(oldTransform*matrix);

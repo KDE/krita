@@ -147,7 +147,7 @@ void AbstractAreaBase::paintBackgroundAttributes( QPainter& painter, const QRect
             ol.setY( rect.center().y() - attributes.pixmap().height()/ 2 );
             painter.drawPixmap( ol, attributes.pixmap() );
         } else {
-            QMatrix m;
+            QTransform m;
             double zW = (double)rect.width()  / (double)attributes.pixmap().width();
             double zH = (double)rect.height() / (double)attributes.pixmap().height();
             switch( attributes.pixmapMode() ) {

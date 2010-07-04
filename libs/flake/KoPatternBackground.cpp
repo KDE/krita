@@ -113,7 +113,7 @@ public:
         return offset;
     }
 
-    QMatrix matrix;
+    QTransform matrix;
     KoPatternBackground::PatternRepeat repeat;
     KoPatternBackground::ReferencePoint refPoint;
     QSizeF targetImageSize;
@@ -136,13 +136,13 @@ KoPatternBackground::~KoPatternBackground()
 {
 }
 
-void KoPatternBackground::setMatrix(const QMatrix &matrix)
+void KoPatternBackground::setTransform(const QTransform &matrix)
 {
     Q_D(KoPatternBackground);
     d->matrix = matrix;
 }
 
-QMatrix KoPatternBackground::matrix() const
+QTransform KoPatternBackground::transform() const
 {
     Q_D(const KoPatternBackground);
     return d->matrix;
@@ -300,11 +300,11 @@ void KoPatternBackground::paint(QPainter &painter, const QPainterPath &fillPath)
         QPointF offset = d->offsetFromRect(targetRect, imageSize);
 
         // create matrix for pixmap scaling
-        QMatrix matrix;
+        QTransform matrix;
         matrix.scale(scaleX, scaleY);
 
         painter.setClipPath(fillPath);
-        painter.setWorldMatrix(matrix, true);
+        painter.setWorldTransform(matrix, true);
         painter.drawTiledPixmap(targetRect, d->imageData->pixmap(imageSize.toSize()), -offset);
     } else if (d->repeat == Original) {
         QRectF sourceRect(QPointF(0, 0), d->imageData->imageSize());

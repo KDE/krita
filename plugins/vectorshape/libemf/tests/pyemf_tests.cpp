@@ -861,7 +861,7 @@ void PyEmfTests::testWorldTransform1()
     QTest::ignoreMessage( QtDebugMsg, "EMR_SELECTOBJECT 4 " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_POLYLINE16 QRect(0,0 51x51) (QPoint(50,0) ,  QPoint(50,50) ,  QPoint(0,50) )  " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_SELECTOBJECT 2 " );
-    QTest::ignoreMessage( QtDebugMsg, "EMR_SETWORLDTRANSFORM: QMatrix(11=1 12=0 21=0 22=1 dx=50 dy=50) " );
+    QTest::ignoreMessage( QtDebugMsg, "EMR_SETWORLDTRANSFORM: QTransform(11=1 12=0 21=0 22=1 dx=50 dy=50) " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_BEGINPATH " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_MOVETOEX QPoint(0,0) " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_LINETO QPoint(100,300) " );
@@ -872,11 +872,11 @@ void PyEmfTests::testWorldTransform1()
     QTest::ignoreMessage( QtDebugMsg, "EMR_ENDPATH " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_STROKEANDFILLPATH QRect(0,0 551x601) " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_EXTTEXTOUTA: QPoint(0,0) \"translate (50,50) loc: 0,0\" " );
-    QTest::ignoreMessage( QtDebugMsg, "EMR_MODIFYWORLDTRANSFORM: 1 QMatrix(11=1 12=0 21=0 22=1 dx=0 dy=0) " );
+    QTest::ignoreMessage( QtDebugMsg, "EMR_MODIFYWORLDTRANSFORM: 1 QTransform(11=1 12=0 21=0 22=1 dx=0 dy=0) " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_SELECTOBJECT 4 " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_POLYLINE16 QRect(0,0 501x801) (QPoint(500,0) ,  QPoint(500,800) ,  QPoint(0,800) )  " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_SELECTOBJECT 2 " );
-    QTest::ignoreMessage( QtDebugMsg, "EMR_SETWORLDTRANSFORM: QMatrix(11=0.707107 12=-0.707107 21=0.707107 22=0.707107 dx=500 dy=800) " );
+    QTest::ignoreMessage( QtDebugMsg, "EMR_SETWORLDTRANSFORM: QTransform(11=0.707107 12=-0.707107 21=0.707107 22=0.707107 dx=500 dy=800) " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_BEGINPATH " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_MOVETOEX QPoint(0,0) " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_LINETO QPoint(100,300) " );
@@ -887,11 +887,11 @@ void PyEmfTests::testWorldTransform1()
     QTest::ignoreMessage( QtDebugMsg, "EMR_ENDPATH " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_STROKEANDFILLPATH QRect(0,0 551x601) " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_EXTTEXTOUTA: QPoint(0,0) \"rotate 45 deg, translate (500,800) loc: 0,0\" " );
-    QTest::ignoreMessage( QtDebugMsg, "EMR_SETWORLDTRANSFORM: QMatrix(11=1 12=0 21=0 22=1 dx=0 dy=0) " );
+    QTest::ignoreMessage( QtDebugMsg, "EMR_SETWORLDTRANSFORM: QTransform(11=1 12=0 21=0 22=1 dx=0 dy=0) " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_SELECTOBJECT 4 " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_POLYLINE16 QRect(0,0 1001x1001) (QPoint(1000,0) ,  QPoint(1000,1000) ,  QPoint(0,1000) )  " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_SELECTOBJECT 2 " );
-    QTest::ignoreMessage( QtDebugMsg, "EMR_MODIFYWORLDTRANSFORM: 3 QMatrix(11=0.173648 12=-0.984808 21=0.984808 22=0.173648 dx=1000 dy=1000) " );
+    QTest::ignoreMessage( QtDebugMsg, "EMR_MODIFYWORLDTRANSFORM: 3 QTransform(11=0.173648 12=-0.984808 21=0.984808 22=0.173648 dx=1000 dy=1000) " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_BEGINPATH " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_MOVETOEX QPoint(0,0) " );
     QTest::ignoreMessage( QtDebugMsg, "EMR_LINETO QPoint(100,300) " );

@@ -1283,15 +1283,15 @@ void KisToolTransform::applyTransform()
 		//	KisShapeSelection* currentShapeSelection = static_cast<KisShapeSelection*>(currentSelection()->shapeSelection());
         //    QList<KoShape *> currentShapes = currentShapeSelection->shapeManager()->shapes();
         //    QList<KoShape *> previousShapes = m_previousShapeSelection->shapeManager()->shapes();
-        //    QList<QMatrix> m_oldMatrixList;
-        //    QList<QMatrix> m_newMatrixList;
+        //    QList<QTransform> m_oldMatrixList;
+        //    QList<QTransform> m_newMatrixList;
 		//	for (int i = 0; i < origShapes.size(); ++i) {
 		//		KoShape *origShape = origShapes.at(i);
-		//		QMatrix origMatrix = origShape->transformation();
-		//		QMatrix previousMatrix = previousShapes.at(i)->transformation();
+		//		QTransform origMatrix = origShape->transformation();
+		//		QTransform previousMatrix = previousShapes.at(i)->transformation();
 
 		//		QPointF center = origMatrix.map(QPointF(0.5 * origShape->size().width(), 0.5 * origShape->size().height()));
-		//		QMatrix rotateMatrix;
+		//		QTransform rotateMatrix;
 		//		rotateMatrix.translate(center.x(), center.y());
 		//		rotateMatrix.rotate(180. * m_a / M_PI);
 		//		rotateMatrix.translate(-center.x(), -center.y());

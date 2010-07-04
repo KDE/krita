@@ -35,7 +35,7 @@ QRectF KoSelectionPrivate::sizeRect()
     bool first = true;
     QRectF bb;
 
-    QMatrix invSelectionTransform = q->absoluteTransformation(0).inverted();
+    QTransform invSelectionTransform = q->absoluteTransformation(0).inverted();
 
     QRectF bound;
 
@@ -45,7 +45,7 @@ QRectF KoSelectionPrivate::sizeRect()
             if (dynamic_cast<KoShapeGroup*>(*it))
                 continue;
 
-            const QMatrix shapeTransform = (*it)->absoluteTransformation(0);
+            const QTransform shapeTransform = (*it)->absoluteTransformation(0);
             const QRectF shapeRect(QRectF(QPointF(), (*it)->size()));
 
             if (first) {
@@ -167,14 +167,14 @@ void KoSelection::select(KoShape *shape, bool recursive)
         if (!oldSelectionCount )
             d->globalBound = QRectF();
 
-        setTransformation(QMatrix());
+        setTransformation(QTransform());
         // we are resetting the transformation here anyway,
         // so we can just add the newly selected shapes to the bounding box
         // in document coordinates and then use that size and position
         int newSelectionCount = d->selectedShapes.count();
         for (int i = oldSelectionCount; i < newSelectionCount; ++i) {
             KoShape *shape = d->selectedShapes[i];
-            const QMatrix shapeTransform = shape->absoluteTransformation(0);
+            const QTransform shapeTransform = shape->absoluteTransformation(0);
             const QRectF shapeRect(QRectF(QPointF(), shape->size()));
 
             d->globalBound = d->globalBound.united( shapeTransform.mapRect( shapeRect ) );
@@ -218,7 +218,7 @@ void KoSelection::deselectAll()
 {
     Q_D(KoSelection);
     // reset the transformation matrix of the selection
-    setTransformation(QMatrix());
+    setTransformation(QTransform());
 
     if (d->selectedShapes.isEmpty())
         return;
@@ -252,7 +252,7 @@ void KoSelection::updateSizeAndPosition()
 {
     Q_D(KoSelection);
     QRectF bb = d->sizeRect();
-    QMatrix matrix = absoluteTransformation(0);
+    QTransform matrix = absoluteTransformation(0);
     setSize(bb.size());
     QPointF p = matrix.map(bb.topLeft() + matrix.inverted().map(position()));
     setPosition(p);

@@ -150,17 +150,17 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     // Do the following to revert the absolute transformation of the container
     // that is re-applied in shape->absoluteTransformation() later on. The transformation matrix
     // of the container has already been applied once before this function is called.
-    QMatrix baseMatrix = absoluteTransformation(&converter).inverted() * painter.matrix();
+    QTransform baseMatrix = absoluteTransformation(&converter).inverted() * painter.transform();
 
     // clip the children to the parent outline.
-    QMatrix m;
+    QTransform m;
     qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     m.scale(zoomX, zoomY);
     painter.setClipPath(m.map(outline()));
 
     QRectF toPaintRect = converter.viewToDocument(painter.clipRegion().boundingRect());
-    toPaintRect = matrix().mapRect(toPaintRect);
+    toPaintRect = transform().mapRect(toPaintRect);
 
     foreach(KoShape *shape, sortedObjects) {
         //kDebug(30006) <<"KoShapeContainer::painting shape:" << shape->shapeId() <<"," << shape->boundingRect();
@@ -173,12 +173,12 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
             continue;
 
         painter.save();
-        painter.setMatrix(shape->absoluteTransformation(&converter) * baseMatrix);
+        painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
         shape->paint(painter, converter);
         painter.restore();
         if (shape->border()) {
             painter.save();
-            painter.setMatrix(shape->absoluteTransformation(&converter) * baseMatrix);
+            painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
             shape->border()->paint(shape, painter, converter);
             painter.restore();
         }

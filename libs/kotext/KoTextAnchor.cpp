@@ -367,14 +367,14 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext &context)
             type = "paragraph";
         shape()->setAdditionalAttribute("text:anchor-type", type);
         if (shape()->parent()) {// an anchor may not yet have been layout-ed
-            QMatrix parentMatrix = shape()->parent()->absoluteTransformation(0).inverted();
-            QMatrix shapeMatrix = shape()->absoluteTransformation(0);;
+            QTransform parentMatrix = shape()->parent()->absoluteTransformation(0).inverted();
+            QTransform shapeMatrix = shape()->absoluteTransformation(0);;
 
             qreal dx = d->distance.x() - shapeMatrix.dx()*parentMatrix.m11()
                                        - shapeMatrix.dy()*parentMatrix.m21();
             qreal dy = d->distance.y() - shapeMatrix.dx()*parentMatrix.m12()
                                        - shapeMatrix.dy()*parentMatrix.m22();
-            context.addShapeOffset(shape(), QMatrix(parentMatrix.m11(),parentMatrix.m12(),
+            context.addShapeOffset(shape(), QTransform(parentMatrix.m11(),parentMatrix.m12(),
                                                     parentMatrix.m21(),parentMatrix.m22(),
                                                     dx,dy));
         }

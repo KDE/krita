@@ -20,7 +20,7 @@
 #include "kis_paint_device.h"
 
 #include <QRect>
-#include <QMatrix>
+#include <QTransform>
 #include <QImage>
 #include <QList>
 #include <QHash>

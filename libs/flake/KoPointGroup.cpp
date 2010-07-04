@@ -40,7 +40,7 @@ void KoPointGroup::remove(KoPathPoint * point)
     }
 }
 
-void KoPointGroup::map(const QMatrix &matrix)
+void KoPointGroup::map(const QTransform &matrix)
 {
     QSet<KoPathPoint *>::iterator it = m_points.begin();
     for (; it != m_points.end(); ++it) {

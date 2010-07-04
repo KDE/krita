@@ -137,7 +137,7 @@ bool EllipseShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 
 void EllipseShape::setSize(const QSizeF &newSize)
 {
-    QMatrix matrix(resizeMatrix(newSize));
+    QTransform matrix(resizeMatrix(newSize));
     m_center = matrix.map(m_center);
     m_radii = matrix.map(m_radii);
     KoParameterShape::setSize(newSize);
@@ -146,7 +146,7 @@ void EllipseShape::setSize(const QSizeF &newSize)
 QPointF EllipseShape::normalize()
 {
     QPointF offset(KoParameterShape::normalize());
-    QMatrix matrix;
+    QTransform matrix;
     matrix.translate(-offset.x(), -offset.y());
     m_center = matrix.map(m_center);
     return offset;

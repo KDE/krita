@@ -104,7 +104,7 @@ void KoPathPointMoveCommandPrivate::applyOffset(qreal factor)
         KoPathShape *path = it.key().pathShape;
         // transform offset from document to shape coordinate system
         QPointF shapeOffset = path->documentToShape(factor*it.value()) - path->documentToShape(QPointF());
-        QMatrix matrix;
+        QTransform matrix;
         matrix.translate(shapeOffset.x(), shapeOffset.y());
 
         KoPathPoint *p = path->pointByIndex(it.key().pointIndex);

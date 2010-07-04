@@ -183,8 +183,8 @@ void ParagraphEditor::paint(QPainter &painter, const KoViewConverter &converter)
 
         // transform painter from view coordinate system to document coordinate system
         QPointF trans = converter.documentToView(QPointF(1.0, 1.0));
-        QMatrix matrix = QMatrix().translate(trans.x(), trans.y());
-        painter.setMatrix(matrix * painter.matrix());
+        QTransform matrix = QTransform().translate(trans.x(), trans.y());
+        painter.setTransform(matrix * painter.transform());
         KoShape::applyConversion(painter, converter);
         painter.setPen(Qt::darkGray);
 
@@ -240,7 +240,7 @@ void ParagraphEditor::initRulerFragments(const ParagraphFragment *fragment, Rule
     qreal shapeBottom(shapeTop + shape->size().height());
 
     // matrix to map text to document coordinates
-    QMatrix matrix = shape->absoluteTransformation(NULL);
+    QTransform matrix = shape->absoluteTransformation(NULL);
     matrix.translate(0.0, -shapeTop);
 
     qreal rightTop = qMax(shapeTop, firstLine.top());

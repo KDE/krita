@@ -346,7 +346,7 @@ QRectF rotatedRect( const QRectF& oldRect, qreal angleInt, const QPointF& center
     const qreal angle = PI * angleInt / 180.0;
     const qreal cosAngle = cos( angle );
     const qreal sinAngle = sin( angle );
-    QMatrix rotationMatrix(cosAngle, sinAngle, -sinAngle, cosAngle, 0, 0);
+    QTransform rotationMatrix(cosAngle, sinAngle, -sinAngle, cosAngle, 0, 0);
     QPolygon rotPts;
     rotPts <<  rotationMatrix.map(rect.topLeft()) //QPoint(0,0)
             << rotationMatrix.map(rect.topRight())
@@ -597,7 +597,7 @@ QSize KDChart::TextLayoutItem::calcSizeHint(
     const qreal angle = PI * mAttributes.rotation() / 180.0;
     const qreal cosAngle = cos( angle );
     const qreal sinAngle = sin( angle );
-    QMatrix rotationMatrix(cosAngle, sinAngle, -sinAngle, cosAngle, 0, 0);
+    QTransform rotationMatrix(cosAngle, sinAngle, -sinAngle, cosAngle, 0, 0);
     QPolygon rotPts;
     rotPts << rotationMatrix.map(rect.topLeft())
            << rotationMatrix.map(rect.topRight())

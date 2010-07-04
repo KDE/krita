@@ -248,7 +248,7 @@ QImage KisAutoBrush::createBrushPreview()
             pixel[i] = qRgb(v, v, v);
         }
     }
-    return image.transformed(QMatrix().rotate(-d->angle * 180 / M_PI));
+    return image.transformed(QTransform().rotate(-d->angle * 180 / M_PI));
 }
 
 QPointF KisAutoBrush::hotSpot(double scaleX, double scaleY, double rotation) const

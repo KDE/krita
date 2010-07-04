@@ -233,7 +233,7 @@ void StarShape::createPoints(int requiredPointCount)
 
 void StarShape::setSize(const QSizeF &newSize)
 {
-    QMatrix matrix(resizeMatrix(newSize));
+    QTransform matrix(resizeMatrix(newSize));
     m_zoomX *= matrix.m11();
     m_zoomY *= matrix.m22();
 
@@ -338,7 +338,7 @@ bool StarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & co
     updatePath(QSizeF());
 
     // reset transformation
-    setTransformation(QMatrix());
+    setTransformation(QTransform());
 
     loadOdfAttributes(element, context, OdfAllAttributes);
 

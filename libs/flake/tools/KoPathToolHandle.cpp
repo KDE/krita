@@ -56,7 +56,7 @@ PointHandle::PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint
 void PointHandle::paint(QPainter &painter, const KoViewConverter &converter)
 {
     painter.save();
-    painter.setMatrix(m_activePoint->parent()->absoluteTransformation(&converter) * painter.matrix());
+    painter.setTransform(m_activePoint->parent()->absoluteTransformation(&converter) * painter.transform());
     KoShape::applyConversion(painter, converter);
 
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
@@ -156,7 +156,7 @@ ParameterHandle::ParameterHandle(KoPathTool *tool, KoParameterShape *parameterSh
 void ParameterHandle::paint(QPainter &painter, const KoViewConverter &converter)
 {
     painter.save();
-    painter.setMatrix(m_parameterShape->absoluteTransformation(&converter) * painter.matrix());
+    painter.setTransform(m_parameterShape->absoluteTransformation(&converter) * painter.transform());
 
     int handleRadius = m_tool->canvas()->resourceManager()->handleRadius();
     m_parameterShape->paintHandle(painter, converter, m_handleId, handleRadius);

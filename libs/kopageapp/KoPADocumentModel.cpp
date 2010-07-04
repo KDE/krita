@@ -208,7 +208,7 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
         case PropertiesRole: return QVariant::fromValue( properties( shape ) );
         case AspectRatioRole:
         {
-            QMatrix matrix = shape->absoluteTransformation( 0 );
+            QTransform matrix = shape->absoluteTransformation( 0 );
             QRectF bbox = matrix.mapRect( shape->outline().boundingRect() );
             KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
             if( container )

@@ -22,7 +22,7 @@
 #include <QPen>
 #include <QLayout>
 #include <QVBoxLayout>
-#include <QMatrix>
+#include <QTransform>
 
 #include <klocale.h>
 
@@ -127,7 +127,7 @@ void KisToolSelectPath::LocalTool::paintPath(KoPathShape &pathShape, QPainter &p
     if (!kisCanvas)
         return;
 
-    QMatrix matrix;
+    QTransform matrix;
     matrix.scale(kisCanvas->image()->xRes(), kisCanvas->image()->yRes());
     matrix.translate(pathShape.position().x(), pathShape.position().y());
     m_selectingTool->paintToolOutline(&painter, m_selectingTool->pixelToView(matrix.map(pathShape.outline())));
@@ -163,7 +163,7 @@ void KisToolSelectPath::LocalTool::addPathShape(KoPathShape* pathShape)
         painter.setOpacity(OPACITY_OPAQUE_U8);
         painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
 
-        QMatrix matrix;
+        QTransform matrix;
         matrix.scale(image->xRes(), image->yRes());
         matrix.translate(pathShape->position().x(), pathShape->position().y());
         painter.fillPainterPath(matrix.map(pathShape->outline()));

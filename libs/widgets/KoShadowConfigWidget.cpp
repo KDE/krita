@@ -91,7 +91,7 @@ void KoShadowConfigWidget::setShadowOffset( const QPointF &offset )
 QPointF KoShadowConfigWidget::shadowOffset() const
 {
     QPointF offset( d->widget.shadowOffset->value(), 0 );
-    QMatrix m;
+    QTransform m;
     m.rotate( 360-d->widget.shadowAngle->value() );
     return m.map( offset );
 }

@@ -137,13 +137,13 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     rotatePixmap.load(KStandardDirs::locate("data", "koffice/icons/rotate.png"));
     shearPixmap.load(KStandardDirs::locate("data", "koffice/icons/shear.png"));
 
-    m_rotateCursors[0] = QCursor(rotatePixmap.transformed(QMatrix().rotate(45)));
-    m_rotateCursors[1] = QCursor(rotatePixmap.transformed(QMatrix().rotate(90)));
-    m_rotateCursors[2] = QCursor(rotatePixmap.transformed(QMatrix().rotate(135)));
-    m_rotateCursors[3] = QCursor(rotatePixmap.transformed(QMatrix().rotate(180)));
-    m_rotateCursors[4] = QCursor(rotatePixmap.transformed(QMatrix().rotate(225)));
-    m_rotateCursors[5] = QCursor(rotatePixmap.transformed(QMatrix().rotate(270)));
-    m_rotateCursors[6] = QCursor(rotatePixmap.transformed(QMatrix().rotate(315)));
+    m_rotateCursors[0] = QCursor(rotatePixmap.transformed(QTransform().rotate(45)));
+    m_rotateCursors[1] = QCursor(rotatePixmap.transformed(QTransform().rotate(90)));
+    m_rotateCursors[2] = QCursor(rotatePixmap.transformed(QTransform().rotate(135)));
+    m_rotateCursors[3] = QCursor(rotatePixmap.transformed(QTransform().rotate(180)));
+    m_rotateCursors[4] = QCursor(rotatePixmap.transformed(QTransform().rotate(225)));
+    m_rotateCursors[5] = QCursor(rotatePixmap.transformed(QTransform().rotate(270)));
+    m_rotateCursors[6] = QCursor(rotatePixmap.transformed(QTransform().rotate(315)));
     m_rotateCursors[7] = QCursor(rotatePixmap);
 /*
     m_rotateCursors[0] = QCursor(Qt::RotateNCursor);
@@ -156,13 +156,13 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     m_rotateCursors[7] = QCursor(Qt::RotateNWCursor);
 */
     m_shearCursors[0] = QCursor(shearPixmap);
-    m_shearCursors[1] = QCursor(shearPixmap.transformed(QMatrix().rotate(45)));
-    m_shearCursors[2] = QCursor(shearPixmap.transformed(QMatrix().rotate(90)));
-    m_shearCursors[3] = QCursor(shearPixmap.transformed(QMatrix().rotate(135)));
-    m_shearCursors[4] = QCursor(shearPixmap.transformed(QMatrix().rotate(180)));
-    m_shearCursors[5] = QCursor(shearPixmap.transformed(QMatrix().rotate(225)));
-    m_shearCursors[6] = QCursor(shearPixmap.transformed(QMatrix().rotate(270)));
-    m_shearCursors[7] = QCursor(shearPixmap.transformed(QMatrix().rotate(315)));
+    m_shearCursors[1] = QCursor(shearPixmap.transformed(QTransform().rotate(45)));
+    m_shearCursors[2] = QCursor(shearPixmap.transformed(QTransform().rotate(90)));
+    m_shearCursors[3] = QCursor(shearPixmap.transformed(QTransform().rotate(135)));
+    m_shearCursors[4] = QCursor(shearPixmap.transformed(QTransform().rotate(180)));
+    m_shearCursors[5] = QCursor(shearPixmap.transformed(QTransform().rotate(225)));
+    m_shearCursors[6] = QCursor(shearPixmap.transformed(QTransform().rotate(270)));
+    m_shearCursors[7] = QCursor(shearPixmap.transformed(QTransform().rotate(315)));
     m_sizeCursors[0] = Qt::SizeVerCursor;
     m_sizeCursors[1] = Qt::SizeBDiagCursor;
     m_sizeCursors[2] = Qt::SizeHorCursor;
@@ -885,11 +885,11 @@ void DefaultTool::recalcSelectionBox()
         return;
 
     if (koSelection()->count()>1) {
-        QMatrix matrix = koSelection()->absoluteTransformation(0);
+        QTransform matrix = koSelection()->absoluteTransformation(0);
         m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->size())));
         m_angle = 0.0; //koSelection()->rotation();
     } else {
-        QMatrix matrix = koSelection()->firstSelectedShape()->absoluteTransformation(0);
+        QTransform matrix = koSelection()->firstSelectedShape()->absoluteTransformation(0);
         m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->firstSelectedShape()->size())));
         m_angle = 0.0; //koSelection()->firstSelectedShape()->rotation();
     }

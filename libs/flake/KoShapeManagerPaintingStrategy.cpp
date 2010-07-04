@@ -47,7 +47,7 @@ KoShapeManagerPaintingStrategy::~KoShapeManagerPaintingStrategy()
 void KoShapeManagerPaintingStrategy::paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint)
 {
     painter.save();
-    painter.setMatrix(shape->absoluteTransformation(&converter) * painter.matrix());
+    painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
 
     if (d->shapeManager) {
         d->shapeManager->paintShape(shape, painter, converter, forPrint);

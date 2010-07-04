@@ -691,18 +691,18 @@ void OutputPainterStrategy::modifyWorldTransform( const quint32 mode, float M11,
     kDebug(31000) << mode << M11 << M12 << M21 << M22 << Dx << Dy;
 #endif
 
-    QMatrix matrix( M11, M12, M21, M22, Dx, Dy);
+    QTransform matrix( M11, M12, M21, M22, Dx, Dy);
 
     if ( mode == MWT_IDENTITY ) {
-        m_painter->setWorldMatrix( QMatrix() );
+        m_painter->setWorldTransform( QTransform() );
     } else if ( mode == MWT_LEFTMULTIPLY ) {
-	m_painter->setWorldMatrix( matrix, true );
+	m_painter->setWorldTransform( matrix, true );
     } else if ( mode == MWT_RIGHTMULTIPLY ) {
-        QMatrix currentMatrix = m_painter->worldMatrix();
-        QMatrix newMatrix = currentMatrix * matrix;
-        m_painter->setWorldMatrix( newMatrix );
+        QTransform currentMatrix = m_painter->worldTransform();
+        QTransform newMatrix = currentMatrix * matrix;
+        m_painter->setWorldTransform( newMatrix );
     } else if ( mode == MWT_SET ) {
-	m_painter->setWorldMatrix( matrix );
+	m_painter->setWorldTransform( matrix );
     } else {
 	qWarning() << "Unimplemented transform mode" << mode;
     }
@@ -715,9 +715,9 @@ void OutputPainterStrategy::setWorldTransform( float M11, float M12, float M21,
     kDebug(31000) << M11 << M12 << M21 << M22 << Dx << Dy;
 #endif
 
-    QMatrix matrix( M11, M12, M21, M22, Dx, Dy);
+    QTransform matrix( M11, M12, M21, M22, Dx, Dy);
 
-    m_painter->setWorldMatrix( matrix );
+    m_painter->setWorldTransform( matrix );
 }
 
 void OutputPainterStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )

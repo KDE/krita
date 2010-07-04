@@ -50,7 +50,7 @@ public:
      */
     void remove(KoPathPoint *point);
 
-    void map(const QMatrix &matrix);
+    void map(const QTransform &matrix);
 
     /**
      * @brief get The point belonging to the group

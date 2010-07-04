@@ -22,7 +22,7 @@
 #include "KoShape.h"
 
 #include <QList>
-#include <QMatrix>
+#include <QTransform>
 
 #include <KDebug>
 
@@ -31,11 +31,11 @@ class KoShapeTransformCommand::Private
 public:
     Private(const QList<KoShape*> &list) : shapes(list) { }
     QList<KoShape*> shapes;
-    QList<QMatrix> oldState;
-    QList<QMatrix> newState;
+    QList<QTransform> oldState;
+    QList<QTransform> newState;
 };
 
-KoShapeTransformCommand::KoShapeTransformCommand(const QList<KoShape*> &shapes, const QList<QMatrix> &oldState, const QList<QMatrix> &newState, QUndoCommand * parent)
+KoShapeTransformCommand::KoShapeTransformCommand(const QList<KoShape*> &shapes, const QList<QTransform> &oldState, const QList<QTransform> &newState, QUndoCommand * parent)
         : QUndoCommand(parent),
         d(new Private(shapes))
 {

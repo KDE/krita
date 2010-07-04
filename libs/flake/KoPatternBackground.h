@@ -22,7 +22,7 @@
 
 #include "KoShapeBackground.h"
 #include "flake_export.h"
-#include <QtGui/QMatrix>
+#include <QtGui/QTransform>
 
 class KoImageCollection;
 class KoOdfLoadingContext;
@@ -58,10 +58,10 @@ public:
     virtual ~KoPatternBackground();
 
     /// Sets the transform matrix
-    void setMatrix(const QMatrix &matrix);
+    void setTransform(const QTransform &matrix);
 
     /// Returns the transform matrix
-    QMatrix matrix() const;
+    QTransform transform() const;
 
     /// Sets a new pattern
     void setPattern(const QImage &pattern);

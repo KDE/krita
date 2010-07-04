@@ -111,7 +111,7 @@ private:
     quint32 m_BitBltRasterOperation;
     qint32 m_xSrc;
     qint32 m_ySrc;
-    QMatrix m_XFormSrc;
+    QTransform m_XFormSrc;
 
     // Background color - elements below
     quint8 m_red;

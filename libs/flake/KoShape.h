@@ -26,7 +26,7 @@
 #include "KoInsets.h"
 #include "KoFlake.h"
 
-#include <QMatrix>
+#include <QTransform>
 #include <QVector>
 #include <QSet>
 #include <QMap>
@@ -625,7 +625,7 @@ public:
      * @param converter if not null, this method uses the converter to mark the right
      *        offsets in the current view.
      */
-    QMatrix absoluteTransformation(const KoViewConverter *converter) const;
+    QTransform absoluteTransformation(const KoViewConverter *converter) const;
 
     /**
      * Applies a transformation to this shape.
@@ -636,16 +636,16 @@ public:
      *
      * @param matrix the transformation matrix to apply
      */
-    void applyAbsoluteTransformation(const QMatrix &matrix);
+    void applyAbsoluteTransformation(const QTransform &matrix);
 
     /**
      * Sets a new transformation matrix describing the local transformations on this shape.
      * @param matrix the new transformation matrix
      */
-    void setTransformation(const QMatrix &matrix);
+    void setTransformation(const QTransform &matrix);
 
     /// Returns the shapes local transformation matrix
-    QMatrix transformation() const;
+    QTransform transformation() const;
 
     /**
      * Applies a transformation to this shape.
@@ -654,7 +654,7 @@ public:
      *
      * @param matrix the transformation matrix to apply
      */
-    void applyTransformation(const QMatrix &matrix);
+    void applyTransformation(const QTransform &matrix);
 
     /**
      * Copy all the settings from the parameter shape and apply them to this shape.
@@ -906,7 +906,7 @@ protected:
      * @param transform the transform attribute string
      * @return the resulting transformation matrix
      */
-    QMatrix parseOdfTransform(const QString &transform);
+    QTransform parseOdfTransform(const QString &transform);
 
     /**
      * @brief Saves the style used for the shape
@@ -945,7 +945,7 @@ protected:
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
 
     /// return the current matrix that contains the rotation/scale/position of this shape
-    QMatrix matrix() const;
+    QTransform transform() const;
 
     KoShapePrivate *d_ptr;
 

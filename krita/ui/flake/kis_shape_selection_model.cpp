@@ -51,7 +51,7 @@ void KisShapeSelectionModel::add(KoShape *child)
     m_shapeSelection->setDirty();
 
     QRect updateRect = child->boundingRect().toAlignedRect();
-    QMatrix matrix;
+    QTransform matrix;
     matrix.scale(m_image->xRes(), m_image->yRes());
     updateRect = matrix.mapRect(updateRect);
 
@@ -76,7 +76,7 @@ void KisShapeSelectionModel::remove(KoShape *child)
         m_shapeSelection->setDirty();
     }
 
-    QMatrix matrix;
+    QTransform matrix;
     matrix.scale(m_image->xRes(), m_image->yRes());
     updateRect = matrix.mapRect(updateRect);
     if (m_shapeSelection) { // No m_shapeSelection indicates the selection is being deleted
@@ -132,7 +132,7 @@ void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType t
     QRectF changedRect = m_shapeMap[child];
     changedRect = changedRect.unite(child->boundingRect());
 
-    QMatrix matrix;
+    QTransform matrix;
     matrix.scale(m_image->xRes(), m_image->yRes());
     changedRect = matrix.mapRect(changedRect);
 

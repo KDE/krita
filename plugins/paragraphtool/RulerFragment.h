@@ -20,7 +20,7 @@
 #ifndef RULERCONTROL_H
 #define RULERCONTROL_H
 
-#include <QMatrix>
+#include <QTransform>
 
 class Ruler;
 
@@ -79,7 +79,7 @@ protected:
 
 private:
     Ruler *m_ruler;
-    QMatrix m_matrix;
+    QTransform m_matrix;
     qreal m_width;
     bool m_visible;
 };

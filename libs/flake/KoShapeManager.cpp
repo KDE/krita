@@ -396,7 +396,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
             if (group) {
                 // the childrens matrix contains the groups matrix as well
                 // so we have to compensate for that before painting the children
-                imagePainter.setMatrix(group->absoluteTransformation(&converter).inverted(), true);
+                imagePainter.setTransform(group->absoluteTransformation(&converter).inverted(), true);
                 d->paintGroup(group, imagePainter, converter, forPrint);
             } else {
                 imagePainter.save();

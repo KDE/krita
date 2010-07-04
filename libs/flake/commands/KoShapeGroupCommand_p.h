@@ -20,7 +20,7 @@
 #ifndef KoShapeGroupCommandPrivate_H
 #define KoShapeGroupCommandPrivate_H
 
-#include <QMatrix>
+#include <QTransform>
 #include <QPair>
 
 class KoShapeGroupCommandPrivate

@@ -23,7 +23,7 @@
 #include "KoShapeBackground.h"
 #include "flake_export.h"
 
-#include <QtGui/QMatrix>
+#include <QtGui/QTransform>
 #include <QtGui/QGradient>
 
 class KoGradientBackgroundPrivate;
@@ -36,22 +36,22 @@ public:
      * Creates new gradient background from given gradient.
      * The background takes ownership of the given gradient.
      */
-    explicit KoGradientBackground(QGradient *gradient, const QMatrix &matrix = QMatrix());
+    explicit KoGradientBackground(QGradient *gradient, const QTransform &matrix = QTransform());
 
     /**
      * Create new gradient background from the given gradient.
      * A clone of the given gradient is used.
      */
-    explicit KoGradientBackground(const QGradient &gradient, const QMatrix &matrix = QMatrix());
+    explicit KoGradientBackground(const QGradient &gradient, const QTransform &matrix = QTransform());
 
     /// Destroys the background
     virtual ~KoGradientBackground();
 
     /// Sets the transform matrix
-    void setMatrix(const QMatrix &matrix);
+    void setTransform(const QTransform &matrix);
 
     /// Returns the transform matrix
-    QMatrix matrix() const;
+    QTransform transform() const;
 
     /**
      * Sets a new gradient.

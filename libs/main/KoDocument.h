@@ -23,7 +23,7 @@
 #define KODOCUMENT_H
 
 #include <QtCore/QDateTime>
-#include <QtGui/QMatrix>
+#include <QtGui/QTransform>
 #include <QList>
 
 #include <kparts/part.h>

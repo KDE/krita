@@ -50,7 +50,7 @@ public:
     QString shapeId;
     QString name; ///< the shapes names
 
-    QMatrix localMatrix; ///< the shapes local transformation matrix
+    QTransform localMatrix; ///< the shapes local transformation matrix
 
     QVector<QPointF> connectors; ///< glue points in percent of size [0..1]
 

@@ -24,7 +24,7 @@
 
 #include "koodf_export.h"
 
-#include <QtGui/QMatrix>
+#include <QtGui/QTransform>
 
 class QBrush;
 class QPen;
@@ -60,10 +60,10 @@ namespace KoOdfGraphicStyles
     KOODF_EXPORT QPen loadOdfStrokeStyle(const KoStyleStack &styleStack, const QString &stroke, const KoOdfStylesReader &stylesReader);
 
     /// Helper function to parse a transformation attribute
-    KOODF_EXPORT QMatrix loadTransformation(const QString &transformation);
+    KOODF_EXPORT QTransform loadTransformation(const QString &transformation);
 
     /// Helper function to create a transformation attribute
-    KOODF_EXPORT QString saveTransformation(const QMatrix &transformation, bool appendTranslateUnit = true);
+    KOODF_EXPORT QString saveTransformation(const QTransform &transformation, bool appendTranslateUnit = true);
 };
 
 #endif /* KOODFGRAPHICSTYLES_H */

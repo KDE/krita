@@ -47,7 +47,7 @@ void KoPathToolSelection::paint(QPainter &painter, const KoViewConverter &conver
     for (; it != m_shapePointMap.end(); ++it) {
         painter.save();
 
-        painter.setMatrix(it.key()->absoluteTransformation(&converter) * painter.matrix());
+        painter.setTransform(it.key()->absoluteTransformation(&converter) * painter.transform());
         KoShape::applyConversion(painter, converter);
 
         foreach(KoPathPoint *p, it.value())

@@ -107,7 +107,7 @@ void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const
     else if( layout() == ArtisticTextShape::OnPath )
     {
         KoPathShape * baseline = KoPathShape::createShapeFromPainterPath( m_baseline );
-        QMatrix offsetMatrix;
+        QTransform offsetMatrix;
         offsetMatrix.translate( 0.0, m_baselineOffset );
         drawData += "textPathData:" + baseline->toString( baseline->transformation() ) + ';';
         drawData += QString( "startOffset:%1%;").arg( m_startOffset * 100.0 );
@@ -204,7 +204,7 @@ bool ArtisticTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCon
     update();
 
     // reset transformation resulting from being put on path
-    setTransformation( QMatrix() );
+    setTransformation( QTransform() );
 
     // load odf attributes including transformation
     loadOdfAttributes( element, context, OdfAllAttributes & ~OdfSize );
@@ -226,7 +226,7 @@ void ArtisticTextShape::setSize( const QSizeF &newSize )
     if ( !oldSize.isNull() ) {
         qreal zoomX = newSize.width() / oldSize.width(); 
         qreal zoomY = newSize.height() / oldSize.height(); 
-        QMatrix matrix( zoomX, 0, 0, zoomY, 0, 0 );
+        QTransform matrix( zoomX, 0, 0, zoomY, 0, 0 );
 
         update();
         applyTransformation( matrix );
@@ -295,7 +295,7 @@ void ArtisticTextShape::createOutline()
                 break;
             qreal angle = m_baseline.angleAtPercent( t );
 
-            QMatrix m;
+            QTransform m;
             m.translate( pathPoint.x(), pathPoint.y() );
             m.rotate( 360. - angle );
             m_outline.addPath( m.map( m_charOutlines[charIdx] ) );
@@ -393,7 +393,7 @@ void ArtisticTextShape::setTextAnchor( TextAnchor anchor )
     updateSizeAndPosition();
     if( ! isOnPath() )
     {
-        QMatrix m;
+        QTransform m;
         m.translate( newOffset-oldOffset, 0.0 );
         setTransformation( transformation() * m );
     }
@@ -425,7 +425,7 @@ bool ArtisticTextShape::putOnPath( KoPathShape * path )
     m_baseline = m_path->absoluteTransformation(0).map( m_path->outline() );
 
     // reset transformation
-    setTransformation( QMatrix() );
+    setTransformation( QTransform() );
     updateSizeAndPosition();
     // move to correct position
     setAbsolutePosition( m_outlineOrigin, KoFlake::TopLeftCorner );
@@ -446,7 +446,7 @@ bool ArtisticTextShape::putOnPath( const QPainterPath &path )
     m_baseline = path;
 
     // reset transformation
-    setTransformation( QMatrix() );
+    setTransformation( QTransform() );
     updateSizeAndPosition();
     // move to correct position
     setAbsolutePosition( m_outlineOrigin, KoFlake::TopLeftCorner );
@@ -568,7 +568,7 @@ void ArtisticTextShape::updateSizeAndPosition( bool global )
     {
         // the outline position is in document coordinates
         // so we adjust our position
-        QMatrix m;
+        QTransform m;
         m.translate( -offset.x(), -offset.y() );
         global ? applyAbsoluteTransformation( m ) : applyTransformation( m );
     }
@@ -581,7 +581,7 @@ void ArtisticTextShape::updateSizeAndPosition( bool global )
     setSize( bbox.size() );
 
     // map outline to shape coordinate system
-    QMatrix normalizeMatrix;
+    QTransform normalizeMatrix;
     normalizeMatrix.translate( -m_outlineOrigin.x(), -m_outlineOrigin.y() );
     m_outline = normalizeMatrix.map( m_outline );
 }

@@ -131,7 +131,7 @@ private:
 
     QRectF m_viewBox;     ///< the viewbox rectangle
     QRectF m_viewBound;   ///< the bounding box of the path in viewbox coordinates
-    QMatrix m_viewMatrix; ///< matrix to convert from viewbox coordinates to shape coordinates
+    QTransform m_viewMatrix; ///< matrix to convert from viewbox coordinates to shape coordinates
     QPointF m_viewBoxOffset;
     QList<EnhancedPathCommand*> m_commands; ///< the commands creating the outline
     QList<EnhancedPathHandle*> m_enhancedHandles; ///< the handles for modifiying the shape

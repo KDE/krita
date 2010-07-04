@@ -147,7 +147,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
             KoPathShape* path = new KoPathShape();
             path->setShapeId(KoPathShapeId);
 
-            QMatrix resolutionMatrix;
+            QTransform resolutionMatrix;
             resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
             path->moveTo(resolutionMatrix.map(coord[0]));
             for (int i = 1; i < coord.count(); i++)

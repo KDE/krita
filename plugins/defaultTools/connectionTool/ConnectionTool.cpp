@@ -69,7 +69,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
         // save the painter to restore it later
         painter.save();
         // Apply the conversion make by the matrix transformation
-        QMatrix transform = m_shapeOn->absoluteTransformation(0);
+        QTransform transform = m_shapeOn->absoluteTransformation(0);
         KoShape::applyConversion(painter, converter);
         foreach(const QPointF &point, m_shapeOn->connectionPoints())
         { // Draw all the connection point of the shape
@@ -83,7 +83,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
         // save the painter to restore it later
         painter.save();
         // Apply the conversion make by the matrix transformation
-        QMatrix transform = m_lastShapeOn->absoluteTransformation(0);
+        QTransform transform = m_lastShapeOn->absoluteTransformation(0);
         KoShape::applyConversion(painter, converter);
         QPointF pointSelected = m_lastShapeOn->connectionPoints().value(getConnectionIndex(m_lastShapeOn, m_mouse));
         handleRect.moveCenter(transform.map(pointSelected));
@@ -101,7 +101,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
         painter.setBrush(Qt::white);
         int radius = canvas()->resourceManager()->handleRadius();
         // Apply the conversion make by the matrix transformation
-        painter.setMatrix(tempShape->absoluteTransformation(&converter) * painter.matrix());
+        painter.setTransform(tempShape->absoluteTransformation(&converter) * painter.transform());
         // ... handle unselected
         tempShape->paintHandles(painter, converter, radius);
 
@@ -117,7 +117,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
             painter.setPen(Qt::blue);
             painter.setBrush(Qt::red);
             // Apply the conversion make by the matrix transformation
-            painter.setMatrix(tempShape->absoluteTransformation(&converter) * painter.matrix());
+            painter.setTransform(tempShape->absoluteTransformation(&converter) * painter.transform());
             tempShape->paintHandle(painter, converter, handleId, radius);
 
             painter.restore();

@@ -49,7 +49,7 @@ void KisShapeSelectionTest::testAddChild()
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 100, 100));
 
     QRect rect(50, 50, 100, 100);
-    QMatrix matrix;
+    QTransform matrix;
     matrix.scale(1 / image->xRes(), 1 / image->yRes());
     rect = matrix.mapRect(rect);
 

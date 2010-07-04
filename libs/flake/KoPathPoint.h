@@ -26,7 +26,7 @@
 
 class KoPathShape;
 class QPointF;
-class QMatrix;
+class QTransform;
 class QRectF;
 class QPainter;
 class KoPointGroup;
@@ -203,7 +203,7 @@ public:
      * @param mapGroup true when the matrix should be also applied to
      *                 all points of the group the point belongs to
      */
-    void map(const QMatrix &matrix, bool mapGroup = false);
+    void map(const QTransform &matrix, bool mapGroup = false);
 
     /**
      * Paints the path point with the actual brush and pen

@@ -21,7 +21,7 @@
 #define ATTACHTEXTTOPATHCOMMAND_H
 
 #include <QtGui/QUndoCommand>
-#include <QtGui/QMatrix>
+#include <QtGui/QTransform>
 
 class ArtisticTextShape;
 class KoPathShape;
@@ -37,7 +37,7 @@ public:
 private:
     ArtisticTextShape * m_textShape;
     KoPathShape * m_pathShape;
-    QMatrix m_oldMatrix;
+    QTransform m_oldMatrix;
 };
 
 #endif // ATTACHTEXTTOPATHCOMMAND_H

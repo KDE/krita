@@ -230,8 +230,8 @@ QString KoOdfGraphicStyles::saveOdfGradientStyle(KoGenStyles &mainStyles, const 
     else
         gradientStyle.addAttribute("svg:spreadMethod", "pad");
 
-    if (! brush.matrix().isIdentity()) {
-        gradientStyle.addAttribute("svg:gradientTransform", saveTransformation(brush.matrix()));
+    if (! brush.transform().isIdentity()) {
+        gradientStyle.addAttribute("svg:gradientTransform", saveTransformation(brush.transform()));
     }
 
     QBuffer buffer;
@@ -287,7 +287,7 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader &s
         return QBrush();
 
     QGradient * gradient = 0;
-    QMatrix matrix;
+    QTransform transform;
 
     if (e->namespaceURI() == KoXmlNS::draw && e->localName() == "gradient") {
         // FIXME seems like oo renders the gradient start stop color at the center of the
@@ -386,7 +386,7 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader &s
             gradient->setSpread(QGradient::PadSpread);
 
         if (e->hasAttributeNS(KoXmlNS::svg, "gradientTransform"))
-            matrix = loadTransformation(e->attributeNS(KoXmlNS::svg, "gradientTransform", QString()));
+            transform = loadTransformation(e->attributeNS(KoXmlNS::svg, "gradientTransform", QString()));
 
         QGradientStops stops;
 
@@ -420,7 +420,7 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader &s
                 gradient->setSpread(QGradient::PadSpread);
 
             if (e->hasAttributeNS(KoXmlNS::svg, "gradientTransform"))
-                matrix = loadTransformation(e->attributeNS(KoXmlNS::svg, "gradientTransform", QString()));
+                transform = loadTransformation(e->attributeNS(KoXmlNS::svg, "gradientTransform", QString()));
 
             QGradientStops stops;
 
@@ -443,7 +443,7 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader &s
         return QBrush();
 
     QBrush resultBrush(*gradient);
-    resultBrush.setMatrix(matrix);
+    resultBrush.setTransform(transform);
 
     delete gradient;
     return resultBrush;
@@ -639,9 +639,9 @@ QPen KoOdfGraphicStyles::loadOdfStrokeStyle(const KoStyleStack &styleStack, cons
     return tmpPen;
 }
 
-QMatrix KoOdfGraphicStyles::loadTransformation(const QString &transformation)
+QTransform KoOdfGraphicStyles::loadTransformation(const QString &transformation)
 {
-    QMatrix matrix;
+    QTransform transform;
 
     // Split string for handling 1 transform statement at a time
     QStringList subtransforms = transformation.split(')', QString::SkipEmptyParts);
@@ -664,42 +664,45 @@ QMatrix KoOdfGraphicStyles::loadTransformation(const QString &transformation)
                 qreal x = KoUnit::parseValue(params[1]);
                 qreal y = KoUnit::parseValue(params[2]);
 
-                matrix.translate(x, y);
+                transform.translate(x, y);
                 // oo2 rotates by radians
-                matrix.rotate(params[0].toDouble()*180.0 / M_PI);
-                matrix.translate(-x, -y);
+                transform.rotate(params[0].toDouble()*180.0 / M_PI);
+                transform.translate(-x, -y);
             } else {
                 // oo2 rotates by radians
-                matrix.rotate(params[0].toDouble()*180.0 / M_PI);
+                transform.rotate(params[0].toDouble()*180.0 / M_PI);
             }
         } else if (subtransform[0] == "translate") {
             if (params.count() == 2) {
                 qreal x = KoUnit::parseValue(params[0]);
                 qreal y = KoUnit::parseValue(params[1]);
-                matrix.translate(x, y);
+                transform.translate(x, y);
             } else   // Spec : if only one param given, assume 2nd param to be 0
-                matrix.translate(KoUnit::parseValue(params[0]) , 0);
+                transform.translate(KoUnit::parseValue(params[0]) , 0);
         } else if (subtransform[0] == "scale") {
             if (params.count() == 2)
-                matrix.scale(params[0].toDouble(), params[1].toDouble());
+                transform.scale(params[0].toDouble(), params[1].toDouble());
             else    // Spec : if only one param given, assume uniform scaling
-                matrix.scale(params[0].toDouble(), params[0].toDouble());
+                transform.scale(params[0].toDouble(), params[0].toDouble());
         } else if (subtransform[0] == "skewx")
-            matrix.shear(tan(params[0].toDouble()), 0.0F);
+            transform.shear(tan(params[0].toDouble()), 0.0F);
         else if (subtransform[0] == "skewy")
-            matrix.shear(tan(params[0].toDouble()), 0.0F);
+            transform.shear(tan(params[0].toDouble()), 0.0F);
         else if (subtransform[0] == "skewy")
-            matrix.shear(0.0F, tan(params[0].toDouble()));
+            transform.shear(0.0F, tan(params[0].toDouble()));
         else if (subtransform[0] == "matrix") {
-            if (params.count() >= 6)
-                matrix.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(), KoUnit::parseValue(params[4]), KoUnit::parseValue(params[5]));
+            if (params.count() >= 6) {
+                transform.setMatrix(params[0].toDouble(), params[1].toDouble(), 0,
+                    params[2].toDouble(), params[3].toDouble(), 0,
+                    KoUnit::parseValue(params[4]), KoUnit::parseValue(params[5]), 1);
+            }
         }
     }
 
-    return matrix;
+    return transform;
 }
 
-QString KoOdfGraphicStyles::saveTransformation(const QMatrix &transformation, bool appendTranslateUnit)
+QString KoOdfGraphicStyles::saveTransformation(const QTransform &transformation, bool appendTranslateUnit)
 {
     QString transform;
     if (appendTranslateUnit)

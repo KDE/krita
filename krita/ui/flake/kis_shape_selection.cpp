@@ -297,7 +297,7 @@ QPainterPath KisShapeSelection::selectionOutline()
 
         QPainterPath outline;
         foreach(KoShape * shape, shapesList) {
-            QMatrix shapeMatrix = shape->absoluteTransformation(0);
+            QTransform shapeMatrix = shape->absoluteTransformation(0);
             outline = outline.united(shapeMatrix.map(shape->outline()));
         }
         m_outline = outline;
@@ -316,7 +316,7 @@ void KisShapeSelection::renderToProjection(KisSelection* projection)
 {
     Q_ASSERT(projection);
     Q_ASSERT(m_image);
-    QMatrix resolutionMatrix;
+    QTransform resolutionMatrix;
     resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
 
     QRectF boundingRect = resolutionMatrix.mapRect(selectionOutline().boundingRect());
@@ -334,7 +334,7 @@ void KisShapeSelection::renderSelection(KisSelection* projection, const QRect& r
     Q_ASSERT(projection);
     Q_ASSERT(m_image);
 
-    QMatrix resolutionMatrix;
+    QTransform resolutionMatrix;
     resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
 
     QTime t;

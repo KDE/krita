@@ -67,13 +67,13 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     painter.save();
 
     // save the original painter transformation
-    QMatrix painterMatrix = painter.worldMatrix();
+    QTransform painterMatrix = painter.worldTransform();
 
     painter.setPen( Qt::green );
     bool editable=false;
     foreach(KoShape *shape, m_selection->selectedShapes(KoFlake::StrippedSelection)) {
         // apply the shape transformation on top of the old painter transformation
-        painter.setWorldMatrix( shape->absoluteTransformation(&converter) * painterMatrix );
+        painter.setWorldTransform( shape->absoluteTransformation(&converter) * painterMatrix );
         // apply the zoom factor
         KoShape::applyConversion( painter, converter );
         // draw the shape bounding rect
@@ -88,7 +88,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         // more than one shape selected, so we need to draw the selection bounding rect
         painter.setPen( Qt::blue );
         // apply the selection transformation on top of the old painter transformation
-        painter.setWorldMatrix( m_selection->absoluteTransformation(&converter) * painterMatrix );
+        painter.setWorldTransform(m_selection->absoluteTransformation(&converter) * painterMatrix);
         // apply the zoom factor
         KoShape::applyConversion( painter, converter );
         // draw the selection bounding rect
@@ -99,13 +99,13 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     else if( m_selection->firstSelectedShape() )
     {   
         // only one shape selected, so we compose the correct painter matrix
-        painter.setWorldMatrix( m_selection->firstSelectedShape()->absoluteTransformation(&converter) * painterMatrix );
+        painter.setWorldTransform(m_selection->firstSelectedShape()->absoluteTransformation(&converter) * painterMatrix);
         KoShape::applyConversion( painter, converter );
         // save the only selected shapes bounding rect for later drawing the handles
         handleArea = QRectF( QPointF(), m_selection->firstSelectedShape()->size() );
     }
 
-    painterMatrix = painter.worldMatrix();
+    painterMatrix = painter.worldTransform();
 
     painter.restore();
 
@@ -115,7 +115,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
     painter.save();
 
-    painter.setMatrix( QMatrix() );
+    painter.setTransform(QTransform());
     painter.setRenderHint( QPainter::Antialiasing, false );
 
     painter.setPen(Qt::black);

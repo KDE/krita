@@ -88,8 +88,8 @@ public:
     virtual QPainterPath decoration(const KoViewConverter &converter) const;
 private:
     qreal project(const QPointF &lineStart , const QPointF &lineEnd, const QPointF &point);
-    QPointF extensionDirection(KoPathPoint * point, const QMatrix &matrix);
-    bool snapToExtension(QPointF &position, KoPathPoint * point, const QMatrix &matrix);
+    QPointF extensionDirection(KoPathPoint * point, const QTransform &matrix);
+    bool snapToExtension(QPointF &position, KoPathPoint * point, const QTransform &matrix);
     QList<QLineF> m_lines;
 };
 

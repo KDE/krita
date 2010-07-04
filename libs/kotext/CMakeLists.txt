@@ -112,6 +112,8 @@ install(
     KoTextEditingFactory.h
     KoTextEditingPlugin.h
     KoTextEditingRegistry.h
+    KoInlineObjectRegistry.h
+    KoInlineObjectFactoryBase.h
     KoBookmark.h
     KoBookmarkManager.h
     KoInlineTextObjectManager.h

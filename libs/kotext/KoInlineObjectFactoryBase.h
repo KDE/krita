@@ -22,8 +22,6 @@
 
 #include <QString>
 
-#include <KoID.h>
-
 #include "kotext_export.h"
 
 class KoInlineObject;

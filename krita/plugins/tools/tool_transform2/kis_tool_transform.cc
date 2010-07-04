@@ -300,7 +300,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
 	m_handleDir[8] = QPointF(0, 0); //also add the center
     m_origDevice = 0;
     m_origSelection = 0;
-	m_handleRadius = 8;
+	m_handleRadius = 12;
 	m_rotationCenterRadius = 12;
 	m_boxValueChanged = false;
 	m_maxRadius = (m_handleRadius > m_rotationCenterRadius) ? m_handleRadius : m_rotationCenterRadius;
@@ -1186,7 +1186,6 @@ void KisToolTransform::applyTransform()
 
 	//todo/undo commented for now
     // This mementoes the current state of the active device.
-	m_origImg->save(QString("test10.png"));
     ApplyTransformCmd transaction(this, currentNode(), m_currentArgs, m_origSelection, m_originalTopLeft, m_originalBottomRight, m_origImg, m_origSelectionImg);
 
 
@@ -1609,8 +1608,10 @@ void KisToolTransform::buttonBoxClicked(QAbstractButton *button)
 	QAbstractButton *resetButton = m_optWidget->buttonBox->button(QDialogButtonBox::Reset);
 
 	if (button == applyButton) {
+		QApplication::setOverrideCursor(KisCursor::waitCursor());
 		applyTransform();
 		initHandles();
+		QApplication::restoreOverrideCursor();
 
 		setButtonBoxDisabled(true);
 	} else if (button == resetButton) {

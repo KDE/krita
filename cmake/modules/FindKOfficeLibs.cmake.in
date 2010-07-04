@@ -5,7 +5,6 @@
 #  KOFFICELIBS_INCLUDE_DIR - the Koffice include directory
 # KOMAIN_LIBRARY
 # KOTEXT_LIBRARY
-# KOPLUGIN_LIBRARY
 # KOODF_LIBRARY
 # KOPAGEAPP_LIBRARY
 # KOKROSS_LIBRARY
@@ -16,6 +15,8 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
+
+find_package(KDE4 REQUIRED)
 
 if ( KOFFICELIBS_INCLUDE_DIR AND KOFFICELIBS_LIBRARIES )
    # in cache already
@@ -34,7 +35,45 @@ FIND_LIBRARY(FLAKE_LIBRARY NAMES flake)
 FIND_LIBRARY(PIGMENTCMS_LIBRARY NAMES pigmentcms)
 FIND_LIBRARY(KOWIDGETS_LIBRARY NAMES kowidgets)
 
+#following are the LIBS with dependencies fulfilled (naming scheme recycled from kde)
 
+SET (KOODF_LIBS
+    ${KDE4_KIO_LIBS}
+    ${KOPLUGIN_LIBRARY}
+    ${KOODF_LIBRARY}
+)
+
+SET (PIGMENTCMS_LIBS
+    ${PIGMENTCMS_LIBRARY}
+    ${KOPLUGIN_LIBRARY}
+    ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY}
+)
+
+SET (FLAKE_LIBS
+    ${FLAKE_LIBRARY}
+    ${PIGMENTCMS_LIBS}
+    ${KOODF_LIBS}
+)
+
+SET (KOTEXT_LIBS
+    ${KOTEXT_LIBRARY}
+    ${FLAKE_LIBS}
+)
+
+SET (KOWIDGETS_LIBS
+    ${KOTEXT_LIBS}
+    ${PIGMENTCMS_LIBS}
+    ${KDE4_KDEUI_LIBS}
+)
+
+SET (KOMAIN_LIBS
+    ${KOMAIN_LIBRARY}
+    ${KOTEXT_LIBS}
+    ${KOWIDGETS_LIBS}
+    ${KDE4_KPARTS_LIBS}
+)
+
+# legacy;
 SET( KOFFICECORE_LIBRARIES
     ${KOODF_LIBRARY}
     ${FLAKE_LIBRARY}
@@ -43,7 +82,7 @@ SET( KOFFICECORE_LIBRARIES
     ${KOPLUGIN_LIBRARY}
     ${KOMAIN_LIBRARY}
 )
-
+# legacy;
 SET( KOFFICELIBS_LIBRARIES
     ${KOKROSS_LIBRARY}
     ${PIGMENTCMS_LIBRARY}

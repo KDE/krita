@@ -130,7 +130,7 @@ public:
     QMap<QString, int> changeTransTable;
     QMap<QString, KoXmlElement> deleteChangeTable;
 
-    explicit Private(KoShapeLoadingContext &context, KoShape *shape)
+    explicit Private(KoShapeLoadingContext &context, KoShape *s)
             : context(context),
             textSharedData(0),
             // stylesDotXml says from where the office:automatic-styles are to be picked from:
@@ -147,7 +147,7 @@ public:
             styleManager(0),
             changeTracker(0),
             rdfData(0),
-            shape(shape),
+            shape(s),
             loadSpanLevel(0),
             loadSpanInitialPos(0)
     {

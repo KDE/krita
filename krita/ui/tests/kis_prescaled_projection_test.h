@@ -51,6 +51,8 @@ private slots:
     void testScalingUndeferredSmoothingPixelForPixel();
 
     void testScalingUndeferredSmoothing();
+
+    void benchmarkUpdate();
 };
 
 #endif

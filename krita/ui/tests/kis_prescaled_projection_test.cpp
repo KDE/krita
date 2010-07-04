@@ -30,12 +30,12 @@
 #include <KoCompositeOp.h>
 #include <KoColorSpaceConstants.h>
 
-#include <kis_paint_device.h>
+#include <kis_config.h>
 #include <kis_types.h>
 #include <kis_image.h>
+#include <kis_paint_device.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
-
 
 #include "canvas/kis_prescaled_projection.h"
 
@@ -237,6 +237,62 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
     projection.setImage(image);
 
     testProjectionScenario(projection, viewConverter, "120dpi");
+
+}
+
+//#include <valgrind/callgrind.h>
+
+void KisPrescaledProjectionTest::benchmarkUpdate()
+{
+    QImage referenceImage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+    QRect imageRect = QRect(QPoint(0,0), referenceImage.size());
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageWSP image = new KisImage(0, imageRect.width(), imageRect.height(), cs, "projection test");
+
+    // set up 300dpi
+    image->setResolution(300 / 72 , 300 / 72);
+
+    KisPaintLayerSP layer = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, cs);
+    layer->paintDevice()->convertFromQImage(referenceImage, "");
+
+    image->addNode(layer, image->rootLayer(), 0);
+
+    KisConfig config;
+    config.setUseMipmapping(true);
+
+
+    KoZoomHandler * viewConverter = new KoZoomHandler();
+    KisPrescaledProjection projection;
+    projection.setViewConverter(viewConverter);
+    projection.setImage(image);
+
+    // Emulate "Use same aspect as pixels"
+    viewConverter->setResolution(image->xRes(), image->yRes());
+
+    viewConverter->setZoom(1.0);
+
+    KisUpdateInfoSP info = projection.updateCache(image->bounds());
+    projection.recalculateCache(info);
+
+    QCOMPARE(imageRect, QRect(0,0,512,512));
+
+    QRect dirtyRect(0,0,20,20);
+    const qint32 numShifts = 25;
+    const QPoint offset(dirtyRect.width(),dirtyRect.height());
+
+    //CALLGRIND_START_INSTRUMENTATION;
+
+    QBENCHMARK {
+        for(qint32 i = 0; i < numShifts; i++) {
+            KisUpdateInfoSP tempInfo = projection.updateCache(dirtyRect);
+            projection.recalculateCache(tempInfo);
+
+            dirtyRect.translate(offset);
+        }
+    }
+
+    //CALLGRIND_STOP_INSTRUMENTATION;
 
 }
 

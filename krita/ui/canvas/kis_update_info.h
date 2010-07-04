@@ -31,7 +31,7 @@ typedef KisSharedPtr<KisUpdateInfo> KisUpdateInfoSP;
 typedef KisSharedPtr<KisPPUpdateInfo> KisPPUpdateInfoSP;
 
 
-class KisUpdateInfo : public KisShared
+class KRITAUI_EXPORT KisUpdateInfo : public KisShared
 {
 public:
     KisUpdateInfo();

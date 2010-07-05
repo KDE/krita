@@ -31,12 +31,15 @@ namespace Libemf
 //                         Class OutputPainterStrategy
 
 
-OutputPainterStrategy::OutputPainterStrategy() :
-    m_header( 0 ),
-    m_path( 0 ),
-    m_currentlyBuildingPath( false ),
-    m_image( 0 ),
-    m_currentCoords()
+OutputPainterStrategy::OutputPainterStrategy()
+    : m_header( 0 )
+    , m_path( 0 )
+    , m_currentlyBuildingPath( false )
+    , m_image( 0 )
+      // FIXME: Initialize all vars here!
+    , m_mapMode(MM_TEXT)
+    , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
+    , m_currentCoords()
 {
     m_painter         = 0;
     m_painterSaves    = 0;
@@ -50,6 +53,9 @@ OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size,
     , m_path( 0 )
     , m_currentlyBuildingPath( false )
     , m_image( 0 )
+      // FIXME: Initialize all vars here!
+    , m_mapMode(MM_TEXT)
+    , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
     , m_currentCoords()
 {
     m_painter         = &painter;
@@ -783,6 +789,7 @@ void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QSt
     // The TA_UPDATECP flag tells us to use the current position
     if (m_textAlignMode & TA_UPDATECP) {
         // (left, top) position = current logical position
+        kDebug(31000) << "TA_UPDATECP";
         x = m_currentCoords.x();
         y = m_currentCoords.y();
     }
@@ -802,20 +809,18 @@ void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QSt
         y -= fm.ascent();  // (height - fm.descent()) is used in qwmf.  This should be the same.
     else if ((m_textAlignMode & TA_BOTTOM) == TA_BOTTOM) {
         y -= height;
+    }
 
 #if DEBUG_EMFPAINT
-        kDebug(31000) << "font = " << m_painter->font() << " pointSize = " << m_painter->font().pointSize()
-                      << "ascent = " << fm.ascent() << " height = " << fm.height()
-                      << "leading = " << fm.leading();
+    kDebug(31000) << "font = " << m_painter->font() << " pointSize = " << m_painter->font().pointSize()
+                  << "ascent = " << fm.ascent() << " height = " << fm.height()
+                  << "leading = " << fm.leading();
 #endif
-    }
 
     // Use the special pen defined by mTextPen for text.
     QPen  savePen = m_painter->pen();
     m_painter->setPen(m_textPen);
-
     m_painter->drawText(x, y, width, height, Qt::AlignLeft|Qt::AlignTop, text);
-
     m_painter->setPen(savePen);
 }
 

@@ -38,6 +38,10 @@ OutputPainterStrategy::OutputPainterStrategy() :
     m_image( 0 ),
     m_currentCoords()
 {
+    m_painter         = 0;
+    m_painterSaves    = 0;
+    m_outputSize      = QSize();
+    m_keepAspectRatio = true;
 }
 
 OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size,
@@ -57,7 +61,7 @@ OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size,
 OutputPainterStrategy::~OutputPainterStrategy()
 {
     delete m_header;
-    //delete m_painter;
+    //delete m_painter;    // Don't delete the painter because we don't own it.
     delete m_path;
     delete m_image;
 }
@@ -83,9 +87,10 @@ void OutputPainterStrategy::init( const Header *header )
     // To be precise, it seems that the StretchDiBits record uses the
     // physical size (stored in header.frame()) to specify where to
     // draw the picture rather than logical coordinates.
+    // (This has since been doubted, and is currently disabled.)
     m_header = new Header(*header);
 
-    QSize  outputSize = header->bounds().size();
+    QSize  headerBoundsSize = header->bounds().size();
 
 #if DEBUG_EMFPAINT
     kDebug(31000) << "----------------------------------------------------------------------";
@@ -105,8 +110,8 @@ void OutputPainterStrategy::init( const Header *header )
 
     // Calculate how much the painter should be resized to fill the
     // outputSize with output.
-    qreal  scaleX = qreal( m_outputSize.width() )  / outputSize.width();
-    qreal  scaleY = qreal( m_outputSize.height() ) / outputSize.height();
+    qreal  scaleX = qreal( m_outputSize.width() )  / headerBoundsSize.width();
+    qreal  scaleY = qreal( m_outputSize.height() ) / headerBoundsSize.height();
     if ( m_keepAspectRatio ) {
         // Use the smaller value so that we don't get an overflow in
         // any direction.
@@ -119,15 +124,16 @@ void OutputPainterStrategy::init( const Header *header )
     kDebug(31000) << "scale = " << scaleX << ", " << scaleY;
 #endif
 
-    // Transform the EMF object so that it fits in the shape.
+    // Transform the EMF object so that it fits in the shape.  The
+    // topleft of the EMF will be the top left of the shape.
     m_painter->scale( scaleX, scaleY );
     m_painter->translate(-header->bounds().left(), -header->bounds().top());
 
-    // Calculate translation if we should center the Emf in the
+    // Calculate translation if we should center the EMF in the
     // area and keep the aspect ratio.
     if ( m_keepAspectRatio ) {
-        m_painter->translate((m_outputSize.width() / scaleX - outputSize.width()) / 2,
-                             (m_outputSize.height() / scaleY - outputSize.height()) / 2);
+        m_painter->translate((m_outputSize.width() / scaleX - headerBoundsSize.width()) / 2,
+                             (m_outputSize.height() / scaleY - headerBoundsSize.height()) / 2);
     }
 
 #if DEBUG_EMFPAINT
@@ -138,6 +144,11 @@ void OutputPainterStrategy::init( const Header *header )
 void OutputPainterStrategy::cleanup( const Header *header )
 {
     Q_UNUSED( header );
+
+#if DEBUG_EMFPAINT
+    if (m_painterSaves > 0)
+        kDebug(33100) << "WARNING: UNRESTORED DC's:" << m_painterSaves;
+#endif
 
     // Restore all the save()s that were done during the processing.
     for (int i = 0; i < m_painterSaves; ++i)
@@ -224,13 +235,15 @@ void OutputPainterStrategy::restoreDC( const qint32 savedDC )
     kDebug(31000) << savedDC;
 #endif
 
-    for (int i = 0; i < savedDC; ++i) {
+    // Note that savedDC is always negative
+    for (int i = 0; i < -savedDC; ++i) {
         if (m_painterSaves > 0) {
             m_painter->restore();
             --m_painterSaves;
         }
         else {
-            kDebug(33100) << "restoreDC(): try to restore painter without save";
+            kDebug(33100) << "restoreDC(): try to restore painter without save" << savedDC - i;
+            break;
         }
     }
 }
@@ -730,7 +743,8 @@ void OutputPainterStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )
 
     m_painter->setPen( m_textPen );
 
-    QPoint position = extTextOutA.referencePoint();
+    // Set position to the reference point. It's assumed that this is the baseline.
+    QPoint       position = extTextOutA.referencePoint();
     QFontMetrics fontMetrics = m_painter->fontMetrics();
     switch ( m_textAlignMode & TA_VERTMASK ) {
         case TA_TOP:
@@ -748,10 +762,11 @@ void OutputPainterStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )
     // TODO: Handle the rest of the test alignment mode flags
 
     m_painter->drawText( position, extTextOutA.textString() );
-
+#if DEBUG_EMFPAINT
     kDebug(33100) << "extTextOutA: ref.point = "
                   << extTextOutA.referencePoint().x() << extTextOutA.referencePoint().y()
                   << ", Text = " << extTextOutA.textString().toLatin1().data();
+#endif
 
     m_painter->restore();
 }
@@ -1118,8 +1133,10 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
         qreal scaleY = qreal(m_header->frame().height()) / qreal(m_header->bounds().height());
         kDebug(31000) << "Scale = " << scaleX << scaleY;
 #endif
+
         QRectF realTarget(QPoint(target.x(), target.y()),
                           QSize(target.width(), target.height()));
+
 #if DEBUG_EMFPAINT
         kDebug(31000) << "    realTarget" << realTarget;
 #endif

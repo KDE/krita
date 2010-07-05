@@ -46,6 +46,13 @@ struct KisMask::Private {
 
             return device;
         }
+
+        ~PerThreadPaintDevice() {
+            // In case current thread used the storage too...
+            if(m_storage.hasLocalData()) {
+                m_storage.setLocalData(0);
+            }
+        }
     private:
         QThreadStorage<KisPaintDeviceSP *> m_storage;
     };

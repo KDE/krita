@@ -1118,6 +1118,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
             if (!paintStrategy->isVisible())
                 continue; // this paragraph shouldn't be shown so just skip it
 
+            painter->save();
             QBrush bg = paintStrategy->background(block.blockFormat().background());
             if (bg != Qt::NoBrush)
                 painter->fillRect(layout->boundingRect(), bg);
@@ -1156,10 +1157,9 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
             decorateParagraph(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
 
             if (lastBorder && lastBorder != border) {
-                painter->save();
                 lastBorder->paint(*painter);
-                painter->restore();
             }
+            painter->restore();
             lastBorder = border;
         } else if (started && inTable==0) {
             // when out of the cliprect and no longer in a table, then we are done drawing.

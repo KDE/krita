@@ -42,6 +42,12 @@ void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* conv
         qDebug() << i.key() << ":" << i.value();
     /----------DO NOT REMOVE----------------*/
     
+    convenienttwin->enabledcurvecrosshatching = getBool("PressureCrosshatching");
+    convenienttwin->enabledcurveopacity = getBool("PressureOpacity");
+    convenienttwin->enabledcurveseparation = getBool("PressureSeparation");
+    convenienttwin->enabledcurvesize = getBool("PressureSize");
+    convenienttwin->enabledcurvethickness = getBool("PressureThickness");
+    
     convenienttwin->angle = getDouble("Hatching/angle");
     convenienttwin->separation = getDouble("Hatching/separation");
     convenienttwin->thickness = getDouble("Hatching/thickness");
@@ -54,8 +60,10 @@ void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* conv
     convenienttwin->plusthenminus = getBool("Hatching/bool_plusthenminus");
     convenienttwin->moirepattern = getBool("Hatching/bool_moirepattern");
     
-    convenienttwin->trigonometryalgebra = getBool("Hatching/bool_trigonometryalgebra");
-    convenienttwin->scratchoff = getBool("Hatching/bool_scratchoff");
+    convenienttwin->separationintervals = getInt("Hatching/separationintervals");
+    
+    //convenienttwin->trigonometryalgebra = getBool("Hatching/bool_trigonometryalgebra");
+    //convenienttwin->scratchoff = getBool("Hatching/bool_scratchoff");
     convenienttwin->antialias = getBool("Hatching/bool_antialias");
     convenienttwin->opaquebackground = getBool("Hatching/bool_opaquebackground");
     convenienttwin->subpixelprecision = getBool("Hatching/bool_subpixelprecision");

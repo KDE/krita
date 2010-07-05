@@ -90,13 +90,10 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
     //Write them into the intermediary config file
     reconfigurationCourier->setProperty("brush_definition", xMLAnalyzer.toString() );
     
-    
-    
-    
     KisCubicCurve CurveSize;
     
     CurveSize.fromString("0,1;1,0.1;");
-    qDebug() << "\n\n\n" << CurveSize.toString() << "\n\n\n";
+    //qDebug() << "\n\n\n" << CurveSize.toString() << "\n\n\n";
     
     QVariant QVCurveSize = QVariant::fromValue(CurveSize);
     
@@ -104,12 +101,13 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
     
     setConfiguration(reconfigurationCourier);  // Finished.
     
+    /* Debugging block
     QMap<QString, QVariant> rofl = QMap<QString, QVariant>(reconfigurationCourier->getProperties());
     
     QMap<QString, QVariant>::const_iterator i;
     for (i = rofl.constBegin(); i != rofl.constEnd(); ++i)
         qDebug() << i.key() << ":" << i.value();
-    
+    */
     
     delete reconfigurationCourier;
 }

@@ -36,8 +36,8 @@ public:
         angleKisDoubleSliderSpinBox     -> setRange(-90.0, 90.0, 1);
         separationKisDoubleSliderSpinBox-> setRange(1.0, 30.0, 1);
         thicknessKisDoubleSliderSpinBox -> setRange(1.0, 30.0, 1);
-        originXKisDoubleSliderSpinBox   -> setRange(-3000, 3000, 0);
-        originYKisDoubleSliderSpinBox   -> setRange(-3000, 3000, 0);
+        originXKisDoubleSliderSpinBox   -> setRange(-300, 300, 0);
+        originYKisDoubleSliderSpinBox   -> setRange(-300, 300, 0);
         
         angleKisDoubleSliderSpinBox     -> setValue(-60);
         separationKisDoubleSliderSpinBox-> setValue(6);
@@ -71,6 +71,8 @@ KisHatchingOptions::KisHatchingOptions()
     connect(m_options->plusThenMinusRadioButton, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->moirePatternRadioButton, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
     
+    connect(m_options->separationIntervalSpinBox, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
+    
     setConfigurationPage(m_options);
 }
 
@@ -92,6 +94,7 @@ void KisHatchingOptions::writeOptionSetting(KisPropertiesConfiguration* setting)
     setting->setProperty("Hatching/bool_plusthenminus", m_options->plusThenMinusRadioButton->isChecked() );
     setting->setProperty("Hatching/bool_moirepattern", m_options->moirePatternRadioButton->isChecked() );
     
+    setting->setProperty("Hatching/separationintervals", m_options->separationIntervalSpinBox->value() );
 }
 
 void KisHatchingOptions::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -108,4 +111,6 @@ void KisHatchingOptions::readOptionSetting(const KisPropertiesConfiguration* set
     m_options->plusThenMinusRadioButton->setChecked( setting->getBool("Hatching/bool_plusthenminus") );
     m_options->moirePatternRadioButton->setChecked( setting->getBool("Hatching/bool_moirepattern") );
     
+    m_options->separationIntervalSpinBox->setValue( setting->getInt("Hatching/separationintervals") );
 }
+;

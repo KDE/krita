@@ -124,11 +124,12 @@ private:
     void iterateVerticalLines(bool forward, int lineindex, bool oneline);
     
     /** Simple function that returns a new distance equal to a multiple or
-    *   divisor of separation depending on the magnitude of 'parameter'.
+    *   divisor of separation depending on the magnitude of 'parameter' and
+    *   the number of intervals of its magnitude.
     *   The multiples and divisors used are all powers of 2 to prevent
     *   desynchronization of the lines during drawing.
     */  
-    double separationAsFunctionOfParameter(double parameter, double separation);
+    double separationAsFunctionOfParameter(double parameter, double separation, int numintervals);
 };
 
 #endif

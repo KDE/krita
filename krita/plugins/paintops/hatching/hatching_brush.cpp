@@ -39,6 +39,18 @@ HatchingBrush::HatchingBrush(const KisHatchingPaintOpSettings* settings)
 {
     m_settings = new KisHatchingPaintOpSettings();
     m_settings = settings;
+    
+    // Initializing
+    separation = m_settings->separation;
+    origin_x = m_settings->origin_x;
+    origin_y = m_settings->origin_y;
+    cursorLineIntercept = 0;
+    baseLineIntercept = 0;
+    scanIntercept = 0;
+    hotIntercept = 0;
+    slope = 0;
+    dx = 0;
+    dy = 0;
 }
 
 
@@ -59,13 +71,11 @@ void HatchingBrush::hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, 
     m_painter.setBackgroundColor(color);
     
     angle = givenangle;
-    thickness = m_settings->thickness * m_settings->thicknessSensorValue;
-    separation = separationAsFunctionOfParameter(m_settings->separationSensorValue, m_settings->separation);
+    thickness = m_settings->thickness * m_settings->thicknesssensorvalue;
+    if (m_settings->enabledcurveseparation)
+        separation = separationAsFunctionOfParameter(m_settings->separationsensorvalue, m_settings->separation, m_settings->separationintervals);
     height_ = height;
     width_ = width;
-    origin_x = m_settings->origin_x;
-    origin_y = m_settings->origin_y;
-    dx = dy = scanIntercept = baseLineIntercept = slope = hotIntercept = cursorLineIntercept = 0;    // Initializing
     
     m_painter.setMaskImageSize(width_, height_);
     QRect limits(QPoint(0,0), QPoint(width_, height_));
@@ -259,21 +269,36 @@ void HatchingBrush::iterateVerticalLines(bool forward, int lineindex, bool oneli
     }
 }
 
-double HatchingBrush::separationAsFunctionOfParameter(double parameter, double separation)
+double HatchingBrush::separationAsFunctionOfParameter(double parameter, double separation, int numintervals)
 {
-    if ((parameter >= 0) && (parameter < 0.2))
-        return (separation * 4); 
-    else if ((parameter >= 0.2) && (parameter < 0.4))
-        return (separation * 2);
-    else if ((parameter >= 0.4) && (parameter < 0.6))
-        return (separation);
-    else if ((parameter >= 0.6) && (parameter < 0.8))
-        return (separation / 2);
-    else if ((parameter >= 0.8) && (parameter <= 1.0))
-        return (separation / 4);
-    else {
-        qDebug() << "Fix your function \n";
+    if ((numintervals < 2) || (numintervals > 7)) {
+        qDebug() << "Fix your function" << numintervals << "<> 2-7" ;
         return separation;
     }
+    
+    double sizeinterval = 1 / double(numintervals);
+    double lowerlimit = 0;
+    double upperlimit = 0;
+    double factor = 0;
+    
+    int basefactor = numintervals / 2;
+    // Make the base separation factor tend to greater than to lesser numbers when numintervals is even
+    if ((numintervals % 2) == 0)
+        basefactor--;
+    
+    for (quint8 currentinterval = 0; currentinterval < numintervals; currentinterval++) {
+        lowerlimit = upperlimit;
+        upperlimit += sizeinterval;
+        if (currentinterval == (numintervals - 1))
+            upperlimit = 1;
+        if ((parameter >= lowerlimit) && (parameter <= upperlimit)) {
+            factor = pow(2, (basefactor - currentinterval));
+            //qDebug() << factor;
+            return (separation * factor);
+        }
+    }
+    
+    qDebug() << "Fix your function" << parameter << ">" << upperlimit ;
+    return separation;
 }
 ;

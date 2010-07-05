@@ -833,29 +833,27 @@ void KoCharacterStyle::loadOdf(KoOdfLoadingContext &context)
 void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
     // The fo:color attribute specifies the foreground color of text.
-    if (styleStack.hasProperty(KoXmlNS::fo, "color")) {     // 3.10.3
-        QColor color(styleStack.property(KoXmlNS::fo, "color"));   // #rrggbb format
-        if (color.isValid())
-            setForeground(QBrush(color));
+    const QString color(styleStack.property(KoXmlNS::fo, "color"));
+    if (!color.isEmpty()) {
+        QColor c(color);
+        if (c.isValid()) {     // 3.10.3
+            setForeground(QBrush(c));
+        }
         // if (styleStack.property(KoXmlNS::style, "use-window-font-color") == "true")
             // we should store this property to allow the layout to ignore the above set color in some situations.
     }
 
-    QString fontName;
-    if (styleStack.hasProperty(KoXmlNS::fo, "font-family")) {
-        fontName = styleStack.property(KoXmlNS::fo, "font-family");
-
+    QString fontName(styleStack.property(KoXmlNS::fo, "font-family"));
+    if (!fontName.isEmpty()) {
         // Specify whether a font has a fixed or variable width.
         // These attributes are ignored if there is no corresponding fo:font-family attribute attached to the same formatting properties element.
-        if (styleStack.hasProperty(KoXmlNS::style, "font-pitch")) {
-            if (styleStack.property(KoXmlNS::style, "font-pitch") == "fixed")
-                setFontFixedPitch(true);
-            else if (styleStack.property(KoXmlNS::style, "font-pitch") == "variable")
-                setFontFixedPitch(false);
+        const QString fontPitch(styleStack.property(KoXmlNS::style, "font-pitch"));
+        if (!fontPitch.isEmpty()) {
+            setFontFixedPitch(fontPitch == "fixed");
         }
 
-        if (styleStack.hasProperty(KoXmlNS::style, "font-family-generic")) {
-            QString genericFamily = styleStack.property(KoXmlNS::style, "font-family-generic");
+        const QString genericFamily(styleStack.property(KoXmlNS::style, "font-family-generic"));
+        if (!genericFamily.isEmpty()) {
             if (genericFamily == "roman")
                 setFontStyleHint(QFont::Serif);
             else if (genericFamily == "swiss")
@@ -871,16 +869,19 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
             }
         }
 
-        if (styleStack.hasProperty(KoXmlNS::style, "font-charset")) {
+        const QString fontCharset(styleStack.property(KoXmlNS::style, "font-charset"));
+        if (!fontCharset.isEmpty()) {
             // this property is not required by Qt, since Qt auto selects the right font based on the text
             // The only charset of interest to us is x-symbol - this should disable spell checking
-            d->setProperty(KoCharacterStyle::FontCharset, styleStack.property(KoXmlNS::style, "font-charset"));
+            d->setProperty(KoCharacterStyle::FontCharset, fontCharset);
         }
     }
-    if (styleStack.hasProperty(KoXmlNS::style, "font-family"))
-        fontName = styleStack.property(KoXmlNS::style, "font-family");
 
-    if (! fontName.isEmpty()) {
+    const QString fontFamily(styleStack.property(KoXmlNS::style, "font-family"));
+    if (!fontFamily.isEmpty())
+        fontName = fontFamily;
+
+    if (!fontName.isEmpty()) {
         // Hmm, the remove "'" could break it's in the middle of the fontname...
         fontName = fontName.remove('\'');
 
@@ -896,18 +897,24 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     // Specify the size of a font. The value of these attribute is either an absolute length or a percentage
     if (styleStack.hasProperty(KoXmlNS::fo, "font-size")) {
         qreal pointSize = styleStack.fontSize();
-        if (pointSize > 0)
+        if (pointSize > 0) {
             setFontPointSize(pointSize);
-    } else if (styleStack.hasProperty(KoXmlNS::style, "font-size-rel")) {
+        }
+    }
+    else {
+        const QString fontSizeRel(styleStack.property(KoXmlNS::style, "font-size-rel"));
+        if (!fontSizeRel.isEmpty()) {
         // These attributes specify a relative font size change as a length such as +1pt, -3pt. It changes the font size based on the font size of the parent style.
-        qreal pointSize = styleStack.fontSize() + KoUnit::parseValue(styleStack.property(KoXmlNS::style, "font-size-rel"));
-        if (pointSize > 0)
-            setFontPointSize(pointSize);
+            qreal pointSize = styleStack.fontSize() + KoUnit::parseValue(fontSizeRel);
+            if (pointSize > 0) {
+                setFontPointSize(pointSize);
+            }
+        }
     }
 
     // Specify the weight of a font. The permitted values are normal, bold, and numeric values 100-900, in steps of 100. Unsupported numerical values are rounded off to the next supported value.
-    if (styleStack.hasProperty(KoXmlNS::fo, "font-weight")) {     // 3.10.24
-        QString fontWeight = styleStack.property(KoXmlNS::fo, "font-weight");
+    const QString fontWeight(styleStack.property(KoXmlNS::fo, "font-weight"));
+    if (!fontWeight.isEmpty()) {     // 3.10.24
         int boldness;
         if (fontWeight == "normal")
             boldness = 50;
@@ -921,9 +928,9 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     }
 
     // Specify whether to use normal or italic font face.
-    if (styleStack.hasProperty(KoXmlNS::fo, "font-style")) {     // 3.10.19
-        if (styleStack.property(KoXmlNS::fo, "font-style") == "italic" ||
-                styleStack.property(KoXmlNS::fo, "font-style") == "oblique") {    // no difference in kotext
+    const QString fontStyle(styleStack.property(KoXmlNS::fo, "font-style" ));
+    if (!fontStyle.isEmpty()) {     // 3.10.19
+        if (fontStyle == "italic" || fontStyle == "oblique") {    // no difference in kotext
             setFontItalic(true);
         }
     }
@@ -951,24 +958,25 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     */
 #endif
 
-    if (styleStack.hasProperty(KoXmlNS::style, "text-underline-mode")) {
-        if (styleStack.property(KoXmlNS::style, "text-underline-mode") == "skip-white-space") {
+    const QString textUndelineMode(styleStack.property( KoXmlNS::style, "text-underline-mode"));
+    if (!textUndelineMode.isEmpty()) {
+        if (textUndelineMode == "skip-white-space") {
             setUnderlineMode(SkipWhiteSpaceLineMode);
-        } else if (styleStack.property(KoXmlNS::style, "text-underline-mode") == "continuous") {
+        } else if (textUndelineMode == "continuous") {
             setUnderlineMode(ContinuousLineMode);
         }
     }
 
     // Specifies whether text is underlined, and if so, whether a single or qreal line will be used for underlining.
-    if (styleStack.hasProperty(KoXmlNS::style, "text-underline-type")
-            || styleStack.hasProperty(KoXmlNS::style, "text-underline-style")) {    // OASIS 14.4.28
+    const QString textUnderlineType(styleStack.property(KoXmlNS::style, "text-underline-type"));
+    const QString textUnderlineStyle(styleStack.property(KoXmlNS::style, "text-underline-style"));
+    if (!textUnderlineType.isEmpty() || !textUnderlineStyle.isEmpty()) {    // OASIS 14.4.28
         LineStyle underlineStyle;
         LineType underlineType;
         qreal underlineWidth;
         LineWeight underlineWeight;
 
-        importOdfLine(styleStack.property(KoXmlNS::style, "text-underline-type"),
-                      styleStack.property(KoXmlNS::style, "text-underline-style"),
+        importOdfLine(textUnderlineType, textUnderlineStyle,
                       styleStack.property(KoXmlNS::style, "text-underline-width"),
                       underlineStyle, underlineType, underlineWeight, underlineWidth);
         setUnderlineStyle(underlineStyle);
@@ -982,33 +990,37 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
         setUnderlineColor(QColor(underLineColor));
 
 
-    if ((styleStack.hasProperty(KoXmlNS::style, "text-line-through-type")) || (styleStack.hasProperty(KoXmlNS::style, "text-line-through-style"))) {         // OASIS 14.4.7
+    const QString textLineThroughType(styleStack.property(KoXmlNS::style, "text-line-through-type"));
+    const QString textLineThroughStyle(styleStack.property(KoXmlNS::style, "text-line-through-style"));
+    if (!textLineThroughType.isEmpty() || !textLineThroughStyle.isEmpty()) { // OASIS 14.4.7
         KoCharacterStyle::LineStyle throughStyle;
         LineType throughType;
         qreal throughWidth;
         LineWeight throughWeight;
 
-        importOdfLine(styleStack.property(KoXmlNS::style, "text-line-through-type"),
-                      styleStack.property(KoXmlNS::style, "text-line-through-style"),
+        importOdfLine(textLineThroughType,textLineThroughStyle,
                       styleStack.property(KoXmlNS::style, "text-line-through-width"),
                       throughStyle, throughType, throughWeight, throughWidth);
 
         setStrikeOutStyle(throughStyle);
         setStrikeOutType(throughType);
         setStrikeOutWidth(throughWeight, throughWidth);
-        if (styleStack.hasProperty(KoXmlNS::style, "text-line-through-text")) {
-            setStrikeOutText(styleStack.property(KoXmlNS::style, "text-line-through-text"));
+        const QString textLineThroughText(styleStack.property(KoXmlNS::style, "text-line-through-text"));
+        if (!textLineThroughText.isEmpty()) {
+            setStrikeOutText(textLineThroughText);
         }
     }
 
-    QString lineThroughColor = styleStack.property(KoXmlNS::style, "text-line-through-color");   // OO 3.10.23, OASIS 14.4.31
-    if (!lineThroughColor.isEmpty() && lineThroughColor != "font-color")
+    const QString lineThroughColor(styleStack.property(KoXmlNS::style, "text-line-through-color"));   // OO 3.10.23, OASIS 14.4.31
+    if (!lineThroughColor.isEmpty() && lineThroughColor != "font-color") {
         setStrikeOutColor(QColor(lineThroughColor));
+    }
 
-    QString lineThroughMode = styleStack.property(KoXmlNS::style, "text-line-through-mode");
+    const QString lineThroughMode(styleStack.property(KoXmlNS::style, "text-line-through-mode"));
     if (lineThroughMode == "continuous") {
         setStrikeOutMode(ContinuousLineMode);
-    } else if (lineThroughMode == "skip-white-space") {
+    }
+    else if (lineThroughMode == "skip-white-space") {
         setStrikeOutMode(SkipWhiteSpaceLineMode);
     }
 
@@ -1035,8 +1047,8 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
                            va, d->m_relativeTextSize, d->m_offsetFromBaseLine, context);
     }
 #endif
-    if (styleStack.hasProperty(KoXmlNS::style, "text-position")) {  // OO 3.10.7
-        QString textPosition = styleStack.property(KoXmlNS::style, "text-position");
+    const QString textPosition(styleStack.property(KoXmlNS::style, "text-position"));
+    if (!textPosition.isEmpty()) {  // OO 3.10.7
         if (textPosition.startsWith("super"))
             setVerticalAlignment(QTextCharFormat::AlignSuperScript);
         else if (textPosition.startsWith("sub"))
@@ -1054,33 +1066,39 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     }
 
     // The fo:font-variant attribute provides the option to display text as small capitalized letters.
-    if (styleStack.hasProperty(KoXmlNS::fo, "font-variant")) {
-        QString textVariant = styleStack.property(KoXmlNS::fo, "font-variant");
+    const QString textVariant(styleStack.property(KoXmlNS::fo, "font-variant"));
+    if (!textVariant.isEmpty()) {
         if (textVariant == "small-caps")
             setFontCapitalization(QFont::SmallCaps);
         else if (textVariant == "normal")
             setFontCapitalization(QFont::MixedCase);
     }
     // The fo:text-transform attribute specifies text transformations to uppercase, lowercase, and capitalization.
-    else if (styleStack.hasProperty(KoXmlNS::fo, "text-transform")) {
-        QString textTransform = styleStack.property(KoXmlNS::fo, "text-transform");
-        if (textTransform == "uppercase")
-            setFontCapitalization(QFont::AllUppercase);
-        else if (textTransform == "lowercase")
-            setFontCapitalization(QFont::AllLowercase);
-        else if (textTransform == "capitalize")
-            setFontCapitalization(QFont::Capitalize);
+    else {
+        const QString textTransform(styleStack.property(KoXmlNS::fo, "text-transform"));
+        if (!textTransform.isEmpty()) {
+            if (textTransform == "uppercase")
+                setFontCapitalization(QFont::AllUppercase);
+            else if (textTransform == "lowercase")
+                setFontCapitalization(QFont::AllLowercase);
+            else if (textTransform == "capitalize")
+                setFontCapitalization(QFont::Capitalize);
+        }
     }
 
-    if (styleStack.hasProperty(KoXmlNS::fo, "language"))
-        setLanguage(styleStack.property(KoXmlNS::fo, "language"));
+    const QString foLanguage(styleStack.property(KoXmlNS::fo, "language"));
+    if (!foLanguage.isEmpty()) {
+        setLanguage(foLanguage);
+    }
 
-    if (styleStack.hasProperty(KoXmlNS::fo, "country"))
-        setCountry(styleStack.property(KoXmlNS::fo, "country"));
+    const QString foCountry(styleStack.property(KoXmlNS::fo, "country"));
+    if (!foCountry.isEmpty()) {
+        setCountry(foCountry);
+    }
 
     // The fo:background-color attribute specifies the background color of a paragraph.
-    if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
-        const QString bgcolor = styleStack.property(KoXmlNS::fo, "background-color");
+    const QString bgcolor(styleStack.property(KoXmlNS::fo, "background-color"));
+    if (!bgcolor.isEmpty()) {
         QBrush brush = background();
         if (bgcolor == "transparent")
             brush.setStyle(Qt::NoBrush);
@@ -1093,42 +1111,39 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     }
 
     // The style:use-window-font-color attribute specifies whether or not the window foreground color should be as used as the foreground color for a light background color and white for a dark background color.
-    if (styleStack.hasProperty(KoXmlNS::style, "use-window-font-color")) {
-        if (styleStack.property(KoXmlNS::style, "use-window-font-color") == "true") {
-            // Do like OpenOffice.org : change the foreground font if its color is too close to the background color...
-            
-            QColor back = background().color();
-            QColor front = foreground().color();
-            if ((abs(qGray(back.rgb()) - qGray(front.rgb())) < 10) && (background().style() != Qt::NoBrush)) {
-                front.setRed(255 - front.red());
-                front.setGreen(255 - front.green());
-                front.setBlue(255 - front.blue());
-                QBrush frontBrush = foreground();
-                frontBrush.setColor(front);
-                if (frontBrush.style() == Qt::NoBrush) {
-                    frontBrush.setStyle(Qt::SolidPattern);
-                }
-                setForeground(frontBrush);
+    if (styleStack.property(KoXmlNS::style, "use-window-font-color") == "true") {
+        // Do like OpenOffice.org : change the foreground font if its color is too close to the background color...
+
+        QColor back = background().color();
+        QColor front = foreground().color();
+        if ((abs(qGray(back.rgb()) - qGray(front.rgb())) < 10) && (background().style() != Qt::NoBrush)) {
+            front.setRed(255 - front.red());
+            front.setGreen(255 - front.green());
+            front.setBlue(255 - front.blue());
+            QBrush frontBrush = foreground();
+            frontBrush.setColor(front);
+            if (frontBrush.style() == Qt::NoBrush) {
+                frontBrush.setStyle(Qt::SolidPattern);
             }
+            setForeground(frontBrush);
         }
     }
 
-    if (styleStack.hasProperty(KoXmlNS::style, "letter-kerning")) {
-        if (styleStack.property(KoXmlNS::style, "letter-kerning") == "true") {
-            setFontKerning(true);
-        } else {
-            setFontKerning(false);
-        }
+    const QString letterKerning(styleStack.property( KoXmlNS::style, "letter-kerning"));
+    if (!letterKerning.isEmpty()) {
+        setFontKerning(letterKerning == "true");
     }
 
-    if (styleStack.hasProperty(KoXmlNS::fo, "letter-spacing")) {
-        qreal space = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "letter-spacing"));
+    const QString letterSpacing(styleStack.property(KoXmlNS::fo, "letter-spacing"));
+    if (!letterSpacing.isEmpty()) {
+        qreal space = KoUnit::parseValue(letterSpacing);
         QFontMetrics fm(font());
         setFontLetterSpacing(100+100*space/fm.averageCharWidth());
     }
 
-    if (styleStack.hasProperty(KoXmlNS::style, "text-outline")) {
-        if (styleStack.property(KoXmlNS::style, "text-outline") == "true") {
+    const QString textOutline(styleStack.property(KoXmlNS::style, "text-outline"));
+    if (!textOutline.isEmpty()) {
+        if (textOutline == "true") {
             setTextOutline(QPen((foreground().style() != Qt::NoBrush)?foreground():QBrush(Qt::black) , 0));
             setForeground(Qt::transparent);
         } else {
@@ -1136,19 +1151,20 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
         }
     }
 
-    if (styleStack.hasProperty(KoXmlNS::style, "text-rotation-angle")) {
-        int angle = styleStack.property(KoXmlNS::style, "text-rotation-angle").toInt();
+    const QString textRotationAngle(styleStack.property(KoXmlNS::style, "text-rotation-angle"));
+    if (!textRotationAngle.isEmpty()) {
+        int angle = textRotationAngle.toInt();
         setTextRotationAngle(intToRotationAngle(angle));
     }
 
-    if (styleStack.hasProperty(KoXmlNS::style, "text-rotation-scale")) {
-        const QString scale = styleStack.property(KoXmlNS::style, "text-rotation-scale");
-        setTextRotationScale(stringToRotationScale(scale));
+    const QString textRotationScale(styleStack.property(KoXmlNS::style, "text-rotation-scale"));
+    if (!textRotationScale.isEmpty()) {
+        setTextRotationScale(stringToRotationScale(textRotationScale));
     }
 
-    if (styleStack.hasProperty(KoXmlNS::style, "text-scale")) {
-        const QString scaleString(styleStack.property(KoXmlNS::style, "text-scale"));
-        const int scale = (scaleString.endsWith('%') ? scaleString.left(scaleString.length()-1) : scaleString).toInt();
+    const QString textScale(styleStack.property(KoXmlNS::style, "text-scale"));
+    if (!textScale.isEmpty()) {
+        const int scale = (textScale.endsWith('%') ? textScale.left(textScale.length()-1) : textScale).toInt();
         setTextScale(scale);
     }
 

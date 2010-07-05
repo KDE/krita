@@ -58,7 +58,6 @@ VectorShape::VectorShape()
     , m_bytes(0)
     , m_size(0)
     , m_ownsBytes(false)
-    , m_printable(true)
 {
     setShapeId(VectorShape_SHAPEID);
 
@@ -102,12 +101,10 @@ void VectorShape::paintDecorations(QPainter &painter, const KoViewConverter &con
 {
     Q_UNUSED(canvas);
 
-    if (1 || !m_printable) {
-        applyConversion(painter, converter);
-        painter.setRenderHint(QPainter::Antialiasing);
+    applyConversion(painter, converter);
+    painter.setRenderHint(QPainter::Antialiasing);
 
-        draw(painter);
-    }
+    draw(painter);
 }
 
 void VectorShape::draw(QPainter &painter) const
@@ -221,8 +218,6 @@ void VectorShape::drawEmf(QPainter &painter) const
 void VectorShape::saveOdf(KoShapeSavingContext & context) const
 {
     Q_UNUSED(context);
-
-    // FIXME: NYI
 }
 
 bool VectorShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
@@ -348,14 +343,3 @@ bool VectorShape::isEmf() const
 
     return false;
 }
-
-
-void VectorShape::setPrintable(bool on)
-{
-    if (m_printable == on)
-        return;
-
-    m_printable = on;
-    update();
-}
-

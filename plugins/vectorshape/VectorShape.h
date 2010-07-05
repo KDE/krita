@@ -41,23 +41,21 @@ public:
     VectorShape();
     virtual ~VectorShape();
 
-    /// reimplemented
+    // reimplemented methods.
+
+    /// reimplemented from KoShape
     void paint(QPainter &painter, const KoViewConverter &converter);
-    /// reimplemented
+    /// reimplemented from KoShape
     void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
-    /// reimplemented
+    /// reimplemented from KoShape
     virtual void saveOdf(KoShapeSavingContext & context) const;
-    /// reimplemented
+    /// reimplemented from KoShape
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
-    /// Load the real contents of the frame shape.
+    /// Load the real contents of the frame shape.  reimplemented  from KoFrameShape
     virtual bool loadOdfFrameElement(const KoXmlElement& frameElement,
                                      KoShapeLoadingContext& context);
 
-    // Methods (none so far)
-    // ...
-
-    void setPrintable(bool on);
-    bool printable() const { return m_printable; }
+    // Methods specific to the vector shape.
 
     void  setVectorBytes( char *bytes, int size, bool takeOwnership );
     char *vectorBytes();
@@ -69,6 +67,7 @@ private:
         VectorTypeNone,             // Uninitialized
         VectorTypeWmf,              // Windows MetaFile
         VectorTypeEmf               // Extended MetaFile
+        // ... more here later
     };
 
     void draw(QPainter &painter) const;
@@ -79,12 +78,13 @@ private:
     bool isWmf() const;
     bool isEmf() const;
 
+    // Member variables
+
     VectorType  m_type;
+
     char  *m_bytes;       // Use char* instead of void* because of QByteArray
     int    m_size;
-    bool   m_ownsBytes;
-
-    bool   m_printable;
+    bool   m_ownsBytes;   // True if the data is owned by this shape.
 };
 
 #endif

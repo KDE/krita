@@ -201,6 +201,7 @@ enum RecordType {
     EMR_POLYLINETO16           = 0x00000059,
     EMR_POLYPOLYLINE16         = 0x0000005A,
     EMR_POLYPOLYGON16          = 0x0000005B,
+    EMR_CREATEMONOBRUSH        = 0x0000005D,
     EMR_EXTCREATEPEN           = 0x0000005F,
     EMR_SETICMMODE             = 0x00000062,
     EMR_SETLAYOUT              = 0x00000073,
@@ -511,6 +512,7 @@ bool Parser::readRecord( QDataStream &stream )
         stream >> clip;
         kDebug(33100) << "EMR_INTERSECTCLIPRECT" << clip;
     }
+    break;
     case EMR_SAVEDC:
     {
         mOutput->saveDC();
@@ -935,6 +937,11 @@ bool Parser::readRecord( QDataStream &stream )
                 }
             }
             mOutput->polyPolygon16( bounds, aPoints );
+        }
+        break;
+    case EMR_CREATEMONOBRUSH:
+        {
+            //Q_ASSERT(0);
         }
         break;
     case EMR_EXTCREATEPEN:

@@ -150,7 +150,7 @@ void KoColorSpaceRegistry::add(KoColorSpaceFactory* item)
 
 void KoColorSpaceRegistry::remove(KoColorSpaceFactory* item)
 {
-    QWriteLocker l(&d->registrylock);
+    d->registrylock.lockForRead();
     QList<QString> toremove;
     foreach(const KoColorSpace * cs, d->csMap) {
         if (cs->id() == item->id()) {
@@ -159,10 +159,14 @@ void KoColorSpaceRegistry::remove(KoColorSpaceFactory* item)
             releaseColorSpace(const_cast<KoColorSpace*>(cs));
         }
     }
+    d->registrylock.unlock();
+    d->registrylock.lockForWrite();
     foreach(const QString& id, toremove) {
         d->csMap.remove(id);
+        // TODO: should not it delete the color space when removing it from the map ?
     }
     d->colorsSpaceFactoryRegistry.remove(item->id());
+    d->registrylock.unlock();
 }
 
 const KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & name) const

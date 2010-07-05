@@ -52,7 +52,7 @@ void KisColorPatches::setColors(QList<QColor>colors)
     update();
 }
 
-void KisColorPatches::paintEvent(QPaintEvent *)
+void KisColorPatches::paintEvent(QPaintEvent* e)
 {
     QPainter painter(this);
     if(m_direction == Vertical)
@@ -67,7 +67,7 @@ void KisColorPatches::paintEvent(QPaintEvent *)
     int widgetHeight = height();
     int numPatchesInACol = widgetHeight/m_patchHeight;
 
-    for(int i=0; i<m_colors.size(); i++) {
+    for(int i=m_buttonList.size(); i<fieldCount(); i++) {
         int row;
         int col;
         if((m_direction==Vertical && m_allowScrolling) || (m_direction==Horizontal && m_allowScrolling==false)) {
@@ -79,8 +79,13 @@ void KisColorPatches::paintEvent(QPaintEvent *)
             col = i/numPatchesInACol;
         }
 
-        painter.fillRect(col*m_patchWidth, row*m_patchHeight, m_patchWidth, m_patchHeight, m_colors.at(i));
+        painter.fillRect(col*m_patchWidth, row*m_patchHeight, m_patchWidth, m_patchHeight, m_colors.at(i-m_buttonList.size()));
     }
+    
+//    for(int i=0; i<m_buttonList.size(); i++) {
+//        m_buttonList.at(i)->paintEvent(e);
+//    }
+    QWidget::paintEvent(e);
 }
 
 void KisColorPatches::wheelEvent(QWheelEvent* event)
@@ -110,14 +115,29 @@ void KisColorPatches::resizeEvent(QResizeEvent* event)
         if(m_direction == Horizontal) {
             setMaximumHeight(heightForWidth(width()));
             setMinimumHeight(heightForWidth(width()));
+            for(int i=0; i<m_buttonList.size(); i++) {
+                m_buttonList.at(i)->setGeometry(i*m_patchWidth, 0, m_patchWidth, m_patchHeight);
+            }
         }
         else {
             setMaximumWidth(widthForHeight(height()));
             setMinimumWidth(widthForHeight(height()));
+            for(int i=0; i<m_buttonList.size(); i++) {
+                m_buttonList.at(i)->setGeometry(0, i*m_patchHeight, m_patchWidth, m_patchHeight);
+            }
         }
     }
 
     QWidget::resizeEvent(event);
+}
+
+void KisColorPatches::setAdditionalButtons(QList<QWidget*> buttonList)
+{
+    for(int i=0; i<buttonList.size(); i++) {
+        buttonList.at(i)->setParent(this);
+//        buttonList.at(i)->setMaximumSize(m_patchWidth, m_patchHeight);
+    }
+    m_buttonList = buttonList;
 }
 
 void KisColorPatches::setPatchLayout(Direction dir, bool allowScrolling, int numRows, int numCols)
@@ -152,24 +172,29 @@ void KisColorPatches::setPatchLayout(Direction dir, bool allowScrolling, int num
 
 int KisColorPatches::widthOfAllPatches()
 {
-    return (m_numPatches/m_numRows)*m_patchWidth;
+    return (fieldCount()/m_numRows)*m_patchWidth;
 }
 
 int KisColorPatches::heightOfAllPatches()
 {
-    return (m_numPatches/m_numCols)*m_patchHeight;
+    return (fieldCount()/m_numCols)*m_patchHeight;
 }
 
 int KisColorPatches::heightForWidth(int width) const
 {
     int numPatchesInARow = width/m_patchWidth;
-    int numRows = (m_numPatches-1)/numPatchesInARow+1;
+    int numRows = (fieldCount()-1)/numPatchesInARow+1;
     return numRows*m_patchHeight;
 }
 
 int KisColorPatches::widthForHeight(int height) const
 {
     int numPatchesInACol = height/m_patchHeight;
-    int numCols = (m_numPatches-1)/numPatchesInACol+1;
+    int numCols = (fieldCount()-1)/numPatchesInACol+1;
     return numCols*m_patchWidth;
+}
+
+int KisColorPatches::fieldCount() const
+{
+    return m_numPatches+m_buttonList.size();
 }

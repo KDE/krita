@@ -36,6 +36,11 @@ protected:
     void paintEvent(QPaintEvent *);
     void wheelEvent(QWheelEvent *);
     void resizeEvent(QResizeEvent *);
+public:
+    /// set buttons, that should be drawn additionally to the patches
+    /// this class takes ownership of them and will delete them
+    /// they will be resized to the patchsize
+    void setAdditionalButtons(QList<QWidget*> buttonList);
 private:
     int m_patchWidth;
     int m_patchHeight;
@@ -47,6 +52,7 @@ private:
     bool m_allowScrolling;
     int m_numCols;
     int m_numRows;
+    QList<QWidget*> m_buttonList;
 
     /// returns width of the patchfield, if there are only m_numRows allowed
     int widthOfAllPatches();
@@ -57,6 +63,9 @@ private:
     int heightForWidth(int width) const;
     /// returns width, that is needed to display all patches with the given height
     int widthForHeight(int height) const;
+    
+    /// returns count of colors and buttons
+    int fieldCount() const;
 };
 
 #endif // KIS_COLSELNG_COLOR_PATCHES_H

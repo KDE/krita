@@ -21,6 +21,7 @@
 #include <QHash>
 #include <QImage>
 #include <QList>
+#include <QPushButton>
 #include <QColor>
 #include <QPainter>
 #include <QResizeEvent>
@@ -39,13 +40,25 @@ KisCommonColors::KisCommonColors(QWidget *parent) :
     m_extractedColors = extractColors();
     setColors(m_extractedColors);
 //    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+    
+    QPushButton* reloadButton = new QPushButton();
+    reloadButton->setMaximumSize(16,16);
+    reloadButton->setIcon(KIcon("view-refresh"));
+    connect(reloadButton, SIGNAL(clicked()), this, SLOT(recalculate()));
+    
+    QList<QWidget*> tmpList;
+    tmpList.append(reloadButton);
+    setAdditionalButtons(tmpList);
 }
 
 void KisCommonColors::setCanvas(KoCanvasBase *canvas)
 {
-    /// todo: make clean
+    // todo:
+    // make clean
+    // make optional
+    
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    connect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()));
+//    connect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()));
 }
 
 void KisCommonColors::recalculate()

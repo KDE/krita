@@ -1113,13 +1113,13 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
         // instead of logical coordinates like all the other types of
         // records.  Therefore we have to rescale the target from
         // physical to logical coordinates.
+#if DEBUG_EMFPAINT
         qreal scaleX = qreal(m_header->frame().width()) / qreal(m_header->bounds().width());
         qreal scaleY = qreal(m_header->frame().height()) / qreal(m_header->bounds().height());
-#if DEBUG_EMFPAINT
         kDebug(31000) << "Scale = " << scaleX << scaleY;
 #endif
-        QRectF realTarget(QPoint(target.x() / scaleX, target.y() / scaleY),
-                          QSize(target.width() / scaleX, target.height() / scaleY));
+        QRectF realTarget(QPoint(target.x(), target.y()),
+                          QSize(target.width(), target.height()));
 #if DEBUG_EMFPAINT
         kDebug(31000) << "    realTarget" << realTarget;
 #endif

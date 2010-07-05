@@ -22,8 +22,6 @@
 
 #include <KoShapeFactoryBase.h>
 
-class KoShape;
-
 class PictureShapeFactory : public KoShapeFactoryBase
 {
 public:

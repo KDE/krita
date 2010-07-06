@@ -251,6 +251,17 @@ void KisStrokeBenchmark::softbrushSoftness()
     benchmarkLine(presetFileName);
 }
 
+void KisStrokeBenchmark::dynabrush()
+{
+    QString presetFileName = "dyna301.kpp";
+    benchmarkLine(presetFileName);
+}
+
+void KisStrokeBenchmark::dynabrushRL()
+{
+    QString presetFileName = "dyna301.kpp";
+    benchmarkRandomLines(presetFileName);
+}
 
 void KisStrokeBenchmark::benchmarkLine(QString presetFileName)
 {

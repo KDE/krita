@@ -104,6 +104,9 @@ private slots:
     void sprayTexture();
     void sprayTextureRL();
     
+    void dynabrush();
+    void dynabrushRL();
+
     void benchmarkRand();
     void benchmarkRand48();
 };

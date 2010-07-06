@@ -298,7 +298,7 @@ void KoTextSharedLoadingData::addListStyles(KoShapeLoadingContext &context, QLis
             d->listStylesDotXmlStyles.insert(it->first, it->second);
         }
         // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
-        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
+        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memory
         if (styleManager) {
             styleManager->add(it->second);
         } else {

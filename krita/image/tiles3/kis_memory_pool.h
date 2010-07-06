@@ -26,18 +26,18 @@
 #ifdef DEBUG_HIT_MISS
 
 #include "kis_debug.h"
-#define DECLARE_STATUS_VAR() qint64 m_hit; qint64 m_miss
-#define INIT_STATUS_VAR() m_hit=0; m_miss=0
+#define DECLARE_STATUS_VAR() qint64 m_hit; qint64 m_miss; qint64 m_averIndex; qint32 m_maxIndex
+#define INIT_STATUS_VAR() m_hit=0; m_miss=0; m_averIndex=0; m_maxIndex=0
 #define POOL_MISS() m_miss++
-#define POOL_HIT() m_hit++
-#define REPORT_STATUS() qDebug() << ppVar(m_hit) << ppVar(m_miss) << double(m_hit)/(m_hit+m_miss)
+#define POOL_HIT(idx) m_hit++; m_averIndex+=idx; m_maxIndex=qMax(m_maxIndex, idx)
+#define REPORT_STATUS() qDebug() << ppVar(m_hit) << ppVar(m_miss) << "Hit rate:" << double(m_hit)/(m_hit+m_miss) << "Max index:" << m_maxIndex <<"Av. index:" << double(m_averIndex)/(m_hit)
 
 #else
 
 #define DECLARE_STATUS_VAR()
 #define INIT_STATUS_VAR()
 #define POOL_MISS()
-#define POOL_HIT()
+#define POOL_HIT(idx)
 #define REPORT_STATUS()
 
 #endif
@@ -97,7 +97,7 @@ public:
                 ptr = m_array[i].fetchAndStoreOrdered(0);
                 if (ptr) {
                     m_allocated.deref();
-                    POOL_HIT();
+                    POOL_HIT(i);
                     return ptr;
                 }
             }

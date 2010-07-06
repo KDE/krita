@@ -19,10 +19,13 @@
 #ifndef __KIS_MEMORY_POOL_H
 #define __KIS_MEMORY_POOL_H
 
+#include "stdlib.h"
+
 //#define DEBUG_HIT_MISS
 
 #ifdef DEBUG_HIT_MISS
 
+#include "kis_debug.h"
 #define DECLARE_STATUS_VAR() qint64 m_hit; qint64 m_miss
 #define INIT_STATUS_VAR() m_hit=0; m_miss=0
 #define POOL_MISS() m_miss++
@@ -108,6 +111,25 @@ private:
     QAtomicInt m_allocated;
     DECLARE_STATUS_VAR();
 };
+
+
+#define POOL_OPERATORS(T)                                               \
+    void* operator new(size_t size) {                                   \
+        return size == sizeof(T) ? __m_pool.pop() : malloc(size);       \
+    }                                                                   \
+    void operator delete(void *ptr, size_t size) {                      \
+        if(size == sizeof(T)) __m_pool.push(ptr);                       \
+        else free(ptr);                                                 \
+    }
+
+#define DECLARE_POOL(T,SIZE)                    \
+    static KisMemoryPool<T,SIZE> __m_pool
+
+#define DEFINE_POOL(T,SIZE)                     \
+    KisMemoryPool<T,SIZE> T::__m_pool
+
+
+
 
 #endif /* __KIS_MEMORY_POOL_H */
 

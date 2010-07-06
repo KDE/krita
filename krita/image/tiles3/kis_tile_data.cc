@@ -24,6 +24,7 @@
 const qint32 KisTileData::WIDTH = 64;
 const qint32 KisTileData::HEIGHT = 64;
 
+DEFINE_POOL(KisTileData, TILE_DATA_POOL_SIZE);
 
 KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store)
         : m_state(NORMAL),

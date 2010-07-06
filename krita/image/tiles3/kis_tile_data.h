@@ -23,6 +23,9 @@
 #include <QAtomicInt>
 #include <QList>
 
+#include "kis_memory_pool.h"
+#define TILE_DATA_POOL_SIZE 32
+
 class KisTileData;
 class KisTileDataStore;
 
@@ -36,6 +39,8 @@ class KisTileData
 {
 public:
     KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store);
+    POOL_OPERATORS(KisTileData);
+
 private:
     KisTileData(const KisTileData& rhs);
 
@@ -120,6 +125,7 @@ private:
 
     KisTileDataStore *m_store;
 
+    DECLARE_POOL(KisTileData, TILE_DATA_POOL_SIZE);
 public:
     static const qint32 WIDTH;
     static const qint32 HEIGHT;

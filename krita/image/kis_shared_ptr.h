@@ -87,7 +87,11 @@ public:
     }
 
     inline KisSharedPtr(const KisWeakSharedPtr<T>& o);
+
+    // Free the pointer and set it to new value
     void attach(T* p) const;
+
+    // Free the pointer
     void clear();
 
     /**
@@ -421,11 +425,13 @@ private:
         }
     }
 
+    // see note in kis_shared.cc
     inline void attach(T* newValue) {
         detach();
         load(newValue);
     }
 
+    // see note in kis_shared.cc
     void detach() {
         d = 0;
 

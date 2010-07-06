@@ -42,6 +42,7 @@ public:
         return _ref.deref();
     }
 
+    // see note in kis_shared.cc
     QAtomicInt* sharedWeakReference() {
         return _sharedWeakReference;
     }

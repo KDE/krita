@@ -63,9 +63,9 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
 
     // XXX: pass image!
 //  TODO custom brush doesn't work correctly
-//    m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Custom Brush"), 0);
-//    connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-//    m_brushesTab->addTab(m_customBrushWidget, i18n("Custom Brush"));
+    m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Custom Brush"), 0);
+    connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
+    addChooser(i18n("Custom Brush"), m_customBrushWidget, CUSTOMBRUSH);
 
     m_textBrushWidget = new KisTextBrushChooser(this, "textbrush", i18n("Text Brush"));
     connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
@@ -95,11 +95,10 @@ KisBrushSP KisBrushSelectionWidget::brush()
     case PREDEFINEDBRUSH:
         theBrush = m_brushChooser->brush();
         break;
+    case CUSTOMBRUSH:
+       theBrush = m_customBrushWidget->brush();
+       break;
     case TEXTBRUSH:
-//  TODO custom brush doesn't work correctly
-//        theBrush = m_customBrushWidget->brush();
-//        break;
-//    case 3:
         theBrush = m_textBrushWidget->brush();
         break;
     default:
@@ -118,20 +117,16 @@ KisBrushSP KisBrushSelectionWidget::brush()
 void KisBrushSelectionWidget::setAutoBrush(bool on)
 {
     m_buttonGroup->button(AUTOBRUSH)->setVisible(on);
-//     m_autoBrushWidget->setVisible(on);
 }
 
 void KisBrushSelectionWidget::setPredefinedBrushes(bool on)
 {
     m_buttonGroup->button(PREDEFINEDBRUSH)->setVisible(on);
-
-//     m_brushChooser->setVisible(on);
 }
 
 void KisBrushSelectionWidget::setCustomBrush(bool on)
 {
-    Q_UNUSED(on);
-//    m_customBrushWidget->setVisible( on );
+    m_buttonGroup->button(CUSTOMBRUSH)->setVisible(on);
 }
 
 void KisBrushSelectionWidget::setTextBrush(bool on)
@@ -141,8 +136,7 @@ void KisBrushSelectionWidget::setTextBrush(bool on)
 
 void KisBrushSelectionWidget::setImage(KisImageWSP image)
 {
-    Q_UNUSED(image);
-//    m_customBrushWidget->setImage(image);
+    m_customBrushWidget->setImage(image);
 }
 
 void KisBrushSelectionWidget::setCurrentBrush(KisBrushSP brush)

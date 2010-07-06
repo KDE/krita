@@ -69,15 +69,15 @@ void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* conv
     convenienttwin->subpixelprecision = getBool("Hatching/bool_subpixelprecision");
                          
     if (getBool("Hatching/bool_nocrosshatching"))
-        convenienttwin->crosshatchingstyle = 1;
+        convenienttwin->crosshatchingstyle = 0;
     else if (getBool("Hatching/bool_perpendicular"))
-        convenienttwin->crosshatchingstyle = 2;
+        convenienttwin->crosshatchingstyle = 1;
     else if (getBool("Hatching/bool_minusthenplus"))
-        convenienttwin->crosshatchingstyle = 3;
+        convenienttwin->crosshatchingstyle = 2;
     else if (getBool("Hatching/bool_plusthenminus"))
-        convenienttwin->crosshatchingstyle = 4;
+        convenienttwin->crosshatchingstyle = 3;
     if (getBool("Hatching/bool_moirepattern"))
-        convenienttwin->crosshatchingstyle = 5;
+        convenienttwin->crosshatchingstyle = 4;
     
 }
 

@@ -71,7 +71,7 @@ KisHatchingOptions::KisHatchingOptions()
     connect(m_options->plusThenMinusRadioButton, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->moirePatternRadioButton, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
     
-    connect(m_options->separationIntervalSpinBox, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->separationIntervalSpinBox, SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
     
     setConfigurationPage(m_options);
 }

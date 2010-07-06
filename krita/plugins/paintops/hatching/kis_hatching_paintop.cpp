@@ -92,12 +92,14 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     KisFixedPaintDeviceSP maskDab = 0;
 
     //SENSOR-depending settings
-    m_settings->crosshatchingsensorvalue = KisPaintOp::scaleForPressure(m_crosshatchingOption.apply(info));
+    m_settings->crosshatchingsensorvalue = m_crosshatchingOption.apply(info);
     m_settings->separationsensorvalue = m_separationOption.apply(info);
     m_settings->thicknesssensorvalue = KisPaintOp::scaleForPressure(m_thicknessOption.apply(info));
     
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 1.0;
+    
+    quint8 origOpacity = m_opacityOption.apply(painter(), info);
     
     //-----------POSITIONING code----------
     QPointF hotSpot = brush->hotSpot(scale, scale);
@@ -120,8 +122,8 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     into a beautiful SELECTION MASK (it's an opacity multiplier), intended to give
     the brush a "brush feel" (soft borders, round shape) despite it comes from a
     simple, ugly, hatched rectangle.
-    The MASK is -----> maskDab
-    The HATCHED part is -----> m_hatchedDab */
+    The MASK is maskDab
+    The HATCHED part is m_hatchedDab */
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         maskDab = brush->paintDevice(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
         maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
@@ -138,27 +140,62 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     qint32 sw = maskDab->bounds().width();
     qint32 sh = maskDab->bounds().height();
     
-    //printf("maskWidth es %li y maskHeight es %li", brush->width(), brush->height());
-    
-    //quint8 origOpacity = m_opacityOption.apply(painter(), info);
-    
     //------This If_block pre-fills the future m_hatchedDab with a pretty backgroundColor
     if (m_settings->opaquebackground) {
         KoColor aersh = painter()->backgroundColor();
         m_hatchedDab->fill(0, 0, (sw-1), (sh-1), aersh.data()); //this plus yellow background = french fry brush
     }
     
-    /*-----This is the 2nd most important line(s).
-    This or these lines create the hatching but nothing visible is painted to the screen----------*/
-    // CROSSHATCHING MODE OFF, SURPRISE!, soon you'll be able to control this from the GUI
-    m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, m_settings->angle, painter()->paintColor());
-    //m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor());
-    //m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
+    // Trick for moire pattern to look better
+    bool donotbasehatch = false;
     
-    //------THIS IS THE MOST IMPORTANT LINE, IT'S THE LINE THAT ACTUALLY PAINTS-------
+    /* If block describing how to stack hatching passes to generate
+    crosshatching according to user specifications */
+    if (m_settings->enabledcurvecrosshatching) {
+        if (m_settings->perpendicular) {
+            if (m_settings->crosshatchingsensorvalue > 0.5)
+                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(90), painter()->paintColor());
+        }
+        else if (m_settings->minusthenplus) {
+            if (m_settings->crosshatchingsensorvalue > 0.33)
+                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
+            if (m_settings->crosshatchingsensorvalue > 0.67)
+                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor());
+        }
+        else if (m_settings->plusthenminus) {
+            if (m_settings->crosshatchingsensorvalue > 0.33)
+                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor());
+            if (m_settings->crosshatchingsensorvalue > 0.67)
+                m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
+        }
+        else if (m_settings->moirepattern) {
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle((m_settings->crosshatchingsensorvalue)*180), painter()->paintColor());
+            donotbasehatch = true;
+        }
+    }
+    else {
+        if (m_settings->perpendicular) {
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(90), painter()->paintColor());
+        }
+        else if (m_settings->minusthenplus) {
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor());
+        }
+        else if (m_settings->plusthenminus) {
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor());
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
+        }
+        else if (m_settings->moirepattern) {
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-10), painter()->paintColor());
+        }
+    }
+    
+    if (!donotbasehatch)
+        m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, m_settings->angle, painter()->paintColor());
+    
+    // The most important line, the one that paints to the screen.
     painter()->bitBlt(x, y, m_hatchedDab, maskDab, 0, 0, sw, sh);
-    
-    //painter()->setOpacity(origOpacity);
+    painter()->setOpacity(origOpacity);
     
     /*-----It took me very long to realize the importance of this line, this is
     the line that makes all brushes be slow, even if they're small, yay!-------*/
@@ -182,6 +219,4 @@ double KisHatchingPaintOp::spinAngle(double spin)
     
     return 0;   // this should never be executed except if NAN
 }
-
-
 ;

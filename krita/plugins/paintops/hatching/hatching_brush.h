@@ -45,6 +45,7 @@ public:
      */
     void hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, double height, double givenangle, const KoColor &color);
 
+    
 private:
     void init();
     KoColor m_inkColor;

@@ -71,7 +71,11 @@ void HatchingBrush::hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, 
     m_painter.setBackgroundColor(color);
     
     angle = givenangle;
-    thickness = m_settings->thickness * m_settings->thicknesssensorvalue;
+    double tempthickness = m_settings->thickness * m_settings->thicknesssensorvalue;
+    if (tempthickness >= 1)
+        thickness = qRound(tempthickness);
+    else
+        thickness = 1;
     if (m_settings->enabledcurveseparation)
         separation = separationAsFunctionOfParameter(m_settings->separationsensorvalue, m_settings->separation, m_settings->separationintervals);
     height_ = height;
@@ -113,7 +117,6 @@ void HatchingBrush::hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, 
         // worth the micromanagement to optimize
     }
 }
-
 
 void HatchingBrush::iterateLines(bool forward, int lineindex, bool oneline)
 {
@@ -282,7 +285,7 @@ double HatchingBrush::separationAsFunctionOfParameter(double parameter, double s
     double factor = 0;
     
     int basefactor = numintervals / 2;
-    // Make the base separation factor tend to greater than to lesser numbers when numintervals is even
+    // Make the base separation factor tend to greater instead of lesser numbers when numintervals is even
     if ((numintervals % 2) == 0)
         basefactor--;
     

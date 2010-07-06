@@ -44,6 +44,11 @@ public:
 
     // see note in kis_shared.cc
     QAtomicInt* sharedWeakReference() {
+        if(!_sharedWeakReference) {
+            _sharedWeakReference = new QAtomicInt();
+            _sharedWeakReference->ref();
+        }
+
         return _sharedWeakReference;
     }
 

@@ -39,8 +39,11 @@
 
 KisShared::KisShared()
 {
-    _sharedWeakReference = new QAtomicInt();
-    _sharedWeakReference->ref();
+    /**
+     * We can defer creation of a weak reference until
+     * better days... It gives us 41% better performance. ;)
+     */
+    _sharedWeakReference = 0;
 }
 
 KisShared::~KisShared()
@@ -50,6 +53,6 @@ KisShared::~KisShared()
      */
     Q_ASSERT(_ref == 0);
 
-    if(!_sharedWeakReference->deref())
+    if(_sharedWeakReference && !_sharedWeakReference->deref())
         delete _sharedWeakReference;
 }

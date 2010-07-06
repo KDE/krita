@@ -279,7 +279,6 @@ install( FILES
     kis_serializable_configuration.h
     kis_selection.h
     kis_shared.h
-    kis_shared_data.h
     kis_shared_ptr.h
     kis_shared_ptr_vector.h
     kis_transaction.h

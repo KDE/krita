@@ -24,8 +24,6 @@
 
 #include <kis_debug.h>
 
-#include <kis_shared_data.h>
-
 #ifndef NDEBUG
 #include "kis_memory_leak_tracker.h"
 #endif
@@ -89,6 +87,8 @@ public:
     }
 
     inline KisSharedPtr(const KisWeakSharedPtr<T>& o);
+    void attach(T* p) const;
+    void clear();
 
     /**
      * Copies a pointer.
@@ -155,16 +155,6 @@ public:
     inline const T* data() const {
         return d;
     }
-
-    /**
-    * it is deleted.
-    */
-    void attach(T* p) const;
-
-    /**
-    * Clear the pointer, i.e. make it a null pointer.
-    */
-    void clear();
 
     /**
     * @return a const pointer to the shared object.
@@ -253,28 +243,26 @@ public:
      * Creates a null pointer.
      */
     inline KisWeakSharedPtr()
-            : d(0) { }
+        : d(0), weakReference(0) { }
 
     /**
      * Creates a new pointer.
      * @param p the pointer
      */
-    inline KisWeakSharedPtr(T* p)
-            : d(p) {
-        if (d) dataPtr = d->dataPtr;
+    inline KisWeakSharedPtr(T* p) {
+        load(p);
     }
 
-    inline KisWeakSharedPtr<T>(const KisSharedPtr<T>& o)
-            : d(o.d) {
-        if (d) dataPtr = d->dataPtr;
+    inline KisWeakSharedPtr<T>(const KisSharedPtr<T>& o) {
+        load(o.d);
     }
+
     /**
      * Copies a pointer.
      * @param o the pointer to copy
      */
-    inline KisWeakSharedPtr<T>(const KisWeakSharedPtr<T>& o)
-            : d(o.d) {
-        if (d) dataPtr = d->dataPtr;
+    inline KisWeakSharedPtr<T>(const KisWeakSharedPtr<T>& o) {
+        load(o.d);
     }
 
     inline KisWeakSharedPtr<T>& operator= (const KisWeakSharedPtr& o) {
@@ -302,57 +290,94 @@ public:
         return *this;
     }
 
-    inline operator const T*() const {
-        Q_ASSERT(!d || (dataPtr && dataPtr->valid)); return d;
-    }
-
     template< class T2> inline operator KisWeakSharedPtr<T2>() const {
         return KisWeakSharedPtr<T2>(d);
     }
 
     /**
-    * Note that if you use this function, the pointer might be destroyed if KisSharedPtr pointing
-    * to this pointer are deleted, resulting in a segmentation fault. Use with care.
-    * @return the pointer
-    */
+     * Note that if you use this function, the pointer might be destroyed
+     * if KisSharedPtr pointing to this pointer are deleted, resulting in
+     * a segmentation fault. Use with care.
+     * @return a const pointer to the shared object.
+     */
     inline T* data() {
-        Q_ASSERT(!d || (dataPtr && dataPtr->valid));
+        if (!isConsistent()) {
+            warnKrita << kBacktrace();
+            Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
+        }
+
         return d;
     }
 
     /**
-    * Note that if you use this function, the pointer might be destroyed if KisSharedPtr pointing
-    * to this pointer are deleted, resulting in a segmentation fault. Use with care.
-    * @return the pointer
-    */
+     * @see data()
+     */
     inline const T* data() const {
-        Q_ASSERT(!d || (dataPtr && dataPtr->valid));
+        if (!isConsistent()) {
+            warnKrita << kBacktrace();
+            Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
+        }
+
         return d;
     }
 
     /**
-    * Note that if you use this function, the pointer might be destroyed if KisSharedPtr pointing
-    * to this pointer are deleted, resulting in a segmentation fault. Use with care.
-    * @return a const pointer to the shared object.
-    */
+     * @see data()
+     */
     inline const T* constData() const {
-        Q_ASSERT(!d || (dataPtr && dataPtr->valid)); return d;
+        if (!isConsistent()) {
+            warnKrita << kBacktrace();
+            Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
+        }
+
+        return d;
+    }
+
+    /**
+     * @see data()
+     */
+    inline operator const T*() const {
+        if (!isConsistent()) {
+            warnKrita << kBacktrace();
+            Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
+        }
+
+        return d;
     }
 
     inline const T& operator*() const {
-        Q_ASSERT(d && dataPtr && dataPtr->valid); return *d;
-    }
-    inline T& operator*() {
-        Q_ASSERT(d && dataPtr && dataPtr->valid); return *d;
-    }
-    inline const T* operator->() const {
-        Q_ASSERT(d && dataPtr && dataPtr->valid); return d;
-    }
-    inline T* operator->() {
-        if (!d || !dataPtr || !dataPtr->valid) {
+        if (!isValid()) {
             warnKrita << kBacktrace();
+            Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
         }
-        Q_ASSERT(d && dataPtr && dataPtr->valid);
+
+        return *d;
+    }
+
+    inline T& operator*() {
+        if (!isValid()) {
+            warnKrita << kBacktrace();
+            Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
+        }
+
+        return *d;
+    }
+
+    inline const T* operator->() const {
+        if (!isValid()) {
+            warnKrita << kBacktrace();
+            Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
+        }
+
+        return d;
+    }
+
+    inline T* operator->() {
+        if (!isValid()) {
+            warnKrita << kBacktrace();
+            Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
+        }
+
         return d;
     }
 
@@ -364,20 +389,59 @@ public:
     }
 
     /**
-     * @return true if the weak pointer points to a valid pointer and false if
-     *         the data has been deleted or is null
+     * @return true if the weak pointer points to a valid pointer
+     *         and false if the data has been deleted or is null
      */
     inline bool isValid() const {
-        return d && dataPtr && dataPtr->valid;
+        Q_ASSERT(!d || (d && weakReference));
+
+        return d && weakReference && isOdd((int)*weakReference);
     }
 private:
-    void attach(T* nd) {
-        d = nd;
-        if (d) dataPtr = d->dataPtr;
-        else dataPtr = 0;
+    static const qint32 WEAK_REF = 2;
+    static inline bool isOdd(const qint32 &x) {
+        return x & 0x01;
     }
+
+    inline bool isConsistent() const {
+        Q_ASSERT(!d || (d && weakReference));
+
+        return !d || (d && weakReference && isOdd((int)*weakReference));
+    }
+
+    void load(T* newValue) {
+        d = newValue;
+
+        if(d) {
+            weakReference = d->sharedWeakReference();
+            weakReference->fetchAndAddOrdered(WEAK_REF);
+        }
+        else {
+            weakReference = 0;
+        }
+    }
+
+    inline void attach(T* newValue) {
+        detach();
+        load(newValue);
+    }
+
+    void detach() {
+        d = 0;
+
+        if (weakReference &&
+            weakReference->fetchAndAddOrdered(-WEAK_REF) <= WEAK_REF) {
+
+            // sanity check:
+            Q_ASSERT((int)*weakReference == 0);
+
+            delete weakReference;
+            weakReference = 0;
+        }
+    }
+
     mutable T* d;
-    KisSharedPtr< KisSharedData > dataPtr;
+    QAtomicInt *weakReference;
 };
 
 
@@ -385,8 +449,13 @@ template <class T>
 Q_INLINE_TEMPLATE  KisSharedPtr<T>::KisSharedPtr(const KisWeakSharedPtr<T>& o)
         : d(o.d)
 {
-    Q_ASSERT(!o.dataPtr || (o.dataPtr && o.dataPtr->valid));
     ref();
+
+    /**
+     * Thread safety:
+     * Is the object we have just referenced still valid?
+     */
+    Q_ASSERT(o.isConsistent());
 }
 
 

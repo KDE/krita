@@ -353,6 +353,27 @@ void KisTiledDataManagerTest::benchmarkReadOnlyTileLazy()
     //CALLGRIND_STOP_INSTRUMENTATION;
 }
 
+class KisSimpleClass : public KisShared
+{
+    qint64 m_int;
+};
+
+typedef KisSharedPtr<KisSimpleClass> KisSimpleClassSP;
+void KisTiledDataManagerTest::benchmarkSharedPointers()
+{
+    const qint32 numIterations = 2 * 1000000;
+
+    //CALLGRIND_START_INSTRUMENTATION;
+
+    QBENCHMARK_ONCE {
+        for(qint32 i = 0; i < numIterations; i++) {
+            KisSimpleClassSP pointer = new KisSimpleClass;
+            pointer = 0;
+        }
+    }
+
+    //CALLGRIND_STOP_INSTRUMENTATION;
+}
 
 /******************* Stress job ***********************/
 

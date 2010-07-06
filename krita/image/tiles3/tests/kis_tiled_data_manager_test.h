@@ -47,6 +47,7 @@ private slots:
     void testTransactions();
     void testPurgeHistory();
     void benchmarkReadOnlyTileLazy();
+    void benchmarkSharedPointers();
 
     void stressTest();
 };

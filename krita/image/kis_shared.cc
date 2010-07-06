@@ -17,15 +17,21 @@
  */
 
 #include "kis_shared.h"
-#include "kis_shared_data.h"
 #include "kis_debug.h"
 
-KisShared::KisShared() : dataPtr(new KisSharedData())
+KisShared::KisShared()
 {
+    _sharedWeakReference = new QAtomicInt();
+    _sharedWeakReference->ref();
 }
 
 KisShared::~KisShared()
 {
-    Q_ASSERT(_ref == 0); // This check that the KisShared object is not anymore referenced
-    dataPtr->valid = false;
+    /**
+     * Check noone references us
+     */
+    Q_ASSERT(_ref == 0);
+
+    if(!_sharedWeakReference->deref())
+        delete _sharedWeakReference;
 }

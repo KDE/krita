@@ -116,7 +116,7 @@ private:
     TileTypeSP *m_hashTable;
     qint32 m_numTiles;
 
-    TileTypeSP m_defaultTile;
+    KisTileData *m_defaultTileData;
     KisMementoManager *m_mementoManager;
 
     mutable QReadWriteLock m_lock;

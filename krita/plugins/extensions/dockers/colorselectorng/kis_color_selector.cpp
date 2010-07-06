@@ -40,7 +40,7 @@ QColor KisColorSelector::pickColorAt(int x, int y)
     return QColor();
 }
 
-KisColorSelectorBase* KisColorSelector::createPopup()
+KisColorSelectorBase* KisColorSelector::createPopup() const
 {
     KisColorSelectorBase* popup = new KisColorSelector(0);
     popup->resize(256,256);

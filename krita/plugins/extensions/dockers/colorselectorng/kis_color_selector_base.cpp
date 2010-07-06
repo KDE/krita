@@ -23,6 +23,11 @@
 #include <QTimer>
 
 #include <KDebug>
+#include "KoColorSpace.h"
+
+#include "kis_canvas2.h"
+#include "kis_canvas_resource_provider.h"
+#include "kis_node.h"
 
 KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     QWidget(parent),
@@ -30,7 +35,9 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_hideDistance(40),
     m_timer(new QTimer(this)),
     m_popupOnMouseOver(false),
-    m_popupOnMouseClick(true)
+    m_popupOnMouseClick(true),
+    m_colorSpace(0),
+    m_canvas(0)
 {
     m_timer->setInterval(350);
     m_timer->setSingleShot(true);
@@ -57,6 +64,18 @@ void KisColorSelectorBase::setPopupBehaviour(bool onMouseOver, bool onMouseClick
     if(m_popupOnMouseOver) {
         setMouseTracking(true);
     }
+}
+
+void KisColorSelectorBase::setColorSpace(const KoColorSpace *colorSpace)
+{
+    m_colorSpace = colorSpace;
+}
+
+void KisColorSelectorBase::setCanvas(KoCanvasBase *canvas)
+{
+    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    Q_ASSERT(m_canvas);
+    update();
 }
 
 void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
@@ -164,4 +183,18 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
 void KisColorSelectorBase::hidePopup()
 {
     hide();
+}
+
+const KoColorSpace* KisColorSelectorBase::colorSpace() const
+{
+    Q_ASSERT(m_canvas);
+    if(m_colorSpace!=0) {
+        return m_colorSpace;
+    }
+    else {
+        KisNodeSP currentNode = m_canvas->resourceManager()->
+                                resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+        return currentNode->colorSpace();
+//        return m_canvas->currentImage()->colorSpace();
+    }
 }

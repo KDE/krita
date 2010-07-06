@@ -19,7 +19,6 @@
 #define KIS_COLSELNG_COMMON_COLORS_H
 
 #include "kis_color_patches.h"
-#include "KoCanvasObserverBase.h"
 
 class KoCanvasBase;
 class KisCanvas2;

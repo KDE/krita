@@ -30,6 +30,9 @@
 #include <QDesktopWidget>
 #include <QtGlobal>
 
+#include "KoColorSpace.h"
+#include "KoColor.h"
+
 #include <KDebug>
 
 inline int sqr(int x);
@@ -65,7 +68,7 @@ QColor KisMyPaintShadeSelector::pickColorAt(int x, int y)
     return c;
 }
 
-KisColorSelectorBase* KisMyPaintShadeSelector::createPopup()
+KisColorSelectorBase* KisMyPaintShadeSelector::createPopup() const
 {
     KisColorSelectorBase* popup = new KisMyPaintShadeSelector(0);
     popup->resize(256,256);
@@ -157,11 +160,18 @@ void KisMyPaintShadeSelector::precalculateData() {
 
 QImage KisMyPaintShadeSelector::getSelector() {
     QImage result(m_size,m_size,QImage::Format_RGB32);
+    
+    if(colorSpace()==0) {
+        result.fill(qRgb(255,255,255));
+        return result;
+    }
 
     for(int i=0; i<m_size; i++) {
         for(int j=0; j<m_size; j++) {
-            QColor c = getColor(i, j);
-            result.setPixel(i, j, c.rgb());
+            QColor qc = getColor(i, j);
+            KoColor kc(qc, colorSpace());
+            result.setPixel(i, j, kc.toQColor().rgb());
+//            result.setPixel(i, j, qc.rgb());
         }
     }
 

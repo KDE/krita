@@ -23,7 +23,9 @@
 class KisColorSelector;
 class KisMyPaintShadeSelector;
 class KisMinimalShadeSelector;
+class KoColorSpace;
 class QBoxLayout;
+class KoCanvasBase;
 
 class KisColorSelectorContainer : public QWidget
 {
@@ -37,6 +39,8 @@ public:
     void setShadeSelectorHideable(bool hideable);
     void setAllowHorizontalLayout(bool allow);
     void setPopupBehaviour(bool onMouseOver, bool onMouseClick);
+    void setColorSpace(const KoColorSpace* colorSpace);
+    void setCanvas(KoCanvasBase* canvas);
 
 signals:
     void openSettings();

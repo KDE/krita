@@ -32,13 +32,13 @@ class KisMyPaintShadeSelector : public KisColorSelectorBase
 public:
     KisMyPaintShadeSelector(QWidget *parent = 0);
 
-public:
-    QImage getSelector();
 protected:
     void paintEvent(QPaintEvent *);
     QColor pickColorAt(int x, int y);
-    KisColorSelectorBase* createPopup();
+    KisColorSelectorBase* createPopup() const;
+
 private:
+    QImage getSelector();
     void setColor(const QColor& c);
     void precalculateData();
     static const int m_size = 256;

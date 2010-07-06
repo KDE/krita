@@ -28,6 +28,7 @@
 #include "kis_color_selector_container.h"
 
 #include "ui_wdg_color_selector_settings.h"
+#include "kis_color_space_selector.h"
 
 #include <KDebug>
 
@@ -41,7 +42,7 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     m_commonColorsWidget = new KisCommonColors(this);
 
     //default settings
-    //remember to also change the default in the ui
+    //remember to also change the default in the ui file
 
     //shade selector
 
@@ -57,7 +58,6 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     m_commonColorsScrolling=false;
     m_commonColorsColCount=2;
     m_commonColorsRowCount=3;
-
 
     //layout
     m_verticalColorPatchesLayout = new QHBoxLayout();
@@ -78,6 +78,7 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
 void KisColorSelectorNgDockerWidget::setCanvas(KoCanvasBase *canvas)
 {
     m_commonColorsWidget->setCanvas(canvas);
+    m_colorSelectorContainer->setCanvas(canvas);
 }
 
 void KisColorSelectorNgDockerWidget::openSettings()
@@ -90,6 +91,7 @@ void KisColorSelectorNgDockerWidget::openSettings()
         m_colorSelectorContainer->setAllowHorizontalLayout(settings.ui->allowHorizontalLayout->isChecked());
 
         m_colorSelectorContainer->setPopupBehaviour(settings.ui->popupOnMouseOver->isChecked(), settings.ui->popupOnMouseClick->isChecked());
+        m_colorSelectorContainer->setColorSpace(settings.ui->colorSpace->currentColorSpace());
 
         //color patches
         m_lastColorsShow = settings.ui->lastUsedColorsShow->isChecked();
@@ -125,22 +127,28 @@ void KisColorSelectorNgDockerWidget::updateLayout()
     else
         m_lastColorsWidget->show();
 
-    if(m_commonColorsShow==false)
+    if(m_commonColorsShow==false) {
         m_commonColorsWidget->hide();
-    else
+    }
+    else {
         m_commonColorsWidget->show();
+    }
 
-    if(m_lastColorsShow && m_lastColorsDirection==KisColorPatches::Vertical)
+    if(m_lastColorsShow && m_lastColorsDirection==KisColorPatches::Vertical) {
         m_verticalColorPatchesLayout->addWidget(m_lastColorsWidget);
+    }
 
-    if(m_commonColorsShow && m_commonColorsDirection==KisColorPatches::Vertical)
+    if(m_commonColorsShow && m_commonColorsDirection==KisColorPatches::Vertical) {
         m_verticalColorPatchesLayout->addWidget(m_commonColorsWidget);
+    }
 
-    if(m_lastColorsShow && m_lastColorsDirection==KisColorPatches::Horizontal)
+    if(m_lastColorsShow && m_lastColorsDirection==KisColorPatches::Horizontal) {
         m_horizontalColorPatchesLayout->addWidget(m_lastColorsWidget);
+    }
 
-    if(m_commonColorsShow && m_commonColorsDirection==KisColorPatches::Horizontal)
+    if(m_commonColorsShow && m_commonColorsDirection==KisColorPatches::Horizontal) {
         m_horizontalColorPatchesLayout->addWidget(m_commonColorsWidget);
+    }
 
     updateGeometry();
 }

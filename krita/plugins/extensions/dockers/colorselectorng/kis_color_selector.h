@@ -27,7 +27,7 @@ class KisColorSelector : public KisColorSelectorBase
 public:
     KisColorSelector(QWidget* parent = 0);
     QColor pickColorAt(int x, int y);
-    KisColorSelectorBase* createPopup();
+    KisColorSelectorBase* createPopup() const;
 };
 
 #endif // KIS_COLSELNG_COLOR_SELECTOR_H

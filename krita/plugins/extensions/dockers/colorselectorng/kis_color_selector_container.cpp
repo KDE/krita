@@ -112,6 +112,18 @@ void KisColorSelectorContainer::setPopupBehaviour(bool onMouseOver, bool onMouse
     m_colorSelector->setPopupBehaviour(onMouseOver, onMouseClick);
 }
 
+void KisColorSelectorContainer::setColorSpace(const KoColorSpace *colorSpace)
+{
+    m_colorSelector->setColorSpace(colorSpace);
+    m_myPaintShadeSelector->setColorSpace(colorSpace);
+}
+
+void KisColorSelectorContainer::setCanvas(KoCanvasBase *canvas)
+{
+    m_colorSelector->setCanvas(canvas);
+    m_myPaintShadeSelector->setCanvas(canvas);
+}
+
 void KisColorSelectorContainer::resizeEvent(QResizeEvent * e)
 {
     if(m_shadeSelector!=0) {

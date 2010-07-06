@@ -31,12 +31,11 @@
 
 #define showSlider(input, step) input->setRange(input->minimum(), input->maximum(), step)
 
-KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const QString& caption)
+KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
         : KisWdgAutobrush(parent, name)
         , m_autoBrush(0)
 {
-    setWindowTitle(caption);
-
+    
     m_linkSize = true;
     m_linkFade = true;
 

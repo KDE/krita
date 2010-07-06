@@ -42,7 +42,7 @@ class PAINTOP_EXPORT KisAutoBrushWidget : public KisWdgAutobrush
 
 public:
 
-    KisAutoBrushWidget(QWidget *parent, const char* name, const QString& caption);
+    KisAutoBrushWidget(QWidget *parent, const char* name);
 
     void activate();
 

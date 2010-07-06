@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QBrush>
 #include <QColor>
+#include <QToolButton>
 
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
@@ -40,27 +41,25 @@
 #include "kis_text_brush_chooser.h"
 
 KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
-        : QWidget(parent)
-{
-    QHBoxLayout * l = new QHBoxLayout(this);
-    l->setObjectName("brushpopuplayout");
-    l->setMargin(2);
-    l->setSpacing(2);
+        : QWidget(parent), m_currentBrushWidget(0)
+{ 
+    uiWdgBrushChooser.setupUi(this);
 
-    m_brushesTab = new QTabWidget(this);
-    m_brushesTab->setObjectName("brushestab");
-    m_brushesTab->setFocusPolicy(Qt::StrongFocus);
-    m_brushesTab->setContentsMargins(1, 1, 1, 1);
+    m_buttonGroup = new QButtonGroup(this);
+    m_buttonGroup->setExclusive(true);
+    
+    m_layout = new QGridLayout(uiWdgBrushChooser.settingsFrame);
+    m_layout->setSizeConstraint(QLayout::SetFixedSize);
+    m_layout->setSpacing(0);
+    m_layout->setMargin(0);
 
-    l->addWidget(m_brushesTab);
-
-    m_autoBrushWidget = new KisAutoBrushWidget(0, "autobrush", i18n("Autobrush"));
+    m_autoBrushWidget = new KisAutoBrushWidget(this, "autobrush");
     connect(m_autoBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    m_brushesTab->addTab(m_autoBrushWidget, i18n("Autobrush"));
+    addChooser(i18n("Autobrush"), m_autoBrushWidget, AUTOBRUSH);
 
-    m_brushChooser = new KisBrushChooser(0);
+    m_brushChooser = new KisBrushChooser(this);
     connect(m_brushChooser, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    m_brushesTab->addTab(m_brushChooser, i18n("Predefined Brushes"));
+    addChooser(i18n("Predefined Brushes"), m_brushChooser, PREDEFINEDBRUSH);
 
     // XXX: pass image!
 //  TODO custom brush doesn't work correctly
@@ -68,16 +67,17 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
 //    connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
 //    m_brushesTab->addTab(m_customBrushWidget, i18n("Custom Brush"));
 
-    m_textBrushWidget = new KisTextBrushChooser(0, "textbrush", i18n("Text Brush"));
+    m_textBrushWidget = new KisTextBrushChooser(this, "textbrush", i18n("Text Brush"));
     connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    m_brushesTab->addTab(m_textBrushWidget, i18n("Text Brush"));
+    addChooser(i18n("Text Brush"), m_textBrushWidget, TEXTBRUSH);
 
-    connect(m_brushesTab, SIGNAL(currentChanged(int)), SIGNAL(sigBrushChanged()));
-
-    setLayout(l);
-
-    // m_brushChooser->itemChooser()->setCurrent(0);
-    m_autoBrushWidget->activate();
+    connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonClicked(int)));
+    
+    foreach(QWidget * widget, m_chooserMap.values()) {
+         m_mininmumSize = m_mininmumSize.expandedTo(widget->sizeHint());
+    }
+    
+    setCurrentWidget(m_autoBrushWidget);
 }
 
 
@@ -88,14 +88,14 @@ KisBrushSelectionWidget::~KisBrushSelectionWidget()
 KisBrushSP KisBrushSelectionWidget::brush()
 {
     KisBrushSP theBrush;
-    switch (m_brushesTab->currentIndex()) {
-    case 0:
+    switch (m_buttonGroup->checkedId()) {
+    case AUTOBRUSH:
         theBrush = m_autoBrushWidget->brush();
         break;
-    case 1:
+    case PREDEFINEDBRUSH:
         theBrush = m_brushChooser->brush();
         break;
-    case 2:
+    case TEXTBRUSH:
 //  TODO custom brush doesn't work correctly
 //        theBrush = m_customBrushWidget->brush();
 //        break;
@@ -117,12 +117,15 @@ KisBrushSP KisBrushSelectionWidget::brush()
 
 void KisBrushSelectionWidget::setAutoBrush(bool on)
 {
-    m_autoBrushWidget->setVisible(on);
+    m_buttonGroup->button(AUTOBRUSH)->setVisible(on);
+//     m_autoBrushWidget->setVisible(on);
 }
 
 void KisBrushSelectionWidget::setPredefinedBrushes(bool on)
 {
-    m_brushChooser->setVisible(on);
+    m_buttonGroup->button(PREDEFINEDBRUSH)->setVisible(on);
+
+//     m_brushChooser->setVisible(on);
 }
 
 void KisBrushSelectionWidget::setCustomBrush(bool on)
@@ -133,7 +136,7 @@ void KisBrushSelectionWidget::setCustomBrush(bool on)
 
 void KisBrushSelectionWidget::setTextBrush(bool on)
 {
-    m_textBrushWidget->setVisible(on);
+    m_buttonGroup->button(TEXTBRUSH)->setVisible(on);
 }
 
 void KisBrushSelectionWidget::setImage(KisImageWSP image)
@@ -148,19 +151,17 @@ void KisBrushSelectionWidget::setCurrentBrush(KisBrushSP brush)
     //      pane, so we don't have to have this if statement and
     //      have an extensible set of brush types
     if (dynamic_cast<KisAutoBrush*>(brush.data())) {
-        m_brushesTab->setCurrentWidget(m_autoBrushWidget);
+        setCurrentWidget(m_autoBrushWidget);
         m_autoBrushWidget->setBrush(brush);
     } else if (dynamic_cast<KisTextBrush*>(brush.data())) {
-        m_brushesTab->setCurrentWidget(m_textBrushWidget);
+        setCurrentWidget(m_textBrushWidget);
         m_textBrushWidget->setBrush(brush);
     } else {
-        m_brushesTab->setCurrentWidget(m_brushChooser);
+        setCurrentWidget(m_brushChooser);
         m_brushChooser->setBrush(brush);
     }
 
 }
-
-
 
 void KisBrushSelectionWidget::setAutoBrushDiameter(qreal diameter)
 {
@@ -173,5 +174,39 @@ qreal KisBrushSelectionWidget::autoBrushDiameter()
     return m_autoBrushWidget->autoBrushDiameter();
 }
 
+void KisBrushSelectionWidget::buttonClicked(int id)
+{
+    setCurrentWidget(m_chooserMap[id]);
+    emit sigBrushChanged();
+}
+
+void KisBrushSelectionWidget::setCurrentWidget(QWidget* widget)
+{
+    if (m_currentBrushWidget) {
+        m_layout->removeWidget(m_currentBrushWidget);
+        m_currentBrushWidget->setParent(this);
+        m_currentBrushWidget->hide();
+    }
+    widget->setMinimumSize(m_mininmumSize);
+
+    m_currentBrushWidget = widget;
+    m_layout->addWidget(widget);
+
+    m_currentBrushWidget->show();
+    m_buttonGroup->button(m_chooserMap.key(widget))->setChecked(true);
+}
+
+void KisBrushSelectionWidget::addChooser(const QString& text, QWidget* widget, int id)
+{
+    QToolButton * button = new QToolButton(this);
+    button->setText(text);
+    button->setAutoRaise(true);
+    button->setCheckable(true);
+    uiWdgBrushChooser.brushChooserButtonLayout->addWidget(button);
+    
+    m_buttonGroup->addButton(button, id);
+    m_chooserMap[m_buttonGroup->id(button)] = widget;
+    widget->hide();
+}
 
 #include "kis_brush_selection_widget.moc"

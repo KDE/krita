@@ -51,6 +51,7 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     wdgairbrush.ui
     wdgfilteroption.ui
     wdgcoloroptions.ui
+    wdgbrushchooser.ui
     sensors/SensorDistanceConfiguration.ui
     sensors/SensorTimeConfiguration.ui
     SensorSelector.ui

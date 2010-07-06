@@ -20,6 +20,7 @@
 
 #include <QWidget>
 #include "kis_brush.h"
+#include "ui_wdgbrushchooser.h"
 
 class QTabWidget;
 class KisAutoBrushWidget;
@@ -59,10 +60,29 @@ public:
 signals:
 
     void sigBrushChanged();
+    
+private slots:
+    void buttonClicked(int id);
 
 private:
-
-    QTabWidget * m_brushesTab;
+    void setCurrentWidget(QWidget * widget);
+    void addChooser(const QString & text, QWidget * widget, int id);
+    
+private:
+    enum Type {
+      AUTOBRUSH,
+      PREDEFINEDBRUSH,
+      CUSTOMBRUSH,
+      TEXTBRUSH
+    };
+    
+    Ui_WdgBrushChooser uiWdgBrushChooser;
+    QGridLayout * m_layout;
+    QWidget * m_currentBrushWidget;
+    QHash<int, QWidget*> m_chooserMap;
+    QButtonGroup * m_buttonGroup;
+    QSize m_mininmumSize;
+    
     KisAutoBrushWidget * m_autoBrushWidget;
     KisBrushChooser * m_brushChooser;
     KisTextBrushChooser * m_textBrushWidget;

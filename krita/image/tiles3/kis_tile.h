@@ -108,13 +108,6 @@ private:
               KisTileData *defaultTileData, KisMementoManager* mm);
 
 private:
-
-    /**
-     * Lock for accessing this tiledata
-     */
-//    mutable QReadWriteLock m_RWLock;
-    mutable QMutex m_lock;
-
     KisTileData *m_tileData;
 
     qint32 m_col;

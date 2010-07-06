@@ -33,8 +33,6 @@ void KisTile::init(qint32 col, qint32 row,
     m_extent = QRect(m_col * KisTileData::WIDTH, m_row * KisTileData::HEIGHT,
                      KisTileData::WIDTH, KisTileData::HEIGHT);
 
-    m_nextTile = 0;
-
     m_tileData = defaultTileData;
     globalTileDataStore.acquireTileData(m_tileData);
 
@@ -46,28 +44,24 @@ void KisTile::init(qint32 col, qint32 row,
 
 KisTile::KisTile(qint32 col, qint32 row,
                  KisTileData *defaultTileData, KisMementoManager* mm)
-        : m_lock(QMutex::Recursive)
 {
     init(col, row, defaultTileData, mm);
 }
 
 KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row, KisMementoManager* mm)
-        : KisShared(),
-        m_lock(QMutex::Recursive)
+        : KisShared()
 {
     init(col, row, rhs.tileData(), mm);
 }
 
 KisTile::KisTile(const KisTile& rhs, KisMementoManager* mm)
-        : KisShared(),
-        m_lock(QMutex::Recursive)
+        : KisShared()
 {
     init(rhs.col(), rhs.row(), rhs.tileData(), mm);
 }
 
 KisTile::KisTile(const KisTile& rhs)
-        : KisShared(),
-        m_lock(QMutex::Recursive)
+        : KisShared()
 {
     init(rhs.col(), rhs.row(), rhs.tileData(), rhs.m_mementoManager);
 }

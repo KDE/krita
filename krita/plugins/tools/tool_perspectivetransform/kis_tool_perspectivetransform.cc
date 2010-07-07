@@ -458,6 +458,19 @@ void KisToolPerspectiveTransform::mouseReleaseEvent(KoPointerEvent * event)
                 updateCanvasPixelRect(image()->bounds());
 
                 m_points.append(m_currentPt);
+                
+                if(m_points.size() == 4) {
+                    QLineF p1(m_points[0], m_points[1]);
+                    QLineF p2(m_points[2], m_points[3]);
+                    QPointF dummy;
+                    if(p1.intersect(p2, &dummy) == QLineF::BoundedIntersection) {
+                        m_points.pop_back();
+                        setStatusText(i18n("Outline isn't allowed to intersect"));
+                    } else {
+                        setStatusText(QString());
+                    }
+                }
+                
 
                 if (m_points.size() == 4) {
                     // from the points, select which is topleft ? topright ? bottomright ? and bottomleft ?

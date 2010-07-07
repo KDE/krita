@@ -13,25 +13,28 @@ USING_PART_OF_NAMESPACE_EIGEN
         
 KisColorSelectorRing::KisColorSelectorRing(KisColorSelectorBase *parent) :
     KisColorSelectorComponent(parent),
-    m_cachedColorSpace(0)
+    m_cachedColorSpace(0),
+    m_cachedSize(0)
 {
 }
 
 void KisColorSelectorRing::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
-    if(colorSpace()!=m_cachedColorSpace || true) {
-//        kDebug()<<"##################painting cache start";
+    if(colorSpace()!=m_cachedColorSpace) {
         m_cachedColorSpace = colorSpace();
+        colorCache();
         paintCache();
-//        kDebug()<<"##################painting cache end";
+        m_cachedSize=qMin(width(), height());
     }
     
-//    kDebug()<<"###################painting ring start";
-//    int size = qMin(width(), height());
-    p.drawPixmap(0,0, m_cache);
-//    kDebug()<<"###################painting ring end";
+    int size = qMin(width(), height());
+    if(m_cachedSize!=size) {
+        m_cachedSize=size;
+        paintCache();
+    }
     
+    p.drawImage(0,0, m_pixelCache);
 }
 
 void KisColorSelectorRing::paintCache()
@@ -40,7 +43,6 @@ void KisColorSelectorRing::paintCache()
     cache.fill(qRgba(0,0,0,0));
     
     Vector2i center(cache.width()/2., cache.height()/2.);
-    const KoColorSpace* colorSpace = this->colorSpace();
     
     int outerRadiusSquared = qMin(cache.width(), cache.height())/2;
     int innerRadiusSquared = outerRadiusSquared*0.7;
@@ -56,15 +58,24 @@ void KisColorSelectorRing::paintCache()
                && relativeVector.squaredNorm() > innerRadiusSquared) {
                 
                 float angle = std::atan2(relativeVector.y(), relativeVector.x())+((float)M_PI);
-                float hue = angle/(2*((float)M_PI));
-                kDebug()<<"======================hue:"<<hue;
-//                hue *= 255;
-                KoColor c(QColor::fromHsvF(hue, 1, 1), colorSpace);
-                cache.setPixel(x, y, c.toQColor().rgb());
-//                cache.setPixel(x, y, QColor::fromHsvF(hue, 1, 1).rgb());
-//                cache.setPixel(x, y, QColor::fromHsv(hue*359, 255, 255).rgb());
+                angle/=2*((float)M_PI);
+                angle*=359.f;
+                cache.setPixel(x, y, m_cachedColors.at(angle));
             }
         }
     }
-    m_cache = QPixmap::fromImage(cache);
+    m_pixelCache = cache;
+}
+
+void KisColorSelectorRing::colorCache()
+{
+    Q_ASSERT(m_cachedColorSpace);
+    m_cachedColors.clear();
+    KoColor koColor(m_cachedColorSpace);
+    QColor qColor;
+    for(int i=0; i<360; i++) {
+        qColor.setHsv(i, 255, 255);
+        koColor.fromQColor(qColor);
+        m_cachedColors.append(koColor.toQColor().rgb());
+    }
 }

@@ -4,7 +4,6 @@
 #include "kis_color_selector_component.h"
 
 #include <QImage>
-#include <QPixmap>
 
 class KisColorSelectorRing : public KisColorSelectorComponent
 {
@@ -15,9 +14,12 @@ protected:
     void paintEvent(QPaintEvent *);
 private:
     void paintCache();
+    void colorCache();
     
-    QPixmap m_cache;
+    QImage m_pixelCache;
     const KoColorSpace* m_cachedColorSpace;
+    int m_cachedSize;
+    QList<QRgb> m_cachedColors;
 };
 
 #endif // KIS_COLOR_SELECTOR_RING_H

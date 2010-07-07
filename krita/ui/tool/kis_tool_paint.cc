@@ -79,6 +79,9 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     m_compositeOp = 0;
     
     m_supportOutline = false;
+    
+    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
+    connect(kiscanvas->view()->resourceProvider(), SIGNAL(sigCompositeOpChanged(QString)), this, SLOT(slotSetCompositeMode(QString))); 
 }
 
 
@@ -93,9 +96,6 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
     switch(key){
         case(KisCanvasResourceProvider::CurrentKritaNode):
             slotSetCompositeMode(canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentCompositeOp).toString());
-            break;
-        case(KisCanvasResourceProvider::CurrentCompositeOp):
-            slotSetCompositeMode(v.toString());
             break;
         default: //nothing
             break;

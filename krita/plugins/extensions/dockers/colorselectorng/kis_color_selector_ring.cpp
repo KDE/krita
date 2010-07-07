@@ -1,7 +1,23 @@
+/*
+ *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ */
+
 #include "kis_color_selector_ring.h"
 
 #include <QPainter>
-#include <QVector2D>
 
 #include <Eigen/Core>
 USING_PART_OF_NAMESPACE_EIGEN
@@ -16,6 +32,11 @@ KisColorSelectorRing::KisColorSelectorRing(KisColorSelectorBase *parent) :
     m_cachedColorSpace(0),
     m_cachedSize(0)
 {
+}
+
+int KisColorSelectorRing::innerRadius() const
+{
+    return (qMin(width(), height())/2)*0.7;
 }
 
 void KisColorSelectorRing::paintEvent(QPaintEvent *)
@@ -45,7 +66,7 @@ void KisColorSelectorRing::paintCache()
     Vector2i center(cache.width()/2., cache.height()/2.);
     
     int outerRadiusSquared = qMin(cache.width(), cache.height())/2;
-    int innerRadiusSquared = outerRadiusSquared*0.7;
+    int innerRadiusSquared = innerRadius();
     outerRadiusSquared*=outerRadiusSquared;
     innerRadiusSquared*=innerRadiusSquared;
     

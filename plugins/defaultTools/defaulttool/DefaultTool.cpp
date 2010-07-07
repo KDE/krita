@@ -514,11 +514,11 @@ void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
             if (inside != m_mouseWasInsideHandles || m_lastHandle != newDirection) {
                 m_lastHandle = newDirection;
                 m_mouseWasInsideHandles = inside;
-                repaintDecorations();
+                //repaintDecorations();
             }
         } else {
-            if (m_lastHandle != KoFlake::NoHandle)
-                repaintDecorations();
+            /*if (m_lastHandle != KoFlake::NoHandle)
+                repaintDecorations(); */
             m_lastHandle = KoFlake::NoHandle;
             m_mouseWasInsideHandles = false;
 

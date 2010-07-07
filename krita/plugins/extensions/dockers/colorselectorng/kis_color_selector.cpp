@@ -18,6 +18,9 @@
 #include "kis_color_selector.h"
 
 #include "kis_color_selector_ring.h"
+#include "kis_color_selector_triangle.h"
+
+#include <cmath>
 
 #include <QHBoxLayout>
 #include <QColor>
@@ -25,15 +28,10 @@
 
 KisColorSelector::KisColorSelector(QWidget* parent) : KisColorSelectorBase(parent)
 {
-    KisColorSelectorComponent* colorRing = new KisColorSelectorRing(this);
-    QHBoxLayout* layout = new QHBoxLayout(this);
-    layout->setSpacing(0);
-    layout->setMargin(0);
-
-    layout->addWidget(colorRing);
+    m_ring = new KisColorSelectorRing(this);
+    m_triangle = new KisColorSelectorTriangle(this);
 
     setMinimumSize(80, 80);
-    colorRing->setMinimumSize(80,80);
 }
 
 QColor KisColorSelector::pickColorAt(int x, int y)
@@ -46,4 +44,12 @@ KisColorSelectorBase* KisColorSelector::createPopup() const
     KisColorSelectorBase* popup = new KisColorSelector(0);
     popup->resize(256,256);
     return popup;
+}
+
+void KisColorSelector::resizeEvent(QResizeEvent* e) {
+    m_ring->setGeometry(0,0,width(),height());
+    m_triangle->setGeometry(0,0,width(),height());
+    m_triangle->setRadius(m_ring->innerRadius());
+    
+    QWidget::resizeEvent(e);
 }

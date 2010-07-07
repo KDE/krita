@@ -21,6 +21,8 @@
 #include "kis_color_selector_base.h"
 
 class QColor;
+class KisColorSelectorTriangle;
+class KisColorSelectorRing;
 
 class KisColorSelector : public KisColorSelectorBase
 {
@@ -28,6 +30,11 @@ public:
     KisColorSelector(QWidget* parent = 0);
     QColor pickColorAt(int x, int y);
     KisColorSelectorBase* createPopup() const;
+protected:
+    void resizeEvent(QResizeEvent *);
+private:
+    KisColorSelectorRing* m_ring;
+    KisColorSelectorTriangle* m_triangle;
 };
 
 #endif // KIS_COLSELNG_COLOR_SELECTOR_H

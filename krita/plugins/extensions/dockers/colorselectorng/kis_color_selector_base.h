@@ -37,13 +37,13 @@ public:
     void setPopupBehaviour(bool onMouseOver, bool onMouseClick);
     void setColorSpace(const KoColorSpace* colorSpace);
     void setCanvas(KoCanvasBase* canvas);
+    const KoColorSpace* colorSpace() const;
 
 protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     virtual KisColorSelectorBase* createPopup() const = 0;
     virtual QColor pickColorAt(int x, int y)=0;
-    const KoColorSpace* colorSpace() const;
 
 protected slots:
     void hidePopup();

@@ -1322,8 +1322,7 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
         }
     }
 
-    m_textShape->update();
-
+    repaintSelection();
     updateSelectionHandler();
     updateActions();
     updateStyleManager();

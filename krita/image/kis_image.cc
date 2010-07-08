@@ -69,8 +69,7 @@
 #include "kis_update_scheduler.h"
 
 
-//#define USE_UPDATE_SCHEDULER
-
+#define USE_UPDATE_SCHEDULER
 
 KisAbstractUpdateScheduler* createUpdateScheduler(KisImageWSP image)
 {

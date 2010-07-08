@@ -143,6 +143,7 @@ void KisImagePyramid::setImageSize(qint32 w, qint32 h)
 void KisImagePyramid::updateCache(KisPPUpdateInfoSP info)
 {
     retrieveImageData(info->dirtyImageRect);
+    qDebug()<<"updateCache"<<QThread::currentThreadId();
 }
 
 void KisImagePyramid::retrieveImageData(const QRect &rect)
@@ -158,6 +159,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
 
 void KisImagePyramid::recalculateCache(KisPPUpdateInfoSP info)
 {
+    qDebug()<<"recalculate cache"<<QThread::currentThreadId();
     KisPaintDevice *src;
     KisPaintDevice *dst;
     QRect currentSrcRect = info->dirtyImageRect;

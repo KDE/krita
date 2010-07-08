@@ -56,6 +56,7 @@ public:
         // Linespacing properties
         KeepTogether,    ///< If true, the row is not allowed to break
         MinumumRowHeight,    ///< a qreal specifying the minimum row height in pt
+        RowHeight,      ///< a qreal specifying the exact row height in pt
         BreakBefore,    ///< If true, insert a frame break before this table row
         BreakAfter,     ///< If true, insert a frame break after this table row
         MasterPageName         ///< Optional name of the master-page
@@ -84,6 +85,11 @@ public:
     /// Set minimum height of row
     void setMinimumRowHeight(const qreal height);
     qreal minimumRowHeight() const;
+
+    /// Set exact and fixed height of row in a table, even if the row could be smaller because of less content
+    void setRowHeight(qreal height);
+    /// Get the exact and fixed height of row in a table
+    qreal rowHeight() const;
 
     void setKeepTogether(bool on);
     bool keepTogether() const;

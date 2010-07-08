@@ -260,7 +260,10 @@ void TableLayout::layoutRow(int row)
     KoTableRowStyle *rowStyle = carsManager ? carsManager->rowStyle(row) : 0;
 
     // Adjust row height.
-    qreal rowHeight = rowStyle ? rowStyle->minimumRowHeight() : 0.0;
+    qreal minimumRowHeight = rowStyle ? rowStyle->minimumRowHeight() : 0.0;
+    qreal rowHeight = rowStyle ? rowStyle->rowHeight() : 0.0;
+    bool rowHasExactHeight = rowStyle ? rowStyle->hasProperty(KoTableRowStyle::RowHeight) : false;
+
     int col = 0;
     while (col < m_table->columns()) {
         // Get the cell format.
@@ -284,11 +287,14 @@ void TableLayout::layoutRow(int row)
                 cellHeight -= m_tableLayoutData->m_rowHeights[rowAbove];
             }
 
-            /*
-             * Now we know how much height this cell contributes to the row,
-             * and can determine wheather the row height will grow.
-             */
-            rowHeight = qMax(rowHeight, cellHeight);
+            // if the row does not have exact height defined
+            if (!rowHasExactHeight) {
+                /*
+                 * Now we know how much height this cell contributes to the row,
+                 * and can determine wheather the row height will grow.
+                 */
+                rowHeight = qMax(qMax(minimumRowHeight, cellHeight), rowHeight);
+            }
         }
         col += cell.columnSpan(); // Skip across column spans.
     }

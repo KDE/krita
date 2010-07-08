@@ -185,6 +185,16 @@ qreal KoTableRowStyle::minimumRowHeight() const
     return propertyDouble(MinumumRowHeight);
 }
 
+void KoTableRowStyle::setRowHeight(qreal height)
+{
+    setProperty(RowHeight, height);
+}
+
+qreal KoTableRowStyle::rowHeight() const
+{
+    return propertyDouble(RowHeight);
+}
+
 void KoTableRowStyle::setKeepTogether(bool on)
 {
     setProperty(KeepTogether, on);
@@ -271,9 +281,14 @@ void KoTableRowStyle::loadOdfProperties(KoStyleStack &styleStack)
         }
     }
 
-    // Column Width
+    // minimum row height
     if (styleStack.hasProperty(KoXmlNS::style, "min-row-height")) {
         setMinimumRowHeight(KoUnit::parseValue(styleStack.property(KoXmlNS::style, "min-row-height")));
+    }
+
+    // row height
+    if (styleStack.hasProperty(KoXmlNS::style, "row-height")) {
+        setRowHeight(KoUnit::parseValue(styleStack.property(KoXmlNS::style, "row-height")));
     }
 
     // The fo:keep-together specifies if a row is allowed to break in the middle of the row.

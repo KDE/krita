@@ -1078,6 +1078,10 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
             qSwap(selectionStart, selectionEnd);
     }
 
+    // we need to access the whole (parent) table when trying to find out the clipping rectangle
+    // for the current table cell (we will use cellAt(...) method), thus we try to get the table from frame
+    QTextTable *wholeTable = qobject_cast<QTextTable*>(frame);
+
     QTextFrame::iterator it;
     for (it = frame->begin(); !(it.atEnd()); ++it) {
         QTextBlock block = it.currentBlock();
@@ -1152,8 +1156,26 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
                     selection.format.property(KoCharacterStyle::ChangeTrackerId);
                 }
             }
+
+           QRectF clipRect;                 // create an empty clipping rectangle
+
+            if (wholeTable) {               // if we're in the table drawing
+                QTextTableCell currentCell = wholeTable->cellAt(block.position());  // get the currently drawn cell
+
+                if (currentCell.isValid()) {                                        // and if the cell is valid
+                    clipRect = m_tableLayout.cellBoundingRect(currentCell);         // get the bounding rectangle from it
+                }
+            }
+
             drawTrackedChangeItem(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
+            if (clipRect.isValid()) {
+                painter->save();
+                painter->setClipRect(clipRect, Qt::IntersectClip);
+            }
             layout->draw(painter, QPointF(0, 0), selections);
+            if (clipRect.isValid()) {
+                painter->restore();
+            }
             decorateParagraph(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
 
             if (lastBorder && lastBorder != border) {

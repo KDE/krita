@@ -50,7 +50,7 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
     m_xshear = xshear;
     m_yshear = yshear;
     m_rotation = rotation,
-	m_xtranslate = xtranslate;
+    m_xtranslate = xtranslate;
     m_ytranslate = ytranslate;
     m_progressUpdater = progress;
     m_filter = filter;
@@ -447,18 +447,18 @@ bool KisTransformWorker::run()
     qint32 xtranslate = m_xtranslate;
     qint32 ytranslate = m_ytranslate;
 
-	m_progressTotalSteps = 0;
+    m_progressTotalSteps = 0;
 
-	//apply shear X and Y
-	if (xshear != 0 || yshear != 0) {
-		m_progressTotalSteps = (r.width() + r.height() * m_xshear);
-		m_progressTotalSteps += r.height() + m_progressTotalSteps  * m_yshear;
+    //apply shear X and Y
+    if (xshear != 0 || yshear != 0) {
+        m_progressTotalSteps = (r.width() + r.height() * m_xshear);
+        m_progressTotalSteps += r.height() + m_progressTotalSteps  * m_yshear;
 
-		transformPass <KisHLineIteratorPixel>(srcdev.data(), srcdev.data(), xscale, yscale *  m_xshear, - int((r.top() + (double)r.height() / 2) * yscale * m_xshear), m_filter, m_fixBorderAlpha);
-		transformPass <KisVLineIteratorPixel>(srcdev.data(), srcdev.data(), yscale, m_yshear, - int((r.left() + (double)r.width() / 2) * xscale * m_yshear), m_filter, m_fixBorderAlpha);
-		yscale = 1.;
-		xscale = 1.;
-	}
+        transformPass <KisHLineIteratorPixel>(srcdev.data(), srcdev.data(), xscale, yscale *  m_xshear, - int((r.top() + (double)r.height() / 2) * yscale * m_xshear), m_filter, m_fixBorderAlpha);
+        transformPass <KisVLineIteratorPixel>(srcdev.data(), srcdev.data(), yscale, m_yshear, - int((r.left() + (double)r.width() / 2) * xscale * m_yshear), m_filter, m_fixBorderAlpha);
+        yscale = 1.;
+        xscale = 1.;
+    }
 
     if (rotation < 0.0)
         rotation = -fmod(-rotation, 2 * M_PI) + 2 * M_PI;

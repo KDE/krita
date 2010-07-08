@@ -28,40 +28,40 @@
 class ToolTransformArgs
 {
 public:
-	ToolTransformArgs();
-	ToolTransformArgs(QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY);
-	~ToolTransformArgs();
-	
-	QPointF translate();
-	QPointF rotationCenterOffset();
-	double aX();
-	double aY();
-	double aZ();
-	double scaleX();
-	double scaleY();
-	double shearX();
-	double shearY();
+    ToolTransformArgs();
+    ToolTransformArgs(QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY);
+    ~ToolTransformArgs();
 
-	void setTranslate(QPointF translate);
-	void setRotationCenterOffset(QPointF rotationCenterOffset);
-	void setAX(double aX);
-	void setAY(double aY);
-	void setAZ(double aZ);
-	void setScaleX(double scaleX);
-	void setScaleY(double scaleY);
-	void setShearX(double shearX);
-	void setShearY(double shearY);
+    QPointF translate();
+    QPointF rotationCenterOffset();
+    double aX();
+    double aY();
+    double aZ();
+    double scaleX();
+    double scaleY();
+    double shearX();
+    double shearY();
+
+    void setTranslate(QPointF translate);
+    void setRotationCenterOffset(QPointF rotationCenterOffset);
+    void setAX(double aX);
+    void setAY(double aY);
+    void setAZ(double aZ);
+    void setScaleX(double scaleX);
+    void setScaleY(double scaleY);
+    void setShearX(double shearX);
+    void setShearY(double shearY);
 
 private:
-	QPointF m_translate;
-	QPointF m_rotationCenterOffset;
-	double m_aX;
-	double m_aY;
-	double m_aZ;
-	double m_scaleX;
-	double m_scaleY;
-	double m_shearX;
-	double m_shearY;
+    QPointF m_translate;
+    QPointF m_rotationCenterOffset;
+    double m_aX;
+    double m_aY;
+    double m_aZ;
+    double m_scaleX;
+    double m_scaleY;
+    double m_shearX;
+    double m_shearY;
 };
 
 #endif

@@ -22,28 +22,28 @@
 
 ToolTransformArgs::ToolTransformArgs()
 {
-	m_translate = QPointF(0, 0);
-	m_rotationCenterOffset = QPointF(0, 0);
-	m_aX = 0;
-	m_aY = 0;
-	m_aZ = 0;
-	m_scaleX = 1.0;
-	m_scaleY = 1.0;
-	m_shearX = 0.0;
-	m_shearY = 0.0;
+    m_translate = QPointF(0, 0);
+    m_rotationCenterOffset = QPointF(0, 0);
+    m_aX = 0;
+    m_aY = 0;
+    m_aZ = 0;
+    m_scaleX = 1.0;
+    m_scaleY = 1.0;
+    m_shearX = 0.0;
+    m_shearY = 0.0;
 }
 
 ToolTransformArgs::ToolTransformArgs(QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY)
 {
-	m_translate = translate;
-	m_rotationCenterOffset = rotationCenterOffset;
-	m_aX = aX;
-	m_aY = aY;
-	m_aZ = aZ;
-	m_scaleX = scaleX;
-	m_scaleY = scaleY;
-	m_shearX = shearX;
-	m_shearY = shearY;
+    m_translate = translate;
+    m_rotationCenterOffset = rotationCenterOffset;
+    m_aX = aX;
+    m_aY = aY;
+    m_aZ = aZ;
+    m_scaleX = scaleX;
+    m_scaleY = scaleY;
+    m_shearX = shearX;
+    m_shearY = shearY;
 }
 
 
@@ -54,90 +54,90 @@ ToolTransformArgs::~ToolTransformArgs()
 
 QPointF ToolTransformArgs::translate()
 {
-	return m_translate;
+    return m_translate;
 }
 
 QPointF ToolTransformArgs::rotationCenterOffset()
 {
-	return m_rotationCenterOffset;
+    return m_rotationCenterOffset;
 }
 
 double ToolTransformArgs::aX()
 {
-	return m_aX;
+    return m_aX;
 }
 
 double ToolTransformArgs::aY()
 {
-	return m_aY;
+    return m_aY;
 }
 
 double ToolTransformArgs::aZ()
 {
-	return m_aZ;
+    return m_aZ;
 }
 
 double ToolTransformArgs::scaleX()
 {
-	return m_scaleX;
+    return m_scaleX;
 }
 
 double ToolTransformArgs::scaleY()
 {
-	return m_scaleY;
+    return m_scaleY;
 }
 
 double ToolTransformArgs::shearX()
 {
-	return m_shearX;
+    return m_shearX;
 }
 
 double ToolTransformArgs::shearY()
 {
-	return m_shearY;
+    return m_shearY;
 }
 
 void ToolTransformArgs::setTranslate(QPointF translate)
 {
-	m_translate = translate;
+    m_translate = translate;
 }
 
 void ToolTransformArgs::setRotationCenterOffset(QPointF rotationCenterOffset)
 {
-	m_rotationCenterOffset = rotationCenterOffset;
+    m_rotationCenterOffset = rotationCenterOffset;
 }
 
 void ToolTransformArgs::setAX(double aX)
 {
-	m_aX = aX;
+    m_aX = aX;
 }
 
 void ToolTransformArgs::setAY(double aY)
 {
-	m_aY = aY;
+    m_aY = aY;
 }
 
 void ToolTransformArgs::setAZ(double aZ)
 {
-	m_aZ = aZ;
+    m_aZ = aZ;
 }
 
 void ToolTransformArgs::setScaleX(double scaleX)
 {
-	m_scaleX = scaleX;
+    m_scaleX = scaleX;
 }
 
 void ToolTransformArgs::setScaleY(double scaleY)
 {
-	m_scaleY = scaleY;
+    m_scaleY = scaleY;
 }
 
 void ToolTransformArgs::setShearX(double shearX)
 {
-	m_shearX = shearX;
+    m_shearX = shearX;
 }
 
 void ToolTransformArgs::setShearY(double shearY)
 {
-	m_shearY = shearY;
+    m_shearY = shearY;
 }

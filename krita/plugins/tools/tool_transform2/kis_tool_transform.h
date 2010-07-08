@@ -56,7 +56,7 @@ public:
         setupUi(this);
     }
 };
-	
+
 /**
  * Transform tool
  *
@@ -77,15 +77,15 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
     void paint(QPainter& gc, const KoViewConverter &converter);
-	//recalc the outline & current QImages
+    //recalc the outline & current QImages
     void recalcOutline();
-	//update the boundrect of the current transformed pixels
-	void updateCurrentOutline();
-	//recalcs the outline and update the corresponding areas of the canvas (union of the outline boundrect before & after recalc)
-	void updateOutlineChanged();
-	//sets the value of the spinboxes to current args
-	void refreshSpinBoxes();
-	void setButtonBoxDisabled(bool disabled);
+    //update the boundrect of the current transformed pixels
+    void updateCurrentOutline();
+    //recalcs the outline and update the corresponding areas of the canvas (union of the outline boundrect before & after recalc)
+    void updateOutlineChanged();
+    //sets the value of the spinboxes to current args
+    void refreshSpinBoxes();
+    void setButtonBoxDisabled(bool disabled);
 
 public:
 
@@ -95,19 +95,19 @@ public:
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
-	void setRotCenter(int id);
-	void setScaleX(double scaleX);
-	void setScaleY(double scaleY);
-	void setShearX(double shearX);
-	void setShearY(double shearY);
-	void setAX(double aX);
-	void setAY(double aY);
-	void setAZ(double aZ);
-	void setTranslateX(double translateX);
-	void setTranslateY(double translateY);
-	void buttonBoxClicked(QAbstractButton *button);
-	void keepAspectRatioChanged(bool keep);
-	void editingFinished();
+    void setRotCenter(int id);
+    void setScaleX(double scaleX);
+    void setScaleY(double scaleY);
+    void setShearX(double shearX);
+    void setShearY(double shearY);
+    void setAX(double aX);
+    void setAY(double aY);
+    void setAZ(double aZ);
+    void setTranslateX(double translateX);
+    void setTranslateY(double translateY);
+    void buttonBoxClicked(QAbstractButton *button);
+    void keepAspectRatioChanged(bool keep);
+    void editingFinished();
 
 private:
 
@@ -127,10 +127,10 @@ private:
     QVector3D invrotY(double x, double y, double z) {
         return QVector3D(x, y, z);
     }
-	QPointF perspective(double x, double y, double z) {
-		Q_UNUSED(z);
-		return QPointF(x, y);
-	}
+    QPointF perspective(double x, double y, double z) {
+        Q_UNUSED(z);
+        return QPointF(x, y);
+    }
 #else
     QVector3D rotX(double x, double y, double z) {
         return QVector3D(x, m_cosaX * y - m_sinaX * z, m_cosaX * z + m_sinaX * y);
@@ -144,11 +144,11 @@ private:
     QVector3D invrotY(double x, double y, double z) {
         return QVector3D(m_cosaY * x + m_sinaY * z, y, - m_sinaY * x + m_cosaY * z);
     }
-	QPointF perspective(double x, double y, double z) {
-		QVector3D t(x, y, z - m_viewerZ);
-		
-		return QPointF(- t.x() * m_viewerZ / t.z(), - t.y() * m_viewerZ / t.z());
-	}
+    QPointF perspective(double x, double y, double z) {
+        QVector3D t(x, y, z - m_viewerZ);
+
+        return QPointF(- t.x() * m_viewerZ / t.z(), - t.y() * m_viewerZ / t.z());
+    }
 #endif
 
     QVector3D rotZ(double x, double y, double z) {
@@ -157,60 +157,60 @@ private:
     QVector3D invrotZ(double x, double y, double z) {
         return QVector3D(m_cosaZ*x + m_sinaZ*y, -m_sinaZ*x + m_cosaZ*y, z);
     }
-	QVector3D shear(double x, double y, double z) {
-		double x2 = x + y * m_currentArgs.shearX();
-		return QVector3D(x2, y + x2 * m_currentArgs.shearY(), z);
-	}
-	QVector3D invshear(double x, double y, double z) {
-		y -= x * m_currentArgs.shearY();
-		x -= y * m_currentArgs.shearX();
+    QVector3D shear(double x, double y, double z) {
+        double x2 = x + y * m_currentArgs.shearX();
+        return QVector3D(x2, y + x2 * m_currentArgs.shearY(), z);
+    }
+    QVector3D invshear(double x, double y, double z) {
+        y -= x * m_currentArgs.shearY();
+        x -= y * m_currentArgs.shearX();
 
-		return QVector3D(x, y, z);
-	}
-	QVector3D scale(double x, double y, double z) {
-		return QVector3D(x * m_currentArgs.scaleX(), y * m_currentArgs.scaleY(), z);
-	}
-	QVector3D invscale(double x, double y, double z) {
-		return QVector3D(x / m_currentArgs.scaleX(), y / m_currentArgs.scaleY(), z);
-	}
-	QVector3D transformVector(double x, double y, double z) {
-		QVector3D t = scale(x, y ,z);
-		t = shear(t.x(), t.y(), t.z());
-		t = rotZ(t.x(), t.y(), t.z());
-		t = rotY(t.x(), t.y(), t.z());
-		t = rotX(t.x(), t.y(), t.z());
+        return QVector3D(x, y, z);
+    }
+    QVector3D scale(double x, double y, double z) {
+        return QVector3D(x * m_currentArgs.scaleX(), y * m_currentArgs.scaleY(), z);
+    }
+    QVector3D invscale(double x, double y, double z) {
+        return QVector3D(x / m_currentArgs.scaleX(), y / m_currentArgs.scaleY(), z);
+    }
+    QVector3D transformVector(double x, double y, double z) {
+        QVector3D t = scale(x, y ,z);
+        t = shear(t.x(), t.y(), t.z());
+        t = rotZ(t.x(), t.y(), t.z());
+        t = rotY(t.x(), t.y(), t.z());
+        t = rotX(t.x(), t.y(), t.z());
 
-		return t;
-	}
-	QVector3D invTransformVector(double x, double y, double z) {
-		QVector3D t = invrotX(x, y, z);
-		t = invrotY(t.x(), t.y(), t.z());
-		t = invrotZ(t.x(), t.y(), t.z());
-		t = invshear(t.x(), t.y(), t.z());
-		t = invscale(t.x(), t.y(), t.z());
+        return t;
+    }
+    QVector3D invTransformVector(double x, double y, double z) {
+        QVector3D t = invrotX(x, y, z);
+        t = invrotY(t.x(), t.y(), t.z());
+        t = invrotZ(t.x(), t.y(), t.z());
+        t = invshear(t.x(), t.y(), t.z());
+        t = invscale(t.x(), t.y(), t.z());
 
-		return t;
-	}
-	QVector3D transformVector(QVector3D v) {
-		return transformVector(v.x(), v.y(), v.z());
-	}
-	QVector3D invTransformVector(QVector3D v) {
-		return invTransformVector(v.x(), v.y(), v.z());
-	}
+        return t;
+    }
+    QVector3D transformVector(QVector3D v) {
+        return transformVector(v.x(), v.y(), v.z());
+    }
+    QVector3D invTransformVector(QVector3D v) {
+        return invTransformVector(v.x(), v.y(), v.z());
+    }
 
     int det(const QPointF & v, const QPointF & w);
     double distsq(const QPointF & v, const QPointF & w); //square of the euclidian distance
-	int octant(double x, double y); //the octant of the director given by vector (x,y)
-	//sets the cursor according the mouse position (doesn't take shearing into account yet)
+    int octant(double x, double y); //the octant of the director given by vector (x,y)
+    //sets the cursor according the mouse position (doesn't take shearing into account yet)
     void setFunctionalCursor();
-	//just sets default values for current args, temporary values..
-	void initTransform();
-	//saves the original selection, paintDevice, Images previous. set transformation to default using initTransform
+    //just sets default values for current args, temporary values..
+    void initTransform();
+    //saves the original selection, paintDevice, Images previous. set transformation to default using initTransform
     void initHandles();
-	//stores m_currentArgs into args
-	void storeArgs(ToolTransformArgs &args);
-	//sets m_currentArgs to args
-	void restoreArgs(ToolTransformArgs args);
+    //stores m_currentArgs into args
+    void storeArgs(ToolTransformArgs &args);
+    //sets m_currentArgs to args
+    void restoreArgs(ToolTransformArgs args);
 
 private slots:
 
@@ -218,71 +218,71 @@ private slots:
 
 private:
     enum function {ROTATE = 0, MOVE, RIGHTSCALE, TOPRIGHTSCALE, TOPSCALE, TOPLEFTSCALE,
-				   LEFTSCALE, BOTTOMLEFTSCALE, BOTTOMSCALE, BOTTOMRIGHTSCALE, 
-				   BOTTOMSHEAR, RIGHTSHEAR, TOPSHEAR, LEFTSHEAR,
-				   MOVECENTER
+                   LEFTSCALE, BOTTOMLEFTSCALE, BOTTOMSCALE, BOTTOMRIGHTSCALE, 
+                   BOTTOMSHEAR, RIGHTSHEAR, TOPSHEAR, LEFTSHEAR,
+                   MOVECENTER
                   };
-	QPointF m_handleDir[9];
+    QPointF m_handleDir[9];
 
     QCursor m_sizeCursors[8]; //cursors for the 8 directions
     function m_function; //current transformation function
 
-	ToolTransformArgs m_currentArgs;
-	ToolTransformArgs m_clickArgs;
+    ToolTransformArgs m_currentArgs;
+    ToolTransformArgs m_clickArgs;
 
-	int m_handleRadius;
-	int m_rotationCenterRadius;
-	int m_maxRadius;
-    
+    int m_handleRadius;
+    int m_rotationCenterRadius;
+    int m_maxRadius;
+
     //informations on the original selection (before any transformation)
-	double m_originalWidth2, m_originalHeight2; //'2' for half
+    double m_originalWidth2, m_originalHeight2; //'2' for half
     QPoint m_originalTopLeft;  //in image coords
     QPoint m_originalBottomRight;  //in image coords
     QPointF m_originalCenter; //original center of the selection
 
-	//informations on the bounding rect of the selection just after the LAST transformation
-	//thus they are initially equal to original points
-	//(used to know dirty rects more precisely)
+    //informations on the bounding rect of the selection just after the LAST transformation
+    //thus they are initially equal to original points
+    //(used to know dirty rects more precisely)
     QPoint m_previousTopLeft;  //in image coords
     QPoint m_previousBottomRight;  //in image coords
 
-	//center used for rotation (calculated from rotationCenterOffset (in currentArgs))
-	QVector3D m_rotationCenter;
-	QVector3D m_clickRotationCenter; //the rotation center at click
-	QPointF m_rotationCenterProj;
-    
+    //center used for rotation (calculated from rotationCenterOffset (in currentArgs))
+    QVector3D m_rotationCenter;
+    QVector3D m_clickRotationCenter; //the rotation center at click
+    QPointF m_rotationCenterProj;
+
     bool m_selecting; // true <=> selection has been clicked
     bool m_actuallyMoveWhileSelected; // true <=> selection has been moved while clicked
-    
+
     //informations on the current selection
     QVector3D m_topLeft;  //in image coords
     QVector3D m_topRight;  //in image coords
     QVector3D m_bottomLeft;  //in image coords
     QVector3D m_bottomRight;  //in image coords
-	QVector3D m_middleLeft;
-	QVector3D m_middleRight;
-	QVector3D m_middleTop;
-	QVector3D m_middleBottom;
+    QVector3D m_middleLeft;
+    QVector3D m_middleRight;
+    QVector3D m_middleTop;
+    QVector3D m_middleBottom;
 
-	QPointF m_topLeftProj; //perspective projection of m_topLeft
-	QPointF m_topRightProj;
-	QPointF m_bottomLeftProj;
-	QPointF m_bottomRightProj;
-	QPointF m_middleLeftProj;
-	QPointF m_middleRightProj;
-	QPointF m_middleTopProj;
-	QPointF m_middleBottomProj;
+    QPointF m_topLeftProj; //perspective projection of m_topLeft
+    QPointF m_topRightProj;
+    QPointF m_bottomLeftProj;
+    QPointF m_bottomRightProj;
+    QPointF m_middleLeftProj;
+    QPointF m_middleRightProj;
+    QPointF m_middleTopProj;
+    QPointF m_middleBottomProj;
 
-	double m_viewerZ; //used for perspective projection
-    
+    double m_viewerZ; //used for perspective projection
+
     //current scale factors
-	//wOutModifiers don't take shift modifier into account
+    //wOutModifiers don't take shift modifier into account
     double m_scaleX_wOutModifier;
     double m_scaleY_wOutModifier;
 
-	QPointF m_prevMousePos;
+    QPointF m_prevMousePos;
     QPointF m_clickPoint; //position of the mouse when click occured
-    
+
     double m_cosaZ; //cos and sin of transformArgs.aZ()
     double m_sinaZ;
     double m_cosaX;
@@ -291,27 +291,27 @@ private:
     double m_sinaY;
     double m_clickangle; //angle made at click, from the rotationCenter
 
-	bool m_boxValueChanged; //true if a boxValue has been changed directly by the user (not by click + move mouse)
-	bool m_hasBeenTransformed;
+    bool m_boxValueChanged; //true if a boxValue has been changed directly by the user (not by click + move mouse)
+    bool m_hasBeenTransformed;
 
-	QImage *m_origImg; //image of the pixels in selection bound rect
-	QTransform m_transform; //transformation from the origImg
-	QImage m_currImg; //origImg transformed using m_transform
-	QImage *m_origSelectionImg; //the original selection with white used as alpha channel
-	QImage m_scaledOrigSelectionImg; //the original selection to be drawn, scaled to the view
-	QSizeF m_refSize; //used in paint() to check if the view has changed (need to update m_currSelectionImg);
+    QImage *m_origImg; //image of the pixels in selection bound rect
+    QTransform m_transform; //transformation from the origImg
+    QImage m_currImg; //origImg transformed using m_transform
+    QImage *m_origSelectionImg; //the original selection with white used as alpha channel
+    QImage m_scaledOrigSelectionImg; //the original selection to be drawn, scaled to the view
+    QSizeF m_refSize; //used in paint() to check if the view has changed (need to update m_currSelectionImg);
 
     KisFilterStrategy *m_filter;
 
     WdgToolTransform *m_optWidget;
 
-	KisPaintDeviceSP m_target;
+    KisPaintDeviceSP m_target;
     KisPaintDeviceSP m_origDevice;
     KisSelectionSP m_origSelection; //contains the original selection
-	//KisShapeSelection *m_previousShapeSelection;
+    //KisShapeSelection *m_previousShapeSelection;
     KoCanvasBase *m_canvas;
 
-	QButtonGroup *m_rotCenterButtons;
+    QButtonGroup *m_rotCenterButtons;
 };
 
 class KisToolTransformFactory : public KoToolFactoryBase

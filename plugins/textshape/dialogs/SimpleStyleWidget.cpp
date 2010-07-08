@@ -153,6 +153,8 @@ void SimpleStyleWidget::setCurrentBlock(const QTextBlock &block)
         switch (layout->textOption().textDirection()) {
         case Qt::LeftToRight: updateDirection(LTR); break;
         case Qt::RightToLeft: updateDirection(RTL); break;
+        default:
+            break;
         }
     }
 

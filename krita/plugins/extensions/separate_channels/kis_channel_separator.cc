@@ -98,8 +98,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
     m_view->image()->lock();
     int i = 0;
-    quint32 channelIndex = 0;
-    for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it, ++channelIndex) {
+    for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it) {
 
         KoChannelInfo * ch = (*it);
 
@@ -137,7 +136,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
             while (! srcIt.isDone()) {
                 if (srcIt.isSelected()) {
                     if (toColor) {
-                        dstCs->singleChannelPixel(dstIt.rawData(), srcIt.rawData(), channelIndex);
+                        dstCs->singleChannelPixel(dstIt.rawData(), srcIt.rawData(), channelPos);
 
                         if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
                             //dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);

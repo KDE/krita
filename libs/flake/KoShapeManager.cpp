@@ -41,6 +41,7 @@
 #include <KoRTree.h>
 
 #include <QPainter>
+#include <QTimer>
 #include <kdebug.h>
 
 class KoShapeManager::Private
@@ -564,6 +565,7 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
     if (d->aggregate4update.contains(shape) || d->additionalShapes.contains(shape)) {
         return;
     }
+    const bool wasEmpty = d->aggregate4update.isEmpty();
     d->aggregate4update.insert(shape);
     d->shapeIndexesBeforeUpdate.insert(shape, shape->zIndex());
 
@@ -572,6 +574,8 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
         foreach(KoShape *child, container->shapes())
             d->aggregate4update.insert(child);
     }
+    if (wasEmpty && !d->aggregate4update.isEmpty())
+        QTimer::singleShot(100, this, SLOT(updateTree()));
 }
 
 QList<KoShape*> KoShapeManager::shapes() const

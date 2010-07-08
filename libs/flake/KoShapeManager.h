@@ -201,6 +201,7 @@ signals:
 private:
     class Private;
     Private * const d;
+    Q_PRIVATE_SLOT(d, void updateTree())
 };
 
 #endif

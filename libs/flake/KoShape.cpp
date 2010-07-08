@@ -679,7 +679,6 @@ void KoShape::setBackground(KoShapeBackground *fill)
     if (d->fill)
         d->fill->ref();
     d->shapeChanged(BackgroundChanged);
-    notifyChanged();
 }
 
 KoShapeBackground * KoShape::background() const

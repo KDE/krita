@@ -93,7 +93,16 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
             }
             // TODO the spec has a strange mention of number:format-source
             else if (e.attributeNS(KoXmlNS::number, "textual", QString()) == "true") {
-                format += shortForm ? "MMM" : "MMMM";
+                bool isExtraShort = false;      // find out if we have to use the extra-short month name (just 1st letter)
+                if (e.attributeNS(KoXmlNS::koffice, "number-length", QString()) == "extra-short") {
+                    isExtraShort = true;
+                }
+
+                if (!isExtraShort) {            // for normal month format (first 3 letters or complete name)
+                    format += shortForm ? "MMM" : "MMMM";
+                } else {                        // for the extra-short month name use 'X' as a special mark
+                    format += "X";
+                }
             } else { // month number
                 format += shortForm ? "M" : "MM";
             }
@@ -586,10 +595,11 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool k
                 format = format.remove(0, 1);
             }
             //TODO implement loading ! What is it ?
-            else if (format.startsWith("MMMMM")) {
+            else if (format.startsWith("MMMMM")) {        // MMMMM is extra-short month name (only 1st character)
                 addTextNumber(text, elementWriter);
                 elementWriter.startElement("number:month");
                 elementWriter.addAttribute("number:textual", "true");
+                elementWriter.addAttribute("koffice:number-length", "extra-short");
                 elementWriter.endElement();
                 format = format.remove(0, 5);
             } else if (format.startsWith("MMMM")) {

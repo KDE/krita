@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008-2010 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
@@ -131,8 +131,6 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     QTextDocument *doc = m_textShapeData->document();
     Q_ASSERT(doc);
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
-
-    //lay->state()->setImageCollection(m_imageCollection);
 
     if (m_textShapeData->endPosition() < 0) { // not layouted yet.
         if (lay == 0) {
@@ -461,6 +459,12 @@ void TextShape::update(const QRectF &shape) const
 
 void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
 {
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    Q_ASSERT(lay);
+    if (!lay->hasLayouter()) {
+        lay->setLayout(new Layout(lay));
+    }
+
     if (asynchronous) {
         synchronized(m_mutex) {
             if (m_textShapeData->isDirty()) {

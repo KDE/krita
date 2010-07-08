@@ -1102,7 +1102,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
 
         QTextLayout *layout = block.layout();
 
-        if (!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty()) {
+        if (!painter->hasClipping() || clipRegion.intersects(layout->boundingRect().toRect())) {
             started = true;
 
             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());

@@ -37,7 +37,6 @@
 #include "kis_image.h"
 
 #include "kis_projection_backend.h"
-#include "kis_projection_cache.h"
 #include "kis_image_pyramid.h"
 
 
@@ -97,7 +96,6 @@ struct KisPrescaledProjection::Private {
      * thought this option worth implementing (ok, yeah.. reimplementing)
      */
     bool useNearestNeighbour;
-    bool useMipmapping;
     bool cacheKisImageAsQImage;
 
     QImage prescaledQImage;
@@ -149,20 +147,14 @@ void KisPrescaledProjection::setViewConverter(KoViewConverter * viewConverter)
     m_d->viewConverter = viewConverter;
 }
 
-void KisPrescaledProjection::initBackend(bool useMipmapping, bool cacheKisImageAsQImage)
+void KisPrescaledProjection::initBackend(bool cacheKisImageAsQImage)
 {
     if (m_d->projectionBackend) {
         delete m_d->projectionBackend;
     }
 
-    if (useMipmapping) {
-        m_d->projectionBackend = new KisImagePyramid(4);
-    }
-    else {
-        KisProjectionCache* cache = new KisProjectionCache();
-        cache->setCacheKisImageAsQImage(cacheKisImageAsQImage);
-        m_d->projectionBackend = cache;
-    }
+    // we disable building the pyramid with setting its height to 1
+    m_d->projectionBackend = new KisImagePyramid(1);
     m_d->projectionBackend->setImage(m_d->image);
 }
 
@@ -171,15 +163,13 @@ void KisPrescaledProjection::updateSettings()
     KisConfig cfg;
 
     if (m_d->useNearestNeighbour != cfg.useNearestNeighbour() ||
-        m_d->useMipmapping != cfg.useMipmapping() ||
         m_d->cacheKisImageAsQImage != cfg.cacheKisImageAsQImage() ||
         m_d->projectionBackend == 0 ) {
 
         m_d->useNearestNeighbour = cfg.useNearestNeighbour();
-        m_d->useMipmapping = cfg.useMipmapping();
         m_d->cacheKisImageAsQImage = cfg.cacheKisImageAsQImage();
 
-        initBackend(m_d->useMipmapping, m_d->cacheKisImageAsQImage);
+        initBackend(m_d->cacheKisImageAsQImage);
     }
 
     setMonitorProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));

@@ -61,7 +61,6 @@
 #ifdef HAVE_OPENGL
 #include <QGLFormat>
 #endif
-#include "kis_projection_cache.h"
 
 //Favorite resource Manager
 #include <ko_favorite_resource_manager.h>

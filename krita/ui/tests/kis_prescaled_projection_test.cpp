@@ -258,9 +258,6 @@ void KisPrescaledProjectionTest::benchmarkUpdate()
 
     image->addNode(layer, image->rootLayer(), 0);
 
-    KisConfig config;
-    config.setUseMipmapping(true);
-
 
     KoZoomHandler * viewConverter = new KoZoomHandler();
     KisPrescaledProjection projection;

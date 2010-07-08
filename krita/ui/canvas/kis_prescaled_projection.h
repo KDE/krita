@@ -126,12 +126,6 @@ public slots:
     void updateSettings();
 
     /**
-     * Called from updateSettings to set up chosen backend:
-     * KisProjectionCache or KisImagePyramidBased
-     */
-    void initBackend(bool useMipmapping, bool cacheKisImageAsQImage);
-
-    /**
      * Called whenever the view widget needs to show a different part of
      * the document
      *
@@ -167,6 +161,12 @@ private:
 
     KisPrescaledProjection(const KisPrescaledProjection &);
     KisPrescaledProjection operator=(const KisPrescaledProjection &);
+
+    /**
+     * Called from updateSettings to set up chosen backend:
+     * now there is only one option left: KisImagePyramid
+     */
+    void initBackend(bool cacheKisImageAsQImage);
 
     /**
      * preScale and draw onto the scaled projection the specified rect,

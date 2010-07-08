@@ -85,6 +85,7 @@ public:
 
 public slots:
     void renderImage();
+    void updateShape();
 
 private:
     KoShape *m_pictureShape;

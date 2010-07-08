@@ -65,6 +65,11 @@ void RenderQueue::renderImage()
     }
 }
 
+void RenderQueue::updateShape()
+{
+    m_pictureShape->update();
+}
+
 //////////////
 PictureShape::PictureShape()
     : KoFrameShape(KoXmlNS::draw, "image"),
@@ -142,7 +147,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
         QTimer::singleShot(0, m_renderQueue, SLOT(renderImage()));
         if (!imageData->hasCachedPixmap()
             || imageData->pixmap().size().width() > pixmapSize.width()) { // don't scale down
-            update(pixelsF); // schedule another update, by then the renderqueue might have rendered the pixmap
+            QTimer::singleShot(0, m_renderQueue, SLOT(updateShape()));
             return;
         }
         pixmap = imageData->pixmap();

@@ -383,15 +383,11 @@ if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     find_package(KofficeSqlite 3.6.16)
     macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
                       FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")
-    ## Test for bzip2
-    find_program(BZIP2_EXECUTABLE NAMES bzip2)
-    macro_log_feature(BZIP2_EXECUTABLE "bzip2" "High-quality data compressor" "http://www.bzip.org"
-                      FALSE "" "Required by Kexi.")
 
-    if(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND)
+    if(NOT SQLITE_FOUND)
         set(SHOULD_BUILD_KEXI FALSE)
         message(STATUS "WARNING: Kexi will not be built.")
-    endif(NOT BZIP2_EXECUTABLE OR NOT SQLITE_FOUND)
+    endif(NOT SQLITE_FOUND)
 endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 
 # koreport component not needed if no app is using it

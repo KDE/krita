@@ -31,7 +31,9 @@ public:
     QColor pickColorAt(int x, int y);
     KisColorSelectorBase* createPopup() const;
 protected:
+    void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *);
+    void mousePressEvent(QMouseEvent* e);
 private:
     KisColorSelectorRing* m_ring;
     KisColorSelectorTriangle* m_triangle;

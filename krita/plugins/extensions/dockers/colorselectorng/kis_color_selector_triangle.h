@@ -29,20 +29,27 @@ public:
     explicit KisColorSelectorTriangle(KisColorSelectorBase* parent);
     
     void setRadius(int radius);
+    bool isComponent(int x, int y) const;
     
+    void mousePressEvent(QMouseEvent *);
+public slots:
+    void setHue(int hue);
+signals:
+    void colorChanged(QColor color);
 protected:
     void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *);
-    
 private:
     int triangleWidth() const;
     int triangleHeight() const;
     void updatePixelCache();
     QRgb colorAt(int x, int y) const;
-    int hue() const;
+    QPoint widgetToTriangleCoordinates(const QPoint& point) const;
     QImage m_pixelCache;
     
     int m_radius;
+    int m_hue;
+    QPoint m_lastClickPos;
 };
 
 #endif // KIS_COLOR_SELECTOR_TRIANGLE_H

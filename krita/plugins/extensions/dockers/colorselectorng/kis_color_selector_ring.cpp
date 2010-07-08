@@ -18,6 +18,7 @@
 #include "kis_color_selector_ring.h"
 
 #include <QPainter>
+#include <QMouseEvent>
 
 #include <Eigen/Core>
 USING_PART_OF_NAMESPACE_EIGEN
@@ -39,14 +40,31 @@ int KisColorSelectorRing::innerRadius() const
     return (qMin(width(), height())/2)*0.7;
 }
 
+bool KisColorSelectorRing::isComponent(int x, int y) const
+{
+    int outerRadiusSquared = qMin(width(), height())/2;
+    int innerRadiusSquared = innerRadius();
+    outerRadiusSquared*=outerRadiusSquared;
+    innerRadiusSquared*=innerRadiusSquared;
+    
+    
+    Vector2i relativeVector(x-width()/2, y-height()/2);
+    
+    if(relativeVector.squaredNorm() < outerRadiusSquared
+       && relativeVector.squaredNorm() > innerRadiusSquared) {
+        return true;
+    }
+    return false;
+}
+
 void KisColorSelectorRing::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
     if(colorSpace()!=m_cachedColorSpace) {
         m_cachedColorSpace = colorSpace();
+        m_cachedSize=qMin(width(), height());
         colorCache();
         paintCache();
-        m_cachedSize=qMin(width(), height());
     }
     
     int size = qMin(width(), height());
@@ -55,12 +73,28 @@ void KisColorSelectorRing::paintEvent(QPaintEvent *)
         paintCache();
     }
     
-    p.drawImage(0,0, m_pixelCache);
+    p.drawImage(width()/2-m_pixelCache.width()/2,
+                height()/2-m_pixelCache.height()/2,
+                m_pixelCache);
+}
+
+void KisColorSelectorRing::mousePressEvent(QMouseEvent * e) {
+    kDebug()<<"##########ring mouse press";
+    if(isComponent(e->x(), e->y())) {
+        QPoint ringTopLeft(width()/2-m_pixelCache.width()/2,
+                            height()/2-m_pixelCache.height()/2);
+        QPoint ringCoord = e->pos()-ringTopLeft;
+        emit hueChanged(QColor(m_pixelCache.pixel(ringCoord)).hue());
+        e->accept();
+    }
+    else {
+        e->ignore();
+    }
 }
 
 void KisColorSelectorRing::paintCache()
 {
-    QImage cache(width(), height(), QImage::Format_ARGB32_Premultiplied);
+    QImage cache(m_cachedSize, m_cachedSize, QImage::Format_ARGB32_Premultiplied);
     cache.fill(qRgba(0,0,0,0));
     
     Vector2i center(cache.width()/2., cache.height()/2.);

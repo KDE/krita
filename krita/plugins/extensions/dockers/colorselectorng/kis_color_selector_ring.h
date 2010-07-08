@@ -28,8 +28,12 @@ class KisColorSelectorRing : public KisColorSelectorComponent
 public:
     explicit KisColorSelectorRing(KisColorSelectorBase *parent);
     int innerRadius() const;
+    void mousePressEvent(QMouseEvent *);
 protected:
+    bool isComponent(int x, int y) const;
     void paintEvent(QPaintEvent *);
+signals:
+    void hueChanged(int hue);
 private:
     void paintCache();
     void colorCache();

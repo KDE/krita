@@ -30,6 +30,7 @@ public:
     explicit KisColorSelectorComponent(KisColorSelectorBase* parent);
 protected:
     const KoColorSpace* colorSpace() const;
+    virtual void mousePressEvent(QMouseEvent *) = 0;
     
 private:
     KisColorSelectorBase* m_parent;

@@ -24,13 +24,19 @@
 
 #include <QHBoxLayout>
 #include <QColor>
+#include <QPainter>
+#include <QMouseEvent>
 
+
+#include <KDebug>
 
 KisColorSelector::KisColorSelector(QWidget* parent) : KisColorSelectorBase(parent)
 {
     m_ring = new KisColorSelectorRing(this);
     m_triangle = new KisColorSelectorTriangle(this);
-
+    
+    connect(m_ring, SIGNAL(hueChanged(int)), m_triangle, SLOT(setHue(int)));
+    
     setMinimumSize(80, 80);
 }
 
@@ -46,10 +52,23 @@ KisColorSelectorBase* KisColorSelector::createPopup() const
     return popup;
 }
 
+void KisColorSelector::paintEvent(QPaintEvent*)
+{
+    QPainter p(this);
+    p.fillRect(0,0,width(),height(),QColor(128,128,128));
+}
+
 void KisColorSelector::resizeEvent(QResizeEvent* e) {
     m_ring->setGeometry(0,0,width(),height());
     m_triangle->setGeometry(0,0,width(),height());
     m_triangle->setRadius(m_ring->innerRadius());
     
     QWidget::resizeEvent(e);
+}
+
+void KisColorSelector::mousePressEvent(QMouseEvent* e)
+{
+    m_ring->mousePressEvent(e);
+    if(!e->isAccepted())
+        m_triangle->mousePressEvent(e);
 }

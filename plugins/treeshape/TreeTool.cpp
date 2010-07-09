@@ -13,49 +13,106 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+ * Boston, MA 02110-1301, USA.
 */
 
-#include "TreeTool.h"
 #include "TreeShape.h"
+#include "TreeTool.h"
+#include "SelectionDecorator.h"
+#include "TreeShapeMoveStrategy.h"
+#include "KoGradientBackground.h"
 
-#include <QToolButton>
-#include <QGridLayout>
-#include <KLocale>
-#include <KIconLoader>
-#include <KUrl>
-#include <KFileDialog>
-
-#include <KoCanvasBase.h>
-#include <KoImageCollection.h>
-#include <KoSelection.h>
-#include <KoShapeManager.h>
 #include <KoPointerEvent.h>
-#include <KoGradientBackground.h>
+#include <KoToolSelection.h>
+#include <KoToolManager.h>
+#include <KoSelection.h>
 #include <KoShapeController.h>
-#include <QUndoCommand>
+#include <KoShapeManager.h>
+#include <KoDocument.h>
+#include <KoCanvasBase.h>
+#include <KoResourceManager.h>
+#include <KoShapeRubberSelectStrategy.h>
+#include <TreeShapeMoveCommand.h>
+#include <commands/KoShapeDeleteCommand.h>
+#include <commands/KoShapeCreateCommand.h>
+#include <KoSnapGuide.h>
 
-#include <kdebug.h>
+#include <QKeyEvent>
 
-TreeTool::TreeTool(KoCanvasBase* canvas)
-    : KoToolBase(canvas)
+#include "kdebug.h"
+
+class SelectionHandler : public KoToolSelection
+{
+public:
+    SelectionHandler(TreeTool *parent)
+        : KoToolSelection(parent), m_selection(parent->koSelection())
+    {
+        Q_ASSERT(m_selection);
+    }
+
+    bool hasSelection() {
+        return m_selection->count();
+    }
+
+private:
+    KoSelection *m_selection;
+};
+
+TreeTool::TreeTool(KoCanvasBase *canvas)
+    : KoInteractionTool(canvas),
+    m_hotPosition(KoFlake::TopLeftCorner),
+    m_moveCommand(0),
+    m_selectionHandler(new SelectionHandler(this))
+{
+//     KoShapeManager * manager = canvas->shapeManager();
+//     connect(manager, SIGNAL(selectionChanged()), this, SLOT(updateActions()));
+}
+
+TreeTool::~TreeTool()
 {
 }
 
-void TreeTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void TreeTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
-    Q_UNUSED(toolActivation);
-    Q_UNUSED(shapes);
-
     useCursor(Qt::ArrowCursor);
+    koSelection()->deselectAll();
+    repaintDecorations();
 }
 
-void TreeTool::deactivate()
+void TreeTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    KoInteractionTool::paint(painter, converter);
+    if (currentStrategy() == 0 && koSelection()->count() > 0) {
+        SelectionDecorator decorator;
+        decorator.setSelection(koSelection());
+        decorator.paint(painter, converter);
+    }
+}
+
+void TreeTool::mousePressEvent(KoPointerEvent *event)
+{
+    KoInteractionTool::mousePressEvent(event);
+}
+
+void TreeTool::mouseMoveEvent(KoPointerEvent *event)
+{
+    KoInteractionTool::mouseMoveEvent(event);
+}
+
+void TreeTool::mouseReleaseEvent(KoPointerEvent *event)
+{
+    KoInteractionTool::mouseReleaseEvent(event);
+}
+
+void TreeTool::mouseDoubleClickEvent(KoPointerEvent *event)
+{
+    Q_UNUSED(event);
+    kDebug() << "doubleclick";
 }
 
 void TreeTool::keyPressEvent(QKeyEvent *event)
 {
+    KoInteractionTool::keyPressEvent(event);
     KoShape *root;
     switch (event->key()) {
         case Qt::Key_Tab:
@@ -69,8 +126,6 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
                         controller->addShapeDirect(shape, command);
                     }
                     canvas()->addCommand(command);
-//                     canvas()->updateCanvas(tree->boundingRect().normalized());
-//                     kDebug() << tree->boundingRect().normalized();
                 }
             }
             event->accept();
@@ -112,27 +167,89 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void TreeTool::mousePressEvent(KoPointerEvent* event)
+KoToolSelection* TreeTool::selection()
 {
-    canvas()->shapeManager()->selection()->deselectAll();
-    KoShape *root = canvas()->shapeManager()->shapeAt(event->point);
-    if (root)
-        if (dynamic_cast<TreeShape*>(root->parent())){
-            canvas()->shapeManager()->selection()->select(root,false);
-            QRadialGradient *gradient = new QRadialGradient(QPointF(0.5,0.5), 0.5, QPointF(0.25,0.25));
-            gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
-            gradient->setColorAt(0.0, Qt::white);
-            gradient->setColorAt(1.0, Qt::red);
-            root->setBackground(new KoGradientBackground(gradient));
-            root->update();
-            event->accept();
-        }
+    return m_selectionHandler;
 }
 
-void TreeTool::mouseDoubleClickEvent(KoPointerEvent *event)
+void TreeTool::resourceChanged(int key, const QVariant & res)
 {
-    Q_UNUSED(event);
-    //shape editing should be here
+    if (key == HotPosition) {
+        m_hotPosition = static_cast<KoFlake::Position>(res.toInt());
+        repaintDecorations();
+    }
+}
+
+KoInteractionStrategy *TreeTool::createStrategy(KoPointerEvent *event)
+{
+    // reset the move by keys when a new strategy is created otherwise we might change the
+    // command after a new command was added. This happend when you where faster than the timer.
+    m_moveCommand = 0;
+
+    KoShapeManager *shapeManager = canvas()->shapeManager();
+    KoSelection *select = shapeManager->selection();
+
+    bool selectMultiple = event->modifiers() & Qt::ControlModifier;
+    bool selectNextInStack = event->modifiers() & Qt::ShiftModifier;
+
+//     if ((event->buttons() == Qt::LeftButton) && !(selectMultiple || selectNextInStack)) {
+//         const QPainterPath outlinePath = select->transformation().map(select->outline());
+//         if (outlinePath.contains(event->point) ||
+//             outlinePath.intersects(handlePaintRect(event->point))) {
+//                 kDebug() << 1;
+//                 return new TreeShapeMoveStrategy(this, event->point);
+//         }
+//     }
+
+    if ((event->buttons() & Qt::LeftButton) == 0)
+        return 0;  // Nothing to do for middle/right mouse button
+
+    KoFlake::ShapeSelection sel;
+    sel = selectNextInStack ? KoFlake::NextUnselected : KoFlake::ShapeOnTop;
+    KoShape *shape = shapeManager->shapeAt(event->point, sel);
+
+    if (!shape) {
+        if (!selectMultiple) {
+            repaintDecorations();
+            select->deselectAll();
+        }
+        kDebug() << "KoShapeRubberSelectStrategy(this, event->point)";
+        return new KoShapeRubberSelectStrategy(this, event->point);
+    }
+
+    if (select->isSelected(shape)) {
+        kDebug() << "isSelected";
+        if (selectMultiple) {
+            repaintDecorations();
+            select->deselect(shape);
+            kDebug() << "deselecting already selected shape";
+        }
+    } else { // clicked on shape which is not selected
+        repaintDecorations();
+        if (!selectMultiple){
+            kDebug() << "deselecting all";
+            shapeManager->selection()->deselectAll();
+        }
+        select->select(shape, selectNextInStack ? false : true);
+        kDebug() << "selecting shape and creating TreeShapeMoveStrategy";
+        repaintDecorations();
+        return new TreeShapeMoveStrategy(this, event->point);
+    }
+    return 0;
+}
+
+void TreeTool::repaintDecorations()
+{
+    Q_ASSERT(koSelection());
+    if (koSelection()->count() > 0)
+        canvas()->updateCanvas(koSelection()->boundingRect());
+}
+
+KoSelection *TreeTool::koSelection()
+{
+    Q_ASSERT(canvas());
+    Q_ASSERT(canvas()->shapeManager());
+    return canvas()->shapeManager()->selection();
 }
 
 #include <TreeTool.moc>

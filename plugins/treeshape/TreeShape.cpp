@@ -64,6 +64,16 @@ TreeShape::~TreeShape()
 {
 }
 
+void TreeShape::addChild(KoShape* tree, KoShape* connector)
+{
+    addShape(tree);
+    addShape(connector);
+    layout()->attachConnector(tree, dynamic_cast<KoConnectionShape*>(connector));
+    layout()->layout();
+    update();
+}
+
+
 KoShape* TreeShape::connector(KoShape *shape)
 {
     Layout *layout = dynamic_cast<Layout*>(KoShapeContainer::model());
@@ -79,18 +89,12 @@ QList<KoShape*> TreeShape::addNewChild()
     KoShape *root = KoShapeRegistry::instance()->value("EllipseShape")->createDefaultShape();
     root->setSize(QSizeF(30,30));
     KoShape *child = new TreeShape(root);
-    addShape(child);
     shapes.append(child);
-    kDebug() << "Child added";
 
     KoShape *connector = KoShapeRegistry::instance()->value("KoConnectionShape")->createDefaultShape();
-    addShape(connector);
     shapes.append(connector);
-    kDebug() << "Connector added";
 
-    layout()->attachConnector(child, dynamic_cast<KoConnectionShape*>(connector));
-    layout()->layout();
-    update();
+    addChild(child, connector);
     kDebug() << "end";
     return shapes;
 }
@@ -107,17 +111,18 @@ KoShape* TreeShape::nextShape()
 
 void TreeShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
-    kDebug() << "start";
+    //kDebug() << "start";
     Q_UNUSED(painter);
     Q_UNUSED(converter);
     //will be relayouted only if needed
     layout()->layout();
-    kDebug() << "end";
+    //kDebug() << "end";
 }
 
 bool TreeShape::hitTest(const QPointF &position) const
 {
-    return layout()->root()->hitTest(position);
+    //return layout()->root()->hitTest(position);
+    return false;
 }
 
 // void TreeShape::shapeChanged(ChangeType type, KoShape *shape)

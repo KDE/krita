@@ -3,12 +3,15 @@ include_directories(  )
 ########### Flake Plugin library ###############
 
 SET (treeshape_LIB_SRCS
-    TreeShape.cpp
-    TreeTool.cpp
-    TreeShapeFactory.cpp
-    TreeToolFactory.cpp
     Layout.cpp
     Plugin.cpp
+    SelectionDecorator.cpp
+    TreeShape.cpp
+    TreeShapeFactory.cpp
+    TreeShapeMoveCommand.cpp
+    TreeShapeMoveStrategy.cpp
+    TreeTool.cpp
+    TreeToolFactory.cpp
 )
 
 kde4_add_plugin(treeshape ${treeshape_LIB_SRCS})

@@ -39,6 +39,7 @@ public:
     TreeShape();
     TreeShape(KoShape *root);
     virtual ~TreeShape();
+    virtual void addChild(KoShape *tree, KoShape *connector);
     virtual KoShape* connector(KoShape *shape);
     virtual QList<KoShape*> addNewChild();
     virtual void setNextShape(KoShape *shape);

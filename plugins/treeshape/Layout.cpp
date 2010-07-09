@@ -104,10 +104,12 @@ void Layout::remove(KoShape *shape)
             prev->setNextShape(next);
         }
         m_children.removeOne(shape);
+        kDebug() << "child removed";
         scheduleRelayout();
     }
 
     else if (m_connectors.removeOne(shape)) {
+        kDebug() << "connector removed";
         scheduleRelayout();
     }
 }
@@ -149,7 +151,7 @@ int Layout::count() const
 
 QList<KoShape*> Layout::shapes() const
 {
-    kDebug() << "";
+    //kDebug() << "";
     QList<KoShape*> all;
     all.append(m_children);
     all.append(m_connectors);
@@ -174,15 +176,6 @@ bool Layout::isChildLocked(const KoShape *shape) const
     return shape->isGeometryProtected();
 }
 
-void Layout::setPosition(const KoShape *shape, uint pos)
-{
-    int index =  m_children.indexOf(const_cast<KoShape*>(shape));
-    if (index != -1) {
-        m_children.swap(index, pos);
-        scheduleRelayout();
-    }
-}
-
 void Layout::childChanged(KoShape *shape, KoShape::ChangeType type)
 {
     Q_UNUSED(shape);
@@ -194,7 +187,7 @@ void Layout::childChanged(KoShape *shape, KoShape::ChangeType type)
 
     // This can be fine-tuned, but right now, simply everything will be re-layouted.
     switch (type) {
-    case KoShape::PositionChanged:
+    //case KoShape::PositionChanged:
     case KoShape::SizeChanged:
         scheduleRelayout();
     // FIXME: There's some cases that would require relayouting but that don't make sense
@@ -211,7 +204,7 @@ void Layout::scheduleRelayout()
 
 void Layout::layout()
 {
-    kDebug() << "start";
+    //kDebug() << "start";
     Q_ASSERT(!m_doingLayout);
 
     if (!m_relayoutScheduled)

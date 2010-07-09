@@ -37,7 +37,7 @@ KisColorSelectorNgDock::KisColorSelectorNgDock()
 //    connect(m_colorSelectorNgWidget, SIGNAL(colorChanged(const QColor&)),
 //            this, SLOT(colorChangedProxy(const QColor&)));
 
-    setWindowTitle(i18n("Color Selector Ng"));
+    setWindowTitle(i18n("Extended Color Selector"));
 }
 
 void KisColorSelectorNgDock::setCanvas(KoCanvasBase * canvas)

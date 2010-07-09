@@ -57,9 +57,10 @@ bool KisColorSelectorRing::isComponent(int x, int y) const
     return false;
 }
 
-void KisColorSelectorRing::paintEvent(QPaintEvent *)
+void KisColorSelectorRing::paintEvent(QPaintEvent * paintEvent, QPainter* painter)
 {
-    QPainter p(this);
+    Q_UNUSED(paintEvent);
+
     if(colorSpace()!=m_cachedColorSpace) {
         m_cachedColorSpace = colorSpace();
         m_cachedSize=qMin(width(), height());
@@ -73,13 +74,17 @@ void KisColorSelectorRing::paintEvent(QPaintEvent *)
         paintCache();
     }
     
-    p.drawImage(width()/2-m_pixelCache.width()/2,
+    painter->drawImage(width()/2-m_pixelCache.width()/2,
                 height()/2-m_pixelCache.height()/2,
                 m_pixelCache);
 }
 
 void KisColorSelectorRing::mousePressEvent(QMouseEvent * e) {
-    kDebug()<<"##########ring mouse press";
+    if((e->buttons()&Qt::MidButton)>0) {
+        e->ignore();
+        return;
+    }
+
     if(isComponent(e->x(), e->y())) {
         QPoint ringTopLeft(width()/2-m_pixelCache.width()/2,
                             height()/2-m_pixelCache.height()/2);

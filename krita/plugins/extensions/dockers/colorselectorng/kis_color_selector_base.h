@@ -39,14 +39,15 @@ public:
     void setCanvas(KoCanvasBase* canvas);
     const KoColorSpace* colorSpace() const;
 
+    enum ColorRole {Foreground, Background};
 protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     virtual KisColorSelectorBase* createPopup() const = 0;
-    virtual QColor pickColorAt(int x, int y)=0;
 
 protected slots:
     void hidePopup();
+    void commitColor(QColor color, ColorRole role);
 
 private:
     KisColorSelectorBase* m_popup;

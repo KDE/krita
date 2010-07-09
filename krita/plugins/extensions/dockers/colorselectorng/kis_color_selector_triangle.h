@@ -32,13 +32,12 @@ public:
     bool isComponent(int x, int y) const;
     
     void mousePressEvent(QMouseEvent *);
+    void paintEvent(QPaintEvent *, QPainter*);
 public slots:
     void setHue(int hue);
 signals:
     void colorChanged(QColor color);
 protected:
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
 private:
     int triangleWidth() const;
     int triangleHeight() const;

@@ -28,7 +28,6 @@ class KisColorSelector : public KisColorSelectorBase
 {
 public:
     KisColorSelector(QWidget* parent = 0);
-    QColor pickColorAt(int x, int y);
     KisColorSelectorBase* createPopup() const;
 protected:
     void paintEvent(QPaintEvent *);

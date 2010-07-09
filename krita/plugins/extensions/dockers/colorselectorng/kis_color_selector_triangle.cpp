@@ -52,22 +52,23 @@ bool KisColorSelectorTriangle::isComponent(int x, int y) const
 void KisColorSelectorTriangle::setHue(int hue)
 {
     m_hue=hue;
-    update();
+    emit update();
 }
 
-void KisColorSelectorTriangle::paintEvent(QPaintEvent *)
+void KisColorSelectorTriangle::paintEvent(QPaintEvent* paintEvent, QPainter* painter)
 {
+    Q_UNUSED(paintEvent);
+
     updatePixelCache();
-    QPainter painter(this);
     
-    painter.drawImage(width()/2-triangleWidth()/2,
+    painter->drawImage(width()/2-triangleWidth()/2,
                       height()/2-triangleHeight()*(2/3.),
                       m_pixelCache);
     if(m_lastClickPos!=QPoint(-1,-1)) {
-        painter.setPen(QColor(0,0,0));
-        painter.drawEllipse(m_lastClickPos, 5, 5);
-        painter.setPen(QColor(255,255,255));
-        painter.drawEllipse(m_lastClickPos, 4, 4);
+        painter->setPen(QColor(0,0,0));
+        painter->drawEllipse(m_lastClickPos, 5, 5);
+        painter->setPen(QColor(255,255,255));
+        painter->drawEllipse(m_lastClickPos, 4, 4);
     }
 }
 
@@ -84,19 +85,15 @@ void KisColorSelectorTriangle::updatePixelCache()
     m_pixelCache = cache;
 }
 
-void KisColorSelectorTriangle::resizeEvent(QResizeEvent* e)
-{
-    QWidget::resizeEvent(e);
-    
-    updatePixelCache();
-}
-
 void KisColorSelectorTriangle::mousePressEvent(QMouseEvent * event)
 {
-    kDebug()<<"##########triangle mouse press";
+    if((event->buttons()&Qt::MidButton)>0) {
+        event->ignore();
+        return;
+    }
     if(isComponent(event->x(), event->y())) {
         m_lastClickPos = event->pos();
-        update();
+        emit update();
         event->accept();
     }
     else {

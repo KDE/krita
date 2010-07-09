@@ -29,9 +29,9 @@ public:
     explicit KisColorSelectorRing(KisColorSelectorBase *parent);
     int innerRadius() const;
     void mousePressEvent(QMouseEvent *);
+    void paintEvent(QPaintEvent*, QPainter*);
 protected:
     bool isComponent(int x, int y) const;
-    void paintEvent(QPaintEvent *);
 signals:
     void hueChanged(int hue);
 private:

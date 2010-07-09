@@ -18,23 +18,35 @@
 #ifndef KIS_COLOR_SELECTOR_COMPONENT_H
 #define KIS_COLOR_SELECTOR_COMPONENT_H
 
-#include <QWidget>
+#include <QObject>
 
 class KoColorSpace;
 class KisColorSelectorBase;
 
-class KisColorSelectorComponent : public QWidget
+class QMouseEvent;
+class QPainter;
+class QResizeEvent;
+class QPaintEvent;
+
+class KisColorSelectorComponent : public QObject
 {
     Q_OBJECT
 public:
     explicit KisColorSelectorComponent(KisColorSelectorBase* parent);
+signals:
+    void update();
 protected:
     const KoColorSpace* colorSpace() const;
+    /// the component must not react on middle click (used for zooming)
     virtual void mousePressEvent(QMouseEvent *) = 0;
+    /// paint component using given painter
+    virtual void paintEvent(QPaintEvent *, QPainter*) = 0;
+
+    int width() const;
+    int height() const;
     
 private:
     KisColorSelectorBase* m_parent;
-
 };
 
 #endif // KIS_COLOR_SELECTOR_COMPONENT_H

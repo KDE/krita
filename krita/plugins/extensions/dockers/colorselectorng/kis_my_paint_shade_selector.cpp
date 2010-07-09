@@ -56,6 +56,15 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
     painter.drawImage(0,0, getSelector().scaled(size, size));
 }
 
+
+void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
+{
+    KisColorSelectorBase::mousePressEvent(e);
+
+    if(!e->isAccepted())
+        pickColorAt(e->x(), e->y());
+}
+
 QColor KisMyPaintShadeSelector::pickColorAt(int x, int y)
 {
     qreal wdgSize = qMin(width(), height());

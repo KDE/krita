@@ -80,12 +80,13 @@ void KisColorSelectorBase::setCanvas(KoCanvasBase *canvas)
 
 void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 {
-    if(m_popupOnMouseClick && (event->buttons()&(Qt::RightButton|Qt::MidButton))>0 && parent()!=0) {
+    if(m_popupOnMouseClick && (event->buttons()&Qt::MidButton)>0 && parent()!=0) {
         //open popup
         if(m_popup==0) {
             m_popup = createPopup();
             Q_ASSERT(m_popup);
             m_popup->setWindowFlags(Qt::Popup);
+            m_popup->setCanvas(m_canvas);
         }
 
         int x = event->globalX();
@@ -107,17 +108,16 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 
         m_popup->move(x, y);
         m_popup->show();
+
+        event->accept();
+    }
+    else if(parent() == 0 && (event->buttons()&Qt::MidButton)>0) {
+        event->accept();
+        hide();
     }
     else {
-        //pick color
-        int x = event->x();
-        int y = event->y();
-
-        x = qBound(0, x, width());
-        y = qBound(0, y, height());
-        pickColorAt(x, y);
+        event->ignore();
     }
-    event->accept();
 }
 
 void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
@@ -140,15 +140,16 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
             m_popup = createPopup();
             Q_ASSERT(m_popup);
             m_popup->setWindowFlags(Qt::Popup);
+            m_popup->setCanvas(m_canvas);
         }
 
         QRect availRect = QApplication::desktop()->availableGeometry(this);
         QRect forbiddenRect = QRect(parentWidget()->mapToGlobal(QPoint(0,0)),
                                     parentWidget()->mapToGlobal(QPoint(parentWidget()->width(), parentWidget()->height())));
 
-        kDebug()<<"availRect="<<availRect;
-        kDebug()<<"forbiddenRect="<<forbiddenRect;
-        kDebug()<<"popup="<<m_popup->geometry();
+//        kDebug()<<"availRect="<<availRect;
+//        kDebug()<<"forbiddenRect="<<forbiddenRect;
+//        kDebug()<<"popup="<<m_popup->geometry();
 
         int x,y;
         if(forbiddenRect.y()+forbiddenRect.height()/2 > availRect.height()/2) {
@@ -182,7 +183,15 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
 
 void KisColorSelectorBase::hidePopup()
 {
-    hide();
+    if(parent()==0)
+        hide();
+    else if (m_popup!=0)
+        m_popup->hide();
+}
+
+void KisColorSelectorBase::commitColor(QColor color, ColorRole role)
+{
+
 }
 
 const KoColorSpace* KisColorSelectorBase::colorSpace() const

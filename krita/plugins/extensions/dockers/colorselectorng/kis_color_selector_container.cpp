@@ -135,7 +135,7 @@ void KisColorSelectorContainer::resizeEvent(QResizeEvent * e)
         else {
             m_shadeSelector->show();
         }
-        if(height()<minimumHeightForBothWidgets && m_allowHorizontalLayout) {
+        if(height() < width() && m_allowHorizontalLayout) {
             m_widgetLayout->setDirection(QBoxLayout::LeftToRight);
             m_buttonLayout->setDirection(QBoxLayout::BottomToTop);
         }

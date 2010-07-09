@@ -35,40 +35,40 @@ KisColorSelector::KisColorSelector(QWidget* parent) : KisColorSelectorBase(paren
     m_ring = new KisColorSelectorRing(this);
     m_triangle = new KisColorSelectorTriangle(this);
     
-    connect(m_ring, SIGNAL(hueChanged(int)), m_triangle, SLOT(setHue(int)));
+    connect(m_ring,     SIGNAL(hueChanged(int)), m_triangle, SLOT(setHue(int)));
+    connect(m_ring,     SIGNAL(update()),        this,       SLOT(update()));
+    connect(m_triangle, SIGNAL(update()),        this,       SLOT(update()));
     
     setMinimumSize(80, 80);
-}
-
-QColor KisColorSelector::pickColorAt(int x, int y)
-{
-    return QColor();
 }
 
 KisColorSelectorBase* KisColorSelector::createPopup() const
 {
     KisColorSelectorBase* popup = new KisColorSelector(0);
-    popup->resize(256,256);
+    popup->resize(350,350);
     return popup;
 }
 
-void KisColorSelector::paintEvent(QPaintEvent*)
+void KisColorSelector::paintEvent(QPaintEvent* e)
 {
     QPainter p(this);
     p.fillRect(0,0,width(),height(),QColor(128,128,128));
+
+    m_ring->paintEvent(e, &p);
+    m_triangle->paintEvent(e, &p);
 }
 
 void KisColorSelector::resizeEvent(QResizeEvent* e) {
-    m_ring->setGeometry(0,0,width(),height());
-    m_triangle->setGeometry(0,0,width(),height());
     m_triangle->setRadius(m_ring->innerRadius());
-    
-    QWidget::resizeEvent(e);
+    KisColorSelectorBase::resizeEvent(e);
 }
 
 void KisColorSelector::mousePressEvent(QMouseEvent* e)
 {
-    m_ring->mousePressEvent(e);
+    KisColorSelectorBase::mousePressEvent(e);
+
+    if(!e->isAccepted())
+        m_ring->mousePressEvent(e);
     if(!e->isAccepted())
         m_triangle->mousePressEvent(e);
 }

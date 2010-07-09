@@ -34,6 +34,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *);
+    void mousePressEvent(QMouseEvent *);
     QColor pickColorAt(int x, int y);
     KisColorSelectorBase* createPopup() const;
 

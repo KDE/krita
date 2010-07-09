@@ -549,6 +549,10 @@ void KoBorder::loadOdf(const KoXmlElement &style)
 
                 setLeftBorderWidth(KoUnit::parseValue(borderData[0], 1.0));
                 setLeftBorderStyle(odfBorderStyle(borderData[1]));
+                QString specialBorderStyle = style.attributeNS(KoXmlNS::koffice, "specialborder-left");
+                if (!specialBorderStyle.isEmpty()) {
+                    setLeftBorderStyle(odfBorderStyle(specialBorderStyle));
+                }
                 setLeftBorderColor(QColor(borderData[2]));
             }
         }
@@ -558,6 +562,10 @@ void KoBorder::loadOdf(const KoXmlElement &style)
                 QStringList borderData = border.split(' ', QString::SkipEmptyParts);
                 setTopBorderWidth(KoUnit::parseValue(borderData[0], 1.0));
                 setTopBorderStyle(odfBorderStyle(borderData[1]));
+                QString specialBorderStyle = style.attributeNS(KoXmlNS::koffice, "specialborder-top");
+                if (!specialBorderStyle.isEmpty()) {
+                    setTopBorderStyle(odfBorderStyle(specialBorderStyle));
+                }
                 setTopBorderColor(QColor(borderData[2]));
             }
         }
@@ -567,6 +575,10 @@ void KoBorder::loadOdf(const KoXmlElement &style)
                 QStringList borderData = border.split(' ', QString::SkipEmptyParts);
                 setRightBorderWidth(KoUnit::parseValue(borderData[0], 1.0));
                 setRightBorderStyle(odfBorderStyle(borderData[1]));
+                QString specialBorderStyle = style.attributeNS(KoXmlNS::koffice, "specialborder-right");
+                if (!specialBorderStyle.isEmpty()) {
+                    setRightBorderStyle(odfBorderStyle(specialBorderStyle));
+                }
                 setRightBorderColor(QColor(borderData[2]));
             }
         }
@@ -576,6 +588,10 @@ void KoBorder::loadOdf(const KoXmlElement &style)
                 QStringList borderData = border.split(' ', QString::SkipEmptyParts);
                 setBottomBorderWidth(KoUnit::parseValue(borderData[0], 1.0));
                 setBottomBorderStyle(odfBorderStyle(borderData[1]));
+                QString specialBorderStyle = style.attributeNS(KoXmlNS::koffice, "specialborder-bottom");
+                if (!specialBorderStyle.isEmpty()) {
+                    setBottomBorderStyle(odfBorderStyle(specialBorderStyle));
+                }
                 setBottomBorderColor(QColor(borderData[2]));
             }
         }

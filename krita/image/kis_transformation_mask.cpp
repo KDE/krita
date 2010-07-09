@@ -72,7 +72,7 @@ void KisTransformationMask::apply(KisPaintDeviceSP projection, const QRect & rc)
      */
 
     // Transform
-    KisTransformWorker worker(projection, m_xscale, m_yscale, m_xshear, m_yshear, m_rotation, m_xtranslate, m_ytranslate, 0, m_filter);
+    KisTransformWorker worker(projection, m_xscale, m_yscale, m_xshear, m_yshear, 0.0, 0.0, m_rotation, m_xtranslate, m_ytranslate, 0, m_filter);
     worker.run();
 }
 

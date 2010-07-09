@@ -217,7 +217,7 @@ void ImageSize::slotSelectionScale()
         KisTransformWorker worker(selection.data(),
                                   (double)w / ((double)(rc.width())),
                                   (double)h / ((double)(rc.height())),
-                                  0, 0, 0.0, 0, 0, u,
+                                  0, 0, 0.0, 0.0, 0.0, 0, 0, u,
                                   dlgSize->filterType()
                                  );
         worker.run();

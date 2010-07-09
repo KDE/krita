@@ -685,7 +685,7 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
     KoProgressUpdater* updater = m_view->createProgressUpdater();
     KoUpdaterPtr u = updater->startSubtask();
 
-    KisTransformWorker worker(layer->paintDevice(), sx, sy, 0, 0, 0.0, 0, 0, u, filterStrategy);
+    KisTransformWorker worker(layer->paintDevice(), sx, sy, 0, 0, 0, 0, 0.0, 0, 0, u, filterStrategy);
     worker.run();
 
     transaction.commit(m_view->image()->undoAdapter());

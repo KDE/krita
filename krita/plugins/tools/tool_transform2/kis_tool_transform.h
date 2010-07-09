@@ -292,7 +292,6 @@ private:
     double m_clickangle; //angle made at click, from the rotationCenter
 
     bool m_boxValueChanged; //true if a boxValue has been changed directly by the user (not by click + move mouse)
-    bool m_hasBeenTransformed;
 
     QImage *m_origImg; //image of the pixels in selection bound rect
     QTransform m_transform; //transformation from the origImg
@@ -306,6 +305,8 @@ private:
     WdgToolTransform *m_optWidget;
 
     KisPaintDeviceSP m_target;
+    //we don't need this origDevice for now
+    //but i keep it here because i might use it when adding one of enkithan's suggestion (cut the seleted pixels instead of keeping them darkened)
     KisPaintDeviceSP m_origDevice;
     KisSelectionSP m_origSelection; //contains the original selection
     //KisShapeSelection *m_previousShapeSelection;

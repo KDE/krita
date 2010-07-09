@@ -131,7 +131,7 @@ private:
 
         KisTransaction transaction(i18n("Rotate Node"), dev);
 
-        KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter, true);
+        KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter, true);
         tw.run();
 
         transaction.commit(m_image->undoAdapter());

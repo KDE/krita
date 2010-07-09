@@ -51,15 +51,21 @@ KisColorSelectorBase* KisColorSelector::createPopup() const
 
 void KisColorSelector::paintEvent(QPaintEvent* e)
 {
+    Q_UNUSED(e);
     QPainter p(this);
     p.fillRect(0,0,width(),height(),QColor(128,128,128));
+    p.setRenderHint(QPainter::Antialiasing);
 
-    m_ring->paintEvent(e, &p);
-    m_triangle->paintEvent(e, &p);
+    m_ring->paintEvent(&p);
+    m_triangle->paintEvent(&p);
 }
 
 void KisColorSelector::resizeEvent(QResizeEvent* e) {
-    m_triangle->setRadius(m_ring->innerRadius());
+    m_ring->setGeometry(0,0,width(), height());
+    m_triangle->setGeometry(width()/2-m_ring->innerRadius(),
+                            height()/2-m_ring->innerRadius(),
+                            m_ring->innerRadius()*2,
+                            m_ring->innerRadius()*2);
     KisColorSelectorBase::resizeEvent(e);
 }
 
@@ -67,8 +73,30 @@ void KisColorSelector::mousePressEvent(QMouseEvent* e)
 {
     KisColorSelectorBase::mousePressEvent(e);
 
-    if(!e->isAccepted())
-        m_ring->mousePressEvent(e);
-    if(!e->isAccepted())
-        m_triangle->mousePressEvent(e);
+    if(!e->isAccepted()) {
+        mouseEvent(e);
+    }
+}
+
+void KisColorSelector::mouseMoveEvent(QMouseEvent* e)
+{
+    KisColorSelectorBase::mouseMoveEvent(e);
+    mouseEvent(e);
+}
+
+void KisColorSelector::mouseEvent(QMouseEvent *e)
+{
+    if(e->buttons()&Qt::LeftButton || e->buttons()&Qt::RightButton) {
+        m_ring->mouseEvent(e->x(), e->y());
+        m_triangle->mouseEvent(e->x(), e->y());
+        if(m_lastColor==m_triangle->currentColor()) {
+            m_lastColor=m_triangle->currentColor();
+            ColorRole role;
+            if(e->buttons() & Qt::LeftButton)
+                role=Foreground;
+            else
+                role=Background;
+            commitColor(m_triangle->currentColor(), role);
+        }
+    }
 }

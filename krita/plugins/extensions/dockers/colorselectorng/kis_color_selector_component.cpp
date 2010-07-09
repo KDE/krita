@@ -20,12 +20,35 @@
 #include "kis_color_selector_base.h"
 
 #include "KoColorSpace.h"
+#include <QPainter>
+#include <QMouseEvent>
 
 
 KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelectorBase* parent) :
     QObject(parent), m_parent(parent)
 {
     Q_ASSERT(parent);
+}
+
+void KisColorSelectorComponent::setGeometry(int x, int y, int width, int height)
+{
+    m_x=x;
+    m_y=y;
+    m_width=width;
+    m_height=height;
+}
+
+void KisColorSelectorComponent::paintEvent(QPainter* painter)
+{
+    painter->save();
+    painter->translate(m_x, m_y);
+    paint(painter);
+    painter->restore();
+}
+
+void KisColorSelectorComponent::mouseEvent(int x, int y)
+{
+    selectColor(x-m_x, y-m_y);
 }
 
 const KoColorSpace* KisColorSelectorComponent::colorSpace() const
@@ -35,12 +58,17 @@ const KoColorSpace* KisColorSelectorComponent::colorSpace() const
     return cs;
 }
 
+QColor KisColorSelectorComponent::currentColor()
+{
+    return QColor();
+}
+
 int KisColorSelectorComponent::width() const
 {
-    return m_parent->width();
+    return m_width;
 }
 
 int KisColorSelectorComponent::height() const
 {
-    return m_parent->height();
+    return m_height;
 }

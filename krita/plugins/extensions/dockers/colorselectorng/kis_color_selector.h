@@ -20,7 +20,7 @@
 
 #include "kis_color_selector_base.h"
 
-class QColor;
+#include <QColor>
 class KisColorSelectorTriangle;
 class KisColorSelectorRing;
 
@@ -33,9 +33,12 @@ protected:
     void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *);
     void mousePressEvent(QMouseEvent* e);
+    void mouseMoveEvent(QMouseEvent *);
 private:
+    void mouseEvent(QMouseEvent* e);
     KisColorSelectorRing* m_ring;
     KisColorSelectorTriangle* m_triangle;
+    QColor m_lastColor;
 };
 
 #endif // KIS_COLSELNG_COLOR_SELECTOR_H

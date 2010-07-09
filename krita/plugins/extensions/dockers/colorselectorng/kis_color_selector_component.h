@@ -26,27 +26,38 @@ class KisColorSelectorBase;
 class QMouseEvent;
 class QPainter;
 class QResizeEvent;
-class QPaintEvent;
+class QColor;
 
 class KisColorSelectorComponent : public QObject
 {
     Q_OBJECT
 public:
     explicit KisColorSelectorComponent(KisColorSelectorBase* parent);
+    void setGeometry(int x, int y, int width, int height);
+    void paintEvent(QPainter*);
+    void mouseEvent(int x, int y);
+    virtual QColor currentColor();
 signals:
+    /// request for repaint, for instance, if the hue changes.
     void update();
 protected:
     const KoColorSpace* colorSpace() const;
-    /// the component must not react on middle click (used for zooming)
-    virtual void mousePressEvent(QMouseEvent *) = 0;
+    virtual void selectColor(int x, int y) = 0;
+
     /// paint component using given painter
-    virtual void paintEvent(QPaintEvent *, QPainter*) = 0;
+    /// the component should respect width() and height() (eg. scale to width and height), but doesn't
+    /// have to care about x/y coordinates (top left corner)
+    virtual void paint(QPainter*) = 0;
 
     int width() const;
     int height() const;
     
 private:
     KisColorSelectorBase* m_parent;
+    int m_width;
+    int m_height;
+    int m_x;
+    int m_y;
 };
 
 #endif // KIS_COLOR_SELECTOR_COMPONENT_H

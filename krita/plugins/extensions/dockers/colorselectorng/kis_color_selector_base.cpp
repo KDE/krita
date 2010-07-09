@@ -177,8 +177,6 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
         e->accept();
         return;
     }
-
-    QWidget::mouseMoveEvent(e);
 }
 
 void KisColorSelectorBase::hidePopup()

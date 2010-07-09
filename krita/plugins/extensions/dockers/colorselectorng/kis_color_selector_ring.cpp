@@ -31,7 +31,8 @@ USING_PART_OF_NAMESPACE_EIGEN
 KisColorSelectorRing::KisColorSelectorRing(KisColorSelectorBase *parent) :
     KisColorSelectorComponent(parent),
     m_cachedColorSpace(0),
-    m_cachedSize(0)
+    m_cachedSize(0),
+    m_lastHue(0)
 {
 }
 
@@ -57,10 +58,8 @@ bool KisColorSelectorRing::isComponent(int x, int y) const
     return false;
 }
 
-void KisColorSelectorRing::paintEvent(QPaintEvent * paintEvent, QPainter* painter)
+void KisColorSelectorRing::paint(QPainter* painter)
 {
-    Q_UNUSED(paintEvent);
-
     if(colorSpace()!=m_cachedColorSpace) {
         m_cachedColorSpace = colorSpace();
         m_cachedSize=qMin(width(), height());
@@ -77,50 +76,89 @@ void KisColorSelectorRing::paintEvent(QPaintEvent * paintEvent, QPainter* painte
     painter->drawImage(width()/2-m_pixelCache.width()/2,
                 height()/2-m_pixelCache.height()/2,
                 m_pixelCache);
+
+    qreal angle;
+    int y_start, y_end, x_start, x_end;
+    angle=((m_lastHue+180)%360)*2.*M_PI/360.;
+    y_start=innerRadius()*sin(angle)+height()/2;
+    y_end=outerRadius()*sin(angle)+height()/2;
+    x_start=innerRadius()*cos(angle)+width()/2;
+    x_end=outerRadius()*cos(angle)+width()/2;
+
+    painter->setPen(QColor(0,0,0));
+    painter->drawLine(x_start, y_start, x_end, y_end);
+
+    angle=((((m_lastHue+180)%360)+1)%359)*2.*M_PI/360.;
+    y_start=innerRadius()*sin(angle)+height()/2;
+    y_end=outerRadius()*sin(angle)+height()/2;
+    x_start=innerRadius()*cos(angle)+width()/2;
+    x_end=outerRadius()*cos(angle)+width()/2;
+
+    painter->setPen(QColor(255,255,255));
+    painter->drawLine(x_start, y_start, x_end, y_end);
 }
 
-void KisColorSelectorRing::mousePressEvent(QMouseEvent * e) {
-    if((e->buttons()&Qt::MidButton)>0) {
-        e->ignore();
-        return;
-    }
-
-    if(isComponent(e->x(), e->y())) {
+void KisColorSelectorRing::selectColor(int x, int y) {
+    if(isComponent(x, y)) {
         QPoint ringTopLeft(width()/2-m_pixelCache.width()/2,
                             height()/2-m_pixelCache.height()/2);
-        QPoint ringCoord = e->pos()-ringTopLeft;
+        QPoint ringCoord = QPoint(x, y)-ringTopLeft;
         emit hueChanged(QColor(m_pixelCache.pixel(ringCoord)).hue());
-        e->accept();
-    }
-    else {
-        e->ignore();
+        m_lastHue=QColor(m_pixelCache.pixel(ringCoord)).hue();
+        emit update();
     }
 }
 
 void KisColorSelectorRing::paintCache()
 {
     QImage cache(m_cachedSize, m_cachedSize, QImage::Format_ARGB32_Premultiplied);
-    cache.fill(qRgba(0,0,0,0));
     
     Vector2i center(cache.width()/2., cache.height()/2.);
-    
-    int outerRadiusSquared = qMin(cache.width(), cache.height())/2;
-    int innerRadiusSquared = innerRadius();
-    outerRadiusSquared*=outerRadiusSquared;
-    innerRadiusSquared*=innerRadiusSquared;
     
     for(int x=0; x<cache.width(); x++) {
         for(int y=0; y<cache.height(); y++) {
             Vector2i currentPoint((float)x, (float)y);
             Vector2i relativeVector = currentPoint-center;
+
+            qreal currentRadius = relativeVector.squaredNorm();
+            currentRadius=sqrt(currentRadius);
             
-            if(relativeVector.squaredNorm() < outerRadiusSquared
-               && relativeVector.squaredNorm() > innerRadiusSquared) {
-                
+            if(currentRadius < outerRadius()+1
+               && currentRadius > innerRadius()-1)
+            {
+
                 float angle = std::atan2(relativeVector.y(), relativeVector.x())+((float)M_PI);
                 angle/=2*((float)M_PI);
                 angle*=359.f;
-                cache.setPixel(x, y, m_cachedColors.at(angle));
+                if(currentRadius < outerRadius()
+                   && currentRadius > innerRadius()) {
+                    cache.setPixel(x, y, m_cachedColors.at(angle));
+                }
+                else {
+                    // draw antialiased border
+                    qreal coef=1.;
+                    if(currentRadius > outerRadius()) {
+                        // outer border
+                        coef-=currentRadius;
+                        coef+=outerRadius();
+                    }
+                    else {
+                        // inner border
+                        coef+=currentRadius;
+                        coef-=innerRadius();
+                    }
+                    coef=qBound(0., coef, 1.);
+                    int red=qRed(m_cachedColors.at(angle));
+                    int green=qGreen(m_cachedColors.at(angle));
+                    int blue=qBlue(m_cachedColors.at(angle));
+
+                    // the format is premultiplied, so we have to take care of that
+                    QRgb color = qRgba(red*coef, green*coef, blue*coef, 255*coef);
+                    cache.setPixel(x, y, color);
+                }
+            }
+            else {
+                cache.setPixel(x, y, qRgba(0,0,0,0));
             }
         }
     }
@@ -138,4 +176,9 @@ void KisColorSelectorRing::colorCache()
         koColor.fromQColor(qColor);
         m_cachedColors.append(koColor.toQColor().rgb());
     }
+}
+
+int KisColorSelectorRing::outerRadius() const
+{
+    return m_cachedSize/2-1;
 }

@@ -41,6 +41,7 @@ private slots:
     void cleanupTestCase();
     
     void benchmarkBitBlt();
+    void benchmarkFastBitBlt();
     void benchmarkBitBltSelection();
     void benchmarkFixedBitBlt();
     void benchmarkFixedBitBltSelection();

@@ -32,6 +32,7 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOp.h>
 #include <KoColor.h>
 
 #include <kis_image.h>
@@ -53,7 +54,6 @@ void KisPainterBenchmark::cleanupTestCase()
 {
 }
 
-
 void KisPainterBenchmark::benchmarkBitBlt()
 {
     KisPaintDeviceSP src = new KisPaintDevice(m_colorSpace);
@@ -64,7 +64,7 @@ void KisPainterBenchmark::benchmarkBitBlt()
     KisPainter gc(dst);
     
     QPoint pos(0,0);
-    QRect rc(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_WIDTH);
+    QRect rc(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
     
     QBENCHMARK{
         for (int i = 0; i < CYCLES ; i++){
@@ -74,6 +74,26 @@ void KisPainterBenchmark::benchmarkBitBlt()
 
 }
 
+void KisPainterBenchmark::benchmarkFastBitBlt()
+{
+    KisPaintDeviceSP src = new KisPaintDevice(m_colorSpace);
+    KisPaintDeviceSP dst = new KisPaintDevice(m_colorSpace);
+    src->fill(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
+    dst->fill(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
+
+    KisPainter gc(dst);
+    gc.setCompositeOp(m_colorSpace->compositeOp(COMPOSITE_COPY));
+
+    QPoint pos(0,0);
+    QRect rc(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+
+    QBENCHMARK{
+        for (int i = 0; i < CYCLES ; i++){
+            gc.bitBlt(pos,src,rc);
+        }
+    }
+
+}
 
 void KisPainterBenchmark::benchmarkBitBltSelection()
 {
@@ -91,7 +111,7 @@ void KisPainterBenchmark::benchmarkBitBltSelection()
     gc.setSelection(selection);
     
     QPoint pos(0,0);
-    QRect rc(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_WIDTH);
+    QRect rc(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
     
     QBENCHMARK{
         for (int i = 0; i < CYCLES ; i++){

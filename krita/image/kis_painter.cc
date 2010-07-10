@@ -345,15 +345,20 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
-    // In case of COMPOSITE_COPY restricting bitblt to extent can
-    // have unexpected behavior since it would reduce the area that
-    // is copied.
-    if (d->compositeOp->id() != COMPOSITE_COPY) {
-        srcRect &= srcdev->extent();
+    if (d->compositeOp->id() == COMPOSITE_COPY) {
+        if(!d->selection && d->device->fastBitBltPossible(srcdev)) {
+            d->device->fastBitBlt(srcdev, srcRect);
+            return;
+        }
     }
+    else {
+        // In case of COMPOSITE_COPY restricting bitblt to extent can
+        // have unexpected behavior since it would reduce the area that
+        // is copied.
+        srcRect &= srcdev->extent();
 
-    if (srcRect.isEmpty()) {
-        return;
+        if(srcRect.isEmpty())
+            return;
     }
 
     dx += srcRect.x() - sx;

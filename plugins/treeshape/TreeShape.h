@@ -44,6 +44,7 @@ public:
     virtual QList<KoShape*> addNewChild();
     virtual void setNextShape(KoShape *shape);
     virtual KoShape* nextShape();
+    virtual void setZIndex(int zIndex);
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
     virtual bool hitTest(const QPointF &position) const;
     virtual void saveOdf(KoShapeSavingContext &context) const;

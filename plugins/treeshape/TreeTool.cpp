@@ -162,6 +162,21 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
             }
             event->accept();
             break;
+        case Qt::Key_Z:
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+                TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
+                if (tree){
+                    kDebug() << "zIndeces of children...";
+                    foreach (KoShape *shape, tree->shapes()){
+                        TreeShape *tmp = dynamic_cast<TreeShape*>(shape);
+                        if (tmp)
+                            kDebug() << "Tree" << shape->zIndex()
+                                     << "Root" << tmp->shapes().last()->zIndex();
+                    }
+                }
+            }
+            event->accept();
+            break;
         default:
             return;
     }
@@ -218,7 +233,8 @@ KoInteractionStrategy *TreeTool::createStrategy(KoPointerEvent *event)
     }
 
     if (select->isSelected(shape)) {
-        kDebug() << "isSelected";
+        kDebug() << "shape is already selected";
+        kDebug() << "shape" << shape << "zIndex" << shape->zIndex();
         if (selectMultiple) {
             repaintDecorations();
             select->deselect(shape);

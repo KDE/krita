@@ -109,6 +109,12 @@ KoShape* TreeShape::nextShape()
     return m_nextShape;
 }
 
+void TreeShape::setZIndex(int zIndex)
+{
+    KoShape::setZIndex(zIndex);
+    layout()->root()->setZIndex(zIndex+1);
+}
+
 void TreeShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
     //kDebug() << "start";

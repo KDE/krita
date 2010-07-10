@@ -45,6 +45,7 @@ void Layout::add(KoShape *shape)
     Q_ASSERT(!m_children.contains(shape));
     TreeShape *tree = dynamic_cast<TreeShape*>(shape);
     if (tree){
+        tree->setZIndex(m_container->zIndex()+1);
         if (tree->nextShape()){
             Q_ASSERT(m_children.contains(tree->nextShape()));
             int pos = m_children.indexOf(tree->nextShape());

@@ -39,7 +39,9 @@ void KisTransformWorkerTest::testCreation()
     KisImageSP image = new KisImage(0, 10, 10, cs, "bla");
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    KisTransformWorker tw(dev, 1.0, 1.0, 1.0, 1.0, 1.5, 0, 0, updater, filter, true);
+    KisTransformWorker tw(dev, 1.0, 1.0,
+                          1.0, 1.0,
+                          1.5, 0, 0, 0, 0, updater, filter, true);
 }
 
 void KisTransformWorkerTest::testMirror()

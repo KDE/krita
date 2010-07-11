@@ -26,6 +26,8 @@ install(FILES
     local_selection_inactive.png
     paintop_settings_01.png
     paintop_settings_02.png
+    paintop_settings_disabled.png
+    paintop_presets_disabled.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )

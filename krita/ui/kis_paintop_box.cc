@@ -490,10 +490,10 @@ void KisPaintopBox::updateCompositeOpComboBox()
             if(!m_inputDeviceEraseModes[KoToolManager::instance()->currentInputDevice()]){
                 m_cmbComposite->setEnabled(true);
             }
-            setEnabled(true);
+            setEnabledInternal(true);
             compositeOpChanged();
         } else {
-            setEnabled(false);
+            setEnabledInternal(false);
         }
     }
 }
@@ -519,6 +519,18 @@ void KisPaintopBox::setCompositeOpInternal(const QString& id)
         if (device) {
             m_compositeOp = device->colorSpace()->compositeOp(compositeID);
         }
+    }
+}
+
+void KisPaintopBox::setEnabledInternal(bool value)
+{
+    setEnabled(value);
+    if(value) {
+        m_settingsWidget->setIcon(KIcon("paintop_settings_02"));
+        m_presetWidget->setIcon(KIcon("paintop_settings_01"));
+    } else {
+        m_settingsWidget->setIcon(KIcon("paintop_settings_disabled"));
+        m_presetWidget->setIcon(KIcon("paintop_presets_disabled"));        
     }
 }
 

@@ -99,6 +99,8 @@ private:
     ///Sets the internal composite op, without emitting
     /// @param id id of the composite op, when empty COMPOSITE_OVER will be used
     void setCompositeOpInternal(const QString & id);
+    
+    void setEnabledInternal(bool value);
 
 private slots:
 

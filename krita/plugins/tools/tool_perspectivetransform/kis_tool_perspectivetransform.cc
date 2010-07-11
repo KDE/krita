@@ -460,12 +460,11 @@ void KisToolPerspectiveTransform::mouseReleaseEvent(KoPointerEvent * event)
                 m_points.append(m_currentPt);
                 
                 if(m_points.size() == 4) {
-                    QLineF p1(m_points[0], m_points[1]);
-                    QLineF p2(m_points[2], m_points[3]);
-                    QPointF dummy;
-                    if(p1.intersect(p2, &dummy) == QLineF::BoundedIntersection) {
+                    QPolygonF polygon;
+                    polygon << m_points[0] << m_points[1] << m_points[2] << m_points[3];
+                    if(!isConvex(polygon)) {
                         m_points.pop_back();
-                        setStatusText(i18n("Outline isn't allowed to intersect"));
+                        setStatusText(i18n("Outline has to be convex"));
                     } else {
                         setStatusText(QString());
                     }

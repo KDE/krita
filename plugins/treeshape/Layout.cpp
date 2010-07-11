@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
 
+   Copyright (c) 2010 Cyril Oblikov <munknex@gmail.com>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -85,6 +87,7 @@ void Layout::setRoot(KoShape *shape)
     m_root = shape;
     m_container->setSize(m_root->size());
     m_lastWidth = m_container->size().width();
+    m_lastHeight = m_container->size().height();
 
     // shape was added to children by setParent() method
     m_children.removeOne(m_root);
@@ -93,6 +96,17 @@ void Layout::setRoot(KoShape *shape)
 KoShape* Layout::root() const
 {
     return m_root;
+}
+
+void Layout::setStructure(TreeShape::TreeType structure)
+{
+    m_structure = structure;
+    scheduleRelayout();
+}
+
+TreeShape::TreeType Layout::structure() const
+{
+    return m_structure;
 }
 
 void Layout::remove(KoShape *shape)
@@ -220,23 +234,97 @@ void Layout::layout()
         m_relayoutScheduled = false;
         return;
     }
-    qreal width=0, maxHeight=0;
+
+    switch (m_structure) {
+        case TreeShape::OrgDown:
+            kDebug() << "d";
+            buildOrgDown();
+            break;
+        case TreeShape::OrgUp:
+            kDebug() << "u";
+            buildOrgUp();
+            break;
+        case TreeShape::OrgLeft:
+            kDebug() << "l";
+            buildOrgLeft();
+            break;
+        case TreeShape::OrgRight:
+            kDebug() << "r";
+            buildOrgRight();
+            break;
+        default:
+            kDebug() << "def";
+            buildOrgDown();
+            break;
+    }
+
+    m_doingLayout = false;
+    m_relayoutScheduled = false;
+    kDebug() << "end";
+}
+
+void Layout::buildOrgUp()
+{
+    qreal fromChildToChild = 5;
+    qreal fromParentToChild = 50;
+
+    // calculating size of container
+    qreal width=0, height=0, maxHeight=0;
     foreach(KoShape *child, m_children){
         QSizeF s = child->size();
         width += s.width();
-        if (s.height()>maxHeight)
-            maxHeight = s.height();
+        maxHeight = qMax(s.height(), maxHeight);
     }
-    kDebug() << width;
-    //spacing
-    width += 5*(m_children.count()-1);
-    if (m_root->size().width()>width)
-        width = m_root->size().width();
 
-    QSizeF s = m_container->size();
-    s.setHeight(m_root->size().height()+70+maxHeight);
-    s.setWidth(width);
-    m_container->setSize(s);
+    // do not forget about spacing
+    width += fromChildToChild*(m_children.count()-1);
+
+    width = qMax(m_root->size().width(), width);
+    height = m_root->size().height()+fromParentToChild+maxHeight;
+    m_container->setSize(QSizeF(width, height));
+
+    QPointF offset((width-m_root->size().width())/2,
+                   fromParentToChild+maxHeight);
+    m_root->setPosition(offset);
+    offset = QPointF((width-m_lastWidth)/2, height-m_lastHeight);
+    m_container->setPosition(m_container->position()-offset);
+    m_lastWidth = width;
+    m_lastHeight = height;
+
+    qreal x = 0;
+    foreach (KoShape *child, m_children){
+        qreal y = height-m_root->size().height()
+                    -child->size().height()
+                    -fromParentToChild;
+        child->setPosition(QPointF(x, y));
+        KoConnectionShape *connector = m_bonds[child];
+        connector->connectFirst(m_root,0);
+        TreeShape *tree = dynamic_cast<TreeShape*>(child);
+        connector->connectSecond(tree->root(),2);
+        connector->updateConnections();
+        x += child->size().width() + fromChildToChild;
+    }
+}
+
+void Layout::buildOrgDown()
+{
+    qreal fromChildToChild = 5;
+    qreal fromParentToChild = 50;
+
+    // calculating size of container
+    qreal width=0, height=0, maxHeight=0;
+    foreach(KoShape *child, m_children){
+        QSizeF s = child->size();
+        width += s.width();
+        maxHeight = qMax(s.height(), maxHeight);
+    }
+
+    // do not forget about spacing
+    width += fromChildToChild*(m_children.count()-1);
+
+    width = qMax(m_root->size().width(), width);
+    height = m_root->size().height()+fromParentToChild+maxHeight;
+    m_container->setSize(QSizeF(width, height));
 
     QPointF offset((width-m_root->size().width())/2, 0);
     m_root->setPosition(offset);
@@ -246,15 +334,95 @@ void Layout::layout()
 
     qreal x = 0;
     foreach (KoShape *child, m_children){
-        child->setPosition(QPointF(x, 70+m_root->size().height()));
+        qreal y = fromParentToChild+m_root->size().height();
+        child->setPosition(QPointF(x, y));
         KoConnectionShape *connector = m_bonds[child];
         connector->connectFirst(m_root,2);
-        connector->connectSecond(child,0);
+        TreeShape *tree = dynamic_cast<TreeShape*>(child);
+        connector->connectSecond(tree->root(),0);
         connector->updateConnections();
-        x += child->size().width() + 5;
+        x += child->size().width() + fromChildToChild;
+    }
+}
+
+void Layout::buildOrgLeft()
+{
+    qreal fromChildToChild = 5;
+    qreal fromParentToChild = 50;
+
+    // calculating size of container
+    qreal width=0, height=0, maxWidth=0;
+    foreach(KoShape *child, m_children){
+        QSizeF s = child->size();
+        height += s.height();
+        maxWidth = qMax(s.width(), maxWidth);
     }
 
-    m_doingLayout = false;
-    m_relayoutScheduled = false;
-    kDebug() << "end";
+    // do not forget about spacing
+    height += fromChildToChild*(m_children.count()-1);
+
+    height = qMax(m_root->size().height(), height);
+    width = m_root->size().width()+fromParentToChild+maxWidth;
+    m_container->setSize(QSizeF(width, height));
+
+    QPointF offset(maxWidth+fromParentToChild,
+                   (height-m_root->size().height())/2);
+    m_root->setPosition(offset);
+    offset = QPointF(width-m_lastWidth, (height-m_lastHeight)/2);
+    m_container->setPosition(m_container->position()-offset);
+    m_lastHeight = height;
+    m_lastWidth = width;
+
+    qreal y = 0;
+    foreach (KoShape *child, m_children){
+        qreal x = width-m_root->size().width()
+                   -child->size().width()
+                   -fromParentToChild;
+        child->setPosition(QPointF(x, y));
+        KoConnectionShape *connector = m_bonds[child];
+        connector->connectFirst(m_root,3);
+        TreeShape *tree = dynamic_cast<TreeShape*>(child);
+        connector->connectSecond(tree->root(),1);
+        connector->updateConnections();
+        y += child->size().height() + fromChildToChild;
+    }
+}
+
+void Layout::buildOrgRight()
+{
+    qreal fromChildToChild = 5;
+    qreal fromParentToChild = 50;
+
+    // calculating size of container
+    qreal width=0, height=0, maxWidth=0;
+    foreach(KoShape *child, m_children){
+        QSizeF s = child->size();
+        height += s.height();
+        maxWidth = qMax(s.width(), maxWidth);
+    }
+
+    // do not forget about spacing
+    height += fromChildToChild*(m_children.count()-1);
+
+    height = qMax(m_root->size().height(), height);
+    width = m_root->size().width()+fromParentToChild+maxWidth;
+    m_container->setSize(QSizeF(width, height));
+
+    QPointF offset(0, (height-m_root->size().height())/2);
+    m_root->setPosition(offset);
+    offset = QPointF(0, (height-m_lastHeight)/2);
+    m_container->setPosition(m_container->position()-offset);
+    m_lastHeight = height;
+
+    qreal y = 0;
+    foreach (KoShape *child, m_children){
+        qreal x = fromParentToChild+m_root->size().width();
+        child->setPosition(QPointF(x, y));
+        KoConnectionShape *connector = m_bonds[child];
+        connector->connectFirst(m_root,1);
+        TreeShape *tree = dynamic_cast<TreeShape*>(child);
+        connector->connectSecond(tree->root(),3);
+        connector->updateConnections();
+        y += child->size().height() + fromChildToChild;
+    }
 }

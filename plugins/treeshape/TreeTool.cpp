@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
 
+   Copyright (c) 2010 Cyril Oblikov <munknex@gmail.com>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -170,9 +172,53 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
                     foreach (KoShape *shape, tree->shapes()){
                         TreeShape *tmp = dynamic_cast<TreeShape*>(shape);
                         if (tmp)
-                            kDebug() << "Tree" << shape->zIndex()
-                                     << "Root" << tmp->shapes().last()->zIndex();
+                            kDebug() << "Tree" << shape->zIndex() << shape->boundingRect()
+                                     << "Root" << tmp->shapes().last()->zIndex()  << shape->boundingRect();
                     }
+                }
+            }
+            event->accept();
+            break;
+        case Qt::Key_1:
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+                TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
+                if (tree){
+                    kDebug() << "OrgUp";
+                    tree->setStructure(TreeShape::OrgUp);
+                    tree->update();
+                }
+            }
+            event->accept();
+            break;
+        case Qt::Key_2:
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+                TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
+                if (tree){
+                    kDebug() << "OrgRight";
+                    tree->setStructure(TreeShape::OrgRight);
+                    tree->update();
+                }
+            }
+            event->accept();
+            break;
+        case Qt::Key_3:
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+                TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
+                if (tree){
+                    kDebug() << "OrgDown";
+                    tree->setStructure(TreeShape::OrgDown);
+                    tree->update();
+                }
+            }
+            event->accept();
+            break;
+        case Qt::Key_4:
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+                TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
+                if (tree){
+                    kDebug() << "OrgLeft";
+                    tree->setStructure(TreeShape::OrgLeft);
+                    tree->update();
                 }
             }
             event->accept();
@@ -233,7 +279,7 @@ KoInteractionStrategy *TreeTool::createStrategy(KoPointerEvent *event)
     }
 
     if (select->isSelected(shape)) {
-        kDebug() << "shape is already selected";
+        kDebug() << "shape is already selected" << shape->shapeId();
         kDebug() << "shape" << shape << "zIndex" << shape->zIndex();
         if (selectMultiple) {
             repaintDecorations();

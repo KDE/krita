@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright 2010 Johannes Simon <johannes.simon@gmail.com>
+   Copyright (c) 2010 Cyril Oblikov <munknex@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +25,7 @@
 #include <QMap>
 
 #include <KoShapeContainerModel.h>
+#include "TreeShape.h"
 
 class QSizeF;
 class KoConnectionShape;
@@ -50,6 +51,16 @@ public:
      * Returns a pointer to root shape.
      */
     KoShape* root() const;
+
+    /**
+     * Sets a structure of TreeShape.
+     */
+    void setStructure(TreeShape::TreeType structure);
+
+    /**
+     * Returns a structure of TreeShape.
+     */
+    TreeShape::TreeType structure() const;
 
     /**
      * Attaches given connector to given shape.
@@ -133,10 +144,19 @@ public:
     void scheduleRelayout();
 
 private:
+    // layouts
+    void buildOrgUp();
+    void buildOrgDown();
+    void buildOrgLeft();
+    void buildOrgRight();
+
     KoShapeContainer *m_container;
+    TreeShape::TreeType m_structure;
     qreal m_lastWidth;
+    qreal m_lastHeight;
     bool m_doingLayout;
     bool m_relayoutScheduled;
+
     KoShape *m_root;
     QList<KoShape*> m_children;
     QList<KoShape*> m_connectors;

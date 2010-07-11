@@ -20,7 +20,6 @@
 
 #include "kis_color_patches.h"
 
-class KoCanvasBase;
 class KisCanvas2;
 
 class KisCommonColors : public KisColorPatches
@@ -30,7 +29,7 @@ public:
     explicit KisCommonColors(QWidget *parent = 0);
 //    int heightForWidth(int) const;
 //    QSize sizeHint() const;
-    void setCanvas(KoCanvasBase *canvas);
+    void setCanvas(KisCanvas2 *canvas);
 private:
     QList<QColor> extractColors();
     QList<QRgb> getColors();

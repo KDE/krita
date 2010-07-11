@@ -32,8 +32,6 @@ public:
 protected:
     void paint(QPainter*);
     bool isComponent(int x, int y) const;
-signals:
-    void hueChanged(int hue);
 private:
     void paintCache();
     void colorCache();

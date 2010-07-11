@@ -103,7 +103,7 @@ void KisColorSelectorRing::selectColor(int x, int y) {
         QPoint ringTopLeft(width()/2-m_pixelCache.width()/2,
                             height()/2-m_pixelCache.height()/2);
         QPoint ringCoord = QPoint(x, y)-ringTopLeft;
-        emit hueChanged(QColor(m_pixelCache.pixel(ringCoord)).hue());
+        emit paramChanged(QColor(m_pixelCache.pixel(ringCoord)).hueF());
         m_lastHue=QColor(m_pixelCache.pixel(ringCoord)).hue();
         emit update();
     }

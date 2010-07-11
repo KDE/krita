@@ -30,7 +30,6 @@ USING_PART_OF_NAMESPACE_EIGEN
 
 KisColorSelectorTriangle::KisColorSelectorTriangle(KisColorSelectorBase* parent) :
     KisColorSelectorComponent(parent),
-    m_hue(0),
     m_lastClickPos(-1,-1)
 {
 }
@@ -42,12 +41,6 @@ bool KisColorSelectorTriangle::isComponent(int x, int y) const
         return true;
     else
         return false;
-}
-
-void KisColorSelectorTriangle::setHue(int hue)
-{
-    m_hue=hue;
-    emit update();
 }
 
 void KisColorSelectorTriangle::paint(QPainter* painter)
@@ -123,7 +116,7 @@ QRgb KisColorSelectorTriangle::colorAt(int x, int y) const
     qreal value = (y)/triangleHeight;
     qreal saturation = relativeX/horizontalLineLength;
 
-    return KoColor(QColor::fromHsvF(m_hue/359., saturation, value).rgb(), colorSpace()).toQColor().rgb();;
+    return KoColor(QColor::fromHsvF(parameter1(), saturation, value).rgb(), colorSpace()).toQColor().rgb();
 }
 
 QPoint KisColorSelectorTriangle::widgetToTriangleCoordinates(const QPoint &point) const

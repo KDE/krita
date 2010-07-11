@@ -24,7 +24,7 @@ class QColor;
 class QTimer;
 class KoColorSpace;
 class KisCanvas2;
-class KoCanvasBase;
+class KisCanvas2;
 
 /// Base class for all color selectors, that should support color management and zooming.
 class KisColorSelectorBase : public QWidget
@@ -36,7 +36,7 @@ public:
 
     void setPopupBehaviour(bool onMouseOver, bool onMouseClick);
     void setColorSpace(const KoColorSpace* colorSpace);
-    void setCanvas(KoCanvasBase* canvas);
+    void setCanvas(KisCanvas2* canvas);
     const KoColorSpace* colorSpace() const;
 
     enum ColorRole {Foreground, Background};

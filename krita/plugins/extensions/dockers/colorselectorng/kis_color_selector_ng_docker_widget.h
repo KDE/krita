@@ -22,7 +22,7 @@
 #include <QWidget>
 #include "kis_color_patches.h"
 
-class KoCanvasBase;
+class KisCanvas2;
 class KisCommonColors;
 class KisColorSelectorContainer;
 
@@ -34,7 +34,7 @@ class KisColorSelectorNgDockerWidget : public QWidget
 Q_OBJECT
 public:
     explicit KisColorSelectorNgDockerWidget(QWidget *parent = 0);
-    void setCanvas(KoCanvasBase* canvas);
+    void setCanvas(KisCanvas2* canvas);
 
 public slots:
     void openSettings();
@@ -49,6 +49,8 @@ private:
 
     QHBoxLayout* m_verticalColorPatchesLayout; // vertical color patches should be added here
     QVBoxLayout* m_horizontalColorPatchesLayout;//horizontal ----------"----------------------
+
+    KisCanvas2* m_canvas;
 
     //color patches options
     bool m_lastColorsShow;

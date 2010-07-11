@@ -20,6 +20,7 @@
 
 #include <klocale.h>
 #include <KoCanvasBase.h>
+#include "kis_canvas2.h"
 
 #include "kis_color_selector_ng_docker_widget.h"
 #include "kis_canvas_resource_provider.h"
@@ -42,7 +43,7 @@ KisColorSelectorNgDock::KisColorSelectorNgDock()
 
 void KisColorSelectorNgDock::setCanvas(KoCanvasBase * canvas)
 {
-    m_colorSelectorNgWidget->setCanvas(canvas);
+    m_colorSelectorNgWidget->setCanvas(dynamic_cast<KisCanvas2*>(canvas));
 //    m_canvas = canvas;
 //    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
 //            this, SLOT(resourceChanged(int, const QVariant&)));

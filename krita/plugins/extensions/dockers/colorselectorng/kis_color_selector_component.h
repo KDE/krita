@@ -37,9 +37,20 @@ public:
     void paintEvent(QPainter*);
     void mouseEvent(int x, int y);
     virtual QColor currentColor();
+    int width() const;
+    int height() const;
+public slots:
+    /// can be used to set the "third" parameter.
+    /// for instance another component selects the hue, which is passed here, and this one selects saturation and value
+    void setParam(qreal p);
+    /// can be used to set the "second" and "third" parameter.
+    /// for instance another component selects hue and saturation, which is passed here, and this one selects value
+    void setParam(qreal p1, qreal p2);
 signals:
     /// request for repaint, for instance, if the hue changes.
     void update();
+    void paramChanged(qreal);
+    void paramChanged(qreal, qreal);
 protected:
     const KoColorSpace* colorSpace() const;
     virtual void selectColor(int x, int y) = 0;
@@ -49,15 +60,16 @@ protected:
     /// have to care about x/y coordinates (top left corner)
     virtual void paint(QPainter*) = 0;
 
-    int width() const;
-    int height() const;
-    
+    qreal parameter1() const;
+    qreal parameter2() const;
 private:
     KisColorSelectorBase* m_parent;
     int m_width;
     int m_height;
     int m_x;
     int m_y;
+    qreal m_param1;
+    qreal m_param2;
 };
 
 #endif // KIS_COLOR_SELECTOR_COMPONENT_H

@@ -71,10 +71,9 @@ void KisColorSelectorBase::setColorSpace(const KoColorSpace *colorSpace)
     m_colorSpace = colorSpace;
 }
 
-void KisColorSelectorBase::setCanvas(KoCanvasBase *canvas)
+void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
 {
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    Q_ASSERT(m_canvas);
+    m_canvas = canvas;
     update();
 }
 

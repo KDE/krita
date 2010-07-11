@@ -19,7 +19,7 @@
 #include "kis_color_selector_settings.h"
 #include "ui_wdg_color_selector_settings.h"
 
-KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
+KisColorSelectorSettings::KisColorSelectorSettings(KisCanvas2* canvas, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::KisColorSelectorSettings)
 {
@@ -30,6 +30,8 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
     ui->lbl_commonColorsNumCols->hide();
     ui->commonColorsNumCols->hide();
     resize(minimumSize());
+
+    ui->colorSelectorType->setCanvas(canvas);
 }
 
 KisColorSelectorSettings::~KisColorSelectorSettings()

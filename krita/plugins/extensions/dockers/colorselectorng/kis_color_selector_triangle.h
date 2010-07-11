@@ -31,8 +31,6 @@ public:
     bool isComponent(int x, int y) const;
     
     void selectColor(int x, int y);
-public slots:
-    void setHue(int hue);
 signals:
     void colorChanged(QColor color);
 protected:
@@ -45,7 +43,6 @@ private:
     QPoint widgetToTriangleCoordinates(const QPoint& point) const;
     QImage m_pixelCache;
     
-    int m_hue;
     QPoint m_lastClickPos;
 };
 

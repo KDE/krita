@@ -19,6 +19,8 @@
 #ifndef KIS_COLSELNG_SETTINGS_H
 #define KIS_COLSELNG_SETTINGS_H
 
+class KisCanvas2;
+
 #include <QDialog>
 
 namespace Ui {
@@ -28,7 +30,7 @@ namespace Ui {
 class KisColorSelectorSettings : public QDialog {
     Q_OBJECT
 public:
-    KisColorSelectorSettings(QWidget *parent = 0);
+    KisColorSelectorSettings(KisCanvas2* canvas, QWidget *parent = 0);
     ~KisColorSelectorSettings();
 
     Ui::KisColorSelectorSettings *ui;

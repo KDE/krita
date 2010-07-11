@@ -23,12 +23,30 @@
 #include <QColor>
 class KisColorSelectorTriangle;
 class KisColorSelectorRing;
+class KisColorSelectorComponent;
+class KisColorSelectorSimple;
 
 class KisColorSelector : public KisColorSelectorBase
 {
 public:
-    KisColorSelector(QWidget* parent = 0);
+    enum Type {Ring, Square, Wheel, Triangle, Slider};
+    enum Parameters {H, S, V, L, SL, SV, SH, VH, LH};
+//    enum MainType {Ring, Square, Wheel};
+//    enum SubType {Triangle, Square, Slider};
+//    enum MainTypeParameter {SL, SV, SH, VH, LH, VSV/*experimental*/};
+//    enum SubTypeParameter {H, S, V, L};
+
+    KisColorSelector(QWidget* parent = 0,
+                     Type mainType = Square,
+                     Type subType = Slider,
+                     Parameters mainTypeParam = SV,
+                     Parameters subTypeParam = H);
     KisColorSelectorBase* createPopup() const;
+
+    void setConfiguration(Type mainType,
+                          Type subType,
+                          Parameters mainTypeParam,
+                          Parameters subTypeParam);
 protected:
     void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *);
@@ -36,8 +54,17 @@ protected:
     void mouseMoveEvent(QMouseEvent *);
 private:
     void mouseEvent(QMouseEvent* e);
+
     KisColorSelectorRing* m_ring;
-    KisColorSelectorTriangle* m_triangle;
+    KisColorSelectorComponent* m_triangle;
+    KisColorSelectorSimple* m_slider;
+    KisColorSelectorSimple* m_square;
+
+    Type m_mainType;
+    Type m_subType;
+    Parameters m_mainTypeParam;
+    Parameters m_subTypeParam;
+
     QColor m_lastColor;
 };
 

@@ -118,7 +118,7 @@ void KisColorSelectorContainer::setColorSpace(const KoColorSpace *colorSpace)
     m_myPaintShadeSelector->setColorSpace(colorSpace);
 }
 
-void KisColorSelectorContainer::setCanvas(KoCanvasBase *canvas)
+void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
 {
     m_colorSelector->setCanvas(canvas);
     m_myPaintShadeSelector->setCanvas(canvas);

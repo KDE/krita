@@ -20,7 +20,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-#include <KoCanvasBase.h>
+#include "kis_canvas2.h"
 
 #include "kis_color_patches.h"
 #include "kis_common_colors.h"
@@ -33,7 +33,7 @@
 #include <KDebug>
 
 KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) :
-    QWidget(parent), m_verticalColorPatchesLayout(0), m_horizontalColorPatchesLayout(0)
+    QWidget(parent), m_verticalColorPatchesLayout(0), m_horizontalColorPatchesLayout(0), m_canvas(0)
 {
     setAutoFillBackground(true);
 
@@ -75,15 +75,19 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     connect(m_colorSelectorContainer, SIGNAL(openSettings()), this, SLOT(openSettings()));
 }
 
-void KisColorSelectorNgDockerWidget::setCanvas(KoCanvasBase *canvas)
+void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
 {
+    Q_ASSERT(canvas);
     m_commonColorsWidget->setCanvas(canvas);
     m_colorSelectorContainer->setCanvas(canvas);
+    m_canvas = canvas;
 }
 
 void KisColorSelectorNgDockerWidget::openSettings()
 {
-    KisColorSelectorSettings settings;
+    Q_ASSERT(m_canvas);
+
+    KisColorSelectorSettings settings(m_canvas);
     if(settings.exec()==QDialog::Accepted) {
         //general
         m_colorSelectorContainer->setShadeSelectorType(settings.ui->shadeSelectorType->currentIndex());

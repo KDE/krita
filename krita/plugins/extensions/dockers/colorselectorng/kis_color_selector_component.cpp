@@ -25,7 +25,10 @@
 
 
 KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelectorBase* parent) :
-    QObject(parent), m_parent(parent)
+    QObject(parent),
+    m_parent(parent),
+    m_param1(1),
+    m_param2(2)
 {
     Q_ASSERT(parent);
 }
@@ -63,6 +66,19 @@ QColor KisColorSelectorComponent::currentColor()
     return QColor();
 }
 
+void KisColorSelectorComponent::setParam(qreal p)
+{
+    m_param1 = p;
+    emit update();
+}
+
+void KisColorSelectorComponent::setParam(qreal p1, qreal p2)
+{
+    m_param1 = p1;
+    m_param2 = p2;
+    emit update();
+}
+
 int KisColorSelectorComponent::width() const
 {
     return m_width;
@@ -71,4 +87,14 @@ int KisColorSelectorComponent::width() const
 int KisColorSelectorComponent::height() const
 {
     return m_height;
+}
+
+qreal KisColorSelectorComponent::parameter1() const
+{
+    return m_param1;
+}
+
+qreal KisColorSelectorComponent::parameter2() const
+{
+    return m_param1;
 }

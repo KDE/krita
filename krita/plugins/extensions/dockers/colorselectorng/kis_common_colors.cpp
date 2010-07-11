@@ -51,13 +51,13 @@ KisCommonColors::KisCommonColors(QWidget *parent) :
     setAdditionalButtons(tmpList);
 }
 
-void KisCommonColors::setCanvas(KoCanvasBase *canvas)
+void KisCommonColors::setCanvas(KisCanvas2 *canvas)
 {
     // todo:
     // make clean
     // make optional
     
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    m_canvas = canvas;
 //    connect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()));
 }
 

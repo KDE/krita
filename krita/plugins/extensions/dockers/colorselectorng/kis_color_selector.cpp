@@ -150,16 +150,19 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* e)
 void KisColorSelector::mouseEvent(QMouseEvent *e)
 {
     if(e->buttons()&Qt::LeftButton || e->buttons()&Qt::RightButton) {
-        m_ring->mouseEvent(e->x(), e->y());
-        m_triangle->mouseEvent(e->x(), e->y());
+        if(m_ring->width()>0) m_ring->mouseEvent(e->x(), e->y());
+        if(m_triangle->width()>0) m_triangle->mouseEvent(e->x(), e->y());
+        if(m_square->width()>0) m_square->mouseEvent(e->x(), e->y());
+        if(m_slider->width()>0) m_slider->mouseEvent(e->x(), e->y());
+
         if(m_lastColor==m_triangle->currentColor()) {
-            m_lastColor=m_triangle->currentColor();
+//            m_lastColor=m_triangle->currentColor();
             ColorRole role;
             if(e->buttons() & Qt::LeftButton)
                 role=Foreground;
             else
                 role=Background;
-            commitColor(m_triangle->currentColor(), role);
+//            commitColor(m_triangle->currentColor(), role);
         }
     }
 }

@@ -51,7 +51,11 @@ void KisColorSelectorComponent::paintEvent(QPainter* painter)
 
 void KisColorSelectorComponent::mouseEvent(int x, int y)
 {
-    selectColor(x-m_x, y-m_y);
+    int newX=x-m_x;
+    int newY=y-m_y;
+    if(newX>0 && newX<width() &&
+       newY>0 && newY<height())
+        selectColor(newX, newY);
 }
 
 const KoColorSpace* KisColorSelectorComponent::colorSpace() const
@@ -96,5 +100,5 @@ qreal KisColorSelectorComponent::parameter1() const
 
 qreal KisColorSelectorComponent::parameter2() const
 {
-    return m_param1;
+    return m_param2;
 }

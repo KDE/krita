@@ -80,13 +80,14 @@ void KisColorSelectorTriangle::updatePixelCache()
     m_pixelCache = cache;
 }
 
-void KisColorSelectorTriangle::selectColor(int x, int y)
+QColor KisColorSelectorTriangle::selectColor(int x, int y)
 {
     if(isComponent(x, y)) {
         m_lastClickPos.setX(x);
         m_lastClickPos.setY(y);
         emit update();
     }
+    return QColor::fromRgb(colorAt(x, y));
 }
 
 qreal KisColorSelectorTriangle::triangleWidth() const

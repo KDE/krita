@@ -53,7 +53,9 @@ signals:
     void paramChanged(qreal, qreal);
 protected:
     const KoColorSpace* colorSpace() const;
-    virtual void selectColor(int x, int y) = 0;
+
+    /// this method must be overloaded to return the colour at position x/y and draw a marker on that position
+    virtual QColor selectColor(int x, int y) = 0;
 
     /// paint component using given painter
     /// the component should respect width() and height() (eg. scale to width and height), but doesn't

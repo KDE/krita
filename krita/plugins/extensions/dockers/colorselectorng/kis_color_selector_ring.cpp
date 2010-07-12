@@ -98,7 +98,7 @@ void KisColorSelectorRing::paint(QPainter* painter)
     painter->drawLine(x_start, y_start, x_end, y_end);
 }
 
-void KisColorSelectorRing::selectColor(int x, int y) {
+QColor KisColorSelectorRing::selectColor(int x, int y) {
     if(isComponent(x, y)) {
         QPoint ringTopLeft(width()/2-m_pixelCache.width()/2,
                             height()/2-m_pixelCache.height()/2);
@@ -107,6 +107,7 @@ void KisColorSelectorRing::selectColor(int x, int y) {
         m_lastHue=QColor(m_pixelCache.pixel(ringCoord)).hue();
         emit update();
     }
+    return QColor();
 }
 
 void KisColorSelectorRing::paintCache()

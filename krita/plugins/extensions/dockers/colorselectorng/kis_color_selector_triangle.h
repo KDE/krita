@@ -30,7 +30,7 @@ public:
     
     bool isComponent(int x, int y) const;
     
-    void selectColor(int x, int y);
+    QColor selectColor(int x, int y);
 signals:
     void colorChanged(QColor color);
 protected:

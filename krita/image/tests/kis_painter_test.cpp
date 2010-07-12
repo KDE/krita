@@ -328,6 +328,43 @@ void KisPainterTest::testSelectionBitBltFixedSelection()
     QCOMPARE(dst->exactBounds(), QRect(10, 10, 5, 10));
 }
 
+void KisPainterTest::testSelectionBitBltEraseCompositeOp()
+{
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+    KoColor c(Qt::red, cs);
+    dst->fill(0, 0, 150, 150, c.data());
+    
+    KisPaintDeviceSP src = new KisPaintDevice(cs);
+    KoColor c2(Qt::black, cs);
+    src->fill(50, 50, 50, 50, c2.data());
+
+    KisPixelSelectionSP selection = new KisPixelSelection();
+    selection->select(QRect(25, 25, 100, 100));
+
+    KisSelectionSP sel = new KisSelection();
+    sel->setPixelSelection(selection);
+    sel->updateProjection();
+
+    const KoCompositeOp* op = cs->compositeOp(COMPOSITE_ERASE);
+    KisPainter painter(dst);
+    painter.setSelection(sel);
+    painter.setCompositeOp(op);
+    painter.bitBlt(0, 0, src, 0, 0, 150, 150);
+    painter.end();
+      
+    //dst->convertToQImage(0).save("result.png");
+    
+    QRect erasedRect(50, 50, 50, 50);
+    KisRectConstIteratorPixel it = dst->createRectConstIterator(0, 0, 150, 150);
+    while (!it.isDone()) {
+        if(!erasedRect.contains(it.x(), it.y())) {
+             QVERIFY(memcmp(it.rawData(), c.data(), cs->pixelSize()) == 0);
+        }
+        ++it;
+    }
+
+}
 
 void KisPainterTest::testSimpleAlphaCopy()
 {

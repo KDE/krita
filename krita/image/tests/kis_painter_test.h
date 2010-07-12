@@ -46,6 +46,8 @@ private slots:
     void testSelectionBltSelection(); // Square selection
     void testSimpleAlphaCopy();
     void testSelectionBitBltFixedSelection();
+    void testSelectionBitBltEraseCompositeOp();
+
 
 };
 

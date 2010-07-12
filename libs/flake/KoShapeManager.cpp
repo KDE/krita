@@ -572,7 +572,7 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
         foreach(KoShape *child, container->shapes())
-            d->aggregate4update.insert(child);
+            notifyShapeChanged(child);
     }
     if (wasEmpty && !d->aggregate4update.isEmpty())
         QTimer::singleShot(100, this, SLOT(updateTree()));

@@ -21,81 +21,124 @@
 #include "kis_color_selector.h"
 #include "kis_canvas2.h"
 
-KisColorSelectorTypeWidget::KisColorSelectorTypeWidget(QWidget* parent) :
-        QComboBox(parent),
-        m_popup(0)
-{
-    if(parent==0) {
-        //this is the popup
+
+#include <KDebug>
+
+class KisColorSelectorTypeWidgetPrivate : public QWidget {
+public:
+    int spacing;
+    int selectorSize;
+    QRect highlightArea;
+
+    KisColorSelectorTypeWidgetPrivate(QWidget* parent) :
+            QWidget(parent, Qt::Popup),
+            spacing(20),
+            selectorSize(100),
+            highlightArea(-1,-1,0,0)
+    {
+        setMouseTracking(true);
+
         QGridLayout* layout = new QGridLayout(this);
-        layout->setSpacing(15);
+        layout->setSpacing(spacing);
 
         layout->addWidget(new KisColorSelector(this, KisColorSelector::Ring, KisColorSelector::Triangle, KisColorSelector::H, KisColorSelector::SL), 0,0);
         layout->addWidget(new KisColorSelector(this, KisColorSelector::Ring, KisColorSelector::Square, KisColorSelector::H, KisColorSelector::SL), 0,1);
         layout->addWidget(new KisColorSelector(this, KisColorSelector::Ring, KisColorSelector::Square, KisColorSelector::H, KisColorSelector::SV), 0,2);
 
         layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SV, KisColorSelector::H), 1,0);
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::VH, KisColorSelector::S), 1,1);
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SH, KisColorSelector::V), 1,2);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SL, KisColorSelector::H), 1,1);
 
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SL, KisColorSelector::H), 2,0);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::VH, KisColorSelector::S), 2,0);
         layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::LH, KisColorSelector::V), 2,1);
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SH, KisColorSelector::L), 2,2);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SH, KisColorSelector::V), 2,2);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SH, KisColorSelector::L), 2,3);
 
         layout->addWidget(new KisColorSelector(this, KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::SH, KisColorSelector::V), 3,0);
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::VH, KisColorSelector::S), 3,1);
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::LH, KisColorSelector::S), 3,2);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::LH, KisColorSelector::S), 3,1);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::VH, KisColorSelector::S), 3,2);
         layout->addWidget(new KisColorSelector(this, KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::VH, KisColorSelector::L), 3,3);
+    }
 
-        setWindowFlags(Qt::Popup);
+protected:
+    void paintEvent(QPaintEvent *)
+    {
+        QPainter painter(this);
+        painter.fillRect(0,0,width(), height(), QColor(128,128,128));
+//        painter.fillRect(2*m_selectorSize,3*m_selectorSize, m_selectorSize+m_spacing, m_selectorSize+m_spacing, palette().highlight());
+        painter.fillRect(highlightArea, palette().highlight());
     }
-    else {
-        m_popup=new KisColorSelectorTypeWidget();
-        setMinimumSize(80,80);
+
+    void mouseMoveEvent(QMouseEvent * e)
+    {
+        if(rect().contains(e->pos())) {
+            for(int i=0; i<layout()->count(); i++) {
+                KisColorSelector* item = dynamic_cast<KisColorSelector*>(layout()->itemAt(i)->widget());
+                Q_ASSERT(item);
+
+                if(item->geometry().adjusted(-spacing/2, -spacing/2, spacing/2, spacing/2).contains(e->pos())) {
+                    QRect oldArea=highlightArea;
+                    highlightArea=item->geometry().adjusted(-spacing/2, -spacing/2, spacing/2, spacing/2);
+                    update(highlightArea);
+                    update(oldArea);
+                }
+            }
+        }
+        else {
+            highlightArea.setRect(-1,-1,0,0);
+        }
     }
+
+    void mousePressEvent(QMouseEvent* e)
+    {
+        if(!rect().contains(e->pos())) {
+            hide();
+            e->accept();
+        }
+    }
+};
+
+KisColorSelectorTypeWidget::KisColorSelectorTypeWidget(QWidget* parent) :
+        QComboBox(parent),
+        m_private(new KisColorSelectorTypeWidgetPrivate(this))
+{
+    setMinimumSize(m_private->selectorSize+m_private->spacing,m_private->selectorSize+m_private->spacing);
 }
 
 KisColorSelectorTypeWidget::~KisColorSelectorTypeWidget()
 {
-    delete m_popup;
 }
 
 void KisColorSelectorTypeWidget::hidePopup()
 {
     QComboBox::hidePopup();
-    if(m_popup) {
-        m_popup->hide();
-    }
+    m_private->hide();
 }
 
 void KisColorSelectorTypeWidget::showPopup()
 {
-    if(parent()) {
-        // only show if this is not the popup
-        QComboBox::showPopup();
-        m_popup->move(mapToGlobal(QPoint(0,0)));
-        m_popup->show();
-    }
+    // only show if this is not the popup
+    QComboBox::showPopup();
+    m_private->move(mapToGlobal(QPoint(0,0)));
+    m_private->show();
 }
 
 void KisColorSelectorTypeWidget::setCanvas(KisCanvas2 *canvas)
 {
-    if(parent()) {
-        //this is not the popup, but we should set the canvas for all popup selectors
-        for(int i=0; i<m_popup->layout()->count(); i++) {
-            KisColorSelector* item = dynamic_cast<KisColorSelector*>(m_popup->layout()->itemAt(i)->widget());
-            Q_ASSERT(item);
-            if(item!=0) {
-                item->setCanvas(canvas);
-                item->setMaximumSize(120,120);
-                item->setMinimumSize(120,120);
-            }
+    //this is not the popup, but we should set the canvas for all popup selectors
+    for(int i=0; i<m_private->layout()->count(); i++) {
+        KisColorSelector* item = dynamic_cast<KisColorSelector*>(m_private->layout()->itemAt(i)->widget());
+        Q_ASSERT(item);
+        if(item!=0) {
+            item->setCanvas(canvas);
+            item->setMaximumSize(m_private->selectorSize, m_private->selectorSize);
+            item->setMinimumSize(m_private->selectorSize, m_private->selectorSize);
+            item->setMouseTracking(true);
+            item->setEnabled(false);
         }
     }
 }
 
 void KisColorSelectorTypeWidget::paintEvent(QPaintEvent *e)
 {
-    QPainter painter(this);
-    painter.fillRect(0,0,width(), height(), QColor(128,128,128));
+    QComboBox::paintEvent(e);
 }

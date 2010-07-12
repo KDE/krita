@@ -52,6 +52,16 @@ void KisColorSelectorSimple::paint(QPainter* painter)
         }
     }
 
+    //antialiasing for wheel
+    if(m_type==KisColorSelector::Wheel) {
+        QPainter tmpPainter(&tmpDev);
+        tmpPainter.setRenderHint(QPainter::Antialiasing);
+        tmpPainter.setPen(QPen(QColor(0,0,0,0), 2.5));
+        tmpPainter.setCompositionMode(QPainter::CompositionMode_Clear);
+        int size=qMin(width(), height());
+        tmpPainter.drawEllipse(width()/2-size/2, height()/2-size/2, size, size);
+    }
+
     painter->drawImage(0,0, tmpDev);
 }
 

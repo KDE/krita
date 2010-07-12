@@ -19,6 +19,7 @@
 #define KIS_COLOR_SELECTOR_TYPE_WIDGET_H
 
 class KisCanvas2;
+class KisColorSelectorTypeWidgetPrivate;
 
 #include <QComboBox>
 
@@ -33,7 +34,7 @@ public:
 protected:
     void paintEvent(QPaintEvent *e);
 private:
-    KisColorSelectorTypeWidget* m_popup;
+    KisColorSelectorTypeWidgetPrivate* m_private;
 };
 
 #endif // KIS_COLOR_SELECTOR_TYPE_WIDGET_H

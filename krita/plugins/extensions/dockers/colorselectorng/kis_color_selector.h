@@ -31,22 +31,32 @@ class KisColorSelector : public KisColorSelectorBase
 public:
     enum Type {Ring, Square, Wheel, Triangle, Slider};
     enum Parameters {H, S, V, L, SL, SV, SH, VH, LH};
+    struct Configuration {
+        Type mainType;
+        Type subType;
+        Parameters mainTypeParameter;
+        Parameters subTypeParameter;
+        Configuration(Type mainT = Square,
+                              Type subT = Slider,
+                              Parameters mainTP = SV,
+                              Parameters subTP = H)
+                                  : mainType(mainT),
+                                  subType(subT),
+                                  mainTypeParameter(mainTP),
+                                  subTypeParameter(subTP)
+        {}
+    };
+
 //    enum MainType {Ring, Square, Wheel};
 //    enum SubType {Triangle, Square, Slider};
 //    enum MainTypeParameter {SL, SV, SH, VH, LH, VSV/*experimental*/};
 //    enum SubTypeParameter {H, S, V, L};
 
-    KisColorSelector(QWidget* parent = 0,
-                     Type mainType = Square,
-                     Type subType = Slider,
-                     Parameters mainTypeParam = SV,
-                     Parameters subTypeParam = H);
+    KisColorSelector(QWidget* parent = 0, Configuration conf = Configuration());
     KisColorSelectorBase* createPopup() const;
 
-    void setConfiguration(Type mainType,
-                          Type subType,
-                          Parameters mainTypeParam,
-                          Parameters subTypeParam);
+    void setConfiguration(Configuration conf);
+    Configuration configuration() const;
 protected:
     void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *);
@@ -60,10 +70,7 @@ private:
     KisColorSelectorSimple* m_slider;
     KisColorSelectorSimple* m_square;
 
-    Type m_mainType;
-    Type m_subType;
-    Parameters m_mainTypeParam;
-    Parameters m_subTypeParam;
+    Configuration m_configuration;
 
     QColor m_lastColor;
 };

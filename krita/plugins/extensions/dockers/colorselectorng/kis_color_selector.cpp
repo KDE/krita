@@ -31,11 +31,7 @@
 
 #include <KDebug>
 
-KisColorSelector::KisColorSelector(QWidget* parent,
-                                   Type mainType,
-                                   Type subType,
-                                   Parameters mainTypeParam,
-                                   Parameters subTypeParam)
+KisColorSelector::KisColorSelector(QWidget* parent, Configuration conf)
                                        : KisColorSelectorBase(parent),
                                        m_ring(0),
                                        m_triangle(0),
@@ -60,7 +56,7 @@ KisColorSelector::KisColorSelector(QWidget* parent,
     
     setMinimumSize(80, 80);
 
-    setConfiguration(mainType, subType, mainTypeParam, subTypeParam);
+    setConfiguration(conf);
 }
 
 KisColorSelectorBase* KisColorSelector::createPopup() const
@@ -70,17 +66,19 @@ KisColorSelectorBase* KisColorSelector::createPopup() const
     return popup;
 }
 
-void KisColorSelector::setConfiguration(Type mainType, Type subType, Parameters mainTypeParam, Parameters subTypeParam)
+void KisColorSelector::setConfiguration(Configuration conf)
 {
-    m_mainType = mainType;
-    m_subType = subType;
-    m_mainTypeParam = mainTypeParam;
-    m_subTypeParam = subTypeParam;
+    m_configuration = conf;
 
     QResizeEvent event(QSize(width(),
                              height()),
                        QSize());
     resizeEvent(&event);
+}
+
+KisColorSelector::Configuration KisColorSelector::configuration() const
+{
+    return m_configuration;
 }
 
 void KisColorSelector::paintEvent(QPaintEvent* e)
@@ -106,9 +104,9 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
     m_slider->setGeometry(0,0,0,0);
     m_square->setGeometry(0,0,0,0);
 
-    if(m_mainType==Ring) {
+    if(m_configuration.mainType==Ring) {
         m_ring->setGeometry(0,0,width(), height());
-        if(m_subType==Triangle) {
+        if(m_configuration.subType==Triangle) {
             m_triangle->setGeometry(width()/2-m_ring->innerRadius(),
                                     height()/2-m_ring->innerRadius(),
                                     m_ring->innerRadius()*2,
@@ -120,15 +118,15 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
                                   height()/2-size/2,
                                   size,
                                   size);
-            m_square->setConfiguration(m_subTypeParam, m_subType);
+            m_square->setConfiguration(m_configuration.subTypeParameter, m_configuration.subType);
         }
     }
     else {
         // type wheel and square
         m_square->setGeometry(0,height()*0.1,width(), height()*0.9);
-        m_square->setConfiguration(m_mainTypeParam, m_mainType);
+        m_square->setConfiguration(m_configuration.mainTypeParameter, m_configuration.mainType);
         m_slider->setGeometry(0,0,width(), height()*0.1);
-        m_slider->setConfiguration(m_subTypeParam, m_subType);
+        m_slider->setConfiguration(m_configuration.subTypeParameter, m_configuration.subType);
     }
 
     KisColorSelectorBase::resizeEvent(e);

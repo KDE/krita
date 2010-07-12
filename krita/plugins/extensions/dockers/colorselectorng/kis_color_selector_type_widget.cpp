@@ -21,7 +21,6 @@
 #include "kis_color_selector.h"
 #include "kis_canvas2.h"
 
-
 #include <KDebug>
 
 class KisColorSelectorTypeWidgetPrivate : public QWidget {
@@ -41,22 +40,22 @@ public:
         QGridLayout* layout = new QGridLayout(this);
         layout->setSpacing(spacing);
 
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Ring, KisColorSelector::Triangle, KisColorSelector::H, KisColorSelector::SL), 0,0);
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Ring, KisColorSelector::Square, KisColorSelector::H, KisColorSelector::SL), 0,1);
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Ring, KisColorSelector::Square, KisColorSelector::H, KisColorSelector::SV), 0,2);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Configuration(KisColorSelector::Ring, KisColorSelector::Triangle, KisColorSelector::H, KisColorSelector::SL)), 0,0);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Configuration(KisColorSelector::Ring, KisColorSelector::Square, KisColorSelector::H, KisColorSelector::SL)), 0,1);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Configuration(KisColorSelector::Ring, KisColorSelector::Square, KisColorSelector::H, KisColorSelector::SV)), 0,2);
 
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SV, KisColorSelector::H), 1,0);
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SL, KisColorSelector::H), 1,1);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Configuration(KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SV, KisColorSelector::H)), 1,0);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Configuration(KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SL, KisColorSelector::H)), 1,1);
 
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::VH, KisColorSelector::S), 2,0);
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::LH, KisColorSelector::V), 2,1);
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SH, KisColorSelector::V), 2,2);
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SH, KisColorSelector::L), 2,3);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Configuration(KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::VH, KisColorSelector::S)), 2,0);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Configuration(KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::LH, KisColorSelector::V)), 2,1);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Configuration(KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SH, KisColorSelector::V)), 2,2);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Configuration(KisColorSelector::Square, KisColorSelector::Slider, KisColorSelector::SH, KisColorSelector::L)), 2,3);
 
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::SH, KisColorSelector::V), 3,0);
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::LH, KisColorSelector::S), 3,1);
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::VH, KisColorSelector::S), 3,2);
-        layout->addWidget(new KisColorSelector(this, KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::VH, KisColorSelector::L), 3,3);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Configuration(KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::SH, KisColorSelector::V)), 3,0);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Configuration(KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::LH, KisColorSelector::S)), 3,1);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Configuration(KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::VH, KisColorSelector::S)), 3,2);
+        layout->addWidget(new KisColorSelector(this, KisColorSelector::Configuration(KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::VH, KisColorSelector::L)), 3,3);
     }
 
 protected:
@@ -64,7 +63,6 @@ protected:
     {
         QPainter painter(this);
         painter.fillRect(0,0,width(), height(), QColor(128,128,128));
-//        painter.fillRect(2*m_selectorSize,3*m_selectorSize, m_selectorSize+m_spacing, m_selectorSize+m_spacing, palette().highlight());
         painter.fillRect(highlightArea, palette().highlight());
     }
 
@@ -78,6 +76,7 @@ protected:
                 if(item->geometry().adjusted(-spacing/2, -spacing/2, spacing/2, spacing/2).contains(e->pos())) {
                     QRect oldArea=highlightArea;
                     highlightArea=item->geometry().adjusted(-spacing/2, -spacing/2, spacing/2, spacing/2);
+                    m_lastActiveConfiguration=item->configuration();
                     update(highlightArea);
                     update(oldArea);
                 }
@@ -90,18 +89,29 @@ protected:
 
     void mousePressEvent(QMouseEvent* e)
     {
-        if(!rect().contains(e->pos())) {
-            hide();
-            e->accept();
+        if(rect().contains(e->pos())) {
+            KisColorSelectorTypeWidget* parent = dynamic_cast<KisColorSelectorTypeWidget*>(this->parent());
+            Q_ASSERT(parent);
+            parent->setConfiguration(m_lastActiveConfiguration);
         }
+        hide();
+        e->accept();
     }
+    KisColorSelector::Configuration m_lastActiveConfiguration;
 };
 
 KisColorSelectorTypeWidget::KisColorSelectorTypeWidget(QWidget* parent) :
         QComboBox(parent),
-        m_private(new KisColorSelectorTypeWidgetPrivate(this))
+        m_private(new KisColorSelectorTypeWidgetPrivate(this)),
+        m_currentSelector(this)
 {
-    setMinimumSize(m_private->selectorSize+m_private->spacing,m_private->selectorSize+m_private->spacing);
+    QLayout* layout = new QGridLayout(this);
+    layout->addWidget(&m_currentSelector);
+    m_currentSelector.setEnabled(false);
+
+    // 30 pixels for the arrow of the combobox
+    setMinimumSize(m_private->selectorSize+m_private->spacing+30,m_private->selectorSize+m_private->spacing);
+    m_currentSelector.setMaximumSize(m_private->selectorSize, m_private->selectorSize);
 }
 
 KisColorSelectorTypeWidget::~KisColorSelectorTypeWidget()
@@ -136,9 +146,22 @@ void KisColorSelectorTypeWidget::setCanvas(KisCanvas2 *canvas)
             item->setEnabled(false);
         }
     }
+    m_currentSelector.setCanvas(canvas);
+}
+
+KisColorSelector::Configuration KisColorSelectorTypeWidget::configuration() const
+{
+    return m_configuration;
 }
 
 void KisColorSelectorTypeWidget::paintEvent(QPaintEvent *e)
 {
     QComboBox::paintEvent(e);
+}
+
+void KisColorSelectorTypeWidget::setConfiguration(KisColorSelector::Configuration conf)
+{
+    m_configuration=conf;
+    m_currentSelector.setConfiguration(conf);
+    update();
 }

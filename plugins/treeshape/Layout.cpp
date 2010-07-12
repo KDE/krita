@@ -32,6 +32,7 @@
 
 Layout::Layout(KoShapeContainer *container)
     : m_container(container)
+    , m_structure(TreeShape::OrgDown)
     , m_doingLayout(false)
     , m_relayoutScheduled(false)
     , m_root(0)

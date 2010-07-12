@@ -172,8 +172,10 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
                     foreach (KoShape *shape, tree->shapes()){
                         TreeShape *tmp = dynamic_cast<TreeShape*>(shape);
                         if (tmp)
-                            kDebug() << "Tree" << shape->zIndex() << shape->boundingRect()
-                                     << "Root" << tmp->shapes().last()->zIndex()  << shape->boundingRect();
+                            kDebug() << shape->shapeId() << shape->zIndex() << shape->boundingRect()
+                                     << tmp->shapes().last()->shapeId()
+                                     << tmp->shapes().last()->zIndex()
+                                     << tmp->shapes().last()->boundingRect();
                     }
                 }
             }

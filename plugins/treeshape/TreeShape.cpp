@@ -44,6 +44,7 @@ TreeShape::TreeShape(): KoShapeContainer(new Layout(this))
 {
     m_nextShape = 0;
     KoShape *root = KoShapeRegistry::instance()->value("EllipseShape")->createDefaultShape();
+    root->setShapeId("Ellipse000");
     root->setSize(QSizeF(50,50));
     root->setParent(this);
     layout()->setRoot(root);
@@ -55,7 +56,9 @@ TreeShape::TreeShape(): KoShapeContainer(new Layout(this))
 TreeShape::TreeShape(KoShape *shape): KoShapeContainer(new Layout(this))
 {
     m_nextShape = 0;
-    setShapeId("TreeShape");
+    int id = qrand()%90+10;
+    setShapeId("TreeShape"+QString::number(id));
+    shape->setShapeId("Ellipse"+QString::number(id));
     addShape(shape);
     layout()->setRoot(shape);
     layout()->layout();

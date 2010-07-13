@@ -53,7 +53,7 @@ public:
         return "GRAYU8";
     }
     virtual QString name() const {
-        return i18n("Grayscale (8-bit integer/channel)");
+        return i18n("Grayscale (no transparency) (8-bit integer/channel)");
     }
     virtual KoID colorModelId() const {
         return GrayColorModelID;

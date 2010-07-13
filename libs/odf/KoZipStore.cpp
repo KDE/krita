@@ -114,6 +114,15 @@ bool KoZipStore::init(Mode _mode, const QByteArray& appIdentification)
     return good;
 }
 
+void KoZipStore::setCompressionEnabled(bool e)
+{
+    if (e) {
+        m_pZip->setCompression(KZip::DeflateCompression);
+    } else {
+        m_pZip->setCompression(KZip::NoCompression);        
+    }
+}
+
 bool KoZipStore::doFinalize()
 {
     return m_pZip->close();

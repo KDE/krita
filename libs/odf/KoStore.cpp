@@ -659,6 +659,10 @@ bool KoStore::finalize()
     return doFinalize();
 }
 
+void KoStore::setCompressionEnabled(bool /*e*/)
+{
+}
+
 bool KoStore::isEncrypted()
 {
     return false;

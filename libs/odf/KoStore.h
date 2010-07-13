@@ -301,6 +301,11 @@ public:
      */
     virtual bool isEncrypted();
 
+    /**
+     * Allow to enable or disable compression of the files. Only supported by the
+     * ZIP backend.
+     */
+    virtual void setCompressionEnabled(bool e);
 protected:
 
     KoStore();

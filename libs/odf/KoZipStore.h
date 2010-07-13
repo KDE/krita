@@ -40,6 +40,7 @@ public:
     KoZipStore(QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification);
     ~KoZipStore();
 
+    virtual void setCompressionEnabled(bool e);
     virtual qint64 write(const char* _data, qint64 _len);
 protected:
     using KoStore::init;

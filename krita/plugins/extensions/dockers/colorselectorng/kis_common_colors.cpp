@@ -26,7 +26,7 @@
 #include <QPainter>
 #include <QResizeEvent>
 
-#include <QDebug>
+#include <KDebug>
 #include <iostream>
 
 #include "kis_canvas2.h"
@@ -105,6 +105,7 @@ public:
     {
         ColorAxis axis = biggestAxis();
         Q_ASSERT(axisSize(axis)>=3);
+
         unsigned char divpos = divPos(axis);
         QList<Color> newVBoxColors;
         for(int i=m_colors.size()-1; i>=0; i--) {
@@ -184,13 +185,6 @@ private:
 QList<QColor> KisCommonColors::extractColors()
 {
     QList<QRgb> colors = getColors();
-    if(colors.size()<m_numColors && false) {
-        QList<QColor> colorList;
-        for(int i=0; i<m_numColors-colorList.size(); i++)
-            colorList.append(QColor(255,255,255));
-
-        return colorList;
-    };
 
     VBox startBox(colors);
     QList<VBox> boxes;
@@ -201,13 +195,14 @@ QList<QColor> KisCommonColors::extractColors()
         int biggestBoxPopulation=-1;
 
         for(int i=0; i<boxes.size(); i++) {
-            if(boxes.at(i).population()>biggestBoxPopulation) {
+            if(boxes.at(i).population()>biggestBoxPopulation &&
+               boxes.at(i).axisSize(boxes.at(i).biggestAxis())>=3) {
                 biggestBox=i;
                 biggestBoxPopulation=boxes.at(i).population();
             }
         }
 
-        if(boxes[biggestBox].population()<=3)
+        if(biggestBox==-1 || boxes[biggestBox].population()<=3)
             break;
         VBox newBox = boxes[biggestBox].divide();
         boxes.append(newBox);
@@ -219,13 +214,14 @@ QList<QColor> KisCommonColors::extractColors()
         int biggestBoxAxisSize=-1;
 
         for(int i=0; i<boxes.size(); i++) {
-            if(boxes.at(i).axisSize(boxes.at(i).biggestAxis())>biggestBoxAxisSize) {
+            if(boxes.at(i).axisSize(boxes.at(i).biggestAxis())>biggestBoxAxisSize &&
+               boxes.at(i).axisSize(boxes.at(i).biggestAxis())>=3) {
                 biggestBox=i;
                 biggestBoxAxisSize=boxes.at(i).axisSize(boxes.at(i).biggestAxis());
             }
         }
 
-        if(boxes[biggestBox].population()<=3)
+        if(biggestBox==-1 || boxes[biggestBox].population()<=3)
             break;
         VBox newBox = boxes[biggestBox].divide();
         boxes.append(newBox);
@@ -233,12 +229,15 @@ QList<QColor> KisCommonColors::extractColors()
 
     QList<QColor> colorList;
     for(int i=0; i<boxes.size(); i++) {
-        if(boxes.at(i).population()>=1)
+        if(boxes.at(i).population()>=1) {
             colorList.append(QColor(boxes.at(i).mean()));
+            if(colorList.last()==QColor(0,0,0))
+                kDebug()<<"dude!";
+        }
     }
 
     while(m_numColors>colorList.size())
-        colorList.append(QColor(0,0,0,0));
+        colorList.append(QColor(0,255,0,0));
 
     return colorList;
 }
@@ -268,7 +267,12 @@ QList<QRgb> KisCommonColors::getColors()
 
     for (int i=0; i<width; i++) {
         for (int j=0; j<height; j++) {
-                colorList.insert(image.pixel(i, j)|qRgba(0,0,0,255));
+            colorList.insert(image.pixel(i, j)|qRgba(0,0,0,255));
+            if((image.pixel(i, j)|qRgba(0,0,0,255)) == qRgba(0,0,0,255)) {
+                kDebug()<<"=================";
+                kDebug()<<i<<"/"<<j;
+                kDebug()<<"duude!";
+            }
         }
     }
 

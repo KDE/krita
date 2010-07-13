@@ -34,8 +34,13 @@ public:
     ~KisColorSelectorSettings();
 
     Ui::KisColorSelectorSettings *ui;
+
+protected slots:
+    void settingsAccepted();
+
 protected:
     void changeEvent(QEvent *e);
+    void readSettings();
 };
 
 #endif // KIS_COLSELNG_SETTINGS_H

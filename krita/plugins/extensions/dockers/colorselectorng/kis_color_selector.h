@@ -45,6 +45,28 @@ public:
                                   mainTypeParameter(mainTP),
                                   subTypeParameter(subTP)
         {}
+        QString toString()
+        {
+            return QString("%1|%2|%3|%4").arg(mainType).arg(subType).arg(mainTypeParameter).arg(subTypeParameter);
+        }
+        void readString(QString string)
+        {
+            QStringList strili = string.split('|');
+            if(strili.length()!=4) return;
+
+            int imt=strili.at(0).toInt();
+            int ist=strili.at(1).toInt();
+            int imtp=strili.at(2).toInt();
+            int istp=strili.at(3).toInt();
+
+            if(imt>Slider || ist>Slider || imtp>LH || istp>LH)
+                return;
+
+            mainType = Type(imt);
+            subType = Type(ist);
+            mainTypeParameter = Parameters(imtp);
+            subTypeParameter = Parameters(istp);
+        }
     };
 
 //    enum MainType {Ring, Square, Wheel};

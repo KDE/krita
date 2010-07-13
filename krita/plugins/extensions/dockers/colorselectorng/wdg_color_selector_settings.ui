@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>514</width>
-    <height>330</height>
+    <height>357</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -102,7 +102,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spinBox_3">
+               <widget class="QSpinBox" name="popupSize">
                 <property name="suffix">
                  <string>px</string>
                 </property>
@@ -170,12 +170,12 @@
           <string>Type and Shape</string>
          </property>
          <property name="buddy">
-          <cstring>colorSelectorType</cstring>
+          <cstring>colorSelectorConfiguration</cstring>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="KisColorSelectorTypeWidget" name="colorSelectorType"/>
+        <widget class="KisColorSelectorTypeWidget" name="colorSelectorConfiguration"/>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_4">
@@ -322,7 +322,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="spinBox_6">
+                <widget class="QSpinBox" name="lastUsedColorsWidth">
                  <property name="suffix">
                   <string>px</string>
                  </property>
@@ -335,7 +335,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="spinBox_7">
+                <widget class="QSpinBox" name="lastUsedColorsHeight">
                  <property name="suffix">
                   <string>px</string>
                  </property>
@@ -356,7 +356,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="spinBox_2">
+                <widget class="QSpinBox" name="lastUsedColorsPatchCount">
                  <property name="minimum">
                   <number>1</number>
                  </property>
@@ -414,7 +414,7 @@
              <item>
               <widget class="QCheckBox" name="lastUsedColorsAllowScrolling">
                <property name="text">
-                <string>Allow Scrolling</string>
+                <string>Allow scrolling</string>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -521,7 +521,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="spinBox_4">
+                <widget class="QSpinBox" name="commonColorsWidth">
                  <property name="suffix">
                   <string>px</string>
                  </property>
@@ -534,7 +534,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="spinBox_5">
+                <widget class="QSpinBox" name="commonColorsHeight">
                  <property name="suffix">
                   <string>px</string>
                  </property>
@@ -555,7 +555,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="spinBox">
+                <widget class="QSpinBox" name="commonColorsPatchCount">
                  <property name="minimum">
                   <number>1</number>
                  </property>
@@ -611,9 +611,16 @@
               </layout>
              </item>
              <item>
+              <widget class="QCheckBox" name="commonColorsAutoUpdate">
+               <property name="text">
+                <string>Update automatically</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QCheckBox" name="commonColorsAllowScrolling">
                <property name="text">
-                <string>Allow Scrolling</string>
+                <string>Allow scrolling</string>
                </property>
               </widget>
              </item>

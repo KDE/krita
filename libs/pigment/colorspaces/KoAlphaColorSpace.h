@@ -184,7 +184,7 @@ public:
     KoAlphaColorSpaceFactory()
             : KoSimpleColorSpaceFactory("ALPHA",
                                         i18n("Alpha mask"),
-                                        true,
+                                        false,
                                         AlphaColorModelID,
                                         Integer8BitsColorDepthID,
                                         8) {

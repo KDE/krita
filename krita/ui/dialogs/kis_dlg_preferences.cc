@@ -53,6 +53,7 @@
 #include <kpagewidgetmodel.h>
 #include <kicon.h>
 #include <kvbox.h>
+#include <kundostack.h>
 
 #include "widgets/squeezedcombobox.h"
 #include "kis_clipboard.h"
@@ -533,6 +534,7 @@ bool KisDlgPreferences::editPreferences()
         foreach(KoDocument* doc, *KoDocument::documentList()) {
             doc->setAutoSave(dialog->m_general->autoSaveInterval());
             doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
+            doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
         }
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
 

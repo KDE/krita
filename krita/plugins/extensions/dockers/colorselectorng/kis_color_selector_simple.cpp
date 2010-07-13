@@ -20,7 +20,6 @@
 #include <QImage>
 #include <QPainter>
 #include <QColor>
-#include "KoColor.h"
 #include <cmath>
 
 #include <KDebug>
@@ -40,6 +39,8 @@ void KisColorSelectorSimple::setConfiguration(Parameter param, Type type)
 
 QColor KisColorSelectorSimple::selectColor(int x, int y)
 {
+    m_kocolor.convertTo(colorSpace());
+
     m_lastClickPos.setX(x);
     m_lastClickPos.setY(y);
 
@@ -93,26 +94,30 @@ QColor KisColorSelectorSimple::selectColor(int x, int y)
 
 void KisColorSelectorSimple::paint(QPainter* painter)
 {
-    QImage tmpDev(width(), height(), QImage::Format_ARGB32_Premultiplied);
+    if(isDirty()) {
+        m_kocolor.convertTo(colorSpace());
 
-    for(int x=0; x<width(); x++) {
-        for(int y=0; y<height(); y++) {
-//            tmpDev.setPixel(x, y, QColor::fromHslF(0,x/qreal(width()), 1-y/qreal(height())).rgb());
-            tmpDev.setPixel(x, y, colorAt(x, y));
+        m_pixelCache=QImage(width(), height(), QImage::Format_ARGB32_Premultiplied);
+
+        for(int x=0; x<width(); x++) {
+            for(int y=0; y<height(); y++) {
+    //            tmpDev.setPixel(x, y, QColor::fromHslF(0,x/qreal(width()), 1-y/qreal(height())).rgb());
+                m_pixelCache.setPixel(x, y, colorAt(x, y));
+            }
+        }
+
+        //antialiasing for wheel
+        if(m_type==KisColorSelector::Wheel) {
+            QPainter tmpPainter(&m_pixelCache);
+            tmpPainter.setRenderHint(QPainter::Antialiasing);
+            tmpPainter.setPen(QPen(QColor(0,0,0,0), 2.5));
+            tmpPainter.setCompositionMode(QPainter::CompositionMode_Clear);
+            int size=qMin(width(), height());
+            tmpPainter.drawEllipse(width()/2-size/2, height()/2-size/2, size, size);
         }
     }
 
-    //antialiasing for wheel
-    if(m_type==KisColorSelector::Wheel) {
-        QPainter tmpPainter(&tmpDev);
-        tmpPainter.setRenderHint(QPainter::Antialiasing);
-        tmpPainter.setPen(QPen(QColor(0,0,0,0), 2.5));
-        tmpPainter.setCompositionMode(QPainter::CompositionMode_Clear);
-        int size=qMin(width(), height());
-        tmpPainter.drawEllipse(width()/2-size/2, height()/2-size/2, size, size);
-    }
-
-    painter->drawImage(0,0, tmpDev);
+    painter->drawImage(0,0, m_pixelCache);
 
     if(m_lastClickPos!=QPoint(-1,-1)) {
         painter->setPen(QColor(0,0,0));
@@ -137,31 +142,31 @@ QRgb KisColorSelectorSimple::colorAt(int x, int y)
 
         switch(m_parameter) {
         case KisColorSelector::SL:
-            return KoColor(QColor::fromHslF(parameter1(), xRel, yRel).rgb(), colorSpace()).toQColor().rgb();
+            m_qcolor.setHslF(parameter1(), xRel, yRel);
             break;
         case KisColorSelector::SV:
-            return KoColor(QColor::fromHsvF(parameter1(), xRel, yRel).rgb(), colorSpace()).toQColor().rgb();
+            m_qcolor.setHsvF(parameter1(), xRel, yRel);
             break;
         case KisColorSelector::SH:
-            return KoColor(QColor::fromHsvF(xRel, yRel, parameter1()).rgb(), colorSpace()).toQColor().rgb();
+            m_qcolor.setHsvF(xRel, yRel, parameter1());
             break;
         case KisColorSelector::VH:
-            return KoColor(QColor::fromHsvF(xRel, parameter1(), yRel).rgb(), colorSpace()).toQColor().rgb();
+            m_qcolor.setHsvF(xRel, parameter1(), yRel);
             break;
         case KisColorSelector::LH:
-            return KoColor(QColor::fromHslF(xRel, parameter1(), yRel).rgb(), colorSpace()).toQColor().rgb();
+            m_qcolor.setHslF(xRel, parameter1(), yRel);
             break;
         case KisColorSelector::H:
-            return KoColor(QColor::fromHsvF(relPos, 1, 1).rgb(), colorSpace()).toQColor().rgb();
+            m_qcolor.setHsvF(relPos, 1, 1);
             break;
         case KisColorSelector::S:
-            return KoColor(QColor::fromHsvF(parameter1(), relPos, parameter2()).rgb(), colorSpace()).toQColor().rgb();
+            m_qcolor.setHsvF(parameter1(), relPos, parameter2());
             break;
         case KisColorSelector::V:
-            return KoColor(QColor::fromHsvF(parameter1(), parameter2(), relPos).rgb(), colorSpace()).toQColor().rgb();
+            m_qcolor.setHsvF(parameter1(), parameter2(), relPos);
             break;
         case KisColorSelector::L:
-            return KoColor(QColor::fromHslF(parameter1(), parameter2(), relPos).rgb(), colorSpace()).toQColor().rgb();
+            m_qcolor.setHslF(parameter1(), parameter2(), relPos);
             break;
         default:
             return qRgb(255,0,0);
@@ -184,16 +189,20 @@ QRgb KisColorSelectorSimple::colorAt(int x, int y)
 
         switch(m_parameter) {
         case KisColorSelector::SH:
-            return KoColor(QColor::fromHsvF(angle, radius, parameter1()).rgb(), colorSpace()).toQColor().rgb();
+            m_qcolor.setHsvF(angle, radius, parameter1());
             break;
         case KisColorSelector::VH:
-            return KoColor(QColor::fromHsvF(angle, parameter1(), radius).rgb(), colorSpace()).toQColor().rgb();
+            m_qcolor.setHsvF(angle, parameter1(), radius);
             break;
         case KisColorSelector::LH:
-            return KoColor(QColor::fromHslF(angle, parameter1(), radius).rgb(), colorSpace()).toQColor().rgb();
+            m_qcolor.setHslF(angle, parameter1(), radius);
             break;
         default:
             return qRgb(255,0,0);
         }
     }
+
+    m_kocolor.fromQColor(m_qcolor);
+    m_kocolor.toQColor(&m_qcolor);
+    return m_qcolor.rgb();
 }

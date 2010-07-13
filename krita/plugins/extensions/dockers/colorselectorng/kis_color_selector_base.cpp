@@ -191,7 +191,7 @@ void KisColorSelectorBase::commitColor(QColor color, ColorRole role)
 
 }
 
-const KoColorSpace* KisColorSelectorBase::colorSpace() const
+const KoColorSpace* KisColorSelectorBase::colorSpace()
 {
     Q_ASSERT(m_canvas);
     if(m_colorSpace!=0) {
@@ -200,7 +200,8 @@ const KoColorSpace* KisColorSelectorBase::colorSpace() const
     else {
         KisNodeSP currentNode = m_canvas->resourceManager()->
                                 resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-        return currentNode->colorSpace();
+        m_colorSpace=currentNode->colorSpace();
+        return m_colorSpace;
 //        return m_canvas->currentImage()->colorSpace();
     }
 }

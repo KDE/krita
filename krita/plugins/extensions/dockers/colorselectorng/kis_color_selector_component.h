@@ -53,6 +53,8 @@ signals:
     void paramChanged(qreal, qreal);
 protected:
     const KoColorSpace* colorSpace() const;
+    /// returns true, if ether the colour space, the size or the parameters have changed since the last paint event
+    bool isDirty() const;
 
     /// this method must be overloaded to return the colour at position x/y and draw a marker on that position
     virtual QColor selectColor(int x, int y) = 0;
@@ -72,6 +74,8 @@ private:
     int m_y;
     qreal m_param1;
     qreal m_param2;
+    bool m_dirty;
+    const KoColorSpace* m_lastColorSpace;
 };
 
 #endif // KIS_COLOR_SELECTOR_COMPONENT_H

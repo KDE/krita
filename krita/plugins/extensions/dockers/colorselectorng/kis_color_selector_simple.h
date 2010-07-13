@@ -18,9 +18,13 @@
 #ifndef KIS_COLOR_SELECTOR_SQUARE_H
 #define KIS_COLOR_SELECTOR_SQUARE_H
 
-class QColor;
 typedef unsigned int QRgb;
+class KoColorSpace;
 
+#include <QColor>
+#include <QImage>
+
+#include "KoColor.h"
 #include "kis_color_selector_component.h"
 #include "kis_color_selector.h"
 
@@ -42,6 +46,9 @@ private:
     Parameter m_parameter;
     Type m_type;
     QPoint m_lastClickPos;
+    KoColor m_kocolor;
+    QColor m_qcolor;
+    QImage m_pixelCache;
 };
 
 #endif // KIS_COLOR_SELECTOR_SQUARE_H

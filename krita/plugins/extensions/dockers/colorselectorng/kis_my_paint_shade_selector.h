@@ -23,9 +23,8 @@
 #define KIS_COLSELNG_MY_PAINT_SHADE_SELECTOR_H
 
 #include "kis_color_selector_base.h"
-
-class QImage;
-class QColor;
+#include <QColor>
+#include <QImage>
 
 class KisMyPaintShadeSelector : public KisColorSelectorBase
 {
@@ -39,7 +38,7 @@ protected:
     KisColorSelectorBase* createPopup() const;
 
 private:
-    QImage getSelector();
+    void updateSelector();
     void setColor(const QColor& c);
     void precalculateData();
     static const int m_size = 256;
@@ -50,7 +49,11 @@ private:
         int v;
     };
     PrecalcData m_precalcData[256][256];
-    QColor getColor(int x, int y);
+    void calculatePos(int x, int y);
+
+    QImage m_selector;
+    QColor m_qcolor;
+    bool m_initialised;
 };
 
 #endif // KIS_COLSELNG_MY_PAINT_SHADE_SELECTOR_H

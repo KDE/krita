@@ -26,8 +26,7 @@
 #include "KoPathShape.h"
 #include "KoToolBase.h"
 #include "KoPathToolSelection.h"
-
-#include "QMap"
+#include <QMap>
 
 class QButtonGroup;
 class KoCanvasBase;

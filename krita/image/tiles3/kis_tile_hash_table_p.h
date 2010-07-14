@@ -31,9 +31,6 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits(KisMementoManager *mm)
     m_hashTable = new TileTypeSP [TABLE_SIZE];
     Q_CHECK_PTR(m_hashTable);
 
-    for (int i = 0; i < TABLE_SIZE; i++)
-        m_hashTable[i] = 0;
-
     m_numTiles = 0;
     m_defaultTileData = 0;
     m_mementoManager = mm;

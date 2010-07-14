@@ -71,7 +71,8 @@ public:
 //    enum MainTypeParameter {SL, SV, SH, VH, LH, VSV/*experimental*/};
 //    enum SubTypeParameter {H, S, V, L};
 
-    KisColorSelector(QWidget* parent = 0, Configuration conf = Configuration());
+    KisColorSelector(Configuration conf, QWidget* parent = 0);
+    KisColorSelector(QWidget* parent=0);
     KisColorSelectorBase* createPopup() const;
 
     void setConfiguration(Configuration conf);
@@ -83,6 +84,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *);
 private:
     void mouseEvent(QMouseEvent* e);
+    void init();
 
     KisColorSelectorRing* m_ring;
     KisColorSelectorComponent* m_triangle;

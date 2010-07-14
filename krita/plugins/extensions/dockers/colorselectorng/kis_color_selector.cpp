@@ -28,35 +28,34 @@
 #include <QPainter>
 #include <QMouseEvent>
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KComponentData>
+#include <KGlobal>
 
 #include <KDebug>
 
-KisColorSelector::KisColorSelector(QWidget* parent, Configuration conf)
+KisColorSelector::KisColorSelector(Configuration conf, QWidget* parent)
                                        : KisColorSelectorBase(parent),
                                        m_ring(0),
                                        m_triangle(0),
                                        m_slider(0),
                                        m_square(0)
 {
-    m_ring = new KisColorSelectorRing(this);
-    m_triangle = new KisColorSelectorTriangle(this);
-    m_slider = new KisColorSelectorSimple(this);
-    m_square = new KisColorSelectorSimple(this);
-    
-    connect(m_ring,     SIGNAL(update()), this, SLOT(update()));
-    connect(m_triangle, SIGNAL(update()), this, SLOT(update()));
-    connect(m_slider,   SIGNAL(update()), this, SLOT(update()));
-    connect(m_square,   SIGNAL(update()), this, SLOT(update()));
-
-    connect(m_ring, SIGNAL(paramChanged(qreal)), m_triangle, SLOT(setParam(qreal)));
-    connect(m_ring, SIGNAL(paramChanged(qreal)), m_square,   SLOT(setParam(qreal)));
-
-    connect(m_square, SIGNAL(paramChanged(qreal,qreal)), m_slider, SLOT(setParam(qreal,qreal)));
-    connect(m_slider, SIGNAL(paramChanged(qreal)),       m_square, SLOT(setParam(qreal)));
-    
-    setMinimumSize(80, 80);
-
+    init();
     setConfiguration(conf);
+}
+
+KisColorSelector::KisColorSelector(QWidget* parent)
+                                       : KisColorSelectorBase(parent),
+                                       m_ring(0),
+                                       m_triangle(0),
+                                       m_slider(0),
+                                       m_square(0)
+{
+    init();
+    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+    setConfiguration(Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelector::Configuration().toString())));
 }
 
 KisColorSelectorBase* KisColorSelector::createPopup() const
@@ -165,4 +164,25 @@ void KisColorSelector::mouseEvent(QMouseEvent *e)
 //            commitColor(m_triangle->currentColor(), role);
         }
     }
+}
+
+void KisColorSelector::init()
+{
+    m_ring = new KisColorSelectorRing(this);
+    m_triangle = new KisColorSelectorTriangle(this);
+    m_slider = new KisColorSelectorSimple(this);
+    m_square = new KisColorSelectorSimple(this);
+
+    connect(m_ring,     SIGNAL(update()), this, SLOT(update()));
+    connect(m_triangle, SIGNAL(update()), this, SLOT(update()));
+    connect(m_slider,   SIGNAL(update()), this, SLOT(update()));
+    connect(m_square,   SIGNAL(update()), this, SLOT(update()));
+
+    connect(m_ring, SIGNAL(paramChanged(qreal)), m_triangle, SLOT(setParam(qreal)));
+    connect(m_ring, SIGNAL(paramChanged(qreal)), m_square,   SLOT(setParam(qreal)));
+
+    connect(m_square, SIGNAL(paramChanged(qreal,qreal)), m_slider, SLOT(setParam(qreal,qreal)));
+    connect(m_slider, SIGNAL(paramChanged(qreal)),       m_square, SLOT(setParam(qreal)));
+
+    setMinimumSize(80, 80);
 }

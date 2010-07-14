@@ -86,8 +86,10 @@ QColor KisColorSelectorTriangle::selectColor(int x, int y)
         m_lastClickPos.setX(x);
         m_lastClickPos.setY(y);
         emit update();
+        QPoint triangleCoords = widgetToTriangleCoordinates(QPoint(x,y));
+        return QColor::fromRgb(colorAt(triangleCoords.x(), triangleCoords.y()));
     }
-    return QColor::fromRgb(colorAt(x, y));
+    return QColor();
 }
 
 qreal KisColorSelectorTriangle::triangleWidth() const

@@ -153,6 +153,7 @@ void TreeShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 
 bool TreeShape::hitTest(const QPointF &position) const
 {
+    Q_UNUSED(position);
     //return layout()->root()->hitTest(position);
     kDebug() << shapeId();
     return false;

@@ -74,7 +74,7 @@ KisTileData::~KisTileData()
         freeData(m_data, m_pixelSize);
 
     /* Free clones list */
-    KisTileData *td;
+    KisTileData *td  = 0;
     while(m_clonesStack.pop(td)) {
         delete td;
     }

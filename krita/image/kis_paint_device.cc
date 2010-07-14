@@ -262,7 +262,7 @@ void KisPaintDevice::prepareClone(KisPaintDeviceSP src)
         m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(src->colorSpace());
         m_d->nChannels = m_d->colorSpace->channelCount();
 
-        if (m_d->pixelSize != m_d->colorSpace->pixelSize()) {
+        if ((quint32)m_d->pixelSize != m_d->colorSpace->pixelSize()) {
             m_datamanager = 0;
             m_datamanager = new KisDataManager(src->pixelSize(), src->defaultPixel());
             m_d->pixelSize = src->pixelSize();

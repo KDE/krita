@@ -122,7 +122,7 @@ KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *def
 
 KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
 {
-    KisTileData *td;
+    KisTileData *td = 0;
 
     if (rhs->m_clonesStack.pop(td)) {
         DEBUG_PRECLONE_ACTION("+ Pre-clone HIT", rhs, td);

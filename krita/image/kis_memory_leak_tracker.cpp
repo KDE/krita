@@ -182,7 +182,7 @@ void KisMemoryLeakTracker::dumpReferences(const void* what)
         errKrita << "Object " << what << " is not tracked";
         return;
     }
-    
+
     WhatInfo& info = d->whatWhoWhen[what];
     dbgKrita << "Object " << what << "(" << info.name << ") is still referenced by " << info.infos.size() << " objects:";
     for (QHash<const void*, BacktraceInfo*>::iterator it2 = info.infos.begin();
@@ -217,10 +217,15 @@ KisMemoryLeakTracker::~KisMemoryLeakTracker()
 
 void KisMemoryLeakTracker::reference(const void* what, const void* bywho, const char* whatName)
 {
+    Q_UNUSED(what);
+    Q_UNUSED(bywho);
+    Q_UNUSED(whatName);
 }
 
 void KisMemoryLeakTracker::dereference(const void* what, const void* bywho)
 {
+    Q_UNUSED(what);
+    Q_UNUSED(bywho);
 }
 
 void KisMemoryLeakTracker::dumpReferences()
@@ -229,6 +234,7 @@ void KisMemoryLeakTracker::dumpReferences()
 
 void KisMemoryLeakTracker::dumpReferences(const void* what)
 {
+    Q_UNUSED(what);
 }
 
 #endif

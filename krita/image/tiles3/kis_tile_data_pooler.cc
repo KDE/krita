@@ -101,7 +101,7 @@ void KisTileDataPooler::cloneTileData(KisTileData *td, qint32 numClones) const
     } else {
         qint32 numUnnededClones = qAbs(numClones);
         for (qint32 i = 0; i < numUnnededClones; i++) {
-            KisTileData *clone;
+            KisTileData *clone = 0;
 
             bool result = td->m_clonesStack.pop(clone);
             if(!result) break;

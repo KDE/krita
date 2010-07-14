@@ -105,7 +105,11 @@ void KisTileCompressor2::compressTileData(KisTileData *tileData,
     const qint32 tileDataSize = TILE_DATA_SIZE(pixelSize);
     qint32 compressedBytes;
 
+#ifdef NDEBUG
+    Q_UNUSED(bufferSize);
+#else
     Q_ASSERT(bufferSize >= tileDataSize + 1);
+#endif
 
     prepareWorkBuffers(tileDataSize);
 

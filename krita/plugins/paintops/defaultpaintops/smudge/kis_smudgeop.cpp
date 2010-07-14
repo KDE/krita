@@ -108,8 +108,8 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
 
     qint32 sw = dab->bounds().width();
     qint32 sh = dab->bounds().height();
-    
-    
+
+
     /* To smudge, one does the following:
          * at first, initialize a temporary paint device with a copy of the original (dab-sized piece, really).
          * all other times:
@@ -132,7 +132,7 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
             ++it;
         }
         opacity = OPACITY_OPAQUE_U8 - opacity;
-        
+
     } else {
         m_firstRun = false;
     }
@@ -147,6 +147,6 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     sw = dstRect.width();
     sh = dstRect.height();
 
-    painter()->bitBlt(dstRect.x(), dstRect.y(), m_srcdev, dab, sx, sy, sw, sh);
+    painter()->bitBltFixedSelection(dstRect.x(), dstRect.y(), m_srcdev, dab, sx, sy, sw, sh);
     return spacing(scale);
 }

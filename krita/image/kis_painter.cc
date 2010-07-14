@@ -272,7 +272,7 @@ QRegion KisPainter::addDirtyRect(const QRect & rc)
     }
 }
 
-void KisPainter::bitBlt(qint32 dx, qint32 dy, const KisPaintDeviceSP srcdev, const KisFixedPaintDeviceSP selection, qint32 sx, qint32 sy, qint32 sw, qint32 sh)
+void KisPainter::bitBltFixedSelection(qint32 dx, qint32 dy, const KisPaintDeviceSP srcdev, const KisFixedPaintDeviceSP selection, qint32 sx, qint32 sy, qint32 sw, qint32 sh)
 {
     if (sw == 0 || sh == 0) return;
     if (srcdev.isNull()) return;
@@ -332,10 +332,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy, const KisPaintDeviceSP srcdev, con
     addDirtyRect(QRect(dx, dy, sw, sh));
 }
 
-void KisPainter::bitBlt(qint32 dx, qint32 dy,
-                        const KisPaintDeviceSP srcdev,
-                        qint32 sx, qint32 sy,
-                        qint32 sw, qint32 sh)
+void KisPainter::bitBlt(qint32 dx, qint32 dy, const KisPaintDeviceSP srcdev, qint32 sx, qint32 sy, qint32 sw, qint32 sh)
 {
     if (sw == 0 || sh == 0) return;
     if (srcdev.isNull()) return;

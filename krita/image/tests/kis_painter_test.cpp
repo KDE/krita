@@ -298,33 +298,33 @@ void KisPainterTest::testSelectionBitBltFixedSelection()
 
     KisPainter painter(dst);
 
-    painter.bitBlt(0, 0, src, fixedSelection, 0, 0, 20, 20);
+    painter.bitBltFixedSelection(0, 0, src, fixedSelection, 0, 0, 20, 20);
     painter.end();
 
     QCOMPARE(dst->exactBounds(), QRect(5, 5, 10, 10));
-    
+
     dst->clear();
     painter.begin(dst);
-    
-    painter.bitBlt(0, 0, src, fixedSelection, 0, 0, 10, 20);
+
+    painter.bitBltFixedSelection(0, 0, src, fixedSelection, 0, 0, 10, 20);
     painter.end();
-    
+
     QCOMPARE(dst->exactBounds(), QRect(5, 5, 5, 10));
 
     dst->clear();
     painter.begin(dst);
-    
-    painter.bitBlt(0, 0, src, fixedSelection, 5, 5, 10, 20);
+
+    painter.bitBltFixedSelection(0, 0, src, fixedSelection, 5, 5, 10, 20);
     painter.end();
-    
+
     QCOMPARE(dst->exactBounds(), QRect(5, 5, 5, 10));
 
     dst->clear();
     painter.begin(dst);
-    
-    painter.bitBlt(5, 5, src, fixedSelection, 0, 0, 10, 20);
+
+    painter.bitBltFixedSelection(5, 5, src, fixedSelection, 0, 0, 10, 20);
     painter.end();
-    
+
     QCOMPARE(dst->exactBounds(), QRect(10, 10, 5, 10));
 }
 
@@ -334,7 +334,7 @@ void KisPainterTest::testSelectionBitBltEraseCompositeOp()
     KisPaintDeviceSP dst = new KisPaintDevice(cs);
     KoColor c(Qt::red, cs);
     dst->fill(0, 0, 150, 150, c.data());
-    
+
     KisPaintDeviceSP src = new KisPaintDevice(cs);
     KoColor c2(Qt::black, cs);
     src->fill(50, 50, 50, 50, c2.data());
@@ -352,9 +352,9 @@ void KisPainterTest::testSelectionBitBltEraseCompositeOp()
     painter.setCompositeOp(op);
     painter.bitBlt(0, 0, src, 0, 0, 150, 150);
     painter.end();
-      
+
     //dst->convertToQImage(0).save("result.png");
-    
+
     QRect erasedRect(50, 50, 50, 50);
     KisRectConstIteratorPixel it = dst->createRectConstIterator(0, 0, 150, 150);
     while (!it.isDone()) {

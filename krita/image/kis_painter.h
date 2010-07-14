@@ -144,12 +144,12 @@ public:
      * Blast the specific region from src to the current paint device using a \ref KisFixedPaintDevice
      * @param selection the selection will be used between (0,0) and (sw-1,sh-1).
      */
-    void bitBlt(qint32 dx, qint32 dy,
-                const KisPaintDeviceSP srcdev,
-                const KisFixedPaintDeviceSP selection,
-                qint32 sx, qint32 sy,
-                qint32 sw, qint32 sh);
-                
+    void bitBltFixedSelection(qint32 dx, qint32 dy,
+                              const KisPaintDeviceSP srcdev,
+                              const KisFixedPaintDeviceSP selection,
+                              qint32 sx, qint32 sy,
+                              qint32 sw, qint32 sh);
+
     /**
      * Convenience method that uses QPoint and QRect
      */
@@ -180,7 +180,7 @@ public:
     void bltFixed(const QPoint & pos, const KisFixedPaintDeviceSP src, const QRect & srcRect);
 
     /**
-     * Transfer the specified region from src onto the current paint device with selection. 
+     * Transfer the specified region from src onto the current paint device with selection.
      * Src is a * fixed-size paint device: this means that src must have the same colorspace as
      * the destination device. Selection is also fixed-size paint device and it's colorspace has
      * to be alpha8. Assert if there is wrong colorspace for selection
@@ -200,9 +200,9 @@ public:
                   const KisFixedPaintDeviceSP selection,
                   qint32 sx, qint32 sy,
                   qint32 sw, qint32 sh);
-    
-    
-    
+
+
+
 
     /**
      * The methods below are 'higher' level than the above methods. They need brushes, colors

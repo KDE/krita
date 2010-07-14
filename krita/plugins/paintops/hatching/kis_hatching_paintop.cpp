@@ -47,9 +47,9 @@ KisHatchingPaintOp::KisHatchingPaintOp(const KisHatchingPaintOpSettings *setting
 {
     m_settings = new KisHatchingPaintOpSettings();
     settings->initializeTwin(m_settings);
-    
+
     m_hatchingBrush = new HatchingBrush(m_settings);
-    
+
     m_crosshatchingOption.readOptionSetting(settings);
     m_separationOption.readOptionSetting(settings);
     m_thicknessOption.readOptionSetting(settings);
@@ -76,18 +76,18 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
         m_hatchedDab = new KisPaintDevice(painter()->device()->colorSpace());
     else
         m_hatchedDab->clear();
-    
+
     //Simple convenience renaming, I'm thinking of removing these inherited quirks
     KisBrushSP brush = m_brush;
     KisPaintDeviceSP device = painter()->device();
-    
+
     //Macro to catch errors
     Q_ASSERT(brush);
-    
+
     //----------SIMPLE error catching code, maybe it's not even needed------
     if (!brush) return 1;
     if (!brush->canPaintFor(info)) return 1;
-    
+
     //DECLARING EMPTY pixel-only paint device, note that it is a smart pointer
     KisFixedPaintDeviceSP maskDab = 0;
 
@@ -95,28 +95,28 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     m_settings->crosshatchingsensorvalue = m_crosshatchingOption.apply(info);
     m_settings->separationsensorvalue = m_separationOption.apply(info);
     m_settings->thicknesssensorvalue = KisPaintOp::scaleForPressure(m_thicknessOption.apply(info));
-    
+
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 1.0;
-    
+
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
-    
+
     //-----------POSITIONING code----------
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
-    
+
     qint32 x, y;
     double xFraction, yFraction;
-    
+
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
-    
+
     if (!m_settings->subpixelprecision) {
         xFraction = 0;
         yFraction = 0;
     }
     //--------END POSITIONING CODE-----------
-    
+
     /*--------VERY UGLY LOOKING IF-ELSE block, copypasted from SmudgeOp-------
     ---This IF-ELSE block is used to turn the mask created in the BrushTip dialogue
     into a beautiful SELECTION MASK (it's an opacity multiplier), intended to give
@@ -134,21 +134,21 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
         brush->mask(maskDab, color, scale, scale, 0.0, info, xFraction, yFraction);
         maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     }
-    
+
     /*-----Convenient renaming for the limits of the maskDab, this will be used
     to hatch a dab of just the right size------*/
     qint32 sw = maskDab->bounds().width();
     qint32 sh = maskDab->bounds().height();
-    
+
     //------This If_block pre-fills the future m_hatchedDab with a pretty backgroundColor
     if (m_settings->opaquebackground) {
         KoColor aersh = painter()->backgroundColor();
         m_hatchedDab->fill(0, 0, (sw-1), (sh-1), aersh.data()); //this plus yellow background = french fry brush
     }
-    
+
     // Trick for moire pattern to look better
     bool donotbasehatch = false;
-    
+
     /* If block describing how to stack hatching passes to generate
     crosshatching according to user specifications */
     if (m_settings->enabledcurvecrosshatching) {
@@ -189,14 +189,14 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-10), painter()->paintColor());
         }
     }
-    
+
     if (!donotbasehatch)
         m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, m_settings->angle, painter()->paintColor());
-    
+
     // The most important line, the one that paints to the screen.
-    painter()->bitBlt(x, y, m_hatchedDab, maskDab, 0, 0, sw, sh);
+    painter()->bitBltFixedSelection(x, y, m_hatchedDab, maskDab, 0, 0, sw, sh);
     painter()->setOpacity(origOpacity);
-    
+
     /*-----It took me very long to realize the importance of this line, this is
     the line that makes all brushes be slow, even if they're small, yay!-------*/
     return spacing(scale);
@@ -206,17 +206,17 @@ double KisHatchingPaintOp::spinAngle(double spin)
 {
     double tempangle = m_settings->angle + spin;
     qint8 factor = 1;
-    
+
     if (tempangle < 0)
         factor = -1;
-    
+
     tempangle = fabs(fmod(tempangle, 180));
-    
+
     if ((tempangle >= 0) && (tempangle <= 90))
         return factor * tempangle;
     else if ((tempangle > 90) && (tempangle <= 180))
         return factor * -(180 - tempangle);
-    
+
     return 0;   // this should never be executed except if NAN
 }
 ;

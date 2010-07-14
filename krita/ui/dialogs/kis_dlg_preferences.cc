@@ -63,7 +63,7 @@
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kis_canvas_resource_provider.h"
-
+#include "kis_preference_set_registry.h"
 #include "kis_factory2.h"
 #include "KoID.h"
 
@@ -495,6 +495,16 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setIcon(KIcon(BarIcon("grid", KIconLoader::SizeMedium)));
     addPage(page);
     m_gridSettings = new GridSettingsTab(vbox);
+
+    KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
+    foreach (KisPreferenceSet *preferenceSet, preferenceSetRegistry->values()) {
+        vbox = new KVBox();
+        page = new KPageWidgetItem(vbox, preferenceSet->name());
+        page->setHeader(preferenceSet->header());
+        page->setIcon(preferenceSet->icon());
+        addPage(page);
+        preferenceSet->setParent(vbox);
+    }
 
     connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
 

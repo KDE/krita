@@ -928,12 +928,12 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     }
 
     // Break the mask up into chunks so we don't have to allocate a potentially very large QImage.
-    const QColor opaqueColor(OPACITY_OPAQUE_U8, OPACITY_OPAQUE_U8, OPACITY_OPAQUE_U8, 255);
-    const QBrush brush(opaqueColor);
+    const QColor black(Qt::black);
+    const QBrush brush(Qt::white);
     for (qint32 x = fillRect.x(); x < fillRect.x() + fillRect.width(); x += d->maskImageWidth) {
         for (qint32 y = fillRect.y(); y < fillRect.y() + fillRect.height(); y += d->maskImageHeight) {
 
-            d->polygonMaskImage.fill(qRgba(OPACITY_TRANSPARENT_U8, OPACITY_TRANSPARENT_U8, OPACITY_TRANSPARENT_U8, 255));
+            d->polygonMaskImage.fill(black.rgb());
             d->maskPainter->translate(-x, -y);
             d->maskPainter->fillPath(path, brush);
             d->maskPainter->translate(x, y);

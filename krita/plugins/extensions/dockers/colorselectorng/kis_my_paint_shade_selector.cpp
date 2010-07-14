@@ -52,11 +52,11 @@ KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
 }
 
 void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
-    if(m_initialised==false) {
+    if (m_initialised == false) {
         // if this is the first paintEvent, then we have to updated the cache before painting.
         // this isn't possible in the constructor, because we don't have the colorspace.
         updateSelector();
-        m_initialised==true;
+        m_initialised = true;
     }
 
     QPainter painter(this);

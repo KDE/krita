@@ -52,12 +52,15 @@ void KisColorSelectorNgDock::setCanvas(KoCanvasBase * canvas)
 
 void KisColorSelectorNgDock::colorChangedProxy(const QColor& c)
 {
+    Q_UNUSED(c);
 //    if (m_canvas)
 //        m_canvas->resourceManager()->setForegroundColor(KoColor(c , KoColorSpaceRegistry::instance()->rgb8()));
 }
 
 void KisColorSelectorNgDock::resourceChanged(int key, const QVariant& v)
 {
+    Q_UNUSED(key);
+    Q_UNUSED(v);
 //    if (key == KoCanvasResource::ForegroundColor) {
 //        m_colorSelectorNgWidget->setQColor(v.value<KoColor>().toQColor());
 //    }

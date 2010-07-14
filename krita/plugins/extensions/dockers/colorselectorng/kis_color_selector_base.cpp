@@ -188,7 +188,8 @@ void KisColorSelectorBase::hidePopup()
 
 void KisColorSelectorBase::commitColor(QColor color, ColorRole role)
 {
-
+    Q_UNUSED(color);
+    Q_UNUSED(role);
 }
 
 const KoColorSpace* KisColorSelectorBase::colorSpace()

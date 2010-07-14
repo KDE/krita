@@ -271,7 +271,8 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;
-    if (m_mode != PAINT && (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || m_mode == EDIT_BRUSH || m_showOutline)) {
+    if ((m_mode != PAINT  || cfg.showOutlineWhilePainting()) &&
+        (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || m_mode == EDIT_BRUSH || m_showOutline)) {
         outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
     } else {
         outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;

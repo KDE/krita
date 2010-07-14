@@ -415,7 +415,11 @@ void ChartConfigWidget::open( KoShape* shape )
         else {
             // And finally try if it was the legend.
             Legend *legend = dynamic_cast<Legend*>( shape );
+#ifdef NDEBUG
+            Q_UNUSED(legend);
+#else
             Q_ASSERT( legend );
+#endif
             d->shape = dynamic_cast<ChartShape*>( shape->parent() );
             Q_ASSERT( d->shape );
             d->ui.tabWidget->setCurrentIndex( 2 );

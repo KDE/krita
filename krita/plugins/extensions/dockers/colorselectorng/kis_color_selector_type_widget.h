@@ -18,12 +18,12 @@
 #ifndef KIS_COLOR_SELECTOR_TYPE_WIDGET_H
 #define KIS_COLOR_SELECTOR_TYPE_WIDGET_H
 
+#include <QComboBox>
+#include "kis_color_selector.h"
+
 class KisCanvas2;
 class KisColorSelectorTypeWidgetPrivate;
-
-#include <QComboBox>
-
-#include "kis_color_selector.h"
+class KoColorSpace;
 
 class KisColorSelectorTypeWidget : public QComboBox
 {
@@ -33,11 +33,11 @@ public:
     ~KisColorSelectorTypeWidget();
     void hidePopup();
     void showPopup();
-    void setCanvas(KisCanvas2* canvas);
     KisColorSelector::Configuration configuration() const;
 protected:
     void paintEvent(QPaintEvent *e);
 public slots:
+    void setColorSpace(const KoColorSpace* colorSpace);
     void setConfiguration(KisColorSelector::Configuration);
 private:
     KisColorSelectorTypeWidgetPrivate* m_private;

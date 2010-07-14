@@ -26,6 +26,8 @@
 #include <KoResourceManager.h>
 
 #include "kis_color_selector_ng_dock.h"
+#include "kis_color_selector_settings.h"
+#include "kis_preference_set_registry.h"
 
 K_PLUGIN_FACTORY(ColorSelectorNgPluginFactory, registerPlugin<ColorSelectorNgPlugin>();)
 K_EXPORT_PLUGIN(ColorSelectorNgPluginFactory("krita"))
@@ -58,14 +60,19 @@ public:
 
 
 ColorSelectorNgPlugin::ColorSelectorNgPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+        : QObject(parent),
+        m_settingsWidget(new KisColorSelectorSettings())
 {
-
     KoDockRegistry::instance()->add(new ColorSelectorNgDockFactory());
+
+    KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
+
+    preferenceSetRegistry->add(m_settingsWidget);
 }
 
 ColorSelectorNgPlugin::~ColorSelectorNgPlugin()
 {
+    
 }
 
 #include "colorselectorng.moc"

@@ -36,6 +36,8 @@
  */
 class KisPreferenceSet : public QWidget {
 public:
+    KisPreferenceSet(QWidget* parent=0) : QWidget(parent)
+    {}
     virtual QString id() = 0;
     virtual QString name() = 0;
     virtual QString header() = 0;

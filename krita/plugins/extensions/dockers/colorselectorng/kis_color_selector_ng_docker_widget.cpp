@@ -87,31 +87,31 @@ void KisColorSelectorNgDockerWidget::openSettings()
 {
     Q_ASSERT(m_canvas);
 
-    KisColorSelectorSettings settings(m_canvas);
+    KisColorSelectorSettingsDialog settings;
     if(settings.exec()==QDialog::Accepted) {
-        // color space needs special treatment
-        m_colorSelectorContainer->setColorSpace(settings.ui->colorSpace->currentColorSpace());
-
-        //general
-        m_colorSelectorContainer->setShadeSelectorType(settings.ui->shadeSelectorType->currentIndex());
-        m_colorSelectorContainer->setShadeSelectorHideable(settings.ui->shadeSelectorHideable->isChecked());
-        m_colorSelectorContainer->setAllowHorizontalLayout(settings.ui->allowHorizontalLayout->isChecked());
-
-        m_colorSelectorContainer->setPopupBehaviour(settings.ui->popupOnMouseOver->isChecked(), settings.ui->popupOnMouseClick->isChecked());
-
-        //color patches
-        m_lastColorsShow = settings.ui->lastUsedColorsShow->isChecked();
-        m_lastColorsDirection = settings.ui->lastUsedColorsAlignVertical->isChecked()?KisColorPatches::Vertical:KisColorPatches::Horizontal;
-        m_lastColorsScrolling = settings.ui->lastUsedColorsAllowScrolling->isChecked();
-        m_lastColorsColCount = settings.ui->lastUsedColorsNumCols->value();
-        m_lastColorsRowCount = settings.ui->lastUsedColorsNumRows->value();
-
-        m_commonColorsShow = settings.ui->commonColorsShow->isChecked();
-        m_commonColorsDirection = settings.ui->commonColorsAlignVertical->isChecked()?KisColorPatches::Vertical:KisColorPatches::Horizontal;
-        m_commonColorsScrolling = settings.ui->commonColorsAllowScrolling->isChecked();
-        m_commonColorsColCount = settings.ui->commonColorsNumCols->value();
-        m_commonColorsRowCount = settings.ui->commonColorsNumRows->value();
-
+//        // color space needs special treatment
+//        m_colorSelectorContainer->setColorSpace(settings.ui->colorSpace->currentColorSpace());
+//
+//        //general
+//        m_colorSelectorContainer->setShadeSelectorType(settings.ui->shadeSelectorType->currentIndex());
+//        m_colorSelectorContainer->setShadeSelectorHideable(settings.ui->shadeSelectorHideable->isChecked());
+//        m_colorSelectorContainer->setAllowHorizontalLayout(settings.ui->allowHorizontalLayout->isChecked());
+//
+//        m_colorSelectorContainer->setPopupBehaviour(settings.ui->popupOnMouseOver->isChecked(), settings.ui->popupOnMouseClick->isChecked());
+//
+//        //color patches
+//        m_lastColorsShow = settings.ui->lastUsedColorsShow->isChecked();
+//        m_lastColorsDirection = settings.ui->lastUsedColorsAlignVertical->isChecked()?KisColorPatches::Vertical:KisColorPatches::Horizontal;
+//        m_lastColorsScrolling = settings.ui->lastUsedColorsAllowScrolling->isChecked();
+//        m_lastColorsColCount = settings.ui->lastUsedColorsNumCols->value();
+//        m_lastColorsRowCount = settings.ui->lastUsedColorsNumRows->value();
+//
+//        m_commonColorsShow = settings.ui->commonColorsShow->isChecked();
+//        m_commonColorsDirection = settings.ui->commonColorsAlignVertical->isChecked()?KisColorPatches::Vertical:KisColorPatches::Horizontal;
+//        m_commonColorsScrolling = settings.ui->commonColorsAllowScrolling->isChecked();
+//        m_commonColorsColCount = settings.ui->commonColorsNumCols->value();
+//        m_commonColorsRowCount = settings.ui->commonColorsNumRows->value();
+//
         updateLayout();
     }
 }

@@ -19,28 +19,45 @@
 #ifndef KIS_COLSELNG_SETTINGS_H
 #define KIS_COLSELNG_SETTINGS_H
 
-class KisCanvas2;
 
 #include <QDialog>
+#include "kis_preference_set_registry.h"
 
 namespace Ui {
     class KisColorSelectorSettings;
 }
+class KIcon;
+class KisCanvas2;
 
-class KisColorSelectorSettings : public QDialog {
+
+class KisColorSelectorSettings : public KisPreferenceSet {
     Q_OBJECT
 public:
-    KisColorSelectorSettings(KisCanvas2* canvas, QWidget *parent = 0);
+    KisColorSelectorSettings(QWidget *parent = 0);
     ~KisColorSelectorSettings();
 
-    Ui::KisColorSelectorSettings *ui;
+    virtual QString id();
+    virtual QString name();
+    virtual QString header();
+    virtual KIcon icon();
 
-protected slots:
-    void settingsAccepted();
+public slots:
+    void savePreferences() const;
+    void loadPreferences();
 
 protected:
-    void changeEvent(QEvent *e);
-    void readSettings();
+//    void changeEvent(QEvent *e);
+
+private:
+    Ui::KisColorSelectorSettings *ui;
 };
+
+class KisColorSelectorSettingsDialog : public QDialog {
+public:
+    KisColorSelectorSettingsDialog(QWidget *parent = 0);
+private:
+    KisColorSelectorSettings* m_widget;
+};
+
 
 #endif // KIS_COLSELNG_SETTINGS_H

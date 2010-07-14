@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QVariant>
 
-class KisView2;
+class KisColorSelectorSettings;
 
 /**
  * Template of view plugin
@@ -34,7 +34,7 @@ public:
     ColorSelectorNgPlugin(QObject *parent, const QVariantList &);
     virtual ~ColorSelectorNgPlugin();
 private:
-    KisView2* m_view;
+    KisColorSelectorSettings* m_settingsWidget;
 };
 
 #endif

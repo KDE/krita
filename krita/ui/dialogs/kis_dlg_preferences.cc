@@ -519,6 +519,10 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 
 KisDlgPreferences::~KisDlgPreferences()
 {
+    KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
+    foreach (KisPreferenceSet *preferenceSet, preferenceSetRegistry->values()) {
+        preferenceSet->setParent(0);
+    }
 }
 
 void KisDlgPreferences::slotDefault()

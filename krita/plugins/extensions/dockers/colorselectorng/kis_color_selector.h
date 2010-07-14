@@ -45,7 +45,7 @@ public:
                                   mainTypeParameter(mainTP),
                                   subTypeParameter(subTP)
         {}
-        QString toString()
+        QString toString() const
         {
             return QString("%1|%2|%3|%4").arg(mainType).arg(subType).arg(mainTypeParameter).arg(subTypeParameter);
         }

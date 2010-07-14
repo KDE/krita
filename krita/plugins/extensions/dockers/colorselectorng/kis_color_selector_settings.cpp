@@ -20,13 +20,17 @@
 #include "ui_wdg_color_selector_settings.h"
 
 #include <KConfigGroup>
+#include <KIcon>
 #include "kis_color_selector_type_widget.h"
 #include "kis_color_selector.h"
 
+#include <QVBoxLayout>
+#include <QDialogButtonBox>
+
 #include <KDebug>
 
-KisColorSelectorSettings::KisColorSelectorSettings(KisCanvas2* canvas, QWidget *parent) :
-    QDialog(parent),
+KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
+    KisPreferenceSet(parent),
     ui(new Ui::KisColorSelectorSettings)
 {
     ui->setupUi(this);
@@ -37,11 +41,12 @@ KisColorSelectorSettings::KisColorSelectorSettings(KisCanvas2* canvas, QWidget *
     ui->commonColorsNumCols->hide();
     resize(minimumSize());
 
-    ui->colorSelectorConfiguration->setCanvas(canvas);
+    ui->colorSelectorConfiguration->setColorSpace(ui->colorSpace->currentColorSpace());
 
-    connect(this, SIGNAL(accepted()), this, SLOT(settingsAccepted()));
+    connect(this, SIGNAL(accepted()), this, SLOT(savePreferences()));
+    connect(ui->colorSpace, SIGNAL(colorSpaceChanged(const KoColorSpace*)), ui->colorSelectorConfiguration, SLOT(setColorSpace(const KoColorSpace*)));
 
-    readSettings();
+    loadPreferences();
 }
 
 KisColorSelectorSettings::~KisColorSelectorSettings()
@@ -49,7 +54,29 @@ KisColorSelectorSettings::~KisColorSelectorSettings()
     delete ui;
 }
 
-void KisColorSelectorSettings::settingsAccepted()
+QString KisColorSelectorSettings::id()
+{
+    return QString("extendedColorSelectorSettings");
+}
+
+QString KisColorSelectorSettings::name()
+{
+    return header();
+}
+
+QString KisColorSelectorSettings::header()
+{
+    return QString("Color Selector Settings");
+}
+
+
+KIcon KisColorSelectorSettings::icon()
+{
+    return KIcon("extended_color_selector");
+}
+
+
+void KisColorSelectorSettings::savePreferences() const
 {
     //write cfg
     KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
@@ -89,19 +116,19 @@ void KisColorSelectorSettings::settingsAccepted()
     cfg.writeEntry("colorSelectorConfiguration", cstw->configuration().toString());
 }
 
-void KisColorSelectorSettings::changeEvent(QEvent *e)
-{
-    QDialog::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
-}
+//void KisColorSelectorSettings::changeEvent(QEvent *e)
+//{
+//    QDialog::changeEvent(e);
+//    switch (e->type()) {
+//    case QEvent::LanguageChange:
+//        ui->retranslateUi(this);
+//        break;
+//    default:
+//        break;
+//    }
+//}
 
-void KisColorSelectorSettings::readSettings()
+void KisColorSelectorSettings::loadPreferences()
 {
     //read cfg
     KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
@@ -161,3 +188,22 @@ void KisColorSelectorSettings::readSettings()
     KisColorSelectorTypeWidget* cstw = dynamic_cast<KisColorSelectorTypeWidget*>(ui->colorSelectorConfiguration);
     cstw->setConfiguration(KisColorSelector::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelector::Configuration().toString())));
 }
+
+
+KisColorSelectorSettingsDialog::KisColorSelectorSettingsDialog(QWidget *parent) :
+        QDialog(parent),
+        m_widget(new KisColorSelectorSettings(this))
+{
+    QLayout* l = new QVBoxLayout(this);
+    l->addWidget(m_widget);
+
+    m_widget->loadPreferences();
+
+    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this);
+    l->addWidget(buttonBox);
+
+    connect(buttonBox, SIGNAL(accepted()), m_widget, SLOT(savePreferences()));
+    connect(buttonBox, SIGNAL(accepted()), this,     SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this,     SLOT(reject()));
+}
+

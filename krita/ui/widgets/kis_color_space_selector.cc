@@ -109,7 +109,11 @@ void KisColorSpaceSelector::setCurrentColorSpace(const KoColorSpace* colorSpace)
 
 void KisColorSpaceSelector::colorSpaceChanged()
 {
-    emit(selectionChanged(d->colorSpaceSelector->cmbProfile->count() != 0));
+    bool valid = d->colorSpaceSelector->cmbProfile->count() != 0;
+    emit(selectionChanged(valid));
+    if(valid) {
+        emit colorSpaceChanged(currentColorSpace());
+    }
 }
 
 #include "kis_color_space_selector.moc"

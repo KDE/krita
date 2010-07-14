@@ -56,6 +56,18 @@ public:
         layout->addWidget(new KisColorSelector(KisColorSelector::Configuration(KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::LH, KisColorSelector::S), this), 3,1);
         layout->addWidget(new KisColorSelector(KisColorSelector::Configuration(KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::VH, KisColorSelector::S), this), 3,2);
         layout->addWidget(new KisColorSelector(KisColorSelector::Configuration(KisColorSelector::Wheel, KisColorSelector::Slider, KisColorSelector::VH, KisColorSelector::L), this), 3,3);
+
+
+        for(int i=0; i<this->layout()->count(); i++) {
+            KisColorSelector* item = dynamic_cast<KisColorSelector*>(this->layout()->itemAt(i)->widget());
+            Q_ASSERT(item);
+            if(item!=0) {
+                item->setMaximumSize(selectorSize, selectorSize);
+                item->setMinimumSize(selectorSize, selectorSize);
+                item->setMouseTracking(true);
+                item->setEnabled(false);
+            }
+        }
     }
 
 protected:
@@ -132,21 +144,18 @@ void KisColorSelectorTypeWidget::showPopup()
     m_private->show();
 }
 
-void KisColorSelectorTypeWidget::setCanvas(KisCanvas2 *canvas)
+void KisColorSelectorTypeWidget::setColorSpace(const KoColorSpace *colorSpace)
 {
     //this is not the popup, but we should set the canvas for all popup selectors
     for(int i=0; i<m_private->layout()->count(); i++) {
         KisColorSelector* item = dynamic_cast<KisColorSelector*>(m_private->layout()->itemAt(i)->widget());
         Q_ASSERT(item);
         if(item!=0) {
-            item->setCanvas(canvas);
-            item->setMaximumSize(m_private->selectorSize, m_private->selectorSize);
-            item->setMinimumSize(m_private->selectorSize, m_private->selectorSize);
-            item->setMouseTracking(true);
-            item->setEnabled(false);
+            item->setColorSpace(colorSpace);
         }
     }
-    m_currentSelector.setCanvas(canvas);
+    m_currentSelector.setColorSpace(colorSpace);
+    update();
 }
 
 KisColorSelector::Configuration KisColorSelectorTypeWidget::configuration() const

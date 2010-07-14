@@ -136,7 +136,7 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
             foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
                 TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
                 if (tree)
-                    if (tree = dynamic_cast<TreeShape*>(tree->parent())){
+                    if (tree == dynamic_cast<TreeShape*>(tree->parent())){
                         kDebug() << "Adding child...";
                         KoShapeController *controller = canvas()->shapeController();
                         QUndoCommand *command = new QUndoCommand;

@@ -149,6 +149,7 @@ void KisPrescaledProjection::setViewConverter(KoViewConverter * viewConverter)
 
 void KisPrescaledProjection::initBackend(bool cacheKisImageAsQImage)
 {
+    Q_UNUSED(cacheKisImageAsQImage);
     if (m_d->projectionBackend) {
         delete m_d->projectionBackend;
     }

@@ -23,14 +23,31 @@
 #include <QAtomicInt>
 #include <QList>
 
+#include "kis_lockless_stack.h"
 #include "kis_memory_pool.h"
-#define TILE_DATA_POOL_SIZE 32
 
 class KisTileData;
 class KisTileDataStore;
 
-#include "kis_lockless_stack.h"
+/**
+ * WARNING: Those definitions for internal use only!
+ * Please use KisTileData::WIDTH/HEIGHT instead
+ */
+#define __TILE_DATA_WIDTH 64
+#define __TILE_DATA_HEIGHT 64
+
+#define TILE_DATA_POOL_SIZE 32
+
+
+// BPP == bytes per pixel
+#define TILE_SIZE_4BPP (4 * __TILE_DATA_WIDTH * __TILE_DATA_HEIGHT)
+#define TILE_SIZE_8BPP (8 * __TILE_DATA_WIDTH * __TILE_DATA_HEIGHT)
+
+
+typedef KisMemoryPool<quint8[TILE_SIZE_4BPP],TILE_DATA_POOL_SIZE> KisTileMemoryPool4BPP;
+typedef KisMemoryPool<quint8[TILE_SIZE_8BPP],TILE_DATA_POOL_SIZE> KisTileMemoryPool8BPP;
 typedef KisLocklessStack<KisTileData*> KisTileDataCache;
+
 
 /**
  * Stores actual tile's data
@@ -39,7 +56,6 @@ class KisTileData
 {
 public:
     KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store);
-    POOL_OPERATORS(KisTileData);
 
 private:
     KisTileData(const KisTileData& rhs);
@@ -72,6 +88,8 @@ public:
 private:
     void fillWithPixel(const quint8 *defPixel);
 
+    static quint8* allocateData(const qint32 pixelSize);
+    static void freeData(quint8 *ptr, const qint32 pixelSize);
 private:
     friend class KisTileDataPooler;
     /**
@@ -125,7 +143,8 @@ private:
 
     KisTileDataStore *m_store;
 
-    DECLARE_POOL(KisTileData, TILE_DATA_POOL_SIZE);
+    static KisTileMemoryPool4BPP m_pool4BPP;
+    static KisTileMemoryPool8BPP m_pool8BPP;
 public:
     static const qint32 WIDTH;
     static const qint32 HEIGHT;

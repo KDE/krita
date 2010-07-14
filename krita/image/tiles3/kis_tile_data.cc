@@ -21,10 +21,12 @@
 #include "kis_tile_data_store.h"
 
 
-const qint32 KisTileData::WIDTH = 64;
-const qint32 KisTileData::HEIGHT = 64;
+const qint32 KisTileData::WIDTH = __TILE_DATA_WIDTH;
+const qint32 KisTileData::HEIGHT = __TILE_DATA_HEIGHT;
 
-DEFINE_POOL(KisTileData, TILE_DATA_POOL_SIZE);
+KisTileMemoryPool4BPP KisTileData::m_pool4BPP;
+KisTileMemoryPool8BPP KisTileData::m_pool8BPP;
+
 
 KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store)
         : m_state(NORMAL),
@@ -35,7 +37,7 @@ KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataSt
 {
     m_nextTD = m_prevTD = this;
 
-    m_data = new quint8[m_pixelSize*WIDTH*HEIGHT];
+    m_data = allocateData(m_pixelSize);
 
     fillWithPixel(defPixel);
 }
@@ -55,11 +57,10 @@ KisTileData::KisTileData(const KisTileData& rhs)
 {
     m_nextTD = m_prevTD = this;
 
-    const quint32 tileDataSize = m_pixelSize * WIDTH * HEIGHT;
-    m_data = new quint8[tileDataSize];
+    m_data = allocateData(m_pixelSize);
 
     rhs.m_store->ensureTileDataLoaded(&rhs);
-    memcpy(m_data, rhs.data(), tileDataSize);
+    memcpy(m_data, rhs.data(), m_pixelSize * WIDTH * HEIGHT);
 
 }
 
@@ -70,7 +71,7 @@ KisTileData::~KisTileData()
     m_store->ensureTileDataLoaded(this);
 
     if (m_data)
-        delete[] m_data;
+        freeData(m_data, m_pixelSize);
 
     /* Free clones list */
     KisTileData *td;
@@ -90,5 +91,32 @@ void KisTileData::fillWithPixel(const quint8 *defPixel)
     }
 }
 
+quint8* KisTileData::allocateData(const qint32 pixelSize)
+{
+    switch(pixelSize) {
+    case 4:
+        return (quint8*) m_pool4BPP.pop();
+        break;
+    case 8:
+        return (quint8*) m_pool8BPP.pop();
+        break;
+        default:
+        return (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
+    }
+}
+
+void KisTileData::freeData(quint8* ptr, const qint32 pixelSize)
+{
+    switch(pixelSize) {
+    case 4:
+        return m_pool4BPP.push(ptr);
+        break;
+    case 8:
+        return m_pool8BPP.push(ptr);
+        break;
+        default:
+        free(ptr);
+    }
+}
 
 

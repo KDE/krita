@@ -64,17 +64,17 @@ public:
         brush->deref();
         m_brushes.removeAll(brush);
     }
-    
+
     virtual void resourceChanged(KisBrush* resource) {
-        
+        Q_UNUSED(resource);
     }
-    
+
     ///Reimplemented
     void importResourceFile( const QString & filename ) {
         QFileInfo fi( filename );
         if( fi.exists() == false )
             return;
-        
+
         if( fi.suffix().toLower() == "abr") {
             QFile::copy(filename, saveLocation() + fi.fileName());
             QList<KisBrush*> collectionResources = createResources( filename );
@@ -106,12 +106,12 @@ private:
         }
         return brushes;
     }
-    
+
     ///Reimplemented
     virtual KisBrush* createResource(const QString & filename) {
 
         QString fileExtension = QFileInfo(filename).suffix().toLower();
-        
+
         KisBrush* brush = 0;
 
         if (fileExtension == "gbr") {

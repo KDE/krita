@@ -48,21 +48,22 @@ KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, Kis
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_sketchProperties.readOptionSetting(settings);
-    
+
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
-    
+
     m_painter = 0;
     m_count = 0;
 }
 
 KisSketchPaintOp::~KisSketchPaintOp()
-{       
+{
     delete m_painter;
 }
 
 KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
 {
+    Q_UNUSED(savedDist);
     if (!painter()) return KisDistanceInformation();
 
     if (!m_dab) {
@@ -74,9 +75,9 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
 
     QPointF prevMouse = pi1.pos();
     QPointF mouse = pi2.pos();
-    
+
     m_points.append(mouse);
-    
+
     // chrome, fur 0.1 * BRUSH_PRESSURE
     // sketchy, long fur 0.05
     qreal opacity = 0.05;
@@ -90,13 +91,13 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     qreal distance;
     QPointF diff;
     int size = m_points.size();
-    
+
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
     qreal radius = m_sketchProperties.radius * scale;
     qreal thresholdDistance =  radius * radius;
     // shaded: probabity : paint always - 0.0 density
     qreal density = thresholdDistance * m_sketchProperties.probability;
-    
+
     for (int i = 0; i < size; i++){
             diff = m_points.at(i) - m_points.at(m_count);
             // chrome : diff 0.2, sketchy : 0.3, fur: 0.5
@@ -105,16 +106,16 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
             if ((distance < thresholdDistance) && drand48() > (distance / density))
             {
                 QPointF offsetPt = diff * m_sketchProperties.offset;
-                
+
                 // shaded: opacity per line :/
-                // ((1 - (d / 1000)) * 0.1 * BRUSH_PRESSURE), offset == 0 
+                // ((1 - (d / 1000)) * 0.1 * BRUSH_PRESSURE), offset == 0
                 // chrome: color per line :/
                 //this.context.strokeStyle = "rgba(" + Math.floor(Math.random() * COLOR[0]) + ", " + Math.floor(Math.random() * COLOR[1]) + ", " + Math.floor(Math.random() * COLOR[2]) + ", " + 0.1 * BRUSH_PRESSURE + " )";
 
                 // long fur
-                // from: count + offset * -random 
+                // from: count + offset * -random
                 // to: i point - (offset * -random)  + random * 2
-                // probability distance / thresholdDistnace   
+                // probability distance / thresholdDistnace
                 if (m_sketchProperties.magnetify){
                     m_painter->drawThickLine(m_points.at(m_count) + offsetPt,
                                          m_points.at(i) - offsetPt,
@@ -125,7 +126,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
                                          m_points.at(m_count) - offsetPt,
                                          m_sketchProperties.lineWidth,m_sketchProperties.lineWidth );
                 }
-                                         
+
             }
     }
     m_count++;
@@ -135,14 +136,14 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     if (m_sketchProperties.useLowOpacity){
         painter()->setOpacity(painter()->opacity() * opacity);
     }
-    
+
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->setOpacity(origOpacity);
-    
+
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());
     KisVector2D dragVec = end - start;
-    
+
     return KisDistanceInformation(0, dragVec.norm());
 }
 
@@ -151,4 +152,4 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
 double KisSketchPaintOp::paintAt(const KisPaintInformation& info)
 {
     return paintLine(info, info).spacing;
-}    
+}

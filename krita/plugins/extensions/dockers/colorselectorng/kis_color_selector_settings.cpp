@@ -107,19 +107,34 @@ void KisColorSelectorSettings::readSettings()
     KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
 
     //general
-    ui->shadeSelectorHideable->setChecked(cfg.readEntry("shadeSelectorHideable", false));
-    ui->allowHorizontalLayout->setChecked(cfg.readEntry("allowHorizontalLayout", true));
-    ui->popupOnMouseOver->setChecked(cfg.readEntry("popupOnMouseOver", false));
-    ui->popupOnMouseClick->setChecked(cfg.readEntry("popupOnMouseClick", true));
+
+    //it's not possible to set a radio box to false. additionally, we need to set shrunkenDonothing to true, in case..
+    bool a = cfg.readEntry("shadeSelectorHideable", false);
+    bool b = cfg.readEntry("allowHorizontalLayout", true);
+    if(a)
+        ui->shadeSelectorHideable->setChecked(true);
+    else if(b)
+        ui->allowHorizontalLayout->setChecked(true);
+    else
+        ui->shrunkenDoNothing->setChecked(true);
+
+
+    a = cfg.readEntry("popupOnMouseOver", false);
+    b = cfg.readEntry("popupOnMouseClick", true);
+    if(a)
+        ui->popupOnMouseOver->setChecked(true);
+    else if(b)
+        ui->popupOnMouseClick->setChecked(true);
+    else
+        ui->neverZoom->setChecked(true);
+
     ui->popupSize->setValue(cfg.readEntry("zoomSize", 280));
 
     //color patches
     ui->lastUsedColorsShow->setChecked(cfg.readEntry("showLastUsedColors", true));
-    bool foo = cfg.readEntry("lastUsedColorsAlignment", false);
-    kDebug()<<"lastUsedColorsAlignment="<<foo;
-    //something weird is happening here
-    ui->lastUsedColorsAlignVertical->setChecked(foo);
-    ui->lastUsedColorsAlignHorizontal->setChecked(!ui->lastUsedColorsAlignVertical->isChecked());
+    a = cfg.readEntry("lastUsedColorsAlignment", false);
+    ui->lastUsedColorsAlignVertical->setChecked(a);
+    ui->lastUsedColorsAlignHorizontal->setChecked(!a);
     ui->lastUsedColorsAllowScrolling->setChecked(cfg.readEntry("lastUsedColorsScrolling", true));
     ui->lastUsedColorsNumCols->setValue(cfg.readEntry("lastUsedColorsNumCols", 1));
     ui->lastUsedColorsNumRows->setValue(cfg.readEntry("lastUsedColorsNumRows", 1));
@@ -128,8 +143,9 @@ void KisColorSelectorSettings::readSettings()
     ui->lastUsedColorsHeight->setValue(cfg.readEntry("lastUsedColorsHeight", 20));
 
     ui->commonColorsShow->setChecked(cfg.readEntry("showCommonColors", true));
-    ui->commonColorsAlignVertical->setChecked(cfg.readEntry("commonColorsAlignment", true));
-    ui->commonColorsAlignHorizontal->setChecked(!ui->commonColorsAlignVertical->isChecked());
+    a = cfg.readEntry("commonColorsAlignment", true);
+    ui->commonColorsAlignVertical->setChecked(a);
+    ui->commonColorsAlignHorizontal->setChecked(!a);
     ui->commonColorsAllowScrolling->setChecked(cfg.readEntry("commonColorsScrolling", false));
     ui->commonColorsNumCols->setValue(cfg.readEntry("commonColorsNumCols", 1));
     ui->commonColorsNumRows->setValue(cfg.readEntry("commonColorsNumRows", 2));
@@ -139,9 +155,9 @@ void KisColorSelectorSettings::readSettings()
     ui->commonColorsAutoUpdate->setChecked(cfg.readEntry("commonColorsAutoUpdate", false));
 
     //shade selector
-    cfg.readEntry("shadeSelectorType", ui->shadeSelectorType->currentIndex());
+    ui->shadeSelectorType->setCurrentIndex(cfg.readEntry("shadeSelectorType", 0));
 
     //color selector
     KisColorSelectorTypeWidget* cstw = dynamic_cast<KisColorSelectorTypeWidget*>(ui->colorSelectorConfiguration);
-    cstw->configuration().readString(cfg.readEntry("colorSelectorConfiguration", KisColorSelector::Configuration().toString()));
+    cstw->setConfiguration(KisColorSelector::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelector::Configuration().toString())));
 }

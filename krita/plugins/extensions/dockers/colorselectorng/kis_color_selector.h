@@ -49,10 +49,10 @@ public:
         {
             return QString("%1|%2|%3|%4").arg(mainType).arg(subType).arg(mainTypeParameter).arg(subTypeParameter);
         }
-        void readString(QString string)
+        static Configuration fromString(QString string)
         {
             QStringList strili = string.split('|');
-            if(strili.length()!=4) return;
+            if(strili.length()!=4) return Configuration();
 
             int imt=strili.at(0).toInt();
             int ist=strili.at(1).toInt();
@@ -60,12 +60,9 @@ public:
             int istp=strili.at(3).toInt();
 
             if(imt>Slider || ist>Slider || imtp>LH || istp>LH)
-                return;
+                return Configuration();
 
-            mainType = Type(imt);
-            subType = Type(ist);
-            mainTypeParameter = Parameters(imtp);
-            subTypeParameter = Parameters(istp);
+            return Configuration(Type(imt), Type(ist), Parameters(imtp), Parameters(istp));
         }
     };
 

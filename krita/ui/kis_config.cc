@@ -555,7 +555,7 @@ void KisConfig::setShowRootLayer(bool showRootLayer)
 
 bool KisConfig::showOutlineWhilePainting()
 {
-    m_cfg.readEntry("ShowOutlineWhilePainting", true);
+    return m_cfg.readEntry("ShowOutlineWhilePainting", true);
 }
 
 void KisConfig::setShowOutlineWhilePainting(bool showOutlineWhilePainting)

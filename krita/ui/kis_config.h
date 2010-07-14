@@ -187,6 +187,9 @@ public:
 
     bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
+    
+    bool showOutlineWhilePainting();
+    void setShowOutlineWhilePainting(bool showOutlineWhilePainting);
 
     int autoSaveInterval();
     void setAutoSaveInterval(int seconds);

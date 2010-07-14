@@ -553,6 +553,16 @@ void KisConfig::setShowRootLayer(bool showRootLayer)
     m_cfg.writeEntry("ShowRootLayer", showRootLayer);
 }
 
+bool KisConfig::showOutlineWhilePainting()
+{
+    m_cfg.readEntry("ShowOutlineWhilePainting", true);
+}
+
+void KisConfig::setShowOutlineWhilePainting(bool showOutlineWhilePainting)
+{
+    m_cfg.writeEntry("ShowOutlineWhilePainting", showOutlineWhilePainting);
+}
+
 int KisConfig::autoSaveInterval() {
     return m_cfg.readEntry("AutoSaveInterval", KoDocument::defaultAutoSave());
 }

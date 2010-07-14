@@ -64,6 +64,7 @@ public:
     int autoSaveInterval();
     void setDefault();
     int undoStackSize();
+    bool showOutlineWhilePainting();
 
 };
 

@@ -90,6 +90,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_autosaveCheckBox->setChecked(autosaveInterval > 0);
     m_undoStackSize->setValue(cfg.undoStackLimit());
     m_backupFileCheckBox->setChecked(cfg.backupFile());
+    m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
 }
 
 void GeneralTab::setDefault()
@@ -103,6 +104,7 @@ void GeneralTab::setDefault()
     m_autosaveSpinBox->setValue(KoDocument::defaultAutoSave() / 60);
     m_undoStackSize->setValue(30);
     m_backupFileCheckBox->setChecked(true);
+    m_showOutlinePainting->setChecked(true);
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -124,6 +126,11 @@ int GeneralTab::autoSaveInterval()
 int GeneralTab::undoStackSize()
 {
     return m_undoStackSize->value();
+}
+
+bool GeneralTab::showOutlineWhilePainting()
+{
+    return m_showOutlinePainting->isChecked();
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -538,6 +545,7 @@ bool KisDlgPreferences::editPreferences()
         KisConfig cfg;
         cfg.setCursorStyle(dialog->m_general->cursorStyle());
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
+        cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
 
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());

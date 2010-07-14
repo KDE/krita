@@ -129,3 +129,26 @@ double KisPenOp::paintAt(const KisPaintInformation& info)
     
     return spacing(scale);
 }
+
+KisDistanceInformation KisPenOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
+{
+    if(m_brush && m_brush->width() == 1 && m_brush->height() == 1) {
+        
+        if (!m_dab) {
+            m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+        } else {
+            m_dab->clear();
+        }
+        
+        KisPainter p(m_dab);
+        p.setPaintColor(painter()->paintColor());
+        p.drawWuLine(pi1.pos(), pi2.pos());
+
+        QRect rc = m_dab->extent();  
+        painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
+        
+        return KisDistanceInformation(0.0, 0.0);
+    }
+    return KisPaintOp::paintLine(pi1, pi2, savedDist);
+}
+

@@ -39,11 +39,14 @@ public:
     virtual ~KisPenOp();
 
     double paintAt(const KisPaintInformation& info);
+    
+    virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
 
 private:
     KisPressureOpacityOption m_opacityOption;
     KisPressureDarkenOption m_darkenOption;
     KisPressureSizeOption m_sizeOption;
+    KisPaintDeviceSP m_dab;
 };
 
 #endif // KIS_PENOP_H_

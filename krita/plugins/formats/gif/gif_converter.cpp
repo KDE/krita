@@ -406,9 +406,12 @@ KisImageBuilder_Result GifConverter::buildFile(const KUrl& uri, KisImageWSP imag
     foreach(const IndexedLayer layer, visitor.m_layers) {
 
         ColorMapObject cmapLayer;
-//        int numColorsLayer = fillColorMap(layer.image, cmapLayer);
+        int numColorsLayer = fillColorMap(layer.image, cmapLayer);
+#ifndef NDEBUG
         Q_ASSERT(numColorsLayer <= 256);
-
+#else
+        Q_UNUSED(numColorsLayer);
+#endif
         QRect rc(layer.topLeft, layer.image.size());
         // Make sure the individual layers are not outside the gif screen bounds
         rc = m_img->bounds().intersected(rc);

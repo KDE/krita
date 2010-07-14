@@ -341,7 +341,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy, const KisPaintDeviceSP srcdev, qin
     QRect srcRect = QRect(sx, sy, sw, sh);
 
     if (d->compositeOp->id() == COMPOSITE_COPY) {
-        if(0 && !d->selection && d->device->fastBitBltPossible(srcdev)) {
+        if(!d->selection && d->device->fastBitBltPossible(srcdev)) {
             d->device->fastBitBlt(srcdev, srcRect);
             addDirtyRect(srcRect);
             return;

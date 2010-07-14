@@ -350,7 +350,9 @@ void KisTiledDataManager::bitBlt(KisTiledDataManager *srcDM, const QRect &rect)
     for (qint32 row = firstRow; row <= lastRow; ++row) {
         for (qint32 column = firstColumn; column <= lastColumn; ++column) {
 
-            KisTileSP srcTile = srcDM->getOldTile(column, row);
+            // In most bitBlt code of Krita we do not use oldRawData
+            // so let's just conform this behavior
+            KisTileSP srcTile = srcDM->getTile(column, row, false);
             QRect tileRect(column*KisTileData::WIDTH, row*KisTileData::HEIGHT,
                            KisTileData::WIDTH, KisTileData::HEIGHT);
             QRect cloneTileRect = rect & tileRect;

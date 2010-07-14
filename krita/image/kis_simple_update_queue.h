@@ -33,8 +33,7 @@ public:
     KisSimpleUpdateQueue();
     ~KisSimpleUpdateQueue();
 
-    void addJob(KisBaseRectsWalkerSP walker);
-    bool tryMergeJob(KisNodeSP node, const QRect& rc);
+    void addJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
 
     void optimize();
 
@@ -42,6 +41,9 @@ public:
 
 protected:
     bool processOneJob(KisUpdaterContext &updaterContext);
+
+    bool trySplitJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
+    bool tryMergeJob(KisNodeSP node, const QRect& rc);
 
     void collectJobs(KisBaseRectsWalkerSP &baseWalker, QRect baseRect,
                      const KisNodeSP &baseNode, const qreal maxAlpha);

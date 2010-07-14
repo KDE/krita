@@ -25,6 +25,17 @@
 #include "kis_merge_walker.h"
 #include "kis_simple_update_queue.h"
 
+bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect) {
+    if(walker->requestedRect() == rect) {
+        return true;
+    }
+    else {
+        qDebug() << "walker rect:" << walker->requestedRect();
+        qDebug() << "expected rect:" << rect;
+        return false;
+    }
+}
+
 void KisSimpleUpdateQueueTest::testJobProcessing()
 {
     KisTestableUpdaterContext context(2);
@@ -41,20 +52,9 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
     image->unlock();
 
     QRect dirtyRect1(0,0,50,100);
-    KisBaseRectsWalkerSP walker1 = new KisMergeWalker(imageRect);
-    walker1->collectRects(paintLayer, dirtyRect1);
-
     QRect dirtyRect2(0,0,100,100);
-    KisBaseRectsWalkerSP walker2 = new KisMergeWalker(imageRect);
-    walker2->collectRects(paintLayer, dirtyRect2);
-
     QRect dirtyRect3(50,0,50,100);
-    KisBaseRectsWalkerSP walker3 = new KisMergeWalker(imageRect);
-    walker3->collectRects(paintLayer, dirtyRect3);
-
     QRect dirtyRect4(150,150,50,50);
-    KisBaseRectsWalkerSP walker4 = new KisMergeWalker(imageRect);
-    walker4->collectRects(paintLayer, dirtyRect4);
 
     QVector<KisUpdateJobItem*> jobs;
     KisWalkersList walkersList;
@@ -66,24 +66,22 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
 
     KisTestableSimpleUpdateQueue queue;
 
-    queue.addJob(walker1);
-    queue.addJob(walker2);
-    queue.addJob(walker3);
-    queue.addJob(walker4);
+    queue.addJob(paintLayer, dirtyRect1, imageRect);
+    queue.addJob(paintLayer, dirtyRect2, imageRect);
+    queue.addJob(paintLayer, dirtyRect3, imageRect);
+    queue.addJob(paintLayer, dirtyRect4, imageRect);
 
     queue.processQueue(context);
 
     jobs = context.getJobs();
 
-    QCOMPARE(jobs[0]->walker(), walker1);
-    QCOMPARE(jobs[1]->walker(), walker3);
+    QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect4));
+    QVERIFY(checkWalker(jobs[1]->walker(), dirtyRect2));
     QCOMPARE(jobs.size(), 2);
 
     walkersList = queue.getWalkersList();
 
-    QCOMPARE(walkersList.size(), 2);
-    QCOMPARE(walkersList[0], walker2);
-    QCOMPARE(walkersList[1], walker4);
+    QCOMPARE(walkersList.size(), 0);
 
 
     /**
@@ -94,10 +92,10 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
 
     queue.blockProcessing(context);
 
-    queue.addJob(walker1);
-    queue.addJob(walker2);
-    queue.addJob(walker3);
-    queue.addJob(walker4);
+    queue.addJob(paintLayer, dirtyRect1, imageRect);
+    queue.addJob(paintLayer, dirtyRect2, imageRect);
+    queue.addJob(paintLayer, dirtyRect3, imageRect);
+    queue.addJob(paintLayer, dirtyRect4, imageRect);
 
     jobs = context.getJobs();
     QCOMPARE(jobs[0]->walker(), KisBaseRectsWalkerSP(0));
@@ -107,13 +105,13 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
 
     jobs = context.getJobs();
 
-    QCOMPARE(jobs[0]->walker(), walker2);
-    QCOMPARE(jobs[1]->walker(), walker4);
+    QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect4));
+    QVERIFY(checkWalker(jobs[1]->walker(), dirtyRect2));
 }
 
-void KisSimpleUpdateQueueTest::testOptimization()
+void KisSimpleUpdateQueueTest::testSplit()
 {
-    QRect imageRect(0,0,200,200);
+    QRect imageRect(0,0,1024,1024);
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, imageRect.width(), imageRect.height(), cs, "merge test");
@@ -124,45 +122,28 @@ void KisSimpleUpdateQueueTest::testOptimization()
     image->addNode(paintLayer);
     image->unlock();
 
-    QRect dirtyRect1(0,0,50,100);
-    KisBaseRectsWalkerSP walker1 = new KisMergeWalker(imageRect);
-    walker1->collectRects(paintLayer, dirtyRect1);
-
-    QRect dirtyRect2(0,0,100,100);
-    KisBaseRectsWalkerSP walker2 = new KisMergeWalker(imageRect);
-    walker2->collectRects(paintLayer, dirtyRect2);
-
-    QRect dirtyRect3(50,0,50,100);
-    KisBaseRectsWalkerSP walker3 = new KisMergeWalker(imageRect);
-    walker3->collectRects(paintLayer, dirtyRect3);
-
-    QRect dirtyRect4(150,150,50,50);
-    KisBaseRectsWalkerSP walker4 = new KisMergeWalker(imageRect);
-    walker4->collectRects(paintLayer, dirtyRect4);
+    QRect dirtyRect1(0,0,1000,1000);
 
     KisTestableSimpleUpdateQueue queue;
     KisWalkersList& walkersList = queue.getWalkersList();
 
-    queue.addJob(walker1);
-    queue.addJob(walker2);
-    queue.addJob(walker3);
-    queue.addJob(walker4);
+    queue.addJob(paintLayer, dirtyRect1, imageRect);
 
     QCOMPARE(walkersList.size(), 4);
-    QCOMPARE(walkersList[0], walker1);
-    QCOMPARE(walkersList[1], walker2);
-    QCOMPARE(walkersList[2], walker3);
-    QCOMPARE(walkersList[3], walker4);
-
+    QVERIFY(checkWalker(walkersList[0], QRect(512,512,488,488)));
+    QVERIFY(checkWalker(walkersList[1], QRect(0,512,512,488)));
+    QVERIFY(checkWalker(walkersList[2], QRect(512,0,488,512)));
+    QVERIFY(checkWalker(walkersList[3], QRect(0,0,512,512)));
 
     queue.optimize();
 
-    QCOMPARE(walkersList.size(), 2);
-    QCOMPARE(walkersList[0], walker1);
-    QCOMPARE(walkersList[1], walker4);
+    //must change nothing
 
-    QCOMPARE(walkersList[0]->requestedRect(), QRect(0,0,100,100));
-
+    QCOMPARE(walkersList.size(), 4);
+    QVERIFY(checkWalker(walkersList[0], QRect(512,512,488,488)));
+    QVERIFY(checkWalker(walkersList[1], QRect(0,512,512,488)));
+    QVERIFY(checkWalker(walkersList[2], QRect(512,0,488,512)));
+    QVERIFY(checkWalker(walkersList[3], QRect(0,0,512,512)));
 }
 
 QTEST_KDEMAIN(KisSimpleUpdateQueueTest, NoGUI)

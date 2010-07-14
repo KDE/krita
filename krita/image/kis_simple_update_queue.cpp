@@ -24,6 +24,9 @@
 #define MAX_MERGE_ALPHA 1
 #define MAX_MERGE_COLLECT_ALPHA 1.5
 
+#define PATCH_WIDTH 512
+#define PATCH_HEIGHT 512
+
 //#define ENABLE_DEBUG_JOIN
 //#define ENABLE_ACCUMULATOR
 
@@ -80,16 +83,53 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
     return jobAdded;
 }
 
-void KisSimpleUpdateQueue::addJob(KisBaseRectsWalkerSP walker)
+void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QRect& rc, const QRect& cropRect)
 {
-    QMutexLocker locker(&m_lock);
-    m_list.append(walker);
+    if(trySplitJob(node, rc, cropRect)) return;
+    if(tryMergeJob(node, rc)) return;
+
+
+    KisBaseRectsWalkerSP walker = new KisMergeWalker(cropRect);
+    walker->collectRects(node, rc);
+
+    m_lock.lock();
+
+    /**
+     * The painting is a bit more responsitive,
+     * if we add new jobs to the head of the list.
+     */
+    m_list.prepend(walker);
+    m_lock.unlock();
 }
 
 bool KisSimpleUpdateQueue::isEmpty()
 {
     QMutexLocker locker(&m_lock);
     return m_list.isEmpty();
+}
+
+bool KisSimpleUpdateQueue::trySplitJob(KisNodeSP node, const QRect& rc, const QRect& cropRect)
+{
+    if(rc.width() <= PATCH_WIDTH || rc.height() <= PATCH_HEIGHT)
+        return false;
+
+    // a bit of recursive splitting...
+
+    qint32 firstCol = rc.x() / PATCH_WIDTH;
+    qint32 firstRow = rc.y() / PATCH_HEIGHT;
+
+    qint32 lastCol = (rc.x() + rc.width()) / PATCH_WIDTH;
+    qint32 lastRow = (rc.y() + rc.height()) / PATCH_HEIGHT;
+
+    for(qint32 i = firstRow; i <= lastRow; i++) {
+        for(qint32 j = firstCol; j <= lastCol; j++) {
+            QRect maxPatchRect(j * PATCH_WIDTH, i * PATCH_HEIGHT,
+                               PATCH_WIDTH, PATCH_HEIGHT);
+            QRect patchRect = rc & maxPatchRect;
+            addJob(node, patchRect, cropRect);
+        }
+    }
+    return true;
 }
 
 bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc)
@@ -103,13 +143,12 @@ bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc)
     KisWalkersListIterator iter(m_list);
 
     /**
-     * We usually add items to the tail of the queue,
-     * so it's more probable to find a good candidate there.
+     * We add new jobs to the head of the list,
+     * so it's more probable to find a good candidate here.
      */
-    iter.toBack();
 
-    while(iter.hasPrevious()) {
-        item = iter.previous();
+    while(iter.hasNext()) {
+        item = iter.next();
 
         if(item->startNode() != node) continue;
 
@@ -165,9 +204,11 @@ void KisSimpleUpdateQueue::collectJobs(KisBaseRectsWalkerSP &baseWalker,
 bool KisSimpleUpdateQueue::joinRects(QRect& baseRect,
                                      const QRect& newRect, qreal maxAlpha)
 {
-    bool result = false;
     QRect unitedRect = baseRect | newRect;
+    if(unitedRect.width() > PATCH_WIDTH || unitedRect.height() > PATCH_HEIGHT)
+        return false;
 
+    bool result = false;
     qint64 baseWork = baseRect.width() * baseRect.height() +
         newRect.width() * newRect.height();
 

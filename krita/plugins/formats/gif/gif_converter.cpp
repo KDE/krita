@@ -406,7 +406,7 @@ KisImageBuilder_Result GifConverter::buildFile(const KUrl& uri, KisImageWSP imag
     foreach(const IndexedLayer layer, visitor.m_layers) {
 
         ColorMapObject cmapLayer;
-        int numColorsLayer = fillColorMap(layer.image, cmapLayer);
+//        int numColorsLayer = fillColorMap(layer.image, cmapLayer);
         Q_ASSERT(numColorsLayer <= 256);
 
         QRect rc(layer.topLeft, layer.image.size());

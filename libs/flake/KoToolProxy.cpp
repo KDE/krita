@@ -61,7 +61,7 @@ void KoToolProxyPrivate::timeout() // Auto scroll the canvas
     scrollEdgePoint += moved;
 
     QMouseEvent event(QEvent::MouseMove, scrollEdgePoint, Qt::LeftButton, Qt::LeftButton, 0);
-    KoPointerEvent ev(&event, scrollEdgePoint);
+    KoPointerEvent ev(&event, controller->canvas()->viewConverter()->viewToDocument(scrollEdgePoint));
     activeTool->mouseMoveEvent(&ev);
 }
 
@@ -72,7 +72,7 @@ void KoToolProxyPrivate::checkAutoScroll(const KoPointerEvent &event)
     if (!activeTool->wantsAutoScroll()) return;
     if (!event.isAccepted()) return;
     if (event.buttons() != Qt::LeftButton) return;
-    scrollEdgePoint = event.point.toPoint();
+    scrollEdgePoint = controller->canvas()->viewConverter()->documentToView(event.point).toPoint();
     if (! scrollTimer.isActive())
         scrollTimer.start();
 }

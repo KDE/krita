@@ -46,10 +46,26 @@ public:
     void setTemporaryCompositeOp(const KoCompositeOp* c);
     void setTemporaryOpacity(quint8 o);
 
+    /**
+     * Writes the temporary target into the paint device of the layer.
+     * This action will lock the temporary target itself.
+     */
     void mergeToLayer(KisLayerSP layer, const QRegion &region,
                       const QString &transactionText);
 
+    /**
+     * Lock the temporary target.
+     * It should be done for guarding every access to
+     * temporaryTarget() or original()
+     * NOTE: well, not "every", but...
+     */
     void lockTemporaryTarget() const;
+
+    /**
+     * Unlock the temporary target
+     * 
+     * \see lockTemporaryTarget()
+     */
     void unlockTemporaryTarget() const;
 
     KisPaintDeviceSP temporaryTarget();

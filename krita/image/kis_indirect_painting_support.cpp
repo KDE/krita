@@ -100,7 +100,11 @@ bool KisIndirectPaintingSupport::hasTemporaryTarget() const
 
 void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QRegion &region, const QString &transactionText)
 {
-    KisPainter gc(layer->paintDevice()/*, currentSelection()*/);
+    /**
+     * We do not apply selection here, because it has already
+     * been taken into account in a tool code
+     */
+    KisPainter gc(layer->paintDevice());
     gc.setCompositeOp(d->compositeOp);
     gc.setOpacity(d->compositeOpacity);
     gc.setChannelFlags(layer->channelFlags());

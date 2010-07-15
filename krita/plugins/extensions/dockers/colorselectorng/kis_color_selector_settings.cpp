@@ -46,7 +46,11 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
     connect(this, SIGNAL(accepted()), this, SLOT(savePreferences()));
     connect(ui->colorSpace, SIGNAL(colorSpaceChanged(const KoColorSpace*)), ui->colorSelectorConfiguration, SLOT(setColorSpace(const KoColorSpace*)));
 
+    //load and save preferences
+    //if something in kritarc is missing, then the default from this load function will be used and saved back to kconfig.
+    //this way, cfg.readEntry() in a random part won't be able to set its own default
     loadPreferences();
+    savePreferences();
 }
 
 KisColorSelectorSettings::~KisColorSelectorSettings()
@@ -89,7 +93,7 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("zoomSize", ui->popupSize->value());
 
     //color patches
-    cfg.writeEntry("showLastUsedColors", ui->lastUsedColorsShow->isChecked());
+    cfg.writeEntry("lastUsedColorsShow", ui->lastUsedColorsShow->isChecked());
     cfg.writeEntry("lastUsedColorsAlignment", ui->lastUsedColorsAlignVertical->isChecked());
     cfg.writeEntry("lastUsedColorsScrolling", ui->lastUsedColorsAllowScrolling->isChecked());
     cfg.writeEntry("lastUsedColorsNumCols", ui->lastUsedColorsNumCols->value());
@@ -98,7 +102,7 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("lastUsedColorsWidth", ui->lastUsedColorsWidth->value());
     cfg.writeEntry("lastUsedColorsHeight", ui->lastUsedColorsHeight->value());
 
-    cfg.writeEntry("showCommonColors", ui->commonColorsShow->isChecked());
+    cfg.writeEntry("commonColorsShow", ui->commonColorsShow->isChecked());
     cfg.writeEntry("commonColorsAlignment", ui->commonColorsAlignVertical->isChecked());
     cfg.writeEntry("commonColorsScrolling", ui->commonColorsAllowScrolling->isChecked());
     cfg.writeEntry("commonColorsNumCols", ui->commonColorsNumCols->value());
@@ -114,6 +118,8 @@ void KisColorSelectorSettings::savePreferences() const
     //color selector
     KisColorSelectorTypeWidget* cstw = dynamic_cast<KisColorSelectorTypeWidget*>(ui->colorSelectorConfiguration);
     cfg.writeEntry("colorSelectorConfiguration", cstw->configuration().toString());
+
+    emit settingsChanged();
 }
 
 //void KisColorSelectorSettings::changeEvent(QEvent *e)
@@ -160,7 +166,7 @@ void KisColorSelectorSettings::loadPreferences()
     ui->popupSize->setValue(cfg.readEntry("zoomSize", 280));
 
     //color patches
-    ui->lastUsedColorsShow->setChecked(cfg.readEntry("showLastUsedColors", true));
+    ui->lastUsedColorsShow->setChecked(cfg.readEntry("lastUsedColorsShow", true));
     a = cfg.readEntry("lastUsedColorsAlignment", false);
     ui->lastUsedColorsAlignVertical->setChecked(a);
     ui->lastUsedColorsAlignHorizontal->setChecked(!a);
@@ -171,7 +177,7 @@ void KisColorSelectorSettings::loadPreferences()
     ui->lastUsedColorsWidth->setValue(cfg.readEntry("lastUsedColorsWidth", 20));
     ui->lastUsedColorsHeight->setValue(cfg.readEntry("lastUsedColorsHeight", 20));
 
-    ui->commonColorsShow->setChecked(cfg.readEntry("showCommonColors", true));
+    ui->commonColorsShow->setChecked(cfg.readEntry("commonColorsShow", true));
     a = cfg.readEntry("commonColorsAlignment", true);
     ui->commonColorsAlignVertical->setChecked(a);
     ui->commonColorsAlignHorizontal->setChecked(!a);

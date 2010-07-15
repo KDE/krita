@@ -29,6 +29,13 @@
 
 #include "ui_wdg_color_selector_settings.h"
 #include "kis_color_space_selector.h"
+#include "kis_preference_set_registry.h"
+#include "kis_color_selector_settings.h"
+
+#include <KConfig>
+#include <KConfigGroup>
+#include <KComponentData>
+#include <KGlobal>
 
 #include <KDebug>
 
@@ -46,19 +53,6 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
 
     //shade selector
 
-    //color patches
-    m_lastColorsShow=true;
-    m_lastColorsDirection=KisColorPatches::Vertical;
-    m_lastColorsScrolling=true;
-    m_lastColorsColCount=2;
-    m_lastColorsRowCount=3;
-
-    m_commonColorsShow=true;
-    m_commonColorsDirection=KisColorPatches::Horizontal;
-    m_commonColorsScrolling=false;
-    m_commonColorsColCount=2;
-    m_commonColorsRowCount=3;
-
     //layout
     m_verticalColorPatchesLayout = new QHBoxLayout();
     m_verticalColorPatchesLayout->setSpacing(0);
@@ -73,6 +67,19 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     updateLayout();
 
     connect(m_colorSelectorContainer, SIGNAL(openSettings()), this, SLOT(openSettings()));
+
+    //emit settingsChanged() if the settings are changed in krita preferences
+    KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
+    KisColorSelectorSettings* settings = dynamic_cast<KisColorSelectorSettings*>(preferenceSetRegistry->get("extendedColorSelectorSettings"));
+    Q_ASSERT(settings);
+
+    connect(settings, SIGNAL(settingsChanged()), this,                     SIGNAL(settingsChanged()));
+    connect(this,     SIGNAL(settingsChanged()), this,                     SLOT(updateLayout()));
+    connect(this,     SIGNAL(settingsChanged()), m_commonColorsWidget,     SLOT(updateSettings()));
+    connect(this,     SIGNAL(settingsChanged()), m_lastColorsWidget,       SLOT(updateSettings()));
+    connect(this,     SIGNAL(settingsChanged()), m_colorSelectorContainer, SIGNAL(settingsChanged()));
+
+    emit settingsChanged();
 }
 
 void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
@@ -89,39 +96,31 @@ void KisColorSelectorNgDockerWidget::openSettings()
 
     KisColorSelectorSettingsDialog settings;
     if(settings.exec()==QDialog::Accepted) {
-//        // color space needs special treatment
-//        m_colorSelectorContainer->setColorSpace(settings.ui->colorSpace->currentColorSpace());
-//
-//        //general
-//        m_colorSelectorContainer->setShadeSelectorType(settings.ui->shadeSelectorType->currentIndex());
-//        m_colorSelectorContainer->setShadeSelectorHideable(settings.ui->shadeSelectorHideable->isChecked());
-//        m_colorSelectorContainer->setAllowHorizontalLayout(settings.ui->allowHorizontalLayout->isChecked());
-//
-//        m_colorSelectorContainer->setPopupBehaviour(settings.ui->popupOnMouseOver->isChecked(), settings.ui->popupOnMouseClick->isChecked());
-//
-//        //color patches
-//        m_lastColorsShow = settings.ui->lastUsedColorsShow->isChecked();
-//        m_lastColorsDirection = settings.ui->lastUsedColorsAlignVertical->isChecked()?KisColorPatches::Vertical:KisColorPatches::Horizontal;
-//        m_lastColorsScrolling = settings.ui->lastUsedColorsAllowScrolling->isChecked();
-//        m_lastColorsColCount = settings.ui->lastUsedColorsNumCols->value();
-//        m_lastColorsRowCount = settings.ui->lastUsedColorsNumRows->value();
-//
-//        m_commonColorsShow = settings.ui->commonColorsShow->isChecked();
-//        m_commonColorsDirection = settings.ui->commonColorsAlignVertical->isChecked()?KisColorPatches::Vertical:KisColorPatches::Horizontal;
-//        m_commonColorsScrolling = settings.ui->commonColorsAllowScrolling->isChecked();
-//        m_commonColorsColCount = settings.ui->commonColorsNumCols->value();
-//        m_commonColorsRowCount = settings.ui->commonColorsNumRows->value();
-//
-        updateLayout();
+        emit settingsChanged();
     }
 }
 
 
 void KisColorSelectorNgDockerWidget::updateLayout()
 {
+    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+
+
     //color patches
-    m_lastColorsWidget->setPatchLayout(m_lastColorsDirection, m_lastColorsScrolling, m_lastColorsRowCount, m_lastColorsColCount);
-    m_commonColorsWidget->setPatchLayout(m_commonColorsDirection, m_commonColorsScrolling, m_commonColorsRowCount, m_commonColorsColCount);
+    bool m_lastColorsShow = cfg.readEntry("lastUsedColorsShow", true);
+    KisColorPatches::Direction m_lastColorsDirection;
+    if(cfg.readEntry("lastUsedColorsAlignment", false))
+        m_lastColorsDirection=KisColorPatches::Vertical;
+    else
+        m_lastColorsDirection=KisColorPatches::Horizontal;
+
+    bool m_commonColorsShow = cfg.readEntry("commonColorsShow", true);
+    KisColorPatches::Direction m_commonColorsDirection;
+    if(cfg.readEntry("commonColorsAlignment", false))
+        m_commonColorsDirection=KisColorPatches::Vertical;
+    else
+        m_commonColorsDirection=KisColorPatches::Horizontal;
+
 
     m_verticalColorPatchesLayout->removeWidget(m_lastColorsWidget);
     m_verticalColorPatchesLayout->removeWidget(m_commonColorsWidget);

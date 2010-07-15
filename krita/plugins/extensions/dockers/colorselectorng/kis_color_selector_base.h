@@ -38,8 +38,11 @@ public:
     void setColorSpace(const KoColorSpace* colorSpace);
     void setCanvas(KisCanvas2* canvas);
     const KoColorSpace* colorSpace();
-
     enum ColorRole {Foreground, Background};
+
+public slots:
+    virtual void updateSettings();
+
 protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);

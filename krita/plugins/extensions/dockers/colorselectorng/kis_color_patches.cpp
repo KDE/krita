@@ -19,10 +19,15 @@
 #include <QPainter>
 #include <QWheelEvent>
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KComponentData>
+#include <KGlobal>
+
 #include <QDebug>
 
-KisColorPatches::KisColorPatches(QWidget *parent) :
-    QWidget(parent), m_scrollValue(0)
+KisColorPatches::KisColorPatches(QWidget *parent, QString configPrefix) :
+    QWidget(parent), m_scrollValue(0), m_configPrefix(configPrefix)
 {
     m_patchWidth = 20;
     m_patchHeight = 20;
@@ -33,6 +38,8 @@ KisColorPatches::KisColorPatches(QWidget *parent) :
     m_numRows = 3;
     m_allowScrolling = true;
 
+    updateSettings();
+
     for(int i=0; i<m_numPatches; i++) {
         m_colors.append(QColor(qrand()|0xff000000));
     }
@@ -40,15 +47,12 @@ KisColorPatches::KisColorPatches(QWidget *parent) :
 
 //    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 //    resize(m_numCols*m_patchWidth, m_numRows*m_patchHeight);
-
-    setPatchLayout(Vertical, false);
 }
 
 void KisColorPatches::setColors(QList<QColor>colors)
 {
     qDebug()<<"KisColSelNgPatches::setColors() -> size:"<<colors.size();
     m_colors = colors;
-    m_numPatches = colors.size();
     update();
 }
 
@@ -140,34 +144,46 @@ void KisColorPatches::setAdditionalButtons(QList<QWidget*> buttonList)
     m_buttonList = buttonList;
 }
 
-void KisColorPatches::setPatchLayout(Direction dir, bool allowScrolling, int numRows, int numCols)
+void KisColorPatches::updateSettings()
 {
-    m_direction = dir;
-    m_allowScrolling = allowScrolling;
-    m_numRows = numRows;
-    m_numCols = numCols;
+    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+    m_allowScrolling = cfg.readEntry(m_configPrefix+"AllowScrolling", true);
 
-    if(allowScrolling && dir == Horizontal) {
+    if(cfg.readEntry(m_configPrefix+"Alignment", false))
+        m_direction=Vertical;
+    else
+        m_direction=Horizontal;
+
+    m_allowScrolling=cfg.readEntry(m_configPrefix+"Scrolling", true);
+    m_numCols=cfg.readEntry(m_configPrefix+"NumCols", 1);
+    m_numRows=cfg.readEntry(m_configPrefix+"NumRows", 1);
+    m_numPatches=cfg.readEntry(m_configPrefix+"Count", 15);
+    m_patchWidth=cfg.readEntry(m_configPrefix+"Width", 20);
+    m_patchHeight=cfg.readEntry(m_configPrefix+"Height", 20);
+
+    if(m_allowScrolling && m_direction == Horizontal) {
+        setMaximumWidth(QWIDGETSIZE_MAX);
+        setMinimumWidth(m_patchWidth);
+
         setMaximumHeight(m_numRows*m_patchHeight);
         setMinimumHeight(m_numRows*m_patchHeight);
-
-        setMaximumWidth(QWIDGETSIZE_MAX);
-        setMinimumWidth(0);
     }
 
-    if(allowScrolling && dir == Vertical) {
+    if(m_allowScrolling && m_direction == Vertical) {
+        setMaximumHeight(QWIDGETSIZE_MAX);
+        setMinimumHeight(m_patchHeight);
+
         setMaximumWidth(m_numCols*m_patchWidth);
         setMinimumWidth(m_numCols*m_patchWidth);
-
-        setMaximumHeight(QWIDGETSIZE_MAX);
-        setMinimumHeight(0);
     }
 
-    if(allowScrolling != true) {
+    if(m_allowScrolling != true) {
         m_scrollValue = 0;
-        setMinimumSize(0,0);
+        setMinimumSize(m_patchWidth, m_patchHeight);
         setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
     }
+
+    update();
 }
 
 int KisColorPatches::widthOfAllPatches()

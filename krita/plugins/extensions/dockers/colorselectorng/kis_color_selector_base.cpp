@@ -206,3 +206,6 @@ const KoColorSpace* KisColorSelectorBase::colorSpace()
 //        return m_canvas->currentImage()->colorSpace();
     }
 }
+
+void KisColorSelectorBase::updateSettings()
+{}

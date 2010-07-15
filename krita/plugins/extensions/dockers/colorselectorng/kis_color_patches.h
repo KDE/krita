@@ -24,14 +24,14 @@ class KisColorPatches : public QWidget
 {
 Q_OBJECT
 public:
-    explicit KisColorPatches(QWidget *parent = 0);
+    explicit KisColorPatches(QWidget *parent = 0, QString configPrefix=QString("lastUsedColors"));
     enum Direction { Horizontal, Vertical };
 
     void setColors(QList<QColor> colors);
 signals:
 
 public slots:
-    void setPatchLayout(Direction dir, bool allowScrolling, int numRows=3, int numCols=1);
+    void updateSettings();
 protected:
     void paintEvent(QPaintEvent *);
     void wheelEvent(QWheelEvent *);
@@ -66,6 +66,8 @@ private:
     
     /// returns count of colors and buttons
     int fieldCount() const;
+
+    QString m_configPrefix;
 };
 
 #endif // KIS_COLSELNG_COLOR_PATCHES_H

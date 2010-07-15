@@ -32,7 +32,7 @@ KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelectorBase* paren
     m_x(0),
     m_y(0),
     m_param1(1),
-    m_param2(2),
+    m_param2(1),
     m_dirty(true),
     m_lastColorSpace(0)
 {

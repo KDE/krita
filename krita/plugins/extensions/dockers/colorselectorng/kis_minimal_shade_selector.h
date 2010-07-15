@@ -25,6 +25,10 @@ class KisMinimalShadeSelector : public QWidget
 Q_OBJECT
 public:
     explicit KisMinimalShadeSelector(QWidget *parent = 0);
+
+public slots:
+    void updateSettings();
+
 protected:
     void paintEvent(QPaintEvent *);
 };

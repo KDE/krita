@@ -32,18 +32,16 @@ class KisColorSelectorContainer : public QWidget
 Q_OBJECT
 public:
     explicit KisColorSelectorContainer(QWidget *parent = 0);
+    void setCanvas(KisCanvas2* canvas);
 
     enum ShadeSelectorType{MyPaintSelector, MinimalSelector, NoSelector};
 
-    void setShadeSelectorType(int type);
-    void setShadeSelectorHideable(bool hideable);
-    void setAllowHorizontalLayout(bool allow);
-    void setPopupBehaviour(bool onMouseOver, bool onMouseClick);
-    void setColorSpace(const KoColorSpace* colorSpace);
-    void setCanvas(KisCanvas2* canvas);
-
 signals:
     void openSettings();
+    void settingsChanged();
+
+protected slots:
+    void updateSettings();
 
 protected:
     void resizeEvent(QResizeEvent *);

@@ -26,6 +26,11 @@
 #include <QPushButton>
 #include <KIcon>
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KComponentData>
+#include <KGlobal>
+
 #include <KDebug>
 
 KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
@@ -54,8 +59,6 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     m_buttonLayout->setMargin(0);
     m_buttonLayout->setSpacing(0);
 
-    connect(settingsButton, SIGNAL(clicked()), this, SIGNAL(openSettings()));
-
     m_widgetLayout = new QBoxLayout(QBoxLayout::TopToBottom, this);
     m_widgetLayout->setSpacing(0);
     m_widgetLayout->setMargin(0);
@@ -67,11 +70,27 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
 
     m_myPaintShadeSelector->hide();
     m_minimalShadeSelector->hide();
-    setShadeSelectorType(MyPaintSelector);
+
+    connect(settingsButton, SIGNAL(clicked()),         this,                   SIGNAL(openSettings()));
+    connect(this,           SIGNAL(settingsChanged()), m_colorSelector,        SLOT(updateSettings()));
+    connect(this,           SIGNAL(settingsChanged()), m_myPaintShadeSelector, SLOT(updateSettings()));
+    connect(this,           SIGNAL(settingsChanged()), this,                   SLOT(updateSettings()));
+    connect(this,           SIGNAL(settingsChanged()), m_minimalShadeSelector, SLOT(updateSettings()));
 }
 
-void KisColorSelectorContainer::setShadeSelectorType(int type)
+void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
 {
+    m_colorSelector->setCanvas(canvas);
+    m_myPaintShadeSelector->setCanvas(canvas);
+}
+
+void KisColorSelectorContainer::updateSettings()
+{
+    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+    m_shadeSelectorHideable = cfg.readEntry("shadeSelectorHideable", false);
+    m_allowHorizontalLayout = cfg.readEntry("allowHorizontalLayout", true);
+
+    int type = cfg.readEntry("shadeSelectorType", 0);
     if(m_shadeSelector!=0)
         m_shadeSelector->hide();
 
@@ -89,39 +108,7 @@ void KisColorSelectorContainer::setShadeSelectorType(int type)
 
     if(m_shadeSelector!=0) {
         m_shadeSelector->show();
-//        setMinimumHeight(m_colorSelector->minimumHeight()+m_shadeSelector->minimumHeight()+30); //+30 for the buttons (temporarily)
     }
-    else {
-//        setMinimumHeight(m_colorSelector->minimumHeight()+30);
-    }
-}
-
-void KisColorSelectorContainer::setShadeSelectorHideable(bool hideable)
-{
-    m_shadeSelectorHideable = hideable;
-}
-
-void KisColorSelectorContainer::setAllowHorizontalLayout(bool allow)
-{
-    m_allowHorizontalLayout = allow;
-}
-
-void KisColorSelectorContainer::setPopupBehaviour(bool onMouseOver, bool onMouseClick)
-{
-    m_myPaintShadeSelector->setPopupBehaviour(onMouseOver, onMouseClick);
-    m_colorSelector->setPopupBehaviour(onMouseOver, onMouseClick);
-}
-
-void KisColorSelectorContainer::setColorSpace(const KoColorSpace *colorSpace)
-{
-    m_colorSelector->setColorSpace(colorSpace);
-    m_myPaintShadeSelector->setColorSpace(colorSpace);
-}
-
-void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
-{
-    m_colorSelector->setCanvas(canvas);
-    m_myPaintShadeSelector->setCanvas(canvas);
 }
 
 void KisColorSelectorContainer::resizeEvent(QResizeEvent * e)

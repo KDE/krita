@@ -27,22 +27,24 @@
 #include <QResizeEvent>
 
 #include <KDebug>
-#include <iostream>
+
+#include <KConfig>
+#include <KConfigGroup>
+#include <KComponentData>
+#include <KGlobal>
 
 #include "kis_canvas2.h"
 #include "kis_image.h"
 
 
 KisCommonColors::KisCommonColors(QWidget *parent) :
-    KisColorPatches(parent), m_numColors(30), m_canvas(0)
+    KisColorPatches(parent, "commonColors"), m_numColors(30), m_canvas(0)
 {
-    setPatchLayout(Horizontal, false, 2);
     m_extractedColors = extractColors();
     setColors(m_extractedColors);
 //    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
     
     QPushButton* reloadButton = new QPushButton();
-    reloadButton->setMaximumSize(16,16);
     reloadButton->setIcon(KIcon("view-refresh"));
     connect(reloadButton, SIGNAL(clicked()), this, SLOT(recalculate()));
     
@@ -58,7 +60,9 @@ void KisCommonColors::setCanvas(KisCanvas2 *canvas)
     // make optional
     
     m_canvas = canvas;
-//    connect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()));
+    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+    if(cfg.readEntry("commonColorsAutoUpdate", false))
+        connect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()));
 }
 
 void KisCommonColors::recalculate()
@@ -268,11 +272,6 @@ QList<QRgb> KisCommonColors::getColors()
     for (int i=0; i<width; i++) {
         for (int j=0; j<height; j++) {
             colorList.insert(image.pixel(i, j)|qRgba(0,0,0,255));
-            if((image.pixel(i, j)|qRgba(0,0,0,255)) == qRgba(0,0,0,255)) {
-                kDebug()<<"=================";
-                kDebug()<<i<<"/"<<j;
-                kDebug()<<"duude!";
-            }
         }
     }
 

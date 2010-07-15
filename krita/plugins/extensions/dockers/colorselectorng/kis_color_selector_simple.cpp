@@ -83,7 +83,7 @@ QColor KisColorSelectorSimple::selectColor(int x, int y)
             angle+=M_PI;
             angle/=2*M_PI;
 
-            emit paramChanged(radius, angle);
+            emit paramChanged(angle, radius);
         }
     }
 

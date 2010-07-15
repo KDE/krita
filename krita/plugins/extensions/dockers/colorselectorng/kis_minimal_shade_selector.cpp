@@ -26,6 +26,11 @@ KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent) :
     setMaximumHeight(30);
 }
 
+void KisMinimalShadeSelector::updateSettings()
+{
+
+}
+
 void KisMinimalShadeSelector::paintEvent(QPaintEvent *) {
     QPainter painter(this);
 

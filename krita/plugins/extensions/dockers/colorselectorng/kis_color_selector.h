@@ -77,11 +77,16 @@ public:
 
     void setConfiguration(Configuration conf);
     Configuration configuration() const;
+
+public slots:
+    void updateSettings();
+
 protected:
     void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *);
     void mousePressEvent(QMouseEvent* e);
     void mouseMoveEvent(QMouseEvent *);
+
 private:
     void mouseEvent(QMouseEvent* e);
     void init();

@@ -38,11 +38,14 @@ public:
 
 public slots:
     void openSettings();
-protected:
 
-private:
+signals:
+    void settingsChanged();
+
+protected slots:
     void updateLayout();
 
+private:
     KisColorSelectorContainer* m_colorSelectorContainer;
     KisColorPatches* m_lastColorsWidget;
     KisCommonColors* m_commonColorsWidget;
@@ -52,18 +55,6 @@ private:
 
     KisCanvas2* m_canvas;
 
-    //color patches options
-    bool m_lastColorsShow;
-    KisColorPatches::Direction m_lastColorsDirection;
-    bool m_lastColorsScrolling;
-    int m_lastColorsColCount;
-    int m_lastColorsRowCount;
-
-    bool m_commonColorsShow;
-    KisColorPatches::Direction m_commonColorsDirection;
-    bool m_commonColorsScrolling;
-    int m_commonColorsColCount;
-    int m_commonColorsRowCount;
 };
 
 #endif // COLORSELECTORNGWIDGET_H

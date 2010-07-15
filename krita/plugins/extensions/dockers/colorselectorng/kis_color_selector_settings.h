@@ -46,6 +46,9 @@ public slots:
     void loadPreferences();
     void loadDefaultPreferences();
 
+signals:
+    void settingsChanged() const;
+
 protected:
 //    void changeEvent(QEvent *e);
 

@@ -54,8 +54,7 @@ KisColorSelector::KisColorSelector(QWidget* parent)
                                        m_square(0)
 {
     init();
-    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
-    setConfiguration(Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelector::Configuration().toString())));
+    updateSettings();
 }
 
 KisColorSelectorBase* KisColorSelector::createPopup() const
@@ -78,6 +77,13 @@ void KisColorSelector::setConfiguration(Configuration conf)
 KisColorSelector::Configuration KisColorSelector::configuration() const
 {
     return m_configuration;
+}
+
+void KisColorSelector::updateSettings()
+{
+    KisColorSelectorBase::updateSettings();
+    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+    setConfiguration(Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelector::Configuration().toString())));
 }
 
 void KisColorSelector::paintEvent(QPaintEvent* e)

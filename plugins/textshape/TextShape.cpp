@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "TextShape.h"
+#include <KoTextSharedLoadingData.h>
 
 #define synchronized(T) QMutex T; \
     for(Finalizer finalizer(T); finalizer.loop(); finalizer.inc())
@@ -41,6 +42,7 @@ struct Finalizer {
 };
 
 #include "Layout.h"
+//#include "TextLayerShape.h"
 
 #include <KoCanvasBase.h>
 #include <KoResourceManager.h>
@@ -391,7 +393,7 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
 
     if (style) {
         KoParagraphStyle paragraphStyle;
-        paragraphStyle.loadOdf(style, context.odfLoadingContext());
+        paragraphStyle.loadOdf(style, context);
 
         QTextDocument *document = m_textShapeData->document();
         QTextCursor cursor(document);

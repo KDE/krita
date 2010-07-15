@@ -50,7 +50,7 @@ class KoView;
  * The canvas widget is at most as big as the viewport of the scroll
  * area, and when the view on the document is near its edges, smaller.
  * In your canvas widget code, you can find the right place in your
- * document in pixel coordinates by adding the documentOffset
+ * document in view coordinates (pixels) by adding the documentOffset
  */
 class FLAKE_EXPORT KoCanvasController : public QAbstractScrollArea
 {
@@ -178,7 +178,7 @@ public:
     /**
      * @brief zooms in around the center.
      *
-     * The center must be specified in document coordinates. The scrollbar positions
+     * The center must be specified in view coordinates (pixels). The scrollbar positions
      * are changed so that the center becomes center if possible.
      *
      * @param center the position to zoom in on
@@ -188,7 +188,7 @@ public:
     /**
      * @brief zooms out around the center.
      *
-     * The center must be specified in pixel coordinates. The scrollbar positions
+     * The center must be specified in view coordinates (pixels). The scrollbar positions
      * are changed so that the center becomes center if possible.
      *
      * @param center the position to zoom out around
@@ -198,7 +198,7 @@ public:
     /**
      * @brief zooms around the center.
      *
-     * The center must be specified in pixel coordinates. The scrollbar positions
+     * The center must be specified in view coordinates (pixels). The scrollbar positions
      * are changed so that the center becomes center if possible.
      *
      * @param center the position to zoom around
@@ -209,10 +209,10 @@ public:
     /**
      * @brief zoom so that rect is exactly visible (as close as possible)
      *
-     * The rect must be specified in pixel coordinates. The scrollbar positions
+     * The rect must be specified in view coordinates (pixels). The scrollbar positions
      * are changed so that the center of the rect becomes center if possible.
      *
-     * @param rect the rect in pixel coords that should fit the view afterwards
+     * @param rect the rect in view coordinates (pixels) that should fit the view afterwards
      */
     void zoomTo(const QRect &rect);
 
@@ -228,17 +228,17 @@ public:
     void recenterPreferred();
 
     /**
-     * Sets the preferred center point in pixels.
+     * Sets the preferred center point in view coordinates (pixels).
      * @param viewPoint the new preferred center
      */
     void setPreferredCenter(const QPoint &viewPoint);
 
-    /// Returns the currently set preferred center point in pixels
+    /// Returns the currently set preferred center point in view coordinates (pixels)
     QPoint preferredCenter() const;
 
     /**
      * Move the canvas over the x and y distance of the parameter distance
-     * @param distance the distance in pixels.  A positive distance means moving the canvas up/left.
+     * @param distance the distance in view coordinates (pixels).  A positive distance means moving the canvas up/left.
      */
     void pan(const QPoint &distance);
 
@@ -343,9 +343,9 @@ signals:
 public slots:
 
     /**
-     * Call this slot whenever the size of your document in pixels
+     * Call this slot whenever the size of your document in view coordinates (pixels)
      * changes, for instance when zooming.
-     * @param newSize the new size, in pixels, of the document.
+     * @param newSize the new size, in view coordinates (pixels), of the document.
      * @param recalculateCenter if true the offset in the document we center on after calling
      *      recenterPreferred() will be recalculated for the new document size so the visual offset stays the same.
      */

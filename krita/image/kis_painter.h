@@ -327,11 +327,9 @@ public:
     void drawLine(const QPointF & start, const QPointF & end);
 
     /**
-     * paints an unstroked one-pixel line using the DDA algorithm from specified start position to the
+     * paints an unstroked, aliased one-pixel line using the DDA algorithm from specified start position to the
      * specified end position.
      *
-     * XXX: this method really should work with subpixel precision for start and end position
-     * XXX: this method does not use the composite op
      */
     void drawDDALine(const QPointF & start, const QPointF & end);
 

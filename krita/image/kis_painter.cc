@@ -1053,60 +1053,58 @@ void KisPainter::drawLine(const QPointF & start, const QPointF & end)
     drawThickLine(start, end, 1, 1);
 }
 
+
 void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
 {
-    KisRandomAccessorPixel accessor = d->device->createRandomAccessor(start.x(), start.y(), d->selection);
-    int pixelSize = d->device->pixelSize();
+    int x = int(start.x());
+    int y = int(start.y());
+
+    int x2 = int(end.x());
+    int y2 = int(end.y());
 
     // Width and height of the line
-    int xd = (int)(end.x() - start.x());
-    int yd = (int)(end.y() - start.y());
+    int xd = x2 - x;
+    int yd = y2 - y;
 
-    int x = start.x();
-    int y = start.y();
-    float fx = start.x();
-    float fy = start.y();
     float m = (float)yd / (float)xd;
-    int y2 = end.y();
-    int x2 = end.x();
 
-    if (fabs(m) > 1) {
-        int incr;
-        if (yd > 0) {
-            m = 1.0f / m;
-            incr = 1;
-        } else {
-            m = -1.0f / m;
-            incr = -1;
-        }
+    float fx = x;
+    float fy = y;
+    int inc;
+
+    int pixelSize = d->device->pixelSize();
+    KisRandomAccessorPixel accessor = d->device->createRandomAccessor(x, y, d->selection);
+    accessor.moveTo(x, y);
+    if (accessor.isSelected()) {
+        d->compositeOp->composite(accessor.rawData(), pixelSize, d->paintColor.data() , pixelSize, 0,0,1,1,d->opacity);
+    }
+
+    if (fabs(m) > 1.0f) {
+        inc = (yd > 0) ? 1 : -1;
+        m = 1.0f / m;
+        m *= inc;    
         while (y != y2) {
+            y = y + inc;
             fx = fx + m;
-            y = y + incr;
-            x = (int)(fx + 0.5f);
+            x = qRound(fx);
             accessor.moveTo(x, y);
             if (accessor.isSelected()) {
-                memcpy(accessor.rawData(), d->paintColor.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, d->paintColor.data() , pixelSize, 0,0,1,1,d->opacity);
             }
         }
     } else {
-        int incr;
-        if (xd > 0) {
-            incr = 1;
-        } else {
-            incr = -1;
-            m = -m;
-        }
+        inc = (xd > 0) ? 1 : -1;
+        m *= inc;
         while (x != x2) {
+            x = x + inc;
             fy = fy + m;
-            x = x + incr;
-            y = (int)(fy + 0.5f);
+            y = qRound(fy);
             accessor.moveTo(x, y);
             if (accessor.isSelected()) {
-                memcpy(accessor.rawData(), d->paintColor.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, d->paintColor.data() , pixelSize, 0,0,1,1,d->opacity);
             }
         }
     }
-
 }
 
 void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
@@ -1433,6 +1431,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
 void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int startWidth, int endWidth)
 {
+    
     KisRandomAccessorPixel accessor = d->device->createRandomAccessor(start.x(), start.y(), d->selection);
     int pixelSize = d->device->pixelSize();
     KoColorSpace * cs = d->device->colorSpace();

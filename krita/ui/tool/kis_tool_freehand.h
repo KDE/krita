@@ -111,11 +111,6 @@ protected:
     double m_dragDist;
 
     bool m_paintIncremental;
-    bool m_paintOnSelection;
-
-    KisPaintDeviceSP m_target;
-    KisLayerSP m_tempLayer;
-    KisPaintDeviceSP m_source;
 
     QString m_transactionText;
     enumBrushMode m_mode;
@@ -145,7 +140,6 @@ private:
 
     // for painting
     QRectF m_oldOutlineRect;
-    bool m_paintedOutline;
     QRegion m_incrementalDirtyRegion;
     QList<FreehandPaintJob*> m_paintJobs;
     KisRecordedPathPaintAction* m_pathPaintAction;

@@ -247,42 +247,6 @@ private:
     Private * const m_d;
 };
 
-/**
- * For classes that support indirect painting.
- *
- * XXX: Name doesn't suggest an object -- is KisIndirectPaintingLayer
- * a better name? (BSAR)
- */
-class KRITAIMAGE_EXPORT KisIndirectPaintingSupport
-{
-    KisIndirectPaintingSupport(const KisIndirectPaintingSupport&);
-    KisIndirectPaintingSupport& operator=(const KisIndirectPaintingSupport&);
-public:
-
-    KisIndirectPaintingSupport();
-    virtual ~KisIndirectPaintingSupport();
-
-    // Indirect painting
-    void setTemporaryTarget(KisPaintDeviceSP t);
-    void setTemporaryCompositeOp(const KoCompositeOp* c);
-    void setTemporaryOpacity(quint8 o);
-    KisPaintDeviceSP temporaryTarget();
-    const KisPaintDeviceSP temporaryTarget() const;
-    const KoCompositeOp* temporaryCompositeOp() const;
-    quint8 temporaryOpacity() const;
-    bool hasTemporaryTarget() const;
-
-    // Or I could make KisLayer a virtual base of KisIndirectPaintingSupport and so, but
-    // I'm sure virtual diamond inheritance isn't as appreciated as this
-
-    virtual KisLayer* layer() = 0;
-
-private:
-    struct Private;
-    Private* const d;
-
-};
-
 Q_DECLARE_METATYPE(KisLayerSP)
 
 #endif // KIS_LAYER_H_

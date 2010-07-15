@@ -140,6 +140,7 @@ set(kritaimage_LIB_SRCS
    kis_image.cc
    kis_iterator.cc
    kis_layer.cc
+   kis_indirect_painting_support.cpp
    kis_mask.cc
    kis_base_mask_generator.cpp
    kis_rect_mask_generator.cpp

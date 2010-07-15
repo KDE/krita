@@ -83,10 +83,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     , m_mode(HOVER)
 {
     m_painter = 0;
-    m_tempLayer = 0;
     m_paintIncremental = false;
-    m_paintOnSelection = false;
-    m_paintedOutline = false;
     m_executor = new QThreadPool(this);
     m_executor->setMaxThreadCount(1);
     m_smooth = true;
@@ -358,74 +355,56 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     if (!currentNode() || !currentNode()->paintDevice())
         return;
 
-    if (m_compositeOp == 0) {
-        KisPaintDeviceSP device = currentNode()->paintDevice();
-        if (device) {
-            m_compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
+    m_mode = PAINT;
+    m_hasPaintAtLeastOnce = false;
+    m_dragDist = 0;
+
+    KisPaintDeviceSP paintDevice = currentNode()->paintDevice();
+    KisPaintDeviceSP targetDevice;
+
+    if (!m_compositeOp)
+        m_compositeOp = paintDevice->colorSpace()->compositeOp(COMPOSITE_OVER);
+
+
+    if (!m_paintIncremental) {
+        KisIndirectPaintingSupport* indirect =
+            dynamic_cast<KisIndirectPaintingSupport*>(currentNode().data());
+
+        if (indirect) {
+            targetDevice = new KisPaintDevice(currentNode().data(), paintDevice->colorSpace());
+            indirect->setTemporaryTarget(targetDevice);
+            indirect->setTemporaryCompositeOp(m_compositeOp);
+            indirect->setTemporaryOpacity(m_opacity);
+        }
+        else {
+            m_paintIncremental = true;
         }
     }
 
-    m_mode = PAINT;
-    m_dragDist = 0;
+    if (!targetDevice)
+        targetDevice = paintDevice;
 
-    // Create painter
-    KisPaintDeviceSP device = currentNode()->paintDevice();
 
     if (m_painter)
         delete m_painter;
 
-    if (!m_paintIncremental) {
-        KisIndirectPaintingSupport* layer;
-        if ((layer = dynamic_cast<KisIndirectPaintingSupport*>(currentNode().data()))) {
-            // Hack for the painting of single-layered layers using indirect painting,
-            // because the group layer would not have a correctly synched cache (
-            // because of an optimization that would happen, having this layer as
-            // projection).
-            KisLayerSP l = layer->layer();
-            KisPaintLayerSP pl = dynamic_cast<KisPaintLayer*>(l.data());
-            m_target = new KisPaintDevice(currentNode().data(), device->colorSpace());
-            layer->setTemporaryTarget(m_target);
-            layer->setTemporaryCompositeOp(m_compositeOp);
-            layer->setTemporaryOpacity(m_opacity);
-        }
-    }
-    if (!m_target) {
-        m_target = device;
-    }
-    m_painter = new KisPainter(m_target, currentSelection());
-    m_hasPaintAtLeastOnce = false;
-    m_source = device;
+    m_painter = new KisPainter(targetDevice, currentSelection());
     m_painter->beginTransaction(m_transactionText);
 
     setupPainter(m_painter);
 
     if (m_paintIncremental) {
-        if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
-            m_painter->setChannelFlags(l->channelFlags());
-            if (l->alphaLocked()) {
-                m_painter->setLockAlpha(l->alphaLocked());
-            }
-        }
-    }
-
-    // if you're drawing on a temporary layer, the layer already sets this
-    if (m_paintIncremental) {
         m_painter->setCompositeOp(m_compositeOp);
         m_painter->setOpacity(m_opacity);
     } else {
-        m_painter->setCompositeOp(device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
+        m_painter->setCompositeOp(paintDevice->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
         m_painter->setOpacity(OPACITY_OPAQUE_U8);
     }
 
     m_previousTangent = QPointF(0, 0);
     m_previousDrag = QPointF(0, 0);
-    /*    dbgUI <<"target:" << m_target <<"(" << m_target->name() <<" )"
-          << " source: " << m_source << "( " << m_source->name() << " )"
-          << ", incremental " << m_paintIncremental
-          << ", paint on selection: " << m_paintOnSelection
-          << ", active device has selection: " << device->hasSelection()
-          << endl;
-    */
+
+
 #ifdef ENABLE_RECORDING // Temporary, to figure out what is going without being
     // distracted by the recording
     m_pathPaintAction = new KisRecordedPathPaintAction(
@@ -453,39 +432,19 @@ void KisToolFreehand::endPaint()
         if (layer && !m_paintIncremental) {
             m_painter->deleteTransaction();
 
-            KisPainter painter(m_source, currentSelection());
-            painter.setCompositeOp(m_compositeOp);
-            painter.setOpacity(m_opacity);
+            KisIndirectPaintingSupport *indirect =
+                dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
+            Q_ASSERT(indirect);
 
-            if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
-                painter.setChannelFlags(l->channelFlags());
-                if (l->alphaLocked()) {
-                    painter.setLockAlpha(l->alphaLocked());
-                }
-            }
-
-            painter.beginTransaction(m_transactionText);
-
-            QRegion r = m_incrementalDirtyRegion;
-            foreach(const QRect& rc, r.rects()) {
-                painter.bitBlt(rc.topLeft(), m_target, rc);
-            }
-            KisIndirectPaintingSupport* indirect = dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
-            if (indirect) {
-                indirect->setTemporaryTarget(0);
-            }
-            // m_source->setDirty(painter.dirtyRegion());
+            indirect->mergeToLayer(layer, m_incrementalDirtyRegion, m_transactionText);
 
             m_incrementalDirtyRegion = QRegion();
-
-            painter.endTransaction(image()->undoAdapter());
         } else {
             m_painter->endTransaction(image()->undoAdapter());
         }
     }
     delete m_painter;
     m_painter = 0;
-    m_target = 0 ;
     notifyModified();
 
     if (!m_paintJobs.empty()) {
@@ -547,13 +506,8 @@ void KisToolFreehand::setDirty(const QRegion& region)
     if (region.numRects() < 1)
         return;
 
-    if (!m_paintOnSelection) {
-        currentNode()->setDirty(region);
-    } else {
-        QRect r = region.boundingRect();
-        r = QRect(r.left() - 1, r.top() - 1, r.width() + 2, r.height() + 2); //needed to update selectionvisualization
-        m_target->setDirty(r);
-    }
+    currentNode()->setDirty(region);
+
     if (!m_paintIncremental) {
         m_incrementalDirtyRegion += region;
     }

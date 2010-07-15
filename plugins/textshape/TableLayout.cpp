@@ -377,32 +377,30 @@ void TableLayout::drawBorders(QPainter *painter, QPainterPath *accuBlankBorders)
                     QRectF bRect = cellBoundingRect(tableCell);
 
                     // First the horizontal borders
-                    if (row == 0)
+                    if (row == 0) {
                         cellStyle.drawTopHorizontalBorder(*painter, bRect.x(), bRect.y(), bRect.width(), accuBlankBorders);
-
+                    }
                     if (row + tableCell.rowSpan() == m_table->rows()) {
                         // we hit the bottom of the table so just draw the bottom border
                         cellStyle.drawBottomHorizontalBorder(*painter, bRect.x(), bRect.bottom(), bRect.width(), accuBlankBorders);
                     } else {
                         // we have cells below so draw sharedborders
                         QTextTableCell tableCellBelow;
-
                         for (int c = column; c < column + tableCell.columnSpan();
                                                     c = tableCellBelow.column()+tableCellBelow.columnSpan()) {
                             tableCellBelow = m_table->cellAt(row + tableCell.rowSpan()-1+1, c);
                             QRectF belowBRect = cellBoundingRect(tableCellBelow);
                             qreal x = qMax(bRect.x(), belowBRect.x());
                             qreal x2 = qMin(bRect.right(), belowBRect.right());
-
                             KoTableCellStyle cellBelowStyle(tableCellBelow.format().toTableCellFormat());
                             cellStyle.drawSharedHorizontalBorder(*painter, cellBelowStyle, x, bRect.bottom(), x2 - x, accuBlankBorders);
                         }
                     }
 
                     // And then the same treatment for vertical borders
-                    if (column == 0)
+                    if (column == 0) {
                         cellStyle.drawLeftmostVerticalBorder(*painter, bRect.x(), bRect.y(), bRect.height(), accuBlankBorders);
-
+                    }
                     if (column + tableCell.columnSpan() == m_table->columns()) {
                         // we hit the rightmost edge of the table so draw the rightmost border
                         cellStyle.drawRightmostVerticalBorder(*painter, bRect.right(), bRect.y(), bRect.height(), accuBlankBorders);
@@ -420,6 +418,8 @@ void TableLayout::drawBorders(QPainter *painter, QPainterPath *accuBlankBorders)
                             cellStyle.drawSharedVerticalBorder(*painter, cellBelowRight, bRect.right(), y, y2-y, accuBlankBorders);
                         }
                     }
+                    // Paint diagonal borders for current cell
+                    cellStyle.paintDiagonalBorders(*painter, bRect);
                 } else { // separating border model
                     cellStyle.paintBorders(*painter, cellBoundingRect(tableCell));
                 }

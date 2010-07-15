@@ -74,6 +74,14 @@ public:
         RightBorderSpacing,        ///< the right border spacing between inner and outer border
         RightBorderInnerPen,     ///< the right border inner pen
         RightBorderStyle,       ///< the right border borderstyle
+        TopLeftToBottomRightBorderOuterPen, ///< the top left to bottom right diagonal border pen
+        TopLeftToBottomRightBorderSpacing,  ///< the top left to bottom right diagonal spacing
+        TopLeftToBottomRightBorderInnerPen, ///< the top left to bottom right diagonal inner pen
+        TopLeftToBottomRightBorderStyle,    ///< the top left to bottom right borderstyle
+        BottomLeftToTopRightBorderOuterPen, ///< the bottom letf to top right diagonal border pen
+        BottomLeftToTopRightBorderSpacing,  ///< the bottom letf to top right diagonal spacing
+        BottomLeftToTopRightBorderInnerPen, ///< the bottom letf to top right diagonal inner pen
+        BottomLeftToTopRightBorderStyle,    ///< the bottom letf to top right borderstyle
         CellBackgroundBrush,     ///< the cell background brush, as QTextFormat::BackgroundBrush is used by paragraphs
         MasterPageName,         ///< Optional name of the master-page
         InlineRdf               ///< Optional KoTextInlineRdf object
@@ -83,7 +91,9 @@ public:
         Top = 0, ///< References the border at the top of the cell
         Left,    ///< References the border at the left side of the cell
         Bottom,  ///< References the border at the bottom of the cell
-        Right    ///< References the border at the right side of the cell
+        Right,   ///< References the border at the right side of the paragraph
+        TopLeftToBottomRight, ///< References the border from top, left corner to bottom, right corner of cell
+        BottomLeftToTopRight  ///< References the border from bottom, left corner to top, right corner of cell
     };
 
     /// Enum used to differentiate between the 3 types of border styles
@@ -190,6 +200,14 @@ public:
      * @bounds the bounding rectangle to draw.
      */
     void paintBorders(QPainter &painter, const QRectF &bounds) const;
+
+    /**
+     * Paint the diagonal borders.
+     *
+     * @painter the painter to draw with.
+     * @bounds the bounding rectangle to draw.
+     */
+    void paintDiagonalBorders(QPainter &painter, const QRectF &bounds) const;
 
     /**
      * Paint the top border.

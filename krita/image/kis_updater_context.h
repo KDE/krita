@@ -39,9 +39,9 @@ public:
         m_merger.startMerge(*m_walker);
 
         QRect changeRect = m_walker->changeRect();
+        emit sigContinueUpdate(changeRect);
         setWalker(0);
 
-        emit sigContinueUpdate(changeRect);
         emit sigDoSomeUsefulWork();
         emit sigJobFinished();
     }

@@ -922,7 +922,7 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     }
 
     if (d->polygonMaskImage.isNull() || (d->maskPainter == 0)) {
-        d->polygonMaskImage = QImage(d->maskImageWidth, d->maskImageHeight, QImage::Format_ARGB32);
+        d->polygonMaskImage = QImage(d->maskImageWidth, d->maskImageHeight, QImage::Format_ARGB32_Premultiplied);
         d->maskPainter = new QPainter(&d->polygonMaskImage);
         d->maskPainter->setRenderHint(QPainter::Antialiasing, antiAliasPolygonFill());
     }

@@ -60,6 +60,18 @@ QRectF KisSketchPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWS
     return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
 }
 
+QPainterPath KisSketchPaintOpSettings::brushOutline() const
+{
+    qreal size = getInt(SKETCH_RADIUS);
+    
+    QRectF rc(0, 0, size, size);
+    rc.translate(-rc.center());
+    
+    QPainterPath path;
+    path.addEllipse(rc);
+    
+    return path;
+}
 
 
 #if defined(HAVE_OPENGL)

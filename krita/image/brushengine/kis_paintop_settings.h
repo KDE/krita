@@ -147,9 +147,8 @@ public:
 
     /**
      * Returns the brush outline in pixel coordinates. Tool is responsible for conversion into view coordinates.
-     * You have to also define the hot spot of the whole QPainterPath (e.g. for rectangle to be shown correctly, it's its center)
      */
-    virtual QPainterPath brushOutline(QPointF& hotSpot) const;
+    virtual QPainterPath brushOutline() const;
     
     /**
      * XXX: document!

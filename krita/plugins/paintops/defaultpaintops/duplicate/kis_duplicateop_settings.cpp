@@ -155,9 +155,9 @@ void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image,
 
 }
 
-QPainterPath KisDuplicateOpSettings::brushOutline(QPointF& hotSpot) const
+QPainterPath KisDuplicateOpSettings::brushOutline() const
 {
-    QPainterPath path = KisBrushBasedPaintOpSettings::brushOutline(hotSpot);
+    QPainterPath path = KisBrushBasedPaintOpSettings::brushOutline();
     
     QPainterPath copy(path);
     QRectF rect2 = copy.boundingRect();

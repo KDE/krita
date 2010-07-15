@@ -67,3 +67,16 @@ QRectF KisHairyPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
     rect = image->pixelToDocument(m.mapRect(rect)).translated(pos);
     return rect;
 }
+
+QPainterPath KisHairyPaintOpSettings::brushOutline() const
+{
+    QPainterPath path = KisBrushBasedPaintOpSettings::brushOutline();
+
+    double scale = getDouble(HAIRY_BRISTLE_SCALE);
+    QTransform m;
+    m.reset();
+    m.scale(scale, scale);   
+    
+    return m.map(path);
+}
+

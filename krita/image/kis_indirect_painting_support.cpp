@@ -19,6 +19,8 @@
 
 #include "kis_indirect_painting_support.h"
 
+#include <QReadWriteLock>
+
 #include <KoCompositeOp.h>
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
@@ -31,6 +33,7 @@ struct KisIndirectPaintingSupport::Private {
     KisPaintDeviceSP temporaryTarget;
     const KoCompositeOp* compositeOp;
     quint8 compositeOpacity;
+    QReadWriteLock lock;
 };
 
 
@@ -58,6 +61,16 @@ void KisIndirectPaintingSupport::setTemporaryCompositeOp(const KoCompositeOp* c)
 void KisIndirectPaintingSupport::setTemporaryOpacity(quint8 o)
 {
     d->compositeOpacity = o;
+}
+
+void KisIndirectPaintingSupport::lockTemporaryTarget() const
+{
+    d->lock.lockForRead();
+}
+
+void KisIndirectPaintingSupport::unlockTemporaryTarget() const
+{
+    d->lock.unlock();
 }
 
 KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget()
@@ -98,17 +111,14 @@ void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QRegion &r
         }
     }
 
-
+    d->lock.lockForWrite();
     gc.beginTransaction(transactionText);
 
     foreach(const QRect& rc, region.rects()) {
         gc.bitBlt(rc.topLeft(), d->temporaryTarget, rc);
     }
-
     d->temporaryTarget = 0;
 
-    // now deprecated
-    // layer->setDirty(gc.dirtyRegion());
-
     gc.endTransaction(layer->image()->undoAdapter());
+    d->lock.unlock();
 }

@@ -122,6 +122,8 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
         KisPaintDeviceSP projection,
         const QRect& rect) const
 {
+    lockTemporaryTarget();
+
     m_d->selection->updateProjection();
     KisSelectionSP tempSelection = m_d->selection;
     KisPainter gc(projection);
@@ -148,6 +150,8 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
 
 
     gc.bitBlt(rect.topLeft(), original, rect);
+
+    unlockTemporaryTarget();
 }
 
 QRect KisSelectionBasedLayer::changeRect(const QRect &rect, PositionToFilthy pos) const

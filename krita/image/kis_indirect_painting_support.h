@@ -49,6 +49,9 @@ public:
     void mergeToLayer(KisLayerSP layer, const QRegion &region,
                       const QString &transactionText);
 
+    void lockTemporaryTarget() const;
+    void unlockTemporaryTarget() const;
+
     KisPaintDeviceSP temporaryTarget();
     const KisPaintDeviceSP temporaryTarget() const;
     const KoCompositeOp* temporaryCompositeOp() const;

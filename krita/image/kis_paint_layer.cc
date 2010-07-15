@@ -115,6 +115,8 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         KisPaintDeviceSP projection,
         const QRect& rect) const
 {
+    lockTemporaryTarget();
+
     KisPainter gc(projection);
     gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_COPY));
     gc.bitBlt(rect.topLeft(), original, rect);
@@ -127,6 +129,8 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         }
         gc.bitBlt(rect.topLeft(), temporaryTarget(), rect);
     }
+
+    unlockTemporaryTarget();
 }
 
 QIcon KisPaintLayer::icon() const

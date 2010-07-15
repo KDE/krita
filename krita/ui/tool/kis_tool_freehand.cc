@@ -600,7 +600,10 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 
     {
         KisPaintOpSettings::OutlineMode outlineMode;
-        if (m_mode == PAINT) m_showOutline = false;
+        if (m_mode == PAINT) {
+            m_showOutline = false;
+        }
+        
         if ((m_mode != PAINT || cfg.showOutlineWhilePainting()) &&
             (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || m_mode == EDIT_BRUSH || m_showOutline)) {
             outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
@@ -615,6 +618,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
         QPainterPath path = currentPaintOpPreset()->settings()->brushOutline(hotSpot);
         // new API
         if (!path.isEmpty()){
+            if (outlineMode != KisPaintOpSettings::CURSOR_IS_OUTLINE) return;
             QMatrix m;
             m.reset();
             m.scale(zoomX, zoomY);

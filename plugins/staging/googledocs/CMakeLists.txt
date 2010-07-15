@@ -1,4 +1,3 @@
-
 include_directories( ${KOMAIN_INCLUDES} ${KOTEXT_INCLUDES} )
 
 #find_package(Qt4 4.5.0 REQUIRED)

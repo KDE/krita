@@ -29,6 +29,7 @@
 #include "kis_types.h"
 #include <krita_export.h>
 
+class QPen;
 class QRegion;
 class QUndoCommand;
 class QRect;
@@ -311,6 +312,11 @@ public:
      */
     void fillPainterPath(const QPainterPath& path);
 
+    /**
+     * Draw the path using the Pen
+     */
+    void drawPainterPath(const QPainterPath& path, const QPen& pen);
+    
     /**
      * paint an unstroked one-pixel wide line from specified start position to the
      * specified end position.

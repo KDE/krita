@@ -965,6 +965,89 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     bitBlt(r.x(), r.y(), d->polygon, r.x(), r.y(), r.width(), r.height());
 }
 
+void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
+{
+    // we are drawing mask, it has to be white
+    // color of the path is given by paintColor()
+    Q_ASSERT(pen.color() == Qt::white);
+    
+    if (!d->fillPainter) {
+        d->polygon = new KisPaintDevice(d->device->colorSpace());
+        d->fillPainter = new KisFillPainter(d->polygon);
+    } else {
+        d->polygon->clear();
+    }
+
+    Q_CHECK_PTR(d->polygon);
+
+    QRectF boundingRect = path.boundingRect();
+    QRect fillRect;
+
+    fillRect.setLeft((qint32)floor(boundingRect.left()));
+    fillRect.setRight((qint32)ceil(boundingRect.right()));
+    fillRect.setTop((qint32)floor(boundingRect.top()));
+    fillRect.setBottom((qint32)ceil(boundingRect.bottom()));
+
+    // take width of the pen into account
+    int penWidth = qRound(pen.widthF());
+    fillRect.adjust(-penWidth, -penWidth, penWidth, penWidth);
+    
+    // Expand the rectangle to allow for anti-aliasing.
+    fillRect.adjust(-1, -1, 1, 1);
+    
+
+    // Clip to the image bounds.
+    if (d->bounds.isValid()) {
+        fillRect &= d->bounds;
+    }
+
+    d->fillPainter->fillRect(fillRect, paintColor(), OPACITY_OPAQUE_U8);
+
+    if (d->polygonMaskImage.isNull() || (d->maskPainter == 0)) {
+        d->polygonMaskImage = QImage(d->maskImageWidth, d->maskImageHeight, QImage::Format_ARGB32_Premultiplied);
+        d->maskPainter = new QPainter(&d->polygonMaskImage);
+        d->maskPainter->setRenderHint(QPainter::Antialiasing, antiAliasPolygonFill());
+    }
+
+    // Break the mask up into chunks so we don't have to allocate a potentially very large QImage.
+    const QColor black(Qt::black);
+    QPen oldPen = d->maskPainter->pen();
+    d->maskPainter->setPen(pen);
+        
+    for (qint32 x = fillRect.x(); x < fillRect.x() + fillRect.width(); x += d->maskImageWidth) {
+        for (qint32 y = fillRect.y(); y < fillRect.y() + fillRect.height(); y += d->maskImageHeight) {
+
+            d->polygonMaskImage.fill(black.rgb());
+            d->maskPainter->translate(-x, -y);
+            d->maskPainter->drawPath(path);
+            d->maskPainter->translate(x, y);
+
+            qint32 rectWidth = qMin(fillRect.x() + fillRect.width() - x, d->maskImageWidth);
+            qint32 rectHeight = qMin(fillRect.y() + fillRect.height() - y, d->maskImageHeight);
+
+            KisHLineIterator lineIt = d->polygon->createHLineIterator(x, y, rectWidth);
+
+            quint8 tmp;
+            for (int row = y; row < y + rectHeight; row++) {
+                QRgb* line = reinterpret_cast<QRgb*>(d->polygonMaskImage.scanLine(row - y));
+                while (!lineIt.isDone()) {
+                    tmp = qRed(line[lineIt.x() - x]);
+                    d->polygon->colorSpace()->applyAlphaU8Mask(lineIt.rawData(),
+                                                            &tmp, 1);
+                    ++lineIt;
+                }
+                lineIt.nextRow();
+            }
+
+        }
+    }
+    
+    d->maskPainter->setPen(oldPen);
+    QRect r = d->polygon->extent();
+
+    bitBlt(r.x(), r.y(), d->polygon, r.x(), r.y(), r.width(), r.height());
+}
+
 void KisPainter::drawLine(const QPointF & start, const QPointF & end)
 {
     drawThickLine(start, end, 1, 1);

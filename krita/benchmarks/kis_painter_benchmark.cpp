@@ -19,6 +19,7 @@
 #include <qtest_kde.h>
 
 #include <QImage>
+#include <QDebug>
 
 #include "kis_painter_benchmark.h"
 #include "kis_benchmark_values.h"
@@ -41,6 +42,7 @@
 
 
 #define CYCLES 20
+static const int LINE_COUNT = 100;
 
 void KisPainterBenchmark::initTestCase()
 {
@@ -48,6 +50,13 @@ void KisPainterBenchmark::initTestCase()
     
     m_color = KoColor(m_colorSpace);
     m_color.fromQColor(Qt::red);
+    
+    
+    srand48(0);
+    for (int i = 0; i < LINE_COUNT ;i++){
+        m_points.append( QPointF(drand48() * TEST_IMAGE_WIDTH, drand48() * TEST_IMAGE_HEIGHT) );
+        m_points.append( QPointF(drand48() * TEST_IMAGE_WIDTH, drand48() * TEST_IMAGE_HEIGHT) );
+    }
 }
 
 void KisPainterBenchmark::cleanupTestCase()
@@ -172,6 +181,59 @@ void KisPainterBenchmark::benchmarkFixedBitBltSelection()
 
 }
 
+void KisPainterBenchmark::benchmarkDrawThickLine()
+{
+    KisPaintDeviceSP dev = new KisPaintDevice(m_colorSpace);
+    KoColor color(m_colorSpace);
+    color.fromQColor(Qt::white);
+    
+    dev->clear();
+    dev->fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT,color.data());
+    
+    color.fromQColor(Qt::black);
+    
+    KisPainter painter(dev);
+    painter.setPaintColor(color);
+    
+    QBENCHMARK{
+        for (int i = 0; i < LINE_COUNT; i++){
+            painter.drawThickLine(m_points[i*2],m_points[i*2+1],10,10);
+        }
+    }
+    //dev->convertToQImage(m_colorSpace->profile()).save("drawThickLine.png");
+}
+
+
+void KisPainterBenchmark::benchmarkDrawQtLine()
+{
+    KisPaintDeviceSP dev = new KisPaintDevice(m_colorSpace);
+    KoColor color(m_colorSpace);
+    color.fromQColor(Qt::white);
+    
+    dev->clear();
+    dev->fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT,color.data());
+    
+    color.fromQColor(Qt::black);
+    
+    KisPainter painter(dev);
+    painter.setPaintColor(color);
+    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    
+    QPen pen;
+    pen.setWidth(10);
+    pen.setColor(Qt::white);
+    pen.setCapStyle(Qt::RoundCap);
+    
+    QBENCHMARK{
+        for (int i = 0; i < LINE_COUNT; i++){
+            QPainterPath path;
+            path.moveTo(m_points[i*2]);
+            path.lineTo(m_points[i*2 + 1]);
+            painter.drawPainterPath(path, pen);
+        }
+    }
+    //dev->convertToQImage(m_colorSpace->profile(),0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT).save("drawQtLine.png");
+}
 
 
 QTEST_KDEMAIN(KisPainterBenchmark, NoGUI)

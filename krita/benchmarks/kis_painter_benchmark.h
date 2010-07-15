@@ -35,6 +35,7 @@ class KisPainterBenchmark : public QObject
 private:
     const KoColorSpace * m_colorSpace;
     KoColor m_color;
+    QVector<QPointF> m_points;
     
 private slots:
     void initTestCase();
@@ -45,7 +46,9 @@ private slots:
     void benchmarkBitBltSelection();
     void benchmarkFixedBitBlt();
     void benchmarkFixedBitBltSelection();
-         
+    
+    void benchmarkDrawThickLine();
+    void benchmarkDrawQtLine();
     
 };
 

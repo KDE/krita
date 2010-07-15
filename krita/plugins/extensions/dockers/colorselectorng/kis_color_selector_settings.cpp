@@ -131,6 +131,8 @@ void KisColorSelectorSettings::savePreferences() const
 void KisColorSelectorSettings::loadPreferences()
 {
     //read cfg
+    //don't forget to also add a new entry to the default preferences
+
     KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
 
     //general
@@ -189,6 +191,51 @@ void KisColorSelectorSettings::loadPreferences()
     cstw->setConfiguration(KisColorSelector::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelector::Configuration().toString())));
 }
 
+void KisColorSelectorSettings::loadDefaultPreferences()
+{
+    //set defaults
+    //if you change something, don't forget that loadPreferences should be kept in sync
+
+    //general
+    ui->allowHorizontalLayout->setChecked(true);
+    ui->shadeSelectorHideable->setChecked(false);
+    ui->shrunkenDoNothing->setChecked(false);
+
+    ui->popupOnMouseClick->setChecked(true);
+    ui->popupOnMouseOver->setChecked(false);
+    ui->neverZoom->setChecked(false);
+
+    ui->popupSize->setValue(280);
+
+    //color patches
+    ui->lastUsedColorsShow->setChecked(true);
+    ui->lastUsedColorsAlignVertical->setChecked(true);
+    ui->lastUsedColorsAlignHorizontal->setChecked(false);
+    ui->lastUsedColorsAllowScrolling->setChecked(true);
+    ui->lastUsedColorsNumCols->setValue(1);
+    ui->lastUsedColorsNumRows->setValue(2);
+    ui->lastUsedColorsPatchCount->setValue(15);
+    ui->lastUsedColorsWidth->setValue(20);
+    ui->lastUsedColorsHeight->setValue(20);
+
+    ui->commonColorsShow->setChecked(true);
+    ui->commonColorsAlignHorizontal->setChecked(true);
+    ui->commonColorsAlignVertical->setChecked(false);
+    ui->commonColorsAllowScrolling->setChecked(false);
+    ui->commonColorsNumCols->setValue(1);
+    ui->commonColorsNumRows->setValue(2);
+    ui->commonColorsPatchCount->setValue(20);
+    ui->commonColorsWidth->setValue(20);
+    ui->commonColorsHeight->setValue(20);
+    ui->commonColorsAutoUpdate->setChecked(false);
+
+    //shade selector
+    ui->shadeSelectorType->setCurrentIndex(0);
+
+    //color selector
+    KisColorSelectorTypeWidget* cstw = dynamic_cast<KisColorSelectorTypeWidget*>(ui->colorSelectorConfiguration);
+    cstw->setConfiguration(KisColorSelector::Configuration());
+}
 
 KisColorSelectorSettingsDialog::KisColorSelectorSettingsDialog(QWidget *parent) :
         QDialog(parent),
@@ -199,11 +246,15 @@ KisColorSelectorSettingsDialog::KisColorSelectorSettingsDialog(QWidget *parent) 
 
     m_widget->loadPreferences();
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this);
+    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::RestoreDefaults,
+                                                       Qt::Horizontal,
+                                                       this);
     l->addWidget(buttonBox);
 
     connect(buttonBox, SIGNAL(accepted()), m_widget, SLOT(savePreferences()));
     connect(buttonBox, SIGNAL(accepted()), this,     SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this,     SLOT(reject()));
+    connect(buttonBox->button(QDialogButtonBox::RestoreDefaults),
+                       SIGNAL(clicked()),  m_widget, SLOT(loadDefaultPreferences()));
 }
 

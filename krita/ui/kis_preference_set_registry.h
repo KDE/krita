@@ -34,16 +34,19 @@
 /**
  * Implement this abstract class to provide a preferences pane for the preferences dialog.
  */
-class KisPreferenceSet : public QWidget {
+class KRITAUI_EXPORT KisPreferenceSet : public QWidget {
+Q_OBJECT
 public:
     KisPreferenceSet(QWidget* parent=0) : QWidget(parent)
     {}
     virtual QString id() = 0;
     virtual QString name() = 0;
     virtual QString header() = 0;
+    virtual KIcon icon() = 0;
+public slots:
     virtual void savePreferences() const = 0;
     virtual void loadPreferences() = 0;
-    virtual KIcon icon() = 0;
+    virtual void loadDefaultPreferences() = 0;
 };
 
 /**
@@ -52,9 +55,6 @@ public:
  */
 class KRITAUI_EXPORT KisPreferenceSetRegistry : public QObject, public KoGenericRegistry<KisPreferenceSet*>
 {
-
-    Q_OBJECT
-
 public:
 
     virtual ~KisPreferenceSetRegistry();

@@ -511,6 +511,10 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
         page->setIcon(preferenceSet->icon());
         addPage(page);
         preferenceSet->setParent(vbox);
+        preferenceSet->loadPreferences();
+
+        connect(this, SIGNAL(defaultClicked()), preferenceSet, SLOT(loadDefaultPreferences()), Qt::UniqueConnection);
+        connect(this, SIGNAL(okClicked()),      preferenceSet, SLOT(savePreferences()),        Qt::UniqueConnection);
     }
 
     connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));

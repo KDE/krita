@@ -44,6 +44,7 @@ public:
 public slots:
     void savePreferences() const;
     void loadPreferences();
+    void loadDefaultPreferences();
 
 protected:
 //    void changeEvent(QEvent *e);
@@ -53,6 +54,7 @@ private:
 };
 
 class KisColorSelectorSettingsDialog : public QDialog {
+Q_OBJECT
 public:
     KisColorSelectorSettingsDialog(QWidget *parent = 0);
 private:

@@ -178,8 +178,8 @@ KoListStyle *KoList::style() const
 
 void KoList::updateStoredList(const QTextBlock &block)
 {
-    int level = block.textList()->format().property(KoListStyle::Level).toInt();
     if (block.textList()) {
+        int level = block.textList()->format().property(KoListStyle::Level).toInt();
         QTextList *textList = block.textList();
         QTextListFormat format = textList->format();
         format.setProperty(KoListStyle::ListId, (KoListStyle::ListIdType)(textList)); 

@@ -889,8 +889,7 @@ qreal Layout::listIndent()
         return 0;
     qreal indent = 0;
     if (m_block.textList())
-        indent = m_block.textList()->format().doubleProperty(KoListStyle::Indent)
-                 + (qMax(0, m_block.textList()->format().intProperty(KoListStyle::Level) - 1) * (m_blockData->counterSpacing() + m_blockData->counterWidth()));
+        indent = m_block.textList()->format().doubleProperty(KoListStyle::Indent);
     if (m_isRtl)
         return indent;
     return m_blockData->counterSpacing() + m_blockData->counterWidth() + indent;

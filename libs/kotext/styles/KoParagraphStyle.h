@@ -516,11 +516,6 @@ public:
     /// set the character style for this paragraph style
     void setCharacterStyle(KoCharacterStyle *style);
 
-    /// return the dropcaps character style for this paragraph style
-    const QString dropCapsStyleName() const;
-    /// set the dropcaps character style for this paragraph style
-    void setDropCapsStyleName(QString styleName);
-
     /**
      * Returns the list style for this paragraph style.
      * @see KoListStyle::isValid()

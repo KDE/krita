@@ -60,7 +60,7 @@ static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 class KoParagraphStyle::Private
 {
 public:
-    Private() : charStyle(0), dropCapsStyleName(0), listStyle(0), parentStyle(0), list(0), next(0) {}
+    Private() : charStyle(0), listStyle(0), parentStyle(0), list(0), next(0) {}
 
     ~Private() {
     }
@@ -71,7 +71,6 @@ public:
 
     QString name;
     KoCharacterStyle *charStyle;
-    QString dropCapsStyleName;
     KoListStyle *listStyle;
     KoParagraphStyle *parentStyle;
     KoList *list;

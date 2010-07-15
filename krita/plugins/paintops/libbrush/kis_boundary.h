@@ -44,6 +44,9 @@ public:
     void generateBoundary();
     
     void paint(QPainter& painter) const;
+    
+    /// returns the outline saved in QPainterPath
+    QPainterPath boundary() const;
 
 private:
     struct Private;

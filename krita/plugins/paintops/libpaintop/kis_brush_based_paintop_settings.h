@@ -39,6 +39,8 @@ public:
     
     ///Reimplemented
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const;
+    
+    virtual QPainterPath brushOutline(QPointF& hotSpot) const;
 };
 
 #endif // KIS_BRUSH_BASED_PAINTOP_SETTINGS_H

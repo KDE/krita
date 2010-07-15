@@ -607,11 +607,28 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
         } else {
             outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
         }
+        
         qreal zoomX, zoomY;
         converter.zoom(&zoomX, &zoomY);
-        gc.scale(zoomX, zoomY);
-        currentPaintOpPreset()->settings()->paintOutline(outlinePos(), currentImage(), gc, outlineMode);
-
+        
+        QPointF hotSpot;
+        QPainterPath path = currentPaintOpPreset()->settings()->brushOutline(hotSpot);
+        // new API
+        if (!path.isEmpty()){
+            QMatrix m;
+            m.reset();
+            m.scale(zoomX, zoomY);
+            QPointF move = outlinePos() - currentImage()->pixelToDocument(hotSpot);
+            m.translate(move.x(), move.y());
+            m.scale(1.0/currentImage()->xRes(),1.0/currentImage()->yRes());
+            
+            paintToolOutline(&gc,m.map(path));
+        }else{
+            gc.save();
+            gc.scale(zoomX, zoomY);
+            currentPaintOpPreset()->settings()->paintOutline(outlinePos(), currentImage(), gc, outlineMode);
+            gc.restore();
+        }
     }
 }
 

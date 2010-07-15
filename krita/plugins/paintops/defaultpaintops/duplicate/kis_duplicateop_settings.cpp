@@ -154,3 +154,29 @@ void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image,
     painter.drawLine(rect2.topRight(), rect2.bottomLeft());
 
 }
+
+QPainterPath KisDuplicateOpSettings::brushOutline(QPointF& hotSpot) const
+{
+    QPainterPath path = KisBrushBasedPaintOpSettings::brushOutline(hotSpot);
+    
+    QPainterPath copy(path);
+    QRectF rect2 = copy.boundingRect();
+    if (m_isOffsetNotUptodate) {
+        copy.translate(m_position);
+    } else {
+        copy.translate(-m_offset);
+    }
+    
+    path.addPath(copy);
+    
+    QTransform m;
+    m.scale(0.5,0.5);
+    
+    path.moveTo(rect2.topLeft());
+    path.lineTo(rect2.bottomRight());
+    
+    path.moveTo(rect2.topRight());
+    path.lineTo(rect2.bottomLeft());
+    
+    return path;
+}

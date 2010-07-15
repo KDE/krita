@@ -58,3 +58,13 @@ void KisBoundary::paint(QPainter& painter) const
         painter.drawPolygon(polygon);
     }
 }
+
+QPainterPath KisBoundary::boundary() const
+{
+    QPainterPath path;
+    foreach(const QPolygon & polygon, d->m_boundary) {
+        path.addPolygon(polygon);
+    }
+    return path;
+}
+

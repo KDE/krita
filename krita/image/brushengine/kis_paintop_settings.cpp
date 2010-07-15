@@ -179,3 +179,9 @@ KisPaintOpSettingsWidget* KisPaintOpSettings::optionsWidget() const
     return d->settingsWidget.data();
 }
 
+QPainterPath KisPaintOpSettings::brushOutline(QPointF& hotSpot) const
+{
+    hotSpot = QPointF();
+    return QPainterPath();
+}
+

@@ -93,12 +93,7 @@ void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QRect& rc, const QRect& 
     walker->collectRects(node, rc);
 
     m_lock.lock();
-
-    /**
-     * The painting is a bit more responsitive,
-     * if we add new jobs to the head of the list.
-     */
-    m_list.prepend(walker);
+    m_list.append(walker);
     m_lock.unlock();
 }
 
@@ -143,12 +138,14 @@ bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc)
     KisWalkersListIterator iter(m_list);
 
     /**
-     * We add new jobs to the head of the list,
+     * We add new jobs to the tail of the list,
      * so it's more probable to find a good candidate here.
      */
 
-    while(iter.hasNext()) {
-        item = iter.next();
+    iter.toBack();
+
+    while(iter.hasPrevious()) {
+        item = iter.previous();
 
         if(item->startNode() != node) continue;
 

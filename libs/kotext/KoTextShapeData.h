@@ -23,7 +23,7 @@
 #include "KoText.h"
 #include "kotext_export.h"
 
-#include <KoShapeUserData.h>
+#include <KoTextShapeDataBase.h>
 #include <KoInsets.h>
 #include <KoXmlReaderForward.h>
 
@@ -44,7 +44,7 @@ class KoDocumentRdfBase;
  * multiple instances of this shape data) can share one QTextDocument by providing a
  * different view on (a different part of) the QTextDocument.
  */
-class KOTEXT_EXPORT KoTextShapeData : public KoShapeUserData
+class KOTEXT_EXPORT KoTextShapeData : public KoTextShapeDataBase
 {
     Q_OBJECT
 public:
@@ -59,8 +59,6 @@ public:
      *    of this data and the doc will be deleted when this shapeData dies.
      */
     void setDocument(QTextDocument *document, bool transferOwnership = true);
-    /// return the document
-    QTextDocument *document();
 
     /**
      * return the amount of points into the document (y) this shape will display.
@@ -111,18 +109,6 @@ public:
     void fireResizeEvent();
 
     /**
-     * Set the margins that will make the shapes text area smaller.
-     * The shape that owns this textShapeData object will layout text in an area
-     * confined by the shape size made smaller by the margins set here.
-     * @param margins the margins that shrink the text area.
-     */
-    void setShapeMargins(const KoInsets &margins);
-    /**
-     * returns the currently set margins for the shape.
-     */
-    KoInsets shapeMargins() const;
-
-    /**
      * Calling this method will do a layout run of the text for this shape using the
      * provided textPage. The currently set page() will not be touched.
      * This is a special method designed for small texts that are used on more than
@@ -166,11 +152,6 @@ public:
      */
     KoText::Direction pageDirection() const;
 
-    /** Sets the vertical alignment of all the text inside the shape. */
-    void setVerticalAlignment(Qt::Alignment alignment);
-    /** Returns the vertical alignment of all the text in the shape */
-    Qt::Alignment verticalAlignment() const;
-
 signals:
     /**
      * emitted when the shape thinks it should be relayouted, for example after
@@ -181,7 +162,7 @@ signals:
     void relayout();
 
 private:
-    KoTextShapeDataPrivate *const d;
+    Q_DECLARE_PRIVATE(KoTextShapeData)
 };
 
 #endif

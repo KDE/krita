@@ -142,7 +142,7 @@ KisDistanceInformation KisPenOp::paintLine(const KisPaintInformation& pi1, const
         
         KisPainter p(m_dab);
         p.setPaintColor(painter()->paintColor());
-        p.drawWuLine(pi1.pos(), pi2.pos());
+        p.drawDDALine(pi1.pos(), pi2.pos());
 
         QRect rc = m_dab->extent();  
         painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());

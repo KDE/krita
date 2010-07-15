@@ -167,10 +167,12 @@ private:
         StylesDotXml = 2
     };
     // helper functions for loading of paragraph styles
-    void addParagraphStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
+    void addParagraphStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                             KoStyleManager *styleManager = 0);
-    QList<QPair<QString, KoParagraphStyle *> > loadParagraphStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements,
+    QList<QPair<QString, KoParagraphStyle *> > loadParagraphStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements,
             int styleTypes, KoStyleManager *manager = 0);
+
+    void addDefaultParagraphStyle(KoShapeLoadingContext &context, const KoXmlElement *styleElem, const KoXmlElement *appDefault, KoStyleManager *styleManager);
 
     // helper functions for loading of character styles
     void addCharacterStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,

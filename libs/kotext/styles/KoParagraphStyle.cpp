@@ -28,6 +28,8 @@
 #include "KoTextDocumentLayout.h"
 #include "KoStyleManager.h"
 #include "KoListLevelProperties.h"
+#include "KoTextSharedLoadingData.h"
+#include <KoShapeLoadingContext.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include "Styles_p.h"
@@ -58,7 +60,7 @@ static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 class KoParagraphStyle::Private
 {
 public:
-    Private() : charStyle(0), listStyle(0), parentStyle(0), list(0), next(0) {}
+    Private() : charStyle(0), dropCapsStyleName(0), listStyle(0), parentStyle(0), list(0), next(0) {}
 
     ~Private() {
     }
@@ -69,6 +71,7 @@ public:
 
     QString name;
     KoCharacterStyle *charStyle;
+    QString dropCapsStyleName;
     KoListStyle *listStyle;
     KoParagraphStyle *parentStyle;
     KoList *list;
@@ -370,6 +373,16 @@ void KoParagraphStyle::setDropCapsDistance(qreal distance)
 qreal KoParagraphStyle::dropCapsDistance() const
 {
     return propertyDouble(DropCapsDistance);
+}
+
+void KoParagraphStyle::setDropCapsTextStyleId(int id)
+{
+    setProperty(KoParagraphStyle::DropCapsTextStyle, id);
+}
+
+int KoParagraphStyle::dropCapsTextStyleId() const
+{
+    return propertyInt(KoParagraphStyle::DropCapsTextStyle);
 }
 
 void KoParagraphStyle::setFollowDocBaseline(bool on)
@@ -937,8 +950,9 @@ QBrush KoParagraphStyle::background() const
     return qvariant_cast<QBrush>(variant);
 }
 
-void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
+void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext)
 {
+    KoOdfLoadingContext &context = scontext.odfLoadingContext();
     const QString name(element->attributeNS(KoXmlNS::style, "display-name", QString()));
     if (!name.isEmpty()) {
         d->name = name;
@@ -965,7 +979,7 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext 
         if (ok)
             setDefaultOutlineLevel(level);
     }
-    
+
     //1.6: KoTextFormat::load
     KoCharacterStyle *charstyle = characterStyle();
     context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
@@ -973,13 +987,16 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext 
 
     //1.6: KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
     context.styleStack().setTypeProperties("paragraph");   // load all style attributes from "style:paragraph-properties"
-    loadOdfProperties(context.styleStack());   // load the KoParagraphStyle from the stylestack
+
+    loadOdfProperties(scontext);   // load the KoParagraphStyle from the stylestack
 
     context.styleStack().restore();
 }
 
-void KoParagraphStyle::loadOdfProperties(KoStyleStack &styleStack)
+void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 {
+    KoStyleStack &styleStack = scontext.odfLoadingContext().styleStack();
+
     // in 1.6 this was defined at KoParagLayout::loadOasisParagLayout(KoParagLayout&, KoOasisContext&)
     const QString writingMode(styleStack.property(KoXmlNS::style, "writing-mode"));
     if (!writingMode.isEmpty()) {
@@ -1306,6 +1323,18 @@ void KoParagraphStyle::loadOdfProperties(KoStyleStack &styleStack)
         setDropCapsLines(lines.toInt());
         const qreal distance = KoUnit::parseValue(dropCap.attributeNS(KoXmlNS::style, "distance", QString()));
         setDropCapsDistance(distance);
+
+        const QString dropstyle = dropCap.attributeNS(KoXmlNS::style, "style-name");
+        if (! dropstyle.isEmpty()) {
+            KoSharedLoadingData *sharedData = scontext.sharedData(KOTEXT_SHARED_LOADING_ID);
+            KoTextSharedLoadingData *textSharedData = 0;
+            textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
+            if (textSharedData) {
+                KoCharacterStyle *cs = textSharedData->characterStyle(dropstyle, true);
+                if (cs)
+                    setDropCapsTextStyleId(cs->styleId());
+            }
+        }
     }
 
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a paragraph.

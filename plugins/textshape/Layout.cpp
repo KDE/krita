@@ -501,6 +501,7 @@ bool Layout::nextParag()
         option.setTextDirection(Qt::RightToLeft);
     else
         option.setTextDirection(Qt::LeftToRight);
+
     layout->setTextOption(option);
 
     // drop caps
@@ -536,10 +537,12 @@ bool Layout::nextParag()
         dropCapsFormatRange.format = blockStart.charFormat();
 
         // find out lineHeight for this block.
+        QTextBlock::iterator it = m_block.begin();
+        QTextFragment lineRepresentative = it.fragment();
         qreal lineHeight = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
         qreal dropCapsHeight = 0;
         if (lineHeight == 0) {
-            lineHeight = blockStart.charFormat().fontPointSize();
+            lineHeight = lineRepresentative.charFormat().fontPointSize();
             qreal linespacing = m_format.doubleProperty(KoParagraphStyle::LineSpacing);
             if (linespacing == 0) { // unset
                 int percent = m_format.intProperty(KoParagraphStyle::PercentLineHeight);
@@ -551,12 +554,21 @@ bool Layout::nextParag()
             dropCapsHeight = linespacing * (dropCapsLines-1);
         }
         const qreal minimum = m_format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
-        if (minimum > 0.0)
+        if (minimum > 0.0) {
             lineHeight = qMax(lineHeight, minimum);
+        }
 
         dropCapsHeight += lineHeight * dropCapsLines;
 
-        QFont f(blockStart.charFormat().font(), m_parent->paintDevice());
+        int dropCapsStyleId = m_format.intProperty(KoParagraphStyle::DropCapsTextStyle);
+        KoCharacterStyle *dropCapsCharStyle = 0;
+        if (dropCapsStyleId > 0 && m_styleManager) {
+            dropCapsCharStyle = m_styleManager->characterStyle(dropCapsStyleId);
+            if (dropCapsCharStyle) {
+                dropCapsCharStyle->applyStyle(dropCapsFormatRange.format);
+            }
+        }
+        QFont f(dropCapsFormatRange.format.font(), m_parent->paintDevice());
         QString dropCapsText(m_block.text().left(dropCapsLength));
         f.setPointSizeF(dropCapsHeight);
         QChar lastChar = dropCapsText.at(dropCapsText.length()-1);

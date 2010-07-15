@@ -351,7 +351,7 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)
 
 void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& style)
 {
-    KoOdfLoadingContext& context = scontext.odfLoadingContext();
+    KoOdfLoadingContext &context = scontext.odfLoadingContext();
 
     // The text:level attribute specifies the level of the number list
     // style. It can be used on all list-level styles.

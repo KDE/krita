@@ -100,7 +100,7 @@ KoTextSharedLoadingData::~KoTextSharedLoadingData()
     delete d;
 }
 
-static void addDefaultParagraphStyle(KoOdfLoadingContext &context, const KoXmlElement *styleElem, const KoXmlElement *appDefault, KoStyleManager *styleManager)
+void KoTextSharedLoadingData::addDefaultParagraphStyle(KoShapeLoadingContext &context, const KoXmlElement *styleElem, const KoXmlElement *appDefault, KoStyleManager *styleManager)
 {
     if (styleManager && styleElem) {
         styleManager->defaultParagraphStyle()->loadOdf(styleElem, context);
@@ -123,16 +123,16 @@ void KoTextSharedLoadingData::loadOdfStyles(KoShapeLoadingContext &scontext, KoS
     addListStyles(scontext, context.stylesReader().autoStyles("list", true).values(), StylesDotXml);
     addListStyles(scontext, context.stylesReader().customStyles("list").values(), ContentDotXml | StylesDotXml, styleManager);
 
-    addDefaultParagraphStyle(context, context.stylesReader().defaultStyle("paragraph"), context.defaultStylesReader().defaultStyle("paragraph"), styleManager);
+    addDefaultParagraphStyle(scontext, context.stylesReader().defaultStyle("paragraph"), context.defaultStylesReader().defaultStyle("paragraph"), styleManager);
     // adding all the styles in order of dependency; automatic styles can have a parent in the named styles, so load the named styles first.
 
     // add office:styles from styles.xml to paragraphContentDotXmlStyles, paragraphStylesDotXmlStyles and styleManager
     // now all styles referencable from the body in content.xml is in paragraphContentDotXmlStyles
-    addParagraphStyles(context, context.stylesReader().customStyles("paragraph").values(), ContentDotXml | StylesDotXml, styleManager);
+    addParagraphStyles(scontext, context.stylesReader().customStyles("paragraph").values(), ContentDotXml | StylesDotXml, styleManager);
     // add office:automatic-styles in styles.xml to paragraphStylesDotXmlStyles
-    addParagraphStyles(context, context.stylesReader().autoStyles("paragraph", true).values(), StylesDotXml);
+    addParagraphStyles(scontext, context.stylesReader().autoStyles("paragraph", true).values(), StylesDotXml);
     // add office:automatic-styles in content.xml to paragraphContentDotXmlStyles
-    addParagraphStyles(context, context.stylesReader().autoStyles("paragraph").values(), ContentDotXml);
+    addParagraphStyles(scontext, context.stylesReader().autoStyles("paragraph").values(), ContentDotXml);
 
     addTableStyles(context, context.stylesReader().autoStyles("table").values(), ContentDotXml);
     addTableStyles(context, context.stylesReader().autoStyles("table", true).values(), StylesDotXml);
@@ -160,7 +160,7 @@ void KoTextSharedLoadingData::loadOdfStyles(KoShapeLoadingContext &scontext, KoS
     kDebug(32500) << "styles.xml:  paragraph styles" << d->paragraphStylesDotXmlStyles.count() << "character styles" << d->characterStylesDotXmlStyles.count();
 }
 
-void KoTextSharedLoadingData::addParagraphStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements,
+void KoTextSharedLoadingData::addParagraphStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements,
         int styleTypes, KoStyleManager *styleManager)
 {
     QList<QPair<QString, KoParagraphStyle *> > paragraphStyles(loadParagraphStyles(context, styleElements, styleTypes, styleManager));
@@ -176,7 +176,7 @@ void KoTextSharedLoadingData::addParagraphStyles(KoOdfLoadingContext &context, Q
     }
 }
 
-QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagraphStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements,
+QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagraphStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements,
         int styleTypes, KoStyleManager *styleManager)
 {
     QList<QPair<QString, KoParagraphStyle *> > paragraphStyles;

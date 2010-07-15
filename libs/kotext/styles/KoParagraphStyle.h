@@ -40,7 +40,7 @@ class KoStyleStack;
 class KoGenStyle;
 class KoGenStyles;
 #include "KoXmlReaderForward.h"
-class KoOdfLoadingContext;
+class KoShapeLoadingContext;
 #include "KoBorder.h"
 
 /**
@@ -70,7 +70,7 @@ public:
         DropCapsLength, ///< Number of glyphs to show as drop-caps
         DropCapsLines,  ///< Number of lines that the drop-caps span
         DropCapsDistance,   ///< Distance between drop caps and text
-        DropCapsTextStyle,  ///< Text style of dropped chars. Not supported yet.
+        DropCapsTextStyle,  ///< Text style of dropped chars.
         FollowDocBaseline,  ///< If true the baselines will be aligned with the doc-wide grid
 
         // border stuff
@@ -263,7 +263,7 @@ public:
      */
     void setDropCapsLines(int lines);
     /**
-     * set dropCapsLines
+     * The dropCapsLines
      * @see setDropCapsLines
      */
     int dropCapsLines() const;
@@ -275,10 +275,23 @@ public:
      */
     void setDropCapsDistance(qreal distance);
     /**
-     * Set dropCaps distance
+     * The dropCaps distance
      * @see setDropCapsDistance
      */
     qreal dropCapsDistance() const;
+
+    /**
+     * Set the style id of the text style used for dropcaps
+     * @see setDropCapsDistance
+     */
+    void setDropCapsTextStyleId(int id);
+
+    /**
+     * The style id of the text style used for dropcaps
+     * @see setDropCapsTextStyleId
+     */
+    int dropCapsTextStyleId() const;
+
     /**
      * If true the baselines will be aligned with the doc-wide grid
      */
@@ -503,6 +516,11 @@ public:
     /// set the character style for this paragraph style
     void setCharacterStyle(KoCharacterStyle *style);
 
+    /// return the dropcaps character style for this paragraph style
+    const QString dropCapsStyleName() const;
+    /// set the dropcaps character style for this paragraph style
+    void setDropCapsStyleName(QString styleName);
+
     /**
      * Returns the list style for this paragraph style.
      * @see KoListStyle::isValid()
@@ -535,7 +553,7 @@ public:
      * @param context the odf loading context
      * @param element the element containing the
      */
-    void loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context);
+    void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context);
 
     void saveOdf(KoGenStyle &style, KoGenStyles &mainStyles);
 
@@ -570,7 +588,7 @@ private:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOdfProperties(KoStyleStack &styleStack);
+    void loadOdfProperties(KoShapeLoadingContext &scontext);
     qreal propertyDouble(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;

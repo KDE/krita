@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -321,8 +322,6 @@ public:
      * paint an unstroked one-pixel wide line from specified start position to the
      * specified end position.
      *
-     * XXX: this method really should work with subpixel precision for start and end position
-     * XXX: this method does not use the composite op
      */
     void drawLine(const QPointF & start, const QPointF & end);
 
@@ -337,16 +336,12 @@ public:
      * Paint an unstroked, wobbly one-pixel wide line from the specified start to the specified
      * end position.
      *
-     * XXX: this method really should work with subpixel precision for start and end position
-     * XXX: this method does not use the composite op
      */
     void drawWobblyLine(const QPointF & start, const QPointF & end);
 
     /**
-     * Paint an unstroked, one-pixel wide line from the specified start to the specified
+     * Paint an unstroked, anti-aliased one-pixel wide line from the specified start to the specified
      * end position using the Wu algorithm
-     *
-     * XXX: this method does not use the composite op
      */
     void drawWuLine(const QPointF & start, const QPointF & end);
 

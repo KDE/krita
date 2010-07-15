@@ -4,7 +4,7 @@
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1127,48 +1127,39 @@ void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
     float fx = (x = x1);
     float fy = (y = y1);
     float m = (float)yd / (float)xd;
-
+    int inc;
+    
     if (fabs(m) > 1) {
-        int incr;
-        if (yd > 0) {
-            m = 1.0f / m;
-            incr = 1;
-        } else {
-            m = -1.0f / m;
-            incr = -1;
-        }
+        inc = (yd > 0) ? 1 : -1;
+        m = 1.0f / m;
+        m *= inc;    
         while (y != y2) {
             fx = fx + m;
-            y = y + incr;
+            y = y + inc;
+            x = qRound(fx);
 
-            x = (int)(fx + 0.5f);
             float br1 = int(fx + 1) - fx;
             float br2 = fx - (int)fx;
 
             accessor.moveTo(x, y);
             if (accessor.isSelected()) {
                 mycolor.setOpacity((quint8)(255*br1));
-                memcpy(accessor.rawData(), mycolor.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, mycolor.data() , pixelSize, 0,0,1,1,d->opacity);
             }
 
             accessor.moveTo(x + 1, y);
             if (accessor.isSelected()) {
                 mycolor.setOpacity((quint8)(255*br2));
-                memcpy(accessor.rawData(), mycolor.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, mycolor.data() , pixelSize, 0,0,1,1,d->opacity);
             }
         }
     } else {
-        int incr;
-        if (xd > 0) {
-            incr = 1;
-        } else {
-            incr = -1;
-            m = -m;
-        }
+        inc = (xd > 0) ? 1 : -1;
+        m *= inc;
         while (x != x2) {
             fy = fy + m;
-            x = x + incr;
-            y = (int)(fy + 0.5f);
+            x = x + inc;
+            y = qRound(fy);
 
             float br1 = int(fy + 1) - fy;
             float br2 = fy - (int)fy;
@@ -1176,13 +1167,13 @@ void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
             accessor.moveTo(x, y);
             if (accessor.isSelected()) {
                 mycolor.setOpacity((quint8)(255*br1));
-                memcpy(accessor.rawData(), mycolor.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, mycolor.data() , pixelSize, 0,0,1,1,d->opacity);
             }
 
             accessor.moveTo(x, y + 1);
             if (accessor.isSelected()) {
                 mycolor.setOpacity((quint8)(255*br2));
-                memcpy(accessor.rawData(), mycolor.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, mycolor.data() , pixelSize, 0,0,1,1,d->opacity);
             }
         }
     }
@@ -1207,7 +1198,6 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
     int ix1, ix2, iy1, iy2;
     quint8 c1, c2;
-    const float MaxPixelValue = 255.0f;
 
     // gradient of line
     xd = (x2 - x1);
@@ -1223,7 +1213,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
             ix1 = ix1 + incr;
             accessor.moveTo(ix1, iy1);
             if (accessor.isSelected()) {
-                memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1,d->opacity);
             }
         }
         return;
@@ -1239,7 +1229,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
             iy1 = iy1 + incr;
             accessor.moveTo(ix1, iy1);
             if (accessor.isSelected()) {
-                memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1,d->opacity);
             }
         }
         return;
@@ -1269,19 +1259,19 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
         brightness1 = invertFrac(yend) * xgap;
         brightness2 =       frac(yend) * xgap;
 
-        c1 = (int)(brightness1 * MaxPixelValue);
-        c2 = (int)(brightness2 * MaxPixelValue);
+        c1 = (int)(brightness1 * OPACITY_OPAQUE_U8);
+        c2 = (int)(brightness2 * OPACITY_OPAQUE_U8);
 
         accessor.moveTo(ix1, iy1);
         if (accessor.isSelected()) {
             lineColor.setOpacity(c1);
-            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+            d->compositeOp->composite(accessor.rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1,d->opacity);
         }
 
         accessor.moveTo(ix1, iy1 + 1);
         if (accessor.isSelected()) {
             lineColor.setOpacity(c2);
-            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+            d->compositeOp->composite(accessor.rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1,d->opacity);
         }
 
         // calc first Y-intersection for main loop
@@ -1298,38 +1288,38 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
         brightness1 = invertFrac(yend) * xgap;
         brightness2 =    frac(yend) * xgap;
 
-        c1 = (int)(brightness1 * MaxPixelValue);
-        c2 = (int)(brightness2 * MaxPixelValue);
+        c1 = (int)(brightness1 * OPACITY_OPAQUE_U8);
+        c2 = (int)(brightness2 * OPACITY_OPAQUE_U8);
 
         accessor.moveTo(ix2, iy2);
         if (accessor.isSelected()) {
             lineColor.setOpacity(c1);
-            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+            d->compositeOp->composite(accessor.rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1,d->opacity);
         }
 
         accessor.moveTo(ix2, iy2 + 1);
         if (accessor.isSelected()) {
             lineColor.setOpacity(c2);
-            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+            d->compositeOp->composite(accessor.rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1,d->opacity);
         }
 
         // main loop
         for (int x = ix1 + 1; x <= ix2 - 1; x++) {
             brightness1 = invertFrac(yf);
             brightness2 =    frac(yf);
-            c1 = (int)(brightness1 * MaxPixelValue);
-            c2 = (int)(brightness2 * MaxPixelValue);
+            c1 = (int)(brightness1 * OPACITY_OPAQUE_U8);
+            c2 = (int)(brightness2 * OPACITY_OPAQUE_U8);
 
             accessor.moveTo(x, int (yf));
             if (accessor.isSelected()) {
                 lineColor.setOpacity(c1);
-                memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1,d->opacity);
             }
 
             accessor.moveTo(x, int (yf) + 1);
             if (accessor.isSelected()) {
                 lineColor.setOpacity(c2);
-                memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1,d->opacity);
             }
 
             yf = yf + grad;
@@ -1360,19 +1350,19 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
         brightness1 = invertFrac(xend) * ygap;
         brightness2 =       frac(xend) * ygap;
 
-        c1 = (int)(brightness1 * MaxPixelValue);
-        c2 = (int)(brightness2 * MaxPixelValue);
+        c1 = (int)(brightness1 * OPACITY_OPAQUE_U8);
+        c2 = (int)(brightness2 * OPACITY_OPAQUE_U8);
 
         accessor.moveTo(ix1, iy1);
         if (accessor.isSelected()) {
             lineColor.setOpacity(c1);
-            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+            d->compositeOp->composite(accessor.rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1,d->opacity);
         }
 
         accessor.moveTo(x1 + 1, y1);
         if (accessor.isSelected()) {
             lineColor.setOpacity(c2);
-            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+            d->compositeOp->composite(accessor.rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1,d->opacity);
         }
 
         // calc first Y-intersection for main loop
@@ -1389,38 +1379,38 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
         brightness1 = invertFrac(xend) * ygap;
         brightness2 =    frac(xend) * ygap;
 
-        c1 = (int)(brightness1 * MaxPixelValue);
-        c2 = (int)(brightness2 * MaxPixelValue);
+        c1 = (int)(brightness1 * OPACITY_OPAQUE_U8);
+        c2 = (int)(brightness2 * OPACITY_OPAQUE_U8);
 
         accessor.moveTo(ix2, iy2);
         if (accessor.isSelected()) {
             lineColor.setOpacity(c1);
-            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+            d->compositeOp->composite(accessor.rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1,d->opacity);
         }
 
         accessor.moveTo(ix2 + 1, iy2);
         if (accessor.isSelected()) {
             lineColor.setOpacity(c2);
-            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+            d->compositeOp->composite(accessor.rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1,d->opacity);
         }
 
         // main loop
         for (int y = iy1 + 1; y <= iy2 - 1; y++) {
             brightness1 = invertFrac(xf);
             brightness2 =    frac(xf);
-            c1 = (int)(brightness1 * MaxPixelValue);
-            c2 = (int)(brightness2 * MaxPixelValue);
+            c1 = (int)(brightness1 * OPACITY_OPAQUE_U8);
+            c2 = (int)(brightness2 * OPACITY_OPAQUE_U8);
 
             accessor.moveTo(int (xf), y);
             if (accessor.isSelected()) {
                 lineColor.setOpacity(c1);
-                memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1,d->opacity);
             }
 
             accessor.moveTo(int (xf) + 1, y);
             if (accessor.isSelected()) {
                 lineColor.setOpacity(c2);
-                memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1,d->opacity);
             }
 
             xf = xf + grad;

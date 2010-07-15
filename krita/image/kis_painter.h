@@ -358,8 +358,6 @@ public:
      * the end.
      *
      * XXX: the width should be set in doubles, not integers.
-     * XXX: this method really should work with subpixel precision for start and end position
-     * XXX: this method does not use the composite op
      */
     void drawThickLine(const QPointF & start, const QPointF & end, int startWidth, int endWidth);
 

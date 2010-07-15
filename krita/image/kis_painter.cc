@@ -1447,8 +1447,6 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
     xfa, yfa, xfb, yfb, b1a, b2a, b1b, b2b, dx, dy;
     int x, y, ix1, ix2, iy1, iy2;
 
-    KoColor pix;
-
     int x0a, y0a, x1a, y1a, x0b, y0b, x1b, y1b;
     int tp0, tn0, tp1, tn1;
 
@@ -1465,10 +1463,10 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
     if (endWidth % 2 == 0) // even width endWidth
         tn1--;
 
-    int x0 = start.x();
-    int y0 = start.y();
-    int x1 = end.x();
-    int y1 = end.y();
+    int x0 = qRound(start.x());
+    int y0 = qRound(start.y());
+    int x1 = qRound(end.x());
+    int y1 = qRound(end.y());
 
     dx = x1 - x0; // run of general line
     dy = y1 - y0; // rise of general line
@@ -1493,13 +1491,13 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
         for (int i = y0a; i <= y0b; i++) {
             accessor.moveTo(x0, i);
             if (accessor.isSelected()) {
-                memcpy(accessor.rawData(), c1.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, c1.data() , pixelSize, 0,0,1,1,d->opacity);
             }
         }
         for (int i = y1a; i <= y1b; i++) {
             accessor.moveTo(x1, i);
             if (accessor.isSelected()) {
-                memcpy(accessor.rawData(), c1.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, c1.data() , pixelSize, 0,0,1,1,d->opacity);
             }
         }
 
@@ -1507,13 +1505,13 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
         for (int i = x0a; i <= x0b; i++) {
             accessor.moveTo(i, y0);
             if (accessor.isSelected()) {
-                memcpy(accessor.rawData(), c1.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, c1.data() , pixelSize, 0,0,1,1,d->opacity);
             }
         }
         for (int i = x1a; i <= x1b; i++) {
             accessor.moveTo(i, y1);
             if (accessor.isSelected()) {
-                memcpy(accessor.rawData(), c1.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, c1.data() , pixelSize, 0,0,1,1,d->opacity);
             }
         }
     }
@@ -1526,7 +1524,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                 qreal alpha = cs->opacityF(accessor.rawData());
                 opacity = .25 * c1.opacityF() + (1 - .25) * alpha;
                 col1.setOpacity(opacity);
-                memcpy(accessor.rawData(), col1.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1,d->opacity);
             }
 
             accessor.moveTo(x1b, y1b + 1);
@@ -1534,7 +1532,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                 qreal alpha = cs->opacityF(accessor.rawData());
                 opacity = .25 * c2.opacityF() + (1 - .25) * alpha;
                 col1.setOpacity(opacity);
-                memcpy(accessor.rawData(), col1.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1,d->opacity);
             }
 
         } else {
@@ -1543,7 +1541,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                 qreal alpha = cs->opacityF(accessor.rawData());
                 opacity = .25 * c1.opacityF() + (1 - .25) * alpha;
                 col1.setOpacity(opacity);
-                memcpy(accessor.rawData(), col1.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1,d->opacity);
             }
 
             accessor.moveTo(x1b + 1, y1b);
@@ -1551,7 +1549,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                 qreal alpha = cs->opacityF(accessor.rawData());
                 opacity = .25 * c2.opacityF() + (1 - .25) * alpha;
                 col1.setOpacity(opacity);
-                memcpy(accessor.rawData(), col1.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1,d->opacity);
             }
         }
     }
@@ -1609,7 +1607,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                 qreal alpha = cs->opacityF(accessor.rawData());
                 opacity = b1a * c3.opacityF() + (1 - b1a) * alpha;
                 col1.setOpacity(opacity);
-                memcpy(accessor.rawData(), col1.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1,d->opacity);
             }
 
             // color first pixel of top line
@@ -1619,7 +1617,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                     qreal alpha = cs->opacityF(accessor.rawData());
                     opacity = b1b * c3.opacityF() + (1 - b1b) * alpha;
                     col1.setOpacity(opacity);
-                    memcpy(accessor.rawData(), col1.data(), pixelSize);
+                    d->compositeOp->composite(accessor.rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1,d->opacity);
                 }
             }
 
@@ -1630,7 +1628,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                     qreal alpha = cs->opacityF(accessor.rawData());
                     opacity = b2a * c3.opacityF() + (1 - b2a)  * alpha;
                     col2.setOpacity(opacity);
-                    memcpy(accessor.rawData(), col2.data(), pixelSize);
+                    d->compositeOp->composite(accessor.rawData(), pixelSize, col2.data() , pixelSize, 0,0,1,1,d->opacity);
                 }
 
             }
@@ -1642,7 +1640,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                     qreal alpha = cs->opacityF(accessor.rawData());
                     opacity = b2b * c3.opacityF() + (1 - b2b) * alpha;
                     col2.setOpacity(opacity);
-                    memcpy(accessor.rawData(), col2.data(), pixelSize);
+                    d->compositeOp->composite(accessor.rawData(), pixelSize, col2.data() , pixelSize, 0,0,1,1,d->opacity);
                 }
 
             }
@@ -1653,14 +1651,14 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                     for (int i = yfa + 1; i <= yfb; i++) {
                         accessor.moveTo(x, i);
                         if (accessor.isSelected()) {
-                            memcpy(accessor.rawData(), c3.data(), pixelSize);
+                            d->compositeOp->composite(accessor.rawData(), pixelSize, c3.data() , pixelSize, 0,0,1,1,d->opacity);
                         }
                     }
                 else
                     for (int i = yfa + 1; i >= yfb; i--) {
                         accessor.moveTo(x, i);
                         if (accessor.isSelected()) {
-                            memcpy(accessor.rawData(), c3.data(), pixelSize);
+                            d->compositeOp->composite(accessor.rawData(), pixelSize, c3.data() , pixelSize, 0,0,1,1,d->opacity);
                         }
                     }
 
@@ -1711,7 +1709,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                 qreal alpha = cs->opacityF(accessor.rawData());
                 opacity = b1a * c3.opacityF() + (1 - b1a) * alpha;
                 col1.setOpacity(opacity);
-                memcpy(accessor.rawData(), col1.data(), pixelSize);
+                d->compositeOp->composite(accessor.rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1,d->opacity);
             }
 
             // color first pixel of right line
@@ -1721,7 +1719,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                     qreal alpha = cs->opacityF(accessor.rawData());
                     opacity = b1b * c3.opacityF() + (1 - b1b)  * alpha;
                     col1.setOpacity(opacity);
-                    memcpy(accessor.rawData(), col1.data(), pixelSize);
+                    d->compositeOp->composite(accessor.rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1,d->opacity);
                 }
             }
 
@@ -1732,7 +1730,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                     qreal alpha = cs->opacityF(accessor.rawData());
                     opacity = b2a * c3.opacityF() + (1 - b2a) * alpha;
                     col2.setOpacity(opacity);
-                    memcpy(accessor.rawData(), col2.data(), pixelSize);
+                    d->compositeOp->composite(accessor.rawData(), pixelSize, col2.data() , pixelSize, 0,0,1,1,d->opacity);
                 }
 
             }
@@ -1744,7 +1742,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                     qreal alpha = cs->opacityF(accessor.rawData());
                     opacity = b2b * c3.opacityF() + (1 - b2b) * alpha;
                     col2.setOpacity(opacity);
-                    memcpy(accessor.rawData(), col2.data(), pixelSize);
+                    d->compositeOp->composite(accessor.rawData(), pixelSize, col2.data() , pixelSize, 0,0,1,1,d->opacity);
                 }
             }
 
@@ -1754,14 +1752,14 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                     for (int i = (int) xfa + 1; i <= (int) xfb; i++) {
                         accessor.moveTo(i, y);
                         if (accessor.isSelected()) {
-                            memcpy(accessor.rawData(), c3.data(), pixelSize);
+                            d->compositeOp->composite(accessor.rawData(), pixelSize, c3.data() , pixelSize, 0,0,1,1,d->opacity);
                         }
                     }
                 else
                     for (int i = (int) xfb; i <= (int) xfa + 1; i++) {
                         accessor.moveTo(i, y);
                         if (accessor.isSelected()) {
-                            memcpy(accessor.rawData(), c3.data(), pixelSize);
+                            d->compositeOp->composite(accessor.rawData(), pixelSize, c3.data() , pixelSize, 0,0,1,1,d->opacity);
                         }
                     }
             }

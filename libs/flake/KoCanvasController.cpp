@@ -386,15 +386,14 @@ bool KoCanvasController::eventFilter(QObject *watched, QEvent *event)
 void KoCanvasController::ensureVisible(KoShape *shape)
 {
     Q_ASSERT(shape);
-    ensureVisible(shape->boundingRect());
+    ensureVisible(d->canvas->viewConverter()->documentToView(shape->boundingRect()));
 }
 
 void KoCanvasController::ensureVisible(const QRectF &rect, bool smooth)
 {
     QRect currentVisible(qMax(0, -canvasOffsetX()), qMax(0, -canvasOffsetY()), visibleWidth(), visibleHeight());
 
-    // convert the document based rect into a canvas based rect
-    QRect viewRect = d->canvas->viewConverter()->documentToView(rect).toRect();
+    QRect viewRect = rect.toRect();
     viewRect.translate(d->canvas->documentOrigin());
     if (!viewRect.isValid() || currentVisible.contains(viewRect))
         return; // its visible. Nothing to do.

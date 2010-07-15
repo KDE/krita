@@ -48,7 +48,7 @@ public:
     bool tabletPressed;
     bool hasSelection;
     QTimer scrollTimer;
-    QPointF scrollEdgePoint;
+    QPoint scrollEdgePoint;
     KoCanvasController *controller;
     KoToolProxy *parent;
 

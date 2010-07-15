@@ -570,7 +570,7 @@ void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
         if (mode == KoZoomMode::ZOOM_PAGE) {
             KoPageLayout &layout = d->activePage->pageLayout();
             QRectF pageRect( 0, 0, layout.width, layout.height );
-            d->canvasController->ensureVisible( pageRect );
+            d->canvasController->ensureVisible(d->canvas->viewConverter()->documentToView(pageRect));
         } else if (mode == KoZoomMode::ZOOM_WIDTH) {
             // horizontally center the page
             KoPageLayout &layout = d->activePage->pageLayout();

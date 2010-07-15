@@ -146,11 +146,12 @@ public:
     /**
      * @brief Scrolls the content of the canvas so that the given rect is visible.
      *
-     * The rect is to be specified in document coordinates. The scrollbar positions
+     * The rect is to be specified in view coordinates (pixels). The scrollbar positions
      * are changed so that the centerpoint of the rectangle is centered if possible.
      *
      * @param rect the rectangle to make visible
      * @param smooth if true the viewport translation will make be just enough to ensure visibility, no more.
+     * @see KoViewConverter::documentToView()
      */
     void ensureVisible(const QRectF &rect, bool smooth = false);
 

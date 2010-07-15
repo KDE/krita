@@ -50,9 +50,7 @@ void KoToolProxyPrivate::timeout() // Auto scroll the canvas
     Q_ASSERT(controller);
     int offsetX = controller->canvasOffsetX();
     int offsetY = controller->canvasOffsetY();
-    // get the points version of 10 pixels offset.
-    QPointF offset = controller->canvas()->viewConverter()->viewToDocument(QPointF(10, 10));
-    QRectF mouseArea(scrollEdgePoint, QSizeF(offset.x(), offset.y()));
+    QRectF mouseArea(scrollEdgePoint, QSizeF(10, 10));
     mouseArea.setTopLeft(mouseArea.center());
 
     controller->ensureVisible(mouseArea, true);
@@ -60,9 +58,9 @@ void KoToolProxyPrivate::timeout() // Auto scroll the canvas
     QPoint moved(offsetX - controller->canvasOffsetX(), offsetY - controller->canvasOffsetY());
     if (moved.x() == 0 && moved.y() == 0)
         return;
-    scrollEdgePoint += controller->canvas()->viewConverter()->viewToDocument(moved);
+    scrollEdgePoint += moved;
 
-    QMouseEvent event(QEvent::MouseMove, scrollEdgePoint.toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
+    QMouseEvent event(QEvent::MouseMove, scrollEdgePoint, Qt::LeftButton, Qt::LeftButton, 0);
     KoPointerEvent ev(&event, scrollEdgePoint);
     activeTool->mouseMoveEvent(&ev);
 }
@@ -74,7 +72,7 @@ void KoToolProxyPrivate::checkAutoScroll(const KoPointerEvent &event)
     if (!activeTool->wantsAutoScroll()) return;
     if (!event.isAccepted()) return;
     if (event.buttons() != Qt::LeftButton) return;
-    scrollEdgePoint = event.point;
+    scrollEdgePoint = event.point.toPoint();
     if (! scrollTimer.isActive())
         scrollTimer.start();
 }

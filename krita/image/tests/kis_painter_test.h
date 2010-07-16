@@ -30,6 +30,7 @@ class KisPainterTest : public QObject
 private:
 
     void allCsApplicator(void (KisPainterTest::* funcPtr)(const KoColorSpace*cs));
+    void testSimpleBlt(const KoColorSpace * cs);
     void testPaintDeviceBltSelection(const KoColorSpace * cs);
     void testPaintDeviceBltSelectionIrregular(const KoColorSpace * cs);
     void testPaintDeviceBltSelectionInverted(const KoColorSpace * cs);
@@ -39,6 +40,7 @@ private:
 
 private slots:
 
+    void testSimpleBlt();
     void testSelectionBltSelectionIrregular(); // Irregular selection
     void testPaintDeviceBltSelectionInverted(); // Inverted selection
     void testPaintDeviceBltSelectionIrregular(); // Irregular selection

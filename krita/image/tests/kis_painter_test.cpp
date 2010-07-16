@@ -61,6 +61,44 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoCo
     }
 }
 
+void KisPainterTest::testSimpleBlt(const KoColorSpace * cs)
+{
+
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+    KisPaintDeviceSP src = new KisPaintDevice(cs);
+    KoColor c(Qt::red, cs);
+    c.setOpacity(quint8(128));
+    src->fill(20, 20, 20, 20, c.data());
+
+    QCOMPARE(src->exactBounds(), QRect(20, 20, 20, 20));
+
+    const KoCompositeOp* op;
+
+    {
+        op = cs->compositeOp(COMPOSITE_OVER);
+        KisPainter painter(dst);
+        painter.setCompositeOp(op);
+        painter.bitBlt(50, 50, src, 20, 20, 20, 20);
+        painter.end();
+        QCOMPARE(dst->exactBounds(), QRect(50,50,20,20));
+    }
+
+    dst->clear();
+
+    {
+        op = cs->compositeOp(COMPOSITE_COPY);
+        KisPainter painter(dst);
+        painter.setCompositeOp(op);
+        painter.bitBlt(50, 50, src, 20, 20, 20, 20);
+        painter.end();
+        QCOMPARE(dst->exactBounds(), QRect(50,50,20,20));
+    }
+}
+
+void KisPainterTest::testSimpleBlt()
+{
+    allCsApplicator(&KisPainterTest::testSimpleBlt);
+}
 
 /*
 

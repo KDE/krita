@@ -64,6 +64,7 @@ QPainterPath KisBoundary::boundary() const
     QPainterPath path;
     foreach(const QPolygon & polygon, d->m_boundary) {
         path.addPolygon(polygon);
+        path.closeSubpath();
     }
     return path;
 }

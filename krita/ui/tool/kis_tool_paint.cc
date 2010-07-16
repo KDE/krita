@@ -82,6 +82,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
     connect(kiscanvas->view()->resourceProvider(), SIGNAL(sigCompositeOpChanged(QString)), this, SLOT(slotSetCompositeMode(QString))); 
+    slotSetCompositeMode(kiscanvas->view()->resourceProvider()->currentCompositeOp());
 }
 
 

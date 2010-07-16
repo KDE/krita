@@ -87,6 +87,12 @@ public:
      */
     virtual bool isEmpty() = 0;
 
+    /**
+     * The update scheduler will tell us when
+     * it is nessesary to reread configuration
+     */
+    virtual void updateSettings() = 0;
+
 protected:
     /**
      * Process one job of the queue.

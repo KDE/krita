@@ -65,21 +65,23 @@
 #include "kis_crop_visitor.h"
 #include "kis_meta_data_merge_strategy.h"
 
+#include "kis_image_config.h"
 #include "kis_projection.h"
 #include "kis_update_scheduler.h"
 
 
-#define USE_UPDATE_SCHEDULER
-
 KisAbstractUpdateScheduler* createUpdateScheduler(KisImageWSP image)
 {
-#ifdef USE_UPDATE_SCHEDULER
-    dbgImage<<"Creating KisUpdateScheduler";
-    return new KisUpdateScheduler(image);
-#else
-    dbgImage<<"Created KisProjection";
-    return new KisProjection(image);
-#endif
+    KisImageConfig config;
+
+    if(config.useUpdateScheduler()) {
+        dbgImage<<"Creating KisUpdateScheduler";
+        return new KisUpdateScheduler(image);
+    }
+    else {
+        dbgImage<<"Created KisProjection";
+        return new KisProjection(image);
+    }
 }
 
 

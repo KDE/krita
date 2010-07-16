@@ -39,6 +39,8 @@ public:
 
     bool isEmpty();
 
+    void updateSettings();
+
 protected:
     bool processOneJob(KisUpdaterContext &updaterContext);
 
@@ -50,8 +52,38 @@ protected:
     bool joinRects(QRect& baseRect, const QRect& newRect, qreal maxAlpha);
 
 protected:
+
     QMutex m_lock;
     KisWalkersList m_list;
+
+    /**
+     * Parameters of optimization
+     * (loaded from a configuration file)
+     */
+
+    /**
+     * Big update areas are split into a set of smaller
+     * ones, m_patchWidth and m_patchHeight represent the
+     * size of these areas.
+     */
+    qint32 m_patchWidth;
+    qint32 m_patchHeight;
+
+    /**
+     * Maximum coefficient of work while regular optimization()
+     */
+    qreal m_maxCollectAlpha;
+
+    /**
+     * Maximum coefficient of work when to rects are considered
+     * similar and are merged in tryMergeJob()
+     */
+    qreal m_maxMergeAlpha;
+
+    /**
+     * The coefficient of work used while collecting phase of tryToMerge()
+     */
+    qreal m_maxMergeCollectAlpha;
 };
 
 class KRITAIMAGE_EXPORT KisTestableSimpleUpdateQueue : public KisSimpleUpdateQueue

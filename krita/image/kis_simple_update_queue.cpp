@@ -20,12 +20,8 @@
 
 #include <QMutexLocker>
 
-#define MAX_COLLECT_ALPHA 2.5
-#define MAX_MERGE_ALPHA 1
-#define MAX_MERGE_COLLECT_ALPHA 1.5
+#include "kis_image_config.h"
 
-#define PATCH_WIDTH 512
-#define PATCH_HEIGHT 512
 
 //#define ENABLE_DEBUG_JOIN
 //#define ENABLE_ACCUMULATOR
@@ -56,10 +52,23 @@
 
 KisSimpleUpdateQueue::KisSimpleUpdateQueue()
 {
+    updateSettings();
 }
 
 KisSimpleUpdateQueue::~KisSimpleUpdateQueue()
 {
+}
+
+void KisSimpleUpdateQueue::updateSettings()
+{
+    KisImageConfig config;
+
+    m_patchWidth = config.updatePatchWidth();
+    m_patchHeight = config.updatePatchHeight();
+
+    m_maxCollectAlpha = config.maxCollectAlpha();
+    m_maxMergeAlpha = config.maxMergeAlpha();
+    m_maxMergeCollectAlpha = config.maxMergeCollectAlpha();
 }
 
 bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
@@ -105,21 +114,21 @@ bool KisSimpleUpdateQueue::isEmpty()
 
 bool KisSimpleUpdateQueue::trySplitJob(KisNodeSP node, const QRect& rc, const QRect& cropRect)
 {
-    if(rc.width() <= PATCH_WIDTH || rc.height() <= PATCH_HEIGHT)
+    if(rc.width() <= m_patchWidth || rc.height() <= m_patchHeight)
         return false;
 
     // a bit of recursive splitting...
 
-    qint32 firstCol = rc.x() / PATCH_WIDTH;
-    qint32 firstRow = rc.y() / PATCH_HEIGHT;
+    qint32 firstCol = rc.x() / m_patchWidth;
+    qint32 firstRow = rc.y() / m_patchHeight;
 
-    qint32 lastCol = (rc.x() + rc.width()) / PATCH_WIDTH;
-    qint32 lastRow = (rc.y() + rc.height()) / PATCH_HEIGHT;
+    qint32 lastCol = (rc.x() + rc.width()) / m_patchWidth;
+    qint32 lastRow = (rc.y() + rc.height()) / m_patchHeight;
 
     for(qint32 i = firstRow; i <= lastRow; i++) {
         for(qint32 j = firstCol; j <= lastCol; j++) {
-            QRect maxPatchRect(j * PATCH_WIDTH, i * PATCH_HEIGHT,
-                               PATCH_WIDTH, PATCH_HEIGHT);
+            QRect maxPatchRect(j * m_patchWidth, i * m_patchHeight,
+                               m_patchWidth, m_patchHeight);
             QRect patchRect = rc & maxPatchRect;
             addJob(node, patchRect, cropRect);
         }
@@ -149,14 +158,14 @@ bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc)
 
         if(item->startNode() != node) continue;
 
-        if(joinRects(baseRect, item->requestedRect(), MAX_MERGE_ALPHA)) {
+        if(joinRects(baseRect, item->requestedRect(), m_maxMergeAlpha)) {
             goodCandidate = item;
             break;
         }
     }
 
     if(goodCandidate)
-        collectJobs(goodCandidate, baseRect, node, MAX_MERGE_COLLECT_ALPHA);
+        collectJobs(goodCandidate, baseRect, node, m_maxMergeCollectAlpha);
 
     return (bool)goodCandidate;
 }
@@ -171,7 +180,7 @@ void KisSimpleUpdateQueue::optimize()
     QRect baseRect = baseWalker->requestedRect();
     KisNodeSP baseNode = baseWalker->startNode();
 
-    collectJobs(baseWalker, baseRect, baseNode, MAX_COLLECT_ALPHA);
+    collectJobs(baseWalker, baseRect, baseNode, m_maxCollectAlpha);
 }
 
 void KisSimpleUpdateQueue::collectJobs(KisBaseRectsWalkerSP &baseWalker,
@@ -202,7 +211,7 @@ bool KisSimpleUpdateQueue::joinRects(QRect& baseRect,
                                      const QRect& newRect, qreal maxAlpha)
 {
     QRect unitedRect = baseRect | newRect;
-    if(unitedRect.width() > PATCH_WIDTH || unitedRect.height() > PATCH_HEIGHT)
+    if(unitedRect.width() > m_patchWidth || unitedRect.height() > m_patchHeight)
         return false;
 
     bool result = false;

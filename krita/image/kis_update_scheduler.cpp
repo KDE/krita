@@ -23,11 +23,12 @@
 #include "kis_simple_update_queue.h"
 
 KisUpdateScheduler::KisUpdateScheduler(KisImageWSP image)
-    : m_image(image)
+    : m_image(image),
+      m_workQueue(0)
 {
-    /**
-     * FIXME: Make queues configurable with a factory
-     */
+    updateSettings();
+
+    // The queue will update settings in a constructor itself
     m_workQueue = new KisSimpleUpdateQueue();
 
     connect(&m_updaterContext, SIGNAL(sigContinueUpdate(const QRect&)),
@@ -64,6 +65,9 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root)
 
 void KisUpdateScheduler::updateSettings()
 {
+    if(m_workQueue) {
+        m_workQueue->updateSettings();
+    }
 }
 
 void KisUpdateScheduler::lock()

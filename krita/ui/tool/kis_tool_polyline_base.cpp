@@ -152,7 +152,9 @@ void KisToolPolylineBase::finish()
 
     m_dragging = false;
     updateArea();
-    finishPolyline(m_points);
+    if(m_points.count() > 1) {
+        finishPolyline(m_points);
+    }
     m_points.clear();
 }
 

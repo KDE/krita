@@ -86,7 +86,7 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
 
 void KisColorSelectorContainer::updateSettings()
 {
-    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     m_shadeSelectorHideable = cfg.readEntry("shadeSelectorHideable", false);
     m_allowHorizontalLayout = cfg.readEntry("allowHorizontalLayout", true);
 

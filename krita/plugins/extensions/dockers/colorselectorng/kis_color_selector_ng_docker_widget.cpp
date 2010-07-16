@@ -70,7 +70,7 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
 
     //emit settingsChanged() if the settings are changed in krita preferences
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
-    KisColorSelectorSettings* settings = dynamic_cast<KisColorSelectorSettings*>(preferenceSetRegistry->get("extendedColorSelectorSettings"));
+    KisColorSelectorSettings* settings = dynamic_cast<KisColorSelectorSettings*>(preferenceSetRegistry->get("advancedColorSelector"));
     Q_ASSERT(settings);
 
     connect(settings, SIGNAL(settingsChanged()), this,                     SIGNAL(settingsChanged()));
@@ -104,7 +104,7 @@ void KisColorSelectorNgDockerWidget::openSettings()
 
 void KisColorSelectorNgDockerWidget::updateLayout()
 {
-    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
 
     //color patches

@@ -146,7 +146,7 @@ void KisColorPatches::setAdditionalButtons(QList<QWidget*> buttonList)
 
 void KisColorPatches::updateSettings()
 {
-    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     m_allowScrolling = cfg.readEntry(m_configPrefix+"AllowScrolling", true);
 
     if(cfg.readEntry(m_configPrefix+"Alignment", false))

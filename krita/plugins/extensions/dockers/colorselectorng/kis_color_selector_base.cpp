@@ -215,7 +215,7 @@ const KoColorSpace* KisColorSelectorBase::colorSpace()
 
 void KisColorSelectorBase::updateSettings()
 {
-    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
     if(cfg.readEntry("useCustomColorSpace", true)) {
         KoColorSpaceRegistry* csr = KoColorSpaceRegistry::instance();

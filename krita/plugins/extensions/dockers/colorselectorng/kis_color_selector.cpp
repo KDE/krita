@@ -82,7 +82,7 @@ KisColorSelector::Configuration KisColorSelector::configuration() const
 void KisColorSelector::updateSettings()
 {
     KisColorSelectorBase::updateSettings();
-    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     setConfiguration(Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelector::Configuration().toString())));
 }
 

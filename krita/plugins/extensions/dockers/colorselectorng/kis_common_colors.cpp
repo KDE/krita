@@ -60,7 +60,7 @@ void KisCommonColors::setCanvas(KisCanvas2 *canvas)
     // make optional
     
     m_canvas = canvas;
-    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     if(cfg.readEntry("commonColorsAutoUpdate", false))
         connect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()));
 }

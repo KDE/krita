@@ -63,7 +63,7 @@ KisColorSelectorSettings::~KisColorSelectorSettings()
 
 QString KisColorSelectorSettings::id()
 {
-    return QString("extendedColorSelectorSettings");
+    return QString("advancedColorSelector");
 }
 
 QString KisColorSelectorSettings::name()
@@ -86,7 +86,7 @@ KIcon KisColorSelectorSettings::icon()
 void KisColorSelectorSettings::savePreferences() const
 {
     //write cfg
-    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
     //general
     cfg.writeEntry("shadeSelectorHideable", ui->shadeSelectorHideable->isChecked());
@@ -150,7 +150,7 @@ void KisColorSelectorSettings::loadPreferences()
     //read cfg
     //don't forget to also add a new entry to the default preferences
 
-    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
     //general
 

@@ -28,7 +28,7 @@
 
 K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportBarcodePlugin, barcodeplugin)
 
-KoReportBarcodePlugin::KoReportBarcodePlugin(QObject *parent, const QVariantList &args ) : KoReportPluginInterface(parent)
+KoReportBarcodePlugin::KoReportBarcodePlugin(QObject *parent, const QVariantList &/*args */) : KoReportPluginInterface(parent)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:barcode");

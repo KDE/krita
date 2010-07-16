@@ -297,13 +297,16 @@ signals:
 
     /**
      * Emitted when the cursor is moved over the canvas widget.
-     * @param position the position in widget pixels.
+     * @param position the position in view coordinates (pixels).
      */
     void canvasMousePositionChanged(const QPoint &position);
 
     /**
      * Emitted when the cursor is moved over the canvas widget.
      * @param position the position in document coordinates.
+     *
+     * Use \ref canvasMousePositionChanged to get the position
+     * in view coordinates.
      */
     void documentMousePositionChanged(const QPointF &position);
 

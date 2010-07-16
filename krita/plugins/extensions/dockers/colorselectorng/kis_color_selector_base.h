@@ -47,10 +47,12 @@ protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     virtual KisColorSelectorBase* createPopup() const = 0;
+    virtual void setColor(QColor color);
 
 protected slots:
     void hidePopup();
     void commitColor(QColor color, ColorRole role);
+    void resourceChanged(int key, const QVariant& v);
 
 private:
     KisColorSelectorBase* m_popup;

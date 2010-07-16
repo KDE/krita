@@ -80,6 +80,11 @@ void KisColorSelectorBase::setColorSpace(const KoColorSpace *colorSpace)
 void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
 {
     m_canvas = canvas;
+
+    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
+            this,                        SLOT(resourceChanged(int, const QVariant&)));
+    setColor(m_canvas->resourceManager()->foregroundColor().toQColor());
+
     update();
 }
 
@@ -184,6 +189,9 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
+void KisColorSelectorBase::setColor(QColor color)
+{}
+
 void KisColorSelectorBase::hidePopup()
 {
     if(parent()==0)
@@ -194,8 +202,21 @@ void KisColorSelectorBase::hidePopup()
 
 void KisColorSelectorBase::commitColor(QColor color, ColorRole role)
 {
-    Q_UNUSED(color);
-    Q_UNUSED(role);
+    Q_ASSERT(m_canvas);
+    if (!m_canvas)
+        return;
+
+    if (role==Foreground)
+        m_canvas->resourceManager()->setForegroundColor(KoColor(color , colorSpace()));
+    else
+        m_canvas->resourceManager()->setBackgroundColor(KoColor(color , colorSpace()));
+}
+
+void KisColorSelectorBase::resourceChanged(int key, const QVariant &v)
+{
+    if (key == KoCanvasResource::ForegroundColor || key == KoCanvasResource::BackgroundColor) {
+        setColor(v.value<KoColor>().toQColor());
+    }
 }
 
 const KoColorSpace* KisColorSelectorBase::colorSpace()

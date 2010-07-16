@@ -106,6 +106,9 @@ void KisColorSelectorSimple::paint(QPainter* painter)
             }
         }
 
+        if(m_lastClickPos!=QPoint(-1,-1))
+            updateLastColor(colorAt(m_lastClickPos.x(), m_lastClickPos.y()));
+
         //antialiasing for wheel
         if(m_type==KisColorSelector::Wheel) {
             QPainter tmpPainter(&m_pixelCache);

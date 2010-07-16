@@ -70,8 +70,15 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 {
     KisColorSelectorBase::mousePressEvent(e);
 
-    if(!e->isAccepted())
-        pickColorAt(e->x(), e->y());
+    if(!e->isAccepted()) {
+        QColor color = pickColorAt(e->x(), e->y());
+
+        ColorRole role=Foreground;
+        if(e->buttons()&Qt::RightButton)
+            role=Background;
+
+        commitColor(color, role);
+    }
 
 }
 
@@ -83,8 +90,10 @@ QColor KisMyPaintShadeSelector::pickColorAt(int x, int y)
     //set the internal color the one on pos x/y
     calculatePos(x*ratio, y*ratio);
 
+    QColor color=m_qcolor;
+
     //change the color of the selector to the one calculated above
-    setColor(m_qcolor);
+    setColor(color);
 
     //repaint the cache
     updateSelector();
@@ -92,7 +101,7 @@ QColor KisMyPaintShadeSelector::pickColorAt(int x, int y)
     //repaint the widget
     update();
 
-    return m_qcolor;
+    return color;
 }
 
 KisColorSelectorBase* KisMyPaintShadeSelector::createPopup() const

@@ -19,6 +19,7 @@
 #define KIS_COLOR_SELECTOR_COMPONENT_H
 
 #include <QObject>
+#include <QColor>
 
 class KoColorSpace;
 class KisColorSelectorBase;
@@ -26,7 +27,7 @@ class KisColorSelectorBase;
 class QMouseEvent;
 class QPainter;
 class QResizeEvent;
-class QColor;
+
 
 class KisColorSelectorComponent : public QObject
 {
@@ -35,7 +36,11 @@ public:
     explicit KisColorSelectorComponent(KisColorSelectorBase* parent);
     void setGeometry(int x, int y, int width, int height);
     void paintEvent(QPainter*);
+
+    /// should create a marker on the correct position
     void mouseEvent(int x, int y);
+
+    /// return the color, that was selected by calling mouseEvent
     virtual QColor currentColor();
     int width() const;
     int height() const;
@@ -64,6 +69,10 @@ protected:
     /// have to care about x/y coordinates (top left corner)
     virtual void paint(QPainter*) = 0;
 
+    /// this should be used to update the last color, if one of the parameters has changed
+    /// the logic for doing this should be moved to this class
+    void updateLastColor(QColor c);
+
     qreal parameter1() const;
     qreal parameter2() const;
 private:
@@ -76,6 +85,7 @@ private:
     qreal m_param2;
     bool m_dirty;
     const KoColorSpace* m_lastColorSpace;
+    QColor m_lastColor;
 };
 
 #endif // KIS_COLOR_SELECTOR_COMPONENT_H

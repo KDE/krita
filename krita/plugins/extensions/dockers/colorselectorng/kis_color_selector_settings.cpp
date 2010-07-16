@@ -23,6 +23,9 @@
 #include <KIcon>
 #include "kis_color_selector_type_widget.h"
 #include "kis_color_selector.h"
+#include "KoColorSpace.h"
+#include "KoColorSpaceRegistry.h"
+#include "KoColorProfile.h"
 
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
@@ -92,6 +95,14 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("popupOnMouseClick", ui->popupOnMouseClick->isChecked());
     cfg.writeEntry("zoomSize", ui->popupSize->value());
 
+    cfg.writeEntry("useCustomColorSpace", ui->useCustomColorSpace->isChecked());
+    const KoColorSpace* colorSpace = ui->colorSpace->currentColorSpace();
+    if(colorSpace) {
+        cfg.writeEntry("customColorSpaceModel", colorSpace->colorModelId().id());
+        cfg.writeEntry("customColorSpaceDepthID", colorSpace->colorDepthId().id());
+        cfg.writeEntry("customColorSpaceProfile", colorSpace->profile()->name());
+    }
+
     //color patches
     cfg.writeEntry("lastUsedColorsShow", ui->lastUsedColorsShow->isChecked());
     cfg.writeEntry("lastUsedColorsAlignment", ui->lastUsedColorsAlignVertical->isChecked());
@@ -153,6 +164,14 @@ void KisColorSelectorSettings::loadPreferences()
     else
         ui->shrunkenDoNothing->setChecked(true);
 
+    if(cfg.readEntry("useCustomColorSpace", true))
+        ui->useCustomColorSpace->setChecked(true);
+    else
+        ui->useImageColorSpace->setChecked(true);
+
+    ui->colorSpace->setCurrentColorModel(KoID(cfg.readEntry("customColorSpaceModel", "RGBA")));
+    ui->colorSpace->setCurrentColorDepth(KoID(cfg.readEntry("customColorSpaceDepthID", "U8")));
+    ui->colorSpace->setCurrentProfile(cfg.readEntry("customColorSpaceProfile", "sRGB built-in - (lcms internal)"));
 
     a = cfg.readEntry("popupOnMouseOver", false);
     b = cfg.readEntry("popupOnMouseClick", true);
@@ -210,8 +229,12 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->popupOnMouseClick->setChecked(true);
     ui->popupOnMouseOver->setChecked(false);
     ui->neverZoom->setChecked(false);
-
     ui->popupSize->setValue(280);
+
+    ui->useImageColorSpace->setChecked(true);
+    ui->colorSpace->setCurrentColorModel(KoID("RGBA"));
+    ui->colorSpace->setCurrentColorDepth(KoID("U8"));
+    ui->colorSpace->setCurrentProfile("sRGB built-in - (lcms internal)");
 
     //color patches
     ui->lastUsedColorsShow->setChecked(true);

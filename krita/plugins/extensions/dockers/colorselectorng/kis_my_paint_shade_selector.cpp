@@ -42,7 +42,7 @@ inline int signedSqr(int x);
 
 KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
         KisColorSelectorBase(parent),
-        m_selector(m_size, m_size, QImage::Format_ARGB32_Premultiplied),
+        m_pixelCache(m_size, m_size, QImage::Format_ARGB32_Premultiplied),
         m_initialised(false)
 {
     precalculateData();
@@ -52,16 +52,17 @@ KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
 }
 
 void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
-    if (m_initialised == false) {
+    if (m_initialised == false || m_pixelCacheColorSpace!=colorSpace()) {
         // if this is the first paintEvent, then we have to updated the cache before painting.
         // this isn't possible in the constructor, because we don't have the colorspace.
         updateSelector();
         m_initialised = true;
     }
 
+
     QPainter painter(this);
     QRect target(0, 0, qMin(width(), height()), qMin(width(), height()));
-    painter.drawImage(target, m_selector, m_selector.rect());
+    painter.drawImage(target, m_pixelCache, m_pixelCache.rect());
 }
 
 
@@ -186,10 +187,7 @@ void KisMyPaintShadeSelector::precalculateData() {
 
 void KisMyPaintShadeSelector::updateSelector() {
     Q_ASSERT(colorSpace());
-//    if(colorSpace()==0) {
-//        m_selector.fill(qRgb(255,255,255));
-//        return;
-//    }
+    m_pixelCacheColorSpace=colorSpace();
 
     KoColor kocolor(colorSpace());
     for(int i=0; i<m_size; i++) {
@@ -198,7 +196,7 @@ void KisMyPaintShadeSelector::updateSelector() {
             kocolor.fromQColor(m_qcolor);
             kocolor.toQColor(&m_qcolor);
 
-            m_selector.setPixel(i, j, m_qcolor.rgb());
+            m_pixelCache.setPixel(i, j, m_qcolor.rgb());
         }
     }
 }

@@ -22,8 +22,14 @@
 #include <QDesktopWidget>
 #include <QTimer>
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KComponentData>
+#include <KGlobal>
+
 #include <KDebug>
 #include "KoColorSpace.h"
+#include "KoColorSpaceRegistry.h"
 
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
@@ -208,4 +214,17 @@ const KoColorSpace* KisColorSelectorBase::colorSpace()
 }
 
 void KisColorSelectorBase::updateSettings()
-{}
+{
+    KConfigGroup cfg = KGlobal::config()->group("extendedColorSelector");
+
+    if(cfg.readEntry("useCustomColorSpace", true)) {
+        KoColorSpaceRegistry* csr = KoColorSpaceRegistry::instance();
+        m_colorSpace = csr->colorSpace(cfg.readEntry("customColorSpaceModel", "RGBA"),
+                                                         cfg.readEntry("customColorSpaceDepthID", "U8"),
+                                                         cfg.readEntry("customColorSpaceProfile", "sRGB built-in - (lcms internal)"));
+    }
+    else {
+        m_colorSpace=0;
+        // the colorspace will be retrieved next time by calling colorSpace()
+    }
+}

@@ -51,7 +51,8 @@ private:
     PrecalcData m_precalcData[256][256];
     void calculatePos(int x, int y);
 
-    QImage m_selector;
+    QImage m_pixelCache;
+    const KoColorSpace* m_pixelCacheColorSpace;
     QColor m_qcolor;
     bool m_initialised;
 };

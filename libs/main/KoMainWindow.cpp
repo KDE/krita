@@ -1329,7 +1329,15 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
         if (dialog.exec() != QDialog::Accepted)
             return 0;
         KUrl url(dialog.selectedUrl());
-        // TODO warn when overwriting
+        if (KIO::NetAccess::exists(url,  KIO::NetAccess::DestinationSide, this)) {
+            bool overwrite = KMessageBox::questionYesNo(this,
+                                            i18n("A document with this name already exists.\n"\
+                                                "Do you want to overwrite it?"),
+                                            i18n("Warning")) == KMessageBox::Yes;
+            if (!overwrite) {
+                return 0;
+            }
+        }
         pdfFileName = url.toLocalFile();
     }
 

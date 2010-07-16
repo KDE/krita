@@ -112,7 +112,7 @@ public:
 
 public slots:
     /**
-     * gets this AdjustmentLayer. Overriddes function in
+     * gets this AdjustmentLayer. Overrides function in
      * KisIndirectPaintingSupport
      * @return this AdjustmentLayer
      */

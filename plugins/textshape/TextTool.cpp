@@ -968,9 +968,10 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) // delete prev word.
                 textEditor->movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
             if (m_actionRecordChanges->isChecked())
-              textEditor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar, this));
+                textEditor->addCommand(new ChangeTrackedDeleteCommand(
+                            ChangeTrackedDeleteCommand::PreviousChar, this));
             else
-              textEditor->addCommand(new DeleteCommand(DeleteCommand::PreviousChar, this));
+                textEditor->addCommand(new DeleteCommand(DeleteCommand::PreviousChar, this));
             editingPluginEvents();
         }
         ensureCursorVisible();

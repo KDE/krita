@@ -68,7 +68,7 @@ void DeleteCommand::redo()
         KoTextEditor *textEditor = m_tool->m_textEditor.data();
         if (textEditor) {
             textEditor->beginEditBlock();
-            if(m_mode == PreviousChar)
+            if (m_mode == PreviousChar)
                 deletePreviousChar();
             else
                 deleteChar();
@@ -127,12 +127,12 @@ void DeleteCommand::deleteSelection(QTextCursor &selection)
         cursor.setPosition(i+1);
         currFormat = cursor.charFormat();
 
-        if ( i == m_position ) {
+        if (i == m_position ) {
             firstFormat = currFormat;
             continue;
         }
 
-        if ( currFormat != firstFormat) {
+        if (currFormat != firstFormat) {
             m_multipleFormatDeletion = true;
             break;
         }

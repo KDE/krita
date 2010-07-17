@@ -97,7 +97,12 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     qreal thresholdDistance =  radius * radius;
     // shaded: probabity : paint always - 0.0 density
     qreal density = thresholdDistance * m_sketchProperties.probability;
-
+    
+    QColor painterColor = painter()->paintColor().toQColor();
+    QColor randomColor;
+    KoColor color(m_dab->colorSpace());
+    
+    
     for (int i = 0; i < size; i++){
             diff = m_points.at(i) - m_points.at(m_count);
             // chrome : diff 0.2, sketchy : 0.3, fur: 0.5
@@ -116,6 +121,15 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
                 // from: count + offset * -random
                 // to: i point - (offset * -random)  + random * 2
                 // probability distance / thresholdDistnace
+
+                randomColor.setRgbF(drand48() * painterColor.redF(),
+                                    drand48() * painterColor.greenF(),
+                                    drand48() * painterColor.blueF()
+                                    );
+                color.fromQColor(randomColor);
+                m_painter->setPaintColor(color);
+                m_painter->setOpacity(drand48() * OPACITY_OPAQUE_U8);
+                
                 if (m_sketchProperties.magnetify){
                     m_painter->drawThickLine(m_points.at(m_count) + offsetPt,
                                          m_points.at(i) - offsetPt,

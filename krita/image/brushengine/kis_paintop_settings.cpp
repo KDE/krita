@@ -179,8 +179,16 @@ KisPaintOpSettingsWidget* KisPaintOpSettings::optionsWidget() const
     return d->settingsWidget.data();
 }
 
-QPainterPath KisPaintOpSettings::brushOutline() const
+QPainterPath KisPaintOpSettings::brushOutline(OutlineMode mode) const
 {
-    return QPainterPath();
+    QPainterPath path;
+    if (mode == CURSOR_IS_OUTLINE){
+        QRectF rc(-5,-5, 10, 10);
+        path.moveTo(rc.topLeft());
+        path.lineTo(rc.bottomRight());
+        path.moveTo(rc.topRight());
+        path.lineTo(rc.bottomLeft());
+    }
+    return path;
 }
 

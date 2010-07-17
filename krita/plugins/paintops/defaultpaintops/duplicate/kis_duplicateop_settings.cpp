@@ -137,11 +137,18 @@ QRectF KisDuplicateOpSettings::duplicateOutlineRect(const QPointF& pos, KisImage
 
 QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {    
-    QRectF dubRect = duplicateOutlineRect(pos, image);
+    /*QRectF dubRect = duplicateOutlineRect(pos, image);
     if (_mode == CURSOR_IS_OUTLINE) {
         dubRect |= KisBrushBasedPaintOpSettings::paintOutlineRect(pos, image, _mode);
     }
-    return dubRect;
+    return dubRect;*/
+    
+    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
+    
+    QPointF hotSpot = KisBrushBasedPaintOpSettings::brushOutline(_mode).boundingRect().center();
+    QRectF boundRect = brushOutline(_mode).boundingRect();
+    return image->pixelToDocument(boundRect.translated(-hotSpot)).translated(pos);
+    
 }
 
 void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
@@ -155,9 +162,10 @@ void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image,
 
 }
 
-QPainterPath KisDuplicateOpSettings::brushOutline() const
+QPainterPath KisDuplicateOpSettings::brushOutline(OutlineMode mode) const
 {
-    QPainterPath path = KisBrushBasedPaintOpSettings::brushOutline();
+    QPainterPath path; 
+    path = KisBrushBasedPaintOpSettings::brushOutline(KisPaintOpSettings::CURSOR_IS_OUTLINE);
     
     QPainterPath copy(path);
     QRectF rect2 = copy.boundingRect();
@@ -171,6 +179,7 @@ QPainterPath KisDuplicateOpSettings::brushOutline() const
     
     QTransform m;
     m.scale(0.5,0.5);
+    rect2 = m.mapRect(rect2);
     
     path.moveTo(rect2.topLeft());
     path.lineTo(rect2.bottomRight());
@@ -178,5 +187,11 @@ QPainterPath KisDuplicateOpSettings::brushOutline() const
     path.moveTo(rect2.topRight());
     path.lineTo(rect2.bottomLeft());
     
-    return path;
+    if (mode == CURSOR_IS_OUTLINE){
+        return path;
+    } else {
+        // workaround?
+        //copy.addEllipse(QRectF(0,0,1,1));
+        return copy;
+    }
 }

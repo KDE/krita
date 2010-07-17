@@ -68,15 +68,17 @@ QRectF KisHairyPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
     return rect;
 }
 
-QPainterPath KisHairyPaintOpSettings::brushOutline() const
+QPainterPath KisHairyPaintOpSettings::brushOutline(OutlineMode mode) const
 {
-    QPainterPath path = KisBrushBasedPaintOpSettings::brushOutline();
-
-    double scale = getDouble(HAIRY_BRISTLE_SCALE);
-    QTransform m;
-    m.reset();
-    m.scale(scale, scale);   
-    
-    return m.map(path);
+    QPainterPath path;
+    if (mode == CURSOR_IS_OUTLINE){
+        path = KisBrushBasedPaintOpSettings::brushOutline(mode);
+        double scale = getDouble(HAIRY_BRISTLE_SCALE);
+        QTransform m;
+        m.reset();
+        m.scale(scale, scale);   
+        path = m.map(path);
+    }
+    return path;
 }
 

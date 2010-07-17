@@ -60,16 +60,17 @@ QRectF KisSketchPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWS
     return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
 }
 
-QPainterPath KisSketchPaintOpSettings::brushOutline() const
+QPainterPath KisSketchPaintOpSettings::brushOutline(OutlineMode mode) const
 {
-    qreal size = getInt(SKETCH_RADIUS);
-    
-    QRectF rc(0, 0, size, size);
-    rc.translate(-rc.center());
-    
     QPainterPath path;
-    path.addEllipse(rc);
+    if (mode == CURSOR_IS_OUTLINE){
+        qreal size = getInt(SKETCH_RADIUS) * 2 + 1;
     
+        QRectF rc(0, 0, size, size);
+        rc.translate(-rc.center());
+    
+        path.addEllipse(rc);
+    }
     return path;
 }
 

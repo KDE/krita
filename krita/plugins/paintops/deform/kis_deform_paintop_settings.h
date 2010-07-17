@@ -39,7 +39,7 @@ public:
 
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
-    virtual QPainterPath brushOutline() const;
+    virtual QPainterPath brushOutline(OutlineMode mode) const;
     
     bool paintIncremental();
     bool isAirbrushing() const;

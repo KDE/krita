@@ -69,20 +69,23 @@ QRectF KisSoftPaintOpSettings::paintOutlineRect ( const QPointF& pos, KisImageWS
     return image->pixelToDocument(brush).translated(pos);
 }
 
-QPainterPath KisSoftPaintOpSettings::brushOutline() const
-{
-    qreal width = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_SCALE);
-    qreal height = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT) * getDouble(BRUSH_SCALE);
-    QRectF brush(0,0,width,height);
-    brush.translate(-brush.center());
 
+QPainterPath KisSoftPaintOpSettings::brushOutline(OutlineMode mode) const
+{
     QPainterPath path;
-    path.addEllipse(brush);
-    
-    QTransform m;
-    m.reset();
-    m.rotate( getDouble(BRUSH_ROTATION) );
-    path = m.map(path);
+    if (mode == CURSOR_IS_OUTLINE){
+        qreal width = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_SCALE);
+        qreal height = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT) * getDouble(BRUSH_SCALE);
+        QRectF brush(0,0,width,height);
+        brush.translate(-brush.center());
+
+        path.addEllipse(brush);
+        
+        QTransform m;
+        m.reset();
+        m.rotate( getDouble(BRUSH_ROTATION) );
+        path = m.map(path);
+    }
     return path;
 }
 

@@ -50,7 +50,7 @@ public:
 
     virtual void paintOutline ( const QPointF& pos, KisImageWSP image, QPainter& painter, OutlineMode _mode ) const;
     virtual QRectF paintOutlineRect ( const QPointF& pos, KisImageWSP image, OutlineMode _mode ) const;
-    virtual QPainterPath brushOutline() const;
+    virtual QPainterPath brushOutline(OutlineMode mode) const;
     
 #if defined(HAVE_OPENGL)
     QString modelName() const { return "3d-pencil"; }

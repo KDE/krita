@@ -147,8 +147,10 @@ public:
 
     /**
      * Returns the brush outline in pixel coordinates. Tool is responsible for conversion into view coordinates.
+     * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline 
+     * always like duplicate paintop indicating the duplicate position
      */
-    virtual QPainterPath brushOutline() const;
+    virtual QPainterPath brushOutline(OutlineMode mode) const;
     
     /**
      * XXX: document!

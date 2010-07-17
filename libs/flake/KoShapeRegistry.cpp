@@ -23,6 +23,7 @@
 #include "KoPathShapeFactory.h"
 #include "KoConnectionShapeFactory.h"
 #include "KoShapeLoadingContext.h"
+#include "KoTextOnShapeContainer.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeGroup.h"
 
@@ -208,10 +209,8 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
 
     // Higher numbers are more specific, map is sorted by keys
     for (int i = factories.size() - 1; i >= 0; --i) {
-
         KoShapeFactoryBase * factory = factories[i];
         if (factory->supports(element)) {
-
             KoShape *shape = factory->createDefaultShape(context.documentResourceManager());
 
             if (shape->shapeId().isEmpty())
@@ -221,8 +220,18 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
             bool loaded = shape->loadOdf(fullElement, context);
             context.odfLoadingContext().styleStack().restore();
 
-            if (loaded)
+            if (loaded) {
+                KoXmlElement text = KoXml::namedItemNS(fullElement, KoXmlNS::text, "p");
+                if (!text.isNull()) {
+                    KoTextOnShapeContainer *tos = new KoTextOnShapeContainer(shape,
+                            context.documentResourceManager());
+                    if (tos->loadOdf(fullElement, context)) {
+                        return tos;
+                    }
+                    delete tos;
+                }
                 return shape;
+            }
 
             // Maybe a shape with a lower priority can load our
             // element, but this attempt has failed.

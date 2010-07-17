@@ -131,7 +131,15 @@ public:
     * @see the @a KoTextLoader::loadBody() method which got called by this method
     * to load the ODF.
     */
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData = 0, KoShape *shape = 0);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData, KoShape *shape = 0);
+
+    /**
+    * Load the TextShape from ODF.
+    * Overloaded method provided for your convenience.
+    */
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) {
+        return loadOdf(element, context, 0);
+    }
 
     /**
     * Store the TextShape data as ODF.

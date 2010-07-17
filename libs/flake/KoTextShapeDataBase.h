@@ -27,6 +27,8 @@
 #include <QTextDocument>
 
 class KoTextShapeDataBasePrivate;
+class KoXmlElement;
+class KoShapeLoadingContext;
 
 /**
  * \internal
@@ -53,6 +55,11 @@ public:
      * returns the currently set margins for the shape.
      */
     KoInsets shapeMargins() const;
+
+    /**
+    * Load the text from ODF.
+    */
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
 
     /** Sets the vertical alignment of all the text inside the shape. */
     void setVerticalAlignment(Qt::Alignment alignment);

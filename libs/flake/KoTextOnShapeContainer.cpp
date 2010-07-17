@@ -171,8 +171,13 @@ void KoTextOnShapeContainer::paintComponent(QPainter &, const KoViewConverter &)
 
 bool KoTextOnShapeContainer::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    // TODO
-    return false;
+    Q_D(KoTextOnShapeContainer);
+    if (d->textShape == 0)
+        return false; // probably because the factory was not found.
+
+    KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(d->textShape->userData());
+    Q_ASSERT(shapeData); // would be a bug in kotext
+    return shapeData->loadOdf(element, context);
 }
 
 void KoTextOnShapeContainer::saveOdf(KoShapeSavingContext &context) const

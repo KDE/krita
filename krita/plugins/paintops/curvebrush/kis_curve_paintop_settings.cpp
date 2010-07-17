@@ -36,7 +36,7 @@ QRectF KisCurvePaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
 
 void KisCurvePaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return;
+    if (_mode != CursorIsOutline) return;
     QRectF rect2 = paintOutlineRect(pos, image, _mode);
     painter.drawLine(rect2.topLeft(), rect2.bottomRight());
     painter.drawLine(rect2.topRight(), rect2.bottomLeft());

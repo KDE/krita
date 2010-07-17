@@ -43,7 +43,7 @@ int KisSprayPaintOpSettings::rate() const
 
 void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return;
+    if (_mode != CursorIsOutline) return;
     qreal width = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_SCALE);
     qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT) * getDouble(SPRAY_SCALE);
 
@@ -61,7 +61,7 @@ void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image
 
 QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
+    if (_mode != CursorIsOutline) return QRectF();
     qreal width = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_SCALE);
     qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT) * getDouble(SPRAY_SCALE);
     QRectF brush(0,0,width,height);
@@ -77,7 +77,7 @@ QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
 QPainterPath KisSprayPaintOpSettings::brushOutline(OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CURSOR_IS_OUTLINE){
+    if (mode == CursorIsOutline){
         qreal width = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_SCALE);
         qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT) * getDouble(SPRAY_SCALE);
         QRectF brush(0,0,width,height);

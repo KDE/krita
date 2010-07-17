@@ -270,9 +270,9 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     KisPaintOpSettings::OutlineMode outlineMode;
     if ((m_mode != PAINT  || cfg.showOutlineWhilePainting()) &&
         (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || m_mode == EDIT_BRUSH || m_showOutline)) {
-        outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
+        outlineMode = KisPaintOpSettings::CursorIsOutline;
     } else {
-        outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
+        outlineMode = KisPaintOpSettings::CursorIsNotOutline;
     }
 
     if (!m_oldOutlineRect.isEmpty()) {
@@ -606,18 +606,18 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
         
         if ((m_mode != PAINT || cfg.showOutlineWhilePainting()) &&
             (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || m_mode == EDIT_BRUSH || m_showOutline)) {
-            outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
+            outlineMode = KisPaintOpSettings::CursorIsOutline;
         } else {
-            outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
+            outlineMode = KisPaintOpSettings::CursorIsNotOutline;
         }
         
         qreal zoomX, zoomY;
         converter.zoom(&zoomX, &zoomY);
         
-        QPainterPath path = currentPaintOpPreset()->settings()->brushOutline();
+        QPainterPath path = currentPaintOpPreset()->settings()->brushOutline(outlineMode);
         // new API
         if (!path.isEmpty()){
-            if (outlineMode != KisPaintOpSettings::CURSOR_IS_OUTLINE) return;
+            if (outlineMode != KisPaintOpSettings::CursorIsOutline) return;
             QMatrix m;
             m.reset();
             m.scale(zoomX, zoomY);

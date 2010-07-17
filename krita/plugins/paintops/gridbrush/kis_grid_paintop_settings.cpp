@@ -33,7 +33,7 @@ bool KisGridPaintOpSettings::paintIncremental()
 
 void KisGridPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, OutlineMode _mode) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return;
+    if (_mode != CursorIsOutline) return;
     qreal sizex = getInt(GRID_WIDTH) * getDouble(GRID_SCALE);
     qreal sizey = getInt(GRID_HEIGHT) * getDouble(GRID_SCALE);
 
@@ -45,7 +45,7 @@ void KisGridPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image,
 
 QRectF KisGridPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
+    if (_mode != CursorIsOutline) return QRectF();
     qreal sizex = getInt(GRID_WIDTH) * getDouble(GRID_SCALE);
     qreal sizey = getInt(GRID_HEIGHT) * getDouble(GRID_SCALE);
     sizex += 2;
@@ -56,7 +56,7 @@ QRectF KisGridPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP 
 QPainterPath KisGridPaintOpSettings::brushOutline(OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CURSOR_IS_OUTLINE) {
+    if (mode == CursorIsOutline) {
         qreal sizex = getInt(GRID_WIDTH) * getDouble(GRID_SCALE);
         qreal sizey = getInt(GRID_HEIGHT) * getDouble(GRID_SCALE);
         QRectF rc(0, 0, sizex, sizey);

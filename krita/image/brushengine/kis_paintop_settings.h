@@ -122,8 +122,8 @@ public:
      * This enum defines the current mode for painting an outline.
      */
     enum OutlineMode {
-        CURSOR_IS_OUTLINE = 1, ///< When this mode is set, then the outline is supposed to paint an outline around the cursor
-        CURSOR_ISNT_OUTLINE = 2 ///< When this mode is set, then the outline is no supposed to paint an outline for the cursor (useful for instance in the duplicate op to show the source)
+        CursorIsOutline = 1, ///< When this mode is set, then the outline is supposed to paint an outline around the cursor
+        CursorIsNotOutline = 2 ///< When this mode is set, then the outline is no supposed to paint an outline for the cursor (useful for instance in the duplicate op to show the source)
     };
     /**
      * @return the rectangle covered by the current brush (or the previous brush??? and what about pressure???)

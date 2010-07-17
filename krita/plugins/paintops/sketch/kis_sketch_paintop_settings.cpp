@@ -45,7 +45,7 @@ int KisSketchPaintOpSettings::rate() const
 
 void KisSketchPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return;
+    if (_mode != CursorIsOutline) return;
     qreal size = getInt(SKETCH_RADIUS);
     painter.setPen(Qt::black);
     painter.drawEllipse(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos));
@@ -54,7 +54,7 @@ void KisSketchPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP imag
 
 QRectF KisSketchPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
+    if (_mode != CursorIsOutline) return QRectF();
     qreal size = getInt(SKETCH_RADIUS);
     size += 10;
     return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
@@ -63,7 +63,7 @@ QRectF KisSketchPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWS
 QPainterPath KisSketchPaintOpSettings::brushOutline(OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CURSOR_IS_OUTLINE){
+    if (mode == CursorIsOutline){
         qreal size = getInt(SKETCH_RADIUS) * 2 + 1;
     
         QRectF rc(0, 0, size, size);

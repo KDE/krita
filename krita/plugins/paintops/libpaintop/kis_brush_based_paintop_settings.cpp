@@ -49,7 +49,7 @@ QRectF KisBrushBasedPaintOpSettings::paintOutlineRect(const QPointF& pos, KisIma
     if(!options)
         return QRectF();
     
-    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
+    if (_mode != CursorIsOutline) return QRectF();
     KisBrushSP brush = options->brush();
     QPointF hotSpot = brush->hotSpot(1.0, 1.0);
     QRectF rect = image->pixelToDocument(
@@ -65,7 +65,7 @@ void KisBrushBasedPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP 
     if(!options)
         return;
     
-    if (_mode != CURSOR_IS_OUTLINE) return;
+    if (_mode != CursorIsOutline) return;
     KisBrushSP brush = options->brush();
     QPointF hotSpot = brush->hotSpot(1.0, 1.0);
     painter.setPen(Qt::black);
@@ -78,7 +78,7 @@ void KisBrushBasedPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP 
 QPainterPath KisBrushBasedPaintOpSettings::brushOutline(OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CURSOR_IS_OUTLINE) {
+    if (mode == CursorIsOutline) {
     
         KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
         if(!options) {

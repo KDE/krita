@@ -35,7 +35,7 @@ void KisHairyPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image
     if(!options)
         return;
     
-    if (_mode != CURSOR_IS_OUTLINE) return;
+    if (_mode != CursorIsOutline) return;
     KisBrushSP brush = options->brush();
     QPointF hotSpot = brush->hotSpot(1.0, 1.0);
     painter.setPen(Qt::black);
@@ -54,7 +54,7 @@ QRectF KisHairyPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
     if(!options)
         return QRectF();
     
-    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
+    if (_mode != CursorIsOutline) return QRectF();
     KisBrushSP brush = options->brush();
     QPointF hotSpot = brush->hotSpot(1.0, 1.0);
 
@@ -71,7 +71,7 @@ QRectF KisHairyPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
 QPainterPath KisHairyPaintOpSettings::brushOutline(OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CURSOR_IS_OUTLINE){
+    if (mode == CursorIsOutline){
         path = KisBrushBasedPaintOpSettings::brushOutline(mode);
         double scale = getDouble(HAIRY_BRISTLE_SCALE);
         QTransform m;

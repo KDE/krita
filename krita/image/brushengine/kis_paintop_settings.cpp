@@ -146,7 +146,7 @@ QRectF KisPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP imag
 
 void KisPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return;
+    if (_mode != CursorIsOutline) return;
     QRectF rect2 = paintOutlineRect(pos, image, _mode);
     painter.drawLine(rect2.topLeft(), rect2.bottomRight());
     painter.drawLine(rect2.topRight(), rect2.bottomLeft());
@@ -182,7 +182,7 @@ KisPaintOpSettingsWidget* KisPaintOpSettings::optionsWidget() const
 QPainterPath KisPaintOpSettings::brushOutline(OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CURSOR_IS_OUTLINE){
+    if (mode == CursorIsOutline){
         QRectF rc(-5,-5, 10, 10);
         path.moveTo(rc.topLeft());
         path.lineTo(rc.bottomRight());

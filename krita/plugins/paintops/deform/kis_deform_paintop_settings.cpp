@@ -52,7 +52,7 @@ int KisDeformPaintOpSettings::rate() const
 
 QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
+    if (_mode != CursorIsOutline) return QRectF();
     qreal width = getDouble(BRUSH_DIAMETER)  * getDouble(BRUSH_SCALE);
     qreal height = getDouble(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT)  * getDouble(BRUSH_SCALE);
     QRectF brush(0,0,width,height);
@@ -67,7 +67,7 @@ QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWS
 
 void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return;
+    if (_mode != CursorIsOutline) return;
     qreal width = getDouble(BRUSH_DIAMETER)  * getDouble(BRUSH_SCALE);
     qreal height = getDouble(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT)  * getDouble(BRUSH_SCALE);
 
@@ -84,7 +84,7 @@ void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP imag
 QPainterPath KisDeformPaintOpSettings::brushOutline(KisPaintOpSettings::OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CURSOR_IS_OUTLINE){
+    if (mode == CursorIsOutline){
         qreal width = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_SCALE);
         qreal height = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT) * getDouble(BRUSH_SCALE);
         QRectF brush(0,0,width,height);

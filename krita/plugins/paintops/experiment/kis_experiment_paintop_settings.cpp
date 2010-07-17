@@ -33,7 +33,7 @@ bool KisExperimentPaintOpSettings::paintIncremental()
 
 QRectF KisExperimentPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
+    if (_mode != CursorIsOutline) return QRectF();
     qreal width = getInt(EXPERIMENT_START_SIZE); /* scale();*/
     qreal height = getInt(EXPERIMENT_START_SIZE); /* scale();*/
     width += 10;
@@ -44,7 +44,7 @@ QRectF KisExperimentPaintOpSettings::paintOutlineRect(const QPointF& pos, KisIma
 
 void KisExperimentPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
 {
-    if (_mode != CURSOR_IS_OUTLINE) return;
+    if (_mode != CursorIsOutline) return;
     qreal width = getInt(EXPERIMENT_START_SIZE); /* scale();*/
     qreal height = getInt(EXPERIMENT_START_SIZE); /* scale();*/
     painter.setPen(QColor(255,128,255));

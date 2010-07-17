@@ -164,7 +164,7 @@ void MixerTool::paint(QPainter &painter, const KoViewConverter &converter)
         m_d->mixingBrush->settings()->paintOutline(m_d->currentMousePosition,
                                                    0,
                                                    painter,
-                                                   KisPaintOpSettings::CURSOR_IS_OUTLINE);
+                                                   KisPaintOpSettings::CursorIsOutline);
     }
 }
 

@@ -92,9 +92,9 @@ public:
     /// Returns the strokes brush
     QBrush lineBrush() const;
 
-    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
-    virtual void borderInsets(const KoShape *shape, KoInsets &insets);
-    virtual bool hasTransparency();
+    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
+    virtual void borderInsets(const KoShape *shape, KoInsets &insets) const;
+    virtual bool hasTransparency() const;
 
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color);

@@ -39,7 +39,7 @@ KoShapeBackground::~KoShapeBackground()
     delete d_ptr;
 }
 
-bool KoShapeBackground::hasTransparency()
+bool KoShapeBackground::hasTransparency() const
 {
     return false;
 }

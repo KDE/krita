@@ -32,11 +32,11 @@ class FolderBorder : public KoShapeBorderModel
 public:
     FolderBorder();
     /// reimplemented from KoShapeBorderModel
-    virtual void fillStyle(KoGenStyle &, KoShapeSavingContext &) {}
+    virtual void fillStyle(KoGenStyle &, KoShapeSavingContext &) const {}
     /// reimplemented from KoShapeBorderModel
-    virtual void borderInsets(const KoShape *shape, KoInsets &insets);
+    virtual void borderInsets(const KoShape *shape, KoInsets &insets) const;
     /// reimplemented from KoShapeBorderModel
-    virtual bool hasTransparency();
+    virtual bool hasTransparency() const;
     /// reimplemented from KoShapeBorderModel
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
     /// reimplemented from KoShapeBorderModel

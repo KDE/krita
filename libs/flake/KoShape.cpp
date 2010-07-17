@@ -561,9 +561,9 @@ KoShapeApplicationData *KoShape::applicationData() const
     return d->appData;
 }
 
-bool KoShape::hasTransparency()
+bool KoShape::hasTransparency() const
 {
-    Q_D(KoShape);
+    Q_D(const KoShape);
     if (! d->fill)
         return true;
     else

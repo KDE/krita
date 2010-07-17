@@ -342,7 +342,7 @@ public:
      * you should override it and always return true if your shape is not square.
      * @return if the shape is (partly) transparent.
      */
-    virtual bool hasTransparency();
+    virtual bool hasTransparency() const;
 
     /**
      * Sets shape level transparency.

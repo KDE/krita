@@ -82,7 +82,7 @@ KoLineBorder& KoLineBorder::operator = (const KoLineBorder &rhs)
     return *this;
 }
 
-void KoLineBorder::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
+void KoLineBorder::fillStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {
     QPen pen = d->pen;
     if (d->brush.gradient())
@@ -92,7 +92,7 @@ void KoLineBorder::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
     KoOdfGraphicStyles::saveOdfStrokeStyle(style, context.mainStyles(), pen);
 }
 
-void KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets)
+void KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets) const
 {
     Q_UNUSED(shape);
     qreal lineWidth = d->pen.widthF();
@@ -111,7 +111,7 @@ void KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets)
     insets.right = lineWidth;
 }
 
-bool KoLineBorder::hasTransparency()
+bool KoLineBorder::hasTransparency() const
 {
     return d->color.alpha() > 0;
 }

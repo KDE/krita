@@ -47,24 +47,24 @@ public:
     virtual ~KoShapeBorderModel();
 
     /**
-     * @brief Fill the style object
+     * @brief Fill the style object (aka save)
      *
      * @param style object
      * @param context used for saving
      */
-    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) = 0;
+    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) const = 0;
 
     /**
      * Return a borderInsets object filled with the size inside the shape that this border takes.
      * @param shape the shape the insets will be calculated for
      * @param insets the insets object that will be filled and returned.
      */
-    virtual void borderInsets(const KoShape *shape, KoInsets &insets) = 0;
+    virtual void borderInsets(const KoShape *shape, KoInsets &insets) const = 0;
     /**
      * Returns true if there is some transparency, false if the border is fully opaque.
      * @return if the border is transparent.
      */
-    virtual bool hasTransparency() = 0;
+    virtual bool hasTransparency() const = 0;
     /**
      * Paint the border.
      * This method should paint the border around shape.

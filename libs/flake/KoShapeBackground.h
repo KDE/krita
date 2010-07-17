@@ -45,7 +45,7 @@ public:
     virtual void paint(QPainter &painter, const QPainterPath &fillPath) const = 0;
 
     /// Returns if the background has some transparency.
-    virtual bool hasTransparency();
+    virtual bool hasTransparency() const;
 
     /**
      * Fills the style object

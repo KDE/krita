@@ -29,7 +29,7 @@ FolderBorder::FolderBorder()
 {
 }
 
-void FolderBorder::borderInsets(const KoShape *shape, KoInsets &insets)
+void FolderBorder::borderInsets(const KoShape *shape, KoInsets &insets) const
 {
     Q_ASSERT(shape);
     insets.left = 1;
@@ -43,7 +43,7 @@ void FolderBorder::borderInsets(const KoShape *shape, KoInsets &insets)
     }
 }
 
-bool FolderBorder::hasTransparency()
+bool FolderBorder::hasTransparency() const
 {
     return false;
 }

@@ -44,6 +44,44 @@
 #include "kis_meta_data_store.h"
 #include "kis_selection.h"
 
+class KisSafeProjection {
+public:
+    KisPaintDeviceSP getDevice() {
+        return m_projection;
+    }
+
+    KisPaintDeviceSP getDeviceLazy(KisPaintDeviceSP prototype) {
+        QMutexLocker locker(&m_lock);
+
+        if(!m_reusablePaintDevice)
+            m_reusablePaintDevice = new KisPaintDevice(*prototype);
+
+        if(!m_projection ||
+           !(*m_projection->colorSpace() == *prototype->colorSpace())) {
+            m_projection = m_reusablePaintDevice;
+            m_projection->makeCloneFromRough(prototype, prototype->extent());
+        }
+
+        m_projection->setX(prototype->x());
+        m_projection->setY(prototype->y());
+
+        return m_projection;
+    }
+
+    void freeDevice() {
+        QMutexLocker locker(&m_lock);
+        m_projection = 0;
+        if(m_reusablePaintDevice) {
+            m_reusablePaintDevice->clear();
+        }
+    }
+
+private:
+    QMutex m_lock;
+    KisPaintDeviceSP m_projection;
+    KisPaintDeviceSP m_reusablePaintDevice;
+};
+
 class KisLayer::Private
 {
 
@@ -53,7 +91,7 @@ public:
     QBitArray channelFlags;
     KisEffectMaskSP previewMask;
     KisMetaData::Store* metaDataStore;
-    KisPaintDeviceSP projection;
+    KisSafeProjection safeProjection;
 };
 
 
@@ -358,29 +396,16 @@ QRect KisLayer::updateProjection(const QRect& rect)
             !originalDevice) return QRect();
 
     if (!needProjection() && !hasEffectMasks()) {
-        m_d->projection = 0;
+        m_d->safeProjection.freeDevice();
     } else {
         if (!updatedRect.isEmpty()) {
 
-            if (!m_d->projection ||
-                    !(*m_d->projection->colorSpace() == *originalDevice->colorSpace())) {
+            KisPaintDeviceSP projection =
+                m_d->safeProjection.getDeviceLazy(originalDevice);
 
-                /**
-                 * If it's needed to create a new projection paint device
-                 * let's do it now! (content will be shared)
-                 */
-                m_d->projection = new KisPaintDevice(*originalDevice);
-
-            } else {
-                m_d->projection->setX(originalDevice->x());
-                m_d->projection->setY(originalDevice->y());
-            }
-            updatedRect = applyMasks(originalDevice, m_d->projection,
+            updatedRect = applyMasks(originalDevice, projection,
                                      updatedRect);
         }
-        /**
-         * FIXME: else { m_d->projection = 0;}
-         */
     }
 
     return updatedRect;
@@ -403,7 +428,9 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 
 KisPaintDeviceSP KisLayer::projection() const
 {
-    return m_d->projection ? m_d->projection : original();
+    KisPaintDeviceSP projection = m_d->safeProjection.getDevice();
+
+    return projection ? projection : original();
 }
 
 QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const

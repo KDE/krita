@@ -48,6 +48,8 @@ KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageWSP image, const QString &
     m_d->type = COPY_PROJECTION;
     m_d->x = 0;
     m_d->y = 0;
+
+    m_d->copyFrom->registerClone(this);
 }
 
 KisCloneLayer::KisCloneLayer(const KisCloneLayer& rhs)
@@ -59,13 +61,15 @@ KisCloneLayer::KisCloneLayer(const KisCloneLayer& rhs)
     m_d->type = rhs.copyType();
     m_d->x = rhs.x();
     m_d->y = rhs.y();
+
+    m_d->copyFrom->registerClone(this);
 }
 
 KisCloneLayer::~KisCloneLayer()
 {
+    m_d->copyFrom->unregisterClone(this);
     delete m_d;
 }
-
 
 bool KisCloneLayer::allowAsChild(KisNodeSP node) const
 {
@@ -105,11 +109,18 @@ void KisCloneLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         const QRect& rect) const
 {
     QRect copyRect = rect;
-    copyRect.moveTo(m_d->x, m_d->y);
+    copyRect.translate(-m_d->x, -m_d->y);
 
     KisPainter gc(projection);
     gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
     gc.bitBlt(rect.topLeft(), original, copyRect);
+}
+
+void KisCloneLayer::setDirtyOriginal(const QRect &rect)
+{
+    QRect localRect = rect;
+    localRect.translate(m_d->x, m_d->y);
+    KisLayer::setDirty(localRect);
 }
 
 qint32 KisCloneLayer::x() const
@@ -131,16 +142,14 @@ void KisCloneLayer::setY(qint32 y)
 
 QRect KisCloneLayer::extent() const
 {
-    QRect rect = KisLayer::extent();
-    rect.moveTo(m_d->x, m_d->y);
-    return rect;
+    KisPaintDeviceSP projectionDevice = projection();
+    return projectionDevice->extent();
 }
 
 QRect KisCloneLayer::exactBounds() const
 {
-    QRect rect = KisLayer::exactBounds();
-    rect.moveTo(m_d->x, m_d->y);
-    return rect;
+    KisPaintDeviceSP projectionDevice = projection();
+    return projectionDevice->exactBounds();
 }
 
 bool KisCloneLayer::accept(KisNodeVisitor & v)

@@ -38,7 +38,7 @@ class QStack;
 
 class QIcon;
 class QBitArray;
-class KisGroupLayer;
+class KisCloneLayer;
 class KisNodeVisitor;
 
 namespace KisMetaData
@@ -146,6 +146,19 @@ public:
      * Set the image this layer belongs to.
      */
     void setImage(KisImageWSP image);
+
+    /**
+     * Clones should be informed about updates of the original
+     * layer, so this is a way to register them
+     */
+    void registerClone(KisCloneLayerSP clone);
+
+    /**
+     * Deregisters the clone from the update list
+     *
+     * \see registerClone()
+     */
+    void unregisterClone(KisCloneLayerSP clone);
 public:
     qint32 x() const;
     qint32 y() const;

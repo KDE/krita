@@ -99,6 +99,12 @@ public:
     void setCopyType(CopyLayerType type);
     CopyLayerType copyType() const;
 
+    /**
+     * This function is called by the original to notify
+     * us that it is dirty
+     */
+    void setDirtyOriginal(const QRect &rect);
+
 public slots:
     // KisIndirectPaintingSupport
     KisLayer* layer() {

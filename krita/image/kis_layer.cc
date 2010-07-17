@@ -33,7 +33,6 @@
 #include <KoColorSpace.h>
 
 #include "kis_debug.h"
-//#include "kis_group_layer.h"
 #include "kis_image.h"
 
 #include "kis_painter.h"
@@ -43,6 +42,9 @@
 #include "kis_selection_mask.h"
 #include "kis_meta_data_store.h"
 #include "kis_selection.h"
+
+#include "kis_clone_layer.h"
+
 
 class KisSafeProjection {
 public:
@@ -82,6 +84,26 @@ private:
     KisPaintDeviceSP m_reusablePaintDevice;
 };
 
+class KisCloneLayersList {
+public:
+    void addClone(KisCloneLayerSP cloneLayer) {
+        m_clonesList.append(cloneLayer);
+    }
+
+    void removeClone(KisCloneLayerSP cloneLayer) {
+        m_clonesList.removeOne(cloneLayer);
+    }
+
+    void setDirty(const QRect &rect) {
+        foreach(KisCloneLayerSP clone, m_clonesList) {
+            clone->setDirtyOriginal(rect);
+        }
+    }
+
+private:
+    QList<KisCloneLayerSP> m_clonesList;
+};
+
 class KisLayer::Private
 {
 
@@ -92,6 +114,7 @@ public:
     KisEffectMaskSP previewMask;
     KisMetaData::Store* metaDataStore;
     KisSafeProjection safeProjection;
+    KisCloneLayersList clonesList;
 };
 
 
@@ -199,6 +222,17 @@ void KisLayer::setImage(KisImageWSP image)
 void KisLayer::setDirty(const QRect & rect)
 {
     m_d->image->updateProjection(this, rect);
+    m_d->clonesList.setDirty(rect);
+}
+
+void KisLayer::registerClone(KisCloneLayerSP clone)
+{
+    m_d->clonesList.addClone(clone);
+}
+
+void KisLayer::unregisterClone(KisCloneLayerSP clone)
+{
+    m_d->clonesList.removeClone(clone);
 }
 
 KisSelectionMaskSP KisLayer::selectionMask() const

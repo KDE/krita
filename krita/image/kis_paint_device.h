@@ -218,6 +218,12 @@ public:
      * Fill the given rectangle with the given pixel. The paint device will expand to
      * contain the given rect.
      */
+    void fill(const QRect & rc, const KoColor &color);
+
+    /**
+     * Overloaded function. For legacy purposes only.
+     * Please use fill(const QRect & rc, const KoColor &color) instead
+     */
     void fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel);
 
 public:

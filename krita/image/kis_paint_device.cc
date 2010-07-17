@@ -507,16 +507,21 @@ void KisPaintDevice::clear()
     m_d->cache.invalidate();
 }
 
-void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel)
-{
-    m_datamanager->clear(x, y, w, h, fillPixel);
-    m_d->cache.invalidate();
-}
-
-
 void KisPaintDevice::clear(const QRect & rc)
 {
     m_datamanager->clear(rc.x(), rc.y(), rc.width(), rc.height(), m_datamanager->defaultPixel());
+    m_d->cache.invalidate();
+}
+
+void KisPaintDevice::fill(const QRect & rc, const KoColor &color)
+{
+    m_datamanager->clear(rc.x(), rc.y(), rc.width(), rc.height(), color.data());
+    m_d->cache.invalidate();
+}
+
+void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel)
+{
+    m_datamanager->clear(x, y, w, h, fillPixel);
     m_d->cache.invalidate();
 }
 

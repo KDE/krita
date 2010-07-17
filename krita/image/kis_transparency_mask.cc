@@ -20,6 +20,7 @@
 
 #include "kis_debug.h"
 
+#include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include "kis_paint_device.h"
@@ -55,7 +56,7 @@ QRect KisTransparencyMask::decorateRect(KisPaintDeviceSP &src,
         KisPainter gc(dst);
         gc.setCompositeOp(src->colorSpace()->compositeOp(COMPOSITE_COPY));
         gc.bitBlt(rc.topLeft(), src, rc);
-        src->clear(rc);
+        src->fill(rc, KoColor(Qt::transparent, src->colorSpace()));
     }
 
     return rc;

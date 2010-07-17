@@ -82,6 +82,14 @@ public:
      */
     void setPlainText(const QString &text);
 
+    /**
+     * This method is called by shapes owned by this container to allow the container to add
+     * ODf content as child elements of the same element that the shape itself saved into.
+     * This method is typically called in the shapes saveOdf() method before closing the
+     * xml element it saved into.
+     */
+    virtual void saveOdfChildElements(KoShapeSavingContext &context) const;
+
 private:
     Q_DECLARE_PRIVATE(KoTextOnShapeContainer)
 };

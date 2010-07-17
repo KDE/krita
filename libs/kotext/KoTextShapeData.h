@@ -148,6 +148,14 @@ public:
     void saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData, int from = 0, int to = -1) const;
 
     /**
+    * Store the TextShape data as ODF.
+    * Overloaded method provided for your convenience.
+    */
+    virtual void saveOdf(KoShapeSavingContext &context, int from = 0, int to  = -1) const {
+        saveOdf(context, 0, from, to);
+    }
+
+    /**
      * Set the page direction.
      * The page direction will determine behavior on the insertion of new text and those
      * new paragraphs default direction.

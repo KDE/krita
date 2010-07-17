@@ -23,6 +23,7 @@
 #include "KoConnectionShape_p.h"
 
 #include "KoViewConverter.h"
+#include "KoShapeContainer.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 #include "KoConnectionShapeLoadingUpdater.h"
@@ -311,6 +312,8 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
 
     saveOdfCommonChildElements(context);
 
+    if (parent())
+        parent()->saveOdfChildElements(context);
     context.xmlWriter().endElement();
 }
 

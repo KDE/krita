@@ -182,7 +182,9 @@ bool KoTextOnShapeContainer::loadOdf(const KoXmlElement &element, KoShapeLoading
 
 void KoTextOnShapeContainer::saveOdf(KoShapeSavingContext &context) const
 {
-    // TODO
+    Q_D(const KoTextOnShapeContainer);
+    if (d->content)
+        d->content->saveOdf(context);
 }
 
 void KoTextOnShapeContainer::setPlainText(const QString &text)
@@ -193,6 +195,7 @@ void KoTextOnShapeContainer::setPlainText(const QString &text)
         return;
     }
     KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(d->textShape->userData());
+    Q_ASSERT(shapeData); // would be a bug in kotext
     Q_ASSERT(shapeData->document());
     shapeData->document()->setPlainText(text);
 }
@@ -253,4 +256,17 @@ Qt::Alignment KoTextOnShapeContainer::textAlignment() const
     answer = answer | (cursor.blockFormat().alignment() & Qt::AlignHorizontal_Mask);
 
     return answer;
+}
+
+void KoTextOnShapeContainer::saveOdfChildElements(KoShapeSavingContext &context) const
+{
+    Q_D(const KoTextOnShapeContainer);
+    if (d->textShape == 0) {
+        return;
+    }
+    KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(d->textShape->userData());
+    Q_ASSERT(shapeData); // would be a bug in kotext
+    if (!shapeData->document()->isEmpty()) {
+        shapeData->saveOdf(context);
+    }
 }

@@ -31,6 +31,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoShapeSavingContext.h>
+#include <KoShapeContainer.h>
 #include <KoUnit.h>
 #include <KoOdfWorkaround.h>
 #include <KoPathPoint.h>
@@ -363,6 +364,8 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
 
         context.xmlWriter().endElement(); // draw:enhanced-geometry
         saveOdfCommonChildElements(context);
+        if (parent())
+            parent()->saveOdfChildElements(context);
         context.xmlWriter().endElement(); // draw:custom-shape
 
         if (m_mirrorHorizontally) {

@@ -202,6 +202,8 @@ public:
      */
     KoShapeContainerModel *model() const;
 
+    virtual void saveOdfChildElements(KoShapeSavingContext &context) const;
+
 protected:
     /**
      * This hook is for inheriting classes that need to do something on adding/removing

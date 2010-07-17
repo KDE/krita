@@ -22,6 +22,7 @@
 #include "RectangleShape.h"
 
 #include <KoPathPoint.h>
+#include <KoShapeContainer.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -80,6 +81,8 @@ void RectangleShape::saveOdf(KoShapeSavingContext & context) const
             context.xmlWriter().addAttributePt("svg:ry", m_cornerRadiusY * (0.5*size().height()) / 100.0);
         }
         saveOdfCommonChildElements(context);
+        if (parent())
+            parent()->saveOdfChildElements(context);
         context.xmlWriter().endElement();
     } else {
         KoPathShape::saveOdf(context);

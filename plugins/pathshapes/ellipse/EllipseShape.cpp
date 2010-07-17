@@ -24,6 +24,7 @@
 #include <KoPathPoint.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
+#include <KoShapeContainer.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>
@@ -75,6 +76,8 @@ void EllipseShape::saveOdf(KoShapeSavingContext &context) const
             context.xmlWriter().addAttribute("draw:end-angle", m_endAngle);
         }
         saveOdfCommonChildElements(context);
+        if (parent())
+            parent()->saveOdfChildElements(context);
         context.xmlWriter().endElement();
     } else {
         KoPathShape::saveOdf(context);

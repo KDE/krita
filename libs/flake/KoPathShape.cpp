@@ -116,6 +116,8 @@ void KoPathShape::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().addAttribute("koffice:nodeTypes", d->nodeTypes());
 
     saveOdfCommonChildElements(context);
+    if (parent())
+        parent()->saveOdfChildElements(context);
     context.xmlWriter().endElement();
 }
 

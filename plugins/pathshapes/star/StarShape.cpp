@@ -23,6 +23,7 @@
 #include <KoPathPoint.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoShapeContainer.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
@@ -386,6 +387,8 @@ void StarShape::saveOdf(KoShapeSavingContext & context) const
             context.xmlWriter().endElement(); // draw:enhanced-geometry
 
             saveOdfCommonChildElements(context);
+            if (parent())
+                parent()->saveOdfChildElements(context);
             context.xmlWriter().endElement(); // draw:custom-shape
         }
         else {
@@ -401,6 +404,8 @@ void StarShape::saveOdf(KoShapeSavingContext & context) const
                 context.xmlWriter().addAttribute("draw:sharpness", QString("%1%").arg(percent));
             }
             saveOdfCommonChildElements(context);
+            if (parent())
+                parent()->saveOdfChildElements(context);
             context.xmlWriter().endElement();
         }
     } else {

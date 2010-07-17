@@ -81,6 +81,10 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
 
     while(iter.hasNext()) {
         item = iter.next();
+
+        if(!item->checksumValid())
+            item->recalculate(item->requestedRect());
+
         if(updaterContext.isJobAllowed(item)) {
             updaterContext.addJob(item);
             iter.remove();

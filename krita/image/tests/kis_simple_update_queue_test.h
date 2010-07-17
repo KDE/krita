@@ -28,6 +28,7 @@ class KisSimpleUpdateQueueTest : public QObject
 private slots:
     void testJobProcessing();
     void testSplit();
+    void testChecksum();
 };
 
 #endif /* KIS_SIMPLE_UPDATE_QUEUE_TEST_H */

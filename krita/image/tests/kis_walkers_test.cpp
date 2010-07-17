@@ -719,6 +719,62 @@ void KisWalkersTest::testMasksOverlapping()
     }
 }
 
+    /*
+      +----------+
+      |root      |
+      | adj      |
+      | paint 1  |
+      +----------+
+     */
+
+void KisWalkersTest::testChecksum()
+{
+    QRect imageRect(0,0,512,512);
+    QRect dirtyRect(100,100,100,100);
+
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, imageRect.width(), imageRect.height(), colorSpace, "walker test");
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisAdjustmentLayerSP adjustmentLayer = new KisAdjustmentLayer(image, "adj", 0, 0);
+
+    image->lock();
+    image->addNode(paintLayer1, image->rootLayer());
+    image->addNode(adjustmentLayer, image->rootLayer());
+    image->unlock();
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
+    Q_ASSERT(filter);
+    KisFilterConfiguration *configuration = filter->defaultConfiguration(0);
+
+    KisMergeWalker walker(imageRect);
+    walker.collectRects(adjustmentLayer, dirtyRect);
+    QCOMPARE(walker.checksumValid(), true);
+
+    adjustmentLayer->setFilter(configuration);
+    QCOMPARE(walker.checksumValid(), false);
+
+    walker.recalculate(dirtyRect);
+    QCOMPARE(walker.checksumValid(), true);
+
+    configuration->setProperty("halfWidth", 20);
+    configuration->setProperty("halfHeight", 20);
+    adjustmentLayer->setFilter(configuration);
+    QCOMPARE(walker.checksumValid(), false);
+
+    walker.recalculate(dirtyRect);
+    QCOMPARE(walker.checksumValid(), true);
+
+    configuration->setProperty("halfWidth", 21);
+    configuration->setProperty("halfHeight", 21);
+    adjustmentLayer->setFilter(configuration);
+    QCOMPARE(walker.checksumValid(), false);
+
+    walker.recalculate(dirtyRect);
+    QCOMPARE(walker.checksumValid(), true);
+
+}
+
 QTEST_KDEMAIN(KisWalkersTest, NoGUI)
 #include "kis_walkers_test.moc"
 

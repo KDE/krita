@@ -77,10 +77,21 @@ public:
 
     void collectRects(KisNodeSP node, const QRect& requestedRect) {
         clear();
+        m_nodeChecksum = calculateChecksum(node, requestedRect);
         m_resultChangeRect = requestedRect;
         m_requestedRect = requestedRect;
         m_startNode = node;
         startTrip(node);
+    }
+
+    inline void recalculate(const QRect& requestedRect) {
+        Q_ASSERT(m_startNode);
+        collectRects(m_startNode, requestedRect);
+    }
+
+    bool checksumValid() {
+        Q_ASSERT(m_startNode);
+        return m_nodeChecksum == calculateChecksum(m_startNode, m_requestedRect);
     }
 
     inline void setCropRect(QRect cropRect) {
@@ -252,6 +263,24 @@ protected:
         }
     }
 
+    static qint32 calculateChecksum(KisNodeSP node, const QRect &requestedRect) {
+        qint32 checksum = 0;
+        qint32 x, y, w, h;
+        QRect tempRect;
+
+        tempRect = node->changeRect(requestedRect);
+        tempRect.getRect(&x, &y, &w, &h);
+        checksum += -x - y + w + h;
+
+        tempRect = node->needRect(requestedRect);
+        tempRect.getRect(&x, &y, &w, &h);
+        checksum += -x - y + w + h;
+
+//        qCritical() << node << requestedRect << "-->" << checksum;
+
+        return checksum;
+    }
+
 private:
     /**
      * The result variables.
@@ -269,6 +298,13 @@ private:
      */
     KisNodeSP m_startNode;
     QRect m_requestedRect;
+
+    /**
+     * Used for getting know whether the start node
+     * properties have changed since the walker was
+     * calculated
+     */
+    qint32 m_nodeChecksum;
 
     /**
      * Temporary variables

@@ -53,6 +53,7 @@ public:
     static const char* const xhtml;
 
     static const char* const koffice;
+    static const char* const officeooo;
 private:
     KoXmlNS(); // don't create an instance of me :)
 };

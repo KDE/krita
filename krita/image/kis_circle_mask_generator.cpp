@@ -28,7 +28,7 @@ struct KisCircleMaskGenerator::Private {
     double cachedSpikesAngle;
 };
 
-KisCircleMaskGenerator::KisCircleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes)
+KisCircleMaskGenerator::KisCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes)
         : KisMaskGenerator(radius, ratio, fh, fv, spikes, CIRCLE), d(new Private)
 {
     d->xcoef = 2.0 / width();
@@ -43,7 +43,7 @@ KisCircleMaskGenerator::~KisCircleMaskGenerator()
     delete d;
 }
 
-quint8 KisCircleMaskGenerator::valueAt(double x, double y) const
+quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
 {
     if (KisMaskGenerator::d->m_empty) return 255;
     double xr = (x /*- m_xcenter*/);

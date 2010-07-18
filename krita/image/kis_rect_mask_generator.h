@@ -34,10 +34,10 @@ class KRITAIMAGE_EXPORT KisRectangleMaskGenerator : public KisMaskGenerator
 
 public:
 
-    KisRectangleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
+    KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes);
     virtual ~KisRectangleMaskGenerator();
 
-    virtual quint8 valueAt(double x, double y) const;
+    virtual quint8 valueAt(qreal x, qreal y) const;
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
 

@@ -30,7 +30,7 @@ KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(
 
 }
 
-double KisDynamicSensorTime::parameter(const KisPaintInformation&  pi)
+qreal KisDynamicSensorTime::parameter(const KisPaintInformation&  pi)
 {
     m_time += pi.currentTime() - m_lastTime;
     m_lastTime = pi.currentTime();

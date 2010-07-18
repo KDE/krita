@@ -30,7 +30,7 @@ KisDynamicSensorDistance::KisDynamicSensorDistance() : KisDynamicSensor(Distance
 
 }
 
-double KisDynamicSensorDistance::parameter(const KisPaintInformation&  pi)
+qreal KisDynamicSensorDistance::parameter(const KisPaintInformation&  pi)
 {
     m_time += pi.movement().norm();
     if (m_time > m_length) {

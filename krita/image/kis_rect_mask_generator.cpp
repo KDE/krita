@@ -26,7 +26,7 @@ struct KisRectangleMaskGenerator::Private {
     double m_c;
 };
 
-KisRectangleMaskGenerator::KisRectangleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes)
+KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes)
         : KisMaskGenerator(radius, ratio, fh, fv, spikes, RECTANGLE), d(new Private)
 {
     if (KisMaskGenerator::d->m_fv == 0 &&
@@ -43,7 +43,7 @@ KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
     delete d;
 }
 
-quint8 KisRectangleMaskGenerator::valueAt(double x, double y) const
+quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
 {
 
     if (KisMaskGenerator::d->m_empty) return 255;

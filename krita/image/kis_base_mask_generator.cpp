@@ -25,7 +25,7 @@
 #include "kis_circle_mask_generator.h"
 #include "kis_rect_mask_generator.h"
 
-KisMaskGenerator::KisMaskGenerator(double radius, double ratio, double fh, double fv, int spikes, Type type) : d(new Private)
+KisMaskGenerator::KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, Type type) : d(new Private)
 {
     d->m_radius = radius;
     d->m_ratio = ratio;
@@ -75,12 +75,12 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
     }
 }
 
-double KisMaskGenerator::width() const
+qreal KisMaskGenerator::width() const
 {
     return d->m_radius;
 }
 
-double KisMaskGenerator::height() const
+qreal KisMaskGenerator::height() const
 {
     if (d->m_spikes == 2) {
         return d->m_radius * d->m_ratio;

@@ -33,7 +33,7 @@ public:
 
     KisDynamicSensorDistance();
     virtual ~KisDynamicSensorDistance() { }
-    virtual double parameter(const KisPaintInformation&);
+    virtual qreal parameter(const KisPaintInformation&);
     virtual void reset();
     virtual QWidget* createConfigurationWidget(QWidget* parent, KisSensorSelector*);
 public slots:

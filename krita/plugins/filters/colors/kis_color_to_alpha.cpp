@@ -97,7 +97,7 @@ void KisFilterColorToAlpha::process(KisConstProcessingInformation srcInfo,
         if (srcIt.isSelected()) {
             quint8 d = cs->difference(color, srcIt.oldRawData());
             if (d >= threshold) {
-                cs->setOpacity(dstIt.rawData(), 1.0, 1);
+                cs->setOpacity(dstIt.rawData(), qreal(1.0), 1);
             } else {
                 cs->setOpacity(dstIt.rawData(), d / thresholdF, 1);
             }

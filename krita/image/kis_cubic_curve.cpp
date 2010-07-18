@@ -293,7 +293,7 @@ qreal KisCubicCurve::Data::value(qreal x)
      */
     x = qBound(spline.begin(), x, spline.end());
     qreal y = spline.getValue(x);
-    return qBound(0.0, y, 1.0);
+    return qBound(qreal(0.0), y, qreal(1.0));
 }
 
 template<typename _T_, typename _T2_>

@@ -437,7 +437,7 @@ void KisToolGradient::slotSetReverse(bool state)
     m_reverse = state;
 }
 
-void KisToolGradient::slotSetAntiAliasThreshold(double value)
+void KisToolGradient::slotSetAntiAliasThreshold(qreal value)
 {
     m_antiAliasThreshold = value;
 }

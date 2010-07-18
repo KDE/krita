@@ -26,3 +26,8 @@ target_link_libraries(KisLocklessStackTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_Q
 set(kis_memory_pool_test_SRCS kis_memory_pool_test.cpp )
 kde4_add_unit_test(KisMemoryPoolTest TESTNAME krita-image-KisMemoryPoolTest  ${kis_memory_pool_test_SRCS})
 target_link_libraries(KisMemoryPoolTest  ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+set(kis_chunk_allocator_test_SRCS kis_chunk_allocator_test.cpp ../swap/kis_chunk_allocator.cpp)
+kde4_add_unit_test(KisChunkAllocatorTest TESTNAME krita-image-KisChunkAllocatorTest  ${kis_chunk_allocator_test_SRCS})
+target_link_libraries(KisChunkAllocatorTest  ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})

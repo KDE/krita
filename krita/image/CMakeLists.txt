@@ -47,6 +47,7 @@ set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_abstract_tile_compressor.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_legacy_tile_compressor.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_tile_compressor_2.cpp
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_chunk_allocator.cpp
 )
 add_subdirectory( tiles3 )
 endif(USE_TILESYSTEM EQUAL 1)

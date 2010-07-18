@@ -15,45 +15,24 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_CHUNK_ALLOCATOR_TEST_H
+#define KIS_CHUNK_ALLOCATOR_TEST_H
 
-#ifndef KIS_IMAGE_CONFIG_H_
-#define KIS_IMAGE_CONFIG_H_
-
-#include <kconfiggroup.h>
-#include "krita_export.h"
+#include <QtTest/QtTest>
 
 
-class KRITAIMAGE_EXPORT KisImageConfig
+class KisChunkAllocatorTest : public QObject
 {
-public:
-    KisImageConfig();
-    ~KisImageConfig();
-
-    bool useUpdateScheduler() const;
-    void setUseUpdateScheduler(bool useUpdateScheduler);
-
-    int updatePatchHeight() const;
-    void setUpdatePatchHeight(int value);
-    int updatePatchWidth() const;
-    void setUpdatePatchWidth(int value);
-
-    qreal maxCollectAlpha() const;
-    qreal maxMergeAlpha() const;
-    qreal maxMergeCollectAlpha() const;
-
-    int maxSwapSize() const;
-    void setMaxSwapSize(int value);
-
-    int swapSlabSize() const;
-    void setswapSlabSize(int value);
+    Q_OBJECT
 
 private:
-    Q_DISABLE_COPY(KisImageConfig);
+qreal measureFragmentation(qint32 transactions, qint32 chunksAlloc,
+                           qint32 chunksFree, bool printDetails);
 
-private:
-    KConfigGroup m_config;
+private slots:
+    void testOperations();
+    void testFragmentation();
 };
 
-
-#endif /* KIS_IMAGE_CONFIG_H_ */
+#endif /* KIS_CHUNK_ALLOCATOR_TEST_H */
 

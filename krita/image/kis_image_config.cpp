@@ -76,3 +76,23 @@ qreal KisImageConfig::maxMergeCollectAlpha() const
 {
     return m_config.readEntry("maxMergeCollectAlpha", 1.5);
 }
+
+int KisImageConfig::maxSwapSize() const
+{
+    return m_config.readEntry("maxSwapSize", 4096); // in MiB
+}
+
+void KisImageConfig::setMaxSwapSize(int value)
+{
+    m_config.writeEntry("maxSwapSize", value);
+}
+
+int KisImageConfig::swapSlabSize() const
+{
+    return m_config.readEntry("swapSlabSize", 64); // in MiB
+}
+
+void KisImageConfig::setswapSlabSize(int value)
+{
+    m_config.writeEntry("swapSlabSize", value);
+}

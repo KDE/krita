@@ -514,11 +514,12 @@ void KisToolTransform::initHandles()
         m_origSelectionImg = new QImage(w, h, QImage::Format_ARGB32);
         m_origSelectionImg->fill(0xFFFFFFFF);
     }
-    m_origSelectionImg->invertPixels();
-    QImage alphaChannel = m_origSelectionImg->createMaskFromColor(qRgb(0, 0, 0));
-    m_origImg->setAlphaChannel(alphaChannel);
+    QImage alphaMask(*m_origSelectionImg);
+
+    m_origImg->setAlphaChannel(alphaMask);
     m_currImg = QImage(*m_origImg); //create a shallow copy
-    m_origSelectionImg->setAlphaChannel(alphaChannel);
+    m_origSelectionImg->invertPixels();
+    m_origSelectionImg->setAlphaChannel(alphaMask);
     if (m_canvas && m_canvas->viewConverter() && kisimage)
         m_refSize = m_canvas->viewConverter()->documentToView(QSizeF(1 / kisimage->xRes(), 1 / kisimage->yRes()));
     else
@@ -1190,7 +1191,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
         case BOTTOMSCALE:
             if (m_function == TOPSCALE) {
                 signY = -1;
-                //we the result of v transformed to be equal to v1Proj (i.e. here we want the projection of the middle bottom point to be unchanged)
+                //we want the result of v transformed to be equal to v1Proj (i.e. here we want the projection of the middle bottom point to be unchanged)
                 v1 = QVector3D((double)(m_originalTopLeft.x() + m_originalBottomRight.x()) / 2.0, m_originalBottomRight.y(), 0) - QVector3D(m_originalCenter);
                 v2 = QVector3D((double)(m_originalTopLeft.x() + m_originalBottomRight.x()) / 2.0, m_originalTopLeft.y(), 0) - QVector3D(m_originalCenter);
                 //we save the projection, and we'll adjust the translation at the end
@@ -1358,13 +1359,8 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
             case TOPRIGHTSCALE:
                 signY = -1;
                 v1 = QVector3D(m_originalTopLeft.x(), m_originalBottomRight.y(), 0) - QVector3D(m_originalCenter);
-                v2 = QVector3D(m_originalTopLeft - m_originalCenter);
-                v3 = QVector3D(m_originalBottomRight.x(), m_originalTopLeft.y(), 0) - QVector3D(m_originalCenter);
-                v4 = QVector3D(m_originalBottomRight - m_originalCenter);
+                v2 = QVector3D(m_originalBottomRight.x(), m_originalTopLeft.y(),0) - QVector3D(m_originalCenter);
                 v1Proj = QVector3D(m_clickBottomLeftProj);
-                v2Proj = QVector3D(m_clickTopLeftProj);
-                v3Proj = QVector3D(m_clickTopRightProj);
-                v4Proj = QVector3D(m_clickBottomRightProj);
                 break;
             case BOTTOMRIGHTSCALE:
                 v1 = QVector3D(m_originalTopLeft - m_originalCenter);
@@ -1536,7 +1532,11 @@ void KisToolTransform::mouseReleaseEvent(KoPointerEvent */*e*/)
     m_selecting = false;
 
     if (m_actuallyMoveWhileSelected) {
-        transform();
+        if (m_imageTooBig) {
+            restoreArgs(m_clickArgs);
+            updateOutlineChanged();
+        } else
+            transform();
 
         m_scaleX_wOutModifier = m_currentArgs.scaleX();
         m_scaleY_wOutModifier = m_currentArgs.scaleY();
@@ -1622,12 +1622,18 @@ void KisToolTransform::recalcOutline()
     m_currentPlan = QVector3D::crossProduct(v1, v2);
     m_currentPlan.normalize();
 
+    //check whether image is too big to be displayed or not
     QPointF minmaxZ = minMaxZ(m_topLeft, m_topRight, m_bottomRight, m_bottomLeft);
-    if (minmaxZ.y() > m_cameraPos.z()) {
+    if (minmaxZ.y() >= m_cameraPos.z() * 0.9) {
         m_imageTooBig = true;
+        if (m_optWidget && m_optWidget->tooBigLabel)
+            m_optWidget->tooBigLabel->show();
         return;
-    } else
+    } else {
         m_imageTooBig = false;
+        if (m_optWidget && m_optWidget->tooBigLabel)
+            m_optWidget->tooBigLabel->hide();
+    }
 
     QMatrix4x4 m;
 
@@ -1678,36 +1684,46 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
         recalcOutline();
         m_scaledOrigSelectionImg = m_origSelectionImg->scaled(m_refSize.width() * m_origSelectionImg->width(), m_refSize.height() * m_origSelectionImg->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
-    gc.setOpacity(0.6);
-    gc.drawImage(origtopleft, m_scaledOrigSelectionImg, QRectF(m_scaledOrigSelectionImg.rect()));
+    if (m_optWidget && m_optWidget->hideDecorationsBox && m_optWidget->hideDecorationsBox->isChecked()) {
+        if (m_imageTooBig)
+            return;
 
-    if (m_imageTooBig)
-        return;
+        gc.setOpacity(0.6);
+        QRectF bRect = boundRect(topleft, topright, bottomleft, bottomright);
+        QPointF bRectCenter = bRect.center();
+        gc.drawImage(QPointF(bRectCenter.x() - (double)m_currImg.width() / 2., bRectCenter.y() - (double)m_currImg.height() / 2.), m_currImg, QRectF(m_currImg.rect()));
+    } else {
+        gc.setOpacity(0.6);
+        gc.drawImage(origtopleft, m_scaledOrigSelectionImg, QRectF(m_scaledOrigSelectionImg.rect()));
 
-    QRectF bRect = boundRect(topleft, topright, bottomleft, bottomright);
-    QPointF bRectCenter = bRect.center();
-    gc.drawImage(QPointF(bRectCenter.x() - (double)m_currImg.width() / 2., bRectCenter.y() - (double)m_currImg.height() / 2.), m_currImg, QRectF(m_currImg.rect()));
-    gc.setOpacity(1.0);
+        if (m_imageTooBig)
+            return;
 
-    gc.drawRect(handleRect.translated(topleft));
-    gc.drawRect(handleRect.translated(middletop));
-    gc.drawRect(handleRect.translated(topright));
-    gc.drawRect(handleRect.translated(middleright));
-    gc.drawRect(handleRect.translated(bottomright));
-    gc.drawRect(handleRect.translated(middlebottom));
-    gc.drawRect(handleRect.translated(bottomleft));
-    gc.drawRect(handleRect.translated(middleleft));
+        QRectF bRect = boundRect(topleft, topright, bottomleft, bottomright);
+        QPointF bRectCenter = bRect.center();
+        gc.drawImage(QPointF(bRectCenter.x() - (double)m_currImg.width() / 2., bRectCenter.y() - (double)m_currImg.height() / 2.), m_currImg, QRectF(m_currImg.rect()));
+        gc.setOpacity(1.0);
 
-    gc.drawLine(topleft, topright);
-    gc.drawLine(topright, bottomright);
-    gc.drawLine(bottomright, bottomleft);
-    gc.drawLine(bottomleft, topleft);
+        gc.drawRect(handleRect.translated(topleft));
+        gc.drawRect(handleRect.translated(middletop));
+        gc.drawRect(handleRect.translated(topright));
+        gc.drawRect(handleRect.translated(middleright));
+        gc.drawRect(handleRect.translated(bottomright));
+        gc.drawRect(handleRect.translated(middlebottom));
+        gc.drawRect(handleRect.translated(bottomleft));
+        gc.drawRect(handleRect.translated(middleleft));
 
-    QPointF rotationCenter = converter.documentToView(QPointF(m_rotationCenterProj.x() / kisimage->xRes(), m_rotationCenterProj.y() / kisimage->yRes()));
-    QRectF rotationCenterRect(- m_rotationCenterRadius / 2., - m_rotationCenterRadius / 2., m_rotationCenterRadius, m_rotationCenterRadius);
-    gc.drawEllipse(rotationCenterRect.translated(rotationCenter));
-    gc.drawLine(QPointF(rotationCenter.x() - m_rotationCenterRadius / 2. - 2, rotationCenter.y()), QPointF(rotationCenter.x() + m_rotationCenterRadius / 2. + 2, rotationCenter.y()));
-    gc.drawLine(QPointF(rotationCenter.x(), rotationCenter.y() - m_rotationCenterRadius / 2. - 2), QPointF(rotationCenter.x(), rotationCenter.y() + m_rotationCenterRadius / 2. + 2));
+        gc.drawLine(topleft, topright);
+        gc.drawLine(topright, bottomright);
+        gc.drawLine(bottomright, bottomleft);
+        gc.drawLine(bottomleft, topleft);
+
+        QPointF rotationCenter = converter.documentToView(QPointF(m_rotationCenterProj.x() / kisimage->xRes(), m_rotationCenterProj.y() / kisimage->yRes()));
+        QRectF rotationCenterRect(- m_rotationCenterRadius / 2., - m_rotationCenterRadius / 2., m_rotationCenterRadius, m_rotationCenterRadius);
+        gc.drawEllipse(rotationCenterRect.translated(rotationCenter));
+        gc.drawLine(QPointF(rotationCenter.x() - m_rotationCenterRadius / 2. - 2, rotationCenter.y()), QPointF(rotationCenter.x() + m_rotationCenterRadius / 2. + 2, rotationCenter.y()));
+        gc.drawLine(QPointF(rotationCenter.x(), rotationCenter.y() - m_rotationCenterRadius / 2. - 2), QPointF(rotationCenter.x(), rotationCenter.y() + m_rotationCenterRadius / 2. + 2));
+    }
 
     gc.setPen(old);
 }
@@ -1820,12 +1836,12 @@ void KisToolTransform::applyTransform()
 
         KisTransformWorker selectionWorker(tmpDevice2, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_originalCenter.x(), m_originalCenter.y(), m_currentArgs.aZ(), (int)(t.x()), (int)(t.y()), progress, m_filter);
         selectionWorker.run();
-        //KisPerspectiveTransformWorker perspectiveSelectionWorker(tmpDevice2, tmpRc3.united(tmpDevice2->extent()), m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), progress);
-        //perspectiveSelectionWorker.run();
+        KisPerspectiveTransformWorker perspectiveSelectionWorker(tmpDevice2, tmpRc3.united(tmpDevice2->extent()), m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), progress);
+        perspectiveSelectionWorker.run();
 
         pixelSelection->clear();
 
-        QRect tmpRc2 = tmpDevice2->extent();
+        QRect tmpRc2 = tmpDevice2->exactBounds();
         KisPainter painter2(pixelSelection);
         painter2.bitBlt(tmpRc2.topLeft(), tmpDevice2, tmpRc2);
         painter2.end();
@@ -2000,6 +2016,9 @@ QWidget* KisToolTransform::createOptionWidget() {
     connect(m_optWidget->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(keepAspectRatioChanged(bool)));
 
     connect(m_optWidget->buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(buttonBoxClicked(QAbstractButton *)));
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
+    if (canvas)
+        connect(m_optWidget->hideDecorationsBox, SIGNAL(stateChanged(int)), canvas, SLOT(updateCanvas()));
     setButtonBoxDisabled(true);
 
     connect(m_optWidget->scaleXBox, SIGNAL(editingFinished()), this, SLOT(editingFinished()));
@@ -2015,12 +2034,7 @@ QWidget* KisToolTransform::createOptionWidget() {
     refreshSpinBoxes();
 
     m_optWidget->warpButton->hide();
-    //hide rotX
-    m_optWidget->aXBox->hide();
-    m_optWidget->label_rotateX->hide();
-    //hide rotY
-    m_optWidget->aYBox->hide();
-    m_optWidget->label_rotateY->hide();
+    m_optWidget->tooBigLabel->hide();
 
     return m_optWidget;
 }

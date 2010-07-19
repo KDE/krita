@@ -78,8 +78,6 @@ void KisColorSelectorTriangle::updatePixelCache()
 
 
     m_pixelCache = cache;
-    if(m_lastClickPos!=QPoint(-1,-1))
-        updateLastColor(selectColor(m_lastClickPos.x(), m_lastClickPos.y()));
 }
 
 QColor KisColorSelectorTriangle::selectColor(int x, int y)

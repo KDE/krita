@@ -65,9 +65,9 @@ void KisColorSelectorComponent::mouseEvent(int x, int y)
     int newY=y-m_y;
     if(newX>0 && newX<width() &&
        newY>0 && newY<height()) {
-        QColor c = selectColor(newX, newY);
-        if(c.isValid())
-           m_lastColor = c;
+        selectColor(newX, newY);
+        m_lastX=newX;
+        m_lastY=newY;
     }
 }
 
@@ -77,6 +77,7 @@ const KoColorSpace* KisColorSelectorComponent::colorSpace() const
     Q_ASSERT(cs);
     return cs;
 }
+
 bool KisColorSelectorComponent::isDirty() const
 {
     return m_dirty || m_lastColorSpace!=colorSpace();
@@ -84,7 +85,7 @@ bool KisColorSelectorComponent::isDirty() const
 
 QColor KisColorSelectorComponent::currentColor()
 {
-    return m_lastColor;
+    return selectColor(m_lastX, m_lastY);
 }
 
 void KisColorSelectorComponent::setParam(qreal p)
@@ -114,11 +115,6 @@ int KisColorSelectorComponent::width() const
 int KisColorSelectorComponent::height() const
 {
     return m_height;
-}
-
-void KisColorSelectorComponent::updateLastColor(QColor c)
-{
-    m_lastColor=c;
 }
 
 qreal KisColorSelectorComponent::parameter1() const

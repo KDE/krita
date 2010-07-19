@@ -69,10 +69,6 @@ protected:
     /// have to care about x/y coordinates (top left corner)
     virtual void paint(QPainter*) = 0;
 
-    /// this should be used to update the last color, if one of the parameters has changed
-    /// the logic for doing this should be moved to this class
-    void updateLastColor(QColor c);
-
     qreal parameter1() const;
     qreal parameter2() const;
 private:
@@ -85,7 +81,8 @@ private:
     qreal m_param2;
     bool m_dirty;
     const KoColorSpace* m_lastColorSpace;
-    QColor m_lastColor;
+    int m_lastX;
+    int m_lastY;
 };
 
 #endif // KIS_COLOR_SELECTOR_COMPONENT_H

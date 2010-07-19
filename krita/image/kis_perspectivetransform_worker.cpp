@@ -20,6 +20,9 @@
 
 #include "kis_perspectivetransform_worker.h"
 
+#include <QMatrix4x4>
+#include <QTransform>
+#include <QVector3D>
 
 #include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
@@ -39,6 +42,8 @@ KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP de
     else
         m_r = m_dev->exactBounds();
 
+    m_xcenter = 0;
+    m_ycenter = 0;
     // below was commented
     /*    if(m_dev->hasSelection())
             m_dev->selection()->clear();*/
@@ -51,6 +56,34 @@ KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP de
     }
 }
 
+KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QRect r, QPointF center, double aX, double aY, double distance, KoUpdater *progress)
+        : m_dev(dev), m_progress(progress), m_selection(KisSelectionSP())
+
+{
+    QMatrix4x4 m;
+
+    m_r = r;
+
+    m.rotate(180. * aX / M_PI, QVector3D(1, 0, 0));
+    m.rotate(180. * aY / M_PI, QVector3D(0, 1, 0));
+    m_transform = m.toTransform(distance);
+    bool invertible;
+    m_transform = m_transform.inverted(&invertible);
+    if (!invertible)
+        m_transform = QTransform();
+    m_xcenter = center.x();
+    m_ycenter = center.y();
+
+    m_matrix[0][0] = m_transform.m11();
+    m_matrix[0][1] = m_transform.m21();
+    m_matrix[0][2] = m_transform.m31();
+    m_matrix[1][0] = m_transform.m12();
+    m_matrix[1][1] = m_transform.m22();
+    m_matrix[1][2] = m_transform.m32();
+    m_matrix[2][0] = m_transform.m13();
+    m_matrix[2][1] = m_transform.m23();
+    m_matrix[2][2] = m_transform.m33();
+}
 
 KisPerspectiveTransformWorker::~KisPerspectiveTransformWorker()
 {
@@ -73,11 +106,13 @@ void KisPerspectiveTransformWorker::run()
         // Action
         while (!dstIt.isDone()) {
             if (dstIt.isSelected()) {
-                QPointF p;
-                double sf = (dstIt.x() * m_matrix[2][0] + dstIt.y() * m_matrix[2][1] + 1.0);
+                QPointF p = m_transform.map(QPointF(dstIt.x() - m_xcenter, dstIt.y() - m_ycenter));
+                double dstX = dstIt.x() - m_xcenter;
+                double dstY = dstIt.y() - m_ycenter;
+                double sf = (dstX * m_matrix[2][0] + dstY * m_matrix[2][1] + m_matrix[2][2]);
                 sf = (sf == 0.) ? 1. : 1. / sf;
-                p.setX((dstIt.x() * m_matrix[0][0] + dstIt.y() * m_matrix[0][1] + m_matrix[0][2]) * sf);
-                p.setY((dstIt.x() * m_matrix[1][0] + dstIt.y() * m_matrix[1][1] + m_matrix[1][2]) * sf);
+                p.setX((dstX * m_matrix[0][0] + dstY * m_matrix[0][1] + m_matrix[0][2]) * sf + m_xcenter);
+                p.setY((dstX * m_matrix[1][0] + dstY * m_matrix[1][1] + m_matrix[1][2]) * sf + m_ycenter);
 
                 srcAcc.moveTo(p);
                 srcAcc.sampledOldRawData(dstIt.rawData());

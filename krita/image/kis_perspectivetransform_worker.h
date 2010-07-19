@@ -21,18 +21,21 @@
 #define KIS_PERSPECTIVETRANSFORM_WORKER_H
 
 #include "kis_types.h"
+#include "krita_export.h"
 #include <QRect>
+#include <QTransform>
 
 class QPointF;
 class KoUpdater;
 
-class KisPerspectiveTransformWorker : public QObject
+class KRITAIMAGE_EXPORT KisPerspectiveTransformWorker : public QObject
 {
 
     Q_OBJECT
 
 public:
     KisPerspectiveTransformWorker(KisPaintDeviceSP dev, KisSelectionSP selection, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdater *progress);
+    KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QRect r, QPointF center, double aX, double aY, double distance, KoUpdater *progress);
 
     ~KisPerspectiveTransformWorker();
 
@@ -42,6 +45,7 @@ private:
     qint32 m_lastProgressReport;
     qint32 m_progressStep;
     double m_xcenter, m_ycenter, m_p, m_q;
+    QTransform m_transform;
     KisPaintDeviceSP m_dev;
     KoUpdater *m_progress;
     KisSelectionSP m_selection;

@@ -3,7 +3,6 @@
 set(kritatoolperspectivetransform_PART_SRCS
     tool_perspectivetransform.cc
     kis_tool_perspectivetransform.cc
-    kis_perspectivetransform_worker.cpp
     )
 
 kde4_add_ui_files(kritatoolperspectivetransform_PART_SRCS wdgperspectivetransform.ui)

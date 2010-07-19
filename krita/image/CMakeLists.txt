@@ -178,6 +178,7 @@ set(kritaimage_LIB_SRCS
    kis_threaded_applicator.cpp
    kis_transaction_data.cpp
    kis_transform_worker.cc
+   kis_perspectivetransform_worker.cpp
    kis_transformation_mask.cpp
    kis_transparency_mask.cc
    kis_undo_adapter.cc
@@ -279,13 +280,13 @@ install( FILES
     kis_random_accessor.h
     kis_iterators_pixel.h
     kis_transform_worker.h
+    kis_perspectivetransform_worker.h
     kis_serializable_configuration.h
     kis_selection.h
     kis_shared.h
     kis_shared_ptr.h
     kis_shared_ptr_vector.h
     kis_transaction.h
-    kis_transform_worker.h
     kis_types.h
     krita_export.h
     filter/kis_filter_configuration.h

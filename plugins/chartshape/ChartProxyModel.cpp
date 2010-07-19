@@ -212,8 +212,11 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
             DataSet *dataSet;
             if ( !dataSetsToRecycle.isEmpty() )
                 dataSet = dataSetsToRecycle.takeLast();
-            else
-                dataSet = new DataSet( this );
+            else{
+                // the datasetnumber needs to be known at construction time, to ensure
+                // default colors are set correctly
+                dataSet = new DataSet( this, createdDataSetCount );                
+            }
             createdDataSets.append( dataSet );
 
             dataSet->blockSignals( true );
@@ -244,13 +247,23 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
                 xDataRegion.subtract( xDataRegion.pointAtIndex( 0 ) );
                 yDataRegion.subtract( yDataRegion.pointAtIndex( 0 ) );
             }
+            
+            if ( d->dataDimensions > 2 && j.hasNext() )
+                j.next();
+            // adding support for third dimension, even if the existing scheme does not scale if we have need for aditional dimensions
+            CellRegion zDataRegion( j.value() );
+
+            if ( d->firstColumnIsLabel ) {
+                zDataRegion.subtract( zDataRegion.pointAtIndex( 0 ) );
+            }
 
             dataSet->setXDataRegion( xDataRegion );
             dataSet->setYDataRegion( yDataRegion );
+            dataSet->setCustomDataRegion( zDataRegion );
             dataSet->setCategoryDataRegion( category );
-            dataSet->setLabelDataRegion( labelDataRegion );
-            createdDataSetCount++;
+            dataSet->setLabelDataRegion( labelDataRegion );            
             dataSet->blockSignals( false );
+            ++createdDataSetCount;
         }
     }
     else {
@@ -313,8 +326,11 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
             DataSet *dataSet;
             if ( !dataSetsToRecycle.isEmpty() )
                 dataSet = dataSetsToRecycle.takeLast();
-            else
-                dataSet = new DataSet( this );
+            else{
+                // the datasetnumber needs to be known at construction time, to ensure
+                // default colors are set correctly
+                dataSet = new DataSet( this, createdDataSetCount );                
+            }
             createdDataSets.append( dataSet );
 
             dataSet->blockSignals( true );
@@ -345,13 +361,23 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
                 xDataRegion.subtract( xDataRegion.pointAtIndex( 0 ) );
                 yDataRegion.subtract( yDataRegion.pointAtIndex( 0 ) );
             }
+            
+            if ( d->dataDimensions > 2 && j.hasNext() )
+                j.next();
+            
+            CellRegion zDataRegion( j.value() );
+
+            if ( d->firstRowIsLabel ) {
+                zDataRegion.subtract( zDataRegion.pointAtIndex( 0 ) );
+            }
 
             dataSet->setXDataRegion( xDataRegion );
             dataSet->setYDataRegion( yDataRegion );
+            dataSet->setCustomDataRegion( zDataRegion );
             dataSet->setLabelDataRegion( labelDataRegion );
             dataSet->setCategoryDataRegion( category );
-            createdDataSetCount++;
             dataSet->blockSignals( false );
+            ++createdDataSetCount;
         }
     }
 
@@ -457,13 +483,15 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
             if ( loadedDataSetCount < createdDataSets.size() ) {
                 dataSet = createdDataSets[loadedDataSetCount];
             } else {
-                dataSet = new DataSet( this );
+                // the datasetnumber needs to be known at construction time, to ensure
+                // default colors are set correctly
+                dataSet = new DataSet( this, d->dataSets.size() );
                 dataSet->setNumber( d->dataSets.size() );
             }
             d->dataSets.append( dataSet );
             dataSet->loadOdf( n, context );
 
-            loadedDataSetCount++;
+            ++loadedDataSetCount;
         } else {
             qWarning() << "ChartProxyModel::loadOdf(): Unknown tag name \"" << n.localName() << "\"";
         }

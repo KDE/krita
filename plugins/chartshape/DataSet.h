@@ -36,6 +36,7 @@
 namespace KDChart {
     class DataValueAttributes;
     class PieAttributes;
+    class MarkerAttributes;
 }
 
 class KoShapeLoadingContext;
@@ -59,7 +60,7 @@ class KDChartModel;
 class CHARTSHAPELIB_EXPORT DataSet
 {
 public:
-    DataSet( ChartProxyModel *model );
+    DataSet( ChartProxyModel *model, int dataSetNr );
     ~DataSet();
 
     // Getter methods
@@ -89,7 +90,7 @@ public:
      * \param section The data point to set this type for. -1 will set
      * a series-wide value
      */
-    void setValueLabelType( ValueLabelType type, int section = -1 );
+    void setValueLabelType( ValueLabelType type, int section = -1 );    
 
     /**
      * \return the value label type.
@@ -99,6 +100,23 @@ public:
      * the series-wide value
      */
     ValueLabelType valueLabelType( int section = -1 ) const;
+    
+    /**
+     * Sets the marker attributes of the series
+     *
+     * \param section The data point to set this type for. -1 will set
+     * a series-wide value
+     */
+    void setMarkerAttributes( const KDChart::MarkerAttributes& attribs, int section = -1 );
+    
+    /**
+     * \return the MarkerAttributes.
+     * \see ValueLabelType
+     *
+     * \param section The data point to return the MarkerAttributes for. -1 will return
+     * the series-wide value
+     */
+    KDChart::MarkerAttributes getMarkerAttributes( int section = -1, bool* success = NULL ) const;
 
     // Graphics properties for the visualization of this dataset.
     QPen   pen() const;

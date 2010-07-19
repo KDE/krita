@@ -103,9 +103,11 @@ public:
     void createBubbleDiagram();
     void createSurfaceDiagram();
     void createGanttDiagram();
+    void applyAttributesToDataSet( DataSet* set, ChartType newCharttype );
 
     // Pointer to Axis that owns this Private instance
     Axis * const q;
+    QMap< DataSet*, KDChart::MarkerAttributes > markerAttributesBackup;//QVector< KDChart::MarkerAttributes > > markerAttributesBackup;
 
     PlotArea *plotArea;
 
@@ -311,6 +313,63 @@ Axis::Private::~Private()
         plotArea->parent()->legend()->kdLegend()->removeDiagram( kdGanttDiagram );
         delete kdGanttDiagram;
         delete kdGanttDiagramModel;
+    }
+}
+/**
+ *
+ * Applies special settings to BubbleCharts and makes a backup of the
+ * the old settings, restoring them if a switch to non buble type is made
+ * This is nedssary as BubbleChart is implemnted via Plotter, a diagram type
+ * would make this obsolete, as the diagram could request correct data from the model
+ *
+ */
+void Axis::Private::applyAttributesToDataSet( DataSet* set, ChartType newCharttype )
+{
+    KDChart::MarkerAttributes restoreAttribs( markerAttributesBackup[ set ] );
+    //markerAttributesBackup[ set ] = set->getMarkerAttributes();
+    switch ( newCharttype )
+    {
+        case( BubbleChartType ):
+        {          
+            markerAttributesBackup[ set ] = set->getMarkerAttributes();  
+            KDChart::MarkerAttributes ma( set->getMarkerAttributes( ) );
+            ma.setVisible( true );
+            ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
+            //ma.setMarkerSize( QSizeF(14.0,14.0) );
+            ma.setMarkerColor( set->color() );                
+            set->setMarkerAttributes( ma );
+            QPen p = ma.pen();
+            p.setColor( set->color() );
+            ma.setPen( p );
+            for ( int i = 0; i < set->size(); ++i ){
+                KDChart::MarkerAttributes ma( set->getMarkerAttributes( i ) );
+                ma.setVisible( true );
+                ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
+                //ma.setMarkerSize( QSizeF(14.0,14.0) );
+                ma.setMarkerColor( set->color() );   
+                QPen p = ma.pen();
+                p.setColor( set->color() );
+                ma.setPen( p );
+                set->setMarkerAttributes( ma, i );
+            }
+        }
+            break;
+        case( BarChartType ):
+        case( LineChartType ):
+        case( ScatterChartType ):
+        case( AreaChartType ):
+        case( RingChartType ):
+        case( RadarChartType ):
+        case( SurfaceChartType ):
+        case( StockChartType ):
+        case( GanttChartType ):
+        case( LastChartType ):
+        default:
+            set->setMarkerAttributes( restoreAttribs );
+            for ( int i = 0; i < set->size(); ++i ){
+                set->setMarkerAttributes( restoreAttribs, i );
+            }
+            break;
     }
 }
 
@@ -843,15 +902,17 @@ void Axis::Private::createBubbleDiagram()
     
     registerDiagram( kdBubbleDiagram );
     
-    kdPlane->addDiagram( kdBubbleDiagram );
+    kdPlane->addDiagram( kdBubbleDiagram );    
 
     if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
         plotArea->kdChart()->addCoordinatePlane( kdPlane );
     
-    //foreach ( Axis *axis, plotArea->axes() ) {
-    //    if ( axis->isVisible() )
-    //        kdBubbleDiagram->addAxis( axis->kdAxis() );
-    //}
+    Q_ASSERT( plotArea );
+    foreach ( Axis *axis, plotArea->axes() ) {
+        //if ( axis->dimension() == XAxisDimension )
+            if ( axis->isVisible() )
+                kdBubbleDiagram->addAxis( axis->kdAxis() );
+    }
     
      // disable the connecting line
     //kdBubbleDiagram->setPen( QPen( Qt::black, 0.0 ) );
@@ -1911,7 +1972,7 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         foreach ( DataSet *dataSet, d->dataSets ) {
             if ( dataSet->chartType() != LastChartType ) {
                 dataSet->setChartType( LastChartType );
-                dataSet->setChartSubType( NoChartSubtype );
+                dataSet->setChartSubType( NoChartSubtype );                
             }
         }
     }
@@ -1920,8 +1981,13 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         if ( dataSet->chartType() != LastChartType )
             continue;
 
+        Qt::PenStyle newPenStyle = newDiagram->pen().style();
+        QPen newPen = dataSet->pen();
+        newPen.setStyle( newPenStyle );
+        d->applyAttributesToDataSet( dataSet, newChartType );
+        dataSet->setPen(  newPen );
         dataSet->setKdDiagram( newDiagram );
-        newModel->addDataSet( dataSet );
+        newModel->addDataSet( dataSet );        
         if ( oldModel && *oldModel ) {
             const int dataSetCount = (*oldModel)->dataDirection() == Qt::Vertical
                                      ? (*oldModel)->columnCount() : (*oldModel)->rowCount();

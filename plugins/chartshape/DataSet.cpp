@@ -69,7 +69,7 @@ using namespace KChart;
 class DataSet::Private
 {
 public:
-    Private( DataSet *parent );
+    Private( DataSet *parent, int dataSetNr );
     ~Private();
 
     void         updateSize();
@@ -147,31 +147,54 @@ public:
     bool blockSignals;
 };
 
-DataSet::Private::Private( DataSet *parent )
-{
-    this->parent = parent;
-    num = -1;
-    chartType = LastChartType;
-    chartSubType = NoChartSubtype;
-    kdChartModel = 0;
-    kdDataSetNumber = -1;
-    showMeanValue = false;
-    showLabels = false;
-    showLowerErrorIndicator = false;
-    showUpperErrorIndicator = false;
-    errorPercentage = 0.0;
-    errorMargin = 0.0;
-    lowerErrorLimit = 0.0;
-    upperErrorLimit = 0.0;
-    brush = QColor( Qt::white );
-    pen = QPen( Qt::black );
-    kdDiagram = 0;
-    attachedAxis = 0;
-    size = 0;
-    blockSignals = false;
-    penIsSet = false;
-    brushIsSet = false;
-    dataValueAttributes = defaultDataValueAttributes();
+DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
+    parent( parent ),
+    chartType( LastChartType ),
+    chartSubType( NoChartSubtype ),
+    attachedAxis( 0 ),
+    showMeanValue( false ),
+    showLabels( false ),
+    showLowerErrorIndicator( false ),
+    showUpperErrorIndicator( false ),
+    errorPercentage( 0.0 ),
+    errorMargin( 0.0 ),
+    lowerErrorLimit( 0.0 ),
+    upperErrorLimit( 0.0 ),
+    penIsSet( false ),
+    brushIsSet( false ),
+    pen( QPen( Qt::black ) ),
+    brush( QColor( Qt::white ) ),    
+    dataValueAttributes( defaultDataValueAttributes() ),
+    num( -1 ),
+    kdDiagram( 0 ),
+    kdDataSetNumber( dataSetNr ),
+    kdChartModel( 0 ),
+    size( 0 ),
+    blockSignals( false )
+{    
+//     this->parent = parent;
+//     num = -1;
+//     chartType = LastChartType;
+//     chartSubType = NoChartSubtype;
+//     kdChartModel = 0;
+//     kdDataSetNumber = -1;
+//     showMeanValue = false;
+//     showLabels = false;
+//     showLowerErrorIndicator = false;
+//     showUpperErrorIndicator = false;
+//     errorPercentage = 0.0;
+//     errorMargin = 0.0;
+//     lowerErrorLimit = 0.0;
+//     upperErrorLimit = 0.0;
+//     brush = QColor( Qt::white );
+//     pen = QPen( Qt::black );
+//     kdDiagram = 0;
+//     attachedAxis = 0;
+//     size = 0;
+//     blockSignals = false;
+//     penIsSet = false;
+//     brushIsSet = false;
+//     dataValueAttributes = defaultDataValueAttributes();
 }
 
 DataSet::Private::~Private()
@@ -193,14 +216,14 @@ KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes()
     // Set positive value position
     KDChart::RelativePosition positivePosition = attr.positivePosition();
     positivePosition.setAlignment( Qt::AlignCenter | Qt::AlignBottom );
-    positivePosition.setReferencePosition( KDChartEnums::PositionNorth );
+    positivePosition.setReferencePosition( KDChartEnums::PositionNorthWest );
     positivePosition.setHorizontalPadding( 0.0 );
     positivePosition.setVerticalPadding( -100.0 );
     attr.setPositivePosition( positivePosition );
     // Set negative value position
     KDChart::RelativePosition negativePosition = attr.negativePosition();
     negativePosition.setAlignment( Qt::AlignCenter | Qt::AlignTop );
-    negativePosition.setReferencePosition( KDChartEnums::PositionSouth );
+    negativePosition.setReferencePosition( KDChartEnums::PositionSouthWest );
     negativePosition.setHorizontalPadding( 0.0 );
     negativePosition.setVerticalPadding( 100.0 );
     attr.setNegativePosition( negativePosition );
@@ -402,10 +425,11 @@ QPen DataSet::Private::defaultPen() const
 }
 
 
-DataSet::DataSet( ChartProxyModel *proxyModel )
-    : d( new Private( this ) )
+DataSet::DataSet( ChartProxyModel *proxyModel, int dataSetNr )
+    : d( new Private( this, dataSetNr ) )
 {
     d->model = proxyModel;
+    setColor( defaultDataSetColor( dataSetNr ) );
 }
 
 DataSet::~DataSet()
@@ -589,6 +613,16 @@ void DataSet::setPen( const QPen &pen )
     d->penIsSet = true;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this );
+    KDChart::MarkerAttributes ma( d->dataValueAttributes.markerAttributes() );
+    ma.setPen( pen );
+    d->dataValueAttributes.setMarkerAttributes( ma );
+    for ( QMap< int, KDChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
+          it != d->sectionsDataValueAttributes.end(); ++it ){
+        KDChart::MarkerAttributes mattr( it->markerAttributes() );
+        mattr.setMarkerColor( pen.color() );
+        it->setMarkerAttributes( mattr );
+    }
+    
 }
 
 void DataSet::setBrush( const QBrush &brush )
@@ -597,6 +631,15 @@ void DataSet::setBrush( const QBrush &brush )
     d->brushIsSet = true;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this );
+    KDChart::MarkerAttributes ma( d->dataValueAttributes.markerAttributes() );
+    ma.setMarkerColor( brush.color() );
+    d->dataValueAttributes.setMarkerAttributes( ma );
+    for ( QMap< int, KDChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
+          it != d->sectionsDataValueAttributes.end(); ++it ){
+        KDChart::MarkerAttributes mattr( it->markerAttributes() );
+        mattr.setMarkerColor( brush.color() );
+        it->setMarkerAttributes( mattr );
+    }
 }
 
 void DataSet::setPieExplodeFactor( int factor )
@@ -613,6 +656,9 @@ void DataSet::setPen( int section, const QPen &pen )
     d->pens[ section ] = pen;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::PenDataRole, section );
+    KDChart::MarkerAttributes mas( d->sectionsDataValueAttributes[ section ].markerAttributes() );
+    mas.setPen( pen );
+    d->sectionsDataValueAttributes[ section ].setMarkerAttributes( mas );
 }
 
 void DataSet::setBrush( int section, const QBrush &brush )
@@ -620,6 +666,9 @@ void DataSet::setBrush( int section, const QBrush &brush )
     d->brushes[ section ] = brush;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::BrushDataRole, section );
+    KDChart::MarkerAttributes mas( d->sectionsDataValueAttributes[ section ].markerAttributes() );
+    mas.setMarkerColor( brush.color() );
+    d->sectionsDataValueAttributes[ section ].setMarkerAttributes( mas );
 }
 
 void DataSet::setPieExplodeFactor( int section, int factor )
@@ -641,6 +690,9 @@ void DataSet::setColor( const QColor &color )
     QBrush brush = d->brush;
     brush.setColor( color );
     setBrush( brush );
+    QPen pen = d->pen;
+    pen.setColor( color );
+    setPen( pen );
 }
 
 int DataSet::number() const
@@ -833,9 +885,26 @@ void DataSet::setCustomDataRegion( const CellRegion &region )
 {
     d->customDataRegion = region;
     d->updateSize();
-
+    int i = 0;
+    for ( QMap< int, KDChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
+          it != d->sectionsDataValueAttributes.end(); ++it ){
+        KDChart::MarkerAttributes mattr( it->markerAttributes() );
+        mattr.setMarkerSize( QSizeF( customData( i ).toDouble(), customData( i ).toDouble() ) );
+        it->setMarkerAttributes( mattr );
+        ++i;
+    }
+    if ( d->sectionsDataValueAttributes.empty() ){
+        for ( i = 0; i < size(); ++i ){
+          KDChart::DataValueAttributes attrs = d->defaultDataValueAttributes();
+          KDChart::MarkerAttributes mattr( attrs.markerAttributes() );
+          mattr.setMarkerSize( QSizeF( customData( i ).toDouble(), customData( i ).toDouble() ) );
+          attrs.setMarkerAttributes( mattr );
+          d->sectionsDataValueAttributes[ i ] = attrs;
+        }
+    }
+    
     if ( !d->blockSignals && d->kdChartModel )
-        d->kdChartModel->dataSetChanged( this, KDChartModel::CustomDataRole, 0, size() - 1 );
+        d->kdChartModel->dataSetChanged( this, KDChartModel::CustomDataRole, 0, size() - 1 );    
 }
 
 void DataSet::setCategoryDataRegion( const CellRegion &region )
@@ -1015,6 +1084,62 @@ KDChartModel *DataSet::kdChartModel() const
 void DataSet::blockSignals( bool block )
 {
     d->blockSignals = block;
+}
+
+void DataSet::setMarkerAttributes( const KDChart::MarkerAttributes& attribs, int section )
+{
+      if ( section >= 0 ){
+          QMap< int, KDChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.find( section );
+        if ( it != d->sectionsDataValueAttributes.end() ){
+            it->setMarkerAttributes( attribs );
+            if ( !it->isVisible() && it->textAttributes().isVisible()){
+              KDChart::TextAttributes tAttr( it->textAttributes() );
+              tAttr.setVisible( false );
+              it->setTextAttributes( tAttr );
+            }
+              it->setVisible( attribs.isVisible() );
+        }else{
+            KDChart::DataValueAttributes attr = d->defaultDataValueAttributes();
+            attr.setMarkerAttributes( attribs );
+            if ( !attr.isVisible() && attr.textAttributes().isVisible()){
+              KDChart::TextAttributes tAttr( attr.textAttributes() );
+              tAttr.setVisible( false );
+              attr.setTextAttributes( tAttr );
+            }
+            attr.setVisible( attribs.isVisible() );
+            d->sectionsDataValueAttributes [ section ] = attr;
+        }
+      }else{
+          d->dataValueAttributes.setMarkerAttributes( attribs );
+          if ( !d->dataValueAttributes.isVisible() && d->dataValueAttributes.textAttributes().isVisible()){
+              KDChart::TextAttributes tAttr( d->dataValueAttributes.textAttributes() );
+              tAttr.setVisible( false );
+              d->dataValueAttributes.setTextAttributes( tAttr );
+          }
+          d->dataValueAttributes.setVisible( attribs.isVisible() );
+      }
+}
+
+KDChart::MarkerAttributes DataSet::getMarkerAttributes( int section, bool* success ) const
+{   
+    if ( section > 0 ){
+        QMap< int, KDChart::DataValueAttributes >::const_iterator it = d->sectionsDataValueAttributes.find( section );
+        if ( it != d->sectionsDataValueAttributes.constEnd() ){
+            if ( success )
+              *success = true;
+            return KDChart::MarkerAttributes( it->markerAttributes() );
+        }
+        else{
+            if ( success )
+              *success = false;
+            return KDChart::MarkerAttributes();
+        }        
+    }else{
+        if ( success )
+            *success = true;
+        return d->dataValueAttributes.markerAttributes();
+    }
+    
 }
 
 void DataSet::setValueLabelType( ValueLabelType type, int section /* = -1 */ )

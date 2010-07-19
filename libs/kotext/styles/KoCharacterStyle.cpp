@@ -1024,29 +1024,6 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
         setStrikeOutMode(SkipWhiteSpaceLineMode);
     }
 
-//TODO
-#if 0
-    if (styleStack.hasProperty(KoXmlNS::style, "text-line-through-type")) {     // OASIS 14.4.7
-        // Reuse code for loading underlines, and convert to strikeout enum (if not wave)
-        UnderlineType uType; UnderlineStyle uStyle;
-        importOasisUnderline(styleStack.property(KoXmlNS::style, "text-line-through-type"),
-                             styleStack.property(KoXmlNS::style, "text-line-through-style"),
-                             uType, uStyle);
-        m_strikeOutType = S_NONE;
-        if (uType != U_WAVE)
-            m_strikeOutType = (StrikeOutType)uType;
-        m_strikeOutStyle = (StrikeOutStyle)uStyle;
-    }
-
-    // Text position
-    va = AlignNormal;
-    d->m_relativeTextSize = 0.58;
-    d->m_offsetFromBaseLine = 0;
-    if (styleStack.hasProperty(KoXmlNS::style, "text-position")) {  // OO 3.10.7
-        importTextPosition(styleStack.property(KoXmlNS::style, "text-position"), fn.pointSizeFloat(),
-                           va, d->m_relativeTextSize, d->m_offsetFromBaseLine, context);
-    }
-#endif
     const QString textPosition(styleStack.property(KoXmlNS::style, "text-position"));
     if (!textPosition.isEmpty()) {  // OO 3.10.7
         if (textPosition.startsWith("super"))

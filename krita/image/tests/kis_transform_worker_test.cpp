@@ -41,7 +41,9 @@ void KisTransformWorkerTest::testCreation()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisTransformWorker tw(dev, 1.0, 1.0,
                           1.0, 1.0,
-                          1.5, 0, 0, 0, 0, updater, filter, true);
+                          0.0, 0.0,
+                          1.5,
+                          0, 0, updater, filter, true);
 }
 
 void KisTransformWorkerTest::testMirror()

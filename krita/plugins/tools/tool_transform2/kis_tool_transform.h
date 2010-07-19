@@ -42,7 +42,7 @@
 #include "ui_wdg_tool_transform.h"
 #include "tool_transform_args.h"
 
-#define PERSPECTIVE_DISABLED
+//#define PERSPECTIVE_DISABLED
 
 class KoID;
 class KisFilterStrategy;
@@ -57,6 +57,7 @@ public:
     }
 };
 
+typedef enum {NONE, XCOORD, YCOORD} DICHO_DROP;
 /**
  * Transform tool
  *
@@ -76,6 +77,9 @@ public:
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void keyReleaseEvent(QKeyEvent *event);
+
     void paint(QPainter& gc, const KoViewConverter &converter);
     //recalc the outline & current QImages
     void recalcOutline();
@@ -83,6 +87,10 @@ public:
     void updateCurrentOutline();
     //recalcs the outline and update the corresponding areas of the canvas (union of the outline boundrect before & after recalc)
     void updateOutlineChanged();
+    double dichotomyScaleY(QVector3D v1, QVector3D v2, DICHO_DROP flag, double desired, double b, double precision, double maxIterations1, double maxIterations2);
+    double dichotomyScaleX(QVector3D v1, QVector3D v2, DICHO_DROP flag, double desired, double b, double precision, double maxIterations1, double maxIterations2);
+    QPolygonF aux_dichotomyScaleXY(QPointF v1, QPointF v2, QPointF v3, QPointF v4, QVector3D v1Proj, double scaleX, double scaleY);
+    QPointF dichotomyScaleXY(QPointF v1, QPointF v2, QPointF v3, QPointF v4, QVector3D v1Proj, QVector3D v3Desired, int signX, int signY, double precision, double maxIterations1, double maxIterations2);
     //sets the value of the spinboxes to current args
     void refreshSpinBoxes();
     void setButtonBoxDisabled(bool disabled);
@@ -114,24 +122,6 @@ private:
     void transform(); //only commits the current transformation to the undo stack
     void applyTransform(); //applies the current transformation to the original paint device
 
-#ifdef PERSPECTIVE_DISABLED
-    QVector3D rotX(double x, double y, double z) {
-        return QVector3D(x, y, z);
-    }
-    QVector3D invrotX(double x, double y, double z) {
-        return QVector3D(x, y, z);
-    }
-    QVector3D rotY(double x, double y, double z) {
-        return QVector3D(x, y, z);
-    }
-    QVector3D invrotY(double x, double y, double z) {
-        return QVector3D(x, y, z);
-    }
-    QPointF perspective(double x, double y, double z) {
-        Q_UNUSED(z);
-        return QPointF(x, y);
-    }
-#else
     QVector3D rotX(double x, double y, double z) {
         return QVector3D(x, m_cosaX * y - m_sinaX * z, m_cosaX * z + m_sinaX * y);
     }
@@ -142,14 +132,53 @@ private:
         return QVector3D(m_cosaY * x + m_sinaY * z, y, - m_sinaY * x + m_cosaY * z);
     }
     QVector3D invrotY(double x, double y, double z) {
-        return QVector3D(m_cosaY * x + m_sinaY * z, y, - m_sinaY * x + m_cosaY * z);
+        return QVector3D(m_cosaY * x - m_sinaY * z, y, + m_sinaY * x + m_cosaY * z);
     }
     QPointF perspective(double x, double y, double z) {
-        QVector3D t(x, y, z - m_viewerZ);
+        if (!m_currentArgs.aX() && !m_currentArgs.aY())
+            return QPointF(x, y);
 
-        return QPointF(- t.x() * m_viewerZ / t.z(), - t.y() * m_viewerZ / t.z());
+        QVector3D t = QVector3D(x, y, z) - m_cameraPos;
+        if (t.z() == 0.0)
+            return QPointF(0,0);
+
+        return QPointF((t.x() - m_eyePos.x()) * m_eyePos.z() / t.z(), (t.y() - m_eyePos.y()) * m_eyePos.z() / t.z());
     }
-#endif
+    //the perspective is only invertible if you five the plan into which the returned point should be
+    QVector3D invperspective(double x, double y, QVector3D plan) {
+        //the following is the solution of the system :
+        //x = (xinv - cx)*ez / (zinv - cz)
+        //y = (yinv - cy)*ez / (zinv - cz)
+        //a*xinv + b*yinv + c*zinv = 0
+        //where :
+        //    (cx, cy, cz) = (m_cameraPos.x() + m_eyePos.x(), m_cameraPos.y() + m_eyePos.y(), m_cameraPos.z())
+        //    ez = m_eyePos
+        //    (a, b, c) = plan
+        if (!m_currentArgs.aX() && !m_currentArgs.aY())
+            return QVector3D(x, y, 0);
+
+        double a = plan.x();
+        double b = plan.y();
+        double c = plan.z();
+        double denom = a*x + b*y + c*m_eyePos.z();
+
+        if (!denom)
+            return QVector3D(0, 0, 0);
+
+        double cx = (m_cameraPos.x() - m_eyePos.x());
+        double cy = (m_cameraPos.y() - m_eyePos.y());
+        double cz = m_cameraPos.z();
+        double ez = m_eyePos.z();
+        double acx = a * cx;
+        double bcy = b * cy;
+        double ccz = c * cz;
+        double xinv, yinv, zinv;
+        xinv = (- (ccz + bcy) * x + cx * (b*y + c*ez)) / denom;
+        yinv = (cy * (a*x + c*ez) - (ccz + acx) * y) / denom;
+        zinv = ((a*x + b*y) * cz - (acx + bcy) * ez) / denom;
+
+        return QVector3D(xinv, yinv, zinv);
+    }
 
     QVector3D rotZ(double x, double y, double z) {
         return QVector3D(m_cosaZ*x - m_sinaZ*y, m_sinaZ*x + m_cosaZ*y, z);
@@ -173,6 +202,18 @@ private:
     QVector3D invscale(double x, double y, double z) {
         return QVector3D(x / m_currentArgs.scaleX(), y / m_currentArgs.scaleY(), z);
     }
+
+    //add 2 scale factors to take view resolution into account (when making QImage previews)
+    QVector3D prev_transformVector(double x, double y, double z, double resX, double resY) {
+        QVector3D t = scale(x, y ,z);
+        t = QVector3D(t.x() * resX, t.y() * resY, t.z());
+        t = shear(t.x(), t.y(), t.z());
+        t = rotZ(t.x(), t.y(), t.z());
+        t = rotY(t.x(), t.y(), t.z());
+        t = rotX(t.x(), t.y(), t.z());
+
+        return t;
+    }
     QVector3D transformVector(double x, double y, double z) {
         QVector3D t = scale(x, y ,z);
         t = shear(t.x(), t.y(), t.z());
@@ -194,6 +235,9 @@ private:
     QVector3D transformVector(QVector3D v) {
         return transformVector(v.x(), v.y(), v.z());
     }
+    QVector3D prev_transformVector(QVector3D v, double resX, double resY) {
+        return prev_transformVector(v.x(), v.y(), v.z(), resX, resY);
+    }
     QVector3D invTransformVector(QVector3D v) {
         return invTransformVector(v.x(), v.y(), v.z());
     }
@@ -203,6 +247,7 @@ private:
     int octant(double x, double y); //the octant of the director given by vector (x,y)
     //sets the cursor according the mouse position (doesn't take shearing into account yet)
     void setFunctionalCursor();
+    void setTransformFunction(QPointF mousePos, Qt::KeyboardModifiers modifiers);
     //just sets default values for current args, temporary values..
     void initTransform();
     //saves the original selection, paintDevice, Images previous. set transformation to default using initTransform
@@ -220,7 +265,7 @@ private:
     enum function {ROTATE = 0, MOVE, RIGHTSCALE, TOPRIGHTSCALE, TOPSCALE, TOPLEFTSCALE,
                    LEFTSCALE, BOTTOMLEFTSCALE, BOTTOMSCALE, BOTTOMRIGHTSCALE, 
                    BOTTOMSHEAR, RIGHTSHEAR, TOPSHEAR, LEFTSHEAR,
-                   MOVECENTER
+                   MOVECENTER, PERSPECTIVE
                   };
     QPointF m_handleDir[9];
 
@@ -248,11 +293,12 @@ private:
 
     //center used for rotation (calculated from rotationCenterOffset (in currentArgs))
     QVector3D m_rotationCenter;
-    QVector3D m_clickRotationCenter; //the rotation center at click
+    QPointF m_clickRotationCenterProj; //the rotation center projection at click
     QPointF m_rotationCenterProj;
 
     bool m_selecting; // true <=> selection has been clicked
     bool m_actuallyMoveWhileSelected; // true <=> selection has been moved while clicked
+    bool m_imageTooBig;
 
     //informations on the current selection
     QVector3D m_topLeft;  //in image coords
@@ -273,7 +319,17 @@ private:
     QPointF m_middleTopProj;
     QPointF m_middleBottomProj;
 
-    double m_viewerZ; //used for perspective projection
+    QPointF m_clickTopLeftProj;
+    QPointF m_clickTopRightProj;
+    QPointF m_clickBottomLeftProj;
+    QPointF m_clickBottomRightProj;
+    QPointF m_clickMiddleLeftProj;
+    QPointF m_clickMiddleRightProj;
+    QPointF m_clickMiddleTopProj;
+    QPointF m_clickMiddleBottomProj;
+
+    QVector3D m_cameraPos, m_eyePos;
+    QVector3D m_currentPlan, m_clickPlan; //vector (a, b, c) represents the vect plan a*x + b*y + c*z = 0
 
     //current scale factors
     //wOutModifiers don't take shift modifier into account

@@ -64,6 +64,7 @@ public:
     void createBrushIndirect( quint32 ihBrush, quint32 BrushStyle, quint8 red,
 			      quint8 green, quint8 blue, quint8 reserved, 
 			      quint32 BrushHatch );
+    void createMonoBrush( quint32 ihBrush, Bitmap *bitmap );
     void selectObject( const quint32 ihObject );
     void deleteObject( const quint32 ihObject );
     void arc( const QRect &box, const QPoint &start, const QPoint &end );

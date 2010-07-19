@@ -113,6 +113,8 @@ public:
 				      quint8 green, quint8 blue, quint8 reserved, 
 				      quint32 BrushHatch ) = 0;
 
+    virtual void createMonoBrush( quint32 ihBrush, Bitmap *bitmap ) = 0;
+
     /**
        Handler for the EMR_SETMAPMODE record type.
 

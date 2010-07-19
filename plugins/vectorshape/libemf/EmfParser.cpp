@@ -940,8 +940,38 @@ bool Parser::readRecord( QDataStream &stream )
         }
         break;
     case EMR_CREATEMONOBRUSH:
+        // MS-EMF 2.3.7.5: EMR_CREATEMONOBRUSH Record
         {
-            //Q_ASSERT(0);
+            kDebug(31000) << "EMR_CREATEMONOBRUSH ============================";
+
+            quint32 ihBrush;    // Index in the EMF Object Table
+            stream >> ihBrush;
+            quint32 usage;      // DIBColors enumeration
+            stream >> usage;
+            quint32 offBmi;     // Offset of the DIB header
+            stream >> offBmi;
+            quint32 cbBmi;      // Size of the DIB header
+            stream >> cbBmi;
+            quint32 offBits;    // Offset of the bitmap
+            stream >> offBits;
+            quint32 cbBits;     // Size of the bitmap
+            stream >> cbBits;
+
+#if 1
+            kDebug(31000) << "index:" << ihBrush;
+            kDebug(31000) << "DIBColors enum:" << usage;
+            kDebug(31000) << "header offset:" << offBmi;
+            kDebug(31000) << "header size:  " << cbBmi;
+            kDebug(31000) << "bitmap offset:" << offBits;
+            kDebug(31000) << "bitmap size:  " << cbBits;
+#endif
+
+            // FIXME: Handle the usage DIBColors info.
+            Bitmap bitmap(stream, size, 8 + 6 * 4, // header + 6 ints
+                          offBmi, cbBmi, offBits, cbBits);
+
+	    mOutput->createMonoBrush(ihBrush, &bitmap);
+
         }
         break;
     case EMR_EXTCREATEPEN:

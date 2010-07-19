@@ -260,6 +260,11 @@ void OutputDebugStrategy::createBrushIndirect( quint32 ihBrush, quint32 BrushSty
              << "Colour:" << QColor( red, green, blue ) << ", Hatch:" << BrushHatch;
 }
 
+void OutputDebugStrategy::createMonoBrush( quint32 ihBrush, Bitmap *bitmap )
+{
+    kDebug(33100) << "EMR_CREATEMONOBRUSH:" << ihBrush << "bitmap:" << bitmap;
+}
+
 void OutputDebugStrategy::selectObject( const quint32 ihObject )
 {
     kDebug(33100) << "EMR_SELECTOBJECT" << ihObject;

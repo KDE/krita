@@ -376,10 +376,10 @@ void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 
     m_objectTable.insert( ihPen,  pen );
 }
 
-void OutputPainterStrategy:: createBrushIndirect( quint32 ihBrush, quint32 brushStyle,
-                                                  quint8 red, quint8 green, quint8 blue,
-                                                  quint8 reserved,
-                                                  quint32 brushHatch )
+void OutputPainterStrategy::createBrushIndirect( quint32 ihBrush, quint32 brushStyle,
+                                                 quint8 red, quint8 green, quint8 blue,
+                                                 quint8 reserved,
+                                                 quint32 brushHatch )
 {
     Q_UNUSED( reserved );
     Q_UNUSED( brushHatch );
@@ -432,6 +432,16 @@ void OutputPainterStrategy:: createBrushIndirect( quint32 ihBrush, quint32 brush
 
     m_objectTable.insert( ihBrush, brush );
 }
+
+void OutputPainterStrategy::createMonoBrush( quint32 ihBrush, Bitmap *bitmap )
+{
+
+    QImage  pattern(bitmap->image());
+    QBrush  brush(pattern);
+
+    m_objectTable.insert( ihBrush, brush );
+}
+
 
 void OutputPainterStrategy::extCreateFontIndirectW( const ExtCreateFontIndirectWRecord &extCreateFontIndirectW )
 {
@@ -524,6 +534,7 @@ void OutputPainterStrategy::selectStockObject( const quint32 ihObject )
 
 void OutputPainterStrategy::selectObject( const quint32 ihObject )
 {
+    kDebug(33100) << hex << ihObject << dec;
     if ( ihObject & 0x80000000 ) {
 	selectStockObject( ihObject );
     } else {

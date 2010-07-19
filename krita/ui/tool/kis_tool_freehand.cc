@@ -276,7 +276,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     }
 
     if (!m_oldOutlineRect.isEmpty()) {
-        canvas()->updateCanvas(m_oldOutlineRect); // erase the old guy
+        canvas()->updateCanvas(m_oldOutlineRect.translated(m_oldOutlinePosition).adjusted(-2,-2,2,2)); // erase the old guy
     }
 
     m_mousePos = e->point;
@@ -292,10 +292,11 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     }
 #endif
 
-    m_oldOutlineRect = currentPaintOpPreset()->settings()->paintOutlineRect(outlinePos(), currentImage(), outlineMode);
+    
+    QPainterPath path = currentPaintOpPreset()->settings()->brushOutline(outlineMode);
+    m_oldOutlineRect = currentImage()->pixelToDocument(path.boundingRect());
     if (!m_oldOutlineRect.isEmpty()) {
-        m_oldOutlineRect.adjust(-2, -2, 2, 2);
-        canvas()->updateCanvas(m_oldOutlineRect); // erase the old guy
+        canvas()->updateCanvas(m_oldOutlineRect.translated( outlinePos() ).adjusted(-2,-2,2,2)); 
     }
 
 }
@@ -615,23 +616,19 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
         converter.zoom(&zoomX, &zoomY);
         
         QPainterPath path = currentPaintOpPreset()->settings()->brushOutline(outlineMode);
-        // new API
-        if (!path.isEmpty()){
-            if (outlineMode != KisPaintOpSettings::CursorIsOutline) return;
-            QMatrix m;
-            m.reset();
-            m.scale(zoomX, zoomY);
-            QPointF move = outlinePos();
-            m.translate(move.x(), move.y());
-            m.scale(1.0/currentImage()->xRes(),1.0/currentImage()->yRes());
-            
-            paintToolOutline(&gc,m.map(path));
-        }else{
-            gc.save();
-            gc.scale(zoomX, zoomY);
-            currentPaintOpPreset()->settings()->paintOutline(outlinePos(), currentImage(), gc, outlineMode);
-            gc.restore();
-        }
+        m_oldOutlineRect = currentImage()->pixelToDocument(path.boundingRect());
+        m_oldOutlinePosition = outlinePos();
+        
+        QTransform m;
+        m.reset();
+        // document to view
+        m.scale(zoomX, zoomY);
+        // translate according outlinePos in document coordinates
+        m.translate(m_oldOutlinePosition.x(), m_oldOutlinePosition.y());
+        // pixel to document
+        m.scale(1.0/currentImage()->xRes(),1.0/currentImage()->yRes());
+        
+        paintToolOutline(&gc,m.map(path));
     }
 }
 

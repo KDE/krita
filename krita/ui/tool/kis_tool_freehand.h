@@ -140,6 +140,9 @@ private:
 
     // for painting
     QRectF m_oldOutlineRect;
+    QPointF m_oldOutlinePosition;
+    
+    
     QRegion m_incrementalDirtyRegion;
     QList<FreehandPaintJob*> m_paintJobs;
     KisRecordedPathPaintAction* m_pathPaintAction;

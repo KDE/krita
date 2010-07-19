@@ -514,11 +514,15 @@ void TableLayout::setCellContentHeight(const QTextTableCell &cell, qreal bottom)
 
     KoTableCellStyle cellStyle(cell.format().toTableCellFormat());
     qreal top = m_tableLayoutData->m_rowPositions[cell.row()]
-        + cellStyle.topPadding() + cellStyle.topBorderWidth();
-    Q_ASSERT(bottom >= top);
+    + cellStyle.topPadding() + cellStyle.topBorderWidth();
+    qreal contentHeight = bottom - top;
+    if (contentHeight < (qreal)0.126) // rounding problems due to Qt-scribe internally using ints.
+        contentHeight = (qreal)0.0;
+
+    Q_ASSERT(contentHeight >= 0);
 
     // Update content height value of the cell.
-    m_tableLayoutData->m_contentHeights[cell.row()][cell.column()] = bottom - top;
+    m_tableLayoutData->m_contentHeights[cell.row()][cell.column()] = contentHeight;
 }
 
 QTextTableCell TableLayout::cellAt(int position) const

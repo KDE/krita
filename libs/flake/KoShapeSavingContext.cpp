@@ -2,6 +2,7 @@
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,9 +41,11 @@ public:
     KoXmlWriter *xmlWriter;
     KoShapeSavingContext::ShapeSavingOptions savingOptions;
     QMap<const KoShape *, QString> drawIds;
+    QMap<const QTextBlockUserData*, QString> subIds;
     QList<const KoShapeLayer*> layers;
     QSet<KoDataCenterBase *> dataCenter;
     int drawId;
+    int subId;
     QMap<QString, KoSharedSavingData*> sharedData;
     QMap<qint64, QString> imageNames;
     int imageId;
@@ -58,6 +61,7 @@ KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w,
         : xmlWriter(&w),
         savingOptions(0),
         drawId(0),
+        subId(0),
         imageId(0),
         mainStyles(s),
         embeddedSaver(e)
@@ -139,6 +143,19 @@ void KoShapeSavingContext::clearDrawIds()
 {
     d->drawIds.clear();
     d->drawId = 0;
+}
+
+QString KoShapeSavingContext::subId(const QTextBlockUserData *subItem, bool insert)
+{
+    QMap<const QTextBlockUserData*, QString>::iterator it(d->subIds.find(subItem));
+    if (it == d->subIds.end()) {
+        if (insert == true) {
+            it = d->subIds.insert(subItem, QString("subitem%1").arg(++d->subId));
+        } else {
+            return QString();
+        }
+    }
+    return it.value();
 }
 
 void KoShapeSavingContext::addLayerForSaving(const KoShapeLayer * layer)

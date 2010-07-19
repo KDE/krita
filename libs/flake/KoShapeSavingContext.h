@@ -2,6 +2,7 @@
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@
 
 #include <QImage>
 #include <QTransform>
+#include <QTextBlockUserData>
 
 class KoShape;
 class KoXmlWriter;
@@ -157,6 +159,18 @@ public:
      * @see KoPAPastePage::process
      */
     void clearDrawIds();
+
+    /**
+     * @brief Get the text id for a sub-item
+     *
+     * The text:id is unique for all sub-item.
+     *
+     * @param subitem for which the sub-item id should be returned
+     * @param insert if true a new sub-item id will be generated if there is non yet
+     *
+     * @return the sub-item id for the sub-item or and empty string if it was not found
+     */
+    QString subId(const QTextBlockUserData *subItem, bool insert = true);
 
     /**
      * Adds a layer to save into a layer-set in styles.xml according to 9.1.2/9.1.3 odf spec

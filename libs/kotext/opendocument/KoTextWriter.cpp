@@ -3,6 +3,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -415,6 +416,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
             saveChange(charFormat);
 
+            if ( const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
+                writer->addAttribute("text:id", context.subId(blockData));
+            }
             //kDebug(30015) << "from:" << from << " to:" << to;
             if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
                 // Write xml:id here for Rdf

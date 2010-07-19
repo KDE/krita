@@ -87,9 +87,13 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutline(OutlineMode mode) const
         
         KisBrushSP brush = options->brush();
         QPointF hotSpot = brush->hotSpot(1.0, 1.0) + QPointF(0.5, 0.5);
+
+        QTransform m;
+        m.scale(brush->scale(), brush->scale());
         
-        path = brush->boundary()->boundary().translated(-hotSpot);
-    
+        path = brush->boundary()->boundary();
+        path = m.map(path);
+        path.translate(-hotSpot);
     }
     return path;
 }

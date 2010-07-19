@@ -148,7 +148,7 @@ void KisColorSelectorRing::paintCache()
                         coef+=currentRadius;
                         coef-=innerRadius();
                     }
-                    coef=qBound(0., coef, 1.);
+                    coef=qBound(qreal(0.), coef, qreal(1.));
                     int red=qRed(m_cachedColors.at(angle));
                     int green=qGreen(m_cachedColors.at(angle));
                     int blue=qBlue(m_cachedColors.at(angle));

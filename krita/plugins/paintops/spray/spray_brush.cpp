@@ -240,8 +240,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             m_painter->setPaintColor(m_inkColor);
         }
 
-        qreal jitteredWidth = qMax(1.0,m_shapeProperties->width * particleScale);
-        qreal jitteredHeight = qMax(1.0,m_shapeProperties->height * particleScale);
+        qreal jitteredWidth = qMax(qreal(1.0),m_shapeProperties->width * particleScale);
+        qreal jitteredHeight = qMax(qreal(1.0),m_shapeProperties->height * particleScale);
 
         if (m_shapeProperties->enabled){
         switch (m_shapeProperties->shape){

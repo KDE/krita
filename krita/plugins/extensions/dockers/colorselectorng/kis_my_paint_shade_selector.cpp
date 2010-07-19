@@ -218,8 +218,8 @@ void KisMyPaintShadeSelector::calculatePos(int x, int y)
     qreal fv = m_colorV + pre.v/255.0;
 
     fh -= floor(fh);
-    fs = qBound(0.0, fs, 1.0);
-    fv = qBound(0.1, fv, 1.0);
+    fs = qBound(qreal(0.0), fs, qreal(1.0));
+    fv = qBound(qreal(0.1), fv, qreal(1.0));
 
     m_qcolor.setHsvF(fh, fs, fv);
 }

@@ -134,7 +134,7 @@ void DynaBrush::drawSegment(KisPainter &painter)
         qreal screenX = m_cursorFilter.velocityX() * m_image->width();
         qreal screenY = m_cursorFilter.velocityY() * m_image->height();
         qreal speed = sqrt(screenX * screenX + screenY * screenY);
-        speed = qBound(0.0, speed , m_properties->circleRadius * 2.0);
+        speed = qBound(qreal(0.0), speed , qreal(m_properties->circleRadius * 2.0));
 
         drawCircle(painter, prev.x(), prev.y() , m_properties->circleRadius + speed, 2 * m_properties->circleRadius  + speed);
         //painter.paintEllipse(prevl.x(), prevl.y(), qAbs((prevl - prevr).x()), qAbs((prevl - prevr).y()) );

@@ -265,8 +265,8 @@ void DeformBrush::paintMask(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer, q
         for (int x = 0; x < dstWidth; x++){
             maskX = x - m_centerX;
             maskY = y - m_centerY;
-            double rmaskX = cosa * maskX - sina * maskY;
-            double rmaskY = sina * maskX + cosa * maskY;
+            qreal rmaskX = cosa * maskX - sina * maskY;
+            qreal rmaskY = sina * maskX + cosa * maskY;
 
 
             distance = norme(rmaskX * m_majorAxis, rmaskY * m_minorAxis);

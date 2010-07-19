@@ -99,6 +99,7 @@ private:
     Configuration m_configuration;
 
     QColor m_lastColor;
+    QPoint m_lastMousePosition;
 };
 
 #endif // KIS_COLSELNG_COLOR_SELECTOR_H

@@ -101,7 +101,6 @@ void KisColorSelectorSimple::paint(QPainter* painter)
 
         for(int x=0; x<width(); x++) {
             for(int y=0; y<height(); y++) {
-    //            tmpDev.setPixel(x, y, QColor::fromHslF(0,x/qreal(width()), 1-y/qreal(height())).rgb());
                 m_pixelCache.setPixel(x, y, colorAt(x, y));
             }
         }

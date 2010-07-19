@@ -19,6 +19,7 @@
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QPainter>
+#include <QTimer>
 
 #include <KoColorConversions.h>
 
@@ -44,6 +45,7 @@ struct KisSmallColorWidget::Private {
     double squareHandleSize;
     CurrentHandle handle;
     int lastX, lastY;
+    QTimer updateTimer;
 };
 
 KisSmallColorWidget::KisSmallColorWidget(QWidget* parent) : QWidget(parent), d(new Private)
@@ -57,6 +59,9 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent) : QWidget(parent), d(n
     updateParameters();
     d->lastX = -1;
     d->lastY = -1;
+    d->updateTimer.setInterval(1);
+    d->updateTimer.setSingleShot(true);
+    connect(&(d->updateTimer), SIGNAL(timeout()), this, SLOT(update()));
 }
 
 KisSmallColorWidget::~KisSmallColorWidget()
@@ -92,7 +97,7 @@ void KisSmallColorWidget::setHue(int h)
     d->hue = h;
     tellColorChanged();
     generateSquare();
-    update();
+    d->updateTimer.start();
 }
 
 void KisSmallColorWidget::setHSV(int h, int s, int v)
@@ -108,7 +113,7 @@ void KisSmallColorWidget::setHSV(int h, int s, int v)
     if(newH) {
         generateSquare();
     }
-    update();
+    d->updateTimer.start();
 }
 
 void KisSmallColorWidget::setQColor(const QColor& c)
@@ -120,7 +125,7 @@ void KisSmallColorWidget::setQColor(const QColor& c)
             d->hue = hue;
         }
         generateSquare();
-        update();
+        d->updateTimer.start();
     }
 }
 
@@ -240,11 +245,11 @@ void KisSmallColorWidget::selectColorAt(int _x, int _y)
     if ((_x < d->rubberWidth && d->handle == NoHandle) || d->handle == HueHandle) {
         d->handle = HueHandle;
         setHue((_x * 360.0) / d->rubberWidth);
-        update();
+        d->updateTimer.start();
     } else if ((_x > width() - d->rectangleWidth && d->handle == NoHandle) || d->handle == ValueSaturationHandle) {
         d->handle = ValueSaturationHandle;
         setHSV(d->hue, (_x - width() + d->rectangleWidth) * 255 / d->rectangleWidth, (_y * 255) / d->rectangleHeight);
-        update();
+        d->updateTimer.start();
     }
 }
 

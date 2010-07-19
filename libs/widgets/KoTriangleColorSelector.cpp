@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <KoColorConversions.h>
+#include <QTimer>
 
 enum CurrentHandle {
     NoHandle,
@@ -54,6 +55,7 @@ struct KoTriangleColorSelector::Private {
     qreal triangleHandleSize;
     bool invalidTriangle;
     int lastX, lastY;
+    QTimer updateTimer;
 };
 
 KoTriangleColorSelector::KoTriangleColorSelector(QWidget* parent) : QWidget(parent), d(new Private)
@@ -69,6 +71,9 @@ KoTriangleColorSelector::KoTriangleColorSelector(QWidget* parent) : QWidget(pare
     d->invalidTriangle = true;
     d->lastX = -1;
     d->lastY = -1;
+    d->updateTimer.setInterval(1);
+    d->updateTimer.setSingleShot(true);
+    connect(&(d->updateTimer), SIGNAL(timeout()), this, SLOT(update()));
 }
 
 KoTriangleColorSelector::~KoTriangleColorSelector()
@@ -152,7 +157,7 @@ void KoTriangleColorSelector::setHue(int h)
     d->hue = h;
     tellColorChanged();
     d->invalidTriangle = true;
-    update();
+    d->updateTimer.start();
 }
 
 int KoTriangleColorSelector::value() const
@@ -166,7 +171,7 @@ void KoTriangleColorSelector::setValue(int v)
     d->value = v;
     tellColorChanged();
     d->invalidTriangle = true;
-    update();
+    d->updateTimer.start();
 }
 
 int KoTriangleColorSelector::saturation() const
@@ -180,7 +185,7 @@ void KoTriangleColorSelector::setSaturation(int s)
     d->saturation = s;
     tellColorChanged();
     d->invalidTriangle = true;
-    update();
+    d->updateTimer.start();
 }
 
 void KoTriangleColorSelector::setHSV(int h, int s, int v)
@@ -193,7 +198,7 @@ void KoTriangleColorSelector::setHSV(int h, int s, int v)
     d->value = v;
     d->saturation = s;
     tellColorChanged();
-    update();
+    d->updateTimer.start();
 }
 
 QColor KoTriangleColorSelector::color() const
@@ -212,7 +217,7 @@ void KoTriangleColorSelector::setQColor(const QColor& c)
         if( hue >= 0 && hue <= 360)
             d->hue = hue;
         d->invalidTriangle = true;
-        update();
+        d->updateTimer.start();
     }
 }
 
@@ -360,7 +365,7 @@ void KoTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
          || d->handle == HueHandle ) {
         d->handle = HueHandle;
         setHue( (int)(atan2(y, x) * 180 / M_PI ) + 180);
-        update();
+        d->updateTimer.start();
     }
     else {
     // Compute the s and v value, if they are in range, use them
@@ -381,7 +386,7 @@ void KoTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
                 setHSV( d->hue, sat * 255, ynormalize * 255);
             }
         }
-        update();
+        d->updateTimer.start();
     }
 }
 

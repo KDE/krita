@@ -189,7 +189,7 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-void KisColorSelectorBase::setColor(QColor color)
+void KisColorSelectorBase::setColor(const QColor& color)
 {}
 
 void KisColorSelectorBase::hidePopup()

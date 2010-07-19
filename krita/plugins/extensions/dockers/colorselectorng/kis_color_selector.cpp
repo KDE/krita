@@ -27,6 +27,7 @@
 #include <QColor>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QTimer>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -149,11 +150,16 @@ void KisColorSelector::mousePressEvent(QMouseEvent* e)
 void KisColorSelector::mouseMoveEvent(QMouseEvent* e)
 {
     KisColorSelectorBase::mouseMoveEvent(e);
+    
     mouseEvent(e);
 }
 
 void KisColorSelector::mouseEvent(QMouseEvent *e)
 {
+    if(m_lastMousePosition==e->pos())
+        return;
+    m_lastMousePosition=e->pos();
+
     if(e->buttons()&Qt::LeftButton || e->buttons()&Qt::RightButton) {
         if(m_ring->width()>0) m_ring->mouseEvent(e->x(), e->y());
         if(m_triangle->width()>0) m_triangle->mouseEvent(e->x(), e->y());
@@ -187,10 +193,18 @@ void KisColorSelector::init()
     m_slider = new KisColorSelectorSimple(this);
     m_square = new KisColorSelectorSimple(this);
 
-    connect(m_ring,     SIGNAL(update()), this, SLOT(update()));
-    connect(m_triangle, SIGNAL(update()), this, SLOT(update()));
-    connect(m_slider,   SIGNAL(update()), this, SLOT(update()));
-    connect(m_square,   SIGNAL(update()), this, SLOT(update()));
+    // a tablet can send many more signals, than a mouse
+    // this causes many repaints, if updating after every signal.
+    // a workaround with a timer can fix that.
+    QTimer* timer = new QTimer(this);
+    timer->setInterval(1);
+    timer->setSingleShot(true);
+
+    connect(timer,      SIGNAL(timeout()), this,  SLOT(update()));
+    connect(m_ring,     SIGNAL(update()),  timer, SLOT(start()));
+    connect(m_triangle, SIGNAL(update()),  timer, SLOT(start()));
+    connect(m_slider,   SIGNAL(update()),  timer, SLOT(start()));
+    connect(m_square,   SIGNAL(update()),  timer, SLOT(start()));
 
     connect(m_ring, SIGNAL(paramChanged(qreal)), m_triangle, SLOT(setParam(qreal)));
     connect(m_ring, SIGNAL(paramChanged(qreal)), m_square,   SLOT(setParam(qreal)));
@@ -199,4 +213,6 @@ void KisColorSelector::init()
     connect(m_slider, SIGNAL(paramChanged(qreal)),       m_square, SLOT(setParam(qreal)));
 
     setMinimumSize(80, 80);
+
+    m_lastMousePosition=QPoint(-1, -1);
 }

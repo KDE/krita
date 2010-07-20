@@ -41,6 +41,8 @@ KOTEXT_EXPORT QStringList underlineTypeList();
 KOTEXT_EXPORT QStringList underlineStyleList();
 KOTEXT_EXPORT Qt::Alignment alignmentFromString(const QString &align);
 KOTEXT_EXPORT QString alignmentToString(Qt::Alignment align);
+KOTEXT_EXPORT Qt::Alignment valignmentFromString(const QString &align);
+KOTEXT_EXPORT QString valignmentToString(Qt::Alignment align);
 
 /// This enum contains values to be used as keys in the canvas KoResourceManager
 enum CanvasResource {

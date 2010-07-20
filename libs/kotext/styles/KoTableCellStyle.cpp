@@ -930,6 +930,16 @@ QBrush KoTableCellStyle::background() const
     return qvariant_cast<QBrush>(variant);
 }
 
+void KoTableCellStyle::setAlignment(Qt::Alignment alignment)
+{
+    setProperty(QTextFormat::BlockAlignment, (int) alignment);
+}
+
+Qt::Alignment KoTableCellStyle::alignment() const
+{
+    return static_cast<Qt::Alignment>(propertyInt(VerticalAlignment));
+}
+
 KoTableCellStyle *KoTableCellStyle::parentStyle() const
 {
     return d->parentStyle;
@@ -1117,6 +1127,12 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
             brush.setColor(bgcolor); // #rrggbb format
             setBackground(brush);
         }
+    }
+
+    // Alignment
+    const QString verticalAlign(styleStack.property(KoXmlNS::style, "vertical-align"));
+    if (!verticalAlign.isEmpty()) {
+        setAlignment(KoText::valignmentFromString(verticalAlign));
     }
 }
 

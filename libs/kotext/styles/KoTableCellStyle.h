@@ -83,6 +83,7 @@ public:
         BottomLeftToTopRightBorderInnerPen, ///< the bottom letf to top right diagonal inner pen
         BottomLeftToTopRightBorderStyle,    ///< the bottom letf to top right borderstyle
         CellBackgroundBrush,     ///< the cell background brush, as QTextFormat::BackgroundBrush is used by paragraphs
+        VerticalAlignment,     ///< the vertical alignment oinside the cell
         MasterPageName,         ///< Optional name of the master-page
         InlineRdf               ///< Optional KoTextInlineRdf object
     };
@@ -298,6 +299,8 @@ public:
     qreal rightBorderWidth() const;
     qreal topBorderWidth() const;
     qreal bottomBorderWidth() const;
+    void setAlignment(Qt::Alignment alignment);
+    Qt::Alignment alignment() const;
 
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableCellStyle *parent);

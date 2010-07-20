@@ -102,6 +102,30 @@ QString KoText::alignmentToString(Qt::Alignment alignment)
     return align;
 }
 
+Qt::Alignment KoText::valignmentFromString(const QString &align)
+{
+    Qt::Alignment alignment = Qt::AlignTop;
+    if (align == "top")
+        alignment = Qt::AlignTop;
+    else if (align == "center")
+        alignment = Qt::AlignVCenter;
+    else if (align == "bottom")
+        alignment = Qt::AlignBottom;
+    return alignment;
+}
+
+QString KoText::valignmentToString(Qt::Alignment alignment)
+{
+    QString align = "";
+    if (alignment == (Qt::AlignTop))
+        align = "top";
+    else if (alignment == Qt::AlignVCenter)
+        align = "center";
+    else if (alignment == Qt::AlignBottom)
+        align = "bottom";
+    return align;
+}
+
 KoText::Direction KoText::directionFromString(const QString &writingMode)
 {
     // LTR is lr-tb. RTL is rl-tb

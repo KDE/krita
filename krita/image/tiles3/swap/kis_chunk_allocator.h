@@ -61,8 +61,17 @@ class KisChunkData
 {
 public:
     KisChunkData(quint64 begin, quint64 size)
-        : m_begin(begin), m_end(begin + size - 1)
     {
+        setChunk(begin, size);
+    }
+
+    inline void setChunk(quint64 begin, quint64 size) {
+        m_begin = begin;
+        m_end = begin + size - 1;
+    }
+
+    inline quint64 size() const {
+        return m_end - m_begin +1;
     }
 
     bool operator== (const KisChunkData& other) const
@@ -88,12 +97,16 @@ public:
     {
     }
 
-    inline quint64 begin() {
+    inline quint64 begin() const {
         return m_iterator->m_begin;
     }
 
-    inline quint64 end() {
+    inline quint64 end() const {
         return m_iterator->m_end;
+    }
+
+    inline quint64 size() const {
+        return m_iterator->size();
     }
 
     inline KisChunkDataListIterator position() {

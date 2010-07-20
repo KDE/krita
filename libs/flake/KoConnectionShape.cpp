@@ -390,7 +390,12 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
             // if there is none, use the bounding rectangle of the parsed path
             viewBox = outline().boundingRect();
         }
+        // convert path to viewbox coordinates to have a bounding rect of (0,0 1x1)
+        // which can later be fitted back into the target rect once we have all
+        // the required information
         QTransform viewMatrix;
+        viewMatrix.scale(viewBox.width() ? static_cast<qreal>(1.0) / viewBox.width() : 1.0,
+                         viewBox.height() ? static_cast<qreal>(1.0) / viewBox.height() : 1.0);
         viewMatrix.translate(-viewBox.left(), -viewBox.top());
         d->map(viewMatrix);
 
@@ -432,24 +437,26 @@ void KoConnectionShape::finishLoadingConnection()
                 p2 = d->handles[EndHandle];
             }
 
-            QPointF bgp = m_subpaths.first()->first()->point();
-            QPointF egp = m_subpaths.last()->last()->point();
-            qreal x1 = bgp.x(), y1 = bgp.y(), x2 = egp.x(), y2 = egp.y(),
-                  kX = (p2.x()-p1.x())/(egp.x()-bgp.x()),
-                  kY = (p2.y()-p1.y())/(egp.y()-bgp.y()),
-                  width = outline().boundingRect().width(),
-                  height = outline().boundingRect().height();
+            QPointF relativeBegin = m_subpaths.first()->first()->point();
+            QPointF relativeEnd = m_subpaths.last()->last()->point();
 
-            p1.setY(p1.y()-y1*kY);
-            p1.setX(p1.x()-x1*kX);
-            p2.setY(p2.y()+(width-y2)*kY);
-            p2.setX(p2.x()+(height-x2)*kX);
+            QPointF diffRelative(relativeBegin - relativeEnd);
+            QPointF diffAbsolute(p1 - p2);
+
+            qreal factorX = diffRelative.x() ? diffAbsolute.x() / diffRelative.x(): 1.0;
+            qreal factorY = diffRelative.y() ? diffAbsolute.y() / diffRelative.y(): 1.0;
+
+            p1.setX(p1.x() - relativeBegin.x() * factorX);
+            p1.setY(p1.y() - relativeBegin.y() * factorY);
+            p2.setX(p2.x() + (1 - relativeEnd.x()) * factorX);
+            p2.setY(p2.y() + (1 - relativeEnd.y()) * factorY);
 
             QRectF targetRect = QRectF(p1, p2).normalized();
+
             // transform the normalized coordinates back to our target rectangle
             QTransform viewMatrix;
             viewMatrix.translate(targetRect.x(), targetRect.y());
-            viewMatrix.scale(kX, kY);
+            viewMatrix.scale(targetRect.width(), targetRect.height());
             d->map(viewMatrix);
 
             // pretend we are during a forced update, so normalize()

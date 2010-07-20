@@ -134,7 +134,13 @@ qreal Layout::x()
 {
     qreal result = m_newParag ? resolveTextIndent() : 0.0;
     if (m_inTable) {
-        result += m_tableLayout.cellContentRect(m_tableCell).x();
+        QTextCursor tableFinder(m_block);
+        QTextTable *table = tableFinder.currentTable();
+        if (table) {
+            // Set the current table on the table layout.
+            m_tableLayout.setTable(table);
+            result += m_tableLayout.cellContentRect(m_tableCell).x();
+        }
     }
     result += m_isRtl ? m_format.rightMargin() : (m_format.leftMargin() + listIndent());
     result += m_borderInsets.left + m_shapeBorder.left;

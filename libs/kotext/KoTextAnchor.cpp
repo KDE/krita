@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2009-2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2010 Ko Gmbh <casper.boemann@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -460,6 +461,15 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
         // 'as-char' means it's completely inline in the text like any other char
         d->horizontalAlignment = HorizontalOffset;
         d->verticalAlignment = VerticalOffset;
+        if (verticalRel == "baseline") {
+            if (verticalPos == "top") { //svg:y attribute is ignored
+                d->distance.setY(-shape()->size().height());
+            } else if (verticalPos == "middle") { //svg:y attribute is ignored
+                d->distance.setY(-shape()->size().height()*(qreal)0.5);
+            } else if (verticalPos == "bottom") { //svg:y attribute is ignored
+                d->distance.setY(0);
+            }
+        }
     } else if (anchorType == "char") {
         // 'char' means it's relative to the paragraph
         // while 'paragraph' further indicates the anchor is always placed at first char

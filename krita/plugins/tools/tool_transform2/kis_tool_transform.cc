@@ -180,10 +180,16 @@ void TransformCmd::origPreviews(QImage *&origImg, QImage *&origSelectionImg) con
 
 void TransformCmd::redo()
 {
+    KoToolManager *manager = KoToolManager::instance();
+    if (manager && m_tool && manager->activeToolId() != m_tool->toolId())
+        manager->switchToolRequested(m_tool->toolId());
 }
 
 void TransformCmd::undo()
 {
+    KoToolManager *manager = KoToolManager::instance();
+    if (manager && m_tool && manager->activeToolId() != m_tool->toolId())
+        manager->switchToolRequested(m_tool->toolId());
 }
 }
 
@@ -397,11 +403,12 @@ void KisToolTransform::setButtonBoxDisabled(bool disabled)
 
 void KisToolTransform::deactivate()
 {
-KisImageWSP kisimage = image();
+    KisImageWSP kisimage = image();
 
-updateCurrentOutline();
+    updateCurrentOutline();
+    m_canvas->updateCanvas(QRect(m_originalTopLeft, m_originalBottomRight));
 
-if (!kisimage)
+    if (!kisimage)
         return;
 
     if (kisimage->undoAdapter())
@@ -451,6 +458,7 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
             m_refSize = QSizeF(0, 0); //will force the recalc of image in recalcOutline
 
             updateOutlineChanged();
+            m_canvas->updateCanvas(QRect(m_originalTopLeft, m_originalBottomRight));
             refreshSpinBoxes();
         }
     }
@@ -493,7 +501,7 @@ void KisToolTransform::initHandles()
         //}
     } else {
         //we take all of the paintDevice
-        dev->exactBounds(x, y, w, h);
+        dev->extent(x, y, w, h);
         m_origSelection = 0;
     }
     m_originalTopLeft = QPoint(x, y);
@@ -1753,9 +1761,8 @@ void KisToolTransform::applyTransform()
     tmpCenter = scale(tmpCenter.x(), tmpCenter.y(), tmpCenter.z());
     tmpCenter = rotZ(tmpCenter.x(), tmpCenter.y(), tmpCenter.z());
     QPointF t = m_currentArgs.translate() - tmpCenter.toPointF();
-    KoProgressUpdater* updater = canvas->view()->createProgressUpdater();
-    updater->start(100, i18n("Transform"));
-    KoUpdaterPtr progress = updater->startSubtask();
+    KoProgressUpdater* updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
+    updater->start(100, i18n("Apply Transformation"));
 
     // This mementoes the current state of the active device.
     ApplyTransformCmd transaction(this, currentNode());
@@ -1772,12 +1779,14 @@ void KisToolTransform::applyTransform()
     // Also restore the original pixel selection (the shape selection will also be restored : see below)
     if (m_origSelection && !m_origSelection->isDeselected()) {
         if (currentSelection()) {
+            //KoUpdaterPtr restorePixSelection = updater->startSubtask(5);
             //copy the pixel selection
             QRect rc = m_origSelection->selectedRect();
             rc = rc.normalized();
             currentSelection()->getOrCreatePixelSelection()->clear();
             KisPainter sgc(KisPaintDeviceSP(currentSelection()->getOrCreatePixelSelection()));
             sgc.setCompositeOp(COMPOSITE_COPY);
+            //sgc.setProgress(restorePixSelection);
             sgc.bitBlt(rc.topLeft(), m_origSelection->getOrCreatePixelSelection(), rc);
             sgc.end();
 
@@ -1799,6 +1808,15 @@ void KisToolTransform::applyTransform()
     // after many tweaks. Since we started the transaction before the copy back, the memento
     // has the previous state.
     if (m_origSelection) {
+        KoUpdaterPtr copyPixels = updater->startSubtask(10);
+        KoUpdaterPtr transformPixels = updater->startSubtask(10);
+        KoUpdaterPtr perspectiveTransfPixels = updater->startSubtask(10);
+        KoUpdaterPtr copyBackPixels = updater->startSubtask(10);
+        KoUpdaterPtr copyPixSelection = updater->startSubtask(10);
+        KoUpdaterPtr transformPixSelection = updater->startSubtask(10);
+        KoUpdaterPtr perspectiveTransfPixSelection = updater->startSubtask(10);
+        KoUpdaterPtr copyBackPixSelection = updater->startSubtask(10);
+
         //we copy the pixels of the selection into a tmpDevice before clearing them
         //we apply the transformation to the tmpDevice
         //and then we blit it into the currentNode's device
@@ -1806,19 +1824,21 @@ void KisToolTransform::applyTransform()
         QRect selectRect = currentSelection()->selectedExactRect();
         KisPainter gc(tmpDevice, currentSelection());
         //gc.bitBlt(selectRect.topLeft(), m_origDevice, selectRect);
+        gc.setProgress(copyPixels);
         gc.bitBlt(selectRect.topLeft(), currentNode()->paintDevice(), selectRect);
         gc.end();
 
-        KisTransformWorker worker(tmpDevice, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_originalCenter.x(), m_originalCenter.y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), progress, m_filter);
+        KisTransformWorker worker(tmpDevice, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_originalCenter.x(), m_originalCenter.y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_filter);
         worker.run();
         QRect tmpRc3 = boundRect(m_topLeftProj, m_topRightProj, m_bottomRightProj, m_bottomLeftProj).toRect();
-        KisPerspectiveTransformWorker perspectiveWorker(tmpDevice, tmpRc3.united(tmpDevice->extent()), m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), progress);
+        KisPerspectiveTransformWorker perspectiveWorker(tmpDevice, tmpRc3.united(tmpDevice->extent()), m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixels);
         perspectiveWorker.run();
 
         currentNode()->paintDevice()->clearSelection(currentSelection());
 
         QRect tmpRc = tmpDevice->exactBounds();
         KisPainter painter(currentNode()->paintDevice());
+        painter.setProgress(copyBackPixels);
         painter.bitBlt(tmpRc.topLeft(), tmpDevice, tmpRc);
         painter.end();
 
@@ -1831,18 +1851,20 @@ void KisToolTransform::applyTransform()
 
         KisPaintDeviceSP tmpDevice2 = new KisPaintDevice(pixelSelection->colorSpace());
         KisPainter gc2(tmpDevice2, currentSelection());
+        gc2.setProgress(copyPixSelection);
         gc2.bitBlt(pixelSelectRect.topLeft(), pixelSelection, pixelSelectRect);
         gc2.end();
 
-        KisTransformWorker selectionWorker(tmpDevice2, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_originalCenter.x(), m_originalCenter.y(), m_currentArgs.aZ(), (int)(t.x()), (int)(t.y()), progress, m_filter);
+        KisTransformWorker selectionWorker(tmpDevice2, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_originalCenter.x(), m_originalCenter.y(), m_currentArgs.aZ(), (int)(t.x()), (int)(t.y()), transformPixSelection, m_filter);
         selectionWorker.run();
-        KisPerspectiveTransformWorker perspectiveSelectionWorker(tmpDevice2, tmpRc3.united(tmpDevice2->extent()), m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), progress);
+        KisPerspectiveTransformWorker perspectiveSelectionWorker(tmpDevice2, tmpRc3.united(tmpDevice2->extent()), m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixSelection);
         perspectiveSelectionWorker.run();
 
         pixelSelection->clear();
 
         QRect tmpRc2 = tmpDevice2->exactBounds();
         KisPainter painter2(pixelSelection);
+        painter2.setProgress(copyBackPixSelection);
         painter2.bitBlt(tmpRc2.topLeft(), tmpDevice2, tmpRc2);
         painter2.end();
 
@@ -1872,10 +1894,14 @@ void KisToolTransform::applyTransform()
         //    KoShapeTransformCommand* cmd = new KoShapeTransformCommand(currentShapes, m_oldMatrixList, m_newMatrixList, transaction.undoCommand());
         //    cmd->redo();
         //}
-
     } else {
-        KisTransformWorker worker(currentNode()->paintDevice(), m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_originalCenter.x(), m_originalCenter.y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), progress, m_filter);
+        KoUpdaterPtr transformPixels = updater->startSubtask(40);
+        KoUpdaterPtr perspectiveTransfPixels = updater->startSubtask(40);
+        KisTransformWorker worker(currentNode()->paintDevice(), m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_originalCenter.x(), m_originalCenter.y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_filter);
         worker.run();
+        QRect tmpRc3 = boundRect(m_topLeftProj, m_topRightProj, m_bottomRightProj, m_bottomLeftProj).toRect();
+        KisPerspectiveTransformWorker perspectiveWorker(currentNode()->paintDevice(), tmpRc3.united(currentNode()->paintDevice()->extent()), m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixels);
+        perspectiveWorker.run();
     }
 
     //canvas update
@@ -1901,6 +1927,7 @@ void KisToolTransform::applyTransform()
     transaction.commit(image()->undoAdapter());
     updater->deleteLater();
 }
+
 void KisToolTransform::notifyCommandAdded(const QUndoCommand * command)
 {
     const ApplyTransformCmdData * cmd1 = dynamic_cast<const ApplyTransformCmdData*>(command);
@@ -1942,15 +1969,18 @@ void KisToolTransform::notifyCommandExecuted(const QUndoCommand * command)
             m_origSelection = presentCmd2->origSelection(m_originalTopLeft, m_originalBottomRight);
             presentCmd2->origPreviews(m_origImg, m_origSelectionImg);
 
+            m_originalCenter = (m_originalTopLeft + m_originalBottomRight) / 2;
+            m_originalHeight2 = m_originalCenter.y() - m_originalTopLeft.y();
+            m_originalWidth2 = m_originalCenter.x() - m_originalTopLeft.x();
+            m_previousTopLeft = m_originalTopLeft;
+            m_previousBottomRight = m_originalBottomRight;
+            m_scaleX_wOutModifier = m_currentArgs.scaleX();
+            m_scaleY_wOutModifier = m_currentArgs.scaleY();
+            m_refSize = QSizeF(0, 0); //will force the recalc of current QImages in recalcOutline
+
             setButtonBoxDisabled(false);
         }
 
-        m_originalCenter = (m_originalTopLeft + m_originalBottomRight) / 2;
-        m_previousTopLeft = m_originalTopLeft;
-        m_previousBottomRight = m_originalBottomRight;
-        m_scaleX_wOutModifier = m_currentArgs.scaleX();
-        m_scaleY_wOutModifier = m_currentArgs.scaleY();
-        m_refSize = QSizeF(0, 0); //will force the recalc of current QImages in recalcOutline
 
         updateOutlineChanged();
         refreshSpinBoxes();

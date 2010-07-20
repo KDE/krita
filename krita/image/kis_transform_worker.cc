@@ -454,8 +454,8 @@ bool KisTransformWorker::run()
 
     //apply shear X and Y
     if (xshear != 0 || yshear != 0) {
-        m_progressTotalSteps = (r.width() + r.height() * m_xshear);
-        m_progressTotalSteps += r.height() + m_progressTotalSteps  * m_yshear;
+        m_progressTotalSteps += (yscale * r.height() * (r.width() + m_xshear * r.height()));
+        m_progressTotalSteps += (xscale * r.width() * (r.height() + m_yshear * r.width()));
 
         transformPass <KisHLineIteratorPixel>(srcdev.data(), srcdev.data(), xscale, yscale *  m_xshear, - round(m_yshearOrigin * yscale * m_xshear), m_filter, m_fixBorderAlpha);
         transformPass <KisVLineIteratorPixel>(srcdev.data(), srcdev.data(), yscale, m_yshear, - round(m_xshearOrigin * xscale * m_yshear), m_filter, m_fixBorderAlpha);
@@ -474,7 +474,7 @@ bool KisTransformWorker::run()
     switch (rotQuadrant) {
     default: // just to shut up the compiler
     case 0:
-        m_progressTotalSteps = 0;
+        m_progressTotalSteps += 0;
         break;
     case 1:
         rotation -= M_PI / 2;

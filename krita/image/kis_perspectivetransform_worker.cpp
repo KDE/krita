@@ -110,12 +110,14 @@ void KisPerspectiveTransformWorker::run()
                 double dstX = dstIt.x() - m_xcenter;
                 double dstY = dstIt.y() - m_ycenter;
                 double sf = (dstX * m_matrix[2][0] + dstY * m_matrix[2][1] + m_matrix[2][2]);
-                sf = (sf == 0.) ? 1. : 1. / sf;
-                p.setX((dstX * m_matrix[0][0] + dstY * m_matrix[0][1] + m_matrix[0][2]) * sf + m_xcenter);
-                p.setY((dstX * m_matrix[1][0] + dstY * m_matrix[1][1] + m_matrix[1][2]) * sf + m_ycenter);
+                if (sf != 0) {
+                    sf = 1. / sf;
+                    p.setX((dstX * m_matrix[0][0] + dstY * m_matrix[0][1] + m_matrix[0][2]) * sf + m_xcenter);
+                    p.setY((dstX * m_matrix[1][0] + dstY * m_matrix[1][1] + m_matrix[1][2]) * sf + m_ycenter);
 
-                srcAcc.moveTo(p);
-                srcAcc.sampledOldRawData(dstIt.rawData());
+                    srcAcc.moveTo(p);
+                    srcAcc.sampledOldRawData(dstIt.rawData());
+                }
 
                 // TODO: Should set alpha = alpha*(1-selectedness)
 //                 cs->setAlpha( dstIt.rawData(), 255, 1);

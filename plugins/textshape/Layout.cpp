@@ -502,7 +502,7 @@ bool Layout::nextParag()
     else
         option.setTextDirection(Qt::LeftToRight);
 
-    layout->setTextOption(option);
+    option.setUseDesignMetrics(true);
 
     // drop caps
 
@@ -599,6 +599,8 @@ bool Layout::nextParag()
     } else {
         m_dropCapsNChars = 0;
     }
+
+    layout->setTextOption(option);
 
     layout->beginLayout();
     m_fragmentIterator = m_block.begin();

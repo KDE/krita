@@ -243,6 +243,16 @@ public:
     QRectF cellContentRect(const QTextTableCell &cell) const;
 
     /**
+     * Get the content Y of a given cell.
+     *
+     * @param cell the cell.
+     * @return the y pos where content starts.
+     *
+     * \sa position(), setPosition()
+     */
+    qreal cellContentY(const QTextTableCell &cell) const;
+
+    /**
      * Get the bounding rectangle of a given row.
      *
      * @param row the row.

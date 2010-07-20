@@ -701,7 +701,7 @@ void Layout::handleTable()
                 // Since we have just stepped into this cell lets
                 // adjust the Y position of the layout to the Y
                 // position of the cell content rectangle.
-                m_y = m_tableLayout.cellContentRect(m_tableCell).y();
+                m_y = m_tableLayout.cellContentY(m_tableCell);
             }
         }
         m_inTable = true; // We are inside a table.

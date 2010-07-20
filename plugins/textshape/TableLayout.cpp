@@ -453,6 +453,19 @@ QTextTableCell TableLayout::hitTestTable(const QPointF &point) const
     return QTextTableCell();
 }
 
+qreal TableLayout::cellContentY(const QTextTableCell &cell) const
+{
+    Q_ASSERT(isValid());
+    Q_ASSERT(cell.isValid());
+
+    /*
+     * Get the cell style and return the bounding rect adjusted for
+     * borders and paddings by calling KoTableCellStyle::contentRect().
+     */
+    KoTableCellStyle cellStyle(cell.format().toTableCellFormat());
+    return m_tableLayoutData->m_rowPositions[cell.row()] + cellStyle.topPadding() + cellStyle.topBorderWidth();
+}
+
 QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const
 {
     Q_ASSERT(isValid());
@@ -471,8 +484,10 @@ QRectF TableLayout::cellBoundingRect(const QTextTableCell &cell) const
     Q_ASSERT(isValid());
     Q_ASSERT(cell.row() < m_tableLayoutData->m_rowPositions.size());
     TableRect tableRect = m_tableLayoutData->m_tableRects.last();
+    int i = m_tableLayoutData->m_tableRects.size()-1;
     while (tableRect.fromRow > cell.row()) {
-        tableRect =  m_tableLayoutData->m_tableRects.first();
+        --i;
+        tableRect =  m_tableLayoutData->m_tableRects[i];
     }
     Q_ASSERT(cell.column() + cell.columnSpan() <=  tableRect.columnPositions.size());
 
@@ -497,8 +512,10 @@ QRectF TableLayout::rowBoundingRect(int row) const
 {
     Q_ASSERT(row < m_tableLayoutData->m_rowPositions.size());
     TableRect tableRect = m_tableLayoutData->m_tableRects.last();
+    int i = m_tableLayoutData->m_tableRects.size()-1;
     while (tableRect.fromRow > row) {
-        tableRect =  m_tableLayoutData->m_tableRects.first();
+        --i;
+        tableRect =  m_tableLayoutData->m_tableRects[i];
     }
     return QRectF(tableRect.rect.left(), m_tableLayoutData->m_rowPositions[row],
                 tableRect.rect.width(),  m_tableLayoutData->m_rowHeights[row]);

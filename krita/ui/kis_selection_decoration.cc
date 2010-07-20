@@ -124,7 +124,7 @@ void KisSelectionDecoration::selectionTimerEvent()
             m_offset++;
             if (m_offset > 7) m_offset = 0;
 
-            dbgKrita << "offset is: " << m_offset;
+//            dbgKrita << "offset is: " << m_offset;
             QRect bound = selection->selectedRect();
             double xRes = view()->image()->xRes();
             double yRes = view()->image()->yRes();

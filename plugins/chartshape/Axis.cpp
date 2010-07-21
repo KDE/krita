@@ -108,6 +108,7 @@ public:
     // Pointer to Axis that owns this Private instance
     Axis * const q;
     QMap< DataSet*, KDChart::MarkerAttributes > markerAttributesBackup;//QVector< KDChart::MarkerAttributes > > markerAttributesBackup;
+    QMap< DataSet*, KDChart::MarkerAttributes > markerAttributesGlobalBackup;//QVector< KDChart::MarkerAttributes > > markerAttributesBackup;
 
     PlotArea *plotArea;
 
@@ -319,23 +320,23 @@ Axis::Private::~Private()
  *
  * Applies special settings to BubbleCharts and makes a backup of the
  * the old settings, restoring them if a switch to non buble type is made
- * This is nedssary as BubbleChart is implemnted via Plotter, a diagram type
+ * This is necssary as BubbleChart is implemnted via Plotter, a diagram type
  * would make this obsolete, as the diagram could request correct data from the model
  *
  */
 void Axis::Private::applyAttributesToDataSet( DataSet* set, ChartType newCharttype )
 {
+    KDChart::MarkerAttributes restoreGlobalAttribs( markerAttributesGlobalBackup[ set ] );
     KDChart::MarkerAttributes restoreAttribs( markerAttributesBackup[ set ] );
-    //markerAttributesBackup[ set ] = set->getMarkerAttributes();
     switch ( newCharttype )
     {
         case( BubbleChartType ):
         {          
-            markerAttributesBackup[ set ] = set->getMarkerAttributes();  
+            markerAttributesGlobalBackup[ set ] = set->getMarkerAttributes();
+            markerAttributesBackup[ set ] = set->getMarkerAttributes( 0 );  
             KDChart::MarkerAttributes ma( set->getMarkerAttributes( ) );
             ma.setVisible( true );
             ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
-            //ma.setMarkerSize( QSizeF(14.0,14.0) );
             ma.setMarkerColor( set->color() );                
             set->setMarkerAttributes( ma );
             QPen p = ma.pen();
@@ -345,7 +346,6 @@ void Axis::Private::applyAttributesToDataSet( DataSet* set, ChartType newChartty
                 KDChart::MarkerAttributes ma( set->getMarkerAttributes( i ) );
                 ma.setVisible( true );
                 ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
-                //ma.setMarkerSize( QSizeF(14.0,14.0) );
                 ma.setMarkerColor( set->color() );   
                 QPen p = ma.pen();
                 p.setColor( set->color() );
@@ -365,11 +365,16 @@ void Axis::Private::applyAttributesToDataSet( DataSet* set, ChartType newChartty
         case( GanttChartType ):
         case( LastChartType ):
         default:
-            set->setMarkerAttributes( restoreAttribs );
-            for ( int i = 0; i < set->size(); ++i ){
-                set->setMarkerAttributes( restoreAttribs, i );
+          // make sure to restore the settings only if necessary, maybe dirty flag is a better option if further extension
+          // is needed
+            if ( plotAreaChartType == BubbleChartType ){
+              
+              set->setMarkerAttributes( restoreGlobalAttribs );
+              for ( int i = 0; i < set->size(); ++i ){
+                  set->setMarkerAttributes( restoreAttribs, i );
+              }
+              break;
             }
-            break;
     }
 }
 

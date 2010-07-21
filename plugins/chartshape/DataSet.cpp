@@ -87,6 +87,7 @@ public:
     void sectionsInRect( const CellRegion &region, const QRect &rect,
                          int &start, int &end ) const;
     void dataChanged( KDChartModel::DataRole role, const QRect &rect ) const;
+    void refreshCustomData();
 
     DataSet      *parent;
 
@@ -256,6 +257,28 @@ bool DataSet::Private::hasOwnChartType() const
 {
     return chartType != LastChartType;
 }
+
+void DataSet::Private::refreshCustomData()
+{
+    int i = 0;
+    for ( QMap< int, KDChart::DataValueAttributes >::iterator it = sectionsDataValueAttributes.begin();
+          it != sectionsDataValueAttributes.end(); ++it ){
+        KDChart::MarkerAttributes mattr( it->markerAttributes() );
+        mattr.setMarkerSize( QSizeF( parent->customData( i ).toDouble(), parent->customData( i ).toDouble() ) );
+        it->setMarkerAttributes( mattr );
+        ++i;
+    }
+    if ( sectionsDataValueAttributes.empty() ){
+        for ( i = 0; i < parent->size(); ++i ){
+          KDChart::DataValueAttributes attrs = defaultDataValueAttributes();
+          KDChart::MarkerAttributes mattr( attrs.markerAttributes() );
+          mattr.setMarkerSize( QSizeF( parent->customData( i ).toDouble(), parent->customData( i ).toDouble() ) );
+          attrs.setMarkerAttributes( mattr );
+          sectionsDataValueAttributes[ i ] = attrs;
+        }
+    }
+}
+
 
 /**
  * Returns the effective chart type of this data set, i.e.
@@ -885,23 +908,7 @@ void DataSet::setCustomDataRegion( const CellRegion &region )
 {
     d->customDataRegion = region;
     d->updateSize();
-    int i = 0;
-    for ( QMap< int, KDChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
-          it != d->sectionsDataValueAttributes.end(); ++it ){
-        KDChart::MarkerAttributes mattr( it->markerAttributes() );
-        mattr.setMarkerSize( QSizeF( customData( i ).toDouble(), customData( i ).toDouble() ) );
-        it->setMarkerAttributes( mattr );
-        ++i;
-    }
-    if ( d->sectionsDataValueAttributes.empty() ){
-        for ( i = 0; i < size(); ++i ){
-          KDChart::DataValueAttributes attrs = d->defaultDataValueAttributes();
-          KDChart::MarkerAttributes mattr( attrs.markerAttributes() );
-          mattr.setMarkerSize( QSizeF( customData( i ).toDouble(), customData( i ).toDouble() ) );
-          attrs.setMarkerAttributes( mattr );
-          d->sectionsDataValueAttributes[ i ] = attrs;
-        }
-    }
+    d->refreshCustomData();
     
     if ( !d->blockSignals && d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::CustomDataRole, 0, size() - 1 );    
@@ -1001,6 +1008,7 @@ void DataSet::xDataChanged( const QRect &region ) const
 
 void DataSet::customDataChanged( const QRect &region ) const
 {
+    d->refreshCustomData();
     d->dataChanged( KDChartModel::CustomDataRole, region );
 }
 
@@ -1151,19 +1159,32 @@ void DataSet::setValueLabelType( ValueLabelType type, int section /* = -1 */ )
         attr = d->sectionsDataValueAttributes[ section ];
 
     switch ( type ) {
-        case NoValueLabel:
+        case NoValueLabel:{
             attr.setVisible( false );
             break;
-        case RealValueLabel:
+        }
+        case RealValueLabel:{
+            KDChart::TextAttributes ta ( attr.textAttributes() );
+            ta.setVisible( true );
+            attr.setTextAttributes( ta );
             attr.setVisible( true );
             attr.setUsePercentage( false );
             break;
-        case PercentageValueLabel:
+        }
+        case PercentageValueLabel:{
+            KDChart::TextAttributes ta ( attr.textAttributes() );
+            ta.setVisible( true );
+            attr.setTextAttributes( ta );
             attr.setVisible( true );
             attr.setUsePercentage( true );
             attr.setSuffix( "%" );
             break;
+        }
     }
+    if ( section > 0 )
+      d->sectionsDataValueAttributes[ section ] = attr;
+    else
+      d->dataValueAttributes = attr;
 }
 
 DataSet::ValueLabelType DataSet::valueLabelType( int section /* = -1 */ ) const
@@ -1171,8 +1192,8 @@ DataSet::ValueLabelType DataSet::valueLabelType( int section /* = -1 */ ) const
     KDChart::DataValueAttributes &attr = d->dataValueAttributes;
     if ( d->sectionsDataValueAttributes.contains( section ) )
         attr = d->sectionsDataValueAttributes[ section ];
-
-    if ( !attr.isVisible() )
+    KDChart::TextAttributes ta ( attr.textAttributes() );
+    if ( !ta.isVisible() )
         return NoValueLabel;
     if ( !attr.usePercentage() )
         return RealValueLabel;
@@ -1253,10 +1274,39 @@ bool DataSet::loadOdf( const KoXmlElement &n,
             setPieExplodeFactor( styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
         styleStack.restore();
     }
+    bool bubbleChart = false;
+    if ( n.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
+        bubbleChart = n.attributeNS( KoXmlNS::chart, "class", QString() ) == "chart:bubble";
+    }
+    
+    bool completeDataDefinition = false;
+    
+    if ( bubbleChart && n.hasChildNodes() ){
+        KoXmlNode cn = n.firstChild();
+        while ( !cn.isNull() ){
+            KoXmlElement elem = cn.toElement();
+            const QString name = elem.tagName();
+            if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") ){
+                if ( completeDataDefinition ){
+                    const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
+                    setYDataRegionString( region );
+                }else{
+                    const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
+                    setXDataRegionString( region );
+                    completeDataDefinition = true;
+                }
+                
+            }
+            cn = cn.nextSibling();
+        }
+    }
 
     if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) ) {
         const QString region = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
-        setYDataRegionString( region );
+        if ( bubbleChart )
+          setCustomDataRegion( region );
+        else
+          setYDataRegionString( region );
     }
     if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) ) {
         const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );

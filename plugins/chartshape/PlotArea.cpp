@@ -150,37 +150,30 @@ public:
 
 PlotArea::Private::Private( PlotArea *q, ChartShape *parent )
     : q(q)
-    , shape(parent)
-{
+    , shape( parent )
     // Default type: normal bar chart
-    chartType    = BarChartType;
-    chartSubtype = NormalChartSubtype;
-
-    wall  = 0;
-    floor = 0;
-
+    ,chartType( BarChartType )
+    ,chartSubtype( NormalChartSubtype )
+    ,wall( 0 )
+    ,floor( 0 )
+    ,threeD( false )
+    ,threeDScene( 0 )
     // By default, x and y axes are not swapped.
-    vertical = false;
-
-    threeD      = false;
-    threeDScene = 0;
-
+    ,vertical( false )
     // Data specific for bar charts
-    vertical       = false;
-    gapBetweenBars = 0;
-    gapBetweenSets = 100;
-
+    ,gapBetweenBars( 0 )
+    ,gapBetweenSets( 100 )
     // OpenOffice.org's default. It means the first pie slice starts at the
     // very top (and then going counter-clockwise).
-    pieAngleOffset = 90.0;
-
+    ,pieAngleOffset( 90.0 )
     // KD Chart stuff
-    kdChart = new KDChart::Chart();
-    kdPlane = new KDChart::CartesianCoordinatePlane( kdChart );
-
-    // Cache
-    pixmapRepaintRequested = true;
-    paintPixmap            = true;
+    ,kdChart( new KDChart::Chart() )
+    ,kdPlane( new KDChart::CartesianCoordinatePlane( kdChart ) )
+    // Cache    
+    ,paintPixmap( true )
+    ,pixmapRepaintRequested( true )
+{       
+    shape->proxyModel()->setDataDimensions( 1 );
 }
 
 PlotArea::Private::~Private()

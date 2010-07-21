@@ -456,6 +456,10 @@ void ChartTool::setDataSetShowValues( DataSet *dataSet, bool b )
         return;
 
     dataSet->setValueLabelType( b ? DataSet::RealValueLabel : DataSet::NoValueLabel );
+    // its necessary to set this for all data value
+    for ( int i = 0; i < dataSet->size(); ++i ){
+        dataSet->setValueLabelType( b ? DataSet::RealValueLabel : DataSet::NoValueLabel, i );
+    }
     d->shape->update();
 }
 

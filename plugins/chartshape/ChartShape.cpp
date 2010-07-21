@@ -971,17 +971,44 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
 
     Q_ASSERT( d->plotArea );
 
-
+    
     // 1. Load the chart type.
     const QString chartClass = chartElement.attributeNS( KoXmlNS::chart,
                                                          "class", QString() );
+    KChart::ChartType chartType = KChart::BarChartType;
     // Find out what charttype the chart class corresponds to.
     bool  knownType = false;
     for ( int type = 0; type < (int)LastChartType; ++type ) {
         if ( chartClass == ODF_CHARTTYPES[ (ChartType)type ] ) {
             //kDebug(35001) <<"found chart of type" << chartClass;
 
-            setChartType( (ChartType)type );
+            chartType = (ChartType)type;
+            // Set the dimensionality of the data points, we can not call
+            // setType here as we bubble charts requires that the datasets already exist
+            int dimensions = 1;
+            switch ( chartType ) {
+            case BarChartType:
+            case LineChartType:
+            case AreaChartType:
+            case CircleChartType:
+            case RingChartType:
+            case RadarChartType:
+            case StockChartType:
+            case GanttChartType:
+                dimensions = 1;
+                break;
+            case ScatterChartType:
+            case SurfaceChartType:
+                dimensions = 2;
+                break;
+            case BubbleChartType:
+                dimensions = 3;
+                break;
+            case LastChartType:
+            default:
+                dimensions = 1;         // Shouldn't happen
+            }
+            proxyModel()->setDataDimensions( dimensions );
             knownType = true;
             break;
         }
@@ -994,6 +1021,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
         //setErrorMessage( i18n( "Unknown chart type %1" ,chartClass ) );
         return false;
     }
+    
 
     // 2. Load the data
     KoXmlElement  dataElem = KoXml::namedItemNS( chartElement,
@@ -1044,7 +1072,11 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     if ( !legendElem.isNull() ) {
         if ( !d->legend->loadOdf( legendElem, context ) )
             return false;
-    }
+    }    
+    
+    // 8. Sets the chart type
+    setChartType( chartType );
+    
     d->legend->update();
 
     requestRepaint();

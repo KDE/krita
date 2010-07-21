@@ -47,6 +47,7 @@
 #include <KoToolProxy.h>
 
 #include "kis_adjustment_layer.h"
+#include "kis_node_manager.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_config.h"
 #include "kis_convolution_painter.h"
@@ -195,7 +196,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_smooth  = new KAction(i18n("Smooth..."), this);
     collection->addAction("smooth", m_smooth);
     connect(m_smooth, SIGNAL(triggered()), this, SLOT(smooth()));
-    
+
     m_imageResizeToSelection  = new KAction(i18n("Size Canvas to Size of Selection"), this);
     collection->addAction("resizeimagetoselection", m_imageResizeToSelection);
     connect(m_imageResizeToSelection, SIGNAL(triggered()), this, SLOT(imageResizeToSelection()));
@@ -455,7 +456,7 @@ void KisSelectionManager::paste()
 {
     KisImageWSP image = m_view->image();
     if (!image) return;
-    
+
     //figure out where to position the clip
     // XXX: Fix this for internal points & zoom! (BSAR)
     QWidget * w = m_view->canvas();
@@ -484,6 +485,8 @@ void KisSelectionManager::paste()
             m_adapter->addNode(layer , image->rootLayer(), 0);
         }
         layer->setDirty();
+        m_view->nodeManager()->activateNode(layer);
+
     } else
         m_view->canvasBase()->toolProxy()->paste();
 }

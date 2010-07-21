@@ -195,11 +195,12 @@ bool Layout::addLine(QTextLine &line)
     }
 
     qreal height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
-    if (line.textLength() == 1 && m_block.text().at(line.textStart()) == QChar::ObjectReplacementCharacter && line.descent() == 0.0) {
-        // thats an (non inline) anchor then, anchors takes no height.
-        height = 0.1;
-    }
     qreal objectHeight = 0.0;
+    if (line.textLength() == 1 && m_block.text().at(line.textStart()) == QChar::ObjectReplacementCharacter && line.descent() == 0.0) {
+        // look up if this is an inline anchor with contributing height
+        // otherwise it's just a no-inline anchor which we set to 0.1 high
+        objectHeight = qMax(0.1, inlineCharHeight(m_fragmentIterator.fragment()));
+    }
     bool useFixedLineHeight = height != 0.0;
     if (useFixedLineHeight) {
         // QTextLine has its position at the top of the line. So if the ascent changes between lines in a parag
@@ -216,9 +217,9 @@ bool Layout::addLine(QTextLine &line)
         }
     } else { // not fixed lineheight
         const bool useFontProperties = m_format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
-        if (useFontProperties)
+        if (useFontProperties) {
             height = line.height();
-        else {
+        } else {
             if (m_fragmentIterator.atEnd()) // no text in parag.
                 height = m_block.charFormat().fontPointSize();
             else {

@@ -134,13 +134,7 @@ qreal Layout::x()
 {
     qreal result = m_newParag ? resolveTextIndent() : 0.0;
     if (m_inTable) {
-        QTextCursor tableFinder(m_block);
-        QTextTable *table = tableFinder.currentTable();
-        if (table) {
-            // Set the current table on the table layout.
-            m_tableLayout.setTable(table);
-            result += m_tableLayout.cellContentRect(m_tableCell).x();
-        }
+        result += m_tableLayout.cellContentRect(m_tableCell).x();
     }
     result += m_isRtl ? m_format.rightMargin() : (m_format.leftMargin() + listIndent());
     result += m_borderInsets.left + m_shapeBorder.left;
@@ -389,6 +383,19 @@ bool Layout::nextParag()
                 m_blockData->border()->setParagraphBottom(borderBottom);
         }
     }
+
+    // make sure m_tableLayout is refering to the right table
+    QTextCursor tableFinder(m_block);
+    QTextTable *table = tableFinder.currentTable();
+    if (table) {
+        // Set the current table on the table layout.
+        m_tableLayout.setTable(table);
+        // Save the current table cell.
+        m_tableCell = table->cellAt(m_block.position());
+        Q_ASSERT(m_tableCell.isValid());
+
+    }
+
     layout = 0;
     m_blockData = 0;
     if (m_data == 0) // no shape to layout, so stop here.
@@ -643,13 +650,6 @@ void Layout::handleTable()
     QTextCursor tableFinder(m_block);
     QTextTable *table = tableFinder.currentTable();
     if (table) {
-        // Set the current table on the table layout.
-        m_tableLayout.setTable(table);
-
-        // Save the current table cell.
-        m_tableCell = table->cellAt(m_block.position());
-        Q_ASSERT(m_tableCell.isValid());
-
         // previousCell is the cell that the previous blocks are in. It can be
         // the same as the current cell, or it can be different, or it can be
         // invalid (if the previous cell is not in a table at all).

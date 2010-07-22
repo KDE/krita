@@ -42,39 +42,6 @@ int KisSketchPaintOpSettings::rate() const
     return getInt(AIRBRUSH_RATE);
 }
 
-
-void KisSketchPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
-{
-    if (_mode != CursorIsOutline) return;
-    qreal size = getInt(SKETCH_RADIUS);
-    painter.setPen(Qt::black);
-    painter.drawEllipse(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos));
-}
-
-
-QRectF KisSketchPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
-{
-    if (_mode != CursorIsOutline) return QRectF();
-    qreal size = getInt(SKETCH_RADIUS);
-    size += 10;
-    return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
-}
-
-QPainterPath KisSketchPaintOpSettings::brushOutline(OutlineMode mode) const
-{
-    QPainterPath path;
-    if (mode == CursorIsOutline){
-        qreal size = getInt(SKETCH_RADIUS) * 2 + 1;
-    
-        QRectF rc(0, 0, size, size);
-        rc.translate(-rc.center());
-    
-        path.addEllipse(rc);
-    }
-    return path;
-}
-
-
 #if defined(HAVE_OPENGL)
 QString KisSketchPaintOpSettings::modelName() const
 {

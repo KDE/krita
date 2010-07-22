@@ -31,6 +31,7 @@
 #if defined(_WIN32) || defined(_WIN64)
 # include <windows.h>
 #endif
+#include <kis_brush_based_paintop_settings.h>
 
 class QWidget;
 class QString;
@@ -39,16 +40,12 @@ class QDomElement;
 class QDomDocument;
 
 
-class KisSketchPaintOpSettings : public KisPaintOpSettings
+class KisSketchPaintOpSettings : public KisBrushBasedPaintOpSettings
 {
 
 public:
     KisSketchPaintOpSettings();
     virtual ~KisSketchPaintOpSettings() {}
-
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, OutlineMode _mode) const;
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
-    virtual QPainterPath brushOutline(OutlineMode mode) const;
     
     bool paintIncremental();
     bool isAirbrushing() const;

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 #define KIS_SKETCHPAINTOP_SETTINGS_WIDGET_H_
 
 #include <kis_paintop_options_widget.h>
+#include <kis_brush_based_paintop_options_widget.h>
 
 #include "ui_wdgsketchoptions.h"
 
@@ -27,7 +28,7 @@ class KisPaintActionTypeOption;
 class KisSketchOpOption;
 class KisPressureOpacityOption;
 
-class KisSketchPaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisSketchPaintOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {
     Q_OBJECT
 
@@ -36,9 +37,6 @@ public:
     virtual ~KisSketchPaintOpSettingsWidget();
 
     KisPropertiesConfiguration* configuration() const;
-    
-    ///Reimplemented
-    void changePaintOpSize(qreal x, qreal y);
 
 public:
     KisSketchOpOption* m_sketchOption;

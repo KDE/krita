@@ -27,6 +27,8 @@
 
 #include "kis_painter.h"
 #include <kis_pressure_size_option.h>
+#include <kis_brush_option.h>
+#include <kis_pressure_rotation_option.h>
 
 class KisSketchPaintOp : public KisPaintOp
 {
@@ -43,11 +45,15 @@ private:
     KisPaintDeviceSP m_dab;
     KisPressureOpacityOption m_opacityOption;
     KisPressureSizeOption m_sizeOption;
+    KisPressureRotationOption m_rotationOption;
+    
+    KisBrushOption m_brushOption;
     SketchProperties m_sketchProperties;
     
     QVector<QPointF> m_points;
     int m_count;
     KisPainter * m_painter;
+    KisBrushSP m_brush;
 };
 
 #endif // KIS_SKETCH_PAINTOP_H_

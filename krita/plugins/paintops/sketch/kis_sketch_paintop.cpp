@@ -47,10 +47,15 @@ KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, Kis
     Q_UNUSED(image);
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
+    m_rotationOption.readOptionSetting(settings);
     m_sketchProperties.readOptionSetting(settings);
+    m_brushOption.readOptionSetting(settings);
 
+    m_brush = m_brushOption.brush();
+    
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
+    m_rotationOption.sensor()->reset();
 
     m_painter = 0;
     m_count = 0;
@@ -78,9 +83,28 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
 
     m_points.append(mouse);
 
+    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
+    double rotation = m_rotationOption.apply(pi2);
+    double xFraction = 0.0;
+    double yFraction = 0.0;
+    
+    KisFixedPaintDeviceSP dab = cachedDab(m_dab->colorSpace());
+    if (m_brush->brushType() == IMAGE || m_brush->brushType() == PIPE_IMAGE) {
+        dab = m_brush->paintDevice(m_dab->colorSpace(), scale, rotation, pi2, xFraction, yFraction);
+    } else {
+        KoColor color = painter()->paintColor();
+        color.convertTo(dab->colorSpace());
+        m_brush->mask(dab, color, scale, scale, rotation, pi2, xFraction, yFraction);
+    }
+
+    // get the size of the mask
+    QRectF brushBoundingBox = dab->bounds();
+    QPointF hotSpot = m_brush->hotSpot(scale,scale,rotation);
+    brushBoundingBox.translate(mouse - hotSpot);
+    
     // chrome, fur 0.1 * BRUSH_PRESSURE
     // sketchy, long fur 0.05
-    qreal opacity = 0.05;
+    qreal opacity = 1.00;
 
     m_painter->setPaintColor( painter()->paintColor() );
     // shaded: does not draw this line, chrome does, fur does
@@ -88,12 +112,8 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
         m_painter->drawThickLine(prevMouse,mouse,m_sketchProperties.lineWidth,m_sketchProperties.lineWidth);
     }
 
-    qreal distance;
-    QPointF diff;
-    int size = m_points.size();
-
-    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
-    qreal radius = m_sketchProperties.radius * scale;
+    //qreal radius = m_sketchProperties.radius * scale;
+    qreal radius = dab->bounds().width() * 0.5;
     qreal thresholdDistance =  radius * radius;
     // shaded: probabity : paint always - 0.0 density
     qreal density = thresholdDistance * m_sketchProperties.probability;
@@ -102,7 +122,50 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     QColor randomColor;
     KoColor color(m_dab->colorSpace());
     
+    int w = dab->bounds().width();
+    quint8 opacityU8 = 0;
+    quint8 * pixel;
+    qreal distance;
+    QPoint  positionInMask;
+    QPointF diff;
+    int size = m_points.size();
     
+    if (m_sketchProperties.useLowOpacity){
+    
+    for (int i = 0; i < size; i++) {
+        if ( brushBoundingBox.contains( m_points.at(i) ) ) {
+            diff = (m_points.at(i) - mouse);
+            positionInMask = (diff + hotSpot).toPoint();
+            pixel = dab->data() + ((positionInMask.y() * w + positionInMask.x()) * dab->pixelSize());
+            opacityU8 = dab->colorSpace()->opacityU8( pixel );
+            
+            
+            if (opacityU8 != 0) {
+                distance = diff.x() * diff.x() + diff.y() * diff.y();
+                
+                if (drand48() > (distance / density)) {
+                    QPointF offsetPt = diff * m_sketchProperties.offset;
+                    
+                    m_painter->setOpacity(opacityU8);
+                    
+                    if (m_sketchProperties.magnetify) {
+                        m_painter->drawThickLine(mouse + offsetPt,
+                                            m_points.at(i) - offsetPt,
+                                            m_sketchProperties.lineWidth,m_sketchProperties.lineWidth );
+                    } else {
+                        // fur mode
+                        m_painter->drawThickLine(mouse + offsetPt,
+                                            mouse - offsetPt,
+                                            m_sketchProperties.lineWidth,m_sketchProperties.lineWidth );
+                    }
+                }
+                
+            }
+        }
+    }
+    
+    }else{
+    qreal radius = m_sketchProperties.radius * scale;
     for (int i = 0; i < size; i++){
             diff = m_points.at(i) - m_points.at(m_count);
             // chrome : diff 0.2, sketchy : 0.3, fur: 0.5
@@ -143,6 +206,9 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
 
             }
     }
+}//else
+
+
     m_count++;
 
     QRect rc = m_dab->extent();

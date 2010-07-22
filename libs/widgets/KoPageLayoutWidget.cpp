@@ -59,7 +59,7 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     width = qMax(width, qMax(d->widget.leftLabel->width(), d->widget.rightLabel->width()));
     d->widget.leftLabel->setMinimumSize(QSize(width, 5));
 
-    d->widget.units->addItems( KoUnit::listOfUnitName() );
+    d->widget.units->addItems(KoUnit::listOfUnitName());
     d->widget.sizes->addItems(KoPageFormat::allFormats());
     setPageSpread(false);
 
@@ -125,15 +125,15 @@ void KoPageLayoutWidget::setUnit(const KoUnit &unit)
 {
     d->unit = unit;
 
-    d->widget.width->setUnit(d->unit);
-    d->widget.height->setUnit(d->unit);
-    d->widget.topMargin->setUnit(d->unit);
-    d->widget.bottomMargin->setUnit(d->unit);
-    d->widget.bindingEdgeMargin->setUnit(d->unit);
-    d->widget.pageEdgeMargin->setUnit(d->unit);
+    d->widget.width->setUnit(unit);
+    d->widget.height->setUnit(unit);
+    d->widget.topMargin->setUnit(unit);
+    d->widget.bottomMargin->setUnit(unit);
+    d->widget.bindingEdgeMargin->setUnit(unit);
+    d->widget.pageEdgeMargin->setUnit(unit);
+    d->widget.units->setCurrentIndex(unit.indexInList());
 
     emit unitChanged(d->unit);
-    // TODO set combobox
 }
 
 void KoPageLayoutWidget::setPageLayout(const KoPageLayout &layout)

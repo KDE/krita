@@ -116,6 +116,8 @@ bool Layout::isInterrupted() const
 qreal Layout::width()
 {
     Q_ASSERT(shape);
+    if (m_dropCapsNChars>0)
+        return m_dropCapsAffectedLineWidthAdjust+10;
     qreal ptWidth = m_inTable ? m_tableLayout.cellContentRect(m_tableCell).width() : shape->size().width();
     if (m_newParag)
         ptWidth -= resolveTextIndent();

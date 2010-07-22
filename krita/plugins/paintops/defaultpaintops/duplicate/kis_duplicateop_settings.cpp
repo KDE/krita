@@ -145,8 +145,8 @@ QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP 
     
     if (_mode != CursorIsOutline) return QRectF();
     
-    QPointF hotSpot = KisBrushBasedPaintOpSettings::brushOutline(_mode).boundingRect().center();
-    QRectF boundRect = brushOutline(_mode).boundingRect();
+    QPointF hotSpot = KisBrushBasedPaintOpSettings::brushOutline(pos,_mode).boundingRect().center();
+    QRectF boundRect = brushOutline(pos,_mode).boundingRect();
     return image->pixelToDocument(boundRect.translated(-hotSpot)).translated(pos);
     
 }
@@ -162,15 +162,15 @@ void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image,
 
 }
 
-QPainterPath KisDuplicateOpSettings::brushOutline(OutlineMode mode) const
+QPainterPath KisDuplicateOpSettings::brushOutline(const QPointF& pos, OutlineMode mode) const
 {
     QPainterPath path; 
-    path = KisBrushBasedPaintOpSettings::brushOutline(KisPaintOpSettings::CursorIsOutline);
+    path = KisBrushBasedPaintOpSettings::brushOutline(pos,KisPaintOpSettings::CursorIsOutline);
     
     QPainterPath copy(path);
     QRectF rect2 = copy.boundingRect();
     if (m_isOffsetNotUptodate) {
-        copy.translate(m_position);
+        copy.translate(m_position - pos);
     } else {
         copy.translate(-m_offset);
     }

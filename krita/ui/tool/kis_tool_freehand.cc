@@ -293,7 +293,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 #endif
 
     
-    QPainterPath path = currentPaintOpPreset()->settings()->brushOutline(outlineMode);
+    QPainterPath path = currentPaintOpPreset()->settings()->brushOutline(currentImage()->documentToPixel(outlinePos()), outlineMode);
     m_oldOutlineRect = currentImage()->pixelToDocument(path.boundingRect());
     if (!m_oldOutlineRect.isEmpty()) {
         canvas()->updateCanvas(m_oldOutlineRect.translated( outlinePos() ).adjusted(-2,-2,2,2)); 
@@ -615,9 +615,10 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
         qreal zoomX, zoomY;
         converter.zoom(&zoomX, &zoomY);
         
-        QPainterPath path = currentPaintOpPreset()->settings()->brushOutline(outlineMode);
-        m_oldOutlineRect = currentImage()->pixelToDocument(path.boundingRect());
         m_oldOutlinePosition = outlinePos();
+        QPainterPath path = currentPaintOpPreset()->settings()->brushOutline(currentImage()->documentToPixel(m_oldOutlinePosition),outlineMode);
+        m_oldOutlineRect = currentImage()->pixelToDocument(path.boundingRect());
+        
         
         QTransform m;
         m.reset();

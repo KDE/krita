@@ -70,7 +70,7 @@ QRectF KisSoftPaintOpSettings::paintOutlineRect ( const QPointF& pos, KisImageWS
 }
 
 
-QPainterPath KisSoftPaintOpSettings::brushOutline(OutlineMode mode) const
+QPainterPath KisSoftPaintOpSettings::brushOutline(const QPointF& pos,OutlineMode mode) const
 {
     QPainterPath path;
     if (mode == CursorIsOutline){

@@ -74,8 +74,9 @@ QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
     return image->pixelToDocument(brush).translated(pos);
 }
 
-QPainterPath KisSprayPaintOpSettings::brushOutline(OutlineMode mode) const
+QPainterPath KisSprayPaintOpSettings::brushOutline(const QPointF& pos,OutlineMode mode) const
 {
+    Q_UNUSED(pos);
     QPainterPath path;
     if (mode == CursorIsOutline){
         qreal width = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_SCALE);

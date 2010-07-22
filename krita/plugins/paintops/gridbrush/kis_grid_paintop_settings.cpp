@@ -53,8 +53,9 @@ QRectF KisGridPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP 
     return image->pixelToDocument(QRectF(0, 0, sizex, sizey).translated(- QPoint(sizex * 0.5, sizey * 0.5))).translated(pos);
 }
 
-QPainterPath KisGridPaintOpSettings::brushOutline(OutlineMode mode) const
+QPainterPath KisGridPaintOpSettings::brushOutline(const QPointF& pos,OutlineMode mode) const
 {
+    Q_UNUSED(pos);
     QPainterPath path;
     if (mode == CursorIsOutline) {
         qreal sizex = getInt(GRID_WIDTH) * getDouble(GRID_SCALE);

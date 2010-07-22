@@ -60,8 +60,9 @@ QRectF KisChalkPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
     return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
 }
 
-QPainterPath KisChalkPaintOpSettings::brushOutline(OutlineMode mode) const
+QPainterPath KisChalkPaintOpSettings::brushOutline(const QPointF& pos,OutlineMode mode) const
 {
+    Q_UNUSED(pos);
     QPainterPath path;
     if (mode == CursorIsOutline){
         qreal size = getInt(CHALK_RADIUS) * 2 + 1;

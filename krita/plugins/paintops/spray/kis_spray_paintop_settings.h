@@ -39,7 +39,7 @@ public:
 
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
-    virtual QPainterPath brushOutline(OutlineMode mode) const;
+    virtual QPainterPath brushOutline(const QPointF& pos,OutlineMode mode) const;
     
     QString modelName() const{
         return "airbrush";

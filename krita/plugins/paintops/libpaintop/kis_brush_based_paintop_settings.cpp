@@ -75,14 +75,14 @@ void KisBrushBasedPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP 
     brush->boundary()->paint(painter);
 }
 
-QPainterPath KisBrushBasedPaintOpSettings::brushOutline(OutlineMode mode) const
+QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const QPointF& pos,OutlineMode mode) const
 {
     QPainterPath path;
     if (mode == CursorIsOutline) {
     
         KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
         if(!options) {
-            return KisPaintOpSettings::brushOutline(mode);
+            return KisPaintOpSettings::brushOutline(pos,mode);
         }
         
         KisBrushSP brush = options->brush();

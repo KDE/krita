@@ -45,4 +45,4 @@ if (BUILD_koreport AND SHOULD_BUILD_KOREPORT)
     macro_optional_add_subdirectory( reporting )
 endif (BUILD_koreport AND SHOULD_BUILD_KOREPORT)
 
-add_subdirectory( staging )
+macro_optional_add_subdirectory( staging )

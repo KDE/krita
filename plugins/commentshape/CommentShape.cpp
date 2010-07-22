@@ -18,10 +18,16 @@
  */
 
 #include "CommentShape.h"
+
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
+
+#include <QPainter>
+#include <QGradient>
+#include <QBrush>
+#include <QRectF>
 
 CommentShape::CommentShape()
 : KoShape()
@@ -58,6 +64,18 @@ bool CommentShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& c
 
 void CommentShape::paint(QPainter& painter, const KoViewConverter& converter)
 {
+    applyConversion(painter, converter);
+
+    QLinearGradient gradient(0, 0, 0, 20);
+    gradient.setColorAt(0.0, QColor(Qt::yellow));
+    gradient.setColorAt(1.0, QColor(254, 201, 7));
+    const QBrush brush(gradient);
+    painter.setBrush(brush);
+
+    painter.setPen(Qt::black);
+
+    const QSizeF size = this->size();
+    painter.drawRect(QRectF(0, 0, size.width(), size.height()));
 }
 
 void CommentShape::saveOdf(KoShapeSavingContext& context) const

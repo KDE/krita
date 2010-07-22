@@ -621,7 +621,7 @@ void Legend::slotChartTypeChanged( ChartType chartType )
     // more clever.
     switch ( chartType ) {
     case LineChartType:
-    case ScatterChartType:
+    //case ScatterChartType:
         d->kdLegend->setLegendStyle( KDChart::Legend::LinesOnly );
         break;
     default:

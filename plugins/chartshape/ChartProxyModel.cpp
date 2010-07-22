@@ -72,9 +72,11 @@ public:
     QVector<QRect>   selection;
 
     bool automaticDataSetCreation;
+    int createdDataSetCount;
 };
 
-ChartProxyModel::Private::Private()
+ChartProxyModel::Private::Private():
+  createdDataSetCount( 0 )
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
@@ -154,7 +156,8 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
     else
         dataRegions = d->selection;
     
-    int createdDataSetCount = 0;
+    int& createdDataSetCount = d->createdDataSetCount;
+    int number = 0;
     if ( d->dataDirection == Qt::Horizontal ) {
         QMap<int, QVector<QRect> >  rows;
         QMap<int, QVector<QRect> >  sortedRows;
@@ -221,7 +224,7 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
 
             dataSet->blockSignals( true );
             
-            dataSet->setNumber( createdDataSetCount );
+            dataSet->setNumber( number );
             //dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
 
             CellRegion labelDataRegion;
@@ -259,11 +262,13 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
 
             dataSet->setXDataRegion( xDataRegion );
             dataSet->setYDataRegion( yDataRegion );
-            dataSet->setCustomDataRegion( zDataRegion );
+            if ( d->dataDimensions >= 3 )
+              dataSet->setCustomDataRegion( zDataRegion );
             dataSet->setCategoryDataRegion( category );
             dataSet->setLabelDataRegion( labelDataRegion );            
             dataSet->blockSignals( false );
             ++createdDataSetCount;
+            ++number;
         }
     }
     else {
@@ -335,7 +340,7 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
 
             dataSet->blockSignals( true );
             
-            dataSet->setNumber( createdDataSetCount );
+            dataSet->setNumber( number );
             //dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
 
             CellRegion labelDataRegion;
@@ -373,11 +378,13 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
 
             dataSet->setXDataRegion( xDataRegion );
             dataSet->setYDataRegion( yDataRegion );
-            dataSet->setCustomDataRegion( zDataRegion );
+            if ( d->dataDimensions >= 3 )
+              dataSet->setCustomDataRegion( zDataRegion );
             dataSet->setLabelDataRegion( labelDataRegion );
             dataSet->setCategoryDataRegion( category );
             dataSet->blockSignals( false );
             ++createdDataSetCount;
+            ++number;
         }
     }
 

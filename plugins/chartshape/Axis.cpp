@@ -328,12 +328,16 @@ void Axis::Private::applyAttributesToDataSet( DataSet* set, ChartType newChartty
 {
     KDChart::MarkerAttributes restoreGlobalAttribs( markerAttributesGlobalBackup[ set ] );
     KDChart::MarkerAttributes restoreAttribs( markerAttributesBackup[ set ] );
+    bool restorationNeeded = plotAreaChartType == BubbleChartType || plotAreaChartType == ScatterChartType;
     switch ( newCharttype )
     {
         case( BubbleChartType ):
         {          
-            markerAttributesGlobalBackup[ set ] = set->getMarkerAttributes();
-            markerAttributesBackup[ set ] = set->getMarkerAttributes( 0 );  
+            if ( !restorationNeeded )
+            {
+                markerAttributesGlobalBackup[ set ] = set->getMarkerAttributes();
+                markerAttributesBackup[ set ] = set->getMarkerAttributes( 0 );  
+            }
             KDChart::MarkerAttributes ma( set->getMarkerAttributes( ) );
             ma.setVisible( true );
             ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
@@ -354,9 +358,35 @@ void Axis::Private::applyAttributesToDataSet( DataSet* set, ChartType newChartty
             }
         }
             break;
-        case( BarChartType ):
-        case( LineChartType ):
         case( ScatterChartType ):
+        {
+            if ( !restorationNeeded )
+            {
+                markerAttributesGlobalBackup[ set ] = set->getMarkerAttributes();
+                markerAttributesBackup[ set ] = set->getMarkerAttributes( 0 );  
+            }
+            KDChart::MarkerAttributes ma( set->getMarkerAttributes( ) );
+            ma.setVisible( true );
+            ma.setMarkerColor( set->color() );
+            ma.setMarkerSize( QSizeF( 10.0f, 10.0f ) );
+            set->setMarkerAttributes( ma );
+            QPen p = ma.pen();
+            p.setColor( set->color() );
+            ma.setPen( p );
+            for ( int i = 0; i < set->size(); ++i ){
+                KDChart::MarkerAttributes ma( set->getMarkerAttributes( i ) );
+                ma.setVisible( true );
+                ma.setMarkerColor( set->color() );   
+                ma.setMarkerSize( QSizeF( 10.0f, 10.0f ) );
+                QPen p = ma.pen();
+                p.setColor( set->color() );
+                ma.setPen( p );
+                set->setMarkerAttributes( ma, i );
+            }
+        }
+            break;
+        case( BarChartType ):
+        case( LineChartType ):        
         case( AreaChartType ):
         case( RingChartType ):
         case( RadarChartType ):
@@ -367,7 +397,7 @@ void Axis::Private::applyAttributesToDataSet( DataSet* set, ChartType newChartty
         default:
           // make sure to restore the settings only if necessary, maybe dirty flag is a better option if further extension
           // is needed
-            if ( plotAreaChartType == BubbleChartType ){
+            if ( restorationNeeded ){
               
               set->setMarkerAttributes( restoreGlobalAttribs );
               for ( int i = 0; i < set->size(); ++i ){
@@ -828,12 +858,14 @@ void Axis::Private::createScatterDiagram()
 {
     Q_ASSERT( kdScatterDiagramModel == 0 );
     Q_ASSERT( kdScatterDiagram == 0 );
+    Q_ASSERT( plotArea );
 
     kdScatterDiagramModel = new KDChartModel;
     kdScatterDiagramModel->setDataDimensions( 2 );
 
     kdScatterDiagram = new KDChart::Plotter( plotArea->kdChart(), kdPlane );
     kdScatterDiagram->setModel( kdScatterDiagramModel );
+    kdScatterDiagram->setPen( Qt::NoPen );
     registerDiagram( kdScatterDiagram );
 
     if ( isVisible )
@@ -843,7 +875,7 @@ void Axis::Private::createScatterDiagram()
     if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
         plotArea->kdChart()->addCoordinatePlane( kdPlane );
 
-    Q_ASSERT( plotArea );
+    
     foreach ( Axis *axis, plotArea->axes() ) {
         if ( axis->dimension() == XAxisDimension )
             if ( axis->isVisible() )
@@ -854,6 +886,19 @@ void Axis::Private::createScatterDiagram()
     KDChart::ThreeDLineAttributes attributes( kdScatterDiagram->threeDLineAttributes() );
     attributes.setEnabled( plotArea->isThreeD() );
     kdScatterDiagram->setThreeDLineAttributes( attributes );
+    
+    KDChart::DataValueAttributes dva( kdScatterDiagram->dataValueAttributes() );
+    dva.setVisible( true );
+    
+    KDChart::TextAttributes ta( dva.textAttributes() );
+    ta.setVisible( true );
+    dva.setTextAttributes( ta );
+
+    KDChart::MarkerAttributes ma( dva.markerAttributes() );
+    ma.setVisible( true );
+    dva.setMarkerAttributes( ma );
+
+    kdScatterDiagram->setDataValueAttributes( dva );
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdScatterDiagram );
 }
@@ -898,6 +943,7 @@ void Axis::Private::createBubbleDiagram()
 {
     Q_ASSERT( kdBubbleDiagramModel == 0 );
     Q_ASSERT( kdBubbleDiagram == 0 );
+    Q_ASSERT( plotArea );
 
     kdBubbleDiagramModel = new KDChartModel;
     kdBubbleDiagramModel->setDataDimensions( 2 );
@@ -910,9 +956,8 @@ void Axis::Private::createBubbleDiagram()
     kdPlane->addDiagram( kdBubbleDiagram );    
 
     if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPlane );
+        plotArea->kdChart()->addCoordinatePlane( kdPlane );    
     
-    Q_ASSERT( plotArea );
     foreach ( Axis *axis, plotArea->axes() ) {
         //if ( axis->dimension() == XAxisDimension )
             if ( axis->isVisible() )
@@ -933,13 +978,7 @@ void Axis::Private::createBubbleDiagram()
     KDChart::MarkerAttributes ma( dva.markerAttributes() );
     ma.setVisible( true );
     ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
-    //ma.setMarkerSize( QSizeF(30.0,30.0) );
     dva.setMarkerAttributes( ma );
-
-    //KDChart::RelativePosition pos( dva.positivePosition() );
-    //pos.setAlignment( Qt::AlignCenter );
-    //pos.setHorizontalPadding(0);
-    //dva.setPositivePosition( pos );
 
     kdBubbleDiagram->setDataValueAttributes( dva );
 

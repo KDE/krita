@@ -66,6 +66,19 @@
 
 using namespace KChart;
 
+const int numDefaultMarkerTypes = 8;
+
+const KDChart::MarkerAttributes::MarkerStyle defaultMarkerTypes[]= { 
+                                              KDChart::MarkerAttributes::MarkerSquare,
+                                              KDChart::MarkerAttributes::MarkerDiamond,
+                                              KDChart::MarkerAttributes::MarkerCross,
+                                              KDChart::MarkerAttributes::MarkerRing,
+                                              KDChart::MarkerAttributes::Marker4Pixels,
+                                              KDChart::MarkerAttributes::MarkerCircle,
+                                              KDChart::MarkerAttributes::MarkerFastCross,
+                                              KDChart::MarkerAttributes::Marker1Pixel
+                                            };
+
 class DataSet::Private
 {
 public:
@@ -80,6 +93,8 @@ public:
 
     QBrush defaultBrush() const;
     QBrush defaultBrush( int section ) const;
+    
+    KDChart::MarkerAttributes defaultMarkerAttributes( int section ) const;
 
     QPen defaultPen() const;
 
@@ -173,33 +188,17 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     size( 0 ),
     blockSignals( false )
 {    
-//     this->parent = parent;
-//     num = -1;
-//     chartType = LastChartType;
-//     chartSubType = NoChartSubtype;
-//     kdChartModel = 0;
-//     kdDataSetNumber = -1;
-//     showMeanValue = false;
-//     showLabels = false;
-//     showLowerErrorIndicator = false;
-//     showUpperErrorIndicator = false;
-//     errorPercentage = 0.0;
-//     errorMargin = 0.0;
-//     lowerErrorLimit = 0.0;
-//     upperErrorLimit = 0.0;
-//     brush = QColor( Qt::white );
-//     pen = QPen( Qt::black );
-//     kdDiagram = 0;
-//     attachedAxis = 0;
-//     size = 0;
-//     blockSignals = false;
-//     penIsSet = false;
-//     brushIsSet = false;
-//     dataValueAttributes = defaultDataValueAttributes();
 }
 
 DataSet::Private::~Private()
 {
+}
+
+KDChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes( int section ) const
+{
+    KDChart::MarkerAttributes ma;
+    ma.setMarkerStyle( defaultMarkerTypes[ section % numDefaultMarkerTypes ] );
+    return ma;
 }
 
 KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes()
@@ -207,6 +206,7 @@ KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes()
     KDChart::DataValueAttributes attr;
     KDChart::TextAttributes textAttr = attr.textAttributes();
     KDChart::Measure fontSize = textAttr.fontSize();
+    attr.setMarkerAttributes( defaultMarkerAttributes( kdDataSetNumber ) );
     fontSize.setValue( 10 );
     // Don't change font size with chart size
     fontSize.setCalculationMode( KDChartEnums::MeasureCalculationModeAbsolute );
@@ -1279,21 +1279,26 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         bubbleChart = n.attributeNS( KoXmlNS::chart, "class", QString() ) == "chart:bubble";
     }
     
-    bool completeDataDefinition = false;
+    bool maybeCompleteDataDefinition = false;
+    bool fullDataDefinition = false;
     
-    if ( bubbleChart && n.hasChildNodes() ){
+    if ( /*bubbleChart &&*/ n.hasChildNodes() ){
         KoXmlNode cn = n.firstChild();
         while ( !cn.isNull() ){
             KoXmlElement elem = cn.toElement();
             const QString name = elem.tagName();
             if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") ){
-                if ( completeDataDefinition ){
+                if ( maybeCompleteDataDefinition ){
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
                     setYDataRegionString( region );
+                    fullDataDefinition = true;
                 }else{
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
                     setXDataRegionString( region );
-                    completeDataDefinition = true;
+                    // as long as there is not default table for missing data series the same region is used twice
+                    // to ensure the diagram is displayed, even if not as expected from o office or ms office
+                    setYDataRegionString( region );
+                    maybeCompleteDataDefinition = true;
                 }
                 
             }
@@ -1303,10 +1308,15 @@ bool DataSet::loadOdf( const KoXmlElement &n,
 
     if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) ) {
         const QString region = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
+        if ( !fullDataDefinition ){
+            setYDataRegion( region );
+            if ( !maybeCompleteDataDefinition )
+              setXDataRegion( region );
+        }
         if ( bubbleChart )
-          setCustomDataRegion( region );
+            setCustomDataRegion( region );
         else
-          setYDataRegionString( region );
+            setYDataRegionString( region );
     }
     if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) ) {
         const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );

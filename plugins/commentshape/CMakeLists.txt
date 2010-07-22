@@ -2,6 +2,7 @@
 SET( commentshape_LIB_SRCS
      CommentShape.cpp
      CommentShapeFactory.cpp
+     Plugin.cpp
    )
 
 kde4_add_plugin(commentshape ${commentshape_LIB_SRCS})

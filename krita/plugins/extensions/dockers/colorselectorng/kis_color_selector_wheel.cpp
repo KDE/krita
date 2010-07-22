@@ -63,14 +63,12 @@ void KisColorSelectorWheel::setColor(const QColor &c)
     m_lastClickPos.setY(sin(angle)*radius+0.5);
 }
 
-QColor KisColorSelectorWheel::selectColor(qreal x, qreal y)
+QColor KisColorSelectorWheel::selectColor(int x, int y)
 {
     m_kocolor.convertTo(colorSpace());
     
-    int xx=x*width();
-    int yy=y*height();
-    int xWheel = xx-width()/2;
-    int yWheel = yy-height()/2;
+    int xWheel = x-width()/2;
+    int yWheel = y-height()/2;
     
     qreal radius = sqrt(xWheel*xWheel+yWheel*yWheel);
     radius/=qMin(width(), height());
@@ -111,7 +109,7 @@ QColor KisColorSelectorWheel::selectColor(qreal x, qreal y)
     m_lastClickPos.setX(cos(angle)*radius+0.5);
     m_lastClickPos.setY(sin(angle)*radius+0.5);
 
-    return colorAt(xx, yy);
+    return colorAt(x, y);
 }
 
 void KisColorSelectorWheel::paint(QPainter* painter)

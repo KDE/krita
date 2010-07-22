@@ -69,7 +69,7 @@ protected:
     bool isDirty() const;
 
     /// this method must be overloaded to return the colour at position x/y and draw a marker on that position
-    virtual QColor selectColor(qreal x, qreal y) = 0;
+    virtual QColor selectColor(int x, int y) = 0;
 
     /// paint component using given painter
     /// the component should respect width() and height() (eg. scale to width and height), but doesn't

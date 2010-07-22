@@ -27,7 +27,7 @@ class KisColorSelectorTriangle : public KisColorSelectorComponent
     Q_OBJECT
 public:
     explicit KisColorSelectorTriangle(KisColorSelectorBase* parent);
-    QColor selectColor(qreal x, qreal y);
+    QColor selectColor(int x, int y);
     void setColor(const QColor &color);
 signals:
     void colorChanged(QColor color);

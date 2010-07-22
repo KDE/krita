@@ -92,13 +92,13 @@ void KisColorSelectorTriangle::updatePixelCache()
     m_pixelCache = cache;
 }
 
-QColor KisColorSelectorTriangle::selectColor(qreal x, qreal y)
+QColor KisColorSelectorTriangle::selectColor(int x, int y)
 {
-    if(isComponent(x*width(), y*height())) {
-        m_lastClickPos.setX(x);
-        m_lastClickPos.setY(y);
+    if(isComponent(x, y)) {
+        m_lastClickPos.setX(x/qreal(width()));
+        m_lastClickPos.setY(y/qreal(height()));
         emit update();
-        QPoint triangleCoords = widgetToTriangleCoordinates(QPoint(x*width(),y*height()));
+        QPoint triangleCoords = widgetToTriangleCoordinates(QPoint(x,y));
         return colorAt(triangleCoords.x(), triangleCoords.y());
     }
     return QColor();

@@ -35,7 +35,7 @@ public:
     void setColor(const QColor& c);
 
 protected:
-    virtual QColor selectColor(qreal x, qreal y);
+    virtual QColor selectColor(int x, int y);
     virtual void paint(QPainter*);
     const QColor& colorAt(int x, int y);
 

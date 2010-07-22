@@ -68,10 +68,10 @@ void KisColorSelectorComponent::mouseEvent(int x, int y)
 {
     if(!isComponent(x-m_x, y-m_y))
         return;
-    qreal newX=(x-m_x)/qreal(width());
-    qreal newY=(y-m_y)/qreal(height());
-    if(newX>=0 && newX<=1 &&
-       newY>=0 && newY<=1) {
+    qreal newX=(x-m_x);
+    qreal newY=(y-m_y);
+    if(newX>=0 && newX<=width() &&
+       newY>=0 && newY<=height()) {
         selectColor(newX, newY);
         m_lastX=newX;
         m_lastY=newY;

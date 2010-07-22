@@ -90,20 +90,20 @@ void KisColorSelectorSimple::setColor(const QColor &c)
     emit update();
 }
 
-QColor KisColorSelectorSimple::selectColor(qreal x, qreal y)
+QColor KisColorSelectorSimple::selectColor(int x, int y)
 {
     m_kocolor.convertTo(colorSpace());
 
-    m_lastClickPos.setX(x);
-    m_lastClickPos.setY(y);
+    m_lastClickPos.setX(x/qreal(width()));
+    m_lastClickPos.setY(y/qreal(height()));
 
-    qreal xRel = x;
-    qreal yRel = 1.-y;
+    qreal xRel = x/qreal(width());
+    qreal yRel = 1.-y/qreal(height());
     qreal relPos;
     if(height()>width())
-        relPos = 1.-y;
+        relPos = 1.-y/qreal(height());
     else
-        relPos = 1.-x;
+        relPos = 1.-x/qreal(width());
 
     switch (m_parameter) {
     case KisColorSelector::H:
@@ -144,7 +144,7 @@ QColor KisColorSelectorSimple::selectColor(qreal x, qreal y)
     emit update();
 
 //    kDebug()<<"selectColor(x/y) y rel="<<yRel<<"  value="<<QColor::fromRgb(colorAt(x, y)).valueF();
-    return colorAt(x*width(), y*height());
+    return colorAt(x, y);
 }
 
 void KisColorSelectorSimple::paint(QPainter* painter)

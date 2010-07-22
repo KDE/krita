@@ -38,8 +38,9 @@ private:
     qreal triangleWidth() const;
     qreal triangleHeight() const;
     void updatePixelCache();
-    QRgb colorAt(int x, int y) const;
+    QColor colorAt(int x, int y) const;
     QPoint widgetToTriangleCoordinates(const QPoint& point) const;
+    QPoint triangleToWidgetCoordinates(const QPoint &point) const;
     QImage m_pixelCache;
     
     QPointF m_lastClickPos;

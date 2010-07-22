@@ -81,9 +81,9 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
 {
     m_canvas = canvas;
 
-    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-            this,                        SLOT(resourceChanged(int, const QVariant&)));
-    setColor(m_canvas->resourceManager()->foregroundColor().toQColor());
+//    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
+//            this,                        SLOT(resourceChanged(int, const QVariant&)));
+//    setColor(m_canvas->resourceManager()->foregroundColor().toQColor());
 
     update();
 }
@@ -202,7 +202,7 @@ void KisColorSelectorBase::hidePopup()
         m_popup->hide();
 }
 
-void KisColorSelectorBase::commitColor(QColor color, ColorRole role)
+void KisColorSelectorBase::commitColor(const KoColor& color, const QColor& rawColor, ColorRole role)
 {
     Q_ASSERT(m_canvas);
     if (!m_canvas)
@@ -212,16 +212,19 @@ void KisColorSelectorBase::commitColor(QColor color, ColorRole role)
         m_canvas->resourceManager()->setForegroundColor(KoColor(color , colorSpace()));
     else
         m_canvas->resourceManager()->setBackgroundColor(KoColor(color , colorSpace()));
+
+    emit colorChanged(rawColor);
 }
 
-void KisColorSelectorBase::resourceChanged(int key, const QVariant &v)
-{
-    if (key == KoCanvasResource::ForegroundColor || key == KoCanvasResource::BackgroundColor) {
-//        KoColor kc(v.value<KoColor>().toQColor(), colorSpace());
-//        setColor(kc.toQColor());
-//        setColor(v.value<KoColor>().toQColor());
-    }
-}
+//void KisColorSelectorBase::resourceChanged(int key, const QVariant &v)
+//{
+//    if (key == KoCanvasResource::ForegroundColor || key == KoCanvasResource::BackgroundColor) {
+////        KoColor kc(v.value<KoColor>().data(), KoColorSpaceRegistry::instance()->rgb8());
+////        setColor(kc.toQColor());
+////        setColor(kc.toQColor());
+////        setColor(v.value<KoColor>().toQColor());
+//    }
+//}
 
 const KoColorSpace* KisColorSelectorBase::colorSpace()
 {

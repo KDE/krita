@@ -32,7 +32,6 @@ KisColorSelectorSimple::KisColorSelectorSimple(KisColorSelectorBase *parent) :
 
 void KisColorSelectorSimple::setColor(const QColor &c)
 {
-    kDebug()<<"setcolor value="<<c.valueF();
     switch (m_parameter) {
     case KisColorSelector::SL:
         m_lastClickPos.setX(c.lightnessF());
@@ -145,7 +144,7 @@ QColor KisColorSelectorSimple::selectColor(qreal x, qreal y)
     emit update();
 
 //    kDebug()<<"selectColor(x/y) y rel="<<yRel<<"  value="<<QColor::fromRgb(colorAt(x, y)).valueF();
-    return QColor::fromRgb(colorAt(x*width(), y*height()));
+    return colorAt(x*width(), y*height());
 }
 
 void KisColorSelectorSimple::paint(QPainter* painter)
@@ -157,7 +156,9 @@ void KisColorSelectorSimple::paint(QPainter* painter)
 
         for(int x=0; x<width(); x++) {
             for(int y=0; y<height(); y++) {
-                m_pixelCache.setPixel(x, y, colorAt(x, y));
+                m_kocolor.fromQColor(colorAt(x, y));
+                m_kocolor.toQColor(&m_qcolor);
+                m_pixelCache.setPixel(x, y, m_qcolor.rgb());
             }
         }
     }
@@ -201,7 +202,7 @@ void KisColorSelectorSimple::paint(QPainter* painter)
     }
 }
 
-QRgb KisColorSelectorSimple::colorAt(int x, int y)
+const QColor& KisColorSelectorSimple::colorAt(int x, int y)
 {
     Q_ASSERT(x>=0 && x<=width());
     Q_ASSERT(y>=0 && y<=height());
@@ -249,10 +250,10 @@ QRgb KisColorSelectorSimple::colorAt(int x, int y)
         m_qcolor.setHslF(m_hue, m_hslSaturation, relPos);
         break;
     default:
-        return qRgb(255,0,0);
+        Q_ASSERT(false);
+        m_qcolor = QColor();
+        return m_qcolor;
     }
 
-    m_kocolor.fromQColor(m_qcolor);
-    m_kocolor.toQColor(&m_qcolor);
-    return m_qcolor.rgb();
+    return m_qcolor;
 }

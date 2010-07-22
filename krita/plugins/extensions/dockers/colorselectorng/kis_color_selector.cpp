@@ -118,6 +118,9 @@ void KisColorSelector::setConfiguration(Configuration conf)
     connect(m_mainComponent, SIGNAL(update()), m_updateTimer,   SLOT(start()), Qt::UniqueConnection);
     connect(m_subComponent,  SIGNAL(update()), m_updateTimer,   SLOT(start()), Qt::UniqueConnection);
     
+    m_mainComponent->setConfiguration(m_configuration.mainTypeParameter, m_configuration.mainType);
+    m_subComponent->setConfiguration(m_configuration.subTypeParameter, m_configuration.subType);
+
     QResizeEvent event(QSize(width(),
                              height()),
                        QSize());
@@ -170,8 +173,6 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
         m_mainComponent->setGeometry(0,height()*0.1,width(), height()*0.9);
         m_subComponent->setGeometry(0,0,width(), height()*0.1);
     }
-    m_mainComponent->setConfiguration(m_configuration.mainTypeParameter, m_configuration.mainType);
-    m_subComponent->setConfiguration(m_configuration.subTypeParameter, m_configuration.subType);
 
     KisColorSelectorBase::resizeEvent(e);
 }
@@ -201,7 +202,7 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
             role=Foreground;
         else
             role=Background;
-        commitColor(m_currentColor, role);
+        commitColor(KoColor(m_currentColor, colorSpace()), m_currentColor, role);
         e->accept();
     }
 }
@@ -210,9 +211,9 @@ void KisColorSelector::setColor(const QColor &color)
 {
 //    m_ring->mouseEvent(-1,-1);
 //    m_triangle->setParam(color.hueF());
-//    m_square->setColor(color);
-//    m_slider->setColor(color);
-//    update();
+    m_mainComponent->setColor(color);
+    m_subComponent->setColor(color);
+    update();
 }
 
 void KisColorSelector::mouseEvent(QMouseEvent *e)

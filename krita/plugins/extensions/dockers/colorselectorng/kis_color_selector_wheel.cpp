@@ -32,51 +32,58 @@ KisColorSelectorWheel::KisColorSelectorWheel(KisColorSelectorBase *parent) :
 
 void KisColorSelectorWheel::setColor(const QColor &c)
 {
+    qreal angle, radius;
+    angle = c.hueF();
+    angle *= 2. * M_PI;
+    angle -= M_PI;
     switch (m_parameter) {
     case KisColorSelector::LH:
-//        m_hue=c.hueF();
-//        m_lightness=c.lightnessF();
         emit paramChanged(c.hueF(), -1, -1, -1, c.lightnessF());
+        radius = c.lightnessF();
         break;
     case KisColorSelector::VH:
-//        m_hue=c.hueF();
-//        m_value=c.valueF();
         emit paramChanged(c.hueF(), -1, c.valueF(), -1, -1);
+        radius=c.valueF();
         break;
     case KisColorSelector::hsvSH:
-//        m_hue=c.hueF();
-//        m_saturation=c.saturationF();
         emit paramChanged(c.hueF(), c.saturationF(), -1, -1, -1);
+        radius = c.saturationF();
         break;
     case KisColorSelector::hslSH:
-//        m_hue=c.hueF();
-//        m_saturation=c.saturationF();
-        emit paramChanged(c.hueF(), -1, -1, c.saturationF(), -1);
+        emit paramChanged(c.hueF(), -1, -1, c.hslSaturationF(), -1);
+        radius = c.hslSaturationF();
         break;
     default:
         Q_ASSERT(false);
         break;
     }
+    radius*=0.5;
+
+    m_lastClickPos.setX(cos(angle)*radius+0.5);
+    m_lastClickPos.setY(sin(angle)*radius+0.5);
 }
 
 QColor KisColorSelectorWheel::selectColor(qreal x, qreal y)
 {
     m_kocolor.convertTo(colorSpace());
-    qreal xRel = x-0.5;
-    qreal yRel = y-0.5;
-
-    qreal radius = sqrt(xRel*xRel+yRel*yRel);
+    
+    int xx=x*width();
+    int yy=y*height();
+    int xWheel = xx-width()/2;
+    int yWheel = yy-height()/2;
+    
+    qreal radius = sqrt(xWheel*xWheel+yWheel*yWheel);
+    radius/=qMin(width(), height());
     if(radius>0.5)
         return QColor();
 
-    m_lastClickPos.setX(x);
-    m_lastClickPos.setY(y);
-
     radius*=2.;
 
-    qreal angle = std::atan2(yRel, xRel);
+    qreal angle = std::atan2(yWheel, xWheel);
     angle+=M_PI;
     angle/=2*M_PI;
+
+    kDebug()<<"angele="<<angle << "   radius="<<radius;
 
     switch (m_parameter) {
     case KisColorSelector::hsvSH:
@@ -98,7 +105,13 @@ QColor KisColorSelectorWheel::selectColor(qreal x, qreal y)
 
     emit update();
 
-    return QColor::fromRgb(colorAt(x*width(), y*height()));
+    angle *= 2. * M_PI;
+    angle -= M_PI;
+    radius*=0.5;
+    m_lastClickPos.setX(cos(angle)*radius+0.5);
+    m_lastClickPos.setY(sin(angle)*radius+0.5);
+
+    return colorAt(xx, yy);
 }
 
 void KisColorSelectorWheel::paint(QPainter* painter)
@@ -110,7 +123,15 @@ void KisColorSelectorWheel::paint(QPainter* painter)
 
         for(int x=0; x<width(); x++) {
             for(int y=0; y<height(); y++) {
-                m_pixelCache.setPixel(x, y, colorAt(x, y));
+                m_qcolor=colorAt(x, y);
+                if(m_qcolor.isValid()) {
+                    m_kocolor.fromQColor(m_qcolor);
+                    m_kocolor.toQColor(&m_qcolor);
+                    m_pixelCache.setPixel(x, y, m_qcolor.rgb());
+                }
+                else {
+                    m_pixelCache.setPixel(x, y, qRgba(0,0,0,0));
+                }
             }
         }
 
@@ -125,15 +146,22 @@ void KisColorSelectorWheel::paint(QPainter* painter)
 
     painter->drawImage(0,0, m_pixelCache);
 
+    // draw selectors
     if(m_lastClickPos!=QPoint(-1,-1)) {
+        QPoint pos = (m_lastClickPos*qMin(width(), height())).toPoint();
+        if(width()<height())
+            pos.setY(pos.y()+height()/2-width()/2);
+        else
+            pos.setX(pos.x()+width()/2-height()/2);
+
         painter->setPen(QColor(0,0,0));
-        painter->drawEllipse(m_lastClickPos.x()*width()-5, m_lastClickPos.y()*height()-5, 10, 10);
+        painter->drawEllipse(pos, 5, 5);
         painter->setPen(QColor(255,255,255));
-        painter->drawEllipse(m_lastClickPos.x()*width()-4, m_lastClickPos.y()*height()-4, 8, 8);
+        painter->drawEllipse(pos, 4, 4);
     }
 }
 
-QRgb KisColorSelectorWheel::colorAt(int x, int y)
+const QColor& KisColorSelectorWheel::colorAt(int x, int y)
 {
     Q_ASSERT(x>=0 && x<=width());
     Q_ASSERT(y>=0 && y<=height());
@@ -142,8 +170,10 @@ QRgb KisColorSelectorWheel::colorAt(int x, int y)
     qreal yRel = y-height()/2.;
 
     qreal radius = sqrt(xRel*xRel+yRel*yRel);
-    if(radius>qMin(width(), height())/2)
-        return qRgba(0,0,0,0);
+    if(radius>qMin(width(), height())/2) {
+        m_qcolor = QColor();
+        return m_qcolor;
+    }
     radius/=qMin(width(), height())/2.;
 
     qreal angle = std::atan2(yRel, xRel);
@@ -165,10 +195,10 @@ QRgb KisColorSelectorWheel::colorAt(int x, int y)
         m_qcolor.setHslF(angle, m_hslSaturation, radius);
         break;
     default:
-        return qRgb(255,0,0);
+        Q_ASSERT(false);
+        m_qcolor = QColor();
+        return m_qcolor;
     }
 
-    m_kocolor.fromQColor(m_qcolor);
-    m_kocolor.toQColor(&m_qcolor);
-    return m_qcolor.rgb();
+    return m_qcolor;
 }

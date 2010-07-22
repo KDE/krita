@@ -44,6 +44,7 @@ public:
     void mouseEvent(int x, int y);
 
     /// return the color, that was selected by calling mouseEvent
+    /// the color must not have a color space conversion
     virtual QColor currentColor();
     int width() const;
     int height() const;

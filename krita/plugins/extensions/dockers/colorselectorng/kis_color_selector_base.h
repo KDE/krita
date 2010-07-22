@@ -21,6 +21,7 @@
 #include <QWidget>
 
 class QColor;
+class KoColor;
 class QTimer;
 class KoColorSpace;
 class KisCanvas2;
@@ -42,17 +43,21 @@ public:
 
 public slots:
     virtual void updateSettings();
+    virtual void setColor(const QColor& color);
 
 protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     virtual KisColorSelectorBase* createPopup() const = 0;
-    virtual void setColor(const QColor& color);
 
 protected slots:
     void hidePopup();
-    void commitColor(QColor color, ColorRole role);
-    void resourceChanged(int key, const QVariant& v);
+    void commitColor(const KoColor& koColor, const QColor& qColor, ColorRole role);
+//    void resourceChanged(int key, const QVariant& v);
+
+signals:
+    /// emits the new color raw, that means without color space transformation
+    void colorChanged(const QColor& rawColor);
 
 private:
     KisColorSelectorBase* m_popup;

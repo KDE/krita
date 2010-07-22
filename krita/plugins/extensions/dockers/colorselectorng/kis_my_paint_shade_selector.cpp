@@ -49,6 +49,7 @@ KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
 {
     precalculateData();
     setMinimumSize(80, 80);
+    setColor(QColor(255,0,0));
 
     m_updateTimer->setInterval(1);
     m_updateTimer->setSingleShot(true);
@@ -81,7 +82,7 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
         if(e->buttons()&Qt::RightButton)
             role=Background;
 
-        commitColor(color, role);
+        commitColor(KoColor(color, colorSpace()), color, role);
     }
 
 }
@@ -98,10 +99,6 @@ QColor KisMyPaintShadeSelector::pickColorAt(int x, int y)
 
     //change the color of the selector to the one calculated above
     setColor(color);
-
-
-    //repaint the widget
-    update();
 
     return color;
 }

@@ -29,6 +29,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QtGlobal>
+#include <QTimer>
 
 #include "KoColorSpace.h"
 #include "KoColor.h"
@@ -43,12 +44,15 @@ inline int signedSqr(int x);
 KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
         KisColorSelectorBase(parent),
         m_pixelCache(m_size, m_size, QImage::Format_ARGB32_Premultiplied),
-        m_initialised(false)
+        m_initialised(false),
+        m_updateTimer(new QTimer(this))
 {
     precalculateData();
     setMinimumSize(80, 80);
 
-    setColor(QColor(200,30,30));
+    m_updateTimer->setInterval(1);
+    m_updateTimer->setSingleShot(true);
+    connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(update()));
 }
 
 void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
@@ -95,8 +99,6 @@ QColor KisMyPaintShadeSelector::pickColorAt(int x, int y)
     //change the color of the selector to the one calculated above
     setColor(color);
 
-    //repaint the cache
-    updateSelector();
 
     //repaint the widget
     update();
@@ -115,6 +117,11 @@ void KisMyPaintShadeSelector::setColor(const QColor &c) {
     m_colorH=c.hsvHueF();
     m_colorS=c.hsvSaturationF();
     m_colorV=c.valueF();
+
+    //repaint the cache
+    m_initialised=false;
+
+    m_updateTimer->start();
 }
 
 void KisMyPaintShadeSelector::precalculateData() {

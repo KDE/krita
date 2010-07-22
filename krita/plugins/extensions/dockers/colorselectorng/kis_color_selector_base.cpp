@@ -190,7 +190,9 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
 }
 
 void KisColorSelectorBase::setColor(const QColor& color)
-{}
+{
+    Q_UNUSED(color);
+}
 
 void KisColorSelectorBase::hidePopup()
 {
@@ -215,7 +217,9 @@ void KisColorSelectorBase::commitColor(QColor color, ColorRole role)
 void KisColorSelectorBase::resourceChanged(int key, const QVariant &v)
 {
     if (key == KoCanvasResource::ForegroundColor || key == KoCanvasResource::BackgroundColor) {
-        setColor(v.value<KoColor>().toQColor());
+//        KoColor kc(v.value<KoColor>().toQColor(), colorSpace());
+//        setColor(kc.toQColor());
+//        setColor(v.value<KoColor>().toQColor());
     }
 }
 

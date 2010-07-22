@@ -15,6 +15,7 @@ kis_color_selector_component.cpp
 kis_color_selector_ring.cpp
 kis_color_selector_triangle.cpp
 kis_color_selector_simple.cpp
+kis_color_selector_wheel.cpp
 kis_color_selector_type_widget.cpp
 )
 

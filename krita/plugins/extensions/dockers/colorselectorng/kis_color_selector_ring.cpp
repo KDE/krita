@@ -77,9 +77,11 @@ void KisColorSelectorRing::paint(QPainter* painter)
                 height()/2-m_pixelCache.height()/2,
                 m_pixelCache);
 
+
+    // paint marker
     qreal angle;
     int y_start, y_end, x_start, x_end;
-    angle=((m_lastHue+180)%360)*2.*M_PI/360.;
+    angle=m_lastHue*2.*M_PI+(M_PI);
     y_start=innerRadius()*sin(angle)+height()/2;
     y_end=outerRadius()*sin(angle)+height()/2;
     x_start=innerRadius()*cos(angle)+width()/2;
@@ -88,7 +90,7 @@ void KisColorSelectorRing::paint(QPainter* painter)
     painter->setPen(QColor(0,0,0));
     painter->drawLine(x_start, y_start, x_end, y_end);
 
-    angle=((((m_lastHue+180)%360)+1)%359)*2.*M_PI/360.;
+    angle+=M_PI/180.;
     y_start=innerRadius()*sin(angle)+height()/2;
     y_end=outerRadius()*sin(angle)+height()/2;
     x_start=innerRadius()*cos(angle)+width()/2;
@@ -98,16 +100,24 @@ void KisColorSelectorRing::paint(QPainter* painter)
     painter->drawLine(x_start, y_start, x_end, y_end);
 }
 
-QColor KisColorSelectorRing::selectColor(int x, int y) {
-    if(isComponent(x, y)) {
-        QPoint ringTopLeft(width()/2-m_pixelCache.width()/2,
-                            height()/2-m_pixelCache.height()/2);
-        QPoint ringCoord = QPoint(x, y)-ringTopLeft;
-        emit paramChanged(QColor(m_pixelCache.pixel(ringCoord)).hueF());
-        m_lastHue=QColor(m_pixelCache.pixel(ringCoord)).hue();
+QColor KisColorSelectorRing::selectColor(qreal x, qreal y) {
+    if(isComponent(x*width(), y*height())) {
+        QPoint ringMiddle(width()/2, height()/2);
+        QPoint ringCoord = QPoint(x*width(), y*height())-ringMiddle;
+        qreal hue = std::atan2(ringCoord.y(), ringCoord.x())+(M_PI);
+        hue/=2.*M_PI;
+        emit paramChanged(hue, -1, -1, -1, -1);
+        m_lastHue=hue;
         emit update();
     }
     return QColor();
+}
+
+void KisColorSelectorRing::setColor(const QColor &color)
+{
+    emit paramChanged(color.hueF(), -1, -1, -1, -1);
+    m_lastHue=color.hueF();
+    emit update();
 }
 
 void KisColorSelectorRing::paintCache()

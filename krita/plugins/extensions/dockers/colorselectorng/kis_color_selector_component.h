@@ -20,9 +20,9 @@
 
 #include <QObject>
 #include <QColor>
+#include "kis_color_selector.h"
 
 class KoColorSpace;
-class KisColorSelectorBase;
 
 class QMouseEvent;
 class QPainter;
@@ -33,56 +33,69 @@ class KisColorSelectorComponent : public QObject
 {
     Q_OBJECT
 public:
+    typedef KisColorSelector::Parameters Parameter;
+    typedef KisColorSelector::Type Type;
+
     explicit KisColorSelectorComponent(KisColorSelectorBase* parent);
     void setGeometry(int x, int y, int width, int height);
     void paintEvent(QPainter*);
 
-    /// should create a marker on the correct position
+    /// saves the mouse position, so that a blip can be created.
     void mouseEvent(int x, int y);
 
     /// return the color, that was selected by calling mouseEvent
     virtual QColor currentColor();
     int width() const;
     int height() const;
+
+    /// setConfiguration can be ignored (for instance ring and triangle, as they can have only one config)
+    void setConfiguration(Parameter param, Type type);
+
+    /// set the color, blibs etc
+    virtual void setColor(const QColor& color) = 0;
 public slots:
-    /// can be used to set the "third" parameter.
-    /// for instance another component selects the hue, which is passed here, and this one selects saturation and value
-    void setParam(qreal p);
-    /// can be used to set the "second" and "third" parameter.
-    /// for instance another component selects hue and saturation, which is passed here, and this one selects value
-    void setParam(qreal p1, qreal p2);
+    /// set hue, saturation, value or/and lightness
+    /// unused parameters should be set to -1
+    void setParam(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness);
 signals:
     /// request for repaint, for instance, if the hue changes.
     void update();
-    void paramChanged(qreal);
-    void paramChanged(qreal, qreal);
+    /// -1, if unaffected
+    void paramChanged(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness);
 protected:
     const KoColorSpace* colorSpace() const;
     /// returns true, if ether the colour space, the size or the parameters have changed since the last paint event
     bool isDirty() const;
 
     /// this method must be overloaded to return the colour at position x/y and draw a marker on that position
-    virtual QColor selectColor(int x, int y) = 0;
+    virtual QColor selectColor(qreal x, qreal y) = 0;
 
     /// paint component using given painter
     /// the component should respect width() and height() (eg. scale to width and height), but doesn't
     /// have to care about x/y coordinates (top left corner)
     virtual void paint(QPainter*) = 0;
 
-    qreal parameter1() const;
-    qreal parameter2() const;
+    /// default returns true
+    /// values are provided in component coordinates, eg (0,0) is top left of component
+    virtual bool isComponent(int x, int y) const;
+
+    qreal m_hue;
+    qreal m_hsvSaturation;
+    qreal m_value;
+    qreal m_hslSaturation;
+    qreal m_lightness;
+    Parameter m_parameter;
+    Type m_type;
 private:
     KisColorSelectorBase* m_parent;
     int m_width;
     int m_height;
     int m_x;
     int m_y;
-    qreal m_param1;
-    qreal m_param2;
     bool m_dirty;
     const KoColorSpace* m_lastColorSpace;
-    int m_lastX;
-    int m_lastY;
+    qreal m_lastX;
+    qreal m_lastY;
 };
 
 #endif // KIS_COLOR_SELECTOR_COMPONENT_H

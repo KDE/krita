@@ -26,15 +26,20 @@
 
 KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelectorBase* parent) :
     QObject(parent),
+    m_hue(0),
+    m_hsvSaturation(1),
+    m_value(1),
+    m_hslSaturation(1),
+    m_lightness(0.5),
     m_parent(parent),
     m_width(0),
     m_height(0),
     m_x(0),
     m_y(0),
-    m_param1(1),
-    m_param2(1),
     m_dirty(true),
-    m_lastColorSpace(0)
+    m_lastColorSpace(0),
+    m_lastX(0),
+    m_lastY(0)
 {
     Q_ASSERT(parent);
 }
@@ -61,10 +66,12 @@ void KisColorSelectorComponent::paintEvent(QPainter* painter)
 
 void KisColorSelectorComponent::mouseEvent(int x, int y)
 {
-    int newX=x-m_x;
-    int newY=y-m_y;
-    if(newX>0 && newX<width() &&
-       newY>0 && newY<height()) {
+    if(!isComponent(x-m_x, y-m_y))
+        return;
+    qreal newX=(x-m_x)/qreal(width());
+    qreal newY=(y-m_y)/qreal(height());
+    if(newX>=0 && newX<=1 &&
+       newY>=0 && newY<=1) {
         selectColor(newX, newY);
         m_lastX=newX;
         m_lastY=newY;
@@ -83,26 +90,50 @@ bool KisColorSelectorComponent::isDirty() const
     return m_dirty || m_lastColorSpace!=colorSpace();
 }
 
+bool KisColorSelectorComponent::isComponent(int x, int y) const
+{
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    return true;
+}
+
 QColor KisColorSelectorComponent::currentColor()
 {
     return selectColor(m_lastX, m_lastY);
 }
 
-void KisColorSelectorComponent::setParam(qreal p)
+void KisColorSelectorComponent::setParam(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness)
 {
-    if(qFuzzyCompare(m_param1, p))
+    if(qFuzzyCompare(m_hue, hue) &&
+       qFuzzyCompare(m_hsvSaturation, hsvSaturation) &&
+       qFuzzyCompare(m_value, value) &&
+       qFuzzyCompare(m_hslSaturation, hslSaturation) &&
+       qFuzzyCompare(m_lightness, lightness))
         return;
-    m_param1 = p;
-    m_dirty=true;
-    emit update();
-}
 
-void KisColorSelectorComponent::setParam(qreal p1, qreal p2)
-{
-    if(qFuzzyCompare(m_param1, p1) && qFuzzyCompare(m_param2, p2))
-        return;
-    m_param1 = p1;
-    m_param2 = p2;
+    if(hue>=0. && hue<=1.)
+        m_hue=hue;
+
+    if(hsvSaturation>=0. && hsvSaturation<=1.) {
+        m_hsvSaturation=hsvSaturation;
+        m_hslSaturation=-1;
+    }
+
+    if(value>=0. && value<=1.) {
+        m_value=value;
+        m_lightness=-1;
+    }
+
+    if(hslSaturation>=0. && hslSaturation<=1.) {
+        m_hslSaturation=hslSaturation;
+        m_hsvSaturation=-1;
+    }
+
+    if(lightness>=0. && lightness<=1.) {
+        m_lightness=lightness;
+        m_value=-1;
+    }
+
     m_dirty=true;
     emit update();
 }
@@ -117,12 +148,8 @@ int KisColorSelectorComponent::height() const
     return m_height;
 }
 
-qreal KisColorSelectorComponent::parameter1() const
+void KisColorSelectorComponent::setConfiguration(Parameter param, Type type)
 {
-    return m_param1;
-}
-
-qreal KisColorSelectorComponent::parameter2() const
-{
-    return m_param2;
+    m_parameter = param;
+    m_type = type;
 }

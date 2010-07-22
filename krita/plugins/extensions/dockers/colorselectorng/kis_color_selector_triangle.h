@@ -27,14 +27,13 @@ class KisColorSelectorTriangle : public KisColorSelectorComponent
     Q_OBJECT
 public:
     explicit KisColorSelectorTriangle(KisColorSelectorBase* parent);
-    
-    bool isComponent(int x, int y) const;
-    
-    QColor selectColor(int x, int y);
+    QColor selectColor(qreal x, qreal y);
+    void setColor(const QColor &color);
 signals:
     void colorChanged(QColor color);
 protected:
     void paint(QPainter*);
+    bool isComponent(int x, int y) const;
 private:
     qreal triangleWidth() const;
     qreal triangleHeight() const;
@@ -43,7 +42,7 @@ private:
     QPoint widgetToTriangleCoordinates(const QPoint& point) const;
     QImage m_pixelCache;
     
-    QPoint m_lastClickPos;
+    QPointF m_lastClickPos;
 };
 
 #endif // KIS_COLOR_SELECTOR_TRIANGLE_H

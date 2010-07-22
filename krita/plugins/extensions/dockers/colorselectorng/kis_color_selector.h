@@ -25,12 +25,13 @@ class KisColorSelectorTriangle;
 class KisColorSelectorRing;
 class KisColorSelectorComponent;
 class KisColorSelectorSimple;
+class KisColorSelectorWheel;
 
 class KisColorSelector : public KisColorSelectorBase
 {
 public:
     enum Type {Ring, Square, Wheel, Triangle, Slider};
-    enum Parameters {H, S, V, L, SL, SV, SH, VH, LH};
+    enum Parameters {H, hsvS, V, hslS, L, SL, SV, hsvSH, hslSH, VH, LH};
     struct Configuration {
         Type mainType;
         Type subType;
@@ -77,15 +78,18 @@ public:
 
     void setConfiguration(Configuration conf);
     Configuration configuration() const;
+    void setColor(const QColor& color);
 
 public slots:
     void updateSettings();
 
 protected:
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
-    void mousePressEvent(QMouseEvent* e);
-    void mouseMoveEvent(QMouseEvent *);
+    void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+
 
 private:
     void mouseEvent(QMouseEvent* e);
@@ -95,10 +99,16 @@ private:
     KisColorSelectorComponent* m_triangle;
     KisColorSelectorSimple* m_slider;
     KisColorSelectorSimple* m_square;
+    KisColorSelectorWheel* m_wheel;
+    KisColorSelectorComponent* m_mainComponent;
+    KisColorSelectorComponent* m_subComponent;
+
+    QTimer* m_updateTimer;
 
     Configuration m_configuration;
 
     QColor m_lastColor;
+    QColor m_currentColor;
     QPoint m_lastMousePosition;
 };
 

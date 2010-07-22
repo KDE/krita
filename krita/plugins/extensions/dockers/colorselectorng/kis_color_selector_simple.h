@@ -26,26 +26,21 @@ class KoColorSpace;
 
 #include "KoColor.h"
 #include "kis_color_selector_component.h"
-#include "kis_color_selector.h"
 
 class KisColorSelectorSimple : public KisColorSelectorComponent
 {
 Q_OBJECT
 public:
-    typedef KisColorSelector::Parameters Parameter;
-    typedef KisColorSelector::Type Type;
     explicit KisColorSelectorSimple(KisColorSelectorBase *parent);
-    void setConfiguration(Parameter param, Type type);
+    void setColor(const QColor& c);
 
 protected:
-    virtual QColor selectColor(int x, int y);
+    virtual QColor selectColor(qreal x, qreal y);
     virtual void paint(QPainter*);
     QRgb colorAt(int x, int y);
 
 private:
-    Parameter m_parameter;
-    Type m_type;
-    QPoint m_lastClickPos;
+    QPointF m_lastClickPos;
     KoColor m_kocolor;
     QColor m_qcolor;
     QImage m_pixelCache;

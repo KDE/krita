@@ -26,6 +26,8 @@
 #include <QColor>
 #include <QImage>
 
+class QTimer;
+
 class KisMyPaintShadeSelector : public KisColorSelectorBase
 {
 public:
@@ -36,10 +38,10 @@ protected:
     void mousePressEvent(QMouseEvent *);
     QColor pickColorAt(int x, int y);
     KisColorSelectorBase* createPopup() const;
+    void setColor(const QColor& c);
 
 private:
     void updateSelector();
-    void setColor(const QColor& c);
     void precalculateData();
     static const int m_size = 256;
     float m_colorH, m_colorS, m_colorV;
@@ -55,6 +57,7 @@ private:
     const KoColorSpace* m_pixelCacheColorSpace;
     QColor m_qcolor;
     bool m_initialised;
+    QTimer* m_updateTimer;
 };
 
 #endif // KIS_COLSELNG_MY_PAINT_SHADE_SELECTOR_H

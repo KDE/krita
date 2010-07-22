@@ -15,34 +15,35 @@
  *  along with this program; if not, write to the Free Software
  */
 
-#ifndef KIS_COLOR_SELECTOR_RING_H
-#define KIS_COLOR_SELECTOR_RING_H
+#ifndef KIS_COLOR_SELECTOR_WHEEL_H
+#define KIS_COLOR_SELECTOR_WHEEL_H
 
-#include "kis_color_selector_component.h"
+typedef unsigned int QRgb;
+class KoColorSpace;
 
+#include <QColor>
 #include <QImage>
 
-class KisColorSelectorRing : public KisColorSelectorComponent
+#include "KoColor.h"
+#include "kis_color_selector_component.h"
+
+class KisColorSelectorWheel : public KisColorSelectorComponent
 {
     Q_OBJECT
 public:
-    explicit KisColorSelectorRing(KisColorSelectorBase *parent);
-    int innerRadius() const;
-    QColor selectColor(qreal x, qreal y);
-    void setColor(const QColor &color);
+    explicit KisColorSelectorWheel(KisColorSelectorBase *parent);
+    void setColor(const QColor& c);
+
 protected:
-    void paint(QPainter*);
-    bool isComponent(int x, int y) const;
+    virtual QColor selectColor(qreal x, qreal y);
+    virtual void paint(QPainter*);
+    QRgb colorAt(int x, int y);
+
 private:
-    void paintCache();
-    void colorCache();
-    int outerRadius() const;
-    
+    QPointF m_lastClickPos;
+    KoColor m_kocolor;
+    QColor m_qcolor;
     QImage m_pixelCache;
-    const KoColorSpace* m_cachedColorSpace;
-    int m_cachedSize;
-    qreal m_lastHue;
-    QList<QRgb> m_cachedColors;
 };
 
-#endif // KIS_COLOR_SELECTOR_RING_H
+#endif // KIS_COLOR_SELECTOR_WHEEL_H

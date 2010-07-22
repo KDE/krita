@@ -31,6 +31,8 @@ public:
     virtual bool loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context);
     virtual void paint(QPainter& painter, const KoViewConverter& converter);
     virtual void saveOdf(KoShapeSavingContext& context) const;
+
+    virtual void setSize(const QSizeF& size);
 private:
     QString m_comment;
     QString m_creator;

@@ -32,7 +32,7 @@
 CommentShape::CommentShape()
 : KoShape()
 {
-    setSize(QSizeF(20,20));
+    KoShape::setSize(QSizeF(20,20));
 }
 
 CommentShape::~CommentShape()
@@ -98,4 +98,9 @@ void CommentShape::saveOdf(KoShapeSavingContext& context) const
     writer.endElement();//text:p
 
     writer.endElement();//officeooo:annotation
+}
+
+void CommentShape::setSize(const QSizeF& size)
+{
+    KoShape::setSize(QSizeF(20,20));
 }

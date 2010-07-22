@@ -28,6 +28,8 @@
 #include <QGradient>
 #include <QBrush>
 #include <QRectF>
+#include <fcntl.h>
+#include <KoShapeLoadingContext.h>
 
 CommentShape::CommentShape()
 : KoShape()
@@ -49,6 +51,11 @@ bool CommentShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& c
         if(child.namespaceURI() == KoXmlNS::dc) {
             if(child.localName() == "creator") {
                 m_creator = child.text();
+                QStringList creatorNames = m_creator.split(' ');
+                //TODO fix for RTL
+                foreach(QString name, creatorNames) {
+                    m_initials += name.left(1);
+                }
             }
             else if(child.localName() == "date") {
                 m_date = QDate::fromString(child.text(), Qt::ISODate);
@@ -76,6 +83,8 @@ void CommentShape::paint(QPainter& painter, const KoViewConverter& converter)
 
     const QSizeF size = this->size();
     painter.drawRect(QRectF(0, 0, size.width(), size.height()));
+
+    painter.drawText( QRectF(QPoint(0,0), size), Qt::AlignCenter, m_initials);
 }
 
 void CommentShape::saveOdf(KoShapeSavingContext& context) const

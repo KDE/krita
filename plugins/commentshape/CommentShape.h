@@ -36,6 +36,7 @@ public:
 private:
     QString m_comment;
     QString m_creator;
+    QString m_initials;
     QDate m_date;
 };
 

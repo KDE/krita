@@ -18,6 +18,8 @@
  */
 
 #include "CommentShape.h"
+#include <KoXmlReader.h>
+#include <KoXmlNS.h>
 
 CommentShape::CommentShape()
 : KoShape()
@@ -28,9 +30,26 @@ CommentShape::~CommentShape()
 {
 }
 
-
 bool CommentShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context)
 {
+    loadOdfAttributes(element, context, OdfPosition);
+
+    KoXmlElement child;
+    forEachElement(child, element)
+    {
+        if(child.namespaceURI() == KoXmlNS::dc) {
+            if(child.localName() == "creator") {
+                m_creator = child.text();
+            }
+            else if(child.localName() == "date") {
+                m_date = QDate::fromString(child.text(), Qt::ISODate);
+            }
+        }
+        else if(child.namespaceURI() == KoXmlNS::text && child.localName() == "p") {
+            m_comment = child.text();
+        }
+    }
+
     return true;
 }
 

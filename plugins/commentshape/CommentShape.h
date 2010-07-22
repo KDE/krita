@@ -20,6 +20,7 @@
 #ifndef COMMENTSHAPE_H
 #define COMMENTSHAPE_H
 #include <KoShape.h>
+#include <QDate>
 
 class CommentShape : public KoShape
 {
@@ -30,6 +31,10 @@ public:
     virtual bool loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context);
     virtual void paint(QPainter& painter, const KoViewConverter& converter);
     virtual void saveOdf(KoShapeSavingContext& context) const;
+private:
+    QString m_comment;
+    QString m_creator;
+    QDate m_date;
 };
 
 #endif // COMMENTSHAPE_H

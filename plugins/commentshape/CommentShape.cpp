@@ -20,6 +20,8 @@
 #include "CommentShape.h"
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
 
 CommentShape::CommentShape()
 : KoShape()
@@ -59,4 +61,22 @@ void CommentShape::paint(QPainter& painter, const KoViewConverter& converter)
 
 void CommentShape::saveOdf(KoShapeSavingContext& context) const
 {
+    KoXmlWriter& writer = context.xmlWriter();
+
+    writer.startElement("officeooo:annotation"); //TODO replace with standarized element name
+    saveOdfAttributes(context, OdfPosition);
+
+    writer.startElement("dc:creator");
+    writer.addTextSpan(m_creator);
+    writer.endElement();//dc:creator
+
+    writer.startElement("dc:date");
+    writer.addTextSpan(m_date.toString(Qt::ISODate));
+    writer.endElement();//dc:date
+
+    writer.startElement("text:p");
+    writer.addTextSpan(m_comment);
+    writer.endElement();//text:p
+
+    writer.endElement();//officeooo:annotation
 }

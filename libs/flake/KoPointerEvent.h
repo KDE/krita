@@ -110,9 +110,7 @@ public:
      * Returns the keyboard modifier flags that existed immediately before the event occurred.
      * See also QApplication::keyboardModifiers().
      */
-    Qt::KeyboardModifiers modifiers() const {
-        return m_event->modifiers();
-    }
+    Qt::KeyboardModifiers modifiers() const;
 
     /// return if the event has been accepted.
     inline bool isAccepted() const {
@@ -131,10 +129,10 @@ public:
     Qt::MouseButtons buttons() const;
 
     /// Return the position screen coordinates
-    const QPoint & globalPos();
+    QPoint globalPos() const;
 
     /// return the position in widget coordinates
-    const QPoint & pos() const;
+    QPoint pos() const;
 
     /**
      * return the pressure (or a default value). The range is 0.0 - 1.0
@@ -229,7 +227,7 @@ protected:
     void setTabletButton(Qt::MouseButton button);
 private:
     // for the d-pointer police; we want to make accessors to the event inline, so this one stays here.
-    QInputEvent *m_event;
+    QEvent *m_event;
 
     class Private;
     Private * const d;

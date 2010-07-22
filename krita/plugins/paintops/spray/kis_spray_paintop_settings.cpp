@@ -90,6 +90,7 @@ QPainterPath KisSprayPaintOpSettings::brushOutline(const QPointF& pos,OutlineMod
         m.reset();
         m.rotate( getDouble(SPRAY_ROTATION) );
         path = m.map(path);
+        path.translate(pos);
     }
     return path;
 }

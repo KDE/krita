@@ -83,7 +83,6 @@ void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP imag
 
 QPainterPath KisDeformPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode) const
 {
-    Q_UNUSED(pos);
     QPainterPath path;
     if (mode == CursorIsOutline){
         qreal width = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_SCALE);
@@ -91,13 +90,13 @@ QPainterPath KisDeformPaintOpSettings::brushOutline(const QPointF& pos, KisPaint
         QRectF brush(0,0,width,height);
         brush.translate(-brush.center());
 
-        QPainterPath path;
         path.addEllipse(brush);
         
         QTransform m;
         m.reset();
         m.rotate( getDouble(BRUSH_ROTATION) );
         path = m.map(path);
+        path.translate(pos);
     }
     return path;
 }

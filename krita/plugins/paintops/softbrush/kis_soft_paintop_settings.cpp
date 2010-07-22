@@ -85,6 +85,7 @@ QPainterPath KisSoftPaintOpSettings::brushOutline(const QPointF& pos,OutlineMode
         m.reset();
         m.rotate( getDouble(BRUSH_ROTATION) );
         path = m.map(path);
+        path.translate(pos);
     }
     return path;
 }

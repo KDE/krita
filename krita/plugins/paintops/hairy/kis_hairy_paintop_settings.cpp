@@ -72,12 +72,13 @@ QPainterPath KisHairyPaintOpSettings::brushOutline(const QPointF& pos,OutlineMod
 {
     QPainterPath path;
     if (mode == CursorIsOutline){
-        path = KisBrushBasedPaintOpSettings::brushOutline(pos,mode);
+        path = KisBrushBasedPaintOpSettings::brushOutline(QPointF(0.0,0.0),mode);
         double scale = getDouble(HAIRY_BRISTLE_SCALE);
         QTransform m;
         m.reset();
-        m.scale(scale, scale);   
+        m.scale(scale, scale);
         path = m.map(path);
+        path.translate(pos);
     }
     return path;
 }

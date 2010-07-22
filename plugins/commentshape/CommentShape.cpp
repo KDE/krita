@@ -26,6 +26,7 @@
 CommentShape::CommentShape()
 : KoShape()
 {
+    setSize(QSizeF(20,20));
 }
 
 CommentShape::~CommentShape()

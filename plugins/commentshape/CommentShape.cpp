@@ -111,7 +111,7 @@ bool CommentShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& c
                 m_date = QDate::fromString(child.text(), Qt::ISODate);
             }
         }
-        else if(child.namespaceURI() == KoXmlNS::text && child.localName() == "pp") {
+        else if(child.namespaceURI() == KoXmlNS::text && child.localName() == "p") {
             commentData()->document()->setHtml(child.text().replace('\n', "<br>"));
         }
     }

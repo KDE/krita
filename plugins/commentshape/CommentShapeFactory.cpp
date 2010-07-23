@@ -22,6 +22,8 @@
 
 #include <klocale.h>
 #include <KoXmlNS.h>
+#include <KoResourceManager.h>
+#include <KoOdfDocument.h>
 
 CommentShapeFactory::CommentShapeFactory(QObject* parent)
 : KoShapeFactoryBase(parent, COMMENTSHAPEID, i18n("Comment"))
@@ -36,7 +38,7 @@ CommentShapeFactory::~CommentShapeFactory()
 
 KoShape* CommentShapeFactory::createDefaultShape(KoResourceManager* documentResources) const
 {
-    return new CommentShape();
+    return new CommentShape(documentResources);
 }
 
 bool CommentShapeFactory::supports(const KoXmlElement& element) const

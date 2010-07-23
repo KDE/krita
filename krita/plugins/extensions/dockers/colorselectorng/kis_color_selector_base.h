@@ -19,6 +19,8 @@
 #define KIS_COLOR_SELECTOR_BASE_H
 
 #include <QWidget>
+#include <QMap>
+#include <QRgb>
 
 class QColor;
 class KoColor;
@@ -53,7 +55,7 @@ protected:
 protected slots:
     void hidePopup();
     void commitColor(const KoColor& koColor, const QColor& qColor, ColorRole role);
-//    void resourceChanged(int key, const QVariant& v);
+    void resourceChanged(int key, const QVariant& v);
 
 signals:
     /// emits the new color raw, that means without color space transformation
@@ -67,6 +69,7 @@ private:
     bool m_popupOnMouseClick;
     const KoColorSpace* m_colorSpace;
     KisCanvas2* m_canvas;
+    QMap<QRgb, QRgb> m_colorMap;
 };
 
 #endif // KIS_COLOR_SELECTOR_BASE_H

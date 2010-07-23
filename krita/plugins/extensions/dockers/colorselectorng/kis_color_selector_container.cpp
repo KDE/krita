@@ -77,8 +77,11 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     connect(this,           SIGNAL(settingsChanged()), this,                   SLOT(updateSettings()));
     connect(this,           SIGNAL(settingsChanged()), m_minimalShadeSelector, SLOT(updateSettings()));
 
-    connect(m_colorSelector,        SIGNAL(colorChanged(QColor)), m_myPaintShadeSelector, SLOT(setColor(QColor)));
-    connect(m_myPaintShadeSelector, SIGNAL(colorChanged(QColor)), m_colorSelector,        SLOT(setColor(QColor)));
+    connect(m_colorSelector,        SIGNAL(colorChanged(const QColor&)), m_myPaintShadeSelector, SLOT(setColor(const QColor&)));
+    connect(m_myPaintShadeSelector, SIGNAL(colorChanged(const QColor&)), m_colorSelector,        SLOT(setColor(const QColor&)));
+
+    connect(m_colorSelector,        SIGNAL(colorChanged(const QColor&)), this, SIGNAL(colorChanged(const QColor&)));
+    connect(m_myPaintShadeSelector, SIGNAL(colorChanged(const QColor&)), this, SIGNAL(colorChanged(const QColor&)));
 }
 
 void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)

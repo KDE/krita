@@ -81,8 +81,8 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
 {
     m_canvas = canvas;
 
-//    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-//            this,                        SLOT(resourceChanged(int, const QVariant&)));
+    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
+            this,                        SLOT(resourceChanged(int, const QVariant&)));
 //    setColor(m_canvas->resourceManager()->foregroundColor().toQColor());
 
     update();
@@ -208,23 +208,75 @@ void KisColorSelectorBase::commitColor(const KoColor& color, const QColor& rawCo
     if (!m_canvas)
         return;
 
+    m_colorMap.insert(color.toQColor().rgb(), rawColor.rgb());
+
     if (role==Foreground)
-        m_canvas->resourceManager()->setForegroundColor(KoColor(color , colorSpace()));
+        m_canvas->resourceManager()->setForegroundColor(color);
     else
-        m_canvas->resourceManager()->setBackgroundColor(KoColor(color , colorSpace()));
+        m_canvas->resourceManager()->setBackgroundColor(color);
+
+//    if (role==Foreground)
+//        m_canvas->resourceManager()->setForegroundColor(color);
+//    else
+//        m_canvas->resourceManager()->setBackgroundColor(color);
 
     emit colorChanged(rawColor);
 }
 
-//void KisColorSelectorBase::resourceChanged(int key, const QVariant &v)
-//{
-//    if (key == KoCanvasResource::ForegroundColor || key == KoCanvasResource::BackgroundColor) {
-////        KoColor kc(v.value<KoColor>().data(), KoColorSpaceRegistry::instance()->rgb8());
-////        setColor(kc.toQColor());
-////        setColor(kc.toQColor());
-////        setColor(v.value<KoColor>().toQColor());
-//    }
-//}
+void KisColorSelectorBase::resourceChanged(int key, const QVariant &v)
+{
+    //disable for now
+    return;
+    if (key == KoCanvasResource::ForegroundColor || key == KoCanvasResource::BackgroundColor) {
+//        KoColor kc(v.value<KoColor>().data(), KoColorSpaceRegistry::instance()->rgb8());
+//        setColor(kc.toQColor());
+//        setColor(kc.toQColor());
+//        setColor();
+
+        QColor wantedColor = v.value<KoColor>().toQColor();
+        wantedColor.setAlpha(255);
+
+        QRgb target=m_colorMap.value(wantedColor.rgb(), qRgba(0,0,0,0));
+        kDebug()<<"wanted Color="<<wantedColor.red()<<"/"<<wantedColor.green()<<"/"<<wantedColor.blue()<<"#"<<wantedColor.alpha();
+
+        if(target==qRgba(0,0,0,0)) {
+            KoColor kc(colorSpace());
+            QColor colorSpaceColor;
+            QColor sRgbColor;
+            kDebug()<<"start creating map";
+
+    //        kDebug()<<"wanted colour hue="<<wantedColor.hue()<<"h: "<<wantedColor.hue()-25<<" > "<<(wantedColor.hue()+25);
+            int hue, sat, val;
+            for(int h=wantedColor.hue()-25; h<(wantedColor.hue()+25+310); h++) {
+                hue=(h+359)%360;
+    //            kDebug()<<hue;
+                for(int s=wantedColor.saturation()-64; s<wantedColor.saturation()+64+128; s++) {
+                    sat=(s+255)%256;
+                    for(int v=wantedColor.value()-64; v<wantedColor.value()+64+128; v++) {
+                        val=(v+255)%256;
+                        sRgbColor.setHsv(hue, sat, val);
+                        kc.fromQColor(sRgbColor);
+                        kc.toQColor(&colorSpaceColor);
+
+                        // using QRgb, because QColor has 16 bit precision and that can cause problems
+                        m_colorMap.insert(colorSpaceColor.rgb(), sRgbColor.rgb());
+                    }
+                }
+            }
+            kDebug()<<"finished, map size="<<m_colorMap.size();
+        }
+
+        target=m_colorMap.value(wantedColor.rgb(), qRgba(0,0,0,0));
+        if(target!=qRgba(0,0,0,0)) {
+            setColor(target);
+        }
+        else {
+            kDebug()<<"######## WARNING: the color "<<wantedColor<<" was not found in the color space. using this color instead.";
+            m_colorMap.insert(wantedColor.rgb(), wantedColor.rgb());
+            setColor(wantedColor);
+        }
+    }
+}
 
 const KoColorSpace* KisColorSelectorBase::colorSpace()
 {

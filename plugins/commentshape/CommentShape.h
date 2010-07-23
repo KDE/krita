@@ -19,25 +19,36 @@
 
 #ifndef COMMENTSHAPE_H
 #define COMMENTSHAPE_H
-#include <KoShape.h>
+
+#include <KoShapeContainer.h>
+#include <KoResourceManager.h>
+
 #include <QDate>
 
-class CommentShape : public KoShape
+class KoTextShapeData;
+
+class CommentShape : public KoShapeContainer
 {
 public:
-    CommentShape();
+    CommentShape(KoResourceManager* resourceManager);
     virtual ~CommentShape();
 
     virtual bool loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context);
-    virtual void paint(QPainter& painter, const KoViewConverter& converter);
     virtual void saveOdf(KoShapeSavingContext& context) const;
-
     virtual void setSize(const QSizeF& size);
+
+    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
+
+    void toogleSelect();
+
 private:
-    QString m_comment;
+    KoTextShapeData* commentData() const;
+
     QString m_creator;
     QString m_initials;
     QDate m_date;
+    bool m_selected;
+    KoShape* m_comment;
 };
 
 #endif // COMMENTSHAPE_H

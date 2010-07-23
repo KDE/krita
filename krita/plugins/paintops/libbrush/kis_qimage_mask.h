@@ -91,7 +91,7 @@ public:
     */
     inline quint8 alphaAt(qint32 x, qint32 y) const {
         if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
-            return m_data.scanLine(y)[x];
+            return m_dataPtr[(y * m_bytesPerLine + x)];
         } else {
             return OPACITY_TRANSPARENT_U8;
         }
@@ -99,7 +99,7 @@ public:
 
     inline void setAlphaAt(qint32 x, qint32 y, quint8 alpha) {
         if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
-            m_data.scanLine(y)[x] = alpha;
+            m_dataPtr[(y * m_bytesPerLine + x)] = alpha;
         }
     }
 
@@ -116,9 +116,12 @@ private:
     void computeAlpha(const QImage& image);
     void copyAlpha(const QImage& image);
 
-    QImage m_data;
     int m_width;
     int m_height;
+    QImage m_data;
+    
+    int m_bytesPerLine;
+    uchar * m_dataPtr;
 
 private:
     void init(const QImage& image);

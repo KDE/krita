@@ -28,7 +28,6 @@
 
 #include "kis_global.h"
 
-
 KisQImagemask::KisQImagemask(const QImage& image, bool hasColor)
 {
     init(image);
@@ -54,6 +53,8 @@ KisQImagemask::KisQImagemask(qint32 width, qint32 height) : m_width(width),
                                                             m_data(width, height, QImage::Format_Indexed8)
 {
     m_data.fill(0);
+    m_dataPtr = m_data.bits();
+    m_bytesPerLine = m_data.bytesPerLine();
 }
 
 inline void KisQImagemask::init(const QImage& image)
@@ -61,6 +62,8 @@ inline void KisQImagemask::init(const QImage& image)
     m_width = image.width();
     m_height = image.height();
     m_data = QImage(m_width,m_height,QImage::Format_Indexed8);
+    m_dataPtr = m_data.bits();
+    m_bytesPerLine = m_data.bytesPerLine();
 }
 
 
@@ -116,8 +119,8 @@ KisQImagemaskSP KisQImagemask::interpolate(KisQImagemaskSP mask1, KisQImagemaskS
     KisQImagemaskSP outputMask = KisQImagemaskSP(new KisQImagemask(width, height));
     Q_CHECK_PTR(outputMask);
 
-    for (int x = 0; x < width; x++) {
-        for (int y = 0; y < height; y++) {
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
             quint8 d = static_cast<quint8>((1 - t) * mask1->alphaAt(x, y) + t * mask2->alphaAt(x, y));
             outputMask->setAlphaAt(x, y, d);
         }
@@ -143,4 +146,5 @@ void KisQImagemask::rotation(double angle)
             m_data.scanLine(y)[x] = tmp.scanLine(y)[4 * x];
         }
     }
+    m_dataPtr = m_data.bits();
 }

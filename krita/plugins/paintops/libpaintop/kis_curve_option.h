@@ -63,6 +63,7 @@ protected:
 
     double computeValue(const KisPaintInformation& info) const {
         double v = m_sensor->parameter(info);
+        
         if (customCurve()) {
             return scaleToCurve(v);
         } else {
@@ -71,8 +72,8 @@ protected:
     }
 
     double scaleToCurve(double pressure) const {
-        int offset = qRound(255.0 * pressure);
-        return m_curve.floatTransfer()[qBound(0, offset, 255)];
+        int offset = qRound(256.0 * pressure);
+        return m_curve.floatTransfer(257)[qBound(0, offset, 256)];
     }
 
     bool customCurve() const {

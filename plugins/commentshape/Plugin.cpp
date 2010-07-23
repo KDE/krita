@@ -19,6 +19,7 @@
 
 #include "Plugin.h"
 #include "CommentShapeFactory.h"
+#include "CommentToolFactory.h"
 
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
@@ -31,7 +32,7 @@ Plugin::Plugin(QObject* parent, const QStringList&)
 : QObject(parent)
 {
     KoShapeRegistry::instance()->add(new CommentShapeFactory(parent));
-    //KoToolRegistry::instance()->add();
+    KoToolRegistry::instance()->add(new CommentToolFactory(parent));
 }
 
 #include <Plugin.moc>

@@ -70,16 +70,7 @@ KisTileData::~KisTileData()
     /* FIXME: this _|_ */
     m_store->ensureTileDataLoaded(this);
 
-    if (m_data)
-        freeData(m_data, m_pixelSize);
-
-    /* Free clones list */
-    KisTileData *td  = 0;
-    while(m_clonesStack.pop(td)) {
-        delete td;
-    }
-
-    Q_ASSERT(m_clonesStack.isEmpty());
+    releaseMemory();
 }
 
 void KisTileData::fillWithPixel(const quint8 *defPixel)
@@ -91,6 +82,28 @@ void KisTileData::fillWithPixel(const quint8 *defPixel)
     }
 }
 
+void KisTileData::releaseMemory()
+{
+    if (m_data) {
+        freeData(m_data, m_pixelSize);
+        m_data = 0;
+    }
+
+    /* Free clones list */
+    KisTileData *td  = 0;
+    while(m_clonesStack.pop(td)) {
+        delete td;
+    }
+
+    Q_ASSERT(m_clonesStack.isEmpty());
+}
+
+void KisTileData::allocateMemory()
+{
+    Q_ASSERT(!m_data);
+    m_data = allocateData(m_pixelSize);
+}
+
 quint8* KisTileData::allocateData(const qint32 pixelSize)
 {
     switch(pixelSize) {
@@ -100,7 +113,7 @@ quint8* KisTileData::allocateData(const qint32 pixelSize)
     case 8:
         return (quint8*) m_pool8BPP.pop();
         break;
-        default:
+    default:
         return (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
     }
 }
@@ -114,7 +127,7 @@ void KisTileData::freeData(quint8* ptr, const qint32 pixelSize)
     case 8:
         return m_pool8BPP.push(ptr);
         break;
-        default:
+    default:
         free(ptr);
     }
 }

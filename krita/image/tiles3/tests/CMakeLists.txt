@@ -36,3 +36,8 @@ target_link_libraries(KisChunkAllocatorTest  ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBR
 set(kis_memory_window_test_SRCS kis_memory_window_test.cpp ../swap/kis_memory_window.cpp)
 kde4_add_unit_test(KisMemoryWindowTest TESTNAME krita-image-KisMemoryWindowTest  ${kis_memory_window_test_SRCS})
 target_link_libraries(KisMemoryWindowTest  ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+set(kis_swapped_data_store_test_SRCS kis_swapped_data_store_test.cpp)
+kde4_add_unit_test(KisSwappedDataStoreTest TESTNAME krita-image-KisSwappedDataStoreTest  ${kis_swapped_data_store_test_SRCS})
+target_link_libraries(KisSwappedDataStoreTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

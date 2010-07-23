@@ -25,14 +25,21 @@
 #include "kis_chunk_allocator.h"
 
 
-#define MiB (1ULL << 20)
-#define DEFAULT_WINDOW_SIZE 16*MiB
+#define DEFAULT_WINDOW_SIZE (16*MiB)
 
 class KRITAIMAGE_EXPORT KisMemoryWindow
 {
 public:
     KisMemoryWindow(quint64 writeWindowSize = DEFAULT_WINDOW_SIZE);
     ~KisMemoryWindow();
+
+    inline quint8* getReadChunkPtr(KisChunk readChunk) {
+        return getReadChunkPtr(readChunk.data());
+    }
+
+    inline quint8* getWriteChunkPtr(KisChunk writeChunk) {
+        return getWriteChunkPtr(writeChunk.data());
+    }
 
     quint8* getReadChunkPtr(const KisChunkData &readChunk);
     quint8* getWriteChunkPtr(const KisChunkData &writeChunk);
@@ -53,5 +60,5 @@ private:
     quint64 m_writeWindowSize;
 };
 
-#endif /* __KIS_CHUNK_ALLOCATOR_H */
+#endif /* __KIS_MEMORY_WINDOW_H */
 

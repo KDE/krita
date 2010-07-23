@@ -92,7 +92,17 @@ int KisImageConfig::swapSlabSize() const
     return m_config.readEntry("swapSlabSize", 64); // in MiB
 }
 
-void KisImageConfig::setswapSlabSize(int value)
+void KisImageConfig::setSwapSlabSize(int value)
 {
     m_config.writeEntry("swapSlabSize", value);
+}
+
+int KisImageConfig::swapWindowSize() const
+{
+    return m_config.readEntry("swapWindowSize", 16); // in MiB
+}
+
+void KisImageConfig::setSwapWindowSize(int value)
+{
+    m_config.writeEntry("swapWindowSize", value);
 }

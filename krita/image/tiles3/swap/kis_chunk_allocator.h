@@ -23,8 +23,10 @@
 
 #include <QLinkedList>
 
-#define DEFAULT_STORE_SIZE (4096ULL * 1<<20) // 4GiB
-#define DEFAULT_SLAB_SIZE (64ULL * 1<<20) // 64MiB
+#define MiB (1ULL << 20)
+
+#define DEFAULT_STORE_SIZE (4096*MiB)
+#define DEFAULT_SLAB_SIZE (64*MiB)
 
 
 //#define DEBUG_SLAB_FAILS
@@ -92,6 +94,8 @@ public:
 class KisChunk
 {
 public:
+    KisChunk() {}
+
     KisChunk(KisChunkDataListIterator iterator)
         : m_iterator(iterator)
     {
@@ -111,6 +115,10 @@ public:
 
     inline KisChunkDataListIterator position() {
         return m_iterator;
+    }
+
+    inline const KisChunkData& data() {
+        return *m_iterator;
     }
 
 private:

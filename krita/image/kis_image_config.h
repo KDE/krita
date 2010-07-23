@@ -45,7 +45,10 @@ public:
     void setMaxSwapSize(int value);
 
     int swapSlabSize() const;
-    void setswapSlabSize(int value);
+    void setSwapSlabSize(int value);
+
+    int swapWindowSize() const;
+    void setSwapWindowSize(int value);
 
 private:
     Q_DISABLE_COPY(KisImageConfig);

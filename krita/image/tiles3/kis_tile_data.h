@@ -25,6 +25,8 @@
 
 #include "kis_lockless_stack.h"
 #include "kis_memory_pool.h"
+#include "swap/kis_chunk_allocator.h"
+
 
 class KisTileData;
 class KisTileDataStore;
@@ -70,7 +72,7 @@ public:
     };
 
     inline quint8* data() const {
-        Q_ASSERT(m_data);
+        // WARN: be careful - it can be null when swapped out!
         return m_data;
     }
 
@@ -84,6 +86,31 @@ public:
         return m_pixelSize;
     }
 
+    inline KisChunk swapChunk() const {
+        return m_swapChunk;
+    }
+
+    inline void setSwapChunk(KisChunk chunk) {
+        m_swapChunk = chunk;
+    }
+
+    /**
+     * Used for swapping purposes only.
+     * Frees the memory occupied by the tile data.
+     * (the caller must save the data beforehand)
+     */
+    void releaseMemory();
+
+    /**
+     * Used for swapping purposes only.
+     * Allocates memory for the tile data after
+     * it has been freed in releaseMemory().
+     * NOTE: the new data can be not-initialized
+     *       and you must fill it yourself!
+     *
+     * \see releaseMemory()
+     */
+    void allocateMemory();
 
 private:
     void fillWithPixel(const quint8 *defPixel);
@@ -119,7 +146,13 @@ private:
     KisTileData *m_prevTD;
 
 private:
+    /**
+     * The chunk of the swap file, that corresponds
+     * to this tile data. Used by KisSwappedDataStore.
+     */
+    KisChunk m_swapChunk;
 
+private:
     /**
      * FIXME: We should be able to work in const environment
      * even when actual data is swapped out to disk

@@ -90,7 +90,7 @@ public:
        provide an iterator over the mask, that would be nice, too.
     */
     inline quint8 alphaAt(qint32 x, qint32 y) const {
-        if (y >= 0 && y < m_data.height() && x >= 0 && x < m_data.width()) {
+        if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
             return m_data.scanLine(y)[x];
         } else {
             return OPACITY_TRANSPARENT_U8;
@@ -98,7 +98,7 @@ public:
     }
 
     inline void setAlphaAt(qint32 x, qint32 y, quint8 alpha) {
-        if (y >= 0 && y < m_data.height() && x >= 0 && x < m_data.width()) {
+        if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
             m_data.scanLine(y)[x] = alpha;
         }
     }
@@ -117,6 +117,12 @@ private:
     void copyAlpha(const QImage& image);
 
     QImage m_data;
+    int m_width;
+    int m_height;
+
+private:
+    void init(const QImage& image);
+    
 };
 
 #endif // KIS_ALPHA_MASK_

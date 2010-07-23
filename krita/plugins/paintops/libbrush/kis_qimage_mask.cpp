@@ -29,8 +29,9 @@
 #include "kis_global.h"
 
 
-KisQImagemask::KisQImagemask(const QImage& image, bool hasColor) : m_data(image.width(), image.height(), QImage::Format_Indexed8)
+KisQImagemask::KisQImagemask(const QImage& image, bool hasColor)
 {
+    init(image);
     if (hasColor) {
         copyAlpha(image);
     } else {
@@ -38,8 +39,9 @@ KisQImagemask::KisQImagemask(const QImage& image, bool hasColor) : m_data(image.
     }
 }
 
-KisQImagemask::KisQImagemask(const QImage& image) : m_data(image.width(), image.height(), QImage::Format_Indexed8)
+KisQImagemask::KisQImagemask(const QImage& image)
 {
+    init(image);
     if (!image.allGray()) {
         copyAlpha(image);
     } else {
@@ -47,10 +49,20 @@ KisQImagemask::KisQImagemask(const QImage& image) : m_data(image.width(), image.
     }
 }
 
-KisQImagemask::KisQImagemask(qint32 width, qint32 height) : m_data(width, height, QImage::Format_Indexed8)
+KisQImagemask::KisQImagemask(qint32 width, qint32 height) : m_width(width), 
+                                                            m_height(height),
+                                                            m_data(width, height, QImage::Format_Indexed8)
 {
     m_data.fill(0);
 }
+
+inline void KisQImagemask::init(const QImage& image)
+{
+    m_width = image.width();
+    m_height = image.height();
+    m_data = QImage(m_width,m_height,QImage::Format_Indexed8);
+}
+
 
 KisQImagemask::~KisQImagemask()
 {
@@ -58,12 +70,12 @@ KisQImagemask::~KisQImagemask()
 
 qint32 KisQImagemask::width() const
 {
-    return m_data.width();
+    return m_width;
 }
 
 qint32 KisQImagemask::height() const
 {
-    return m_data.height();
+    return m_height;
 }
 void KisQImagemask::copyAlpha(const QImage& image)
 {

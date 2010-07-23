@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Comment Tool
+X-KDE-ServiceTypes=KOffice/Tool
+Type=Service
+X-KDE-Library=commenttool
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

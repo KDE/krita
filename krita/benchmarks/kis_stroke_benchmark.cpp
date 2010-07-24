@@ -112,6 +112,19 @@ void KisStrokeBenchmark::cleanupTestCase()
 {
 }
 
+void KisStrokeBenchmark::pixelbrush300px()
+{
+    QString presetFileName = "autobrush_300px.kpp";
+    benchmarkStroke(presetFileName);
+}
+
+void KisStrokeBenchmark::pixelbrush300pxRL()
+{
+    QString presetFileName = "autobrush_300px.kpp";
+    benchmarkRandomLines(presetFileName);
+}
+
+
 void KisStrokeBenchmark::sprayPixels()
 {
     QString presetFileName = "spray_wu_pixels1.kpp";
@@ -263,7 +276,39 @@ void KisStrokeBenchmark::dynabrushRL()
     benchmarkRandomLines(presetFileName);
 }
 
-void KisStrokeBenchmark::benchmarkLine(QString presetFileName)
+/*
+void KisStrokeBenchmark::predefinedBrush()
+{
+    QString presetFileName = "deevad-slow-brush1.kpp";
+    benchmarkLine(presetFileName);
+}
+
+void KisStrokeBenchmark::predefinedBrushRL()
+{
+    
+    QString presetFileName = "deevad-slow-brush1.kpp";
+    
+    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
+    preset->load();
+    preset->settings()->setNode(m_layer);
+    m_painter->setPaintOpPreset(preset, m_image);
+
+    sleep(3);
+    
+    QBENCHMARK{
+        for (int i = 0; i < LINES; i++){
+            KisPaintInformation pi1(m_startPoints[i], 0.0);
+            KisPaintInformation pi2(m_endPoints[i], 1.0);
+            m_painter->paintLine(pi1, pi2);
+        }
+    }
+
+    //m_layer->paintDevice()->convertToQImage(0).save(m_outputPath + presetFileName + "_randomLines" + OUTPUT_FORMAT);
+
+}
+*/
+
+inline void KisStrokeBenchmark::benchmarkLine(QString presetFileName)
 {
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
     preset->load();
@@ -287,7 +332,7 @@ void KisStrokeBenchmark::benchmarkLine(QString presetFileName)
 }
 
 
-void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
+inline void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
 {
     qDebug() << "preset : " << presetFileName;
 

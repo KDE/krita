@@ -68,6 +68,10 @@ private slots:
     void cleanupTestCase();
     
     void init();
+
+    // Autobrush
+    void pixelbrush300px();
+    void pixelbrush300pxRL();
     
     // Soft brush benchmarks
     void softbrushDefault30();
@@ -106,7 +110,10 @@ private slots:
     
     void dynabrush();
     void dynabrushRL();
-
+/*    
+    void predefinedBrush();
+    void predefinedBrushRL();
+*/   
     void benchmarkRand();
     void benchmarkRand48();
 };

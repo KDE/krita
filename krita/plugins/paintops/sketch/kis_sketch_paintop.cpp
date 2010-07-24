@@ -41,6 +41,21 @@
 /*
 * Based on Harmony project http://github.com/mrdoob/harmony/
 */
+// chrome : diff 0.2, sketchy : 0.3, fur: 0.5
+// fur : distance / thresholdDistance
+
+// shaded: opacity per line :/
+// ((1 - (d / 1000)) * 0.1 * BRUSH_PRESSURE), offset == 0
+// chrome: color per line :/
+//this.context.strokeStyle = "rgba(" + Math.floor(Math.random() * COLOR[0]) + ", " + Math.floor(Math.random() * COLOR[1]) + ", " + Math.floor(Math.random() * COLOR[2]) + ", " + 0.1 * BRUSH_PRESSURE + " )";
+
+// long fur
+// from: count + offset * -random
+// to: i point - (offset * -random)  + random * 2
+// probability distance / thresholdDistnace
+
+// shaded: probabity : paint always - 0.0 density
+
 KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
 {
@@ -66,6 +81,33 @@ KisSketchPaintOp::~KisSketchPaintOp()
     delete m_painter;
 }
 
+void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end)
+{
+    if (m_sketchProperties.lineWidth == 1){
+        m_painter->drawThickLine(start, end, m_sketchProperties.lineWidth,m_sketchProperties.lineWidth);
+    }else{
+        m_painter->drawLine(start, end, m_sketchProperties.lineWidth, true);
+    }
+   
+}
+
+void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal scale, qreal rotation){
+    m_maskDab = cachedDab(m_dab->colorSpace());
+    
+    if (m_brush->brushType() == IMAGE || m_brush->brushType() == PIPE_IMAGE) {
+        m_maskDab = m_brush->paintDevice(m_dab->colorSpace(), scale, rotation, info, 0.0, 0.0);
+    } else {
+        KoColor color = painter()->paintColor();
+        color.convertTo(m_maskDab->colorSpace());
+        m_brush->mask(m_maskDab, color, scale, scale, rotation, info, 0.0, 0.0);
+    }
+
+    // update bounding box
+    m_brushBoundingBox = m_maskDab->bounds();
+    m_hotSpot = m_brush->hotSpot(scale,scale,rotation);
+    m_brushBoundingBox.translate(info.pos() - m_hotSpot);
+}
+
 KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
 {
     Q_UNUSED(savedDist);
@@ -80,142 +122,118 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
 
     QPointF prevMouse = pi1.pos();
     QPointF mouse = pi2.pos();
-
     m_points.append(mouse);
+
+
+    // shaded: does not draw this line, chrome does, fur does
+    if (m_sketchProperties.makeConnection){
+        drawConnection(prevMouse,mouse);
+    }
 
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
     double rotation = m_rotationOption.apply(pi2);
-    double xFraction = 0.0;
-    double yFraction = 0.0;
+    qreal thresholdDistance;
     
-    KisFixedPaintDeviceSP dab = cachedDab(m_dab->colorSpace());
-    if (m_brush->brushType() == IMAGE || m_brush->brushType() == PIPE_IMAGE) {
-        dab = m_brush->paintDevice(m_dab->colorSpace(), scale, rotation, pi2, xFraction, yFraction);
-    } else {
-        KoColor color = painter()->paintColor();
-        color.convertTo(dab->colorSpace());
-        m_brush->mask(dab, color, scale, scale, rotation, pi2, xFraction, yFraction);
+    // update the mask for simple mode only once
+    // determine the radius
+    if (m_count == 0 && m_sketchProperties.simpleMode){
+        updateBrushMask(pi2,1.0,0.0);
+        //m_radius = qMax(m_maskDab->bounds().width(),m_maskDab->bounds().height()) * 0.5;
+        m_radius = 0.5 * qMax(m_brush->width(), m_brush->height());
+    }
+    
+    if (!m_sketchProperties.simpleMode){
+        updateBrushMask(pi2,scale,rotation);
+        m_radius = qMax(m_maskDab->bounds().width(),m_maskDab->bounds().height()) * 0.5;
+        thresholdDistance = pow(m_radius,2);
     }
 
-    // get the size of the mask
-    QRectF brushBoundingBox = dab->bounds();
-    QPointF hotSpot = m_brush->hotSpot(scale,scale,rotation);
-    brushBoundingBox.translate(mouse - hotSpot);
-    
-    // chrome, fur 0.1 * BRUSH_PRESSURE
-    // sketchy, long fur 0.05
-    qreal opacity = 1.00;
+    if (m_sketchProperties.simpleMode){
+        // update the radius according scale in simple mode
+        thresholdDistance = pow(m_radius * scale,2);
+    }    
 
-    m_painter->setPaintColor( painter()->paintColor() );
-    // shaded: does not draw this line, chrome does, fur does
-    if (m_sketchProperties.makeConnection){
-        m_painter->drawThickLine(prevMouse,mouse,m_sketchProperties.lineWidth,m_sketchProperties.lineWidth);
-    }
-
-    //qreal radius = m_sketchProperties.radius * scale;
-    qreal radius = dab->bounds().width() * 0.5;
-    qreal thresholdDistance =  radius * radius;
-    // shaded: probabity : paint always - 0.0 density
+    // determine density
     qreal density = thresholdDistance * m_sketchProperties.probability;
     
+    // probability behaviour
+    // TODO: make this option
+    bool isDistanceDepedent = true;
+    qreal probability = 1.0 - m_sketchProperties.probability;
+
     QColor painterColor = painter()->paintColor().toQColor();
     QColor randomColor;
     KoColor color(m_dab->colorSpace());
     
-    int w = dab->bounds().width();
+    int w = m_maskDab->bounds().width();
     quint8 opacityU8 = 0;
     quint8 * pixel;
     qreal distance;
     QPoint  positionInMask;
     QPointF diff;
+
+    m_painter->setPaintColor( painter()->paintColor() );
     int size = m_points.size();
-    
-    if (m_sketchProperties.useLowOpacity){
-    
+    // MAIN LOOP
     for (int i = 0; i < size; i++) {
-        if ( brushBoundingBox.contains( m_points.at(i) ) ) {
-            diff = (m_points.at(i) - mouse);
-            positionInMask = (diff + hotSpot).toPoint();
-            pixel = dab->data() + ((positionInMask.y() * w + positionInMask.x()) * dab->pixelSize());
-            opacityU8 = dab->colorSpace()->opacityU8( pixel );
-            
-            
-            if (opacityU8 != 0) {
-                distance = diff.x() * diff.x() + diff.y() * diff.y();
-                
-                if (drand48() > (distance / density)) {
-                    QPointF offsetPt = diff * m_sketchProperties.offset;
-                    
-                    m_painter->setOpacity(opacityU8);
-                    
-                    if (m_sketchProperties.magnetify) {
-                        m_painter->drawThickLine(mouse + offsetPt,
-                                            m_points.at(i) - offsetPt,
-                                            m_sketchProperties.lineWidth,m_sketchProperties.lineWidth );
-                    } else {
-                        // fur mode
-                        m_painter->drawThickLine(mouse + offsetPt,
-                                            mouse - offsetPt,
-                                            m_sketchProperties.lineWidth,m_sketchProperties.lineWidth );
-                    }
-                }
-                
+        diff = m_points.at(i) - mouse;
+        distance = diff.x() * diff.x() + diff.y() * diff.y();
+        
+        // circle test
+        bool makeConnection = false;
+        if (m_sketchProperties.simpleMode){
+            if (distance < thresholdDistance){
+                makeConnection = true;
             }
+        // mask test
+        }else{
+            
+            if ( m_brushBoundingBox.contains( m_points.at(i) ) ){
+                positionInMask = (diff + m_hotSpot).toPoint();
+                pixel = m_maskDab->data() + ((positionInMask.y() * w + positionInMask.x()) * m_maskDab->pixelSize());
+                opacityU8 = m_maskDab->colorSpace()->opacityU8( pixel );
+                if (opacityU8 != 0){
+                    makeConnection = true;
+                }
+            }
+            
         }
-    }
-    
-    }else{
-    qreal radius = m_sketchProperties.radius * scale;
-    for (int i = 0; i < size; i++){
-            diff = m_points.at(i) - m_points.at(m_count);
-            // chrome : diff 0.2, sketchy : 0.3, fur: 0.5
-            distance = diff.x() * diff.x() + diff.y() * diff.y();
-            // fur : distance / thresholdDistance
-            if ((distance < thresholdDistance) && drand48() > (distance / density))
-            {
-                QPointF offsetPt = diff * m_sketchProperties.offset;
+        
+        if (!makeConnection){
+            // check next point
+            continue;
+        }
 
-                // shaded: opacity per line :/
-                // ((1 - (d / 1000)) * 0.1 * BRUSH_PRESSURE), offset == 0
-                // chrome: color per line :/
-                //this.context.strokeStyle = "rgba(" + Math.floor(Math.random() * COLOR[0]) + ", " + Math.floor(Math.random() * COLOR[1]) + ", " + Math.floor(Math.random() * COLOR[2]) + ", " + 0.1 * BRUSH_PRESSURE + " )";
+        if (isDistanceDepedent){
+            probability =  distance / density;
+        }
 
-                // long fur
-                // from: count + offset * -random
-                // to: i point - (offset * -random)  + random * 2
-                // probability distance / thresholdDistnace
-
+        // density check
+        if (drand48() >= probability) {
+            QPointF offsetPt = diff * m_sketchProperties.offset;
+            
+            if (m_sketchProperties.magnetify) {
+                drawConnection(mouse + offsetPt, m_points.at(i) - offsetPt);
+            }else{
+                drawConnection(mouse + offsetPt, mouse - offsetPt);
+            }
+        
+            if (m_sketchProperties.randomRGB){
+                // some color transformation per line goes here
                 randomColor.setRgbF(drand48() * painterColor.redF(),
                                     drand48() * painterColor.greenF(),
                                     drand48() * painterColor.blueF()
                                     );
                 color.fromQColor(randomColor);
                 m_painter->setPaintColor(color);
-                m_painter->setOpacity(drand48() * OPACITY_OPAQUE_U8);
-                
-                if (m_sketchProperties.magnetify){
-                    m_painter->drawThickLine(m_points.at(m_count) + offsetPt,
-                                         m_points.at(i) - offsetPt,
-                                         m_sketchProperties.lineWidth,m_sketchProperties.lineWidth );
-                }else{
-                    // fur mode
-                    m_painter->drawThickLine(m_points.at(m_count) + offsetPt,
-                                         m_points.at(m_count) - offsetPt,
-                                         m_sketchProperties.lineWidth,m_sketchProperties.lineWidth );
-                }
-
             }
-    }
-}//else
-
+        }
+    }// end of MAIN LOOP
 
     m_count++;
 
     QRect rc = m_dab->extent();
     quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
-    if (m_sketchProperties.useLowOpacity){
-        painter()->setOpacity(painter()->opacity() * opacity);
-    }
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->setOpacity(origOpacity);

@@ -42,6 +42,25 @@ int KisSketchPaintOpSettings::rate() const
     return getInt(AIRBRUSH_RATE);
 }
 
+QPainterPath KisSketchPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode) const
+{
+    bool simpleMode = getBool(SKETCH_USE_SIMPLE_MODE);
+    if (simpleMode){
+        KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
+        if(!options)
+            return QPainterPath();
+    
+        if (mode != CursorIsOutline) return QPainterPath();
+        KisBrushSP brush = options->brush();
+        // just circle supported
+        qreal diameter = qMax(brush->width(), brush->height());
+        return ellipseOutline(diameter, diameter, 1.0 , 0.0).translated(pos);
+
+    }
+    return KisBrushBasedPaintOpSettings::brushOutline(pos, mode);
+}
+
+
 #if defined(HAVE_OPENGL)
 QString KisSketchPaintOpSettings::modelName() const
 {

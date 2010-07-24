@@ -46,7 +46,9 @@ class KisSketchPaintOpSettings : public KisBrushBasedPaintOpSettings
 public:
     KisSketchPaintOpSettings();
     virtual ~KisSketchPaintOpSettings() {}
-    
+
+    virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode) const;
+
     bool paintIncremental();
     bool isAirbrushing() const;
     int rate() const;

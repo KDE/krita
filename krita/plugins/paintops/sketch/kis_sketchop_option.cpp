@@ -33,14 +33,13 @@ KisSketchOpOption::KisSketchOpOption()
 {
     m_checkable = false;
     m_options = new KisSketchOpOptionsWidget();
-    connect(m_options->radiusKNumInp, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->offsetSPBox,SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->lowOpacityCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->simpleModeCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->connectionCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->magnetifyCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->randomRGBCHbox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->lineWidthSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->densitySPBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    
     
     setConfigurationPage(m_options);
 }
@@ -50,37 +49,26 @@ KisSketchOpOption::~KisSketchOpOption()
     // delete m_options;
 }
 
-void KisSketchOpOption::setThreshold(int radius) const
-{
-    m_options->radiusKNumInp->setValue(radius);
-}
-
-int KisSketchOpOption::threshold() const
-{
-    return m_options->radiusKNumInp->value();
-}
-
-
 void KisSketchOpOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
 {
-    settings->setProperty(SKETCH_RADIUS,m_options->radiusKNumInp->value());
     settings->setProperty(SKETCH_OFFSET,m_options->offsetSPBox->value());
     settings->setProperty(SKETCH_PROBABILITY, m_options->densitySPBox->value());
-    settings->setProperty(SKETCH_LOW_OPACITY,m_options->lowOpacityCHBox->isChecked());
+    settings->setProperty(SKETCH_USE_SIMPLE_MODE,m_options->simpleModeCHBox->isChecked());
     settings->setProperty(SKETCH_MAKE_CONNECTION, m_options->connectionCHBox->isChecked());
     settings->setProperty(SKETCH_MAGNETIFY,m_options->magnetifyCHBox->isChecked());
+    settings->setProperty(SKETCH_RANDOM_RGB,m_options->randomRGBCHbox->isChecked());
     settings->setProperty(SKETCH_LINE_WIDTH,m_options->lineWidthSPBox->value());
 }
 
 void KisSketchOpOption::readOptionSetting(const KisPropertiesConfiguration* settings)
 {
-        m_options->radiusKNumInp->setValue(settings->getInt(SKETCH_RADIUS));
         m_options->offsetSPBox->setValue( settings->getDouble(SKETCH_OFFSET) );
-        m_options->lowOpacityCHBox->setChecked(settings->getBool(SKETCH_LOW_OPACITY));
+        m_options->simpleModeCHBox->setChecked(settings->getBool(SKETCH_USE_SIMPLE_MODE));
         m_options->connectionCHBox->setChecked(settings->getBool(SKETCH_MAKE_CONNECTION));
         m_options->magnetifyCHBox->setChecked(settings->getBool(SKETCH_MAGNETIFY));
         m_options->lineWidthSPBox->setValue(settings->getInt(SKETCH_LINE_WIDTH));
         m_options->densitySPBox->setValue(settings->getDouble(SKETCH_PROBABILITY));
+        m_options->randomRGBCHbox->setChecked(settings->getBool(SKETCH_RANDOM_RGB));
 }
 
 

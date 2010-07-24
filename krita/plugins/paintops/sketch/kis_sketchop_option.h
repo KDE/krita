@@ -21,13 +21,13 @@
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
-const QString SKETCH_RADIUS = "Sketch/radius";
 const QString SKETCH_PROBABILITY = "Sketch/probability";
 const QString SKETCH_OFFSET = "Sketch/offset";
-const QString SKETCH_LOW_OPACITY = "Sketch/lowOpacity";
+const QString SKETCH_USE_SIMPLE_MODE = "Sketch/simpleMode";
 const QString SKETCH_MAKE_CONNECTION = "Sketch/makeConnection";
 const QString SKETCH_MAGNETIFY = "Sketch/magnetify";
 const QString SKETCH_LINE_WIDTH = "Sketch/lineWidth";
+const QString SKETCH_RANDOM_RGB = "Sketch/randomRGB";
 
 
 class KisSketchOpOptionsWidget;
@@ -53,21 +53,21 @@ private:
 
 class SketchProperties{
 public:
-    int radius; // px
     qreal offset; // perc
     qreal probability; // perc
-    bool useLowOpacity;
+    bool simpleMode;
     bool makeConnection;
     bool magnetify;
+    bool randomRGB;
     int lineWidth; // px
     
     void readOptionSetting(const KisPropertiesConfiguration* settings){
-        radius = settings->getInt(SKETCH_RADIUS);
         probability = settings->getDouble(SKETCH_PROBABILITY);
         offset = settings->getDouble(SKETCH_OFFSET) * 0.01;
-        useLowOpacity = settings->getBool(SKETCH_LOW_OPACITY);
+        simpleMode = settings->getBool(SKETCH_USE_SIMPLE_MODE);
         makeConnection = settings->getBool(SKETCH_MAKE_CONNECTION);
         magnetify = settings->getBool(SKETCH_MAGNETIFY);
+        randomRGB = settings->getBool(SKETCH_RANDOM_RGB);
         lineWidth = settings->getInt(SKETCH_LINE_WIDTH);
     }
 };

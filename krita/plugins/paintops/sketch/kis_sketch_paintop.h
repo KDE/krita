@@ -43,6 +43,15 @@ public:
 private:
     // pixel buffer
     KisPaintDeviceSP m_dab;
+    
+    // mask detection area
+    KisFixedPaintDeviceSP m_maskDab;
+    QRectF m_brushBoundingBox;
+    QPointF m_hotSpot;
+
+    // simple mode
+    qreal m_radius;
+    
     KisPressureOpacityOption m_opacityOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureRotationOption m_rotationOption;
@@ -54,6 +63,11 @@ private:
     int m_count;
     KisPainter * m_painter;
     KisBrushSP m_brush;
+
+private:
+    void drawConnection(const QPointF &start, const QPointF &end);
+    void updateBrushMask(const KisPaintInformation& info, qreal scale, qreal rotation);
+
 };
 
 #endif // KIS_SKETCH_PAINTOP_H_

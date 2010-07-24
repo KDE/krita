@@ -329,7 +329,7 @@ public:
      * paint an unstroked line with thickness from specified start position to the
      * specified end position. Scanline algorithm is used.
      */
-    void drawLine(const QPointF &start, const QPointF &end, qreal width = 1, bool antialias = true);
+    void drawLine(const QPointF &start, const QPointF &end, qreal width, bool antialias);
     
     
     /**

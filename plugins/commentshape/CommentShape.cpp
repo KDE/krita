@@ -18,6 +18,8 @@
  */
 
 #include "CommentShape.h"
+#include "Globals.h"
+#include "InitialsCommentShape.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
@@ -30,6 +32,7 @@
 #include <KoTextShapeData.h>
 #include <KoColorBackground.h>
 #include <KoLineBorder.h>
+#include <KoGradientBackground.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -40,20 +43,10 @@
 #include <QRectF>
 
 #define TextShapeId "TextShapeID"
-#include <KoGradientBackground.h>
-
-namespace {
-    const QPointF initialsBoxPoint = QPointF(0.0,0.0);
-    const QSizeF initialsBoxSize = QSizeF(20.0,20.0);
-    const QPointF commentBoxPoint = QPointF(22.0,0.0);
-    const QSizeF commentBoxSize = QSizeF(100.0,100.0);
-
-    const QSizeF wholeSize = QSizeF(120.0,100.0);
-}
 
 CommentShape::CommentShape(KoResourceManager* resourceManager)
 : KoShapeContainer()
-, m_selected(false)
+, m_active(false)
 {
     KoShapeContainer::setSize(initialsBoxSize);
 
@@ -84,11 +77,17 @@ CommentShape::CommentShape(KoResourceManager* resourceManager)
     m_comment->setBorder(border);
 
     addShape(m_comment);
+
+    m_initials = new InitialsCommentShape();
+    m_initials->setSize(QSizeF(20,20));
+    m_initials->setSelectable(false);
+    addShape(m_initials);
 }
 
 CommentShape::~CommentShape()
 {
     delete m_comment;
+    delete m_initials;
 }
 
 bool CommentShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context)
@@ -102,10 +101,12 @@ bool CommentShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& c
             if(child.localName() == "creator") {
                 m_creator = child.text();
                 QStringList creatorNames = m_creator.split(' ');
+                QString initials;
                 //TODO fix for RTL
                 foreach(QString name, creatorNames) {
-                    m_initials += name.left(1);
+                    initials += name.left(1);
                 }
+                m_initials->setInitials(initials);
             }
             else if(child.localName() == "date") {
                 m_date = QDate::fromString(child.text(), Qt::ISODate);
@@ -143,49 +144,37 @@ void CommentShape::saveOdf(KoShapeSavingContext& context) const
 
 void CommentShape::paintComponent(QPainter& painter, const KoViewConverter& converter)
 {
-    applyConversion(painter, converter);
-
-    QLinearGradient gradient(initialsBoxPoint, QPointF(0, initialsBoxSize.height()));
-    qreal lighterPos = 0.0;
-    qreal darkerPos = 0.0;
-    if(!m_selected){
-        darkerPos = 1.0;
-    }
-    else {
-        lighterPos = 1.0;
-    }
-    gradient.setColorAt(lighterPos, QColor(Qt::yellow));
-    gradient.setColorAt(darkerPos, QColor(254, 201, 7));
-    const QBrush brush(gradient);
-    painter.setBrush(brush);
-
-    painter.setPen(Qt::black);
-
-    const QSizeF size = QSizeF(20,20);
-    painter.drawRect(QRectF(initialsBoxPoint, initialsBoxSize));
-
-    painter.drawText( QRectF(initialsBoxPoint, initialsBoxSize), Qt::AlignCenter, m_initials);
 }
-
 
 void CommentShape::setSize(const QSizeF& size)
 {
     KoShapeContainer::setSize(initialsBoxSize);
 }
 
-void CommentShape::toogleSelect()
+void CommentShape::toogleActive()
 {
-    m_selected = !m_selected;
-    if(!m_selected) {
+    setActive(!m_active);
+}
+
+bool CommentShape::isActive() const
+{
+    return m_active;
+}
+
+void CommentShape::setActive(bool active)
+{
+    m_active = active;
+    if(!m_active) {
         KoShapeContainer::setSize(initialsBoxSize);
-        m_comment->setVisible(false);
     }
     else {
         KoShapeContainer::setSize(wholeSize);
-        m_comment->setVisible(true);
     }
+    m_initials->setActive(m_active);
+    m_comment->setVisible(m_active);
     update();
 }
+
 
 KoTextShapeData* CommentShape::commentData() const
 {

@@ -26,6 +26,7 @@
 #include <QDate>
 
 class KoTextShapeData;
+class InitialsCommentShape;
 
 class CommentShape : public KoShapeContainer
 {
@@ -39,16 +40,19 @@ public:
 
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
 
-    void toogleSelect();
+    void toogleActive();
+    void setActive(bool active);
+    bool isActive() const;
 
 private:
     KoTextShapeData* commentData() const;
 
     QString m_creator;
-    QString m_initials;
     QDate m_date;
-    bool m_selected;
     KoShape* m_comment;
+    InitialsCommentShape* m_initials;
+
+    bool m_active;
 };
 
 #endif // COMMENTSHAPE_H

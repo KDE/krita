@@ -166,7 +166,10 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                         coloringInformation->nextColumn();
                     }
                 }
-                double random = (1.0 - d->randomness) + d->randomness * float(rand()) / RAND_MAX;
+                qreal random = 1.0;
+                if (d->randomness != 0.0){
+                    random = (1.0 - d->randomness) + d->randomness * qreal(rand()) / RAND_MAX;
+                }
                 cs->setOpacity(dabPointer,quint8( ( OPACITY_OPAQUE_U8 - interpolatedValueAt(maskX, maskY,d->precomputedQuarter,halfWidth) ) * random), 1);
                 dabPointer += pixelSize;
             }//endfor x
@@ -205,7 +208,10 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                     }
                 }
                 
-                double random = (1.0 - d->randomness) + d->randomness * float(rand()) / RAND_MAX;
+                qreal random = 1.0;
+                if (d->randomness != 0.0){
+                    random = (1.0 - d->randomness) + d->randomness * float(rand()) / RAND_MAX;
+                }
                 cs->setOpacity(dabPointer, quint8( (OPACITY_OPAQUE_U8 - d->shape->valueAt(maskX, maskY)) * random), 1);
                 dabPointer += pixelSize;
             }//endfor x
@@ -240,10 +246,14 @@ QImage KisAutoBrush::createBrushPreview()
 
     double centerX = image.width() * 0.5;
     double centerY = image.height() * 0.5;
+    qreal random = 1.0;
     for (int j = 0; j < height; ++j) {
         QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(j));
         for (int i = 0; i < width; ++i) {
-            double random = (1.0 - d->randomness) + d->randomness * float(rand()) / RAND_MAX;
+            if (d->randomness != 0.0){
+                random = (1.0 - d->randomness) + d->randomness * float(rand()) / RAND_MAX;
+            }
+            
             qint8 v = 255 - (255 - d->shape->valueAt(i - centerX, j - centerY)) * random;
             pixel[i] = qRgb(v, v, v);
         }

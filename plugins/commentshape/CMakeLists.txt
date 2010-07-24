@@ -3,6 +3,7 @@ SET( commentshape_LIB_SRCS
      CommentShapeFactory.cpp
      CommentTool.cpp
      CommentToolFactory.cpp
+     InitialsCommentShape.cpp
      Plugin.cpp
    )
 

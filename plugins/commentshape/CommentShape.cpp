@@ -33,6 +33,7 @@
 #include <KoColorBackground.h>
 #include <KoLineBorder.h>
 #include <KoGradientBackground.h>
+#include <KoApplication.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -102,9 +103,15 @@ bool CommentShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& c
                 m_creator = child.text();
                 QStringList creatorNames = m_creator.split(' ');
                 QString initials;
-                //TODO fix for RTL
-                foreach(QString name, creatorNames) {
-                    initials += name.left(1);
+                if(KoApplication::isLeftToRight()) {
+                    foreach(QString name, creatorNames) {
+                        initials += name.left(1);
+                    }
+                }
+                else {
+                    foreach(QString name, creatorNames) {
+                        initials += name.right(1);
+                    }
                 }
                 m_initials->setInitials(initials);
             }

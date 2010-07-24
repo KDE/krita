@@ -40,7 +40,7 @@ public:
 
 private:
     KoCanvasBase* m_canvas;
-    CommentShape* m_previouseActiveShape;
+    CommentShape* m_previouseActiveCommentShape;
     bool m_temporary;
 };
 

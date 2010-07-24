@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Comment Tool
+Name[x-test]=xxComment Toolxx
 X-KDE-ServiceTypes=KOffice/Tool
 Type=Service
 X-KDE-Library=commenttool

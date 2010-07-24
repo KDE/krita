@@ -82,12 +82,14 @@ qint32 KisQImagemask::height() const
 }
 void KisQImagemask::copyAlpha(const QImage& image)
 {
+    uchar * data;
     for (int y = 0; y < image.height(); y++) {
         const QRgb *scanline = reinterpret_cast<const QRgb *>(image.scanLine(y));
+        data = m_data.scanLine(y);
         for (int x = 0; x < image.width(); x++) {
             QRgb c = scanline[x];
             quint8 a = (qGray(c) * qAlpha(c)) / 255;
-            m_data.scanLine(y)[x] = a;
+            data[x] = a;
         }
     }
 }
@@ -101,10 +103,14 @@ void KisQImagemask::computeAlpha(const QImage& image)
     // invert it, because 255, 255, 255 is white, which is
     // completely transparent, but 255 corresponds to
     // OPACITY_OPAQUE.
-    for (int y = 0; y < image.height(); y++) {
+    int height = image.height();
+    int width = image.width();
+    uchar * data;
+    for (int y = 0; y < height; y++) {
         const QRgb *scanline = reinterpret_cast<const QRgb *>(image.scanLine(y));
-        for (int x = 0; x < image.width(); x++) {
-            m_data.scanLine(y)[x] = (255 - qRed(scanline[x]));
+        data = m_data.scanLine(y);
+        for (int x = 0; x < width; x++) {
+            data[x] = (255 - qRed(scanline[x]));
         }
     }
 }

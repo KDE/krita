@@ -22,7 +22,7 @@
 
 #include "kis_canvas2.h"
 
-#include "kis_color_patches.h"
+#include "kis_color_history.h"
 #include "kis_common_colors.h"
 #include "kis_color_selector_settings.h"
 #include "kis_color_selector_container.h"
@@ -45,7 +45,7 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     setAutoFillBackground(true);
 
     m_colorSelectorContainer = new KisColorSelectorContainer(this);
-    m_lastColorsWidget = new KisColorPatches(this);
+    m_lastColorsWidget = new KisColorHistory(this);
     m_commonColorsWidget = new KisCommonColors(this);
 
     //default settings
@@ -79,6 +79,9 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     connect(this,     SIGNAL(settingsChanged()), m_lastColorsWidget,       SLOT(updateSettings()));
     connect(this,     SIGNAL(settingsChanged()), m_colorSelectorContainer, SIGNAL(settingsChanged()));
     connect(this,     SIGNAL(settingsChanged()), this,                     SLOT(update()));
+    
+    connect(m_colorSelectorContainer, SIGNAL(colorChanged(QColor)),
+            m_lastColorsWidget,       SLOT(commitColor(QColor)));
 
     emit settingsChanged();
 }

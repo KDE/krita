@@ -5,6 +5,7 @@ kis_color_selector_ng_dock.cpp
 kis_color_selector_ng_docker_widget.cpp
 kis_my_paint_shade_selector.cpp
 kis_color_patches.cpp
+kis_color_history.cpp
 kis_color_selector.cpp
 kis_common_colors.cpp
 kis_minimal_shade_selector.cpp

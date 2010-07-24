@@ -26,12 +26,12 @@
 
 #include <QDebug>
 
-KisColorPatches::KisColorPatches(QWidget *parent, QString configPrefix) :
+KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent) :
     QWidget(parent), m_scrollValue(0), m_configPrefix(configPrefix)
 {
     m_patchWidth = 20;
     m_patchHeight = 20;
-    m_numPatches = 30;
+    m_patchCount = 30;
 
     m_direction = Horizontal;
     m_numCols = 2;
@@ -40,10 +40,10 @@ KisColorPatches::KisColorPatches(QWidget *parent, QString configPrefix) :
 
     updateSettings();
 
-    for(int i=0; i<m_numPatches; i++) {
-        m_colors.append(QColor(qrand()|0xff000000));
-    }
-    setColors(m_colors);
+//    for(int i=0; i<m_patchCount; i++) {
+//        m_colors.append(QColor(qrand()|0xff000000));
+//    }
+//    setColors(m_colors);
 
 //    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 //    resize(m_numCols*m_patchWidth, m_numRows*m_patchHeight);
@@ -71,7 +71,7 @@ void KisColorPatches::paintEvent(QPaintEvent* e)
     int widgetHeight = height();
     int numPatchesInACol = widgetHeight/m_patchHeight;
 
-    for(int i=m_buttonList.size(); i<fieldCount(); i++) {
+    for(int i=m_buttonList.size(); i<qMin(fieldCount(), m_colors.size()+m_buttonList.size()); i++) {
         int row;
         int col;
         if((m_direction==Vertical && m_allowScrolling) || (m_direction==Horizontal && m_allowScrolling==false)) {
@@ -135,6 +135,11 @@ void KisColorPatches::resizeEvent(QResizeEvent* event)
     QWidget::resizeEvent(event);
 }
 
+int KisColorPatches::patchCount() const
+{
+    return m_patchCount;
+}
+
 void KisColorPatches::setAdditionalButtons(QList<QWidget*> buttonList)
 {
     for(int i=0; i<buttonList.size(); i++) {
@@ -157,7 +162,7 @@ void KisColorPatches::updateSettings()
     m_allowScrolling=cfg.readEntry(m_configPrefix+"Scrolling", true);
     m_numCols=cfg.readEntry(m_configPrefix+"NumCols", 1);
     m_numRows=cfg.readEntry(m_configPrefix+"NumRows", 1);
-    m_numPatches=cfg.readEntry(m_configPrefix+"Count", 15);
+    m_patchCount=cfg.readEntry(m_configPrefix+"Count", 15);
     m_patchWidth=cfg.readEntry(m_configPrefix+"Width", 20);
     m_patchHeight=cfg.readEntry(m_configPrefix+"Height", 20);
 
@@ -212,5 +217,5 @@ int KisColorPatches::widthForHeight(int height) const
 
 int KisColorPatches::fieldCount() const
 {
-    return m_numPatches+m_buttonList.size();
+    return m_patchCount+m_buttonList.size();
 }

@@ -24,7 +24,7 @@ class KisColorPatches : public QWidget
 {
 Q_OBJECT
 public:
-    explicit KisColorPatches(QWidget *parent = 0, QString configPrefix=QString("lastUsedColors"));
+    explicit KisColorPatches(QString configPrefix, QWidget *parent = 0);
     enum Direction { Horizontal, Vertical };
 
     void setColors(QList<QColor> colors);
@@ -36,6 +36,7 @@ protected:
     void paintEvent(QPaintEvent *);
     void wheelEvent(QWheelEvent *);
     void resizeEvent(QResizeEvent *);
+    int patchCount() const;
 public:
     /// set buttons, that should be drawn additionally to the patches
     /// this class takes ownership of them and will delete them
@@ -44,7 +45,7 @@ public:
 private:
     int m_patchWidth;
     int m_patchHeight;
-    int m_numPatches;
+    int m_patchCount;
     QList<QColor> m_colors;
     int m_scrollValue;
 

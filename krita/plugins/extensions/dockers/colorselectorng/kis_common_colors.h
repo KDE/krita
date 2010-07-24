@@ -34,7 +34,6 @@ private:
     QList<QColor> extractColors();
     QList<QRgb> getColors();
 
-    int m_numColors;
     QList<QColor> m_extractedColors;
     KisCanvas2* m_canvas;
 public slots:

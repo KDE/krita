@@ -38,7 +38,7 @@
 
 
 KisCommonColors::KisCommonColors(QWidget *parent) :
-    KisColorPatches(parent, "commonColors"), m_numColors(30), m_canvas(0)
+    KisColorPatches("commonColors", parent), m_canvas(0)
 {
     m_extractedColors = extractColors();
     setColors(m_extractedColors);
@@ -193,8 +193,10 @@ QList<QColor> KisCommonColors::extractColors()
     VBox startBox(colors);
     QList<VBox> boxes;
     boxes.append(startBox);
+    
+    int numColors=patchCount();
 
-    while (boxes.size()<m_numColors*3/5 && colors.size()>m_numColors*3/5) {
+    while (boxes.size()<numColors*3/5 && colors.size()>numColors*3/5) {
         int biggestBox=-1;
         int biggestBoxPopulation=-1;
 
@@ -213,7 +215,7 @@ QList<QColor> KisCommonColors::extractColors()
     }
 
 
-    while (boxes.size()<m_numColors && colors.size()>m_numColors) {
+    while (boxes.size()<numColors && colors.size()>numColors) {
         int biggestBox=-1;
         int biggestBoxAxisSize=-1;
 
@@ -240,7 +242,7 @@ QList<QColor> KisCommonColors::extractColors()
         }
     }
 
-    while(m_numColors>colorList.size())
+    while(numColors>colorList.size())
         colorList.append(QColor(0,255,0,0));
 
     return colorList;

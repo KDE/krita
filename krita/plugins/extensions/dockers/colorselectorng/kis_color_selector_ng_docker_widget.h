@@ -20,10 +20,10 @@
 #define COLORSELECTORNGWIDGET_H
 
 #include <QWidget>
-#include "kis_color_patches.h"
 
 class KisCanvas2;
 class KisCommonColors;
+class KisColorHistory;
 class KisColorSelectorContainer;
 
 class QVBoxLayout;
@@ -47,7 +47,7 @@ protected slots:
 
 private:
     KisColorSelectorContainer* m_colorSelectorContainer;
-    KisColorPatches* m_lastColorsWidget;
+    KisColorHistory* m_lastColorsWidget;
     KisCommonColors* m_commonColorsWidget;
 
     QHBoxLayout* m_verticalColorPatchesLayout; // vertical color patches should be added here

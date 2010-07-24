@@ -79,17 +79,9 @@ QPainterPath KisSprayPaintOpSettings::brushOutline(const QPointF& pos,OutlineMod
     Q_UNUSED(pos);
     QPainterPath path;
     if (mode == CursorIsOutline){
-        qreal width = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_SCALE);
-        qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT) * getDouble(SPRAY_SCALE);
-        QRectF brush(0,0,width,height);
-        brush.translate(-brush.center());
-
-        path.addEllipse(brush);
-        
-        QTransform m;
-        m.reset();
-        m.rotate( getDouble(SPRAY_ROTATION) );
-        path = m.map(path);
+        qreal width = getInt(SPRAY_DIAMETER);
+        qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT);
+        path = ellipseOutline(width, height, getDouble(SPRAY_SCALE), getDouble(SPRAY_ROTATION));
         path.translate(pos);
     }
     return path;

@@ -74,17 +74,9 @@ QPainterPath KisSoftPaintOpSettings::brushOutline(const QPointF& pos,OutlineMode
 {
     QPainterPath path;
     if (mode == CursorIsOutline){
-        qreal width = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_SCALE);
-        qreal height = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT) * getDouble(BRUSH_SCALE);
-        QRectF brush(0,0,width,height);
-        brush.translate(-brush.center());
-
-        path.addEllipse(brush);
-        
-        QTransform m;
-        m.reset();
-        m.rotate( getDouble(BRUSH_ROTATION) );
-        path = m.map(path);
+        qreal width = getInt(BRUSH_DIAMETER);
+        qreal height = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT);
+        path = KisPaintOpSettings::ellipseOutline(width, height, getDouble(BRUSH_SCALE), getDouble(BRUSH_ROTATION));
         path.translate(pos);
     }
     return path;

@@ -153,6 +153,11 @@ public:
     virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode) const;
     
     /**
+    * Useful for simple elliptical brush outline.
+    */
+    QPainterPath ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation) const;
+    
+    /**
      * XXX: document!
      */
     virtual void changePaintOpSize(qreal x, qreal y);

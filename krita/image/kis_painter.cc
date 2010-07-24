@@ -1048,6 +1048,87 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
     bitBlt(r.x(), r.y(), d->polygon, r.x(), r.y(), r.width(), r.height());
 }
 
+/**/
+void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width, bool antialias){
+    int x1 = start.x();
+    int y1 = start.y();
+    int x2 = end.x();
+    int y2 = end.y();
+
+    if ((x2 == x1 ) && (y2 == y1)) return;
+    
+    int dx = x2-x1;
+    int dy = y2-y1;
+
+    qreal _C = dx*y1 - dy*x1;
+    qreal projectionDenominator = 1.0 / (pow(dx,2) + pow(dy,2));
+   
+    qreal subPixel;
+    if (qAbs(dx) > qAbs(dy)){
+        subPixel = start.x() - x1;
+    }else{
+        subPixel = start.y() - y1;
+    }
+    
+    qreal halfWidth = width * 0.5 + subPixel;
+    int W_ = qRound(halfWidth) + 1;
+
+    // save the state
+    int X1_ = x1;
+    int Y1_ = y1;
+    int X2_ = x2;
+    int Y2_ = y2;
+    
+    if (x2<x1) qSwap(x1,x2);
+    if (y2<y1) qSwap(y1,y2);
+   
+    qreal denominator = sqrt(pow(dy,2) + pow(dx,2));
+    if (denominator == 0.0) {
+        denominator = 1.0;
+    }
+    denominator = 1.0/denominator;
+    
+    qreal projection,scanX,scanY,AA_;
+    quint8 pixelOpacity = d->opacity;    
+    int pixelSize = d->device->pixelSize();
+    KisRandomAccessorPixel accessor = d->device->createRandomAccessor(x1, y1, d->selection);
+    
+    for (int y = y1-W_; y < y2+W_ ; y++){
+        for (int x = x1-W_; x < x2+W_; x++){
+           
+            projection = ( (x-X1_)* dx + (y-Y1_)*dy ) * projectionDenominator;
+            scanX = X1_ + projection * dx;
+            scanY = Y1_ + projection * dy;
+
+            if (((scanX < x1) || (scanX > x2)) || ((scanY < y1) || (scanY > y2))) {
+                AA_ = qMin( sqrt( pow(x-X1_,2) + pow(y-Y1_,2) ), 
+                            sqrt( pow(x-X2_,2) + pow(y-Y2_,2) ));   
+            }else{
+                AA_ = qAbs(dy*x - dx*y + _C) * denominator;
+            }
+         
+            if (AA_>halfWidth) { 
+                continue; 
+            }
+            
+            if (antialias){
+                if (AA_ > halfWidth-1.0) {
+                    pixelOpacity = d->opacity * ( 1.0 - (AA_-(halfWidth-1.0)));
+                }else{
+                    pixelOpacity = d->opacity;
+                }
+            } 
+            
+            accessor.moveTo(x, y);
+            if (accessor.isSelected()) {
+                d->compositeOp->composite(accessor.rawData(), pixelSize, d->paintColor.data() , pixelSize, 0,0,1,1,pixelOpacity);
+            }
+        }
+    }
+}
+
+/**/
+
 void KisPainter::drawLine(const QPointF & start, const QPointF & end)
 {
     drawThickLine(start, end, 1, 1);

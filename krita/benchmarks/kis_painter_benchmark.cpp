@@ -40,9 +40,11 @@
 #include <kis_painter.h>
 #include <kis_types.h>
 
+#define SAVE_OUTPUT
 
 #define CYCLES 20
 static const int LINE_COUNT = 100;
+static const int LINE_WIDTH = 1;
 
 void KisPainterBenchmark::initTestCase()
 {
@@ -197,10 +199,12 @@ void KisPainterBenchmark::benchmarkDrawThickLine()
     
     QBENCHMARK{
         for (int i = 0; i < LINE_COUNT; i++){
-            painter.drawThickLine(m_points[i*2],m_points[i*2+1],10,10);
+            painter.drawThickLine(m_points[i*2],m_points[i*2+1],LINE_WIDTH,LINE_WIDTH);
         }
     }
-    //dev->convertToQImage(m_colorSpace->profile()).save("drawThickLine.png");
+#ifdef SAVE_OUTPUT    
+    dev->convertToQImage(m_colorSpace->profile()).save("drawThickLine.png");
+#endif
 }
 
 
@@ -220,7 +224,7 @@ void KisPainterBenchmark::benchmarkDrawQtLine()
     painter.setFillStyle(KisPainter::FillStyleForegroundColor);
     
     QPen pen;
-    pen.setWidth(10);
+    pen.setWidth(LINE_WIDTH);
     pen.setColor(Qt::white);
     pen.setCapStyle(Qt::RoundCap);
     
@@ -232,9 +236,36 @@ void KisPainterBenchmark::benchmarkDrawQtLine()
             painter.drawPainterPath(path, pen);
         }
     }
-    //dev->convertToQImage(m_colorSpace->profile(),0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT).save("drawQtLine.png");
+#ifdef SAVE_OUTPUT        
+    dev->convertToQImage(m_colorSpace->profile(),0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT).save("drawQtLine.png");
+#endif
 }
 
+void KisPainterBenchmark::benchmarkDrawScanLine()
+{
+    KisPaintDeviceSP dev = new KisPaintDevice(m_colorSpace);
+    KoColor color(m_colorSpace);
+    color.fromQColor(Qt::white);
+    
+    dev->clear();
+    dev->fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT,color.data());
+    
+    color.fromQColor(Qt::black);
+    
+    KisPainter painter(dev);
+    painter.setPaintColor(color);
+    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    
+    
+    QBENCHMARK{
+        for (int i = 0; i < LINE_COUNT; i++){
+            painter.drawLine(m_points[i*2],m_points[i*2+1],LINE_WIDTH,true);
+        }
+    }
+#ifdef SAVE_OUTPUT    
+    dev->convertToQImage(m_colorSpace->profile(),0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT).save("drawScanLine.png");
+#endif
+}
 
 QTEST_KDEMAIN(KisPainterBenchmark, NoGUI)
 #include "kis_painter_benchmark.moc"

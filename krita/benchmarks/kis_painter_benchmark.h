@@ -49,6 +49,7 @@ private slots:
     
     void benchmarkDrawThickLine();
     void benchmarkDrawQtLine();
+    void benchmarkDrawScanLine();
     
 };
 

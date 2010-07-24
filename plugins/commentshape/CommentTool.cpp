@@ -92,8 +92,8 @@ void CommentTool::mouseReleaseEvent(KoPointerEvent* event)
         commentUnderCursor->setActive(true);
 
         m_previouseActiveCommentShape = commentUnderCursor;
-        event->accept();
     }
+    event->accept();
 }
 
 void CommentTool::mouseMoveEvent(KoPointerEvent* event)

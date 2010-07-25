@@ -22,6 +22,7 @@
 
 #include <QColor>
 #include <QPainter>
+#include <QTimer>
 
 struct KoColorSlider::Private
 {
@@ -54,7 +55,7 @@ void KoColorSlider::setColors(const KoColor& mincolor, const KoColor& maxcolor)
     d->minColor = mincolor;
     d->maxColor = maxcolor;
     d->upToDate = false;
-    update();
+    QTimer::singleShot(1, this, SLOT(update()));
 }
 
 void KoColorSlider::drawContents( QPainter *painter )

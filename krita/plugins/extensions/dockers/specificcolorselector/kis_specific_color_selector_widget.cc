@@ -18,7 +18,6 @@
 #include "kis_specific_color_selector_widget.h"
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QTimer>
 
 #include <klocale.h>
 
@@ -76,18 +75,9 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
                 input = 0;
             }
             if (input) {
-                QTimer* timer = new QTimer(input);
-                timer->setSingleShot(true);
-                timer->setInterval(1);
+                connect(input, SIGNAL(updated()), this,  SLOT(update()));
+                connect(this,  SIGNAL(updated()), input, SLOT(update()));
 
-                QTimer* timer2 = new QTimer(input);
-                timer2->setSingleShot(true);
-                timer2->setInterval(1);
-
-                connect(input, SIGNAL(updated()), timer, SLOT(start()));
-                connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-                connect(this, SIGNAL(updated()), timer2, SLOT(start()));
-                connect(timer2, SIGNAL(timeout()), input, SLOT(update()));
                 m_inputs.append(input);
                 m_layout->addWidget(input);
             }

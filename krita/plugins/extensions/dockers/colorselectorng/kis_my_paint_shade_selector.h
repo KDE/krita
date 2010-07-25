@@ -30,15 +30,18 @@ class QTimer;
 
 class KisMyPaintShadeSelector : public KisColorSelectorBase
 {
+Q_OBJECT
 public:
     KisMyPaintShadeSelector(QWidget *parent = 0);
+
+public slots:
+    void setColor(const QColor& c);
 
 protected:
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *);
     QColor pickColorAt(int x, int y);
     KisColorSelectorBase* createPopup() const;
-    void setColor(const QColor& c);
 
 private:
     void updateSelector();

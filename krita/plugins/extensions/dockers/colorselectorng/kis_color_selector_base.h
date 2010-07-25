@@ -19,7 +19,6 @@
 #define KIS_COLOR_SELECTOR_BASE_H
 
 #include <QWidget>
-#include <QMap>
 #include <QRgb>
 
 class QColor;
@@ -40,7 +39,7 @@ public:
     void setPopupBehaviour(bool onMouseOver, bool onMouseClick);
     void setColorSpace(const KoColorSpace* colorSpace);
     void setCanvas(KisCanvas2* canvas);
-    const KoColorSpace* colorSpace();
+    const KoColorSpace* colorSpace() const;
     enum ColorRole {Foreground, Background};
 
 public slots:
@@ -51,6 +50,8 @@ protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     virtual KisColorSelectorBase* createPopup() const = 0;
+    /// finds a QColor, that will be ref.toQColor(), if converting it to the color space of ref
+    QColor findGeneratingColor(const KoColor& ref) const;
 
 protected slots:
     void hidePopup();
@@ -59,7 +60,7 @@ protected slots:
 
 signals:
     /// emits the new color raw, that means without color space transformation
-    void colorChanged(const QColor& rawColor);
+    void colorChanged(const QColor& rawColor) const;
 
 private:
     KisColorSelectorBase* m_popup;
@@ -67,9 +68,9 @@ private:
     QTimer* m_timer;
     bool m_popupOnMouseOver;
     bool m_popupOnMouseClick;
-    const KoColorSpace* m_colorSpace;
+    mutable const KoColorSpace* m_colorSpace;
     KisCanvas2* m_canvas;
-    QMap<QRgb, QRgb> m_colorMap;
+    bool m_colorUpdateAllowed;
 };
 
 #endif // KIS_COLOR_SELECTOR_BASE_H

@@ -43,7 +43,8 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_popupOnMouseOver(false),
     m_popupOnMouseClick(true),
     m_colorSpace(0),
-    m_canvas(0)
+    m_canvas(0),
+    m_colorUpdateAllowed(true)
 {
     m_timer->setInterval(350);
     m_timer->setSingleShot(true);
@@ -82,7 +83,7 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
     m_canvas = canvas;
 
     connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-            this,                        SLOT(resourceChanged(int, const QVariant&)));
+            this,                        SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
 //    setColor(m_canvas->resourceManager()->foregroundColor().toQColor());
 
     update();
@@ -189,6 +190,71 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
+qreal distance(const QColor& c1, const QColor& c2)
+{
+    qreal dr = c1.redF()-c2.redF();
+    qreal dg = c1.greenF()-c2.greenF();
+    qreal db = c1.blueF()-c2.blueF();
+
+    return sqrt(dr*dr+dg*dg+db*db);
+}
+
+inline bool inRange(qreal m) {
+    if(m>=0. && m<=1.) return true;
+    else return false;
+}
+
+inline bool modify(QColor* estimate, const QColor& target, const QColor& result)
+{
+    qreal r = estimate->redF() - (result.redF() - target.redF());
+    qreal g = estimate->greenF() - (result.greenF() - target.greenF());
+    qreal b = estimate->blueF() - (result.blueF() - target.blueF());
+
+    if(inRange(r) && inRange(g) && inRange(b)) {
+        estimate->setRgbF(r, g, b);
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+QColor KisColorSelectorBase::findGeneratingColor(const KoColor& ref) const
+{
+    kDebug() << "starting search for generating colour";
+    KoColor converter(colorSpace());
+    QColor currentEstimate;
+    ref.toQColor(&currentEstimate);
+    kDebug() << "currentEstimate: " << currentEstimate;
+
+    QColor currentResult;
+    converter.fromQColor(currentEstimate);
+    converter.toQColor(&currentResult);
+    kDebug() << "currentResult: " << currentResult;
+
+
+    QColor target;
+    ref.toQColor(&target);
+    kDebug() << "target: " << target;
+
+    bool estimateValid=true;
+    int iterationCounter=0;
+
+    kDebug() << "current distance = " << distance(target, currentResult);
+    while(distance(target, currentResult)>0.001 && estimateValid && iterationCounter<100) {
+        estimateValid = modify(&currentEstimate, target, currentResult);
+        converter.fromQColor(currentEstimate);
+        converter.toQColor(&currentResult);
+        kDebug() << "current distance = " << distance(target, currentResult);
+
+        iterationCounter++;
+    }
+
+    kDebug() << "end search for generating colour";
+
+    return currentEstimate;
+}
+
 void KisColorSelectorBase::setColor(const QColor& color)
 {
     Q_UNUSED(color);
@@ -208,77 +274,29 @@ void KisColorSelectorBase::commitColor(const KoColor& color, const QColor& rawCo
     if (!m_canvas)
         return;
 
-    m_colorMap.insert(color.toQColor().rgb(), rawColor.rgb());
+    m_colorUpdateAllowed=false;
 
     if (role==Foreground)
         m_canvas->resourceManager()->setForegroundColor(color);
     else
         m_canvas->resourceManager()->setBackgroundColor(color);
 
-//    if (role==Foreground)
-//        m_canvas->resourceManager()->setForegroundColor(color);
-//    else
-//        m_canvas->resourceManager()->setBackgroundColor(color);
-
     emit colorChanged(rawColor);
+
+    m_colorUpdateAllowed=true;
 }
 
 void KisColorSelectorBase::resourceChanged(int key, const QVariant &v)
 {
-    //disable for now
-    return;
+    if(m_colorUpdateAllowed==false)
+        return;
+
     if (key == KoCanvasResource::ForegroundColor || key == KoCanvasResource::BackgroundColor) {
-//        KoColor kc(v.value<KoColor>().data(), KoColorSpaceRegistry::instance()->rgb8());
-//        setColor(kc.toQColor());
-//        setColor(kc.toQColor());
-//        setColor();
-
-        QColor wantedColor = v.value<KoColor>().toQColor();
-        wantedColor.setAlpha(255);
-
-        QRgb target=m_colorMap.value(wantedColor.rgb(), qRgba(0,0,0,0));
-        kDebug()<<"wanted Color="<<wantedColor.red()<<"/"<<wantedColor.green()<<"/"<<wantedColor.blue()<<"#"<<wantedColor.alpha();
-
-        if(target==qRgba(0,0,0,0)) {
-            KoColor kc(colorSpace());
-            QColor colorSpaceColor;
-            QColor sRgbColor;
-            kDebug()<<"start creating map";
-
-    //        kDebug()<<"wanted colour hue="<<wantedColor.hue()<<"h: "<<wantedColor.hue()-25<<" > "<<(wantedColor.hue()+25);
-            int hue, sat, val;
-            for(int h=wantedColor.hue()-25; h<(wantedColor.hue()+25+310); h++) {
-                hue=(h+359)%360;
-    //            kDebug()<<hue;
-                for(int s=wantedColor.saturation()-64; s<wantedColor.saturation()+64+128; s++) {
-                    sat=(s+255)%256;
-                    for(int v=wantedColor.value()-64; v<wantedColor.value()+64+128; v++) {
-                        val=(v+255)%256;
-                        sRgbColor.setHsv(hue, sat, val);
-                        kc.fromQColor(sRgbColor);
-                        kc.toQColor(&colorSpaceColor);
-
-                        // using QRgb, because QColor has 16 bit precision and that can cause problems
-                        m_colorMap.insert(colorSpaceColor.rgb(), sRgbColor.rgb());
-                    }
-                }
-            }
-            kDebug()<<"finished, map size="<<m_colorMap.size();
-        }
-
-        target=m_colorMap.value(wantedColor.rgb(), qRgba(0,0,0,0));
-        if(target!=qRgba(0,0,0,0)) {
-            setColor(target);
-        }
-        else {
-            kDebug()<<"######## WARNING: the color "<<wantedColor<<" was not found in the color space. using this color instead.";
-            m_colorMap.insert(wantedColor.rgb(), wantedColor.rgb());
-            setColor(wantedColor);
-        }
+        setColor(findGeneratingColor(v.value<KoColor>()));
     }
 }
 
-const KoColorSpace* KisColorSelectorBase::colorSpace()
+const KoColorSpace* KisColorSelectorBase::colorSpace() const
 {
     if(m_colorSpace!=0) {
         return m_colorSpace;

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Comment Shape
+Name[x-test]=xxComment Shapexx
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=commentshape

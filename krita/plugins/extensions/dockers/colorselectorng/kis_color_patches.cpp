@@ -18,13 +18,14 @@
 #include "kis_color_patches.h"
 #include <QPainter>
 #include <QWheelEvent>
+#include <QMouseEvent>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KComponentData>
 #include <KGlobal>
 
-#include <QDebug>
+#include <KDebug>
 
 KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent) :
     QWidget(parent), m_scrollValue(0), m_configPrefix(configPrefix)
@@ -133,6 +134,31 @@ void KisColorPatches::resizeEvent(QResizeEvent* event)
     }
 
     QWidget::resizeEvent(event);
+}
+
+void KisColorPatches::mousePressEvent(QMouseEvent* e)
+{
+    int scrollX = m_direction==Horizontal?m_scrollValue:0;
+    int scrollY = m_direction==Vertical?m_scrollValue:0;
+    int column = (e->pos().x()-scrollX)/m_patchWidth;
+    int row = (e->pos().y()-scrollY)/m_patchHeight;
+
+    int patchNr;
+    if(m_direction == Horizontal) {
+        int patchesInARow = width()/m_patchWidth;
+        patchNr=row*patchesInARow+column;
+    }
+    else {
+        // Vertical
+        int patchesInAColumn = height()/m_patchHeight;
+        patchNr=column*patchesInAColumn+row;
+    }
+
+    patchNr-=m_buttonList.size();
+
+    Q_ASSERT(patchNr >= 0);
+    if(patchNr<m_colors.size())
+        emit colorSelected(m_colors.at(patchNr));
 }
 
 int KisColorPatches::patchCount() const

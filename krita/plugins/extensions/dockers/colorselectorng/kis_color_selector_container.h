@@ -36,6 +36,9 @@ public:
 
     enum ShadeSelectorType{MyPaintSelector, MinimalSelector, NoSelector};
 
+public slots:
+    void setColor(const QColor& color);
+
 signals:
     void openSettings();
     void settingsChanged();

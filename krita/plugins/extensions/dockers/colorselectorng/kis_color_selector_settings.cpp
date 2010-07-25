@@ -46,7 +46,6 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
 
     ui->colorSelectorConfiguration->setColorSpace(ui->colorSpace->currentColorSpace());
 
-    connect(this, SIGNAL(accepted()), this, SLOT(savePreferences()));
     connect(ui->colorSpace, SIGNAL(colorSpaceChanged(const KoColorSpace*)), ui->colorSelectorConfiguration, SLOT(setColorSpace(const KoColorSpace*)));
 
     //load and save preferences

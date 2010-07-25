@@ -29,6 +29,7 @@ public:
 
     void setColors(QList<QColor> colors);
 signals:
+    void colorSelected(QColor color);
 
 public slots:
     void updateSettings();
@@ -36,6 +37,7 @@ protected:
     void paintEvent(QPaintEvent *);
     void wheelEvent(QWheelEvent *);
     void resizeEvent(QResizeEvent *);
+    void mousePressEvent(QMouseEvent *);
     int patchCount() const;
 public:
     /// set buttons, that should be drawn additionally to the patches

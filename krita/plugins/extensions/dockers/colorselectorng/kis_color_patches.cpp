@@ -25,10 +25,13 @@
 #include <KComponentData>
 #include <KGlobal>
 
+#include "kis_canvas2.h"
+#include "KoResourceManager.h"
+
 #include <KDebug>
 
 KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent) :
-    QWidget(parent), m_scrollValue(0), m_configPrefix(configPrefix)
+    QWidget(parent), m_canvas(0), m_scrollValue(0), m_configPrefix(configPrefix)
 {
     m_patchWidth = 20;
     m_patchHeight = 20;
@@ -41,16 +44,11 @@ KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent) :
 
     updateSettings();
 
-//    for(int i=0; i<m_patchCount; i++) {
-//        m_colors.append(QColor(qrand()|0xff000000));
-//    }
-//    setColors(m_colors);
-
 //    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 //    resize(m_numCols*m_patchWidth, m_numRows*m_patchHeight);
 }
 
-void KisColorPatches::setColors(QList<QColor>colors)
+void KisColorPatches::setColors(QList<KoColor>colors)
 {
     qDebug()<<"KisColSelNgPatches::setColors() -> size:"<<colors.size();
     m_colors = colors;
@@ -84,7 +82,11 @@ void KisColorPatches::paintEvent(QPaintEvent* e)
             col = i/numPatchesInACol;
         }
 
-        painter.fillRect(col*m_patchWidth, row*m_patchHeight, m_patchWidth, m_patchHeight, m_colors.at(i-m_buttonList.size()));
+        painter.fillRect(col*m_patchWidth,
+                         row*m_patchHeight,
+                         m_patchWidth,
+                         m_patchHeight,
+                         m_colors.at(i-m_buttonList.size()).toQColor());
     }
     
 //    for(int i=0; i<m_buttonList.size(); i++) {
@@ -157,8 +159,12 @@ void KisColorPatches::mousePressEvent(QMouseEvent* e)
     patchNr-=m_buttonList.size();
 
     Q_ASSERT(patchNr >= 0);
-    if(patchNr<m_colors.size())
-        emit colorSelected(m_colors.at(patchNr));
+    if(patchNr<m_colors.size()) {
+        if (e->button()==Qt::LeftButton)
+            m_canvas->resourceManager()->setForegroundColor(m_colors.at(patchNr));
+        else if (e->button()==Qt::RightButton)
+            m_canvas->resourceManager()->setBackgroundColor(m_colors.at(patchNr));
+    }
 }
 
 int KisColorPatches::patchCount() const

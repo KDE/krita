@@ -1,4 +1,7 @@
 #include "kis_color_history.h"
+#include "kis_canvas2.h"
+#include "kis_view2.h"
+#include "kis_canvas_resource_provider.h"
 
 #include <QColor>
 
@@ -7,7 +10,14 @@ KisColorHistory::KisColorHistory(QWidget *parent) :
 {
 }
 
-void KisColorHistory::commitColor(const QColor& color)
+void KisColorHistory::setCanvas(KisCanvas2 *canvas)
+{
+    KisColorPatches::setCanvas(canvas);
+    connect(canvas->view()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)),
+            this,                               SLOT(commitColor(KoColor)));
+}
+
+void KisColorHistory::commitColor(const KoColor& color)
 {
     m_colorHistory.removeAll(color);
     m_colorHistory.prepend(color);

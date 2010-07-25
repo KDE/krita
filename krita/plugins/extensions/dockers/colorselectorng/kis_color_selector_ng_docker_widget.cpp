@@ -79,13 +79,6 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     connect(this,     SIGNAL(settingsChanged()), m_lastColorsWidget,       SLOT(updateSettings()));
     connect(this,     SIGNAL(settingsChanged()), m_colorSelectorContainer, SIGNAL(settingsChanged()));
     connect(this,     SIGNAL(settingsChanged()), this,                     SLOT(update()));
-    
-    connect(m_colorSelectorContainer, SIGNAL(colorChanged(QColor)),
-            m_lastColorsWidget,       SLOT(commitColor(QColor)));
-    connect(m_lastColorsWidget,       SIGNAL(colorSelected(QColor)),
-            m_colorSelectorContainer, SLOT(setColor(QColor)));
-    connect(m_commonColorsWidget,     SIGNAL(colorSelected(QColor)),
-            m_colorSelectorContainer, SLOT(setColor(QColor)));
 
     emit settingsChanged();
 }
@@ -94,6 +87,7 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
 {
     Q_ASSERT(canvas);
     m_commonColorsWidget->setCanvas(canvas);
+    m_lastColorsWidget->setCanvas(canvas);
     m_colorSelectorContainer->setCanvas(canvas);
     m_canvas = canvas;
 }

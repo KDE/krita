@@ -42,7 +42,6 @@ public slots:
 signals:
     void openSettings();
     void settingsChanged();
-    void colorChanged(const QColor&);
 
 protected slots:
     void updateSettings();

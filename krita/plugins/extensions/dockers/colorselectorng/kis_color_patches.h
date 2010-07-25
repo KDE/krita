@@ -20,6 +20,10 @@
 
 #include <QWidget>
 
+class KoColor;
+class KisCanvas2;
+
+
 class KisColorPatches : public QWidget
 {
 Q_OBJECT
@@ -27,28 +31,32 @@ public:
     explicit KisColorPatches(QString configPrefix, QWidget *parent = 0);
     enum Direction { Horizontal, Vertical };
 
-    void setColors(QList<QColor> colors);
-signals:
-    void colorSelected(QColor color);
+    void setColors(QList<KoColor> colors);
+    virtual void setCanvas(KisCanvas2 *canvas) {m_canvas=canvas;}
 
 public slots:
     void updateSettings();
+
 protected:
     void paintEvent(QPaintEvent *);
     void wheelEvent(QWheelEvent *);
     void resizeEvent(QResizeEvent *);
     void mousePressEvent(QMouseEvent *);
     int patchCount() const;
+
+    KisCanvas2* m_canvas;
+
 public:
     /// set buttons, that should be drawn additionally to the patches
     /// this class takes ownership of them and will delete them
     /// they will be resized to the patchsize
     void setAdditionalButtons(QList<QWidget*> buttonList);
+
 private:
     int m_patchWidth;
     int m_patchHeight;
     int m_patchCount;
-    QList<QColor> m_colors;
+    QList<KoColor> m_colors;
     int m_scrollValue;
 
     Direction m_direction;

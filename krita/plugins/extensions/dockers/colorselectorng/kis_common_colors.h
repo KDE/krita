@@ -20,8 +20,6 @@
 
 #include "kis_color_patches.h"
 
-class KisCanvas2;
-
 class KisCommonColors : public KisColorPatches
 {
 Q_OBJECT
@@ -31,11 +29,9 @@ public:
 //    QSize sizeHint() const;
     void setCanvas(KisCanvas2 *canvas);
 private:
-    QList<QColor> extractColors();
+    QList<KoColor> extractColors();
     QList<QRgb> getColors();
 
-    QList<QColor> m_extractedColors;
-    KisCanvas2* m_canvas;
 public slots:
     void recalculate();
 };

@@ -33,15 +33,15 @@
 #include <KComponentData>
 #include <KGlobal>
 
+#include "KoColor.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"
 
 
 KisCommonColors::KisCommonColors(QWidget *parent) :
-    KisColorPatches("commonColors", parent), m_canvas(0)
+    KisColorPatches("commonColors", parent)
 {
-    m_extractedColors = extractColors();
-    setColors(m_extractedColors);
+    setColors(extractColors());
 //    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
     
     QPushButton* reloadButton = new QPushButton();
@@ -55,11 +55,11 @@ KisCommonColors::KisCommonColors(QWidget *parent) :
 
 void KisCommonColors::setCanvas(KisCanvas2 *canvas)
 {
+    KisColorPatches::setCanvas(canvas);
+
     // todo:
     // make clean
     // make optional
-    
-    m_canvas = canvas;
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     if(cfg.readEntry("commonColorsAutoUpdate", false))
         connect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()));
@@ -67,8 +67,7 @@ void KisCommonColors::setCanvas(KisCanvas2 *canvas)
 
 void KisCommonColors::recalculate()
 {
-    m_extractedColors = extractColors();
-    setColors(m_extractedColors);
+    setColors(extractColors());
 }
 
 enum ColorAxis {RedAxis=0, GreenAxis, BlueAxis};
@@ -186,7 +185,7 @@ private:
 };
 
 
-QList<QColor> KisCommonColors::extractColors()
+QList<KoColor> KisCommonColors::extractColors()
 {
     QList<QRgb> colors = getColors();
 
@@ -233,17 +232,14 @@ QList<QColor> KisCommonColors::extractColors()
         boxes.append(newBox);
     }
 
-    QList<QColor> colorList;
+    QList<KoColor> colorList;
     for(int i=0; i<boxes.size(); i++) {
         if(boxes.at(i).population()>=1) {
-            colorList.append(QColor(boxes.at(i).mean()));
+            colorList.append(KoColor(QColor(boxes.at(i).mean()), m_canvas->image()->colorSpace()));
 //            if(colorList.last()==QColor(0,0,0))
 //                kDebug()<<"dude!";
         }
     }
-
-    while(numColors>colorList.size())
-        colorList.append(QColor(0,255,0,0));
 
     return colorList;
 }

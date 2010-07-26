@@ -1732,7 +1732,6 @@ void KisToolTransform::recalcOutline()
 		}
 
 		m_currImg = bilinearInterpolation(*m_origImg, m_nbPoints, m_nbPoints, m_origPoint, m_viewCurrPoint);
-		m_currImg.save("test1.png");
 
 		m_topLeftProj = m_topLeft.toPointF();
 		m_topRightProj = m_topRight.toPointF();

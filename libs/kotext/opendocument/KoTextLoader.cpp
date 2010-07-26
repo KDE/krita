@@ -1128,8 +1128,11 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
 
 void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 {
-    cursor.insertText("\n");
-    cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 1);
+    //add block before table,
+    if (cursor.block().blockNumber() != 0) {
+        cursor.insertBlock(QTextBlockFormat());
+    }
+
     QTextTableFormat tableFormat;
     QString tableStyleName = tableElem.attributeNS(KoXmlNS::table, "style-name", "");
     if (!tableStyleName.isEmpty()) {
@@ -1137,6 +1140,15 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
         if (tblStyle)
             tblStyle->applyStyle(tableFormat);
     }
+
+    // if table has master page style property, copy it to block before table, because this block belongs to table
+    QVariant masterStyle = tableFormat.property(KoTableStyle::MasterPageName);
+    if (!masterStyle.isNull()) {
+        QTextBlockFormat textBlockFormat;
+        textBlockFormat.setProperty(KoParagraphStyle::MasterPageName,masterStyle);
+        cursor.setBlockFormat(textBlockFormat);
+    }
+
     KoTableColumnAndRowStyleManager *tcarManager = new KoTableColumnAndRowStyleManager;
     tableFormat.setProperty(KoTableStyle::ColumnAndRowStyleManager, QVariant::fromValue(reinterpret_cast<void *>(tcarManager)));
     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);

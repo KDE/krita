@@ -195,7 +195,7 @@ bool Layout::addLine(QTextLine &line)
     if (line.textLength() == 1 && m_block.text().at(line.textStart()) == QChar::ObjectReplacementCharacter && line.descent() == 0.0) {
         // look up if this is an inline anchor with contributing height
         // otherwise it's just a no-inline anchor which we set to 0.1 high
-        objectHeight = qMax(0.1, inlineCharHeight(m_fragmentIterator.fragment()));
+        objectHeight = qMax(qreal(0.1), inlineCharHeight(m_fragmentIterator.fragment()));
     }
     bool useFixedLineHeight = height != 0.0;
     if (useFixedLineHeight) {

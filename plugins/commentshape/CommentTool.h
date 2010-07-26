@@ -26,6 +26,7 @@ class CommentShape;
 
 class CommentTool : public KoToolBase
 {
+    Q_OBJECT
 public:
     CommentTool(KoCanvasBase* canvas);
     virtual ~CommentTool();

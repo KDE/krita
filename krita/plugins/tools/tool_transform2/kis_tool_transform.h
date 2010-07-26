@@ -94,6 +94,7 @@ public:
     //sets the value of the spinboxes to current args
     void refreshSpinBoxes();
     void setButtonBoxDisabled(bool disabled);
+	void setFreeTBoxesDisabled(bool disabled);
 
 public:
 
@@ -116,6 +117,7 @@ public slots:
     void buttonBoxClicked(QAbstractButton *button);
     void keepAspectRatioChanged(bool keep);
     void editingFinished();
+	void warpButtonToggled(bool checked);
 
 private:
 
@@ -256,6 +258,7 @@ private:
     void storeArgs(ToolTransformArgs &args);
     //sets m_currentArgs to args
     void restoreArgs(ToolTransformArgs args);
+	QRectF warpBoundRect();
 
 private slots:
 
@@ -267,10 +270,13 @@ private:
                    BOTTOMSHEAR, RIGHTSHEAR, TOPSHEAR, LEFTSHEAR,
                    MOVECENTER, PERSPECTIVE
                   };
+	enum mode {FREE_TRANSFORM = 0, WARP};
+	
     QPointF m_handleDir[9];
 
     QCursor m_sizeCursors[8]; //cursors for the 8 directions
     function m_function; //current transformation function
+	mode m_mode;
 
     ToolTransformArgs m_currentArgs;
     ToolTransformArgs m_clickArgs;
@@ -369,6 +375,15 @@ private:
     KoCanvasBase *m_canvas;
 
     QButtonGroup *m_rotCenterButtons;
+
+	//Warping-related :
+	int m_nbPoints;
+	double m_gridSpaceX, m_gridSpaceY;
+	QPointF **m_origPoint; //the original position of the points
+	QPointF **m_currPoint;
+	QPointF **m_viewCurrPoint;
+	bool m_cursorOverPoint;
+	QPoint m_pointUnderCursor; //the number in the grid
 };
 
 class KisToolTransformFactory : public KoToolFactoryBase

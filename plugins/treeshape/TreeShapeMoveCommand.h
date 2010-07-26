@@ -48,7 +48,7 @@ public:
      */
     TreeShapeMoveCommand(const QList<KoShape*> &shapes,
                          TreeShape *newParent,
-                         TreeShape *nextShape = 0,
+                         KoShape *nextShape = 0,
                          QUndoCommand *parent = 0);
     ~TreeShapeMoveCommand();
     /// redo the command

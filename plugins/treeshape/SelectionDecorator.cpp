@@ -55,8 +55,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
             editable = true;
     }
 
-    if(m_selection->count()>1)
-    {
+    if(m_selection->count()>1) {
         // more than one shape selected, so we need to draw the selection bounding rect
         painter.setPen( Qt::blue );
         // apply the selection transformation on top of the old painter transformation
@@ -65,9 +64,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         KoShape::applyConversion( painter, converter );
         // draw the selection bounding rect
         painter.drawRect( QRectF( QPointF(), m_selection->size() ) );
-    }
-    else if( m_selection->firstSelectedShape() )
-    {
+    } else if( m_selection->firstSelectedShape() ) {
         // only one shape selected, so we compose the correct painter matrix
         painter.setWorldTransform(m_selection->firstSelectedShape()->absoluteTransformation(&converter) * painterMatrix);
         KoShape::applyConversion( painter, converter );

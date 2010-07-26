@@ -78,6 +78,11 @@ public:
     KoShape* connector(KoShape *shape);
 
     /**
+     * Returns a pointer to child. Used when we are searching for a place where to put shape.
+     */
+    virtual KoShape* proposePosition(KoShape* shape);
+
+    /**
      * Turns clipping of a shape on or off.
      */
     void setClipped(const KoShape *shape, bool clipping);

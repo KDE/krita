@@ -43,12 +43,12 @@
 TreeShape::TreeShape(): KoShapeContainer(new Layout(this))
 {
     m_nextShape = 0;
-    KoShape *root = KoShapeRegistry::instance()->value("EllipseShape")->createDefaultShape();
+    KoShape *root = KoShapeRegistry::instance()->value("RectangleShape")->createDefaultShape();
     root->setShapeId("Ellipse000");
-    root->setSize(QSizeF(50,50));
+    root->setSize(QSizeF(60,30));
     root->setParent(this);
     layout()->setRoot(root);
-    for (int i=0; i<3; i++){
+    for (int i=0; i<3; i++) {
         addNewChild();
     }
 }
@@ -67,6 +67,49 @@ TreeShape::TreeShape(KoShape *shape): KoShapeContainer(new Layout(this))
 
 TreeShape::~TreeShape()
 {
+}
+
+void TreeShape::setZIndex(int zIndex)
+{
+    KoShape::setZIndex(zIndex);
+    layout()->root()->setZIndex(zIndex+1);
+}
+
+void TreeShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
+{
+    //kDebug() << "start";
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
+    //will be relayouted only if needed
+    layout()->layout();
+    //kDebug() << "end";
+}
+
+bool TreeShape::hitTest(const QPointF &position) const
+{
+    Q_UNUSED(position);
+    //return layout()->root()->hitTest(position);
+    //kDebug() << shapeId();
+    return false;
+}
+
+// void TreeShape::shapeChanged(ChangeType type, KoShape *shape)
+// {
+//     Q_UNUSED(shape);
+//     Q_UNUSED(type);
+//     kDebug() << "";
+// }
+
+void TreeShape::saveOdf(KoShapeSavingContext &context) const
+{
+    Q_UNUSED(context);
+}
+
+bool TreeShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    Q_UNUSED(element);
+    Q_UNUSED(context);
+    return true;
 }
 
 void TreeShape::addChild(KoShape* tree, KoShape* connector)
@@ -112,8 +155,8 @@ QList<KoShape*> TreeShape::addNewChild()
     kDebug() << "start";
     QList<KoShape*> shapes;
 
-    KoShape *root = KoShapeRegistry::instance()->value("EllipseShape")->createDefaultShape();
-    root->setSize(QSizeF(30,30));
+    KoShape *root = KoShapeRegistry::instance()->value("RectangleShape")->createDefaultShape();
+    root->setSize(QSizeF(50,20));
     KoShape *child = new TreeShape(root);
     shapes.append(child);
 
@@ -135,47 +178,9 @@ KoShape* TreeShape::nextShape()
     return m_nextShape;
 }
 
-void TreeShape::setZIndex(int zIndex)
+KoShape* TreeShape::proposePosition(KoShape* shape)
 {
-    KoShape::setZIndex(zIndex);
-    layout()->root()->setZIndex(zIndex+1);
-}
-
-void TreeShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
-{
-    //kDebug() << "start";
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
-    //will be relayouted only if needed
-    layout()->layout();
-    //kDebug() << "end";
-}
-
-bool TreeShape::hitTest(const QPointF &position) const
-{
-    Q_UNUSED(position);
-    //return layout()->root()->hitTest(position);
-    kDebug() << shapeId();
-    return false;
-}
-
-// void TreeShape::shapeChanged(ChangeType type, KoShape *shape)
-// {
-//     Q_UNUSED(shape);
-//     Q_UNUSED(type);
-//     kDebug() << "";
-// }
-
-void TreeShape::saveOdf(KoShapeSavingContext &context) const
-{
-    Q_UNUSED(context);
-}
-
-bool TreeShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
-{
-    Q_UNUSED(element);
-    Q_UNUSED(context);
-    return true;
+    return layout()->proposePosition(shape);
 }
 
 Layout* TreeShape::layout() const

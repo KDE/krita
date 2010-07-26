@@ -47,6 +47,12 @@ public:
     TreeShape();
     TreeShape(KoShape *root);
     virtual ~TreeShape();
+    virtual void setZIndex(int zIndex);
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    virtual bool hitTest(const QPointF &position) const;
+    virtual void saveOdf(KoShapeSavingContext &context) const;
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+
     virtual void addChild(KoShape *tree, KoShape *connector);
     virtual KoShape* connector(KoShape *shape);
     virtual KoShape* root() const;
@@ -55,11 +61,7 @@ public:
     virtual QList<KoShape*> addNewChild();
     virtual void setNextShape(KoShape *shape);
     virtual KoShape* nextShape();
-    virtual void setZIndex(int zIndex);
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
-    virtual bool hitTest(const QPointF &position) const;
-    virtual void saveOdf(KoShapeSavingContext &context) const;
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual KoShape* proposePosition(KoShape* shape);
 
 private:
 //     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);

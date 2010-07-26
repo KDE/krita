@@ -26,13 +26,13 @@
 
 TreeShapeMoveCommand::TreeShapeMoveCommand(const QList<KoShape*> &shapes,
                                            TreeShape *newParent,
-                                           TreeShape *nextShape,
+                                           KoShape *nextShape,
                                            QUndoCommand *parent)
         : QUndoCommand(parent),
         m_newParent(newParent),
         m_nextShape(nextShape)
 {
-    foreach(KoShape *shape, shapes){
+    foreach(KoShape *shape, shapes) {
         TreeShape *tree = dynamic_cast<TreeShape*>(shape);
         TreeShape *par = dynamic_cast<TreeShape*>(shape->parent());
         m_trees.append(tree);
@@ -60,7 +60,7 @@ void TreeShapeMoveCommand::redo()
 void TreeShapeMoveCommand::undo()
 {
     QUndoCommand::undo();
-    for (int i = 0; i < m_trees.count(); i++){
+    for (int i = 0; i < m_trees.count(); i++) {
         m_trees[i]->setNextShape(m_oldNextShapes[i]);
         m_parents[i]->addChild(m_trees[i], m_connectors[i]);
     }

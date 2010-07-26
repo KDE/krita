@@ -30,6 +30,7 @@ class KoCanvasBase;
 class KoToolBase;
 class KoShape;
 class TreeShape;
+class KoConnectionShape;
 
 /**
  * Implements the Move action on an object or selected objects.
@@ -48,15 +49,20 @@ public:
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     QUndoCommand* createCommand();
-    void finishInteraction( Qt::KeyboardModifiers modifiers ) { Q_UNUSED( modifiers ); }
+    void finishInteraction( Qt::KeyboardModifiers modifiers );
     virtual void paint( QPainter &painter, const KoViewConverter &converter);
+
+protected:
+    TreeShape* proposeParent();
 private:
-    QList<QPointF> m_previousPositions;
-    QList<QPointF> m_newPositions;
-    QPointF m_start, m_diff, m_initialSelectionPosition, m_initialOffset;
+    QPointF m_start, m_diff, m_initialOffset;
     QList<KoShape*> m_selectedShapes;
     TreeShape *m_newParent;
-    KoShape *m_currentShape;
+    KoShape *m_newNextShape;
+    KoShape *m_movable;
+    KoConnectionShape *m_connector;
+    KoShape *m_ballastRoot, *m_ballastTree, *m_ballastConnector;
+    QUndoCommand *m_command;
 };
 
 #endif

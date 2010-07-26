@@ -63,7 +63,7 @@ public:
      * collection and others.
      * @see KoCanvasBase::resourceManager()
      */
-    KoResourceManager *resourceManager() const;
+    virtual KoResourceManager *resourceManager() const;
 
 private:
     KoShapeControllerBasePrivate * d;

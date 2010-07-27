@@ -63,7 +63,8 @@ private slots:
     void slotExport();
     void slotAddPredefined();
     void slotUpdateCurrentBrush(int i = 0); // To connect with activated(int)
-    void slotUpdateSpacing();
+    void slotUpdateSpacing(qreal spacing);
+    void slotUpdateName(const QString &name);
 
 signals:
 

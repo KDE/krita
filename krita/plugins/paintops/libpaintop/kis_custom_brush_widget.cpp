@@ -26,6 +26,8 @@
 #include <QComboBox>
 #include <QCheckBox>
 
+#include <QDateTime>
+
 #include <QPixmap>
 #include <QShowEvent>
 #include <kglobal.h>
@@ -59,7 +61,8 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     //    connect(exportButton, SIGNAL(pressed()), this, SLOT(slotExport()));
     connect(brushStyle, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
     connect(colorAsMask, SIGNAL(stateChanged(int)), this, SLOT(slotUpdateCurrentBrush(int)));
-    connect(spacingSlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotUpdateSpacing()));
+    connect(spacingSlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotUpdateSpacing(qreal)));
+    connect(nameLineEdit, SIGNAL(textChanged(QString)), this, SLOT(slotUpdateName(QString)));
     slotUpdateCurrentBrush();
 }
 
@@ -89,10 +92,19 @@ void KisCustomBrushWidget::slotUpdateCurrentBrush(int)
     emit sigBrushChanged();
 }
 
-void KisCustomBrushWidget::slotUpdateSpacing()
+void KisCustomBrushWidget::slotUpdateSpacing(qreal spacing)
 {
     if (m_brush) {
-        m_brush->setSpacing(spacingSlider->value());
+        m_brush->setSpacing(spacing);
+    }
+    emit sigBrushChanged();
+}
+
+
+void KisCustomBrushWidget::slotUpdateName(const QString& name)
+{
+    if (m_brush){
+        m_brush->setName(name);
     }
     emit sigBrushChanged();
 }
@@ -128,6 +140,10 @@ void KisCustomBrushWidget::slotAddPredefined()
 
     // Save it to that file
     m_brush->setFilename(tempFileName);
+    m_brush->setName(nameLineEdit->text());
+    if (m_brush->name().isEmpty()){
+        m_brush->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
+    }
     m_brush->setValid(true);
 
     // Add it to the brush server, so that it automatically gets to the mediators, and
@@ -143,14 +159,14 @@ void KisCustomBrushWidget::createBrush()
 
     if (brushStyle->currentIndex() == 0) {
         KisSelectionSP selection = m_image->globalSelection();
+        // create copy of the data
+        m_image->lock();
+        KisPaintDeviceSP dev = new KisPaintDevice(*m_image->mergedImage());
+        m_image->unlock();
+        
         if (!selection){
-            m_brush = new KisGbrBrush(m_image->projection().data(), 0, 0, m_image->width(), m_image->height());
+            m_brush = new KisGbrBrush(dev.data(), 0, 0, m_image->width(), m_image->height());
         }else{
-            // create copy of the data
-            m_image->lock();
-            KisPaintDeviceSP dev = new KisPaintDevice(*m_image->projection());
-            m_image->unlock();
-            
             dev->applySelectionMask(selection);
             QRect rc = dev->exactBounds();
             m_brush = new KisGbrBrush(dev.data(), rc.x(), rc.y(), rc.width(), rc.height());
@@ -161,7 +177,6 @@ void KisCustomBrushWidget::createBrush()
         }
      
         m_brush->setSpacing(spacingSlider->value());
-        
         return;
     }
 
@@ -192,8 +207,9 @@ void KisCustomBrushWidget::createBrush()
     }
 
     m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);
-    if (colorAsMask->isChecked())
+    if (colorAsMask->isChecked()){
         static_cast<KisGbrBrush*>(m_brush.data())->makeMaskImage();
+    }
 }
 
 void KisCustomBrushWidget::setImage(KisImageWSP image)

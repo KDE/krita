@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>267</width>
-    <height>266</height>
+    <height>285</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -17,6 +17,20 @@
    <property name="margin">
     <number>11</number>
    </property>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="brushNameLbl">
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="nameLineEdit"/>
+     </item>
+    </layout>
+   </item>
    <item>
     <layout class="QGridLayout">
      <property name="margin">
@@ -91,39 +105,11 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
-     <item>
-      <widget class="QLabel" name="spacingLbl">
-       <property name="text">
-        <string>Spacing</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KisDoubleSliderSpinBox" name="spacingSlider" native="true"/>
-     </item>
-    </layout>
-   </item>
-   <item>
     <widget class="QCheckBox" name="colorAsMask">
      <property name="text">
       <string>Use color as mask</string>
      </property>
     </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="brushNameLbl">
-       <property name="text">
-        <string>Name</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="nameLineEdit"/>
-     </item>
-    </layout>
    </item>
    <item>
     <layout class="QHBoxLayout">
@@ -183,6 +169,20 @@
         </size>
        </property>
       </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
+     <item>
+      <widget class="QLabel" name="spacingLbl">
+       <property name="text">
+        <string>Spacing</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KisDoubleSliderSpinBox" name="spacingSlider" native="true"/>
      </item>
     </layout>
    </item>

@@ -28,6 +28,8 @@
 #include <kis_types.h>
 #include <kis_brush.h>
 
+const double DEFAULT_SPACING = 0.25;
+
 class KisGbrBrush;
 
 class KoResource;
@@ -39,6 +41,8 @@ class KisWdgCustomBrush : public QWidget, public Ui::KisWdgCustomBrush
 public:
     KisWdgCustomBrush(QWidget *parent) : QWidget(parent) {
         setupUi(this);
+        spacingSlider->setRange(0.0,1.0, 2);
+        spacingSlider->setValue(DEFAULT_SPACING);
     }
 };
 
@@ -59,6 +63,7 @@ private slots:
     void slotExport();
     void slotAddPredefined();
     void slotUpdateCurrentBrush(int i = 0); // To connect with activated(int)
+    void slotUpdateSpacing();
 
 signals:
 

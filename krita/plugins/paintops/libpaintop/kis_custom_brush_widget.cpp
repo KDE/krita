@@ -41,6 +41,7 @@
 #include "kis_brush_server.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include <kis_selection.h>
 
 KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageWSP image)
         : KisWdgCustomBrush(parent)
@@ -58,6 +59,7 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     //    connect(exportButton, SIGNAL(pressed()), this, SLOT(slotExport()));
     connect(brushStyle, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
     connect(colorAsMask, SIGNAL(stateChanged(int)), this, SLOT(slotUpdateCurrentBrush(int)));
+    connect(spacingSlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotUpdateSpacing()));
     slotUpdateCurrentBrush();
 }
 
@@ -86,6 +88,15 @@ void KisCustomBrushWidget::slotUpdateCurrentBrush(int)
     }
     emit sigBrushChanged();
 }
+
+void KisCustomBrushWidget::slotUpdateSpacing()
+{
+    if (m_brush) {
+        m_brush->setSpacing(spacingSlider->value());
+    }
+    emit sigBrushChanged();
+}
+
 
 void KisCustomBrushWidget::slotExport()
 {
@@ -131,9 +142,26 @@ void KisCustomBrushWidget::createBrush()
         return;
 
     if (brushStyle->currentIndex() == 0) {
-        m_brush = new KisGbrBrush(m_image->mergedImage().data(), 0, 0, m_image->width(), m_image->height());
-        if (colorAsMask->isChecked())
+        KisSelectionSP selection = m_image->globalSelection();
+        if (!selection){
+            m_brush = new KisGbrBrush(m_image->projection().data(), 0, 0, m_image->width(), m_image->height());
+        }else{
+            // create copy of the data
+            m_image->lock();
+            KisPaintDeviceSP dev = new KisPaintDevice(*m_image->projection());
+            m_image->unlock();
+            
+            dev->applySelectionMask(selection);
+            QRect rc = dev->exactBounds();
+            m_brush = new KisGbrBrush(dev.data(), rc.x(), rc.y(), rc.width(), rc.height());
+        }
+        
+        if (colorAsMask->isChecked()){
             static_cast<KisGbrBrush*>(m_brush.data())->makeMaskImage();
+        }
+     
+        m_brush->setSpacing(spacingSlider->value());
+        
         return;
     }
 

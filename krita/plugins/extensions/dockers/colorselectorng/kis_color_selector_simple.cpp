@@ -34,8 +34,8 @@ void KisColorSelectorSimple::setColor(const QColor &c)
 {
     switch (m_parameter) {
     case KisColorSelector::SL:
-        m_lastClickPos.setX(c.lightnessF());
-        m_lastClickPos.setY(c.hslSaturationF());
+        m_lastClickPos.setX(c.hslSaturationF());
+        m_lastClickPos.setY(1.-c.lightnessF());
         emit paramChanged(-1, -1, -1, c.hslSaturationF(), c.lightnessF());
         break;
     case KisColorSelector::LH:

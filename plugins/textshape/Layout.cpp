@@ -192,10 +192,9 @@ bool Layout::addLine(QTextLine &line)
 
     qreal height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
     qreal objectHeight = 0.0;
-    if (line.textLength() == 1 && m_block.text().at(line.textStart()) == QChar::ObjectReplacementCharacter && line.descent() == 0.0) {
-        // look up if this is an inline anchor with contributing height
-        // otherwise it's just a no-inline anchor which we set to 0.1 high
-        objectHeight = qMax(qreal(0.1), inlineCharHeight(m_fragmentIterator.fragment()));
+    if (line.textLength() == 1 && m_block.text().at(line.textStart()) == QChar::ObjectReplacementCharacter && line.descent() == 0.0 && line.ascent() == 0.0) {
+        // This is an anchor but not an inline anchor so set to some very small hight
+        height = 0.1;
     }
     bool useFixedLineHeight = height != 0.0;
     if (useFixedLineHeight) {
@@ -386,18 +385,6 @@ bool Layout::nextParag()
         }
     }
 
-    // make sure m_tableLayout is refering to the right table
-    QTextCursor tableFinder(m_block);
-    QTextTable *table = tableFinder.currentTable();
-    if (table) {
-        // Set the current table on the table layout.
-        m_tableLayout.setTable(table);
-        // Save the current table cell.
-        m_tableCell = table->cellAt(m_block.position());
-        Q_ASSERT(m_tableCell.isValid());
-
-    }
-
     layout = 0;
     m_blockData = 0;
     if (m_data == 0) // no shape to layout, so stop here.
@@ -418,6 +405,17 @@ bool Layout::nextParag()
         }
         cleanupShapes();
         return false;
+    }
+
+    // make sure m_tableLayout is refering to the right table
+    QTextCursor tableFinder(m_block);
+    QTextTable *table = tableFinder.currentTable();
+    if (table) {
+        // Set the current table on the table layout.
+        m_tableLayout.setTable(table);
+        // Save the current table cell.
+        m_tableCell = table->cellAt(m_block.position());
+        Q_ASSERT(m_tableCell.isValid());
     }
     m_format = m_block.blockFormat();
     m_blockData = dynamic_cast<KoTextBlockData*>(m_block.userData());

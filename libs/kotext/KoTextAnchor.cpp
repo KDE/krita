@@ -237,7 +237,7 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
     } else {
         d->isPositionedInline = false;
         object.setWidth(0);
-        object.setAscent(fm.ascent());
+        object.setAscent(0);
         object.setDescent(0);
     }
 }

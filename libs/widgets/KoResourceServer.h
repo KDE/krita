@@ -180,6 +180,21 @@ public:
 
         return true;
     }
+    
+    /// Remove a resource from Resource Server but not from a file
+    /// the resource will be deleted by Resource Server
+    bool removeResourceFromServer(T* resource){
+        if ( !m_resourcesByFilename.contains( resource->filename() ) ) {
+            return false;
+        }
+        
+        m_resourcesByName.remove(resource->name());
+        m_resourcesByFilename.remove(resource->filename());
+        m_resources.removeAt(m_resources.indexOf(resource));
+        notifyRemovingResource(resource);
+        delete resource;
+        return true;
+    }
 
     /// Remove a resource from resourceserver and hard disk
     bool removeResource(T* resource) {

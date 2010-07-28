@@ -59,7 +59,7 @@ KisBirdEyeBox::KisBirdEyeBox()
 
     m_exposureDoubleWidget = new KisDoubleWidget(-10, 10, w);
     m_exposureDoubleWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_exposureDoubleWidget->setToolTip("Select the exposure (stops) for HDR images");
+    m_exposureDoubleWidget->setToolTip(i18n("Select the exposure (stops) for HDR images"));
     hl->addWidget(m_exposureDoubleWidget);
 
     l->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));

@@ -43,6 +43,11 @@ DatasetSelectorWidget::DatasetSelectorWidget ( QWidget* parent )
     setMinimumSize ( minimumSizeHint() );
 }
 
+DatasetSelectorWidget::~DatasetSelectorWidget()
+{
+    delete mUi;
+}
+
 void DatasetSelectorWidget::on_sbStartColumn_valueChanged ( const int )
 {
     calculateMapping();

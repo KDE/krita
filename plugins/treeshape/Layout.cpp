@@ -284,6 +284,7 @@ void Layout::layout()
             break;
     }
 
+    m_container->update();
     m_doingLayout = false;
     m_relayoutScheduled = false;
     kDebug() << "end";

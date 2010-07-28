@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,11 +59,9 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUpdateCurrentBrush()));
-    //    connect(exportButton, SIGNAL(pressed()), this, SLOT(slotExport()));
     connect(brushStyle, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
-    connect(colorAsMask, SIGNAL(stateChanged(int)), this, SLOT(slotUpdateCurrentBrush(int)));
+    connect(colorAsMask, SIGNAL(toggled(bool)), this, SLOT(slotUpdateUseColorAsMask(bool)));
     connect(spacingSlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotUpdateSpacing(qreal)));
-    connect(nameLineEdit, SIGNAL(textChanged(QString)), this, SLOT(slotUpdateName(QString)));
     slotUpdateCurrentBrush();
 }
 
@@ -86,8 +85,9 @@ void KisCustomBrushWidget::slotUpdateCurrentBrush(int)
 {
     if (m_image) {
         createBrush();
-        if (m_brush)
-            preview->setPixmap(QPixmap::fromImage(m_brush->image()));
+        if (m_brush){
+            preview->setPixmap(QPixmap::fromImage( m_brush->image() ));
+        }
     }
     emit sigBrushChanged();
 }
@@ -100,20 +100,15 @@ void KisCustomBrushWidget::slotUpdateSpacing(qreal spacing)
     emit sigBrushChanged();
 }
 
-
-void KisCustomBrushWidget::slotUpdateName(const QString& name)
+void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
     if (m_brush){
-        m_brush->setName(name);
+        static_cast<KisGbrBrush*>( m_brush.data() )->setUseColorAsMask( useColorAsMask );
+        preview->setPixmap(QPixmap::fromImage( m_brush->image() ));
     }
     emit sigBrushChanged();
 }
 
-
-void KisCustomBrushWidget::slotExport()
-{
-    ;
-}
 
 void KisCustomBrushWidget::slotAddPredefined()
 {
@@ -140,9 +135,10 @@ void KisCustomBrushWidget::slotAddPredefined()
 
     // Save it to that file
     m_brush->setFilename(tempFileName);
-    m_brush->setName(nameLineEdit->text());
-    if (m_brush->name().isEmpty()){
+    if (nameLineEdit->text().isEmpty()){
         m_brush->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
+    }else{
+        m_brush->setName(nameLineEdit->text());
     }
     m_brush->setValid(true);
 
@@ -157,6 +153,12 @@ void KisCustomBrushWidget::createBrush()
     if (!m_image)
         return;
 
+    if (m_brush){
+        // TODO: Warining, resolve this!
+        // The brush should be removed from resource server!!!
+        // KisBrushServer::instance()->brushServer()->removeResourceFromServer( static_cast<KisGbrBrush*>(m_brush.data()) );
+    }
+    
     if (brushStyle->currentIndex() == 0) {
         KisSelectionSP selection = m_image->globalSelection();
         // create copy of the data
@@ -165,51 +167,50 @@ void KisCustomBrushWidget::createBrush()
         m_image->unlock();
         
         if (!selection){
-            m_brush = new KisGbrBrush(dev.data(), 0, 0, m_image->width(), m_image->height());
+            m_brush = new KisGbrBrush(dev, 0, 0, m_image->width(), m_image->height());
         }else{
             dev->applySelectionMask(selection);
             QRect rc = dev->exactBounds();
-            m_brush = new KisGbrBrush(dev.data(), rc.x(), rc.y(), rc.width(), rc.height());
+            m_brush = new KisGbrBrush(dev, rc.x(), rc.y(), rc.width(), rc.height());
         }
-        
-        if (colorAsMask->isChecked()){
-            static_cast<KisGbrBrush*>(m_brush.data())->makeMaskImage();
+    
+    } else {
+        // For each layer in the current image, create a new image, and add it to the list
+        QVector< QVector<KisPaintDevice*> > devices;
+        devices.push_back(QVector<KisPaintDevice*>());
+        int w = m_image->width();
+        int h = m_image->height();
+
+        // We only loop over the rootLayer. Since we actually should have a layer selection
+        // list, no need to elaborate on that here and now
+        KisLayer* layer = dynamic_cast<KisLayer*>(m_image->rootLayer()->firstChild().data());
+        while (layer) {
+            KisPaintLayer* paint = 0;
+            if (layer->visible() && (paint = dynamic_cast<KisPaintLayer*>(layer)))
+                devices[0].push_back(paint->paintDevice().data());
+            layer = dynamic_cast<KisLayer*>(layer->nextSibling().data());
         }
-     
-        m_brush->setSpacing(spacingSlider->value());
-        return;
+        QVector<KisParasite::SelectionMode> modes;
+
+        switch (comboBox2->currentIndex()) {
+        case 0: modes.push_back(KisParasite::Constant); break;
+        case 1: modes.push_back(KisParasite::Random); break;
+        case 2: modes.push_back(KisParasite::Incremental); break;
+        case 3: modes.push_back(KisParasite::Pressure); break;
+        case 4: modes.push_back(KisParasite::Angular); break;
+        default: modes.push_back(KisParasite::Incremental);
+        }
+
+        m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);
     }
 
-    // For each layer in the current image, create a new image, and add it to the list
-    QVector< QVector<KisPaintDevice*> > devices;
-    devices.push_back(QVector<KisPaintDevice*>());
-    int w = m_image->width();
-    int h = m_image->height();
-
-    // We only loop over the rootLayer. Since we actually should have a layer selection
-    // list, no need to elaborate on that here and now
-    KisLayer* layer = dynamic_cast<KisLayer*>(m_image->rootLayer()->firstChild().data());
-    while (layer) {
-        KisPaintLayer* paint = 0;
-        if (layer->visible() && (paint = dynamic_cast<KisPaintLayer*>(layer)))
-            devices[0].push_back(paint->paintDevice().data());
-        layer = dynamic_cast<KisLayer*>(layer->nextSibling().data());
-    }
-    QVector<KisParasite::SelectionMode> modes;
-
-    switch (comboBox2->currentIndex()) {
-    case 0: modes.push_back(KisParasite::Constant); break;
-    case 1: modes.push_back(KisParasite::Random); break;
-    case 2: modes.push_back(KisParasite::Incremental); break;
-    case 3: modes.push_back(KisParasite::Pressure); break;
-    case 4: modes.push_back(KisParasite::Angular); break;
-    default: modes.push_back(KisParasite::Incremental);
-    }
-
-    m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);
-    if (colorAsMask->isChecked()){
-        static_cast<KisGbrBrush*>(m_brush.data())->makeMaskImage();
-    }
+    static_cast<KisGbrBrush*>( m_brush.data() )->setUseColorAsMask( colorAsMask->isChecked() );
+    m_brush->setSpacing(spacingSlider->value());
+    m_brush->setFilename("/tmp/temporaryKritaBrush.gbr");
+    m_brush->setName("temporaryBrush");
+    m_brush->setValid(true);
+    // temporaryKritaBrush.gbr will not be saved to file by resource server
+    KisBrushServer::instance()->brushServer()->addResource( static_cast<KisGbrBrush*>( m_brush.data() ), false);
 }
 
 void KisCustomBrushWidget::setImage(KisImageWSP image)

@@ -35,6 +35,9 @@ public:
     Private()
             : m_systemSheetsParentItem(0)
             , m_userSheetsParentItem(0) {}
+    ~Private() {
+	    delete m_ui;
+    }
 };
 
 enum {

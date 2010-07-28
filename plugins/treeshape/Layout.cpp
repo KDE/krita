@@ -120,7 +120,7 @@ void Layout::remove(KoShape *shape)
             prev->setNextShape(next);
         }
         m_children.removeOne(shape);
-        kDebug() << "child removed";
+        kDebug() << "child removed" << shape->shapeId();
         scheduleRelayout();
     }
 
@@ -229,6 +229,7 @@ void Layout::childChanged(KoShape *shape, KoShape::ChangeType type)
     switch (type) {
     //case KoShape::PositionChanged:
     case KoShape::SizeChanged:
+        kDebug() << "Child SizeChanged";
         scheduleRelayout();
     // FIXME: There's some cases that would require relayouting but that don't make sense
     // for chart items, e.g. ShearChanged. How should these changes be avoided or handled?

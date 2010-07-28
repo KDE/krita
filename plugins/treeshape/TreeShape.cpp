@@ -77,12 +77,12 @@ void TreeShape::setZIndex(int zIndex)
 
 void TreeShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
-    //kDebug() << "start";
+    //kDebug() << "start" << this->shapeId();
     Q_UNUSED(painter);
     Q_UNUSED(converter);
     //will be relayouted only if needed
     layout()->layout();
-    //kDebug() << "end";
+    //kDebug() << "end" << this->shapeId();
 }
 
 bool TreeShape::hitTest(const QPointF &position) const
@@ -118,7 +118,14 @@ void TreeShape::addChild(KoShape* tree, KoShape* connector)
     addShape(connector);
     layout()->attachConnector(tree, dynamic_cast<KoConnectionShape*>(connector));
     layout()->layout();
-    update();
+
+//     TreeShape *p = dynamic_cast<TreeShape*>(parent());
+//     while (p) {
+//         kDebug() << p->shapeId();
+//         p->update();
+//         p = dynamic_cast<TreeShape*>(p->parent());
+//     }
+
 }
 
 KoShape* TreeShape::connector(KoShape *shape)

@@ -118,13 +118,13 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
     KoShape *root;
     switch (event->key()) {
         case Qt::Key_Tab:
-            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()) {
                 TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
-                if (tree){
+                if (tree) {
                     kDebug() << "Adding child...";
                     KoShapeController *controller = canvas()->shapeController();
                     QUndoCommand *command = new QUndoCommand;
-                    foreach(KoShape* shape, tree->addNewChild()){
+                    foreach(KoShape* shape, tree->addNewChild()) {
                         controller->addShapeDirect(shape, command);
                     }
                     canvas()->addCommand(command);
@@ -133,15 +133,15 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
             event->accept();
             break;
         case Qt::Key_Return:
-            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()) {
                 TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
-                if (tree){
+                if (tree) {
                     tree = dynamic_cast<TreeShape*>(tree->parent());
-                    if (tree){
+                    if (tree) {
                         kDebug() << "Adding child...";
                         KoShapeController *controller = canvas()->shapeController();
                         QUndoCommand *command = new QUndoCommand;
-                        foreach(KoShape* shape, tree->addNewChild()){
+                        foreach(KoShape* shape, tree->addNewChild()) {
                             controller->addShapeDirect(shape, command);
                         }
                         canvas()->addCommand(command);
@@ -151,14 +151,14 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
             event->accept();
             break;
         case Qt::Key_Delete:
-            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()) {
                 TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
-                if (tree){
+                if (tree) {
                     KoShapeController *controller = canvas()->shapeController();
                     QUndoCommand *command = new QUndoCommand;
                     controller->removeShape(tree,command);
                     TreeShape *grandparent = dynamic_cast<TreeShape*>(tree->parent());
-                    if (grandparent){
+                    if (grandparent) {
                         controller->removeShape(grandparent->connector(tree),command);
                     }
                     canvas()->addCommand(command);
@@ -167,11 +167,11 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
             event->accept();
             break;
         case Qt::Key_Z:
-            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()) {
                 TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
-                if (tree){
+                if (tree) {
                     kDebug() << "zIndeces of children...";
-                    foreach (KoShape *shape, tree->shapes()){
+                    foreach (KoShape *shape, tree->shapes()) {
                         TreeShape *tmp = dynamic_cast<TreeShape*>(shape);
                         if (tmp)
                             kDebug() << shape->shapeId() << shape->zIndex() << shape->boundingRect()
@@ -184,9 +184,9 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
             event->accept();
             break;
         case Qt::Key_1:
-            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()) {
                 TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
-                if (tree){
+                if (tree) {
                     kDebug() << "OrgUp";
                     tree->setStructure(TreeShape::OrgUp);
                     tree->update();
@@ -195,9 +195,9 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
             event->accept();
             break;
         case Qt::Key_2:
-            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()) {
                 TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
-                if (tree){
+                if (tree) {
                     kDebug() << "OrgRight";
                     tree->setStructure(TreeShape::OrgRight);
                     tree->update();
@@ -206,9 +206,9 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
             event->accept();
             break;
         case Qt::Key_3:
-            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()) {
                 TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
-                if (tree){
+                if (tree) {
                     kDebug() << "OrgDown";
                     tree->setStructure(TreeShape::OrgDown);
                     tree->update();
@@ -217,9 +217,9 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
             event->accept();
             break;
         case Qt::Key_4:
-            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()){
+            foreach (root, canvas()->shapeManager()->selection()->selectedShapes()) {
                 TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
-                if (tree){
+                if (tree) {
                     kDebug() << "OrgLeft";
                     tree->setStructure(TreeShape::OrgLeft);
                     tree->update();
@@ -292,7 +292,7 @@ KoInteractionStrategy *TreeTool::createStrategy(KoPointerEvent *event)
         }
     } else { // clicked on shape which is not selected
         repaintDecorations();
-        if (!selectMultiple){
+        if (!selectMultiple) {
             kDebug() << "deselecting all";
             shapeManager->selection()->deselectAll();
         }

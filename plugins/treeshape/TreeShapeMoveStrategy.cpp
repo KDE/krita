@@ -72,10 +72,6 @@ TreeShapeMoveStrategy::TreeShapeMoveStrategy(KoToolBase *tool, const QPointF &cl
     controller->addShapeDirect(m_ballastTree,m_command);
     controller->addShapeDirect(m_ballastConnector,m_command);
     m_command->redo();
-//     tool->canvas()->shapeManager()->addShape(m_movable);
-//     tool->canvas()->shapeManager()->addShape(m_connector);
-//     tool->canvas()->shapeManager()->addShape(m_ballast);
-//     tool->canvas()->shapeManager()->addShape(m_ballastConnector);
     m_connector->setZIndex(shape->zIndex()+5);
     m_movable->setZIndex(shape->zIndex()+5);
     m_connector->updateConnections();
@@ -106,9 +102,12 @@ void TreeShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     if (proposed && (proposed != m_newParent)) {
         m_newParent = proposed;
         m_newNextShape = proposed->proposePosition(m_movable);
-        //dynamic_cast<TreeShape*>(m_ballastTree)->setNextShape(m_newNextShape);
-        //m_newParent->addChild(m_ballastTree, m_ballastConnector);
-        //kDebug() << "|||" << m_newParent->shapeId();// << m_newParent->root()->shapeId();
+        if (m_ballastTree->parent()) {
+            m_ballastTree->parent()->removeShape(m_ballastTree);
+        }
+        dynamic_cast<TreeShape*>(m_ballastTree)->setNextShape(m_newNextShape);
+        kDebug() << m_newParent->shapeId() << m_newNextShape; // << m_newParent->root()->shapeId();
+        m_newParent->addChild(m_ballastTree, m_ballastConnector);
         m_connector->connectFirst(m_movable, 0);
         m_connector->connectSecond(m_newParent->root(),2);
         m_connector->updateConnections();
@@ -127,6 +126,7 @@ QUndoCommand* TreeShapeMoveStrategy::createCommand()
 void TreeShapeMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED( modifiers );
+    kDebug() << "";
     m_command->undo();
 }
 
@@ -152,6 +152,7 @@ TreeShape* TreeShapeMoveStrategy::proposeParent()
         if (tree && !tree->root()->boundingRect().contains(cp))
             trees.append(tree);
     }
+    kDebug() << trees.removeOne(dynamic_cast<TreeShape*>(m_ballastTree));
 
     if (!trees.isEmpty()) {
         qSort(trees.begin(), trees.end(), KoShape::compareShapeZIndex);

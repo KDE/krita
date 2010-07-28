@@ -35,12 +35,12 @@ protected:
     void paint(QPainter*);
     bool isComponent(int x, int y) const;
 private:
-    qreal triangleWidth() const;
-    qreal triangleHeight() const;
+    int triangleWidth() const;
+    int triangleHeight() const;
     void updatePixelCache();
     QColor colorAt(int x, int y) const;
     QPoint widgetToTriangleCoordinates(const QPoint& point) const;
-    QPoint triangleToWidgetCoordinates(const QPoint &point) const;
+    QPoint triangleToWidgetCoordinates(const QPoint& point) const;
     QImage m_pixelCache;
     
     QPointF m_lastClickPos;

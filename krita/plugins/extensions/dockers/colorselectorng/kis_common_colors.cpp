@@ -51,6 +51,7 @@ KisCommonColors::KisCommonColors(QWidget *parent) :
     QList<QWidget*> tmpList;
     tmpList.append(reloadButton);
     setAdditionalButtons(tmpList);
+    updateSettings();
 }
 
 void KisCommonColors::setCanvas(KisCanvas2 *canvas)

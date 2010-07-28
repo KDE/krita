@@ -66,16 +66,12 @@ void KisColorSelectorComponent::paintEvent(QPainter* painter)
 
 void KisColorSelectorComponent::mouseEvent(int x, int y)
 {
-    if(!isComponent(x-m_x, y-m_y))
-        return;
-    qreal newX=(x-m_x);
-    qreal newY=(y-m_y);
-    if(newX>=0 && newX<=width() &&
-       newY>=0 && newY<=height()) {
-        selectColor(newX, newY);
-        m_lastX=newX;
-        m_lastY=newY;
-    }
+    int newX=qBound(0, (x-m_x), width());
+    int newY=qBound(0, (y-m_y), height());
+
+    selectColor(newX, newY);
+    m_lastX=newX;
+    m_lastY=newY;
 }
 
 const KoColorSpace* KisColorSelectorComponent::colorSpace() const
@@ -92,9 +88,10 @@ bool KisColorSelectorComponent::isDirty() const
 
 bool KisColorSelectorComponent::isComponent(int x, int y) const
 {
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-    return true;
+    if(x>=0 && y>=0 && x<=width() && y<=height())
+        return true;
+    else
+        return false;
 }
 
 QColor KisColorSelectorComponent::currentColor()

@@ -54,6 +54,10 @@ public:
 
     /// set the color, blibs etc
     virtual void setColor(const QColor& color) = 0;
+
+    /// returns true, if this component wants to grab the mouse (normaly true, if isComponent returns true)
+    virtual bool wantsGrab(int x, int y) {return isComponent(x-m_x, y-m_y);}
+
 public slots:
     /// set hue, saturation, value or/and lightness
     /// unused parameters should be set to -1
@@ -76,8 +80,8 @@ protected:
     /// have to care about x/y coordinates (top left corner)
     virtual void paint(QPainter*) = 0;
 
-    /// default returns true
-    /// values are provided in component coordinates, eg (0,0) is top left of component
+    /// a subclass can implement this method, the default returns true if the coordinates are in the component rect
+    /// values for the subclasses are provided in component coordinates, eg (0,0) is top left of component
     virtual bool isComponent(int x, int y) const;
 
     qreal m_hue;

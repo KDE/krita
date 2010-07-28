@@ -45,7 +45,8 @@ KisColorSelector::KisColorSelector(Configuration conf, QWidget* parent)
                                        m_square(0),
                                        m_wheel(0),
                                        m_mainComponent(0),
-                                       m_subComponent(0)
+                                       m_subComponent(0),
+                                       m_grabbingComponent(0)
 {
     init();
     setConfiguration(conf);
@@ -59,7 +60,8 @@ KisColorSelector::KisColorSelector(QWidget* parent)
                                        m_square(0),
                                        m_wheel(0),
                                        m_mainComponent(0),
-                                       m_subComponent(0)
+                                       m_subComponent(0),
+                                       m_grabbingComponent(0)
 {
     init();
     updateSettings();
@@ -182,6 +184,11 @@ void KisColorSelector::mousePressEvent(QMouseEvent* e)
     KisColorSelectorBase::mousePressEvent(e);
 
     if(!e->isAccepted()) {
+        if(m_mainComponent->wantsGrab(e->x(), e->y()))
+            m_grabbingComponent=m_mainComponent;
+        else if(m_subComponent->wantsGrab(e->x(), e->y()))
+            m_grabbingComponent=m_subComponent;
+
         mouseEvent(e);
     }
 }
@@ -203,8 +210,9 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
         else
             role=Background;
         commitColor(KoColor(m_currentColor, colorSpace()), m_currentColor, role);
-        e->accept();
     }
+    e->accept();
+    m_grabbingComponent=0;
 }
 
 void KisColorSelector::setColor(const QColor &color)
@@ -222,9 +230,8 @@ void KisColorSelector::mouseEvent(QMouseEvent *e)
         return;
     m_lastMousePosition=e->pos();
 
-    if(e->buttons()&Qt::LeftButton || e->buttons()&Qt::RightButton) {
-        m_mainComponent->mouseEvent(e->x(), e->y());
-        m_subComponent->mouseEvent(e->x(), e->y());
+    if(m_grabbingComponent && (e->buttons()&Qt::LeftButton || e->buttons()&Qt::RightButton)) {
+        m_grabbingComponent->mouseEvent(e->x(), e->y());
 
         m_currentColor=m_mainComponent->currentColor();
     }

@@ -101,15 +101,14 @@ void KisColorSelectorRing::paint(QPainter* painter)
 }
 
 QColor KisColorSelectorRing::selectColor(int x, int y) {
-    if(isComponent(x, y)) {
-        QPoint ringMiddle(width()/2, height()/2);
-        QPoint ringCoord = QPoint(x, y)-ringMiddle;
-        qreal hue = std::atan2(ringCoord.y(), ringCoord.x())+(M_PI);
-        hue/=2.*M_PI;
-        emit paramChanged(hue, -1, -1, -1, -1);
-        m_lastHue=hue;
-        emit update();
-    }
+    QPoint ringMiddle(width()/2, height()/2);
+    QPoint ringCoord = QPoint(x, y)-ringMiddle;
+    qreal hue = std::atan2(ringCoord.y(), ringCoord.x())+(M_PI);
+    hue/=2.*M_PI;
+    emit paramChanged(hue, -1, -1, -1, -1);
+    m_lastHue=hue;
+    emit update();
+
     return QColor();
 }
 

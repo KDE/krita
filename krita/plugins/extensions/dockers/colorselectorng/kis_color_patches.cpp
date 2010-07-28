@@ -33,15 +33,6 @@
 KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent) :
     QWidget(parent), m_canvas(0), m_scrollValue(0), m_configPrefix(configPrefix)
 {
-    m_patchWidth = 20;
-    m_patchHeight = 20;
-    m_patchCount = 30;
-
-    m_direction = Horizontal;
-    m_numCols = 2;
-    m_numRows = 3;
-    m_allowScrolling = true;
-
     updateSettings();
 
 //    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -58,10 +49,12 @@ void KisColorPatches::setColors(QList<KoColor>colors)
 void KisColorPatches::paintEvent(QPaintEvent* e)
 {
     QPainter painter(this);
-    if(m_direction == Vertical)
-        painter.translate(0, m_scrollValue);
-    else
-        painter.translate(m_scrollValue, 0);
+    if(m_allowScrolling) {
+        if(m_direction == Vertical)
+            painter.translate(0, m_scrollValue);
+        else
+            painter.translate(m_scrollValue, 0);
+    }
 
 
     int widgetWidth = width();
@@ -114,24 +107,17 @@ void KisColorPatches::wheelEvent(QWheelEvent* event)
 
 void KisColorPatches::resizeEvent(QResizeEvent* event)
 {
-    QWheelEvent* dummyWheelEvent = new QWheelEvent(QPoint(), 0, Qt::NoButton, Qt::NoModifier);
-    wheelEvent(dummyWheelEvent);
-    delete dummyWheelEvent;
+    QWheelEvent dummyWheelEvent(QPoint(), 0, Qt::NoButton, Qt::NoModifier);
+    wheelEvent(&dummyWheelEvent);
 
     if(m_allowScrolling == false && event->oldSize() != event->size()) {
         if(m_direction == Horizontal) {
             setMaximumHeight(heightForWidth(width()));
             setMinimumHeight(heightForWidth(width()));
-            for(int i=0; i<m_buttonList.size(); i++) {
-                m_buttonList.at(i)->setGeometry(i*m_patchWidth, 0, m_patchWidth, m_patchHeight);
-            }
         }
         else {
             setMaximumWidth(widthForHeight(height()));
             setMinimumWidth(widthForHeight(height()));
-            for(int i=0; i<m_buttonList.size(); i++) {
-                m_buttonList.at(i)->setGeometry(0, i*m_patchHeight, m_patchWidth, m_patchHeight);
-            }
         }
     }
 
@@ -184,7 +170,6 @@ void KisColorPatches::setAdditionalButtons(QList<QWidget*> buttonList)
 void KisColorPatches::updateSettings()
 {
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
-    m_allowScrolling = cfg.readEntry(m_configPrefix+"AllowScrolling", true);
 
     if(cfg.readEntry(m_configPrefix+"Alignment", false))
         m_direction=Vertical;
@@ -197,6 +182,10 @@ void KisColorPatches::updateSettings()
     m_patchCount=cfg.readEntry(m_configPrefix+"Count", 15);
     m_patchWidth=cfg.readEntry(m_configPrefix+"Width", 20);
     m_patchHeight=cfg.readEntry(m_configPrefix+"Height", 20);
+
+    for(int i=0; i<m_buttonList.size(); i++) {
+        m_buttonList.at(i)->setGeometry(0, i*m_patchHeight, m_patchWidth, m_patchHeight);
+    }
 
     if(m_allowScrolling && m_direction == Horizontal) {
         setMaximumWidth(QWIDGETSIZE_MAX);
@@ -214,11 +203,12 @@ void KisColorPatches::updateSettings()
         setMinimumWidth(m_numCols*m_patchWidth);
     }
 
-    if(m_allowScrolling != true) {
+    if(m_allowScrolling == false) {
         m_scrollValue = 0;
-        setMinimumSize(m_patchWidth, m_patchHeight);
-        setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
     }
+
+    QResizeEvent dummy(size(), QSize(-1,-1));
+    resizeEvent(&dummy);
 
     update();
 }

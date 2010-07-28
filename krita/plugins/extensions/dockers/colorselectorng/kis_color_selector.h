@@ -102,6 +102,7 @@ private:
     KisColorSelectorWheel* m_wheel;
     KisColorSelectorComponent* m_mainComponent;
     KisColorSelectorComponent* m_subComponent;
+    KisColorSelectorComponent* m_grabbingComponent;
 
     QTimer* m_updateTimer;
 

@@ -490,7 +490,7 @@ bool Layout::nextParag()
     if (tabStopDistance > 0)
         option.setTabStop(tabStopDistance * qt_defaultDpiY() / 72.);
     else
-        option.setTabStop(m_defaultTabSizing);
+        option.setTabStop(m_defaultTabSizing * qt_defaultDpiY() / 72.);
 
     // tabs
     QList<QTextOption::Tab> tabs;

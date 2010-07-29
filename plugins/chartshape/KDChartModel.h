@@ -55,6 +55,23 @@ namespace KChart {
  *
  */
 
+ /**
+  * Note on data directions in KDChart's models:
+  *
+  * For circular (polar) charts, items shown in the legend should not be the
+  * data set labels, but the category labels instead. For example, a pie chart
+  * contains exactly one data set (if there's more series in the table, they are
+  * ignored). Obviously showing the title of the data set wouldn't be very useful
+  * in the legend. So the categories are shown instead.
+  *
+  * Since KDChart extracts the legend items from horizontal header data (the headers
+  * in each column) data sets have to be inserted row-wise instead of column-wise for
+  * these charts. To do so, KDChartModel::setDataDirection( Qt::Horizontal ) is used.
+  *
+  * In all other cases, we show the data set labels in the legend. Therefore we insert
+  * data sets column-wise, which is done by calling setDataDirection( Qt::Vertical ).
+  */
+
 class CHARTSHAPELIB_EXPORT KDChartModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -79,6 +96,8 @@ public:
      * Specifies in what direction a data set 'points'. More specifically,
      * if the data direction is Qt::Vertical, a data set occupies one
      * column (in case only one data dimension is being used).
+     *
+     * See "Note on data directions in KDChart's models" above.
      */
     void setDataDirection( Qt::Orientation direction );
     /**

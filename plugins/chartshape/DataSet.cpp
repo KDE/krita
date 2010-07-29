@@ -417,6 +417,9 @@ QBrush DataSet::Private::defaultBrush() const
 {
     Q_ASSERT( kdDiagram );
     Qt::Orientation modelDataDirection = kdChartModel->dataDirection();
+    // A data set-wide default brush only makes sense if the legend shows
+    // data set labels, not the category data. See notes on data directions
+    // in KDChartModel.h for details.
     if ( modelDataDirection == Qt::Vertical )
         return defaultDataSetColor( kdDataSetNumber );
     // FIXME: What to return in the other case?

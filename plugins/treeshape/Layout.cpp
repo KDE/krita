@@ -48,6 +48,7 @@ void Layout::add(KoShape *shape)
     Q_ASSERT(!m_children.contains(shape));
     TreeShape *tree = dynamic_cast<TreeShape*>(shape);
     if (tree) {
+        tree->setStructure(m_structure);
         tree->setZIndex(m_container->zIndex()+1);
         if (tree->nextShape()) {
             Q_ASSERT(m_children.contains(tree->nextShape()));
@@ -102,6 +103,8 @@ KoShape* Layout::root() const
 void Layout::setStructure(TreeShape::TreeType structure)
 {
     m_structure = structure;
+    foreach(KoShape *shape, m_children)
+        dynamic_cast<TreeShape*>(shape)->setStructure(structure);
     scheduleRelayout();
 }
 

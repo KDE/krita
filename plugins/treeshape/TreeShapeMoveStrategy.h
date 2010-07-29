@@ -25,6 +25,7 @@
 
 #include <QPointF>
 #include <QList>
+#include "TreeShape.h"
 
 class KoCanvasBase;
 class KoToolBase;
@@ -54,6 +55,8 @@ public:
 
 protected:
     TreeShape* proposeParent();
+    // helper function
+    TreeShape* propose(QRectF area, TreeShape::TreeType structure);
 private:
     QPointF m_start, m_diff, m_initialOffset;
     QList<KoShape*> m_selectedShapes;

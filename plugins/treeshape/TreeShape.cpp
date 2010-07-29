@@ -118,14 +118,6 @@ void TreeShape::addChild(KoShape* tree, KoShape* connector)
     addShape(connector);
     layout()->attachConnector(tree, dynamic_cast<KoConnectionShape*>(connector));
     layout()->layout();
-
-//     TreeShape *p = dynamic_cast<TreeShape*>(parent());
-//     while (p) {
-//         kDebug() << p->shapeId();
-//         p->update();
-//         p = dynamic_cast<TreeShape*>(p->parent());
-//     }
-
 }
 
 KoShape* TreeShape::connector(KoShape *shape)

@@ -143,13 +143,84 @@ TreeShape* TreeShapeMoveStrategy::proposeParent()
     TreeShape *parent = 0;
     qreal length = 50;
 
-    QPointF cp = m_movable->absoluteTransformation(0).map(m_movable->connectionPoints()[0]);
-    QRectF rect = QRectF(cp-QPointF(0,length), QSizeF(1,length));
-    QList<KoShape*> shapes = tool()->canvas()->shapeManager()->shapesAt(rect);
+//     QPointF pos = m_movable->absolutePosition(KoFlake::TopLeftCorner)+QPointF(-length, length);
+//     QSizeF size = m_movable->size() + QSizeF(2*length, 2*length);
+//     QRectF searchArea(pos, size);
+
+    QList< QPair<TreeShape*, qreal> > trees;
+    TreeShape *tree;
+    QPointF pos, treePos;
+    QRectF rect;
+    qreal minDistance = 10000, distance;
+
+    // down
+    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[0]);
+    rect = QRectF(pos-QPointF(0,length), QSizeF(1,length));
+    tree = propose(rect, TreeShape::OrgDown);
+    if (tree) {
+        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[2]);
+        distance = (pos.x() - treePos.x())*(pos.x() - treePos.x())
+                    + (pos.y() - treePos.y())*(pos.y() - treePos.y());
+        if (distance<minDistance) {
+            minDistance = distance;
+            parent = tree;
+        }
+    }
+
+    // up
+    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[2]);
+    rect = QRectF(pos, QSizeF(1,length));
+    tree = propose(rect, TreeShape::OrgUp);
+    if (tree) {
+        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[0]);
+        distance = (pos.x() - treePos.x())*(pos.x() - treePos.x())
+                    + (pos.y() - treePos.y())*(pos.y() - treePos.y());
+        if (distance<minDistance) {
+            minDistance = distance;
+            parent = tree;
+        }
+    }
+
+    // right
+    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[1]);
+    rect = QRectF(pos, QSizeF(length,1));
+    tree = propose(rect, TreeShape::OrgRight);
+    if (tree) {
+        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[3]);
+        distance = (pos.x() - treePos.x())*(pos.x() - treePos.x())
+                    + (pos.y() - treePos.y())*(pos.y() - treePos.y());
+        if (distance<minDistance) {
+            minDistance = distance;
+            parent = tree;
+        }
+    }
+
+    // left
+    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[3]);
+    rect = QRectF(pos-QPointF(length,0), QSizeF(length,1));
+    tree = propose(rect, TreeShape::OrgLeft);
+    if (tree) {
+        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[1]);
+        distance = (pos.x() - treePos.x())*(pos.x() - treePos.x())
+                    + (pos.y() - treePos.y())*(pos.y() - treePos.y());
+        if (distance<minDistance) {
+            minDistance = distance;
+            parent = tree;
+        }
+    }
+
+    return parent;
+}
+
+TreeShape* TreeShapeMoveStrategy::propose(QRectF area, TreeShape::TreeType structure)
+{
+    TreeShape *parent = 0;
+
+    QList<KoShape*> shapes = tool()->canvas()->shapeManager()->shapesAt(area);
     QList<TreeShape*> trees;
     foreach (KoShape *shape, shapes) {
         TreeShape *tree = dynamic_cast<TreeShape*>(shape);
-        if (tree && !tree->root()->boundingRect().contains(cp))
+        if (tree && (tree->structure() == structure))
             trees.append(tree);
     }
     kDebug() << trees.removeOne(dynamic_cast<TreeShape*>(m_ballastTree));

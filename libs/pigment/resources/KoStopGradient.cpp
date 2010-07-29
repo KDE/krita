@@ -245,7 +245,13 @@ KoStopGradient * KoStopGradient::fromQGradient(QGradient * gradient)
 
 void KoStopGradient::setStops(QList< KoGradientStop > stops)
 {
-    m_stops = stops;
+    m_stops.clear();
+    KoColor color;
+    foreach(const KoGradientStop & stop, stops) {
+        color = stop.second;
+        color.convertTo(colorSpace());
+        m_stops.append(KoGradientStop(stop.first, color));
+    }
     updatePreview();
 }
 

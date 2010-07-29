@@ -74,6 +74,7 @@ signals:
 private:
     void createBrush();
 
+    bool m_brushCreated;
     KisImageWSP m_image;
     KisBrushSP m_brush;
     KoResourceServerAdapter<KisBrush>* m_rServerAdapter;

@@ -58,7 +58,8 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     m_rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
     
     m_brush = 0;
-
+    m_brushCreated = false;
+    
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUpdateCurrentBrush()));
     connect(brushStyle, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
@@ -80,7 +81,10 @@ KisBrushSP KisCustomBrushWidget::brush()
 
 void KisCustomBrushWidget::showEvent(QShowEvent *)
 {
-    slotUpdateCurrentBrush(0);
+    if (!m_brushCreated){
+        slotUpdateCurrentBrush(0);
+        m_brushCreated = true;
+    }
 }
 
 void KisCustomBrushWidget::slotUpdateCurrentBrush(int)

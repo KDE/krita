@@ -79,7 +79,6 @@ MirrorProperties KisPressureMirrorOption::apply(const KisPaintInformation& info)
     }
     
     double sensorResult = computeValue(info);
-    qDebug() << sensorResult;
     bool result = (sensorResult >= 0.5);
     
     if (m_enableHorizontalMirror){

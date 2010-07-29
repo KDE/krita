@@ -704,7 +704,7 @@ void DataSet::setPieExplodeFactor( int section, int factor )
 
 QColor DataSet::color() const
 {
-    return d->brush.color();
+    return brush().color();
 }
 
 void DataSet::setColor( const QColor &color )

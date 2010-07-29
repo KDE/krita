@@ -452,7 +452,6 @@ DataSet::DataSet( ChartProxyModel *proxyModel, int dataSetNr )
     : d( new Private( this, dataSetNr ) )
 {
     d->model = proxyModel;
-    setColor( defaultDataSetColor( dataSetNr ) );
 }
 
 DataSet::~DataSet()

@@ -182,8 +182,8 @@ public:
     }
     
     /// Remove a resource from Resource Server but not from a file
-    /// the resource will be deleted by Resource Server
-    bool removeResourceFromServer(T* resource){
+    /// if deleteResource is true. the resource will be deleted by resource server
+    bool removeResourceFromServer(T* resource, bool deleteResource = true){
         if ( !m_resourcesByFilename.contains( resource->filename() ) ) {
             return false;
         }
@@ -192,7 +192,11 @@ public:
         m_resourcesByFilename.remove(resource->filename());
         m_resources.removeAt(m_resources.indexOf(resource));
         notifyRemovingResource(resource);
-        delete resource;
+        
+        if (deleteResource) { 
+            delete resource;
+        }
+        
         return true;
     }
 

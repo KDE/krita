@@ -108,8 +108,9 @@ void TreeShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
         dynamic_cast<TreeShape*>(m_ballastTree)->setNextShape(m_newNextShape);
         kDebug() << m_newParent->shapeId() << m_newNextShape; // << m_newParent->root()->shapeId();
         m_newParent->addChild(m_ballastTree, m_ballastConnector);
-        m_connector->connectFirst(m_movable, 0);
-        m_connector->connectSecond(m_newParent->root(),2);
+        QPair<int, int> points = chooseConnectionPoints(proposed->structure());
+        m_connector->connectFirst(m_movable, points.first);
+        m_connector->connectSecond(m_newParent->root(), points.second);
         m_connector->updateConnections();
     }
 }
@@ -182,11 +183,11 @@ TreeShape* TreeShapeMoveStrategy::proposeParent()
     }
 
     // right
-    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[1]);
-    rect = QRectF(pos, QSizeF(length,1));
+    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[3]);
+    rect = QRectF(pos-QPointF(length,0), QSizeF(length,1));
     tree = propose(rect, TreeShape::OrgRight);
     if (tree) {
-        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[3]);
+        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[1]);
         distance = (pos.x() - treePos.x())*(pos.x() - treePos.x())
                     + (pos.y() - treePos.y())*(pos.y() - treePos.y());
         if (distance<minDistance) {
@@ -196,11 +197,11 @@ TreeShape* TreeShapeMoveStrategy::proposeParent()
     }
 
     // left
-    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[3]);
-    rect = QRectF(pos-QPointF(length,0), QSizeF(length,1));
+    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[1]);
+    rect = QRectF(pos, QSizeF(length,1));
     tree = propose(rect, TreeShape::OrgLeft);
     if (tree) {
-        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[1]);
+        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[3]);
         distance = (pos.x() - treePos.x())*(pos.x() - treePos.x())
                     + (pos.y() - treePos.y())*(pos.y() - treePos.y());
         if (distance<minDistance) {
@@ -236,4 +237,31 @@ TreeShape* TreeShapeMoveStrategy::propose(QRectF area, TreeShape::TreeType struc
     }
 
     return parent;
+}
+
+QPair< int, int > TreeShapeMoveStrategy::chooseConnectionPoints(TreeShape::TreeType structure)
+{
+    QPair< int, int > points;
+    switch (structure) {
+        case TreeShape::OrgDown:
+            points.first = 0;
+            points.second = 2;
+            break;
+        case TreeShape::OrgUp:
+            points.first = 2;
+            points.second = 0;
+            break;
+        case TreeShape::OrgLeft:
+            points.first = 1;
+            points.second = 3;
+            break;
+        case TreeShape::OrgRight:
+            points.first = 3;
+            points.second = 1;
+            break;
+        default:
+            break;
+    }
+
+    return points;
 }

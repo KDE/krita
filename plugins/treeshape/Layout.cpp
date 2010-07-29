@@ -146,18 +146,64 @@ KoShape* Layout::proposePosition(KoShape* shape)
 
     KoShape *nextShape = 0;
 
-    if (m_structure == TreeShape::OrgDown) {
-        QPointF pos = shape->absoluteTransformation(0).map(shape->connectionPoints()[0]);
-        pos = m_container->documentToShape(pos);
+    QPointF pos;
+    switch (m_structure) {
+        case TreeShape::OrgDown:
+            pos = shape->shapeToDocument(shape->connectionPoints()[0]);
+            pos = m_container->documentToShape(pos);
 
-        nextShape = m_children.first();
-        foreach(KoShape* child, m_children)
-            if (child->position().x()>pos.x()) {
-                nextShape = child;
-                break;
-            }
-        if (nextShape->position().x()<pos.x())
-            nextShape = 0;
+            nextShape = m_children.first();
+            foreach(KoShape* child, m_children)
+                if (child->position().x()>pos.x()) {
+                    nextShape = child;
+                    break;
+                }
+            if (nextShape->position().x()<pos.x())
+                nextShape = 0;
+            break;
+        case TreeShape::OrgUp:
+            pos = shape->shapeToDocument(shape->connectionPoints()[2]);
+            pos = m_container->documentToShape(pos);
+
+            nextShape = m_children.first();
+            foreach(KoShape* child, m_children)
+                if (child->position().x()>pos.x()) {
+                    nextShape = child;
+                    break;
+                }
+            if (nextShape->position().x()<pos.x())
+                nextShape = 0;
+            break;
+        case TreeShape::OrgLeft:
+            pos = shape->shapeToDocument(shape->connectionPoints()[1]);
+            pos = m_container->documentToShape(pos);
+
+            nextShape = m_children.first();
+            foreach(KoShape* child, m_children)
+                if (child->position().y()>pos.y()) {
+                    nextShape = child;
+                    break;
+                }
+            if (nextShape->position().y()<pos.y())
+                nextShape = 0;
+            break;
+        case TreeShape::OrgRight:
+            pos = shape->shapeToDocument(shape->connectionPoints()[3]);
+            pos = m_container->documentToShape(pos);
+
+            nextShape = m_children.first();
+            foreach(KoShape* child, m_children)
+                if (child->position().y()>pos.y()) {
+                    nextShape = child;
+                    break;
+                }
+            if (nextShape->position().y()<pos.y())
+                nextShape = 0;
+            break;
+        default:
+            kDebug() << "def";
+            buildOrgDown();
+            break;
     }
 
     return nextShape;

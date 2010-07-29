@@ -54,6 +54,7 @@ public:
     virtual void paint( QPainter &painter, const KoViewConverter &converter);
 
 protected:
+    QPair<int,int> chooseConnectionPoints(TreeShape::TreeType structure);
     TreeShape* proposeParent();
     // helper function
     TreeShape* propose(QRectF area, TreeShape::TreeType structure);

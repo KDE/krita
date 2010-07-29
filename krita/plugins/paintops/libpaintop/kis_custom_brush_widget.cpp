@@ -56,6 +56,8 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
 
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
     m_rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
+    
+    m_brush = 0;
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUpdateCurrentBrush()));
@@ -144,8 +146,9 @@ void KisCustomBrushWidget::slotAddPredefined()
 
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
-    if (m_rServerAdapter)
+    if (m_rServerAdapter) {
         m_rServerAdapter->addResource(static_cast<KisGbrBrush*>(m_brush.data())->clone());
+    }
 }
 
 void KisCustomBrushWidget::createBrush()
@@ -154,9 +157,11 @@ void KisCustomBrushWidget::createBrush()
         return;
 
     if (m_brush){
-        // TODO: Warining, resolve this!
-        // The brush should be removed from resource server!!!
-        // KisBrushServer::instance()->brushServer()->removeResourceFromServer( static_cast<KisGbrBrush*>(m_brush.data()) );
+        // don't delete shared pointer, please
+        bool removedCorrectly = KisBrushServer::instance()->brushServer()->removeResourceFromServer(  m_brush.data(), false );
+        if (!removedCorrectly){
+            kWarning() << "Brush was not removed correctly for the resource server";
+        }
     }
     
     if (brushStyle->currentIndex() == 0) {
@@ -206,11 +211,11 @@ void KisCustomBrushWidget::createBrush()
 
     static_cast<KisGbrBrush*>( m_brush.data() )->setUseColorAsMask( colorAsMask->isChecked() );
     m_brush->setSpacing(spacingSlider->value());
-    m_brush->setFilename("/tmp/temporaryKritaBrush.gbr");
-    m_brush->setName("temporaryBrush");
+    m_brush->setFilename(TEMPORARY_FILENAME);
+    m_brush->setName(TEMPORARY_BRUSH_NAME);
     m_brush->setValid(true);
-    // temporaryKritaBrush.gbr will not be saved to file by resource server
-    KisBrushServer::instance()->brushServer()->addResource( static_cast<KisGbrBrush*>( m_brush.data() ), false);
+    
+    KisBrushServer::instance()->brushServer()->addResource( m_brush.data() , false);
 }
 
 void KisCustomBrushWidget::setImage(KisImageWSP image)

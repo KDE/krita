@@ -207,4 +207,10 @@ KoColor MixerCanvas::currentColorAt(QPoint pos)
     return KoColor();
 }
 
+QCursor MixerCanvas::setCursor(const QCursor &cursor)
+{
+    QCursor oldCursor = QWidget::cursor();
+    QWidget::setCursor(cursor);
+    return oldCursor;
+}
 #include "mixercanvas.moc"

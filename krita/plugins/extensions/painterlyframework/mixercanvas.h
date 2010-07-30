@@ -67,6 +67,7 @@ public:
 
     KoColor currentColorAt(QPoint pos);
 
+    QCursor setCursor(const QCursor &cursor);
 protected:
 
     // Events to be redirected to the MixerTool

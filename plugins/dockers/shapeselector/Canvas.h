@@ -72,7 +72,7 @@ public:
     virtual void updateInputMethodInfo() {}
     /// implementing KoCanvasBase
     virtual const QWidget* canvasWidget() const { return 0; }
-
+    QCursor setCursor(const QCursor &cursor) { return cursor; }
     ItemStore *itemStore() const { return m_parent->itemStore(); }
 
     /**

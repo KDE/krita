@@ -30,6 +30,7 @@
 #include <QRectF>
 #include <QRect>
 #include <QWidget>
+#include <QCursor>
 
 #include "flake_export.h"
 
@@ -85,6 +86,15 @@ public:
      * @return if snap to grid is enabled.
      */
     virtual bool snapToGrid() const = 0;
+
+
+    /**
+     * set the specified cursor on this canvas
+     *
+     * @param cursor the new cursor
+     * @return the old cursor
+     */
+    virtual QCursor setCursor(const QCursor &cursor) = 0;
 
     /**
      * Adds a command to the history. Call this for each @p command you create.

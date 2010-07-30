@@ -600,4 +600,11 @@ bool KisCanvas2::handlePopupPaletteIsVisible(KoPointerEvent* e)
     return false;
 }
 
+QCursor KisCanvas2::setCursor(const QCursor &cursor)
+{
+    QCursor oldCursor = canvasWidget()->cursor();
+    canvasWidget()->setCursor(cursor);
+    return oldCursor;
+}
+
 #include "kis_canvas2.moc"

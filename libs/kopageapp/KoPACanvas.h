@@ -76,6 +76,8 @@ public:
     QPoint viewToWidget(const QPoint& p) const;
     QRect viewToWidget(const QRect& r) const;
 
+    QCursor setCursor(const QCursor &cursor);
+
 public slots:
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
     void updateSize();

@@ -60,6 +60,7 @@ public:
     const QWidget* canvasWidget() const;
     KoUnit unit() const;
     virtual void updateInputMethodInfo() {}
+    QCursor setCursor(const QCursor &cursor) { return cursor; }
 
 private slots:
     void repaint();

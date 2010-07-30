@@ -563,13 +563,7 @@ void KoToolManager::Private::updateCursor(const QCursor &cursor)
     Q_ASSERT(canvasData);
     Q_ASSERT(canvasData->canvas);
     Q_ASSERT(canvasData->canvas->canvas());
-    if (canvasData->canvas->canvas()->canvasWidget()) {
-        canvasData->canvas->canvas()->canvasWidget()->setCursor(cursor);
-    }
-    else if (canvasData->canvas->canvas()->canvasItem()) {
-        canvasData->canvas->canvas()->canvasItem()->setCursor(cursor);
-    }
-
+    canvasData->canvas->canvas()->setCursor(cursor);
 }
 
 void KoToolManager::Private::switchBackRequested()

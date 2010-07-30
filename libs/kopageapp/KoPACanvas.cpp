@@ -53,7 +53,7 @@ public:
         delete masterShapeManager;
         delete shapeManager;
     }
-    
+
     ///< the origin of the page rect inside the canvas in document points
     QPointF origin() const
     {
@@ -316,6 +316,13 @@ QRect KoPACanvas::viewToWidget(const QRect& r) const
 KoGuidesData * KoPACanvas::guidesData()
 {
     return &d->doc->guidesData();
+}
+
+QCursor KoPACanvas::setCursor(const QCursor &cursor)
+{
+    QCursor oldCursor = QWidget::cursor();
+    QWidget::setCursor(cursor);
+    return oldCursor;
 }
 
 #include <KoPACanvas.moc>

@@ -99,6 +99,12 @@ public:
     }
 
     virtual void updateInputMethodInfo() {}
+
+    QCursor setCursor(const QCursor &cursor)
+    {
+        return cursor;
+    }
+
 private:
     KoShapeManager *m_shapeManager;
 };

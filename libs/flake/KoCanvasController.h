@@ -297,6 +297,8 @@ public:
     void emitMoveDocumentOffset(const QPoint &point) { emit moveDocumentOffset(point); }
     void emitZoomBy(const qreal factor) { emit zoomBy(factor); }
 
+    // Convenience method to retrieve the canvas controller for who needs to use QPointer
+    KoCanvasController *canvasController() const { return m_canvasController; }
 
 signals:
 

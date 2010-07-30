@@ -230,8 +230,6 @@ public:
      */
     bool isReadWrite() const;
 
-protected:
-    friend class KoCanvasController;
     /// called by KoCanvasController to set the controller that handles this canvas.
     void setCanvasController(KoCanvasController *controller);
 

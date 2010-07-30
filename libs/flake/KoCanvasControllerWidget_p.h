@@ -18,19 +18,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCANVASCONTROLLER_P_H
-#define KOCANVASCONTROLLER_P_H
+#ifndef KOCANVASCONTROLLERWIDGET_P_H
+#define KOCANVASCONTROLLERWIDGET_P_H
 
-#include "KoCanvasController.h"
+#include "KoCanvasControllerWidget.h"
 
 #include <QWidget>
 
 class Viewport;
 
-class KoCanvasController::Private
+class KoCanvasControllerWidget::Private
 {
 public:
-    Private(KoCanvasController *qq);
+    Private(KoCanvasControllerWidget *qq);
 
     /**
      * Gets called by the tool manager if this canvas controller is the current active canvas controller.
@@ -42,7 +42,7 @@ public:
 
     void activate();
 
-    KoCanvasController *q;
+    KoCanvasControllerWidget *q;
     KoCanvasBase * canvas;
     CanvasMode canvasMode;
     int margin; // The viewport margin around the document // TODO can we remove this one? The viewport has a copy...
@@ -60,7 +60,7 @@ class Viewport : public QWidget
 
 public:
 
-    Viewport(KoCanvasController *parent);
+    Viewport(KoCanvasControllerWidget *parent);
     ~Viewport() {}
 
     void setCanvas(QWidget *canvas);
@@ -101,7 +101,7 @@ private:
 
 private:
 
-    KoCanvasController *m_parent;
+    KoCanvasControllerWidget *m_parent;
     KoShape *m_draggedShape;
 
     bool m_drawShadow;

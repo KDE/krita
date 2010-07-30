@@ -20,7 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoCanvasController_p.h"
+#include "KoCanvasControllerWidget_p.h"
 #include "KoShape.h"
 #include "KoShape_p.h"
 #include "KoShapeFactoryBase.h" // for the SHAPE mimetypes
@@ -46,7 +46,7 @@
 #include <stdlib.h>
 
 // ********** Viewport **********
-Viewport::Viewport(KoCanvasController *parent)
+Viewport::Viewport(KoCanvasControllerWidget *parent)
         : QWidget(parent)
         , m_draggedShape(0)
         , m_drawShadow(false)
@@ -370,4 +370,4 @@ void Viewport::resetLayout()
 #endif
 }
 
-#include <KoCanvasController_p.moc>
+#include <KoCanvasControllerWidget_p.moc>

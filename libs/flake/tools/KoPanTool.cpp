@@ -23,6 +23,7 @@
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
+#include "KoCanvasControllerWidget.h"
 #include "KoViewConverter.h"
 
 #include <QKeyEvent>
@@ -72,18 +73,23 @@ void KoPanTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void KoPanTool::keyPressEvent(QKeyEvent *event)
 {
+    // XXX: Make widget-independent!
+    KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(m_controller);
+    if (!canvasControllerWidget) {
+        return;
+    }
     switch (event->key()) {
         case Qt::Key_Up:
-            m_controller->pan(QPoint(0, -m_controller->verticalScrollBar()->singleStep()));
+            m_controller->pan(QPoint(0, -canvasControllerWidget->verticalScrollBar()->singleStep()));
             break;
         case Qt::Key_Down:
-            m_controller->pan(QPoint(0, m_controller->verticalScrollBar()->singleStep()));
+            m_controller->pan(QPoint(0, canvasControllerWidget->verticalScrollBar()->singleStep()));
             break;
         case Qt::Key_Left:
-            m_controller->pan(QPoint(-m_controller->horizontalScrollBar()->singleStep(), 0));
+            m_controller->pan(QPoint(-canvasControllerWidget->horizontalScrollBar()->singleStep(), 0));
             break;
         case Qt::Key_Right:
-            m_controller->pan(QPoint(m_controller->horizontalScrollBar()->singleStep(), 0));
+            m_controller->pan(QPoint(canvasControllerWidget->horizontalScrollBar()->singleStep(), 0));
             break;
     }
     event->accept();

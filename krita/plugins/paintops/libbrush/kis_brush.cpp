@@ -636,7 +636,7 @@ KisQImagemaskSP KisBrush::scaleMask(const KisScaledBrush *srcBrush, double scale
     int dstWidth = static_cast<int>(ceil(scale * width())) + 1;
     int dstHeight = static_cast<int>(ceil(scale * height())) + 1;
 
-    KisQImagemaskSP dstMask = KisQImagemaskSP(new KisQImagemask(dstWidth, dstHeight));
+    KisQImagemaskSP dstMask = KisQImagemaskSP(new KisQImagemask(dstWidth, dstHeight, false));
     Q_CHECK_PTR(dstMask);
 
     KisQImagemaskSP srcMask = srcBrush->mask();

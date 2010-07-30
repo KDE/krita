@@ -33,7 +33,7 @@
 #include <KoShapeManager.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 #include <KoDocument.h>
 #include <KoZoomAction.h>
 #include <KoToolProxy.h>
@@ -113,7 +113,7 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShape
 {
     KisConfig cfg;
     createCanvas(cfg.useOpenGL());
-    connect(view->canvasController(), SIGNAL(moveDocumentOffset(const QPoint&)), SLOT(documentOffsetMoved(const QPoint&)));
+    connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), SLOT(documentOffsetMoved(const QPoint&)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(this, SIGNAL(canvasDestroyed(QWidget *)), this, SLOT(slotCanvasDestroyed(QWidget *)));
 }
@@ -139,7 +139,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     widget->setAttribute(Qt::WA_OpaquePaintEvent);
     widget->setMouseTracking(true);
     widget->setAcceptDrops(true);
-    KoCanvasController *controller = canvasController();
+    KoCanvasControllerWidget *controller = dynamic_cast<KoCanvasControllerWidget*>(canvasController());
     if (controller) {
         Q_ASSERT(controller->canvas() == this);
         // Avoids jumping and redrawing when changing zoom means the image fits in the area completely
@@ -148,6 +148,11 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
 
         controller->changeCanvasWidget(widget);
     }
+}
+
+bool KisCanvas2::canvasIsOpenGL()
+{
+    return m_d->currentCanvasIsOpenGL;
 }
 
 void KisCanvas2::gridSize(qreal *horizontal, qreal *vertical) const

@@ -56,7 +56,7 @@
 #include <ktemporaryfile.h>
 
 #include <KoMainWindow.h>
-#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 #include <KoSelection.h>
 #include <KoToolBoxFactory.h>
 #include <KoZoomHandler.h>
@@ -209,7 +209,8 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->doc = doc;
     m_d->viewConverter = new KoZoomHandler();
 
-    m_d->canvasController = new KoCanvasController(this);
+    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(this);
+    m_d->canvasController = canvasController;
     m_d->canvasController->setDrawShadow(false);
     m_d->canvasController->setMargin(10);
     m_d->canvasController->setCanvasMode(KoCanvasController::Infinite);
@@ -242,12 +243,12 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
         KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(m_d->canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
                 shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
     }
 
     m_d->statusBar = new KisStatusBar(this);
-    connect(m_d->canvasController, SIGNAL(documentMousePositionChanged(const QPointF &)),
+    connect(m_d->canvasController->proxyObject, SIGNAL(documentMousePositionChanged(const QPointF &)),
             m_d->statusBar, SLOT(documentMousePositionChanged(const QPointF &)));
 
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),

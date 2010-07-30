@@ -35,7 +35,7 @@
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
-#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 #include <KoGlobal.h>
 #include <KoRulerController.h>
 
@@ -108,15 +108,15 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 
     layout->addWidget(m_horizontalRuler, 0, 1);
     layout->addWidget(m_verticalRuler, 1, 0);
-    layout->addWidget(m_canvasController, 1, 1);
+    layout->addWidget(static_cast<KoCanvasControllerWidget*>(m_canvasController), 1, 1);
 
-    connect(m_canvasController, SIGNAL(canvasOffsetXChanged(int)),
+    connect(m_canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
             this, SLOT(pageOffsetChanged()));
 
-    connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)),
+    connect(m_canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)),
             this, SLOT(pageOffsetChanged()));
 
-    connect(m_canvasController,
+    connect(m_canvasController->proxyObject,
             SIGNAL(canvasMousePositionChanged(const QPoint &)),
             SLOT(mousePositionChanged(const QPoint &)));
 

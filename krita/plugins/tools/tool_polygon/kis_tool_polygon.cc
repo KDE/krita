@@ -34,7 +34,6 @@
 
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasController.h>
 #include <KoPathShape.h>
 #include <KoShapeController.h>
 #include <KoLineBorder.h>

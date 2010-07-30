@@ -513,7 +513,7 @@ void KisTool::slotResetFgBg()
 
 bool KisTool::isCanvasOpenGL() const
 {
-    return canvas()->canvasController()->isCanvasOpenGL();
+    return canvas()->canvasIsOpenGL();
 }
 
 void KisTool::beginOpenGL()

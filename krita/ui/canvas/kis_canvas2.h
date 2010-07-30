@@ -73,6 +73,8 @@ public:
 
 public: // KoCanvasBase implementation
 
+    bool canvasIsOpenGL();
+
     void gridSize(qreal *horizontal, qreal *vertical) const;
 
     bool snapToGrid() const;
@@ -170,7 +172,7 @@ public slots:
 
     /// slot for setting the mirroring
     void mirrorCanvas(bool mirror);
-    
+
 private slots:
 
     /**

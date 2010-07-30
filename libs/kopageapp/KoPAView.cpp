@@ -30,7 +30,7 @@
 #include <QClipboard>
 #include <QLabel>
 
-#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 #include <KoResourceManager.h>
 #include <KoColorBackground.h>
 #include <KoFind.h>
@@ -181,7 +181,8 @@ void KoPAView::initGUI()
     setLayout( gridLayout );
 
     d->canvas = new KoPACanvas( this, d->doc );
-    d->canvasController = new KoCanvasController( this );
+    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( this );
+    d->canvasController = canvasController;
     d->canvasController->setCanvas( d->canvas );
     KoToolManager::instance()->addController( d->canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
@@ -224,15 +225,15 @@ void KoPAView::initGUI()
 
     gridLayout->addWidget(d->horizontalRuler, 0, 1);
     gridLayout->addWidget(d->verticalRuler, 1, 0);
-    gridLayout->addWidget( d->canvasController, 1, 1 );
+    gridLayout->addWidget(canvasController, 1, 1 );
 
-    connect(d->canvasController, SIGNAL(canvasOffsetXChanged(int)),
+    connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
             this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController, SIGNAL(canvasOffsetYChanged(int)),
+    connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)),
             this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController, SIGNAL(sizeChanged(const QSize&)),
+    connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(const QSize&)),
             this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController, SIGNAL(canvasMousePositionChanged(const QPoint&)),
+    connect(d->canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(const QPoint&)),
             this, SLOT(updateMousePosition(const QPoint&)));
     d->verticalRuler->createGuideToolConnection(d->canvas);
     d->horizontalRuler->createGuideToolConnection(d->canvas);
@@ -241,15 +242,13 @@ void KoPAView::initGUI()
     if (shell())
     {
         shell()->createDockWidget( &toolBoxFactory );
-
-        connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*) ),
+        connect( canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*) ),
              shell()->dockerManager(), SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*) ) );
     }
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    connect(d->canvas, SIGNAL(documentSize(const QSize&)), d->canvasController, SLOT(setDocumentSize(const QSize&)));
-    connect(d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
-            d->canvas, SLOT(setDocumentOffset(const QPoint&)));
+    connect(d->canvas, SIGNAL(documentSize(const QSize&)), d->canvasController->proxyObject, SLOT(setDocumentSize(const QSize&)));
+    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->canvas, SLOT(setDocumentOffset(const QPoint&)));
 
     if (shell()) {
         KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, d->doc->pageType() );
@@ -281,7 +280,7 @@ void KoPAView::initActions()
     d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
     d->deleteSelectionAction->setEnabled(false);
     connect(d->deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
-    connect(d->canvas->toolProxy(),    SIGNAL(selectionChanged(bool)), 
+    connect(d->canvas->toolProxy(),    SIGNAL(selectionChanged(bool)),
             d->deleteSelectionAction, SLOT(setEnabled(bool)));
 
     KToggleAction *showGrid= d->doc->gridData().gridToggleAction(d->canvas);
@@ -716,7 +715,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     if ( shell() && pageChanged ) {
         d->documentStructureDocker->setActivePage(d->activePage);
     }
-    
+
     // Set the current page number in the canvas resource provider
     d->canvas->resourceManager()->setResource( KoCanvasResource::CurrentPage, d->doc->pageIndex(d->activePage)+1 );
 }

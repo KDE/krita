@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
@@ -204,7 +204,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="KisColorSelectorTypeWidget" name="colorSelectorConfiguration"/>
+        <widget class="KisColorSelectorComboBox" name="colorSelectorConfiguration"/>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_4">
@@ -909,9 +909,9 @@
    <header>widgets/kis_color_space_selector.h</header>
   </customwidget>
   <customwidget>
-   <class>KisColorSelectorTypeWidget</class>
+   <class>KisColorSelectorComboBox</class>
    <extends>QComboBox</extends>
-   <header>kis_color_selector_type_widget.h</header>
+   <header>kis_color_selector_combo_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  */
 
-#include "kis_color_selector_type_widget.h"
+#include "kis_color_selector_combo_box.h"
 #include <QGridLayout>
 
 #include "kis_color_selector.h"
@@ -103,7 +103,7 @@ protected:
     void mousePressEvent(QMouseEvent* e)
     {
         if(rect().contains(e->pos())) {
-            KisColorSelectorTypeWidget* parent = dynamic_cast<KisColorSelectorTypeWidget*>(this->parent());
+            KisColorSelectorComboBox* parent = dynamic_cast<KisColorSelectorComboBox*>(this->parent());
             Q_ASSERT(parent);
             parent->setConfiguration(m_lastActiveConfiguration);
         }
@@ -113,7 +113,7 @@ protected:
     KisColorSelector::Configuration m_lastActiveConfiguration;
 };
 
-KisColorSelectorTypeWidget::KisColorSelectorTypeWidget(QWidget* parent) :
+KisColorSelectorComboBox::KisColorSelectorComboBox(QWidget* parent) :
         QComboBox(parent),
         m_private(new KisColorSelectorTypeWidgetPrivate(this)),
         m_currentSelector(this)
@@ -127,17 +127,17 @@ KisColorSelectorTypeWidget::KisColorSelectorTypeWidget(QWidget* parent) :
     m_currentSelector.setMaximumSize(m_private->selectorSize, m_private->selectorSize);
 }
 
-KisColorSelectorTypeWidget::~KisColorSelectorTypeWidget()
+KisColorSelectorComboBox::~KisColorSelectorComboBox()
 {
 }
 
-void KisColorSelectorTypeWidget::hidePopup()
+void KisColorSelectorComboBox::hidePopup()
 {
     QComboBox::hidePopup();
     m_private->hide();
 }
 
-void KisColorSelectorTypeWidget::showPopup()
+void KisColorSelectorComboBox::showPopup()
 {
     // only show if this is not the popup
     QComboBox::showPopup();
@@ -145,7 +145,7 @@ void KisColorSelectorTypeWidget::showPopup()
     m_private->show();
 }
 
-void KisColorSelectorTypeWidget::setColorSpace(const KoColorSpace *colorSpace)
+void KisColorSelectorComboBox::setColorSpace(const KoColorSpace *colorSpace)
 {
     //this is not the popup, but we should set the canvas for all popup selectors
     for(int i=0; i<m_private->layout()->count(); i++) {
@@ -159,17 +159,17 @@ void KisColorSelectorTypeWidget::setColorSpace(const KoColorSpace *colorSpace)
     update();
 }
 
-KisColorSelector::Configuration KisColorSelectorTypeWidget::configuration() const
+KisColorSelector::Configuration KisColorSelectorComboBox::configuration() const
 {
     return m_configuration;
 }
 
-void KisColorSelectorTypeWidget::paintEvent(QPaintEvent *e)
+void KisColorSelectorComboBox::paintEvent(QPaintEvent *e)
 {
     QComboBox::paintEvent(e);
 }
 
-void KisColorSelectorTypeWidget::setConfiguration(KisColorSelector::Configuration conf)
+void KisColorSelectorComboBox::setConfiguration(KisColorSelector::Configuration conf)
 {
     m_configuration=conf;
     m_currentSelector.setConfiguration(conf);

@@ -25,12 +25,12 @@ class KisCanvas2;
 class KisColorSelectorTypeWidgetPrivate;
 class KoColorSpace;
 
-class KisColorSelectorTypeWidget : public QComboBox
+class KisColorSelectorComboBox : public QComboBox
 {
     Q_OBJECT
 public:
-    KisColorSelectorTypeWidget(QWidget* parent=0);
-    ~KisColorSelectorTypeWidget();
+    KisColorSelectorComboBox(QWidget* parent=0);
+    ~KisColorSelectorComboBox();
     void hidePopup();
     void showPopup();
     KisColorSelector::Configuration configuration() const;

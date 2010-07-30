@@ -21,7 +21,7 @@
 
 #include <KConfigGroup>
 #include <KIcon>
-#include "kis_color_selector_type_widget.h"
+#include "kis_color_selector_combo_box.h"
 #include "kis_color_selector.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
@@ -131,7 +131,7 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("minimalShadeSelectorLineHeight", ui->minimalShadeSelectorLineHeight->value());
 
     //color selector
-    KisColorSelectorTypeWidget* cstw = dynamic_cast<KisColorSelectorTypeWidget*>(ui->colorSelectorConfiguration);
+    KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cfg.writeEntry("colorSelectorConfiguration", cstw->configuration().toString());
 
     emit settingsChanged();
@@ -224,7 +224,7 @@ void KisColorSelectorSettings::loadPreferences()
     ui->minimalShadeSelectorLineHeight->setValue(cfg.readEntry("minimalShadeSelectorLineHeight", 20));
 
     //color selector
-    KisColorSelectorTypeWidget* cstw = dynamic_cast<KisColorSelectorTypeWidget*>(ui->colorSelectorConfiguration);
+    KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cstw->setConfiguration(KisColorSelector::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelector::Configuration().toString())));
 }
 
@@ -282,7 +282,7 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->minimalShadeSelectorLineHeight->setValue(20);
 
     //color selector
-    KisColorSelectorTypeWidget* cstw = dynamic_cast<KisColorSelectorTypeWidget*>(ui->colorSelectorConfiguration);
+    KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cstw->setConfiguration(KisColorSelector::Configuration());
 }
 

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,14 +22,12 @@
 #include "kis_gbr_brush.h"
 
 #include <QImage>
-#include <QVector>
-
-#include <kis_shared.h>
 
 #include <KoColorSpace.h>
 
 #include "kis_global.h"
 #include "kis_types.h"
+#include <kis_shared.h>
 
 /**
  * KisQImagemask is intended to create alpha values from a QImage for use
@@ -55,19 +54,25 @@ public:
     /**
        Create a transparent mask.
     */
-    KisQImagemask(qint32 width, qint32 height);
+    KisQImagemask(qint32 width, qint32 height, bool initialize = true);
 
     virtual ~KisQImagemask();
 
+
+    
     /**
-       @return the number of alpha values in a scanline.
-    */
-    qint32 height() const;
+     * @return the number of lines in the mask.
+     */
+    qint32 height() const {
+        return m_height;
+    }
 
     /**
-       @return the number of lines in the mask.
+     * @return the number of alpha values in a scanline.
      */
-    qint32 width() const;
+    qint32 width() const{
+        return m_width;
+    }
 
     /**
      * Return the alpha mask bytes
@@ -81,6 +86,10 @@ public:
 
        Returns quint8 OPACITY_TRANSPARENT if the value is
        outside the bounds of the mask.
+       
+       Now it is much faster, we cache the pointer to data
+       in storage (QImage) instead of calling scanlines which
+       was slow
 
        XXX: this is, of course, not the best way of masking.
        Better would be to let KisQImagemask fill a chunk of memory
@@ -88,7 +97,7 @@ public:
        void applyMask(quint8 *pixeldata, qint32 pixelWidth,
        qint32 alphaPos). That would be fastest, or we could
        provide an iterator over the mask, that would be nice, too.
-    */
+     */
     inline quint8 alphaAt(qint32 x, qint32 y) const {
         if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
             return m_dataPtr[(y * m_bytesPerLine + x)];
@@ -108,14 +117,18 @@ public:
      */
     void rotation(double angle);
 
-    // Create a new mask by interpolating between mask1 and mask2 as t
-    // goes from 0 to 1.
+    /**
+     *Create a new mask by interpolating between mask1 and mask2 as t goes from 0 to 1.
+     */
     static KisQImagemaskSP interpolate(KisQImagemaskSP mask1, KisQImagemaskSP mask2, double t);
 
 private:
-    void computeAlpha(const QImage& image);
-    void copyAlpha(const QImage& image);
+    /// init the internal storage (QImage)
+    void init(int width, int height);
+    void computeAlphaMaskFromGrayScale(const QImage& image);
+    void computeAlphaMaskFromRGBA(const QImage& image);
 
+private:    
     int m_width;
     int m_height;
     QImage m_data;
@@ -123,9 +136,6 @@ private:
     int m_bytesPerLine;
     uchar * m_dataPtr;
 
-private:
-    void init(const QImage& image);
-    
 };
 
 #endif // KIS_ALPHA_MASK_

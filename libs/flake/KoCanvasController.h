@@ -280,7 +280,7 @@ public:
      * @param recalculateCenter if true the offset in the document we center on after calling
      *      recenterPreferred() will be recalculated for the new document size so the visual offset stays the same.
      */
-    virtual void setDocumentSize(const QSize &sz, bool recalculateCenter = true) = 0;
+    virtual void setDocumentSize(const QSize &sz, bool recalculateCenter) = 0;
 
 protected:
 

@@ -83,15 +83,6 @@ public:
     virtual ~KoCanvasController();
 
 
-protected:
-
-    friend class KoToolManager;
-
-    /**
-     * Activate this canvascontroller from the toolmanager
-     */
-    virtual void activate() = 0;
-
 public:
 
     /**

@@ -128,7 +128,7 @@ void KoZoomController::setPageSize(const QSizeF &pageSize)
 void KoZoomController::setDocumentSize( const QSizeF &documentSize )
 {
     d->documentSize = documentSize;
-    d->canvasController->setDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize(), false );
+    d->canvasController->updateDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize(), false );
 
     // Finally ask the canvasController to recenter
     d->canvasController->recenterPreferred();
@@ -176,7 +176,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
         kWarning(30004) << "ZoomController; Your page size is larger than your document size (" <<
             d->pageSize << " > " << d->documentSize << ")\n";
 #endif
-    d->canvasController->setDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize(), true );
+    d->canvasController->updateDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize(), true );
 
     // Finally ask the canvasController to recenter
     d->canvasController->recenterPreferred();

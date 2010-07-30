@@ -527,7 +527,7 @@ void KoCanvasControllerWidget::setToolOptionWidgets(const QMap<QString, QWidget 
     emit toolOptionWidgetsChanged(widgetMap);
 }
 
-void KoCanvasControllerWidget::setDocumentSize(const QSize &sz, bool recalculateCenter)
+void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalculateCenter)
 {
     if (!recalculateCenter) {
         // assume the distance from the top stays equal and recalculate the center.

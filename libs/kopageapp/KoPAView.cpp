@@ -247,7 +247,7 @@ void KoPAView::initGUI()
     }
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    connect(d->canvas, SIGNAL(documentSize(const QSize&)), d->canvasController->proxyObject, SLOT(setDocumentSize(const QSize&)));
+    connect(d->canvas, SIGNAL(documentSize(const QSize&)), d->canvasController->proxyObject, SLOT(updateDocumentSize(const QSize&)));
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->canvas, SLOT(setDocumentOffset(const QPoint&)));
 
     if (shell()) {

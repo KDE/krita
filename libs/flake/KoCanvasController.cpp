@@ -139,9 +139,9 @@ KoCanvasControllerProxyObject::KoCanvasControllerProxyObject(KoCanvasController 
 {
 }
 
-void KoCanvasControllerProxyObject::setDocumentSize(const QSize &newSize, bool recalculateCenter)
+void KoCanvasControllerProxyObject::updateDocumentSize(const QSize &newSize, bool recalculateCenter)
 {
-    m_canvasController->setDocumentSize(newSize, recalculateCenter);
+    m_canvasController->updateDocumentSize(newSize, recalculateCenter);
 }
 
 

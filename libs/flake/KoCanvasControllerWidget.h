@@ -244,7 +244,7 @@ public:
      * @param recalculateCenter if true the offset in the document we center on after calling
      *      recenterPreferred() will be recalculated for the new document size so the visual offset stays the same.
      */
-    void setDocumentSize(const QSize &sz, bool recalculateCenter = true);
+    void updateDocumentSize(const QSize &sz, bool recalculateCenter = true);
 
     /**
      * \internal

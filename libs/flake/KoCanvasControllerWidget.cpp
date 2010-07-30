@@ -208,7 +208,7 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(QWidget *parent)
 
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetX()));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetY()));
-    connect(this, SIGNAL(moveDocumentOffset(const QPoint&)), d->viewportWidget, SLOT(documentOffsetMoved(const QPoint&)));
+    connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->viewportWidget, SLOT(documentOffsetMoved(const QPoint&)));
 }
 
 KoCanvasControllerWidget::~KoCanvasControllerWidget()

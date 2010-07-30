@@ -127,7 +127,7 @@ public:
     /**
      * Insert page to the document at index
      *
-     * The function checks if it is a normal or a master page and puts it in 
+     * The function checks if it is a normal or a master page and puts it in
      * the correct list.
      *
      * @param page to insert to document
@@ -138,7 +138,7 @@ public:
     /**
      * Insert @p page to the document after page @p before
      *
-     * The function checks if it is a normal or a master page and puts it in 
+     * The function checks if it is a normal or a master page and puts it in
      * the correct list.
      *
      * @param page to insert to document
@@ -173,7 +173,7 @@ public:
      *
      * The page is created with new.
      *
-     * Reimplement when you need a derivered class in your kopageapplication 
+     * Reimplement when you need a derivered class in your kopageapplication
      */
     virtual KoPAPage *newPage(KoPAMasterPage *masterPage);
 
@@ -182,7 +182,7 @@ public:
      *
      * The page is created with new.
      *
-     * Reimplement when you need a derivered class in your kopageapplication 
+     * Reimplement when you need a derivered class in your kopageapplication
      */
     virtual KoPAMasterPage * newMasterPage();
 
@@ -221,9 +221,9 @@ public:
     virtual KoPageApp::PageType pageType() const;
 
     /**
-     * Get the thumbnail for the page. 
+     * Get the thumbnail for the page.
      *
-     * Us this method instead the on in the pages directly
+     * Use this method instead the one in the pages directly
      */
     QPixmap pageThumbnail(KoPAPageBase* page, const QSize& size);
 
@@ -280,7 +280,7 @@ protected:
     void loadOdfSettings( const KoXmlDocument & settingsDoc );
 
     /**
-     * This function is called by at the end of addShape. This is used 
+     * This function is called by at the end of addShape. This is used
      * e.g. for doing work on the application which is in the KoShapeAppData.
      *
      * The default impementation does nothing
@@ -288,7 +288,7 @@ protected:
     virtual void postAddShape( KoPAPageBase * page, KoShape * shape );
 
     /**
-     * This function is called by at the end of removeShape. This is used 
+     * This function is called by at the end of removeShape. This is used
      * e.g. for doing work on the application which is in the KoShapeAppData.
      *
      * The default impementation does nothing

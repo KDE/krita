@@ -29,6 +29,7 @@
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
 #include "KoCanvasController.h"
+#include "KoCanvasControllerWidget.h"
 #include "rdf/KoDocumentRdfBase.h"
 #ifdef SHOULD_BUILD_RDF
 #include "rdf/KoDocumentRdf.h"
@@ -2513,7 +2514,7 @@ QGraphicsItem *KoDocument::createCanvasItem()
 {
     KoView *view = createView();
     QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
-    QWidget *canvasController = view->findChild<KoCanvasController*>();
+    QWidget *canvasController = view->findChild<KoCanvasControllerWidget*>();
     proxy->setWidget(canvasController);
     return proxy;
 }

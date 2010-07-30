@@ -125,6 +125,11 @@ void KisColorSelectorSettings::savePreferences() const
     //shade selector
     cfg.writeEntry("shadeSelectorType", ui->shadeSelectorType->currentIndex());
 
+    cfg.writeEntry("minimalShadeSelectorAsGradient", ui->minimalShadeSelectorAsGradient->isChecked());
+    cfg.writeEntry("minimalShadeSelectorPatchCount", ui->minimalShadeSelectorPatchesPerLine->value());
+    cfg.writeEntry("minimalShadeSelectorLineCount",  ui->minimalShadeSelectorLineCount->value());
+    cfg.writeEntry("minimalShadeSelectorLineHeight", ui->minimalShadeSelectorLineHeight->value());
+
     //color selector
     KisColorSelectorTypeWidget* cstw = dynamic_cast<KisColorSelectorTypeWidget*>(ui->colorSelectorConfiguration);
     cfg.writeEntry("colorSelectorConfiguration", cstw->configuration().toString());
@@ -210,6 +215,14 @@ void KisColorSelectorSettings::loadPreferences()
     //shade selector
     ui->shadeSelectorType->setCurrentIndex(cfg.readEntry("shadeSelectorType", 0));
 
+    bool asGradient = cfg.readEntry("minimalShadeSelectorAsGradient", false);
+    if(asGradient) ui->minimalShadeSelectorAsGradient->setChecked(true);
+    else ui->minimalShadeSelectorAsColorPatches->setChecked(true);
+
+    ui->minimalShadeSelectorPatchesPerLine->setValue(cfg.readEntry("minimalShadeSelectorPatchCount", 10));
+    ui->minimalShadeSelectorLineCount->setValue(cfg.readEntry("minimalShadeSelectorLineCount", 3));
+    ui->minimalShadeSelectorLineHeight->setValue(cfg.readEntry("minimalShadeSelectorLineHeight", 20));
+
     //color selector
     KisColorSelectorTypeWidget* cstw = dynamic_cast<KisColorSelectorTypeWidget*>(ui->colorSelectorConfiguration);
     cstw->setConfiguration(KisColorSelector::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelector::Configuration().toString())));
@@ -259,6 +272,14 @@ void KisColorSelectorSettings::loadDefaultPreferences()
 
     //shade selector
     ui->shadeSelectorType->setCurrentIndex(0);
+
+//    bool asGradient = false;
+//    if(asGradient) ui->minimalShadeSelectorAsGradient->setChecked(true);
+//    else
+    ui->minimalShadeSelectorAsColorPatches->setChecked(true);
+    ui->minimalShadeSelectorPatchesPerLine->setValue(10);
+    ui->minimalShadeSelectorLineCount->setValue(3);
+    ui->minimalShadeSelectorLineHeight->setValue(20);
 
     //color selector
     KisColorSelectorTypeWidget* cstw = dynamic_cast<KisColorSelectorTypeWidget*>(ui->colorSelectorConfiguration);

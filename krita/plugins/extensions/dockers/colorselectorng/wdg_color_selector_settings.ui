@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
@@ -333,14 +333,14 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_12">
             <item>
-             <widget class="QRadioButton" name="radioButton">
+             <widget class="QRadioButton" name="minimalShadeSelectorAsGradient">
               <property name="text">
                <string>gradient</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QRadioButton" name="radioButton_2">
+             <widget class="QRadioButton" name="minimalShadeSelectorAsColorPatches">
               <property name="text">
                <string>color patches</string>
               </property>
@@ -367,7 +367,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox"/>
+             <widget class="QSpinBox" name="minimalShadeSelectorPatchesPerLine"/>
             </item>
            </layout>
           </item>
@@ -381,7 +381,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_2">
+             <widget class="QSpinBox" name="minimalShadeSelectorLineCount">
               <property name="minimum">
                <number>1</number>
               </property>
@@ -414,7 +414,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_3">
+             <widget class="QSpinBox" name="minimalShadeSelectorLineHeight">
               <property name="minimum">
                <number>16</number>
               </property>

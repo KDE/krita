@@ -3,6 +3,11 @@
 #include <QPainter>
 #include <QColor>
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KComponentData>
+#include <KGlobal>
+
 KisShadeSelectorLine::KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta, QWidget *parent) :
     QWidget(parent)
 {
@@ -26,15 +31,18 @@ void KisShadeSelectorLine::setColor(const QColor &color)
 
 void KisShadeSelectorLine::updateSettings()
 {
-    m_gradient=false;
-    m_patchCount=10;
-    m_lineHeight=20;
-    m_backgroundColor=QColor(128, 128, 128);
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+
+    m_gradient = cfg.readEntry("minimalShadeSelectorAsGradient", false);
+    m_patchCount = cfg.readEntry("minimalShadeSelectorPatchCount", 10);
+    m_lineHeight = cfg.readEntry("minimalShadeSelectorLineHeight", 20);
+    m_backgroundColor = QColor(128, 128, 128);
 }
 
 void KisShadeSelectorLine::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
+    painter.fillRect(0,0, width(), height(), m_backgroundColor);
     if(m_gradient) {
         QColor c1;
         qreal hue1 = m_color.hueF()-m_hueDelta;
@@ -57,11 +65,10 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
         gradient.setColorAt(0.5, m_color);
         gradient.setColorAt(1, c2);
 
-        painter.fillRect(0,0,width(), height()/2, QBrush(gradient));
+        painter.fillRect(0,0,width(), m_lineHeight, QBrush(gradient));
     }
     else {
-        painter.fillRect(0,0, width(), height(), m_backgroundColor);
-        int patchWidth = (width()-2*m_patchCount)/m_patchCount;
+        qreal patchWidth = (width()-2*m_patchCount)/qreal(m_patchCount);
         qreal hueStep=m_hueDelta/qreal(m_patchCount);
         qreal saturationStep=m_saturationDelta/qreal(m_patchCount);
         qreal valueStep=m_valueDelta/qreal(m_patchCount);

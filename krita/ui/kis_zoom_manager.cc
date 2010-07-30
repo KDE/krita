@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (C) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (C) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify

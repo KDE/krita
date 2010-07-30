@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2005-2009 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (c) 2005-2010 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>

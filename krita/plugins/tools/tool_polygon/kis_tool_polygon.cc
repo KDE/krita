@@ -4,6 +4,7 @@
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

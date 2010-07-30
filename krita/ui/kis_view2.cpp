@@ -5,7 +5,7 @@
  *                1999 Michael Koch    <koch@kde.org>
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *                2002 Patrick Julien <freak@codepimps.org>
- *                2003-2007 Boudewijn Rempt <boud@valdyas.org>
+ *                2003-20010 Boudewijn Rempt <boud@valdyas.org>
  *                2004 Clarence Dang <dang@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify

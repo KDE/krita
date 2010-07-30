@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (c) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or

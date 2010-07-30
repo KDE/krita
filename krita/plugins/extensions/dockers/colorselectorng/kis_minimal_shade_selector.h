@@ -20,6 +20,8 @@
 
 #include <QWidget>
 
+class KisShadeSelectorLine;
+
 class KisMinimalShadeSelector : public QWidget
 {
 Q_OBJECT
@@ -27,10 +29,14 @@ public:
     explicit KisMinimalShadeSelector(QWidget *parent = 0);
 
 public slots:
+    void setColor(const QColor& color);
     void updateSettings();
 
 protected:
-    void paintEvent(QPaintEvent *);
+//    void paintEvent(QPaintEvent *);
+
+private:
+    QList<KisShadeSelectorLine*> m_shadingLines;
 };
 
 #endif // KIS_COLSELNG_SHADE_SELECTOR_H

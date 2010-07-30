@@ -537,7 +537,7 @@ void KoCanvasControllerWidget::setDocumentSize(const QSize &sz, bool recalculate
 
     const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
     d->ignoreScrollSignals = true;
-    setDocumentSize(sz);
+    KoCanvasController::setDocumentSize(sz);
     d->viewportWidget->setDocumentSize(sz);
     d->resetScrollBars();
     d->ignoreScrollSignals = oldIgnoreScrollSignals;

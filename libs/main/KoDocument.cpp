@@ -343,11 +343,6 @@ KoDocument::~KoDocument()
 
     delete d->filterManager;
 
-    if (d->canvasItem && d->canvasItem->scene()) {
-        d->canvasItem->scene()->removeItem(d->canvasItem);
-        delete d->canvasItem;
-    }
-
     delete d;
     s_documentList->removeOne(this);
     // last one?

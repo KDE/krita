@@ -390,13 +390,12 @@ QImage KisGbrBrush::image() const
 {
     if (hasColor() && useColorAsMask()) {
         QImage image = m_image;
-
         for (int y = 0; y < image.height(); y++) {
             QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
             for (int x = 0; x < image.width(); x++) {
                 QRgb c = pixel[x];
-                int a = (qGray(c) * qAlpha(c)) / 255;
-                pixel[x] = qRgba(a, a, a, a);
+                int a = ((255 - qGray(c)) * qAlpha(c)) / 255;
+                pixel[x] = qRgba(a, a, a, 255);
             }
         }
         return image;
@@ -438,8 +437,9 @@ void KisGbrBrush::setImage(const QImage& image)
 
 void KisGbrBrush::makeMaskImage()
 {
-    if (!hasColor())
+    if (!hasColor()) {
         return;
+    }
 
     QImage image(width(), height(), QImage::Format_RGB32);
 
@@ -449,8 +449,8 @@ void KisGbrBrush::makeMaskImage()
             QRgb *pixel = reinterpret_cast<QRgb *>(m_image.scanLine(y));
             for (int x = 0; x < width(); x++) {
                 QRgb c = pixel[x];
-                int a = (qGray(c) * qAlpha(c)) / 255; // qGray(black) = 0
-                pixel[x] = qRgba(a, a, a, 255);
+                int a = ((255 - qGray(c)) * qAlpha(c)) / 255; // qGray(black) = 0
+                pixel[x] = qRgb(a, a, a);
             }
         }
 
@@ -459,7 +459,7 @@ void KisGbrBrush::makeMaskImage()
 
     setBrushType(MASK);
     setHasColor(false);
-    d->useColorAsMask = false;
+    setUseColorAsMask(false);
     resetBoundary();
     clearScaledBrushes();
 }

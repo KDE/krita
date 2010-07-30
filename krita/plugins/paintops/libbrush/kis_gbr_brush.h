@@ -78,10 +78,19 @@ public:
      */
     virtual bool saveToDevice(QIODevice* dev) const;
 
+    /**
+     * If the brush image data are colorful (e.g. you created the brush from the canvas with custom brush)
+     * and you want to paint with it as with masks, set to true.
+     */
     virtual void setUseColorAsMask(bool useColorAsMask);
 
     virtual bool useColorAsMask() const;
 
+    /** 
+     * Convert the mask to inverted gray scale, so it is alpha mask. 
+     * It can be used as MASK brush type. This operates on the date of the brush,
+     * so it destruct the original brush data
+     */
     virtual void makeMaskImage();
 
     virtual enumBrushType brushType() const;

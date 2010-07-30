@@ -150,10 +150,13 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
             }
             event->accept();
             break;
-        case Qt::Key_Delete:
+        case Qt::Key_D:
+            kDebug() << "Key_D";
             foreach (root, canvas()->shapeManager()->selection()->selectedShapes()) {
                 TreeShape *tree = dynamic_cast<TreeShape*>(root->parent());
+                kDebug() << root->shapeId();
                 if (tree) {
+                    kDebug() << tree->shapeId();
                     KoShapeController *controller = canvas()->shapeController();
                     QUndoCommand *command = new QUndoCommand;
                     controller->removeShape(tree,command);

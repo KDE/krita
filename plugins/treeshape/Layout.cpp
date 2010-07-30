@@ -91,7 +91,7 @@ void Layout::setRoot(KoShape *shape)
     m_lastWidth = m_container->size().width();
     m_lastHeight = m_container->size().height();
 
-    // shape was added to children by setParent() method
+    // shape was added to children by TreeShape::addShape() method
     m_children.removeOne(m_root);
 }
 
@@ -102,10 +102,18 @@ KoShape* Layout::root() const
 
 void Layout::setStructure(TreeShape::TreeType structure)
 {
-    m_structure = structure;
     foreach(KoShape *shape, m_children)
         dynamic_cast<TreeShape*>(shape)->setStructure(structure);
+
+    m_structure = structure;
+    QSizeF rootSize = root()->size();
+    m_lastHeight = rootSize.height();
+    m_lastWidth = rootSize.width();
+
     scheduleRelayout();
+    m_container->update();
+    layout();
+    m_container->update();
 }
 
 TreeShape::TreeType Layout::structure() const
@@ -202,7 +210,6 @@ KoShape* Layout::proposePosition(KoShape* shape)
             break;
         default:
             kDebug() << "def";
-            buildOrgDown();
             break;
     }
 
@@ -303,8 +310,13 @@ void Layout::layout()
     m_doingLayout = true;
 
     if (m_children.isEmpty()) {
-        m_container->setPosition(m_container->position()+m_root->position());
+        if (!m_root->position().isNull()) {
+            QPointF rootPos = m_container->documentToShape(m_root->shapeToDocument(QPointF()));
+            m_container->setPosition(rootPos);
+            m_root->setPosition(QPointF());
+        }
         m_container->setSize(m_root->size());
+
         m_doingLayout = false;
         m_relayoutScheduled = false;
         return;
@@ -332,6 +344,7 @@ void Layout::layout()
             buildOrgDown();
             break;
     }
+    kDebug() << m_container->shapeId() << m_container->size();
 
     m_container->update();
     m_doingLayout = false;

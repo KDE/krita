@@ -20,15 +20,118 @@
 
 #include "KoCanvasController.h"
 
+#include <QSize>
+#include <QPoint>
+
+class KoCanvasController::Private {
+public:
+    Private()
+        : canvasMode(Centered)
+        , margin(0)
+        , preferredCenterFractionX(0.5)
+        , preferredCenterFractionY(0.5)
+    {
+    }
+
+    CanvasMode canvasMode;
+    int margin;
+    QSize documentSize;
+    QPoint documentOffset;
+    qreal preferredCenterFractionX;
+    qreal preferredCenterFractionY;
+};
+
 KoCanvasController::KoCanvasController()
+    : d(new Private())
 {
     proxyObject = new KoCanvasControllerProxyObject(this);
 }
 
 KoCanvasController::~KoCanvasController()
 {
+    delete d;
     delete proxyObject;
 }
+
+void KoCanvasController::setCanvasMode(CanvasMode mode)
+{
+    d->canvasMode = mode;
+    switch (mode) {
+    case AlignTop:
+        d->preferredCenterFractionX = 0;
+        d->preferredCenterFractionY = 0.5;
+        break;
+    case Centered:
+        d->preferredCenterFractionX = 0.5;
+        d->preferredCenterFractionY = 0.5;
+        break;
+    case Infinite:
+    case Presentation:
+    case Spreadsheet:
+        d->preferredCenterFractionX = 0;
+        d->preferredCenterFractionY = 0;
+        break;
+    };
+}
+
+void KoCanvasController::setMargin(int margin)
+{
+    d->margin = margin;
+}
+
+int KoCanvasController::margin() const
+{
+    return d->margin;
+}
+
+
+KoCanvasController::CanvasMode KoCanvasController::canvasMode() const
+{
+    return d->canvasMode;
+}
+
+void KoCanvasController::setDocumentSize(const QSize &sz)
+{
+    d->documentSize = sz;
+}
+
+QSize KoCanvasController::documentSize() const
+{
+    return d->documentSize;
+}
+
+void KoCanvasController::setPreferredCenterFractionX(qreal x)
+{
+    d->preferredCenterFractionX = x;
+}
+
+qreal KoCanvasController::preferredCenterFractionX() const
+{
+    return d->preferredCenterFractionX;
+}
+
+void KoCanvasController::setPreferredCenterFractionY(qreal y)
+{
+    d->preferredCenterFractionY = y;
+}
+
+qreal KoCanvasController::preferredCenterFractionY() const
+{
+    return d->preferredCenterFractionY;
+}
+
+void KoCanvasController::setDocumentOffset( QPoint &offset)
+{
+    d->documentOffset = offset;
+}
+
+QPoint KoCanvasController::documentOffset() const
+{
+    return d->documentOffset;
+}
+
+
+
 
 KoCanvasControllerProxyObject::KoCanvasControllerProxyObject(KoCanvasController *controller, QObject *parent)
     : QObject(parent)
@@ -40,5 +143,6 @@ void KoCanvasControllerProxyObject::setDocumentSize(const QSize &newSize, bool r
 {
     m_canvasController->setDocumentSize(newSize, recalculateCenter);
 }
+
 
 #include <KoCanvasController.moc>

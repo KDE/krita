@@ -42,7 +42,7 @@ set(flake_SRCS
     KoToolBase.cpp
     KoCanvasController.cpp
     KoCanvasControllerWidget.cpp
-    KoCanvasControllerWidget_p.cpp
+    KoCanvasControllerWidgetViewport_p.cpp
     KoShapeRegistry.cpp
     KoToolFactoryBase.cpp
     KoPathShapeFactory.cpp

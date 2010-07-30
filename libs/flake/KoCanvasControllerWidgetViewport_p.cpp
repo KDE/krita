@@ -20,7 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoCanvasControllerWidget_p.h"
+#include "KoCanvasControllerWidgetViewport_p.h"
 #include "KoShape.h"
 #include "KoShape_p.h"
 #include "KoShapeFactoryBase.h" // for the SHAPE mimetypes
@@ -370,4 +370,4 @@ void Viewport::resetLayout()
 #endif
 }
 
-#include <KoCanvasControllerWidget_p.moc>
+#include <KoCanvasControllerWidgetViewport_p.moc>

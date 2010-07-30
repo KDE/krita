@@ -27,33 +27,6 @@
 
 class Viewport;
 
-class KoCanvasControllerWidget::Private
-{
-public:
-    Private(KoCanvasControllerWidget *qq);
-
-    /**
-     * Gets called by the tool manager if this canvas controller is the current active canvas controller.
-     */
-    void setDocumentOffset();
-
-    void resetScrollBars();
-    void emitPointerPositionChangedSignals(QEvent *event);
-
-    void activate();
-
-    KoCanvasControllerWidget *q;
-    KoCanvasBase * canvas;
-    CanvasMode canvasMode;
-    int margin; // The viewport margin around the document // TODO can we remove this one? The viewport has a copy...
-    QSize documentSize;
-    QPoint documentOffset;
-    Viewport * viewportWidget;
-    qreal preferredCenterFractionX;
-    qreal preferredCenterFractionY;
-    bool ignoreScrollSignals;
-};
-
 class Viewport : public QWidget
 {
     Q_OBJECT

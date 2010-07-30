@@ -82,6 +82,39 @@ public:
     explicit KoCanvasController();
     virtual ~KoCanvasController();
 
+
+protected:
+
+    friend class KoToolManager;
+
+    /**
+     * Activate this canvascontroller from the toolmanager
+     */
+    virtual void activate() = 0;
+
+public:
+
+    /**
+     * Returns the current margin that is used to pad the canvas with.
+     * This value is read from the KConfig property "canvasmargin"
+     */
+    virtual int margin() const;
+
+    /**
+     * Set the new margin to pad the canvas with.
+     */
+    virtual void setMargin(int margin);
+
+    /**
+     * Sets the how the canvas behaves if the zoomed document becomes smaller than the viewport.
+     * @param mode the new canvas mode, CanvasMode::Centered is the default value
+     */
+    virtual void setCanvasMode(KoCanvasController::CanvasMode mode);
+
+    /// Returns the current canvas mode
+    virtual KoCanvasController::CanvasMode canvasMode() const;
+
+
     /**
      * compatibility with QAbstractScrollArea
      */
@@ -140,14 +173,6 @@ public:
      */
     virtual int canvasOffsetY() const = 0;
 
-    /**
-     * Sets the how the canvas behaves if the zoomed document becomes smaller than the viewport.
-     * @param mode the new canvas mode, CanvasMode::Centered is the default value
-     */
-    virtual void setCanvasMode(KoCanvasController::CanvasMode mode) = 0;
-
-    /// Returns the current canvas mode
-    virtual KoCanvasController::CanvasMode canvasMode() const = 0;
 
     /**
      * @brief Scrolls the content of the canvas so that the given rect is visible.
@@ -238,17 +263,6 @@ public:
     virtual void pan(const QPoint &distance) = 0;
 
     /**
-     * Returns the current margin that is used to pad the canvas with.
-     * This value is read from the KConfig property "canvasmargin"
-     */
-    virtual int margin() const = 0;
-
-    /**
-     * Set the new margin to pad the canvas with.
-     */
-    virtual void setMargin(int margin) = 0;
-
-    /**
      * Get the position of the scrollbar
      */
     virtual QPoint scrollBarValue() const = 0;
@@ -267,6 +281,25 @@ public:
      *      recenterPreferred() will be recalculated for the new document size so the visual offset stays the same.
      */
     virtual void setDocumentSize(const QSize &sz, bool recalculateCenter = true) = 0;
+
+protected:
+
+    void setDocumentSize(const QSize &sz);
+    QSize documentSize() const;
+
+    void setPreferredCenterFractionX(qreal);
+    qreal preferredCenterFractionX() const;
+
+    void setPreferredCenterFractionY(qreal);
+    qreal preferredCenterFractionY() const;
+
+    void setDocumentOffset( QPoint &offset);
+    QPoint documentOffset() const;
+
+private:
+
+    class Private;
+    Private * const d;
 };
 
 

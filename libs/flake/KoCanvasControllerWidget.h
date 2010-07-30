@@ -64,6 +64,12 @@ public:
     /// Reimplemented from KoCanvasController
 
     /**
+     * Activate this canvascontroller
+     */
+    void activate();
+
+
+    /**
      * Set the shadow option -- by default the canvas controller draws
      * a black shadow around the canvas widget, which you may or may
      * not want.
@@ -115,15 +121,6 @@ public:
      * The topmost pixel that is shown is returned.
      */
     int canvasOffsetY() const;
-
-    /**
-     * Sets the how the canvas behaves if the zoomed document becomes smaller than the viewport.
-     * @param mode the new canvas mode, CanvasMode::Centered is the default value
-     */
-    void setCanvasMode(KoCanvasController::CanvasMode mode);
-
-    /// Returns the current canvas mode
-    KoCanvasController::CanvasMode canvasMode() const;
 
     /**
      * @brief Scrolls the content of the canvas so that the given rect is visible.
@@ -223,12 +220,6 @@ public:
      * @param distance the distance in view coordinates (pixels).  A positive distance means moving the canvas up/left.
      */
     void pan(const QPoint &distance);
-
-    /**
-     * Returns the current margin that is used to pad the canvas with.
-     * This value is read from the KConfig property "canvasmargin"
-     */
-    int margin() const;
 
     /**
      * Set the new margin to pad the canvas with.

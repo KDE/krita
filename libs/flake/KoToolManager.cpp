@@ -33,7 +33,6 @@
 #include "tools/KoPathToolFactory.h"
 #include "KoCanvasController.h"
 #include "KoCanvasControllerWidget.h"
-#include "KoCanvasControllerWidget_p.h"
 #include "KoShape.h"
 #include "KoShapeLayer.h"
 #include "KoShapeRegistry.h"
@@ -410,7 +409,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
             inputDevice = canvasData->inputDevice;
             KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
             if (canvasControllerWidget) {
-                canvasControllerWidget->priv()->activate();
+                canvasControllerWidget->activate();
             }
         } else {
             KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
@@ -486,7 +485,7 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
 
     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
     if (canvasControllerWidget) {
-        canvasControllerWidget->priv()->activate();
+        canvasControllerWidget->activate();
     }
 
     emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
@@ -541,7 +540,7 @@ void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
             canvasData->canvas->canvas()->canvasWidget()->setCursor(canvasData->activeTool->cursor());
             KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
             if (canvasControllerWidget) {
-                canvasControllerWidget->priv()->activate();
+                canvasControllerWidget->activate();
             }
             postSwitchTool(false);
             emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
@@ -552,7 +551,7 @@ void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
     canvasData = canvasses.value(newCanvas).first();
     inputDevice = canvasData->inputDevice;
     if (canvasControllerWidget) {
-        canvasControllerWidget->priv()->activate();
+        canvasControllerWidget->activate();
     }
     emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
 }
@@ -667,7 +666,7 @@ void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
             }
             KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
             if (canvasControllerWidget) {
-                canvasControllerWidget->priv()->activate();
+                canvasControllerWidget->activate();
             }
             emit q->inputDeviceChanged(device);
             emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
@@ -688,7 +687,7 @@ void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
     emit q->inputDeviceChanged(device);
     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
     if (canvasControllerWidget) {
-        canvasControllerWidget->priv()->activate();
+        canvasControllerWidget->activate();
     }
     emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
 }

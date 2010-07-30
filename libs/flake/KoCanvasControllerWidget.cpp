@@ -25,7 +25,7 @@
 
 #include "KoCanvasControllerWidget.h"
 
-#include "KoCanvasControllerWidget_p.h"
+#include "KoCanvasControllerWidgetViewport_p.h"
 #include "KoShape.h"
 #include "KoViewConverter.h"
 #include "KoCanvasBase.h"
@@ -50,16 +50,34 @@
 #include <QtOpenGL/QGLWidget>
 #endif
 
-KoCanvasControllerWidget::Private::Private(KoCanvasControllerWidget *qq)
-    : q(qq),
-    canvas(0),
-    canvasMode(Centered),
-    margin(0),
-    preferredCenterFractionX(0.5),
-    preferredCenterFractionY(0.5),
-    ignoreScrollSignals(false)
+
+class KoCanvasControllerWidget::Private
 {
-}
+public:
+
+    Private(KoCanvasControllerWidget *qq)
+        : q(qq),
+        canvas(0),
+        ignoreScrollSignals(false)
+    {
+    }
+
+    /**
+     * Gets called by the tool manager if this canvas controller is the current active canvas controller.
+     */
+    void setDocumentOffset();
+
+    void resetScrollBars();
+    void emitPointerPositionChangedSignals(QEvent *event);
+
+    void activate();
+
+    KoCanvasControllerWidget *q;
+    KoCanvasBase * canvas;
+    Viewport * viewportWidget;
+    bool ignoreScrollSignals;
+};
+
 
 void KoCanvasControllerWidget::Private::setDocumentOffset()
 {
@@ -69,10 +87,10 @@ void KoCanvasControllerWidget::Private::setDocumentOffset()
     // compensate.
 
     QPoint pt(q->horizontalScrollBar()->value(), q->verticalScrollBar()->value());
-    if (pt.x() < margin) pt.setX(0);
-    if (pt.y() < margin) pt.setY(0);
-    if (pt.x() > documentSize.width()) pt.setX(documentSize.width());
-    if (pt.y() > documentSize.height()) pt.setY(documentSize.height());
+    if (pt.x() < q->margin()) pt.setX(0);
+    if (pt.y() < q->margin()) pt.setY(0);
+    if (pt.x() > q->documentSize().width()) pt.setX(q->documentSize().width());
+    if (pt.y() > q->documentSize().height()) pt.setY(q->documentSize().height());
 
     q->proxyObject->emitMoveDocumentOffset(pt);
 
@@ -90,8 +108,8 @@ void KoCanvasControllerWidget::Private::setDocumentOffset()
         }
 
         if (!isCanvasOpenGL) {
-            QPoint diff = documentOffset - pt;
-            if (canvasMode == Spreadsheet && canvasWidget->layoutDirection() == Qt::RightToLeft) {
+            QPoint diff = q->documentOffset() - pt;
+            if (q->canvasMode() == Spreadsheet && canvasWidget->layoutDirection() == Qt::RightToLeft) {
                 canvasWidget->scroll(-diff.x(), diff.y());
             } else {
                 canvasWidget->scroll(diff.x(), diff.y());
@@ -99,7 +117,7 @@ void KoCanvasControllerWidget::Private::setDocumentOffset()
         }
     }
 
-    documentOffset = pt;
+    q->setDocumentOffset(pt);
 }
 
 void KoCanvasControllerWidget::Private::resetScrollBars()
@@ -107,8 +125,8 @@ void KoCanvasControllerWidget::Private::resetScrollBars()
     // The scrollbar value always points at the top-left corner of the
     // bit of image we paint.
 
-    int docH = documentSize.height() + margin;
-    int docW = documentSize.width() + margin;
+    int docH = q->documentSize().height() + q->margin();
+    int docW = q->documentSize().width() + q->margin();
     int drawH = viewportWidget->height();
     int drawW = viewportWidget->width();
 
@@ -158,7 +176,7 @@ void KoCanvasControllerWidget::Private::emitPointerPositionChangedSignals(QEvent
         }
     }
 
-    QPoint pixelPos = (pointerPos - canvas->documentOrigin()) + documentOffset;
+    QPoint pixelPos = (pointerPos - canvas->documentOrigin()) + q->documentOffset();
     QPointF documentPos = canvas->viewConverter()->viewToDocument(pixelPos);
 
     q->proxyObject->emitDocumentMousePositionChanged(documentPos);
@@ -214,6 +232,11 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(QWidget *parent)
 KoCanvasControllerWidget::~KoCanvasControllerWidget()
 {
     delete d;
+}
+
+void KoCanvasControllerWidget::activate()
+{
+    d->activate();
 }
 
 void KoCanvasControllerWidget::scrollContentsBy(int dx, int dy)
@@ -307,32 +330,6 @@ int KoCanvasControllerWidget::visibleWidth() const
     return qMin(width1, width2);
 }
 
-void KoCanvasControllerWidget::setCanvasMode(CanvasMode mode)
-{
-    d->canvasMode = mode;
-    switch (mode) {
-    case AlignTop:
-        d->preferredCenterFractionX = 0;
-        d->preferredCenterFractionY = 0.5;
-        break;
-    case Centered:
-        d->preferredCenterFractionX = 0.5;
-        d->preferredCenterFractionY = 0.5;
-        break;
-    case Infinite:
-    case Presentation:
-    case Spreadsheet:
-        d->preferredCenterFractionX = 0;
-        d->preferredCenterFractionY = 0;
-        break;
-    };
-}
-
-KoCanvasControllerWidget::CanvasMode KoCanvasControllerWidget::canvasMode() const
-{
-    return d->canvasMode;
-}
-
 int KoCanvasControllerWidget::canvasOffsetX() const
 {
     int offset = 0;
@@ -369,10 +366,10 @@ void KoCanvasControllerWidget::updateCanvasOffsetX()
     if (d->ignoreScrollSignals)
         return;
     if (horizontalScrollBar()->isVisible())
-        d->preferredCenterFractionX = (horizontalScrollBar()->value()
-                                       + horizontalScrollBar()->pageStep() / 2.0) / d->documentSize.width();
+        setPreferredCenterFractionY((horizontalScrollBar()->value()
+                                     + horizontalScrollBar()->pageStep() / 2.0) / documentSize().width());
     else
-        d->preferredCenterFractionX = 0;
+        setPreferredCenterFractionX(0);
 }
 
 void KoCanvasControllerWidget::updateCanvasOffsetY()
@@ -381,10 +378,10 @@ void KoCanvasControllerWidget::updateCanvasOffsetY()
     if (d->ignoreScrollSignals)
         return;
     if (verticalScrollBar()->isVisible())
-        d->preferredCenterFractionY = (verticalScrollBar()->value()
-                                       + verticalScrollBar()->pageStep() / 2.0) / d->documentSize.height();
+        setPreferredCenterFractionY((verticalScrollBar()->value()
+                                     + verticalScrollBar()->pageStep() / 2.0) / documentSize().height());
     else
-        d->preferredCenterFractionY = 0;
+        setPreferredCenterFractionY(0);
 }
 
 bool KoCanvasControllerWidget::eventFilter(QObject *watched, QEvent *event)
@@ -444,14 +441,14 @@ void KoCanvasControllerWidget::ensureVisible(const QRectF &rect, bool smooth)
 
 void KoCanvasControllerWidget::recenterPreferred()
 {
-    if (viewport()->width() >= d->documentSize.width()
-        && viewport()->height() >= d->documentSize.height())
+    if (viewport()->width() >= documentSize().width()
+        && viewport()->height() >= documentSize().height())
         return; // no need to center when image is smaller than viewport
     const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
     d->ignoreScrollSignals = true;
 
-    QPoint center = QPoint(int(d->documentSize.width() * d->preferredCenterFractionX),
-                           int(d->documentSize.height() * d->preferredCenterFractionY));
+    QPoint center = QPoint(int(documentSize().width() * preferredCenterFractionX()),
+                           int(documentSize().height() * preferredCenterFractionY()));
 
     // convert into a viewport based point
     center.rx() += d->canvas->canvasWidget()->x() + frameWidth();
@@ -485,8 +482,8 @@ void KoCanvasControllerWidget::zoomOut(const QPoint &center)
 
 void KoCanvasControllerWidget::zoomBy(const QPoint &center, qreal zoom)
 {
-    d->preferredCenterFractionX = 1.0 * center.x() / d->documentSize.width();
-    d->preferredCenterFractionY = 1.0 * center.y() / d->documentSize.height();
+    setPreferredCenterFractionX(1.0 * center.x() / documentSize().width());
+    setPreferredCenterFractionY(1.0 * center.y() / documentSize().height());
 
     const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
     d->ignoreScrollSignals = true;
@@ -505,13 +502,13 @@ void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
     else
         scale = 1.0 * viewport()->width() / viewRect.width();
 
-    const qreal preferredCenterFractionX = 1.0 * viewRect.center().x() / d->documentSize.width();
-    const qreal preferredCenterFractionY = 1.0 * viewRect.center().y() / d->documentSize.height();
+    const qreal preferredCenterFractionX = 1.0 * viewRect.center().x() / documentSize().width();
+    const qreal preferredCenterFractionY = 1.0 * viewRect.center().y() / documentSize().height();
 
     proxyObject->emitZoomBy(scale);
 
-    d->preferredCenterFractionX = preferredCenterFractionX;
-    d->preferredCenterFractionY = preferredCenterFractionY;
+    setPreferredCenterFractionX(preferredCenterFractionX);
+    setPreferredCenterFractionY(preferredCenterFractionY);
     recenterPreferred();
     d->canvas->canvasWidget()->update();
 }
@@ -534,13 +531,13 @@ void KoCanvasControllerWidget::setDocumentSize(const QSize &sz, bool recalculate
 {
     if (!recalculateCenter) {
         // assume the distance from the top stays equal and recalculate the center.
-        d->preferredCenterFractionX = d->documentSize.width() * d->preferredCenterFractionX / sz.width();
-        d->preferredCenterFractionY = d->documentSize.height() * d->preferredCenterFractionY / sz.height();
+        setPreferredCenterFractionX(documentSize().width() * preferredCenterFractionX() / sz.width());
+        setPreferredCenterFractionY(documentSize().height() * preferredCenterFractionY() / sz.height());
     }
 
     const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
     d->ignoreScrollSignals = true;
-    d->documentSize = sz;
+    setDocumentSize(sz);
     d->viewportWidget->setDocumentSize(sz);
     d->resetScrollBars();
     d->ignoreScrollSignals = oldIgnoreScrollSignals;
@@ -564,16 +561,16 @@ void KoCanvasControllerWidget::pan(const QPoint &distance)
 
 void KoCanvasControllerWidget::setPreferredCenter(const QPoint &viewPoint)
 {
-    d->preferredCenterFractionX = 1.0 * viewPoint.x() / d->documentSize.width();
-    d->preferredCenterFractionY = 1.0 * viewPoint.y() / d->documentSize.height();
+    setPreferredCenterFractionX(1.0 * viewPoint.x() / documentSize().width());
+    setPreferredCenterFractionY(1.0 * viewPoint.y() / documentSize().height());
     recenterPreferred();
 }
 
 QPoint KoCanvasControllerWidget::preferredCenter() const
 {
     QPoint center;
-    center.setX(qRound(d->preferredCenterFractionX * d->documentSize.width()));
-    center.setY(qRound(d->preferredCenterFractionY * d->documentSize.height()));
+    center.setX(qRound(preferredCenterFractionX() * documentSize().width()));
+    center.setY(qRound(preferredCenterFractionY() * documentSize().height()));
     return center;
 }
 
@@ -619,10 +616,10 @@ void KoCanvasControllerWidget::wheelEvent(QWheelEvent *event)
         const qreal zoomLevel = event->delta() > 0 ? sqrt(2.0) : sqrt(0.5);
 
         QPointF oldCenter = preferredCenter();
-        if (visibleWidth() >= d->documentSize.width())
-            oldCenter.rx() = d->documentSize.width() * 0.5;
-        if (visibleHeight() >= d->documentSize.height())
-            oldCenter.ry() = d->documentSize.height() * 0.5;
+        if (visibleWidth() >= documentSize().width())
+            oldCenter.rx() = documentSize().width() * 0.5;
+        if (visibleHeight() >= documentSize().height())
+            oldCenter.ry() = documentSize().height() * 0.5;
 
         const QPointF newCenter = mousePos - (1.0 / zoomLevel) * (mousePos - oldCenter);
 
@@ -645,7 +642,7 @@ bool KoCanvasControllerWidget::focusNextPrevChild(bool)
 
 void KoCanvasControllerWidget::setMargin(int margin)
 {
-    d->margin = margin;
+    KoCanvasController::setMargin(margin);
     Q_ASSERT(d->viewportWidget);
     d->viewportWidget->setMargin(margin);
 }
@@ -675,11 +672,6 @@ void KoCanvasControllerWidget::setScrollBarValue(const QPoint &value)
     if (vBar && !vBar->isHidden()) {
         vBar->setValue(value.y());
     }
-}
-
-int KoCanvasControllerWidget::margin() const
-{
-    return d->margin;
 }
 
 KoCanvasControllerWidget::Private *KoCanvasControllerWidget::priv()

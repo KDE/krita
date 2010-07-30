@@ -96,6 +96,10 @@ public:
 
     KDChart::MarkerAttributes defaultMarkerAttributes() const;
 
+    // Returns an instance of DataValueAttributes with sane default values in
+    // relation to KChart
+    KDChart::DataValueAttributes defaultDataValueAttributes() const;
+
     QPen defaultPen() const;
 
     // Determines what sections of a cell region lie in rect
@@ -127,10 +131,6 @@ public:
     bool brushIsSet;
     QPen pen;
     QBrush brush;
-
-    // Returns an instance of DataValueAttributes with sane default values in
-    // relation to KChart
-    KDChart::DataValueAttributes defaultDataValueAttributes();
 
     KDChart::PieAttributes pieAttributes;
     KDChart::DataValueAttributes dataValueAttributes;
@@ -202,7 +202,7 @@ KDChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes() const
     return ma;
 }
 
-KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes()
+KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes() const
 {
     KDChart::DataValueAttributes attr;
     KDChart::TextAttributes textAttr = attr.textAttributes();

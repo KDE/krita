@@ -496,12 +496,18 @@ void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
 {
     Q_UNUSED(from);
     // XXX: Focus handling for non-qwidget based canvases!
-    KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
-    if (!canvasControllerWidget)
+    if (!canvasData) {
         return;
+    }
 
-    if (to == 0 || (canvasData && to == canvasControllerWidget))
+    KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
+    if (!canvasControllerWidget) {
         return;
+    }
+
+    if (to == 0 || to == canvasControllerWidget) {
+        return;
+    }
 
     KoCanvasController *newCanvas = 0;
     // if the 'to' is one of our canvasses, or one of its children, then switch.

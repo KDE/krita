@@ -28,6 +28,7 @@
 #include "KoMainWindow.h"
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
+#include "KoCanvasController.h"
 #include "rdf/KoDocumentRdfBase.h"
 #ifdef SHOULD_BUILD_RDF
 #include "rdf/KoDocumentRdf.h"
@@ -69,6 +70,8 @@
 #include <QtGui/QApplication>
 #include <QtGui/QPrinter>
 #include <QtGui/QPrintDialog>
+#include <QGraphicsScene>
+#include <QGraphicsProxyWidget>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but KUrl didn't like it,
@@ -118,7 +121,9 @@ public:
             storeInternal(false),
             bLoading(false),
             startUpWidget(0),
-            undoStack(0)
+            undoStack(0),
+            canvasItem(0)
+
     {
         confirmNonNativeSave[0] = true;
         confirmNonNativeSave[1] = true;
@@ -191,6 +196,8 @@ public:
     bool bEmpty;
 
     KoPageLayout pageLayout;
+
+    QGraphicsItem *canvasItem;
 };
 
 // Used in singleViewMode
@@ -334,6 +341,12 @@ KoDocument::~KoDocument()
     }
 
     delete d->filterManager;
+
+    if (d->canvasItem && d->canvasItem->scene()) {
+        d->canvasItem->scene()->removeItem(d->canvasItem);
+        delete d->canvasItem;
+    }
+
     delete d;
     s_documentList->removeOne(this);
     // last one?
@@ -2486,6 +2499,23 @@ bool KoDocument::isEmpty() const
 void KoDocument::setEmpty()
 {
     d->bEmpty = true;
+}
+
+QGraphicsItem *KoDocument::canvasItem()
+{
+    if (!d->canvasItem) {
+        d->canvasItem = createCanvasItem();
+    }
+    return d->canvasItem;
+}
+
+QGraphicsItem *KoDocument::createCanvasItem()
+{
+    KoView *view = createView();
+    QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
+    QWidget *canvasController = view->findChild<KoCanvasController*>();
+    proxy->setWidget(canvasController);
+    return proxy;
 }
 
 // static

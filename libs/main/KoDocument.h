@@ -39,6 +39,7 @@
 #include <KoOdfDocument.h>
 
 class QUndoCommand;
+class QGraphicsItem;
 
 class KoStore;
 class KoOdfReadStore;
@@ -357,6 +358,14 @@ public:
      * @return number of views this document is displayed in
      */
     int viewCount() const;
+
+    /**
+     * @return a QGraphicsItem canvas displaying this document. The QGraphicsItem
+     * is created on first call. There is only one QGraphicsItem canvas that can
+     * be shown by many QGraphicsView subclasses (those should reimplement KoCanvasControllerBase
+     * as well).
+     */
+    QGraphicsItem *canvasItem();
 
     /**
      * Reimplemented from KParts::Part
@@ -882,6 +891,12 @@ protected:
     QString autoSaveFile(const QString & path) const;
 
     virtual KoView *createViewInstance(QWidget *parent) = 0;
+
+    /**
+     * Override this to create a QGraphicsItem that does not rely
+     * on proxying a KoCanvasController.
+     */
+    virtual QGraphicsItem *createCanvasItem();
 
     /**
      *  Loads a document from KReadOnlyPart::m_file (KParts takes care of downloading

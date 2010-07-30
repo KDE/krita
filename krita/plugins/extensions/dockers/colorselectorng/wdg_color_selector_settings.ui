@@ -426,16 +426,16 @@
            </layout>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox"/>
+           <widget class="KisShadeSelectorLineComboBox" name="comboBox"/>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox_2"/>
+           <widget class="KisShadeSelectorLineComboBox" name="comboBox_2"/>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox_4"/>
+           <widget class="KisShadeSelectorLineComboBox" name="comboBox_4"/>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox_5"/>
+           <widget class="KisShadeSelectorLineComboBox" name="comboBox_5"/>
           </item>
          </layout>
         </widget>
@@ -912,6 +912,11 @@
    <class>KisColorSelectorComboBox</class>
    <extends>QComboBox</extends>
    <header>kis_color_selector_combo_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisShadeSelectorLineComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kis_shade_selector_line_combo_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -54,6 +54,19 @@ void KisShadeSelectorLine::setCanvas(KisCanvas2 *canvas)
             this,                        SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
 }
 
+QString KisShadeSelectorLine::toString() const
+{
+    return QString("%1|%2|%3").arg(m_hueDelta).arg(m_saturationDelta).arg(m_valueDelta);
+}
+
+void KisShadeSelectorLine::fromString(const QString& string)
+{
+    QStringList strili = string.split('|');
+    m_hueDelta = strili.at(0).toDouble();
+    m_saturationDelta = strili.at(1).toDouble();
+    m_valueDelta = strili.at(2).toDouble();
+}
+
 void KisShadeSelectorLine::paintEvent(QPaintEvent *)
 {
     m_pixelCache = QImage(width(), height(), QImage::Format_ARGB32_Premultiplied);

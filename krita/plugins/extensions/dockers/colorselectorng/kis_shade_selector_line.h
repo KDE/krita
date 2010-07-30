@@ -14,6 +14,8 @@ public:
     void setColor(const QColor& color);
     void updateSettings();
     void setCanvas(KisCanvas2* canvas);
+    QString toString() const;
+    void fromString(const QString& string);
 
 protected:
     void paintEvent(QPaintEvent *);

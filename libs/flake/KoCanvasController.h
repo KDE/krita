@@ -78,12 +78,9 @@ public:
 
     /**
      * Constructor.
-     * @param parent the parent this widget will belong to
      */
     explicit KoCanvasController();
     virtual ~KoCanvasController();
-
-
 
     /**
      * compatibility with QAbstractScrollArea
@@ -94,7 +91,6 @@ public:
      * @return the size of the viewport
      */
     virtual QSize viewportSize() const = 0;
-
 
     /**
      * Set the shadow option -- by default the canvas controller draws

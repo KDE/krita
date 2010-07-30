@@ -93,8 +93,8 @@ public:
 
     QBrush defaultBrush() const;
     QBrush defaultBrush( int section ) const;
-    
-    KDChart::MarkerAttributes defaultMarkerAttributes( int section ) const;
+
+    KDChart::MarkerAttributes defaultMarkerAttributes() const;
 
     QPen defaultPen() const;
 
@@ -194,10 +194,11 @@ DataSet::Private::~Private()
 {
 }
 
-KDChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes( int section ) const
+KDChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes() const
 {
     KDChart::MarkerAttributes ma;
-    ma.setMarkerStyle( defaultMarkerTypes[ section % numDefaultMarkerTypes ] );
+    // Don't show markers unless we turn them on
+    ma.setVisible( false );
     return ma;
 }
 
@@ -205,8 +206,10 @@ KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes()
 {
     KDChart::DataValueAttributes attr;
     KDChart::TextAttributes textAttr = attr.textAttributes();
+    // Don't show value labels by default
+    textAttr.setVisible( false );
     KDChart::Measure fontSize = textAttr.fontSize();
-    attr.setMarkerAttributes( defaultMarkerAttributes( kdDataSetNumber ) );
+    attr.setMarkerAttributes( defaultMarkerAttributes() );
     fontSize.setValue( 10 );
     // Don't change font size with chart size
     fontSize.setCalculationMode( KDChartEnums::MeasureCalculationModeAbsolute );
@@ -234,6 +237,8 @@ KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes()
     attr.setShowOverlappingDataLabels( true );
     // Yes, data point labels can repeatedly have the same text. (e.g. the same value)
     attr.setShowRepetitiveDataLabels( true );
+
+    attr.setVisible( true );
 
     return attr;
 }
@@ -627,9 +632,40 @@ KDChart::PieAttributes DataSet::pieAttributes( int section ) const
 
 KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 */ ) const
 {
+    KDChart::DataValueAttributes attr( d->dataValueAttributes );
     if ( d->sectionsDataValueAttributes.contains( section ) )
-        return d->sectionsDataValueAttributes[ section ];
-    return d->dataValueAttributes;
+        attr = d->sectionsDataValueAttributes[ section ];
+
+    /*
+     * Update attributes that are related to properties out of the data
+     * sets's reach and thus might have changed in the meanwhile.
+     */
+    KDChart::MarkerAttributes ma( attr.markerAttributes() );
+
+    // The chart type is a property of the plot area, check that.
+    switch ( d->effectiveChartType() ) {
+    case ScatterChartType:
+        // TODO: Marker type should be customizable
+        // TODO: Marker size should be customizable
+        Q_ASSERT( kdDataSetNumber() >= 0 );
+        ma.setMarkerStyle( defaultMarkerTypes[ kdDataSetNumber() % numDefaultMarkerTypes ] );
+        ma.setVisible( true );
+        break;
+    case BubbleChartType:
+        ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
+        ma.setVisible( true );
+        break;
+    default:
+        // TODO: Make markers customizable even for other types
+        ma.setVisible( false );
+        break;
+    }
+
+    ma.setMarkerColor( brush( section ).color() );
+    ma.setPen( pen( section ) );
+    attr.setMarkerAttributes( ma );
+
+    return attr;
 }
 
 void DataSet::setPen( const QPen &pen )
@@ -1094,62 +1130,6 @@ KDChartModel *DataSet::kdChartModel() const
 void DataSet::blockSignals( bool block )
 {
     d->blockSignals = block;
-}
-
-void DataSet::setMarkerAttributes( const KDChart::MarkerAttributes& attribs, int section )
-{
-      if ( section >= 0 ){
-          QMap< int, KDChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.find( section );
-        if ( it != d->sectionsDataValueAttributes.end() ){
-            it->setMarkerAttributes( attribs );
-            if ( !it->isVisible() && it->textAttributes().isVisible()){
-              KDChart::TextAttributes tAttr( it->textAttributes() );
-              tAttr.setVisible( false );
-              it->setTextAttributes( tAttr );
-            }
-              it->setVisible( attribs.isVisible() );
-        }else{
-            KDChart::DataValueAttributes attr = d->defaultDataValueAttributes();
-            attr.setMarkerAttributes( attribs );
-            if ( !attr.isVisible() && attr.textAttributes().isVisible()){
-              KDChart::TextAttributes tAttr( attr.textAttributes() );
-              tAttr.setVisible( false );
-              attr.setTextAttributes( tAttr );
-            }
-            attr.setVisible( attribs.isVisible() );
-            d->sectionsDataValueAttributes [ section ] = attr;
-        }
-      }else{
-          d->dataValueAttributes.setMarkerAttributes( attribs );
-          if ( !d->dataValueAttributes.isVisible() && d->dataValueAttributes.textAttributes().isVisible()){
-              KDChart::TextAttributes tAttr( d->dataValueAttributes.textAttributes() );
-              tAttr.setVisible( false );
-              d->dataValueAttributes.setTextAttributes( tAttr );
-          }
-          d->dataValueAttributes.setVisible( attribs.isVisible() );
-      }
-}
-
-KDChart::MarkerAttributes DataSet::getMarkerAttributes( int section, bool* success ) const
-{   
-    if ( section > 0 ){
-        QMap< int, KDChart::DataValueAttributes >::const_iterator it = d->sectionsDataValueAttributes.find( section );
-        if ( it != d->sectionsDataValueAttributes.constEnd() ){
-            if ( success )
-              *success = true;
-            return KDChart::MarkerAttributes( it->markerAttributes() );
-        }
-        else{
-            if ( success )
-              *success = false;
-            return KDChart::MarkerAttributes();
-        }        
-    }else{
-        if ( success )
-            *success = true;
-        return d->dataValueAttributes.markerAttributes();
-    }
-    
 }
 
 void DataSet::setValueLabelType( ValueLabelType type, int section /* = -1 */ )

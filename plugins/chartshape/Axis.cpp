@@ -316,97 +316,6 @@ Axis::Private::~Private()
         delete kdGanttDiagramModel;
     }
 }
-/**
- *
- * Applies special settings to BubbleCharts and makes a backup of the
- * the old settings, restoring them if a switch to non buble type is made
- * This is necssary as BubbleChart is implemnted via Plotter, a diagram type
- * would make this obsolete, as the diagram could request correct data from the model
- *
- */
-void Axis::Private::applyAttributesToDataSet( DataSet* set, ChartType newCharttype )
-{
-    KDChart::MarkerAttributes restoreGlobalAttribs( markerAttributesGlobalBackup[ set ] );
-    KDChart::MarkerAttributes restoreAttribs( markerAttributesBackup[ set ] );
-    bool restorationNeeded = plotAreaChartType == BubbleChartType || plotAreaChartType == ScatterChartType;
-    switch ( newCharttype )
-    {
-        case( BubbleChartType ):
-        {          
-            if ( !restorationNeeded )
-            {
-                markerAttributesGlobalBackup[ set ] = set->getMarkerAttributes();
-                markerAttributesBackup[ set ] = set->getMarkerAttributes( 0 );  
-            }
-            KDChart::MarkerAttributes ma( set->getMarkerAttributes( ) );
-            ma.setVisible( true );
-            ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
-            ma.setMarkerColor( set->color() );                
-            set->setMarkerAttributes( ma );
-            QPen p = ma.pen();
-            p.setColor( set->color() );
-            ma.setPen( p );
-            for ( int i = 0; i < set->size(); ++i ){
-                KDChart::MarkerAttributes ma( set->getMarkerAttributes( i ) );
-                ma.setVisible( true );
-                ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
-                ma.setMarkerColor( set->color() );   
-                QPen p = ma.pen();
-                p.setColor( set->color() );
-                ma.setPen( p );
-                set->setMarkerAttributes( ma, i );
-            }
-        }
-            break;
-        case( ScatterChartType ):
-        {
-            if ( !restorationNeeded )
-            {
-                markerAttributesGlobalBackup[ set ] = set->getMarkerAttributes();
-                markerAttributesBackup[ set ] = set->getMarkerAttributes( 0 );  
-            }
-            KDChart::MarkerAttributes ma( set->getMarkerAttributes( ) );
-            ma.setVisible( true );
-            ma.setMarkerColor( set->color() );
-            ma.setMarkerSize( QSizeF( 10.0f, 10.0f ) );
-            set->setMarkerAttributes( ma );
-            QPen p = ma.pen();
-            p.setColor( set->color() );
-            ma.setPen( p );
-            for ( int i = 0; i < set->size(); ++i ){
-                KDChart::MarkerAttributes ma( set->getMarkerAttributes( i ) );
-                ma.setVisible( true );
-                ma.setMarkerColor( set->color() );   
-                ma.setMarkerSize( QSizeF( 10.0f, 10.0f ) );
-                QPen p = ma.pen();
-                p.setColor( set->color() );
-                ma.setPen( p );
-                set->setMarkerAttributes( ma, i );
-            }
-        }
-            break;
-        case( BarChartType ):
-        case( LineChartType ):        
-        case( AreaChartType ):
-        case( RingChartType ):
-        case( RadarChartType ):
-        case( SurfaceChartType ):
-        case( StockChartType ):
-        case( GanttChartType ):
-        case( LastChartType ):
-        default:
-          // make sure to restore the settings only if necessary, maybe dirty flag is a better option if further extension
-          // is needed
-            if ( restorationNeeded ){
-              
-              set->setMarkerAttributes( restoreGlobalAttribs );
-              for ( int i = 0; i < set->size(); ++i ){
-                  set->setMarkerAttributes( restoreAttribs, i );
-              }
-              break;
-            }
-    }
-}
 
 void Axis::Private::registerDiagram( KDChart::AbstractDiagram *diagram )
 {
@@ -2028,7 +1937,6 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         Qt::PenStyle newPenStyle = newDiagram->pen().style();
         QPen newPen = dataSet->pen();
         newPen.setStyle( newPenStyle );
-        d->applyAttributesToDataSet( dataSet, newChartType );
         dataSet->setPen(  newPen );
         dataSet->setKdDiagram( newDiagram );
         newModel->addDataSet( dataSet );        

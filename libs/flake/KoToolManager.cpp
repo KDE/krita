@@ -56,6 +56,7 @@
 #include <QKeyEvent>
 #include <QGridLayout>
 #include <QDockWidget>
+#include <QGraphicsWidget>
 #include <QStringList>
 #include <QAbstractButton>
 #include <QApplication>
@@ -242,8 +243,9 @@ void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
     // emit a empty status text to clear status text from last active tool
     emit q->changedStatusText(QString());
 
-    // we expect the tool to emit a cursor on activation.  This is for quick-fail :)
-    canvasData->canvas->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
+    // we expect the tool to emit a cursor on activation.
+    updateCursor(Qt::ForbiddenCursor);
+
     foreach(KAction *action, canvasData->activeTool->actions()) {
         action->setEnabled(true);
         // XXX: how to handle actions for non-qwidget-based canvases?
@@ -527,7 +529,7 @@ void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
     foreach(CanvasData *data, canvasses.value(newCanvas)) {
         if (data->inputDevice == inputDevice) {
             if (canvasData) { // deactivate the old one.
-                canvasData->canvas->canvas()->canvasWidget()->setCursor(Qt::ArrowCursor);
+                updateCursor(Qt::ArrowCursor);
                 if (canvasData->activeTool) {
                     canvasData->activeTool->deactivate();
                     KoToolProxy *proxy = proxies.value(canvasData->canvas->canvas());
@@ -537,7 +539,7 @@ void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
             }
 
             canvasData = data;
-            canvasData->canvas->canvas()->canvasWidget()->setCursor(canvasData->activeTool->cursor());
+            updateCursor(canvasData->activeTool->cursor());
             KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
             if (canvasControllerWidget) {
                 canvasControllerWidget->activate();
@@ -561,7 +563,13 @@ void KoToolManager::Private::updateCursor(const QCursor &cursor)
     Q_ASSERT(canvasData);
     Q_ASSERT(canvasData->canvas);
     Q_ASSERT(canvasData->canvas->canvas());
-    canvasData->canvas->canvas()->canvasWidget()->setCursor(cursor);
+    if (canvasData->canvas->canvas()->canvasWidget()) {
+        canvasData->canvas->canvas()->canvasWidget()->setCursor(cursor);
+    }
+    else if (canvasData->canvas->canvas()->canvasItem()) {
+        canvasData->canvas->canvas()->canvasItem()->setCursor(cursor);
+    }
+
 }
 
 void KoToolManager::Private::switchBackRequested()
@@ -662,7 +670,7 @@ void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
                 switchTool(KoInteractionTool_ID, false);
             else {
                 postSwitchTool(false);
-                canvasData->canvas->canvas()->canvasWidget()->setCursor(canvasData->activeTool->cursor());
+                updateCursor(canvasData->activeTool->cursor());
             }
             KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
             if (canvasControllerWidget) {

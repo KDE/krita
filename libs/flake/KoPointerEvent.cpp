@@ -52,22 +52,25 @@ KoPointerEvent::KoPointerEvent(QMouseEvent *ev, const QPointF &pnt)
         m_event(ev),
         d(new Private())
 {
+    Q_ASSERT(m_event);
     d->mouseEvent = ev;
 }
 
 KoPointerEvent::KoPointerEvent(QGraphicsSceneMouseEvent *ev, const QPointF &pnt)
         : point(pnt),
-        m_event(0),
+        m_event(ev),
         d(new Private())
 {
+    Q_ASSERT(m_event);
     d->gsMouseEvent = ev;
 }
 
 KoPointerEvent::KoPointerEvent(QGraphicsSceneWheelEvent *ev, const QPointF &pnt)
         : point(pnt),
-        m_event(0),
+        m_event(ev),
         d(new Private())
 {
+    Q_ASSERT(m_event);
     d->gsWheelEvent = ev;
 }
 
@@ -76,6 +79,7 @@ KoPointerEvent::KoPointerEvent(QTabletEvent *ev, const QPointF &pnt)
         m_event(ev),
         d(new Private())
 {
+    Q_ASSERT(m_event);
     d->tabletEvent = ev;
 }
 
@@ -84,18 +88,29 @@ KoPointerEvent::KoPointerEvent(QWheelEvent *ev, const QPointF &pnt)
         m_event(ev),
         d(new Private())
 {
+    Q_ASSERT(m_event);
     d->wheelEvent = ev;
 }
 
 KoPointerEvent::KoPointerEvent(KoInputDeviceHandlerEvent * ev, int x, int y, int z, int rx, int ry, int rz)
-        : m_event(ev), d(new Private())
+        : m_event(ev)
+        , d(new Private())
 {
+    Q_ASSERT(m_event);
     d->deviceEvent = ev;
     d->pos = QPoint(x, y);
     d->posZ = z;
     d->rotationX = rx;
     d->rotationY = ry;
     d->rotationZ = rz;
+}
+
+KoPointerEvent::KoPointerEvent(KoPointerEvent *event, const QPointF& point)
+    : point(point)
+    , m_event(event->m_event)
+    , d(new Private(*(event->d)))
+{
+    Q_ASSERT(m_event);
 }
 
 KoPointerEvent::~KoPointerEvent()

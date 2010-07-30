@@ -39,6 +39,7 @@ class KoCanvasBase;
 class KoCanvasController;
 class KoToolProxyPrivate;
 class QInputMethodEvent;
+class KoPointerEvent;
 
 /**
  * Simple proxy interface that provides a point d'appui for canvas
@@ -69,18 +70,23 @@ public:
     void tabletEvent(QTabletEvent *event, const QPointF &point);
     /// Forwarded to the current KoToolBase
     void mousePressEvent(QMouseEvent *event, const QPointF &point);
+    void mousePressEvent(KoPointerEvent *event);
     /// Forwarded to the current KoToolBase
     void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);
+    void mouseDoubleClickEvent(KoPointerEvent *event);
     /// Forwarded to the current KoToolBase
     void mouseMoveEvent(QMouseEvent *event, const QPointF &point);
+    void mouseMoveEvent(KoPointerEvent *event);
     /// Forwarded to the current KoToolBase
     void mouseReleaseEvent(QMouseEvent *event, const QPointF &point);
+    void mouseReleaseEvent(KoPointerEvent *event);
     /// Forwarded to the current KoToolBase
     void keyPressEvent(QKeyEvent *event);
     /// Forwarded to the current KoToolBase
     void keyReleaseEvent(QKeyEvent *event);
     /// Forwarded to the current KoToolBase
     void wheelEvent(QWheelEvent * event, const QPointF &point);
+    void wheelEvent(KoPointerEvent *event);
     /// Forwarded to the current KoToolBase
     QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
     /// Forwarded to the current KoToolBase

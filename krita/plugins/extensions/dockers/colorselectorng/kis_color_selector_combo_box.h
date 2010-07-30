@@ -22,7 +22,7 @@
 #include "kis_color_selector.h"
 
 class KisCanvas2;
-class KisColorSelectorTypeWidgetPrivate;
+class KisColorSelectorComboBoxPrivate;
 class KoColorSpace;
 
 class KisColorSelectorComboBox : public QComboBox
@@ -40,7 +40,7 @@ public slots:
     void setColorSpace(const KoColorSpace* colorSpace);
     void setConfiguration(KisColorSelector::Configuration);
 private:
-    KisColorSelectorTypeWidgetPrivate* m_private;
+    KisColorSelectorComboBoxPrivate* m_private;
     KisColorSelector::Configuration m_configuration;
     KisColorSelector m_currentSelector;
 };

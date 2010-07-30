@@ -23,13 +23,13 @@
 
 #include <KDebug>
 
-class KisColorSelectorTypeWidgetPrivate : public QWidget {
+class KisColorSelectorComboBoxPrivate : public QWidget {
 public:
     int spacing;
     int selectorSize;
     QRect highlightArea;
 
-    KisColorSelectorTypeWidgetPrivate(QWidget* parent) :
+    KisColorSelectorComboBoxPrivate(QWidget* parent) :
             QWidget(parent, Qt::Popup),
             spacing(20),
             selectorSize(100),
@@ -115,7 +115,7 @@ protected:
 
 KisColorSelectorComboBox::KisColorSelectorComboBox(QWidget* parent) :
         QComboBox(parent),
-        m_private(new KisColorSelectorTypeWidgetPrivate(this)),
+        m_private(new KisColorSelectorComboBoxPrivate(this)),
         m_currentSelector(this)
 {
     QLayout* layout = new QGridLayout(this);

@@ -125,9 +125,6 @@ public:
     /// Returns the current canvas mode
     KoCanvasController::CanvasMode canvasMode() const;
 
-    /// Returns true if canvas uses QGLWidget (OpenGL can be used for painting on canvas)
-    bool isCanvasOpenGL() const;
-
     /**
      * @brief Scrolls the content of the canvas so that the given rect is visible.
      *

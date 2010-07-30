@@ -79,7 +79,17 @@ void KoCanvasControllerWidget::Private::setDocumentOffset()
     QWidget *canvasWidget = canvas->canvasWidget();
 
     if (canvasWidget) {
-        if (!q->isCanvasOpenGL()) {
+        bool isCanvasOpenGL = false;
+        QWidget *canvasWidget = canvas->canvasWidget();
+        if (canvasWidget) {
+#ifdef HAVE_OPENGL
+            if (qobject_cast<QGLWidget*>(canvasWidget) != 0) {
+                isCanvasOpenGL = true;
+            }
+#endif
+        }
+
+        if (!isCanvasOpenGL) {
             QPoint diff = documentOffset - pt;
             if (canvasMode == Spreadsheet && canvasWidget->layoutDirection() == Qt::RightToLeft) {
                 canvasWidget->scroll(-diff.x(), diff.y());
@@ -177,9 +187,9 @@ void KoCanvasControllerWidget::Private::activate()
 
 ////////////
 KoCanvasControllerWidget::KoCanvasControllerWidget(QWidget *parent)
-        : QAbstractScrollArea(parent)
-        , KoCanvasController()
-        , d(new Private(this))
+    : QAbstractScrollArea(parent)
+    , KoCanvasController()
+    , d(new Private(this))
 {
     setFrameShape(NoFrame);
     d->viewportWidget = new Viewport(this);
@@ -360,7 +370,7 @@ void KoCanvasControllerWidget::updateCanvasOffsetX()
         return;
     if (horizontalScrollBar()->isVisible())
         d->preferredCenterFractionX = (horizontalScrollBar()->value()
-                + horizontalScrollBar()->pageStep() / 2.0) / d->documentSize.width();
+                                       + horizontalScrollBar()->pageStep() / 2.0) / d->documentSize.width();
     else
         d->preferredCenterFractionX = 0;
 }
@@ -372,7 +382,7 @@ void KoCanvasControllerWidget::updateCanvasOffsetY()
         return;
     if (verticalScrollBar()->isVisible())
         d->preferredCenterFractionY = (verticalScrollBar()->value()
-                + verticalScrollBar()->pageStep() / 2.0) / d->documentSize.height();
+                                       + verticalScrollBar()->pageStep() / 2.0) / d->documentSize.height();
     else
         d->preferredCenterFractionY = 0;
 }
@@ -435,7 +445,7 @@ void KoCanvasControllerWidget::ensureVisible(const QRectF &rect, bool smooth)
 void KoCanvasControllerWidget::recenterPreferred()
 {
     if (viewport()->width() >= d->documentSize.width()
-            && viewport()->height() >= d->documentSize.height())
+        && viewport()->height() >= d->documentSize.height())
         return; // no need to center when image is smaller than viewport
     const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
     d->ignoreScrollSignals = true;
@@ -540,21 +550,6 @@ void KoCanvasControllerWidget::setDocumentSize(const QSize &sz, bool recalculate
         updateCanvasOffsetX();
     if (verticalScrollBar()->isHidden())
         updateCanvasOffsetY();
-}
-
-bool KoCanvasControllerWidget::isCanvasOpenGL() const
-{
-    QWidget *canvasWidget = d->canvas->canvasWidget();
-
-    if (canvasWidget) {
-#ifdef HAVE_OPENGL
-        if (qobject_cast<QGLWidget*>(canvasWidget) != 0) {
-            return true;
-        }
-#endif
-    }
-
-    return false;
 }
 
 void KoCanvasControllerWidget::pan(const QPoint &distance)

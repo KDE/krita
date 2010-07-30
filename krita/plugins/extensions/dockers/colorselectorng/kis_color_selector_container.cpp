@@ -87,12 +87,7 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
 {
     m_colorSelector->setCanvas(canvas);
     m_myPaintShadeSelector->setCanvas(canvas);
-}
-
-void KisColorSelectorContainer::setColor(const QColor& color)
-{
-    m_colorSelector->setColor(color);
-    m_myPaintShadeSelector->setColor(color);
+    m_minimalShadeSelector->setCanvas(canvas);
 }
 
 void KisColorSelectorContainer::updateSettings()

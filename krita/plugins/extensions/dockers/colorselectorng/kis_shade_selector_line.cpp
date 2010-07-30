@@ -2,14 +2,21 @@
 
 #include <QPainter>
 #include <QColor>
+#include <QMouseEvent>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KComponentData>
 #include <KGlobal>
 
+#include "KoResourceManager.h"
+#include "KoColorSpaceRegistry.h"
+
+#include "kis_canvas2.h"
+
+
 KisShadeSelectorLine::KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta, QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent), m_canvas(0)
 {
     setDelta(hueDelta, satDelta, valDelta);
 
@@ -39,9 +46,18 @@ void KisShadeSelectorLine::updateSettings()
     m_backgroundColor = QColor(128, 128, 128);
 }
 
+void KisShadeSelectorLine::setCanvas(KisCanvas2 *canvas)
+{
+    m_canvas=canvas;
+
+    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
+            this,                        SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+}
+
 void KisShadeSelectorLine::paintEvent(QPaintEvent *)
 {
-    QPainter painter(this);
+    m_pixelCache = QImage(width(), height(), QImage::Format_ARGB32_Premultiplied);
+    QPainter painter(&m_pixelCache);
     painter.fillRect(0,0, width(), height(), m_backgroundColor);
     if(m_gradient) {
         QColor c1;
@@ -89,5 +105,32 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
             painter.fillRect(z*(patchWidth+2)+1, 0, patchWidth, m_lineHeight, QColor::fromHsvF(hue, saturation, value));
             z++;
         }
+    }
+
+    QPainter wpainter(this);
+    wpainter.drawImage(0,0, m_pixelCache);
+}
+
+void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
+{
+    Q_ASSERT(m_canvas);
+
+    QColor color(m_pixelCache.pixel(e->pos()));
+    if(color==m_backgroundColor)
+        return;
+
+    if(e->button()==Qt::LeftButton)
+        m_canvas->resourceManager()->setForegroundColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()));
+
+    if(e->button()==Qt::RightButton)
+        m_canvas->resourceManager()->setBackgroundColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()));
+
+    e->accept();
+}
+
+void KisShadeSelectorLine::resourceChanged(int key, const QVariant &v)
+{
+    if (key == KoCanvasResource::ForegroundColor || key == KoCanvasResource::BackgroundColor) {
+        setColor((v.value<KoColor>()).toQColor());
     }
 }

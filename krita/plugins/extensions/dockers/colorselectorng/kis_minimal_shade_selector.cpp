@@ -49,6 +49,12 @@ KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent) :
     l->setMargin(0);
 }
 
+void KisMinimalShadeSelector::setCanvas(KisCanvas2 *canvas)
+{
+    for(int i=0; i<m_shadingLines.size(); i++)
+        m_shadingLines.at(i)->setCanvas(canvas);
+}
+
 void KisMinimalShadeSelector::setColor(const QColor& color)
 {
     for(int i=0; i<m_shadingLines.size(); i++)
@@ -69,19 +75,3 @@ void KisMinimalShadeSelector::updateSettings()
         m_shadingLines.at(i)->updateSettings();
 }
 
-//void KisMinimalShadeSelector::paintEvent(QPaintEvent *) {
-//    QPainter painter(this);
-
-//    QLinearGradient g1(0,0, width(), 0);
-//    g1.setColorAt(0, QColor(100,0,0));
-//    g1.setColorAt(0.5, QColor(255,0,0));
-//    g1.setColorAt(1, QColor(255,155,155));
-
-//    QLinearGradient g2(0,0, width(), 0);
-//    g2.setColorAt(0, QColor(155, 100, 0));
-//    g2.setColorAt(0.5, QColor(255, 0, 0));
-//    g2.setColorAt(1, QColor(155, 0, 100));
-
-//    painter.fillRect(0,0,width(), height()/2, QBrush(g1));
-//    painter.fillRect(0, height()/2, width(), height()/2, QBrush(g2));
-//}

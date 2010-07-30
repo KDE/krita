@@ -21,19 +21,18 @@
 #include <QWidget>
 
 class KisShadeSelectorLine;
+class KisCanvas2;
 
 class KisMinimalShadeSelector : public QWidget
 {
 Q_OBJECT
 public:
     explicit KisMinimalShadeSelector(QWidget *parent = 0);
+    void setCanvas(KisCanvas2* canvas);
 
 public slots:
     void setColor(const QColor& color);
     void updateSettings();
-
-protected:
-//    void paintEvent(QPaintEvent *);
 
 private:
     QList<KisShadeSelectorLine*> m_shadingLines;

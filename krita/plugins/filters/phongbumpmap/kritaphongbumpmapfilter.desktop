@@ -1,7 +1,15 @@
 [Desktop Entry]
 Name=Phong Bumpmap Filter
+Name[pt]=Filtro de Mapas de Relevo Phong
+Name[pt_BR]=Filtro de Mapas de Relevo Phong
+Name[sv]=Phong bulkartefilter
+Name[uk]=Фільтр рельєфу за Фонгом
 Name[x-test]=xxPhong Bumpmap Filterxx
 Comment=Phong Bumpmap filter
+Comment[pt]=Filtro de Mapas de Relevo Phong
+Comment[pt_BR]=Filtro de Mapas de Relevo Phong
+Comment[sv]=Phong bulkartefilter
+Comment[uk]=Фільтр рельєфу за Фонгом
 Comment[x-test]=xxPhong Bumpmap filterxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service

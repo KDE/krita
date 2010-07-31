@@ -84,8 +84,6 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
     visible(true),
     printable(true),
     geometryProtected(false),
-    sizeProtected(false),
-    positionProtected(false),
     keepAspect(false),
     selectable(true),
     detectCollision(false),
@@ -261,9 +259,6 @@ void KoShape::shear(qreal sx, qreal sy)
 void KoShape::setSize(const QSizeF &newSize)
 {
     Q_D(KoShape);
-    if (d->sizeProtected)
-        return;
-
     QSizeF oldSize(size());
     if (oldSize == newSize)
         return;
@@ -277,9 +272,6 @@ void KoShape::setSize(const QSizeF &newSize)
 void KoShape::setPosition(const QPointF &newPosition)
 {
     Q_D(KoShape);
-    if (d->positionProtected)
-        return;
-
     QPointF currentPos = position();
     if (newPosition == currentPos)
         return;
@@ -531,8 +523,6 @@ void KoShape::copySettings(const KoShape *shape)
         d->printable = shape->isPrintable();
 
     d->geometryProtected = shape->isGeometryProtected();
-    d->sizeProtected = shape->isSizeProtected();
-    d->positionProtected = shape->isPositionProtected();
     d->keepAspect = shape->keepAspectRatio();
     d->localMatrix = shape->d_ptr->localMatrix;
 }
@@ -776,30 +766,6 @@ bool KoShape::isContentProtected() const
 {
     Q_D(const KoShape);
     return d->protectContent;
-}
-
-void KoShape::setPositionProtected(bool on)
-{
-    Q_D(KoShape);
-    d->positionProtected = on;
-}
-
-bool KoShape::isPositionProtected() const
-{
-    Q_D(const KoShape);
-    return d->positionProtected;
-}
-
-void KoShape::setSizeProtected(bool on)
-{
-    Q_D(KoShape);
-    d->sizeProtected = on;
-}
-
-bool KoShape::isSizeProtected() const
-{
-    Q_D(const KoShape);
-    return d->sizeProtected;
 }
 
 KoShapeContainer *KoShape::parent() const

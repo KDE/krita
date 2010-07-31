@@ -419,14 +419,14 @@ public:
      * Makes it possible for the user to select this shape.
      * This parameter defaults to true.
      * @param selectable when true; set the shape to be selectable by the user.
-     * @see setGeometryProtected(), setContentProtected(), setVisible(), setPositionProtected(), setSizetProtected()
+     * @see setGeometryProtected(), setContentProtected(), setVisible()
      */
     void setSelectable(bool selectable);
 
     /**
      * Returns if this shape can be selected by the user.
      * @return true only when the object is selectable.
-     * @see isGeometryProtected(), isContentProtected(), isVisible(), isPositionPretected(), isSizeProtected()
+     * @see isGeometryProtected(), isContentProtected(), isVisible()
      */
     bool isSelectable() const;
 
@@ -435,7 +435,7 @@ public:
      * The geometry being protected means the user can not change shape or position of the
      * shape. This includes any matrix operation such as rotation.
      * @param on when true; set the shape to have its geometry protected.
-     * @see setContentProtected(), setSelectable(), setVisible(), setPositionProtected(), setSizetProtected()
+     * @see setContentProtected(), setSelectable(), setVisible()
      */
     void setGeometryProtected(bool on);
 
@@ -444,43 +444,15 @@ public:
      * The geometry being protected means the user can not change shape or position of the
      * shape. This includes any matrix operation such as rotation.
      * @return current geometry protection state of this shape.
-     * @see isContentProtected(), isSelectable(), isVisible(), isPositionPretected(), isSizeProtected()
+     * @see isContentProtected(), isSelectable(), isVisible()
      */
     bool isGeometryProtected() const;
-
-    /**
-    * Tells the shape to have its size protected from user changes.
-    * @param on when true; set the sape to have its size protected.
-    * @see setGeometryProtected(), setSelectable(), setVisible(), setPositionProtected(), setContentProtected()
-    */
-    void setSizeProtected(bool on);
-
-    /**
-    * Returns current size protection state of this shape.
-    * @return current size protection state of this shape.
-    * @see isGeometryProtected(), isSelectable(), isVisible(), isPositionPretected(), isContentProtected()
-    */
-    bool isSizeProtected() const;
-
-    /**
-    * Tells the shape to have its position protected from user changes.
-    * @param on when true; set the sape to have its size protected.
-    * @see setGeometryProtected(), setSelectable(), setVisible(), setSizeProtected(), setContentProtected()
-    */
-    void setPositionProtected(bool on);
-
-    /**
-    * Returns current size protection state of this shape.
-    * @return current size protection state of this shape.
-    * @see isGeometryProtected(), isSelectable(), isVisible(), isSizePretected(), isContentProtected()
-    */
-    bool isPositionProtected() const;
 
     /**
      * Marks the shape to have its content protected against editing.
      * Content protection is a hint for tools to disallow the user editing the content.
      * @param protect when true set the shapes content to be protected from user modification.
-     * @see setGeometryProtected(), setSelectable(), setVisible(), setSizeProtected(), setPositionProtected()
+     * @see setGeometryProtected(), setSelectable(), setVisible()
      */
     void setContentProtected(bool protect);
 
@@ -488,7 +460,7 @@ public:
      * Returns current content protection state of this shape.
      * Content protection is a hint for tools to disallow the user editing the content.
      * @return current content protection state of this shape.
-     * @see isGeometryProtected(), isSelectable(), isVisible(), isPositionPretected(), isSizeProtected()
+     * @see isGeometryProtected(), isSelectable(), isVisible()
      */
     bool isContentProtected() const;
 

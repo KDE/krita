@@ -80,7 +80,7 @@ public:
     int keepAspect : 1;
     int selectable : 1;
     int detectCollision : 1;
-    int protectContent : 1;
+    int contentProtected : 1;
 
     Q_DECLARE_PUBLIC(KoShape)
 };

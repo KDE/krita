@@ -89,7 +89,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
     keepAspect(false),
     selectable(true),
     detectCollision(false),
-    protectContent(false)
+    contentProtected(false)
 {
     connectors.append(QPointF(0.5, 0.0));
     connectors.append(QPointF(1.0, 0.5));
@@ -769,13 +769,13 @@ bool KoShape::isGeometryProtected() const
 void KoShape::setContentProtected(bool protect)
 {
     Q_D(KoShape);
-    d->protectContent = protect;
+    d->contentProtected = protect;
 }
 
 bool KoShape::isContentProtected() const
 {
     Q_D(const KoShape);
-    return d->protectContent;
+    return d->contentProtected;
 }
 
 void KoShape::setPositionProtected(bool on)

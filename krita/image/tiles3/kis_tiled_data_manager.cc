@@ -259,7 +259,8 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
         else
             td = globalTileDataStore.createDefaultTileData(pixelSize,
                     clearPixel);
-        globalTileDataStore.acquireTileData(td);
+
+        td->acquire();
     }
 
     for (qint32 row = firstRow; row <= lastRow; ++row) {
@@ -300,7 +301,7 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
             }
         }
     }
-    if (td) globalTileDataStore.releaseTileData(td);
+    if (td) td->release();
     delete[] clearPixelData;
 }
 

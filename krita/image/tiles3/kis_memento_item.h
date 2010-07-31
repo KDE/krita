@@ -52,9 +52,9 @@ public:
             m_parent(0) {
         if (m_tileData) {
             if (m_commitedFlag)
-                globalTileDataStore.acquireTileData(m_tileData);
+                m_tileData->acquire();
             else
-                globalTileDataStore.refTileData(m_tileData);
+                m_tileData->ref();
         }
     }
 
@@ -69,7 +69,7 @@ public:
         Q_UNUSED(mm);
         m_tileData = defaultTileData;
         /* acquire the tileData deliberately and completely */
-        globalTileDataStore.acquireTileData(m_tileData);
+        m_tileData->acquire();
         m_col = col;
         m_row = row;
         m_type = CHANGED;
@@ -85,7 +85,7 @@ public:
         Q_UNUSED(mm);
         m_tileData = rhs.m_tileData;
         /* Setting counter: m_refCount++ */
-        globalTileDataStore.refTileData(m_tileData);
+        m_tileData->ref();
         m_col = rhs.m_col;
         m_row = rhs.m_row;
         m_type = CHANGED;
@@ -106,7 +106,7 @@ public:
     void deleteTile(KisTile* tile, KisTileData* defaultTileData) {
         m_tileData = defaultTileData;
         /* Setting counter: m_refCount++ */
-        globalTileDataStore.refTileData(m_tileData);
+        m_tileData->ref();
 
         m_col = tile->col();
         m_row = tile->row();
@@ -116,7 +116,7 @@ public:
     void changeTile(KisTile* tile) {
         m_tileData = tile->tileData();
         /* Setting counter: m_refCount++ */
-        globalTileDataStore.refTileData(m_tileData);
+        m_tileData->ref();
         m_col = tile->col();
         m_row = tile->row();
         m_type = CHANGED;
@@ -130,8 +130,8 @@ public:
              * m_refCount++, m_usersCount++;
              * m_refCount--
              */
-            globalTileDataStore.acquireTileData(m_tileData);
-            globalTileDataStore.derefTileData(m_tileData);
+            m_tileData->acquire();
+            m_tileData->deref();
 
             m_tileData->setMementoed(true);
         }
@@ -195,10 +195,10 @@ protected:
         if (m_tileData) {
             if (m_commitedFlag) {
                 m_tileData->setMementoed(false);
-                globalTileDataStore.releaseTileData(m_tileData);
+                m_tileData->release();
             }
             else {
-                globalTileDataStore.derefTileData(m_tileData);
+                m_tileData->deref();
             }
         }
     }

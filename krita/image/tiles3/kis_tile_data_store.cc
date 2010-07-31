@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include "kis_tile_data_store.h"
+#include "kis_tile_data.h"
 #include "kis_debug.h"
 
 #include "kis_tile_data_store_iterators.h"
@@ -74,9 +75,8 @@ void KisTileDataStore::registerTileData(KisTileData *td)
     m_numTiles++;
 }
 
-void KisTileDataStore::unregisterTileData(KisTileData *td)
+inline void KisTileDataStore::unregisterTileDataImp(KisTileData *td)
 {
-    QWriteLocker lock(&m_listRWLock);
     KisTileDataListIterator tempIterator = td->m_listIterator;
 
     if(m_clockIterator == tempIterator) {
@@ -86,6 +86,12 @@ void KisTileDataStore::unregisterTileData(KisTileData *td)
     td->m_listIterator = m_tileDataList.end();
     m_tileDataList.erase(tempIterator);
     m_numTiles--;
+}
+
+void KisTileDataStore::unregisterTileData(KisTileData *td)
+{
+    QWriteLocker lock(&m_listRWLock);
+    unregisterTileDataImp(td);
 }
 
 KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *defPixel)
@@ -104,9 +110,9 @@ KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
     if (rhs->m_clonesStack.pop(td)) {
         DEBUG_PRECLONE_ACTION("+ Pre-clone HIT", rhs, td);
     } else {
-        blockSwapping(rhs);
+        rhs->blockSwapping();
         td = new KisTileData(*rhs);
-        unblockSwapping(rhs);
+        rhs->unblockSwapping();
         DEBUG_PRECLONE_ACTION("- Pre-clone #MISS#", rhs, td);
     }
 
@@ -120,12 +126,17 @@ void KisTileDataStore::freeTileData(KisTileData *td)
 
     DEBUG_FREE_ACTION(td);
 
+    m_listRWLock.lockForWrite();
     td->m_swapLock.lockForWrite();
+
     if(!td->data()) {
         m_swappedStore.forgetTileData(td);
     }
-    unregisterTileData(td);
+
+    unregisterTileDataImp(td);
+
     td->m_swapLock.unlock();
+    m_listRWLock.unlock();
 
     delete td;
 }

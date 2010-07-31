@@ -20,12 +20,11 @@
 
 
 #include <QReadWriteLock>
-#include "kis_tile_data.h"
+#include "kis_tile_data_interface.h"
 
 #include "kis_tile_data_pooler.h"
 #include "swap/kis_tile_data_swapper.h"
 #include "swap/kis_swapped_data_store.h"
-
 
 class KisTestingTileDataStoreAccessor;
 class KisTileDataStoreIterator;
@@ -69,48 +68,6 @@ public:
     KisTileDataStoreClockIterator* beginClockIteration();
     void endIteration(KisTileDataStoreClockIterator* iterator);
 
-    /**
-     * Increments usersCount of a TD and refs shared pointer counter
-     * Used by KisTile for COW
-     */
-    inline quint32 acquireTileData(const KisTileData *td) const {
-        qint32 ref = refTileData(td);
-        td->m_usersCount.ref();
-        return ref;
-    }
-
-    /**
-     * Decrements usersCount of a TD and derefs shared pointer counter
-     * Used by KisTile for COW
-     */
-    inline quint32 releaseTileData(KisTileData *td) {
-        td->m_usersCount.deref();
-        qint32 ref = derefTileData(td);
-        return ref;
-    }
-
-    /**
-     * Only refs shared pointer counter.
-     * Used only by KisMementoManager without
-     * consideration of COW.
-     */
-    inline quint32 refTileData(const KisTileData *td) const {
-        return td->m_refCount.ref();
-    }
-
-    /**
-     * Only refs shared pointer counter.
-     * Used only by KisMementoManager without
-     * consideration of COW.
-     */
-    inline quint32 derefTileData(KisTileData *td) {
-        if (!(td->m_refCount.deref())) {
-            freeTileData(td);
-            return 0;
-        }
-        return td->m_refCount;
-    }
-
     inline KisTileData* createDefaultTileData(qint32 pixelSize, const quint8 *defPixel) {
         return allocTileData(pixelSize, defPixel);
     }
@@ -123,19 +80,6 @@ public:
         m_swapper.kick();
     }
 
-    inline void blockSwapping(KisTileData *td) {
-        td->m_swapLock.lockForRead();
-        if(!td->data()) {
-            td->m_swapLock.unlock();
-            ensureTileDataLoaded(td);
-        }
-        td->resetAge();
-    }
-
-    inline void unblockSwapping(KisTileData *td) {
-        td->m_swapLock.unlock();
-    }
-
     /**
      * Try swap out the tile data.
      * It may fail in case the tile is being accessed
@@ -143,7 +87,8 @@ public:
      */
     bool trySwapTileData(KisTileData *td);
 
-private:
+    void freeTileData(KisTileData *td);
+
     /**
      * Ensures that the tile data is totally present in memory
      * and it's swapping is blocked by holding td->m_swapLock
@@ -156,10 +101,10 @@ private:
 
 private:
     KisTileData *allocTileData(qint32 pixelSize, const quint8 *defPixel);
-    void freeTileData(KisTileData *td);
 
     void registerTileData(KisTileData *td);
     void unregisterTileData(KisTileData *td);
+    inline void unregisterTileDataImp(KisTileData *td);
     void freeRegisteredTiles();
 
     void debugSwapAll();

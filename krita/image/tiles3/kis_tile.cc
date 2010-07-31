@@ -34,7 +34,7 @@ void KisTile::init(qint32 col, qint32 row,
                      KisTileData::WIDTH, KisTileData::HEIGHT);
 
     m_tileData = defaultTileData;
-    globalTileDataStore.acquireTileData(m_tileData);
+    m_tileData->acquire();
 
     m_mementoManager = mm;
 
@@ -70,7 +70,7 @@ KisTile::~KisTile()
 {
     if (m_mementoManager)
         m_mementoManager->registerTileDeleted(this);
-    globalTileDataStore.releaseTileData(m_tileData);
+    m_tileData->release();
 }
 
 //#define DEBUG_TILE_LOCKING
@@ -90,13 +90,24 @@ KisTile::~KisTile()
 #define DEBUG_COWING(newTD)
 #endif
 
+inline void KisTile::blockSwapping() const
+{
+    int oldValue = m_lockCounter.fetchAndAddOrdered(1);
+    if(!oldValue)
+        m_tileData->blockSwapping();
+}
 
+inline void KisTile::unblockSwapping() const
+{
+    bool lastLock = !m_lockCounter.deref();
+    if(lastLock)
+        m_tileData->unblockSwapping();
+}
 
 void KisTile::lockForRead() const
 {
     DEBUG_LOG_ACTION("lock [R]");
-//    m_lock.lock();
-    globalTileDataStore.blockSwapping(m_tileData);
+    blockSwapping();
 }
 
 
@@ -104,17 +115,17 @@ void KisTile::lockForRead() const
 
 void KisTile::lockForWrite()
 {
-    globalTileDataStore.blockSwapping(m_tileData);
+    blockSwapping();
 
     /* We are doing COW here */
     if (lazyCopying()) {
         KisTileData *tileData = globalTileDataStore.duplicateTileData(m_tileData);
-        KisTileData *oldTileData = m_tileData;
-        globalTileDataStore.acquireTileData(tileData);
-        globalTileDataStore.blockSwapping(tileData);
+        tileData->acquire();
+        tileData->blockSwapping();
+        KisTileData *oldTileData = m_tileData; // FIXME: atomic access is better
         m_tileData = tileData;
-        globalTileDataStore.unblockSwapping(oldTileData);
-        globalTileDataStore.releaseTileData(oldTileData);
+        oldTileData->unblockSwapping();
+        oldTileData->release();
 
         DEBUG_COWING(tileData);
 
@@ -123,14 +134,12 @@ void KisTile::lockForWrite()
     }
 
     DEBUG_LOG_ACTION("lock [W]");
-//    m_lock.lock();
 }
 
 void KisTile::unlock() const
 {
-    globalTileDataStore.unblockSwapping(m_tileData);
+    unblockSwapping();
     DEBUG_LOG_ACTION("unlock");
-//    m_lock.unlock();
 }
 
 

@@ -163,12 +163,12 @@ template<class T>
 inline void KisTileHashTableTraits<T>::setDefaultTileDataImp(KisTileData *defaultTileData)
 {
     if (m_defaultTileData) {
-        globalTileDataStore.releaseTileData(m_defaultTileData);
+        m_defaultTileData->release();
         m_defaultTileData = 0;
     }
 
     if (defaultTileData) {
-        globalTileDataStore.acquireTileData(defaultTileData);
+        defaultTileData->acquire();
         m_defaultTileData = defaultTileData;
     }
 }

@@ -107,8 +107,12 @@ private:
     void init(qint32 col, qint32 row,
               KisTileData *defaultTileData, KisMementoManager* mm);
 
+    inline void blockSwapping() const;
+    inline void unblockSwapping() const;
+
 private:
     KisTileData *m_tileData;
+    mutable QAtomicInt m_lockCounter;
 
     qint32 m_col;
     qint32 m_row;

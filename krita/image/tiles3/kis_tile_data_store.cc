@@ -55,6 +55,8 @@ void KisTileDataStore::tileListAppend(KisTileData *td)
         td->m_prevTD = td->m_nextTD = td;
         tileListHead() = td;
     }
+
+    m_numTiles++;
 }
 
 void KisTileDataStore::tileListDetach(KisTileData *td)
@@ -69,6 +71,8 @@ void KisTileDataStore::tileListDetach(KisTileData *td)
         /* List has the only element */
         tileListHead() = 0;
     }
+
+    m_numTiles--;
 }
 
 void KisTileDataStore::tileListClear()
@@ -87,7 +91,8 @@ void KisTileDataStore::tileListClear()
 KisTileDataStore::KisTileDataStore()
         : m_pooler(this),
         m_listRWLock(QReadWriteLock::Recursive),
-        m_tileDataListHead(0)
+        m_tileDataListHead(0),
+        m_numTiles(0)
 {
     m_pooler.start();
 }
@@ -203,17 +208,15 @@ void KisTileDataStore::debugSwapAll()
     QWriteLocker lock(&m_listRWLock);
 
     qint32 numSwapped = 0;
-    qint32 totalTiles = 0;
     KisTileData *iter;
     tileListForEach(iter, tileListHead(), tileListTail()) {
-        totalTiles++;
         if(trySwapTileData(iter)) {
             numSwapped++;
         }
     }
 
     qDebug() << "Swapped out tile data:" << numSwapped;
-    qDebug() << "Total tile data:" << totalTiles;
+    qDebug() << "Total tile data:" << m_numTiles;
 
     m_swappedStore.debugStatistics();
 }

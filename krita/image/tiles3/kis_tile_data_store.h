@@ -41,6 +41,9 @@ public:
 
     KisTileData *duplicateTileData(KisTileData *rhs);
 
+    inline qint32 numTiles() const {
+        return m_numTiles;
+    }
 
     /**
      * Increments usersCount of a TD and refs shared pointer counter
@@ -141,6 +144,7 @@ private:
 
     QReadWriteLock m_listRWLock;
     KisTileData *m_tileDataListHead;
+    qint32 m_numTiles;
 };
 
 extern KisTileDataStore globalTileDataStore;

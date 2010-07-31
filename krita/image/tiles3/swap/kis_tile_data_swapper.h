@@ -21,11 +21,13 @@
 #include <QObject>
 #include <QThread>
 
+#include "krita_export.h"
+
+
 class KisTileDataStore;
 class KisTileData;
 
-
-class KisTileDataSwapper : public QThread
+class KRITAIMAGE_EXPORT KisTileDataSwapper : public QThread
 {
     Q_OBJECT
 
@@ -44,8 +46,7 @@ private:
     void run();
 
     void doJob();
-    qint32 pass0(qint32 tilesToFree);
-    qint32 pass1(qint32 tilesToFree);
+    template<class strategy> qint64 pass(qint64 needToFreeMetric);
 
 private:
     static const qint32 TIMEOUT;

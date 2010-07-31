@@ -92,9 +92,17 @@ KisTile::~KisTile()
 
 inline void KisTile::blockSwapping() const
 {
+    /**
+     * DIRTY HACK ALERT:
+     * Please do this in a lockless way
+     */
+    QMutexLocker locker(&m_temporaryMutex);
+
     int oldValue = m_lockCounter.fetchAndAddOrdered(1);
     if(!oldValue)
         m_tileData->blockSwapping();
+
+    Q_ASSERT(data());
 }
 
 inline void KisTile::unblockSwapping() const

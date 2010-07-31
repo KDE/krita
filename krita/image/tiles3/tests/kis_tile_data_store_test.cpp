@@ -21,7 +21,7 @@
 
 #include "kis_debug.h"
 
-//#include "kis_image_config.h"
+#include "kis_image_config.h"
 
 #include "tiles3/kis_tiled_data_manager.h"
 #include "tiles_test_utils.h"
@@ -144,7 +144,13 @@ void KisTileDataStoreTest::testLeaks()
 
 void KisTileDataStoreTest::testSwapping()
 {
+    KisImageConfig config;
+    config.setMemoryHardLimit(1);
+    config.setMemorySoftLimit(0);
+
     KisTileDataStore::instance()->debugClear();
+
+
 
     const qint32 pixelSize = 1;
     quint8 defaultPixel = 128;
@@ -163,7 +169,7 @@ void KisTileDataStoreTest::testSwapping()
         tile->unlock();
     }
 
-    KisTileDataStore::instance()->debugSwapAll();
+    //KisTileDataStore::instance()->debugSwapAll();
 
     for(qint32 col = 0; col < 1000; col++) {
         KisTileSP tile = dm.getTile(col, 0, true);

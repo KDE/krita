@@ -496,6 +496,7 @@ void KisTiledDataManagerTest::stressTest()
         pool.start(job);
         accessRect.translate(1024, 0);
     }
+    pool.waitForDone();
 }
 
 QTEST_KDEMAIN(KisTiledDataManagerTest, NoGUI)

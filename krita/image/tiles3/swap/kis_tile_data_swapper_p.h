@@ -67,21 +67,19 @@ public:
     KisStoreLimits() {
         KisImageConfig config;
 
-        m_emergencyThresholdMetric = MiB_TO_METRIC(config.memoryHardLimit());
-        m_softLimitThresholdMetric = MiB_TO_METRIC(config.memorySoftLimit());
-
-        // Initial approximaion
-        recalculateLimits(4.);
-    }
-
-    inline void recalculateLimits(qreal pixelSize) {
-        m_emergencyThreshold = METRIC_TO_TILES(m_emergencyThresholdMetric, pixelSize);
-        m_softLimitThreshold = METRIC_TO_TILES(m_softLimitThresholdMetric, pixelSize);
+        m_emergencyThreshold = MiB_TO_METRIC(config.memoryHardLimit());
+        m_softLimitThreshold = MiB_TO_METRIC(config.memorySoftLimit());
 
         m_hardLimitThreshold = m_emergencyThreshold - m_emergencyThreshold / 8;
         m_hardLimit = m_hardLimitThreshold - m_hardLimitThreshold / 8;
         m_softLimit = m_softLimitThreshold - m_softLimitThreshold / 8;
+
+
     }
+
+    /**
+     * These methods return the "metric" of the size
+     */
 
     inline qint32 emergencyThreshold() {
         return m_emergencyThreshold;
@@ -109,9 +107,6 @@ private:
     qint32 m_hardLimit;
     qint32 m_softLimitThreshold;
     qint32 m_softLimit;
-
-    qint32 m_emergencyThresholdMetric;
-    qint32 m_softLimitThresholdMetric;
 };
 
 

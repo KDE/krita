@@ -37,6 +37,7 @@ KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataSt
         m_pixelSize(pixelSize),
         m_store(store)
 {
+    m_store->checkFreeMemory();
     m_data = allocateData(m_pixelSize);
 
     fillWithPixel(defPixel);
@@ -57,6 +58,7 @@ KisTileData::KisTileData(const KisTileData& rhs)
         m_pixelSize(rhs.m_pixelSize),
         m_store(rhs.m_store)
 {
+    m_store->checkFreeMemory();
     m_data = allocateData(m_pixelSize);
 
     memcpy(m_data, rhs.data(), m_pixelSize * WIDTH * HEIGHT);

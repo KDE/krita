@@ -32,21 +32,11 @@ void KisStoreLimitsTest::testLimits()
 
     KisStoreLimits limits;
 
-    limits.recalculateLimits(4.);
-
-    QCOMPARE(limits.emergencyThreshold(), 1024);
-    QCOMPARE(limits.hardLimitThreshold(), 896);
-    QCOMPARE(limits.hardLimit(), 784);
-    QCOMPARE(limits.softLimitThreshold(), 512);
-    QCOMPARE(limits.softLimit(), 448);
-
-    limits.recalculateLimits(8.);
-
-    QCOMPARE(limits.emergencyThreshold(), 512);
-    QCOMPARE(limits.hardLimitThreshold(), 448);
-    QCOMPARE(limits.hardLimit(), 392);
-    QCOMPARE(limits.softLimitThreshold(), 256);
-    QCOMPARE(limits.softLimit(), 224);
+    QCOMPARE(limits.emergencyThreshold(), 4096);
+    QCOMPARE(limits.hardLimitThreshold(), 3584);
+    QCOMPARE(limits.hardLimit(), 3136);
+    QCOMPARE(limits.softLimitThreshold(), 2048);
+    QCOMPARE(limits.softLimit(), 1792);
 }
 
 QTEST_KDEMAIN(KisStoreLimitsTest, NoGUI)

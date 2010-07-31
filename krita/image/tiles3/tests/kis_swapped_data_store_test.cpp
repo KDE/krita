@@ -26,7 +26,8 @@
 #include "tiles3/kis_tile_data.h"
 #include "tiles_test_utils.h"
 
-#include "tiles3/swap/kis_swapped_data_store.h"
+#include "tiles3/kis_tile_data_store.h"
+
 
 #define COLUMN2COLOR(col) (col%255)
 
@@ -46,7 +47,7 @@ void KisSwappedDataStoreTest::testRoundTrip()
 
     QList<KisTileData*> tileDataList;
     for(qint32 i = 0; i < NUM_TILES; i++)
-        tileDataList.append(new KisTileData(pixelSize, &defaultPixel, 0));
+        tileDataList.append(new KisTileData(pixelSize, &defaultPixel, KisTileDataStore::instance()));
 
     for(qint32 i = 0; i < NUM_TILES; i++) {
         KisTileData *td = tileDataList[i];
@@ -112,7 +113,7 @@ void KisSwappedDataStoreTest::testRandomAccess()
 
     QList<KisTileData*> tileDataList;
     for(qint32 i = 0; i < NUM_TILES; i++)
-        tileDataList.append(new KisTileData(pixelSize, &defaultPixel, 0));
+        tileDataList.append(new KisTileData(pixelSize, &defaultPixel, KisTileDataStore::instance()));
 
     for(qint32 i = 0; i < NUM_CYCLES; i++) {
         if(!(i%5000))

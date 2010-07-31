@@ -128,6 +128,11 @@ private:
     KisTileSP m_nextTile;
 
     KisMementoManager *m_mementoManager;
+
+    /**
+     * FIXME: Dirty workaround
+     */
+    mutable QMutex m_temporaryMutex;
 };
 
 #endif // KIS_TILE_H_

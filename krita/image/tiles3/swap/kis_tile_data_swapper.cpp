@@ -40,6 +40,9 @@ const qint32 KisTileDataSwapper::DELAY = 0.7 * SEC;
 #define DEBUG_VALUE(value)
 #endif
 
+class SoftSwapStrategy;
+class AggressiveSwapStrategy;
+
 
 class KisTileDataSwapper::Private
 {
@@ -48,6 +51,7 @@ public:
     QAtomicInt shouldExitFlag;
     KisTileDataStore *store;
     KisStoreLimits limits;
+    QMutex cycleLock;
 };
 
 KisTileDataSwapper::KisTileDataSwapper(KisTileDataStore *store)
@@ -96,65 +100,118 @@ void KisTileDataSwapper::run()
 
 void KisTileDataSwapper::checkFreeMemory()
 {
-    if(m_d->store->numTilesInMemory() > m_d->limits.emergencyThreshold())
+//    qDebug() <<"check memory: high limit -" << m_d->limits.emergencyThreshold() <<"in mem -" << m_d->store->numTilesInMemory();
+    if(m_d->store->memoryMetric() > m_d->limits.emergencyThreshold())
         doJob();
 }
 
 void KisTileDataSwapper::doJob()
 {
-    qint32 tilesInMemory = m_d->store->numTilesInMemory();
+    /**
+     * In emergency case usual threads have access
+     * to this function as well
+     */
+    QMutexLocker locker(&m_d->cycleLock);
+
+    qint32 memoryMetric = m_d->store->memoryMetric();
 
     DEBUG_ACTION("Started swap cycle");
     DEBUG_VALUE(m_d->store->numTiles());
-    DEBUG_VALUE(tilesInMemory);
+    DEBUG_VALUE(m_d->store->numTilesInMemory());
+    DEBUG_VALUE(memoryMetric);
 
     DEBUG_VALUE(m_d->limits.softLimitThreshold());
     DEBUG_VALUE(m_d->limits.hardLimitThreshold());
 
 
-    if(tilesInMemory > m_d->limits.softLimitThreshold()) {
-        qint32 softFreeTiles =  tilesInMemory - m_d->limits.softLimit();
-        DEBUG_VALUE(softFreeTiles);
+    if(memoryMetric > m_d->limits.softLimitThreshold()) {
+        qint32 softFree =  memoryMetric - m_d->limits.softLimit();
+        DEBUG_VALUE(softFree);
         DEBUG_ACTION("\t pass0");
-        tilesInMemory -= pass0(softFreeTiles);
-        // by the end of pass0 the estimation of limits is updated...
-        DEBUG_VALUE( tilesInMemory);
+        memoryMetric -= pass<SoftSwapStrategy>(softFree);
+        DEBUG_VALUE(memoryMetric);
 
-
-        if(tilesInMemory > m_d->limits.hardLimitThreshold()) {
-            qint32 hardFreeTiles =  tilesInMemory - m_d->limits.hardLimit();
-            tilesInMemory -= pass1(hardFreeTiles);
+        if(memoryMetric > m_d->limits.hardLimitThreshold()) {
+            qint32 hardFree =  memoryMetric - m_d->limits.hardLimit();
+            DEBUG_VALUE(hardFree);
+            DEBUG_ACTION("\t pass1");
+            memoryMetric -= pass<AggressiveSwapStrategy>(hardFree);
+            DEBUG_VALUE(memoryMetric);
         }
     }
 }
 
-qint32 KisTileDataSwapper::pass0(qint32 tilesToFree)
-{
-    qint32 numCountedTiles = 0;
-    quint64 pixelSizeSum = 0;
 
-    qint32 tilesFreed = 0;
+class SoftSwapStrategy
+{
+public:
+    typedef KisTileDataStoreIterator iterator;
+
+    static inline iterator* beginIteration(KisTileDataStore *store) {
+        return store->beginIteration();
+    }
+
+    static inline void endIteration(KisTileDataStore *store, iterator *iter) {
+        store->endIteration(iter);
+    }
+
+    static inline bool isInteresting(KisTileData *td) {
+        // We are working with mementoed tiles only...
+        return td->mementoed() && td->numUsers() <= 1;
+    }
+
+    static inline bool swapOutFirst(KisTileData *td) {
+        return td->age() > 0;
+    }
+};
+
+class AggressiveSwapStrategy
+{
+public:
+    typedef KisTileDataStoreClockIterator iterator;
+
+    static inline iterator* beginIteration(KisTileDataStore *store) {
+        return store->beginClockIteration();
+    }
+
+    static inline void endIteration(KisTileDataStore *store, iterator *iter) {
+        store->endIteration(iter);
+    }
+
+    static inline bool isInteresting(KisTileData *td) {
+        // Add some aggression...
+        Q_UNUSED(td);
+        return true; // >:)
+    }
+
+    static inline bool swapOutFirst(KisTileData *td) {
+        return td->age() > 0;
+    }
+};
+
+
+template<class strategy>
+qint64 KisTileDataSwapper::pass(qint64 needToFreeMetric)
+{
+    qint64 freedMetric = 0;
     QList<KisTileData*> additionalCandidates;
 
+    typename strategy::iterator *iter =
+        strategy::beginIteration(m_d->store);
 
-    KisTileDataStoreIterator *iter = m_d->store->beginIteration();
     KisTileData *item;
 
     while(iter->hasNext()) {
         item = iter->next();
 
-        if(tilesFreed >= tilesToFree) break;
+        if(freedMetric >= needToFreeMetric) break;
 
-        numCountedTiles++;
-        pixelSizeSum += item->pixelSize();
 
-        // Now we are working with mementoed tiles only...
-        if(!item->mementoed()) continue;
-        if(item->numUsers() > 1) continue;
+        if(!strategy::isInteresting(item)) continue;
 
-        if(item->age() > 0) {
+        if(strategy::swapOutFirst(item)) {
             if(iter->trySwapOut(item)) {
-                tilesFreed++;
+                freedMetric += item->pixelSize();
             }
         }
         else {
@@ -165,28 +222,14 @@ qint32 KisTileDataSwapper::pass0(qint32 tilesToFree)
     }
 
     foreach(item, additionalCandidates) {
-        if(tilesFreed >= tilesToFree) break;
+        if(freedMetric >= needToFreeMetric) break;
 
         if(iter->trySwapOut(item)) {
-            tilesFreed++;
+            freedMetric += item->pixelSize();
         }
     }
 
-    m_d->store->endIteration(iter);
+    strategy::endIteration(m_d->store, iter);
 
-    // Correction of limits...
-    if(numCountedTiles > 0) {
-        qreal pixelSize = qreal(pixelSizeSum) / numCountedTiles;
-        m_d->limits.recalculateLimits(pixelSize);
-    }
-
-    return tilesFreed;
-}
-
-qint32 KisTileDataSwapper::pass1(qint32 tilesToFree)
-{
-    Q_UNUSED(tilesToFree);
-
-    qint32 tilesFreed = 0;
-    return tilesFreed;
+    return freedMetric;
 }

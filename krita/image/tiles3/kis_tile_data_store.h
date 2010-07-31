@@ -61,6 +61,17 @@ public:
         return m_numTiles;
     }
 
+    inline void checkFreeMemory() {
+        m_swapper.checkFreeMemory();
+    }
+
+    /**
+     * \see m_memoryMetric
+     */
+    inline qint64 memoryMetric() const {
+        return m_memoryMetric;
+    }
+
     KisTileDataStoreIterator* beginIteration();
     void endIteration(KisTileDataStoreIterator* iterator);
 
@@ -131,9 +142,16 @@ private:
 
     KisTileDataListIterator m_clockIterator;
 
-    QReadWriteLock m_listRWLock;
+    QMutex m_listLock;
     KisTileDataList m_tileDataList;
     qint32 m_numTiles;
+
+    /**
+     * This metric is used for computing the volume
+     * of memory occupied by tile data objects.
+     * metric = num_bytes / (KisTileData::WIDTH * KisTileData::HEIGHT)
+     */
+    qint64 m_memoryMetric;
 };
 
 #endif /* KIS_TILE_DATA_STORE_H_ */

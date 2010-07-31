@@ -107,6 +107,12 @@ public:
     inline bool deref();
 
     /**
+     * Creates a clone of the tile data safely.
+     * It will try to use the cached clones.
+     */
+    inline KisTileData* clone();
+
+    /**
      * Control the access of swapper to the tile data
      */
     inline void blockSwapping();

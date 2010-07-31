@@ -27,7 +27,6 @@
 #include "kis_tile_data_interface.h"
 
 
-extern KisTileDataStore globalTileDataStore;
 #include "kis_tile_data_store.h"
 
 
@@ -65,17 +64,21 @@ inline bool KisTileData::deref() {
     bool _ref;
 
     if (!(_ref = m_refCount.deref())) {
-        globalTileDataStore.freeTileData(this);
+        m_store->freeTileData(this);
         return 0;
     }
     return _ref;
+}
+
+inline KisTileData* KisTileData::clone() {
+    return m_store->duplicateTileData(this);
 }
 
 inline void KisTileData::blockSwapping() {
     m_swapLock.lockForRead();
     if(!m_data) {
         m_swapLock.unlock();
-        globalTileDataStore.ensureTileDataLoaded(this);
+        m_store->ensureTileDataLoaded(this);
     }
     resetAge();
 }

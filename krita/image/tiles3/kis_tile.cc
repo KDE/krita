@@ -119,7 +119,7 @@ void KisTile::lockForWrite()
 
     /* We are doing COW here */
     if (lazyCopying()) {
-        KisTileData *tileData = globalTileDataStore.duplicateTileData(m_tileData);
+        KisTileData *tileData = m_tileData->clone();
         tileData->acquire();
         tileData->blockSwapping();
         KisTileData *oldTileData = m_tileData; // FIXME: atomic access is better

@@ -42,8 +42,6 @@ public:
 
     void debugPrintList();
 
-    KisTileData *duplicateTileData(KisTileData *rhs);
-
     /**
      * Returns total number of tiles present: in memory
      * or in a swap file
@@ -86,6 +84,14 @@ public:
      * at the same moment of time.
      */
     bool trySwapTileData(KisTileData *td);
+
+
+    /**
+     * WARN: The following three method are only for usage
+     * in KisTileData. Do not call them directly!
+     */
+
+    KisTileData *duplicateTileData(KisTileData *rhs);
 
     void freeTileData(KisTileData *td);
 

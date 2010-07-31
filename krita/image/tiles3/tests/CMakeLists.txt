@@ -41,3 +41,8 @@ target_link_libraries(KisMemoryWindowTest  ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRAR
 set(kis_swapped_data_store_test_SRCS kis_swapped_data_store_test.cpp)
 kde4_add_unit_test(KisSwappedDataStoreTest TESTNAME krita-image-KisSwappedDataStoreTest  ${kis_swapped_data_store_test_SRCS})
 target_link_libraries(KisSwappedDataStoreTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+set(kis_tile_data_store_test_SRCS kis_tile_data_store_test.cpp)
+kde4_add_unit_test(KisTileDataStoreTest TESTNAME krita-image-KisTileDataStoreTest  ${kis_tile_data_store_test_SRCS})
+target_link_libraries(KisTileDataStoreTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

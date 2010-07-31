@@ -127,7 +127,9 @@ KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
     if (rhs->m_clonesStack.pop(td)) {
         DEBUG_PRECLONE_ACTION("+ Pre-clone HIT", rhs, td);
     } else {
+        blockSwapping(rhs);
         td = new KisTileData(*rhs);
+        unblockSwapping(rhs);
         DEBUG_PRECLONE_ACTION("- Pre-clone #MISS#", rhs, td);
     }
 
@@ -141,17 +143,48 @@ void KisTileDataStore::freeTileData(KisTileData *td)
 
     DEBUG_FREE_ACTION(td);
 
+    td->m_swapLock.lockForWrite();
+    if(!td->data()) {
+        m_swappedStore.forgetTileData(td);
+    }
     tileListDetach(td);
+    td->m_swapLock.unlock();
+
     delete td;
 }
 
-void KisTileDataStore::ensureTileDataLoaded(const KisTileData *td)
+void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
 {
-    Q_UNUSED(td);
-    /* Swapping isn't implemented yet */
-    Q_ASSERT(td->m_state == KisTileData::NORMAL);
+    td->m_swapLock.lockForRead();
+
+    while(!td->data()) {
+        td->m_swapLock.unlock();
+
+        td->m_swapLock.lockForWrite();
+
+        if(!td->data()) {
+            m_swappedStore.swapInTileData(td);
+        }
+
+        td->m_swapLock.unlock();
+
+        /**
+         * <-- In theory, livelock is possible here...
+         */
+
+        td->m_swapLock.lockForRead();
+    }
 }
 
+bool KisTileDataStore::trySwapTileData(KisTileData *td)
+{
+    if(!td->m_swapLock.tryLockForWrite()) return false;
+
+    if(td->data()) {
+        m_swappedStore.swapOutTileData(td);
+    }
+    td->m_swapLock.unlock();
+}
 
 void KisTileDataStore::debugPrintList()
 {
@@ -163,4 +196,24 @@ void KisTileDataStore::debugPrintList()
                  << "\n  next:    \t" << iter->m_nextTD
                  << "\n  prev:    \t" << iter->m_prevTD;
     }
+}
+
+void KisTileDataStore::debugSwapAll()
+{
+    QWriteLocker lock(&m_listRWLock);
+
+    qint32 numSwapped = 0;
+    qint32 totalTiles = 0;
+    KisTileData *iter;
+    tileListForEach(iter, tileListHead(), tileListTail()) {
+        totalTiles++;
+        if(trySwapTileData(iter)) {
+            numSwapped++;
+        }
+    }
+
+    qDebug() << "Swapped out tile data:" << numSwapped;
+    qDebug() << "Total tile data:" << totalTiles;
+
+    m_swappedStore.debugStatistics();
 }

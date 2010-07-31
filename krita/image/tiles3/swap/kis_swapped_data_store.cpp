@@ -48,6 +48,7 @@ KisSwappedDataStore::~KisSwappedDataStore()
 
 void KisSwappedDataStore::swapOutTileData(KisTileData *td)
 {
+    Q_ASSERT(td->data());
     QMutexLocker locker(&m_lock);
 
     /**
@@ -73,6 +74,7 @@ void KisSwappedDataStore::swapOutTileData(KisTileData *td)
 
 void KisSwappedDataStore::swapInTileData(KisTileData *td)
 {
+    Q_ASSERT(!td->data());
     QMutexLocker locker(&m_lock);
 
     // see comment in swapOutTileData()

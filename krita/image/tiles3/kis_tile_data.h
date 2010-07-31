@@ -89,9 +89,25 @@ public:
     inline KisChunk swapChunk() const {
         return m_swapChunk;
     }
-
     inline void setSwapChunk(KisChunk chunk) {
         m_swapChunk = chunk;
+    }
+
+    inline bool mementoed() const {
+        return m_mementoFlag;
+    }
+    inline void setMementoed(bool value) {
+        m_mementoFlag += value ? 1 : -1;
+    }
+
+    inline int age() const {
+        return m_age;
+    }
+    inline void resetAge() {
+        m_age = 0;
+    }
+    inline void markOld() {
+        m_age++;
     }
 
     /**
@@ -151,6 +167,34 @@ private:
      * to this tile data. Used by KisSwappedDataStore.
      */
     KisChunk m_swapChunk;
+
+
+    /**
+     * The flag is set by KisMementoItem to show this
+     * tile data is going down in history.
+     *
+     * (m_mementoFlag && m_usersCount == 1) means that
+     * the only user of tile data is a memento manager.
+     */
+    qint32 m_mementoFlag;
+
+    /**
+     * Counts up time after last access to the tile data.
+     * 0 - recently accessed
+     * 1+ - not recently accessed
+     */
+    //FIXME: make memory aligned
+    int m_age;
+
+
+    /**
+     * The primitive for controlling swapping of the tile.
+     * lockForRead() - used by regular threads to ensure swapper
+     *                 won't touch this tile data.
+     * tryLockForWrite() - used by swapper to check noone reads
+     *                     this tile data
+     */
+    QReadWriteLock m_swapLock;
 
 private:
     /**

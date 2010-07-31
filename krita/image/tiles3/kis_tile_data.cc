@@ -30,6 +30,8 @@ KisTileMemoryPool8BPP KisTileData::m_pool8BPP;
 
 KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store)
         : m_state(NORMAL),
+          m_mementoFlag(0),
+          m_age(0),
         m_usersCount(0),
         m_refCount(0),
         m_pixelSize(pixelSize),
@@ -50,6 +52,8 @@ KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataSt
  */
 KisTileData::KisTileData(const KisTileData& rhs)
         : m_state(NORMAL),
+          m_mementoFlag(0),
+          m_age(0),
         m_usersCount(0),
         m_refCount(0),
         m_pixelSize(rhs.m_pixelSize),
@@ -59,17 +63,12 @@ KisTileData::KisTileData(const KisTileData& rhs)
 
     m_data = allocateData(m_pixelSize);
 
-    rhs.m_store->ensureTileDataLoaded(&rhs);
     memcpy(m_data, rhs.data(), m_pixelSize * WIDTH * HEIGHT);
-
 }
 
 
 KisTileData::~KisTileData()
 {
-    /* FIXME: this _|_ */
-    m_store->ensureTileDataLoaded(this);
-
     releaseMemory();
 }
 

@@ -23,7 +23,10 @@
 #include "kis_tile_data.h"
 
 #include "kis_tile_data_pooler.h"
+#include "swap/kis_swapped_data_store.h"
 
+
+class KisTestingTileDataStoreAccessor;
 
 /**
  * Stores tileData objects. When needed compresses them and swaps.
@@ -36,7 +39,6 @@ public:
 
     void debugPrintList();
 
-    void ensureTileDataLoaded(const KisTileData *td);
     KisTileData *duplicateTileData(KisTileData *rhs);
 
 
@@ -91,6 +93,36 @@ public:
         m_pooler.kick();
     }
 
+    inline void blockSwapping(KisTileData *td) {
+        td->m_swapLock.lockForRead();
+        if(!td->data()) {
+            td->m_swapLock.unlock();
+            ensureTileDataLoaded(td);
+        }
+    }
+
+    inline void unblockSwapping(KisTileData *td) {
+        td->m_swapLock.unlock();
+    }
+
+    /**
+     * Try swap out the tile data.
+     * It may fail in case the tile is being accessed
+     * at the same moment of time.
+     */
+    bool trySwapTileData(KisTileData *td);
+
+private:
+    /**
+     * Ensures that the tile data is totally present in memory
+     * and it's swapping is blocked by holding td->m_swapLock
+     * in a read mode.
+     * PRECONDITIONS: td->m_swapLock is *unlocked*
+     * POSTCONDITIONS: td->m_data is in memory and
+     *                 td->m_swapLock is locked
+     */
+    void ensureTileDataLoaded(KisTileData *td);
+
 private:
     KisTileData *allocTileData(qint32 pixelSize, const quint8 *defPixel);
     void freeTileData(KisTileData *td);
@@ -99,9 +131,13 @@ private:
     void tileListDetach(KisTileData *td);
     void tileListClear();
 
+    void debugSwapAll();
 private:
     friend class KisTileDataPooler;
     KisTileDataPooler m_pooler;
+
+    friend class KisTestingTileDataStoreAccessor;
+    KisSwappedDataStore m_swappedStore;
 
     QReadWriteLock m_listRWLock;
     KisTileData *m_tileDataListHead;

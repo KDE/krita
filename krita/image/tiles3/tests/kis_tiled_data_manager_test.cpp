@@ -148,7 +148,7 @@ void KisTiledDataManagerTest::testVersionedBitBlt()
     KisMementoSP memento2 = dstDM.getMemento();
     dstDM.bitBlt(&srcDM1, cloneRect);
 
-    QVERIFY(checkTilesShared(&srcDM1, &dstDM, true, false, tilesRect));
+    QVERIFY(checkTilesShared(&srcDM1, &dstDM, false, false, tilesRect));
     QVERIFY(checkTilesNotShared(&srcDM1, &srcDM1, true, false, tilesRect));
     QVERIFY(checkTilesNotShared(&dstDM, &dstDM, true, false, tilesRect));
 
@@ -161,7 +161,7 @@ void KisTiledDataManagerTest::testVersionedBitBlt()
     KisMementoSP memento4 = dstDM.getMemento();
     dstDM.bitBlt(&srcDM2, cloneRect);
 
-    QVERIFY(checkTilesShared(&srcDM2, &dstDM, true, false, tilesRect));
+    QVERIFY(checkTilesShared(&srcDM2, &dstDM, false, false, tilesRect));
     QVERIFY(checkTilesNotShared(&srcDM2, &srcDM2, true, false, tilesRect));
     QVERIFY(checkTilesNotShared(&dstDM, &dstDM, true, false, tilesRect));
 
@@ -169,12 +169,12 @@ void KisTiledDataManagerTest::testVersionedBitBlt()
     QVERIFY(checkTilesShared(&dstDM, &dstDM, true, false, tilesRect));
 
     dstDM.rollback(memento4);
-    QVERIFY(checkTilesShared(&srcDM1, &dstDM, true, true, tilesRect));
+    QVERIFY(checkTilesShared(&srcDM1, &dstDM, false, false, tilesRect));
     QVERIFY(checkTilesShared(&dstDM, &dstDM, true, false, tilesRect));
     QVERIFY(checkTilesNotShared(&srcDM1, &srcDM1, true, false, tilesRect));
 
     dstDM.rollforward(memento4);
-    QVERIFY(checkTilesShared(&srcDM2, &dstDM, true, true, tilesRect));
+    QVERIFY(checkTilesShared(&srcDM2, &dstDM, false, false, tilesRect));
     QVERIFY(checkTilesShared(&dstDM, &dstDM, true, false, tilesRect));
     QVERIFY(checkTilesNotShared(&srcDM1, &srcDM1, true, false, tilesRect));
 }

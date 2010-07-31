@@ -50,7 +50,6 @@ CommentShape::CommentShape(KoResourceManager* resourceManager)
 , m_active(false)
 {
     KoShapeContainer::setSize(initialsBoxSize);
-    setSizeProtected(true);
 
     m_comment = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
     if ( !m_comment ) {

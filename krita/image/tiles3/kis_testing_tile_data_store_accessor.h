@@ -39,6 +39,9 @@ public:
 
     static KisTileData *allocTileData(qint32 pixelSize, const quint8 *defPixel);
     static void freeTileData(KisTileData *td);
+
+    static void clear();
+    static int numTiles();
 };
 
 #endif /* KIS_TESTING_TILE_DATA_STORE_ACCESSOR_H_ */

@@ -28,6 +28,7 @@ private:
 
 private slots:
     void testClockIterator();
+    void testLeaks();
     void testSwapping();
 };
 

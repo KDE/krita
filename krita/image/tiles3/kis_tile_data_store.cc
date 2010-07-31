@@ -55,7 +55,16 @@ KisTileDataStore::~KisTileDataStore()
 {
     m_pooler.terminatePooler();
     m_swapper.terminateSwapper();
-    freeRegisteredTiles();
+
+    if(numTiles() > 0) {
+        qCritical() << "CRITICAL: According to statistics of the KisTileDataStore"
+                    << "some tiles have leaked from the Krita control!";
+        qCritical() << "CRITICAL: Tiles in memory:" << numTilesInMemory()
+                    << "Total tiles:" << numTiles();
+        Q_ASSERT_X(0, "KisTileDataStore::~KisTileDataStore",
+                   "Let's crash to be on the safe side! ;)");
+
+    }
 }
 
 void KisTileDataStore::registerTileData(KisTileData *td)
@@ -77,18 +86,6 @@ void KisTileDataStore::unregisterTileData(KisTileData *td)
     td->m_listIterator = m_tileDataList.end();
     m_tileDataList.erase(tempIterator);
     m_numTiles--;
-}
-
-void KisTileDataStore::freeRegisteredTiles()
-{
-    QWriteLocker lock(&m_listRWLock);
-
-    KisTileDataListIterator iter = m_tileDataList.begin();
-
-    while(iter != m_tileDataList.end()) {
-        delete *iter;
-        iter = m_tileDataList.erase(iter);
-    }
 }
 
 KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *defPixel)
@@ -175,7 +172,7 @@ bool KisTileDataStore::trySwapTileData(KisTileData *td)
 KisTileDataStoreIterator* KisTileDataStore::beginIteration()
 {
     m_listRWLock.lockForRead();
-    return new KisTileDataStoreIterator(m_tileDataList);
+    return new KisTileDataStoreIterator(m_tileDataList, this);
 }
 void KisTileDataStore::endIteration(KisTileDataStoreIterator* iterator)
 {
@@ -186,7 +183,7 @@ void KisTileDataStore::endIteration(KisTileDataStoreIterator* iterator)
 KisTileDataStoreReverseIterator* KisTileDataStore::beginReverseIteration()
 {
     m_listRWLock.lockForRead();
-    return new KisTileDataStoreReverseIterator(m_tileDataList);
+    return new KisTileDataStoreReverseIterator(m_tileDataList, this);
 }
 void KisTileDataStore::endIteration(KisTileDataStoreReverseIterator* iterator)
 {
@@ -197,7 +194,7 @@ void KisTileDataStore::endIteration(KisTileDataStoreReverseIterator* iterator)
 KisTileDataStoreClockIterator* KisTileDataStore::beginClockIteration()
 {
     m_listRWLock.lockForRead();
-    return new KisTileDataStoreClockIterator(m_tileDataList, m_clockIterator);
+    return new KisTileDataStoreClockIterator(m_clockIterator, m_tileDataList, this);
 }
 void KisTileDataStore::endIteration(KisTileDataStoreClockIterator* iterator)
 {
@@ -232,4 +229,16 @@ void KisTileDataStore::debugSwapAll()
     qDebug() << "Total tile data:" << m_numTiles;
 
     m_swappedStore.debugStatistics();
+}
+
+void KisTileDataStore::debugClear()
+{
+    QWriteLocker lock(&m_listRWLock);
+
+    KisTileDataListIterator iter = m_tileDataList.begin();
+
+    while(iter != m_tileDataList.end()) {
+        delete *iter;
+        iter = m_tileDataList.erase(iter);
+    }
 }

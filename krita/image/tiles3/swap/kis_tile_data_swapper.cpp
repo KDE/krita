@@ -152,7 +152,7 @@ qint32 KisTileDataSwapper::pass0(qint32 tilesToFree)
         if(item->numUsers() > 1) continue;
 
         if(item->age() > 0) {
-            if(m_d->store->trySwapTileData(item)) {
+            if(iter->trySwapOut(item)) {
                 tilesFreed++;
             }
         }
@@ -166,7 +166,7 @@ qint32 KisTileDataSwapper::pass0(qint32 tilesToFree)
     foreach(item, additionalCandidates) {
         if(tilesFreed >= tilesToFree) break;
 
-        if(m_d->store->trySwapTileData(item)) {
+        if(iter->trySwapOut(item)) {
             tilesFreed++;
         }
     }

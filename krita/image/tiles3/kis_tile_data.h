@@ -155,6 +155,10 @@ private:
     friend class KisTile;
     friend class KisTileDataStore;
 
+    friend class KisTileDataStoreIterator;
+    friend class KisTileDataStoreReverseIterator;
+    friend class KisTileDataStoreClockIterator;
+
     /**
      * The state of the tile.
      * Filled in by tileDataStore and

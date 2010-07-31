@@ -85,6 +85,7 @@ public:
     }
 
     ~KisCanvas2Private() {
+        delete favoriteResourceManager;
         delete shapeManager;
         delete toolProxy;
     }

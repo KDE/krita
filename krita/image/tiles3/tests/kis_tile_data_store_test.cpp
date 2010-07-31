@@ -116,6 +116,24 @@ void KisTileDataStoreTest::testClockIterator()
 
 }
 
+void KisTileDataStoreTest::testLeaks()
+{
+    KisTestingTileDataStoreAccessor::clear();
+
+    const qint32 pixelSize = 1;
+    quint8 defaultPixel = 128;
+    KisTiledDataManager *dm = new KisTiledDataManager(pixelSize, &defaultPixel);
+
+    KisTileSP tile = dm->getTile(0, 0, true);
+    tile->lockForWrite();
+    tile->unlock();
+
+    tile = 0;
+
+    delete dm;
+
+    QCOMPARE(KisTestingTileDataStoreAccessor::numTiles(), 0);
+}
 
 #define COLUMN2COLOR(col) (col%255)
 

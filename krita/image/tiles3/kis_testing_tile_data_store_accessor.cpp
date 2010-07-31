@@ -50,3 +50,11 @@ KisTileData* KisTestingTileDataStoreAccessor::allocTileData(qint32 pixelSize, co
 void KisTestingTileDataStoreAccessor::freeTileData(KisTileData *td) {
     globalTileDataStore.freeTileData(td);
 }
+
+void KisTestingTileDataStoreAccessor::clear() {
+    globalTileDataStore.debugClear();
+}
+
+qint32  KisTestingTileDataStoreAccessor::numTiles() {
+    return globalTileDataStore.numTiles();
+}

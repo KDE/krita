@@ -45,10 +45,17 @@ public:
 
     KisTileData *duplicateTileData(KisTileData *rhs);
 
+    /**
+     * Returns total number of tiles present: in memory
+     * or in a swap file
+     */
     inline qint32 numTiles() const {
         return m_numTiles;
     }
 
+    /**
+     * Returns the number of tiles present in memory only
+     */
     inline qint32 numTilesInMemory() const {
         return m_numTiles - m_swappedStore.numTiles();
     }
@@ -156,6 +163,7 @@ private:
     void freeRegisteredTiles();
 
     void debugSwapAll();
+    void debugClear();
 private:
     KisTileDataPooler m_pooler;
     KisTileDataSwapper m_swapper;

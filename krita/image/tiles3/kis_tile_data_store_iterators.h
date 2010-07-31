@@ -35,8 +35,9 @@
 class KisTileDataStoreIterator
 {
 public:
-    KisTileDataStoreIterator(KisTileDataList &list)
-        : m_list(list)
+    KisTileDataStoreIterator(KisTileDataList &list, KisTileDataStore *store)
+        : m_list(list),
+          m_store(store)
     {
         m_iterator = m_list.begin();
         m_end = m_list.end();
@@ -54,17 +55,26 @@ public:
         return m_iterator != m_end;
     }
 
+    inline bool trySwapOut(KisTileData *td) {
+        if(td->m_listIterator == m_iterator)
+            m_iterator++;
+
+        return m_store->trySwapTileData(td);
+    }
+
 private:
     KisTileDataList &m_list;
     KisTileDataListIterator m_iterator;
     KisTileDataListIterator m_end;
+    KisTileDataStore *m_store;
 };
 
 class KisTileDataStoreReverseIterator
 {
 public:
-    KisTileDataStoreReverseIterator(KisTileDataList &list)
-        : m_list(list)
+    KisTileDataStoreReverseIterator(KisTileDataList &list, KisTileDataStore *store)
+        : m_list(list),
+          m_store(store)
     {
         m_iterator = m_list.end();
         m_begin = m_list.begin();
@@ -82,17 +92,26 @@ public:
         return m_iterator != m_begin;
     }
 
+    inline bool trySwapOut(KisTileData *td) {
+        if(td->m_listIterator == m_iterator)
+            m_iterator++;
+
+        return m_store->trySwapTileData(td);
+    }
+
 private:
     KisTileDataList &m_list;
     KisTileDataListIterator m_iterator;
     KisTileDataListIterator m_begin;
+    KisTileDataStore *m_store;
 };
 
 class KisTileDataStoreClockIterator
 {
 public:
-    KisTileDataStoreClockIterator(KisTileDataList &list, KisTileDataListIterator startItem)
-        : m_list(list)
+    KisTileDataStoreClockIterator(KisTileDataListIterator startItem, KisTileDataList &list, KisTileDataStore *store)
+        : m_list(list),
+          m_store(store)
     {
         m_end = m_list.end();
 
@@ -110,6 +129,11 @@ public:
     }
 
     inline KisTileData* peekNext() {
+        if(m_iterator == m_end) {
+            m_iterator = m_list.begin();
+            m_endReached = true;
+        }
+
         return *m_iterator;
     }
 
@@ -126,6 +150,13 @@ public:
         return !(m_endReached && m_iterator == m_startItem);
     }
 
+    inline bool trySwapOut(KisTileData *td) {
+        if(td->m_listIterator == m_iterator)
+            m_iterator++;
+
+        return m_store->trySwapTileData(td);
+    }
+
 private:
     friend class KisTileDataStore;
     inline KisTileDataListIterator getFinalPosition() {
@@ -138,6 +169,7 @@ private:
     KisTileDataListIterator m_iterator;
     KisTileDataListIterator m_startItem;
     KisTileDataListIterator m_end;
+    KisTileDataStore *m_store;
 };
 
 #endif /* KIS_TILE_DATA_STORE_ITERATORS_H_ */

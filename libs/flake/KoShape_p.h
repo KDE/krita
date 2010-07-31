@@ -75,6 +75,8 @@ public:
     int visible : 1;
     int printable : 1;
     int geometryProtected : 1;
+    int sizeProtected : 1;
+    int positionProtected : 1;
     int keepAspect : 1;
     int selectable : 1;
     int detectCollision : 1;

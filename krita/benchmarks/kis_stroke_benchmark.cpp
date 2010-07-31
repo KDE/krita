@@ -110,6 +110,7 @@ void KisStrokeBenchmark::initLines(int width, int height)
 
 void KisStrokeBenchmark::cleanupTestCase()
 {
+    delete m_painter;
 }
 
 void KisStrokeBenchmark::pixelbrush300px()

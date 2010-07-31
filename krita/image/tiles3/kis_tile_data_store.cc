@@ -17,7 +17,8 @@
  */
 
 
-#include <stdio.h>
+#include <kglobal.h>
+
 #include "kis_tile_data_store.h"
 #include "kis_tile_data.h"
 #include "kis_debug.h"
@@ -27,6 +28,7 @@
 //#define DEBUG_PRECLONE
 
 #ifdef DEBUG_PRECLONE
+#include <stdio.h>
 #define DEBUG_PRECLONE_ACTION(action, oldTD, newTD) \
     printf("!!! %s:\t\t\t  0x%X -> 0x%X    \t\t!!!\n",  \
            action, (quintptr)oldTD, (quintptr) newTD)
@@ -37,8 +39,6 @@
 #define DEBUG_FREE_ACTION(td)
 #endif
 
-
-KisTileDataStore globalTileDataStore;
 
 
 KisTileDataStore::KisTileDataStore()
@@ -66,6 +66,12 @@ KisTileDataStore::~KisTileDataStore()
                    "Let's crash to be on the safe side! ;)");
 
     }
+}
+
+KisTileDataStore* KisTileDataStore::instance()
+{
+    K_GLOBAL_STATIC(KisTileDataStore, s_instance);
+    return s_instance;
 }
 
 inline void KisTileDataStore::registerTileDataImp(KisTileData *td)
@@ -244,18 +250,17 @@ void KisTileDataStore::debugPrintList()
 
 void KisTileDataStore::debugSwapAll()
 {
-    QWriteLocker lock(&m_listRWLock);
-
-    qint32 numSwapped = 0;
+    KisTileDataStoreIterator* iter = beginIteration();
     KisTileData *item;
-    foreach(item, m_tileDataList) {
-        if(trySwapTileData(item)) {
-            numSwapped++;
-        }
+    while(iter->hasNext()) {
+        item = iter->next();
+        iter->trySwapOut(item);
     }
+    endIteration(iter);
 
-    qDebug() << "Swapped out tile data:" << numSwapped;
-    qDebug() << "Total tile data:" << m_numTiles;
+    qDebug() << "Number of tiles:" << numTiles();
+    qDebug() << "Tiles in memory:" << numTilesInMemory();
+
 
     m_swappedStore.debugStatistics();
 }

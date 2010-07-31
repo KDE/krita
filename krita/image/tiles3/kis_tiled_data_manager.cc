@@ -104,8 +104,7 @@ void KisTiledDataManager::setDefaultPixel(const quint8 *defaultPixel)
 {
     QWriteLocker locker(&m_lock);
 
-    KisTileData *td = globalTileDataStore.createDefaultTileData(pixelSize(),
-                      defaultPixel);
+    KisTileData *td = KisTileDataStore::instance()->createDefaultTileData(pixelSize(), defaultPixel);
     m_hashTable->setDefaultTileData(td);
     m_mementoManager->setDefaultTileData(td);
 
@@ -257,8 +256,7 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
              */
             td = m_hashTable->defaultTileData();
         else
-            td = globalTileDataStore.createDefaultTileData(pixelSize,
-                    clearPixel);
+            td = KisTileDataStore::instance()->createDefaultTileData(pixelSize, clearPixel);
 
         td->acquire();
     }

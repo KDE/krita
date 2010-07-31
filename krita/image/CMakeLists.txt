@@ -50,7 +50,7 @@ set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_chunk_allocator.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_memory_window.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_swapped_data_store.cpp
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_testing_tile_data_store_accessor.cpp
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_tile_data_swapper.cpp
 )
 add_subdirectory( tiles3 )
 endif(USE_TILESYSTEM EQUAL 1)

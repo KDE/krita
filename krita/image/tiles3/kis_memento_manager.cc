@@ -207,7 +207,7 @@ void KisMementoManager::commit()
     DEBUG_DUMP_MESSAGE("COMMIT_DONE");
 
     // Waking up pooler to prepare copies for us
-    globalTileDataStore.kickPooler();
+    KisTileDataStore::instance()->kickPooler();
 }
 
 KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row)

@@ -28,23 +28,24 @@
 
 #include "tiles3/kis_tile_data_store.h"
 #include "tiles3/kis_tile_data_store_iterators.h"
-#include "tiles3/kis_testing_tile_data_store_accessor.h"
 
 
 void KisTileDataStoreTest::testClockIterator()
 {
+    KisTileDataStore::instance()->debugClear();
+
     const qint32 pixelSize = 1;
     quint8 defaultPixel = 128;
 
     QList<KisTileData*> tileDataList;
 
-    tileDataList.append(KisTestingTileDataStoreAccessor::allocTileData(pixelSize, &defaultPixel));
-    tileDataList.append(KisTestingTileDataStoreAccessor::allocTileData(pixelSize, &defaultPixel));
-    tileDataList.append(KisTestingTileDataStoreAccessor::allocTileData(pixelSize, &defaultPixel));
+    tileDataList.append(KisTileDataStore::instance()->createDefaultTileData(pixelSize, &defaultPixel));
+    tileDataList.append(KisTileDataStore::instance()->createDefaultTileData(pixelSize, &defaultPixel));
+    tileDataList.append(KisTileDataStore::instance()->createDefaultTileData(pixelSize, &defaultPixel));
 
 
     /// First, full cycle!
-    KisTileDataStoreClockIterator *iter = KisTestingTileDataStoreAccessor::beginClockIteration();
+    KisTileDataStoreClockIterator *iter = KisTileDataStore::instance()->beginClockIteration();
     KisTileData *item;
 
     QVERIFY(iter->hasNext());
@@ -61,21 +62,21 @@ void KisTileDataStoreTest::testClockIterator()
 
     QVERIFY(!iter->hasNext());
 
-    KisTestingTileDataStoreAccessor::endIteration(iter);
+    KisTileDataStore::instance()->endIteration(iter);
 
 
     /// Second, iterate until the second item!
-    iter = KisTestingTileDataStoreAccessor::beginClockIteration();
+    iter = KisTileDataStore::instance()->beginClockIteration();
 
     QVERIFY(iter->hasNext());
     item = iter->next();
     QCOMPARE(item, tileDataList[0]);
 
-    KisTestingTileDataStoreAccessor::endIteration(iter);
+    KisTileDataStore::instance()->endIteration(iter);
 
 
     /// Third, check the position restored!
-    iter = KisTestingTileDataStoreAccessor::beginClockIteration();
+    iter = KisTileDataStore::instance()->beginClockIteration();
 
     QVERIFY(iter->hasNext());
     item = iter->next();
@@ -91,16 +92,16 @@ void KisTileDataStoreTest::testClockIterator()
 
     QVERIFY(!iter->hasNext());
 
-    KisTestingTileDataStoreAccessor::endIteration(iter);
+    KisTileDataStore::instance()->endIteration(iter);
 
 
-    /// By this moment KisTileDataStore::m_clockIterator has been set
+    /// By this moment KisTileDataStore::instance()->m_clockIterator has been set
     /// onto the second (tileDataList[1]) item.
     /// Let's try remove it and see what will happen...
 
-    KisTestingTileDataStoreAccessor::freeTileData(tileDataList[1]);
+    KisTileDataStore::instance()->freeTileData(tileDataList[1]);
 
-    iter = KisTestingTileDataStoreAccessor::beginClockIteration();
+    iter = KisTileDataStore::instance()->beginClockIteration();
 
     QVERIFY(iter->hasNext());
     item = iter->next();
@@ -112,13 +113,17 @@ void KisTileDataStoreTest::testClockIterator()
 
     QVERIFY(!iter->hasNext());
 
-    KisTestingTileDataStoreAccessor::endIteration(iter);
+    KisTileDataStore::instance()->endIteration(iter);
 
+    KisTileDataStore::instance()->freeTileData(tileDataList[0]);
+    KisTileDataStore::instance()->freeTileData(tileDataList[2]);
 }
 
 void KisTileDataStoreTest::testLeaks()
 {
-    KisTestingTileDataStoreAccessor::clear();
+    KisTileDataStore::instance()->debugClear();
+
+    QCOMPARE(KisTileDataStore::instance()->numTiles(), 0);
 
     const qint32 pixelSize = 1;
     quint8 defaultPixel = 128;
@@ -132,13 +137,15 @@ void KisTileDataStoreTest::testLeaks()
 
     delete dm;
 
-    QCOMPARE(KisTestingTileDataStoreAccessor::numTiles(), 0);
+    QCOMPARE(KisTileDataStore::instance()->numTiles(), 0);
 }
 
 #define COLUMN2COLOR(col) (col%255)
 
 void KisTileDataStoreTest::testSwapping()
 {
+    KisTileDataStore::instance()->debugClear();
+
     const qint32 pixelSize = 1;
     quint8 defaultPixel = 128;
     KisTiledDataManager dm(pixelSize, &defaultPixel);
@@ -156,7 +163,7 @@ void KisTileDataStoreTest::testSwapping()
         tile->unlock();
     }
 
-    KisTestingTileDataStoreAccessor::swapAll();
+    KisTileDataStore::instance()->debugSwapAll();
 
     for(qint32 col = 0; col < 1000; col++) {
         KisTileSP tile = dm.getTile(col, 0, true);

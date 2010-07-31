@@ -18,6 +18,7 @@
 #ifndef KIS_TILE_DATA_STORE_H_
 #define KIS_TILE_DATA_STORE_H_
 
+#include "krita_export.h"
 
 #include <QReadWriteLock>
 #include "kis_tile_data_interface.h"
@@ -26,7 +27,6 @@
 #include "swap/kis_tile_data_swapper.h"
 #include "swap/kis_swapped_data_store.h"
 
-class KisTestingTileDataStoreAccessor;
 class KisTileDataStoreIterator;
 class KisTileDataStoreReverseIterator;
 class KisTileDataStoreClockIterator;
@@ -34,10 +34,14 @@ class KisTileDataStoreClockIterator;
 /**
  * Stores tileData objects. When needed compresses them and swaps.
  */
-class KisTileDataStore
+class KRITAIMAGE_EXPORT KisTileDataStore
 {
-public:
+private:
     KisTileDataStore();
+
+public:
+    static KisTileDataStore* instance();
+
     ~KisTileDataStore();
 
     void debugPrintList();
@@ -122,7 +126,7 @@ private:
     KisTileDataPooler m_pooler;
     KisTileDataSwapper m_swapper;
 
-    friend class KisTestingTileDataStoreAccessor;
+    friend class KisTileDataStoreTest;
     KisSwappedDataStore m_swappedStore;
 
     KisTileDataListIterator m_clockIterator;
@@ -131,8 +135,6 @@ private:
     KisTileDataList m_tileDataList;
     qint32 m_numTiles;
 };
-
-extern KisTileDataStore globalTileDataStore;
 
 #endif /* KIS_TILE_DATA_STORE_H_ */
 

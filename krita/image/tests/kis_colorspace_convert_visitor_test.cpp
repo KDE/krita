@@ -41,6 +41,7 @@ void KisColorSpaceConvertVisitorTest::testCreation()
     KisColorSpaceConvertVisitor test(image, rgb, KoColorConversionTransformation::IntentPerceptual);
     layer->accept(test);
     QVERIFY(layer->colorSpace()->colorModelId() == rgb->colorModelId());
+    delete undoAdapterDummy;
 }
 
 

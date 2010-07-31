@@ -73,6 +73,10 @@ KisRectIterator2::KisRectIterator2(KisTiledDataManager *dataManager,
 
 KisRectIterator2::~KisRectIterator2()
 {
+    if (m_tile)
+        unlockTile(m_tile);
+    if (m_oldTile)
+        unlockTile(m_oldTile);
 }
 
 qint32 KisRectIterator2::nConseqPixels() const

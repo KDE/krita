@@ -21,7 +21,7 @@
 
 #include "kis_debug.h"
 
-#include "kis_image_config.h"
+//#include "kis_image_config.h"
 
 #include "tiles3/kis_tiled_data_manager.h"
 #include "tiles_test_utils.h"

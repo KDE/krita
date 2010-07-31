@@ -46,6 +46,14 @@ KisSwappedDataStore::~KisSwappedDataStore()
     delete m_allocator;
 }
 
+quint64 KisSwappedDataStore::numTiles() const
+{
+    // We are not acquiring the lock here...
+    // Hope QLinkedList will ensure atomic access to it's size...
+
+    return m_allocator->numChunks();
+}
+
 void KisSwappedDataStore::swapOutTileData(KisTileData *td)
 {
     Q_ASSERT(td->data());

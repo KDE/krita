@@ -23,6 +23,7 @@
 #include "kis_tile_data.h"
 
 #include "kis_tile_data_pooler.h"
+#include "swap/kis_tile_data_swapper.h"
 #include "swap/kis_swapped_data_store.h"
 
 
@@ -43,6 +44,10 @@ public:
 
     inline qint32 numTiles() const {
         return m_numTiles;
+    }
+
+    inline qint32 numTilesInMemory() const {
+        return m_numTiles - m_swappedStore.numTiles();
     }
 
     /**
@@ -94,6 +99,9 @@ public:
     // Called by The Memento Manager after every commit
     inline void kickPooler() {
         m_pooler.kick();
+
+        //FIXME: maybe, rename a function?
+        m_swapper.kick();
     }
 
     inline void blockSwapping(KisTileData *td) {
@@ -102,6 +110,7 @@ public:
             td->m_swapLock.unlock();
             ensureTileDataLoaded(td);
         }
+        td->resetAge();
     }
 
     inline void unblockSwapping(KisTileData *td) {
@@ -138,6 +147,9 @@ private:
 private:
     friend class KisTileDataPooler;
     KisTileDataPooler m_pooler;
+
+    friend class KisTileDataSwapper;
+    KisTileDataSwapper m_swapper;
 
     friend class KisTestingTileDataStoreAccessor;
     KisSwappedDataStore m_swappedStore;

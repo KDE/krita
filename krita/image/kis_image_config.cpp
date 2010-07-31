@@ -106,3 +106,23 @@ void KisImageConfig::setSwapWindowSize(int value)
 {
     m_config.writeEntry("swapWindowSize", value);
 }
+
+int KisImageConfig::memoryHardLimit() const
+{
+    return m_config.readEntry("memoryHardLimit", 512); // in MiB
+}
+
+void KisImageConfig::setMemoryHardLimit(int value)
+{
+    m_config.writeEntry("memoryHardLimit", value);
+}
+
+int KisImageConfig::memorySoftLimit() const
+{
+    return m_config.readEntry("memorySoftLimit", 256); // in MiB
+}
+
+void KisImageConfig::setMemorySoftLimit(int value)
+{
+    m_config.writeEntry("memorySoftLimit", value);
+}

@@ -50,6 +50,11 @@ public:
     int swapWindowSize() const;
     void setSwapWindowSize(int value);
 
+    int memoryHardLimit() const;
+    void setMemoryHardLimit(int value);
+    int memorySoftLimit() const;
+    void setMemorySoftLimit(int value);
+
 private:
     Q_DISABLE_COPY(KisImageConfig);
 

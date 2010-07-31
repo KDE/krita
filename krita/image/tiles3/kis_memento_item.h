@@ -132,6 +132,8 @@ public:
              */
             globalTileDataStore.acquireTileData(m_tileData);
             globalTileDataStore.derefTileData(m_tileData);
+
+            m_tileData->setMementoed(true);
         }
         m_commitedFlag = true;
     }
@@ -191,10 +193,13 @@ public:
 protected:
     void releaseTileData() {
         if (m_tileData) {
-            if (m_commitedFlag)
+            if (m_commitedFlag) {
+                m_tileData->setMementoed(false);
                 globalTileDataStore.releaseTileData(m_tileData);
-            else
+            }
+            else {
                 globalTileDataStore.derefTileData(m_tileData);
+            }
         }
     }
 

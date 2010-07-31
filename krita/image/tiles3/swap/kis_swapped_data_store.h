@@ -38,6 +38,11 @@ public:
     ~KisSwappedDataStore();
 
     /**
+     * Returns number of swapped out tile data objects
+     */
+    quint64 numTiles() const;
+
+    /**
      * Swap out the data stored in the \a td to the swap file
      * and free memory occupied by td->data().
      * LOCKING: the lock on the tile data should be taken

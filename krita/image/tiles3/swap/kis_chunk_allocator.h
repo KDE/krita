@@ -133,6 +133,10 @@ public:
                       quint64 storeSize = DEFAULT_STORE_SIZE);
     ~KisChunkAllocator();
 
+    inline quint64 numChunks() const {
+        return m_list.size();
+    }
+
     KisChunk getChunk(quint64 size);
     void freeChunk(KisChunk chunk);
 

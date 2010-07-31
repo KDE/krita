@@ -90,21 +90,26 @@ void KisTileDataStore::tileListClear()
 
 KisTileDataStore::KisTileDataStore()
         : m_pooler(this),
+          m_swapper(this),
         m_listRWLock(QReadWriteLock::Recursive),
         m_tileDataListHead(0),
         m_numTiles(0)
 {
     m_pooler.start();
+    m_swapper.start();
 }
 
 KisTileDataStore::~KisTileDataStore()
 {
     m_pooler.terminatePooler();
+    m_swapper.terminateSwapper();
     tileListClear();
 }
 
 KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *defPixel)
 {
+    m_swapper.checkFreeMemory();
+
     KisTileData *td = new KisTileData(pixelSize, defPixel, this);
 
     tileListAppend(td);
@@ -160,6 +165,8 @@ void KisTileDataStore::freeTileData(KisTileData *td)
 
 void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
 {
+//    qDebug() << "#### SWAP MISS! ####" << td << ppVar(td->mementoed()) << ppVar(td->age()) << ppVar(td->numUsers());
+
     td->m_swapLock.lockForRead();
 
     while(!td->data()) {
@@ -183,12 +190,16 @@ void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
 
 bool KisTileDataStore::trySwapTileData(KisTileData *td)
 {
-    if(!td->m_swapLock.tryLockForWrite()) return false;
+    bool result = false;
+    if(!td->m_swapLock.tryLockForWrite()) return result;
 
     if(td->data()) {
         m_swappedStore.swapOutTileData(td);
+        result = true;
     }
     td->m_swapLock.unlock();
+
+    return result;
 }
 
 void KisTileDataStore::debugPrintList()

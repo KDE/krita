@@ -110,6 +110,10 @@ public:
         m_age++;
     }
 
+    qint32  numUsers() const {
+        return m_usersCount;
+    }
+
     /**
      * Used for swapping purposes only.
      * Frees the memory occupied by the tile data.
@@ -135,6 +139,7 @@ private:
     static void freeData(quint8 *ptr, const qint32 pixelSize);
 private:
     friend class KisTileDataPooler;
+    friend class KisTileDataSwapper;
     /**
      * A list of pre-duplicated tiledatas.
      * To make a COW faster, KisTileDataPooler thread duplicates

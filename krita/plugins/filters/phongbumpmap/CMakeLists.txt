@@ -1,5 +1,6 @@
 set(kritaphongbumpmap_PART_SRCS
     phongbumpmap.cpp
+    phong_pixel_processor.cpp
     )
 
 kde4_add_ui_files(kritaphongbumpmap_PART_SRCS wdgphongbumpmap.ui)

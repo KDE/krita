@@ -72,15 +72,14 @@
 #include <KoColorSpaceRegistry.h>
 #include <colorprofiles/KoDummyColorProfile.h>
 
+#include <QColor>
+
 /*
 #include <../../extensions/impasto/kis_fresh_start_color_space.h>
 #include <../../extensions/impasto/kis_fresh_start_color_space.cpp>
 */
 
 #include "kdebug.h"
-
-#include <../../extensions/impasto/kis_rgbu8_height_color_space.h>
-#include <../../extensions/impasto/kis_rgbu8_height_color_space.cpp>
 
 
 K_PLUGIN_FACTORY(KritaPhongBumpmapFactory, registerPlugin<KritaPhongBumpmap>();)
@@ -106,14 +105,8 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
                                     KoUpdater* progressUpdater
                                     ) const
 {
-    /*NOTE: THIS FILTER HASN'T BEEN EITHER OPTIMIZED, OR GIVEN MUCH THOUGHT,
-    IT'S STILL PRE-ALPHA, ITS SPAGETTINESS IS EVIDENT AND ITS INEFFICIENCY TOO.
-    NOT POINTING OUT THE OBVIOUS IS APPRECIATED, THANK YOU.*/
     
-    //qDebug("---- LE FILTER, LE FILTER, LE FILTER, LE FILTER, LE FILTER, LE FILTER ----");
-    
-    QImage bumpmap;
-    QTime timer;
+    QTime timer, timerE;
     QPoint pos;
     QVector<quint8*> Channels;
     KisPaintDeviceSP src;
@@ -127,16 +120,9 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
         return;
     }
         
-        
     timer.start();
     
-    //qDebug() << srcInfo.paintDevice()->colorSpace()->colorModelId();
-    /*  ------- Debugging tools
-    QList<KoID> AVER = KoColorSpaceRegistry::instance()->listKeys();
-    
-    foreach (KoID mierda, AVER)
-        qDebug() << mierda ;
-    */
+    quint32 demora_proceso[] = {0, 0, 0};
     
     src = srcInfo.paintDevice();
     dst = dstInfo.paintDevice();
@@ -145,6 +131,9 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
     
     Channels = src->readPlanarBytes(lim.x(), lim.y(), lim.width(), lim.height());
     
+    QImage bumpmap(lim.width(), lim.height(), QImage::Format_RGB32);
+    bumpmap.fill(0);
+    
     foreach (KoChannelInfo* channel, src->colorSpace()->channels()) {
         if (userChosenHeightChannel == channel->name())
             m_heightChannel = channel;
@@ -152,34 +141,48 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
     
     quint8* heightmap = Channels.data()[m_heightChannel->index()];
     
-    QVector3D reflection_vector(0, 0, 0);
-    QVector3D normal_vector(0, 0, 1);
-    QVector3D x_vector(1, 0, 0);
-    QVector3D y_vector(0, 1, 0);
-    QVector3D light_vector(-6, -6, 3);
-    light_vector.normalize();
-    QVector3D vision_vector(0, 0, 1);
+    qDebug("Tiempo de preparacion: %d ms", timer.restart());
     
-    qreal Il, Ka, Kd, Ks, shiny_exp, I, Ia, Id, Is;
-    
-    Il = 0xFF;
-    Ka = 0.0;
-    Kd = 1;
-    Ks = 1;
-    shiny_exp = 40;
-    
-    I = Ia = Id = Is = 0;
-    
-    qDebug("Time elapsed: %d ms", timer.elapsed());
-    
-    quint32 posup, posdown, posleft, posright;
+    quint32 posup;
+    quint32 posdown;
+    quint32 posleft;
+    quint32 posright;
     quint32 x, y;
-    x = y = 0;
+    
+    QColor I; //Reflected light
+    
+    quint8** fastHeightmap = new quint8*[lim.height()];
+    
+    for (int yIndex = 0; yIndex < lim.height(); yIndex++) {
+        
+        quint8* fastLine = new quint8[lim.width()];
+        
+        for (int xIndex = 0; xIndex < lim.width(); xIndex++) {
+            fastLine[xIndex] = heightmap[xIndex + yIndex * lim.width()];
+        }
+        
+        fastHeightmap[yIndex] = fastLine;
+    }
+    
+    PhongPixelProcessor *pixelProcessor = new PhongPixelProcessor(heightmap);
+    PhongPixelProcessor *fastPixelProcessor = new PhongPixelProcessor(fastHeightmap);
+    
+    //======================================
+    //======Preparation paraphlenalia=======
+    //======================================
+
+    //int pixelsPerLine = bumpmap.bytesPerLine() / 4;
+    
+    QRgb** lines = new QRgb*[bumpmap.height()];
+
+    for (int yIndex = 0; yIndex < bumpmap.height(); yIndex++)
+        lines[yIndex] = (QRgb *) bumpmap.scanLine(yIndex);
+        
+    qDebug("Tiempo de pointeracion: %d ms", timer.restart());
+
     //=======================================
     //================Fill===================
     //=======================================
-    
-    qDebug("VEAMOS SI ESTO EXISTE REALMENTE");
     
     if ((lim.width() == 1) && (lim.height() == 1))
         return;
@@ -192,20 +195,9 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
     posleft = 0;
     posright = 1;
     
-    normal_vector.setX(- heightmap[posright] + heightmap[posleft]);
-    normal_vector.setY(- heightmap[posup] + heightmap[posdown]);
-    normal_vector.setZ(4);
-    normal_vector.normalize();
-    reflection_vector = (2 * pow(QVector3D::dotProduct(normal_vector, light_vector), shiny_exp)) * normal_vector - light_vector;
-    Ia = Ka * Il;
-    Id = Kd * Il * QVector3D::dotProduct(normal_vector, light_vector);
-    if (Id < 0)     Id = 0;
-    Is = Ks * Il * QVector3D::dotProduct(vision_vector, reflection_vector);
-    if (Is < 0)     Is = 0;
-    I = Ia + Id + Is;
-    if (I > 0xFF)   I = 0xFF;
-    if (I < 0)      I = 0;
-    dst->setPixel(0, 0, QColor(I, I, I));  // TODO: Inefficient, hacky, silly, will fix
+    I = pixelProcessor->illuminatePixel(posup, posdown, posleft, posright);
+    lines[0][0] = I.rgb();
+    //dst->setPixel(0, 0, I);  // TODO: Inefficient, hacky, silly, will fix
     
     // calculate corner (width_minus_1,0)
     posup = lim.width() + width_minus_1;
@@ -213,20 +205,9 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
     posleft = width_minus_1 - 1;
     posright = width_minus_1;
     
-    normal_vector.setX(- heightmap[posright] + heightmap[posleft]);
-    normal_vector.setY(- heightmap[posup] + heightmap[posdown]);
-    normal_vector.setZ(4);
-    normal_vector.normalize();
-    reflection_vector = (2 * pow(QVector3D::dotProduct(normal_vector, light_vector), shiny_exp)) * normal_vector - light_vector;
-    Ia = Ka * Il;
-    Id = Kd * Il * QVector3D::dotProduct(normal_vector, light_vector);
-    if (Id < 0)     Id = 0;
-    Is = Ks * Il * QVector3D::dotProduct(vision_vector, reflection_vector);
-    if (Is < 0)     Is = 0;
-    I = Ia + Id + Is;
-    if (I > 0xFF)   I = 0xFF;
-    if (I < 0)      I = 0;
-    dst->setPixel(width_minus_1, 0, QColor(I, I, I));  // TODO: Inefficient, hacky, silly, will fix
+    I = pixelProcessor->illuminatePixel(posup, posdown, posleft, posright);
+    lines[0][width_minus_1] = I.rgb();
+    //dst->setPixel(width_minus_1, 0, I);  // TODO: Inefficient, hacky, silly, will fix
     
     // calculate corner (0,height_minus_1)
     posup = (height_minus_1) * lim.width();
@@ -234,20 +215,9 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
     posleft =  height_minus_1 * lim.width();
     posright = height_minus_1  * lim.width() + 1;
     
-    normal_vector.setX(- heightmap[posright] + heightmap[posleft]);
-    normal_vector.setY(- heightmap[posup] + heightmap[posdown]);
-    normal_vector.setZ(4);
-    normal_vector.normalize();
-    reflection_vector = (2 * pow(QVector3D::dotProduct(normal_vector, light_vector), shiny_exp)) * normal_vector - light_vector;
-    Ia = Ka * Il;
-    Id = Kd * Il * QVector3D::dotProduct(normal_vector, light_vector);
-    if (Id < 0)     Id = 0;
-    Is = Ks * Il * QVector3D::dotProduct(vision_vector, reflection_vector);
-    if (Is < 0)     Is = 0;
-    I = Ia + Id + Is;
-    if (I > 0xFF)   I = 0xFF;
-    if (I < 0)      I = 0;
-    dst->setPixel(0, height_minus_1, QColor(I, I, I));  // TODO: Inefficient, hacky, silly, will fix
+    I = pixelProcessor->illuminatePixel(posup, posdown, posleft, posright);
+    lines[height_minus_1][0] = I.rgb();
+    //dst->setPixel(0, height_minus_1, I);  // TODO: Inefficient, hacky, silly, will fix
     
     // calculate corner (width_minus_1,height_minus_1)
     posup = (height_minus_1) * lim.width() + width_minus_1;
@@ -255,20 +225,9 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
     posleft =  height_minus_1 * lim.width() + width_minus_1 - 1;
     posright = height_minus_1  * lim.width() + width_minus_1;
     
-    normal_vector.setX(- heightmap[posright] + heightmap[posleft]);
-    normal_vector.setY(- heightmap[posup] + heightmap[posdown]);
-    normal_vector.setZ(4);
-    normal_vector.normalize();
-    reflection_vector = (2 * pow(QVector3D::dotProduct(normal_vector, light_vector), shiny_exp)) * normal_vector - light_vector;
-    Ia = Ka * Il;
-    Id = Kd * Il * QVector3D::dotProduct(normal_vector, light_vector);
-    if (Id < 0)     Id = 0;
-    Is = Ks * Il * QVector3D::dotProduct(vision_vector, reflection_vector);
-    if (Is < 0)     Is = 0;
-    I = Ia + Id + Is;
-    if (I > 0xFF)   I = 0xFF;
-    if (I < 0)      I = 0;
-    dst->setPixel(width_minus_1, height_minus_1, QColor(I, I, I));  // TODO: Inefficient, hacky, silly, will fix
+    I = pixelProcessor->illuminatePixel(posup, posdown, posleft, posright);
+    lines[height_minus_1][width_minus_1] = I.rgb();
+    //dst->setPixel(width_minus_1, height_minus_1, I);  // TODO: Inefficient, hacky, silly, will fix
     
     
     for (y = 1; y < height_minus_1; y++) {
@@ -278,63 +237,30 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
         posleft =  y * lim.width();
         posright = y * lim.width() + 1;
         
-        normal_vector.setX(- heightmap[posright] + heightmap[posleft]);
-        normal_vector.setY(- heightmap[posup] + heightmap[posdown]);
-        normal_vector.setZ(4);
-        normal_vector.normalize();
-        reflection_vector = (2 * pow(QVector3D::dotProduct(normal_vector, light_vector), shiny_exp)) * normal_vector - light_vector;
-        Ia = Ka * Il;
-        Id = Kd * Il * QVector3D::dotProduct(normal_vector, light_vector);
-        if (Id < 0)     Id = 0;
-        Is = Ks * Il * QVector3D::dotProduct(vision_vector, reflection_vector);
-        if (Is < 0)     Is = 0;
-        I = Ia + Id + Is;
-        if (I > 0xFF)   I = 0xFF;
-        if (I < 0)      I = 0;
-        dst->setPixel(0, y, QColor(I, I, I));  // TODO: Inefficient, hacky, silly, will fix
+        I = pixelProcessor->illuminatePixel(posup, posdown, posleft, posright);
+        lines[y][0] = I.rgb();
+        //dst->setPixel(0, y, I);  // TODO: Inefficient, hacky, silly, will fix
         
         // calculate edge (width_minus_1, y)
         posup = (y + 1) * lim.width() + width_minus_1;
         posdown = (y - 1) * lim.width() + width_minus_1;
         posleft =  y * lim.width() + width_minus_1 - 1;
-        posright = y  * lim.width() + width_minus_1;
+        posright = y * lim.width() + width_minus_1;
         
-        normal_vector.setX(- heightmap[posright] + heightmap[posleft]);
-        normal_vector.setY(- heightmap[posup] + heightmap[posdown]);
-        normal_vector.setZ(4);
-        normal_vector.normalize();
-        reflection_vector = (2 * pow(QVector3D::dotProduct(normal_vector, light_vector), shiny_exp)) * normal_vector - light_vector;
-        Ia = Ka * Il;
-        Id = Kd * Il * QVector3D::dotProduct(normal_vector, light_vector);
-        if (Id < 0)     Id = 0;
-        Is = Ks * Il * QVector3D::dotProduct(vision_vector, reflection_vector);
-        if (Is < 0)     Is = 0;
-        I = Ia + Id + Is;
-        if (I > 0xFF)   I = 0xFF;
-        if (I < 0)      I = 0;
-        dst->setPixel(width_minus_1, y, QColor(I, I, I));  // TODO: Inefficient, hacky, silly, will fix
+        I = pixelProcessor->illuminatePixel(posup, posdown, posleft, posright);
+        lines[y][width_minus_1] = I.rgb();
+        //dst->setPixel(width_minus_1, y, I);  // TODO: Inefficient, hacky, silly, will fix
     }
     for (x = 1; x < width_minus_1; x++) {
         // calculate edge (x, 0)
         posup = lim.width() + x;
-        posdown = -lim.width() + x;
+        posdown = x;
         posleft = x - 1;
         posright = x + 1;
         
-        normal_vector.setX(- heightmap[posright] + heightmap[posleft]);
-        normal_vector.setY(- heightmap[posup] + heightmap[posdown]);
-        normal_vector.setZ(4);
-        normal_vector.normalize();
-        reflection_vector = (2 * pow(QVector3D::dotProduct(normal_vector, light_vector), shiny_exp)) * normal_vector - light_vector;
-        Ia = Ka * Il;
-        Id = Kd * Il * QVector3D::dotProduct(normal_vector, light_vector);
-        if (Id < 0)     Id = 0;
-        Is = Ks * Il * QVector3D::dotProduct(vision_vector, reflection_vector);
-        if (Is < 0)     Is = 0;
-        I = Ia + Id + Is;
-        if (I > 0xFF)   I = 0xFF;
-        if (I < 0)      I = 0;
-        dst->setPixel(x, 0, QColor(I, I, I));  // TODO: Inefficient, hacky, silly, will fix
+        I = pixelProcessor->illuminatePixel(posup, posdown, posleft, posright);
+        lines[0][x] = I.rgb();
+        //dst->setPixel(x, 0, I);  // TODO: Inefficient, hacky, silly, will fix
         
         // calculate edge (x, height_minus_1)
         posup = (height_minus_1) * lim.width() + x;
@@ -342,47 +268,45 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
         posleft =  height_minus_1 * lim.width() + x - 1;
         posright = height_minus_1 * lim.width() + x + 1;
         
-        normal_vector.setX(- heightmap[posright] + heightmap[posleft]);
-        normal_vector.setY(- heightmap[posup] + heightmap[posdown]);
-        normal_vector.setZ(4);
-        normal_vector.normalize();
-        reflection_vector = (2 * pow(QVector3D::dotProduct(normal_vector, light_vector), shiny_exp)) * normal_vector - light_vector;
-        Ia = Ka * Il;
-        Id = Kd * Il * QVector3D::dotProduct(normal_vector, light_vector);
-        if (Id < 0)     Id = 0;
-        Is = Ks * Il * QVector3D::dotProduct(vision_vector, reflection_vector);
-        if (Is < 0)     Is = 0;
-        I = Ia + Id + Is;
-        if (I > 0xFF)   I = 0xFF;
-        if (I < 0)      I = 0;
-        dst->setPixel(x, height_minus_1, QColor(I, I, I));  // TODO: Inefficient, hacky, silly, will fix
+        I = pixelProcessor->illuminatePixel(posup, posdown, posleft, posright);
+        lines[height_minus_1][x] = I.rgb();
+        //dst->setPixel(x, height_minus_1, I);  // TODO: Inefficient, hacky, silly, will fix
         
         for (y = 1; y < height_minus_1; y++) {
+            //timerE.start();
             // calculate interior (x, y)
+            //demora_proceso[0] += timerE.restart();
+            
+            //QRgb yay = fastPixelProcessor->fastIlluminatePixel(QPoint(x, y+1), QPoint(x, y-1), QPoint(x-1, y), QPoint(x+1, y));
+            //demora_proceso[1] += timerE.restart();
+            //lines[y][x] = yay;
+            //dst->setPixel(x, y, I);  // TODO: Inefficient, hacky, silly, will fix
+            //demora_proceso[2] += timerE.elapsed();
+            
+            /*
             posup = (y + 1) * lim.width() + x;
             posdown = (y - 1) * lim.width() + x;
             posleft =  y * lim.width() + x - 1;
             posright = y  * lim.width() + x + 1;
             
-            normal_vector.setX(- heightmap[posright] + heightmap[posleft]);
-            normal_vector.setY(- heightmap[posup] + heightmap[posdown]);
-            normal_vector.setZ(4);
-            normal_vector.normalize();
-            reflection_vector = (2 * pow(QVector3D::dotProduct(normal_vector, light_vector), shiny_exp)) * normal_vector - light_vector;
-            Ia = Ka * Il;
-            Id = Kd * Il * QVector3D::dotProduct(normal_vector, light_vector);
-            if (Id < 0)     Id = 0;
-            Is = Ks * Il * QVector3D::dotProduct(vision_vector, reflection_vector);
-            if (Is < 0)     Is = 0;
-            I = Ia + Id + Is;
-            if (I > 0xFF)   I = 0xFF;
-            if (I < 0)      I = 0;
-            dst->setPixel(x, y, QColor(I, I, I));  // TODO: Inefficient, hacky, silly, will fix
+            I = pixelProcessor->illuminatePixel(posup, posdown, posleft, posright);
+            lines[y][x] = I.rgb();
+            */
+            lines[y][x] = fastPixelProcessor->reallyFastIlluminatePixel(x, y+1, x, y-1, x-1, y, x+1, y);
         }
     }
-    qDebug("Time elapsed: %d ms", timer.elapsed());
+    qDebug("Tiempo de calculo: %d ms", timer.restart());
+    dst->convertFromQImage(bumpmap, "");
     
+    qDebug("Tiempo deconversion: %d ms", timer.elapsed());
+    
+    //qDebug("Tiempo gastado en calcular indices: %d ms", demora_proceso[0]);
+    //qDebug("Tiempo gastado en procesar pixeles: %d ms", demora_proceso[1]);
+    //qDebug("Tiempo gastado en asignar pixeles: %d ms", demora_proceso[2]);
     //bumpmap.save("/home/pentalis/GSoC/relieve_filtrado.bmp");
+    
+    delete pixelProcessor;
+    delete lines;
 }
 
 

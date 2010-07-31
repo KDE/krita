@@ -30,6 +30,8 @@
 
 #include "ui_wdgphongbumpmap.h"
 
+#include "phong_pixel_processor.h"
+
 class KisNodeModel;
 
 class PhongBumpmapWidget : public QWidget, public Ui::WdgPhongBumpmap
@@ -82,7 +84,6 @@ public:
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
     
-
 };
 
 class KisPhongBumpmapConfigWidget : public KisConfigWidget

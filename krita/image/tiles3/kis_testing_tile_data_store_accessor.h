@@ -30,6 +30,15 @@ class KRITAIMAGE_EXPORT KisTestingTileDataStoreAccessor
 public:
     static KisTileDataStore* getStore();
     static void swapAll();
+
+    static KisTileDataStoreIterator* beginIteration();
+    static void endIteration(KisTileDataStoreIterator* iterator);
+
+    static KisTileDataStoreClockIterator* beginClockIteration();
+    static void endIteration(KisTileDataStoreClockIterator* iterator);
+
+    static KisTileData *allocTileData(qint32 pixelSize, const quint8 *defPixel);
+    static void freeTileData(KisTileData *td);
 };
 
 #endif /* KIS_TESTING_TILE_DATA_STORE_ACCESSOR_H_ */

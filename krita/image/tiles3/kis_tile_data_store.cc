@@ -21,101 +21,7 @@
 #include "kis_tile_data_store.h"
 #include "kis_debug.h"
 
-/**
- * TODO:
- * 1) Swapper thread
- * 2) [Done] Pool of prealloc'ed tiledata objects
- * 3) Compression before swapping
- */
-
-
-KisTileDataStore globalTileDataStore;
-
-
-#define tileListHead() (m_tileDataListHead)
-#define tileListTail() (m_tileDataListHead->m_prevTD)
-#define tileListEmpty() (!m_tileDataListHead)
-#define tileListForEach(iter, first, last) for(iter=first; iter; iter=(iter==last ? 0 : iter->m_nextTD))
-
-/* TODO: _|_ */
-/*#define tileListForEachSafe(iter, first, last)        \
-  for(iter=first; iter!=last ;iter=iter->nextTD;)
-*/
-
-void KisTileDataStore::tileListAppend(KisTileData *td)
-{
-    QWriteLocker lock(&m_listRWLock);
-    if (!tileListEmpty()) {
-        td->m_prevTD = tileListTail();
-        td->m_nextTD = tileListHead();
-
-        tileListTail()->m_nextTD = td;
-        tileListHead()->m_prevTD = td;
-    } else {
-        td->m_prevTD = td->m_nextTD = td;
-        tileListHead() = td;
-    }
-
-    m_numTiles++;
-}
-
-void KisTileDataStore::tileListDetach(KisTileData *td)
-{
-    QWriteLocker lock(&m_listRWLock);
-    if (td != td->m_nextTD) {
-        td->m_prevTD->m_nextTD = td->m_nextTD;
-        td->m_nextTD->m_prevTD = td->m_prevTD;
-        if (td == tileListHead())
-            tileListHead() = td->m_nextTD;
-    } else {
-        /* List has the only element */
-        tileListHead() = 0;
-    }
-
-    m_numTiles--;
-}
-
-void KisTileDataStore::tileListClear()
-{
-    QWriteLocker lock(&m_listRWLock);
-    if (!tileListEmpty()) {
-        KisTileData *tmp;
-        while (!tileListEmpty()) {
-            tmp = tileListHead();
-            tileListDetach(tmp);
-            delete tmp;
-        }
-    }
-}
-
-KisTileDataStore::KisTileDataStore()
-        : m_pooler(this),
-          m_swapper(this),
-        m_listRWLock(QReadWriteLock::Recursive),
-        m_tileDataListHead(0),
-        m_numTiles(0)
-{
-    m_pooler.start();
-    m_swapper.start();
-}
-
-KisTileDataStore::~KisTileDataStore()
-{
-    m_pooler.terminatePooler();
-    m_swapper.terminateSwapper();
-    tileListClear();
-}
-
-KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *defPixel)
-{
-    m_swapper.checkFreeMemory();
-
-    KisTileData *td = new KisTileData(pixelSize, defPixel, this);
-
-    tileListAppend(td);
-    return td;
-}
-
+#include "kis_tile_data_store_iterators.h"
 
 //#define DEBUG_PRECLONE
 
@@ -130,6 +36,70 @@ KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *def
 #define DEBUG_FREE_ACTION(td)
 #endif
 
+
+KisTileDataStore globalTileDataStore;
+
+
+KisTileDataStore::KisTileDataStore()
+    : m_pooler(this),
+      m_swapper(this),
+      m_listRWLock(QReadWriteLock::Recursive),
+      m_numTiles(0)
+{
+    m_clockIterator = m_tileDataList.end();
+    m_pooler.start();
+    m_swapper.start();
+}
+
+KisTileDataStore::~KisTileDataStore()
+{
+    m_pooler.terminatePooler();
+    m_swapper.terminateSwapper();
+    freeRegisteredTiles();
+}
+
+void KisTileDataStore::registerTileData(KisTileData *td)
+{
+    QWriteLocker lock(&m_listRWLock);
+    td->m_listIterator = m_tileDataList.insert(m_tileDataList.end(), td);
+    m_numTiles++;
+}
+
+void KisTileDataStore::unregisterTileData(KisTileData *td)
+{
+    QWriteLocker lock(&m_listRWLock);
+    KisTileDataListIterator tempIterator = td->m_listIterator;
+
+    if(m_clockIterator == tempIterator) {
+        m_clockIterator = tempIterator + 1;
+    }
+
+    td->m_listIterator = m_tileDataList.end();
+    m_tileDataList.erase(tempIterator);
+    m_numTiles--;
+}
+
+void KisTileDataStore::freeRegisteredTiles()
+{
+    QWriteLocker lock(&m_listRWLock);
+
+    KisTileDataListIterator iter = m_tileDataList.begin();
+
+    while(iter != m_tileDataList.end()) {
+        delete *iter;
+        iter = m_tileDataList.erase(iter);
+    }
+}
+
+KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *defPixel)
+{
+    m_swapper.checkFreeMemory();
+
+    KisTileData *td = new KisTileData(pixelSize, defPixel, this);
+    registerTileData(td);
+    return td;
+}
+
 KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
 {
     KisTileData *td = 0;
@@ -143,7 +113,7 @@ KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
         DEBUG_PRECLONE_ACTION("- Pre-clone #MISS#", rhs, td);
     }
 
-    tileListAppend(td);
+    registerTileData(td);
     return td;
 }
 
@@ -157,7 +127,7 @@ void KisTileDataStore::freeTileData(KisTileData *td)
     if(!td->data()) {
         m_swappedStore.forgetTileData(td);
     }
-    tileListDetach(td);
+    unregisterTileData(td);
     td->m_swapLock.unlock();
 
     delete td;
@@ -202,15 +172,47 @@ bool KisTileDataStore::trySwapTileData(KisTileData *td)
     return result;
 }
 
+KisTileDataStoreIterator* KisTileDataStore::beginIteration()
+{
+    m_listRWLock.lockForRead();
+    return new KisTileDataStoreIterator(m_tileDataList);
+}
+void KisTileDataStore::endIteration(KisTileDataStoreIterator* iterator)
+{
+    delete iterator;
+    m_listRWLock.unlock();
+}
+
+KisTileDataStoreReverseIterator* KisTileDataStore::beginReverseIteration()
+{
+    m_listRWLock.lockForRead();
+    return new KisTileDataStoreReverseIterator(m_tileDataList);
+}
+void KisTileDataStore::endIteration(KisTileDataStoreReverseIterator* iterator)
+{
+    delete iterator;
+    m_listRWLock.unlock();
+}
+
+KisTileDataStoreClockIterator* KisTileDataStore::beginClockIteration()
+{
+    m_listRWLock.lockForRead();
+    return new KisTileDataStoreClockIterator(m_tileDataList, m_clockIterator);
+}
+void KisTileDataStore::endIteration(KisTileDataStoreClockIterator* iterator)
+{
+    m_clockIterator = iterator->getFinalPosition();
+    delete iterator;
+    m_listRWLock.unlock();
+}
+
 void KisTileDataStore::debugPrintList()
 {
-    KisTileData *iter;
-    tileListForEach(iter, tileListHead(), tileListTail()) {
+    KisTileData *item;
+    foreach(item, m_tileDataList) {
         dbgTiles << "-------------------------\n"
-                 << "TileData:\t\t\t" << iter
-                 << "\n  refCount:\t" << iter->m_refCount
-                 << "\n  next:    \t" << iter->m_nextTD
-                 << "\n  prev:    \t" << iter->m_prevTD;
+                 << "TileData:\t\t\t" << item
+                 << "\n  refCount:\t" << item->m_refCount;
     }
 }
 
@@ -219,9 +221,9 @@ void KisTileDataStore::debugSwapAll()
     QWriteLocker lock(&m_listRWLock);
 
     qint32 numSwapped = 0;
-    KisTileData *iter;
-    tileListForEach(iter, tileListHead(), tileListTail()) {
-        if(trySwapTileData(iter)) {
+    KisTileData *item;
+    foreach(item, m_tileDataList) {
+        if(trySwapTileData(item)) {
             numSwapped++;
         }
     }

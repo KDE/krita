@@ -27,7 +27,95 @@
 #include "tiles_test_utils.h"
 
 #include "tiles3/kis_tile_data_store.h"
+#include "tiles3/kis_tile_data_store_iterators.h"
 #include "tiles3/kis_testing_tile_data_store_accessor.h"
+
+
+void KisTileDataStoreTest::testClockIterator()
+{
+    const qint32 pixelSize = 1;
+    quint8 defaultPixel = 128;
+
+    QList<KisTileData*> tileDataList;
+
+    tileDataList.append(KisTestingTileDataStoreAccessor::allocTileData(pixelSize, &defaultPixel));
+    tileDataList.append(KisTestingTileDataStoreAccessor::allocTileData(pixelSize, &defaultPixel));
+    tileDataList.append(KisTestingTileDataStoreAccessor::allocTileData(pixelSize, &defaultPixel));
+
+
+    /// First, full cycle!
+    KisTileDataStoreClockIterator *iter = KisTestingTileDataStoreAccessor::beginClockIteration();
+    KisTileData *item;
+
+    QVERIFY(iter->hasNext());
+    item = iter->next();
+    QCOMPARE(item, tileDataList[0]);
+
+    QVERIFY(iter->hasNext());
+    item = iter->next();
+    QCOMPARE(item, tileDataList[1]);
+
+    QVERIFY(iter->hasNext());
+    item = iter->next();
+    QCOMPARE(item, tileDataList[2]);
+
+    QVERIFY(!iter->hasNext());
+
+    KisTestingTileDataStoreAccessor::endIteration(iter);
+
+
+    /// Second, iterate until the second item!
+    iter = KisTestingTileDataStoreAccessor::beginClockIteration();
+
+    QVERIFY(iter->hasNext());
+    item = iter->next();
+    QCOMPARE(item, tileDataList[0]);
+
+    KisTestingTileDataStoreAccessor::endIteration(iter);
+
+
+    /// Third, check the position restored!
+    iter = KisTestingTileDataStoreAccessor::beginClockIteration();
+
+    QVERIFY(iter->hasNext());
+    item = iter->next();
+    QCOMPARE(item, tileDataList[1]);
+
+    QVERIFY(iter->hasNext());
+    item = iter->next();
+    QCOMPARE(item, tileDataList[2]);
+
+    QVERIFY(iter->hasNext());
+    item = iter->next();
+    QCOMPARE(item, tileDataList[0]);
+
+    QVERIFY(!iter->hasNext());
+
+    KisTestingTileDataStoreAccessor::endIteration(iter);
+
+
+    /// By this moment KisTileDataStore::m_clockIterator has been set
+    /// onto the second (tileDataList[1]) item.
+    /// Let's try remove it and see what will happen...
+
+    KisTestingTileDataStoreAccessor::freeTileData(tileDataList[1]);
+
+    iter = KisTestingTileDataStoreAccessor::beginClockIteration();
+
+    QVERIFY(iter->hasNext());
+    item = iter->next();
+    QCOMPARE(item, tileDataList[2]);
+
+    QVERIFY(iter->hasNext());
+    item = iter->next();
+    QCOMPARE(item, tileDataList[0]);
+
+    QVERIFY(!iter->hasNext());
+
+    KisTestingTileDataStoreAccessor::endIteration(iter);
+
+}
+
 
 #define COLUMN2COLOR(col) (col%255)
 
@@ -60,8 +148,6 @@ void KisTileDataStoreTest::testSwapping()
         QVERIFY(memoryIsFilled(COLUMN2COLOR(col), td->data(), TILESIZE));
         tile->unlock();
     }
-
-
 }
 
 QTEST_KDEMAIN(KisTileDataStoreTest, NoGUI)

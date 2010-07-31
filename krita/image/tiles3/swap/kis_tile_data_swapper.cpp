@@ -22,6 +22,7 @@
 #include "tiles3/swap/kis_tile_data_swapper_p.h"
 #include "tiles3/kis_tile_data.h"
 #include "tiles3/kis_tile_data_store.h"
+#include "tiles3/kis_tile_data_store_iterators.h"
 #include "kis_debug.h"
 
 #define SEC 1000
@@ -39,12 +40,6 @@ const qint32 KisTileDataSwapper::DELAY = 0.7 * SEC;
 #define DEBUG_VALUE(value)
 #endif
 
-
-#define tileListForEach(iter, first, last) for(iter=first; iter; iter=(iter==last ? 0 : iter->m_nextTD))
-#define tileListForEachReverse(iter, last, first) for(iter=last; iter; iter=(iter==first ? 0 : iter->m_prevTD))
-#define tileListHead() (m_d->store->m_tileDataListHead)
-#define tileListTail() (m_d->store->m_tileDataListHead->m_prevTD)
-#define tileListEmpty() (!m_d->store->m_tileDataListHead)
 
 class KisTileDataSwapper::Private
 {
@@ -141,41 +136,42 @@ qint32 KisTileDataSwapper::pass0(qint32 tilesToFree)
     QList<KisTileData*> additionalCandidates;
 
 
-    m_d->store->m_listRWLock.lockForRead();
+    KisTileDataStoreIterator *iter = m_d->store->beginIteration();
+    KisTileData *item;
 
-    KisTileData *iter;
-    if (!tileListEmpty()) {
-        tileListForEach(iter, tileListHead(), tileListTail()) {
-            if(tilesFreed >= tilesToFree) break;
+    while(iter->hasNext()) {
+        item = iter->next();
 
-            numCountedTiles++;
-            pixelSizeSum += iter->pixelSize();
-
-            // Now we are working with mementoed tiles only...
-            if(!iter->mementoed()) continue;
-            if(iter->numUsers() > 1) continue;
-
-            if(iter->age() > 0) {
-                if(m_d->store->trySwapTileData(iter)) {
-                    tilesFreed++;
-                }
-            }
-            else {
-                iter->markOld();
-                additionalCandidates.append(iter);
-            }
-        }
-    }
-
-    foreach(iter, additionalCandidates) {
         if(tilesFreed >= tilesToFree) break;
 
-        if(m_d->store->trySwapTileData(iter)) {
+        numCountedTiles++;
+        pixelSizeSum += item->pixelSize();
+
+        // Now we are working with mementoed tiles only...
+        if(!item->mementoed()) continue;
+        if(item->numUsers() > 1) continue;
+
+        if(item->age() > 0) {
+            if(m_d->store->trySwapTileData(item)) {
+                tilesFreed++;
+            }
+        }
+        else {
+            item->markOld();
+            additionalCandidates.append(item);
+        }
+
+    }
+
+    foreach(item, additionalCandidates) {
+        if(tilesFreed >= tilesToFree) break;
+
+        if(m_d->store->trySwapTileData(item)) {
             tilesFreed++;
         }
     }
 
-    m_d->store->m_listRWLock.unlock();
+    m_d->store->endIteration(iter);
 
     // Correction of limits...
     if(numCountedTiles > 0) {
@@ -188,16 +184,8 @@ qint32 KisTileDataSwapper::pass0(qint32 tilesToFree)
 
 qint32 KisTileDataSwapper::pass1(qint32 tilesToFree)
 {
+    Q_UNUSED(tilesToFree);
+
     qint32 tilesFreed = 0;
-
-    m_d->store->m_listRWLock.lockForRead();
-    KisTileData *iter;
-    if (!tileListEmpty()) {
-        tileListForEach(iter, tileListHead(), tileListTail()) {
-
-        }
-    }
-    m_d->store->m_listRWLock.unlock();
-
     return tilesFreed;
 }

@@ -27,8 +27,8 @@ class KisTileDataStoreTest : public QObject
 private:
 
 private slots:
+    void testClockIterator();
     void testSwapping();
-
 };
 
 #endif /* KIS_TILE_DATA_STORE_TEST_H */

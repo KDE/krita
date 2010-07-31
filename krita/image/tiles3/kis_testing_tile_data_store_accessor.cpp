@@ -17,6 +17,7 @@
  */
 
 #include "kis_testing_tile_data_store_accessor.h"
+#include "kis_tile_data_store_iterators.h"
 
 KisTileDataStore* KisTestingTileDataStoreAccessor::getStore() {
     return &globalTileDataStore;
@@ -26,3 +27,26 @@ void KisTestingTileDataStoreAccessor::swapAll() {
     globalTileDataStore.debugSwapAll();
 }
 
+KisTileDataStoreIterator* KisTestingTileDataStoreAccessor::beginIteration() {
+    return globalTileDataStore.beginIteration();
+}
+
+void KisTestingTileDataStoreAccessor::endIteration(KisTileDataStoreIterator* iterator) {
+    return globalTileDataStore.endIteration(iterator);
+}
+
+KisTileDataStoreClockIterator* KisTestingTileDataStoreAccessor::beginClockIteration() {
+    return globalTileDataStore.beginClockIteration();
+}
+
+void KisTestingTileDataStoreAccessor::endIteration(KisTileDataStoreClockIterator* iterator) {
+    return globalTileDataStore.endIteration(iterator);
+}
+
+KisTileData* KisTestingTileDataStoreAccessor::allocTileData(qint32 pixelSize, const quint8 *defPixel) {
+    return globalTileDataStore.allocTileData(pixelSize, defPixel);
+}
+
+void KisTestingTileDataStoreAccessor::freeTileData(KisTileData *td) {
+    globalTileDataStore.freeTileData(td);
+}

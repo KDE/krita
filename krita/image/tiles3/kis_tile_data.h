@@ -51,6 +51,11 @@ typedef KisMemoryPool<quint8[TILE_SIZE_8BPP],TILE_DATA_POOL_SIZE> KisTileMemoryP
 typedef KisLocklessStack<KisTileData*> KisTileDataCache;
 
 
+typedef QLinkedList<KisTileData*> KisTileDataList;
+typedef KisTileDataList::iterator KisTileDataListIterator;
+typedef KisTileDataList::const_iterator KisTileDataListConstIterator;
+
+
 /**
  * Stores actual tile's data
  */
@@ -139,7 +144,6 @@ private:
     static void freeData(quint8 *ptr, const qint32 pixelSize);
 private:
     friend class KisTileDataPooler;
-    friend class KisTileDataSwapper;
     /**
      * A list of pre-duplicated tiledatas.
      * To make a COW faster, KisTileDataPooler thread duplicates
@@ -160,11 +164,10 @@ private:
     mutable EnumTileDataState m_state;
 
     /**
-     * Next and previous tiledata elements in the linked list
-     * of parental datastore
+     * Iterator that points to a position in the list
+     * where the tile data is stored
      */
-    KisTileData *m_nextTD;
-    KisTileData *m_prevTD;
+    KisTileDataListIterator m_listIterator;
 
 private:
     /**

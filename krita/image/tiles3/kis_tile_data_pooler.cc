@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
+#include "kis_tile_data_store_iterators.h"
 #include "kis_debug.h"
 #include "kis_tile_data_pooler.h"
 
@@ -116,12 +117,6 @@ void KisTileDataPooler::cloneTileData(KisTileData *td, qint32 numClones) const
     DEBUG_CLONE_ACTION(td, numClones);
 }
 
-#define tileListForEach(iter, first, last) for(iter=first; iter; iter=(iter==last ? 0 : iter->m_nextTD))
-#define tileListForEachReverse(iter, last, first) for(iter=last; iter; iter=(iter==first ? 0 : iter->m_prevTD))
-#define tileListHead() (m_store->m_tileDataListHead)
-#define tileListTail() (m_store->m_tileDataListHead->m_prevTD)
-#define tileListEmpty() (!m_store->m_tileDataListHead)
-
 void KisTileDataPooler::waitForWork()
 {
     bool success;
@@ -166,26 +161,26 @@ void KisTileDataPooler::run()
         QThread::msleep(0);
         DEBUG_SIMPLE_ACTION("cycle started");
 
-        m_store->m_listRWLock.lockForRead();
-        KisTileData *iter;
 
-        if (!tileListEmpty()) {
-            tileListForEachReverse(iter, tileListTail(), tileListHead()) {
-                if (interestingTileData(iter)) {
+        KisTileDataStoreReverseIterator *iter = m_store->beginReverseIteration();
+        KisTileData *item;
 
-                    qint32 clonesNeeded = numClonesNeeded(iter);
-                    if (clonesNeeded) {
-                        m_lastCycleHadWork = true;
-                        cloneTileData(iter, clonesNeeded);
-                    }
+        while(iter->hasNext()) {
+            item = iter->next();
+            if (interestingTileData(item)) {
+
+                qint32 clonesNeeded = numClonesNeeded(item);
+                if (clonesNeeded) {
+                    m_lastCycleHadWork = true;
+                    cloneTileData(item, clonesNeeded);
                 }
             }
         }
 
+        m_store->endIteration(iter);
+
+
         DEBUG_TILE_STATISTICS();
-
-        m_store->m_listRWLock.unlock();
-
         DEBUG_SIMPLE_ACTION("cycle finished");
     }
 }
@@ -197,13 +192,17 @@ void KisTileDataPooler::debugTileStatistics()
      * This means m_store is already locked
      */
 
-    qint64 totalTiles=0;
     qint64 preallocatedTiles=0;
-    KisTileData *iter;
 
-    tileListForEach(iter, tileListHead(), tileListTail()) {
-        totalTiles++;
-        preallocatedTiles += iter->m_clonesStack.size();
+    KisTileDataStoreIterator *iter = m_store->beginIteration();
+    KisTileData *item;
+
+    while(iter->hasNext()) {
+        item = iter->next();
+        preallocatedTiles += item->m_clonesStack.size();
     }
-    qDebug() << "Tiles statistics:\t total:" << totalTiles << "\t preallocated:"<< preallocatedTiles;
+
+    m_store->endIteration(iter);
+
+    qDebug() << "Tiles statistics:\t total:" << m_store->numTiles() << "\t preallocated:"<< preallocatedTiles;
 }

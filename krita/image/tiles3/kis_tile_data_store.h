@@ -28,6 +28,9 @@
 
 
 class KisTestingTileDataStoreAccessor;
+class KisTileDataStoreIterator;
+class KisTileDataStoreReverseIterator;
+class KisTileDataStoreClockIterator;
 
 /**
  * Stores tileData objects. When needed compresses them and swaps.
@@ -49,6 +52,15 @@ public:
     inline qint32 numTilesInMemory() const {
         return m_numTiles - m_swappedStore.numTiles();
     }
+
+    KisTileDataStoreIterator* beginIteration();
+    void endIteration(KisTileDataStoreIterator* iterator);
+
+    KisTileDataStoreReverseIterator* beginReverseIteration();
+    void endIteration(KisTileDataStoreReverseIterator* iterator);
+
+    KisTileDataStoreClockIterator* beginClockIteration();
+    void endIteration(KisTileDataStoreClockIterator* iterator);
 
     /**
      * Increments usersCount of a TD and refs shared pointer counter
@@ -139,23 +151,22 @@ private:
     KisTileData *allocTileData(qint32 pixelSize, const quint8 *defPixel);
     void freeTileData(KisTileData *td);
 
-    void tileListAppend(KisTileData *td);
-    void tileListDetach(KisTileData *td);
-    void tileListClear();
+    void registerTileData(KisTileData *td);
+    void unregisterTileData(KisTileData *td);
+    void freeRegisteredTiles();
 
     void debugSwapAll();
 private:
-    friend class KisTileDataPooler;
     KisTileDataPooler m_pooler;
-
-    friend class KisTileDataSwapper;
     KisTileDataSwapper m_swapper;
 
     friend class KisTestingTileDataStoreAccessor;
     KisSwappedDataStore m_swappedStore;
 
+    KisTileDataListIterator m_clockIterator;
+
     QReadWriteLock m_listRWLock;
-    KisTileData *m_tileDataListHead;
+    KisTileDataList m_tileDataList;
     qint32 m_numTiles;
 };
 

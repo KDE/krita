@@ -68,11 +68,16 @@ KisTileDataStore::~KisTileDataStore()
     }
 }
 
+inline void KisTileDataStore::registerTileDataImp(KisTileData *td)
+{
+    td->m_listIterator = m_tileDataList.insert(m_tileDataList.end(), td);
+    m_numTiles++;
+}
+
 void KisTileDataStore::registerTileData(KisTileData *td)
 {
     QWriteLocker lock(&m_listRWLock);
-    td->m_listIterator = m_tileDataList.insert(m_tileDataList.end(), td);
-    m_numTiles++;
+    registerTileDataImp(td);
 }
 
 inline void KisTileDataStore::unregisterTileDataImp(KisTileData *td)
@@ -132,8 +137,9 @@ void KisTileDataStore::freeTileData(KisTileData *td)
     if(!td->data()) {
         m_swappedStore.forgetTileData(td);
     }
-
-    unregisterTileDataImp(td);
+    else {
+        unregisterTileDataImp(td);
+    }
 
     td->m_swapLock.unlock();
     m_listRWLock.unlock();
@@ -150,13 +156,20 @@ void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
     while(!td->data()) {
         td->m_swapLock.unlock();
 
+        /**
+         * The order of this heavy locking is very important.
+         * Change it only in case, you really know what you are doing.
+         */
+        m_listRWLock.lockForWrite();
         td->m_swapLock.lockForWrite();
 
         if(!td->data()) {
             m_swappedStore.swapInTileData(td);
+            registerTileDataImp(td);
         }
 
         td->m_swapLock.unlock();
+        m_listRWLock.unlock();
 
         /**
          * <-- In theory, livelock is possible here...
@@ -168,10 +181,15 @@ void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
 
 bool KisTileDataStore::trySwapTileData(KisTileData *td)
 {
+    /**
+     * This function is called with m_listRWLock acquired
+     */
+
     bool result = false;
     if(!td->m_swapLock.tryLockForWrite()) return result;
 
     if(td->data()) {
+        unregisterTileDataImp(td);
         m_swappedStore.swapOutTileData(td);
         result = true;
     }

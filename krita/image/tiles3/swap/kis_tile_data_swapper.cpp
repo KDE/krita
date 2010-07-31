@@ -105,7 +105,8 @@ void KisTileDataSwapper::doJob()
     qint32 tilesInMemory = m_d->store->numTilesInMemory();
 
     DEBUG_ACTION("Started swap cycle");
-    DEBUG_VALUE( tilesInMemory);
+    DEBUG_VALUE(m_d->store->numTiles());
+    DEBUG_VALUE(tilesInMemory);
 
     DEBUG_VALUE(m_d->limits.softLimitThreshold());
     DEBUG_VALUE(m_d->limits.hardLimitThreshold());

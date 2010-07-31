@@ -49,14 +49,14 @@ public:
      * or in a swap file
      */
     inline qint32 numTiles() const {
-        return m_numTiles;
+        return m_numTiles + m_swappedStore.numTiles();
     }
 
     /**
      * Returns the number of tiles present in memory only
      */
     inline qint32 numTilesInMemory() const {
-        return m_numTiles - m_swappedStore.numTiles();
+        return m_numTiles;
     }
 
     KisTileDataStoreIterator* beginIteration();
@@ -94,8 +94,10 @@ public:
      * and it's swapping is blocked by holding td->m_swapLock
      * in a read mode.
      * PRECONDITIONS: td->m_swapLock is *unlocked*
+     *                m_listRWLock is *unlocked*
      * POSTCONDITIONS: td->m_data is in memory and
      *                 td->m_swapLock is locked
+     *                 m_listRWLock is unlocked
      */
     void ensureTileDataLoaded(KisTileData *td);
 
@@ -104,6 +106,7 @@ private:
 
     void registerTileData(KisTileData *td);
     void unregisterTileData(KisTileData *td);
+    inline void registerTileDataImp(KisTileData *td);
     inline void unregisterTileDataImp(KisTileData *td);
     void freeRegisteredTiles();
 

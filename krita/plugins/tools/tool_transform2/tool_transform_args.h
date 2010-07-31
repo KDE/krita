@@ -28,10 +28,34 @@
 class ToolTransformArgs
 {
 public:
+	typedef enum TransfMode_ {FREE_TRANSFORM = 0, WARP} TransfMode;
+	typedef enum WarpType_ {AFFINE_TRANSFORM = 0} WarpType;
+
     ToolTransformArgs();
-    ToolTransformArgs(QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY);
+    ToolTransformArgs(ToolTransformArgs& args); //makes a COPY of the points given in args
+    ToolTransformArgs(TransfMode mode,
+						QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY,
+						int pointsPerLine, WarpType warpType, double alpha, QPointF previewPos);
+						//allocates the memory for the points according to pointsPerLine value
     ~ToolTransformArgs();
 
+	TransfMode mode();
+	void setMode(TransfMode mode);
+
+	//warp-related
+	int pointsPerLine();
+	QPointF *origPoints();
+	QPointF *transfPoints();
+	WarpType warpType();
+	double alpha();
+	QPointF previewPos();
+
+	void setPoints(int pointsPerLine, QPointF *origPoints, QPointF *transfPoints); //makes a COPY of the given points
+	void setWarpType(WarpType warpType);
+	void setAlpha(double alpha);
+	void setPreviewPos(QPointF previewPos);
+
+	//"free transform"-related
     QPointF translate();
     QPointF rotationCenterOffset();
     double aX();
@@ -53,6 +77,17 @@ public:
     void setShearY(double shearY);
 
 private:
+	TransfMode m_mode;
+
+	//warp-related
+	int m_pointsPerLine;
+	QPointF *m_origPoints;
+	QPointF *m_transfPoints;
+	WarpType m_warpType;
+	double m_alpha; //for affine warp type
+	QPointF m_previewPos;
+
+	//"free transform"-related
     QPointF m_translate;
     QPointF m_rotationCenterOffset;
     double m_aX;

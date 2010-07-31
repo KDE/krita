@@ -251,14 +251,15 @@ private:
     void setFunctionalCursor();
     void setTransformFunction(QPointF mousePos, Qt::KeyboardModifiers modifiers);
     //just sets default values for current args, temporary values..
-    void initTransform();
+	void initWarpTransform();
+	void initFreeTransform();
     //saves the original selection, paintDevice, Images previous. set transformation to default using initTransform
-    void initHandles();
+    void initHandles(ToolTransformArgs::TransfMode mode);
     //stores m_currentArgs into args
     void storeArgs(ToolTransformArgs &args);
     //sets m_currentArgs to args
     void restoreArgs(ToolTransformArgs args);
-	QRectF warpBoundRect();
+	QRectF calcWarpBoundRect();
 
 private slots:
 
@@ -270,13 +271,11 @@ private:
                    BOTTOMSHEAR, RIGHTSHEAR, TOPSHEAR, LEFTSHEAR,
                    MOVECENTER, PERSPECTIVE
                   };
-	enum mode {FREE_TRANSFORM = 0, WARP};
 	
     QPointF m_handleDir[9];
 
     QCursor m_sizeCursors[8]; //cursors for the 8 directions
     function m_function; //current transformation function
-	mode m_mode;
 
     ToolTransformArgs m_currentArgs;
     ToolTransformArgs m_clickArgs;
@@ -376,14 +375,12 @@ private:
 
     QButtonGroup *m_rotCenterButtons;
 
-	//Warping-related :
-	int m_nbPoints;
+	//Warp-related :
 	double m_gridSpaceX, m_gridSpaceY;
-	QPointF **m_origPoint; //the original position of the points
-	QPointF **m_currPoint;
-	QPointF **m_viewCurrPoint;
+	QPointF *m_viewTransfPoints;
+	QPointF *m_viewOrigPoints;
 	bool m_cursorOverPoint;
-	QPoint m_pointUnderCursor; //the number in the grid
+	int m_pointUnderCursor; //the number in the grid
 };
 
 class KisToolTransformFactory : public KoToolFactoryBase

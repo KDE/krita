@@ -74,6 +74,7 @@
 
 #include <QColor>
 
+#include <opengl/kis_opengl.h>
 /*
 #include <../../extensions/impasto/kis_fresh_start_color_space.h>
 #include <../../extensions/impasto/kis_fresh_start_color_space.cpp>

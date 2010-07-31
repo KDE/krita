@@ -51,6 +51,8 @@ void PhongPixelProcessor::initialize()
     lightSources.append(light1);
     lightSources.append(light2);
     
+    fastLight = light1;
+    fastLight2 = light2;
     //Ka, Kd and Ks must be between 0 and 1 or grave errors will happen
     Ka = 0.0;
     Kd = 1;
@@ -74,38 +76,46 @@ void PhongPixelProcessor::setLightVector(QVector3D lightVector)
 
 QRgb PhongPixelProcessor::reallyFastIlluminatePixel(quint16 upx, quint16 upy, quint16 downx, quint16 downy, quint16 leftx, quint16 lefty, quint16 rightx, quint16 righty)
 {
-    qreal I;
+    qreal temp;
     qreal Il;
-    int totalChannels = 3;
+    const int totalChannels = 3;
     qreal computation[] = {0, 0, 0};
-    QColor pixelColor;
+    QColor pixelColor(0, 0, 0);
     
     normal_vector.setX(- fastHeightmap[righty][rightx] + fastHeightmap[lefty][leftx]);
     normal_vector.setY(- fastHeightmap[upy][upx] + fastHeightmap[downy][downx]);
     normal_vector.setZ(8);
     normal_vector.normalize();
-    reflection_vector = (2 * pow(QVector3D::dotProduct(normal_vector, light_vector), shiny_exp)) * normal_vector - light_vector;
     
+    /*
     foreach (Illuminant illuminant, lightSources) {
+        temp = Kd * QVector3D::dotProduct(normal_vector, illuminant.lightVector);
         for (int channel = 0; channel < totalChannels; channel++) {
             //I = each RGB value
-            Il = illuminant.RGBvalue[channel];
-            Ia = Ka * Il;
-            Id = Kd * Il * QVector3D::dotProduct(normal_vector, illuminant.lightVector);
+            Id = illuminant.RGBvalue[channel] * temp;
             if (Id < 0)     Id = 0;
-            Is = Ks * Il * QVector3D::dotProduct(vision_vector, reflection_vector);
-            if (Is < 0)     Is = 0;
-            I = Ia + Id + Is;
-            if (I  > 1)     I  = 1;
-            computation[channel] += I;
+            if (Id > 1)     Id = 1;
+            computation[channel] += Id;
         }
     }
+    */
     
+    temp = QVector3D::dotProduct(normal_vector, fastLight.lightVector);
     for (int channel = 0; channel < totalChannels; channel++) {
-        if (computation[channel] > 1)
-            computation[channel] = 1;
-        if (computation[channel] < 0)
-            computation[channel] = 0;
+        //I = each RGB value
+        Id = fastLight.RGBvalue[channel] * temp;
+        if (Id < 0)     Id = 0;
+        if (Id > 1)     Id = 1;
+        computation[channel] += Id;
+    }
+    
+    temp = QVector3D::dotProduct(normal_vector, fastLight2.lightVector);
+    for (int channel = 0; channel < totalChannels; channel++) {
+        //I = each RGB value
+        Id = fastLight2.RGBvalue[channel] * temp;
+        if (Id < 0)     Id = 0;
+        if (Id > 1)     Id = 1;
+        computation[channel] += Id;
     }
     
     pixelColor.setRedF(computation[0]);

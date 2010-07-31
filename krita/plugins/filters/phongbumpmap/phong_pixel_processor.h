@@ -78,6 +78,8 @@ public:
     void setLightVector(QVector3D light_vector);
     
     QList<Illuminant> lightSources;
+    Illuminant fastLight;
+    Illuminant fastLight2;
 };
 
 

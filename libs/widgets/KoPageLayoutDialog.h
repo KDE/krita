@@ -29,10 +29,11 @@
 struct KoPageLayout;
 
 /// A dialog to show the settings for one page and apply them afterwards.
-class KOWIDGETS_EXPORT KoPageLayoutDialog : public KPageDialog {
+class KOWIDGETS_EXPORT KoPageLayoutDialog : public KPageDialog
+{
     Q_OBJECT
 public:
-    explicit KoPageLayoutDialog(QWidget *parent, const KoPageLayout& layout);
+    explicit KoPageLayoutDialog(QWidget *parent, const KoPageLayout &layout);
     ~KoPageLayoutDialog();
 
     void showTextDirection(bool on);

@@ -228,8 +228,9 @@ void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *coll
 void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection *collection)
 {
     if (collection) {
-        // let the collection first check if it already has one. If it doesn't it'll call this method
-        // again and we'll go to the other clause
+        // Let the collection first check if it already has one. If it
+        // doesn't it'll call this method again and we'll go to the
+        // other clause.
         KoImageData *other = collection->createImageData(url, store);
         this->operator=(*other);
         delete other;

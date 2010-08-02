@@ -140,11 +140,13 @@ KoImageData *KoImageCollection::createImageData(const QString &href, KoStore *st
 {
     // the tricky thing with a 'store' is that we need to read the data now
     // as the store will no longer be readable after the loading completed.
+    //
     // The solution we use is to read the data, store it in a KTemporaryFile
     // and read and parse it on demand when the image data is actually needed.
     // This leads to having two keys, one for the store and one for the
     // actual image data. We need the latter so if someone else gets the same
-    // image data he can find this data and share (warm fuzzy feeling here)
+    // image data he can find this data and share (insert warm fuzzy feeling here).
+    //
     QByteArray storeKey = (QString::number((qint64) store) + href).toLatin1();
     if (d->storeImages.contains(storeKey))
         return new KoImageData(d->storeImages.value(storeKey));

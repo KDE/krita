@@ -142,13 +142,16 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
     // If the element is in a frame, the frame is already added by the
     // application and we only want to create a shape from the
     // embedded element. The very first shape we create is accepted.
-    // XXX: we might want to have some code to determine which is the
-    // "best" of the creatable shapes.
+    //
+    // FIXME: we might want to have some code to determine which is
+    //        the "best" of the creatable shapes.
     if (e.tagName() == "frame" && e.namespaceURI() == KoXmlNS::draw) {
         KoXmlElement element;
         forEachElement(element, e) {
+            // Check for draw:object
             if (element.tagName() == "object" && element.namespaceURI() == KoXmlNS::draw && element.hasChildNodes()) {
-                // find first element
+                // Loop through the elements and find the first one
+                // that is handled by any shape.
                 KoXmlNode n = element.firstChild();
                 for (; !n.isNull(); n = n.nextSibling()) {
                     if (n.isElement()) {
@@ -158,13 +161,17 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                 }
             }
             else {
+                // If not draw:object, e.g draw:image or draw:plugin
                 shape = d->createShapeInternal(e, context, element);
             }
+
+            // If we found a shape that can handle the element in question, then break.
             if (shape) {
                 break;
             }
         }
     }
+
     // Hardwire the group shape into the loading as it should not appear
     // in the shape selector
     else if (e.localName() == "g" && e.namespaceURI() == KoXmlNS::draw) {
@@ -191,12 +198,16 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
     return shape;
 }
 
-KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullElement, KoShapeLoadingContext &context, const KoXmlElement &element) const
+KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullElement,
+                                                       KoShapeLoadingContext &context,
+                                                       const KoXmlElement &element) const
 {
+    // Pair of namespace, tagname
     QPair<QString, QString> p = QPair<QString, QString>(element.namespaceURI(), element.tagName());
 
-    // remove duplicate lookup
-    if (!factoryMap.contains(p)) return 0;
+    // Remove duplicate lookup.
+    if (!factoryMap.contains(p))
+        return 0; 
 
     QMultiMap<int, KoShapeFactoryBase*> priorityMap = factoryMap.value(p);
     QList<KoShapeFactoryBase*> factories = priorityMap.values();
@@ -207,7 +218,18 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
         kDebug(30006) << f->id() << f->name();
 #endif
 
-    // Higher numbers are more specific, map is sorted by keys
+    // Loop through all shape factories. If any of them supports this
+    // element, then we let the factory create a shape from it. This
+    // may fail because the element itself is too generic to draw any
+    // real conclusions from it - we actually have to try to load it.
+    // An example of this is the draw:image element which have
+    // potentially hundreds of different image formats to support,
+    // including vector formats.
+    //
+    // If it succeeds, then we use this shape, if it does fail, then
+    // just try the next.
+    //
+    // Higher numbers are more specific, map is sorted by keys.
     for (int i = factories.size() - 1; i >= 0; --i) {
         KoShapeFactoryBase * factory = factories[i];
         if (factory->supports(element)) {

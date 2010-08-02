@@ -42,7 +42,10 @@ class KoPatternBackgroundPrivate : public KoShapeBackgroundPrivate
 {
 public:
     KoPatternBackgroundPrivate()
-        : repeat(KoPatternBackground::Tiled), refPoint(KoPatternBackground::TopLeft), imageCollection(0), imageData(0)
+        : repeat(KoPatternBackground::Tiled)
+        , refPoint(KoPatternBackground::TopLeft)
+        , imageCollection(0)
+        , imageData(0)
     {
     }
 
@@ -123,6 +126,10 @@ public:
     KoImageCollection * imageCollection;
     KoImageData * imageData;
 };
+
+
+// ----------------------------------------------------------------
+
 
 KoPatternBackground::KoPatternBackground(KoImageCollection * imageCollection)
         : KoShapeBackground(*(new KoPatternBackgroundPrivate()))
@@ -405,7 +412,7 @@ bool KoPatternBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF 
         return false;
 
     delete d->imageData;
-    d->imageData = d->imageCollection->createImageData(href,context.store());
+    d->imageData = d->imageCollection->createImageData(href, context.store());
     if (! d->imageData)
         return false;
 

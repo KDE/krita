@@ -4,7 +4,6 @@
 add_subdirectory(pics)
 
 include_directories( ${KOMAIN_INCLUDES}
-    ${KOODF_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/
     ${CMAKE_SOURCE_DIR}/libs/koreport
     ${CMAKE_SOURCE_DIR}/libs/koreport/common

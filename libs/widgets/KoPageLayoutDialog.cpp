@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007,2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
 #include "KoPagePreviewWidget.h"
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <QCheckBox>
 #include <QDialogButtonBox>
@@ -32,9 +33,10 @@
 class KoPageLayoutDialog::Private
 {
 public:
+    Private() : pageLayoutWidget(0), documentCheckBox(0) {}
     KoPageLayout layout;
     KoPageLayoutWidget *pageLayoutWidget;
-    QCheckBox* documentCheckBox;
+    QCheckBox *documentCheckBox;
 };
 
 
@@ -63,16 +65,6 @@ KoPageLayoutDialog::KoPageLayoutDialog(QWidget *parent, const KoPageLayout &layo
     prev->setPageLayout(d->layout);
     lay->addWidget(prev);
 
-    for (int i = 0; i < children().count(); ++i) {
-        if (QDialogButtonBox* buttonBox = qobject_cast<QDialogButtonBox*>(children()[i])) {
-            d->documentCheckBox = new QCheckBox(i18n("Apply to document"), buttonBox);
-            buttonBox->addButton(d->documentCheckBox, QDialogButtonBox::ResetRole);
-            break;
-        }
-    }
-
-    connect (d->documentCheckBox, SIGNAL(toggled(bool)),
-            d->pageLayoutWidget, SLOT(setApplyToDocument(bool)));
     connect (d->pageLayoutWidget, SIGNAL(layoutChanged(const KoPageLayout&)),
             prev, SLOT(setPageLayout(const KoPageLayout&)));
     connect (d->pageLayoutWidget, SIGNAL(layoutChanged(const KoPageLayout&)),
@@ -108,7 +100,27 @@ void KoPageLayoutDialog::reject()
 
 bool KoPageLayoutDialog::applyToDocument() const
 {
-    return d->documentCheckBox->isChecked();
+    return d->documentCheckBox && d->documentCheckBox->isChecked();
+}
+
+void KoPageLayoutDialog::showApplyToDocument(bool on)
+{
+    if (on && d->documentCheckBox == 0) {
+        for (int i = 0; i < children().count(); ++i) {
+            if (QDialogButtonBox *buttonBox = qobject_cast<QDialogButtonBox*>(children()[i])) {
+                d->documentCheckBox = new QCheckBox(i18n("Apply to document"), buttonBox);
+                d->documentCheckBox->setChecked(true);
+                buttonBox->addButton(d->documentCheckBox, QDialogButtonBox::ResetRole);
+                break;
+            }
+        }
+
+        Q_ASSERT(d->pageLayoutWidget);
+        connect (d->documentCheckBox, SIGNAL(toggled(bool)),
+                d->pageLayoutWidget, SLOT(setApplyToDocument(bool)));
+    } else if (d->documentCheckBox) {
+        d->documentCheckBox->setVisible(on);
+    }
 }
 
 void KoPageLayoutDialog::showTextDirection(bool on)
@@ -135,3 +147,5 @@ void KoPageLayoutDialog::setPageSpread(bool pageSpread)
 {
     d->pageLayoutWidget->setPageSpread(pageSpread);
 }
+
+

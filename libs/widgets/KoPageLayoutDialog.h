@@ -41,12 +41,11 @@ public:
     void showPageSpread(bool on);
     void setPageSpread(bool pageSpread);
     KoPageLayout pageLayout() const;
+    bool applyToDocument() const;
+    void showApplyToDocument(bool on);
 
 private slots:
     void setPageLayout(const KoPageLayout &layout);
-
-protected:
-    bool applyToDocument() const;
 
 protected slots:
     void accept();

@@ -102,12 +102,12 @@ public slots:
     void setPageSize(const QSizeF &pageSize);
 
     /**
-    * Set the size of the whole document curretly being shown on the cavas.
+    * Set the size of the whole document currently being shown on the canvas.
     * The document size will be used together with the current zoom level to calculate the size of the
     * canvas in the canvasController.
     * @param documentSize the new document size in points
     */
-    void setDocumentSize( const QSizeF &documentSize );
+    void setDocumentSize(const QSizeF &documentSize);
 
 signals:
     /**

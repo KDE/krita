@@ -39,7 +39,7 @@
 #define KOFFICE_IS_VERSION(a,b,c) ( KOFFICE_VERSION >= KOFFICE_MAKE_VERSION(a,b,c) )
 
 /**
- * Namespace for general KOFFICE functions.
+ * Namespace for general KOffice functions.
  */
 namespace KOffice
 {
@@ -50,30 +50,47 @@ namespace KOffice
  * installed when the program was compiled.
  * @return the version number, encoded in a single uint
  */
-unsigned int version();
+inline unsigned int version()
+{
+    return KOFFICE_VERSION;
+}
+
 /**
  * Returns the major number of KOffice's version, e.g.
  * 1 for KOffice 1.2.3.
  * @return the major version number
  */
-unsigned int versionMajor();
+inline unsigned int versionMajor()
+{
+    return KOFFICE_VERSION_MAJOR;
+}
+
 /**
  * Returns the minor number of KOffice's version, e.g.
  * 2 for KOffice 1.2.3.
  * @return the minor version number
  */
-unsigned int versionMinor();
+inline unsigned int versionMinor() {
+    return KOFFICE_VERSION_MINOR;
+}
+
 /**
  * Returns the release of KOffice's version, e.g.
  * 3 for KOffice 1.2.3.
  * @return the release number
  */
-unsigned int versionRelease();
+inline unsigned int versionRelease() {
+    return KOFFICE_VERSION_RELEASE;
+}
+
 /**
  * Returns the KOffice version as string, e.g. "1.2.3".
  * @return the KOffice version. You can keep the string forever
  */
-const char *versionString();
+inline const char *versionString() {
+    return KOFFICE_VERSION_STRING;
+}
+
 }
 
 #endif // _KOFFICE_VERSION_H_

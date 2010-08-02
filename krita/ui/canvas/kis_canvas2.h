@@ -195,7 +195,7 @@ private slots:
 
     void slotCanvasDestroyed(QWidget* w);
 
-    QCursor setCursor(const QCursor &cursor);
+    void setCursor(const QCursor &cursor);
 
 public:
 //    friend class KisView2;

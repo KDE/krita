@@ -94,7 +94,7 @@ public:
      * @param cursor the new cursor
      * @return the old cursor
      */
-    virtual QCursor setCursor(const QCursor &cursor) = 0;
+    virtual void setCursor(const QCursor &cursor) = 0;
 
     /**
      * Adds a command to the history. Call this for each @p command you create.

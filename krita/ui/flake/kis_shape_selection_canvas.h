@@ -52,10 +52,7 @@ public:
     const QWidget* canvasWidget() const;
     KoUnit unit() const;
     virtual void updateInputMethodInfo() {}
-    QCursor setCursor(const QCursor &cursor)
-    {
-        return cursor;
-    }
+    virtual void setCursor(const QCursor &) {}
 private:
     KoShapeManager * m_shapeManager;
 };

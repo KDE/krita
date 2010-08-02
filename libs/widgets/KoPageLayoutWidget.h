@@ -45,8 +45,6 @@ public:
     void setTextDirection(KoText::Direction direction);
     KoText::Direction textDirection() const;
 
-    int startPageNumber() const;
-
 signals:
     void layoutChanged(const KoPageLayout &layout);
     void unitChanged(const KoUnit &unit);

@@ -85,9 +85,7 @@ public:
     }
 
     /// set default tab size for this document
-    virtual void setTabSpacing(qreal spacing) {
-        m_defaultTabSizing = spacing;
-    }
+    virtual void setTabSpacing(qreal spacing);
 
 private:
     friend class TestTableLayout; // to allow direct testing.

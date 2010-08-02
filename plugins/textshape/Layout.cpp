@@ -58,6 +58,8 @@
 #include <QTextTableCell>
 #include <QTextFragment>
 
+extern int qt_defaultDpiY();
+
 // ---------------- layout helper ----------------
 Layout::Layout(KoTextDocumentLayout *parent)
         : m_styleManager(0),
@@ -71,7 +73,7 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_textShape(0),
         m_demoText(false),
         m_endOfDemoText(false),
-        m_defaultTabSizing(MM_TO_POINT(15)),
+        m_defaultTabSizing(0),
         m_currentTabStop(0),
         m_dropCapsNChars(0),
         m_dropCapsAffectsNMoreLines(0),
@@ -82,6 +84,7 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_restartingFirstCellAfterTableBreak(false)
 {
     m_frameStack.reserve(5); // avoid reallocs
+    setTabSpacing(MM_TO_POINT(15));
 }
 
 bool Layout::start()
@@ -350,8 +353,6 @@ bool Layout::addLine(QTextLine &line)
     return false;
 }
 
-extern int qt_defaultDpiY();
-
 bool Layout::nextParag()
 {
     Q_ASSERT(shape);
@@ -490,7 +491,7 @@ bool Layout::nextParag()
     if (tabStopDistance > 0)
         option.setTabStop(tabStopDistance * qt_defaultDpiY() / 72.);
     else
-        option.setTabStop(m_defaultTabSizing * qt_defaultDpiY() / 72.);
+        option.setTabStop(m_defaultTabSizing);
 
     // tabs
     QList<QTextOption::Tab> tabs;
@@ -2062,4 +2063,9 @@ void Layout::updateFrameStack()
             }
         }
     }
+}
+
+void Layout::setTabSpacing(qreal spacing)
+{
+    m_defaultTabSizing = spacing * qt_defaultDpiY() / 72.;
 }

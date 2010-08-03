@@ -17,10 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _BRUSH_H_
-#define _BRUSH_H_
-
-#include <QVector>
+#ifndef HATCHING_BRUSH_H_
+#define HATCHING_BRUSH_H_
 
 #include <KoColor.h>
 

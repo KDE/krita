@@ -87,9 +87,6 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     if (!brush) return 1;
     if (!brush->canPaintFor(info)) return 1;
 
-    //DECLARING EMPTY pixel-only paint device, note that it is a smart pointer
-    KisFixedPaintDeviceSP maskDab = 0;
-
     //SENSOR-depending settings
     m_settings->crosshatchingsensorvalue = m_crosshatchingOption.apply(info);
     m_settings->separationsensorvalue = m_separationOption.apply(info);
@@ -116,13 +113,14 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     }
     //--------END POSITIONING CODE-----------
 
-    /*--------VERY UGLY LOOKING IF-ELSE block, copypasted from SmudgeOp-------
+    //DECLARING EMPTY pixel-only paint device, note that it is a smart pointer
+    KisFixedPaintDeviceSP maskDab = 0;
+    
+    /*--------copypasted from SmudgeOp-------
     ---This IF-ELSE block is used to turn the mask created in the BrushTip dialogue
     into a beautiful SELECTION MASK (it's an opacity multiplier), intended to give
     the brush a "brush feel" (soft borders, round shape) despite it comes from a
-    simple, ugly, hatched rectangle.
-    The MASK is maskDab
-    The HATCHED part is m_hatchedDab */
+    simple, ugly, hatched rectangle.*/
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         maskDab = brush->paintDevice(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
         maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());

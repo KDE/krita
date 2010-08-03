@@ -480,6 +480,8 @@ void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
 void KisGbrBrush::setUseColorAsMask(bool useColorAsMask)
 {
     d->useColorAsMask = useColorAsMask;
+    resetBoundary();
+    clearScaledBrushes();
 }
 bool KisGbrBrush::useColorAsMask() const
 {

@@ -394,8 +394,8 @@ QImage KisGbrBrush::image() const
             QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
             for (int x = 0; x < image.width(); x++) {
                 QRgb c = pixel[x];
-                int a = ((255 - qGray(c)) * qAlpha(c)) / 255;
-                pixel[x] = qRgba(a, a, a, 255);
+                int a = qGray(c);
+                pixel[x] = qRgba(a, a, a, qAlpha(c));
             }
         }
         return image;

@@ -4,6 +4,7 @@
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 José Luis Vergara Toloza <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -89,27 +90,23 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    KisFixedPaintDeviceSP dab = 0;
-
-    QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
-    QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1.0;
+    KisFixedPaintDeviceSP maskDab = 0;
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->paintDevice(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
-        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
+        maskDab = brush->paintDevice(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
+        maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     } else {
-        dab = cachedDab();
+        maskDab = cachedDab();
         KoColor color = painter()->paintColor();
-        color.convertTo(dab->colorSpace());
-        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
-        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
+        color.convertTo(maskDab->colorSpace());
+        brush->mask(maskDab, color, scale, scale, 0.0, info, xFraction, yFraction);
+        maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     }
 
-    qint32 sw = dab->bounds().width();
-    qint32 sh = dab->bounds().height();
-
-
+    /*-----Convenient renaming for the limits of the maskDab------*/
+    qint32 sw = maskDab->bounds().width();
+    qint32 sh = maskDab->bounds().height();
+    
     /* To smudge, one does the following:
          * at first, initialize a temporary paint device with a copy of the original (dab-sized piece, really).
          * all other times:
@@ -120,33 +117,35 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
        TODO: what happened exactly in 1.6 (and should happen now) when the dab resizes halfway due to pressure?
     */
     int opacity = OPACITY_OPAQUE_U8;
-    int sw2 = sw / 2;
-    int sh2 = sh / 2;
     if (!m_firstRun) {
         opacity = m_rateOption.apply(opacity, info);
 
-        KisRectIterator it = m_srcdev->createRectIterator(sw2, sh2, sw, sh);
+        KisRectIterator it = m_srcdev->createRectIterator(0, 0, sw, sh);
         KoColorSpace* cs = m_srcdev->colorSpace();
         while (!it.isDone()) {
             cs->setOpacity(it.rawData(), quint8(cs->opacityF(it.rawData()) * opacity), 1);
             ++it;
         }
         opacity = OPACITY_OPAQUE_U8 - opacity;
-
-    } else {
+    }
+    else {
         m_firstRun = false;
     }
 
+    // This extracts the piece of image to be duplicated to generate the smudge effect
     KisPainter copyPainter(m_srcdev);
     copyPainter.setOpacity(opacity);
-    copyPainter.bitBlt(sw2, sh2, device, pt.x(), pt.y(), sw, sh);
+    copyPainter.bitBlt(0, 0, device, pt.x(), pt.y(), sw, sh);
     copyPainter.end();
-
-    qint32 sx = dstRect.x() - x + sw2;
-    qint32 sy = dstRect.y() - y + sh2;
-    sw = dstRect.width();
-    sh = dstRect.height();
-
-    painter()->bitBltFixedSelection(dstRect.x(), dstRect.y(), m_srcdev, dab, sx, sy, sw, sh);
+    
+    /* Porting the hatching brush selection bugfix. This made this brush 20% slower.
+    XXX: Better solutions appreciated.
+    This applies the maskDab to m_srcdev which contains the colors to be smudged */
+    KisPaintDeviceSP blitDab = new KisPaintDevice(painter()->device()->colorSpace());
+    KisPainter smallpainter(blitDab);
+    smallpainter.bitBltFixedSelection(0, 0, m_srcdev, maskDab, 0, 0, sw, sh);
+    
+    // Blit the results to the screen.
+    painter()->bitBlt(x, y, blitDab, 0, 0, sw, sh);
     return spacing(scale);
 }

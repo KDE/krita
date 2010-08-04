@@ -413,12 +413,15 @@ void KisPaintopBox::slotSaveActivePreset()
 
     QString name = m_presetsPopup->getPresetName();
 
-    int i = 1;
     QFileInfo fileInfo;
-    do {
-        fileInfo.setFile(saveLocation + name + QString("%1.kpp").arg(i));
+    fileInfo.setFile(saveLocation + name + newPreset->defaultFileExtension());
+
+    int i = 1;
+    while (fileInfo.exists()) {
+        fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + newPreset->defaultFileExtension());
         i++;
-    } while (fileInfo.exists());
+    }
+    
     newPreset->setFilename(fileInfo.filePath());
     newPreset->setName(name);
 

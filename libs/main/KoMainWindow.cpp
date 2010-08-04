@@ -1902,7 +1902,6 @@ KoDockerManager * KoMainWindow::dockerManager() const
 void KoMainWindow::toggleDockersVisibility(bool v) const
 {
     Q_UNUSED(v);
-    qDebug() << "toggleDockersVisibility";
     if (d->hiddenDockwidgets.isEmpty()){
         foreach(QObject* widget, children()) {
             if (widget->inherits("QDockWidget")) {

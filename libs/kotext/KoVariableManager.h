@@ -21,6 +21,7 @@
 
 #include "kotext_export.h"
 
+#include <QObject>
 #include <QString>
 
 class KoVariable;
@@ -39,8 +40,9 @@ class KoVariableManagerPrivate;
  * @see KoInlineTextObjectManager::createInsertVariableActions()
  * @see KoInlineTextObjectManager::variableManager()
  */
-class KOTEXT_EXPORT KoVariableManager
+class KOTEXT_EXPORT KoVariableManager : public QObject
 {
+	Q_OBJECT
 public:
     /// constructor
     explicit KoVariableManager(KoInlineTextObjectManager *inlineObjectManager);
@@ -85,6 +87,9 @@ public:
 
     /// return a list of all variable names.
     QList<QString> variables() const;
+
+signals:
+	void valueChanged();
 
 private:
     KoVariableManagerPrivate * const d;

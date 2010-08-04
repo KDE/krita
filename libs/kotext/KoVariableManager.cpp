@@ -53,6 +53,7 @@ void KoVariableManager::setValue(const QString &name, const QString &value)
     }
     // the variable manager stores the actual value of the variable.
     d->inlineObjectManager->setProperty(static_cast<KoInlineObject::Property>(key), value);
+    emit valueChanged();
 }
 
 QString KoVariableManager::value(const QString &name) const

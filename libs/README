@@ -42,7 +42,7 @@ Naming
 ======
 
 All of KOffice libs uses so called CamelCase naming for all files in the libraries.
-Example:  KoParagaphDialog.cpp
+Example:  KoParagraphDialog.cpp
 File extensions are always .cpp and .h
 We prefer one class per file.  This is to make the filename match the class, which
 obviously does not work if there is more then one class in the file.

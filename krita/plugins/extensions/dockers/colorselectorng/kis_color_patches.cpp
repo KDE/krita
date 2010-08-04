@@ -187,18 +187,17 @@ void KisColorPatches::updateSettings()
         m_buttonList.at(i)->setGeometry(0, i*m_patchHeight, m_patchWidth, m_patchHeight);
     }
 
-    if(m_allowScrolling && m_direction == Horizontal) {
-        setMaximumWidth(QWIDGETSIZE_MAX);
-        setMinimumWidth(m_patchWidth);
+    setMaximumWidth(QWIDGETSIZE_MAX);
+    setMinimumWidth(m_patchWidth);
+    setMaximumHeight(QWIDGETSIZE_MAX);
+    setMinimumHeight(m_patchHeight);
 
+    if(m_allowScrolling && m_direction == Horizontal) {
         setMaximumHeight(m_numRows*m_patchHeight);
         setMinimumHeight(m_numRows*m_patchHeight);
     }
 
     if(m_allowScrolling && m_direction == Vertical) {
-        setMaximumHeight(QWIDGETSIZE_MAX);
-        setMinimumHeight(m_patchHeight);
-
         setMaximumWidth(m_numCols*m_patchWidth);
         setMinimumWidth(m_numCols*m_patchWidth);
     }

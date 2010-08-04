@@ -19,16 +19,20 @@
 #include "kis_color_selector_settings.h"
 #include "ui_wdg_color_selector_settings.h"
 
+#include <QVBoxLayout>
+#include <QDialogButtonBox>
+#include <QPushButton>
+
 #include <KConfigGroup>
 #include <KIcon>
-#include "kis_color_selector_combo_box.h"
-#include "kis_color_selector.h"
+
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 
-#include <QVBoxLayout>
-#include <QDialogButtonBox>
+#include "kis_color_selector_combo_box.h"
+#include "kis_color_selector.h"
+
 
 #include <KDebug>
 
@@ -143,7 +147,13 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("commonColorsAutoUpdate", ui->commonColorsAutoUpdate->isChecked());
 
     //shade selector
-    cfg.writeEntry("shadeSelectorType", ui->shadeSelectorType->currentIndex());
+    QString shadeSelectorType("MyPaint");
+    if(ui->shadeSelectorTypeMinimal->isChecked())
+        shadeSelectorType="Minimal";
+    if(ui->shadeSelectorTypeHidden->isChecked())
+        shadeSelectorType="Hidden";
+
+    cfg.writeEntry("shadeSelectorType", shadeSelectorType);
 
     cfg.writeEntry("minimalShadeSelectorAsGradient", ui->minimalShadeSelectorAsGradient->isChecked());
     cfg.writeEntry("minimalShadeSelectorPatchCount", ui->minimalShadeSelectorPatchesPerLine->value());
@@ -233,7 +243,10 @@ void KisColorSelectorSettings::loadPreferences()
     ui->commonColorsAutoUpdate->setChecked(cfg.readEntry("commonColorsAutoUpdate", false));
 
     //shade selector
-    ui->shadeSelectorType->setCurrentIndex(cfg.readEntry("shadeSelectorType", 0));
+    QString shadeSelectorType=cfg.readEntry("shadeSelectorType", "MyPaint");
+    ui->shadeSelectorTypeMyPaint->setChecked(shadeSelectorType=="MyPaint");
+    ui->shadeSelectorTypeMinimal->setChecked(shadeSelectorType=="Minimal");
+    ui->shadeSelectorTypeHidden->setChecked(shadeSelectorType=="Hidden");
 
     bool asGradient = cfg.readEntry("minimalShadeSelectorAsGradient", false);
     if(asGradient) ui->minimalShadeSelectorAsGradient->setChecked(true);
@@ -291,7 +304,9 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->commonColorsAutoUpdate->setChecked(false);
 
     //shade selector
-    ui->shadeSelectorType->setCurrentIndex(0);
+    ui->shadeSelectorTypeMyPaint->setChecked(true);
+    ui->shadeSelectorTypeMinimal->setChecked(true);
+    ui->shadeSelectorTypeHidden->setChecked(true);
 
 //    bool asGradient = false;
 //    if(asGradient) ui->minimalShadeSelectorAsGradient->setChecked(true);

@@ -18,12 +18,12 @@
 #ifndef KIS_COLSELNG_SHADE_SELECTOR_H
 #define KIS_COLSELNG_SHADE_SELECTOR_H
 
-#include <QWidget>
+#include "kis_color_selector_base.h"
 
 class KisShadeSelectorLine;
 class KisCanvas2;
 
-class KisMinimalShadeSelector : public QWidget
+class KisMinimalShadeSelector : public KisColorSelectorBase
 {
 Q_OBJECT
 public:
@@ -33,6 +33,10 @@ public:
 public slots:
     void setColor(const QColor& color);
     void updateSettings();
+
+protected:
+    void paintEvent(QPaintEvent *);
+    virtual KisColorSelectorBase* createPopup() const;
 
 private:
     QList<KisShadeSelectorLine*> m_shadingLines;

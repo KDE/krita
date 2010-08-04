@@ -96,25 +96,24 @@ void KisColorSelectorContainer::updateSettings()
     m_shadeSelectorHideable = cfg.readEntry("shadeSelectorHideable", false);
     m_allowHorizontalLayout = cfg.readEntry("allowHorizontalLayout", true);
 
-    int type = cfg.readEntry("shadeSelectorType", 0);
-    if(m_shadeSelector!=0)
+    QString type = cfg.readEntry("shadeSelectorType", "MyPaint");
+
+    QWidget* newShadeSelector;
+    if(type=="MyPaint")
+        newShadeSelector = m_myPaintShadeSelector;
+    else if (type=="Minimal")
+        newShadeSelector = m_minimalShadeSelector;
+    else
+        newShadeSelector = 0;
+
+    if(m_shadeSelector!=newShadeSelector && m_shadeSelector!=0) {
         m_shadeSelector->hide();
-
-    switch(type) {
-    case MyPaintSelector:
-        m_shadeSelector = m_myPaintShadeSelector;
-        break;
-    case MinimalSelector:
-        m_shadeSelector = m_minimalShadeSelector;
-        break;
-    default:
-        m_shadeSelector = 0;
-        break;
     }
+    m_shadeSelector=newShadeSelector;
 
-    if(m_shadeSelector!=0) {
+    if(m_shadeSelector!=0)
         m_shadeSelector->show();
-    }
+
 }
 
 void KisColorSelectorContainer::resizeEvent(QResizeEvent * e)

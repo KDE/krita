@@ -31,6 +31,8 @@
 
 #include "kis_canvas2.h"
 
+#include "kis_minimal_shade_selector.h"
+
 #include <KDebug>
 
 KisShadeSelectorLine::KisShadeSelectorLine(QWidget *parent) :
@@ -160,6 +162,12 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
 void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
 {
     Q_ASSERT(m_canvas);
+    if(e->button()!=Qt::LeftButton && e->button()!=Qt::RightButton) {
+        KisMinimalShadeSelector* parent = dynamic_cast<KisMinimalShadeSelector*>(parentWidget());
+        if(parent!=0)
+            parent->mousePressEvent(e);
+        return;
+    }
 
     QColor color(m_pixelCache.pixel(e->pos()));
     if(color==m_backgroundColor)

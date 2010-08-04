@@ -38,7 +38,7 @@ public:
 
     void setPopupBehaviour(bool onMouseOver, bool onMouseClick);
     void setColorSpace(const KoColorSpace* colorSpace);
-    void setCanvas(KisCanvas2* canvas);
+    virtual void setCanvas(KisCanvas2* canvas);
     const KoColorSpace* colorSpace() const;
     enum ColorRole {Foreground, Background};
 
@@ -46,8 +46,10 @@ public slots:
     virtual void updateSettings();
     virtual void setColor(const QColor& color);
 
-protected:
+public:
     void mousePressEvent(QMouseEvent *);
+
+protected:
     void mouseMoveEvent(QMouseEvent *);
     virtual KisColorSelectorBase* createPopup() const = 0;
     /// finds a QColor, that will be ref.toQColor(), if converting it to the color space of ref

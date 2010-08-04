@@ -19,7 +19,7 @@
 
 #include <QColor>
 #include <QVBoxLayout>
-//#include <QPainter>
+#include <QPainter>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -30,7 +30,7 @@
 
 
 KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent) :
-    QWidget(parent), m_canvas(0)
+    KisColorSelectorBase(parent), m_canvas(0)
 {
     QVBoxLayout* l = new QVBoxLayout(this);
     l->setSpacing(0);
@@ -41,6 +41,7 @@ KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent) :
 
 void KisMinimalShadeSelector::setCanvas(KisCanvas2 *canvas)
 {
+    KisColorSelectorBase::setCanvas(canvas);
     m_canvas=canvas;
     for(int i=0; i<m_shadingLines.size(); i++)
         m_shadingLines.at(i)->setCanvas(canvas);
@@ -54,6 +55,7 @@ void KisMinimalShadeSelector::setColor(const QColor& color)
 
 void KisMinimalShadeSelector::updateSettings()
 {
+    KisColorSelectorBase::updateSettings();
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
     QString stri = cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0");
@@ -82,5 +84,19 @@ void KisMinimalShadeSelector::updateSettings()
 
     for(int i=0; i<m_shadingLines.size(); i++)
         m_shadingLines.at(i)->updateSettings();
+
+    setPopupBehaviour(false, false);
 }
 
+void KisMinimalShadeSelector::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    painter.fillRect(0,0,width(), height(), QColor(128,128,128));
+}
+
+KisColorSelectorBase* KisMinimalShadeSelector::createPopup() const
+{
+    KisMinimalShadeSelector* popup = new KisMinimalShadeSelector(0);
+    popup->resize(350,350);
+    return popup;
+}

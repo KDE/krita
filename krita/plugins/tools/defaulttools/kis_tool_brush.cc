@@ -151,6 +151,7 @@ QWidget * KisToolBrush::createOptionWidget()
 
     // Drawing assistant configuration
     m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionWidget);
+    m_chkAssistant->setToolTip(i18n("You need to add Ruler Assistants before this tool will work."));
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
     m_sliderMagnetism = new KisSliderSpinBox(optionWidget);
     m_sliderMagnetism->setToolTip(i18n("Assistant Magnetism"));

@@ -331,7 +331,7 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
     int nameLength = qstrlen(name);
     int wrote;
 
-    bh.header_size = htonl(sizeof(GimpBrushHeader) + nameLength);
+    bh.header_size = htonl(sizeof(GimpBrushHeader) + nameLength + 1);
     bh.version = htonl(2); // Only RGBA8 data needed atm, no cinepaint stuff
     bh.width = htonl(width());
     bh.height = htonl(height());
@@ -351,7 +351,7 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
     if (wrote == -1)
         return false;
 
-    wrote = dev->write(name, nameLength); // No +1 for the trailing NULL it seems...
+    wrote = dev->write(name, nameLength + 1);
     if (wrote == -1)
         return false;
 

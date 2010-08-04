@@ -1,0 +1,27 @@
+[Desktop Entry]
+Name=LCMS Color Management Engine for Pigment
+Name[ca]=Motor de gestió de color LCMS per al Pigment
+Name[ca@valencia]=Motor de gestió de color LCMS per al Pigment
+Name[da]=LCMS farvehåndteringsmotor til Pigment
+Name[de]=LCMS-Farbverwaltung für Pigment
+Name[en_GB]=LCMS Colour Management Engine for Pigment
+Name[es]=Motor de gestión de colores LCMS para Pigment
+Name[et]=Pigmendi LCMS värvihalduse mootor
+Name[fr]=Application de gestion de couleurs LCMS pour pigment
+Name[it]=Motore di gestione dei colori LCMS di Pigment
+Name[ja]=Pigment のための LCMS カラーマネージメントエンジン
+Name[nb]=LCMS fargestyringsmotor for pigment
+Name[nds]=LCMS-Klöörpleegkarn för Pigment
+Name[nl]=LCMS Kleurbeheer-engine voor Pigment
+Name[pt]=Motor de Gestão de Cores do LCMS para o Pigment
+Name[pt_BR]=Motor de Gerenciamento de Cores do LCMS para o Pigment
+Name[sv]=LCMS-färghanteringsverktyg för pigment
+Name[uk]=Рушій керування кольорами LCMS для Pigment
+Name[wa]=Éndjin d' manaedjmint del coleur LCMS po Pigmint
+Name[x-test]=xxLCMS Color Management Engine for Pigmentxx
+Name[zh_TW]=Pigment 的 LCMS 色彩管理引擎
+X-KDE-ServiceTypes=KOffice/ColorSpace
+Type=Service
+X-KDE-Library=kolcmsengine
+X-Pigment-MinVersion=0
+X-Flake-PluginVersion=1

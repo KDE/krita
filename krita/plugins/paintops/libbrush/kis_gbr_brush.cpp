@@ -5,6 +5,7 @@
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -123,7 +124,6 @@ KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
     d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
-
     initFromPaintDev(image, x, y, w, h);
 }
 
@@ -441,22 +441,32 @@ void KisGbrBrush::makeMaskImage()
         return;
     }
 
-    QImage image(width(), height(), QImage::Format_RGB32);
-
-    if (m_image.width() == image.width() && m_image.height() == image.height()) {
-
-        for (int y = 0; y < height(); y++) {
+    if (m_image.width() == width() && m_image.height() == height()) {
+        int imageWidth = width();
+        int imageHeight = height();
+        QImage image(imageWidth, imageHeight, QImage::Format_Indexed8);
+        QVector<QRgb> table;
+        for (int i = 0; i < 256; ++i) {
+            table.append(qRgb(i, i, i));
+        }
+        image.setColorTable(table);
+        
+        for (int y = 0; y < imageHeight; y++) {
             QRgb *pixel = reinterpret_cast<QRgb *>(m_image.scanLine(y));
-            for (int x = 0; x < width(); x++) {
+            uchar * dstPixel = image.scanLine(y);
+            for (int x = 0; x < imageWidth; x++) {
                 QRgb c = pixel[x];
-                int a = ((255 - qGray(c)) * qAlpha(c)) / 255; // qGray(black) = 0
-                pixel[x] = qRgb(a, a, a);
+                float alpha = qAlpha(c)/255.0f;
+                // linear interpolation with maximum gray value which is transparent in the mask
+                //int a = (qGray(c) * alpha) + ((1.0 - alpha) * 255);
+                // single multiplication version
+                int a = 255 + alpha*(qGray(c) - 255);
+                dstPixel[x] = (uchar)a;
             }
         }
-
         setImage(image);
     }
-
+    
     setBrushType(MASK);
     setHasColor(false);
     setUseColorAsMask(false);

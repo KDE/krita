@@ -36,6 +36,7 @@ public slots:
 
 private:
     QList<KisShadeSelectorLine*> m_shadingLines;
+    KisCanvas2* m_canvas;
 };
 
 #endif // KIS_COLSELNG_SHADE_SELECTOR_H

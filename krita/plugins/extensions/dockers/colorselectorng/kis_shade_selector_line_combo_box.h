@@ -4,6 +4,7 @@
 #include <QComboBox>
 
 class KisShadeSelectorLineComboBoxPrivate;
+class KisShadeSelectorLine;
 
 class KisShadeSelectorLineComboBox : public QComboBox
 {
@@ -13,12 +14,23 @@ public:
     void hidePopup();
     void showPopup();
     void setConfiguration(const QString& stri);
+    QString configuration() const;
+    void setLineNumber(int n);
+//    QSize sizeHint() const;
 
-signals:
+protected:
+    void resizeEvent(QResizeEvent *e);
 
 public slots:
+    void updateSettings();
+    void setGradient(bool);
+    void setPatches(bool);
+    void setPatchCount(int count);
+    void setLineHeight(int height);
+
 private:
     KisShadeSelectorLineComboBoxPrivate* m_private;
+    KisShadeSelectorLine* m_currentLine;
 
 };
 

@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>514</width>
-    <height>408</height>
+    <height>357</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Color Selector Settings</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
+  <layout class="QGridLayout" name="gridLayout_5">
+   <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -320,122 +320,130 @@
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_7">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>200</height>
-          </size>
-         </property>
          <property name="title">
           <string>Minimal Shade Selector</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_12">
+         <layout class="QHBoxLayout" name="horizontalLayout_12">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_12">
+           <layout class="QVBoxLayout" name="verticalLayout">
             <item>
-             <widget class="QRadioButton" name="minimalShadeSelectorAsGradient">
-              <property name="text">
-               <string>gradient</string>
-              </property>
-             </widget>
+             <layout class="QFormLayout" name="formLayout_2">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>Line Count</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QSpinBox" name="minimalShadeSelectorLineCount">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>10</number>
+                </property>
+                <property name="value">
+                 <number>4</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_6">
+                <property name="text">
+                 <string>line height</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QSpinBox" name="minimalShadeSelectorLineHeight">
+                <property name="minimum">
+                 <number>16</number>
+                </property>
+                <property name="maximum">
+                 <number>99</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QRadioButton" name="minimalShadeSelectorAsColorPatches">
-              <property name="text">
-               <string>color patches</string>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QRadioButton" name="minimalShadeSelectorAsGradient">
+                <property name="text">
+                 <string>gradient</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="minimalShadeSelectorAsColorPatches">
+                <property name="text">
+                 <string>color patches</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <spacer name="horizontalSpacer_4">
+             <layout class="QFormLayout" name="formLayout_3">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label">
+                <property name="text">
+                 <string>patches per line</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QSpinBox" name="minimalShadeSelectorPatchesPerLine"/>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_7">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
-                <height>20</height>
+                <width>20</width>
+                <height>0</height>
                </size>
               </property>
              </spacer>
             </item>
-            <item>
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>patches per line</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="minimalShadeSelectorPatchesPerLine"/>
-            </item>
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_6">
-            <item>
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>Line Count</string>
+           <widget class="QScrollArea" name="scrollArea">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>280</width>
+               <height>111</height>
+              </rect>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <property name="topMargin">
+               <number>0</number>
               </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="minimalShadeSelectorLineCount">
-              <property name="minimum">
-               <number>1</number>
+              <property name="bottomMargin">
+               <number>0</number>
               </property>
-              <property name="maximum">
-               <number>10</number>
+              <property name="spacing">
+               <number>0</number>
               </property>
-              <property name="value">
-               <number>4</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_5">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>line height</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="minimalShadeSelectorLineHeight">
-              <property name="minimum">
-               <number>16</number>
-              </property>
-              <property name="maximum">
-               <number>99</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="KisShadeSelectorLineComboBox" name="comboBox"/>
-          </item>
-          <item>
-           <widget class="KisShadeSelectorLineComboBox" name="comboBox_2"/>
-          </item>
-          <item>
-           <widget class="KisShadeSelectorLineComboBox" name="comboBox_4"/>
-          </item>
-          <item>
-           <widget class="KisShadeSelectorLineComboBox" name="comboBox_5"/>
+              <item row="0" column="0">
+               <widget class="KisShadeSelectorLinesSettings" name="minimalShadeSelectorLineSettings"/>
+              </item>
+             </layout>
+            </widget>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -914,9 +922,9 @@
    <header>kis_color_selector_combo_box.h</header>
   </customwidget>
   <customwidget>
-   <class>KisShadeSelectorLineComboBox</class>
+   <class>KisShadeSelectorLinesSettings</class>
    <extends>QComboBox</extends>
-   <header>kis_shade_selector_line_combo_box.h</header>
+   <header>kis_shade_selector_lines_settings.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -928,12 +936,12 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>65</y>
+     <x>368</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>79</x>
-     <y>68</y>
+     <x>303</x>
+     <y>234</y>
     </hint>
    </hints>
   </connection>
@@ -944,12 +952,12 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>65</y>
+     <x>368</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>86</x>
-     <y>68</y>
+     <x>426</x>
+     <y>234</y>
     </hint>
    </hints>
   </connection>
@@ -960,12 +968,12 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>65</y>
+     <x>368</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>79</x>
-     <y>68</y>
+     <x>303</x>
+     <y>262</y>
     </hint>
    </hints>
   </connection>
@@ -976,12 +984,12 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>65</y>
+     <x>368</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>86</x>
-     <y>68</y>
+     <x>426</x>
+     <y>262</y>
     </hint>
    </hints>
   </connection>
@@ -992,12 +1000,12 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>89</x>
-     <y>65</y>
+     <x>444</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>79</x>
-     <y>68</y>
+     <x>303</x>
+     <y>234</y>
     </hint>
    </hints>
   </connection>
@@ -1008,12 +1016,12 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>89</x>
-     <y>65</y>
+     <x>444</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>86</x>
-     <y>68</y>
+     <x>426</x>
+     <y>234</y>
     </hint>
    </hints>
   </connection>
@@ -1024,12 +1032,12 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>89</x>
-     <y>65</y>
+     <x>444</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>79</x>
-     <y>68</y>
+     <x>303</x>
+     <y>262</y>
     </hint>
    </hints>
   </connection>
@@ -1040,12 +1048,12 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>89</x>
-     <y>65</y>
+     <x>444</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>86</x>
-     <y>68</y>
+     <x>426</x>
+     <y>262</y>
     </hint>
    </hints>
   </connection>
@@ -1056,12 +1064,12 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>35</x>
-     <y>65</y>
+     <x>121</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>31</x>
-     <y>68</y>
+     <x>56</x>
+     <y>234</y>
     </hint>
    </hints>
   </connection>
@@ -1072,12 +1080,12 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>35</x>
-     <y>65</y>
+     <x>121</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>38</x>
-     <y>68</y>
+     <x>179</x>
+     <y>234</y>
     </hint>
    </hints>
   </connection>
@@ -1088,12 +1096,12 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>35</x>
-     <y>65</y>
+     <x>121</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>31</x>
-     <y>68</y>
+     <x>56</x>
+     <y>262</y>
     </hint>
    </hints>
   </connection>
@@ -1104,12 +1112,12 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>35</x>
-     <y>65</y>
+     <x>121</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>38</x>
-     <y>68</y>
+     <x>179</x>
+     <y>262</y>
     </hint>
    </hints>
   </connection>
@@ -1120,12 +1128,12 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>41</x>
-     <y>65</y>
+     <x>197</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>31</x>
-     <y>68</y>
+     <x>56</x>
+     <y>234</y>
     </hint>
    </hints>
   </connection>
@@ -1136,12 +1144,12 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>41</x>
-     <y>65</y>
+     <x>197</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>38</x>
-     <y>68</y>
+     <x>179</x>
+     <y>234</y>
     </hint>
    </hints>
   </connection>
@@ -1152,12 +1160,12 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>41</x>
-     <y>65</y>
+     <x>197</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>31</x>
-     <y>68</y>
+     <x>56</x>
+     <y>262</y>
     </hint>
    </hints>
   </connection>
@@ -1168,12 +1176,12 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>41</x>
-     <y>65</y>
+     <x>197</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>38</x>
-     <y>68</y>
+     <x>179</x>
+     <y>262</y>
     </hint>
    </hints>
   </connection>
@@ -1188,8 +1196,8 @@
      <y>63</y>
     </hint>
     <hint type="destinationlabel">
-     <x>46</x>
-     <y>60</y>
+     <x>63</x>
+     <y>145</y>
     </hint>
    </hints>
   </connection>
@@ -1200,12 +1208,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>94</x>
-     <y>63</y>
+     <x>310</x>
+     <y>84</y>
     </hint>
     <hint type="destinationlabel">
-     <x>94</x>
-     <y>60</y>
+     <x>310</x>
+     <y>145</y>
     </hint>
    </hints>
   </connection>
@@ -1216,12 +1224,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>64</y>
+     <x>310</x>
+     <y>202</y>
     </hint>
     <hint type="destinationlabel">
-     <x>90</x>
-     <y>64</y>
+     <x>310</x>
+     <y>266</y>
     </hint>
    </hints>
   </connection>
@@ -1232,12 +1240,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>42</x>
-     <y>64</y>
+     <x>63</x>
+     <y>202</y>
     </hint>
     <hint type="destinationlabel">
-     <x>42</x>
-     <y>64</y>
+     <x>63</x>
+     <y>266</y>
     </hint>
    </hints>
   </connection>
@@ -1270,6 +1278,38 @@
     <hint type="destinationlabel">
      <x>97</x>
      <y>249</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>minimalShadeSelectorAsColorPatches</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>minimalShadeSelectorPatchesPerLine</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>142</x>
+     <y>280</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>149</x>
+     <y>308</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>minimalShadeSelectorAsGradient</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>minimalShadeSelectorPatchesPerLine</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>69</x>
+     <y>278</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>312</y>
     </hint>
    </hints>
   </connection>

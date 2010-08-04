@@ -30,27 +30,18 @@
 
 
 KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent), m_canvas(0)
 {
     QVBoxLayout* l = new QVBoxLayout(this);
-    KisShadeSelectorLine* kisssl = new KisShadeSelectorLine(0.2, 0.0, 0.0, this);
-    l->addWidget(kisssl);
-    m_shadingLines.append(kisssl);
-
-    kisssl = new KisShadeSelectorLine(0.0, 1., 0.0, this);
-    l->addWidget(kisssl);
-    m_shadingLines.append(kisssl);
-
-    kisssl = new KisShadeSelectorLine(0.0, 0.0, 1., this);
-    l->addWidget(kisssl);
-    m_shadingLines.append(kisssl);
-
     l->setSpacing(0);
     l->setMargin(0);
+
+    updateSettings();
 }
 
 void KisMinimalShadeSelector::setCanvas(KisCanvas2 *canvas)
 {
+    m_canvas=canvas;
     for(int i=0; i<m_shadingLines.size(); i++)
         m_shadingLines.at(i)->setCanvas(canvas);
 }
@@ -65,9 +56,27 @@ void KisMinimalShadeSelector::updateSettings()
 {
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
-    int lineCount = cfg.readEntry("minimalShadeSelectorLineCount", 3);
-    int lineHeight = cfg.readEntry("minimalShadeSelectorLineHeight", 20);
+    QString stri = cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0");
+    QStringList strili = stri.split(";", QString::SkipEmptyParts);
 
+    int lineCount = strili.size();
+    while(lineCount-m_shadingLines.size() > 0) {
+        m_shadingLines.append(new KisShadeSelectorLine(this));
+        m_shadingLines.last()->setLineNumber(m_shadingLines.size()-1);
+        layout()->addWidget(m_shadingLines.last());
+    }
+    while(lineCount-m_shadingLines.size() < 0) {
+        layout()->removeWidget(m_shadingLines.last());
+        delete m_shadingLines.takeLast();
+    }
+
+    for(int i=0; i<strili.size(); i++) {
+        m_shadingLines.at(i)->fromString(strili.at(i));
+        if(m_canvas!=0)
+            m_shadingLines.at(i)->setCanvas(m_canvas);
+    }
+
+    int lineHeight = cfg.readEntry("minimalShadeSelectorLineHeight", 20);
     setMinimumHeight(lineCount*lineHeight+2*lineCount);
     setMaximumHeight(lineCount*lineHeight+2*lineCount);
 

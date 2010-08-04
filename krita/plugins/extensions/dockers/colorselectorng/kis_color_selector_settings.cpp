@@ -46,11 +46,31 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
 
     ui->colorSelectorConfiguration->setColorSpace(ui->colorSpace->currentColorSpace());
 
-    connect(ui->colorSpace, SIGNAL(colorSpaceChanged(const KoColorSpace*)), ui->colorSelectorConfiguration, SLOT(setColorSpace(const KoColorSpace*)));
+    connect(ui->colorSpace,                 SIGNAL(colorSpaceChanged(const KoColorSpace*)),
+            ui->colorSelectorConfiguration, SLOT(setColorSpace(const KoColorSpace*)));
+
+    connect(ui->minimalShadeSelectorLineCount,      SIGNAL(valueChanged(int)),
+            ui->minimalShadeSelectorLineSettings,   SLOT(setLineCount(int)));
+
+    connect(ui->minimalShadeSelectorLineSettings,   SIGNAL(lineCountChanged(int)),
+            ui->minimalShadeSelectorLineCount,      SLOT(setValue(int)));
+
+    connect(ui->minimalShadeSelectorAsGradient,     SIGNAL(toggled(bool)),
+            ui->minimalShadeSelectorLineSettings,   SIGNAL(setGradient(bool)));
+
+    connect(ui->minimalShadeSelectorAsColorPatches, SIGNAL(toggled(bool)),
+            ui->minimalShadeSelectorLineSettings,   SIGNAL(setPatches(bool)));
+
+    connect(ui->minimalShadeSelectorLineHeight,     SIGNAL(valueChanged(int)),
+            ui->minimalShadeSelectorLineSettings,   SIGNAL(setLineHeight(int)));
+
+    connect(ui->minimalShadeSelectorPatchesPerLine, SIGNAL(valueChanged(int)),
+            ui->minimalShadeSelectorLineSettings,   SIGNAL(setPatchCount(int)));
+
 
     //load and save preferences
     //if something in kritarc is missing, then the default from this load function will be used and saved back to kconfig.
-    //this way, cfg.readEntry() in a random part won't be able to set its own default
+    //this way, cfg.readEntry() in any part won't be able to set its own default
     loadPreferences();
     savePreferences();
 }
@@ -127,7 +147,7 @@ void KisColorSelectorSettings::savePreferences() const
 
     cfg.writeEntry("minimalShadeSelectorAsGradient", ui->minimalShadeSelectorAsGradient->isChecked());
     cfg.writeEntry("minimalShadeSelectorPatchCount", ui->minimalShadeSelectorPatchesPerLine->value());
-    cfg.writeEntry("minimalShadeSelectorLineCount",  ui->minimalShadeSelectorLineCount->value());
+    cfg.writeEntry("minimalShadeSelectorLineConfig",  ui->minimalShadeSelectorLineSettings->toString());
     cfg.writeEntry("minimalShadeSelectorLineHeight", ui->minimalShadeSelectorLineHeight->value());
 
     //color selector
@@ -220,7 +240,7 @@ void KisColorSelectorSettings::loadPreferences()
     else ui->minimalShadeSelectorAsColorPatches->setChecked(true);
 
     ui->minimalShadeSelectorPatchesPerLine->setValue(cfg.readEntry("minimalShadeSelectorPatchCount", 10));
-    ui->minimalShadeSelectorLineCount->setValue(cfg.readEntry("minimalShadeSelectorLineCount", 3));
+    ui->minimalShadeSelectorLineSettings->fromString(cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0"));
     ui->minimalShadeSelectorLineHeight->setValue(cfg.readEntry("minimalShadeSelectorLineHeight", 20));
 
     //color selector
@@ -278,7 +298,7 @@ void KisColorSelectorSettings::loadDefaultPreferences()
 //    else
     ui->minimalShadeSelectorAsColorPatches->setChecked(true);
     ui->minimalShadeSelectorPatchesPerLine->setValue(10);
-    ui->minimalShadeSelectorLineCount->setValue(3);
+    ui->minimalShadeSelectorLineSettings->fromString("0|0.2|0|0");
     ui->minimalShadeSelectorLineHeight->setValue(20);
 
     //color selector

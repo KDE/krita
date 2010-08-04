@@ -1,6 +1,7 @@
 #include "kis_shade_selector_line_combo_box.h"
 
 #include <QVBoxLayout>
+#include <QGridLayout>
 #include <QPainter>
 #include <QMouseEvent>
 
@@ -10,14 +11,12 @@ class KisShadeSelectorLineComboBoxPrivate : public QWidget {
 public:
     int spacing;
     int selectorWidth;
-    int selectorHeight;
     QRect highlightArea;
 
     KisShadeSelectorLineComboBoxPrivate(QWidget* parent) :
             QWidget(parent, Qt::Popup),
             spacing(20),
             selectorWidth(100),
-            selectorHeight(20),
             highlightArea(-1,-1,0,0)
     {
         setMouseTracking(true);
@@ -36,8 +35,8 @@ public:
             KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(this->layout()->itemAt(i)->widget());
             Q_ASSERT(item);
             if(item!=0) {
-                item->setMaximumSize(selectorWidth, selectorHeight);
-                item->setMinimumSize(selectorWidth, selectorHeight);
+//                item->setMaximumWidth(selectorWidth);
+//                item->setMinimumWidth(selectorWidth);
                 item->setMouseTracking(true);
                 item->setEnabled(false);
                 item->setColor(QColor(190,50,50));
@@ -77,6 +76,7 @@ protected:
     void mousePressEvent(QMouseEvent* e)
     {
         if(rect().contains(e->pos())) {
+            mouseMoveEvent(e);
             KisShadeSelectorLineComboBox* parent = dynamic_cast<KisShadeSelectorLineComboBox*>(this->parent());
             Q_ASSERT(parent);
             parent->setConfiguration(m_lastActiveConfiguration);
@@ -89,8 +89,23 @@ protected:
 
 KisShadeSelectorLineComboBox::KisShadeSelectorLineComboBox(QWidget *parent) :
     QComboBox(parent),
-    m_private(new KisShadeSelectorLineComboBoxPrivate(this))
+    m_private(new KisShadeSelectorLineComboBoxPrivate(this)),
+    m_currentLine(new KisShadeSelectorLine(0,0,0,this))
 {
+    QGridLayout* l = new QGridLayout(this);
+    l->addWidget(m_currentLine);
+
+    m_currentLine->setEnabled(false);
+    m_currentLine->setColor(QColor(190,50,50));
+
+    // 30 pixels for the arrow of the combobox
+//    setMinimumWidth(m_private->selectorWidth+m_private->spacing+30);
+//    setMaximumWidth(minimumWidth());
+//    m_currentLine->setMaximumWidth(m_private->selectorWidth);
+
+//    setMaximumHeight(QWIDGETSIZE_MAX);
+
+    updateSettings();
 }
 
 void KisShadeSelectorLineComboBox::hidePopup()
@@ -109,5 +124,112 @@ void KisShadeSelectorLineComboBox::showPopup()
 
 void KisShadeSelectorLineComboBox::setConfiguration(const QString &stri)
 {
+    m_currentLine->fromString(stri);
+}
 
+QString KisShadeSelectorLineComboBox::configuration() const
+{
+    return m_currentLine->toString();
+}
+
+void KisShadeSelectorLineComboBox::setLineNumber(int n)
+{
+    m_currentLine->setLineNumber(n);
+    for(int i=0; i<m_private->layout()->count(); i++) {
+        KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_private->layout()->itemAt(i)->widget());
+        Q_ASSERT(item);
+        if(item!=0) {
+            item->setLineNumber(n);;
+        }
+    }
+}
+
+//QSize KisShadeSelectorLineComboBox::sizeHint() const
+//{
+//    return minimumSize();
+//}
+
+void KisShadeSelectorLineComboBox::resizeEvent(QResizeEvent *e)
+{
+    Q_UNUSED(e);
+    m_currentLine->setMaximumWidth(width()-30-m_private->spacing);
+    m_private->setMinimumWidth(width());
+}
+
+void KisShadeSelectorLineComboBox::updateSettings()
+{
+    m_currentLine->updateSettings();
+    for(int i=0; i<m_private->layout()->count(); i++) {
+        KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_private->layout()->itemAt(i)->widget());
+        Q_ASSERT(item);
+        if(item!=0) {
+            item->updateSettings();
+        }
+    }
+
+    setLineHeight(m_currentLine->m_lineHeight);
+}
+
+
+void KisShadeSelectorLineComboBox::setGradient(bool b)
+{
+    m_currentLine->m_gradient=b;
+    for(int i=0; i<m_private->layout()->count(); i++) {
+        KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_private->layout()->itemAt(i)->widget());
+        Q_ASSERT(item);
+        if(item!=0) {
+            item->m_gradient=b;
+        }
+    }
+
+    update();
+}
+
+void KisShadeSelectorLineComboBox::setPatches(bool b)
+{
+    m_currentLine->m_gradient=!b;
+    for(int i=0; i<m_private->layout()->count(); i++) {
+        KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_private->layout()->itemAt(i)->widget());
+        Q_ASSERT(item);
+        if(item!=0) {
+            item->m_gradient=!b;
+        }
+    }
+
+    update();
+}
+
+void KisShadeSelectorLineComboBox::setPatchCount(int count)
+{
+    m_currentLine->m_patchCount=count;
+    for(int i=0; i<m_private->layout()->count(); i++) {
+        KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_private->layout()->itemAt(i)->widget());
+        Q_ASSERT(item);
+        if(item!=0) {
+            item->m_patchCount=count;
+        }
+    }
+
+    update();
+}
+
+void KisShadeSelectorLineComboBox::setLineHeight(int height)
+{
+    m_currentLine->m_lineHeight=height;
+    m_currentLine->setMinimumHeight(height);
+    m_currentLine->setMaximumHeight(height);
+    setMinimumHeight(height+m_private->spacing);
+    setMaximumHeight(height+m_private->spacing);
+
+    for(int i=0; i<m_private->layout()->count(); i++) {
+        KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_private->layout()->itemAt(i)->widget());
+        Q_ASSERT(item);
+        if(item!=0) {
+            item->m_lineHeight=height;
+            item->setMaximumHeight(height);
+            item->setMinimumHeight(height);
+        }
+    }
+
+    update();
 }

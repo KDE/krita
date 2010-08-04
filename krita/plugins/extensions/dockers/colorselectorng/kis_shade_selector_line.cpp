@@ -14,12 +14,19 @@
 
 #include "kis_canvas2.h"
 
+#include <KDebug>
+
+KisShadeSelectorLine::KisShadeSelectorLine(QWidget *parent) :
+    QWidget(parent), m_canvas(0)
+{
+    setDelta(0, 0, 0);
+    updateSettings();
+}
 
 KisShadeSelectorLine::KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta, QWidget *parent) :
     QWidget(parent), m_canvas(0)
 {
     setDelta(hueDelta, satDelta, valDelta);
-
     updateSettings();
 }
 
@@ -44,6 +51,9 @@ void KisShadeSelectorLine::updateSettings()
     m_patchCount = cfg.readEntry("minimalShadeSelectorPatchCount", 10);
     m_lineHeight = cfg.readEntry("minimalShadeSelectorLineHeight", 20);
     m_backgroundColor = QColor(128, 128, 128);
+
+    setMaximumHeight(m_lineHeight);
+    setMinimumHeight(m_lineHeight);
 }
 
 void KisShadeSelectorLine::setCanvas(KisCanvas2 *canvas)
@@ -54,17 +64,23 @@ void KisShadeSelectorLine::setCanvas(KisCanvas2 *canvas)
             this,                        SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
 }
 
+void KisShadeSelectorLine::setLineNumber(int n)
+{
+    m_lineNumber=n;
+}
+
 QString KisShadeSelectorLine::toString() const
 {
-    return QString("%1|%2|%3").arg(m_hueDelta).arg(m_saturationDelta).arg(m_valueDelta);
+    return QString("%1|%2|%3|%4").arg(m_lineNumber).arg(m_hueDelta).arg(m_saturationDelta).arg(m_valueDelta);
 }
 
 void KisShadeSelectorLine::fromString(const QString& string)
 {
     QStringList strili = string.split('|');
-    m_hueDelta = strili.at(0).toDouble();
-    m_saturationDelta = strili.at(1).toDouble();
-    m_valueDelta = strili.at(2).toDouble();
+    m_lineNumber = strili.at(0).toInt();
+    m_hueDelta = strili.at(1).toDouble();
+    m_saturationDelta = strili.at(2).toDouble();
+    m_valueDelta = strili.at(3).toDouble();
 }
 
 void KisShadeSelectorLine::paintEvent(QPaintEvent *)

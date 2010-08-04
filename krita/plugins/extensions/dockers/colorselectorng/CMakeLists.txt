@@ -11,6 +11,7 @@ kis_common_colors.cpp
 kis_minimal_shade_selector.cpp
 kis_shade_selector_line.cpp
 kis_shade_selector_line_combo_box.cpp
+kis_shade_selector_lines_settings.cpp
 kis_color_selector_settings.cpp
 kis_color_selector_container.cpp
 kis_color_selector_base.cpp

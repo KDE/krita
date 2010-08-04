@@ -33,7 +33,6 @@
 #include <QShowEvent>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <ktemporaryfile.h>
 
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -129,14 +128,19 @@ void KisCustomBrushWidget::slotAddPredefined()
         extension = ".gih";
     }
 
+    QString name = nameLineEdit->text();
     QString tempFileName;
     {
-        KTemporaryFile file;
-        file.setPrefix(dir);
-        file.setSuffix(extension);
-        file.setAutoRemove(false);
-        file.open();
-        tempFileName = file.fileName();
+        QFileInfo fileInfo;
+        fileInfo.setFile(dir + name + extension);
+
+        int i = 1;
+        while (fileInfo.exists()) {
+            fileInfo.setFile(dir + name + QString("%1").arg(i) + extension);
+            i++;
+        }
+
+        tempFileName = fileInfo.filePath();
     }
 
     // Add it to the brush server, so that it automatically gets to the mediators, and
@@ -148,7 +152,7 @@ void KisCustomBrushWidget::slotAddPredefined()
         if (nameLineEdit->text().isEmpty()){
             resource->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
         }else{
-            resource->setName(nameLineEdit->text());
+            resource->setName( name );
         }
 
         if (colorAsMask->isChecked()){

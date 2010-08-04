@@ -139,19 +139,23 @@ void KisCustomBrushWidget::slotAddPredefined()
         tempFileName = file.fileName();
     }
 
-    // Save it to that file
-    m_brush->setFilename(tempFileName);
-    if (nameLineEdit->text().isEmpty()){
-        m_brush->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
-    }else{
-        m_brush->setName(nameLineEdit->text());
-    }
-    m_brush->setValid(true);
-
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
     if (m_rServerAdapter) {
-        m_rServerAdapter->addResource(static_cast<KisGbrBrush*>(m_brush.data())->clone());
+        KisGbrBrush * resource = static_cast<KisGbrBrush*>( m_brush.data() )->clone();
+        resource->setFilename(tempFileName);
+        
+        if (nameLineEdit->text().isEmpty()){
+            resource->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
+        }else{
+            resource->setName(nameLineEdit->text());
+        }
+
+        if (colorAsMask->isChecked()){
+            resource->makeMaskImage();
+        }
+    
+        m_rServerAdapter->addResource( resource );
     }
 }
 

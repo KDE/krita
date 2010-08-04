@@ -197,7 +197,7 @@ public:
     KAction *showFileVersions;
     KAction *importFile;
     KAction *exportFile;
-    KAction* toggleDockers;
+    KToggleAction *toggleDockers;
     KRecentFilesAction *recent;
 
     bool isImporting;
@@ -338,8 +338,9 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     QAction *sep = new QAction(this);
     sep->setSeparator(true);
     d->splitViewActionList.append(sep);
-            
+
     d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
+    d->toggleDockers->setCheckedState(KGuiItem(i18n("Hide Dockers")));
     d->toggleDockers->setChecked(true);
     actionCollection()->addAction("view_toggledockers", d->toggleDockers);
 

@@ -34,7 +34,7 @@ class TreeShape;
 class KoShapeContainer;
 
 /// The undo / redo command for shape moving.
-class FLAKE_EXPORT TreeShapeMoveCommand : public QUndoCommand
+class TreeShapeMoveCommand : public QUndoCommand
 {
 public:
     /**

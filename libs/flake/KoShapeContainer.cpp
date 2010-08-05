@@ -22,6 +22,7 @@
 #include "KoShapeContainerModel.h"
 #include "KoShapeBorderModel.h"
 #include "KoShapeContainerDefaultModel.h"
+#include "KoShapeSavingContext.h"
 
 #include <QPointF>
 #include <QPainter>

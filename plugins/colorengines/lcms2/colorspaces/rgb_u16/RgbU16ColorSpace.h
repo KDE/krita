@@ -50,7 +50,7 @@ public:
 class RgbU16ColorSpaceFactory : public LcmsColorSpaceFactory
 {
 public:
-    RgbU16ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_BGRA_16, icSigRgbData) {
+    RgbU16ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_BGRA_16, cmsSigRgbData) {
     }
     virtual QString id() const {
         return RgbU16ColorSpace::colorSpaceId();

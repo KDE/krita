@@ -30,7 +30,7 @@
 
 
 GrayU16ColorSpace ::GrayU16ColorSpace(KoColorProfile *p) :
-        LcmsColorSpace<GrayU16Traits>("GRAYU16", i18n("Grayscale (16-bit integer/channel)"), TYPE_GRAY_16, icSigGrayData, p)
+        LcmsColorSpace<GrayU16Traits>("GRAYU16", i18n("Grayscale (16-bit integer/channel)"), TYPE_GRAY_16, cmsSigGrayData, p)
 {
     addChannel(new KoChannelInfo(i18n("Gray"), 0, 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
 

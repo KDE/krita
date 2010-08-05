@@ -48,7 +48,7 @@ public:
 class XyzU16ColorSpaceFactory : public LcmsColorSpaceFactory
 {
 public:
-    XyzU16ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_XYZA_16, icSigXYZData) {
+    XyzU16ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_XYZA_16, cmsSigXYZData) {
     }
     virtual QString id() const {
         return "XYZA16";

@@ -57,7 +57,7 @@ class RgbU8ColorSpaceFactory : public LcmsColorSpaceFactory
 
 public:
 
-    RgbU8ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_BGRA_8, icSigRgbData) {}
+    RgbU8ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_BGRA_8, cmsSigRgbData) {}
     virtual bool userVisible() const {
         return true;
     }

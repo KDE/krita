@@ -45,7 +45,7 @@ public:
 class CmykU8ColorSpaceFactory : public LcmsColorSpaceFactory
 {
 public:
-    CmykU8ColorSpaceFactory(): LcmsColorSpaceFactory(TYPE_CMYK5_8, icSigCmykData) {}
+    CmykU8ColorSpaceFactory(): LcmsColorSpaceFactory(TYPE_CMYK5_8, cmsSigCmykData) {}
     virtual bool userVisible() const {
         return true;
     }

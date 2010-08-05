@@ -31,7 +31,7 @@
 #include "compositeops/KoCompositeOpErase.h"
 
 KoGrayColorSpace ::KoGrayColorSpace(KoColorProfile *p) :
-        LcmsColorSpace<GrayU8Traits>("GRAYU8", i18n("Grayscale without alpha (8-bit integer/channel)"), TYPE_GRAY_8, icSigGrayData, p)
+        LcmsColorSpace<GrayU8Traits>("GRAYU8", i18n("Grayscale without alpha (8-bit integer/channel)"), TYPE_GRAY_8, cmsSigGrayData, p)
 {
     addChannel(new KoChannelInfo(i18n("Gray"), 0, 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
 

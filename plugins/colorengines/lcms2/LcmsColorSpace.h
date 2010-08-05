@@ -252,10 +252,10 @@ public:
     virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const {
         if (!d->profile) return 0;
 
-        cmsToneCurve transferFunctions[3];
-        transferFunctions[0] = cmsBuildTabulatedToneCurve16(256, transferValues);
-        transferFunctions[1] = cmsBuildGamma(256, 1.0);
-        transferFunctions[2] = cmsBuildGamma(256, 1.0);
+        cmsToneCurve* transferFunctions[3];
+        transferFunctions[0] = cmsBuildTabulatedToneCurve16( 0, 256, transferValues);
+        transferFunctions[1] = cmsBuildGamma(0, 1.0);
+        transferFunctions[2] = cmsBuildGamma(0, 1.0);
 
         KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);
         adj->profiles[1] = cmsCreateLinearizationDeviceLink(cmsSigLabData, transferFunctions);
@@ -271,7 +271,7 @@ public:
 
     virtual KoColorTransformation *createDesaturateAdjustment() const {
         if (!d->profile) return 0;
-
+#if 1
         KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);
 
         adj->profiles[0] = d->profile->lcmsProfile();
@@ -324,18 +324,16 @@ public:
         adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(), INTENT_PERCEPTUAL, cmsFLAGS_NOWHITEONWHITEFIXUP);
 
         return adj;
+#endif
     }
 
     virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const*transferValues) const {
         if (!d->profile) return 0;
 
-        LPGAMMATABLE *transferFunctions = new LPGAMMATABLE[ _CSTraits::channels_nb +1];
+        cmsToneCurve ** transferFunctions = new cmsToneCurve*[ _CSTraits::channels_nb +1];
 
         for (uint ch = 0; ch < this->colorChannelCount(); ch++) {
-            transferFunctions[ch] = cmsBuildGamma(256, 1.0);
-            for (uint i = 0; i < 256; i++) {
-                transferFunctions[ch]->GammaTable[i] = transferValues[ch][i];
-            }
+            cmsBuildTabulatedToneCurve16( 0, 256, transferValues[ch]);
         }
 
         KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);

@@ -47,7 +47,7 @@ public:
 class GrayU16ColorSpaceFactory : public LcmsColorSpaceFactory
 {
 public:
-    GrayU16ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_GRAY_16, icSigGrayData) {}
+    GrayU16ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_GRAY_16, cmsSigGrayData) {}
     virtual QString id() const {
         return "GRAYU16";
     }

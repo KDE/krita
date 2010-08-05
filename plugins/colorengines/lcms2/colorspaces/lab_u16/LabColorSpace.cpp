@@ -26,7 +26,7 @@
 #include "../compositeops/KoCompositeOps.h"
 
 LabColorSpace::LabColorSpace(KoColorProfile *p) :
-        LcmsColorSpace<KoLabU16Traits>(colorSpaceId(), i18n("L*a*b* (16-bit integer/channel)"),  COLORSPACE_SH(PT_Lab) | CHANNELS_SH(3) | BYTES_SH(2) | EXTRA_SH(1), icSigLabData, p)
+        LcmsColorSpace<KoLabU16Traits>(colorSpaceId(), i18n("L*a*b* (16-bit integer/channel)"),  COLORSPACE_SH(PT_Lab) | CHANNELS_SH(3) | BYTES_SH(2) | EXTRA_SH(1), cmsSigLabData, p)
 {
     addChannel(new KoChannelInfo(i18n("Lightness"), CHANNEL_L * sizeof(quint16), CHANNEL_L, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(100, 100, 100)));
     addChannel(new KoChannelInfo(i18n("a*"), CHANNEL_A * sizeof(quint16), CHANNEL_A, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(150, 150, 150)));

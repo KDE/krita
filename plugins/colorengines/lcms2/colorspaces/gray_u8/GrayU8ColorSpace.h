@@ -46,7 +46,7 @@ public:
 class KoGrayAU8ColorSpaceFactory : public LcmsColorSpaceFactory
 {
 public:
-    KoGrayAU8ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_GRAYA_8, icSigGrayData) {
+    KoGrayAU8ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_GRAYA_8, cmsSigGrayData) {
     }
     virtual QString id() const {
         return "GRAYA";

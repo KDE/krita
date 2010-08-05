@@ -60,7 +60,7 @@ private:
 class LabColorSpaceFactory : public LcmsColorSpaceFactory
 {
 public:
-    LabColorSpaceFactory() : LcmsColorSpaceFactory((COLORSPACE_SH(PT_Lab) | CHANNELS_SH(3) | BYTES_SH(2) | EXTRA_SH(1)), icSigLabData) {}
+    LabColorSpaceFactory() : LcmsColorSpaceFactory((COLORSPACE_SH(PT_Lab) | CHANNELS_SH(3) | BYTES_SH(2) | EXTRA_SH(1)), cmsSigLabData) {}
     virtual bool userVisible() const {
         return true;
     }

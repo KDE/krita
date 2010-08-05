@@ -29,7 +29,7 @@
 #include "compositeops/RgbCompositeOps.h"
 
 RgbU16ColorSpace::RgbU16ColorSpace(KoColorProfile *p) :
-        LcmsColorSpace<KoRgbU16Traits>(colorSpaceId(), i18n("RGB (16-bit integer/channel)"),  TYPE_BGRA_16, icSigRgbData, p)
+        LcmsColorSpace<KoRgbU16Traits>(colorSpaceId(), i18n("RGB (16-bit integer/channel)"),  TYPE_BGRA_16, cmsSigRgbData, p)
 {
     addChannel(new KoChannelInfo(i18n("Red"),   2*sizeof(quint16), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT16, 2, QColor(255, 0, 0)));
     addChannel(new KoChannelInfo(i18n("Green"), 1*sizeof(quint16), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT16, 2, QColor(0, 255, 0)));

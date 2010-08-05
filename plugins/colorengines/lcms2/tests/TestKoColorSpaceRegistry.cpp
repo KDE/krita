@@ -33,10 +33,10 @@ void TestKoColorSpaceRegistry::testRgbU8()
     cmsHPROFILE lcmsProfile = cmsCreate_sRGBProfile();
     QString testProfileName = "TestRGBU8ProfileName";
 
-    cmsAddTag(lcmsProfile, icSigProfileDescriptionTag, testProfileName.toLatin1().data());
-    cmsAddTag(lcmsProfile, icSigDeviceModelDescTag, testProfileName.toLatin1().data());
+    cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().data());
+    cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().data());
     QByteArray manufacturerName("");
-    cmsAddTag(lcmsProfile, icSigDeviceMfgDescTag, manufacturerName.data());
+    cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, manufacturerName.data());
 
 }
 
@@ -58,10 +58,10 @@ void TestKoColorSpaceRegistry::testRgbU16()
     cmsHPROFILE lcmsProfile = cmsCreate_sRGBProfile();
     QString testProfileName = "TestRGBU16ProfileName";
 
-    cmsAddTag(lcmsProfile, icSigProfileDescriptionTag, testProfileName.toLatin1().data());
-    cmsAddTag(lcmsProfile, icSigDeviceModelDescTag, testProfileName.toLatin1().data());
+    cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().data());
+    cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().data());
     QByteArray manufacturerName("");
-    cmsAddTag(lcmsProfile, icSigDeviceMfgDescTag, manufacturerName.data());
+    cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, manufacturerName.data());
 
 }
 
@@ -85,13 +85,13 @@ void TestKoColorSpaceRegistry::testLab()
     whitepoint.y = 0.33;
     whitepoint.Y = 1.0;
 
-    cmsHPROFILE lcmsProfile = cmsCreateLabProfile(&whitepoint);
+    cmsHPROFILE lcmsProfile = cmsCreateLab2Profile(&whitepoint);
     QString testProfileName = "TestLabProfileName";
 
-    cmsAddTag(lcmsProfile, icSigProfileDescriptionTag, testProfileName.toLatin1().data());
-    cmsAddTag(lcmsProfile, icSigDeviceModelDescTag, testProfileName.toLatin1().data());
+    cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().data());
+    cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().data());
     QByteArray manufacturerName("");
-    cmsAddTag(lcmsProfile, icSigDeviceMfgDescTag, manufacturerName.data());
+    cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, manufacturerName.data());
 
 }
 

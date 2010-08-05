@@ -36,8 +36,8 @@ public:
     Private() : valid(false), suitableForOutput(false) { }
 
     cmsHPROFILE profile;
-    icColorSpaceSignature colorSpaceSignature;
-    icProfileClassSignature deviceClass;
+    cmsColorSpaceSignature colorSpaceSignature;
+    cmsProfileClassSignature deviceClass;
     QString productDescription;
     QString productInfo;
     QString manufacturer;
@@ -64,13 +64,13 @@ LcmsColorProfileContainer::LcmsColorProfileContainer(IccColorProfile::Data * dat
 
 QByteArray LcmsColorProfileContainer::lcmsProfileToByteArray(const cmsHPROFILE profile)
 {
-    size_t  bytesNeeded = 0;
+    cmsUInt32Number  bytesNeeded = 0;
     // Make a raw data image ready for saving
-    _cmsSaveProfileToMem(profile, 0, &bytesNeeded); // calc size
+    cmsSaveProfileToMem(profile, 0, &bytesNeeded); // calc size
     QByteArray rawData;
     rawData.resize(bytesNeeded);
     if (rawData.size() >= (int)bytesNeeded) {
-        _cmsSaveProfileToMem(profile, rawData.data(), &bytesNeeded); // fill buffer
+        cmsSaveProfileToMem(profile, rawData.data(), &bytesNeeded); // fill buffer
     } else {
         errorPigment << "Couldn't resize the profile buffer, system is probably running out of memory.";
         rawData.resize(0);
@@ -99,10 +99,10 @@ QByteArray LcmsColorProfileContainer::createFromChromacities(const KoRGBChromati
     lcmsToPigmentViceVersaStructureCopy(primaries.Blue, _chromacities.primaries.Blue);
     lcmsToPigmentViceVersaStructureCopy(whitePoint, _chromacities.whitePoint);
     const int numGammaTableEntries = 256;
-    LPGAMMATABLE gammaTable = cmsBuildGamma(numGammaTableEntries, gamma);
+    cmsToneCurve* gammaTable = cmsBuildGamma(0, gamma);
 
     const int numTransferFunctions = 3;
-    LPGAMMATABLE transferFunctions[numTransferFunctions];
+    cmsToneCurve* transferFunctions[numTransferFunctions];
 
     for (int i = 0; i < numTransferFunctions; ++i) {
         transferFunctions[i] = gammaTable;
@@ -127,15 +127,15 @@ QByteArray LcmsColorProfileContainer::createFromChromacities(const KoRGBChromati
 
     // icSigProfileDescriptionTag is the compulsory tag and is the profile name
     // displayed by other applications.
-    cmsAddTag(profile, icSigProfileDescriptionTag, name.toLatin1().data());
+    cmsWriteTag(profile, cmsSigProfileDescriptionTag, name.toLatin1().data());
 
-    cmsAddTag(profile, icSigDeviceModelDescTag, name.toLatin1().data());
+    cmsWriteTag(profile, cmsSigDeviceModelDescTag, name.toLatin1().data());
 
     // Clear the default manufacturer's tag that is set to "(lcms internal)"
     QByteArray ba("");
-    cmsAddTag(profile, icSigDeviceMfgDescTag, ba.data());
+    cmsWriteTag(profile, cmsSigDeviceMfgDescTag, ba.data());
 
-    cmsFreeGamma(gammaTable);
+    cmsFreeToneCurve(gammaTable);
     QByteArray profileArray = lcmsProfileToByteArray(profile);
     cmsCloseProfile(profile);
     return profileArray;
@@ -151,7 +151,7 @@ bool LcmsColorProfileContainer::init()
 {
     if (d->profile) cmsCloseProfile(d->profile);
 
-    d->profile = cmsOpenProfileFromMem((void*)d->data->rawData().constData(), (DWORD)d->data->rawData().size());
+    d->profile = cmsOpenProfileFromMem((void*)d->data->rawData().constData(), d->data->rawData().size());
 
 #ifndef NDEBUG
     if (d->data->rawData().size() == 4096) {

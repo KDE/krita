@@ -362,3 +362,20 @@ void KisImagePipeBrush::sanitize()
     }
 }
 
+void KisImagePipeBrush::setAngle(qreal _angle)
+{
+    KisBrush::setAngle(_angle);
+    for (int i = 0; i < m_d->brushes.count(); i++){
+        m_d->brushes.at(i)->setAngle(_angle);
+    }
+
+}
+
+void KisImagePipeBrush::setScale(qreal _scale)
+{
+    KisBrush::setScale(_scale);
+    for (int i = 0; i < m_d->brushes.count(); i++){
+        m_d->brushes.at(i)->setScale(_scale);
+    }
+   
+}

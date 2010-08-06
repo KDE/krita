@@ -265,9 +265,9 @@ public:
 
     virtual const KisBoundary* boundary() const;
 
-    void setScale(qreal _scale);
+    virtual void setScale(qreal _scale);
     qreal scale() const;
-    void setAngle(qreal _angle);
+    virtual void setAngle(qreal _angle);
     qreal angle();
 protected:
 

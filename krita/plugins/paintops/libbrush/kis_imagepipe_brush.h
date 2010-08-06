@@ -95,6 +95,8 @@ public:
     virtual KisImagePipeBrush* clone() const;
 
     virtual QString defaultFileExtension() const;
+    virtual void setAngle(qreal _angle);
+    virtual void setScale(qreal _scale);
 
     /**
      *  @return the next mask in the pipe.

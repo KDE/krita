@@ -157,17 +157,17 @@ bool LcmsColorProfileContainer::init()
 #endif
 
     if (d->profile) {
-        char buffer[500];
+        wchar_t buffer[500];
         d->colorSpaceSignature = cmsGetColorSpace(d->profile);
         d->deviceClass = cmsGetDeviceClass(d->profile);
-        cmsGetProfileInfoASCII(d->profile, cmsInfoDescription, cmsNoLanguage, cmsNoCountry, buffer, 500);
-        d->productDescription = QString::fromAscii(buffer);
+        cmsGetProfileInfo(d->profile, cmsInfoDescription, cmsNoLanguage, cmsNoCountry, buffer, 500);
+        d->productDescription = QString::fromWCharArray(buffer);
         d->valid = true;
-        cmsGetProfileInfoASCII(d->profile, cmsInfoModel, cmsNoLanguage, cmsNoCountry, buffer, 500);
-        d->name = QString::fromAscii(buffer);
+        cmsGetProfileInfo(d->profile, cmsInfoModel, cmsNoLanguage, cmsNoCountry, buffer, 500);
+        d->name = QString::fromWCharArray(buffer);
 
-        cmsGetProfileInfoASCII(d->profile, cmsInfoManufacturer, cmsNoLanguage, cmsNoCountry, buffer, 500);
-        d->manufacturer = QString::fromAscii(buffer);
+        cmsGetProfileInfo(d->profile, cmsInfoManufacturer, cmsNoLanguage, cmsNoCountry, buffer, 500);
+        d->manufacturer = QString::fromWCharArray(buffer);
         
         // Check if the profile can convert (something->this)
 #if 0

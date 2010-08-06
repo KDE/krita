@@ -44,7 +44,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="generalSettings">
       <attribute name="title">
@@ -298,16 +298,16 @@
              <number>45</number>
             </property>
             <property name="value">
-             <number>135</number>
+             <number>127</number>
             </property>
             <property name="sliderPosition">
-             <number>135</number>
+             <number>127</number>
             </property>
             <property name="tracking">
              <bool>true</bool>
             </property>
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="invertedAppearance">
              <bool>false</bool>
@@ -344,9 +344,9 @@
               </property>
               <property name="color">
                <color>
-                <red>0</red>
-                <green>0</green>
-                <blue>255</blue>
+                <red>255</red>
+                <green>255</green>
+                <blue>0</blue>
                </color>
               </property>
              </widget>
@@ -439,7 +439,7 @@
                <number>15</number>
               </property>
               <property name="value">
-               <number>135</number>
+               <number>127</number>
               </property>
              </widget>
             </item>
@@ -490,16 +490,16 @@
              <number>45</number>
             </property>
             <property name="value">
-             <number>270</number>
+             <number>33</number>
             </property>
             <property name="sliderPosition">
-             <number>270</number>
+             <number>33</number>
             </property>
             <property name="tracking">
              <bool>true</bool>
             </property>
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="invertedAppearance">
              <bool>false</bool>
@@ -606,7 +606,7 @@
                <number>15</number>
               </property>
               <property name="value">
-               <number>270</number>
+               <number>33</number>
               </property>
              </widget>
             </item>
@@ -700,7 +700,7 @@
              <bool>true</bool>
             </property>
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="invertedAppearance">
              <bool>false</bool>
@@ -895,7 +895,7 @@
              <bool>true</bool>
             </property>
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="invertedAppearance">
              <bool>false</bool>

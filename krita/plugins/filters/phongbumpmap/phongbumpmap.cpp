@@ -1,4 +1,5 @@
 /*
+ *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
  *  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -115,7 +116,6 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
     }
         
     timer.start();
-    quint32 demora_proceso[] = {0, 0, 0};
     
     KisPaintDeviceSP src;
     src = srcInfo.paintDevice();
@@ -127,15 +127,15 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
             m_heightChannel = channel;
     }
     
-    //qDebug("Tiempo de preparacion: %d ms", timer.restart());
+    qDebug("Tiempo de preparacion: %d ms", timer.restart());
     
     QRect inputArea(srcInfo.topLeft(), size);
-    inputArea.adjust(-2, -2, 2, 2);
+    inputArea.adjust(-1, -1, 1, 1);
     QRect outputArea = inputArea.adjusted(1, 1, -1, -1);
     //QRect outputArea(dstInfo.topLeft().x()+1, dstInfo.topLeft().y()+1, size.width()-1, size.height()-1);
     
-    qDebug() << "inputArea: " << inputArea << srcInfo.topLeft();
-    qDebug() << "outputArea: " << outputArea << dstInfo.topLeft();
+    //qDebug() << "inputArea: " << inputArea << srcInfo.topLeft();
+    //qDebug() << "outputArea: " << outputArea << dstInfo.topLeft();
     quint32 posup;
     quint32 posdown;
     quint32 posleft;
@@ -174,7 +174,7 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
     const int OUTPUT_OFFSET = 1;
     
     QVector<quint8*> tileChannels;
-    PhongPixelProcessor tileRenderer;
+    PhongPixelProcessor tileRenderer(config);
     
     //======================================
     //===============RENDER=================
@@ -323,13 +323,11 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
     sneaky->convertFromQImage(bumpmap, "");
     leHack.bitBlt(dstInfo.topLeft(), sneaky, sneaky->exactBounds());
     */
-    qDebug() << bumpmap.size();
+    //qDebug() << bumpmap.size();
     dstInfo.paintDevice()->convertFromQImage(bumpmap, "", dstInfo.topLeft().x(), dstInfo.topLeft().y());
     qDebug("Tiempo deconversion: %d ms", timer.elapsed());
-    /*
-    for (int yIndex = 0; yIndex < bumpmap.height(); yIndex++)
-        delete bumpmapByteLines[yIndex];
-    */
+    
+    delete [] bumpmapByteLines;
 }
 
 
@@ -357,7 +355,7 @@ QRect KisFilterPhongBumpmap::neededRect(const QRect &rect, const KisFilterConfig
 
 QRect KisFilterPhongBumpmap::changedRect(const QRect &rect, const KisFilterConfiguration* config) const
 {
-    return rect.adjusted(-1, -1, 1, 1);
+    return rect.adjusted(-2, -2, 2, 2);
 }
 
 
@@ -407,10 +405,10 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     connect(m_page->specularReflectivityCheckBox, SIGNAL(toggled(bool)),
             m_page->shinynessExponentLabel, SLOT(setEnabled(bool)));
     
-    QRect aersh = QRect(0, 0, 600, 350);
-    parent->setMaximumWidth(600);
-    parent->layout()->setGeometry(aersh);
-    parent->layout()->addWidget(m_page);
+    QVBoxLayout * l = new QVBoxLayout(this);
+    Q_CHECK_PTR(l);
+
+    l->addWidget(m_page);
     
     /* fill in the channel chooser */
     QList<KoChannelInfo *> channels = m_device->colorSpace()->channels();
@@ -428,8 +426,27 @@ void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfigurat
 KisPropertiesConfiguration* KisPhongBumpmapConfigWidget::configuration() const
 {
     KisFilterConfiguration * config = new KisFilterConfiguration("phongbumpmap", 2);
-    config->setProperty("heightChannel", m_page->heightChannelComboBox->currentText());
-    
+    config->setProperty(PHONG_HEIGHT_CHANNEL, m_page->heightChannelComboBox->currentText());
+    config->setProperty(PHONG_AMBIENT_REFLECTIVITY, m_page->ambientReflectivityKisDoubleSliderSpinBox->value());
+    config->setProperty(PHONG_DIFFUSE_REFLECTIVITY, m_page->diffuseReflectivityKisDoubleSliderSpinBox->value());
+    config->setProperty(PHONG_SPECULAR_REFLECTIVITY, m_page->specularReflectivityKisDoubleSliderSpinBox->value());
+    config->setProperty(PHONG_SHINYNESS_EXPONENT, m_page->shinynessExponentKisSliderSpinBox->value());
+    config->setProperty(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED, m_page->diffuseReflectivityCheckBox->isChecked());
+    config->setProperty(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED, m_page->specularReflectivityCheckBox->isChecked());
+    config->setProperty(PHONG_SHINYNESS_EXPONENT_IS_ENABLED, m_page->specularReflectivityCheckBox->isChecked());
+    config->setProperty(PHONG_ILLUMINANT_COLOR[1], m_page->lightKColorCombo1->color());
+    config->setProperty(PHONG_ILLUMINANT_COLOR[2], m_page->lightKColorCombo2->color());
+    config->setProperty(PHONG_ILLUMINANT_COLOR[3], m_page->lightKColorCombo3->color());
+    config->setProperty(PHONG_ILLUMINANT_COLOR[4], m_page->lightKColorCombo4->color());
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[1], m_page->azimuthSpinBox1->value());
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[2], m_page->azimuthSpinBox2->value());
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[3], m_page->azimuthSpinBox3->value());
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[4], m_page->azimuthSpinBox4->value());
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[1], m_page->inclinationSpinBox1->value());
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[2], m_page->inclinationSpinBox2->value());
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[3], m_page->inclinationSpinBox3->value());
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[4], m_page->inclinationSpinBox4->value());
+
     return config;
 }
 

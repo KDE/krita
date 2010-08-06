@@ -19,50 +19,54 @@
 #include "phong_pixel_processor.h"
 #include <cmath>
 
-PhongPixelProcessor::PhongPixelProcessor()
+
+PhongPixelProcessor::PhongPixelProcessor(const KisPropertiesConfiguration* config)
 {
-    initialize();
+    initialize(config);
 }
 
-PhongPixelProcessor::PhongPixelProcessor(quint8 hmap[])
+void PhongPixelProcessor::initialize(const KisPropertiesConfiguration* config)
 {
-    heightmap = hmap;
-    initialize();
-}
-
-PhongPixelProcessor::PhongPixelProcessor(quint8* hmap[])
-{
-    fastHeightmap = hmap;
-    initialize();
-}
-
-void PhongPixelProcessor::initialize()
-{
-    reflection_vector = QVector3D(0, 0, 0);
+    // Basic, fundamental
     normal_vector = QVector3D(0, 0, 1);
+    vision_vector = QVector3D(0, 0, 1);
     x_vector = QVector3D(1, 0, 0);
     y_vector = QVector3D(0, 1, 0);
-    vision_vector = QVector3D(0, 0, 1);
+    
+    // Mutable
+    reflection_vector = QVector3D(0, 0, 0);
+    
     setLightVector(QVector3D(-8, 8, 2));
     
-    Illuminant light1;
-    Illuminant light2;
-    light1.RGBvalue << 0 << 0 << 1;
-    light2.RGBvalue << 1 << 0 << 0;
-    light1.lightVector = QVector3D(6, 6, 3);
-    light1.lightVector.normalize();
-    light2.lightVector = QVector3D(-8, 8, 5);
-    light2.lightVector.normalize();
-    lightSources.append(light1);
-    lightSources.append(light2);
+    Illuminant light[PHONG_TOTAL_ILLUMINANTS];
+    QVariant guiLight[PHONG_TOTAL_ILLUMINANTS];
+    //qint32 guiAzimuth[PHONG_ILLUMINANT_COLOR];
+    //qint32 guiInclination[PHONG_TOTAL_ILLUMINANTS];
     
-    fastLight = light1;
-    fastLight2 = light2;
+    qint32 azimuth;
+    qint32 inclination;
+    
+    for (int i = 0; i < PHONG_TOTAL_ILLUMINANTS; i++) {
+        config->getProperty(PHONG_ILLUMINANT_COLOR[i+1], guiLight[i]);
+        light[i].RGBvalue << guiLight[i].value<QColor>().redF();
+        light[i].RGBvalue << guiLight[i].value<QColor>().greenF();
+        light[i].RGBvalue << guiLight[i].value<QColor>().blueF();
+        
+        azimuth = config->getInt(PHONG_ILLUMINANT_AZIMUTH[i+1]);
+        inclination = config->getInt(PHONG_ILLUMINANT_INCLINATION[i+1]);
+        light[i].lightVector.setX( cos( azimuth * M_PI / 180 ) );
+        light[i].lightVector.setY( sin( azimuth * M_PI / 180 ) );
+        light[i].lightVector.setZ( cos( inclination * M_PI / 180 ) );
+        lightSources.append(light[i]);
+    }
+    
+    fastLight = light[0];
+    fastLight2 = light[1];
     //Ka, Kd and Ks must be between 0 and 1 or grave errors will happen
-    Ka = 0.0;
-    Kd = 1;
-    Ks = 1;
-    shiny_exp = 40;
+    Ka = config->getDouble(PHONG_AMBIENT_REFLECTIVITY);
+    Kd = config->getDouble(PHONG_DIFFUSE_REFLECTIVITY);
+    Ks = config->getDouble(PHONG_SPECULAR_REFLECTIVITY);
+    shiny_exp = config->getInt(PHONG_SHINYNESS_EXPONENT);
     
     Ia = Id = Is = 0;
     
@@ -123,6 +127,10 @@ QRgb PhongPixelProcessor::reallyFastIlluminatePixel(quint32 posup, quint32 posdo
         computation[channel] += Id;
     }
     
+    for (int i = 0; i < 3; i++)
+        if (computation[i] > 1)
+            computation[i] = 1;
+
     pixelColor.setRedF(computation[0]);
     pixelColor.setGreenF(computation[1]);
     pixelColor.setBlueF(computation[2]);

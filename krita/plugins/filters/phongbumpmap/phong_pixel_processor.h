@@ -24,6 +24,9 @@
 #include <QPair>
 #include <QMap>
 
+#include "constants.h"
+#include "kis_properties_configuration.h"
+
 struct Illuminant
 {
     QList<qreal> RGBvalue;
@@ -34,12 +37,10 @@ class PhongPixelProcessor
 {
     
 public:
-    PhongPixelProcessor();
-    PhongPixelProcessor(quint8* hmap[]);
-    PhongPixelProcessor(quint8 hmap[]);
+    PhongPixelProcessor(const KisPropertiesConfiguration* config);
     ~PhongPixelProcessor();
     
-    void initialize();
+    void initialize(const KisPropertiesConfiguration* config);
     
     QVector3D reflection_vector;
     QVector3D normal_vector;

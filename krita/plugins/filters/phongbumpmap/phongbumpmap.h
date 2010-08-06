@@ -30,7 +30,10 @@
 
 #include "ui_wdgphongbumpmap.h"
 
+#include "constants.h"
+
 #include "phong_pixel_processor.h"
+
 
 class KisNodeModel;
 

@@ -1172,7 +1172,7 @@ void KisBrush::generateBoundary() const
     } else {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         dev = new KisFixedPaintDevice(cs);
-        mask(dev, KoColor(Qt::black, cs) , 1.0, 1.0, 0.0, KisPaintInformation());
+        mask(dev, KoColor(Qt::black, cs) , 1.0/scale(), 1.0/scale(), 0.0, KisPaintInformation());
 #if 0
         KisQImagemaskSP amask = mask(KisPaintInformation());
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);

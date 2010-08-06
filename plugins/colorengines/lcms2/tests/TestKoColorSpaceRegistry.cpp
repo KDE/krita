@@ -35,8 +35,7 @@ void TestKoColorSpaceRegistry::testRgbU8()
 
     cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().data());
     cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().data());
-    QByteArray manufacturerName("");
-    cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, manufacturerName.data());
+    cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, "");
 
 }
 
@@ -60,8 +59,7 @@ void TestKoColorSpaceRegistry::testRgbU16()
 
     cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().data());
     cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().data());
-    QByteArray manufacturerName("");
-    cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, manufacturerName.data());
+    cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, "");
 
 }
 
@@ -90,8 +88,7 @@ void TestKoColorSpaceRegistry::testLab()
 
     cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().data());
     cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().data());
-    QByteArray manufacturerName("");
-    cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, manufacturerName.data());
+    cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, "");
 
 }
 

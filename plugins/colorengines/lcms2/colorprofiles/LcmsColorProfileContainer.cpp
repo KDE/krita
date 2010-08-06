@@ -39,10 +39,8 @@ public:
     cmsColorSpaceSignature colorSpaceSignature;
     cmsProfileClassSignature deviceClass;
     QString productDescription;
-    QString productInfo;
     QString manufacturer;
     QString name;
-    QString info;
     IccColorProfile::Data * data;
     bool valid;
     bool suitableForOutput;
@@ -98,7 +96,6 @@ QByteArray LcmsColorProfileContainer::createFromChromacities(const KoRGBChromati
     lcmsToPigmentViceVersaStructureCopy(primaries.Green, _chromacities.primaries.Green);
     lcmsToPigmentViceVersaStructureCopy(primaries.Blue, _chromacities.primaries.Blue);
     lcmsToPigmentViceVersaStructureCopy(whitePoint, _chromacities.whitePoint);
-    const int numGammaTableEntries = 256;
     cmsToneCurve* gammaTable = cmsBuildGamma(0, gamma);
 
     const int numTransferFunctions = 3;
@@ -160,14 +157,18 @@ bool LcmsColorProfileContainer::init()
 #endif
 
     if (d->profile) {
+        char buffer[500];
         d->colorSpaceSignature = cmsGetColorSpace(d->profile);
         d->deviceClass = cmsGetDeviceClass(d->profile);
-        d->productDescription = cmsTakeProductDesc(d->profile);
-        d->productInfo = cmsTakeProductInfo(d->profile);
+        cmsGetProfileInfoASCII(d->profile, cmsInfoDescription, cmsNoLanguage, cmsNoCountry, buffer, 500);
+        d->productDescription = QString::fromAscii(buffer);
         d->valid = true;
-        d->name = cmsTakeProductName(d->profile);
-        d->info = d->productInfo;
+        cmsGetProfileInfoASCII(d->profile, cmsInfoModel, cmsNoLanguage, cmsNoCountry, buffer, 500);
+        d->name = QString::fromAscii(buffer);
 
+        cmsGetProfileInfoASCII(d->profile, cmsInfoManufacturer, cmsNoLanguage, cmsNoCountry, buffer, 500);
+        d->manufacturer = QString::fromAscii(buffer);
+        
         // Check if the profile can convert (something->this)
 #if 0
 //         LPMATSHAPER OutMatShaper = cmsBuildOutputMatrixShaper(d->profile);
@@ -183,12 +184,12 @@ bool LcmsColorProfileContainer::init()
             d->suitableForOutput = true;
         }
 #endif
-        if (cmsIsTag(d->profile, icSigAToB0Tag)  &&
-                cmsIsTag(d->profile, icSigAToB1Tag) &&
-                cmsIsTag(d->profile, icSigAToB2Tag) &&
-                cmsIsTag(d->profile, icSigBToA0Tag) &&
-                cmsIsTag(d->profile, icSigBToA1Tag)  &&
-                cmsIsTag(d->profile, icSigBToA2Tag)) {
+        if (cmsIsTag(d->profile, cmsSigAToB0Tag)  &&
+                cmsIsTag(d->profile, cmsSigAToB1Tag) &&
+                cmsIsTag(d->profile, cmsSigAToB2Tag) &&
+                cmsIsTag(d->profile, cmsSigBToA0Tag) &&
+                cmsIsTag(d->profile, cmsSigBToA1Tag)  &&
+                cmsIsTag(d->profile, cmsSigBToA2Tag)) {
             d->suitableForOutput = true;
         } else {
             d->suitableForOutput = false;
@@ -212,24 +213,14 @@ cmsHPROFILE LcmsColorProfileContainer::lcmsProfile() const
     return d->profile;
 }
 
-icColorSpaceSignature LcmsColorProfileContainer::colorSpaceSignature() const
+cmsColorSpaceSignature LcmsColorProfileContainer::colorSpaceSignature() const
 {
     return d->colorSpaceSignature;
 }
 
-icProfileClassSignature LcmsColorProfileContainer::deviceClass() const
+cmsProfileClassSignature LcmsColorProfileContainer::deviceClass() const
 {
     return d->deviceClass;
-}
-
-QString LcmsColorProfileContainer::productDescription() const
-{
-    return d->productDescription;
-}
-
-QString LcmsColorProfileContainer::productInfo() const
-{
-    return d->productInfo;
 }
 
 QString LcmsColorProfileContainer::manufacturer() const
@@ -249,12 +240,12 @@ bool LcmsColorProfileContainer::isSuitableForOutput() const
 
 bool LcmsColorProfileContainer::isSuitableForPrinting() const
 {
-    return deviceClass() == icSigOutputClass;
+    return deviceClass() == cmsSigOutputClass;
 }
 
 bool LcmsColorProfileContainer::isSuitableForDisplay() const
 {
-    return deviceClass() == icSigDisplayClass;
+    return deviceClass() == cmsSigDisplayClass;
 }
 
 QString LcmsColorProfileContainer::name() const
@@ -263,16 +254,16 @@ QString LcmsColorProfileContainer::name() const
 }
 QString LcmsColorProfileContainer::info() const
 {
-    return d->info;
+    return d->productDescription;
 }
 
 static KoCIExyY RGB2xyY(cmsHPROFILE RGBProfile, qreal red, qreal green, qreal blue)
 {
     cmsHPROFILE XYZProfile = cmsCreateXYZProfile();
 
-    const DWORD inputFormat = TYPE_RGB_DBL;
-    const DWORD outputFormat = TYPE_XYZ_DBL;
-    const DWORD transformFlags = cmsFLAGS_NOTPRECALC;
+    const cmsUInt32Number inputFormat = TYPE_RGB_DBL;
+    const cmsUInt32Number outputFormat = TYPE_XYZ_DBL;
+    const cmsUInt32Number transformFlags = cmsFLAGS_LOWRESPRECALC;
 
     cmsHTRANSFORM transform = cmsCreateTransform(RGBProfile, inputFormat, XYZProfile, outputFormat,
                               INTENT_ABSOLUTE_COLORIMETRIC, transformFlags);
@@ -318,7 +309,7 @@ static KoCIExyY RGB2xyY(cmsHPROFILE RGBProfile, qreal red, qreal green, qreal bl
 
 KoRGBChromaticities* LcmsColorProfileContainer::chromaticitiesFromProfile() const
 {
-    if (cmsGetColorSpace(d->profile) != icSigRgbData) return 0;
+    if (cmsGetColorSpace(d->profile) != cmsSigRgbData) return 0;
 
     KoRGBChromaticities* chromaticities = new KoRGBChromaticities();
 

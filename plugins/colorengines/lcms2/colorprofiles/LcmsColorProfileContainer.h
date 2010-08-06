@@ -70,14 +70,6 @@ public:
      */
     cmsProfileClassSignature deviceClass() const;
     /**
-     * @return the description of the profile
-     */
-    QString productDescription() const;
-    /**
-     * @return some information about the profile
-     */
-    QString productInfo() const;
-    /**
      * @return the name of the manufacturer
      */
     QString manufacturer() const;

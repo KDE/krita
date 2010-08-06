@@ -157,16 +157,18 @@ void KisBrushSelectionWidget::setCurrentBrush(KisBrushSP brush)
 
 }
 
-void KisBrushSelectionWidget::setAutoBrushDiameter(qreal diameter)
+void KisBrushSelectionWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
 {
-    m_autoBrushWidget->setAutoBrushDiameter(diameter);
+    if (m_buttonGroup->checkedId() == AUTOBRUSH){
+        m_autoBrushWidget->setBrushSize(dxPixels, dyPixels);
+
+    }else if (m_buttonGroup->checkedId() == PREDEFINEDBRUSH){
+    
+        m_brushChooser->setBrushSize(dxPixels, dyPixels);
+    
+    }
 }
 
-
-qreal KisBrushSelectionWidget::autoBrushDiameter()
-{
-    return m_autoBrushWidget->autoBrushDiameter();
-}
 
 void KisBrushSelectionWidget::buttonClicked(int id)
 {

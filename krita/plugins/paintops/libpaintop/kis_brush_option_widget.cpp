@@ -79,16 +79,11 @@ void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfiguration* s
 }
 
 
-void KisBrushOptionWidget::setAutoBrushDiameter(qreal diameter)
+void KisBrushOptionWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
 {
-    m_brushSelectionWidget->setAutoBrushDiameter(diameter);
+    m_brushSelectionWidget->setBrushSize(dxPixels, dyPixels);
 }
 
-
-qreal KisBrushOptionWidget::autoBrushDiameter()
-{
-    return m_brushSelectionWidget->autoBrushDiameter();
-}
 
 void KisBrushOptionWidget::brushChanged()
 {

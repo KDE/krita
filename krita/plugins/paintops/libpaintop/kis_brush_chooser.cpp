@@ -260,4 +260,19 @@ void KisBrushChooser::slotActivatedBrush(KoResource * resource)
     }
 }
 
+void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
+{
+        Q_UNUSED(yPixels);
+        qreal oldWidth = m_brush->width() * m_brush->scale(); // or maybe m_slScale->value()
+        qreal newWidth = oldWidth + xPixels;
+        if (newWidth <= 0.0) {
+            return;
+        }
+        
+        qreal newScale = newWidth / m_brush->width();
+        // signal valueChanged will care about call to slotSetItemScale
+        m_slScale->setValue(newScale);
+}
+
+
 #include "kis_brush_chooser.moc"

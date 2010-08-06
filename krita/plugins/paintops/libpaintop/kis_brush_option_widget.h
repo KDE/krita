@@ -54,8 +54,7 @@ public:
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-    void setAutoBrushDiameter(qreal diameter);
-    qreal autoBrushDiameter();
+    void setBrushSize(qreal dxPixels, qreal dyPixels);
     
     bool presetIsValid();
     

@@ -38,10 +38,7 @@ KisBrushSP KisBrushBasedPaintopOptionWidget::brush()
 
 void KisBrushBasedPaintopOptionWidget::changePaintOpSize(qreal x, qreal y)
 {
-    Q_UNUSED(y);
-    qreal currentDiameter = m_brushOption->autoBrushDiameter();
-    
-    m_brushOption->setAutoBrushDiameter(currentDiameter + qRound(x));
+    m_brushOption->setBrushSize(x,y);
 }
 
 bool KisBrushBasedPaintopOptionWidget::presetIsValid()

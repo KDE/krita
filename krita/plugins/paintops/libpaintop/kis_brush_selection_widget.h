@@ -54,8 +54,7 @@ public:
 
     void setCurrentBrush(KisBrushSP brush);
     
-    void setAutoBrushDiameter(qreal diameter);
-    qreal autoBrushDiameter();
+    void setBrushSize(qreal dxPixels, qreal dyPixels);
     bool presetIsValid() { return m_presetIsValid; }
 
 signals:

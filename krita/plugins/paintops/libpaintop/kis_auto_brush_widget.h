@@ -50,8 +50,7 @@ public:
 
     void setBrush(KisBrushSP brush);
     
-    void setAutoBrushDiameter(qreal diameter);
-    qreal autoBrushDiameter();
+    void setBrushSize(qreal dxPixels, qreal dyPixels);
 
 private slots:
 

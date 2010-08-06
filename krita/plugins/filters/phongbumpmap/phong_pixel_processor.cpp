@@ -19,6 +19,11 @@
 #include "phong_pixel_processor.h"
 #include <cmath>
 
+PhongPixelProcessor::PhongPixelProcessor()
+{
+    initialize();
+}
+
 PhongPixelProcessor::PhongPixelProcessor(quint8 hmap[])
 {
     heightmap = hmap;
@@ -42,8 +47,8 @@ void PhongPixelProcessor::initialize()
     
     Illuminant light1;
     Illuminant light2;
-    light1.RGBvalue << 1 << 0 << 0;
-    light2.RGBvalue << 0 << 0 << 1;
+    light1.RGBvalue << 0 << 0 << 1;
+    light2.RGBvalue << 1 << 0 << 0;
     light1.lightVector = QVector3D(6, 6, 3);
     light1.lightVector.normalize();
     light2.lightVector = QVector3D(-8, 8, 5);
@@ -74,7 +79,7 @@ void PhongPixelProcessor::setLightVector(QVector3D lightVector)
     light_vector = lightVector;
 }
 
-QRgb PhongPixelProcessor::reallyFastIlluminatePixel(quint16 upx, quint16 upy, quint16 downx, quint16 downy, quint16 leftx, quint16 lefty, quint16 rightx, quint16 righty)
+QRgb PhongPixelProcessor::reallyFastIlluminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright)
 {
     qreal temp;
     qreal Il;
@@ -82,8 +87,8 @@ QRgb PhongPixelProcessor::reallyFastIlluminatePixel(quint16 upx, quint16 upy, qu
     qreal computation[] = {0, 0, 0};
     QColor pixelColor(0, 0, 0);
     
-    normal_vector.setX(- fastHeightmap[righty][rightx] + fastHeightmap[lefty][leftx]);
-    normal_vector.setY(- fastHeightmap[upy][upx] + fastHeightmap[downy][downx]);
+    normal_vector.setX(- heightmap[posright] + heightmap[posleft]);
+    normal_vector.setY(- heightmap[posup] + heightmap[posdown]);
     normal_vector.setZ(8);
     normal_vector.normalize();
     
@@ -125,6 +130,7 @@ QRgb PhongPixelProcessor::reallyFastIlluminatePixel(quint16 upx, quint16 upy, qu
     return pixelColor.rgb();
 }
 
+/*
 QRgb PhongPixelProcessor::fastIlluminatePixel(QPoint posup, QPoint posdown, QPoint posleft, QPoint posright)
 {
     qreal I;
@@ -167,6 +173,7 @@ QRgb PhongPixelProcessor::fastIlluminatePixel(QPoint posup, QPoint posdown, QPoi
     
     return pixelColor.rgb();
 }
+*/
 
 QColor PhongPixelProcessor::illuminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright)
 {

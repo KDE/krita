@@ -39,8 +39,20 @@ class PhongBumpmapWidget : public QWidget, public Ui::WdgPhongBumpmap
     Q_OBJECT
 
 public:
-    PhongBumpmapWidget(QWidget *parent) : QWidget(parent) {
+    
+    PhongBumpmapWidget(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
+        
+        ambientReflectivityKisDoubleSliderSpinBox  -> setRange(0, 1, 2);
+        diffuseReflectivityKisDoubleSliderSpinBox  -> setRange(0, 1, 2);
+        specularReflectivityKisDoubleSliderSpinBox -> setRange(0, 1, 2);
+        shinynessExponentKisSliderSpinBox          -> setRange(1, 200);
+        
+        ambientReflectivityKisDoubleSliderSpinBox  -> setValue(0);
+        diffuseReflectivityKisDoubleSliderSpinBox  -> setValue(0.5);
+        specularReflectivityKisDoubleSliderSpinBox -> setValue(0.5);
+        shinynessExponentKisSliderSpinBox          -> setValue(40);
     }
 };
 
@@ -77,6 +89,9 @@ public:
 
     qreal inline pixelProcess (quint8* heightmap, quint32 posup, quint32 posdown, quint32 posleft, quint32 posright);
     
+    QRect neededRect(const QRect &rect, const KisFilterConfiguration* config) const;
+    QRect changedRect(const QRect &rect, const KisFilterConfiguration* config) const;
+    
     bool supportsAdjustmentLayers() const {
         return false;
     }
@@ -104,7 +119,6 @@ private:
 
     KisPaintDeviceSP m_device;
     KisImageWSP m_image;
-    KisNodeModel * m_model;
 };
 
 #endif

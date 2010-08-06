@@ -34,6 +34,7 @@ class PhongPixelProcessor
 {
     
 public:
+    PhongPixelProcessor();
     PhongPixelProcessor(quint8* hmap[]);
     PhongPixelProcessor(quint8 hmap[]);
     ~PhongPixelProcessor();
@@ -71,7 +72,7 @@ public:
     ///Total specular light
     qreal Is;
     
-    QRgb reallyFastIlluminatePixel(quint16 upx, quint16 upy, quint16 downx, quint16 downy, quint16 leftx, quint16 lefty, quint16 rightx, quint16 righty);
+    QRgb reallyFastIlluminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright);
     QRgb fastIlluminatePixel(QPoint posup, QPoint posdown, QPoint posleft, QPoint posright);
     QColor illuminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright);
     

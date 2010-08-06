@@ -76,9 +76,6 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QStringList &)
     profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.ICC",  KStandardDirs::Recursive);
     profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.icc",  KStandardDirs::Recursive);
 
-    // Set lcms to return NUll/false etc from failing calls, rather than aborting the app.
-    cmsErrorAction(LCMS_ERROR_SHOW);
-
     // Load the profiles
     if (!profileFilenames.empty()) {
         KoColorProfile * profile = 0;

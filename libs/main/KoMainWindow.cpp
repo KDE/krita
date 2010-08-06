@@ -1529,7 +1529,7 @@ void KoMainWindow::slotProgress(int value)
     if (d->firstTime) {
         // The statusbar might not even be created yet.
         // So check for that first, and create it if necessary
-        QStatusBar* bar = qFindChild<QStatusBar *>(this);
+        QStatusBar *bar = findChild<QStatusBar *>();
         if (!bar) {
             statusBar()->show();
             QApplication::sendPostedEvents(this, QEvent::ChildAdded);

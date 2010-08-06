@@ -229,7 +229,6 @@ IntEdit::slotValueChanged(int)
 void
 IntEdit::updateSpinWidgets()
 {
-    // NOTE: If this code must be compiled with MSVC 6, replace findchildren with qFindChildren
     // An empty string matches all object names.
     QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
 #ifndef Q_WS_WIN
@@ -460,7 +459,6 @@ DoubleEdit::slotValueChanged(double)
 void
 DoubleEdit::updateSpinWidgets()
 {
-    // NOTE: If this code must be compiled with MSVC 6, replace findchildren with qFindChildren
     // An empty string matches all object names.
     QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
 #ifndef Q_WS_WIN

@@ -451,7 +451,7 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
             data = new KoTextBlockData();
             block.setUserData(data);
         }
-        d->context.addShapeSubItemId(d->shape, qVariantFromValue(data), element.attributeNS(KoXmlNS::text, "id"));
+        d->context.addShapeSubItemId(d->shape, QVariant::fromValue(data), element.attributeNS(KoXmlNS::text, "id"));
     }
 
     // attach Rdf to cursor.block()

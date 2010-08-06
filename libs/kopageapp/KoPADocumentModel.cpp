@@ -402,7 +402,7 @@ QMimeData * KoPADocumentModel::mimeData( const QModelIndexList & indexes ) const
     // encode the data
     QModelIndexList::ConstIterator it = indexes.begin();
     for( ; it != indexes.end(); ++it)
-        stream << qVariantFromValue( qulonglong( it->internalPointer() ) );
+        stream << QVariant::fromValue( qulonglong( it->internalPointer() ) );
 
     data->setData(format, encoded);
     return data;

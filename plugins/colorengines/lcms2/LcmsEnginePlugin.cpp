@@ -95,7 +95,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QStringList &)
     }
 
     // Initialise LAB
-    KoColorProfile *labProfile = LcmsColorProfileContainer::createFromLcmsProfile(cmsCreateLabProfile(NULL));
+    KoColorProfile *labProfile = LcmsColorProfileContainer::createFromLcmsProfile(cmsCreateLab2Profile(NULL));
     registry->addProfile(labProfile);
     registry->add(new LabColorSpaceFactory());
     KoHistogramProducerFactoryRegistry::instance()->add(
@@ -114,9 +114,9 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QStringList &)
 
     // Create the default profile for grayscale, probably not the best place to but that, but still better than in a grayscale plugin
     // .22 gamma grayscale or something like that. Taken from the lcms tutorial...
-    LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2);
+    cmsToneCurve* Gamma = cmsBuildGamma(0, 2.2);
     cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
-    cmsFreeGamma(Gamma);
+    cmsFreeToneCurve(Gamma);
     KoColorProfile *defProfile = LcmsColorProfileContainer::createFromLcmsProfile(hProfile);
     registry->addProfile(defProfile);
 

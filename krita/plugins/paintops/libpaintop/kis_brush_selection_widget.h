@@ -56,6 +56,7 @@ public:
     
     void setAutoBrushDiameter(qreal diameter);
     qreal autoBrushDiameter();
+    bool presetIsValid() { return m_presetIsValid; }
 
 signals:
 
@@ -75,6 +76,8 @@ private:
       CUSTOMBRUSH,
       TEXTBRUSH
     };
+    
+    bool m_presetIsValid;
     
     Ui_WdgBrushChooser uiWdgBrushChooser;
     QGridLayout * m_layout;

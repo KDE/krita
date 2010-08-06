@@ -61,8 +61,6 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     connect(m_brushChooser, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     addChooser(i18n("Predefined Brushes"), m_brushChooser, PREDEFINEDBRUSH);
 
-    // XXX: pass image!
-//  TODO custom brush doesn't work correctly
     m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Custom Brush"), 0);
     connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     addChooser(i18n("Custom Brush"), m_customBrushWidget, CUSTOMBRUSH);
@@ -78,6 +76,8 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     }
     
     setCurrentWidget(m_autoBrushWidget);
+    
+    m_presetIsValid = true;
 }
 
 
@@ -188,6 +188,8 @@ void KisBrushSelectionWidget::setCurrentWidget(QWidget* widget)
 
     m_currentBrushWidget->show();
     m_buttonGroup->button(m_chooserMap.key(widget))->setChecked(true);
+    
+    m_presetIsValid = (m_buttonGroup->checkedId() != CUSTOMBRUSH);
 }
 
 void KisBrushSelectionWidget::addChooser(const QString& text, QWidget* widget, int id)

@@ -58,6 +58,13 @@ public:
         Q_UNUSED(y);
     }
 
+    /**
+     * This is true for all of the paintop widget except for the Custom brush tab in the Brush tip dialog
+     */
+    virtual bool presetIsValid(){
+        return true;
+    }
+
 protected:
 
 

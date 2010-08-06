@@ -35,6 +35,8 @@ public:
     KisBrushSP brush();
     
     void changePaintOpSize(qreal x, qreal y);
+    virtual bool presetIsValid();
+    
 
 private:
     KisBrushOptionWidget * m_brushOption;

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * Copyright (C) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -72,6 +73,7 @@ private slots:
     void fillScratchPadGradient();
     void fillScratchPadSolid();
     void fillScratchPadLayer();
+    void slotCheckPresetValidity();
 
 private:
 

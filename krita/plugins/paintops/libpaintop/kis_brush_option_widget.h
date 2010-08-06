@@ -57,6 +57,8 @@ public:
     void setAutoBrushDiameter(qreal diameter);
     qreal autoBrushDiameter();
     
+    bool presetIsValid();
+    
 private slots:
     void brushChanged();
 
@@ -64,6 +66,7 @@ private:
 
     KisBrushSelectionWidget * m_brushSelectionWidget;
     KisBrushOption m_brushOption;
+    
 };
 
 #endif

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,12 +37,14 @@
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_paintop_preset.h>
+#include <kis_paintop_settings_widget.h>
 #include <kis_canvas_resource_provider.h>
 #include <widgets/kis_preset_chooser.h>
 
 #include <ui_wdgpaintopsettings.h>
 #include <kis_node.h>
 #include "kis_config.h"
+
 
 class KisPaintOpPresetsPopup::Private
 {
@@ -50,7 +53,7 @@ public:
 
     Ui_WdgPaintOpSettings uiWdgPaintOpPresetSettings;
     QGridLayout *layout;
-    QWidget *settingsWidget;
+    KisPaintOpSettingsWidget *settingsWidget;
     QFont smallFont;
     KisCanvasResourceProvider *resourceProvider;
     bool detached;
@@ -128,6 +131,15 @@ KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()
     delete m_d;
 }
 
+void KisPaintOpPresetsPopup::slotCheckPresetValidity()
+{
+    if (m_d->settingsWidget){
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setEnabled( m_d->settingsWidget->presetIsValid() );
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setEnabled( m_d->settingsWidget->presetIsValid() );
+    }
+}
+
+
 void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
 {
     if (m_d->settingsWidget) {
@@ -137,7 +149,11 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     m_d->layout->update();
     updateGeometry();
 
-    m_d->settingsWidget = widget;
+    m_d->settingsWidget = static_cast<KisPaintOpSettingsWidget*>(widget);
+    if (m_d->settingsWidget){
+        connect(m_d->settingsWidget,SIGNAL(sigConfigurationItemChanged()),this,SLOT(slotCheckPresetValidity()));
+        slotCheckPresetValidity();
+    }
 
     if (widget) {
 
@@ -193,8 +209,6 @@ void KisPaintOpPresetsPopup::switchDetached()
 {
     if (parentWidget()) {
 
-        qDebug() << parentWidget()->objectName() << m_d->detached;
-
         m_d->detached = !m_d->detached;
         if (m_d->detached) {
             parentWidget()->setWindowFlags(Qt::Tool);
@@ -208,5 +222,6 @@ void KisPaintOpPresetsPopup::switchDetached()
         cfg.setPaintopPopupDetached(m_d->detached);
     }
 }
+
 
 #include "kis_paintop_presets_popup.moc"

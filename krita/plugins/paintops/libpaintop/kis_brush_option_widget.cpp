@@ -95,3 +95,8 @@ void KisBrushOptionWidget::brushChanged()
     m_brushOption.setBrush(brush());
     emit sigSettingChanged();
 }
+
+bool KisBrushOptionWidget::presetIsValid()
+{
+    return m_brushSelectionWidget->presetIsValid();
+}

@@ -22,7 +22,7 @@
 
 ToolTransformArgs::ToolTransformArgs()
 {
-	m_mode = FREE_TRANSFORM;
+	m_mode = WARP;
     m_translate = QPointF(0, 0);
     m_rotationCenterOffset = QPointF(0, 0);
     m_aX = 0;
@@ -33,14 +33,14 @@ ToolTransformArgs::ToolTransformArgs()
     m_shearX = 0.0;
     m_shearY = 0.0;
 	m_pointsPerLine = 0;
-	m_origPoints = NULL;
-	m_transfPoints = NULL;
-	m_warpType = AFFINE_TRANSFORM;
+    m_origPoints = QVector<QPointF>();
+    m_transfPoints = QVector<QPointF>();
+	m_warpType = KisWarpTransformWorker::AFFINE_TRANSFORM;
 	m_alpha = 1.0;
 	m_previewPos = QPointF(0, 0);
 }
 
-ToolTransformArgs::ToolTransformArgs(ToolTransformArgs& args)
+void ToolTransformArgs::init(const ToolTransformArgs& args)
 {
 	m_mode = args.mode();
 	m_translate = args.translate();
@@ -53,25 +53,37 @@ ToolTransformArgs::ToolTransformArgs(ToolTransformArgs& args)
 	m_shearX = args.shearX();
 	m_shearY = args.shearY();
 	m_pointsPerLine = args.pointsPerLine();
-	if (m_pointsPerLine > 0) {
-		int nbPoints = m_pointsPerLine * m_pointsPerLine;
-		m_origPoints = new QPointF[nbPoints];
-		m_transfPoints = new QPointF[nbPoints];
-		QPointF *argsOrigPoints = args.origPoints();
-		QPointF *argsTransfPoints = args.transfPoints();
-		for (int i = 0; i < nbPoints; ++i) {
-			m_origPoints[i] = argsOrigPoints[i];
-			m_transfPoints[i] = argsTransfPoints[i];
-		}
-	}
+    m_origPoints = args.origPoints(); //it's a copy
+    m_transfPoints = args.transfPoints();
 	m_warpType = args.warpType();
 	m_alpha = args.alpha();
 	m_previewPos = args.previewPos();
+    m_defaultPoints = args.defaultPoints();
+}
+
+void ToolTransformArgs::clear()
+{
+    m_origPoints.clear();
+    m_transfPoints.clear();
+    m_pointsPerLine = 0;
+}
+
+ToolTransformArgs::ToolTransformArgs(const ToolTransformArgs& args)
+{
+    init(args);
+}
+
+ToolTransformArgs& ToolTransformArgs::operator=(const ToolTransformArgs& args)
+{
+    clear();
+    init(args);
+
+    return *this;
 }
 
 ToolTransformArgs::ToolTransformArgs(TransfMode mode,
 							QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY,
-							int pointsPerLine, WarpType warpType, double alpha, QPointF previewPos)
+							int pointsPerLine, KisWarpTransformWorker::WarpType warpType, double alpha, QPointF previewPos, bool defaultPoints)
 {
 	m_mode = mode;
     m_translate = translate;
@@ -84,24 +96,23 @@ ToolTransformArgs::ToolTransformArgs(TransfMode mode,
     m_shearX = shearX;
     m_shearY = shearY;
 	m_pointsPerLine = pointsPerLine;
-	if (m_pointsPerLine > 0) {
-		int nbPoints = m_pointsPerLine * m_pointsPerLine;
-
-		m_origPoints = new QPointF[nbPoints];
-		m_transfPoints = new QPointF[nbPoints];
-	}
+    int nbPoints = m_pointsPerLine * m_pointsPerLine;
+    m_origPoints.resize(nbPoints);
+    m_transfPoints.resize(nbPoints);
 
 	m_warpType = warpType;
 	m_alpha = alpha;
 	m_previewPos = previewPos;
+    m_defaultPoints = defaultPoints;
 }
 
 
 ToolTransformArgs::~ToolTransformArgs()
 {
+    clear();
 }
 
-ToolTransformArgs::TransfMode ToolTransformArgs::mode()
+ToolTransformArgs::TransfMode ToolTransformArgs::mode() const
 {
 	return m_mode;
 }
@@ -111,57 +122,63 @@ void ToolTransformArgs::setMode(TransfMode mode)
 	m_mode = mode;
 }
 
-int ToolTransformArgs::pointsPerLine()
+int ToolTransformArgs::pointsPerLine() const
 {
 	return m_pointsPerLine;
 }
 
-QPointF *ToolTransformArgs::origPoints()
+const QVector<QPointF> &ToolTransformArgs::origPoints() const
 {
 	return m_origPoints;
 }
 
-QPointF *ToolTransformArgs::transfPoints()
+QPointF &ToolTransformArgs::origPoint(int i)
+{
+    return m_origPoints[i];
+}
+
+const QVector<QPointF> &ToolTransformArgs::transfPoints() const
 {
 	return m_transfPoints;
 }
 
-ToolTransformArgs::WarpType ToolTransformArgs::warpType()
+QPointF &ToolTransformArgs::transfPoint(int i)
+{
+    return m_transfPoints[i];
+}
+
+KisWarpTransformWorker::WarpType ToolTransformArgs::warpType() const
 {
 	return m_warpType;
 }
 
-double ToolTransformArgs::alpha()
+double ToolTransformArgs::alpha() const
 {
 	return m_alpha;
 }
 
-QPointF ToolTransformArgs::previewPos()
+QPointF ToolTransformArgs::previewPos() const
 {
 	return m_previewPos;
 }
 
-void ToolTransformArgs::setPoints(int pointsPerLine, QPointF *origPoints, QPointF *transfPoints)
+bool ToolTransformArgs::defaultPoints() const
 {
-	int nbPoints = pointsPerLine * pointsPerLine;
-	if (m_pointsPerLine != pointsPerLine) {
-		if (m_pointsPerLine > 0) {
-			delete m_origPoints;
-			delete m_transfPoints;
-		}
-
-		m_pointsPerLine = pointsPerLine;
-		m_origPoints = new QPointF[nbPoints];
-		m_transfPoints = new QPointF[nbPoints];
-	}
-
-	for (int i = 0; i < nbPoints; ++i) {
-		m_origPoints[i] = origPoints[i];
-		m_transfPoints[i] = transfPoints[i];
-	}
+    return m_defaultPoints;
 }
 
-void ToolTransformArgs::setWarpType(WarpType warpType)
+void ToolTransformArgs::setPointsPerLine(int pointsPerLine)
+{
+    m_pointsPerLine = pointsPerLine;
+}
+
+void ToolTransformArgs::setPoints(QVector<QPointF> origPoints, QVector<QPointF> transfPoints)
+{
+    m_origPoints = QVector<QPointF>(origPoints);
+    m_transfPoints = QVector<QPointF>(transfPoints);
+}
+
+void ToolTransformArgs::setWarpType(KisWarpTransformWorker::WarpType warpType)
 {
 	m_warpType = warpType;
 }
@@ -176,47 +193,52 @@ void ToolTransformArgs::setPreviewPos(QPointF previewPos)
 	m_previewPos = previewPos;
 }
 
-QPointF ToolTransformArgs::translate()
+void ToolTransformArgs::setDefaultPoints(bool defaultPoints)
+{
+    m_defaultPoints = defaultPoints;
+}
+
+QPointF ToolTransformArgs::translate() const
 {
     return m_translate;
 }
 
-QPointF ToolTransformArgs::rotationCenterOffset()
+QPointF ToolTransformArgs::rotationCenterOffset() const
 {
     return m_rotationCenterOffset;
 }
 
-double ToolTransformArgs::aX()
+double ToolTransformArgs::aX() const
 {
     return m_aX;
 }
 
-double ToolTransformArgs::aY()
+double ToolTransformArgs::aY() const
 {
     return m_aY;
 }
 
-double ToolTransformArgs::aZ()
+double ToolTransformArgs::aZ() const
 {
     return m_aZ;
 }
 
-double ToolTransformArgs::scaleX()
+double ToolTransformArgs::scaleX() const
 {
     return m_scaleX;
 }
 
-double ToolTransformArgs::scaleY()
+double ToolTransformArgs::scaleY() const
 {
     return m_scaleY;
 }
 
-double ToolTransformArgs::shearX()
+double ToolTransformArgs::shearX() const
 {
     return m_shearX;
 }
 
-double ToolTransformArgs::shearY()
+double ToolTransformArgs::shearY() const
 {
     return m_shearY;
 }
@@ -265,3 +287,19 @@ void ToolTransformArgs::setShearY(double shearY)
 {
     m_shearY = shearY;
 }
+
+bool ToolTransformArgs::isIdentity(QPointF originalTranslate) const
+{
+    if (m_mode == FREE_TRANSFORM) {
+        return (m_translate == originalTranslate && m_scaleX == 1
+                && m_scaleY == 1 && m_shearX == 0 && m_shearY == 0
+                && m_aX == 0 && m_aY == 0 && m_aZ == 0);
+    } else {
+        for (int i = 0; i < m_origPoints.size(); ++i)
+            if (m_origPoints[i] != m_transfPoints[i])
+                return false;
+
+        return true;
+    }
+}
+

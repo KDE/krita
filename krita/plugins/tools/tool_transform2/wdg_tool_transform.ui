@@ -803,7 +803,7 @@
              <item>
               <widget class="QLabel" name="label_4">
                <property name="text">
-                <string>Rigidity</string>
+                <string>Flexibility</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -811,9 +811,18 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="spinBox_2">
+              <widget class="QDoubleSpinBox" name="alphaBox">
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="maximum">
+                <double>5.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+               <property name="value">
+                <double>1.000000000000000</double>
                </property>
               </widget>
              </item>
@@ -832,7 +841,7 @@
               </widget>
              </item>
              <item>
-              <widget class="KisCmbIDList" name="cmbFilter_2"/>
+              <widget class="QComboBox" name="cmbWarpType"/>
              </item>
             </layout>
            </item>
@@ -847,7 +856,7 @@
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout_6">
                   <item>
-                   <widget class="QRadioButton" name="DefaultRadioButton">
+                   <widget class="QRadioButton" name="defaultRadioButton">
                     <property name="text">
                      <string>Default</string>
                     </property>
@@ -863,7 +872,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QWidget" name="horizontalWidget" native="true">
+                   <widget class="QWidget" name="defaultWarpWidget" native="true">
                     <layout class="QHBoxLayout" name="horizontalLayout_7">
                      <item>
                       <widget class="QLabel" name="label_3">
@@ -876,12 +885,12 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QSpinBox" name="spinBox">
+                      <widget class="QSpinBox" name="densityBox">
                        <property name="alignment">
                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                        </property>
                        <property name="minimum">
-                        <number>1</number>
+                        <number>0</number>
                        </property>
                        <property name="value">
                         <number>3</number>
@@ -905,7 +914,7 @@
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout_12">
                   <item>
-                   <widget class="QRadioButton" name="CustomRadioButton">
+                   <widget class="QRadioButton" name="customRadioButton">
                     <property name="text">
                      <string>Custom</string>
                     </property>
@@ -918,7 +927,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QWidget" name="verticalWidget_4" native="true">
+                   <widget class="QWidget" name="customWarpWidget" native="true">
                     <property name="enabled">
                      <bool>false</bool>
                     </property>
@@ -928,18 +937,12 @@
                        <property name="text">
                         <string>Lock Points</string>
                        </property>
-                       <property name="checkable">
-                        <bool>true</bool>
-                       </property>
-                       <property name="autoExclusive">
-                        <bool>false</bool>
-                       </property>
                       </widget>
                      </item>
                      <item>
                       <widget class="QPushButton" name="resetPointsButton">
                        <property name="text">
-                        <string>Reset Points</string>
+                        <string>Clear Points</string>
                        </property>
                       </widget>
                      </item>
@@ -1016,40 +1019,7 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>CustomRadioButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>verticalWidget_4</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>256</x>
-     <y>66</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>276</x>
-     <y>114</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>DefaultRadioButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>horizontalWidget</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>117</x>
-     <y>69</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>101</x>
-     <y>96</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <buttongroups>
   <buttongroup name="buttonGroup"/>
  </buttongroups>

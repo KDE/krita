@@ -158,23 +158,6 @@ inline void KisWarpTransformWorker::InsertInSortedList(Side **L, Side *NewSide)
     CurrSide->next = NewSide;
 }
 
-void KisWarpTransformWorker::FreeSidesList(Side *L)
-{
-    Side *nextSide;
-
-    while (L != NULL) {
-        nextSide = L->next;
-        delete L;
-        L = nextSide;
-    }
-}
-
-void KisWarpTransformWorker::FreeSidesTable(Side *TC[], int top, int bottom)
-{
-    for (int i = top; i <= bottom; ++i)
-        FreeSidesList(TC[i]);
-}
-
 void KisWarpTransformWorker::FreeExtSide(ExtendedSide *S)
 {
     if (S == NULL)
@@ -509,9 +492,11 @@ void KisWarpTransformWorker::ClipPolygone(ExtendedSide **ExtSides, QRect *clippe
 
     for (int i = 0; i < 4; ++i) {
         if (*ExtSides == NULL) {
+            FreeExtSide(Senti);
             return;
         } else if ((*ExtSides)->next == NULL) {
             //only one side : no interior => nothing to draw
+            FreeExtSide(Senti);
             FreeExtSides(ExtSides);
             return;
         }
@@ -535,17 +520,17 @@ void KisWarpTransformWorker::ClipPolygone(ExtendedSide **ExtSides, QRect *clippe
     FreeExtSide(Senti);
 }
 
-inline bool KisWarpTransformWorker::equals(double a, double b, double tolerance)
+inline bool KisWarpTransformWorker::equals(qreal a, qreal b, qreal tolerance)
 {
     return ( (a == b) || ((a <= (b + tolerance)) && (a >= (b - tolerance))) );
 }
 
-inline bool KisWarpTransformWorker::valInRange(double val, double range_min, double range_max, double tolerance)
+inline bool KisWarpTransformWorker::valInRange(qreal val, qreal range_min, qreal range_max, qreal tolerance)
 {
     return ((val + tolerance) >= range_min) && ((val - tolerance) <= range_max);
 }
 
-inline double KisWarpTransformWorker::det(QVector2D v0, QVector2D v1)
+inline qreal KisWarpTransformWorker::det(QVector2D v0, QVector2D v1)
 {
     return (v0.x() * v1.y() - v0.y() * v1.x());
 }
@@ -556,19 +541,19 @@ int KisWarpTransformWorker::inverseBilinInterp(QVector2D p0_minus_p, QVector2D p
 {
     bool t1_valid, t2_valid;
 
-    double A  = det(p0_minus_p, p0_minus_p2);
-    double B1 = det(p0_minus_p, p1_minus_p3);
-    double B2 = det(p1_minus_p, p0_minus_p2);
-    double C  = det(p1_minus_p, p1_minus_p3);
-    double B  = 0.5 * (B1 + B2);
+    qreal A  = det(p0_minus_p, p0_minus_p2);
+    qreal B1 = det(p0_minus_p, p1_minus_p3);
+    qreal B2 = det(p1_minus_p, p0_minus_p2);
+    qreal C  = det(p1_minus_p, p1_minus_p3);
+    qreal B  = 0.5 * (B1 + B2);
 
-    double s1 = 0, s2 = 0, t1 = 0, t2 = 0;
+    qreal s1 = 0, s2 = 0, t1 = 0, t2 = 0;
 
-    double Am2BpC = A - 2 * B + C;
+    qreal Am2BpC = A - 2 * B + C;
     int num_valid_s = 0;
 
     if (equals(Am2BpC, 0, 1e-10)) {
-        double AmC = A - C;
+        qreal AmC = A - C;
         if (equals(AmC, 0, 1e-10))
             //the input is a line
             return 0;
@@ -576,8 +561,8 @@ int KisWarpTransformWorker::inverseBilinInterp(QVector2D p0_minus_p, QVector2D p
         if (valInRange(s1, 0, 1, 1e-10))
             num_valid_s = 1;
     } else {
-        double sqrtBsqmAC = sqrt(B * B - A * C );
-        double AmB = A - B;
+        qreal sqrtBsqmAC = sqrt(B * B - A * C );
+        qreal AmB = A - B;
         s1 = (AmB - sqrtBsqmAC) / Am2BpC;
         s2 = (AmB + sqrtBsqmAC) / Am2BpC;
         num_valid_s = 0;
@@ -598,8 +583,8 @@ int KisWarpTransformWorker::inverseBilinInterp(QVector2D p0_minus_p, QVector2D p
         return 0;
 
     //necessarily num_valid_s is > 0
-    double tdenom_x = (1 - s1) * p0_minus_p2.x() + s1 * p1_minus_p3.x();
-    double tdenom_y = (1 - s1) * p0_minus_p2.y() + s1 * p1_minus_p3.y();
+    qreal tdenom_x = (1 - s1) * p0_minus_p2.x() + s1 * p1_minus_p3.x();
+    qreal tdenom_y = (1 - s1) * p0_minus_p2.y() + s1 * p1_minus_p3.y();
     t1_valid = true;
     if (equals(tdenom_x, 0, 1e-10) && equals(tdenom_y, 0, 1e-10))
         t1_valid = false;
@@ -655,7 +640,7 @@ int KisWarpTransformWorker::inverseBilinInterp(QVector2D p0_minus_p, QVector2D p
 
 void inline KisWarpTransformWorker::bilinInterp(QPointF p0, QPointF p1, QPointF p2, QPointF p3, QPointF st, QPointF& p)
 {
-    double s = st.x(), t = st.y();
+    qreal s = st.x(), t = st.y();
     p = t*(s * p3 + (1 - s) * p2) + (1 - t)*(s * p1 + (1 - s) * p0);
 }
 
@@ -690,6 +675,7 @@ void KisWarpTransformWorker::quadInterpolation(QImage *src, QImage *dst, QPolygo
     }
 
     Senti = new Side;
+    Senti->next = NULL;
 
     //init TC
     CurrExtSide = ExtSides;
@@ -907,16 +893,12 @@ void KisWarpTransformWorker::quadInterpolation(QImage *src, QImage *dst, QPolygo
     }
 
     delete Senti;
-    FreeSidesList(TCA);
-    FreeSidesTable(TC, boundRect.top(), boundRect.bottom() + 1);
     FreeExtSides(&ExtSides);
 }
 
-/* Applies an affine transformation to the point v according the original
-set of points p, the new set of points q, and the constant alpha.
-The algorithm is based a paper "Image Deformation Using Moving Least Squares" */
-inline QPointF KisWarpTransformWorker::calcAffineTransformation(QPointF v, int nbPoints, QPointF *p, QPointF *q, qreal alpha)
+QPointF KisWarpTransformWorker::affineTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha)
 {
+    int nbPoints = p.size();
     qreal w[nbPoints];
     qreal sumWi = 0;
     QPointF pStar(0, 0), qStar(0, 0);
@@ -924,7 +906,7 @@ inline QPointF KisWarpTransformWorker::calcAffineTransformation(QPointF v, int n
 
     for (int i = 0; i < nbPoints; ++i) {
         if (v == p[i])
-        return q[i];
+            return q[i];
 
         QVector2D tmp(p[i] - v);
         w[i] = 1. / pow(tmp.lengthSquared(), alpha);
@@ -950,7 +932,7 @@ inline QPointF KisWarpTransformWorker::calcAffineTransformation(QPointF v, int n
     qreal A_tmp_inv[4];
 
     if (det_A_tmp == 0)
-    return v;
+        return v;
 
     A_tmp_inv[0] = A_tmp[3] / det_A_tmp;
     A_tmp_inv[1] = - A_tmp[1] / det_A_tmp;
@@ -971,6 +953,44 @@ inline QPointF KisWarpTransformWorker::calcAffineTransformation(QPointF v, int n
     return res;
 }
 
+QPointF KisWarpTransformWorker::similitudeTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha)
+{
+    //TODO: implement
+    Q_UNUSED(p);
+    Q_UNUSED(q);
+    Q_UNUSED(alpha);
+
+    return v;
+}
+
+QPointF KisWarpTransformWorker::rigidTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha)
+{
+    //TODO: implement
+    Q_UNUSED(p);
+    Q_UNUSED(q);
+    Q_UNUSED(alpha);
+
+    return v;
+}
+
+QPointF KisWarpTransformWorker::transformMath(WarpType warpType, QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha)
+{
+    switch (warpType) {
+    case AFFINE_TRANSFORM:
+        return affineTransformMath(v, p, q, alpha);
+        break;
+    case SIMILITUDE_TRANSFORM:
+        return similitudeTransformMath(v, p, q, alpha);
+        break;
+    case RIGID_TRANSFORM:
+        return rigidTransformMath(v, p, q, alpha);
+        break;
+    default:
+        return v;
+        break;
+    }
+}
+
 inline void KisWarpTransformWorker::switchVertices(QPoint **a, QPoint **b)
 {
     QPoint *tmp = *a;
@@ -978,21 +998,48 @@ inline void KisWarpTransformWorker::switchVertices(QPoint **a, QPoint **b)
     *b = tmp;
 }
 
-QImage KisWarpTransformWorker::affineTransformation(QImage *src, qint32 pointsPerLine, qint32 pointsPerColumn, QPointF *origPoint, QPointF *transfPoint, qreal alpha, QPointF originalTopLeft, QPointF *newTopLeft)
+QImage KisWarpTransformWorker::aux_transformation(WarpMathFunction warpMathFunction, QImage *src, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, QPointF originalTopLeft, QPointF *newTopLeft)
 {
-    qint32 nbPoints = pointsPerLine * pointsPerColumn;
 
-    QRectF origBRect(transfPoint[0], transfPoint[0]);
-    QRectF transfBRect(transfPoint[0], transfPoint[0]);
-    for (int i = 0; i < nbPoints; ++i) {
-        if ( transfPoint[i].x() < transfBRect.left() )
-            transfBRect.setLeft(transfPoint[i].x());
-        else if ( transfPoint[i].x() > transfBRect.right() )
-            transfBRect.setRight(transfPoint[i].x());
-        if ( transfPoint[i].y() < transfBRect.top() )
-            transfBRect.setTop(transfPoint[i].y());
-        else if ( transfPoint[i].y() > transfBRect.bottom() )
-            transfBRect.setBottom(transfPoint[i].y());
+    if (warpMathFunction == NULL || origPoint.size() != transfPoint.size() ||
+            origPoint.size() == 0) {
+        *newTopLeft = originalTopLeft;
+        return QImage(*src);
+    }
+
+    qint32 nbPoints = origPoint.size();
+    QRectF transfBRect;
+    if (nbPoints == 1) {
+        *newTopLeft = originalTopLeft + transfPoint[0] - origPoint[0];
+        return QImage(*src);
+    } else {
+        //we need to find an approximation of the dimensions of the new image
+        transfBRect = QRectF(transfPoint[0], transfPoint[0]);
+
+        for (int i = 1; i < nbPoints; ++i) {
+            if ( transfPoint[i].x() < transfBRect.left() )
+                transfBRect.setLeft(transfPoint[i].x());
+            else if ( transfPoint[i].x() > transfBRect.right() )
+                transfBRect.setRight(transfPoint[i].x());
+            if ( transfPoint[i].y() < transfBRect.top() )
+                transfBRect.setTop(transfPoint[i].y());
+            else if ( transfPoint[i].y() > transfBRect.bottom() )
+                transfBRect.setBottom(transfPoint[i].y());
+        }
+
+        QPolygonF polygon;
+        qreal width2 = (qreal)src->width() / 2.;
+        qreal height2 = (qreal)src->height() / 2.;
+        QPointF topLeft = warpMathFunction(originalTopLeft, origPoint, transfPoint, alpha);
+        QPointF topMiddle = warpMathFunction(originalTopLeft + QPointF(width2, 0), origPoint, transfPoint, alpha);
+        QPointF topRight = warpMathFunction(originalTopLeft + QPointF(src->width(), 0), origPoint, transfPoint, alpha);
+        QPointF middleRight = warpMathFunction(originalTopLeft + QPointF(src->width(), height2), origPoint, transfPoint, alpha);
+        QPointF bottomRight = warpMathFunction(originalTopLeft + QPointF(src->width(), src->height()), origPoint, transfPoint, alpha);
+        QPointF bottomMiddle = warpMathFunction(originalTopLeft + QPointF(width2, src->height()), origPoint, transfPoint, alpha);
+        QPointF bottomLeft = warpMathFunction(originalTopLeft + QPointF(0, src->height()), origPoint, transfPoint, alpha);
+        QPointF middleLeft = warpMathFunction(originalTopLeft + QPointF(0, height2), origPoint, transfPoint, alpha);
+        polygon << topLeft << topMiddle << topRight << middleRight << bottomRight << bottomMiddle << bottomLeft << middleLeft;
+        transfBRect |= polygon.boundingRect();
     }
 
     QImage dst(ceil(transfBRect.width()), ceil(transfBRect.height()), QImage::Format_ARGB32_Premultiplied);
@@ -1009,14 +1056,13 @@ QImage KisWarpTransformWorker::affineTransformation(QImage *src, qint32 pointsPe
 
     int pixelPrecision = 20;
     int verticesPerLine = src->width() / pixelPrecision + 2; 
-    QPoint *previousLineVertices = new QPoint[verticesPerLine]();
-    QPoint *currentLineVertices = new QPoint[verticesPerLine]();
-    Q_ASSERT(previousLineVertices != NULL && currentLineVertices != NULL);
+    QPoint *previousLineVertices = new QPoint[verticesPerLine];
+    QPoint *currentLineVertices = new QPoint[verticesPerLine];
 
     int i, prevI;
     int j, prevJ;
     int k, prevK;
-    double x, y;
+    qreal x, y;
     bool lineDone;
     bool imageDone;
 
@@ -1032,7 +1078,7 @@ QImage KisWarpTransformWorker::affineTransformation(QImage *src, qint32 pointsPe
     lineDone = false;
     while (!lineDone) {
         while (j < src->width()) {
-            QPointF dstPosF = calcAffineTransformation(QPointF(x, y), nbPoints, origPoint, transfPoint, alpha);
+            QPointF dstPosF = warpMathFunction(QPointF(x, y), origPoint, transfPoint, alpha);
             dstPosF -= *newTopLeft;
             QPoint dstPos = QPoint(qRound(dstPosF.x()), qRound(dstPosF.y()));
 
@@ -1065,7 +1111,7 @@ QImage KisWarpTransformWorker::affineTransformation(QImage *src, qint32 pointsPe
             x = originalTopLeft.x();
 
             //first column needs a special treatment
-            QPointF dstPosF = calcAffineTransformation(QPointF(x, y), nbPoints, origPoint, transfPoint, alpha);
+            QPointF dstPosF = warpMathFunction(QPointF(x, y), origPoint, transfPoint, alpha);
             dstPosF -= *newTopLeft;
             QPoint dstPos = QPoint(qRound(dstPosF.x()), qRound(dstPosF.y()));
 
@@ -1082,7 +1128,7 @@ QImage KisWarpTransformWorker::affineTransformation(QImage *src, qint32 pointsPe
             lineDone = false;
             while (!lineDone) {
                 while (j < src->width()) {
-                    dstPosF = calcAffineTransformation(QPointF(x, y), nbPoints, origPoint, transfPoint, alpha);
+                    dstPosF = warpMathFunction(QPointF(x, y), origPoint, transfPoint, alpha);
                     dstPosF -= *newTopLeft;
                     QPoint dstPos = QPoint(qRound(dstPosF.x()), qRound(dstPosF.y()));
 
@@ -1125,20 +1171,51 @@ QImage KisWarpTransformWorker::affineTransformation(QImage *src, qint32 pointsPe
             imageDone = true;
     }
 
-    delete previousLineVertices;
-    delete currentLineVertices;
+    delete[] previousLineVertices;
+    delete[] currentLineVertices;
 
     return dst;
 }
 
-KisWarpTransformWorker::KisWarpTransformWorker(KisPaintDeviceSP dev, qint32 pointsPerLine, qint32 pointsPerColumn, QPointF *origPoint, QPointF *transfPoint, qreal alpha, KoUpdater *progress)
+QImage KisWarpTransformWorker::transformation(WarpType warpType, QImage *src, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, QPointF originalTopLeft, QPointF *newTopLeft)
+{
+    switch (warpType) {
+    case AFFINE_TRANSFORM:
+        return aux_transformation(&affineTransformMath, src, origPoint, transfPoint, alpha, originalTopLeft, newTopLeft);
+        break;
+    case SIMILITUDE_TRANSFORM:
+        return aux_transformation(&similitudeTransformMath, src, origPoint, transfPoint, alpha, originalTopLeft, newTopLeft);
+        break;
+    case RIGID_TRANSFORM:
+        return aux_transformation(&rigidTransformMath, src, origPoint, transfPoint, alpha, originalTopLeft, newTopLeft);
+        break;
+    default:
+        return QImage(*src);
+        break;
+    }
+}
+
+KisWarpTransformWorker::KisWarpTransformWorker(WarpType warpType, KisPaintDeviceSP dev, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, KoUpdater *progress)
         : m_dev(dev), m_progress(progress)
 {
-    m_pointsPerLine = pointsPerLine;
-    m_pointsPerColumn = pointsPerColumn;
     m_origPoint = origPoint;
     m_transfPoint = transfPoint;
     m_alpha = alpha;
+
+    switch(warpType) {
+    case AFFINE_TRANSFORM:
+        m_warpMathFunction = &affineTransformMath;
+        break;
+    case SIMILITUDE_TRANSFORM:
+        m_warpMathFunction = &similitudeTransformMath;
+        break;
+    case RIGID_TRANSFORM:
+        m_warpMathFunction = &rigidTransformMath;
+        break;
+    default:
+        m_warpMathFunction = NULL;
+        break;
+    }
 }
 
 KisWarpTransformWorker::~KisWarpTransformWorker()
@@ -1302,29 +1379,37 @@ void KisWarpTransformWorker::quadInterpolation(KisPaintDeviceSP src, KisPaintDev
     }
 
     delete Senti;
-    FreeSidesList(TCA);
-    FreeSidesTable(TC, 0, boundRect.bottom() + 1);
     FreeExtSides(&ExtSides);
 }
 
 void KisWarpTransformWorker::run()
 {
+
+    if (m_warpMathFunction == NULL || m_origPoint.size() != m_transfPoint.size()
+            || m_origPoint.size() == 0)
+        return;
+
+    qint32 nbPoints = m_origPoint.size();
     KisPaintDeviceSP srcdev = new KisPaintDevice(*m_dev.data());
     QRect srcBounds = srcdev->exactBounds();
 
-    qint32 nbPoints = m_pointsPerLine * m_pointsPerColumn;
-
-    QRectF origBRect(m_transfPoint[0], m_transfPoint[0]);
-    QRectF transfBRect(m_transfPoint[0], m_transfPoint[0]);
-    for (int i = 0; i < nbPoints; ++i) {
-        if ( m_transfPoint[i].x() < transfBRect.left() )
-            transfBRect.setLeft(m_transfPoint[i].x());
-        else if ( m_transfPoint[i].x() > transfBRect.right() )
-            transfBRect.setRight(m_transfPoint[i].x());
-        if ( m_transfPoint[i].y() < transfBRect.top() )
-            transfBRect.setTop(m_transfPoint[i].y());
-        else if ( m_transfPoint[i].y() > transfBRect.bottom() )
-            transfBRect.setBottom(m_transfPoint[i].y());
+    QRectF transfBRect;
+    if (nbPoints == 1) {
+        QPointF translate(QPointF(m_dev->x(), m_dev->y()) + m_transfPoint[0] - m_origPoint[0]); 
+        m_dev->move(translate.toPoint());
+        return;
+    } else {
+        transfBRect = QRectF(m_transfPoint[0], m_transfPoint[0]);
+        for (int i = 1; i < nbPoints; ++i) {
+            if ( m_transfPoint[i].x() < transfBRect.left() )
+                transfBRect.setLeft(m_transfPoint[i].x());
+            else if ( m_transfPoint[i].x() > transfBRect.right() )
+                transfBRect.setRight(m_transfPoint[i].x());
+            if ( m_transfPoint[i].y() < transfBRect.top() )
+                transfBRect.setTop(m_transfPoint[i].y());
+            else if ( m_transfPoint[i].y() > transfBRect.bottom() )
+                transfBRect.setBottom(m_transfPoint[i].y());
+        }
     }
 
     m_dev->clear();
@@ -1337,12 +1422,11 @@ void KisWarpTransformWorker::run()
 
     QPoint *previousLineVertices = new QPoint[verticesPerLine]();
     QPoint *currentLineVertices = new QPoint[verticesPerLine]();
-    Q_ASSERT(previousLineVertices != NULL && currentLineVertices != NULL);
 
     int i, prevX;
     int j, prevY;
     int k, prevK;
-    double x, y;
+    qreal x, y;
     bool lineDone;
     bool imageDone;
 
@@ -1363,7 +1447,7 @@ void KisWarpTransformWorker::run()
     lineDone = false;
     while (!lineDone) {
         while (j < srcBounds.width()) {
-            QPointF dstPosF = calcAffineTransformation(QPointF(x, y), nbPoints, m_origPoint, m_transfPoint, m_alpha);
+            QPointF dstPosF = m_warpMathFunction(QPointF(x, y), m_origPoint, m_transfPoint, m_alpha);
             QPoint dstPos = QPoint(qRound(dstPosF.x()), qRound(dstPosF.y()));
 
             previousLineVertices[k] = dstPos;
@@ -1394,7 +1478,7 @@ void KisWarpTransformWorker::run()
             x = srcBounds.left();
 
             //first column needs a special treatment
-            QPointF dstPosF = calcAffineTransformation(QPointF(x, y), nbPoints, m_origPoint, m_transfPoint, m_alpha);
+            QPointF dstPosF = m_warpMathFunction(QPointF(x, y), m_origPoint, m_transfPoint, m_alpha);
             QPoint dstPos = QPoint(qRound(dstPosF.x()), qRound(dstPosF.y()));
 
             currentLineVertices[0] = dstPos;
@@ -1410,7 +1494,7 @@ void KisWarpTransformWorker::run()
             lineDone = false;
             while (!lineDone) {
                 while (j < srcBounds.width()) {
-                    dstPosF = calcAffineTransformation(QPointF(x, y), nbPoints, m_origPoint, m_transfPoint, m_alpha);
+                    dstPosF = m_warpMathFunction(QPointF(x, y), m_origPoint, m_transfPoint, m_alpha);
                     QPoint dstPos = QPoint(qRound(dstPosF.x()), qRound(dstPosF.y()));
 
                     currentLineVertices[k] = dstPos;
@@ -1461,6 +1545,6 @@ void KisWarpTransformWorker::run()
             imageDone = true;
     }
 
-    delete previousLineVertices;
-    delete currentLineVertices;
+    delete[] previousLineVertices;
+    delete[] currentLineVertices;
 }

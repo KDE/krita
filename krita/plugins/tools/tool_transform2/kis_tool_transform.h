@@ -81,16 +81,14 @@ public:
     void paint(QPainter& gc, const KoViewConverter &converter);
     //recalc the outline & current QImages
     void recalcOutline();
-    //update the boundrect of the current transformed pixels
-    void updateCurrentOutline();
     //recalcs the outline and update the corresponding areas of the canvas (union of the outline boundrect before & after recalc)
-    void updateOutlineChanged();
+    void outlineChanged();
     double dichotomyScaleY(QVector3D v1, QVector3D v2, DICHO_DROP flag, double desired, double b, double precision, double maxIterations1, double maxIterations2);
     double dichotomyScaleX(QVector3D v1, QVector3D v2, DICHO_DROP flag, double desired, double b, double precision, double maxIterations1, double maxIterations2);
     QPolygonF aux_dichotomyScaleXY(QPointF v1, QPointF v2, QPointF v3, QPointF v4, QVector3D v1Proj, double scaleX, double scaleY);
     QPointF dichotomyScaleXY(QPointF v1, QPointF v2, QPointF v3, QPointF v4, QVector3D v1Proj, QVector3D v3Desired, int signX, int signY, double precision, double maxIterations1, double maxIterations2);
-    //sets the value of the spinboxes to current args
-    void refreshSpinBoxes();
+    //updates the UI according to currentArgs
+    void updateUI();
     void setButtonBoxDisabled(bool disabled);
 	void setFreeTBoxesDisabled(bool disabled);
 
@@ -110,12 +108,20 @@ public slots:
     void setAX(double aX);
     void setAY(double aY);
     void setAZ(double aZ);
+    void setAlpha(double alpha);
+    void setDensity(int density);
     void setTranslateX(double translateX);
     void setTranslateY(double translateY);
     void buttonBoxClicked(QAbstractButton *button);
     void keepAspectRatioChanged(bool keep);
     void editingFinished();
-	void warpButtonToggled(bool checked);
+	void warpButtonClicked(bool checked);
+	void freeTransformButtonClicked(bool checked);
+    void warpTypeChanged(int index);
+    void warpDefaultButtonClicked(bool checked);
+    void warpCustomButtonClicked(bool checked);
+    void lockUnlockPointsButtonClicked();
+    void resetPointsButtonClicked();
 
 private:
 
@@ -248,6 +254,8 @@ private:
     //sets the cursor according the mouse position (doesn't take shearing into account yet)
     void setFunctionalCursor();
     void setTransformFunction(QPointF mousePos, Qt::KeyboardModifiers modifiers);
+    //if pointsPerLine < 0, uses m_defaultPointsPerLine instead
+    void setDefaultWarpPoints(int pointsPerLine = -1);
     //just sets default values for current args, temporary values..
 	void initWarpTransform();
 	void initFreeTransform();
@@ -256,7 +264,7 @@ private:
     //stores m_currentArgs into args
     void storeArgs(ToolTransformArgs &args);
     //sets m_currentArgs to args
-    void restoreArgs(ToolTransformArgs args);
+    void restoreArgs(const ToolTransformArgs &args);
 	QRectF calcWarpBoundRect();
 
 private slots:
@@ -270,11 +278,11 @@ private:
                    MOVECENTER, PERSPECTIVE
                   };
 	
-    QPointF m_handleDir[9];
-
-    QCursor m_sizeCursors[8]; //cursors for the 8 directions
     function m_function; //current transformation function
+    bool m_editWarpPoints;
 
+    QPointF m_handleDir[9];
+    QCursor m_sizeCursors[8]; //cursors for the 8 directions
     ToolTransformArgs m_currentArgs;
     ToolTransformArgs m_clickArgs;
 
@@ -287,12 +295,6 @@ private:
     QPoint m_originalTopLeft;  //in image coords
     QPoint m_originalBottomRight;  //in image coords
     QPointF m_originalCenter; //original center of the selection
-
-    //informations on the bounding rect of the selection just after the LAST transformation
-    //thus they are initially equal to original points
-    //(used to know dirty rects more precisely)
-    QPoint m_previousTopLeft;  //in image coords
-    QPoint m_previousBottomRight;  //in image coords
 
     //center used for rotation (calculated from rotationCenterOffset (in currentArgs))
     QVector3D m_rotationCenter;
@@ -374,9 +376,10 @@ private:
     QButtonGroup *m_rotCenterButtons;
 
 	//Warp-related :
+    int m_defaultPointsPerLine;
 	double m_gridSpaceX, m_gridSpaceY;
-	QPointF *m_viewTransfPoints;
-	QPointF *m_viewOrigPoints;
+    QVector<QPointF> m_viewTransfPoints;
+    QVector<QPointF> m_viewOrigPoints;
 	bool m_cursorOverPoint;
 	int m_pointUnderCursor; //the number in the grid
 };

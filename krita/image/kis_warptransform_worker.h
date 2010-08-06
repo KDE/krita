@@ -35,26 +35,42 @@
 
 class KRITAIMAGE_EXPORT KisWarpTransformWorker : public QObject
 {
-
     Q_OBJECT
 
 public:
+	typedef enum WarpType_ {AFFINE_TRANSFORM = 0, SIMILITUDE_TRANSFORM, RIGID_TRANSFORM} WarpType;
+
+    /* Applies a transformation (affine, similitude, MLS) to the point v
+    according the original set of points p, the new set of points q, and
+    the constant alpha.
+    The algorithms are based a paper entitled "Image Deformation Using
+    Moving Least Squares", by Scott Schaefer (Texas A&M University), Travis
+    McPhail (Rice University) and Joe Warren (Rice University)*/
+    static QPointF affineTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha);
+    static QPointF similitudeTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha);
+    static QPointF rigidTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha);
+    //convenience method : calls one of the 3 math function above depending on warpType
+    static QPointF transformMath(WarpType warpType, QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha);
+    //puts in dst the transformed quad pDst from pSrc, using src pixels
     static void quadInterpolation(QImage *src, QImage *dst, QPolygon pSrc, QPolygon pDst);
     static void quadInterpolation(KisPaintDeviceSP src, KisPaintDeviceSP dst, QPolygon pSrc, QPolygon pDst);
-    static QImage affineTransformation(QImage *src, qint32 pointsPerLine, qint32 pointsPerColumn, QPointF *origPoint, QPointF *transfPoint, qreal alpha, QPointF originalTopLeft, QPointF *newTopLeft);
 
-    KisWarpTransformWorker(KisPaintDeviceSP dev, qint32 pointsPerLine, qint32 pointsPerColumn, QPointF *origPoint, QPointF *transfPoint, qreal alpha, KoUpdater *progress);
+    static QImage transformation(WarpType warpType, QImage *src, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, QPointF originalTopLeft, QPointF *newTopLeft);
+
+    KisWarpTransformWorker(WarpType warpType, KisPaintDeviceSP dev, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, KoUpdater *progress);
     ~KisWarpTransformWorker();
     void run();
+
+private:
+    typedef QPointF (*WarpMathFunction)(QPointF, QVector<QPointF>, QVector<QPointF>, qreal);
 
 private:
     qreal m_progressTotalSteps;
     qreal m_lastProgressReport;
     qreal m_progressStep;
-    qint32 m_pointsPerLine;
-    qint32 m_pointsPerColumn;
-    QPointF *m_origPoint;
-    QPointF *m_transfPoint;
+    WarpMathFunction m_warpMathFunction;
+    QVector<QPointF> m_origPoint;
+    QVector<QPointF> m_transfPoint;
     qreal m_alpha;
     KisPaintDeviceSP m_dev;
     KoUpdater *m_progress;
@@ -87,13 +103,13 @@ private:
     static inline void setRegion(bool reg[4], int x0, int y0, QRect clipRect);
     static void Sutherland_Hodgman(ExtendedSide **Dest, ExtendedSide *ExtSide, QRect clipRect, ClipperSide CS, bool &PreviousPointOut);
     static void ClipPolygone(ExtendedSide **ExtSides, QRect *clipper);
-    static inline bool equals(double a, double b, double tolerance);
-    static inline bool valInRange(double val, double range_min, double range_max, double tolerance);
+    static inline bool equals(qreal a, qreal b, qreal tolerance);
+    static inline bool valInRange(qreal val, qreal range_min, qreal range_max, qreal tolerance);
     static int inverseBilinInterp(QVector2D p0_minus_p, QVector2D p1_minus_p, QVector2D p0_minus_p2, QVector2D p1_minus_p3, QPointF& sol1, QPointF& sol2);
     static inline void bilinInterp(QPointF p0, QPointF p1, QPointF p2, QPointF p3, QPointF st, QPointF& p);
-    static inline double det(QVector2D v0, QVector2D v1);
-    static inline QPointF calcAffineTransformation(QPointF v, int nbPoints, QPointF *p, QPointF *q, qreal alpha);
+    static inline qreal det(QVector2D v0, QVector2D v1);
     static inline void switchVertices(QPoint **a, QPoint **b);
+    static QImage aux_transformation(WarpMathFunction warpMathFunction, QImage *src, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, QPointF originalTopLeft, QPointF *newTopLeft);
 };
 
 #endif

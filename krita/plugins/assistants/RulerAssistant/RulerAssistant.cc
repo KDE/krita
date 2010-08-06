@@ -75,7 +75,6 @@ void RulerAssistant::drawAssistant(QPainter& _painter, const QPoint& documentOff
     // Draw the gradient
     QPointF p1 = *handles()[0];
     QPointF p2 = *handles()[1];
-    _painter.setPen(QColor(0,0,0));
     _painter.save();
     {
         _painter.translate(_converter.documentToView(p1));

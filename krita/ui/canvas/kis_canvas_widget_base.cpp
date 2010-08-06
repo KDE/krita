@@ -91,7 +91,9 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, bool tools,
 
     // ask the decorations to paint themselves
     foreach(KisCanvasDecoration* deco, m_d->decorations) {
+        gc.save();
         deco->paint(gc, documentOffset, clipRect, *canvas->viewConverter());
+        gc.restore();
     }
 
     // Give the tool a chance to paint its stuff

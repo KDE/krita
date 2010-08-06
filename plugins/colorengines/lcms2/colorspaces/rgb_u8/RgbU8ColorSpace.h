@@ -82,7 +82,7 @@ public:
     }
 
     virtual QString defaultProfile() const {
-        return "sRGB built-in - (lcms internal)";
+        return "sRGB built-in";
     }
 };
 

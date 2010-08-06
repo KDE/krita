@@ -88,7 +88,7 @@ public:
     }
 
     virtual QString defaultProfile() const {
-        return "Lab built-in - (lcms internal)";
+        return "Lab identity built-in";
     }
 };
 

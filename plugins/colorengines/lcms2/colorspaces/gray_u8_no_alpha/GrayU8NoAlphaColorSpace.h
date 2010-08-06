@@ -73,7 +73,7 @@ public:
     }
 
     virtual QString defaultProfile() const {
-        return "gray built-in - (lcms internal)";
+        return "gray built-in";
     }
 };
 

@@ -271,19 +271,17 @@ public:
 
     virtual KoColorTransformation *createDesaturateAdjustment() const {
         if (!d->profile) return 0;
-#if 1
         KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);
 
         adj->profiles[0] = d->profile->lcmsProfile();
         adj->profiles[2] = d->profile->lcmsProfile();
         adj->csProfile = d->profile->lcmsProfile();
 
-        LPLUT Lut;
         BCHSWADJUSTS bchsw;
 
         bchsw.Saturation = -25;
 
-        adj->profiles[1] = cmsCreateProfilePlaceholder();
+        adj->profiles[1] = cmsCreateProfilePlaceholder(0);
         if (!adj->profiles[1]) { // can't allocate
             delete adj;
             return NULL;
@@ -293,38 +291,39 @@ public:
         cmsSetColorSpace(adj->profiles[1], cmsSigLabData);
         cmsSetPCS(adj->profiles[1], cmsSigLabData);
 
-        cmsSetRenderingIntent(adj->profiles[1], INTENT_PERCEPTUAL);
+        cmsSetHeaderRenderingIntent(adj->profiles[1], INTENT_PERCEPTUAL);
 
         // Creates a LUT with 3D grid only
-        Lut = cmsAllocLUT();
+        cmsPipeline* Lut = cmsPipelineAlloc(0, 3, 3);
 
-        cmsAlloc3DGrid(Lut, 32, 3, 3);
+        cmsStage* stage = cmsStageAllocCLut16bit(0, 32, 3, 3, 0);
 
-        if (!cmsSample3DGrid(Lut, desaturateSampler, static_cast<LPVOID>(&bchsw), 0)) {
+        if (!cmsStageSampleCLut16bit(stage, desaturateSampler, static_cast<void*>(&bchsw), 0)) {
             // Shouldn't reach here
-            cmsFreeLUT(Lut);
+            cmsStageFree(stage);
+            cmsPipelineFree(Lut);
             cmsCloseProfile(adj->profiles[1]);
             delete adj;
             return NULL;
         }
+        cmsPipelineInsertStage(Lut, cmsAT_BEGIN, stage);
 
         // Create tags
 
-        cmsAddTag(adj->profiles[1], cmsSigDeviceMfgDescTag, (LPVOID) "(krita internal)");
-        cmsAddTag(adj->profiles[1], cmsSigProfileDescriptionTag, (LPVOID) "krita saturation abstract profile");
-        cmsAddTag(adj->profiles[1], cmsSigDeviceModelDescTag, (LPVOID) "saturation built-in");
+        cmsWriteTag(adj->profiles[1], cmsSigDeviceMfgDescTag, (void*) "(krita internal)");
+        cmsWriteTag(adj->profiles[1], cmsSigProfileDescriptionTag, (void*) "krita saturation abstract profile");
+        cmsWriteTag(adj->profiles[1], cmsSigDeviceModelDescTag, (void*) "saturation built-in");
 
-        cmsAddTag(adj->profiles[1], cmsSigMediaWhitePointTag, (LPVOID) cmsD50_XYZ());
+        cmsWriteTag(adj->profiles[1], cmsSigMediaWhitePointTag, (void*) cmsD50_XYZ());
 
-        cmsAddTag(adj->profiles[1], cmsSigAToB0Tag, (LPVOID) Lut);
+        cmsWriteTag(adj->profiles[1], cmsSigAToB0Tag, (void*) Lut);
 
         // LUT is already on virtual profile
-        cmsFreeLUT(Lut);
+        cmsPipelineFree(Lut);
 
         adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(), INTENT_PERCEPTUAL, cmsFLAGS_NOWHITEONWHITEFIXUP);
 
         return adj;
-#endif
     }
 
     virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const*transferValues) const {

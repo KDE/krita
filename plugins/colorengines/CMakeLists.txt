@@ -1,4 +1,14 @@
+macro_optional_find_package(LCMS2)
 
-if(HAVE_LCMS)
-    add_subdirectory(lcms)
-endif(HAVE_LCMS)
+macro_log_feature(HAVE_LCMS2 "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Required for color management and Krita")
+
+if(LCMS2_FOUND)
+  add_subdirectory(lcms2)
+
+else()
+  if(HAVE_LCMS)
+      message(STATUS "LCMS version 2 was not found, lcms v1 will be used instead.")
+      add_subdirectory(lcms)
+  endif(HAVE_LCMS)
+endif()
+

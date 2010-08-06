@@ -34,6 +34,19 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="cbUseOpenGLToolOutlineWorkaround">
+        <property name="toolTip">
+         <string>This enables a workaround for a bug in Qt. 
+If you experience problems while creating a selection, 
+a shape or with the brush outline, 
+then you can try to enable this.</string>
+        </property>
+        <property name="text">
+         <string>Use workaround for tool outlines</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

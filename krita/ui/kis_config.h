@@ -88,6 +88,9 @@ public:
     bool useOpenGLShaders() const;
     void setUseOpenGLShaders(bool useOpenGLShaders);
 
+    bool useOpenGLToolOutlineWorkaround() const;
+    void setUseOpenGLToolOutlineWorkaround(bool useWorkaround);
+
     qint32 maxNumberOfThreads();
     void setMaxNumberOfThreads(qint32 numberOfThreads);
 

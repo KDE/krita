@@ -301,8 +301,11 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
         cbUseOpenGLShaders->setEnabled(false);
+        cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
     } else {
         cbUseOpenGL->setChecked(cfg.useOpenGL());
+        cbUseOpenGLToolOutlineWorkaround->setEnabled(cfg.useOpenGL());
+        cbUseOpenGLToolOutlineWorkaround->setChecked(cfg.useOpenGLToolOutlineWorkaround());
 #ifdef HAVE_GLEW
         if (KisOpenGL::hasShadingLanguage()) {
             cbUseOpenGLShaders->setChecked(cfg.useOpenGLShaders());
@@ -333,6 +336,8 @@ void DisplaySettingsTab::setDefault()
     cbUseOpenGL->setChecked(false);
     cbUseOpenGLShaders->setChecked(false);
     cbUseOpenGLShaders->setEnabled(false);
+    cbUseOpenGLToolOutlineWorkaround->setChecked(false);
+    cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
     chkMoving->setChecked(true);
     intCheckSize->setValue(32);
     colorChecks->setColor(QColor(220, 220, 220));
@@ -346,6 +351,7 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
         cbUseOpenGLShaders->setEnabled(isChecked);
     }
 #endif
+    cbUseOpenGLToolOutlineWorkaround->setEnabled(isChecked);
 #else
     Q_UNUSED(isChecked);
 #endif
@@ -604,8 +610,11 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
-
+        cfg.setUseOpenGLToolOutlineWorkaround(dialog->m_displaySettings->cbUseOpenGLToolOutlineWorkaround->isChecked());
+#else
+        cfg.setUseOpenGLToolOutlineWorkaround(false);
 #endif
+
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());
         cfg.setScrollingCheckers(dialog->m_displaySettings->chkMoving->isChecked());
         cfg.setCheckersColor(dialog->m_displaySettings->colorChecks->color());

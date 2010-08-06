@@ -237,6 +237,16 @@ void KisConfig::setUseOpenGLShaders(bool useOpenGLShaders)
     m_cfg.writeEntry("useOpenGLShaders", useOpenGLShaders);
 }
 
+bool KisConfig::useOpenGLToolOutlineWorkaround() const
+{
+    return m_cfg.readEntry("useOpenGLToolOutlineWorkaround", false);
+}
+
+void KisConfig::setUseOpenGLToolOutlineWorkaround(bool useWorkaround)
+{
+    m_cfg.writeEntry("useOpenGLToolOutlineWorkaround", useWorkaround);
+}
+
 qint32 KisConfig::maxNumberOfThreads()
 {
     return m_cfg.readEntry("maxthreads", QThread::idealThreadCount());

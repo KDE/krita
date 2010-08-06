@@ -414,8 +414,11 @@ QWidget* KisTool::optionWidget()
 void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
     //KisToolSelectMagnetic uses custom painting, so don't forget to update that as well
+    KisConfig cfg;
+    bool useWorkaround = cfg.useOpenGLToolOutlineWorkaround();
 #if defined(HAVE_OPENGL)
-    if (m_outlinePaintMode==XOR_MODE && isCanvasOpenGL()) {
+
+    if (m_outlinePaintMode==XOR_MODE && isCanvasOpenGL() && !useWorkaround) {
         beginOpenGL();
 
         glEnable(GL_LINE_SMOOTH);
@@ -443,7 +446,7 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
     else
 #endif
 #ifdef INDEPENDENT_CANVAS
-    if (m_outlinePaintMode==XOR_MODE) {
+    if (m_outlinePaintMode==XOR_MODE && !(isCanvasOpenGL() && useWorkaround)) {
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);

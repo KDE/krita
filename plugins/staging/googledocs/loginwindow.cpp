@@ -23,9 +23,6 @@
 #include <QtGui>
 #include <QX11Info>
 
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-
 LoginWindow::LoginWindow(QWidget *parent)
         : QDialog(parent),
           m_authDialog(new Ui_Dialog)

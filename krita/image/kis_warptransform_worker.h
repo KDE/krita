@@ -39,9 +39,9 @@ class KRITAIMAGE_EXPORT KisWarpTransformWorker : public QObject
     Q_OBJECT
 
 public:
-	static void quadInterpolation(QImage *src, QImage *dst, QPolygon pSrc, QPolygon pDst);
-	static void quadInterpolation(KisPaintDeviceSP src, KisPaintDeviceSP dst, QPolygon pSrc, QPolygon pDst);
-	static QImage affineTransformation(QImage *src, qint32 pointsPerLine, qint32 pointsPerColumn, QPointF *origPoint, QPointF *transfPoint, qreal alpha, QPointF originalTopLeft, QPointF *newTopLeft);
+    static void quadInterpolation(QImage *src, QImage *dst, QPolygon pSrc, QPolygon pDst);
+    static void quadInterpolation(KisPaintDeviceSP src, KisPaintDeviceSP dst, QPolygon pSrc, QPolygon pDst);
+    static QImage affineTransformation(QImage *src, qint32 pointsPerLine, qint32 pointsPerColumn, QPointF *origPoint, QPointF *transfPoint, qreal alpha, QPointF originalTopLeft, QPointF *newTopLeft);
 
     KisWarpTransformWorker(KisPaintDeviceSP dev, qint32 pointsPerLine, qint32 pointsPerColumn, QPointF *origPoint, QPointF *transfPoint, qreal alpha, KoUpdater *progress);
     ~KisWarpTransformWorker();
@@ -51,44 +51,49 @@ private:
     qreal m_progressTotalSteps;
     qreal m_lastProgressReport;
     qreal m_progressStep;
-	qint32 m_pointsPerLine;
-	qint32 m_pointsPerColumn;
-	QPointF *m_origPoint;
-	QPointF *m_transfPoint;
-	qreal m_alpha;
+    qint32 m_pointsPerLine;
+    qint32 m_pointsPerColumn;
+    QPointF *m_origPoint;
+    QPointF *m_transfPoint;
+    qreal m_alpha;
     KisPaintDeviceSP m_dev;
     KoUpdater *m_progress;
 
 private:
-	struct s_Fraction;
-	typedef struct s_Fraction Fraction;
+    struct s_Fraction;
+    typedef struct s_Fraction Fraction;
 
-	class Side;
+    class Side;
 
-	struct s_ExtendedSide;
-	typedef struct s_ExtendedSide ExtendedSide;
+    struct s_ExtendedSide;
+    typedef struct s_ExtendedSide ExtendedSide;
 
-	enum ClipperSide_ {
-		LEFTSIDE = 0, RIGHTSIDE = 1, UPSIDE = 2, DOWNSIDE = 3
-	};
-	typedef enum ClipperSide_ ClipperSide;
+    enum ClipperSide_ {
+        LEFTSIDE = 0, RIGHTSIDE = 1, UPSIDE = 2, DOWNSIDE = 3
+    };
+    typedef enum ClipperSide_ ClipperSide;
 
-	static inline Side CalcSide(QPoint P1, QPoint P2, Side *next);
-	static inline Side CalcSide(QPoint *P1, QPoint *P2, Side *next);
-	static inline void AddExtSide(ExtendedSide **S, QPoint P0, QPoint P1);
-	static void CreateExtSides(ExtendedSide **sides, QPolygon polygon);
-	static inline void Insert(Side **L, Side *NewSide);
-	static inline void InsertInSortedList(Side **L, Side *NewSide);
-	static void FreeSidesList(Side *L);
-	static void FreeSidesTable(Side *TC[], int top, int bottom);
-	static void FreeExtSide(ExtendedSide *S);
-	static void FreeExtSides(ExtendedSide **S);
-	static inline void AddExtSide(ExtendedSide **dest, QPoint P, QPoint S, Side C);
-	static inline void setRegion(bool reg[4], int x0, int y0, QRect clipRect);
-	static void Sutherland_Hodgman(ExtendedSide **Dest, ExtendedSide *ExtSide, QRect clipRect, ClipperSide CS, bool &PreviousPointOut);
-	static void ClipPolygone(ExtendedSide **ExtSides, QRect *clipper);
-	static inline void switchVertices(QPoint **a, QPoint **b);
-	static inline QPointF calcAffineTransformation(QPointF v, int nbPoints, QPointF *p, QPointF *q, qreal alpha);
+    static inline Side CalcSide(QPoint P1, QPoint P2, Side *next);
+    static inline Side CalcSide(QPoint *P1, QPoint *P2, Side *next);
+    static inline void AddExtSide(ExtendedSide **S, QPoint P0, QPoint P1);
+    static void CreateExtSides(ExtendedSide **sides, QPolygon polygon);
+    static inline void Insert(Side **L, Side *NewSide);
+    static inline void InsertInSortedList(Side **L, Side *NewSide);
+    static void FreeSidesList(Side *L);
+    static void FreeSidesTable(Side *TC[], int top, int bottom);
+    static void FreeExtSide(ExtendedSide *S);
+    static void FreeExtSides(ExtendedSide **S);
+    static inline void AddExtSide(ExtendedSide **dest, QPoint P, QPoint S, Side C);
+    static inline void setRegion(bool reg[4], int x0, int y0, QRect clipRect);
+    static void Sutherland_Hodgman(ExtendedSide **Dest, ExtendedSide *ExtSide, QRect clipRect, ClipperSide CS, bool &PreviousPointOut);
+    static void ClipPolygone(ExtendedSide **ExtSides, QRect *clipper);
+    static inline bool equals(double a, double b, double tolerance);
+    static inline bool valInRange(double val, double range_min, double range_max, double tolerance);
+    static int inverseBilinInterp(QVector2D p0_minus_p, QVector2D p1_minus_p, QVector2D p0_minus_p2, QVector2D p1_minus_p3, QPointF& sol1, QPointF& sol2);
+    static inline void bilinInterp(QPointF p0, QPointF p1, QPointF p2, QPointF p3, QPointF st, QPointF& p);
+    static inline double det(QVector2D v0, QVector2D v1);
+    static inline QPointF calcAffineTransformation(QPointF v, int nbPoints, QPointF *p, QPointF *q, qreal alpha);
+    static inline void switchVertices(QPoint **a, QPoint **b);
 };
 
 #endif

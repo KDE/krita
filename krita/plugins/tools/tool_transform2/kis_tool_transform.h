@@ -42,8 +42,6 @@
 #include "ui_wdg_tool_transform.h"
 #include "tool_transform_args.h"
 
-//#define PERSPECTIVE_DISABLED
-
 class KoID;
 class KisFilterStrategy;
 

@@ -84,8 +84,6 @@ void KisToolSelectRectangular::LocalTool::finishRect(const QRectF& rect)
 
     if (m_selectingTool->m_selectionMode == PIXEL_SELECTION) {
 
-        // We don't want the border of the 'rectangle' to be included in our selection
-        rc.setSize(rc.size() - QSize(1, 1));
         if (rc.width() > 0 && rc.height() > 0) {
             KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
             tmpSel->select(rc);

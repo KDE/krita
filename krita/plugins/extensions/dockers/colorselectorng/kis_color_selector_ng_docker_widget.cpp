@@ -16,26 +16,24 @@
  */
 
 #include "kis_color_selector_ng_docker_widget.h"
+#include "ui_wdg_color_selector_settings.h"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-
-#include "kis_canvas2.h"
-
-#include "kis_color_history.h"
-#include "kis_common_colors.h"
-#include "kis_color_selector_settings.h"
-#include "kis_color_selector_container.h"
-
-#include "ui_wdg_color_selector_settings.h"
-#include "kis_color_space_selector.h"
-#include "kis_preference_set_registry.h"
-#include "kis_color_selector_settings.h"
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KComponentData>
 #include <KGlobal>
+
+#include "kis_canvas2.h"
+#include "kis_color_space_selector.h"
+#include "kis_preference_set_registry.h"
+
+#include "kis_color_history.h"
+#include "kis_common_colors.h"
+#include "kis_color_selector_settings.h"
+#include "kis_color_selector_container.h"
 
 #include <KDebug>
 

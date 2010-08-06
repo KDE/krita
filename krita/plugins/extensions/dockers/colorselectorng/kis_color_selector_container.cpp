@@ -30,6 +30,13 @@
 #include <KConfigGroup>
 #include <KComponentData>
 #include <KGlobal>
+#include <KAction>
+#include <KActionCollection>
+
+#include "kis_view2.h"
+#include "kis_canvas2.h"
+#include "kis_canvas_resource_provider.h"
+#include "kis_layer_manager.h"
 
 #include <KDebug>
 
@@ -40,7 +47,11 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     m_minimalShadeSelector(new KisMinimalShadeSelector(this)),
     m_shadeSelector(m_myPaintShadeSelector),
     m_shadeSelectorHideable(false),
-    m_allowHorizontalLayout(true)
+    m_allowHorizontalLayout(true),
+    m_colorSelAction(0),
+    m_mypaintAction(0),
+    m_minimalAction(0),
+    m_canvas(0)
 {
     QPushButton* pipetteButton = new QPushButton(this);
     QPushButton* settingsButton = new QPushButton(this);
@@ -85,9 +96,29 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
 
 void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
 {
+    m_canvas=canvas;
     m_colorSelector->setCanvas(canvas);
     m_myPaintShadeSelector->setCanvas(canvas);
     m_minimalShadeSelector->setCanvas(canvas);
+
+    KActionCollection* actionCollection = canvas->view()->actionCollection();
+
+    m_colorSelAction = new KAction("Show color selector", this);
+    m_colorSelAction->setShortcut(QKeySequence(tr("C")));
+    connect(m_colorSelAction, SIGNAL(triggered()), m_colorSelector, SLOT(showPopup()));
+    actionCollection->addAction("show_color_selector", m_colorSelAction);
+
+    m_mypaintAction = new KAction("Show MyPaint shade selector", this);
+    m_mypaintAction->setShortcut(QKeySequence(tr("M")));
+    connect(m_mypaintAction, SIGNAL(triggered()), m_myPaintShadeSelector, SLOT(showPopup()));
+    actionCollection->addAction("show_mypaint_shade_selector", m_mypaintAction);
+
+    m_minimalAction = new KAction("Show minimal shade selector", this);
+    m_minimalAction->setShortcut(QKeySequence(tr("N")));
+    connect(m_minimalAction, SIGNAL(triggered()), m_minimalShadeSelector, SLOT(showPopup()));
+    actionCollection->addAction("show_minimal_shade_selector", m_minimalAction);
+
+    connect(m_canvas->view()->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(reactOnLayerChange()));
 }
 
 void KisColorSelectorContainer::updateSettings()
@@ -114,6 +145,24 @@ void KisColorSelectorContainer::updateSettings()
     if(m_shadeSelector!=0)
         m_shadeSelector->show();
 
+}
+
+void KisColorSelectorContainer::reactOnLayerChange()
+{
+    KisNodeSP node = m_canvas->view()->resourceProvider()->currentNode();
+    if (node) {
+        KisPaintDeviceSP device = node->paintDevice();
+        if (device) {
+            m_colorSelAction->setEnabled(true);
+            m_mypaintAction->setEnabled(true);
+            m_minimalAction->setEnabled(true);
+        }
+        else {
+            m_colorSelAction->setEnabled(false);
+            m_mypaintAction->setEnabled(false);
+            m_minimalAction->setEnabled(false);
+        }
+    }
 }
 
 void KisColorSelectorContainer::resizeEvent(QResizeEvent * e)

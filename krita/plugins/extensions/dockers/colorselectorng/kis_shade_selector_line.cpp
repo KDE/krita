@@ -160,9 +160,7 @@ void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
 {
     Q_ASSERT(m_canvas);
     if(e->button()!=Qt::LeftButton && e->button()!=Qt::RightButton) {
-        KisMinimalShadeSelector* parent = dynamic_cast<KisMinimalShadeSelector*>(parentWidget());
-        if(parent!=0)
-            parent->mousePressEvent(e);
+        e->setAccepted(false);
         return;
     }
 

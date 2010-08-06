@@ -45,12 +45,14 @@ public:
 public slots:
     virtual void updateSettings();
     virtual void setColor(const QColor& color);
+    virtual void showPopup();
 
 public:
     void mousePressEvent(QMouseEvent *);
 
 protected:
     void mouseMoveEvent(QMouseEvent *);
+    void keyPressEvent(QKeyEvent *);
     virtual KisColorSelectorBase* createPopup() const = 0;
     /// finds a QColor, that will be ref.toQColor(), if converting it to the color space of ref
     QColor findGeneratingColor(const KoColor& ref) const;

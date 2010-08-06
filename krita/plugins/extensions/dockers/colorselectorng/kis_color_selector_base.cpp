@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QTimer>
+#include <QCursor>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -93,12 +94,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 {
     if(m_popupOnMouseClick && (event->buttons()&Qt::MidButton)>0 && parent()!=0) {
         //open popup
-        if(m_popup==0) {
-            m_popup = createPopup();
-            Q_ASSERT(m_popup);
-            m_popup->setWindowFlags(Qt::Popup);
-            m_popup->setCanvas(m_canvas);
-        }
+        showPopup();
 
         int x = event->globalX();
         int y = event->globalY();
@@ -133,6 +129,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 
 void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
 {
+//    kDebug()<<"mouse move event, e="<<e->pos()<<"  global="<<e->globalPos();
     if(parent()==0 && (qMin(e->x(), e->y())<-m_hideDistance || qMax(e->x(), e->y())>width()+m_hideDistance)) {
         if(!m_timer->isActive()) {
             m_timer->start();
@@ -147,12 +144,7 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
     }
     else if(parent()!=0 && m_popupOnMouseOver && this->rect().contains(e->pos()) && (m_popup==0 || m_popup->isHidden())) {
         //open popup
-        if(m_popup==0) {
-            m_popup = createPopup();
-            Q_ASSERT(m_popup);
-            m_popup->setWindowFlags(Qt::Popup);
-            m_popup->setCanvas(m_canvas);
-        }
+        showPopup();
 
         QRect availRect = QApplication::desktop()->availableGeometry(this);
         QRect forbiddenRect = QRect(parentWidget()->mapToGlobal(QPoint(0,0)),
@@ -184,10 +176,14 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
         }
 
         m_popup->move(x, y);
-        m_popup->show();
         e->accept();
         return;
     }
+}
+
+void KisColorSelectorBase::keyPressEvent(QKeyEvent *)
+{
+    hidePopup();
 }
 
 qreal distance(const QColor& c1, const QColor& c2)
@@ -258,6 +254,20 @@ QColor KisColorSelectorBase::findGeneratingColor(const KoColor& ref) const
 void KisColorSelectorBase::setColor(const QColor& color)
 {
     Q_UNUSED(color);
+}
+
+void KisColorSelectorBase::showPopup()
+{
+    if(m_popup==0) {
+        m_popup = createPopup();
+        Q_ASSERT(m_popup);
+        m_popup->setWindowFlags(Qt::Popup);
+        m_popup->setCanvas(m_canvas);
+    }
+
+    QPoint cursorPos = QCursor::pos();
+    m_popup->show();
+    m_popup->move(cursorPos.x()-width()/2, cursorPos.y()-height()/2);
 }
 
 void KisColorSelectorBase::hidePopup()

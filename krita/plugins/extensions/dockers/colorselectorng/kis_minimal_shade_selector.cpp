@@ -55,6 +55,7 @@ void KisMinimalShadeSelector::setColor(const QColor& color)
 
 void KisMinimalShadeSelector::updateSettings()
 {
+    bool mouseTracking = hasMouseTracking();
     KisColorSelectorBase::updateSettings();
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
@@ -86,6 +87,9 @@ void KisMinimalShadeSelector::updateSettings()
         m_shadingLines.at(i)->updateSettings();
 
     setPopupBehaviour(false, false);
+
+    // if not setting the mouse tracking again, then the new childwidgets will disable it.
+    setMouseTracking(mouseTracking);
 }
 
 void KisMinimalShadeSelector::paintEvent(QPaintEvent *)

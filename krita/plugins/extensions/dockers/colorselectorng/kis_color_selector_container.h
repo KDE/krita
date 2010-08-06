@@ -26,6 +26,7 @@ class KisMinimalShadeSelector;
 class KoColorSpace;
 class QBoxLayout;
 class KisCanvas2;
+class KAction;
 
 class KisColorSelectorContainer : public QWidget
 {
@@ -42,6 +43,7 @@ signals:
 
 protected slots:
     void updateSettings();
+    void reactOnLayerChange();
 
 protected:
     void resizeEvent(QResizeEvent *);
@@ -57,6 +59,12 @@ private:
 
     QBoxLayout* m_buttonLayout;
     QBoxLayout* m_widgetLayout;
+
+    KAction* m_colorSelAction;
+    KAction* m_mypaintAction;
+    KAction* m_minimalAction;
+
+    KisCanvas2* m_canvas;
 };
 
 #endif // KIS_COLOR_SELECTOR_CONTAINER_H

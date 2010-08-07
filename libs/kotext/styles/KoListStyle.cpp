@@ -123,8 +123,6 @@ KoListLevelProperties KoListStyle::levelProperties(int level) const
     if (d->levels.count()) {
         KoListLevelProperties llp = d->levels.begin().value();
         llp.setLevel(level);
-        // TODO make the 10 configurable.
-        llp.setIndent(level * 10.0);
         return llp;
     }
     KoListLevelProperties llp;

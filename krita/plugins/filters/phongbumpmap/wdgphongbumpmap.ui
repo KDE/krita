@@ -98,7 +98,7 @@
         <item row="2" column="0">
          <widget class="QCheckBox" name="specularReflectivityCheckBox">
           <property name="toolTip">
-           <string>Unckeck to ignore specular reflectivity during computations and increase performance.</string>
+           <string>Uncheck to ignore specular reflectivity during computations and increase performance.</string>
           </property>
           <property name="text">
            <string>Specular reflectivity</string>

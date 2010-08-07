@@ -40,7 +40,11 @@ struct KisPropertiesConfiguration::Private {
 
 KisPropertiesConfiguration::KisPropertiesConfiguration() : d(new Private)
 {
+}
 
+KisPropertiesConfiguration::~KisPropertiesConfiguration()
+{
+    delete d;
 }
 
 KisPropertiesConfiguration::KisPropertiesConfiguration(const KisPropertiesConfiguration& rhs)
@@ -84,7 +88,7 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
         if(d->notSavedProperties.contains(it.key())) {
             continue;
         }
-            
+
         QDomElement e = doc.createElement("param");
         e.setAttribute("name", QString(it.key().toLatin1()));
         QVariant v = it.value();

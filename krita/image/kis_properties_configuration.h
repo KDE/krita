@@ -48,13 +48,12 @@ public:
      * Create a new properties  config.
      */
     KisPropertiesConfiguration();
+    virtual ~KisPropertiesConfiguration();
 
     /**
      * Deep copy the properties  configFile
      */
     KisPropertiesConfiguration(const KisPropertiesConfiguration& rhs);
-
-    virtual ~KisPropertiesConfiguration() {}
 
 public:
 
@@ -116,12 +115,12 @@ public:
     KisCubicCurve getCubicCurve(const QString & name, const KisCubicCurve & curve = KisCubicCurve()) const;
 
     KoColor getColor(const QString& name, const KoColor& color = KoColor()) const;
-    
+
     QMap<QString, QVariant> getProperties() const;
 
     /// Clear the map of properties
     void clearProperties();
-    
+
     ///Marks a property that should not be saved by toXML
     void setPropertyNotSaved(const QString & name);
 

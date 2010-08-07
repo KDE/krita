@@ -57,7 +57,6 @@ private:
     bool m_shadeSelectorHideable;
     bool m_allowHorizontalLayout;
 
-    QBoxLayout* m_buttonLayout;
     QBoxLayout* m_widgetLayout;
 
     KAction* m_colorSelAction;

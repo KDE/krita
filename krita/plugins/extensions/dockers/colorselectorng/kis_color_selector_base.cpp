@@ -323,6 +323,9 @@ const KoColorSpace* KisColorSelectorBase::colorSpace() const
 
 void KisColorSelectorBase::updateSettings()
 {
+    if(m_popup!=0)
+        m_popup->updateSettings();
+
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
     if(cfg.readEntry("useCustomColorSpace", true)) {

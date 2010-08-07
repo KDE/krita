@@ -17,11 +17,6 @@
 
 #include "kis_color_selector.h"
 
-#include "kis_color_selector_ring.h"
-#include "kis_color_selector_triangle.h"
-#include "kis_color_selector_simple.h"
-#include "kis_color_selector_wheel.h"
-
 #include <cmath>
 
 #include <QHBoxLayout>
@@ -29,11 +24,18 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QTimer>
+#include <QPushButton>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KComponentData>
 #include <KGlobal>
+#include <KIcon>
+
+#include "kis_color_selector_ring.h"
+#include "kis_color_selector_triangle.h"
+#include "kis_color_selector_simple.h"
+#include "kis_color_selector_wheel.h"
 
 #include <KDebug>
 
@@ -59,6 +61,7 @@ KisColorSelector::KisColorSelector(QWidget* parent)
                                        m_slider(0),
                                        m_square(0),
                                        m_wheel(0),
+                                       m_button(0),
                                        m_mainComponent(0),
                                        m_subComponent(0),
                                        m_grabbingComponent(0)
@@ -153,9 +156,26 @@ void KisColorSelector::paintEvent(QPaintEvent* e)
     m_subComponent->paintEvent(&p);
 }
 
+inline int iconSize(qreal width, qreal height) {
+    qreal radius = qMin(width, height)/2.;
+    qreal xm = width/2.;
+    qreal ym = height/2.;
+    if(xm>=2*ym || ym>=2*xm)
+        return qBound(5., radius, 32.);
+
+    qreal a=-2;
+    qreal b=2.*(xm+ym);
+    qreal c=radius*radius-xm*xm-ym*ym;
+    return qBound(5., ((-b+sqrt(b*b-4*a*c))/(2*a)), 32.);
+}
+
 void KisColorSelector::resizeEvent(QResizeEvent* e) {
     if(m_configuration.subType==Ring) {
         m_ring->setGeometry(0,0,width(), height());
+        if(m_button!=0) {
+            int size = iconSize(width(), height());
+            m_button->setGeometry(0, 0, size, size);
+        }
         if(m_configuration.mainType==Triangle) {
             m_triangle->setGeometry(width()/2-m_ring->innerRadius(),
                                     height()/2-m_ring->innerRadius(),
@@ -172,8 +192,29 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
     }
     else {
         // type wheel and square
-        m_mainComponent->setGeometry(0,height()*0.1,width(), height()*0.9);
-        m_subComponent->setGeometry(0,0,width(), height()*0.1);
+        if(m_configuration.mainType==Wheel) {
+            if(m_button!=0) {
+                int size = iconSize(width(), height()*0.9);
+                m_button->setGeometry(0, height()*0.1, size, size);
+            }
+            m_mainComponent->setGeometry(0, height()*0.1, width(), height()*0.9);
+            m_subComponent->setGeometry( 0, 0,            width(), height()*0.1);
+        }
+        else {
+            int buttonSize = qBound(20, int(0.1*height()), 32);
+            m_button->setGeometry(0, 0, buttonSize, buttonSize);
+
+            if(height()>width()) {
+                int selectorHeight=height()-buttonSize;
+                m_mainComponent->setGeometry(0, buttonSize+selectorHeight*0.1, width(), selectorHeight*0.9);
+                m_subComponent->setGeometry( 0, buttonSize,                    width(), selectorHeight*0.1);
+            }
+            else {
+                int selectorWidth=width()-buttonSize;
+                m_mainComponent->setGeometry(buttonSize, height()*0.1, selectorWidth, height()*0.9);
+                m_subComponent->setGeometry( buttonSize, 0,            selectorWidth, height()*0.1);
+            }
+        }
     }
 
     KisColorSelectorBase::resizeEvent(e);
@@ -244,6 +285,12 @@ void KisColorSelector::init()
     m_slider = new KisColorSelectorSimple(this);
     m_square = new KisColorSelectorSimple(this);
     m_wheel = new KisColorSelectorWheel(this);
+
+    if(parent()!=0) {
+        m_button = new QPushButton(this);
+        m_button->setIcon(KIcon("configure"));
+        connect(m_button, SIGNAL(clicked()), SIGNAL(settingsButtonClicked()));
+    }
 
     // a tablet can send many more signals, than a mouse
     // this causes many repaints, if updating after every signal.

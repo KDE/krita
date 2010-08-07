@@ -26,9 +26,11 @@ class KisColorSelectorRing;
 class KisColorSelectorComponent;
 class KisColorSelectorSimple;
 class KisColorSelectorWheel;
+class QPushButton;
 
 class KisColorSelector : public KisColorSelectorBase
 {
+    Q_OBJECT
 public:
     enum Type {Ring, Square, Wheel, Triangle, Slider};
     enum Parameters {H, hsvS, V, hslS, L, SL, SV, hsvSH, hslSH, VH, LH};
@@ -83,6 +85,9 @@ public:
 public slots:
     void updateSettings();
 
+signals:
+    void settingsButtonClicked();
+
 protected:
     void paintEvent(QPaintEvent*);
     void resizeEvent(QResizeEvent*);
@@ -100,6 +105,7 @@ private:
     KisColorSelectorSimple* m_slider;
     KisColorSelectorSimple* m_square;
     KisColorSelectorWheel* m_wheel;
+    QPushButton* m_button;
     KisColorSelectorComponent* m_mainComponent;
     KisColorSelectorComponent* m_subComponent;
     KisColorSelectorComponent* m_grabbingComponent;

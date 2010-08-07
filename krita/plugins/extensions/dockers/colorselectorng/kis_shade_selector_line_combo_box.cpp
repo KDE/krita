@@ -41,6 +41,8 @@ public:
         QVBoxLayout* layout = new QVBoxLayout(this);
         layout->setSpacing(spacing);
 
+        layout->addWidget(new KisShadeSelectorLine(1.0, 0.0, 0.0, this));
+        layout->addWidget(new KisShadeSelectorLine(0.1, 0.0, 0.0, this));
         layout->addWidget(new KisShadeSelectorLine(0.2, 0.0, 0.0, this));
         layout->addWidget(new KisShadeSelectorLine(0.0, 0.5, 0.0, this));
         layout->addWidget(new KisShadeSelectorLine(0.0, 1.0, 0.0, this));

@@ -135,10 +135,12 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
     qreal valueStep=m_valueDelta/qreal(patchCount);
 
     int z=0;
+    qreal colorHue = m_color.hueF();
+    if(colorHue<0) colorHue=0;
     for(int i=-patchCount/2; i<=patchCount/2; i++) {
         if(i==0 && patchCount%2==0) continue;
 
-        qreal hue=m_color.hueF()+(i*hueStep);
+        qreal hue=colorHue+(i*hueStep);
         if(hue<0) hue+=1.;
         if(hue>1) hue-=1.;
 

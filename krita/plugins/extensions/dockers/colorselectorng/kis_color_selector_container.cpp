@@ -53,28 +53,10 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     m_minimalAction(0),
     m_canvas(0)
 {
-    QPushButton* pipetteButton = new QPushButton(this);
-    QPushButton* settingsButton = new QPushButton(this);
-
-    pipetteButton->setIcon(KIcon("krita_tool_color_picker"));
-    pipetteButton->setFlat(true);
-    settingsButton->setIcon(KIcon("configure"));
-    settingsButton->setFlat(true);
-    pipetteButton->setMaximumWidth(24);
-    settingsButton->setMaximumWidth(24);
-
-    m_buttonLayout = new QBoxLayout(QBoxLayout::LeftToRight);
-    m_buttonLayout->addStretch(1);
-    m_buttonLayout->addWidget(pipetteButton);
-    m_buttonLayout->addWidget(settingsButton);
-    m_buttonLayout->setMargin(0);
-    m_buttonLayout->setSpacing(0);
-
     m_widgetLayout = new QBoxLayout(QBoxLayout::TopToBottom, this);
     m_widgetLayout->setSpacing(0);
     m_widgetLayout->setMargin(0);
 
-    m_widgetLayout->addLayout(m_buttonLayout);
     m_widgetLayout->addWidget(m_colorSelector);
     m_widgetLayout->addWidget(m_myPaintShadeSelector);
     m_widgetLayout->addWidget(m_minimalShadeSelector);
@@ -82,7 +64,8 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     m_myPaintShadeSelector->hide();
     m_minimalShadeSelector->hide();
 
-    connect(settingsButton, SIGNAL(clicked()),         this,                   SIGNAL(openSettings()));
+    connect(m_colorSelector,SIGNAL(settingsButtonClicked()), SIGNAL(openSettings()));
+
     connect(this,           SIGNAL(settingsChanged()), m_colorSelector,        SLOT(updateSettings()));
     connect(this,           SIGNAL(settingsChanged()), m_myPaintShadeSelector, SLOT(updateSettings()));
     connect(this,           SIGNAL(settingsChanged()), this,                   SLOT(updateSettings()));
@@ -176,13 +159,11 @@ void KisColorSelectorContainer::resizeEvent(QResizeEvent * e)
         else {
             m_shadeSelector->show();
         }
-        if(height() < width() && m_allowHorizontalLayout) {
+        if(height() < width() && m_allowHorizontalLayout && m_shadeSelector!=m_minimalShadeSelector) {
             m_widgetLayout->setDirection(QBoxLayout::LeftToRight);
-            m_buttonLayout->setDirection(QBoxLayout::BottomToTop);
         }
         else {
             m_widgetLayout->setDirection(QBoxLayout::TopToBottom);
-            m_buttonLayout->setDirection(QBoxLayout::LeftToRight);
         }
     }
 

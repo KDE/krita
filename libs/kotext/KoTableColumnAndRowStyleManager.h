@@ -41,7 +41,7 @@ class KOTEXT_EXPORT KoTableColumnAndRowStyleManager
 {
 public:
     explicit KoTableColumnAndRowStyleManager();
-    virtual ~KoTableColumnAndRowStyleManager();
+    ~KoTableColumnAndRowStyleManager();
 
     /**
      * Set the column style for the column \a column to \a columnStyle.

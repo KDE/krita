@@ -58,12 +58,12 @@ public:
 
 
 KoTableColumnStyle::KoTableColumnStyle()
-        : QObject(), d(new Private())
+        :  d(new Private())
 {
 }
 
 KoTableColumnStyle::KoTableColumnStyle(const KoTableColumnStyle &rhs)
-        : QObject(), d(rhs.d)
+        : d(rhs.d)
 {
 }
 
@@ -201,7 +201,6 @@ void KoTableColumnStyle::setName(const QString &name)
     if (name == d->name)
         return;
     d->name = name;
-    emit nameChanged(name);
 }
 
 int KoTableColumnStyle::styleId() const
@@ -268,23 +267,6 @@ void KoTableColumnStyle::loadOdfProperties(KoStyleStack &styleStack)
     }
 }
 
-void KoTableColumnStyle::copyProperties(const KoTableColumnStyle *style)
-{
-    d->stylesPrivate = style->d->stylesPrivate;
-    setName(style->name()); // make sure we emit property change
-    d->next = style->d->next;
-    d->parentStyle = style->d->parentStyle;
-}
-
-/*
-KoTableColumnStyle *KoTableColumnStyle::clone(QObject *parent)
-{
-    KoTableColumnStyle *newStyle = new KoTableColumnStyle(parent);
-    newStyle->copyProperties(this);
-    return newStyle;
-}
-*/
-
 bool KoTableColumnStyle::operator==(const KoTableColumnStyle &other) const
 {
     return other.d->stylesPrivate == d->stylesPrivate;
@@ -310,5 +292,3 @@ void KoTableColumnStyle::saveOdf(KoGenStyle &style)
         } 
 */
 }
-
-#include <KoTableColumnStyle.moc>

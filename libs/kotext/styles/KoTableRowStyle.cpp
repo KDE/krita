@@ -56,13 +56,13 @@ public:
     StylePrivate stylesPrivate;
 };
 
-KoTableRowStyle::KoTableRowStyle(QObject *parent)
-        : QObject(parent), d(new Private())
+KoTableRowStyle::KoTableRowStyle()
+    :  d(new Private())
 {
 }
 
 KoTableRowStyle::KoTableRowStyle(const KoTableRowStyle &rhs)
-        : QObject(), d(rhs.d)
+        : d(rhs.d)
 {
 }
 
@@ -230,7 +230,6 @@ void KoTableRowStyle::setName(const QString &name)
     if (name == d->name)
         return;
     d->name = name;
-    emit nameChanged(name);
 }
 
 int KoTableRowStyle::styleId() const
@@ -318,22 +317,6 @@ void KoTableRowStyle::loadOdfProperties(KoStyleStack &styleStack)
     }
 }
 
-void KoTableRowStyle::copyProperties(const KoTableRowStyle *style)
-{
-    d->stylesPrivate = style->d->stylesPrivate;
-    setName(style->name()); // make sure we emit property change
-    d->next = style->d->next;
-    d->parentStyle = style->d->parentStyle;
-}
-
-KoTableRowStyle *KoTableRowStyle::clone(QObject *parent)
-{
-    KoTableRowStyle *newStyle = new KoTableRowStyle(parent);
-    newStyle->copyProperties(this);
-    return newStyle;
-}
-
-
 bool KoTableRowStyle::operator==(const KoTableRowStyle &other) const
 {
     return other.d->stylesPrivate == d->stylesPrivate;
@@ -359,5 +342,3 @@ void KoTableRowStyle::saveOdf(KoGenStyle &style)
         } 
 */
 }
-
-#include <KoTableRowStyle.moc>

@@ -71,7 +71,7 @@ KoTableColumnStyle KoTableColumnAndRowStyleManager::columnStyle(int column) cons
         return KoTableColumnStyle();
     }
 
-    return d->tableColumnStyles.value(column, KoTableColumnStyle());
+    return d->tableColumnStyles.value(column);
 }
 
 void KoTableColumnAndRowStyleManager::setRowStyle(int row, const KoTableRowStyle &rowStyle)
@@ -99,6 +99,6 @@ KoTableRowStyle KoTableColumnAndRowStyleManager::rowStyle(int row) const
         return KoTableRowStyle();
     }
 
-    return d->tableRowStyles.value(row, KoTableRowStyle());
+    return d->tableRowStyles.value(row);
 }
 

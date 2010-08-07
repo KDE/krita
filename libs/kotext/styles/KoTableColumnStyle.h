@@ -51,9 +51,8 @@ class KoOdfLoadingContext;
  *
  * @see KoStyleManager, KoTableRowAndColumnStyleManager
  */
-class KOTEXT_EXPORT KoTableColumnStyle : public QObject
+class KOTEXT_EXPORT KoTableColumnStyle
 {
-    Q_OBJECT
 public:
     enum Property {
         StyleId = QTextTableFormat::UserProperty + 1,
@@ -73,9 +72,6 @@ public:
 
     /// Destructor
     ~KoTableColumnStyle();
-
-    /// Creates a clone of this style with the specified parent.
-    //KoTableColumnStyle *clone(QObject *parent = 0);
 
     /// Set the column width.
     void setColumnWidth(qreal width);
@@ -128,9 +124,6 @@ public:
     /// Set the name of the master-page.
     void setMasterPageName(const QString &name);
 
-    /// Copy all the properties from the other style to this style, effectively duplicating it.
-    void copyProperties(const KoTableColumnStyle *style);
-
     /// Remove the property \key from this style.
     void remove(int key);
 
@@ -174,9 +167,6 @@ public:
      * @returns a QVariant which holds the property value.
      */
     QVariant value(int key) const;
-
-signals:
-    void nameChanged(const QString &newName);
 
 private:
     /**

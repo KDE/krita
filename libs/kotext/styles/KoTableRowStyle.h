@@ -47,9 +47,8 @@ class KoOdfLoadingContext;
  * @see KoStyleManager
  * @see KoTableRowAndColumnStyleManager
  */
-class KOTEXT_EXPORT KoTableRowStyle : public QObject
+class KOTEXT_EXPORT KoTableRowStyle
 {
-    Q_OBJECT
 public:
     enum Property {
         StyleId = QTextTableFormat::UserProperty + 1,
@@ -63,7 +62,7 @@ public:
     };
 
     /// Constructor
-    KoTableRowStyle(QObject *parent = 0);
+    KoTableRowStyle();
     /// Constructor
     KoTableRowStyle(const KoTableRowStyle &rhs);
     /// assign operator
@@ -71,9 +70,6 @@ public:
 
     /// Destructor
     ~KoTableRowStyle();
-
-    /// creates a clone of this style with the specified parent
-    KoTableRowStyle *clone(QObject *parent = 0);
 
     void setBackground(const QBrush &brush);
     /// See similar named method on QTextBlockFormat
@@ -121,10 +117,6 @@ public:
     /// Set the name of the master-page.
     void setMasterPageName(const QString &name);
 
-
-    /// copy all the properties from the other style to this style, effectively duplicating it.
-    void copyProperties(const KoTableRowStyle *style);
-
     void remove(int key);
 
     /// Compare the properties of this style with the other
@@ -164,9 +156,6 @@ public:
      * @returns a QVariant which holds the property value.
      */
     QVariant value(int key) const;
-
-signals:
-    void nameChanged(const QString &newName);
 
 private:
     /**

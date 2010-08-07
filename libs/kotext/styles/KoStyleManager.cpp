@@ -275,7 +275,6 @@ void KoStyleManager::add(KoTableColumnStyle *style)
 {
     if (d->tableColumnStyles.key(style, -1) != -1)
         return;
-    style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
     d->tableColumnStyles.insert(d->s_stylesNumber++, style);
     emit styleAdded(style);
@@ -285,7 +284,6 @@ void KoStyleManager::add(KoTableRowStyle *style)
 {
     if (d->tableRowStyles.key(style, -1) != -1)
         return;
-    style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
     d->tableRowStyles.insert(d->s_stylesNumber++, style);
     emit styleAdded(style);

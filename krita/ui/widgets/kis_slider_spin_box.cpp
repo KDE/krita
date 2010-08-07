@@ -63,12 +63,13 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     QPalette pal = d->edit->palette();
     pal.setColor(QPalette::Base, Qt::transparent);
     d->edit->setPalette(pal);
-    
+
     connect(d->edit, SIGNAL(lostFocus()), this, SLOT(editLostFocus()));
 
     d->validator = new QDoubleValidator(d->edit);
     d->edit->setValidator(d->validator);
 
+    d->value = 0;
     d->minimum = 0;
     d->maximum = 100;
     d->factor = 1.0;

@@ -28,8 +28,6 @@ void TestTableLayout::init()
     m_textLayout = 0;
     m_shape = 0;
     m_defaultTableStyle = 0;
-    m_defaultColumnStyle = 0;
-    m_defaultRowStyle = 0;
     m_defaultCellStyle = 0;
 }
 
@@ -87,23 +85,19 @@ void TestTableLayout::initTest(int rows, int columns,
     Q_ASSERT(m_table);
 
     // Column styles.
-    KoTableColumnStyle *m_defaultColumnStyle = new KoTableColumnStyle();
-    Q_ASSERT(m_defaultColumnStyle);
-    m_defaultColumnStyle->setRelativeColumnWidth(50.0);
+    m_defaultColumnStyle.setRelativeColumnWidth(50.0);
     for (int col = 0; col < columns; ++col) {
         if (columnStyles.value(col)) {
-            m_tableColumnAndRowStyleManager->setColumnStyle(col, columnStyles.at(col));
+            m_tableColumnAndRowStyleManager->setColumnStyle(col, *(columnStyles.at(col)));
         } else {
             m_tableColumnAndRowStyleManager->setColumnStyle(col, m_defaultColumnStyle);
         }
     }
 
     // Row styles.
-    KoTableRowStyle *m_defaultRowStyle = new KoTableRowStyle();
-    Q_ASSERT(m_defaultRowStyle);
     for (int row = 0; row < rows; ++row) {
         if (rowStyles.value(row)) {
-            m_tableColumnAndRowStyleManager->setRowStyle(row, rowStyles.at(row));
+            m_tableColumnAndRowStyleManager->setRowStyle(row, *(rowStyles.at(row)));
         } else {
             m_tableColumnAndRowStyleManager->setRowStyle(row, m_defaultRowStyle);
         }
@@ -157,8 +151,6 @@ void TestTableLayout::cleanupTest()
     delete m_styleManager;
     delete m_tableColumnAndRowStyleManager;
     delete m_defaultTableStyle;
-    delete m_defaultColumnStyle;
-    delete m_defaultRowStyle;
     delete m_defaultCellStyle;
 }
 

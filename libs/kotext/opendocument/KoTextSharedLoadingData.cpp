@@ -55,9 +55,9 @@ public:
         qDeleteAll(listStylesToDelete);
         qDeleteAll(tableStylesToDelete);
         qDeleteAll(tableCellStylesToDelete);
+        qDeleteAll(tableColumnStylesToDelete);
+        qDeleteAll(tableRowStylesToDelete);
         qDeleteAll(sectionStylesToDelete);
-        // NOTE: Table column/row styles are managed by KoTableColumnAndRowStyleManager
-        //       and are not deleted here.
     }
 
     // It is possible that automatic-styles in content.xml and styles.xml have the same name
@@ -86,6 +86,8 @@ public:
     QList<KoListStyle *> listStylesToDelete;
     QList<KoTableStyle *> tableStylesToDelete;
     QList<KoTableCellStyle *> tableCellStylesToDelete;
+    QList<KoTableColumnStyle *> tableColumnStylesToDelete;
+    QList<KoTableRowStyle *> tableRowStylesToDelete;
     QList<KoSectionStyle *> sectionStylesToDelete;
     QHash<QString, KoParagraphStyle*> namedParagraphStyles;
 };
@@ -377,10 +379,11 @@ void KoTextSharedLoadingData::addTableColumnStyles(KoOdfLoadingContext &context,
             d->tableColumnStylesDotXmlStyles.insert(it->first, it->second);
         }
         // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
-        // in case styles are not added to the style manager they will be managed by the
-        // tableColumnAndRowStyleManager instead
+        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
         if (styleManager) {
             styleManager->add(it->second);
+        } else {
+            d->tableColumnStylesToDelete.append(it->second);
         }
     }
 }
@@ -416,10 +419,11 @@ void KoTextSharedLoadingData::addTableRowStyles(KoOdfLoadingContext &context, QL
             d->tableRowStylesDotXmlStyles.insert(it->first, it->second);
         }
         // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
-        // in case styles are not added to the style manager they will be managed by the
-        // tableColumnAndRowStyleManager instead
+        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
         if (styleManager) {
             styleManager->add(it->second);
+        } else {
+            d->tableRowStylesToDelete.append(it->second);
         }
     }
 }

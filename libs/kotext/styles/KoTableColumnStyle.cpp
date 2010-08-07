@@ -38,7 +38,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-class KoTableColumnStyle::Private
+class KoTableColumnStyle::Private : public QSharedData
 {
 public:
     Private() : parentStyle(0), next(0) {}
@@ -56,14 +56,25 @@ public:
     StylePrivate stylesPrivate;
 };
 
-KoTableColumnStyle::KoTableColumnStyle(QObject *parent)
-        : QObject(parent), d(new Private())
+
+KoTableColumnStyle::KoTableColumnStyle()
+        : QObject(), d(new Private())
 {
+}
+
+KoTableColumnStyle::KoTableColumnStyle(const KoTableColumnStyle &rhs)
+        : QObject(), d(rhs.d)
+{
+}
+
+KoTableColumnStyle &KoTableColumnStyle::operator=(const KoTableColumnStyle &rhs)
+{
+    d = rhs.d;
+    return *this;
 }
 
 KoTableColumnStyle::~KoTableColumnStyle()
 {
-    delete d;
 }
 
 void KoTableColumnStyle::setParentStyle(KoTableColumnStyle *parent)
@@ -265,13 +276,14 @@ void KoTableColumnStyle::copyProperties(const KoTableColumnStyle *style)
     d->parentStyle = style->d->parentStyle;
 }
 
+/*
 KoTableColumnStyle *KoTableColumnStyle::clone(QObject *parent)
 {
     KoTableColumnStyle *newStyle = new KoTableColumnStyle(parent);
     newStyle->copyProperties(this);
     return newStyle;
 }
-
+*/
 
 bool KoTableColumnStyle::operator==(const KoTableColumnStyle &other) const
 {

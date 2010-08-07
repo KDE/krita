@@ -65,13 +65,17 @@ public:
     };
 
     /// Constructor
-    KoTableColumnStyle(QObject *parent = 0);
+    KoTableColumnStyle();
+    /// Constructor
+    KoTableColumnStyle(const KoTableColumnStyle &rhs);
+    /// assign operator
+    KoTableColumnStyle &operator=(const KoTableColumnStyle &rhs);
 
     /// Destructor
     ~KoTableColumnStyle();
 
     /// Creates a clone of this style with the specified parent.
-    KoTableColumnStyle *clone(QObject *parent = 0);
+    //KoTableColumnStyle *clone(QObject *parent = 0);
 
     /// Set the column width.
     void setColumnWidth(qreal width);
@@ -188,7 +192,7 @@ private:
     QColor propertyColor(int key) const;
 
     class Private;
-    Private * const d;
+    QSharedDataPointer<Private> d;
 };
 
 #endif

@@ -141,47 +141,47 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
     KoTableColumnAndRowStyleManager *carsManager =
     reinterpret_cast<KoTableColumnAndRowStyleManager *>(
             tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
+    if (!carsManager)
+        carsManager = new KoTableColumnAndRowStyleManager();
+
     // Column widths.
     qreal availableWidth = tableWidth; // Width available for columns.
     QList<int> relativeWidthColumns; // List of relative width columns.
     qreal relativeWidthSum = 0; // Sum of relative column width values.
     int numNonStyleColumns = 0;
     for (int col = 0; col < tableRect.columnPositions.size(); ++col) {
-        KoTableColumnStyle *columnStyle = carsManager ? carsManager->columnStyle(col) : 0;
-        if (!columnStyle) {
-            // No style so neither width nor relative width specified. Can this happen?
-           tableRect.columnWidths[col] = 0.0;
-            relativeWidthColumns.append(col); // handle it as a relative width column without asking for anything
-            ++numNonStyleColumns;
-        } else if (columnStyle->hasProperty(KoTableColumnStyle::RelativeColumnWidth)) {
+        KoTableColumnStyle columnStyle = carsManager->columnStyle(col);
+        if (columnStyle.hasProperty(KoTableColumnStyle::RelativeColumnWidth)) {
             // Relative width specified. Will be handled in the next loop.
             relativeWidthColumns.append(col);
-            relativeWidthSum += columnStyle->relativeColumnWidth();
-        } else if (columnStyle->hasProperty(KoTableColumnStyle::ColumnWidth)) {
+            relativeWidthSum += columnStyle.relativeColumnWidth();
+        } else if (columnStyle.hasProperty(KoTableColumnStyle::ColumnWidth)) {
             // Only width specified, so use it.
-            tableRect.columnWidths[col] = columnStyle->columnWidth();
-            availableWidth -= columnStyle->columnWidth();
+            tableRect.columnWidths[col] = columnStyle.columnWidth();
+            availableWidth -= columnStyle.columnWidth();
         } else {
-            // Neither width nor relative width specified. Can this happen?
+            // Neither width nor relative width specified.
             kWarning(32600) << "Neither column-width nor rel-column-width specified";
             tableRect.columnWidths[col] = 0.0;
+            relativeWidthColumns.append(col); // handle it as a relative width column without asking for anything
+            ++numNonStyleColumns;
         }
     }
 
     // Calculate width to those columns that don't actually request it
-    qreal widthForNonStyleColumn = ((1.0 - qMin<qreal>(relativeWidthSum, 1.0)) * availableWidth);
-    availableWidth -= widthForNonStyleColumn; // might as well do this calc before dividing by numNonStyleColumns
+    qreal widthForNonWidthColumn = ((1.0 - qMin<qreal>(relativeWidthSum, 1.0)) * availableWidth);
+    availableWidth -= widthForNonWidthColumn; // might as well do this calc before dividing by numNonStyleColumns
     if (numNonStyleColumns)
-        widthForNonStyleColumn /= numNonStyleColumns;
+        widthForNonWidthColumn /= numNonStyleColumns;
 
     // Relative column widths have now been summed up and can be distributed.
     foreach (int col, relativeWidthColumns) {
-        KoTableColumnStyle *columnStyle = carsManager ? carsManager->columnStyle(col) : 0;
-        if (columnStyle) {
+        KoTableColumnStyle columnStyle = carsManager->columnStyle(col);
+        if (columnStyle.hasProperty(KoTableColumnStyle::RelativeColumnWidth) || columnStyle.hasProperty(KoTableColumnStyle::ColumnWidth)) {
             tableRect.columnWidths[col] =
-                qMax<qreal>(columnStyle->relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
+                qMax<qreal>(columnStyle.relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
         } else {
-            tableRect.columnWidths[col] = widthForNonStyleColumn;
+            tableRect.columnWidths[col] = widthForNonWidthColumn;
         }
     }
 
@@ -235,6 +235,9 @@ void TableLayout::layoutRow(int row)
     reinterpret_cast<KoTableColumnAndRowStyleManager *>(
             tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
 
+    if (!carsManager)
+        carsManager = new KoTableColumnAndRowStyleManager();
+
     /*
      * Implementation Note:
      *
@@ -257,12 +260,12 @@ void TableLayout::layoutRow(int row)
      * cells that should contribute to the row height.
      */
 
-    KoTableRowStyle *rowStyle = carsManager ? carsManager->rowStyle(row) : 0;
+    KoTableRowStyle rowStyle = carsManager->rowStyle(row);
 
     // Adjust row height.
-    qreal minimumRowHeight = rowStyle ? rowStyle->minimumRowHeight() : 0.0;
-    qreal rowHeight = rowStyle ? rowStyle->rowHeight() : 0.0;
-    bool rowHasExactHeight = rowStyle ? rowStyle->hasProperty(KoTableRowStyle::RowHeight) : false;
+    qreal minimumRowHeight = rowStyle.minimumRowHeight();
+    qreal rowHeight = rowStyle.rowHeight();
+    bool rowHasExactHeight = rowStyle.hasProperty(KoTableRowStyle::RowHeight);
 
     int col = 0;
     while (col < m_table->columns()) {

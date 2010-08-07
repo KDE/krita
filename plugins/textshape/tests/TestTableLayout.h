@@ -1,6 +1,9 @@
 #ifndef TESTTABLELAYOUT_H
 #define TESTTABLELAYOUT_H
 
+#include <KoTableColumnStyle.h>
+#include <KoTableRowStyle.h>
+
 #include <QObject>
 #include <QHash>
 #include <QList>
@@ -107,8 +110,8 @@ private:
 
     // Default styles for the test table.
     KoTableStyle *m_defaultTableStyle;
-    KoTableColumnStyle *m_defaultColumnStyle;
-    KoTableRowStyle *m_defaultRowStyle;
+    KoTableColumnStyle m_defaultColumnStyle;
+    KoTableRowStyle m_defaultRowStyle;
     KoTableCellStyle *m_defaultCellStyle;
 };
 

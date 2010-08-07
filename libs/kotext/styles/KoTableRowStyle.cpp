@@ -38,7 +38,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-class KoTableRowStyle::Private
+class KoTableRowStyle::Private : public QSharedData
 {
 public:
     Private() : parentStyle(0), next(0) {}
@@ -61,9 +61,19 @@ KoTableRowStyle::KoTableRowStyle(QObject *parent)
 {
 }
 
+KoTableRowStyle::KoTableRowStyle(const KoTableRowStyle &rhs)
+        : QObject(), d(rhs.d)
+{
+}
+
+KoTableRowStyle &KoTableRowStyle::operator=(const KoTableRowStyle &rhs)
+{
+    d = rhs.d;
+    return *this;
+}
+
 KoTableRowStyle::~KoTableRowStyle()
 {
-    delete d;
 }
 
 void KoTableRowStyle::setParentStyle(KoTableRowStyle *parent)

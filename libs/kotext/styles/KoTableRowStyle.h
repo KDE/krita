@@ -64,6 +64,10 @@ public:
 
     /// Constructor
     KoTableRowStyle(QObject *parent = 0);
+    /// Constructor
+    KoTableRowStyle(const KoTableRowStyle &rhs);
+    /// assign operator
+    KoTableRowStyle &operator=(const KoTableRowStyle &rhs);
 
     /// Destructor
     ~KoTableRowStyle();
@@ -176,7 +180,7 @@ private:
     QColor propertyColor(int key) const;
 
     class Private;
-    Private * const d;
+    QSharedDataPointer<Private> d;
 };
 
 #endif

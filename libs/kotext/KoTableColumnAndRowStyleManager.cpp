@@ -31,13 +31,9 @@ class KoTableColumnAndRowStyleManager::Private
 public:
     Private()  { }
     ~Private() {
-        qDeleteAll(tableColumnStylesToDelete);
-        qDeleteAll(tableRowStylesToDelete);
     }
-    QVector<KoTableColumnStyle *> tableColumnStyles;
-    QVector<KoTableRowStyle *> tableRowStyles;
-    QSet<KoTableRowStyle *> tableRowStylesToDelete;
-    QSet<KoTableColumnStyle *> tableColumnStylesToDelete;
+    QVector<KoTableColumnStyle> tableColumnStyles;
+    QVector<KoTableRowStyle> tableRowStyles;
 };
 
 KoTableColumnAndRowStyleManager::KoTableColumnAndRowStyleManager()
@@ -50,7 +46,7 @@ KoTableColumnAndRowStyleManager::~KoTableColumnAndRowStyleManager()
     delete d;
 }
 
-void KoTableColumnAndRowStyleManager::setColumnStyle(int column, KoTableColumnStyle *columnStyle)
+void KoTableColumnAndRowStyleManager::setColumnStyle(int column, const KoTableColumnStyle &columnStyle)
 {
     Q_ASSERT(column >= 0);
 
@@ -61,26 +57,24 @@ void KoTableColumnAndRowStyleManager::setColumnStyle(int column, KoTableColumnSt
     if (d->tableColumnStyles.value(column) == columnStyle) {
         return;
     }
-    
-    d->tableColumnStylesToDelete.insert(columnStyle); // add the style so it can be deleted on destruction
 
     while (column > d->tableColumnStyles.size())
-        d->tableColumnStyles.append(0);
+        d->tableColumnStyles.append(KoTableColumnStyle());
     d->tableColumnStyles.insert(column, columnStyle);
 }
 
-KoTableColumnStyle *KoTableColumnAndRowStyleManager::columnStyle(int column)
+KoTableColumnStyle KoTableColumnAndRowStyleManager::columnStyle(int column) const
 {
     Q_ASSERT(column >= 0);
 
     if (column < 0) {
-        return 0;
+        return KoTableColumnStyle();
     }
 
-    return d->tableColumnStyles.value(column, 0);
+    return d->tableColumnStyles.value(column, KoTableColumnStyle());
 }
 
-void KoTableColumnAndRowStyleManager::setRowStyle(int row, KoTableRowStyle *rowStyle)
+void KoTableColumnAndRowStyleManager::setRowStyle(int row, const KoTableRowStyle &rowStyle)
 {
     Q_ASSERT(row >= 0);
 
@@ -92,21 +86,19 @@ void KoTableColumnAndRowStyleManager::setRowStyle(int row, KoTableRowStyle *rowS
         return;
     }
 
-    d->tableRowStylesToDelete.insert(rowStyle); // add the style so it can be deleted on destruction
-
     while (row > d->tableRowStyles.size())
-        d->tableRowStyles.append(0);
+        d->tableRowStyles.append(KoTableRowStyle());
     d->tableRowStyles.insert(row, rowStyle);
 }
 
-KoTableRowStyle *KoTableColumnAndRowStyleManager::rowStyle(int row)
+KoTableRowStyle KoTableColumnAndRowStyleManager::rowStyle(int row) const
 {
     Q_ASSERT(row >= 0);
 
     if (row < 0) {
-        return 0;
+        return KoTableRowStyle();
     }
 
-    return d->tableRowStyles.value(row, 0);
+    return d->tableRowStyles.value(row, KoTableRowStyle());
 }
 

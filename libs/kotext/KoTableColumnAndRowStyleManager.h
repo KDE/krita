@@ -26,13 +26,16 @@ class KoTableColumnStyle;
 class KoTableRowStyle;
 
 /**
- * Manages all column and row styles for a table.
+ * Manages all column and row styles for a single table.
+ *
+ * It's not managing the lifetime of named styles, which is the job of the KoStyleManager,
+ * so you should still register such styles in the styleManager too.
+ *
+ * The main purpose of this manager is simply to keep track of which styles are in
+ * which column (and in which row).
  *
  * TODO:
  *  - Eliminate duplicates.
- *  - Delegate to KoStyleManager for named styles.
- *  - Keep instances instead of pointers to styles after the styles
- *    have been made implicitly shared.
  */
 class KOTEXT_EXPORT KoTableColumnAndRowStyleManager
 {
@@ -44,9 +47,9 @@ public:
      * Set the column style for the column \a column to \a columnStyle.
      *
      * @param column the column to set the style for.
-     * @param columnStyle a pointer to the column style.
+     * @param columnStyle a column style.
      */
-    void setColumnStyle(int column, KoTableColumnStyle *columnStyle);
+    void setColumnStyle(int column, const KoTableColumnStyle &columnStyle);
 
     /**
      * Get the column style for the column \a column.
@@ -54,15 +57,15 @@ public:
      * @param column the column to get the style for.
      * @return the column style.
      */
-    KoTableColumnStyle *columnStyle(int column);
+    KoTableColumnStyle columnStyle(int column) const;
 
     /**
      * Set the row style for the row \a row to \a rowStyle.
      *
      * @param row the row to set the style for.
-     * @param rowStyle a pointer to the row style.
+     * @param rowStyle a row style.
      */
-    void setRowStyle(int row, KoTableRowStyle *rowStyle);
+    void setRowStyle(int row, const KoTableRowStyle &rowStyle);
 
     /**
      * Get the row style for the row \a column.
@@ -70,7 +73,7 @@ public:
      * @param row the row to get the style for.
      * @return the row style.
      */
-    KoTableRowStyle *rowStyle(int row);
+    KoTableRowStyle rowStyle(int row) const;
 
 private:
     class Private;

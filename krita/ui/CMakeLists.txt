@@ -52,6 +52,7 @@ set(kritaui_LIB_SRCS
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
+    kis_brushengine_selector.cpp
     kis_canvas_resource_provider.cpp 
     kis_categorized_item_delegate.cpp
     kis_clipboard.cc 

@@ -96,7 +96,7 @@ KisBrushEngineSelector::KisBrushEngineSelector(KisView2 * view, QWidget *parent)
     m_cmbPaintops->setMovement(QListView::Static);
     m_cmbPaintops->setMaximumWidth(150);
     m_cmbPaintops->setMovement(QListView::Static);
-    m_cmbPaintops->setGridSize(QSize(150,42));
+    m_cmbPaintops->setGridSize(QSize(150,50));
 
     m_cmbPaintops->setToolTip(i18n("Brush Engines"));
     m_cmbPaintops->setMovement(QListView::Static);

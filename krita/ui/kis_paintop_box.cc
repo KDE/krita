@@ -25,6 +25,7 @@
 #include <QPixmap>
 #include <QLayout>
 #include <QHBoxLayout>
+#include <QLabel>
 
 #include <kactioncollection.h>
 #include <kis_debug.h>
@@ -53,6 +54,7 @@
 #include <kis_config_widget.h>
 #include <kis_image.h>
 #include <kis_node.h>
+
 #include "kis_node_manager.h"
 #include "kis_layer_manager.h"
 #include "kis_view2.h"
@@ -60,11 +62,10 @@
 #include "widgets/kis_popup_button.h"
 #include "widgets/kis_paintop_presets_popup.h"
 #include "widgets/kis_paintop_presets_chooser_popup.h"
-#include <kis_paintop_settings_widget.h>
-
+#include "kis_paintop_settings_widget.h"
+#include "kis_brushengine_selector.h"
 #include "ko_favorite_resource_manager.h"
-#include <kis_paintop_presets_chooser_popup.h>
-#include <QLabel>
+
 
 KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name)
         : QWidget(parent)
@@ -72,6 +73,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
         , m_optionWidget(0)
         , m_settingsWidget(0)
         , m_presetWidget(0)
+        , m_brushChooser(0)
         , m_view(view)
         , m_activePreset(0)
         , m_compositeOp(0)
@@ -79,9 +81,9 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
         , m_eraserUsed(false)
 {
     Q_ASSERT(view != 0);
-    
+
     KGlobal::mainComponent().dirs()->addResourceType("kis_defaultpresets", "data", "krita/defaultpresets/");
-    
+
     setObjectName(name);
 
     KAcceleratorManager::setNoAccel(this);
@@ -102,41 +104,51 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_settingsWidget->setIcon(KIcon("paintop_settings_02"));
     m_settingsWidget->setToolTip(i18n("Edit brush settings"));
     m_settingsWidget->setFixedSize(32, 32);
-    
+
     m_presetWidget = new KisPopupButton(this);
     m_presetWidget->setIcon(KIcon("paintop_settings_01"));
     m_presetWidget->setToolTip(i18n("Choose brush preset"));
     m_presetWidget->setFixedSize(32, 32);
-    
+
+    m_brushChooser = new KisPopupButton(this);
+    m_brushChooser->setIcon(KIcon("paintop_settings_01"));
+    m_brushChooser->setToolTip(i18n("Choose and edit brush"));
+    m_brushChooser->setFixedSize(32, 32);
+
     m_eraseModeButton = new QPushButton(this);
     m_eraseModeButton->setIcon(KIcon("draw-eraser"));
     m_eraseModeButton->setToolTip(i18n("Set eraser mode"));
     m_eraseModeButton->setFixedSize(32, 32);
     m_eraseModeButton->setCheckable(true);
     m_eraseModeButton->setShortcut(Qt::Key_E);
-    
+
     connect(m_eraseModeButton, SIGNAL(toggled(bool)), this, SLOT(eraseModeToggled(bool)));
-    
+
     QLabel* labelMode = new QLabel(i18n("Mode: "), this);
     labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     m_cmbComposite = new KisCmbComposite(this);
     nodeChanged(view->activeNode());
     connect(m_cmbComposite, SIGNAL(activated(const QString&)), this, SLOT(slotSetCompositeMode(const QString&)));
-    
+
     m_layout = new QHBoxLayout(this);
     m_layout->addWidget(m_cmbPaintops);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
+    //m_layout->addWidget(m_brushChooser);
     m_layout->addWidget(labelMode);
     m_layout->addWidget(m_cmbComposite);
     m_layout->addWidget(m_eraseModeButton);
-    
+    //m_layout->addSpacerItem(new QSpacerItem(10, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
+
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_settingsWidget->setPopupWidget(m_presetsPopup);
     m_presetsPopup->switchDetached();
-    
+
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
     m_presetWidget->setPopupWidget(m_presetsChooserPopup);
+
+    m_brushEngineSelector = new KisBrushEngineSelector(m_view, this);
+    m_brushChooser->setPopupWidget(m_brushEngineSelector);
 
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
     for (QList<KoID>::Iterator it = keys.begin(); it != keys.end(); ++it) {
@@ -150,12 +162,12 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
 
     connect(m_presetsPopup, SIGNAL(savePresetClicked()), this, SLOT(slotSaveActivePreset()));
-    
+
     connect(m_presetsPopup, SIGNAL(defaultPresetClicked()), this, SLOT(slotSetupDefaultPreset()));
 
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
-            
+
     connect(m_resourceProvider, SIGNAL(sigNodeChanged(const KisNodeSP)),
             this, SLOT(nodeChanged(const KisNodeSP)));
 }
@@ -282,7 +294,7 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
 
     m_cmbPaintops->setCurrentIndex(index);
     setCurrentPaintop(paintop);
-    
+
     if(inputDevice.device() == QTabletEvent::Stylus && inputDevice.pointer() == QTabletEvent::Eraser && !m_eraserUsed) {
         m_inputDeviceEraseModes[inputDevice] = true;
         m_eraserUsed = true;
@@ -421,7 +433,7 @@ void KisPaintopBox::slotSaveActivePreset()
         fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + newPreset->defaultFileExtension());
         i++;
     }
-    
+
     newPreset->setFilename(fileInfo.filePath());
     newPreset->setName(name);
 
@@ -430,20 +442,20 @@ void KisPaintopBox::slotSaveActivePreset()
 
 void KisPaintopBox::slotUpdatePreset()
 {
-    m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));    
+    m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
 }
 
 void KisPaintopBox::slotSetupDefaultPreset(){
     QString defaultName = m_activePreset->paintOp().id() + ".kpp";
     QString path = KGlobal::mainComponent().dirs()->findResource("kis_defaultpresets", defaultName);
     KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
-    
+
     if ( !preset->load() ){
         kWarning() << preset->filename() << "could not be found.";
         kWarning() << "I was looking for " << defaultName;
         return;
     }
-    
+
     preset->settings()->setNode( m_activePreset->settings()->node() );
     preset->settings()->setOptionsWidget(m_optionWidget);
     m_optionWidget->setConfiguration(preset->settings());
@@ -484,7 +496,7 @@ void KisPaintopBox::updateCompositeOpComboBox()
             m_cmbComposite->setCompositeOpList(compositeOps);
 
             if(m_cmbComposite->currentItem().isEmpty()){
-                
+
             }
             if (m_compositeOp == 0 || compositeOps.indexOf(const_cast<KoCompositeOp*>(m_compositeOp)) < 0) {
                 m_compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
@@ -533,7 +545,7 @@ void KisPaintopBox::setEnabledInternal(bool value)
         m_presetWidget->setIcon(KIcon("paintop_settings_01"));
     } else {
         m_settingsWidget->setIcon(KIcon("paintop_settings_disabled"));
-        m_presetWidget->setIcon(KIcon("paintop_presets_disabled"));        
+        m_presetWidget->setIcon(KIcon("paintop_presets_disabled"));
     }
 }
 

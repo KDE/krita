@@ -1,4 +1,4 @@
-/*
+    /*
  *  kis_paintop_box.h - part of KImageShop/Krayon/Krita
  *
  *  Copyright (c) 2004-2008 Boudewijn Rempt (boud@valdyas.org)
@@ -50,6 +50,7 @@ class KisPaintOpPresetsPopup;
 class KisPaintOpPresetsChooserPopup;
 class KisPaintOpSettingsWidget;
 class KisCmbComposite;
+class KisBrushEngineSelector;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -91,15 +92,15 @@ private:
 
     KoID defaultPaintop(const KoInputDevice & inputDevice);
     KisPaintOpPresetSP activePreset(const KoID & paintop, const KoInputDevice & inputDevice);
-    
+
     ///Sets the current composite op in the canvas resource provide
     ///Composite op will be set to eraser if the erase mode of the input device is active
     void compositeOpChanged();
-    
+
     ///Sets the internal composite op, without emitting
     /// @param id id of the composite op, when empty COMPOSITE_OVER will be used
     void setCompositeOpInternal(const QString & id);
-    
+
     void setEnabledInternal(bool value);
 
 private slots:
@@ -122,10 +123,12 @@ private:
     KisPaintOpSettingsWidget* m_optionWidget;
     KisPopupButton* m_settingsWidget;
     KisPopupButton* m_presetWidget;
+    KisPopupButton* m_brushChooser;
     KisCmbComposite* m_cmbComposite;
     QPushButton* m_eraseModeButton;
     KisPaintOpPresetsPopup* m_presetsPopup;
     KisPaintOpPresetsChooserPopup* m_presetsChooserPopup;
+    KisBrushEngineSelector* m_brushEngineSelector;
     KisView2* m_view;
 
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
@@ -141,7 +144,7 @@ private:
     typedef QHash<QString, KisPaintOpPresetSP> PresetMap;
     typedef QHash<KoInputDevice, PresetMap > InputDevicePresetsMap;
     InputDevicePresetsMap m_inputDevicePresets;
-    
+
     QHash<KoInputDevice, bool> m_inputDeviceEraseModes;
     QHash<KoInputDevice, QString> m_inputDeviceCompositeModes;
     bool m_eraserUsed;

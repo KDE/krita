@@ -145,8 +145,6 @@ install(
     styles/KoTableRowStyle.h
     styles/KoTableCellStyle.h
     styles/KoTableFormat.h
-    styles/KoTableColumnFormat.h
-    styles/KoTableRowFormat.h
     styles/KoSectionStyle.h
     styles/KoStyleManager.h
     DESTINATION

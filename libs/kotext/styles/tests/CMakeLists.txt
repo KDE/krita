@@ -26,9 +26,3 @@ target_link_libraries(TestSectionStyle kotext ${QT_QTTEST_LIBRARY})
 set(TestTableCellStyle_test_SRCS TestTableCellStyle.cpp)
 kde4_add_unit_test(TestTableCellStyle TESTNAME libs-kotext-styles-TestTableCellStyle ${TestTableCellStyle_test_SRCS})
 target_link_libraries(TestTableCellStyle kotext ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(TestTableFormats_test_SRCS TestTableFormats.cpp)
-kde4_add_unit_test(TestTableFormats TESTNAME libs-kotext-styles-TestTableFormats ${TestTableFormats_test_SRCS})
-target_link_libraries(TestTableFormats kotext ${QT_QTTEST_LIBRARY})

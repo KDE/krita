@@ -67,8 +67,6 @@ set(kotext_LIB_SRCS
     styles/KoTableCellStyle.cpp
     styles/KoTableFormat.cpp
     styles/KoTableFormat_p.cpp
-    styles/KoTableColumnFormat.cpp
-    styles/KoTableRowFormat.cpp
     styles/KoSectionStyle.cpp
     opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextSharedSavingData.cpp

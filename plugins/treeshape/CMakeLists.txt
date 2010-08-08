@@ -4,22 +4,27 @@ include_directories(  )
 
 SET (treeshape_LIB_SRCS
     Layout.cpp
-    Plugin.cpp
-    SelectionDecorator.cpp
     TreeShape.cpp
-    TreeShapeFactory.cpp
-    TreeShapeMoveCommand.cpp
+
+    TreeShapeConfigWidget.cpp
+    TreeChangeStructureCommand.cpp
+    TreeChangeConnectionCommand.cpp
     TreeShapeMoveStrategy.cpp
+    TreeShapeMoveCommand.cpp
+    TreeShapeFactory.cpp
+
+    SelectionDecorator.cpp
     TreeTool.cpp
     TreeToolFactory.cpp
+    Plugin.cpp
 )
 
+kde4_add_ui_files(treeshape_LIB_SRCS
+    TreeShapeConfigWidget.ui
+)
 kde4_add_plugin(treeshape ${treeshape_LIB_SRCS})
 
-target_link_libraries(treeshape komain)
+target_link_libraries(treeshape flake)
+
 install(TARGETS treeshape DESTINATION ${PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-install( FILES treeshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-
+install(FILES treeshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})

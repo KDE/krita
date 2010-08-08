@@ -53,6 +53,7 @@ void TreeShapeMoveCommand::redo()
     Q_ASSERT(!m_trees.isEmpty());
     for (int i = 0; i < m_trees.count(); i++) {
         m_trees[i]->setNextShape(m_nextShape);
+        m_trees[i]->setParent(0);
         m_newParent->addChild(m_trees[i], m_connectors[i]);
     }
 }
@@ -62,6 +63,7 @@ void TreeShapeMoveCommand::undo()
     QUndoCommand::undo();
     for (int i = 0; i < m_trees.count(); i++) {
         m_trees[i]->setNextShape(m_oldNextShapes[i]);
+        m_trees[i]->setParent(0);
         m_parents[i]->addChild(m_trees[i], m_connectors[i]);
     }
 }

@@ -18,23 +18,33 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TREESHAPEFACTORY_H
-#define TREESHAPEFACTORY_H
+#ifndef TREECHANGECONNECTIONCOMMAND_H
+#define TREECHANGECONNECTIONCOMMAND_H
 
-#include <KoShapeFactoryBase.h>
+#include "TreeShape.h"
+#include <QtGui/QUndoCommand>
 
-class KoShape;
-
-class TreeShapeFactory : public KoShapeFactoryBase
+/// The undo / redo command for configuring a connections between root and children
+class TreeChangeConnectionCommand : public QUndoCommand
 {
 public:
-    TreeShapeFactory(QObject *parent);
-    ~TreeShapeFactory();
+    /**
+     * Configures a tree shape
+     * @param tree the tree shape to configure
+     * @param structure the tree structure
+     * @param followParent if tree will follow parent's structure
+     * @param parent the optional parent command
+     */
+    TreeChangeConnectionCommand(TreeShape *tree, KoConnectionShape::Type type, QUndoCommand *parent=0);
+    /// redo the command
+    virtual void redo();
+    /// revert the actions done in redo
+    virtual void undo();
+private:
+    TreeShape *m_tree;
 
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement &e) const;
-
-//     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    KoConnectionShape::Type m_oldType, m_newType;
 };
 
-#endif
+#endif // TREECHANGECONNECTIONCOMMAND_H
+

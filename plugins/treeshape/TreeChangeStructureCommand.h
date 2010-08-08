@@ -18,33 +18,34 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <klocale.h>
+#ifndef TREECHANGESTRUCTURECOMMAND_H
+#define TREECHANGESTRUCTURECOMMAND_H
 
 #include "TreeShape.h"
-#include "TreeTool.h"
+#include <QtGui/QUndoCommand>
 
-#include "TreeToolFactory.h"
-
-
-TreeToolFactory::TreeToolFactory(QObject* parent)
-    : KoToolFactoryBase(parent, "TreeToolFactoryId")
+/// The undo / redo command for configuring a a tree shape
+class TreeChangeStructureCommand : public QUndoCommand
 {
-    setToolTip(i18n("Tree editing tool"));
-    setToolType(mainToolType());
-    setPriority(1);
-    setActivationShapeId("flake/always");
-    //setActivationShapeId(TREESHAPEID);
-}
+public:
+    /**
+     * Configures a tree shape
+     * @param tree the tree shape to configure
+     * @param structure the tree structure
+     * @param followParent if tree will follow parent's structure
+     * @param parent the optional parent command
+     */
+    TreeChangeStructureCommand(TreeShape *tree, TreeShape::TreeType structure, QUndoCommand *parent = 0);
+    /// redo the command
+    virtual void redo();
+    /// revert the actions done in redo
+    virtual void undo();
+private:
+    TreeShape *m_tree;
 
-TreeToolFactory::~TreeToolFactory()
-{
-}
+    TreeShape::TreeType m_oldStructure, m_newStructure;
+    bool m_oldFollowParent, m_newFollowParent;
+};
 
-KoToolBase* TreeToolFactory::createTool(KoCanvasBase* canvas)
-{
-    return new TreeTool(canvas);
-}
-
-#include <TreeToolFactory.moc>
-
+#endif // TREECHANGESTRUCTURECOMMAND_H
 

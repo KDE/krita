@@ -18,23 +18,42 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TREESHAPEFACTORY_H
-#define TREESHAPEFACTORY_H
+#include "TreeChangeStructureCommand.h"
+#include <klocale.h>
 
-#include <KoShapeFactoryBase.h>
-
-class KoShape;
-
-class TreeShapeFactory : public KoShapeFactoryBase
+TreeChangeStructureCommand::TreeChangeStructureCommand(TreeShape *tree, TreeShape::TreeType structure, QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_tree(tree)
+    , m_newStructure(structure)
 {
-public:
-    TreeShapeFactory(QObject *parent);
-    ~TreeShapeFactory();
+    Q_ASSERT(m_tree);
 
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement &e) const;
+    setText(i18n("Change tree"));
 
-//     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
-};
+    m_oldStructure = m_tree->structure();
+    m_oldFollowParent = false;
+}
 
-#endif
+void TreeChangeStructureCommand::redo()
+{
+    QUndoCommand::redo();
+
+    m_tree->update();
+
+    if (m_oldStructure != m_newStructure)
+        m_tree->setStructure(m_newStructure);
+
+    m_tree->update();
+}
+
+void TreeChangeStructureCommand::undo()
+{
+    QUndoCommand::undo();
+
+    m_tree->update();
+
+    if (m_oldStructure != m_newStructure)
+        m_tree->setStructure(m_oldStructure);
+
+    m_tree->update();
+}

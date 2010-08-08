@@ -19,6 +19,10 @@
 */
 
 #include "TreeShape.h"
+#include "TreeShapeConfigWidget.h"
+#include "TreeChangeStructureCommand.h"
+//#include "TreeChangeShapeCommand.h"
+#include "TreeChangeConnectionCommand.h"
 #include "TreeTool.h"
 #include "SelectionDecorator.h"
 #include "TreeShapeMoveStrategy.h"
@@ -66,19 +70,12 @@ TreeTool::TreeTool(KoCanvasBase *canvas)
     m_moveCommand(0),
     m_selectionHandler(new SelectionHandler(this))
 {
-//     KoShapeManager * manager = canvas->shapeManager();
-//     connect(manager, SIGNAL(selectionChanged()), this, SLOT(updateActions()));
+    KoShapeManager * manager = canvas->shapeManager();
+    connect(manager, SIGNAL(selectionChanged()), this, SLOT(grabTrees()));
 }
 
 TreeTool::~TreeTool()
 {
-}
-
-void TreeTool::activate(ToolActivation, const QSet<KoShape*> &)
-{
-    useCursor(Qt::ArrowCursor);
-    koSelection()->deselectAll();
-    repaintDecorations();
 }
 
 void TreeTool::paint(QPainter &painter, const KoViewConverter &converter)
@@ -89,6 +86,71 @@ void TreeTool::paint(QPainter &painter, const KoViewConverter &converter)
         decorator.setSelection(koSelection());
         decorator.paint(painter, converter);
     }
+}
+
+void TreeTool::activate(ToolActivation, const QSet<KoShape*> &)
+{
+    useCursor(Qt::ArrowCursor);
+    koSelection()->deselectAll();
+    repaintDecorations();
+}
+
+void TreeTool::changeStructure(int index)
+{
+    kDebug() << index;
+    QUndoCommand *command = new QUndoCommand;
+    command->setText(i18n("Change Tree Structure"));
+    foreach(TreeShape *tree, m_selectedTrees) {
+        TreeShape::TreeType structure = static_cast<TreeShape::TreeType>(index);
+        new TreeChangeStructureCommand(tree, structure, command);
+    }
+
+    canvas()->addCommand(command);
+}
+
+void TreeTool::changeShape(int index)
+{
+    kDebug() << index;
+//     QUndoCommand *command = new QUndoCommand;
+//     command->setText(i18n("Change Background Shape"));
+//     foreach(TreeShape *tree, m_selectedTrees) {
+//         TreeShape::RootType type = static_cast<TreeShape::RootType>(index);
+//         new TreeChangeShapeCommand(tree, type, command);
+//     }
+// 
+//     canvas()->addCommand(command);
+}
+
+void TreeTool::changeConnectionType(int index)
+{
+    kDebug() << index;
+    QUndoCommand *command = new QUndoCommand;
+    command->setText(i18n("Change Connection Type"));
+    foreach(TreeShape *tree, m_selectedTrees) {
+        KoConnectionShape::Type type = static_cast<KoConnectionShape::Type>(index);
+        new TreeChangeConnectionCommand(tree, type, command);
+    }
+
+    canvas()->addCommand(command);
+}
+
+void TreeTool::grabTrees()
+{
+    m_selectedTrees.clear();
+
+    TreeShape *tree;
+    foreach (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes())
+        while (shape) {
+            tree = dynamic_cast<TreeShape*>(shape->parent());
+            if (tree) {
+                m_selectedTrees.append(tree);
+                shape = 0;
+            } else {
+                shape = shape->parent();
+            }
+        }
+
+    emit updateConfigWidget(m_selectedTrees.isEmpty() ? 0 : m_selectedTrees.first());
 }
 
 void TreeTool::mousePressEvent(KoPointerEvent *event)
@@ -240,12 +302,17 @@ KoToolSelection* TreeTool::selection()
     return m_selectionHandler;
 }
 
-void TreeTool::resourceChanged(int key, const QVariant & res)
+QMap<QString, QWidget *> TreeTool::createOptionWidgets()
 {
-    if (key == HotPosition) {
-        m_hotPosition = static_cast<KoFlake::Position>(res.toInt());
-        repaintDecorations();
-    }
+    TreeShapeConfigWidget *widget = new TreeShapeConfigWidget(this);
+    connect(this, SIGNAL(updateConfigWidget(TreeShape*)),
+            widget, SLOT(updateParameters(TreeShape*)));
+    emit updateConfigWidget(0);
+
+    QMap<QString, QWidget *> widgets;
+    widgets[i18n("Tree Shape")] = widget;
+
+    return widgets;
 }
 
 KoInteractionStrategy *TreeTool::createStrategy(KoPointerEvent *event)

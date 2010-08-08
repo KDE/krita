@@ -21,10 +21,9 @@
 #include "TreeShapeFactory.h"
 
 #include "TreeShape.h"
-//#include "TreeConfigWidget.h"
+//#include "TreeShapeConfigWidget.h"
 
 #include <KoXmlNS.h>
-#include "KoShapeControllerBase.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -42,7 +41,7 @@ TreeShapeFactory::~TreeShapeFactory() {}
 KoShape *TreeShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
     Q_UNUSED(documentResources);
-    TreeShape * defaultShape = new TreeShape();
+    TreeShape *defaultShape = new TreeShape();
     defaultShape->setShapeId(TREESHAPEID);
 
     return defaultShape;
@@ -53,3 +52,10 @@ bool TreeShapeFactory::supports(const KoXmlElement &e) const
     Q_UNUSED(e);
     return false;
 }
+
+// QList<KoShapeConfigWidgetBase*> TreeShapeFactory::createShapeOptionPanels()
+// {
+//     QList<KoShapeConfigWidgetBase*> panels;
+//     panels.append(new TreeShapeConfigWidget());
+//     return panels;
+// }

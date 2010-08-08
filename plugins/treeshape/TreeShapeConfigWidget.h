@@ -18,23 +18,26 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TREESHAPEFACTORY_H
-#define TREESHAPEFACTORY_H
+#ifndef TREESHAPECONFIGWIDGET_H
+#define TREESHAPECONFIGWIDGET_H
 
-#include <KoShapeFactoryBase.h>
+#include <ui_TreeShapeConfigWidget.h>
+#include <KoShapeConfigWidgetBase.h>
 
-class KoShape;
+class TreeShape;
+class TreeTool;
 
-class TreeShapeFactory : public KoShapeFactoryBase
+class TreeShapeConfigWidget : public QWidget
 {
+    Q_OBJECT
 public:
-    TreeShapeFactory(QObject *parent);
-    ~TreeShapeFactory();
+    explicit TreeShapeConfigWidget(TreeTool *tool, QWidget *parent=0);
 
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement &e) const;
-
-//     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+public slots:
+    void updateParameters(TreeShape *tree);
+private:
+    Ui::TreeShapeConfigWidget widget;
+    TreeTool *m_tool;
 };
 
-#endif
+#endif // TREESHAPECONFIGWIDGET_H

@@ -22,7 +22,7 @@
 #define TREESHAPE_H
 
 #include "KoShapeContainer.h"
-
+#include <KoConnectionShape.h>
 
 #define TREESHAPEID "TreeShape"
 
@@ -41,8 +41,16 @@ public:
     enum TreeType {
         OrgDown, OrgUp, OrgLeft, OrgRight,
         TreeLeft, TreeRight,
-        MapClockwise, MapAntiClockwise
+        MapClockwise, MapAntiClockwise,
+        FollowParent
     };
+
+    enum RootType {
+        Rectangle, Ellipse,
+        None
+    };
+
+    // ConnectionType is defined in KoConnectionShape
 
     TreeShape();
     TreeShape(KoShape *root);
@@ -55,13 +63,18 @@ public:
 
     virtual void addChild(KoShape *tree, KoShape *connector);
     virtual KoShape* connector(KoShape *shape);
+    virtual void setRoot(KoShape *shape, RootType type);
     virtual KoShape* root() const;
+    virtual RootType rootType() const;
     virtual void setStructure(TreeShape::TreeType structure);
     virtual TreeShape::TreeType structure() const;
+    virtual void setConnectionType(KoConnectionShape::Type type);
+    virtual KoConnectionShape::Type connectionType() const;
     virtual QList<KoShape*> addNewChild();
     virtual void setNextShape(KoShape *shape);
     virtual KoShape* nextShape();
     virtual KoShape* proposePosition(KoShape* shape);
+    virtual TreeType proposeStructure();
 
 private:
 //     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);

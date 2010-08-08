@@ -45,12 +45,17 @@ public:
     /**
      * Adds a root shape to the layout.
      */
-    void setRoot(KoShape *shape);
+    void setRoot(KoShape *shape, TreeShape::RootType type);
 
     /**
      * Returns a pointer to root shape.
      */
     KoShape* root() const;
+
+    /**
+     * Returns a type of root shape.
+     */
+    TreeShape::RootType rootType() const;
 
     /**
      * Sets a structure of TreeShape.
@@ -62,6 +67,15 @@ public:
      */
     TreeShape::TreeType structure() const;
 
+    /**
+     * Sets a type of connection between root and children.
+     */
+    void setConnectionType(KoConnectionShape::Type type);
+
+    /**
+     * Returns a type of connectors.
+     */
+    KoConnectionShape::Type connectionType() const;
     /**
      * Attaches given connector to given shape.
      */
@@ -81,6 +95,11 @@ public:
      * Returns a pointer to child. Used when we are searching for a place where to put shape.
      */
     virtual KoShape* proposePosition(KoShape* shape);
+
+     /**
+     * Returns a proposed structure for children.
+     */
+    virtual TreeShape::TreeType proposeStructure();
 
     /**
      * Turns clipping of a shape on or off.
@@ -154,9 +173,16 @@ private:
     void buildOrgDown();
     void buildOrgLeft();
     void buildOrgRight();
+    void buildOrgClockwise();
+    void buildOrgAntiClockwise();
 
     KoShapeContainer *m_container;
     TreeShape::TreeType m_structure;
+    TreeShape::TreeType m_proposedStructure;
+    TreeShape::TreeType m_structureToPropose;
+    TreeShape::RootType m_rootType;
+    KoConnectionShape::Type m_connectionType;
+    bool m_connectionTypeSeted;
     qreal m_lastWidth;
     qreal m_lastHeight;
     bool m_doingLayout;

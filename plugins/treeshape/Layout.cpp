@@ -32,7 +32,9 @@
 
 Layout::Layout(KoShapeContainer *container)
     : m_container(container)
-    , m_structure(TreeShape::OrgDown)
+    , m_structure(TreeShape::FollowParent)
+    , m_structureToPropose(TreeShape::OrgDown)
+    , m_connectionType(KoConnectionShape::Standard)
     , m_doingLayout(false)
     , m_relayoutScheduled(false)
     , m_root(0)
@@ -48,7 +50,6 @@ void Layout::add(KoShape *shape)
     Q_ASSERT(!m_children.contains(shape));
     TreeShape *tree = dynamic_cast<TreeShape*>(shape);
     if (tree) {
-        tree->setStructure(m_structure);
         tree->setZIndex(m_container->zIndex()+1);
         if (tree->nextShape()) {
             Q_ASSERT(m_children.contains(tree->nextShape()));
@@ -65,12 +66,14 @@ void Layout::add(KoShape *shape)
             }
             m_children.append(shape);
         }
+        tree->setStructure(tree->structure());
     }
 
     KoConnectionShape *connector = dynamic_cast<KoConnectionShape*>(shape);
     if (connector) {
         Q_ASSERT(!m_connectors.contains(connector));
         m_connectors.append(shape);
+        connector->setType(m_connectionType);
     }
 
     scheduleRelayout();
@@ -84,9 +87,10 @@ void Layout::attachConnector(KoShape* shape, KoConnectionShape *connector)
     //scheduleRelayout();
 }
 
-void Layout::setRoot(KoShape *shape)
+void Layout::setRoot(KoShape *shape, TreeShape::RootType type)
 {
     m_root = shape;
+    m_rootType = type;
     m_container->setSize(m_root->size());
     m_lastWidth = m_container->size().width();
     m_lastHeight = m_container->size().height();
@@ -100,10 +104,29 @@ KoShape* Layout::root() const
     return m_root;
 }
 
+TreeShape::RootType Layout::rootType() const
+{
+    return m_rootType;
+}
 void Layout::setStructure(TreeShape::TreeType structure)
 {
-    foreach(KoShape *shape, m_children)
-        dynamic_cast<TreeShape*>(shape)->setStructure(structure);
+    // should be replaced in future with something more smart
+    m_structureToPropose = structure;
+
+    // relayout children following us
+    foreach(KoShape *shape, m_children) {
+        TreeShape *tree = dynamic_cast<TreeShape*>(shape);
+        if (tree->structure()==TreeShape::FollowParent)
+            // keeps following and relayouts
+            tree->setStructure(TreeShape::FollowParent);
+    }
+
+    m_proposedStructure = structure;
+    if (structure == TreeShape::FollowParent) {
+        TreeShape *parent = dynamic_cast<TreeShape*>(m_container->parent());
+        if (parent)
+            m_proposedStructure = parent->proposeStructure();
+    }
 
     m_structure = structure;
     QSizeF rootSize = root()->size();
@@ -118,7 +141,22 @@ void Layout::setStructure(TreeShape::TreeType structure)
 
 TreeShape::TreeType Layout::structure() const
 {
-    return m_structure;
+    return m_proposedStructure;
+}
+
+void Layout::setConnectionType(KoConnectionShape::Type type)
+{
+    m_connectionType = type;
+    m_connectionTypeSeted = true;
+    foreach(KoShape *shape, m_connectors) {
+        KoConnectionShape *connector = dynamic_cast<KoConnectionShape*>(shape);
+        connector->setType(type);
+    }
+}
+
+KoConnectionShape::Type Layout::connectionType() const
+{
+    return m_connectionType;
 }
 
 void Layout::remove(KoShape *shape)
@@ -214,6 +252,11 @@ KoShape* Layout::proposePosition(KoShape* shape)
     }
 
     return nextShape;
+}
+
+TreeShape::TreeType Layout::proposeStructure()
+{
+    return m_structureToPropose;
 }
 
 void Layout::setClipped(const KoShape *shape, bool clipping)
@@ -317,12 +360,19 @@ void Layout::layout()
         }
         m_container->setSize(m_root->size());
 
+        m_container->update();
         m_doingLayout = false;
         m_relayoutScheduled = false;
         return;
     }
 
-    switch (m_structure) {
+    TreeShape::TreeType structure = m_structure;
+    if (m_structure == TreeShape::FollowParent) {
+        TreeShape *parent = dynamic_cast<TreeShape*>(m_container->parent());
+        structure = (parent) ? parent->proposeStructure() : TreeShape::OrgDown;
+    }
+
+    switch (structure) {
         case TreeShape::OrgDown:
             kDebug() << "d";
             buildOrgDown();
@@ -514,4 +564,14 @@ void Layout::buildOrgRight()
         connector->updateConnections();
         y += child->size().height() + fromChildToChild;
     }
+}
+
+void Layout::buildOrgClockwise()
+{
+
+}
+
+void Layout::buildOrgAntiClockwise()
+{
+
 }

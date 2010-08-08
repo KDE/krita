@@ -30,12 +30,10 @@
 class KoInteractionStrategy;
 class TreeShapeMoveCommand;
 class KoSelection;
+class TreeShape;
 
 /**
- * The default tool (associated with the arrow icon) implements the default
- * interactions you have with flake objects.<br>
- * The tool provides scaling, moving, selecting, rotation and soon skewing of
- * any number of shapes.
+ * The Tree tool implements interactions you have with trees.
  * <p>Note that the implementation of those different strategies are delegated
  * to the InteractionStrategy class and its subclasses.
  */
@@ -48,46 +46,48 @@ public:
      * and handled by interaction strategies of type KoInteractionStrategy.
      * @param canvas the canvas this tool will be working for.
      */
-    explicit TreeTool( KoCanvasBase *canvas );
+    explicit TreeTool(KoCanvasBase *canvas);
     virtual ~TreeTool();
-
-    enum CanvasResource {
-        HotPosition = 1410100299
-    };
-
-public:
-
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
-
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
     virtual void repaintDecorations();
-
-    ///reimplemented
     virtual KoToolSelection* selection();
+
+signals:
+    void updateConfigWidget(TreeShape *tree);
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
+    void changeStructure(int index);
+    void changeShape(int index);
+    void changeConnectionType(int index);
+
+private slots:
+    /// Grabs TreeShapes from selection on selection change
+    void grabTrees();
+
 public: // Events
 
-    virtual void mousePressEvent( KoPointerEvent *event );
-    virtual void mouseMoveEvent( KoPointerEvent *event );
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
-    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
 
     virtual void keyPressEvent(QKeyEvent *event);
 
 protected:
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
+    virtual QMap<QString, QWidget *>  createOptionWidgets();
 
 private:
-    bool moveSelection( int direction, Qt::KeyboardModifiers modifiers );
+    void setupActions();
+    void updateConfigWidget();
+    bool moveSelection(int direction, Qt::KeyboardModifiers modifiers);
 
     // convenience method;
     KoSelection * koSelection();
 
-    void resourceChanged( int key, const QVariant & res );
-
-    KoFlake::SelectionHandle m_lastHandle;
+    QList<TreeShape*> m_selectedTrees;
     KoFlake::Position m_hotPosition;
     bool m_mouseWasInsideHandles;
     TreeShapeMoveCommand *m_moveCommand;

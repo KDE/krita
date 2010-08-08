@@ -22,6 +22,7 @@
 #include "TreeShapeMoveStrategy.h"
 #include "TreeShapeMoveCommand.h"
 #include "SelectionDecorator.h"
+#include "KoTextOnShapeContainer.h"
 
 #include "KoShapeRegistry.h"
 #include "kdebug.h"
@@ -55,6 +56,9 @@ TreeShapeMoveStrategy::TreeShapeMoveStrategy(KoToolBase *tool, const QPointF &cl
     gradient->setColorAt(0.0, Qt::white);
     gradient->setColorAt(1.0, Qt::blue);
     m_ballastRoot->setBackground(new KoGradientBackground(gradient));
+    KoTextOnShapeContainer *tos = new KoTextOnShapeContainer(m_ballastRoot, 0);
+    tos->setResizeBehavior(KoTextOnShapeContainer::IndependendSizes);
+    m_ballastRoot = tos;
     m_ballastTree = dynamic_cast<KoShape*>(new TreeShape(m_ballastRoot));
     m_ballastConnector = KoShapeRegistry::instance()->value("KoConnectionShape")->createDefaultShape();
 
@@ -221,10 +225,13 @@ TreeShape* TreeShapeMoveStrategy::propose(QRectF area, TreeShape::TreeType struc
     QList<TreeShape*> trees;
     foreach (KoShape *shape, shapes) {
         TreeShape *tree = dynamic_cast<TreeShape*>(shape);
+        if (tree) kDebug() << tree->structure();
         if (tree && (tree->structure() == structure))
             trees.append(tree);
     }
-    kDebug() << trees.removeOne(dynamic_cast<TreeShape*>(m_ballastTree));
+    trees.removeOne(dynamic_cast<TreeShape*>(m_ballastTree));
+    foreach(KoShape *shape, m_selectedShapes)
+        trees.removeOne(dynamic_cast<TreeShape*>(shape));
 
     if (!trees.isEmpty()) {
         qSort(trees.begin(), trees.end(), KoShape::compareShapeZIndex);

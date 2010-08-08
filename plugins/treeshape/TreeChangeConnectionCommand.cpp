@@ -18,23 +18,41 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TREESHAPEFACTORY_H
-#define TREESHAPEFACTORY_H
+#include "TreeChangeConnectionCommand.h"
+#include <klocale.h>
 
-#include <KoShapeFactoryBase.h>
-
-class KoShape;
-
-class TreeShapeFactory : public KoShapeFactoryBase
+TreeChangeConnectionCommand::TreeChangeConnectionCommand(TreeShape *tree, KoConnectionShape::Type type, QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_tree(tree)
+    , m_newType(type)
 {
-public:
-    TreeShapeFactory(QObject *parent);
-    ~TreeShapeFactory();
+    Q_ASSERT(m_tree);
 
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement &e) const;
+    setText(i18n("Change tree"));
 
-//     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
-};
+    m_oldType = m_tree->connectionType();
+}
 
-#endif
+void TreeChangeConnectionCommand::redo()
+{
+    QUndoCommand::redo();
+
+    m_tree->update();
+
+    if (m_oldType != m_newType)
+        m_tree->setConnectionType(m_newType);
+
+    m_tree->update();
+}
+
+void TreeChangeConnectionCommand::undo()
+{
+    QUndoCommand::undo();
+
+    m_tree->update();
+
+    if (m_oldType != m_newType)
+        m_tree->setConnectionType(m_oldType);
+
+    m_tree->update();
+}

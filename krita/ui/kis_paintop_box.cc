@@ -110,10 +110,10 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_presetWidget->setToolTip(i18n("Choose brush preset"));
     m_presetWidget->setFixedSize(32, 32);
 
-    m_brushChooser = new KisPopupButton(this);
-    m_brushChooser->setIcon(KIcon("paintop_settings_01"));
-    m_brushChooser->setToolTip(i18n("Choose and edit brush"));
-    m_brushChooser->setFixedSize(32, 32);
+//    m_brushChooser = new KisPopupButton(this);
+//    m_brushChooser->setIcon(KIcon("paintop_settings_01"));
+//    m_brushChooser->setToolTip(i18n("Choose and edit brush"));
+//    m_brushChooser->setFixedSize(32, 32);
 
     m_eraseModeButton = new QPushButton(this);
     m_eraseModeButton->setIcon(KIcon("draw-eraser"));

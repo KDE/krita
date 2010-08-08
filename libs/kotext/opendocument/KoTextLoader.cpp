@@ -637,8 +637,24 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
             loadBody(e, cursor, isDeleteChange);
         }
 
-        if (!current.textList())
+        if (!current.textList()) {
+            if (!d->currentList->style()->hasLevelProperties(level)) {
+                KoListLevelProperties llp;
+                // Look if one of the lower levels are defined to we can copy over that level.
+                for(int i = level - 1; i >= 0; --i) {
+                    if(d->currentList->style()->hasLevelProperties(i)) {
+                        llp = d->currentList->style()->levelProperties(i);
+                        break;
+                    }
+                }
+                llp.setLevel(level);
+                // TODO make the 10 configurable
+                llp.setIndent(level * 10.0);
+                d->currentList->style()->setLevelProperties(llp);
+            }
+
             d->currentList->add(current, level);
+        }
 
         if (listHeader)
             blockFormat.setProperty(KoParagraphStyle::IsListHeader, true);

@@ -126,16 +126,12 @@ void SpellCheck::setBackgroundSpellChecking(bool on)
     KConfigGroup spellConfig = KGlobal::config()->group("Spelling");
     m_enableSpellCheck = on;
     spellConfig.writeEntry("autoSpellCheck", m_enableSpellCheck);
-    if (!m_enableSpellCheck) {
-        if (m_document) {
-            foreach (const BlockLayout& bl, m_misspellings) {
-                QTextBlock block = m_document->findBlock(bl.start);
-                if (block.isValid()) {
-                    block.layout()->clearAdditionalFormats();
-                    m_document->markContentsDirty(bl.start, bl.start + bl.length);
-                }
+    if (m_document && !m_enableSpellCheck) {
+        for (QTextBlock block = m_document->begin(); block != m_document->end(); block = block.next()) {
+            if (block.isValid()) {
+                block.layout()->clearAdditionalFormats();
+                m_document->markContentsDirty(block.position(), block.position() + block.length());
             }
-            m_misspellings.clear();
         }
     }
 }
@@ -248,8 +244,7 @@ void SpellCheck::runQueue()
             continue;
         m_isChecking = true;
         m_document = section.document;
-        //commented next line out, because we need the data in m_misspellings to remove all mispelled
-        //m_misspellings.clear();
+        m_misspellings.clear();
         do {
             BlockLayout bl;
             bl.start = block.position();

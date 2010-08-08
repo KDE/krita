@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
- * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2007-2010 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
@@ -123,8 +123,6 @@ KoListLevelProperties KoListStyle::levelProperties(int level) const
     if (d->levels.count()) {
         KoListLevelProperties llp = d->levels.begin().value();
         llp.setLevel(level);
-        // TODO make the 10 configurable.
-        llp.setIndent(level * 10.0);
         return llp;
     }
     KoListLevelProperties llp;

@@ -42,6 +42,9 @@
 #include "KoXmlNS.h"
 #include "KoOpenPane.h"
 #include "KoApplication.h"
+#include <KoProgressProxy.h>
+#include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 #include <KoDpi.h>
 #include <KoXmlWriter.h>
@@ -107,6 +110,8 @@ class KoDocument::Private
 {
 public:
     Private() :
+            progressUpdater(0),
+            profileStream(0),
             filterManager(0),
             specialOutputFlag(0),   // default is native format
             isImporting(false),
@@ -154,6 +159,9 @@ public:
 #else
     KoDocumentRdfBase *docRdf;
 #endif
+    KoProgressUpdater *progressUpdater;
+    QTextStream *profileStream;
+    QTime profileReferenceTime;
 
     KoUnit unit;
 
@@ -264,6 +272,52 @@ void KoBrowserExtension::print()
         if ( printDialog->exec() )
             view->print( printer, *printDialog );
     */
+}
+
+namespace {
+    KoMainWindow* currentShell(KoDocument* doc)
+    {
+        QWidget *widget = qApp->activeWindow();
+        KoMainWindow *shell = qobject_cast<KoMainWindow*>(widget);
+        while (!shell && widget) {
+            widget = widget->parentWidget();
+            shell = qobject_cast<KoMainWindow*>(widget);
+        }
+
+        if (!shell)
+            shell = doc->shells().first();
+        return shell;
+    }
+    class DocumentProgressProxy : public KoProgressProxy {
+    public:
+        KoDocument* const m_doc;
+
+        DocumentProgressProxy(KoDocument* doc)
+            : m_doc(doc)
+        {
+        }
+
+        ~DocumentProgressProxy() {
+            // signal that the job is done
+            setValue(-1);
+        }
+
+        int maximum() const {
+            return 100;
+        }
+
+        void setValue(int value) {
+            currentShell(m_doc)->slotProgress(value);
+        }
+
+        void setRange(int /*minimum*/, int /*maximum*/) {
+
+        }
+
+        void setFormat(const QString &/*format*/) {
+
+        }
+    };
 }
 
 KoDocument::KoDocument(QWidget * parentWidget, QObject* parent, bool singleViewMode)
@@ -1256,9 +1310,17 @@ bool KoDocument::openFile()
 
     QString importedFile = localFilePath();
 
+    // create the main progress monitoring object for loading, this can
+    // contain subtasks for filtering and loading
+    DocumentProgressProxy proxyProgress(this);
+    d->progressUpdater = new KoProgressUpdater(&proxyProgress,
+                                               KoProgressUpdater::Threaded,
+                                               d->profileStream);
+    d->progressUpdater->setReferenceTime(d->profileReferenceTime);
+
     if (!isNativeFormat(typeName.toLatin1(), ForImport)) {
         if (!d->filterManager)
-            d->filterManager = new KoFilterManager(this);
+            d->filterManager = new KoFilterManager(this, d->progressUpdater);
         KoFilter::ConversionStatus status;
         importedFile = d->filterManager->importDocument(localFilePath(), status);
         if (status != KoFilter::OK) {
@@ -1319,6 +1381,8 @@ bool KoDocument::openFile()
             }
 
             d->bLoading = false;
+            delete d->progressUpdater;
+            d->progressUpdater = 0;
             return false;
         }
         d->bEmpty = false;
@@ -1401,8 +1465,22 @@ bool KoDocument::openFile()
         deleteOpenPane();
     }
     d->bLoading = false;
+
+    QPointer<KoUpdater> updater
+            = progressUpdater()->startSubtask(1, "clear undo stack");
+    updater->setProgress(0);
     undoStack()->clear();
+    updater->setProgress(100);
+
+    delete d->progressUpdater;
+    d->progressUpdater = 0;
+
     return ok;
+}
+
+KoProgressUpdater* KoDocument::progressUpdater() const
+{
+    return d->progressUpdater;
 }
 
 // shared between openFile and koMainWindow's "create new empty document" code
@@ -2459,6 +2537,16 @@ void KoDocument::setDocumentClean(bool clean)
     setModified(!clean);
 }
 
+void KoDocument::setProfileStream(QTextStream* profilestream)
+{
+    d->profileStream = profilestream;
+}
+
+void KoDocument::setProfileReferenceTime(const QTime& referenceTime)
+{
+    d->profileReferenceTime = referenceTime;
+}
+
 void KoDocument::clearUndoHistory()
 {
     d->undoStack->clear();
@@ -2476,16 +2564,7 @@ KoGuidesData &KoDocument::guidesData()
 
 KoMainWindow* KoDocument::currentShell()
 {
-    QWidget *widget = qApp->activeWindow();
-    KoMainWindow *shell = qobject_cast<KoMainWindow*>(widget);
-    while (!shell && widget) {
-        widget = widget->parentWidget();
-        shell = qobject_cast<KoMainWindow*>(widget);
-    }
-
-    if (!shell)
-        shell = d->shells.first();
-    return shell;
+    return ::currentShell(this);
 }
 
 bool KoDocument::isEmpty() const

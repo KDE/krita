@@ -53,6 +53,7 @@ class KoDocumentRdfBase;
 class KoOpenPane;
 class KUndoStack;
 class KoTextEditor;
+class KoProgressUpdater;
 
 class KoVersionInfo
 {
@@ -576,6 +577,13 @@ public:
     KoDocumentRdfBase *documentRdfBase() const;
 
     /**
+     * @return the object to report progress to.
+     * One can add more KoUpdaters to it to make the progress reporting more
+     * accurate. If no active progress reporter is present, 0 is returned.
+     **/
+    KoProgressUpdater* progressUpdater() const;
+
+    /**
      * Appends the shell to the list of shells which show this
      * document as their root document.
      *
@@ -605,13 +613,6 @@ public:
      */
     static QList<KoDocument*> *documentList() {
         return s_documentList;
-    }
-
-    /**
-     * Signal the progress of operations such as loading or saving.
-     */
-    void emitProgress(int value) {
-        emit sigProgress(value);
     }
 
     /**
@@ -824,6 +825,15 @@ public slots:
      */
     virtual void setDocumentClean(bool clean);
 
+    /**
+     * Set the output stream to report profile information to.
+     */
+    void setProfileStream(QTextStream* profilestream);
+
+    /**
+     * Set the output stream to report profile information to.
+     */
+    void setProfileReferenceTime(const QTime& referenceTime);
 signals:
 
     /**
@@ -838,7 +848,7 @@ signals:
      * Your KoDocument-derived class should emit the signal now and then during load/save.
      * KoMainWindow will take care of displaying a progress bar automatically.
      */
-    void sigProgress(int value);
+    void sigProgress_(int value); // _ is added to help remove bad calls to it
 
     /**
      * Emitted e.g. at the beginning of a save operation

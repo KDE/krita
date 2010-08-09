@@ -26,6 +26,7 @@
 
 #include <QMutex>
 #include <QPointer>
+#include <QTime>
 
 /**
  * KoUpdaterPrivate is the gui-thread side of KoUpdater. Communication
@@ -45,13 +46,14 @@ class KoUpdaterPrivate : public QObject
 
 public:
 
-    KoUpdaterPrivate(KoProgressUpdater *parent, int weight)
+    KoUpdaterPrivate(KoProgressUpdater *parent, int weight, const QString& name)
         : QObject( parent )
         , m_progress(0)
         , m_weight(weight)
         , m_interrupted(false)
         , m_parent(parent)
     {
+        setObjectName(name);
     }
 
     /// when deleting an updater, make sure the accompanying thread is
@@ -63,6 +65,28 @@ public:
     int progress() const { return m_progress; }
 
     int weight() const { return m_weight; }
+
+    class TimePoint {
+    public:
+        QTime time;
+        int value;
+
+        explicit TimePoint(int value_) :time(QTime::currentTime()), value(value_) {}
+    };
+
+    void addPoint(int value) {
+        m_points.append(TimePoint(value));
+    }
+
+    QList<TimePoint> getPoints() const {
+        return m_points;
+    }
+
+    bool isSignificant(int value) const {
+        if (m_points.size() == 0) return true;
+        const TimePoint& tp = m_points.last();
+        return tp.value != value || tp.time.msecsTo(QTime::currentTime()) > 250;
+    }
 
 public slots:
 
@@ -86,12 +110,12 @@ signals:
     void sigInterrupted();
 
 private:
-
     int m_progress; // always in percent
     int m_weight;
     bool m_interrupted;
 
     KoProgressUpdater *m_parent;
+    QList<TimePoint> m_points;
 
     int min;
     int max;

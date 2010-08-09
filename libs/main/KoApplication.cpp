@@ -41,6 +41,10 @@
 
 bool KoApplication::m_starting = true;
 
+namespace {
+    const QTime appStartTime(QTime::currentTime());
+}
+
 class KoApplicationPrivate
 {
 public:
@@ -77,6 +81,7 @@ bool KoApplication::initHack()
     options.add("export-filename <filename>", ki18n("Filename for export-pdf"));
     options.add("benchmark-loading", ki18n("just load the file and then exit"));
     options.add("benchmark-loading-show-window", ki18n("load the file, show the window and progressbar and then exit"));
+    options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
     KCmdLineArgs::addCmdLineOptions(options, ki18n("KOffice"), "koffice", "kde");
     return true;
 }
@@ -158,8 +163,16 @@ bool KoApplication::start()
         QString pdfFileName = koargs->getOption("export-filename");
         const bool doTemplate = koargs->isSet("template");
         const bool benchmarkLoading = koargs->isSet("benchmark-loading") || koargs->isSet("benchmark-loading-show-window");
-        const bool showShell = koargs->isSet("benchmark-loading-show-window");;
+        const bool showShell = koargs->isSet("benchmark-loading-show-window");
+        QString profileFileName = koargs->getOption("profile-filename");
         koargs->clear();
+
+        QTextStream profileoutput;
+        QFile profileFile(profileFileName);
+        if (!profileFileName.isEmpty()
+                && profileFile.open(QFile::WriteOnly | QFile::Truncate)) {
+            profileoutput.setDevice(&profileFile);
+        }
 
         // Loop through arguments
 
@@ -175,6 +188,15 @@ bool KoApplication::start()
                 if (showShell || !benchmarkLoading) {
                     shell->show();
                 }
+
+                if (profileoutput.device()) {
+                    doc->setProfileStream(&profileoutput);
+                    profileoutput << "KoApplication::start\t"
+                            << appStartTime.msecsTo(QTime::currentTime())
+                            <<"\t0" << endl;
+                    doc->setAutoErrorHandlingEnabled(false);
+                }
+                doc->setProfileReferenceTime(appStartTime);
 
                 // are we just trying to open a template?
                 if (doTemplate) {
@@ -222,6 +244,11 @@ bool KoApplication::start()
                 }
                 else if (shell->openDocument(doc, args->url(i))) {
                     if (benchmarkLoading) {
+                        if (profileoutput.device()) {
+                            profileoutput << "KoApplication::start\t"
+                                   << appStartTime.msecsTo(QTime::currentTime())
+                                   <<"\t100" << endl;
+                        }
                         shell->slotFileQuit();
                         return true; // only load one document!
                     }
@@ -243,6 +270,12 @@ bool KoApplication::start()
                     // .... if failed
                     // delete doc; done by openDocument
                     // delete shell; done by ~KoDocument
+                }
+
+                if (profileoutput.device()) {
+                    profileoutput << "KoApplication::start\t"
+                            << appStartTime.msecsTo(QTime::currentTime())
+                            <<"\t100" << endl;
                 }
             }
         }

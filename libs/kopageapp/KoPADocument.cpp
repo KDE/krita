@@ -41,6 +41,8 @@
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
 #include <KoXmlNS.h>
+#include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 #include "KoPACanvas.h"
 #include "KoPAView.h"
@@ -110,9 +112,13 @@ bool KoPADocument::loadXML( const KoXmlDocument & doc, KoStore * )
     return true;
 }
 
-bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
+bool KoPADocument::loadOdf( KoOdfReadStore & odfStore)
 {
-    emit sigProgress( 0 );
+    QPointer<KoUpdater> updater;
+    if (progressUpdater()) {
+        updater = progressUpdater()->startSubtask(1, "KoPADocument::loadOdf");
+        updater->setProgress(0);
+    }
     KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), componentData() );
     KoPALoadingContext paContext(loadingContext, resourceManager());
 
@@ -164,7 +170,7 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
 
     updatePageCount();
 
-    emit sigProgress( -1 );
+    if (updater) updater->setProgress(100);
     return true;
 }
 

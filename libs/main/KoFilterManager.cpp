@@ -24,6 +24,7 @@ Boston, MA 02110-1301, USA.
 #include "KoFilterManager_p.h"
 #include "KoDocument.h"
 #include "KoDocumentEntry.h"
+#include "KoProgressUpdater.h"
 
 #include <QFile>
 #include <QLabel>
@@ -46,8 +47,10 @@ Boston, MA 02110-1301, USA.
 // static cache for filter availability
 QMap<QString, bool> KoFilterManager::m_filterAvailable;
 
-KoFilterManager::KoFilterManager(KoDocument* document) :
-        m_document(document), m_parentChain(0), m_graph(""), d(new Private)
+KoFilterManager::KoFilterManager(KoDocument* document,
+                                 KoProgressUpdater* progressUpdater) :
+        m_document(document), m_parentChain(0), m_graph(""),
+        d(new Private(progressUpdater))
 {
     d->batch = false;
     if (document)
@@ -76,7 +79,8 @@ KoFilterManager::~KoFilterManager()
     delete d;
 }
 
-QString KoFilterManager::importDocument(const QString& url, KoFilter::ConversionStatus& status)
+QString KoFilterManager::importDocument(const QString& url,
+                                        KoFilter::ConversionStatus& status)
 {
     // Find the mime type for the file to be imported.
     KUrl u;
@@ -531,6 +535,11 @@ void KoFilterManager::setBatchMode(const bool batch)
 bool KoFilterManager::getBatchMode(void) const
 {
     return d->batch;
+}
+
+KoProgressUpdater* KoFilterManager::progressUpdater() const
+{
+    return d->progressUpdater;
 }
 
 #include <KoFilterManager.moc>

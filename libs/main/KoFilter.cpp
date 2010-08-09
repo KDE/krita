@@ -27,19 +27,42 @@ Boston, MA 02110-1301, USA.
 #include <kdebug.h>
 #include <QStack>
 #include "KoFilterManager.h"
-
+#include "KoUpdater.h"
 
 class KoFilter::Private
 {
 public:
+    QPointer<KoUpdater> updater;
+
+    Private() :updater(0) {}
 };
 
-KoFilter::KoFilter(QObject* parent) : QObject(parent), m_chain(0), d(0)
+KoFilter::KoFilter(QObject* parent)
+    : QObject(parent), m_chain(0), d(new Private)
 {
 }
 
 KoFilter::~KoFilter()
 {
+    if (d->updater) d->updater->setProgress(100);
     delete d;
 }
+
+void KoFilter::setUpdater(const QPointer<KoUpdater>& updater)
+{
+    if (d->updater && !updater) {
+        disconnect(this, SLOT(slotProgress(int)));
+    } else if (!d->updater && updater) {
+        connect(this, SIGNAL(sigProgress(int)), SLOT(slotProgress(int)));
+    }
+    d->updater = updater;
+}
+
+void KoFilter::slotProgress(int value)
+{
+    if (d->updater) {
+        d->updater->setValue(value);
+    }
+}
+
 #include <KoFilter.moc>

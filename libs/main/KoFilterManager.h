@@ -31,6 +31,7 @@ Boston, MA 02110-1301, USA.
 
 #include "komain_export.h"
 class KoDocument;
+class KoProgressUpdater;
 
 /**
  *  @brief The class managing all the filters.
@@ -57,7 +58,8 @@ public:
     /**
      * Create a filter manager for a document
      */
-    explicit KoFilterManager(KoDocument* document);
+    explicit KoFilterManager(KoDocument* document,
+                             KoProgressUpdater* progressUpdater = 0);
 
     /**
      * Create a filter manager for the Shape Collection docker.
@@ -91,7 +93,8 @@ public:
      * If the QString which is returned isEmpty() and the status is OK,
      * then we imported the file directly into the document.
      */
-    QString importDocument(const QString& url, KoFilter::ConversionStatus& status);
+    QString importDocument(const QString& url,
+                           KoFilter::ConversionStatus& status);
 
     /**
      * @brief Exports the given file/document to the specified URL/mimetype.
@@ -142,8 +145,10 @@ public:
      */
     bool getBatchMode(void) const;
 
-signals:
-    void sigProgress(int);
+    /**
+     * Return the KoProgressUpdater or NULL if there is none.
+     **/
+    KoProgressUpdater* progressUpdater() const;
 
 private:
     // === API for KoFilterChains === (internal)

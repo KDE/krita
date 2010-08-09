@@ -27,6 +27,8 @@
 
 class KoUpdater;
 class KoProgressProxy;
+class QTextStream;
+class QTime;
 
 /**
  * Allow multiple subtasks to safely update and report progress.
@@ -73,7 +75,8 @@ public:
      * Constructor.
      * @param progressBar the progress bar to update.
      */
-    KoProgressUpdater(KoProgressProxy *progressBar, Mode mode = Threaded);
+    KoProgressUpdater(KoProgressProxy *progressBar, Mode mode = Threaded,
+                      QTextStream* output = 0);
 
     /// destructor
     virtual ~KoProgressUpdater();
@@ -102,13 +105,24 @@ public:
      * are packed in a QPointer so you can check whether they have
      * been deleted before dereferencing.
      */
-    QPointer<KoUpdater> startSubtask(int weight=1);
+    QPointer<KoUpdater> startSubtask(int weight=1,
+                                     const QString &name = QString());
 
     /**
      * Cancelling the action will make each subtask be marked as 'interrupted' and
      * set the total progress to 100%.
      */
     void cancel();
+
+    /**
+     * Set the time with respect to which the progress events are logged.
+     */
+    void setReferenceTime(const QTime &referenceTime);
+
+    /**
+     * Get the time with respect to which the progress events are logged.
+     */
+    QTime referenceTime() const;
 
 private slots:
 

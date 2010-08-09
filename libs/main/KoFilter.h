@@ -23,9 +23,12 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QObject>
 #include <QtCore/QMap>
+#include <QtCore/QPointer>
+
 #include "komain_export.h"
 class QIODevice;
 class KoFilterChain;
+class KoUpdater;
 
 /**
  * @brief The base class for import and export filters.
@@ -87,6 +90,12 @@ public:
      */
     virtual ConversionStatus convert(const QByteArray& from, const QByteArray& to) = 0;
 
+    /**
+     * Set the updater to which the filter will report progress.
+     * Every emit of the sigProgress signal is reported to the updater.
+     */
+    void setUpdater(const QPointer<KoUpdater>& updater);
+
 signals:
     /**
      * Emit this signal with a value in the range of 1...100 to have some
@@ -116,6 +125,9 @@ private:
 
     class Private;
     Private * const d;
+
+private slots:
+    void slotProgress(int value);
 };
 
 #endif

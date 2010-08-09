@@ -38,10 +38,8 @@ KoOdfDocument::~KoOdfDocument()
     delete d;
 }
 
-
 bool KoOdfDocument::saveChildrenOdf(SavingContext & documentContext)
 {
     Q_UNUSED(documentContext)
     return true;
 }
-

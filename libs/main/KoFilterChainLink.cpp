@@ -23,7 +23,8 @@ Boston, MA 02110-1301, USA.
 #include <kdebug.h>
 #include "KoFilterEntry.h"
 #include "KoFilterManager.h"
-
+#include "KoProgressUpdater.h"
+#include "KoUpdater.h"
 
 namespace
 {
@@ -31,6 +32,17 @@ namespace
     const int SIGNAL_PREFIX_LEN = 10;
     const char* const SLOT_PREFIX = "commSlot";
     const int SLOT_PREFIX_LEN = 8;
+
+    KoUpdater* createUpdater(KoFilterChain* chain)
+    {
+        KoProgressUpdater* pu = chain->manager()->progressUpdater();
+        QPointer<KoUpdater> updater = 0;
+        if (pu) {
+            updater = pu->startSubtask(1, "filter");
+            updater->setProgress(0);
+        }
+        return updater;
+    }
 }
 
 namespace KOfficeFilter {
@@ -42,7 +54,7 @@ namespace KOfficeFilter {
         , m_from(from)
         , m_to(to)
         , m_filter(0)
-        , d(0)
+        , m_updater(createUpdater(chain))
     {
     }
 
@@ -63,9 +75,14 @@ namespace KOfficeFilter {
             return KoFilter::CreationError;
         }
 
-        // redirect the progress information to the KoFilterManager
-        QObject::connect(m_filter, SIGNAL(sigProgress(int)),
-                         m_chain->manager(), SIGNAL(sigProgress(int)));
+        if (m_updater) {
+            // if there is an updater, use that for progress reporting
+            m_filter->setUpdater(m_updater);
+        } else {
+            // redirect the progress information to the KoFilterManager
+            QObject::connect(m_filter, SIGNAL(sigProgress(int)),
+                             m_chain->manager(), SIGNAL(sigProgress(int)));
+        }
 
         if (parentChainLink)
             setupCommunication(parentChainLink->m_filter);

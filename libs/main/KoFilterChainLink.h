@@ -22,6 +22,7 @@ Boston, MA 02110-1301, USA.
 #include <KoFilterChain.h>
 
 class QByteArray;
+class KoUpdater;
 
 namespace KOfficeFilter {
 
@@ -55,6 +56,10 @@ public:
     // circular dependencies in their embedded files :}
     int lruPartIndex() const;
 
+    QPointer<KoUpdater> updater() const {
+        return m_updater;
+    }
+
 private:
     ChainLink(const ChainLink& rhs);
     ChainLink& operator=(const ChainLink& rhs);
@@ -70,8 +75,7 @@ private:
     // circular dependencies in their embedded files :}
     KoFilter* m_filter;
 
-    class Private;
-    Private * const d;
+    QPointer<KoUpdater> const m_updater;
 };
 
 }

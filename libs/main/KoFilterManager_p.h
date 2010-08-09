@@ -28,12 +28,20 @@ Boston, MA 02110-1301, USA.
 #include <KDialog>
 
 class QListWidget;
+class KoProgressUpdater;
 
 class KoFilterManager::Private
 {
 public:
     bool batch;
     QByteArray importMimeType;
+    KoProgressUpdater* const progressUpdater;
+
+    Private(KoProgressUpdater* progressUpdater_ = 0)
+        :progressUpdater(progressUpdater_)
+    {
+    }
+
 };
 
 class KoFilterChooser : public KDialog

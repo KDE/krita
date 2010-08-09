@@ -34,9 +34,6 @@
     <height>0</height>
    </size>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
   </property>

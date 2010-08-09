@@ -28,9 +28,6 @@
     <height>323</height>
    </size>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout_10" rowstretch="0" columnstretch="0" rowminimumheight="0" columnminimumwidth="0">
    <property name="sizeConstraint">
     <enum>QLayout::SetDefaultConstraint</enum>

@@ -24,7 +24,7 @@
 
 #include <KDebug>
 
-KisColorSelectorWheel::KisColorSelectorWheel(KisColorSelectorBase *parent) :
+KisColorSelectorWheel::KisColorSelectorWheel(KisColorSelector *parent) :
     KisColorSelectorComponent(parent),
     m_lastClickPos(-1,-1)
 {
@@ -144,8 +144,8 @@ void KisColorSelectorWheel::paint(QPainter* painter)
 
     painter->drawImage(0,0, m_pixelCache);
 
-    // draw selectors
-    if(m_lastClickPos!=QPoint(-1,-1)) {
+    // draw blips
+    if(m_lastClickPos!=QPoint(-1,-1) && m_parent->displayBlip()) {
         QPoint pos = (m_lastClickPos*qMin(width(), height())).toPoint();
         if(width()<height())
             pos.setY(pos.y()+height()/2-width()/2);

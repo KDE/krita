@@ -94,6 +94,7 @@ protected:
     void mousePressEvent(QMouseEvent*);
     void mouseMoveEvent(QMouseEvent*);
     void mouseReleaseEvent(QMouseEvent*);
+    bool displaySettingsButton();
 
 
 private:
@@ -117,6 +118,11 @@ private:
     QColor m_lastColor;
     QColor m_currentColor;
     QPoint m_lastMousePosition;
+    bool m_blipDisplay;
+
+public:
+    void setDisplayBlip(bool disp) {m_blipDisplay = disp;}
+    bool displayBlip() const {return m_blipDisplay;}
 };
 
 #endif // KIS_COLSELNG_COLOR_SELECTOR_H

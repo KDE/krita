@@ -36,6 +36,7 @@
 #include "kis_color_selector_triangle.h"
 #include "kis_color_selector_simple.h"
 #include "kis_color_selector_wheel.h"
+#include "kis_color_selector_container.h"
 
 #include <KDebug>
 
@@ -48,7 +49,8 @@ KisColorSelector::KisColorSelector(Configuration conf, QWidget* parent)
                                        m_wheel(0),
                                        m_mainComponent(0),
                                        m_subComponent(0),
-                                       m_grabbingComponent(0)
+                                       m_grabbingComponent(0),
+                                       m_blipDisplay(true)
 {
     init();
     setConfiguration(conf);
@@ -64,7 +66,8 @@ KisColorSelector::KisColorSelector(QWidget* parent)
                                        m_button(0),
                                        m_mainComponent(0),
                                        m_subComponent(0),
-                                       m_grabbingComponent(0)
+                                       m_grabbingComponent(0),
+                                       m_blipDisplay(true)
 {
     init();
     updateSettings();
@@ -126,9 +129,7 @@ void KisColorSelector::setConfiguration(Configuration conf)
     m_mainComponent->setConfiguration(m_configuration.mainTypeParameter, m_configuration.mainType);
     m_subComponent->setConfiguration(m_configuration.subTypeParameter, m_configuration.subType);
 
-    QResizeEvent event(QSize(width(),
-                             height()),
-                       QSize());
+    QResizeEvent event(QSize(width(), height()), QSize());
     resizeEvent(&event);
     setColor(QColor(255,0,0));
 }
@@ -172,7 +173,7 @@ inline int iconSize(qreal width, qreal height) {
 void KisColorSelector::resizeEvent(QResizeEvent* e) {
     if(m_configuration.subType==Ring) {
         m_ring->setGeometry(0,0,width(), height());
-        if(m_button!=0) {
+        if(displaySettingsButton()) {
             int size = iconSize(width(), height());
             m_button->setGeometry(0, 0, size, size);
         }
@@ -193,7 +194,7 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
     else {
         // type wheel and square
         if(m_configuration.mainType==Wheel) {
-            if(m_button!=0) {
+            if(displaySettingsButton()) {
                 int size = iconSize(width(), height()*0.9);
                 m_button->setGeometry(0, height()*0.1, size, size);
             }
@@ -201,8 +202,11 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
             m_subComponent->setGeometry( 0, 0,            width(), height()*0.1);
         }
         else {
-            int buttonSize = qBound(20, int(0.1*height()), 32);
-            m_button->setGeometry(0, 0, buttonSize, buttonSize);
+            int buttonSize = 0;
+            if(displaySettingsButton()) {
+                buttonSize = qBound(20, int(0.1*height()), 32);
+                m_button->setGeometry(0, 0, buttonSize, buttonSize);
+            }
 
             if(height()>width()) {
                 int selectorHeight=height()-buttonSize;
@@ -256,6 +260,14 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
     m_grabbingComponent=0;
 }
 
+bool KisColorSelector::displaySettingsButton()
+{
+    if(dynamic_cast<KisColorSelectorContainer*>(parent())!=0)
+        return true;
+    else
+        return false;
+}
+
 void KisColorSelector::setColor(const QColor &color)
 {
 //    m_ring->mouseEvent(-1,-1);
@@ -286,7 +298,7 @@ void KisColorSelector::init()
     m_square = new KisColorSelectorSimple(this);
     m_wheel = new KisColorSelectorWheel(this);
 
-    if(parent()!=0) {
+    if(displaySettingsButton()) {
         m_button = new QPushButton(this);
         m_button->setIcon(KIcon("configure"));
         connect(m_button, SIGNAL(clicked()), SIGNAL(settingsButtonClicked()));

@@ -31,7 +31,7 @@ class KisColorSelectorWheel : public KisColorSelectorComponent
 {
     Q_OBJECT
 public:
-    explicit KisColorSelectorWheel(KisColorSelectorBase *parent);
+    explicit KisColorSelectorWheel(KisColorSelector *parent);
     void setColor(const QColor& c);
 
 protected:

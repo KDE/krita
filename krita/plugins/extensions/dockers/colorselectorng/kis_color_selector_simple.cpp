@@ -24,7 +24,7 @@
 
 #include <KDebug>
 
-KisColorSelectorSimple::KisColorSelectorSimple(KisColorSelectorBase *parent) :
+KisColorSelectorSimple::KisColorSelectorSimple(KisColorSelector *parent) :
     KisColorSelectorComponent(parent),
     m_lastClickPos(-1,-1)
 {
@@ -165,8 +165,8 @@ void KisColorSelectorSimple::paint(QPainter* painter)
 
     painter->drawImage(0,0, m_pixelCache);
 
-    // draw marker
-    if(m_lastClickPos!=QPointF(-1,-1)) {
+    // draw blip
+    if(m_lastClickPos!=QPointF(-1,-1) && m_parent->displayBlip()) {
         switch (m_parameter) {
         case KisColorSelector::H:
         case KisColorSelector::hsvS:

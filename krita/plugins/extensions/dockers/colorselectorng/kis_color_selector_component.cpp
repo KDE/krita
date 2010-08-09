@@ -24,7 +24,7 @@
 #include <QMouseEvent>
 
 
-KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelectorBase* parent) :
+KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelector* parent) :
     QObject(parent),
     m_hue(0),
     m_hsvSaturation(1),

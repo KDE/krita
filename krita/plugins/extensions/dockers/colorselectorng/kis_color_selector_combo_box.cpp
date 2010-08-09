@@ -67,6 +67,7 @@ public:
                 item->setMouseTracking(true);
                 item->setEnabled(false);
                 item->setColor(QColor(255,0,0));
+                item->setDisplayBlip(false);
             }
         }
     }
@@ -121,6 +122,7 @@ KisColorSelectorComboBox::KisColorSelectorComboBox(QWidget* parent) :
     QLayout* layout = new QGridLayout(this);
     layout->addWidget(&m_currentSelector);
     m_currentSelector.setEnabled(false);
+    m_currentSelector.setDisplayBlip(false);
 
     // 30 pixels for the arrow of the combobox
     setMinimumSize(m_private->selectorSize+m_private->spacing+30,m_private->selectorSize+m_private->spacing);

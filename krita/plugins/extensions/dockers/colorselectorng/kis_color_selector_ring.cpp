@@ -28,7 +28,7 @@ USING_PART_OF_NAMESPACE_EIGEN
 
 #include <KDebug>
         
-KisColorSelectorRing::KisColorSelectorRing(KisColorSelectorBase *parent) :
+KisColorSelectorRing::KisColorSelectorRing(KisColorSelector *parent) :
     KisColorSelectorComponent(parent),
     m_cachedColorSpace(0),
     m_cachedSize(0),
@@ -78,26 +78,28 @@ void KisColorSelectorRing::paint(QPainter* painter)
                 m_pixelCache);
 
 
-    // paint marker
-    qreal angle;
-    int y_start, y_end, x_start, x_end;
-    angle=m_lastHue*2.*M_PI+(M_PI);
-    y_start=innerRadius()*sin(angle)+height()/2;
-    y_end=outerRadius()*sin(angle)+height()/2;
-    x_start=innerRadius()*cos(angle)+width()/2;
-    x_end=outerRadius()*cos(angle)+width()/2;
+    // paint blip
+    if(m_parent->displayBlip()) {
+        qreal angle;
+        int y_start, y_end, x_start, x_end;
+        angle=m_lastHue*2.*M_PI+(M_PI);
+        y_start=innerRadius()*sin(angle)+height()/2;
+        y_end=outerRadius()*sin(angle)+height()/2;
+        x_start=innerRadius()*cos(angle)+width()/2;
+        x_end=outerRadius()*cos(angle)+width()/2;
 
-    painter->setPen(QColor(0,0,0));
-    painter->drawLine(x_start, y_start, x_end, y_end);
+        painter->setPen(QColor(0,0,0));
+        painter->drawLine(x_start, y_start, x_end, y_end);
 
-    angle+=M_PI/180.;
-    y_start=innerRadius()*sin(angle)+height()/2;
-    y_end=outerRadius()*sin(angle)+height()/2;
-    x_start=innerRadius()*cos(angle)+width()/2;
-    x_end=outerRadius()*cos(angle)+width()/2;
+        angle+=M_PI/180.;
+        y_start=innerRadius()*sin(angle)+height()/2;
+        y_end=outerRadius()*sin(angle)+height()/2;
+        x_start=innerRadius()*cos(angle)+width()/2;
+        x_end=outerRadius()*cos(angle)+width()/2;
 
-    painter->setPen(QColor(255,255,255));
-    painter->drawLine(x_start, y_start, x_end, y_end);
+        painter->setPen(QColor(255,255,255));
+        painter->drawLine(x_start, y_start, x_end, y_end);
+    }
 }
 
 QColor KisColorSelectorRing::selectColor(int x, int y) {

@@ -36,7 +36,7 @@ public:
     typedef KisColorSelector::Parameters Parameter;
     typedef KisColorSelector::Type Type;
 
-    explicit KisColorSelectorComponent(KisColorSelectorBase* parent);
+    explicit KisColorSelectorComponent(KisColorSelector* parent);
     void setGeometry(int x, int y, int width, int height);
     void paintEvent(QPainter*);
 
@@ -91,8 +91,8 @@ protected:
     qreal m_lightness;
     Parameter m_parameter;
     Type m_type;
+    KisColorSelector* m_parent;
 private:
-    KisColorSelectorBase* m_parent;
     int m_width;
     int m_height;
     int m_x;

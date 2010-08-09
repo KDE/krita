@@ -538,6 +538,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setIcon(KIcon("preferences-system-performance"));
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
+    m_tabletSettings->m_page->pressureCurve->setMaximumSize(QSize(1000, 1000));
     
     
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();

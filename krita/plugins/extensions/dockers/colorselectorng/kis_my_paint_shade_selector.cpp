@@ -106,7 +106,6 @@ QColor KisMyPaintShadeSelector::pickColorAt(int x, int y)
 KisColorSelectorBase* KisMyPaintShadeSelector::createPopup() const
 {
     KisColorSelectorBase* popup = new KisMyPaintShadeSelector(0);
-    popup->resize(256,256);
     return popup;
 }
 

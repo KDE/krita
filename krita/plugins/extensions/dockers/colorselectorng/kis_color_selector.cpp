@@ -76,7 +76,6 @@ KisColorSelector::KisColorSelector(QWidget* parent)
 KisColorSelectorBase* KisColorSelector::createPopup() const
 {
     KisColorSelectorBase* popup = new KisColorSelector(0);
-    popup->resize(350,350);
     return popup;
 }
 
@@ -279,10 +278,6 @@ void KisColorSelector::setColor(const QColor &color)
 
 void KisColorSelector::mouseEvent(QMouseEvent *e)
 {
-    if(m_lastMousePosition==e->pos())
-        return;
-    m_lastMousePosition=e->pos();
-
     if(m_grabbingComponent && (e->buttons()&Qt::LeftButton || e->buttons()&Qt::RightButton)) {
         m_grabbingComponent->mouseEvent(e->x(), e->y());
 
@@ -314,6 +309,4 @@ void KisColorSelector::init()
     connect(m_updateTimer,      SIGNAL(timeout()), this,  SLOT(update()));
 
     setMinimumSize(80, 80);
-
-    m_lastMousePosition=QPoint(-1, -1);
 }

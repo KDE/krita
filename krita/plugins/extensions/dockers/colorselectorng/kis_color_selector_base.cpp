@@ -45,7 +45,9 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_popupOnMouseClick(true),
     m_colorSpace(0),
     m_canvas(0),
-    m_colorUpdateAllowed(true)
+    m_colorUpdateAllowed(true),
+    m_isPopup(false),
+    m_parent(0)
 {
     m_timer->setInterval(350);
     m_timer->setSingleShot(true);
@@ -57,8 +59,6 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
 
 KisColorSelectorBase::~KisColorSelectorBase()
 {
-    if(m_popup!=0)
-        delete m_popup;
 }
 
 void KisColorSelectorBase::setPopupBehaviour(bool onMouseOver, bool onMouseClick)
@@ -92,7 +92,7 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
 
 void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 {
-    if(m_popupOnMouseClick && (event->buttons()&Qt::MidButton)>0 && parent()!=0) {
+    if(m_popupOnMouseClick && (event->buttons()&Qt::MidButton)>0 && !m_isPopup) {
         //open popup
         showPopup();
 
@@ -118,7 +118,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 
         event->accept();
     }
-    else if(parent() == 0 && (event->buttons()&Qt::MidButton)>0) {
+    else if(m_isPopup && (event->buttons()&Qt::MidButton)>0) {
         event->accept();
         hide();
     }
@@ -130,19 +130,22 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
 {
 //    kDebug()<<"mouse move event, e="<<e->pos()<<"  global="<<e->globalPos();
-    if(parent()==0 && (qMin(e->x(), e->y())<-m_hideDistance || qMax(e->x(), e->y())>width()+m_hideDistance)) {
+
+    if(m_isPopup
+       && (qMin(e->x(), e->y())<-m_hideDistance || qMax(e->x(), e->y())>width()+m_hideDistance)
+       && !m_parent->rect().contains(m_parent->mapFromGlobal(e->globalPos()))) {
         if(!m_timer->isActive()) {
             m_timer->start();
         }
         e->accept();
         return;
     }
-    else if (parent()==0){
+    else if (m_isPopup){
         m_timer->stop();
         e->accept();
         return;
     }
-    else if(parent()!=0 && m_popupOnMouseOver && this->rect().contains(e->pos()) && (m_popup==0 || m_popup->isHidden())) {
+    else if(!m_isPopup && m_popupOnMouseOver && this->rect().contains(e->pos()) && (m_popup==0 || m_popup->isHidden())) {
         //open popup
         showPopup();
 
@@ -262,17 +265,20 @@ void KisColorSelectorBase::showPopup()
         m_popup = createPopup();
         Q_ASSERT(m_popup);
         m_popup->setWindowFlags(Qt::Popup);
+        m_popup->m_parent = this;
+        m_popup->m_isPopup=true;
         m_popup->setCanvas(m_canvas);
+        m_popup->updateSettings();
     }
 
     QPoint cursorPos = QCursor::pos();
     m_popup->show();
-    m_popup->move(cursorPos.x()-width()/2, cursorPos.y()-height()/2);
+    m_popup->move(cursorPos.x()-m_popup->width()/2, cursorPos.y()-m_popup->height()/2);
 }
 
 void KisColorSelectorBase::hidePopup()
 {
-    if(parent()==0)
+    if(m_isPopup)
         hide();
     else if (m_popup!=0)
         m_popup->hide();
@@ -328,6 +334,10 @@ void KisColorSelectorBase::updateSettings()
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
+    bool onMouseOver = cfg.readEntry("popupOnMouseOver", false);
+    bool onMouseClick = cfg.readEntry("popupOnMouseClick", true);
+    setPopupBehaviour(onMouseOver, onMouseClick);
+
     if(cfg.readEntry("useCustomColorSpace", true)) {
         KoColorSpaceRegistry* csr = KoColorSpaceRegistry::instance();
         m_colorSpace = csr->colorSpace(cfg.readEntry("customColorSpaceModel", "RGBA"),
@@ -337,5 +347,8 @@ void KisColorSelectorBase::updateSettings()
     else {
         m_colorSpace=0;
         // the colorspace will be retrieved next time by calling colorSpace()
+    }
+    if(m_isPopup) {
+        resize(cfg.readEntry("zoomSize", 280), cfg.readEntry("zoomSize", 280));
     }
 }

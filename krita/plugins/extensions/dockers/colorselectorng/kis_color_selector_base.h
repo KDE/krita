@@ -75,6 +75,8 @@ private:
     mutable const KoColorSpace* m_colorSpace;
     KisCanvas2* m_canvas;
     bool m_colorUpdateAllowed;
+    bool m_isPopup; //this instance is a popup
+    QWidget* m_parent;
 };
 
 #endif // KIS_COLOR_SELECTOR_BASE_H

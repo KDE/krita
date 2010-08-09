@@ -117,7 +117,6 @@ private:
 
     QColor m_lastColor;
     QColor m_currentColor;
-    QPoint m_lastMousePosition;
     bool m_blipDisplay;
 
 public:

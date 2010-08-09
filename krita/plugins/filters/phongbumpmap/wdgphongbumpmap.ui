@@ -248,15 +248,15 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="illumination">
+     <widget class="QWidget" name="lightSources">
       <attribute name="title">
-       <string>Illumination</string>
+       <string>Light Sources</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_9">
        <item row="0" column="0">
-        <widget class="QGroupBox" name="illuminantGroupBox1">
+        <widget class="QGroupBox" name="lightSourceGroupBox1">
          <property name="title">
-          <string>Illuminant 1</string>
+          <string>Light Source 1</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -284,6 +284,9 @@
               <width>0</width>
               <height>0</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Azimuth</string>
             </property>
             <property name="maximum">
              <number>359</number>
@@ -389,6 +392,9 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="whatsThis">
+               <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
+              </property>
               <property name="suffix">
                <string>°</string>
               </property>
@@ -420,6 +426,12 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="whatsThis">
+               <string>Direction of the light, the dial tip represents where the light comes from.</string>
+              </property>
               <property name="wrapping">
                <bool>true</bool>
               </property>
@@ -446,9 +458,9 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QGroupBox" name="illuminantGroupBox2">
+        <widget class="QGroupBox" name="lightSourceGroupBox2">
          <property name="title">
-          <string>Illuminant 2</string>
+          <string>Light Source 2</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -476,6 +488,9 @@
               <width>0</width>
               <height>0</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Azimuth</string>
             </property>
             <property name="maximum">
              <number>359</number>
@@ -587,6 +602,12 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="whatsThis">
+               <string>Direction of the light, the dial tip represents where the light comes from.</string>
+              </property>
               <property name="wrapping">
                <bool>true</bool>
               </property>
@@ -621,6 +642,12 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="whatsThis">
+               <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
+              </property>
               <property name="suffix">
                <string>°</string>
               </property>
@@ -644,9 +671,9 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QGroupBox" name="illuminantGroupBox3">
+        <widget class="QGroupBox" name="lightSourceGroupBox3">
          <property name="title">
-          <string>Illuminant 3</string>
+          <string>Light Source 3</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -677,6 +704,9 @@
               <width>0</width>
               <height>0</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Azimuth</string>
             </property>
             <property name="maximum">
              <number>359</number>
@@ -772,6 +802,9 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="whatsThis">
+               <string>Direction of the light, the dial tip represents where the light comes from.</string>
+              </property>
               <property name="wrapping">
                <bool>true</bool>
               </property>
@@ -806,6 +839,9 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="whatsThis">
+               <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
+              </property>
               <property name="suffix">
                <string>°</string>
               </property>
@@ -839,9 +875,9 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QGroupBox" name="illuminantGroupBox4">
+        <widget class="QGroupBox" name="lightSourceGroupBox4">
          <property name="title">
-          <string>Illuminant 4</string>
+          <string>Light Source 4</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -872,6 +908,9 @@
               <width>0</width>
               <height>0</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Azimuth</string>
             </property>
             <property name="maximum">
              <number>359</number>
@@ -983,6 +1022,9 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="whatsThis">
+               <string>Direction of the light, the dial tip represents where the light comes from.</string>
+              </property>
               <property name="wrapping">
                <bool>true</bool>
               </property>
@@ -1016,6 +1058,9 @@
                 <width>75</width>
                 <height>0</height>
                </size>
+              </property>
+              <property name="whatsThis">
+               <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
               </property>
               <property name="suffix">
                <string>°</string>

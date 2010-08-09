@@ -75,7 +75,8 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 {
     KisColorSelectorBase::mousePressEvent(e);
 
-    if(!e->isAccepted()) {
+    QRect widgetRect(0, 0, qMin(width(), height()), qMin(width(), height()));
+    if(!e->isAccepted() && widgetRect.contains(e->pos())) {
         QColor color = pickColorAt(e->x(), e->y());
 
         ColorRole role=Foreground;

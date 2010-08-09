@@ -87,9 +87,6 @@ void KisMinimalShadeSelector::updateSettings()
         m_shadingLines.at(i)->updateSettings();
 
     setPopupBehaviour(false, false);
-
-    // if not setting the mouse tracking again, then the new childwidgets will disable it.
-    setMouseTracking(mouseTracking);
 }
 
 void KisMinimalShadeSelector::paintEvent(QPaintEvent *)

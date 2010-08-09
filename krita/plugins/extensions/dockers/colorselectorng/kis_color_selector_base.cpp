@@ -52,9 +52,6 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_timer->setInterval(350);
     m_timer->setSingleShot(true);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(hidePopup()));
-
-    if(parent==0 || m_popupOnMouseOver)
-        setMouseTracking(true);
 }
 
 KisColorSelectorBase::~KisColorSelectorBase()
@@ -69,7 +66,7 @@ void KisColorSelectorBase::setPopupBehaviour(bool onMouseOver, bool onMouseClick
         m_popupOnMouseOver = false;
     }
     setMouseTracking(false);
-    if(m_popupOnMouseOver) {
+    if(m_isPopup || m_popupOnMouseOver) {
         setMouseTracking(true);
     }
 }

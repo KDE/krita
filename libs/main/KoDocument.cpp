@@ -165,7 +165,7 @@ public:
 
     KoUnit unit;
 
-    KoFilterManager * filterManager; // The filter-manager to use when loading/saving [for the options]
+    KoFilterManager *filterManager; // The filter-manager to use when loading/saving [for the options]
 
     QByteArray mimeType; // The actual mimetype of the document
     QByteArray outputMimeType; // The mimetype to use when saving
@@ -240,18 +240,18 @@ public:
     }
 
     // Called by openFile()
-    void setKoView(KoView * view) {
+    void setKoView(KoView *view) {
         m_view = view;
         setFocusProxy(m_view);
     }
-    KoView * koView() const {
+    KoView *koView() const {
         return m_view;
     }
 private:
-    KoView* m_view;
+    KoView *m_view;
 };
 
-KoBrowserExtension::KoBrowserExtension(KoDocument * doc)
+KoBrowserExtension::KoBrowserExtension(KoDocument *doc)
         : KParts::BrowserExtension(doc)
 {
     emit enableAction("print", true);
@@ -261,9 +261,9 @@ void KoBrowserExtension::print()
 {
     kDebug(30003) << "implement; KoBrowserExtension::print";
     /*
-        KoDocument * doc = static_cast<KoDocument *>( parent() );
-        KoViewWrapperWidget * wrapper = static_cast<KoViewWrapperWidget *>( doc->widget() );
-        KoView * view = wrapper->koView();
+        KoDocument *doc = static_cast<KoDocument *>( parent() );
+        KoViewWrapperWidget *wrapper = static_cast<KoViewWrapperWidget *>( doc->widget() );
+        KoView *view = wrapper->koView();
         // TODO remove code duplication (KoMainWindow), by moving this to KoView
         QPrinter printer;
         QPrintDialog *printDialog = KdePrint::createPrintDialog(&printer, view->printDialogPages(), view);
@@ -275,7 +275,7 @@ void KoBrowserExtension::print()
 }
 
 namespace {
-    KoMainWindow* currentShell(KoDocument* doc)
+    KoMainWindow *currentShell(KoDocument *doc)
     {
         QWidget *widget = qApp->activeWindow();
         KoMainWindow *shell = qobject_cast<KoMainWindow*>(widget);
@@ -290,9 +290,9 @@ namespace {
     }
     class DocumentProgressProxy : public KoProgressProxy {
     public:
-        KoDocument* const m_doc;
+        KoDocument *const m_doc;
 
-        DocumentProgressProxy(KoDocument* doc)
+        DocumentProgressProxy(KoDocument *doc)
             : m_doc(doc)
         {
         }
@@ -320,7 +320,7 @@ namespace {
     };
 }
 
-KoDocument::KoDocument(QWidget * parentWidget, QObject* parent, bool singleViewMode)
+KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMode)
         : KParts::ReadWritePart(parent)
         , d(new Private)
 {
@@ -386,7 +386,7 @@ KoDocument::~KoDocument()
 
     // Tell our views that the document is already destroyed and
     // that they shouldn't try to access it.
-    foreach(KoView* view, d->views) {
+    foreach(KoView *view, d->views) {
         view->setDocumentDeleted();
     }
     delete d->startUpWidget;
@@ -669,7 +669,7 @@ void KoDocument::slotAutoSave()
 QAction *KoDocument::action(const QDomElement &element) const
 {
     // First look in the document itself
-    QAction* act = KParts::ReadWritePart::action(element);
+    QAction *act = KParts::ReadWritePart::action(element);
     if (act)
         return act;
 
@@ -703,10 +703,10 @@ void KoDocument::setReadWrite(bool readwrite)
 {
     KParts::ReadWritePart::setReadWrite(readwrite);
 
-    foreach(KoView* view, d->views) {
+    foreach(KoView *view, d->views) {
         view->updateReadWrite(readwrite);
     }
-    foreach(KoMainWindow* mainWindow, d->shells) {
+    foreach(KoMainWindow *mainWindow, d->shells) {
         mainWindow->setReadWrite(readwrite);
     }
     setAutoSave(d->autoSaveDelay);
@@ -730,7 +730,7 @@ void KoDocument::addView(KoView *view)
     view->updateReadWrite(isReadWrite());
 
     if (d->views.size() == 1) {
-        KoApplication* app = qobject_cast<KoApplication*>(KApplication::kApplication());
+        KoApplication *app = qobject_cast<KoApplication*>(KApplication::kApplication());
         if (0 != app) {
             emit app->documentOpened('/'+objectName());
         }
@@ -742,7 +742,7 @@ void KoDocument::removeView(KoView *view)
     d->views.removeAll(view);
 
     if (d->views.isEmpty()) {
-        KoApplication* app = qobject_cast<KoApplication*>(KApplication::kApplication());
+        KoApplication *app = qobject_cast<KoApplication*>(KApplication::kApplication());
         if (0 != app) {
             emit app->documentClosed('/'+objectName());
         }
@@ -761,7 +761,7 @@ int KoDocument::viewCount() const
 
 KParts::Part *KoDocument::hitTest(QWidget *widget, const QPoint &globalPos)
 {
-    foreach(KoView* view, d->views) {
+    foreach(KoView *view, d->views) {
         if (static_cast<QWidget *>(view) == widget) {
             QPoint canvasPos(view->canvas()->mapFromGlobal(globalPos));
             canvasPos.rx() += view->canvasXOffset();
@@ -853,7 +853,7 @@ bool KoDocument::saveNativeFormat(const QString & file)
 
     // TODO: use std::auto_ptr or create store on stack [needs API fixing],
     // to remove all the 'delete store' in all the branches
-    KoStore* store = KoStore::createStore(file, KoStore::Write, mimeType, backend);
+    KoStore *store = KoStore::createStore(file, KoStore::Write, mimeType, backend);
     if (d->specialOutputFlag == SaveEncrypted && !d->password.isNull())
         store->setPassword(d->password);
     if (store->bad()) {
@@ -869,13 +869,13 @@ bool KoDocument::saveNativeFormat(const QString & file)
     }
 }
 
-bool KoDocument::saveNativeFormatODF(KoStore* store, const QByteArray &mimeType)
+bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
 {
     kDebug(30003) << "Saving to OASIS format";
     // Tell KoStore not to touch the file names
     store->disallowNameExpansion();
     KoOdfWriteStore odfStore(store);
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
+    KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
     KoEmbeddedDocumentSaver embeddedSaver;
     SavingContext documentContext(odfStore, embeddedSaver);
 
@@ -926,7 +926,7 @@ bool KoDocument::saveNativeFormatODF(KoStore* store, const QByteArray &mimeType)
     if (!d->versionInfo.isEmpty()) {
         if (store->open("VersionList.xml")) {
             KoStoreDevice dev(store);
-            KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev,
+            KoXmlWriter *xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev,
                                      "VL:version-list");
             for (int i = 0; i < d->versionInfo.size(); ++i) {
                 KoVersionInfo *version = &d->versionInfo[i];
@@ -970,7 +970,7 @@ bool KoDocument::saveNativeFormatODF(KoStore* store, const QByteArray &mimeType)
     return true;
 }
 
-bool KoDocument::saveNativeFormatKOffice(KoStore* store)
+bool KoDocument::saveNativeFormatKOffice(KoStore *store)
 {
     kDebug(30003) << "Saving root";
     if (store->open("root")) {
@@ -1014,7 +1014,7 @@ bool KoDocument::saveNativeFormatKOffice(KoStore* store)
     return true;
 }
 
-bool KoDocument::saveToStream(QIODevice * dev)
+bool KoDocument::saveToStream(QIODevice *dev)
 {
     QDomDocument doc = saveXML();
     // Save to buffer
@@ -1027,7 +1027,7 @@ bool KoDocument::saveToStream(QIODevice * dev)
 }
 
 // Called for embedded documents
-bool KoDocument::saveToStore(KoStore* _store, const QString & _path)
+bool KoDocument::saveToStore(KoStore *_store, const QString & _path)
 {
     kDebug(30003) << "Saving document to store" << _path;
 
@@ -1059,7 +1059,7 @@ bool KoDocument::saveToStore(KoStore* _store, const QString & _path)
     return true;
 }
 
-bool KoDocument::saveOasisPreview(KoStore* store, KoXmlWriter* manifestWriter)
+bool KoDocument::saveOasisPreview(KoStore *store, KoXmlWriter *manifestWriter)
 {
     const QPixmap pix = generatePreview(QSize(128, 128));
     QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
@@ -1076,7 +1076,7 @@ bool KoDocument::saveOasisPreview(KoStore* store, KoXmlWriter* manifestWriter)
     return true;
 }
 
-bool KoDocument::savePreview(KoStore* store)
+bool KoDocument::savePreview(KoStore *store)
 {
     QPixmap pix = generatePreview(QSize(256, 256));
     // Reducing to 8bpp reduces file sizes quite a lot.
@@ -1251,7 +1251,7 @@ bool KoDocument::openUrl(const KUrl & _url)
         //if ( d->shells.isEmpty() )
         //    kWarning(30003) << "no shell yet !";
         // Add to recent actions list in our shells
-        foreach(KoMainWindow* mainWindow, d->shells) {
+        foreach(KoMainWindow *mainWindow, d->shells) {
             mainWindow->addRecentURL(_url);
         }
     }
@@ -1431,13 +1431,13 @@ bool KoDocument::openFile()
 
     if (ok && d->bSingleViewMode) {
         // See addClient below
-        KXMLGUIFactory* guiFactory = factory();
+        KXMLGUIFactory *guiFactory = factory();
         if (guiFactory)  // 0 when splitting views in konq, for some reason
             guiFactory->removeClient(this);
 
         if (!d->views.isEmpty()) {
             // We already had a view (this happens when doing reload in konqueror)
-            KoView* v = d->views.first();
+            KoView *v = d->views.first();
             if (guiFactory)
                 guiFactory->removeClient(v);
             removeView(v);
@@ -1478,7 +1478,7 @@ bool KoDocument::openFile()
     return ok;
 }
 
-KoProgressUpdater* KoDocument::progressUpdater() const
+KoProgressUpdater *KoDocument::progressUpdater() const
 {
     return d->progressUpdater;
 }
@@ -1496,7 +1496,7 @@ void KoDocument::setMimeTypeAfterLoading(const QString& mimeType)
 }
 
 // The caller must call store->close() if loadAndParse returns true.
-bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc)
+bool KoDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc)
 {
     //kDebug(30003) <<"Trying to open" << filename;
 
@@ -1610,7 +1610,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
 bool KoDocument::loadNativeFormatFromStore(const QString& file)
 {
     KoStore::Backend backend = (d->specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
-    KoStore * store = KoStore::createStore(file, KoStore::Read, "", backend);
+    KoStore *store = KoStore::createStore(file, KoStore::Read, "", backend);
 
     if (store->bad()) {
         d->lastErrorMessage = i18n("Not a valid KOffice file: %1", file);
@@ -1639,7 +1639,7 @@ bool KoDocument::loadNativeFormatFromStore(QByteArray &data)
     bool succes;
     KoStore::Backend backend = (d->specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
     QBuffer buffer(&data);
-    KoStore * store = KoStore::createStore(&buffer, KoStore::Read, "", backend);
+    KoStore *store = KoStore::createStore(&buffer, KoStore::Read, "", backend);
 
     if (store->bad())
         return false;
@@ -1659,7 +1659,7 @@ bool KoDocument::loadNativeFormatFromStore(QByteArray &data)
     return succes;
 }
 
-bool KoDocument::loadNativeFormatFromStoreInternal(KoStore * store)
+bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
 {
     bool oasis = true;
 
@@ -1746,7 +1746,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore * store)
 }
 
 // For embedded documents
-bool KoDocument::loadFromStore(KoStore* _store, const QString& url)
+bool KoDocument::loadFromStore(KoStore *_store, const QString& url)
 {
     if (_store->open(url)) {
         KoXmlDocument doc;
@@ -1777,7 +1777,7 @@ bool KoDocument::loadFromStore(KoStore* _store, const QString& url)
     return result;
 }
 
-bool KoDocument::loadOasisFromStore(KoStore* store)
+bool KoDocument::loadOasisFromStore(KoStore *store)
 {
     KoOdfReadStore odfStore(store);
     if (! odfStore.loadAndParse(d->lastErrorMessage)) {
@@ -1805,7 +1805,7 @@ bool KoDocument::addVersion(const QString& comment)
     // to remove all the 'delete store' in all the branches
     QByteArray data;
     QBuffer buffer(&data);
-    KoStore* store = KoStore::createStore(&buffer/*file*/, KoStore::Write, mimeType, backend);
+    KoStore *store = KoStore::createStore(&buffer/*file*/, KoStore::Write, mimeType, backend);
     if (store->bad()) {
         delete store;
         return false;
@@ -1816,7 +1816,7 @@ bool KoDocument::addVersion(const QString& comment)
     store->disallowNameExpansion();
     KoOdfWriteStore odfStore(store);
 
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
+    KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
     Q_UNUSED(manifestWriter); // XXX why?
 
     KoEmbeddedDocumentSaver embeddedSaver;
@@ -1934,7 +1934,7 @@ void KoDocument::setTitleModified(const QString &caption, bool mod)
         return;
     }
     // we must be root doc so update caption in all related windows
-    foreach(KoMainWindow* mainWindow, d->shells) {
+    foreach(KoMainWindow *mainWindow, d->shells) {
         mainWindow->updateCaption(caption, mod);
         mainWindow->updateReloadFileAction(this);
         mainWindow->updateVersionsFileAction(this);
@@ -2174,7 +2174,7 @@ int KoDocument::shellCount() const
     return d->shells.count();
 }
 
-// DCOPObject * KoDocument::dcopObject()
+// DCOPObject *KoDocument::dcopObject()
 // {
 //     if ( !d->dcopObject )
 //         d->dcopObject = new KoDocumentIface( this );
@@ -2310,7 +2310,7 @@ bool KoDocument::hasExternURL() const
     return !url().protocol().isEmpty() && url().protocol() != STORE_PROTOCOL && url().protocol() != INTERNAL_PROTOCOL;
 }
 
-void KoDocument::slotStarted(KIO::Job* job)
+void KoDocument::slotStarted(KIO::Job *job)
 {
     if (job && job->ui()) {
         job->ui()->setWindow(currentShell());
@@ -2318,8 +2318,8 @@ void KoDocument::slotStarted(KIO::Job* job)
 }
 
 static const struct {
-    const char* localName;
-    const char* documentType;
+    const char *localName;
+    const char *documentType;
 } TN2DTArray[] = {
     { "text", I18N_NOOP("a word processing") },
     { "spreadsheet", I18N_NOOP("a spreadsheet") },
@@ -2360,7 +2360,7 @@ void KoDocument::setUnit(const KoUnit &unit)
     }
 }
 
-void KoDocument::saveUnitOdf(KoXmlWriter* settingsWriter) const
+void KoDocument::saveUnitOdf(KoXmlWriter *settingsWriter) const
 {
     settingsWriter->addConfigItem("unit", unitName());
 }
@@ -2370,7 +2370,7 @@ QString KoDocument::unitName() const
     return KoUnit::unitName(unit());
 }
 
-void KoDocument::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
+void KoDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 {
 #ifndef NDEBUG
     if (d->templateType.isEmpty())
@@ -2436,13 +2436,13 @@ void KoDocument::startCustomDocument()
     deleteOpenPane();
 }
 
-KoOpenPane* KoDocument::createOpenPane(QWidget* parent, const KComponentData &componentData,
+KoOpenPane *KoDocument::createOpenPane(QWidget *parent, const KComponentData &componentData,
                                        const QString& templateType)
 {
     const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
                                                                KoFilterManager::Import, KoDocument::readExtraNativeMimeTypes());
 
-    KoOpenPane* openPane = new KoOpenPane(parent, componentData, mimeFilter, templateType);
+    KoOpenPane *openPane = new KoOpenPane(parent, componentData, mimeFilter, templateType);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(openPane);
     foreach(const CustomDocumentWidgetItem & item, widgetList) {
         openPane->addCustomDocumentWidget(item.widget, item.title, item.icon);
@@ -2487,11 +2487,11 @@ QList<KoDocument::CustomDocumentWidgetItem> KoDocument::createCustomDocumentWidg
     return QList<CustomDocumentWidgetItem>();
 }
 
-bool KoDocument::showEmbedInitDialog(QWidget* parent)
+bool KoDocument::showEmbedInitDialog(QWidget *parent)
 {
     KDialog dlg(parent);
     dlg.setCaption(i18n("Embedding Object"));
-    KoOpenPane* pane = createOpenPane(&dlg, componentData(), templateType());
+    KoOpenPane *pane = createOpenPane(&dlg, componentData(), templateType());
     pane->layout()->setMargin(0);
     dlg.setMainWidget(pane);
     KConfigGroup cfg = KSharedConfig::openConfig("EmbedInitDialog")->group(QString());
@@ -2510,12 +2510,12 @@ QList<KoVersionInfo> & KoDocument::versionList()
     return d->versionInfo;
 }
 
-KUndoStack* KoDocument::undoStack()
+KUndoStack *KoDocument::undoStack()
 {
     return d->undoStack;
 }
 
-void KoDocument::addCommand(QUndoCommand* command)
+void KoDocument::addCommand(QUndoCommand *command)
 {
     if (command)
         d->undoStack->push(command);
@@ -2537,7 +2537,7 @@ void KoDocument::setDocumentClean(bool clean)
     setModified(!clean);
 }
 
-void KoDocument::setProfileStream(QTextStream* profilestream)
+void KoDocument::setProfileStream(QTextStream *profilestream)
 {
     d->profileStream = profilestream;
 }
@@ -2562,7 +2562,7 @@ KoGuidesData &KoDocument::guidesData()
     return d->guidesData;
 }
 
-KoMainWindow* KoDocument::currentShell()
+KoMainWindow *KoDocument::currentShell()
 {
     return ::currentShell(this);
 }

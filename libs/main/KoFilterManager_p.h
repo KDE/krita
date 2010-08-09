@@ -35,9 +35,9 @@ class KoFilterManager::Private
 public:
     bool batch;
     QByteArray importMimeType;
-    KoProgressUpdater* const progressUpdater;
+    KoProgressUpdater * const progressUpdater;
 
-    Private(KoProgressUpdater* progressUpdater_ = 0)
+    Private(KoProgressUpdater *progressUpdater_ = 0)
         :progressUpdater(progressUpdater_)
     {
     }

@@ -28,14 +28,14 @@ Boston, MA 02110-1301, USA.
 
 namespace
 {
-    const char* const SIGNAL_PREFIX = "commSignal";
+    const char *const SIGNAL_PREFIX = "commSignal";
     const int SIGNAL_PREFIX_LEN = 10;
-    const char* const SLOT_PREFIX = "commSlot";
+    const char *const SLOT_PREFIX = "commSlot";
     const int SLOT_PREFIX_LEN = 8;
 
-    KoUpdater* createUpdater(KoFilterChain* chain)
+    KoUpdater *createUpdater(KoFilterChain *chain)
     {
-        KoProgressUpdater* pu = chain->manager()->progressUpdater();
+        KoProgressUpdater *pu = chain->manager()->progressUpdater();
         QPointer<KoUpdater> updater = 0;
         if (pu) {
             updater = pu->startSubtask(1, "filter");
@@ -47,7 +47,7 @@ namespace
 
 namespace KOfficeFilter {
 
-    ChainLink::ChainLink(KoFilterChain* chain, KoFilterEntry::Ptr filterEntry,
+    ChainLink::ChainLink(KoFilterChain *chain, KoFilterEntry::Ptr filterEntry,
                          const QByteArray& from, const QByteArray& to)
         : m_chain(chain)
         , m_filterEntry(filterEntry)
@@ -61,7 +61,7 @@ namespace KOfficeFilter {
     ChainLink::~ChainLink() {
     }
 
-    KoFilter::ConversionStatus ChainLink::invokeFilter(const ChainLink* const parentChainLink)
+    KoFilter::ConversionStatus ChainLink::invokeFilter(const ChainLink *const parentChainLink)
     {
         if (!m_filterEntry) {
             kError(30500) << "This filter entry is null. Strange stuff going on." << endl;
@@ -105,13 +105,13 @@ namespace KOfficeFilter {
         return -1;
     }
 
-    void ChainLink::setupCommunication(const KoFilter* const parentFilter) const
+    void ChainLink::setupCommunication(const KoFilter *const parentFilter) const
     {
         if (!parentFilter)
             return;
 
-        const QMetaObject* const parent = parentFilter->metaObject();
-        const QMetaObject* const child = m_filter->metaObject();
+        const QMetaObject *const parent = parentFilter->metaObject();
+        const QMetaObject *const child = m_filter->metaObject();
         if (!parent || !child)
             return;
 
@@ -119,10 +119,10 @@ namespace KOfficeFilter {
         setupConnections(m_filter, parentFilter);
     }
 
-    void ChainLink::setupConnections(const KoFilter* sender, const KoFilter* receiver) const
+    void ChainLink::setupConnections(const KoFilter *sender, const KoFilter *receiver) const
     {
-        const QMetaObject* const parent = sender->metaObject();
-        const QMetaObject* const child = receiver->metaObject();
+        const QMetaObject * const parent = sender->metaObject();
+        const QMetaObject * const child = receiver->metaObject();
         if (!parent || !child)
             return;
 

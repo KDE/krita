@@ -35,12 +35,12 @@ class ChainLink
 {
 
 public:
-    ChainLink(KoFilterChain* chain, KoFilterEntry::Ptr filterEntry,
+    ChainLink(KoFilterChain *chain, KoFilterEntry::Ptr filterEntry,
               const QByteArray& from, const QByteArray& to);
 
     ~ChainLink();
 
-    KoFilter::ConversionStatus invokeFilter(const ChainLink* const parentChainLink);
+    KoFilter::ConversionStatus invokeFilter(const ChainLink * const parentChainLink);
 
     QByteArray from() const {
         return m_from;
@@ -64,16 +64,16 @@ private:
     ChainLink(const ChainLink& rhs);
     ChainLink& operator=(const ChainLink& rhs);
 
-    void setupCommunication(const KoFilter* const parentFilter) const;
-    void setupConnections(const KoFilter* sender, const KoFilter* receiver) const;
+    void setupCommunication(const KoFilter * const parentFilter) const;
+    void setupConnections(const KoFilter *sender, const KoFilter *receiver) const;
 
-    KoFilterChain* m_chain;
+    KoFilterChain *m_chain;
     KoFilterEntry::Ptr m_filterEntry;
     QByteArray m_from, m_to;
 
     // This hack is only needed due to crappy Microsoft design and
     // circular dependencies in their embedded files :}
-    KoFilter* m_filter;
+    KoFilter *m_filter;
 
     QPointer<KoUpdater> const m_updater;
 };

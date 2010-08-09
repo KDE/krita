@@ -58,8 +58,8 @@ public:
     /**
      * Create a filter manager for a document
      */
-    explicit KoFilterManager(KoDocument* document,
-                             KoProgressUpdater* progressUpdater = 0);
+    explicit KoFilterManager(KoDocument *document,
+                             KoProgressUpdater *progressUpdater = 0);
 
     /**
      * Create a filter manager for the Shape Collection docker.
@@ -82,7 +82,7 @@ public:
      *        to allow embedding for filters. Most likely you do not have to care.
      */
     explicit KoFilterManager(const QString& url, const QByteArray& mimetypeHint = "",
-                             KoFilterChain* const parentChain = 0);
+                             KoFilterChain * const parentChain = 0);
 
     virtual ~KoFilterManager();
 
@@ -148,7 +148,7 @@ public:
     /**
      * Return the KoProgressUpdater or NULL if there is none.
      **/
-    KoProgressUpdater* progressUpdater() const;
+    KoProgressUpdater *progressUpdater() const;
 
 private:
     // === API for KoFilterChains === (internal)
@@ -163,16 +163,16 @@ private:
     QString exportFile() const {
         return m_exportUrl;
     }
-    friend KoDocument* KoFilterChain::filterManagerKoDocument() const;
-    KoDocument* document() const {
+    friend KoDocument *KoFilterChain::filterManagerKoDocument() const;
+    KoDocument *document() const {
         return m_document;
     }
     friend int KoFilterChain::filterManagerDirection() const;
     int direction() const {
         return static_cast<int>(m_direction);
     }
-    friend KoFilterChain* KoFilterChain::filterManagerParentChain() const;
-    KoFilterChain* parentChain() const {
+    friend KoFilterChain *KoFilterChain::filterManagerParentChain() const;
+    KoFilterChain *parentChain() const {
         return m_parentChain;
     }
 
@@ -182,8 +182,8 @@ private:
 
     void importErrorHelper(const QString& mimeType, const bool suppressDialog = false);
 
-    KoDocument* m_document;
-    KoFilterChain* const m_parentChain;
+    KoDocument *m_document;
+    KoFilterChain *const m_parentChain;
     QString m_importUrl, m_exportUrl;
     QByteArray m_importUrlMimetypeHint;  ///< suggested mimetype
     KOfficeFilter::Graph m_graph;

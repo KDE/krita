@@ -110,21 +110,21 @@ protected:
     /**
      * This is the constructor your filter has to call, obviously.
      */
-    KoFilter(QObject* parent = 0);
+    KoFilter(QObject *parent = 0);
 
     /**
      * Use this pointer to access all information about input/output
      * during the conversion. @em Don't use it in the constructor -
      * it's invalid while constructing the object!
      */
-    KoFilterChain* m_chain;
+    KoFilterChain *m_chain;
 
 private:
     KoFilter(const KoFilter& rhs);
     KoFilter& operator=(const KoFilter& rhs);
 
     class Private;
-    Private * const d;
+    Private *const d;
 
 private slots:
     void slotProgress(int value);

@@ -95,8 +95,8 @@ public:
      *        (KoViewWrapperWidget) which is a child of @p parentWidget.
      *        This widget can be retrieved by calling widget().
      */
-    KoDocument(QWidget* parentWidget,
-               QObject* parent,
+    KoDocument(QWidget *parentWidget,
+               QObject *parent,
                bool singleViewMode = false);
 
     /**
@@ -411,7 +411,7 @@ public:
      * @param parent the KoMainWindow used as parent for the widget.
      * @param alwaysShow always show the widget even if the user has configured it to not show.
      */
-    virtual void showStartUpWidget(KoMainWindow* parent, bool alwaysShow = false);
+    virtual void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
 
     /**
      *  Tells the document that its title has been modified, either because
@@ -443,26 +443,26 @@ public:
      *  @param store The store to load from
      *  @param url An internal url, like tar:/1/2
      */
-    virtual bool loadFromStore(KoStore* store, const QString& url);
+    virtual bool loadFromStore(KoStore *store, const QString& url);
 
     /**
      *  @brief Loads an OASIS document from a store.
      *  This is used for both the main document and embedded objects.
      */
-    virtual bool loadOasisFromStore(KoStore* store);
+    virtual bool loadOasisFromStore(KoStore *store);
 
     /**
      *  @brief Saves a document to a store.
      *
      *  You should not have to reimplement this - but call it in saveChildren().
      */
-    virtual bool saveToStore(KoStore* store, const QString& path);
+    virtual bool saveToStore(KoStore *store, const QString& path);
 
     /**
      *  Reimplement this method to load the contents of your KOffice document,
      *  from the XML document. This is for the pre-Oasis file format (maindoc.xml).
      */
-    virtual bool loadXML(const KoXmlDocument & doc, KoStore * store) = 0;
+    virtual bool loadXML(const KoXmlDocument & doc, KoStore *store) = 0;
 
 
     /**
@@ -502,7 +502,7 @@ public:
      *  saveXML(). This method exists only for applications that
      *  don't use QDomDocument for saving, i.e. kword and kpresenter.
      */
-    virtual bool saveToStream(QIODevice * dev);
+    virtual bool saveToStream(QIODevice *dev);
 
     /**
      *  Loads a document in the native format from a given URL.
@@ -581,7 +581,7 @@ public:
      * One can add more KoUpdaters to it to make the progress reporting more
      * accurate. If no active progress reporter is present, 0 is returned.
      **/
-    KoProgressUpdater* progressUpdater() const;
+    KoProgressUpdater *progressUpdater() const;
 
     /**
      * Appends the shell to the list of shells which show this
@@ -736,7 +736,7 @@ public:
      *
      * @param settingsWriter
      */
-    void saveUnitOdf(KoXmlWriter* settingsWriter) const;
+    void saveUnitOdf(KoXmlWriter *settingsWriter) const;
 
     /**
      * Returns the name of the unit used to display all measures/distances.
@@ -760,7 +760,7 @@ public:
      * Shows the init dialog when embeding
      * @param parent the parent widget
      */
-    virtual bool showEmbedInitDialog(QWidget* parent);
+    virtual bool showEmbedInitDialog(QWidget *parent);
 
 
     QList<KoVersionInfo> &versionList();
@@ -800,7 +800,7 @@ public slots:
      * Adds a command to the undo stack and executes it by calling the redo() function.
      * @param command command to add to the undo stack
      */
-    virtual void addCommand(QUndoCommand* command);
+    virtual void addCommand(QUndoCommand *command);
 
     /**
      * Begins recording of a macro command. At the end endMacro needs to be called.
@@ -828,7 +828,7 @@ public slots:
     /**
      * Set the output stream to report profile information to.
      */
-    void setProfileStream(QTextStream* profilestream);
+    void setProfileStream(QTextStream *profilestream);
 
     /**
      * Set the output stream to report profile information to.
@@ -887,7 +887,7 @@ protected:
      */
     struct CustomDocumentWidgetItem {
         /// Pointer to the custom document widget
-        QWidget* widget;
+        QWidget *widget;
         /// title used in the sidebar. If left empty it will be displayed as "Custom Document"
         QString title;
         /// icon used in the sidebar. If left empty it will use the unknown icon
@@ -947,7 +947,7 @@ protected:
      *  from a store. This function is called after loadXML()
      *  and after loadChildren() have been called.
      */
-    virtual bool completeLoading(KoStore* store);
+    virtual bool completeLoading(KoStore *store);
 
     /**
      *  If you want to write additional files to a store,
@@ -959,7 +959,7 @@ protected:
      *  But do this ONLY if the document is not stored extern (see isStoredExtern() ).
      *  If it is, then the pictures should be saved to tar:/pictures.
      */
-    virtual bool completeSaving(KoStore* store);
+    virtual bool completeSaving(KoStore *store);
 
 
     /** @internal */
@@ -989,7 +989,7 @@ protected:
      * @param instance the KComponentData to be used for KConfig data
      * @param templateType the template-type (group) that should be selected on creation.
      */
-    KoOpenPane* createOpenPane(QWidget* parent, const KComponentData &instance,
+    KoOpenPane *createOpenPane(QWidget *parent, const KComponentData &instance,
                                const QString& templateType = QString());
 
 
@@ -1016,24 +1016,24 @@ private slots:
 
 private:
 
-    bool saveNativeFormatODF(KoStore* store, const QByteArray &mimeType);
-    bool saveNativeFormatKOffice(KoStore* store);
+    bool saveNativeFormatODF(KoStore *store, const QByteArray &mimeType);
+    bool saveNativeFormatKOffice(KoStore *store);
 
     /// @return the current KoMainWindow shell
-    KoMainWindow* currentShell();
+    KoMainWindow *currentShell();
 
     KService::Ptr nativeService();
-    bool oldLoadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
+    bool oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc);
     bool loadNativeFormatFromStore(const QString& file);
-    bool loadNativeFormatFromStoreInternal(KoStore * store);
+    bool loadNativeFormatFromStoreInternal(KoStore *store);
 
-    bool savePreview(KoStore* store);
-    bool saveOasisPreview(KoStore* store, KoXmlWriter* manifestWriter);
+    bool savePreview(KoStore *store);
+    bool saveOasisPreview(KoStore *store, KoXmlWriter *manifestWriter);
 
     QString prettyPathOrUrl() const;
 
     class Private;
-    Private * const d;
+    Private *const d;
 
 
     static QList<KoDocument*> *s_documentList;

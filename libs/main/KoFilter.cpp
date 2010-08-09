@@ -37,7 +37,7 @@ public:
     Private() :updater(0) {}
 };
 
-KoFilter::KoFilter(QObject* parent)
+KoFilter::KoFilter(QObject *parent)
     : QObject(parent), m_chain(0), d(new Private)
 {
 }

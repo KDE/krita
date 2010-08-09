@@ -33,7 +33,7 @@ class KoProgressUpdater::Private
 public:
 
     Private(KoProgressUpdater *_parent, KoProgressProxy *p, Mode _mode,
-            QTextStream* output_ = 0)
+            QTextStream *output_ = 0)
         : parent(_parent)
         , progressBar(p)
         , mode(_mode)
@@ -51,13 +51,13 @@ public:
     int currentProgress;
     bool updated;          // is true whe
                            // never the progress needs to be recomputed
-    QTextStream* output;
+    QTextStream *output;
     QTimer updateGuiTimer; // fires regulary to update the progress bar widget
     QList<QPointer<KoUpdaterPrivate> > subtasks;
     QList<QPointer<KoUpdater> > subTaskWrappers; // We delete these
     QTime referenceTime;
 
-    static void logEvents(QTextStream& out, KoProgressUpdater::Private* updater,
+    static void logEvents(QTextStream& out, KoProgressUpdater::Private *updater,
                           const QTime& startTime, const QString& prefix);
 };
 
@@ -167,7 +167,7 @@ void KoProgressUpdater::updateUi()
                 progress = updater->progress();
             }
 
-            totalProgress += progress * updater->weight();
+            totalProgress += progress *updater->weight();
         }
 
         d->currentProgress = totalProgress / d->totalWeight;
@@ -188,7 +188,7 @@ void KoProgressUpdater::updateUi()
 }
 
 void KoProgressUpdater::Private::logEvents(QTextStream& out,
-                                           KoProgressUpdater::Private* updater,
+                                           KoProgressUpdater::Private *updater,
                                            const QTime& startTime,
                                            const QString& prefix) {
     // initial implementation: write out the names of all events

@@ -76,7 +76,7 @@ public:
      * @param progressBar the progress bar to update.
      */
     KoProgressUpdater(KoProgressProxy *progressBar, Mode mode = Threaded,
-                      QTextStream* output = 0);
+                      QTextStream *output = 0);
 
     /// destructor
     virtual ~KoProgressUpdater();
@@ -132,7 +132,7 @@ private slots:
 private:
 
     class Private;
-    Private * const d;
+    Private *const d;
 
 };
 

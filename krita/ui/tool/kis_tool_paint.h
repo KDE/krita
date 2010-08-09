@@ -61,6 +61,9 @@ enum enumBrushMode {
     PAN
 };
 
+// wacom 
+const static int LEVEL_OF_PRESSURE_RESOLUTION = 1024;
+
 class KRITAUI_EXPORT KisToolPaint
         : public KisTool
 {
@@ -107,6 +110,10 @@ protected:
 
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 
+    qreal pressureToCurve(qreal pressure){
+        return m_pressureSamples.at( qRound(pressure * LEVEL_OF_PRESSURE_RESOLUTION) );
+    }
+    
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
@@ -118,6 +125,7 @@ private slots:
 
 protected slots:
     virtual void resetCursorStyle();
+    virtual void updateTabletPressureSamples();
 
 
 protected:
@@ -125,6 +133,7 @@ protected:
     quint8 m_opacity;
     const KoCompositeOp * m_compositeOp;
     bool m_paintOutline;
+    QVector<qreal> m_pressureSamples;
 
 private:
 

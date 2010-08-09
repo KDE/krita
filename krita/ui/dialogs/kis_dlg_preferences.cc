@@ -71,6 +71,7 @@
 
 // for the performance update
 #include "tiles/kis_tilemanager.h"
+#include <kis_cubic_curve.h>
 
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
         : WdgGeneralSettings(_parent, _name)
@@ -253,6 +254,27 @@ void ColorSettingsTab::refillPrintProfiles(const KoID & s)
 
 //---------------------------------------------------------------------------------------------------
 
+void TabletSettingsTab::setDefault()
+{
+    KisCubicCurve curve;
+    curve.fromString(DEFAULT_CURVE_STRING);
+    m_page->pressureCurve->setCurve(curve);
+}
+
+TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget(parent)
+{
+    setObjectName(name);
+    m_page = new WdgTabletSettings(this);
+    
+    KisConfig cfg;
+    KisCubicCurve curve;
+    curve.fromString( cfg.pressureTabletCurve() );
+    
+    m_page->pressureCurve->setCurve(curve);
+}
+
+
+//---------------------------------------------------------------------------------------------------
 PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
         : WdgPerformanceSettings(parent, name)
 {
@@ -509,6 +531,15 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     addPage(page);
     m_gridSettings = new GridSettingsTab(vbox);
 
+    // Tablet
+    vbox = new KVBox();
+    page = new KPageWidgetItem(vbox, i18n("Tablet settings"));
+    page->setHeader(i18n("Tablet"));
+    page->setIcon(KIcon("preferences-system-performance"));
+    addPage(page);
+    m_tabletSettings = new TabletSettingsTab(vbox);
+    
+    
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     foreach (KisPreferenceSet *preferenceSet, preferenceSetRegistry->values()) {
         vbox = new KVBox();
@@ -546,6 +577,7 @@ void KisDlgPreferences::slotDefault()
     m_displaySettings->setDefault();
 #endif
     m_gridSettings->setDefault();
+    m_tabletSettings->setDefault();
 }
 
 bool KisDlgPreferences::editPreferences()
@@ -579,6 +611,9 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUseBlackPointCompensation(dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());
         cfg.setRenderIntent(dialog->m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
+        
+        // Tablet settings
+        cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
 
 #if 0
         // it's scaled from 0 - 6, but the config is in 0 - 300

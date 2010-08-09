@@ -187,6 +187,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgcustompattern.ui
     forms/wdglayerproperties.ui
     forms/wdgcolorsettings.ui
+    forms/wdgtabletsettings.ui
     forms/wdgcolorspaceselector.ui
     forms/wdgdisplaysettings.ui
     forms/kis_previewwidgetbase.ui

@@ -65,6 +65,7 @@
 #include "widgets/kis_slider_spin_box.h"
 #include "kis_canvas_resource_provider.h"
 #include <recorder/kis_recorded_paint_action.h>
+#include <kis_cubic_curve.h>
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
@@ -77,6 +78,8 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 
     m_opacity = OPACITY_OPAQUE_U8;
     m_compositeOp = 0;
+    
+    updateTabletPressureSamples();
     
     m_supportOutline = false;
     
@@ -102,6 +105,7 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
     }
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateTabletPressureSamples()));
 
 }
 
@@ -259,6 +263,15 @@ void KisToolPaint::resetCursorStyle()
 
 
 }
+
+void KisToolPaint::updateTabletPressureSamples()
+{
+    KisConfig cfg;
+    KisCubicCurve curve;
+    curve.fromString(cfg.pressureTabletCurve());
+    m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION);
+}
+
 
 void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
 {

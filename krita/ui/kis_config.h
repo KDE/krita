@@ -223,6 +223,9 @@ public:
 
     bool paintopPopupDetached() const;
     void setPaintopPopupDetached(bool detached);
+    
+    QString pressureTabletCurve() const;
+    void setPressureTabletCurve(const QString& curveString) const;
 
 private:
     KisConfig(const KisConfig&);

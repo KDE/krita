@@ -31,6 +31,7 @@
 #include "ui_wdgdisplaysettings.h"
 #include "ui_wdggridsettings.h"
 #include "ui_wdgcolorsettings.h"
+#include "ui_wdgtabletsettings.h"
 #include "ui_wdgperformancesettings.h"
 
 class KoID;
@@ -97,6 +98,29 @@ public:
     void setDefault();
     WdgColorSettings * m_page;
     QButtonGroup m_pasteBehaviourGroup;
+};
+
+class WdgTabletSettings : public QWidget, public Ui::WdgTabletSettings {
+    
+    Q_OBJECT
+
+public:
+    WdgTabletSettings(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
+
+};
+
+class TabletSettingsTab : public QWidget {
+    Q_OBJECT
+public:
+    TabletSettingsTab(QWidget* parent = 0, const char * name = 0);
+
+public:
+    void setDefault();
+    WdgTabletSettings * m_page;
+    
+    
 };
 
 
@@ -214,6 +238,7 @@ protected:
     PerformanceTab* m_performanceSettings;
     DisplaySettingsTab * m_displaySettings;
     GridSettingsTab* m_gridSettings;
+    TabletSettingsTab* m_tabletSettings;
 
 protected slots:
 

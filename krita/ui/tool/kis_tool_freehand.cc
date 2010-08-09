@@ -195,7 +195,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         if (e->button() == Qt::LeftButton) {
             initPaint(e);
             m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point)),
-                                                             e->pressure(), e->xTilt(), e->yTilt(),
+                                                             pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
                                                              KisVector2D::Zero(),
                                                              e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed());
         } else if (m_mode == PAINT && (e->button() == Qt::RightButton || e->button() == Qt::MidButton)) {
@@ -225,7 +225,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
             QPointF dragVec = pos - m_previousPaintInformation.pos();
 
             KisPaintInformation info = KisPaintInformation(pos,
-                                                           e->pressure(), e->xTilt(), e->yTilt(),
+                                                           pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
                                                            toKisVector2D(dragVec),
                                                            e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed());
 

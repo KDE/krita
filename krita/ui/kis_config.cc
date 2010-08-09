@@ -667,3 +667,13 @@ void KisConfig::setPaintopPopupDetached(bool detached)
 {
     m_cfg.writeEntry("PaintopPopupDetached", detached);
 }
+
+QString KisConfig::pressureTabletCurve() const
+{
+    return m_cfg.readEntry("tabletPressureCurve","0,0;1,1;");
+}
+
+void KisConfig::setPressureTabletCurve(const QString& curveString) const
+{
+    m_cfg.writeEntry("tabletPressureCurve", curveString);
+}

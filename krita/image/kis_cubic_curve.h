@@ -27,6 +27,8 @@
 
 class QPointF;
 
+const QString DEFAULT_CURVE_STRING = "0,0;1,1;";
+
 /**
  * Hold the data for a cubic curve.
  */

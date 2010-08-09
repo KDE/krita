@@ -621,7 +621,7 @@ void KisToolTransform::setDefaultWarpPoints(int pointsPerLine)
 
 void KisToolTransform::initWarpTransform()
 {
-    m_currentArgs = ToolTransformArgs(ToolTransformArgs::WARP, m_originalCenter, QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0, KisWarpTransformWorker::AFFINE_TRANSFORM, 1.0, m_originalTopLeft, true);
+    m_currentArgs = ToolTransformArgs(ToolTransformArgs::WARP, m_originalCenter, QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, m_originalTopLeft, true);
 
     setDefaultWarpPoints();
     m_refSize = QSizeF(0, 0);
@@ -629,7 +629,7 @@ void KisToolTransform::initWarpTransform()
 
 void KisToolTransform::initFreeTransform()
 {
-    m_currentArgs = ToolTransformArgs(ToolTransformArgs::FREE_TRANSFORM, m_originalCenter, QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0, KisWarpTransformWorker::AFFINE_TRANSFORM, 1.0, m_originalTopLeft, true);
+    m_currentArgs = ToolTransformArgs(ToolTransformArgs::FREE_TRANSFORM, m_originalCenter, QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, m_originalTopLeft, true);
     m_scaleX_wOutModifier = m_currentArgs.scaleX();
     m_scaleY_wOutModifier = m_currentArgs.scaleY();
 
@@ -2364,7 +2364,7 @@ QWidget* KisToolTransform::createOptionWidget() {
     m_optWidget->cmbWarpType->insertItem(KisWarpTransformWorker::SIMILITUDE_TRANSFORM,i18n("Similitude"));
     m_optWidget->cmbWarpType->insertItem(KisWarpTransformWorker::RIGID_TRANSFORM,i18n("Rigid"));
     connect(m_optWidget->cmbWarpType, SIGNAL(currentIndexChanged(int)), this, SLOT(warpTypeChanged(int)));
-    m_optWidget->cmbWarpType->setCurrentIndex(KisWarpTransformWorker::AFFINE_TRANSFORM);
+    m_optWidget->cmbWarpType->setCurrentIndex(KisWarpTransformWorker::RIGID_TRANSFORM);
 
     QPixmap rotateX_Pixmap, rotateY_Pixmap, rotateZ_Pixmap;
     rotateX_Pixmap.loadFromData(rotateX_PNG, rotateX_PNG_len, "png");
@@ -2684,7 +2684,7 @@ void KisToolTransform::warpTypeChanged(int index)
         m_currentArgs.setWarpType((KisWarpTransformWorker::WarpType)index);
         break;
     default:
-        m_currentArgs.setWarpType(KisWarpTransformWorker::AFFINE_TRANSFORM);
+        m_currentArgs.setWarpType(KisWarpTransformWorker::RIGID_TRANSFORM);
         break;
     }
 

@@ -955,22 +955,92 @@ QPointF KisWarpTransformWorker::affineTransformMath(QPointF v, QVector<QPointF> 
 
 QPointF KisWarpTransformWorker::similitudeTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha)
 {
-    //TODO: implement
-    Q_UNUSED(p);
-    Q_UNUSED(q);
-    Q_UNUSED(alpha);
+    int nbPoints = p.size();
+    qreal w[nbPoints];
+    qreal sumWi = 0;
+    QPointF pStar(0, 0), qStar(0, 0);
+    QPointF pHat[nbPoints], qHat[nbPoints];
 
-    return v;
+    for (int i = 0; i < nbPoints; ++i) {
+        if (v == p[i])
+            return q[i];
+
+        QVector2D tmp(p[i] - v);
+        w[i] = 1. / pow(tmp.lengthSquared(), alpha);
+        pStar += w[i] * p[i];
+        qStar += w[i] * q[i];
+        sumWi += w[i];
+    }
+    pStar /= sumWi;
+    qStar /= sumWi;
+
+    qreal mu_s = 0;
+    QPointF res_tmp(0, 0);
+    qreal qx, qy, px, py;
+    for (int i = 0; i < nbPoints; ++i) {
+        pHat[i] = p[i] - pStar;
+        qHat[i] = q[i] - qStar;
+
+        QVector2D tmp(pHat[i]);
+        mu_s += w[i] * tmp.lengthSquared();
+
+        qx = w[i] * qHat[i].x();
+        qy = w[i] * qHat[i].y();
+        px = pHat[i].x();
+        py = pHat[i].y();
+
+        res_tmp += QPointF(qx * px + qy * py, qx * py - qy * px);
+    }
+
+    res_tmp /= mu_s;
+    QPointF v_m_pStar(v - pStar);
+    QPointF res(res_tmp.x() * v_m_pStar.x() + res_tmp.y() * v_m_pStar.y(), res_tmp.x() * v_m_pStar.y() - res_tmp.y() * v_m_pStar.x());
+    res += qStar;
+
+    return res;
 }
 
 QPointF KisWarpTransformWorker::rigidTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha)
 {
-    //TODO: implement
-    Q_UNUSED(p);
-    Q_UNUSED(q);
-    Q_UNUSED(alpha);
+    int nbPoints = p.size();
+    qreal w[nbPoints];
+    qreal sumWi = 0;
+    QPointF pStar(0, 0), qStar(0, 0);
+    QPointF pHat[nbPoints], qHat[nbPoints];
 
-    return v;
+    for (int i = 0; i < nbPoints; ++i) {
+        if (v == p[i])
+            return q[i];
+
+        QVector2D tmp(p[i] - v);
+        w[i] = 1. / pow(tmp.lengthSquared(), alpha);
+        pStar += w[i] * p[i];
+        qStar += w[i] * q[i];
+        sumWi += w[i];
+    }
+    pStar /= sumWi;
+    qStar /= sumWi;
+
+    QVector2D res_tmp(0, 0);
+    qreal qx, qy, px, py;
+    for (int i = 0; i < nbPoints; ++i) {
+        pHat[i] = p[i] - pStar;
+        qHat[i] = q[i] - qStar;
+
+        qx = w[i] * qHat[i].x();
+        qy = w[i] * qHat[i].y();
+        px = pHat[i].x();
+        py = pHat[i].y();
+
+        res_tmp += QVector2D(qx * px + qy * py, qx * py - qy * px);
+    }
+
+    QPointF f_arrow(res_tmp.normalized().toPointF());
+    QVector2D v_m_pStar(v - pStar);
+    QPointF res(f_arrow.x() * v_m_pStar.x() + f_arrow.y() * v_m_pStar.y(), f_arrow.x() * v_m_pStar.y() - f_arrow.y() * v_m_pStar.x());
+    res += qStar;
+
+    return res;
 }
 
 QPointF KisWarpTransformWorker::transformMath(WarpType warpType, QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha)

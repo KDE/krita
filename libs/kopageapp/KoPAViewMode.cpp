@@ -27,7 +27,7 @@
 
 #include <QCloseEvent>
 
-KoPAViewMode::KoPAViewMode( KoPAView * view, KoPACanvas * canvas )
+KoPAViewMode::KoPAViewMode( KoPAViewBase * view, KoPACanvasBase * canvas )
 : m_canvas( canvas )
 , m_toolProxy( canvas->toolProxy() )
 , m_view( view )
@@ -57,7 +57,7 @@ void KoPAViewMode::activate( KoPAViewMode * previousViewMode )
 {
     Q_UNUSED( previousViewMode );
     m_canvas->updateSize();
-    m_view->updateActivePage( m_view->activePage() );
+    updateActivePage( m_view->activePage() );
     // this is done to set the preferred center
     m_canvas->canvasController()->setCanvasMode( KoCanvasController::Centered );
     m_canvas->canvasController()->recenterPreferred();
@@ -67,19 +67,19 @@ void KoPAViewMode::deactivate()
 {
 }
 
-KoPACanvas * KoPAViewMode::canvas() const
+KoPACanvasBase * KoPAViewMode::canvas() const
 {
     return m_canvas;
 }
 
-KoPAView * KoPAViewMode::view() const
+KoPAViewBase * KoPAViewMode::view() const
 {
     return m_view;
 }
 
-KoViewConverter * KoPAViewMode::viewConverter( KoPACanvas * canvas )
+KoViewConverter * KoPAViewMode::viewConverter( KoPACanvasBase * canvas )
 {
-    return m_view->KoPAView::viewConverter( canvas );
+    return m_view->viewConverter( canvas );
 }
 
 void KoPAViewMode::updateActivePage( KoPAPageBase *page )
@@ -113,7 +113,7 @@ QPointF KoPAViewMode::origin()
 {
     return m_origin;
 }
- 
+
 void KoPAViewMode::setOrigin(const QPointF &o)
 {
     m_origin = o;

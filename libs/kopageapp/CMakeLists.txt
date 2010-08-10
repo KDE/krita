@@ -18,7 +18,9 @@ set( kopageapp_LIB_SRCS
      KoPADocument.cpp
      KoShapeTraversal.cpp
      KoPAView.cpp
+     KoPAViewBase.cpp
      KoPACanvas.cpp
+     KoPACanvasBase.cpp
      KoPASavingContext.cpp
      KoPAPixmapCache.cpp
      KoPAPageBase.cpp

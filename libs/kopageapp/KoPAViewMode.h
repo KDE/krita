@@ -26,8 +26,9 @@
 #include <QPointF>
 
 struct KoPageLayout;
-class KoPAView;
+class KoPAViewBase;
 class KoPACanvas;
+class KoPACanvasBase;
 class KoPAPageBase;
 class KoToolProxy;
 class KoShape;
@@ -39,6 +40,7 @@ class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
 class QCloseEvent;
+class QRectF;
 class QUndoCommand;
 
 class KOPAGEAPP_EXPORT KoPAViewMode : public QObject
@@ -46,9 +48,10 @@ class KOPAGEAPP_EXPORT KoPAViewMode : public QObject
 
     Q_OBJECT
 public:
-    KoPAViewMode( KoPAView * view, KoPACanvas * canvas );
+    KoPAViewMode( KoPAViewBase * view, KoPACanvasBase * canvas );
     virtual ~KoPAViewMode();
 
+    virtual void paint(KoPACanvasBase* /*canvas*/, QPainter& /*painter*/, const QRectF &/*paintRect*/) {}
     virtual void paintEvent( KoPACanvas * canvas, QPaintEvent* event ) = 0;
     virtual void tabletEvent( QTabletEvent *event, const QPointF &point ) = 0;
     virtual void mousePressEvent( QMouseEvent *event, const QPointF &point ) = 0;
@@ -104,14 +107,14 @@ public:
      *
      * @return canvas canvas used by the view mode
      */
-    KoPACanvas * canvas() const;
+    KoPACanvasBase * canvas() const;
 
     /**
      * @brief Get the view
      *
      * @return view view used by the view mode
      */
-    KoPAView * view() const;
+    KoPAViewBase * view() const;
 
     /**
      * @brief Get the view mode's implementation of view converter
@@ -120,7 +123,37 @@ public:
      *
      * @return the view converter used in the view mode
      */
-    virtual KoViewConverter * viewConverter( KoPACanvas * canvas );
+    virtual KoViewConverter * viewConverter( KoPACanvasBase * canvas );
+
+    /**
+     * @brief Update the view when a new shape is added to the document
+     *
+     * The default implementation does nothing. The derived class' implementation
+     * should check whether the new shape is added to currently active page.
+     *
+     * @param shape the new shape added to the document
+     */
+    virtual void addShape( KoShape *shape );
+
+    /**
+     * @brief Update the view when a shape is removed from the document
+     *
+     * The default implementation does nothing. The derived class' implementation
+     * should check whether the shape is removed from currently active page.
+     *
+     * @param shape the shape removed from the document
+     */
+    virtual void removeShape( KoShape *shape );
+
+    virtual const KoPageLayout &activePageLayout() const;
+
+    virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, QUndoCommand *parent = 0 );
+
+    QPointF origin();
+
+    void setOrigin(const QPointF &origin);
+
+public slots:
 
     /**
      * @brief Update the view based on the active page
@@ -135,38 +168,10 @@ public:
      */
     virtual void updateActivePage( KoPAPageBase * page );
 
-    /**
-     * @brief Update the view when a new shape is added to the document
-     *
-     * The default implementation does nothing. The derived class' implementation 
-     * should check whether the new shape is added to currently active page.
-     *
-     * @param shape the new shape added to the document
-     */
-    virtual void addShape( KoShape *shape );
-
-    /**
-     * @brief Update the view when a shape is removed from the document
-     *
-     * The default implementation does nothing. The derived class' implementation 
-     * should check whether the shape is removed from currently active page.
-     *
-     * @param shape the shape removed from the document
-     */
-    virtual void removeShape( KoShape *shape );
-
-    virtual const KoPageLayout &activePageLayout() const;
-
-    virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, QUndoCommand *parent = 0 );
-
-    QPointF origin();
-    
-    void setOrigin(const QPointF &origin);
-    
 protected:
-    KoPACanvas * m_canvas;
+    KoPACanvasBase * m_canvas;
     KoToolProxy * m_toolProxy;
-    KoPAView * m_view;
+    KoPAViewBase * m_view;
     QPointF m_origin;
 };
 

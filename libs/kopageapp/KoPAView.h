@@ -25,13 +25,14 @@
 #include <QObject>
 
 #include <KoView.h>
+#include <KoPAViewBase.h>
 #include <KoZoomHandler.h>
 #include "KoPageApp.h"
 #include "kopageapp_export.h"
 
 class KoCanvasController;
 class KoFind;
-class KoPACanvas;
+class KoPACanvasBase;
 class KoPADocument;
 class KoPAPageBase;
 class KoPAViewMode;
@@ -45,8 +46,8 @@ class KUrl;
 class QTextDocument;
 class QLabel;
 
-/// Creates a view with a KoPACanvas and rulers
-class KOPAGEAPP_EXPORT KoPAView : public KoView
+/// Creates a view with a KoPACanvasBase and rulers
+class KOPAGEAPP_EXPORT KoPAView : public KoView, public KoPAViewBase
 {
     Q_OBJECT
 public:
@@ -70,7 +71,7 @@ public:
 
     void updateReadWrite( bool readwrite );
 
-    virtual KoViewConverter * viewConverter( KoPACanvas * canvas );
+    virtual KoViewConverter * viewConverter( KoPACanvasBase * canvas );
 
     KoZoomHandler    *zoomHandler()    const;
     KoZoomController *zoomController() const;
@@ -79,7 +80,7 @@ public:
     KoRuler *verticalRuler();
 
     /// @return the canvas for the application
-    KoPACanvas * kopaCanvas() const;
+    KoPACanvasBase * kopaCanvas() const;
     /// @return the document for the application
     KoPADocument * kopaDocument() const;
     /// @return Page that is shown in the canvas
@@ -129,7 +130,7 @@ public:
     virtual KoPrintJob * createPrintJob();
 
     /**
-     * Get the thumbnail for the page. 
+     * Get the thumbnail for the page.
      *
      * Us this method instead the on in the pages directly
      */
@@ -155,22 +156,14 @@ public:
     /// Update page navigation actions
     void updatePageNavigationActions();
 
-
-public slots:
-    /// Set the active page and updates the UI
-    void updateActivePage( KoPAPageBase * page );
-
     /// Shows/hides the rulers
     void setShowRulers(bool show);
 
     /// Insert a new page after the current one
     void insertPage();
 
-signals:
-    /// Emitted every time the active page is changed
-    void activePageChanged();
-
 protected:
+
     /// creates the widgets (called from the constructor)
     void initGUI();
     /// creates the actions (called from the constructor)
@@ -183,13 +176,14 @@ protected:
     virtual void partActivateEvent(KParts::PartActivateEvent* event);
 
     bool isMasterUsed( KoPAPageBase * page );
+    void editPaste();
 
 protected slots:
+
     void viewSnapToGrid(bool snap);
     void viewGuides(bool show);
     void slotZoomChanged( KoZoomMode::Mode mode, qreal zoom );
 
-    void editPaste();
     void editDeleteSelection();
     void editSelectAll();
     void editDeselectAll();
@@ -248,8 +242,8 @@ protected slots:
      */
     void reinitDocumentDocker();
 
-    /** 
-     * Import slideshow 
+    /**
+     * Import slideshow
      */
     void importDocument();
 

@@ -32,7 +32,7 @@
 #include "KoPAView.h"
 #include "commands/KoPAChangePageLayoutCommand.h"
 
-KoPAViewModeNormal::KoPAViewModeNormal( KoPAView * view, KoPACanvas * canvas )
+KoPAViewModeNormal::KoPAViewModeNormal( KoPAViewBase * view, KoPACanvasBase * canvas )
 : KoPAViewMode( view, canvas )
 , m_masterMode( false )
 , m_savedPage( 0 )
@@ -50,7 +50,7 @@ void KoPAViewModeNormal::paintEvent( KoPACanvas *canvas, QPaintEvent* event )
 #else
     Q_ASSERT( m_canvas == canvas );
 #endif
-    QPainter painter( m_canvas );
+    QPainter painter( canvas );
     painter.translate( -m_canvas->documentOffset() );
     painter.setRenderHint( QPainter::Antialiasing );
     QRect clipRect = event->rect().translated( m_canvas->documentOffset() );

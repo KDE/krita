@@ -23,7 +23,7 @@
 
 #include <KoToolBase.h>
 
-class KoPAView;
+class KoPAViewBase;
 
 class KoPABackgroundTool : public KoToolBase
 {
@@ -45,7 +45,7 @@ public:
     ///Reimplemented from KoToolBase
     virtual void mouseReleaseEvent( KoPointerEvent *event );
 
-    KoPAView * view() const;
+    KoPAViewBase * view() const;
 
 public slots:
     void slotActivePageChanged();
@@ -55,7 +55,7 @@ protected:
     virtual QMap<QString, QWidget *> createOptionWidgets();
 
 private:
-    KoPAView * m_view;
+    KoPAViewBase * m_view;
 };
 
 #endif //KOPABACKGROUNDTOOL_H

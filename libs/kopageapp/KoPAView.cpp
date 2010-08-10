@@ -4,7 +4,7 @@
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
    Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
    Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -181,7 +181,7 @@ void KoPAView::initGUI()
     gridLayout->setSpacing( 0 );
     setLayout( gridLayout );
 
-    d->canvas = new KoPACanvas( this, d->doc );
+    d->canvas = new KoPACanvas( this, d->doc, this );
     KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( this );
     d->canvasController = canvasController;
     d->canvasController->setCanvas( d->canvas );
@@ -249,14 +249,14 @@ void KoPAView::initGUI()
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(d->canvas, SIGNAL(documentSize(const QSize&)), d->canvasController->proxyObject, SLOT(updateDocumentSize(const QSize&)));
-    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->canvas, SLOT(setDocumentOffset(const QPoint&)));
+    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->canvas, SLOT(slotSetDocumentOffset(const QPoint&)));
 
     if (shell()) {
         KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, d->doc->pageType() );
         d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( shell()->createDockWidget( &structureDockerFactory ) );
         connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
                 d->documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
-        connect(d->documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
+        connect(d->documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), proxyObject, SLOT(updateActivePage(KoPAPageBase*)));
         connect(d->documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
 
         KoToolManager::instance()->requestToolActivation( d->canvasController );
@@ -359,7 +359,7 @@ void KoPAView::initActions()
 }
 
 
-KoPACanvas* KoPAView::kopaCanvas() const
+KoPACanvasBase * KoPAView::kopaCanvas() const
 {
     return d->canvas;
 }
@@ -380,7 +380,7 @@ void KoPAView::updateReadWrite( bool readwrite )
     KoToolManager::instance()->updateReadWrite(d->canvasController, readwrite);
 }
 
-KoViewConverter* KoPAView::viewConverter( KoPACanvas * canvas )
+KoViewConverter* KoPAView::viewConverter( KoPACanvasBase * canvas )
 {
     Q_UNUSED( canvas );
 
@@ -527,7 +527,7 @@ void KoPAView::editDeselectAll()
         selection->deselectAll();
 
     selectionChanged();
-    kopaCanvas()->update();
+    d->canvas->update();
 }
 
 void KoPAView::formatMasterPage()
@@ -581,7 +581,7 @@ void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
             int horizontalMove = viewRect.center().x() - currentVisible.center().x();
             d->canvasController->pan(QPoint(horizontalMove, 0));
         }
-        kopaCanvas()->update();
+        d->canvas->update();
     }
 }
 
@@ -632,11 +632,6 @@ KoShapeManager* KoPAView::masterShapeManager() const
     return d->canvas->masterShapeManager();
 }
 
-void KoPAView::updateActivePage( KoPAPageBase * page )
-{
-    d->viewMode->updateActivePage( page );
-}
-
 void KoPAView::reinitDocumentDocker()
 {
     if (shell()) {
@@ -671,7 +666,7 @@ void KoPAView::doUpdateActivePage( KoPAPageBase * page )
     updatePageNavigationActions();
 
     if ( pageChanged ) {
-        emit activePageChanged();
+        proxyObject->emitActivePageChanged();
     }
 
     pageOffsetChanged();
@@ -726,7 +721,7 @@ void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
     KoPAPageBase * newPage = d->doc->pageByNavigation( d->activePage, pageNavigation );
 
     if ( newPage != d->activePage ) {
-        updateActivePage( newPage );
+        proxyObject->updateActivePage( newPage );
     }
 }
 

@@ -23,6 +23,7 @@
 #include "KoPAViewMode.h"
 
 class KoPAPage;
+class KoPACanvasBase;
 class QPainter;
 class QRectF;
 class KoViewConverter;
@@ -30,7 +31,7 @@ class KoViewConverter;
 class KOPAGEAPP_EXPORT KoPAViewModeNormal : public KoPAViewMode
 {
 public:
-    KoPAViewModeNormal( KoPAView * view, KoPACanvas * m_canvas );
+    KoPAViewModeNormal( KoPAViewBase * view, KoPACanvasBase * m_canvas );
     ~KoPAViewModeNormal();
 
     void paintEvent( KoPACanvas * canvas, QPaintEvent* event );
@@ -47,7 +48,7 @@ public:
      * @brief Switch the active view mode to work on master/normal pages
      *
      * When it is switched to master mode the master page of the current active page
-     * is selected. If it switches back the page which was shown before going into 
+     * is selected. If it switches back the page which was shown before going into
      * the master mode is shown. If the mode is the same nothing happens.
      *
      * @param master if true work on master pages, if false work on normal pages
@@ -57,7 +58,7 @@ public:
     virtual bool masterMode();
 
     void addShape( KoShape *shape );
-    
+
     void removeShape( KoShape *shape );
 
     virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, QUndoCommand *parent = 0 );

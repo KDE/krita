@@ -46,7 +46,7 @@ KoPABackgroundToolWidget::KoPABackgroundToolWidget( KoPABackgroundTool *tool, QW
     connect( widget.useMasterBackground, SIGNAL( stateChanged( int ) ), this, SLOT( useMasterBackground( int ) ) );
     connect( widget.displayMasterShapes, SIGNAL( stateChanged( int ) ), this, SLOT( displayMasterShapes( int ) ) );
 
-    connect( m_tool->view(), SIGNAL( activePageChanged() ), this, SLOT( slotActivePageChanged() ) );
+    connect( m_tool->view()->proxyObject, SIGNAL( activePageChanged() ), this, SLOT( slotActivePageChanged() ) );
 
     slotActivePageChanged();
 }

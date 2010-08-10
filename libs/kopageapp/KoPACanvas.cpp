@@ -38,8 +38,9 @@
 
 KoPACanvas::KoPACanvas( KoPAViewBase * view, KoPADocument * doc, QWidget *parent ,  Qt::WindowFlags f)
     : QWidget( parent, f )
-    , KoPACanvasBase( view, doc )
+    , KoPACanvasBase( doc )
 {
+    setView(view);
     setFocusPolicy( Qt::StrongFocus );
     // this is much faster than painting it in the paintevent
     setBackgroundRole( QPalette::Base );

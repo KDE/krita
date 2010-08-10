@@ -34,8 +34,11 @@ class KOPAGEAPP_EXPORT KoPACanvasBase : public KoCanvasBase
 {
 
 public:
-    explicit KoPACanvasBase( KoPAViewBase * view, KoPADocument * doc );
+    explicit KoPACanvasBase( KoPADocument * doc );
     virtual ~KoPACanvasBase();
+
+    /// set the viewbase on the canvas; this needs to be called before the canvas can be used.
+    void setView(KoPAViewBase *view);
 
     /// Update the canvas
     virtual void repaint() = 0;

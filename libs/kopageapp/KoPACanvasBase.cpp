@@ -39,8 +39,8 @@
 class KoPACanvasBase::Private
 {
 public:
-    Private(KoPAViewBase * view, KoPADocument * doc)
-    : view(view)
+    Private(KoPADocument * doc)
+    : view(0)
     , doc(doc)
     , shapeManager(0)
     , masterShapeManager(0)
@@ -68,9 +68,9 @@ public:
     QPoint documentOffset;
 };
 
-KoPACanvasBase::KoPACanvasBase( KoPAViewBase * view, KoPADocument * doc )
+KoPACanvasBase::KoPACanvasBase( KoPADocument * doc )
     : KoCanvasBase( doc )
-    , d(new Private(view, doc))
+    , d(new Private(doc))
 {
     d->shapeManager = new KoShapeManager( this );
     d->masterShapeManager = new KoShapeManager( this );
@@ -80,6 +80,11 @@ KoPACanvasBase::KoPACanvasBase( KoPAViewBase * view, KoPADocument * doc )
 KoPACanvasBase::~KoPACanvasBase()
 {
     delete d;
+}
+
+void KoPACanvasBase::setView(KoPAViewBase *view)
+{
+    d->view = view;
 }
 
 KoPADocument* KoPACanvasBase::document() const

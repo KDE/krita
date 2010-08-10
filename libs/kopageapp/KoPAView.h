@@ -82,8 +82,6 @@ public:
     KoPADocument * kopaDocument() const;
     /// @return Page that is shown in the canvas
     KoPAPageBase* activePage() const;
-    /// @return the acvive viewMode
-    KoPAViewMode* viewMode() const;
 
     /// Set page shown in the canvas to @p page
     void setActivePage( KoPAPageBase * page );
@@ -95,13 +93,6 @@ public:
 
     /// @return the master shape manager used for this view
     KoShapeManager* masterShapeManager() const;
-
-    /**
-     * @brief Set the view mode
-     *
-     * @param mode the new view mode
-     */
-    void setViewMode( KoPAViewMode* mode );
 
     /**
      * @brief Enables/Disables the given actions

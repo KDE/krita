@@ -97,7 +97,6 @@ public:
     : doc( document )
     , canvas( 0 )
     , activePage( 0 )
-    , viewMode( 0 )
     {}
 
     ~Private()
@@ -142,7 +141,6 @@ public:
     KoPADocument *doc;
     KoPACanvas *canvas;
     KoPAPageBase *activePage;
-    KoPAViewMode *viewMode;
 };
 
 
@@ -206,7 +204,7 @@ void KoPAView::initGUI()
     d->zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 
     d->viewModeNormal = new KoPAViewModeNormal( this, d->canvas );
-    d->viewMode = d->viewModeNormal;
+    setViewMode(d->viewModeNormal);
 
     // The rulers
     d->horizontalRuler = new KoRuler(this, Qt::Horizontal, viewConverter( d->canvas ));
@@ -536,13 +534,13 @@ void KoPAView::formatMasterPage()
 
 void KoPAView::formatPageLayout()
 {
-    const KoPageLayout &pageLayout = d->viewMode->activePageLayout();
+    const KoPageLayout &pageLayout = viewMode()->activePageLayout();
 
     KoPAPageLayoutDialog dialog( d->doc, pageLayout, d->canvas );
 
     if ( dialog.exec() == QDialog::Accepted ) {
         QUndoCommand *command = new QUndoCommand( i18n( "Change page layout" ) );
-        d->viewMode->changePageLayout( dialog.pageLayout(), dialog.applyToDocument(), command );
+        viewMode()->changePageLayout( dialog.pageLayout(), dialog.applyToDocument(), command );
 
         d->canvas->addCommand( command );
     }
@@ -581,7 +579,7 @@ void KoPAView::configure()
 
 void KoPAView::setMasterMode( bool master )
 {
-    d->viewMode->setMasterMode( master );
+    viewMode()->setMasterMode( master );
     if (shell()) {
         d->documentStructureDocker->setMasterMode(master);
     }
@@ -596,22 +594,6 @@ KoShapeManager* KoPAView::shapeManager() const
     return d->canvas->shapeManager();
 }
 
-KoPAViewMode* KoPAView::viewMode() const
-{
-    return d->viewMode;
-}
-
-void KoPAView::setViewMode( KoPAViewMode* mode )
-{
-    Q_ASSERT( mode );
-    if ( mode != d->viewMode )
-    {
-        KoPAViewMode * previousViewMode = d->viewMode;
-        d->viewMode->deactivate();
-        d->viewMode = mode;
-        d->viewMode->activate( previousViewMode );
-    }
-}
 
 KoShapeManager* KoPAView::masterShapeManager() const
 {
@@ -769,7 +751,7 @@ void KoPAView::setShowRulers(bool show)
 void KoPAView::insertPage()
 {
     KoPAPageBase * page = 0;
-    if ( d->viewMode->masterMode() ) {
+    if ( viewMode()->masterMode() ) {
         KoPAMasterPage * masterPage = d->doc->newMasterPage();
         masterPage->setBackground( new KoColorBackground( Qt::white ) );
         // use the layout of the current active page for the new page
@@ -1058,7 +1040,7 @@ void KoPAView::findDocumentSetPrevious( QTextDocument * document )
 void KoPAView::updatePageNavigationActions()
 {
     int index = d->doc->pageIndex(activePage());
-    int pageCount = d->doc->pages(d->viewMode->masterMode()).count();
+    int pageCount = d->doc->pages(viewMode()->masterMode()).count();
 
     actionCollection()->action("page_previous")->setEnabled(index > 0);
     actionCollection()->action("page_first")->setEnabled(index > 0);

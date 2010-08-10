@@ -85,12 +85,6 @@ public:
     virtual void setActionEnabled( int actions, bool enable ) = 0;
 
     /// XXX
-    virtual KoRuler *horizontalRuler() = 0;
-
-    /// XXX
-    virtual KoRuler *verticalRuler() = 0;
-
-    /// XXX
     virtual void updatePageNavigationActions() = 0;
 
     /**
@@ -98,10 +92,10 @@ public:
      *
      * @param mode the new view mode
      */
-    virtual void setViewMode( KoPAViewMode* mode ) = 0;
+    virtual void setViewMode( KoPAViewMode* mode );
 
-    /// @return the acvive viewMode
-    virtual KoPAViewMode* viewMode() const = 0;
+    /// @return the active viewMode
+    virtual KoPAViewMode* viewMode() const;
 
     /// Insert a new page after the current one
     virtual void insertPage() = 0;

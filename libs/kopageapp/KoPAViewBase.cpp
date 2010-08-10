@@ -25,11 +25,13 @@ class KoPAViewBase::Private {
 public:
 
     KoZoomHandler zoomHandler;
+    KoPAViewMode * viewMode;
 };
 
 KoPAViewBase::KoPAViewBase()
     : d(new Private)
 {
+    d->viewMode = 0;
     proxyObject = new KoPAViewProxyObject(this);
 }
 
@@ -60,6 +62,26 @@ KoZoomHandler* KoPAViewBase::zoomHandler() const
 {
     return &d->zoomHandler;
 }
+
+void KoPAViewBase::setViewMode( KoPAViewMode* mode )
+{
+    Q_ASSERT( mode );
+    if ( !d->viewMode ) {
+        d->viewMode = mode;
+    }
+    else if ( mode != d->viewMode ) {
+        KoPAViewMode * previousViewMode = d->viewMode;
+        d->viewMode->deactivate();
+        d->viewMode = mode;
+        d->viewMode->activate( previousViewMode );
+    }
+}
+
+KoPAViewMode* KoPAViewBase::viewMode() const
+{
+    return d->viewMode;
+}
+
 
 KoPAViewProxyObject::KoPAViewProxyObject(KoPAViewBase *parent)
 {

@@ -18,19 +18,48 @@
  */
 
 #include <KoPAViewBase.h>
+#include <KoZoomHandler.h>
 
+class KoPAViewBase::Private {
+
+public:
+
+    KoZoomHandler zoomHandler;
+};
 
 KoPAViewBase::KoPAViewBase()
+    : d(new Private)
 {
     proxyObject = new KoPAViewProxyObject(this);
 }
 
 KoPAViewBase::~KoPAViewBase()
 {
+    delete d;
     delete proxyObject;
 }
 
+KoViewConverter* KoPAViewBase::viewConverter( KoPACanvasBase * canvas )
+{
+    Q_UNUSED( canvas );
 
+    return &d->zoomHandler;
+}
+
+KoZoomHandler* KoPAViewBase::zoomHandler()
+{
+    return &d->zoomHandler;
+}
+
+KoViewConverter* KoPAViewBase::viewConverter() const
+{
+    return &d->zoomHandler;
+}
+
+KoZoomHandler* KoPAViewBase::zoomHandler() const
+{
+    return &d->zoomHandler;
+}
 
 KoPAViewProxyObject::KoPAViewProxyObject(KoPAViewBase *parent)
 {

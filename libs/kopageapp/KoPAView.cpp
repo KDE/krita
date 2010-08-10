@@ -108,7 +108,6 @@ public:
 
     KoCanvasController *canvasController;
     KoZoomController *zoomController;
-    KoZoomHandler zoomHandler;
 
     KAction *editPaste;
     KAction *deleteSelectionAction;
@@ -188,7 +187,7 @@ void KoPAView::initGUI()
     KoToolManager::instance()->addController( d->canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
 
-    d->zoomController = new KoZoomController( d->canvasController, &d->zoomHandler, actionCollection());
+    d->zoomController = new KoZoomController( d->canvasController, zoomHandler(), actionCollection());
     connect( d->zoomController, SIGNAL( zoomChanged( KoZoomMode::Mode, qreal ) ),
              this, SLOT( slotZoomChanged( KoZoomMode::Mode, qreal ) ) );
 
@@ -269,7 +268,7 @@ void KoPAView::initActions()
     new KoCutController(kopaCanvas(), action);
     action = actionCollection()->addAction( KStandardAction::Copy, "edit_copy", 0, 0 );
     new KoCopyController(kopaCanvas(), action);
-    d->editPaste = actionCollection()->addAction( KStandardAction::Paste, "edit_paste", this, SLOT( editPaste() ) );
+    d->editPaste = actionCollection()->addAction( KStandardAction::Paste, "edit_paste", proxyObject, SLOT( editPaste() ) );
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(d->canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
     clipboardDataChanged();
@@ -304,14 +303,14 @@ void KoPAView::initActions()
     d->viewRulers  = new KToggleAction(i18n("Show Rulers"), this);
     actionCollection()->addAction("view_rulers", d->viewRulers );
     d->viewRulers->setToolTip(i18n("Show/hide the view's rulers"));
-    connect(d->viewRulers, SIGNAL(triggered(bool)), this, SLOT(setShowRulers(bool)));
+    connect(d->viewRulers, SIGNAL(triggered(bool)), proxyObject, SLOT(setShowRulers(bool)));
     setShowRulers(d->doc->rulersVisible());
 
     d->actionInsertPage = new KAction( KIcon("document-new"), i18n( "Insert Page" ), this );
     actionCollection()->addAction( "page_insertpage", d->actionInsertPage );
     d->actionInsertPage->setToolTip( i18n( "Insert a new page after the current one" ) );
     d->actionInsertPage->setWhatsThis( i18n( "Insert a new page after the current one" ) );
-    connect( d->actionInsertPage, SIGNAL( triggered() ), this, SLOT( insertPage() ) );
+    connect( d->actionInsertPage, SIGNAL( triggered() ), proxyObject, SLOT( insertPage() ) );
 
     d->actionCopyPage = new KAction( i18n( "Copy Page" ), this );
     actionCollection()->addAction( "page_copypage", d->actionCopyPage );
@@ -380,23 +379,6 @@ void KoPAView::updateReadWrite( bool readwrite )
     KoToolManager::instance()->updateReadWrite(d->canvasController, readwrite);
 }
 
-KoViewConverter* KoPAView::viewConverter( KoPACanvasBase * canvas )
-{
-    Q_UNUSED( canvas );
-
-    return &d->zoomHandler;
-}
-
-KoZoomHandler* KoPAView::zoomHandler() const
-{
-    return &d->zoomHandler;
-}
-
-KoZoomController* KoPAView::zoomController() const
-{
-    return d->zoomController;
-}
-
 KoRuler* KoPAView::horizontalRuler()
 {
     return d->horizontalRuler;
@@ -407,6 +389,10 @@ KoRuler* KoPAView::verticalRuler()
     return d->verticalRuler;
 }
 
+KoZoomController* KoPAView::zoomController() const
+{
+    return d->zoomController;
+}
 
 
 void KoPAView::importDocument()

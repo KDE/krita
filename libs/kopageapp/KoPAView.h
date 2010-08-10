@@ -69,12 +69,9 @@ public:
     explicit KoPAView( KoPADocument * document, QWidget * parent = 0 );
     virtual ~KoPAView();
 
+    KoZoomController* zoomController() const;
+
     void updateReadWrite( bool readwrite );
-
-    virtual KoViewConverter * viewConverter( KoPACanvasBase * canvas );
-
-    KoZoomHandler    *zoomHandler()    const;
-    KoZoomController *zoomController() const;
 
     KoRuler *horizontalRuler();
     KoRuler *verticalRuler();

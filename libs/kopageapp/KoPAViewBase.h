@@ -25,6 +25,7 @@
 class KoPACanvasBase;
 class KoViewConverter;
 class KoPAPageBase;
+class KoZoomHandler;
 class KoPADocument;
 class KoRuler;
 class KoZoomHandler;
@@ -47,12 +48,6 @@ public:
     explicit KoPAViewBase();
     virtual ~KoPAViewBase();
 
-    /// XXX
-    virtual KoZoomHandler *zoomHandler() const = 0;
-
-    /// XXX
-    virtual KoZoomController *zoomController() const = 0;
-
     /// @return the canvas for the application
     virtual KoPACanvasBase * kopaCanvas() const = 0;
 
@@ -60,7 +55,12 @@ public:
     virtual KoPADocument * kopaDocument() const = 0;
 
     /// XXX
-    virtual KoViewConverter * viewConverter( KoPACanvasBase * canvas ) = 0;
+    virtual KoViewConverter * viewConverter( KoPACanvasBase * canvas );
+    virtual KoViewConverter * viewConverter() const;
+    virtual KoZoomController * zoomController() const = 0;
+
+    virtual KoZoomHandler * zoomHandler();
+    virtual KoZoomHandler *zoomHandler() const;
 
     /// Set the active page and updates the UI
     virtual void doUpdateActivePage( KoPAPageBase * page ) = 0;
@@ -114,6 +114,11 @@ public:
 
     /// XXX
     virtual void setShowRulers(bool show) = 0;
+
+private:
+
+    class Private;
+    Private * const d;
 };
 
 /**

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
  */
 
 #include "chalk_brush.h"
-#include "brush_shape.h"
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -28,7 +27,7 @@
 
 #include "kis_random_accessor.h"
 #include <cmath>
-#include <time.h>
+#include <ctime>
 
 #if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand
@@ -43,7 +42,7 @@ ChalkBrush::ChalkBrush(const ChalkProperties* properties)
 {
     m_counter = 0;
     m_properties = properties;
-    init();
+    srand48(time(0));
 }
 
 
@@ -51,21 +50,11 @@ ChalkBrush::~ChalkBrush()
 {
 }
 
-void ChalkBrush::init()
-{
-    BrushShape bs;
-    // some empiric values
-    bs.fromGaussian(m_properties->radius, 1.0f, 0.9f);
-    m_bristles = bs.getBristles();
-    srand48(time(0));
-}
 
 void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
 {
     m_inkColor = color;
     m_counter++;
-
-    Bristle *bristle;
 
     qint32 pixelSize = dev->colorSpace()->pixelSize();
     KisRandomAccessor accessor = dev->createRandomAccessor((int)x, (int)y);
@@ -92,22 +81,25 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
         }
     }
     
-    int dx, dy;
-    qreal dirt;
-    for (int i = 0; i < m_bristles.size(); i++) {
-        bristle = &m_bristles[i];
+    int pixelX, pixelY;
+    int radiusSquared = m_properties->radius * m_properties->radius;
+    double dirtThreshold = 0.5;
+    
+    for (int by = -m_properties->radius; by <= m_properties->radius; by++) {
+        int bySquared = by*by;
+        for (int bx = -m_properties->radius; bx <= m_properties->radius; bx++) {
+            // let's call that noise from ground to chalk :)
+            if ( ((bx*bx + bySquared) > radiusSquared) || drand48() < dirtThreshold) {
+                continue;
+            }
 
-        // let's call that noise from ground to chalk :)
-        dirt = drand48();
-        if (bristle->distanceCenter() > m_properties->radius || dirt < 0.5) {
-            continue;
+            pixelX = qRound(x + bx);
+            pixelY = qRound(y + by);
+
+            accessor.moveTo(pixelX, pixelY);
+            memcpy(accessor.rawData(), m_inkColor.data(), pixelSize);
         }
-
-        dx = qRound(x + bristle->x());
-        dy = qRound(y + bristle->y());
-
-        accessor.moveTo(dx, dy);
-        memcpy(accessor.rawData(), m_inkColor.data(), pixelSize);
     }
+
 }
 

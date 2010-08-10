@@ -4,8 +4,6 @@ set(kritachalkpaintop_PART_SRCS
     kis_chalkop_option.cpp
     kis_chalk_paintop_settings.cpp
     kis_chalk_paintop_settings_widget.cpp
-    bristle.cpp
-    brush_shape.cpp
     chalk_brush.cpp	
     )
 

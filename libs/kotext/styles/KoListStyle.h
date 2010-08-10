@@ -107,7 +107,7 @@ public:
         Thai,       ///< Thai characters for normal 10-base counting
         Abjad,      ///< Abjad sequence.
         AbjadMinor, ///< A lesser known version of the Abjad sequence.
-        ArabicAlphabet,
+        ArabicAlphabet, ///< Arabic alphabet.
         /// an image for the bullet
         ImageItem
 
@@ -190,7 +190,8 @@ public:
      */
     void removeLevelProperties(int level);
 
-    QTextListFormat listFormat(int level);
+    /// return a QTextListFormat that contains formatting information for the level.
+    QTextListFormat listFormat(int level) const;
 
     /// return the configured list levels that hasLevelProperties would return true to.
     QList<int> listLevels() const;

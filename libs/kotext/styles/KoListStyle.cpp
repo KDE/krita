@@ -132,7 +132,7 @@ KoListLevelProperties KoListStyle::levelProperties(int level) const
     return llp;
 }
 
-QTextListFormat KoListStyle::listFormat(int level)
+QTextListFormat KoListStyle::listFormat(int level) const
 {
     KoListLevelProperties llp = levelProperties(level);
     QTextListFormat format;

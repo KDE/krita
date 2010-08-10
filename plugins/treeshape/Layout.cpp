@@ -351,6 +351,7 @@ void Layout::layout()
         return;
 
     m_doingLayout = true;
+    m_container->update();
 
     if (m_children.isEmpty()) {
         if (!m_root->position().isNull()) {

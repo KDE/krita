@@ -61,6 +61,8 @@ TreeShapeMoveStrategy::TreeShapeMoveStrategy(KoToolBase *tool, const QPointF &cl
     m_ballastRoot = tos;
     m_ballastTree = dynamic_cast<KoShape*>(new TreeShape(m_ballastRoot));
     m_ballastConnector = KoShapeRegistry::instance()->value("KoConnectionShape")->createDefaultShape();
+    m_ballastTree->setVisible(false);
+    m_ballastConnector->setVisible(false);
 
     m_movable = KoShapeRegistry::instance()->value("RectangleShape")->createDefaultShape();
     m_movable->setSize(QSizeF(50,20));
@@ -68,6 +70,7 @@ TreeShapeMoveStrategy::TreeShapeMoveStrategy(KoToolBase *tool, const QPointF &cl
 
     KoShape *tmp = KoShapeRegistry::instance()->value("KoConnectionShape")->createDefaultShape();
     m_connector = dynamic_cast<KoConnectionShape*>(tmp);
+    m_connector->setVisible(false);
 
     KoShapeController *controller = tool->canvas()->shapeController();
     m_command = new QUndoCommand;
@@ -79,6 +82,7 @@ TreeShapeMoveStrategy::TreeShapeMoveStrategy(KoToolBase *tool, const QPointF &cl
     m_connector->setZIndex(shape->zIndex()+5);
     m_movable->setZIndex(shape->zIndex()+5);
     m_connector->updateConnections();
+
     QList<KoShape*> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
     foreach(KoShape *shape, selectedShapes) {
         kDebug() << "selected shape" << shape
@@ -107,10 +111,15 @@ void TreeShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
         m_newParent = proposed;
         m_newNextShape = proposed->proposePosition(m_movable);
         if (m_ballastTree->parent()) {
+            m_ballastTree->setVisible(false);
+            m_ballastConnector->setVisible(false);
             m_ballastTree->parent()->removeShape(m_ballastTree);
         }
         dynamic_cast<TreeShape*>(m_ballastTree)->setNextShape(m_newNextShape);
         kDebug() << m_newParent->shapeId() << m_newNextShape; // << m_newParent->root()->shapeId();
+        m_ballastTree->setVisible(true);
+        m_ballastConnector->setVisible(true);
+        m_connector->setVisible(true);
         m_newParent->addChild(m_ballastTree, m_ballastConnector);
         QPair<int, int> points = chooseConnectionPoints(proposed->structure());
         m_connector->connectFirst(m_movable, points.first);

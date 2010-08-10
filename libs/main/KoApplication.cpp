@@ -188,6 +188,9 @@ bool KoApplication::start()
                 if (showShell || !benchmarkLoading) {
                     shell->show();
                 }
+                if (benchmarkLoading) {
+                    doc->setReadWrite(false);
+                }
 
                 if (profileoutput.device()) {
                     doc->setProfileStream(&profileoutput);

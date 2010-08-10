@@ -22,10 +22,9 @@
 #include "Layout.h"
 #include "KoShape.h"
 #include "KoShapeContainer.h"
-#include "KoShapeContainerModel.h"
 #include "KoConnectionShape.h"
+#include "KoTextOnShapeContainer.h"
 #include "KoShapeLayer.h"
-#include "SimpleShapeContainerModel.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
 #include "KoXmlWriter.h"
@@ -33,13 +32,11 @@
 #include "KoShapeRegistry.h"
 #include "KoShapeBorderModel.h"
 #include "KoShapeShadow.h"
-
 #include <KoShapeRegistry.h>
 
 #include <QPainter>
 
 #include "kdebug.h"
-#include <KoTextOnShapeContainer.h>
 
 TreeShape::TreeShape(): KoShapeContainer(new Layout(this))
 {
@@ -113,7 +110,20 @@ bool TreeShape::hitTest(const QPointF &position) const
 
 void TreeShape::saveOdf(KoShapeSavingContext &context) const
 {
-    Q_UNUSED(context);
+    //Q_UNUSED(context);
+    context.xmlWriter().startElement("draw:tree");
+    saveOdfAttributes(context, (OdfMandatories ^ OdfLayer) | OdfAdditionalAttributes);
+    context.xmlWriter().addAttributePt("svg:y", position().y());
+
+    QList<KoShape*> children = shapes();
+    qSort(children.begin(), children.end(), KoShape::compareShapeZIndex);
+
+    foreach(KoShape* shape, children) {
+        shape->saveOdf(context);
+    }
+
+    saveOdfCommonChildElements(context);
+    context.xmlWriter().endElement();
 }
 
 bool TreeShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)

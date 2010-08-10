@@ -22,7 +22,7 @@ macro_optional_find_package(OpenJPEG)
 macro_log_feature(OPENJPEG_FOUND "openjpeg" "Free library for JPEG 2000 image compression" "http://www.openjpeg.org" FALSE "" "Required by the Krita JPEG 2000 filter")
 
 macro_optional_find_package(GIF2)
-macro_log_feature(GIF_FOUND "libungif/giflib" "Free library for reading and writing GIF images" "htt://XXX!!!" FALSE "" "Required by the Krita GIF filter")
+macro_log_feature(GIF_FOUND "libungif/giflib" "Free library for reading and writing GIF images" "http://directory.fsf.org/project/libungif/" FALSE "" "Required by the Krita GIF filter")
 
 include_directories(${KRITA_INCLUDES})
 

@@ -47,8 +47,10 @@ KoPACanvasItem::KoPACanvasItem( KoPADocument * doc)
     , KoPACanvasBase( doc )
 {
     setFocusPolicy( Qt::StrongFocus );
+#if QT_VERSION  >= 0x040700
     // this is much faster than painting it in the paintevent
     setAutoFillBackground( true );
+#endif
 }
 
 void KoPACanvasItem::repaint()

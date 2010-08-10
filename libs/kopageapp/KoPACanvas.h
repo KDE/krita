@@ -41,13 +41,13 @@ public:
     /// reimplemented method
     virtual void updateCanvas( const QRectF& rc );
 
-    virtual void setCursor(const QCursor &cursor);
-
     /// reimplemented method
     virtual void updateInputMethodInfo();
 
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
     void updateSize();
+
+    void setCursor(const QCursor &cursor);
 
 public slots:
 

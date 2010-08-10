@@ -49,8 +49,6 @@ KoPACanvasItem::KoPACanvasItem( KoPADocument * doc)
     setFocusPolicy( Qt::StrongFocus );
     // this is much faster than painting it in the paintevent
     setAutoFillBackground( true );
-    updateSize();
-    setAttribute(Qt::WA_InputMethodEnabled, true);
 }
 
 void KoPACanvasItem::repaint()
@@ -64,11 +62,12 @@ void KoPACanvasItem::updateSize()
     QSize size;
 
     if ( koPAView()->activePage() ) {
+        qDebug() << ">>>>>>>>>>>>>>>>>>> We have an active page";
         KoPageLayout pageLayout = koPAView()->activePage()->pageLayout();
         size.setWidth( qRound( koPAView()->zoomHandler()->zoomItX( pageLayout.width ) ) );
         size.setHeight( qRound( koPAView()->zoomHandler()->zoomItX( pageLayout.height ) ) );
     }
-
+    qDebug() << "\t>>>>>>>>>>>>>>>>>> size" << size;
     emit documentSize(size);
 }
 
@@ -83,6 +82,7 @@ void KoPACanvasItem::updateCanvas( const QRectF& rc )
 
 void KoPACanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget */*widget*/)
 {
+    qDebug()<< "going to paint on canvas" << this << "on rect" << option->exposedRect;
     KoPACanvasBase::paint(*painter, option->exposedRect);
 }
 
@@ -90,6 +90,9 @@ void KoPACanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 void KoPACanvasItem::mousePressEvent( QGraphicsSceneMouseEvent *e )
 {
     QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    Q_ASSERT(koPAView());
+    Q_ASSERT(koPAView()->viewMode());
+    Q_ASSERT(viewConverter());
     koPAView()->viewMode()->mousePressEvent(&me, viewConverter()->viewToDocument(widgetToView(me.pos() + documentOffset())));
 
     if(!me.isAccepted() && me.button() == Qt::RightButton)
@@ -182,11 +185,9 @@ void KoPACanvasItem::showContextMenu( const QPoint& globalPos, const QList<QActi
         menu->exec( globalPos );
 }
 
-QCursor KoPACanvasItem::setCursor(const QCursor &cursor)
+void KoPACanvasItem::setCursor(const QCursor &cursor)
 {
-    QCursor oldCursor = QGraphicsWidget::cursor();
     QGraphicsWidget::setCursor(cursor);
-    return oldCursor;
 }
 
 #include <KoPACanvasItem.moc>

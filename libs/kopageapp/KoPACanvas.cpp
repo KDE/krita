@@ -79,7 +79,8 @@ void KoPACanvas::updateSize()
 }
 
 void KoPACanvas::updateCanvas( const QRectF& rc )
-{    QRect clipRect(viewToWidget(viewConverter()->documentToView(rc).toRect()));
+{
+    QRect clipRect(viewToWidget(viewConverter()->documentToView(rc).toRect()));
     clipRect.adjust( -2, -2, 2, 2 ); // Resize to fit anti-aliasing
     clipRect.moveTopLeft( clipRect.topLeft() - documentOffset());
     update( clipRect );
@@ -174,12 +175,12 @@ void KoPACanvas::resizeEvent( QResizeEvent * event )
 
 void KoPACanvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList )
 {
-    KoPAView* view = dynamic_cast<KoPAView*>(koPAView());
-    if (!view) return;
+    KoPAView *view = dynamic_cast<KoPAView*>(koPAView());
+    if (!view || !view->factory()) return;
 
     view->unplugActionList( "toolproxy_action_list" );
     view->plugActionList( "toolproxy_action_list", actionList );
-    if( !view->factory() ) return;
+
 
     QMenu *menu = dynamic_cast<QMenu*>( view->factory()->container( "default_canvas_popup", view ) );
 
@@ -187,33 +188,7 @@ void KoPACanvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>
         menu->exec( globalPos );
 }
 
-<<<<<<< HEAD
-QPoint KoPACanvas::widgetToView(const QPoint& p) const
-{
-    return p - viewConverter()->documentToView(d->origin()).toPoint();
-}
-
-QRect KoPACanvas::widgetToView(const QRect& r) const
-{
-    return r.translated(viewConverter()->documentToView(-d->origin()).toPoint());
-}
-
-QPoint KoPACanvas::viewToWidget(const QPoint& p) const
-{
-    return p + viewConverter()->documentToView(d->origin()).toPoint();
-}
-
-QRect KoPACanvas::viewToWidget(const QRect& r) const
-{
-    return r.translated(viewConverter()->documentToView(d->origin()).toPoint());
-}
-
-KoGuidesData * KoPACanvas::guidesData()
-{
-    return &d->doc->guidesData();
-}
-
-void KoPACanvas::setCursor(const QCursor &cursor)
+void KoPACanvas::setCursor(const QCursor &cursor) 
 {
     QWidget::setCursor(cursor);
 }

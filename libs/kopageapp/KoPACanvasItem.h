@@ -36,7 +36,7 @@ public:
 
     void repaint();
 
-    QCursor setCursor(const QCursor &cursor);
+    void setCursor(const QCursor &cursor);
 
     QWidget* canvasWidget() { return 0; }
     const QWidget* canvasWidget() const { return 0; }

@@ -118,7 +118,7 @@ private:
 /**
  * QObject proxy class for handling signals and slots
  */
-class KoPAViewProxyObject : public QObject {
+class KOPAGEAPP_EXPORT KoPAViewProxyObject : public QObject {
 
     Q_OBJECT
 

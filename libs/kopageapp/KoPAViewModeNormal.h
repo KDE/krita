@@ -34,7 +34,8 @@ public:
     KoPAViewModeNormal( KoPAViewBase * view, KoPACanvasBase * m_canvas );
     ~KoPAViewModeNormal();
 
-    void paintEvent( KoPACanvas * canvas, QPaintEvent* event );
+    void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect);
+    //void paintEvent( KoPACanvas * canvas, QPaintEvent* event );
     void tabletEvent( QTabletEvent *event, const QPointF &point );
     void mousePressEvent( QMouseEvent *event, const QPointF &point );
     void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point );

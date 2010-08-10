@@ -43,17 +43,17 @@ KoPAViewModeNormal::~KoPAViewModeNormal()
 {
 }
 
-void KoPAViewModeNormal::paintEvent( KoPACanvas *canvas, QPaintEvent* event )
+void KoPAViewModeNormal::paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect)
 {
 #ifdef NDEBUG
     Q_UNUSED(canvas)
 #else
     Q_ASSERT( m_canvas == canvas );
 #endif
-    QPainter painter( canvas );
+
     painter.translate( -m_canvas->documentOffset() );
     painter.setRenderHint( QPainter::Antialiasing );
-    QRect clipRect = event->rect().translated( m_canvas->documentOffset() );
+    QRect clipRect = paintRect.translated( m_canvas->documentOffset() ).toRect();
     painter.setClipRect( clipRect );
 
     painter.translate( m_canvas->documentOrigin().x(), m_canvas->documentOrigin().y() );

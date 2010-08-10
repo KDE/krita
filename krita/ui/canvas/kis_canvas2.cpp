@@ -114,6 +114,13 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShape
 {
     KisConfig cfg;
     createCanvas(cfg.useOpenGL());
+    KisCanvasWidgetBase* baseWidget = dynamic_cast<KisCanvasWidgetBase*>(m_d->canvasWidget);
+    if (baseWidget){
+        baseWidget->setBorderColor(cfg.canvasBorderColor());
+    }else{
+        kWarning() << "Something is wrong with canvas! It is no longer KisCanvasWidgetBase";
+    }
+    
     connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), SLOT(documentOffsetMoved(const QPoint&)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(this, SIGNAL(canvasDestroyed(QWidget *)), this, SLOT(slotCanvasDestroyed(QWidget *)));
@@ -282,7 +289,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 {
     KisConfig cfg;
     slotSetDisplayProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
-
+    
     if (useOpenGL) {
 #ifdef HAVE_OPENGL
         if (QGLFormat::hasOpenGL()) {
@@ -522,6 +529,15 @@ void KisCanvas2::slotConfigChanged()
     resetCanvas(useOpenGL);
     if (useOpenGL) {
         cfg.setCanvasState("OPENGL_SUCCESS");
+    }
+    
+    // due to canvas border update the canvas
+    KisCanvasWidgetBase * base = dynamic_cast<KisCanvasWidgetBase*>(m_d->canvasWidget);
+    if (base){
+        base->setBorderColor(cfg.canvasBorderColor());
+        m_d->canvasWidget->widget()->update();
+    }else{
+        kWarning() << "Something is wrong with canvas! It is no longer KisCanvasWidgetBase";
     }
 }
 

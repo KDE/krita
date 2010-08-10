@@ -68,6 +68,15 @@ public: // KisAbstractCanvasWidget
     virtual void setDecorations(const QList<KisCanvasDecoration*> &);
     virtual QList<KisCanvasDecoration*> decorations();
 
+    /**
+     * Returns the color of the border, i.e. the part of the canvas 
+     * outside the image contents. 
+     *
+     */
+    QColor borderColor() const;
+    void setBorderColor(const QColor& color);
+
+    
 protected:
     /**
      * Returns one check of the background checkerboard pattern.
@@ -75,13 +84,6 @@ protected:
      * @param checkSize the size of the check
      */
     QImage checkImage(qint32 checkSize);
-
-    /**
-     * Returns the color of the border, i.e. the part of the canvas 
-     * outside the image contents. 
-     *
-     */
-    QColor borderColor() const;
 
     KisCanvas2 *canvas() const;
 

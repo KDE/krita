@@ -43,6 +43,7 @@ public:
         , viewConverter(newCanvas->viewConverter())
         , toolProxy(newCanvas->toolProxy())
         , ignorenextMouseEventExceptRightMiddleClick(0)
+        , borderColor(Qt::gray)
     {}
 
     QList<KisCanvasDecoration*> decorations;
@@ -54,8 +55,9 @@ public:
     /// the origin of the image rect
     QPoint origin;
     QTimer blockMouseEvent;
-
+    
     bool ignorenextMouseEventExceptRightMiddleClick; // HACK work around Qt bug not sending tablet right/dblclick http://bugreports.qt.nokia.com/browse/QTBUG-8598
+    QColor borderColor;
 };
 
 KisCanvasWidgetBase::KisCanvasWidgetBase(KisCanvas2 * canvas)
@@ -143,9 +145,14 @@ QImage KisCanvasWidgetBase::checkImage(qint32 checkSize)
     return tile;
 }
 
+void KisCanvasWidgetBase::setBorderColor(const QColor& color)
+{
+    m_d->borderColor = color;
+}
+
 QColor KisCanvasWidgetBase::borderColor() const
 {
-    return QColor(Qt::gray);
+    return m_d->borderColor;
 }
 
 KisCanvas2 *KisCanvasWidgetBase::canvas() const

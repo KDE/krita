@@ -145,6 +145,9 @@ public:
     QColor checkersColor();
     void setCheckersColor(const QColor & v);
 
+    QColor canvasBorderColor();
+    void setCanvasBorderColor(const QColor &color);
+    
     bool antialiasCurves();
     void setAntialiasCurves(bool v);
 

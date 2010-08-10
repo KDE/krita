@@ -348,6 +348,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
     colorChecks->setColor(cfg.checkersColor());
+    canvasBorder->setColor(cfg.canvasBorderColor());
     chkCurveAntialiasing->setChecked(cfg.antialiasCurves());
 
     connect(cbUseOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
@@ -363,6 +364,7 @@ void DisplaySettingsTab::setDefault()
     chkMoving->setChecked(true);
     intCheckSize->setValue(32);
     colorChecks->setColor(QColor(220, 220, 220));
+    canvasBorder->setColor(QColor(Qt::gray));
 }
 
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
@@ -654,6 +656,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());
         cfg.setScrollingCheckers(dialog->m_displaySettings->chkMoving->isChecked());
         cfg.setCheckersColor(dialog->m_displaySettings->colorChecks->color());
+        cfg.setCanvasBorderColor(dialog->m_displaySettings->canvasBorder->color());
         cfg.setAntialiasCurves(dialog->m_displaySettings->chkCurveAntialiasing->isChecked());
         // Grid settings
         cfg.setGridMainStyle(dialog->m_gridSettings->selectMainStyle->currentIndex());

@@ -203,12 +203,13 @@ void KoCharacterStyle::clearForeground()
 
 void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
 {
-    QList<int> keys = d->stylesPrivate.keys();
-    for (int i = 0; i < keys.count(); i++) {
-        QVariant variant = d->stylesPrivate.value(keys[i]);
-        if (!variant.isNull()) {
-            format.setProperty(keys[i], variant);
+    const QMap<int, QVariant> props = d->stylesPrivate.properties();
+    QMap<int, QVariant>::const_iterator it = props.begin();
+    while (it != props.end()) {
+        if (!it.value().isNull()) {
+            format.setProperty(it.key(), it.value());
         }
+        ++it;
     }
 }
 

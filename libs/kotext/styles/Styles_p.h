@@ -47,6 +47,9 @@ public:
     bool operator==(const StylePrivate &other) const;
     bool operator!=(const StylePrivate &other) const;
     bool isEmpty() const;
+    const QMap<int, QVariant> properties() const {
+        return m_properties;
+    }
 
 private:
     QMap<int, QVariant> m_properties;

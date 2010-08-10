@@ -191,10 +191,12 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
         d->parentStyle->applyStyle(format);
     }
     format.clearProperty(QTextFormat::PageBreakPolicy); //this should not be inherited according to odf
-    QList<int> keys = d->stylesPrivate.keys();
-    for (int i = 0; i < keys.count(); i++) {
-        QVariant variant = d->stylesPrivate.value(keys[i]);
-        format.setProperty(keys[i], variant);
+
+    const QMap<int, QVariant> props = d->stylesPrivate.properties();
+    QMap<int, QVariant>::const_iterator it = props.begin();
+    while (it != props.end()) {
+        format.setProperty(it.key(), it.value());
+        ++it;
     }
     if ((hasProperty(DefaultOutlineLevel)) && (!format.hasProperty(OutlineLevel))) {
        format.setProperty(OutlineLevel, defaultOutlineLevel());

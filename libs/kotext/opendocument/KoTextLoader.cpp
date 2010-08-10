@@ -415,7 +415,8 @@ void KoTextLoader::loadDeleteChangeOutsidePorH(QString id, QTextCursor &cursor)
 void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &cursor)
 {
     // TODO use the default style name a default value?
-    QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
+    const QString styleName = element.attributeNS(KoXmlNS::text, "style-name",
+                                                  QString());
 
     KoParagraphStyle *paragraphStyle = d->textSharedData->paragraphStyle(styleName, d->stylesDotXml);
 

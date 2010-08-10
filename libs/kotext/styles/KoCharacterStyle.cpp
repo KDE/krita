@@ -234,21 +234,22 @@ void KoCharacterStyle::applyStyle(QTextCursor *selection) const
 
 void KoCharacterStyle::unapplyStyle(QTextCharFormat &format) const
 {
-    QList<int> keys = d->stylesPrivate.keys();
-    for (int i = 0; i < keys.count(); i++) {
-        QVariant variant = d->stylesPrivate.value(keys[i]);
-        if (!variant.isNull()) {
-            if (variant == format.property(keys[i]))
-                format.clearProperty(keys[i]);
+    QMap<int, QVariant> props = d->stylesPrivate.properties();
+    QMap<int, QVariant>::const_iterator it = props.constBegin();
+    while (it != props.constEnd()) {
+        if (!it.value().isNull() && it.value() == format.property(it.key())) {
+           format.clearProperty(it.key());
         }
+        ++it;
     }
 
-    keys = d->hardCodedDefaultStyle.keys();
-    for (int i = 0; i < keys.count(); i++) {
-        QVariant variant = d->hardCodedDefaultStyle.value(keys.at(i));
-        if (!variant.isNull() && !format.hasProperty(keys.at(i))) {
-            format.setProperty(keys.at(i), variant);
+    props = d->hardCodedDefaultStyle.properties();
+    it = props.constBegin();
+    while (it != props.constEnd()) {
+        if (!it.value().isNull() && !format.hasProperty(it.key())) {
+            format.setProperty(it.key(), it.value());
         }
+        ++it;
     }
 }
 

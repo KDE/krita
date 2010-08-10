@@ -62,12 +62,10 @@ void KoPACanvasItem::updateSize()
     QSize size;
 
     if ( koPAView()->activePage() ) {
-        qDebug() << ">>>>>>>>>>>>>>>>>>> We have an active page";
         KoPageLayout pageLayout = koPAView()->activePage()->pageLayout();
         size.setWidth( qRound( koPAView()->zoomHandler()->zoomItX( pageLayout.width ) ) );
         size.setHeight( qRound( koPAView()->zoomHandler()->zoomItX( pageLayout.height ) ) );
     }
-    qDebug() << "\t>>>>>>>>>>>>>>>>>> size" << size;
     emit documentSize(size);
 }
 
@@ -82,7 +80,6 @@ void KoPACanvasItem::updateCanvas( const QRectF& rc )
 
 void KoPACanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget */*widget*/)
 {
-    qDebug()<< "going to paint on canvas" << this << "on rect" << option->exposedRect;
     KoPACanvasBase::paint(*painter, option->exposedRect);
 }
 

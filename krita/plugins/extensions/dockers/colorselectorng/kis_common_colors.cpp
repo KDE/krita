@@ -66,6 +66,14 @@ void KisCommonColors::setCanvas(KisCanvas2 *canvas)
         connect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()));
 }
 
+KisColorSelectorBase* KisCommonColors::createPopup() const
+{
+    KisCommonColors* ret = new KisCommonColors();
+    ret->setCanvas(m_canvas);
+    ret->setColors(colors());
+    return ret;
+}
+
 void KisCommonColors::recalculate()
 {
     setColors(extractColors());

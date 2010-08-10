@@ -21,6 +21,8 @@
 
 #include <QWidget>
 
+class KAction;
+
 class KisCanvas2;
 class KisCommonColors;
 class KisColorHistory;
@@ -44,11 +46,15 @@ signals:
 
 protected slots:
     void updateLayout();
+    void reactOnLayerChange();
 
 private:
     KisColorSelectorContainer* m_colorSelectorContainer;
-    KisColorHistory* m_lastColorsWidget;
+    KisColorHistory* m_colorHistoryWidget;
     KisCommonColors* m_commonColorsWidget;
+
+    KAction* m_colorHistoryAction;
+    KAction* m_commonColorsAction;
 
     QHBoxLayout* m_verticalColorPatchesLayout; // vertical color patches should be added here
     QVBoxLayout* m_horizontalColorPatchesLayout;//horizontal ----------"----------------------

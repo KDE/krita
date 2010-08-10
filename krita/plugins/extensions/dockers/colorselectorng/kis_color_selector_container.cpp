@@ -84,10 +84,15 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
     m_myPaintShadeSelector->setCanvas(canvas);
     m_minimalShadeSelector->setCanvas(canvas);
 
+    connect(m_canvas->view()->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(reactOnLayerChange()));
+
     KActionCollection* actionCollection = canvas->view()->actionCollection();
 
+    if(m_colorSelAction!=0)
+        return;     //we don't need to create the actions a second time
+
     m_colorSelAction = new KAction("Show color selector", this);
-    m_colorSelAction->setShortcut(QKeySequence(tr("C")));
+    m_colorSelAction->setShortcut(QKeySequence(tr("S")));
     connect(m_colorSelAction, SIGNAL(triggered()), m_colorSelector, SLOT(showPopup()));
     actionCollection->addAction("show_color_selector", m_colorSelAction);
 
@@ -100,8 +105,6 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
     m_minimalAction->setShortcut(QKeySequence(tr("N")));
     connect(m_minimalAction, SIGNAL(triggered()), m_minimalShadeSelector, SLOT(showPopup()));
     actionCollection->addAction("show_minimal_shade_selector", m_minimalAction);
-
-    connect(m_canvas->view()->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(reactOnLayerChange()));
 }
 
 void KisColorSelectorContainer::updateSettings()

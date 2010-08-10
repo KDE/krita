@@ -25,8 +25,13 @@
 #include <KConfigGroup>
 #include <KComponentData>
 #include <KGlobal>
+#include <KAction>
+#include <KActionCollection>
 
 #include "kis_canvas2.h"
+#include "kis_view2.h"
+#include "kis_layer_manager.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_color_space_selector.h"
 #include "kis_preference_set_registry.h"
 
@@ -38,12 +43,17 @@
 #include <KDebug>
 
 KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) :
-    QWidget(parent), m_verticalColorPatchesLayout(0), m_horizontalColorPatchesLayout(0), m_canvas(0)
+    QWidget(parent),
+    m_colorHistoryAction(0),
+    m_commonColorsAction(0),
+    m_verticalColorPatchesLayout(0),
+    m_horizontalColorPatchesLayout(0),
+    m_canvas(0)
 {
     setAutoFillBackground(true);
 
     m_colorSelectorContainer = new KisColorSelectorContainer(this);
-    m_lastColorsWidget = new KisColorHistory(this);
+    m_colorHistoryWidget = new KisColorHistory(this);
     m_commonColorsWidget = new KisCommonColors(this);
 
     //default settings
@@ -74,7 +84,7 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     connect(settings, SIGNAL(settingsChanged()), this,                     SIGNAL(settingsChanged()));
     connect(this,     SIGNAL(settingsChanged()), this,                     SLOT(updateLayout()));
     connect(this,     SIGNAL(settingsChanged()), m_commonColorsWidget,     SLOT(updateSettings()));
-    connect(this,     SIGNAL(settingsChanged()), m_lastColorsWidget,       SLOT(updateSettings()));
+    connect(this,     SIGNAL(settingsChanged()), m_colorHistoryWidget,       SLOT(updateSettings()));
     connect(this,     SIGNAL(settingsChanged()), m_colorSelectorContainer, SIGNAL(settingsChanged()));
     connect(this,     SIGNAL(settingsChanged()), this,                     SLOT(update()));
 
@@ -85,9 +95,26 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
 {
     Q_ASSERT(canvas);
     m_commonColorsWidget->setCanvas(canvas);
-    m_lastColorsWidget->setCanvas(canvas);
+    m_colorHistoryWidget->setCanvas(canvas);
     m_colorSelectorContainer->setCanvas(canvas);
     m_canvas = canvas;
+
+    connect(m_canvas->view()->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(reactOnLayerChange()));
+
+    KActionCollection* actionCollection = canvas->view()->actionCollection();
+
+    if(m_colorHistoryAction!=0)
+        return;     //we don't need to create the actions a second time
+
+    m_colorHistoryAction = new KAction("Show color history", this);
+    m_colorHistoryAction->setShortcut(QKeySequence(tr("H")));
+    connect(m_colorHistoryAction, SIGNAL(triggered()), m_colorHistoryWidget, SLOT(showPopup()));
+    actionCollection->addAction("show_color_history", m_colorHistoryAction);
+
+    m_commonColorsAction = new KAction("Show common colors", this);
+    m_commonColorsAction->setShortcut(QKeySequence(tr("C")));
+    connect(m_commonColorsAction, SIGNAL(triggered()), m_commonColorsWidget, SLOT(showPopup()));
+    actionCollection->addAction("show_common_colors", m_commonColorsAction);
 }
 
 void KisColorSelectorNgDockerWidget::openSettings()
@@ -122,15 +149,15 @@ void KisColorSelectorNgDockerWidget::updateLayout()
         m_commonColorsDirection=KisColorPatches::Horizontal;
 
 
-    m_verticalColorPatchesLayout->removeWidget(m_lastColorsWidget);
+    m_verticalColorPatchesLayout->removeWidget(m_colorHistoryWidget);
     m_verticalColorPatchesLayout->removeWidget(m_commonColorsWidget);
-    m_horizontalColorPatchesLayout->removeWidget(m_lastColorsWidget);
+    m_horizontalColorPatchesLayout->removeWidget(m_colorHistoryWidget);
     m_horizontalColorPatchesLayout->removeWidget(m_commonColorsWidget);
 
     if(m_lastColorsShow==false)
-        m_lastColorsWidget->hide();
+        m_colorHistoryWidget->hide();
     else
-        m_lastColorsWidget->show();
+        m_colorHistoryWidget->show();
 
     if(m_commonColorsShow==false) {
         m_commonColorsWidget->hide();
@@ -140,7 +167,7 @@ void KisColorSelectorNgDockerWidget::updateLayout()
     }
 
     if(m_lastColorsShow && m_lastColorsDirection==KisColorPatches::Vertical) {
-        m_verticalColorPatchesLayout->addWidget(m_lastColorsWidget);
+        m_verticalColorPatchesLayout->addWidget(m_colorHistoryWidget);
     }
 
     if(m_commonColorsShow && m_commonColorsDirection==KisColorPatches::Vertical) {
@@ -148,7 +175,7 @@ void KisColorSelectorNgDockerWidget::updateLayout()
     }
 
     if(m_lastColorsShow && m_lastColorsDirection==KisColorPatches::Horizontal) {
-        m_horizontalColorPatchesLayout->addWidget(m_lastColorsWidget);
+        m_horizontalColorPatchesLayout->addWidget(m_colorHistoryWidget);
     }
 
     if(m_commonColorsShow && m_commonColorsDirection==KisColorPatches::Horizontal) {
@@ -156,4 +183,20 @@ void KisColorSelectorNgDockerWidget::updateLayout()
     }
 
     updateGeometry();
+}
+
+void KisColorSelectorNgDockerWidget::reactOnLayerChange()
+{
+    KisNodeSP node = m_canvas->view()->resourceProvider()->currentNode();
+    if (node) {
+        KisPaintDeviceSP device = node->paintDevice();
+        if (device) {
+            m_colorHistoryAction->setEnabled(true);
+            m_commonColorsAction->setEnabled(true);
+        }
+        else {
+            m_colorHistoryAction->setEnabled(false);
+            m_commonColorsAction->setEnabled(false);
+        }
+    }
 }

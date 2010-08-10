@@ -18,13 +18,15 @@
 #ifndef KIS_COLSELNG_COLOR_PATCHES_H
 #define KIS_COLSELNG_COLOR_PATCHES_H
 
-#include <QWidget>
+#include "kis_color_selector_base.h"
+
+#include "KoColor.h"
 
 class KoColor;
 class KisCanvas2;
 
 
-class KisColorPatches : public QWidget
+class KisColorPatches : public KisColorSelectorBase
 {
 Q_OBJECT
 public:
@@ -32,6 +34,7 @@ public:
     enum Direction { Horizontal, Vertical };
 
     void setColors(QList<KoColor> colors);
+    QList<KoColor> colors() const {return m_colors;}
     virtual void setCanvas(KisCanvas2 *canvas) {m_canvas=canvas;}
 
 public slots:
@@ -44,8 +47,6 @@ protected:
     void mousePressEvent(QMouseEvent *);
     int patchCount() const;
 
-    KisCanvas2* m_canvas;
-
 public:
     /// set buttons, that should be drawn additionally to the patches
     /// this class takes ownership of them and will delete them
@@ -57,6 +58,7 @@ private:
     int m_patchHeight;
     int m_patchCount;
     QList<KoColor> m_colors;
+    bool m_allowColorListChangeGuard;
     int m_scrollValue;
 
     Direction m_direction;

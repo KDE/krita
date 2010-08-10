@@ -28,6 +28,7 @@ public:
 //    int heightForWidth(int) const;
 //    QSize sizeHint() const;
     void setCanvas(KisCanvas2 *canvas);
+    KisColorSelectorBase* createPopup() const;
 private:
     QList<KoColor> extractColors();
     QList<QRgb> getColors();

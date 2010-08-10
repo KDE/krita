@@ -55,7 +55,6 @@ void KisMinimalShadeSelector::setColor(const QColor& color)
 
 void KisMinimalShadeSelector::updateSettings()
 {
-    bool mouseTracking = hasMouseTracking();
     KisColorSelectorBase::updateSettings();
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 

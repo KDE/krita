@@ -66,17 +66,19 @@ signals:
     /// emits the new color raw, that means without color space transformation
     void colorChanged(const QColor& rawColor) const;
 
-private:
+protected:
+    KisCanvas2* m_canvas;
     KisColorSelectorBase* m_popup;
+    QWidget* m_parent;
+
+private:
     int m_hideDistance;
     QTimer* m_timer;
     bool m_popupOnMouseOver;
     bool m_popupOnMouseClick;
     mutable const KoColorSpace* m_colorSpace;
-    KisCanvas2* m_canvas;
     bool m_colorUpdateAllowed;
     bool m_isPopup; //this instance is a popup
-    QWidget* m_parent;
 };
 
 #endif // KIS_COLOR_SELECTOR_BASE_H

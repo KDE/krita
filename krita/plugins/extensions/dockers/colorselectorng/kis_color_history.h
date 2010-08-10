@@ -11,7 +11,8 @@ public:
     explicit KisColorHistory(QWidget *parent = 0);
     void setCanvas(KisCanvas2 *canvas);
 
-signals:
+protected:
+    KisColorSelectorBase* createPopup() const;
 
 public slots:
     void commitColor(const KoColor& color);

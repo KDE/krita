@@ -17,6 +17,15 @@ void KisColorHistory::setCanvas(KisCanvas2 *canvas)
             this,                               SLOT(commitColor(KoColor)));
 }
 
+KisColorSelectorBase* KisColorHistory::createPopup() const
+{
+    KisColorHistory* ret = new KisColorHistory();
+    ret->setCanvas(m_canvas);
+    ret->setColors(colors());
+    ret->m_colorHistory=m_colorHistory;
+    return ret;
+}
+
 void KisColorHistory::commitColor(const KoColor& color)
 {
     m_colorHistory.removeAll(color);

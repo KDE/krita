@@ -31,7 +31,7 @@
 #include <KDebug>
 
 KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent) :
-    QWidget(parent), m_canvas(0), m_scrollValue(0), m_configPrefix(configPrefix)
+    KisColorSelectorBase(parent), m_allowColorListChangeGuard(true), m_scrollValue(0), m_configPrefix(configPrefix)
 {
     updateSettings();
 
@@ -41,9 +41,22 @@ KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent) :
 
 void KisColorPatches::setColors(QList<KoColor>colors)
 {
-    qDebug()<<"KisColSelNgPatches::setColors() -> size:"<<colors.size();
-    m_colors = colors;
-    update();
+//    qDebug()<<"KisColSelNgPatches::setColors() -> size:"<<colors.size();
+    if(m_allowColorListChangeGuard) {
+        m_colors = colors;
+
+        m_allowColorListChangeGuard=false;
+
+        KisColorPatches* parent = dynamic_cast<KisColorPatches*>(m_parent);
+        if(parent) parent->setColors(colors);
+
+        KisColorPatches* popup = dynamic_cast<KisColorPatches*>(m_popup);
+        if(popup) popup->setColors(colors);
+
+        m_allowColorListChangeGuard=true;
+
+        update();
+    }
 }
 
 void KisColorPatches::paintEvent(QPaintEvent* e)
@@ -110,6 +123,12 @@ void KisColorPatches::resizeEvent(QResizeEvent* event)
     QWheelEvent dummyWheelEvent(QPoint(), 0, Qt::NoButton, Qt::NoModifier);
     wheelEvent(&dummyWheelEvent);
 
+    if(parentWidget()==0) {
+        // this instance is a popup
+        setMinimumWidth(m_patchWidth*(m_patchCount/4));
+        setMaximumWidth(minimumWidth());
+    }
+
     if(m_allowScrolling == false && event->oldSize() != event->size()) {
         if(m_direction == Horizontal) {
             setMaximumHeight(heightForWidth(width()));
@@ -126,6 +145,10 @@ void KisColorPatches::resizeEvent(QResizeEvent* event)
 
 void KisColorPatches::mousePressEvent(QMouseEvent* e)
 {
+    KisColorSelectorBase::mousePressEvent(e);
+    if(e->isAccepted())
+        return;
+
     int scrollX = m_direction==Horizontal?m_scrollValue:0;
     int scrollY = m_direction==Vertical?m_scrollValue:0;
     int column = (e->pos().x()-scrollX)/m_patchWidth;
@@ -144,8 +167,7 @@ void KisColorPatches::mousePressEvent(QMouseEvent* e)
 
     patchNr-=m_buttonList.size();
 
-    Q_ASSERT(patchNr >= 0);
-    if(patchNr<m_colors.size()) {
+    if(patchNr>=0 && patchNr<m_colors.size()) {
         if (e->button()==Qt::LeftButton)
             m_canvas->resourceManager()->setForegroundColor(m_colors.at(patchNr));
         else if (e->button()==Qt::RightButton)
@@ -169,6 +191,8 @@ void KisColorPatches::setAdditionalButtons(QList<QWidget*> buttonList)
 
 void KisColorPatches::updateSettings()
 {
+    KisColorSelectorBase::updateSettings();
+
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
     if(cfg.readEntry(m_configPrefix+"Alignment", false))
@@ -182,6 +206,14 @@ void KisColorPatches::updateSettings()
     m_patchCount=cfg.readEntry(m_configPrefix+"Count", 15);
     m_patchWidth=cfg.readEntry(m_configPrefix+"Width", 20);
     m_patchHeight=cfg.readEntry(m_configPrefix+"Height", 20);
+
+    if(parentWidget()==0) {
+        // this instance is a popup
+        m_allowScrolling = false;
+        m_direction = Horizontal;
+        m_patchWidth*=2;
+        m_patchHeight*=2;
+    }
 
     for(int i=0; i<m_buttonList.size(); i++) {
         m_buttonList.at(i)->setGeometry(0, i*m_patchHeight, m_patchWidth, m_patchHeight);
@@ -209,6 +241,7 @@ void KisColorPatches::updateSettings()
     QResizeEvent dummy(size(), QSize(-1,-1));
     resizeEvent(&dummy);
 
+    setPopupBehaviour(false, false);
     update();
 }
 

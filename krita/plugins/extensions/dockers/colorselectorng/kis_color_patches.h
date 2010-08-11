@@ -44,8 +44,11 @@ protected:
     void paintEvent(QPaintEvent *);
     void wheelEvent(QWheelEvent *);
     void resizeEvent(QResizeEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
     void mousePressEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
     int patchCount() const;
+    bool colorAt(const QPoint &, KoColor *result) const;
 
 public:
     /// set buttons, that should be drawn additionally to the patches
@@ -81,6 +84,8 @@ private:
     int fieldCount() const;
 
     QString m_configPrefix;
+
+    QPoint m_dragStartPos;
 };
 
 #endif // KIS_COLSELNG_COLOR_PATCHES_H

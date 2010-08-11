@@ -16,6 +16,8 @@
  */
 
 #include "kis_color_patches.h"
+
+#include <QApplication>
 #include <QPainter>
 #include <QWheelEvent>
 #include <QMouseEvent>
@@ -143,16 +145,79 @@ void KisColorPatches::resizeEvent(QResizeEvent* event)
     QWidget::resizeEvent(event);
 }
 
-void KisColorPatches::mousePressEvent(QMouseEvent* e)
+void KisColorPatches::mouseReleaseEvent(QMouseEvent* event)
 {
-    KisColorSelectorBase::mousePressEvent(e);
-    if(e->isAccepted())
+    event->setAccepted(false);
+    KisColorSelectorBase::mouseReleaseEvent(event);
+    if(event->isAccepted() || !rect().contains(event->pos()))
         return;
+
+
+    KoColor color;
+    if(colorAt(event->pos(), &color)) {
+        if (event->button()==Qt::LeftButton)
+            m_canvas->resourceManager()->setForegroundColor(color);
+        else if (event->button()==Qt::RightButton)
+            m_canvas->resourceManager()->setBackgroundColor(color);
+    }
+}
+
+
+void KisColorPatches::mousePressEvent(QMouseEvent *event)
+{
+    KisColorSelectorBase::mousePressEvent(event);
+    if(event->isAccepted())
+        return;
+
+    if (event->button() == Qt::LeftButton)
+        m_dragStartPos = event->pos();
+}
+
+void KisColorPatches::mouseMoveEvent(QMouseEvent *event)
+{
+    event->ignore();
+    KisColorSelectorBase::mouseMoveEvent(event);
+    if(event->isAccepted())
+        return;
+
+    if (!(event->buttons() & Qt::LeftButton))
+        return;
+    if ((event->pos() - m_dragStartPos).manhattanLength()
+         < QApplication::startDragDistance())
+        return;
+
+    KoColor koColor;
+    if(!colorAt(m_dragStartPos, &koColor))
+        return;
+
+    QDrag *drag = new QDrag(this);
+    QMimeData *mimeData = new QMimeData;
+
+    QColor color = koColor.toQColor();
+    mimeData->setColorData(color);
+    mimeData->setText(color.name());
+    drag->setMimeData(mimeData);
+
+    /*Qt::DropAction dropAction = */drag->exec(Qt::CopyAction);
+//    kDebug() << dropAction;
+
+    event->accept();
+}
+
+int KisColorPatches::patchCount() const
+{
+    return m_patchCount;
+}
+
+bool KisColorPatches::colorAt(const QPoint &pos, KoColor *result) const
+{
+    if(!rect().contains(pos))
+        return false;
 
     int scrollX = m_direction==Horizontal?m_scrollValue:0;
     int scrollY = m_direction==Vertical?m_scrollValue:0;
-    int column = (e->pos().x()-scrollX)/m_patchWidth;
-    int row = (e->pos().y()-scrollY)/m_patchHeight;
+    int column = (pos.x()-scrollX)/m_patchWidth;
+    int row = (pos.y()-scrollY)/m_patchHeight;
 
     int patchNr;
     if(m_direction == Horizontal) {
@@ -168,16 +233,10 @@ void KisColorPatches::mousePressEvent(QMouseEvent* e)
     patchNr-=m_buttonList.size();
 
     if(patchNr>=0 && patchNr<m_colors.size()) {
-        if (e->button()==Qt::LeftButton)
-            m_canvas->resourceManager()->setForegroundColor(m_colors.at(patchNr));
-        else if (e->button()==Qt::RightButton)
-            m_canvas->resourceManager()->setBackgroundColor(m_colors.at(patchNr));
+        (*result)=m_colors.at(patchNr);
+        return true;
     }
-}
-
-int KisColorPatches::patchCount() const
-{
-    return m_patchCount;
+    else return false;
 }
 
 void KisColorPatches::setAdditionalButtons(QList<QWidget*> buttonList)

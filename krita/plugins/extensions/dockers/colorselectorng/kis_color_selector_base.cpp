@@ -251,6 +251,34 @@ QColor KisColorSelectorBase::findGeneratingColor(const KoColor& ref) const
     return currentEstimate;
 }
 
+void KisColorSelectorBase::dragEnterEvent(QDragEnterEvent *e)
+{
+    if(e->mimeData()->hasColor())
+        e->acceptProposedAction();
+    if(e->mimeData()->hasText() && QColor(e->mimeData()->text()).isValid())
+        e->acceptProposedAction();
+}
+
+void KisColorSelectorBase::dropEvent(QDropEvent *e)
+{
+//    kDebug() << "drop event. mime format=" << e->mimeData()->formats() << "  text=" << e->mimeData()->text() << "  colour=" << e->mimeData()->colorData();
+
+    QColor color;
+    if(e->mimeData()->hasColor()) {
+        color = qvariant_cast<QColor>(e->mimeData()->colorData());
+    }
+    else if(e->mimeData()->hasText()) {
+        color.setNamedColor(e->mimeData()->text());
+        if(!color.isValid())
+            return;
+    }
+
+    KoColor kocolor(color , KoColorSpaceRegistry::instance()->rgb8());
+    color = findGeneratingColor(kocolor);
+    setColor(color);
+    commitColor(kocolor, color, Foreground);
+}
+
 void KisColorSelectorBase::setColor(const QColor& color)
 {
     Q_UNUSED(color);

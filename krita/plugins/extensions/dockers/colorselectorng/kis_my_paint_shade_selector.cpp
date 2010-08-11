@@ -47,6 +47,8 @@ KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
         m_initialised(false),
         m_updateTimer(new QTimer(this))
 {
+    setAcceptDrops(true);
+
     precalculateData();
     setMinimumSize(80, 80);
     setColor(QColor(255,0,0));
@@ -73,6 +75,7 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 
 void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 {
+    e->setAccepted(false);
     KisColorSelectorBase::mousePressEvent(e);
 
     QRect widgetRect(0, 0, qMin(width(), height()), qMin(width(), height()));

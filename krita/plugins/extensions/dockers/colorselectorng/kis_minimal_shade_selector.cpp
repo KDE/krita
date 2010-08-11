@@ -32,6 +32,8 @@
 KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent) :
     KisColorSelectorBase(parent), m_canvas(0)
 {
+    setAcceptDrops(true);
+
     QVBoxLayout* l = new QVBoxLayout(this);
     l->setSpacing(0);
     l->setMargin(0);

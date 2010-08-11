@@ -56,6 +56,8 @@ protected:
     virtual KisColorSelectorBase* createPopup() const = 0;
     /// finds a QColor, that will be ref.toQColor(), if converting it to the color space of ref
     QColor findGeneratingColor(const KoColor& ref) const;
+    void dragEnterEvent(QDragEnterEvent *);
+    void dropEvent(QDropEvent *);
 
 protected slots:
     void hidePopup();

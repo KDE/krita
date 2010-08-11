@@ -225,6 +225,7 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
 
 void KisColorSelector::mousePressEvent(QMouseEvent* e)
 {
+    e->setAccepted(false);
     KisColorSelectorBase::mousePressEvent(e);
 
     if(!e->isAccepted()) {
@@ -287,6 +288,8 @@ void KisColorSelector::mouseEvent(QMouseEvent *e)
 
 void KisColorSelector::init()
 {
+    setAcceptDrops(true);
+
     m_ring = new KisColorSelectorRing(this);
     m_triangle = new KisColorSelectorTriangle(this);
     m_slider = new KisColorSelectorSimple(this);

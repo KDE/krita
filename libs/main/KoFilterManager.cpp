@@ -53,9 +53,6 @@ KoFilterManager::KoFilterManager(KoDocument* document,
         d(new Private(progressUpdater))
 {
     d->batch = false;
-    if (document)
-        QObject::connect(this, SIGNAL(sigProgress(int)),
-                         document, SIGNAL(sigProgress(int)));
 }
 
 

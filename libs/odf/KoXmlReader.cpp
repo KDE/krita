@@ -1071,11 +1071,18 @@ namespace {
     void parseElementContents(QXmlStreamReader &xml, KoXmlPackedDocument &doc, ParseError &error)
     {
         xml.readNext();
+        QString ws;
+        bool sawElement = false;
         while (!xml.atEnd()) {
             switch (xml.tokenType()) {
             case QXmlStreamReader::EndElement:
+                // if an element contains only whitespace, put it in the dom
+                if (!ws.isEmpty() && !sawElement) {
+                    doc.addText(ws);
+                }
                 return;
             case QXmlStreamReader::StartElement:
+                sawElement = true;
                 parseElement(xml, doc, error);
                 break;
             case QXmlStreamReader::Characters:
@@ -1083,6 +1090,8 @@ namespace {
                     doc.addCData(xml.text().toString());
                 } else if (!xml.isWhitespace()) {
                     doc.addText(xml.text().toString());
+                } else if (!sawElement) {
+                    ws += xml.text();
                 }
                 break;
             case QXmlStreamReader::ProcessingInstruction:

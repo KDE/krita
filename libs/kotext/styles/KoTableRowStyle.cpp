@@ -41,7 +41,7 @@
 class KoTableRowStyle::Private : public QSharedData
 {
 public:
-    Private() : parentStyle(0), next(0) {}
+    Private() : QSharedData(), parentStyle(0), next(0) {}
 
     ~Private() {
     }
@@ -319,7 +319,7 @@ void KoTableRowStyle::loadOdfProperties(KoStyleStack &styleStack)
 
 bool KoTableRowStyle::operator==(const KoTableRowStyle &other) const
 {
-    return other.d->stylesPrivate == d->stylesPrivate;
+    return other.d == d;
 }
 
 void KoTableRowStyle::removeDuplicates(const KoTableRowStyle &other)

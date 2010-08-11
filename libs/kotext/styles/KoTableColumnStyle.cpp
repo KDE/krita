@@ -269,7 +269,7 @@ void KoTableColumnStyle::loadOdfProperties(KoStyleStack &styleStack)
 
 bool KoTableColumnStyle::operator==(const KoTableColumnStyle &other) const
 {
-    return (other.d == d);
+    return other.d == d;
 }
 
 void KoTableColumnStyle::removeDuplicates(const KoTableColumnStyle &other)

@@ -1183,8 +1183,10 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                     QString columnStyleName = tblTag.attributeNS(KoXmlNS::table, "style-name", "");
                     if (!columnStyleName.isEmpty()) {
                         KoTableColumnStyle *columnStyle = d->textSharedData->tableColumnStyle(columnStyleName, d->stylesDotXml);
-                        for (int c = columns; c < columns + repeatColumn; c++) {
-                            tcarManager->setColumnStyle(c, *columnStyle);
+                        if (columnStyle) {
+                            for (int c = columns; c < columns + repeatColumn; c++) {
+                                tcarManager->setColumnStyle(c, *columnStyle);
+                            }
                         }
                     }
                     columns = columns + repeatColumn;
@@ -1196,7 +1198,9 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                     QString rowStyleName = tblTag.attributeNS(KoXmlNS::table, "style-name", "");
                     if (!rowStyleName.isEmpty()) {
                         KoTableRowStyle *rowStyle = d->textSharedData->tableRowStyle(rowStyleName, d->stylesDotXml);
-                        tcarManager->setRowStyle(rows, *rowStyle);
+                        if (rowStyle) {
+                            tcarManager->setRowStyle(rows, *rowStyle);
+                        }
                     }
                     rows++;
                     if (columns > 0)

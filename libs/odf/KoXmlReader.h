@@ -43,8 +43,7 @@ typedef QDomDocument KoXmlDocument;
 #else
 
 class QString;
-class QXmlReader;
-class QXmlInputSource;
+class QXmlStreamReader;
 
 class KoXmlNode;
 class KoXmlText;
@@ -281,7 +280,7 @@ public:
                     QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0);
     bool setContent(QIODevice* device,
                     QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0);
-    bool setContent(QXmlInputSource *source, QXmlReader *reader,
+    bool setContent(QXmlStreamReader *reader,
                     QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0);
     bool setContent(const QByteArray& text, bool namespaceProcessing,
                     QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
@@ -299,31 +298,6 @@ private:
 };
 
 #endif // KOXML_USE_QDOM
-
-class KOODF_EXPORT KoXmlInputSource: public QXmlInputSource
-{
-public:
-    explicit KoXmlInputSource(QIODevice *dev);
-    ~KoXmlInputSource();
-
-    virtual void setData(const QString& dat);
-    virtual void setData(const QByteArray& dat);
-    virtual void fetchData();
-    virtual QString data() const;
-    virtual QChar next();
-    virtual void reset();
-
-protected:
-    virtual QString fromRawData(const QByteArray &data, bool beginning = false);
-
-private:
-    QIODevice* device;
-    QTextDecoder* decoder;
-    QString stringData;
-    int stringLength;
-    int stringIndex;
-    char* buffer;
-};
 
 /**
  * This namespace contains a few convenience functions to simplify code using QDom
@@ -406,10 +380,6 @@ KOODF_EXPORT QDomDocument asQDomDocument(QDomDocument ownerDoc, const KoXmlDocum
  */
 KOODF_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
                                 bool namespaceProcessing, QString* errorMsg = 0,
-                                int* errorLine = 0, int* errorColumn = 0);
-
-KOODF_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
-                                QXmlSimpleReader* reader, QString* errorMsg = 0,
                                 int* errorLine = 0, int* errorColumn = 0);
 }
 

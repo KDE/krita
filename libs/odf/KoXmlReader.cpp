@@ -76,6 +76,7 @@
 
 #include <qxml.h>
 #include <qdom.h>
+#include <QXmlStreamReader>
 
 #include <QBuffer>
 #include <QByteArray>
@@ -761,7 +762,7 @@ private:
 #ifdef KOXML_COMPACT
 public:
     const KoXmlPackedItem& itemAt(unsigned depth, unsigned index) {
-        KoXmlPackedGroup& group = groups[depth];
+        const KoXmlPackedGroup& group = groups[depth];
         return group[index];
     }
 
@@ -775,7 +776,7 @@ public:
           Function clear, newItem, addElement, addAttribute, addText,
           addCData, addProcessing are all related. These are all necessary
           for stateful manipulation of the document. See also the calls
-          to these function from KoXmlHandler.
+          to these function from parseDocument().
 
           The state itself is defined by the member variables
           currentDepth and the groups (see above).
@@ -1010,237 +1011,114 @@ public:
 
 };
 
-// ==================================================================
-//
-//         KoXmlHandler
-//
-// ==================================================================
+namespace {
 
-class KoXmlHandler : public QXmlDefaultHandler
-{
-public:
-    KoXmlHandler(KoXmlPackedDocument* doc);
+    class ParseError {
+    public:
+        QString errorMsg;
+        int errorLine;
+        int errorColumn;
+        bool error;
 
-    // content handler
-    bool startDocument();
-    bool endDocument();
+        ParseError() :errorLine(-1), errorColumn(-1), error(false) {}
+    };
 
-    bool startElement(const QString& nsURI, const QString& localName,
-                      const QString& qName, const QXmlAttributes& atts);
-    bool endElement(const QString& nsURI, const QString& localName,
-                    const QString& qName);
+    void parseElement(QXmlStreamReader &xml, KoXmlPackedDocument &doc, ParseError &error);
 
-    bool characters(const QString& ch);
-    bool processingInstruction(const QString& target, const QString& data);
-    bool skippedEntity(const QString& name);
-
-    // lexical handler
-    bool startCDATA();
-    bool endCDATA();
-    bool startEntity(const QString &);
-    bool endEntity(const QString &);
-    bool startDTD(const QString& name, const QString& publicId,
-                  const QString& systemId);
-    bool comment(const QString& ch);
-
-    // decl handler
-    bool externalEntityDecl(const QString &name, const QString &publicId,
-                            const QString &systemId) ;
-
-    // DTD handler
-    bool notationDecl(const QString & name, const QString & publicId,
-                      const QString & systemId);
-    bool unparsedEntityDecl(const QString &name, const QString &publicId,
-                            const QString &systemId, const QString &notationName) ;
-
-    // error handler
-    bool fatalError(const QXmlParseException& exception);
-
-    QString errorMsg;
-    int errorLine;
-    int errorColumn;
-
-private:
-    KoXmlPackedDocument* document;
-    bool processNamespace;
-    QString entityName;
-    bool cdata;
-};
-
-
-KoXmlHandler::KoXmlHandler(KoXmlPackedDocument* doc) : QXmlDefaultHandler(),
-        errorLine(0), errorColumn(0), document(doc),
-        processNamespace(doc->processNamespace), cdata(false)
-{
-}
-
-bool KoXmlHandler::startDocument()
-{
-    // just for sanity
-    cdata = false;
-    entityName.clear();
-
-    errorMsg.clear();
-    errorLine = 0;
-    errorColumn = 0;
-
-    document->clear();
-    return true;
-}
-
-bool KoXmlHandler::endDocument()
-{
-    document->finish();
-    return true;
-}
-
-bool KoXmlHandler::startDTD(const QString& name, const QString& publicId,
-                            const QString& systemId)
-{
-    Q_UNUSED(publicId);
-    Q_UNUSED(systemId);
-
-    document->addDTD(name);
-
-    return true;
-}
-
-bool KoXmlHandler::startElement(const QString& nsURI, const QString& localName,
-                                const QString& name, const QXmlAttributes& atts)
-{
-    Q_UNUSED(localName);
-
-    document->addElement(name, fixNamespace(nsURI));
-
-    // add all attributes
-    for (int c = 0; c < atts.length(); c++)
-        document->addAttribute(atts.qName(c), atts.uri(c), atts.value(c));
-
-    return true;
-}
-
-bool KoXmlHandler::endElement(const QString& nsURI, const QString& localName,
-                              const QString& qName)
-{
-    Q_UNUSED(nsURI);
-    Q_UNUSED(localName);
-    Q_UNUSED(qName);
-
-    document->closeElement();
-
-    return true;
-}
-
-bool KoXmlHandler::characters(const QString& str)
-{
-    // are we inside entity ?
-    if (!entityName.isEmpty()) {
-        // we do not handle entity but need to keep track of it
-        // because we want to skip it alltogether
-        return true;
+    // parse one element as if this were a standalone xml document
+    ParseError parseDocument(QXmlStreamReader &xml, KoXmlPackedDocument &doc) {
+        doc.clear();
+        ParseError error;
+        xml.readNext();
+        while (!xml.atEnd() && xml.tokenType() != QXmlStreamReader::EndDocument) {
+            switch (xml.tokenType()) {
+            case QXmlStreamReader::StartElement:
+                parseElement(xml, doc, error);
+                break;
+            case QXmlStreamReader::DTD:
+                doc.addDTD(xml.dtdName().toString());
+                break;
+            case QXmlStreamReader::StartDocument:
+                if (!xml.documentEncoding().isEmpty() || !xml.documentVersion().isEmpty()) {
+                    doc.addProcessingInstruction();
+                }
+                break;
+            case QXmlStreamReader::ProcessingInstruction:
+                doc.addProcessingInstruction();
+                break;
+            default:
+                break;
+            }
+            xml.readNext();
+        }
+        if (xml.hasError()) {
+            error.error = true;
+            if (xml.tokenType() == QXmlStreamReader::Invalid) {
+                if (error.errorMsg.isNull()) {
+                    error.errorMsg = "unexpected character";
+                }
+            } else {
+                error.errorMsg = xml.errorString();
+            }
+            error.errorColumn = xml.columnNumber();
+            error.errorLine = xml.lineNumber();
+        } else {
+            doc.finish();
+        }
+        return error;
     }
 
-    // add a new text or CDATA
-    if (cdata)
-        document->addCData(str);
-    else
-        document->addText(str);
+    void parseElementContents(QXmlStreamReader &xml, KoXmlPackedDocument &doc, ParseError &error)
+    {
+        xml.readNext();
+        while (!xml.atEnd()) {
+            switch (xml.tokenType()) {
+            case QXmlStreamReader::EndElement:
+                return;
+            case QXmlStreamReader::StartElement:
+                parseElement(xml, doc, error);
+                break;
+            case QXmlStreamReader::Characters:
+                if (xml.isCDATA()) {
+                    doc.addCData(xml.text().toString());
+                } else if (!xml.isWhitespace()) {
+                    doc.addText(xml.text().toString());
+                }
+                break;
+            case QXmlStreamReader::ProcessingInstruction:
+                doc.addProcessingInstruction();
+                break;
+            default:
+                break;
+            }
+            xml.readNext();
+        }
+    }
 
-    return true;
-}
+    void parseElement(QXmlStreamReader &xml, KoXmlPackedDocument &doc,
+                      ParseError &error) {
+        // reader.tokenType() is now QXmlStreamReader::StartElement
+        doc.addElement(xml.qualifiedName().toString(),
+                       fixNamespace(xml.namespaceUri().toString()));
+        QXmlStreamAttributes attr = xml.attributes();
+        QXmlStreamAttributes::const_iterator a = attr.constBegin();
+        while (a != attr.constEnd()) {
+            doc.addAttribute(a->qualifiedName().toString(),
+                             a->namespaceUri().toString(),
+                             a->value().toString());
+            ++a;
+        }
+        parseElementContents(xml, doc, error);
+        if (xml.atEnd()) {
+            if (xml.error() == QXmlStreamReader::NotWellFormedError) {
+                error.errorMsg = "tag mismatch";
+            }
+            return;
+        }
+        // reader.tokenType() is now QXmlStreamReader::EndElement
+        doc.closeElement();
+    }
 
-bool KoXmlHandler::processingInstruction(const QString& target,
-        const QString& data)
-{
-    Q_UNUSED(target);
-    Q_UNUSED(data);
-
-    document->addProcessingInstruction();
-
-    return true;
-}
-
-bool KoXmlHandler::skippedEntity(const QString& name)
-{
-    Q_UNUSED(name);
-
-    // we skip entity
-    return true;
-}
-
-bool KoXmlHandler::startCDATA()
-{
-    cdata = true;
-    return true;
-}
-
-bool KoXmlHandler::endCDATA()
-{
-    cdata = false;
-    return true;
-}
-
-bool KoXmlHandler::startEntity(const QString& name)
-{
-    entityName = name;
-    return true;
-}
-
-bool KoXmlHandler::endEntity(const QString& name)
-{
-    Q_UNUSED(name);
-    entityName.clear();
-    return true;
-}
-
-bool KoXmlHandler::comment(const QString& comment)
-{
-    Q_UNUSED(comment);
-
-    // we skip comment
-    return true;
-}
-
-bool KoXmlHandler::unparsedEntityDecl(const QString &name,
-                                      const QString &publicId, const QString &systemId, const QString &notationName)
-{
-    Q_UNUSED(name);
-    Q_UNUSED(publicId);
-    Q_UNUSED(systemId);
-    Q_UNUSED(notationName);
-
-    // we skip entity
-    return true;
-}
-
-bool KoXmlHandler::externalEntityDecl(const QString &name,
-                                      const QString &publicId, const QString &systemId)
-{
-    Q_UNUSED(name);
-    Q_UNUSED(publicId);
-    Q_UNUSED(systemId);
-
-    // we skip entity
-    return true;
-}
-
-bool KoXmlHandler::notationDecl(const QString & name,
-                                const QString & publicId, const QString & systemId)
-{
-    Q_UNUSED(name);
-    Q_UNUSED(publicId);
-    Q_UNUSED(systemId);
-
-    // we skip notation node
-    return true;
-}
-
-bool KoXmlHandler::fatalError(const QXmlParseException& exception)
-{
-    errorMsg = exception.message();
-    errorLine =  exception.lineNumber();
-    errorColumn =  exception.columnNumber();
-    return QXmlDefaultHandler::fatalError(exception);
 }
 
 
@@ -1313,9 +1191,7 @@ public:
     unsigned long nodeIndex;
 
     // for document node
-    bool setContent(QXmlInputSource* source, QXmlReader* reader,
-                    QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0);
-    bool setContent(QXmlInputSource* source, bool namespaceProcessing,
+    bool setContent(QXmlStreamReader *reader,
                     QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0);
 
     // used when doing on-demand (re)parse
@@ -1334,7 +1210,6 @@ private:
     QHash<QString, QString> attr;
     QHash<KoXmlStringPair, QString> attrNS;
     QString textData;
-    friend class KoXmlHandler;
     friend class KoXmlElement;
 };
 
@@ -1520,18 +1395,7 @@ void KoXmlNodeData::setData(const QString& d)
     textData = d;
 }
 
-bool KoXmlNodeData::setContent(QXmlInputSource* source, bool namespaceProcessing,
-                               QString* errorMsg, int* errorLine, int* errorColumn)
-{
-    QXmlSimpleReader reader;
-    reader.setFeature(QLatin1String("http://xml.org/sax/features/namespaces"), namespaceProcessing);
-    reader.setFeature(QLatin1String("http://xml.org/sax/features/namespace-prefixes"), !namespaceProcessing);
-    reader.setFeature(QLatin1String("http://trolltech.com/xml/features/report-whitespace-only-CharData"), false);
-    return setContent(source, &reader, errorMsg, errorLine, errorColumn);
-}
-
-bool KoXmlNodeData::setContent(QXmlInputSource* source,
-                               QXmlReader* reader, QString* errorMsg, int* errorLine, int* errorColumn)
+bool KoXmlNodeData::setContent(QXmlStreamReader* reader, QString* errorMsg, int* errorLine, int* errorColumn)
 {
     if (nodeType != KoXmlNode::DocumentNode)
         return false;
@@ -1540,33 +1404,20 @@ bool KoXmlNodeData::setContent(QXmlInputSource* source,
     nodeType = KoXmlNode::DocumentNode;
 
     // sanity checks
-    if (!source) return false;
     if (!reader) return false;
 
     delete packedDoc;
     packedDoc = new KoXmlPackedDocument;
-    packedDoc->processNamespace = false;
+    packedDoc->processNamespace = reader->namespaceProcessing();
 
-    packedDoc->processNamespace =
-        reader->feature("http://xml.org/sax/features/namespaces") &&
-        !reader->feature("http://xml.org/sax/features/namespace-prefixes");
-
-    KoXmlHandler handler(packedDoc);
-    reader->setContentHandler(&handler);
-    reader->setErrorHandler(&handler);
-    reader->setLexicalHandler(&handler);
-    reader->setDeclHandler(&handler);
-    reader->setDTDHandler(&handler);
-
-    bool result = reader->parse(source);
-    if (!result) {
+    ParseError error = parseDocument(*reader, *packedDoc);
+    if (error.error) {
         // parsing error has occurred
-        if (errorMsg) *errorMsg = handler.errorMsg;
-        if (errorLine) *errorLine = handler.errorLine;
-        if (errorColumn)  *errorColumn = handler.errorColumn;
+        if (errorMsg) *errorMsg = error.errorMsg;
+        if (errorLine) *errorLine = error.errorLine;
+        if (errorColumn)  *errorColumn = error.errorColumn;
         return false;
     }
-
 
     // initially load
     loadChildren();
@@ -2612,7 +2463,7 @@ void KoXmlDocument::clear()
     d->emptyDocument = false;
 }
 
-bool KoXmlDocument::setContent(QXmlInputSource *source, QXmlReader *reader,
+bool KoXmlDocument::setContent(QXmlStreamReader *reader,
                                QString* errorMsg, int* errorLine, int* errorColumn)
 {
     if (d->nodeType != KoXmlNode::DocumentNode) {
@@ -2622,7 +2473,7 @@ bool KoXmlDocument::setContent(QXmlInputSource *source, QXmlReader *reader,
     }
 
     dt = KoXmlDocumentType();
-    bool result = d->setContent(source, reader, errorMsg, errorLine, errorColumn);
+    bool result = d->setContent(reader, errorMsg, errorLine, errorColumn);
     if (result && !isNull()) {
         dt.d->nodeType = KoXmlNode::DocumentTypeNode;
         dt.d->tagName = d->packedDoc->docType;
@@ -2648,18 +2499,12 @@ bool KoXmlDocument::setContent(QIODevice* device, bool namespaceProcessing,
         d->nodeType = KoXmlNode::DocumentNode;
     }
 
-    QXmlSimpleReader reader;
-    reader.setFeature("http://xml.org/sax/features/namespaces", namespaceProcessing);
-    reader.setFeature("http://xml.org/sax/features/namespace-prefixes", !namespaceProcessing);
-    reader.setFeature(QLatin1String("http://trolltech.com/xml/features/report-whitespace-only-CharData"), false);
-
-    // FIXME this hack is apparently private
-    //reader.setUndefEntityInAttrHack(true);
-
-    QXmlInputSource source(device);
+    device->open(QIODevice::ReadOnly);
+    QXmlStreamReader reader(device);
+    reader.setNamespaceProcessing(namespaceProcessing);
 
     dt = KoXmlDocumentType();
-    bool result = d->setContent(&source, &reader, errorMsg, errorLine, errorColumn);
+    bool result = d->setContent(&reader, errorMsg, errorLine, errorColumn);
     {
         dt.d->nodeType = KoXmlNode::DocumentTypeNode;
         dt.d->tagName = d->packedDoc->docType;
@@ -2686,11 +2531,11 @@ bool KoXmlDocument::setContent(const QString& text, bool namespaceProcessing,
         d->nodeType = KoXmlNode::DocumentNode;
     }
 
-    QXmlInputSource source;
-    source.setData(text);
+    QXmlStreamReader reader(text);
+    reader.setNamespaceProcessing(namespaceProcessing);
 
     dt = KoXmlDocumentType();
-    bool result = d->setContent(&source, namespaceProcessing, errorMsg, errorLine, errorColumn);
+    bool result = d->setContent(&reader, errorMsg, errorLine, errorColumn);
     if (result && !isNull()) {
         dt.d->nodeType = KoXmlNode::DocumentTypeNode;
         dt.d->tagName = d->packedDoc->docType;
@@ -2707,92 +2552,6 @@ bool KoXmlDocument::setContent(const QString& text,
 }
 
 #endif
-
-// ==================================================================
-//
-//         KoXmlInputSource
-//
-// ==================================================================
-
-/*
-  This is the size of buffer every time we read a chunk of data from the device.
-
-  Note 1: maximum allocated space is thus 2*KOXML_BUFSIZE due to the
-  stringData (a QString instance).
-  TODO: use mmap to avoid double-buffering like this.
-
-  Note 2: a much larger buffer won't speed up significantly. This is because
-  the bottleneck is elsewhere, not here.
-
-*/
-
-#define KOXML_BUFSIZE 16*1024  // should be adequate
-
-KoXmlInputSource::KoXmlInputSource(QIODevice *dev): QXmlInputSource(),
-        device(dev)
-{
-    int mib = 106; // UTF-8
-    decoder = QTextCodec::codecForMib(mib)->makeDecoder();
-
-    stringLength = 0;
-    stringIndex = 0;
-    buffer = new char[KOXML_BUFSIZE];
-
-    reset();
-}
-
-KoXmlInputSource::~KoXmlInputSource()
-{
-    delete decoder;
-    delete [] buffer;
-}
-
-void KoXmlInputSource::setData(const QString& dat)
-{
-    Q_UNUSED(dat);
-}
-
-void KoXmlInputSource::setData(const QByteArray& dat)
-{
-    Q_UNUSED(dat);
-}
-
-void KoXmlInputSource::fetchData()
-{
-}
-
-QString KoXmlInputSource::data() const
-{
-    return QString();
-}
-
-QChar KoXmlInputSource::next()
-{
-    if (stringIndex >= stringLength) {
-        // read more data first
-        qint64 bytes = device->read(buffer, KOXML_BUFSIZE);
-        if (bytes == 0)
-            return EndOfDocument;
-
-        stringData = decoder->toUnicode(buffer, bytes);
-        stringLength = stringData.length();
-        stringIndex = 0;
-    }
-
-    return stringData[stringIndex++];
-}
-
-void KoXmlInputSource::reset()
-{
-    device->seek(0);
-}
-
-QString KoXmlInputSource::fromRawData(const QByteArray &data, bool beginning)
-{
-    Q_UNUSED(data);
-    Q_UNUSED(beginning);
-    return QString();
-}
 
 // ==================================================================
 //
@@ -2891,23 +2650,8 @@ bool KoXml::setDocument(KoXmlDocument& doc, QIODevice* device,
                         bool namespaceProcessing, QString* errorMsg, int* errorLine,
                         int* errorColumn)
 {
-    QXmlSimpleReader reader;
-    reader.setFeature(QLatin1String("http://xml.org/sax/features/namespaces"), namespaceProcessing);
-    reader.setFeature(QLatin1String("http://xml.org/sax/features/namespace-prefixes"), !namespaceProcessing);
-    reader.setFeature(QLatin1String("http://trolltech.com/xml/features/report-whitespace-only-CharData"), false);
-
-    KoXmlInputSource* source = new KoXmlInputSource(device);
-    bool result = doc.setContent(source, &reader, errorMsg, errorLine, errorColumn);
-    delete source;
+    QXmlStreamReader reader(device);
+    reader.setNamespaceProcessing(namespaceProcessing);
+    bool result = doc.setContent(&reader, errorMsg, errorLine, errorColumn);
     return result;
 }
-
-bool KoXml::setDocument(KoXmlDocument& doc, QIODevice* device,
-                        QXmlSimpleReader* reader, QString* errorMsg, int* errorLine, int* errorColumn)
-{
-    KoXmlInputSource* source = new KoXmlInputSource(device);
-    bool result = doc.setContent(source, reader, errorMsg, errorLine, errorColumn);
-    delete source;
-    return result;
-}
-

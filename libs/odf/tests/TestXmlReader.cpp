@@ -1243,7 +1243,7 @@ void TestXmlReader::testRootError()
     QCOMPARE(errorMsg.isEmpty(), false);
     QCOMPARE(errorMsg, QString("unexpected character"));
     QCOMPARE(errorLine, 1);
-    QCOMPARE(errorColumn, 17);
+    QCOMPARE(errorColumn, 21);
 }
 
 void TestXmlReader::testMismatchedTag()
@@ -1514,7 +1514,7 @@ void TestXmlReader::testSimpleOpenDocumentSpreadsheet()
 
     xmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     xmlstream << "<office:document-content ";
-    xmlstream << "xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\"";
+    xmlstream << "xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" ";
     xmlstream << "xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" ";
     xmlstream << "xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\">";
     xmlstream << "<office:body>";
@@ -2244,18 +2244,11 @@ void TestXmlReader::testLargeOpenDocumentSpreadsheet()
 
 #if 0
     // just to test parsing speed with plain dumb handler
-    QXmlSimpleReader* reader = new QXmlSimpleReader;
-    reader->setFeature("http://xml.org/sax/features/namespaces", true);
-    QXmlDefaultHandler handler;
-    reader->setContentHandler(&handler);
-    reader->setErrorHandler(&handler);
-    reader->setLexicalHandler(&handler);
-    reader->setDeclHandler(&handler);
-    reader->setDTDHandler(&handler);
-    QXmlInputSource xmlSource(&xmldevice);
+    QXmlStreamReader *reader = new QXmlStreamReader(xmldevice);
+    reader->setNamespaceProcessing(true);
     timer.start();
-    reader->parse(&xmlSource);
-    printf("Large spreadsheet: QXmlDefaultHandler parsing time is %d ms\n", timer.elapsed());
+    ParseError error = parseDocument(*reader, doc);
+    printf("Large spreadsheet: QXmlStreamReader parsing time is %d ms\n", timer.elapsed());
     delete reader;
     xmldevice.seek(0);
 #endif

@@ -29,6 +29,8 @@
 #include "KoOdfStylesReader.h"
 #include "KoXmlNS.h"
 
+#include <QXmlStreamReader>
+
 class KoOdfReadStore::Private
 {
 public:
@@ -53,18 +55,6 @@ KoOdfReadStore::KoOdfReadStore(KoStore *store)
 KoOdfReadStore::~KoOdfReadStore()
 {
     delete d;
-}
-
-void KoOdfReadStore::setupXmlReader(QXmlSimpleReader &reader, bool namespaceProcessing)
-{
-    if (namespaceProcessing) {
-        reader.setFeature("http://xml.org/sax/features/namespaces", true);
-        reader.setFeature("http://xml.org/sax/features/namespace-prefixes", false);
-    } else {
-        reader.setFeature("http://xml.org/sax/features/namespaces", false);
-        reader.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
-    }
-    reader.setFeature("http://trolltech.com/xml/features/report-whitespace-only-CharData", true);
 }
 
 KoStore * KoOdfReadStore::store() const
@@ -135,16 +125,10 @@ bool KoOdfReadStore::loadAndParse(QIODevice *fileDevice, KoXmlDocument &doc, QSt
     QString errorMsg;
     int errorLine, errorColumn;
 
-    // We need to be able to see the space in <text:span> </text:span>, this is why
-    // we activate the "report-whitespace-only-CharData" feature.
-    // Unfortunately this leads to lots of whitespace text nodes in between real
-    // elements in the rest of the document, watch out for that.
-    QXmlInputSource source(fileDevice);
-    // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
-    QXmlSimpleReader reader;
-    setupXmlReader(reader, true /*namespaceProcessing*/);
+    QXmlStreamReader reader(fileDevice);
+    reader.setNamespaceProcessing(true);
 
-    bool ok = doc.setContent(&source, &reader, &errorMsg, &errorLine, &errorColumn);
+    bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
         kError(30003) << "Parsing error in " << fileName << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl

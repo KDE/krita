@@ -1509,6 +1509,17 @@ void TestXmlReader::testWhitespace()
     QTextStream xmlstream(&xmldevice);
 
     // content.xml for testing paragraphs with whitespace
+    /* The list of elements for which whitespace should be preserved can be
+       obtained from the Relax NG schema with these commands:
+
+        cat OpenDocument-schema-v1.0-os.rng| xmlstarlet sel \
+         -N s="http://relaxng.org/ns/structure/1.0" -t -m '//s:text' \
+         -v '../@name' -n |grep :
+        cat OpenDocument-schema-v1.0-os.rng| xmlstarlet sel \
+         -N s="http://relaxng.org/ns/structure/1.0" \
+         -t -m "//s:ref[@name='paragraph-content']" -v '../../@name' -n |grep :
+    */
+
     xmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     xmlstream << "<office:document-content ";
     xmlstream << " xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\"";

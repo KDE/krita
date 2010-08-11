@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>494</width>
-    <height>357</height>
+    <height>353</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -331,7 +331,7 @@
               <item row="1" column="1">
                <widget class="QSpinBox" name="minimalShadeSelectorLineHeight">
                 <property name="minimum">
-                 <number>16</number>
+                 <number>8</number>
                 </property>
                 <property name="maximum">
                  <number>99</number>
@@ -398,7 +398,7 @@
                <x>0</x>
                <y>0</y>
                <width>265</width>
-               <height>111</height>
+               <height>114</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_4">
@@ -420,19 +420,6 @@
           </item>
          </layout>
         </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>

@@ -23,17 +23,30 @@
 class KisCanvas2;
 class KisShadeSelectorLineComboBox;
 
-class KisShadeSelectorLine : public QWidget
+class KisShadeSelectorLineBase : public QWidget {
+public:
+    KisShadeSelectorLineBase(QWidget *parent = 0) : QWidget(parent)
+    {}
+
+    void setLineNumber(int n) {m_lineNumber=n;}
+    virtual QString toString() const = 0;
+    virtual void fromString(const QString& string) = 0;
+
+protected:
+    int m_lineNumber;
+};
+
+class KisShadeSelectorLine : public KisShadeSelectorLineBase
 {
     Q_OBJECT
 public:
     explicit KisShadeSelectorLine(QWidget *parent = 0);
-    explicit KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta, QWidget *parent = 0);
-    void setDelta(qreal hue, qreal sat, qreal val);
+    explicit KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta, QWidget *parent = 0, qreal hueShift = 0, qreal satShift = 0, qreal shiftVal = 0);
+    void setParam(qreal hue, qreal sat, qreal val, qreal hueShift, qreal satShift, qreal shiftVal);
     void setColor(const QColor& color);
     void updateSettings();
     void setCanvas(KisCanvas2* canvas);
-    void setLineNumber(int n);
+    void showHelpText() {m_displayHelpText=true;}
     QString toString() const;
     void fromString(const QString& string);
 
@@ -49,6 +62,10 @@ private:
     qreal m_saturationDelta;
     qreal m_valueDelta;
 
+    qreal m_hueShift;
+    qreal m_saturationShift;
+    qreal m_valueShift;
+
     QColor m_color;
     QColor m_backgroundColor;
 
@@ -57,7 +74,7 @@ private:
     bool m_gradient;
     int m_patchCount;
     int m_lineHeight;
-    int m_lineNumber;
+    bool m_displayHelpText;
 
     KisCanvas2* m_canvas;
 

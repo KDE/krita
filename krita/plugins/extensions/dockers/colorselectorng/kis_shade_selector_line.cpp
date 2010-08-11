@@ -25,6 +25,7 @@
 #include <KConfigGroup>
 #include <KComponentData>
 #include <KGlobal>
+#include <KLocale>
 
 #include "KoResourceManager.h"
 #include "KoColorSpaceRegistry.h"
@@ -36,24 +37,28 @@
 #include <KDebug>
 
 KisShadeSelectorLine::KisShadeSelectorLine(QWidget *parent) :
-    QWidget(parent), m_canvas(0)
+    KisShadeSelectorLineBase(parent), m_displayHelpText(false), m_canvas(0)
 {
-    setDelta(0, 0, 0);
+    setParam(0, 0, 0, 0, 0, 0);
     updateSettings();
 }
 
-KisShadeSelectorLine::KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta, QWidget *parent) :
-    QWidget(parent), m_canvas(0)
+KisShadeSelectorLine::KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta, QWidget *parent, qreal hueShift, qreal satShift, qreal valShift) :
+    KisShadeSelectorLineBase(parent), m_displayHelpText(false), m_canvas(0)
 {
-    setDelta(hueDelta, satDelta, valDelta);
+    setParam(hueDelta, satDelta, valDelta, hueShift, satShift, valShift);
     updateSettings();
 }
 
-void KisShadeSelectorLine::setDelta(qreal hue, qreal sat, qreal val)
+void KisShadeSelectorLine::setParam(qreal hueDelta, qreal satDelta, qreal valDelta, qreal hueShift, qreal satShift, qreal valShift)
 {
-    m_hueDelta = hue;
-    m_saturationDelta = sat;
-    m_valueDelta = val;
+    m_hueDelta = hueDelta;
+    m_saturationDelta = satDelta;
+    m_valueDelta = valDelta;
+
+    m_hueShift = hueShift;
+    m_saturationShift = satShift;
+    m_valueShift = valShift;
 }
 
 void KisShadeSelectorLine::setColor(const QColor &color)
@@ -83,14 +88,9 @@ void KisShadeSelectorLine::setCanvas(KisCanvas2 *canvas)
             this,                        SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
 }
 
-void KisShadeSelectorLine::setLineNumber(int n)
-{
-    m_lineNumber=n;
-}
-
 QString KisShadeSelectorLine::toString() const
 {
-    return QString("%1|%2|%3|%4").arg(m_lineNumber).arg(m_hueDelta).arg(m_saturationDelta).arg(m_valueDelta);
+    return QString("%1|%2|%3|%4|%5|%6|%7").arg(m_lineNumber).arg(m_hueDelta).arg(m_saturationDelta).arg(m_valueDelta).arg(m_hueShift).arg(m_saturationShift).arg(m_valueShift);
 }
 
 void KisShadeSelectorLine::fromString(const QString& string)
@@ -100,6 +100,10 @@ void KisShadeSelectorLine::fromString(const QString& string)
     m_hueDelta = strili.at(1).toDouble();
     m_saturationDelta = strili.at(2).toDouble();
     m_valueDelta = strili.at(3).toDouble();
+    if(strili.size()==4) return;            // don't crash, if reading old config files.
+    m_hueShift = strili.at(4).toDouble();
+    m_saturationShift = strili.at(5).toDouble();
+    m_valueShift = strili.at(6).toDouble();
 }
 
 void KisShadeSelectorLine::paintEvent(QPaintEvent *)
@@ -135,18 +139,16 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
     qreal valueStep=m_valueDelta/qreal(patchCount);
 
     int z=0;
-    qreal colorHue = m_color.hueF();
-    if(colorHue<0) colorHue=0;
     for(int i=-patchCount/2; i<=patchCount/2; i++) {
         if(i==0 && patchCount%2==0) continue;
 
-        qreal hue=colorHue+(i*hueStep);
-        if(hue<0) hue+=1.;
-        if(hue>1) hue-=1.;
+        qreal hue=m_color.hueF()+(i*hueStep)+m_hueShift;
+        while(hue<0) hue+=1.;
+        while(hue>1) hue-=1.;
 
-        qreal saturation = qBound(0., m_color.saturationF()+(i*saturationStep), 1.);
+        qreal saturation = qBound(0., m_color.saturationF()+(i*saturationStep)+m_saturationShift, 1.);
 
-        qreal value = qBound(0., m_color.valueF()+(i*valueStep), 1.);
+        qreal value = qBound(0., m_color.valueF()+(i*valueStep)+m_valueShift, 1.);
 
 
         koColor.fromQColor(QColor::fromHsvF(hue, saturation, value));
@@ -156,6 +158,17 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
 
     QPainter wpainter(this);
     wpainter.drawImage(0,0, m_pixelCache);
+    if(m_displayHelpText) {
+        QString helpText(i18n("delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6")
+                         .arg(m_hueDelta)
+                         .arg(m_saturationDelta)
+                         .arg(m_valueDelta)
+                         .arg(m_hueShift)
+                         .arg(m_saturationShift)
+                         .arg(m_valueShift));
+        wpainter.setPen(QColor(255,255,255));
+        wpainter.drawText(rect(), helpText);
+    }
 }
 
 void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)

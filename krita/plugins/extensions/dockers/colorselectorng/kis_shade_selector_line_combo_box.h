@@ -30,7 +30,6 @@ public:
     explicit KisShadeSelectorLineComboBox(QWidget *parent = 0);
     void hidePopup();
     void showPopup();
-    void setConfiguration(const QString& stri);
     QString configuration() const;
     void setLineNumber(int n);
 //    QSize sizeHint() const;
@@ -39,6 +38,7 @@ protected:
     void resizeEvent(QResizeEvent *e);
 
 public slots:
+    void setConfiguration(const QString& stri);
     void updateSettings();
     void setGradient(bool);
     void setPatches(bool);

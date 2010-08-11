@@ -345,6 +345,14 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     grpOpenGL->setEnabled(false);
     cbUseOpenGLShaders->setEnabled(false);
 #endif
+
+    QStringList qtVersion = QString(qVersion()).split(".");
+    int versionNumber = qtVersion.at(0).toInt()*10000
+                        + qtVersion.at(1).toInt()*100
+                        + qtVersion.at(2).toInt();
+    if(versionNumber>=40603)
+        cbUseOpenGLToolOutlineWorkaround->hide();
+
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
     colorChecks->setColor(cfg.checkersColor());

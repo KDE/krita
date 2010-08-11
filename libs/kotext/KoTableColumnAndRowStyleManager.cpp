@@ -54,7 +54,7 @@ void KoTableColumnAndRowStyleManager::setColumnStyle(int column, const KoTableCo
         return;
     }
 
-    if (d->tableColumnStyles.value(column) == columnStyle) {
+    if (column < d->tableColumnStyles.size() && d->tableColumnStyles.value(column) == columnStyle) {
         return;
     }
 
@@ -82,7 +82,7 @@ void KoTableColumnAndRowStyleManager::setRowStyle(int row, const KoTableRowStyle
         return;
     }
 
-    if (d->tableRowStyles.value(row) == rowStyle) {
+    if (row < d->tableRowStyles.size() && d->tableRowStyles.value(row) == rowStyle) {
         return;
     }
 

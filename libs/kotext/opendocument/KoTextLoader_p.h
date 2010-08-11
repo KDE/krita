@@ -26,21 +26,27 @@
 // into single spaces
 class KoTextLoaderP {
 public:
+    inline static bool isspace(ushort ch) {
+        // options are ordered by likelyhood
+        return ch == ' ' || ch== '\n' || ch == '\r' ||  ch == '\t';
+    }
+
 static QString normalizeWhitespace(const QString &in, bool leadingSpace)
 {
-    QString text = in;
+    QString textstring = in;
+    ushort *text = (ushort*)textstring.data(); // this detaches from the string 'in'
     int r, w = 0;
-    int len = text.length();
+    int len = textstring.length();
     for (r = 0; r < len; ++r) {
-        QChar ch = text.at(r);
+        const ushort ch = text[r];
         // check for space, tab, line feed, carriage return
-        if (ch.unicode() == ' ' || ch.unicode() == '\t' || ch.unicode() == '\r' ||  ch.unicode() == '\n') {
+        if (isspace(ch)) {
             // if we were lead by whitespace in some parent or previous sibling element,
             // we completely collapse this space
             if (r != 0 || !leadingSpace)
-                text[w++] = QChar(' ');
+                text[w++] = ' ';
             // find the end of the whitespace run
-            while (r < len && text.at(r).isSpace())
+            while (r < len && isspace(text[r]))
                 ++r;
             // and then record the next non-whitespace character
             if (r < len)
@@ -50,7 +56,7 @@ static QString normalizeWhitespace(const QString &in, bool leadingSpace)
         }
     }
     // and now trim off the unused part of the string
-    text.truncate(w);
-    return text;
+    textstring.truncate(w);
+    return textstring;
 }
 };

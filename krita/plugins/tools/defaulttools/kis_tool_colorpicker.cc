@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -63,6 +64,8 @@ KisToolColorPicker::KisToolColorPicker(KoCanvasBase* canvas)
     m_updateColor = true;
     m_normaliseValues = false;
     m_pickedColor = KoColor();
+    m_colorPicking = false;
+    m_toForegroundColor = true;
 }
 
 KisToolColorPicker::~KisToolColorPicker()
@@ -76,40 +79,14 @@ void KisToolColorPicker::paint(QPainter& gc, const KoViewConverter &converter)
     Q_UNUSED(converter);
 }
 
-void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
+void KisToolColorPicker::pickColor(const QPointF& pos)
 {
-    if (canvas()) {
-        if (event->button() != Qt::LeftButton && event->button() != Qt::RightButton)
-            return;
-
-        if (!currentImage())
-            return;
-
-        if (!currentNode())
-            return;
-
-        bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
-        if (!sampleMerged) {
-            if (!currentNode()) {
-                KMessageBox::information(0, i18n("Cannot pick a color as no layer is active."));
-                return;
-            }
-            if (!currentNode()->visible()) {
-                KMessageBox::information(0, i18n("Cannot pick a color as the active layer is not visible."));
-                return;
-            }
-        }
-
         KisPaintDeviceSP dev = currentNode()->paintDevice();
         if (!dev) return;
 
-        QPoint pos = convertToIntPixelCoord(event);
 
-        if (!currentImage()->bounds().contains(pos)) {
-            return;
-        }
-
-        if (sampleMerged) {
+        
+        if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
             dev = currentImage()->mergedImage();
         }
 
@@ -156,44 +133,87 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
             cs->mixColorsOp()->mixColors(cpixels, weights, counts[m_radius], data);
             m_pickedColor = KoColor(data, cs);
 
-            for (i = 0; i < counts[m_radius]; i++)
+            for (i = 0; i < counts[m_radius]; i++){
                 delete[] pixels[i];
+            }
             delete[] pixels;
             delete[] data;
         }
-
-        displayPickedColor();
-
+        
         if (m_updateColor) {
-            if (event->button() == Qt::LeftButton)
+            if (m_toForegroundColor)
                 canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor, m_pickedColor);
             else
                 canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor, m_pickedColor);
         }
 
-        if (m_addPalette) {
-            KoColorSetEntry ent;
-            ent.color = m_pickedColor;
-            // We don't ask for a name, too intrusive here
+        
+}
 
-            KoColorSet* palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
-            palette->add(ent);
 
-            if (!palette->save()) {
-                KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()), i18n("Palette"));
+void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
+{
+    if (canvas()) {
+        if (event->button() != Qt::LeftButton && event->button() != Qt::RightButton){
+            return;
+        }
+
+        if (!currentImage()){
+            return;
+        }
+
+        bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
+        if (!sampleMerged) {
+            if (!currentNode()) {
+                KMessageBox::information(0, i18n("Cannot pick a color as no layer is active."));
+                return;
+            }
+            if (!currentNode()->visible()) {
+                KMessageBox::information(0, i18n("Cannot pick a color as the active layer is not visible."));
+                return;
             }
         }
+
+        QPoint pos = convertToIntPixelCoord(event);
+        // the color picking has to start in the visible part of the layer 
+        if (!currentImage()->bounds().contains(pos)) {
+            return;
+        }
+        
+        m_colorPicking = true;
+        m_toForegroundColor = (event->button() == Qt::LeftButton);
+        
+        pickColor(pos);
+        displayPickedColor();
+
     }
 }
 
 void KisToolColorPicker::mouseMoveEvent(KoPointerEvent *event)
 {
-    Q_UNUSED(event);
+    if (m_colorPicking){
+        QPoint pos = convertToIntPixelCoord(event);
+        pickColor(pos);
+        displayPickedColor();
+    }
 }
 
 void KisToolColorPicker::mouseReleaseEvent(KoPointerEvent *event)
 {
-    Q_UNUSED(event);
+    if (m_addPalette) {
+        KoColorSetEntry ent;
+        ent.color = m_pickedColor;
+        // We don't ask for a name, too intrusive here
+
+        KoColorSet* palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
+        palette->add(ent);
+
+        if (!palette->save()) {
+            KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()), i18n("Palette"));
+        }
+    }
+    
+    m_colorPicking = false;
 }
 
 void KisToolColorPicker::displayPickedColor()

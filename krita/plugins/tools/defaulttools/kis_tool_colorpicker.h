@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -68,7 +69,10 @@ public slots:
 
 private:
     void displayPickedColor();
+    void pickColor(const QPointF& pos);
 
+    bool m_toForegroundColor;
+    bool m_colorPicking;
     bool m_updateColor;
     bool m_addPalette;
     bool m_normaliseValues;

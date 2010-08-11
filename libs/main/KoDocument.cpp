@@ -277,6 +277,8 @@ void KoBrowserExtension::print()
 namespace {
     KoMainWindow *currentShell(KoDocument *doc)
     {
+        if (!doc) return 0;
+
         QWidget *widget = qApp->activeWindow();
         KoMainWindow *shell = qobject_cast<KoMainWindow*>(widget);
         while (!shell && widget) {
@@ -284,8 +286,9 @@ namespace {
             shell = qobject_cast<KoMainWindow*>(widget);
         }
 
-        if (!shell)
+        if (!shell && doc && doc->shells().size() > 0) {
             shell = doc->shells().first();
+        }
         return shell;
     }
     class DocumentProgressProxy : public KoProgressProxy {
@@ -307,7 +310,10 @@ namespace {
         }
 
         void setValue(int value) {
-            currentShell(m_doc)->slotProgress(value);
+            KoMainWindow *mainWindow = currentShell(m_doc);
+            if (mainWindow) {
+                mainWindow->slotProgress(value);
+            }
         }
 
         void setRange(int /*minimum*/, int /*maximum*/) {

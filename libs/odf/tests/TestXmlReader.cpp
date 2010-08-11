@@ -31,6 +31,7 @@ private slots:
     void testMismatchedTag();
     void testConvertQDomElement();
     void testSimpleOpenDocumentText();
+    void testWhitespace();
     void testSimpleOpenDocumentSpreadsheet();
     void testSimpleOpenDocumentPresentation();
     void testSimpleOpenDocumentFormula();
@@ -1495,6 +1496,47 @@ void TestXmlReader::testSimpleOpenDocumentText()
     QCOMPARE(parElement.tagName(), QString("p"));
     QCOMPARE(parElement.text(), QString("Hello, world!"));
     QCOMPARE(parElement.attributeNS(QString(textNS), "style-name", ""), QString("Standard"));
+}
+
+void TestXmlReader::testWhitespace()
+{
+    QString errorMsg;
+    int errorLine = 0;
+    int errorColumn = 0;
+
+    QBuffer xmldevice;
+    xmldevice.open(QIODevice::WriteOnly);
+    QTextStream xmlstream(&xmldevice);
+
+    // content.xml for testing paragraphs with whitespace
+    xmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    xmlstream << "<office:document-content ";
+    xmlstream << " xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\"";
+    xmlstream << " xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\">";
+    xmlstream << "   <text:p> </text:p>";
+    xmlstream << "   <text:p> <text:span/> </text:p>";
+    xmlstream << "</office:document-content>";
+    xmldevice.close();
+
+    KoXmlDocument doc;
+    QCOMPARE(doc.setContent(&xmldevice, true, &errorMsg, &errorLine, &errorColumn), true);
+    QCOMPARE(errorMsg.isEmpty(), true);
+    QCOMPARE(errorLine, 0);
+    QCOMPARE(errorColumn, 0);
+
+    KoXmlElement p1;
+    p1 = doc.documentElement().firstChild().toElement();
+    QCOMPARE(p1.isNull(), false);
+    QCOMPARE(p1.isElement(), true);
+    QEXPECT_FAIL("", "Whitespace handling should be fixed.", Continue);
+    QCOMPARE(KoXml::childNodesCount(p1), 1);
+
+    KoXmlElement p2;
+    p2 = p1.nextSibling().toElement();
+    QCOMPARE(p2.isNull(), false);
+    QCOMPARE(p2.isElement(), true);
+    QEXPECT_FAIL("", "Whitespace handling should be fixed.", Continue);
+    QCOMPARE(KoXml::childNodesCount(p2), 3);
 }
 
 void TestXmlReader::testSimpleOpenDocumentSpreadsheet()

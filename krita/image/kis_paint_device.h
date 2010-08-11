@@ -115,7 +115,7 @@ public:
      * the default pixel in not completely transarent
      */
     virtual void setDefaultBounds(KisDefaultBounds bounds);
-    
+
      /**
      * the default bounds rect of the paint device
      */
@@ -530,7 +530,7 @@ public:
      * @param selection an up-to-date selection that has the same origin as the paint device
      * @return an iterator which points to the first pixel of an rectangle
      */
-    KisRectIteratorPixel createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h, const KisSelection * selection = 0);
+    KDE_DEPRECATED KisRectIteratorPixel createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h, const KisSelection * selection = 0);
 
     /**
      * Create an iterator over a rectangle section of a paint device, the path followed by
@@ -541,22 +541,29 @@ public:
      * @param selection an up-to-date selection that has the same origin as the paint device* @return an iterator which points to the first pixel of an rectangle, this iterator
      * does not allow to change the pixel values
      */
-    KisRectConstIteratorPixel createRectConstIterator(qint32 left, qint32 top, qint32 w, qint32 h, const KisSelection * selection = 0) const;
+    KDE_DEPRECATED  KisRectConstIteratorPixel createRectConstIterator(qint32 left, qint32 top, qint32 w, qint32 h, const KisSelection * selection = 0) const;
 
     /**
      * @param selection an up-to-date selection that has the same origin as the paint device
      * @return an iterator which points to the first pixel of a horizontal line, this iterator
      * does not allow to change the pixel values
      */
-    KisHLineConstIteratorPixel createHLineConstIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection = 0) const;
+    KDE_DEPRECATED KisHLineConstIteratorPixel createHLineConstIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection = 0) const;
 
     KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w);
+
     KisHLineConstIteratorSP createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const;
+
     KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h);
+
     KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const;
+
     KisRectIteratorSP createRectIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h);
+
     KisRectConstIteratorSP createRectConstIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h) const;
+
     KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y);
+
     KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const;
 
     /**
@@ -578,19 +585,19 @@ public:
     * @param selection an up-to-date selection that has the same origin as the paint device
      * @return an iterator which points to the first pixel of a horizontal line
      */
-    KisHLineIteratorPixel createHLineIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection = 0);
+    KDE_DEPRECATED KisHLineIteratorPixel createHLineIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection = 0);
 
     /**
      * @param selection an up-to-date selection that has the same origin as the paint device
      * This function return an iterator which points to the first pixel of a vertical line
      */
-    KisVLineIteratorPixel createVLineIterator(qint32 x, qint32 y, qint32 h, const KisSelection * selection = 0);
+    KDE_DEPRECATED KisVLineIteratorPixel createVLineIterator(qint32 x, qint32 y, qint32 h, const KisSelection * selection = 0);
 
     /**
      * @param selection an up-to-date selection that has the same origin as the paint device
      * This function return an iterator which points to the first pixel of a vertical line
      */
-    KisVLineConstIteratorPixel createVLineConstIterator(qint32 x, qint32 y, qint32 h, const KisSelection * selection = 0) const;
+    KDE_DEPRECATED KisVLineConstIteratorPixel createVLineConstIterator(qint32 x, qint32 y, qint32 h, const KisSelection * selection = 0) const;
 
     /**
      * This function creates a random accessor which allow to randomly access any pixels on
@@ -600,7 +607,7 @@ public:
      * @param x, y starting point of the accessor
      * @param selection an up-to-date selection that has the same origin as the paint device
      */
-    KisRandomAccessorPixel createRandomAccessor(qint32 x, qint32 y, const KisSelection * selection = 0);
+    KDE_DEPRECATED KisRandomAccessorPixel createRandomAccessor(qint32 x, qint32 y, const KisSelection * selection = 0);
 
     /**
      * This function creates a random accessor which allow to randomly access any pixels on
@@ -609,7 +616,7 @@ public:
      * you can.
      * @param selection an up-to-date selection that has the same origin as the paint device
      */
-    KisRandomConstAccessorPixel createRandomConstAccessor(qint32 x, qint32 y, const KisSelection * selection = 0) const;
+    KDE_DEPRECATED KisRandomConstAccessorPixel createRandomConstAccessor(qint32 x, qint32 y, const KisSelection * selection = 0) const;
 
     /**
      * This function create a random accessor which can easily access to sub pixel values.

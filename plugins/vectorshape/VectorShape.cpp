@@ -254,14 +254,16 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
     KoStore *store  = context.odfLoadingContext().store();
     bool     result = store->open(href);
 
-    if (!result)
+    if (!result) {
         return false;
+    }
 
     // Store the size and make a sanity check.
     // The size of the minimum EMF header record is 88.
     m_size = store->size();
     if (m_size < 88) {
         m_size = 0;
+        store->close();
         return false;
     }
 

@@ -130,7 +130,6 @@ void KisColorSelector::setConfiguration(Configuration conf)
 
     QResizeEvent event(QSize(width(), height()), QSize());
     resizeEvent(&event);
-    setColor(QColor(255,0,0));
 }
 
 KisColorSelector::Configuration KisColorSelector::configuration() const
@@ -270,8 +269,6 @@ bool KisColorSelector::displaySettingsButton()
 
 void KisColorSelector::setColor(const QColor &color)
 {
-//    m_ring->mouseEvent(-1,-1);
-//    m_triangle->setParam(color.hueF());
     m_mainComponent->setColor(color);
     m_subComponent->setColor(color);
     update();

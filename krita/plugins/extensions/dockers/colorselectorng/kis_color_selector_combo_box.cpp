@@ -123,6 +123,7 @@ KisColorSelectorComboBox::KisColorSelectorComboBox(QWidget* parent) :
     layout->addWidget(&m_currentSelector);
     m_currentSelector.setEnabled(false);
     m_currentSelector.setDisplayBlip(false);
+    m_currentSelector.setColor(QColor(255,0,0));
 
     // 30 pixels for the arrow of the combobox
     setMinimumSize(m_private->selectorSize+m_private->spacing+30,m_private->selectorSize+m_private->spacing);

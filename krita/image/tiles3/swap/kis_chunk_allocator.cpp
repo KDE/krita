@@ -170,7 +170,7 @@ bool KisChunkAllocator::sanityCheck(bool pleaseCrash)
     return !failed;
 }
 
-qreal KisChunkAllocator::debugFragmentation(bool stdout)
+qreal KisChunkAllocator::debugFragmentation(bool toStderr)
 {
     KisChunkDataListIterator i;
 
@@ -195,7 +195,7 @@ qreal KisChunkAllocator::debugFragmentation(bool stdout)
     if(totalSize)
         fragmentation = qreal(free) / totalSize;
 
-    if(stdout) {
+    if(toStderr) {
         qDebug() << "Hard store limit:\t" << m_storeMaxSize;
         qDebug() << "Slab size:\t\t" << m_storeSlabSize;
         qDebug() << "Num slabs:\t\t" << m_storeSize / m_storeSlabSize;

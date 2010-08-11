@@ -142,7 +142,7 @@ public:
 
     void debugChunks();
     bool sanityCheck(bool pleaseCrash = true);
-    qreal debugFragmentation(bool stdout = true);
+    qreal debugFragmentation(bool toStderr = true);
 
 private:
     bool tryInsertChunk(KisChunkDataList &list,

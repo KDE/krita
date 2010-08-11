@@ -68,14 +68,6 @@ public:
     QList<KoPAPageBase *> loadOdfMasterPages( const QHash<QString, KoXmlElement*> masterStyles, KoPALoadingContext & context );
 
     /**
-     * Load pages
-     *
-     * @param body
-     * @param context
-     */
-    QList<KoPAPageBase *> loadOdfPages( const KoXmlElement & body, KoPALoadingContext & context );
-
-    /**
      * Save pages
      *
      * This is used by saveOdf and for copy and paste of pages.
@@ -322,6 +314,18 @@ protected:
 
     /// set the page count so it gets shown correctly in variables
     void updatePageCount();
+
+private:
+
+    friend class KoPAPastePage;
+    /**
+     * Load pages
+     *
+     * @param body
+     * @param context
+     */
+    QList<KoPAPageBase *> loadOdfPages( const KoXmlElement & body, KoPALoadingContext & context );
+
 
 private:
     class Private;

@@ -269,7 +269,7 @@ void KisToolPaint::updateTabletPressureSamples()
     KisConfig cfg;
     KisCubicCurve curve;
     curve.fromString(cfg.pressureTabletCurve());
-    m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION);
+    m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION + 1);
 }
 
 

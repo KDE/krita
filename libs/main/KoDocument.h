@@ -848,7 +848,7 @@ signals:
      * Your KoDocument-derived class should emit the signal now and then during load/save.
      * KoMainWindow will take care of displaying a progress bar automatically.
      */
-    void sigProgress_(int value); // _ is added to help remove bad calls to it
+    void sigProgress(int value);
 
     /**
      * Emitted e.g. at the beginning of a save operation

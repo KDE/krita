@@ -58,7 +58,8 @@ enum enumBrushMode {
     PAINT,
     HOVER,
     EDIT_BRUSH,
-    PAN
+    PAN,
+    COLOR_PICKING
 };
 
 // wacom 

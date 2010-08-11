@@ -97,6 +97,7 @@ private:
     QPointF adjustPosition(const QPointF& point);
     void queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* previousJob);
     void showOutlineTemporary();
+    void pickColor(const QPoint &pos, bool currentNode);
     
 private slots:
 
@@ -160,6 +161,8 @@ private:
     
     QTimer m_timer;
     bool m_showOutline;
+    
+    bool m_toForegroundColor;
 };
 
 

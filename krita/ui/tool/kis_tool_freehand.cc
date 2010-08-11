@@ -163,27 +163,19 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         return;
 
     // control-click gets the color at the current point. For now, only with a ratio of 1
-    if (e->modifiers() & Qt::AltModifier && e->modifiers() & Qt::ControlModifier) {
-        if (e->button() == Qt::LeftButton)
-            canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor,
-                                                     KisToolUtils::pick(currentNode()->paintDevice(),
-                                                                        convertToIntPixelCoord(e)));
-        else
-            canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor,
-                                                     KisToolUtils::pick(currentNode()->paintDevice(),
-                                                                        convertToIntPixelCoord(e)));
-    } else if ( e->modifiers() & Qt::ControlModifier ) {
-        // get the current color of the project, as per Deevad's suggestion.
-        // this shouldn't be changed back to the current node :-)
-        KisPaintDeviceSP projection = image()->projection();
-        if (e->button() == Qt::LeftButton)
-            canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor,
-                                                     KisToolUtils::pick(projection, convertToIntPixelCoord(e)));
-        else
-            canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor,
-                                                     KisToolUtils::pick(projection, convertToIntPixelCoord(e)));
-
-    } else if (e->modifiers() == Qt::ShiftModifier) {
+    // get the current color of the project, as per Deevad's suggestion.
+    // this shouldn't be changed back to the current node :-)
+    // CTRL+ALT picks color from current layer
+    // CTRL picks color from projection
+    if (e->modifiers() & Qt::ControlModifier) {
+        
+        m_toForegroundColor = (e->button() == Qt::LeftButton);
+        pickColor(convertToIntPixelCoord(e),e->modifiers() & Qt::AltModifier);
+        m_mode = COLOR_PICKING;
+        useCursor(KisCursor::pickerCursor());
+        e->accept();
+        
+   } else if (e->modifiers() == Qt::ShiftModifier) {
         m_mode = EDIT_BRUSH;
         m_prevMousePos = e->point;
         m_originalPos = e->globalPos();
@@ -262,6 +254,17 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     case PAN: {
             pan(e);
         }
+        break;
+    case COLOR_PICKING:{
+            useCursor(KisCursor::pickerCursor());
+            if (e->modifiers() & Qt::ControlModifier) {
+                pickColor(convertToIntPixelCoord(e), e->modifiers() & Qt::AltModifier);
+            }else {
+                // DO Nothing
+            }
+            
+        }
+        break;
     default:
         ;
     }
@@ -304,15 +307,16 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 {
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-
-    if (canvas2->handlePopupPaletteIsVisible(e)) return;
+    if (canvas2->handlePopupPaletteIsVisible(e)) {
+        return;
+    }
     else if (e->button() == Qt::LeftButton) {
-
         //TODO: There is a bug here. If pop up palette is visible and a new colour is selected,
         //the new colour will be added when the user clicks on the canvas to hide the palette
         //This is used to handle recently used colour (KoFavoriteResourceManager)
         emit sigPainting();
     }
+    
     switch (m_mode) {
     case PAINT:
         if (!m_hasPaintAtLeastOnce)
@@ -330,7 +334,11 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
     default:
         ;
     };
-    KisToolPaint::mouseReleaseEvent(e);
+    
+    if (m_mode != COLOR_PICKING){ 
+        KisToolPaint::mouseReleaseEvent(e);
+    }
+    
     m_mode = HOVER;
     resetCursorStyle();
 }
@@ -345,7 +353,9 @@ void KisToolFreehand::keyPressEvent(QKeyEvent *event)
         useCursor(Qt::OpenHandCursor);
 
         event->accept();
-    } else {
+    }/* else if (event->key() == Qt::Key_Control){ // we need to reset the cursor back when the user does not hold any key so commented so far
+        useCursor(KisCursor::pickerCursor());
+    }*/else {
         event->ignore();
     }
 }
@@ -727,6 +737,17 @@ void KisToolFreehand::hideOutline()
     m_showOutline = false;
     //canvas()->updateCanvas(m_oldOutlineRect);
     canvas()->updateCanvas(QRect(QPoint(0, 0), QSize(currentImage()->width(), currentImage()->height())));
+}
+
+
+void KisToolFreehand::pickColor(const QPoint &pos, bool fromCurrentNode)
+{
+    int key = m_toForegroundColor ? KoCanvasResource::ForegroundColor : KoCanvasResource::BackgroundColor;
+    if (fromCurrentNode){
+            canvas()->resourceManager()->setResource(key,KisToolUtils::pick( currentNode()->paintDevice(),pos));
+    } else /* projection */{
+            canvas()->resourceManager()->setResource(key,KisToolUtils::pick( image()->projection(), pos));
+    }
 }
 
 

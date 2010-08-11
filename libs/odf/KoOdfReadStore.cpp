@@ -127,7 +127,7 @@ bool KoOdfReadStore::loadAndParse(QIODevice *fileDevice, KoXmlDocument &doc, QSt
 
     QXmlStreamReader reader(fileDevice);
     reader.setNamespaceProcessing(true);
-
+    fileDevice->open(QIODevice::ReadOnly);
     bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
         kError(30003) << "Parsing error in " << fileName << "! Aborting!" << endl

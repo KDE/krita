@@ -84,7 +84,7 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     connect(settings, SIGNAL(settingsChanged()), this,                     SIGNAL(settingsChanged()));
     connect(this,     SIGNAL(settingsChanged()), this,                     SLOT(updateLayout()));
     connect(this,     SIGNAL(settingsChanged()), m_commonColorsWidget,     SLOT(updateSettings()));
-    connect(this,     SIGNAL(settingsChanged()), m_colorHistoryWidget,       SLOT(updateSettings()));
+    connect(this,     SIGNAL(settingsChanged()), m_colorHistoryWidget,     SLOT(updateSettings()));
     connect(this,     SIGNAL(settingsChanged()), m_colorSelectorContainer, SIGNAL(settingsChanged()));
     connect(this,     SIGNAL(settingsChanged()), this,                     SLOT(update()));
 

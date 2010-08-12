@@ -35,6 +35,7 @@
 KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent) :
     KisColorSelectorBase(parent), m_allowColorListChangeGuard(true), m_scrollValue(0), m_configPrefix(configPrefix)
 {
+    resize(1, 1);
     updateSettings();
 
 //    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -122,6 +123,9 @@ void KisColorPatches::wheelEvent(QWheelEvent* event)
 
 void KisColorPatches::resizeEvent(QResizeEvent* event)
 {
+    if(size()==QSize(1, 1))
+        return;
+
     QWheelEvent dummyWheelEvent(QPoint(), 0, Qt::NoButton, Qt::NoModifier);
     wheelEvent(&dummyWheelEvent);
 
@@ -141,8 +145,6 @@ void KisColorPatches::resizeEvent(QResizeEvent* event)
             setMinimumWidth(widthForHeight(height()));
         }
     }
-
-    QWidget::resizeEvent(event);
 }
 
 void KisColorPatches::mouseReleaseEvent(QMouseEvent* event)
@@ -279,9 +281,9 @@ void KisColorPatches::updateSettings()
     }
 
     setMaximumWidth(QWIDGETSIZE_MAX);
-    setMinimumWidth(m_patchWidth);
+    setMinimumWidth(1);
     setMaximumHeight(QWIDGETSIZE_MAX);
-    setMinimumHeight(m_patchHeight);
+    setMinimumHeight(1);
 
     if(m_allowScrolling && m_direction == Horizontal) {
         setMaximumHeight(m_numRows*m_patchHeight);

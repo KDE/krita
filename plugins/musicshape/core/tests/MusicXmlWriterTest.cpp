@@ -253,6 +253,7 @@ bool validateOutput(Sheet* sheet, const char* fname)
     KoXmlDocument valid;
     KoXml::setDocument(valid, &validFile, true);
 
+    dev->reset();
     KoXmlDocument result;
     KoXml::setDocument(result, dev, true);
 

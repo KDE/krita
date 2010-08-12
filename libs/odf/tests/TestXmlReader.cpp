@@ -1242,7 +1242,7 @@ void TestXmlReader::testRootError()
     KoXmlDocument doc;
     QCOMPARE(doc.setContent(&xmldevice, &errorMsg, &errorLine, &errorColumn), false);
     QCOMPARE(errorMsg.isEmpty(), false);
-    QCOMPARE(errorMsg, QString("unexpected character"));
+    QCOMPARE(errorMsg, QString("Extra content at end of document."));
     QCOMPARE(errorLine, 1);
     QCOMPARE(errorColumn, 21);
 }
@@ -1262,7 +1262,7 @@ void TestXmlReader::testMismatchedTag()
     KoXmlDocument doc;
     QCOMPARE(doc.setContent(&xmldevice, &errorMsg, &errorLine, &errorColumn), false);
     QCOMPARE(errorMsg.isEmpty(), false);
-    QCOMPARE(errorMsg, QString("tag mismatch"));
+    QCOMPARE(errorMsg, QString("Opening and ending tag mismatch."));
     QCOMPARE(errorLine, 1);
     QCOMPARE(errorColumn, 11);
 }

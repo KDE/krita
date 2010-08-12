@@ -1037,7 +1037,7 @@ namespace {
         ParseError() :errorLine(-1), errorColumn(-1), error(false) {}
     };
 
-    void parseElement(QXmlStreamReader &xml, KoXmlPackedDocument &doc, ParseError &error);
+    void parseElement(QXmlStreamReader &xml, KoXmlPackedDocument &doc);
 
     // parse one element as if this were a standalone xml document
     ParseError parseDocument(QXmlStreamReader &xml, KoXmlPackedDocument &doc) {
@@ -1047,7 +1047,7 @@ namespace {
         while (!xml.atEnd() && xml.tokenType() != QXmlStreamReader::EndDocument) {
             switch (xml.tokenType()) {
             case QXmlStreamReader::StartElement:
-                parseElement(xml, doc, error);
+                parseElement(xml, doc);
                 break;
             case QXmlStreamReader::DTD:
                 doc.addDTD(xml.dtdName().toString());
@@ -1067,13 +1067,7 @@ namespace {
         }
         if (xml.hasError()) {
             error.error = true;
-            if (xml.tokenType() == QXmlStreamReader::Invalid) {
-                if (error.errorMsg.isNull()) {
-                    error.errorMsg = "unexpected character";
-                }
-            } else {
-                error.errorMsg = xml.errorString();
-            }
+            error.errorMsg = xml.errorString();
             error.errorColumn = xml.columnNumber();
             error.errorLine = xml.lineNumber();
         } else {
@@ -1082,7 +1076,7 @@ namespace {
         return error;
     }
 
-    void parseElementContents(QXmlStreamReader &xml, KoXmlPackedDocument &doc, ParseError &error)
+    void parseElementContents(QXmlStreamReader &xml, KoXmlPackedDocument &doc)
     {
         xml.readNext();
         QString ws;
@@ -1097,7 +1091,7 @@ namespace {
                 return;
             case QXmlStreamReader::StartElement:
                 sawElement = true;
-                parseElement(xml, doc, error);
+                parseElement(xml, doc);
                 break;
             case QXmlStreamReader::Characters:
                 if (xml.isCDATA()) {
@@ -1118,8 +1112,7 @@ namespace {
         }
     }
 
-    void parseElement(QXmlStreamReader &xml, KoXmlPackedDocument &doc,
-                      ParseError &error) {
+    void parseElement(QXmlStreamReader &xml, KoXmlPackedDocument &doc) {
         // reader.tokenType() is now QXmlStreamReader::StartElement
         doc.addElement(xml.qualifiedName().toString(),
                        fixNamespace(xml.namespaceUri().toString()));
@@ -1131,13 +1124,7 @@ namespace {
                              a->value().toString());
             ++a;
         }
-        parseElementContents(xml, doc, error);
-        if (xml.atEnd()) {
-            if (xml.error() == QXmlStreamReader::NotWellFormedError) {
-                error.errorMsg = "tag mismatch";
-            }
-            return;
-        }
+        parseElementContents(xml, doc);
         // reader.tokenType() is now QXmlStreamReader::EndElement
         doc.closeElement();
     }

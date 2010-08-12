@@ -1539,7 +1539,6 @@ void TestXmlReader::testWhitespace()
     p1 = doc.documentElement().firstChild().toElement();
     QCOMPARE(p1.isNull(), false);
     QCOMPARE(p1.isElement(), true);
-    QEXPECT_FAIL("", "Whitespace handling should be fixed.", Continue);
     QCOMPARE(KoXml::childNodesCount(p1), 1);
 
     KoXmlElement p2;

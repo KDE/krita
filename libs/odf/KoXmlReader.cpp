@@ -77,6 +77,7 @@
 #include <qxml.h>
 #include <qdom.h>
 #include <QXmlStreamReader>
+#include <QXmlStreamEntityResolver>
 
 #include <QBuffer>
 #include <QByteArray>
@@ -2483,6 +2484,17 @@ void KoXmlDocument::clear()
     d->emptyDocument = false;
 }
 
+namespace {
+    /* Use an entity resolver that ignores undefined entities and simply
+       returns an empty string for them.
+       */
+    class DumbEntityResolver : public QXmlStreamEntityResolver {
+    public:
+        QString resolveUndeclaredEntity ( const QString &) { return ""; }
+    };
+
+}
+
 bool KoXmlDocument::setContent(QXmlStreamReader *reader,
                                QString* errorMsg, int* errorLine, int* errorColumn)
 {
@@ -2522,6 +2534,8 @@ bool KoXmlDocument::setContent(QIODevice* device, bool namespaceProcessing,
     device->open(QIODevice::ReadOnly);
     QXmlStreamReader reader(device);
     reader.setNamespaceProcessing(namespaceProcessing);
+    DumbEntityResolver entityResolver;
+    reader.setEntityResolver(&entityResolver);
 
     dt = KoXmlDocumentType();
     bool result = d->setContent(&reader, errorMsg, errorLine, errorColumn);
@@ -2553,6 +2567,8 @@ bool KoXmlDocument::setContent(const QString& text, bool namespaceProcessing,
 
     QXmlStreamReader reader(text);
     reader.setNamespaceProcessing(namespaceProcessing);
+    DumbEntityResolver entityResolver;
+    reader.setEntityResolver(&entityResolver);
 
     dt = KoXmlDocumentType();
     bool result = d->setContent(&reader, errorMsg, errorLine, errorColumn);

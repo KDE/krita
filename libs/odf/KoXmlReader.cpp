@@ -111,6 +111,29 @@
 // this is used to quickly get namespaced attribute(s)
 typedef QPair<QString, QString> KoXmlStringPair;
 
+class KoQName {
+public:
+    QString nsURI;
+    QString name;
+
+    explicit KoQName(const QString& nsURI_, const QString& name_)
+        : nsURI(nsURI_), name(name_) {}
+    bool operator==(const KoQName& qname) const {
+        // local name is more likely to differ, so compare that first
+        return name == qname.name && nsURI == qname.nsURI;
+    }
+};
+
+uint qHash(const KoQName& qname)
+{
+    // possibly add a faster hash function that only includes some trailing
+    // part of the nsURI
+
+    // in case of doubt, use this:
+    // return qHash(qname.nsURI)^qHash(qname.name);
+    return qHash(qname.nsURI)^qHash(qname.name);
+}
+
 // this simplistic hash is rather fast-and-furious. it works because
 // likely there is very few namespaced attributes per element
 static inline uint qHash(const KoXmlStringPair &p)
@@ -182,7 +205,7 @@ static QString fixNamespace(const QString &nsURI)
 //
 // ==================================================================
 
-// 24 bytes on most system
+// 12 bytes on most system 32 bit systems, 16 bytes on 64 bit systems
 class KoXmlPackedItem
 {
 public:
@@ -195,8 +218,7 @@ quint32 childStart: 28;
 unsigned depth: 28;
 #endif
 
-    unsigned nameIndex;
-    unsigned nsURIIndex;
+    unsigned qnameIndex;
     QString value;
 
     // it is important NOT to have a copy constructor, so that growth is optimal
@@ -216,8 +238,7 @@ static QDataStream& operator<<(QDataStream& s, const KoXmlPackedItem& item)
     s << flag;
     s << (quint8) item.type;
     s << item.childStart;
-    s << item.nameIndex;
-    s << item.nsURIIndex;
+    s << item.qnameIndex;
     s << item.value;
 
     return s;
@@ -233,8 +254,7 @@ static QDataStream& operator>>(QDataStream& s, KoXmlPackedItem& item)
     s >> flag;
     s >> type;
     s >> child;
-    s >> item.nameIndex;
-    s >> item.nsURIIndex;
+    s >> item.qnameIndex;
     s >> value;
 
     item.attr = (flag != 0);
@@ -718,24 +738,23 @@ public:
     QVector<KoXmlPackedItem> items;
 #endif
 
-    QStringList stringList;
+    QList<KoQName> qnameList;
     QString docType;
 
 private:
-    QHash<QString, unsigned> stringHash;
+    QHash<KoQName, unsigned> qnameHash;
 
-    unsigned cacheString(const QString& str) {
-        if (str.isEmpty())
-            return 0;
+    unsigned cacheQName(const QString& name, const QString& nsURI) {
+        KoQName qname(nsURI, name);
 
-        const unsigned& ii = stringHash[str];
-        if (ii > 0)
+        const unsigned ii = qnameHash.value(qname, (unsigned)-1);
+        if (ii != (unsigned)-1)
             return ii;
 
         // not yet declared, so we add it
-        unsigned i = stringList.count();
-        stringList.append(str);
-        stringHash.insert(str, i);
+        unsigned i = qnameList.count();
+        qnameList.append(qname);
+        qnameHash.insert(qname, i);
 
         return i;
     }
@@ -802,8 +821,7 @@ public:
         // a constructor for KoXmlPackedItem
         item.attr = false;
         item.type = KoXmlNode::NullNode;
-        item.nameIndex = 0;
-        item.nsURIIndex = 0;
+        item.qnameIndex = 0;
         item.childStart = itemCount(depth + 1);
         item.value.clear();
 
@@ -812,15 +830,12 @@ public:
 
     void clear() {
         currentDepth = 0;
-        stringHash.clear();
-        stringList.clear();
+        qnameHash.clear();
+        qnameList.clear();
         valueHash.clear();
         valueList.clear();
         groups.clear();
         docType.clear();
-
-        // reserve index #0
-        cacheString(QString());
 
         // first node is root
         KoXmlPackedItem& rootItem = newItem(0);
@@ -829,7 +844,7 @@ public:
 
     void finish() {
         // won't be needed anymore
-        stringHash.clear();
+        qnameHash.clear();
         valueHash.clear();
         valueList.clear();
 
@@ -844,8 +859,7 @@ public:
     void addElement(const QString& name, const QString& nsURI) {
         KoXmlPackedItem& item = newItem(currentDepth + 1);
         item.type = KoXmlNode::ElementNode;
-        item.nameIndex = cacheString(name);
-        item.nsURIIndex = cacheString(nsURI);
+        item.qnameIndex = cacheQName(name, nsURI);
 
         currentDepth++;
     }
@@ -861,8 +875,7 @@ public:
     void addAttribute(const QString& name, const QString& nsURI, const QString& value) {
         KoXmlPackedItem& item = newItem(currentDepth + 1);
         item.attr = true;
-        item.nameIndex = cacheString(name);
-        item.nsURIIndex = cacheString(nsURI);
+        item.qnameIndex = cacheQName(name, nsURI);
         //item.value = cacheValue( value );
         item.value = value;
     }
@@ -1467,8 +1480,7 @@ void KoXmlNodeData::loadChildren(int depth)
 
         // attribute belongs to this node
         if (item.attr) {
-            QString name = packedDoc->stringList[item.nameIndex];
-            QString nsURI = fixNamespace(packedDoc->stringList[item.nsURIIndex]);
+            KoQName qname = packedDoc->qnameList[item.qnameIndex];
             QString value = item.value;
 
             QString prefix;
@@ -1476,31 +1488,30 @@ void KoXmlNodeData::loadChildren(int depth)
             QString qName; // with prefix
             QString localName;  // without prefix, i.e. local name
 
-            localName = qName = name;
+            localName = qName = qname.name;
             int i = qName.indexOf(':');
             if (i != -1) prefix = qName.left(i);
             if (i != -1) localName = qName.mid(i + 1);
 
             if (packedDoc->processNamespace) {
-                setAttributeNS(nsURI, qName, value);
+                setAttributeNS(qname.nsURI, qName, value);
                 setAttribute(localName, value);
             } else
                 setAttribute(qName, value);
         } else {
-            QString name = packedDoc->stringList[item.nameIndex];
-            QString nsURI = fixNamespace(packedDoc->stringList[item.nsURIIndex]);
+            KoQName qname = packedDoc->qnameList[item.qnameIndex];
             QString value = item.value;
 
-            QString nodeName = name;
+            QString nodeName = qname.name;
             QString localName;
             QString prefix;
 
             if (packedDoc->processNamespace) {
-                localName = name;
-                int di = name.indexOf(':');
+                localName = qname.name;
+                int di = qname.name.indexOf(':');
                 if (di != -1) {
-                    localName = name.mid(di + 1);
-                    prefix = name.left(di);
+                    localName = qname.name.mid(di + 1);
+                    prefix = qname.name.left(di);
                 }
                 nodeName = localName;
             }
@@ -1514,7 +1525,7 @@ void KoXmlNodeData::loadChildren(int depth)
             dat->tagName = nodeName;
             dat->localName = localName;
             dat->prefix = prefix;
-            dat->namespaceURI = nsURI;
+            dat->namespaceURI = qname.nsURI;
             dat->count = 1;
             dat->parent = this;
             dat->prev = lastDat;
@@ -1699,13 +1710,13 @@ static QDomNode itemAsQDomNode(QDomDocument ownerDoc, KoXmlPackedDocument* packe
     if (self.type == KoXmlNode::ElementNode) {
         QDomElement element;
 
-        QString name = packedDoc->stringList[self.nameIndex];
-        QString nsURI = fixNamespace(packedDoc->stringList[self.nsURIIndex]);
+        KoQName qname = packedDoc->qnameList[self.qnameIndex];
+        qname.nsURI = fixNamespace(qname.nsURI);
 
         if (packedDoc->processNamespace)
-            element = ownerDoc.createElementNS(nsURI, name);
+            element = ownerDoc.createElementNS(qname.nsURI, qname.name);
         else
-            element = ownerDoc.createElement(name);
+            element = ownerDoc.createElement(qname.name);
 
         // check all subnodes for attributes
         for (unsigned i = self.childStart; i < childStop; i++) {
@@ -1715,8 +1726,8 @@ static QDomNode itemAsQDomNode(QDomDocument ownerDoc, KoXmlPackedDocument* packe
 
             // attribute belongs to this node
             if (item.attr) {
-                QString name = packedDoc->stringList[item.nameIndex];
-                QString nsURI = fixNamespace(packedDoc->stringList[item.nsURIIndex]);
+                KoQName qname = packedDoc->qnameList[item.qnameIndex];
+                qname.nsURI = fixNamespace(qname.nsURI );
                 QString value = item.value;
 
                 QString prefix;
@@ -1724,16 +1735,16 @@ static QDomNode itemAsQDomNode(QDomDocument ownerDoc, KoXmlPackedDocument* packe
                 QString qName; // with prefix
                 QString localName;  // without prefix, i.e. local name
 
-                localName = qName = name;
+                localName = qName = qname.name;
                 int i = qName.indexOf(':');
                 if (i != -1) prefix = qName.left(i);
                 if (i != -1) localName = qName.mid(i + 1);
 
                 if (packedDoc->processNamespace) {
-                    element.setAttributeNS(nsURI, qName, value);
+                    element.setAttributeNS(qname.nsURI, qName, value);
                     element.setAttribute(localName, value);
                 } else
-                    element.setAttribute(name, value);
+                    element.setAttribute(qname.name, value);
             } else {
                 // add it recursively
                 QDomNode childNode = itemAsQDomNode(ownerDoc, packedDoc, nodeDepth + 1, i);

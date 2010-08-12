@@ -858,9 +858,6 @@ void KoTextLoader::loadText(const QString &fulltext, QTextCursor &cursor,
         // we can remove the leading space in the next text
         *stripLeadingSpace = text[text.length() - 1].isSpace();
 
-        if (d->changeTracker && d->changeStack.count())
-        qDebug() << "CT " << d->changeTracker << " " <<  d->changeStack.count();
-
         if (d->changeTracker && d->changeStack.count()) {
             QTextCharFormat format;
             format.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());

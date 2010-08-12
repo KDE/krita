@@ -844,6 +844,41 @@ QString KoTextLoader::createUniqueBookmarkName(KoBookmarkManager* bmm, QString b
     return ret;
 }
 
+void KoTextLoader::loadText(const QString &fulltext, QTextCursor &cursor,
+                            bool *stripLeadingSpace, bool isLastNode)
+{
+#ifdef KOOPENDOCUMENTLOADER_DEBUG
+    kDebug(32500) << "  <text> localName=" << localName << " parent.localName=" << element.localName() << " text=" << text
+    << text.length();
+#endif
+    QString text = KoTextLoaderP::normalizeWhitespace(fulltext, *stripLeadingSpace);
+
+    if (!text.isEmpty()) {
+        // if present text ends with a space,
+        // we can remove the leading space in the next text
+        *stripLeadingSpace = text[text.length() - 1].isSpace();
+
+        if (d->changeTracker && d->changeStack.count())
+        qDebug() << "CT " << d->changeTracker << " " <<  d->changeStack.count();
+
+        if (d->changeTracker && d->changeStack.count()) {
+            QTextCharFormat format;
+            format.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
+            cursor.mergeCharFormat(format);
+        }
+        cursor.insertText(text);
+
+        if (d->loadSpanLevel == 1 && isLastNode
+                && cursor.position() > d->loadSpanInitialPos) {
+            QTextCursor tempCursor(cursor);
+            tempCursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, 1); // select last char loaded
+            if (tempCursor.selectedText() == " " && *stripLeadingSpace) {            // if it's a collapsed blankspace
+                tempCursor.removeSelectedText();                                    // remove it
+            }
+        }
+    }
+}
+
 void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bool *stripLeadingSpace)
 {
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
@@ -858,34 +893,9 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
 //        const bool isOfficeNS = ts.namespaceURI() == KoXmlNS::office;
         if (node.isText()) {
-            QString text = node.toText().data();
-#ifdef KOOPENDOCUMENTLOADER_DEBUG
-            kDebug(32500) << "  <text> localName=" << localName << " parent.localName=" << element.localName() << " text=" << text
-            << text.length();
-#endif
-            text = KoTextLoaderP::normalizeWhitespace(text, *stripLeadingSpace);
-
-            if (!text.isEmpty()) {
-                // if present text ends with a space,
-                // we can remove the leading space in the next text
-                *stripLeadingSpace = text[text.length() - 1].isSpace();
-
-                if (d->changeTracker && d->changeStack.count()) {
-                    QTextCharFormat format;
-                    format.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
-                    cursor.mergeCharFormat(format);
-                }
-                cursor.insertText(text);
-
-                if (d->loadSpanLevel == 1 && node.nextSibling().isNull()
-                        && cursor.position() > d->loadSpanInitialPos) {
-                    QTextCursor tempCursor(cursor);
-                    tempCursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, 1); // select last char loaded
-                    if (tempCursor.selectedText() == " " && *stripLeadingSpace) {            // if it's a collapsed blankspace
-                        tempCursor.removeSelectedText();                                    // remove it
-                    }
-                }
-            }
+            bool isLastNode = node.nextSibling().isNull();
+            loadText(node.toText().data(), cursor, stripLeadingSpace,
+                     isLastNode);
         } else if (isTextNS && localName == "change-start") { // text:change-start
             d->openChangeRegion(ts);
         } else if (isTextNS && localName == "change-end") {

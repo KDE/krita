@@ -111,6 +111,13 @@ private:
     */
     void loadSection(const KoXmlElement &element, QTextCursor &cursor);
 
+
+    /**
+    * Load the text into the \p cursor .
+    */
+    void loadText(const QString &text, QTextCursor &cursor,
+                  bool *stripLeadingSpace, bool isLastNode);
+
     /**
     * Load the span from the \p element into the \p cursor .
     */

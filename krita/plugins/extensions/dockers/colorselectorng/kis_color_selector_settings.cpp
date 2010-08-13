@@ -205,7 +205,7 @@ void KisColorSelectorSettings::loadPreferences()
 
     ui->colorSpace->setCurrentColorModel(KoID(cfg.readEntry("customColorSpaceModel", "RGBA")));
     ui->colorSpace->setCurrentColorDepth(KoID(cfg.readEntry("customColorSpaceDepthID", "U8")));
-    ui->colorSpace->setCurrentProfile(cfg.readEntry("customColorSpaceProfile", "sRGB built-in - (lcms internal)"));
+    ui->colorSpace->setCurrentProfile(cfg.readEntry("customColorSpaceProfile", KoColorSpaceRegistry::instance()->rgb8()->profile()->name()));
 
     a = cfg.readEntry("popupOnMouseOver", false);
     b = cfg.readEntry("popupOnMouseClick", true);
@@ -279,7 +279,7 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->useImageColorSpace->setChecked(true);
     ui->colorSpace->setCurrentColorModel(KoID("RGBA"));
     ui->colorSpace->setCurrentColorDepth(KoID("U8"));
-    ui->colorSpace->setCurrentProfile("sRGB built-in - (lcms internal)");
+    ui->colorSpace->setCurrentProfile(KoColorSpaceRegistry::instance()->rgb8()->profile()->name());
 
     //color patches
     ui->lastUsedColorsShow->setChecked(true);

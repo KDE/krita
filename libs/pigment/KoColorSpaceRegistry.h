@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2010 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -90,6 +90,12 @@ public:
     void addProfile(KoColorProfile* profile);
     void addProfile(const KoColorProfile* profile); // TODO why ?
     void removeProfile(KoColorProfile* profile);
+    
+    /**
+     * Create an alias to a profile with a different name. Then @ref profileByName
+     * will return the profile @p to when passed @p name as a parameter.
+     */
+    void addProfileAlias(const QString& name, const QString& to);
 
     /**
      * create a profile of the specified type.

@@ -52,6 +52,7 @@
 struct KoColorSpaceRegistry::Private {
     KoGenericRegistry<KoColorSpaceFactory *> colorsSpaceFactoryRegistry;
     QHash<QString, KoColorProfile * > profileMap;
+    QHash<QString, QString> profileAlias;
     QHash<QString, const KoColorSpace * > csMap;
     const KoColorSpace *alphaCs;
     KoColorConversionSystem *colorConversionSystem;
@@ -169,9 +170,20 @@ void KoColorSpaceRegistry::remove(KoColorSpaceFactory* item)
     d->registrylock.unlock();
 }
 
-const KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & name) const
+void KoColorSpaceRegistry::addProfileAlias(const QString& name, const QString& to)
 {
+    QWriteLocker l(&d->registrylock);
+    d->profileAlias[name] = to;
+}
+
+const KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & _name) const
+{
+    QString name = _name;
     QReadLocker l(&d->registrylock);
+    if (d->profileAlias.find(name) != d->profileAlias.end()) {
+      name = d->profileAlias[name];
+    }
+    
     if (d->profileMap.find(name) == d->profileMap.end()) {
         return 0;
     }

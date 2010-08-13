@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2010 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -178,6 +178,11 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QStringList &)
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
         (KoID("XYZ16HISTO", i18n("XYZ16 Histogram")), XYZAColorModelID.id(), Integer16BitsColorDepthID.id()));
+
+    // Add profile alias for default profile from lcms1
+    registry->addProfileAlias("sRGB built-in - (lcms internal)", "sRGB built-in");
+    registry->addProfileAlias("gray built-in - (lcms internal)", "gray built-in");
+    registry->addProfileAlias("Lab identity built-in - (lcms internal)", "Lab identity built-in");
 }
 
 #include <LcmsEnginePlugin.moc>

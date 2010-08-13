@@ -145,7 +145,7 @@ QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,EllipseShape,Rectan
 [koffice]
 FlakePluginsDisabled=formulashape,divineproportionshape,kexirelationdesignshape,vectorshape
 ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetshape
-TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect
+TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect,spellcheck
 TextVariablePluginsDisabled=textvariables,kprvariables
 ToolPluginsDisabled=paragraphtool,kopabackgroundtool,kpresentertoolanimation
 

@@ -62,6 +62,10 @@ void scGRAYf_to_scRGBAf(float gIn, output float rOut, output float gOut, output 
                 <input colorModel="GRAY" type="float" profile="Standard Linear Gray (scGRAY)" />
                 <output colorModel="GRAYA" depth="16" type="integer" profile="gray built-in - (lcms internal)" />
             </conversion>
+            <conversion function="scGRAYf_to_GRAYu16">
+                <input colorModel="GRAY" type="float" profile="Standard Linear Gray (scGRAY)" />
+                <output colorModel="GRAYA" depth="16" type="integer" profile="gray built-in" />
+            </conversion>
             <conversion function="scGRAYf_to_scRGBAf">
                 <input colorModel="GRAY" type="float" profile="Standard Linear Gray (scGRAY)" />
                 <output colorModel="RGBA" type="float" profile="Standard Linear RGB (scRGB/sRGB64)" />

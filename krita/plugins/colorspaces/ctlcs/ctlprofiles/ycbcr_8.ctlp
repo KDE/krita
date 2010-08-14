@@ -41,6 +41,14 @@ void YCbCri8_to_RGBAi8(int YIn, int CbIn, int CrIn, int aIn, output int bOut, ou
                 <input colorModel="YCbCrA" depth="8" type="integer" />
                 <output colorModel="RGBA" depth="8" type="integer" profile="sRGB built-in - (lcms internal)" />
             </conversion>
+            <conversion function="RGBAi8_to_YCbCri8">
+                <input colorModel="RGBA" depth="8" type="integer" profile="sRGB built-in" />
+                <output colorModel="YCbCrA" depth="8" type="integer" />
+            </conversion>
+            <conversion function="YCbCri8_to_RGBAi8">
+                <input colorModel="YCbCrA" depth="8" type="integer" />
+                <output colorModel="RGBA" depth="8" type="integer" profile="sRGB built-in" />
+            </conversion>
         </conversions>
     </transformations>
 </ctlprofile>

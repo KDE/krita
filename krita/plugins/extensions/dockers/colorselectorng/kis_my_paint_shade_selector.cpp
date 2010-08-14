@@ -32,6 +32,7 @@
 #include <QTimer>
 
 #include "KoColorSpace.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
 
 #include <KDebug>
@@ -43,13 +44,11 @@ inline int signedSqr(int x);
 
 KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
         KisColorSelectorBase(parent),
-        m_pixelCache(m_size, m_size, QImage::Format_ARGB32_Premultiplied),
-        m_initialised(false),
+        m_pixelCache(0, 0, QImage::Format_ARGB32_Premultiplied),
         m_updateTimer(new QTimer(this))
 {
     setAcceptDrops(true);
 
-    precalculateData();
     setMinimumSize(80, 80);
     setColor(QColor(255,0,0));
 
@@ -59,98 +58,37 @@ KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
 }
 
 void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
-    if (m_initialised == false || m_pixelCacheColorSpace!=colorSpace()) {
-        // if this is the first paintEvent, then we have to updated the cache before painting.
-        // this isn't possible in the constructor, because we don't have the colorspace.
-        updateSelector();
-        m_initialised = true;
-    }
-
-
-    QPainter painter(this);
-    QRect target(0, 0, qMin(width(), height()), qMin(width(), height()));
-    painter.drawImage(target, m_pixelCache, m_pixelCache.rect());
-}
-
-
-void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
-{
-    e->setAccepted(false);
-    KisColorSelectorBase::mousePressEvent(e);
-
-    QRect widgetRect(0, 0, qMin(width(), height()), qMin(width(), height()));
-    if(!e->isAccepted() && widgetRect.contains(e->pos())) {
-        QColor color = pickColorAt(e->x(), e->y());
-
-        ColorRole role=Foreground;
-        if(e->buttons()&Qt::RightButton)
-            role=Background;
-
-        commitColor(KoColor(color, colorSpace()), color, role);
-    }
-
-}
-
-QColor KisMyPaintShadeSelector::pickColorAt(int x, int y)
-{
-    qreal wdgSize = qMin(width(), height());
-    qreal ratio = 256.0/wdgSize;
-
-    //set the internal color the one on pos x/y
-    calculatePos(x*ratio, y*ratio);
-
-    QColor color=m_qcolor;
-
-    //change the color of the selector to the one calculated above
-    setColor(color);
-
-    return color;
-}
-
-KisColorSelectorBase* KisMyPaintShadeSelector::createPopup() const
-{
-    KisColorSelectorBase* popup = new KisMyPaintShadeSelector(0);
-    return popup;
-}
-
-void KisMyPaintShadeSelector::setColor(const QColor &c) {
-    m_colorH=c.hsvHueF();
-    m_colorS=c.hsvSaturationF();
-    m_colorV=c.valueF();
-
-    //repaint the cache
-    m_initialised=false;
-
-    m_updateTimer->start();
-}
-
-void KisMyPaintShadeSelector::precalculateData() {
     // Hint to the casual reader: some of the calculation here do not
     // what Martin Renold originally intended. Not everything here will make sense.
     // It does not matter in the end, as long as the result looks good.
 
-    int width, height;
-    int s_radius = m_size/2.6;
+    // This selector was ported from MyPaint in 2010
 
-    width = m_size;
-    height = m_size;
+    m_pixelCache = QImage(width(), height(), QImage::Format_ARGB32_Premultiplied);
 
-    for (int y=0; y<height; y++) {
-        for (int x=0; x<width; x++) {
+    int size = qMin(width(), height());
+    int s_radius = size/2.6;
+
+    KoColor kocolor(colorSpace());
+    QColor qcolor;
+
+    for (int x=0; x<width(); x++) {
+        for (int y=0; y<height(); y++) {
+
             float v_factor = 0.6;
             float s_factor = 0.6;
             float v_factor2 = 0.013;
             float s_factor2 = 0.013;
 
-            int stripe_width = 15;
+            int stripe_width = 15*size/255.;
 
             float h = 0;
             float s = 0;
             float v = 0;
 
-            int dx = x-width/2;
-            int dy = y-height/2;
-            int diag = sqrt(2)*m_size/2;
+            int dx = x-width()/2;
+            int dy = y-height()/2;
+            int diag = sqrt(2)*size/2;
 
             int dxs, dys;
             if (dx > 0)
@@ -165,7 +103,7 @@ void KisMyPaintShadeSelector::precalculateData() {
             float r = std::sqrt(sqr(dxs)+sqr(dys));
 
             // hue
-            if (r < s_radius) {
+            if (r < s_radius-100) {
                 if (dx > 0)
                     h = 90*sqr2(r/s_radius);
                 else
@@ -177,9 +115,9 @@ void KisMyPaintShadeSelector::precalculateData() {
             }
 
             // horizontal and vertical lines
-            int min = std::abs(dx);
-            if (std::abs(dy) < min) min = std::abs(dy);
-            if (min < stripe_width) {
+            if (qMin(abs(dx), abs(dy)) < stripe_width) {
+                dx = (dx/qreal(width()))*255;
+                dy = (dy/qreal(height()))*255;
                 h = 0;
                 // x-axis = value, y-axis = saturation
                 v =    dx*v_factor + signedSqr(dx)*v_factor2;
@@ -194,41 +132,60 @@ void KisMyPaintShadeSelector::precalculateData() {
                 }
             }
 
-            m_precalcData[x][y].h=h;
-            m_precalcData[x][y].s=s;
-            m_precalcData[x][y].v=v;
+            qreal fh = m_colorH + h/360.0;
+            qreal fs = m_colorS + s/255.0;
+            qreal fv = m_colorV + v/255.0;
+
+            fh -= floor(fh);
+            fs = qBound(qreal(0.0), fs, qreal(1.0));
+            fv = qBound(qreal(0.1), fv, qreal(1.0));
+
+            qcolor.setHsvF(fh, fs, fv);
+            kocolor.fromQColor(qcolor);
+            kocolor.toQColor(&qcolor);
+            m_pixelCache.setPixel(x, y, qcolor.rgb());
         }
     }
+
+        QPainter painter(this);
+//        QRect target(0, 0, qMin(width(), height()), qMin(width(), height()));
+//        painter.drawImage(target, m_pixelCache, m_pixelCache.rect());
+        painter.drawImage(0, 0, m_pixelCache);
 }
 
-void KisMyPaintShadeSelector::updateSelector() {
-    Q_ASSERT(colorSpace());
-    m_pixelCacheColorSpace=colorSpace();
 
-    KoColor kocolor(colorSpace());
-    for(int i=0; i<m_size; i++) {
-        for(int j=0; j<m_size; j++) {
-            calculatePos(i, j);
-            kocolor.fromQColor(m_qcolor);
-            kocolor.toQColor(&m_qcolor);
-
-            m_pixelCache.setPixel(i, j, m_qcolor.rgb());
-        }
-    }
-}
-
-void KisMyPaintShadeSelector::calculatePos(int x, int y)
+void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 {
-    PrecalcData& pre = m_precalcData[x][y];
-    qreal fh = m_colorH + pre.h/360.0;
-    qreal fs = m_colorS + pre.s/255.0;
-    qreal fv = m_colorV + pre.v/255.0;
+    e->setAccepted(false);
+    KisColorSelectorBase::mousePressEvent(e);
 
-    fh -= floor(fh);
-    fs = qBound(qreal(0.0), fs, qreal(1.0));
-    fv = qBound(qreal(0.1), fv, qreal(1.0));
+    QRect widgetRect(0, 0, qMin(width(), height()), qMin(width(), height()));
+    if(!e->isAccepted() && widgetRect.contains(e->pos())) {
+        QColor color = QColor(m_pixelCache.pixel(e->x(), e->y()));
+        color = findGeneratingColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()));
 
-    m_qcolor.setHsvF(fh, fs, fv);
+        ColorRole role=Foreground;
+        if(e->buttons()&Qt::RightButton)
+            role=Background;
+
+        setColor(color);
+        commitColor(KoColor(color, colorSpace()), color, role);
+    }
+
+}
+
+KisColorSelectorBase* KisMyPaintShadeSelector::createPopup() const
+{
+    KisColorSelectorBase* popup = new KisMyPaintShadeSelector(0);
+    return popup;
+}
+
+void KisMyPaintShadeSelector::setColor(const QColor &c) {
+    m_colorH=c.hsvHueF();
+    m_colorS=c.hsvSaturationF();
+    m_colorV=c.valueF();
+
+    m_updateTimer->start();
 }
 
 inline int sqr(int x) {

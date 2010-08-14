@@ -40,26 +40,13 @@ public slots:
 protected:
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *);
-    QColor pickColorAt(int x, int y);
     KisColorSelectorBase* createPopup() const;
 
 private:
     void updateSelector();
-    void precalculateData();
-    static const int m_size = 256;
     float m_colorH, m_colorS, m_colorV;
-    struct PrecalcData {
-        int h;
-        int s;
-        int v;
-    };
-    PrecalcData m_precalcData[256][256];
-    void calculatePos(int x, int y);
 
     QImage m_pixelCache;
-    const KoColorSpace* m_pixelCacheColorSpace;
-    QColor m_qcolor;
-    bool m_initialised;
     QTimer* m_updateTimer;
 };
 

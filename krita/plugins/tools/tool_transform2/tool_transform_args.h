@@ -12,7 +12,7 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *
+*
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
@@ -22,65 +22,153 @@
 #define TOOL_TRANSFORM_ARGS_H_
 
 #include <QPointF>
-#include <QVector3D>
 #include <kis_warptransform_worker.h>
 
-//To store and restore the parameters of a transformation (describes the state of the tool)
+/**
+ * Class used to store the parameters of a transformation.
+ * Some parameters are specific to free transform mode, and
+ * others to warp mode : maybe add a union to save a little more
+ * memory.
+ */
+
 class ToolTransformArgs
 {
 public:
 	typedef enum TransfMode_ {FREE_TRANSFORM = 0, WARP} TransfMode;
 
+    /**
+     * Initializes the parameters for an identity transformation,
+     * with mode set to free transform.
+    */
     ToolTransformArgs();
+
+    /**
+     * The object return will be a copy of args.
+    */
     ToolTransformArgs(const ToolTransformArgs& args);
-    ToolTransformArgs& operator=(const ToolTransformArgs& args);
+
+    /**
+     * If mode is warp, original and transformed vector points will be of size 0.
+     * Use setPoints method to set those vectors.
+    */
     ToolTransformArgs(TransfMode mode,
 						QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY,
-						int pointsPerLine, KisWarpTransformWorker::WarpType warpType, double alpha, QPointF previewPos, bool defaultPoints);
-						//allocates the memory for the points according to pointsPerLine value
+						KisWarpTransformWorker::WarpType warpType, double alpha, QPointF previewPos, bool defaultPoints);
     ~ToolTransformArgs();
+    ToolTransformArgs& operator=(const ToolTransformArgs& args);
 
-	TransfMode mode() const;
-	void setMode(TransfMode mode);
+	inline TransfMode mode() const {
+        return m_mode;
+    }
+	inline void setMode(TransfMode mode) {
+        m_mode = mode;
+    }
 
 	//warp-related
-	int pointsPerLine() const;
-	QPointF &origPoint(int i);
-	QPointF &transfPoint(int i);
-	const QVector<QPointF> &origPoints() const;
-	const QVector<QPointF> &transfPoints() const;
-	KisWarpTransformWorker::WarpType warpType() const;
-	double alpha() const;
-	QPointF previewPos() const;
-    bool defaultPoints() const;
-
-    void setPointsPerLine(int pointsPerLine);
-	void setPoints(QVector<QPointF>, QVector<QPointF> transfPoints); //makes a COPY of the given points
-	void setWarpType(KisWarpTransformWorker::WarpType warpType);
-	void setAlpha(double alpha);
-	void setPreviewPos(QPointF previewPos);
-    void setDefaultPoints(bool defaultPoints);
+	inline int pointsPerLine() const {
+        return m_pointsPerLine;
+    }
+	inline QPointF &origPoint(int i) {
+        return m_origPoints[i];
+    }
+	inline QPointF &transfPoint(int i) {
+        return m_transfPoints[i];
+    }
+	inline const QVector<QPointF> &origPoints() const {
+        return m_origPoints;
+    }
+	inline const QVector<QPointF> &transfPoints() const {
+        return m_transfPoints;
+    }
+	inline KisWarpTransformWorker::WarpType warpType() const {
+        return m_warpType;
+    }
+	inline double alpha() const {
+        return m_alpha;
+    }
+	inline QPointF previewPos() const {
+        return m_previewPos;
+    }
+    inline bool defaultPoints() const {
+        return m_defaultPoints;
+    }
+    inline void setPointsPerLine(int pointsPerLine) {
+        m_pointsPerLine = pointsPerLine;
+    }
+	inline void setPoints(QVector<QPointF> origPoints, QVector<QPointF> transfPoints) {
+        m_origPoints = QVector<QPointF>(origPoints);
+        m_transfPoints = QVector<QPointF>(transfPoints);
+        m_pointsPerLine = m_origPoints.size();
+    }
+	inline void setWarpType(KisWarpTransformWorker::WarpType warpType) {
+        m_warpType = warpType;
+    }
+	inline void setAlpha(double alpha) {
+        m_alpha = alpha;
+    }
+	inline void setPreviewPos(QPointF previewPos) {
+        m_previewPos = previewPos;
+    }
+    inline void setDefaultPoints(bool defaultPoints) {
+        m_defaultPoints = defaultPoints;
+    }
 
 	//"free transform"-related
-    QPointF translate() const;
-    QPointF rotationCenterOffset() const;
-    double aX() const;
-    double aY() const;
-    double aZ() const;
-    double scaleX() const;
-    double scaleY() const;
-    double shearX() const;
-    double shearY() const;
+    inline QPointF translate() const {
+        return m_translate;
+    }
+    inline QPointF rotationCenterOffset() const {
+        return m_rotationCenterOffset;
+    }
+    inline double aX() const {
+        return m_aX;
+    }
+    inline double aY() const {
+        return m_aY;
+    }
+    inline double aZ() const {
+        return m_aZ;
+    }
+    inline double scaleX() const {
+        return m_scaleX;
+    }
+    inline double scaleY() const {
+        return m_scaleY;
+    }
+    inline double shearX() const {
+        return m_shearX;
+    }
+    inline double shearY() const {
+        return m_shearY;
+    }
 
-    void setTranslate(QPointF translate);
-    void setRotationCenterOffset(QPointF rotationCenterOffset);
-    void setAX(double aX);
-    void setAY(double aY);
-    void setAZ(double aZ);
-    void setScaleX(double scaleX);
-    void setScaleY(double scaleY);
-    void setShearX(double shearX);
-    void setShearY(double shearY);
+    inline void setTranslate(QPointF translate) {
+        m_translate = translate;
+    }
+    inline void setRotationCenterOffset(QPointF rotationCenterOffset) {
+        m_rotationCenterOffset = rotationCenterOffset;
+    }
+    inline void setAX(double aX) {
+        m_aX = aX;
+    }
+    inline void setAY(double aY) {
+        m_aY = aY;
+    }
+    inline void setAZ(double aZ) {
+        m_aZ = aZ;
+    }
+    inline void setScaleX(double scaleX) {
+        m_scaleX = scaleX;
+    }
+    inline void setScaleY(double scaleY) {
+        m_scaleY = scaleY;
+    }
+    inline void setShearX(double shearX) {
+        m_shearX = shearX;
+    }
+    inline void setShearY(double shearY) {
+        m_shearY = shearY;
+    }
 
     bool isIdentity(QPointF originalTranslate) const;
 
@@ -89,18 +177,23 @@ private:
     void init(const ToolTransformArgs& args);
 	TransfMode m_mode;
 
-	//warp-related
-	int m_pointsPerLine;
+	// warp-related arguments
+    // these are basically the arguments taken by the warp transform worker
+    bool m_defaultPoints; // true : the original points are set to make a grid
+                          // which density is given by pointsPerLine
+	int m_pointsPerLine; // density of the grid when defaultPoints is true
 	QVector<QPointF> m_origPoints;
 	QVector<QPointF> m_transfPoints;
 	KisWarpTransformWorker::WarpType m_warpType;
-	double m_alpha; //for affine warp type
+	double m_alpha;
 	QPointF m_previewPos;
-    bool m_defaultPoints;
 
-	//"free transform"-related
+	//'free transform'-related
+    // basically the arguments taken by the transform worker
     QPointF m_translate;
-    QPointF m_rotationCenterOffset;
+    QPointF m_rotationCenterOffset; // the position of the rotation center relative to
+                                    // the original top left corner of the selection
+                                    // before any transformation
     double m_aX;
     double m_aY;
     double m_aZ;
@@ -110,4 +203,4 @@ private:
     double m_shearY;
 };
 
-#endif
+#endif // TOOL_TRANSFORM_ARGS_H_

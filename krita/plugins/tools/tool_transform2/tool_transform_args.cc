@@ -83,7 +83,7 @@ ToolTransformArgs& ToolTransformArgs::operator=(const ToolTransformArgs& args)
 
 ToolTransformArgs::ToolTransformArgs(TransfMode mode,
 							QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY,
-							int pointsPerLine, KisWarpTransformWorker::WarpType warpType, double alpha, QPointF previewPos, bool defaultPoints)
+							KisWarpTransformWorker::WarpType warpType, double alpha, QPointF previewPos, bool defaultPoints)
 {
 	m_mode = mode;
     m_translate = translate;
@@ -95,10 +95,9 @@ ToolTransformArgs::ToolTransformArgs(TransfMode mode,
     m_scaleY = scaleY;
     m_shearX = shearX;
     m_shearY = shearY;
-	m_pointsPerLine = pointsPerLine;
-    int nbPoints = m_pointsPerLine * m_pointsPerLine;
-    m_origPoints.resize(nbPoints);
-    m_transfPoints.resize(nbPoints);
+	m_pointsPerLine = 0;
+    m_origPoints = QVector<QPointF>();
+    m_transfPoints = QVector<QPointF>();
 
 	m_warpType = warpType;
 	m_alpha = alpha;
@@ -110,182 +109,6 @@ ToolTransformArgs::ToolTransformArgs(TransfMode mode,
 ToolTransformArgs::~ToolTransformArgs()
 {
     clear();
-}
-
-ToolTransformArgs::TransfMode ToolTransformArgs::mode() const
-{
-	return m_mode;
-}
-
-void ToolTransformArgs::setMode(TransfMode mode)
-{
-	m_mode = mode;
-}
-
-int ToolTransformArgs::pointsPerLine() const
-{
-	return m_pointsPerLine;
-}
-
-const QVector<QPointF> &ToolTransformArgs::origPoints() const
-{
-	return m_origPoints;
-}
-
-QPointF &ToolTransformArgs::origPoint(int i)
-{
-    return m_origPoints[i];
-}
-
-const QVector<QPointF> &ToolTransformArgs::transfPoints() const
-{
-	return m_transfPoints;
-}
-
-QPointF &ToolTransformArgs::transfPoint(int i)
-{
-    return m_transfPoints[i];
-}
-
-KisWarpTransformWorker::WarpType ToolTransformArgs::warpType() const
-{
-	return m_warpType;
-}
-
-double ToolTransformArgs::alpha() const
-{
-	return m_alpha;
-}
-
-QPointF ToolTransformArgs::previewPos() const
-{
-	return m_previewPos;
-}
-
-bool ToolTransformArgs::defaultPoints() const
-{
-    return m_defaultPoints;
-}
-
-void ToolTransformArgs::setPointsPerLine(int pointsPerLine)
-{
-    m_pointsPerLine = pointsPerLine;
-}
-
-void ToolTransformArgs::setPoints(QVector<QPointF> origPoints, QVector<QPointF> transfPoints)
-{
-    m_origPoints = QVector<QPointF>(origPoints);
-    m_transfPoints = QVector<QPointF>(transfPoints);
-}
-
-void ToolTransformArgs::setWarpType(KisWarpTransformWorker::WarpType warpType)
-{
-	m_warpType = warpType;
-}
-
-void ToolTransformArgs::setAlpha(double alpha)
-{
-	m_alpha = alpha;
-}
-
-void ToolTransformArgs::setPreviewPos(QPointF previewPos)
-{
-	m_previewPos = previewPos;
-}
-
-void ToolTransformArgs::setDefaultPoints(bool defaultPoints)
-{
-    m_defaultPoints = defaultPoints;
-}
-
-QPointF ToolTransformArgs::translate() const
-{
-    return m_translate;
-}
-
-QPointF ToolTransformArgs::rotationCenterOffset() const
-{
-    return m_rotationCenterOffset;
-}
-
-double ToolTransformArgs::aX() const
-{
-    return m_aX;
-}
-
-double ToolTransformArgs::aY() const
-{
-    return m_aY;
-}
-
-double ToolTransformArgs::aZ() const
-{
-    return m_aZ;
-}
-
-double ToolTransformArgs::scaleX() const
-{
-    return m_scaleX;
-}
-
-double ToolTransformArgs::scaleY() const
-{
-    return m_scaleY;
-}
-
-double ToolTransformArgs::shearX() const
-{
-    return m_shearX;
-}
-
-double ToolTransformArgs::shearY() const
-{
-    return m_shearY;
-}
-
-void ToolTransformArgs::setTranslate(QPointF translate)
-{
-    m_translate = translate;
-}
-
-void ToolTransformArgs::setRotationCenterOffset(QPointF rotationCenterOffset)
-{
-    m_rotationCenterOffset = rotationCenterOffset;
-}
-
-void ToolTransformArgs::setAX(double aX)
-{
-    m_aX = aX;
-}
-
-void ToolTransformArgs::setAY(double aY)
-{
-    m_aY = aY;
-}
-
-void ToolTransformArgs::setAZ(double aZ)
-{
-    m_aZ = aZ;
-}
-
-void ToolTransformArgs::setScaleX(double scaleX)
-{
-    m_scaleX = scaleX;
-}
-
-void ToolTransformArgs::setScaleY(double scaleY)
-{
-    m_scaleY = scaleY;
-}
-
-void ToolTransformArgs::setShearX(double shearX)
-{
-    m_shearX = shearX;
-}
-
-void ToolTransformArgs::setShearY(double shearY)
-{
-    m_shearY = shearY;
 }
 
 bool ToolTransformArgs::isIdentity(QPointF originalTranslate) const

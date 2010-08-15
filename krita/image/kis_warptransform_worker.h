@@ -33,6 +33,15 @@
 
 #include <KoUpdater.h>
 
+/**
+ * Class to apply a transformation (affine, similitude, MLS) to a paintDevice
+ * or a QImage according an original set of points p, a new set of points q,
+ * and the constant alpha.
+ * The algorithms are based a paper entitled "Image Deformation Using
+ * Moving Least Squares", by Scott Schaefer (Texas A&M University), Travis
+ * McPhail (Rice University) and Joe Warren (Rice University)
+ */
+
 class KRITAIMAGE_EXPORT KisWarpTransformWorker : public QObject
 {
     Q_OBJECT
@@ -40,25 +49,22 @@ class KRITAIMAGE_EXPORT KisWarpTransformWorker : public QObject
 public:
 	typedef enum WarpType_ {AFFINE_TRANSFORM = 0, SIMILITUDE_TRANSFORM, RIGID_TRANSFORM} WarpType;
 
-    /* Applies a transformation (affine, similitude, MLS) to the point v
-    according the original set of points p, the new set of points q, and
-    the constant alpha.
-    The algorithms are based a paper entitled "Image Deformation Using
-    Moving Least Squares", by Scott Schaefer (Texas A&M University), Travis
-    McPhail (Rice University) and Joe Warren (Rice University)*/
     static QPointF affineTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha);
     static QPointF similitudeTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha);
     static QPointF rigidTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha);
-    //convenience method : calls one of the 3 math function above depending on warpType
+    // Convenience method : calls one of the 3 math function above depending on warpType
     static QPointF transformMath(WarpType warpType, QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha);
-    //puts in dst the transformed quad pDst from pSrc, using src pixels
+    // Puts in dst the transformed quad pDst interpolated using quad pSrc and pixels of image src
     static void quadInterpolation(QImage *src, QImage *dst, QPolygon pSrc, QPolygon pDst);
     static void quadInterpolation(KisPaintDeviceSP src, KisPaintDeviceSP dst, QPolygon pSrc, QPolygon pDst);
 
+    // Apply the transform on a QImage
     static QImage transformation(WarpType warpType, QImage *src, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, QPointF originalTopLeft, QPointF *newTopLeft);
 
+    // Prepare the transformation on dev
     KisWarpTransformWorker(WarpType warpType, KisPaintDeviceSP dev, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, KoUpdater *progress);
     ~KisWarpTransformWorker();
+    // Perform the prepated transformation
     void run();
 
 private:

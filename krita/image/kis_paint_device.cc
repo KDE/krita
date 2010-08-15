@@ -73,9 +73,9 @@ public:
     }
 
     QRect exactBounds() {
-        if (m_exactBoundsValid) {
-            return m_exactBounds;
-        }
+        //if (m_exactBoundsValid) {
+        //    return m_exactBounds;
+        //}
         m_exactBounds = m_paintDevice->calculateExactBounds();
         m_exactBoundsValid = true;
         return m_exactBounds;

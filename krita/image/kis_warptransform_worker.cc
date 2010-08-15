@@ -1317,17 +1317,12 @@ void KisWarpTransformWorker::quadInterpolation(KisPaintDeviceSP src, KisPaintDev
     QPointF sol1, sol2;
 
     QRect boundRect = pDst.boundingRect();
+    int TC_offset = 0;
     if (boundRect.top() < 0)
-        boundRect.setTop(0);
-    if (boundRect.bottom() < 0)
-        boundRect.setBottom(0);
-    if (boundRect.left() < 0)
-        boundRect.setLeft(0);
-    if (boundRect.right() < 0)
-        boundRect.setRight(0);
-    Side *TC[boundRect.bottom() + 2];
+        TC_offset = - boundRect.top();
+    Side *TC[boundRect.bottom() + TC_offset + 2];
 
-    for (int i = 0; i <= boundRect.bottom() + 1; ++i)
+    for (int i = 0; i <= boundRect.bottom() + TC_offset + 1; ++i)
         TC[i] = NULL;
 
     CreateExtSides(&ExtSides, pDst);
@@ -1344,9 +1339,9 @@ void KisWarpTransformWorker::quadInterpolation(KisPaintDeviceSP src, KisPaintDev
     CurrExtSide = ExtSides;
     while (CurrExtSide != NULL) {
         if (CurrExtSide->P->y() <= CurrExtSide->S->y())
-            Insert(&TC[CurrExtSide->P->y()], CurrExtSide->Side_);
+            Insert(&TC[CurrExtSide->P->y() + TC_offset], CurrExtSide->Side_);
         else
-            Insert(&TC[CurrExtSide->S->y()], CurrExtSide->Side_);
+            Insert(&TC[CurrExtSide->S->y() + TC_offset], CurrExtSide->Side_);
 
         CurrExtSide = CurrExtSide->next;
     }
@@ -1358,13 +1353,13 @@ void KisWarpTransformWorker::quadInterpolation(KisPaintDeviceSP src, KisPaintDev
         KisHLineIteratorPixel pixels = dst->createHLineIterator(0, y, boundRect.right() + 2);
 
         //insert elements of TC(y) in TCA
-        CurrSide = TC[y];
+        CurrSide = TC[y + TC_offset];
         while (CurrSide != NULL) {
             NextSide = CurrSide->next;
             InsertInSortedList(&TCA, CurrSide);
             CurrSide = NextSide;
         }
-        TC[y] = NULL;
+        TC[y + TC_offset] = NULL;
 
         //delete elements of TCA for which ymax=y
         if (TCA != NULL) {

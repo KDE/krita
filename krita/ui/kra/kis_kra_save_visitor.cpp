@@ -161,6 +161,7 @@ bool KisKraSaveVisitor::savePaintDevice(KisNode * node)
 {
 
     // Layer data
+    m_store->setCompressionEnabled(false);
     if (m_store->open(getLocation(node))) {
         if (!node->paintDevice()->write(m_store)) {
             node->paintDevice()->disconnect();
@@ -174,6 +175,7 @@ bool KisKraSaveVisitor::savePaintDevice(KisNode * node)
         m_store->write((char*)node->paintDevice()->defaultPixel(), node->paintDevice()->colorSpace()->pixelSize());
         m_store->close();
     }
+    m_store->setCompressionEnabled(true);
     return true;
 }
 

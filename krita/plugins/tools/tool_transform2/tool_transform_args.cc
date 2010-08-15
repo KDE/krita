@@ -22,7 +22,7 @@
 
 ToolTransformArgs::ToolTransformArgs()
 {
-	m_mode = WARP;
+	m_mode = FREE_TRANSFORM;
     m_translate = QPointF(0, 0);
     m_rotationCenterOffset = QPointF(0, 0);
     m_aX = 0;

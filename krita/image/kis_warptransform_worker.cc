@@ -19,8 +19,8 @@
  */
 
 #include "kis_warptransform_worker.h"
-#include "kis_iterators_pixel.h"
 #include "kis_random_sub_accessor.h"
+#include "kis_iterator_ng.h"
 
 #include <QTransform>
 #include <QVector2D>
@@ -1350,7 +1350,7 @@ void KisWarpTransformWorker::quadInterpolation(KisPaintDeviceSP src, KisPaintDev
 
     KisRandomSubAccessorPixel srcAcc = src->createRandomSubAccessor();
     while (TCA != NULL || y <= boundRect.bottom()) {
-        KisHLineIteratorPixel pixels = dst->createHLineIterator(boundRect.left(), y, boundRect.width() + 2);
+        KisHLineIteratorSP pixels = dst->createHLineIteratorNG(boundRect.left(), y, boundRect.width() + 2);
 
         //insert elements of TC(y) in TCA
         CurrSide = TC[y + TC_offset];
@@ -1433,10 +1433,10 @@ void KisWarpTransformWorker::quadInterpolation(KisPaintDeviceSP src, KisPaintDev
                     bilinInterp(q0, q1, q2, q3, sol1, q);
                     srcAcc.moveTo(q);
                 }
-                srcAcc.sampledOldRawData(pixels.rawData());
+                srcAcc.sampledOldRawData(pixels->rawData());
             }
 
-            ++pixels;
+            pixels->nextPixel();
         }
 
         ++y;
@@ -1506,7 +1506,7 @@ void KisWarpTransformWorker::run()
     j = 0;
     x = srcBounds.left();
     k = 0;
-    KisHLineConstIteratorPixel srcPix = srcdev->createHLineConstIterator(x, y, srcBounds.width());
+    KisHLineConstIteratorSP srcPix = srcdev->createHLineConstIteratorNG(x, y, srcBounds.width());
     KisRandomSubAccessorPixel dstAcc = m_dev->createRandomSubAccessor();
     lineDone = false;
     while (!lineDone) {
@@ -1516,7 +1516,7 @@ void KisWarpTransformWorker::run()
 
             previousLineVertices[k] = dstPos;
 
-            srcPix += pixelPrecision;
+            srcPix->nextPixels(pixelPrecision);
             j += pixelPrecision;
             x += pixelPrecision;
             ++k;
@@ -1526,7 +1526,7 @@ void KisWarpTransformWorker::run()
         if (j - pixelPrecision < srcBounds.width() - 1) {
             j = srcBounds.width() - 1;
             x = j + srcBounds.left();
-            srcPix = srcdev->createHLineConstIterator(x, y, 1);
+            srcPix = srcdev->createHLineConstIteratorNG(x, y, 1);
         } else
             lineDone = true;
     }
@@ -1538,7 +1538,7 @@ void KisWarpTransformWorker::run()
     y += pixelPrecision;
     while (!imageDone) {
         while (i < srcBounds.height()) {
-            srcPix = srcdev->createHLineConstIterator(x, y, srcBounds.width());
+            srcPix = srcdev->createHLineConstIteratorNG(x, y, srcBounds.width());
             x = srcBounds.left();
 
             //first column needs a special treatment
@@ -1547,7 +1547,7 @@ void KisWarpTransformWorker::run()
 
             currentLineVertices[0] = dstPos;
 
-            srcPix += pixelPrecision;
+            srcPix->nextPixels(pixelPrecision);
             prevX = x;
             x += pixelPrecision;
 
@@ -1569,7 +1569,7 @@ void KisWarpTransformWorker::run()
 
                     quadInterpolation(srcdev, m_dev, pSrc, pDst);
 
-                    srcPix += pixelPrecision;
+                    srcPix->nextPixels(pixelPrecision);
                     j += pixelPrecision;
                     prevK = k;
                     ++k;
@@ -1589,7 +1589,7 @@ void KisWarpTransformWorker::run()
                 if (j - pixelPrecision < srcBounds.width() - 1) {
                     j = srcBounds.width() - 1;
                     x = j + srcBounds.left();
-                    srcPix = srcdev->createHLineConstIterator(x, y, 1);
+                    srcPix = srcdev->createHLineConstIteratorNG(x, y, 1);
                 } else
                     lineDone = true;
             }
@@ -1604,7 +1604,7 @@ void KisWarpTransformWorker::run()
         if (i - pixelPrecision < srcBounds.height() - 1) {
             i = srcBounds.height() - 1;
             y = i + srcBounds.top();
-            srcPix = srcdev->createHLineConstIterator(srcBounds.left(), y, 1);
+            srcPix = srcdev->createHLineConstIteratorNG(srcBounds.left(), y, 1);
         } else
             imageDone = true;
     }

@@ -1350,7 +1350,7 @@ void KisWarpTransformWorker::quadInterpolation(KisPaintDeviceSP src, KisPaintDev
 
     KisRandomSubAccessorPixel srcAcc = src->createRandomSubAccessor();
     while (TCA != NULL || y <= boundRect.bottom()) {
-        KisHLineIteratorPixel pixels = dst->createHLineIterator(0, y, boundRect.right() + 2);
+        KisHLineIteratorPixel pixels = dst->createHLineIterator(boundRect.left(), y, boundRect.width() + 2);
 
         //insert elements of TC(y) in TCA
         CurrSide = TC[y + TC_offset];
@@ -1391,7 +1391,6 @@ void KisWarpTransformWorker::quadInterpolation(KisPaintDeviceSP src, KisPaintDev
         CurrSide = TCA;
         InsidePolygone = false;
         ChangeSideForNextPixel = false;
-        pixels += boundRect.left();
         for (int j = boundRect.left(); j <= boundRect.right() + 1; ++j) {
             if (ChangeSideForNextPixel) {
                 InsidePolygone = !InsidePolygone;

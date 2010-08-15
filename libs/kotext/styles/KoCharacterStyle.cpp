@@ -116,13 +116,13 @@ void KoCharacterStyle::Private::setApplicationDefaults(KoOdfLoadingContext &cont
 void KoCharacterStyle::Private::ensureMinimalProperties(QTextCursor &cursor, bool blockCharFormatAlso)
 {
     QTextCharFormat format = cursor.charFormat();
-    QList<int> keys = hardCodedDefaultStyle.keys();
-    for (int i = 0; i < keys.count(); i++) {
-        const int key = keys.at(i);
-        QVariant variant = hardCodedDefaultStyle.value(key);
-        if (!variant.isNull() && !format.hasProperty(key)) {
-            format.setProperty(key, variant);
+    QMap<int, QVariant> props = hardCodedDefaultStyle.properties();
+    QMap<int, QVariant>::const_iterator it = props.begin();
+    while (it != props.end()) {
+        if (!it.value().isNull() && !!format.hasProperty(it.key())) {
+            format.setProperty(it.key(), it.value());
         }
+        ++it;
     }
     cursor.mergeCharFormat(format);
     if (blockCharFormatAlso)

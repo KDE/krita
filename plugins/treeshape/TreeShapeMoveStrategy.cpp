@@ -134,7 +134,7 @@ QUndoCommand* TreeShapeMoveStrategy::createCommand()
         kDebug() << "children " << m_selectedShapes.size() << "parent" << m_newParent;
         return 0;
     }
-    return new TreeShapeMoveCommand(m_selectedShapes, m_newParent, m_newNextShape);
+    return new TreeShapeMoveCommand(m_selectedShapes, m_newParent, m_newNextShape, m_diff);
 }
 
 void TreeShapeMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)

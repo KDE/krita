@@ -37,18 +37,10 @@ class KoShapeContainer;
 class TreeShapeMoveCommand : public QUndoCommand
 {
 public:
-    /**
-     * Constructor.
-     * @param shapes the set of objects that are moved.
-     * @param previousPositions the known set of previous positions for each of the objects.
-     *  this list naturally must have the same amount of items as the shapes set.
-     * @param newPositions the new positions for the shapes.
-     *  this list naturally must have the same amount of items as the shapes set.
-     * @param parent the parent command used for macro commands
-     */
     TreeShapeMoveCommand(const QList<KoShape*> &shapes,
                          TreeShape *newParent,
-                         KoShape *nextShape = 0,
+                         KoShape *nextShape,
+                         QPointF diff,
                          QUndoCommand *parent = 0);
     ~TreeShapeMoveCommand();
     /// redo the command
@@ -63,6 +55,7 @@ private:
     KoShape *m_nextShape;
     QList<KoShape*> m_oldNextShapes;
     QList<KoShape*> m_connectors;
+    QPointF m_diff;
 };
 
 #endif

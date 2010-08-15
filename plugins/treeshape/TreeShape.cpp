@@ -33,24 +33,28 @@
 #include "KoShapeBorderModel.h"
 #include "KoShapeShadow.h"
 #include <KoShapeRegistry.h>
+#include <KoXmlNS.h>
 
 #include <QPainter>
 
 #include "kdebug.h"
 
-TreeShape::TreeShape(): KoShapeContainer(new Layout(this))
+TreeShape::TreeShape(KoResourceManager *documentResources)
+            : KoShapeContainer(new Layout(this)),
+            m_documentResources(documentResources)
 {
     m_nextShape = 0;
+    setName("TreeShape0");
     KoShape *root = KoShapeRegistry::instance()->value("RectangleShape")->createDefaultShape();
-    root->setShapeId("Ellipse000");
     root->setSize(QSizeF(60,30));
-    KoTextOnShapeContainer *tos = new KoTextOnShapeContainer(root, 0);
+    KoTextOnShapeContainer *tos = new KoTextOnShapeContainer(root, documentResources);
     tos->setResizeBehavior(KoTextOnShapeContainer::IndependendSizes);
     root = tos;
+    root->setName("TextOnShape0");
     root->setParent(this);
     layout()->setRoot(root, Rectangle);
     setStructure(OrgDown);
-    for (int i=0; i<3; i++) {
+    for (int i=0; i<0; i++) {
         addNewChild();
     }
 }
@@ -113,10 +117,14 @@ void TreeShape::saveOdf(KoShapeSavingContext &context) const
     //Q_UNUSED(context);
     context.xmlWriter().startElement("draw:tree");
     saveOdfAttributes(context, (OdfMandatories ^ OdfLayer) | OdfAdditionalAttributes);
+    context.xmlWriter().addAttributePt("svg:x", position().x());
     context.xmlWriter().addAttributePt("svg:y", position().y());
+    context.xmlWriter().addAttribute("draw:structure", structure());
+    context.xmlWriter().addAttribute("draw:rootType", rootType());
+    context.xmlWriter().addAttribute("draw:connectionType", connectionType());
 
     QList<KoShape*> children = shapes();
-    qSort(children.begin(), children.end(), KoShape::compareShapeZIndex);
+    //qSort(children.begin(), children.end(), KoShape::compareShapeZIndex);
 
     foreach(KoShape* shape, children) {
         shape->saveOdf(context);
@@ -128,8 +136,146 @@ void TreeShape::saveOdf(KoShapeSavingContext &context) const
 
 bool TreeShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    Q_UNUSED(element);
-    Q_UNUSED(context);
+    loadOdfAttributes(element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements);
+
+    QString attribute;
+
+    Q_ASSERT(element.hasAttributeNS(KoXmlNS::draw, "structure"));
+    attribute = element.attributeNS(KoXmlNS::draw, "structure");
+    kDebug() << attribute;
+    TreeType proposedTreeType = static_cast<TreeType>(attribute.toInt());
+//     switch (attribute) {
+//         case "OrgDown":
+//             setStructure(OrgDown);
+//             break;
+//         case "OrgUp":
+//             setStructure(OrgUp);
+//             break;
+//         case "OrgRight":
+//             setStructure(OrgRight);
+//             break;
+//         case "OrgLeft":
+//             setStructure(OrgLeft);
+//             break;
+//         case "TreeRight":
+//             setStructure(TreeRight);
+//             break;
+//         case "TreeLeft":
+//             setStructure(TreeLeft);
+//             break;
+//         case "MapClockwise":
+//             setStructure(MapClockwise);
+//             break;
+//         case "MapAntiClockwise":
+//             setStructure(MapAntiClockwise);
+//             break;
+//         case default:
+//             kDebug() << "Unsupported tree structure:" << attribute;
+//             setStructure(OrgDown);
+//             break;
+//     }
+
+    Q_ASSERT(element.hasAttributeNS(KoXmlNS::draw, "rootType"));
+    attribute = element.attributeNS(KoXmlNS::draw, "rootType");
+    kDebug() << attribute;
+    RootType proposedRootType = static_cast<RootType>(attribute.toInt());
+//     switch (attribute) {
+//         case "Rectangle":
+//             proposedRootType = Rectangle;
+//             break;
+//         case "Ellipse":
+//             proposedRootType = Ellipse;
+//             break;
+//         case "None":
+//             proposedRootType = None;
+//             break;
+//         case default:
+//             kDebug() << "Unsupported root type:" << attribute;
+//             proposedRootType = Rectangle;
+//             break;
+//     }
+
+    Q_ASSERT(element.hasAttributeNS(KoXmlNS::draw, "connectionType"));
+    attribute = element.attributeNS(KoXmlNS::draw, "connectionType");
+    kDebug() << attribute;
+    KoConnectionShape::Type proposedConnectionType = static_cast<KoConnectionShape::Type>(attribute.toInt());
+//     switch (attribute) {
+//         case "Standart":
+//             break;
+//         case "Lines":
+//             break;
+//         case "Straight":
+//             break;
+//         case "Curve":
+//             break;
+//         case default:
+//             break;
+//     }
+
+    KoXmlElement child;
+    QMap<KoShapeLayer*, int> usedLayers;
+    QList<KoShape*> trees, connectors;
+    forEachElement(child, element) {
+        KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
+        if (shape) {
+            KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape->parent());
+            if (layer)
+                usedLayers[layer]++;
+            KoTextOnShapeContainer *tos = dynamic_cast<KoTextOnShapeContainer*>(shape);
+            TreeShape *tree = dynamic_cast<TreeShape*>(shape);
+            KoConnectionShape *connector = dynamic_cast<KoConnectionShape*>(shape);
+            if (tos) {
+                kDebug() << "Setting Root";
+                setRoot(tos, proposedRootType);
+            } else if (tree) {
+                trees.append(shape);
+            } else if (connector) {
+                connectors.append(connector);
+            } else {
+                kDebug() << "Ignoring unexpectad shape:" << shape->shapeId();
+            }
+        }
+    }
+
+    kDebug() << "Adding children";
+    for (int i=0; i<trees.count(); i++)
+        addChild(trees[i], connectors[i]);
+
+    KoShapeLayer *parent = 0;
+    int maxUseCount = 0;
+    // find most used layer and use this as parent for the group
+    for (QMap<KoShapeLayer*, int>::const_iterator it(usedLayers.constBegin()); it != usedLayers.constEnd(); ++it) {
+        if (it.value() > maxUseCount) {
+            maxUseCount = it.value();
+            parent = it.key();
+        }
+    }
+    setParent(parent);
+
+    QPointF pos;
+    if (element.hasAttributeNS(KoXmlNS::svg, "x") && element.hasAttributeNS(KoXmlNS::svg, "y")) {
+        pos.setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x", QString())));
+        pos.setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y", QString())));
+    } else {
+        kDebug() << "Coordinates were missed";
+    }
+    setPosition(pos);
+    setStructure(proposedTreeType);
+    setConnectionType(proposedConnectionType);
+
+//     QRectF bound;
+//     bool boundInitialized = false;
+//     foreach(KoShape * shape, shapes()) {
+//         if (!boundInitialized) {
+//             bound = shape->boundingRect();
+//             boundInitialized = true;
+//         } else
+//             bound = bound.united(shape->boundingRect());
+//     }
+// 
+//     kDebug() << bound;
+//     setPosition(bound.topLeft());
+
     return true;
 }
 
@@ -150,6 +296,8 @@ KoShape* TreeShape::connector(KoShape *shape)
 
 void TreeShape::setRoot(KoShape* shape, TreeShape::RootType type)
 {
+    shape->setName(name()+QString("_Root"));
+    addShape(shape);
     layout()->setRoot(shape, type);
 }
 
@@ -193,12 +341,15 @@ KoConnectionShape::Type TreeShape::connectionType() const
 QList<KoShape*> TreeShape::addNewChild()
 {
     kDebug() << "start";
+    // this list of shapes would be returned
+    // used by TreeTool to add shapes to canvas
     QList<KoShape*> shapes;
 
     KoShape *root = KoShapeRegistry::instance()->value("RectangleShape")->createDefaultShape();
     root->setSize(QSizeF(50,20));
-    KoTextOnShapeContainer *tos = new KoTextOnShapeContainer(root, 0);
+    KoTextOnShapeContainer *tos = new KoTextOnShapeContainer(root, m_documentResources);
     tos->setResizeBehavior(KoTextOnShapeContainer::IndependendSizes);
+    tos->setPlainText(" ");
     root = tos;
     KoShape *child = new TreeShape(root);
     shapes.append(child);

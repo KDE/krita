@@ -34,14 +34,14 @@ TreeShapeFactory::TreeShapeFactory(QObject *parent)
     setToolTip(i18n("Tree for mind maps"));
     setIcon("x-shape-image");
     setLoadingPriority(2);
+    setOdfElementNames(KoXmlNS::draw, QStringList("tree"));
 }
 
 TreeShapeFactory::~TreeShapeFactory() {}
 
 KoShape *TreeShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
-    Q_UNUSED(documentResources);
-    TreeShape *defaultShape = new TreeShape();
+    TreeShape *defaultShape = new TreeShape(documentResources);
     defaultShape->setShapeId(TREESHAPEID);
 
     return defaultShape;
@@ -49,8 +49,8 @@ KoShape *TreeShapeFactory::createDefaultShape(KoResourceManager *documentResourc
 
 bool TreeShapeFactory::supports(const KoXmlElement &e) const
 {
-    Q_UNUSED(e);
-    return false;
+    kDebug() << ((e.localName() == "tree") && (e.namespaceURI() == KoXmlNS::draw));
+    return ((e.localName() == "tree") && (e.namespaceURI() == KoXmlNS::draw));
 }
 
 // QList<KoShapeConfigWidgetBase*> TreeShapeFactory::createShapeOptionPanels()

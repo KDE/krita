@@ -27,10 +27,12 @@
 TreeShapeMoveCommand::TreeShapeMoveCommand(const QList<KoShape*> &shapes,
                                            TreeShape *newParent,
                                            KoShape *nextShape,
+                                           QPointF diff,
                                            QUndoCommand *parent)
         : QUndoCommand(parent),
         m_newParent(newParent),
-        m_nextShape(nextShape)
+        m_nextShape(nextShape),
+        m_diff(diff)
 {
     foreach(KoShape *shape, shapes) {
         TreeShape *tree = dynamic_cast<TreeShape*>(shape);
@@ -38,7 +40,7 @@ TreeShapeMoveCommand::TreeShapeMoveCommand(const QList<KoShape*> &shapes,
         m_trees.append(tree);
         m_oldNextShapes.append(tree->nextShape());
         m_parents.append(par);
-        m_connectors.append(par->connector(shape));
+        m_connectors.append(par ? par->connector(shape) : 0);
     }
     setText(i18n("Attach tree"));
 }
@@ -52,9 +54,16 @@ void TreeShapeMoveCommand::redo()
     QUndoCommand::redo();
     Q_ASSERT(!m_trees.isEmpty());
     for (int i = 0; i < m_trees.count(); i++) {
-        m_trees[i]->setNextShape(m_nextShape);
-        m_trees[i]->setParent(0);
-        m_newParent->addChild(m_trees[i], m_connectors[i]);
+        TreeShape *tree = m_trees[i];
+        tree->setNextShape(m_nextShape);
+        tree->setParent(0);
+        if (m_newParent) {
+            // TODO: if tree was without parent we should create a connector
+            // for it. Otherwise it will cause a crash.
+            m_newParent->addChild(tree, m_connectors[i]);
+        } else {
+            tree->setPosition(tree->position()+m_diff);
+        }
     }
 }
 
@@ -62,8 +71,13 @@ void TreeShapeMoveCommand::undo()
 {
     QUndoCommand::undo();
     for (int i = 0; i < m_trees.count(); i++) {
-        m_trees[i]->setNextShape(m_oldNextShapes[i]);
-        m_trees[i]->setParent(0);
-        m_parents[i]->addChild(m_trees[i], m_connectors[i]);
+        TreeShape *tree = m_trees[i];
+        tree->setNextShape(m_oldNextShapes[i]);
+        tree->setParent(0);
+        if (m_parents[i]) {
+            m_parents[i]->addChild(tree, m_connectors[i]);
+        } else {
+            tree->setPosition(tree->position()-m_diff);
+        }
     }
 }

@@ -22,6 +22,7 @@
 #define TREESHAPE_H
 
 #include "KoShapeContainer.h"
+#include "KoResourceManager.h"
 #include <KoConnectionShape.h>
 
 #define TREESHAPEID "TreeShape"
@@ -45,14 +46,15 @@ public:
         FollowParent
     };
 
+    // ConnectionType is defined in KoConnectionShape
+
     enum RootType {
         Rectangle, Ellipse,
         None
     };
 
-    // ConnectionType is defined in KoConnectionShape
 
-    TreeShape();
+    TreeShape(KoResourceManager *documentResources=0);
     TreeShape(KoShape *root);
     virtual ~TreeShape();
     virtual void setZIndex(int zIndex);
@@ -80,6 +82,7 @@ private:
 //     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
     virtual Layout *layout() const;
 
+    KoResourceManager *m_documentResources;
     KoShape *m_nextShape;
 };
 

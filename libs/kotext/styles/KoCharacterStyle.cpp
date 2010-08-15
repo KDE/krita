@@ -80,7 +80,7 @@ public:
     void setApplicationDefaults(KoOdfLoadingContext &context);
 
     //This should be called after all charFormat properties are merged to the cursor.
-    void ensureMinimalProperties(QTextCursor &cursor, bool blockCharFormatAlso);
+    void ensureMinimalProperties(QTextCharFormat &format);
 
     StylePrivate hardCodedDefaultStyle;
 
@@ -113,9 +113,8 @@ void KoCharacterStyle::Private::setApplicationDefaults(KoOdfLoadingContext &cont
     }
 }
 
-void KoCharacterStyle::Private::ensureMinimalProperties(QTextCursor &cursor, bool blockCharFormatAlso)
+void KoCharacterStyle::Private::ensureMinimalProperties(QTextCharFormat &format)
 {
-    QTextCharFormat format = cursor.charFormat();
     QMap<int, QVariant> props = hardCodedDefaultStyle.properties();
     QMap<int, QVariant>::const_iterator it = props.begin();
     while (it != props.end()) {
@@ -124,9 +123,6 @@ void KoCharacterStyle::Private::ensureMinimalProperties(QTextCursor &cursor, boo
         }
         ++it;
     }
-    cursor.mergeCharFormat(format);
-    if (blockCharFormatAlso)
-        cursor.mergeBlockCharFormat(format);
 }
 
 KoCharacterStyle::KoCharacterStyle(QObject *parent)
@@ -216,20 +212,26 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
     QTextCursor cursor(block);
-    QTextCharFormat cf;
     cursor.setPosition(block.position() + block.length() - 1, QTextCursor::KeepAnchor);
-    applyStyle(cf);
-    cursor.mergeCharFormat(cf);
-    cursor.mergeBlockCharFormat(cf);
-    d->ensureMinimalProperties(cursor, true);
+
+    // this is suboptimal code: the minimal defaults should be applied first, not last
+    QTextCharFormat format = cursor.charFormat();
+    applyStyle(format);
+    d->ensureMinimalProperties(format);
+    cursor.setCharFormat(format);
+
+     format = cursor.blockCharFormat();
+    applyStyle(format);
+    d->ensureMinimalProperties(format);
+    cursor.setBlockCharFormat(format);
 }
 
 void KoCharacterStyle::applyStyle(QTextCursor *selection) const
 {
-    QTextCharFormat cf;
-    applyStyle(cf);
-    selection->mergeCharFormat(cf);
-    d->ensureMinimalProperties(*selection, false);
+    QTextCharFormat format = selection->charFormat();
+    applyStyle(format);
+    d->ensureMinimalProperties(format);
+    selection->setCharFormat(format);
 }
 
 void KoCharacterStyle::unapplyStyle(QTextCharFormat &format) const

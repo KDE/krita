@@ -265,8 +265,6 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
         KisPaintDeviceSP device;
 
         if (currentImage() && (device = currentNode()->paintDevice())) {
-
-#if 1 // unthreaded
             qApp->setOverrideCursor(Qt::BusyCursor);
 
             KisGradientPainter painter(device, currentSelection());
@@ -294,35 +292,6 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
             painter.endTransaction(image()->undoAdapter());
 
             qApp->restoreOverrideCursor();
-#else
-            // XXX: figure out why threaded gradients give weird noise
-            KisTransaction transaction(i18n("Gradient"), device);
-
-            KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(canvas());
-            KoProgressUpdater * updater = canvas->view()->createProgressUpdater();
-            updater->start(100, i18n("Gradient"));
-
-            KisGradientPainter::Configuration config;
-            config.gradient = currentGradient();
-            config.transaction = transaction;
-            config.fgColor = currentFgColor();
-            config.opacity = m_opacity;
-            config.compositeOp = m_compositeOp;
-            config.vectorStart = m_startPos;
-            config.vectorEnd = m_endPos;
-            config.shape = m_shape;
-            config.repeat = m_repeat;
-            config.antiAliasThreshold = m_antiAliasThreshold;
-            config.reverse = m_reverse;
-
-            KisGradientJobFactory factory(&config, currentSelection());
-            KisThreadedApplicator applicator(device, currentImage()->bounds(), &factory, updater);
-            connect(&applicator, SIGNAL(areaDone(const QRect&)), this, SLOT(areaDone(const QRect&)));
-
-            applicator.execute();
-
-            transaction.commit(image()->undoAdapter());
-#endif
             currentNode()->setDirty();
             notifyModified();
             delete updater;

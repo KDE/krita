@@ -55,7 +55,7 @@ public:
 
 
     TreeShape(KoResourceManager *documentResources=0);
-    TreeShape(KoShape *root);
+    TreeShape(KoShape *root, KoResourceManager *documentResources=0);
     virtual ~TreeShape();
     virtual void setZIndex(int zIndex);
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);

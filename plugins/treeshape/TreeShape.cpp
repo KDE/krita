@@ -40,8 +40,8 @@
 #include "kdebug.h"
 
 TreeShape::TreeShape(KoResourceManager *documentResources)
-            : KoShapeContainer(new Layout(this)),
-            m_documentResources(documentResources)
+            : KoShapeContainer(new Layout(this))
+            , m_documentResources(documentResources)
 {
     m_nextShape = 0;
     setName("TreeShape0");
@@ -59,7 +59,9 @@ TreeShape::TreeShape(KoResourceManager *documentResources)
     }
 }
 
-TreeShape::TreeShape(KoShape *shape): KoShapeContainer(new Layout(this))
+TreeShape::TreeShape(KoShape *shape, KoResourceManager *documentResources)
+            : KoShapeContainer(new Layout(this))
+            , m_documentResources(documentResources)
 {
     m_nextShape = 0;
     int id = qrand()%90+10;
@@ -351,7 +353,7 @@ QList<KoShape*> TreeShape::addNewChild()
     tos->setResizeBehavior(KoTextOnShapeContainer::IndependendSizes);
     tos->setPlainText(" ");
     root = tos;
-    KoShape *child = new TreeShape(root);
+    KoShape *child = new TreeShape(root, m_documentResources);
     shapes.append(child);
 
     KoShape *connector = KoShapeRegistry::instance()->value("KoConnectionShape")->createDefaultShape();

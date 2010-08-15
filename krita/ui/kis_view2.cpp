@@ -512,9 +512,10 @@ void KisView2::slotLoadingFinished()
     if (m_d->statusBar) {
         m_d->statusBar->imageSizeChanged(image()->width(), image()->height());
     }
-    m_d->resourceProvider->slotImageSizeChanged();
-
-    m_d->nodeManager->nodesUpdated();
+    if (m_d->resourceProvider)
+        m_d->resourceProvider->slotImageSizeChanged();
+    if (m_d->nodeManager)
+        m_d->nodeManager->nodesUpdated();
 
     connectCurrentImage();
 
@@ -532,8 +533,10 @@ void KisView2::slotLoadingFinished()
     /**
      * Dirty hack alert
      */
-    m_d->viewConverter->setZoomMode(KoZoomMode::ZOOM_PAGE);
-    m_d->zoomManager->zoomController()->setAspectMode(true);
+    if (m_d->viewConverter)
+        m_d->viewConverter->setZoomMode(KoZoomMode::ZOOM_PAGE);
+    if (m_d->zoomManager && m_d->zoomManager->zoomController())
+        m_d->zoomManager->zoomController()->setAspectMode(true);
 
     updateGUI();
 

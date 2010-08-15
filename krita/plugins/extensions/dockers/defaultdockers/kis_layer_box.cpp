@@ -87,7 +87,6 @@ KisLayerBox::KisLayerBox()
 
     setMinimumSize(mainWidget->minimumSizeHint());
 
-    m_wdgLayerBox->listLayers->viewport()->installEventFilter(this);
     m_wdgLayerBox->listLayers->setDragDropMode(QAbstractItemView::InternalMove);
     m_wdgLayerBox->listLayers->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
 

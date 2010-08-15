@@ -343,7 +343,7 @@ QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets
 
     QList<KoDocument::CustomDocumentWidgetItem> widgetList;
     KoDocument::CustomDocumentWidgetItem item;
-    item.widget = new KisCustomImageWidget(parent, this, w, h, clipAvailable, cfg.defImageResolution(), cfg.workingColorSpace(), "unnamed");
+    item.widget = new KisCustomImageWidget(parent, this, w, h, clipAvailable, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(), "unnamed");
     widgetList << item;
 
     return widgetList;
@@ -404,7 +404,9 @@ bool KisDoc2::newImage(const QString& name,
     cfg.defImageWidth(width);
     cfg.defImageHeight(height);
     cfg.defImageResolution(imageResolution);
-
+    cfg.defColorModel(image->colorSpace()->colorModelId().id());
+    cfg.defColorDepth(image->colorSpace()->colorDepthId().id());
+    cfg.defColorProfile(image->colorSpace()->profile()->name());
 
     qApp->restoreOverrideCursor();
     return true;

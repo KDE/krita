@@ -30,6 +30,8 @@
 #include <QStringList>
 
 #include "kis_global.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoColorProfile.h>
 
 
 namespace
@@ -96,6 +98,36 @@ qint32 KisConfig::defImageHeight() const
 double KisConfig::defImageResolution() const
 {
     return m_cfg.readEntry("imageResolutionDef", IMAGE_DEFAULT_RESOLUTION) / 72.0;
+}
+
+QString KisConfig::defColorModel() const
+{
+    return m_cfg.readEntry("colorModelDef", KoColorSpaceRegistry::instance()->rgb8()->colorModelId().id());
+}
+
+void KisConfig::defColorModel(const QString & model)
+{
+    m_cfg.writeEntry("colorModelDef", model);
+}
+
+QString KisConfig::defColorDepth() const
+{
+    return m_cfg.readEntry("colorDepthDef", KoColorSpaceRegistry::instance()->rgb8()->colorDepthId().id());
+}
+
+void KisConfig::defColorDepth(const QString & depth)
+{
+    m_cfg.writeEntry("colorDepthDef", depth);
+}
+
+QString KisConfig::defColorProfile() const
+{
+    return m_cfg.readEntry("colorProfileDef", KoColorSpaceRegistry::instance()->rgb8()->profile()->name());
+}
+
+void KisConfig::defColorProfile(const QString & profile)
+{
+    m_cfg.writeEntry("colorProfileDef", profile);
 }
 
 void KisConfig::defImageWidth(qint32 width)

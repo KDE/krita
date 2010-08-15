@@ -50,6 +50,33 @@ public:
 
     double defImageResolution() const;
     void defImageResolution(double res);
+    
+    /**
+     * @return the id of the default color model used for creating new images.
+     */
+    QString defColorModel() const;
+    /**
+     * set the id of the default color model used for creating new images.
+     */
+    void defColorModel(const QString & model);
+
+    /**
+     * @return the id of the default color depth used for creating new images.
+     */
+    QString defColorDepth() const;
+    /**
+     * set the id of the default color depth used for creating new images.
+     */
+    void defColorDepth(const QString & depth);
+
+    /**
+     * @return the id of the default color profile used for creating new images.
+     */
+    QString defColorProfile() const;
+    /**
+     * set the id of the default color profile used for creating new images.
+     */
+    void defColorProfile(const QString & depth);
 
     enumCursorStyle cursorStyle() const;
     enumCursorStyle getDefaultCursorStyle() const;

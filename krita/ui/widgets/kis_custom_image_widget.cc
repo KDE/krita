@@ -56,10 +56,9 @@
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
-KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32 defWidth, qint32 defHeight, bool clipAvailable, double resolution, const QString & defColorSpaceName, const QString & imageName)
+KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32 defWidth, qint32 defHeight, bool clipAvailable, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
         : WdgNewImage(parent)
 {
-    Q_UNUSED(defColorSpaceName);
     setObjectName("KisCustomImageWidget");
     m_doc = doc;
 
@@ -98,8 +97,9 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
     chkFromClipboard->setChecked(clipAvailable);
     chkFromClipboard->setEnabled(clipAvailable);
 
-    colorSpaceSelector->setCurrentColorModel(RGBAColorModelID);
-    colorSpaceSelector->setCurrentColorDepth(Integer8BitsColorDepthID);
+    colorSpaceSelector->setCurrentColorModel(KoID(defColorModel));
+    colorSpaceSelector->setCurrentColorDepth(KoID(defColorDepth));
+    colorSpaceSelector->setCurrentProfile(defColorProfile);
 
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));

@@ -11,8 +11,7 @@ public:
     KisCurveWidget(QWidget *parent = 0);
     ~KisCurveWidget();
 
-protected:
-    void paintEvent(QPaintEvent *);
+private:
 };
 
 #endif // KIS_CURVE_WIDGET_H

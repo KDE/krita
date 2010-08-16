@@ -1,13 +1,80 @@
 #include "kis_curve_widget.h"
 
+#include <QHBoxLayout>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
-#include <QVector2D>
+
+#include "kis_cubic_curve_widget.h"
+#include "kis_linear_curve_widget.h"
+
+class KisPaintedCurveWidget : public QWidget {
+public:
+    KisPaintedCurveWidget(QWidget *parent = 0)
+        : QWidget(parent), m_lastPointX(-1)
+    {}
+
+protected:
+    void paintEvent(QPaintEvent *)
+    {
+        QPainter painter(this);
+//        painter.setMatrix(m_converterMatrix);
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        QPainterPath path;
+        path.moveTo(0,0);
+
+
+        for (QMap<int, int>::iterator iter=m_points.begin(); iter!=(m_points.end()); iter++) {
+            path.lineTo(iter.key(), iter.value());
+        }
+
+        painter.drawPath(path);
+    }
+
+    inline void deletePoints(int fromX, int toX)
+    {
+        int start = qMin(fromX, toX);
+        int end = qMax(fromX, toX);
+
+        QList<int> keys = m_points.keys();
+        for(int i=0; i<keys.size(); i++) {
+            if(keys.at(i)>start && keys.at(i)<end)
+                m_points.remove(keys.at(i));
+        }
+    }
+
+    void mousePressEvent(QMouseEvent *e)
+    {
+        if(e->button()==Qt::LeftButton) {
+            m_lastPointX = e->x();
+        }
+    }
+
+    void mouseMoveEvent(QMouseEvent *e)
+    {
+        if(e->buttons()&Qt::LeftButton) {
+            deletePoints(m_lastPointX, e->x());
+            m_points.insert(e->x(), e->y());
+            m_lastPointX=e->x();
+            update();
+        }
+    }
+
+private:
+    QMap<int, int> m_points;
+    int m_lastPointX;
+};
 
 KisCurveWidget::KisCurveWidget(QWidget *parent)
     : QWidget(parent)
 {
-    resize(500, 500);
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->addWidget(new KisPaintedCurveWidget(this));
+    layout->addWidget(new KisCubicCurveWidget(this));
+    layout->addWidget(new KisLinearCurveWidget(this));
+
+    resize(1500, 500);
 }
 
 KisCurveWidget::~KisCurveWidget()
@@ -15,64 +82,3 @@ KisCurveWidget::~KisCurveWidget()
 
 }
 
-
-void KisCurveWidget::paintEvent(QPaintEvent *)
-{
-    QList<QPoint> points;
-    points.append(QPoint(0,0));
-//    points.append(QPoint(100,10));
-//    points.append(QPoint(150,100));
-//    points.append(QPoint(180,70));
-//    points.append(QPoint(210,280));
-//    points.append(QPoint(255,0));
-    points.append(QPoint(40, 260));
-    points.append(QPoint(300,300));
-
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.translate(100, 100);
-    QPainterPath path;
-    path.moveTo(points.first());
-//    path.lineTo(100, 200);
-//    path.lineTo(300, 300);
-//    path.quadTo(100,200, 300,300);
-
-    QList<QPair<QVector2D, QVector2D> > controlPoints;
-//    controlPoints.append(QPair<QVector2D, QVector2D>(QVector2D(0,0), QVector2D(1,1)));
-
-    for(int i=0; i<points.size(); i++) {
-        QVector2D last(points.at((i-1)>=0?(i-1):0));
-        QVector2D current(points.at(i));
-        QVector2D next(points.at((i+1)<points.size()?(i+1):i));
-
-        QVector2D tangent = next-last;
-        tangent.normalize();
-
-        QVector2D ctrlPt1(current - (current.x()-last.x())*0.5*tangent);
-        QVector2D ctrlPt2(current + (next.x()-current.x())*0.5*tangent);
-
-        controlPoints.append(QPair<QVector2D, QVector2D>(ctrlPt1, ctrlPt2));
-    }
-
-//    controlPoints.append(QPair<QVector2D, QVector2D>(QVector2D(299,299), QVector2D(301,301)));
-
-//    path.lineTo(points.at());
-    for(int i=1; i<points.size(); i++) {
-        path.cubicTo(controlPoints.at(i-1).second.toPoint(), controlPoints.at(i).first.toPoint(), points.at(i));
-    }
-//    path.lineTo(points.last());
-
-
-    painter.drawPath(path);
-
-
-    for(int i=0; i<points.size(); i++) {
-        painter.drawEllipse(points.at(i), 5, 5);
-    }
-
-    for(int i=0; i<controlPoints.size(); i++) {
-        painter.drawEllipse(controlPoints.at(i).first.toPoint(), 2, 2);
-        painter.drawEllipse(controlPoints.at(i).second.toPoint(), 3, 3);
-        painter.drawEllipse(controlPoints.at(i).second.toPoint(), 1, 1);
-    }
-}

@@ -52,7 +52,7 @@ public:
         specularReflectivityKisDoubleSliderSpinBox -> setRange(0, 1, 2);
         shinynessExponentKisSliderSpinBox          -> setRange(1, 200);
         
-        ambientReflectivityKisDoubleSliderSpinBox  -> setValue(0);
+        ambientReflectivityKisDoubleSliderSpinBox  -> setValue(0.1);
         diffuseReflectivityKisDoubleSliderSpinBox  -> setValue(0.5);
         specularReflectivityKisDoubleSliderSpinBox -> setValue(0.5);
         shinynessExponentKisSliderSpinBox          -> setValue(40);
@@ -72,7 +72,6 @@ public:
  * heightmap-based mesh to achieve a bumpmapping effect with
  * multiple illumination sources.
  *
- * TODO: actually make it support multiple illumination sources.
  */
 class KisFilterPhongBumpmap : public KisFilter
 {

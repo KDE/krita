@@ -108,7 +108,7 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
     // Benchmark
     QTime timer, timerE;
     
-    QString userChosenHeightChannel = config->getString("heightChannel", "FAIL");
+    QString userChosenHeightChannel = config->getString(PHONG_HEIGHT_CHANNEL, "FAIL");
     
     if (userChosenHeightChannel == "FAIL") {
         qDebug("FIX YOUR FILTER");
@@ -208,7 +208,8 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
                     posright = y * tileLimits.width() + x + 1;
                     
                     bumpmapByteLines[y + tileLimits.y() - OUTPUT_OFFSET][x + tileLimits.x() - OUTPUT_OFFSET] =
-                    tileRenderer.reallyFastIlluminatePixel(posup, posdown, posleft, posright);
+                    //tileRenderer.reallyFastIlluminatePixel(posup, posdown, posleft, posright);
+                    tileRenderer.testingSpeedIlluminatePixel(posup, posdown, posleft, posright);
                 }
             }
         }
@@ -242,7 +243,8 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
                     posright = y * tileLimits.width() + x + 1;
                     
                     bumpmapByteLines[y + tileLimits.y() - OUTPUT_OFFSET][x + tileLimits.x() - OUTPUT_OFFSET] =
-                    tileRenderer.reallyFastIlluminatePixel(posup, posdown, posleft, posright);
+                    //tileRenderer.reallyFastIlluminatePixel(posup, posdown, posleft, posright);
+                    tileRenderer.testingSpeedIlluminatePixel(posup, posdown, posleft, posright);
                 }
             }
         }
@@ -276,7 +278,8 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
                     posright = y * tileLimits.width() + x + 1;
                     
                     bumpmapByteLines[y + tileLimits.y() - OUTPUT_OFFSET][x + tileLimits.x() - OUTPUT_OFFSET] =
-                    tileRenderer.reallyFastIlluminatePixel(posup, posdown, posleft, posright);
+                    //tileRenderer.reallyFastIlluminatePixel(posup, posdown, posleft, posright);
+                    tileRenderer.testingSpeedIlluminatePixel(posup, posdown, posleft, posright);
                 }
             }
         }
@@ -310,7 +313,8 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
                 posright = y * tileLimits.width() + x + 1;
                 
                 bumpmapByteLines[y + tileLimits.y() - OUTPUT_OFFSET][x + tileLimits.x() - OUTPUT_OFFSET] =
-                tileRenderer.reallyFastIlluminatePixel(posup, posdown, posleft, posright);
+                //tileRenderer.reallyFastIlluminatePixel(posup, posdown, posleft, posright);
+                tileRenderer.testingSpeedIlluminatePixel(posup, posdown, posleft, posright);
             }
         }
     }
@@ -420,6 +424,35 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
 
 void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
+    QVariant tempcolor;
+    m_page->ambientReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_AMBIENT_REFLECTIVITY) );
+    m_page->diffuseReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_DIFFUSE_REFLECTIVITY) );
+    m_page->specularReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_SPECULAR_REFLECTIVITY) );
+    m_page->shinynessExponentKisSliderSpinBox->setValue( config->getInt(PHONG_SHINYNESS_EXPONENT) );
+    m_page->diffuseReflectivityCheckBox->setChecked( config->getBool(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED) ); 
+    m_page->specularReflectivityCheckBox->setChecked( config->getBool(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED) );
+    // Indexes are off by 1 simply because arrays start at 0 and the GUI naming scheme started at 1
+    m_page->lightSourceGroupBox1->setChecked( config->getBool(PHONG_ILLUMINANT_IS_ENABLED[0]) );
+    m_page->lightSourceGroupBox2->setChecked( config->getBool(PHONG_ILLUMINANT_IS_ENABLED[1]) );
+    m_page->lightSourceGroupBox3->setChecked( config->getBool(PHONG_ILLUMINANT_IS_ENABLED[2]) );
+    m_page->lightSourceGroupBox4->setChecked( config->getBool(PHONG_ILLUMINANT_IS_ENABLED[3]) );
+    config->getProperty(PHONG_ILLUMINANT_COLOR[0], tempcolor);
+    m_page->lightKColorCombo1->setColor(tempcolor.value<QColor>());
+    config->getProperty(PHONG_ILLUMINANT_COLOR[1], tempcolor);
+    m_page->lightKColorCombo2->setColor(tempcolor.value<QColor>());
+    config->getProperty(PHONG_ILLUMINANT_COLOR[2], tempcolor);
+    m_page->lightKColorCombo3->setColor(tempcolor.value<QColor>());
+    config->getProperty(PHONG_ILLUMINANT_COLOR[3], tempcolor);
+    m_page->lightKColorCombo4->setColor(tempcolor.value<QColor>());
+    m_page->azimuthSpinBox1->setValue( config->getDouble(PHONG_ILLUMINANT_AZIMUTH[0]) );
+    m_page->azimuthSpinBox2->setValue( config->getDouble(PHONG_ILLUMINANT_AZIMUTH[1]) );
+    m_page->azimuthSpinBox3->setValue( config->getDouble(PHONG_ILLUMINANT_AZIMUTH[2]) );
+    m_page->azimuthSpinBox4->setValue( config->getDouble(PHONG_ILLUMINANT_AZIMUTH[3]) );
+    m_page->inclinationSpinBox1->setValue( config->getDouble(PHONG_ILLUMINANT_INCLINATION[0]) );
+    m_page->inclinationSpinBox2->setValue( config->getDouble(PHONG_ILLUMINANT_INCLINATION[1]) );
+    m_page->inclinationSpinBox3->setValue( config->getDouble(PHONG_ILLUMINANT_INCLINATION[2]) );
+    m_page->inclinationSpinBox4->setValue( config->getDouble(PHONG_ILLUMINANT_INCLINATION[3]) );
+    
     if (!config) return;
 }
 
@@ -433,20 +466,32 @@ KisPropertiesConfiguration* KisPhongBumpmapConfigWidget::configuration() const
     config->setProperty(PHONG_SHINYNESS_EXPONENT, m_page->shinynessExponentKisSliderSpinBox->value());
     config->setProperty(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED, m_page->diffuseReflectivityCheckBox->isChecked());
     config->setProperty(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED, m_page->specularReflectivityCheckBox->isChecked());
-    config->setProperty(PHONG_SHINYNESS_EXPONENT_IS_ENABLED, m_page->specularReflectivityCheckBox->isChecked());
-    config->setProperty(PHONG_ILLUMINANT_COLOR[1], m_page->lightKColorCombo1->color());
-    config->setProperty(PHONG_ILLUMINANT_COLOR[2], m_page->lightKColorCombo2->color());
-    config->setProperty(PHONG_ILLUMINANT_COLOR[3], m_page->lightKColorCombo3->color());
-    config->setProperty(PHONG_ILLUMINANT_COLOR[4], m_page->lightKColorCombo4->color());
-    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[1], m_page->azimuthSpinBox1->value());
-    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[2], m_page->azimuthSpinBox2->value());
-    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[3], m_page->azimuthSpinBox3->value());
-    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[4], m_page->azimuthSpinBox4->value());
-    config->setProperty(PHONG_ILLUMINANT_INCLINATION[1], m_page->inclinationSpinBox1->value());
-    config->setProperty(PHONG_ILLUMINANT_INCLINATION[2], m_page->inclinationSpinBox2->value());
-    config->setProperty(PHONG_ILLUMINANT_INCLINATION[3], m_page->inclinationSpinBox3->value());
-    config->setProperty(PHONG_ILLUMINANT_INCLINATION[4], m_page->inclinationSpinBox4->value());
-
+    //config->setProperty(PHONG_SHINYNESS_EXPONENT_IS_ENABLED, m_page->specularReflectivityCheckBox->isChecked());
+    // Indexes are off by 1 simply because arrays start at 0 and the GUI naming scheme started at 1
+    config->setProperty(PHONG_ILLUMINANT_IS_ENABLED[0], m_page->lightSourceGroupBox1->isChecked());
+    config->setProperty(PHONG_ILLUMINANT_IS_ENABLED[1], m_page->lightSourceGroupBox2->isChecked());
+    config->setProperty(PHONG_ILLUMINANT_IS_ENABLED[2], m_page->lightSourceGroupBox3->isChecked());
+    config->setProperty(PHONG_ILLUMINANT_IS_ENABLED[3], m_page->lightSourceGroupBox4->isChecked());
+    config->setProperty(PHONG_ILLUMINANT_COLOR[0], m_page->lightKColorCombo1->color());
+    config->setProperty(PHONG_ILLUMINANT_COLOR[1], m_page->lightKColorCombo2->color());
+    config->setProperty(PHONG_ILLUMINANT_COLOR[2], m_page->lightKColorCombo3->color());
+    config->setProperty(PHONG_ILLUMINANT_COLOR[3], m_page->lightKColorCombo4->color());
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[0], m_page->azimuthSpinBox1->value());
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[1], m_page->azimuthSpinBox2->value());
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[2], m_page->azimuthSpinBox3->value());
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[3], m_page->azimuthSpinBox4->value());
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[0], m_page->inclinationSpinBox1->value());
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[1], m_page->inclinationSpinBox2->value());
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[2], m_page->inclinationSpinBox3->value());
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[3], m_page->inclinationSpinBox4->value());
+    
+    // Read configuration
+    QMap<QString, QVariant> rofl = QMap<QString, QVariant>(config->getProperties());
+    
+    QMap<QString, QVariant>::const_iterator i;
+    for (i = rofl.constBegin(); i != rofl.constEnd(); ++i)
+        qDebug() << i.key() << ":" << i.value();
+    
     return config;
 }
 

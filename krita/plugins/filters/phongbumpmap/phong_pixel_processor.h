@@ -73,15 +73,24 @@ public:
     ///Total specular light
     qreal Is;
     
+    QRgb testingSpeedIlluminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright);
     QRgb reallyFastIlluminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright);
     QRgb fastIlluminatePixel(QPoint posup, QPoint posdown, QPoint posleft, QPoint posright);
     QColor illuminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright);
     
     void setLightVector(QVector3D light_vector);
     
+    ///Light sources to use (those disabled in the GUI are not present here)
     QList<Illuminant> lightSources;
+    
+    ///Size of this stuff
+    quint8 size;
+    
     Illuminant fastLight;
     Illuminant fastLight2;
+    
+    bool diffuseLightIsEnabled;
+    bool specularLightIsEnabled;
 };
 
 

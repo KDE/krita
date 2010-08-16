@@ -41,7 +41,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="generalSettings">
       <attribute name="title">
@@ -229,22 +229,6 @@
        </property>
        <property name="text">
         <string>Channel to use as heightmap</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="warningGUILabel">
-       <property name="geometry">
-        <rect>
-         <x>350</x>
-         <y>80</y>
-         <width>141</width>
-         <height>61</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Warning: all GUI except Heightmap channel is unlinked.</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
        </property>
       </widget>
      </widget>

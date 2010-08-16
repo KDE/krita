@@ -49,6 +49,7 @@ TreeShape::TreeShape(KoResourceManager *documentResources)
     root->setSize(QSizeF(60,30));
     KoTextOnShapeContainer *tos = new KoTextOnShapeContainer(root, documentResources);
     tos->setResizeBehavior(KoTextOnShapeContainer::IndependendSizes);
+    tos->setPlainText(" ");
     root = tos;
     root->setName("TextOnShape0");
     root->setParent(this);
@@ -77,6 +78,12 @@ TreeShape::TreeShape(KoShape *shape, KoResourceManager *documentResources)
 
 TreeShape::~TreeShape()
 {
+    kDebug() << "";
+    KoShape *tos = root();
+    if (tos) {
+        kDebug() << this << "deleting root";
+        delete tos;
+    }
 }
 
 void TreeShape::setZIndex(int zIndex)
@@ -227,7 +234,10 @@ bool TreeShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
             TreeShape *tree = dynamic_cast<TreeShape*>(shape);
             KoConnectionShape *connector = dynamic_cast<KoConnectionShape*>(shape);
             if (tos) {
-                kDebug() << "Setting Root";
+                kDebug() << this << "Setting Root";
+                KoShape *oldRoot = root();
+                if (oldRoot)
+                    oldRoot->deleteLater();
                 setRoot(tos, proposedRootType);
             } else if (tree) {
                 trees.append(shape);

@@ -34,6 +34,9 @@
 #include <KoSelection.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
+#include <KoShapePaste.h>
+#include <KoShapeOdfSaveHelper.h>
+#include <KoDrag.h>
 #include <KoDocument.h>
 #include <KoCanvasBase.h>
 #include <KoResourceManager.h>
@@ -44,6 +47,7 @@
 #include <KoSnapGuide.h>
 
 #include <QKeyEvent>
+#include <QClipboard>
 
 #include "kdebug.h"
 
@@ -379,6 +383,59 @@ void TreeTool::repaintDecorations()
     Q_ASSERT(koSelection());
     if (koSelection()->count() > 0)
         canvas()->updateCanvas(koSelection()->boundingRect());
+}
+
+void TreeTool::copy() const
+{
+    QList<KoShape*> shapes;
+    foreach (TreeShape *tree, m_selectedTrees)
+        shapes.append(dynamic_cast<KoShape*>(tree));
+
+    if (!m_selectedTrees.empty()) {
+        KoShapeOdfSaveHelper saveHelper(shapes);
+        KoDrag drag;
+        drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+        drag.addToClipboard();
+    }
+}
+
+void TreeTool::deleteSelection()
+{
+    QList<KoShape*> shapes;
+    foreach (TreeShape *tree, m_selectedTrees)
+        shapes.append(dynamic_cast<KoShape*>(tree));
+
+    if (!m_selectedTrees.empty()) {
+        canvas()->addCommand(canvas()->shapeController()->removeShapes(shapes));
+    }
+}
+
+bool TreeTool::paste()
+{
+    const QMimeData * data = QApplication::clipboard()->mimeData();
+
+    bool success = false;
+    if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))) {
+        KoShapeManager * shapeManager = canvas()->shapeManager();
+        KoShapePaste paste(canvas(), shapeManager->selection()->activeLayer());
+        success = paste.paste(KoOdf::Text, data);
+        if (success) {
+            shapeManager->selection()->deselectAll();
+            foreach(KoShape *shape, paste.pastedShapes()) {
+                TreeShape *tree = dynamic_cast<TreeShape*>(shape);
+                Q_ASSERT(tree);
+                shapeManager->selection()->select(tree->root());
+            }
+        }
+    }
+    return success;
+}
+
+QStringList TreeTool::supportedPasteMimeTypes() const
+{
+    QStringList list;
+    list << KoOdf::mimeType(KoOdf::Text);
+    return list;
 }
 
 KoSelection *TreeTool::koSelection()

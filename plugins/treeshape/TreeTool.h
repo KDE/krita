@@ -50,6 +50,12 @@ public:
     virtual ~TreeTool();
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
     virtual void repaintDecorations();
+
+    virtual void copy() const;
+    virtual void deleteSelection();
+    virtual bool paste();
+    virtual QStringList supportedPasteMimeTypes() const;
+
     virtual KoToolSelection* selection();
 
 signals:

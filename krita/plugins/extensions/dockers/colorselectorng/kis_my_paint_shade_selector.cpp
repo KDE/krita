@@ -65,6 +65,8 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
     // This selector was ported from MyPaint in 2010
 
     m_pixelCache = QImage(width(), height(), QImage::Format_ARGB32_Premultiplied);
+    QImage circleBorder(width(), height(), QImage::Format_ARGB32_Premultiplied);
+    circleBorder.fill(qRgba(0,0,0,0));
 
     int size = qMin(width(), height());
     int s_radius = size/2.6;
@@ -100,22 +102,10 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
             else
                 dys = dy + stripe_width;
 
-            float r = std::sqrt(sqr(dxs)+sqr(dys));
+            qreal r = std::sqrt(qreal(sqr(dxs)+sqr(dys)));
 
-            // hue
-            if (r < s_radius-100) {
-                if (dx > 0)
-                    h = 90*sqr2(r/s_radius);
-                else
-                    h = 360 - 90*sqr2(r/s_radius);
-                s = 256*(atan2f(std::abs(dxs),dys)/M_PI) - 128;
-            } else {
-                h = 180 + 180*atan2f(dys,-dxs)/M_PI;
-                v = 255*(r-s_radius)/(diag-s_radius) - 128;
-            }
-
-            // horizontal and vertical lines
             if (qMin(abs(dx), abs(dy)) < stripe_width) {
+                // horizontal and vertical lines
                 dx = (dx/qreal(width()))*255;
                 dy = (dy/qreal(height()))*255;
                 h = 0;
@@ -130,6 +120,46 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
                     // vertical stripe
                     v = 0.0;
                 }
+            }
+            else if (r < s_radius+1) {
+                // hue
+                if (dx > 0)
+                    h = 90*sqr2(r/s_radius);
+                else
+                    h = 360 - 90*sqr2(r/s_radius);
+                s = 256*(atan2f(std::abs(dxs),dys)/M_PI) - 128;
+
+                if (r > s_radius) {
+                    // antialiasing boarder
+                    qreal aaFactor = r-floor(r); // part after the decimal point
+                    aaFactor = 1-aaFactor;
+
+                    qreal fh = m_colorH + h/360.0;
+                    qreal fs = m_colorS + s/255.0;
+                    qreal fv = m_colorV + v/255.0;
+
+                    fh -= floor(fh);
+                    fs = qBound(qreal(0.0), fs, qreal(1.0));
+                    fv = qBound(qreal(0.1), fv, qreal(1.0));
+
+                    qcolor.setHsvF(fh, fs, fv);
+                    kocolor.fromQColor(qcolor);
+                    kocolor.toQColor(&qcolor);
+
+                    int aaR = qcolor.red()*aaFactor;
+                    int aaG = qcolor.green()*aaFactor;
+                    int aaB = qcolor.blue()*aaFactor;
+
+                    circleBorder.setPixel(x, y, qRgba(aaR, aaG, aaB, 255*aaFactor));
+
+                    h = 180 + 180*atan2f(dys,-dxs)/M_PI;
+                    v = 255*(r-s_radius)/(diag-s_radius) - 128;
+                }
+            }
+            else {
+                // background (hue+darkness gradient)
+                h = 180 + 180*atan2f(dys,-dxs)/M_PI;
+                v = 255*(r-s_radius)/(diag-s_radius) - 128;
             }
 
             qreal fh = m_colorH + h/360.0;
@@ -147,10 +177,11 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
         }
     }
 
-        QPainter painter(this);
-//        QRect target(0, 0, qMin(width(), height()), qMin(width(), height()));
-//        painter.drawImage(target, m_pixelCache, m_pixelCache.rect());
-        painter.drawImage(0, 0, m_pixelCache);
+    QPainter pixelCachePainter(&m_pixelCache);
+    pixelCachePainter.drawImage(0,0, circleBorder);
+
+    QPainter painter(this);
+    painter.drawImage(0, 0, m_pixelCache);
 }
 
 

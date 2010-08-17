@@ -21,6 +21,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp 
     canvas/kis_canvas2.cpp 
     canvas/kis_canvas_decoration.cc
+    canvas/kis_coordinates_converter.cpp 
     canvas/kis_grid_manager.cpp 
     canvas/kis_grid_painter_configuration.cpp
     canvas/kis_perspective_grid_manager.cpp  

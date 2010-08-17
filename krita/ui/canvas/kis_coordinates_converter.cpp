@@ -257,6 +257,15 @@ QRectF KisCoordinatesConverter::widgetRectInFlakePixels() const
     return reversedTransform.mapRect(QRectF(QPoint(0,0), m_d->canvasWidgetSize));
 }
 
+QPoint KisCoordinatesConverter::offsetFromFlakeCenterPoint(const QPointF &pt) const
+{
+    QTransform transform = m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget;
+    QPointF newWidgetCenter = transform.map(pt);
+    QPointF oldWidgetCenter = QPointF(m_d->canvasWidgetSize.width() / 2, m_d->canvasWidgetSize.height() / 2);
+
+    return documentOffset() + (newWidgetCenter - oldWidgetCenter).toPoint();
+}
+
 void KisCoordinatesConverter::imageScale(qreal *scaleX, qreal *scaleY) const
 {
     // get the x and y zoom level of the canvas

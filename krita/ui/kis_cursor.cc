@@ -330,12 +330,12 @@ QCursor KisCursor::selectCursor()
 
 QCursor KisCursor::openHandCursor()
 {
-    return load("openhand_cursor.xpm");
+    return Qt::OpenHandCursor;
 }
 
 QCursor KisCursor::closedHandCursor()
 {
-    return load("closedhand_cursor.xpm");
+    return Qt::ClosedHandCursor;
 }
 
 QCursor KisCursor::rotateCursor()

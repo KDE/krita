@@ -134,7 +134,7 @@ KisCanvas2::~KisCanvas2()
 
 void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
-    connect(widget, SIGNAL(needAdjustOrigin()), this, SLOT(adjustOrigin()), Qt::DirectConnection);
+    connect(widget, SIGNAL(needAdjustOrigin()), this, SLOT(adjustOrigin()));
 
     KisAbstractCanvasWidget * tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
     Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");

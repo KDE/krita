@@ -527,6 +527,7 @@ void KisTool::beginOpenGL()
 
     if (canvasWidget) {
         canvasWidget->beginOpenGL();
+        canvasWidget->setupFlakeToWidgetTransformation();
     }
 #endif
 }

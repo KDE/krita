@@ -54,7 +54,7 @@ node model
 */
 void kisnodemodel_test::testRowcount()
 {
-    KisImageWSP image = new KisImage(0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage");
+    KisImageSP image = new KisImage(0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage");
 
     KisNodeModel model(0);
     ModelTest(&model, this);
@@ -102,7 +102,7 @@ mode:
 */
 void kisnodemodel_test::testModelIndex()
 {
-    KisImageWSP image = new KisImage(0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage");
+    KisImageSP image = new KisImage(0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage");
 
     KisNodeModel model(0);
     ModelTest(&model, this);
@@ -180,7 +180,7 @@ void kisnodemodel_test::testModelIndex()
 
 void kisnodemodel_test::testGroupLayers()
 {
-    KisImageWSP image = new KisImage(0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage");
+    KisImageSP image = new KisImage(0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage");
 
     KisNodeModel model(0);
     ModelTest(&model, this);

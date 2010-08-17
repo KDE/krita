@@ -110,7 +110,6 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
     glViewport(0, 0, (GLint)width, (GLint)height);
 
     emit needAdjustOrigin();
-    update();
 }
 
 void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
@@ -225,6 +224,11 @@ void KisOpenGLCanvas2::drawBackground()
 void KisOpenGLCanvas2::drawImage()
 {
     setupImageToWidgetTransformation();
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
     KisImageWSP image = canvas()->image();
     KisCoordinatesConverter *converter = coordinatesConverter();
@@ -365,10 +369,23 @@ void KisOpenGLCanvas2::setupImageToWidgetTransformation()
 
     glMatrixMode(GL_MODELVIEW);
 
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     QTransform transform = coordinatesConverter()->imageToWidgetTransform();
+    loadQTransform(transform);
+}
+
+void KisOpenGLCanvas2::setupFlakeToWidgetTransformation()
+{
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glViewport(0, 0, width(), height());
+    glOrtho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity();
+
+    glMatrixMode(GL_MODELVIEW);
+
+    QTransform transform = coordinatesConverter()->flakeToWidgetTransform();
     loadQTransform(transform);
 }
 

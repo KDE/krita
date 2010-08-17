@@ -21,6 +21,15 @@
 #include "KoToolRegistry.h"
 #include <KGlobal>
 
+#include "tools/KoCreatePathToolFactory.h"
+#include "tools/KoCreateShapesToolFactory.h"
+#include "tools/KoCreateShapesTool.h"
+#include "tools/KoPathToolFactory.h"
+#include "tools/KoZoomTool.h"
+#include "tools/KoZoomToolFactory.h"
+#include "tools/KoPanTool.h"
+#include "tools/KoPanToolFactory.h"
+
 #include <KoPluginLoader.h>
 
 KoToolRegistry::KoToolRegistry()
@@ -39,6 +48,7 @@ void KoToolRegistry::init()
     config.blacklist = "ToolPluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Tool"),
                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"));
+    registerGenericTools();
 }
 
 KoToolRegistry::~KoToolRegistry()
@@ -52,6 +62,15 @@ KoToolRegistry* KoToolRegistry::instance()
         s_instance->init();
     }
     return s_instance;
+}
+
+void KoToolRegistry::registerGenericTools()
+{
+    add(new KoCreatePathToolFactory(this));
+    add(new KoCreateShapesToolFactory(this));
+    add(new KoPathToolFactory(this));
+    add(new KoZoomToolFactory(this));
+    add(new KoPanToolFactory(this));
 }
 
 #include <KoToolRegistry.moc>

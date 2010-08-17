@@ -27,10 +27,6 @@
 #include "KoToolProxy.h"
 #include "KoToolProxy_p.h"
 #include "KoSelection.h"
-#include "tools/KoCreatePathToolFactory.h"
-#include "tools/KoCreateShapesToolFactory.h"
-#include "tools/KoCreateShapesTool.h"
-#include "tools/KoPathToolFactory.h"
 #include "KoCanvasController.h"
 #include "KoCanvasControllerWidget.h"
 #include "KoShape.h"
@@ -41,10 +37,9 @@
 #include "KoInputDeviceHandlerRegistry.h"
 #include "KoInputDeviceHandlerEvent.h"
 #include "KoPointerEvent.h"
+#include "tools/KoCreateShapesTool.h"
 #include "tools/KoZoomTool.h"
-#include "tools/KoZoomToolFactory.h"
 #include "tools/KoPanTool.h"
-#include "tools/KoPanToolFactory.h"
 
 // Qt + kde
 #include <QWidget>
@@ -162,12 +157,6 @@ void KoToolManager::Private::setup()
 {
     if (tools.size() > 0)
         return;
-
-    tools.append(new ToolHelper(new KoCreatePathToolFactory(q)));
-    tools.append(new ToolHelper(new KoCreateShapesToolFactory(q)));
-    tools.append(new ToolHelper(new KoPathToolFactory(q)));
-    tools.append(new ToolHelper(new KoZoomToolFactory(q)));
-    tools.append(new ToolHelper(new KoPanToolFactory(q)));
 
     KoShapeRegistry::instance();
     KoToolRegistry *registry = KoToolRegistry::instance();

@@ -469,6 +469,10 @@ void OutputPainterStrategy::extCreateFontIndirectW( const ExtCreateFontIndirectW
 
 void OutputPainterStrategy::selectStockObject( const quint32 ihObject )
 {
+#if DEBUG_EMFPAINT
+    kDebug(31000) << ihObject;
+#endif
+
     switch ( ihObject ) {
     case WHITE_BRUSH:
 	m_painter->setBrush( QBrush( Qt::white ) );
@@ -498,11 +502,12 @@ void OutputPainterStrategy::selectStockObject( const quint32 ihObject )
 	m_painter->setPen( QPen( Qt::NoPen ) );
 	break;
     case OEM_FIXED_FONT:
-	Q_ASSERT( 0 );
-	break;
     case ANSI_FIXED_FONT:
-	Q_ASSERT( 0 );
-	break;
+        {
+            QFont  font(QString("Fixed"));
+            m_painter->setFont(font);
+            break;
+        }
     case ANSI_VAR_FONT:
 	Q_ASSERT( 0 );
 	break;

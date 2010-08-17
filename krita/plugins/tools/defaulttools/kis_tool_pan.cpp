@@ -25,13 +25,17 @@
 #include <KoCanvasController.h>
 #include <KoCanvasControllerWidget.h>
 
+#include <kis_canvas2.h>
+
 #include "kis_cursor.h"
+#include "kis_coordinates_converter.h"
 
 
 KisToolPan::KisToolPan(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::openHandCursor())
 {
     setObjectName("tool_pan");
+    m_rotationMode = false;
 }
 
 KisToolPan::~KisToolPan()
@@ -45,8 +49,46 @@ bool KisToolPan::wantsAutoScroll() const
 
 void KisToolPan::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    Q_UNUSED(gc);
     Q_UNUSED(converter);
+    if(m_rotationMode) {
+        const KisCoordinatesConverter *converter = kritaCanvas()->coordinatesConverter();
+        QPointF centerPoint = converter->flakeCenterPoint();
+
+        const qreal checkerRadius = 50;
+        QBrush fillBrush(QColor(0,0,0,100));
+        QPen checkerPen(QColor(255,255,255,100), 5., Qt::SolidLine, Qt::RoundCap);
+
+        gc.save();
+
+        gc.setPen(Qt::NoPen);
+        gc.setBrush(fillBrush);
+        gc.drawEllipse(centerPoint, checkerRadius, checkerRadius);
+
+        gc.setPen(checkerPen);
+        gc.drawLine(centerPoint, centerPoint + QPointF(0, -checkerRadius));
+
+        gc.restore();
+    }
+}
+
+KisCanvas2* KisToolPan::kritaCanvas() const
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+    return kritaCanvas;
+}
+
+qreal KisToolPan::calculateAngle(QPointF oldPoint,
+                                 QPointF newPoint)
+{
+    QPointF centerPoint = widgetCenterInWidgetPixels();
+    oldPoint -= centerPoint;
+    newPoint -= centerPoint;
+
+    qreal oldAngle = atan2(oldPoint.y(), oldPoint.x());
+    qreal newAngle = atan2(newPoint.y(), newPoint.x());
+
+    return (180 / 3.14) * (newAngle - oldAngle);
 }
 
 void KisToolPan::mousePressEvent(KoPointerEvent *e)
@@ -66,8 +108,15 @@ void KisToolPan::mouseMoveEvent(KoPointerEvent *e)
     e->accept();
 
     QPointF actualPosition = convertDocumentToWidget(e->point);
-    QPointF distance(m_lastPosition - actualPosition);
-    canvas()->canvasController()->pan(distance.toPoint());
+
+    if(e->modifiers() & Qt::ShiftModifier) {
+        qreal angle = calculateAngle(m_lastPosition, actualPosition);
+        kritaCanvas()->rotateCanvas(angle);
+    }
+    else {
+        QPointF distance(m_lastPosition - actualPosition);
+        canvas()->canvasController()->pan(distance.toPoint());
+    }
 
     m_lastPosition = actualPosition;
 }
@@ -97,8 +146,22 @@ void KisToolPan::keyPressEvent(QKeyEvent *event)
         case Qt::Key_Right:
             canvasControllerWidget->pan(QPoint(canvasControllerWidget->horizontalScrollBar()->singleStep(), 0));
             break;
+        case Qt::Key_Shift:
+            m_rotationMode = true;
+            kritaCanvas()->updateCanvas();
+            break;
     }
     event->accept();
+}
+
+void KisToolPan::keyReleaseEvent(QKeyEvent *event)
+{
+    switch (event->key()) {
+        case Qt::Key_Shift:
+            m_rotationMode = false;
+            kritaCanvas()->updateCanvas();
+            break;
+    }
 }
 
 #include "kis_tool_pan.moc"

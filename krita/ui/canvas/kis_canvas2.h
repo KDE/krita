@@ -173,6 +173,7 @@ public slots:
 
     /// slot for setting the mirroring
     void mirrorCanvas(bool mirror);
+    void rotateCanvas(qreal angle);
     void rotateCanvasRight15();
     void rotateCanvasLeft15();
     void resetCanvasTransformations();

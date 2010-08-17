@@ -157,6 +157,10 @@ QTransform KisCoordinatesConverter::postprocessingTransform() const
 DEFINE_TRANSFORM_METHODS(imageToDocument, documentToImage,
                          m_d->imageToDocument);
 
+DEFINE_TRANSFORM_METHODS(flakeToWidget, widgetToFlake,
+                         m_d->flakeToPostprocessedFlake
+                         * m_d->postprocessedFlakeToWidget);
+
 DEFINE_TRANSFORM_METHODS(documentToWidget, widgetToDocument,
                          m_d->documentToFlake * m_d->flakeToPostprocessedFlake
                          * m_d->postprocessedFlakeToWidget);
@@ -211,7 +215,7 @@ void KisCoordinatesConverter::getQPainterCheckersInfo(QTransform *transform,
 void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform,
                                                     QTransform *modelTransform,
                                                     QRectF *textureRect,
-                                                    QRectF *modelRect)
+                                                    QRectF *modelRect) const
 {
     KisConfig cfg;
     QRectF viewportRect = imageRectInViewportPixels();
@@ -266,7 +270,7 @@ QPoint KisCoordinatesConverter::shiftFromFlakeCenterPoint(const QPointF &pt) con
     return (newWidgetCenter - oldWidgetCenter).toPoint();
 }
 
-QPointF KisCoordinatesConverter::flakeCenterPoint()
+QPointF KisCoordinatesConverter::flakeCenterPoint() const
 {
     QRectF widgetRect = widgetRectInFlakePixels();
     return QPointF(widgetRect.left() + widgetRect.width() / 2,

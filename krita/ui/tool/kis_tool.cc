@@ -184,6 +184,15 @@ void KisTool::resourceChanged(int key, const QVariant & v)
     };
 }
 
+QPointF KisTool::widgetCenterInWidgetPixels()
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+
+    const KisCoordinatesConverter *converter = kritaCanvas->coordinatesConverter();
+    return converter->flakeToWidget(converter->flakeCenterPoint());
+}
+
 QPointF KisTool::convertDocumentToWidget(const QPointF& pt)
 {
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());

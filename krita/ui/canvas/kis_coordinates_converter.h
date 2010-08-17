@@ -91,6 +91,7 @@ public:
 
     // Automatic methods generation. See a comment above.
     DECLARE_TRANSFORM_METHODS(imageToViewport, viewportToImage);
+    DECLARE_TRANSFORM_METHODS(flakeToWidget, widgetToFlake);
     DECLARE_TRANSFORM_METHODS(widgetToViewport, viewportToWidget);
     DECLARE_TRANSFORM_METHODS(documentToWidget, widgetToDocument);
     DECLARE_TRANSFORM_METHODS(imageToDocument, documentToImage);
@@ -108,7 +109,7 @@ public:
     void getOpenGLCheckersInfo(QTransform *textureTransform,
                                QTransform *modelTransform,
                                QRectF *textureRect,
-                               QRectF *modelRect);
+                               QRectF *modelRect) const;
 
     QRectF imageRectInWidgetPixels() const;
     QRectF imageRectInViewportPixels() const;
@@ -116,7 +117,7 @@ public:
     QRectF widgetRectInFlakePixels() const;
 
     QPoint shiftFromFlakeCenterPoint(const QPointF &pt) const;
-    QPointF flakeCenterPoint();
+    QPointF flakeCenterPoint() const;
 
     void imageScale(qreal *scaleX, qreal *scaleY) const;
 

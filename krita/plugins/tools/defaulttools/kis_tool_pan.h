@@ -23,6 +23,7 @@
 #include <kis_tool.h>
 
 class KoCanvasBase;
+class KisCanvas2;
 
 class KisToolPan : public KisTool
 {
@@ -41,6 +42,7 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
     void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
@@ -48,7 +50,12 @@ public:
 //    virtual QWidget* optionWidget();
 
 private:
+    qreal calculateAngle(QPointF oldPoint, QPointF newPoint);
+    KisCanvas2* kritaCanvas() const;
+
+private:
     QPointF m_lastPosition;
+    bool m_rotationMode;
 };
 
 

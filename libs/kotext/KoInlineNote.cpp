@@ -39,7 +39,7 @@
 #include <QFontMetricsF>
 #include <QTextOption>
 #include <QDateTime>
-
+#include <QPointer>
 
 class KoInlineNote::Private
 {
@@ -52,6 +52,7 @@ public:
     QDateTime date;
     bool autoNumbering;
     KoInlineNote::Type type;
+    QPointer<KoStyleManager> styleManager;
 };
 
 KoInlineNote::KoInlineNote(Type type)
@@ -176,6 +177,7 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     QTextCursor cursor(document);
     KoTextDocument textDocument(document);
     textDocument.setStyleManager(styleManager);
+    d->styleManager = styleManager;
     textDocument.setChangeTracker(changeTracker);
 
     KoTextLoader loader(context);
@@ -230,6 +232,9 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
     QTextDocument *document = new QTextDocument();
+    KoTextDocument textDocument(document);
+    textDocument.setStyleManager(d->styleManager);
+
     QTextCursor cursor(document);
     cursor.insertFragment(d->text);
 

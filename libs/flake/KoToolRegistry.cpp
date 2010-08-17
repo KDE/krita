@@ -48,7 +48,13 @@ void KoToolRegistry::init()
     config.blacklist = "ToolPluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Tool"),
                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"));
-    registerGenericTools();
+
+    // register generic tools
+    add(new KoCreatePathToolFactory(this));
+    add(new KoCreateShapesToolFactory(this));
+    add(new KoPathToolFactory(this));
+    add(new KoZoomToolFactory(this));
+    add(new KoPanToolFactory(this));
 }
 
 KoToolRegistry::~KoToolRegistry()
@@ -62,15 +68,6 @@ KoToolRegistry* KoToolRegistry::instance()
         s_instance->init();
     }
     return s_instance;
-}
-
-void KoToolRegistry::registerGenericTools()
-{
-    add(new KoCreatePathToolFactory(this));
-    add(new KoCreateShapesToolFactory(this));
-    add(new KoPathToolFactory(this));
-    add(new KoZoomToolFactory(this));
-    add(new KoPanToolFactory(this));
 }
 
 #include <KoToolRegistry.moc>

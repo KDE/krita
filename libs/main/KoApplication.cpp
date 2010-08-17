@@ -82,6 +82,7 @@ bool KoApplication::initHack()
     options.add("benchmark-loading", ki18n("just load the file and then exit"));
     options.add("benchmark-loading-show-window", ki18n("load the file, show the window and progressbar and then exit"));
     options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
+    options.add("roundtrip-filename <filename>", ki18n("Load a file and save it as an ODF file. Meant for debugging."));
     KCmdLineArgs::addCmdLineOptions(options, ki18n("KOffice"), "koffice", "kde");
     return true;
 }
@@ -160,11 +161,14 @@ bool KoApplication::start()
     } else {
         const bool print = koargs->isSet("print");
         const bool exportAsPdf = koargs->isSet("export-pdf");
-        QString pdfFileName = koargs->getOption("export-filename");
+        const QString pdfFileName = koargs->getOption("export-filename");
+        const QString roundtripFileName = koargs->getOption("roundtrip-filename");
         const bool doTemplate = koargs->isSet("template");
-        const bool benchmarkLoading = koargs->isSet("benchmark-loading") || koargs->isSet("benchmark-loading-show-window");
+        const bool benchmarkLoading = koargs->isSet("benchmark-loading")
+                                      || koargs->isSet("benchmark-loading-show-window")
+                                      || !roundtripFileName.isEmpty();
         const bool showShell = koargs->isSet("benchmark-loading-show-window");
-        QString profileFileName = koargs->getOption("profile-filename");
+        const QString profileFileName = koargs->getOption("profile-filename");
         koargs->clear();
 
         QTextStream profileoutput;
@@ -251,6 +255,9 @@ bool KoApplication::start()
                             profileoutput << "KoApplication::start\t"
                                    << appStartTime.msecsTo(QTime::currentTime())
                                    <<"\t100" << endl;
+                        }
+                        if (!roundtripFileName.isEmpty()) {
+                            doc->saveAs(KUrl("file:"+roundtripFileName));
                         }
                         shell->slotFileQuit();
                         return true; // only load one document!

@@ -44,6 +44,7 @@ enum KisCanvasType {
     OPENGL
 };
 
+class KisCoordinatesConverter;
 class KoViewConverter;
 
 /**
@@ -106,6 +107,7 @@ public: // KoCanvasBase implementation
 
     virtual void updateInputMethodInfo();
 
+    const KisCoordinatesConverter* coordinatesConverter() const;
     virtual const KoViewConverter *viewConverter() const;
 
     virtual QWidget* canvasWidget();
@@ -143,6 +145,7 @@ public: // KisCanvas2 methods
 signals:
 
     void documentOriginChanged();
+    void scrollAreaSizeChanged();
 
     void imageChanged(KisImageWSP image);
 

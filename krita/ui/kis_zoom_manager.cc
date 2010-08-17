@@ -41,6 +41,7 @@
 
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
+#include "kis_coordinates_converter.h"
 #include "kis_image.h"
 #include "kis_statusbar.h"
 #include "kis_config.h"
@@ -158,6 +159,12 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
 
     m_view->canvasBase()->notifyZoomChanged();
     m_view->canvas()->update();
+}
+
+void KisZoomManager::slotScrollAreaSizeChanged()
+{
+    QSize widgetSize = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect().size();
+    m_canvasController->updateDocumentSize(widgetSize, true);
 }
 
 void KisZoomManager::changeAspectMode(bool aspectMode)

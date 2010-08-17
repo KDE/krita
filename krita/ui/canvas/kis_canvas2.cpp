@@ -250,6 +250,11 @@ void KisCanvas2::updateInputMethodInfo()
     // TODO call (the protected) QWidget::updateMicroFocus() on the proper canvas widget...
 }
 
+const KisCoordinatesConverter* KisCanvas2::coordinatesConverter() const
+{
+    return m_d->coordinatesConverter;
+}
+
 const KoViewConverter* KisCanvas2::viewConverter() const
 {
     return m_d->viewConverter;
@@ -487,6 +492,7 @@ void KisCanvas2::notifyZoomChanged()
         Q_ASSERT(m_d->prescaledProjection);
         m_d->prescaledProjection->notifyZoomChanged();
     }
+    emit scrollAreaSizeChanged();
 }
 
 void KisCanvas2::preScale()

@@ -79,6 +79,7 @@
 #include "kis_config_notifier.h"
 #include "kis_statusbar.h"
 #include "canvas/kis_canvas2.h"
+#include "kis_coordinates_converter.h"
 #include "kis_doc2.h"
 #include "kis_factory2.h"
 #include "kis_filter_manager.h"
@@ -296,6 +297,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     // canvas sends signal that origin is changed
     connect(m_d->canvas, SIGNAL(documentOriginChanged()), m_d->zoomManager, SLOT(pageOffsetChanged()));
+    connect(m_d->canvas, SIGNAL(scrollAreaSizeChanged()), m_d->zoomManager, SLOT(slotScrollAreaSizeChanged()));
 
     setAcceptDrops(true);
 }
@@ -701,14 +703,13 @@ void KisView2::slotImageSizeChanged()
     m_d->zoomManager->zoomController()->setPageSize(size);
     m_d->zoomManager->zoomController()->setDocumentSize(size);
 
-    QSize documentSize(int(ceil(m_d->viewConverter->documentToViewX(image()->width()  / image()->xRes()))),
-                       int(ceil(m_d->viewConverter->documentToViewY(image()->height() / image()->yRes()))));
-    m_d->canvasController->updateDocumentSize(documentSize, true);
+    canvasBase()->notifyZoomChanged();
+    QSize widgetSize = canvasBase()->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect().size();
+    m_d->canvasController->updateDocumentSize(widgetSize, true);
 
     m_d->zoomManager->updateGUI();
 
     //update view
-    canvasBase()->notifyZoomChanged();
     canvas()->update();
 }
 

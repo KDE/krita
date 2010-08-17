@@ -51,10 +51,15 @@ public:
 //    virtual QWidget* optionWidget();
 
 private:
+    void adjustCursor();
+    bool isInCheckerArea(QPointF pt);
     qreal calculateAngle(QPointF oldPoint, QPointF newPoint);
     KisCanvas2* kritaCanvas() const;
 
 private:
+    static const qreal m_checkerRadius;
+
+    QCursor m_defaultCursor;
     QPointF m_lastPosition;
     bool m_rotationMode;
 };

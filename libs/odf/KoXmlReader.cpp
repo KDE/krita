@@ -2096,12 +2096,13 @@ KoXmlNode KoXmlNode::namedItemNS(const QString& nsURI, const QString& name) cons
     if (!d->loaded)
         d->loadChildren();
 
-
     KoXmlNodeData* node = d->first;
     while (node) {
-        if (node->namespaceURI == nsURI)
-            if (node->localName == name)
-                return KoXmlNode(node);
+        if (node->nodeType == KoXmlNode::ElementNode
+                 && node->namespaceURI == nsURI
+                 && node->localName == name) {
+            return KoXmlNode(node);
+        }
         node = node->next;
     }
 

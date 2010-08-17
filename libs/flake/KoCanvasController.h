@@ -39,13 +39,15 @@ class KoView;
 class KoCanvasControllerProxyObject;
 
 /**
- * This widget is a wrapper around your canvas providing scrollbars.
+ * KoCanvasController is the base class for widgets that are a wrapper
+ * around your canvas providing scrollbars.
+ *
  * Flake does not provide a canvas, the application will have to
  * extend a QWidget and implement that themselves; but Flake does make
- * it a lot easier to do so. One of those things is this widget that
- * acts as a decorator around the canvas widget and provides
+ * it a lot easier to do so. One of those things is this class which
+ * acts as a decorator around the canvas widget or graphics item and provides
  * scrollbars and allows the canvas to be centered in the viewArea
- * <p>The using application can intantiate this class and add its
+ * <p>The using application can instantiate this class and add its
  * canvas using the setCanvas() call. Which is designed so it can be
  * called multiple times for those that wish to exchange one canvas
  * widget for another.
@@ -73,7 +75,7 @@ public:
     };
 
 
-    // proxy QObject
+    // proxy QObject: use this to connect to slots and signals.
     KoCanvasControllerProxyObject *proxyObject;
 
     /**
@@ -294,6 +296,12 @@ private:
 };
 
 
+/**
+ * Workaround class for the problem that Qt does not allow two QObject base classes.
+ * KoCanvasController can be implemented by for instance QWidgets, so it cannot be
+ * a QObject directly. The interface of this class should be considered public interface
+ * for KoCanvasController.
+ */
 class FLAKE_EXPORT KoCanvasControllerProxyObject : public QObject {
 
     Q_OBJECT

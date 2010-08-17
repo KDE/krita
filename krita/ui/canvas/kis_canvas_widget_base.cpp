@@ -152,9 +152,10 @@ QImage KisCanvasWidgetBase::checkImage(qint32 checkSize)
     return tile;
 }
 
-void KisCanvasWidgetBase::setBorderColor(const QColor& color)
+void KisCanvasWidgetBase::notifyConfigChanged()
 {
-    m_d->borderColor = color;
+    KisConfig cfg;
+    m_d->borderColor = cfg.canvasBorderColor();
 }
 
 QColor KisCanvasWidgetBase::borderColor() const

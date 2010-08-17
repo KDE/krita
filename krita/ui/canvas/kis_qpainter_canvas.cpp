@@ -246,6 +246,7 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 void KisQPainterCanvas::slotConfigChanged()
 {
     m_d->checkBrush = QBrush(checkImage());
+    notifyConfigChanged();
 }
 
 bool KisQPainterCanvas::callFocusNextPrevChild(bool next)

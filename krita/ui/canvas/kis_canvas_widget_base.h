@@ -68,18 +68,11 @@ public: // KisAbstractCanvasWidget
      */
     QColor borderColor() const;
 
+protected:
     /**
      * Returns one check of the background checkerboard pattern.
      */
     QImage checkImage(qint32 checkSize = -1);
-
-protected:
-    /**
-     * Returns one check of the background checkerboard pattern.
-     *
-     * @param checkSize the size of the check
-     */
-    QImage checkImage(qint32 checkSize);
 
     KisCanvas2 *canvas() const;
 
@@ -110,6 +103,7 @@ protected:
     void processWheelEvent(QWheelEvent *e);
     QVariant processInputMethodQuery(Qt::InputMethodQuery query) const;
     void processInputMethodEvent(QInputMethodEvent *event);
+    void notifyConfigChanged();
 
     /// To be implemented by the derived canvas 
     virtual bool callFocusNextPrevChild(bool next) = 0;

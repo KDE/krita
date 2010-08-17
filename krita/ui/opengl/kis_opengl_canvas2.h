@@ -128,9 +128,12 @@ public: // QWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
-signals:
+private slots:
+    void slotConfigChanged();
 
+signals:
     void needAdjustOrigin();
+
 protected:
 
     void resizeGL(int width, int height);

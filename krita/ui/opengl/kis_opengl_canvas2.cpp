@@ -50,6 +50,7 @@
 #include "kis_view2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_config.h"
+#include "kis_config_notifier.h"
 #include "kis_debug.h"
 #include "kis_selection_manager.h"
 #include "kis_group_layer.h"
@@ -94,6 +95,9 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, KisCoordinatesConverter 
     } else {
         dbgUI << "Created QGLWidget with no sharing";
     }
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    slotConfigChanged();
 }
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
@@ -399,6 +403,11 @@ void KisOpenGLCanvas2::leaveEvent(QEvent* e)
 {
     update();
     QWidget::leaveEvent(e);
+}
+
+void KisOpenGLCanvas2::slotConfigChanged()
+{
+    notifyConfigChanged();
 }
 
 void KisOpenGLCanvas2::mouseMoveEvent(QMouseEvent *e)

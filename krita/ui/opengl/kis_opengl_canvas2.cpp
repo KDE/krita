@@ -128,12 +128,8 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
         restoreGLState();
 
 
-        gc.save();
-
         QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
         drawDecorations(gc, boundingRect);
-
-        gc.restore();
     } else {
         restoreGLState();
     }

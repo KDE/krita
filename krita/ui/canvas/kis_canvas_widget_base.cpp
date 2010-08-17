@@ -73,6 +73,8 @@ KisCanvasWidgetBase::~KisCanvasWidgetBase()
 
 void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidgetRect)
 {
+    gc.save();
+
     // Setup the painter to take care of the offset; all that the
     // classes that do painting need to keep track of is resolution
     gc.setRenderHint(QPainter::Antialiasing);
@@ -84,19 +86,18 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 
     gc.setRenderHint(QPainter::SmoothPixmapTransform);
 
-    // Paint the shapes (other than the layers)
-    gc.save();
 
+    gc.save();
     gc.setClipRect(updateWidgetRect);
 
     QTransform transform = m_d->coordinatesConverter->flakeToWidgetTransform();
     gc.setTransform(transform);
 
+    // Paint the shapes (other than the layers)
     m_d->canvas->globalShapeManager()->paint(gc, *m_d->viewConverter, false);
 
     // some tools do not restore gc, but that is not important here
     toolProxy()->paint(gc, *m_d->viewConverter);
-
     gc.restore();
 
     // ask the decorations to paint themselves
@@ -104,6 +105,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
         deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter);
     }
 
+    gc.restore();
 }
 
 void KisCanvasWidgetBase::addDecoration(KisCanvasDecoration* deco)

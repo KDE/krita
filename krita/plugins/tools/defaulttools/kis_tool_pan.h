@@ -19,6 +19,7 @@
 #ifndef KIS_TOOL_PAN_H_
 #define KIS_TOOL_PAN_H_
 
+#include <KoPanTool.h>
 #include <KoToolFactoryBase.h>
 #include <kis_tool.h>
 
@@ -64,11 +65,11 @@ class KisToolPanFactory : public KoToolFactoryBase
 
 public:
     KisToolPanFactory(QObject *parent, const QStringList&)
-            : KoToolFactoryBase(parent, "KritaShape/KisToolPan") {
+            : KoToolFactoryBase(parent, KoPanTool_ID) {
         setToolTip(i18n("Move and rotate your canvas"));
-        setToolType(TOOL_TYPE_TRANSFORM);
+        setToolType(navigationToolType());
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE);
-        setPriority(11);
+        setPriority(5);
         setIcon("krita_tool_pan");
         //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
     }

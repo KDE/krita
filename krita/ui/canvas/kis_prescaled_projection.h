@@ -118,7 +118,7 @@ public slots:
      * Called whenever the view widget needs to show a different part of
      * the document
      */
-    void viewportMoved(const QPoint &offset);
+    void viewportMoved(const QPointF &offset);
 
     /**
      * Called whenever the size of the KisImage changes
@@ -126,10 +126,12 @@ public slots:
     void setImageSize(qint32 w, qint32 h);
 
     /**
-     * Resize the prescaled image. The size is given in canvas
-     * widget pixels.
+     * Checks whether it is needed to resize the prescaled image and
+     * updates it. The size is given in canvas widget pixels.
      */
-    void resizePrescaledImage(const QSize & newSize);
+    void notifyCanvasSizeChanged(const QSize &widgetSize);
+
+    void notifyZoomChanged();
 
     /**
      * Set the current monitor profile
@@ -154,6 +156,8 @@ private:
      * now there is only one option left: KisImagePyramid
      */
     void initBackend(bool cacheKisImageAsQImage);
+
+    void updateViewportSize();
 
     /**
      * preScale and draw onto the scaled projection the specified rect,

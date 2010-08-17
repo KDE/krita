@@ -156,8 +156,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     Q_UNUSED(zoom);
     KisImageWSP image = m_view->image();
 
-    m_view->canvasBase()->preScale();
-    m_view->canvasBase()->adjustOrigin();
+    m_view->canvasBase()->notifyZoomChanged();
     m_view->canvas()->update();
 }
 

@@ -71,6 +71,8 @@ public:
 
     void setCanvasWidget(QWidget * widget);
 
+    void notifyZoomChanged();
+
 public: // KoCanvasBase implementation
 
     bool canvasIsOpenGL();
@@ -135,7 +137,6 @@ public: // KisCanvas2 methods
 
     bool usingHDRExposureProgram();
     /// @return true if the canvas image should be displayed in vertically mirrored mode
-    bool isCanvasMirrored();
     void addDecoration(KisCanvasDecoration* deco);
     KisCanvasDecoration* decoration(const QString& id);
 

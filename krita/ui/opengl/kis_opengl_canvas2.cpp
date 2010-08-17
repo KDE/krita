@@ -143,9 +143,9 @@ void KisOpenGLCanvas2::loadQTransform(QTransform transform)
     memset(matrix, 0, sizeof(GLfloat) * 16);
 
     matrix[0] = transform.m11();
-    matrix[1] = transform.m21();
+    matrix[1] = transform.m12();
 
-    matrix[4] = transform.m12();
+    matrix[4] = transform.m21();
     matrix[5] = transform.m22();
 
     matrix[12] = transform.m31();
@@ -169,6 +169,21 @@ void KisOpenGLCanvas2::drawBorder()
 
 void KisOpenGLCanvas2::drawBackground()
 {
+    KisCoordinatesConverter *converter = coordinatesConverter();
+
+    QTransform textureTransform;
+    QTransform modelTransform;
+    QRectF textureRect;
+    QRectF modelRect;
+    converter->getOpenGLCheckersInfo(&textureTransform, &modelTransform, &textureRect, &modelRect);
+
+    KisConfig cfg;
+    GLfloat checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
+
+    textureTransform *= QTransform::fromScale(checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
+                                               checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
+
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, width(), height());
@@ -176,21 +191,11 @@ void KisOpenGLCanvas2::drawBackground()
 
     glMatrixMode(GL_TEXTURE);
     glLoadIdentity();
-    KisConfig cfg;
-    GLfloat checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
-    glScalef(checkSizeScale, checkSizeScale, 1.0);
-
+    loadQTransform(textureTransform);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    KisCoordinatesConverter *converter = coordinatesConverter();
-    QRectF viewportRect = converter->imageRectInViewportPixels();
-    QRectF textureRect = QRectF(0, 0,
-                                viewportRect.width() / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
-                                viewportRect.height() / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
-
-    QTransform transform = converter->checkersToWidgetTransform();
-    loadQTransform(transform);
+    loadQTransform(modelTransform);
 
     glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->backgroundTexture());
     glEnable(GL_TEXTURE_2D);
@@ -200,16 +205,16 @@ void KisOpenGLCanvas2::drawBackground()
     glColor3f(1.0, 1.0, 1.0);
 
     glTexCoord2f(textureRect.left(), textureRect.top());
-    glVertex2f(viewportRect.left(), viewportRect.top());
+    glVertex2f(modelRect.left(), modelRect.top());
 
     glTexCoord2f(textureRect.right(), textureRect.top());
-    glVertex2f(viewportRect.right(), viewportRect.top());
+    glVertex2f(modelRect.right(), modelRect.top());
 
     glTexCoord2f(textureRect.right(), textureRect.bottom());
-    glVertex2f(viewportRect.right(), viewportRect.bottom());
+    glVertex2f(modelRect.right(), modelRect.bottom());
 
     glTexCoord2f(textureRect.left(), textureRect.bottom());
-    glVertex2f(viewportRect.left(), viewportRect.bottom());
+    glVertex2f(modelRect.left(), modelRect.bottom());
 
     glEnd();
 

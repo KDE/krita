@@ -693,8 +693,7 @@ void KisView2::slotImageSizeChanged()
     m_d->zoomManager->updateGUI();
 
     //update view
-    canvasBase()->preScale();
-    canvasBase()->adjustOrigin();
+    canvasBase()->notifyZoomChanged();
     canvas()->update();
 }
 

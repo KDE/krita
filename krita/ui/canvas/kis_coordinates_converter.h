@@ -24,22 +24,49 @@
 
 
 class QSize;
+class QSizeF;
 class QRectF;
 class QPoint;
+class QPolygonF;
 class QTransform;
 class KoViewConverter;
 
 
 /**
- * Automatic generation of QRectF transformations.
- * They will use QPointF methods for transforming rectangles.
+ * Automatic generation of QRectF and QPointF transformation methods.
+ * They will use pre-generated QTransform objects to perform the change.
  */
-#define DEFINE_RECT_METHOD(name)                                        \
+#define DEFINE_RECT_METHOD(name,transform)                              \
     QRectF KisCoordinatesConverter::name(const QRectF &rc) const        \
-    { return QRectF(name(rc.topLeft()), name(rc.bottomRight())); }
+    {                                                                   \
+        return (transform).mapRect(rc);                                 \
+    }
+
+#define DEFINE_POINT_METHOD(name,transform)                             \
+    QPointF KisCoordinatesConverter::name(const QPointF &pt) const      \
+    {                                                                   \
+        return (transform).map(pt);                                     \
+    }
 
 #define DECLARE_RECT_METHOD(name)               \
     QRectF name(const QRectF &rc) const
+
+#define DECLARE_POINT_METHOD(name)              \
+    QPointF name(const QPointF &rc) const
+
+
+#define DEFINE_TRANSFORM_METHODS(name,invertedName,transform)         \
+    DEFINE_RECT_METHOD(name, transform);                              \
+    DEFINE_RECT_METHOD(invertedName, (transform).inverted());         \
+    DEFINE_POINT_METHOD(name, transform);                             \
+    DEFINE_POINT_METHOD(invertedName, (transform).inverted())         \
+
+#define DECLARE_TRANSFORM_METHODS(name,invertedName)                   \
+    DECLARE_RECT_METHOD(name);                                         \
+    DECLARE_RECT_METHOD(invertedName);                                 \
+    DECLARE_POINT_METHOD(name);                                        \
+    DECLARE_POINT_METHOD(invertedName)                                 \
+
 
 
 
@@ -49,6 +76,8 @@ public:
     KisCoordinatesConverter(KoViewConverter *viewConverter);
     ~KisCoordinatesConverter();
 
+    void notifyZoomChanged();
+    void setCanvasWidgetSize(QSize size);
     void setImage(KisImageWSP image);
     void setDocumentOrigin(const QPoint &origin);
     void setDocumentOffset(const QPoint &offset);
@@ -56,40 +85,41 @@ public:
     QPoint documentOrigin() const;
     QPoint documentOffset() const;
 
-    QPointF imageToViewport(const QPointF &pt) const;
-    QPointF viewportToImage(const QPointF &pt) const;
+    void setPostprocessingTransform(const QTransform &transform);
+    QTransform postprocessingTransform() const;
 
-    QPointF widgetToViewport(const QPointF &pt) const;
-    QPointF viewportToWidget(const QPointF &pt) const;
 
-    QPointF widgetToDocument(const QPointF &pt) const;
-    QPointF documentToWidget(const QPointF &pt) const;
+    // Automatic methods generation. See a comment above.
+    DECLARE_TRANSFORM_METHODS(imageToViewport, viewportToImage);
+    DECLARE_TRANSFORM_METHODS(widgetToViewport, viewportToWidget);
+    DECLARE_TRANSFORM_METHODS(documentToWidget, widgetToDocument);
+    DECLARE_TRANSFORM_METHODS(imageToDocument, documentToImage);
 
-    QPointF imageToDocument(const QPointF &pt) const;
-    QPointF documentToImage(const QPointF &pt) const;
-
-    DECLARE_RECT_METHOD(imageToViewport);
-    DECLARE_RECT_METHOD(viewportToImage);
-
-    DECLARE_RECT_METHOD(widgetToViewport);
-    DECLARE_RECT_METHOD(viewportToWidget);
-
-    DECLARE_RECT_METHOD(widgetToDocument);
-    DECLARE_RECT_METHOD(documentToWidget);
-
-    DECLARE_RECT_METHOD(imageToDocument);
-    DECLARE_RECT_METHOD(documentToImage);
 
     QTransform imageToWidgetTransform() const;
     QTransform documentToWidgetTransform() const;
     QTransform flakeToWidgetTransform() const;
     QTransform viewportToWidgetTransform() const;
-    QTransform checkersToWidgetTransform() const;
+
+    void getQPainterCheckersInfo(QTransform *transform,
+                                 QPointF *brushOrigin,
+                                 QPolygonF *poligon) const;
+
+    void getOpenGLCheckersInfo(QTransform *textureTransform,
+                               QTransform *modelTransform,
+                               QRectF *textureRect,
+                               QRectF *modelRect);
 
     QRectF imageRectInWidgetPixels() const;
     QRectF imageRectInViewportPixels() const;
+    QSizeF imageSizeInFlakePixels() const;
+    QRectF widgetRectInFlakePixels() const;
 
     void imageScale(qreal *scaleX, qreal *scaleY) const;
+
+private:
+    void recalculateTransformations() const;
+
 private:
     struct Private;
     Private * const m_d;

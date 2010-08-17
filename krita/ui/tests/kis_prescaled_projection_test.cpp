@@ -47,7 +47,7 @@ bool KisPrescaledProjectionTest::testProjectionScenario(KisPrescaledProjection &
         const QString & name)
 {
 
-    projection.resizePrescaledImage(QSize(1000, 1000));
+    projection.notifyCanvasSizeChanged(QSize(1000, 1000));
     projection.prescaledQImage().save(name + "_prescaled_projection_01.png");
 
     viewConverter->setZoom(0.5);
@@ -90,57 +90,57 @@ bool KisPrescaledProjectionTest::testProjectionScenario(KisPrescaledProjection &
     projection.preScale();
     projection.prescaledQImage().save(name + "_prescaled_projection_07.png");
 
-//    projection.documentOffsetMoved(QPoint(50, 50));
+    projection.viewportMoved(QPoint(50, 50));
     projection.prescaledQImage().save(name + "_prescaled_projection_08.png");
 
-//    projection.documentOffsetMoved(QPoint(100, 100));
+    projection.viewportMoved(QPoint(100, 100));
     projection.prescaledQImage().save(name + "_prescaled_projection_081.png");
 
-//    projection.documentOffsetMoved(QPoint(200, 200));
+    projection.viewportMoved(QPoint(200, 200));
     projection.prescaledQImage().save(name + "_prescaled_projection_082.png");
 
-//    projection.documentOffsetMoved(QPoint(250, 250));
+    projection.viewportMoved(QPoint(250, 250));
     projection.prescaledQImage().save(name + "_prescaled_projection_083.png");
 
-//    projection.documentOffsetMoved(QPoint(150, 200));
+    projection.viewportMoved(QPoint(150, 200));
     projection.prescaledQImage().save(name + "_prescaled_projection_084.png");
 
-//    projection.documentOffsetMoved(QPoint(100, 200));
+    projection.viewportMoved(QPoint(100, 200));
     projection.prescaledQImage().save(name + "_prescaled_projection_085.png");
 
-//    projection.documentOffsetMoved(QPoint(50, 200));
+    projection.viewportMoved(QPoint(50, 200));
     projection.prescaledQImage().save(name + "_prescaled_projection_086.png");
 
-//    projection.documentOffsetMoved(QPoint(0, 200));
+    projection.viewportMoved(QPoint(0, 200));
     projection.prescaledQImage().save(name + "_prescaled_projection_087.png");
 
-    projection.resizePrescaledImage(QSize(750, 750));
+    projection.notifyCanvasSizeChanged(QSize(750, 750));
     projection.prescaledQImage().save(name + "_prescaled_projection_09.png");
 
     viewConverter->setZoom(1.0);
     projection.preScale();
     projection.prescaledQImage().save(name + "_prescaled_projection_10.png");
 
-    projection.resizePrescaledImage(QSize(350, 350));
+    projection.notifyCanvasSizeChanged(QSize(350, 350));
     projection.prescaledQImage().save(name + "_prescaled_projection_11.png");
 
-//    projection.documentOffsetMoved(QPoint(100, 100));
+    projection.viewportMoved(QPoint(100, 100));
     projection.prescaledQImage().save(name + "_prescaled_projection_12.png");
 
     viewConverter->setZoom(0.75);
     projection.preScale();
     projection.prescaledQImage().save(name + "_prescaled_projection_13.png");
 
-//    projection.documentOffsetMoved(QPoint(10, 10));
+    projection.viewportMoved(QPoint(10, 10));
     projection.prescaledQImage().save(name + "_prescaled_projection_14.png");
 
-//    projection.documentOffsetMoved(QPoint(0, 0));
+    projection.viewportMoved(QPoint(0, 0));
     projection.prescaledQImage().save(name + "_prescaled_projection_15.png");
 
-//    projection.documentOffsetMoved(QPoint(10, 10));
+    projection.viewportMoved(QPoint(10, 10));
     projection.prescaledQImage().save(name + "_prescaled_projection_16.png");
 
-//    projection.documentOffsetMoved(QPoint(30, 50));
+    projection.viewportMoved(QPoint(30, 50));
     projection.prescaledQImage().save(name + "_prescaled_projection_17.png");
 
     return true;
@@ -179,7 +179,6 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
 
-//    projection.setViewConverter(viewConverter);
     projection.setImage(image);
 
     // pixel-for-pixel, at 100% zoom
@@ -298,17 +297,18 @@ void KisPrescaledProjectionTest::testScaling()
 
     KisCoordinatesConverter converter(zoomHandler);
     converter.setImage(image);
+    converter.setCanvasWidgetSize(QSize(100,100));
 
     KisPrescaledProjection projection;
     projection.setCoordinatesConverter(&converter);
     projection.setImage(image);
 
     converter.setDocumentOffset(QPoint(100,100));
-    converter.setDocumentOrigin(QPoint(200,200));
+    converter.setDocumentOrigin(QPoint(0,0));
 
 
-    projection.resizePrescaledImage(QSize(100,100));
-    projection.preScale();
+    projection.notifyCanvasSizeChanged(QSize(100,100));
+    projection.notifyZoomChanged();
 
     QImage result = projection.prescaledQImage();
     QImage reference = sourceImage.copy(QRect(100,100,100,100));

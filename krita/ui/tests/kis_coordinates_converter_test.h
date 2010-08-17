@@ -29,6 +29,10 @@ private slots:
     void testConversion();
     void testImageCropping();
     void testTransformations();
+    void testConsistency();
+    void testRotation();
+    void testMirroring();
+    void testMirroringCanvasBiggerThanImage();
 };
 
 #endif /* KIS_COORDINATES_CONVERTER_TEST_H */

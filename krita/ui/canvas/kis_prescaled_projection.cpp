@@ -83,8 +83,7 @@ struct KisPrescaledProjection::Private {
     Private()
             : useNearestNeighbour(false)
             , cacheKisImageAsQImage(true)
-            , canvasSize(0, 0)
-            , imageSize(0, 0)
+            , viewportSize(0, 0)
             , monitorProfile(0)
             , projectionBackend(0) {
     }
@@ -98,8 +97,8 @@ struct KisPrescaledProjection::Private {
 
     QImage prescaledQImage;
 
-    QSize canvasSize; // in view pixels
-    QSize imageSize; // in kisimage pixels
+    QSize canvasSize;
+    QSize viewportSize;
     KisImageWSP image;
     KisCoordinatesConverter *coordinatesConverter;
     const KoColorProfile* monitorProfile;
@@ -172,22 +171,38 @@ void KisPrescaledProjection::updateSettings()
     setMonitorProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
 }
 
-void KisPrescaledProjection::viewportMoved(const QPoint &offset)
+void KisPrescaledProjection::viewportMoved(const QPointF &offset)
 {
     // FIXME: \|/
     if(m_d->prescaledQImage.isNull()) return;
     if(offset.isNull()) return;
 
-    QImage newImage = QImage(m_d->canvasSize, QImage::Format_ARGB32);
+    QPoint alignedOffset = offset.toPoint();
 
-    QRect newViewportRect = QRect(QPoint(0,0), m_d->canvasSize);
-    QRect oldViewportRect = newViewportRect.translated(-offset);
+    if(offset != alignedOffset) {
+        /**
+         * We can't optimize anything whe offset is float :(
+         * Just prescale entire image.
+         */
+        preScale();
+        return;
+    }
+
+    QImage newImage = QImage(m_d->viewportSize, QImage::Format_ARGB32);
+
+    /**
+     * TODO: viewport rects should be cropped by the borders of
+     * the image, because it may be requested to read/write
+     * outside QImage and copyQImage will not chatch it
+     */
+    QRect newViewportRect = QRect(QPoint(0,0), m_d->viewportSize);
+    QRect oldViewportRect = newViewportRect.translated(-alignedOffset);
 
     QRegion updateRegion = newViewportRect;
 
     QRect savedArea = newViewportRect & oldViewportRect;
     if(!savedArea.isEmpty()) {
-        copyQImage(-offset.x(), -offset.y(), &newImage, m_d->prescaledQImage);
+        copyQImage(-alignedOffset.x(), -alignedOffset.y(), &newImage, m_d->prescaledQImage);
         updateRegion -= savedArea;
     }
 
@@ -208,10 +223,8 @@ void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
 {
     m_d->projectionBackend->setImageSize(w, h);
 
-    m_d->imageSize = QSize(w, h);
-
     QRect viewportRect = m_d->coordinatesConverter->imageToViewport(QRect(0, 0, w, h)).toAlignedRect();
-    viewportRect = viewportRect.intersected(QRect(QPoint(0, 0), m_d->canvasSize));
+    viewportRect = viewportRect.intersected(QRect(QPoint(0, 0), m_d->viewportSize));
 
     if (!viewportRect.isEmpty()) {
         preScale(viewportRect);
@@ -258,8 +271,7 @@ void KisPrescaledProjection::recalculateCache(KisUpdateInfoSP info)
 
 void KisPrescaledProjection::preScale()
 {
-    Q_ASSERT(m_d->canvasSize.isValid());
-    preScale(QRect(QPoint(0, 0), m_d->canvasSize));
+    preScale(QRect(QPoint(0, 0), m_d->viewportSize));
 }
 
 QRect KisPrescaledProjection::preScale(const QRect & rc)
@@ -286,30 +298,39 @@ void KisPrescaledProjection::setMonitorProfile(const KoColorProfile * profile)
     m_d->projectionBackend->setMonitorProfile(profile);
 }
 
-void KisPrescaledProjection::resizePrescaledImage(const QSize & newSize)
+
+void KisPrescaledProjection::updateViewportSize()
 {
+    QRectF imageRect = m_d->coordinatesConverter->imageRectInWidgetPixels();
+    QRectF canvasRect(QPointF(0,0), m_d->canvasSize);
+    QRectF minimalRect = imageRect & canvasRect;
 
-    QSize oldSize;
+    m_d->viewportSize = m_d->coordinatesConverter->widgetToViewport(minimalRect).toAlignedRect().size();
 
-    if (m_d->prescaledQImage.isNull()) {
-        oldSize = QSize(0, 0);
-    } else {
-        oldSize = m_d->prescaledQImage.size();
+    if (m_d->prescaledQImage.isNull() ||
+        m_d->prescaledQImage.size() != m_d->viewportSize) {
+
+        m_d->prescaledQImage = QImage(m_d->viewportSize, QImage::Format_ARGB32);
     }
+}
 
-    dbgRender << "KisPrescaledProjection::resizePrescaledImage from " << oldSize << " to " << newSize << endl;
-
-    QImage image = QImage(newSize, QImage::Format_ARGB32);
-//     m_d->prescaledQImage.fill( QColor( 255, 0, 0, 128 ).rgba() );
-
-// FIXME: Let someone else figure out the optimization where we copy the
-// still visible part of the image after moving the offset and then
-// only draw the newly visible parts
-
-    m_d->prescaledQImage = image;
-    m_d->canvasSize = newSize;
+void KisPrescaledProjection::notifyZoomChanged()
+{
+    updateViewportSize();
     preScale();
 }
+
+void KisPrescaledProjection::notifyCanvasSizeChanged(const QSize &widgetSize)
+{
+    // FIXME: Let someone else figure out the optimization where we copy the
+    // still visible part of the image after moving the offset and then
+    // only draw the newly visible parts
+
+    m_d->canvasSize = widgetSize;
+    updateViewportSize();
+    preScale();
+}
+
 
 KisPPUpdateInfoSP
 KisPrescaledProjection::getUpdateInformation(const QRect &viewportRect,
@@ -323,7 +344,7 @@ KisPrescaledProjection::getUpdateInformation(const QRect &viewportRect,
     info->dirtyImageRect = dirtyImageRect;
 
     // first, crop the part of the view rect that is outside of the canvas
-    QRect croppedViewRect = viewportRect.intersected(QRect(QPoint(0, 0), m_d->canvasSize));
+    QRect croppedViewRect = viewportRect.intersected(QRect(QPoint(0, 0), m_d->viewportSize));
 
     // second, align this rect to the KisImage's pixels and pixels
     // of projection backend

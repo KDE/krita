@@ -120,21 +120,26 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 
     KisCoordinatesConverter *converter = coordinatesConverter();
     QTransform imageTransform = converter->viewportToWidgetTransform();
-    QTransform checkersTransform = converter->checkersToWidgetTransform();
-    QRectF viewportBoundingRect = converter->imageRectInViewportPixels();
 
     gc.save();
 
     gc.setCompositionMode(QPainter::CompositionMode_Source);
     gc.fillRect(QRect(QPoint(0, 0), size()), borderColor());
 
-    //Set the brush origin accordingly
+    QTransform checkersTransform;
+    QPointF brushOrigin;
+    QPolygonF polygon;
+
+    converter->getQPainterCheckersInfo(&checkersTransform, &brushOrigin, &polygon);
+    gc.setPen(Qt::NoPen);
+    gc.setBrush(m_d->checkBrush);
+    gc.setBrushOrigin(brushOrigin);
     gc.setTransform(checkersTransform);
-    gc.setBrushOrigin(viewportBoundingRect.topLeft());
-    gc.fillRect(viewportBoundingRect, m_d->checkBrush);
+    gc.drawPolygon(polygon);
 
     gc.setTransform(imageTransform);
     QRectF viewportRect = converter->widgetToViewport(ev->rect());
+
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
     gc.drawImage(viewportRect, m_d->prescaledProjection->prescaledQImage(),
                  viewportRect);
@@ -233,7 +238,8 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
         size.setHeight(1);
     }
 
-    m_d->prescaledProjection->resizePrescaledImage(size);
+    coordinatesConverter()->setCanvasWidgetSize(size);
+    m_d->prescaledProjection->notifyCanvasSizeChanged(size);
     emit needAdjustOrigin();
 }
 

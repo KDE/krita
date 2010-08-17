@@ -115,7 +115,8 @@ public:
     QSizeF imageSizeInFlakePixels() const;
     QRectF widgetRectInFlakePixels() const;
 
-    QPoint offsetFromFlakeCenterPoint(const QPointF &pt) const;
+    QPoint shiftFromFlakeCenterPoint(const QPointF &pt) const;
+    QPointF flakeCenterPoint();
 
     void imageScale(qreal *scaleX, qreal *scaleY) const;
 

@@ -39,6 +39,7 @@
 #include "kis_tool_measure.h"
 #include "kis_tool_path.h"
 #include "kis_tool_move.h"
+#include "kis_tool_pan.h"
 
 K_PLUGIN_FACTORY(DefaultToolsFactory, registerPlugin<DefaultTools>();)
 K_EXPORT_PLUGIN(DefaultToolsFactory("krita"))
@@ -59,6 +60,7 @@ DefaultTools::DefaultTools(QObject *parent, const QVariantList &)
     r->add(new KisToolMeasureFactory(r, QStringList()));
     r->add(new KisToolPathFactory(r, QStringList()));
     r->add(new KisToolMoveFactory(r, QStringList()));
+    r->add(new KisToolPanFactory(r, QStringList()));
 }
 
 DefaultTools::~DefaultTools()

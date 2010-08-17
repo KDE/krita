@@ -216,6 +216,7 @@ public:
 private:
     Q_DISABLE_COPY(KisCanvas2);
 
+    void pan(QPoint shift);
     void createCanvas(bool useOpenGL);
     void createQPainterCanvas();
     void createOpenGLCanvas();

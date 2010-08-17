@@ -168,41 +168,64 @@ bool KisCanvas2::snapToGrid() const
     return m_d->view->document()->gridData().snapToGrid();
 }
 
+void KisCanvas2::pan(QPoint shift)
+{
+    KoCanvasControllerWidget* controller =
+        dynamic_cast<KoCanvasControllerWidget*>(canvasController());
+    controller->pan(shift);
+}
+
 void KisCanvas2::mirrorCanvas(bool enable)
 {
     if(enable != m_d->canvasMirroredY) {
+        QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
+
         QTransform newTransform = m_d->coordinatesConverter->postprocessingTransform();
         newTransform *= QTransform::fromScale(-1,1);
         m_d->coordinatesConverter->setPostprocessingTransform(newTransform);
         m_d->canvasMirroredY = enable;
         notifyZoomChanged();
-        updateCanvas();
+
+        QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
+        pan(shift);
     }
 }
 
 void KisCanvas2::rotateCanvasRight15()
 {
+    QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
+
     QTransform newTransform = m_d->coordinatesConverter->postprocessingTransform();
     newTransform.rotate(15);
     m_d->coordinatesConverter->setPostprocessingTransform(newTransform);
     notifyZoomChanged();
-    updateCanvas();
+
+    QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
+    pan(shift);
 }
 
 void KisCanvas2::rotateCanvasLeft15()
 {
+    QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
+
     QTransform newTransform = m_d->coordinatesConverter->postprocessingTransform();
     newTransform.rotate(-15);
     m_d->coordinatesConverter->setPostprocessingTransform(newTransform);
     notifyZoomChanged();
-    updateCanvas();
+
+    QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
+    pan(shift);
 }
 
 void KisCanvas2::resetCanvasTransformations()
 {
+    QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
+
     m_d->coordinatesConverter->setPostprocessingTransform(QTransform());
     notifyZoomChanged();
-    updateCanvas();
+
+    QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
+    pan(shift);
 }
 
 void KisCanvas2::addCommand(QUndoCommand *command)

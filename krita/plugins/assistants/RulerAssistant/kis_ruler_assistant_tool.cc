@@ -109,11 +109,15 @@ void KisRulerAssistantTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
+    QColor handlesColor(0, 0, 0, 125);
+
     foreach(const KisPaintingAssistantHandleSP handle, m_handles) {
         if (handle == m_handleDrag) {
-            _gc.setBrush(QColor(0, 0, 0, 125));
+            _gc.setPen(handlesColor);
+            _gc.setBrush(handlesColor);
         } else {
-            _gc.setBrush(QColor(0, 0, 0, 0));
+            _gc.setPen(handlesColor);
+            _gc.setBrush(Qt::transparent);
         }
         _gc.drawEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(5, 5), QSizeF(10, 10)));
     }

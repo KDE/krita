@@ -98,6 +98,7 @@ void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const
 
     gc.save();
     gc.setTransform(initialTransform);
+    gc.setPen(QColor(0, 0, 0, 125));
     gc.drawLine(p1,p2);
     gc.restore();
 }

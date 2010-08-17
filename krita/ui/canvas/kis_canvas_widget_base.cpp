@@ -94,6 +94,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 
     m_d->canvas->globalShapeManager()->paint(gc, *m_d->viewConverter, false);
 
+    // some tools do not restore gc, but that is not important here
     toolProxy()->paint(gc, *m_d->viewConverter);
 
     gc.restore();

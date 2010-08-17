@@ -564,7 +564,7 @@ void KisCanvas2::adjustOrigin()
 {
     QPoint newOrigin;
 
-    QSize documentSize = m_d->coordinatesConverter->imageSizeInWidgetPixels();
+    QSize documentSize = m_d->coordinatesConverter->imageRectInWidgetPixels().toAlignedRect().size();
     QSize widgetSize = m_d->canvasWidget->widget()->size();
 
     int widthDiff = widgetSize.width() - documentSize.width();

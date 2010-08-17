@@ -86,8 +86,6 @@ QPointF KisCoordinatesConverter::viewportToImage(const QPointF &pt) const
     return m_d->image->documentToPixel(docPt);
 }
 
-DEFINE_RECT_METHOD(imageToViewport);
-DEFINE_RECT_METHOD(viewportToImage);
 
 QPointF KisCoordinatesConverter::widgetToViewport(const QPointF &pt) const
 {
@@ -98,9 +96,6 @@ QPointF KisCoordinatesConverter::viewportToWidget(const QPointF &pt) const
 {
     return pt + m_d->documentOrigin;
 }
-
-DEFINE_RECT_METHOD(widgetToViewport);
-DEFINE_RECT_METHOD(viewportToWidget);
 
 
 QPointF KisCoordinatesConverter::widgetToDocument(const QPointF &pt) const
@@ -115,8 +110,6 @@ QPointF KisCoordinatesConverter::documentToWidget(const QPointF &pt) const
     return tempPt + m_d->documentOrigin - m_d->documentOffset;
 }
 
-DEFINE_RECT_METHOD(widgetToDocument);
-DEFINE_RECT_METHOD(documentToWidget);
 
 QPointF KisCoordinatesConverter::imageToDocument(const QPointF &pt) const
 {
@@ -128,8 +121,20 @@ QPointF KisCoordinatesConverter::documentToImage(const QPointF &pt) const
     return m_d->image->documentToPixel(pt);
 }
 
+
+// see comment in a header file
+DEFINE_RECT_METHOD(imageToViewport);
+DEFINE_RECT_METHOD(viewportToImage);
+
+DEFINE_RECT_METHOD(widgetToViewport);
+DEFINE_RECT_METHOD(viewportToWidget);
+
+DEFINE_RECT_METHOD(widgetToDocument);
+DEFINE_RECT_METHOD(documentToWidget);
+
 DEFINE_RECT_METHOD(imageToDocument);
 DEFINE_RECT_METHOD(documentToImage);
+
 
 QTransform KisCoordinatesConverter::imageToWidgetTransform() const
 {
@@ -188,10 +193,9 @@ QTransform KisCoordinatesConverter::checkersToWidgetTransform() const
     return transform;
 }
 
-QSize KisCoordinatesConverter::imageSizeInWidgetPixels() const
-{
-    return imageRectInWidgetPixels().toAlignedRect().size();
-}
+
+
+// these functions will return bounding rect if the canvas is rotated
 
 QRectF KisCoordinatesConverter::imageRectInWidgetPixels() const
 {

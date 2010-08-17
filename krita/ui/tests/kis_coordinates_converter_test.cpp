@@ -64,6 +64,9 @@ void KisCoordinatesConverterTest::testConversion()
     QCOMPARE(converter.widgetToDocument(testRect), QRectF(1.20,1.20,1,1));
     QCOMPARE(converter.documentToWidget(testRect), QRectF(9980,9980,10000,10000));
 
+    QCOMPARE(converter.imageToDocument(testRect), QRectF(1,1,1,1));
+    QCOMPARE(converter.documentToImage(testRect), QRectF(10000,10000,10000,10000));
+
     zoomHandler->setZoom(0.5);
 
     QCOMPARE(converter.imageToViewport(testRect), QRectF(20,20,50,50));
@@ -74,6 +77,9 @@ void KisCoordinatesConverterTest::testConversion()
 
     QCOMPARE(converter.widgetToDocument(testRect), QRectF(2.4,2.4,2,2));
     QCOMPARE(converter.documentToWidget(testRect), QRectF(4980,4980,5000,5000));
+
+    QCOMPARE(converter.imageToDocument(testRect), QRectF(1,1,1,1));
+    QCOMPARE(converter.documentToImage(testRect), QRectF(10000,10000,10000,10000));
 
     delete zoomHandler;
 }
@@ -97,6 +103,9 @@ void KisCoordinatesConverterTest::testImageCropping()
              QRectF(900,900,200,200));
 }
 
+#define CHECK_TRANSFORM(trans,test,ref) QCOMPARE(trans.map(test).boundingRect(), ref)
+//#define CHECK_TRANSFORM(trans,test,ref) qDebug() << trans.map(test).boundingRect()
+
 void KisCoordinatesConverterTest::testTransformations()
 {
     KisImageSP image;
@@ -109,23 +118,41 @@ void KisCoordinatesConverterTest::testTransformations()
     converter.setDocumentOrigin(QPoint(10,20));
     converter.setDocumentOffset(QPoint(30,50));
 
+    QRectF testRect(100,100,100,100);
+    QTransform imageToWidget;
+    QTransform documentToWidget;
+    QTransform flakeToWidget;
+    QTransform viewportToWidget;
+    QTransform checkersToWidget;
+
+
     zoomHandler->setZoom(1.);
 
-    QRectF testRect(100,100,100,100);
-    QTransform transform = converter.imageToWidgetTransform();
+    imageToWidget = converter.imageToWidgetTransform();
+    documentToWidget = converter.documentToWidgetTransform();
+    flakeToWidget = converter.flakeToWidgetTransform();
+    viewportToWidget = converter.viewportToWidgetTransform();
+    checkersToWidget = converter.checkersToWidgetTransform();
 
-    QRectF rect1 = converter.viewportToWidget(converter.imageToViewport(testRect));
-    QRectF rect2 = transform.map(testRect).boundingRect();
-
-    QCOMPARE(rect1, rect2);
+    CHECK_TRANSFORM(imageToWidget, testRect, QRectF(80,70,100,100));
+    CHECK_TRANSFORM(documentToWidget, testRect, QRectF(9980,9970,10000,10000));
+    CHECK_TRANSFORM(flakeToWidget, testRect, QRectF(80,70,100,100));
+    CHECK_TRANSFORM(viewportToWidget, testRect, QRectF(110,120,100,100));
+    CHECK_TRANSFORM(checkersToWidget, testRect, QRectF(140,170,100,100));
 
     zoomHandler->setZoom(0.5);
-    transform = converter.imageToWidgetTransform();
 
-    rect1 = converter.viewportToWidget(converter.imageToViewport(testRect));
-    rect2 = transform.map(testRect).boundingRect();
+    imageToWidget = converter.imageToWidgetTransform();
+    documentToWidget = converter.documentToWidgetTransform();
+    flakeToWidget = converter.flakeToWidgetTransform();
+    viewportToWidget = converter.viewportToWidgetTransform();
+    checkersToWidget = converter.checkersToWidgetTransform();
 
-    QCOMPARE(rect1, rect2);
+    CHECK_TRANSFORM(imageToWidget, testRect, QRectF(30,20,50,50));
+    CHECK_TRANSFORM(documentToWidget, testRect, QRectF(4980,4970,5000,5000));
+    CHECK_TRANSFORM(flakeToWidget, testRect, QRectF(80,70,100,100));
+    CHECK_TRANSFORM(viewportToWidget, testRect, QRectF(110,120,100,100));
+    CHECK_TRANSFORM(checkersToWidget, testRect, QRectF(140,170,100,100));
 }
 
 

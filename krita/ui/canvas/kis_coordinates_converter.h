@@ -30,6 +30,10 @@ class QTransform;
 class KoViewConverter;
 
 
+/**
+ * Automatic generation of QRectF transformations.
+ * They will use QPointF methods for transforming rectangles.
+ */
 #define DEFINE_RECT_METHOD(name)                                        \
     QRectF KisCoordinatesConverter::name(const QRectF &rc) const        \
     { return QRectF(name(rc.topLeft()), name(rc.bottomRight())); }
@@ -82,7 +86,6 @@ public:
     QTransform viewportToWidgetTransform() const;
     QTransform checkersToWidgetTransform() const;
 
-    QSize imageSizeInWidgetPixels() const;
     QRectF imageRectInWidgetPixels() const;
     QRectF imageRectInViewportPixels() const;
 

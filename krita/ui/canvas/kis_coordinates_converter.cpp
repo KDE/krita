@@ -18,8 +18,11 @@
 
 #include "kis_coordinates_converter.h"
 
+#include <QTransform>
 
 #include <KoViewConverter.h>
+
+#include <kis_config.h>
 #include <kis_image.h>
 
 
@@ -31,16 +34,20 @@ struct KisCoordinatesConverter::Private {
 };
 
 
-KisCoordinatesConverter::KisCoordinatesConverter(KisImageWSP image, KoViewConverter *viewConverter)
+KisCoordinatesConverter::KisCoordinatesConverter(KoViewConverter *viewConverter)
     : m_d(new Private)
 {
-    m_d->image = image;
     m_d->viewConverter = viewConverter;
 }
 
 KisCoordinatesConverter::~KisCoordinatesConverter()
 {
     delete m_d;
+}
+
+void KisCoordinatesConverter::setImage(KisImageWSP image)
+{
+    m_d->image = image;
 }
 
 void KisCoordinatesConverter::setDocumentOrigin(const QPoint &origin)
@@ -53,44 +60,152 @@ void KisCoordinatesConverter::setDocumentOffset(const QPoint &offset)
     m_d->documentOffset = offset;
 }
 
-QRectF KisCoordinatesConverter::imageToViewport(const QRect &imageRect)
+QPoint KisCoordinatesConverter::documentOrigin() const
 {
-    QRectF docRect = m_d->image->pixelToDocument(QRectF(imageRect));
-    QRectF tempRect = m_d->viewConverter->documentToView(docRect);
-
-    return tempRect.translated(-m_d->documentOffset);
+    return m_d->documentOrigin;
 }
 
-QRect KisCoordinatesConverter::viewportToImage(const QRectF &viewportRect)
+QPoint KisCoordinatesConverter::documentOffset() const
 {
-    QRectF tempRect = viewportRect.translated(m_d->documentOffset);
-    QRectF docRect = m_d->viewConverter->viewToDocument(tempRect);
-
-    // FIXME: intersection?
-    return m_d->image->documentToPixel(docRect).toAlignedRect().intersected(m_d->image->bounds());
+    return m_d->documentOffset;
 }
 
-QRectF KisCoordinatesConverter::imageToWidget(const QRect &imageRect)
+QPointF KisCoordinatesConverter::imageToViewport(const QPointF &pt) const
 {
-    return viewportToWidget(imageToViewport(imageRect));
+    QPointF docPt = m_d->image->pixelToDocument(pt);
+    QPointF tempPt = m_d->viewConverter->documentToView(docPt);
+
+    return tempPt - m_d->documentOffset;
 }
 
-QRect KisCoordinatesConverter::widgetToImage(const QRectF &widgetRect)
+QPointF KisCoordinatesConverter::viewportToImage(const QPointF &pt) const
 {
-    return viewportToImage(widgetToViewport(widgetRect));
+    QPointF tempPt = pt + m_d->documentOffset;
+    QPointF docPt = m_d->viewConverter->viewToDocument(tempPt);
+
+    return m_d->image->documentToPixel(docPt);
 }
 
-QRectF KisCoordinatesConverter::widgetToViewport(const QRectF &widgetRect)
+DEFINE_RECT_METHOD(imageToViewport);
+DEFINE_RECT_METHOD(viewportToImage);
+
+QPointF KisCoordinatesConverter::widgetToViewport(const QPointF &pt) const
 {
-    return widgetRect.translated(-(m_d->documentOrigin + m_d->documentOffset));
+    return pt - m_d->documentOrigin;
 }
 
-QRectF KisCoordinatesConverter::viewportToWidget(const QRectF &viewportRect)
+QPointF KisCoordinatesConverter::viewportToWidget(const QPointF &pt) const
 {
-    return viewportRect.translated(m_d->documentOrigin + m_d->documentOffset);
+    return pt + m_d->documentOrigin;
 }
 
-void KisCoordinatesConverter::imageScale(qreal *scaleX, qreal *scaleY)
+DEFINE_RECT_METHOD(widgetToViewport);
+DEFINE_RECT_METHOD(viewportToWidget);
+
+
+QPointF KisCoordinatesConverter::widgetToDocument(const QPointF &pt) const
+{
+    QPointF tempPt = pt - m_d->documentOrigin + m_d->documentOffset;
+    return m_d->viewConverter->viewToDocument(tempPt);
+}
+
+QPointF KisCoordinatesConverter::documentToWidget(const QPointF &pt) const
+{
+    QPointF tempPt = m_d->viewConverter->documentToView(pt);
+    return tempPt + m_d->documentOrigin - m_d->documentOffset;
+}
+
+DEFINE_RECT_METHOD(widgetToDocument);
+DEFINE_RECT_METHOD(documentToWidget);
+
+QPointF KisCoordinatesConverter::imageToDocument(const QPointF &pt) const
+{
+    return m_d->image->pixelToDocument(pt);
+}
+
+QPointF KisCoordinatesConverter::documentToImage(const QPointF &pt) const
+{
+    return m_d->image->documentToPixel(pt);
+}
+
+DEFINE_RECT_METHOD(imageToDocument);
+DEFINE_RECT_METHOD(documentToImage);
+
+QTransform KisCoordinatesConverter::imageToWidgetTransform() const
+{
+    QTransform transform;
+
+    qreal scaleX, scaleY;
+    imageScale(&scaleX, &scaleY);
+
+    transform.scale(scaleX, scaleY);
+    transform.translate(-m_d->documentOffset.x() / scaleX + m_d->documentOrigin.x() / scaleX,
+                        -m_d->documentOffset.y() / scaleY + m_d->documentOrigin.y() / scaleY);
+
+    return transform;
+}
+
+QTransform KisCoordinatesConverter::documentToWidgetTransform() const
+{
+    QTransform transform;
+
+    qreal zoomX, zoomY;
+    m_d->viewConverter->zoom(&zoomX, &zoomY);
+
+    transform.scale(zoomX, zoomY);
+    transform.translate(-m_d->documentOffset.x() / zoomX + m_d->documentOrigin.x() / zoomX,
+                        -m_d->documentOffset.y() / zoomY + m_d->documentOrigin.y() / zoomY);
+
+    return transform;
+}
+
+QTransform KisCoordinatesConverter::flakeToWidgetTransform() const
+{
+    QTransform transform;
+    transform.translate(-m_d->documentOffset.x() + m_d->documentOrigin.x(),
+                        -m_d->documentOffset.y() + m_d->documentOrigin.y());
+
+    return transform;
+}
+
+QTransform KisCoordinatesConverter::viewportToWidgetTransform() const
+{
+    QTransform transform;
+    transform.translate(m_d->documentOrigin.x(), m_d->documentOrigin.y());
+
+    return transform;
+}
+
+QTransform KisCoordinatesConverter::checkersToWidgetTransform() const
+{
+    QTransform transform;
+    transform.translate(m_d->documentOrigin.x(), m_d->documentOrigin.y());
+
+    KisConfig cfg;
+    if (!cfg.scrollCheckers())
+            transform.translate(+m_d->documentOffset.x(), +m_d->documentOffset.y());
+
+    return transform;
+}
+
+QSize KisCoordinatesConverter::imageSizeInWidgetPixels() const
+{
+    return imageRectInWidgetPixels().toAlignedRect().size();
+}
+
+QRectF KisCoordinatesConverter::imageRectInWidgetPixels() const
+{
+    if(!m_d->image) return QRectF();
+    return viewportToWidget(imageToViewport(m_d->image->bounds()));
+}
+
+QRectF KisCoordinatesConverter::imageRectInViewportPixels() const
+{
+    if(!m_d->image) return QRectF();
+    return imageToViewport(m_d->image->bounds());
+}
+
+void KisCoordinatesConverter::imageScale(qreal *scaleX, qreal *scaleY) const
 {
     // get the x and y zoom level of the canvas
     qreal zoomX, zoomY;

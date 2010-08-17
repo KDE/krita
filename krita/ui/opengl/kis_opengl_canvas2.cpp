@@ -31,6 +31,7 @@
 #include <QPaintEvent>
 #include <QPoint>
 #include <QPainter>
+#include <QTransform>
 
 #include <kxmlguifactory.h>
 
@@ -42,6 +43,7 @@
 #include "kis_types.h"
 #include <ko_favorite_resource_manager.h>
 #include "canvas/kis_canvas2.h"
+#include "kis_coordinates_converter.h"
 #include "kis_image.h"
 #include "opengl/kis_opengl.h"
 #include "opengl/kis_opengl_image_textures.h"
@@ -74,9 +76,9 @@ public:
     bool GLStateSaved;
 };
 
-KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures)
+KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent, KisOpenGLImageTexturesSP imageTextures)
         : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget())
-        , KisCanvasWidgetBase(canvas)
+        , KisCanvasWidgetBase(canvas, coordinatesConverter)
         , m_d(new Private())
 {
     m_d->openGLImageTextures = imageTextures;
@@ -103,10 +105,11 @@ void KisOpenGLCanvas2::initializeGL()
 {
 }
 
-void KisOpenGLCanvas2::resizeGL(int w, int h)
+void KisOpenGLCanvas2::resizeGL(int width, int height)
 {
-    glViewport(0, 0, (GLint)w, (GLint)h);
-    adjustOrigin();
+    glViewport(0, 0, (GLint)width, (GLint)height);
+
+    emit needAdjustOrigin();
     update();
 }
 
@@ -118,39 +121,47 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 
     drawBorder();
 
+    Q_ASSERT(canvas()->image());
+
     if (canvas()->image()) {
         drawBackground();
-
-        if(canvas()->image()->rootLayer()->childCount()>0) {
-            drawImage();
-        }
-
+        drawImage();
         restoreGLState();
 
-        // XXX: make settable
-        bool drawTools = true;
 
         gc.save();
-        if (canvas()->isCanvasMirrored()){
-            QTransform m = gc.transform();
-            m.translate( documentOrigin().x(), 0);
-            m.scale(-1,1 );
-            m.translate( -documentSize().width(),0 );
-            m.translate( -documentOrigin().x(), 0);
-            gc.setTransform(m);
-        }
 
-        drawDecorations(gc, drawTools,
-                        documentOffset(),
-                        QRect(QPoint(0, 0), documentSize()),
-                        canvas());
-                        
+        QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
+        drawDecorations(gc, boundingRect);
+
         gc.restore();
     } else {
         restoreGLState();
     }
 
     gc.end();
+}
+
+void KisOpenGLCanvas2::loadQTransform(QTransform transform)
+{
+    GLfloat matrix[16];
+    memset(matrix, 0, sizeof(GLfloat) * 16);
+
+    matrix[0] = transform.m11();
+    matrix[1] = transform.m21();
+
+    matrix[4] = transform.m12();
+    matrix[5] = transform.m22();
+
+    matrix[12] = transform.m31();
+    matrix[13] = transform.m32();
+
+    matrix[3] = transform.m13();
+    matrix[7] = transform.m23();
+
+    matrix[15] = transform.m33();
+
+    glLoadMatrixf(matrix);
 }
 
 void KisOpenGLCanvas2::drawBorder()
@@ -163,9 +174,6 @@ void KisOpenGLCanvas2::drawBorder()
 
 void KisOpenGLCanvas2::drawBackground()
 {
-    const qreal scaleX = zoomScaleX();
-    const qreal scaleY = zoomScaleY();
-
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, width(), height());
@@ -173,46 +181,40 @@ void KisOpenGLCanvas2::drawBackground()
 
     glMatrixMode(GL_TEXTURE);
     glLoadIdentity();
-
     KisConfig cfg;
     GLfloat checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
-
     glScalef(checkSizeScale, checkSizeScale, 1.0);
 
-    if (cfg.scrollCheckers()) {
-        glTranslatef(static_cast<GLfloat>(documentOffset().x()) / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
-                     static_cast<GLfloat>(documentOffset().y()) / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
-                     0.0);
-    }
-
-    glScalef(scaleX, scaleY, 1.0);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(documentOrigin().x(), documentOrigin().y(), 0.0);
-    glScalef(scaleX, scaleY, 1.0);
+    KisCoordinatesConverter *converter = coordinatesConverter();
+    QRectF viewportRect = converter->imageRectInViewportPixels();
+    QRectF textureRect = QRectF(0, 0,
+                                viewportRect.width() / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
+                                viewportRect.height() / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
+
+    QTransform transform = converter->checkersToWidgetTransform();
+    loadQTransform(transform);
 
     glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->backgroundTexture());
     glEnable(GL_TEXTURE_2D);
     glShadeModel(GL_FLAT);
 
     glBegin(GL_QUADS);
-
     glColor3f(1.0, 1.0, 1.0);
-    glTexCoord2f(0.0, 0.0);
-    glVertex2f(0.0, 0.0);
 
-    KisImageWSP image = canvas()->image();
+    glTexCoord2f(textureRect.left(), textureRect.top());
+    glVertex2f(viewportRect.left(), viewportRect.top());
 
-    glTexCoord2f(image->width() / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE, 0.0);
-    glVertex2f(image->width(), 0.0);
+    glTexCoord2f(textureRect.right(), textureRect.top());
+    glVertex2f(viewportRect.right(), viewportRect.top());
 
-    glTexCoord2f(image->width() / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
-                 image->height() / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
-    glVertex2f(image->width(), image->height());
+    glTexCoord2f(textureRect.right(), textureRect.bottom());
+    glVertex2f(viewportRect.right(), viewportRect.bottom());
 
-    glTexCoord2f(0.0, image->height() / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
-    glVertex2f(0.0, image->height());
+    glTexCoord2f(textureRect.left(), textureRect.bottom());
+    glVertex2f(viewportRect.left(), viewportRect.bottom());
 
     glEnd();
 
@@ -222,23 +224,20 @@ void KisOpenGLCanvas2::drawBackground()
 
 void KisOpenGLCanvas2::drawImage()
 {
-    setPixelToViewTransformation();
+    setupImageToWidgetTransformation();
 
-    const qreal scaleX = zoomScaleX();
-
-    glEnable(GL_TEXTURE_2D);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    QRectF documentRect = viewConverter()->viewToDocument(QRectF(documentOffset().x(), 
-                                                                    documentOffset().y(), 
-                                                                    width(), 
-                                                                    height()));
     KisImageWSP image = canvas()->image();
+    KisCoordinatesConverter *converter = coordinatesConverter();
 
-    QRect wr = image->documentToIntPixel(documentRect);
-    wr &= QRect(0, 0, image->width(), image->height());
+    QRectF widgetRect(0,0, width(), height());
+    QRectF widgetRectInImagePixels = converter->
+        documentToImage(converter->widgetToDocument(widgetRect));
+
+    qreal scaleX, scaleY;
+    converter->imageScale(&scaleX, &scaleY);
+
+    QRect wr = widgetRectInImagePixels.toAlignedRect() & image->bounds();
+
 
     if (image->colorSpace()->hasHighDynamicRange()) {
         if (m_d->openGLImageTextures->usingHDRExposureProgram()) {
@@ -249,11 +248,6 @@ void KisOpenGLCanvas2::drawImage()
 
     makeCurrent();
 
-    if (canvas()->isCanvasMirrored()){
-        glScalef(-1,1,1);
-        glTranslatef(-image->width(),0,0);
-    }
-    
     for (int x = (wr.left() / m_d->openGLImageTextures->imageTextureTileWidth()) * m_d->openGLImageTextures->imageTextureTileWidth();
         x <= wr.right();
         x += m_d->openGLImageTextures->imageTextureTileWidth()) {
@@ -352,7 +346,6 @@ void KisOpenGLCanvas2::restoreGLState()
 void KisOpenGLCanvas2::beginOpenGL(void)
 {
     saveGLState();
-    setupMatrices();
 }
 
 void KisOpenGLCanvas2::endOpenGL(void)
@@ -360,7 +353,7 @@ void KisOpenGLCanvas2::endOpenGL(void)
     restoreGLState();
 }
 
-void KisOpenGLCanvas2::setupMatrices(void)
+void KisOpenGLCanvas2::setupImageToWidgetTransformation()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -371,44 +364,12 @@ void KisOpenGLCanvas2::setupMatrices(void)
     glLoadIdentity();
 
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(-documentOffset().x(), -documentOffset().y(), 0.0);
-    glTranslatef(documentOrigin().x(),  documentOrigin().y(), 0.0);
-}
 
-void KisOpenGLCanvas2::applyZoomScalingToModelView(void)
-{
-    KisImageWSP image = canvas()->image();
-    
-    if (!image) return;
-    
-    const qreal scaleX = zoomScaleX();
-    const qreal scaleY = zoomScaleY();
-    
-    glMatrixMode(GL_MODELVIEW);
-    glScalef(scaleX, scaleY, 1.0);
-}
-
-void KisOpenGLCanvas2::setPixelToViewTransformation(void)
-{
-    setupMatrices();
-    applyZoomScalingToModelView();
-}
-
-qreal KisOpenGLCanvas2::zoomScaleX() const
-{
-    qreal sx, sy;
-    viewConverter()->zoom(&sx, &sy);
-
-    return sx / canvas()->image()->xRes();
-}
-
-qreal KisOpenGLCanvas2::zoomScaleY() const
-{
-    qreal sx, sy;
-    viewConverter()->zoom(&sx, &sy);
-
-    return sy / canvas()->image()->yRes();
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    QTransform transform = coordinatesConverter()->imageToWidgetTransform();
+    loadQTransform(transform);
 }
 
 void KisOpenGLCanvas2::enterEvent(QEvent* e)
@@ -475,17 +436,6 @@ void KisOpenGLCanvas2::tabletEvent(QTabletEvent *e)
 void KisOpenGLCanvas2::wheelEvent(QWheelEvent *e)
 {
     processWheelEvent(e);
-}
-
-void KisOpenGLCanvas2::documentOffsetMoved(const QPoint & pt)
-{
-    KisCanvasWidgetBase::documentOffsetMoved(pt);
-    update();
-}
-
-void KisOpenGLCanvas2::emitDocumentOriginChangedSignal()
-{
-    emit documentOriginChanged(documentOrigin());
 }
 
 bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)

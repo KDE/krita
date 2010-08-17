@@ -23,30 +23,70 @@
 #include "kis_types.h"
 
 
-class QRect;
+class QSize;
 class QRectF;
 class QPoint;
+class QTransform;
 class KoViewConverter;
+
+
+#define DEFINE_RECT_METHOD(name)                                        \
+    QRectF KisCoordinatesConverter::name(const QRectF &rc) const        \
+    { return QRectF(name(rc.topLeft()), name(rc.bottomRight())); }
+
+#define DECLARE_RECT_METHOD(name)               \
+    QRectF name(const QRectF &rc) const
+
+
 
 class KRITAUI_EXPORT KisCoordinatesConverter
 {
 public:
-    KisCoordinatesConverter(KisImageWSP image, KoViewConverter *viewConverter);
+    KisCoordinatesConverter(KoViewConverter *viewConverter);
     ~KisCoordinatesConverter();
 
+    void setImage(KisImageWSP image);
     void setDocumentOrigin(const QPoint &origin);
     void setDocumentOffset(const QPoint &offset);
 
-    QRectF imageToWidget(const QRect &imageRect);
-    QRect widgetToImage(const QRectF &widgetRect);
+    QPoint documentOrigin() const;
+    QPoint documentOffset() const;
 
-    QRectF imageToViewport(const QRect &imageRect);
-    QRect viewportToImage(const QRectF &viewportRect);
+    QPointF imageToViewport(const QPointF &pt) const;
+    QPointF viewportToImage(const QPointF &pt) const;
 
-    QRectF widgetToViewport(const QRectF &widgetRect);
-    QRectF viewportToWidget(const QRectF &viewportRect);
+    QPointF widgetToViewport(const QPointF &pt) const;
+    QPointF viewportToWidget(const QPointF &pt) const;
 
-    void imageScale(qreal *scaleX, qreal *scaleY);
+    QPointF widgetToDocument(const QPointF &pt) const;
+    QPointF documentToWidget(const QPointF &pt) const;
+
+    QPointF imageToDocument(const QPointF &pt) const;
+    QPointF documentToImage(const QPointF &pt) const;
+
+    DECLARE_RECT_METHOD(imageToViewport);
+    DECLARE_RECT_METHOD(viewportToImage);
+
+    DECLARE_RECT_METHOD(widgetToViewport);
+    DECLARE_RECT_METHOD(viewportToWidget);
+
+    DECLARE_RECT_METHOD(widgetToDocument);
+    DECLARE_RECT_METHOD(documentToWidget);
+
+    DECLARE_RECT_METHOD(imageToDocument);
+    DECLARE_RECT_METHOD(documentToImage);
+
+    QTransform imageToWidgetTransform() const;
+    QTransform documentToWidgetTransform() const;
+    QTransform flakeToWidgetTransform() const;
+    QTransform viewportToWidgetTransform() const;
+    QTransform checkersToWidgetTransform() const;
+
+    QSize imageSizeInWidgetPixels() const;
+    QRectF imageRectInWidgetPixels() const;
+    QRectF imageRectInViewportPixels() const;
+
+    void imageScale(qreal *scaleX, qreal *scaleY) const;
 private:
     struct Private;
     Private * const m_d;

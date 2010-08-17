@@ -167,9 +167,6 @@ public slots:
     /// adjust the origin of the document
     void adjustOrigin();
 
-    /// documentOffset changed, now update the rulers in zoom manager
-    void updateRulers();
-
     /// slot for setting the mirroring
     void mirrorCanvas(bool mirror);
 
@@ -215,13 +212,6 @@ private:
     void createCanvas(bool useOpenGL);
     void createQPainterCanvas();
     void createOpenGLCanvas();
-
-    /**
-     * Returns a rect in widget pixels that is translated for document
-     * offset, resolution and zoom and that is guaranteed to be inside
-     * the widget.
-     */
-    QRect viewRectFromDoc(const QRectF & docRect);
 
 private:
 

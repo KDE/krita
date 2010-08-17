@@ -28,7 +28,7 @@
 class QPainter;
 class QRect;
 class QRectF;
-class KoViewConverter;
+class KisCoordinatesConverter;
 
 #include <kis_shared_ptr.h>
 #include <KoGenericRegistry.h>
@@ -77,7 +77,7 @@ public:
      * @param point the coordinates in point in the document reference
      */
     virtual QPointF adjustPosition(const QPointF& point) const = 0;
-    virtual void drawAssistant(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter) const = 0;
+    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter) = 0;
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();

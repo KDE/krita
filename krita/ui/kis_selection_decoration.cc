@@ -23,8 +23,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <KoViewConverter.h>
-
 #include "kis_types.h"
 #include "kis_view2.h"
 #include "kis_selection.h"
@@ -34,6 +32,7 @@
 #include "kis_selection_manager.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
+#include "kis_coordinates_converter.h"
 
 KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
     : KisCanvasDecoration("selection", i18n("Selection decoration"), view), m_mode(Ants)
@@ -169,77 +168,71 @@ void KisSelectionDecoration::updateSimpleOutline()
     }
 }
 
-void KisSelectionDecoration::drawDecoration(QPainter& painter, const QPoint& documentOffset, const QRect& area, const KoViewConverter& converter)
+void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
+    Q_UNUSED(updateRect);
 
-    Q_UNUSED(documentOffset)
-    Q_UNUSED(area);
     KisSelectionSP selection = view()->selection();
     if (!selection || selection->isDeselected() || !selection->isVisible())
         return;
 
-    qreal sx, sy;
-    converter.zoom(&sx, &sy);
-
     if (m_mode == Mask) {
         Q_ASSERT_X(0, "KisSelectionDecoration.cc", "MASK MODE NOT SUPPORTED YET!");
     }
-    if (m_mode == Ants && selection && selection->hasPixelSelection()) {
 
-        QTransform matrix;
-        matrix.scale(sx / view()->image()->xRes(), sy / view()->image()->yRes());
+    if (m_mode == Ants && selection->hasPixelSelection()) {
 
-        QTransform oldWorldMatrix = painter.worldTransform();
-        painter.setWorldTransform(matrix, true);
+        QTransform transform = converter->imageToWidgetTransform();
 
-        QTime t;
-        t.start();
-        painter.setRenderHints(0);
+        qreal scaleX, scaleY;
+        converter->imageScale(&scaleX, &scaleY);
+
+        gc.save();
+        gc.setTransform(transform);
+        gc.setRenderHints(0);
 
         QPen pen(m_brushes[m_offset], 0);
 
         int i = 0;
-        painter.setPen(pen);
-        if (1 / view()->image()->xRes()*sx < 3)
+        gc.setPen(pen);
+        if (0.5 * (scaleX + scaleY) < 3) {
             foreach(const QPolygon & polygon, m_simpleOutline) {
-            painter.drawPolygon(polygon);
-            i++;
+                gc.drawPolygon(polygon);
+                i++;
+            }
         } else {
             foreach(const QPolygon & polygon, m_outline) {
-                painter.drawPolygon(polygon);
+                gc.drawPolygon(polygon);
                 i++;
             }
         }
 
-        dbgRender << "Polygons :" << i;
-        dbgRender << "Painting marching ants :" << t.elapsed();
-
-        painter.setWorldTransform(oldWorldMatrix);
+        gc.restore();
     }
-    if (m_mode == Ants && selection && selection->hasShapeSelection()) {
+
+    if (m_mode == Ants && selection->hasShapeSelection()) {
         KisShapeSelection* shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
 
         QVector<qreal> dashes;
-        qreal space = 4;
-        dashes << 4 << space;
+        dashes << 4 << 4;
+
+        QPen backgroundPen(Qt::white);
+        backgroundPen.setCosmetic(true);
 
         QPainterPathStroker stroker;
         stroker.setWidth(0);
         stroker.setDashPattern(dashes);
         stroker.setDashOffset(m_offset - 4);
+        QPainterPath stroke = stroker.createStroke(shapeSelection->selectionOutline());
 
-        painter.setRenderHint(QPainter::Antialiasing);
-        QColor outlineColor = Qt::black;
+        QTransform transform = converter->documentToWidgetTransform();
 
-        QTransform zoomMatrix;
-        zoomMatrix.scale(sx, sy);
-
-        QPen backgroundPen(Qt::white);
-        backgroundPen.setCosmetic(true);
-        painter.strokePath(zoomMatrix.map(shapeSelection->selectionOutline()), backgroundPen);
-
-        QPainterPath stroke = stroker.createStroke(zoomMatrix.map(shapeSelection->selectionOutline()));
-        painter.fillPath(stroke, outlineColor);
+        gc.save();
+        gc.setTransform(transform);
+        gc.setRenderHint(QPainter::Antialiasing);
+        gc.strokePath(shapeSelection->selectionOutline(), backgroundPen);
+        gc.fillPath(stroke, Qt::black);
+        gc.restore();
     }
 }
 

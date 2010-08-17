@@ -40,6 +40,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoShapeManager.h>
+#include "kis_coordinates_converter.h"
 #include <KoZoomHandler.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
@@ -71,17 +72,11 @@ public:
     QBrush checkBrush;
 };
 
-KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
+KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent)
         : QWidget(parent)
-        , KisCanvasWidgetBase(canvas)
+        , KisCanvasWidgetBase(canvas, coordinatesConverter)
         , m_d(new Private())
 {
-    // XXX: Reset pattern size and color when the properties change!
-
-    KisConfig cfg;
-
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-
     setAutoFillBackground(true);
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
@@ -89,7 +84,8 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     setAttribute(Qt::WA_StaticContents);
     setAttribute(Qt::WA_OpaquePaintEvent);
 
-    m_d->checkBrush = QBrush(checkImage(cfg.checkSize()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    slotConfigChanged();
 }
 
 KisQPainterCanvas::~KisQPainterCanvas()
@@ -122,63 +118,37 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     QPainter gc(this);
 #endif
 
+    KisCoordinatesConverter *converter = coordinatesConverter();
+    QTransform imageTransform = converter->viewportToWidgetTransform();
+    QTransform checkersTransform = converter->checkersToWidgetTransform();
+    QRectF viewportBoundingRect = converter->imageRectInViewportPixels();
+
+    gc.save();
+
     gc.setCompositionMode(QPainter::CompositionMode_Source);
     gc.fillRect(QRect(QPoint(0, 0), size()), borderColor());
 
-    // Don't draw the checks if we draw a cached pixmap, because we
-    // need alpha transparency for checks. The precached pixmap
-    // already should contain checks.
-    QRect documentRect = QRect(QPoint(0, 0), documentSize());
-    QRect fillRect = documentRect.translated(documentOrigin());
-    if (!cfg.noXRender()) {
-        if (cfg.scrollCheckers()) {
-            if (documentOffset().x() > 0) {
-                fillRect.adjust(0, 0, documentOffset().x(), 0);
-            } else {
-                fillRect.adjust(documentOffset().x(), 0, 0, 0);
-            }
-            if (documentOffset().y() > 0) {
-                fillRect.adjust(0, 0, 0, documentOffset().y());
-            } else {
-                fillRect.adjust(0, documentOffset().y(), 0, 0);
-            }
-            gc.save();
-            gc.translate(-documentOffset());
-            gc.fillRect(fillRect, m_d->checkBrush);
-            gc.restore();
-        } else {
-            // Checks
-            gc.fillRect(fillRect, m_d->checkBrush);
-        }
-    }
+    //Set the brush origin accordingly
+    gc.setTransform(checkersTransform);
+    gc.setBrushOrigin(viewportBoundingRect.topLeft());
+    gc.fillRect(viewportBoundingRect, m_d->checkBrush);
 
-    if(canvas()->image()->rootLayer()->childCount()>0) {
-        gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    gc.setTransform(imageTransform);
+    QRectF viewportRect = converter->widgetToViewport(ev->rect());
+    gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    gc.drawImage(viewportRect, m_d->prescaledProjection->prescaledQImage(),
+                 viewportRect);
 
-        gc.save();
-        if (canvas()->isCanvasMirrored()){
-            QTransform m = gc.transform();
-            m.translate( documentOrigin().x(), 0);
-            m.scale(-1,1 );
-            m.translate( -documentSize().width(),0 );
-            m.translate( -documentOrigin().x(), 0);
-            gc.setTransform(m);
-        }
-//            if (cfg.noXRender()) {
-//                gc.drawPixmap(ev->rect(), m_d->prescaledProjection->prescaledPixmap(), 
-//                            ev->rect().translated(-documentOrigin()));
-//            } else {
-                gc.drawImage(ev->rect(), m_d->prescaledProjection->prescaledQImage(), 
-                            ev->rect().translated(-documentOrigin()));
-//            }
-    }
+    gc.restore();
+
 
 #ifdef DEBUG_REPAINT
     QColor color = QColor(random() % 255, random() % 255, random() % 255, 150);
     gc.fillRect(ev->rect(), color);
 #endif
-    drawDecorations(gc, true, documentOffset(), fillRect.translated(-documentOrigin()), canvas());
-    gc.restore();
+
+    QRect boundingRect = converter->imageRectInWidgetPixels().toAlignedRect();
+    drawDecorations(gc, boundingRect);
     gc.end();
 
 #ifdef INDEPENDENT_CANVAS
@@ -253,13 +223,6 @@ void KisQPainterCanvas::wheelEvent(QWheelEvent *e)
     processWheelEvent(e);
 }
 
-void KisQPainterCanvas::documentOffsetMoved(const QPoint & pt)
-{
-    KisCanvasWidgetBase::documentOffsetMoved(pt);
-    m_d->prescaledProjection->documentOffsetMoved(pt);
-    update();
-}
-
 void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 {
     QSize size(e->size());
@@ -269,26 +232,14 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
     if (size.height() <= 0) {
         size.setHeight(1);
     }
+
     m_d->prescaledProjection->resizePrescaledImage(size);
-    adjustOrigin();
+    emit needAdjustOrigin();
 }
 
 void KisQPainterCanvas::slotConfigChanged()
 {
-    KisConfig cfg;
-
-    /**
-     * FIXME: Please pay attention to these options:
-     *   - cfg.checkSize();
-     *   - cfg.checkersColor();
-     */
-
-    m_d->checkBrush = QBrush(checkImage(cfg.checkSize()));
-}
-
-void KisQPainterCanvas::emitDocumentOriginChangedSignal()
-{
-    emit documentOriginChanged(documentOrigin());
+    m_d->checkBrush = QBrush(checkImage());
 }
 
 bool KisQPainterCanvas::callFocusNextPrevChild(bool next)

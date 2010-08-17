@@ -28,6 +28,7 @@ class KisCoordinatesConverterTest : public QObject
 private slots:
     void testConversion();
     void testImageCropping();
+    void testTransformations();
 };
 
 #endif /* KIS_COORDINATES_CONVERTER_TEST_H */

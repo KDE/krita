@@ -90,11 +90,11 @@ void KisPaintingAssistantsManager::setup(KActionCollection * collection)
     d->updateAction();
 }
 
-void KisPaintingAssistantsManager::drawDecoration(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter)
+void KisPaintingAssistantsManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
     foreach(KisPaintingAssistant* assistant, d->assistants) {
         gc.save();
-        assistant->drawAssistant(gc, documentOffset, area, converter);
+        assistant->drawAssistant(gc, updateRect, converter);
         gc.restore();
     }
 }

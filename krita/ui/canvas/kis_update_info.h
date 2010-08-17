@@ -53,8 +53,6 @@ class KisOpenGLUpdateInfo : public KisUpdateInfo
 public:
     KisTextureTileUpdateInfoList tileList;
     QRect dirtyViewportRect();
-
-    QRectF viewportRect;
 };
 #endif /* HAVE_OPENGL */
 

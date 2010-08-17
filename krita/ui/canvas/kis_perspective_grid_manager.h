@@ -56,7 +56,7 @@ public slots:
      */
     void clearPerspectiveGrid();
 protected:
-    virtual void drawDecoration(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter);
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
 private:
     bool m_toggleEdition;
     KisView2* m_view;

@@ -22,8 +22,9 @@
 
 #include <QPainter>
 #include <QLinearGradient>
+#include <QTransform>
 
-#include <KoViewConverter.h>
+#include "kis_coordinates_converter.h"
 
 #include <math.h>
 
@@ -67,29 +68,38 @@ inline double norm2(const QPointF& p)
     return sqrt(p.x() * p.x() + p.y() * p.y());
 }
 
-void RulerAssistant::drawAssistant(QPainter& _painter, const QPoint& documentOffset,  const QRect& _area, const KoViewConverter &_converter) const
+void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
-    Q_UNUSED(documentOffset);
-    Q_UNUSED(_area);
+    Q_UNUSED(updateRect);
     Q_ASSERT(handles().size() == 2);
+
+    QTransform initialTransform = converter->documentToWidgetTransform();
+
     // Draw the gradient
     QPointF p1 = *handles()[0];
     QPointF p2 = *handles()[1];
-    _painter.save();
+    gc.save();
     {
-        _painter.translate(_converter.documentToView(p1));
-        _painter.rotate(angle(p1, p2) / M_PI * 180);
+        QTransform gradientTransform = initialTransform;
+
+        gradientTransform.translate(p1.x(), p1.y());
+        gradientTransform.rotate(angle(p1, p2) / M_PI * 180);
+        gc.setTransform(gradientTransform);
+
         QLinearGradient gradient(0, -30, 0, 30);
         gradient.setColorAt(0, QColor(0, 0, 0, 0));
         gradient.setColorAt(0.5, QColor(0, 0, 0, 100));
         gradient.setColorAt(1, QColor(0, 0, 0, 0));
-        _painter.setBrush(gradient);
-        _painter.setPen(QPen(Qt::NoPen));
-        _painter.drawRect(_converter.documentToView(QRectF(0, -50, norm2(p2 - p1), 100)));
+        gc.setBrush(gradient);
+        gc.setPen(QPen(Qt::NoPen));
+        gc.drawRect(QRectF(0, -50, norm2(p2 - p1), 100));
     }
-    _painter.restore();
-    _painter.drawLine(_converter.documentToView(p1),
-                      _converter.documentToView(p2));
+    gc.restore();
+
+    gc.save();
+    gc.setTransform(initialTransform);
+    gc.drawLine(p1,p2);
+    gc.restore();
 }
 
 RulerAssistantFactory::RulerAssistantFactory()

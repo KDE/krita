@@ -42,19 +42,10 @@ public:
 
     virtual KoToolProxy * toolProxy() = 0;
 
-    virtual void documentOffsetMoved(const QPoint &) = 0;
-
-    virtual QPoint documentOrigin() const = 0;
-
-    virtual void adjustOrigin() = 0;
-
     /**
      * Draw the specified decorations on the view.
      */
-    virtual void drawDecorations(QPainter & gc, bool tools,
-                                 const QPoint & documentOffset,
-                                 const QRect & clipRect,
-                                 KisCanvas2 * canvas) = 0;
+    virtual void drawDecorations(QPainter & gc, const QRect &updateWidgetRect) = 0;
 
     virtual void addDecoration(KisCanvasDecoration* deco) = 0;
     virtual KisCanvasDecoration* decoration(const QString& id) = 0;

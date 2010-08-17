@@ -37,7 +37,7 @@ public:
     KisScriptDecoration(Kross::Action* _action, KisView2* _view);
     virtual ~KisScriptDecoration();
 protected:
-    virtual void drawDecoration(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter);
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
 private:
     struct Private;
     Private* const d;

@@ -66,12 +66,10 @@ void KisCanvasDecoration::toggleVisibility()
     d->visible = !d->visible;
 }
 
-void KisCanvasDecoration::paint(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter)
+void KisCanvasDecoration::paint(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter)
 {
-    if (visible()) {
-        //dbgKrita << "Decoration " << name() << " is visible";
-        drawDecoration(gc, documentOffset, area, converter);
-    }
+    if (visible())
+        drawDecoration(gc, updateArea, converter);
 }
 
 KisView2* KisCanvasDecoration::view() const

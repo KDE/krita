@@ -43,8 +43,6 @@ private slots:
 
     void testCreation();
 
-    void testCoordinateConversionRoundTrip();
-
     // Doesn't fail yet, but at least writes out several versions
     // of a scaled image. Make them compare with the results when
     // we're done and have everything okay for regressions
@@ -53,6 +51,8 @@ private slots:
     void testScalingUndeferredSmoothing();
 
     void benchmarkUpdate();
+
+    void testScaling();
 };
 
 #endif

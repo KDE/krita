@@ -36,6 +36,7 @@
 #include "kis_config_notifier.h"
 #include "kis_image.h"
 
+#include "kis_coordinates_converter.h"
 #include "kis_projection_backend.h"
 #include "kis_image_pyramid.h"
 
@@ -82,11 +83,8 @@ struct KisPrescaledProjection::Private {
     Private()
             : useNearestNeighbour(false)
             , cacheKisImageAsQImage(true)
-            , documentOffset(0, 0)
-            , documentOrigin(0, 0)
             , canvasSize(0, 0)
             , imageSize(0, 0)
-            , viewConverter(0)
             , monitorProfile(0)
             , projectionBackend(0) {
     }
@@ -100,13 +98,10 @@ struct KisPrescaledProjection::Private {
 
     QImage prescaledQImage;
 
-    QPoint documentOffset; // in view pixels
-    QPoint documentOrigin; // in view pixels too
-
     QSize canvasSize; // in view pixels
     QSize imageSize; // in kisimage pixels
     KisImageWSP image;
-    KoViewConverter * viewConverter;
+    KisCoordinatesConverter *coordinatesConverter;
     const KoColorProfile* monitorProfile;
     KisProjectionBackend* projectionBackend;
 };
@@ -134,6 +129,7 @@ void KisPrescaledProjection::setImage(KisImageWSP image)
     m_d->image = image;
     m_d->projectionBackend->setImage(image);
 
+
     setImageSize(image->width(), image->height());
 }
 
@@ -142,9 +138,9 @@ QImage KisPrescaledProjection::prescaledQImage() const
     return m_d->prescaledQImage;
 }
 
-void KisPrescaledProjection::setViewConverter(KoViewConverter * viewConverter)
+void KisPrescaledProjection::setCoordinatesConverter(KisCoordinatesConverter *coordinatesConverter)
 {
-    m_d->viewConverter = viewConverter;
+    m_d->coordinatesConverter = coordinatesConverter;
 }
 
 void KisPrescaledProjection::initBackend(bool cacheKisImageAsQImage)
@@ -176,72 +172,36 @@ void KisPrescaledProjection::updateSettings()
     setMonitorProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
 }
 
-
-void KisPrescaledProjection::documentOffsetMoved(const QPoint &documentOffset)
+void KisPrescaledProjection::viewportMoved(const QPoint &offset)
 {
-    dbgRender << "documentOffsetMoved " << m_d->documentOffset << ", to " << documentOffset;
-    QPoint oldDocumentOffset = m_d->documentOffset;
-    m_d->documentOffset = documentOffset;
+    // FIXME: \|/
+    if(m_d->prescaledQImage.isNull()) return;
+    if(offset.isNull()) return;
 
-    // We've called documentOffsetMoved before even updating the projection
-    if (m_d->prescaledQImage.isNull()) {
+    QImage newImage = QImage(m_d->canvasSize, QImage::Format_ARGB32);
 
-        return;
+    QRect newViewportRect = QRect(QPoint(0,0), m_d->canvasSize);
+    QRect oldViewportRect = newViewportRect.translated(-offset);
+
+    QRegion updateRegion = newViewportRect;
+
+    QRect savedArea = newViewportRect & oldViewportRect;
+    if(!savedArea.isEmpty()) {
+        copyQImage(-offset.x(), -offset.y(), &newImage, m_d->prescaledQImage);
+        updateRegion -= savedArea;
     }
 
-    qint32 width = m_d->prescaledQImage.width();
-    qint32 height = m_d->prescaledQImage.height();
 
-    QRegion exposedRegion = QRect(0, 0, width, height);
+    QPainter gc(&newImage);
+    QVector<QRect> rects = updateRegion.rects();
 
-    qint32 oldCanvasXOffset = oldDocumentOffset.x();
-    qint32 oldCanvasYOffset = oldDocumentOffset.y();
-
-    dbgRender << "w: " << width << ", h" << height << ", oldCanvasXOffset " << oldCanvasXOffset << ", oldCanvasYOffset " << oldCanvasYOffset
-    << ", new offset: " << documentOffset;
-
-    QImage image = QImage(width, height, QImage::Format_ARGB32);
-    QPainter gc(&image);
-
-    if (oldCanvasXOffset != m_d->documentOffset.x() || oldCanvasYOffset != m_d->documentOffset.y()) {
-
-        qint32 deltaX =  oldCanvasXOffset - m_d->documentOffset.x();
-        qint32 deltaY = oldCanvasYOffset - m_d->documentOffset.y();
-
-        dbgRender << "deltaX: " << deltaX << ", deltaY: " << deltaY;
-        if (qAbs(deltaX) < width && qAbs(deltaY) < height) {
-            dbgRender << "Copy old data";
-            copyQImage(deltaX, deltaY, &image, m_d->prescaledQImage);
-
-            dbgRender << "exposedRegion: " << exposedRegion;
-            dbgRender << "Preexistant data: " << QRegion(QRect(deltaX, deltaY, width , height));
-            exposedRegion -= QRegion(QRect(deltaX, deltaY, width , height));
-            dbgRender << "exposedRegion: " << exposedRegion;
-        }
-        dbgRender << "exposedRegion: " << exposedRegion;
-        if (!exposedRegion.isEmpty()) {
-
-            QVector<QRect> rects = exposedRegion.rects();
-
-            for (int i = 0; i < rects.count(); i++) {
-                QRect r = rects[i];
-                // Set the areas to empty. Who knows, there may be not
-                // enough image to draw in them.
-                gc.fillRect(r, QColor(0, 0, 0, 0));
-                dbgRender << "render on rect" << r;
-                /**
-                 * FIXME: It can happen that we will need access to KisImage here
-                 */
-                KisPPUpdateInfoSP info = getUpdateInformation(r, QRect());
-                drawUsingBackend(gc, info);
-            }
-        }
-        m_d->prescaledQImage = image;
-    } else {
-        // Don't do "anything" if this function is called while the offset hasn't changed
-        // because that usually happen when the scrollbars appears
-        dbgRender << "Document Offset Moved but without moving !";
+    foreach(QRect rect, rects) {
+        //gc.fillRect(r, QColor(0, 0, 0, 0));
+        KisPPUpdateInfoSP info = getUpdateInformation(rect, QRect());
+        drawUsingBackend(gc, info);
     }
+
+    m_d->prescaledQImage = newImage;
 }
 
 void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
@@ -250,10 +210,11 @@ void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
 
     m_d->imageSize = QSize(w, h);
 
-    QRect vRect = viewRectFromImagePixels(QRect(0, 0, w, h)).toAlignedRect();
-    vRect = vRect.intersected(QRect(QPoint(0, 0), m_d->canvasSize));
-    if (!vRect.isEmpty()) {
-        preScale(vRect);
+    QRect viewportRect = m_d->coordinatesConverter->imageToViewport(QRect(0, 0, w, h)).toAlignedRect();
+    viewportRect = viewportRect.intersected(QRect(QPoint(0, 0), m_d->canvasSize));
+
+    if (!viewportRect.isEmpty()) {
+        preScale(viewportRect);
     }
 }
 
@@ -273,7 +234,10 @@ KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
     if (!dirtyImageRect.intersects(m_d->image->bounds()))
         return new KisPPUpdateInfo();
 
-    QRect rawViewRect = viewRectFromImagePixels(dirtyImageRect).toAlignedRect();
+
+    QRect rawViewRect =
+        m_d->coordinatesConverter->imageToViewport(dirtyImageRect).toAlignedRect();
+
     KisPPUpdateInfoSP info = getUpdateInformation(rawViewRect, dirtyImageRect);
 
     m_d->projectionBackend->updateCache(info);
@@ -351,21 +315,9 @@ KisPPUpdateInfoSP
 KisPrescaledProjection::getUpdateInformation(const QRect &viewportRect,
                                              const QRect &dirtyImageRect)
 {
-    Q_ASSERT(m_d->viewConverter);
-
     KisPPUpdateInfoSP info = new KisPPUpdateInfo();
 
-    // get the x and y zoom level of the canvas
-    qreal zoomX, zoomY;
-    m_d->viewConverter->zoom(&zoomX, &zoomY);
-
-    // Get the KisImage resolution
-    qreal resX = m_d->image->xRes();
-    qreal resY = m_d->image->yRes();
-
-    // Compute the scale factors
-    info->scaleX = zoomX / resX;
-    info->scaleY = zoomY / resY;
+    m_d->coordinatesConverter->imageScale(&info->scaleX, &info->scaleY);
 
     // save it for future
     info->dirtyImageRect = dirtyImageRect;
@@ -375,11 +327,13 @@ KisPrescaledProjection::getUpdateInformation(const QRect &viewportRect,
 
     // second, align this rect to the KisImage's pixels and pixels
     // of projection backend
-    info->imageRect = imageRectFromViewPortPixels(QRectF(croppedViewRect));
+    info->imageRect = m_d->coordinatesConverter->viewportToImage(QRectF(croppedViewRect)).toAlignedRect();
+    info->imageRect = info->imageRect & m_d->image->bounds();
+
     m_d->projectionBackend->alignSourceRect(info->imageRect, info->scaleX);
 
     // finally, compute the dirty rect of the canvas
-    info->viewportRect = viewRectFromImagePixels(info->imageRect);
+    info->viewportRect = m_d->coordinatesConverter->imageToViewport(info->imageRect);
 
     info->borderWidth = 0;
     if (SCALE_MORE_OR_EQUAL_TO(info->scaleX, info->scaleY, 1.0)) {
@@ -396,8 +350,6 @@ KisPrescaledProjection::getUpdateInformation(const QRect &viewportRect,
     }
 
     dbgRender << "#####################################";
-    dbgRender << ppVar(resX) << ppVar(resY);
-    dbgRender << ppVar(zoomX) << ppVar(zoomY);
     dbgRender << ppVar(info->scaleX) << ppVar(info->scaleY);
     dbgRender << ppVar(info->borderWidth) << ppVar(info->renderHints);
     dbgRender << ppVar(info->transfer);
@@ -430,49 +382,6 @@ void KisPrescaledProjection::drawUsingBackend(QPainter &gc, KisPPUpdateInfoSP in
         //patch.prescaleWithBlitz(viewportRect);
         patch.drawMe(gc, info->viewportRect, info->renderHints);
     }
-}
-
-QRectF KisPrescaledProjection::viewRectFromImagePixels(const QRect& rc)
-{
-    Q_ASSERT(m_d->viewConverter);
-
-    qreal xRes = m_d->image->xRes();
-    qreal yRes = m_d->image->yRes();
-
-    QRectF imageRect(rc);
-
-    QRectF docRect;
-    docRect.setCoords(imageRect.left() / xRes, imageRect.top() / yRes,
-                      imageRect.right() / xRes, imageRect.bottom() / yRes);
-
-    QRectF viewRect = m_d->viewConverter->documentToView(docRect);
-    viewRect = viewRect.translated(-m_d->documentOffset);
-
-    QRectF viewRectInter = viewRect.intersected(QRectF(0, 0, m_d->canvasSize.width(), m_d->canvasSize.height()));
-
-    if (viewRect != viewRectInter && !viewRectInter.isEmpty()) {
-        dbgRender << "*** Bad alignment of viewport rect ***";
-        dbgRender << "* Calculated: " << viewRect;
-        dbgRender << "* Must be:    " << viewRectInter;
-        dbgRender << "*** ****************************** ***";
-    }
-
-    return viewRect;
-}
-
-QRect KisPrescaledProjection::imageRectFromViewPortPixels(const QRectF& viewportRect)
-{
-    QRectF intersectedRect = viewportRect;//.intersected(QRectF(0, 0, m_d->canvasSize.width(), m_d->canvasSize.height()));
-    QRectF translatedRect = intersectedRect.translated(m_d->documentOffset);
-    QRectF docRect = m_d->viewConverter->viewToDocument(translatedRect);
-
-    return m_d->image->documentToPixel(docRect).toAlignedRect().intersected(m_d->image->bounds());
-}
-
-
-void KisPrescaledProjection::updateDocumentOrigin(const QPoint& documentOrigin)
-{
-    m_d->documentOrigin = documentOrigin;
 }
 
 #include "kis_prescaled_projection.moc"

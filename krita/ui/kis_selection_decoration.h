@@ -38,7 +38,7 @@ public:
 
     void setMode(Mode mode);
 protected:
-    virtual void drawDecoration(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter);
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
 public slots:
     void selectionChanged();
     void selectionTimerEvent();

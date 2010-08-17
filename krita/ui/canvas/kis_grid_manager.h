@@ -56,7 +56,7 @@ private slots:
     void fastConfig20x20();
     void fastConfig40x40();
 protected:
-    virtual void drawDecoration(QPainter& gc, const QPoint& documentOffset, const QRect& area, const KoViewConverter &converter);
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
 
 private:
 

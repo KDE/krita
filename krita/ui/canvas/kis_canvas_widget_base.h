@@ -37,11 +37,12 @@ class QInputMethodEvent;
 class QVariant;
 
 class KoViewConverter;
+class KisCoordinatesConverter;
 
 class KisCanvasWidgetBase : public KisAbstractCanvasWidget
 {
 public:
-    KisCanvasWidgetBase(KisCanvas2 * canvas);
+    KisCanvasWidgetBase(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter);
 
     virtual ~KisCanvasWidgetBase();
 
@@ -49,19 +50,11 @@ public: // KisAbstractCanvasWidget
 
     virtual KoToolProxy * toolProxy();
 
-    virtual void documentOffsetMoved(const QPoint &);
-
-    virtual QPoint documentOrigin() const;
-
-    virtual void adjustOrigin();
-
     /**
      * Draw the specified decorations on the view.
      */
-    virtual void drawDecorations(QPainter & gc, bool tools,
-                                 const QPoint & documentOffset,
-                                 const QRect & clipRect,
-                                 KisCanvas2 * canvas);
+    virtual void drawDecorations(QPainter & gc, const QRect &updateWidgetRect);
+
     virtual void addDecoration(KisCanvasDecoration* deco);
     virtual KisCanvasDecoration* decoration(const QString& id);
 
@@ -69,14 +62,17 @@ public: // KisAbstractCanvasWidget
     virtual QList<KisCanvasDecoration*> decorations();
 
     /**
-     * Returns the color of the border, i.e. the part of the canvas 
-     * outside the image contents. 
+     * Returns the color of the border, i.e. the part of the canvas
+     * outside the image contents.
      *
      */
     QColor borderColor() const;
-    void setBorderColor(const QColor& color);
 
-    
+    /**
+     * Returns one check of the background checkerboard pattern.
+     */
+    QImage checkImage(qint32 checkSize = -1);
+
 protected:
     /**
      * Returns one check of the background checkerboard pattern.
@@ -87,24 +83,8 @@ protected:
 
     KisCanvas2 *canvas() const;
 
-    const KoViewConverter *viewConverter() const;
+    KisCoordinatesConverter* coordinatesConverter();
 
-    QPoint documentOffset() const;
-
-    /// document size in widget pixels
-    QSize documentSize() const;
-
-    /// these methods take origin coordinate into account, basically it means (point - origin)
-    QPointF widgetToView(const QPointF& p) const;
-    QRect widgetToView(const QRect& r) const;
-    QPoint viewToWidget(const QPoint& p) const;
-    QRect viewToWidget(const QRect& r) const;
-
-    /// Convert widget coords to document, taking into account document origin and offset.
-    QPointF widgetToDocument(const QPointF& p) const;
-
-    QPointF mirror(const QPointF& pos) const;
-    
     /**
      * Convert a mouse event widget coordinate to a document 
      * coordinate, applying an offset to convert the integer 
@@ -132,7 +112,6 @@ protected:
     void processInputMethodEvent(QInputMethodEvent *event);
 
     /// To be implemented by the derived canvas 
-    virtual void emitDocumentOriginChangedSignal() = 0;
     virtual bool callFocusNextPrevChild(bool next) = 0;
 
 private:

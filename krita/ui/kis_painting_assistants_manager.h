@@ -42,7 +42,8 @@ public:
     void setup(KActionCollection * collection);
     QList<KisPaintingAssistantHandleSP> handles();
 protected:
-    virtual void drawDecoration(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter);
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
+
 private:
     struct Private;
     Private* const d;

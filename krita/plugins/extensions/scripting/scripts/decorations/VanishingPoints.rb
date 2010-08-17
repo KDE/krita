@@ -14,7 +14,7 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-def drawDecoration( gc, documentOffset, area, converter)
+def drawDecoration( gc, updateRect, converter)
     x_c = 800
     y_c = 600
     painter = Qt::Internal.kross2smoke( gc, Qt::Painter )

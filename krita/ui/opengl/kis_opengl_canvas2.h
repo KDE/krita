@@ -51,7 +51,7 @@ class KRITAUI_EXPORT KisOpenGLCanvas2 : public QGLWidget, public KisCanvasWidget
 
 public:
 
-    KisOpenGLCanvas2(KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures);
+    KisOpenGLCanvas2(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent, KisOpenGLImageTexturesSP imageTextures);
 
     virtual ~KisOpenGLCanvas2();
 
@@ -61,21 +61,21 @@ public:
      * that primitives can be rendered using coordinates returned 
      * from pixelToView(). 
      */ 
-    void beginOpenGL(void);
+    void beginOpenGL();
 
     /** 
      * Notify the canvas that rendering using native OpenGL commands
      * has finished. This restores the state so that the canvas can 
      * be painted on using a QPainter. 
      */ 
-    void endOpenGL(void);
+    void endOpenGL();
 
     /**
      * Set the projection and model view matrices so that primitives can be
      * rendered using image pixel coordinates. This handles zooming and scrolling
      * of the canvas.
      */
-    void setPixelToViewTransformation(void);
+    void setupImageToWidgetTransformation();
 
 public: // QWidget
 
@@ -123,18 +123,12 @@ public: // QWidget
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
 signals:
-    /**
-     * This signal is emitted when the document origin has changed.
-     * The document origin is the point (in pixel) on the virtual
-     * canvas where the documents origin (0,0) or the top left
-     * corner of the page is. Copied from Karbon
-     */
-    void documentOriginChanged(const QPoint &origin);
 
+    void needAdjustOrigin();
 protected:
 
+    void resizeGL(int width, int height);
     void initializeGL();
-    void resizeGL(int w, int h);
 
 public: // KisAbstractCanvasWidget
 
@@ -142,30 +136,21 @@ public: // KisAbstractCanvasWidget
         return this;
     }
 
-    void documentOffsetMoved(const QPoint & pt);
-
 protected: // KisCanvasWidgetBase
-
-    virtual void emitDocumentOriginChangedSignal();
     virtual bool callFocusNextPrevChild(bool next);
 
 private:
     class Private;
     Private * const m_d;
 
+    void loadQTransform(QTransform transform);
+
     void drawBorder();
     void drawImage();
     void drawBackground();
 
-    void setupMatrices();
-    void applyZoomScalingToModelView();
-
-    qreal zoomScaleX() const;
-    qreal zoomScaleY() const;
-
     void saveGLState();
     void restoreGLState();
-
 };
 
 #endif // HAVE_OPENGL

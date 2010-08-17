@@ -119,7 +119,7 @@ void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
 
                 if (canvasWidget) {
                     beginOpenGL();
-                    canvasWidget->setPixelToViewTransformation();
+                    canvasWidget->setupImageToWidgetTransformation();
 
                     glMatrixMode(GL_MODELVIEW);
                     glTranslatef(0.5, 0.5, 0.0);

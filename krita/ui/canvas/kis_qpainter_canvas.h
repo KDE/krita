@@ -49,7 +49,7 @@ class KisQPainterCanvas : public QWidget, public KisCanvasWidgetBase
 
 public:
 
-    KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent);
+    KisQPainterCanvas(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent);
 
     virtual ~KisQPainterCanvas();
 
@@ -109,22 +109,12 @@ public: // KisAbstractCanvasWidget
         return this;
     }
 
-    void documentOffsetMoved(const QPoint &);
-
-signals:
-
-    /**
-     * This signal is emitted when the document origin has changed.
-     * The document origin is the point (in pixel) on the virtual
-     * canvas where the documents origin (0,0) or the top left
-     * corner of the page is. Copied from Karbon
-     */
-    void documentOriginChanged(const QPoint &origin);
-
 protected: // KisCanvasWidgetBase
 
-    virtual void emitDocumentOriginChangedSignal();
     virtual bool callFocusNextPrevChild(bool next);
+
+signals:
+    void needAdjustOrigin();
 
 private slots:
     void slotConfigChanged();

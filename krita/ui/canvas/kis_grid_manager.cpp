@@ -26,7 +26,8 @@
 #include <qgl.h>
 #endif
 
-#include <QRadioButton>
+
+#include <QTransform>
 
 #include <kaction.h>
 #include <ktoggleaction.h>
@@ -34,7 +35,7 @@
 #include <kdialog.h>
 #include <klocale.h>
 
-#include <KoViewConverter.h>
+#include "kis_coordinates_converter.h"
 
 #include "kis_config.h"
 #include "kis_grid_painter_configuration.h"
@@ -159,36 +160,34 @@ void KisGridManager::fastConfig40x40()
     m_view->canvas()->update();
 }
 
-#define pixelToView(point) \
-    converter.documentToView( m_view->document()->image()->pixelToDocument(point))
-
-#define viewToPixel(point) \
-    m_view->document()->image()->documentToPixel( converter.viewToDocument( point))
-
-void KisGridManager::drawDecoration(QPainter& gc, const QPoint& documentOffset, const QRect& area, const KoViewConverter &converter)
+void KisGridManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
-    dbgRender << "drawDecoration";
     KisConfig cfg;
 
     quint32 offsetx = cfg.getGridOffsetX();
     quint32 offsety = cfg.getGridOffsetY();
-    quint32 hspacing = cfg.getGridHSpacing(); // m_doc->gridData().gridX(); // use koffice grid when KOffice grid is on par with Krita grid, and is configurable by whatever mean Krita has to manipulate the grid
-    quint32 vspacing = cfg.getGridVSpacing(); // m_doc->gridData().gridY(); // use koffice grid when KOffice grid is on par with Krita grid, and is configurable by whatever mean Krita has to manipulate the grid
+    quint32 hspacing = cfg.getGridHSpacing();
+    quint32 vspacing = cfg.getGridVSpacing();
     quint32 subdivision = cfg.getGridSubdivisions() - 1;
 
-    // Draw vertical line
     QPen mainPen = KisGridPainterConfiguration::mainPen();
     QPen subdivisionPen = KisGridPainterConfiguration::subdivisionPen();
-    quint32 i = subdivision - (offsetx / hspacing) % (subdivision + 1);
 
-    QPointF bottomRight = viewToPixel(area.bottomRight() + documentOffset);
-    QPointF topLeft = viewToPixel(area.topLeft() + documentOffset);
+    qreal x1, y1, x2, y2;
+    QRectF imageRect = converter->documentToImage(updateRect);
+    imageRect.getCoords(&x1, &y1, &x2, &y2);
 
-    dbgRender << "area = " << area << "topLeft = " << topLeft << " bottomRight = " << bottomRight << " documentOffset = " << documentOffset;
+    QTransform transform = converter->imageToWidgetTransform();
 
+    gc.save();
+    gc.setTransform(transform);
+
+    quint32 i;
+
+    // Draw vertical line
+    i = subdivision - (offsetx / hspacing) % (subdivision + 1);
     double x = offsetx % hspacing;
-    dbgRender << " x = " << x << " hspacing = " << hspacing;
-    while (x <= bottomRight.x()) {
+    while (x <= x2) {
         if (i == subdivision) {
             gc.setPen(mainPen);
             i = 0;
@@ -196,19 +195,18 @@ void KisGridManager::drawDecoration(QPainter& gc, const QPoint& documentOffset, 
             gc.setPen(subdivisionPen);
             i++;
         }
-        if (x >= topLeft.x()) {
+        if (x >= x1) {
             // Always draw the full line otherwise the line stippling varies
             // with the location of area and we get glitchy patterns.
-            dbgRender << pixelToView(QPointF(x, topLeft.y())) << " " << pixelToView(QPointF(x, bottomRight.y())) << (bottomRight.y());
-            gc.drawLine(pixelToView(QPointF(x, topLeft.y())), pixelToView(QPointF(x, bottomRight.y())));
+            gc.drawLine(QPointF(x, y1),QPointF(x, y2));
         }
         x += hspacing;
     }
+
     // Draw horizontal line
     i = subdivision - (offsety / vspacing) % (subdivision + 1);
-    double y = offsety % vspacing;
-    dbgRender << " y = " << x << " vspacing = " << vspacing;
-    while (y <= bottomRight.y()) {
+    qreal y = offsety % vspacing;
+    while (y <= y2) {
         if (i == subdivision) {
             gc.setPen(mainPen);
             i = 0;
@@ -216,12 +214,13 @@ void KisGridManager::drawDecoration(QPainter& gc, const QPoint& documentOffset, 
             gc.setPen(subdivisionPen);
             i++;
         }
-        if (y >= topLeft.y()) {
-            gc.drawLine(pixelToView(QPointF(topLeft.x(), y)), pixelToView(QPointF(bottomRight.x(), y)));
+        if (y >= y1) {
+            gc.drawLine(QPointF(x1, y), QPointF(x2, y));
         }
         y += vspacing;
     }
 
+    gc.restore();
 }
 
 #include "kis_grid_manager.moc"

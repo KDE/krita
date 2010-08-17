@@ -21,6 +21,8 @@
 
 #include <qtest_kde.h>
 
+#include <QTransform>
+
 #include <KoZoomHandler.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_image.h>
@@ -32,10 +34,10 @@ void initImage(KisImageSP *image, KoZoomHandler **zoomHandler)
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     *image = new KisImage(0, 1000, 1000, cs, "projection test");
-    (*image)->setResolution(300, 300);
+    (*image)->setResolution(100, 100);
 
     *zoomHandler = new KoZoomHandler();
-    (*zoomHandler)->setResolution(300, 300);
+    (*zoomHandler)->setResolution(100, 100);
 }
 
 void KisCoordinatesConverterTest::testConversion()
@@ -44,33 +46,34 @@ void KisCoordinatesConverterTest::testConversion()
     KoZoomHandler *zoomHandler;
     initImage(&image, &zoomHandler);
 
-    QRect testRect(100,100,100,100);
-    KisCoordinatesConverter converter(image, zoomHandler);
+    QRectF testRect(100,100,100,100);
+    KisCoordinatesConverter converter(zoomHandler);
 
+    converter.setImage(image);
     converter.setDocumentOrigin(QPoint(10,10));
     converter.setDocumentOffset(QPoint(30,30));
 
     zoomHandler->setZoom(1.);
 
     QCOMPARE(converter.imageToViewport(testRect), QRectF(70,70,100,100));
-    QCOMPARE(converter.viewportToImage(testRect), QRect(130,130,100,100));
+    QCOMPARE(converter.viewportToImage(testRect), QRectF(130,130,100,100));
 
-    QCOMPARE(converter.widgetToViewport(testRect), QRectF(60,60,100,100));
-    QCOMPARE(converter.viewportToWidget(testRect), QRectF(140,140,100,100));
+    QCOMPARE(converter.widgetToViewport(testRect), QRectF(90,90,100,100));
+    QCOMPARE(converter.viewportToWidget(testRect), QRectF(110,110,100,100));
 
-    QCOMPARE(converter.imageToWidget(testRect), QRectF(110,110,100,100));
-    QCOMPARE(converter.widgetToImage(testRect), QRect(90,90,100,100));
+    QCOMPARE(converter.widgetToDocument(testRect), QRectF(1.20,1.20,1,1));
+    QCOMPARE(converter.documentToWidget(testRect), QRectF(9980,9980,10000,10000));
 
     zoomHandler->setZoom(0.5);
 
     QCOMPARE(converter.imageToViewport(testRect), QRectF(20,20,50,50));
-    QCOMPARE(converter.viewportToImage(testRect), QRect(260,260,200,200));
+    QCOMPARE(converter.viewportToImage(testRect), QRectF(260,260,200,200));
 
-    QCOMPARE(converter.widgetToViewport(testRect), QRectF(60,60,100,100));
-    QCOMPARE(converter.viewportToWidget(testRect), QRectF(140,140,100,100));
+    QCOMPARE(converter.widgetToViewport(testRect), QRectF(90,90,100,100));
+    QCOMPARE(converter.viewportToWidget(testRect), QRectF(110,110,100,100));
 
-    QCOMPARE(converter.imageToWidget(testRect), QRectF(60,60,50,50));
-    QCOMPARE(converter.widgetToImage(testRect), QRect(180,180,200,200));
+    QCOMPARE(converter.widgetToDocument(testRect), QRectF(2.4,2.4,2,2));
+    QCOMPARE(converter.documentToWidget(testRect), QRectF(4980,4980,5000,5000));
 
     delete zoomHandler;
 }
@@ -81,20 +84,48 @@ void KisCoordinatesConverterTest::testImageCropping()
     KoZoomHandler *zoomHandler;
     initImage(&image, &zoomHandler);
 
-    KisCoordinatesConverter converter(image, zoomHandler);
+    KisCoordinatesConverter converter(zoomHandler);
 
+    converter.setImage(image);
     converter.setDocumentOrigin(QPoint(0,0));
     converter.setDocumentOffset(QPoint(0,0));
 
     zoomHandler->setZoom(1.);
 
-    // we do crop here
+    // we do NOT crop here
     QCOMPARE(converter.viewportToImage(QRectF(900,900,200,200)),
-             QRect(900,900,100,100));
+             QRectF(900,900,200,200));
+}
 
-    QCOMPARE(converter.widgetToImage(QRectF(900,900,200,200)),
-             QRect(900,900,100,100));
+void KisCoordinatesConverterTest::testTransformations()
+{
+    KisImageSP image;
+    KoZoomHandler *zoomHandler;
+    initImage(&image, &zoomHandler);
 
+    KisCoordinatesConverter converter(zoomHandler);
+
+    converter.setImage(image);
+    converter.setDocumentOrigin(QPoint(10,20));
+    converter.setDocumentOffset(QPoint(30,50));
+
+    zoomHandler->setZoom(1.);
+
+    QRectF testRect(100,100,100,100);
+    QTransform transform = converter.imageToWidgetTransform();
+
+    QRectF rect1 = converter.viewportToWidget(converter.imageToViewport(testRect));
+    QRectF rect2 = transform.map(testRect).boundingRect();
+
+    QCOMPARE(rect1, rect2);
+
+    zoomHandler->setZoom(0.5);
+    transform = converter.imageToWidgetTransform();
+
+    rect1 = converter.viewportToWidget(converter.imageToViewport(testRect));
+    rect2 = transform.map(testRect).boundingRect();
+
+    QCOMPARE(rect1, rect2);
 }
 
 

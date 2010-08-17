@@ -24,8 +24,10 @@
 
 class QPoint;
 class QRect;
+class QRectF;
 class QPainter;
 class KoViewConverter;
+class KisCoordinatesConverter;
 class KisView2;
 
 /**
@@ -44,12 +46,14 @@ public:
      * @return whether the decoration is visible.
      */
     bool visible() const;
+
     /**
      * Will paint the decoration on the QPainter, if the visible is set to true.
      *
-     * @param documentOffset the offset of the view in the document, expressed in the view reference (not in the document reference)
+     * @param updateRect dirty rect in document pixels
      */
-    void paint(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter);
+    void paint(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
+
 public slots:
     /**
      * Set if the decoration is visible or not.
@@ -60,7 +64,8 @@ public slots:
      */
     void toggleVisibility();
 protected:
-    virtual void drawDecoration(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter) = 0;
+    virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter) = 0;
+
     /**
      * @return the parent KisView
      */

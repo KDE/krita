@@ -37,8 +37,10 @@
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 
+#include "canvas/kis_coordinates_converter.h"
 #include "canvas/kis_prescaled_projection.h"
 
+#include "../../sdk/tests/testutil.h"
 
 bool KisPrescaledProjectionTest::testProjectionScenario(KisPrescaledProjection & projection,
         KoZoomHandler * viewConverter,
@@ -88,28 +90,28 @@ bool KisPrescaledProjectionTest::testProjectionScenario(KisPrescaledProjection &
     projection.preScale();
     projection.prescaledQImage().save(name + "_prescaled_projection_07.png");
 
-    projection.documentOffsetMoved(QPoint(50, 50));
+//    projection.documentOffsetMoved(QPoint(50, 50));
     projection.prescaledQImage().save(name + "_prescaled_projection_08.png");
 
-    projection.documentOffsetMoved(QPoint(100, 100));
+//    projection.documentOffsetMoved(QPoint(100, 100));
     projection.prescaledQImage().save(name + "_prescaled_projection_081.png");
 
-    projection.documentOffsetMoved(QPoint(200, 200));
+//    projection.documentOffsetMoved(QPoint(200, 200));
     projection.prescaledQImage().save(name + "_prescaled_projection_082.png");
 
-    projection.documentOffsetMoved(QPoint(250, 250));
+//    projection.documentOffsetMoved(QPoint(250, 250));
     projection.prescaledQImage().save(name + "_prescaled_projection_083.png");
 
-    projection.documentOffsetMoved(QPoint(150, 200));
+//    projection.documentOffsetMoved(QPoint(150, 200));
     projection.prescaledQImage().save(name + "_prescaled_projection_084.png");
 
-    projection.documentOffsetMoved(QPoint(100, 200));
+//    projection.documentOffsetMoved(QPoint(100, 200));
     projection.prescaledQImage().save(name + "_prescaled_projection_085.png");
 
-    projection.documentOffsetMoved(QPoint(50, 200));
+//    projection.documentOffsetMoved(QPoint(50, 200));
     projection.prescaledQImage().save(name + "_prescaled_projection_086.png");
 
-    projection.documentOffsetMoved(QPoint(0, 200));
+//    projection.documentOffsetMoved(QPoint(0, 200));
     projection.prescaledQImage().save(name + "_prescaled_projection_087.png");
 
     projection.resizePrescaledImage(QSize(750, 750));
@@ -122,23 +124,23 @@ bool KisPrescaledProjectionTest::testProjectionScenario(KisPrescaledProjection &
     projection.resizePrescaledImage(QSize(350, 350));
     projection.prescaledQImage().save(name + "_prescaled_projection_11.png");
 
-    projection.documentOffsetMoved(QPoint(100, 100));
+//    projection.documentOffsetMoved(QPoint(100, 100));
     projection.prescaledQImage().save(name + "_prescaled_projection_12.png");
 
     viewConverter->setZoom(0.75);
     projection.preScale();
     projection.prescaledQImage().save(name + "_prescaled_projection_13.png");
 
-    projection.documentOffsetMoved(QPoint(10, 10));
+//    projection.documentOffsetMoved(QPoint(10, 10));
     projection.prescaledQImage().save(name + "_prescaled_projection_14.png");
 
-    projection.documentOffsetMoved(QPoint(0, 0));
+//    projection.documentOffsetMoved(QPoint(0, 0));
     projection.prescaledQImage().save(name + "_prescaled_projection_15.png");
 
-    projection.documentOffsetMoved(QPoint(10, 10));
+//    projection.documentOffsetMoved(QPoint(10, 10));
     projection.prescaledQImage().save(name + "_prescaled_projection_16.png");
 
-    projection.documentOffsetMoved(QPoint(30, 50));
+//    projection.documentOffsetMoved(QPoint(30, 50));
     projection.prescaledQImage().save(name + "_prescaled_projection_17.png");
 
     return true;
@@ -152,37 +154,6 @@ void KisPrescaledProjectionTest::testCreation()
     QVERIFY(prescaledProjection->prescaledQImage().isNull());
     delete prescaledProjection;
 }
-
-
-void KisPrescaledProjectionTest::testCoordinateConversionRoundTrip()
-{
-    KisPrescaledProjection projection;
-
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, 100, 100, cs, "projection test");
-    image->setResolution(300, 300);
-
-    KoZoomHandler * viewConverter = new KoZoomHandler();
-    viewConverter->setResolution(120, 120);
-
-    projection.setViewConverter(viewConverter);
-    projection.setImage(image);
-    projection.resizePrescaledImage(QSize(100, 100));
-
-    QRect viewRect = projection.viewRectFromImagePixels(QRect(0, 0, 100, 100)).toAlignedRect();
-
-    QCOMPARE(viewRect, QRect(0, 0, 40, 40));
-
-    QRect viewRect2 = projection.viewRectFromImagePixels(QRect(0, 0, 200, 200)).toAlignedRect();
-    QCOMPARE(viewRect2, QRect(0, 0, 80, 80));
-
-    QRect imageRect = projection.imageRectFromViewPortPixels(viewRect);
-    QCOMPARE(imageRect, QRect(0, 0, 100, 100));
-
-    QRect viewRect3 = projection.viewRectFromImagePixels(imageRect).toAlignedRect();
-    QCOMPARE(viewRect3, viewRect);
-}
-
 
 void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
 {
@@ -203,7 +174,12 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
 
     KisPrescaledProjection projection;
     KoZoomHandler * viewConverter = new KoZoomHandler();
-    projection.setViewConverter(viewConverter);
+
+    KisCoordinatesConverter converter(viewConverter);
+    converter.setImage(image);
+    projection.setCoordinatesConverter(&converter);
+
+//    projection.setViewConverter(viewConverter);
     projection.setImage(image);
 
     // pixel-for-pixel, at 100% zoom
@@ -225,15 +201,19 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
 
     // 300 dpi recalculated to pixels per point (of which there are 72
     // to the inch)
-    image->setResolution(300 / 72 , 300 / 72);
+    image->setResolution(100, 100);
 
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8, cs);
     image->addNode(layer.data(), image->rootLayer(), 0);
     layer->paintDevice()->convertFromQImage(qimage, "");
 
     KisPrescaledProjection projection;
-    KoZoomHandler * viewConverter = new KoZoomHandler();
-    projection.setViewConverter(viewConverter);
+    KoZoomHandler *viewConverter = new KoZoomHandler();
+
+    KisCoordinatesConverter converter(viewConverter);
+    converter.setImage(image);
+    projection.setCoordinatesConverter(&converter);
+
     projection.setImage(image);
 
     testProjectionScenario(projection, viewConverter, "120dpi");
@@ -261,7 +241,11 @@ void KisPrescaledProjectionTest::benchmarkUpdate()
 
     KoZoomHandler * viewConverter = new KoZoomHandler();
     KisPrescaledProjection projection;
-    projection.setViewConverter(viewConverter);
+
+    KisCoordinatesConverter converter(viewConverter);
+    converter.setImage(image);
+    projection.setCoordinatesConverter(&converter);
+
     projection.setImage(image);
 
     // Emulate "Use same aspect as pixels"
@@ -292,6 +276,57 @@ void KisPrescaledProjectionTest::benchmarkUpdate()
     //CALLGRIND_STOP_INSTRUMENTATION;
 
 }
+
+
+void KisPrescaledProjectionTest::testScaling()
+{
+    QImage sourceImage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, sourceImage.width(), sourceImage.height(), cs, "projection test");
+    image->setResolution(100, 100);
+
+    KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8, cs);
+    layer->paintDevice()->convertFromQImage(sourceImage, "");
+
+    image->addNode(layer, image->rootLayer(), 0);
+
+
+    KoZoomHandler *zoomHandler = new KoZoomHandler();
+    zoomHandler->setResolution(100, 100);
+    zoomHandler->setZoom(1.);
+
+    KisCoordinatesConverter converter(zoomHandler);
+    converter.setImage(image);
+
+    KisPrescaledProjection projection;
+    projection.setCoordinatesConverter(&converter);
+    projection.setImage(image);
+
+    converter.setDocumentOffset(QPoint(100,100));
+    converter.setDocumentOrigin(QPoint(200,200));
+
+
+    projection.resizePrescaledImage(QSize(100,100));
+    projection.preScale();
+
+    QImage result = projection.prescaledQImage();
+    QImage reference = sourceImage.copy(QRect(100,100,100,100));
+
+    QPoint pt;
+    QVERIFY(TestUtil::compareQImages(pt, result, reference));
+
+
+    // Test scrolling
+    converter.setDocumentOffset(QPoint(150,150));
+    projection.viewportMoved(QPoint(50,50));
+
+    result = projection.prescaledQImage();
+    reference = sourceImage.copy(QRect(150,150,100,100));
+
+    QVERIFY(TestUtil::compareQImages(pt, result, reference));
+}
+
 
 QTEST_KDEMAIN(KisPrescaledProjectionTest, GUI)
 

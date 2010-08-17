@@ -29,6 +29,8 @@
 #include <KoViewConverter.h>
 #include <KoToolProxy.h>
 
+
+#include "kis_coordinates_converter.h"
 #include "kis_canvas_decoration.h"
 #include "../kis_config.h"
 #include "kis_canvas2.h"
@@ -38,8 +40,9 @@
 class KisCanvasWidgetBase::Private
 {
 public:
-    Private(KisCanvas2 *newCanvas)
+    Private(KisCanvas2 *newCanvas, KisCoordinatesConverter *newCoordinatesConverter)
         : canvas(newCanvas)
+        , coordinatesConverter(newCoordinatesConverter)
         , viewConverter(newCanvas->viewConverter())
         , toolProxy(newCanvas->toolProxy())
         , ignorenextMouseEventExceptRightMiddleClick(0)
@@ -48,20 +51,17 @@ public:
 
     QList<KisCanvasDecoration*> decorations;
     KisCanvas2 * canvas;
+    KisCoordinatesConverter *coordinatesConverter;
     const KoViewConverter * viewConverter;
     KoToolProxy * toolProxy;
-    /// the offset of the view in the document, expressed in the view reference (not in the document reference)
-    QPoint documentOffset;
-    /// the origin of the image rect
-    QPoint origin;
     QTimer blockMouseEvent;
     
     bool ignorenextMouseEventExceptRightMiddleClick; // HACK work around Qt bug not sending tablet right/dblclick http://bugreports.qt.nokia.com/browse/QTBUG-8598
     QColor borderColor;
 };
 
-KisCanvasWidgetBase::KisCanvasWidgetBase(KisCanvas2 * canvas)
-    : m_d(new Private(canvas))
+KisCanvasWidgetBase::KisCanvasWidgetBase(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter)
+    : m_d(new Private(canvas, coordinatesConverter))
 {
     m_d->blockMouseEvent.setSingleShot(true);
 }
@@ -71,39 +71,38 @@ KisCanvasWidgetBase::~KisCanvasWidgetBase()
     delete m_d;
 }
 
-void KisCanvasWidgetBase::drawDecorations(QPainter & gc, bool tools,
-                                          const QPoint & documentOffset,
-                                          const QRect & clipRect,
-                                          KisCanvas2 * canvas)
+void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidgetRect)
 {
     // Setup the painter to take care of the offset; all that the
     // classes that do painting need to keep track of is resolution
     gc.setRenderHint(QPainter::Antialiasing);
     gc.setRenderHint(QPainter::TextAntialiasing);
-//     gc.setRenderHint(QPainter::HighQualityAntialiasing); // http://www.archivum.info/qt-interest@trolltech.com/2010-01/00481/Re:-(Qt-interest)-Is-QPainter::HighQualityAntialiasing-render-hint-broken-in-Qt-4.6.html <- this option does not do anything anymore with Qt4.6, so don't reenable it since it seems to break display
+
+    // This option does not do anything anymore with Qt4.6, so don't reenable it since it seems to break display
+    // http://www.archivum.info/qt-interest@trolltech.com/2010-01/00481/Re:-(Qt-interest)-Is-QPainter::HighQualityAntialiasing-render-hint-broken-in-Qt-4.6.html
+    // gc.setRenderHint(QPainter::HighQualityAntialiasing);
+
     gc.setRenderHint(QPainter::SmoothPixmapTransform);
-    gc.translate(QPoint(-documentOffset.x(), -documentOffset.y()));
-    gc.translate(documentOrigin());
 
     // Paint the shapes (other than the layers)
     gc.save();
-    gc.setClipRect(clipRect);
-    canvas->globalShapeManager()->paint(gc, *canvas->viewConverter(), false);
+
+    gc.setClipRect(updateWidgetRect);
+
+    QTransform transform = m_d->coordinatesConverter->flakeToWidgetTransform();
+    gc.setTransform(transform);
+
+    m_d->canvas->globalShapeManager()->paint(gc, *m_d->viewConverter, false);
+
+    toolProxy()->paint(gc, *m_d->viewConverter);
+
     gc.restore();
 
     // ask the decorations to paint themselves
     foreach(KisCanvasDecoration* deco, m_d->decorations) {
-        gc.save();
-        deco->paint(gc, documentOffset, clipRect, *canvas->viewConverter());
-        gc.restore();
+        deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter);
     }
 
-    // Give the tool a chance to paint its stuff
-    if (tools) {
-        gc.save();
-        toolProxy()->paint(gc, *canvas->viewConverter());
-        gc.restore();
-    }
 }
 
 void KisCanvasWidgetBase::addDecoration(KisCanvasDecoration* deco)
@@ -135,11 +134,16 @@ QImage KisCanvasWidgetBase::checkImage(qint32 checkSize)
 {
     KisConfig cfg;
 
+    if(checkSize < 0)
+        checkSize = cfg.checkSize();
+
+    QColor checkColor = cfg.checkersColor();
+
     QImage tile(checkSize * 2, checkSize * 2, QImage::Format_RGB32);
     QPainter pt(&tile);
     pt.fillRect(tile.rect(), Qt::white);
-    pt.fillRect(0, 0, checkSize, checkSize, cfg.checkersColor());
-    pt.fillRect(checkSize, checkSize, checkSize, checkSize, cfg.checkersColor());
+    pt.fillRect(0, 0, checkSize, checkSize, checkColor);
+    pt.fillRect(checkSize, checkSize, checkSize, checkSize, checkColor);
     pt.end();
 
     return tile;
@@ -160,9 +164,9 @@ KisCanvas2 *KisCanvasWidgetBase::canvas() const
     return m_d->canvas;
 }
 
-const KoViewConverter *KisCanvasWidgetBase::viewConverter() const
+KisCoordinatesConverter* KisCanvasWidgetBase::coordinatesConverter()
 {
-    return m_d->viewConverter;
+    return m_d->coordinatesConverter;
 }
 
 KoToolProxy *KisCanvasWidgetBase::toolProxy()
@@ -170,103 +174,14 @@ KoToolProxy *KisCanvasWidgetBase::toolProxy()
     return m_d->toolProxy;
 }
 
-QPoint KisCanvasWidgetBase::documentOffset() const
-{
-    return m_d->documentOffset;
-}
-
-QPoint KisCanvasWidgetBase::documentOrigin() const
-{
-    return m_d->origin;
-}
-
-void KisCanvasWidgetBase::documentOffsetMoved(const QPoint & pt)
-{
-    m_d->documentOffset = pt;
-}
-
-QSize KisCanvasWidgetBase::documentSize() const
-{
-    KisImageWSP image = m_d->canvas->image();
-    return QSize(int(ceil(m_d->viewConverter->documentToViewX(image->width()  / image->xRes()))),
-                 int(ceil(m_d->viewConverter->documentToViewY(image->height() / image->yRes()))));
-}
-
-void KisCanvasWidgetBase::adjustOrigin()
-{
-    KisImageWSP image = m_d->canvas->image();
-    if (image == 0) return;
-
-    QRect documentRect = QRect(QPoint(0, 0), documentSize());
-
-    // save the old origin to see if it has changed
-    QPoint oldOrigin = m_d->origin;
-
-    // set the origin to the zoom document rect origin
-    m_d->origin = -documentRect.topLeft();
-
-    // the document bounding rect is always centered on the virtual canvas
-    // if there are margins left around the zoomed document rect then
-    // distribute them evenly on both sides
-    int widthDiff = widget()->size().width() - documentRect.width();
-    if (widthDiff > 0)
-        m_d->origin.rx() += qRound(0.5 * widthDiff);
-    int heightDiff = widget()->size().height() - documentRect.height();
-    if (heightDiff > 0)
-        m_d->origin.ry() += qRound(0.5 * heightDiff);
-
-    emitDocumentOriginChangedSignal();
-}
-
-
-QPointF KisCanvasWidgetBase::widgetToDocument(const QPointF& p) const
-{
-    if (m_d->canvas->isCanvasMirrored())
-    {   
-        return mirror(m_d->viewConverter->viewToDocument(widgetToView(p + m_d->documentOffset)));
-    }else{
-        return m_d->viewConverter->viewToDocument(widgetToView(p + m_d->documentOffset));
-    }
-}
-
-QPointF KisCanvasWidgetBase::mirror(const QPointF& pos) const
-{
-    QSizeF imageSize = m_d->viewConverter->viewToDocument(documentSize());
-    return QPointF(imageSize.width() - pos.x(), pos.y() );
-}
-
 QPointF KisCanvasWidgetBase::mouseEventWidgetToDocument(const QPoint& mousePosition) const
 {
     const qreal PIXEL_CENTRE_OFFSET = 0.5;
     const QPointF pixelCentre(mousePosition.x() + PIXEL_CENTRE_OFFSET,
                               mousePosition.y() + PIXEL_CENTRE_OFFSET);
-    return widgetToDocument(pixelCentre);
+
+    return m_d->coordinatesConverter->widgetToDocument(pixelCentre);
 }
-
-
-QPointF KisCanvasWidgetBase::widgetToView(const QPointF& p) const
-{
-    return p - m_d->origin;
-}
-
-
-QRect KisCanvasWidgetBase::widgetToView(const QRect& r) const
-{
-    return r.translated(- m_d->origin);
-}
-
-
-QPoint KisCanvasWidgetBase::viewToWidget(const QPoint& p) const
-{
-    return p + m_d->origin;
-}
-
-
-QRect KisCanvasWidgetBase::viewToWidget(const QRect& r) const
-{
-    return r.translated(m_d->origin);
-}
-
 
 void KisCanvasWidgetBase::processMouseMoveEvent(QMouseEvent *e)
 {
@@ -376,7 +291,7 @@ void KisCanvasWidgetBase::processTabletEvent(QTabletEvent *e)
     m_d->blockMouseEvent.start(100);
 
     const QPointF pos = e->hiResGlobalPos() - widget()->mapToGlobal(QPoint(0, 0));
-    m_d->toolProxy->tabletEvent(e, widgetToDocument(pos));
+    m_d->toolProxy->tabletEvent(e, m_d->coordinatesConverter->widgetToDocument(pos));
 
     // HACK
     e->ignore();
@@ -386,7 +301,7 @@ void KisCanvasWidgetBase::processTabletEvent(QTabletEvent *e)
 
 void KisCanvasWidgetBase::processWheelEvent(QWheelEvent *e)
 {
-    m_d->toolProxy->wheelEvent(e, widgetToDocument(e->pos()));
+    m_d->toolProxy->wheelEvent(e, m_d->coordinatesConverter->widgetToDocument(e->pos()));
 }
 
 

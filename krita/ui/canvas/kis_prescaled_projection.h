@@ -32,8 +32,8 @@ class QRectF;
 class QSize;
 class QPainter;
 
-class KoViewConverter;
 class KoColorProfile;
+class KisCoordinatesConverter;
 
 #include <kis_types.h>
 
@@ -88,18 +88,7 @@ public:
      */
     QImage prescaledQImage() const;
 
-    /**
-     * Set the view converter, the object that is responsible for
-     * translating between image pixels, document points and view
-     * pixels, keeping track of zoom levels.
-     */
-    void setViewConverter(KoViewConverter * viewConverter);
-
-    /**
-     * Return the intersection of the widget size and the given rect
-     * in image pixels converted to widget pixels.
-     */
-    void updateDocumentOrigin(const QPoint &documentOrigin);
+    void setCoordinatesConverter(KisCoordinatesConverter *coordinatesConverter);
 
 public slots:
 
@@ -128,10 +117,8 @@ public slots:
     /**
      * Called whenever the view widget needs to show a different part of
      * the document
-     *
-     * @param documentOffset the offset in widget pixels
      */
-    void documentOffsetMoved(const QPoint &documentOffset);
+    void viewportMoved(const QPoint &offset);
 
     /**
      * Called whenever the size of the KisImage changes
@@ -196,24 +183,6 @@ private:
      * @param gc The painter we draw on
      */
     void drawUsingBackend(QPainter &gc, KisPPUpdateInfoSP info);
-
-    /**
-     * Converts image pixels into widget pixels
-     * viewRect will always correspond to imageRect (no border
-     * adjustment is done)
-     * Note: caller should check whether viewRect is inside
-     *       canvas area himself
-     */
-    QRectF viewRectFromImagePixels(const QRect& imageRect);
-
-    /**
-     * Converts widget pixels into image pixels
-     * Note1: imageRect will always be adjusted to be inside
-     *        an image, so it _may not_ correspond viewportRect
-     * Note2: caller should check whether viewportRect is inside
-     *        canvas area himself before calling.
-     */
-    QRect imageRectFromViewPortPixels(const QRectF& viewportRect);
 
     struct Private;
     Private * const m_d;

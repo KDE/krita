@@ -39,8 +39,14 @@ KisScriptDecoration::~KisScriptDecoration()
     delete d;
 }
 
-void KisScriptDecoration::drawDecoration(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter)
+void KisScriptDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
     dbgScript << "Call to drawDecoration";
-    d->action->callFunction("drawDecoration", QVariantList() << qVariantFromValue((void*)&gc) << documentOffset << area << qVariantFromValue((void*)&converter));
+
+    QVariantList list;
+    list << qVariantFromValue((void*)&gc)
+         << updateRect
+         << qVariantFromValue((void*)converter);
+
+    d->action->callFunction("drawDecoration", list);
 }

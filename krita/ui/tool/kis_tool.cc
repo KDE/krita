@@ -63,6 +63,7 @@
 
 #include "kis_canvas_resource_provider.h"
 #include "canvas/kis_canvas2.h"
+#include "kis_coordinates_converter.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -181,6 +182,14 @@ void KisTool::resourceChanged(int key, const QVariant & v)
         ;
         // Do nothing
     };
+}
+
+QPointF KisTool::convertDocumentToWidget(const QPointF& pt)
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+
+    return kritaCanvas->coordinatesConverter()->documentToWidget(pt);
 }
 
 QPointF KisTool::convertToPixelCoord(KoPointerEvent *e)

@@ -655,7 +655,7 @@ QPointF KisToolFreehand::adjustPosition(const QPointF& point)
 void KisToolFreehand::initPan(KoPointerEvent *event)
 {
     m_mode = PAN;
-    m_lastPosition = documentToViewport(event->point);
+    m_lastPosition = convertDocumentToWidget(event->point);
     event->accept();
     useCursor(QCursor(Qt::ClosedHandCursor));
 }
@@ -670,7 +670,7 @@ void KisToolFreehand::pan(KoPointerEvent *event)
         return;
     event->accept();
 
-    QPointF actualPosition = documentToViewport(event->point);
+    QPointF actualPosition = convertDocumentToWidget(event->point);
     QPointF distance(m_lastPosition - actualPosition);
     canvas()->canvasController()->pan(distance.toPoint());
 
@@ -690,16 +690,6 @@ void KisToolFreehand::customMoveEvent(KoPointerEvent * event)
         event->accept();
     }
     event->ignore();
-}
-
-
-QPointF KisToolFreehand::documentToViewport(const QPointF &p)
-{
-    QPointF viewportPoint = canvas()->viewConverter()->documentToView(p);
-    viewportPoint += canvas()->documentOrigin();
-    viewportPoint += QPoint(canvas()->canvasController()->canvasOffsetX(),
-                            canvas()->canvasController()->canvasOffsetY());
-    return viewportPoint;
 }
 
 void KisToolFreehand::increaseBrushSize()

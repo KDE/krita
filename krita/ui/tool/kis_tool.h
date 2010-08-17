@@ -88,6 +88,8 @@ public:
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *) {}  // when a krita tool is enabled, don't push double click on
 
+    QPointF convertDocumentToWidget(const QPointF& pt);
+
     /// Convert from native (postscript points) to image pixel
     /// coordinates.
     QPointF convertToPixelCoord(KoPointerEvent *e);

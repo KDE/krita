@@ -170,6 +170,9 @@ public slots:
 
     /// slot for setting the mirroring
     void mirrorCanvas(bool mirror);
+    void rotateCanvasRight15();
+    void rotateCanvasLeft15();
+    void resetCanvasTransformations();
 
 private slots:
 

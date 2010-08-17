@@ -241,6 +241,21 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
     connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvas, SLOT(mirrorCanvas(bool)));
 
+    KAction *rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
+    actionCollection()->addAction("rotate_canvas_right", rotateCanvasRight);
+    rotateCanvasRight->setShortcut(QKeySequence("Ctrl+]"));
+    connect(rotateCanvasRight, SIGNAL(triggered()),m_d->canvas, SLOT(rotateCanvasRight15()));
+
+    KAction *rotateCanvasLeft = new KAction(i18n("Rotate Canvas Left"), this);
+    actionCollection()->addAction("rotate_canvas_left", rotateCanvasLeft);
+    rotateCanvasLeft->setShortcut(QKeySequence("Ctrl+["));
+    connect(rotateCanvasLeft, SIGNAL(triggered()),m_d->canvas, SLOT(rotateCanvasLeft15()));
+
+    KAction *resetCanvasTransformations = new KAction(i18n("Reset Canvas Transformations"), this);
+    actionCollection()->addAction("reset_canvas_transformations", resetCanvasTransformations);
+    resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
+    connect(resetCanvasTransformations, SIGNAL(triggered()),m_d->canvas, SLOT(resetCanvasTransformations()));
+
     if (shell())
     {
         KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));

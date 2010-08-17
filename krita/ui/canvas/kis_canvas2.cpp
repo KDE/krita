@@ -179,12 +179,36 @@ void KisCanvas2::mirrorCanvas(bool enable)
     if(enable != m_d->canvasMirroredY) {
         QTransform newTransform = m_d->coordinatesConverter->postprocessingTransform();
         newTransform *= QTransform::fromScale(-1,1);
-//        newTransform.rotate(15);
         m_d->coordinatesConverter->setPostprocessingTransform(newTransform);
         m_d->canvasMirroredY = enable;
         notifyZoomChanged();
         updateCanvas();
     }
+}
+
+void KisCanvas2::rotateCanvasRight15()
+{
+    QTransform newTransform = m_d->coordinatesConverter->postprocessingTransform();
+    newTransform.rotate(15);
+    m_d->coordinatesConverter->setPostprocessingTransform(newTransform);
+    notifyZoomChanged();
+    updateCanvas();
+}
+
+void KisCanvas2::rotateCanvasLeft15()
+{
+    QTransform newTransform = m_d->coordinatesConverter->postprocessingTransform();
+    newTransform.rotate(-15);
+    m_d->coordinatesConverter->setPostprocessingTransform(newTransform);
+    notifyZoomChanged();
+    updateCanvas();
+}
+
+void KisCanvas2::resetCanvasTransformations()
+{
+    m_d->coordinatesConverter->setPostprocessingTransform(QTransform());
+    notifyZoomChanged();
+    updateCanvas();
 }
 
 void KisCanvas2::addCommand(QUndoCommand *command)

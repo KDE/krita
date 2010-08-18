@@ -96,7 +96,11 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
     m_dialog->setCursor(Qt::ArrowCursor);
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
+#if KDCRAW_VERSION < 0x010200
     m_rawWidget.rawSettings->setDefaultSettings();
+#else
+    m_rawWidget.rawSettings->resetToDefault();
+#endif
 
     slotUpdatePreview();
 
@@ -184,6 +188,7 @@ void KisRawImport::slotUpdatePreview()
 
 RawDecodingSettings KisRawImport::rawDecodingSettings()
 {
+#if KDCRAW_VERSION < 0x010200
     RawDecodingSettings settings;
     settings.sixteenBitsImage = true;
     settings.brightness = m_rawWidget.rawSettings->brightness();
@@ -208,6 +213,9 @@ RawDecodingSettings KisRawImport::rawDecodingSettings()
 
 
     return settings;
+#else
+    return m_rawWidget.rawSettings->settings();
+#endif
 }
 
 #include "kis_raw_import.moc"

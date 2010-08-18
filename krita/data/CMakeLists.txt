@@ -7,6 +7,7 @@ add_subdirectory( templates )
 add_subdirectory( shaders )
 add_subdirectory( images )
 add_subdirectory( backgrounds )
+add_subdirectory( cursors )
 ########### install files ###############
 
 install( FILES  

@@ -51,7 +51,7 @@ QCursor KisCursor::upArrowCursor()
 
 QCursor KisCursor::crossCursor()
 {
-    return Qt::CrossCursor;
+    return load("cursor-cross.xpm");
 }
 
 QCursor KisCursor::waitCursor()

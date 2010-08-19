@@ -582,7 +582,7 @@ QPair<int, int> KoRTree<T>::pickSeeds(Node *node)
     int s2 = 1;
     qreal max = 0;
     for (int i = 0; i < m_capacity + 1; ++i) {
-        for (int j = 0; j < m_capacity + 1; ++j) {
+        for (int j = i+1; j < m_capacity + 1; ++j) {
             if (i != j) {
                 QRectF bb1(node->childBoundingBox(i));
                 QRectF bb2(node->childBoundingBox(j));

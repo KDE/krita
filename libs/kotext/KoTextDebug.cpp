@@ -534,6 +534,38 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             key = "continue-numbering";
             value = QString::number(properties[id].toInt());
             break;
+        case KoListStyle::MinimumWidth:
+            key = "minimum-width";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::ListId:
+            key = "list-id";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::IsOutline:
+            key = "is-outline";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::Indent:
+            key = "indent";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::MinimumDistance:
+            key = "minimum-distance";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::Width:
+            key = "width";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::Height:
+            key = "height";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::BulletImageKey:
+            key = "bullet-image-key";
+            value = QString::number(properties[id].toInt());
+            break;
         default:
             break;
         }

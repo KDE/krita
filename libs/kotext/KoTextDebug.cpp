@@ -1122,6 +1122,7 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
     if (list) {
         attrs.append(" list=\"item:").append(QString::number(list->itemNumber(block) + 1)).append('/')
         .append(QString::number(list->count()));
+        attrs.append('"');
         attrs.append(listAttributes(list->format()));
     }
 

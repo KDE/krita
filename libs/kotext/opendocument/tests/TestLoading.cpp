@@ -273,9 +273,11 @@ bool TestLoading::compareBlocks(const QTextBlock &actualBlock, const QTextBlock 
         }
         if (!compareListFormats(actualList->format(), expectedList->format())
                 || (actualList->itemNumber(actualBlock) != expectedList->itemNumber(expectedBlock))) {
-            qDebug() << "compareBlocks: list properties mismatch at " << actualBlock.text()
-            << KoTextDebug::listAttributes(actualList->format()) << KoTextDebug::listAttributes(expectedList->format())
-            << actualList->itemNumber(actualBlock) << expectedList->itemNumber(expectedBlock);
+            qDebug() << "compareBlocks: list properties mismatch at " << actualBlock.text() << endl
+            << "expected:" << KoTextDebug::listAttributes(expectedList->format())
+            << expectedList->itemNumber(expectedBlock) << endl
+            << "actual:  " << KoTextDebug::listAttributes(actualList->format())
+            << actualList->itemNumber(actualBlock);
             return false;
         }
     } else {

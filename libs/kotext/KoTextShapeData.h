@@ -36,7 +36,7 @@ class KoTextPage;
 class KoDocumentRdfBase;
 
 /**
- * The data store that is held by each KoTextShape instance.
+ * The data store that is held by each TextShape instance.
  * This is a separate object to allow KWord proper to use this class' API and
  * access the internals of the text shape.
  *

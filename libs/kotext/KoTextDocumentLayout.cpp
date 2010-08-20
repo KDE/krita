@@ -241,7 +241,7 @@ QRectF KoTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const
 QSizeF KoTextDocumentLayout::documentSize() const
 {
     // nobody calls this code and I have no way of implementing it anyway...
-    kWarning() << "KoTextDocumentLayout::documentSize is not implemented";
+    //kWarning() << "KoTextDocumentLayout::documentSize is not implemented";
     return QSizeF(10, 10);
 }
 
@@ -261,7 +261,7 @@ QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame *frame) const
 {
     Q_UNUSED(frame);
     // nobody calls this code and I have no way of implementing it anyway...
-    kWarning() << "KoTextDocumentLayout::frameBoundingRect is not implemented";
+    //kWarning() << "KoTextDocumentLayout::frameBoundingRect is not implemented";
     return QRectF(0, 0, 10, 10);
 }
 

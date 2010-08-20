@@ -66,8 +66,10 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm)
         m_lock(QReadWriteLock::NonRecursive)
 {
     /* See comment in destructor for details */
-    // FIXME: do we actually need to clone the history of the device?
-    m_mementoManager = new KisMementoManager(*dm.m_mementoManager);
+
+    /* We do not clone the history of the device, there is no usecase for it */
+    m_mementoManager = new KisMementoManager();
+    m_mementoManager->setDefaultTileData(dm.m_hashTable->defaultTileData());
     m_hashTable = new KisTileHashTable(*dm.m_hashTable, m_mementoManager);
 
     m_pixelSize = dm.m_pixelSize;

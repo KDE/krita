@@ -66,6 +66,7 @@ public:
     void removeListener(KoTextReference *reference);
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual void saveOdf(KoShapeSavingContext &context);
 
 private:
     class Private;

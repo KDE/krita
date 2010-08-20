@@ -42,11 +42,10 @@ public:
     KoTextReference(int indexId);
     ~KoTextReference();
 
-    /// reimplemented method from superclass
     virtual void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
-
-    /// reimplemented method from superclass
     virtual void setup();
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual void saveOdf(KoShapeSavingContext &context);
 
 private:
     KoTextLocator *locator();

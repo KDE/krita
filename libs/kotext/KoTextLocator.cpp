@@ -181,3 +181,9 @@ bool KoTextLocator::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &
     // TODO
     return false;
 }
+
+void KoTextLocator::saveOdf(KoShapeSavingContext &context)
+{
+    Q_UNUSED(context);
+    // TODO
+}

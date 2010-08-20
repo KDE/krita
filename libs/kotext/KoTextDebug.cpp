@@ -163,7 +163,7 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
     }
 
     KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : 0;
-    if (styleManager) {
+    if (styleManager && textFormat.hasProperty(KoCharacterStyle::StyleId)) {
         int id = textFormat.intProperty(KoCharacterStyle::StyleId);
         KoCharacterStyle *characterStyle = styleManager->characterStyle(id);
         attrs.append(" characterStyle=\"id:").append(QString::number(id));
@@ -291,7 +291,7 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
 {
     QString attrs;
     KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : 0;
-    if (styleManager) {
+    if (styleManager && blockFormat.hasProperty(KoParagraphStyle::StyleId)) {
         int id = blockFormat.intProperty(KoParagraphStyle::StyleId);
         KoParagraphStyle *paragraphStyle = styleManager->paragraphStyle(id);
         attrs.append(" paragraphStyle=\"id:").append(QString::number(id));
@@ -465,7 +465,7 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
 {
     QString attrs;
     KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : 0;
-    if (styleManager) {
+    if (styleManager && listFormat.hasProperty(KoListStyle::StyleId)) {
         int id = listFormat.intProperty(KoListStyle::StyleId);
         KoListStyle *listStyle = styleManager->listStyle(id);
         attrs.append(" listStyle=\"id:").append(QString::number(id));

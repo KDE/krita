@@ -68,6 +68,7 @@ SpellCheck::SpellCheck()
 
 void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
 {
+    setDocument(document);
     if (!m_enableSpellCheck)
         return;
 
@@ -87,20 +88,31 @@ void SpellCheck::finishedParagraph(QTextDocument *document, int cursorPosition)
 
 void SpellCheck::checkSection(QTextDocument *document, int startPosition, int endPosition)
 {
+    setDocument(document);
+    if (!m_enableSpellCheck)
+        return;
     if (startPosition >= endPosition) // no work
         return;
-
+    
     foreach (const SpellSections &ss, m_documentsQueue) {
         if (ss.from <= startPosition && ss.to >= endPosition)
             return;
         // TODO also check if we should replace an existing queued item with a longer span
     }
-    disconnect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
-    connect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
 
     SpellSections ss(document, startPosition, endPosition);
     m_documentsQueue.enqueue(ss);
     runQueue();
+}
+
+void SpellCheck::setDocument(QTextDocument *document)
+{
+    if (m_document == document)
+        return;
+    if (m_document)
+        disconnect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
+    m_document = document;
+    connect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
 }
 
 QStringList SpellCheck::availableBackends() const
@@ -126,12 +138,17 @@ void SpellCheck::setBackgroundSpellChecking(bool on)
     KConfigGroup spellConfig = KGlobal::config()->group("Spelling");
     m_enableSpellCheck = on;
     spellConfig.writeEntry("autoSpellCheck", m_enableSpellCheck);
-    if (m_document && !m_enableSpellCheck) {
-        for (QTextBlock block = m_document->begin(); block != m_document->end(); block = block.next()) {
-            if (block.isValid()) {
-                block.layout()->clearAdditionalFormats();
-                m_document->markContentsDirty(block.position(), block.position() + block.length());
+    if (m_document) {
+        if (!m_enableSpellCheck) {
+            for (QTextBlock block = m_document->begin(); block != m_document->end(); block = block.next()) {
+                if (block.isValid() && block.layout()->additionalFormats().count() > 0) {
+                    block.layout()->clearAdditionalFormats();
+                    m_document->markContentsDirty(block.position(), block.position() + block.length());
+                }
             }
+        } else {
+            //when re-enabling 'Auto Spell Check' we want spellchecking the whole document
+            checkSection(m_document, 0, m_document->characterCount() - 1);
         }
     }
 }
@@ -213,12 +230,12 @@ void SpellCheck::documentChanged(int from, int min, int plus)
     bool changed = false;
     for (int i=0; i < ranges.count(); ++i) {
         const QTextLayout::FormatRange &range = ranges.at(i);
-        if (range.start > from && range.format == m_defaultMisspelledFormat) {
+        if (block.position() + range.start > from && range.format == m_defaultMisspelledFormat) {
             QTextLayout::FormatRange newRange = range;
             newRange.start += plus - min;
             ranges[i] = newRange;
             changed = true;
-        } else if ((range.start > from || range.start + range.length > from)
+        } else if ((block.position() + range.start > from || block.position() + range.start + range.length > from)
                 && range.format == m_defaultMisspelledFormat) {
             ranges.removeAt(i);
             --i;
@@ -243,7 +260,6 @@ void SpellCheck::runQueue()
         if (!block.isValid())
             continue;
         m_isChecking = true;
-        m_document = section.document;
         m_misspellings.clear();
         do {
             BlockLayout bl;
@@ -253,7 +269,7 @@ void SpellCheck::runQueue()
             m_misspellings << bl;
             block = block.next();
         } while(block.isValid() && block.position() < section.to);
-
+        
         m_bgSpellCheck->startRun(section.document, section.from, section.to);
         break;
     }

@@ -39,10 +39,15 @@ class SpellCheck : public KoTextEditingPlugin
 public:
     SpellCheck();
 
+    /// reimplemented from superclass
     void finishedWord(QTextDocument *document, int cursorPosition);
+    
+    /// reimplemented from superclass
     void finishedParagraph(QTextDocument *document, int cursorPosition);
+    
+    /// reimplemented from superclass
     void checkSection(QTextDocument *document, int startPosition, int endPosition);
-
+    
     QStringList availableBackends() const;
     QStringList availableLanguages() const;
 
@@ -53,6 +58,9 @@ public:
     bool backgroundSpellChecking();
     bool skipAllUppercaseWords();
     bool skipRunTogetherWords();
+    
+    //reimplemented from KOffice2.0, we disconnect and re- connect the 'documentChanged' signal only when the document has replaced
+    void setDocument(QTextDocument *document);
 
 public slots:
     void setDefaultLanguage(const QString &lang);

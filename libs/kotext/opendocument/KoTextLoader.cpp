@@ -847,11 +847,10 @@ QString KoTextLoader::createUniqueBookmarkName(KoBookmarkManager* bmm, QString b
 void KoTextLoader::loadText(const QString &fulltext, QTextCursor &cursor,
                             bool *stripLeadingSpace, bool isLastNode)
 {
-#ifdef KOOPENDOCUMENTLOADER_DEBUG
-    kDebug(32500) << "  <text> localName=" << localName << " parent.localName=" << element.localName() << " text=" << text
-    << text.length();
-#endif
     QString text = KoTextLoaderP::normalizeWhitespace(fulltext, *stripLeadingSpace);
+#ifdef KOOPENDOCUMENTLOADER_DEBUG
+    kDebug(32500) << "  <text> text=" << text << text.length();
+#endif
 
     if (!text.isEmpty()) {
         // if present text ends with a space,

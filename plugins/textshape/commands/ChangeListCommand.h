@@ -22,7 +22,6 @@
 #define CHANGELISTCOMMAND
 
 #include "TextCommandBase.h"
-#include "TextTool.h"
 #include <KoListStyle.h>
 #include <KoList.h>
 #include <KoListLevelProperties.h>

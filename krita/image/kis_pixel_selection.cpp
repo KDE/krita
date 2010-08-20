@@ -35,7 +35,6 @@
 #include "kis_debug.h"
 #include "kis_types.h"
 #include "kis_image.h"
-#include "kis_datamanager.h"
 #include "kis_fill_painter.h"
 #include "kis_outline_generator.h"
 
@@ -221,20 +220,20 @@ void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
 
 void KisPixelSelection::clear(const QRect & r)
 {
-    if (*(m_datamanager->defaultPixel()) != MIN_SELECTED) {
+    if (*defaultPixel() != MIN_SELECTED) {
         KisFillPainter painter(KisPaintDeviceSP(this));
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
         painter.fillRect(r, KoColor(Qt::white, cs), MIN_SELECTED);
     } else {
-        m_datamanager->clear(r.x(), r.y(), r.width(), r.height(), m_datamanager->defaultPixel());
+        KisPaintDevice::clear(r);
     }
 }
 
 void KisPixelSelection::clear()
 {
     quint8 defPixel = MIN_SELECTED;
-    m_datamanager->setDefaultPixel(&defPixel);
-    m_datamanager->clear();
+    setDefaultPixel(&defPixel);
+    KisPaintDevice::clear();
 }
 
 void KisPixelSelection::invert()
@@ -248,13 +247,13 @@ void KisPixelSelection::invert()
         *(it.rawData()) = MAX_SELECTED - *(it.rawData());
         ++it;
     }
-    quint8 defPixel = MAX_SELECTED - *(m_datamanager->defaultPixel());
-    m_datamanager->setDefaultPixel(&defPixel);
+    quint8 defPixel = MAX_SELECTED - *defaultPixel();
+    setDefaultPixel(&defPixel);
 }
 
 bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
 {
-    if (*(m_datamanager->defaultPixel()) != MIN_SELECTED)
+    if (*defaultPixel() != MIN_SELECTED)
         return false;
     QRect sr = selectedExactRect();
     return ! r.intersects(sr);
@@ -262,7 +261,7 @@ bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
 
 bool KisPixelSelection::isProbablyTotallyUnselected(const QRect & r) const
 {
-    if (*(m_datamanager->defaultPixel()) != MIN_SELECTED)
+    if (*defaultPixel() != MIN_SELECTED)
         return false;
     QRect sr = selectedRect();
     return ! r.intersects(sr);
@@ -271,7 +270,7 @@ bool KisPixelSelection::isProbablyTotallyUnselected(const QRect & r) const
 
 QRect KisPixelSelection::selectedRect() const
 {
-    if (*(m_datamanager->defaultPixel()) == MIN_SELECTED) {
+    if (*defaultPixel() == MIN_SELECTED) {
         return extent().intersected(defaultBounds().bounds());
     } else {
         return defaultBounds().bounds();
@@ -280,7 +279,7 @@ QRect KisPixelSelection::selectedRect() const
 
 QRect KisPixelSelection::selectedExactRect() const
 {
-    if (*(m_datamanager->defaultPixel()) == MIN_SELECTED) {
+    if (*defaultPixel() == MIN_SELECTED) {
         return exactBounds().intersected(defaultBounds().bounds());
     } else {
         return defaultBounds().bounds();
@@ -317,7 +316,6 @@ void KisPixelSelection::setDirty()
 
 QVector<QPolygon> KisPixelSelection::outline()
 {
-    quint8 defaultPixel = *(m_datamanager->defaultPixel());
     QRect selectionExtent = selectedExactRect();
     qint32 xOffset = selectionExtent.x();
     qint32 yOffset = selectionExtent.y();
@@ -328,7 +326,7 @@ QVector<QPolygon> KisPixelSelection::outline()
 
     readBytes(buffer, xOffset, yOffset, width, height);
 
-    KisOutlineGenerator generator(colorSpace(), defaultPixel);
+    KisOutlineGenerator generator(colorSpace(), *defaultPixel());
     QVector<QPolygon> paths = generator.outline(buffer, xOffset, yOffset, width, height);
     
     delete[] buffer;

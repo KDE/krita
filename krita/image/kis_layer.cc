@@ -86,22 +86,22 @@ private:
 
 class KisCloneLayersList {
 public:
-    void addClone(KisCloneLayerSP cloneLayer) {
+    void addClone(KisCloneLayerWSP cloneLayer) {
         m_clonesList.append(cloneLayer);
     }
 
-    void removeClone(KisCloneLayerSP cloneLayer) {
+    void removeClone(KisCloneLayerWSP cloneLayer) {
         m_clonesList.removeOne(cloneLayer);
     }
 
     void setDirty(const QRect &rect) {
-        foreach(KisCloneLayerSP clone, m_clonesList) {
+        foreach(KisCloneLayerWSP clone, m_clonesList) {
             clone->setDirtyOriginal(rect);
         }
     }
 
 private:
-    QList<KisCloneLayerSP> m_clonesList;
+    QList<KisCloneLayerWSP> m_clonesList;
 };
 
 class KisLayer::Private
@@ -225,12 +225,12 @@ void KisLayer::setDirty(const QRect & rect)
     m_d->clonesList.setDirty(rect);
 }
 
-void KisLayer::registerClone(KisCloneLayerSP clone)
+void KisLayer::registerClone(KisCloneLayerWSP clone)
 {
     m_d->clonesList.addClone(clone);
 }
 
-void KisLayer::unregisterClone(KisCloneLayerSP clone)
+void KisLayer::unregisterClone(KisCloneLayerWSP clone)
 {
     m_d->clonesList.removeClone(clone);
 }

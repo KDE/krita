@@ -487,7 +487,7 @@ public:
     /**
      * Replace the pixel data, color strategy, and profile.
      */
-    void setDataManager(KisDataManagerSP data, const KoColorSpace * colorSpace);
+    void setDataManager(KisDataManagerSP data, const KoColorSpace * colorSpace = 0);
 
     /**
      * Return the number of bytes a pixel takes.
@@ -684,11 +684,8 @@ private:
      */
     QVector<qint32> channelSizes();
 
-protected:
-
-    KisDataManagerSP m_datamanager;
-
 private:
+    KisDataManagerSP m_datamanager;
 
     class Private;
     Private * const m_d;

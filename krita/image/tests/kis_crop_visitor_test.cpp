@@ -60,6 +60,7 @@ void KisCropVisitorTest::testUndo()
     if (!TestUtil::compareQImages(errpoint, image1, dev->convertToQImage(0, 0, 0, 300, 300))) {
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
+    delete undoAdapterDummy;
 }
 
 

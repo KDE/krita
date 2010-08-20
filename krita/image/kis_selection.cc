@@ -96,7 +96,7 @@ KisSelection::KisSelection(KisPaintDeviceSP parent, KisMaskSP mask, KisDefaultBo
      * with the pixel selection until we get an additional
      * selection component
      */
-    m_datamanager = m_d->pixelSelection->dataManager();
+    setDataManager(m_d->pixelSelection->dataManager());
 }
 
 KisSelection::KisSelection()
@@ -122,7 +122,7 @@ KisSelection::KisSelection(const KisSelection& rhs)
     m_d->interestedInDirtyness = false;
     if (rhs.m_d->hasPixelSelection) {
         m_d->pixelSelection = new KisPixelSelection(*rhs.m_d->pixelSelection.data());
-        m_d->pixelSelection->dataManager()->setDefaultPixel(rhs.m_d->pixelSelection->dataManager()->defaultPixel());
+        m_d->pixelSelection->setDefaultPixel(rhs.m_d->pixelSelection->defaultPixel());
     }
     m_d->hasPixelSelection = rhs.m_d->hasPixelSelection;
     m_d->isDeselected = rhs.m_d->isDeselected;
@@ -160,8 +160,8 @@ quint8 KisSelection::selected(qint32 x, qint32 y) const
 void KisSelection::clear()
 {
     quint8 defPixel = MIN_SELECTED;
-    dataManager()->setDefaultPixel(&defPixel);
-    dataManager()->clear();
+    setDefaultPixel(&defPixel);
+    KisPaintDevice::clear();
 }
 
 void KisSelection::clear(const QRect& r)
@@ -169,13 +169,13 @@ void KisSelection::clear(const QRect& r)
 
     KisFillPainter painter(KisPaintDeviceSP(this));
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    painter.fillRect(r, KoColor(Qt::white, cs), *(dataManager()->defaultPixel()));
+    painter.fillRect(r, KoColor(Qt::white, cs), *(defaultPixel()));
 }
 
 
 bool KisSelection::isTotallyUnselected(const QRect & r) const
 {
-    if (*(dataManager()->defaultPixel()) != MIN_SELECTED)
+    if (*defaultPixel() != MIN_SELECTED)
         return false;
     QRect sr = selectedExactRect();
     return ! r.intersects(sr);
@@ -183,7 +183,7 @@ bool KisSelection::isTotallyUnselected(const QRect & r) const
 
 bool KisSelection::isProbablyTotallyUnselected(const QRect & r) const
 {
-    if (*(dataManager()->defaultPixel()) != MIN_SELECTED)
+    if (*defaultPixel() != MIN_SELECTED)
         return false;
     QRect sr = selectedRect();
     return ! r.intersects(sr);
@@ -191,7 +191,7 @@ bool KisSelection::isProbablyTotallyUnselected(const QRect & r) const
 
 QRect KisSelection::selectedRect() const
 {
-    if (*(m_datamanager->defaultPixel()) == MIN_SELECTED) {
+    if (*defaultPixel() == MIN_SELECTED) {
         return extent().intersected(defaultBounds().bounds());
     } else {
         return defaultBounds().bounds();
@@ -200,7 +200,7 @@ QRect KisSelection::selectedRect() const
 
 QRect KisSelection::selectedExactRect() const
 {
-    if (*(m_datamanager->defaultPixel()) == MIN_SELECTED) {
+    if (*defaultPixel() == MIN_SELECTED) {
         return exactBounds().intersected(defaultBounds().bounds());
     } else {
         return defaultBounds().bounds();
@@ -269,7 +269,7 @@ KisPixelSelectionSP KisSelection::getOrCreatePixelSelection()
     }
     // Share the datamanager unless there's a shape selection
     if (!m_d->hasShapeSelection) {
-        m_datamanager = m_d->pixelSelection->dataManager();
+        setDataManager(m_d->pixelSelection->dataManager());
     }
     return m_d->pixelSelection;
 }
@@ -280,7 +280,7 @@ void KisSelection::setPixelSelection(KisPixelSelectionSP pixelSelection)
     m_d->hasPixelSelection = true;
     // Share the datamanager unless there's a shape selection
     if (!m_d->hasShapeSelection) {
-        m_datamanager = pixelSelection->dataManager();
+        setDataManager(pixelSelection->dataManager());
     }
 }
 
@@ -290,8 +290,8 @@ void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
     m_d->hasShapeSelection = true;
     Q_ASSERT(m_d->shapeSelection);
     // Unshare the data manager of the pixel selection
-    if (m_d->hasPixelSelection && m_datamanager == m_d->pixelSelection->dataManager()) {
-        m_datamanager = new KisDataManager(1, m_d->pixelSelection->dataManager()->defaultPixel());
+    if (m_d->hasPixelSelection && dataManager() == m_d->pixelSelection->dataManager()) {
+        setDataManager(new KisDataManager(1, m_d->pixelSelection->defaultPixel()));
     }
 }
 
@@ -303,8 +303,8 @@ void KisSelection::updateProjection()
 
     clear();
     if (m_d->hasPixelSelection) {
-        quint8 defPixel = *(m_d->pixelSelection->dataManager()->defaultPixel());
-        dataManager()->setDefaultPixel(&defPixel);
+        quint8 defPixel = *(m_d->pixelSelection->defaultPixel());
+        setDefaultPixel(&defPixel);
         m_d->pixelSelection->renderToProjection(this);
     }
     m_d->shapeSelection->renderToProjection(this);
@@ -320,8 +320,8 @@ void KisSelection::updateProjection(const QRect& r)
 
     clear(r);
     if (m_d->hasPixelSelection) {
-        quint8 defPixel = *(m_d->pixelSelection->dataManager()->defaultPixel());
-        dataManager()->setDefaultPixel(&defPixel);
+        quint8 defPixel = *(m_d->pixelSelection->defaultPixel());
+        setDefaultPixel(&defPixel);
 
         m_d->pixelSelection->renderToProjection(this, r);
     }

@@ -151,14 +151,14 @@ public:
      * Clones should be informed about updates of the original
      * layer, so this is a way to register them
      */
-    void registerClone(KisCloneLayerSP clone);
+    void registerClone(KisCloneLayerWSP clone);
 
     /**
      * Deregisters the clone from the update list
      *
      * \see registerClone()
      */
-    void unregisterClone(KisCloneLayerSP clone);
+    void unregisterClone(KisCloneLayerWSP clone);
 public:
     qint32 x() const;
     qint32 y() const;

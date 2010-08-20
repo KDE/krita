@@ -84,17 +84,6 @@ public:
         return 0;
     }
 
-    /**
-     * Load a variable from odf.
-     * TODO make abstract when it is implemented in all variables
-     *
-     * @param element element which represents the shape in odf
-     * @param context the KoShapeLoadingContext used for loading
-     *
-     * @return false if loading failed
-     */
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-
 protected:
     /**
      * This hook is called whenever the variable gets a new position.

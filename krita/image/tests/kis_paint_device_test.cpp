@@ -545,7 +545,6 @@ void KisPaintDeviceTest::testDeviceDuplication()
 //    qDebug()<<"FILLING";
     device->fill(fillRect.left(), fillRect.top(),
                  fillRect.width(), fillRect.height(),fillPixel);
-
     referenceImage = device->convertToQImage(0);
 
 
@@ -587,6 +586,32 @@ void KisPaintDeviceTest::testTranslate()
     QCOMPARE(device->exactBounds(), QRect(-10,10,64,64));
     QCOMPARE(device->extent(), QRect(-10,10,64,64));
 }
+
+void KisPaintDeviceTest::testOpacity()
+{
+    // blt a semi-transparent image on a white paint device
+
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP fdev = new KisPaintDevice(cs);
+    fdev->convertFromQImage(image, "");
+
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());
+    KisPainter gc(dev);
+    gc.bitBlt(QPoint(0, 0), fdev, image.rect());
+
+    QImage result = dev->convertToQImage(0, 0, 0, 640, 441);
+    QImage checkResult(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent_result.png");
+    QPoint errpoint;
+
+    if (!TestUtil::compareQImages(errpoint, checkResult, result)) {
+        checkResult.save("kis_paint_device_test_test_blt_fixed_opactiy_expected.png");
+        result.save("kis_paint_device_test_test_blt_fixed_opacity_result.png");
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+}
+
 
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)
 #include "kis_paint_device_test.moc"

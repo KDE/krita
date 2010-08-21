@@ -173,6 +173,7 @@ void KisCanvas2::pan(QPoint shift)
     KoCanvasControllerWidget* controller =
         dynamic_cast<KoCanvasControllerWidget*>(canvasController());
     controller->pan(shift);
+    updateCanvas();
 }
 
 void KisCanvas2::mirrorCanvas(bool enable)

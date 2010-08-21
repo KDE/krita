@@ -130,6 +130,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 
 void KisZoomManager::mousePositionChanged(const QPoint &pos)
 {
+    // "widget-to-postprocessed-flake"
     QPoint canvasOffset(m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY());
     QPoint viewPos = pos - m_canvasController->canvas()->documentOrigin() - canvasOffset;
 
@@ -145,10 +146,11 @@ void KisZoomManager::toggleShowRulers(bool show)
 
 void KisZoomManager::updateGUI()
 {
-    KisImageWSP image = m_view->image();
+    QRectF widgetRect = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels();
+    QSize documentSize = m_view->canvasBase()->viewConverter()->viewToDocument(widgetRect).toAlignedRect().size();
 
-    m_horizontalRuler->setRulerLength(image->width() / image->xRes());
-    m_verticalRuler->setRulerLength(image->height() / image->yRes());
+    m_horizontalRuler->setRulerLength(documentSize.width());
+    m_verticalRuler->setRulerLength(documentSize.height());
 }
 
 void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
@@ -165,6 +167,7 @@ void KisZoomManager::slotScrollAreaSizeChanged()
 {
     QSize widgetSize = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect().size();
     m_canvasController->updateDocumentSize(widgetSize, true);
+    updateGUI();
 }
 
 void KisZoomManager::changeAspectMode(bool aspectMode)

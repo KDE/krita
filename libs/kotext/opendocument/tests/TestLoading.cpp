@@ -319,8 +319,16 @@ bool TestLoading::compareBlocks(const QTextBlock &actualBlock, const QTextBlock 
     }
 
     bool equal = actualIterator.atEnd() == expectedIterator.atEnd();
-    if (!equal)
-        qDebug() << "compareBlock: Iterator are not in the end! at " << actualBlock.text() << expectedBlock.text();
+    if (!equal) {
+        if (actualIterator.atEnd())
+            qDebug() << "compareBlock: expected more text after block length:"
+                << actualBlock.length() << ", expected:" << expectedBlock.length()
+                << "at position:" << actualBlock.position();
+        else
+            qDebug() << "compareBlock: more text than expected in block length:"
+                << actualBlock.length() << ", expected:" << expectedBlock.length()
+                << "at position:" << actualBlock.position();
+    }
 
     return equal;
 }
@@ -1141,7 +1149,9 @@ void TestLoading::testLoading()
 //    showDocument(actualDocument);
 //    showDocument(expectedDocument);
     if (!documentsEqual) {
+        qDebug() << "actual document:  ======================";
         KoTextDebug::dumpDocument(actualDocument);
+        qDebug() << "expected document: ======================";
         KoTextDebug::dumpDocument(expectedDocument);
     }
     delete actualDocument;

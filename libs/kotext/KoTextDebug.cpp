@@ -285,7 +285,7 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
             break;
         case KoCharacterStyle::TextRotationAngle:
             key = "rotation-angle";
-            value = properties[id].toInt();
+            value = QString::number(properties[id].toInt());
             break;
         case KoCharacterStyle::TextRotationScale:
             key = "text-rotation-scale";
@@ -293,11 +293,11 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
             break;
         case KoCharacterStyle::TextScale:
             key = "text-scale";
-            value = properties[id].toInt();
+            value = QString::number(properties[id].toInt());
             break;
         case KoCharacterStyle::InlineRdf:
             key = "inline-rdf";
-            value = properties[id].toInt();
+            value = QString::number(properties[id].toInt());
             break;
         default:
             break;
@@ -512,7 +512,7 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             break;
         case QTextListFormat::ListIndent:
             key = "indent";
-            value = QString::number(properties[id].toInt());
+            value = QString::number(properties[id].toDouble());
             break;
         case KoListStyle::ListItemPrefix:
             key = "prefix";
@@ -564,7 +564,7 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             break;
         case KoListStyle::MinimumWidth:
             key = "minimum-width";
-            value = QString::number(properties[id].toInt());
+            value = QString::number(properties[id].toDouble());
             break;
         case KoListStyle::ListId:
             key = "list-id";
@@ -572,7 +572,7 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             break;
         case KoListStyle::IsOutline:
             key = "is-outline";
-            value = QString::number(properties[id].toInt());
+            value = properties[id].toBool();
             break;
         case KoListStyle::Indent:
             key = "indent";
@@ -580,15 +580,15 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             break;
         case KoListStyle::MinimumDistance:
             key = "minimum-distance";
-            value = QString::number(properties[id].toInt());
+            value = QString::number(properties[id].toDouble());
             break;
         case KoListStyle::Width:
             key = "width";
-            value = QString::number(properties[id].toInt());
+            value = QString::number(properties[id].toDouble());
             break;
         case KoListStyle::Height:
             key = "height";
-            value = QString::number(properties[id].toInt());
+            value = QString::number(properties[id].toDouble());
             break;
         case KoListStyle::BulletImageKey:
             key = "bullet-image-key";

@@ -35,12 +35,15 @@ namespace
 
     KoUpdater *createUpdater(KoFilterChain *chain)
     {
-        KoProgressUpdater *pu = chain->manager()->progressUpdater();
         QPointer<KoUpdater> updater = 0;
+        Q_ASSERT(chain);
+        Q_ASSERT(chain->manager());
+        KoProgressUpdater *pu = chain->manager()->progressUpdater();
         if (pu) {
             updater = pu->startSubtask(1, "filter");
             updater->setProgress(0);
         }
+
         return updater;
     }
 }

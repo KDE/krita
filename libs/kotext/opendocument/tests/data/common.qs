@@ -2,6 +2,7 @@ var document = new QTextDocument;
 var cursor = new QTextCursor(document);
 
 var InlineObjectMaker = "\uFFFC"; // QChar.ObjectReplacementCharacter
+var SoftLineFeed = "\u2028";
 
 // Default paragraph formatting
 var i;

@@ -39,7 +39,7 @@ void KisActionRecorderTest::testCreation()
 {
 
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "paintop registry test");
+    KisImage image(0, 512, 512, colorSpace, "paintop registry test");
 
     KisActionRecorder test();
 }
@@ -57,7 +57,7 @@ void KisActionRecorderTest::testFiles()
             // Create an image and the document
             QDomDocument domDoc;
 
-            KisImageWSP image = new KisImage(0, 200, 200, KoColorSpaceRegistry::instance()->rgb8(), "");
+            KisImage image(0, 200, 200, KoColorSpaceRegistry::instance()->rgb8(), "");
 
             // Load recorded action
             QString err;
@@ -72,8 +72,8 @@ void KisActionRecorderTest::testFiles()
             KisMacro m;
             m.fromXML(docElem, 0);
             // Play
-            m.play(KisPlayInfo(image, image->root()));
-            QImage sourceImage = image->convertToQImage(0, 0, 200, 200, 0);
+            m.play(KisPlayInfo(&image, image.root()));
+            QImage sourceImage = image.convertToQImage(0, 0, 200, 200, 0);
             // load what we should have get from the hard drive
             QImage resultImage(resultFileInfo.absoluteFilePath());
             resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);

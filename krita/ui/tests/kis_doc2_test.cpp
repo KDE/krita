@@ -131,14 +131,6 @@ void KisDoc2Test::testUndoRedoNotify()
     doc.undoStack()->redo();
     QVERIFY(!listener.wasAdded());
     QVERIFY(listener.wasExecuted());
-    QCOMPARE(listener.command(), testCommand1);
-    qDebug() << "Undo index:" << doc.undoStack()->index();
-
-    qDebug() << "Redo";
-    listener.reset();
-    doc.undoStack()->redo();
-    QVERIFY(!listener.wasAdded());
-    QVERIFY(listener.wasExecuted());
     QCOMPARE(listener.command(), testCommand2);
     qDebug() << "Undo index:" << doc.undoStack()->index();
 

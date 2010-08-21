@@ -433,7 +433,6 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
 
 bool KisTransformWorker::run()
 {
-//return false;
     //progress info
     m_progressTotalSteps = 0;
     m_progressStep = 0;

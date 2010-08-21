@@ -274,6 +274,12 @@ private slots:
 
 protected:
 
+    /**
+     * Moves scroll bars to ensure \p center is in the center
+     * of the viewport
+     */
+    virtual void scrollToCenterPoint(const QPoint &center);
+
     /// reimplemented from QWidget
     virtual void paintEvent(QPaintEvent *event);
     /// reimplemented from QWidget

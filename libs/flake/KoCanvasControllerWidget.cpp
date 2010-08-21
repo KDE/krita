@@ -454,20 +454,16 @@ void KoCanvasControllerWidget::recenterPreferred()
     center.rx() += d->canvas->canvasWidget()->x() + frameWidth();
     center.ry() += d->canvas->canvasWidget()->y() + frameWidth();
 
+    scrollToCenterPoint(center);
+
+    d->ignoreScrollSignals = oldIgnoreScrollSignals;
+}
+
+void KoCanvasControllerWidget::scrollToCenterPoint(const QPoint &center)
+{
     // calculate the difference to the viewport centerpoint
     QPoint topLeft = center - 0.5 * QPoint(viewport()->width(), viewport()->height());
-
-    QScrollBar *hBar = horizontalScrollBar();
-    // try to centralize the centerpoint which we want to make visible
-    topLeft.rx() = qMax(topLeft.x(), hBar->minimum());
-    topLeft.rx() = qMin(topLeft.x(), hBar->maximum());
-    hBar->setValue(topLeft.x());
-
-    QScrollBar *vBar = verticalScrollBar();
-    topLeft.ry() = qMax(topLeft.y(), vBar->minimum());
-    topLeft.ry() = qMin(topLeft.y(), vBar->maximum());
-    vBar->setValue(topLeft.y());
-    d->ignoreScrollSignals = oldIgnoreScrollSignals;
+    setScrollBarValue(topLeft);
 }
 
 void KoCanvasControllerWidget::zoomIn(const QPoint &center)
@@ -551,12 +547,8 @@ void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalcul
 
 void KoCanvasControllerWidget::pan(const QPoint &distance)
 {
-    QScrollBar *hBar = horizontalScrollBar();
-    if (hBar && !hBar->isHidden())
-        hBar->setValue(hBar->value() + distance.x());
-    QScrollBar *vBar = verticalScrollBar();
-    if (vBar && !vBar->isHidden())
-        vBar->setValue(vBar->value() + distance.y());
+    QPoint sourcePoint = scrollBarValue();
+    setScrollBarValue(sourcePoint + distance);
 }
 
 void KoCanvasControllerWidget::setPreferredCenter(const QPoint &viewPoint)

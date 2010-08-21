@@ -56,7 +56,6 @@
 #include <ktemporaryfile.h>
 
 #include <KoMainWindow.h>
-#include <KoCanvasControllerWidget.h>
 #include <KoSelection.h>
 #include <KoToolBoxFactory.h>
 #include <KoZoomHandler.h>
@@ -79,6 +78,7 @@
 #include "kis_config_notifier.h"
 #include "kis_statusbar.h"
 #include "canvas/kis_canvas2.h"
+#include "canvas/kis_canvas_controller.h"
 #include "kis_coordinates_converter.h"
 #include "kis_doc2.h"
 #include "kis_factory2.h"
@@ -210,7 +210,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->doc = doc;
     m_d->viewConverter = new KoZoomHandler();
 
-    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(this);
+    KoCanvasControllerWidget *canvasController = new KisCanvasController(this);
     canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setDrawShadow(false);

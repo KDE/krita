@@ -536,7 +536,11 @@ bool KoFilterManager::getBatchMode(void) const
 
 KoProgressUpdater* KoFilterManager::progressUpdater() const
 {
-    return d->progressUpdater;
+    if (d->progressUpdater.isNull()) {
+        // somebody, probably its parent, deleted our progress updater for us
+        return 0;
+    }
+    return d->progressUpdater.data();
 }
 
 #include <KoFilterManager.moc>

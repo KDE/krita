@@ -50,7 +50,8 @@ public:
     KisTransformWorker(KisPaintDeviceSP dev,
                        double  xscale, double  yscale,
                        double  xshear, double  yshear,
-                       double  xshearOrigin, double yshearOrigin, double rotation,
+                       double  xshearOrigin, double yshearOrigin,
+                       double rotation,
                        qint32  xtranslate, qint32  ytranslate,
                        KoUpdaterPtr progress,
                        KisFilterStrategy *filter, bool fixBorderAlpha = false);

@@ -49,7 +49,10 @@ KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageWSP image, const QString &
     m_d->x = 0;
     m_d->y = 0;
 
-    m_d->copyFrom->registerClone(this);
+    // When loading the layer we copy from might not exist yet
+    if (m_d->copyFrom) {
+        m_d->copyFrom->registerClone(this);
+    }
 }
 
 KisCloneLayer::KisCloneLayer(const KisCloneLayer& rhs)
@@ -61,13 +64,16 @@ KisCloneLayer::KisCloneLayer(const KisCloneLayer& rhs)
     m_d->type = rhs.copyType();
     m_d->x = rhs.x();
     m_d->y = rhs.y();
-
-    m_d->copyFrom->registerClone(this);
+    if (m_d->copyFrom) {
+        m_d->copyFrom->registerClone(this);
+    }
 }
 
 KisCloneLayer::~KisCloneLayer()
 {
-    m_d->copyFrom->unregisterClone(this);
+    if (m_d->copyFrom) {
+        m_d->copyFrom->unregisterClone(this);
+    }
     delete m_d;
 }
 

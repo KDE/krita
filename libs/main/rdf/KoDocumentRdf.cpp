@@ -258,12 +258,13 @@ bool KoDocumentRdf::loadOasis(KoStore *store)
         // store the fileNames and exhaust the binding result
         // iterator first.
         //
-        while (ok && it.next()) {
+        while (it.next()) {
             QString fileName = it.binding("fileName").toString();
             externalRdfFiles << fileName;
         }
         foreach (const QString &fileName, externalRdfFiles) {
             ok = loadRdf(store, parser, fileName);
+            if (!ok) break;
         }
     }
     return ok;
@@ -587,7 +588,7 @@ QList<KoRdfLocation*> KoDocumentRdf::locations(Soprano::Model *m)
         "  GRAPH ?graph { \n"
         "  \n"
         "        ?geo geo84:lat  ?lat . \n"
-        "        ?geo geo84:long ?long . \n"
+        "        ?geo geo84:long ?long \n"
         "        OPTIONAL { ?geo rdf:type ?type } \n"
         "  \n"
         "  } \n"

@@ -60,6 +60,8 @@
 
 extern int qt_defaultDpiY();
 
+#define DropCapsAdditionalFormattingId 25602902
+
 // ---------------- layout helper ----------------
 Layout::Layout(KoTextDocumentLayout *parent)
         : m_styleManager(0),
@@ -527,7 +529,7 @@ bool Layout::nextParag()
     for (QList< QTextLayout::FormatRange >::Iterator iter = formatRanges.begin();
             iter != formatRanges.end();
             ++iter) {
-        if (iter->format.boolProperty(KoCharacterStyle::DropCapsAdditionalFormatting)) {
+        if (iter->format.boolProperty(DropCapsAdditionalFormattingId)) {
             formatRanges.erase(iter);
         }
     }
@@ -602,7 +604,7 @@ bool Layout::nextParag()
             f.setPointSizeF(f.pointSizeF() + adjustment);
         }
         dropCapsFormatRange.format.setFontPointSize(f.pointSizeF());
-        dropCapsFormatRange.format.setProperty(KoCharacterStyle::DropCapsAdditionalFormatting,
+        dropCapsFormatRange.format.setProperty(DropCapsAdditionalFormattingId,
                 (QVariant) true);
         dropCapsFormatRange.start = 0;
         dropCapsFormatRange.length = dropCapsLength + firstNonSpace;

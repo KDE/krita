@@ -72,8 +72,6 @@ public:
         Language,
         Country,
         FontCharset,
-        DropCapsAdditionalFormatting, // to identify the purpose of the additionalFormatting
-        // set on the layout. is not copied during applyStyle().
         TextRotationAngle,
         TextRotationScale,
         TextScale,

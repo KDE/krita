@@ -67,10 +67,6 @@ public:
     QList<MyPaintBrushResource*> brushes() const;
     MyPaintBrushResource* brush(const QString& fileName) const;
 
-private slots:
-
-    void brushThreadDone();
-
 private:
 
     class Private;

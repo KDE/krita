@@ -36,7 +36,6 @@ class MyPaintFactory::Private {
 public:
 
     KoResourceServer<MyPaintBrushResource>* brushServer;
-    KoResourceLoaderThread* brushThread;
     QMap<QString, MyPaintBrushResource*> brushes;
 };
 
@@ -46,16 +45,27 @@ MyPaintFactory::MyPaintFactory()
     : m_d( new Private )
 {
     KGlobal::mainComponent().dirs()->addResourceType("mypaint_brushes", "data", "krita/brushes/");
+
     m_d->brushServer = new KoResourceServer<MyPaintBrushResource>("mypaint_brushes", "*.myb");
-    m_d->brushThread = new KoResourceLoaderThread(m_d->brushServer);
-    connect(m_d->brushThread, SIGNAL(finished()), this, SLOT(brushThreadDone()));
-    m_d->brushThread->start();
+    KoResourceLoaderThread thread(m_d->brushServer);
+
+    QStringList extensionList = m_d->brushServer->extensions().split(':');
+    QStringList fileNames;
+
+    foreach (const QString &extension, extensionList) {
+        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_d->brushServer->type().toAscii(), extension);
+    }
+
+    m_d->brushServer->loadResources(fileNames);
+    foreach(MyPaintBrushResource* brush, m_d->brushServer->resources()) {
+        QFileInfo info(brush->filename());
+        m_d->brushes[info.baseName()] = brush;
+    }
 
 }
 
 MyPaintFactory::~MyPaintFactory()
 {
-    if (m_d->brushThread) m_d->brushThread->cancel();
     delete m_d->brushServer;
     delete m_d;
 }
@@ -76,21 +86,8 @@ KisPaintOpSettingsSP MyPaintFactory::settings(KisImageWSP image)
     return new MyPaintSettings();
 }
 
-void MyPaintFactory::brushThreadDone()
-{
-    delete m_d->brushThread;
-    m_d->brushThread = 0;
-    foreach(MyPaintBrushResource* brush, m_d->brushServer->resources()) {
-        QFileInfo info(brush->filename());
-        m_d->brushes[info.baseName()] = brush;
-    }
-}
-
 KisPaintOpSettingsWidget* MyPaintFactory::createSettingsWidget(QWidget * parent)
 {
-    while(m_d->brushThread) {
-        qApp->processEvents();
-    }
     return new MyPaintSettingsWidget(parent);
 }
 

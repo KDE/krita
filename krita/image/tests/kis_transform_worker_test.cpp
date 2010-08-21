@@ -29,6 +29,7 @@
 #include "kis_transform_worker.h"
 #include "testutil.h"
 #include "kis_transaction.h"
+#include "kis_random_accessor_ng.h"
 
 void KisTransformWorkerTest::testCreation()
 {
@@ -36,7 +37,6 @@ void KisTransformWorkerTest::testCreation()
     KoProgressUpdater pu(&bar);
     KoUpdaterPtr updater = pu.startSubtask();
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, 10, 10, cs, "bla");
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisTransformWorker tw(dev, 1.0, 1.0,
@@ -80,7 +80,7 @@ void KisTransformWorkerTest::testMirrorY()
     KisTransformWorker::mirrorY(dev2);
     KisTransformWorker::mirrorY(dev2);
     QImage result = dev2->convertToQImage(0, 0, 0, image.width(), image.height());
-    image = image.mirrored(false, true);
+    image = image.mirrored(false, true  );
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, image, result)) {
@@ -138,10 +138,401 @@ void KisTransformWorkerTest::testMirrorTransactionY()
         result.save("mirror_test_4_result.png");
         QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
+}
 
+void KisTransformWorkerTest::testScaleUp()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, "");
+
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+    KisTransaction t("test", dev);
+    KisTransformWorker tw(dev, 2.4, 2.4,
+                          0.0, 0.0,
+                          0.0, 0.0,
+                          0.0,
+                          0, 0, updater, filter, true);
+    tw.run();
+    t.end();
+
+    QRect rc = dev->exactBounds();
+    QVERIFY(rc.width() == qRound(image.width() * 2.4));
+    QVERIFY(rc.height() == qRound(image.height() * 2.4));
+
+//    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+//    result.save("testxscaleup.png");
+//    QPoint errpoint;
+//    if (!TestUtil::compareQImages(errpoint, image, result)) {
+//        image.save("test_x_scaleup_source.png");
+//        result.save("test_x_scaleup_result.png");
+//        QFAIL(QString("Failed to scalethe image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+//    }
+}
+
+
+void KisTransformWorkerTest::testXScaleUp()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, "");
+
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+    KisTransaction t("test", dev);
+    KisTransformWorker tw(dev, 2.0, 1.0,
+                          0.0, 0.0,
+                          0.0, 0.0,
+                          0.0,
+                          0, 0, updater, filter, true);
+    tw.run();
+    t.end();
+
+    QRect rc = dev->exactBounds();
+
+    QVERIFY(rc.width() == image.width() * 2);
+    QVERIFY(rc.height() == image.height());
+
+//    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+//    result.save("testxscaleup.png");
+//    QPoint errpoint;
+//    if (!TestUtil::compareQImages(errpoint, image, result)) {
+//        image.save("test_x_scaleup_source.png");
+//        result.save("test_x_scaleup_result.png");
+//        QFAIL(QString("Failed to scalethe image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+//    }
+}
+
+void KisTransformWorkerTest::testYScaleUp()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, "");
+
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+
+    KisTransaction t("test", dev);
+    KisTransformWorker tw(dev, 1.0, 2.0,
+                          0.0, 0.0,
+                          0.0, 0.0,
+                          0.0,
+                          0, 0, updater, filter, true);
+    tw.run();
+    t.end();
+
+    QRect rc = dev->exactBounds();
+
+    QVERIFY(rc.width() == image.width());
+    QVERIFY(rc.height() == image.height() * 2);
+
+//    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+//    result.save("testxscaleup.png");
+//    QPoint errpoint;
+//    if (!TestUtil::compareQImages(errpoint, image, result)) {
+//        image.save("test_x_scaleup_source.png");
+//        result.save("test_x_scaleup_result.png");
+//        QFAIL(QString("Failed to scalethe image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+//    }
+}
+
+
+void KisTransformWorkerTest::testScaleDown()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, "");
+
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+
+    KisTransaction t("test", dev);
+    KisTransformWorker tw(dev, 0.123, 0.123,
+                          0.0, 0.0,
+                          0.0, 0.0,
+                          0.0,
+                          0, 0, updater, filter, true);
+    tw.run();
+    t.end();
+
+    QRect rc = dev->exactBounds();
+
+//    QVERIFY(rc.width() == 703);
+//    QVERIFY(rc.height() == 628);
+
+//    KisTransaction t2("test", dev);
+//    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
+//    for(int x = rc.x(); x < rc.width(); ++x) {
+//        for(int y = rc.y(); y < rc.height(); ++y) {
+//            ac->moveTo(x, y);
+//            cs->setOpacity(ac->rawData(), 0.5, 1);
+//        }
+//    }
+//    t2.end();
+
+    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    QPoint errpoint;
+    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "test_scaledown_result.png");
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("test_scaledown_source.png");
+        result.save("test_scaledown_result.png");
+        QFAIL(QString("Failed to scale down the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+}
+
+
+void KisTransformWorkerTest::testXScaleDown()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, "");
+
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+
+    KisTransaction t("test", dev);
+    KisTransformWorker tw(dev, 0.123, 1.0,
+                          0.0, 0.0,
+                          0.0, 0.0,
+                          0.0,
+                          0, 0, updater, filter, true);
+    tw.run();
+    t.end();
+    QRect rc = dev->exactBounds();
+
+//    QVERIFY(rc.width() == 703);
+//    QVERIFY(rc.height() == 628);
+
+//    KisTransaction t2("test", dev);
+//    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
+//    for(int x = rc.x(); x < rc.width(); ++x) {
+//        for(int y = rc.y(); y < rc.height(); ++y) {
+//            ac->moveTo(x, y);
+//            cs->setOpacity(ac->rawData(), 0.5, 1);
+//        }
+//    }
+//    t2.end();
+
+    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    QPoint errpoint;
+    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "scaledownx_result.png");
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("scaledownx_source.png");
+        result.save("scaledownx_result.png");
+        QFAIL(QString("Failed to scale down the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+}
+
+void KisTransformWorkerTest::testYScaleDown()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, "");
+
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+    KisTransaction t("test", dev);
+    KisTransformWorker tw(dev, 1.0, 0.123,
+                          0.0, 0.0,
+                          0.0, 0.0,
+                          0.0,
+                          0, 0, updater, filter, true);
+    tw.run();
+    t.end();
+
+    QRect rc = dev->exactBounds();
+
+//    QVERIFY(rc.width() == 703);
+//    QVERIFY(rc.height() == 628);
+
+//    KisTransaction t2("test", dev);
+//    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
+//    for(int x = rc.x(); x < rc.width(); ++x) {
+//        for(int y = rc.y(); y < rc.height(); ++y) {
+//            ac->moveTo(x, y);
+//            cs->setOpacity(ac->rawData(), 0.5, 1);
+//        }
+//    }
+//    t2.end();
+
+    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    QPoint errpoint;
+    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "scaledowny_result.png");
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("scaledowny_source.png");
+        result.save("scaledowny_result.png");
+        QFAIL(QString("Failed to scale down the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+}
+
+void KisTransformWorkerTest::testXShear()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, "");
+
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+
+    KisTransaction t("test", dev);
+    KisTransformWorker tw(dev, 1.0, 1.0,
+                          1.0, 0.0,
+                          0.0, 0.0,
+                          0.0,
+                          0, 0, updater, filter, true);
+    tw.run();
+    t.end();
+
+    QRect rc = dev->exactBounds();
+
+//    QVERIFY(rc.width() == 703);
+//    QVERIFY(rc.height() == 628);
+
+//    KisTransaction t2("test", dev);
+//    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
+//    for(int x = rc.x(); x < rc.width(); ++x) {
+//        for(int y = rc.y(); y < rc.height(); ++y) {
+//            ac->moveTo(x, y);
+//            cs->setOpacity(ac->rawData(), 0.5, 1);
+//        }
+//    }
+//    t2.end();
+
+    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    QPoint errpoint;
+    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "shearx_result.png");
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("shearx_source.png");
+        result.save("shearx_result.png");
+        QFAIL(QString("Failed to shear the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+}
+
+
+void KisTransformWorkerTest::testYShear()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, "");
+
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+
+    KisTransaction t("test", dev);
+    KisTransformWorker tw(dev, 1.0, 1.0,
+                          0.0, 1.0,
+                          0.0, 0.0,
+                          0.0,
+                          0, 0, updater, filter, true);
+    tw.run();
+    t.end();
+
+    QRect rc = dev->exactBounds();
+
+//    QVERIFY(rc.width() == 703);
+//    QVERIFY(rc.height() == 628);
+
+//    KisTransaction t2("test", dev);
+//    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
+//    for(int x = rc.x(); x < rc.width(); ++x) {
+//        for(int y = rc.y(); y < rc.height(); ++y) {
+//            ac->moveTo(x, y);
+//            cs->setOpacity(ac->rawData(), 0.5, 1);
+//        }
+//    }
+//    t2.end();
+
+    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    QPoint errpoint;
+    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "sheary_result.png");
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("sheary_source.png");
+        result.save("sheary_result.png");
+        QFAIL(QString("Failed to rotate the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
 
 }
 
+
+void KisTransformWorkerTest::testRotation()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, "");
+
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+
+    KisTransaction t("test", dev);
+    KisTransformWorker tw(dev, 1.0, 1.0,
+                          0.0, 0.0,
+                          0.0, 0.0,
+                          34,
+                          0, 0, updater, filter, true);
+    tw.run();
+    t.end();
+
+    QRect rc = dev->exactBounds();
+
+//    QVERIFY(rc.width() == 703);
+//    QVERIFY(rc.height() == 628);
+
+//    KisTransaction t2("test", dev);
+//    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
+//    for(int x = rc.x(); x < rc.width(); ++x) {
+//        for(int y = rc.y(); y < rc.height(); ++y) {
+//            ac->moveTo(x, y);
+//            cs->setOpacity(ac->rawData(), 0.5, 1);
+//        }
+//    }
+//    t2.end();
+
+    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    QPoint errpoint;
+    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "rotate_result.png");
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("rotate_source.png");
+        result.save("rotate_result.png");
+        QFAIL(QString("Failed to rotate the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+}
 
 QTEST_KDEMAIN(KisTransformWorkerTest, GUI)
 #include "kis_transform_worker_test.moc"

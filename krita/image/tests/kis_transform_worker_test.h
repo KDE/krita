@@ -31,6 +31,15 @@ private slots:
     void testMirrorY();
     void testMirrorTransactionX();
     void testMirrorTransactionY();
+    void testScaleUp();
+    void testXScaleUp();
+    void testYScaleUp();
+    void testScaleDown();
+    void testXScaleDown();
+    void testYScaleDown();
+    void testXShear();
+    void testYShear();
+    void testRotation();
 
 
 };

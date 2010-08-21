@@ -271,6 +271,34 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
             key = "language";
             value = properties[id].toString();
             break;
+        case KoCharacterStyle::HasHyphenation:
+            key = "hypenation";
+            value = properties[id].toBool();
+            break;
+        case KoCharacterStyle::StrikeOutText:
+            key = "strikeout-text";
+            value = properties[id].toString();
+            break;
+        case KoCharacterStyle::FontCharset:
+            key = "font-charset";
+            value = properties[id].toString();
+            break;
+        case KoCharacterStyle::TextRotationAngle:
+            key = "rotation-angle";
+            value = properties[id].toInt();
+            break;
+        case KoCharacterStyle::TextRotationScale:
+            key = "text-rotation-scale";
+            value = properties[id].toInt() == KoCharacterStyle::Fixed ? "Fixed" : "LineHeight";
+            break;
+        case KoCharacterStyle::TextScale:
+            key = "text-scale";
+            value = properties[id].toInt();
+            break;
+        case KoCharacterStyle::InlineRdf:
+            key = "inline-rdf";
+            value = properties[id].toInt();
+            break;
         default:
             break;
         }

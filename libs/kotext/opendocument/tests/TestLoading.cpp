@@ -144,9 +144,9 @@ bool TestLoading::compareFragments(const QTextFragment &actualFragment, const QT
                  && actualFormat.verticalAlignment() == expectedFormat.verticalAlignment(); // FIXME: Compare other properties
 
     if (!equal) {
-        qDebug() << "Actual property:   " << KoTextDebug::textAttributes(actualFormat);
-        qDebug() << "Expected property: " << KoTextDebug::textAttributes(expectedFormat);
-        qDebug() << "compareFragment: property mismatch at " << actualFragment.text();
+        qDebug() << "compareFragments: properties mismatch at " << actualFragment.text() << endl
+        << "actual:  " << KoTextDebug::textAttributes(actualFormat) << endl
+        << "expected:" << KoTextDebug::textAttributes(expectedFormat);
     }
 
     return equal;
@@ -276,10 +276,10 @@ bool TestLoading::compareBlocks(const QTextBlock &actualBlock, const QTextBlock 
         if (!compareListFormats(actualList->format(), expectedList->format())
                 || (actualList->itemNumber(actualBlock) != expectedList->itemNumber(expectedBlock))) {
             qDebug() << "compareBlocks: list properties mismatch at " << actualBlock.text() << endl
-            << "expected:" << KoTextDebug::listAttributes(expectedList->format())
-            << expectedList->itemNumber(expectedBlock) << endl
             << "actual:  " << KoTextDebug::listAttributes(actualList->format())
-            << actualList->itemNumber(actualBlock);
+            << actualList->itemNumber(actualBlock) << endl
+            << "expected:" << KoTextDebug::listAttributes(expectedList->format())
+            << expectedList->itemNumber(expectedBlock);
             return false;
         }
     } else {

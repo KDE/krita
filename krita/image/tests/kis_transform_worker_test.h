@@ -27,8 +27,10 @@ class KisTransformWorkerTest : public QObject
 private slots:
 
     void testCreation();
-    void testMirror();
-    void testMirrorTransaction();
+    void testMirrorX();
+    void testMirrorY();
+    void testMirrorTransactionX();
+    void testMirrorTransactionY();
 
 
 };

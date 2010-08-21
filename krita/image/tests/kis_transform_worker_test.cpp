@@ -46,135 +46,100 @@ void KisTransformWorkerTest::testCreation()
                           0, 0, updater, filter, true);
 }
 
-void KisTransformWorkerTest::testMirror()
+void KisTransformWorkerTest::testMirrorX()
 {
+
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
+    dev2->convertFromQImage(image, "");
+    KisTransformWorker::mirrorX(dev2);
+    KisTransformWorker::mirrorX(dev2);
+    KisTransformWorker::mirrorX(dev2);
+    QImage result = dev2->convertToQImage(0, 0, 0, image.width(), image.height());
+    image = image.mirrored(true, false);
 
-    quint8* pixel = cs->allocPixelBuffer(1);
-    cs->fromQColor(Qt::white, pixel);
-    dev->fill(0, 0, 512, 512, pixel);
-
-    cs->fromQColor(Qt::black, pixel);
-    dev->fill(512, 0, 512, 512, pixel);
-
-    QColor c1;
-    dev->pixel(5, 5, &c1);
-
-    QColor c2;
-    dev->pixel(517, 5, &c2);
-
-    QVERIFY(c1 == Qt::white);
-    QVERIFY(c2 == Qt::black);
-    dev->convertToQImage(0, 0, 0, 1024, 512).save("before.png");
-
-    KisTransformWorker::mirrorX(dev);
-    dev->convertToQImage(0, 0, 0, 1024, 512).save("mirror_x.png");
-
-    dev->pixel(5, 5, &c1);
-    dev->pixel(517, 5, &c2);
-
-    QVERIFY(c1 == Qt::black);
-    QVERIFY(c2 == Qt::white);
-
-    cs->fromQColor(Qt::white, pixel);
-    dev->fill(0, 0, 512, 512, pixel);
-
-    cs->fromQColor(Qt::black, pixel);
-    dev->fill(0, 512, 512, 512, pixel);
-
-    dev->pixel(5, 5, &c1);
-    dev->pixel(5, 517, &c2);
-
-    QVERIFY(c1 == Qt::white);
-    QVERIFY(c2 == Qt::black);
-
-    KisTransformWorker::mirrorY(dev);
-    dev->convertToQImage(0, 0, 0, 1024, 512).save("mirror_y.png");
-
-    dev->pixel(5, 5, &c1);
-    dev->pixel(5, 517, &c2);
-
-    QVERIFY(c1 == Qt::black);
-    QVERIFY(c2 == Qt::white);
-
-    {
-        QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
-        KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
-        dev2->convertFromQImage(image, "");
-        KisTransformWorker::mirrorX(dev2);
-        KisTransformWorker::mirrorX(dev2);
-        KisTransformWorker::mirrorX(dev2);
-        dev2->convertToQImage(0, 0, 0, image.width(), image.height()).save("mirror_test2.png");
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        // They are the same, but should be mirrored
+        image.save("mirror_test_1_source.png");
+        result.save("mirror_test_1_result.png");
+        QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
+
 }
 
-void KisTransformWorkerTest::testMirrorTransaction()
+void KisTransformWorkerTest::testMirrorY()
+{
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
+    dev2->convertFromQImage(image, "");
+    KisTransformWorker::mirrorY(dev2);
+    KisTransformWorker::mirrorY(dev2);
+    KisTransformWorker::mirrorY(dev2);
+    QImage result = dev2->convertToQImage(0, 0, 0, image.width(), image.height());
+    image = image.mirrored(false, true);
+
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        // They are the same, but should be mirrored
+        image.save("mirror_test_2_source.png");
+        result.save("mirror_test_2_result.png");
+        QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+
+}
+
+void KisTransformWorkerTest::testMirrorTransactionX()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
+    dev2->convertFromQImage(image, "");
 
-    quint8* pixel = cs->allocPixelBuffer(1);
-    cs->fromQColor(Qt::white, pixel);
-    dev->fill(0, 0, 512, 512, pixel);
+    KisTransaction t("mirror", dev2);
+    KisTransformWorker::mirrorX(dev2);
+    t.end();
 
-    cs->fromQColor(Qt::black, pixel);
-    dev->fill(512, 0, 512, 512, pixel);
+    QImage result = dev2->convertToQImage(0, 0, 0, image.width(), image.height());
 
-    QColor c1;
-    QColor c2;
+    image = image.mirrored(true, false);
 
-    dev->pixel(5, 5, &c1);
-    dev->pixel(517, 5, &c2);
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        // They are the same, but should be mirrored
+        image.save("mirror_test_3_source.png");
+        result.save("mirror_test_3_result.png");
+        QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
 
-    QVERIFY(c1 == Qt::white);
-    QVERIFY(c2 == Qt::black);
-    dev->convertToQImage(0, 0, 0, 1024, 512).save("transaction_before.png");
-
-    KisTransaction transaction1("mirror", dev);
-    KisTransformWorker::mirrorX(dev);
-
-    dev->pixel(5, 5, &c1);
-    dev->pixel(517, 5, &c2);
-
-    dev->convertToQImage(0, 0, 0, 1024, 512).save("transaction_mirror_x.png");
-    QVERIFY(c1 == Qt::black);
-    QVERIFY(c2 == Qt::white);
-
-    cs->fromQColor(Qt::white, pixel);
-    dev->fill(0, 0, 512, 512, pixel);
-
-    cs->fromQColor(Qt::black, pixel);
-    dev->fill(0, 512, 512, 512, pixel);
-
-    dev->pixel(5, 5, &c1);
-    dev->pixel(5, 517, &c2);
-
-    QVERIFY(c1 == Qt::white);
-    QVERIFY(c2 == Qt::black);
-
-    transaction1.end();
-
-    KisTransaction transaction2("mirror", dev);
-    KisTransformWorker::mirrorY(dev);
-    dev->convertToQImage(0, 0, 0, 1024, 512).save("transaction_mirror_y.png");
-
-    dev->pixel(5, 5, &c1);
-    dev->pixel(5, 517, &c2);
-
-    QVERIFY(c1 == Qt::black);
-    QVERIFY(c2 == Qt::white);
-
-    transaction2.end();
-
-    {
-        QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
-        KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
-        dev2->convertFromQImage(image, "");
-        KisTransaction t("mirror", dev2);
-        KisTransformWorker::mirrorX(dev2);
-        dev2->convertToQImage(0, 0, 0, image.width(), image.height()).save("mirror_test_t_2.png");
     }
+}
+void KisTransformWorkerTest::testMirrorTransactionY()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
+    dev2->convertFromQImage(image, "");
+
+    KisTransaction t("mirror", dev2);
+    KisTransformWorker::mirrorY(dev2);
+    t.end();
+
+    QImage result = dev2->convertToQImage(0, 0, 0, image.width(), image.height());
+
+    image = image.mirrored(false, true);
+
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        // They are the same, but should be mirrored
+        image.save("mirror_test_4_source.png");
+        result.save("mirror_test_4_result.png");
+        QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+
+
 }
 
 

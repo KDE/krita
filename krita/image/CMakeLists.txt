@@ -11,21 +11,7 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 set(USE_TILESYSTEM 3)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-tiles.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/../config-tiles.h) ### WRONG PLACE???
 
-if(USE_TILESYSTEM EQUAL 1)
-set(libkritatile_SRCS
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiled_random_accessor.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledvlineiterator.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledhlineiterator.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tileddatamanager.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tile.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tilediterator.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledrectiterator.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_memento.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tilemanager.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tile_compressor.cc
-)
-add_subdirectory( tiles )
-elseif(USE_TILESYSTEM EQUAL 3)
+if(USE_TILESYSTEM EQUAL 3)
 set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data.cc
@@ -53,7 +39,7 @@ set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_tile_data_swapper.cpp
 )
 add_subdirectory( tiles3 )
-endif(USE_TILESYSTEM EQUAL 1)
+endif(USE_TILESYSTEM EQUAL 3)
 
 option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in release build)" ON)
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)

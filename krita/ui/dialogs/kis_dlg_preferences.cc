@@ -70,7 +70,6 @@
 #include "KoColorProfile.h"
 
 // for the performance update
-#include "tiles/kis_tilemanager.h"
 #include <kis_cubic_curve.h>
 
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)

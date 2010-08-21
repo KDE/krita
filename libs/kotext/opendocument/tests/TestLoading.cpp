@@ -865,6 +865,10 @@ void TestLoading::cleanup()
 
 void TestLoading::addData(LoadSave loadSave)
 {
+    QTest::newRow("whitespace") << "TextContents/Paragraph/whitespace";
+    QTest::newRow("basicContents") << "TextContents/Paragraph/basicContents";
+    QTest::newRow("boldAndItalic") << "TextContents/TextFormatting/boldAndItalic";
+
     QTest::newRow("bulletedList") << "TextContents/Lists/bulletedList";
     QTest::newRow("continueNumbering") << "TextContents/Lists/continueNumbering";
     QTest::newRow("embeddedBulletedList") << "TextContents/Lists/embeddedBulletedList";
@@ -875,12 +879,9 @@ void TestLoading::addData(LoadSave loadSave)
     QTest::newRow("numberedParagraph") << "TextContents/Lists/numberedParagraph";
     QTest::newRow("startValue") << "TextContents/Lists/startValue";
 
-    QTest::newRow("boldAndItalic") << "TextContents/TextFormatting/boldAndItalic";
 
     QTest::newRow("attributedText") << "TextContents/Paragraph/attributedText";
-    QTest::newRow("basicContents") << "TextContents/Paragraph/basicContents";
     QTest::newRow("nestedSpan") << "TextContents/Paragraph/nestedSpan";
-    QTest::newRow("whitespace") << "TextContents/Paragraph/whitespace";
 
     QTest::newRow("fontSize1") << "TextContents/TextFormatting/fontSize";
 

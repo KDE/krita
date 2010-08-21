@@ -236,8 +236,8 @@ bool TestLoading::compareBlockFormats(const QTextBlockFormat &actualFormat, cons
             break;
         }
         if (!match) {
-            qDebug() << "Actual property:   " << KoTextDebug::paraAttributes(actualFormat);
-            qDebug() << "Expected property: " << KoTextDebug::paraAttributes(expectedFormat);
+            qDebug() << "Actual:  " << KoTextDebug::paraAttributes(actualFormat);
+            qDebug() << "Expected:" << KoTextDebug::paraAttributes(expectedFormat);
             qDebug() << "At index: QTextFormat::UserProperty + " << id - QTextFormat::UserProperty;
             return false;
         }

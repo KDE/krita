@@ -75,7 +75,7 @@ public:
         TextRotationAngle,
         TextRotationScale,
         TextScale,
-        InlineRdf,  ///< KoTextInlineRdf for this block
+        InlineRdf,  ///< KoTextInlineRdf pointer
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550 // Internal: Reserved for ChangeTracker
     };
@@ -260,7 +260,7 @@ public:
     void setTextRotationAngle(RotationAngle angle);
     /// Get the current text rotation angle of this KoCharacterStyle
     RotationAngle textRotationAngle() const;
-    /** 
+    /**
      *  RotationScale pecifies whether for rotated text the width of the text
      *  should be scaled to fit into the current line height or the width of the text
      *  should remain fixed, therefore changing the current line height

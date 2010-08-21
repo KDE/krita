@@ -57,7 +57,6 @@ public:
     enum Property {
         StyleId = QTextFormat::UserProperty + 1, ///< The id stored in the charFormat to link the text to this style.
         HasHyphenation,
-        FontId,
         StrikeOutStyle,
         StrikeOutType,
         StrikeOutColor,

@@ -104,7 +104,6 @@ var KoCharacterStyle = {};
 i = QTextFormat.UserProperty;
 KoCharacterStyle.StyleId = ++i;
 KoCharacterStyle.HasHyphenataion = ++i;
-KoCharacterStyle.FontId = ++i;
 KoCharacterStyle.StrikeOutStyle = ++i;
 KoCharacterStyle.StrikeOutType = ++i;
 KoCharacterStyle.StrikeOutColor = ++i;

@@ -367,6 +367,9 @@ void KisCanvas2::connectCurrentImage()
 
         connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)),
                 m_d->openGLImageTextures, SLOT(slotImageSizeChanged(qint32, qint32)));
+
+        QRect imageRect = m_d->view->image()->bounds();
+        m_d->openGLImageTextures->slotImageSizeChanged(imageRect.width(), imageRect.height());
 #else
         qFatal("Bad use of connectCurrentImage(). It shouldn't have happened =(");
 #endif

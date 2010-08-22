@@ -68,10 +68,8 @@ void KisMyPaintSurfaceTest::testGetColor()
 
     surface.get_color(500.0, 500.0, 100.0, &r, &g, &b, &a);
 
-    qDebug() << r << g << b << a;
-
-    QVERIFY(qFuzzyCompare(r, 0.0L));
-    QVERIFY(qFuzzyCompare(g, 0.0L));
+    QVERIFY(qFuzzyCompare((float)qRound(r), 0.0L));
+    QVERIFY(qFuzzyCompare((float)qRound(g), 0.0L));
     QVERIFY(qFuzzyCompare(b, 1.0L));
     QVERIFY(qFuzzyCompare(a, 1.0L));
 }

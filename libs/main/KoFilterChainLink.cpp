@@ -81,14 +81,11 @@ namespace KOfficeFilter {
         if (m_updater) {
             // if there is an updater, use that for progress reporting
             m_filter->setUpdater(m_updater);
-        } else {
-            // redirect the progress information to the KoFilterManager
-            QObject::connect(m_filter, SIGNAL(sigProgress(int)),
-                             m_chain->manager(), SIGNAL(sigProgress(int)));
         }
 
-        if (parentChainLink)
+        if (parentChainLink) {
             setupCommunication(parentChainLink->m_filter);
+        }
 
         KoFilter::ConversionStatus status = m_filter->convert(m_from, m_to);
         delete m_filter;

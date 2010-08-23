@@ -119,7 +119,7 @@ void KoCharacterStyle::Private::ensureMinimalProperties(QTextCursor &cursor, boo
     QMap<int, QVariant> props = hardCodedDefaultStyle.properties();
     QMap<int, QVariant>::const_iterator it = props.constBegin();
     while (it != props.constEnd()) {
-        if (!it.value().isNull() && !!format.hasProperty(it.key())) {
+        if (!it.value().isNull() && !format.hasProperty(it.key())) {
             format.setProperty(it.key(), it.value());
         }
         ++it;

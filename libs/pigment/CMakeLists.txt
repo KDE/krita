@@ -65,6 +65,7 @@ set(PIGMENT_INSTALL_FILES
         KoColorProfile.h
         KoColorSpace.h
         KoColorSpaceEngine.h
+        KoColorSpaceFactory.h
         KoColorSpaceAbstract.h
         KoColorSpaceConstants.h
         KoColorSpaceMaths.h

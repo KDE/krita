@@ -33,6 +33,7 @@ public:
     Private(KoOdfStylesReader &sr, KoStore *s)
         : store(s),
         stylesReader(sr),
+        generatorType(KoOdfLoadingContext::Unknown),
         metaXmlParsed(false),
         useStylesAutoStyles(false)
     {

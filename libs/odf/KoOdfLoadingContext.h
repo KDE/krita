@@ -37,7 +37,7 @@ class KoStore;
 class KOODF_EXPORT KoOdfLoadingContext
 {
 public:
-    enum GeneratorType { KOffice, OpenOffice, MicrosoftOffice };
+    enum GeneratorType { Unknown, KOffice, OpenOffice, MicrosoftOffice };
     /**
      * Stores reference to the KoOdfStylesReader and stored passed by
      * KoDocument. Make sure that the KoOdfStylesReader instance outlives

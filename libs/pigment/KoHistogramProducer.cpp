@@ -33,6 +33,7 @@ KoHistogramProducerFactoryRegistry::KoHistogramProducerFactoryRegistry()
 
 KoHistogramProducerFactoryRegistry::~KoHistogramProducerFactoryRegistry()
 {
+    qDeleteAll(values());
 }
 
 KoHistogramProducerFactoryRegistry* KoHistogramProducerFactoryRegistry::instance()

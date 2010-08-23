@@ -61,10 +61,13 @@ public:
                           const QTime& startTime, const QString& prefix);
 };
 
+// NOTE: do not make the KoProgressUpdater object part of the QObject
+// hierarchy. Do not make KoProgressProxy its parent (note that KoProgressProxy
+// is not necessarily castable to QObject ). This prevents proper functioning
+// of progress reporting in multi-threaded environments.
 KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar,
                                      Mode mode, QTextStream *output)
-    : QObject(dynamic_cast<QObject*>(progressBar))
-    , d (new Private(this, progressBar, mode, output))
+    : d (new Private(this, progressBar, mode, output))
 {
     Q_ASSERT(d->progressBar);
     connect(&d->updateGuiTimer, SIGNAL(timeout()), SLOT(updateUi()));

@@ -73,6 +73,11 @@ public:
             dummyToolLabel(0) {
     }
 
+    ~CanvasData() {
+        // the dummy tool widget does not necessarily have a parent and we create it, so we delete it.
+        delete dummyToolWidget;
+    }
+
     KoToolBase *activeTool;     // active Tool
     QString activeToolId;   // the id of the active Tool
     QString activationShapeId; // the shape-type (KoShape::shapeId()) the activeTool 'belongs' to.
@@ -419,11 +424,13 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
         proxy->setActiveTool(0);
 
     QList<KoToolBase *> tools;
-    foreach(CanvasData *cd, canvasses.value(controller)) {
-        foreach(KoToolBase *tool, cd->allTools)
-            if (! tools.contains(tool))
+    foreach(CanvasData *canvasData, canvasses.value(controller)) {
+        foreach(KoToolBase *tool, canvasData->allTools) {
+            if (! tools.contains(tool)) {
                 tools.append(tool);
-        delete cd;
+            }
+        }
+        delete canvasData;
     }
     foreach(KoToolBase *tool, tools) {
         uniqueToolIds.remove(tool);

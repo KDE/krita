@@ -35,10 +35,10 @@ public:
     ~KoEmbeddedDocumentSaver();
 
     /**
-     * Adds the object specific attibutes to the tag, but does NOT
+     * Adds the object specific attributes to the tag, but does NOT
      * write the content of the embedded document. Saving of the
      * embedded documents themselves is done in @ref save. This
-     * function should be called from within KoOdfDocument::saveOasis.
+     * function should be called from within KoOdfDocument::saveOdf.
      */
     void embedDocument(KoXmlWriter &writer, KoOdfDocument *doc);
 

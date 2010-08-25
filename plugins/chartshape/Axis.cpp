@@ -909,7 +909,7 @@ void Axis::Private::createSurfaceDiagram()
         ...
     }
 #else // fallback to bar diagram for now
-    createBarDiagram();
+    if (!kdBarDiagramModel) createBarDiagram();
     kdSurfaceDiagramModel = kdBarDiagramModel;
     kdBarDiagramModel = 0;
     kdSurfaceDiagram = kdBarDiagram;
@@ -932,10 +932,10 @@ void Axis::Private::createGanttDiagram()
         ...
     }
 #else // fallback to bar diagram for now
-    createBarDiagram();
-    kdSurfaceDiagramModel = kdBarDiagramModel;
+    if (!kdBarDiagramModel) createBarDiagram();
+    kdGanttDiagramModel = kdBarDiagramModel;
     kdBarDiagramModel = 0;
-    kdSurfaceDiagram = kdBarDiagram;
+    kdGanttDiagram = kdBarDiagram;
     kdBarDiagram = 0;
 #endif
 }
@@ -1900,15 +1900,13 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         if ( !d->kdSurfaceDiagram )
            d->createSurfaceDiagram();
         newModel = d->kdSurfaceDiagramModel;
-        //newDiagram = d->kdSurfaceDiagram;
-        newDiagram = 0;
+        newDiagram = d->kdSurfaceDiagram;
         break;
     case GanttChartType:
         if ( !d->kdGanttDiagram )
            d->createGanttDiagram();
         newModel = d->kdGanttDiagramModel;
-        //newDiagram = d->kdGanttDiagram;
-        newDiagram = 0;
+        newDiagram = d->kdGanttDiagram;
         break;
     default:;
         // FIXME: Implement more chart types

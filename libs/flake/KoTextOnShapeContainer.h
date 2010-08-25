@@ -43,6 +43,7 @@ public:
      *      the text styles will not be shared with other shapes.
      */
     explicit KoTextOnShapeContainer(KoShape *childShape, KoResourceManager *documentResources = 0);
+    virtual ~KoTextOnShapeContainer();
 
     // reimplemented
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);

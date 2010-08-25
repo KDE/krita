@@ -165,6 +165,13 @@ KoTextOnShapeContainer::KoTextOnShapeContainer(KoShape *childShape, KoResourceMa
     setToolDelegates(delegates);
 }
 
+KoTextOnShapeContainer::~KoTextOnShapeContainer()
+{
+    Q_D(KoTextOnShapeContainer);
+    // can't do this in the destructor of the Private class as by the time that destructor gets called there is no ShapeContainer anymore to check the parent
+    if (d->content && d->content->parent() == this) delete d->content;
+}
+
 void KoTextOnShapeContainer::paintComponent(QPainter &, const KoViewConverter &)
 {
 }

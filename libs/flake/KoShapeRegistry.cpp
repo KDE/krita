@@ -250,6 +250,7 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
                     if (tos->loadOdf(fullElement, context)) {
                         return tos;
                     }
+                    shape->setParent(0);
                     delete tos;
                 }
                 return shape;

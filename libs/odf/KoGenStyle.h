@@ -255,18 +255,30 @@ public:
 
     /// Add a property to the style
     void addProperty(const QString &propName, const QString &propValue, PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
         m_properties[type].insert(propName, propValue);
     }
     /// Overloaded version of addProperty that takes a char*, usually for "..."
     void addProperty(const QString &propName, const char *propValue, PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
         m_properties[type].insert(propName, QString::fromUtf8(propValue));
     }
     /// Overloaded version of addProperty that converts an int to a string
     void addProperty(const QString &propName, int propValue, PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
         m_properties[type].insert(propName, QString::number(propValue));
     }
     /// Overloaded version of addProperty that converts a bool to a string (false/true)
     void addProperty(const QString &propName, bool propValue, PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
         m_properties[type].insert(propName, propValue ? "true" : "false");
     }
 
@@ -405,6 +417,7 @@ private:
     // Note that the copy constructor and assignment operator are allowed.
     // Better not use pointers below!
     // TODO turn this into a QSharedData class
+    PropertyType m_propertyType;
     Type m_type;
     QByteArray m_familyName;
     QString m_parentName;

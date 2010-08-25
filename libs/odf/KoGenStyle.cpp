@@ -47,6 +47,59 @@ KoGenStyle::KoGenStyle(Type type, const char* familyName,
         : m_type(type), m_familyName(familyName), m_parentName(parentName),
         m_autoStyleInStylesDotXml(false), m_defaultStyle(false)
 {
+    switch (type) {
+        case TextStyle:
+        case TextAutoStyle:
+            m_propertyType = TextType;
+            break;
+        case ParagraphStyle:
+        case ParagraphAutoStyle:
+            m_propertyType = ParagraphType;
+            break;
+        case GraphicStyle:
+        case GraphicAutoStyle:
+            m_propertyType = GraphicType;
+            break;
+        case SectionStyle:
+        case SectionAutoStyle:
+            m_propertyType = SectionType;
+            break;
+        case RubyStyle:
+        case RubyAutoStyle:
+            m_propertyType = RubyType;
+            break;
+        case TableStyle:
+        case TableAutoStyle:
+            m_propertyType = TableType;
+            break;
+        case TableColumnStyle:
+        case TableColumnAutoStyle:
+            m_propertyType = TableColumnType;
+            break;
+        case TableRowStyle:
+        case TableRowAutoStyle:
+            m_propertyType = TableRowType;
+            break;
+        case TableCellStyle:
+        case TableCellAutoStyle:
+            m_propertyType = TableCellType;
+            break;
+        case PresentationStyle:
+        case PresentationAutoStyle:
+            m_propertyType = PresentationType;
+            break;
+        case DrawingPageStyle:
+        case DrawingPageAutoStyle:
+            m_propertyType = DrawingPageType;
+            break;
+        case ChartStyle:
+        case ChartAutoStyle:
+            m_propertyType = ChartType;
+            break;
+        default:
+            m_propertyType =  DefaultType;
+            break;
+    }
 }
 
 KoGenStyle::~KoGenStyle()
@@ -252,6 +305,9 @@ void KoGenStyle::writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, cons
 
 void KoGenStyle::addPropertyPt(const QString& propName, qreal propValue, PropertyType type)
 {
+    if (type == DefaultType) {
+        type = m_propertyType;
+    }
     QString str;
     str.setNum(propValue, 'f', DBL_DIG);
     str += "pt";

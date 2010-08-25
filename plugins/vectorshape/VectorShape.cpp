@@ -67,6 +67,8 @@ VectorShape::VectorShape()
 
 VectorShape::~VectorShape()
 {
+    if (m_ownsBytes)
+        delete[] m_bytes;
 }
 
 void  VectorShape::setVectorBytes( char *bytes, int size, bool takeOwnership )

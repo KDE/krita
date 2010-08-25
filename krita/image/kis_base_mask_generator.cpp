@@ -24,6 +24,9 @@
 
 #include "kis_circle_mask_generator.h"
 #include "kis_rect_mask_generator.h"
+#include "kis_cubic_curve.h"
+#include "kis_curve_circle_mask_generator.h"
+#include "kis_curve_rect_mask_generator.h"
 
 KisMaskGenerator::KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, Type type) : d(new Private)
 {
@@ -68,6 +71,19 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
     int spikes = elt.attribute("spikes", "2").toInt();
     QString typeShape = elt.attribute("type", "circle");
 
+    
+    if (typeShape == "curve_circle"){
+        KisCubicCurve curve;
+        curve.fromString(elt.attribute("softness_curve","0,0;1,1"));
+        return new KisCurveCircleMaskGenerator(radius, ratio, hfade, vfade, spikes, curve);
+    }
+    
+    if (typeShape == "curve_rect"){
+        KisCubicCurve curve;
+        curve.fromString(elt.attribute("softness_curve","0,0;1,1"));
+        return new KisCurveRectangleMaskGenerator(radius, ratio, hfade, vfade, spikes, curve);
+    }
+    
     if (typeShape == "circle") {
         return new KisCircleMaskGenerator(radius, ratio, hfade, vfade, spikes);
     } else {

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004,2007,2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,6 +31,7 @@
 #include "kis_slider_spin_box.h"
 
 #define showSlider(input, step) input->setRange(input->minimum(), input->maximum(), step)
+#include <kis_cubic_curve.h>
 
 KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
         : KisWdgAutobrush(parent, name)
@@ -85,10 +87,24 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     inputSpacing->setValue(0.1);
     connect(inputSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(paramChanged()));
 
+    density->setRange(0, 100, 0);
+    density->setSingleStep(1);
+    density->setValue(100);
+    density->setSuffix("%");
+    connect(density, SIGNAL(valueChanged(qreal)),this, SLOT(paramChanged()));
+    
+    KisCubicCurve topLeftBottomRightLinearCurve;
+    topLeftBottomRightLinearCurve.setPoint(0, QPointF(0.0,1.0));
+    topLeftBottomRightLinearCurve.setPoint(1, QPointF(1.0,0.0));
+    softnessCurve->setCurve(topLeftBottomRightLinearCurve);
+    connect(softnessCurve, SIGNAL(modified()), this, SLOT(paramChanged()));
+    
     m_brush = QImage(1, 1, QImage::Format_RGB32);
 
     connect(brushPreview, SIGNAL(clicked()), SLOT(paramChanged()));
-
+    connect(comboBoxMaskType, SIGNAL(activated(int)), SLOT(paramChanged()));
+    connect(comboBoxMaskType, SIGNAL(activated(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+    
     brushPreview->setIconSize(QSize(100, 100));
 
     paramChanged();
@@ -110,16 +126,22 @@ void KisAutoBrushWidget::paramChanged()
 {
     KisMaskGenerator* kas;
 
-    if (comboBoxShape->currentIndex() == 0) { // use index compare instead of comparing a translatable string
-        kas = new KisCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
-        Q_CHECK_PTR(kas);
-
-    } else {
-        kas = new KisRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
-        Q_CHECK_PTR(kas);
-
+    if (comboBoxMaskType->currentIndex() == 1) { // soft brush
+        if (comboBoxShape->currentIndex() == 0){
+            kas = new KisCurveCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), softnessCurve->curve());
+        }else{
+            kas = new KisCurveRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(),softnessCurve->curve());
+        }
+    }else {// default == 0 or any other
+        if (comboBoxShape->currentIndex() == 0) { // use index compare instead of comparing a translatable string
+            kas = new KisCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
+        } else {
+            kas = new KisRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
+        }
     }
-    m_autoBrush = new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI, inputRandomness->value() / 100.0);
+    Q_CHECK_PTR(kas);
+    
+    m_autoBrush = new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI, inputRandomness->value() / 100.0, density->value() / 100.0);
     m_autoBrush->setSpacing(inputSpacing->value());
     m_brush = m_autoBrush->image();
 
@@ -190,6 +212,8 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     inputSpikes->setValue(aBrush->maskGenerator()->spikes());
     inputSpacing->setValue(aBrush->spacing());
     inputSpacing->setExponentRatio(3.0);
+    inputRandomness->setValue(aBrush->randomness() * 100);
+    density->setValue(aBrush->density() * 100);
 }
 
 

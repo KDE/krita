@@ -32,7 +32,7 @@ class BRUSH_EXPORT KisAutoBrush : public KisBrush
 
 public:
 
-    KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness);
+    KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density);
 
     virtual ~KisAutoBrush();
 
@@ -61,6 +61,8 @@ public:
     virtual QPointF hotSpot(double scaleX, double scaleY, double rotation) const;
     const KisMaskGenerator* maskGenerator() const;
     qreal angle() const;
+    qreal randomness() const;
+    qreal density() const;
 private:
     QImage createBrushPreview();
     bool isBrushSymmetric(double angle) const;

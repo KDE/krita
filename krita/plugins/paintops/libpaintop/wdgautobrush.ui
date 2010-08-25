@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>545</width>
-    <height>342</height>
+    <width>555</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -15,6 +15,12 @@
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>555</width>
+    <height>500</height>
+   </size>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0">
@@ -39,6 +45,20 @@
        <property name="text">
         <string/>
        </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBoxMaskType">
+       <item>
+        <property name="text">
+         <string>default</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>soft brush</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>
@@ -116,48 +136,99 @@
       </layout>
      </item>
      <item>
-      <widget class="QGroupBox" name="grpFade_2">
-       <property name="title">
-        <string>Fade</string>
+      <widget class="QStackedWidget" name="stackedWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <property name="leftMargin">
-         <number>4</number>
-        </property>
-        <item>
-         <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,0">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>Horizontal:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="KisDoubleSliderSpinBox" name="inputHFade" native="true"/>
-          </item>
-          <item row="0" column="2" rowspan="2">
-           <widget class="KoAspectButton" name="aspectButton" native="true"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>Vertical:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="KisDoubleSliderSpinBox" name="inputVFade" native="true"/>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="PageFade">
+        <widget class="QGroupBox" name="grpFade_2">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>291</width>
+           <height>101</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>1024</width>
+           <height>1024</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Fade</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="leftMargin">
+           <number>4</number>
+          </property>
+          <item>
+           <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,0">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Horizontal:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="KisDoubleSliderSpinBox" name="inputHFade" native="true"/>
+            </item>
+            <item row="0" column="2" rowspan="2">
+             <widget class="KoAspectButton" name="aspectButton" native="true"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Vertical:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="KisDoubleSliderSpinBox" name="inputVFade" native="true"/>
+            </item>
+           </layout>
           </item>
          </layout>
-        </item>
-       </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="PageCurve">
+        <widget class="KisCurveWidget" name="softnessCurve" native="true">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>261</width>
+           <height>81</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
       </widget>
      </item>
      <item>
@@ -172,7 +243,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="4" column="1">
         <widget class="KisDoubleSliderSpinBox" name="inputSpacing" native="true"/>
        </item>
        <item row="1" column="1">
@@ -180,16 +251,6 @@
        </item>
        <item row="2" column="1">
         <widget class="KisDoubleSliderSpinBox" name="inputRandomness" native="true"/>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Spacing:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label">
@@ -221,12 +282,38 @@
          </property>
         </widget>
        </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Spacing:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Density:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="KisDoubleSliderSpinBox" name="density" native="true"/>
+       </item>
       </layout>
      </item>
      <item>
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Preferred</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -258,6 +345,12 @@
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisCurveWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/kis_curve_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

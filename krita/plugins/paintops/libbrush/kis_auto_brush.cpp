@@ -19,7 +19,6 @@
 
 #include "kis_auto_brush.h"
 
-
 #include <kis_debug.h>
 #include <math.h>
 
@@ -27,6 +26,7 @@
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 
 #include "kis_datamanager.h"
 #include "kis_paint_device.h"
@@ -37,21 +37,23 @@ struct KisAutoBrush::Private {
     KisMaskGenerator* shape;
     qreal angle;
     qreal randomness;
+    qreal density;
     mutable QVector<quint8> precomputedQuarter;
 };
 
-KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness)
+KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density)
         : KisBrush()
         , d(new Private)
 {
     d->shape = as;
     d->angle = angle;
     d->randomness = randomness;
-    QImage image = createBrushPreview();
-    setImage(image);
+    d->density = density;
     setBrushType(MASK);
     setWidth(d->shape->width());
     setHeight(d->shape->height());
+    QImage image = createBrushPreview();
+    setImage(image);
 }
 
 KisAutoBrush::~KisAutoBrush()
@@ -80,7 +82,9 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     
     int dstWidth = maskWidth(scaleX, angle);
     int dstHeight = maskHeight(scaleY, angle);
-
+    
+    
+    
     // if there's coloring information, we merely change the alpha: in that case,
     // the dab should be big enough!
     if (coloringInformation) {
@@ -152,6 +156,8 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
             }
         }
         
+        qreal random = 1.0;
+        quint8 alphaValue = OPACITY_TRANSPARENT_U8;
         for (int y = 0; y < dstHeight; y++) {
             for (int x = 0; x < dstWidth; x++) {
 
@@ -166,12 +172,23 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                         coloringInformation->nextColumn();
                     }
                 }
-                qreal random = 1.0;
                 if (d->randomness != 0.0){
                     random = (1.0 - d->randomness) + d->randomness * qreal(rand()) / RAND_MAX;
                 }
-                cs->setOpacity(dabPointer,quint8( ( OPACITY_OPAQUE_U8 - interpolatedValueAt(maskX, maskY,d->precomputedQuarter,halfWidth) ) * random), 1);
+                
+                alphaValue = quint8( ( OPACITY_OPAQUE_U8 - interpolatedValueAt(maskX, maskY,d->precomputedQuarter,halfWidth) ) * random);
+                if (d->density != 1.0){
+                    // compute density only for visible pixels of the mask
+                    if (alphaValue != OPACITY_TRANSPARENT_U8){
+                        if ( !(d->density >= drand48()) ){
+                            alphaValue = OPACITY_TRANSPARENT_U8;
+                        }
+                    }
+                }   
+
+                cs->setOpacity(dabPointer, alphaValue, 1);
                 dabPointer += pixelSize;
+
             }//endfor x
             //printf("\n");
 
@@ -191,6 +208,9 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         double cosa = cos(angle);
         double sina = sin(angle);
         
+        qreal random = 1.0;
+        quint8 alphaValue = OPACITY_TRANSPARENT_U8;
+        
         for (int y = 0; y < dstHeight; y++) {
             for (int x = 0; x < dstWidth; x++) {
 
@@ -208,11 +228,23 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                     }
                 }
                 
-                qreal random = 1.0;
                 if (d->randomness != 0.0){
                     random = (1.0 - d->randomness) + d->randomness * float(rand()) / RAND_MAX;
                 }
-                cs->setOpacity(dabPointer, quint8( (OPACITY_OPAQUE_U8 - d->shape->valueAt(maskX, maskY)) * random), 1);
+                
+                alphaValue = quint8( (OPACITY_OPAQUE_U8 - d->shape->valueAt(maskX, maskY)) * random);
+
+                // avoid computation of random numbers if density is full
+                if (d->density != 1.0){
+                    // compute density only for visible pixels of the mask
+                    if (alphaValue != OPACITY_TRANSPARENT_U8){
+                        if ( !(d->density >= drand48()) ){
+                            alphaValue = OPACITY_TRANSPARENT_U8;
+                        }
+                    }
+                }   
+
+                cs->setOpacity(dabPointer, alphaValue, 1);
                 dabPointer += pixelSize;
             }//endfor x
             if (!color && coloringInformation) {
@@ -236,29 +268,24 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
     e.setAttribute("spacing", spacing());
     e.setAttribute("angle", d->angle);
     e.setAttribute("randomness", d->randomness);
+    e.setAttribute("density", d->density);
 }
 
 QImage KisAutoBrush::createBrushPreview()
 {
-    int width = qMax((int)(d->shape->width() + 0.5), 1);
-    int height = qMax((int)(d->shape->height() + 0.5), 1);
-    QImage image(width, height, QImage::Format_ARGB32);
+    srand(0);
+    srand48(0);
+    int width = maskWidth(1.0, d->angle);
+    int height = maskHeight(1.0, d->angle);
+    
+    KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, 0, KisVector2D::Zero(), 0, 0);
 
-    double centerX = image.width() * 0.5;
-    double centerY = image.height() * 0.5;
-    qreal random = 1.0;
-    for (int j = 0; j < height; ++j) {
-        QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(j));
-        for (int i = 0; i < width; ++i) {
-            if (d->randomness != 0.0){
-                random = (1.0 - d->randomness) + d->randomness * float(rand()) / RAND_MAX;
-            }
-            
-            qint8 v = 255 - (255 - d->shape->valueAt(i - centerX, j - centerY)) * random;
-            pixel[i] = qRgb(v, v, v);
-        }
-    }
-    return image.transformed(QTransform().rotate(-d->angle * 180 / M_PI));
+    KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice( KoColorSpaceRegistry::instance()->rgb8() );
+    fdev->setRect(QRect(0, 0, width, height));
+    fdev->initialize();
+
+    mask(fdev,1.0, 1.0, 0.0, info);
+    return fdev->convertToQImage();
 }
 
 QPointF KisAutoBrush::hotSpot(double scaleX, double scaleY, double rotation) const
@@ -274,6 +301,16 @@ const KisMaskGenerator* KisAutoBrush::maskGenerator() const
 qreal KisAutoBrush::angle() const
 {
     return d->angle;
+}
+
+qreal KisAutoBrush::density() const
+{
+    return d->density;
+}
+
+qreal KisAutoBrush::randomness() const
+{
+    return d->randomness;
 }
 
 

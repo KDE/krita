@@ -138,7 +138,7 @@ void KoConfigMiscPage::apply()
     KConfigGroup miscGroup = d->config->group("Misc");
 
     int currentUnit = d->unit->currentIndex();
-    if ( currentUnit >= 0 && d->oldUnit.indexInList() != static_cast<uint>(currentUnit)) {
+    if (d->oldUnit.indexInList() != currentUnit) {
         d->oldUnit = KoUnit((KoUnit::Unit)currentUnit);
         d->doc->setUnit(d->oldUnit);
         miscGroup.writeEntry("Units", KoUnit::unitName(d->oldUnit));

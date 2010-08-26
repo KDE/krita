@@ -26,6 +26,8 @@ set(kritalibpaintop_LIB_SRCS
     kis_pressure_hsv_option.cpp
     kis_pressure_opacity_option.cpp
     kis_pressure_mirror_option.cpp
+    kis_pressure_scatter_option.cpp
+    kis_pressure_scatter_option_widget.cpp
     kis_pressure_mirror_option_widget.cpp
     kis_pressure_rate_option.cpp
     kis_pressure_rate_option_widget.cpp

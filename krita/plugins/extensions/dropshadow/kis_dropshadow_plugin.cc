@@ -72,10 +72,10 @@ void KisDropshadowPlugin::slotDropshadow()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisPaintDeviceSP dev = m_view->activeDevice();
-    if (!dev) return;
+    KisLayerSP layer = m_view->activeLayer();
+    if (!layer) return;
 
-    DlgDropshadow * dlgDropshadow = new DlgDropshadow(dev->colorSpace()->name(),
+    DlgDropshadow * dlgDropshadow = new DlgDropshadow(layer->colorSpace()->name(),
             image->colorSpace()->name(),
             m_view, "Dropshadow");
     Q_CHECK_PTR(dlgDropshadow);

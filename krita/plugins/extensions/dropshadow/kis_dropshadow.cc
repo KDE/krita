@@ -85,7 +85,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
     KisLayerSP src = m_view->activeLayer();
     if (!src) return;
 
-    KisPaintDeviceSP dev = m_view->activeDevice();
+    KisPaintDeviceSP dev = src->projection();
     if (!dev) return;
 
     image->undoAdapter()->beginMacro(i18n("Add Drop Shadow"));

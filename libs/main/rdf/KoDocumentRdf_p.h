@@ -25,16 +25,16 @@
 class KoDocumentRdfPrivate
 {
 public:
-    Soprano::Model *m_model; ///< Main Model containing all Rdf for doc
+    Soprano::Model *model; ///< Main Model containing all Rdf for doc
     typedef QList<KoTextInlineRdf*> m_inlineRdfObjects_t;
-    m_inlineRdfObjects_t m_inlineRdfObjects;  ///< Cache of weak pointers to inline Rdf
-    KoRdfPrefixMapping *m_prefixMapping;     ///< prefix -> URI mapping
+    m_inlineRdfObjects_t inlineRdfObjects;  ///< Cache of weak pointers to inline Rdf
+    KoRdfPrefixMapping *prefixMapping;     ///< prefix -> URI mapping
 
-    QList<KoRdfFoaF*> m_foafObjects;
-    QList<KoRdfCalendarEvent*> m_calObjects;
-    QList<KoRdfLocation*> m_locObjects;
+    QList<KoRdfFoaF*> foafObjects;
+    QList<KoRdfCalendarEvent*> calObjects;
+    QList<KoRdfLocation*> locObjects;
 
-    QMap<QString,QList<KoSemanticStylesheet*> > m_userStylesheets;
+    QMap<QString,QList<KoSemanticStylesheet*> > userStylesheets;
 
     KoDocumentRdfPrivate();
     ~KoDocumentRdfPrivate();

@@ -60,6 +60,9 @@ public:
     /// @returns the selected resource, 0 is no resource is selected
     KoResource * currentResource();
 
+    /// Sets the item representing the resource as selected
+    void setCurrentResource(KoResource* resource);
+
     /**
      * Sets the sected resource, does nothing if there is no valid item
      * @param row row of the item

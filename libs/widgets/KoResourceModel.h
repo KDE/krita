@@ -52,6 +52,8 @@ public:
         /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
         LargeThumbnailRole = 33
     };
+    
+    QModelIndex indexFromResource(KoResource* resource);
 
 private slots:
     void resourceAdded(KoResource *resource);

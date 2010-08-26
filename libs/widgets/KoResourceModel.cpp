@@ -154,4 +154,12 @@ void KoResourceModel::resourceChanged(KoResource* resource)
     emit dataChanged(modelIndex, modelIndex);
 }
 
+QModelIndex KoResourceModel::indexFromResource(KoResource* resource)
+{
+    int resourceIndex = m_resourceAdapter->resources().indexOf(resource);
+    int row = resourceIndex / columnCount();
+    int column = resourceIndex % columnCount();
+    return index(row, column);    
+}
+
 #include <KoResourceModel.moc>

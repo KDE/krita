@@ -203,6 +203,15 @@ KoResource *  KoResourceItemChooser::currentResource()
     return 0;
 }
 
+void KoResourceItemChooser::setCurrentResource(KoResource* resource)
+{
+    QModelIndex index = d->model->indexFromResource(resource);
+    if( !index.isValid() )
+        return;
+
+    d->view->setCurrentIndex(index);
+}
+
 void KoResourceItemChooser::setCurrentItem(int row, int column)
 {
     QModelIndex index = d->model->index(row, column);

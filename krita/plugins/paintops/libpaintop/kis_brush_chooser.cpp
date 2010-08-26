@@ -157,7 +157,9 @@ KisBrushChooser::~KisBrushChooser()
 
 void KisBrushChooser::setBrush(KisBrushSP _brush)
 {
-    Q_UNUSED(_brush);
+    KoResource *resource = static_cast<KoResource*>(_brush.data());
+    m_itemChooser->setCurrentResource( resource );
+    update( resource );
     /*
       XXX: why is this uncommented?
 

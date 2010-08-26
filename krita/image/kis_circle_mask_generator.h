@@ -40,6 +40,8 @@ public:
     virtual quint8 valueAt(qreal x, qreal y) const;
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
+    
+    virtual void setSoftness(qreal softness);
 
 private:
 

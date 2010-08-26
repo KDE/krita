@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004,2007-2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,7 +19,7 @@
 
 #include "kis_mask_generator.h"
 
-#include <math.h>
+#include <cmath>
 
 #include <QDomDocument>
 
@@ -34,6 +35,7 @@ KisMaskGenerator::KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv
     d->m_ratio = ratio;
     d->m_fh = 0.5 * fh;
     d->m_fv = 0.5 * fv;
+    d->softness = 1.0; // by default don't change fade/softness/hardness
     d->m_spikes = spikes;
     d->type = type;
     init();
@@ -113,6 +115,18 @@ qreal KisMaskGenerator::ratio() const
 {
     return d->m_ratio;
 }
+
+qreal KisMaskGenerator::softness() const
+{
+    return d->softness;
+}
+
+
+void KisMaskGenerator::setSoftness(qreal softness)
+{
+    d->softness = softness;
+}
+
 
 qreal KisMaskGenerator::horizontalFade() const
 {

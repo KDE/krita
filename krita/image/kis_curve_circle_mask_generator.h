@@ -22,10 +22,15 @@
 #include "krita_export.h"
 
 #include "kis_mask_generator.h"
+#include <QList>
+#include <QVector>
 
 class KisCubicCurve;
 class QDomElement;
 class QDomDocument;
+
+class QPointF;
+
 
 /**
  * This mask generator use softness/hardness defined by user curve
@@ -42,7 +47,10 @@ public:
     virtual quint8 valueAt(qreal x, qreal y) const;
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
-
+    virtual void setSoftness(qreal softness);
+    
+    static void transformCurveForSoftness(qreal softness,const QList<QPointF> &points, int curveResolution, QVector<qreal> &result);
+    
 private:
 
     qreal norme(qreal a, qreal b) const {

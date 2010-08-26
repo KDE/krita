@@ -27,12 +27,15 @@
 
 #include "kis_curve_circle_mask_generator.h"
 #include "kis_cubic_curve.h"
+#include <QPointF>
 
 struct KisCurveCircleMaskGenerator::Private {
     qreal xcoef, ycoef;
     qreal cachedSpikesAngle;
     QVector<qreal> curveData;
+    QList<QPointF> curvePoints;
     QString curve;
+    bool dirty;
 };
 
 KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve)
@@ -42,7 +45,9 @@ KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal radius, qreal rat
     d->ycoef = 2.0 / (KisMaskGenerator::d->m_ratio * width());
     d->cachedSpikesAngle = M_PI / KisMaskGenerator::d->m_spikes;
     d->curveData = curve.floatTransfer( width() + 2);
+    d->curvePoints = curve.points();
     d->curve = curve.toString();
+    d->dirty = false;
 }
 
 KisCurveCircleMaskGenerator::~KisCurveCircleMaskGenerator()
@@ -73,7 +78,8 @@ quint8 KisCurveCircleMaskGenerator::valueAt(qreal x, qreal y) const
     
         quint16 alphaValue = distance;
         qreal alphaValueF = distance - alphaValue;
-           
+        
+        
         qreal alpha = (
             (1.0 - alphaValueF) * d->curveData.at(alphaValue) + 
                     alphaValueF * d->curveData.at(alphaValue+1));
@@ -89,3 +95,36 @@ void KisCurveCircleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
     e.setAttribute("softness_curve", d->curve);
 }
 
+void KisCurveCircleMaskGenerator::setSoftness(qreal softness)
+{
+    // performance
+    if (!d->dirty && softness == 1.0) return;
+    d->dirty = true;
+    KisMaskGenerator::setSoftness(softness);
+    KisCurveCircleMaskGenerator::transformCurveForSoftness(softness,d->curvePoints, width() + 2, d->curveData);
+}
+
+void KisCurveCircleMaskGenerator::transformCurveForSoftness(qreal softness,const QList<QPointF> &points, int curveResolution, QVector< qreal >& result)
+{
+    softness *= 2.0;
+    QList<QPointF> newList = points;
+    newList.detach();
+    
+    int size = newList.size();
+    if (size == 2){
+        // make place for new point in the centre
+        newList.append(newList.at(1));
+        newList[1] = (newList.at(0) + newList.at(2)) * 0.5;
+        // transoform it
+        newList[1].setY(qBound(0.0,newList.at(1).y() * softness,1.0));
+    }else{
+        // transform all points except first and last
+        for (int i = 1; i < size-1; i++){
+            newList[i].setY(qBound(0.0,newList.at(i).y() * softness,1.0));
+        }
+    }
+
+    // compute the data
+    KisCubicCurve curve(newList);
+    result = curve.floatTransfer( curveResolution );
+}

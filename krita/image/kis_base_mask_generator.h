@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008-2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -75,9 +76,14 @@ public:
     qreal verticalFade() const;
     int spikes() const;
     Type type() const;
+    
+    qreal softness() const;
+    virtual void setSoftness(qreal softness);
+    
 protected:
     struct Private {
         qreal m_radius, m_ratio;
+        qreal softness;
         qreal m_fh, m_fv;
         int m_spikes;
         qreal cs, ss;

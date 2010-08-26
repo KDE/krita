@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004,2007-2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,11 +17,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_circle_mask_generator.h"
-#include "kis_fast_math.h"
+#include <cmath>
 
-#include <math.h>
 #include <QDomDocument>
+
+#include "kis_fast_math.h"
+#include "kis_circle_mask_generator.h"
+#include "kis_base_mask_generator.h"
 
 struct KisCircleMaskGenerator::Private {
     double xcoef, ycoef;
@@ -67,7 +70,10 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
     if (n > 1) {
         return 255;
     } else {
-        double normeFade = norme(xr * d->xfadecoef, yr * d->yfadecoef);
+        qreal transformedFadeX = d->xfadecoef * softness();
+        qreal transformedFadeY = d->yfadecoef * softness();
+        
+        double normeFade = norme(xr * transformedFadeX, yr * transformedFadeY);
         if (normeFade > 1) {
             double xle, yle;
             // xle stands for x-coordinate limit exterior
@@ -84,7 +90,7 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
                 yle = xle * c;
             }
             // On the internal limit of the fade area, normeFade is equal to 1
-            double normeFadeLimitE = norme(xle * d->xfadecoef, yle * d->yfadecoef);
+            double normeFadeLimitE = norme(xle * transformedFadeX, yle * transformedFadeY);
             return (uchar)(255 *(normeFade - 1) / (normeFadeLimitE - 1));
         } else {
             return 0;
@@ -98,3 +104,11 @@ void KisCircleMaskGenerator::toXML(QDomDocument& d, QDomElement& e) const
     e.setAttribute("type", "circle");
 }
 
+void KisCircleMaskGenerator::setSoftness(qreal softness)
+{
+    if (softness == 0){
+        KisMaskGenerator::setSoftness(1.0);
+    }else{
+        KisMaskGenerator::setSoftness(1.0 / softness);
+    }
+}

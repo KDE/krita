@@ -23,17 +23,24 @@
 #include <QDomDocument>
 #include <QVector>
 #include "kis_cubic_curve.h"
+#include <QPointF>
 
 struct KisCurveRectangleMaskGenerator::Private {
     QVector<qreal> curveData;
+    QList<QPointF> curvePoints;
+    int curveResolution;
     QString curve;
+    bool dirty;
 };
 
 KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve)
         : KisMaskGenerator(radius, ratio, fh, fv, spikes, RECTANGLE), d(new Private)
 {
+    d->curveResolution = qRound(width());
+    d->curveData = curve.floatTransfer( d->curveResolution + 1); 
+    d->curvePoints = curve.points();
     d->curve = curve.toString();
-    d->curveData = curve.floatTransfer(width() + 1); 
+    d->dirty = false;
 }
 
 KisCurveRectangleMaskGenerator::~KisCurveRectangleMaskGenerator()
@@ -51,8 +58,8 @@ quint8 KisCurveRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     double s = qAbs(x) / width();
     double t = qAbs(y) / height();
     
-    int sIndex = qRound(s * width());
-    int tIndex = qRound(t * width());
+    int sIndex = qRound(s * (d->curveResolution));
+    int tIndex = qRound(t * (d->curveResolution));
     
     int sIndexInverted = width() - sIndex;
     int tIndexInverted = width() - tIndex;
@@ -68,5 +75,14 @@ void KisCurveRectangleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) co
     KisMaskGenerator::toXML(doc, e);
     e.setAttribute("type", "curve_rect");
     e.setAttribute("softness_curve", d->curve);
+}
+
+void KisCurveRectangleMaskGenerator::setSoftness(qreal softness)
+{
+    // performance
+    if (!d->dirty && softness == 1.0) return;
+    d->dirty = true;
+    KisMaskGenerator::setSoftness(softness);
+    KisCurveCircleMaskGenerator::transformCurveForSoftness(softness,d->curvePoints, d->curveResolution + 1, d->curveData);
 }
 

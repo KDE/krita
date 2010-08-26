@@ -33,6 +33,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_pressure_rate_option_widget.cpp
     kis_pressure_rotation_option.cpp
     kis_pressure_size_option.cpp
+    kis_pressure_softness_option.cpp
     kis_pressure_mix_option.cpp
     kis_sensor_selector.cc
     kis_text_brush_chooser.cpp

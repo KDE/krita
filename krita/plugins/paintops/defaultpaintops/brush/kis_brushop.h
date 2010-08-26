@@ -31,6 +31,7 @@
 #include <kis_pressure_mix_option.h>
 #include <kis_pressure_hsv_option.h>
 #include <kis_pressure_mirror_option.h>
+#include <kis_pressure_scatter_option.h>
 
 class KisBrushBasedPaintOpSettings;
 
@@ -58,8 +59,10 @@ private:
     KisPressureDarkenOption m_darkenOption;
     KisPressureRotationOption m_rotationOption;
     KisPressureMixOption m_mixOption;
+    KisPressureScatterOption m_scatterOption;
     QList<KisPressureHSVOption*> m_hsvOptions;
     KoColorTransformation* m_hsvTransfo;
+
 };
 
 #endif // KIS_BRUSHOP_H_

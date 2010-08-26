@@ -4,6 +4,7 @@
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com> 
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +26,7 @@
 #include <QRect>
 
 #include <kis_image.h>
+#include <kis_vec.h>
 #include <kis_debug.h>
 
 #include <KoColorTransformation.h>
@@ -66,11 +68,14 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_darkenOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
     m_mixOption.readOptionSetting(settings);
+    m_scatterOption.readOptionSetting(settings);
+    
     m_sizeOption.sensor()->reset();
     m_mirrorOption.sensor()->reset();
     m_opacityOption.sensor()->reset();
     m_darkenOption.sensor()->reset();
     m_rotationOption.sensor()->reset();
+    m_scatterOption.sensor()->reset();
 }
 
 KisBrushOp::~KisBrushOp()
@@ -100,7 +105,9 @@ double KisBrushOp::paintAt(const KisPaintInformation& info)
     double rotation = m_rotationOption.apply(info);
     
     QPointF hotSpot = brush->hotSpot(scale, scale, rotation);
-    QPointF pt = info.pos() - hotSpot;
+    // return info.pos() if sensor is not enabled
+    QPointF pos = m_scatterOption.apply(info, qMax(brush->width(), brush->height()) * scale); 
+    QPointF pt = pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines

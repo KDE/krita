@@ -32,6 +32,7 @@
 #include <kis_pressure_hsv_option.h>
 #include <kis_airbrush_option.h>
 #include <kis_pressure_mirror_option_widget.h>
+#include <kis_pressure_scatter_option_widget.h>
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
         : KisBrushBasedPaintopOptionWidget(parent)
@@ -48,6 +49,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption()));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createValueOption()));
     addPaintOpOption(new KisAirbrushOption(false));
+    addPaintOpOption(new KisPressureScatterOptionWidget());
     addPaintOpOption(new KisPaintActionTypeOption());
 }
 

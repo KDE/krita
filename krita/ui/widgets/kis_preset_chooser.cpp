@@ -70,8 +70,9 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     if(preview.isNull()) {
         return;
     }
-    painter->drawImage(option.rect.x(), option.rect.y(),
-                       preview.scaled(option.rect.size(), Qt::IgnoreAspectRatio));
+    QRect paintRect = option.rect.adjusted(2, 2, -2, -2);
+    painter->drawImage(paintRect.x(), paintRect.y(),
+                       preview.scaled(paintRect.size(), Qt::IgnoreAspectRatio));
 }
 
 class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>

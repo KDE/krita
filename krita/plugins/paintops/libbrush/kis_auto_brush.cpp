@@ -62,11 +62,13 @@ KisAutoBrush::~KisAutoBrush()
     delete d;
 }
 
+
+
 void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         KisBrush::ColoringInformation* coloringInformation,
         double scaleX, double scaleY, double angle,
         const KisPaintInformation& info,
-        double subPixelX , double subPixelY) const
+        double subPixelX , double subPixelY, qreal softnessFactor) const
 {
     Q_UNUSED(info);
 
@@ -148,6 +150,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         
         // precompute the table for interpolation 
         int pos = 0;
+        d->shape->setSoftness(softnessFactor);
         for (int y = 0; y < halfHeight; y++){
             for (int x = 0; x < halfWidth; x++, pos++){
                 double maskX = x * invScaleX;
@@ -210,7 +213,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         
         qreal random = 1.0;
         quint8 alphaValue = OPACITY_TRANSPARENT_U8;
-        
+        d->shape->setSoftness( softnessFactor );
         for (int y = 0; y < dstHeight; y++) {
             for (int x = 0; x < dstWidth; x++) {
 

@@ -104,8 +104,9 @@ public:
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
             double scaleX, double scaleY, double angle,
             const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0) const;
+            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
+            
 
 protected:
 

@@ -53,7 +53,7 @@ enum enumBrushType {
     AIRBRUSH
 };
 
-
+static const qreal DEFAULT_SOFTNESS_FACTOR = 1.0;
 
 class KisBrush;
 typedef KisSharedPtr<KisBrush> KisBrushSP;
@@ -206,7 +206,7 @@ public:
     void mask(KisFixedPaintDeviceSP dst,
               double scaleX, double scaleY, double angle,
               const KisPaintInformation& info = KisPaintInformation(),
-              double subPixelX = 0, double subPixelY = 0) const;
+              double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
     /**
      * clear dst fill it with a mask colored with KoColor
@@ -215,7 +215,7 @@ public:
               const KoColor& color,
               double scaleX, double scaleY, double angle,
               const KisPaintInformation& info = KisPaintInformation(),
-              double subPixelX = 0, double subPixelY = 0) const;
+              double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
     /**
      * clear dst and fill it with a mask colored with the corresponding colors of src
@@ -224,7 +224,7 @@ public:
               const KisPaintDeviceSP src,
               double scaleX, double scaleY, double angle,
               const KisPaintInformation& info = KisPaintInformation(),
-              double subPixelX = 0, double subPixelY = 0) const;
+              double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
 
     virtual bool hasColor() const;
@@ -253,7 +253,7 @@ public:
                                                      ColoringInformation* coloringInfo,
                                                      double scaleX, double scaleY, double angle,
                                                      const KisPaintInformation& info = KisPaintInformation(),
-                                                     double subPixelX = 0, double subPixelY = 0) const;
+                                                     double subPixelX = 0, double subPixelY = 0,qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
 
     /**

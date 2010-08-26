@@ -49,8 +49,11 @@ public:
             KisBrush::ColoringInformation* src,
             double scaleX, double scaleY, double angle,
             const KisPaintInformation& info = KisPaintInformation(),
-            double subPixelX = 0, double subPixelY = 0) const;
+            double subPixelX = 0, double subPixelY = 0,
+            qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
+
+            
 public:
 
     bool load() {

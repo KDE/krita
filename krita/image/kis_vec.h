@@ -23,6 +23,7 @@
 
 #include <QPoint>
 #include <Eigen/Core>
+#include <QVector2D>
 
 typedef Eigen::Matrix<qreal, 2, 1> KisVector2D;
 typedef Eigen::Matrix<qreal, 3, 1> KisVector3D;
@@ -40,6 +41,11 @@ template<typename ExpressionType>
 inline QPointF toQPointF(const ExpressionType& expr)
 {
     return QPointF(expr.x(), expr.y());
+}
+
+template<typename ExpressionType>
+inline QVector2D toQVector2D(const ExpressionType& expr){
+    return QVector2D(expr.x(), expr.y());
 }
 
 inline KisVector2D nullKisVector2D()

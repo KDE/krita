@@ -58,46 +58,49 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     if (! index.isValid())
         return;
 
-    const QAbstractProxyModel* proxyModel = dynamic_cast<const QAbstractProxyModel*>(index.model());
-    QModelIndex originalIndex = proxyModel->mapToSource(index);
-    KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(originalIndex.internalPointer());
+    KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(index.internalPointer());
 
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
         painter->fillRect(option.rect, option.palette.highlight());
     }
 
-    painter->setPen(Qt::black);
-    painter->drawText(option.rect.x() + 255, option.rect.y() + option.rect.height() - 5, preset->name());
-
-    QRect previewRect = QRect(option.rect.x(), option.rect.y(), 250, option.rect.height());
     QImage preview = preset->image();
 
     if(preview.isNull()) {
         return;
     }
-    painter->drawImage(previewRect.x(), previewRect.y(),
-                       preview.scaled(previewRect.size(), Qt::KeepAspectRatio));
+    painter->drawImage(option.rect.x(), option.rect.y(),
+                       preview.scaled(option.rect.size(), Qt::IgnoreAspectRatio));
 }
 
-class KisPresetProxyModel : public QSortFilterProxyModel
+class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>
 {
 public:
-    KisPresetProxyModel(QObject * parent = 0)
-        : QSortFilterProxyModel(parent), m_showAll(false){}
-    virtual ~KisPresetProxyModel() {}
+    KisPresetProxyAdapter(KoResourceServer< KisPaintOpPreset >* resourceServer)
+         : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer), m_showAll(false){}
+    virtual ~KisPresetProxyAdapter() {}
+    
+    virtual QList< KoResource* > resources() {
+        if( ! resourceServer() )
+            return QList<KoResource*>();
 
-    ///Reimplemented
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+        QList<KisPaintOpPreset*> serverResources = resourceServer()->resources();
+
+        QList<KoResource*> resources;
+        foreach( KisPaintOpPreset* resource, serverResources ) {
+            if(filterAcceptsPreset(resource)) {
+                resources.append( resource );
+            }
+        }
+        return resources;      
+    }
+
+    bool filterAcceptsPreset(KisPaintOpPreset* preset) const
     {
         if(m_paintopID.id().isEmpty())
             return true;
 
-        QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
-        if(!index.isValid())
-            return false;
-
-        KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(index.internalPointer());
         return ((preset->paintOp() == m_paintopID || m_showAll) &&
                 preset->name().contains(m_nameFilter, Qt::CaseInsensitive));
     }
@@ -119,6 +122,11 @@ public:
     {
         m_showAll = show;
     }
+    
+    ///Resets the model connected to the adapter
+    void invalidate() {
+        emitRemovingResource(0);
+    }
 
 private:
     KoID m_paintopID;
@@ -132,13 +140,11 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     setObjectName(name);
     QVBoxLayout * layout = new QVBoxLayout(this);
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisPaintOpPreset>(rserver);
-    m_chooser = new KoResourceItemChooser(adapter, this);
+    m_presetProxy = new KisPresetProxyAdapter(rserver);
+    m_chooser = new KoResourceItemChooser(m_presetProxy, this);
     m_chooser->showGetHotNewStuff(true, true);
-    m_presetProxy = new KisPresetProxyModel(this);
-    m_chooser->setProxyModel(m_presetProxy);
-    m_chooser->setColumnCount(1);
-    m_chooser->setRowHeight(60);
+    m_chooser->setColumnCount(10);
+    m_chooser->setRowHeight(50);
     m_chooser->setItemDelegate(new KisPresetDelegate(this));
     layout->addWidget(m_chooser);
 

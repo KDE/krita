@@ -80,7 +80,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setCanvasColor(Qt::white);
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
-    m_d->uiWdgPaintOpPresetSettings.scratchPad->setCutoutOverlay(QRect(0, 0, 250, 60));
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->setCutoutOverlay(QRect(25, 25, 200, 200));
     m_d->uiWdgPaintOpPresetSettings.fillLayer->setIcon(KIcon("newlayer"));
     m_d->uiWdgPaintOpPresetSettings.fillGradient->setIcon(KIcon("krita_tool_gradient"));
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KIcon("krita_tool_color_fill"));

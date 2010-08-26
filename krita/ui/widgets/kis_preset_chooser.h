@@ -22,7 +22,7 @@
 #include <krita_export.h>
 #include <KoID.h>
 
-class KisPresetProxyModel;
+class KisPresetProxyAdapter;
 class KoResourceItemChooser;
 class KoResource;
 
@@ -55,7 +55,7 @@ public slots:
 
 private:
     KoResourceItemChooser *m_chooser;
-    KisPresetProxyModel *m_presetProxy;
+    KisPresetProxyAdapter *m_presetProxy;
 };
 
 #endif // KIS_ITEM_CHOOSER_H_

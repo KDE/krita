@@ -76,7 +76,7 @@ public:
             m_resourceServer->addObserver(this);
     }
 
-    QList<KoResource*> resources() 
+    virtual QList<KoResource*> resources() 
     {
         if( ! m_resourceServer )
             return QList<KoResource*>();
@@ -142,6 +142,12 @@ public:
             return QString();
 
         return m_resourceServer->extensions();
+    }
+    
+protected:
+    KoResourceServer<T>* resourceServer()
+    {
+        return m_resourceServer;
     }
 
 private:

@@ -59,7 +59,7 @@
 #include <kis_convolution_painter.h>
 #include <commands/kis_node_commands.h>
 #include <kis_layer_manager.h>
-
+#include <kis_node_commands_adapter.h>
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
@@ -79,6 +79,8 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
 {
     QColor color = c;
 
+    if(!m_view) return;
+    
     KisImageWSP image = m_view->image();
     if (!image) return;
 
@@ -125,12 +127,9 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
     if (!progressUpdater->interrupted()) {
         shadowDev->move(xoffset, yoffset);
 
-        KisGroupLayerSP parent = image->rootLayer();
-        if (m_view)
-            parent = dynamic_cast<KisGroupLayer*>(m_view->activeLayer()->parent().data());
-
         KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), i18n("Drop Shadow"), opacity, shadowDev));
-        image->addNode(l.data(), parent.data(), src->nextSibling());
+        KisNodeCommandsAdapter commandAdapter(m_view);
+        commandAdapter.addNode(l, src->parent(), src->prevSibling());
 
         if (allowResize) {
             QRect shadowBounds = shadowDev->exactBounds();

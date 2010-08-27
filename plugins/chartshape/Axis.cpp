@@ -73,6 +73,7 @@
 #include "ChartProxyModel.h"
 #include "TextLabelDummy.h"
 #include "Layout.h"
+#include <KDChartBackgroundAttributes>
 
 
 using namespace KChart;
@@ -967,6 +968,9 @@ Axis::Axis( PlotArea *parent )
 
     d->plotArea = parent;
     d->kdAxis       = new KDChart::CartesianAxis();
+    KDChart::BackgroundAttributes batt( d->kdAxis->backgroundAttributes() );
+    batt.setBrush( QBrush( Qt::white ) );
+    d->kdAxis->setBackgroundAttributes( batt );
     d->kdPlane      = new KDChart::CartesianCoordinatePlane();
     d->kdPolarPlane = new KDChart::PolarCoordinatePlane();
 
@@ -1533,7 +1537,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                     styleStack.setTypeProperties( "graphic" );
                     if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-color" ) ) {
                         const QString strokeColor = styleStack.property( KoXmlNS::svg, "stroke-color" );
-                        d->showMajorGrid = true;
+                        //d->showMajorGrid = true;
                         if ( major )
                             gridPen = QPen( QColor( strokeColor ) );
                         else

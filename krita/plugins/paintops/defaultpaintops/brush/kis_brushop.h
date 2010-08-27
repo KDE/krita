@@ -52,6 +52,7 @@ public:
     virtual ~KisBrushOp();
 
     double paintAt(const KisPaintInformation& info);
+    virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
 
 private:
     KisColorSource* m_colorSource;
@@ -66,7 +67,7 @@ private:
     KisPressureScatterOption m_scatterOption;
     QList<KisPressureHSVOption*> m_hsvOptions;
     KoColorTransformation* m_hsvTransfo;
-
+    KisPaintDeviceSP m_dab;
 };
 
 #endif // KIS_BRUSHOP_H_

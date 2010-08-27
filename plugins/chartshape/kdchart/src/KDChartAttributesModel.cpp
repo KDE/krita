@@ -1,29 +1,24 @@
-/* -*- Mode: C++ -*-
-   KDChart - a multi-platform charting engine
-   */
-
 /****************************************************************************
- ** Copyright (C) 2001-2007 Klaralvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #include "KDChartAttributesModel.h"
 #include "KDChartPalette.h"
@@ -295,9 +290,22 @@ QVariant AttributesModel::headerData ( int section,
                                        int role/* = Qt::DisplayRole */ ) const
 {
   if( sourceModel() ) {
-      QVariant sourceData = sourceModel()->headerData( section, orientation, role );
+      const QVariant sourceData = sourceModel()->headerData( section, orientation, role );
       if ( sourceData.isValid() ) return sourceData;
   }
+
+  if( orientation == Qt::Horizontal && role == ColumnDataRole )
+  {
+    // it seems the source model doesn't like the idea of handing out all the column data at once...
+    // so we have to do it manually.
+    QVariantList result;
+    const int rows = sourceModel()->rowCount();
+    for( int row = 0; row < rows; ++row )
+        result.push_back( sourceModel()->index( row, section ).data() );
+
+    return result;
+  }
+
 
   // the source model didn't have data set, let's use our stored values
   const QMap<int, QMap<int, QVariant> >& map = orientation == Qt::Horizontal ? mHorizontalHeaderDataMap : mVerticalHeaderDataMap;
@@ -308,10 +316,17 @@ QVariant AttributesModel::headerData ( int section,
       }
   }
 
+  return defaultHeaderData( section, orientation, role );
+}
+
+
+QVariant AttributesModel::defaultHeaderData ( int section, Qt::Orientation orientation, int role ) const
+{
   // Default values if nothing else matches
   switch ( role ) {
   case Qt::DisplayRole:
-      return QLatin1String( orientation == Qt::Vertical ?  "Series " : "Item " ) + QString::number( section + 1 ) ;
+      //TODO for KDChart 3.0: Change to "return QString::number( section+1 );"
+      return QLatin1String( orientation == Qt::Vertical ?  "Series " : "Item " ) + QString::number( section ) ;
 
   case KDChart::DatasetBrushRole: {
       if ( paletteType() == PaletteTypeSubdued )
@@ -322,7 +337,7 @@ QVariant AttributesModel::headerData ( int section,
           return Palette::defaultPalette().getBrush( section );
       else
           qWarning("Unknown type of fallback palette!");
-  }
+  } break;
   case KDChart::DatasetPenRole: {
       // default to the color set for the brush (or it's defaults)
       // but only if no per model override was set
@@ -330,14 +345,13 @@ QVariant AttributesModel::headerData ( int section,
           QBrush brush = qVariantValue<QBrush>( headerData( section, orientation, DatasetBrushRole ) );
           return QPen( brush.color() );
       }
-  }
+  } break;
   default:
       break;
   }
 
   return QVariant();
 }
-
 
 // Note: Our users NEED this method - even if
 //       we do not need it at drawing time!
@@ -365,7 +379,7 @@ QVariant AttributesModel::data( int column, int role ) const
   if ( isKnownAttributesRole( role ) ) {
       // check if there is something set for the column (dataset)
       QVariant v;
-      v = headerData( column, Qt::Vertical, role );
+      v = headerData( column, Qt::Horizontal, role );
 
       // check if there is something set at global level
       if ( !v.isValid() )

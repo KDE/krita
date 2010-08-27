@@ -1,25 +1,24 @@
 /****************************************************************************
- ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #ifndef KDCHARTABSTRACTDIAGRAM_H
 #define KDCHARTABSTRACTDIAGRAM_H
@@ -567,8 +566,30 @@ namespace KDChart {
         QList<MarkerAttributes> datasetMarkers() const;
 
 
-        // configure the ordinate in percent mode - values 0 to 100
+        /**
+         * \deprecated
+         *
+         * \brief Deprecated method that turns the percent mode of this diagram on or off.
+         *
+         * This method is deprecated. Use the setType() method of a supporting diagram implementation
+         * instead, e.g. BarDiagram::setType().
+         *
+         * \see percentMode
+         */
         void setPercentMode( bool percent );
+
+
+        /**
+         * \brief Returns whether this diagram is drawn in percent mode.
+         *
+         * If true, all data points in the same column of a diagram will
+         * be be drawn at the same X coordinate and stacked up so that the distance from the
+         * last data point (or the zero line) to a data point P is always the ratio of (Y-Value of P)/
+         * (sum of all Y-Values in same column as P) relative to the diagrams height
+         * (or width, if abscissa and ordinate are swapped).
+         *
+         * Note that this property is not applicable to all diagram types.
+         */
         bool percentMode() const;
 
         virtual void paintMarker( QPainter* painter,
@@ -593,10 +614,10 @@ namespace KDChart {
         int datasetDimension() const;
 
         /**
-         * \obsolete
+         * \deprecated
          *
          * Sets the dataset dimension of the diagram. Using this method
-         * is obsolete. Use the specific diagram types instead.
+         * is deprecated. Use the specific diagram types instead.
          */
         void setDatasetDimension( int dimension );
 
@@ -630,16 +651,16 @@ namespace KDChart {
 
     protected:
         /**
-         * \obsolete
-         * This method is obsolete and provided for backward-compatibility only.
+         * \deprecated
+         * This method is deprecated and provided for backward-compatibility only.
          * Your own diagram classes should call
          * d->paintDataValueTextsAndMarkers() instead
          * which also is taking care for showing your cell-specific comments, if any,
          */
         virtual void paintDataValueTexts( QPainter* painter );
         /**
-         * \obsolete
-         * This method is obsolete and provided for backward-compatibility only.
+         * \deprecated
+         * This method is deprecated and provided for backward-compatibility only.
          * Your own diagram classes should call
          * d->paintDataValueTextsAndMarkers() instead
          * which also is taking care for showing your cell-specific comments, if any,
@@ -668,8 +689,17 @@ namespace KDChart {
         */
         void layoutChanged( AbstractDiagram* );
 
+        /**
+         * This signal is emitted when this diagram is being destroyed, but before all the
+         * data, i.e. the attributes model, is invalidated.
+         */
+        void aboutToBeDestroyed();
+
         /** This signal is emitted, when either the model or the AttributesModel is replaced. */
         void modelsChanged();
+
+        /** This signal is emitted, when the model data is changed. */
+        void modelDataChanged();
 
         /** This signal is emitted, when the hidden status of at least one data cell was (un)set. */
         void dataHidden();

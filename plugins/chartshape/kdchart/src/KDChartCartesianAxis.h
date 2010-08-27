@@ -1,29 +1,25 @@
-/* -*- Mode: C++ -*-
-   KDChart - a multi-platform charting engine
-*/
-
 /****************************************************************************
- ** Copyright (C) 2005-2007 Klarälvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
+
 #ifndef KDCHARTCARTESIANAXIS_H
 #define KDCHARTCARTESIANAXIS_H
 
@@ -81,8 +77,17 @@ namespace KDChart {
         /** reimpl */
         virtual void paintCtx( PaintContext* );
 
+        /**
+         * Sets the optional text displayed as chart title.
+         */
         void setTitleText( const QString& text );
         QString titleText() const;
+        
+        /**
+         * Sets the spacing between the title and the diagram.
+         */
+        void setTitleSpace( qreal value );
+        qreal titleSpace() const;
 
         void setTitleTextAttributes( const TextAttributes &a );
         /**
@@ -127,6 +132,17 @@ namespace KDChart {
          */
         QMap< double, QString > annotations() const;
 
+        /**
+         * Sets custom ticks on the axis.
+         * Ticks are a QList of doubles defining their special position.
+         */
+        void setCustomTicks( const QList< double >& ticksPostions );
+        /**
+         * Returns the currently set custom ticks on the axis.
+         */
+        QList< double > customTicks() const;
+
+
         /** pure virtual in QLayoutItem */
         virtual bool isEmpty() const;
         /** pure virtual in QLayoutItem */
@@ -145,8 +161,7 @@ namespace KDChart {
     public Q_SLOTS:
         void setCachedSizeDirty() const;
 
-
-        int tickLength( bool subUnitTicks = false ) const;
+        virtual int tickLength( bool subUnitTicks = false ) const;
     };
 
     typedef QList<CartesianAxis*> CartesianAxisList;

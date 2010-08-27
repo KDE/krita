@@ -1,25 +1,24 @@
 /****************************************************************************
- ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #include "KDChartCartesianGrid.h"
 #include "KDChartAbstractCartesianDiagram.h"
@@ -35,23 +34,51 @@
 
 using namespace KDChart;
 
+CartesianGrid::CartesianGrid()
+    : AbstractGrid(), m_minsteps( 2 ), m_maxsteps( 12 )
+{
+}
+
+CartesianGrid::~CartesianGrid()
+{
+}
+        
+int CartesianGrid::minimalSteps() const
+{
+    return m_minsteps;
+}
+
+void CartesianGrid::setMinimalSteps(int minsteps)
+{
+    m_minsteps = minsteps;
+}
+
+int CartesianGrid::maximalSteps() const
+{
+    return m_maxsteps;
+}
+
+void CartesianGrid::setMaximalSteps(int maxsteps)
+{
+    m_maxsteps = maxsteps;
+}
 
 void CartesianGrid::drawGrid( PaintContext* context )
 {
     //qDebug() << "KDChart::CartesianGrid::drawGrid( PaintContext* context ) called";
 
-    CartesianCoordinatePlane* origplane = dynamic_cast<CartesianCoordinatePlane*>(context->coordinatePlane());
+    CartesianCoordinatePlane* plane = dynamic_cast<CartesianCoordinatePlane*>(context->coordinatePlane());
    
     // This plane is used for tranlating the coordinates - not for the data boundaries
     PainterSaver p( context->painter() );
-    CartesianCoordinatePlane* plane = dynamic_cast< CartesianCoordinatePlane* >( origplane->sharedAxisMasterPlane( context->painter() ) );
+    plane = dynamic_cast< CartesianCoordinatePlane* >( plane->sharedAxisMasterPlane( context->painter() ) );
 
     Q_ASSERT_X ( plane, "CartesianGrid::drawGrid",
                  "Bad function call: PaintContext::coodinatePlane() NOT a cartesian plane." );
 
 
-    const GridAttributes gridAttrsX( origplane->gridAttributes( Qt::Horizontal ) );
-    const GridAttributes gridAttrsY( origplane->gridAttributes( Qt::Vertical ) );
+    const GridAttributes gridAttrsX( plane->gridAttributes( Qt::Horizontal ) );
+    const GridAttributes gridAttrsY( plane->gridAttributes( Qt::Vertical ) );
 
     //qDebug() << "OK:";
     if ( !gridAttrsX.isGridVisible() && !gridAttrsY.isGridVisible() ) return;
@@ -59,7 +86,7 @@ void CartesianGrid::drawGrid( PaintContext* context )
 
     // important: Need to update the calculated mData,
     //            before we may use it!
-    updateData( origplane );
+    updateData( context->coordinatePlane() );
 
     if( plane->axesCalcModeX() == KDChart::AbstractCoordinatePlane::Logarithmic && mData.first().stepWidth == 0.0 )
             mData.first().stepWidth = 1.0;
@@ -600,10 +627,6 @@ void CartesianGrid::calculateStepWidth(
     const qreal distance = end - start;
     //qDebug( "raw data start: %f   end: %f", start, end);
 
-    //FIXME(khz): make minSteps and maxSteps configurable by the user.
-    const int minSteps = 2;
-    const int maxSteps = 12;
-
     qreal steps;
     int power = 0;
     while( list.last() * fastPow10( power ) < distance ){
@@ -623,7 +646,7 @@ void CartesianGrid::calculateStepWidth(
     do{
         //qDebug() << "list:" << testList;
         //qDebug( "calculating steps: power: %i", power);
-        calculateSteps( start, end, testList, minSteps, maxSteps, power,
+        calculateSteps( start, end, testList, m_minsteps, m_maxsteps, power,
                         steps, stepWidth,
                         adjustLower, adjustUpper );
         --power;

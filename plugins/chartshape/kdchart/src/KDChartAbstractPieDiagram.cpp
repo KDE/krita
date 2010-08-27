@@ -1,25 +1,24 @@
 /****************************************************************************
- ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #include "KDChartAbstractPieDiagram.h"
 #include "KDChartAbstractPieDiagram_p.h"
@@ -115,8 +114,7 @@ void AbstractPieDiagram::setPieAttributes( const PieAttributes & attrs )
 
 void AbstractPieDiagram::setPieAttributes( int column, const PieAttributes & attrs )
 {
-    d->attributesModel->setHeaderData(
-        column, Qt::Vertical, qVariantFromValue( attrs ), PieAttributesRole );
+    d->setDatasetAttrs( column, qVariantFromValue( attrs ), PieAttributesRole );
     emit layoutChanged( this );
 }
 
@@ -140,9 +138,7 @@ PieAttributes AbstractPieDiagram::pieAttributes() const
 //       (khz, 2006-07-28)
 PieAttributes AbstractPieDiagram::pieAttributes( int column ) const
 {
-    const QVariant attrs(
-            d->attributesModel->headerData( column, Qt::Vertical,
-                                            PieAttributesRole ) );
+    const QVariant attrs( d->datasetAttrs( column, PieAttributesRole ) );
     if( attrs.isValid() )
         return qVariantValue< PieAttributes >( attrs );
     return pieAttributes();
@@ -165,8 +161,7 @@ void AbstractPieDiagram::setThreeDPieAttributes( const ThreeDPieAttributes & tda
 
 void AbstractPieDiagram::setThreeDPieAttributes( int column, const ThreeDPieAttributes & tda )
 {
-    d->attributesModel->setHeaderData(
-        column, Qt::Vertical, qVariantFromValue( tda ), ThreeDPieAttributesRole );
+    d->setDatasetAttrs( column, qVariantFromValue( tda ), ThreeDPieAttributesRole );
     emit layoutChanged( this );
 }
 
@@ -190,9 +185,7 @@ ThreeDPieAttributes AbstractPieDiagram::threeDPieAttributes() const
 //       (khz, 2006-07-28)
 ThreeDPieAttributes AbstractPieDiagram::threeDPieAttributes( int column ) const
 {
-    const QVariant attrs(
-            d->attributesModel->headerData( column, Qt::Vertical,
-                                            ThreeDPieAttributesRole ) );
+    const QVariant attrs( d->datasetAttrs( column, ThreeDPieAttributesRole ) );
     if( attrs.isValid() )
         return qVariantValue< ThreeDPieAttributes >( attrs );
     return threeDPieAttributes();

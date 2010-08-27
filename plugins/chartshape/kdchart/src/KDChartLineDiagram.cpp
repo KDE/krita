@@ -1,25 +1,24 @@
 /****************************************************************************
- ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #include "KDChartLineDiagram.h"
 #include "KDChartLineDiagram_p.h"
@@ -71,6 +70,7 @@ void LineDiagram::init()
     d->percentDiagram = new PercentLineDiagram( this );
     d->implementor = d->normalDiagram;
     d->centerDataPoints = false;
+    d->reverseDatasetOrder = false;
 }
 
 LineDiagram::~LineDiagram()
@@ -103,7 +103,8 @@ bool LineDiagram::compare( const LineDiagram* other )const
             ( static_cast<const AbstractCartesianDiagram*>(this)->compare( other ) ) &&
             // compare own properties
             (type()             == other->type()) &&
-            (centerDataPoints() == other->centerDataPoints());
+            (centerDataPoints() == other->centerDataPoints()) &&
+            (reverseDatasetOrder() == other->reverseDatasetOrder());
 }
 
 /**
@@ -161,6 +162,16 @@ bool LineDiagram::centerDataPoints() const
 	return d->centerDataPoints;
 }
 
+void LineDiagram::setReverseDatasetOrder( bool reverse )
+{
+    d->reverseDatasetOrder = reverse;
+}
+
+bool LineDiagram::reverseDatasetOrder() const
+{
+    return d->reverseDatasetOrder;
+}
+
 /**
   * Sets the global line attributes to \a la
   */
@@ -179,11 +190,7 @@ void LineDiagram::setLineAttributes(
         int column,
     const LineAttributes& la )
 {
-    d->attributesModel->setHeaderData(
-            column,
-            Qt::Vertical,
-            qVariantFromValue( la ),
-            LineAttributesRole );
+    d->setDatasetAttrs( column, qVariantFromValue( la ), LineAttributesRole );
     emit propertiesChanged();
 }
 
@@ -192,8 +199,7 @@ void LineDiagram::setLineAttributes(
   */
 void LineDiagram::resetLineAttributes( int column )
 {
-    d->attributesModel->resetHeaderData(
-            column, Qt::Vertical, LineAttributesRole );
+    d->resetDatasetAttrs( column, LineAttributesRole );
     emit propertiesChanged();
 }
 
@@ -235,9 +241,7 @@ LineAttributes LineDiagram::lineAttributes() const
   */
 LineAttributes LineDiagram::lineAttributes( int column ) const
 {
-    const QVariant attrs(
-            d->attributesModel->headerData( column, Qt::Vertical,
-                                            LineAttributesRole ) );
+    const QVariant attrs( d->datasetAttrs( column, LineAttributesRole ) );
     if( attrs.isValid() )
         return qVariantValue< LineAttributes >( attrs );
     return lineAttributes();
@@ -276,11 +280,7 @@ void LineDiagram::setThreeDLineAttributes(
     const ThreeDLineAttributes& la )
 {
     setDataBoundariesDirty();
-    d->attributesModel->setHeaderData(
-        column,
-        Qt::Vertical,
-        qVariantFromValue( la ),
-        ThreeDLineAttributesRole );
+    d->setDatasetAttrs( column, qVariantFromValue( la ), ThreeDLineAttributesRole );
    emit propertiesChanged();
 }
 
@@ -313,9 +313,7 @@ ThreeDLineAttributes LineDiagram::threeDLineAttributes() const
   */
 ThreeDLineAttributes LineDiagram::threeDLineAttributes( int column ) const
 {
-    const QVariant attrs(
-            d->attributesModel->headerData( column, Qt::Vertical,
-                                            ThreeDLineAttributesRole ) );
+    const QVariant attrs( d->datasetAttrs( column, ThreeDLineAttributesRole ) );
     if( attrs.isValid() )
         return qVariantValue< ThreeDLineAttributes >( attrs );
     return threeDLineAttributes();
@@ -340,10 +338,7 @@ double LineDiagram::threeDItemDepth( const QModelIndex& index ) const
 double LineDiagram::threeDItemDepth( int column ) const
 {
     return qVariantValue<ThreeDLineAttributes>(
-        d->attributesModel->headerData (
-            column,
-            Qt::Vertical,
-            KDChart::ThreeDLineAttributesRole ) ).validDepth();
+        d->datasetAttrs( column, KDChart::ThreeDLineAttributesRole ) ).validDepth();
 }
 
 /**

@@ -1,5 +1,5 @@
 <ui version="4.0" >
- <author>Mirko Boehm &lt;mirko@kdab.net></author>
+ <author>Mirko Boehm &lt;mirko@kdab.com></author>
  <comment></comment>
  <exportmacro></exportmacro>
  <class>DatasetSelector</class>
@@ -25,6 +25,9 @@
     <width>0</width>
     <height>0</height>
    </size>
+  </property>
+  <property name="windowTitle" >
+   <string>Data Selector</string>
   </property>
   <layout class="QHBoxLayout" >
    <property name="margin" >

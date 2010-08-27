@@ -1,25 +1,24 @@
 /****************************************************************************
- ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- **
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- **
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #include "KDChartCartesianCoordinatePlane.h"
 #include "KDChartCartesianCoordinatePlane_p.h"
@@ -60,6 +59,7 @@ CartesianCoordinatePlane::Private::Private()
     , autoAdjustVerticalRangeToData(  67)
     , autoAdjustGridToZoom( true )
     , fixedDataCoordinateSpaceRelation( false )
+    , xAxisStartAtZero(true)
     , reverseVerticalPlane( false )
     , reverseHorizontalPlane( false )
 {
@@ -127,6 +127,9 @@ void CartesianCoordinatePlane::paint ( QPainter* painter )
         // paint the diagrams:
         for ( int i = 0; i < diags.size(); i++ )
         {
+            if ( diags[i]->isHidden() ) {
+                continue;
+            }
 //qDebug("  start diags[i]->paint ( &ctx );");
             PainterSaver diagramPainterSaver( painter );
             diags[i]->paint ( &ctx );
@@ -152,7 +155,11 @@ void CartesianCoordinatePlane::slotLayoutChanged ( AbstractDiagram* )
 QRectF CartesianCoordinatePlane::getRawDataBoundingRectFromDiagrams() const
 {
     // determine unit of the rectangles of all involved diagrams:
-    qreal minX, maxX, minY, maxY = 0.0;
+    qreal minX = 0;
+    qreal maxX = 0;
+    qreal minY = 0;
+    qreal maxY = 0
+                 ;
     bool bStarting = true;
     Q_FOREACH( const AbstractDiagram* diagram, diagrams() )
     {
@@ -185,10 +192,13 @@ QRectF CartesianCoordinatePlane::adjustedToMaxEmptyInnerPercentage(
                     isPositive ? qMax(r.left(), r.right()) : qMin(r.left(), r.right());
             if( innerBound / outerBound * 100 <= percentX )
             {
-                if( isPositive )
-                    erg.setLeft( 0.0 );
-                else
-                    erg.setRight( 0.0 );
+                if(d->xAxisStartAtZero)
+                {
+                    if( isPositive )
+                        erg.setLeft( 0.0 );
+                    else
+                        erg.setRight( 0.0 );
+                }
             }
         }
     }
@@ -267,14 +277,14 @@ DataDimensionsList CartesianCoordinatePlane::getDataDimensionsList() const
     const AbstractCartesianDiagram* dgr
         = diagrams().isEmpty() ? 0 : dynamic_cast<const AbstractCartesianDiagram*> (diagrams().first() );
     if( dgr && dgr->referenceDiagram() )
-        dgr = dgr->referenceDiagram();
-        const BarDiagram *barDiagram = qobject_cast< const BarDiagram* >( dgr );
+    	dgr = dgr->referenceDiagram();
+	const BarDiagram *barDiagram = qobject_cast< const BarDiagram* >( dgr );
 
-        // note:
-        // It does make sense to retrieve the orientation from the first diagram. This is because
-        // a coordinate plane can either be for horizontal *or* for vertical diagrams. Both at the
-        // same time won't work, and thus the orientation for all diagrams is the same as for the first one.
-        const Qt::Orientation diagramOrientation = barDiagram != 0 ? barDiagram->orientation() : Qt::Vertical;
+	// note:
+	// It does make sense to retrieve the orientation from the first diagram. This is because
+	// a coordinate plane can either be for horizontal *or* for vertical diagrams. Both at the
+	// same time won't work, and thus the orientation for all diagrams is the same as for the first one.
+	const Qt::Orientation diagramOrientation = barDiagram != 0 ? barDiagram->orientation() : Qt::Vertical;
 
     const bool diagramIsVertical = diagramOrientation == Qt::Vertical;
 
@@ -454,6 +464,19 @@ void CartesianCoordinatePlane::setFixedDataCoordinateSpaceRelation( bool fixed )
 bool CartesianCoordinatePlane::hasFixedDataCoordinateSpaceRelation() const
 {
     return d->fixedDataCoordinateSpaceRelation;
+}
+
+void CartesianCoordinatePlane::setXAxisStartAtZero(bool fixedStart)
+{
+    if(d->xAxisStartAtZero == fixedStart)
+        return;
+
+    d->xAxisStartAtZero = fixedStart;
+}
+
+bool CartesianCoordinatePlane::xAxisStartAtZero() const
+{
+    return d->xAxisStartAtZero;
 }
 
 void CartesianCoordinatePlane::handleFixedDataCoordinateSpaceRelation( const QRectF& geometry )

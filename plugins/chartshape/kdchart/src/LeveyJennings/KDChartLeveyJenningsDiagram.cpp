@@ -1,25 +1,24 @@
 /****************************************************************************
- ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #include "KDChartLeveyJenningsDiagram.h"
 #include "KDChartLeveyJenningsDiagram_p.h"
@@ -550,24 +549,27 @@ void LeveyJenningsDiagram::paint( PaintContext* ctx )
 
         painter->setPen( pen( lotIndex ) );
 
+        QVariant vValue = m.data( valueIndex );
+        double value = vValue.toDouble();
         const int lot = m.data( lotIndex ).toInt();
-        double value = m.data( valueIndex ).toDouble();
         const bool ok = m.data( okIndex ).toBool();
         const QDateTime time = m.data( timeIndex ).toDateTime();
         const double xValue = ( time.toTime_t() - minTime ) / static_cast< double >( 24 * 60 * 60 );
 
-        const double expectedMean = m.data( expectedMeanIndex ).toDouble();
-        const double expectedSD = m.data( expectedSDIndex ).toDouble();
+        QVariant vExpectedMean = m.data( expectedMeanIndex );
+        const double expectedMean = vExpectedMean.toDouble();
+        QVariant vExpectedSD = m.data( expectedSDIndex );
+        const double expectedSD = vExpectedSD.toDouble();
 
         QPointF point = ctx->coordinatePlane()->translate( QPointF( xValue, value ) );
 
-        if( static_cast< int >( value ) == 0 )
+        if( vValue.isNull() )
         {
             hadMissingValue = true;
         }
         else
         {
-            if( static_cast< int >( expectedMean ) != 0 && static_cast< int >( expectedSD ) != 0 )
+            if( !vExpectedMean.isNull() && !vExpectedSD.isNull() )
             {
                 // this calculates the 'logical' value relative to the expected mean and SD of this point
                 value -= expectedMean;

@@ -1,25 +1,24 @@
 /****************************************************************************
- ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #ifndef KDCHARTABSTRACTGRID_H
 #define KDCHARTABSTRACTGRID_H
@@ -73,16 +72,59 @@ namespace KDChart {
           */
         virtual void drawGrid( PaintContext* context ) = 0;
 
+        /**
+         * Causes grid to be recalculated upon the next call
+         * of updateData().
+         *
+         * \see calculateGrid
+         */
         void setNeedRecalculate();
 
+        /**
+         * Checks whether both coordinates of r are valid according
+         * to isValueValid
+         *
+         * \see isValueValid
+         */
         static bool isBoundariesValid(const QRectF& r );
+
+        /**
+         * Checks whether both coordinates of both points are valid
+         * according to isValueValid
+         *
+         * \see isValueValid
+         */
         static bool isBoundariesValid(const QPair<QPointF,QPointF>& b );
+
+        /**
+         * Checks whether all start and end properties of every
+         * DataDimension in the list l are valid according to
+         * isValueValid().
+         *
+         * \see isValueValid
+         */
         static bool isBoundariesValid(const DataDimensionsList& l );
+
+        /**
+         * Checks if r is neither NaN nor infinity.
+         */
         static bool isValueValid(const qreal& r );
+
+        /**
+         * Adjusts \a start and/or \a end so that they are a multiple of
+         * \a stepWidth
+         */
         static void adjustLowerUpperRange(
                 qreal& start, qreal& end,
                 qreal stepWidth,
                 bool adjustLower, bool adjustUpper );
+
+        /**
+         * Adjusts \a dim so that \c dim.start and/or \c dim.end are a multiple
+         * of \c dim.stepWidth.
+         *
+         * \see adjustLowerUpperRange
+         */
         static const DataDimension adjustedLowerUpperRange(
                 const DataDimension& dim,
                 bool adjustLower, bool adjustUpper );

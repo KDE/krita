@@ -1,29 +1,24 @@
-  /* -*- Mode: C++ -*-
-   KDChart - a multi-platform charting engine
-   */
-
 /****************************************************************************
- ** Copyright (C) 2005-2007 Klarälvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #ifndef KDCHARTABSTRACTAXIS_H
 #define KDCHARTABSTRACTAXIS_H
@@ -101,26 +96,141 @@ namespace KDChart {
          */
         bool compare( const AbstractAxis* other )const;
 
+        /**
+          * \internal
+          *
+          * Method invoked by AbstractCartesianDiagram::addAxis().
+          *
+          * You should not call this function, unless you know exactly,
+          * what you are doing.
+          *
+          * \sa connectSignals(), AbstractCartesianDiagram::addAxis()
+          */
         void createObserver( AbstractDiagram* diagram );
+
+        /**
+          * \internal
+          *
+          * Method invoked by AbstractCartesianDiagram::takeAxis().
+          *
+          * You should not call this function, unless you know exactly,
+          * what you are doing.
+          *
+          * \sa AbstractCartesianDiagram::takeAxis()
+          */
         void deleteObserver( AbstractDiagram* diagram );
         const AbstractDiagram* diagram() const;
         bool observedBy( AbstractDiagram* diagram ) const;
+
+        /**
+          * Wireing the signal/slot connections.
+          *
+          * This method gets called automatically, each time, when you assign
+          * the axis to a diagram, either by passing a diagram* to the c'tor,
+          * or by calling the diagram's setAxis method, resp.
+          *
+          * If overwriting this method in derived classes, make sure to call
+          * this base method AbstractAxis::connectSignals(), so your axis
+          * gets connected to the diagram's built-in signals.
+          *
+          * \sa AbstractCartesianDiagram::addAxis()
+          */
         virtual void connectSignals();
 
+        /**
+          \brief Use this to specify the text attributes to be used for axis labels.
+
+          By default, the reference area will be set at painting time.
+          It will be the then-valid coordinate plane's parent widget,
+          so normally, it will be the KDChart::Chart.
+          Thus the labels of all of your axes in all of your diagrams
+          within that Chart will be drawn in same font size, by default.
+
+          \sa textAttributes, setLabels
+        */
         void setTextAttributes( const TextAttributes &a );
+
+        /**
+          \brief Returns the text attributes to be used for axis labels.
+
+          \sa setTextAttributes
+        */
         TextAttributes textAttributes() const;
         
+        /**
+          \brief Use this to specify the attributes used to paint the axis ruler
+
+          Every axis has a default set of ruler attributes that is exactly the
+          same among them. Use this method to specify your own attributes.
+
+          \sa rulerAttributes
+        */
         void setRulerAttributes( const RulerAttributes &a );
+
+        /**
+          \brief Returns the attributes to be used for painting the rulers
+
+          \sa setRulerAttributes
+        */
         RulerAttributes rulerAttributes() const;
 
+        /**
+          \brief Use this to specify your own set of strings, to be used as axis labels.
+
+          Labels specified via setLabels take precedence:
+          If a non-empty list is passed, KD Chart will use these strings as axis labels,
+          instead of calculating them.
+
+          If you a smaller number of strings than the number of labels drawn at this
+          axis, KD Chart will iterate over the list, repeating the strings, until all
+          labels are drawn.
+          As an example you could specify the seven days of the week as abscissa labels,
+          which would be repeatedly used then.
+
+          By passing an empty QStringList you can reset the default behaviour.
+
+          \sa labels, setShortLabels
+        */
         void setLabels( const QStringList& list );
+
+        /**
+          Returns a list of strings, that are used as axis labels, as set via setLabels.
+
+          \sa setLabels
+        */
         QStringList labels() const;
+
+        /**
+          \brief Use this to specify your own set of strings, to be used as axis labels,
+          in case the normal labels are too long.
+
+          \note Setting done via setShortLabels will be ignored, if you did not pass
+          a non-empty string list via setLabels too!
+
+          By passing an empty QStringList you can reset the default behaviour.
+
+          \sa shortLabels, setLabels
+        */
         void setShortLabels( const QStringList& list );
+
+        /**
+          Returns a list of strings, that are used as axis labels, as set via setShortLabels.
+
+          \note Setting done via setShortLabels will be ignored, if you did not pass
+          a non-empty string list via setLabels too!
+
+          \sa setShortLabels
+        */
         QStringList shortLabels() const;
 
         virtual void setGeometry( const QRect& rect ) = 0;
         virtual QRect geometry() const = 0;
 
+        /**
+            \brief Convenience function, returns the coordinate plane, in which this axis is used.
+
+            If the axis is not used in a coordinate plane, the return value is Zero.
+         */
         const AbstractCoordinatePlane* coordinatePlane() const;
 
     protected Q_SLOTS:

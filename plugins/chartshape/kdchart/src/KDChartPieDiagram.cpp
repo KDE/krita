@@ -1,25 +1,24 @@
 /****************************************************************************
- ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- **
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- **
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #include <QDebug>
 #include <QPainter>
@@ -184,7 +183,20 @@ void PieDiagram::paint(PaintContext* ctx)
     QPainter nullPainter(&nullPd);
     ctx->setPainter(&nullPainter);
     paintInternal(ctx, textBoundingRect);
+	
+	//edit start
+	// point from the text is getting printed 
+	/*QPoint currentPosition = textBoundingRect.bottomLeft().toPoint();
+	
+	QPoint textRectCenter = textBoundingRect.center().toPoint();
 
+	qreal newX = currentPosition.x() - textRectCenter.x();
+	qreal newY =  currentPosition.y() - textRectCenter.y();
+	currentPosition.setX(newX);
+	currentPosition.setY(newY);
+
+	textBoundingRect.translate(currentPosition);*/
+	//edit end
     // Now perform the real painting
     ctx->setPainter(actualPainter);
     paintInternal(ctx, textBoundingRect);
@@ -239,8 +251,8 @@ void PieDiagram::paintInternal(PaintContext* ctx, QRectF& textBoundingRect)
         double maxDistance = 0, dist = 0;
 
         QPointF center = ctx->rectangle().center();
-
-        dist = qAbs(textBoundingRect.right() - center.x());
+		
+		dist = qAbs(textBoundingRect.right() - center.x());
         if(dist > maxDistance)
             maxDistance = dist;
 
@@ -261,6 +273,9 @@ void PieDiagram::paintInternal(PaintContext* ctx, QRectF& textBoundingRect)
         if(diff > 0)
             d->size *= 1.0-(diff/size);
     }
+
+    if(d->size < 0)
+        d->size = 0; 
 
     qreal sizeFor3DEffect = 0.0;
     if ( ! threeDAttrs.isEnabled() ) {
@@ -486,6 +501,10 @@ void PieDiagram::drawPieSurface( QPainter* painter,
         if ( angleLen == 360 ) {
             // full circle, avoid nasty line in the middle
             painter->drawEllipse( drawPosition );
+
+            //Add polygon to Reverse mapper for showing tool tips.
+            QPolygonF poly( drawPosition );
+            d->reverseMapper.addPolygon( index.row(), index.column(), poly );
         } else {
             // draw the top of this piece
             // Start with getting the points for the arc.
@@ -502,7 +521,6 @@ void PieDiagram::drawPieSurface( QPainter* painter,
                 degree += granularity;
                 ++iPoint;
             }
-            /*int last = poly.size();*/
             // if necessary add one more point to fill the last small gap
             if( ! perfectMatch ){
                 poly[ iPoint ] = pointOnCircle( drawPosition, startAngle + angleLen );
@@ -514,50 +532,68 @@ void PieDiagram::drawPieSurface( QPainter* painter,
             }
             //find the value and paint it
             //fix value position
-            const qreal sum = valueTotals();
             d->reverseMapper.addPolygon( index.row(), index.column(), poly );
+			
             painter->drawPolygon( poly );
-
-            // the new code is setting the needed position points according to the slice:
-            // all is calculated as if the slice were 'standing' on it's tip and the border
-            // were on top, so North is the middle of the curved outside line and South is the tip
-            //
-            const QPointF south = drawPosition.center();
-            const QPointF southEast = south;
-            const QPointF southWest = south;
-            const QPointF north = pointOnCircle( drawPosition, startAngle + angleLen/2.0 );
-            const QPointF northEast = pointOnCircle( drawPosition, startAngle );
-            const QPointF northWest = pointOnCircle( drawPosition, startAngle + angleLen );
-            const QPointF center    = (south + north) / 2.0;
-            const QPointF east      = (south + northEast) / 2.0;
-            const QPointF west      = (south + northWest) / 2.0;
-            PositionPoints points( center, northWest, north, northEast, east, southEast, south, southWest, west);
-            qreal topAngle = startAngle - 90;
-            if( topAngle < 0.0 )
-                topAngle += 360;
-            points.setDegrees(KDChartEnums::PositionEast,      topAngle);
-            points.setDegrees(KDChartEnums::PositionNorthEast, topAngle);
-            points.setDegrees(KDChartEnums::PositionWest,      topAngle + angleLen);
-            points.setDegrees(KDChartEnums::PositionNorthWest, topAngle + angleLen);
-            points.setDegrees(KDChartEnums::PositionCenter,    topAngle + angleLen/2.0);
-            points.setDegrees(KDChartEnums::PositionNorth,     topAngle + angleLen/2.0);
-            d->appendDataValueTextInfoToList(
-                    this, *list, index, 0,
-                    points, Position::Center, Position::Center,
-                    angleLen*sum / 360 );
-
-            // The following, old code (since kdc 2.0.0) was not correct:
-            // Settings made for the position had been totally ignored,
-            // AND the center was NOT the center - except for pieces of 45 degrees size
-            //
-            // QLineF centerLine(  drawPosition.center(),
-            //                 QPointF( (poly[ last - 2].x() + poly.first().x())/2,
-            //                          ( poly.first().y() + poly[last-2].y() )/2 ) );
-            // QPointF valuePos( ( centerLine.x1() + centerLine.x2() )/2,
-            //                       ( centerLine.y1() + centerLine.y2() )/2 ) ;
-            //
-            // paintDataValueText( painter, index, valuePos, angleLen*sum / 360  );
         }
+        // the new code is setting the needed position points according to the slice:
+        // all is calculated as if the slice were 'standing' on it's tip and the border
+        // were on top, so North is the middle of the curved outside line and South is the tip
+        //
+        const qreal sum = valueTotals();
+        const QPointF south = drawPosition.center();
+        const QPointF southEast = south;
+        const QPointF southWest = south;
+        const QPointF north = pointOnCircle( drawPosition, startAngle + angleLen/2.0 );
+
+        const QPointF northEast = pointOnCircle( drawPosition, startAngle );
+        const QPointF northWest = pointOnCircle( drawPosition, startAngle + angleLen );
+        QPointF center    = (south + north) / 2.0;
+        const QPointF east      = (south + northEast) / 2.0;
+        const QPointF west      = (south + northWest) / 2.0;
+
+        CartesianDiagramDataCompressor::DataValueAttributesList allAttrs( d->aggregatedAttrs( this, index, 0 ) );
+        const QFontMetrics * fm = (d->cachedFontMetrics( allAttrs.value(index).textAttributes().calculatedFont(d->plane,KDChartEnums::MeasureOrientationMinimum ), this ));
+        if(!list->isEmpty())
+        {
+                QRect textRect = fm->boundingRect(QString::number(list->last().value));
+                textRect.translated(center.toPoint());
+                QPoint textRectCenter = textRect.center();
+                qreal newX = center.x() - textRectCenter.x();
+                qreal newY =  center.y() - textRectCenter.y();
+                center.setX(newX);
+                center.setY(newY);
+        }
+
+        PositionPoints points( center, northWest, north, northEast, east, southEast, south, southWest, west);
+        qreal topAngle = startAngle - 90;
+        if( topAngle < 0.0 )
+            topAngle += 360;
+        points.setDegrees(KDChartEnums::PositionEast,      topAngle);
+        points.setDegrees(KDChartEnums::PositionNorthEast, topAngle);
+        points.setDegrees(KDChartEnums::PositionWest,      topAngle + angleLen);
+        points.setDegrees(KDChartEnums::PositionNorthWest, topAngle + angleLen);
+        points.setDegrees(KDChartEnums::PositionCenter,    topAngle + angleLen/2.0);
+        points.setDegrees(KDChartEnums::PositionNorth,     topAngle + angleLen/2.0);
+
+        //painter->drawText(points.mPositionCenter,QLatin1String("P"));
+
+        d->appendDataValueTextInfoToList(
+                this, *list, index, 0,
+                points, Position::Center, Position::Center,
+                angleLen*sum / 360 );
+
+        // The following, old code (since kdc 2.0.0) was not correct:
+        // Settings made for the position had been totally ignored,
+        // AND the center was NOT the center - except for pieces of 45 degrees size
+        //
+        // QLineF centerLine(  drawPosition.center(),
+        //                 QPointF( (poly[ last - 2].x() + poly.first().x())/2,
+        //                          ( poly.first().y() + poly[last-2].y() )/2 ) );
+        // QPointF valuePos( ( centerLine.x1() + centerLine.x2() )/2,
+        //                       ( centerLine.y1() + centerLine.y2() )/2 ) ;
+        //
+        // paintDataValueText( painter, index, valuePos, angleLen*sum / 360  );
     }
 }
 

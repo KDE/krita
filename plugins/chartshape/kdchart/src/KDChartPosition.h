@@ -1,27 +1,22 @@
-/* -*- Mode: C++ -*-
-  KDChart - a multi-platform charting engine
-  */
-
 /****************************************************************************
-** Copyright (C) 2005-2007 Klarälvdalens Datakonsult AB.  All rights reserved.
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
 **
 ** This file is part of the KD Chart library.
 **
-** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
 **
 **********************************************************************/
 
@@ -50,7 +45,7 @@ namespace KDChart {
  * methods below), in a similar way, as you would use a
  * compass to navigate on a map.
  *
- * \Note Often you will declare a \c Position together with the
+ * \note Often you will declare a \c Position together with the
  * RelativePosition class, to specify a logical point,
  * which then will be used to layout your chart at runtime,
  * e.g. for specifying the location of a floating Legend box.
@@ -69,7 +64,6 @@ switch( yourPosition().value() ) {
 \endverbatim
  * \sa RelativePosition, KDChartEnums::PositionValue
  */
-
 class KDCHART_EXPORT Position
 {
     Q_DECLARE_TR_FUNCTIONS( Position )

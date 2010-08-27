@@ -1,25 +1,24 @@
 /****************************************************************************
- ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #include "KDChartAbstractDiagram.h"
 #include "KDChartAbstractDiagram_p.h"
@@ -117,6 +116,7 @@ AbstractDiagram::AbstractDiagram ( QWidget* parent, AbstractCoordinatePlane* pla
 
 AbstractDiagram::~AbstractDiagram()
 {
+    emit aboutToBeDestroyed();
     delete _d;
 }
 
@@ -246,6 +246,7 @@ void AbstractDiagram::setModel( QAbstractItemModel * newModel )
         disconnect( model(), SIGNAL( columnsRemoved( QModelIndex, int, int ) ), this, SLOT( setDataBoundariesDirty() ) );
         disconnect( model(), SIGNAL( modelReset() ), this, SLOT( setDataBoundariesDirty() ) );
         disconnect( model(), SIGNAL( layoutChanged() ), this, SLOT( setDataBoundariesDirty() ) );
+        disconnect( model(), SIGNAL( dataChanged(QModelIndex,QModelIndex) ), this, SIGNAL( modelDataChanged() ));
     }
     QAbstractItemView::setModel( newModel );
     AttributesModel* amodel = new PrivateAttributesModel( newModel, this );
@@ -261,6 +262,7 @@ void AbstractDiagram::setModel( QAbstractItemModel * newModel )
         connect( model(), SIGNAL( columnsRemoved( QModelIndex, int, int ) ), this, SLOT( setDataBoundariesDirty() ) );
         connect( model(), SIGNAL( modelReset() ), this, SLOT( setDataBoundariesDirty() ) );
         connect( model(), SIGNAL( layoutChanged() ), this, SLOT( setDataBoundariesDirty() ) );
+        connect( model(), SIGNAL( dataChanged(QModelIndex,QModelIndex) ), this, SIGNAL( modelDataChanged() ));
     }
     emit modelsChanged();
 }
@@ -387,11 +389,7 @@ void AbstractDiagram::setHidden( int dataset, bool hidden )
     // To store the flag for a dataset, we use the first column
     // that's associated with it. (i.e., with a dataset dimension
     // of two, the column of the keys)
-    const int column = dataset * datasetDimension();
-    d->attributesModel->setHeaderData(
-        column, Qt::Vertical,
-        qVariantFromValue( hidden ),
-        DataHiddenRole );
+    d->setDatasetAttrs( dataset, qVariantFromValue( hidden ), DataHiddenRole );
     emit dataHidden();
 }
 
@@ -411,13 +409,7 @@ bool AbstractDiagram::isHidden() const
 
 bool AbstractDiagram::isHidden( int dataset ) const
 {
-    // To store the flag for a dataset, we use the first column
-    // that's associated with it. (i.e., with a dataset dimension
-    // of two, the column of the keys)
-    const int column = dataset * datasetDimension();
-    const QVariant boolFlag(
-            attributesModel()->headerData( column, Qt::Vertical,
-                    DataHiddenRole ) );
+    const QVariant boolFlag( d->datasetAttrs( dataset, DataHiddenRole ) );
     if( boolFlag.isValid() )
         return qVariantValue< bool >( boolFlag );
     return isHidden();
@@ -445,13 +437,7 @@ void AbstractDiagram::setDataValueAttributes( const QModelIndex & index,
 
 void AbstractDiagram::setDataValueAttributes( int dataset, const DataValueAttributes & a )
 {
-    // To store the attributes for a dataset, we use the first column
-    // that's associated with it. (i.e., with a dataset dimension
-    // of two, the column of the keys)
-    const int column = dataset * datasetDimension();
-    d->attributesModel->setHeaderData(
-        column, Qt::Vertical,
-        qVariantFromValue( a ), DataValueLabelAttributesRole );
+    d->setDatasetAttrs( dataset, qVariantFromValue( a ), DataValueLabelAttributesRole );
     emit propertiesChanged();
 }
 
@@ -473,15 +459,9 @@ DataValueAttributes AbstractDiagram::dataValueAttributes( int dataset ) const
         attributesModel()->data( attributesModel()->mapFromSource(columnToIndex( column )),
         KDChart::DataValueLabelAttributesRole ) );
     */
-    
-    // To store the attributes for a dataset, we use the first column
-    // that's associated with it. (i.e., with a dataset dimension
-    // of two, the column of the keys)
-    const int column = dataset * datasetDimension();
 
     const QVariant headerAttrs(
-            attributesModel()->headerData( column, Qt::Horizontal,
-                KDChart::DataValueLabelAttributesRole ) );
+        d->datasetAttrs( dataset, KDChart::DataValueLabelAttributesRole ) );
     if( headerAttrs.isValid() )
         return qVariantValue< DataValueAttributes >( headerAttrs );
     return dataValueAttributes();
@@ -714,6 +694,8 @@ void AbstractDiagram::paintMarker( QPainter* painter,
                     painter->drawLine(  top, bottom );
                     break;
                 }
+            case MarkerAttributes::NoMarker:
+                break;
             default:
                 Q_ASSERT_X ( false, "paintMarkers()",
                             "Type item does not match a defined Marker Type." );
@@ -755,15 +737,7 @@ void AbstractDiagram::setPen( const QPen& pen )
 
 void AbstractDiagram::setPen( int dataset, const QPen& pen )
 {
-    // To store the pen for a dataset, we use the first column
-    // that's associated with it. (i.e., with a dataset dimension
-    // of two, the column of the keys)
-    const int column = dataset * datasetDimension();
-    
-    attributesModel()->setHeaderData(
-        column, Qt::Horizontal,
-        qVariantFromValue( pen ),
-        DatasetPenRole );
+    d->setDatasetAttrs( dataset, qVariantFromValue( pen ), DatasetPenRole );
     emit propertiesChanged();
 }
 
@@ -775,14 +749,7 @@ QPen AbstractDiagram::pen() const
 
 QPen AbstractDiagram::pen( int dataset ) const
 {
-    // To store the pen for a dataset, we use the first column
-    // that's associated with it. (i.e., with a dataset dimension
-    // of two, the column of the keys)
-    const int column = dataset * datasetDimension();
-    
-    const QVariant penSettings(
-            attributesModel()->headerData( column, Qt::Horizontal,
-                    DatasetPenRole ) );
+    const QVariant penSettings( d->datasetAttrs( dataset, DatasetPenRole ) );
     if( penSettings.isValid() )
         return qVariantValue< QPen >( penSettings );
     return pen();
@@ -813,15 +780,7 @@ void AbstractDiagram::setBrush( const QBrush& brush )
 
 void AbstractDiagram::setBrush( int dataset, const QBrush& brush )
 {
-    // To store the brush for a dataset, we use the first column
-    // that's associated with it. (i.e., with a dataset dimension
-    // of two, the column of the keys)
-    const int column = dataset * datasetDimension();
-    
-    attributesModel()->setHeaderData(
-        column, Qt::Horizontal,
-        qVariantFromValue( brush ),
-        DatasetBrushRole );
+    d->setDatasetAttrs( dataset, qVariantFromValue( brush ), DatasetBrushRole );
     emit propertiesChanged();
 }
 
@@ -833,14 +792,7 @@ QBrush AbstractDiagram::brush() const
 
 QBrush AbstractDiagram::brush( int dataset ) const
 {
-    // To store the brush for a dataset, we use the first column
-    // that's associated with it. (i.e., with a dataset dimension
-    // of two, the column of the keys)
-    const int column = dataset * datasetDimension();
-    
-    const QVariant brushSettings(
-            attributesModel()->headerData( column, Qt::Horizontal,
-                    DatasetBrushRole ) );
+    const QVariant brushSettings( d->datasetAttrs( dataset, DatasetBrushRole ) );
     if( brushSettings.isValid() )
         return qVariantValue< QBrush >( brushSettings );
     return brush();
@@ -1026,7 +978,7 @@ QStringList AbstractDiagram::datasetLabels() const
     QStringList ret;
     if( model() == 0 )
         return ret;
-
+    
     const int columnCount = attributesModel()->columnCount(attributesModelRootIndex());
     for( int i = 0; i < columnCount; i += datasetDimension() )
         ret << attributesModel()->headerData( i, Qt::Horizontal, Qt::DisplayRole ).toString();

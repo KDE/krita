@@ -1,25 +1,24 @@
 /****************************************************************************
- ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #include "KDChartChart.h"
 #include "KDChartChart_p.h"
@@ -91,7 +90,6 @@ void Chart::Private::slotUnregisterDestroyedHeaderFooter( HeaderFooter* hf )
 
 void Chart::Private::slotUnregisterDestroyedPlane( AbstractCoordinatePlane* plane )
 {
-    plane->setReferenceCoordinatePlane(0);
     coordinatePlanes.removeAll( plane );
     Q_FOREACH ( AbstractCoordinatePlane* p, coordinatePlanes )
     {
@@ -471,7 +469,12 @@ void Chart::Private::slotLayoutPlanes()
         planesLayout ? planesLayout->direction() : QBoxLayout::TopToBottom;
     if ( planesLayout && dataAndLegendLayout )
         dataAndLegendLayout->removeItem( planesLayout );
-
+    
+    const bool hadPlanesLayout = planesLayout != 0;
+    int left, top, right, bottom;
+    if(hadPlanesLayout)
+        planesLayout->getContentsMargins(&left, &top, &right, &bottom);
+        
     KDAB_FOREACH( KDChart::AbstractLayoutItem* plane, planeLayoutItems ) {
         plane->removeFromParentLayout();
     }
@@ -480,6 +483,9 @@ void Chart::Private::slotLayoutPlanes()
     //hint: The direction is configurable by the user now, as
     //      we are using a QBoxLayout rather than a QVBoxLayout.  (khz, 2007/04/25)
     planesLayout = new QBoxLayout( oldPlanesDirection );
+
+    if(hadPlanesLayout)
+        planesLayout->setContentsMargins(left, top, right, bottom);
 
     // TESTING(khz): set the margin of all of the layouts to Zero
 #if defined SET_ALL_MARGINS_TO_ZERO
@@ -504,10 +510,11 @@ void Chart::Private::slotLayoutPlanes()
             // this plane is sharing an axis with another one, so use
             // the grid of that one as well
             planeLayout = planeInfos[pi.referencePlane].gridLayout;
+            Q_ASSERT( planeLayout );
         } else {
             planesLayout->addLayout( planeLayout );
         }
-        Q_ASSERT( planeLayout );
+
         /* Put the plane in the center of the layout. If this is our own, that's
          * the middle of the layout, if we are sharing, it's a cell in the center
          * column of the shared grid. */
@@ -906,6 +913,14 @@ BackgroundAttributes Chart::backgroundAttributes() const
     return d->backgroundAttributes;
 }
 
+//TODO KDChart 3.0; change QLayout into QBoxLayout::Direction
+void Chart::setCoordinatePlaneLayout( QLayout * layout )
+{
+    delete d->planesLayout;
+    d->planesLayout = dynamic_cast<QBoxLayout*>( layout );
+    d->slotLayoutPlanes();
+}
+
 QLayout* Chart::coordinatePlaneLayout()
 {
     return d->planesLayout;
@@ -962,10 +977,13 @@ void Chart::takeCoordinatePlane( AbstractCoordinatePlane* plane )
 {
     const int idx = d->coordinatePlanes.indexOf( plane );
     if( idx != -1 ){
+        d->coordinatePlanes.takeAt( idx );
         disconnect( plane, SIGNAL( destroyedCoordinatePlane( AbstractCoordinatePlane* ) ),
                     d, SLOT( slotUnregisterDestroyedPlane( AbstractCoordinatePlane* ) ) );
-        d->slotUnregisterDestroyedPlane( plane );
+        plane->removeFromParentLayout();
+        plane->setParent( 0 );
     }
+    d->slotLayoutPlanes();
     // Need to emit the signal: In case somebody has connected the signal
     // to her own slot for e.g. calling update() on a widget containing the chart.
     emit propertiesChanged();
@@ -1578,13 +1596,14 @@ bool Chart::event( QEvent* event )
         const QHelpEvent* const helpEvent = static_cast< QHelpEvent* >( event );
         KDAB_FOREACH( const AbstractCoordinatePlane* const plane, d->coordinatePlanes )
         {
-            KDAB_FOREACH( const AbstractDiagram* const diag, plane->diagrams() )
-            {
-                const QModelIndex index = diag->indexAt( helpEvent->pos() );
+            for (int i = plane->diagrams().count() - 1; i >= 0; --i) {
+                const QModelIndex index = plane->diagrams().at(i)->indexAt( helpEvent->pos() );
                 const QVariant toolTip = index.data( Qt::ToolTipRole );
                 if( toolTip.isValid() )
                 {
-                    QToolTip::showText( helpEvent->globalPos(), toolTip.toString() );
+                    QPoint pos = mapFromGlobal(helpEvent->pos());
+                    QRect rect(pos-QPoint(1,1), QSize(3,3));
+                    QToolTip::showText( QCursor::pos(), toolTip.toString(), this, rect );
                     return true;
                 }
             }

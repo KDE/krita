@@ -1,29 +1,25 @@
-/* -*- Mode: C++ -*-
-   KDChart - a multi-platform charting engine
-   */
-
 /****************************************************************************
- ** Copyright (C) 2001-2007 Klaralvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
+
 #ifndef __KDCHART_ATTRIBUTES_MODEL_H__
 #define __KDCHART_ATTRIBUTES_MODEL_H__
 
@@ -54,14 +50,14 @@ public:
     explicit AttributesModel( QAbstractItemModel* model, QObject * parent = 0 );
     ~AttributesModel();
 
-    /* Copies the internal data (maps and palette) of another
-       AttributesModel* into this one.
-    */
+    /** Copies the internal data (maps and palette) of another
+     *  AttributesModel* into this one.
+     */
     void initFrom( const AttributesModel* other );
 
-    /* Returns true if both, all of the attributes set, and
+    /** Returns true if both, all of the attributes set, and
      * the palette set is equal in both of the AttributeModels.
-    */
+     */
     bool compare( const AttributesModel* other )const;
 
     bool compareAttributes( int role, const QVariant& a, const QVariant& b )const;
@@ -103,6 +99,8 @@ public:
     /** \reimpl */
     bool setHeaderData ( int section, Qt::Orientation orientation, const QVariant & value,
                          int role = Qt::DisplayRole);
+    /** Returns default values for the header data. */
+    virtual QVariant defaultHeaderData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
     /** Remove any explicit attributes settings that might have been specified before. */
     bool resetHeaderData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole);
     /** \reimpl */

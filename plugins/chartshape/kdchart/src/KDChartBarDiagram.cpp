@@ -1,25 +1,24 @@
 /****************************************************************************
- ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #include "KDChartBarDiagram.h"
 #include "KDChartBarDiagram_p.h"
@@ -226,10 +225,7 @@ void BarDiagram::setBarAttributes( const BarAttributes& ba )
   */
 void BarDiagram::setBarAttributes( int column, const BarAttributes& ba )
 {
-    d->attributesModel->setHeaderData(
-        column, Qt::Vertical,
-        qVariantFromValue( ba ),
-        BarAttributesRole );
+    d->setDatasetAttrs( column, qVariantFromValue( ba ), BarAttributesRole );
     emit propertiesChanged();
 }
 
@@ -259,9 +255,7 @@ BarAttributes BarDiagram::barAttributes() const
   */
 BarAttributes BarDiagram::barAttributes( int column ) const
 {
-    const QVariant attrs(
-            d->attributesModel->headerData( column, Qt::Vertical,
-                    KDChart::BarAttributesRole ) );
+    const QVariant attrs( d->datasetAttrs( column, KDChart::BarAttributesRole ) );
     if( attrs.isValid() )
         return qVariantValue< BarAttributes >( attrs );
     return barAttributes();
@@ -295,10 +289,7 @@ void BarDiagram::setThreeDBarAttributes( const ThreeDBarAttributes& threeDAttrs 
 void BarDiagram::setThreeDBarAttributes( int column, const ThreeDBarAttributes& threeDAttrs )
 {
     setDataBoundariesDirty();
-    d->attributesModel->setHeaderData(
-        column, Qt::Vertical,
-        qVariantFromValue( threeDAttrs ),
-        ThreeDBarAttributesRole );
+    d->setDatasetAttrs( column,  qVariantFromValue( threeDAttrs ), ThreeDBarAttributesRole );
     //emit layoutChanged( this );
     emit propertiesChanged();
 
@@ -332,9 +323,7 @@ ThreeDBarAttributes BarDiagram::threeDBarAttributes() const
   */
 ThreeDBarAttributes BarDiagram::threeDBarAttributes( int column ) const
 {
-    const QVariant attrs(
-            d->attributesModel->headerData( column, Qt::Vertical,
-                                            KDChart::ThreeDBarAttributesRole ) );
+    const QVariant attrs( d->datasetAttrs( column, KDChart::ThreeDBarAttributesRole ) );
     if( attrs.isValid() )
         return qVariantValue< ThreeDBarAttributes >( attrs );
     return threeDBarAttributes();
@@ -359,10 +348,7 @@ double BarDiagram::threeDItemDepth( const QModelIndex& index ) const
 double BarDiagram::threeDItemDepth( int column ) const
 {
     return qVariantValue<ThreeDBarAttributes>(
-        d->attributesModel->headerData (
-            column,
-            Qt::Vertical,
-            KDChart::ThreeDBarAttributesRole ) ).validDepth();
+        d->datasetAttrs( column, KDChart::ThreeDBarAttributesRole ) ).validDepth();
 }
 
 void BarDiagram::resizeEvent ( QResizeEvent*)
@@ -400,6 +386,11 @@ void BarDiagram::paint( PaintContext* ctx )
 
     AbstractCoordinatePlane* const plane = ctx->coordinatePlane();
     ctx->setCoordinatePlane( plane->sharedAxisMasterPlane( ctx->painter() ) );
+
+    // Only paint elements that are in the paint context's rectangle
+    // (in this case boundaries of the diagram, see paintEvent())
+    ctx->painter()->setClipping( true );
+    ctx->painter()->setClipRect( ctx->rectangle() );
 
     // paint different bar types Normal - Stacked - Percent - Default Normal
     d->implementor->paint( ctx );

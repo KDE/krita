@@ -1,25 +1,24 @@
 /****************************************************************************
- ** Copyright (C) 2007 Klar�vdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #include "KDChartLegend.h"
 #include "KDChartLegend_p.h"
@@ -350,8 +349,8 @@ void Legend::addDiagram( AbstractDiagram* newDiagram )
         }else{
             d->observers.append( observer );
         }
-        connect( observer, SIGNAL( diagramDestroyed(AbstractDiagram*) ),
-                        SLOT( resetDiagram(AbstractDiagram*) ));
+        connect( observer, SIGNAL( diagramAboutToBeDestroyed(AbstractDiagram*) ),
+                           SLOT( resetDiagram(AbstractDiagram*) ));
         connect( observer, SIGNAL( diagramDataChanged(AbstractDiagram*) ),
                  SLOT( setNeedRebuild() ));
         connect( observer, SIGNAL( diagramDataHidden(AbstractDiagram*) ),
@@ -364,6 +363,24 @@ void Legend::addDiagram( AbstractDiagram* newDiagram )
 
 void Legend::removeDiagram( AbstractDiagram* oldDiagram )
 {
+    int datasetBrushOffset = 0;
+    QList<AbstractDiagram*> diagrams = this->diagrams();
+    for(int i =0; i <diagrams.count(); i++)
+    {
+        if(diagrams.at(i) == oldDiagram)
+        {
+            for( int i = 0; i < oldDiagram->datasetBrushes().count(); i++ ){
+                d->brushes.remove(datasetBrushOffset + i);
+                d->texts.remove(datasetBrushOffset + i);
+            }
+            for( int i = 0; i < oldDiagram->datasetPens().count(); i++ ){
+                d->pens.remove(datasetBrushOffset + i);
+            }
+            break;
+        }
+        datasetBrushOffset += diagrams.at(i)->datasetBrushes().count();
+    }
+
     if( oldDiagram ){
         DiagramObserver* oldObs = d->findObserverForDiagram( oldDiagram );
         if( oldObs ){
@@ -379,9 +396,8 @@ void Legend::removeDiagram( AbstractDiagram* oldDiagram )
 
 void Legend::removeDiagrams()
 {
-    const DiagramList diags = diagrams();
-    KDAB_FOREACH( AbstractDiagram* diag, diags )
-        removeDiagram( diag );
+    for (int i = 0; i < d->observers.size(); ++i)
+        removeDiagram( d->observers.at(i)->diagram() );
 }
 
 void Legend::replaceDiagram( AbstractDiagram* newDiagram,
@@ -397,6 +413,25 @@ void Legend::replaceDiagram( AbstractDiagram* newDiagram,
         removeDiagram( old );
     if( newDiagram )
         addDiagram( newDiagram );
+}
+
+uint Legend::dataSetOffset(KDChart::AbstractDiagram* diagram)
+{
+    uint offset = 0;
+
+    for (int i = 0; i < d->observers.count(); ++i)
+    {
+        if(d->observers.at(i)->diagram() == diagram)
+            return offset;
+
+        KDChart::AbstractDiagram* diagram = d->observers.at(i)->diagram();
+        if(!diagram->model())
+            continue;
+
+        offset = offset + diagram->model()->columnCount();
+    }
+
+    return offset;
 }
 
 void Legend::setDiagram( KDChart::AbstractDiagram* newDiagram )
@@ -979,10 +1014,7 @@ void Legend::buildLegend()
         // as well as through the dataset brush set in the diagram, whereas the
         // MarkerAttributes are preferred.
         const QBrush markerBrush = markerAttrs[dataset].markerColor().isValid() ?
-                                   QBrush(markerAttrs[dataset].markerColor()) : d->modelBrushes[ dataset ];
-
-        //qDebug()<<"Legend::buildLegend:"<<markerBrush<<markerAttrs[dataset].markerColor().isValid()<<dataset;
-
+                                   QBrush(markerAttrs[dataset].markerColor()) : brush( dataset );
         switch( style ){
             case( MarkersOnly ):
                 markerLineItem = new KDChart::MarkerLayoutItem(
@@ -1089,7 +1121,6 @@ void Legend::buildLegend()
 void Legend::setHiddenDatasets( const QList<uint> hiddenDatasets )
 {
     d->hiddenDatasets = hiddenDatasets;
-    setNeedRebuild();
 }
 
 const QList<uint> Legend::hiddenDatasets() const
@@ -1099,13 +1130,10 @@ const QList<uint> Legend::hiddenDatasets() const
 
 void Legend::setDatasetHidden( uint dataset, bool hidden )
 {
-    if( hidden && !d->hiddenDatasets.contains( dataset ) ) {
+    if( hidden && !d->hiddenDatasets.contains( dataset ) )
         d->hiddenDatasets.append( dataset );
-        setNeedRebuild();
-    } else if( !hidden && d->hiddenDatasets.contains( dataset ) ) {
+    else if( !hidden && d->hiddenDatasets.contains( dataset ) )
         d->hiddenDatasets.removeAll( dataset );
-        setNeedRebuild();
-    }
 }
 
 bool Legend::datasetIsHidden( uint dataset ) const

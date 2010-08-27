@@ -1,25 +1,24 @@
 /****************************************************************************
- ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KD Chart library.
- **
- ** This file may be used under the terms of the GNU General Public
- ** License versions 2.0 or 3.0 as published by the Free Software
- ** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
- ** included in the packaging of this file.  Alternatively you may (at
- ** your option) use any later version of the GNU General Public
- ** License if such license has been publicly approved by
- ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
- ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
- ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
- ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
- ** not expressly granted herein.
- ** 
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- **********************************************************************/
+** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Chart library.
+**
+** Licensees holding valid commercial KD Chart licenses may use this file in
+** accordance with the KD Chart Commercial License Agreement provided with
+** the Software.
+**
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 and version 3 as published by the
+** Free Software Foundation and appearing in the file LICENSE.GPL included.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** Contact info@kdab.com if any conditions of this licensing are not
+** clear to you.
+**
+**********************************************************************/
 
 #ifndef KDCHARTABSTRACTDIAGRAM_P_H
 #define KDCHARTABSTRACTDIAGRAM_P_H
@@ -38,6 +37,7 @@
 #include "KDChartAbstractDiagram.h"
 #include "KDChartAbstractCoordinatePlane.h"
 #include "KDChartDataValueAttributes.h"
+#include "KDChartBackgroundAttributes"
 #include "KDChartRelativePosition.h"
 #include "KDChartPosition.h"
 #include "KDChartPainterSaver_p.h"
@@ -327,7 +327,12 @@ namespace KDChart {
 
                 if ( attrs.showRepetitiveDataLabels() || pos.x() <= lastX || lastRoundedValue != text ) {
                     //qDebug() << text;
-                    lastRoundedValue = text;
+
+                    //Check if there is only one and only one pie.
+                    //If not then update lastRoundedValue for further checking.
+                    if(!(diag->model()->rowCount() == 1))
+                        lastRoundedValue = text;
+
                     lastX = pos.x();
                     const PainterSaver painterSaver( painter );
                     painter->setPen( PrintingParameters::scalePen( ta.pen() ) );
@@ -336,6 +341,17 @@ namespace KDChart {
                     QAbstractTextDocumentLayout::PaintContext context;
                     context.palette = diag->palette();
                     context.palette.setColor(QPalette::Text, ta.pen().color() );
+
+                    BackgroundAttributes back(attrs.backgroundAttributes());
+                    if(back.isVisible())
+                    {
+                        QTextBlockFormat fmt;
+                        fmt.setBackground(back.brush());
+                        QTextCursor cursor(&doc);
+                        cursor.setPosition(0);
+                        cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor, 1);
+                        cursor.mergeBlockFormat(fmt);
+                    }
 
                     QAbstractTextDocumentLayout* const layout = doc.documentLayout();
 
@@ -436,6 +452,39 @@ namespace KDChart {
             CartesianDiagramDataCompressor::DataValueAttributesList allAttrs;
             allAttrs[index] = diagram->dataValueAttributes( index );
             return allAttrs;
+        }
+
+        /**
+         * Sets arbitrary attributes of a data set.
+         */
+        void setDatasetAttrs( int dataset, QVariant data, DisplayRoles role )
+        {
+            // To store attributes for a dataset, we use the first column
+            // that's associated with it. (i.e., with a dataset dimension
+            // of two, the column of the keys). In most cases however, there's
+            // only one data dimension, and thus also only one column per data set.
+            int column = dataset * datasetDimension;
+            attributesModel->setHeaderData( column, Qt::Horizontal, data, role );
+        }
+
+        /**
+         * Retrieves arbitrary attributes of a data set.
+         */
+        QVariant datasetAttrs( int dataset, DisplayRoles role ) const
+        {
+            // See setDataSetAttrs for explanation of column
+            int column = dataset * datasetDimension;
+            return attributesModel->headerData( column, Qt::Horizontal, role );
+        }
+        
+        /**
+         * Resets an attribute of a dataset back to its default.
+         */
+        void resetDatasetAttrs( int dataset, DisplayRoles role )
+        {
+            // See setDataSetAttrs for explanation of column
+            int column = dataset * datasetDimension;
+            attributesModel->resetHeaderData( column, Qt::Horizontal, role );
         }
 
     protected:

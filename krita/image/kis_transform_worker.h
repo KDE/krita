@@ -70,6 +70,7 @@ public:
 
 public:
 
+    // returns false if interrupted
     bool run();
 
 private:
@@ -98,6 +99,7 @@ private:
     int m_progressTotalSteps;
     int m_progressStep;
     int m_lastProgressReport;
+    QRect m_boundRect;
 
     bool m_fixBorderAlpha;
 };

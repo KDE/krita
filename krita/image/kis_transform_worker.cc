@@ -67,11 +67,9 @@ KisTransformWorker::~KisTransformWorker()
 void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     qint32 pixelSize = src->pixelSize();
-    QRect r;
+    QRect r(m_boundRect);
     KoColorSpace *cs = src->colorSpace();
     Q_UNUSED(cs);
-
-    r = src->exactBounds();
 
     KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), r.top(), r.width());
     KisHLineIterator vit = dst->createHLineIterator(r.x(), r.top(), r.width());
@@ -100,10 +98,9 @@ void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     qint32 pixelSize = src->pixelSize();
-    QRect r;
+    QRect r(m_boundRect);
     KoColorSpace *cs = src->colorSpace();
     Q_UNUSED(cs);
-    r = src->exactBounds();
 
     for (qint32 y = r.bottom(); y >= r.top(); --y) {
         KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width());
@@ -126,15 +123,16 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
             break;
         }
     }
+
+    m_boundRect = QRect(- r.bottom(), r.x(), r.height(), r.width());
 }
 
 void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     qint32 pixelSize = src->pixelSize();
-    QRect r;
+    QRect r(m_boundRect);
     KoColorSpace *cs = src->colorSpace();
     Q_UNUSED(cs);
-    r = src->exactBounds();
 
     KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), r.top(), r.width());
 
@@ -161,15 +159,16 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
             break;
         }
     }
+
+    m_boundRect = QRect(r.top(), - r.x() - r.width(), r.height(), r.width());
 }
 
 void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     qint32 pixelSize = src->pixelSize();
-    QRect r;
+    QRect r(m_boundRect);
     KoColorSpace *cs = src->colorSpace();
     Q_UNUSED(cs);
-    r = src->exactBounds();
 
     KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), r.top(), r.width());
 
@@ -194,6 +193,8 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
             break;
         }
     }
+
+    m_boundRect = QRect(- r.x() - r.width(), - r.bottom(), r.width(), r.height());
 }
 
 template <class iter> iter createIterator(KisPaintDevice *dev, qint32 start, qint32 lineNum, qint32 len);
@@ -210,12 +211,11 @@ template <> KisVLineIteratorPixel createIterator <KisVLineIteratorPixel>
     return dev->createVLineIterator(lineNum, start, len);
 }
 
-template <class iter> void calcDimensions(KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines);
+template <class iter> void calcDimensions(QRect rc, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines);
 
 template <> void calcDimensions <KisHLineIteratorPixel>
-(KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines)
+(QRect rc, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines)
 {
-    QRect rc = dev->exactBounds();
     srcStart = rc.x();
     firstLine = rc.y();
     srcLen = rc.width();
@@ -223,13 +223,38 @@ template <> void calcDimensions <KisHLineIteratorPixel>
 }
 
 template <> void calcDimensions <KisVLineIteratorPixel>
-(KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines)
+(QRect rc, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines)
 {
-    QRect rc = dev->exactBounds();
     firstLine = rc.x();
     srcStart = rc.y();
     numLines = rc.width();
     srcLen = rc.height();
+}
+
+template <class iter> void updateBounds(QRect &boundRect, double floatscale, double shear, qint32 dx);
+
+template <> void updateBounds <KisHLineIteratorPixel>
+(QRect &boundRect, double floatscale, double shear, qint32 dx)
+{
+    QPoint topLeft(qFloor(boundRect.left() * floatscale + boundRect.top() * shear + dx), boundRect.top());
+    QPoint topRight(qCeil(boundRect.right() * floatscale + boundRect.top() * shear + dx), boundRect.top());
+    QPoint bottomRight(qCeil(boundRect.right() * floatscale + boundRect.bottom() * shear + dx), boundRect.bottom());
+    QPoint bottomLeft(qFloor(boundRect.left() * floatscale + boundRect.bottom() * shear + dx), boundRect.bottom());
+    QPolygon p;
+    p << topLeft << topRight << bottomRight << bottomLeft;
+    boundRect = p.boundingRect();
+}
+
+template <> void updateBounds <KisVLineIteratorPixel>
+(QRect &boundRect, double floatscale, double shear, qint32 dx)
+{
+    QPoint topLeft(boundRect.left(), qFloor(boundRect.top() * floatscale + boundRect.left() * shear + dx));
+    QPoint topRight(boundRect.right(), qFloor(boundRect.top() * floatscale + boundRect.right() * shear + dx));
+    QPoint bottomRight(boundRect.right(), qCeil(boundRect.bottom() * floatscale + boundRect.right() * shear + dx));
+    QPoint bottomLeft(boundRect.left(), qCeil(boundRect.bottom() * floatscale + boundRect.left() * shear + dx));
+    QPolygon p;
+    p << topLeft << topRight << bottomRight << bottomLeft;
+    boundRect = p.boundingRect();
 }
 
 struct FilterValues {
@@ -257,13 +282,15 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
     qint32 shearFracOffset;
 
 
-    calcDimensions <T>(src, srcStart, srcLen, firstLine, numLines);
+    calcDimensions <T>(m_boundRect, srcStart, srcLen, firstLine, numLines);
 
     scale = int(floatscale * srcLen + 0.5);
     scaleDenom = srcLen;
 
-    if (scaleDenom == 0)
+    if (scaleDenom == 0) {
+        updateBounds <T>(m_boundRect, floatscale, shear, dx);
         return;
+    }
 
     qint32 support = filterStrategy->intSupport();
     qint32 dstLen, dstStart;
@@ -363,7 +390,7 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
         while (i < srcLen + extraLen) {
             data = srcIt.rawData();
             memcpy(&tmpLine[i*pixelSize], data, pixelSize);
-            cs->setOpacity(data, quint8(0), 1);
+            memcpy(data, src->defaultPixel(), pixelSize);
             if (i < srcLen + extraLen - 1) // duplicate pixels along edge
                 ++srcIt;
             i++;
@@ -429,6 +456,8 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
     delete [] colors;
     delete [] tmpLine;
     delete [] filterWeights;
+
+    updateBounds <T>(m_boundRect, floatscale, shear, dx);
 }
 
 bool KisTransformWorker::run()
@@ -436,7 +465,7 @@ bool KisTransformWorker::run()
     //progress info
     m_progressTotalSteps = 0;
     m_progressStep = 0;
-    QRect r = m_dev->exactBounds();
+    m_boundRect = m_dev->exactBounds();
 
     KisPaintDeviceSP tmpdev1 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace()));
     KisPaintDeviceSP srcdev = m_dev;
@@ -453,11 +482,13 @@ bool KisTransformWorker::run()
 
     //apply shear X and Y
     if (xshear != 0 || yshear != 0) {
-        m_progressTotalSteps += (yscale * r.height() * (r.width() + m_xshear * r.height()));
-        m_progressTotalSteps += (xscale * r.width() * (r.height() + m_yshear * r.width()));
+        m_progressTotalSteps += (yscale * m_boundRect.height() * (m_boundRect.width() + m_xshear * m_boundRect.height()));
+        m_progressTotalSteps += (xscale * m_boundRect.width() * (m_boundRect.height() + m_yshear * m_boundRect.width()));
 
-        transformPass <KisHLineIteratorPixel>(srcdev.data(), srcdev.data(), xscale, yscale *  m_xshear, - round(m_yshearOrigin * yscale * m_xshear), m_filter, m_fixBorderAlpha);
-        transformPass <KisVLineIteratorPixel>(srcdev.data(), srcdev.data(), yscale, m_yshear, - round(m_xshearOrigin * xscale * m_yshear), m_filter, m_fixBorderAlpha);
+        int dx = - qRound(m_yshearOrigin * yscale * m_xshear);
+        int dy = - qRound(m_xshearOrigin * xscale * m_yshear);
+        transformPass <KisHLineIteratorPixel>(srcdev.data(), srcdev.data(), xscale, yscale *  m_xshear, dx, m_filter, m_fixBorderAlpha);
+        transformPass <KisVLineIteratorPixel>(srcdev.data(), srcdev.data(), yscale, m_yshear, dy, m_filter, m_fixBorderAlpha);
         yscale = 1.;
         xscale = 1.;
     }
@@ -480,18 +511,18 @@ bool KisTransformWorker::run()
         tmp = xscale;
         xscale = yscale;
         yscale = tmp;
-        m_progressTotalSteps += r.width() * r.height();
+        m_progressTotalSteps += m_boundRect.width() * m_boundRect.height();
         break;
     case 2:
         rotation -= M_PI;
-        m_progressTotalSteps += r.width() * r.height();
+        m_progressTotalSteps += m_boundRect.width() * m_boundRect.height();
         break;
     case 3:
         rotation -= -M_PI / 2 + 2 * M_PI;
         tmp = xscale;
         xscale = yscale;
         yscale = tmp;
-        m_progressTotalSteps += r.width() * r.height();
+        m_progressTotalSteps += m_boundRect.width() * m_boundRect.height();
         break;
     }
 
@@ -501,8 +532,8 @@ bool KisTransformWorker::run()
     xtranslate -= int(xshear * ytranslate);
 
     // Calculate progress steps
-    m_progressTotalSteps += int(yscale * r.width() * r.height());
-    m_progressTotalSteps += int(xscale * r.width() * (r.height() * yscale + r.width() * yshear));
+    m_progressTotalSteps += int(yscale * m_boundRect.width() * m_boundRect.height());
+    m_progressTotalSteps += int(xscale * m_boundRect.width() * (m_boundRect.height() * yscale + m_boundRect.width() * yshear));
 
     // Now that we have everything in place it's time to do the actual right angle rotations
     switch (rotQuadrant) {
@@ -526,7 +557,6 @@ bool KisTransformWorker::run()
         break;
     }
 
-
     //// Handle simple move case possibly with rotation of 90,180,270
     if (rotation == 0.0 && xscale == 1.0 && yscale == 1.0) {
         if (rotQuadrant == 0) {
@@ -538,8 +568,7 @@ bool KisTransformWorker::run()
         }
         //progress info
         if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(100);
-        return false;
-
+        return true;
     }
 
     if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {

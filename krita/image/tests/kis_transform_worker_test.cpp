@@ -162,17 +162,18 @@ void KisTransformWorkerTest::testScaleUp()
     t.end();
 
     QRect rc = dev->exactBounds();
+
     QVERIFY(rc.width() == qRound(image.width() * 2.4));
     QVERIFY(rc.height() == qRound(image.height() * 2.4));
 
-//    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
-//    result.save("testxscaleup.png");
-//    QPoint errpoint;
-//    if (!TestUtil::compareQImages(errpoint, image, result)) {
-//        image.save("test_x_scaleup_source.png");
-//        result.save("test_x_scaleup_result.png");
-//        QFAIL(QString("Failed to scalethe image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
-//    }
+    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    QPoint errpoint;
+    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "test_scaleup_result.png");
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("test_scaleup_source.png");
+        result.save("test_scaleup_result.png");
+        QFAIL(QString("Failed to scale the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
 }
 
 
@@ -196,20 +197,20 @@ void KisTransformWorkerTest::testXScaleUp()
                           0, 0, updater, filter, true);
     tw.run();
     t.end();
-
+    
     QRect rc = dev->exactBounds();
 
     QVERIFY(rc.width() == image.width() * 2);
     QVERIFY(rc.height() == image.height());
 
-//    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
-//    result.save("testxscaleup.png");
-//    QPoint errpoint;
-//    if (!TestUtil::compareQImages(errpoint, image, result)) {
-//        image.save("test_x_scaleup_source.png");
-//        result.save("test_x_scaleup_result.png");
-//        QFAIL(QString("Failed to scalethe image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
-//    }
+    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    QPoint errpoint;
+    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "scaleupx_result.png");
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("test_x_scaleup_source.png");
+        result.save("test_x_scaleup_result.png");
+        QFAIL(QString("Failed to scale up the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
 }
 
 void KisTransformWorkerTest::testYScaleUp()
@@ -233,22 +234,56 @@ void KisTransformWorkerTest::testYScaleUp()
                           0, 0, updater, filter, true);
     tw.run();
     t.end();
-
+    
     QRect rc = dev->exactBounds();
 
     QVERIFY(rc.width() == image.width());
     QVERIFY(rc.height() == image.height() * 2);
 
-//    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
-//    result.save("testxscaleup.png");
-//    QPoint errpoint;
-//    if (!TestUtil::compareQImages(errpoint, image, result)) {
-//        image.save("test_x_scaleup_source.png");
-//        result.save("test_x_scaleup_result.png");
-//        QFAIL(QString("Failed to scalethe image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
-//    }
+    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    QPoint errpoint;
+    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "scaleupy_result.png");
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("test_y_scaleup_source.png");
+        result.save("test_y_scaleup_result.png");
+        QFAIL(QString("Failed to scale up the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
 }
 
+void KisTransformWorkerTest::testIdentity()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, "");
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+
+    KisTransaction t("test", dev);
+    KisTransformWorker tw(dev, 1.0, 1.0,
+                          0.0, 0.0,
+                          0.0, 0.0,
+                          0.0,
+                          0, 0, updater, filter, true);
+    tw.run();
+    t.end();
+    
+    QRect rc = dev->exactBounds();
+
+    QVERIFY(rc.width() ==image.width());
+    QVERIFY(rc.height() == image.height());
+
+    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("test_identity_source.png");
+        result.save("test_identity_result.png");
+        QFAIL(QString("Failed to apply identity transformation to image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+}
 
 void KisTransformWorkerTest::testScaleDown()
 {
@@ -260,7 +295,6 @@ void KisTransformWorkerTest::testScaleDown()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, "");
-
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
     KisTransaction t("test", dev);
@@ -271,11 +305,11 @@ void KisTransformWorkerTest::testScaleDown()
                           0, 0, updater, filter, true);
     tw.run();
     t.end();
-
+    
     QRect rc = dev->exactBounds();
 
-//    QVERIFY(rc.width() == 703);
-//    QVERIFY(rc.height() == 628);
+    QVERIFY(rc.width() == qRound(image.width() * 0.123));
+    QVERIFY(rc.height() == qRound(image.height() * 0.123));
 
 //    KisTransaction t2("test", dev);
 //    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
@@ -319,10 +353,16 @@ void KisTransformWorkerTest::testXScaleDown()
                           0, 0, updater, filter, true);
     tw.run();
     t.end();
+    
     QRect rc = dev->exactBounds();
 
-//    QVERIFY(rc.width() == 703);
-//    QVERIFY(rc.height() == 628);
+    QVERIFY(rc.width() == qRound(image.width() * 0.123));
+    QVERIFY(rc.height() == image.height() - 1); // the height is reduced by 1 because in the source image
+                                                // at the bottom line most pixels (except 1 or 2) are
+                                                // entirely transparent.
+                                                // when scaling down the image by ~ 1/10, the few non-tranparent
+                                                // pixels disappear when "mixed" with the transparent ones
+                                                // around
 
 //    KisTransaction t2("test", dev);
 //    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
@@ -364,11 +404,11 @@ void KisTransformWorkerTest::testYScaleDown()
                           0, 0, updater, filter, true);
     tw.run();
     t.end();
-
+    
     QRect rc = dev->exactBounds();
 
-//    QVERIFY(rc.width() == 703);
-//    QVERIFY(rc.height() == 628);
+    QVERIFY(rc.width() == image.width());
+    QVERIFY(rc.height() == qRound(image.height() * 0.123));
 
 //    KisTransaction t2("test", dev);
 //    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
@@ -406,7 +446,7 @@ void KisTransformWorkerTest::testXShear()
     KisTransaction t("test", dev);
     KisTransformWorker tw(dev, 1.0, 1.0,
                           1.0, 0.0,
-                          0.0, 0.0,
+                          300., 200.,
                           0.0,
                           0, 0, updater, filter, true);
     tw.run();
@@ -414,8 +454,8 @@ void KisTransformWorkerTest::testXShear()
 
     QRect rc = dev->exactBounds();
 
-//    QVERIFY(rc.width() == 703);
-//    QVERIFY(rc.height() == 628);
+    QVERIFY(rc.width() == 959);
+    QVERIFY(rc.height() == image.height());
 
 //    KisTransaction t2("test", dev);
 //    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
@@ -454,7 +494,7 @@ void KisTransformWorkerTest::testYShear()
     KisTransaction t("test", dev);
     KisTransformWorker tw(dev, 1.0, 1.0,
                           0.0, 1.0,
-                          0.0, 0.0,
+                          300., 200.,
                           0.0,
                           0, 0, updater, filter, true);
     tw.run();
@@ -462,8 +502,8 @@ void KisTransformWorkerTest::testYShear()
 
     QRect rc = dev->exactBounds();
 
-//    QVERIFY(rc.width() == 703);
-//    QVERIFY(rc.height() == 628);
+    QVERIFY(rc.width() == image.width());
+    QVERIFY(rc.height() == 959);
 
 //    KisTransaction t2("test", dev);
 //    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
@@ -481,7 +521,7 @@ void KisTransformWorkerTest::testYShear()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("sheary_source.png");
         result.save("sheary_result.png");
-        QFAIL(QString("Failed to rotate the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to shear the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
 
 }
@@ -511,8 +551,8 @@ void KisTransformWorkerTest::testRotation()
 
     QRect rc = dev->exactBounds();
 
-//    QVERIFY(rc.width() == 703);
-//    QVERIFY(rc.height() == 628);
+    QVERIFY(rc.width() == 702);
+    QVERIFY(rc.height() == 629);
 
 //    KisTransaction t2("test", dev);
 //    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());

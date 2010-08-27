@@ -34,6 +34,7 @@
 #include <kis_pressure_mirror_option_widget.h>
 #include <kis_pressure_scatter_option_widget.h>
 #include <kis_pressure_softness_option.h>
+#include <kis_pressure_sharpness_option_widget.h>
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
         : KisBrushBasedPaintopOptionWidget(parent)
@@ -44,6 +45,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisPressureMirrorOptionWidget());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSoftnessOption()));
+    addPaintOpOption(new KisPressureSharpnessOptionWidget());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureMixOption()));

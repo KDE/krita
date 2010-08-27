@@ -33,6 +33,7 @@
 #include <kis_pressure_mirror_option.h>
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_softness_option.h>
+#include <kis_pressure_sharpness_option.h>
 
 class KisBrushBasedPaintOpSettings;
 
@@ -58,6 +59,7 @@ private:
     KisPressureMirrorOption m_mirrorOption;
     KisPressureOpacityOption m_opacityOption;
     KisPressureSoftnessOption m_softnessOption;
+    KisPressureSharpnessOption m_sharpnessOption;
     KisPressureDarkenOption m_darkenOption;
     KisPressureRotationOption m_rotationOption;
     KisPressureMixOption m_mixOption;

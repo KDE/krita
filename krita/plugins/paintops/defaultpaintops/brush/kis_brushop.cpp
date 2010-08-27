@@ -38,6 +38,7 @@
 #include <kis_painter.h>
 #include <kis_brush_based_paintop_settings.h>
 #include <kis_color_source.h>
+#include <kis_pressure_sharpness_option.h>
 
 KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(settings, painter), m_hsvTransfo(0)
@@ -66,6 +67,7 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_mirrorOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_softnessOption.readOptionSetting(settings);
+    m_sharpnessOption.readOptionSetting(settings);
     m_darkenOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
     m_mixOption.readOptionSetting(settings);
@@ -75,6 +77,7 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_mirrorOption.sensor()->reset();
     m_opacityOption.sensor()->reset();
     m_softnessOption.sensor()->reset();
+    m_sharpnessOption.sensor()->reset();
     m_darkenOption.sensor()->reset();
     m_rotationOption.sensor()->reset();
     m_scatterOption.sensor()->reset();
@@ -119,9 +122,8 @@ double KisBrushOp::paintAt(const KisPaintInformation& info)
     qint32 y;
     double yFraction;
 
-    splitCoordinate(pt.x(), &x, &xFraction);
-    splitCoordinate(pt.y(), &y, &yFraction);
-
+    m_sharpnessOption.apply(info, pt, x, y, xFraction, yFraction);
+    
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
     m_colorSource->selectColor(m_mixOption.apply(info) );
     KoColor origColor = painter()->paintColor();
@@ -149,6 +151,8 @@ double KisBrushOp::paintAt(const KisPaintInformation& info)
     
     MirrorProperties mirrors = m_mirrorOption.apply(info);
     dab->mirror(mirrors.horizontalMirror, mirrors.verticalMirror);
+
+    m_sharpnessOption.applyTreshold( dab );
     
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
     painter()->setOpacity(origOpacity);

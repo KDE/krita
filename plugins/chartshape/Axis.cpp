@@ -1189,8 +1189,6 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
         dataSet->setCategoryDataRegionString( "" );
     }
     else if ( dimension() == YAxisDimension ) {
-        dataSet->setAttachedAxis( 0 );
-
         ChartType chartType = dataSet->chartType();
         if ( chartType == LastChartType )
             chartType = d->plotAreaChartType;
@@ -1228,6 +1226,7 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
         dataSet->setKdDiagram( 0 );
         dataSet->setKdChartModel( 0 );
         dataSet->setKdDataSetNumber( -1 );
+        dataSet->setAttachedAxis( 0 );
 
         if ( !silent ) {
             layoutPlanes();

@@ -39,7 +39,7 @@ struct KisCurveCircleMaskGenerator::Private {
 };
 
 KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve)
-        : KisMaskGenerator(radius, ratio, fh, fv, spikes, CIRCLE), d(new Private)
+        : KisMaskGenerator(radius, ratio, fh, fv, spikes, CIRCLE, SoftId), d(new Private)
 {
     d->xcoef = 2.0 / width();
     d->ycoef = 2.0 / (KisMaskGenerator::d->m_ratio * width());
@@ -91,7 +91,7 @@ quint8 KisCurveCircleMaskGenerator::valueAt(qreal x, qreal y) const
 void KisCurveCircleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
     KisMaskGenerator::toXML(doc, e);
-    e.setAttribute("type", "curve_circle");
+    e.setAttribute("type", "circle");
     e.setAttribute("softness_curve", d->curve);
 }
 

@@ -27,7 +27,7 @@ struct KisRectangleMaskGenerator::Private {
 };
 
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes)
-        : KisMaskGenerator(radius, ratio, fh, fv, spikes, RECTANGLE), d(new Private)
+        : KisMaskGenerator(radius, ratio, fh, fv, spikes, RECTANGLE, DefaultId), d(new Private)
 {
     if (KisMaskGenerator::d->m_fv == 0 &&
             KisMaskGenerator::d->m_fh == 0) {

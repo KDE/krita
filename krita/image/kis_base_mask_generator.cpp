@@ -29,7 +29,7 @@
 #include "kis_curve_circle_mask_generator.h"
 #include "kis_curve_rect_mask_generator.h"
 
-KisMaskGenerator::KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, Type type) : d(new Private)
+KisMaskGenerator::KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, Type type, const KoID& id) : d(new Private), m_id(id)
 {
     d->m_radius = radius;
     d->m_ratio = ratio;
@@ -61,7 +61,7 @@ void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
     e.setAttribute("hfade", horizontalFade());
     e.setAttribute("vfade", verticalFade());
     e.setAttribute("spikes", d->m_spikes);
-
+    e.setAttribute("id", id());
 }
 
 KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
@@ -72,25 +72,29 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
     double vfade = elt.attribute("vfade", "0.0").toDouble();
     int spikes = elt.attribute("spikes", "2").toInt();
     QString typeShape = elt.attribute("type", "circle");
+    QString id = elt.attribute("id", DefaultId.id());
+    
+    if (id == DefaultId.id()){
+        if (typeShape == "circle"){
+            return new KisCircleMaskGenerator(radius, ratio, hfade, vfade, spikes);
+        }else{
+            return new KisRectangleMaskGenerator(radius, ratio, hfade, vfade, spikes);
+        }
+    }
+    
+    if (id == SoftId.id()){
+        KisCubicCurve curve;
+        curve.fromString(elt.attribute("softness_curve","0,0;1,1"));
 
-    
-    if (typeShape == "curve_circle"){
-        KisCubicCurve curve;
-        curve.fromString(elt.attribute("softness_curve","0,0;1,1"));
-        return new KisCurveCircleMaskGenerator(radius, ratio, hfade, vfade, spikes, curve);
+        if (typeShape == "circle"){
+            return new KisCurveCircleMaskGenerator(radius, ratio, hfade, vfade, spikes, curve);
+        }else{
+            return new KisCurveRectangleMaskGenerator(radius, ratio, hfade, vfade, spikes, curve);
+        }
     }
     
-    if (typeShape == "curve_rect"){
-        KisCubicCurve curve;
-        curve.fromString(elt.attribute("softness_curve","0,0;1,1"));
-        return new KisCurveRectangleMaskGenerator(radius, ratio, hfade, vfade, spikes, curve);
-    }
-    
-    if (typeShape == "circle") {
-        return new KisCircleMaskGenerator(radius, ratio, hfade, vfade, spikes);
-    } else {
-        return new KisRectangleMaskGenerator(radius, ratio, hfade, vfade, spikes);
-    }
+    // if unknown
+    return new KisCircleMaskGenerator(radius, ratio, hfade, vfade, spikes);
 }
 
 qreal KisMaskGenerator::width() const
@@ -146,4 +150,11 @@ int KisMaskGenerator::spikes() const
 KisMaskGenerator::Type KisMaskGenerator::type() const
 {
     return d->type;
+}
+
+QList< KoID > KisMaskGenerator::maskGeneratorIds()
+{
+    QList<KoID> ids;
+    ids << DefaultId << SoftId;
+    return ids;
 }

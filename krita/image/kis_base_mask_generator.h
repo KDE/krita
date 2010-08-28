@@ -20,10 +20,16 @@
 #ifndef _KIS_MASK_GENERATOR_H_
 #define _KIS_MASK_GENERATOR_H_
 
+#include <KoID.h>
+#include <klocale.h>
+
 #include "krita_export.h"
 
 class QDomElement;
 class QDomDocument;
+
+const KoID DefaultId("default", i18n("Default")); ///< generate Krita default mask generator
+const KoID SoftId("soft", i18n("Soft brush")); ///< generate brush mask from former softbrush paintop, where softness is based on curve
 
 /**
  * This is the base class for mask shapes
@@ -45,7 +51,7 @@ public:
      * @param fh horizontal fade (fh \< w / 2 )
      * @param fv vertical fade (fv \< h / 2 )
      */
-    KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, Type type);
+    KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, Type type, const KoID& id = DefaultId);
 
     virtual ~KisMaskGenerator();
 
@@ -77,6 +83,11 @@ public:
     int spikes() const;
     Type type() const;
     
+    inline QString id() const { return m_id.id(); }
+    inline QString name() const { return m_id.name(); }
+
+    static QList<KoID> maskGeneratorIds();
+    
     qreal softness() const;
     virtual void setSoftness(qreal softness);
     
@@ -92,6 +103,9 @@ protected:
     };
 
     Private* const d;
+    
+private:
+    const KoID& m_id;
 };
 
 #endif

@@ -102,8 +102,14 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     m_brush = QImage(1, 1, QImage::Format_RGB32);
 
     connect(brushPreview, SIGNAL(clicked()), SLOT(paramChanged()));
+    
+    QList<KoID> ids = KisMaskGenerator::maskGeneratorIds();
+    for (int i=0;i<ids.size();i++){
+        comboBoxMaskType->insertItem(i,ids[i].name());
+    }
+    
     connect(comboBoxMaskType, SIGNAL(activated(int)), SLOT(paramChanged()));
-    connect(comboBoxMaskType, SIGNAL(activated(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+    connect(comboBoxMaskType, SIGNAL(currentIndexChanged(int)), stackedWidget, SLOT(setCurrentIndex(int))); 
     
     brushPreview->setIconSize(QSize(100, 100));
 
@@ -209,6 +215,9 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     }else /*if (aBrush->maskGenerator()->type() == KisMaskGenerator::RECTANGLE) */ {
         comboBoxShape->setCurrentIndex(1);
     }
+    
+    comboBoxMaskType->setCurrentIndex( comboBoxMaskType->findText( aBrush->maskGenerator()->name() ) );
+    
     inputRadius->setValue(aBrush->maskGenerator()->radius());
     inputRatio->setValue(aBrush->maskGenerator()->ratio());
     inputHFade->setValue(aBrush->maskGenerator()->horizontalFade());
@@ -219,6 +228,7 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     inputSpacing->setExponentRatio(3.0);
     inputRandomness->setValue(aBrush->randomness() * 100);
     density->setValue(aBrush->density() * 100);
+    
 }
 
 

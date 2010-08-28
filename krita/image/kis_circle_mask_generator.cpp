@@ -32,7 +32,7 @@ struct KisCircleMaskGenerator::Private {
 };
 
 KisCircleMaskGenerator::KisCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes)
-        : KisMaskGenerator(radius, ratio, fh, fv, spikes, CIRCLE), d(new Private)
+        : KisMaskGenerator(radius, ratio, fh, fv, spikes, CIRCLE, DefaultId), d(new Private)
 {
     d->xcoef = 2.0 / width();
     d->ycoef = 2.0 / (KisMaskGenerator::d->m_ratio * width());

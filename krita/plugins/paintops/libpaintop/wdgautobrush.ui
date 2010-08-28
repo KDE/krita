@@ -48,18 +48,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBoxMaskType">
-       <item>
-        <property name="text">
-         <string>default</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>soft brush</string>
-        </property>
-       </item>
-      </widget>
+      <widget class="QComboBox" name="comboBoxMaskType"/>
      </item>
      <item>
       <widget class="QComboBox" name="comboBoxShape">

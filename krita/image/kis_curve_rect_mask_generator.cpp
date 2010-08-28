@@ -34,7 +34,7 @@ struct KisCurveRectangleMaskGenerator::Private {
 };
 
 KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve)
-        : KisMaskGenerator(radius, ratio, fh, fv, spikes, RECTANGLE), d(new Private)
+        : KisMaskGenerator(radius, ratio, fh, fv, spikes, RECTANGLE, SoftId), d(new Private)
 {
     d->curveResolution = qRound(width());
     d->curveData = curve.floatTransfer( d->curveResolution + 1); 
@@ -73,7 +73,7 @@ quint8 KisCurveRectangleMaskGenerator::valueAt(qreal x, qreal y) const
 void KisCurveRectangleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
     KisMaskGenerator::toXML(doc, e);
-    e.setAttribute("type", "curve_rect");
+    e.setAttribute("type", "rect");
     e.setAttribute("softness_curve", d->curve);
 }
 

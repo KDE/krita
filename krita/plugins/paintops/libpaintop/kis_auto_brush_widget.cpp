@@ -204,6 +204,11 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     m_brush = brush->image();
     // XXX: lock, set and unlock the widgets.
     KisAutoBrush* aBrush = dynamic_cast<KisAutoBrush*>(brush.data());
+    if (aBrush->maskGenerator()->type() == KisMaskGenerator::CIRCLE){
+        comboBoxShape->setCurrentIndex(0);
+    }else /*if (aBrush->maskGenerator()->type() == KisMaskGenerator::RECTANGLE) */ {
+        comboBoxShape->setCurrentIndex(1);
+    }
     inputRadius->setValue(aBrush->maskGenerator()->radius());
     inputRatio->setValue(aBrush->maskGenerator()->ratio());
     inputHFade->setValue(aBrush->maskGenerator()->horizontalFade());

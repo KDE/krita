@@ -326,8 +326,7 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
         endPaint();
         break;
     case PAN:
-        endPan();
-        break;
+        return;
     case EDIT_BRUSH:
         QCursor::setPos(m_originalPos);
         break;
@@ -358,6 +357,15 @@ void KisToolFreehand::keyPressEvent(QKeyEvent *event)
     }*/else {
         event->ignore();
     }
+}
+
+void KisToolFreehand::keyReleaseEvent(QKeyEvent* event)
+{
+    if (m_mode == PAN && event->key() == Qt::Key_Space) {
+        endPan();
+        event->accept();
+    }
+    KoToolBase::keyReleaseEvent(event);
 }
 
 void KisToolFreehand::initPaint(KoPointerEvent *)

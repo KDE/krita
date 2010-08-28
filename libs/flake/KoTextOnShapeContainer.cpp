@@ -79,6 +79,9 @@ KoTextOnShapeContainerModel::KoTextOnShapeContainerModel(KoTextOnShapeContainer 
 
 void KoTextOnShapeContainerModel::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
 {
+#ifdef QT_NO_DEBUG
+    Q_UNUSED(container);
+#endif
     if (lock || type != KoShape::SizeChanged) {
         return;
     }

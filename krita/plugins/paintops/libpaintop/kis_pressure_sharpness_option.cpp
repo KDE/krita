@@ -55,25 +55,25 @@ void KisPressureSharpnessOption::apply(const KisPaintInformation &info, const QP
         // brush
         KisPaintOp::splitCoordinate(pt.x(), &x, &xFraction);
         KisPaintOp::splitCoordinate(pt.y(), &y, &yFraction);
-    }
-        
-    qreal processedSharpnes = qBound<qreal>(0.0,(computeValue(info) * 2  * m_sharpnessFactor),1.0);
-    if (processedSharpnes == 1.0){
-        // pen 
-        xFraction = 0.0;
-        yFraction = 0.0;
-        x = qRound(pt.x());
-        y = qRound(pt.y());
-    }else{
-        // something in between
-        qint32 xi = qRound( pt.x() );
-        qint32 yi = qRound( pt.y() );
-        
-        qreal xf = processedSharpnes * xi + (1.0 - processedSharpnes) * pt.x();
-        qreal yf = processedSharpnes * yi + (1.0 - processedSharpnes) * pt.y();
+    } else {
+        qreal processedSharpnes = qBound<qreal>(0.0,(computeValue(info) * 2  * m_sharpnessFactor),1.0);
+        if (processedSharpnes == 1.0){
+            // pen 
+            xFraction = 0.0;
+            yFraction = 0.0;
+            x = qRound(pt.x());
+            y = qRound(pt.y());
+        }else{
+            // something in between
+            qint32 xi = qRound( pt.x() );
+            qint32 yi = qRound( pt.y() );
+            
+            qreal xf = processedSharpnes * xi + (1.0 - processedSharpnes) * pt.x();
+            qreal yf = processedSharpnes * yi + (1.0 - processedSharpnes) * pt.y();
 
-        KisPaintOp::splitCoordinate(xf, &x, &xFraction);
-        KisPaintOp::splitCoordinate(yf, &y, &yFraction);
+            KisPaintOp::splitCoordinate(xf, &x, &xFraction);
+            KisPaintOp::splitCoordinate(yf, &y, &yFraction);
+        }
     }
 }
 

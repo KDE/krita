@@ -34,6 +34,7 @@ class KisSensorSelector;
 
 const KoID FuzzyId("fuzzy", i18n("Fuzzy")); ///< generate a random number
 const KoID SpeedId("speed", i18n("Speed")); ///< generate a number depending on the speed of the cursor
+const KoID FadeId("fade", i18n("Fade")); ///< generate a number that increase everytime you call it (e.g. per dab)
 const KoID DistanceId("distance", i18n("Distance")); ///< generate a number that increase with distance
 const KoID TimeId("time", i18n("Time")); ///< generate a number that increase with time
 const KoID DrawingAngleId("drawingangle", i18n("Drawing angle")); ///< number depending on the angle

@@ -44,6 +44,7 @@ set(kritalibpaintop_LIB_SRCS
     sensors/kis_dynamic_sensors.cc
     sensors/kis_dynamic_sensor_distance.cc
     sensors/kis_dynamic_sensor_time.cc
+    sensors/kis_dynamic_sensor_fade.cpp
 )
 
 kde4_add_ui_files(kritalibpaintop_LIB_SRCS
@@ -59,6 +60,7 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     wdgbrushchooser.ui
     sensors/SensorDistanceConfiguration.ui
     sensors/SensorTimeConfiguration.ui
+    sensors/SensorFadeConfiguration.ui
     SensorSelector.ui
 )
 

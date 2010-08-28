@@ -154,6 +154,11 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         e->accept();
         return;
     }
+    if (e->button() == Qt::MidButton) {
+        initPan();
+        e->accept();
+        return;
+    }
 
     if (!currentNode())
         return;
@@ -325,6 +330,10 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
         endPaint();
         break;
     case PAN:
+        if (e->button() == Qt::MidButton) {
+            endPan();
+            e->accept();
+        }
         return;
     case EDIT_BRUSH:
         QCursor::setPos(m_originalPos);

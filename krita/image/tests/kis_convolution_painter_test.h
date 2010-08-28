@@ -25,6 +25,7 @@ class KisConvolutionPainterTest : public QObject
 {
     Q_OBJECT
 
+    // XXX: Currently unimplemented again
     void testMaskConvolutionOnRedChannel();
 
 private slots:

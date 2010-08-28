@@ -50,8 +50,8 @@ void KisTextBrush::updateBrush()
     QPainter p;
     p.begin(&px);
     p.setFont(m_font);
-    p.fillRect(0, 0, w, h, Qt::black);
-    p.setPen(Qt::white);
+    p.fillRect(0, 0, w, h, Qt::white);
+    p.setPen(Qt::black);
     p.drawText(0, metric.ascent(), m_txt);
     p.end();
     setImage(px.toImage());

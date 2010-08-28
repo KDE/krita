@@ -151,7 +151,6 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     //     if (!currentImage())
     //    return;
     if (m_mode == PAN) {
-        initPan(e);
         e->accept();
         return;
     }
@@ -348,9 +347,7 @@ void KisToolFreehand::keyPressEvent(QKeyEvent *event)
     {
         event->accept(); // Make sure nothing disturb the painting
     } else if (event->key() == Qt::Key_Space) {
-        m_mode = PAN;
-        useCursor(Qt::OpenHandCursor);
-
+        initPan();
         event->accept();
     }/* else if (event->key() == Qt::Key_Control){ // we need to reset the cursor back when the user does not hold any key so commented so far
         useCursor(KisCursor::pickerCursor());
@@ -660,11 +657,10 @@ QPointF KisToolFreehand::adjustPosition(const QPointF& point)
     return point;
 }
 
-void KisToolFreehand::initPan(KoPointerEvent *event)
+void KisToolFreehand::initPan()
 {
     m_mode = PAN;
-    m_lastPosition = convertDocumentToWidget(event->point);
-    event->accept();
+    m_lastPosition = convertDocumentToWidget(m_mousePos);
     useCursor(QCursor(Qt::ClosedHandCursor));
 }
 
@@ -673,9 +669,6 @@ void KisToolFreehand::pan(KoPointerEvent *event)
     Q_ASSERT(canvas());
     Q_ASSERT(canvas()->canvasController());
 
-
-    if (event->buttons() == 0)
-        return;
     event->accept();
 
     QPointF actualPosition = convertDocumentToWidget(event->point);

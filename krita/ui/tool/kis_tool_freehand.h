@@ -82,7 +82,7 @@ protected:
     virtual void endPaint();
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
-    virtual void initPan(KoPointerEvent *e);
+    virtual void initPan();
     virtual void pan(KoPointerEvent *e);
     virtual void endPan();
 

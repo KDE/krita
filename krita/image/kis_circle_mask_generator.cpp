@@ -93,7 +93,13 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
             double normeFadeLimitE = norme(xle * transformedFadeX, yle * transformedFadeY);
             return (uchar)(255 *(normeFade - 1) / (normeFadeLimitE - 1));
         } else {
-            return 0;
+            n = 1 - n;
+            if( width() < 2 || height() < 2 || n > d->xcoef * 0.5 || n > d->ycoef * 0.5)
+            {
+              return 0;
+            } else {
+              return 255 *  ( 1 - 4 * n * n  / (d->xcoef * d->ycoef) );
+            }
         }
     }
 }

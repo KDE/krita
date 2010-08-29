@@ -85,8 +85,6 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     int dstWidth = maskWidth(scaleX, angle);
     int dstHeight = maskHeight(scaleY, angle);
     
-    
-    
     // if there's coloring information, we merely change the alpha: in that case,
     // the dab should be big enough!
     if (coloringInformation) {
@@ -129,8 +127,8 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     double invScaleX = 1.0 / scaleX;
     double invScaleY = 1.0 / scaleY;
 
-    double centerX = dstWidth  * 0.5 - 1.0 + subPixelX;
-    double centerY = dstHeight * 0.5 - 1.0 + subPixelY;
+    double centerX = dstWidth  * 0.5 - 0.5 + subPixelX;
+    double centerY = dstHeight * 0.5 - 0.5 + subPixelY;
 
     // the results differ, sometimes this code is faster, sometimes it is not
     // more investigation is probably needed

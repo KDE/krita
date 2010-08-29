@@ -724,7 +724,7 @@ void KisConfig::setPressureTabletCurve(const QString& curveString) const
 
 bool KisConfig::zoomWithWheel() const
 {
-    return m_cfg.readEntry("ZoomWithWheel", false);
+    return m_cfg.readEntry("ZoomWithWheel", true);
 }
 
 void KisConfig::setZoomWithWheel(const bool zoom) const

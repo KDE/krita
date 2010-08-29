@@ -100,7 +100,7 @@ void GeneralTab::setDefault()
 
     m_cmbCursorShape->setCurrentIndex(cfg.getDefaultCursorStyle());
     chkShowRootLayer->setChecked(false);
-    chkZoomWithWheel->setChecked(false);
+    chkZoomWithWheel->setChecked(true);
     m_autosaveCheckBox->setChecked(true);
     //convert to minutes
     m_autosaveSpinBox->setValue(KoDocument::defaultAutoSave() / 60);

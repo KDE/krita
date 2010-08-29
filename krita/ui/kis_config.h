@@ -257,6 +257,9 @@ public:
     QString pressureTabletCurve() const;
     void setPressureTabletCurve(const QString& curveString) const;
 
+    bool zoomWithWheel() const;
+    void setZoomWithWheel(const bool zoom) const;
+    
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

@@ -67,6 +67,7 @@
 #include <KoResourceServerProvider.h>
 #include <KoCompositeOp.h>
 #include <KoTemplateCreateDia.h>
+#include <KoCanvasControllerWidget.h>
 
 #include <kactioncollection.h>
 
@@ -215,6 +216,8 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setDrawShadow(false);
     canvasController->setCanvasMode(KoCanvasController::Infinite);
+    KisConfig cfg;
+    canvasController->setZoomWithWheel(cfg.zoomWithWheel());
 
     m_d->canvasController = canvasController;
 
@@ -673,6 +676,8 @@ void KisView2::slotPreferences()
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
         m_d->resourceProvider->resetDisplayProfile();
+        KisConfig cfg;
+        static_cast<KoCanvasControllerWidget*>(m_d->canvasController)->setZoomWithWheel(cfg.zoomWithWheel());
 
         // Update the settings for all nodes -- they don't query
         // KisConfig directly because they need the settings during

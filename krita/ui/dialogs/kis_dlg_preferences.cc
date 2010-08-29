@@ -83,7 +83,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
     chkShowRootLayer->setChecked(cfg.showRootLayer());
-
+    chkZoomWithWheel->setChecked(cfg.zoomWithWheel());
+    
     int autosaveInterval = cfg.autoSaveInterval();
     //convert to minutes
     m_autosaveSpinBox->setValue(autosaveInterval / 60);
@@ -611,6 +612,7 @@ bool KisDlgPreferences::editPreferences()
             doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
         }
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
+        cfg.setZoomWithWheel(dialog->m_general->chkZoomWithWheel->isChecked());
 
         // Color settings
         cfg.setMonitorProfile(dialog->m_colorSettings->m_page->cmbMonitorProfile->itemHighlighted());

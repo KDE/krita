@@ -25,7 +25,7 @@ void KisCubicCurveWidget::paintEvent(QPaintEvent *e)
     QPainterPath path;
     path.moveTo(m_points.first());
 
-    QList<QPair<QVector2D, QVector2D> > controlPoints;
+    QList<QPair<QVector2D, QVector2D> > cubicControlPoints;
 
     for(int i=1; i<m_points.size()-1; i++) {
         QVector2D last(m_points.at((i-1)>=0?(i-1):0));
@@ -38,7 +38,7 @@ void KisCubicCurveWidget::paintEvent(QPaintEvent *e)
         QVector2D ctrlPt1(current - (current.x()-last.x())*CONTROL_POINT_FACTOR*tangent);
         QVector2D ctrlPt2(current + (next.x()-current.x())*CONTROL_POINT_FACTOR *tangent);
 
-        controlPoints.append(QPair<QVector2D, QVector2D>(ctrlPt1, ctrlPt2));
+        cubicControlPoints.append(QPair<QVector2D, QVector2D>(ctrlPt1, ctrlPt2));
     }
 
     if(m_points.size()>=3) {
@@ -57,7 +57,7 @@ void KisCubicCurveWidget::paintEvent(QPaintEvent *e)
         qreal delta = atan2(direction.y(), direction.x());
 
         qreal newAngle = delta+delta-tau;
-        qDebug()<<"tau="<<tau<<"  delta="<<delta<<"  newAngle="<<newAngle;
+
         while(newAngle<0) newAngle+=2*M_PI;
         while(newAngle>2*M_PI) newAngle-=2*M_PI;
         if(newAngle>M_PI/2. && newAngle<M_PI) newAngle=M_PI/2.;
@@ -70,8 +70,8 @@ void KisCubicCurveWidget::paintEvent(QPaintEvent *e)
         controlPoint*=m_points.at(1).x()*CONTROL_POINT_FACTOR;
         controlPoint+=first;
 
-        controlPoints.prepend(controlPoints.first());
-        controlPoints.first().second=controlPoint;
+        cubicControlPoints.prepend(cubicControlPoints.first());
+        cubicControlPoints.first().second=controlPoint;
 
         // compute control point for last line=======================================
         QVector2D last(m_points.last());
@@ -100,17 +100,17 @@ void KisCubicCurveWidget::paintEvent(QPaintEvent *e)
         controlPoint*=(last.x()-secondToLast.x())*CONTROL_POINT_FACTOR;
         controlPoint+=last;
 
-        controlPoints.append(controlPoints.last());
-        controlPoints.last().first=controlPoint;
+        cubicControlPoints.append(cubicControlPoints.last());
+        cubicControlPoints.last().first=controlPoint;
     }
     else {
-        controlPoints.append(QPair<QVector2D, QVector2D>(QVector2D(m_points.first()), QVector2D(m_points.first())));
-        controlPoints.append(QPair<QVector2D, QVector2D>(QVector2D(m_points.last()), QVector2D(m_points.last())));
+        cubicControlPoints.append(QPair<QVector2D, QVector2D>(QVector2D(m_points.first()), QVector2D(m_points.first())));
+        cubicControlPoints.append(QPair<QVector2D, QVector2D>(QVector2D(m_points.last()), QVector2D(m_points.last())));
     }
 
 
     for(int i=1; i<m_points.size(); i++) {
-        path.cubicTo(controlPoints.at(i-1).second.toPointF(), controlPoints.at(i).first.toPointF(), m_points.at(i));
+        path.cubicTo(cubicControlPoints.at(i-1).second.toPointF(), cubicControlPoints.at(i).first.toPointF(), m_points.at(i));
     }
 
     painter.drawPath(path);

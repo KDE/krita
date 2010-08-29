@@ -6,8 +6,15 @@
 #include <QMap>
 
 class KisFreehandCurveWidget : public KisCurveWidgetBase {
+    Q_OBJECT;
 public:
     KisFreehandCurveWidget(QWidget *parent = 0);
+
+    virtual QList<QPointF> controlPoints() const;
+    virtual void setControlPoints(const QList<QPointF> &points);
+
+public slots:
+    void reset();
 
 protected:
     void paintEvent(QPaintEvent *);

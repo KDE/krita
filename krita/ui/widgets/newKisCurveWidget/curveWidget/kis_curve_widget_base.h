@@ -18,6 +18,12 @@ public:
     KisCurveWidgetBase(QWidget *parent = 0);
     ~KisCurveWidgetBase();
 
+    virtual QList<QPointF> controlPoints() const;
+    virtual void setControlPoints(const QList<QPointF> &points);
+
+public slots:
+    virtual void reset();
+
 protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);

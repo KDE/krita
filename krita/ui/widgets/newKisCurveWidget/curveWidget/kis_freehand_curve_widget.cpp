@@ -4,9 +4,43 @@
 #include <QMouseEvent>
 #include <QVector2D>
 
+#include <QDebug>
+
 KisFreehandCurveWidget::KisFreehandCurveWidget(QWidget *parent) :
     KisCurveWidgetBase(parent), m_lastPointX(-1)
-{}
+{
+    reset();
+}
+
+QList<QPointF> KisFreehandCurveWidget::controlPoints() const
+{
+    QList<QPointF> retPoints;
+
+    for (QMap<int, int>::const_iterator iter=m_points.begin(); iter!=(m_points.end()); iter++) {
+        retPoints.append(QPointF(iter.key(), iter.value()));
+    }
+
+    return retPoints;
+}
+
+void KisFreehandCurveWidget::setControlPoints(const QList<QPointF> &points)
+{
+    deletePoints(0, CURVE_RANGE);
+
+    for(int i=0; i<points.size(); i++) {
+        m_points.insert(points.at(i).x(), points.at(i).y());
+    }
+}
+
+void KisFreehandCurveWidget::reset()
+{
+    m_points.clear();
+
+    m_points.insert(0,0);
+    m_points.insert(CURVE_RANGE, CURVE_RANGE);
+
+    update();
+}
 
 void KisFreehandCurveWidget::paintEvent(QPaintEvent *)
 {
@@ -18,7 +52,8 @@ void KisFreehandCurveWidget::paintEvent(QPaintEvent *)
     painter.setMatrix(m_converterMatrix);
 
     QPainterPath path;
-    path.moveTo(0,0);
+    QMap<int, int>::iterator firstPoint = m_points.begin();
+    path.moveTo(firstPoint.key(), firstPoint.value());
 
 
     for (QMap<int, int>::iterator iter=m_points.begin(); iter!=(m_points.end()); iter++) {

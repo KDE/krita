@@ -15,17 +15,31 @@ bool pointCompare (const QPointF &p1, const QPointF &p2)
 KisCurveWidgetBase::KisCurveWidgetBase(QWidget *parent)
     : QWidget(parent), CURVE_RANGE(1000), m_currentPoint(-1)
 {
-    resize(500, 500);
+    KisCurveWidgetBase::reset();
+    setMinimumSize(50, 50);
+}
+
+KisCurveWidgetBase::~KisCurveWidgetBase()
+{}
+
+QList<QPointF> KisCurveWidgetBase::controlPoints() const
+{
+    return m_points;
+}
+
+void KisCurveWidgetBase::setControlPoints(const QList<QPointF> &points)
+{
+    m_points = points;
+}
+
+void KisCurveWidgetBase::reset()
+{
+    m_points.clear();
 
     m_points.append(QPointF(0, 0));
     m_points.append(QPoint(CURVE_RANGE, CURVE_RANGE));
 
-    m_converterMatrix.scale(1, -1);
-}
-
-KisCurveWidgetBase::~KisCurveWidgetBase()
-{
-
+    update();
 }
 
 void KisCurveWidgetBase::mousePressEvent(QMouseEvent *event)

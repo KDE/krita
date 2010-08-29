@@ -6,22 +6,27 @@
 class QPainter;
 class QVector2D;
 
+
 class KisCurveWidgetBase : public QWidget
 {
     Q_OBJECT
+
+protected:
+    const qreal CURVE_RANGE;
 
 public:
     KisCurveWidgetBase(QWidget *parent = 0);
     ~KisCurveWidgetBase();
 
 protected:
-    void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
     void mouseDoubleClickEvent(QMouseEvent *);
+    void resizeEvent(QResizeEvent *);
 
     void paintBlips(QPainter* painter);
+    void paintBackground(QPainter* painter);
 
     void addPoint(const QVector2D& pos);
     // returns true, if pos is a point, also if the point is not removed.

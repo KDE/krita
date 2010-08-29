@@ -13,14 +13,13 @@ bool pointCompare (const QPointF &p1, const QPointF &p2)
 }
 
 KisCurveWidgetBase::KisCurveWidgetBase(QWidget *parent)
-    : QWidget(parent), m_currentPoint(-1)
+    : QWidget(parent), CURVE_RANGE(1000), m_currentPoint(-1)
 {
     resize(500, 500);
 
     m_points.append(QPointF(0, 0));
-    m_points.append(QPoint(300, 300));
+    m_points.append(QPoint(CURVE_RANGE, CURVE_RANGE));
 
-    m_converterMatrix.translate(100, 400);
     m_converterMatrix.scale(1, -1);
 }
 
@@ -29,12 +28,6 @@ KisCurveWidgetBase::~KisCurveWidgetBase()
 
 }
 
-
-void KisCurveWidgetBase::paintEvent(QPaintEvent *)
-{
-}
-
-
 void KisCurveWidgetBase::mousePressEvent(QMouseEvent *event)
 {
     QVector2D mousePos(m_converterMatrix.inverted().map(event->posF()));
@@ -42,7 +35,9 @@ void KisCurveWidgetBase::mousePressEvent(QMouseEvent *event)
         bool movingButton=false;
         for(int i=0; i<m_points.size(); i++) {
             QVector2D pointPos(m_points.at(i));
-            if((mousePos-pointPos).lengthSquared()<36) {
+            QVector2D mouseDistance = (mousePos-pointPos);
+            mouseDistance*=QVector2D(m_converterMatrix.m11(), m_converterMatrix.m22());
+            if(mouseDistance.lengthSquared()<100) {
                 m_currentPoint=i;
                 movingButton=true;
                 break;
@@ -64,6 +59,9 @@ void KisCurveWidgetBase::mouseMoveEvent(QMouseEvent *event)
 {
     if(m_currentPoint!=-1) {
         QPointF mousePos = m_converterMatrix.inverted().map(event->posF());
+        mousePos.setX(qBound(0., mousePos.x(), CURVE_RANGE));
+        mousePos.setY(qBound(0., mousePos.y(), CURVE_RANGE));
+
         if(m_currentPoint!=0 && m_currentPoint!=m_points.size()-1) {
             if(!(rect().adjusted(-20, -20, 20, 20).contains(event->pos()))) {
                 m_points.removeAt(m_currentPoint);
@@ -71,11 +69,11 @@ void KisCurveWidgetBase::mouseMoveEvent(QMouseEvent *event)
                 update();
                 return;
             }
-            else if(mousePos.x()<m_points.at(m_currentPoint-1).x()) {
-                m_points[m_currentPoint].setX(m_points.at(m_currentPoint-1).x());
+            else if(mousePos.x()<m_points.at(m_currentPoint-1).x()+1) {
+                m_points[m_currentPoint].setX(m_points.at(m_currentPoint-1).x()+1);
             }
-            else if (mousePos.x()>m_points.at(m_currentPoint+1).x()) {
-                m_points[m_currentPoint].setX(m_points.at(m_currentPoint+1).x());
+            else if (mousePos.x()>m_points.at(m_currentPoint+1).x()-1) {
+                m_points[m_currentPoint].setX(m_points.at(m_currentPoint+1).x()-1);
             }
             else {
                 m_points[m_currentPoint].setX(mousePos.x());
@@ -99,11 +97,26 @@ void KisCurveWidgetBase::mouseDoubleClickEvent(QMouseEvent *event)
         addPoint(mousePos);
 }
 
+void KisCurveWidgetBase::resizeEvent(QResizeEvent *)
+{
+    m_converterMatrix = QMatrix();
+    m_converterMatrix.scale(width()/CURVE_RANGE, height()/(-1*CURVE_RANGE));
+    m_converterMatrix.translate(0, -1*CURVE_RANGE);
+}
+
 void KisCurveWidgetBase::paintBlips(QPainter *painter)
 {
     for(int i=0; i<m_points.size(); i++) {
-        painter->drawEllipse(m_points.at(i), 5, 5);
+        painter->drawEllipse(m_points.at(i), 5/m_converterMatrix.m11(), 5/m_converterMatrix.m22());
     }
+}
+
+void KisCurveWidgetBase::paintBackground(QPainter *painter)
+{
+    QImage bg(width(), height(), QImage::Format_ARGB32_Premultiplied);
+    bg.fill(qRgb(250, 250, 250));
+
+    painter->drawImage(0, 0, bg);
 }
 
 void KisCurveWidgetBase::addPoint(const QVector2D& pos)

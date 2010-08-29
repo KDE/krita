@@ -5,6 +5,8 @@
 #include <QPainter>
 #include <QPainterPath>
 
+#include <QDebug>
+
 KisCubicCurveWidget::KisCubicCurveWidget(QWidget *parent) :
     KisCurveWidgetBase(parent)
 {
@@ -13,10 +15,12 @@ KisCubicCurveWidget::KisCubicCurveWidget(QWidget *parent) :
 void KisCubicCurveWidget::paintEvent(QPaintEvent *e)
 {
     const qreal CONTROL_POINT_FACTOR=0.4;
-    KisCurveWidgetBase::paintEvent(e);
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
+
+    paintBackground(&painter);
+
     painter.setMatrix(m_converterMatrix);
     QPainterPath path;
     path.moveTo(m_points.first());
@@ -53,14 +57,18 @@ void KisCubicCurveWidget::paintEvent(QPaintEvent *e)
         qreal delta = atan2(direction.y(), direction.x());
 
         qreal newAngle = delta+delta-tau;
-        if(newAngle>M_PI/2.) newAngle=M_PI/2.;
-        if(newAngle<0) newAngle=0;
+        qDebug()<<"tau="<<tau<<"  delta="<<delta<<"  newAngle="<<newAngle;
+        while(newAngle<0) newAngle+=2*M_PI;
+        while(newAngle>2*M_PI) newAngle-=2*M_PI;
+        if(newAngle>M_PI/2. && newAngle<M_PI) newAngle=M_PI/2.;
+        if(newAngle<M_PI*3./2. && newAngle>M_PI) newAngle=M_PI*3./2.;
 
 
         QVector2D controlPoint;
         controlPoint.setX(cos(newAngle));
         controlPoint.setY(sin(newAngle));
         controlPoint*=m_points.at(1).x()*CONTROL_POINT_FACTOR;
+        controlPoint+=first;
 
         controlPoints.prepend(controlPoints.first());
         controlPoints.first().second=controlPoint;
@@ -80,8 +88,10 @@ void KisCubicCurveWidget::paintEvent(QPaintEvent *e)
         /*qreal */delta = atan2(direction.y(), direction.x());
 
         /*qreal */newAngle = delta+delta-tau;
-        if(newAngle<M_PI*-1.) newAngle=M_PI*-1.;
-        if(newAngle>M_PI/-2.) newAngle=M_PI/-2.;
+        while(newAngle<0) newAngle+=2*M_PI;
+        while(newAngle>2*M_PI) newAngle-=2*M_PI;
+        if(newAngle<M_PI/2.) newAngle=M_PI/2.;
+        if(newAngle>M_PI*3./2.) newAngle=M_PI*3./2.;
 
 
 //        QVector2D controlPoint;

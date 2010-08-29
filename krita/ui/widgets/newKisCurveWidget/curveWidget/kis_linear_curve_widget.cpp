@@ -9,11 +9,13 @@ KisLinearCurveWidget::KisLinearCurveWidget(QWidget *parent) :
 }
 
 void KisLinearCurveWidget::paintEvent(QPaintEvent *e) {
-    KisCurveWidgetBase::paintEvent(e);
 
     QPainter painter(this);
-    painter.setMatrix(m_converterMatrix);
     painter.setRenderHint(QPainter::Antialiasing);
+
+    paintBackground(&painter);
+
+    painter.setMatrix(m_converterMatrix);
 
     QPainterPath path;
     path.moveTo(m_points.first());

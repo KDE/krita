@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_iterator_test.h"
+#include "kis_iterators_ng_test.h"
 #include <QApplication>
 
 #include <qtest_kde.h>
@@ -229,6 +229,15 @@ void KisIteratorTest::hLineIter(const KoColorSpace * colorSpace)
     delete[] bytes;
 }
 
+void KisIteratorTest::justCreation(const KoColorSpace * colorSpace)
+{
+    KisPaintDevice dev(colorSpace);
+    dev.createVLineConstIteratorNG(0, 0, 128);
+    dev.createVLineIteratorNG(0, 0, 128);
+    dev.createHLineConstIteratorNG(0, 0, 128);
+    dev.createHLineIteratorNG(0, 0, 128);
+}
+
 void KisIteratorTest::vLineIter(const KoColorSpace * colorSpace)
 {
 
@@ -344,6 +353,11 @@ void KisIteratorTest::hLineIter()
     allCsApplicator(&KisIteratorTest::hLineIter);
 }
 
+void KisIteratorTest::justCreation()
+{
+    allCsApplicator(&KisIteratorTest::justCreation);
+}
+
 void KisIteratorTest::vLineIter()
 {
     allCsApplicator(&KisIteratorTest::vLineIter);
@@ -355,4 +369,4 @@ void KisIteratorTest::randomAccessor()
 }
 
 QTEST_KDEMAIN(KisIteratorTest, NoGUI)
-#include "kis_iterator_test.moc"
+#include "kis_iterators_ng_test.moc"

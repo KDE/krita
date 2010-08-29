@@ -5,6 +5,13 @@
 #include <QVector2D>
 #include <QMouseEvent>
 
+bool pointCompare (const QPointF &p1, const QPointF &p2)
+{
+    if(p1.x()<p2.x()) return true;
+    if(p1.x()==p2.x() && p1.y()<p2.y()) return true;
+    return false;
+}
+
 KisCurveWidgetBase::KisCurveWidgetBase(QWidget *parent)
     : QWidget(parent), m_currentPoint(-1)
 {
@@ -30,15 +37,26 @@ void KisCurveWidgetBase::paintEvent(QPaintEvent *)
 
 void KisCurveWidgetBase::mousePressEvent(QMouseEvent *event)
 {
+    QVector2D mousePos(m_converterMatrix.inverted().map(event->posF()));
     if(event->button()==Qt::LeftButton) {
-        QVector2D mousePos(m_converterMatrix.inverted().map(event->posF()));
+        bool movingButton=false;
         for(int i=0; i<m_points.size(); i++) {
             QVector2D pointPos(m_points.at(i));
             if((mousePos-pointPos).lengthSquared()<36) {
                 m_currentPoint=i;
+                movingButton=true;
                 break;
             }
         }
+
+        if(movingButton==false) {
+            addPoint(mousePos);
+            // start moving the new point
+            mousePressEvent(event);
+        }
+    }
+    else if(event->button()==Qt::RightButton) {
+        removePoint(mousePos);
     }
 }
 
@@ -74,28 +92,11 @@ void KisCurveWidgetBase::mouseReleaseEvent(QMouseEvent *event)
         m_currentPoint=-1;
 }
 
-bool pointCompare (const QPointF &p1, const QPointF &p2)
-{
-    if(p1.x()<p2.x()) return true;
-    if(p1.x()==p2.x() && p1.y()<p2.y()) return true;
-    return false;
-}
-
 void KisCurveWidgetBase::mouseDoubleClickEvent(QMouseEvent *event)
 {
     QVector2D mousePos(m_converterMatrix.inverted().map(event->posF()));
-    for(int i=0; i<m_points.size(); i++) {
-        if((QVector2D(m_points.at(i))-mousePos).lengthSquared()<36) {
-            if(i>0 && i<m_points.size()-1) { // don't add a point, if double clicking on start or end
-                m_points.removeAt(i);
-                update();
-            }
-            return;
-        }
-    }
-    m_points.append(mousePos.toPointF());
-    qSort(m_points.begin(), m_points.end(), pointCompare);
-    update();
+    if(!removePoint(mousePos))
+        addPoint(mousePos);
 }
 
 void KisCurveWidgetBase::paintBlips(QPainter *painter)
@@ -104,3 +105,26 @@ void KisCurveWidgetBase::paintBlips(QPainter *painter)
         painter->drawEllipse(m_points.at(i), 5, 5);
     }
 }
+
+void KisCurveWidgetBase::addPoint(const QVector2D& pos)
+{
+    m_points.append(pos.toPointF());
+    qSort(m_points.begin(), m_points.end(), pointCompare);
+    update();
+}
+
+bool KisCurveWidgetBase::removePoint(const QVector2D& pos)
+{
+    for(int i=0; i<m_points.size(); i++) {
+        if((QVector2D(m_points.at(i))-pos).lengthSquared()<36) {
+            if(i>0 && i<m_points.size()-1) { // don't remove a point, if on start or end
+                m_points.removeAt(i);
+                update();
+            }
+            return true;
+        }
+    }
+
+    return false;
+}
+

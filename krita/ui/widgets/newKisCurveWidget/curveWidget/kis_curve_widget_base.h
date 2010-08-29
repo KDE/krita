@@ -4,6 +4,7 @@
 #include <QtGui/QWidget>
 
 class QPainter;
+class QVector2D;
 
 class KisCurveWidgetBase : public QWidget
 {
@@ -21,6 +22,10 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *);
 
     void paintBlips(QPainter* painter);
+
+    void addPoint(const QVector2D& pos);
+    // returns true, if pos is a point, also if the point is not removed.
+    bool removePoint(const QVector2D& pos);
 
     QList<QPointF> m_points;
     QMatrix m_converterMatrix;

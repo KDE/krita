@@ -1,5 +1,6 @@
 #include "kis_cubic_curve_widget.h"
 
+#include <cmath>
 #include <QVector2D>
 #include <QPainter>
 #include <QPainterPath>
@@ -11,6 +12,7 @@ KisCubicCurveWidget::KisCubicCurveWidget(QWidget *parent) :
 
 void KisCubicCurveWidget::paintEvent(QPaintEvent *e)
 {
+    const qreal CONTROL_POINT_FACTOR=0.4;
     KisCurveWidgetBase::paintEvent(e);
 
     QPainter painter(this);
@@ -29,18 +31,67 @@ void KisCubicCurveWidget::paintEvent(QPaintEvent *e)
         QVector2D tangent = next-last;
         tangent.normalize();
 
-        QVector2D ctrlPt1(current - (current.x()-last.x())*0.5*tangent);
-        QVector2D ctrlPt2(current + (next.x()-current.x())*0.5*tangent);
+        QVector2D ctrlPt1(current - (current.x()-last.x())*CONTROL_POINT_FACTOR*tangent);
+        QVector2D ctrlPt2(current + (next.x()-current.x())*CONTROL_POINT_FACTOR *tangent);
 
         controlPoints.append(QPair<QVector2D, QVector2D>(ctrlPt1, ctrlPt2));
     }
 
-    if(controlPoints.size()>0) {
+    if(m_points.size()>=3) {
+        // compute control point for first line=======================================
+        QVector2D first(m_points.first());
+        QVector2D second(m_points.at(1));
+        QVector2D third(m_points.at(2));
+
+        QVector2D tangent = third-first;
+        tangent.normalize();
+
+        QVector2D direction = second-first;
+        direction.normalize();
+
+        qreal tau = atan2(tangent.y(), tangent.x());
+        qreal delta = atan2(direction.y(), direction.x());
+
+        qreal newAngle = delta+delta-tau;
+        if(newAngle>M_PI/2.) newAngle=M_PI/2.;
+        if(newAngle<0) newAngle=0;
+
+
+        QVector2D controlPoint;
+        controlPoint.setX(cos(newAngle));
+        controlPoint.setY(sin(newAngle));
+        controlPoint*=m_points.at(1).x()*CONTROL_POINT_FACTOR;
+
         controlPoints.prepend(controlPoints.first());
-        controlPoints.first().second=controlPoints.first().first;
+        controlPoints.first().second=controlPoint;
+
+        // compute control point for last line=======================================
+        QVector2D last(m_points.last());
+        QVector2D secondToLast(m_points.at(m_points.size()-2));
+        QVector2D thirdToLast(m_points.at(m_points.size()-3));
+
+        /*QVector2D */tangent = thirdToLast-last;
+        tangent.normalize();
+
+        /*QVector2D */direction = secondToLast-last;
+        direction.normalize();
+
+        /*qreal */tau = atan2(tangent.y(), tangent.x());
+        /*qreal */delta = atan2(direction.y(), direction.x());
+
+        /*qreal */newAngle = delta+delta-tau;
+        if(newAngle<M_PI*-1.) newAngle=M_PI*-1.;
+        if(newAngle>M_PI/-2.) newAngle=M_PI/-2.;
+
+
+//        QVector2D controlPoint;
+        controlPoint.setX(cos(newAngle));
+        controlPoint.setY(sin(newAngle));
+        controlPoint*=(last.x()-secondToLast.x())*CONTROL_POINT_FACTOR;
+        controlPoint+=last;
 
         controlPoints.append(controlPoints.last());
-        controlPoints.last().first=controlPoints.last().second;
+        controlPoints.last().first=controlPoint;
     }
     else {
         controlPoints.append(QPair<QVector2D, QVector2D>(QVector2D(m_points.first()), QVector2D(m_points.first())));

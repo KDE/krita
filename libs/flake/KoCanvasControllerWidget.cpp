@@ -58,7 +58,8 @@ public:
     Private(KoCanvasControllerWidget *qq)
         : q(qq),
         canvas(0),
-        ignoreScrollSignals(false)
+        ignoreScrollSignals(false),
+        zoomWithWheel(false)
     {
     }
 
@@ -76,6 +77,7 @@ public:
     KoCanvasBase * canvas;
     Viewport * viewportWidget;
     bool ignoreScrollSignals;
+    bool zoomWithWheel;
 };
 
 
@@ -545,6 +547,11 @@ void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalcul
         updateCanvasOffsetY();
 }
 
+void KoCanvasControllerWidget::setZoomWithWheel(bool zoom)
+{
+    d->zoomWithWheel = zoom;
+}
+
 void KoCanvasControllerWidget::pan(const QPoint &distance)
 {
     QPoint sourcePoint = scrollBarValue();
@@ -599,7 +606,7 @@ void KoCanvasControllerWidget::keyPressEvent(QKeyEvent *event)
 
 void KoCanvasControllerWidget::wheelEvent(QWheelEvent *event)
 {
-    if ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
+    if (d->zoomWithWheel != ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier)) {
         const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
         d->ignoreScrollSignals = true;
 

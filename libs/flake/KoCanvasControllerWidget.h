@@ -246,6 +246,12 @@ public:
      */
     void updateDocumentSize(const QSize &sz, bool recalculateCenter = true);
 
+     /**
+     * Set mouse wheel to zoom behaviour
+     * @param zoom if true wheel will zoom instead of scroll, control modifier will scroll
+     */
+    void setZoomWithWheel(bool zoom);
+    
     /**
      * \internal
      */

@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>KoPageLayoutWidget</class>
- <widget class="QWidget" name="KoPageLayoutWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="KoPageLayoutWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,34 +10,34 @@
     <height>417</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout" >
-   <item row="0" column="0" >
-    <widget class="QLabel" name="unitsLabel" >
-     <property name="text" >
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="unitsLabel">
+     <property name="text">
       <string>Unit:</string>
      </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>units</cstring>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" colspan="2" >
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
+   <item row="0" column="1" colspan="2">
+    <layout class="QHBoxLayout">
+     <property name="spacing">
       <number>6</number>
      </property>
-     <property name="margin" >
+     <property name="margin">
       <number>0</number>
      </property>
      <item>
-      <widget class="QComboBox" name="units" />
+      <widget class="QComboBox" name="units"/>
      </item>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>10</width>
          <height>0</height>
@@ -46,150 +47,150 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
       <string>Size:</string>
      </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>sizes</cstring>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" colspan="2" >
-    <widget class="QComboBox" name="sizes" />
+   <item row="2" column="1" colspan="2">
+    <widget class="QComboBox" name="sizes"/>
    </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="label_3" >
-     <property name="text" >
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
       <string>Width:</string>
      </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>width</cstring>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="2" >
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
+   <item row="3" column="1" colspan="2">
+    <layout class="QHBoxLayout">
+     <property name="spacing">
       <number>6</number>
      </property>
-     <property name="margin" >
+     <property name="margin">
       <number>0</number>
      </property>
      <item>
-      <widget class="KoUnitDoubleSpinBox" name="width" />
+      <widget class="KoUnitDoubleSpinBox" name="width"/>
      </item>
      <item>
-      <widget class="QLabel" name="label_4" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+      <widget class="QLabel" name="label_4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Height:</string>
        </property>
-       <property name="buddy" >
+       <property name="buddy">
         <cstring>height</cstring>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KoUnitDoubleSpinBox" name="height" />
+      <widget class="KoUnitDoubleSpinBox" name="height"/>
      </item>
     </layout>
    </item>
-   <item row="3" column="0" >
-    <widget class="QLabel" name="label_5" >
-     <property name="text" >
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
       <string>Orientation:</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
-    <widget class="QRadioButton" name="portrait" >
-     <property name="text" >
+   <item row="4" column="1">
+    <widget class="QRadioButton" name="portrait">
+     <property name="text">
       <string>Portrait</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="2" >
-    <widget class="QRadioButton" name="landscape" >
-     <property name="text" >
+   <item row="4" column="2">
+    <widget class="QRadioButton" name="landscape">
+     <property name="text">
       <string>Landscape</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" >
-    <widget class="QLabel" name="facingPageLabel" >
-     <property name="text" >
+   <item row="5" column="0">
+    <widget class="QLabel" name="facingPageLabel">
+     <property name="text">
       <string>Facing pages:</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1" >
-    <widget class="QRadioButton" name="singleSided" >
-     <property name="text" >
+   <item row="5" column="1">
+    <widget class="QRadioButton" name="singleSided">
+     <property name="text">
       <string>Single sided</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="2" >
-    <widget class="QRadioButton" name="facingPages" >
-     <property name="text" >
+   <item row="5" column="2">
+    <widget class="QRadioButton" name="facingPages">
+     <property name="text">
       <string>Facing pages</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0" >
-    <widget class="QLabel" name="directionLabel" >
-     <property name="text" >
+   <item row="6" column="0">
+    <widget class="QLabel" name="directionLabel">
+     <property name="text">
       <string>Text direction:</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="1" colspan="2" >
-    <widget class="QComboBox" name="textDirection" >
+   <item row="6" column="1" colspan="2">
+    <widget class="QComboBox" name="textDirection">
      <item>
-      <property name="text" >
+      <property name="text">
        <string>Automatic</string>
       </property>
      </item>
      <item>
-      <property name="text" >
+      <property name="text">
        <string>Left to right</string>
       </property>
      </item>
      <item>
-      <property name="text" >
+      <property name="text">
        <string>Right to left</string>
       </property>
      </item>
     </widget>
    </item>
-   <item row="6" column="0" colspan="3" >
-    <widget class="QGroupBox" name="margins" >
-     <property name="title" >
+   <item row="7" column="0" colspan="3">
+    <widget class="QGroupBox" name="margins">
+     <property name="title">
       <string>Margins</string>
      </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
+     <layout class="QGridLayout">
+      <property name="margin">
        <number>9</number>
       </property>
-      <property name="spacing" >
+      <property name="spacing">
        <number>6</number>
       </property>
-      <item rowspan="4" row="0" column="2" >
+      <item row="0" column="2" rowspan="4">
        <spacer>
-        <property name="orientation" >
+        <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeType" >
+        <property name="sizeType">
          <enum>QSizePolicy::MinimumExpanding</enum>
         </property>
-        <property name="sizeHint" stdset="0" >
+        <property name="sizeHint" stdset="0">
          <size>
           <width>10</width>
           <height>10</height>
@@ -197,70 +198,70 @@
         </property>
        </spacer>
       </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="rightLabel" >
-        <property name="text" >
+      <item row="2" column="0">
+       <widget class="QLabel" name="rightLabel">
+        <property name="text">
          <string>Page edge:</string>
         </property>
-        <property name="buddy" >
+        <property name="buddy">
          <cstring>pageEdgeMargin</cstring>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="leftLabel" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QLabel" name="leftLabel">
+        <property name="text">
          <string>Binding edge:</string>
         </property>
-        <property name="buddy" >
+        <property name="buddy">
          <cstring>bindingEdgeMargin</cstring>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" >
-       <widget class="QLabel" name="label_12" >
-        <property name="text" >
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
          <string>Bottom:</string>
         </property>
-        <property name="buddy" >
+        <property name="buddy">
          <cstring>bottomMargin</cstring>
         </property>
        </widget>
       </item>
-      <item row="2" column="1" >
-       <widget class="KoUnitDoubleSpinBox" name="pageEdgeMargin" >
-        <property name="maximum" >
+      <item row="2" column="1">
+       <widget class="KoUnitDoubleSpinBox" name="pageEdgeMargin">
+        <property name="maximum">
          <double>999.990000000000009</double>
         </property>
        </widget>
       </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="label_9" >
-        <property name="text" >
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
          <string>Top:</string>
         </property>
-        <property name="buddy" >
+        <property name="buddy">
          <cstring>topMargin</cstring>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <widget class="KoUnitDoubleSpinBox" name="bindingEdgeMargin" >
-        <property name="maximum" >
+      <item row="1" column="1">
+       <widget class="KoUnitDoubleSpinBox" name="bindingEdgeMargin">
+        <property name="maximum">
          <double>999.990000000000009</double>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="KoUnitDoubleSpinBox" name="topMargin" >
-        <property name="maximum" >
+      <item row="0" column="1">
+       <widget class="KoUnitDoubleSpinBox" name="topMargin">
+        <property name="maximum">
          <double>999.990000000000009</double>
         </property>
        </widget>
       </item>
-      <item row="3" column="1" >
-       <widget class="KoUnitDoubleSpinBox" name="bottomMargin" >
-        <property name="maximum" >
+      <item row="3" column="1">
+       <widget class="KoUnitDoubleSpinBox" name="bottomMargin">
+        <property name="maximum">
          <double>999.990000000000009</double>
         </property>
        </widget>
@@ -268,18 +269,28 @@
      </layout>
     </widget>
    </item>
-   <item row="7" column="0" colspan="3" >
-    <spacer name="verticalSpacer" >
-     <property name="orientation" >
+   <item row="8" column="0" colspan="3">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>318</width>
        <height>10</height>
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="stylesLabel">
+     <property name="text">
+      <string>Follow style:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="2">
+    <widget class="QComboBox" name="pageStyle"/>
    </item>
   </layout>
  </widget>

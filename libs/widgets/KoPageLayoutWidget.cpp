@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -81,10 +81,12 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     if (layout.format == 0) // make sure we always call this during startup, even if the A3 (index=0) was chosen
         sizeChanged(layout.format);
     showTextDirection(false);
-/* disable page spreads for now */
+    /* disable advanced page layout features by default */
     d->widget.facingPageLabel->setVisible(false);
     d->widget.facingPages->setVisible(false);
     d->widget.singleSided->setVisible(false);
+    d->widget.stylesLabel->setVisible(false);
+    d->widget.pageStyle->setVisible(false);
 }
 
 KoPageLayoutWidget::~KoPageLayoutWidget()
@@ -315,4 +317,21 @@ KoText::Direction KoPageLayoutWidget::textDirection() const
     default:
     case 0: return KoText::AutoDirection;
     }
+}
+
+void KoPageLayoutWidget::showPageStyles(bool on)
+{
+    d->widget.stylesLabel->setVisible(on);
+    d->widget.pageStyle->setVisible(on);
+}
+
+void KoPageLayoutWidget::setPageStyles(const QStringList &styles)
+{
+    d->widget.pageStyle->clear();
+    d->widget.pageStyle->addItems(styles);
+}
+
+QString KoPageLayoutWidget::currentPageStyle() const
+{
+    return d->widget.pageStyle->currentText();
 }

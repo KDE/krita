@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,13 +33,15 @@ class KOWIDGETS_EXPORT KoPageLayoutWidget : public QWidget
     Q_OBJECT
 
 public:
-
     KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layout);
     ~KoPageLayoutWidget();
 
     void setUnit(const KoUnit &unit);
     void showUnitchooser(bool on);
     void showPageSpread(bool on);
+    void showPageStyles(bool on);
+    void setPageStyles(const QStringList &styles);
+    QString currentPageStyle() const;
     void setPageSpread(bool pageSpread);
     void showTextDirection(bool on);
     void setTextDirection(KoText::Direction direction);

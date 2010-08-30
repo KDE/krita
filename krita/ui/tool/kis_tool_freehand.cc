@@ -172,13 +172,13 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     // CTRL+ALT picks color from current layer
     // CTRL picks color from projection
     if (e->modifiers() & Qt::ControlModifier) {
-        
+
         m_toForegroundColor = (e->button() == Qt::LeftButton);
         pickColor(convertToIntPixelCoord(e),e->modifiers() & Qt::AltModifier);
         m_mode = COLOR_PICKING;
         useCursor(KisCursor::pickerCursor());
         e->accept();
-        
+
    } else if (e->modifiers() == Qt::ShiftModifier) {
         m_mode = EDIT_BRUSH;
         m_prevMousePos = e->point;
@@ -266,7 +266,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
             }else {
                 // DO Nothing
             }
-            
+
         }
         break;
     default:
@@ -299,11 +299,11 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     }
 #endif
 
-    
+
     QPainterPath path = currentPaintOpPreset()->settings()->brushOutline(currentImage()->documentToPixel(outlinePos()), outlineMode);
     m_oldOutlineRect = currentImage()->pixelToDocument(path.boundingRect());
     if (!m_oldOutlineRect.isEmpty()) {
-        canvas()->updateCanvas(m_oldOutlineRect.adjusted(-2,-2,2,2)); 
+        canvas()->updateCanvas(m_oldOutlineRect.adjusted(-2,-2,2,2));
     }
 
 }
@@ -320,7 +320,7 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
         //This is used to handle recently used colour (KoFavoriteResourceManager)
         emit sigPainting();
     }
-    
+
     switch (m_mode) {
     case PAINT:
         if (!m_hasPaintAtLeastOnce)
@@ -341,21 +341,21 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
     default:
         ;
     };
-    
-    if (m_mode != COLOR_PICKING){ 
+
+    if (m_mode != COLOR_PICKING){
         KisToolPaint::mouseReleaseEvent(e);
     }
-    
+
     m_mode = HOVER;
     resetCursorStyle();
 }
 
 void KisToolFreehand::keyPressEvent(QKeyEvent *event)
 {
-    if (m_mode != HOVER)
-    {
+    if (m_mode != HOVER) {
         event->accept(); // Make sure nothing disturb the painting
-    } else if (event->key() == Qt::Key_Space) {
+    }
+    else if (event->key() == Qt::Key_Space) {
         initPan();
         event->accept();
     }/* else if (event->key() == Qt::Key_Control){ // we need to reset the cursor back when the user does not hold any key so commented so far
@@ -628,21 +628,21 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
         if (m_mode == PAINT) {
             m_showOutline = false;
         }
-        
+
         if ((m_mode != PAINT || cfg.showOutlineWhilePainting()) &&
             (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || m_mode == EDIT_BRUSH || m_showOutline)) {
             outlineMode = KisPaintOpSettings::CursorIsOutline;
         } else {
             outlineMode = KisPaintOpSettings::CursorIsNotOutline;
         }
-        
+
         qreal zoomX, zoomY;
         converter.zoom(&zoomX, &zoomY);
-        
-        
+
+
         QPainterPath path = currentPaintOpPreset()->settings()->brushOutline(currentImage()->documentToPixel(outlinePos()),outlineMode);
         m_oldOutlineRect = currentImage()->pixelToDocument(path.boundingRect());
-        
+
 /*        QTransform m;
         m.reset();
         // document to view
@@ -650,9 +650,9 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
         // translate according outlinePos in document coordinates
         // pixel to document
         m.scale(1.0/currentImage()->xRes(),1.0/currentImage()->yRes());
-        
+
         m.map(path);*/
-        
+
         paintToolOutline(&gc,pixelToView(path));
     }
 }

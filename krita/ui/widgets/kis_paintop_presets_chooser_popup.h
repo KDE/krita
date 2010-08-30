@@ -38,7 +38,11 @@ public:
 
 signals:
     void resourceSelected( KoResource * resource );
-
+    
+private slots:
+    void slotThumbnailMode();
+    void slotDetailMode();
+   
 private:
 
     class Private;

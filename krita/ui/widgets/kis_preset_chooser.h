@@ -22,6 +22,7 @@
 #include <krita_export.h>
 #include <KoID.h>
 
+class KisPresetDelegate;
 class KisPresetProxyAdapter;
 class KoResourceItemChooser;
 class KoResource;
@@ -41,10 +42,16 @@ public:
     KisPresetChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisPresetChooser();
     
+    enum ViewMode{
+        THUMBNAIL, /// Shows thumbnails
+        DETAIL  /// Shows thumbsnails with text next to it
+    };
+    
     ///Set id for paintop to be accept by the proxy model
     ///@param paintopID id of the paintop for which the presets will be shown
     void setPresetFilter(const KoID & paintopID);
 
+    void setViewMode(ViewMode mode);
 signals:
     void resourceSelected( KoResource * resource );
     
@@ -56,6 +63,7 @@ public slots:
 private:
     KoResourceItemChooser *m_chooser;
     KisPresetProxyAdapter *m_presetProxy;
+    KisPresetDelegate* m_delegate;
 };
 
 #endif // KIS_ITEM_CHOOSER_H_

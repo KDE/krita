@@ -43,7 +43,7 @@
 class KisPresetDelegate : public QAbstractItemDelegate
 {
 public:
-    KisPresetDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent) {}
+    KisPresetDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent), m_showText(false) {}
     virtual ~KisPresetDelegate() {}
     /// reimplemented
     virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
@@ -51,6 +51,13 @@ public:
     QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
         return option.decorationSize;
     }
+
+    void setShowText(bool showText) {
+        m_showText = showText;
+    }
+    
+private:
+    bool m_showText;
 };
 
 void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
@@ -70,9 +77,19 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     if(preview.isNull()) {
         return;
     }
+
     QRect paintRect = option.rect.adjusted(2, 2, -2, -2);
+    if (!m_showText) {
     painter->drawImage(paintRect.x(), paintRect.y(),
                        preview.scaled(paintRect.size(), Qt::IgnoreAspectRatio));
+    } else {
+        QSize pixSize(paintRect.height(), paintRect.height());
+        painter->drawImage(paintRect.x(), paintRect.y(),
+                       preview.scaled(pixSize, Qt::KeepAspectRatio));
+        
+        painter->setPen(Qt::black);      
+        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());      
+    }
 }
 
 class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>
@@ -146,7 +163,8 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     m_chooser->showGetHotNewStuff(true, true);
     m_chooser->setColumnCount(10);
     m_chooser->setRowHeight(50);
-    m_chooser->setItemDelegate(new KisPresetDelegate(this));
+    m_delegate = new KisPresetDelegate(this);
+    m_chooser->setItemDelegate(m_delegate);
     layout->addWidget(m_chooser);
 
     connect(m_chooser, SIGNAL(resourceSelected(KoResource*)),
@@ -175,6 +193,16 @@ void KisPresetChooser::setShowAll(bool show)
     m_presetProxy->invalidate();
 }
 
+void KisPresetChooser::setViewMode(KisPresetChooser::ViewMode mode)
+{
+    if (mode == THUMBNAIL) {
+        m_chooser->setColumnCount(10);
+        m_delegate->setShowText(false);
+    } else {
+        m_chooser->setColumnCount(1);
+        m_delegate->setShowText(true);
+    }
+}
 
 #include "kis_preset_chooser.moc"
 

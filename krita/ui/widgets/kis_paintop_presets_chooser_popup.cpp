@@ -22,6 +22,7 @@
 #include <KoResource.h>
 
 #include <ui_wdgpaintoppresets.h>
+#include <kmenu.h>
 
 class KisPaintOpPresetsChooserPopup::Private
 {
@@ -34,6 +35,22 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     , m_d(new Private())
 {
     m_d->uiWdgPaintOpPresets.setupUi(this);
+    KMenu* menu = new KMenu(this);
+    
+    QActionGroup *actionGroup = new QActionGroup(this);
+
+    QAction* action = menu->addAction(KIcon("view-preview"), i18n("Thumbnails"), this, SLOT(slotThumbnailMode()));
+    action->setCheckable(true);
+    action->setChecked(true);
+    action->setActionGroup(actionGroup);
+
+    action = menu->addAction(KIcon("view-list-details"), i18n("Details"), this, SLOT(slotDetailMode()));
+    action->setCheckable(true);
+    action->setActionGroup(actionGroup);
+    
+    m_d->uiWdgPaintOpPresets.viewModeButton->setIcon(KIcon("view-choose"));
+    m_d->uiWdgPaintOpPresets.viewModeButton->setMenu(menu);
+    m_d->uiWdgPaintOpPresets.viewModeButton->setPopupMode(QToolButton::InstantPopup);
     
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
@@ -54,4 +71,14 @@ KisPaintOpPresetsChooserPopup::~KisPaintOpPresetsChooserPopup()
 void KisPaintOpPresetsChooserPopup::setPresetFilter(const KoID& paintopID)
 {
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setPresetFilter(paintopID);
+}
+
+void KisPaintOpPresetsChooserPopup::slotThumbnailMode()
+{
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(KisPresetChooser::THUMBNAIL);
+}
+
+void KisPaintOpPresetsChooserPopup::slotDetailMode()
+{
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(KisPresetChooser::DETAIL);
 }

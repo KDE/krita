@@ -67,7 +67,7 @@ public:
     int lineWidth; // px
     
     void readOptionSetting(const KisPropertiesConfiguration* settings){
-        probability = settings->getDouble(SKETCH_PROBABILITY) * 0.01;
+        probability = settings->getDouble(SKETCH_PROBABILITY);
         offset = settings->getDouble(SKETCH_OFFSET) * 0.01;
         lineWidth = settings->getInt(SKETCH_LINE_WIDTH);
         simpleMode = settings->getBool(SKETCH_USE_SIMPLE_MODE);

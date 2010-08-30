@@ -167,6 +167,9 @@
         <property name="text">
          <string>Use distance density</string>
         </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="0" column="1">

@@ -58,7 +58,7 @@ KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
     QDomElement firstTag = xMLAnalyzer.documentElement();
     QDomElement firstTagsChild = firstTag.elementsByTagName("MaskGenerator").item(0).toElement();
     
-    firstTagsChild.attributeNode("radius").setValue("128");
+    firstTagsChild.attributeNode("diameter").setValue("128");
     
     reconfigurationCourier->setProperty("brush_definition", xMLAnalyzer.toString() );
     setConfiguration(reconfigurationCourier);  

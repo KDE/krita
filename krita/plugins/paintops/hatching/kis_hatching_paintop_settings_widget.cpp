@@ -85,7 +85,7 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
     
     // SET THE DEFAULT VALUES
     firstTag.attributeNode("spacing").setValue("0.4");
-    firstTagsChild.attributeNode("radius").setValue("30");
+    firstTagsChild.attributeNode("diameter").setValue("30");
     
     //Write them into the intermediary config file
     reconfigurationCourier->setProperty("brush_definition", xMLAnalyzer.toString() );

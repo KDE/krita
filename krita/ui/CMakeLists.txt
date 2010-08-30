@@ -236,6 +236,7 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES
     canvas/kis_canvas2.h
     canvas/kis_canvas_decoration.h
+    canvas/kis_coordinates_converter.h
     tool/kis_tool.h
     kis_cursor.h
     kis_view2.h

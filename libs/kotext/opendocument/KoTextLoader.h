@@ -1,9 +1,12 @@
 /* This file is part of the KDE project
- * Copyright (C) 2004-2006 David Faure <faure@kde.org>
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2001-2006 David Faure <faure@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

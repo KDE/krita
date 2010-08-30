@@ -20,16 +20,12 @@
 #define KIS_UPDATE_INFO_H_
 
 #include <QPainter>
-#include "kis_shared.h"
+
 #include "kis_image_patch.h"
-#include <opengl/kis_opengl.h>
+#include "kis_shared.h"
+#include "opengl/kis_opengl.h"
 
-
-class KisUpdateInfo;
-class KisPPUpdateInfo;
-typedef KisSharedPtr<KisUpdateInfo> KisUpdateInfoSP;
-typedef KisSharedPtr<KisPPUpdateInfo> KisPPUpdateInfoSP;
-
+#include "kis_ui_types.h"
 
 class KRITAUI_EXPORT KisUpdateInfo : public KisShared
 {

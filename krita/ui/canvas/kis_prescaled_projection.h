@@ -36,9 +36,7 @@ class KoColorProfile;
 class KisCoordinatesConverter;
 
 #include <kis_types.h>
-
-class KisPrescaledProjection;
-typedef KisSharedPtr<KisPrescaledProjection> KisPrescaledProjectionSP;
+#include "kis_ui_types.h"
 
 /**
  * KisPrescaledProjection is responsible for keeping around a

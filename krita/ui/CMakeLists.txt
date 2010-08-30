@@ -239,6 +239,7 @@ install( FILES
     tool/kis_tool.h
     kis_cursor.h
     kis_view2.h
+    kis_ui_types.h
 #    kis_cmb_composite.h
 #    kis_cmb_idlist.h
 #    kis_color_cup.h

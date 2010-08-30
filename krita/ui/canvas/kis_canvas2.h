@@ -29,7 +29,7 @@
 #include <kis_types.h>
 #include <KoPointerEvent.h>
 
-#include "kis_prescaled_projection.h"
+#include "kis_ui_types.h"
 
 class KoToolProxy;
 class KoColorProfile;

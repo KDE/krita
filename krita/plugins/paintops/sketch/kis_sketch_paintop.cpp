@@ -121,13 +121,13 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     }
 
     QPointF prevMouse = pi1.pos();
-    QPointF mouse = pi2.pos();
-    m_points.append(mouse);
+    QPointF mousePosition = pi2.pos();
+    m_points.append(mousePosition);
 
 
     // shaded: does not draw this line, chrome does, fur does
     if (m_sketchProperties.makeConnection){
-        drawConnection(prevMouse,mouse);
+        drawConnection(prevMouse,mousePosition);
     }
 
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
@@ -158,7 +158,6 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     
     // probability behaviour
     // TODO: make this option
-    bool isDistanceDepedent = true;
     qreal probability = 1.0 - m_sketchProperties.probability;
 
     QColor painterColor = painter()->paintColor().toQColor();
@@ -176,7 +175,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     int size = m_points.size();
     // MAIN LOOP
     for (int i = 0; i < size; i++) {
-        diff = m_points.at(i) - mouse;
+        diff = m_points.at(i) - mousePosition;
         distance = diff.x() * diff.x() + diff.y() * diff.y();
         
         // circle test
@@ -204,7 +203,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
             continue;
         }
 
-        if (isDistanceDepedent){
+        if (m_sketchProperties.distanceDensity){
             probability =  distance / density;
         }
 
@@ -212,12 +211,6 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
         if (drand48() >= probability) {
             QPointF offsetPt = diff * m_sketchProperties.offset;
             
-            if (m_sketchProperties.magnetify) {
-                drawConnection(mouse + offsetPt, m_points.at(i) - offsetPt);
-            }else{
-                drawConnection(mouse + offsetPt, mouse - offsetPt);
-            }
-        
             if (m_sketchProperties.randomRGB){
                 // some color transformation per line goes here
                 randomColor.setRgbF(drand48() * painterColor.redF(),
@@ -227,6 +220,27 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
                 color.fromQColor(randomColor);
                 m_painter->setPaintColor(color);
             }
+            
+            // distance based opacity
+            quint8 opacity = OPACITY_OPAQUE_U8;
+            if (m_sketchProperties.distanceOpacity){ 
+                opacity *= qRound((1.0 - (distance / thresholdDistance)));
+            }
+            
+            if (m_sketchProperties.randomOpacity){
+                opacity *= drand48();
+            }
+            
+            m_painter->setOpacity(opacity);
+            
+            if (m_sketchProperties.magnetify) {
+                drawConnection(mousePosition + offsetPt, m_points.at(i) - offsetPt);
+            }else{
+                drawConnection(mousePosition + offsetPt, mousePosition - offsetPt);
+            }
+
+            
+            
         }
     }// end of MAIN LOOP
 

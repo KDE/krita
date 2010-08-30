@@ -1364,7 +1364,7 @@ void KoMainWindow::slotConfigureToolbars()
     if (rootDocument())
         saveMainWindowSettings(KGlobal::config()->group(rootDocument()->componentData().componentName()));
     KEditToolBar edit(factory(), this);
-    connect(&edit, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
+    connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
 }
 

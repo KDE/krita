@@ -44,7 +44,7 @@ public:
     KoBookmarkManager();
     ~KoBookmarkManager();
 
-    /// @return a bookmark with the specified name
+    /// @return a bookmark with the specified name, or 0 if there is none
     KoBookmark *retrieveBookmark(const QString &name);
 
     /// @return a list of QString containing all bookmark names

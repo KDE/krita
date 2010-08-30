@@ -34,6 +34,8 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_color_space_selector.h"
 #include "kis_preference_set_registry.h"
+#include "kis_node.h"
+#include "kis_paint_device.h"
 
 #include "kis_color_history.h"
 #include "kis_common_colors.h"

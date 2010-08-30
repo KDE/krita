@@ -19,6 +19,7 @@
 #include "kis_tool_pan.h"
 
 #include <QScrollBar>
+#include <QPainter>
 
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>

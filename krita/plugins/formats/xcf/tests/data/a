@@ -1,0 +1,7 @@
+koconverter mask.xcf mask.xcf.png
+koconverter opacity-40.xcf opacity-40.xcf.png
+koconverter simple.xcf simple.xcf.png
+koconverter subtract-multiply-masks.xcf subtract-multiply-masks.xcf.png
+koconverter subtract-multiply.xcf subtract-multiply.xcf.png
+koconverter subtract-opacity-40.xcf subtract-opacity-40.xcf.png
+koconverter subtract.xcf subtract.xcf.png

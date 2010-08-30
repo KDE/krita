@@ -17,6 +17,7 @@
 
 #include "kis_color_selector_combo_box.h"
 #include <QGridLayout>
+#include <QPainter>
 
 #include "kis_color_selector.h"
 #include "kis_canvas2.h"

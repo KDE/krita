@@ -29,11 +29,11 @@ struct KisRectangleMaskGenerator::Private {
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes)
         : KisMaskGenerator(radius, ratio, fh, fv, spikes, RECTANGLE, DefaultId), d(new Private)
 {
-    if (KisMaskGenerator::d->m_fv == 0 &&
-            KisMaskGenerator::d->m_fh == 0) {
+    if (KisMaskGenerator::d->fv == 0 &&
+            KisMaskGenerator::d->fh == 0) {
         d->m_c = 0;
     } else {
-        d->m_c = (KisMaskGenerator::d->m_fv / KisMaskGenerator::d->m_fh);
+        d->m_c = (KisMaskGenerator::d->fv / KisMaskGenerator::d->fh);
         Q_ASSERT(!isnan(d->m_c));
     }
 }
@@ -46,12 +46,12 @@ KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
 quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
 {
 
-    if (KisMaskGenerator::d->m_empty) return 255;
+    if (KisMaskGenerator::d->empty) return 255;
     double xr = qAbs(x /*- m_xcenter*/) / width();
     double yr = qAbs(y /*- m_ycenter*/) / height();
     
-    qreal fhTransformed = KisMaskGenerator::d->m_fh * softness();
-    qreal fvTransformed = KisMaskGenerator::d->m_fv * softness();
+    qreal fhTransformed = KisMaskGenerator::d->fh * softness();
+    qreal fvTransformed = KisMaskGenerator::d->fv * softness();
     
     if (xr > fhTransformed || yr > fvTransformed) {
         if (yr <= ((xr - fhTransformed) * d->m_c + fvTransformed)) {

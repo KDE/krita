@@ -38,12 +38,12 @@ struct KisCurveCircleMaskGenerator::Private {
     bool dirty;
 };
 
-KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve)
-        : KisMaskGenerator(radius, ratio, fh, fv, spikes, CIRCLE, SoftId), d(new Private)
+KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve)
+        : KisMaskGenerator(diameter, ratio, fh, fv, spikes, CIRCLE, SoftId), d(new Private)
 {
     d->xcoef = 2.0 / width();
-    d->ycoef = 2.0 / (KisMaskGenerator::d->m_ratio * width());
-    d->cachedSpikesAngle = M_PI / KisMaskGenerator::d->m_spikes;
+    d->ycoef = 2.0 / (KisMaskGenerator::d->ratio * width());
+    d->cachedSpikesAngle = M_PI / KisMaskGenerator::d->spikes;
     d->curveData = curve.floatTransfer( width() + 2);
     d->curvePoints = curve.points();
     d->curve = curve.toString();
@@ -59,7 +59,7 @@ quint8 KisCurveCircleMaskGenerator::valueAt(qreal x, qreal y) const
 {
     qreal xr = x;
     qreal yr = qAbs(y);
-    if (KisMaskGenerator::d->m_spikes > 2) {
+    if (KisMaskGenerator::d->spikes > 2) {
         double angle = (KisFastMath::atan2(yr, xr));
 
         while (angle > d->cachedSpikesAngle ){

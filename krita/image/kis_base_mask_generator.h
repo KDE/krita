@@ -76,7 +76,7 @@ public:
 
     qreal height() const;
 
-    qreal radius() const;
+    qreal diameter() const;
     qreal ratio() const;
     qreal horizontalFade() const;
     qreal verticalFade() const;
@@ -93,12 +93,12 @@ public:
     
 protected:
     struct Private {
-        qreal m_radius, m_ratio;
+        qreal diameter, ratio;
         qreal softness;
-        qreal m_fh, m_fv;
-        int m_spikes;
+        qreal fh, fv;
+        int spikes;
         qreal cs, ss;
-        bool m_empty;
+        bool empty;
         Type type;
     };
 

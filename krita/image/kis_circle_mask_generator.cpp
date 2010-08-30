@@ -31,14 +31,14 @@ struct KisCircleMaskGenerator::Private {
     double cachedSpikesAngle;
 };
 
-KisCircleMaskGenerator::KisCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes)
-        : KisMaskGenerator(radius, ratio, fh, fv, spikes, CIRCLE, DefaultId), d(new Private)
+KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes)
+        : KisMaskGenerator(diameter, ratio, fh, fv, spikes, CIRCLE, DefaultId), d(new Private)
 {
     d->xcoef = 2.0 / width();
-    d->ycoef = 2.0 / (KisMaskGenerator::d->m_ratio * width());
-    d->xfadecoef = (KisMaskGenerator::d->m_fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->m_fh * width()));
-    d->yfadecoef = (KisMaskGenerator::d->m_fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->m_fv * KisMaskGenerator::d->m_ratio * width()));
-    d->cachedSpikesAngle = M_PI / KisMaskGenerator::d->m_spikes;
+    d->ycoef = 2.0 / (KisMaskGenerator::d->ratio * width());
+    d->xfadecoef = (KisMaskGenerator::d->fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fh * width()));
+    d->yfadecoef = (KisMaskGenerator::d->fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fv * KisMaskGenerator::d->ratio * width()));
+    d->cachedSpikesAngle = M_PI / KisMaskGenerator::d->spikes;
 }
 
 KisCircleMaskGenerator::~KisCircleMaskGenerator()
@@ -48,11 +48,11 @@ KisCircleMaskGenerator::~KisCircleMaskGenerator()
 
 quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
 {
-    if (KisMaskGenerator::d->m_empty) return 255;
+    if (KisMaskGenerator::d->empty) return 255;
     double xr = (x /*- m_xcenter*/);
     double yr = fabs(y /*- m_ycenter*/);
 
-    if (KisMaskGenerator::d->m_spikes > 2) {
+    if (KisMaskGenerator::d->spikes > 2) {
         double angle = (KisFastMath::atan2(yr, xr));
 
         while (angle > d->cachedSpikesAngle ){

@@ -29,14 +29,14 @@
 #include "kis_curve_circle_mask_generator.h"
 #include "kis_curve_rect_mask_generator.h"
 
-KisMaskGenerator::KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, Type type, const KoID& id) : d(new Private), m_id(id)
+KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, Type type, const KoID& id) : d(new Private), m_id(id)
 {
-    d->m_radius = radius;
-    d->m_ratio = ratio;
-    d->m_fh = 0.5 * fh;
-    d->m_fv = 0.5 * fv;
+    d->diameter = diameter;
+    d->ratio = ratio;
+    d->fh = 0.5 * fh;
+    d->fv = 0.5 * fv;
     d->softness = 1.0; // by default don't change fade/softness/hardness
-    d->m_spikes = spikes;
+    d->spikes = spikes;
     d->type = type;
     init();
 }
@@ -48,25 +48,32 @@ KisMaskGenerator::~KisMaskGenerator()
 
 void KisMaskGenerator::init()
 {
-    d->cs = cos(- 2 * M_PI / d->m_spikes);
-    d->ss = sin(- 2 * M_PI / d->m_spikes);
-    d->m_empty = (d->m_ratio == 0.0 || d->m_radius == 0.0);
+    d->cs = cos(- 2 * M_PI / d->spikes);
+    d->ss = sin(- 2 * M_PI / d->spikes);
+    d->empty = (d->ratio == 0.0 || d->diameter == 0.0);
 }
 
 void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
     Q_UNUSED(doc);
-    e.setAttribute("radius", d->m_radius);
-    e.setAttribute("ratio", d->m_ratio);
+    //e.setAttribute("radius", d->radius);
+    e.setAttribute("diameter", d->diameter);
+    e.setAttribute("ratio", d->ratio);
     e.setAttribute("hfade", horizontalFade());
     e.setAttribute("vfade", verticalFade());
-    e.setAttribute("spikes", d->m_spikes);
+    e.setAttribute("spikes", d->spikes);
     e.setAttribute("id", id());
 }
 
 KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
 {
-    double radius = elt.attribute("radius", "1.0").toDouble();
+    double diameter = 1.0;
+    // backward compatibility -- it was mistakenly named radius for 2.2
+    if (elt.hasAttribute("radius")){
+        diameter = elt.attribute("radius", "1.0").toDouble();
+    }else /*if (elt.hasAttribute("diameter"))*/{
+        diameter = elt.attribute("diameter", "1.0").toDouble();
+    }
     double ratio = elt.attribute("ratio", "1.0").toDouble();
     double hfade = elt.attribute("hfade", "0.0").toDouble();
     double vfade = elt.attribute("vfade", "0.0").toDouble();
@@ -76,9 +83,9 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
     
     if (id == DefaultId.id()){
         if (typeShape == "circle"){
-            return new KisCircleMaskGenerator(radius, ratio, hfade, vfade, spikes);
+            return new KisCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes);
         }else{
-            return new KisRectangleMaskGenerator(radius, ratio, hfade, vfade, spikes);
+            return new KisRectangleMaskGenerator(diameter, ratio, hfade, vfade, spikes);
         }
     }
     
@@ -87,37 +94,37 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
         curve.fromString(elt.attribute("softness_curve","0,0;1,1"));
 
         if (typeShape == "circle"){
-            return new KisCurveCircleMaskGenerator(radius, ratio, hfade, vfade, spikes, curve);
+            return new KisCurveCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes, curve);
         }else{
-            return new KisCurveRectangleMaskGenerator(radius, ratio, hfade, vfade, spikes, curve);
+            return new KisCurveRectangleMaskGenerator(diameter, ratio, hfade, vfade, spikes, curve);
         }
     }
     
     // if unknown
-    return new KisCircleMaskGenerator(radius, ratio, hfade, vfade, spikes);
+    return new KisCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes);
 }
 
 qreal KisMaskGenerator::width() const
 {
-    return d->m_radius;
+    return d->diameter;
 }
 
 qreal KisMaskGenerator::height() const
 {
-    if (d->m_spikes == 2) {
-        return d->m_radius * d->m_ratio;
+    if (d->spikes == 2) {
+        return d->diameter * d->ratio;
     }
-    return d->m_radius;
+    return d->diameter;
 }
 
-qreal KisMaskGenerator::radius() const
+qreal KisMaskGenerator::diameter() const
 {
-    return d->m_radius;
+    return d->diameter;
 }
 
 qreal KisMaskGenerator::ratio() const
 {
-    return d->m_ratio;
+    return d->ratio;
 }
 
 qreal KisMaskGenerator::softness() const
@@ -134,17 +141,17 @@ void KisMaskGenerator::setSoftness(qreal softness)
 
 qreal KisMaskGenerator::horizontalFade() const
 {
-    return 2.0 * d->m_fh; // 'cause in init we divide it again
+    return 2.0 * d->fh; // 'cause in init we divide it again
 }
 
 qreal KisMaskGenerator::verticalFade() const
 {
-    return 2.0 * d->m_fv; // 'cause in init we divide it again
+    return 2.0 * d->fv; // 'cause in init we divide it again
 }
 
 int KisMaskGenerator::spikes() const
 {
-    return d->m_spikes;
+    return d->spikes;
 }
 
 KisMaskGenerator::Type KisMaskGenerator::type() const

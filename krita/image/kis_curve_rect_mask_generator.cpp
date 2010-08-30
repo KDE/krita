@@ -33,8 +33,8 @@ struct KisCurveRectangleMaskGenerator::Private {
     bool dirty;
 };
 
-KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve)
-        : KisMaskGenerator(radius, ratio, fh, fv, spikes, RECTANGLE, SoftId), d(new Private)
+KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve)
+        : KisMaskGenerator(diameter, ratio, fh, fv, spikes, RECTANGLE, SoftId), d(new Private)
 {
     d->curveResolution = qRound(width());
     d->curveData = curve.floatTransfer( d->curveResolution + 1); 
@@ -51,7 +51,7 @@ KisCurveRectangleMaskGenerator::~KisCurveRectangleMaskGenerator()
 quint8 KisCurveRectangleMaskGenerator::valueAt(qreal x, qreal y) const
 {
 
-    if (KisMaskGenerator::d->m_empty) {
+    if (KisMaskGenerator::d->empty) {
         return 255;
     }
     

@@ -17,37 +17,33 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CURVE_WIDGET_H
-#define KIS_CURVE_WIDGET_H
+#include "kis_linear_curve_widget.h"
 
-#include <QtGui/QWidget>
+#include <QPainter>
+#include <QPainterPath>
 
-class KisCurveWidgetBase;
-
-class KisCurveWidget : public QWidget
+KisLineCurveWidget::KisLineCurveWidget(QWidget *parent) :
+    KisCurveWidgetBase(parent)
 {
-    Q_OBJECT
+}
 
-public:
-    KisCurveWidget(QWidget *parent = 0);
-    ~KisCurveWidget();
+void KisLineCurveWidget::paintEvent(QPaintEvent *e) {
 
-public slots:
-    void switchToFunction() {switchTo(m_functionLikeWidget);}
-    void switchToCubic() {switchTo(m_cubicWidget);}
-    void switchToLinear() {switchTo(m_linearWidget);}
-    void switchToFreehand() {switchTo(m_freehandWidget);}
-    void reset();
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
-protected:
-    void switchTo(KisCurveWidgetBase* newWidget);
+    paintBackground(&painter);
 
-private:
-    KisCurveWidgetBase* m_currentCurve;
-    KisCurveWidgetBase* m_functionLikeWidget;
-    KisCurveWidgetBase* m_cubicWidget;
-    KisCurveWidgetBase* m_linearWidget;
-    KisCurveWidgetBase* m_freehandWidget;
-};
+    painter.setMatrix(m_converterMatrix);
 
-#endif // KIS_CURVE_WIDGET_H
+    QPainterPath path;
+    path.moveTo(m_points.first());
+
+    for(int i=1; i<m_points.size(); i++) {
+        path.lineTo(m_points.at(i));
+    }
+
+    painter.drawPath(path);
+
+    paintBlips(&painter);
+}

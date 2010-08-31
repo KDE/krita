@@ -17,37 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CURVE_WIDGET_H
-#define KIS_CURVE_WIDGET_H
+#ifndef KIS_CUBIC_CURVE_WIDGET_H
+#define KIS_CUBIC_CURVE_WIDGET_H
 
-#include <QtGui/QWidget>
+#include "kis_curve_widget_base.h"
 
-class KisCurveWidgetBase;
-
-class KisCurveWidget : public QWidget
+class KisSplineCurveWidget : public KisCurveWidgetBase
 {
     Q_OBJECT
-
 public:
-    KisCurveWidget(QWidget *parent = 0);
-    ~KisCurveWidget();
-
-public slots:
-    void switchToFunction() {switchTo(m_functionLikeWidget);}
-    void switchToCubic() {switchTo(m_cubicWidget);}
-    void switchToLinear() {switchTo(m_linearWidget);}
-    void switchToFreehand() {switchTo(m_freehandWidget);}
-    void reset();
+    explicit KisSplineCurveWidget(QWidget *parent = 0);
 
 protected:
-    void switchTo(KisCurveWidgetBase* newWidget);
+    void paintEvent(QPaintEvent *);
 
-private:
-    KisCurveWidgetBase* m_currentCurve;
-    KisCurveWidgetBase* m_functionLikeWidget;
-    KisCurveWidgetBase* m_cubicWidget;
-    KisCurveWidgetBase* m_linearWidget;
-    KisCurveWidgetBase* m_freehandWidget;
 };
 
-#endif // KIS_CURVE_WIDGET_H
+#endif // KIS_CUBIC_CURVE_WIDGET_H

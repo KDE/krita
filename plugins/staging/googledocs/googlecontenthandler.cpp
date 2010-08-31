@@ -69,7 +69,7 @@ bool GoogleContentHandler::endDocument ()
     return true;
 }
 
-bool GoogleContentHandler::endElement ( const QString & namespaceURI, const QString & localName, const QString & qName )
+bool GoogleContentHandler::endElement ( const QString & /*namespaceURI*/, const QString & /*localName*/, const QString & /*qName */)
 {
     //printName(localName);
     QString element = m_nodeStack.pop();
@@ -81,7 +81,7 @@ bool GoogleContentHandler::endElement ( const QString & namespaceURI, const QStr
     return true;
 }
 
-bool GoogleContentHandler::endPrefixMapping ( const QString & prefix )
+bool GoogleContentHandler::endPrefixMapping ( const QString & /*prefix */)
 {
     return true;
 }
@@ -91,21 +91,21 @@ QString GoogleContentHandler::errorString () const
     return QString();
 }
 
-bool GoogleContentHandler::ignorableWhitespace ( const QString & ch )
+bool GoogleContentHandler::ignorableWhitespace ( const QString & /*ch */)
 {
     return true;
 }
 
-bool GoogleContentHandler::processingInstruction ( const QString & target, const QString & data )
+bool GoogleContentHandler::processingInstruction ( const QString & /*target*/, const QString & /*data */)
 {
     return true;
 }
 
-void GoogleContentHandler::setDocumentLocator ( QXmlLocator * locator )
+void GoogleContentHandler::setDocumentLocator ( QXmlLocator * /*locator*/ )
 {
 }
 
-bool GoogleContentHandler::skippedEntity ( const QString & name )
+bool GoogleContentHandler::skippedEntity ( const QString & /*name*/ )
 {
     return true;
 }
@@ -115,8 +115,8 @@ bool GoogleContentHandler::startDocument ()
     return true;
 }
 
-bool GoogleContentHandler::startElement ( const QString & namespaceURI, const QString & localName,
-                                          const QString & qName, const QXmlAttributes & atts )
+bool GoogleContentHandler::startElement ( const QString & /*namespaceURI*/, const QString & localName,
+                                          const QString & /*qName*/, const QXmlAttributes & atts )
 {
     m_nodeStack.push(localName);
 
@@ -138,7 +138,7 @@ bool GoogleContentHandler::startElement ( const QString & namespaceURI, const QS
     return true;
 }
 
-bool GoogleContentHandler::startPrefixMapping ( const QString & prefix, const QString & uri )
+bool GoogleContentHandler::startPrefixMapping ( const QString & /*prefix*/, const QString & /*uri */)
 {
     //qDebug() << "GoogleContentHandler::startPrefixMapping() " << prefix << uri;
     return true;

@@ -48,7 +48,7 @@ void DocumentListWindow::fetchDocument()
     m_docListDialog->okButton->setEnabled(false);
 }
 
-void DocumentListWindow::getClickedDocument(QListWidgetItem *item)
+void DocumentListWindow::getClickedDocument(QListWidgetItem */*item*/)
 {
 }
 

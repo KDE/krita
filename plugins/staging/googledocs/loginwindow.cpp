@@ -74,6 +74,6 @@ void LoginWindow::authenticated(bool success)
     }
 }
 
-void LoginWindow::setShowProgressIndicator(bool visible)
+void LoginWindow::setShowProgressIndicator(bool /*visible*/)
 {
 }

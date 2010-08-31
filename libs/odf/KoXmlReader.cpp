@@ -1373,10 +1373,7 @@ QString KoXmlNodeData::attributeNS(const QString& nsURI, const QString& name,
                                    const QString& def) const
 {
     KoXmlStringPair key(nsURI, name);
-    if (attrNS.contains(key))
-        return attrNS[ key ];
-    else
-        return def;
+    return attrNS.value(key, def);
 }
 
 bool KoXmlNodeData::hasAttributeNS(const QString& nsURI, const QString& name) const
@@ -2249,10 +2246,7 @@ QString KoXmlElement::attributeNS(const QString& namespaceURI,
         d->loadChildren();
 
     KoXmlStringPair key(namespaceURI, localName);
-    if (d->attrNS.contains(key))
-        return d->attrNS[ key ];
-    else
-        return defaultValue;
+    return d->attrNS.value(key, defaultValue);
 
 //  return d->attributeNS( namespaceURI, localName, defaultValue );
 }

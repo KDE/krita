@@ -37,9 +37,9 @@
 
 const float radToDeg = 57.29578f;
 
-const QString HUE = "h";
-const QString SATURATION = "s";
-const QString VALUE = "v";
+const QString HUE('h');
+const QString SATURATION('s');
+const QString VALUE('v');
 
 #if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand

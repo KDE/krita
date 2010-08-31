@@ -39,7 +39,7 @@ QString KisShadeSelectorLinesSettings::toString() const
     QString result;
     for(int i=0; i<m_lineList.size(); i++) {
         result.append(m_lineList.at(i)->configuration());
-        result.append(";");
+        result.append(';');
     }
 
     return result;
@@ -47,7 +47,7 @@ QString KisShadeSelectorLinesSettings::toString() const
 
 void KisShadeSelectorLinesSettings::fromString(const QString &stri)
 {
-    QStringList strili = stri.split(";", QString::SkipEmptyParts);
+    QStringList strili = stri.split(';', QString::SkipEmptyParts);
     setLineCount(strili.size());
     for(int i=0; i<strili.size(); i++) {
         m_lineList.at(i)->setConfiguration(strili.at(i));

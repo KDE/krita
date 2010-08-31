@@ -64,8 +64,8 @@ metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QVariantList &
         actionCollection()->addAction("EditLayerMetaData", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotEditLayerMetaData()));
         
-        QStringList runtimeVersion = QString(qVersion()).split(".");
-        QStringList compileVersion = QString(QT_VERSION_STR).split(".");
+        QStringList runtimeVersion = QString(qVersion()).split('.');
+        QStringList compileVersion = QString(QT_VERSION_STR).split('.');
         
         action->setEnabled(runtimeVersion[1] == compileVersion[1]);
     }

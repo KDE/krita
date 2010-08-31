@@ -340,7 +340,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 info.updateImageType(imfTypeToKisType(channel.type));
 
                 QString qname = j.name();
-                QStringList list = qname.split(".");
+                QStringList list = qname.split('.');
                 QString layersuffix = list.last();
 
                 if (list.size() > 1) {
@@ -754,7 +754,7 @@ void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& informationObjects
                 }
             }
             ExrPaintLayerSaveInfo info;
-            info.name = name + paintLayer->name() + ".";
+            info.name = name + paintLayer->name() + '.';
             info.layer = paintLayer;
             if (paintLayer->colorSpace()->colorModelId() == RGBAColorModelID) {
                 info.channels.push_back(info.name + remap(current2original, "B"));
@@ -781,7 +781,7 @@ void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& informationObjects
             }
             informationObjects.push_back(info);
         } else if (KisGroupLayerSP groupLayer = dynamic_cast<KisGroupLayer*>(node.data())) {
-            recBuildPaintLayerSaveInfo(informationObjects, name + groupLayer->name() + ".", groupLayer);
+            recBuildPaintLayerSaveInfo(informationObjects, name + groupLayer->name() + '.', groupLayer);
         }
     }
 }

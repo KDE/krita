@@ -118,7 +118,7 @@ void AbrBrushProperties::setupProperty(const QString& attributeName, const QStri
         attributeName == ABR_BRUSH_SPACING ||
         attributeName == OBJECT_NAME_BRUSH)
     {
-        list = value.split(" ");
+        list = value.split(' ');
         //e.g. "#Pxl 10" -> ['#Pxl','10'] 
         Q_ASSERT(list.count() == 2);
         bool ok;
@@ -206,7 +206,7 @@ void AbrTipDynamicsProperties::setupProperty(const QString& attributeName, const
         attributeName == ABR_TIP_DYNAMICS_TILT_SCALE 
         )
     {
-        list = value.split(" ");
+        list = value.split(' ');
         //e.g. "#Pxl 10" -> ['#Pxl','10'] 
         Q_ASSERT(list.count() == 2);
         bool ok;
@@ -275,7 +275,7 @@ void AbrGroupProperties::setupProperty(const QString& attributeName, const QStri
     double valueDbl = 0.0;
     QStringList list;
     if (attributeName == ABR_DYNAMICS_JITTER) {
-        list = value.split(" ");
+        list = value.split(' ');
         //e.g. "#Pxl 10" -> ['#Pxl','10'] 
         Q_ASSERT(list.count() == 2);
         bool ok;

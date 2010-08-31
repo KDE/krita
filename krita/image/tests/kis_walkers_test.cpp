@@ -124,25 +124,25 @@ QString nodeTypeString(KisMergeWalker::NodePosition position)
 
 QString nodeTypePostfix(KisMergeWalker::NodePosition position)
 {
-    QString string="_";
+    QString string('_');
 
     if(position & KisMergeWalker::N_TOPMOST)
-        string+="T";
+        string += 'T';
     else if(position & KisMergeWalker::N_BOTTOMMOST)
-        string+="B";
+        string += 'B';
     else
-        string+="N";
+        string += 'N';
 
     if(position & KisMergeWalker::N_ABOVE_FILTHY)
-        string+="A";
+        string += 'A';
     else if(position & KisMergeWalker::N_FILTHY)
-        string+="F";
+        string += 'F';
     else if(position & KisMergeWalker::N_FILTHY_PROJECTION)
-        string+="P";
+        string += 'P';
     else if(position & KisMergeWalker::N_FILTHY_ORIGINAL)
-        string+="O";
+        string += 'O';
     else if(position & KisMergeWalker::N_BELOW_FILTHY)
-        string+="B";
+        string += 'B';
     else
         qFatal("Impossible happened");
 

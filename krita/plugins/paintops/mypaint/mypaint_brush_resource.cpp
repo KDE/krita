@@ -299,7 +299,7 @@ public:
             pointsPerInput << vPoints();
         }
 
-        QStringList parts = s.split("|");
+        QStringList parts = s.split('|');
         Q_ASSERT(parts.size() > 0);
 
         set_base_value(parts.takeFirst().toFloat());
@@ -313,7 +313,7 @@ public:
             //dbgKrita << "parts" << parts;
 
             QString command = parts.takeFirst().trimmed();
-            parts = parts.join(" ").split(",");
+            parts = parts.join(QString(' ')).split(',');
 
             //dbgKrita << "command" << command << "parts" << parts;
 
@@ -362,7 +362,7 @@ bool MyPaintBrushResource::load()
     //dbgKrita << filename();
 
     QFileInfo iconFile(filename());
-    m_icon.load(iconFile.path() + "/" + iconFile.baseName() + "_prev.png");
+    m_icon.load(iconFile.path() + '/' + iconFile.baseName() + "_prev.png");
 
     int version = -1;
 

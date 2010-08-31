@@ -144,9 +144,9 @@ QString KisNodeQueryPath::toString() const
 {
     QString str = "";
     if (!d->relative) {
-        str = "/";
+        str = '/';
     } else if (d->elements.count() == 0) {
-        return ".";
+        return QString('.');
     }
     for (int i = 0; i < d->elements.count(); ++i) {
         PathElement pe = d->elements[i];
@@ -162,7 +162,7 @@ QString KisNodeQueryPath::toString() const
             break;
         }
         if (i != d->elements.count() - 1) {
-            str += "/";
+            str += '/';
         }
     }
     return str;
@@ -180,7 +180,7 @@ KisNodeQueryPath KisNodeQueryPath::fromString(const QString& _path)
         return path;
     }
     path.d->relative = !(_path.at(0) == '/');
-    QStringList indexes = _path.split("/");
+    QStringList indexes = _path.split('/');
     if (!path.d->relative) {
         indexes.pop_front(); // In case of an absolute path "/1/2", the list is "", "1", "2" which is not good
     }

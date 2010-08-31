@@ -63,7 +63,7 @@ QString AbrStructParser::p_tdta(QDataStream &buf){
         buf >> text[i];
     }
         
-    return "(tdta:" + QString::number(size) +")" + QString::fromUtf16(text,size);
+    return "(tdta:" + QString::number(size) + ')' + QString::fromUtf16(text,size);
 }
 
 QString AbrStructParser::p_desc(QDataStream &buf){
@@ -123,8 +123,8 @@ QString AbrStructParser::p_objc(QDataStream &buf){
     
     quint32 value;
     buf >> value;
-    //return QString::fromLatin1( objname ) + " " + QString::fromLatin1(typeName) + " " + QString::number(value);
-    return QString::fromLatin1(typeName) + " " + QString::number(value);
+    //return QString::fromLatin1( objname ) + ' ' + QString::fromLatin1(typeName) + ' ' + QString::number(value);
+    return QString::fromLatin1(typeName) + ' ' + QString::number(value);
 }
     
 QString AbrStructParser::p_untf(QDataStream &buf){
@@ -133,7 +133,7 @@ QString AbrStructParser::p_untf(QDataStream &buf){
     type[4] = '\0';
     double value;
     buf >> value;
-    return QString::fromLatin1(type) + " " + QString::number(value);
+    return QString::fromLatin1(type) + ' ' + QString::number(value);
 }
 
 QString AbrStructParser::p_bool(QDataStream &buf){
@@ -171,7 +171,7 @@ QString AbrStructParser::p_enum(QDataStream &buf){
     buf.readRawData(name2,size2);
     name2[size2] = '\0';
     
-    return QString::fromLatin1(name1) + " " + QString::fromLatin1(name2);
+    return QString::fromLatin1(name1) + ' ' + QString::fromLatin1(name2);
 }
 
 quint32 AbrStructParser::parseEntry(QDataStream &buf){

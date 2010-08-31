@@ -350,7 +350,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     cbUseOpenGLShaders->setEnabled(false);
 #endif
 
-    QStringList qtVersion = QString(qVersion()).split(".");
+    QStringList qtVersion = QString(qVersion()).split('.');
     int versionNumber = qtVersion.at(0).toInt()*10000
                         + qtVersion.at(1).toInt()*100
                         + qtVersion.at(2).toInt();

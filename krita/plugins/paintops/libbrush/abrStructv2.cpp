@@ -103,7 +103,7 @@ static QString p_objc(QDataStream &buf){
     
     quint32 value;
     buf >> value;
-    return QString::fromLatin1( name ) + " " + QString::number(value);
+    return QString::fromLatin1( name ) + ' ' + QString::number(value);
 }
 
 static QString p_untf(QDataStream &buf){
@@ -112,7 +112,7 @@ static QString p_untf(QDataStream &buf){
     type[4] = '\0';
     double value;
     buf >> value;
-    return QString::fromLatin1(type) + " " + QString::number(value);
+    return QString::fromLatin1(type) + ' ' + QString::number(value);
 }
 
 static QString p_bool(QDataStream &buf){
@@ -150,7 +150,7 @@ static QString p_enum(QDataStream &buf){
     buf.readRawData(name2,size2);
     name2[size2] = '\0';
     
-    return QString::fromLatin1(name1) + " " + QString::fromLatin1(name2);
+    return QString::fromLatin1(name1) + ' ' + QString::fromLatin1(name2);
 }
 
 // static QString p_unkn(QDataStream &buf, QHash<QString, enumFuncNames> & types){

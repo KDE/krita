@@ -433,11 +433,11 @@ QString Value::toString() const
             const Value& val = d->value.array->at(i);
             r += val.toString();
             if (i != d->value.array->size() - 1) {
-                r += ",";
+                r += ',';
             }
-            r += " ";
+            r += ' ';
         }
-        r += "}";
+        r += '}';
         return r;
     }
     case Value::Structure: {
@@ -448,11 +448,11 @@ QString Value::toString() const
             const Value& val = d->value.structure->value(field);
             r += field + " => " + val.toString();
             if (i != d->value.array->size() - 1) {
-                r += ",";
+                r += ',';
             }
-            r += " ";
+            r += ' ';
         }
-        r += "}";
+        r += '}';
         return r;
     }
     break;

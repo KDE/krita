@@ -107,7 +107,7 @@ void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
             dbgImage << prefix << "\t" << node->at(i) << "node at" << i << " has index from parent:" << node->index(node->at(i));
 
         if (node->at(i)->childCount() > 0) {
-            dumpNodeStack(node->at(i), prefix + "\t");
+            dumpNodeStack(node->at(i), prefix + '\t');
         }
     }
 

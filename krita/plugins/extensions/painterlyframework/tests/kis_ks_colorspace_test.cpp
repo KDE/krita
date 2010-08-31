@@ -44,7 +44,7 @@ void print_vector(int n, const quint8 *v, const QString &text)
     QString vstr;
     qDebug() << text;
     for (int i = 0; i < n; i++)
-        vstr += QString::number(reinterpret_cast<const type*>(v)[i]) + " ";
+        vstr += QString::number(reinterpret_cast<const type*>(v)[i]) + ' ';
     qDebug() << vstr;
 }
 

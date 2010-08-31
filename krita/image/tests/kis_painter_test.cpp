@@ -47,7 +47,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoCo
         // ALL THESE COLORSPACES ARE BROKEN: WE NEED UNITTESTS FOR COLORSPACES!
         if (csId.startsWith("KS")) continue;
         if (csId.startsWith("Xyz")) continue;
-        if (csId.startsWith("Y")) continue;
+        if (csId.startsWith('Y')) continue;
         if (csId.contains("AF")) continue;
         if (csId == "GRAYU16") continue; // No point in testing bounds with a cs without alpha
 

@@ -316,3 +316,4 @@ QColor PhongPixelProcessor::illuminatePixel(quint32 posup, quint32 posdown, quin
 
     return pixelColor;
 }
+

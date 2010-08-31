@@ -145,6 +145,11 @@ static inline uint qHash(const KoXmlStringPair &p)
     // return qHash(p.first)^qHash(p.second);
 }
 
+static inline bool operator==(const KoXmlStringPair &a, const KoXmlStringPair &b)
+{
+    return a.second == b.second && a.first == b.first;
+}
+
 // Older versions of OpenOffice.org used different namespaces. This function
 // does translate the old namespaces into the new ones.
 static QString fixNamespace(const QString &nsURI)

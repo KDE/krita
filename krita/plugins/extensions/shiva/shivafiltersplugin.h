@@ -30,6 +30,7 @@ class SourcesCollection;
 
 class ShivaPlugin : public QObject
 {
+    Q_OBJECT
 public:
     ShivaPlugin(QObject* parent, const QVariantList&);
     virtual ~ShivaPlugin();

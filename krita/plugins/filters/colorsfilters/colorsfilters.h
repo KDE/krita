@@ -30,6 +30,7 @@ class KoColorTransformation;
 
 class ColorsFilters : public QObject
 {
+    Q_OBJECT
 public:
     ColorsFilters(QObject *parent, const QVariantList &);
     virtual ~ColorsFilters();

@@ -26,6 +26,7 @@
 
 class KritaExtensionsColors : public QObject
 {
+    Q_OBJECT
 public:
     KritaExtensionsColors(QObject *parent, const QVariantList &);
     virtual ~KritaExtensionsColors();

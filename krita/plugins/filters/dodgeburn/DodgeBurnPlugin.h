@@ -23,6 +23,7 @@
 
 class DodgeBurnPlugin : public QObject
 {
+    Q_OBJECT
 public:
     DodgeBurnPlugin(QObject *parent, const QVariantList &);
     virtual ~DodgeBurnPlugin();

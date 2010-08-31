@@ -28,6 +28,7 @@ class KisColorAdjustment;
 
 class LevelFilter : public QObject
 {
+    Q_OBJECT
 public:
     LevelFilter(QObject *parent, const QVariantList &);
     virtual ~LevelFilter();

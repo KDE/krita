@@ -27,6 +27,7 @@
 
 class KritaExample : public QObject
 {
+    Q_OBJECT
 public:
     KritaExample(QObject *parent, const QVariantList &);
     virtual ~KritaExample();

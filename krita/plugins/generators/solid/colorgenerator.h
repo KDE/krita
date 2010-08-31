@@ -29,6 +29,7 @@ class KisConfigWidget;
 
 class KritaColorGenerator : public QObject
 {
+    Q_OBJECT
 public:
     KritaColorGenerator(QObject *parent, const QVariantList &);
     virtual ~KritaColorGenerator();

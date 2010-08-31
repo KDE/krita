@@ -29,6 +29,7 @@ class KisConfigWidget;
 
 class KritaRandomPickFilter : public QObject
 {
+    Q_OBJECT
 public:
     KritaRandomPickFilter(QObject *parent, const QVariantList &);
     virtual ~KritaRandomPickFilter();

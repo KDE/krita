@@ -25,6 +25,7 @@
 
 class KisCubismFilterPlugin : public QObject
 {
+    Q_OBJECT
 public:
     KisCubismFilterPlugin(QObject *parent, const QVariantList &);
     virtual ~KisCubismFilterPlugin();

@@ -27,6 +27,7 @@
 
 class FastColorTransferPlugin : public QObject
 {
+    Q_OBJECT
 public:
     FastColorTransferPlugin(QObject *parent, const QVariantList &);
     virtual ~FastColorTransferPlugin();

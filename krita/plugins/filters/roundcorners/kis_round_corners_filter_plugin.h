@@ -25,6 +25,7 @@
 
 class KisRoundCornersFilterPlugin : public QObject
 {
+    Q_OBJECT
 public:
     KisRoundCornersFilterPlugin(QObject *parent, const QVariantList &);
     virtual ~KisRoundCornersFilterPlugin();

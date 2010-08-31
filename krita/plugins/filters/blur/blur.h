@@ -26,6 +26,7 @@
 
 class BlurFilterPlugin : public QObject
 {
+    Q_OBJECT
 public:
     BlurFilterPlugin(QObject *parent, const QVariantList &);
     virtual ~BlurFilterPlugin();

@@ -14,8 +14,6 @@ set(kritadefaultpaintops_PART_SRCS
 	duplicate/kis_duplicateop_settings.cpp
 	duplicate/kis_duplicateop_settings_widget.cpp
 	duplicate/kis_duplicateop_option.cpp
-	pen/kis_penop.cpp
-	pen/kis_penop_settings_widget.cpp
 	smudge/kis_smudgeop.cpp
 	smudge/kis_smudgeop_settings_widget.cpp
     )
@@ -39,7 +37,7 @@ install( FILES
     krita-paintbrush.png
     krita-eraser.png
     krita-duplicate.png
-    krita-pencil.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+     DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 
 
 install( FILES  

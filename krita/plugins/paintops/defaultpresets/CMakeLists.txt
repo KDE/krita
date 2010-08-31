@@ -14,8 +14,6 @@ install( FILES
     experimentbrush.kpp  
     gridbrush.kpp  
     paintbrush.kpp  
-    pencil.kpp         
-    softbrush.kpp
     DESTINATION  ${DATA_INSTALL_DIR}/krita/defaultpresets)
 
 

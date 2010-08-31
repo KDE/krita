@@ -34,6 +34,9 @@ public slots:
     void setColor(const QColor& color);
     void updateSettings();
 
+protected slots:
+    void resourceChanged(int key, const QVariant& v);
+
 protected:
     void paintEvent(QPaintEvent *);
     virtual KisColorSelectorBase* createPopup() const;

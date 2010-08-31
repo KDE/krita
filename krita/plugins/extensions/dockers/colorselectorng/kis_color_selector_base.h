@@ -46,32 +46,33 @@ public slots:
     virtual void updateSettings();
     virtual void setColor(const QColor& color);
     virtual void showPopup();
+    /// commits a color to the resource manager
+    void commitColor(const KoColor& koColor, const QColor& qColor, ColorRole role);
 
 public:
     void mousePressEvent(QMouseEvent *);
+
+    /// finds a QColor, that will be ref.toQColor(), if converting it to the color space of ref
+    QColor findGeneratingColor(const KoColor& ref) const;
 
 protected:
     void mouseMoveEvent(QMouseEvent *);
     void keyPressEvent(QKeyEvent *);
     virtual KisColorSelectorBase* createPopup() const = 0;
-    /// finds a QColor, that will be ref.toQColor(), if converting it to the color space of ref
-    QColor findGeneratingColor(const KoColor& ref) const;
     void dragEnterEvent(QDragEnterEvent *);
     void dropEvent(QDropEvent *);
 
 protected slots:
     void hidePopup();
-    void commitColor(const KoColor& koColor, const QColor& qColor, ColorRole role);
-    void resourceChanged(int key, const QVariant& v);
 
-signals:
-    /// emits the new color raw, that means without color space transformation
-    void colorChanged(const QColor& rawColor) const;
+    /// if you overwrite this, keep in mind, that you should set the colour only, if m_colorUpdateAllowed is true
+    virtual void resourceChanged(int key, const QVariant& v);
 
 protected:
     KisCanvas2* m_canvas;
     KisColorSelectorBase* m_popup;
     QWidget* m_parent;
+    bool m_colorUpdateAllowed;
 
 private:
     int m_hideDistance;
@@ -79,7 +80,6 @@ private:
     bool m_popupOnMouseOver;
     bool m_popupOnMouseClick;
     mutable const KoColorSpace* m_colorSpace;
-    bool m_colorUpdateAllowed;
     bool m_isPopup; //this instance is a popup
 };
 

@@ -41,12 +41,12 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_canvas(0),
     m_popup(0),
     m_parent(0),
+    m_colorUpdateAllowed(true),
     m_hideDistance(40),
     m_timer(new QTimer(this)),
     m_popupOnMouseOver(false),
     m_popupOnMouseClick(true),
     m_colorSpace(0),
-    m_colorUpdateAllowed(true),
     m_isPopup(false)
 {
     m_timer->setInterval(350);
@@ -321,8 +321,6 @@ void KisColorSelectorBase::commitColor(const KoColor& color, const QColor& rawCo
         m_canvas->resourceManager()->setForegroundColor(color);
     else
         m_canvas->resourceManager()->setBackgroundColor(color);
-
-    emit colorChanged(rawColor);
 
     m_colorUpdateAllowed=true;
 }

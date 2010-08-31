@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>494</width>
-    <height>353</height>
+    <width>514</width>
+    <height>333</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -206,19 +206,6 @@
        <item row="0" column="1">
         <widget class="KisColorSelectorComboBox" name="colorSelectorConfiguration"/>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Color Harmonies</string>
-         </property>
-         <property name="buddy">
-          <cstring>comboBox_3</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="comboBox_3"/>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
@@ -263,25 +250,35 @@
          <property name="title">
           <string>Update shade selector</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
-          <item>
-           <widget class="QCheckBox" name="checkBox">
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="shadeSelectorUpdateOnRightClick">
             <property name="text">
              <string>on right click</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QCheckBox" name="checkBox_2">
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="shadeSelectorUpdateOnForeground">
+            <property name="text">
+             <string>on foreground color selector change</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="shadeSelectorUpdateOnLeftClick">
             <property name="text">
              <string>on left click</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QCheckBox" name="checkBox_3">
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="shadeSelectorUpdateOnBackground">
             <property name="text">
-             <string>on color selector change</string>
+             <string>on background color change</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -397,8 +394,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>265</width>
-               <height>114</height>
+               <width>280</width>
+               <height>124</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_4">

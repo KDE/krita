@@ -155,6 +155,11 @@ void KisColorSelectorSettings::savePreferences() const
 
     cfg.writeEntry("shadeSelectorType", shadeSelectorType);
 
+    cfg.writeEntry("shadeSelectorUpdateOnRightClick", ui->shadeSelectorUpdateOnRightClick->isChecked());
+    cfg.writeEntry("shadeSelectorUpdateOnForeground", ui->shadeSelectorUpdateOnForeground->isChecked());
+    cfg.writeEntry("shadeSelectorUpdateOnLeftClick", ui->shadeSelectorUpdateOnLeftClick->isChecked());
+    cfg.writeEntry("shadeSelectorUpdateOnBackground", ui->shadeSelectorUpdateOnBackground->isChecked());
+
     cfg.writeEntry("minimalShadeSelectorAsGradient", ui->minimalShadeSelectorAsGradient->isChecked());
     cfg.writeEntry("minimalShadeSelectorPatchCount", ui->minimalShadeSelectorPatchesPerLine->value());
     cfg.writeEntry("minimalShadeSelectorLineConfig",  ui->minimalShadeSelectorLineSettings->toString());
@@ -248,6 +253,11 @@ void KisColorSelectorSettings::loadPreferences()
     ui->shadeSelectorTypeMinimal->setChecked(shadeSelectorType=="Minimal");
     ui->shadeSelectorTypeHidden->setChecked(shadeSelectorType=="Hidden");
 
+    ui->shadeSelectorUpdateOnRightClick->setChecked(cfg.readEntry("shadeSelectorUpdateOnRightClick", false));
+    ui->shadeSelectorUpdateOnForeground->setChecked(cfg.readEntry("shadeSelectorUpdateOnForeground", false));
+    ui->shadeSelectorUpdateOnLeftClick->setChecked(cfg.readEntry("shadeSelectorUpdateOnLeftClick", false));
+    ui->shadeSelectorUpdateOnBackground->setChecked(cfg.readEntry("shadeSelectorUpdateOnBackground", true));
+
     bool asGradient = cfg.readEntry("minimalShadeSelectorAsGradient", false);
     if(asGradient) ui->minimalShadeSelectorAsGradient->setChecked(true);
     else ui->minimalShadeSelectorAsColorPatches->setChecked(true);
@@ -307,6 +317,11 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->shadeSelectorTypeMyPaint->setChecked(true);
     ui->shadeSelectorTypeMinimal->setChecked(true);
     ui->shadeSelectorTypeHidden->setChecked(true);
+
+    ui->shadeSelectorUpdateOnRightClick->setChecked(false);
+    ui->shadeSelectorUpdateOnForeground->setChecked(false);
+    ui->shadeSelectorUpdateOnLeftClick->setChecked(false);
+    ui->shadeSelectorUpdateOnBackground->setChecked(true);
 
 //    bool asGradient = false;
 //    if(asGradient) ui->minimalShadeSelectorAsGradient->setChecked(true);

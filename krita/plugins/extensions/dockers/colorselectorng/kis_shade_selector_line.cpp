@@ -32,6 +32,7 @@
 
 #include "kis_canvas2.h"
 
+#include "kis_color_selector_base.h"
 #include "kis_minimal_shade_selector.h"
 
 #include <KDebug>
@@ -83,9 +84,6 @@ void KisShadeSelectorLine::updateSettings()
 void KisShadeSelectorLine::setCanvas(KisCanvas2 *canvas)
 {
     m_canvas=canvas;
-
-    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-            this,                        SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
 }
 
 QString KisShadeSelectorLine::toString() const
@@ -183,18 +181,21 @@ void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
     if(color==m_backgroundColor)
         return;
 
-    if(e->button()==Qt::LeftButton)
-        m_canvas->resourceManager()->setForegroundColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()));
+    KisColorSelectorBase* parent = dynamic_cast<KisColorSelectorBase*>(parentWidget());
 
+    KisColorSelectorBase::ColorRole role = KisColorSelectorBase::Foreground;
     if(e->button()==Qt::RightButton)
-        m_canvas->resourceManager()->setBackgroundColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()));
+        role = KisColorSelectorBase::Background;
+
+    parent->commitColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()), color, role);
+
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+
+    bool onRightClick = cfg.readEntry("shadeSelectorUpdateOnRightClick", false);
+    bool onLeftClick = cfg.readEntry("shadeSelectorUpdateOnLeftClick", false);
+
+    if((e->button()==Qt::LeftButton && onLeftClick) || (e->button()==Qt::RightButton && onRightClick))
+        parent->setColor(parent->findGeneratingColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8())));
 
     e->accept();
-}
-
-void KisShadeSelectorLine::resourceChanged(int key, const QVariant &v)
-{
-    if (key == KoCanvasResource::ForegroundColor || key == KoCanvasResource::BackgroundColor) {
-        setColor((v.value<KoColor>()).toQColor());
-    }
 }

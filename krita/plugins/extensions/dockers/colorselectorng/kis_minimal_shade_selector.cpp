@@ -26,6 +26,8 @@
 #include <KComponentData>
 #include <KGlobal>
 
+#include "KoResourceManager.h"
+
 #include "kis_shade_selector_line.h"
 
 
@@ -88,6 +90,22 @@ void KisMinimalShadeSelector::updateSettings()
         m_shadingLines.at(i)->updateSettings();
 
     setPopupBehaviour(false, false);
+}
+
+void KisMinimalShadeSelector::resourceChanged(int key, const QVariant &v)
+{
+    if(m_colorUpdateAllowed==false)
+        return;
+
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+
+    bool onForeground = cfg.readEntry("shadeSelectorUpdateOnForeground", false);
+    bool onBackground = cfg.readEntry("shadeSelectorUpdateOnBackground", true);
+
+    if ((key == KoCanvasResource::ForegroundColor && onForeground)
+        || (key == KoCanvasResource::BackgroundColor && onBackground)) {
+        setColor(findGeneratingColor(v.value<KoColor>()));
+    }
 }
 
 void KisMinimalShadeSelector::paintEvent(QPaintEvent *)

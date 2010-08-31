@@ -29,11 +29,11 @@ public:
     explicit KisColorSelectorTriangle(KisColorSelector* parent);
     QColor selectColor(int x, int y);
     void setColor(const QColor &color);
-signals:
-    void colorChanged(QColor color);
+
 protected:
     void paint(QPainter*);
     bool isComponent(int x, int y) const;
+
 private:
     int triangleWidth() const;
     int triangleHeight() const;

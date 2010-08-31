@@ -54,9 +54,6 @@ protected:
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *);
 
-protected slots:
-    void resourceChanged(int key, const QVariant &v);
-
 private:
     qreal m_hueDelta;
     qreal m_saturationDelta;

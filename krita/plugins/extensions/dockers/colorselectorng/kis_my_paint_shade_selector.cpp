@@ -20,8 +20,10 @@
  */
 
 #include "kis_my_paint_shade_selector.h"
+
 #include <cmath>
 #include <cstdlib>
+
 #include <QImage>
 #include <QColor>
 #include <QPainter>
@@ -31,9 +33,15 @@
 #include <QtGlobal>
 #include <QTimer>
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KComponentData>
+#include <KGlobal>
+
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
+#include "KoResourceManager.h"
 
 #include <KDebug>
 
@@ -190,16 +198,23 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
     e->setAccepted(false);
     KisColorSelectorBase::mousePressEvent(e);
 
-    QRect widgetRect(0, 0, qMin(width(), height()), qMin(width(), height()));
-    if(!e->isAccepted() && widgetRect.contains(e->pos())) {
+    if(!e->isAccepted()) {
         QColor color = QColor(m_pixelCache.pixel(e->x(), e->y()));
         color = findGeneratingColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()));
 
         ColorRole role=Foreground;
-        if(e->buttons()&Qt::RightButton)
+        if(e->button()&Qt::RightButton)
             role=Background;
 
-        setColor(color);
+        KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+        bool onRightClick = cfg.readEntry("shadeSelectorUpdateOnRightClick", false);
+        bool onLeftClick = cfg.readEntry("shadeSelectorUpdateOnLeftClick", false);
+
+        if((e->button()&Qt::LeftButton && onLeftClick)
+            || (e->button()&Qt::RightButton && onRightClick)) {
+            setColor(color);
+        }
+
         commitColor(KoColor(color, colorSpace()), color, role);
     }
 
@@ -217,6 +232,22 @@ void KisMyPaintShadeSelector::setColor(const QColor &c) {
     m_colorV=c.valueF();
 
     m_updateTimer->start();
+}
+
+void KisMyPaintShadeSelector::resourceChanged(int key, const QVariant &v)
+{
+    if(m_colorUpdateAllowed==false)
+        return;
+
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+
+    bool onForeground = cfg.readEntry("shadeSelectorUpdateOnForeground", false);
+    bool onBackground = cfg.readEntry("shadeSelectorUpdateOnBackground", true);
+
+    if ((key == KoCanvasResource::ForegroundColor && onForeground)
+        || (key == KoCanvasResource::BackgroundColor && onBackground)) {
+        setColor(findGeneratingColor(v.value<KoColor>()));
+    }
 }
 
 inline int sqr(int x) {

@@ -36,6 +36,7 @@ KisBoundary::KisBoundary(KisFixedPaintDeviceSP dev) : d(new Private)
 
 KisBoundary::~KisBoundary()
 {
+    delete d;
 }
 
 void KisBoundary::generateBoundary()

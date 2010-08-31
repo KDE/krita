@@ -179,7 +179,7 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
 
     bool is16bit = pd->colorSpace()->id() == "RGBA16" || pd->colorSpace()->id() == "GRAYA16";
 
-    // Open the file for writting
+    // Open the file for writing
     QFile fp(filename);
     fp.open(QIODevice::WriteOnly);
 

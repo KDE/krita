@@ -28,7 +28,7 @@ class KisImagePatch
 {
 public:
     /**
-     * A default constuctor initializing invalid patch
+     * A default constructor initializing invalid patch
      */
     KisImagePatch();
 

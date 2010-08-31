@@ -53,7 +53,7 @@ struct KisRecordedPathPaintAction::Private {
         QPointF control2;
         KisPaintInformation point2;
     };
-    QList<BezierCurveSlice> infos;
+    QList<BezierCurveSlice> curveSlices;
 };
 
 KisRecordedPathPaintAction::KisRecordedPathPaintAction(
@@ -79,7 +79,7 @@ void KisRecordedPathPaintAction::addPoint(const KisPaintInformation& info)
     Private::BezierCurveSlice slice;
     slice.type = Private::BezierCurveSlice::Point;
     slice.point1 = info;
-    d->infos.append(slice);
+    d->curveSlices.append(slice);
 }
 
 void KisRecordedPathPaintAction::addLine(const KisPaintInformation& point1, const KisPaintInformation& point2)
@@ -88,7 +88,7 @@ void KisRecordedPathPaintAction::addLine(const KisPaintInformation& point1, cons
     slice.type = Private::BezierCurveSlice::Line;
     slice.point1 = point1;
     slice.point2 = point2;
-    d->infos.append(slice);
+    d->curveSlices.append(slice);
 }
 
 void KisRecordedPathPaintAction::addPolyLine(const QList<QPointF>& points)
@@ -113,16 +113,16 @@ void KisRecordedPathPaintAction::addCurve(const KisPaintInformation& point1,
     slice.control1 = control1;
     slice.control2 = control2;
     slice.point2 = point2;
-    d->infos.append(slice);
+    d->curveSlices.append(slice);
 }
 
 void KisRecordedPathPaintAction::playPaint(const KisPlayInfo&, KisPainter* painter) const
 {
-    dbgImage << "play path paint action with " << d->infos.size() << " slices";
-    if (d->infos.size() <= 0) return;
+    dbgImage << "play path paint action with " << d->curveSlices.size() << " slices";
+    if (d->curveSlices.size() <= 0) return;
     KisDistanceInformation savedDist;
     
-    foreach (Private::BezierCurveSlice slice, d->infos)
+    foreach (Private::BezierCurveSlice slice, d->curveSlices)
     {
         switch(slice.type)
         {
@@ -144,7 +144,7 @@ void KisRecordedPathPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisR
 {
     KisRecordedPaintAction::toXML(doc, elt, context);
     QDomElement waypointsElt = doc.createElement("Slices");
-    foreach(const Private::BezierCurveSlice & slice, d->infos) {
+    foreach(const Private::BezierCurveSlice & slice, d->curveSlices) {
         switch(slice.type)
         {
             case Private::BezierCurveSlice::Point:

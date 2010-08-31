@@ -218,7 +218,7 @@ quint32 AbrStructParser::parseEntry(QDataStream &buf){
                 case P_DOUB: value = p_doub(buf); break;
                 case P_ENUM: value = p_enum(buf); break;
                 case P_TDTA: value = p_tdta(buf); break;
-                default: qDebug() << "Freak error occured!"; break;
+                default: qDebug() << "Freak error occurred!"; break;
             }
             
             QString attributeName = QString::fromLatin1(name);

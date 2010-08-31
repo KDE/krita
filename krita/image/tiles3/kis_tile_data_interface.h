@@ -228,7 +228,7 @@ private:
      * The primitive for controlling swapping of the tile.
      * lockForRead() - used by regular threads to ensure swapper
      *                 won't touch this tile data.
-     * tryLockForWrite() - used by swapper to check noone reads
+     * tryLockForWrite() - used by swapper to check no-one reads
      *                     this tile data
      */
     QReadWriteLock m_swapLock;

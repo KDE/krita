@@ -110,7 +110,7 @@ private:
         QPolygon m_tmpDetectedBorder;
         int m_accuracy;
 
-        //debuging
+        //debugging
         QPolygonF m_debugPolyline;
         QPolygon m_debugScannedPoints;
     };

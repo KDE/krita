@@ -148,7 +148,7 @@ protected:
     /**
      * The flag that blocks registration of changes on tiles.
      * This is a temporary state of the memento manager, that
-     * is used for travelling in history
+     * is used for traveling in history
      *
      * \see rollback()
      * \see rollforward()

@@ -84,7 +84,7 @@ private:
 };
 
 /**
- * while travelling down to the rootlayer, we update the projection
+ * while traveling down to the rootlayer, we update the projection
  * of every node.
  */
 class KisImageUpdater : public QObject

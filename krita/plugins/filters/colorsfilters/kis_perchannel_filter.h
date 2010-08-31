@@ -24,10 +24,10 @@
 #include <QPair>
 #include <QList>
 
-#include "filter/kis_color_transformation_filter.h"
-#include "filter/kis_filter_configuration.h"
-#include "kis_config_widget.h"
-
+#include <filter/kis_color_transformation_filter.h>
+#include <filter/kis_filter_configuration.h>
+#include <kis_config_widget.h>
+#include <kis_paint_device.h>
 #include "ui_wdg_perchannel.h"
 
 class WdgPerChannel : public QWidget, public Ui::WdgPerChannel

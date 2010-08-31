@@ -26,21 +26,21 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
     QRegExp parasiteSplitter(":");
     QStringList parasites = source.split(basicSplitter, QString::SkipEmptyParts);
     for (int i = 0; i < parasites.count(); i++) {
-        QStringList splitted = parasites.at(i).split(parasiteSplitter, QString::SkipEmptyParts);
-        if (splitted.count() != 2) {
+        QStringList split = parasites.at(i).split(parasiteSplitter, QString::SkipEmptyParts);
+        if (split.count() != 2) {
             warnImage << "Wrong count for this parasite key/value:" << parasites.at(i);
             continue;
         }
-        QString index = splitted.at(0);
+        QString index = split.at(0);
         if (index == "dim") {
-            dim = (splitted.at(1)).toInt();
+            dim = (split.at(1)).toInt();
             if (dim < 1 || dim > MaxDim) {
                 dim = 1;
             }
         } else if (index.startsWith(QString("sel"))) {
             int selIndex = index.mid(strlen("sel")).toInt();
             if (selIndex >= 0 && selIndex < dim) {
-                QString selectionMode = splitted.at(1);
+                QString selectionMode = split.at(1);
                 if (selectionMode == "incremental")
                     selection[selIndex] = KisParasite::Incremental;
                 else if (selectionMode == "angular") {
@@ -65,9 +65,9 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
                 warnImage << "Rankindex out of range: " << rankIndex;
                 continue;
             }
-            rank[rankIndex] = (splitted.at(1)).toInt();
+            rank[rankIndex] = (split.at(1)).toInt();
         } else if (index == "ncells") {
-            ncells = (splitted.at(1)).toInt();
+            ncells = (split.at(1)).toInt();
             if (ncells < 1) {
                 warnImage << "ncells out of range: " << ncells;
                 ncells = 1;

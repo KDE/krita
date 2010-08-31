@@ -164,7 +164,7 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
     QByteArray mimeType("application/x-krita-selection");
     const QMimeData *cbData = cb->mimeData();
     KisPaintDeviceSP clip;
-    
+
     if (cbData && cbData->hasFormat(mimeType)) {
         dbgUI << "Use clip as x-krita-selection";
         QByteArray encodedData = cbData->data(mimeType);
@@ -173,13 +173,13 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
         const KoColorProfile *profile = 0;
 
         QString csDepth, csModel;
-        
+
         // topLeft
         if (store->hasFile("topLeft")) {
             store->open("topLeft");
             QString str = store->read(store->size());
             store->close();
-            QStringList list = str.split(" ");
+            QStringList list = str.split(' ');
             if (list.size() == 2) {
                 topLeft.setX(list[0].toInt());
                 topLeft.setY(list[1].toInt());
@@ -187,7 +187,7 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
             }
             dbgUI << str << topLeft;
         }
-        
+
         // ColorSpace id of layer data
         if (store->hasFile("colormodel")) {
             store->open("colormodel");

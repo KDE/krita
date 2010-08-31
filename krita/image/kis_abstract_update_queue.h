@@ -72,13 +72,13 @@ public:
 
     /**
      * Append a new job into the queue.
-     * Must be overriden by the descendants.
+     * Must be overridden by the descendants.
      */
     virtual void addJob(KisNodeSP node, const QRect& rc, const QRect& cropRect) = 0;
 
     /**
      * Optimize the queue's jobs.
-     * Must be overriden by the descendants.
+     * Must be overridden by the descendants.
      */
     virtual void optimize() = 0;
 
@@ -89,14 +89,14 @@ public:
 
     /**
      * The update scheduler will tell us when
-     * it is nessesary to reread configuration
+     * it is necessary to reread configuration
      */
     virtual void updateSettings() = 0;
 
 protected:
     /**
      * Process one job of the queue.
-     * Must be overriden by the descendants.
+     * Must be overridden by the descendants.
      */
     virtual bool processOneJob(KisUpdaterContext &updaterContext) = 0;
 

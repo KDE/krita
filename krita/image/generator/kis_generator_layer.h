@@ -55,7 +55,7 @@ public:
     void setFilter(KisFilterConfiguration * filterConfig);
 
     /**
-     * Convinience functions.
+     * Convenience functions.
      * FIXME: should be deprecated? (DK)
      */
     KisFilterConfiguration *generator() const {

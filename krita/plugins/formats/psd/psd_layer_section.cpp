@@ -232,12 +232,12 @@ bool PSDLayerSection::read(QIODevice* io)
         }
 
         if (!psdread(io, &opacity)) {
-            error = "Could not read global mask info visualisation opacity";
+            error = "Could not read global mask info visualization opacity";
             return false;
         }
 
         if (!psdread(io, &kind)) {
-            error = "Could not read global mask info visualisation type";
+            error = "Could not read global mask info visualization type";
             return false;
         }
     }

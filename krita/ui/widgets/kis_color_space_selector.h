@@ -38,11 +38,11 @@ public:
     void setCurrentColorSpace(const KoColorSpace* colorSpace);
 signals:
     /**
-     * This signal is emited when a new color space is selected.
+     * This signal is emitted when a new color space is selected.
      * @param valid indicates if the color space can be used
      */
     void selectionChanged(bool valid);
-    /// This signal is emited, when a new color space is selected, that can be used (eg is valid)
+    /// This signal is emitted, when a new color space is selected, that can be used (eg is valid)
     void colorSpaceChanged(const KoColorSpace*);
 private slots:
     void fillCmbDepths(const KoID& idd);

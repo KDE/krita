@@ -156,7 +156,7 @@ QRect KisMask::decorateRect(KisPaintDeviceSP &src,
 {
     Q_UNUSED(src);
     Q_UNUSED(dst);
-    Q_ASSERT_X(0, "KisMask::decorateRect", "Should be overriden by successors");
+    Q_ASSERT_X(0, "KisMask::decorateRect", "Should be overridden by successors");
     return rc;
 }
 

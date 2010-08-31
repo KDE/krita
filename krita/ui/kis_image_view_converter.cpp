@@ -22,7 +22,7 @@ KisImageViewConverter::KisImageViewConverter(const KisImageWSP image)
         : m_image(image)
 {
     Q_ASSERT(image);
-    setZoom(0.1); // set the superclass to not hit the optimisation of zoom=100%
+    setZoom(0.1); // set the superclass to not hit the optimization of zoom=100%
 }
 
 // remember here; document is postscript points;  view is krita pixels.

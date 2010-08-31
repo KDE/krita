@@ -114,7 +114,7 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
 void KisPaletteManager::changeCurrentBrushLabel()
 {
     m_currentBrushLabel->setText(m_paintOpBox->currentPaintop().id());
-    //m_paintOpBox->currentPaintopKoID().name() doesnt work properly.
+    //m_paintOpBox->currentPaintopKoID().name() doesn't work properly.
 }
 
 

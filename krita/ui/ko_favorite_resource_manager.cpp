@@ -50,7 +50,7 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
 
     //take favorite brushes from a file then append to QList
     KConfigGroup group(KGlobal::config(), "favoriteList");
-    QStringList favoriteList = (group.readEntry("favoriteBrushes")).split(",", QString::SkipEmptyParts);
+    QStringList favoriteList = (group.readEntry("favoriteBrushes")).split(',', QString::SkipEmptyParts);
 
     for (int pos = 0; pos < favoriteList.size(); pos++)
     {

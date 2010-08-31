@@ -318,7 +318,7 @@ private:
     KoCanvasBase *m_canvas;
     QButtonGroup *m_rotCenterButtons;
 
-    // informations on the original selection (before any transformation)
+    // information on the original selection (before any transformation)
     double m_originalWidth2, m_originalHeight2; // '2' meaning half
     QPoint m_originalTopLeft;  // in image coords
     QPoint m_originalBottomRight;
@@ -329,7 +329,7 @@ private:
     QPointF m_clickRotationCenterProj; // the rotation center projection at click
     QPointF m_rotationCenterProj;
 
-    // informations on the current selection
+    // information on the current selection
     QVector3D m_topLeft; //in image coords
     QVector3D m_topRight;
     QVector3D m_bottomLeft;
@@ -358,7 +358,7 @@ private:
     QPointF m_clickMiddleBottomProj;
 
     QPointF m_prevMousePos;
-    QPointF m_clickPoint; //position of the mouse when click occured
+    QPointF m_clickPoint; //position of the mouse when click occurred
 
     // 'Free-transform'-related :
     QVector3D m_cameraPos, m_eyePos;

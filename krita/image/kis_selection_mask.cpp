@@ -131,7 +131,7 @@ bool KisSelectionMask::active() const
 
 void KisSelectionMask::setActive(bool active)
 {
-    //the change needs to be done by the manager to deactive current active selectionMask
+    //the change needs to be done by the manager to deactivate current active selectionMask
     emit changeActivity(this,active);
 }
 

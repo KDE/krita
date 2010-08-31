@@ -157,7 +157,7 @@ private:
     KAction* m_increaseBrushSize;
     KAction* m_decreaseBrushSize;
     
-    bool m_hasPaintAtLeastOnce; ///< this indicates wether mouseReleaseEvent should call paintAt or not
+    bool m_hasPaintAtLeastOnce; ///< this indicates whether mouseReleaseEvent should call paintAt or not
     
     QTimer m_timer;
     bool m_showOutline;

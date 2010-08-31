@@ -225,7 +225,7 @@ static quint32 parseEntry(QDataStream &buf){
                 case P_LONG: value = p_vlls(buf); break; // yes vlls, it is not typo
                 case P_DOUB: value = p_doub(buf); break;
                 case P_ENUM: value = p_enum(buf); break;
-                default: qDebug() << "Freak error occured!"; break;
+                default: qDebug() << "Freak error occurred!"; break;
             }
             qDebug() << name << type << value;
             

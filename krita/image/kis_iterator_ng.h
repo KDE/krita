@@ -62,7 +62,7 @@ public:
 };
 
 /**
- * Also support writting.
+ * Also support writing.
  */
 class KRITAIMAGE_EXPORT KisHLineIteratorNG : public KisHLineConstIteratorNG, public KisBaseIteratorNG
 {
@@ -88,7 +88,7 @@ public:
 };
 
 /**
- * Also support writting.
+ * Also support writing.
  */
 class KRITAIMAGE_EXPORT KisVLineIteratorNG : public KisVLineConstIteratorNG, public KisBaseIteratorNG
 {
@@ -112,7 +112,7 @@ public:
 };
 
 /**
- * Also support writting.
+ * Also support writing.
  */
 class KRITAIMAGE_EXPORT KisRectIteratorNG : public KisRectConstIteratorNG, public KisBaseIteratorNG
 {

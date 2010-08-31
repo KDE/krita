@@ -103,7 +103,7 @@ public:
     /// tangential pressure (i.e., rate for an airbrush device)
     double tangentialPressure() const;
     
-    /// Number of ms since the begining of the stroke
+    /// Number of ms since the beginning of the stroke
     int currentTime() const;
 
     void toXML(QDomDocument&, QDomElement&) const;

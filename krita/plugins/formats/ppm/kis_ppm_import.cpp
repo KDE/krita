@@ -253,7 +253,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
 
     Q_ASSERT(channels != -1);
     char c; device->getChar(&c);
-    if (!isspace(c)) return KoFilter::CreationError; // Invalid file, it should have a seperator now
+    if (!isspace(c)) return KoFilter::CreationError; // Invalid file, it should have a separator now
 
     // Read width
     int width = readNumber(device);

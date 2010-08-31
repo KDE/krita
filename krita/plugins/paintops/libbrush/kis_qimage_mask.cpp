@@ -145,7 +145,7 @@ void KisQImagemask::rotation(double angle)
     init(tmp.width(), tmp.height());
 
     // Do not use convertToFormat to go back to Indexed8, since it is quiet
-    // a slow general operation, while we know that we are outputing a grayscale image
+    // a slow general operation, while we know that we are outputting a grayscale image
     for (int y = 0; y < tmp.height(); ++y) {
         for (int x = 0; x < tmp.width(); ++x) {
             m_data.scanLine(y)[x] = tmp.scanLine(y)[4 * x];

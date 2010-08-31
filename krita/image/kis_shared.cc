@@ -49,7 +49,7 @@ KisShared::KisShared()
 KisShared::~KisShared()
 {
     /**
-     * Check noone references us
+     * Check no-one references us
      */
     Q_ASSERT(_ref == 0);
 

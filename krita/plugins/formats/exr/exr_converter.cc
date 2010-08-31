@@ -293,7 +293,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
 
     // Constuct the list of LayerInfo
 
-    QList<ExrPaintLayerInfo> infos;
+    QList<ExrPaintLayerInfo> informationObjects;
     QList<ExrGroupLayerInfo> groups;
 
     ImageType imageType = IT_UNKNOWN;
@@ -321,7 +321,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 info.channelMap[qname] = qname;
             }
         }
-        infos.push_back(info);
+        informationObjects.push_back(info);
         imageType = info.imageType;
     } else {
         dbgFile << "Multi layers:";
@@ -351,17 +351,17 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 info.channelMap[layersuffix] = qname;
             }
             if (info.imageType != IT_UNKNOWN && info.imageType != IT_UNSUPPORTED) {
-                infos.push_back(info);
+                informationObjects.push_back(info);
                 if (imageType < info.imageType) {
                     imageType = info.imageType;
                 }
             }
         }
     }
-    dbgFile << "File has " << infos.size() << " layers";
+    dbgFile << "File has " << informationObjects.size() << " layers";
     // Set the colorspaces
-    for (int i = 0; i < infos.size(); ++i) {
-        ExrPaintLayerInfo& info = infos[i];
+    for (int i = 0; i < informationObjects.size(); ++i) {
+        ExrPaintLayerInfo& info = informationObjects[i];
         QString modelId;
         if (info.channelMap.size() == 1) {
             modelId = GrayColorModelID.id();
@@ -447,8 +447,8 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     }
 
     // Load the layers
-    for (int i = 0; i < infos.size(); ++i) {
-        ExrPaintLayerInfo& info = infos[i];
+    for (int i = 0; i < informationObjects.size(); ++i) {
+        ExrPaintLayerInfo& info = informationObjects[i];
         if (info.colorSpace) {
             dbgFile << "Decoding " << info.name << " with " << info.channelMap.size() << " channels, and color space " << info.colorSpace->id();
             KisPaintLayerSP layer = new KisPaintLayer(m_image, info.name, OPACITY_OPAQUE_U8, info.colorSpace);
@@ -662,10 +662,10 @@ Encoder* encoder(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int w
     return 0;
 }
 
-void encodeData(Imf::OutputFile& file, const QList<ExrPaintLayerSaveInfo>& infos, int width, int height)
+void encodeData(Imf::OutputFile& file, const QList<ExrPaintLayerSaveInfo>& informationObjects, int width, int height)
 {
     QList<Encoder*> encoders;
-    foreach(const ExrPaintLayerSaveInfo& info, infos) {
+    foreach(const ExrPaintLayerSaveInfo& info, informationObjects) {
         encoders.push_back(encoder(file, info, width));
     }
 
@@ -721,10 +721,10 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
     // Open file for writing
     Imf::OutputFile file(QFile::encodeName(uri.path()), header);
 
-    QList<ExrPaintLayerSaveInfo> infos;
-    infos.push_back(info);
+    QList<ExrPaintLayerSaveInfo> informationObjects;
+    informationObjects.push_back(info);
 
-    encodeData(file, infos, width, height);
+    encodeData(file, informationObjects, width, height);
 
     return KisImageBuilder_RESULT_OK;
 }
@@ -737,7 +737,7 @@ QString remap(const QMap<QString, QString>& current2original, const QString& cur
     return current;
 }
 
-void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& infos, const QString& name, KisGroupLayerSP parent)
+void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& informationObjects, const QString& name, KisGroupLayerSP parent)
 {
     for (uint i = 0; i < parent->childCount(); ++i) {
         KisNodeSP node = parent->at(i);
@@ -779,9 +779,9 @@ void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& infos, const QStri
             } else {
                 info.pixelType = Imf::NUM_PIXELTYPES;
             }
-            infos.push_back(info);
+            informationObjects.push_back(info);
         } else if (KisGroupLayerSP groupLayer = dynamic_cast<KisGroupLayer*>(node.data())) {
-            recBuildPaintLayerSaveInfo(infos, name + groupLayer->name() + ".", groupLayer);
+            recBuildPaintLayerSaveInfo(informationObjects, name + groupLayer->name() + ".", groupLayer);
         }
     }
 }
@@ -805,12 +805,12 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP 
     qint32 width = image->width();
     Imf::Header header(width, height);
 
-    QList<ExrPaintLayerSaveInfo> infos;
-    recBuildPaintLayerSaveInfo(infos, "", layer);
+    QList<ExrPaintLayerSaveInfo> informationObjects;
+    recBuildPaintLayerSaveInfo(informationObjects, "", layer);
 
-    dbgFile << infos.size() << " layers to save";
+    dbgFile << informationObjects.size() << " layers to save";
 
-    foreach(const ExrPaintLayerSaveInfo& info, infos) {
+    foreach(const ExrPaintLayerSaveInfo& info, informationObjects) {
         if (info.pixelType < Imf::NUM_PIXELTYPES) {
             foreach(const QString& channel, info.channels) {
                 dbgFile << channel << " " << info.pixelType;
@@ -822,7 +822,7 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP 
     // Open file for writing
     Imf::OutputFile file(QFile::encodeName(uri.path()), header);
 
-    encodeData(file, infos, width, height);
+    encodeData(file, informationObjects, width, height);
     return KisImageBuilder_RESULT_OK;
 }
 

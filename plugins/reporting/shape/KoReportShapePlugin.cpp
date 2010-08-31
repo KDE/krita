@@ -27,7 +27,7 @@
 
 K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportShapePlugin, shapeplugin)
 
-KoReportShapePlugin::KoReportShapePlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
+KoReportShapePlugin::KoReportShapePlugin(QObject *parent, const QVariantList &/*args*/) : KoReportPluginInterface(parent)
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:shape");
@@ -57,7 +57,7 @@ QObject* KoReportShapePlugin::createDesignerInstance(KoReportDesigner* designer,
     return new KoReportDesignerItemShape(designer, scene, pos);
 }
 
-QObject* KoReportShapePlugin::createScriptInstance(KoReportItemBase* item)
+QObject* KoReportShapePlugin::createScriptInstance(KoReportItemBase* /*item*/)
 {
     return 0;
 }

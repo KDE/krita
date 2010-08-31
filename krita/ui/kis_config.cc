@@ -185,7 +185,9 @@ void KisConfig::setWorkingColorSpace(const QString & workingColorSpace)
 
 QString KisConfig::printerColorSpace() const
 {
-    return m_cfg.readEntry("printerColorSpace", "RGBA");
+    //TODO currently only rgb8 is supported
+    //return m_cfg.readEntry("printerColorSpace", "RGBA");
+    return QString("RGBA");
 }
 
 void KisConfig::setPrinterColorSpace(const QString & printerColorSpace)

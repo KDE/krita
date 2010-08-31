@@ -162,6 +162,9 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     refillMonitorProfiles(KoID("RGBA", ""));
     refillPrintProfiles(KoID(cfg.printerColorSpace(), ""));
 
+    //hide printing settings
+    m_page->groupBox2->hide();
+    
     if (m_page->cmbMonitorProfile->contains(cfg.monitorProfile()))
         m_page->cmbMonitorProfile->setCurrent(cfg.monitorProfile());
     if (m_page->cmbPrintProfile->contains(cfg.printerProfile()))

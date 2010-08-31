@@ -85,7 +85,7 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
         if (!dev) return;
 
 
-        
+
         if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
             dev = currentImage()->mergedImage();
         }
@@ -139,7 +139,7 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             delete[] pixels;
             delete[] data;
         }
-        
+
         if (m_updateColor) {
             if (m_toForegroundColor)
                 canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor, m_pickedColor);
@@ -147,7 +147,7 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
                 canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor, m_pickedColor);
         }
 
-        
+
 }
 
 
@@ -175,14 +175,14 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
         }
 
         QPoint pos = convertToIntPixelCoord(event);
-        // the color picking has to start in the visible part of the layer 
+        // the color picking has to start in the visible part of the layer
         if (!currentImage()->bounds().contains(pos)) {
             return;
         }
-        
+
         m_colorPicking = true;
         m_toForegroundColor = (event->button() == Qt::LeftButton);
-        
+
         pickColor(pos);
         displayPickedColor();
 
@@ -198,7 +198,7 @@ void KisToolColorPicker::mouseMoveEvent(KoPointerEvent *event)
     }
 }
 
-void KisToolColorPicker::mouseReleaseEvent(KoPointerEvent *event)
+void KisToolColorPicker::mouseReleaseEvent(KoPointerEvent */*event*/)
 {
     if (m_addPalette) {
         KoColorSetEntry ent;
@@ -212,7 +212,7 @@ void KisToolColorPicker::mouseReleaseEvent(KoPointerEvent *event)
             KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()), i18n("Palette"));
         }
     }
-    
+
     m_colorPicking = false;
 }
 

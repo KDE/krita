@@ -81,7 +81,7 @@ public:
     }
 
     int pop() {
-        int value;
+        int value  = 0;
 
         bool result = m_stack.pop(value);
         Q_ASSERT(result);

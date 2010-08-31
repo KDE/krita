@@ -32,7 +32,7 @@ KisColorSelectorWheel::KisColorSelectorWheel(KisColorSelector *parent) :
 
 void KisColorSelectorWheel::setColor(const QColor &c)
 {
-    qreal angle, radius;
+    qreal angle = 0.0, radius = 0.0;
     angle = c.hueF();
     angle *= 2. * M_PI;
     angle -= M_PI;
@@ -66,10 +66,10 @@ void KisColorSelectorWheel::setColor(const QColor &c)
 QColor KisColorSelectorWheel::selectColor(int x, int y)
 {
     m_kocolor.convertTo(colorSpace());
-    
+
     int xWheel = x-width()/2;
     int yWheel = y-height()/2;
-    
+
     qreal radius = sqrt(xWheel*xWheel+yWheel*yWheel);
     radius/=qMin(width(), height());
     if(radius>0.5)

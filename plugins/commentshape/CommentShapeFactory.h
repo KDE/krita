@@ -26,6 +26,8 @@
 
 class CommentShapeFactory : public KoShapeFactoryBase
 {
+    Q_OBJECT
+
 public:
     CommentShapeFactory(QObject* parent);
     virtual ~CommentShapeFactory();

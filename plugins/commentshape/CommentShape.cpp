@@ -149,11 +149,11 @@ void CommentShape::saveOdf(KoShapeSavingContext& context) const
     writer.endElement();//officeooo:annotation
 }
 
-void CommentShape::paintComponent(QPainter& painter, const KoViewConverter& converter)
+void CommentShape::paintComponent(QPainter& /*painter*/, const KoViewConverter& /*converter*/)
 {
 }
 
-void CommentShape::setSize(const QSizeF& size)
+void CommentShape::setSize(const QSizeF& /*size*/)
 {
     KoShapeContainer::setSize(initialsBoxSize);
 }

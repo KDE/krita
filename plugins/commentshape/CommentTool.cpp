@@ -39,7 +39,7 @@ CommentTool::~CommentTool()
 {
 }
 
-void CommentTool::activate(KoToolBase::ToolActivation toolActivation, const QSet< KoShape* >& shapes)
+void CommentTool::activate(KoToolBase::ToolActivation toolActivation, const QSet< KoShape* >& /*shapes*/)
 {
     const QCursor cursor(Qt::ArrowCursor);
     emit useCursor(cursor);
@@ -109,11 +109,11 @@ void CommentTool::mouseMoveEvent(KoPointerEvent* event)
     }
 }
 
-void CommentTool::mousePressEvent(KoPointerEvent* event)
+void CommentTool::mousePressEvent(KoPointerEvent* /*event*/)
 {
 }
 
-void CommentTool::paint(QPainter& painter, const KoViewConverter& converter)
+void CommentTool::paint(QPainter& /*painter*/, const KoViewConverter& /*converter*/)
 {
 }
 

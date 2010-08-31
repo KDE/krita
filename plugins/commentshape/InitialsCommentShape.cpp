@@ -32,11 +32,11 @@ InitialsCommentShape::~InitialsCommentShape()
 {
 }
 
-void InitialsCommentShape::saveOdf(KoShapeSavingContext& context) const
+void InitialsCommentShape::saveOdf(KoShapeSavingContext& /*context*/) const
 {
 }
 
-bool InitialsCommentShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context)
+bool InitialsCommentShape::loadOdf(const KoXmlElement& /*element*/, KoShapeLoadingContext& /*context*/)
 {
     return false;
 }

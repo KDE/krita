@@ -150,7 +150,7 @@ public:
      * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline 
      * always like duplicate paintop indicating the duplicate position
      */
-    virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode) const;
+    virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;
     
     /**
     * Useful for simple elliptical brush outline.

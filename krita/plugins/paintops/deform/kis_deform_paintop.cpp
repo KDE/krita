@@ -100,6 +100,9 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 
         qreal rotation = m_sizeProperties.rotation + m_rotationOption.apply(info);
         qreal scale = m_sizeProperties.scale * KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+        
+        setCurrentRotation(rotation);
+        setCurrentScale(scale);
 
         QPointF pos = pt - m_deformBrush.hotSpot(scale,rotation);
 

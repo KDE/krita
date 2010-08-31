@@ -40,7 +40,7 @@ public:
     ///Reimplemented
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const;
     
-    virtual QPainterPath brushOutline(const QPointF& pos,OutlineMode mode) const;
+    virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;
 };
 
 #endif // KIS_BRUSH_BASED_PAINTOP_SETTINGS_H

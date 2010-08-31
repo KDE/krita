@@ -95,6 +95,8 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 1.0;
 
+    setCurrentScale(scale);
+
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
 
     //-----------POSITIONING code----------

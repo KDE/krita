@@ -50,13 +50,15 @@
 
 struct KisPaintOp::Private {
     Private()
-            : dab(0) {
+            : dab(0),currentScale(1.0),currentRotation(0) {
     }
 
     KisFixedPaintDeviceSP dab;
     KoColor color;
     KoColor previousPaintColor;
     KisPainter* painter;
+    qreal currentScale;
+    qreal currentRotation;
 };
 
 
@@ -212,4 +214,24 @@ double KisPaintOp::scaleForPressure(double pressure)
     }
 
     return scale;
+}
+
+qreal KisPaintOp::currentRotation() const
+{
+    return d->currentRotation;
+}
+
+qreal KisPaintOp::currentScale() const
+{
+    return d->currentScale;
+}
+
+void KisPaintOp::setCurrentRotation(qreal rotation)
+{
+    d->currentRotation = rotation;
+}
+
+void KisPaintOp::setCurrentScale(qreal scale)
+{
+    d->currentScale = scale;
 }

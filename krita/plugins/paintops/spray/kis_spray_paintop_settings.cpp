@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <cmath>
+
 #include <kis_paint_action_type_option.h>
 #include <kis_color_option.h>
 
@@ -40,48 +42,14 @@ int KisSprayPaintOpSettings::rate() const
 }
 
 
-
-void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
-{
-    if (_mode != CursorIsOutline) return;
-    qreal width = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_SCALE);
-    qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT) * getDouble(SPRAY_SCALE);
-
-    QRectF brush(0,0,width,height);
-    brush.translate(-brush.center());
-    painter.save();
-    painter.translate( pos);
-    painter.rotate( getDouble(SPRAY_ROTATION));
-    painter.setPen(Qt::black);
-    painter.setPen(QColor(255,128,255));
-    painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-    painter.drawEllipse(image->pixelToDocument(brush));
-    painter.restore();
-}
-
-QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
-{
-    if (_mode != CursorIsOutline) return QRectF();
-    qreal width = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_SCALE);
-    qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT) * getDouble(SPRAY_SCALE);
-    QRectF brush(0,0,width,height);
-    brush.translate(-brush.center());
-    QTransform m;
-    m.reset();
-    m.rotate( getDouble(SPRAY_ROTATION) );
-    brush = m.mapRect(brush);
-    brush.adjust(-1,-1,1,1);
-    return image->pixelToDocument(brush).translated(pos);
-}
-
-QPainterPath KisSprayPaintOpSettings::brushOutline(const QPointF& pos,OutlineMode mode) const
+QPainterPath KisSprayPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
 {
     Q_UNUSED(pos);
     QPainterPath path;
     if (mode == CursorIsOutline){
         qreal width = getInt(SPRAY_DIAMETER);
         qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT);
-        path = ellipseOutline(width, height, getDouble(SPRAY_SCALE), getDouble(SPRAY_ROTATION));
+        path = ellipseOutline(width, height, getDouble(SPRAY_SCALE) * scale , getDouble(SPRAY_ROTATION) - rotation*180.0/M_PI);
         path.translate(pos);
     }
     return path;

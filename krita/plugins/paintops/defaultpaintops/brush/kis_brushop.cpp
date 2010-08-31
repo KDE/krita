@@ -109,6 +109,9 @@ double KisBrushOp::paintAt(const KisPaintInformation& info)
 
     double rotation = m_rotationOption.apply(info);
     
+    setCurrentScale(scale);
+    setCurrentRotation(rotation);
+    
     QPointF hotSpot = brush->hotSpot(scale, scale, rotation);
     // return info.pos() if sensor is not enabled
     QPointF pos = m_scatterOption.apply(info, qMax(brush->width(), brush->height()) * scale); 

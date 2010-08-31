@@ -94,6 +94,9 @@ double KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
 
+    setCurrentRotation(rotation);
+    setCurrentScale(scale);
+    
     m_sprayBrush.paint( m_dab,
                         m_settings->node()->paintDevice(), 
                         info, 

@@ -179,7 +179,7 @@ KisPaintOpSettingsWidget* KisPaintOpSettings::optionsWidget() const
     return d->settingsWidget.data();
 }
 
-QPainterPath KisPaintOpSettings::brushOutline(const QPointF& pos, OutlineMode mode) const
+QPainterPath KisPaintOpSettings::brushOutline(const QPointF& pos, OutlineMode mode, qreal scale, qreal rotation) const
 {
     QPainterPath path;
     if (mode == CursorIsOutline){
@@ -188,6 +188,9 @@ QPainterPath KisPaintOpSettings::brushOutline(const QPointF& pos, OutlineMode mo
         path.lineTo(rc.bottomRight());
         path.moveTo(rc.topRight());
         path.lineTo(rc.bottomLeft());
+        QTransform m;
+        m.reset(); m.scale(scale,scale); m.rotateRadians(rotation);
+        path = m.map(path);
         path.translate(pos);
     }
     return path;

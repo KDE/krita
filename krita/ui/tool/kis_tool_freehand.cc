@@ -300,7 +300,15 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 #endif
 
 
-    QPainterPath path = currentPaintOpPreset()->settings()->brushOutline(currentImage()->documentToPixel(outlinePos()), outlineMode);
+    QPainterPath path;
+    if (m_painter && m_painter->paintOp()){
+        path = currentPaintOpPreset()->settings()->brushOutline(currentImage()->documentToPixel(outlinePos()), 
+                                                                         outlineMode,
+                                                                         m_painter->paintOp()->currentScale(),
+                                                                         m_painter->paintOp()->currentRotation());
+    }else{
+        path = currentPaintOpPreset()->settings()->brushOutline(currentImage()->documentToPixel(outlinePos()),outlineMode);
+    }
     m_oldOutlineRect = currentImage()->pixelToDocument(path.boundingRect());
     if (!m_oldOutlineRect.isEmpty()) {
         canvas()->updateCanvas(m_oldOutlineRect.adjusted(-2,-2,2,2));
@@ -640,18 +648,16 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
         converter.zoom(&zoomX, &zoomY);
 
 
-        QPainterPath path = currentPaintOpPreset()->settings()->brushOutline(currentImage()->documentToPixel(outlinePos()),outlineMode);
+        QPainterPath path;
+        if (m_painter && m_painter->paintOp()){
+            path = currentPaintOpPreset()->settings()->brushOutline(currentImage()->documentToPixel(outlinePos()), 
+                                                                                outlineMode,
+                                                                                m_painter->paintOp()->currentScale(),
+                                                                                m_painter->paintOp()->currentRotation());
+        }else{
+            path = currentPaintOpPreset()->settings()->brushOutline(currentImage()->documentToPixel(outlinePos()),outlineMode);
+        }
         m_oldOutlineRect = currentImage()->pixelToDocument(path.boundingRect());
-
-/*        QTransform m;
-        m.reset();
-        // document to view
-        m.scale(zoomX, zoomY);
-        // translate according outlinePos in document coordinates
-        // pixel to document
-        m.scale(1.0/currentImage()->xRes(),1.0/currentImage()->yRes());
-
-        m.map(path);*/
 
         paintToolOutline(&gc,pixelToView(path));
     }

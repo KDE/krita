@@ -129,6 +129,8 @@ double KisDuplicateOp::paintAt(const KisPaintInformation& info)
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
+    setCurrentScale(scale);
+    
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.

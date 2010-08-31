@@ -27,56 +27,16 @@
 #include "kis_brush_based_paintop_options_widget.h"
 #include "kis_boundary.h"
 
-void KisHairyPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
-{
-    double scale = getDouble(HAIRY_BRISTLE_SCALE);
 
-    KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
-    if(!options)
-        return;
-    
-    if (_mode != CursorIsOutline) return;
-    KisBrushSP brush = options->brush();
-    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
-    painter.setPen(Qt::black);
-    painter.setBackground(Qt::black);
-        
-    painter.translate(paintOutlineRect(pos, image, _mode).topLeft());
-    painter.scale(1/image->xRes()*scale, 1/image->yRes()*scale);
-    brush->boundary()->paint(painter);
-    painter.restore();
- }
- 
- 
-QRectF KisHairyPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
-{
-    KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
-    if(!options)
-        return QRectF();
-    
-    if (_mode != CursorIsOutline) return QRectF();
-    KisBrushSP brush = options->brush();
-    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
-
-    double scale = getDouble(HAIRY_BRISTLE_SCALE);
-    QTransform m;
-    m.reset();
-    m.scale(scale, scale);   
-    
-    QRectF rect = QRectF(0, 0, brush->width(), brush->height()).translated(-(hotSpot + QPointF(0.5, 0.5)));
-    rect = image->pixelToDocument(m.mapRect(rect)).translated(pos);
-    return rect;
-}
-
-QPainterPath KisHairyPaintOpSettings::brushOutline(const QPointF& pos,OutlineMode mode) const
+QPainterPath KisHairyPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
 {
     QPainterPath path;
     if (mode == CursorIsOutline){
-        path = KisBrushBasedPaintOpSettings::brushOutline(QPointF(0.0,0.0),mode);
-        double scale = getDouble(HAIRY_BRISTLE_SCALE);
+        path = KisBrushBasedPaintOpSettings::brushOutline(QPointF(0.0,0.0),mode, scale, rotation);
+        double scaleFactor = getDouble(HAIRY_BRISTLE_SCALE);
         QTransform m;
         m.reset();
-        m.scale(scale, scale);
+        m.scale(scaleFactor * scale, scaleFactor * scale);
         path = m.map(path);
         path.translate(pos);
     }

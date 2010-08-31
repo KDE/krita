@@ -48,46 +48,15 @@ int KisDeformPaintOpSettings::rate() const
     }
 }
 
-
-
-QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
-{
-    if (_mode != CursorIsOutline) return QRectF();
-    qreal width = getDouble(BRUSH_DIAMETER)  * getDouble(BRUSH_SCALE);
-    qreal height = getDouble(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT)  * getDouble(BRUSH_SCALE);
-    QRectF brush(0,0,width,height);
-    brush.translate(-brush.center());
-    QTransform m;
-    m.reset();
-    m.rotate(getDouble(BRUSH_ROTATION));
-    brush = m.mapRect(brush);
-    brush.adjust(-1,-1,1,1);
-    return image->pixelToDocument(brush).translated(pos);
-}
-
-void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
-{
-    if (_mode != CursorIsOutline) return;
-    qreal width = getDouble(BRUSH_DIAMETER)  * getDouble(BRUSH_SCALE);
-    qreal height = getDouble(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT)  * getDouble(BRUSH_SCALE);
-
-    QRectF brush(0,0,width,height);
-    brush.translate(-brush.center());
-    painter.save();
-    painter.translate( pos);
-    painter.rotate(getDouble(BRUSH_ROTATION));
-    painter.setPen(Qt::black);
-    painter.drawEllipse(image->pixelToDocument(brush));
-    painter.restore();
-}
-
-QPainterPath KisDeformPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode) const
+QPainterPath KisDeformPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
 {
     QPainterPath path;
     if (mode == CursorIsOutline){
         qreal width = getInt(BRUSH_DIAMETER);
         qreal height = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT);
         path = ellipseOutline(width, height,getDouble(BRUSH_SCALE),getDouble(BRUSH_ROTATION) );
+        QTransform m; m.reset(); m.scale(scale,scale); m.rotateRadians(rotation);
+        path = m.map(path);
         path.translate(pos);
     }
     return path;

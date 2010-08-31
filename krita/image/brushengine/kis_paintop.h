@@ -110,8 +110,22 @@ public:
      */
     static void splitCoordinate(double coordinate, qint32 *whole, double *fraction);
 
+    /**
+     * returns the scale and rotation dynamically computed for the single dab
+     * rotation is in radians
+     * This is used e.g. for dynamic brush outline
+     */
+    qreal currentScale() const;
+    qreal currentRotation() const;
+    
 protected:
 
+    void setCurrentScale(qreal scale);
+    /**
+    * Set rotation in radians
+    */
+    void setCurrentRotation(qreal rotation);
+    
     static double scaleForPressure(double pressure);
 
     KisFixedPaintDeviceSP cachedDab();

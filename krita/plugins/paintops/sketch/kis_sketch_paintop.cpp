@@ -132,6 +132,10 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
 
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
     double rotation = m_rotationOption.apply(pi2);
+    
+    setCurrentScale(scale);
+    setCurrentRotation(rotation);
+    
     qreal thresholdDistance;
     
     // update the mask for simple mode only once

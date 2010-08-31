@@ -141,7 +141,7 @@ double KisHairyPaintOp::paintAt(const KisPaintInformation& info)
 
 KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist)
 {
-    // spacing is ignored in hairy-e, maybe todo
+    // spacing is ignored in hairy, maybe todo
     Q_UNUSED(savedDist);
 
     if (!painter()) return KisDistanceInformation();
@@ -152,11 +152,14 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
         m_dab->clear();
     }
     
-    qreal scale = m_properties.scaleFactor * KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
+    qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
     qreal rotation = m_rotationOption.apply(pi2);
     quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
+
+    setCurrentScale(scale);
+    setCurrentRotation(rotation);
     
-    m_brush.paintLine(m_dab, m_dev, pi1, pi2, scale, rotation);
+    m_brush.paintLine(m_dab, m_dev, pi1, pi2, scale * m_properties.scaleFactor, rotation);
 
     //QRect rc = m_dab->exactBounds();
     QRect rc = m_dab->extent();

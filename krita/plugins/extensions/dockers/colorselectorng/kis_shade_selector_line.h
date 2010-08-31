@@ -73,8 +73,6 @@ private:
     int m_lineHeight;
     bool m_displayHelpText;
 
-    KisCanvas2* m_canvas;
-
     friend class KisShadeSelectorLineComboBox;
 };
 

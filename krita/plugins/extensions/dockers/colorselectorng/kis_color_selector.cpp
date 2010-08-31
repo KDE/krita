@@ -253,7 +253,7 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
             role=Foreground;
         else
             role=Background;
-        commitColor(KoColor(m_currentColor, colorSpace()), m_currentColor, role);
+        commitColor(KoColor(m_currentColor, colorSpace()), role);
     }
     e->accept();
     m_grabbingComponent=0;

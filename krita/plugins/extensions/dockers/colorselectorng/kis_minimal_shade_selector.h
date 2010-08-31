@@ -15,8 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_COLSELNG_SHADE_SELECTOR_H
-#define KIS_COLSELNG_SHADE_SELECTOR_H
+#ifndef KIS_MINIMAL_SHADE_SELECTOR_H
+#define KIS_MINIMAL_SHADE_SELECTOR_H
 
 #include "kis_color_selector_base.h"
 
@@ -46,4 +46,4 @@ private:
     KisCanvas2* m_canvas;
 };
 
-#endif // KIS_COLSELNG_SHADE_SELECTOR_H
+#endif

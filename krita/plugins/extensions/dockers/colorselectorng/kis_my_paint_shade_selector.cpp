@@ -215,7 +215,7 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
             setColor(color);
         }
 
-        commitColor(KoColor(color, colorSpace()), color, role);
+        commitColor(KoColor(color, colorSpace()), role);
     }
 
 }

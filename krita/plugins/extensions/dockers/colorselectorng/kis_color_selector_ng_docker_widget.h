@@ -16,8 +16,8 @@
  */
 
 
-#ifndef COLORSELECTORNGWIDGET_H
-#define COLORSELECTORNGWIDGET_H
+#ifndef KIS_COLOR_SELECTOR_NG_DOCKER_WIDGET_H
+#define KIS_COLOR_SELECTOR_NG_DOCKER_WIDGET_H
 
 #include <QWidget>
 
@@ -63,4 +63,4 @@ private:
 
 };
 
-#endif // COLORSELECTORNGWIDGET_H
+#endif

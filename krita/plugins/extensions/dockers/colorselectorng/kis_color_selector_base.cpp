@@ -261,8 +261,6 @@ void KisColorSelectorBase::dragEnterEvent(QDragEnterEvent *e)
 
 void KisColorSelectorBase::dropEvent(QDropEvent *e)
 {
-//    kDebug() << "drop event. mime format=" << e->mimeData()->formats() << "  text=" << e->mimeData()->text() << "  colour=" << e->mimeData()->colorData();
-
     QColor color;
     if(e->mimeData()->hasColor()) {
         color = qvariant_cast<QColor>(e->mimeData()->colorData());
@@ -276,7 +274,7 @@ void KisColorSelectorBase::dropEvent(QDropEvent *e)
     KoColor kocolor(color , KoColorSpaceRegistry::instance()->rgb8());
     color = findGeneratingColor(kocolor);
     setColor(color);
-    commitColor(kocolor, color, Foreground);
+    commitColor(kocolor, Foreground);
 }
 
 void KisColorSelectorBase::setColor(const QColor& color)
@@ -309,7 +307,7 @@ void KisColorSelectorBase::hidePopup()
         m_popup->hide();
 }
 
-void KisColorSelectorBase::commitColor(const KoColor& color, const QColor& rawColor, ColorRole role)
+void KisColorSelectorBase::commitColor(const KoColor& color, ColorRole role)
 {
     Q_ASSERT(m_canvas);
     if (!m_canvas)

@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  */
 
-#ifndef KIS_COLOR_SELECTOR_SQUARE_H
-#define KIS_COLOR_SELECTOR_SQUARE_H
+#ifndef KIS_COLOR_SELECTOR_SIMPLE_H
+#define KIS_COLOR_SELECTOR_SIMPLE_H
 
 typedef unsigned int QRgb;
 class KoColorSpace;
@@ -46,4 +46,4 @@ private:
     QImage m_pixelCache;
 };
 
-#endif // KIS_COLOR_SELECTOR_SQUARE_H
+#endif

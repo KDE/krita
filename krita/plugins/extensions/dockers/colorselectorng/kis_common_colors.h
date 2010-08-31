@@ -15,8 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_COLSELNG_COMMON_COLORS_H
-#define KIS_COLSELNG_COMMON_COLORS_H
+#ifndef KIS_COMMON_COLORS_H
+#define KIS_COMMON_COLORS_H
 
 #include "kis_color_patches.h"
 
@@ -37,4 +37,4 @@ public slots:
     void recalculate();
 };
 
-#endif // KIS_COLSELNG_COMMON_COLORS_H
+#endif

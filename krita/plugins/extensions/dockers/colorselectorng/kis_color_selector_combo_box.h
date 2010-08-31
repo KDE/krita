@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  */
 
-#ifndef KIS_COLOR_SELECTOR_TYPE_WIDGET_H
-#define KIS_COLOR_SELECTOR_TYPE_WIDGET_H
+#ifndef KIS_COLOR_SELECTOR_COMBO_BOX_H
+#define KIS_COLOR_SELECTOR_COMBO_BOX_H
 
 #include <QComboBox>
 #include "kis_color_selector.h"
@@ -45,4 +45,4 @@ private:
     KisColorSelector m_currentSelector;
 };
 
-#endif // KIS_COLOR_SELECTOR_TYPE_WIDGET_H
+#endif

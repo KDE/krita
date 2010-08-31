@@ -16,14 +16,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _SMALLCOLORSELECTOR_DOCK_H_
-#define _SMALLCOLORSELECTOR_DOCK_H_
+#ifndef KIS_COLOR_SELECTOR_NG_DOCKER_H
+#define KIS_COLOR_SELECTOR_NG_DOCKER_H
 
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
 class KisColorSelectorNgDockerWidget;
-class KoColor;
 
 class KisColorSelectorNgDock : public QDockWidget, public KoCanvasObserverBase
 {
@@ -33,12 +32,9 @@ public:
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-public slots:
-    void colorChangedProxy(const QColor&);
-    void resourceChanged(int, const QVariant&);
+
 private:
     KisColorSelectorNgDockerWidget* m_colorSelectorNgWidget;
-    KoCanvasBase* m_canvas;
 };
 
 

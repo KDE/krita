@@ -47,8 +47,6 @@ void KisMinimalShadeSelector::setCanvas(KisCanvas2 *canvas)
 {
     KisColorSelectorBase::setCanvas(canvas);
     m_canvas=canvas;
-    for(int i=0; i<m_shadingLines.size(); i++)
-        m_shadingLines.at(i)->setCanvas(canvas);
 }
 
 void KisMinimalShadeSelector::setColor(const QColor& color)
@@ -78,8 +76,6 @@ void KisMinimalShadeSelector::updateSettings()
 
     for(int i=0; i<strili.size(); i++) {
         m_shadingLines.at(i)->fromString(strili.at(i));
-        if(m_canvas!=0)
-            m_shadingLines.at(i)->setCanvas(m_canvas);
     }
 
     int lineHeight = cfg.readEntry("minimalShadeSelectorLineHeight", 20);

@@ -47,7 +47,7 @@ public slots:
     virtual void setColor(const QColor& color);
     virtual void showPopup();
     /// commits a color to the resource manager
-    void commitColor(const KoColor& koColor, const QColor& qColor, ColorRole role);
+    void commitColor(const KoColor& koColor, ColorRole role);
 
 public:
     void mousePressEvent(QMouseEvent *);
@@ -83,4 +83,4 @@ private:
     bool m_isPopup; //this instance is a popup
 };
 
-#endif // KIS_COLOR_SELECTOR_BASE_H
+#endif

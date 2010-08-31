@@ -19,8 +19,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_COLSELNG_MY_PAINT_SHADE_SELECTOR_H
-#define KIS_COLSELNG_MY_PAINT_SHADE_SELECTOR_H
+#ifndef KIS_MY_PAINT_SHADE_SELECTOR_H
+#define KIS_MY_PAINT_SHADE_SELECTOR_H
 
 #include "kis_color_selector_base.h"
 #include <QColor>
@@ -53,4 +53,4 @@ private:
     QTimer* m_updateTimer;
 };
 
-#endif // KIS_COLSELNG_MY_PAINT_SHADE_SELECTOR_H
+#endif // KIS_MY_PAINT_SHADE_SELECTOR_H

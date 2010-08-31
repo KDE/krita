@@ -38,14 +38,14 @@
 #include <KDebug>
 
 KisShadeSelectorLine::KisShadeSelectorLine(QWidget *parent) :
-    KisShadeSelectorLineBase(parent), m_displayHelpText(false), m_canvas(0)
+    KisShadeSelectorLineBase(parent), m_displayHelpText(false)
 {
     setParam(0, 0, 0, 0, 0, 0);
     updateSettings();
 }
 
 KisShadeSelectorLine::KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta, QWidget *parent, qreal hueShift, qreal satShift, qreal valShift) :
-    KisShadeSelectorLineBase(parent), m_displayHelpText(false), m_canvas(0)
+    KisShadeSelectorLineBase(parent), m_displayHelpText(false)
 {
     setParam(hueDelta, satDelta, valDelta, hueShift, satShift, valShift);
     updateSettings();
@@ -79,11 +79,6 @@ void KisShadeSelectorLine::updateSettings()
 
     setMaximumHeight(m_lineHeight);
     setMinimumHeight(m_lineHeight);
-}
-
-void KisShadeSelectorLine::setCanvas(KisCanvas2 *canvas)
-{
-    m_canvas=canvas;
 }
 
 QString KisShadeSelectorLine::toString() const
@@ -171,7 +166,6 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
 
 void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
 {
-    Q_ASSERT(m_canvas);
     if(e->button()!=Qt::LeftButton && e->button()!=Qt::RightButton) {
         e->setAccepted(false);
         return;
@@ -187,7 +181,7 @@ void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
     if(e->button()==Qt::RightButton)
         role = KisColorSelectorBase::Background;
 
-    parent->commitColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()), color, role);
+    parent->commitColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()), role);
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 

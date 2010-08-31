@@ -63,7 +63,8 @@ bool psdpad(QIODevice* io, quint32 padding)
 bool psdwrite(QIODevice* io, const QString &s)
 {
     int l = s.length();
-    char* str = s.toAscii().data();
+    QByteArray b = s.toAscii();
+    char* str = b.data();
     int written = io->write(str, l);
     return written == l;
 }
@@ -82,7 +83,8 @@ bool psdwrite_pascalstring(QIODevice* io, const QString &s)
     quint8 length = s.length();
     psdwrite(io, length);
 
-    char* str = s.toAscii().data();
+    QByteArray b = s.toAscii();
+    char* str = b.data();
     int written = io->write(str, length);
     if (written != length) return false;
 

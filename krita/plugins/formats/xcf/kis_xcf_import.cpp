@@ -138,6 +138,7 @@ QString layerModeG2K(GimpLayerModeEffects mode)
     case GIMP_SCREEN_MODE:
         return COMPOSITE_SCREEN;
     case GIMP_OVERLAY_MODE:
+    case GIMP_SOFTLIGHT_MODE:
         return COMPOSITE_OVERLAY;
     case GIMP_DIFFERENCE_MODE:
         return COMPOSITE_DIFF;
@@ -167,14 +168,13 @@ QString layerModeG2K(GimpLayerModeEffects mode)
         return COMPOSITE_ERASE;
     case GIMP_REPLACE_MODE:
         return COMPOSITE_COPY;
-
     case GIMP_COLOR_ERASE_MODE:
     case GIMP_NORMAL_NOPARTIAL_MODE:
     case GIMP_ANTI_ERASE_MODE:
     case GIMP_GRAIN_EXTRACT_MODE:
     case GIMP_GRAIN_MERGE_MODE:
     case GIMP_HARDLIGHT_MODE:
-    case GIMP_SOFTLIGHT_MODE:
+
     case GIMP_BEHIND_MODE:
         break;
     }

@@ -286,16 +286,16 @@ void KisStrokeBenchmark::predefinedBrush()
 
 void KisStrokeBenchmark::predefinedBrushRL()
 {
-    
+
     QString presetFileName = "deevad-slow-brush1.kpp";
-    
+
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
     preset->load();
     preset->settings()->setNode(m_layer);
     m_painter->setPaintOpPreset(preset, m_image);
 
     sleep(3);
-    
+
     QBENCHMARK{
         for (int i = 0; i < LINES; i++){
             KisPaintInformation pi1(m_startPoints[i], 0.0);
@@ -388,9 +388,10 @@ QBENCHMARK
 
 void KisStrokeBenchmark::benchmarkRand()
 {
+    float j;
     QBENCHMARK{
         for (int i = 0 ; i < COUNT; i++){
-            rand() / (float)RAND_MAX;
+            j = rand() / (float)RAND_MAX;
         }
     }
 }

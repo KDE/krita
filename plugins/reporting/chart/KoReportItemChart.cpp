@@ -392,11 +392,11 @@ int KoReportItemChart::render(OROPage* page, OROSection* section,  QPointF offse
 
         pic->setPosition(pos);
         pic->setSize(size);
-        page->addPrimitive(pic);
+        if (page) page->addPrimitive(pic);
 
         OROPicture *p2 = dynamic_cast<OROPicture*>(pic->clone());
         p2->setPosition(m_pos.toPoint());
-        section->addPrimitive(p2);
+        if (section) section->addPrimitive(p2);
     }
 
     return 0;

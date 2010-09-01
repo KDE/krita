@@ -185,24 +185,26 @@ int KoReportItemBarcode::render(OROPage* page, OROSection* /*section*/,  QPointF
 
     QString val = data.toString();
 
-    QString fmt = m_format->value().toString();
-    int align = alignment();
-    if (fmt == "3of9")
-        render3of9(page, rect, val, align);
-    else if (fmt == "3of9+")
-        renderExtended3of9(page, rect, val, align);
-    else if (fmt == "128")
-        renderCode128(page, rect, val, align);
-    else if (fmt == "ean13")
-        renderCodeEAN13(page, rect, val, align);
-    else if (fmt == "ean8")
-        renderCodeEAN8(page, rect, val, align);
-    else if (fmt == "upc-a")
-        renderCodeUPCA(page, rect, val, align);
-    else if (fmt == "upc-e")
-        renderCodeUPCE(page, rect, val, align);
-    else {
-        kDebug() << "Unknown barcode format:" << fmt;
+    if (page) {
+      QString fmt = m_format->value().toString();
+      int align = alignment();
+      if (fmt == "3of9")
+	  render3of9(page, rect, val, align);
+      else if (fmt == "3of9+")
+	  renderExtended3of9(page, rect, val, align);
+      else if (fmt == "128")
+	  renderCode128(page, rect, val, align);
+      else if (fmt == "ean13")
+	  renderCodeEAN13(page, rect, val, align);
+      else if (fmt == "ean8")
+	  renderCodeEAN8(page, rect, val, align);
+      else if (fmt == "upc-a")
+	  renderCodeUPCA(page, rect, val, align);
+      else if (fmt == "upc-e")
+	  renderCodeUPCE(page, rect, val, align);
+      else {
+	  kDebug() << "Unknown barcode format:" << fmt;
+      }
     }
     return 0;
 }

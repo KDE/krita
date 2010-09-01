@@ -168,13 +168,13 @@ QString layerModeG2K(GimpLayerModeEffects mode)
         return COMPOSITE_ERASE;
     case GIMP_REPLACE_MODE:
         return COMPOSITE_COPY;
+    case GIMP_HARDLIGHT_MODE:
+        return COMPOSITE_HARD_LIGHT;
     case GIMP_COLOR_ERASE_MODE:
     case GIMP_NORMAL_NOPARTIAL_MODE:
     case GIMP_ANTI_ERASE_MODE:
     case GIMP_GRAIN_EXTRACT_MODE:
     case GIMP_GRAIN_MERGE_MODE:
-    case GIMP_HARDLIGHT_MODE:
-
     case GIMP_BEHIND_MODE:
         break;
     }

@@ -62,8 +62,7 @@ public:
                     // Screen
                     srcChannel = 2 * srcChannel - NATIVE_MAX_VALUE;
                     srcChannel = NATIVE_MAX_VALUE - KoColorSpaceMaths<channels_type>::multiply(NATIVE_MAX_VALUE - dstChannel, NATIVE_MAX_VALUE - srcChannel);
-                    channels_type newChannel = KoColorSpaceMaths<channels_type>::blend(srcChannel, dstChannel, srcBlend);
-                    dst[i] = newChannel;
+                    dst[i] = KoColorSpaceMaths<channels_type>::blend(srcChannel, dstChannel, srcBlend);
                 }
             }
         }

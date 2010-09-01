@@ -33,7 +33,7 @@ class KoCompositeOpSoftlight : public KoCompositeOpAlphaBase<_CSTraits, KoCompos
 public:
 
     KoCompositeOpSoftlight(const KoColorSpace * cs)
-            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpSoftlight<_CSTraits>, true >(cs, COMPOSITE_SOFT_LIGHT, i18n("Softlight"), KoCompositeOp::categoryLight()) {
+        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpSoftlight<_CSTraits>, true >(cs, COMPOSITE_SOFT_LIGHT, i18n("Soft light"), KoCompositeOp::categoryLight()) {
     }
 
 public:
@@ -52,12 +52,20 @@ public:
                 channels_type srcChannel = src[i];
                 channels_type dstChannel = dst[i];
 
-                channels_type multiplied = KoColorSpaceMaths<channels_type>::multiply(srcChannel, dstChannel);
-                channels_type screen = NATIVE_MAX_VALUE - KoColorSpaceMaths<channels_type>::multiply(NATIVE_MAX_VALUE - dstChannel, NATIVE_MAX_VALUE - srcChannel);
-
-                channels_type combination = KoColorSpaceMaths<channels_type>::multiply((255 - srcChannel), multiplied) + KoColorSpaceMaths<channels_type>::multiply(srcChannel, screen);
-                dst[i] = KoColorSpaceMaths<channels_type>::blend(combination, dstChannel, srcBlend);
-
+                if (srcChannel <= NATIVE_MAX_VALUE / 2) {
+                    dstChannel = dstChannel - (NATIVE_MAX_VALUE - (2 * srcChannel)) * dstChannel * (NATIVE_MAX_VALUE - dstChannel);
+                }
+                else {
+                    channels_type tmpDst;
+                    if (dstChannel <= NATIVE_MAX_VALUE / 4) {
+                        tmpDst = ((16 * dstChannel - 12) * dstChannel + 4 ) * dstChannel;
+                    }
+                    else {
+                        tmpDst = sqrt(dstChannel);
+                    }
+                    dstChannel = dstChannel + (2 * srcChannel - NATIVE_MAX_VALUE) * (tmpDst - dstChannel);
+                }
+                dst[i] = KoColorSpaceMaths<channels_type>::blend(srcChannel, dstChannel, srcBlend);
             }
         }
     }

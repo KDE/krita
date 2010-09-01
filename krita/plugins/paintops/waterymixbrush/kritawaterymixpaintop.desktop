@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Watery Mixbrush
+Name[es]=Pincel acuoso de mezclado
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritawaterymixpaintop
+X-Krita-Version=3

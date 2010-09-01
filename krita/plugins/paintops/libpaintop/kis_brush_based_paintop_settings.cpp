@@ -91,8 +91,9 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const QPointF& pos, KisP
         QTransform m;
         m.reset();
         m.rotateRadians(-rotation); 
-        m.translate(-hotSpot.x(), -hotSpot.y());
         m.scale(brush->scale() * scale, brush->scale() * scale);
+        m.translate(-hotSpot.x(), -hotSpot.y());
+        
         
         path = brush->boundary()->boundary();
         path = m.map(path);

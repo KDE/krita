@@ -33,7 +33,7 @@ class KoCompositeOpHardlight : public KoCompositeOpAlphaBase<_CSTraits, KoCompos
 public:
 
     KoCompositeOpHardlight(const KoColorSpace * cs)
-            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpHardlight<_CSTraits>, true >(cs, COMPOSITE_HARD_LIGHT, i18n("Hardlight"), KoCompositeOp::categoryLight()) {
+        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpHardlight<_CSTraits>, true >(cs, COMPOSITE_HARD_LIGHT, i18n("Hard light"), KoCompositeOp::categoryLight()) {
     }
 
 public:
@@ -52,12 +52,19 @@ public:
                 channels_type srcChannel = src[i];
                 channels_type dstChannel = dst[i];
 
-                channels_type multiplied = KoColorSpaceMaths<channels_type>::multiply(srcChannel, dstChannel);
-                channels_type screen = NATIVE_MAX_VALUE - KoColorSpaceMaths<channels_type>::multiply(NATIVE_MAX_VALUE - dstChannel, NATIVE_MAX_VALUE - srcChannel);
-
-                channels_type combination = KoColorSpaceMaths<channels_type>::multiply((255 - srcChannel), multiplied) + KoColorSpaceMaths<channels_type>::multiply(srcChannel, screen);
-                dst[i] = KoColorSpaceMaths<channels_type>::blend(combination, dstChannel, srcBlend);
-
+                if (srcChannel <= NATIVE_MAX_VALUE / 2) {
+                    // Multiply
+                    srcChannel = srcChannel * 2;
+                    srcChannel = KoColorSpaceMaths<channels_type>::multiply(srcChannel, dstChannel);
+                    dst[i] = KoColorSpaceMaths<channels_type>::blend(srcChannel, dstChannel, srcBlend);
+                }
+                else {
+                    // Screen
+                    srcChannel = 2 * srcChannel - NATIVE_MAX_VALUE;
+                    srcChannel = NATIVE_MAX_VALUE - KoColorSpaceMaths<channels_type>::multiply(NATIVE_MAX_VALUE - dstChannel, NATIVE_MAX_VALUE - srcChannel);
+                    channels_type newChannel = KoColorSpaceMaths<channels_type>::blend(srcChannel, dstChannel, srcBlend);
+                    dst[i] = newChannel;
+                }
             }
         }
     }

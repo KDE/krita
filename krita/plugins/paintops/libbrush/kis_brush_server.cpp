@@ -46,7 +46,7 @@ public:
     ~BrushResourceServer() {
         foreach(KisBrush* brush, m_brushes)
         {
-            brush->deref();
+            removeResourceFromServer(brush, false);
         }
     }
 

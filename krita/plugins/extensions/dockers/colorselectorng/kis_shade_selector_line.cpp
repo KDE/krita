@@ -152,13 +152,13 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
     QPainter wpainter(this);
     wpainter.drawImage(0,0, m_pixelCache);
     if(m_displayHelpText) {
-        QString helpText(i18n("delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6")
-                         .arg(m_hueDelta)
-                         .arg(m_saturationDelta)
-                         .arg(m_valueDelta)
-                         .arg(m_hueShift)
-                         .arg(m_saturationShift)
-                         .arg(m_valueShift));
+        QString helpText(i18n("delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6",
+                         m_hueDelta,
+                         m_saturationDelta,
+                         m_valueDelta,
+                         m_hueShift,
+                         m_saturationShift,
+                         m_valueShift));
         wpainter.setPen(QColor(255,255,255));
         wpainter.drawText(rect(), helpText);
     }

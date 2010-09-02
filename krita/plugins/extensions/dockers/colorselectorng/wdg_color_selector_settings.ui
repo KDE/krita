@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_5">
    <item row="0" column="0">
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="KTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -877,6 +877,12 @@
    <class>KisShadeSelectorLinesSettings</class>
    <extends>QComboBox</extends>
    <header>kis_shade_selector_lines_settings.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>KTabWidget</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

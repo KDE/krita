@@ -102,7 +102,7 @@ KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
 
 KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
         : KisExternalLayer(_rhs)
-        , KoShapeLayer(_rhs)
+        , KoShapeLayer() //no _rhs here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
 {
     kDebug() << "copying rhs" << &_rhs << "to" << this;
@@ -123,7 +123,6 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
     if (!success) {
         warnUI << "Could not paste shape layer";
     }
-
 }
 
 KisShapeLayer::~KisShapeLayer()
@@ -153,14 +152,15 @@ bool KisShapeLayer::allowAsChild(KisNodeSP node) const
     return node->inherits("KisMask");
 }
 
-void KisShapeLayer::addChild(KoShape *object)
+void KisShapeLayer::addChild(KoShape *object, bool update)
 {
-    QRect updatedRect = m_d->converter->documentToView(object->boundingRect()).toRect();
-
     KoShapeLayer::addShape(object);
     m_d->canvas->shapeManager()->addShape(object);
 
-    setDirty(updatedRect);
+    if (update) {
+        QRect updatedRect = m_d->converter->documentToView(object->boundingRect()).toRect();   
+        setDirty(updatedRect);
+    }
 }
 
 void KisShapeLayer::removeChild(KoShape *object)

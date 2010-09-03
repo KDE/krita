@@ -213,8 +213,9 @@ void KisSmallColorWidget::mouseReleaseEvent(QMouseEvent * event)
     if (event->button() == Qt::LeftButton) {
         selectColorAt(event->x(), event->y());
         d->handle = NoHandle;
+    } else {
+        QWidget::mouseReleaseEvent(event);
     }
-    QWidget::mouseReleaseEvent(event);
 }
 
 void KisSmallColorWidget::mousePressEvent(QMouseEvent * event)
@@ -222,16 +223,18 @@ void KisSmallColorWidget::mousePressEvent(QMouseEvent * event)
     if (event->button() == Qt::LeftButton) {
         d->handle = NoHandle;
         selectColorAt(event->x(), event->y());
+    } else {
+        QWidget::mousePressEvent(event);
     }
-    QWidget::mousePressEvent(event);
 }
 
 void KisSmallColorWidget::mouseMoveEvent(QMouseEvent * event)
 {
     if (event->buttons() & Qt::LeftButton) {
         selectColorAt(event->x(), event->y());
+    } else {
+        QWidget::mouseMoveEvent(event);
     }
-    QWidget::mouseMoveEvent(event);
 }
 
 void KisSmallColorWidget::selectColorAt(int _x, int _y)

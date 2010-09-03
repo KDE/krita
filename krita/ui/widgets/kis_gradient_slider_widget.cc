@@ -110,9 +110,11 @@ void KisGradientSliderWidget::paintEvent(QPaintEvent* pe)
 
 void KisGradientSliderWidget::mousePressEvent(QMouseEvent * e)
 {
-    QWidget::mousePressEvent(e);
-    if ((e->y() < MARGIN || e->y() > height() - MARGIN) || (e->x() < MARGIN || e->x() > width() - MARGIN) || e-> button() != Qt::LeftButton)
+    if ((e->y() < MARGIN || e->y() > height() - MARGIN) || (e->x() < MARGIN || e->x() > width() - MARGIN) || e-> button() != Qt::LeftButton) {
+        QWidget::mousePressEvent(e);
         return;
+    }
+    
     double t = (double)(e->x() - MARGIN) / (double)(width() - 2 * MARGIN);
     KoGradientSegment* segment = 0;
     segment = m_autogradientResource->segmentAt(t);
@@ -157,15 +159,17 @@ void KisGradientSliderWidget::mousePressEvent(QMouseEvent * e)
 
 void KisGradientSliderWidget::mouseReleaseEvent(QMouseEvent * e)
 {
-    QWidget::mouseReleaseEvent(e);
+    //QWidget::mouseReleaseEvent(e);
     m_drag = NO_DRAG;
 }
 
 void KisGradientSliderWidget::mouseMoveEvent(QMouseEvent * e)
 {
-    QWidget::mouseMoveEvent(e);
-    if ((e->y() < MARGIN || e->y() > height() - MARGIN) || (e->x() < MARGIN || e->x() > width() - MARGIN))
+    if ((e->y() < MARGIN || e->y() > height() - MARGIN) || (e->x() < MARGIN || e->x() > width() - MARGIN)) {
+        QWidget::mouseMoveEvent(e);
         return;
+    }
+    
     double t = (double)(e->x() - MARGIN) / (double)(width() - 2 * MARGIN);
     switch (m_drag) {
     case RIGHT_DRAG:

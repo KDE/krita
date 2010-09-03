@@ -187,6 +187,12 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
         dbgImage << "No paintopid attribute";
         return;
     }
+    
+    if (KisPaintOpRegistry::instance()->get(paintopid) == 0)
+    {
+        dbgImage << "No paintop " << paintopid;
+        return;
+    }
 
     KoID id(paintopid, "");
 

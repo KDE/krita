@@ -35,6 +35,7 @@
 #include <kis_paintop_preset.h>
 #include "kis_paintop_options_model.h"
 #include <kis_categorized_item_delegate.h>
+#include <qstyleditemdelegate.h>
 
 class KisPaintOpOptionsWidget::Private
 {
@@ -61,7 +62,7 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
     m_d->proxyModel->setCategorizedModel(true);
     m_d->proxyModel->setSortRole(KisPaintOpOptionsModel::SortingRole);
     m_d->optionsList->setModel(m_d->proxyModel);
-    m_d->optionsList->setItemDelegate(new KisCategorizedItemDelegate(new QItemDelegate));
+    m_d->optionsList->setItemDelegate(new KisCategorizedItemDelegate(new QStyledItemDelegate));
     m_d->optionsList->setFixedWidth(128);
     QSizePolicy policy =  QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     policy.setHorizontalStretch(0);

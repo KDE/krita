@@ -655,6 +655,13 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
     }
     updateActions();
 
+    //activate context-menu for spelling-suggestions
+    if (event->button() == Qt::RightButton) {
+        KoTextEditingPlugin *plugin = m_textEditingPlugins->spellcheck();
+        if (plugin)
+            plugin->setCurrentCursorPosition(m_textEditor.data()->document(), m_textEditor.data()->position());
+    }
+    
     if (event->button() ==  Qt::MidButton) // Paste
         paste();
     else

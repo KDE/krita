@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  * Copyright (C) 2007,2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2010 Christoph Goerlich <chgoerlich@gmx.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,6 +33,7 @@
 
 class QTextDocument;
 class BgSpellCheck;
+class SpellCheckMenu;
 
 class SpellCheck : public KoTextEditingPlugin
 {
@@ -41,13 +43,16 @@ public:
 
     /// reimplemented from superclass
     void finishedWord(QTextDocument *document, int cursorPosition);
-    
+
     /// reimplemented from superclass
     void finishedParagraph(QTextDocument *document, int cursorPosition);
-    
+
     /// reimplemented from superclass
     void checkSection(QTextDocument *document, int startPosition, int endPosition);
-    
+
+    ///reimplemented from superclass
+    void setCurrentCursorPosition(QTextDocument *document, int cursorPosition);
+
     QStringList availableBackends() const;
     QStringList availableLanguages() const;
 
@@ -58,9 +63,11 @@ public:
     bool backgroundSpellChecking();
     bool skipAllUppercaseWords();
     bool skipRunTogetherWords();
-    
+
     //reimplemented from KOffice2.0, we disconnect and re- connect the 'documentChanged' signal only when the document has replaced
     void setDocument(QTextDocument *document);
+
+    void replaceWordBySuggestion(const QString &word, int startPosition);  
 
 public slots:
     void setDefaultLanguage(const QString &lang);
@@ -72,6 +79,7 @@ private slots:
     void runQueue();
     void setBackgroundSpellChecking(bool b);
     void documentChanged(int from, int min, int plus);
+    void clearHighlightMisspelled(int startPosition);
 
 private:
     Sonnet::Speller m_speller;
@@ -95,6 +103,7 @@ private:
     bool m_documentIsLoading;
     bool m_isChecking;
     QTextCharFormat m_defaultMisspelledFormat;
+    SpellCheckMenu *m_spellCheckMenu;
 
     /**
      For a whole text run we accumulate all misspellings and apply them to

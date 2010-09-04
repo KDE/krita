@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2008 Fredy Yanardi <fyanardi@gmail.com>
  * Copyright (C) 2007,2009,2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2010 Christoph Goerlich <chgoerlich@gmx.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +21,7 @@
 
 #include "SpellCheck.h"
 #include "BgSpellCheck.h"
+#include "SpellCheckMenu.h"
 
 #include <KoCharacterStyle.h>
 #include <KoResourceManager.h>
@@ -41,7 +43,8 @@ SpellCheck::SpellCheck()
     m_enableSpellCheck(true),
     m_allowSignals(true),
     m_documentIsLoading(false),
-    m_isChecking(false)
+    m_isChecking(false),
+    m_spellCheckMenu(0)
 {
     /* setup actions for this plugin */
     KAction *configureAction = new KAction(i18n("Configure &Spell Checking..."), this);
@@ -60,10 +63,17 @@ SpellCheck::SpellCheck()
     m_defaultMisspelledFormat.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
     m_defaultMisspelledFormat.setUnderlineColor(QColor(Qt::red)); // TODO make use kde-config
 
+
+    m_spellCheckMenu = new SpellCheckMenu(m_speller, this);
+    QPair<QString, KAction*> pair = m_spellCheckMenu->menuAction();
+    addAction(pair.first, pair.second);
+
     connect(m_bgSpellCheck, SIGNAL(misspelledWord(const QString &,int,bool)),
             this, SLOT(highlightMisspelled(const QString &,int,bool)));
     connect(m_bgSpellCheck, SIGNAL(done()), this, SLOT(finishedRun()));
     connect(spellCheck, SIGNAL(toggled(bool)), this, SLOT(setBackgroundSpellChecking(bool)));
+    connect(m_spellCheckMenu, SIGNAL(clearHighlightingForWord(int)),
+            this, SLOT(clearHighlightMisspelled(int)));
 }
 
 void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
@@ -93,7 +103,7 @@ void SpellCheck::checkSection(QTextDocument *document, int startPosition, int en
         return;
     if (startPosition >= endPosition) // no work
         return;
-    
+
     foreach (const SpellSections &ss, m_documentsQueue) {
         if (ss.from <= startPosition && ss.to >= endPosition)
             return;
@@ -103,6 +113,7 @@ void SpellCheck::checkSection(QTextDocument *document, int startPosition, int en
     SpellSections ss(document, startPosition, endPosition);
     m_documentsQueue.enqueue(ss);
     runQueue();
+    m_spellCheckMenu->setVisible(true);
 }
 
 void SpellCheck::setDocument(QTextDocument *document)
@@ -146,9 +157,12 @@ void SpellCheck::setBackgroundSpellChecking(bool on)
                     m_document->markContentsDirty(block.position(), block.position() + block.length());
                 }
             }
+            m_spellCheckMenu->setEnabled(false);
+            m_spellCheckMenu->setVisible(false);
         } else {
             //when re-enabling 'Auto Spell Check' we want spellchecking the whole document
             checkSection(m_document, 0, m_document->characterCount() - 1);
+            m_spellCheckMenu->setVisible(true);
         }
     }
 }
@@ -269,7 +283,7 @@ void SpellCheck::runQueue()
             m_misspellings << bl;
             block = block.next();
         } while(block.isValid() && block.position() < section.to);
-        
+
         m_bgSpellCheck->startRun(section.document, section.from, section.to);
         break;
     }
@@ -321,8 +335,18 @@ void SpellCheck::finishedRun()
             newRanges = bl.ranges;
             foreach (const QTextLayout::FormatRange &range, ranges) {
                 if (range.format != m_defaultMisspelledFormat
-                        || range.start + range.length < bl.checkStart)
-                    newRanges << range;
+                        || range.start + range.length < bl.checkStart) {
+                    //workaround to avoid multiple adding of already existing ranges in AdditionalFormats of the TextBlock
+                    bool rangeAlreadyExists= false;
+                    foreach (const QTextLayout::FormatRange &newRange, newRanges) {
+                        if (newRange.start == range.start && range.format == m_defaultMisspelledFormat) {
+                            rangeAlreadyExists = true;
+                            break;
+                        }
+                    }
+                    if (!rangeAlreadyExists)
+                        newRanges << range;
+                }
             }
             if (newRanges.isEmpty())
                 block.layout()->clearAdditionalFormats();
@@ -334,6 +358,79 @@ void SpellCheck::finishedRun()
     m_allowSignals = true;
 
     QTimer::singleShot(0, this, SLOT(runQueue()));
+}
+
+void SpellCheck::setCurrentCursorPosition(QTextDocument *document, int cursorPosition)
+{
+    setDocument(document);
+    if (m_enableSpellCheck) {
+        //check if word at cursor is misspelled
+        QTextBlock block = m_document->findBlock(cursorPosition);
+        if (block.isValid() && block.layout()->additionalFormats().count() > 0) {
+            QList<QTextLayout::FormatRange> ranges = block.layout()->additionalFormats();
+            foreach (const QTextLayout::FormatRange &range, ranges) {
+                if (cursorPosition >= block.position() + range.start 
+                        && cursorPosition <= block.position() + range.start + range.length
+                        && range.format == m_defaultMisspelledFormat) {
+                    QString word = block.text().mid(range.start, range.length);
+                    m_spellCheckMenu->setMisspelled(word, block.position() + range.start);
+                    m_spellCheckMenu->setCurrentLanguage(m_bgSpellCheck->currentLanguage());
+                    m_spellCheckMenu->setVisible(true);
+                    m_spellCheckMenu->setEnabled(true);
+                    return;
+                }
+            }
+            m_spellCheckMenu->setEnabled(false);
+        } else {
+            m_spellCheckMenu->setEnabled(false);
+        }
+    }
+}
+
+void SpellCheck::clearHighlightMisspelled(int startPosition)
+{
+    if (!m_document)
+        return;
+
+    QTextBlock block = m_document->findBlock(startPosition);
+    if (!block.isValid())
+        return;
+
+    QList<QTextLayout::FormatRange> ranges = block.layout()->additionalFormats();
+    bool found = false;
+    for (int i = 0; i < ranges.count(); ++i) {
+        const QTextLayout::FormatRange &range = ranges.at(i);
+        if (startPosition == block.position() + range.start
+                && range.format == m_defaultMisspelledFormat) {
+            ranges.removeAt(i);
+            found = true;
+            break;
+        }
+    }
+    if (found) {
+        block.layout()->setAdditionalFormats(ranges);
+        m_document->markContentsDirty(block.position(), block.length());
+    }
+}
+
+void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition)
+{
+    if (!m_document)
+        return;
+
+    QTextBlock block = m_document->findBlock(startPosition);
+    if (!block.isValid())
+        return;
+
+    QTextCursor cursor(m_document);
+    cursor.setPosition(startPosition);
+    cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+    //if the replaced word and the suggestion had the same number of chars, 
+    //we must clear highlighting manually, see 'documentChanged'
+    if ((cursor.selectionEnd() - cursor.selectionStart()) == word.length())
+        clearHighlightMisspelled(startPosition);
+
+    cursor.insertText(word);
 }
 
 #include <SpellCheck.moc>

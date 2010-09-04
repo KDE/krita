@@ -8,6 +8,7 @@ set(spellcheck_SRCS
     SpellCheck.cpp
     SpellCheckFactory.cpp
     BgSpellCheck.cpp
+    SpellCheckMenu.cpp
 )
 
 kde4_add_plugin(spellcheck ${spellcheck_SRCS})

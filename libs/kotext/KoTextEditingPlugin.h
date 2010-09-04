@@ -80,6 +80,9 @@ public:
      */
     virtual void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
+    /// can be called when this plugin needs the current position of the textcursor
+    virtual void setCurrentCursorPosition(QTextDocument *document, int cursorPosition);
+
     /**
      * Retrieves the entire collection of actions for the plugin
      */

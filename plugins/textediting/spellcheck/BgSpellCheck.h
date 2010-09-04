@@ -37,6 +37,7 @@ public:
     explicit BgSpellCheck(const Speller &speller, QObject *parent = 0);
     explicit BgSpellCheck(QObject *parent = 0);
     void startRun(QTextDocument *document, int startPosition, int endPosition);
+    QString currentLanguage();
 
 protected:
     /// reimplemented

@@ -77,19 +77,14 @@ KisComplexOp::~KisComplexOp()
 
 double KisComplexOp::paintAt(const KisPaintInformation& info)
 {
-    dbgPlugins << "KisComplexOp::paintAt" << 1;
     if (!painter()->device()) return 1.0;
 
-    dbgPlugins << 2;
     KisBrushSP brush = m_brush;
     if (!m_brush)
         return 1.0;
 
-    dbgPlugins << 3;
     if (! brush->canPaintFor(info))
         return 1.0;
-
-    dbgPlugins << 4;
 
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
 
@@ -115,15 +110,11 @@ double KisComplexOp::paintAt(const KisPaintInformation& info)
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-
     if (painter()->bounds().isValid()) {
         dstRect &= painter()->bounds();
     }
 
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 0.0;
-
-    dbgPlugins << 5;
-
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1;
 
     qint32 sx = dstRect.x() - x;
     qint32 sy = dstRect.y() - y;
@@ -142,7 +133,6 @@ double KisComplexOp::paintAt(const KisPaintInformation& info)
 
     m_bidiOption.applyFixed(dab, device, painter(), sx, sy, sw, sh, scale, dstRect);
 
-    dbgPlugins << "ComplexOp blitting: " << dstRect;
     painter()->bltFixed(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
 
     painter()->setOpacity(origOpacity);

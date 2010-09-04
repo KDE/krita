@@ -119,9 +119,14 @@ bool KisTiledDataManager::write(KoStore *store)
     QReadLocker locker(&m_lock);
     if (!store) return false;
 
-    char str[80];
-    sprintf(str, "%d\n", m_hashTable->numTiles());
-    store->write(str, strlen(str));
+    if(CURRENT_VERSION == LEGACY_VERSION) {
+        char str[80];
+        sprintf(str, "%d\n", m_hashTable->numTiles());
+        store->write(str, strlen(str));
+    }
+    else {
+        writeTilesHeader(store, m_hashTable->numTiles());
+    }
 
 
     KisTileHashTableIterator iter(m_hashTable);
@@ -151,18 +156,26 @@ bool KisTiledDataManager::read(KoStore *store)
         return false;
     }
 
-    char str[80];
-    quint32 numTiles;
-    stream->readLine(str, 79);
+    const qint32 maxLineLength = 79; // Legacy magic
+    QByteArray line = stream->readLine(maxLineLength);
+    line = line.trimmed();
 
+    quint32 numTiles;
     qint32 tilesVersion = LEGACY_VERSION;
 
-    if (str[0] == 'V') {
-        sscanf(str, "VERSION %u", &tilesVersion);
-        qFatal("Version %u is not implemented yet", tilesVersion);
+    if (line[0] == 'V') {
+        QList<QByteArray> lineItems = line.split(' ');
+
+        QString keyword = lineItems.takeFirst();
+        Q_ASSERT(keyword == "VERSION");
+
+        tilesVersion = lineItems.takeFirst().toInt();
+
+        if(!processTilesHeader(stream, numTiles))
+            return false;
     }
     else {
-        sscanf(str, "%u", &numTiles);
+        numTiles = line.toUInt();
     }
 
     KisAbstractTileCompressorSP compressor =
@@ -174,6 +187,89 @@ bool KisTiledDataManager::read(KoStore *store)
 
     m_mementoManager->commit();
     return true;
+}
+
+bool KisTiledDataManager::writeTilesHeader(KoStore *store, quint32 numTiles)
+{
+    QString buffer;
+
+    buffer = QString("VERSION %1\n"
+                     "TILEWIDTH %2\n"
+                     "TILEHEIGHT %3\n"
+                     "PIXELSIZE %4\n"
+                     "DATA %5\n")
+        .arg(CURRENT_VERSION)
+        .arg(KisTileData::WIDTH)
+        .arg(KisTileData::HEIGHT)
+        .arg(pixelSize())
+        .arg(numTiles);
+
+    store->write(buffer.toAscii());
+    return true;
+}
+
+#define takeOneLine(stream, maxLine, keyword, value)            \
+    do {                                                        \
+        QByteArray line = stream->readLine(maxLine);            \
+        line = line.trimmed();                                  \
+        QList<QByteArray> lineItems = line.split(' ');          \
+        keyword = lineItems.takeFirst();                        \
+        value = lineItems.takeFirst().toInt();                  \
+    } while(0)                                                  \
+
+
+bool KisTiledDataManager::processTilesHeader(QIODevice *stream, quint32 &numTiles)
+{
+    /**
+     * We assume that there is only one version of this header
+     * possible. In case we invent something new, it'll be quite easy
+     * to modify the behavior
+     */
+
+    const qint32 maxLineLength = 25;
+    const qint32 totalNumTests = 4;
+    bool foundDataMark = false;
+    qint32 testsPassed = 0;
+
+    QString keyword;
+    qint32 value;
+
+    while(!foundDataMark && stream->canReadLine()) {
+        takeOneLine(stream, maxLineLength, keyword, value);
+
+        if (keyword == "TILEWIDTH") {
+            if(value != KisTileData::WIDTH)
+                goto wrongString;
+        }
+        else if (keyword == "TILEHEIGHT") {
+            if(value != KisTileData::HEIGHT)
+                goto wrongString;
+        }
+        else if (keyword == "PIXELSIZE") {
+            if((quint32)value != pixelSize())
+                goto wrongString;
+        }
+        else if (keyword == "DATA") {
+            numTiles = value;
+            foundDataMark = true;
+        }
+        else {
+            goto wrongString;
+        }
+
+        testsPassed++;
+    }
+
+    if(testsPassed != totalNumTests) {
+        warnTiles << "Not enough fields of tiles header present"
+                  << testsPassed << "of" << totalNumTests;
+    }
+
+    return testsPassed == totalNumTests;
+
+wrongString:
+    warnTiles << "Wrong string in tiles header:" << keyword << value;
+    return false;
 }
 
 void KisTiledDataManager::purge(const QRect& area)

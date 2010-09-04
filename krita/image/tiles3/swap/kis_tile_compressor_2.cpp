@@ -54,6 +54,9 @@ void KisTileCompressor2::writeTile(KisTileSP tile, KoStore *store)
 
 void KisTileCompressor2::readTile(KoStore *store, KisTiledDataManager *dm)
 {
+    const qint32 tileDataSize = TILE_DATA_SIZE(pixelSize(dm));
+    prepareStreamingBuffer(tileDataSize);
+
     QIODevice *stream = store->device();
     QByteArray header = stream->readLine(maxHeaderLength());
 
@@ -74,7 +77,6 @@ void KisTileCompressor2::readTile(KoStore *store, KisTiledDataManager *dm)
     stream->read(m_streamingBuffer.data(), dataSize);
 
     tile->lockForWrite();
-
     decompressTileData((quint8*)m_streamingBuffer.data(), dataSize, tile->tileData());
     tile->unlock();
 }

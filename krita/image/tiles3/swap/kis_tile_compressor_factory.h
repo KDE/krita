@@ -20,6 +20,7 @@
 #define __KIS_TILE_COMPRESSOR_FACTORY_H
 
 #include "tiles3/swap/kis_legacy_tile_compressor.h"
+#include "tiles3/swap/kis_tile_compressor_2.h"
 
 class KRITAIMAGE_EXPORT KisTileCompressorFactory
 {
@@ -28,6 +29,9 @@ public:
         switch(version) {
         case 1:
             return new KisLegacyTileCompressor();
+            break;
+        case 2:
+            return new KisTileCompressor2();
             break;
         default:
             qFatal("Unknown version of the tiles");

@@ -97,7 +97,7 @@ class KRITAIMAGE_EXPORT KisTiledDataManager : public KisShared
 {
 private:
     static const qint32 LEGACY_VERSION = 1;
-    static const qint32 CURRENT_VERSION = 1;
+    static const qint32 CURRENT_VERSION = 2;
 
 protected:
     /*FIXME:*/
@@ -320,6 +320,9 @@ private:
     qint32 yToRow(qint32 y) const;
 
 private:
+    bool writeTilesHeader(KoStore *store, quint32 numTiles);
+    bool processTilesHeader(QIODevice *stream, quint32 &numTiles);
+
     qint32 divideRoundDown(qint32 x, const qint32 y) const;
     KisTileDataWrapper pixelPtr(qint32 x, qint32 y,
                                 enum KisTileDataWrapper::accessType type);

@@ -128,7 +128,20 @@ void KoShapeGroupCommand::redo()
     for (uint i = 0; i < shapeCount; ++i) {
         KoShape * shape = d->shapes[i];
         shape->setZIndex(zIndex++);
-        shape->applyAbsoluteTransformation(groupTransform);
+
+        if(d->container->inheritsTransform(shape)) {
+            shape->applyAbsoluteTransformation(groupTransform);
+        }
+        else {
+            QSizeF containerSize = d->container->size();
+            QTransform t = d->container->absoluteTransformation(0);
+            containerSize = QSizeF(containerSize.width()*t.m11(), containerSize.height()*t.m22());
+            QPointF containerPos = d->container->absolutePosition() - QPointF(0.5 * containerSize.width(), 0.5 * containerSize.height());
+            QTransform matrix;
+            matrix.translate(containerPos.x(), containerPos.y());
+            shape->applyAbsoluteTransformation(matrix.inverted());
+        }
+
         d->container->addShape(shape);
         d->container->setClipped(shape, d->clipped[i]);
         d->container->setInheritsTransform(shape, d->inheritTransform[i]);
@@ -148,7 +161,18 @@ void KoShapeGroupCommand::undo()
             d->oldParents.at(i)->setClipped(shape, d->oldClipped.at(i));
             d->oldParents.at(i)->setInheritsTransform(shape, d->oldInheritTransform.at(i));
         }
-        shape->applyAbsoluteTransformation(ungroupTransform);
+        if(d->container->inheritsTransform(shape)) {
+            shape->applyAbsoluteTransformation(ungroupTransform);
+        }
+        else {
+            QSizeF containerSize = d->container->size();
+            QTransform t = d->container->absoluteTransformation(0);
+            containerSize = QSizeF(containerSize.width()*t.m11(), containerSize.height()*t.m22());
+            QPointF containerPos = d->container->absolutePosition() - QPointF(0.5 * containerSize.width(), 0.5 * containerSize.height());
+            QTransform matrix;
+            matrix.translate(containerPos.x(), containerPos.y());
+            shape->applyAbsoluteTransformation(matrix);
+        }
         shape->setZIndex(d->oldZIndex[i]);
     }
 

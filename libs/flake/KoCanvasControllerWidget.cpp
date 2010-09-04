@@ -368,7 +368,7 @@ void KoCanvasControllerWidget::updateCanvasOffsetX()
     if (d->ignoreScrollSignals)
         return;
     if (horizontalScrollBar()->isVisible())
-        setPreferredCenterFractionY((horizontalScrollBar()->value()
+        setPreferredCenterFractionX((horizontalScrollBar()->value()
                                      + horizontalScrollBar()->pageStep() / 2.0) / documentSize().width());
     else
         setPreferredCenterFractionX(0);

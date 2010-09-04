@@ -21,10 +21,42 @@
 #include <KCategoryDrawer>
 #include <KCategorizedSortFilterProxyModel>
 #include <QPainter>
+#include <QApplication>
+
+class KisCategoryDrawer : public KCategoryDrawer
+{
+public:
+    virtual void drawCategory ( const QModelIndex& index, int sortRole, const QStyleOption& option, QPainter* painter ) const
+    {
+        painter->setRenderHint(QPainter::Antialiasing);
+        const QString category = index.model()->data(index, KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+        
+        QLinearGradient gradient(option.rect.topLeft(), option.rect.bottomLeft());         
+        if (index.row() != 0) {
+            gradient.setColorAt(0, Qt::transparent);
+        }
+        gradient.setColorAt(0.3, option.palette.background());
+        gradient.setColorAt(0.8, option.palette.background());
+        gradient.setColorAt(1, Qt::transparent);
+        painter->fillRect(option.rect, gradient);
+         
+        QFont font(QApplication::font());
+        font.setBold(true);
+        const QFontMetrics fontMetrics = QFontMetrics(font);
+         
+        QRect textRect = option.rect.adjusted(5, 0, 0, 0);
+ 
+        painter->save();
+        painter->setFont(font);
+        painter->setPen(option.palette.text().color());
+        painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, category);
+        painter->restore();
+    }
+};
 
 struct KisCategorizedItemDelegate::Private {
     QAbstractItemDelegate* fallback;
-    KCategoryDrawer* categoryDrawer;
+    KisCategoryDrawer* categoryDrawer;
     bool isFirstOfCategory(const QModelIndex& index);
 };
 
@@ -44,7 +76,7 @@ KisCategorizedItemDelegate::KisCategorizedItemDelegate(QAbstractItemDelegate* _f
 {
     _fallback->setParent(this);
     d->fallback = _fallback;
-    d->categoryDrawer = new KCategoryDrawer;
+    d->categoryDrawer = new KisCategoryDrawer;
 }
 
 KisCategorizedItemDelegate::~KisCategorizedItemDelegate()

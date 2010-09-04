@@ -49,6 +49,7 @@ KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const 
         d->oldParents.append(d->container->parent());
         d->oldClipped.append(d->container->isClipped(shape));
         d->oldInheritTransform.append(shape->parent() && shape->parent()->inheritsTransform(shape));
+        d->inheritTransform.append(false);
         // TODO this might also need to change the children of the parent but that is very problematic if the parent is 0
         d->oldZIndex.append(zIndex++);
     }

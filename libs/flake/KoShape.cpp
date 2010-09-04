@@ -348,8 +348,6 @@ QTransform KoShape::absoluteTransformation(const KoViewConverter *converter) con
             matrix = container->absoluteTransformation(converter);
         } else {
             QSizeF containerSize = container->size();
-            QTransform t = container->absoluteTransformation(0);
-            containerSize = QSizeF(containerSize.width()*t.m11(), containerSize.height()*t.m22());
             QPointF containerPos = container->absolutePosition() - QPointF(0.5 * containerSize.width(), 0.5 * containerSize.height());
             if (converter)
                 containerPos = converter->documentToView(containerPos);

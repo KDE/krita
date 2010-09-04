@@ -30,7 +30,6 @@ private slots:
     void testModel();
     void testSetParent();
     void testSetParent2();
-    void testScaling();
 };
 
 #endif

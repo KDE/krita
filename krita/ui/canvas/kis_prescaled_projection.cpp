@@ -189,6 +189,7 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
     }
 
     QImage newImage = QImage(m_d->viewportSize, QImage::Format_ARGB32);
+    newImage.fill(0);
 
     /**
      * TODO: viewport rects should be cropped by the borders of
@@ -196,22 +197,21 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
      * outside QImage and copyQImage will not chatch it
      */
     QRect newViewportRect = QRect(QPoint(0,0), m_d->viewportSize);
-    QRect oldViewportRect = newViewportRect.translated(-alignedOffset);
+    QRect oldViewportRect = newViewportRect.translated(alignedOffset);
 
     QRegion updateRegion = newViewportRect;
-
     QRect savedArea = newViewportRect & oldViewportRect;
+
     if(!savedArea.isEmpty()) {
-        copyQImage(-alignedOffset.x(), -alignedOffset.y(), &newImage, m_d->prescaledQImage);
+        copyQImage(alignedOffset.x(), alignedOffset.y(), &newImage, m_d->prescaledQImage);
         updateRegion -= savedArea;
     }
-
 
     QPainter gc(&newImage);
     QVector<QRect> rects = updateRegion.rects();
 
     foreach(QRect rect, rects) {
-        //gc.fillRect(r, QColor(0, 0, 0, 0));
+        //gc.fillRect(rect, QColor(128, 0, 0, 255));
         KisPPUpdateInfoSP info = getUpdateInformation(rect, QRect());
         drawUsingBackend(gc, info);
     }
@@ -302,8 +302,9 @@ void KisPrescaledProjection::setMonitorProfile(const KoColorProfile * profile)
 void KisPrescaledProjection::updateViewportSize()
 {
     QRectF imageRect = m_d->coordinatesConverter->imageRectInWidgetPixels();
-    QRectF canvasRect(QPointF(0,0), m_d->canvasSize);
-    QRectF minimalRect = imageRect & canvasRect;
+    QSizeF minimalSize(qMin(imageRect.width(), (qreal)m_d->canvasSize.width()),
+                       qMin(imageRect.height(), (qreal)m_d->canvasSize.height()));
+    QRectF minimalRect(QPointF(0,0), minimalSize);
 
     m_d->viewportSize = m_d->coordinatesConverter->widgetToViewport(minimalRect).toAlignedRect().size();
 

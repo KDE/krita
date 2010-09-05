@@ -561,9 +561,9 @@ void KisCanvas2::setImageSize(qint32 w, qint32 h)
 
 void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
 {
-    QPointF offsetBefore = m_d->coordinatesConverter->widgetRectInFlakePixels().topLeft();
+    QPointF offsetBefore = m_d->coordinatesConverter->imageRectInViewportPixels().topLeft();
     m_d->coordinatesConverter->setDocumentOffset(documentOffset);
-    QPointF offsetAfter = m_d->coordinatesConverter->widgetRectInFlakePixels().topLeft();
+    QPointF offsetAfter = m_d->coordinatesConverter->imageRectInViewportPixels().topLeft();
 
     QPointF moveOffset = offsetAfter - offsetBefore;
 

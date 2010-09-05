@@ -560,7 +560,6 @@ void KisLayerManager::layerDuplicate()
         return;
 
     KisLayerSP dup = dynamic_cast<KisLayer*>(active->clone().data());
-    dup->setName(i18n("Duplicate of '%1'", active->name()));
     m_commandsAdapter->addNode(dup.data(), active->parent(), active.data());
     if (dup) {
         activateLayer(dup);

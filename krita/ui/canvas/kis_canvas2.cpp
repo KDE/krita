@@ -632,7 +632,7 @@ void KisCanvas2::adjustOrigin()
     if (heightDiff > 0)
         newOrigin.ry() = qRound(0.5 * heightDiff);
 
-    m_d->coordinatesConverter->setDocumentOrigin(newOrigin);
+//    m_d->coordinatesConverter->setDocumentOrigin(newOrigin);
 
     emit documentOriginChanged();
 }

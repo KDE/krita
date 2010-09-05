@@ -251,7 +251,14 @@ public:
      * @param zoom if true wheel will zoom instead of scroll, control modifier will scroll
      */
     void setZoomWithWheel(bool zoom);
-    
+
+    /**
+     * Set scroll area to be bigger than actual document.
+     * It allows the user to move the corner of the document
+     * to e.g. the center of the screen
+     */
+    void setVastScrolling(bool vastScrolling);
+
     /**
      * \internal
      */
@@ -285,6 +292,12 @@ protected:
      * of the viewport
      */
     virtual void scrollToCenterPoint(const QPoint &center);
+
+    /**
+     * Zoom document keeping point \p widgetPoint unchanged
+     * \param widgetPoint sticky point in widget pixels
+     */
+    virtual void zoomRelativeToPoint(QPoint widgetPoint, qreal zoomLevel);
 
     /// reimplemented from QWidget
     virtual void paintEvent(QPaintEvent *event);

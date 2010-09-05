@@ -96,3 +96,14 @@ bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
 
     return KoCanvasControllerWidget::eventFilter(watched, event);
 }
+
+void KisCanvasController::zoomRelativeToPoint(QPoint widgetPoint, qreal zoomLevel)
+{
+    const QPoint mousePos(m_d->coordinatesConverter->widgetToFlake(widgetPoint).toPoint());
+
+    QRectF oldWidgetRect = m_d->coordinatesConverter->widgetRectInFlakePixels();
+    QPointF oldCenter = oldWidgetRect.center();
+    const QPointF newCenter = mousePos - (1.0 / zoomLevel) * (mousePos - oldCenter);
+
+    zoomBy(newCenter.toPoint(), zoomLevel);
+}

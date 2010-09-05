@@ -32,9 +32,11 @@ public:
     ~KisCanvasController();
 
     void setCanvas(KoCanvasBase *canvas);
-    void scrollToCenterPoint(const QPoint &center);
-
     bool eventFilter(QObject *watched, QEvent *event);
+
+protected:
+    void scrollToCenterPoint(const QPoint &center);
+    void zoomRelativeToPoint(QPoint widgetPoint, qreal zoomLevel);
 
 private:
     struct Private;

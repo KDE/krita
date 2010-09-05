@@ -59,7 +59,8 @@ public:
         : q(qq),
         canvas(0),
         ignoreScrollSignals(false),
-        zoomWithWheel(false)
+        zoomWithWheel(false),
+        vastScrolling(false)
     {
     }
 
@@ -78,6 +79,7 @@ public:
     Viewport * viewportWidget;
     bool ignoreScrollSignals;
     bool zoomWithWheel;
+    bool vastScrolling;
 };
 
 
@@ -89,11 +91,6 @@ void KoCanvasControllerWidget::Private::setDocumentOffset()
     // compensate.
 
     QPoint pt(q->horizontalScrollBar()->value(), q->verticalScrollBar()->value());
-    if (pt.x() < q->margin()) pt.setX(0);
-    if (pt.y() < q->margin()) pt.setY(0);
-    if (pt.x() > q->documentSize().width()) pt.setX(q->documentSize().width());
-    if (pt.y() > q->documentSize().height()) pt.setY(q->documentSize().height());
-
     q->proxyObject->emitMoveDocumentOffset(pt);
 
     QWidget *canvasWidget = canvas->canvasWidget();
@@ -135,23 +132,17 @@ void KoCanvasControllerWidget::Private::resetScrollBars()
     QScrollBar *hScroll = q->horizontalScrollBar();
     QScrollBar *vScroll = q->verticalScrollBar();
 
-    if (docH <= drawH && docW <= drawW) {
-        // we need no scrollbars
-        vScroll->setRange(0, 0);
-        hScroll->setRange(0, 0);
-    } else if (docH <= drawH) {
-        // we need a horizontal scrollbar only
-        vScroll->setRange(0, 0);
-        hScroll->setRange(0, docW - drawW);
-    } else if (docW <= drawW) {
-        // we need a vertical scrollbar only
-        hScroll->setRange(0, 0);
-        vScroll->setRange(0, docH - drawH);
-    } else {
-        // we need both scrollbars
-        vScroll->setRange(0, docH - drawH);
-        hScroll->setRange(0, docW - drawW);
-    }
+    int horizontalReserve = vastScrolling ? drawW : 0;
+    int verticalReserve = vastScrolling ? drawH : 0;
+
+    int xMin = -horizontalReserve;
+    int yMin = -verticalReserve;
+
+    int xMax = docW - drawW + horizontalReserve;
+    int yMax = docH - drawH + verticalReserve;
+
+    hScroll->setRange(xMin, xMax);
+    vScroll->setRange(yMin, yMax);
 
     int fontheight = QFontMetrics(q->font()).height();
 
@@ -285,6 +276,9 @@ void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
 
     proxyObject->emitCanvasSet(this);
     QTimer::singleShot(0, this, SLOT(activate()));
+
+    setPreferredCenterFractionX(0.5);
+    setPreferredCenterFractionY(0.5);
 }
 
 KoCanvasBase* KoCanvasControllerWidget::canvas() const
@@ -371,7 +365,7 @@ void KoCanvasControllerWidget::updateCanvasOffsetX()
         setPreferredCenterFractionX((horizontalScrollBar()->value()
                                      + horizontalScrollBar()->pageStep() / 2.0) / documentSize().width());
     else
-        setPreferredCenterFractionX(0);
+        setPreferredCenterFractionX(0.5);
 }
 
 void KoCanvasControllerWidget::updateCanvasOffsetY()
@@ -383,7 +377,7 @@ void KoCanvasControllerWidget::updateCanvasOffsetY()
         setPreferredCenterFractionY((verticalScrollBar()->value()
                                      + verticalScrollBar()->pageStep() / 2.0) / documentSize().height());
     else
-        setPreferredCenterFractionY(0);
+        setPreferredCenterFractionY(0.5);
 }
 
 bool KoCanvasControllerWidget::eventFilter(QObject *watched, QEvent *event)
@@ -443,9 +437,6 @@ void KoCanvasControllerWidget::ensureVisible(const QRectF &rect, bool smooth)
 
 void KoCanvasControllerWidget::recenterPreferred()
 {
-    if (viewport()->width() >= documentSize().width()
-        && viewport()->height() >= documentSize().height())
-        return; // no need to center when image is smaller than viewport
     const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
     d->ignoreScrollSignals = true;
 
@@ -552,6 +543,11 @@ void KoCanvasControllerWidget::setZoomWithWheel(bool zoom)
     d->zoomWithWheel = zoom;
 }
 
+void KoCanvasControllerWidget::setVastScrolling(bool vastScrolling)
+{
+    d->vastScrolling = vastScrolling;
+}
+
 void KoCanvasControllerWidget::pan(const QPoint &distance)
 {
     QPoint sourcePoint = scrollBarValue();
@@ -610,27 +606,25 @@ void KoCanvasControllerWidget::wheelEvent(QWheelEvent *event)
         const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
         d->ignoreScrollSignals = true;
 
-        const QPoint offset(horizontalScrollBar()->value(), verticalScrollBar()->value());
-        const QPoint mousePos(event->pos() + offset);
         const qreal zoomLevel = event->delta() > 0 ? sqrt(2.0) : sqrt(0.5);
+        zoomRelativeToPoint(event->pos(), zoomLevel);
 
-        QPointF oldCenter = preferredCenter();
-        if (visibleWidth() >= documentSize().width())
-            oldCenter.rx() = documentSize().width() * 0.5;
-        if (visibleHeight() >= documentSize().height())
-            oldCenter.ry() = documentSize().height() * 0.5;
-
-        const QPointF newCenter = mousePos - (1.0 / zoomLevel) * (mousePos - oldCenter);
-
-        if (event->delta() > 0)
-            zoomIn(newCenter.toPoint());
-        else
-            zoomOut(newCenter.toPoint());
         event->accept();
 
         d->ignoreScrollSignals = oldIgnoreScrollSignals;
     } else
         QAbstractScrollArea::wheelEvent(event);
+}
+
+void KoCanvasControllerWidget::zoomRelativeToPoint(QPoint widgetPoint, qreal zoomLevel)
+{
+    const QPoint offset(horizontalScrollBar()->value(), verticalScrollBar()->value());
+    const QPoint mousePos(widgetPoint + offset);
+
+    QPointF oldCenter = preferredCenter();
+    const QPointF newCenter = mousePos - (1.0 / zoomLevel) * (mousePos - oldCenter);
+
+    zoomBy(newCenter.toPoint(), zoomLevel);
 }
 
 bool KoCanvasControllerWidget::focusNextPrevChild(bool)

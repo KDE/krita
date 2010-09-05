@@ -114,7 +114,7 @@ void KisGradientSliderWidget::mousePressEvent(QMouseEvent * e)
         QWidget::mousePressEvent(e);
         return;
     }
-    
+
     double t = (double)(e->x() - MARGIN) / (double)(width() - 2 * MARGIN);
     KoGradientSegment* segment = 0;
     segment = m_autogradientResource->segmentAt(t);
@@ -159,7 +159,7 @@ void KisGradientSliderWidget::mousePressEvent(QMouseEvent * e)
 
 void KisGradientSliderWidget::mouseReleaseEvent(QMouseEvent * e)
 {
-    //QWidget::mouseReleaseEvent(e);
+    Q_UNUSED(e);
     m_drag = NO_DRAG;
 }
 
@@ -169,7 +169,7 @@ void KisGradientSliderWidget::mouseMoveEvent(QMouseEvent * e)
         QWidget::mouseMoveEvent(e);
         return;
     }
-    
+
     double t = (double)(e->x() - MARGIN) / (double)(width() - 2 * MARGIN);
     switch (m_drag) {
     case RIGHT_DRAG:

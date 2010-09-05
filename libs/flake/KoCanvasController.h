@@ -275,6 +275,19 @@ public:
      */
     virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter) = 0;
 
+    /**
+     * Set mouse wheel to zoom behaviour
+     * @param zoom if true wheel will zoom instead of scroll, control modifier will scroll
+     */
+    virtual void setZoomWithWheel(bool zoom) = 0;
+
+    /**
+     * Set scroll area to be bigger than actual document.
+     * It allows the user to move the corner of the document
+     * to e.g. the center of the screen
+     */
+    virtual void setVastScrolling(bool vastScrolling) = 0;
+
 protected:
 
     void setDocumentSize(const QSize &sz);

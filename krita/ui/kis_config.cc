@@ -734,3 +734,12 @@ void KisConfig::setZoomWithWheel(const bool zoom) const
     m_cfg.writeEntry("ZoomWithWheel", zoom);
 }
 
+bool KisConfig::vastScrolling() const
+{
+    return m_cfg.readEntry("vastScrolling", true);
+}
+
+void KisConfig::setVastScrolling(const bool toggle) const
+{
+    m_cfg.writeEntry("vastScrolling", toggle);
+}

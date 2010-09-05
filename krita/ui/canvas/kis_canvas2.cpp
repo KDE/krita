@@ -83,7 +83,8 @@ public:
         , currentCanvasUsesOpenGLShaders(false)
         , toolProxy(new KoToolProxy(parent))
         , favoriteResourceManager(0)
-        , canvasMirroredY(false) {
+        , canvasMirroredY(false)
+        , vastScrolling(true) {
     }
 
     ~KisCanvas2Private() {
@@ -108,13 +109,16 @@ public:
 #endif
     KisPrescaledProjectionSP prescaledProjection;
     bool canvasMirroredY;
+    bool vastScrolling;
 };
 
 KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc)
     : KoCanvasBase(sc)
     , m_d(new KisCanvas2Private(this, viewConverter, view))
 {
+    // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
+    m_d->vastScrolling = cfg.vastScrolling();
     createCanvas(cfg.useOpenGL());
 
     connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), SLOT(documentOffsetMoved(const QPoint&)));
@@ -583,8 +587,10 @@ bool KisCanvas2::usingHDRExposureProgram()
 
 void KisCanvas2::slotConfigChanged()
 {
-    // first, assume we're going to crash when switching to opengl
     KisConfig cfg;
+    m_d->vastScrolling = cfg.vastScrolling();
+
+    // first, assume we're going to crash when switching to opengl
     bool useOpenGL = cfg.useOpenGL();
     if (cfg.canvasState() == "TRY_OPENGL" && useOpenGL) {
         cfg.setCanvasState("OPENGL_FAILED");
@@ -624,15 +630,17 @@ void KisCanvas2::adjustOrigin()
     QSize documentSize = m_d->coordinatesConverter->imageRectInWidgetPixels().toAlignedRect().size();
     QSize widgetSize = m_d->canvasWidget->widget()->size();
 
-    int widthDiff = widgetSize.width() - documentSize.width();
-    int heightDiff = widgetSize.height() - documentSize.height();
+    if(!m_d->vastScrolling) {
+        int widthDiff = widgetSize.width() - documentSize.width();
+        int heightDiff = widgetSize.height() - documentSize.height();
 
-    if (widthDiff > 0)
-        newOrigin.rx() = qRound(0.5 * widthDiff);
-    if (heightDiff > 0)
-        newOrigin.ry() = qRound(0.5 * heightDiff);
+        if (widthDiff > 0)
+            newOrigin.rx() = qRound(0.5 * widthDiff);
+        if (heightDiff > 0)
+            newOrigin.ry() = qRound(0.5 * heightDiff);
+    }
 
-//    m_d->coordinatesConverter->setDocumentOrigin(newOrigin);
+    m_d->coordinatesConverter->setDocumentOrigin(newOrigin);
 
     emit documentOriginChanged();
 }

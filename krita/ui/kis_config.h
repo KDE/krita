@@ -259,7 +259,10 @@ public:
 
     bool zoomWithWheel() const;
     void setZoomWithWheel(const bool zoom) const;
-    
+
+    bool vastScrolling() const;
+    void setVastScrolling(const bool toggle) const;
+
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

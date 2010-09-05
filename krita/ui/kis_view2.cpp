@@ -218,7 +218,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     canvasController->setCanvasMode(KoCanvasController::Infinite);
     KisConfig cfg;
     canvasController->setZoomWithWheel(cfg.zoomWithWheel());
-    canvasController->setVastScrolling(true);
+    canvasController->setVastScrolling(cfg.vastScrolling());
 
     m_d->canvasController = canvasController;
 

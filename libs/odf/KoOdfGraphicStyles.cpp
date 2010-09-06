@@ -454,7 +454,7 @@ QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, cons
     QBrush tmpBrush; // default brush for "none" is a Qt::NoBrush
 
     if (fill == "solid") {
-        tmpBrush.setStyle(static_cast<Qt::BrushStyle>(1));
+        tmpBrush.setStyle(Qt::SolidPattern);
         if (styleStack.hasProperty(KoXmlNS::draw, "fill-color"))
             tmpBrush.setColor(styleStack.property(KoXmlNS::draw, "fill-color"));
         if (styleStack.hasProperty(KoXmlNS::draw, "opacity")) {

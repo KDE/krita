@@ -106,8 +106,10 @@ public slots:
     * The document size will be used together with the current zoom level to calculate the size of the
     * canvas in the canvasController.
     * @param documentSize the new document size in points
+    * @param recalculateCenter tells canvas controller not to touch
+    *        preferredCenterFraction
     */
-    void setDocumentSize(const QSizeF &documentSize);
+    void setDocumentSize(const QSizeF &documentSize, bool recalculateCenter = false);
 
 signals:
     /**

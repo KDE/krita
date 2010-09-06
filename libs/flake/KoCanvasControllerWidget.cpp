@@ -383,10 +383,7 @@ void KoCanvasControllerWidget::updateCanvasOffsetY()
 bool KoCanvasControllerWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if (d->canvas && d->canvas->canvasWidget() && (watched == d->canvas->canvasWidget())) {
-        if ((event->type() == QEvent::Resize) || event->type() == QEvent::Move) {
-            updateCanvasOffsetX();
-            updateCanvasOffsetY();
-        } else if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
+         if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
             d->emitPointerPositionChangedSignals(event);
         }
     }

@@ -126,10 +126,10 @@ void KoZoomController::setPageSize(const QSizeF &pageSize)
         setZoom(KoZoomMode::ZOOM_PAGE, 0);
 }
 
-void KoZoomController::setDocumentSize( const QSizeF &documentSize )
+void KoZoomController::setDocumentSize(const QSizeF &documentSize, bool recalculateCenter)
 {
     d->documentSize = documentSize;
-    d->canvasController->updateDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize(), false );
+    d->canvasController->updateDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize(), recalculateCenter);
 
     // Finally ask the canvasController to recenter
     d->canvasController->recenterPreferred();

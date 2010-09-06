@@ -76,7 +76,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 
     KisImageWSP image = m_view->image();
     m_zoomController->setPageSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()));
-    m_zoomController->setDocumentSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()));
+    m_zoomController->setDocumentSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()), true);
 
     m_zoomAction = m_zoomController->zoomAction();
     actionCollection->addAction("zoom", m_zoomAction);

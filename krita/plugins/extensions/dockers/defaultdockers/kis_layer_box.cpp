@@ -215,20 +215,22 @@ void KisLayerBox::updateUI()
 {
     Q_ASSERT(! m_image.isNull());
 
-    m_wdgLayerBox->bnDelete->setEnabled(m_nodeManager->activeNode());
-    m_wdgLayerBox->bnRaise->setEnabled(m_nodeManager->activeNode()
-                                       && (m_nodeManager->activeNode()->nextSibling()
-                                           || (m_nodeManager->activeNode()->parent()
-                                               && m_nodeManager->activeNode()->parent() != m_image->root())));
+    KisNodeSP active = m_nodeManager->activeNode();
+    
+    m_wdgLayerBox->bnDelete->setEnabled(active);
+    m_wdgLayerBox->bnRaise->setEnabled(active && (active->nextSibling()
+                                           || (active->parent() && active->parent() != m_image->root())));
 
-    m_wdgLayerBox->bnLower->setEnabled(m_nodeManager->activeNode() && m_nodeManager->activeNode()->prevSibling());
+    m_wdgLayerBox->bnLower->setEnabled(active && active->prevSibling());
+    m_wdgLayerBox->bnDuplicate->setEnabled(active);
+    m_wdgLayerBox->bnProperties->setEnabled(active);
 
-    m_wdgLayerBox->doubleOpacity->setEnabled(m_nodeManager->activeNode());
+    m_wdgLayerBox->doubleOpacity->setEnabled(active);
     m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
 
-    m_wdgLayerBox->cmbComposite->setEnabled(m_nodeManager->activeNode());
+    m_wdgLayerBox->cmbComposite->setEnabled(active);
 
-    if (KisNodeSP active = m_nodeManager->activeNode()) {
+    if (active) {
         if (m_nodeManager->activePaintDevice())
             slotFillCompositeOps(m_nodeManager->activeColorSpace());
         else

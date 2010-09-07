@@ -34,6 +34,8 @@ inline double drand48()
 }
 #endif
 
+enum DeformModes {GROW, SHRINK, SWIRL_CW, SWIRL_CCW, MOVE, LENS_IN, LENS_OUT, DEFORM_COLOR};
+
 class DeformProperties
 {
 public:
@@ -169,9 +171,9 @@ public:
     DeformBrush();
     ~DeformBrush();
 
-    void paintMask(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer,
+    KisFixedPaintDeviceSP paintMask(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer,
                    qreal scale,qreal rotation,QPointF pos,
-                   qreal subPixelX,qreal subPixelY);
+                   qreal subPixelX,qreal subPixelY, int dabX, int dabY);
 
     void oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF pos);
     void setSizeProperties(KisBrushSizeProperties * properties){ m_sizeProperties = properties; }
@@ -181,7 +183,7 @@ public:
 
 private:
     // return true if can paint
-    bool setupAction(QPointF pos);
+    bool setupAction(DeformModes mode,const QPointF &pos);
     /// move pixel from new computed coords newX, newY to x,y (inverse mapping)
     void movePixel(qreal newX, qreal newY, quint8 *dst);
     void debugColor(const quint8* data, KoColorSpace * cs);

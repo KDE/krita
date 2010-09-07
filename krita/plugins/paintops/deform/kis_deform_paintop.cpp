@@ -38,6 +38,8 @@
 
 #include "kis_deform_option.h"
 #include "kis_brush_size_option.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoCompositeOp.h>
 
 KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
@@ -63,20 +65,30 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
 
     m_deformBrush.setProperties( &m_properties );
     m_deformBrush.setSizeProperties( &m_sizeProperties );
+
     m_deformBrush.initDeformAction();
 
     m_dev = source();
+    m_dabAsSelection = new KisSelection();
+    m_copyPainter = new KisPainter(m_dabAsSelection);
+    m_copyPainter->setOpacity(OPACITY_OPAQUE_U8);
+    m_copyPainter->setCompositeOp(COMPOSITE_COPY);
 
+    
     if ((m_sizeProperties.diameter * 0.5) > 1) {
         m_ySpacing = m_xSpacing = m_sizeProperties.diameter * 0.5 * m_sizeProperties.spacing;
     } else {
         m_ySpacing = m_xSpacing = 1.0;
     }
     m_spacing = m_xSpacing;
+    
+    
+    
 }
 
 KisDeformPaintOp::~KisDeformPaintOp()
 {
+    delete m_copyPainter;
 }
 
 double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
@@ -109,11 +121,30 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         splitCoordinate(pos.x(), &x, &subPixelX);
         splitCoordinate(pos.y(), &y, &subPixelY);
 
-        m_deformBrush.paintMask(dab, m_dev, scale,rotation,info.pos(), subPixelX,subPixelY);
+        KisFixedPaintDeviceSP mask = m_deformBrush.paintMask(dab, m_dev, 
+                                                             scale,rotation,
+                                                             info.pos(), 
+                                                             subPixelX,subPixelY,
+                                                             x,y
+                                                             );
 
+        // this happens for the first dab of the move mode, we need more information for being able to move 
+        if (!mask){
+            return m_spacing;
+        }
+        
+        m_dabAsSelection->clear();
+        m_copyPainter->bltFixed(QPoint(x,y),mask,mask->bounds());
+        
         quint8 origOpacity = m_opacityOption.apply(painter(), info);
+        KisSelectionSP origSelection = painter()->selection();
+        
+        painter()->setSelection(m_dabAsSelection);
         painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
+        
+        painter()->setSelection(origSelection);
         painter()->setOpacity(origOpacity);
+        
         return m_spacing;
 #else
         if (!m_dab) {

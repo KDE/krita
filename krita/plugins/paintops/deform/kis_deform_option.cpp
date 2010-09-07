@@ -24,6 +24,9 @@ public:
     KisDeformOptionsWidget(QWidget *parent = 0)
             : QWidget(parent) {
         setupUi(this);
+        
+        deformAmount->setRange(0.0,1.0,2);
+        deformAmount->setValue(0.20);
     }
 };
 
@@ -33,7 +36,7 @@ KisDeformOption::KisDeformOption()
     m_checkable = false;
     m_options = new KisDeformOptionsWidget();
 
-    connect(m_options->deformAmountSPBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->deformAmount, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->interpolationChBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->useCounter, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->useOldData, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
@@ -57,7 +60,7 @@ KisDeformOption::~KisDeformOption()
 
 void  KisDeformOption::readOptionSetting(const KisPropertiesConfiguration * config)
 {
-    m_options->deformAmountSPBox->setValue(config->getDouble(DEFORM_AMOUNT));
+    m_options->deformAmount->setValue(config->getDouble(DEFORM_AMOUNT));
     m_options->interpolationChBox->setChecked(config->getBool(DEFORM_USE_BILINEAR));
     m_options->useCounter->setChecked(config->getBool(DEFORM_USE_COUNTER));
     m_options->useOldData->setChecked(config->getBool(DEFORM_USE_OLD_DATA));
@@ -85,7 +88,7 @@ void  KisDeformOption::readOptionSetting(const KisPropertiesConfiguration * conf
 
 void KisDeformOption::writeOptionSetting(KisPropertiesConfiguration* config) const
 {
-    config->setProperty(DEFORM_AMOUNT, m_options->deformAmountSPBox->value());
+    config->setProperty(DEFORM_AMOUNT, m_options->deformAmount->value());
     config->setProperty(DEFORM_ACTION, deformAction());
     config->setProperty(DEFORM_USE_BILINEAR, m_options->interpolationChBox->isChecked());
     config->setProperty(DEFORM_USE_COUNTER, m_options->useCounter->isChecked());

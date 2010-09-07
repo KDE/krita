@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>340</width>
-    <height>458</height>
+    <height>460</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,7 +23,7 @@
    </size>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
+   <item row="0" column="0">
     <widget class="QLabel" name="deformLabel">
      <property name="font">
       <font>
@@ -36,133 +36,193 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QRadioButton" name="growBtn">
-     <property name="text">
-      <string>Grow</string>
-     </property>
-    </widget>
+   <item row="1" column="0">
+    <layout class="QGridLayout" name="modesGrid">
+     <item row="0" column="0">
+      <widget class="QRadioButton" name="growBtn">
+       <property name="text">
+        <string>Grow</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QRadioButton" name="shrinkBtn">
+       <property name="text">
+        <string>Shrink</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QRadioButton" name="swirlCCWBtn">
+       <property name="text">
+        <string>Swirl CCW</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QRadioButton" name="swirlCWBtn">
+       <property name="text">
+        <string>Swirl CW</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QRadioButton" name="moveBtn">
+       <property name="text">
+        <string>Move</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QRadioButton" name="colorBtn">
+       <property name="text">
+        <string>Color deformation</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QRadioButton" name="lensOutBtn">
+       <property name="text">
+        <string>Lens zoom out</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QRadioButton" name="lensBtn">
+       <property name="text">
+        <string>Lens zoom in</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="2" column="1">
-    <widget class="QRadioButton" name="shrinkBtn">
-     <property name="text">
-      <string>Shrink</string>
-     </property>
-    </widget>
+   <item row="2" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <spacer name="topSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>28</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="deformAmountLayout" stretch="0,1">
+       <item>
+        <widget class="QLabel" name="deformAmountLbl">
+         <property name="font">
+          <font>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Deform Amount</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="KisDoubleSliderSpinBox" name="deformAmount" native="true"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="middleSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>105</width>
+         <height>13</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
    <item row="3" column="0">
-    <widget class="QRadioButton" name="swirlCCWBtn">
-     <property name="text">
-      <string>Swirl CCW</string>
+    <layout class="QVBoxLayout" name="qualityLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMaximumSize</enum>
      </property>
-    </widget>
+     <item>
+      <widget class="QCheckBox" name="interpolationChBox">
+       <property name="text">
+        <string>Bilinear interpolation</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="useCounter">
+       <property name="text">
+        <string>Use counter</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="useOldData">
+       <property name="text">
+        <string>Use undeformed image</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="3" column="1">
-    <widget class="QRadioButton" name="swirlCWBtn">
-     <property name="text">
-      <string>Swirl CW</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QRadioButton" name="moveBtn">
-     <property name="text">
-      <string>Move</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QRadioButton" name="colorBtn">
-     <property name="text">
-      <string>Color deformation</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QRadioButton" name="lensOutBtn">
-     <property name="text">
-      <string>Lens zoom out</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
-    <widget class="QRadioButton" name="lensBtn">
-     <property name="text">
-      <string>Lens zoom in</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0">
-    <widget class="QLabel" name="deformAmountLbl">
-     <property name="font">
-      <font>
-       <weight>50</weight>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Deform Amount</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="1">
-    <widget class="QDoubleSpinBox" name="deformAmountSPBox">
-     <property name="minimum">
-      <double>0.010000000000000</double>
-     </property>
-     <property name="maximum">
-      <double>1.000000000000000</double>
-     </property>
-     <property name="singleStep">
-      <double>0.100000000000000</double>
-     </property>
-     <property name="value">
-      <double>0.200000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="0" colspan="2">
-    <widget class="QCheckBox" name="interpolationChBox">
-     <property name="text">
-      <string>Bilinear interpolation</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="0">
-    <widget class="QCheckBox" name="useCounter">
-     <property name="text">
-      <string>Use counter</string>
-     </property>
-    </widget>
-   </item>
-   <item row="15" column="0" colspan="2">
-    <widget class="QCheckBox" name="useOldData">
-     <property name="text">
-      <string>Use undeformed image</string>
-     </property>
-    </widget>
-   </item>
-   <item row="17" column="1">
-    <spacer name="verticalSpacer">
+   <item row="4" column="0">
+    <spacer name="bottomSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>167</height>
+       <height>100</height>
       </size>
      </property>
     </spacer>
    </item>
   </layout>
+  <zorder>deformLabel</zorder>
+  <zorder>growBtn</zorder>
+  <zorder>shrinkBtn</zorder>
+  <zorder>swirlCCWBtn</zorder>
+  <zorder>swirlCWBtn</zorder>
+  <zorder>moveBtn</zorder>
+  <zorder>colorBtn</zorder>
+  <zorder>lensOutBtn</zorder>
+  <zorder>lensBtn</zorder>
+  <zorder>deformAmountLbl</zorder>
+  <zorder>interpolationChBox</zorder>
+  <zorder>useCounter</zorder>
+  <zorder>useOldData</zorder>
+  <zorder>deformAmount</zorder>
+  <zorder>middleSpacer</zorder>
+  <zorder>topSpacer</zorder>
+  <zorder>interpolationChBox</zorder>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

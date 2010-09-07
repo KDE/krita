@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Watery Mixbrush
+Name[it]=Pennello miscelante acquoso
+Name[pt]=Pincele de Mistura Húmido
+Name[pt_BR]=Pincel de Mistura Úmido
+Name[sv]=Vattenrik blandarpensel
+Name[uk]=Водяний пензель-змішувач
 Name[x-test]=xxWatery Mixbrushxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service

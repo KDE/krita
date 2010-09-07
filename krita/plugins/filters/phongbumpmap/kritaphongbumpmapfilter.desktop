@@ -2,6 +2,7 @@
 Name=Phong Bumpmap Filter
 Name[es]=Filtro de mapa de colisiones Phong
 Name[it]=Filtro bumpmap Phong
+Name[nb]=Phong Dumpkart-filter
 Name[pt]=Filtro de Mapas de Relevo Phong
 Name[pt_BR]=Filtro de Mapas de Relevo Phong
 Name[sv]=Phong bulkartefilter
@@ -10,6 +11,7 @@ Name[x-test]=xxPhong Bumpmap Filterxx
 Comment=Phong Bumpmap filter
 Comment[es]=Filtro de mapa de colisiones Phong
 Comment[it]=Filtro bumpmap Phong
+Comment[nb]=Phong Dumpkart-filter
 Comment[pt]=Filtro de Mapas de Relevo Phong
 Comment[pt_BR]=Filtro de Mapas de Relevo Phong
 Comment[sv]=Phong bulkartefilter

@@ -110,6 +110,9 @@ private slots:
     
     void dynabrush();
     void dynabrushRL();
+    
+    void deformBrush();
+    void deformBrushRL();
 /*    
     void predefinedBrush();
     void predefinedBrushRL();

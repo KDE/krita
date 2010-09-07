@@ -113,6 +113,18 @@ void KisStrokeBenchmark::cleanupTestCase()
     delete m_painter;
 }
 
+void KisStrokeBenchmark::deformBrush()
+{
+    QString presetFileName = "deform-default.kpp";
+    benchmarkStroke(presetFileName);
+}
+
+void KisStrokeBenchmark::deformBrushRL()
+{
+    QString presetFileName = "deform-default.kpp";
+    benchmarkRandomLines(presetFileName);
+}
+
 void KisStrokeBenchmark::pixelbrush300px()
 {
     QString presetFileName = "autobrush_300px.kpp";

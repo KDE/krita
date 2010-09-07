@@ -1024,7 +1024,11 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 } else if (localName == "bookmark-end") {
                     bookmark->setType(KoBookmark::EndBookmark);
                     KoBookmark *startBookmark = textObjectManager->bookmarkManager()->retrieveBookmark(uniqBookmarkName);
-                    startBookmark->setEndBookmark(bookmark);
+                    if (startBookmark) {        // set end bookmark only if we got start bookmark (we might not have in case of broken document)
+                        startBookmark->setEndBookmark(bookmark);
+                    } else {
+                        kWarning(32500) << "bookmark-end of non-existing bookmark - broken document?";
+                    }
                 }
                 textObjectManager->insertInlineObject(cursor, bookmark);
             }

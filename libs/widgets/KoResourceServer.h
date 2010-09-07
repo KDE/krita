@@ -131,7 +131,7 @@ public:
                 foreach(T* resource, resources) {
                     if (resource->load() && resource->valid())
                     {
-                        m_resourcesByFilename[front] = resource;
+                        m_resourcesByFilename[resource->filename()] = resource;
 
                         if ( resource->name().isNull() ) {
                             resource->setName( fname );

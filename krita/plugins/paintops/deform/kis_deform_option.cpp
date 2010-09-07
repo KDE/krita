@@ -36,7 +36,7 @@ KisDeformOption::KisDeformOption()
     m_checkable = false;
     m_options = new KisDeformOptionsWidget();
 
-    connect(m_options->deformAmount, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->deformAmount, SIGNAL(valueChanged(qreal)),SIGNAL(sigSettingChanged()));
     connect(m_options->interpolationChBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->useCounter, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->useOldData, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));

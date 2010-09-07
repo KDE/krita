@@ -166,18 +166,9 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                     Q_CHECK_PTR(m_painter);
 
                     m_painter->beginTransaction(i18nc("a straight drawn line", "Line"));
-
-                    m_painter->setPaintColor(currentFgColor());
-                    m_painter->setOpacity(m_opacity);
-                    m_painter->setCompositeOp(m_compositeOp);
-                    m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
-                    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
-                        m_painter->setChannelFlags(l->channelFlags());
-                        if (l->alphaLocked()) {
-                            m_painter->setLockAlpha(l->alphaLocked());
-                        }
-                    }
-
+                    
+                    setupPainter(m_painter);
+                    
                     m_painter->paintLine(m_startPos, m_endPos);
 
                     QRegion dirtyRegion = m_painter->dirtyRegion();

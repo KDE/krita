@@ -277,8 +277,8 @@ void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
     proxyObject->emitCanvasSet(this);
     QTimer::singleShot(0, this, SLOT(activate()));
 
-    setPreferredCenterFractionX(0.5);
-    setPreferredCenterFractionY(0.5);
+    setPreferredCenterFractionX(0);
+    setPreferredCenterFractionY(0);
 }
 
 KoCanvasBase* KoCanvasControllerWidget::canvas() const
@@ -365,7 +365,7 @@ void KoCanvasControllerWidget::updateCanvasOffsetX()
         setPreferredCenterFractionX((horizontalScrollBar()->value()
                                      + horizontalScrollBar()->pageStep() / 2.0) / documentSize().width());
     else
-        setPreferredCenterFractionX(0.5);
+        setPreferredCenterFractionX(0);
 }
 
 void KoCanvasControllerWidget::updateCanvasOffsetY()
@@ -377,7 +377,7 @@ void KoCanvasControllerWidget::updateCanvasOffsetY()
         setPreferredCenterFractionY((verticalScrollBar()->value()
                                      + verticalScrollBar()->pageStep() / 2.0) / documentSize().height());
     else
-        setPreferredCenterFractionY(0.5);
+        setPreferredCenterFractionY(0);
 }
 
 bool KoCanvasControllerWidget::eventFilter(QObject *watched, QEvent *event)

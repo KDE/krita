@@ -36,7 +36,7 @@ public:
 
 protected:
     void scrollToCenterPoint(const QPoint &center);
-    void zoomRelativeToPoint(QPoint widgetPoint, qreal zoomLevel);
+    void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomLevel);
 
 private:
     struct Private;

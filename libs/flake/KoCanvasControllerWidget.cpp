@@ -613,7 +613,7 @@ void KoCanvasControllerWidget::wheelEvent(QWheelEvent *event)
         QAbstractScrollArea::wheelEvent(event);
 }
 
-void KoCanvasControllerWidget::zoomRelativeToPoint(QPoint widgetPoint, qreal zoomLevel)
+void KoCanvasControllerWidget::zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomLevel)
 {
     const QPoint offset(horizontalScrollBar()->value(), verticalScrollBar()->value());
     const QPoint mousePos(widgetPoint + offset);

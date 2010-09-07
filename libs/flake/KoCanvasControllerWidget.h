@@ -297,7 +297,7 @@ protected:
      * Zoom document keeping point \p widgetPoint unchanged
      * \param widgetPoint sticky point in widget pixels
      */
-    virtual void zoomRelativeToPoint(QPoint widgetPoint, qreal zoomLevel);
+    virtual void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomLevel);
 
     /// reimplemented from QWidget
     virtual void paintEvent(QPaintEvent *event);

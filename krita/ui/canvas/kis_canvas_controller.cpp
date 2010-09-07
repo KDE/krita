@@ -97,7 +97,7 @@ bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
     return KoCanvasControllerWidget::eventFilter(watched, event);
 }
 
-void KisCanvasController::zoomRelativeToPoint(QPoint widgetPoint, qreal zoomLevel)
+void KisCanvasController::zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomLevel)
 {
     const QPoint mousePos(m_d->coordinatesConverter->widgetToFlake(widgetPoint).toPoint());
 

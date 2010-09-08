@@ -27,6 +27,7 @@
 struct KisBoundary::Private {
     KisFixedPaintDeviceSP m_device;
     QVector<QPolygon> m_boundary;
+    QPainterPath path;
 };
 
 KisBoundary::KisBoundary(KisFixedPaintDeviceSP dev) : d(new Private)
@@ -46,6 +47,13 @@ void KisBoundary::generateBoundary()
 
     KisOutlineGenerator generator(d->m_device->colorSpace(), OPACITY_TRANSPARENT_U8);
     d->m_boundary = generator.outline(d->m_device->data(), 0, 0, d->m_device->bounds().width(), d->m_device->bounds().height());
+
+    d->path = QPainterPath();
+    foreach(const QPolygon & polygon, d->m_boundary) {
+        d->path.addPolygon(polygon);
+        d->path.closeSubpath();
+    }
+
 }
 
 void KisBoundary::paint(QPainter& painter) const
@@ -60,13 +68,8 @@ void KisBoundary::paint(QPainter& painter) const
     }
 }
 
-QPainterPath KisBoundary::boundary() const
+QPainterPath KisBoundary::path() const
 {
-    QPainterPath path;
-    foreach(const QPolygon & polygon, d->m_boundary) {
-        path.addPolygon(polygon);
-        path.closeSubpath();
-    }
-    return path;
+    return d->path;
 }
 

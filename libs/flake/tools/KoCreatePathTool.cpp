@@ -118,7 +118,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 {
     Q_D(KoCreatePathTool);
 
-    if (event->buttons() & Qt::RightButton) {
+    if (event->button() == Qt::RightButton || (event->button() == Qt::LeftButton && event->modifiers() & Qt::ShiftModifier)) {
         if (d->shape) {
             // repaint the shape before removing the last point
             canvas()->updateCanvas(d->shape->boundingRect());

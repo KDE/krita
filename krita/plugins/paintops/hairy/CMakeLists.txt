@@ -7,7 +7,6 @@ set(kritahairypaintop_PART_SRCS
     kis_hairy_paintop_settings.cpp
     kis_hairy_paintop_settings_widget.cpp
     bristle.cpp
-    brush_shape.cpp
     hairy_brush.cpp
     trajectory.cpp
     )

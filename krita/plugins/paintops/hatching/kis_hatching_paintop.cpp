@@ -192,17 +192,10 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     if (!donotbasehatch)
         m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, m_settings->angle, painter()->paintColor());
 
-    // Fixing selection bug, this made the brush ~10% slower, better solutions welcome
-    KisPaintDeviceSP blitDab = 0;
-    blitDab = new KisPaintDevice(painter()->device()->colorSpace());
-    KisPainter smallpainter(blitDab);
-    smallpainter.bitBltFixedSelection(0, 0, m_hatchedDab, maskDab, 0, 0, sw, sh);
-
     // The most important line, the one that paints to the screen.
-    //painter()->bitBltFixedSelection(x, y, m_hatchedDab, maskDab, 0, 0, sw, sh);  // old, buggy
-    painter()->bitBlt(x, y, blitDab, 0, 0, sw, sh);    //new, bugfixed
+    painter()->bitBltFixedSelection(x, y, m_hatchedDab, maskDab, 0, 0, sw, sh);
     painter()->setOpacity(origOpacity);
-
+    
     /*-----It took me very long to realize the importance of this line, this is
     the line that makes all brushes be slow, even if they're small, yay!-------*/
     return spacing(scale);

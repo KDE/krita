@@ -54,7 +54,7 @@ void Trajectory::reset()
 }
 
 
-QVector<QPointF> &Trajectory::getLinearTrajectory(const QPointF &start, const QPointF &end, double space)
+const QVector<QPointF> &Trajectory::getLinearTrajectory(const QPointF &start, const QPointF &end, double space)
 {
     Q_UNUSED(space);
     reset();

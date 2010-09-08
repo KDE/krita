@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,7 +48,6 @@ private:
     KisHairyProperties m_properties;
     const KisBrushBasedPaintOpSettings* m_settings;
 
-    KisImageWSP m_image;
     bool newStrokeFlag;
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
@@ -56,7 +55,6 @@ private:
     KisPressureRotationOption m_rotationOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
-
     
     void loadSettings(const KisBrushBasedPaintOpSettings* settings);
 };

@@ -19,7 +19,6 @@
 #include <KoCompositeOps.h>
 
 #include "hairy_brush.h"
-#include "brush_shape.h"
 #include "trajectory.h"
 
 #include <KoColor.h>
@@ -28,9 +27,11 @@
 
 #include <QVariant>
 #include <QHash>
-#include <QList>
+#include <QVector>
 
-#include "kis_random_accessor.h"
+#include <kis_random_accessor.h>
+#include <kis_types.h>
+#include <kis_fixed_paint_device.h>
 
 #include <cmath>
 #include <ctime>
@@ -40,15 +41,6 @@ const float radToDeg = 57.29578f;
 const QString HUE('h');
 const QString SATURATION('s');
 const QString VALUE('v');
-
-#if defined(_WIN32) || defined(_WIN64)
-#define srand48 srand
-inline double drand48()
-{
-    return double(rand()) / RAND_MAX;
-}
-#endif
-
 
 HairyBrush::HairyBrush()
 {
@@ -69,19 +61,40 @@ HairyBrush::~HairyBrush()
 
 }
 
-void HairyBrush::setBrushShape(BrushShape brushShape)
+void HairyBrush::fromDabWithDensity(KisFixedPaintDeviceSP dab, qreal density)
 {
-    m_initialShape = brushShape;
-    m_bristles = brushShape.getBristles();
-}
+    int width = dab->bounds().width();
+    int height = dab->bounds().height(); 
 
-
-void HairyBrush::setInkColor(const KoColor &color)
-{
-    for (int i = 0; i < m_bristles.size(); i++) {
-        m_bristles[i]->setColor(color);
+    int centerX = width * 0.5;
+    int centerY = height * 0.5;
+   
+    // make mask 
+    Bristle * bristle = 0;
+    qreal alpha;
+    
+    quint8 * dabPointer = dab->data();
+    quint8 pixelSize = dab->pixelSize();
+    const KoColorSpace * cs = dab->colorSpace();
+    KoColor bristleColor(cs);
+    
+    srand48(12345678);
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            alpha =  cs->opacityF(dabPointer);
+            if (alpha != 0.0){
+                if (density == 1.0 || drand48() <= density){
+                    memcpy(bristleColor.data(), dabPointer, pixelSize);
+                
+                    bristle = new Bristle(x - centerX, y - centerY, alpha); // using value from image as length of bristle    
+                    bristle->setColor(bristleColor);
+                
+                    m_bristles.append(bristle);
+                }
+            } 
+            dabPointer += pixelSize;
+        }
     }
-    m_color = color;
 }
 
 
@@ -133,15 +146,19 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
 
     // if this is first time the brush touches the canvas and we use soak the ink from canvas
     if (firstStroke() && m_properties->useSoakInk){
-        KisRandomConstAccessor laccessor = layer->createRandomConstAccessor((int)x1, (int)y1);
-        colorifyBristles(laccessor,layer->colorSpace() ,pi1.pos());
+        if (layer){
+            KisRandomConstAccessor laccessor = layer->createRandomConstAccessor((int)x1, (int)y1);
+            colorifyBristles(laccessor,layer->colorSpace() ,pi1.pos());
+        }else{
+            kWarning() << "Can't soak the ink from the layer";
+        }
     }
 
     qreal fx1, fy1, fx2, fy2;
     qreal randomX, randomY;
     qreal shear;
 
-    QVector<QPointF> bristlePath; // path for single bristle
+    
 
     float inkDeplation = 0.0;
     int inkDepletionSize = m_properties->inkDepletionCurve.size();
@@ -188,7 +205,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
 
         if ( m_properties->threshold && (bristle->length() < treshold) ) continue;
         // paint between first and last dab
-        bristlePath = m_trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
+        const QVector<QPointF> bristlePath = m_trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
         bristlePathSize = m_trajectory.size();
 
         bristleColor = bristle->color();

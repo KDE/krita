@@ -319,7 +319,7 @@ void KisPrescaledProjectionTest::testScaling()
 
     // Test scrolling
     converter.setDocumentOffset(QPoint(150,150));
-    projection.viewportMoved(QPoint(50,50));
+    projection.viewportMoved(QPoint(-50,-50));
 
     result = projection.prescaledQImage();
     reference = sourceImage.copy(QRect(150,150,100,100));

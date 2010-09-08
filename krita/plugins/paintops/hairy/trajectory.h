@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ class Trajectory
 public:
     Trajectory();
     ~Trajectory();
-    QVector<QPointF> &getLinearTrajectory(const QPointF &start, const QPointF &end, double space);
+    const QVector<QPointF> &getLinearTrajectory(const QPointF &start, const QPointF &end, double space);
     QVector<QPointF> getDDATrajectory(QPointF start, QPointF end, double space);
     
     inline int size(){ return m_size; }

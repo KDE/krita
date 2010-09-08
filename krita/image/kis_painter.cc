@@ -280,8 +280,11 @@ void KisPainter::bitBltFixedSelection(qint32 dx, qint32 dy, const KisPaintDevice
 
     Q_ASSERT(srcdev->pixelSize() == d->pixelSize);
     Q_ASSERT(selection->colorSpace() == KoColorSpaceRegistry::instance()->alpha8());
-
+    
     QRect srcRect = QRect(sx, sy, sw, sh);
+    QRect dstRect = QRect(dx, dy, sw, sh);
+
+    bool selectedness = d->selection && !d->selection->isDeselected();
 
     // In case of COMPOSITE_COPY restricting bitblt to extent can
     // have unexpected behavior since it would reduce the area that
@@ -302,32 +305,72 @@ void KisPainter::bitBltFixedSelection(qint32 dx, qint32 dy, const KisPaintDevice
     sw = srcRect.width();
     sh = srcRect.height();
 
-    quint8 * srcBytes = new quint8[ sw * sh * srcdev->pixelSize()];
-    srcdev->readBytes(srcBytes,sx,sy,sw,sh);
+    /* Try to catch when someone attempts to use the function too generally.
+    Making the src image different in size to the mask will lead to 
+    unexpected behavior and complicates the function. Let the user of the
+    function sort those problems and make both equal */
+    Q_ASSERT(selection->bounds().width() == sw && selection->bounds().height() == sh);
+    
+    quint8 * srcBytes = new quint8[ sw * sh * srcdev->pixelSize() ];
+    srcdev->readBytes(srcBytes, sx, sy, sw, sh);
 
-    quint8 * dstBytes = new quint8[ sw * sh * d->device->pixelSize()];
-    d->device->readBytes(dstBytes, dx,dy, sw, sh);
+    quint8 * dstBytes = new quint8[ sw * sh * d->device->pixelSize() ];
+    d->device->readBytes(dstBytes, dx, dy, sw, sh);
 
-    quint8 * selectionBytes = new quint8[ sw * sh * selection->pixelSize()];
-    selection->readBytes(selectionBytes, 0, 0, sw, sh);
+    quint8 * mergedSelectionBytes = new quint8[ sw * sh * selection->pixelSize() ];
+
+    if (!selectedness) {
+        selection->readBytes(mergedSelectionBytes, 0, 0, sw, sh);
+    }
+    else {
+        /* Here selection->pixelSize() is known to be the same as
+        d->selection->pixelSize(), both should be equal to 1 */
+        quint32 totalPixels = sw * sh * selection->pixelSize();
+
+        quint8 * selectionBytes = new quint8[ totalPixels ];
+        d->selection->readBytes(selectionBytes, dx, dy, sw, sh);
+
+        for (quint32 i = 0; i < totalPixels; ++i) {
+            mergedSelectionBytes[i] = 0;
+        }
+
+        /* This is the only way to emulate the Multiply compositeOp which
+        is required to blend selections. To avoid the creation of
+        mergedSelectionBytes, compositeOp("multiply") must be created.
+        MAX_SELECTED is used instead of d->opacity because it is in principle
+        the way to emulate multiply, but so far both act visually identical */
+        KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_OVER)
+        ->composite(mergedSelectionBytes,
+                    sw * selection->pixelSize(),
+                    selection->data(),
+                    sw * selection->pixelSize(),
+                    selectionBytes,
+                    sw * selection->pixelSize(),
+                    sh,
+                    sw,
+                    MAX_SELECTED);
+
+        delete [] selectionBytes;
+    }
 
     d->colorSpace->bitBlt(dstBytes,
-                        sw * d->device->pixelSize(),
-                        srcdev->colorSpace(),
-                        srcBytes,
-                        sw * srcdev->colorSpace()->pixelSize(),
-                        selectionBytes,
-                        sw  * selection->pixelSize(),
-                        d->opacity,
-                        sh,
-                        sw,
-                        d->compositeOp,
-                        d->channelFlags);
+                          sw * d->device->pixelSize(),
+                          srcdev->colorSpace(),
+                          srcBytes,
+                          sw * srcdev->colorSpace()->pixelSize(),
+                          mergedSelectionBytes,
+                          sw  * selection->pixelSize(),
+                          d->opacity,
+                          sh,
+                          sw,
+                          d->compositeOp,
+                          d->channelFlags);
 
     d->device->writeBytes(dstBytes, dx, dy, sw, sh);
 
     delete [] srcBytes;
     delete [] dstBytes;
+    delete [] mergedSelectionBytes;
 
     addDirtyRect(QRect(dx, dy, sw, sh));
 }

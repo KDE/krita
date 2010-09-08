@@ -141,6 +141,9 @@ void KisBrushSelectionWidget::setImage(KisImageWSP image)
 
 void KisBrushSelectionWidget::setCurrentBrush(KisBrushSP brush)
 {
+    if (!brush) {
+        return;
+    }
     // XXX: clever code have brush plugins know their configuration
     //      pane, so we don't have to have this if statement and
     //      have an extensible set of brush types

@@ -27,12 +27,12 @@
 
 #include "trajectory.h"
 #include "bristle.h"
-#include "brush_shape.h"
 
 #include <kis_paint_device.h>
 #include <kis_paint_information.h>
 #include <kis_random_accessor.h>
 
+class KoCompositeOp;
 
 class KoColorSpace;
 
@@ -41,7 +41,7 @@ public:
     quint16 radius;
     quint16 inkAmount;
     qreal sigma;
-    QList<float> inkDepletionCurve;
+    QVector<qreal> inkDepletionCurve;
     bool inkDepletionEnabled;
     bool isbrushDimension1D;
     bool useMousePressure;
@@ -75,11 +75,11 @@ public:
 
     void paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale, qreal rotation);
     /// set ink color for the whole bristle shape
-    void setInkColor(const KoColor &color);
-    /// set the bristles
-    void setBrushShape(BrushShape brushShape);
+    void setInkColor(const KoColor &color){ m_color = color; }
     /// set parameters for the brush engine
     void setProperties(KisHairyProperties * properties){ m_properties = properties; }
+    /// set the shape of the bristles according the dab
+    void fromDabWithDensity(KisFixedPaintDeviceSP dab, qreal density);
 
 private:
     /// paints single bristle
@@ -113,9 +113,7 @@ private:
     
     QVector<Bristle*> m_bristles;
     QTransform m_transform;
-
-    BrushShape m_initialShape;
-   
+  
     // used for interpolation the path of bristles
     Trajectory m_trajectory;
     QHash<QString, QVariant> m_params;    

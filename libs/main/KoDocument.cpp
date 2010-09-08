@@ -855,7 +855,7 @@ bool KoDocument::saveNativeFormat(const QString & file)
     // OLD: QCString mimeType = oasis ? nativeOasisMimeType() : nativeFormatMimeType();
     QByteArray mimeType = d->outputMimeType;
     QByteArray nativeOasisMime = nativeOasisMimeType();
-    bool oasis = !mimeType.isEmpty() && (mimeType == nativeOasisMime || mimeType == nativeOasisMime + "-template");
+    bool oasis = !mimeType.isEmpty() && (mimeType == nativeOasisMime || mimeType == nativeOasisMime + "-template" || mimeType.startsWith("application/vnd.oasis.opendocument"));
 
     // TODO: use std::auto_ptr or create store on stack [needs API fixing],
     // to remove all the 'delete store' in all the branches

@@ -1169,28 +1169,11 @@ void KisBrush::generateBoundary() const
     KisFixedPaintDeviceSP dev;
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
-        dev = paintDevice(KoColorSpaceRegistry::instance()->rgb8(), 1.0, 0.0, KisPaintInformation());
+        dev = paintDevice(KoColorSpaceRegistry::instance()->rgb8(), 1.0/scale(), -angle(), KisPaintInformation());
     } else {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         dev = new KisFixedPaintDevice(cs);
-        mask(dev, KoColor(Qt::black, cs) , 1.0/scale(), 1.0/scale(), 0.0, KisPaintInformation());
-#if 0
-        KisQImagemaskSP amask = mask(KisPaintInformation());
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-        dev = new KisPaintDevice(cs, "tmp for generateBoundary");
-
-        KisHLineIteratorPixel it = dev->createHLineIterator(0, 0, w);
-
-        for (int y = 0; y < h; y++) {
-            int x = 0;
-
-            while (!it.isDone()) {
-                cs->setAlpha(it.rawData(), amask->alphaAt(x++, y), 1);
-                ++it;
-            }
-            it.nextRow();
-        }
-#endif
+        mask(dev, KoColor(Qt::black, cs) , 1.0/scale(), 1.0/scale(), -angle(), KisPaintInformation());
     }
 
     d->boundary = new KisBoundary(dev);
@@ -1219,7 +1202,7 @@ void KisBrush::setAngle(qreal _rotation)
   d->angle = _rotation;
 }
 
-qreal KisBrush::angle()
+qreal KisBrush::angle() const
 {
   return d->angle;
 }

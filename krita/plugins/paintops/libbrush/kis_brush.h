@@ -268,7 +268,7 @@ public:
     virtual void setScale(qreal _scale);
     qreal scale() const;
     virtual void setAngle(qreal _angle);
-    qreal angle();
+    qreal angle() const;
 protected:
 
     KisBrush(const KisBrush& rhs);

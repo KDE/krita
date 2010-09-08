@@ -318,11 +318,17 @@ void KisPrescaledProjectionTest::testScaling()
 
 
     // Test scrolling
+
+    result.save("RESULT_PRE.png");
+
     converter.setDocumentOffset(QPoint(150,150));
-    projection.viewportMoved(QPoint(50,50));
+    projection.viewportMoved(QPoint(-50,-50));
 
     result = projection.prescaledQImage();
     reference = sourceImage.copy(QRect(150,150,100,100));
+
+    result.save("RESULT.png");
+    reference.save("REF.png");
 
     QVERIFY(TestUtil::compareQImages(pt, result, reference));
 }

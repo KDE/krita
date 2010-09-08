@@ -140,14 +140,8 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     copyPainter.bitBlt(0, 0, device, pt.x(), pt.y(), sw, sh);
     copyPainter.end();
     
-    /* Porting the hatching brush selection bugfix. This made this brush 20% slower.
-    XXX: Better solutions appreciated.
-    This applies the maskDab to m_srcdev which contains the colors to be smudged */
-    KisPaintDeviceSP blitDab = new KisPaintDevice(painter()->device()->colorSpace());
-    KisPainter smallpainter(blitDab);
-    smallpainter.bitBltFixedSelection(0, 0, m_srcdev, maskDab, 0, 0, sw, sh);
-    
     // Blit the results to the screen.
-    painter()->bitBlt(x, y, blitDab, 0, 0, sw, sh);
+    painter()->bitBltFixedSelection(x, y, m_srcdev, maskDab, 0, 0, sw, sh);
+    
     return spacing(scale);
 }

@@ -158,8 +158,8 @@ public:
         virtual int cursorPosition() const = 0;
         /// return the y offset of the document at start of shape.
         virtual qreal docOffsetInShape() const = 0;
-        /// when a line is added, update internal vars.  Return true if line does not fit in shape
-        virtual bool addLine(QTextLine &line) = 0;
+        /// when a line is added, update internal vars. Inner shapes possibly intersect and split line into more parts. Set processingLine true, when current line is part of line and not last part of line. So baseline will be same for all parts of line. Return true if line does not fit in shape.
+        virtual bool addLine(QTextLine &line, bool processingLine = false) = 0;
         /// prepare for next paragraph; return false if there is no next parag.
         virtual bool nextParag() = 0;
         /// revert layout to the previous paragraph. Return false if there is no previous paragraph.
@@ -186,7 +186,8 @@ public:
         virtual void registerInlineObject(const QTextInlineObject &inlineObject) = 0;
         /// called by the KoTextDocumentLayout to find out which if any table cell is hit. Returns 0 when no hit
         virtual QTextTableCell hitTestTable(QTextTable *table, const QPointF &point) = 0;
-
+        /// Inner shapes possibly intersect and split line into more parts. This returns max part height.
+        virtual qreal maxLineHeight() const = 0;
         /// the index in the list of shapes (or frameset) of the shape we are currently layouting.
         int shapeNumber;
         /// the shape that is currently being laid out

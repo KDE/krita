@@ -66,7 +66,7 @@ public:
     qreal docOffsetInShape() const {
         return 0;
     }
-    bool addLine(QTextLine &) {
+    bool addLine(QTextLine &, bool) {
         return false;
     }
     bool nextParag() {
@@ -90,6 +90,9 @@ public:
     void registerInlineObject(const QTextInlineObject &) {}
     QTextTableCell hitTestTable(QTextTable *, const QPointF &) {
         return QTextTableCell();
+    }
+    qreal maxLineHeight() const {
+        return 0;
     }
 };
 

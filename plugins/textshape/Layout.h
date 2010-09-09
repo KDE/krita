@@ -61,7 +61,7 @@ public:
     /// return the y offset of the document at start of shape.
     virtual qreal docOffsetInShape() const;
     /// when a line is added, update internal vars.  Return true if line does not fit in shape
-    virtual bool addLine(QTextLine &line);
+    virtual bool addLine(QTextLine &line, bool processingLine = false);
     /// prepare for next paragraph; return false if there is no next parag.
     virtual bool nextParag();
     virtual bool previousParag();
@@ -86,7 +86,10 @@ public:
 
     /// set default tab size for this document
     virtual void setTabSpacing(qreal spacing);
-
+    /// Inner shapes possibly intersect and split line into more parts. This returns max part height.
+    virtual qreal maxLineHeight() const {
+        return m_maxLineHeight;
+    }
 private:
     friend class TestTableLayout; // to allow direct testing.
 
@@ -176,6 +179,7 @@ private:
     QTextTableCell m_tableCell;  /**< Current table cell. */
     bool m_restartingAfterTableBreak; /** We are in a re-layout that was a result of a break in a table. */
     bool m_restartingFirstCellAfterTableBreak; /** We are in a re-layout that was a result of a break in a table. only true first cell after */
+    qreal m_maxLineHeight;
 };
 
 #endif

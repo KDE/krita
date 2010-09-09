@@ -83,7 +83,8 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_y_justBelowDropCaps(0),
         m_dropCapsPositionAdjust(0),
         m_restartingAfterTableBreak(false),
-        m_restartingFirstCellAfterTableBreak(false)
+        m_restartingFirstCellAfterTableBreak(false),
+        m_maxLineHeight(0)
 {
     m_frameStack.reserve(5); // avoid reallocs
     setTabSpacing(MM_TO_POINT(15));
@@ -173,7 +174,7 @@ qreal Layout::docOffsetInShape() const
     return m_data->documentOffset();
 }
 
-bool Layout::addLine(QTextLine &line)
+bool Layout::addLine(QTextLine &line, bool processingLine)
 {
     if (m_blockData && m_block.textList() && m_block.layout()->lineCount() == 1) {
         // first line, lets check where the line ended up and adjust the positioning of the counter.
@@ -256,7 +257,6 @@ bool Layout::addLine(QTextLine &line)
               < m_y + line.height() + m_shapeBorder.bottom
             // but make sure we don't leave the shape empty.
             && m_block.position() + line.textStart() > m_data->position()) {
-
         if (oldFootnoteDocLength >= 0) {
             QTextCursor cursor(m_textShape->footnoteDocument());
             cursor.setPosition(oldFootnoteDocLength);
@@ -302,14 +302,19 @@ bool Layout::addLine(QTextLine &line)
         }
         height = qMax(height, objectHeight) + linespacing;
     }
-
     qreal minimum = m_format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
     if (minimum > 0.0)
         height = qMax(height, minimum);
-    if (qAbs(m_y - line.y()) < 0.126) // rounding problems due to Qt-scribe internally using ints.
-        m_y += height;
-    else
-        m_y = line.y() + height; // The line got a pos <> from y(), follow that lead.
+    //rounding problems due to Qt-scribe internally using ints.
+    //also used when line was moved down because of intersections with other shapes
+    if (qAbs(m_y - line.y()) >= 0.126) {
+        m_y = line.y();
+    }
+    m_maxLineHeight = qMax(m_maxLineHeight, height);
+    if (! processingLine) {
+        m_y += m_maxLineHeight;
+        m_maxLineHeight = 0;
+    }
     m_newShape = false;
     m_newParag = false;
 

@@ -250,6 +250,9 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
 {
     KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(resource);
     dbgUI << "preset " << preset->name() << "selected";
+    if (!preset->settings()->isValid()) {
+        return;
+    }
 
     if(preset->paintOp() != currentPaintop()) {
         setCurrentPaintop(preset->paintOp());

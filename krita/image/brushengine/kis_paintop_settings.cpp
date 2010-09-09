@@ -179,6 +179,11 @@ KisPaintOpSettingsWidget* KisPaintOpSettings::optionsWidget() const
     return d->settingsWidget.data();
 }
 
+bool KisPaintOpSettings::isValid()
+{
+    return true;
+}
+
 QPainterPath KisPaintOpSettings::brushOutline(const QPointF& pos, OutlineMode mode, qreal scale, qreal rotation) const
 {
     QPainterPath path;

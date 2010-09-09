@@ -22,6 +22,7 @@
 #include <kis_airbrush_option.h>
 #include "kis_brush_based_paintop_options_widget.h"
 #include <kis_boundary.h>
+#include "kis_brush_server.h"
 
 bool KisBrushBasedPaintOpSettings::paintIncremental()
 {
@@ -101,5 +102,17 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const QPointF& pos, KisP
         path.translate(pos);
     }
     return path;
+}
+
+bool KisBrushBasedPaintOpSettings::isValid()
+{
+    QString filename = getString("requiredBrushFile","");
+    if (!filename.isEmpty()) {
+        KisBrushSP brush = KisBrushServer::instance()->brushServer()->getResourceByFilename(filename);
+        if (!brush) {
+            return false;
+        }
+    }
+    return true;
 }
 

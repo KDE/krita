@@ -284,8 +284,6 @@ void KisPainter::bitBltFixedSelection(qint32 dx, qint32 dy, const KisPaintDevice
     QRect srcRect = QRect(sx, sy, sw, sh);
     QRect dstRect = QRect(dx, dy, sw, sh);
 
-    bool selectedness = d->selection && !d->selection->isDeselected();
-
     // In case of COMPOSITE_COPY restricting bitblt to extent can
     // have unexpected behavior since it would reduce the area that
     // is copied.
@@ -319,18 +317,27 @@ void KisPainter::bitBltFixedSelection(qint32 dx, qint32 dy, const KisPaintDevice
 
     quint8 * mergedSelectionBytes = new quint8[ sw * sh * selection->pixelSize() ];
 
-    if (!selectedness) {
+    /*
+    This checks whether there is nothing selected.
+    When there is nothing selected, execute the IF block.
+    When there is something selected, execute the ELSE block.
+    Note that this IF-ELSE block is not redundant.
+    d->selection must be located first in the if statement, because
+    d->selection->isDeselected() may not exist, causing a crash.
+    */
+    if (!(d->selection && !d->selection->isDeselected())) {
         selection->readBytes(mergedSelectionBytes, 0, 0, sw, sh);
     }
     else {
         /* Here selection->pixelSize() is known to be the same as
         d->selection->pixelSize(), both should be equal to 1 */
-        quint32 totalPixels = sw * sh * selection->pixelSize();
+        quint32 totalBytes = sw * sh * selection->pixelSize();
 
-        quint8 * selectionBytes = new quint8[ totalPixels ];
+        quint8 * selectionBytes = new quint8[ totalBytes ];
         d->selection->readBytes(selectionBytes, dx, dy, sw, sh);
 
-        for (quint32 i = 0; i < totalPixels; ++i) {
+        // Initialize data to UNSELECTED == 0
+        for (quint32 i = 0; i < totalBytes; ++i) {
             mergedSelectionBytes[i] = 0;
         }
 
@@ -359,7 +366,7 @@ void KisPainter::bitBltFixedSelection(qint32 dx, qint32 dy, const KisPaintDevice
                           srcBytes,
                           sw * srcdev->colorSpace()->pixelSize(),
                           mergedSelectionBytes,
-                          sw  * selection->pixelSize(),
+                          sw * selection->pixelSize(),
                           d->opacity,
                           sh,
                           sw,

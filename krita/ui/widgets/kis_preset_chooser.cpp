@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <klineedit.h>
+#include <kicon.h>
 
 #include <KoResourceItemChooser.h>
 #include <KoResourceModel.h>
@@ -77,7 +78,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     if(preview.isNull()) {
         return;
     }
-
+    
     QRect paintRect = option.rect.adjusted(2, 2, -2, -2);
     if (!m_showText) {
     painter->drawImage(paintRect.x(), paintRect.y(),
@@ -89,6 +90,11 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         
         painter->setPen(Qt::black);      
         painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());      
+    }
+    
+    if (!preset->settings()->isValid()) {
+        KIcon icon("edit-delete");
+        icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
     }
 }
 

@@ -174,6 +174,11 @@ public:
      */
     void setModelName(const QString & modelName);
     
+    /// Check if the settings are valid, setting might be invalid through missing brushes etc
+    /// Overwrite if the settings of a paintop can be invalid
+    /// @return state of the settings, default implementation is true
+    virtual bool isValid();
+    
 protected:
      /**
      * @return the option widget of the paintop (can be 0 is no option widgets is set)

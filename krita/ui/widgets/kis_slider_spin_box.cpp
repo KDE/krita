@@ -31,6 +31,7 @@
 #include <QIntValidator>
 #include <QTimer>
 #include <QtDebug>
+#include <QDoubleSpinBox>
 
 struct KisAbstractSliderSpinBoxPrivate {
     QLineEdit* edit;
@@ -44,6 +45,7 @@ struct KisAbstractSliderSpinBoxPrivate {
     int maximum;
     int minimum;
     int singleStep;
+    QSpinBox* dummySpinBox;
 };
 
 KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractSliderSpinBoxPrivate* _d) :
@@ -80,6 +82,10 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     //Set sane defaults
     setFocusPolicy(Qt::StrongFocus);
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    
+    //dummy needed to fix a bug in the polyester theme
+    d->dummySpinBox = new QSpinBox();
+    d->dummySpinBox->hide();
 }
 
 KisAbstractSliderSpinBox::~KisAbstractSliderSpinBox()
@@ -123,7 +129,7 @@ void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
     QRect eraseRect(QPoint(rect().x(), rect().y()),
                     QPoint(progressRect(spinOpts).right(), rect().bottom()));
     painter.setClipRegion(QRegion(rect()).subtracted(eraseRect));
-    style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, 0);
+    style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, d->dummySpinBox);
     painter.setClipping(false);
 
 

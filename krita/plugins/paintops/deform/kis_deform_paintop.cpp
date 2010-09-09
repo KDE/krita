@@ -132,17 +132,9 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         if (!mask){
             return m_spacing;
         }
-        
-        m_dabAsSelection->clear();
-        m_copyPainter->bltFixed(QPoint(x,y),mask,mask->bounds());
-        
+
         quint8 origOpacity = m_opacityOption.apply(painter(), info);
-        KisSelectionSP origSelection = painter()->selection();
-        
-        painter()->setSelection(m_dabAsSelection);
-        painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
-        
-        painter()->setSelection(origSelection);
+        painter()->bltFixed(x,y, dab, mask, 0, 0, mask->bounds().width() ,mask->bounds().height() );
         painter()->setOpacity(origOpacity);
         
         return m_spacing;

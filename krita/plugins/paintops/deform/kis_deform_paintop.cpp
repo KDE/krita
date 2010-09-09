@@ -69,11 +69,6 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     m_deformBrush.initDeformAction();
 
     m_dev = source();
-    m_dabAsSelection = new KisSelection();
-    m_copyPainter = new KisPainter(m_dabAsSelection);
-    m_copyPainter->setOpacity(OPACITY_OPAQUE_U8);
-    m_copyPainter->setCompositeOp(COMPOSITE_COPY);
-
     
     if ((m_sizeProperties.diameter * 0.5) > 1) {
         m_ySpacing = m_xSpacing = m_sizeProperties.diameter * 0.5 * m_sizeProperties.spacing;
@@ -88,7 +83,6 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
 
 KisDeformPaintOp::~KisDeformPaintOp()
 {
-    delete m_copyPainter;
 }
 
 double KisDeformPaintOp::paintAt(const KisPaintInformation& info)

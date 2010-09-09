@@ -50,9 +50,6 @@ private:
 
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
-    
-    KisSelectionSP m_dabAsSelection;
-    KisPainter * m_copyPainter;
 
     DeformBrush m_deformBrush;
     DeformProperties m_properties;
@@ -61,14 +58,10 @@ private:
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
     KisPressureRotationOption m_rotationOption;    
-
     
     qreal m_xSpacing;
     qreal m_ySpacing;
     qreal m_spacing;
-    
-    
-
 };
 
 #endif // KIS_DEFORMPAINTOP_H_

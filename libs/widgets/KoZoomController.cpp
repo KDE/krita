@@ -179,6 +179,15 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
 #endif
     d->canvasController->updateDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize(), true );
 
+    if(d->canvasController->canvasMode() == KoCanvasController::Infinite
+       && (mode == KoZoomMode::ZOOM_WIDTH || mode == KoZoomMode::ZOOM_PAGE)) {
+        QPoint documentCenter =
+            d->zoomHandler->documentToView(QPoint(d->documentSize.width() / 2,
+                                                  d->documentSize.height() / 2)).toPoint();
+
+        d->canvasController->setPreferredCenter(documentCenter);
+    }
+
     // Finally ask the canvasController to recenter
     d->canvasController->recenterPreferred();
 

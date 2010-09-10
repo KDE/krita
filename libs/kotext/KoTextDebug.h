@@ -35,6 +35,7 @@ class QTextTableFormat;
 class QTextTableCellFormat;
 class QTextFrameFormat;
 class QTextBlockFormat;
+class QTextStream;
 class KoParagraphStyle;
 class KoCharacterStyle;
 class KoTableStyle;
@@ -95,7 +96,7 @@ public:
      *
      * @param document a pointer to the document that should be dumped.
      */
-    static void dumpDocument(const QTextDocument *document);
+    static void dumpDocument(const QTextDocument *document, QTextStream &out);
 
     /**
      * Dump the structure of the specified frame.
@@ -104,14 +105,14 @@ public:
      *
      * @param frame a pointer to the frame that should be dumped.
      */
-    static void dumpFrame(const QTextFrame *frame);
+    static void dumpFrame(const QTextFrame *frame, QTextStream &out);
 
     /**
      * Dump the structure of the specified block.
      *
      * @param block the block that should be dumped.
      */
-    static void dumpBlock(const QTextBlock &block);
+    static void dumpBlock(const QTextBlock &block, QTextStream &out);
 
     /**
      * Dump the structure of the specified table.
@@ -120,7 +121,7 @@ public:
      *
      * @param a pointer to the table that should be dumped.
      */
-    static void dumpTable(const QTextTable *table);
+    static void dumpTable(const QTextTable *table, QTextStream &out);
 
     /**
      * Dump the structure of the specified table cell.
@@ -129,7 +130,7 @@ public:
      *
      * @param cell the cell that should be dumped.
      */
-    static void dumpTableCell(const QTextTableCell &cell);
+    static void dumpTableCell(const QTextTableCell &cell, QTextStream &out);
 
     /**
      * Dump the contents of the specified text fragment.
@@ -138,7 +139,7 @@ public:
      *
      * @param fragment the fragment which's content should be dumped.
      */
-    static void dumpFragment(const QTextFragment &fragment);
+    static void dumpFragment(const QTextFragment &fragment, QTextStream &out);
 
     /**
      * Get the properties of the given text character format.

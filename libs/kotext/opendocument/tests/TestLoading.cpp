@@ -22,6 +22,7 @@
 
 #include <QtGui>
 #include <KDebug>
+#include <QTextStream>
 #include <QtScript>
 #include <QtTest>
 
@@ -1150,10 +1151,11 @@ void TestLoading::testLoading()
 //    showDocument(actualDocument);
 //    showDocument(expectedDocument);
     if (!documentsEqual) {
+        QTextStream out(stdout);
         qDebug() << "actual document:  ======================";
-        KoTextDebug::dumpDocument(actualDocument);
+        KoTextDebug::dumpDocument(actualDocument, out);
         qDebug() << "expected document: ======================";
-        KoTextDebug::dumpDocument(expectedDocument);
+        KoTextDebug::dumpDocument(expectedDocument, out);
     }
     delete actualDocument;
     delete expectedDocument;
@@ -1184,8 +1186,9 @@ void TestLoading::testSaving()
     bool documentsEqual = compareDocuments(savedDocument, expectedDocument);
 
     if (!documentsEqual) {
-        KoTextDebug::dumpDocument(savedDocument);
-        KoTextDebug::dumpDocument(expectedDocument);
+        QTextStream out(stdout);
+        KoTextDebug::dumpDocument(savedDocument, out);
+        KoTextDebug::dumpDocument(expectedDocument, out);
     }
     delete actualDocument;
     delete expectedDocument;

@@ -34,7 +34,13 @@
 class KoCanvasBase::Private
 {
 public:
-    Private() : shapeController(0), resourceManager(0), controller(0), readWrite(true) {}
+    Private() : shapeController(0),
+        resourceManager(0),
+        controller(0),
+        snapGuide(0),
+        readWrite(true)
+    {
+    }
     ~Private() {
         delete shapeController;
         delete resourceManager;

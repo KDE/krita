@@ -38,6 +38,7 @@ private slots:
     void testCompositeOverlay();
     void testCompositeScreen();
     void testCompositeSubtract();
+    void testCompositeCopy();
 };
 
 #endif

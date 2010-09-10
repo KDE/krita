@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,6 +22,8 @@
 
 #include <qtest_kde.h>
 
+#include <KoColorSpace.h>
+
 #include "../compositeops/KoCompositeOpAlphaDarken.h"
 #include "../compositeops/KoCompositeOpOver.h"
 
@@ -40,6 +43,10 @@
 #include <KoCompositeOpOverlay.h>
 #include <KoCompositeOpScreen.h>
 #include <KoCompositeOpSubtract.h>
+#include <KoCompositeOpCopy.h>
+
+#include <KoColorSpaceRegistry.h>
+#include <KoColor.h>
 
 void TestKoCompositeOps::testCompositeOver()
 {
@@ -1249,6 +1256,126 @@ void TestKoCompositeOps::testCompositeSubtract()
     QCOMPAREui(p16f1.blue, 6857);
     QCOMPAREui(p16f1.alpha, QUARTER_OPACITY);
 }
+
+void TestKoCompositeOps::testCompositeCopy()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoCompositeOp * copy = cs->compositeOp(COMPOSITE_COPY);
+   
+    KoColor black(Qt::black, cs);
+    KoColor white(Qt::white, cs);
+    KoColor opaque(QColor(0,0,0,0), cs);
+    
+    int w = 512;
+    int h = 512;
+    
+    int pixelCount = w * h;
+    quint32 pixelSize = cs->pixelSize();
+    // dst
+    quint8 * layer = new quint8[pixelCount * pixelSize];
+    quint8 * iter = layer;
+    for (int i = 0; i < pixelCount; i++){
+        memcpy(iter, white.data() , pixelSize);
+        iter += pixelSize;
+    }
+    
+    // full white image
+    //cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::IntentPerceptual).save("0dst.png");
+    
+    // src
+    quint8 * dab = new quint8[pixelCount * pixelSize];
+    iter = dab;
+    for (int i = 0; i < pixelCount; i++){
+        memcpy(iter, black.data() , pixelSize);
+        iter += pixelSize;
+    }
+    
+    // full black image
+    //cs->convertToQImage(dab, w, h, 0,KoColorConversionTransformation::IntentPerceptual).save("1src.png");
+
+
+    // selection
+    quint32 selectionPixelSize = KoColorSpaceRegistry::instance()->alpha8()->pixelSize();
+    quint8 * selection = new quint8[pixelCount * selectionPixelSize];
+    iter = selection;
+    for (int height = 0; height < h; height++){
+        for (int width = 0; width < w; width++){
+            if ((height > 128) && (height < 256) && (width > 128) && (width < 256)){
+                *iter = 255;
+            }else{
+                *iter = 0;
+            }
+            iter += selectionPixelSize;
+        }
+    }
+    
+    // white rectangle at 128,128  
+    //KoColorSpaceRegistry::instance()->alpha8()->convertToQImage(selection, w, h, 0, KoColorConversionTransformation::IntentPerceptual).save("1mask.png");
+
+    copy->composite(layer,w * pixelSize, 
+                    dab, w * pixelSize, 
+                    0,0, 
+                    h, w,
+                    255,
+                    QBitArray());
+                    
+    
+    // full black image
+    //cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::IntentPerceptual).save("2result.png");
+    
+    copy->composite(layer,w * pixelSize,
+                    opaque.data(), 0,
+                    0,0,
+                    h,w,
+                    255,
+                    QBitArray()
+                    );
+    
+    // full opaque image
+    //cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::IntentPerceptual).save("3result.png");
+    
+    copy->composite(layer,w * pixelSize,
+                    dab, w * pixelSize,
+                    selection, w * selectionPixelSize,
+                    h,w,
+                    255,
+                    QBitArray()
+                    );
+    
+    // black rectangle on opaque background
+    QImage result = cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::IntentPerceptual);
+    QImage expectedResult(QString(FILES_DATA_DIR) + QDir::separator() + "CopyWithSelectionExpectedResult.png");
+    
+    bool testOk = (result == expectedResult);
+    QVERIFY2(testOk, "Images are not equal");
+    if (!testOk){
+        qDebug() << "Saving the result";
+        result.save("CopyWithSelection.png");
+    }
+    
+    copy->composite(layer, w * pixelSize,
+                    white.data(), 0,
+                    selection, w * selectionPixelSize,
+                    h,w,
+                    255,
+                    QBitArray());
+                    
+                    
+    result = cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::IntentPerceptual);
+    expectedResult = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "CopySingleWithSelectionExpectedResult.png");
+    
+    
+    testOk = (result == expectedResult);
+    QVERIFY2(testOk, "Images with single pixel and selection are not equal");
+    if (!testOk){
+        qDebug() << "Saving the result";
+        result.save("CopySingleWithSelection.png");
+    }
+    
+    
+    
+}
+
 
 QTEST_KDEMAIN(TestKoCompositeOps, NoGUI)
 #include "TestKoCompositeOps.moc"

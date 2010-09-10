@@ -133,9 +133,10 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
 
                     // Must be a table:table-cell, otherwise go to
                     // next element.
-                    if ( __n.namespaceURI() != KoXmlNS::table
-                         || __n.localName() != "table-cell" )
-                        continue;
+                    if ( __n.namespaceURI() == KoXmlNS::table
+                         && __n.localName() == "table-cell" )
+                    {
+//                         continue;
 
                     // If this row is wider than any previous one,
                     // then add another column.
@@ -143,11 +144,12 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
                     if ( column >= columnCount() )
                         setColumnCount( columnCount() + 1 );
 
-                    const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );
+                    const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );                    
 
-                    QString valueString;
+                    QString valueString = __n.attributeNS( KoXmlNS::office, "value" );
                     const KoXmlElement valueElement = __n.namedItemNS( KoXmlNS::text, "p" ).toElement();
-                    if ( valueElement.isNull() || !valueElement.isElement() ) {
+                    if ( ( valueElement.isNull() || !valueElement.isElement() ) && valueString.isEmpty() )
+                    {
                         qWarning() << "ChartTableModel::loadOdf(): Cell contains no valid <text:p> element, cannnot load cell data.";
                         // Even if it doesn't contain any value, it's still a cell.
                         column++;
@@ -156,7 +158,8 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
 
                     // Read the actual value in the cell.
                     QVariant value;
-                    valueString = valueElement.text();
+                    if ( valueString.isEmpty() )
+                        valueString = valueElement.text();
                     if ( valueType == "float" )
                         value = valueString.toDouble();
                     else if ( valueType == "boolean" )
@@ -166,11 +169,12 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
 
                     setData( index( row, column ), value );
 
-                    column++;
+                    ++column;
+                    }
 
                 } // foreach table:table-cell
-
-                row++;
+                if ( !isHeader )
+                    ++row;
 
             } // foreach table:table-row
         }

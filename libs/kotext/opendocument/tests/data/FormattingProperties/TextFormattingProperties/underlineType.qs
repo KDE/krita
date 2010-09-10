@@ -1,7 +1,7 @@
 include("common.qs");
 
 var noUnderlineFormat = QTextCharFormat.clone(defaultTextFormat);
-setFormatProperty(noUnderlineFormat, KoCharacterStyle.UnderlineStyle, KoCharacterStyle.SolidLine);
+setFormatProperty(noUnderlineFormat, KoCharacterStyle.UnderlineStyle, KoCharacterStyle.NoLineStyle);
 setFormatProperty(noUnderlineFormat, KoCharacterStyle.UnderlineType, KoCharacterStyle.NoLineType);
 
 var singleUnderlineFormat = QTextCharFormat.clone(defaultTextFormat);

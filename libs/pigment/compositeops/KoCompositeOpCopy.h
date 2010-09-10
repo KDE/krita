@@ -67,7 +67,8 @@ public:
                 qint32 columns = numColumns;
                 while (columns > 0) {
                     memcpy(dstN, src, bytesPerPixel);
-                    dst += bytesPerPixel;
+                    dstN += bytesPerPixel;
+                    columns--;
                 }
             } else {
                 memcpy(dst, src, numColumns * bytesPerPixel);

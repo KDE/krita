@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -64,7 +64,9 @@ public:
      * returns the loaded shape. The element expected is one of
      * 'draw:line', 'draw:frame' / etc.
      *
-     * @returns the shape or 0 if no shape could be created
+     * @returns the shape or 0 if no shape could be created. The shape may have as its parent
+     *    set a layer which was previously created and stored in the context.
+     * @see KoShapeLoadingContext::layer()
      */
     KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 

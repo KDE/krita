@@ -616,7 +616,6 @@ void KisPainter::bltFixed(qint32 dx, qint32 dy,
     addDirtyRect(QRect(dx, dy, sw, sh));
 }
 
-
 void KisPainter::bltFixed(qint32 dx, qint32 dy,
                           const KisFixedPaintDeviceSP srcDev,
                           const KisFixedPaintDeviceSP selection,
@@ -628,7 +627,11 @@ void KisPainter::bltFixed(qint32 dx, qint32 dy,
     if (d->device.isNull()) return;
     Q_ASSERT(srcDev->pixelSize() == d->pixelSize);
     Q_ASSERT(selection->colorSpace() == KoColorSpaceRegistry::instance()->alpha8());
-
+    Q_ASSERT(selection->bounds().width() == sw && selection->bounds().height() == sh);
+    //TODO: it does not work when sx != 0 but it is used that way somewhere?
+    Q_ASSERT(sx == 0);
+    Q_ASSERT(sy == 0);
+    
     QRect srcRect = QRect(sx, sy, sw, sh);
 
     if (srcRect.isEmpty()) {
@@ -647,28 +650,58 @@ void KisPainter::bltFixed(qint32 dx, qint32 dy,
     sw = srcRect.width();
     sh = srcRect.height();
 
-    const KoColorSpace * srcCs = d->colorSpace;
     quint8* dstBytes = new quint8[sw * sh * d->device->pixelSize()];
     d->device->readBytes(dstBytes, dx, dy, sw, sh);
-
-    quint8* selBytes = selection->data();
-
-    d->colorSpace->bitBlt(dstBytes,
+    
+    if (!(d->selection && !d->selection->isDeselected())){
+        d->colorSpace->bitBlt(dstBytes,
                             sw * d->device->pixelSize(),
-                            srcCs,
+                            d->colorSpace,
                             srcDev->data() + sx,
                             srcDev->bounds().width() * srcDev->pixelSize(),
-                            selBytes,
+                            selection->data(),
                             sw  * selection->pixelSize(),
                             d->opacity,
                             sh,
                             sw,
                             d->compositeOp,
                             d->channelFlags);
+    }else{
+        quint32 totalBytes = sw * sh * selection->pixelSize();
+        quint8 * mergedSelectionBytes = new quint8[ totalBytes ];
+        
+        d->selection->readBytes(mergedSelectionBytes, dx, dy, sw, sh);
+        // merge selection here 
+        KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_MULT)
+        ->composite(mergedSelectionBytes,
+                    sw * selection->pixelSize(),
+                    selection->data(),
+                    sw * selection->pixelSize(),
+                    0,
+                    0,
+                    sh,
+                    sw,
+                    0);// Q_UNUSED in MULT
+        
 
+        d->colorSpace->bitBlt(dstBytes,
+                        sw * d->device->pixelSize(),
+                        d->colorSpace,
+                        srcDev->data() + sx,
+                        srcDev->bounds().width() * srcDev->pixelSize(),
+                        mergedSelectionBytes,
+                        sw  * selection->pixelSize(),
+                        d->opacity,
+                        sh,
+                        sw,
+                        d->compositeOp,
+                        d->channelFlags);
+                        
+        delete[] mergedSelectionBytes;
+    }
 
     d->device->writeBytes(dstBytes, dx, dy, sw, sh);
-
+    
     delete[] dstBytes;
 
     addDirtyRect(QRect(dx, dy, sw, sh));

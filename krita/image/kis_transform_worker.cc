@@ -2,6 +2,7 @@
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de> filters
  *  Copyright (c) 2005-2007 Casper Boemann <cbr@boemann.dk>
  *  Copyright (c) 2005, 2010 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -466,6 +467,12 @@ bool KisTransformWorker::run()
     m_progressTotalSteps = 0;
     m_progressStep = 0;
     m_boundRect = m_dev->exactBounds();
+
+    if (m_boundRect.isNull()) {
+        if (!m_progressUpdater.isNull())
+            m_progressUpdater->setProgress(100);
+        return true;
+    }
 
     KisPaintDeviceSP tmpdev1 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace()));
     KisPaintDeviceSP srcdev = m_dev;

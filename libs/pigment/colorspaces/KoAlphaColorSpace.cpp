@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -180,7 +181,79 @@ public:
     }
 };
 
+
+
+
+class CompositeMultiply : public KoCompositeOp
+{
+
+public:
+
+    CompositeMultiply(KoColorSpace * cs)
+            : KoCompositeOp(cs, COMPOSITE_MULT, i18n("Multiply"), KoCompositeOp::categoryArithmetic()) {
+    }
+
+public:
+
+    using KoCompositeOp::composite;
+
+    void composite(quint8 *dst,
+                   qint32 dststride,
+                   const quint8 *src,
+                   qint32 srcstride,
+                   const quint8 *maskRowStart,
+                   qint32 maskstride,
+                   qint32 rows,
+                   qint32 cols,
+                   quint8 opacity,
+                   const QBitArray & channelFlags) const {
+
+        Q_UNUSED(opacity);
+        Q_UNUSED(channelFlags);
+
+
+        quint8 *destination;
+        const quint8 *source;
+        qint32 i;
+
+        if (rows <= 0 || cols <= 0)
+            return;
+
+        while (rows-- > 0) {
+            const quint8 *mask = maskRowStart;
+            destination = dst;
+            source = src;
+
+            for (i = cols; i > 0; i--, destination++, source++) {
+
+                // If the mask tells us to completely not
+                // blend this pixel, continue.
+                if (mask != 0) {
+                    if (mask[0] == OPACITY_TRANSPARENT_U8) {
+                        mask++;
+                        continue;
+                    }
+                    mask++;
+                }
+
+                // here comes the math
+                destination[PIXEL_MASK] = KoColorSpaceMaths<quint8>::multiply(destination[PIXEL_MASK], source[PIXEL_MASK]);
+
+            }
+
+            dst += dststride;
+            src += srcstride;
+
+            if (maskRowStart) {
+                maskRowStart += maskstride;
+            }
+        }
+    }
+};
+
 }
+
+
 
 KoAlphaColorSpace::KoAlphaColorSpace() :
         KoColorSpaceAbstract<AlphaU8Traits>("ALPHA", i18n("Alpha mask"))
@@ -190,6 +263,7 @@ KoAlphaColorSpace::KoAlphaColorSpace() :
     addCompositeOp(new CompositeClear(this));
     addCompositeOp(new KoCompositeOpErase<AlphaU8Traits>(this));
     addCompositeOp(new CompositeSubtract(this));
+    addCompositeOp(new CompositeMultiply(this));
     addCompositeOp(new KoCompositeOpAlphaDarken<AlphaU8Traits>(this));
     m_profile = new KoDummyColorProfile;
 }

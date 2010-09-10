@@ -174,6 +174,9 @@ void KoSelection::select(KoShape *shape, bool recursive)
         int newSelectionCount = d->selectedShapes.count();
         for (int i = oldSelectionCount; i < newSelectionCount; ++i) {
             KoShape *shape = d->selectedShapes[i];
+            if (dynamic_cast<KoShapeGroup*>(shape)) {
+                continue;
+            }
             const QTransform shapeTransform = shape->absoluteTransformation(0);
             const QRectF shapeRect(QRectF(QPointF(), shape->size()));
 

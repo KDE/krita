@@ -185,7 +185,8 @@ public:
      * Transfer the specified region from src onto the current paint device with selection.
      * Src is a * fixed-size paint device: this means that src must have the same colorspace as
      * the destination device. Selection is also fixed-size paint device and it's colorspace has
-     * to be alpha8. Assert if there is wrong colorspace for selection
+     * to be alpha8. Assert if there is wrong colorspace for selection. Selection is merged with 
+     * selection set in KisPainter (intersection of the selections with COMPOSITE_MULT)
      *
      * @param dx the destination x-coordinate
      * @param dy the destination y-coordinate

@@ -1,8 +1,8 @@
 include("common.qs");
 
 var noLineThroughFormat = QTextCharFormat.clone(defaultTextFormat);
-setFormatProperty(noLineThroughFormat, KoCharacterStyle.StrikeOutStyle, KoCharacterStyle.SolidLine);
-setFormatProperty(noLineThroughFormat, KoCharacterStyle.StrikeOutType, KoCharacterStyle.NoLineType);
+setFormatProperty(noLineThroughFormat, KoCharacterStyle.StrikeOutStyle, KoCharacterStyle.NoLineStyle);
+setFormatProperty(noLineThroughFormat, KoCharacterStyle.StrikeOutType, KoCharacterStyle.NoLineTYpe);
 
 var singleLineThroughFormat = QTextCharFormat.clone(defaultTextFormat);
 setFormatProperty(singleLineThroughFormat, KoCharacterStyle.StrikeOutStyle, KoCharacterStyle.SolidLine);

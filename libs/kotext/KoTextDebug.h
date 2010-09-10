@@ -87,7 +87,7 @@ class KoTableCellStyle;
  *
  * @sa dumpDocument(), dumpFrame(), dumpBlock()
  */
-class KOTEXT_EXPORT KoTextDebug
+class KOTEXT_TEST_EXPORT KoTextDebug
 {
 public:
     /**

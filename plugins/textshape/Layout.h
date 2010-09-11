@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009-2010 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -60,6 +61,8 @@ public:
     virtual int cursorPosition() const;
     /// return the y offset of the document at start of shape.
     virtual qreal docOffsetInShape() const;
+    /// expand a bounding rect by excessive indents (indents outside the shape)
+    QRectF expandVisibleRect(const QRectF &rect) const;
     /// when a line is added, update internal vars.  Return true if line does not fit in shape
     virtual bool addLine(QTextLine &line, bool processingLine = false);
     /// prepare for next paragraph; return false if there is no next parag.
@@ -179,6 +182,8 @@ private:
     QTextTableCell m_tableCell;  /**< Current table cell. */
     bool m_restartingAfterTableBreak; /** We are in a re-layout that was a result of a break in a table. */
     bool m_restartingFirstCellAfterTableBreak; /** We are in a re-layout that was a result of a break in a table. only true first cell after */
+    // bookkeeping for drawing outside borders
+    qreal m_allTimeMinimumLeft;
     qreal m_maxLineHeight;
 };
 

@@ -117,16 +117,16 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
     rectangle.setHeight( d->ruler->height() - 6.0);
     QRectF activeRangeRectangle;
     activeRangeRectangle.setX(qMax(rectangle.x() + 1,
-          d->viewConverter->documentToViewX(d->activeRangeStart) + d->offset));
+          d->viewConverter->documentToViewX(d->effectiveActiveRangeStart()) + d->offset));
     activeRangeRectangle.setY(rectangle.y() + 1);
     activeRangeRectangle.setRight(qMin(rectangle.right() - 1,
-          d->viewConverter->documentToViewX(d->activeRangeEnd) + d->offset));
+          d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd()) + d->offset));
     activeRangeRectangle.setHeight(rectangle.height() - 2);
 
     painter.setPen(d->ruler->palette().color(QPalette::Mid));
     painter.drawRect(rectangle);
 
-    if(d->activeRangeStart != d->activeRangeEnd)
+    if(d->effectiveActiveRangeStart() != d->effectiveActiveRangeEnd())
         painter.fillRect(activeRangeRectangle, d->ruler->palette().brush(QPalette::Base));
 
     if(d->showSelectionBorders) {
@@ -157,10 +157,10 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
     foreach (const KoRuler::Tab & t, d->tabs) {
         qreal x;
         if (d->rightToLeft)
-            x = d->viewConverter->documentToViewX(d->activeRangeEnd - t.position)
+            x = d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd() - t.position)
                     + d->offset;
         else
-            x = d->viewConverter->documentToViewX(d->activeRangeStart + t.position)
+            x = d->viewConverter->documentToViewX(d->effectiveActiveRangeStart() + t.position)
                     + d->offset;
 
         polygon.clear();
@@ -327,9 +327,9 @@ void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &
     qreal x;
     // Draw first line start indent
     if (d->rightToLeft)
-        x = d->activeRangeEnd - d->firstLineIndent - d->paragraphIndent;
+        x = d->effectiveActiveRangeEnd() - d->firstLineIndent - d->paragraphIndent;
     else
-        x = d->activeRangeStart + d->firstLineIndent + d->paragraphIndent;
+        x = d->effectiveActiveRangeStart() + d->firstLineIndent + d->paragraphIndent;
     // convert and use the +0.5 to go to nearest integer so that the 0.5 added below ensures sharp lines
     x = int(d->viewConverter->documentToViewX(x) + qMax(0, d->offset) +0.5);
     polygon << QPointF(x+6.5, 0.5)
@@ -340,9 +340,9 @@ void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &
 
     // draw the hanging indent.
     if (d->rightToLeft)
-        x = d->activeRangeStart + d->endIndent;
+        x = d->effectiveActiveRangeStart() + d->endIndent;
     else
-        x = d->activeRangeStart + d->paragraphIndent;
+        x = d->effectiveActiveRangeStart() + d->paragraphIndent;
     // convert and use the +0.5 to go to nearest integer so that the 0.5 added below ensures sharp lines
     x = int(d->viewConverter->documentToViewX(x) + qMax(0, d->offset) +0.5);
     const int bottom = d->ruler->height();
@@ -356,10 +356,10 @@ void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &
     // Draw end-indent or paragraph indent if mode is rightToLeft
     qreal diff;
     if (d->rightToLeft)
-        diff = d->viewConverter->documentToViewX(d->activeRangeEnd
+        diff = d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd()
                      - d->paragraphIndent) + qMax(0, d->offset) - x;
     else
-        diff = d->viewConverter->documentToViewX(d->activeRangeEnd - d->endIndent)
+        diff = d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd() - d->endIndent)
                 + qMax(0, d->offset) - x;
     polygon.translate(diff, 0);
     painter.drawPolygon(polygon);
@@ -390,15 +390,15 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
     QRectF activeRangeRectangle;
     activeRangeRectangle.setX(rectangle.x() + 1);
     activeRangeRectangle.setY(qMax(rectangle.y() + 1,
-        d->viewConverter->documentToViewY(d->activeRangeStart) + d->offset));
+        d->viewConverter->documentToViewY(d->effectiveActiveRangeStart()) + d->offset));
     activeRangeRectangle.setWidth(rectangle.width() - 2);
     activeRangeRectangle.setBottom(qMin(rectangle.bottom() - 1,
-        d->viewConverter->documentToViewY(d->activeRangeEnd) + d->offset));
+        d->viewConverter->documentToViewY(d->effectiveActiveRangeEnd()) + d->offset));
 
     painter.setPen(d->ruler->palette().color(QPalette::Mid));
     painter.drawRect(rectangle);
 
-    if(d->activeRangeStart != d->activeRangeEnd)
+    if(d->effectiveActiveRangeStart() != d->effectiveActiveRangeEnd())
         painter.fillRect(activeRangeRectangle, d->ruler->palette().brush(QPalette::Base));
     
     if(d->showSelectionBorders) {
@@ -592,11 +592,11 @@ void HorizontalDistancesPaintingStrategy::drawMeasurements(const KoRulerPrivate 
 {
     QList<qreal> points;
     points << 0.0;
-    points << d->activeRangeStart + d->paragraphIndent + d->firstLineIndent;
-    points << d->activeRangeStart + d->paragraphIndent;
-    points << d->activeRangeEnd - d->endIndent;
-    points << d->activeRangeStart;
-    points << d->activeRangeEnd;
+    points << d->effectiveActiveRangeStart() + d->paragraphIndent + d->firstLineIndent;
+    points << d->effectiveActiveRangeStart() + d->paragraphIndent;
+    points << d->effectiveActiveRangeEnd() - d->endIndent;
+    points << d->effectiveActiveRangeStart();
+    points << d->effectiveActiveRangeEnd();
     points << d->rulerLength;
     qSort(points.begin(), points.end());
     QListIterator<qreal> i(points);
@@ -615,6 +615,8 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
     rulerLength(0),
     activeRangeStart(0),
     activeRangeEnd(0),
+    activeOverrideRangeStart(0),
+    activeOverrideRangeEnd(0),
     mouseCoordinate(-1),
     showMousePosition(0),
     showSelectionBorders(false),
@@ -671,24 +673,25 @@ qreal KoRulerPrivate::doSnapping(const qreal value) const
     return numberStep * qRound(value / numberStep);
 }
 
-KoRulerPrivate::Selection KoRulerPrivate::selectionAtPosition(const QPoint & pos, int *selectOffset ) {
+KoRulerPrivate::Selection KoRulerPrivate::selectionAtPosition(const QPoint & pos, int *selectOffset )
+{
     const int height = ruler->height();
     if (rightToLeft) {
-        int x = int(viewConverter->documentToViewX(activeRangeEnd - firstLineIndent - paragraphIndent) + offset);
+        int x = int(viewConverter->documentToViewX(effectiveActiveRangeEnd() - firstLineIndent - paragraphIndent) + offset);
         if (pos.x() >= x - 8 && pos.x() <= x +8 && pos.y() < height / 2) {
             if (selectOffset)
                 *selectOffset = x - pos.x();
             return KoRulerPrivate::FirstLineIndent;
         }
 
-        x = int(viewConverter->documentToViewX(activeRangeEnd - paragraphIndent) + offset);
+        x = int(viewConverter->documentToViewX(effectiveActiveRangeEnd() - paragraphIndent) + offset);
         if (pos.x() >= x - 8 && pos.x() <= x +8 && pos.y() > height / 2) {
             if (selectOffset)
                 *selectOffset = x - pos.x();
             return KoRulerPrivate::ParagraphIndent;
         }
 
-        x = int(viewConverter->documentToViewX(activeRangeStart + endIndent) + offset);
+        x = int(viewConverter->documentToViewX(effectiveActiveRangeStart() + endIndent) + offset);
         if (pos.x() >= x - 8 && pos.x() <= x + 8) {
             if (selectOffset)
                 *selectOffset = x - pos.x();
@@ -696,21 +699,21 @@ KoRulerPrivate::Selection KoRulerPrivate::selectionAtPosition(const QPoint & pos
         }
     }
     else {
-        int x = int(viewConverter->documentToViewX(activeRangeStart + firstLineIndent + paragraphIndent) + offset);
+        int x = int(viewConverter->documentToViewX(effectiveActiveRangeStart() + firstLineIndent + paragraphIndent) + offset);
         if (pos.x() >= x -8 && pos.x() <= x + 8 && pos.y() < height / 2) {
             if (selectOffset)
                 *selectOffset = x - pos.x();
             return KoRulerPrivate::FirstLineIndent;
         }
 
-        x = int(viewConverter->documentToViewX(activeRangeStart + paragraphIndent) + offset);
+        x = int(viewConverter->documentToViewX(effectiveActiveRangeStart() + paragraphIndent) + offset);
         if (pos.x() >= x - 8 && pos.x() <= x + 8 && pos.y() > height/2) {
             if (selectOffset)
                 *selectOffset = x - pos.x();
             return KoRulerPrivate::ParagraphIndent;
         }
 
-        x = int(viewConverter->documentToViewX(activeRangeEnd - endIndent) + offset);
+        x = int(viewConverter->documentToViewX(effectiveActiveRangeEnd() - endIndent) + offset);
         if (pos.x() >= x - 8 && pos.x() <= x + 8) {
             if (selectOffset)
                 *selectOffset = x - pos.x();
@@ -721,7 +724,8 @@ KoRulerPrivate::Selection KoRulerPrivate::selectionAtPosition(const QPoint & pos
     return KoRulerPrivate::None;
 }
 
-int KoRulerPrivate::hotSpotIndex(const QPoint & pos) {
+int KoRulerPrivate::hotSpotIndex(const QPoint & pos)
+{
     for(int counter = 0; counter < hotspots.count(); counter++) {
         bool hit;
         if (orientation == Qt::Horizontal)
@@ -733,6 +737,24 @@ int KoRulerPrivate::hotSpotIndex(const QPoint & pos) {
             return counter;
     }
     return -1;
+}
+
+qreal KoRulerPrivate::effectiveActiveRangeStart() const
+{
+    if (activeOverrideRangeStart != activeOverrideRangeEnd) {
+        return activeOverrideRangeStart;
+    } else {
+        return activeRangeStart;
+    }
+}
+
+qreal KoRulerPrivate::effectiveActiveRangeEnd() const
+{
+    if (activeOverrideRangeStart != activeOverrideRangeEnd) {
+        return activeOverrideRangeEnd;
+    } else {
+        return activeRangeEnd;
+    }
 }
 
 void KoRulerPrivate::emitTabChanged()
@@ -821,6 +843,13 @@ void KoRuler::setActiveRange(qreal start, qreal end)
 {
     d->activeRangeStart = start;
     d->activeRangeEnd = end;
+    update();
+}
+
+void KoRuler::setOverrideActiveRange(qreal start, qreal end)
+{
+    d->activeOverrideRangeStart = start;
+    d->activeOverrideRangeEnd = end;
     update();
 }
 
@@ -949,10 +978,10 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         int x;
         foreach (const Tab & t, d->tabs) {
             if (d->rightToLeft)
-                x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - t.position)
+                x = int(d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd() - t.position)
                         + d->offset);
             else
-                x = int(d->viewConverter->documentToViewX(d->activeRangeStart + t.position)
+                x = int(d->viewConverter->documentToViewX(d->effectiveActiveRangeStart() + t.position)
                         + d->offset);
             if (pos.x() >= x-6 && pos.x() <= x+6) {
                 d->selected = KoRulerPrivate::Tab;
@@ -978,7 +1007,7 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
     if (d->showTabs && d->selected == KoRulerPrivate::None) {
         // still haven't found something so let assume the user wants to add a tab
         qreal tabpos = d->viewConverter->viewToDocumentX(pos.x() - d->offset)
-                    - d->activeRangeStart;
+                    - d->effectiveActiveRangeStart();
         Tab t = {tabpos, d->tabChooser->type()};
         d->tabs.append(t);
         d->selectOffset = 0;
@@ -1025,16 +1054,16 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
 {
     QPoint pos = ev->pos();
 
-    qreal activeLength = d->activeRangeEnd - d->activeRangeStart;
+    qreal activeLength = d->effectiveActiveRangeEnd() - d->effectiveActiveRangeStart();
 
     switch (d->selected) {
     case KoRulerPrivate::FirstLineIndent:
         if (d->rightToLeft)
-            d->firstLineIndent = d->activeRangeEnd - d->paragraphIndent -
+            d->firstLineIndent = d->effectiveActiveRangeEnd() - d->paragraphIndent -
                 d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset - d->offset);
         else
             d->firstLineIndent = d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset
-                - d->offset) - d->activeRangeStart - d->paragraphIndent;
+                - d->offset) - d->effectiveActiveRangeStart() - d->paragraphIndent;
         if( ! (ev->modifiers() & Qt::ShiftModifier)) {
             d->firstLineIndent = d->doSnapping(d->firstLineIndent);
             d->paintingStrategy = d->normalPaintingStrategy;
@@ -1047,11 +1076,11 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         break;
     case KoRulerPrivate::ParagraphIndent:
         if (d->rightToLeft)
-            d->paragraphIndent = d->activeRangeEnd -
+            d->paragraphIndent = d->effectiveActiveRangeEnd() -
                 d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset - d->offset);
         else
             d->paragraphIndent = d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset
-                - d->offset) - d->activeRangeStart;
+                - d->offset) - d->effectiveActiveRangeStart();
         if( ! (ev->modifiers() & Qt::ShiftModifier)) {
             d->paragraphIndent = d->doSnapping(d->paragraphIndent);
             d->paintingStrategy = d->normalPaintingStrategy;
@@ -1069,9 +1098,9 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
     case KoRulerPrivate::EndIndent:
         if (d->rightToLeft)
             d->endIndent = d->viewConverter->viewToDocumentX(pos.x()
-                 + d->selectOffset - d->offset) - d->activeRangeStart;
+                 + d->selectOffset - d->offset) - d->effectiveActiveRangeStart();
         else
-            d->endIndent = d->activeRangeEnd - d->viewConverter->viewToDocumentX(pos.x()
+            d->endIndent = d->effectiveActiveRangeEnd() - d->viewConverter->viewToDocumentX(pos.x()
                  + d->selectOffset - d->offset);
         if (!(ev->modifiers() & Qt::ShiftModifier)) {
             d->endIndent = d->doSnapping(d->endIndent);
@@ -1098,11 +1127,11 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
             }
         }
         if (d->rightToLeft)
-            d->tabs[d->currentIndex].position = d->activeRangeEnd -
+            d->tabs[d->currentIndex].position = d->effectiveActiveRangeEnd() -
                 d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset - d->offset);
         else
             d->tabs[d->currentIndex].position = d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset
-                - d->offset) - d->activeRangeStart;
+                - d->offset) - d->effectiveActiveRangeStart();
         if (!(ev->modifiers() & Qt::ShiftModifier))
             d->tabs[d->currentIndex].position = d->doSnapping(d->tabs[d->currentIndex].position);
         if (d->tabs[d->currentIndex].position < 0)

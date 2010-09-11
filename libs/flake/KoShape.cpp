@@ -315,7 +315,7 @@ QRectF KoShape::boundingRect() const
     Q_D(const KoShape);
     QSizeF mySize = size();
     QTransform transform = absoluteTransformation(0);
-    QRectF bb(QPointF(0, 0), mySize);
+    QRectF bb = outlineRect();
     if (d->border) {
         KoInsets insets;
         d->border->borderInsets(this, insets);
@@ -328,7 +328,7 @@ QRectF KoShape::boundingRect() const
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
     if (d->filterEffectStack) {
-        QRectF clipRect = d->filterEffectStack->clipRectForBoundingRect(QRectF(QPointF(), mySize));
+        QRectF clipRect = d->filterEffectStack->clipRectForBoundingRect(outlineRect());
         bb |= transform.mapRect(clipRect);
     }
 
@@ -475,10 +475,15 @@ void KoShape::update(const QRectF &shape) const
 
 QPainterPath KoShape::outline() const
 {
-    Q_D(const KoShape);
     QPainterPath path;
-    path.addRect(QRectF(QPointF(0, 0), QSizeF(qMax(d->size.width(), qreal(0.0001)), qMax(d->size.height(), qreal(0.0001)))));
+    path.addRect(outlineRect());
     return path;
+}
+
+QRectF KoShape::outlineRect() const
+{
+    Q_D(const KoShape);
+    return QRectF(QPointF(0, 0), QSizeF(qMax(d->size.width(), qreal(0.0001)), qMax(d->size.height(), qreal(0.0001))));
 }
 
 QPointF KoShape::absolutePosition(KoFlake::Position anchor) const

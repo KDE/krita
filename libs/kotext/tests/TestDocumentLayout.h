@@ -24,6 +24,8 @@ private slots:
 
     /// Test the hittest of KoTextDocumentLayout
     void testHitTest();
+    /// Test the hittest of KoTextDocumentLayout regarding setions
+    void testHitTestSection();
 
 private:
     void initForNewTest();

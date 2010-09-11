@@ -53,7 +53,8 @@ public:
     }
 
     void canvasResourceChanged(int key) {
-        if (key != KoText::CurrentTextPosition && key != KoText::CurrentTextDocument)
+        if (key != KoText::CurrentTextPosition && key != KoText::CurrentTextDocument
+            && key != KoCanvasResource::ActiveRange)
             return;
 
         QTextBlock block = currentBlock();
@@ -62,6 +63,8 @@ public:
             ruler->setShowTabs(false);
             return;
         }
+        QRectF activeRange = resourceManager->resource(KoCanvasResource::ActiveRange).toRectF();
+        ruler->setOverrideActiveRange(activeRange.left(), activeRange.right());
         ruler->setShowIndents(true);
         ruler->setShowTabs(true);
         if (block.position() <= lastPosition && block.position() + block.length() > lastPosition)

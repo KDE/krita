@@ -87,6 +87,14 @@ public:
      */
     virtual QSizeF documentSize() const;
 
+    /**
+     * Expands the give rect in the horizontal dimension,
+     * so that everything in the document will be visible
+     * Notably this can give a negative x coord
+     * the vertical dimensions are never touched or relied upon
+     */
+    QRectF expandVisibleRect(const QRectF &rect) const;
+
     /// Draws the layout on the given painter with the given context.
     virtual void draw(QPainter * painter, const QAbstractTextDocumentLayout::PaintContext & context);
 
@@ -159,6 +167,8 @@ public:
         /// return the y offset of the document at start of shape.
         virtual qreal docOffsetInShape() const = 0;
         /// when a line is added, update internal vars. Inner shapes possibly intersect and split line into more parts. Set processingLine true, when current line is part of line and not last part of line. So baseline will be same for all parts of line. Return true if line does not fit in shape.
+        /// expand a bounding rect by excessive indents (indents outside the shape)
+        virtual QRectF expandVisibleRect(const QRectF &rect) const = 0;
         virtual bool addLine(QTextLine &line, bool processingLine = false) = 0;
         /// prepare for next paragraph; return false if there is no next parag.
         virtual bool nextParag() = 0;

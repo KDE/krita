@@ -2,6 +2,7 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2010 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +22,8 @@
 
 #ifndef KOTEXTSHAPE_H
 #define KOTEXTSHAPE_H
+
+#include "Layout.h"
 
 #include <KoShapeContainer.h>
 #include <KoFrameShape.h>
@@ -56,7 +59,10 @@ public:
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
 
     /// helper method.
-    QPointF convertScreenPos(const QPointF &point);
+    QPointF convertScreenPos(const QPointF &point) const;
+
+    /// reimplemented
+    QRectF outlineRect() const;
 
     /// set the image collection which is needed to draw bullet from images
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
@@ -134,7 +140,6 @@ private:
     mutable QWaitCondition m_waiter;
     KoPageProvider *m_pageProvider;
     KoImageCollection *m_imageCollection;
-
     QRegion m_paintRegion;
 };
 

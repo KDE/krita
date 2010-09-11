@@ -59,6 +59,7 @@ enum CanvasResource {
     Unit,               ///< The unit of this canvas
     CurrentPage,        ///< The current page number
     ActiveStyleType,    ///< the actual active style type see KoFlake::StyleType for valid values
+    ActiveRange,        ///< The area where the rulers should show white
     KarbonStart = 1000,      ///< Base number for karbon specific values.
     KexiStart = 2000,        ///< Base number for kexi specific values.
     KivioStart = 3000,       ///< Base number for kivio specific values.

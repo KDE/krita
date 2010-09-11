@@ -2,6 +2,7 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008-2010 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2010 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -176,9 +177,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     context.viewConverter = &converter;
     context.imageCollection = m_imageCollection;
 
-    QRectF rect(0, 0, size().width(), size().height());
-    rect.adjust(-5, 0, 5, 0);
-    painter.setClipRect(rect, Qt::IntersectClip);
+    painter.setClipRect(outlineRect(), Qt::IntersectClip);
     painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());
     lay->draw(&painter, context);
@@ -191,10 +190,20 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     m_paintRegion = QRegion();
 }
 
-QPointF TextShape::convertScreenPos(const QPointF &point)
+QPointF TextShape::convertScreenPos(const QPointF &point) const
 {
     QPointF p = absoluteTransformation(0).inverted().map(point);
     return p + QPointF(0.0, m_textShapeData->documentOffset());
+}
+
+QRectF TextShape::outlineRect() const
+{
+    QRectF rect(QPointF(0,0), size());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    if (lay) {
+        rect = lay->expandVisibleRect(rect);
+    }
+    return rect;
 }
 
 void TextShape::shapeChanged(ChangeType type, KoShape *shape)
@@ -230,16 +239,15 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
 
         QPointF tl(0.0, 0.0);
         QRectF rect(tl, size());
-
         pen.setWidthF(onePixel.y());
         painter.setPen(pen);
-        painter.drawLine(tl, rect.topRight());
+        painter.drawLine(rect.topLeft(), rect.topRight());
         painter.drawLine(rect.bottomLeft(), rect.bottomRight());
 
         pen.setWidthF(onePixel.x());
         painter.setPen(pen);
         painter.drawLine(rect.topRight(), rect.bottomRight());
-        painter.drawLine(tl, rect.bottomLeft());
+        painter.drawLine(rect.topLeft(), rect.bottomLeft());
         painter.restore();
     }
 

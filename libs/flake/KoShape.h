@@ -513,6 +513,14 @@ public:
     virtual QPainterPath outline() const;
 
     /**
+     * returns the outline of the shape in the form of a rect.
+     * The outlineRect returned will always have the position() of the shape as the origin, so
+     * moving the shape will not alter the result.  The outline is used to calculate the boundingRect.
+     * @returns the outline of the shape in the form of a rect.
+     */
+    virtual QRectF outlineRect() const;
+
+    /**
      * Returns the currently set border, or 0 if there is no border.
      * @return the currently set border, or 0 if there is no border.
      */

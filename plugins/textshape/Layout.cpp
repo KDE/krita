@@ -3,7 +3,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
- * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2009-2010 KO GmbH <cbo@kogmbh.com>
  * Copyright (C) 2009-2010 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
@@ -84,6 +84,7 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_dropCapsPositionAdjust(0),
         m_restartingAfterTableBreak(false),
         m_restartingFirstCellAfterTableBreak(false),
+        m_allTimeMinimumLeft(0),
         m_maxLineHeight(0)
 {
     m_frameStack.reserve(5); // avoid reallocs
@@ -141,14 +142,15 @@ qreal Layout::width()
 qreal Layout::x()
 {
     qreal result = m_newParag ? resolveTextIndent() : 0.0;
-    if (m_inTable) {
-        result += m_tableLayout.cellContentRect(m_tableCell).x();
-    }
     result += m_isRtl ? m_format.rightMargin() : (m_format.leftMargin() + listIndent());
     result += m_borderInsets.left + m_shapeBorder.left;
 //    if (m_block.layout()->lineCount() > 1)
     if (m_dropCapsNChars == 0)
         result += m_dropCapsAffectedLineWidthAdjust;
+    m_allTimeMinimumLeft = qMin(m_allTimeMinimumLeft, result);
+    if (m_inTable) {
+        result += m_tableLayout.cellContentRect(m_tableCell).x();
+    }
     return result;
 }
 
@@ -173,6 +175,11 @@ qreal Layout::docOffsetInShape() const
 {
     Q_ASSERT(m_data);
     return m_data->documentOffset();
+}
+
+QRectF Layout::expandVisibleRect(const QRectF &rect) const
+{
+    return rect.adjusted(m_allTimeMinimumLeft, 0.0, 50.0, 0.0);
 }
 
 bool Layout::addLine(QTextLine &line, bool processingLine)
@@ -510,7 +517,7 @@ bool Layout::nextParag()
             KoText::Tab koTab = tv.value<KoText::Tab>();
             QTextOption::Tab tab;
 
-            // convertion here is required because Qt thinks in device units and we don't
+            // conversion here is required because Qt thinks in device units and we don't
             tab.position = (koTab.position - tabOffset) * qt_defaultDpiY() / 72.;
             tab.type = koTab.type;
             tab.delimiter = koTab.delimiter;

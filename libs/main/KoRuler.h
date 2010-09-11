@@ -112,6 +112,14 @@ public slots:
       */
     void setActiveRange(qreal start, qreal end);
 
+    /** Set the override active range, ie the part of the ruler that is most likely used.
+      * set to 0, 0 when there is no longer any active range
+      * The override, means that if set it takes precedence over the normal active range.
+      * @param start the start of the range in pt
+      * @param end the end of the range in pt
+      */
+    void setOverrideActiveRange(qreal start, qreal end);
+
     /** Set the state of the ruler so that it shows everything in right to left mode.
       * @param isRightToLeft state of right to left mode. Default is false.
       */

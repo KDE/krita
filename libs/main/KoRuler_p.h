@@ -134,6 +134,8 @@ public:
     qreal rulerLength;
     qreal activeRangeStart;
     qreal activeRangeEnd;
+    qreal activeOverrideRangeStart;
+    qreal activeOverrideRangeEnd;
 
     int mouseCoordinate;
     int showMousePosition;
@@ -190,6 +192,8 @@ public:
     qreal doSnapping(const qreal value) const;
     Selection selectionAtPosition(const QPoint & pos, int *selectOffset = 0);
     int hotSpotIndex(const QPoint & pos);
+    qreal effectiveActiveRangeStart() const;
+    qreal effectiveActiveRangeEnd() const;
 
     friend class VerticalPaintingStrategy;
     friend class HorizontalPaintingStrategy;

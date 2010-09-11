@@ -565,7 +565,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
         QTransform shapeMatrix = ts->absoluteTransformation(&converter);
         shapeMatrix.scale(zoomX, zoomY);
         painter.setTransform(shapeMatrix * painter.transform());
-        painter.setClipRect(QRectF(QPointF(), ts->size()), Qt::IntersectClip);
+        painter.setClipRect(ts->outlineRect(), Qt::IntersectClip);
         painter.translate(0, -data->documentOffset());
         if ((data->endPosition() >= selectStart && data->position() <= selectEnd)
                 || (data->position() <= selectStart && data->endPosition() >= selectEnd)) {
@@ -620,6 +620,15 @@ void TextTool::updateSelectedShape(const QPointF &point)
             }
         }
         setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
+
+        // This is how we inform the rulers of the active range
+        // For now we will not consider table cells, but just give the shape dimensions
+        QVariant v;
+        QRectF rect(QPoint(), m_textShape->size());
+        rect = m_textShape->absoluteTransformation(0).mapRect(rect);
+        v.setValue(rect);
+        canvas()->resourceManager()->setResource(KoCanvasResource::ActiveRange, v);
+
     }
 }
 
@@ -1310,8 +1319,19 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
     }
     if (m_textShape == 0) { // none found
         emit done();
+        // This is how we inform the rulers of the active range
+        // No shape means no active range
+        canvas()->resourceManager()->setResource(KoCanvasResource::ActiveRange, QVariant(QRectF()));
         return;
     }
+
+    // This is how we inform the rulers of the active range
+    // For now we will not consider table cells, but just give the shape dimensions
+    QVariant v;
+    QRectF rect(QPoint(), m_textShape->size());
+    rect = m_textShape->absoluteTransformation(0).mapRect(rect);
+    v.setValue(rect);
+    canvas()->resourceManager()->setResource(KoCanvasResource::ActiveRange, v);
 
     setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
     useCursor(Qt::IBeamCursor);
@@ -1346,6 +1366,11 @@ void TextTool::deactivate()
     if (m_textShapeData) // then we got disabled without ever having done anything.
         repaintCaret();
     m_textShape = 0;
+
+    // This is how we inform the rulers of the active range
+    // No shape means no active range
+    canvas()->resourceManager()->setResource(KoCanvasResource::ActiveRange, QVariant(QRectF()));
+
     if (m_textShapeData && m_textShapeData) {
         TextSelection selection;
         selection.document = m_textShapeData->document();
@@ -1459,7 +1484,7 @@ QRectF TextTool::textRect(int startPosition, int endPosition) const
 
     if (line1.textStart() + block.position() == line2.textStart() + block2.position())
         return QRectF(qMin(startX, endX), line1.y(), qAbs(startX - endX), line1.height());
-    return QRectF(0, line1.y(), 10E6, line2.y() + line2.height() - line1.y());
+    return QRectF(-5E6, line1.y(), 10E6, line2.y() + line2.height() - line1.y());
 }
 
 KoToolSelection* TextTool::selection()

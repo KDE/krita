@@ -799,15 +799,17 @@ void TestDocumentLayout::testEmptyParag()
 
 void TestDocumentLayout::testDropCaps()
 {
-    initForNewTest(m_loremIpsum);
+    initForNewTest(QString("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam\nsome more text")); // some not too long text so the dropcap will be bigger than the block
 
     KoParagraphStyle style;
     style.setDropCaps(false);
     style.setDropCapsLength(1);
-    style.setDropCapsLines(3);
+    style.setDropCapsLines(4);
     style.setDropCapsDistance(9.0);
     QTextBlock block = m_doc->begin();
+    QTextBlock secondblock = block.next();
     style.applyStyle(block);
+    
     m_layout->layout();
 
     // dummy version, caps is still false.
@@ -831,11 +833,23 @@ void TestDocumentLayout::testDropCaps()
     line = m_blockLayout->lineAt(1);
     QVERIFY(line.textLength() > 2);
     qreal heightNormalLine = line.height();
+    qreal linexpos = line.position().x();
     QCOMPARE(line.position().y(), 0.0); // aligned top
+    QVERIFY(line.position().x() > 20.0); // can't get a tight-boundingrect here.
+
+    // Now test that a following block is moved inward by the same about since
+    // it should still be influenced by the dropcap
+    m_blockLayout = secondblock.layout();
+    QVERIFY(m_blockLayout->lineCount() == 1);
+    line = m_blockLayout->lineAt(0);
+    QVERIFY(line.textLength() > 3);
+    QCOMPARE(line.position().x(), linexpos);
+    QVERIFY(line.position().x() > 20.0); // can't get a tight-boundingrect here.
 
     style.setDropCaps(false); // remove it
     style.applyStyle(block);
     m_layout->layout();
+    m_blockLayout = block.layout();
 
     // test that the first text line is no longer dropcaps
     QVERIFY(m_blockLayout->lineCount() > 2);

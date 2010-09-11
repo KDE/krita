@@ -133,7 +133,7 @@ qreal Layout::width()
         ptWidth -= m_blockData->counterWidth() + m_blockData->counterSpacing();
     ptWidth -= m_format.leftMargin() + m_format.rightMargin();
     ptWidth -= m_borderInsets.left + m_borderInsets.right + m_shapeBorder.right;
-    if (m_block.layout()->lineCount() > 1)
+    if (m_dropCapsNChars == 0)
         ptWidth -= m_dropCapsAffectedLineWidthAdjust;
     return ptWidth;
 }
@@ -146,7 +146,8 @@ qreal Layout::x()
     }
     result += m_isRtl ? m_format.rightMargin() : (m_format.leftMargin() + listIndent());
     result += m_borderInsets.left + m_shapeBorder.left;
-    if (m_block.layout()->lineCount() > 1)
+//    if (m_block.layout()->lineCount() > 1)
+    if (m_dropCapsNChars == 0)
         result += m_dropCapsAffectedLineWidthAdjust;
     return result;
 }
@@ -586,9 +587,7 @@ bool Layout::nextParag()
         KoCharacterStyle *dropCapsCharStyle = 0;
         if (dropCapsStyleId > 0 && m_styleManager) {
             dropCapsCharStyle = m_styleManager->characterStyle(dropCapsStyleId);
-            if (dropCapsCharStyle) {
-                dropCapsCharStyle->applyStyle(dropCapsFormatRange.format);
-            }
+            dropCapsCharStyle->applyStyle(dropCapsFormatRange.format);
         }
         QFont f(dropCapsFormatRange.format.font(), m_parent->paintDevice());
         QString dropCapsText(m_block.text().left(dropCapsLength));

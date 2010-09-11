@@ -42,4 +42,20 @@
 
 #endif
 
+/* Now the same for KOTEXT_TEST_EXPORT, if compiling with unit tests enabled */
+
+#ifdef COMPILING_TESTS
+#if defined _WIN32 || defined _WIN64
+# if defined(MAKE_KOTEXT_LIB)
+#       define KOTEXT_TEST_EXPORT KDE_EXPORT
+#   else
+#       define KOTEXT_TEST_EXPORT KDE_IMPORT
+#   endif
+# else /* not windows */
+#   define KOTEXT_TEST_EXPORT KDE_EXPORT
+# endif
+#else /* not compiling tests */
+#   define KOTEXT_TEST_EXPORT
+#endif
+
 #endif

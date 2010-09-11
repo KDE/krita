@@ -23,7 +23,6 @@
 #include <KoTextBlockData.h>
 #include <KoTextDocument.h>
 #include <QTextCursor>
-#include <KoTextDebug.h>
 #include <KoParagraphStyle.h>
 
 #include <KLocale>

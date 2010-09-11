@@ -830,17 +830,22 @@ void DataSet::setUpperErrorLimit( qreal limit )
 
 QVariant DataSet::xData( int index ) const
 {
-    return d->data( d->xDataRegion, index );
+    const QVariant data = d->data( d->xDataRegion, index );
+    return data.isValid() ? data : index + 1;
 }
 
 QVariant DataSet::yData( int index ) const
 {
-    return d->data( d->yDataRegion, index );
+    const QVariant data = d->data( d->yDataRegion, index );
+    return data.isValid() ? data : index + 1;
+//     return d->data( d->yDataRegion, index );
 }
 
 QVariant DataSet::customData( int index ) const
 {
-    return d->data( d->customDataRegion, index );
+    const QVariant data = d->data( d->customDataRegion, index );
+    return data.isValid() ? data : index + 1;
+//     return d->data( d->customDataRegion, index );
 }
 
 QVariant DataSet::categoryData( int index ) const
@@ -1272,11 +1277,10 @@ bool DataSet::loadOdf( const KoXmlElement &n,
             if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") ){
                 if ( maybeCompleteDataDefinition ){
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
-                    setYDataRegionString( region );
+                    setXDataRegionString( region );
                     fullDataDefinition = true;
                 }else{
-                    const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
-                    setXDataRegionString( region );
+                    const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );                    
                     // as long as there is not default table for missing data series the same region is used twice
                     // to ensure the diagram is displayed, even if not as expected from o office or ms office
                     setYDataRegionString( region );
@@ -1292,8 +1296,8 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         const QString region = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
         if ( !fullDataDefinition ){
             setYDataRegion( region );
-            if ( !maybeCompleteDataDefinition )
-              setXDataRegion( region );
+//             if ( !maybeCompleteDataDefinition )
+//               setXDataRegion( region );
         }
         if ( bubbleChart )
             setCustomDataRegion( region );

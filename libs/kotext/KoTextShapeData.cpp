@@ -48,8 +48,6 @@
 #include "opendocument/KoTextLoader.h"
 #include "opendocument/KoTextWriter.h"
 
-#include "KoTextDebug.h"
-
 class KoTextShapeDataPrivate : public KoTextShapeDataBasePrivate
 {
 public:

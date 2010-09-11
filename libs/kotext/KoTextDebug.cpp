@@ -27,7 +27,7 @@
 #include <QTextTable>
 #include <QTextFragment>
 #include <QTextList>
-#include <QDebug>
+#include <QTextStream>
 
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
@@ -47,6 +47,9 @@
 int KoTextDebug::depth = 0;
 const int KoTextDebug::INDENT = 2;
 const QTextDocument *KoTextDebug::document = 0;
+
+#define dumpIndent(T) { for (int i=0; i<T; ++i) out << ' '; }
+#define dumpList(T) { foreach (const QString &x, T) out << x << ' '; }
 
 Q_DECLARE_METATYPE(QList<KoText::Tab>)
 
@@ -98,13 +101,13 @@ static QString fontProperties(const QTextCharFormat &textFormat)
     return fontProps.join(",");
 }
 
-void KoTextDebug::dumpDocument(const QTextDocument *doc)
+void KoTextDebug::dumpDocument(const QTextDocument *doc, QTextStream &out)
 {
     Q_ASSERT(doc);
     document = doc;
-    qDebug() << qPrintable(QString("<document defaultfont=\"%1\">").arg(doc->defaultFont().toString()));
-    dumpFrame(document->rootFrame());
-    qDebug() << "</document>";
+    out << QString("<document defaultfont=\"%1\">").arg(doc->defaultFont().toString());
+    dumpFrame(document->rootFrame(), out);
+    out << "</document>";
     document = 0;
 }
 
@@ -1139,13 +1142,12 @@ QString KoTextDebug::tableCellAttributes(const QTextTableCellFormat &tableCellFo
     return attrs;
 }
 
-void KoTextDebug::dumpFrame(const QTextFrame *frame)
+void KoTextDebug::dumpFrame(const QTextFrame *frame, QTextStream &out)
 {
     depth += INDENT;
 
-    QString attrs;
-    attrs.append(frameAttributes(frame->frameFormat()));
-    qDebug("%*s<frame%s>", depth, " ", qPrintable(attrs));
+    dumpIndent(depth);
+    out << "<frame" << frameAttributes(frame->frameFormat()) << '>' << endl;
 
     QTextFrame::iterator iterator = frame->begin();
 
@@ -1156,20 +1158,21 @@ void KoTextDebug::dumpFrame(const QTextFrame *frame)
         if (childFrame) {
             QTextTable *table = qobject_cast<QTextTable *>(childFrame);
             if (table) {
-                dumpTable(table);
+                dumpTable(table, out);
             } else {
-                dumpFrame(frame);
+                dumpFrame(frame, out);
             }
         } else if (textBlock.isValid()) {
-            dumpBlock(textBlock);
+            dumpBlock(textBlock, out);
         }
     }
 
-    qDebug("%*s%s", depth, " ", "</frame>");
+    dumpIndent(depth);
+    out << "</frame>" << endl;
     depth -= INDENT;
 }
 
-void KoTextDebug::dumpBlock(const QTextBlock &block)
+void KoTextDebug::dumpBlock(const QTextBlock &block, QTextStream &out)
 {
     depth += INDENT;
 
@@ -1186,43 +1189,47 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
         attrs.append(listAttributes(list->format()));
     }
 
-    qDebug("%*s<block%s>", depth, " ", qPrintable(attrs));
+    dumpIndent(depth);
+    out << "<block" << attrs << '>' << endl;
 
     QTextBlock::Iterator iterator = block.begin();
     for (; !iterator.atEnd() && !iterator.atEnd(); ++iterator) {
         QTextFragment fragment = iterator.fragment();
         if (fragment.isValid()) {
-            dumpFragment(fragment);
+            dumpFragment(fragment, out);
         }
     }
-    qDebug("%*s%s", depth, " ", "</block>");
+    dumpIndent(depth);
+    out << "</block>" << endl;
     depth -= INDENT;
     if (block.next().isValid())
-        qDebug(" ");
+        out << ' ';
 }
 
-void KoTextDebug::dumpTable(const QTextTable *table)
+void KoTextDebug::dumpTable(const QTextTable *table, QTextStream &out)
 {
     depth += INDENT;
 
     QString attrs;
     attrs.append(tableAttributes(table->format()));
-    attrs.append(frameAttributes(table->frameFormat())); // include frame attribues too.
+    attrs.append(frameAttributes(table->frameFormat())); // include frame attributes too.
 
-    qDebug("%*s<table%s>", depth, " ", qPrintable(attrs));
+    dumpIndent(depth);
+    out << "<table" << attrs << '>' << endl;
 
     // loop through all the cells in the table and dump the cells.
     for (int row = 0; row < table->rows(); ++row) {
         for (int column = 0; column < table->columns(); ++column) {
-            dumpTableCell(table->cellAt(row, column));
+            dumpTableCell(table->cellAt(row, column), out);
         }
     }
 
-    qDebug("%*s%s", depth, " ", "</table>");
+    dumpIndent(depth);
+    out << "</table>" << endl;
     depth -= INDENT;
 }
 
-void KoTextDebug::dumpTableCell(const QTextTableCell &cell)
+void KoTextDebug::dumpTableCell(const QTextTableCell &cell, QTextStream &out)
 {
     depth += INDENT;
 
@@ -1230,27 +1237,29 @@ void KoTextDebug::dumpTableCell(const QTextTableCell &cell)
     attrs.append(textAttributes(cell.format()));
     attrs.append(tableCellAttributes(cell.format().toTableCellFormat()));
 
-    qDebug("%*s<cell%s>", depth, " ", qPrintable(attrs));
+    dumpIndent(depth);
+    out << "<cell" << attrs << '>' << endl;
 
     // iterate through the cell content.
     QTextFrame::iterator cellIter = cell.begin();
     while (!cellIter.atEnd()) {
         if (cellIter.currentFrame() != 0) {
             // content is a frame or table.
-            dumpFrame(cellIter.currentFrame());
+            dumpFrame(cellIter.currentFrame(), out);
         } else {
             // content is a block.
-            dumpBlock(cellIter.currentBlock());
+            dumpBlock(cellIter.currentBlock(), out);
         }
         ++cellIter;
     }
 
-    qDebug("%*s%s", depth, " ", "</cell>");
+    dumpIndent(depth);
+    out << "</cell>\n";
 
     depth -= INDENT;
 }
 
-void KoTextDebug::dumpFragment(const QTextFragment &fragment)
+void KoTextDebug::dumpFragment(const QTextFragment &fragment, QTextStream &out)
 {
     depth += INDENT;
 
@@ -1260,13 +1269,17 @@ void KoTextDebug::dumpFragment(const QTextFragment &fragment)
     if (inlineObject) {
         QString cf = inlineObjectAttributes(charFormat);
 
-        qDebug("%*s<fragment%s/>", depth, " ", qPrintable(cf));
+        dumpIndent(depth);
+        out << "<fragment" << cf << ">\n";
     } else {
         QString cf = textAttributes(charFormat);
 
-        qDebug("%*s<fragment%s>", depth, " ", qPrintable(cf));
-        qDebug("%*s|%s|", depth + INDENT, " ", qPrintable(fragment.text()));
-        qDebug("%*s%s", depth, " ", "</fragment>");
+        dumpIndent(depth);
+        out << "<fragment" << cf << ">\n";
+        dumpIndent(depth + INDENT);
+        out << '|' << fragment.text() << "|\n";
+        dumpIndent(depth);
+        out << "</fragment>\n";
     }
 
     depth -= INDENT;

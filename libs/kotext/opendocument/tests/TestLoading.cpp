@@ -22,6 +22,7 @@
 
 #include <QtGui>
 #include <KDebug>
+#include <QTextStream>
 #include <QtScript>
 #include <QtTest>
 
@@ -1136,6 +1137,9 @@ void TestLoading::testLoading_data()
 void TestLoading::testLoading()
 {
     QFETCH(QString, testcase);
+    if (testcase.startsWith("Tables/"))
+        QEXPECT_FAIL("", "Tables not supported yet", Abort);
+    QString testName = testcase;
     testcase.prepend(FILES_DATA_DIR);
 
     QTextDocument *actualDocument = documentFromOdt(testcase + ".odt");
@@ -1150,10 +1154,19 @@ void TestLoading::testLoading()
 //    showDocument(actualDocument);
 //    showDocument(expectedDocument);
     if (!documentsEqual) {
-        qDebug() << "actual document:  ======================";
-        KoTextDebug::dumpDocument(actualDocument);
-        qDebug() << "expected document: ======================";
-        KoTextDebug::dumpDocument(expectedDocument);
+        testName.replace('/', '_');
+        QFile file1("failed-loading-" + testName + "-actual");
+        if (file1.open(QFile::WriteOnly)) {
+            QTextStream out(&file1);
+            KoTextDebug::dumpDocument(actualDocument, out);
+            file1.close();
+        }
+        QFile file2("failed-loading-" + testName + "-expected");
+        if (file2.open(QFile::WriteOnly)) {
+            QTextStream out(&file2);
+            KoTextDebug::dumpDocument(expectedDocument, out);
+            file2.close();
+        }
     }
     delete actualDocument;
     delete expectedDocument;
@@ -1170,6 +1183,9 @@ void TestLoading::testSaving_data()
 void TestLoading::testSaving()
 {
     QFETCH(QString, testcase);
+    if (testcase.startsWith("Tables/"))
+        QEXPECT_FAIL("", "Tables not supported yet", Abort);
+    QString testName = testcase;
     testcase.prepend(FILES_DATA_DIR);
 
     QTextDocument *actualDocument = documentFromOdt(testcase + ".odt");
@@ -1184,8 +1200,19 @@ void TestLoading::testSaving()
     bool documentsEqual = compareDocuments(savedDocument, expectedDocument);
 
     if (!documentsEqual) {
-        KoTextDebug::dumpDocument(savedDocument);
-        KoTextDebug::dumpDocument(expectedDocument);
+        testName.replace('/', '_');
+        QFile file1("failed-saving-" + testName + "-actual");
+        if (file1.open(QFile::WriteOnly)) {
+            QTextStream out(&file1);
+            KoTextDebug::dumpDocument(savedDocument, out);
+            file1.close();
+        }
+        QFile file2("failed-saving-" + testName + "-expected");
+        if (file2.open(QFile::WriteOnly)) {
+            QTextStream out(&file2);
+            KoTextDebug::dumpDocument(expectedDocument, out);
+            file2.close();
+        }
     }
     delete actualDocument;
     delete expectedDocument;

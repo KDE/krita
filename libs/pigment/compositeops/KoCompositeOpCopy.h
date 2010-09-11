@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2007 Emanuele Tamponi <emanuele@valinor.it>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -49,38 +50,67 @@ public:
                    quint8 opacity,
                    const QBitArray & channelFlags) const {
 
-        Q_UNUSED(maskRowStart);
-        Q_UNUSED(maskRowStride);
         Q_UNUSED(channelFlags);
         Q_UNUSED(opacity);
 
-        qint32 srcInc = (srcRowStride == 0) ? 0 : colorSpace()->pixelSize();
+        const KoColorSpace* cs = colorSpace();
+        qint32 bytesPerPixel = cs->pixelSize();
+        
+        qint32 srcInc = (srcRowStride == 0) ? 0 : bytesPerPixel;
 
         quint8 *dst = dstRowStart;
         const quint8 *src = srcRowStart;
-        const KoColorSpace* cs = colorSpace();
-        qint32 bytesPerPixel = cs->pixelSize();
+        const quint8 *mask = maskRowStart;
 
-        while (rows > 0) {
-            if (srcInc == 0) {
+        if (maskRowStart != 0){
+            while (rows > 0) {
                 quint8* dstN = dst;
+                const quint8* srcN = src;
+                const quint8* maskN = mask;
                 qint32 columns = numColumns;
+                
                 while (columns > 0) {
-                    memcpy(dstN, src, bytesPerPixel);
-                    dst += bytesPerPixel;
+                    if (*maskN != 0){
+                        memcpy(dstN, srcN, bytesPerPixel);
+                    }
+
+                    dstN += bytesPerPixel;
+                    srcN += srcInc; // if srcRowStride == 0, don't move the pixel
+                    maskN++; // byte
+                    columns--;
                 }
-            } else {
-                memcpy(dst, src, numColumns * bytesPerPixel);
+            
+                dst += dstRowStride;
+                src += srcRowStride;
+                mask += maskRowStride;
+                --rows;
             }
+        }else{
+        
+        
+        
+            while (rows > 0) {
+                if (srcInc == 0) {
+                    quint8* dstN = dst;
+                    qint32 columns = numColumns;
+                    while (columns > 0) {
+                        memcpy(dstN, src, bytesPerPixel);
+                        dstN += bytesPerPixel;
+                        columns--;
+                    }
+                } else {
+                    memcpy(dst, src, numColumns * bytesPerPixel);
+                }
 
-            // XXX: what is the reason for this code? I think we should copy the alpha channel as well.
-            //if (opacity != OPACITY_OPAQUE) {
-            //    cs->multiplyAlpha(dst, opacity, numColumns);
-            //}
+                // XXX: what is the reason for this code? I think we should copy the alpha channel as well.
+                //if (opacity != OPACITY_OPAQUE) {
+                //    cs->multiplyAlpha(dst, opacity, numColumns);
+                //}
 
-            dst += dstRowStride;
-            src += srcRowStride;
-            --rows;
+                dst += dstRowStride;
+                src += srcRowStride;
+                --rows;
+            }
         }
     }
 };

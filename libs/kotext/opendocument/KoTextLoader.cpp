@@ -928,7 +928,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             KoCharacterStyle *characterStyle = d->textSharedData->characterStyle(styleName, d->stylesDotXml);
             if (characterStyle) {
                 characterStyle->applyStyle(&cursor);
-            } else {
+            } else if (!styleName.isEmpty()) {
                 kWarning(32500) << "character style " << styleName << " not found";
             }
 

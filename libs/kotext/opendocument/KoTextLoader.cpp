@@ -427,7 +427,8 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
         if (!styleName.isEmpty())
             kWarning(32500) << "paragraph style " << styleName << "not found - using default style";
         paragraphStyle = d->styleManager->defaultParagraphStyle();
-        kWarning(32500) << "defaultParagraphStyle not found - using default style";
+        if (paragraphStyle == 0)
+            kWarning(32500) << "defaultParagraphStyle not found - using default style";
     }
 
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format

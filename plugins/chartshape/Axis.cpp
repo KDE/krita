@@ -1237,6 +1237,13 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
     return true;
 }
 
+void Axis::clearDataSets()
+{
+    QList<DataSet*> list = d->dataSets;
+    foreach( DataSet *dataSet, list )
+        detachDataSet( dataSet, true );
+}
+
 qreal Axis::majorInterval() const
 {
     return d->majorInterval;
@@ -1760,6 +1767,9 @@ KDChart::AbstractCoordinatePlane *Axis::kdPlane() const
 
 void Axis::plotAreaChartTypeChanged( ChartType newChartType )
 {
+    if ( dimension() != YAxisDimension )
+        return;
+
     // Return if there's nothing to do
     if ( newChartType == d->plotAreaChartType )
         return;

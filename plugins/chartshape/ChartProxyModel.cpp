@@ -782,17 +782,6 @@ Qt::Orientation ChartProxyModel::dataDirection()
 
 void ChartProxyModel::invalidateDataSets()
 {
-    foreach ( DataSet *dataSet, d->dataSets )
-    {
-        if ( dataSet->attachedAxis() ) {
-            // Remove data sets 'silently'. Once the last data set
-            // has been detached from an axis, the axis will delete
-            // all models and diagrams associated with it, thus we
-            // do not need to propagate these events to any models.
-            dataSet->attachedAxis()->detachDataSet( dataSet, true );
-        }
-    }
-
     d->removedDataSets = d->dataSets;
     d->dataSets.clear();
 }

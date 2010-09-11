@@ -253,13 +253,27 @@ void PlotArea::plotAreaInit()
 
 void PlotArea::dataSetCountChanged()
 {
-    if ( !yAxis() )
-        return;
+    Q_ASSERT( xAxis() && yAxis() );
+    QMap<DataSet*, Axis*> attachedAxes;
+    QList<DataSet*> dataSets = proxyModel()->dataSets();
 
-    foreach( DataSet *dataSet, proxyModel()->dataSets() ) {
-        if ( !dataSet->attachedAxis() ) {
+    // Remember to what y axis each data set belongs
+    foreach( DataSet *dataSet, dataSets )
+        attachedAxes.insert( dataSet, dataSet->attachedAxis() );
+
+    // Proxy structure and thus data sets changed, drop old state and
+    // clear all axes of data sets
+    foreach( Axis *axis, axes() )
+        axis->clearDataSets();
+
+    // Now add the new list of data sets to the axis they belong to
+    foreach( DataSet *dataSet, dataSets ) {
+        xAxis()->attachDataSet( dataSet );
+        // If they weren't assigned to a y axis before, use default y axis
+        if ( attachedAxes[dataSet] )
+            attachedAxes[dataSet]->attachDataSet( dataSet );
+        else
             yAxis()->attachDataSet( dataSet );
-        }
     }
 }
 

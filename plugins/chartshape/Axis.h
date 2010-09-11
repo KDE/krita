@@ -84,8 +84,25 @@ public:
     void setTitleText( const QString &text );
     void setShowLabels( bool show );
     void setDimension( AxisDimension dimension );
+
+    /**
+     * Attaches a data set to this axis, adding it to a diagram
+     * of its chart type, creating it if necessary
+     */
     bool attachDataSet( DataSet *dataSet, bool silent = false );
+
+    /**
+     * Detaches a data set from this axis, removing it from the diagram of
+     * its chart type, and deleting it if it was the last data set in this diagram.
+     */
     bool detachDataSet( DataSet *dataSet, bool silent = false );
+
+    /**
+     * Detaches all data sets in this axis, deleting any diagram
+     * that this axis might have owned.
+     */
+    void clearDataSets();
+
     void setMajorInterval( qreal interval );
     void setMinorInterval( qreal interval );
     void setMinorIntervalDivisor( int divisor );

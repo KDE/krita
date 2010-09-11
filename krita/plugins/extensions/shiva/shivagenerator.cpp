@@ -29,9 +29,10 @@
 #include <OpenShiva/Kernel.h>
 
 #include <ShivaGeneratorConfigWidget.h>
-#include <OpenShiva/Metadata.h>
 #include <OpenShiva/Source.h>
 #include "Version.h"
+
+#include METADATA_HEADER
 
 #include "PaintDeviceImage.h"
 #include "QVariantValue.h"

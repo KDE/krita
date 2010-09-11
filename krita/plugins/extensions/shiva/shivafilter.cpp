@@ -29,7 +29,7 @@
 #include "QVariantValue.h"
 #include <OpenShiva/Kernel.h>
 #include <OpenShiva/Source.h>
-#include <OpenShiva/Metadata.h>
+#include METADATA_HEADER
 #include <GTLCore/Region.h>
 
 #include "Version.h"

@@ -23,8 +23,9 @@
 
 #include "filter/kis_filter_configuration.h"
 #include "QVariantValue.h"
-#include <OpenShiva/Metadata.h>
 #include "Version.h"
+
+#include METADATA_HEADER
 
 
 ShivaGeneratorConfigWidget::ShivaGeneratorConfigWidget(const OpenShiva::Source* _source, QWidget* parent) : KisConfigWidget(parent), m_source(_source), m_widget(new QtShiva::SourceParametersWidget(this))

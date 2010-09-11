@@ -57,6 +57,7 @@ class KoGenStyle;
 class  KOTEXT_EXPORT KoListStyle : public QObject
 {
     Q_OBJECT
+    Q_ENUMS(Style Property)
 public:
     // ListIdType will be 32-bit in 32 bit machines and 64 bit in 64 bit machines
     typedef quintptr ListIdType;

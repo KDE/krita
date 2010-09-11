@@ -250,17 +250,48 @@ bool TestLoading::compareListFormats(const QTextListFormat &actualFormat, const 
 {
     QMap<int, QVariant> actualProperties = actualFormat.properties();
     actualProperties.remove(KoListStyle::StyleId);
-    actualProperties.remove(KoListStyle::Indent);
-    actualProperties.remove(KoListStyle::MinimumWidth);
     actualProperties.remove(KoListStyle::MinimumDistance);
     actualProperties.remove(KoListStyle::ListId);
+    actualProperties.remove(QTextFormat::ObjectIndex);
 
     QMap<int, QVariant> expectedProperties = expectedFormat.properties();
     expectedProperties.remove(KoListStyle::StyleId);
-    expectedProperties.remove(KoListStyle::Indent);
-    expectedProperties.remove(KoListStyle::MinimumWidth);
     expectedProperties.remove(KoListStyle::MinimumDistance);
     expectedProperties.remove(KoListStyle::ListId);
+    expectedProperties.remove(QTextFormat::ObjectIndex);
+
+
+    struct Enum {
+        static QString resolve(int key) {
+            QMetaObject meta;
+            if (key >= QTextFormat::UserProperty)
+                meta = KoListStyle::staticMetaObject;
+            else
+                meta = QTextFormat::staticMetaObject;
+            QMetaEnum me = meta.enumerator(meta.indexOfEnumerator("Property"));
+            QString answer(me.valueToKey(key));
+            if (answer.isEmpty())
+                answer = QString::number(key);
+            return answer;
+        }
+    };
+
+    foreach (int key, expectedProperties.keys()) {
+        if (actualProperties.contains(key)) {
+            if (actualProperties.value(key) != expectedProperties.value(key)) {
+                qDebug() << "properties don't match;" << Enum::resolve(key)
+                    << actualProperties.value(key) << expectedProperties.value(key);
+            }
+        } else {
+            qDebug() << "Expected but missing property;" << Enum::resolve(key);
+        }
+    }
+    foreach (int key, actualProperties.keys()) {
+        if (!expectedProperties.contains(key)) {
+            qDebug() << "found extra property;" << Enum::resolve(key);
+        }
+    }
+
     return actualProperties == expectedProperties;
 }
 

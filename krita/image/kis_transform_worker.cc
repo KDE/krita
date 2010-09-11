@@ -25,6 +25,7 @@
 #include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
+#include <KoColor.h>
 
 #include "kis_paint_device.h"
 #include "kis_debug.h"
@@ -466,7 +467,12 @@ bool KisTransformWorker::run()
     //progress info
     m_progressTotalSteps = 0;
     m_progressStep = 0;
-    m_boundRect = m_dev->exactBounds();
+
+    KoColor defaultPixel(m_dev->defaultPixel(), m_dev->colorSpace());
+    if (defaultPixel.opacityU8() != OPACITY_TRANSPARENT_U8)
+        m_boundRect = m_dev->dataManager()->extent();
+    else
+        m_boundRect = m_dev->exactBounds();
 
     if (m_boundRect.isNull()) {
         if (!m_progressUpdater.isNull())
@@ -625,7 +631,11 @@ QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* sele
     if (selection) {
         r = selection->selectedExactRect();
     } else {
-        r = dev->exactBounds();
+        KoColor defaultPixel(dev->defaultPixel(), dev->colorSpace());
+        if (defaultPixel.opacityU8() != OPACITY_TRANSPARENT_U8)
+            r = dev->dataManager()->extent();
+        else
+            r = dev->exactBounds();
     }
     {
         KisHLineConstIteratorPixel srcIt = dev->createHLineConstIterator(r.x(), r.top(), r.width(), selection);
@@ -671,7 +681,11 @@ QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, const KisSelection* sele
     if (selection) {
         r = selection->selectedExactRect();
     } else {
-        r = dev->exactBounds();
+        KoColor defaultPixel(dev->defaultPixel(), dev->colorSpace());
+        if (defaultPixel.opacityU8() != OPACITY_TRANSPARENT_U8)
+            r = dev->dataManager()->extent();
+        else
+            r = dev->exactBounds();
     }
     {
         qint32 y1, y2;

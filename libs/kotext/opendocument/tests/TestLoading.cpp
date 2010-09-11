@@ -1168,8 +1168,6 @@ void TestLoading::testLoading_data()
 void TestLoading::testLoading()
 {
     QFETCH(QString, testcase);
-    if (testcase.startsWith("Tables/"))
-        QEXPECT_FAIL("", "Tables not supported yet", Abort);
     QString testName = testcase;
     testcase.prepend(FILES_DATA_DIR);
 
@@ -1199,6 +1197,8 @@ void TestLoading::testLoading()
             file2.close();
         }
     }
+    if (testcase.indexOf("Tables/") > 0)
+        QEXPECT_FAIL("", "Tables not supported yet", Abort);
     delete actualDocument;
     delete expectedDocument;
     QVERIFY(documentsEqual);
@@ -1214,8 +1214,6 @@ void TestLoading::testSaving_data()
 void TestLoading::testSaving()
 {
     QFETCH(QString, testcase);
-    if (testcase.startsWith("Tables/"))
-        QEXPECT_FAIL("", "Tables not supported yet", Abort);
     QString testName = testcase;
     testcase.prepend(FILES_DATA_DIR);
 
@@ -1248,6 +1246,8 @@ void TestLoading::testSaving()
     delete actualDocument;
     delete expectedDocument;
     delete savedDocument;
+    if (testcase.indexOf("Tables/") > 0)
+        QEXPECT_FAIL("", "Tables not supported yet", Abort);
     QVERIFY(documentsEqual);
 }
 

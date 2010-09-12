@@ -527,19 +527,22 @@ void KisPaintDevice::clear()
 
 void KisPaintDevice::clear(const QRect & rc)
 {
-    m_datamanager->clear(rc.x(), rc.y(), rc.width(), rc.height(), m_datamanager->defaultPixel());
+    m_datamanager->clear(rc.x() - m_d->x, rc.y() - m_d->y,
+                         rc.width(), rc.height(),
+                         m_datamanager->defaultPixel());
     m_d->cache.invalidate();
 }
 
 void KisPaintDevice::fill(const QRect & rc, const KoColor &color)
 {
-    m_datamanager->clear(rc.x(), rc.y(), rc.width(), rc.height(), color.data());
+    m_datamanager->clear(rc.x() - m_d->x, rc.y() - m_d->y,
+                         rc.width(), rc.height(), color.data());
     m_d->cache.invalidate();
 }
 
 void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel)
 {
-    m_datamanager->clear(x, y, w, h, fillPixel);
+    m_datamanager->clear(x - m_d->x, y - m_d->y, w, h, fillPixel);
     m_d->cache.invalidate();
 }
 
@@ -728,7 +731,7 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, const
     if (!rect.isValid())
         e = extent();
     else
-        e = rect;
+        e = rect.translated(-m_d->x, -m_d->y);
     e.getRect(&srcX0, &srcY0, &srcWidth, &srcHeight);
 
 

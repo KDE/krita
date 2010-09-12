@@ -250,7 +250,7 @@ KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoDocumentRdfBase *rd
         d->textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
     }
 
-    kDebug(32500) << "sharedData" << sharedData << "textSharedData" << d->textSharedData;
+    //kDebug(32500) << "sharedData" << sharedData << "textSharedData" << d->textSharedData;
 
     if (!d->textSharedData) {
         d->textSharedData = new KoTextSharedLoadingData();

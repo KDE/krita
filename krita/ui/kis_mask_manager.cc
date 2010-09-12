@@ -105,15 +105,6 @@ void KisMaskManager::masksUpdated()
     m_view->updateGUI();
 }
 
-void KisMaskManager::initMaskSelection(KisMask* mask)
-{
-    if (m_view->selection()) {
-        KisSelectionSP selection =
-            new KisSelection(*m_view->selection().data());
-        mask->setSelection(selection);
-    }
-}
-
 void KisMaskManager::createTransparencyMask()
 {
     KisLayerSP layer = m_view->activeLayer();
@@ -160,9 +151,9 @@ void KisMaskManager::createSelectionmask()
 
 void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
 {
-    KisLayer * layer = dynamic_cast<KisLayer*>(parent.data());
+    KisLayer *layer = dynamic_cast<KisLayer*>(parent.data());
     KisMask *mask = new KisTransparencyMask();
-    initMaskSelection(mask);
+    mask->initSelection(m_view->selection(), layer);
 
     QList<KisNodeSP> transparencyMasks = layer->childNodes(QStringList("KisTransparencyMask"),KoProperties());
     mask->setName(i18n("Transparency Mask")+QString::number(transparencyMasks.count()+1));
@@ -180,18 +171,20 @@ void KisMaskManager::addEffectMask(KisNodeSP parent, KisEffectMaskSP mask)
 
 void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
 {
+    KisLayer *layer = dynamic_cast<KisLayer*>(parent.data());
+    KisFilterMask *mask = new KisFilterMask();
+    mask->initSelection(m_view->selection(), layer);
+
+    mask->setName(i18n("New filter mask"));
+    m_commandsAdapter->addNode(mask, parent, above);
+
     /**
      * FIXME: We'll use layer's paint device for creation of a thumbnail.
      * Actually, we can't use it's projection as newly created mask
      * may be going to be inserted in the middle of the masks stack
      */
+    KisPaintDeviceSP paintDevice = layer->paintDevice();
 
-    KisPaintDeviceSP paintDevice = parent->paintDevice();
-    KisFilterMask *mask = new KisFilterMask();
-    initMaskSelection(mask);
-
-    mask->setName(i18n("New filter mask"));
-    m_commandsAdapter->addNode(mask, parent, above);
 
     KisDlgAdjustmentLayer dialog(mask, mask, paintDevice, m_view->image(),
                                  mask->name(), i18n("New Filter Mask"),
@@ -216,8 +209,9 @@ void KisMaskManager::createTransformationMask(KisNodeSP parent, KisNodeSP above)
          * FIXME: Add preview feature
          */
 
+        KisLayer *layer = dynamic_cast<KisLayer*>(parent.data());
         KisTransformationMask * mask = new KisTransformationMask();
-        initMaskSelection(mask);
+        mask->initSelection(m_view->selection(), layer);
 
         mask->setName(dlg.transformationEffect()->maskName());
         mask->setXScale(dlg.transformationEffect()->xScale());
@@ -246,7 +240,8 @@ void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
         layer->selectionMask()->setActive(false);
 
     KisSelectionMask *mask = new KisSelectionMask(m_view->image());
-    initMaskSelection(mask);
+    mask->initSelection(m_view->selection(), layer);
+
     connect(mask,SIGNAL(changeActivity(KisSelectionMask*,bool)),this,SLOT(changeActivity(KisSelectionMask*,bool)));
 
     //counting number of KisSelectionMask    

@@ -179,8 +179,6 @@ private:
      */
     void activateMask(KisMaskSP mask);
 
-    void initMaskSelection(KisMask* mask);
-
     void createSelectionMask(KisNodeSP parent, KisNodeSP above);
     void createTransformationMask(KisNodeSP parent, KisNodeSP above);
     void createFilterMask(KisNodeSP parent, KisNodeSP above);

@@ -82,6 +82,8 @@ public:
 
     virtual ~KisMask();
 
+    void initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer);
+
     const KoColorSpace * colorSpace() const;
     const KoCompositeOp * compositeOp() const;
 

@@ -131,6 +131,9 @@ KisMemoryLeakTracker::~KisMemoryLeakTracker()
         errKrita << (d->whatWhoWhen.size()) << " leaks have been detected";
         d->dumpReferencedObjectsAndDelete(d->whatWhoWhen, true);
         errKrita << "****************************************";
+#ifndef NDEBUG
+        qFatal("Leaks have been detected... fix krita.");
+#endif
     }
     delete d;
 }

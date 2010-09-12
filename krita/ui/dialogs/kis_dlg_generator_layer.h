@@ -61,8 +61,6 @@ protected slots:
 private:
 
     Ui_WdgDlgGeneratorLayer dlgWidget;
-    KisConfigWidget * m_currentConfigWidget;
-    KisGeneratorSP m_currentGenerator;
     bool m_customName;
     bool m_freezeName;
 };

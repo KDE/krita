@@ -17,29 +17,19 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef MOCKTEXTSHAPE_H
-#define MOCKTEXTSHAPE_H
+#ifndef TESTTEXTTOOL_H
+#define TESTTEXTTOOL_H
 
-#include "../TextShape.h"
-#include <KoTextDocumentLayout.h>
+#include <QObject>
+#include <QString>
+#include <qtest_kde.h>
 
-class MockTextShape : public TextShape
+class TestTextTool : public QObject
 {
-public:
-    MockTextShape()
-        : TextShape(0)
-    {
-        layout = qobject_cast<KoTextDocumentLayout*>(textShapeData()->document()->documentLayout());
-    }
-    void paint(QPainter &painter, const KoViewConverter &converter) {
-        Q_UNUSED(painter);
-        Q_UNUSED(converter);
-    }
-    virtual void saveOdf(KoShapeSavingContext &) const {}
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
-        return true;
-    }
-    KoTextDocumentLayout *layout;
+    Q_OBJECT
+
+private slots:
+    void testTextRect();
 };
 
 #endif

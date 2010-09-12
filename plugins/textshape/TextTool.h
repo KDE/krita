@@ -123,6 +123,8 @@ public:
 
     KoTextEditor *textEditor() { return m_textEditor.data(); }
 
+    QRectF textRect(int startPosition, int endPosition) const;
+
 public slots:
     /// start the textedit-plugin.
     void startTextEditingPlugin(const QString &pluginId);
@@ -253,7 +255,6 @@ private:
     void repaintCaret();
     void repaintSelection();
     void repaintSelection(int from, int to);
-    QRectF textRect(int startPosition, int endPosition) const;
     int pointToPosition(const QPointF & point) const;
     void updateActions();
     void updateStyleManager();

@@ -27,7 +27,7 @@ TestChangeTrackedDelete::~TestChangeTrackedDelete()
 void TestChangeTrackedDelete::testDeletePreviousChar()
 {
     TextTool *textTool = new TextTool(new MockCanvas);
-    KoTextEditor *textEditor = textTool->m_textEditor.data();
+    KoTextEditor *textEditor = textTool->textEditor();
     QVERIFY(textEditor);
     QTextDocument *document = textEditor->document();
     QTextCursor *cursor = textEditor->cursor();
@@ -44,7 +44,7 @@ void TestChangeTrackedDelete::testDeletePreviousChar()
 void TestChangeTrackedDelete::testDeleteNextChar()
 {
     TextTool *textTool = new TextTool(new MockCanvas);
-    KoTextEditor *textEditor = textTool->m_textEditor.data();
+    KoTextEditor *textEditor = textTool->textEditor();
     QVERIFY(textEditor);
     QTextDocument *document = textEditor->document();
     QTextCursor *cursor = textEditor->cursor();
@@ -61,7 +61,7 @@ void TestChangeTrackedDelete::testDeleteNextChar()
 void TestChangeTrackedDelete::testDeleteSelection()
 {
     TextTool *textTool = new TextTool(new MockCanvas);
-    KoTextEditor *textEditor = textTool->m_textEditor.data();
+    KoTextEditor *textEditor = textTool->textEditor();
     QVERIFY(textEditor);
     QTextDocument *document = textEditor->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
@@ -86,7 +86,7 @@ void TestChangeTrackedDelete::testDeleteSelection()
 void TestChangeTrackedDelete::testPrefixMerge()
 {
     TextTool *textTool = new TextTool(new MockCanvas);
-    KoTextEditor *textEditor = textTool->m_textEditor.data();
+    KoTextEditor *textEditor = textTool->textEditor();
     QVERIFY(textEditor);
     QTextDocument *document = textEditor->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
@@ -113,7 +113,7 @@ void TestChangeTrackedDelete::testPrefixMerge()
 void TestChangeTrackedDelete::testSuffixMerge()
 {
     TextTool *textTool = new TextTool(new MockCanvas);
-    KoTextEditor *textEditor = textTool->m_textEditor.data();
+    KoTextEditor *textEditor = textTool->textEditor();
     QVERIFY(textEditor);
     QTextDocument *document = textEditor->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
@@ -140,7 +140,7 @@ void TestChangeTrackedDelete::testSuffixMerge()
 void TestChangeTrackedDelete::testInterMerge()
 {
     TextTool *textTool = new TextTool(new MockCanvas);
-    KoTextEditor *textEditor = textTool->m_textEditor.data();
+    KoTextEditor *textEditor = textTool->textEditor();
     QVERIFY(textEditor);
     QTextDocument *document = textEditor->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
@@ -171,7 +171,7 @@ void TestChangeTrackedDelete::testInterMerge()
 void TestChangeTrackedDelete::testPartialListItemDelete()
 {
     TextTool *textTool = new TextTool(new MockCanvas);
-    KoTextEditor *textEditor = textTool->m_textEditor.data();
+    KoTextEditor *textEditor = textTool->textEditor();
     QVERIFY(textEditor);
     QTextDocument *document = textEditor->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
@@ -220,7 +220,7 @@ void TestChangeTrackedDelete::testPartialListItemDelete()
 void TestChangeTrackedDelete::testListItemDelete()
 {
     TextTool *textTool = new TextTool(new MockCanvas);
-    KoTextEditor *textEditor = textTool->m_textEditor.data();
+    KoTextEditor *textEditor = textTool->textEditor();
     QVERIFY(textEditor);
     QTextDocument *document = textEditor->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
@@ -271,7 +271,7 @@ void TestChangeTrackedDelete::testListItemDelete()
 void TestChangeTrackedDelete::testListDelete()
 {
     TextTool *textTool = new TextTool(new MockCanvas);
-    KoTextEditor *textEditor = textTool->m_textEditor.data();
+    KoTextEditor *textEditor = textTool->textEditor();
     QVERIFY(textEditor);
     QTextDocument *document = textEditor->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
@@ -328,7 +328,7 @@ void TestChangeTrackedDelete::testListDelete()
 void TestChangeTrackedDelete::testTableDelete()
 {
     TextTool *textTool = new TextTool(new MockCanvas);
-    KoTextEditor *textEditor = textTool->m_textEditor.data();
+    KoTextEditor *textEditor = textTool->textEditor();
     QVERIFY(textEditor);
     QTextDocument *document = textEditor->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());

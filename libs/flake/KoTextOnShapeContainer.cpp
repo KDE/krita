@@ -24,6 +24,9 @@
 #include "KoShapeFactoryBase.h"
 #include "KoTextShapeDataBase.h"
 
+#include <KoXmlNS.h>
+#include <KoShapeLoadingContext.h>
+
 #include <KDebug>
 #include <QTextCursor>
 
@@ -278,5 +281,21 @@ void KoTextOnShapeContainer::saveOdfChildElements(KoShapeSavingContext &context)
     Q_ASSERT(shapeData); // would be a bug in kotext
     if (!shapeData->document()->isEmpty()) {
         shapeData->saveOdf(context);
+    }
+}
+
+// static
+void KoTextOnShapeContainer::tryWrapShape(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    KoXmlElement text = KoXml::namedItemNS(element, KoXmlNS::text, "p");
+    if (!text.isNull()) {
+        KoShapeContainer *oldParent = shape->parent();
+        KoTextOnShapeContainer *tos = new KoTextOnShapeContainer(shape,
+                context.documentResourceManager());
+        if (!tos->loadOdf(element, context)) {
+            // failed, delete it again.
+            shape->setParent(oldParent);
+            delete tos;
+        }
     }
 }

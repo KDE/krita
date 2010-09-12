@@ -108,7 +108,7 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
         return QRect();
     }
 
-    KisConstProcessingInformation srcInfo(src,  rc.topLeft(), selection());
+    KisConstProcessingInformation srcInfo(src,  rc.topLeft(), 0);
     KisProcessingInformation dstInfo(dst, rc.topLeft(), 0);
 
     KoProgressUpdater updater(nodeProgressProxy());

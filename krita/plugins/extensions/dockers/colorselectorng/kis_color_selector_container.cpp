@@ -81,7 +81,8 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
     m_myPaintShadeSelector->setCanvas(canvas);
     m_minimalShadeSelector->setCanvas(canvas);
 
-    connect(m_canvas->view()->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(reactOnLayerChange()));
+    if(m_canvas->view()->layerManager())
+        connect(m_canvas->view()->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()));
 
     KActionCollection* actionCollection = canvas->view()->actionCollection();
 

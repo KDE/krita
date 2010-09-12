@@ -308,5 +308,5 @@ void KisColorSelector::init()
 
     connect(m_updateTimer,      SIGNAL(timeout()), this,  SLOT(update()));
 
-    setMinimumSize(80, 80);
+    setMinimumSize(40, 40);
 }

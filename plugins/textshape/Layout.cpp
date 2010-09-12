@@ -2044,7 +2044,7 @@ void Layout::updateFrameStack()
     for (int i = changedFrameFrom ; i < m_frameStack.count(); ++i) {
         QTextFrame *frame = m_frameStack.at(i);
         QTextFrameFormat ff = frame->frameFormat();
-        if (ff.hasProperty(KoText::TableOfContents) && ff.property(KoText::TableOfContents).toBool() == true) {
+        if (false && ff.hasProperty(KoText::TableOfContents) && ff.property(KoText::TableOfContents).toBool() == true) {
             // this frame is a TOC
             bool found = false;
             QList<QWeakPointer<ToCGenerator> >::Iterator iter = m_tocGenerators.begin();

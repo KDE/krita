@@ -456,7 +456,7 @@ QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString &_format, bool k
 {
     Q_UNUSED(_prefix);
     Q_UNUSED(_suffix);
-    kDebug(30003) << "QString KoOdfNumberStyles::saveOdfTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    //kDebug(30003) << "QString KoOdfNumberStyles::saveOdfTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
     KoGenStyle currentStyle(KoGenStyle::NumericTimeStyle);
     QBuffer buffer;
@@ -575,7 +575,7 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool k
 {
     Q_UNUSED(_prefix);
     Q_UNUSED(_suffix);
-    kDebug(30003) << _format;
+    //kDebug(30003) << _format;
     QString format(_format);
 
     // Not supported into Qt: "era" "week-of-year" "quarter"
@@ -716,7 +716,7 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool k
 QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &_format,
         const QString &_prefix, const QString &_suffix)
 {
-    kDebug(30003) << "QString saveOdfFractionStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    //kDebug(30003) << "QString saveOdfFractionStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
     KoGenStyle currentStyle(KoGenStyle::NumericFractionStyle);
@@ -775,7 +775,7 @@ QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &_format,
 QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &_format,
         const QString &_prefix, const QString &_suffix)
 {
-    kDebug(30003) << "QString saveOdfNumberStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    //kDebug(30003) << "QString saveOdfNumberStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
     KoGenStyle currentStyle(KoGenStyle::NumericNumberStyle);
@@ -800,7 +800,7 @@ QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &_format,
     text = _prefix ;
     addTextNumber(text, elementWriter);
     elementWriter.startElement("number:number");
-    kDebug(30003) << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
+    //kDebug(30003) << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
     if (!beforeSeparator)
         elementWriter.addAttribute("number:decimal-places", decimalplaces);
     elementWriter.addAttribute("number:min-integer-digits", integerdigits);
@@ -823,7 +823,7 @@ QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &_format,
     //<number:text>%</number:text>
     //</number:percentage-style>
 
-    kDebug(30003) << "QString saveOdfPercentageStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    //kDebug(30003) << "QString saveOdfPercentageStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
     KoGenStyle currentStyle(KoGenStyle::NumericPercentageStyle);
@@ -873,7 +873,7 @@ QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
     //</number:number-style>
 
     //example 000,000e+0000
-    kDebug(30003) << "QString saveOdfScientificStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    //kDebug(30003) << "QString saveOdfScientificStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
     KoGenStyle currentStyle(KoGenStyle::NumericScientificStyle);
@@ -919,7 +919,7 @@ QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
     addTextNumber(text, elementWriter);
 
     elementWriter.startElement("number:scientific-number");
-    kDebug(30003) << " decimalplace :" << decimalplace << " integerdigits :" << integerdigits << " exponentdigits :" << exponentdigits;
+    //kDebug(30003) << " decimalplace :" << decimalplace << " integerdigits :" << integerdigits << " exponentdigits :" << exponentdigits;
     if (!beforeSeparator)
         elementWriter.addAttribute("number:decimal-places", decimalplace);
     elementWriter.addAttribute("number:min-integer-digits", integerdigits);
@@ -946,7 +946,7 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
     //<number:currency-symbol>VEB</number:currency-symbol>
     //</number:currency-style>
 
-    kDebug(30003) << "QString saveOdfCurrencyStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    //kDebug(30003) << "QString saveOdfCurrencyStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
     KoGenStyle currentStyle(KoGenStyle::NumericCurrencyStyle);
@@ -973,7 +973,7 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
     addTextNumber(text, elementWriter);
 
     elementWriter.startElement("number:number");
-    kDebug(30003) << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
+    //kDebug(30003) << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
     if (!beforeSeparator)
         elementWriter.addAttribute("number:decimal-places", decimalplaces);
     elementWriter.addAttribute("number:min-integer-digits", integerdigits);
@@ -984,7 +984,7 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
     addKofficeNumericStyleExtension(elementWriter, _suffix, _prefix);
 
     elementWriter.startElement("number:currency-symbol");
-    kDebug(30003) << " currency-symbol:" << symbol;
+    //kDebug(30003) << " currency-symbol:" << symbol;
     elementWriter.addTextNode(symbol.toUtf8());
     elementWriter.endElement();
 
@@ -1000,7 +1000,7 @@ QString saveOdfTextStyle(KoGenStyles &mainStyles, const QString &_format, const 
     //<number:text-content/>
     ///</number:text-style>
 
-    kDebug(30003) << "QString saveOdfTextStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    //kDebug(30003) << "QString saveOdfTextStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
     KoGenStyle currentStyle(KoGenStyle::NumericTextStyle);

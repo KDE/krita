@@ -6,9 +6,8 @@
 #include <qtest_kde.h>
 
 #include "../Layout.h"
-#include "../TextShape.h"
+#include "MockTextShape.h"
 
-class MockTextShape;
 class KoTextDocumentLayout;
 class KoSectionStyle;
 class KoStyleManager;
@@ -60,25 +59,6 @@ private:
 
     // Default styles for the test.
     KoSectionStyle *m_defaultSectionStyle;
-};
-
-class MockTextShape : public TextShape
-{
-public:
-    MockTextShape() : TextShape(0)
-    {
-        layout = qobject_cast<KoTextDocumentLayout*>(textShapeData()->document()->documentLayout());
-    }
-    void paint(QPainter &painter, const KoViewConverter &converter)
-    {
-        Q_UNUSED(painter);
-        Q_UNUSED(converter);
-    }
-    virtual void saveOdf(KoShapeSavingContext &) const {}
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
-        return true;
-    }
-    KoTextDocumentLayout *layout;
 };
 
 #endif // TESTSECTIONS_H

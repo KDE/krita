@@ -35,7 +35,7 @@ template <typename T, typename K> class QMap;
 namespace KDChart {
 
     /**
-      * @brief A set of ottributes controlling the appearance of data set markers
+      * @brief A set of attributes controlling the appearance of data set markers
       */
     class KDCHART_EXPORT MarkerAttributes
     {
@@ -62,6 +62,9 @@ namespace KDChart {
         typedef QMap<uint, MarkerStyle> MarkerStylesMap;
         void setMarkerStylesMap( const MarkerStylesMap & map );
         MarkerStylesMap markerStylesMap() const;
+        
+        void setThreeD( bool value );
+        bool threeD() const;
 
         void setMarkerStyle( MarkerStyle style );
         MarkerStyle markerStyle() const;

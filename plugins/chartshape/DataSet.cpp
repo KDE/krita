@@ -652,7 +652,10 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
         ma.setVisible( true );
         break;
     case BubbleChartType:
-        ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
+        Q_ASSERT( attachedAxis() );
+        Q_ASSERT( attachedAxis()->plotArea() );
+        ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerCircle );        
+        ma.setThreeD( attachedAxis()->plotArea()->isThreeD() );
         ma.setVisible( true );
         break;
     default:

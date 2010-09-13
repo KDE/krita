@@ -620,8 +620,27 @@ void AbstractDiagram::paintMarker( QPainter* painter,
         painter->translate( pos );
         switch ( markerAttributes.markerStyle() ) {
             case MarkerAttributes::MarkerCircle:
+            {
+                if ( markerAttributes.threeD() ) {
+                    QRadialGradient grad;
+                    grad.setCoordinateMode( QGradient::ObjectBoundingMode );
+                    QColor drawColor = brush.color();
+                    grad.setCenter( 0.5, 0.5 );
+                    grad.setRadius( 1.0 );
+                    grad.setFocalPoint( 0.35, 0.35 );
+                    grad.setColorAt( 0.00, drawColor.lighter( 150 ) );
+                    grad.setColorAt( 0.20, drawColor );
+                    grad.setColorAt( 0.50, drawColor.darker( 150 ) );
+                    grad.setColorAt( 0.75, drawColor.darker( 200 ) );
+                    grad.setColorAt( 0.95, drawColor.darker( 250 ) );
+                    grad.setColorAt( 1.00, drawColor.darker( 200 ) );
+                    QBrush newBrush( grad );
+                    newBrush.setMatrix( brush.matrix() );
+                    painter->setBrush( newBrush );
+                }
                 painter->drawEllipse( QRectF( 0 - maSize.height()/2, 0 - maSize.width()/2,
                             maSize.height(), maSize.width()) );
+            }
                 break;
             case MarkerAttributes::MarkerSquare:
                 {

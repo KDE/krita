@@ -79,6 +79,9 @@ public:
 public:
     QString filename() const;
     void setFilename(const QString& filename);
+
+    /// Name of the file without the path
+    QString shortFilename() const;
     QString name() const;
     void setName(const QString& name);
     bool valid() const;

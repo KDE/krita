@@ -39,23 +39,27 @@ class KoView;
 class KoCanvasControllerProxyObject;
 
 /**
- * KoCanvasController is the base class for widgets that are a wrapper
- * around your canvas providing scrollbars.
+ * KoCanvasController is the base class for wrappers around your canvas
+ * that provides scrolling and zoomming for your canvas.
  *
  * Flake does not provide a canvas, the application will have to
- * extend a QWidget and implement that themselves; but Flake does make
- * it a lot easier to do so. One of those things is this class which
- * acts as a decorator around the canvas widget or graphics item and provides
- * scrollbars and allows the canvas to be centered in the viewArea
+ * implement a canvas themselves. You canvas can be QWidget-based, QGraphicsItem-based
+ * or something we haven't invented yet -- as long the class that holds the canvas
+ * imlements KoCanvasController, tools, scrolling and zooming will work.
+ *
+ * A KoCanvasController implementation acts as a decorator around the canvas widget or
+ * graphics item and provides a way to scroll the cavasn, allows the canvas to be centered
+ * in the viewArea and manages tool activation.
+ *
  * <p>The using application can instantiate this class and add its
  * canvas using the setCanvas() call. Which is designed so it can be
- * called multiple times for those that wish to exchange one canvas
- * widget for another.
+ * called multiple times if you need to exchange one canvas
+ * widget for another, for instance, switching between a plain QWidget or a QGLWidget.
  *
- * Effectively, there is _one_ KoCanvasController per KoView in your
+ * <p>There is _one_ KoCanvasController per canvas in your
  * application.
  *
- * The canvas widget is at most as big as the viewport of the scroll
+ * <p>The canvas widget is at most as big as the viewport of the scroll
  * area, and when the view on the document is near its edges, smaller.
  * In your canvas widget code, you can find the right place in your
  * document in view coordinates (pixels) by adding the documentOffset

@@ -55,7 +55,7 @@ void addStandardCompositeOps(KoColorSpace* cs)
     cs->addCompositeOp(new KoCompositeOpOverlay<_Traits_>(cs));
     cs->addCompositeOp(new KoCompositeOpScreen<_Traits_>(cs));
     cs->addCompositeOp(new KoCompositeOpSubtract<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpSoftLight<_Traits_>(cs));
+    cs->addCompositeOp(new KoCompositeOpSoftlight<_Traits_>(cs));
     cs->addCompositeOp(new KoCompositeOpHardlight<_Traits_>(cs));
 }
 

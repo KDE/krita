@@ -58,7 +58,6 @@
 #include "kis_paintop_box.h"
 #include "kis_custom_pattern.h"
 #include "widgets/kis_pattern_chooser.h"
-#include "kis_popup_palette.h"
 #include "ko_favorite_resource_manager.h"
 #include <kis_canvas2.h>
 
@@ -91,7 +90,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     action  = new KAction(i18n("&Gradients"), this);
     view->actionCollection()->addAction("gradients", action);
     action->setDefaultWidget(m_gradientWidget);
-    
+
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
     m_gradientWidget->setResourceAdapter(adapter);
@@ -119,16 +118,6 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     action  = new KAction(i18n("&Painter's Tools"), this);
     view->actionCollection()->addAction("paintops", action);
     action->setDefaultWidget(m_paintopBox);
-
-        /***TESTING***/
-    m_view->canvasBase()->createFavoriteResourceManager(m_paintopBox);
-
-    m_paletteButton = new QPushButton(i18n("Save to Palette"));
-    connect(m_paletteButton, SIGNAL(clicked()), this, SLOT(slotSaveToFavouriteBrushes()));
-    action  = new KAction(i18n("&Palette"), this);
-    view->actionCollection()->addAction("palette_manager", action);
-    action->setDefaultWidget(m_paletteButton);
-
 }
 
 
@@ -180,17 +169,6 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     if (chooser->currentResource())
         view->resourceProvider()->slotPatternActivated(chooser->currentResource());
 
-}
-
-void KisControlFrame::slotSaveToFavouriteBrushes()
-{
-    if(! m_view->canvasBase()->favoriteResourceManager())
-    {
-        m_view->canvasBase()->createFavoriteResourceManager(m_paintopBox);
-    }
-    else {
-        m_view->canvasBase()->favoriteResourceManager()->showPaletteManager();
-    }
 }
 
 void KisControlFrame::createGradientsChooser(KisView2 * view)

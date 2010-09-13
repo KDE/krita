@@ -680,6 +680,7 @@ bool KisCanvas2::handlePopupPaletteIsVisible(KoPointerEvent* e)
 
     //TODO: port favoriteResourceManager to KisCanvas2, then enable this function.
     if (e->button() && (Qt::LeftButton || Qt::MidButton || Qt::RightButton)
+        && favoriteResourceManager()
         && favoriteResourceManager()->isPopupPaletteVisible()) {
         favoriteResourceManager()->slotShowPopupPalette();
         return true;

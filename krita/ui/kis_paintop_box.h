@@ -111,6 +111,7 @@ private slots:
     void eraseModeToggled(bool checked);
     void updateCompositeOpComboBox();
     void slotSetCompositeMode(const QString& compositeOp);
+    void slotSaveToFavouriteBrushes();
 
 private:
 
@@ -130,6 +131,7 @@ private:
     KisPaintOpPresetsChooserPopup* m_presetsChooserPopup;
     KisBrushEngineSelector* m_brushEngineSelector;
     KisView2* m_view;
+    QPushButton* m_paletteButton;
 
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     QList<KoID> m_paintops;

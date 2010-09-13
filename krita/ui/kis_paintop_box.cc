@@ -55,6 +55,7 @@
 #include <kis_image.h>
 #include <kis_node.h>
 
+#include "kis_canvas2.h"
 #include "kis_node_manager.h"
 #include "kis_layer_manager.h"
 #include "kis_view2.h"
@@ -103,22 +104,19 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_settingsWidget = new KisPopupButton(this);
     m_settingsWidget->setIcon(KIcon("paintop_settings_02"));
     m_settingsWidget->setToolTip(i18n("Edit brush settings"));
-    m_settingsWidget->setFixedSize(32, 32);
+    //m_settingsWidget->setText(i18n("Create Brush"));
+    //m_settingsWidget->setFixedSize(32, 32);
 
     m_presetWidget = new KisPopupButton(this);
     m_presetWidget->setIcon(KIcon("paintop_settings_01"));
     m_presetWidget->setToolTip(i18n("Choose brush preset"));
-    m_presetWidget->setFixedSize(32, 32);
-
-    m_brushChooser = new KisPopupButton(this);
-    m_brushChooser->setIcon(KIcon("paintop_settings_01"));
-    m_brushChooser->setToolTip(i18n("Choose and edit brush"));
-    m_brushChooser->setFixedSize(32, 32);
+    //m_presetWidget->setText(i18n("Select Brush"));
+    //m_presetWidget->setFixedSize(32, 32);
 
     m_eraseModeButton = new QPushButton(this);
     m_eraseModeButton->setIcon(KIcon("draw-eraser"));
     m_eraseModeButton->setToolTip(i18n("Set eraser mode"));
-    m_eraseModeButton->setFixedSize(32, 32);
+    //m_eraseModeButton->setFixedSize(32, 32);
     m_eraseModeButton->setCheckable(true);
     m_eraseModeButton->setShortcut(Qt::Key_E);
 
@@ -130,15 +128,27 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     nodeChanged(view->activeNode());
     connect(m_cmbComposite, SIGNAL(activated(const QString&)), this, SLOT(slotSetCompositeMode(const QString&)));
 
+    m_brushChooser = new KisPopupButton(this);
+    //m_brushChooser->setIcon(KIcon("paintop_settings_01"));
+    m_brushChooser->setText(i18n("Brush Editor"));
+    m_brushChooser->setToolTip(i18n("Choose and edit brush"));
+
+    m_paletteButton = new QPushButton(i18n("Save to Palette"));
+    connect(m_paletteButton, SIGNAL(clicked()), this, SLOT(slotSaveToFavouriteBrushes()));
+    //KAction *action  = new KAction(i18n("&Palette"), this);
+    //view->actionCollection()->addAction("palette_manager", action);
+    //action->setDefaultWidget(m_paletteButton);
+
     m_layout = new QHBoxLayout(this);
     m_layout->addWidget(m_cmbPaintops);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
-    m_layout->addWidget(m_brushChooser);
     m_layout->addWidget(labelMode);
     m_layout->addWidget(m_cmbComposite);
     m_layout->addWidget(m_eraseModeButton);
-    //m_layout->addSpacerItem(new QSpacerItem(10, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    m_layout->addWidget(m_paletteButton);
+    m_layout->addSpacerItem(new QSpacerItem(10, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    m_layout->addWidget(m_brushChooser);
 
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_settingsWidget->setPopupWidget(m_presetsPopup);
@@ -557,6 +567,18 @@ void KisPaintopBox::slotSetCompositeMode(const QString& compositeOp)
     m_inputDeviceCompositeModes[KoToolManager::instance()->currentInputDevice()] = compositeOp;
     setCompositeOpInternal(compositeOp);
     m_resourceProvider->setCurrentCompositeOp(compositeOp);
+}
+
+
+void KisPaintopBox::slotSaveToFavouriteBrushes()
+{
+    if(! m_view->canvasBase()->favoriteResourceManager())
+    {
+        m_view->canvasBase()->createFavoriteResourceManager(this);
+    }
+    else {
+        m_view->canvasBase()->favoriteResourceManager()->showPaletteManager();
+    }
 }
 
 #include "kis_paintop_box.moc"

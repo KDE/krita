@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2009 Edward Apap <schumifer@hotmail.com>
+ *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -29,9 +30,12 @@
 #include "kis_perspective_math.h"
 #include "kis_random_sub_accessor.h"
 #include "kis_selection.h"
+#include "kis_datamanager.h"
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
+#include <KoColorSpace.h>
+#include <KoColor.h>
 
 KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, KisSelectionSP selection, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdater *progress)
         : m_dev(dev), m_progress(progress), m_selection(selection)
@@ -39,8 +43,13 @@ KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP de
 {
     if (selection)
         m_r = m_selection->selectedExactRect();
-    else
-        m_r = m_dev->exactBounds();
+    else {
+        KoColor defaultPixel(m_dev->defaultPixel(), m_dev->colorSpace());
+        if (defaultPixel.opacityU8() != OPACITY_TRANSPARENT_U8)
+            m_r = m_dev->dataManager()->extent();
+        else
+            m_r = m_dev->exactBounds();
+    }
 
     m_xcenter = 0;
     m_ycenter = 0;

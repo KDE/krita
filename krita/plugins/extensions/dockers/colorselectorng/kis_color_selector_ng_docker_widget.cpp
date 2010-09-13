@@ -101,7 +101,8 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
     m_colorSelectorContainer->setCanvas(canvas);
     m_canvas = canvas;
 
-    connect(m_canvas->view()->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(reactOnLayerChange()));
+    if(m_canvas->view()->layerManager())
+        connect(m_canvas->view()->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()));
 
     KActionCollection* actionCollection = canvas->view()->actionCollection();
 

@@ -206,6 +206,13 @@ bool KoDocumentSectionDelegate::eventFilter(QObject *object, QEvent *event)
             }
         }
     } break;
+    case QEvent::FocusOut : {
+        QLineEdit *edit = qobject_cast<QLineEdit*>(object);
+        if (edit && edit == d->edit) {
+            emit commitData(edit);
+            emit closeEditor(edit);
+        }
+    }
     default: break;
     }
 

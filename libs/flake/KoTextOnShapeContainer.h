@@ -91,6 +91,22 @@ public:
      */
     virtual void saveOdfChildElements(KoShapeSavingContext &context) const;
 
+    /**
+     * Try to load text-on-shape from \a element and wrap \a shape with it.
+     * In ODF certain shape-types can have a "text:p" child-element which
+     * translates in KOffice design to it ending up with a
+     * KoTextOnShapeContainer as parent.
+     * What this method does is check if the argument element has a text:p
+     * child and if it does (and is valid) then it adds a parent to the
+     * shape (see constructor) and loads the text data.
+     * If no text data was found the shape is not touched.
+     * Nothing is returned as there typically is no need to check. If you want
+     * to know that the text was added you can call parent() on the shape you
+     * passed in.
+     */
+    static void tryWrapShape(KoShape *shape, const KoXmlElement &element,
+            KoShapeLoadingContext &context);
+
 private:
     Q_DECLARE_PRIVATE(KoTextOnShapeContainer)
 };

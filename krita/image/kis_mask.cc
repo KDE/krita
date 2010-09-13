@@ -106,24 +106,31 @@ const KoCompositeOp * KisMask::compositeOp() const
     return op ? op : parentNode->colorSpace()->compositeOp(COMPOSITE_OVER);
 }
 
+void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
+{
+    Q_ASSERT(parentLayer);
+
+    KisPaintDeviceSP parentPaintDevice = parentLayer->paintDevice();
+
+    if(copyFrom) {
+        /**
+         * We can't use setSelection as we may not have parent() yet
+         */
+        m_d->selection = new KisSelection(*copyFrom);
+        m_d->selection->setDefaultBounds(parentPaintDevice->defaultBounds());
+    }
+    else {
+        m_d->selection = new KisSelection(parentPaintDevice,
+                                          parentPaintDevice->defaultBounds());
+
+        quint8 newDefaultPixel = MAX_SELECTED;
+        m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
+    }
+    m_d->selection->updateProjection();
+}
+
 KisSelectionSP KisMask::selection() const
 {
-    if (!m_d->selection) {
-        // FIXME: this violates the const
-        m_d->selection = new KisSelection();
-        if (parent()) {
-            const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
-            m_d->selection->setDefaultBounds(KisDefaultBounds(parentLayer->image()));
-        }
-        /**
-         * FIXME: Add default pixel choice
-         * e.g. "Selected by default" or "Deselected by default"
-         */
-        if (parent())
-            m_d->selection->getOrCreatePixelSelection()->select(parent()->exactBounds(), MAX_SELECTED);
-        m_d->selection->updateProjection();
-    }
-
     return m_d->selection;
 }
 
@@ -162,7 +169,7 @@ QRect KisMask::decorateRect(KisPaintDeviceSP &src,
 
 void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 {
-    if (m_d->selection) {
+    if (selection()) {
 
         m_d->selection->updateProjection(rc);
 
@@ -182,6 +189,7 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
         KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.device(projection);
         cacheDevice->makeCloneFromRough(projection, rc);
         projection->clear(rc);
+
         // FIXME: how about opacity and compositeOp?
         decorateRect(cacheDevice, projection, rc);
     }

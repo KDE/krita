@@ -180,6 +180,7 @@ void KisCustomImageWidget::buttonClicked()
     width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
     height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
 
+    qc.setAlpha(backgroundOpacity());
     KoColor bgColor(qc, cs);
     m_doc->newImage(txtName->text(), width, height, cs, bgColor, txtDescription->toPlainText(), resolution);
 
@@ -187,7 +188,7 @@ void KisCustomImageWidget::buttonClicked()
     if (image && image->root() && image->root()->firstChild()) {
         KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
         if (layer) {
-            layer->setOpacity(backgroundOpacity());
+            layer->setOpacity(OPACITY_OPAQUE_U8);
         }
         // Hack: with a semi-transparent background color, the projection isn't composited right if we just set the default pixel
         if (layer && backgroundOpacity() < OPACITY_OPAQUE_U8) {
@@ -197,7 +198,7 @@ void KisCustomImageWidget::buttonClicked()
 #warning "Why transaction here? FIXME: remove it!"
 #endif
             painter.beginTransaction("");
-            painter.fillRect(0, 0, width, height, bgColor, OPACITY_OPAQUE_U8);
+            painter.fillRect(0, 0, width, height, bgColor, backgroundOpacity());
             painter.deleteTransaction();
 
         }

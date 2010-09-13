@@ -19,6 +19,9 @@
 
 #include <kglobal.h>
 
+// to disable assert when the leak tracker is active
+#include "config-memory-leak-tracker.h"
+
 #include "kis_tile_data_store.h"
 #include "kis_tile_data.h"
 #include "kis_debug.h"
@@ -62,8 +65,11 @@ KisTileDataStore::~KisTileDataStore()
                     << "some tiles have leaked from the Krita control!";
         qCritical() << "CRITICAL: Tiles in memory:" << numTilesInMemory()
                     << "Total tiles:" << numTiles();
+
+#ifndef HAVE_MEMORY_LEAK_TRACKER
         Q_ASSERT_X(0, "KisTileDataStore::~KisTileDataStore",
                    "Let's crash to be on the safe side! ;)");
+#endif /* HAVE_MEMORY_LEAK_TRACKER */
 
     }
 }

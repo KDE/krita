@@ -34,8 +34,6 @@
 
 KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, QWidget * parent)
         : KDialog(parent)
-        , m_currentConfigWidget(0)
-        , m_currentGenerator(0)
         , m_customName(false)
         , m_freezeName(false)
 {

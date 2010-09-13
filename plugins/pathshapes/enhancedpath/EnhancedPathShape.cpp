@@ -31,7 +31,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoShapeSavingContext.h>
-#include <KoShapeContainer.h>
+#include <KoTextOnShapeContainer.h>
 #include <KoUnit.h>
 #include <KoOdfWorkaround.h>
 #include <KoPathPoint.h>
@@ -448,6 +448,8 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     setPosition(pos);
 
     loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements);
+
+    KoTextOnShapeContainer::tryWrapShape(this, element, context);
 
     return true;
 }

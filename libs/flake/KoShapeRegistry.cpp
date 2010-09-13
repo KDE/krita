@@ -23,9 +23,9 @@
 #include "KoPathShapeFactory.h"
 #include "KoConnectionShapeFactory.h"
 #include "KoShapeLoadingContext.h"
-#include "KoTextOnShapeContainer.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeGroup.h"
+#include "KoShapeLayer.h"
 
 #include <KoPluginLoader.h>
 #include <KoXmlReader.h>
@@ -243,16 +243,12 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
             context.odfLoadingContext().styleStack().restore();
 
             if (loaded) {
-                KoXmlElement text = KoXml::namedItemNS(fullElement, KoXmlNS::text, "p");
-                if (!text.isNull()) {
-                    KoTextOnShapeContainer *tos = new KoTextOnShapeContainer(shape,
-                            context.documentResourceManager());
-                    if (tos->loadOdf(fullElement, context)) {
-                        return tos;
-                    }
-                    shape->setParent(0);
-                    delete tos;
-                }
+                // we return the top-level most shape as thats the one that we'll have to
+                // add to the KoShapeManager for painting later (and also to avoid memory leaks)
+                // but don't go past a KoShapeLayer as KoShape adds those from the context
+                // during loading and those are already added.
+                while (shape->parent() && dynamic_cast<KoShapeLayer*>(shape->parent()) == 0)
+                    shape = shape->parent();
                 return shape;
             }
 

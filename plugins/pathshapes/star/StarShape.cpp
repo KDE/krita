@@ -23,7 +23,7 @@
 #include <KoPathPoint.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoShapeContainer.h>
+#include <KoTextOnShapeContainer.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
@@ -342,6 +342,7 @@ bool StarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & co
     setTransformation(QTransform());
 
     loadOdfAttributes(element, context, OdfAllAttributes);
+    KoTextOnShapeContainer::tryWrapShape(this, element, context);
 
     return true;
 }

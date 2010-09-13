@@ -131,6 +131,61 @@ target_link_libraries(TestSections kotext ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
+set(TestTextTool_test_SRCS
+    TestTextTool.cpp
+    ../ChangeTracker.cpp
+    ../commands/AcceptChangeCommand.cpp
+    ../commands/ChangeListCommand.cpp
+    ../commands/ChangeListLevelCommand.cpp
+    ../commands/ChangeTrackedDeleteCommand.cpp
+    ../commands/DeleteCommand.cpp
+    ../commands/ListItemNumberingCommand.cpp
+    ../commands/RejectChangeCommand.cpp
+    ../commands/ShowChangesCommand.cpp
+    ../commands/TextCommandBase.cpp
+    ../commands/TextCutCommand.cpp
+    ../commands/TextPasteCommand.cpp
+    ../dialogs/ChangeConfigureDialog.cpp
+    ../dialogs/CharacterGeneral.cpp
+    ../dialogs/CharacterHighlighting.cpp
+    ../dialogs/FontDecorations.cpp
+    ../dialogs/FontDia.cpp
+    ../dialogs/FontLayoutTab.cpp
+    ../dialogs/FontTab.cpp
+    ../dialogs/FormattingPreview.cpp
+    ../dialogs/InsertCharacter.cpp
+    ../dialogs/LanguageTab.cpp
+    ../dialogs/ListsSpinBox.cpp
+    ../dialogs/NewStyleWidget.cpp
+    ../dialogs/ParagraphBulletsNumbers.cpp
+    ../dialogs/ParagraphDecorations.cpp
+    ../dialogs/ParagraphGeneral.cpp
+    ../dialogs/ParagraphIndentSpacing.cpp
+    ../dialogs/ParagraphLayout.cpp
+    ../dialogs/ParagraphSettingsDialog.cpp
+    ../dialogs/SimpleStyleWidget.cpp
+    ../dialogs/StyleManager.cpp
+    ../dialogs/StyleManagerDialog.cpp
+    ../dialogs/StyleManagerWelcome.cpp
+    ../dialogs/StylesModel.cpp
+    ../dialogs/StylesWidget.cpp
+    ../dialogs/TableDialog.cpp
+    ../dialogs/TrackedChangeManager.cpp
+    ../dialogs/TrackedChangeModel.cpp
+    ../Layout.cpp
+    ../ListItemsHelper.cpp
+    ../TableLayout.cpp
+    ../TableLayoutData.cpp
+    ../TextEditingPluginContainer.cpp
+    ../TextShape.cpp
+    ../TextTool.cpp
+    ../ToCGenerator.cpp
+)
+kde4_add_unit_test(TestTextTool TESTNAME shapes-text-TestTextTool ${TestTextTool_test_SRCS})
+target_link_libraries(TestTextTool komain ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(TestChangeTrackedDelete_test_SRCS
     TestChangeTrackedDelete.cpp
     ../commands/ChangeListCommand.cpp

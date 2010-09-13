@@ -27,6 +27,7 @@
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 #include "KoConnectionShapeLoadingUpdater.h"
+#include "KoTextOnShapeContainer.h"
 #include "KoPathShapeLoader.h"
 #include "KoPathPoint.h"
 #include <KoXmlReader.h>
@@ -407,6 +408,8 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         d->forceUpdate = true;
         updateConnections();
     }
+
+    KoTextOnShapeContainer::tryWrapShape(this, element, context);
 
     return true;
 }

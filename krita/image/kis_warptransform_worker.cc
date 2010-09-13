@@ -1,7 +1,7 @@
 /*
  *  kis_warptransform_worker.cc -- part of Krita
  *
- *  Copyright (c) 2010 Marc Pegon
+ *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,12 +21,15 @@
 #include "kis_warptransform_worker.h"
 #include "kis_random_sub_accessor.h"
 #include "kis_iterator_ng.h"
+#include "kis_datamanager.h"
 
 #include <QTransform>
 #include <QVector2D>
 #include <QPainter>
 
 #include <KoProgressUpdater.h>
+#include <KoColorSpace.h>
+#include <KoColor.h>
 
 #include <limits.h>
 #include <math.h>
@@ -1455,7 +1458,12 @@ void KisWarpTransformWorker::run()
 
     qint32 nbPoints = m_origPoint.size();
     KisPaintDeviceSP srcdev = new KisPaintDevice(*m_dev.data());
-    QRect srcBounds = srcdev->exactBounds();
+    KoColor defaultPixel(srcdev->defaultPixel(), srcdev->colorSpace());
+    QRect srcBounds;
+    if (defaultPixel.opacityU8() != OPACITY_TRANSPARENT_U8)
+        srcBounds = srcdev->dataManager()->extent();
+    else
+        srcBounds = srcdev->exactBounds();
 
     QRectF transfBRect;
     if (nbPoints == 1) {

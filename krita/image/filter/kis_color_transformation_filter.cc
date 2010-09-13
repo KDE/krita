@@ -65,9 +65,8 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
     KoColorTransformation* colorTransformation = createTransformation(cs, config);
     if (!colorTransformation) return;
 
-    bool hasSelection = srcInfo.selection();
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
+    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), 0);
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), 0);
 
     for (int row = 0; row < size.height(); ++row) {
         while (! srcIt.isDone()) {
@@ -75,34 +74,11 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
             int dstItConseq = dstIt.nConseqHPixels();
             int conseqPixels = qMin(srcItConseq, dstItConseq);
 
-            int pixels = 0;
-            int pixelsSrc = 0;
-
-            if (hasSelection) {
-                // Get largest horizontal row of selected pixels
-                const quint8* oldRawData = srcIt.oldRawData();
-                while (srcIt.isSelected() && pixels < conseqPixels) {
-                    ++pixels;
-                    ++srcIt;
-                    ++pixelsSrc;
-                }
-                colorTransformation->transform(oldRawData, dstIt.rawData(), pixels);
-
-                // We apparently found a non-selected pixels, or the row
-                // was done; get the stretch of non-selected pixels
-                while (!srcIt.isSelected() && pixels < conseqPixels) {
-                    ++ pixels;
-                    ++srcIt;
-                    ++pixelsSrc;
-                }
-            } else {
-                pixels = conseqPixels;
-                colorTransformation->transform(srcIt.oldRawData(), dstIt.rawData(), pixels);
-            }
+            colorTransformation->transform(srcIt.oldRawData(), dstIt.rawData(), conseqPixels);
 
             // Update progress
-            srcIt += (pixels - pixelsSrc);
-            dstIt += pixels;
+            srcIt += conseqPixels;
+            dstIt += conseqPixels;
         }
         if (progressUpdater) progressUpdater->setValue(row);
 

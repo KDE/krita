@@ -61,6 +61,9 @@ class TextTool : public KoToolBase
     Q_OBJECT
 public:
     explicit TextTool(KoCanvasBase *canvas);
+#ifndef NDEBUG
+    explicit TextTool(MockCanvas *canvas);
+#endif
     ~TextTool();
 
     /// reimplemented from superclass
@@ -116,6 +119,11 @@ public:
 
     const QTextCursor cursor();
 
+    void setShapeData(KoTextShapeData *data);
+
+    KoTextEditor *textEditor() { return m_textEditor.data(); }
+
+    QRectF textRect(int startPosition, int endPosition) const;
 
 public slots:
     /// start the textedit-plugin.
@@ -243,21 +251,13 @@ private slots:
 
     void testSlot(bool);
 
-#ifndef NDEBUG
-protected:
-    explicit TextTool(MockCanvas *canvas);
-#endif
-    friend class TestChangeTrackedDelete;
-
 private:
     void repaintCaret();
     void repaintSelection();
     void repaintSelection(int from, int to);
-    QRectF textRect(int startPosition, int endPosition) const;
     int pointToPosition(const QPointF & point) const;
     void updateActions();
     void updateStyleManager();
-    void setShapeData(KoTextShapeData *data);
     void updateSelectedShape(const QPointF &point);
     void updateSelectionHandler();
     void editingPluginEvents();

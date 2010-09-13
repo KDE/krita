@@ -79,6 +79,7 @@ KisWdgGenerator::KisWdgGenerator(QWidget * parent, KisPaintDeviceSP dev)
 
 KisWdgGenerator::~KisWdgGenerator()
 {
+  delete d;
 }
 
 void KisWdgGenerator::setPaintdevice(KisPaintDeviceSP dev)

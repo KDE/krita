@@ -32,6 +32,7 @@
 #include "KoShapeBackground.h"
 #include "KoShapeContainer.h"
 #include "KoFilterEffectStack.h"
+#include "KoTextOnShapeContainer.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -176,6 +177,7 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
     setPosition(pos);
 
     loadOdfAttributes(element, context, OdfTransformation);
+    KoTextOnShapeContainer::tryWrapShape(this, element, context);
 
     return true;
 }

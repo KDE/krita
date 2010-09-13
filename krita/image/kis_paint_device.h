@@ -168,12 +168,22 @@ public:
      * uses caching, so calling to this function without changing
      * the device is quite cheap.
      *
+     * Exactbounds follows these rules:
+     *
+     * <ul>
+     * <li>if there is actual pixel data in the paint device, it is the exact bounds of this data,
+     *     no matter the value of the default pixel.
+     * <li>if there no pixel data in the paint device, and the default pixel is transparent,
+     *     exactBounds is empty
+     * <li>If there is no pixel data in the paint device, and the default pixel is not fully transparent,
+     *     exactBounds is the size of the image.
+     * </ul>
      * \see calculateExactBounds()
      */
     virtual QRect exactBounds() const;
 
     /// Convience method for the above
-    void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
+    KDE_DEPRECATED void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
 
     /**
      * Returns a rough approximation of region covered by device.

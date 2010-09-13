@@ -1,5 +1,5 @@
 #! /bin/sh
-$EXTRACTRC `find . -name \*.ui` >> rc.cpp 
+$EXTRACTRC `find . -name \*.ui | grep -v '/tests/'` >> rc.cpp
 RCFILES=`find . -name \*.rc                                                   \
 	| grep -v plugins/extensions/metadataeditor/editors/dublincore.rc     \
 	| grep -v plugins/extensions/metadataeditor/editors/exif.rc

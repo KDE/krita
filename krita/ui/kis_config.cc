@@ -743,3 +743,14 @@ void KisConfig::setVastScrolling(const bool toggle) const
 {
     m_cfg.writeEntry("vastScrolling", toggle);
 }
+
+int KisConfig::presetChooserViewMode() const
+{
+    return m_cfg.readEntry("presetChooserViewMode", 0);
+}
+
+void KisConfig::setPresetChooserViewMode(const int mode)
+{
+    m_cfg.writeEntry("presetChooserViewMode", mode);
+}
+

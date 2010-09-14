@@ -57,7 +57,7 @@ struct KisMask::Private {
         QThreadStorage<KisPaintDeviceSP *> m_storage;
     };
 
-    KisSelectionSP selection;
+    mutable KisSelectionSP selection;
     PerThreadPaintDevice paintDeviceCache;
 };
 
@@ -131,6 +131,24 @@ void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
 
 KisSelectionSP KisMask::selection() const
 {
+    #warning "Please remove lazyness from KisMask::selection() after release of 2.3"
+
+    if(!m_d->selection) {
+        KisLayer *parentLayer = dynamic_cast<KisLayer*>(parent().data());
+        if(parentLayer) {
+            KisPaintDeviceSP parentPaintDevice = parentLayer->paintDevice();
+            m_d->selection = new KisSelection(parentPaintDevice,
+                                              parentPaintDevice->defaultBounds());
+
+            quint8 newDefaultPixel = MAX_SELECTED;
+            m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
+        }
+        else {
+            m_d->selection = new KisSelection();
+        }
+        m_d->selection->updateProjection();
+    }
+
     return m_d->selection;
 }
 

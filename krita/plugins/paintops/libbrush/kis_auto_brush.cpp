@@ -35,7 +35,6 @@
 
 struct KisAutoBrush::Private {
     KisMaskGenerator* shape;
-    qreal angle;
     qreal randomness;
     qreal density;
     mutable QVector<quint8> precomputedQuarter;
@@ -46,12 +45,12 @@ KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, 
         , d(new Private)
 {
     d->shape = as;
-    d->angle = angle;
     d->randomness = randomness;
     d->density = density;
     setBrushType(MASK);
     setWidth(d->shape->width());
     setHeight(d->shape->height());
+    setAngle(angle);
     QImage image = createBrushPreview();
     setImage(image);
 }
@@ -75,27 +74,24 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     // Generate the paint device from the mask
     const KoColorSpace* cs = dst->colorSpace();
     quint32 pixelSize = cs->pixelSize();
-
-    angle += d->angle;
     
-    // Make sure the angle stay in [0;2*M_PI]
-    if(angle < 0) angle += 2 * M_PI;
-    if(angle > 2 * M_PI) angle -= 2 * M_PI;
-    
-    int dstWidth = maskWidth(scaleX, angle);
+    // mask dimension methods already includes KisBrush::angle()
+    int dstWidth = maskWidth(scaleX, angle); 
     int dstHeight = maskHeight(scaleY, angle);
+    
+    angle += KisBrush::angle();
     
     // if there's coloring information, we merely change the alpha: in that case,
     // the dab should be big enough!
     if (coloringInformation) {
 
         // old bounds
-        QRect bounds = dst->bounds();
+        QRect oldBounds = dst->bounds();
 
         // new bounds. we don't care if there is some extra memory occcupied.
         dst->setRect(QRect(0, 0, dstWidth, dstHeight));
 
-        if (dstWidth * dstHeight <= bounds.width() * bounds.height()) {
+        if (dstWidth * dstHeight <= oldBounds.width() * oldBounds.height()) {
             // just clear the data in dst,
             memset(dst->data(), OPACITY_TRANSPARENT_U8, dstWidth * dstHeight * dst->pixelSize());
         } else {
@@ -107,7 +103,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
             qWarning() << "Creating a default black dab: no coloring info and no initialized paint device to mask";
             dst->clear(QRect(0, 0, dstWidth, dstHeight));
         }
-        Q_ASSERT(dst->bounds().size().width() >= dstWidth && dst->bounds().size().height() >= dstHeight);
+        Q_ASSERT(dst->bounds().width() >= dstWidth && dst->bounds().height() >= dstHeight);
     }
 
     quint8* dabPointer = dst->data();
@@ -267,7 +263,7 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
     e.appendChild(shapeElt);
     e.setAttribute("type", "auto_brush");
     e.setAttribute("spacing", spacing());
-    e.setAttribute("angle", d->angle);
+    e.setAttribute("angle", KisBrush::angle());
     e.setAttribute("randomness", d->randomness);
     e.setAttribute("density", d->density);
 }
@@ -276,8 +272,8 @@ QImage KisAutoBrush::createBrushPreview()
 {
     srand(0);
     srand48(0);
-    int width = maskWidth(1.0, d->angle);
-    int height = maskHeight(1.0, d->angle);
+    int width = maskWidth(1.0, 0.0);
+    int height = maskHeight(1.0, 0.0);
     
     KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, 0, KisVector2D::Zero(), 0, 0);
 
@@ -285,23 +281,14 @@ QImage KisAutoBrush::createBrushPreview()
     fdev->setRect(QRect(0, 0, width, height));
     fdev->initialize();
 
-    mask(fdev,1.0, 1.0, 0.0, info);
+    mask(fdev,KoColor(Qt::black, fdev->colorSpace()),1.0, 1.0, 0.0, info);
     return fdev->convertToQImage();
 }
 
-QPointF KisAutoBrush::hotSpot(double scaleX, double scaleY, double rotation) const
-{
-    return KisBrush::hotSpot(scaleX, scaleY, rotation + d->angle);
-}
 
 const KisMaskGenerator* KisAutoBrush::maskGenerator() const
 {
     return d->shape;
-}
-
-qreal KisAutoBrush::angle() const
-{
-    return d->angle;
 }
 
 qreal KisAutoBrush::density() const
@@ -348,3 +335,8 @@ quint8 KisAutoBrush::interpolatedValueAt(double x, double y,const QVector<quint8
 }
 
 
+void KisAutoBrush::setImage(const QImage& image)
+{
+    m_image = image;
+    clearScaledBrushes();
+}

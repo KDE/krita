@@ -21,6 +21,7 @@
 
 #include "styles/KoTableColumnStyle.h"
 #include "styles/KoTableRowStyle.h"
+#include "styles/KoTableCellStyle.h"
 
 #include <QVector>
 #include <QSet>
@@ -34,6 +35,9 @@ public:
     }
     QVector<KoTableColumnStyle> tableColumnStyles;
     QVector<KoTableRowStyle> tableRowStyles;
+
+    QVector<KoTableCellStyle*> defaultRowCellStyles;
+    QVector<KoTableCellStyle*> defaultColumnCellStyles;
 };
 
 KoTableColumnAndRowStyleManager::KoTableColumnAndRowStyleManager()
@@ -102,3 +106,44 @@ KoTableRowStyle KoTableColumnAndRowStyleManager::rowStyle(int row) const
     return d->tableRowStyles.value(row);
 }
 
+KoTableCellStyle* KoTableColumnAndRowStyleManager::defaultColumnCellStyle(int column) const
+{
+    Q_ASSERT(column >= 0);
+
+    return d->defaultColumnCellStyles.value(column);
+}
+
+void KoTableColumnAndRowStyleManager::setDefaultColumnCellStyle(int column, KoTableCellStyle* cellStyle)
+{
+    Q_ASSERT(column >= 0);
+
+    if (column < d->defaultColumnCellStyles.size() && d->defaultColumnCellStyles.value(column) == cellStyle) {
+        return;
+    }
+
+    while (column > d->defaultColumnCellStyles.size())
+        d->defaultColumnCellStyles.append(0);
+
+    d->defaultColumnCellStyles.append(cellStyle);
+}
+
+KoTableCellStyle* KoTableColumnAndRowStyleManager::defaultRowCellStyle(int row) const
+{
+    Q_ASSERT(row >= 0);
+
+    return d->defaultRowCellStyles.value(row);
+}
+
+void KoTableColumnAndRowStyleManager::setDefaultRowCellStyle(int row, KoTableCellStyle* cellStyle)
+{
+    Q_ASSERT(row >= 0);
+
+    if (row < d->defaultRowCellStyles.size() && d->defaultRowCellStyles.value(row) == cellStyle) {
+        return;
+    }
+
+    while (row > d->defaultRowCellStyles.size())
+        d->defaultRowCellStyles.append(0);
+
+    d->defaultRowCellStyles.append(cellStyle);
+}

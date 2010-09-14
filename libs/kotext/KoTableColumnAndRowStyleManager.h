@@ -24,6 +24,7 @@
 
 class KoTableColumnStyle;
 class KoTableRowStyle;
+class KoTableCellStyle;
 
 /**
  * Manages all column and row styles for a single table.
@@ -74,6 +75,38 @@ public:
      * @return the row style.
      */
     KoTableRowStyle rowStyle(int row) const;
+
+    /**
+     * Get the default cell style for the row \a row.
+     *
+     * @param row the row to get the style for.
+     * @return the default cell style for \a row.
+     */
+    KoTableCellStyle* defaultRowCellStyle(int row) const;
+
+    /**
+     * Set the default cell style for the row \a row.
+     *
+     * @param row the row to set the style to.
+     * @return the default cell style for \a row.
+     */
+    void setDefaultRowCellStyle(int row, KoTableCellStyle* cellStyle);
+
+    /**
+     * Get the default cell style for the column \a column.
+     *
+     * @param column the column to get the style for.
+     * @return the default cell style for \a column.
+     */
+    KoTableCellStyle* defaultColumnCellStyle(int column) const;
+    
+    /**
+     * Set the default cell style for the column \a column.
+     *
+     * @param column the column to set the style to.
+     * @return the default cell style for \a column.
+     */
+    void setDefaultColumnCellStyle(int column, KoTableCellStyle* cellStyle);
 
 private:
     class Private;

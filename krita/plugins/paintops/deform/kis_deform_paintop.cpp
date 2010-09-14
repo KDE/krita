@@ -128,7 +128,7 @@ double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         }
 
         quint8 origOpacity = m_opacityOption.apply(painter(), info);
-        painter()->bltFixed(x,y, dab, mask, 0, 0, mask->bounds().width() ,mask->bounds().height() );
+        painter()->bltFixedWithFixedSelection(x,y, dab, mask, mask->bounds().width() ,mask->bounds().height() );
         painter()->setOpacity(origOpacity);
         
         return m_spacing;

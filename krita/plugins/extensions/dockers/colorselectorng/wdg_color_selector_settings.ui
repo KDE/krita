@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>514</width>
+    <width>502</width>
     <height>333</height>
    </rect>
   </property>
@@ -71,7 +71,7 @@
             <item>
              <widget class="QRadioButton" name="popupOnMouseClick">
               <property name="text">
-               <string notr="true">when pressing right or mid mousebutton</string>
+               <string notr="true">when pressing mid mousebutton</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -248,20 +248,23 @@
        <item>
         <widget class="QGroupBox" name="groupBox_6">
          <property name="title">
-          <string>Update shade selector</string>
+          <string>Update shade selector when</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
           <item row="0" column="0">
            <widget class="QCheckBox" name="shadeSelectorUpdateOnRightClick">
             <property name="text">
-             <string>on right click</string>
+             <string>right clicking on shade selector</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
            <widget class="QCheckBox" name="shadeSelectorUpdateOnForeground">
+            <property name="toolTip">
+             <string>this doesn't include a color change by the shade selector</string>
+            </property>
             <property name="text">
-             <string>on foreground color selector change</string>
+             <string>foreground color changes</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -271,14 +274,17 @@
           <item row="1" column="0">
            <widget class="QCheckBox" name="shadeSelectorUpdateOnLeftClick">
             <property name="text">
-             <string>on left click</string>
+             <string>left clicking on shade selector</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
            <widget class="QCheckBox" name="shadeSelectorUpdateOnBackground">
+            <property name="toolTip">
+             <string>this doesn't include a color change by the shade selector</string>
+            </property>
             <property name="text">
-             <string>on background color change</string>
+             <string>background color change</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -314,7 +320,7 @@
                  <number>10</number>
                 </property>
                 <property name="value">
-                 <number>4</number>
+                 <number>3</number>
                 </property>
                </widget>
               </item>
@@ -332,6 +338,9 @@
                 </property>
                 <property name="maximum">
                  <number>99</number>
+                </property>
+                <property name="value">
+                 <number>16</number>
                 </property>
                </widget>
               </item>
@@ -806,8 +815,11 @@
              </item>
              <item>
               <widget class="QCheckBox" name="commonColorsAutoUpdate">
+               <property name="toolTip">
+                <string>this can be slow on big images</string>
+               </property>
                <property name="text">
-                <string>Update automatically</string>
+                <string>Update after every stroke</string>
                </property>
               </widget>
              </item>

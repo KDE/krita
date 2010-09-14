@@ -54,6 +54,11 @@ bool KoShapeGroup::hitTest(const QPointF &position) const
     return false;
 }
 
+QSizeF KoShapeGroup::size() const
+{
+    return QSizeF(0, 0);
+}
+
 void KoShapeGroup::shapeCountChanged()
 {
     // TODO: why is this needed here ? the group/ungroup command should take care of this

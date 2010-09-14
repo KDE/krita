@@ -127,7 +127,6 @@ void TestShapeGroupCommand::testToplevelGroup()
     QCOMPARE(toplevelShape2->absolutePosition(KoFlake::TopLeftCorner), QPointF(50, 150));
     QCOMPARE(toplevelShape2->position(), QPointF(0, 100));
     QCOMPARE(toplevelGroup->position(), QPointF(50, 50));
-    QCOMPARE(toplevelGroup->size(), QSizeF(50, 150));
 
     cmd1->undo();
     QVERIFY(toplevelShape1->parent() == 0);
@@ -163,7 +162,6 @@ void TestShapeGroupCommand::testSublevelGroup()
     QCOMPARE(toplevelShape2->absolutePosition(KoFlake::TopLeftCorner), QPointF(50, 150));
     QCOMPARE(toplevelShape2->position(), QPointF(0, 100));
     QCOMPARE(toplevelGroup->position(), QPointF(50, 50));
-    QCOMPARE(toplevelGroup->size(), QSizeF(250, 150));
 
     QCOMPARE(sublevelShape1->parent(), sublevelGroup);
     QCOMPARE(sublevelShape1->absolutePosition(KoFlake::TopLeftCorner), QPointF(150, 150));
@@ -173,7 +171,6 @@ void TestShapeGroupCommand::testSublevelGroup()
     QCOMPARE(sublevelShape2->position(), QPointF(100, 0));
     QCOMPARE(sublevelGroup->absolutePosition(KoFlake::TopLeftCorner), QPointF(150, 150));
     QCOMPARE(sublevelGroup->position(), QPointF(100, 100));
-    QCOMPARE(sublevelGroup->size(), QSizeF(150, 50));
 
     // check that the shapes are added in the correct order
     QList<KoShape*> childOrder(sublevelGroup->shapes());
@@ -198,9 +195,8 @@ void TestShapeGroupCommand::testAddToToplevelGroup()
 
     QVERIFY(extraShape1->parent() == toplevelGroup);
     QCOMPARE(extraShape1->absolutePosition(KoFlake::TopLeftCorner), QPointF(150, 50));
-    QCOMPARE(extraShape1->position(), QPointF(100, 0));
-    QCOMPARE(toplevelGroup->position(), QPointF(50, 50));
-    QCOMPARE(toplevelGroup->size(), QSizeF(150, 150));
+    QCOMPARE(extraShape1->position(), QPointF(0, 0));
+    QCOMPARE(toplevelGroup->position(), QPointF(150, 50));
 
     cmd2->undo();
 
@@ -208,7 +204,6 @@ void TestShapeGroupCommand::testAddToToplevelGroup()
     QCOMPARE(extraShape1->absolutePosition(KoFlake::TopLeftCorner), QPointF(150, 50));
     QCOMPARE(extraShape1->position(), QPointF(150, 50));
     QCOMPARE(toplevelGroup->position(), QPointF(50, 50));
-    QCOMPARE(toplevelGroup->size(), QSizeF(50, 150));
 }
 
 void TestShapeGroupCommand::testAddToSublevelGroup()
@@ -228,14 +223,13 @@ void TestShapeGroupCommand::testAddToSublevelGroup()
 
     QVERIFY(extraShape2->parent() == sublevelGroup);
     QCOMPARE(extraShape2->absolutePosition(KoFlake::TopLeftCorner), QPointF(250, 50));
-    QCOMPARE(extraShape2->position(), QPointF(100, 0));
+    QCOMPARE(extraShape2->position(), QPointF(0, 0));
     QCOMPARE(sublevelShape1->absolutePosition(KoFlake::TopLeftCorner), QPointF(150, 150));
-    QCOMPARE(sublevelShape1->position(), QPointF(0, 100));
+    QCOMPARE(sublevelShape1->position(), QPointF(-100, 100));
     QCOMPARE(sublevelShape2->absolutePosition(KoFlake::TopLeftCorner), QPointF(250, 150));
-    QCOMPARE(sublevelShape2->position(), QPointF(100, 100));
-    QCOMPARE(sublevelGroup->absolutePosition(KoFlake::TopLeftCorner), QPointF(150, 50));
-    QCOMPARE(sublevelGroup->position(), QPointF(100, 0));
-    QCOMPARE(sublevelGroup->size(), QSizeF(150, 150));
+    QCOMPARE(sublevelShape2->position(), QPointF(0, 100));
+    QCOMPARE(sublevelGroup->absolutePosition(KoFlake::TopLeftCorner), QPointF(250, 50));
+    QCOMPARE(sublevelGroup->position(), QPointF(200, 0));
 
     cmd2->undo();
 
@@ -248,12 +242,11 @@ void TestShapeGroupCommand::testAddToSublevelGroup()
     QCOMPARE(sublevelShape2->position(), QPointF(100, 0));
     QCOMPARE(sublevelGroup->absolutePosition(KoFlake::TopLeftCorner), QPointF(150, 150));
     QCOMPARE(sublevelGroup->position(), QPointF(100, 100));
-    QCOMPARE(sublevelGroup->size(), QSizeF(150, 50));
 }
 
 void TestShapeGroupCommand::testGroupStrokeShapes()
 {
-    QRectF bound = strokeShape1->boundingRect().unite( strokeShape2->boundingRect() );
+    QRectF bound(0,0,0,0);
     if (strokeGroup->border()) {
         KoInsets insets;
         strokeGroup->border()->borderInsets(strokeGroup, insets);
@@ -271,7 +264,7 @@ void TestShapeGroupCommand::testGroupStrokeShapes()
     strokeCmd->redo();
     QCOMPARE(strokeShape1->size(), QSizeF(50, 50));
     QCOMPARE(strokeShape2->size(), QSizeF(50, 50));
-    QCOMPARE(bound, strokeGroup->boundingRect());
+    QCOMPARE(strokeGroup->boundingRect(), bound);
 }
 
 QTEST_MAIN(TestShapeGroupCommand)

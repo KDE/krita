@@ -195,7 +195,7 @@ void KisColorSelectorSettings::loadPreferences()
 
     //it's not possible to set a radio box to false. additionally, we need to set shrunkenDonothing to true, in case..
     bool a = cfg.readEntry("shadeSelectorHideable", false);
-    bool b = cfg.readEntry("allowHorizontalLayout", true);
+    bool b = cfg.readEntry("allowHorizontalLayout", false);
     if(a)
         ui->shadeSelectorHideable->setChecked(true);
     else if(b)
@@ -203,7 +203,7 @@ void KisColorSelectorSettings::loadPreferences()
     else
         ui->shrunkenDoNothing->setChecked(true);
 
-    if(cfg.readEntry("useCustomColorSpace", true))
+    if(cfg.readEntry("useCustomColorSpace", false))
         ui->useCustomColorSpace->setChecked(true);
     else
         ui->useImageColorSpace->setChecked(true);
@@ -225,50 +225,50 @@ void KisColorSelectorSettings::loadPreferences()
 
     //color patches
     ui->lastUsedColorsShow->setChecked(cfg.readEntry("lastUsedColorsShow", true));
-    a = cfg.readEntry("lastUsedColorsAlignment", false);
+    a = cfg.readEntry("lastUsedColorsAlignment", true);
     ui->lastUsedColorsAlignVertical->setChecked(a);
     ui->lastUsedColorsAlignHorizontal->setChecked(!a);
     ui->lastUsedColorsAllowScrolling->setChecked(cfg.readEntry("lastUsedColorsScrolling", true));
     ui->lastUsedColorsNumCols->setValue(cfg.readEntry("lastUsedColorsNumCols", 1));
     ui->lastUsedColorsNumRows->setValue(cfg.readEntry("lastUsedColorsNumRows", 1));
-    ui->lastUsedColorsPatchCount->setValue(cfg.readEntry("lastUsedColorsCount", 15));
-    ui->lastUsedColorsWidth->setValue(cfg.readEntry("lastUsedColorsWidth", 20));
-    ui->lastUsedColorsHeight->setValue(cfg.readEntry("lastUsedColorsHeight", 20));
+    ui->lastUsedColorsPatchCount->setValue(cfg.readEntry("lastUsedColorsCount", 20));
+    ui->lastUsedColorsWidth->setValue(cfg.readEntry("lastUsedColorsWidth", 16));
+    ui->lastUsedColorsHeight->setValue(cfg.readEntry("lastUsedColorsHeight", 16));
 
     ui->commonColorsShow->setChecked(cfg.readEntry("commonColorsShow", true));
-    a = cfg.readEntry("commonColorsAlignment", true);
+    a = cfg.readEntry("commonColorsAlignment", false);
     ui->commonColorsAlignVertical->setChecked(a);
     ui->commonColorsAlignHorizontal->setChecked(!a);
     ui->commonColorsAllowScrolling->setChecked(cfg.readEntry("commonColorsScrolling", false));
     ui->commonColorsNumCols->setValue(cfg.readEntry("commonColorsNumCols", 1));
-    ui->commonColorsNumRows->setValue(cfg.readEntry("commonColorsNumRows", 2));
-    ui->commonColorsPatchCount->setValue(cfg.readEntry("commonColorsCount", 20));
-    ui->commonColorsWidth->setValue(cfg.readEntry("commonColorsWidth", 20));
-    ui->commonColorsHeight->setValue(cfg.readEntry("commonColorsHeight", 20));
+    ui->commonColorsNumRows->setValue(cfg.readEntry("commonColorsNumRows", 1));
+    ui->commonColorsPatchCount->setValue(cfg.readEntry("commonColorsCount", 12));
+    ui->commonColorsWidth->setValue(cfg.readEntry("commonColorsWidth", 16));
+    ui->commonColorsHeight->setValue(cfg.readEntry("commonColorsHeight", 16));
     ui->commonColorsAutoUpdate->setChecked(cfg.readEntry("commonColorsAutoUpdate", false));
 
     //shade selector
-    QString shadeSelectorType=cfg.readEntry("shadeSelectorType", "MyPaint");
+    QString shadeSelectorType=cfg.readEntry("shadeSelectorType", "Minimal");
     ui->shadeSelectorTypeMyPaint->setChecked(shadeSelectorType=="MyPaint");
     ui->shadeSelectorTypeMinimal->setChecked(shadeSelectorType=="Minimal");
     ui->shadeSelectorTypeHidden->setChecked(shadeSelectorType=="Hidden");
 
     ui->shadeSelectorUpdateOnRightClick->setChecked(cfg.readEntry("shadeSelectorUpdateOnRightClick", false));
-    ui->shadeSelectorUpdateOnForeground->setChecked(cfg.readEntry("shadeSelectorUpdateOnForeground", false));
     ui->shadeSelectorUpdateOnLeftClick->setChecked(cfg.readEntry("shadeSelectorUpdateOnLeftClick", false));
+    ui->shadeSelectorUpdateOnForeground->setChecked(cfg.readEntry("shadeSelectorUpdateOnForeground", true));
     ui->shadeSelectorUpdateOnBackground->setChecked(cfg.readEntry("shadeSelectorUpdateOnBackground", true));
 
-    bool asGradient = cfg.readEntry("minimalShadeSelectorAsGradient", false);
+    bool asGradient = cfg.readEntry("minimalShadeSelectorAsGradient", true);
     if(asGradient) ui->minimalShadeSelectorAsGradient->setChecked(true);
     else ui->minimalShadeSelectorAsColorPatches->setChecked(true);
 
     ui->minimalShadeSelectorPatchesPerLine->setValue(cfg.readEntry("minimalShadeSelectorPatchCount", 10));
-    ui->minimalShadeSelectorLineSettings->fromString(cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0"));
-    ui->minimalShadeSelectorLineHeight->setValue(cfg.readEntry("minimalShadeSelectorLineHeight", 20));
+    ui->minimalShadeSelectorLineSettings->fromString(cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0|0|0|0;1|0|1|1|0|0|0;2|0|-1|1|0|0|0;"));
+    ui->minimalShadeSelectorLineHeight->setValue(cfg.readEntry("minimalShadeSelectorLineHeight", 16));
 
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
-    cstw->setConfiguration(KisColorSelector::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelector::Configuration().toString())));
+    cstw->setConfiguration(KisColorSelector::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", "3|0|5|0"))); // triangle selector
 }
 
 void KisColorSelectorSettings::loadDefaultPreferences()
@@ -277,9 +277,9 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     //if you change something, don't forget that loadPreferences should be kept in sync
 
     //general
-    ui->allowHorizontalLayout->setChecked(true);
+    ui->allowHorizontalLayout->setChecked(false);
     ui->shadeSelectorHideable->setChecked(false);
-    ui->shrunkenDoNothing->setChecked(false);
+    ui->shrunkenDoNothing->setChecked(true);
 
     ui->popupOnMouseClick->setChecked(true);
     ui->popupOnMouseOver->setChecked(false);
@@ -297,43 +297,43 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->lastUsedColorsAlignHorizontal->setChecked(false);
     ui->lastUsedColorsAllowScrolling->setChecked(true);
     ui->lastUsedColorsNumCols->setValue(1);
-    ui->lastUsedColorsNumRows->setValue(2);
-    ui->lastUsedColorsPatchCount->setValue(15);
-    ui->lastUsedColorsWidth->setValue(20);
-    ui->lastUsedColorsHeight->setValue(20);
+    ui->lastUsedColorsNumRows->setValue(1);
+    ui->lastUsedColorsPatchCount->setValue(20);
+    ui->lastUsedColorsWidth->setValue(16);
+    ui->lastUsedColorsHeight->setValue(16);
 
     ui->commonColorsShow->setChecked(true);
-    ui->commonColorsAlignHorizontal->setChecked(true);
     ui->commonColorsAlignVertical->setChecked(false);
+    ui->commonColorsAlignHorizontal->setChecked(true);
     ui->commonColorsAllowScrolling->setChecked(false);
     ui->commonColorsNumCols->setValue(1);
-    ui->commonColorsNumRows->setValue(2);
-    ui->commonColorsPatchCount->setValue(20);
-    ui->commonColorsWidth->setValue(20);
-    ui->commonColorsHeight->setValue(20);
+    ui->commonColorsNumRows->setValue(1);
+    ui->commonColorsPatchCount->setValue(12);
+    ui->commonColorsWidth->setValue(16);
+    ui->commonColorsHeight->setValue(16);
     ui->commonColorsAutoUpdate->setChecked(false);
 
     //shade selector
-    ui->shadeSelectorTypeMyPaint->setChecked(true);
+    ui->shadeSelectorTypeMyPaint->setChecked(false);
     ui->shadeSelectorTypeMinimal->setChecked(true);
-    ui->shadeSelectorTypeHidden->setChecked(true);
+    ui->shadeSelectorTypeHidden->setChecked(false);
 
     ui->shadeSelectorUpdateOnRightClick->setChecked(false);
-    ui->shadeSelectorUpdateOnForeground->setChecked(false);
     ui->shadeSelectorUpdateOnLeftClick->setChecked(false);
+    ui->shadeSelectorUpdateOnForeground->setChecked(true);
     ui->shadeSelectorUpdateOnBackground->setChecked(true);
 
-//    bool asGradient = false;
-//    if(asGradient) ui->minimalShadeSelectorAsGradient->setChecked(true);
-//    else
-    ui->minimalShadeSelectorAsColorPatches->setChecked(true);
+    bool asGradient = true;
+    if(asGradient) ui->minimalShadeSelectorAsGradient->setChecked(true);
+    else ui->minimalShadeSelectorAsColorPatches->setChecked(true);
+
     ui->minimalShadeSelectorPatchesPerLine->setValue(10);
-    ui->minimalShadeSelectorLineSettings->fromString("0|0.2|0|0");
-    ui->minimalShadeSelectorLineHeight->setValue(20);
+    ui->minimalShadeSelectorLineSettings->fromString("0|0.2|0|0|0|0|0;1|0|1|1|0|0|0;2|0|-1|1|0|0|0;");
+    ui->minimalShadeSelectorLineHeight->setValue(16);
 
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
-    cstw->setConfiguration(KisColorSelector::Configuration());
+    cstw->setConfiguration(KisColorSelector::Configuration("3|0|5|0")); // triangle selector
 }
 
 KisColorSelectorSettingsDialog::KisColorSelectorSettingsDialog(QWidget *parent) :

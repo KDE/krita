@@ -51,6 +51,7 @@ void KisMinimalShadeSelector::setCanvas(KisCanvas2 *canvas)
 
 void KisMinimalShadeSelector::setColor(const QColor& color)
 {
+    m_lastColor = color;
     for(int i=0; i<m_shadingLines.size(); i++)
         m_shadingLines.at(i)->setColor(color);
 }
@@ -113,6 +114,6 @@ void KisMinimalShadeSelector::paintEvent(QPaintEvent *)
 KisColorSelectorBase* KisMinimalShadeSelector::createPopup() const
 {
     KisMinimalShadeSelector* popup = new KisMinimalShadeSelector(0);
-    popup->resize(350,350);
+    popup->setColor(m_lastColor);
     return popup;
 }

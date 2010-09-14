@@ -223,6 +223,7 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 KisColorSelectorBase* KisMyPaintShadeSelector::createPopup() const
 {
     KisColorSelectorBase* popup = new KisMyPaintShadeSelector(0);
+    popup->setColor(m_lastColor);
     return popup;
 }
 
@@ -230,6 +231,7 @@ void KisMyPaintShadeSelector::setColor(const QColor &c) {
     m_colorH=c.hsvHueF();
     m_colorS=c.hsvSaturationF();
     m_colorV=c.valueF();
+    m_lastColor=c;
 
     m_updateTimer->start();
 }

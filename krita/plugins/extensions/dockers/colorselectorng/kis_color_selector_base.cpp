@@ -115,7 +115,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 
         event->accept();
     }
-    else if(m_isPopup && (event->buttons()&Qt::MidButton)>0) {
+    else if(m_isPopup && ((event->button()==Qt::MidButton) || (!rect().contains(event->pos())))) {
         event->accept();
         hide();
     }
@@ -295,8 +295,8 @@ void KisColorSelectorBase::showPopup()
     }
 
     QPoint cursorPos = QCursor::pos();
-    m_popup->show();
     m_popup->move(cursorPos.x()-m_popup->width()/2, cursorPos.y()-m_popup->height()/2);
+    m_popup->show();
 }
 
 void KisColorSelectorBase::hidePopup()

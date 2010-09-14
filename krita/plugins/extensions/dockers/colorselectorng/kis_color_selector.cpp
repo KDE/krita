@@ -76,6 +76,7 @@ KisColorSelector::KisColorSelector(QWidget* parent)
 KisColorSelectorBase* KisColorSelector::createPopup() const
 {
     KisColorSelectorBase* popup = new KisColorSelector(0);
+    popup->setColor(m_lastColor);
     return popup;
 }
 
@@ -271,6 +272,7 @@ void KisColorSelector::setColor(const QColor &color)
 {
     m_mainComponent->setColor(color);
     m_subComponent->setColor(color);
+    m_lastColor=color;
     update();
 }
 

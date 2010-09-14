@@ -54,6 +54,12 @@ void KoResource::setFilename(const QString& filename)
     d->removable = ! fileInfo.exists() || fileInfo.isWritable();
 }
 
+QString KoResource::shortFilename() const
+{
+    QFileInfo fileInfo(d->filename);
+    return fileInfo.fileName();
+}
+
 QString KoResource::name() const
 {
     return d->name;

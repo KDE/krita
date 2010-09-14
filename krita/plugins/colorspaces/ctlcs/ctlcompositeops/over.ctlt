@@ -4,7 +4,8 @@
   {
     @colorchannels( @out = @in(0) ; )
   } else {
-    @colorchannels( @out = ( ( @in(0) - @in(1)) * blend + @in(1) ); )
+    float a; float b;
+    @colorchannels( a = @in(0); b = @in(1); @out = ( ( a - b) * blend ) + b; )
   }
 }
 

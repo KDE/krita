@@ -36,7 +36,7 @@ void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
     d.appendChild(e);
     setting->setProperty( "brush_definition", d.toString() );
     if (!m_brush->filename().isEmpty()) {
-        setting->setProperty( "requiredBrushFile", m_brush->filename() );
+        setting->setProperty( "requiredBrushFile", m_brush->shortFilename() );
     }
 }
 

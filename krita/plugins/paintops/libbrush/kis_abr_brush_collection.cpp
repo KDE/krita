@@ -534,7 +534,7 @@ bool KisAbrBrushCollection::load()
 
     for (i = 0; i < abr_hdr.count; i++)
     {
-        layer_ID = abr_brush_load(abr, &abr_hdr, filename(), image_ID, i + 1);
+        layer_ID = abr_brush_load(abr, &abr_hdr, shortFilename(), image_ID, i + 1);
         if (layer_ID == -1){
             warnKrita << "Warning: problem loading brush #" << i << " in " << filename();
         }

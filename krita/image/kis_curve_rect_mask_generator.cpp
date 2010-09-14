@@ -54,9 +54,16 @@ quint8 KisCurveRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     if (KisMaskGenerator::d->empty) {
         return 255;
     }
-    
+
     double s = qAbs(x) / width();
+    if (s > 1.0){
+        return 255;
+    }
+    
     double t = qAbs(y) / height();
+    if (t > 1.0){
+        return 255;
+    }
     
     int sIndex = qRound(s * (d->curveResolution));
     int tIndex = qRound(t * (d->curveResolution));

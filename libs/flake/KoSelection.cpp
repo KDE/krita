@@ -174,6 +174,8 @@ void KoSelection::select(KoShape *shape, bool recursive)
         int newSelectionCount = d->selectedShapes.count();
         for (int i = oldSelectionCount; i < newSelectionCount; ++i) {
             KoShape *shape = d->selectedShapes[i];
+
+            // don't add the rect of the group rect, as it can be invalid
             if (dynamic_cast<KoShapeGroup*>(shape)) {
                 continue;
             }

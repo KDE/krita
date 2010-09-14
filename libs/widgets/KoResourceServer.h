@@ -131,7 +131,7 @@ public:
                 foreach(T* resource, resources) {
                     if (resource->load() && resource->valid())
                     {
-                        m_resourcesByFilename[resource->filename()] = resource;
+                        m_resourcesByFilename[resource->shortFilename()] = resource;
 
                         if ( resource->name().isNull() ) {
                             resource->setName( fname );
@@ -172,7 +172,7 @@ public:
             resource->setName( resource->filename() );
         }
 
-        m_resourcesByFilename[resource->filename()] = resource;
+        m_resourcesByFilename[resource->shortFilename()] = resource;
         m_resourcesByName[resource->name()] = resource;
         m_resources.append(resource);
 
@@ -184,12 +184,12 @@ public:
     /// Remove a resource from Resource Server but not from a file
     /// if deleteResource is true. the resource will be deleted by resource server
     bool removeResourceFromServer(T* resource, bool deleteResource = true){
-        if ( !m_resourcesByFilename.contains( resource->filename() ) ) {
+        if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
         }
         
         m_resourcesByName.remove(resource->name());
-        m_resourcesByFilename.remove(resource->filename());
+        m_resourcesByFilename.remove(resource->shortFilename());
         m_resources.removeAt(m_resources.indexOf(resource));
         notifyRemovingResource(resource);
         
@@ -202,7 +202,7 @@ public:
 
     /// Remove a resource from resourceserver and hard disk
     bool removeResource(T* resource) {
-        if ( !m_resourcesByFilename.contains( resource->filename() ) ) {
+        if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
         }
 
@@ -223,7 +223,7 @@ public:
 
         if (removedFromDisk) {
             m_resourcesByName.remove(resource->name());
-            m_resourcesByFilename.remove(resource->filename());
+            m_resourcesByFilename.remove(resource->shortFilename());
             m_resources.removeAt(m_resources.indexOf(resource));
             notifyRemovingResource(resource);
             delete resource;

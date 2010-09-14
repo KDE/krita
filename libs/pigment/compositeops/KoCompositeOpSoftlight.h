@@ -42,30 +42,29 @@ public:
     }
 
     inline static void composeColorChannels(channels_type srcBlend,
-                                            const channels_type* src,
-                                            channels_type* dst,
+                                            const channels_type* s,
+                                            channels_type* d,
                                             bool allChannelFlags,
-                                            const QBitArray & channelFlags) {
+                                            const QBitArray & channelFlags)
+    {
         for (uint i = 0; i < _CSTraits::channels_nb; i++) {
+
             if ((int)i != _CSTraits::alpha_pos  && (allChannelFlags || channelFlags.testBit(i))) {
 
-                channels_type srcChannel = src[i];
-                channels_type dstChannel = dst[i];
+                qreal srcColor = KoColorSpaceMaths<channels_type, qreal>::scaleToA(s[i]);
+                qreal dstColor = KoColorSpaceMaths<channels_type, qreal>::scaleToA(d[i]);
+                qreal newColor = 0.0;
 
-                if (srcChannel <= NATIVE_MAX_VALUE / 2) {
-                    dstChannel = dstChannel - (NATIVE_MAX_VALUE - (2 * srcChannel)) * dstChannel * (NATIVE_MAX_VALUE - dstChannel);
+                if (srcColor <= 0.5) {
+                    newColor = (2 * srcColor - 1) * (dstColor - (dstColor * dstColor)) + dstColor;
                 }
                 else {
-                    channels_type tmpDst;
-                    if (dstChannel <= NATIVE_MAX_VALUE / 4) {
-                        tmpDst = ((16 * dstChannel - 12) * dstChannel + 4 ) * dstChannel;
-                    }
-                    else {
-                        tmpDst = sqrt(dstChannel);
-                    }
-                    dstChannel = dstChannel + (2 * srcChannel - NATIVE_MAX_VALUE) * (tmpDst - dstChannel);
+                    newColor = (2 * srcColor - 1) * (sqrt(dstColor) - dstColor) + dstColor;
                 }
-                dst[i] = KoColorSpaceMaths<channels_type>::blend(srcChannel, dstChannel, srcBlend);
+
+                channels_type result = KoColorSpaceMaths<qreal, channels_type>::scaleToA(newColor);
+
+                d[i] = KoColorSpaceMaths<channels_type>::blend(result, d[i], srcBlend);
             }
         }
     }

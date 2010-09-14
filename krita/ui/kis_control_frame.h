@@ -66,7 +66,6 @@ public slots:
 
     void slotSetPattern(KisPattern * pattern);
     void slotSetGradient(KoAbstractGradient * gradient);
-    void slotSaveToFavouriteBrushes();
 
 private:
 
@@ -90,7 +89,7 @@ private:
     KisGradientChooser * m_gradientChooser;
 
     KisPaintopBox * m_paintopBox;
-    QPushButton* m_paletteButton;
+
 };
 
 #endif

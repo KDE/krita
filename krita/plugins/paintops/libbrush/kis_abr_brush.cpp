@@ -79,7 +79,7 @@ void KisAbrBrush::toXML(QDomDocument& d, QDomElement& e) const
     Q_UNUSED(d);
     e.setAttribute("type", "abr_brush");
     e.setAttribute("name", name()); // legacy
-    e.setAttribute("filename", filename());
+    e.setAttribute("filename", shortFilename());
     e.setAttribute("spacing", spacing());
 }
 

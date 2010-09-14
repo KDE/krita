@@ -264,7 +264,7 @@ void KisColorSelectorSettings::loadPreferences()
 
     ui->minimalShadeSelectorPatchesPerLine->setValue(cfg.readEntry("minimalShadeSelectorPatchCount", 10));
     ui->minimalShadeSelectorLineSettings->fromString(cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0|0|0|0;1|0|1|1|0|0|0;2|0|-1|1|0|0|0;"));
-    ui->minimalShadeSelectorLineHeight->setValue(cfg.readEntry("minimalShadeSelectorLineHeight", 16));
+    ui->minimalShadeSelectorLineHeight->setValue(cfg.readEntry("minimalShadeSelectorLineHeight", 10));
 
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
@@ -329,7 +329,7 @@ void KisColorSelectorSettings::loadDefaultPreferences()
 
     ui->minimalShadeSelectorPatchesPerLine->setValue(10);
     ui->minimalShadeSelectorLineSettings->fromString("0|0.2|0|0|0|0|0;1|0|1|1|0|0|0;2|0|-1|1|0|0|0;");
-    ui->minimalShadeSelectorLineHeight->setValue(16);
+    ui->minimalShadeSelectorLineHeight->setValue(10);
 
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);

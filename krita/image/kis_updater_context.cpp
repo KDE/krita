@@ -69,9 +69,7 @@ bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
     bool intersects = false;
 
     foreach(const KisUpdateJobItem *item, m_jobs) {
-        KisBaseRectsWalkerSP currentWalker = item->walker();
-
-        if(currentWalker && walkersIntersect(walker, currentWalker)) {
+        if(item->isRunning() && walkerIntersectsJob(walker, item)) {
             intersects = true;
             break;
         }
@@ -80,6 +78,13 @@ bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
     return !intersects;
 }
 
+/**
+ * NOTE: In theory, isJobAllowed() and addJob() should be merged into
+ * one atomic method like `bool push()`, because this implementation
+ * of KisUpdaterContext will not work in case of multiple
+ * producers. But currently we have only one producer (one thread
+ * in a time), that is guaranteed by the mutex in KisSimpleUpdateQueue.
+ */
 void KisUpdaterContext::addJob(KisBaseRectsWalkerSP walker)
 {
     qint32 jobIndex = findSpareThread();
@@ -106,11 +111,11 @@ void KisUpdaterContext::waitForDone()
     m_threadPool.waitForDone();
 }
 
-bool KisUpdaterContext::walkersIntersect(KisBaseRectsWalkerSP walker1,
-                                        KisBaseRectsWalkerSP walker2)
+bool KisUpdaterContext::walkerIntersectsJob(KisBaseRectsWalkerSP walker,
+                                            const KisUpdateJobItem* job)
 {
-    return (walker1->accessRect().intersects(walker2->changeRect())) ||
-        (walker2->accessRect().intersects(walker1->changeRect()));
+    return (walker->accessRect().intersects(job->changeRect())) ||
+        (job->accessRect().intersects(walker->changeRect()));
 }
 
 qint32 KisUpdaterContext::findSpareThread()
@@ -151,6 +156,6 @@ const QVector<KisUpdateJobItem*> KisTestableUpdaterContext::getJobs()
 void KisTestableUpdaterContext::clear()
 {
     foreach(KisUpdateJobItem *item, m_jobs)
-        item->setWalker(0);
+        item->setDone();
 }
 

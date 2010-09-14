@@ -173,8 +173,7 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
                     }
 
                 } // foreach table:table-cell
-                if ( !isHeader )
-                    ++row;
+                ++row;
 
             } // foreach table:table-row
         }

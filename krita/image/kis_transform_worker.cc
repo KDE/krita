@@ -468,6 +468,8 @@ bool KisTransformWorker::run()
     Otherwise the program will crash at a later point, in a very obscure way, probably by division by zero */
     Q_ASSERT_X(m_xscale != 0, "KisTransformer::run() validation step", "xscale == 0");
     Q_ASSERT_X(m_yscale != 0, "KisTransformer::run() validation step", "yscale == 0");
+    // Fallback safety line in case Krita is compiled without ASSERTS
+    if (m_xscale == 0 || m_yscale == 0) return false;
     
     // Progress info
     m_progressTotalSteps = 0;

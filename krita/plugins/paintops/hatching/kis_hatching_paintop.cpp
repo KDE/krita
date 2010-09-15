@@ -193,7 +193,7 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
         m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, m_settings->angle, painter()->paintColor());
 
     // The most important line, the one that paints to the screen.
-    painter()->bitBltFixedSelection(x, y, m_hatchedDab, maskDab, 0, 0, sw, sh);
+    painter()->bitBltWithFixedSelection(x, y, m_hatchedDab, maskDab, sw, sh);
     painter()->setOpacity(origOpacity);
     
     /*-----It took me very long to realize the importance of this line, this is

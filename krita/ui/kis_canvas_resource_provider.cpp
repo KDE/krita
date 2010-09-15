@@ -55,6 +55,7 @@ KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
         : m_view(view)
 {
     m_fGChanged = true;  
+    m_enablefGChange = true;    // default to true, so that colour history is working without popup palette
 }
 
 KisCanvasResourceProvider::~KisCanvasResourceProvider()

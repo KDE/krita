@@ -129,7 +129,17 @@ void KoShapeGroupCommand::redo()
         KoShape * shape = d->shapes[i];
         shape->setZIndex(zIndex++);
 
-        shape->applyAbsoluteTransformation(groupTransform);
+        if(d->container->inheritsTransform(shape)) {
+            shape->applyAbsoluteTransformation(groupTransform);
+        }
+        else {
+            QSizeF containerSize = d->container->size();
+            QPointF containerPos = d->container->absolutePosition() - QPointF(0.5 * containerSize.width(), 0.5 * containerSize.height());
+
+            QTransform matrix;
+            matrix.translate(containerPos.x(), containerPos.y());
+            shape->applyAbsoluteTransformation(matrix.inverted());
+        }
 
         d->container->addShape(shape);
         d->container->setClipped(shape, d->clipped[i]);
@@ -150,9 +160,17 @@ void KoShapeGroupCommand::undo()
             d->oldParents.at(i)->setClipped(shape, d->oldClipped.at(i));
             d->oldParents.at(i)->setInheritsTransform(shape, d->oldInheritTransform.at(i));
         }
+        if(d->container->inheritsTransform(shape)) {
+            shape->applyAbsoluteTransformation(ungroupTransform);
+        }
+        else {
+            QSizeF containerSize = d->container->size();
+            QPointF containerPos = d->container->absolutePosition() - QPointF(0.5 * containerSize.width(), 0.5 * containerSize.height());
 
-        shape->applyAbsoluteTransformation(ungroupTransform);
-
+            QTransform matrix;
+            matrix.translate(containerPos.x(), containerPos.y());
+            shape->applyAbsoluteTransformation(matrix);
+        }
         shape->setZIndex(d->oldZIndex[i]);
     }
 

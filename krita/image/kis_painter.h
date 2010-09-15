@@ -2,6 +2,7 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 José Luis Vergara Toloza <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -126,83 +127,174 @@ public:
     const KisPaintDeviceSP device() const;
     KisPaintDeviceSP device();
 
-    /**
-     * Blast the specified region from src onto the current paint device.
-     * @param dx the destination x-coordinate
-     * @param dy the destination y-coordinate
-     * @param op a pointer to the composite op use to blast the pixels from src on dst
-     * @param src the source device
-     * @param sx the source x-coordinate
-     * @param sy the source y-coordinate
-     * @param sw the width of the region
-     * @param sh the height of the region
-     */
-    void bitBlt(qint32 dx, qint32 dy,
-                const KisPaintDeviceSP src,
-                qint32 sx, qint32 sy,
-                qint32 sw, qint32 sh);
+    
 
     /**
-     * Blast the specific region from src to the current paint device using a \ref KisFixedPaintDevice
-     * @param selection the selection will be used between (0,0) and (sw-1,sh-1).
-     */
-    void bitBltFixedSelection(qint32 dx, qint32 dy,
-                              const KisPaintDeviceSP srcdev,
-                              const KisFixedPaintDeviceSP selection,
-                              qint32 sx, qint32 sy,
-                              qint32 sw, qint32 sh);
-
-    /**
-     * Convenience method that uses QPoint and QRect
-     */
-    void bitBlt(const QPoint & pos, const KisPaintDeviceSP src, const QRect & srcRect);
-
-    /**
-     * Blast the specified region from src onto the current paint device. Src is a
-     * fixed-size paint device: this means that src must have the same colorspace as
-     * the destination device.
+     * Blast a region of srcWidth @param srcWidth and srcHeight @param srcHeight from @param
+     * srcDev onto the current paint device. @param srcX and @param srcY set the x and y
+     * positions of the origin top-left corner, @param dstX and @param dstY those of
+     * the destination.
+     * Any pixel read outside the limits of @param srcDev will return the
+     * default pixel, this is a property of \ref KisPaintDevice.
      *
-     * @param dx the destination x-coordinate
-     * @param dy the destination y-coordinate
-     * @param op a pointer to the composite op use to blast the pixels from src on dst
-     * @param src the source device
-     * @param sx the source x-coordinate
-     * @param sy the source y-coordinate
-     * @param sw the width of the region
-     * @param sh the height of the region
+     * @param dstX the destination x-coordinate
+     * @param dstY the destination y-coordinate
+     * @param op a pointer to the composite op used to blast the pixels from @param srcDev to the current paint device
+     * @param srcDev the source device
+     * @param srcX the source x-coordinate
+     * @param srcY the source y-coordinate
+     * @param srcWidth the width of the region to be manipulated
+     * @param srcHeight the height of the region to be manipulated
      */
-    void bltFixed(qint32 dx, qint32 dy,
-                  const KisFixedPaintDeviceSP src,
-                  qint32 sx, qint32 sy,
-                  qint32 sw, qint32 sh);
+    void bitBlt(qint32 dstX, qint32 dstY,
+                const KisPaintDeviceSP srcDev,
+                qint32 srcX, qint32 srcY,
+                qint32 srcWidth, qint32 srcHeight);
 
     /**
-     * Convenience method that uses QPoint and QRect
-     */
-    void bltFixed(const QPoint & pos, const KisFixedPaintDeviceSP src, const QRect & srcRect);
-
-    /**
-     * Transfer the specified region from src onto the current paint device with selection.
-     * Src is a * fixed-size paint device: this means that src must have the same colorspace as
-     * the destination device. Selection is also fixed-size paint device and it's colorspace has
-     * to be alpha8. Assert if there is wrong colorspace for selection. Selection is merged with 
-     * selection set in KisPainter (intersection of the selections with COMPOSITE_MULT)
+     * Convenience method that uses QPoint and QRect.
      *
-     * @param dx the destination x-coordinate
-     * @param dy the destination y-coordinate
-     * @param op a pointer to the composite op use to blast the pixels from src on dst
-     * @param src the source device
-     * @param selection the selection stored in fixed device
-     * @param sx the source x-coordinate
-     * @param sy the source y-coordinate
-     * @param sw the width of the region
-     * @param sh the height of the region
+     * @param pos the destination coordinate, it replaces @param dstX and @param dstY.
+     * @param srcDev the source device.
+     * @param srcRect the rectangle describing the area to blast from @param srcDev into the current paint device.
+     * @param srcRect replaces @param srcX, @param srcY, @param srcWidth and @param srcHeight.
+     *
      */
-    void bltFixed(qint32 dx, qint32 dy,
+    void bitBlt(const QPoint & pos, const KisPaintDeviceSP srcDev, const QRect & srcRect);
+    
+    /**
+     * Blasts a @param selection of srcWidth @param srcWidth and srcHeight @param srcHeight
+     * of @param srcDev on the current paint device. There is parameters
+     * to control where the area begins in each distinct device, explained below.
+     * @param selection can be used as a mask to shape @param srcDev to
+     * something interesting in the same step it is rendered to the current
+     * paint device. @param selection 's colorspace must be alpha8 (the
+     * colorspace for selections/transparency), the rectangle formed by
+     * @param selX, @param selY, @param srcWidth and @param srcHeight must not go
+     * beyond its limits, and they must be different from zero.
+     * @param selection and KisPainter's selection (the user selection) are
+     * fused together through the composite operation COMPOSITE_MULT.
+     * Any pixel read outside the limits of @param srcDev will return the
+     * default pixel, this is a property of \ref KisPaintDevice.
+     *
+     * @param dstX the destination x-coordinate
+     * @param dstY the destination y-coordinate
+     * @param srcDev the source device
+     * @param selection the custom selection to apply on the source device
+     * @param srcX the source x-coordinate
+     * @param srcY the source y-coordinate
+     * @param selX the selection x-coordinate
+     * @param selY the selection y-coordinate
+     * @param srcWidth the width of the region to be manipulated
+     * @param srcHeight the height of the region to be manipulated
+     *
+     */
+    void bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
+                                  const KisPaintDeviceSP srcDev,
+                                  const KisFixedPaintDeviceSP selection,
+                                  qint32 srcX, qint32 srcY,
+                                  qint32 selX, qint32 selY,
+                                  quint32 srcWidth, quint32 srcHeight);
+    
+    /**
+     * Convenience method that assumes @param selX, @param selY, @param srcX and @param srcY are
+     * equal to 0. Best used when @param selection and the desired area of @param srcDev have exactly
+     * the same dimensions and are specially made for each other.
+     *
+     * @param dstX the destination x-coordinate
+     * @param dstY the destination y-coordinate
+     * @param srcDev the source device
+     * @param selection the custom selection to apply on the source device
+     * @param srcWidth the width of the region to be manipulated
+     * @param srcHeight the height of the region to be manipulated
+     */
+    void bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
+                                  const KisPaintDeviceSP srcDev,
+                                  const KisFixedPaintDeviceSP selection,
+                                  quint32 srcWidth, quint32 srcHeight);
+
+    /**
+     * Blast a region of srcWidth @param srcWidth and srcHeight @param srcHeight from @param srcDev onto the current
+     * paint device. @param srcX and @param srcY set the x and y positions of the
+     * origin top-left corner, @param dstX and @param dstY those of the destination.
+     * @param srcDev is a \ref KisFixedPaintDevice: this means that @param srcDev must have the same
+     * colorspace as the destination device.
+     *
+     * @param dstX the destination x-coordinate
+     * @param dstY the destination y-coordinate
+     * @param op a pointer to the composite op use to blast the pixels from srcDev on dst
+     * @param srcDev the source device
+     * @param srcX the source x-coordinate
+     * @param srcY the source y-coordinate
+     * @param srcWidth the width of the region to be manipulated
+     * @param srcHeight the height of the region to be manipulated
+     */
+    void bltFixed(qint32 dstX, qint32 dstY,
                   const KisFixedPaintDeviceSP srcDev,
-                  const KisFixedPaintDeviceSP selection,
-                  qint32 sx, qint32 sy,
-                  qint32 sw, qint32 sh);
+                  qint32 srcX, qint32 srcY,
+                  qint32 srcWidth, qint32 srcHeight);
+
+    /**
+     * Convenience method that uses QPoint and QRect.
+     *
+     * @param pos the destination coordinate, it replaces @param dstX and @param dstY.
+     * @param srcDev the source device.
+     * @param srcRect the rectangle describing the area to blast from @param srcDev into the current paint device.
+     * @param srcRect replaces @param srcX, @param srcY, @param srcWidth and @param srcHeight.
+     *
+     */
+    void bltFixed(const QPoint & pos, const KisFixedPaintDeviceSP srcDev, const QRect & srcRect);
+
+    /**
+     * Blasts a @param selection of srcWidth @param srcWidth and srcHeight @param srcHeight
+     * of @param srcDev on the current paint device. There is parameters to control
+     * the top-left corner of the area in each respective paint device (@param dstX,
+     * @param dstY, @param srcX, @param srcY).
+     * @param selection can be used as a mask to shape @param srcDev to something
+     * interesting in the same step it is rendered to the current paint device.
+     * @param srcDev is a \ref KisFixedPaintDevice: this means that @param srcDev
+     * must have the same colorspace as the destination device.
+     * @param selection 's colorspace must be alpha8 (the colorspace for
+     * selections/transparency).
+     * The rectangle formed by the respective top-left coordinates of each device
+     * and @param srcWidth and @param srcHeight must not go beyond their limits, and
+     * they must be different from zero.
+     * @param selection and KisPainter's selection (the user selection) are
+     * fused together through the composite operation COMPOSITE_MULT.
+     *
+     * @param dstX the destination x-coordinate
+     * @param dstY the destination y-coordinate
+     * @param op a pointer to the composite op use to blast the pixels from srcDev on dst
+     * @param srcDev the source device
+     * @param selection the selection stored in fixed device
+     * @param srcX the source x-coordinate
+     * @param srcY the source y-coordinate
+     * @param srcWidth the width of the region to be manipulated
+     * @param srcHeight the height of the region to be manipulated
+     */
+    void bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
+                                    const KisFixedPaintDeviceSP srcDev,
+                                    const KisFixedPaintDeviceSP selection,
+                                    qint32 srcX, qint32 srcY,
+                                    qint32 selX, qint32 selY,
+                                    quint32 srcWidth, quint32 srcHeight);
+                                    
+    /**
+     * Convenience method that assumes @param selX, @param selY, @param srcX and @param srcY are
+     * equal to 0. Best used when @param selection and @param srcDev have exactly the same
+     * dimensions and are specially made for each other.
+     *
+     * @param dstX the destination x-coordinate
+     * @param dstY the destination y-coordinate
+     * @param srcDev the source device
+     * @param selection the custom selection to apply on the source device
+     * @param srcWidth the width of the region to be manipulated
+     * @param srcHeight the height of the region to be manipulated
+     */
+    void bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
+                                    const KisFixedPaintDeviceSP srcDev,
+                                    const KisFixedPaintDeviceSP selection,
+                                    quint32 srcWidth, quint32 srcHeight);
 
 
 

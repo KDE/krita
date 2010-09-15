@@ -141,7 +141,7 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     copyPainter.end();
     
     // Blit the results to the screen.
-    painter()->bitBltFixedSelection(x, y, m_srcdev, maskDab, 0, 0, sw, sh);
+    painter()->bitBltWithFixedSelection(x, y, m_srcdev, maskDab, sw, sh);
     
     return spacing(scale);
 }

@@ -72,9 +72,9 @@ public:
     bool colorPerParticle;
     bool mixBgColor;
 
-    qint8 hue;
-    qint8 saturation;
-    qint8 value;
+    int hue;
+    int saturation;
+    int value;
 public:
     /// fill the class members with related properties
     void fillProperties(const KisPropertiesConfiguration* setting);

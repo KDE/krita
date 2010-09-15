@@ -51,6 +51,7 @@ private:
 
     QImage m_pixelCache;
     QTimer* m_updateTimer;
+    QColor m_lastColor;
 };
 
 #endif // KIS_MY_PAINT_SHADE_SELECTOR_H

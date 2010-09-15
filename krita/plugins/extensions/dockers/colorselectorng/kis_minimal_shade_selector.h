@@ -43,6 +43,7 @@ protected:
 
 private:
     QList<KisShadeSelectorLine*> m_shadingLines;
+    QColor m_lastColor;
     KisCanvas2* m_canvas;
 };
 

@@ -439,12 +439,17 @@ QUndoCommand* KisShapeLayer::transform(double  xscale, double  yscale, double  x
 
     QList<QTransform> oldTransformations;
     QList<QTransform> newTransformations;
+
+    // this code won't work if there are shapes, that inherit the transformation from the parent container.
+    // the chart and tree shapes are examples for that, but they aren't used in krita and there are no other shapes like that.
     foreach(const KoShape* shape, shapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
 
+
         newTransformations.append(oldTransform*matrix);
     }
+
     return new KoShapeTransformCommand(shapes, oldTransformations, newTransformations);
 }
 

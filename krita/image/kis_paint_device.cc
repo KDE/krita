@@ -375,16 +375,15 @@ QRect KisPaintDevice::extent() const
 {
     QRect extent;
 
+    qint32 x, y, w, h;
+    m_datamanager->extent(x, y, w, h);
+    x += m_d->x;
+    y += m_d->y;
+    extent = QRect(x, y, w, h);
+
     quint8 defaultOpacity = colorSpace()->opacityU8(defaultPixel());
-    if (defaultOpacity != OPACITY_TRANSPARENT_U8) {
-        extent = m_d->defaultBounds.bounds();
-    } else {
-        qint32 x, y, w, h;
-        m_datamanager->extent(x, y, w, h);
-        x += m_d->x;
-        y += m_d->y;
-        extent = QRect(x, y, w, h);
-    }
+    if (defaultOpacity != OPACITY_TRANSPARENT_U8)
+        extent |= m_d->defaultBounds.bounds();
 
     return extent;
 }
@@ -412,7 +411,13 @@ QRect KisPaintDevice::calculateExactBounds() const
 {
     quint8 defaultOpacity = colorSpace()->opacityU8(defaultPixel());
     if(defaultOpacity != OPACITY_TRANSPARENT_U8) {
-        return m_d->defaultBounds.bounds();
+        /**
+         * We will not calculate exact bounds for the device,
+         * that is knows to be at least not smaller than image.
+         * It isn't worth it.
+         */
+
+        return extent();
     }
 
     // Solution n°2

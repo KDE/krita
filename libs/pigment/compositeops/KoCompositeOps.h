@@ -36,6 +36,7 @@
 #include "compositeops/KoCompositeOpInversedSubtract.h"
 #include "compositeops/KoCompositeOpSoftlight.h"
 #include "compositeops/KoCompositeOpHardlight.h"
+#include "compositeops/KoCompositeOpCopy2.h"
 
 /**
  * This function add to the colorspace all the composite ops defined by
@@ -47,6 +48,7 @@ void addStandardCompositeOps(KoColorSpace* cs)
     cs->addCompositeOp(new KoCompositeOpAdd<_Traits_>(cs));
     cs->addCompositeOp(new KoCompositeOpAlphaDarken<_Traits_>(cs));
     cs->addCompositeOp(new KoCompositeOpBurn<_Traits_>(cs));
+    cs->addCompositeOp(new KoCompositeOpCopy2<_Traits_>(cs));
     cs->addCompositeOp(new KoCompositeOpDivide<_Traits_>(cs));
     cs->addCompositeOp(new KoCompositeOpDodge<_Traits_>(cs));
     cs->addCompositeOp(new KoCompositeOpErase<_Traits_>(cs));

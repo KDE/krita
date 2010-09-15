@@ -5,6 +5,7 @@
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 José Luis Vergara Toloza <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -272,170 +273,217 @@ QRegion KisPainter::addDirtyRect(const QRect & rc)
     }
 }
 
-void KisPainter::bitBltFixedSelection(qint32 dx, qint32 dy, const KisPaintDeviceSP srcdev, const KisFixedPaintDeviceSP selection, qint32 sx, qint32 sy, qint32 sw, qint32 sh)
+
+
+
+
+void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
+                                          const KisPaintDeviceSP srcDev,
+                                          const KisFixedPaintDeviceSP selection,
+                                          qint32 selX, qint32 selY,
+                                          qint32 srcX, qint32 srcY,
+                                          quint32 srcWidth, quint32 srcHeight)
 {
-    if (sw == 0 || sh == 0) return;
-    if (srcdev.isNull()) return;
+    // TODO: get selX and selY working as intended
+    
+    /* This check for nonsense ought to be a Q_ASSERT. However, when paintops are just
+    initializing they perform some dummy passes with those parameters, and it must not crash */
+    if (srcWidth == 0 || srcHeight == 0) return;
+    if (srcDev.isNull()) return;
     if (d->device.isNull()) return;
-
-    Q_ASSERT(srcdev->pixelSize() == d->pixelSize);
+    
+    // TODO: What purpose has checking if src and this have the same pixel size?
+    Q_ASSERT(srcDev->pixelSize() == d->pixelSize);
+    // Check that selection has an alpha colorspace, crash if false
     Q_ASSERT(selection->colorSpace() == KoColorSpaceRegistry::instance()->alpha8());
-    
-    QRect srcRect = QRect(sx, sy, sw, sh);
-    QRect dstRect = QRect(dx, dy, sw, sh);
 
-    // In case of COMPOSITE_COPY restricting bitblt to extent can
-    // have unexpected behavior since it would reduce the area that
-    // is copied.
+    QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
+    QRect selRect = QRect(selX, selY, srcWidth, srcHeight);
+    
+    /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
+    so crash if someone attempts to do this. Don't resize YET as it would obfuscate the mistake. */
+    Q_ASSERT(selection->bounds().contains(selRect));
+    
+    /* KisPaintDevice is a tricky beast, and it can easily have unpredictable exactBounds() or extent()
+    in limit cases (for example, when brushes become too small in a brush engine). That's why there's no
+    Q_ASSERT to check correlation between srcRect and those bounds.
+    Below lies a speed optimization that shrinks srcRect only when srcDev is smaller than it. This is no
+    problem and without it there would be no illegal read from memory since reading out the bounds of a
+    KisPaintDevice gives the default pixel.*/
+    
+    /* In case of COMPOSITE_COPY restricting bitBlt to extent can
+    have unexpected behavior since it would reduce the area that
+    is copied (Read below). */
     if (d->compositeOp->id() != COMPOSITE_COPY) {
-        srcRect &= srcdev->extent();
+        /* If srcDev->extent() (the area of the tiles containing srcDev)
+        is smaller than srcRect, then shrink srcRect to that size. This
+        is done as a speed optimization, useful for stack recomposition
+        in KisImage. srcRect won't grow if srcDev->extent() is larger. */
+        srcRect &= srcDev->extent();
+
+        if (srcRect.isEmpty()) return;
+
+        // Readjust the function paramenters to the new dimensions.
+        dstX += srcRect.x() - srcX;    // This will only add, not substract
+        dstY += srcRect.y() - srcY;    // Idem
+        srcX = srcRect.x();
+        srcY = srcRect.y();
+        srcWidth = srcRect.width();
+        srcHeight = srcRect.height();
     }
 
-    if (srcRect.isEmpty()) {
-        return;
-    }
-
-    dx += srcRect.x() - sx;
-    dy += srcRect.y() - sy;
-
-    sx = srcRect.x();
-    sy = srcRect.y();
-    sw = srcRect.width();
-    sh = srcRect.height();
-
-    /* Try to catch when someone attempts to use the function too generally.
-    Making the src image different in size to the mask will lead to 
-    unexpected behavior and complicates the function. Let the user of the
-    function sort those problems and make both equal */
-    Q_ASSERT(selection->bounds().width() == sw && selection->bounds().height() == sh);
+    /* Create an intermediate byte array to hold information before it is written
+    to the current paint device (d->device) */
+    quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
+    d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
     
-    quint8 * srcBytes = new quint8[ sw * sh * srcdev->pixelSize() ];
-    srcdev->readBytes(srcBytes, sx, sy, sw, sh);
-
-    quint8 * dstBytes = new quint8[ sw * sh * d->device->pixelSize() ];
-    d->device->readBytes(dstBytes, dx, dy, sw, sh);
-
-    quint8 * mergedSelectionBytes = new quint8[ sw * sh * selection->pixelSize() ];
-
-    /*
-    This checks whether there is nothing selected.
+    // Copy the relevant bytes of raw data from srcDev
+    quint8* srcBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
+    srcDev->readBytes(srcBytes, srcX, srcY, srcWidth, srcHeight);
+    
+    /* This checks whether there is nothing selected.
     When there is nothing selected, execute the IF block.
     When there is something selected, execute the ELSE block.
     Note that this IF-ELSE block is not redundant.
     d->selection must be located first in the if statement, because
-    d->selection->isDeselected() may not exist, causing a crash.
-    */
+    if it is null and not checked first, d->selection->isDeselected()
+    will call unreferenced memory and crash. */
     if (!(d->selection && !d->selection->isDeselected())) {
-        selection->readBytes(mergedSelectionBytes, 0, 0, sw, sh);
+        /* As there's nothing selected, blit to dstBytes (intermediary bit array),
+          ignoring d->selection (the user selection)*/
+        d->colorSpace->bitBlt(dstBytes,
+                              srcWidth * d->device->pixelSize(),
+                              srcDev->colorSpace(),
+                              srcBytes,
+                              srcWidth * srcDev->pixelSize(),
+                              selection->data() + selX,
+                              srcWidth * selection->pixelSize(),
+                              d->opacity,
+                              srcHeight,
+                              srcWidth,
+                              d->compositeOp,
+                              d->channelFlags);
     }
     else {
-        /* Here selection->pixelSize() is known to be the same as
-        d->selection->pixelSize(), both should be equal to 1 */
-        quint32 totalBytes = sw * sh * selection->pixelSize();
-
-        quint8 * selectionBytes = new quint8[ totalBytes ];
-        d->selection->readBytes(selectionBytes, dx, dy, sw, sh);
-
-        // Initialize data to UNSELECTED == 0
-        for (quint32 i = 0; i < totalBytes; ++i) {
-            mergedSelectionBytes[i] = 0;
-        }
-
-        /* This is the only way to emulate the Multiply compositeOp which
-        is required to blend selections. To avoid the creation of
-        mergedSelectionBytes, compositeOp("multiply") must be created.
-        MAX_SELECTED is used instead of d->opacity because it is in principle
-        the way to emulate multiply, but so far both act visually identical */
-        KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_OVER)
+        /* Read the user selection (d->selection) bytes into an array, ready
+        to merge in the next block*/
+        quint32 totalBytes = srcWidth * srcHeight * selection->pixelSize();
+        quint8 * mergedSelectionBytes = new quint8[ totalBytes ];
+        d->selection->readBytes(mergedSelectionBytes, dstX, dstY, srcWidth, srcHeight);
+        
+        // Merge selections here by multiplying them - compositeOP(COMPOSITE_MULT)
+        KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_MULT)
         ->composite(mergedSelectionBytes,
-                    sw * selection->pixelSize(),
-                    selection->data(),
-                    sw * selection->pixelSize(),
-                    selectionBytes,
-                    sw * selection->pixelSize(),
-                    sh,
-                    sw,
-                    MAX_SELECTED);
+                    srcWidth * selection->pixelSize(),
+                    selection->data() + selX,
+                    srcWidth * selection->pixelSize(),
+                    0,
+                    0,
+                    srcHeight,
+                    srcWidth,
+                    0); // Q_UNUSED in MULT
 
-        delete [] selectionBytes;
+        // Blit to dstBytes (intermediary bit array)
+        d->colorSpace->bitBlt(dstBytes,
+                              srcWidth * d->device->pixelSize(),
+                              d->colorSpace,
+                              srcBytes,
+                              srcWidth * srcDev->pixelSize(),
+                              mergedSelectionBytes,
+                              srcWidth * selection->pixelSize(),
+                              d->opacity,
+                              srcHeight,
+                              srcWidth,
+                              d->compositeOp,
+                              d->channelFlags);
+
+        delete[] mergedSelectionBytes;
     }
 
-    d->colorSpace->bitBlt(dstBytes,
-                          sw * d->device->pixelSize(),
-                          srcdev->colorSpace(),
-                          srcBytes,
-                          sw * srcdev->colorSpace()->pixelSize(),
-                          mergedSelectionBytes,
-                          sw * selection->pixelSize(),
-                          d->opacity,
-                          sh,
-                          sw,
-                          d->compositeOp,
-                          d->channelFlags);
+    d->device->writeBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
+    
+    delete[] dstBytes;
 
-    d->device->writeBytes(dstBytes, dx, dy, sw, sh);
-
-    delete [] srcBytes;
-    delete [] dstBytes;
-    delete [] mergedSelectionBytes;
-
-    addDirtyRect(QRect(dx, dy, sw, sh));
+    addDirtyRect(QRect(dstX, dstY, srcWidth, srcHeight));
 }
 
-void KisPainter::bitBlt(qint32 dx, qint32 dy, const KisPaintDeviceSP srcdev, qint32 sx, qint32 sy, qint32 sw, qint32 sh)
+
+void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
+                                          const KisPaintDeviceSP srcDev,
+                                          const KisFixedPaintDeviceSP selection,
+                                          quint32 srcWidth, quint32 srcHeight)
 {
-    if (sw == 0 || sh == 0) return;
-    if (srcdev.isNull()) return;
+    bitBltWithFixedSelection(dstX, dstY, srcDev, selection, 0, 0, 0, 0, srcWidth, srcHeight);
+}
+
+
+void KisPainter::bitBlt(qint32 dstX, qint32 dstY,
+                        const KisPaintDeviceSP srcDev,
+                        qint32 srcX, qint32 srcY,
+                        qint32 srcWidth, qint32 srcHeight)
+{
+    /* This check for nonsense ought to be a Q_ASSERT. However, when paintops are just
+    initializing they perform some dummy passes with those parameters, and it must not crash */
+    if (srcWidth == 0 || srcHeight == 0) return;
+    if (srcDev.isNull()) return;
     if (d->device.isNull()) return;
 
-    QRect srcRect = QRect(sx, sy, sw, sh);
+    QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
 
     if (d->compositeOp->id() == COMPOSITE_COPY) {
-        if(!d->selection && sx == dx && sy ==dy && d->device->fastBitBltPossible(srcdev)) {
-            d->device->fastBitBlt(srcdev, srcRect);
+        if(!d->selection && srcX == dstX && srcY == dstY && d->device->fastBitBltPossible(srcDev)) {
+            d->device->fastBitBlt(srcDev, srcRect);
             addDirtyRect(srcRect);
             return;
         }
     }
     else {
-        // In case of COMPOSITE_COPY restricting bitblt to extent can
-        // have unexpected behavior since it would reduce the area that
-        // is copied.
-        srcRect &= srcdev->extent();
+        /* In case of COMPOSITE_COPY restricting bitBlt to extent can
+        have unexpected behavior since it would reduce the area that
+        is copied (Read below). */
+        if (d->compositeOp->id() != COMPOSITE_COPY) {
+            /* If srcDev->extent() (the area of the tiles containing srcDev)
+            is smaller than srcRect, then shrink srcRect to that size. This
+            is done as a speed optimization, useful for stack recomposition
+            in KisImage. srcRect won't grow if srcDev->extent() is larger. */
+            srcRect &= srcDev->extent();
 
-        if(srcRect.isEmpty())
-            return;
+            if (srcRect.isEmpty()) return;
+
+            // Readjust the function paramenters to the new dimensions.
+            dstX += srcRect.x() - srcX;    // This will only add, not substract
+            dstY += srcRect.y() - srcY;    // Idem
+            srcX = srcRect.x();
+            srcY = srcRect.y();
+            srcWidth = srcRect.width();
+            srcHeight = srcRect.height();
+        }
     }
+    const KoColorSpace * srcCs = srcDev->colorSpace();
 
-    dx += srcRect.x() - sx;
-    dy += srcRect.y() - sy;
+    qint32 dstY_ = dstY;
+    qint32 srcY_ = srcY;
+    qint32 rowsRemaining = srcHeight;
 
-    sx = srcRect.x();
-    sy = srcRect.y();
-    sw = srcRect.width();
-    sh = srcRect.height();
+    // Read below
+    KisRandomConstAccessorPixel srcIt = srcDev->createRandomConstAccessor(srcX, srcY);
+    KisRandomAccessorPixel dstIt = d->device->createRandomAccessor(dstX, dstY);
 
-    const KoColorSpace * srcCs = srcdev->colorSpace();
-
-    qint32 dstY = dy;
-    qint32 srcY = sy;
-    qint32 rowsRemaining = sh;
-
-    KisRandomConstAccessorPixel srcIt = srcdev->createRandomConstAccessor(sx, sy);
-    KisRandomAccessorPixel dstIt = d->device->createRandomAccessor(dx, dy);
-
+    /* Here be a huge block of verbose code that does roughly the same than
+    the other bit blit operations. This one is longer than the rest in an effort to
+    optimize speed and memory use */
     if (d->selection) {
 
-        KisRandomConstAccessorPixel maskIt = d->selection->createRandomConstAccessor(dx, dy);
+        KisRandomConstAccessorPixel maskIt = d->selection->createRandomConstAccessor(dstX, dstY);
 
         while (rowsRemaining > 0) {
 
-            qint32 dstX = dx;
-            qint32 srcX = sx;
-            qint32 columnsRemaining = sw;
-            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX + sw - 1);
-            qint32 numContiguousSrcRows = srcdev->numContiguousRows(srcY, srcX, srcX + sw - 1);
-            qint32 numContiguousSelRows = d->selection->numContiguousRows(srcY, srcX, srcX + sw - 1);
+            qint32 dstX_ = dstX;
+            qint32 srcX_ = srcX;
+            qint32 columnsRemaining = srcWidth;
+            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY_, dstX_, dstX_ + srcWidth - 1);
+            qint32 numContiguousSrcRows = srcDev->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
+            qint32 numContiguousSelRows = d->selection->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
 
             qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
             rows = qMin(rows, numContiguousSelRows);
@@ -443,22 +491,22 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy, const KisPaintDeviceSP srcdev, qin
 
             while (columnsRemaining > 0) {
 
-                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY + rows - 1);
-                qint32 numContiguousSrcColumns = srcdev->numContiguousColumns(srcX, srcY, srcY + rows - 1);
-                qint32 numContiguousSelColumns = d->selection->numContiguousColumns(srcX, srcY, srcY + rows - 1);
+                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX_, dstY_, dstY_ + rows - 1);
+                qint32 numContiguousSrcColumns = srcDev->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
+                qint32 numContiguousSelColumns = d->selection->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
 
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
                 columns = qMin(columns, numContiguousSelColumns);
                 columns = qMin(columns, columnsRemaining);
 
-                qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
-                srcIt.moveTo(srcX, srcY);
+                qint32 srcRowStride = srcDev->rowStride(srcX_, srcY_);
+                srcIt.moveTo(srcX_, srcY_);
 
-                qint32 dstRowStride = d->device->rowStride(dstX, dstY);
-                dstIt.moveTo(dstX, dstY);
+                qint32 dstRowStride = d->device->rowStride(dstX_, dstY_);
+                dstIt.moveTo(dstX_, dstY_);
 
-                qint32 maskRowStride = d->selection->rowStride(dstX, dstY);
-                maskIt.moveTo(dstX, dstY);
+                qint32 maskRowStride = d->selection->rowStride(dstX_, dstY_);
+                maskIt.moveTo(dstX_, dstY_);
 
                 d->colorSpace->bitBlt(dstIt.rawData(),
                                       dstRowStride,
@@ -472,41 +520,42 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy, const KisPaintDeviceSP srcdev, qin
                                       columns,
                                       d->compositeOp,
                                       d->channelFlags);
-                srcX += columns;
-                dstX += columns;
+                srcX_ += columns;
+                dstX_ += columns;
                 columnsRemaining -= columns;
             }
 
-            srcY += rows;
-            dstY += rows;
+            srcY_ += rows;
+            dstY_ += rows;
             rowsRemaining -= rows;
         }
-    } else {
+    }
+    else {
 
         while (rowsRemaining > 0) {
 
-            qint32 dstX = dx;
-            qint32 srcX = sx;
-            qint32 columnsRemaining = sw;
-            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX + sw - 1);
-            qint32 numContiguousSrcRows = srcdev->numContiguousRows(srcY, srcX, srcX + sw - 1);
+            qint32 dstX_ = dstX;
+            qint32 srcX_ = srcX;
+            qint32 columnsRemaining = srcWidth;
+            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY_, dstX_, dstX_ + srcWidth - 1);
+            qint32 numContiguousSrcRows = srcDev->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
 
             qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
             rows = qMin(rows, rowsRemaining);
 
             while (columnsRemaining > 0) {
 
-                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY + rows - 1);
-                qint32 numContiguousSrcColumns = srcdev->numContiguousColumns(srcX, srcY, srcY + rows - 1);
+                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX_, dstY_, dstY_ + rows - 1);
+                qint32 numContiguousSrcColumns = srcDev->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
 
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
                 columns = qMin(columns, columnsRemaining);
 
-                qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
-                srcIt.moveTo(srcX, srcY);
+                qint32 srcRowStride = srcDev->rowStride(srcX_, srcY_);
+                srcIt.moveTo(srcX_, srcY_);
 
-                qint32 dstRowStride = d->device->rowStride(dstX, dstY);
-                dstIt.moveTo(dstX, dstY);
+                qint32 dstRowStride = d->device->rowStride(dstX_, dstY_);
+                dstIt.moveTo(dstX_, dstY_);
 
                 d->colorSpace->bitBlt(dstIt.rawData(),
                                       dstRowStride,
@@ -521,207 +570,221 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy, const KisPaintDeviceSP srcdev, qin
                                       d->compositeOp,
                                       d->channelFlags);
 
-                srcX += columns;
-                dstX += columns;
+                srcX_ += columns;
+                dstX_ += columns;
                 columnsRemaining -= columns;
             }
 
-            srcY += rows;
-            dstY += rows;
+            srcY_ += rows;
+            dstY_ += rows;
             rowsRemaining -= rows;
         }
     }
 
-    addDirtyRect(QRect(dx, dy, sw, sh));
+    addDirtyRect(QRect(dstX, dstY, srcWidth, srcHeight));
 }
 
-void KisPainter::bitBlt(const QPoint & pos, const KisPaintDeviceSP src, const QRect & srcRect)
+
+void KisPainter::bitBlt(const QPoint & pos, const KisPaintDeviceSP srcDev, const QRect & srcRect)
 {
-    bitBlt(pos.x(), pos.y(), src, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
+    bitBlt(pos.x(), pos.y(), srcDev, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
 }
 
 
-
-void KisPainter::bltFixed(qint32 dx, qint32 dy,
+void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
                           const KisFixedPaintDeviceSP srcDev,
-                          qint32 sx, qint32 sy,
-                          qint32 sw, qint32 sh)
+                          qint32 srcX, qint32 srcY,
+                          qint32 srcWidth, qint32 srcHeight)
 {
-    if (sw == 0 || sh == 0) return;
+    /* This check for nonsense ought to be a Q_ASSERT. However, when paintops are just
+    initializing they perform some dummy passes with those parameters, and it must not crash */
+    if (srcWidth == 0 || srcHeight == 0) return;
     if (srcDev.isNull()) return;
     if (d->device.isNull()) return;
+    
+    // TODO: What purpose has checking if src and this have the same pixel size?
     Q_ASSERT(srcDev->pixelSize() == d->pixelSize);
 
-    QRect srcRect = QRect(sx, sy, sw, sh);
-
-    if (srcRect.isEmpty()) {
-        return;
-    }
-
-    if (!srcRect.contains(srcDev->bounds())) {
-        srcRect = srcDev->bounds();
-    }
-
-    dx += srcRect.x() - sx;
-    dy += srcRect.y() - sy;
-
-    sx = srcRect.x();
-    sy = srcRect.y();
-    sw = srcRect.width();
-    sh = srcRect.height();
-
+    QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
+    
+    /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
+    so crash if someone attempts to do this. Don't resize as it would obfuscate the mistake. */
+    Q_ASSERT(srcDev->bounds().contains(srcRect));
+    
+    // Convenient renaming
     const KoColorSpace * srcCs = d->colorSpace;
-    quint8* dstBytes = new quint8[sw * sh * d->device->pixelSize()];
-    d->device->readBytes(dstBytes, dx, dy, sw, sh);
+    
+    /* Create an intermediate byte array to hold information before it is written
+    to the current paint device (aka: d->device) */
+    quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
+    d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
+    // TODO: use the d->selection && !isDeselected() combo
     if (d->selection) {
-
-        quint8* selBytes = new quint8[sw * sh * d->selection->pixelSize()];
-        d->selection->readBytes(selBytes, dx, dy, sw, sh);
-
+        /* d->selection is a KisPaintDevice, so first a readBytes is performed to
+        get the area of interest... */
+        quint8* selBytes = new quint8[srcWidth * srcHeight * d->selection->pixelSize()];
+        d->selection->readBytes(selBytes, dstX, dstY, srcWidth, srcHeight);
+        // ...and then blit.
         d->colorSpace->bitBlt(dstBytes,
-                              sw * d->device->pixelSize(),
+                              srcWidth * d->device->pixelSize(),
                               srcCs,
-                              srcDev->data() + sx,
+                              srcDev->data() + srcX,
                               srcDev->bounds().width() * srcDev->pixelSize(),
                               selBytes,
-                              sw  * d->selection->pixelSize(),
+                              srcWidth * d->selection->pixelSize(),
                               d->opacity,
-                              sh,
-                              sw,
+                              srcHeight,
+                              srcWidth,
                               d->compositeOp,
                               d->channelFlags);
 
         delete[] selBytes;
-    } else {
+    }
+    else {
+        // Here we blit ignoring d->selection, note the zeroes.
         d->colorSpace->bitBlt(dstBytes,
-                              sw * d->device->pixelSize(),
+                              srcWidth * d->device->pixelSize(),
                               srcCs,
-                              srcDev->data() + sx,
+                              srcDev->data() + srcX,
                               srcDev->bounds().width() * srcDev->pixelSize(),
                               0,
                               0,
                               d->opacity,
-                              sh,
-                              sw,
+                              srcHeight,
+                              srcWidth,
                               d->compositeOp,
                               d->channelFlags);
 
     }
 
-    d->device->writeBytes(dstBytes, dx, dy, sw, sh);
+    d->device->writeBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
     delete[] dstBytes;
 
-    addDirtyRect(QRect(dx, dy, sw, sh));
+    addDirtyRect(QRect(dstX, dstY, srcWidth, srcHeight));
 }
 
-void KisPainter::bltFixed(qint32 dx, qint32 dy,
-                          const KisFixedPaintDeviceSP srcDev,
-                          const KisFixedPaintDeviceSP selection,
-                          qint32 sx, qint32 sy,
-                          qint32 sw, qint32 sh)
+void KisPainter::bltFixed(const QPoint & pos, const KisFixedPaintDeviceSP srcDev, const QRect & srcRect)
 {
-    if (sw == 0 || sh == 0) return;
+    bltFixed(pos.x(), pos.y(), srcDev, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
+}
+
+void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
+                                            const KisFixedPaintDeviceSP srcDev,
+                                            const KisFixedPaintDeviceSP selection,
+                                            qint32 selX, qint32 selY,
+                                            qint32 srcX, qint32 srcY,
+                                            quint32 srcWidth, quint32 srcHeight)
+{
+    // TODO: get selX and selY working as intended
+    
+    /* This check for nonsense ought to be a Q_ASSERT. However, when paintops are just
+    initializing they perform some dummy passes with those parameters, and it must not crash */
+    if (srcWidth == 0 || srcHeight == 0) return;
     if (srcDev.isNull()) return;
     if (d->device.isNull()) return;
+    
+    // TODO: What purpose has checking if src and this have the same pixel size?
     Q_ASSERT(srcDev->pixelSize() == d->pixelSize);
+    // Check that selection has an alpha colorspace, crash if false
     Q_ASSERT(selection->colorSpace() == KoColorSpaceRegistry::instance()->alpha8());
-    Q_ASSERT(selection->bounds().width() == sw && selection->bounds().height() == sh);
-    //TODO: it does not work when sx != 0 but it is used that way somewhere?
-    Q_ASSERT(sx == 0);
-    Q_ASSERT(sy == 0);
     
-    QRect srcRect = QRect(sx, sy, sw, sh);
-
-    if (srcRect.isEmpty()) {
-        return;
-    }
-
-    if (!srcRect.contains(srcDev->bounds())) {
-        srcRect = srcDev->bounds();
-    }
-
-    dx += srcRect.x() - sx;
-    dy += srcRect.y() - sy;
-
-    sx = srcRect.x();
-    sy = srcRect.y();
-    sw = srcRect.width();
-    sh = srcRect.height();
-
-    quint8* dstBytes = new quint8[sw * sh * d->device->pixelSize()];
-    d->device->readBytes(dstBytes, dx, dy, sw, sh);
+    QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
+    QRect selRect = QRect(selX, selY, srcWidth, srcHeight);
     
-    if (!(d->selection && !d->selection->isDeselected())){
+    /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
+    so crash if someone attempts to do this. Don't resize as it would obfuscate the mistake. */
+    Q_ASSERT(srcDev->bounds().contains(srcRect));
+    Q_ASSERT(selection->bounds().contains(selRect));
+    
+    /* Create an intermediate byte array to hold information before it is written
+    to the current paint device (aka: d->device) */
+    quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
+    d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
+    
+    // Check bitBltWithFixedSelection for an explanation of this if-check
+    if (!(d->selection && !d->selection->isDeselected())) {
+        /* As there's nothing selected, blit to dstBytes (intermediary bit array),
+          ignoring d->selection (the user selection)*/
         d->colorSpace->bitBlt(dstBytes,
-                            sw * d->device->pixelSize(),
-                            d->colorSpace,
-                            srcDev->data() + sx,
-                            srcDev->bounds().width() * srcDev->pixelSize(),
-                            selection->data(),
-                            sw  * selection->pixelSize(),
-                            d->opacity,
-                            sh,
-                            sw,
-                            d->compositeOp,
-                            d->channelFlags);
-    }else{
-        quint32 totalBytes = sw * sh * selection->pixelSize();
+                              srcWidth * d->device->pixelSize(),
+                              d->colorSpace,
+                              srcDev->data() + srcX,
+                              srcDev->bounds().width() * srcDev->pixelSize(),
+                              selection->data() + selX,
+                              srcWidth * selection->pixelSize(),
+                              d->opacity,
+                              srcHeight,
+                              srcWidth,
+                              d->compositeOp,
+                              d->channelFlags);
+    }
+    else {
+        /* Read the user selection (d->selection) bytes into an array, ready
+        to merge in the next block*/
+        quint32 totalBytes = srcWidth * srcHeight * selection->pixelSize();
         quint8 * mergedSelectionBytes = new quint8[ totalBytes ];
+        d->selection->readBytes(mergedSelectionBytes, dstX, dstY, srcWidth, srcHeight);
         
-        d->selection->readBytes(mergedSelectionBytes, dx, dy, sw, sh);
-        // merge selection here 
+        // Merge selections here by multiplying them - compositeOp(COMPOSITE_MULT)
         KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_MULT)
         ->composite(mergedSelectionBytes,
-                    sw * selection->pixelSize(),
+                    srcWidth * selection->pixelSize(),
                     selection->data(),
-                    sw * selection->pixelSize(),
+                    srcWidth * selection->pixelSize(),
                     0,
                     0,
-                    sh,
-                    sw,
-                    0);// Q_UNUSED in MULT
-        
+                    srcHeight,
+                    srcWidth,
+                    0); // Q_UNUSED in MULT
 
+        // Blit to dstBytes (intermediary bit array)
         d->colorSpace->bitBlt(dstBytes,
-                        sw * d->device->pixelSize(),
-                        d->colorSpace,
-                        srcDev->data() + sx,
-                        srcDev->bounds().width() * srcDev->pixelSize(),
-                        mergedSelectionBytes,
-                        sw  * selection->pixelSize(),
-                        d->opacity,
-                        sh,
-                        sw,
-                        d->compositeOp,
-                        d->channelFlags);
+                              srcWidth * d->device->pixelSize(),
+                              d->colorSpace,
+                              srcDev->data() + srcX,
+                              srcDev->bounds().width() * srcDev->pixelSize(),
+                              mergedSelectionBytes,
+                              srcWidth * selection->pixelSize(),
+                              d->opacity,
+                              srcHeight,
+                              srcWidth,
+                              d->compositeOp,
+                              d->channelFlags);
                         
         delete[] mergedSelectionBytes;
     }
 
-    d->device->writeBytes(dstBytes, dx, dy, sw, sh);
+    d->device->writeBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
     
     delete[] dstBytes;
 
-    addDirtyRect(QRect(dx, dy, sw, sh));
+    addDirtyRect(QRect(dstX, dstY, srcWidth, srcHeight));
 }
 
-
-void KisPainter::bltFixed(const QPoint & pos, const KisFixedPaintDeviceSP src, const QRect & srcRect)
+void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
+                                            const KisFixedPaintDeviceSP srcDev,
+                                            const KisFixedPaintDeviceSP selection,
+                                            quint32 srcWidth, quint32 srcHeight)
 {
-    bltFixed(pos.x(), pos.y(), src, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
+    bltFixedWithFixedSelection(dstX, dstY, srcDev, selection, 0, 0, 0, 0, srcWidth, srcHeight);
 }
+
+
+
+
 
 KisDistanceInformation KisPainter::paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             const KisDistanceInformation& savedDist)
+                                             const KisPaintInformation &pi2,
+                                             const KisDistanceInformation& savedDist)
 {
     if (!d->device) return KisDistanceInformation();
     if (!d->paintOp || !d->paintOp->canPaint()) return KisDistanceInformation();
 
     return d->paintOp->paintLine(pi1, pi2, savedDist);
 }
+
 
 void KisPainter::paintPolyline(const vQPointF &points,
                                int index, int numPoints)
@@ -779,10 +842,10 @@ void KisPainter::getBezierCurvePoints(const QPointF &pos1,
 }
 
 KisDistanceInformation KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
-                                    const QPointF &control1,
-                                    const QPointF &control2,
-                                    const KisPaintInformation &pi2,
-                                    const KisDistanceInformation& savedDist)
+                                                    const QPointF &control1,
+                                                    const QPointF &control2,
+                                                    const KisPaintInformation &pi2,
+                                                    const KisDistanceInformation& savedDist)
 {
     if (d->paintOp && d->paintOp->canPaint()) {
         return d->paintOp->paintBezierCurve(pi1, control1, control2, pi2, savedDist);
@@ -1140,14 +1203,14 @@ void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width,
 
     if ((x2 == x1 ) && (y2 == y1)) return;
     
-    int dx = x2-x1;
-    int dy = y2-y1;
+    int dstX = x2-x1;
+    int dstY = y2-y1;
 
-    qreal _C = dx*y1 - dy*x1;
-    qreal projectionDenominator = 1.0 / (pow(dx,2) + pow(dy,2));
+    qreal _C = dstX*y1 - dstY*x1;
+    qreal projectionDenominator = 1.0 / (pow(dstX,2) + pow(dstY,2));
    
     qreal subPixel;
-    if (qAbs(dx) > qAbs(dy)){
+    if (qAbs(dstX) > qAbs(dstY)){
         subPixel = start.x() - x1;
     }else{
         subPixel = start.y() - y1;
@@ -1165,7 +1228,7 @@ void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width,
     if (x2<x1) qSwap(x1,x2);
     if (y2<y1) qSwap(y1,y2);
    
-    qreal denominator = sqrt(pow(dy,2) + pow(dx,2));
+    qreal denominator = sqrt(pow(dstY,2) + pow(dstX,2));
     if (denominator == 0.0) {
         denominator = 1.0;
     }
@@ -1179,15 +1242,15 @@ void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width,
     for (int y = y1-W_; y < y2+W_ ; y++){
         for (int x = x1-W_; x < x2+W_; x++){
            
-            projection = ( (x-X1_)* dx + (y-Y1_)*dy ) * projectionDenominator;
-            scanX = X1_ + projection * dx;
-            scanY = Y1_ + projection * dy;
+            projection = ( (x-X1_)* dstX + (y-Y1_)*dstY ) * projectionDenominator;
+            scanX = X1_ + projection * dstX;
+            scanY = Y1_ + projection * dstY;
 
             if (((scanX < x1) || (scanX > x2)) || ((scanY < y1) || (scanY > y2))) {
                 AA_ = qMin( sqrt( pow(x-X1_,2) + pow(y-Y1_,2) ), 
                             sqrt( pow(x-X2_,2) + pow(y-Y2_,2) ));   
             }else{
-                AA_ = qAbs(dy*x - dx*y + _C) * denominator;
+                AA_ = qAbs(dstY*x - dstX*y + _C) * denominator;
             }
          
             if (AA_>halfWidth) { 
@@ -1597,7 +1660,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
     KoColor col2(c1);
 
     float grada, gradb, dxa, dxb, dya, dyb, adya, adyb, fraca, fracb,
-    xfa, yfa, xfb, yfb, b1a, b2a, b1b, b2b, dx, dy;
+    xfa, yfa, xfb, yfb, b1a, b2a, b1b, b2b, dstX, dstY;
     int x, y, ix1, ix2, iy1, iy2;
 
     int x0a, y0a, x1a, y1a, x0b, y0b, x1b, y1b;
@@ -1621,13 +1684,13 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
     int x1 = qRound(end.x());
     int y1 = qRound(end.y());
 
-    dx = x1 - x0; // run of general line
-    dy = y1 - y0; // rise of general line
+    dstX = x1 - x0; // run of general line
+    dstY = y1 - y0; // rise of general line
 
-    if (dy < 0) dy = -dy;
-    if (dx < 0) dx = -dx;
+    if (dstY < 0) dstY = -dstY;
+    if (dstX < 0) dstX = -dstX;
 
-    if (dx > dy) { // horizontalish
+    if (dstX > dstY) { // horizontalish
         horizontal = 1;
         x0a = x0;   y0a = y0 - tn0;
         x0b = x0;   y0b = y0 + tp0;
@@ -1752,7 +1815,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             b2b = fracb;
 
             // color first pixel of bottom line
-            opacity = ((x - ix1) / dx) * c2.opacityF() + (1 - (x - ix1) / dx) * c1.opacityF();
+            opacity = ((x - ix1) / dstX) * c2.opacityF() + (1 - (x - ix1) / dstX) * c1.opacityF();
             c3.setOpacity(opacity);
 
             accessor.moveTo(x, (int)yfa);
@@ -1854,7 +1917,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             b2b = fracb;
 
             // color first pixel of left line
-            opacity = ((y - iy1) / dy) * c2.opacityF() + (1 - (y - iy1) / dy) * c1.opacityF();
+            opacity = ((y - iy1) / dstY) * c2.opacityF() + (1 - (y - iy1) / dstY) * c1.opacityF();
             c3.setOpacity(opacity);
 
             accessor.moveTo(int (xfa), y);

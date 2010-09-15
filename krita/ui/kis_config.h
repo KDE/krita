@@ -262,6 +262,9 @@ public:
 
     bool vastScrolling() const;
     void setVastScrolling(const bool toggle) const;
+    
+    int presetChooserViewMode() const;
+    void setPresetChooserViewMode(const int mode);
 
 private:
     KisConfig(const KisConfig&);

@@ -191,6 +191,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         m.map(nx,ny, &nx,&ny);
 
         // color transformation
+        KoColorTransformation* transfo;
         if (shouldColor){
             if (m_colorProperties->sampleInputColor){
                 subAcc.moveTo(nx+x, ny+y);
@@ -222,8 +223,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                 params["h"] = (m_colorProperties->hue / 180.0) * drand48();
                 params["s"] = (m_colorProperties->saturation / 100.0) * drand48();
                 params["v"] = (m_colorProperties->value / 100.0) * drand48();
-
-                KoColorTransformation* transfo;
+                
                 transfo = dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
                 transfo->transform(m_inkColor.data(), m_inkColor.data() , 1);
             }
@@ -294,12 +294,6 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                     QRect rc = m_transformed.rect();
 
                     if (m_colorProperties->useRandomHSV){
-                        params["h"] = (m_colorProperties->hue / 180.0) * drand48();
-                        params["s"] = (m_colorProperties->saturation / 100.0) * drand48();
-                        params["v"] = (m_colorProperties->value / 100.0) * drand48();
-
-                        KoColorTransformation* transfo;
-                        transfo = dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
 
                         for (int y = rc.y(); y< rc.y()+rc.height(); y++){
                             for (int x = rc.x(); x < rc.x()+rc.width();x++){
@@ -336,6 +330,13 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                 m_brush->brushType() == PIPE_IMAGE) 
             {
                 m_fixedDab = m_brush->paintDevice(m_fixedDab->colorSpace(), particleScale, -rotationZ, info, xFraction, yFraction);
+
+                if (m_colorProperties->useRandomHSV){
+                    quint8 * dabPointer = m_fixedDab->data();
+                    int pixelCount = m_fixedDab->bounds().width() * m_fixedDab->bounds().height();
+                    transfo->transform(dabPointer, dabPointer, pixelCount);
+                }
+                
             } else {
                 m_brush->mask(m_fixedDab, m_inkColor, particleScale, particleScale, -rotationZ, info, xFraction, yFraction);
             }

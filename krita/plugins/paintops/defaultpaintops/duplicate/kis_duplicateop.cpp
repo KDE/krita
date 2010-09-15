@@ -310,7 +310,7 @@ double KisDuplicateOp::paintAt(const KisPaintInformation& info)
     sw = dstRect.width();
     sh = dstRect.height();
 
-    painter()->bitBltFixedSelection(dstRect.x(), dstRect.y(), m_srcdev, dab, sx, sy, sw, sh);
+    painter()->bitBltWithFixedSelection(dstRect.x(), dstRect.y(), m_srcdev, dab, sx, sy, 0, 0, sw, sh);
 
     return spacing(scale);
 }

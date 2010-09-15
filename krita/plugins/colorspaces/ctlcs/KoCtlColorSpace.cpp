@@ -35,6 +35,8 @@
 #include "KoCtlMixColorsOp.h"
 #include "KoCtlConvolutionOp.h"
 
+#include "KoCompositeOpCopy.h"
+
 struct KoCtlColorSpace::Private {
     Private() : alphaCtlChannel(0) {}
     KoCtlColorProfile* profile;

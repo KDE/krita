@@ -52,6 +52,8 @@ public:
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
     /// always returns false since the group itself can't be selected or hit
     virtual bool hitTest(const QPointF &position) const;
+    /// a group in flake doesn't have a size, this funcion just returns QSizeF(0,0)
+    virtual QSizeF size() const;
     /// reimplemented from KoShape
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented

@@ -52,6 +52,8 @@ public:
             double subPixelX = 0, double subPixelY = 0,
             qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
+protected:
+    virtual void setImage(const QImage& image);
 
             
 public:
@@ -61,9 +63,7 @@ public:
     }
 
     void toXML(QDomDocument& , QDomElement&) const;
-    virtual QPointF hotSpot(double scaleX, double scaleY, double rotation) const;
     const KisMaskGenerator* maskGenerator() const;
-    qreal angle() const;
     qreal randomness() const;
     qreal density() const;
 private:

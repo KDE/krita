@@ -43,8 +43,10 @@
 // Both limits defined to be 15 units away from the min (0) or max (255) to allow actual mixing of colors
 const quint8 MIXABLE_UPPER_LIMIT = 240;
 const quint8 MIXABLE_LOWER_LIMIT = 15;
+
 // All pieces of color extracted from the canvas will be centered around MIGHTY_CENTER
 const QPoint MIGHTY_CENTER = QPoint(0, 0);
+
 
 KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(settings, painter)
@@ -69,16 +71,17 @@ KisSmudgeOp::~KisSmudgeOp()
 }
 
 /* To smudge, one does the following:
- * at first, initialize a temporary paint device with a copy of the original (dab-sized piece, really).
- * all other times:
-   reduce the transparency of the temporary paint device so as to let it mix gradually
- * combine the temp device with the piece the brush currently is 'painting', according to a mix (opacity)
-   note that in the first step, this does the actual copying of the data
- * this combination is then composited upon the actual image
- * TODO: what happened exactly in 1.6 (and should happen now) when the dab resizes halfway due to pressure?
- * ---> This version of smudge attempts to center new 'absorbed' dabs over the previous ones, as well as
-   make the areas not visible to the user gradually vanish. (Commented blocks at the end allow changes
-   to this behavior)
+
+ 1.- First step: initialize a temporary paint device (m_srcdev) with a copy of the colors below the mouse pointer.
+ All other times:
+ 2.- Vanishing step: Reduce the transparency of the temporary paint device so as to let it mix gradually.
+ 3.- Combine: Combine the temporary device with the piece the brush currently is 'painting', according to a ratio:
+ in this case, opacity. (This is what in the first step does the copying of the data).
+ 4.- Blit to screen: This combination is then composited upon the actual image.
+ 5.- Special case: If the size of the dab (brush mask) changes during the stroke (for example, when
+ using a stylus sensitive to pressure), align the colors extracted to the center of the previously absorbed colors,
+ and in the vanishing step, ensure that all the colors have their opacity slowly reduced, not just the ones below
+ the current brush mask.
 */
     
 double KisSmudgeOp::paintAt(const KisPaintInformation& info)
@@ -95,28 +98,29 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 1.0;
     setCurrentScale(scale);
     
-    /* Align a point that represents the top-left corner of the brush stroke rendering
+    /* Align a point that represents the top-left corner of the brush-stroke-rendering
     with the mouse pointer and take into account the brush mask size */
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
-    // Split the coordinates into integer plus fractional parts. The integer
-    // is where the dab will be positioned and the fractional part determines
-    // the sub-pixel positioning.
-    qint32 x;
-    double xFraction;
-    qint32 y;
-    double yFraction;
+    /* Split the coordinates into integer plus fractional parts. The integer
+    is where the dab will be positioned and the fractional part determines
+    the sub-pixel positioning. */
+    qint32 x, y;
+    double xFraction, yFraction;
 
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
     KisFixedPaintDeviceSP maskDab = 0;
 
+    // Extract the brush mask (maskDab) from brush, and turn it into a transparency mask (alpha8).
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
+        // This is for bitmap brushes
         maskDab = brush->paintDevice(painter()->device()->colorSpace(), scale, 0.0, info, xFraction, yFraction);
         maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     } else {
+        // This is for parametric brushes, those created in the Autobrush popup config dialogue
         maskDab = cachedDab();
         KoColor color = painter()->paintColor();
         color.convertTo(maskDab->colorSpace());
@@ -124,16 +128,12 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
         maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     }
 
-    /*-----Convenient renaming for the limits of the maskDab------*/
+    // Convenient renaming for the limits of the maskDab
     qint32 sw = maskDab->bounds().width();
     qint32 sh = maskDab->bounds().height();
-    
-    // Prepare the top left corner of the temporary paint device where the extracted color will be drawn
-    QPoint extractionTopLeft = QPoint(MIGHTY_CENTER.x() - sw / 2,
-                                      MIGHTY_CENTER.y() - sh / 2);
                              
-    /* In the block below, the opacity of the color stored in m_srcdev TODO: rename it
-    is reduced in opacity. Nothing of the color present in it is left out*/
+    /* In the block below, the opacity of the colors stored in m_srcdev (TODO: rename it)
+    is reduced in opacity. Nothing of the color present inside it is left out */
     int opacity = OPACITY_OPAQUE_U8;
     if (!m_firstRun) {
         opacity = m_rateOption.apply(opacity, info);
@@ -159,29 +159,20 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
         m_firstRun = false;
     }
 
-    // copyPainter will extract the piece of color (image) to be duplicated to generate the smudge effect
+    /* Prepare the top left corner of the temporary paint device where the extracted color will be drawn */
+    QPoint extractionTopLeft = QPoint(MIGHTY_CENTER.x() - sw / 2,
+                                      MIGHTY_CENTER.y() - sh / 2);
+                                      
+    /* copyPainter will extract the piece of color (image) to be duplicated to generate the smudge effect,
+    it extracts a simple unmasked rectangle and adds it to what was extracted before in this same block of code,
+    this sometimes shows artifacts when the brush is used with stylus and high spacing */
     KisPainter copyPainter(m_srcdev);
     copyPainter.setOpacity(opacity);
-    
-    // Normal algorithm: color is extracted as a rectangle, and then blitted with a mask.
-    
     copyPainter.bitBlt(extractionTopLeft.x(), extractionTopLeft.y(), painter()->device(), x, y, sw, sh);
     copyPainter.end();
-    painter()->bitBltWithFixedSelection(x, y, m_srcdev, maskDab, 0, 0, extractionTopLeft.x(), extractionTopLeft.y(), sw, sh);
     
-    // Reverted algorithm: color is extracted with a mask, and then blitted as a rectangle.
-    /*
-    copyPainter.bitBltWithFixedSelection(extractionTopLeft.x(), extractionTopLeft.y(), painter()->device(), maskDab, 0, 0, x, y, sw, sh);
-    copyPainter.end();
-    painter()->bitBlt(x, y, m_srcdev, extractionTopLeft.x(), extractionTopLeft.y(), sw, sh);
-    */
-    
-    // Stacked algorithm: both extraction and blitting are done with a mask.
-    /*
-    copyPainter.bitBltWithFixedSelection(extractionTopLeft.x(), extractionTopLeft.y(), painter()->device(), maskDab, 0, 0, x, y, sw, sh);
-    copyPainter.end();
+    // This is the line that renders the extracted colors to the screen, with maskDab giving it the brush shape
     painter()->bitBltWithFixedSelection(x, y, m_srcdev, maskDab, 0, 0, extractionTopLeft.x(), extractionTopLeft.y(), sw, sh);
-    */
     
     return spacing(scale);
 }

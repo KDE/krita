@@ -49,6 +49,7 @@ public:
 
 private:
     bool m_firstRun;
+    // The "temporary paint device"
     KisPaintDeviceSP m_srcdev;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;

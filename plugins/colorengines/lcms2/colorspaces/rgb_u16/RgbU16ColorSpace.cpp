@@ -49,7 +49,7 @@ RgbU16ColorSpace::RgbU16ColorSpace(KoColorProfile *p) :
     addCompositeOp(new RgbCompositeOpOut<KoRgbU16Traits>(this));
     addCompositeOp(new RgbCompositeOpDiff<KoRgbU16Traits>(this));
     addCompositeOp(new RgbCompositeOpBumpmap<KoRgbU16Traits>(this));
-    addCompositeOp(new RgbCompositeOpClear<KoRgbU16Traits>(this));
+//     addCompositeOp(new RgbCompositeOpClear<KoRgbU16Traits>(this));
     addCompositeOp(new RgbCompositeOpDissolve<KoRgbU16Traits>(this));
 }
 

@@ -181,10 +181,10 @@ public:
      * @param dstY the destination y-coordinate
      * @param srcDev the source device
      * @param selection the custom selection to apply on the source device
-     * @param srcX the source x-coordinate
-     * @param srcY the source y-coordinate
      * @param selX the selection x-coordinate
      * @param selY the selection y-coordinate
+     * @param srcX the source x-coordinate
+     * @param srcY the source y-coordinate
      * @param srcWidth the width of the region to be manipulated
      * @param srcHeight the height of the region to be manipulated
      *
@@ -192,8 +192,8 @@ public:
     void bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
                                   const KisPaintDeviceSP srcDev,
                                   const KisFixedPaintDeviceSP selection,
-                                  qint32 srcX, qint32 srcY,
                                   qint32 selX, qint32 selY,
+                                  qint32 srcX, qint32 srcY,
                                   quint32 srcWidth, quint32 srcHeight);
     
     /**
@@ -267,6 +267,8 @@ public:
      * @param op a pointer to the composite op use to blast the pixels from srcDev on dst
      * @param srcDev the source device
      * @param selection the selection stored in fixed device
+     * @param selX the selection x-coordinate
+     * @param selY the selection y-coordinate
      * @param srcX the source x-coordinate
      * @param srcY the source y-coordinate
      * @param srcWidth the width of the region to be manipulated
@@ -275,8 +277,8 @@ public:
     void bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
                                     const KisFixedPaintDeviceSP srcDev,
                                     const KisFixedPaintDeviceSP selection,
-                                    qint32 srcX, qint32 srcY,
                                     qint32 selX, qint32 selY,
+                                    qint32 srcX, qint32 srcY,
                                     quint32 srcWidth, quint32 srcHeight);
                                     
     /**

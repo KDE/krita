@@ -129,8 +129,8 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     qint32 sh = maskDab->bounds().height();
     
     // Prepare the top left corner of the temporary paint device where the extracted color will be drawn
-    m_extractionTopLeft = QPoint(MIGHTY_CENTER.x() - sw / 2,
-                                 MIGHTY_CENTER.y() - sh / 2);
+    QPoint extractionTopLeft = QPoint(MIGHTY_CENTER.x() - sw / 2,
+                                      MIGHTY_CENTER.y() - sh / 2);
                              
     /* In the block below, the opacity of the color stored in m_srcdev TODO: rename it
     is reduced in opacity. Nothing of the color present in it is left out*/
@@ -165,22 +165,22 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     
     // Normal algorithm: color is extracted as a rectangle, and then blitted with a mask.
     
-    copyPainter.bitBlt(m_extractionTopLeft.x(), m_extractionTopLeft.y(), painter()->device(), x, y, sw, sh);
+    copyPainter.bitBlt(extractionTopLeft.x(), extractionTopLeft.y(), painter()->device(), x, y, sw, sh);
     copyPainter.end();
-    painter()->bitBltWithFixedSelection(x, y, m_srcdev, maskDab, 0, 0, m_extractionTopLeft.x(), m_extractionTopLeft.y(), sw, sh);
+    painter()->bitBltWithFixedSelection(x, y, m_srcdev, maskDab, 0, 0, extractionTopLeft.x(), extractionTopLeft.y(), sw, sh);
     
     // Reverted algorithm: color is extracted with a mask, and then blitted as a rectangle.
     /*
-    copyPainter.bitBltWithFixedSelection(m_extractionTopLeft.x(), m_extractionTopLeft.y(), painter()->device(), maskDab, 0, 0, x, y, sw, sh);
+    copyPainter.bitBltWithFixedSelection(extractionTopLeft.x(), extractionTopLeft.y(), painter()->device(), maskDab, 0, 0, x, y, sw, sh);
     copyPainter.end();
-    painter()->bitBlt(x, y, m_srcdev, m_extractionTopLeft.x(), m_extractionTopLeft.y(), sw, sh);
+    painter()->bitBlt(x, y, m_srcdev, extractionTopLeft.x(), extractionTopLeft.y(), sw, sh);
     */
     
     // Stacked algorithm: both extraction and blitting are done with a mask.
     /*
-    copyPainter.bitBltWithFixedSelection(m_extractionTopLeft.x(), m_extractionTopLeft.y(), painter()->device(), maskDab, 0, 0, x, y, sw, sh);
+    copyPainter.bitBltWithFixedSelection(extractionTopLeft.x(), extractionTopLeft.y(), painter()->device(), maskDab, 0, 0, x, y, sw, sh);
     copyPainter.end();
-    painter()->bitBltWithFixedSelection(x, y, m_srcdev, maskDab, 0, 0, m_extractionTopLeft.x(), m_extractionTopLeft.y(), sw, sh);
+    painter()->bitBltWithFixedSelection(x, y, m_srcdev, maskDab, 0, 0, extractionTopLeft.x(), extractionTopLeft.y(), sw, sh);
     */
     
     return spacing(scale);

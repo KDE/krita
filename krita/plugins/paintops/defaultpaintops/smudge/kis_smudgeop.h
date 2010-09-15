@@ -53,7 +53,6 @@ private:
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
     KisPressureRateOption m_rateOption;
-    QPoint m_extractionTopLeft;
 };
 
 #endif // KIS_SMUDGEOP_H_

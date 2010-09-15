@@ -260,8 +260,8 @@ public:
     bool zoomWithWheel() const;
     void setZoomWithWheel(const bool zoom) const;
 
-    bool vastScrolling() const;
-    void setVastScrolling(const bool toggle) const;
+    qreal vastScrolling() const;
+    void setVastScrolling(const qreal factor) const;
     
     int presetChooserViewMode() const;
     void setPresetChooserViewMode(const int mode);

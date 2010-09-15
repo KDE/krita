@@ -734,14 +734,14 @@ void KisConfig::setZoomWithWheel(const bool zoom) const
     m_cfg.writeEntry("ZoomWithWheel", zoom);
 }
 
-bool KisConfig::vastScrolling() const
+qreal KisConfig::vastScrolling() const
 {
-    return m_cfg.readEntry("vastScrolling", true);
+    return m_cfg.readEntry("vastScrolling", 0.9);
 }
 
-void KisConfig::setVastScrolling(const bool toggle) const
+void KisConfig::setVastScrolling(const qreal factor) const
 {
-    m_cfg.writeEntry("vastScrolling", toggle);
+    m_cfg.writeEntry("vastScrolling", factor);
 }
 
 int KisConfig::presetChooserViewMode() const

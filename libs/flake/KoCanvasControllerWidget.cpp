@@ -60,7 +60,7 @@ public:
         canvas(0),
         ignoreScrollSignals(false),
         zoomWithWheel(false),
-        vastScrolling(false)
+        vastScrollingFactor(0)
     {
     }
 
@@ -79,7 +79,7 @@ public:
     Viewport * viewportWidget;
     bool ignoreScrollSignals;
     bool zoomWithWheel;
-    bool vastScrolling;
+    qreal vastScrollingFactor;
 };
 
 
@@ -132,8 +132,8 @@ void KoCanvasControllerWidget::Private::resetScrollBars()
     QScrollBar *hScroll = q->horizontalScrollBar();
     QScrollBar *vScroll = q->verticalScrollBar();
 
-    int horizontalReserve = vastScrolling ? drawW : 0;
-    int verticalReserve = vastScrolling ? drawH : 0;
+    int horizontalReserve = vastScrollingFactor * drawW;
+    int verticalReserve = vastScrollingFactor * drawH;
 
     int xMin = -horizontalReserve;
     int yMin = -verticalReserve;
@@ -540,9 +540,9 @@ void KoCanvasControllerWidget::setZoomWithWheel(bool zoom)
     d->zoomWithWheel = zoom;
 }
 
-void KoCanvasControllerWidget::setVastScrolling(bool vastScrolling)
+void KoCanvasControllerWidget::setVastScrolling(qreal factor)
 {
-    d->vastScrolling = vastScrolling;
+    d->vastScrollingFactor = factor;
 }
 
 void KoCanvasControllerWidget::pan(const QPoint &distance)

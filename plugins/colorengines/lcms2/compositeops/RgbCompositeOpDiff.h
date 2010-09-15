@@ -20,71 +20,40 @@
 #define RGBCOMPOSITEOPDIFF_H
 
 #include "KoColorSpaceMaths.h"
-#include <KoCompositeOp.h>
+#include <KoCompositeOpAlphaBase.h>
+
 
 #define AbsoluteValue(x)  ((x) < 0 ? -(x) : (x))
 
 template<class _CSTraits>
-class RgbCompositeOpDiff : public KoCompositeOp
+class RgbCompositeOpDiff : public KoCompositeOpAlphaBase<_CSTraits, RgbCompositeOpDiff<_CSTraits>, true >
 {
     typedef typename _CSTraits::channels_type channels_type;
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
 
 public:
 
-    RgbCompositeOpDiff(KoColorSpace * cs, const bool userVisible = true)
-            : KoCompositeOp(cs, COMPOSITE_DIFF, i18n("Diff"), "", userVisible) {
+    RgbCompositeOpDiff(KoColorSpace * cs)
+            : KoCompositeOpAlphaBase<_CSTraits, RgbCompositeOpDiff<_CSTraits>, true >(cs, COMPOSITE_DIFF, i18n("Diff"), KoCompositeOp::categoryMisc()) {
+    }
+    
+    inline static channels_type selectAlpha(channels_type srcAlpha, channels_type dstAlpha) {
+        return qMin(srcAlpha, dstAlpha);
     }
 
-    using KoCompositeOp::composite;
+    inline static void composeColorChannels(channels_type srcBlend,
+                                            const channels_type* src,
+                                            channels_type* dst,
+                                            bool allChannelFlags,
+                                            const QBitArray & channelFlags) {
+        for (uint i = 0; i < _CSTraits::channels_nb; i++) {
+            if ((int)i != _CSTraits::alpha_pos  && (allChannelFlags || channelFlags.testBit(i))) {
 
-    void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                   const quint8 *srcRowStart, qint32 srcRowStride,
-                   const quint8 *maskRowStart, qint32 maskRowStride,
-                   qint32 rows, qint32 numColumns,
-                   quint8 opacity,
-                   const QBitArray & channelFlags) const {
-        Q_UNUSED(maskRowStart);
-        Q_UNUSED(maskRowStride);
+                channels_type diff = (channels_type)
+                                     AbsoluteValue(src[i] - (compositetype) dst[i]);
 
-        if (opacity == OPACITY_TRANSPARENT_U8)
-            return;
-
-        channels_type *d;
-        const channels_type *s;
-
-        qint32 i;
-
-        qreal sAlpha, dAlpha;
-
-        while (rows-- > 0) {
-            d = reinterpret_cast<channels_type *>(dstRowStart);
-            s = reinterpret_cast<const channels_type *>(srcRowStart);
-            for (i = numColumns; i > 0; i--, d += _CSTraits::channels_nb, s += _CSTraits::channels_nb) {
-                sAlpha = NATIVE_OPACITY_OPAQUE - s[_CSTraits::alpha_pos];
-                dAlpha = NATIVE_OPACITY_OPAQUE - d[_CSTraits::alpha_pos];
-
-                if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::red_pos))
-                    d[_CSTraits::red_pos] = (channels_type)
-                                            AbsoluteValue(s[_CSTraits::red_pos] - (qreal) d[_CSTraits::red_pos]);
-
-                if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::green_pos))
-                    d[_CSTraits::green_pos] = (channels_type)
-                                              AbsoluteValue(s[_CSTraits::green_pos] - (qreal) d[_CSTraits::green_pos]);
-
-
-                if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::blue_pos))
-                    d[_CSTraits::blue_pos] = (channels_type)
-                                             AbsoluteValue(s[_CSTraits::blue_pos] - (qreal) d[_CSTraits::blue_pos]);
-
-                if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::alpha_pos))
-                    d[_CSTraits::alpha_pos] = NATIVE_OPACITY_OPAQUE - (channels_type)
-                                              AbsoluteValue(sAlpha - (qreal) dAlpha);
-
+                dst[i] = KoColorSpaceMaths<channels_type>::blend(diff, dst[i], srcBlend);
             }
-            dstRowStart += dstRowStride;
-            srcRowStart += srcRowStride;
-
         }
     }
 

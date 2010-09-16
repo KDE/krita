@@ -179,10 +179,6 @@ public:  // Krita specific interfaces
     KisPerspectiveGridManager* perspectiveGridManager();
     KisPaintingAssistantsManager* paintingAssistantManager();
 
-    /// disable and enable toolbar controls. used for disabling them during painting.
-    void enableControls();
-    void disableControls();
-
 signals:
 
     void sigLoadingFinished();

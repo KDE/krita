@@ -801,15 +801,4 @@ void KisView2::slotCreateTemplate()
 
 }
 
-void KisView2::enableControls()
-{
-    m_d->controlFrame->paintopBox()->setEnabled(true);
-}
-
-void KisView2::disableControls()
-{
-    // prevents possible crashes, if somebody changes the paintop during dragging by using the mousewheel
-    m_d->controlFrame->paintopBox()->setEnabled(false);
-}
-
 #include "kis_view2.moc"

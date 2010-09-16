@@ -42,6 +42,10 @@ public:
 
     KisPropertiesConfiguration* configuration() const;
 
+    virtual bool supportScratchBox(){
+        return false;
+    }
+    
 public:
     KisDuplicateOpOption* m_duplicateOption;
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,7 +46,11 @@ KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPai
 
     m_properties.readOptionSetting(settings);
     
-    m_chalkBrush = new ChalkBrush( &m_properties );
+    KoColorTransformation* transfo = 0;
+    if (m_properties.inkDepletion && m_properties.useSaturation){
+        transfo = painter->device()->colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
+    }    
+    m_chalkBrush = new ChalkBrush( &m_properties, transfo );
 }
 
 KisChalkPaintOp::~KisChalkPaintOp()

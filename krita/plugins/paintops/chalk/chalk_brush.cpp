@@ -29,17 +29,19 @@
 #include <cmath>
 #include <ctime>
 
-#if defined(_WIN32) || defined(_WIN64)
-#define srand48 srand
-inline double drand48()
-{
-    return double(rand()) / RAND_MAX;
-}
-#endif
 
-
-ChalkBrush::ChalkBrush(const ChalkProperties* properties)
+ChalkBrush::ChalkBrush(const ChalkProperties* properties, KoColorTransformation* transformation)
 {
+    m_transfo = transformation;
+    if (m_transfo){
+        m_transfo->setParameter(m_transfo->parameterId("h"),0.0);
+        m_saturationId = m_transfo->parameterId("s"); // cache for later usage
+        m_transfo->setParameter(m_transfo->parameterId("v"),0.0);
+    }else{
+        m_saturationId = -1;
+    }
+    
+
     m_counter = 0;
     m_properties = properties;
     srand48(time(0));
@@ -66,13 +68,11 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
         result = -(result * 10) / 100.0;
 
         if ( m_properties->useSaturation ){
-            QHash<QString, QVariant> params;
-            params["h"] = 0.0;
-            params["s"] = result;
-            params["v"] = 0.0;
-
-            KoColorTransformation* transfo = dev->colorSpace()->createColorTransformation("hsv_adjustment", params);
-            transfo->transform(m_inkColor.data(), m_inkColor.data(), 1);
+            if (m_transfo){
+                m_transfo->setParameter(m_saturationId,result);
+                m_transfo->transform(m_inkColor.data(), m_inkColor.data(), 1);
+            }
+            
         }
 
         if ( m_properties->useOpacity ){

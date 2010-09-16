@@ -384,6 +384,10 @@ void KisToolFreehand::keyReleaseEvent(QKeyEvent* event)
 
 void KisToolFreehand::initPaint(KoPointerEvent *)
 {
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    if(canvas2)
+        canvas2->view()->disableControls();
+
     //    dbgUI << "initPaint";
     if (!currentNode() || !currentNode()->paintDevice())
         return;
@@ -452,6 +456,10 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 void KisToolFreehand::endPaint()
 {
     //    dbgUI << "endPaint";
+
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    if(canvas2)
+        canvas2->view()->enableControls();
 
     m_mode = HOVER;
     if (m_painter) {

@@ -241,6 +241,8 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
     if (m_dragging && e->button() == Qt::LeftButton) {
 
+        currentNode()->setSystemLocked(true);
+
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
         delete m_gradientProgram;
         m_gradientProgram = 0;
@@ -296,7 +298,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
             delete updater;
         }
         canvas()->updateCanvas(convertToPt(currentImage()->bounds()));
-
+        currentNode()->setSystemLocked(false);
     }
 }
 

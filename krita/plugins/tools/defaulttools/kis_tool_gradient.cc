@@ -47,7 +47,6 @@
 #include <KoProgressUpdater.h>
 
 #include <kis_gradient_painter.h>
-#include <kis_gradient_job.h>
 #include <kis_painter.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_layer.h>

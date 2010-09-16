@@ -75,6 +75,8 @@ private:
     QImage m_brushQImage;
     QImage m_transformed;
 
+    KoColorTransformation* m_transfo;
+    
     const KisSprayProperties * m_properties;
     const KisColorProperties * m_colorProperties;
     const KisShapeProperties * m_shapeProperties;

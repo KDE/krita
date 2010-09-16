@@ -389,7 +389,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
         canvas2->view()->disableControls();
 
     //    dbgUI << "initPaint";
-    if (!currentNode() || !currentNode()->paintDevice())
+    if (!currentNode() || !currentNode()->paintDevice() || currentNode()->systemLocked())
         return;
 
     m_mode = PAINT;

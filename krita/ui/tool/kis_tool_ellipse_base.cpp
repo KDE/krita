@@ -57,6 +57,10 @@ void KisToolEllipseBase::mousePressEvent(KoPointerEvent *event)
 {
     Q_ASSERT(canvas() && currentImage());
 
+    if (!currentNode() || currentNode()->systemLocked()) {
+        return;
+    }
+    
     if (event->button() == Qt::LeftButton) {
         QPointF pos = convertToPixelCoord(event);
         m_dragging = true;

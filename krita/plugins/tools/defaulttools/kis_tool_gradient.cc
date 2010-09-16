@@ -236,7 +236,7 @@ void KisToolGradient::mouseMoveEvent(KoPointerEvent *e)
 
 void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 {
-    if (!currentNode())
+    if (!currentNode() || currentNode()->systemLocked())
        return;
 
     if (m_dragging && e->button() == Qt::LeftButton) {

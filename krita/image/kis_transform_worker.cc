@@ -151,7 +151,7 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
         }
         hit.nextRow();
 
-        //progress info
+        // Progress info
         m_progressStep += r.width();
         if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
@@ -464,7 +464,14 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
 
 bool KisTransformWorker::run()
 {
-    //progress info
+    /* Check for nonsense and let the user know, this helps debugging.
+    Otherwise the program will crash at a later point, in a very obscure way, probably by division by zero */
+    Q_ASSERT_X(m_xscale != 0, "KisTransformer::run() validation step", "xscale == 0");
+    Q_ASSERT_X(m_yscale != 0, "KisTransformer::run() validation step", "yscale == 0");
+    // Fallback safety line in case Krita is compiled without ASSERTS
+    if (m_xscale == 0 || m_yscale == 0) return false;
+    
+    // Progress info
     m_progressTotalSteps = 0;
     m_progressStep = 0;
 
@@ -493,7 +500,7 @@ bool KisTransformWorker::run()
 
     m_progressTotalSteps = 0;
 
-    //apply shear X and Y
+    // Apply shear X and Y
     if (xshear != 0 || yshear != 0) {
         m_progressTotalSteps += (yscale * m_boundRect.height() * (m_boundRect.width() + m_xshear * m_boundRect.height()));
         m_progressTotalSteps += (xscale * m_boundRect.width() * (m_boundRect.height() + m_yshear * m_boundRect.width()));
@@ -589,6 +596,7 @@ bool KisTransformWorker::run()
         return false;
     }
 
+    // First pass
     transformPass <KisHLineIteratorPixel>(srcdev.data(), srcdev.data(), xscale, yscale*xshear, 0, m_filter, m_fixBorderAlpha);
 
     if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
@@ -615,10 +623,10 @@ bool KisTransformWorker::run()
 
     //CBRm_dev->setDirty();
 
-    //progress info
+    // Progress info
     if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(100);
-
     if (!m_progressUpdater.isNull()) return m_progressUpdater->interrupted();
+    
     return true;
 }
 

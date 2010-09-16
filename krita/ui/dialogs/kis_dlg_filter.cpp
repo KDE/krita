@@ -61,19 +61,8 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP im
     d->node = node;
     d->image = image;
     d->mask = new KisFilterMask();
+    d->mask->initSelection(selection, dynamic_cast<KisLayer*>(node.data()));
     d->uiFilterDialog.filterSelection->showFilterGallery(KisConfig().showFilterGallery());
-
-    KisPixelSelectionSP psel = d->mask->selection()->getOrCreatePixelSelection();
-    if (selection) {
-        QRect extent = selection->selectedRect();
-        KisPainter painter(psel);
-        painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_COPY));
-        painter.bitBlt(extent.topLeft(), selection, extent);
-        painter.end();
-    } else {
-        psel->select(rc);
-    }
-    d->mask->selection()->updateProjection();
 
     if (d->node->inherits("KisLayer")) {
         qobject_cast<KisLayer*>(d->node.data())->setPreviewMask(d->mask);

@@ -289,8 +289,12 @@ public:
      * Set scroll area to be bigger than actual document.
      * It allows the user to move the corner of the document
      * to e.g. the center of the screen
+     *
+     * @param factor the coefficient, defining how much we can scroll out,
+     *     measured in parts of the widget size. Null value means vast
+     *     scrolling is disabled.
      */
-    virtual void setVastScrolling(bool vastScrolling) = 0;
+    virtual void setVastScrolling(qreal factor) = 0;
 
 protected:
 

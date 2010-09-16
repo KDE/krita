@@ -4,6 +4,7 @@
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 José Luis Vergara Toloza <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,6 +49,7 @@ public:
 
 private:
     bool m_firstRun;
+    // The "temporary paint device"
     KisPaintDeviceSP m_srcdev;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;

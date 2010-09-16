@@ -275,7 +275,9 @@ void KoOpenPane::addCustomDocumentWidget(QWidget *widget, const QString& title, 
     ++d->m_freeCustomWidgetIndex;
     KConfigGroup cfgGrp(d->m_componentData.config(), "TemplateChooserDialog");
 
-    if (cfgGrp.readEntry("LastReturnType") == realtitle) {
+    QString lastActiveItem = cfgGrp.readEntry("LastReturnType");
+    bool showCustomItemByDefault = cfgGrp.readEntry("ShowCustomDocumentWidgetByDefault", false);
+    if (lastActiveItem == realtitle || (lastActiveItem.isEmpty() && showCustomItemByDefault)) {
         d->m_sectionList->setCurrentItem(item, 0, QItemSelectionModel::ClearAndSelect);
         KoSectionListItem* selectedItem = static_cast<KoSectionListItem*>(item);
         d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();

@@ -113,26 +113,26 @@ void DynaBrush::drawSegment(KisPainter &painter)
     QPointF nowr(nx + delx , ny + dely);
 
     // transform coords from float points into image points
-    prev.rx() *= m_image->width();
-    prevr.rx() *= m_image->width();
-    prevl.rx() *= m_image->width();
-    now.rx()  *= m_image->width();
-    nowl.rx() *= m_image->width();
-    nowr.rx() *= m_image->width();
+    prev.rx() *= m_canvasWidth;
+    prevr.rx() *= m_canvasWidth;
+    prevl.rx() *= m_canvasWidth;
+    now.rx()  *= m_canvasWidth;
+    nowl.rx() *= m_canvasWidth;
+    nowr.rx() *= m_canvasWidth;
 
-    prev.ry() *= m_image->height();
-    prevr.ry() *= m_image->height();
-    prevl.ry() *= m_image->height();
-    now.ry()  *= m_image->height();
-    nowl.ry() *= m_image->height();
-    nowr.ry() *= m_image->height();
+    prev.ry() *= m_canvasHeight;
+    prevr.ry() *= m_canvasHeight;
+    prevl.ry() *= m_canvasHeight;
+    now.ry()  *= m_canvasHeight;
+    nowl.ry() *= m_canvasHeight;
+    nowr.ry() *= m_canvasHeight;
 
     if (m_properties->enableLine)
         painter.drawLine(prev, now);
 
     if (m_properties->action == 0) {
-        qreal screenX = m_cursorFilter.velocityX() * m_image->width();
-        qreal screenY = m_cursorFilter.velocityY() * m_image->height();
+        qreal screenX = m_cursorFilter.velocityX() * m_canvasWidth;
+        qreal screenY = m_cursorFilter.velocityY() * m_canvasHeight;
         qreal speed = sqrt(screenX * screenX + screenY * screenY);
         speed = qBound(qreal(0.0), speed , qreal(m_properties->circleRadius * 2.0));
 

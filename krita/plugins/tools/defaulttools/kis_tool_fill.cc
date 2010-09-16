@@ -185,6 +185,7 @@ void KisToolFill::mouseReleaseEvent(KoPointerEvent *e)
     if (!currentNode()) return;
     if (!currentImage() || !currentNode()->paintDevice()) return;
     if (e->button() == Qt::LeftButton) {
+        currentNode()->setSystemLocked(true);
         int x, y;
 
         x = static_cast<int>(m_startPos.x());
@@ -195,6 +196,7 @@ void KisToolFill::mouseReleaseEvent(KoPointerEvent *e)
         }
 
         flood(x, y);
+        currentNode()->setSystemLocked(false);
         notifyModified();
     } else {
         KisToolPaint::mouseReleaseEvent(e);

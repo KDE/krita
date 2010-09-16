@@ -96,8 +96,6 @@ private:
     void colorifyBristles(KisRandomConstAccessor& acc, KoColorSpace * cs, QPointF point);
     
     void repositionBristles(double angle, double slope);
-    /// rotate every enabled bristle
-    void rotateBristles(double angle);
     /// compute mouse pressure according distance
     double computeMousePressure(double distance);
 
@@ -107,6 +105,8 @@ private:
     void opacityDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation);
     /// fetch actaul ink status according depletion curve
     qreal fetchInkDepletion(Bristle * bristle, int inkDepletionSize);
+
+    void initAndCache();
     
 private:
     const KisHairyProperties * m_properties;
@@ -133,7 +133,6 @@ private:
     KoColor m_color;
     
     int m_saturationId;
-    QVariant m_saturationVariant;
     KoColorTransformation * m_transfo;
     
     // internal counter counts the calls of paint, the counter is 1 when the first call occurs

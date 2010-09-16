@@ -38,27 +38,34 @@
 
 const float radToDeg = 57.29578f;
 
-const QString HUE('h');
-const QString SATURATION('s');
-const QString VALUE('v');
-
 HairyBrush::HairyBrush()
 {
     srand48(time(0));
     m_counter = 0;
     m_lastAngle = 0.0;
     m_oldPressure = 0.0f;
-
-    m_params[HUE] = 0.0;
-    m_params[SATURATION] = 0.0;
-    m_params[VALUE] = 0.0;
-    m_saturationId = 0;
+   
+    m_saturationId = -1;
     m_transfo = 0;
 }
 
 HairyBrush::~HairyBrush()
 {
 
+}
+
+
+void HairyBrush::initAndCache()
+{
+        m_compositeOp = m_dab->colorSpace()->compositeOp(COMPOSITE_OVER);
+        m_pixelSize = m_dab->colorSpace()->pixelSize();
+        
+        if (m_properties->useSaturation){
+            m_transfo = m_dab->colorSpace()->createColorTransformation("hsv_adjustment", m_params);
+            if (m_transfo){
+                m_saturationId = m_transfo->parameterId("s");
+            }
+        }
 }
 
 void HairyBrush::fromDabWithDensity(KisFixedPaintDeviceSP dab, qreal density)
@@ -126,22 +133,15 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     qreal pressure = mousePressure * (pi2.pressure() * 2);
 
     Bristle *bristle = 0;
-    KoColor bristleColor;
+    KoColor bristleColor(dab->colorSpace());
 
     KisRandomAccessor accessor = dab->createRandomAccessor((int)x1, (int)y1);
-    m_pixelSize = dab->colorSpace()->pixelSize();
     m_dabAccessor = &accessor;
     m_dab = dab;
 
-    if (firstStroke()){
-        m_compositeOp = m_dab->colorSpace()->compositeOp(COMPOSITE_OVER);
-    }
-
-    m_params[SATURATION] = 0.0;
-
-    if (m_properties->useSaturation){
-        m_transfo = m_dab->colorSpace()->createColorTransformation("hsv_adjustment", m_params);
-        m_saturationId = m_transfo->parameterId(SATURATION);
+    // initialization block
+    if ( firstStroke() ){
+        initAndCache();
     }
 
     // if this is first time the brush touches the canvas and we use soak the ink from canvas
@@ -157,8 +157,6 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     qreal fx1, fy1, fx2, fy2;
     qreal randomX, randomY;
     qreal shear;
-
-    
 
     float inkDeplation = 0.0;
     int inkDepletionSize = m_properties->inkDepletionCurve.size();
@@ -208,7 +206,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
         const QVector<QPointF> bristlePath = m_trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
         bristlePathSize = m_trajectory.size();
 
-        bristleColor = bristle->color();
+        memcpy(bristleColor.data(), bristle->color().data() , m_pixelSize);
         for (int i = 0; i < bristlePathSize ; i++) {
 
             if (m_properties->inkDepletionEnabled){
@@ -250,23 +248,24 @@ inline qreal HairyBrush::fetchInkDepletion(Bristle* bristle, int inkDepletionSiz
 
 void HairyBrush::saturationDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation)
 {
+    qreal saturation;
     if (m_properties->useWeights) {
     // new weighted way (experiment)
-        m_saturationVariant = (
+        saturation = (
                             (pressure * m_properties->pressureWeight) +
                             (bristle->length() * m_properties->bristleLengthWeight) +
                             (bristle->inkAmount() * m_properties->bristleInkAmountWeight) +
                             ((1.0 - inkDeplation) * m_properties->inkDepletionWeight)) - 1.0;
     } else {
         // old way of computing saturation
-        m_saturationVariant = (
+        saturation = (
                                 pressure *
                                 bristle->length() *
                                 bristle->inkAmount() *
                                 (1.0 - inkDeplation)) - 1.0;
 
     }
-    m_transfo->setParameter(m_saturationId, m_saturationVariant);
+    m_transfo->setParameter(m_saturationId, saturation);
     m_transfo->transform(bristleColor.data(), bristleColor.data() , 1);
 }
 
@@ -312,7 +311,7 @@ inline void HairyBrush::addBristleInk(Bristle */*bristle*/, QPointF pos, const K
         if (m_properties->useCompositing){
             paintParticle(pos, color);
         }else{
-            paintParticle(pos,color,1.0);
+            paintParticle(pos, color,1.0);
         }
     }
     else

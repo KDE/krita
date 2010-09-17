@@ -162,7 +162,7 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
         
         // Reduce the opacity of all the data contained therein
         KisRectIterator it = m_tempDev->createRectIterator(m_wholeTempData.x(), m_wholeTempData.y(),
-                                                          m_wholeTempData.width(), m_wholeTempData.height());
+                                                           m_wholeTempData.width(), m_wholeTempData.height());
         KoColorSpace* cs = m_tempDev->colorSpace();
         while (!it.isDone()) {
             cs->setOpacity(it.rawData(), quint8(cs->opacityF(it.rawData()) * opacity), 1);
@@ -174,7 +174,7 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     }
     else {
         m_firstRun = false;
-        m_wholeTempData = maskDab->bounds();
+        m_wholeTempData = QRect(extractionTopLeft, maskDab->bounds().size());
     }
                                       
     /* copyPainter will extract the piece of color (image) to be duplicated to generate the smudge effect,

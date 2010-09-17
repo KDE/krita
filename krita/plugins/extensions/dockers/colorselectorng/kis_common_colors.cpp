@@ -56,6 +56,9 @@ KisCommonColors::KisCommonColors(QWidget *parent) :
 
 void KisCommonColors::setCanvas(KisCanvas2 *canvas)
 {
+    if(m_canvas!=0)
+        disconnect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()));
+
     KisColorPatches::setCanvas(canvas);
 
     // todo:

@@ -218,11 +218,15 @@ PlotArea::PlotArea( ChartShape *parent )
     Q_ASSERT( d->shape->proxyModel() );
 
     connect( d->shape->proxyModel(), SIGNAL( modelReset() ),
-             this,                   SLOT( dataSetCountChanged() ) );
+             this,                   SLOT( proxyModelStructureChanged() ) );
     connect( d->shape->proxyModel(), SIGNAL( rowsInserted( const QModelIndex, int, int ) ),
-             this,                   SLOT( dataSetCountChanged() ) );
+             this,                   SLOT( proxyModelStructureChanged() ) );
     connect( d->shape->proxyModel(), SIGNAL( rowsRemoved( const QModelIndex, int, int ) ),
-             this,                   SLOT( dataSetCountChanged() ) );
+             this,                   SLOT( proxyModelStructureChanged() ) );
+    connect( d->shape->proxyModel(), SIGNAL( columnsInserted( const QModelIndex, int, int ) ),
+             this,                   SLOT( proxyModelStructureChanged() ) );
+    connect( d->shape->proxyModel(), SIGNAL( columnsRemoved( const QModelIndex, int, int ) ),
+             this,                   SLOT( proxyModelStructureChanged() ) );
     connect( d->shape->proxyModel(), SIGNAL( columnsInserted( const QModelIndex, int, int ) ),
              this,                   SLOT( plotAreaUpdate() ) );
     connect( d->shape->proxyModel(), SIGNAL( columnsRemoved( const QModelIndex, int, int ) ),
@@ -252,7 +256,7 @@ void PlotArea::plotAreaInit()
     d->initAxes();
 }
 
-void PlotArea::dataSetCountChanged()
+void PlotArea::proxyModelStructureChanged()
 {
     Q_ASSERT( xAxis() && yAxis() );
     QMap<DataSet*, Axis*> attachedAxes;
@@ -261,6 +265,12 @@ void PlotArea::dataSetCountChanged()
     // Remember to what y axis each data set belongs
     foreach( DataSet *dataSet, dataSets )
         attachedAxes.insert( dataSet, dataSet->attachedAxis() );
+
+    // FIXME: Maybe this shouldn't be a property of an axis. After all
+    // there should be exactly one x axis and one region for categories.
+    // See note in Axis::setCategoryDataRegion()
+    // Categories might have been inserted or removed from the proxy model.
+    xAxis()->setCategoryDataRegion( proxyModel()->categoryDataRegion() );
 
     // Proxy structure and thus data sets changed, drop old state and
     // clear all axes of data sets
@@ -579,6 +589,8 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     while ( !d->axes.isEmpty() ) {
         Axis *axis = d->axes.takeLast();
         Q_ASSERT( axis );
+        // Clear this axis of all data sets, deleting any diagram associated with it.
+        axis->clearDataSets();
         if ( axis->title() )
             d->automaticallyHiddenAxisTitles.removeAll( axis->title() );
         delete axis;

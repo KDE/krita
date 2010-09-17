@@ -145,7 +145,7 @@ public:
     
 public slots:
     void requestRepaint() const;
-    void dataSetCountChanged();
+    void proxyModelStructureChanged();
     void plotAreaUpdate() const;
     
 signals:

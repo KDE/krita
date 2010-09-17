@@ -1195,8 +1195,9 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
     if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
         KoStyleStack &styleStack = odfLoadingContext.styleStack();
-        styleStack.save();
-        styleStack.clear();
+//         KoStyleStack styleStack;
+//         styleStack.save();
+//         styleStack.clear();
         odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
 
         brushLoaded = false;
@@ -1224,7 +1225,7 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
             }
         }
 
-        styleStack.restore();
+//         styleStack.restore();
     }
 
 #ifndef NWORKAROUND_ODF_BUGS
@@ -1247,6 +1248,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
 {
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
     KoStyleStack &styleStack = odfLoadingContext.styleStack();
+    styleStack.save();
 
     {
         QBrush brush(Qt::NoBrush);
@@ -1353,7 +1355,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
 
         ++loadedDataPointCount;
     }
-
+    styleStack.restore();
     return true;
 }
 

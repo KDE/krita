@@ -567,7 +567,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
-    styleStack.clear();
+//     styleStack.clear();
 
     // First step is to load the axis. Datasets are attached to an
     // axis and we need the axis to check for categories.

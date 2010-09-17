@@ -160,7 +160,7 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
         KDChart::FrameAttributes frameAttributes = d->kdPlane->frameAttributes();
         
         // Add the chart style to the style stack.
-        styleStack.clear();
+//         styleStack.clear();
         context.odfLoadingContext().fillStyleStack( surfaceElement, 
                                                     KoXmlNS::chart, "style-name", "chart" );
         

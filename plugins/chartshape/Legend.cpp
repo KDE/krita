@@ -428,7 +428,7 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
-
+    
     if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         context.odfLoadingContext().fillStyleStack( legendElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "graphic" );

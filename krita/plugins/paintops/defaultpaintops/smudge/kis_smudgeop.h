@@ -50,7 +50,9 @@ public:
 private:
     bool m_firstRun;
     // The "temporary paint device"
-    KisPaintDeviceSP m_srcdev;
+    KisPaintDeviceSP m_tempDev;
+    // The size of the rectangle encompassing the whole data in the temporary device needs to be cached for speed
+    QRect m_wholeTempData;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
     KisPressureRateOption m_rateOption;

@@ -29,6 +29,10 @@ public:
 //    QSize sizeHint() const;
     void setCanvas(KisCanvas2 *canvas);
     KisColorSelectorBase* createPopup() const;
+
+public slots:
+    void updateSettings();
+
 private:
     QList<KoColor> extractColors();
     QList<QRgb> getColors();

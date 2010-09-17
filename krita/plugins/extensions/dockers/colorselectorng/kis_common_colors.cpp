@@ -63,7 +63,7 @@ void KisCommonColors::setCanvas(KisCanvas2 *canvas)
     // make optional
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     if(cfg.readEntry("commonColorsAutoUpdate", false))
-        connect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()));
+        connect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()), Qt::UniqueConnection);
 }
 
 KisColorSelectorBase* KisCommonColors::createPopup() const
@@ -72,6 +72,22 @@ KisColorSelectorBase* KisCommonColors::createPopup() const
     ret->setCanvas(m_canvas);
     ret->setColors(colors());
     return ret;
+}
+
+void KisCommonColors::updateSettings()
+{
+    KisColorPatches::updateSettings();
+
+    if(!m_canvas)
+        return;
+
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    if(cfg.readEntry("commonColorsAutoUpdate", false)) {
+        connect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()), Qt::UniqueConnection);
+    }
+    else {
+        disconnect(m_canvas->image(), SIGNAL(sigImageModified()), this, SLOT(recalculate()));
+    }
 }
 
 void KisCommonColors::recalculate()

@@ -372,6 +372,8 @@ QVariant KDChartModel::headerData( int section,
 
         DataSet *dataSet  = d->dataSets[ dataSetNumber ];
 
+        qDebug() << "DataSet: " << dataSetNumber;
+        qDebug() << "label data; " << dataSet->labelData();
         switch ( role ) {
         case Qt::DisplayRole:
             return dataSet->labelData();

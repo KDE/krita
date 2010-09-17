@@ -45,6 +45,8 @@ private slots:
     void testFirstRowAsLabel();
     void testFirstColumnAsLabel();
     void testFirstRowAndColumnAsLabels();
+    void testRegionOrder();
+    void testComplexRegions();
 
 private:
     // m_source must be initialized before m_proxyModel

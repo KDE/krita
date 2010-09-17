@@ -1263,7 +1263,6 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                                         }
 
                                         QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                                        Q_ASSERT(cellStyle);
                                         if (cellStyle)
                                             cellStyle->applyStyle(cellFormat);
                                         cell.setFormat(cellFormat);

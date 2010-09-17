@@ -64,6 +64,15 @@ public:
     virtual bool presetIsValid(){
         return true;
     }
+    
+    /**
+     * Some paintops are more complicated and require full canvas with layers, projections and KisImage etc.
+     * Example is duplicate paintop. In this case simple canvas like scratchbox does not work.
+     * Every paintop supports the scratchbox by default, override and return false if paintop does not.
+     */
+    virtual bool supportScratchBox(){
+        return true;
+    }
 
 protected:
 

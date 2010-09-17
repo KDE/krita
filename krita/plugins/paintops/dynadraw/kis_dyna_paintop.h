@@ -48,7 +48,6 @@ public:
 private:
     const KisDynaPaintOpSettings* m_settings;
     KisDynaProperties m_properties;
-    KisImageWSP m_image;
     KisPaintDeviceSP m_dab;
     DynaBrush m_dynaBrush;
 };

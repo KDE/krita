@@ -43,9 +43,13 @@
 KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
         , m_settings(settings)
-        , m_image(image)
 {
-    m_dynaBrush.setImage(image);
+    if (image){
+        m_dynaBrush.setCanvasSize(image->width(), image->height());
+    }else{
+        // some dummy values for scratchpad 
+        m_dynaBrush.setCanvasSize(1000, 1000);
+    }
 
     m_properties.initWidth = settings->getDouble(DYNA_WIDTH);
     m_properties.action = settings->getDouble(DYNA_ACTION);
@@ -73,7 +77,6 @@ KisDynaPaintOp::~KisDynaPaintOp()
 KisDistanceInformation KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist)
 {
     Q_UNUSED(savedDist);
-    if (!m_image) return KisDistanceInformation();
     if (!painter()) return KisDistanceInformation();
 
     if (!m_dab) {

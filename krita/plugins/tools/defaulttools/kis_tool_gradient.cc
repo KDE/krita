@@ -47,7 +47,6 @@
 #include <KoProgressUpdater.h>
 
 #include <kis_gradient_painter.h>
-#include <kis_gradient_job.h>
 #include <kis_painter.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_layer.h>
@@ -237,10 +236,12 @@ void KisToolGradient::mouseMoveEvent(KoPointerEvent *e)
 
 void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 {
-    if (!currentNode())
+    if (!currentNode() || currentNode()->systemLocked())
        return;
 
     if (m_dragging && e->button() == Qt::LeftButton) {
+
+        currentNode()->setSystemLocked(true);
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
         delete m_gradientProgram;
@@ -297,7 +298,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
             delete updater;
         }
         canvas()->updateCanvas(convertToPt(currentImage()->bounds()));
-
+        currentNode()->setSystemLocked(false);
     }
 }
 

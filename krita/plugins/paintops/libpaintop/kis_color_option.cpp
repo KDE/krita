@@ -28,6 +28,16 @@ public:
         : QWidget(parent)
     {
         setupUi(this);
+        
+        hueSlider->setRange(-180,180);
+        hueSlider->setValue(0);
+        
+        saturationSlider->setRange(-100,100);
+        saturationSlider->setValue(0);
+
+        valueSlider->setRange(-100,100);
+        valueSlider->setValue(0);
+
     }
 };
 
@@ -36,12 +46,15 @@ KisColorOption::KisColorOption()
 {
     m_checkable = false;
     m_options = new KisColorOptionsWidget();
-    
+
+    // ui
+    connect(m_options->randomHSVCHBox,SIGNAL(toggled(bool)),m_options->hsvWidget,SLOT(setEnabled(bool)));    
+    // settings
     connect(m_options->randomOpacityCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->hueSlider,SIGNAL(sliderReleased()),SIGNAL(sigSettingChanged()));
-    connect(m_options->saturationSlider,SIGNAL(sliderReleased()),SIGNAL(sigSettingChanged()));
-    connect(m_options->valueSlider,SIGNAL(sliderReleased()),SIGNAL(sigSettingChanged()));
+    connect(m_options->hueSlider,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
+    connect(m_options->saturationSlider,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
+    connect(m_options->valueSlider,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
     connect(m_options->sampleInputCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->colorPerParticleCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->fillBackgroundCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));

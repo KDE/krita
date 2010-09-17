@@ -153,10 +153,17 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     if (m_d->settingsWidget){
         connect(m_d->settingsWidget,SIGNAL(sigConfigurationItemChanged()),this,SLOT(slotCheckPresetValidity()));
         slotCheckPresetValidity();
+        if (m_d->settingsWidget->supportScratchBox()){
+            showScratchPad();
+        }else{
+            hideScratchPad();
+        }
     }
 
     if (widget) {
 
+        
+        
         widget->setFont(m_d->smallFont);
 
         m_d->settingsWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
@@ -221,6 +228,17 @@ void KisPaintOpPresetsPopup::switchDetached()
         KisConfig cfg;
         cfg.setPaintopPopupDetached(m_d->detached);
     }
+}
+
+void KisPaintOpPresetsPopup::hideScratchPad()
+{
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->setVisible(false);
+}
+
+
+void KisPaintOpPresetsPopup::showScratchPad()
+{
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->setVisible(true);
 }
 
 

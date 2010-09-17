@@ -48,6 +48,10 @@ void KisToolRectangleBase::deactivate()
 void KisToolRectangleBase::mousePressEvent(KoPointerEvent *e)
 {
     Q_ASSERT(canvas() && currentImage());
+    
+    if (!currentNode() || currentNode()->systemLocked()) {
+        return;
+    }
 
     if (e->button() == Qt::LeftButton) {
         QPointF pos = convertToPixelCoord(e);

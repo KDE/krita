@@ -58,15 +58,16 @@ public:
     int applyFilter(qreal mx, qreal my);
 
     void updateCursorPosition(const QPointF &point) {
-        m_cursorPos.setX(point.x() / m_image->width());
-        m_cursorPos.setY(point.y() / m_image->height());
+        m_cursorPos.setX(point.x() / m_canvasWidth);
+        m_cursorPos.setY(point.y() / m_canvasHeight);
     }
 
     void setProperties(KisDynaProperties * properties){
         m_properties = properties;
     }
-    void setImage(KisImageWSP image) {
-        m_image = image;
+    void setCanvasSize(int width, int height) {
+        m_canvasWidth = width;
+        m_canvasHeight = height;
     }
 
 
@@ -86,7 +87,9 @@ private:
                    int count);
 
     KoColor m_inkColor;
-    KisImageWSP m_image;
+    
+    int m_canvasWidth;
+    int m_canvasHeight;
 
     int m_counter;
     int m_pixelSize;

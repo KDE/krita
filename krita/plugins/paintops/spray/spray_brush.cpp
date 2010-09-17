@@ -51,6 +51,7 @@ SprayBrush::SprayBrush()
 {
     srand48(time(0));
     m_painter = 0;
+    m_transfo = 0;
     m_rand = new RandomGauss(time(0));
 }
 
@@ -94,7 +95,10 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);
         m_painter->setMaskImageSize(m_shapeProperties->width, m_shapeProperties->height );
         m_pixelSize = dab->colorSpace()->pixelSize();
-
+        if (m_colorProperties->useRandomHSV){
+            m_transfo = dab->colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
+        }
+        
         m_brushQImage = m_shapeProperties->image;
         if (!m_brushQImage.isNull()){
             m_brushQImage = m_brushQImage.scaled(m_shapeProperties->width, m_shapeProperties->height);
@@ -191,7 +195,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         m.map(nx,ny, &nx,&ny);
 
         // color transformation
-        KoColorTransformation* transfo;
+        
         if (shouldColor){
             if (m_colorProperties->sampleInputColor){
                 subAcc.moveTo(nx+x, ny+y);
@@ -219,13 +223,12 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                 mixOp->mixColors(colors, colorWeights, 2, m_inkColor.data() );
             }
 
-            if (m_colorProperties->useRandomHSV){
+            if (m_colorProperties->useRandomHSV && m_transfo){
                 params["h"] = (m_colorProperties->hue / 180.0) * drand48();
                 params["s"] = (m_colorProperties->saturation / 100.0) * drand48();
                 params["v"] = (m_colorProperties->value / 100.0) * drand48();
-                
-                transfo = dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
-                transfo->transform(m_inkColor.data(), m_inkColor.data() , 1);
+                m_transfo->setParameters(params);
+                m_transfo->transform(m_inkColor.data(), m_inkColor.data() , 1);
             }
 
             if (m_colorProperties->useRandomOpacity){
@@ -293,12 +296,12 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                     KisRandomAccessor ac = m_imageDevice->createRandomAccessor(0,0);
                     QRect rc = m_transformed.rect();
 
-                    if (m_colorProperties->useRandomHSV){
+                    if (m_colorProperties->useRandomHSV && m_transfo){
 
                         for (int y = rc.y(); y< rc.y()+rc.height(); y++){
                             for (int x = rc.x(); x < rc.x()+rc.width();x++){
                                 ac.moveTo(x,y);
-                                transfo->transform(ac.rawData(), ac.rawData() , 1);
+                                m_transfo->transform(ac.rawData(), ac.rawData() , 1);
                             }
                         }
                     }
@@ -331,10 +334,10 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             {
                 m_fixedDab = m_brush->paintDevice(m_fixedDab->colorSpace(), particleScale, -rotationZ, info, xFraction, yFraction);
 
-                if (m_colorProperties->useRandomHSV){
+                if (m_colorProperties->useRandomHSV && m_transfo){
                     quint8 * dabPointer = m_fixedDab->data();
                     int pixelCount = m_fixedDab->bounds().width() * m_fixedDab->bounds().height();
-                    transfo->transform(dabPointer, dabPointer, pixelCount);
+                    m_transfo->transform(dabPointer, dabPointer, pixelCount);
                 }
                 
             } else {

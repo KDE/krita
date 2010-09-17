@@ -30,7 +30,7 @@ class ChalkBrush
 {
 
 public:
-    ChalkBrush(const ChalkProperties * properties);
+    ChalkBrush(const ChalkProperties * properties, KoColorTransformation* transformation);
     ~ChalkBrush();
     void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color);
 
@@ -38,6 +38,8 @@ private:
     KoColor m_inkColor;
     int m_counter;
     const ChalkProperties * m_properties;
+    KoColorTransformation* m_transfo;
+    int m_saturationId;
 
 };
 

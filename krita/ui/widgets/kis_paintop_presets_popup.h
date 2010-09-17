@@ -64,6 +64,8 @@ protected:
 
 public slots:
     void switchDetached();
+    void hideScratchPad();
+    void showScratchPad();
 
 signals:
     void savePresetClicked();

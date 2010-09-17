@@ -68,6 +68,10 @@ KisToolStar::~KisToolStar()
 }
 void KisToolStar::mousePressEvent(KoPointerEvent *event)
 {
+    if (!currentNode() || currentNode()->systemLocked()) {
+        return;
+    }
+    
     if (canvas() && event->button() == Qt::LeftButton) {
         m_dragging = true;
         m_dragStart = convertToPixelCoord(event);

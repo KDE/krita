@@ -116,6 +116,22 @@
 #include "ko_favorite_resource_manager.h"
 #include "kis_paintop_box.h"
 
+class BlockingUserInputEventFilter : public QObject
+{
+    bool eventFilter(QObject *watched, QEvent *event)
+    {
+        Q_UNUSED(watched);
+        if(dynamic_cast<QWheelEvent*>(event)
+            || dynamic_cast<QKeyEvent*>(event)
+            || dynamic_cast<QMouseEvent*>(event)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+};
+
 class KisView2::KisView2Private
 {
 
@@ -177,6 +193,7 @@ public:
     KisPerspectiveGridManager * perspectiveGridManager;
     KisPaintingAssistantsManager* paintingAssistantManager;
     KoFavoriteResourceManager* favoriteResourceManager;
+    BlockingUserInputEventFilter blockingEventFilter;
 };
 
 
@@ -801,15 +818,24 @@ void KisView2::slotCreateTemplate()
 
 }
 
-void KisView2::enableControls()
-{
-    m_d->controlFrame->paintopBox()->setEnabled(true);
-}
-
 void KisView2::disableControls()
 {
     // prevents possible crashes, if somebody changes the paintop during dragging by using the mousewheel
-    m_d->controlFrame->paintopBox()->setEnabled(false);
+    // this is for Bug 250944
+    // the solution blocks all wheel, mouse and key event, while dragging with the freehand tool
+    // see KisToolFreehand::initPaint() and endPaint()
+    m_d->controlFrame->paintopBox()->installEventFilter(&m_d->blockingEventFilter);
+    foreach(QObject* child, m_d->controlFrame->paintopBox()->children()) {
+        child->installEventFilter(&m_d->blockingEventFilter);
+    }
+}
+
+void KisView2::enableControls()
+{
+    m_d->controlFrame->paintopBox()->removeEventFilter(&m_d->blockingEventFilter);
+    foreach(QObject* child, m_d->controlFrame->paintopBox()->children()) {
+        child->removeEventFilter(&m_d->blockingEventFilter);
+    }
 }
 
 #include "kis_view2.moc"

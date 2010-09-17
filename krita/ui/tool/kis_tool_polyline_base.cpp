@@ -49,6 +49,9 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas, const QCursor & 
 }
 void KisToolPolylineBase::mousePressEvent(KoPointerEvent *event)
 {
+    if (!currentNode() || currentNode()->systemLocked()) {
+        return;
+    }
     if (event->button() == Qt::LeftButton && event->modifiers() != Qt::ShiftModifier) {
         m_dragging = true;
     } else if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier) {
@@ -71,6 +74,9 @@ void KisToolPolylineBase::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolPolylineBase::mouseReleaseEvent(KoPointerEvent *event)
 {
+    if (!currentNode() || currentNode()->systemLocked()) {
+        return;
+    }
     if (!currentImage()) return;
     if (m_dragging && event->button() == Qt::LeftButton && event->modifiers() != Qt::ShiftModifier) {
         m_dragStart = convertToPixelCoord(event);

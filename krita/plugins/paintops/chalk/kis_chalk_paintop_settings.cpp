@@ -42,26 +42,10 @@ int KisChalkPaintOpSettings::rate() const
     return getInt(AIRBRUSH_RATE);
 }
 
-
-void KisChalkPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
+QPainterPath KisChalkPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
 {
-    if (_mode != CursorIsOutline) return;
-    qreal size = getInt(CHALK_RADIUS) * 2 + 1;
-    painter.setPen(Qt::black);
-    painter.drawEllipse(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos));
-}
-
-
-QRectF KisChalkPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
-{
-    if (_mode != CursorIsOutline) return QRectF();
-    qreal size = getInt(CHALK_RADIUS) * 2 + 1;
-    size += 10;
-    return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
-}
-
-QPainterPath KisChalkPaintOpSettings::brushOutline(const QPointF& pos,OutlineMode mode) const
-{
+    Q_UNUSED(scale);
+    Q_UNUSED(rotation);
     QPainterPath path;
     if (mode == CursorIsOutline){
         qreal size = getInt(CHALK_RADIUS) * 2 + 1;
@@ -72,7 +56,6 @@ QPainterPath KisChalkPaintOpSettings::brushOutline(const QPointF& pos,OutlineMod
     }
     return path;
 }
-
 
 #if defined(HAVE_OPENGL)
 QString KisChalkPaintOpSettings::modelName() const

@@ -59,6 +59,8 @@ public:
     virtual bool isCellRegionValid(const QString& regionName) const;
 
     // Load and save the contained data in an ODF DOM tree.
+    // FIXME: Move saving/loading logic to helper class like TableLoaderAndSaver,
+    // this class is outdated and should be removed.
     bool loadOdf( const KoXmlElement &tableElement, 
                   KoShapeLoadingContext &context );
     bool saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;

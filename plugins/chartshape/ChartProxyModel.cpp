@@ -134,17 +134,6 @@ void ChartProxyModel::reset( const CellRegion& region )
     endResetModel();
 }
 
-#if QT_VERSION < 0x040600
-void ChartProxyModel::beginResetModel()
-{
-}
-
-void ChartProxyModel::endResetModel()
-{
-    reset();
-}
-#endif
-
 void ChartProxyModel::rebuildDataMap()
 {
     invalidateDataSets();

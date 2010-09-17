@@ -142,12 +142,6 @@ signals:
     void dataChanged();
 
 private:
-#if QT_VERSION < 0x040600
-    //! @todo Remove once we drop support for Qt < 4.6
-    //! For compatability with Qt < 4.6
-    void beginResetModel();
-    void endResetModel();
-#endif
     class Private;
     Private *const d;
 };

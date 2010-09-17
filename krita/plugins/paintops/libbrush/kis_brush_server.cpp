@@ -61,7 +61,9 @@ public:
     ///Reimplemented
     virtual void removingResource(KisBrush* brush)
     {
-        brush->deref();
+        if(!brush->deref()) {
+            delete brush;
+        }
         m_brushes.removeAll(brush);
     }
 

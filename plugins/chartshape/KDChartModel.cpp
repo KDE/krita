@@ -544,10 +544,11 @@ void KDChartModel::removeDataSet( DataSet *dataSet, bool silent )
 
         if ( newMaxDataSetSize < oldMaxDataSetSize ) {
             if ( d->dataDirection == Qt::Horizontal )
-                beginRemoveColumns( QModelIndex(), newMaxDataSetSize, newMaxDataSetSize - 1 );
+                beginRemoveColumns( QModelIndex(), newMaxDataSetSize, oldMaxDataSetSize - 1 );
             else
-                beginRemoveRows( QModelIndex(), newMaxDataSetSize, newMaxDataSetSize - 1 );
-            d->biggestDataSetSize = d->calcMaxDataSetSize();
+                beginRemoveRows( QModelIndex(), newMaxDataSetSize, oldMaxDataSetSize - 1 );
+            d->dataSets = _dataSets;
+            d->biggestDataSetSize = newMaxDataSetSize;
             if ( d->dataDirection == Qt::Horizontal )
                 endRemoveColumns();
             else

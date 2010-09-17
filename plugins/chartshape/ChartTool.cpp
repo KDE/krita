@@ -252,16 +252,16 @@ QWidget *ChartTool::createOptionWidget()
     ChartConfigWidget  *widget = new ChartConfigWidget();
     widget->open( d->shape );
     
-    connect( widget, SIGNAL( dataSetXDataRegionChanged( DataSet*, const QString& ) ),
-	     this,   SLOT( setDataSetXDataRegion( DataSet*, const QString& ) ) );
-    connect( widget, SIGNAL( dataSetYDataRegionChanged( DataSet*, const QString& ) ),
-	     this,   SLOT( setDataSetYDataRegion( DataSet*, const QString& ) ) );
-    connect( widget, SIGNAL( dataSetCustomDataRegionChanged( DataSet*, const QString& ) ),
-	     this,   SLOT( setDataSetCustomDataRegion( DataSet*, const QString& ) ) );
-    connect( widget, SIGNAL( dataSetLabelDataRegionChanged( DataSet*, const QString& ) ),
-	     this,   SLOT( setDataSetLabelDataRegion( DataSet*, const QString& ) ) );
-    connect( widget, SIGNAL( dataSetCategoryDataRegionChanged( DataSet*, const QString& ) ),
-	     this,   SLOT( setDataSetCategoryDataRegion( DataSet*, const QString& ) ) );
+    connect( widget, SIGNAL( dataSetXDataRegionChanged( DataSet*, const CellRegion& ) ),
+             this,   SLOT( setDataSetXDataRegion( DataSet*, const CellRegion& ) ) );
+    connect( widget, SIGNAL( dataSetYDataRegionChanged( DataSet*, const CellRegion& ) ),
+             this,   SLOT( setDataSetYDataRegion( DataSet*, const CellRegion& ) ) );
+    connect( widget, SIGNAL( dataSetCustomDataRegionChanged( DataSet*, const CellRegion& ) ),
+             this,   SLOT( setDataSetCustomDataRegion( DataSet*, const CellRegion& ) ) );
+    connect( widget, SIGNAL( dataSetLabelDataRegionChanged( DataSet*, const CellRegion& ) ),
+             this,   SLOT( setDataSetLabelDataRegion( DataSet*, const CellRegion& ) ) );
+    connect( widget, SIGNAL( dataSetCategoryDataRegionChanged( DataSet*, const CellRegion& ) ),
+             this,   SLOT( setDataSetCategoryDataRegion( DataSet*, const CellRegion& ) ) );
     connect( widget, SIGNAL( dataSetChartTypeChanged( DataSet*, ChartType ) ),
              this,   SLOT( setDataSetChartType( DataSet*, ChartType ) ) );
     connect( widget, SIGNAL( dataSetChartSubTypeChanged( DataSet*, ChartSubtype ) ),
@@ -371,44 +371,44 @@ void ChartTool::setChartSubType( ChartSubtype subtype )
 }
 
 
-void ChartTool::setDataSetXDataRegion( DataSet *dataSet, const QString &region )
+void ChartTool::setDataSetXDataRegion( DataSet *dataSet, const CellRegion &region )
 {
     if ( !dataSet )
         return;
 
-    dataSet->setXDataRegionString( region );
+    dataSet->setXDataRegion( region );
 }
 
-void ChartTool::setDataSetYDataRegion( DataSet *dataSet, const QString &region )
+void ChartTool::setDataSetYDataRegion( DataSet *dataSet, const CellRegion &region )
 {
     if ( !dataSet )
         return;
 
-    dataSet->setYDataRegionString( region );
+    dataSet->setYDataRegion( region );
 }
 
-void ChartTool::setDataSetCustomDataRegion( DataSet *dataSet, const QString &region )
+void ChartTool::setDataSetCustomDataRegion( DataSet *dataSet, const CellRegion &region )
 {
     if ( !dataSet )
         return;
 
-    dataSet->setCustomDataRegionString( region );
+    dataSet->setCustomDataRegion( region );
 }
 
-void ChartTool::setDataSetLabelDataRegion( DataSet *dataSet, const QString &region )
+void ChartTool::setDataSetLabelDataRegion( DataSet *dataSet, const CellRegion &region )
 {
     if ( !dataSet )
         return;
 
-    dataSet->setLabelDataRegionString( region );
+    dataSet->setLabelDataRegion( region );
 }
 
-void ChartTool::setDataSetCategoryDataRegion( DataSet *dataSet, const QString &region )
+void ChartTool::setDataSetCategoryDataRegion( DataSet *dataSet, const CellRegion &region )
 {
     if ( !dataSet )
         return;
 
-    dataSet->setCategoryDataRegionString( region );
+    dataSet->setCategoryDataRegion( region );
 }
 
 

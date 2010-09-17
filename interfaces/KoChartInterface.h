@@ -20,28 +20,48 @@
 #define KOCHART_INTERFACE
 
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
+#include <Qt>
 
 
 #define ChartShapeId "ChartShape"
 
 class QAbstractItemModel;
-class QRect;
+class QString;
 
 
 namespace KoChart
 {
 
+/**
+ * Interface for ChartShape to embed it into a spreadsheet.
+ */
 class ChartInterface
 {
 public:
     virtual ~ChartInterface() {}
 
-    virtual void setModel(QAbstractItemModel* model, bool takeOwnershipOfModel = false) = 0;
-    virtual void setModel(QAbstractItemModel* model, const QVector<QRect> &selection) = 0;
-    virtual void setFirstRowIsLabel(bool isLabel) = 0;
-    virtual void setFirstColumnIsLabel(bool isLabel) = 0;
-    virtual void setDataDirection(Qt::Orientation orientation) = 0;
+    /**
+     * Sets the SheetAccessModel to be used by this chart. Use this method if
+     * you want to embed the ChartShape into a spreadsheet.
+     *
+     * See kspread/SheetAccessModel.h for details.
+     */
+    virtual void setSheetAccessModel(QAbstractItemModel* model) = 0;
+
+    /**
+     * Re-initializes the chart with data from an arbitrary region.
+     *
+     * @param region             Name of region to use, e.g. "Table1.A1:B3"
+     * @param firstRowIsLabel    Whether to interpret the first row as labels
+     * @param firstColumnIsLabel Whether to interpret the first column as labels
+     * @param dataDirection      orientation of a data set. Qt::Horizontal means a row is
+     *                           to be interpreted as one data set, columns with Qt::Vertical.
+     */
+    virtual void reset(const QString& region,
+                       bool firstRowIsLabel,
+                       bool firstColumnIsLabel,
+                       Qt::Orientation dataDirection) = 0;
 };
 
 } // namespace KoChart
@@ -49,3 +69,4 @@ public:
 Q_DECLARE_INTERFACE(KoChart::ChartInterface, "org.koffice.KoChart.ChartInterface:1.0")
 
 #endif // KOCHART_INTERFACE
+

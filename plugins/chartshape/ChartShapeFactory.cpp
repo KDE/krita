@@ -41,6 +41,7 @@
 #include "PlotArea.h"
 #include "Axis.h"
 #include "Legend.h"
+#include "TableSource.h"
 
 
 using namespace KChart;
@@ -83,9 +84,14 @@ bool ChartShapeFactory::supports( const KoXmlElement &element ) const
 KoShape *ChartShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
     ChartShape* shape = new ChartShape(documentResources);
+    ChartProxyModel *proxyModel = shape->proxyModel();
 
     // Fill cells with data.
     QStandardItemModel  *m_chartData = new QStandardItemModel();
+    shape->setInternalModel( m_chartData );
+    Table *internalTable = shape->tableSource()->add( "internal-model", m_chartData );
+    // TODO (not implemented yet)
+    // shape->tableSource()->setRenameOnNameClash( internalTable );
     m_chartData->setRowCount( 4 );
     m_chartData->setColumnCount( 5 );
 
@@ -118,10 +124,9 @@ KoShape *ChartShapeFactory::createDefaultShape(KoResourceManager *documentResour
     m_chartData->setData( m_chartData->index( 3, 3 ), 8.6 );
     m_chartData->setData( m_chartData->index( 3, 4 ), 4.3 );
 
-    // We want the chart shape to take over and handle this model itself
-    shape->setModel( m_chartData, true );
-    shape->setFirstRowIsLabel( true );
-    shape->setFirstColumnIsLabel( true );
+    proxyModel->setFirstRowIsLabel( true );
+    proxyModel->setFirstColumnIsLabel( true );
+    proxyModel->reset( CellRegion( internalTable, QRect( 1, 1, 5, 4 ) ) );
 
     const QSizeF shapeSize = shape->size();
 

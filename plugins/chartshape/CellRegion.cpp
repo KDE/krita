@@ -36,6 +36,9 @@
 // KDE
 #include <kdebug.h>
 
+// KChart
+#include "TableSource.h"
+
 
 using std::pow;
 using namespace KChart;
@@ -66,14 +69,15 @@ public:
     // changes were made to this region.
     bool origStringValid;
 
-    // Name of the sheet this region lies in
-    QString sheetName;
+    /// Table this region is in (name/model pair provided by TableSource)
+    Table *table;
 };
 
 
 CellRegion::Private::Private()
 {
     origStringValid = false;
+    table = 0;
 }
 
 CellRegion::Private::~Private()
@@ -97,7 +101,7 @@ CellRegion::CellRegion( const CellRegion &region )
     *this = region;
 }
 
-CellRegion::CellRegion( const QString& region )
+CellRegion::CellRegion( TableSource *source, const QString& region )
     : d( new Private() )
 {
     // A dollar sign before a part of the address means that this part
@@ -121,9 +125,10 @@ CellRegion::CellRegion( const QString& region )
         // here. We do not support more than one table in a cell region.
         // Also we do not support regions spanned over different sheets. For us
         // everything is either on no sheet or on the same sheet.
-        d->sheetName = regEx.cap( 1 );
-        if ( d->sheetName.endsWith( "." ) )
-            d->sheetName = d->sheetName.left( d->sheetName.length() - 1 );
+        QString sheetName = regEx.cap( 1 );
+        if ( sheetName.endsWith( "." ) )
+            sheetName = sheetName.left( sheetName.length() - 1 );
+        d->table = source->get( sheetName );
 
         QPoint topLeft( rangeStringToInt( regEx.cap(2) ), regEx.cap(3).toInt() );
         if ( isPoint ) {
@@ -138,28 +143,32 @@ CellRegion::CellRegion( const QString& region )
     d->origStringValid = true;
 }
 
-CellRegion::CellRegion( const QPoint &point )
+CellRegion::CellRegion( Table *table, const QPoint &point )
     : d( new Private() )
 {
+    d->table = table;
     add( point );
 }
 
-CellRegion::CellRegion( const QRect &rect )
+CellRegion::CellRegion( Table *table, const QRect &rect )
     : d( new Private() )
 {
+    d->table = table;
     add( rect );
 }
 
-CellRegion::CellRegion( const QPoint &point, const QSize &size )
+CellRegion::CellRegion( Table *table, const QVector<QRect> &rects )
     : d( new Private() )
 {
-    add( QRect( point, size ) );
+    d->table = table;
+    foreach( QRect rect, rects )
+        add( rect );
 }
 
-CellRegion::CellRegion( const QVector<QRect> &rects )
+CellRegion::CellRegion( Table *table )
     : d( new Private() )
 {
-    add( rects );
+    d->table = table;
 }
 
 CellRegion::~CellRegion()
@@ -174,7 +183,7 @@ CellRegion& CellRegion::operator = ( const CellRegion& region )
     d->boundingRect = region.d->boundingRect;
     d->origString = region.d->origString;
     d->origStringValid = region.d->origStringValid;
-    d->sheetName = region.d->sheetName;
+    d->table = region.d->table;
 
     return *this;
 }
@@ -185,6 +194,10 @@ bool CellRegion::operator == ( const CellRegion &other ) const
 }
 
 
+Table *CellRegion::table() const
+{
+    return d->table;
+}
 
 QVector<QRect> CellRegion::rects() const
 {
@@ -198,7 +211,7 @@ int CellRegion::rectCount() const
 
 QString CellRegion::sheetName() const
 {
-    return d->sheetName;
+    return d->table->name();
 }
 
 bool CellRegion::isValid() const
@@ -210,8 +223,6 @@ QString CellRegion::Private::pointToString( const QPoint &point ) const
 {
     QString result;
 
-    if(!sheetName.isEmpty())
-        result.append( '$' + sheetName + '.' );
     result.append( '$' + columnName( point.x() ) );
     result.append( '$' + QString::number( point.y() ) );
 
@@ -230,6 +241,8 @@ QString CellRegion::toString() const
     for ( int i = 0; i < d->rects.count(); ++i ) {
         const QRect range = d->rects[i];
         // Top-left corner
+        if ( table() )
+            result.append( '$' + table()->name() + '.' );
         result.append( d->pointToString( range.topLeft() ) );
 
         // If it is not a point, append rect's bottom-right corner
@@ -330,6 +343,8 @@ void CellRegion::add( const QRect &rect )
 {
     d->origStringValid = false;
 
+// These checks are obsolete, a CellRegion can be used otherwise as well
+#if 0
     if ( !rect.isValid() ) {
         qWarning() << "CellRegion::add() Attempt to add invalid rectangle";
         qWarning() << "CellRegion::add():" << rect;
@@ -341,6 +356,7 @@ void CellRegion::add( const QRect &rect )
         qWarning() << "CellRegion::add():" << rect;
         return;
     }
+#endif
 
     d->rects.append( rect );
     d->boundingRect |= rect;
@@ -490,11 +506,6 @@ static QString rangeIntToString( int i )
     return tmp;
 }
 #endif
-// static
-QVector<QRect> CellRegion::stringToRegion( const QString &string )
-{
-    return CellRegion( string ).rects();
-}
 
 int CellRegion::rangeCharToInt( char c )
 {
@@ -541,10 +552,4 @@ static QString columnName( uint column )
         str.prepend( QChar( 'A' + ( col % 26 ) ) );
 
     return str;
-}
-
-// static
-QString CellRegion::regionToString( const QVector<QRect> &region )
-{
-    return CellRegion( region ).toString();
 }

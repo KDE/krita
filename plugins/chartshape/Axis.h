@@ -76,9 +76,18 @@ public:
     Qt::Orientation orientation();
     QFont font() const;
     bool isVisible() const;
-    
-    QString categoryDataRegionString() const;
-    void setCategoryDataRegionString( const QString &region );
+
+    CellRegion categoryDataRegion() const;
+
+    /**
+     * Sets the cell region to use for categories in this axis.
+     *
+     * FIXME: This only applies to an x axis. Also, there's always exactly
+     * one region for categories in an entire chart (TODO: verify).
+     * Right now there's four (!) classes holding this region: Axis, DataSet,
+     * PlotArea and ChartProxyModel. Only one should hold this property.
+     */
+    void setCategoryDataRegion( const CellRegion &region );
 	
     void setPosition( AxisPosition position );
     void setTitleText( const QString &text );

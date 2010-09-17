@@ -25,6 +25,7 @@
 
 // Qt
 #include <QRegion>
+#include <QPoint>
 
 // KDE
 #include <KDebug>
@@ -44,6 +45,7 @@
 // KChart
 #include "Axis.h"
 #include "DataSet.h"
+#include "TableSource.h"
 
 using namespace KChart;
 
@@ -54,29 +56,35 @@ using namespace KChart;
 
 class ChartProxyModel::Private {
 public:
-    Private();
+    Private( ChartProxyModel *parent, TableSource *source );
     ~Private();
+
+    ChartProxyModel *const q;
+
+    TableSource *const tableSource;
 
     bool             firstRowIsLabel;
     bool             firstColumnIsLabel;
     Qt::Orientation  dataDirection;
     int              dataDimensions;
     
-    QString categoryDataRegion;
+    CellRegion categoryDataRegion;
 
     QVector< CellRegion > dataSetRegions;
     
     QList<DataSet*>  dataSets;
     QList<DataSet*>  removedDataSets;
     
-    QVector<QRect>   selection;
+    CellRegion       selection;
 
     bool automaticDataSetCreation;
     int createdDataSetCount;
 };
 
-ChartProxyModel::Private::Private():
-  createdDataSetCount( 0 )
+ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source )
+    : q( parent )
+    , tableSource( source )
+    , createdDataSetCount( 0 )
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
@@ -100,10 +108,14 @@ ChartProxyModel::Private::~Private()
 //                          Class ChartProxyModel
 
 
-ChartProxyModel::ChartProxyModel()
-    : QAbstractProxyModel( 0 ),
-      d( new Private )
+ChartProxyModel::ChartProxyModel( TableSource *source )
+    : QAbstractTableModel(),
+      d( new Private( this, source ) )
 {
+    connect( source, SIGNAL( tableAdded( Table* ) ),
+             this,   SLOT( addTable( Table* ) ) );
+    connect( source, SIGNAL( tableRemoved( Table* ) ),
+             this,   SLOT( removeTable( Table* ) ) );
 }
 
 ChartProxyModel::~ChartProxyModel()
@@ -111,15 +123,15 @@ ChartProxyModel::~ChartProxyModel()
     delete d;
 }
 
-
-void ChartProxyModel::setAutomaticDataSetCreation( bool enable )
+void ChartProxyModel::reset( const CellRegion& region )
 {
-    d->automaticDataSetCreation = enable;
-}
+    beginResetModel();
 
-bool ChartProxyModel::automaticDataSetCreation() const
-{
-    return d->automaticDataSetCreation;
+    d->selection = region;
+    invalidateDataSets();
+    d->dataSets = createDataSetsFromRegion( d->removedDataSets );
+
+    endResetModel();
 }
 
 #if QT_VERSION < 0x040600
@@ -135,26 +147,32 @@ void ChartProxyModel::endResetModel()
 
 void ChartProxyModel::rebuildDataMap()
 {
-    if ( !d->automaticDataSetCreation )
-        return;
-
     invalidateDataSets();
     d->dataSets = createDataSetsFromRegion( d->removedDataSets );
 }
 
+void ChartProxyModel::addTable( Table *table )
+{
+    QAbstractItemModel *model = table->model();
+    connect( model, SIGNAL( dataChanged( QModelIndex, QModelIndex ) ),
+             this,  SLOT( dataChanged( QModelIndex, QModelIndex ) ) );
+}
+
+void ChartProxyModel::removeTable( Table *table )
+{
+    QAbstractItemModel *model = table->model();
+    model->disconnect( this );
+}
+
 QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataSetsToRecycle )
 {
+    if ( !d->selection.isValid() )
+        return QList<DataSet*>();
+    
     QList<DataSet*> createdDataSets;
-    QVector<QRect> dataRegions;
-
-    if ( d->selection.isEmpty() ) {
-        const QRect dataBoundingRect( QPoint( 1, 1 ),
-                                      QSize( sourceModel()->columnCount(),
-                                             sourceModel()->rowCount() ) );
-        dataRegions.append( dataBoundingRect );
-    }
-    else
-        dataRegions = d->selection;
+    const QVector<QRect> dataRegions = d->selection.rects();
+    Table *table = d->selection.table();
+    Q_ASSERT( table );
     
     int& createdDataSetCount = d->createdDataSetCount;
     int number = 0;
@@ -199,12 +217,12 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
         QMapIterator<int, QVector<QRect> > j( sortedRows );
         
         CellRegion category;
-        if ( ! categoryDataRegion().isEmpty() ) {
-            category = CellRegion( categoryDataRegion() );
+        if ( categoryDataRegion().isValid() ) {
+            category = categoryDataRegion();
         } else if ( d->firstRowIsLabel && j.hasNext() ) {
             j.next();
             
-            category = CellRegion( j.value() );
+            category = CellRegion( table, j.value() );
             if ( d->firstColumnIsLabel )
                 category.subtract( category.pointAtIndex( 0 ) );
         }
@@ -232,19 +250,19 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
             CellRegion xDataRegion;
             // In case of > 1 data dimensions, x data appears before y data
             if ( d->dataDimensions > 1 )
-                xDataRegion = CellRegion( j.value() );
+                xDataRegion = CellRegion( table, j.value() );
 
             //qDebug() << "Creating data set with region" << j.value();
             if ( d->firstColumnIsLabel ) {
-                CellRegion tmpRegion = CellRegion( j.value() );
+                CellRegion tmpRegion = CellRegion( table, j.value() );
                 QPoint labelDataPoint = tmpRegion.pointAtIndex( 0 );
-                labelDataRegion = CellRegion( labelDataPoint );
+                labelDataRegion = CellRegion( table, labelDataPoint );
             }
 
             if ( d->dataDimensions > 1 && j.hasNext() )
                 j.next();
             
-            CellRegion yDataRegion( j.value() );
+            CellRegion yDataRegion( table, j.value() );
 
             if ( d->firstColumnIsLabel ) {
                 xDataRegion.subtract( xDataRegion.pointAtIndex( 0 ) );
@@ -254,7 +272,7 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
             if ( d->dataDimensions > 2 && j.hasNext() )
                 j.next();
             // adding support for third dimension, even if the existing scheme does not scale if we have need for aditional dimensions
-            CellRegion zDataRegion( j.value() );
+            CellRegion zDataRegion( table, j.value() );
 
             if ( d->firstColumnIsLabel ) {
                 zDataRegion.subtract( zDataRegion.pointAtIndex( 0 ) );
@@ -315,12 +333,12 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
         QMapIterator<int, QVector<QRect> > j( sortedColumns );
         
         CellRegion category;
-        if ( ! categoryDataRegion().isEmpty() ) {
-            category = CellRegion( categoryDataRegion() );
+        if ( categoryDataRegion().isValid() ) {
+            category = categoryDataRegion();
         } else if ( d->firstColumnIsLabel && j.hasNext() ) {
             j.next();
             
-            category = CellRegion( j.value() );
+            category = CellRegion( table, j.value() );
             if ( d->firstRowIsLabel )
                 category.subtract( category.pointAtIndex( 0 ) );
         }
@@ -348,19 +366,19 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
             CellRegion xDataRegion;
             // In case of > 1 data dimensions, x data appears before y data
             if ( d->dataDimensions > 1 )
-                xDataRegion = CellRegion( j.value() );
+                xDataRegion = CellRegion( table, j.value() );
 
             //qDebug() << "Creating data set with region" << j.value();
             if ( d->firstRowIsLabel ) {
-                CellRegion tmpRegion = CellRegion( j.value() );
+                CellRegion tmpRegion = CellRegion( table, j.value() );
                 QPoint labelDataPoint = tmpRegion.pointAtIndex( 0 );
-                labelDataRegion = CellRegion( labelDataPoint );
+                labelDataRegion = CellRegion( table, labelDataPoint );
             }
 
             if ( d->dataDimensions > 1 && j.hasNext() )
                 j.next();
             
-            CellRegion yDataRegion( j.value() );
+            CellRegion yDataRegion( table, j.value() );
 
             if ( d->firstRowIsLabel ) {
                 xDataRegion.subtract( xDataRegion.pointAtIndex( 0 ) );
@@ -370,7 +388,7 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
             if ( d->dataDimensions > 2 && j.hasNext() )
                 j.next();
             
-            CellRegion zDataRegion( j.value() );
+            CellRegion zDataRegion( table, j.value() );
 
             if ( d->firstRowIsLabel ) {
                 zDataRegion.subtract( zDataRegion.pointAtIndex( 0 ) );
@@ -391,62 +409,6 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
     return createdDataSets;
 }
 
-
-void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
-{
-    if ( this->sourceModel() == sourceModel )
-        return;
-
-    beginResetModel();
-
-    if ( this->sourceModel() ) {
-        disconnect( this->sourceModel(), SIGNAL( modelReset() ),
-                    this,                SLOT( slotModelReset() ) );
-        disconnect( this->sourceModel(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
-                    this,                SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
-        disconnect( this->sourceModel(), SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
-                    this,                SLOT( slotRowsInserted( const QModelIndex&, int, int ) ) );
-        disconnect( this->sourceModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-                    this,                SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
-        disconnect( this->sourceModel(), SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
-                    this,                SLOT( slotRowsRemoved( const QModelIndex&, int, int ) ) );
-        disconnect( this->sourceModel(), SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
-                    this,                SLOT( slotColumnsRemoved( const QModelIndex&, int, int ) ) );
-    }
-
-    if ( sourceModel ) {
-        connect( sourceModel, SIGNAL( modelReset() ),
-                 this,        SLOT( slotModelReset() ) );
-        connect( sourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
-                 this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
-        connect( sourceModel, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
-                 this,        SLOT( slotRowsInserted( const QModelIndex&, int, int ) ) );
-        connect( sourceModel, SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-                 this,        SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
-        connect( sourceModel, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
-                 this,        SLOT( slotRowsRemoved( const QModelIndex&, int, int ) ) );
-        connect( sourceModel, SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
-                 this,        SLOT( slotColumnsRemoved( const QModelIndex&, int, int ) ) );
-    }
-
-    QAbstractProxyModel::setSourceModel( sourceModel );
-    
-    rebuildDataMap();
-    endResetModel();
-}
-
-void ChartProxyModel::setSourceModel( QAbstractItemModel *model,
-                                      const QVector<QRect> &selection )
-{
-    d->selection = selection;
-    setSourceModel( model );
-}
-
-void ChartProxyModel::setSelection( const QVector<QRect> &selection )
-{
-    d->selection = selection;
-    //needReset();
-}
 
 void ChartProxyModel::saveOdf( KoShapeSavingContext &context ) const
 {
@@ -469,15 +431,13 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     int loadedDataSetCount = 0;
 
     // A cell range for all data is optional.
-    // If it is specified, use createDataSetsFromRegion() to automatically
-    // turn this data region into consecutive data series.
     // If cell ranges are in addition specified for one or more of these
     // data series, they'll be overwritten by these values.
     if ( element.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
     {
         QString cellRangeAddress = element.attributeNS( KoXmlNS::table, "cell-range-address" );
-        setSelection( CellRegion::stringToRegion( cellRangeAddress ) );
-        createdDataSets = createDataSetsFromRegion( d->removedDataSets );
+        // FIXME: Do we need to reset everything here? It may be enough to set the cell range address.
+        reset( CellRegion( d->tableSource, cellRangeAddress ) );
     }
 
     KoXmlElement n;
@@ -513,21 +473,12 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
 
 
 QVariant ChartProxyModel::data( const QModelIndex &index,
-                                int role /* = Qt::DisplayRole */ ) const
+                                int role ) const
 {
-    if ( sourceModel() == 0 )
-        return QVariant();
-    
-    QModelIndex sourceIndex = mapToSource( index );
-    if ( sourceIndex == QModelIndex() ) {
-        qWarning() << "ChartProxyModel::data(): Attempting to request data for invalid source index";
-        qWarning() << "ChartProxyModel::data(): Mapping resulted in:";
-        qWarning() << index << "-->" << sourceIndex;
-        return QVariant();
-    }
-
-    QVariant value = sourceModel()->data( sourceIndex, role );
-    return value;
+    Q_UNUSED( index );
+    Q_UNUSED( role );
+    Q_ASSERT( "To be implemented" );
+    return QVariant();
 }
 
 void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
@@ -536,7 +487,7 @@ void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex
 
     // Excerpt from the Qt reference for QRect::bottomRight() which is
     // used for calculating bottomRight.  Note that for historical
-    // reasons this function returns 
+    // reasons this function returns
     //   QPoint(left() + width() -1, top() + height() - 1).
     QPoint bottomRightPoint( bottomRight.column() + 1, bottomRight.row() + 1 );
     QRect dataChangedRect = QRect( topLeftPoint,
@@ -559,81 +510,20 @@ void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex
         if ( dataSet->customDataRegion().intersects( dataChangedRect ) )
             dataSet->customDataChanged( dataSet->customDataRegion().intersected( dataChangedRect ).boundingRect() );
     }
-	
+
     emit dataChanged();
 }
+
 
 QVariant ChartProxyModel::headerData( int section,
                                       Qt::Orientation orientation,
                                       int role /* = Qt::DisplayRole */ ) const
 {
-    if ( sourceModel() == 0 )
-        return QVariant();
-
-    orientation = mapToSource( orientation );
-
-    int row    = 0;
-    int column = 0;
-
-    if ( orientation == Qt::Horizontal ) {
-        if ( !d->firstColumnIsLabel )
-            return QVariant();
-
-        // Return the first column in the section-th row
-        row = section;
-        if ( d->firstRowIsLabel )
-            row++;
-        // first source row is used for x values
-        if ( d->dataDimensions == 2 )
-            row++;
-    }
-    else {
-        // orientation == Qt::Vertical here
-
-        if ( !d->firstRowIsLabel )
-            return QVariant();
-
-        // Return the section-th column in the first row.
-        column = section;
-        if ( d->firstColumnIsLabel )
-            column++;
-
-        // First source column is used for X values.
-        if ( d->dataDimensions == 2 )
-            column++;
-    }
-
-    // Check for overflow in rows.
-    if ( row >= sourceModel()->rowCount() ) {
-        qWarning() << "ChartProxyModel::headerData(): Attempting to request header data for row >= rowCount";
-
-        return QVariant();
-    }
-
-    // Check for overflow in columns.
-    if ( column >= sourceModel()->columnCount() ) {
-        qWarning() << "ChartProxyModel::headerData(): Attempting to request header data for column >= columnCount";
-
-        return QVariant();
-    }
-
-    return sourceModel()->data( sourceModel()->index( row, column ), role );
-}
-
-
-QMap<int, QVariant> ChartProxyModel::itemData( const QModelIndex &index ) const
-{
-    return sourceModel()->itemData( mapToSource( index ) );
-}
-
-
-QModelIndex ChartProxyModel::index( int row,
-                                    int column,
-                                    const QModelIndex &parent /* = QModelIndex() */ ) const
-{
-    Q_UNUSED( parent );
-
-    return QAbstractItemModel::createIndex( row, column, 0 );
+    Q_UNUSED( section );
+    Q_UNUSED( orientation );
+    Q_UNUSED( role );
+    Q_ASSERT( "To be implemented" );
+    return QVariant();
 }
 
 
@@ -644,103 +534,16 @@ QModelIndex ChartProxyModel::parent( const QModelIndex &index ) const
     return QModelIndex();
 }
 
-QModelIndex ChartProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
-{
-    Q_UNUSED( sourceIndex );
-    return QModelIndex();
-}
-
-QModelIndex ChartProxyModel::mapToSource( const QModelIndex &proxyIndex ) const
-{
-    Q_UNUSED( proxyIndex );
-    return QModelIndex();
-}
-
-
-Qt::Orientation ChartProxyModel::mapFromSource( Qt::Orientation orientation ) const
-{
-    // In fact, this method does exactly the same thing as
-    // mapToSource( Qt::Orientation ), but replacing the code with a
-    // call to mapToSource() would just confuse at this point.
-
-    if ( d->dataDirection == Qt::Horizontal )
-        return orientation;
-
-    // Orientation is Qt::Horizontal
-    // Thus, we need to return the opposite of orientation.
-    if ( orientation == Qt::Vertical )
-        return Qt::Horizontal;
-
-    return Qt::Vertical;
-}
-
-
-Qt::Orientation ChartProxyModel::mapToSource( Qt::Orientation orientation ) const
-{
-    if ( d->dataDirection == Qt::Horizontal )
-        return orientation;
-
-    // Orientation is Qt::Horizontal.
-    // Thus, we need to return the opposite of orientation.
-    if ( orientation == Qt::Vertical )
-        return Qt::Horizontal;
-
-    return Qt::Vertical;
-}
-
 int ChartProxyModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) const
 {
-    if ( sourceModel() == 0 )
-        return 0;
-
-    int rowCount;
-    if ( d->dataDirection == Qt::Horizontal )
-        rowCount = sourceModel()->rowCount( parent );
-    else
-        rowCount = sourceModel()->columnCount( parent );
-
-    // Even if the first row is a header - if the data table is empty,
-    // we still have 0 rows, not -1
-
-    bool firstRowIsLabel = d->firstRowIsLabel;
-    if ( d->dataDirection == Qt::Vertical )
-        firstRowIsLabel = d->firstColumnIsLabel;
-
-    if ( rowCount > 0 && firstRowIsLabel )
-        rowCount--;
-    
-    // One row is used for x values
-    if ( d->dataDimensions == 2 )
-        rowCount--;
-    
-    rowCount *= d->dataDimensions;
-
-    return rowCount;
+    return d->dataSets.count();
 }
 
 
 int ChartProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ ) const
 {
-    if ( sourceModel() == 0 )
-        return 0;
-    
-    int columnCount;
-    if ( d->dataDirection == Qt::Horizontal )
-        columnCount = sourceModel()->columnCount( parent );
-    else
-        columnCount = sourceModel()->rowCount( parent );
-
-    // Even if the first column is a header - if the data table is empty,
-    // we still have 0 columns, not -1
-
-    bool firstColumnIsLabel = d->firstColumnIsLabel;
-    if ( d->dataDirection == Qt::Vertical )
-        firstColumnIsLabel = d->firstRowIsLabel;
-
-    if ( columnCount > 0 && firstColumnIsLabel )
-        columnCount--;
-    
-    return columnCount;
+    // FIXME: Replace this by the actual column count once the proxy is properly being used.
+    return INT_MAX;
 }
 
 void ChartProxyModel::setFirstRowIsLabel( bool b )
@@ -751,9 +554,6 @@ void ChartProxyModel::setFirstRowIsLabel( bool b )
     beginResetModel();
     
     d->firstRowIsLabel = b;
-    
-    if ( !sourceModel() )
-        return;
     
     rebuildDataMap();
     endResetModel();
@@ -767,9 +567,6 @@ void ChartProxyModel::setFirstColumnIsLabel( bool b )
 
     beginResetModel();
     d->firstColumnIsLabel = b;
-
-    if ( !sourceModel() )
-        return;
     
     rebuildDataMap();
     endResetModel();
@@ -793,9 +590,6 @@ void ChartProxyModel::setDataDirection( Qt::Orientation orientation )
 
     beginResetModel();
     d->dataDirection = orientation;
-
-    if ( !sourceModel() )
-        return;
 
     rebuildDataMap();
     endResetModel();
@@ -823,12 +617,12 @@ bool ChartProxyModel::firstColumnIsLabel() const
     return d->firstColumnIsLabel;
 }
 
-QString ChartProxyModel::categoryDataRegion() const
+CellRegion ChartProxyModel::categoryDataRegion() const
 {
     return d->categoryDataRegion;
 }
 
-void ChartProxyModel::setCategoryDataRegion(const QString& region)
+void ChartProxyModel::setCategoryDataRegion( const CellRegion &region )
 {
     d->categoryDataRegion = region;
 }
@@ -836,60 +630,6 @@ void ChartProxyModel::setCategoryDataRegion(const QString& region)
 QList<DataSet*> ChartProxyModel::dataSets() const
 {
     return d->dataSets;
-}
-
-void ChartProxyModel::slotRowsInserted( const QModelIndex &parent, 
-                                        int start, int end )
-{
-    Q_UNUSED( parent );
-    Q_UNUSED( start );
-    Q_UNUSED( end );
-
-    beginResetModel();
-    rebuildDataMap();
-    endResetModel();
-}
-
-void ChartProxyModel::slotColumnsInserted( const QModelIndex &parent,
-                                           int start, int end )
-{
-    Q_UNUSED( parent );
-    Q_UNUSED( start );
-    Q_UNUSED( end );
-
-    beginResetModel();
-    rebuildDataMap();
-    endResetModel();
-}
-
-void ChartProxyModel::slotRowsRemoved( const QModelIndex &parent,
-                                       int start, int end )
-{
-    Q_UNUSED( parent );
-    Q_UNUSED( start );
-    Q_UNUSED( end );
-
-    beginResetModel();
-    rebuildDataMap();
-    endResetModel();
-}
-
-void ChartProxyModel::slotColumnsRemoved( const QModelIndex &parent,
-                                          int start, int end )
-{
-    Q_UNUSED( parent );
-    Q_UNUSED( start );
-    Q_UNUSED( end );
-
-    beginResetModel();
-    rebuildDataMap();
-    endResetModel();
-}
-
-void ChartProxyModel::slotModelReset()
-{
-    rebuildDataMap();
-    reset(); // propagate
 }
 
 #include "ChartProxyModel.moc"

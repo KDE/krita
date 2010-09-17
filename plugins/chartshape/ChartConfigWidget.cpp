@@ -63,6 +63,7 @@
 #include "commands/ChartTypeCommand.h"
 #include "CellRegionStringValidator.h"
 #include "ChartTableModel.h"
+#include "TableSource.h"
 
 using namespace KChart;
 
@@ -140,6 +141,8 @@ public:
 
     // Table Editor (a.k.a. the data editor)
     TableEditorDialog    *tableEditorDialog;
+    // Source containing all tables the chart uses (name/model pairs)
+    TableSource          *tableSource;
 
     // Legend
     QButtonGroup         *positionButtonGroup;
@@ -426,9 +429,11 @@ void ChartConfigWidget::open( KoShape* shape )
         }
     }
 
-    KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>( d->shape->model() );
-    ChartTableModel *tableModel = qobject_cast<ChartTableModel*>( d->shape->model() );
-    d->isExternalDataSource = ( spreadSheetModel != 0 && tableModel == 0 );
+// NOTE: There's no single source table anymore, a KSpread workbook allows multiple to be used with a chart.
+//    KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>( d->shape->internalModel() );
+// NOTE: This is obsolete, ChartShape::isEmbedded() is now used instead.
+//    ChartTableModel *tableModel = qobject_cast<ChartTableModel*>( d->shape->model() );
+//    d->isExternalDataSource = ( spreadSheetModel != 0 && tableModel == 0 );
 
     // Update the axis titles
     //d->ui.xAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText() );
@@ -438,12 +443,16 @@ void ChartConfigWidget::open( KoShape* shape )
     //d->ui.legendTitle->setText( d->shape->legend()->title() );
 
     // Fill the data table
-    if ( d->isExternalDataSource ) {
+    if ( d->shape->isEmbedded() ) {
+ // FIXME: CellRegion itself together with a TableSource should now be used
+ // to validate  the correctness of a table range address.
+#if 0
         d->cellRegionStringValidator = new CellRegionStringValidator( spreadSheetModel );
         d->cellRegionDialog.labelDataRegion->setValidator( d->cellRegionStringValidator );
         d->cellRegionDialog.xDataRegion->setValidator( d->cellRegionStringValidator );
         d->cellRegionDialog.yDataRegion->setValidator( d->cellRegionStringValidator );
         d->cellRegionDialog.categoryDataRegion->setValidator( d->cellRegionStringValidator );
+#endif
 
         // If the data source is external, the editData button opens a
         // dialog to edit the data ranges instead of the data itself.
@@ -1045,6 +1054,7 @@ void ChartConfigWidget::slotShowTableEditor( bool show )
     if ( !d->tableEditorDialog ) {
         d->tableEditorDialog = new TableEditorDialog;
         d->tableEditorDialog->setProxyModel( d->shape->proxyModel() );
+        d->tableEditorDialog->setModel( d->shape->internalModel() );
     }
 
     if ( show ) {
@@ -1268,7 +1278,8 @@ void ChartConfigWidget::ui_dataSetXDataRegionChanged()
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
 
-    const QString region = d->cellRegionDialog.xDataRegion->text();
+    const QString regionString = d->cellRegionDialog.xDataRegion->text();
+    const CellRegion region( d->tableSource, regionString );
 
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
 
@@ -1281,7 +1292,8 @@ void ChartConfigWidget::ui_dataSetYDataRegionChanged()
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
 
-    const QString region = d->cellRegionDialog.yDataRegion->text();
+    const QString regionString = d->cellRegionDialog.yDataRegion->text();
+    const CellRegion region( d->tableSource, regionString );
 
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
 
@@ -1313,7 +1325,8 @@ void ChartConfigWidget::ui_dataSetCategoryDataRegionChanged()
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
 
-    const QString region = d->cellRegionDialog.categoryDataRegion->text();
+    const QString regionString = d->cellRegionDialog.categoryDataRegion->text();
+    const CellRegion region( d->tableSource, regionString );
 
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
 
@@ -1326,7 +1339,8 @@ void ChartConfigWidget::ui_dataSetLabelDataRegionChanged()
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
 
-    const QString region = d->cellRegionDialog.labelDataRegion->text();
+    const QString regionString = d->cellRegionDialog.labelDataRegion->text();
+    const CellRegion region( d->tableSource, regionString );
 
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
 
@@ -1342,16 +1356,16 @@ void ChartConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog( int index )
     DataSet *dataSet = d->dataSets[ index ];
     const int dimensions = dataSet->dimension();
 
-    d->cellRegionDialog.labelDataRegion->setText( dataSet->labelDataRegionString() );
+    d->cellRegionDialog.labelDataRegion->setText( dataSet->labelDataRegion().toString() );
     if ( dimensions > 1 )
     {
         d->cellRegionDialog.xDataRegion->setEnabled( true );
-        d->cellRegionDialog.xDataRegion->setText( dataSet->xDataRegionString() );
+        d->cellRegionDialog.xDataRegion->setText( dataSet->xDataRegion().toString() );
     }
     else
         d->cellRegionDialog.xDataRegion->setEnabled( false );
-    d->cellRegionDialog.yDataRegion->setText( dataSet->yDataRegionString() );
-    d->cellRegionDialog.categoryDataRegion->setText( dataSet->categoryDataRegionString() );
+    d->cellRegionDialog.yDataRegion->setText( dataSet->yDataRegion().toString() );
+    d->cellRegionDialog.categoryDataRegion->setText( dataSet->categoryDataRegion().toString() );
 
     d->selectedDataSet_CellRegionDialog = index;
 }

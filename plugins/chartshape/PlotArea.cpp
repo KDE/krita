@@ -76,6 +76,7 @@
 #include "ChartProxyModel.h"
 #include "ScreenConversions.h"
 #include "Layout.h"
+#include "OdfLoadingHelper.h"
 
 using namespace KChart;
 
@@ -185,8 +186,8 @@ PlotArea::Private::~Private()
 void PlotArea::Private::initAxes()
 {
     // The category data region is anchored to an axis and will be set on addAxis if the
-    // axis defines the Axis::categoryDataRegionString(). So, clear it now.
-    q->proxyModel()->setCategoryDataRegion(QString());
+    // axis defines the Axis::categoryDataRegion(). So, clear it now.
+    q->proxyModel()->setCategoryDataRegion( CellRegion() );
     // Remove all old axes
     while( !axes.isEmpty() ) {
         Axis *axis = axes.takeLast();
@@ -411,8 +412,8 @@ bool PlotArea::addAxis( Axis *axis )
     if ( axis->dimension() == XAxisDimension ) {
         // set the categoryDataRegion of the proxyModel. This will then be used on
         // ChartProxyModel::createDataSetsFromRegion to create the dataSets.
-        if ( proxyModel()->categoryDataRegion().isEmpty() && ! axis->categoryDataRegionString().isEmpty() )
-            proxyModel()->setCategoryDataRegion(axis->categoryDataRegionString());
+        if ( !proxyModel()->categoryDataRegion().isValid() && axis->categoryDataRegion().isValid() )
+            proxyModel()->setCategoryDataRegion( axis->categoryDataRegion() );
 
         // let each axis know about the other axis
         foreach ( Axis *_axis, d->axes ) {
@@ -445,11 +446,11 @@ bool PlotArea::removeAxis( Axis *axis )
     
     if ( axis->dimension() == XAxisDimension ) {
         // If the axis is removed we probably need to update the used categoryDataRegion too.
-        if ( ! proxyModel()->categoryDataRegion().isEmpty() && proxyModel()->categoryDataRegion() == axis->categoryDataRegionString() ) {
-            proxyModel()->setCategoryDataRegion(QString());
+        if ( proxyModel()->categoryDataRegion().isValid() && proxyModel()->categoryDataRegion() == axis->categoryDataRegion() ) {
+            proxyModel()->setCategoryDataRegion( CellRegion() );
             foreach ( Axis *_axis, d->axes ) {
-                 if ( _axis->dimension() == XAxisDimension && ! _axis->categoryDataRegionString().isEmpty()) {
-                     proxyModel()->setCategoryDataRegion( _axis->categoryDataRegionString() );
+                 if ( _axis->dimension() == XAxisDimension && _axis->categoryDataRegion().isValid()) {
+                     proxyModel()->setCategoryDataRegion( _axis->categoryDataRegion() );
                      break;
                  }
             }
@@ -567,6 +568,8 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
+    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
+
     styleStack.clear();
 
     // First step is to load the axis. Datasets are attached to an
@@ -609,7 +612,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
 
     CellRegion cellRangeAddress;
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) ) {
-        cellRangeAddress = CellRegion( plotAreaElement.attributeNS( KoXmlNS::table, "cell-range-address" ) );
+        cellRangeAddress = CellRegion( helper->tableSource, plotAreaElement.attributeNS( KoXmlNS::table, "cell-range-address" ) );
     }
 
     // Find out about things that are in the plotarea style.
@@ -720,15 +723,20 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         proxyModel()->setFirstRowIsLabel( false );
         proxyModel()->setFirstColumnIsLabel( false );
     }
-
+    
+// NOTE: Not needed anymore. SheetAccessModel is now directly passed during initialization of chart in KSpread.
+// Also, all tables are now used simultaneously.
+#if 0
     QAbstractItemModel *sheetAccessModel = 0;
     if (d->shape->resourceManager()->hasResource(75751149)) { // duplicated from kspread
         QVariant var = d->shape->resourceManager()->resource(75751149);
         sheetAccessModel = static_cast<QAbstractItemModel*>(var.value<void*>());
     }
+#endif
 
     setCellRangeAddress( cellRangeAddress );
 
+#if 0
     if ( sheetAccessModel ) {
         const QString sheetName = cellRangeAddress.sheetName();
         int sheetIndex = 0;
@@ -745,6 +753,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         if ( sheet )
             d->shape->setModel( sheet.data() );
     }
+#endif
     
     // Now, after the axes, load the datasets.
     // Note that this only contains properties of the datasets, the

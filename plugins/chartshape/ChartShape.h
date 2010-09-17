@@ -69,6 +69,7 @@ namespace KDChart {
 // Interface to SimpleTextShape plugin
 class KoTextShapeData;
 #define TextShapeId "TextShapeID"
+#define OdfLoadingHelperId "OdfLoadingHelperId"
 typedef KoTextShapeData TextLabelData;
 
 namespace KChart {
@@ -83,6 +84,7 @@ class ThreeDScene;
 class CellRegion;
 class ChartTableModel;
 class Layout;
+class TableSource;
 
 extern const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ];
 
@@ -108,8 +110,7 @@ public:
     ~ChartShape();
 
     // Getter methods
-    QAbstractItemModel  *model()      const;
-    ChartProxyModel     *proxyModel() const;
+    ChartProxyModel *proxyModel() const;
 
     // Parts of the chart
     KoShape        *title() const;
@@ -133,9 +134,34 @@ public:
     void showSubTitle(bool doShow);
     void showFooter(bool doShow);
 
-    // Setter methods
-    void setModel( QAbstractItemModel *model, bool takeOwnershipOfModel = false );
-    void setModel( QAbstractItemModel *model, const QVector<QRect> &selection );
+    /**
+     * Returns the internal data table if existent, otherwise null.
+     */
+    QAbstractItemModel *internalModel() const;
+
+    /**
+     * Tells the ChartShape what model to use as internal table. When
+     * the shape is loaded from ODF, it sets it itself.
+     *
+     * Use this method only if you created shape and model manually.
+     * This method will assume that there is no internal model set yet.
+     */
+    void setInternalModel( QAbstractItemModel *model );
+
+    /**
+     * Returns a "map" containing all tables that are being used,
+     * or may be used, in this chart.
+     */
+    TableSource *tableSource() const;
+
+    /**
+     * Returns true if this chart is embedded in another application and that application
+     * provides the data, otherwise false. This is useful for e.g. the UI's data editor:
+     * If embedded, it can display an "Edit Regions..." button, otherwise the usual
+     * "Edit Data...".
+     */
+    bool isEmbedded() const;
+
     bool addAxis( Axis *axis );
     bool removeAxis( Axis *axis );
 
@@ -143,10 +169,32 @@ public:
     ChartSubtype  chartSubType() const;
     bool          isThreeD() const;
 
-    // Inherited from chart interface
-    void setFirstRowIsLabel( bool isLabel );
-    void setFirstColumnIsLabel( bool isLabel );
-    void setDataDirection( Qt::Orientation orientation );
+    /***
+     * Inherited from koChartInterface
+     ***/
+
+    /**
+     * Sets the SheetAccessModel to be used by this chart.
+     *
+     * See kspread/SheetAccessModel.h for details.
+     */
+    void setSheetAccessModel( QAbstractItemModel* model );
+
+    /**
+     * Re-initializes the chart with data from an arbitrary region.
+     *
+     * @param region             Name of region to use, e.g. "Table1.A1:B3"
+     * @param firstRowIsLabel    Whether to interpret the first row as labels
+     * @param firstColumnIsLabel Whether to interpret the first column as labels
+     * @param dataDirection      orientation of a data set. Qt::Horizontal means a row is
+     *                           to be interpreted as one data set, columns with Qt::Vertical.
+     *
+     * @see ChartProxyModel::init()
+     */
+    void reset( const QString& region,
+                bool firstRowIsLabel,
+                bool firstColumnIsLabel,
+                Qt::Orientation dataDirection );
 
     void setChartType( ChartType type );
     void setChartSubType( ChartSubtype subType );

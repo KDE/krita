@@ -75,11 +75,11 @@ private slots:
     void setShowFooter( bool show );
 
     // Datasets
-    void setDataSetXDataRegion( DataSet *dataSet, const QString &region );
-    void setDataSetYDataRegion( DataSet *dataSet, const QString &region );
-    void setDataSetCustomDataRegion( DataSet *dataSet, const QString &region );
-    void setDataSetLabelDataRegion( DataSet *dataSet, const QString &region );
-    void setDataSetCategoryDataRegion( DataSet *dataSet, const QString &region );
+    void setDataSetXDataRegion( DataSet *dataSet, const CellRegion &region );
+    void setDataSetYDataRegion( DataSet *dataSet, const CellRegion &region );
+    void setDataSetCustomDataRegion( DataSet *dataSet, const CellRegion &region );
+    void setDataSetLabelDataRegion( DataSet *dataSet, const CellRegion &region );
+    void setDataSetCategoryDataRegion( DataSet *dataSet, const CellRegion &region );
     
     void setDataSetChartType( DataSet *dataSet, ChartType type );
     void setDataSetChartSubType( DataSet *dataSet, ChartSubtype subType );

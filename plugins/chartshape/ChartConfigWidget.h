@@ -124,11 +124,11 @@ signals:
     void showVerticalLinesChanged( bool b );
     void showHorizontalLinesChanged( bool b );
     
-    void dataSetXDataRegionChanged( DataSet *dataSet, const QString &region );
-    void dataSetYDataRegionChanged( DataSet *dataSet, const QString &region );
-    void dataSetCustomDataRegionChanged( DataSet *dataSet, const QString &region );
-    void dataSetCategoryDataRegionChanged( DataSet *dataSet, const QString &region );
-    void dataSetLabelDataRegionChanged( DataSet *dataSet, const QString &region );
+    void dataSetXDataRegionChanged( DataSet *dataSet, const CellRegion &region );
+    void dataSetYDataRegionChanged( DataSet *dataSet, const CellRegion &region );
+    void dataSetCustomDataRegionChanged( DataSet *dataSet, const CellRegion &region );
+    void dataSetCategoryDataRegionChanged( DataSet *dataSet, const CellRegion &region );
+    void dataSetLabelDataRegionChanged( DataSet *dataSet, const CellRegion &region );
     
     void datasetColorChanged( DataSet *dataSet, const QColor& color );
     void datasetShowValuesChanged( DataSet *dataSet, bool b );

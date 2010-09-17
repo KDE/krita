@@ -193,23 +193,11 @@ public:
     CellRegion labelDataRegion() const;
     // TODO: Region for custom colors
 
-    QString xDataRegionString() const;
-    QString yDataRegionString() const;
-    QString customDataRegionString() const;
-    QString categoryDataRegionString() const;
-    QString labelDataRegionString() const;
-
     void setXDataRegion( const CellRegion &region );
     void setYDataRegion( const CellRegion &region );
     void setCustomDataRegion( const CellRegion &region );
     void setCategoryDataRegion( const CellRegion &region );
     void setLabelDataRegion( const CellRegion &region );
-
-    void setXDataRegionString( const QString &region );
-    void setYDataRegionString( const QString &region );
-    void setCustomDataRegionString( const QString &region );
-    void setCategoryDataRegionString( const QString &region );
-    void setLabelDataRegionString( const QString &region );
 
     int size() const;
     int dimension() const;
@@ -227,6 +215,7 @@ public:
     void labelDataChanged() const;
     void categoryDataChanged( int start, int end ) const;
 
+    // FIXME: The parameter 'region' is unused in the methods below
     void yDataChanged( const QRect &region ) const;
     void xDataChanged( const QRect &region ) const;
     void customDataChanged( const QRect &region ) const;

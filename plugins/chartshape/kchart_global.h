@@ -43,6 +43,10 @@ enum ChartType {
 };
 const int NUM_CHARTTYPES = int ( LastChartType );
 
+bool isPolar( ChartType type );
+
+bool isCartesian( ChartType type );
+
 
 // Chart subtypes, applicable to Bar, Line, Area, and Radar
 enum ChartSubtype {

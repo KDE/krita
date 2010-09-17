@@ -63,6 +63,7 @@
 #include <KDChartThreeDPieAttributes>
 #include <KDChartThreeDLineAttributes>
 #include <KDChartDataValueAttributes>
+#include <KDChartBackgroundAttributes>
 
 // KChart
 #include "PlotArea.h"
@@ -73,7 +74,7 @@
 #include "ChartProxyModel.h"
 #include "TextLabelDummy.h"
 #include "Layout.h"
-#include <KDChartBackgroundAttributes>
+#include "OdfLoadingHelper.h"
 
 
 using namespace KChart;
@@ -176,7 +177,7 @@ public:
     ChartType     plotAreaChartType;
     ChartSubtype  plotAreaChartSubType;
 
-    QString categoryDataRegionString;
+    CellRegion categoryDataRegion;
 
     // If KDChart::LineDiagram::centerDataPoints() property is set to true,
     // the data points drawn in a line (i.e., also an area) diagram start at
@@ -1149,7 +1150,7 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
     d->dataSets.append( dataSet );
 
     if ( dimension() == XAxisDimension ) {
-        dataSet->setCategoryDataRegionString( d->categoryDataRegionString );
+        dataSet->setCategoryDataRegion( d->categoryDataRegion );
     }
     else if ( dimension() == YAxisDimension ) {
         dataSet->setAttachedAxis( this );
@@ -1186,7 +1187,7 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
     d->dataSets.removeAll( dataSet );
 
     if ( dimension() == XAxisDimension ) {
-        dataSet->setCategoryDataRegionString( "" );
+        dataSet->setCategoryDataRegion( CellRegion() );
     }
     else if ( dimension() == YAxisDimension ) {
         ChartType chartType = dataSet->chartType();
@@ -1443,23 +1444,25 @@ Qt::Orientation Axis::orientation()
     return Qt::Vertical;
 }
 
-QString Axis::categoryDataRegionString() const
+CellRegion Axis::categoryDataRegion() const
 {
-    return d->categoryDataRegionString;
+    return d->categoryDataRegion;
 }
 
-void Axis::setCategoryDataRegionString( const QString &region )
+void Axis::setCategoryDataRegion( const CellRegion &region )
 {
-    d->categoryDataRegionString = region;
+    d->categoryDataRegion = region;
 
     foreach( DataSet *dataSet, d->dataSets )
-        dataSet->setCategoryDataRegionString( region );
+        dataSet->setCategoryDataRegion( region );
 }
 
 bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context )
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
+
+    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
 
     d->title->setVisible( false );
     
@@ -1553,7 +1556,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
             }
             else if ( n.localName() == "categories" ) {
                 if ( n.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
-                    setCategoryDataRegionString( n.attributeNS( KoXmlNS::table, "cell-range-address" ) );
+                    setCategoryDataRegion( CellRegion( helper->tableSource, n.attributeNS( KoXmlNS::table, "cell-range-address" ) ) );
             }
         }
 

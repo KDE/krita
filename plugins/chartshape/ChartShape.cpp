@@ -103,6 +103,8 @@
 #include "ChartDocument.h"
 #include "ChartTableModel.h"
 #include "Layout.h"
+#include "TableSource.h"
+#include "OdfLoadingHelper.h"
 
 
 // Define the protocol used here for embedded documents' URL
@@ -255,8 +257,11 @@ public:
     PlotArea  *plotArea;
 
     // Data
-    QAbstractItemModel  *internalModel; // The actual data
-    ChartProxyModel     *proxyModel;	// What's presented to KDChart
+    ChartProxyModel     *proxyModel;	 /// What's presented to KDChart
+    QAbstractItemModel  *internalModel;
+    TableSource          tableSource;
+
+    bool embedded; /// @see isEmbedded()
 
     ChartDocument *document;
 
@@ -268,6 +273,7 @@ public:
 
 ChartShape::Private::Private( ChartShape *shape )
     : resourceManager(0)
+    , internalModel( 0 )
 {
     // Register the owner.
     this->shape = shape;
@@ -280,8 +286,10 @@ ChartShape::Private::Private( ChartShape *shape )
     plotArea = 0;
 
     // Data
-    internalModel = 0;
     proxyModel    = 0;
+
+    // If not explicitly set otherwise, this chart is not embedded.
+    embedded = false;
 
     document = 0;
 }
@@ -366,7 +374,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     setShapeId( ChartShapeId );
 
     // Instantiated all children first
-    d->proxyModel = new ChartProxyModel();
+    d->proxyModel = new ChartProxyModel( &d->tableSource );
 
     d->plotArea = new PlotArea( this );
     d->document = new ChartDocument( this );
@@ -504,20 +512,10 @@ ChartShape::~ChartShape()
     delete d->plotArea;
 
     delete d->proxyModel;
-    delete d->internalModel;    // Ok to call even when 0.
 
     delete d->document;
 
     delete d;
-}
-
-
-QAbstractItemModel *ChartShape::model() const
-{
-    // Can't return d->internalModel because the data may come from
-    // the outside, e.g. a spreadsheet.  We only use d->internalModel
-    // for a model that we own ourselves.
-    return d->proxyModel->sourceModel();
 }
 
 ChartProxyModel *ChartShape::proxyModel() const
@@ -606,43 +604,25 @@ void ChartShape::showFooter(bool doShow)
     d->showLabel( d->footer, doShow );
 }
 
-void ChartShape::setModel( QAbstractItemModel *model,
-                           bool takeOwnershipOfModel )
+QAbstractItemModel *ChartShape::internalModel() const
 {
-    Q_ASSERT( model );
-    //kDebug(35001) << "Setting" << model << "as chart model.";
-
-    // Only do something if we are not already using the new model.
-    if ( model == d->internalModel )
-        return;
-
-    // If we already have an old internal model, delete it first.
-    if ( d->internalModel ) {
-        delete d->internalModel;
-    }
-
-    d->internalModel = ( takeOwnershipOfModel ? model : 0 );
-
-    d->proxyModel->setSourceModel( model );
-
-    requestRepaint();
+    return d->internalModel;
 }
 
-void ChartShape::setModel( QAbstractItemModel *model,
-                           const QVector<QRect> &selection )
+void ChartShape::setInternalModel( QAbstractItemModel *model )
 {
-    Q_ASSERT( model );
-    kDebug(35001) << "Setting" << model << "as chart model.";
-    kDebug(35001) << "Selection:" << selection;
+    Q_ASSERT( !d->internalModel );
+    d->internalModel = model;
+}
 
-    d->proxyModel->setSourceModel( model, selection );
+TableSource *ChartShape::tableSource() const
+{
+    return &d->tableSource;
+}
 
-    if ( d->internalModel ) {
-        delete d->internalModel;
-        d->internalModel = 0;
-    }
-
-    requestRepaint();
+bool ChartShape::isEmbedded() const
+{
+    return d->embedded;
 }
 
 bool ChartShape::addAxis( Axis *axis )
@@ -680,24 +660,24 @@ bool ChartShape::isThreeD() const
     return d->plotArea->isThreeD();
 }
 
-void ChartShape::setFirstRowIsLabel( bool isLabel )
+void ChartShape::setSheetAccessModel( QAbstractItemModel *model )
 {
-    d->proxyModel->setFirstRowIsLabel( isLabel );
-
-    requestRepaint();
+    d->tableSource.setSheetAccessModel( model );
 }
 
-void ChartShape::setFirstColumnIsLabel( bool isLabel )
+void ChartShape::reset( const QString &region,
+                        bool firstRowIsLabel,
+                        bool firstColumnIsLabel,
+                        Qt::Orientation dataDirection )
 {
-    d->proxyModel->setFirstColumnIsLabel( isLabel );
-
-    requestRepaint();
-}
-
-void ChartShape::setDataDirection( Qt::Orientation orientation )
-{
-    Q_ASSERT( d->proxyModel );
-    d->proxyModel->setDataDirection( orientation );
+    qDebug() << "RESETTING FROM:" << region;
+    // This method is provided via KoChartInterface, which is
+    // used by embedding applications.
+    d->embedded = true;
+    d->proxyModel->setFirstRowIsLabel( firstRowIsLabel );
+    d->proxyModel->setFirstColumnIsLabel( firstColumnIsLabel );
+    d->proxyModel->setDataDirection( dataDirection );
+    d->proxyModel->reset( CellRegion( &d->tableSource, region ) );
 }
 
 void ChartShape::setChartType( ChartType type )
@@ -910,17 +890,10 @@ bool ChartShape::loadOdf( const KoXmlElement &element,
     // and *before* we delete existing axes.
     proxyModel()->invalidateDataSets();
 
-    // When loading from ODF, all data sets are added explicitly.
-    bool autoCreation = proxyModel()->automaticDataSetCreation();
-    proxyModel()->setAutomaticDataSetCreation( false );
-
     // Load common attributes of (frame) shapes.  If you change here,
     // don't forget to also change in saveOdf().
     loadOdfAttributes( element, context, OdfAllAttributes );
     bool result = loadOdfFrame( element, context );
-
-    // Restore previous setting
-    proxyModel()->setAutomaticDataSetCreation( autoCreation );
 
     return result;
 }
@@ -942,6 +915,12 @@ bool ChartShape::loadOdfFrameElement( const KoXmlElement &element,
 bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
                                   KoShapeLoadingContext &context )
 {
+    // The shared data will automatically be deleted in the destructor
+    // of KoShapeLoadingContext
+    OdfLoadingHelper *helper = new OdfLoadingHelper;
+    helper->tableSource = &d->tableSource;
+    context.addSharedData( OdfLoadingHelperId, helper );
+
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
@@ -1094,10 +1073,19 @@ bool ChartShape::loadOdfData( const KoXmlElement &tableElement,
         return true;
 
     // FIXME: Make model->loadOdf() return a bool, and use it here.
-    ChartTableModel *model = new ChartTableModel;
-    model->loadOdf( tableElement, context );
+    // Create a table with data from document, add it as table source
+    // and reset the proxy only with data from this new table.
+    ChartTableModel *internalModel = new ChartTableModel;
+    d->internalModel = internalModel;
+    internalModel->loadOdf( tableElement, context );
+    int rows = internalModel->rowCount();
+    int cols = internalModel->columnCount();
 
-    setModel( model, true );
+    QString tableName = tableElement.attributeNS( KoXmlNS::table, "name" );
+    Table *table = d->tableSource.add( tableName, internalModel );
+    // TODO: d->tableSource.setAvoidNameClash( tableName )
+    CellRegion region( table, QRect( 1, 1, rows, cols ) );
+    d->proxyModel->reset( region );
 
     return true;
 }
@@ -1176,12 +1164,15 @@ void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
 {
     Q_UNUSED( mainStyles );
 
+    // FIXME: Move this method to a sane place
+    QAbstractItemModel *internalModel = d->internalModel;
+
     // Only save the data if we actually have some.
-    if ( !d->internalModel )
+    if ( !internalModel )
         return;
 
-    const int cols = d->internalModel->columnCount();
-    const int rows = d->internalModel->rowCount();
+    const int cols = internalModel->columnCount();
+    const int rows = internalModel->rowCount();
 
     bodyWriter.startElement( "table:table" );
     bodyWriter.addAttribute( "table:name", "local-table" );
@@ -1220,9 +1211,9 @@ void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
     for ( int row = 0; row < rows ; ++row ) {
         bodyWriter.startElement( "table:table-row" );
         for ( int col = 0; col < cols; ++col ) {
-            //QVariant value( d->internalModel.cellVal( row, col ) );
-            QModelIndex  index = d->internalModel->index( row, col );
-            QVariant     value = d->internalModel->data( index );
+            //QVariant value( internalModel.cellVal( row, col ) );
+            QModelIndex  index = internalModel->index( row, col );
+            QVariant     value = internalModel->data( index );
 
             QString  valType;
             QString  valStr;

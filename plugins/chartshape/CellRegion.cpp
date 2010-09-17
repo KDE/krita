@@ -112,30 +112,34 @@ CellRegion::CellRegion( TableSource *source, const QString& region )
     QString searchStr = QString( region ).remove( "$" );
     QRegExp regEx;
 
-    const bool isPoint = !region.contains( ':' );
-    if ( isPoint )
-        regEx = QRegExp( "(|.*\\.)([A-Z]+)([0-9]+)" );
-    else // support range-notations like Sheet1.D2:Sheet1.F2 Sheet1.D2:F2 D2:F2
-        regEx = QRegExp ( "(|.*\\.)([A-Z]+)([0-9]+)\\:(|.*\\.)([A-Z]+)([0-9]+)" );
+    QStringList regionList = searchStr.split( ";" );
+    foreach( QString region, regionList ) {
+        const bool isPoint = !region.contains( ':' );
+        if ( isPoint )
+            regEx = QRegExp( "(|.*\\.)([A-Z]+)([0-9]+)" );
+        else // support range-notations like Sheet1.D2:Sheet1.F2 Sheet1.D2:F2 D2:F2
+            regEx = QRegExp ( "(|.*\\.)([A-Z]+)([0-9]+)\\:(|.*\\.)([A-Z]+)([0-9]+)" );
 
-    // Check if region string is valid (e.g. not empty)
-    if ( regEx.indexIn( searchStr ) >= 0 ) {
-        // It is possible for a cell-range-address as defined in ODF to contain
-        // refernces to cells of more than one sheet. This, however, we ignore
-        // here. We do not support more than one table in a cell region.
-        // Also we do not support regions spanned over different sheets. For us
-        // everything is either on no sheet or on the same sheet.
-        QString sheetName = regEx.cap( 1 );
-        if ( sheetName.endsWith( "." ) )
-            sheetName = sheetName.left( sheetName.length() - 1 );
-        d->table = source->get( sheetName );
+        // Check if region string is valid (e.g. not empty)
+        if ( regEx.indexIn( region ) >= 0 ) {
+            // It is possible for a cell-range-address as defined in ODF to contain
+            // refernces to cells of more than one sheet. This, however, we ignore
+            // here. We do not support more than one table in a cell region.
+            // Also we do not support regions spanned over different sheets. For us
+            // everything is either on no sheet or on the same sheet.
+            QString sheetName = regEx.cap( 1 );
+            if ( sheetName.endsWith( "." ) )
+                sheetName = sheetName.left( sheetName.length() - 1 );
+            // TODO: Support for multiple tables in one region
+            d->table = source->get( sheetName );
 
-        QPoint topLeft( rangeStringToInt( regEx.cap(2) ), regEx.cap(3).toInt() );
-        if ( isPoint ) {
-            d->rects.append( QRect( topLeft, QSize( 1, 1 ) ) );
-        } else {
-            QPoint bottomRight( rangeStringToInt( regEx.cap(5) ), regEx.cap(6).toInt() );
-            d->rects.append( QRect( topLeft, bottomRight ) );
+            QPoint topLeft( rangeStringToInt( regEx.cap(2) ), regEx.cap(3).toInt() );
+            if ( isPoint ) {
+                d->rects.append( QRect( topLeft, QSize( 1, 1 ) ) );
+            } else {
+                QPoint bottomRight( rangeStringToInt( regEx.cap(5) ), regEx.cap(6).toInt() );
+                d->rects.append( QRect( topLeft, bottomRight ) );
+            }
         }
     }
 

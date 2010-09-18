@@ -280,6 +280,8 @@ Axis::Private::~Private()
 
     delete kdGanttDiagram;
     delete kdGanttDiagramModel;
+
+    delete kdAxis;
 }
 
 void Axis::Private::registerDiagram( KDChart::AbstractDiagram *diagram )

@@ -183,6 +183,9 @@ PlotArea::Private::~Private()
         delete axis;
     delete kdPlane;
     delete kdChart;
+    delete wall;
+    delete floor;
+    delete threeDScene;
 }
 
 void PlotArea::Private::initAxes()

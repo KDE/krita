@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Preset Docker
+Comment=Docker for selecting presets
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritapresetdocker
+X-Krita-Version=3

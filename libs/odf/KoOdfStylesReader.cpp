@@ -64,6 +64,8 @@ KoOdfStylesReader::~KoOdfStylesReader()
         qDeleteAll(d->contentAutoStyles[family]);
     foreach(const QString& family, d->stylesAutoStyles.keys())
         qDeleteAll(d->stylesAutoStyles[family]);
+    foreach(const QString& name, d->dataFormats.keys())
+        delete d->dataFormats[name].second;
     qDeleteAll(d->defaultStyles);
     qDeleteAll(d->styles);
     qDeleteAll(d->masterPages);
@@ -242,7 +244,7 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
                    || localName == "date-style"
                    || localName == "time-style")) {
         QPair<QString, KoOdfNumberStyles::NumericStyleFormat> numberStyle = KoOdfNumberStyles::loadOdfNumberStyle(e);
-        d->dataFormats.insert(numberStyle.first, numberStyle.second);
+        d->dataFormats.insert(numberStyle.first, qMakePair(numberStyle.second, new KoXmlElement(e)));
     }
 }
 

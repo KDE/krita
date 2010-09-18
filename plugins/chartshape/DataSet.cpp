@@ -1241,12 +1241,9 @@ void DataSet::saveOdf( KoShapeSavingContext &context ) const
     const QString styleName = mainStyles.insert( style, "ch" );
     bodyWriter.addAttribute( "chart:style-name", styleName );
 
-    // TODO: Save external data sources also
-    const QString prefix( "local-table." );
-
     // Save cell regions
-    bodyWriter.addAttribute( "chart:values-cell-range-address", prefix + yDataRegion().toString() );
-    bodyWriter.addAttribute( "chart:label-cell-address", prefix + labelDataRegion().toString() );
+    bodyWriter.addAttribute( "chart:values-cell-range-address", yDataRegion().toString() );
+    bodyWriter.addAttribute( "chart:label-cell-address", labelDataRegion().toString() );
 
     bodyWriter.endElement(); // chart:series
 }

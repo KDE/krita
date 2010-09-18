@@ -51,7 +51,9 @@ HairyBrush::HairyBrush()
 
 HairyBrush::~HairyBrush()
 {
-
+    delete m_transfo;
+    qDeleteAll(m_bristles.begin(), m_bristles.end());
+    m_bristles.clear();
 }
 
 

@@ -58,6 +58,7 @@ SprayBrush::SprayBrush()
 SprayBrush::~SprayBrush()
 {
     delete m_painter;
+    delete m_transfo;
     delete m_rand;
 }
 

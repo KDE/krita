@@ -326,6 +326,11 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     Table *table = region.table();
     Q_ASSERT( table );
     QAbstractItemModel *model = table->model();
+    // This means the table the region lies in has been removed, but nobody
+    // has changed the region in the meantime. That is a perfectly valid
+    // scenario, so just return invalid data.
+    if ( !model )
+        return QVariant();
 
     // FIXME: Why not use this immediately if true?
     const bool verticalHeaderData   = dataPoint.x() == 0;

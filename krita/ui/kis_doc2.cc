@@ -36,6 +36,7 @@
 #include <QTimer>
 
 // KDE
+#include <krun.h>
 #include <kimageio.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -44,6 +45,7 @@
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <KUndoStack>
+#include <kstandarddirs.h>
 
 // KOffice
 #include <KoApplication.h>
@@ -144,13 +146,14 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
         : KoDocument(parentWidget, parent, singleViewMode)
         , m_d(new KisDocPrivate())
 {
-
+    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> createing KISDOC!";
     setComponentData(KisFactory2::componentData(), false);
     setTemplateType("krita_template");
     init();
     connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     undoStack()->setUndoLimit(KisConfig().undoStackLimit());
     setBackupFile(KisConfig().backupFile());
+
 }
 
 KisDoc2::~KisDoc2()
@@ -158,7 +161,7 @@ KisDoc2::~KisDoc2()
     // Despite being QObject they needs to be deleted before the image
     delete m_d->shapeController;
     delete m_d->nodeModel;
-    
+
     // The following line trigger the deletion of the image
     m_d->image.clear();
 
@@ -439,6 +442,15 @@ void KisDoc2::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
     }
     else {
         KoDocument::showStartUpWidget(parent, alwaysShow);
+        KisConfig cfg;
+        if (cfg.firstRun()) {
+            QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
+            qDebug() << "fname" << fname;
+            if (!fname.isEmpty()) {
+                openUrl(fname);
+            }
+            cfg.setFirstRun(false);
+        }
     }
 }
 

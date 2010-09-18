@@ -50,7 +50,7 @@ public:
 
     double defImageResolution() const;
     void defImageResolution(double res);
-    
+
     /**
      * @return the id of the default color model used for creating new images.
      */
@@ -174,7 +174,7 @@ public:
 
     QColor canvasBorderColor();
     void setCanvasBorderColor(const QColor &color);
-    
+
     bool antialiasCurves();
     void setAntialiasCurves(bool v);
 
@@ -220,13 +220,13 @@ public:
 
     bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
-    
+
     bool showOutlineWhilePainting();
     void setShowOutlineWhilePainting(bool showOutlineWhilePainting);
 
     int autoSaveInterval();
     void setAutoSaveInterval(int seconds);
-    
+
     bool backupFile();
     void setBackupFile(bool backupFile);
 
@@ -240,7 +240,7 @@ public:
 
     bool showFilterGalleryLayerMaskDialog();
     void setShowFilterGalleryLayerMaskDialog(bool showFilterGallery);
-    
+
     QString defaultPainterlyColorModelId();
     void setDefaultPainterlyColorModelId(const QString& def);
 
@@ -253,7 +253,7 @@ public:
 
     bool paintopPopupDetached() const;
     void setPaintopPopupDetached(bool detached);
-    
+
     QString pressureTabletCurve() const;
     void setPressureTabletCurve(const QString& curveString) const;
 
@@ -262,9 +262,14 @@ public:
 
     qreal vastScrolling() const;
     void setVastScrolling(const qreal factor) const;
-    
+
     int presetChooserViewMode() const;
     void setPresetChooserViewMode(const int mode);
+
+    bool firstRun() const;
+    void setFirstRun(const bool firstRun) const;
+
+
 
 private:
     KisConfig(const KisConfig&);

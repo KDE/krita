@@ -754,3 +754,13 @@ void KisConfig::setPresetChooserViewMode(const int mode)
     m_cfg.writeEntry("presetChooserViewMode", mode);
 }
 
+
+bool KisConfig::firstRun() const
+{
+    return m_cfg.readEntry("firstRun", true);
+}
+
+void KisConfig::setFirstRun(const bool first) const
+{
+    m_cfg.writeEntry("firstRun", first);
+}

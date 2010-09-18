@@ -23,14 +23,13 @@
 
 // Qt
 #include <QObject>
+#include <QAbstractItemModel>
 
 // KChart
 #include "ChartShape.h"
 
 
 class QString;
-class QAbstractItemModel;
-class QModelIndex;
 
 
 namespace KChart {

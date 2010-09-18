@@ -3,5 +3,7 @@ Type=Link
 URL=.source/Manga-JpTemplate.kra
 Icon=template_gray_empty
 Name=Manga template
+Name[x-test]=xxManga templatexx
 Comment=template for Japanese Manga-style comics
+Comment[x-test]=xxtemplate for Japanese Manga-style comicsxx
 X-Krita-Version=2

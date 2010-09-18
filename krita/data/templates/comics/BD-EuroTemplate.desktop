@@ -3,5 +3,7 @@ Type=Link
 URL=.source/BD-EuroTemplate.kra
 Icon=template_gray_empty
 Name=European BD template
+Name[x-test]=xxEuropean BD templatexx
 Comment=template for European BD-style comics
+Comment[x-test]=xxtemplate for European BD-style comicsxx
 X-Krita-Version=2

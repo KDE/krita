@@ -3,5 +3,7 @@ Type=Link
 URL=.source/Comics-USTemplate.kra
 Icon=template_gray_empty
 Name=US-style comics template
+Name[x-test]=xxUS-style comics templatexx
 Comment=template for US-style comics
+Comment[x-test]=xxtemplate for US-style comicsxx
 X-Krita-Version=2

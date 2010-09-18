@@ -22,6 +22,7 @@
 #include <QAbstractItemModel>
 #include <QPointer>
 #include <QMap>
+#include <QSet>
 #include <Qt>
 
 using namespace KChart;
@@ -38,6 +39,7 @@ class TableSource::Private
 {
 public:
     Private( TableSource *parent );
+    ~Private();
 
     /**
      * Called if a column in the SAM (Sheet Access Model) is changed that
@@ -62,12 +64,23 @@ public:
     QMap<QString, Table*> tablesByName;
     /// Redundant (but complete!) list of tables, now with model as UID
     QMap<const QAbstractItemModel*, Table*> tablesByModel;
+
+    /// Set of Table instances owned by this TableSource.
+    /// This isn't equivalent to Tables in tablesByName or tablesByModel
+    /// as a Table isn't deleted when it is removed from this source (the
+    /// model pointer is just set to null).
+    QSet<Table*> tables;
 };
 
 TableSource::Private::Private( TableSource *parent )
     : q( parent )
     , sheetAccessModel( 0 )
 {
+}
+
+TableSource::Private::~Private()
+{
+    qDeleteAll( tablesByName.values() );
 }
 
 /**
@@ -99,6 +112,11 @@ void TableSource::Private::updateEmptySamColumn( int col )
 TableSource::TableSource()
     : d( new Private( this ) )
 {
+}
+
+TableSource::~TableSource()
+{
+    delete d;
 }
 
 Table *TableSource::get( const QString &tableName ) const
@@ -144,6 +162,7 @@ Table *TableSource::add( const QString &name, QAbstractItemModel *model )
     Table *table = new Table( name, model );
     d->tablesByName.insert( name, table );
     d->tablesByModel.insert( model, table );
+    d->tables.insert( table );
 
     emit tableAdded( table );
 
@@ -158,8 +177,10 @@ void TableSource::remove( const QString &name )
     if ( table ) {
         d->tablesByName.remove( table->m_name );
         d->tablesByModel.remove( table->m_model );
+        d->tables.remove( table );
         emit tableRemoved( table );
-        delete table;
+        // Don't delete the Table instance, it might still be in use.
+        table->m_model = 0;
     }
 }
 

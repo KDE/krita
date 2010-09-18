@@ -54,6 +54,7 @@ class CHARTSHAPELIB_EXPORT TableSource : public QObject
 
 public:
     TableSource();
+    ~TableSource();
 
     /**
      * Returns the table (model/name pair) associated with @a tableName.

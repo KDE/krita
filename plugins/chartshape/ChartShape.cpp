@@ -926,8 +926,11 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     if ( resourceManager()->hasResource( 75751149 ) ) { // duplicated from kspread
         QVariant var = resourceManager()->resource( 75751149 );
         sheetAccessModel = static_cast<QAbstractItemModel*>( var.value<void*>() );
-        if ( sheetAccessModel )
+        if ( sheetAccessModel ) {
+            // We're embedded in KSpread, which means KSpread provides the data
+            d->usesInternalModelOnly = false;
             d->tableSource.setSheetAccessModel( sheetAccessModel );
+        }
     }
 
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();

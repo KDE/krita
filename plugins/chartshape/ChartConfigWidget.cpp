@@ -431,7 +431,7 @@ void ChartConfigWidget::open( KoShape* shape )
 
 // NOTE: There's no single source table anymore, a KSpread workbook allows multiple to be used with a chart.
 //    KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>( d->shape->internalModel() );
-// NOTE: This is obsolete, ChartShape::isEmbedded() is now used instead.
+// NOTE: This is obsolete, ChartShape::usesInternalModelOnly() is now used instead.
 //    ChartTableModel *tableModel = qobject_cast<ChartTableModel*>( d->shape->model() );
 //    d->isExternalDataSource = ( spreadSheetModel != 0 && tableModel == 0 );
 
@@ -443,7 +443,7 @@ void ChartConfigWidget::open( KoShape* shape )
     //d->ui.legendTitle->setText( d->shape->legend()->title() );
 
     // Fill the data table
-    if ( d->shape->isEmbedded() ) {
+    if ( !d->shape->usesInternalModelOnly() ) {
  // FIXME: CellRegion itself together with a TableSource should now be used
  // to validate  the correctness of a table range address.
 #if 0

@@ -155,12 +155,16 @@ public:
     TableSource *tableSource() const;
 
     /**
-     * Returns true if this chart is embedded in another application and that application
-     * provides the data, otherwise false. This is useful for e.g. the UI's data editor:
-     * If embedded, it can display an "Edit Regions..." button, otherwise the usual
-     * "Edit Data...".
+     * Returns true if the chart has no external data sources.
+     *
+     * This method is used to differentiate between charts that are embedded
+     * into e.g. spreadsheets where these sheets provide the data, and
+     * applications that do not provide the data, but where the data is stored
+     * in an internal model in the chart document.
+     *
+     * For the first case, this method returns false, for the latter true.
      */
-    bool isEmbedded() const;
+    bool usesInternalModelOnly() const;
 
     bool addAxis( Axis *axis );
     bool removeAxis( Axis *axis );

@@ -261,7 +261,7 @@ public:
     QAbstractItemModel  *internalModel;
     TableSource          tableSource;
 
-    bool embedded; /// @see isEmbedded()
+    bool usesInternalModelOnly; /// @see usesInternalModelOnly()
 
     ChartDocument *document;
 
@@ -288,8 +288,8 @@ ChartShape::Private::Private( ChartShape *shape )
     // Data
     proxyModel    = 0;
 
-    // If not explicitly set otherwise, this chart is not embedded.
-    embedded = false;
+    // If not explicitly set otherwise, this chart provides its own data.
+    usesInternalModelOnly = true;
 
     document = 0;
 }
@@ -620,9 +620,9 @@ TableSource *ChartShape::tableSource() const
     return &d->tableSource;
 }
 
-bool ChartShape::isEmbedded() const
+bool ChartShape::usesInternalModelOnly() const
 {
-    return d->embedded;
+    return d->usesInternalModelOnly;
 }
 
 bool ChartShape::addAxis( Axis *axis )
@@ -673,7 +673,7 @@ void ChartShape::reset( const QString &region,
     qDebug() << "RESETTING FROM:" << region;
     // This method is provided via KoChartInterface, which is
     // used by embedding applications.
-    d->embedded = true;
+    d->usesInternalModelOnly = false;
     d->proxyModel->setFirstRowIsLabel( firstRowIsLabel );
     d->proxyModel->setFirstColumnIsLabel( firstColumnIsLabel );
     d->proxyModel->setDataDirection( dataDirection );

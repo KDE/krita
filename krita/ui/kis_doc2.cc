@@ -445,7 +445,6 @@ void KisDoc2::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
         KisConfig cfg;
         if (cfg.firstRun()) {
             QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
-            qDebug() << "fname" << fname;
             if (!fname.isEmpty()) {
                 openUrl(fname);
             }

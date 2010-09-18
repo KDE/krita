@@ -54,6 +54,7 @@
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
 #include <ktemporaryfile.h>
+#include <kactioncollection.h>
 
 #include <KoMainWindow.h>
 #include <KoSelection.h>
@@ -68,8 +69,7 @@
 #include <KoCompositeOp.h>
 #include <KoTemplateCreateDia.h>
 #include <KoCanvasControllerWidget.h>
-
-#include <kactioncollection.h>
+#include <KoDocumentEntry.h>
 
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
@@ -212,6 +212,10 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
     actionCollection()->addAction("createTemplate", m_d->createTemplate);
     connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
+
+    KAction *firstRun = new KAction( i18n( "Load Tutorial"), this);
+    actionCollection()->addAction("first_run", firstRun);
+    connect(firstRun, SIGNAL(triggered()), this, SLOT(slotFirstRun()));
 
     setComponentData(KisFactory2::componentData(), false);
 
@@ -836,6 +840,26 @@ void KisView2::enableControls()
     foreach(QObject* child, m_d->controlFrame->paintopBox()->children()) {
         child->removeEventFilter(&m_d->blockingEventFilter);
     }
+}
+
+void KisView2::slotFirstRun()
+{
+    QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
+    if (!fname.isEmpty()) {
+        KoDocumentEntry entry = KoDocumentEntry(KoDocument::readNativeService());
+        QString errorMsg;
+        KoDocument* doc = entry.createDoc(&errorMsg);
+        if (!doc) return;
+        KoMainWindow *shell = new KoMainWindow(doc->componentData());
+        shell->show();
+        QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
+        // for initDoc to fill in the recent docs list
+        // and for KoDocument::slotStarted
+        doc->addShell(shell);
+        doc->showStartUpWidget(shell);
+        doc->openUrl(fname);
+    }
+
 }
 
 #include "kis_view2.moc"

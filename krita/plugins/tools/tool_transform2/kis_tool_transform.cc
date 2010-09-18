@@ -1903,7 +1903,7 @@ void KisToolTransform::transform()
 
 void KisToolTransform::applyTransform()
 {
-    if (!image() || !currentNode()->paintDevice())
+    if (!image() || !currentNode()->paintDevice() || currentNode()->systemLocked())
         return;
 
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);

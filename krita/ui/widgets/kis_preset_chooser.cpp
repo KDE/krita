@@ -210,5 +210,12 @@ void KisPresetChooser::setViewMode(KisPresetChooser::ViewMode mode)
     }
 }
 
+void KisPresetChooser::resizeEvent(QResizeEvent* event)
+{
+    QWidget::resizeEvent(event);
+    m_chooser->setColumnCount(m_chooser->width()/50);
+}
+
+
 #include "kis_preset_chooser.moc"
 

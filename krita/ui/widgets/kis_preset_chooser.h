@@ -60,6 +60,9 @@ public slots:
     
     void setShowAll(bool show);
 
+protected:
+    virtual void resizeEvent(QResizeEvent* event);
+    
 private:
     KoResourceItemChooser *m_chooser;
     KisPresetProxyAdapter *m_presetProxy;

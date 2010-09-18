@@ -179,6 +179,8 @@ PlotArea::Private::Private( PlotArea *q, ChartShape *parent )
 
 PlotArea::Private::~Private()
 {
+    foreach( Axis *axis, axes )
+        delete axis;
     delete kdPlane;
     delete kdChart;
 }

@@ -248,75 +248,38 @@ Axis::Private::~Private()
 {
     Q_ASSERT( plotArea );
 
-    if ( kdPlane ) {
-        plotArea->kdChart()->takeCoordinatePlane( kdPlane );
-        delete kdPlane;
-    }
+    delete kdPlane;
+    delete kdPolarPlane;
 
-    if ( kdPolarPlane ) {
-        plotArea->kdChart()->takeCoordinatePlane( kdPolarPlane );
-        delete kdPolarPlane;
-    }
+    delete kdBarDiagram;
+    delete kdBarDiagramModel;
 
-    if ( kdBarDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdBarDiagram );
-        delete kdBarDiagram;
-        delete kdBarDiagramModel;
-    }
+    delete kdAreaDiagram;
+    delete kdAreaDiagramModel;
 
-    if ( kdAreaDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdAreaDiagram );
-        delete kdAreaDiagram;
-        delete kdAreaDiagramModel;
-    }
+    delete kdCircleDiagram;
+    delete kdCircleDiagramModel;
 
-    if ( kdCircleDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdCircleDiagram );
-        delete kdCircleDiagram;
-        delete kdCircleDiagramModel;
-    }
+    delete kdRingDiagram;
+    delete kdRingDiagramModel;
 
-    if ( kdRingDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdRingDiagram );
-        delete kdRingDiagram;
-        delete kdRingDiagramModel;
-    }
+    delete kdRadarDiagram;
+    delete kdRadarDiagramModel;
 
-    if ( kdRadarDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdRadarDiagram );
-        delete kdRadarDiagram;
-        delete kdRadarDiagramModel;
-    }
+    delete kdScatterDiagram;
+    delete kdScatterDiagramModel;
 
-    if ( kdScatterDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdScatterDiagram );
-        delete kdScatterDiagram;
-        delete kdScatterDiagramModel;
-    }
+    delete kdStockDiagram;
+    delete kdStockDiagramModel;
 
-    if ( kdStockDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdStockDiagram );
-        delete kdStockDiagram;
-        delete kdStockDiagramModel;
-    }
+    delete kdBubbleDiagram;
+    delete kdBubbleDiagramModel;
 
-    if ( kdBubbleDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdBubbleDiagram );
-        delete kdBubbleDiagram;
-        delete kdBubbleDiagramModel;
-    }
+    delete kdSurfaceDiagram;
+    delete kdSurfaceDiagramModel;
 
-    if ( kdSurfaceDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdSurfaceDiagram );
-        delete kdSurfaceDiagram;
-        delete kdSurfaceDiagramModel;
-    }
-
-    if ( kdGanttDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdGanttDiagram );
-        delete kdGanttDiagram;
-        delete kdGanttDiagramModel;
-    }
+    delete kdGanttDiagram;
+    delete kdGanttDiagramModel;
 }
 
 void Axis::Private::registerDiagram( KDChart::AbstractDiagram *diagram )

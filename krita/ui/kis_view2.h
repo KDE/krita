@@ -107,6 +107,8 @@ public:  // Krita specific interfaces
     /// Return the wrapper class around the statusbar
     KisStatusBar * statusBar() const;
 
+    KisPaintopBox* paintOpBox() const;
+
     /// create a new progress updater
     KoProgressUpdater* createProgressUpdater(KoProgressUpdater::Mode mode = KoProgressUpdater::Threaded);
 

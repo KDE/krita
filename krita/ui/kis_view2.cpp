@@ -246,15 +246,17 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->resourceProvider = new KisCanvasResourceProvider(this);
     m_d->resourceProvider->setResourceManager(m_d->canvas->resourceManager());
 
+    createManagers();
+    createActions();
+
+    m_d->controlFrame = new KisControlFrame(this);
+
     Q_ASSERT(m_d->canvasController);
     KoToolManager::instance()->addController(m_d->canvasController);
     KoToolManager::instance()->registerTools(actionCollection(), m_d->canvasController);
 
 
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
-
-    createManagers();
-    createActions();
 
     m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
     m_d->mirrorCanvas->setChecked(false);
@@ -294,7 +296,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->resourceProvider, SLOT(slotNodeActivated(KisNodeSP)));
 
-    m_d->controlFrame = new KisControlFrame(this);
 
     connect(layerManager(), SIGNAL(currentColorSpaceChanged(const KoColorSpace*)),
             m_d->controlFrame->paintopBox(), SLOT(colorSpaceChanged(const KoColorSpace*)));
@@ -456,6 +457,11 @@ QWidget* KisView2::canvas() const
 KisStatusBar * KisView2::statusBar() const
 {
     return m_d->statusBar;
+}
+
+KisPaintopBox* KisView2::paintOpBox() const
+{
+    return m_d->controlFrame->paintopBox();
 }
 
 KoProgressUpdater* KisView2::createProgressUpdater(KoProgressUpdater::Mode mode)

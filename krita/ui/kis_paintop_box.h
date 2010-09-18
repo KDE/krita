@@ -87,6 +87,7 @@ public slots:
     void slotSaveActivePreset();
     void slotUpdatePreset();
     void slotSetupDefaultPreset();
+    void resourceSelected( KoResource * resource );
 
 private:
 
@@ -106,7 +107,6 @@ private:
 private slots:
 
     void updatePaintops();
-    void resourceSelected( KoResource * resource );
     void nodeChanged(const KisNodeSP node);
     void eraseModeToggled(bool checked);
     void updateCompositeOpComboBox();

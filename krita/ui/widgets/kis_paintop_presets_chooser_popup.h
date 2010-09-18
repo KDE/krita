@@ -22,10 +22,11 @@
 
 #include <QWidget>
 #include <KoID.h>
+#include <krita_export.h>
 
 class KoResource;
 
-class KisPaintOpPresetsChooserPopup : public QWidget
+class KRITAUI_EXPORT KisPaintOpPresetsChooserPopup : public QWidget
 {
     Q_OBJECT
 public:

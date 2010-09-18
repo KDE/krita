@@ -735,37 +735,8 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         proxyModel()->setFirstRowIsLabel( false );
         proxyModel()->setFirstColumnIsLabel( false );
     }
-    
-// NOTE: Not needed anymore. SheetAccessModel is now directly passed during initialization of chart in KSpread.
-// Also, all tables are now used simultaneously.
-#if 0
-    QAbstractItemModel *sheetAccessModel = 0;
-    if (d->shape->resourceManager()->hasResource(75751149)) { // duplicated from kspread
-        QVariant var = d->shape->resourceManager()->resource(75751149);
-        sheetAccessModel = static_cast<QAbstractItemModel*>(var.value<void*>());
-    }
-#endif
 
     setCellRangeAddress( cellRangeAddress );
-
-#if 0
-    if ( sheetAccessModel ) {
-        const QString sheetName = cellRangeAddress.sheetName();
-        int sheetIndex = 0;
-        // Find sheet that this cell range address is associated with
-        if ( !sheetName.isEmpty() ) {
-            while ( sheetIndex + 1 < sheetAccessModel->columnCount() &&
-                    sheetAccessModel->headerData( sheetIndex, Qt::Horizontal ) != sheetName )
-                sheetIndex++;
-        }
-        QPointer<QAbstractItemModel> sheet = sheetAccessModel->data( sheetAccessModel->index( 0, sheetIndex ) ).value< QPointer<QAbstractItemModel> >();
-
-        // If sheet can't be found, we'll stay with the back-up model loaded from the
-        // chart document.
-        if ( sheet )
-            d->shape->setModel( sheet.data() );
-    }
-#endif
     
     // Now, after the axes, load the datasets.
     // Note that this only contains properties of the datasets, the

@@ -175,6 +175,8 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
 
     connect(m_chooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
+            
+    m_mode = THUMBNAIL;
 }
 
 KisPresetChooser::~KisPresetChooser()
@@ -201,21 +203,26 @@ void KisPresetChooser::setShowAll(bool show)
 
 void KisPresetChooser::setViewMode(KisPresetChooser::ViewMode mode)
 {
-    if (mode == THUMBNAIL) {
-        m_chooser->setColumnCount(10);
+    m_mode = mode;
+    updateViewSettings();
+}
+
+void KisPresetChooser::resizeEvent(QResizeEvent* event)
+{
+    QWidget::resizeEvent(event);
+    updateViewSettings();
+}
+
+void KisPresetChooser::updateViewSettings()
+{
+    if (m_mode == THUMBNAIL) {
+        m_chooser->setColumnCount(m_chooser->width()/50);
         m_delegate->setShowText(false);
     } else {
         m_chooser->setColumnCount(1);
         m_delegate->setShowText(true);
     }
 }
-
-void KisPresetChooser::resizeEvent(QResizeEvent* event)
-{
-    QWidget::resizeEvent(event);
-    m_chooser->setColumnCount(m_chooser->width()/50);
-}
-
 
 #include "kis_preset_chooser.moc"
 

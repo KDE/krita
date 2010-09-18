@@ -63,10 +63,13 @@ public slots:
 protected:
     virtual void resizeEvent(QResizeEvent* event);
     
+    void updateViewSettings();
+    
 private:
     KoResourceItemChooser *m_chooser;
     KisPresetProxyAdapter *m_presetProxy;
     KisPresetDelegate* m_delegate;
+    ViewMode m_mode;
 };
 
 #endif // KIS_ITEM_CHOOSER_H_

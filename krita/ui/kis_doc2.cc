@@ -146,7 +146,6 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
         : KoDocument(parentWidget, parent, singleViewMode)
         , m_d(new KisDocPrivate())
 {
-    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> createing KISDOC!";
     setComponentData(KisFactory2::componentData(), false);
     setTemplateType("krita_template");
     init();

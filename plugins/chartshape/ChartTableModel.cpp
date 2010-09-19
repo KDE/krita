@@ -114,9 +114,6 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
         if ( n.localName() == "table-rows"
              || n.localName() == "table-header-rows" )
         {
-            const bool isHeader = n.localName() == "table-header-rows";
-            Q_UNUSED(isHeader);
-
             found = true;
 
             KoXmlElement  _n;
@@ -177,8 +174,7 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
                     }
 
                 } // foreach table:table-cell
-                if ( !isHeader )
-                    ++row;
+                ++row;
 
             } // foreach table:table-row
         }

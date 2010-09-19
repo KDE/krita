@@ -23,12 +23,14 @@
 #include <kis_image.h>
 
 #include <KoInputDevice.h>
+#include <KoCompositeOp.h>
 
 #include "kis_deform_paintop_settings_widget.h"
 #include "kis_deform_paintop_settings.h"
 #include "kis_deform_paintop.h"
 
 KisDeformPaintOpFactory::KisDeformPaintOpFactory()
+    : KisPaintOpFactory(QStringList(COMPOSITE_COPY))
 {
 }
 

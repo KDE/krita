@@ -37,21 +37,21 @@
 
 #include "kis_brush.h"
 
-KisHairyPaintOp::KisHairyPaintOp(const
-                               KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
+KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
         , m_settings(settings)
         , newStrokeFlag(true)
 
 {
+    Q_UNUSED(image)
     Q_ASSERT(settings);
 
     if (!settings->node()) {
         m_dev = 0;
     } else {
         m_dev = settings->node()->paintDevice();
-    } 
-    
+    }
+
     KisBrushOption brushOption;
     brushOption.readOptionSetting(settings);
     KisBrushSP brush = brushOption.brush();
@@ -61,13 +61,13 @@ KisHairyPaintOp::KisHairyPaintOp(const
     } else {
         brush->mask(dab, painter->paintColor(), 1.0, 1.0, 0.0);
     }
-    
+
     m_brush.fromDabWithDensity(dab, settings->getDouble(HAIRY_BRISTLE_DENSITY) * 0.01);
     m_brush.setInkColor(painter->paintColor());
-    
+
     loadSettings(settings);
     m_brush.setProperties( &m_properties );
-    
+
     m_rotationOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
@@ -80,7 +80,7 @@ void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
 {
     m_properties.inkAmount = settings->getInt(HAIRY_INK_AMOUNT);
     //TODO: wait for the transfer function with variable size
-    
+
     m_properties.inkDepletionCurve = settings->getCubicCurve(HAIRY_INK_DEPLETION_CURVE).floatTransfer(m_properties.inkAmount);
 
     m_properties.inkDepletionEnabled = settings->getBool(HAIRY_INK_DEPLETION_ENABLED);
@@ -124,14 +124,14 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
     } else {
         m_dab->clear();
     }
-    
+
     qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
     qreal rotation = m_rotationOption.apply(pi2);
     quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
 
     setCurrentScale(scale);
     setCurrentRotation(rotation);
-    
+
     m_brush.paintLine(m_dab, m_dev, pi1, pi2, scale * m_properties.scaleFactor, rotation);
 
     //QRect rc = m_dab->exactBounds();
@@ -142,6 +142,6 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());
     KisVector2D dragVec = end - start;
-    
+
     return KisDistanceInformation(0, dragVec.norm());
 }

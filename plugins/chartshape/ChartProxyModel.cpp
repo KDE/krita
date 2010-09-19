@@ -46,6 +46,7 @@
 #include "Axis.h"
 #include "DataSet.h"
 #include "TableSource.h"
+#include "OdfLoadingHelper.h"
 
 using namespace KChart;
 
@@ -345,24 +346,36 @@ void ChartProxyModel::saveOdf( KoShapeSavingContext &context ) const
 bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                                KoShapeLoadingContext &context )
 {
+    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
+    // If we exclusively use the chart's internal model then all data
+    // is taken from there and each data set is automatically assigned
+    // the rows it belongs to.
+    bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
+
     beginResetModel();
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
     invalidateDataSets();
 
-    QList<DataSet*> createdDataSets;
-    int loadedDataSetCount = 0;
-
     // A cell range for all data is optional.
     // If cell ranges are in addition specified for one or more of these
     // data series, they'll be overwritten by these values.
-    if ( element.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
+    // Note: In case ignoreCellRanges is true, ChartShape::loadOdf() has
+    // already made sure the proxy is reset with data from the internal model.
+    if ( !ignoreCellRanges &&
+         element.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
     {
         QString cellRangeAddress = element.attributeNS( KoXmlNS::table, "cell-range-address" );
-        // FIXME: Do we need to reset everything here? It may be enough to set the cell range address.
-        reset( CellRegion( d->tableSource, cellRangeAddress ) );
+        d->selection = CellRegion( d->tableSource, cellRangeAddress );
     }
+
+    // This is what we'll use as basis for the data sets we "produce" from ODF.
+    // This might be data sets that were "instantiated" from the internal
+    // table or from an arbitrary selection of other tables as specified
+    // in the PlotArea's table:cell-range-address attribute (parsed above).
+    QList<DataSet*> createdDataSets = createDataSetsFromRegion( d->removedDataSets );
+    int loadedDataSetCount = 0;
 
     KoXmlElement n;
     forEachElement ( n, element ) {

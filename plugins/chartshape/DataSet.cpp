@@ -329,6 +329,7 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     // This means the table the region lies in has been removed, but nobody
     // has changed the region in the meantime. That is a perfectly valid
     // scenario, so just return invalid data.
+    Q_ASSERT( model );
     if ( !model )
         return QVariant();
 
@@ -1117,6 +1118,10 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     KoStyleStack &styleStack = odfLoadingContext.styleStack();
 
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
+    // If we exclusively use the chart's internal model then all data
+    // is taken from there and each data set is automatically assigned
+    // the rows it belongs to. See ChartProxyModel::loadOdf()
+    bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
 
     {
         QBrush brush(Qt::NoBrush);
@@ -1147,7 +1152,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         while ( !cn.isNull() ){
             KoXmlElement elem = cn.toElement();
             const QString name = elem.tagName();
-            if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") ){
+            if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") && !ignoreCellRanges ) {
                 if ( maybeCompleteDataDefinition ){
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
                     setXDataRegion( CellRegion( helper->tableSource, region ) );
@@ -1165,7 +1170,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         }
     }
 
-    if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) ) {
+    if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) && !ignoreCellRanges ) {
         const QString regionString = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
         const CellRegion region( helper->tableSource, regionString );
         if ( !fullDataDefinition ){
@@ -1178,7 +1183,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         else
             setYDataRegion( region );
     }
-    if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) ) {
+    if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) && !ignoreCellRanges ) {
         const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
         setLabelDataRegion( CellRegion( helper->tableSource, region ) );
     }

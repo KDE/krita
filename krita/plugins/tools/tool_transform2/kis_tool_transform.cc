@@ -486,7 +486,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
             if (m_origSelectionImg != NULL)
                 m_scaledOrigSelectionImg = m_origSelectionImg->scaled(m_refSize.width() * m_origSelectionImg->width(), m_refSize.height() * m_origSelectionImg->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         }
-        if (m_optWidget && m_optWidget->hideDecorationsBox && m_optWidget->hideDecorationsBox->isChecked()) {
+        if (m_optWidget && m_optWidget->showDecorationsBox && !m_optWidget->showDecorationsBox->isChecked()) {
             if (m_imageTooBig)
                 return;
 
@@ -588,7 +588,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
             if (m_origSelectionImg != NULL)
                 m_scaledOrigSelectionImg = m_origSelectionImg->scaled(m_refSize.width() * m_origSelectionImg->width(), m_refSize.height() * m_origSelectionImg->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         }
-        if (m_optWidget && m_optWidget->hideDecorationsBox && !m_optWidget->hideDecorationsBox->isChecked()) {
+        if (m_optWidget && m_optWidget->showDecorationsBox && m_optWidget->showDecorationsBox->isChecked()) {
             gc.setOpacity(0.6);
             gc.drawImage(origtopleft, m_scaledOrigSelectionImg, QRectF(m_scaledOrigSelectionImg.rect()));
 
@@ -2286,7 +2286,7 @@ QWidget* KisToolTransform::createOptionWidget() {
     connect(m_optWidget->buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(slotButtonBoxClicked(QAbstractButton *)));
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
     if (canvas)
-        connect(m_optWidget->hideDecorationsBox, SIGNAL(stateChanged(int)), canvas, SLOT(updateCanvas()));
+        connect(m_optWidget->showDecorationsBox, SIGNAL(toggled(bool)), canvas, SLOT(updateCanvas()));
     setButtonBoxDisabled(true);
 
     connect(m_optWidget->scaleXBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));

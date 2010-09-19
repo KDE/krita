@@ -32,6 +32,7 @@
 #include <QButtonGroup>
 
 #include <KStandardDirs>
+#include <KIcon>
 
 #include <KoInteractionTool.h>
 #include <KoToolFactoryBase.h>
@@ -55,6 +56,15 @@ class WdgToolTransform : public QWidget, public Ui::WdgToolTransform
 public:
     WdgToolTransform(QWidget *parent) : QWidget(parent) {
         setupUi(this);
+        showDecorationsBox->setIcon(KIcon("krita_tool_transform"));
+        label_shearX->setPixmap(KIcon("shear_horizontal").pixmap(16, 16));
+        label_shearY->setPixmap(KIcon("shear_vertical").pixmap(16, 16));
+
+        label_width->setPixmap(KIcon("width_icon").pixmap(16, 16));
+        label_height->setPixmap(KIcon("height_icon").pixmap(16, 16));
+
+        label_offsetX->setPixmap(KIcon("offset_horizontal").pixmap(16, 16));
+        label_offsetY->setPixmap(KIcon("offset_vertical").pixmap(16, 16));
     }
 };
 

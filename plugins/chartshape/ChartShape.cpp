@@ -670,7 +670,6 @@ void ChartShape::reset( const QString &region,
                         bool firstColumnIsLabel,
                         Qt::Orientation dataDirection )
 {
-    qDebug() << "RESETTING FROM:" << region;
     // This method is provided via KoChartInterface, which is
     // used by embedding applications.
     d->usesInternalModelOnly = false;

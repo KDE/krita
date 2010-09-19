@@ -385,7 +385,9 @@ void KisLayerBox::slotRmClicked()
 
     for (int i = 0, n = l.count(); i < n; ++i) {
         KisNodeSP node = m_nodeModel->nodeFromIndex(l.at(i));
-        m_nodeManager->removeNode(node);
+        if (!node->systemLocked()) {
+            m_nodeManager->removeNode(node);        
+        }
     }
     m_nodeManager->updateGUI();
 }

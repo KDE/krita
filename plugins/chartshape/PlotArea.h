@@ -151,7 +151,6 @@ public slots:
 signals:
     void gapBetweenBarsChanged( int );
     void gapBetweenSetsChanged( int );
-    void pieExplodeFactorChanged( DataSet*, int );
     void pieAngleOffsetChanged( qreal );
 
 private:

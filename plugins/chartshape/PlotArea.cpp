@@ -992,9 +992,11 @@ void PlotArea::setGapBetweenSets( int percent )
 
 void PlotArea::setPieExplodeFactor( DataSet *dataSet, int percent )
 {
+    // FIXME: This is a global property, but here we're modifying a
+    // local property of a data set
     d->pieExplodeFactor = percent;
 
-    emit pieExplodeFactorChanged( dataSet, percent );
+    dataSet->setPieExplodeFactor( percent );
 }
 
 void PlotArea::setPieAngleOffset( qreal angle )

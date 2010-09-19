@@ -151,7 +151,6 @@ public:
 public slots:
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );
-    void setPieExplodeFactor( DataSet *dataSet, int percent );
     void setPieAngleOffset( qreal angle );
     
 private:

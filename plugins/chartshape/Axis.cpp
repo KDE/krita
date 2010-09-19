@@ -2159,18 +2159,6 @@ void Axis::setGapBetweenSets( int percent )
     requestRepaint();
 }
 
-void Axis::setPieExplodeFactor( DataSet *dataSet, int percent )
-{
-    if ( d->kdCircleDiagram ) {
-        KDChart::PieAttributes attributes = d->kdCircleDiagram->pieAttributes();
-        attributes.setExplodeFactor( (float)percent / 100.0 );
-        d->kdCircleDiagram->setPieAttributes( dataSet->kdDataSetNumber(),
-                                              attributes );
-    }
-
-    requestRepaint();
-}
-
 void Axis::setPieAngleOffset( qreal angle )
 {
     // only set if we already have a diagram else the value will be picked up on creating the diagram

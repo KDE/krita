@@ -34,7 +34,6 @@
 #include <QComboBox>
 #include <QApplication>
 #include <QMatrix4x4>
-#include <QLinearGradient>
 
 #include <kis_debug.h>
 #include <kactioncollection.h>
@@ -2436,8 +2435,13 @@ void KisToolTransform::setScaleX(double scaleX)
         // the spinbox has been modified directly
         m_currentArgs.setScaleX(scaleX / 100.);
 
-        if (m_optWidget->aspectButton->keepAspectRatio() && m_optWidget->scaleXBox->value() != m_optWidget->scaleYBox->value())
-            m_optWidget->scaleYBox->setValue(m_optWidget->scaleXBox->value());
+        if (m_optWidget->aspectButton->keepAspectRatio() && fabs(m_optWidget->scaleXBox->value()) != fabs(m_optWidget->scaleYBox->value())) {
+            if (m_optWidget->scaleYBox->value() > 0) {
+                m_optWidget->scaleYBox->setValue(fabs(m_optWidget->scaleXBox->value()));
+            } else {
+                m_optWidget->scaleYBox->setValue(- fabs(m_optWidget->scaleXBox->value()));
+            }
+        }
 
         outlineChanged();
 
@@ -2445,7 +2449,7 @@ void KisToolTransform::setScaleX(double scaleX)
         setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
     } else {
         // the scale factor has been modified by mouse movement : we set the aspect ratio button manually
-        if (m_currentArgs.scaleX() == m_currentArgs.scaleY())
+        if (fabs(m_currentArgs.scaleX()) == fabs(m_currentArgs.scaleY()))
             m_optWidget->aspectButton->setKeepAspectRatio(true);
         else
             m_optWidget->aspectButton->setKeepAspectRatio(false);
@@ -2458,8 +2462,13 @@ void KisToolTransform::setScaleY(double scaleY)
         // the spinbox has been modified directly
         m_currentArgs.setScaleY(scaleY / 100.);
 
-        if (m_optWidget->aspectButton->keepAspectRatio() && m_optWidget->scaleXBox->value() != m_optWidget->scaleYBox->value())
-            m_optWidget->scaleXBox->setValue(m_optWidget->scaleYBox->value());
+        if (m_optWidget->aspectButton->keepAspectRatio() && fabs(m_optWidget->scaleXBox->value()) != fabs(m_optWidget->scaleYBox->value())) {
+            if (m_optWidget->scaleXBox->value() > 0) {
+                m_optWidget->scaleXBox->setValue(fabs(m_optWidget->scaleYBox->value()));
+            } else {
+                m_optWidget->scaleXBox->setValue(- fabs(m_optWidget->scaleYBox->value()));
+            }
+        }
 
         outlineChanged();
 
@@ -2467,7 +2476,7 @@ void KisToolTransform::setScaleY(double scaleY)
         setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
     } else {
         // the scale factor has been modified by mouse movement : we set the aspect ratio button manually
-        if (m_currentArgs.scaleX() == m_currentArgs.scaleY())
+        if (fabs(m_currentArgs.scaleX()) == fabs(m_currentArgs.scaleY()))
             m_optWidget->aspectButton->setKeepAspectRatio(true);
         else
             m_optWidget->aspectButton->setKeepAspectRatio(false);
@@ -2604,10 +2613,20 @@ void KisToolTransform::slotButtonBoxClicked(QAbstractButton *button)
 void KisToolTransform::slotKeepAspectRatioChanged(bool keep)
 {
     if (keep) {
-        if (m_optWidget->scaleXBox->value() > m_optWidget->scaleYBox->value())
-            m_optWidget->scaleYBox->setValue(m_optWidget->scaleXBox->value());
-        else if (m_optWidget->scaleYBox->value() > m_optWidget->scaleXBox->value())
-            m_optWidget->scaleXBox->setValue(m_optWidget->scaleYBox->value());
+        if (fabs(m_optWidget->scaleXBox->value()) > fabs(m_optWidget->scaleYBox->value())) {
+            if (m_optWidget->scaleYBox->value() > 0) {
+                m_optWidget->scaleYBox->setValue(fabs(m_optWidget->scaleXBox->value()));
+            } else {
+                m_optWidget->scaleYBox->setValue(- fabs(m_optWidget->scaleXBox->value()));
+            }
+        }
+        else if (m_optWidget->scaleYBox->value() > m_optWidget->scaleXBox->value()) {
+            if (m_optWidget->scaleXBox->value() > 0) {
+                m_optWidget->scaleXBox->setValue(fabs(m_optWidget->scaleYBox->value()));
+            } else {
+                m_optWidget->scaleXBox->setValue(- fabs(m_optWidget->scaleYBox->value()));
+            }
+        }
     }
 }
 

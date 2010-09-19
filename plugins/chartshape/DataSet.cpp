@@ -329,7 +329,6 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     // This means the table the region lies in has been removed, but nobody
     // has changed the region in the meantime. That is a perfectly valid
     // scenario, so just return invalid data.
-    Q_ASSERT( model );
     if ( !model )
         return QVariant();
 

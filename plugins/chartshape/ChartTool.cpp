@@ -721,7 +721,7 @@ void ChartTool::setPieExplodeFactor( DataSet *dataSet, int percent )
 {
     Q_ASSERT( d->shape );
 
-    d->shape->plotArea()->setPieExplodeFactor( dataSet, percent );
+    dataSet->setPieExplodeFactor( percent );
     d->shape->update();
 }
 

@@ -104,7 +104,6 @@ public:
 
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );
-    void setPieExplodeFactor( DataSet *dataSet, int percent );
 
     /**
      * @see pieAngleOffset

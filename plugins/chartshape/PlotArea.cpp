@@ -129,7 +129,6 @@ public:
     int   gapBetweenSets;
     
     // 2. Pie charts
-    int   pieExplodeFactor;     // in percents
     // TODO: Load+Save
     qreal pieAngleOffset;       // in degrees
 
@@ -988,15 +987,6 @@ void PlotArea::setGapBetweenSets( int percent )
     d->gapBetweenSets = percent;
 
     emit gapBetweenSetsChanged( percent );
-}
-
-void PlotArea::setPieExplodeFactor( DataSet *dataSet, int percent )
-{
-    // FIXME: This is a global property, but here we're modifying a
-    // local property of a data set
-    d->pieExplodeFactor = percent;
-
-    dataSet->setPieExplodeFactor( percent );
 }
 
 void PlotArea::setPieAngleOffset( qreal angle )

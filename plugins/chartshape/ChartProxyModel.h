@@ -76,7 +76,6 @@ public:
      */
     void reset( const CellRegion &region );
 
-public slots:
     QList<DataSet*> createDataSetsFromRegion( QList<DataSet*> dataSetsToRecycle );
 
     /**
@@ -87,8 +86,6 @@ public slots:
 
     virtual QVariant data( const QModelIndex &index, int role ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
-
-    virtual void dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
 
     virtual QModelIndex parent( const QModelIndex &index ) const;
 
@@ -123,6 +120,9 @@ public slots:
      * if and only if automaticDataSetCreation() returns true.
      */
     void rebuildDataMap();
+
+public slots:
+    virtual void dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
 
     /**
      * Called by the TableSource whenever a table is added to it.

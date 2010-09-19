@@ -24,10 +24,15 @@
 
 static QStringList opsInOrder;
 
-KisCompositeOpsModel::KisCompositeOpsModel(const QList<KoCompositeOp*>& list)
+KisCompositeOpsModel::KisCompositeOpsModel(const QList<KoCompositeOp*>& list, const QList<KoCompositeOp*>& whitelist)
 {
     foreach(KoCompositeOp* op, list) {
         if (op->userVisible()) {
+            m_list.push_back(CompositeOpInfo(op->id(), op->description(), op->category()));
+        }
+    }
+    foreach(KoCompositeOp* op, whitelist) {
+        if (!m_list.contains(CompositeOpInfo(op->id(), op->description(), op->category()))) {
             m_list.push_back(CompositeOpInfo(op->id(), op->description(), op->category()));
         }
     }

@@ -47,9 +47,9 @@ KisCmbComposite::~KisCmbComposite()
 {
 }
 
-void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
+void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list, const QList<KoCompositeOp*> & whitelist)
 {
-    KisCompositeOpsModel* model = new KisCompositeOpsModel(list);
+    KisCompositeOpsModel* model = new KisCompositeOpsModel(list, whitelist);
     m_sortModel->setSourceModel(model);
     m_sortModel->sort(0);
     setMaxVisibleItems(list.size());

@@ -103,9 +103,9 @@ public slots:
     void ui_axisShowTitleChanged( bool b );
     void ui_axisShowGridLinesChanged( bool b );
     void ui_axisUseLogarithmicScalingChanged( bool b );
-    void ui_axisStepWidthChanged( qreal width );
+    void ui_axisStepWidthChanged( double width );
     void ui_axisUseAutomaticStepWidthChanged( bool b );
-    void ui_axisSubStepWidthChanged( qreal width );
+    void ui_axisSubStepWidthChanged( double width );
     void ui_axisUseAutomaticSubStepWidthChanged( bool b );
     void ui_axisScalingButtonClicked();
     void ui_axisAdded();

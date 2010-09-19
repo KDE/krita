@@ -316,7 +316,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
         if ( !dataSetsToRecycle.isEmpty() )
             dataSet = dataSetsToRecycle.takeFirst();
         else
-            dataSet = new DataSet( q, dataSetNumber );
+            dataSet = new DataSet( dataSetNumber );
 
         // category and x data are "global" regions shared among all data sets
         dataSet->setCategoryDataRegion( categoryDataRegion );
@@ -402,7 +402,7 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
             } else {
                 // the datasetnumber needs to be known at construction time, to ensure
                 // default colors are set correctly
-                dataSet = new DataSet( this, d->dataSets.size() );
+                dataSet = new DataSet( d->dataSets.size() );
                 dataSet->setNumber( d->dataSets.size() );
             }
             d->dataSets.append( dataSet );

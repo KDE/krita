@@ -60,7 +60,7 @@ class KDChartModel;
 class CHARTSHAPELIB_EXPORT DataSet
 {
 public:
-    DataSet( ChartProxyModel *model, int dataSetNr );
+    DataSet( int dataSetNr );
     ~DataSet();
 
     // Getter methods
@@ -68,8 +68,6 @@ public:
     ChartType     chartType() const;
     ChartSubtype  chartSubType() const;
     Axis         *attachedAxis() const;
-
-    ChartProxyModel   *model() const;
 
     /**
      * Describes ODF attribute chart:data-label-number from §15.32.3

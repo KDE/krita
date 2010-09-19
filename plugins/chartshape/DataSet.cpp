@@ -46,7 +46,6 @@
 #include "KDChartModel.h"
 
 // KChart
-#include "ChartProxyModel.h"
 #include "Axis.h"
 #include "PlotArea.h"
 #include "Surface.h"
@@ -150,8 +149,6 @@ public:
     // FIXME: Remove category region from DataSet - this is not the place
     // it belongs to.
     CellRegion categoryDataRegion; // x labels -- same for all datasets
-
-    ChartProxyModel *model;
 
     KDChartModel *kdChartModel;
 
@@ -396,11 +393,10 @@ QPen DataSet::Private::defaultPen() const
 }
 
 
-DataSet::DataSet( ChartProxyModel *proxyModel, int dataSetNr )
+DataSet::DataSet( int dataSetNr )
     : d( new Private( this, dataSetNr ) )
 {
     Q_ASSERT( dataSetNr >= 0 );
-    d->model = proxyModel;
 }
 
 DataSet::~DataSet()
@@ -425,12 +421,6 @@ ChartSubtype DataSet::chartSubType() const
 Axis *DataSet::attachedAxis() const
 {
     return d->attachedAxis;
-}
-
-// FIXME: Should this method also be called proxyModel?
-ChartProxyModel *DataSet::model() const
-{
-    return d->model;
 }
 
 bool DataSet::showMeanValue() const

@@ -78,6 +78,10 @@ private slots:
     void updateSettings();
     void progressPercentageChanged(int, const KisNodeSP);
     void layersChanged();
+    void nodeChanged(KisNode * node);
+    
+    void updateNodes();
+    
 private:
 
     class Private;

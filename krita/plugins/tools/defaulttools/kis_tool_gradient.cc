@@ -241,7 +241,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
     if (m_dragging && e->button() == Qt::LeftButton) {
 
-        currentNode()->setSystemLocked(true);
+        currentNode()->setSystemLocked(true, false);
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
         delete m_gradientProgram;

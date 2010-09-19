@@ -74,6 +74,7 @@ public: // KisNodeGraphListener implementation
     void nodeHasBeenRemoved(KisNode *parent, int index);
     void aboutToMoveNode(KisNode * parent, int oldIndex, int newIndex);
     void nodeHasBeenMoved(KisNode * parent, int oldIndex, int newIndex);
+    void nodeChanged(KisNode * node);
 
 public:
 
@@ -525,6 +526,11 @@ signals:
      * Inform the model we're done moving a layer.
      */
     void sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
+    
+    /**
+     * Inform the model that a node was changed
+     */
+    void sigNodeChanged(KisNode * node);
 
 public slots:
 

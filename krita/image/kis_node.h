@@ -123,6 +123,8 @@ public:
      * See \ref changeRect
      */
     virtual QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
+    
+    virtual void setSystemLocked(bool l, bool update = true);
 
 public: // Graph methods
 

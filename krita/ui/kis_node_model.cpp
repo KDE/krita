@@ -36,12 +36,15 @@
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
+#include <QTimer>
 
 class KisNodeModel::Private
 {
 public:
     KisImageWSP image;
     bool showRootLayer;
+    QList<KisNode*> updateQueue;
+    QTimer* updateTimer;
 };
 
 KisNodeModel::KisNodeModel(QObject * parent)
@@ -50,6 +53,8 @@ KisNodeModel::KisNodeModel(QObject * parent)
 {
     updateSettings();
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(updateSettings()));
+    m_d->updateTimer = new QTimer(this);
+    connect(m_d->updateTimer, SIGNAL(timeout()), SLOT(updateNodes()));
 }
 
 KisNodeModel::~KisNodeModel()
@@ -74,6 +79,8 @@ void KisNodeModel::setImage(KisImageWSP image)
             SLOT(beginRemoveNodes(KisNode*, int)));
     connect(m_d->image, SIGNAL(sigNodeHasBeenRemoved(KisNode*, int)),
             SLOT(endRemoveNodes(KisNode*, int)));
+    connect(m_d->image, SIGNAL(sigNodeChanged(KisNode*)),
+            SLOT(nodeChanged(KisNode*)));
 }
 
 KisNodeSP KisNodeModel::nodeFromIndex(const QModelIndex &index)
@@ -354,6 +361,9 @@ void KisNodeModel::endInsertNodes(KisNode * parent, int index)
 
 void KisNodeModel::beginRemoveNodes(KisNode * parent, int index)
 {
+    m_d->updateTimer->stop();
+    m_d->updateQueue.clear();
+    
     //dbgUI <<"KisNodeModel::beginRemoveNodes parent=" << parent << ", index=" << index;
     beginRemoveRows(indexFromNode(parent), parent->childCount() - 1 - index, parent->childCount() - 1 - index);
 }
@@ -475,5 +485,22 @@ void KisNodeModel::layersChanged()
     reset();
 }
 
+void KisNodeModel::nodeChanged(KisNode* node)
+{
+    if (!m_d->updateQueue.contains(node)) {
+        m_d->updateQueue.append(node);
+    }
+    m_d->updateTimer->start(1000);
+}
+
+void KisNodeModel::updateNodes()
+{
+    foreach(KisNode * node, m_d->updateQueue) {
+        QModelIndex index = indexFromNode(node);
+        emit dataChanged(index, index);
+    }
+    m_d->updateTimer->stop();
+    m_d->updateQueue.clear();
+}
 
 #include "kis_node_model.moc"

@@ -202,11 +202,6 @@ public:
     int size() const;
     int dimension() const;
 
-    void setKdDiagram( KDChart::AbstractDiagram *diagram );
-    void setKdDataSetNumber( int number );
-
-    KDChart::AbstractDiagram *kdDiagram() const;
-
     // Called by the proxy model
     void yDataChanged( int start, int end ) const;
     void xDataChanged( int start, int end ) const;

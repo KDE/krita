@@ -1131,7 +1131,6 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
         if( !model )
             return false;
 
-        dataSet->setKdDiagram( diagram );
         if ( model )
             model->addDataSet( dataSet, silent );
 
@@ -1189,7 +1188,6 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
                 oldModel->removeDataSet( dataSet, silent );
         }
 
-        dataSet->setKdDiagram( 0 );
         dataSet->setKdChartModel( 0 );
         dataSet->setAttachedAxis( 0 );
 
@@ -1916,7 +1914,6 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         QPen newPen = dataSet->pen();
         newPen.setStyle( newPenStyle );
         dataSet->setPen(  newPen );
-        dataSet->setKdDiagram( newDiagram );
         newModel->addDataSet( dataSet );        
         if ( oldModel && *oldModel ) {
             const int dataSetCount = (*oldModel)->dataDirection() == Qt::Vertical

@@ -152,7 +152,6 @@ public:
     CellRegion categoryDataRegion; // x labels -- same for all datasets
 
     ChartProxyModel *model;
-    KDChart::AbstractDiagram *kdDiagram;
 
     KDChartModel *kdChartModel;
 
@@ -179,7 +178,6 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     brush( QColor( Qt::white ) ),    
     dataValueAttributes( defaultDataValueAttributes() ),
     num( dataSetNr ),
-    kdDiagram( 0 ),
     kdChartModel( 0 ),
     size( 0 ),
     blockSignals( false )
@@ -364,7 +362,6 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
 
 QBrush DataSet::Private::defaultBrush() const
 {
-    Q_ASSERT( kdDiagram );
     Qt::Orientation modelDataDirection = kdChartModel->dataDirection();
     // A data set-wide default brush only makes sense if the legend shows
     // data set labels, not the category data. See notes on data directions
@@ -377,7 +374,6 @@ QBrush DataSet::Private::defaultBrush() const
 
 QBrush DataSet::Private::defaultBrush( int section ) const
 {
-    Q_ASSERT( kdDiagram );
     Qt::Orientation modelDataDirection = kdChartModel->dataDirection();
     // Horizontally aligned diagrams have a specific color per category
     // See for example pie or ring charts. A pie chart contains a single
@@ -966,16 +962,6 @@ int DataSet::dimension() const
 
     // Avoid warnings from the compiler.
     return 0;
-}
-
-void DataSet::setKdDiagram( KDChart::AbstractDiagram *diagram )
-{
-    d->kdDiagram = diagram;
-}
-
-KDChart::AbstractDiagram *DataSet::kdDiagram() const
-{
-    return d->kdDiagram;
 }
 
 void DataSet::setKdChartModel( KDChartModel *model )

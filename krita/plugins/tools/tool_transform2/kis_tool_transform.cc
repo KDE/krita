@@ -1796,6 +1796,9 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
 {
     int x, y, w, h;
 
+    if (!currentNode())
+        return;
+
     KisPaintDeviceSP dev = currentNode()->paintDevice();
 
     //// Create a lazy copy of the current state
@@ -1917,9 +1920,9 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
             outlineChanged();
             m_canvas->updateCanvas(QRect(m_originalTopLeft, m_originalBottomRight));
         }
+    } else {
+        updateOptionWidget();
     }
-    currentNode() =
-        m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
 }
 
 void KisToolTransform::deactivate()
@@ -2152,11 +2155,15 @@ void KisToolTransform::notifyCommandAdded(const QUndoCommand * command)
     const ApplyTransformCmdData * cmd1 = dynamic_cast<const ApplyTransformCmdData*>(command);
     const TransformCmd* cmd2 = dynamic_cast<const TransformCmd*>(command);
 
-    if (cmd1 == 0 && cmd2 == 0) {
-        // The last added command wasn't one of ours;
-        // we should reset to the new state of the canvas.
-        // In effect we should treat this as if the tool has been just activated
-        initTransform(m_currentArgs.mode());
+    if (currentNode()) {
+        if (cmd1 == 0 && cmd2 == 0) {
+            // The last added command wasn't one of ours;
+            // we should reset to the new state of the canvas.
+            // In effect we should treat this as if the tool has been just activated
+            initTransform(m_currentArgs.mode());
+        }
+    } else {
+        updateOptionWidget();
     }
 }
 
@@ -2169,41 +2176,45 @@ void KisToolTransform::notifyCommandExecuted(const QUndoCommand * command)
     presentCmd1 = dynamic_cast<const ApplyTransformCmdData*>(image()->undoAdapter()->presentCommand());
     presentCmd2 = dynamic_cast<const TransformCmd*>(image()->undoAdapter()->presentCommand());
 
-    if (presentCmd1 == 0 && presentCmd2 == 0) {
-        // The command now on the top of the stack isn't one of ours
-        // We should treat this as if the tool has been just activated
-        initTransform(m_currentArgs.mode());
+    if (currentNode()) {
+        if (presentCmd1 == 0 && presentCmd2 == 0) {
+            // The command now on the top of the stack isn't one of ours
+            // We should treat this as if the tool has been just activated
+            initTransform(m_currentArgs.mode());
 
-        outlineChanged();
-    } else {
-        if (presentCmd1 != 0) {
-            // we have undone a transformation just after an "apply transformation" : we just to to reinit the handles
-            initTransform(presentCmd1->mode());
+            outlineChanged();
         } else {
-            // the present command (on top of a stack) is a simple transform : we ask for its arguments
+            if (presentCmd1 != 0) {
+                // we have undone a transformation just after an "apply transformation" : we just to to reinit the handles
+                initTransform(presentCmd1->mode());
+            } else {
+                // the present command (on top of a stack) is a simple transform : we ask for its arguments
 
-            presentCmd2->transformArgs(m_currentArgs);
+                presentCmd2->transformArgs(m_currentArgs);
 
-            int nbPoints = m_currentArgs.origPoints().size();
-            m_viewOrigPoints.resize(nbPoints);
-            m_viewTransfPoints.resize(nbPoints);
+                int nbPoints = m_currentArgs.origPoints().size();
+                m_viewOrigPoints.resize(nbPoints);
+                m_viewTransfPoints.resize(nbPoints);
 
-            m_origSelection = presentCmd2->origSelection(m_originalTopLeft, m_originalBottomRight);
-            presentCmd2->origPreviews(m_origImg, m_origSelectionImg);
+                m_origSelection = presentCmd2->origSelection(m_originalTopLeft, m_originalBottomRight);
+                presentCmd2->origPreviews(m_origImg, m_origSelectionImg);
 
-            m_originalCenter = (m_originalTopLeft + m_originalBottomRight) / 2;
-            m_originalHeight2 = m_originalCenter.y() - m_originalTopLeft.y();
-            m_originalWidth2 = m_originalCenter.x() - m_originalTopLeft.x();
-            m_scaleX_wOutModifier = m_currentArgs.scaleX();
-            m_scaleY_wOutModifier = m_currentArgs.scaleY();
-            m_refSize = QSizeF(0, 0); // will force the recalc of current QImages in recalcOutline
+                m_originalCenter = (m_originalTopLeft + m_originalBottomRight) / 2;
+                m_originalHeight2 = m_originalCenter.y() - m_originalTopLeft.y();
+                m_originalWidth2 = m_originalCenter.x() - m_originalTopLeft.x();
+                m_scaleX_wOutModifier = m_currentArgs.scaleX();
+                m_scaleY_wOutModifier = m_currentArgs.scaleY();
+                m_refSize = QSizeF(0, 0); // will force the recalc of current QImages in recalcOutline
 
-            m_editWarpPoints = false;
-            updateOptionWidget();
-            setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+                m_editWarpPoints = false;
+                updateOptionWidget();
+                setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+            }
+
+            outlineChanged();
         }
-
-        outlineChanged();
+    } else {
+        updateOptionWidget();
     }
 }
 
@@ -2309,59 +2320,66 @@ void KisToolTransform::updateOptionWidget()
     if (m_optWidget == 0)
         return;
 
-    if (m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
-        if (m_optWidget->stackedWidget)
-            m_optWidget->stackedWidget->setCurrentIndex(0);
-        if (m_optWidget->freeTransformButton)
-            m_optWidget->freeTransformButton->setChecked(true);
-        if (m_optWidget->warpButton)
-            m_optWidget->warpButton->setChecked(false);
-        if (m_optWidget->scaleXBox)
-            m_optWidget->scaleXBox->setValue(m_currentArgs.scaleX() * 100.);
-        if (m_optWidget->scaleYBox)
-            m_optWidget->scaleYBox->setValue(m_currentArgs.scaleY() * 100.);
-        if (m_optWidget->shearXBox)
-            m_optWidget->shearXBox->setValue(m_currentArgs.shearX());
-        if (m_optWidget->shearYBox)
-            m_optWidget->shearYBox->setValue(m_currentArgs.shearY());
-        if (m_optWidget->translateXBox)
-            m_optWidget->translateXBox->setValue(m_currentArgs.translate().x());
-        if (m_optWidget->translateYBox)
-            m_optWidget->translateYBox->setValue(m_currentArgs.translate().y());
-        if (m_optWidget->aXBox)
-            m_optWidget->aXBox->setValue(radianToDegree(m_currentArgs.aX()));
-        if (m_optWidget->aYBox)
-            m_optWidget->aYBox->setValue(radianToDegree(m_currentArgs.aY()));
-        if (m_optWidget->aZBox)
-            m_optWidget->aZBox->setValue(radianToDegree(m_currentArgs.aZ()));
+    if (!currentNode()) {
+        m_optWidget->setEnabled(false);
+        return;
     } else {
-        if (m_optWidget->stackedWidget)
-            m_optWidget->stackedWidget->setCurrentIndex(1);
-        if (m_optWidget->freeTransformButton)
-            m_optWidget->freeTransformButton->setChecked(false);
-        if (m_optWidget->warpButton)
-            m_optWidget->warpButton->setChecked(true);
-        if (m_optWidget->alphaBox)
-            m_optWidget->alphaBox->setValue(m_currentArgs.alpha());
-        if (m_currentArgs.defaultPoints()) {
-            if (m_optWidget->densityBox)
-                m_optWidget->densityBox->setValue(m_currentArgs.pointsPerLine());
-        }
-        if (m_optWidget->cmbWarpType)
-            m_optWidget->cmbWarpType->setCurrentIndex((int)m_currentArgs.warpType());
-        if (m_optWidget->defaultRadioButton)
-            m_optWidget->defaultRadioButton->setChecked(m_currentArgs.defaultPoints());
-        if (m_optWidget->customRadioButton)
-            m_optWidget->customRadioButton->setChecked(!m_currentArgs.defaultPoints());
-        if (m_optWidget->defaultWarpWidget)
-            m_optWidget->defaultWarpWidget->setEnabled(m_currentArgs.defaultPoints());
-        if (m_optWidget->customWarpWidget)
-            m_optWidget->customWarpWidget->setEnabled(!m_currentArgs.defaultPoints());
-        if (m_optWidget->lockUnlockPointsButton) {
-            if (m_editWarpPoints)
-                m_optWidget->lockUnlockPointsButton->setText(i18n("Lock Points"));
-            else
-                m_optWidget->lockUnlockPointsButton->setText(i18n("Unlock Points"));
+        m_optWidget->setEnabled(true);
+
+        if (m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
+            if (m_optWidget->stackedWidget)
+                m_optWidget->stackedWidget->setCurrentIndex(0);
+            if (m_optWidget->freeTransformButton)
+                m_optWidget->freeTransformButton->setChecked(true);
+            if (m_optWidget->warpButton)
+                m_optWidget->warpButton->setChecked(false);
+            if (m_optWidget->scaleXBox)
+                m_optWidget->scaleXBox->setValue(m_currentArgs.scaleX() * 100.);
+            if (m_optWidget->scaleYBox)
+                m_optWidget->scaleYBox->setValue(m_currentArgs.scaleY() * 100.);
+            if (m_optWidget->shearXBox)
+                m_optWidget->shearXBox->setValue(m_currentArgs.shearX());
+            if (m_optWidget->shearYBox)
+                m_optWidget->shearYBox->setValue(m_currentArgs.shearY());
+            if (m_optWidget->translateXBox)
+                m_optWidget->translateXBox->setValue(m_currentArgs.translate().x());
+            if (m_optWidget->translateYBox)
+                m_optWidget->translateYBox->setValue(m_currentArgs.translate().y());
+            if (m_optWidget->aXBox)
+                m_optWidget->aXBox->setValue(radianToDegree(m_currentArgs.aX()));
+            if (m_optWidget->aYBox)
+                m_optWidget->aYBox->setValue(radianToDegree(m_currentArgs.aY()));
+            if (m_optWidget->aZBox)
+                m_optWidget->aZBox->setValue(radianToDegree(m_currentArgs.aZ()));
+        } else {
+            if (m_optWidget->stackedWidget)
+                m_optWidget->stackedWidget->setCurrentIndex(1);
+            if (m_optWidget->freeTransformButton)
+                m_optWidget->freeTransformButton->setChecked(false);
+            if (m_optWidget->warpButton)
+                m_optWidget->warpButton->setChecked(true);
+            if (m_optWidget->alphaBox)
+                m_optWidget->alphaBox->setValue(m_currentArgs.alpha());
+            if (m_currentArgs.defaultPoints()) {
+                if (m_optWidget->densityBox)
+                    m_optWidget->densityBox->setValue(m_currentArgs.pointsPerLine());
+            }
+            if (m_optWidget->cmbWarpType)
+                m_optWidget->cmbWarpType->setCurrentIndex((int)m_currentArgs.warpType());
+            if (m_optWidget->defaultRadioButton)
+                m_optWidget->defaultRadioButton->setChecked(m_currentArgs.defaultPoints());
+            if (m_optWidget->customRadioButton)
+                m_optWidget->customRadioButton->setChecked(!m_currentArgs.defaultPoints());
+            if (m_optWidget->defaultWarpWidget)
+                m_optWidget->defaultWarpWidget->setEnabled(m_currentArgs.defaultPoints());
+            if (m_optWidget->customWarpWidget)
+                m_optWidget->customWarpWidget->setEnabled(!m_currentArgs.defaultPoints());
+            if (m_optWidget->lockUnlockPointsButton) {
+                if (m_editWarpPoints)
+                    m_optWidget->lockUnlockPointsButton->setText(i18n("Lock Points"));
+                else
+                    m_optWidget->lockUnlockPointsButton->setText(i18n("Unlock Points"));
+            }
         }
     }
 }

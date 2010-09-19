@@ -117,7 +117,9 @@ public:
             , macroNestDepth(0)
             , ioProgressTotalSteps(0)
             , ioProgressBase(0)
-            , kraLoader(0) {
+            , kraLoader(0)
+            , dieOnError(false)
+    {
     }
 
     ~KisDocPrivate() {
@@ -140,6 +142,7 @@ public:
     KisKraSaver* kraSaver;
 
     QString error;
+    bool dieOnError;
 
 };
 
@@ -440,18 +443,21 @@ void KisDoc2::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
     if (!KoColorSpaceEngineRegistry::instance()->contains("icc")) {
         // need to wait 1 event since exiting here would not work.
         m_d->error = i18n("The KOffice LittleCMS color management plugin is not installed. Krita will quit now.");
-        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
-    }
-
-    QStringList qtversion = QString(qVersion()).split('.');
-    if (qtversion[0] == "4" && qtversion[1] <= "6" && qtversion[3].toInt() < 3) {
-        m_d->error = i18n("Krita needs at least Qt 4.6.3 to work correctly. Your Qt version is %1.", qVersion());
+        m_d->dieOnError = true;
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
     }
 
     KoDocument::showStartUpWidget(parent, alwaysShow);
     KisConfig cfg;
     if (cfg.firstRun()) {
+
+        QStringList qtversion = QString(qVersion()).split('.');
+        if (qtversion[0] == "4" && qtversion[1] <= "6" && qtversion[3].toInt() < 3) {
+            m_d->error = i18n("Krita needs at least Qt 4.6.3 to work correctly. Your Qt version is %1. If you have a graphics tablet it will not work correctly", qVersion());
+            m_d->dieOnError = false;
+            QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
+        }
+
         QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
         if (!fname.isEmpty()) {
             openUrl(fname);
@@ -465,7 +471,9 @@ void KisDoc2::showErrorAndDie()
     KMessageBox::error(widget(),
                        m_d->error,
                        i18n("Installation error"));
-    QCoreApplication::exit(10);
+    if (m_d->dieOnError) {
+        QCoreApplication::exit(10);
+    }
 }
 
 void KisDoc2::paintContent(QPainter& painter, const QRect& rc)

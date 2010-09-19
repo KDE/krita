@@ -1910,10 +1910,16 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         if ( dataSet->chartType() != LastChartType )
             continue;
 
+// FIXME: What does this do? Only the user may set a data set's pen through
+// a proper UI, in any other case the pen falls back to a default
+// which depends on the chart type, so setting it here will break the default
+// for other chart types.
+#if 0
         Qt::PenStyle newPenStyle = newDiagram->pen().style();
         QPen newPen = dataSet->pen();
         newPen.setStyle( newPenStyle );
         dataSet->setPen(  newPen );
+#endif
         newModel->addDataSet( dataSet );        
         if ( oldModel && *oldModel ) {
             const int dataSetCount = (*oldModel)->dataDirection() == Qt::Vertical

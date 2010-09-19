@@ -73,6 +73,7 @@ public slots:
     void update();
 
     void slotShowTableEditor( bool show );
+    void slotShowCellRegionDialog();
 
     void dataSetChartTypeSelected( QAction *action );
     void datasetColorSelected( const QColor& color );

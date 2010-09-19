@@ -24,6 +24,7 @@
 
 // Qt
 #include <QButtonGroup>
+#include <QComboBox>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -461,7 +462,7 @@ void ChartConfigWidget::open( KoShape* shape )
         // dialog to edit the data ranges instead of the data itself.
         d->ui.editData->setText( i18n( "Data Ranges..." ) );
         connect( d->ui.editData,       SIGNAL( clicked( bool ) ),
-                 &d->cellRegionDialog, SLOT( show() ) );
+                 this, SLOT( slotShowCellRegionDialog() ) );
         connect( d->cellRegionDialog.xDataRegion, SIGNAL( editingFinished() ),
                  this, SLOT( ui_dataSetXDataRegionChanged() ) );
         connect( d->cellRegionDialog.yDataRegion, SIGNAL( editingFinished() ),
@@ -1066,6 +1067,16 @@ void ChartConfigWidget::slotShowTableEditor( bool show )
     else {
         d->tableEditorDialog->show();
     }
+}
+
+
+void ChartConfigWidget::slotShowCellRegionDialog()
+{
+    // Update regions of selected dataset
+    int selectedDataSet = d->cellRegionDialog.dataSets->currentIndex();
+    ui_dataSetSelectionChanged_CellRegionDialog( selectedDataSet );
+
+    d->cellRegionDialog.show();
 }
 
 

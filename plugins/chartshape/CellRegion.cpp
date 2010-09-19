@@ -61,14 +61,6 @@ public:
     QRect          boundingRect;
     // NOTE: Don't forget to extend operator=() if you add new members
 
-    // Determines, if not empty, what string this cell region was created from.
-    QString origString;
-    // ODF's definition of table:cell-range-address is much more comprehensive
-    // than what we currently support. Use the original string this cell region
-    // was initialized with (if string constructor used) as fall-back if no
-    // changes were made to this region.
-    bool origStringValid;
-
     /// Table this region is in (name/model pair provided by TableSource)
     Table *table;
 };
@@ -76,7 +68,6 @@ public:
 
 CellRegion::Private::Private()
 {
-    origStringValid = false;
     table = 0;
 }
 
@@ -142,9 +133,6 @@ CellRegion::CellRegion( TableSource *source, const QString& region )
             }
         }
     }
-
-    d->origString = region;
-    d->origStringValid = true;
 }
 
 CellRegion::CellRegion( Table *table, const QPoint &point )
@@ -185,8 +173,6 @@ CellRegion& CellRegion::operator = ( const CellRegion& region )
 {
     d->rects        = region.d->rects;
     d->boundingRect = region.d->boundingRect;
-    d->origString = region.d->origString;
-    d->origStringValid = region.d->origStringValid;
     d->table = region.d->table;
 
     return *this;
@@ -235,9 +221,6 @@ QString CellRegion::Private::pointToString( const QPoint &point ) const
 
 QString CellRegion::toString() const
 {
-    if ( d->origStringValid )
-        return d->origString;
-
     if ( !isValid() )
         return QString();
 
@@ -345,8 +328,6 @@ void CellRegion::add( const QPoint &point )
 
 void CellRegion::add( const QRect &rect )
 {
-    d->origStringValid = false;
-
 // These checks are obsolete, a CellRegion can be used otherwise as well
 #if 0
     if ( !rect.isValid() ) {

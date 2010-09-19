@@ -919,6 +919,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     // of KoShapeLoadingContext
     OdfLoadingHelper *helper = new OdfLoadingHelper;
     helper->tableSource = &d->tableSource;
+    helper->chartUsesInternalModelOnly = d->usesInternalModelOnly;
     context.addSharedData( OdfLoadingHelperId, helper );
 
     // Get access to sheets in KSpread
@@ -1083,6 +1084,10 @@ bool ChartShape::loadOdfData( const KoXmlElement &tableElement,
     // There is no table element to load
     if ( tableElement.isNull() || !tableElement.isElement() )
         return true;
+
+    Table *oldInternalTable = d->tableSource.get( d->internalModel );
+    d->tableSource.remove( oldInternalTable->name() );
+    delete d->internalModel;
 
     // FIXME: Make model->loadOdf() return a bool, and use it here.
     // Create a table with data from document, add it as table source

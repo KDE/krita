@@ -34,6 +34,7 @@ class OdfLoadingHelper : public KoSharedLoadingData
 {
 public:
     TableSource *tableSource;
+    bool         chartUsesInternalModelOnly;
 };
 
 } // namespace KChart

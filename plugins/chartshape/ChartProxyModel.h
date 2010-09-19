@@ -84,7 +84,26 @@ public:
     bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
     void saveOdf( KoShapeSavingContext &context ) const;
 
+    /**
+     * Returns data or properties of a data point.
+     *
+     * TODO: Not implemented yet. At the moment, DataSet's data and attribute
+     * getter are used instead.
+     */
     virtual QVariant data( const QModelIndex &index, int role ) const;
+
+    /**
+     * Returns properties that are global to either a data set or a category,
+     * depending on the orientation.
+     *
+     * If @a orientation is Qt::Horizontal, this method will return properties
+     * global do the data set with number @a section.
+     * If @a orientation is Qt::Vertical, it will return properties global to
+     * the category with index @a section.
+     *
+     * TODO: Not implemented yet. At the moment, DataSet's data and attribute
+     * getter are used instead.
+     */
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
     virtual QModelIndex parent( const QModelIndex &index ) const;
@@ -109,12 +128,31 @@ public:
     bool firstColumnIsLabel() const;
     Qt::Orientation dataDirection();
     
+    /**
+     * @see setCategoryDataRegion()
+     */
     CellRegion categoryDataRegion() const;
+
+    /**
+     * Sets the region to use for categories, i.e. the labels for a certain
+     * index in all data sets. This is what will be used to label points
+     * on the x axis in a cartesian chart and what will be used as legend
+     * items in a polar chart.
+     */
     void setCategoryDataRegion( const CellRegion &region );
 
+    /**
+     * A list of all data sets that are currently being used in the chart.
+     */
     QList<DataSet*> dataSets() const;
 
+    /**
+     * Clears the list of data sets, but keeps them in a list of "removed"
+     * data sets for the next time that reset() is called. The latter list
+     * will be re-used so that properties of data sets don't get lost.
+     */
     void invalidateDataSets();
+
     /**
      * Discards old and creates new data sets from the current region selection
      * if and only if automaticDataSetCreation() returns true.
@@ -122,6 +160,9 @@ public:
     void rebuildDataMap();
 
 public slots:
+    /**
+     * Connected to dataChanged() signal of source models in TableSource.
+     */
     virtual void dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
 
     /**

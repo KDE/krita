@@ -461,7 +461,7 @@ void ChartConfigWidget::open( KoShape* shape )
         // If the data source is external, the editData button opens a
         // dialog to edit the data ranges instead of the data itself.
         d->ui.editData->setText( i18n( "Data Ranges..." ) );
-        connect( d->ui.editData,       SIGNAL( clicked( bool ) ),
+        connect( d->ui.editData, SIGNAL( clicked( bool ) ),
                  this, SLOT( slotShowCellRegionDialog() ) );
         connect( d->cellRegionDialog.xDataRegion, SIGNAL( editingFinished() ),
                  this, SLOT( ui_dataSetXDataRegionChanged() ) );
@@ -480,7 +480,7 @@ void ChartConfigWidget::open( KoShape* shape )
         // This part is run when the data source is not external,
         // i.e. the data is handled by the chart shape itself.
         connect( d->ui.editData, SIGNAL( clicked( bool ) ),
-                 this,           SLOT( slotShowTableEditor( bool ) ) );
+                 this,           SLOT( slotShowTableEditor() ) );
     }
 
     update();
@@ -1053,7 +1053,7 @@ void ChartConfigWidget::update()
 }
 
 
-void ChartConfigWidget::slotShowTableEditor( bool show )
+void ChartConfigWidget::slotShowTableEditor()
 {
     if ( !d->tableEditorDialog ) {
         d->tableEditorDialog = new TableEditorDialog;
@@ -1061,12 +1061,7 @@ void ChartConfigWidget::slotShowTableEditor( bool show )
         d->tableEditorDialog->setModel( d->shape->internalModel() );
     }
 
-    if ( show ) {
-        d->tableEditorDialog->hide();
-    }
-    else {
-        d->tableEditorDialog->show();
-    }
+    d->tableEditorDialog->show();
 }
 
 

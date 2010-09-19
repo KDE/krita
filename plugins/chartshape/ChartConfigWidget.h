@@ -72,7 +72,7 @@ public slots:
     void setThreeDMode( bool threeD );
     void update();
 
-    void slotShowTableEditor( bool show );
+    void slotShowTableEditor();
     void slotShowCellRegionDialog();
 
     void dataSetChartTypeSelected( QAction *action );

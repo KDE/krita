@@ -8,6 +8,7 @@ kis_color_patches.cpp
 kis_color_history.cpp
 kis_color_selector.cpp
 kis_common_colors.cpp
+kis_common_colors_recalculation_runner.cpp
 kis_minimal_shade_selector.cpp
 kis_shade_selector_line.cpp
 kis_shade_selector_line_combo_box.cpp

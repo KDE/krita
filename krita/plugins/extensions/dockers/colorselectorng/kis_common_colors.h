@@ -18,7 +18,11 @@
 #ifndef KIS_COMMON_COLORS_H
 #define KIS_COMMON_COLORS_H
 
+#include <QMutex>
+#include <QTimer>
 #include "kis_color_patches.h"
+
+class QPushButton;
 
 class KisCommonColors : public KisColorPatches
 {
@@ -29,16 +33,16 @@ public:
 //    QSize sizeHint() const;
     void setCanvas(KisCanvas2 *canvas);
     KisColorSelectorBase* createPopup() const;
+    void setColors(QList<KoColor> colors);
 
 public slots:
     void updateSettings();
+    void recalculate();
 
 private:
-    QList<KoColor> extractColors();
-    QList<QRgb> getColors();
-
-public slots:
-    void recalculate();
+    QMutex m_mutex;
+    QTimer m_recalculationTimer;
+    QPushButton* m_reloadButton;
 };
 
 #endif

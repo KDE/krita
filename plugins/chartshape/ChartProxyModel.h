@@ -76,8 +76,6 @@ public:
      */
     void reset( const CellRegion &region );
 
-    QList<DataSet*> createDataSetsFromRegion( QList<DataSet*> dataSetsToRecycle );
-
     /**
     * Load series from ODF
     */
@@ -152,12 +150,6 @@ public:
      * will be re-used so that properties of data sets don't get lost.
      */
     void invalidateDataSets();
-
-    /**
-     * Discards old and creates new data sets from the current region selection
-     * if and only if automaticDataSetCreation() returns true.
-     */
-    void rebuildDataMap();
 
 public slots:
     /**

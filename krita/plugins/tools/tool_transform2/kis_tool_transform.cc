@@ -914,7 +914,7 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *e)
 
 void KisToolTransform::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Meta) {
+    if (!m_selecting && event->key() == Qt::Key_Meta) {
         m_function = PERSPECTIVE;
         setFunctionalCursor();
     }
@@ -922,9 +922,10 @@ void KisToolTransform::keyPressEvent(QKeyEvent *event)
 
 void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
 {
-    Q_UNUSED(event);
-
-    setTransformFunction(m_prevMousePos, event->modifiers());
+    if (!event || event->key() == Qt::Key_Meta) {
+        m_selecting = false;
+        setTransformFunction(m_prevMousePos, event->modifiers());
+    }
 }
 
 // the interval for the dichotomy is [0, b]
@@ -1357,7 +1358,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
             case PERSPECTIVE:
                 {
                 t = QVector3D(mousePos.x() - m_clickPoint.x(), mousePos.y() - m_clickPoint.y(), 0);
-                double thetaX = - t.y() * M_PI / m_originalWidth2 / 2 / m_currentArgs.scaleX();
+                double thetaX = - t.y() * M_PI / m_originalHeight2 / 2 / fabs(m_currentArgs.scaleY());
 
                 if (e->modifiers() & Qt::ShiftModifier) {
                     int quotient = thetaX * 12 / M_PI;
@@ -1368,7 +1369,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
                 m_cosaX = cos(m_currentArgs.aX()); // update the cos/sin for transformation
                 m_sinaX = sin(m_currentArgs.aX());
                 t = invrotX(t.x(), t.y(), t.z());
-                double thetaY = t.x() * M_PI / m_originalHeight2 / 2 / m_currentArgs.scaleY();
+                double thetaY = t.x() * M_PI / m_originalWidth2 / 2 / fabs(m_currentArgs.scaleX());
 
                 if (e->modifiers() & Qt::ShiftModifier) {
                     int quotient = thetaY * 12 / M_PI;
@@ -1636,9 +1637,9 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
                     if (e->modifiers() & Qt::ControlModifier) {
                         // we apply the constraint before going to local space
                         if (fabs(t.x()) >= fabs(t.y()))
-                        t.setY(0);
+                            t.setY(0);
                         else
-                        t.setX(0);
+                            t.setX(0);
                         t = invperspective(t.x(), t.y(), m_clickPlane);
                         t = invTransformVector(t.x(), t.y(), t.z()); // go to local space
                     } else {
@@ -2436,7 +2437,7 @@ void KisToolTransform::setScaleX(double scaleX)
         m_currentArgs.setScaleX(scaleX / 100.);
 
         if (m_optWidget->aspectButton->keepAspectRatio() && fabs(m_optWidget->scaleXBox->value()) != fabs(m_optWidget->scaleYBox->value())) {
-            if (m_optWidget->scaleYBox->value() > 0) {
+            if (m_optWidget->scaleYBox->value() >= 0) {
                 m_optWidget->scaleYBox->setValue(fabs(m_optWidget->scaleXBox->value()));
             } else {
                 m_optWidget->scaleYBox->setValue(- fabs(m_optWidget->scaleXBox->value()));
@@ -2463,7 +2464,7 @@ void KisToolTransform::setScaleY(double scaleY)
         m_currentArgs.setScaleY(scaleY / 100.);
 
         if (m_optWidget->aspectButton->keepAspectRatio() && fabs(m_optWidget->scaleXBox->value()) != fabs(m_optWidget->scaleYBox->value())) {
-            if (m_optWidget->scaleXBox->value() > 0) {
+            if (m_optWidget->scaleXBox->value() >= 0) {
                 m_optWidget->scaleXBox->setValue(fabs(m_optWidget->scaleYBox->value()));
             } else {
                 m_optWidget->scaleXBox->setValue(- fabs(m_optWidget->scaleYBox->value()));
@@ -2614,14 +2615,14 @@ void KisToolTransform::slotKeepAspectRatioChanged(bool keep)
 {
     if (keep) {
         if (fabs(m_optWidget->scaleXBox->value()) > fabs(m_optWidget->scaleYBox->value())) {
-            if (m_optWidget->scaleYBox->value() > 0) {
+            if (m_optWidget->scaleYBox->value() >= 0) {
                 m_optWidget->scaleYBox->setValue(fabs(m_optWidget->scaleXBox->value()));
             } else {
                 m_optWidget->scaleYBox->setValue(- fabs(m_optWidget->scaleXBox->value()));
             }
         }
         else if (m_optWidget->scaleYBox->value() > m_optWidget->scaleXBox->value()) {
-            if (m_optWidget->scaleXBox->value() > 0) {
+            if (m_optWidget->scaleXBox->value() >= 0) {
                 m_optWidget->scaleXBox->setValue(fabs(m_optWidget->scaleYBox->value()));
             } else {
                 m_optWidget->scaleXBox->setValue(- fabs(m_optWidget->scaleYBox->value()));

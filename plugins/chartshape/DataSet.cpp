@@ -153,7 +153,6 @@ public:
 
     ChartProxyModel *model;
     KDChart::AbstractDiagram *kdDiagram;
-    int kdDataSetNumber;
 
     KDChartModel *kdChartModel;
 
@@ -179,9 +178,8 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     pen( QPen( Qt::black ) ),
     brush( QColor( Qt::white ) ),    
     dataValueAttributes( defaultDataValueAttributes() ),
-    num( -1 ),
+    num( dataSetNr ),
     kdDiagram( 0 ),
-    kdDataSetNumber( dataSetNr ),
     kdChartModel( 0 ),
     size( 0 ),
     blockSignals( false )
@@ -372,7 +370,7 @@ QBrush DataSet::Private::defaultBrush() const
     // data set labels, not the category data. See notes on data directions
     // in KDChartModel.h for details.
     if ( modelDataDirection == Qt::Vertical )
-        return defaultDataSetColor( kdDataSetNumber );
+        return defaultDataSetColor( num );
     // FIXME: What to return in the other case?
     return QBrush();
 }
@@ -396,7 +394,7 @@ QPen DataSet::Private::defaultPen() const
     ChartType chartType = effectiveChartType();
     if ( chartType == LineChartType ||
          chartType == ScatterChartType )
-        pen = QPen( defaultDataSetColor( kdDataSetNumber ) );
+        pen = QPen( defaultDataSetColor( num ) );
 
     return pen;
 }
@@ -405,6 +403,7 @@ QPen DataSet::Private::defaultPen() const
 DataSet::DataSet( ChartProxyModel *proxyModel, int dataSetNr )
     : d( new Private( this, dataSetNr ) )
 {
+    Q_ASSERT( dataSetNr >= 0 );
     d->model = proxyModel;
 }
 
@@ -593,8 +592,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
     case ScatterChartType:
         // TODO: Marker type should be customizable
         // TODO: Marker size should be customizable
-        Q_ASSERT( kdDataSetNumber() >= 0 );
-        ma.setMarkerStyle( defaultMarkerTypes[ kdDataSetNumber() % numDefaultMarkerTypes ] );
+        ma.setMarkerStyle( defaultMarkerTypes[ number() % numDefaultMarkerTypes ] );
         ma.setVisible( true );
         break;
     case BubbleChartType:
@@ -978,19 +976,6 @@ void DataSet::setKdDiagram( KDChart::AbstractDiagram *diagram )
 KDChart::AbstractDiagram *DataSet::kdDiagram() const
 {
     return d->kdDiagram;
-}
-
-int DataSet::kdDataSetNumber() const
-{
-    return d->kdDataSetNumber;
-}
-
-void DataSet::setKdDataSetNumber( int number )
-{
-    // FIXME: Is there anything to emit here?
-    // In theory, this should be done before any data is retrieved
-    // from KDChartModel
-    d->kdDataSetNumber = number;
 }
 
 void DataSet::setKdChartModel( KDChartModel *model )

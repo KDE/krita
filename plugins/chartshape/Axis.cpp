@@ -1191,7 +1191,6 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
 
         dataSet->setKdDiagram( 0 );
         dataSet->setKdChartModel( 0 );
-        dataSet->setKdDataSetNumber( -1 );
         dataSet->setAttachedAxis( 0 );
 
         if ( !silent ) {

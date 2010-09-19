@@ -471,10 +471,6 @@ void KDChartModel::addDataSet( DataSet *dataSet, bool silent )
     if ( silent ) {
         d->dataSets.insert( dataSetIndex, dataSet );
         d->biggestDataSetSize = d->calcMaxDataSetSize();
-
-        // Regenerate the numbers for all the datasets.
-        for ( int i = dataSetIndex; i < d->dataSets.size(); i++ )
-            d->dataSets[ i ]->setKdDataSetNumber( i );
     }
     else if ( !d->dataSets.isEmpty() ) {
         const int columnAboutToBeInserted = dataSetIndex * d->dataDimensions;
@@ -486,10 +482,6 @@ void KDChartModel::addDataSet( DataSet *dataSet, bool silent )
             beginInsertRows( QModelIndex(), columnAboutToBeInserted,
                              columnAboutToBeInserted + d->dataDimensions - 1 );
         d->dataSets.insert( dataSetIndex, dataSet );
-
-        // Regenerate the numbers for all the datasets.
-        for ( int i = dataSetIndex; i < d->dataSets.size(); i++ )
-            d->dataSets[ i ]->setKdDataSetNumber( i );
 
         if ( d->dataDirection == Qt::Vertical )
             endInsertColumns();
@@ -512,12 +504,11 @@ void KDChartModel::addDataSet( DataSet *dataSet, bool silent )
         }
     }
     else {
-        // If we had no datasets before, we haven't had a valid
-        // structure yet.  Thus, emit the modelReset() signal.
         d->dataSets.append( dataSet );
-        dataSet->setKdDataSetNumber( 0 );
         d->biggestDataSetSize = d->calcMaxDataSetSize();
 
+        // If we had no datasets before, we haven't had a valid
+        // structure yet.  Thus, emit the modelReset() signal.
         reset();
     }
 }
@@ -567,10 +558,6 @@ void KDChartModel::removeDataSet( DataSet *dataSet, bool silent )
             endRemoveRows();
         else
             endRemoveColumns();
-    }
-
-    for ( int i = dataSetIndex; i < d->dataSets.size(); i++ ) {
-        d->dataSets[ i ]->setKdDataSetNumber( i );
     }
 }
 

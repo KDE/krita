@@ -232,49 +232,49 @@ ChartConfigWidget::ChartConfigWidget()
 
     // Chart type button with its associated menu
     QMenu *chartTypeMenu = new QMenu( this );
-    chartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
+    chartTypeMenu->setIcon( KIcon( "office-chart-bar" ) );
 
     // Bar charts
-    QMenu *barChartMenu = chartTypeMenu->addMenu( KIcon( "chart_bar_beside" ), i18n( "Bar Chart" ) );
-    d->normalBarChartAction  = barChartMenu->addAction( KIcon( "chart_bar_beside" ), i18n("Normal") );
-    d->stackedBarChartAction = barChartMenu->addAction( KIcon( "chart_bar_layer" ), i18n("Stacked") );
-    d->percentBarChartAction = barChartMenu->addAction( KIcon( "chart_bar_percent" ), i18n("Percent") );
+    QMenu *barChartMenu = chartTypeMenu->addMenu( KIcon( "office-chart-bar" ), i18n( "Bar Chart" ) );
+    d->normalBarChartAction  = barChartMenu->addAction( KIcon( "office-chart-bar" ), i18n("Normal") );
+    d->stackedBarChartAction = barChartMenu->addAction( KIcon( "office-chart-bar-stacked" ), i18n("Stacked") );
+    d->percentBarChartAction = barChartMenu->addAction( KIcon( "office-chart-bar-percentage" ), i18n("Percent") );
 
     // Line charts
-    QMenu *lineChartMenu = chartTypeMenu->addMenu( KIcon( "chart_line_normal" ), i18n( "Line Chart" ) );
-    d->normalLineChartAction  = lineChartMenu->addAction( KIcon( "chart_line_normal" ), i18n("Normal") );
-    d->stackedLineChartAction = lineChartMenu->addAction( KIcon( "chart_line_stacked" ), i18n("Stacked") );
-    d->percentLineChartAction = lineChartMenu->addAction( KIcon( "chart_line_percent" ), i18n("Percent") );
+    QMenu *lineChartMenu = chartTypeMenu->addMenu( KIcon( "office-chart-line" ), i18n( "Line Chart" ) );
+    d->normalLineChartAction  = lineChartMenu->addAction( KIcon( "office-chart-line" ), i18n("Normal") );
+    d->stackedLineChartAction = lineChartMenu->addAction( KIcon( "office-chart-line-stacked" ), i18n("Stacked") );
+    d->percentLineChartAction = lineChartMenu->addAction( KIcon( "office-chart-line-percentage" ), i18n("Percent") );
 
     // Area charts
-    QMenu *areaChartMenu = chartTypeMenu->addMenu( KIcon( "chart_area_normal" ), i18n( "Area Chart" ) );
-    d->normalAreaChartAction  = areaChartMenu->addAction( KIcon( "chart_area_normal" ), i18n("Normal") );
-    d->stackedAreaChartAction = areaChartMenu->addAction( KIcon( "chart_area_stacked" ), i18n("Stacked") );
-    d->percentAreaChartAction = areaChartMenu->addAction( KIcon( "chart_area_percent" ), i18n("Percent") );
+    QMenu *areaChartMenu = chartTypeMenu->addMenu( KIcon( "office-chart-area" ), i18n( "Area Chart" ) );
+    d->normalAreaChartAction  = areaChartMenu->addAction( KIcon( "office-chart-area" ), i18n("Normal") );
+    d->stackedAreaChartAction = areaChartMenu->addAction( KIcon( "office-chart-area-stacked" ), i18n("Stacked") );
+    d->percentAreaChartAction = areaChartMenu->addAction( KIcon( "office-chart-area-percentage" ), i18n("Percent") );
 
     chartTypeMenu->addSeparator();
 
     // Circular charts: pie and ring
-    d->circleChartAction = chartTypeMenu->addAction( KIcon( "chart_pie_normal" ), i18n("Pie Chart") );
-    d->ringChartAction = chartTypeMenu->addAction( KIcon( "chart_ring_normal" ), i18n("Ring Chart") );
+    d->circleChartAction = chartTypeMenu->addAction( KIcon( "office-chart-pie" ), i18n("Pie Chart") );
+    d->ringChartAction = chartTypeMenu->addAction( KIcon( "office-chart-ring" ), i18n("Ring Chart") );
 
     chartTypeMenu->addSeparator();
 
     // Polar charts: radar
-    d->radarChartAction = chartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
+    d->radarChartAction = chartTypeMenu->addAction( KIcon( "office-chart-polar" ), i18n("Polar Chart") );
 
     chartTypeMenu->addSeparator();
 
     // X/Y charts: scatter and bubble
-    d->scatterChartAction = chartTypeMenu->addAction( KIcon( "chart_scatter_normal" ), i18n("Scatter Chart") );
-    d->bubbleChartAction = chartTypeMenu->addAction( KIcon( "chart_bubble_normal" ), i18n("Bubble Chart") );
+    d->scatterChartAction = chartTypeMenu->addAction( KIcon( "office-chart-scatter" ), i18n("Scatter Chart") );
+    d->bubbleChartAction = chartTypeMenu->addAction( i18n("Bubble Chart") );
 
     chartTypeMenu->addSeparator();
 
-    d->stockChartAction = chartTypeMenu->addAction( KIcon( "chart_stock_normal" ), i18n("Stock Chart") );
-    d->surfaceChartAction = chartTypeMenu->addAction( KIcon( "chart_surface_normal" ), i18n("Surface Chart") );
+    d->stockChartAction = chartTypeMenu->addAction( i18n("Stock Chart") );
+    d->surfaceChartAction = chartTypeMenu->addAction( i18n("Surface Chart") );
     d->surfaceChartAction->setEnabled( false );
-    d->ganttChartAction = chartTypeMenu->addAction( KIcon( "chart_gantt_normal" ), i18n("Gantt Chart") );
+    d->ganttChartAction = chartTypeMenu->addAction( i18n("Gantt Chart") );
     d->ganttChartAction->setEnabled( false );
 
     d->ui.chartTypeMenu->setMenu( chartTypeMenu );
@@ -286,31 +286,31 @@ ChartConfigWidget::ChartConfigWidget()
     QMenu *dataSetChartTypeMenu = new QMenu( this );
 
     // Default chart type is a bar chart
-    dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
+    dataSetChartTypeMenu->setIcon( KIcon( "chart-bar" ) );
 
 
-    d->dataSetBarChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_bar" ), "Bar Chart" );
-    d->dataSetNormalBarChartAction  = d->dataSetBarChartMenu->addAction( KIcon( "chart_bar_beside" ), i18n("Normal") );
-    d->dataSetStackedBarChartAction = d->dataSetBarChartMenu->addAction( KIcon( "chart_bar_layer" ), i18n("Stacked") );
-    d->dataSetPercentBarChartAction = d->dataSetBarChartMenu->addAction( KIcon( "chart_bar_percent" ), i18n("Percent") );
+    d->dataSetBarChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "office-chart-bar" ), "Bar Chart" );
+    d->dataSetNormalBarChartAction  = d->dataSetBarChartMenu->addAction( KIcon( "office-chart-bar" ), i18n("Normal") );
+    d->dataSetStackedBarChartAction = d->dataSetBarChartMenu->addAction( KIcon( "office-chart-bar-stacked" ), i18n("Stacked") );
+    d->dataSetPercentBarChartAction = d->dataSetBarChartMenu->addAction( KIcon( "office-chart-bar-percentage" ), i18n("Percent") );
 
-    d->dataSetLineChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_line" ), "Line Chart" );
-    d->dataSetNormalLineChartAction  = d->dataSetLineChartMenu->addAction( KIcon( "chart_line_normal" ), i18n("Normal") );
-    d->dataSetStackedLineChartAction = d->dataSetLineChartMenu->addAction( KIcon( "chart_line_stacked" ), i18n("Stacked") );
-    d->dataSetPercentLineChartAction = d->dataSetLineChartMenu->addAction( KIcon( "chart_line_percent" ), i18n("Percent") );
+    d->dataSetLineChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "office-chart-line" ), "Line Chart" );
+    d->dataSetNormalLineChartAction  = d->dataSetLineChartMenu->addAction( KIcon( "office-chart-line" ), i18n("Normal") );
+    d->dataSetStackedLineChartAction = d->dataSetLineChartMenu->addAction( KIcon( "office-chart-line-stacked" ), i18n("Stacked") );
+    d->dataSetPercentLineChartAction = d->dataSetLineChartMenu->addAction( KIcon( "office-chart-line-percentage" ), i18n("Percent") );
 
-    d->dataSetAreaChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_area" ), "Area Chart" );
-    d->dataSetNormalAreaChartAction  = d->dataSetAreaChartMenu->addAction( KIcon( "chart_area_normal" ), i18n("Normal") );
-    d->dataSetStackedAreaChartAction = d->dataSetAreaChartMenu->addAction( KIcon( "chart_area_stacked" ), i18n("Stacked") );
-    d->dataSetPercentAreaChartAction = d->dataSetAreaChartMenu->addAction( KIcon( "chart_area_percent" ), i18n("Percent") );
+    d->dataSetAreaChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "office-chart-area" ), "Area Chart" );
+    d->dataSetNormalAreaChartAction  = d->dataSetAreaChartMenu->addAction( KIcon( "office-chart-area" ), i18n("Normal") );
+    d->dataSetStackedAreaChartAction = d->dataSetAreaChartMenu->addAction( KIcon( "office-chart-area-stacked" ), i18n("Stacked") );
+    d->dataSetPercentAreaChartAction = d->dataSetAreaChartMenu->addAction( KIcon( "office-chart-area-percentage" ), i18n("Percent") );
 
-    d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_pie_normal" ), i18n("Pie Chart") );
-    d->dataSetRingChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_ring_normal" ), i18n("Ring Chart") );
-    d->dataSetRadarChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
-    d->dataSetStockChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_stock_normal" ), i18n("Stock Chart") );
-    d->dataSetBubbleChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_bubble_normal" ), i18n("Bubble Chart") );
+    d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction( KIcon( "office-chart-pie" ), i18n("Pie Chart") );
+    d->dataSetRingChartAction = dataSetChartTypeMenu->addAction( KIcon( "office-chart-ring" ), i18n("Ring Chart") );
+    d->dataSetRadarChartAction = dataSetChartTypeMenu->addAction( KIcon( "office-chart-polar" ), i18n("Polar Chart") );
+    d->dataSetStockChartAction = dataSetChartTypeMenu->addAction( i18n("Stock Chart") );
+    d->dataSetBubbleChartAction = dataSetChartTypeMenu->addAction( i18n("Bubble Chart") );
 
-    d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_scatter_normal" ), i18n("Scatter Chart") );
+    d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction( KIcon( "office-chart-scatter" ), i18n("Scatter Chart") );
 
     d->ui.dataSetChartTypeMenu->setMenu( dataSetChartTypeMenu );
 

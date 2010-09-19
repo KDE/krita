@@ -48,6 +48,8 @@ private:
     QAbstractItemModel *m_model;
 };
 
+typedef QMap<QString, Table*> TableMap;
+
 class CHARTSHAPELIB_EXPORT TableSource : public QObject
 {
     Q_OBJECT
@@ -71,6 +73,12 @@ public:
      * by some "table source".
      */
     Table *get( const QAbstractItemModel *model ) const;
+
+    /**
+     * Returns a map of all name/table pairs in this source.
+     * Mostly for debugging purposes.
+     */
+    TableMap tableMap() const;
 
     /**
      * Sets the KSpread::SheetAccessModel instance to use to get notified

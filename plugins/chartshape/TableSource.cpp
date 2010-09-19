@@ -133,6 +133,11 @@ Table *TableSource::get( const QAbstractItemModel *model ) const
     return d->tablesByModel[model];
 }
 
+TableMap TableSource::tableMap() const
+{
+    return d->tablesByName;
+}
+
 void TableSource::setSheetAccessModel( QAbstractItemModel *model )
 {
     // Disconnect slots from signals in old sheetAccessModel

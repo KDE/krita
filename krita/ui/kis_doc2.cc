@@ -139,6 +139,8 @@ public:
     KisKraLoader* kraLoader;
     KisKraSaver* kraSaver;
 
+    QString error;
+
 };
 
 
@@ -437,26 +439,32 @@ void KisDoc2::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
     // print error if the lcms engine is not available
     if (!KoColorSpaceEngineRegistry::instance()->contains("icc")) {
         // need to wait 1 event since exiting here would not work.
+        m_d->error = i18n("The KOffice LittleCMS color management plugin is not installed. Krita will quit now.");
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
     }
-    else {
-        KoDocument::showStartUpWidget(parent, alwaysShow);
-        KisConfig cfg;
-        if (cfg.firstRun()) {
-            QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
-            if (!fname.isEmpty()) {
-                openUrl(fname);
-            }
-            cfg.setFirstRun(false);
+
+    QStringList qtversion = QString(qVersion()).split('.');
+    if (qtversion[0] == "4" && qtversion[1] <= "6" && qtversion[3].toInt() < 3) {
+        m_d->error = i18n("Krita needs at least Qt 4.6.3 to work correctly. Your Qt version is %1.", qVersion());
+        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
+    }
+
+    KoDocument::showStartUpWidget(parent, alwaysShow);
+    KisConfig cfg;
+    if (cfg.firstRun()) {
+        QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
+        if (!fname.isEmpty()) {
+            openUrl(fname);
         }
+        cfg.setFirstRun(false);
     }
 }
 
 void KisDoc2::showErrorAndDie()
 {
     KMessageBox::error(widget(),
-                       i18n("The KOffice LittleCMS color management plugin is not installed. Krita will quit now."),
-                       i18n("Installation Error"));
+                       m_d->error,
+                       i18n("Installation error"));
     QCoreApplication::exit(10);
 }
 

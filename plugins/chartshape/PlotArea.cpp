@@ -271,16 +271,16 @@ void PlotArea::proxyModelStructureChanged()
     foreach( DataSet *dataSet, dataSets )
         attachedAxes.insert( dataSet, dataSet->attachedAxis() );
 
+    // Proxy structure and thus data sets changed, drop old state and
+    // clear all axes of data sets
+    foreach( Axis *axis, axes() )
+        axis->clearDataSets();
+
     // FIXME: Maybe this shouldn't be a property of an axis. After all
     // there should be exactly one x axis and one region for categories.
     // See note in Axis::setCategoryDataRegion()
     // Categories might have been inserted or removed from the proxy model.
     xAxis()->setCategoryDataRegion( proxyModel()->categoryDataRegion() );
-
-    // Proxy structure and thus data sets changed, drop old state and
-    // clear all axes of data sets
-    foreach( Axis *axis, axes() )
-        axis->clearDataSets();
 
     // Now add the new list of data sets to the axis they belong to
     foreach( DataSet *dataSet, dataSets ) {

@@ -166,24 +166,28 @@ bool EnhancedPathCommand::execute()
     // elliptical quadrant (initial segment tangential to x-axis) (x y) +
     case 'X': {
         KoPathPoint * lastPoint = lastPathPoint();
+        bool xDir = true;
         foreach (const QPointF &point, points) {
             qreal rx = point.x() - lastPoint->point().x();
             qreal ry = point.y() - lastPoint->point().y();
-            qreal startAngle = ry > 0.0 ? 90.0 : 270.0;
-            qreal sweepAngle = rx*ry < 0.0 ? 90.0 : -90.0;
+            qreal startAngle = xDir ? (ry > 0.0 ? 90.0 : 270.0) : (rx < 0.0 ? 0.0 : 180.0);
+            qreal sweepAngle = xDir ? (rx*ry < 0.0 ? 90.0 : -90.0) : (rx*ry > 0.0 ? 90.0 : -90.0);
             lastPoint = m_parent->arcTo(fabs(rx), fabs(ry), startAngle, sweepAngle);
+            xDir = !xDir;
         }
         break;
     }
     // elliptical quadrant (initial segment tangential to y-axis) (x y) +
     case 'Y': {
         KoPathPoint * lastPoint = lastPathPoint();
+        bool xDir = false;
         foreach (const QPointF &point, points) {
             qreal rx = point.x() - lastPoint->point().x();
             qreal ry = point.y() - lastPoint->point().y();
-            qreal startAngle = rx < 0.0 ? 0.0 : 180.0;
-            qreal sweepAngle = rx*ry > 0.0 ? 90.0 : -90.0;
+            qreal startAngle = xDir ? (ry > 0.0 ? 90.0 : 270.0) : (rx < 0.0 ? 0.0 : 180.0);
+            qreal sweepAngle = xDir ? (rx*ry < 0.0 ? 90.0 : -90.0) : (rx*ry > 0.0 ? 90.0 : -90.0);
             lastPoint = m_parent->arcTo(fabs(rx), fabs(ry), startAngle, sweepAngle);
+            xDir = !xDir;
         }
         break;
     }

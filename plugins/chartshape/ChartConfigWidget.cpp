@@ -181,6 +181,7 @@ ChartConfigWidget::Private::Private( QWidget *parent )
     lastFixedPosition       = KDChart::Position::East;
     selectedDataSet = 0;
     shape = 0;
+    tableSource = 0;
 
     type = KChart::LastChartType;
     subtype = KChart::NoChartSubtype;
@@ -428,6 +429,8 @@ void ChartConfigWidget::open( KoShape* shape )
             d->ui.tabWidget->setCurrentIndex( 2 );
         }
     }
+
+    d->tableSource = d->shape->tableSource();
 
 // NOTE: There's no single source table anymore, a KSpread workbook allows multiple to be used with a chart.
 //    KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>( d->shape->internalModel() );

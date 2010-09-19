@@ -1101,7 +1101,7 @@ bool ChartShape::loadOdfData( const KoXmlElement &tableElement,
     QString tableName = tableElement.attributeNS( KoXmlNS::table, "name" );
     Table *table = d->tableSource.add( tableName, internalModel );
     // TODO: d->tableSource.setAvoidNameClash( tableName )
-    CellRegion region( table, QRect( 1, 1, rows, cols ) );
+    CellRegion region( table, QRect( 1, 1, cols, rows ) );
     d->proxyModel->reset( region );
 
     return true;

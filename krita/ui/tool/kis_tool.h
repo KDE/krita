@@ -172,6 +172,9 @@ protected:
     /// Call after finishing use of native OpenGL commands when painting this tool's decorations.
     /// This is a convenience method that calls endOpenGL() on the OpenGL canvas object.
     void endOpenGL();
+    
+    /// Sets the systemLocked for the current node, this will not deactivate the tool buttons
+    void setCurrentNodeLocked(bool locked);
 
 protected slots:
     /**

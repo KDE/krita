@@ -156,12 +156,14 @@ void KisToolPolylineBase::finish()
     if (!currentNode())
         return;
 
+    setCurrentNodeLocked(true);
     m_dragging = false;
     updateArea();
     if(m_points.count() > 1) {
         finishPolyline(m_points);
     }
     m_points.clear();
+    setCurrentNodeLocked(false);
 }
 
 QRectF KisToolPolylineBase::dragBoundingRect()

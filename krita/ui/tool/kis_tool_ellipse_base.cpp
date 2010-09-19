@@ -119,7 +119,9 @@ void KisToolEllipseBase::mouseReleaseEvent(KoPointerEvent *event)
     if (m_dragging && event->button() == Qt::LeftButton) {
         updateArea();
         m_dragging = false;
+        setCurrentNodeLocked(true);
         finishEllipse(QRectF(m_dragStart, m_dragEnd).normalized());
+        setCurrentNodeLocked(false);
         event->accept();
     }
 }

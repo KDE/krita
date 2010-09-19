@@ -1963,7 +1963,7 @@ void KisToolTransform::applyTransform()
     if (!canvas)
         return;
 
-    currentNode()->setSystemLocked(true);
+    setCurrentNodeLocked(true);
 
     QVector3D tmpCenter(m_originalCenter.x(), m_originalCenter.y(), 0);
     tmpCenter = scale(tmpCenter.x(), tmpCenter.y(), tmpCenter.z());
@@ -2144,7 +2144,7 @@ void KisToolTransform::applyTransform()
 
     transaction.commit(image()->undoAdapter());
     updater->deleteLater();
-    currentNode()->setSystemLocked(false);
+    setCurrentNodeLocked(false);
 }
 
 void KisToolTransform::notifyCommandAdded(const QUndoCommand * command)

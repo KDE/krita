@@ -645,9 +645,7 @@ void DataSet::setBrush( const QBrush &brush )
 
 void DataSet::setPieExplodeFactor( int factor )
 {
-    KDChart::PieAttributes pieAttributes;
-    pieAttributes.setExplodeFactor( (qreal)factor / (qreal)100 );
-    d->pieAttributes = pieAttributes;
+    d->pieAttributes.setExplodeFactor( (qreal)factor / (qreal)100 );
     if( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this );
 }
@@ -674,9 +672,8 @@ void DataSet::setBrush( int section, const QBrush &brush )
 
 void DataSet::setPieExplodeFactor( int section, int factor )
 {
-    KDChart::PieAttributes pieAttributes;
+    KDChart::PieAttributes &pieAttributes = d->sectionsPieAttributes[section];
     pieAttributes.setExplodeFactor( (qreal)factor / (qreal)100 );
-    d->sectionsPieAttributes[ section ] = pieAttributes;
     if( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::PieAttributesRole, section);
 }

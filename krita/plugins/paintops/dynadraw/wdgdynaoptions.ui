@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgDynaOptions</class>
- <widget class="QWidget" name="WdgDynaOptions" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgDynaOptions">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,192 +10,188 @@
     <height>359</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>210</horstretch>
     <verstretch>60</verstretch>
    </sizepolicy>
   </property>
-  <property name="minimumSize" >
+  <property name="minimumSize">
    <size>
     <width>337</width>
     <height>359</height>
    </size>
   </property>
-  <widget class="QTabWidget" name="tabWidget" >
-   <property name="geometry" >
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>0</x>
      <y>0</y>
      <width>321</width>
      <height>341</height>
     </rect>
    </property>
-   <property name="minimumSize" >
+   <property name="minimumSize">
     <size>
      <width>321</width>
      <height>341</height>
     </size>
    </property>
-   <property name="maximumSize" >
+   <property name="maximumSize">
     <size>
      <width>321</width>
      <height>341</height>
     </size>
    </property>
-   <property name="currentIndex" >
-    <number>1</number>
+   <property name="currentIndex">
+    <number>0</number>
    </property>
-   <widget class="QWidget" name="tab" >
-    <attribute name="title" >
+   <widget class="QWidget" name="tab">
+    <attribute name="title">
      <string>Dynamics settings</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget" >
-     <property name="geometry" >
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>30</y>
-       <width>156</width>
-       <height>223</height>
+       <x>20</x>
+       <y>0</y>
+       <width>281</width>
+       <height>122</height>
       </rect>
      </property>
-     <layout class="QGridLayout" name="gridLayout" >
-      <item row="0" column="0" colspan="2" >
-       <widget class="QLabel" name="initWidthLbl" >
-        <property name="text" >
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="initWidthLbl">
+        <property name="text">
          <string>Initial width</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="2" >
-       <widget class="QDoubleSpinBox" name="initWidthSPBox" >
-        <property name="minimum" >
+      <item row="0" column="1">
+       <widget class="QDoubleSpinBox" name="initWidthSPBox">
+        <property name="minimum">
          <double>-99.000000000000000</double>
         </property>
-        <property name="singleStep" >
+        <property name="singleStep">
          <double>0.050000000000000</double>
         </property>
-        <property name="value" >
+        <property name="value">
          <double>1.500000000000000</double>
         </property>
        </widget>
       </item>
-      <item rowspan="2" row="1" column="2" >
-       <widget class="QDoubleSpinBox" name="massSPBox" >
-        <property name="minimum" >
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Mass</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="massSPBox">
+        <property name="minimum">
          <double>-99.000000000000000</double>
         </property>
-        <property name="singleStep" >
+        <property name="singleStep">
          <double>0.050000000000000</double>
         </property>
-        <property name="value" >
+        <property name="value">
          <double>0.500000000000000</double>
         </property>
        </widget>
       </item>
-      <item rowspan="2" row="2" column="0" colspan="2" >
-       <widget class="QLabel" name="label_3" >
-        <property name="text" >
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
          <string>Drag</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="2" >
-       <widget class="QDoubleSpinBox" name="dragSPBox" >
-        <property name="minimum" >
+      <item row="2" column="1">
+       <widget class="QDoubleSpinBox" name="dragSPBox">
+        <property name="minimum">
          <double>-99.000000000000000</double>
         </property>
-        <property name="singleStep" >
+        <property name="singleStep">
          <double>0.050000000000000</double>
         </property>
-        <property name="value" >
+        <property name="value">
          <double>0.150000000000000</double>
         </property>
        </widget>
       </item>
-      <item rowspan="2" row="4" column="0" colspan="3" >
-       <widget class="QCheckBox" name="fixedAngleChBox" >
-        <property name="text" >
-         <string>Fixed angle</string>
+      <item row="3" column="1">
+       <widget class="QDoubleSpinBox" name="widthRangeSPBox">
+        <property name="minimum">
+         <double>-99.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.050000000000000</double>
+        </property>
+        <property name="value">
+         <double>0.050000000000000</double>
         </property>
        </widget>
       </item>
-      <item row="6" column="0" colspan="2" >
-       <widget class="QLabel" name="label_4" >
-        <property name="text" >
-         <string>X angle</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="0" >
-       <widget class="QLabel" name="label_5" >
-        <property name="text" >
-         <string>Y angle</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0" colspan="2" >
-       <widget class="QLabel" name="label_6" >
-        <property name="text" >
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
          <string>Width range</string>
         </property>
        </widget>
       </item>
-      <item row="8" column="2" >
-       <widget class="QDoubleSpinBox" name="widthRangeSPBox" >
-        <property name="minimum" >
-         <double>-99.000000000000000</double>
-        </property>
-        <property name="singleStep" >
-         <double>0.050000000000000</double>
-        </property>
-        <property name="value" >
-         <double>0.050000000000000</double>
-        </property>
-       </widget>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>135</y>
+       <width>281</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Angle</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KisDoubleSliderSpinBox" name="angleSlider" native="true">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-      <item row="7" column="2" >
-       <widget class="QDoubleSpinBox" name="yAngleSPBox" >
-        <property name="minimum" >
-         <double>-99.000000000000000</double>
-        </property>
-        <property name="singleStep" >
-         <double>0.050000000000000</double>
-        </property>
-        <property name="value" >
-         <double>0.200000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="2" >
-       <widget class="QDoubleSpinBox" name="xAngleSPBox" >
-        <property name="minimum" >
-         <double>-99.000000000000000</double>
-        </property>
-        <property name="singleStep" >
-         <double>0.050000000000000</double>
-        </property>
-        <property name="value" >
-         <double>0.600000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="2" >
-       <widget class="QLabel" name="label_2" >
-        <property name="text" >
-         <string>Mass</string>
+      <item>
+       <widget class="QCheckBox" name="fixedAngleChBox">
+        <property name="text">
+         <string>Fixed angle</string>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
    </widget>
-   <widget class="QWidget" name="tab_2" >
-    <attribute name="title" >
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
      <string>Shape</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget" >
-     <property name="geometry" >
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
       <rect>
        <x>0</x>
        <y>10</y>
@@ -202,32 +199,32 @@
        <height>141</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout" >
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout" >
+       <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QRadioButton" name="circleRBox" >
-          <property name="text" >
+         <widget class="QRadioButton" name="circleRBox">
+          <property name="text">
            <string>Circle</string>
           </property>
-          <property name="checked" >
+          <property name="checked">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="twoCBox" >
-          <property name="text" >
+         <widget class="QCheckBox" name="twoCBox">
+          <property name="text">
            <string>Two</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="circleRadiusSPBox" >
-          <property name="toolTip" >
+         <widget class="QSpinBox" name="circleRadiusSPBox">
+          <property name="toolTip">
            <string>Circle radius</string>
           </property>
-          <property name="value" >
+          <property name="value">
            <number>20</number>
           </property>
          </widget>
@@ -235,30 +232,30 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2" >
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QRadioButton" name="linesRBox" >
-          <property name="text" >
+         <widget class="QRadioButton" name="linesRBox">
+          <property name="text">
            <string>Lines</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="lineSpacingSPBox" >
-          <property name="toolTip" >
+         <widget class="QDoubleSpinBox" name="lineSpacingSPBox">
+          <property name="toolTip">
            <string>Line spacing</string>
           </property>
-          <property name="value" >
+          <property name="value">
            <double>20.000000000000000</double>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="lineCountSPBox" >
-          <property name="toolTip" >
+         <widget class="QSpinBox" name="lineCountSPBox">
+          <property name="toolTip">
            <string>Line count</string>
           </property>
-          <property name="value" >
+          <property name="value">
            <number>10</number>
           </property>
          </widget>
@@ -266,25 +263,25 @@
        </layout>
       </item>
       <item>
-       <widget class="QRadioButton" name="polygonRBox" >
-        <property name="text" >
+       <widget class="QRadioButton" name="polygonRBox">
+        <property name="text">
          <string>Polygon</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="wireRBox" >
-        <property name="text" >
+       <widget class="QRadioButton" name="wireRBox">
+        <property name="text">
          <string>Wire</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="LineCBox" >
-        <property name="text" >
+       <widget class="QCheckBox" name="LineCBox">
+        <property name="text">
          <string>Paint connection</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
@@ -294,6 +291,14 @@
    </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -48,9 +48,8 @@ DynaBrush::DynaBrush()
 
 void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
 {
-    qreal mx, my;
-    mx = m_cursorPos.x();
-    my = m_cursorPos.y();
+    qreal mx = m_cursorPos.x();
+    qreal my = m_cursorPos.y();
 
     if (!m_initialized) {
         m_cursorFilter.initFilterPosition(mx, my);
@@ -58,7 +57,6 @@ void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
         m_cursorFilter.setFixedAngles(m_properties->xAngle,m_properties->yAngle);
         m_cursorFilter.setMass(m_properties->mass);
         m_cursorFilter.setDrag(m_properties->drag);
-        
 
         for (quint16 i = 0; i < m_properties->circleRadius; i++) {
             m_prevPosition.append(QPointF(x, y));
@@ -83,25 +81,19 @@ DynaBrush::~DynaBrush()
 
 void DynaBrush::drawSegment(KisPainter &painter)
 {
-    qreal delx, dely;
-    qreal wid;
-    qreal px, py, nx, ny;
-
-    wid = m_properties->widthRange - m_cursorFilter.velocity();
-
-    wid = wid * m_properties->initWidth;
-
+    qreal wid = (m_properties->widthRange - m_cursorFilter.velocity()) * m_properties->initWidth;
+    
     if (wid < 0.00001) {
         wid = 0.00001;
     }
 
-    delx = m_cursorFilter.angleX() * wid;
-    dely = m_cursorFilter.angleY() * wid;
-
-    px = m_cursorFilter.prevX();
-    py = m_cursorFilter.prevY();
-    nx = m_cursorFilter.x();
-    ny = m_cursorFilter.y();
+    qreal delx = m_cursorFilter.angleX() * wid;
+    qreal dely = m_cursorFilter.angleY() * wid;
+    
+    qreal px = m_cursorFilter.prevX();
+    qreal py = m_cursorFilter.prevY();
+    qreal nx = m_cursorFilter.x();
+    qreal ny = m_cursorFilter.y();
 
     QPointF prev(px , py);         // previous position
     QPointF now(nx , ny);           // new position
@@ -127,8 +119,9 @@ void DynaBrush::drawSegment(KisPainter &painter)
     nowl.ry() *= m_canvasHeight;
     nowr.ry() *= m_canvasHeight;
 
-    if (m_properties->enableLine)
+    if (m_properties->enableLine){
         painter.drawLine(prev, now);
+    }
 
     if (m_properties->action == 0) {
         qreal screenX = m_cursorFilter.velocityX() * m_canvasWidth;

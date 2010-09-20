@@ -55,8 +55,11 @@ KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainte
     m_properties.action = settings->getDouble(DYNA_ACTION);
     m_properties.mass = settings->getDouble(DYNA_MASS);
     m_properties.drag = settings->getDouble(DYNA_DRAG);
-    m_properties.xAngle = settings->getDouble(DYNA_X_ANGLE);
-    m_properties.yAngle = settings->getDouble(DYNA_Y_ANGLE);
+
+    double angle = settings->getDouble(DYNA_ANGLE);
+    m_properties.xAngle = cos(angle * M_PI/180.0);
+    m_properties.yAngle = sin(angle * M_PI/180.0);
+
     m_properties.widthRange = settings->getDouble(DYNA_WIDTH_RANGE);
     m_properties.circleRadius = settings->getInt(DYNA_CIRCLE_RADIUS);
     m_properties.lineCount = settings->getInt(DYNA_LINE_COUNT);

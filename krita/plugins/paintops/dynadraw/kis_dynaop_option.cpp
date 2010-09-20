@@ -26,6 +26,10 @@ public:
     KisDynaOpOptionsWidget(QWidget *parent = 0)
             : QWidget(parent) {
         setupUi(this);
+        angleSlider->setRange(0,360,0);
+        angleSlider->setValue(0);
+        angleSlider->setSingleStep(1);
+        angleSlider->setSuffix(QChar(Qt::Key_degree));
     }
 };
 
@@ -35,6 +39,10 @@ KisDynaOpOption::KisDynaOpOption()
     m_checkable = false;
     m_options = new KisDynaOpOptionsWidget();
     
+    //ui 
+    connect(m_options->fixedAngleChBox,SIGNAL(toggled(bool)),m_options->angleSlider,SLOT(setEnabled(bool)));
+    
+    // preset
     connect(m_options->circleRBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->polygonRBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->wireRBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
@@ -42,8 +50,7 @@ KisDynaOpOption::KisDynaOpOption()
     connect(m_options->initWidthSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->massSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->dragSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->xAngleSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->yAngleSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->angleSlider,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->widthRangeSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->circleRadiusSPBox,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
     connect(m_options->lineCountSPBox,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
@@ -80,15 +87,6 @@ bool KisDynaOpOption::useFixedAngle() const
     return m_options->fixedAngleChBox->isChecked();
 }
 
-qreal KisDynaOpOption::xAngle() const
-{
-    return m_options->xAngleSPBox->value();
-}
-
-qreal KisDynaOpOption::yAngle() const
-{
-    return m_options->yAngleSPBox->value();
-}
 
 qreal KisDynaOpOption::widthRange() const
 {
@@ -140,8 +138,7 @@ void KisDynaOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
     setting->setProperty(DYNA_MASS ,mass());
     setting->setProperty(DYNA_DRAG ,drag());
     setting->setProperty(DYNA_USE_FIXED_ANGLE ,useFixedAngle());
-    setting->setProperty(DYNA_X_ANGLE ,xAngle());
-    setting->setProperty(DYNA_Y_ANGLE ,yAngle());
+    setting->setProperty(DYNA_ANGLE ,m_options->angleSlider->value());
     setting->setProperty(DYNA_WIDTH_RANGE ,widthRange());
     setting->setProperty(DYNA_ACTION ,action());
     setting->setProperty(DYNA_CIRCLE_RADIUS ,circleRadius());
@@ -165,8 +162,7 @@ void KisDynaOpOption::readOptionSetting(const KisPropertiesConfiguration* settin
     m_options->initWidthSPBox->setValue( setting->getDouble(DYNA_WIDTH));
     m_options->massSPBox->setValue( setting->getDouble(DYNA_MASS));
     m_options->dragSPBox->setValue( setting->getDouble(DYNA_DRAG));
-    m_options->xAngleSPBox->setValue( setting->getDouble(DYNA_X_ANGLE));
-    m_options->yAngleSPBox->setValue( setting->getDouble(DYNA_Y_ANGLE));
+    m_options->angleSlider->setValue( setting->getDouble(DYNA_ANGLE));
     m_options->widthRangeSPBox->setValue( setting->getDouble(DYNA_WIDTH_RANGE));
     m_options->circleRadiusSPBox->setValue( setting->getInt(DYNA_CIRCLE_RADIUS));
     m_options->lineCountSPBox->setValue( setting->getInt(DYNA_LINE_COUNT));
@@ -175,5 +171,3 @@ void KisDynaOpOption::readOptionSetting(const KisPropertiesConfiguration* settin
     m_options->twoCBox->setChecked(setting->getBool(DYNA_USE_TWO_CIRCLES));
     m_options->fixedAngleChBox->setChecked(setting->getBool(DYNA_USE_FIXED_ANGLE));
 }
-
-

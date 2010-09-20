@@ -24,8 +24,7 @@ const QString DYNA_WIDTH = "Dyna/width";
 const QString DYNA_MASS = "Dyna/mass";
 const QString DYNA_DRAG = "Dyna/drag";
 const QString DYNA_USE_FIXED_ANGLE = "Dyna/useFixedAngle";
-const QString DYNA_X_ANGLE = "Dyna/xAngle";
-const QString DYNA_Y_ANGLE = "Dyna/yAngle";
+const QString DYNA_ANGLE = "Dyna/angle";
 const QString DYNA_WIDTH_RANGE = "Dyna/widthRange";
 const QString DYNA_ACTION = "Dyna/action";
 const QString DYNA_CIRCLE_RADIUS = "Dyna/circleRadius";
@@ -38,6 +37,8 @@ class KisDynaOpOptionsWidget;
 
 class KisDynaOpOption : public KisPaintOpOption
 {
+    Q_OBJECT
+    
 public:
     KisDynaOpOption();
     ~KisDynaOpOption();
@@ -46,8 +47,6 @@ public:
     qreal mass() const;
     qreal drag() const;
     bool useFixedAngle() const;
-    qreal xAngle() const;
-    qreal yAngle() const;
     qreal widthRange() const;
 
     int action() const;
@@ -64,6 +63,7 @@ public:
 private:
     KisDynaOpOptionsWidget * m_options;
 
+    
 };
 
 #endif

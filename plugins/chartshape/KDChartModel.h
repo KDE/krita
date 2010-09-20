@@ -128,8 +128,21 @@ public slots:
     void removeDataSet( DataSet *dataSet, bool silent = false );
     QList<DataSet*> dataSets() const;
 
+    /**
+     * Called by DataSet whenever a property that is global to all its data
+     * points changes, e.g. its label or its pen
+     */
     void dataSetChanged( DataSet *dataSet );
+
+    /**
+     * Called by DataSet whenever one or more of its data points changes,
+     * e.g. the x value of a data point.
+     */
     void dataSetChanged( DataSet *dataSet, DataRole role, int first, int last = -1 );
+
+    /**
+     * Called by DataSet when the total number of data points it has changed.
+     */
     void dataSetSizeChanged( DataSet *dataSet, int newSize );
     
     void emitReset();

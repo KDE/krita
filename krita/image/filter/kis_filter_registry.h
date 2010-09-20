@@ -50,9 +50,10 @@ signals:
 
 private:
 
-    KisFilterRegistry();
+    KisFilterRegistry(QObject *parent);
     KisFilterRegistry(const KisFilterRegistry&);
     KisFilterRegistry operator=(const KisFilterRegistry&);
+
 };
 
 #endif // KIS_FILTERSPACE_REGISTRY_H_

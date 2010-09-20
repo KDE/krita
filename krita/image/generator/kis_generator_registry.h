@@ -51,10 +51,9 @@ signals:
 
 private:
 
-    KisGeneratorRegistry();
+    KisGeneratorRegistry(QObject *parent);
     KisGeneratorRegistry(const KisGeneratorRegistry&);
     KisGeneratorRegistry operator=(const KisGeneratorRegistry&);
-
 };
 
 #endif // KIS_GENERATOR_REGISTRY_H_

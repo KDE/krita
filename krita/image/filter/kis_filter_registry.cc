@@ -22,6 +22,7 @@
 #include <math.h>
 
 #include <QString>
+#include <QApplication>
 
 #include <kglobal.h>
 #include <kaction.h>
@@ -40,22 +41,27 @@
 #include "filter/kis_filter.h"
 #include "kis_filter_configuration.h"
 
-KisFilterRegistry::KisFilterRegistry()
+KisFilterRegistry::KisFilterRegistry(QObject *parent)
+    : QObject(parent)
 {
 }
 
 KisFilterRegistry::~KisFilterRegistry()
 {
     dbgRegistry << "deleting KisFilterRegistry";
+    foreach(QString id, keys()) {
+        remove(id);
+    }
 }
 
 KisFilterRegistry* KisFilterRegistry::instance()
 {
-    K_GLOBAL_STATIC(KisFilterRegistry, s_instance);
-    if (!s_instance.exists()) {
+    KisFilterRegistry *reg = qApp->findChild<KisFilterRegistry *>("");
+    if (!reg) {
+        reg = new KisFilterRegistry(qApp);
         KoPluginLoader::instance()->load("Krita/Filter", "Type == 'Service' and ([X-Krita-Version] == 3)");
     }
-    return s_instance;
+    return reg;
 }
 
 void KisFilterRegistry::add(KisFilterSP item)

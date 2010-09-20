@@ -58,7 +58,7 @@ void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
         m_cursorFilter.setMass(m_properties->mass);
         m_cursorFilter.setDrag(m_properties->drag);
 
-        for (quint16 i = 0; i < m_properties->circleRadius; i++) {
+        for (quint16 i = 0; i < m_properties->lineCount; i++) {
             m_prevPosition.append(QPointF(x, y));
         }
 
@@ -127,15 +127,13 @@ void DynaBrush::drawSegment(KisPainter &painter)
         qreal screenX = m_cursorFilter.velocityX() * m_canvasWidth;
         qreal screenY = m_cursorFilter.velocityY() * m_canvasHeight;
         qreal speed = sqrt(screenX * screenX + screenY * screenY);
-        speed = qBound(qreal(0.0), speed , qreal(m_properties->circleRadius * 2.0));
+        speed = qBound(qreal(0.0), speed , qreal(m_properties->diameter));
 
-        drawCircle(painter, prev.x(), prev.y() , m_properties->circleRadius + speed, 2 * m_properties->circleRadius  + speed);
-        //painter.paintEllipse(prevl.x(), prevl.y(), qAbs((prevl - prevr).x()), qAbs((prevl - prevr).y()) );
+        drawCircle(painter, prev.x(), prev.y() , m_properties->diameter * 0.5 + speed, m_properties->diameter + speed);
         if (m_properties->useTwoCircles) {
-            drawCircle(painter, now.x(), now.y() , m_properties->circleRadius + speed, 2 * m_properties->circleRadius + speed);
-            //drawCircle(painter, now.x(), now.y() , m_circleRadius * m_mouse.vel , 2 * m_circleRadius * m_mouse.vel );
-            //  painter.paintEllipse(nowl.x(), nowl.y(), qAbs((nowl - nowr).x()), qAbs((nowl - nowr).y()) );
+            drawCircle(painter, now.x(), now.y() , m_properties->diameter * 0.5 + speed, m_properties->diameter + speed);
         }
+        
     } else if (m_properties->action == 1) {
         drawQuad(painter, prevr, prevl, nowl, nowr);
     } else if (m_properties->action == 2) {

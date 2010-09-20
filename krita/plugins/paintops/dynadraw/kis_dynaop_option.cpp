@@ -30,6 +30,11 @@ public:
         angleSlider->setValue(0);
         angleSlider->setSingleStep(1);
         angleSlider->setSuffix(QChar(Qt::Key_degree));
+        
+        diameterDSSB->setRange(0,1000,0);
+        diameterDSSB->setValue(20);
+        diameterDSSB->setExponentRatio(3.0);
+        
     }
 };
 
@@ -52,7 +57,7 @@ KisDynaOpOption::KisDynaOpOption()
     connect(m_options->dragSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->angleSlider,SIGNAL(valueChanged(qreal)),SIGNAL(sigSettingChanged()));
     connect(m_options->widthRangeSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->circleRadiusSPBox,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
+    connect(m_options->diameterDSSB,SIGNAL(valueChanged(qreal)),SIGNAL(sigSettingChanged()));
     connect(m_options->lineCountSPBox,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
     connect(m_options->lineSpacingSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->LineCBox,SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
@@ -107,10 +112,6 @@ int KisDynaOpOption::action() const
     return 0;
 }
 
-int KisDynaOpOption::circleRadius() const
-{
-    return m_options->circleRadiusSPBox->value();
-}
 
 bool KisDynaOpOption::enableLine() const
 {
@@ -141,7 +142,7 @@ void KisDynaOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
     setting->setProperty(DYNA_ANGLE ,m_options->angleSlider->value());
     setting->setProperty(DYNA_WIDTH_RANGE ,widthRange());
     setting->setProperty(DYNA_ACTION ,action());
-    setting->setProperty(DYNA_CIRCLE_RADIUS ,circleRadius());
+    setting->setProperty(DYNA_DIAMETER ,m_options->diameterDSSB->value());
     setting->setProperty(DYNA_ENABLE_LINE ,enableLine());
     setting->setProperty(DYNA_USE_TWO_CIRCLES ,useTwoCircles());
     setting->setProperty(DYNA_LINE_COUNT ,lineCount());
@@ -164,7 +165,7 @@ void KisDynaOpOption::readOptionSetting(const KisPropertiesConfiguration* settin
     m_options->dragSPBox->setValue( setting->getDouble(DYNA_DRAG));
     m_options->angleSlider->setValue( setting->getDouble(DYNA_ANGLE));
     m_options->widthRangeSPBox->setValue( setting->getDouble(DYNA_WIDTH_RANGE));
-    m_options->circleRadiusSPBox->setValue( setting->getInt(DYNA_CIRCLE_RADIUS));
+    m_options->diameterDSSB->setValue( setting->getInt(DYNA_DIAMETER));
     m_options->lineCountSPBox->setValue( setting->getInt(DYNA_LINE_COUNT));
     m_options->lineSpacingSPBox->setValue( setting->getDouble(DYNA_LINE_SPACING));
     m_options->LineCBox->setChecked(setting->getBool(DYNA_ENABLE_LINE));

@@ -61,14 +61,12 @@ KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainte
     m_properties.yAngle = sin(angle * M_PI/180.0);
 
     m_properties.widthRange = settings->getDouble(DYNA_WIDTH_RANGE);
-    m_properties.circleRadius = settings->getInt(DYNA_CIRCLE_RADIUS);
+    m_properties.diameter = settings->getInt(DYNA_DIAMETER);
     m_properties.lineCount = settings->getInt(DYNA_LINE_COUNT);
     m_properties.lineSpacing = settings->getDouble(DYNA_LINE_SPACING);
     m_properties.enableLine = settings->getBool(DYNA_ENABLE_LINE);
     m_properties.useTwoCircles = settings->getBool(DYNA_USE_TWO_CIRCLES);
     m_properties.useFixedAngle = settings->getBool(DYNA_USE_FIXED_ANGLE);
-    
-    settings->dump();
     
     m_dynaBrush.setProperties( &m_properties );
 }

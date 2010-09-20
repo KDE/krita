@@ -39,7 +39,7 @@ public:
     qreal widthRange;
     qreal lineSpacing;
     quint8 action;
-    quint16 circleRadius;
+    quint16 diameter;
     quint16 lineCount;
     bool enableLine;
     bool useTwoCircles;

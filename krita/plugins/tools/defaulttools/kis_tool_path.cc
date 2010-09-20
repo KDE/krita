@@ -93,7 +93,7 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
     KisNodeSP currentNode =
         canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2 *>(this->canvas());
-    if (!currentNode || !kiscanvas) {
+    if (!currentNode || !kiscanvas || currentNode->systemLocked()) {
         return;
     }
     // Get painting options
@@ -152,7 +152,9 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
         if (!dev) {
             return;
         }
-
+        
+        setCurrentNodeLocked(true);
+        
         KisSelectionSP selection = kiscanvas->view()->selection();
 
         KisPainter painter(dev, selection);
@@ -167,6 +169,7 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
         QRegion dirtyRegion = painter.dirtyRegion();
         dev->setDirty(dirtyRegion);
         image->setModified();
+        setCurrentNodeLocked(false);
 
     } else {
         pathShape->normalize();

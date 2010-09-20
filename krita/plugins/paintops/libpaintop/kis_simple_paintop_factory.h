@@ -30,8 +30,10 @@ template <class Op, class OpSettings, class OpSettingsWidget> class KisSimplePai
 
 public:
     KisSimplePaintOpFactory(const QString& id, const QString& name,
-                            const QString& pixmap, const QString& model = QString())
-        : m_id(id)
+                            const QString& pixmap, const QString& model = QString(),
+                            const QStringList& whiteListedCompositeOps = QStringList())
+        : KisPaintOpFactory(whiteListedCompositeOps)
+        , m_id(id)
         , m_name(name)
         , m_pixmap(pixmap)
         , m_model(model)
@@ -41,7 +43,7 @@ public:
     virtual ~KisSimplePaintOpFactory()
         {
         }
-        
+
     KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image = 0)
     {
         const OpSettings *opSettings = dynamic_cast<const OpSettings *>(settings.data());
@@ -64,7 +66,7 @@ public:
     {
         return new OpSettingsWidget(parent);
     }
-    
+
     QString id() const {
         return m_id;
     }
@@ -76,7 +78,7 @@ public:
     QString pixmap() {
         return m_pixmap;
     }
-    
+
 private:
     QString m_id;
     QString m_name;

@@ -46,10 +46,10 @@
 #include "KDChartModel.h"
 
 // KChart
-#include "ChartProxyModel.h"
 #include "Axis.h"
 #include "PlotArea.h"
 #include "Surface.h"
+#include "OdfLoadingHelper.h"
 
 // KOffice
 #include <KoXmlNS.h>
@@ -102,9 +102,6 @@ public:
 
     QPen defaultPen() const;
 
-    // Determines what sections of a cell region lie in rect
-    void sectionsInRect( const CellRegion &region, const QRect &rect,
-                         int &start, int &end ) const;
     void dataChanged( KDChartModel::DataRole role, const QRect &rect ) const;
     void refreshCustomData();
 
@@ -153,10 +150,6 @@ public:
     // it belongs to.
     CellRegion categoryDataRegion; // x labels -- same for all datasets
 
-    ChartProxyModel *model;
-    KDChart::AbstractDiagram *kdDiagram;
-    int kdDataSetNumber;
-
     KDChartModel *kdChartModel;
 
     int size;
@@ -181,9 +174,7 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     pen( QPen( Qt::black ) ),
     brush( QColor( Qt::white ) ),    
     dataValueAttributes( defaultDataValueAttributes() ),
-    num( -1 ),
-    kdDiagram( 0 ),
-    kdDataSetNumber( dataSetNr ),
+    num( dataSetNr ),
     kdChartModel( 0 ),
     size( 0 ),
     blockSignals( false )
@@ -316,9 +307,7 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
 {
     if ( !region.isValid() )
         return QVariant();
-
-    QAbstractItemModel *model = this->model->sourceModel();
-    if ( !model )
+    if ( !region.hasPointAtIndex( index ) )
         return QVariant();
 
     // The result
@@ -327,6 +316,14 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     // Convert the given index in this dataset to a data point in the
     // source model.
     QPoint dataPoint = region.pointAtIndex( index );
+    Table *table = region.table();
+    Q_ASSERT( table );
+    QAbstractItemModel *model = table->model();
+    // This means the table the region lies in has been removed, but nobody
+    // has changed the region in the meantime. That is a perfectly valid
+    // scenario, so just return invalid data.
+    if ( !model )
+        return QVariant();
 
     // FIXME: Why not use this immediately if true?
     const bool verticalHeaderData   = dataPoint.x() == 0;
@@ -360,80 +357,20 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     return data;
 }
 
-void DataSet::Private::sectionsInRect( const CellRegion &region, const QRect &rect,
-                                       int &start, int &end ) const
-{
-    QVector<QRect> dataRegions = region.rects();
-
-    start = -1;
-    end = -1;
-
-    if ( region.orientation() == Qt::Horizontal ) {
-        QPoint  topLeft  = rect.topLeft();
-        QPoint  topRight = rect.topRight();
-
-        int totalWidth = 0;
-        int i;
-
-        for ( i = 0; i < dataRegions.size(); i++ ) {
-            if ( dataRegions[i].contains( topLeft ) ) {
-                start = totalWidth + topLeft.x() - dataRegions[i].topLeft().x();
-                break;
-            }
-            totalWidth += dataRegions[i].width();
-        }
-
-        for ( ; i < dataRegions.size(); i++ ) {
-            if ( dataRegions[i].contains( topRight ) ) {
-                end = totalWidth + topRight.x() - dataRegions[i].topLeft().x();
-                break;
-            }
-
-            totalWidth += dataRegions[i].width();
-        }
-    }
-    else {
-        QPoint  topLeft    = rect.topLeft();
-        QPoint  bottomLeft = rect.bottomLeft();
-
-        int totalHeight = 0;
-        int i;
-        for ( i = 0; i < dataRegions.size(); i++ ) {
-            if ( dataRegions[i].contains( topLeft ) ) {
-                start = totalHeight + topLeft.y() - dataRegions[i].topLeft().y();
-                break;
-            }
-
-            totalHeight += dataRegions[i].height();
-        }
-
-        for ( ; i < dataRegions.size(); i++ ) {
-            if ( dataRegions[i].contains( bottomLeft ) ) {
-                end = totalHeight + bottomLeft.y() - dataRegions[i].topLeft().y();
-                break;
-            }
-
-            totalHeight += dataRegions[i].height();
-        }
-    }
-}
-
 QBrush DataSet::Private::defaultBrush() const
 {
-    Q_ASSERT( kdDiagram );
     Qt::Orientation modelDataDirection = kdChartModel->dataDirection();
     // A data set-wide default brush only makes sense if the legend shows
     // data set labels, not the category data. See notes on data directions
     // in KDChartModel.h for details.
     if ( modelDataDirection == Qt::Vertical )
-        return defaultDataSetColor( kdDataSetNumber );
+        return defaultDataSetColor( num );
     // FIXME: What to return in the other case?
     return QBrush();
 }
 
 QBrush DataSet::Private::defaultBrush( int section ) const
 {
-    Q_ASSERT( kdDiagram );
     Qt::Orientation modelDataDirection = kdChartModel->dataDirection();
     // Horizontally aligned diagrams have a specific color per category
     // See for example pie or ring charts. A pie chart contains a single
@@ -450,16 +387,16 @@ QPen DataSet::Private::defaultPen() const
     ChartType chartType = effectiveChartType();
     if ( chartType == LineChartType ||
          chartType == ScatterChartType )
-        pen = QPen( defaultDataSetColor( kdDataSetNumber ) );
+        pen = QPen( defaultDataSetColor( num ) );
 
     return pen;
 }
 
 
-DataSet::DataSet( ChartProxyModel *proxyModel, int dataSetNr )
+DataSet::DataSet( int dataSetNr )
     : d( new Private( this, dataSetNr ) )
 {
-    d->model = proxyModel;
+    Q_ASSERT( dataSetNr >= 0 );
 }
 
 DataSet::~DataSet()
@@ -484,12 +421,6 @@ ChartSubtype DataSet::chartSubType() const
 Axis *DataSet::attachedAxis() const
 {
     return d->attachedAxis;
-}
-
-// FIXME: Should this method also be called proxyModel?
-ChartProxyModel *DataSet::model() const
-{
-    return d->model;
 }
 
 bool DataSet::showMeanValue() const
@@ -647,8 +578,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
     case ScatterChartType:
         // TODO: Marker type should be customizable
         // TODO: Marker size should be customizable
-        Q_ASSERT( kdDataSetNumber() >= 0 );
-        ma.setMarkerStyle( defaultMarkerTypes[ kdDataSetNumber() % numDefaultMarkerTypes ] );
+        ma.setMarkerStyle( defaultMarkerTypes[ number() % numDefaultMarkerTypes ] );
         ma.setVisible( true );
         break;
     case BubbleChartType:
@@ -708,9 +638,7 @@ void DataSet::setBrush( const QBrush &brush )
 
 void DataSet::setPieExplodeFactor( int factor )
 {
-    KDChart::PieAttributes pieAttributes;
-    pieAttributes.setExplodeFactor( (qreal)factor / (qreal)100 );
-    d->pieAttributes = pieAttributes;
+    d->pieAttributes.setExplodeFactor( (qreal)factor / (qreal)100 );
     if( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this );
 }
@@ -737,9 +665,8 @@ void DataSet::setBrush( int section, const QBrush &brush )
 
 void DataSet::setPieExplodeFactor( int section, int factor )
 {
-    KDChart::PieAttributes pieAttributes;
+    KDChart::PieAttributes &pieAttributes = d->sectionsPieAttributes[section];
     pieAttributes.setExplodeFactor( (qreal)factor / (qreal)100 );
-    d->sectionsPieAttributes[ section ] = pieAttributes;
     if( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::PieAttributesRole, section);
 }
@@ -906,31 +833,6 @@ CellRegion DataSet::labelDataRegion() const
     return d->labelDataRegion;
 }
 
-QString DataSet::xDataRegionString() const
-{
-    return CellRegion::regionToString( d->xDataRegion.rects() );
-}
-
-QString DataSet::yDataRegionString() const
-{
-    return CellRegion::regionToString( d->yDataRegion.rects() );
-}
-
-QString DataSet::customDataRegionString() const
-{
-    return CellRegion::regionToString( d->customDataRegion.rects() );
-}
-
-QString DataSet::categoryDataRegionString() const
-{
-    return CellRegion::regionToString( d->categoryDataRegion.rects() );
-}
-
-QString DataSet::labelDataRegionString() const
-{
-    return CellRegion::regionToString( d->labelDataRegion.rects() );
-}
-
 
 void DataSet::setXDataRegion( const CellRegion &region )
 {
@@ -975,31 +877,6 @@ void DataSet::setLabelDataRegion( const CellRegion &region )
         d->kdChartModel->dataSetChanged( this, KDChartModel::LabelDataRole, 0, size() - 1 );
 }
 
-void DataSet::setXDataRegionString( const QString &string )
-{
-    setXDataRegion( CellRegion::stringToRegion( string ) );
-}
-
-void DataSet::setYDataRegionString( const QString &string )
-{
-    setYDataRegion( CellRegion::stringToRegion( string ) );
-}
-
-void DataSet::setCustomDataRegionString( const QString &string )
-{
-    setCustomDataRegion( CellRegion::stringToRegion( string ) );
-}
-
-void DataSet::setCategoryDataRegionString( const QString &string )
-{
-    setCategoryDataRegion( CellRegion::stringToRegion( string ) );
-}
-
-void DataSet::setLabelDataRegionString( const QString &string )
-{
-    setLabelDataRegion( CellRegion::stringToRegion( string ) );
-}
-
 
 int DataSet::size() const
 {
@@ -1011,35 +888,10 @@ void DataSet::Private::dataChanged( KDChartModel::DataRole role, const QRect &re
     if ( blockSignals || !kdChartModel )
         return;
 
-    const CellRegion *cellRegion = 0;
-    switch ( role ) {
-    case KDChartModel::YDataRole:
-        cellRegion = &yDataRegion;
-        break;
-    case KDChartModel::XDataRole:
-        cellRegion = &xDataRegion;
-        break;
-    case KDChartModel::CategoryDataRole:
-        cellRegion = &categoryDataRegion;
-        break;
-    case KDChartModel::LabelDataRole:
-        cellRegion = &labelDataRegion;
-        break;
-    case KDChartModel::CustomDataRole:
-        cellRegion = &customDataRegion;
-        break;
-    // TODO
-    case KDChartModel::ZDataRole:
-    case KDChartModel::BrushDataRole:
-    case KDChartModel::PenDataRole:
-    case KDChartModel::PieAttributesRole:
-        return;
-    }
-
-    int start, end;
-    sectionsInRect( *cellRegion, rect, start, end );
-
-    kdChartModel->dataSetChanged( parent, role, start, end );
+    // Stubbornly pretend like everything changed. This as well should be
+    // refactored to be done in ChartProxyModel, then we can also fine-tune
+    // it for performance.
+    kdChartModel->dataSetChanged( parent, role, 0, size - 1 );
 }
 
 void DataSet::yDataChanged( const QRect &region ) const
@@ -1100,29 +952,6 @@ int DataSet::dimension() const
 
     // Avoid warnings from the compiler.
     return 0;
-}
-
-void DataSet::setKdDiagram( KDChart::AbstractDiagram *diagram )
-{
-    d->kdDiagram = diagram;
-}
-
-KDChart::AbstractDiagram *DataSet::kdDiagram() const
-{
-    return d->kdDiagram;
-}
-
-int DataSet::kdDataSetNumber() const
-{
-    return d->kdDataSetNumber;
-}
-
-void DataSet::setKdDataSetNumber( int number )
-{
-    // FIXME: Is there anything to emit here?
-    // In theory, this should be done before any data is retrieved
-    // from KDChartModel
-    d->kdDataSetNumber = number;
 }
 
 void DataSet::setKdChartModel( KDChartModel *model )
@@ -1250,6 +1079,12 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     KoStyleStack &styleStack = odfLoadingContext.styleStack();
     styleStack.save();
 
+    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
+    // If we exclusively use the chart's internal model then all data
+    // is taken from there and each data set is automatically assigned
+    // the rows it belongs to. See ChartProxyModel::loadOdf()
+    bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
+
     {
         QBrush brush(Qt::NoBrush);
         QPen pen(Qt::NoPen);
@@ -1279,16 +1114,16 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         while ( !cn.isNull() ){
             KoXmlElement elem = cn.toElement();
             const QString name = elem.tagName();
-            if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") ){
+            if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") && !ignoreCellRanges ) {
                 if ( maybeCompleteDataDefinition ){
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
-                    setXDataRegionString( region );
+                    setXDataRegion( CellRegion( helper->tableSource, region ) );
                     fullDataDefinition = true;
                 }else{
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );                    
                     // as long as there is not default table for missing data series the same region is used twice
                     // to ensure the diagram is displayed, even if not as expected from o office or ms office
-                    setYDataRegionString( region );
+                    setYDataRegion( CellRegion( helper->tableSource, region ) );
                     maybeCompleteDataDefinition = true;
                 }
                 
@@ -1297,8 +1132,9 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         }
     }
 
-    if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) ) {
-        const QString region = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
+    if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) && !ignoreCellRanges ) {
+        const QString regionString = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
+        const CellRegion region( helper->tableSource, regionString );
         if ( !fullDataDefinition ){
             setYDataRegion( region );
 //             if ( !maybeCompleteDataDefinition )
@@ -1307,11 +1143,11 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         if ( bubbleChart )
             setCustomDataRegion( region );
         else
-            setYDataRegionString( region );
+            setYDataRegion( region );
     }
-    if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) ) {
+    if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) && !ignoreCellRanges ) {
         const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
-        setLabelDataRegionString( region );
+        setLabelDataRegion( CellRegion( helper->tableSource, region ) );
     }
     if ( n.hasAttributeNS( KoXmlNS::chart, "data-label-text" ) ) {
         const QString enable = n.attributeNS( KoXmlNS::chart, "data-label-text", QString() );
@@ -1377,12 +1213,9 @@ void DataSet::saveOdf( KoShapeSavingContext &context ) const
     const QString styleName = mainStyles.insert( style, "ch" );
     bodyWriter.addAttribute( "chart:style-name", styleName );
 
-    // TODO: Save external data sources also
-    const QString prefix( "local-table." );
-
     // Save cell regions
-    bodyWriter.addAttribute( "chart:values-cell-range-address", prefix + yDataRegionString() );
-    bodyWriter.addAttribute( "chart:label-cell-address", prefix + labelDataRegionString() );
+    bodyWriter.addAttribute( "chart:values-cell-range-address", yDataRegion().toString() );
+    bodyWriter.addAttribute( "chart:label-cell-address", labelDataRegion().toString() );
 
     bodyWriter.endElement(); // chart:series
 }

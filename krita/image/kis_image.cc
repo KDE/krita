@@ -213,6 +213,10 @@ void KisImage::nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex)
     emit sigNodeHasBeenMoved(parent, oldIndex, newIndex);
 }
 
+void KisImage::nodeChanged(KisNode* node)
+{
+    emit sigNodeChanged(node);
+}
 
 KisSelectionSP KisImage::globalSelection() const
 {

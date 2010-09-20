@@ -50,6 +50,7 @@ ChalkBrush::ChalkBrush(const ChalkProperties* properties, KoColorTransformation*
 
 ChalkBrush::~ChalkBrush()
 {
+    delete m_transfo;
 }
 
 

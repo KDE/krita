@@ -44,6 +44,7 @@
 
 // KChart
 #include "CellRegion.h"
+#include "OdfLoadingHelper.h"
 
 
 namespace KChart {
@@ -66,6 +67,7 @@ QHash<QString, QVector<QRect> > ChartTableModel::cellRegion() const
 
 bool ChartTableModel::setCellRegion( const QString& regionName )
 {
+#if 0 // FIXME: What does this code do?
     int result = 0;
 
     const int size = regionName.size();
@@ -75,6 +77,8 @@ bool ChartTableModel::setCellRegion( const QString& regionName )
     }
 
     return result;
+#endif
+    return true;
 }
 
 bool ChartTableModel::isCellRegionValid( const QString& regionName ) const
@@ -110,9 +114,6 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
         if ( n.localName() == "table-rows"
              || n.localName() == "table-header-rows" )
         {
-            const bool isHeader = n.localName() == "table-header-rows";
-            Q_UNUSED(isHeader);
-
             found = true;
 
             KoXmlElement  _n;

@@ -287,6 +287,11 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
     calcDimensions <T>(m_boundRect, srcStart, srcLen, firstLine, numLines);
 
     scale = int(floatscale * srcLen + 0.5);
+    if (scale == 0) {
+        dst->clear();
+        return;
+    }
+
     scaleDenom = srcLen;
 
     if (scaleDenom == 0) {

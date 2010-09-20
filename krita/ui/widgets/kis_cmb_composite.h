@@ -45,7 +45,7 @@ public:
 
     const QString& currentItem() const;
 
-    void setCompositeOpList(const QList<KoCompositeOp*>& list);
+    void setCompositeOpList(const QList<KoCompositeOp*>& list, const QList<KoCompositeOp*>& whitelist = QList<KoCompositeOp*>());
     void setCurrent(const KoCompositeOp* op);
     void setCurrent(const QString & s);
 

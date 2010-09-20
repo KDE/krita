@@ -19,8 +19,14 @@
 
 #include <KoColorSpace.h>
 
-KisPaintOpFactory::KisPaintOpFactory()
+KisPaintOpFactory::KisPaintOpFactory(const QStringList & whiteListedCompositeOps)
+    : m_whiteListedCompositeOps(whiteListedCompositeOps)
 {
+}
+
+QStringList KisPaintOpFactory::whiteListedCompositeOps() const
+{
+    return m_whiteListedCompositeOps;
 }
 
 bool KisPaintOpFactory::userVisible(const KoColorSpace * cs)

@@ -275,8 +275,13 @@ public:
      * Set the locked status of this node. System Locked nodes indicates
      * that an algorithm is processing them and that an other
      * algorithm need to wait before accessing it.
+     *
+     * A KisNode will update the layer model when the lock is released.
+     *
+     * @param l lock state
+     * @param update set false if the tools shouldn't be locked
      */
-    void setSystemLocked(bool l);
+    virtual void setSystemLocked(bool l, bool update = true);
 
     /**
      * @return true if the node can be edited: if it's visible and neither locked

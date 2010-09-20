@@ -23,6 +23,7 @@
 #include "krita_export.h"
 #include <QObject>
 #include <QString>
+#include <QStringList>
 
 class KoColorSpace;
 class KisPainter;
@@ -42,7 +43,7 @@ class KRITAIMAGE_EXPORT KisPaintOpFactory : public QObject
 
 public:
 
-    KisPaintOpFactory();
+    KisPaintOpFactory(const QStringList & whiteListedCompositeOps = QStringList());
     virtual ~KisPaintOpFactory() {}
 
     /**
@@ -53,6 +54,12 @@ public:
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image) = 0;
     virtual QString id() const = 0;
     virtual QString name() const = 0;
+
+    /**
+     * List of usually hidden compositeops that are useful for this paintop.
+     */
+    QStringList whiteListedCompositeOps() const;
+
 
     /**
      * The filename of the pixmap we can use to represent this paintop in the ui.
@@ -75,7 +82,8 @@ public:
      * create a widget that can display paintop settings
      */
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent) = 0;
-
+private:
+    QStringList m_whiteListedCompositeOps;
 };
 
 #endif

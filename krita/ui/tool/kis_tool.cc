@@ -562,5 +562,12 @@ void KisTool::endOpenGL()
 #endif
 }
 
+void KisTool::setCurrentNodeLocked(bool locked)
+{
+    if (currentNode()) {
+        currentNode()->setSystemLocked(locked, false);
+    }
+}
+
 #include "kis_tool.moc"
 

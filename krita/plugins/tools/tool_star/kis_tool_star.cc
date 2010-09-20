@@ -132,7 +132,8 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 
             if (!currentNode()->paintDevice())
                 return;
-
+            setCurrentNodeLocked(true);
+            
             KisPaintDeviceSP device = currentNode()->paintDevice();
             KisPainter painter(device, currentSelection());
             painter.beginTransaction(i18n("Star"));
@@ -147,6 +148,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
             updatePreview();
 
             painter.endTransaction(image()->undoAdapter());
+            setCurrentNodeLocked(false);
         } else {
             KoPathShape* path = new KoPathShape();
             path->setShapeId(KoPathShapeId);

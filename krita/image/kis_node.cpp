@@ -103,6 +103,14 @@ QRect KisNode::changeRect(const QRect &rect, PositionToFilthy pos) const
     return rect;
 }
 
+void KisNode::setSystemLocked(bool l, bool update)
+{
+    KisBaseNode::setSystemLocked(l, update);
+    if (!l && m_d->graphListener) {
+        m_d->graphListener->nodeChanged(this);
+    }
+}
+
 bool KisNode::accept(KisNodeVisitor &v)
 {
     return v.visit(this);

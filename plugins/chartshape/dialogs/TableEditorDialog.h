@@ -26,6 +26,7 @@
 
 #include "ui_ChartTableEditor.h"
 
+class QAbstractItemModel;
 class QModelIndex;
 class QAction;
 
@@ -45,6 +46,7 @@ public:
 
     void init();
     void setProxyModel( ChartProxyModel *proxyModel );
+    void setModel( QAbstractItemModel *model );
     void updateDialog();
 
 protected slots:

@@ -28,6 +28,13 @@ install(FILES
     paintop_settings_02.png
     paintop_settings_disabled.png
     paintop_presets_disabled.png
+    width_icon.png
+    height_icon.png
+    ratio_icon.png
+    shear_horizontal.png
+    shear_vertical.png
+    offset_horizontal.png
+    offset_vertical.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )

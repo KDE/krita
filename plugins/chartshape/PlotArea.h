@@ -104,7 +104,6 @@ public:
 
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );
-    void setPieExplodeFactor( DataSet *dataSet, int percent );
 
     /**
      * @see pieAngleOffset
@@ -145,13 +144,12 @@ public:
     
 public slots:
     void requestRepaint() const;
-    void dataSetCountChanged();
+    void proxyModelStructureChanged();
     void plotAreaUpdate() const;
     
 signals:
     void gapBetweenBarsChanged( int );
     void gapBetweenSetsChanged( int );
-    void pieExplodeFactorChanged( DataSet*, int );
     void pieAngleOffsetChanged( qreal );
 
 private:

@@ -52,7 +52,10 @@ public:
     virtual void nodeHasBeenMoved(KisNode *, int, int) {
         afterMove = true;
     }
-
+        
+    virtual void nodeChanged(KisNode* node) {
+    
+    }
 
     bool beforeInsertRow;
     bool afterInsertRow;

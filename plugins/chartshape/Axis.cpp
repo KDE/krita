@@ -63,6 +63,7 @@
 #include <KDChartThreeDPieAttributes>
 #include <KDChartThreeDLineAttributes>
 #include <KDChartDataValueAttributes>
+#include <KDChartBackgroundAttributes>
 
 // KChart
 #include "PlotArea.h"
@@ -73,7 +74,7 @@
 #include "ChartProxyModel.h"
 #include "TextLabelDummy.h"
 #include "Layout.h"
-#include <KDChartBackgroundAttributes>
+#include "OdfLoadingHelper.h"
 
 
 using namespace KChart;
@@ -176,7 +177,7 @@ public:
     ChartType     plotAreaChartType;
     ChartSubtype  plotAreaChartSubType;
 
-    QString categoryDataRegionString;
+    CellRegion categoryDataRegion;
 
     // If KDChart::LineDiagram::centerDataPoints() property is set to true,
     // the data points drawn in a line (i.e., also an area) diagram start at
@@ -247,75 +248,40 @@ Axis::Private::~Private()
 {
     Q_ASSERT( plotArea );
 
-    if ( kdPlane ) {
-        plotArea->kdChart()->takeCoordinatePlane( kdPlane );
-        delete kdPlane;
-    }
+    delete kdPlane;
+    delete kdPolarPlane;
 
-    if ( kdPolarPlane ) {
-        plotArea->kdChart()->takeCoordinatePlane( kdPolarPlane );
-        delete kdPolarPlane;
-    }
+    delete kdBarDiagram;
+    delete kdBarDiagramModel;
 
-    if ( kdBarDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdBarDiagram );
-        delete kdBarDiagram;
-        delete kdBarDiagramModel;
-    }
+    delete kdAreaDiagram;
+    delete kdAreaDiagramModel;
 
-    if ( kdAreaDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdAreaDiagram );
-        delete kdAreaDiagram;
-        delete kdAreaDiagramModel;
-    }
+    delete kdCircleDiagram;
+    delete kdCircleDiagramModel;
 
-    if ( kdCircleDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdCircleDiagram );
-        delete kdCircleDiagram;
-        delete kdCircleDiagramModel;
-    }
+    delete kdRingDiagram;
+    delete kdRingDiagramModel;
 
-    if ( kdRingDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdRingDiagram );
-        delete kdRingDiagram;
-        delete kdRingDiagramModel;
-    }
+    delete kdRadarDiagram;
+    delete kdRadarDiagramModel;
 
-    if ( kdRadarDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdRadarDiagram );
-        delete kdRadarDiagram;
-        delete kdRadarDiagramModel;
-    }
+    delete kdScatterDiagram;
+    delete kdScatterDiagramModel;
 
-    if ( kdScatterDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdScatterDiagram );
-        delete kdScatterDiagram;
-        delete kdScatterDiagramModel;
-    }
+    delete kdStockDiagram;
+    delete kdStockDiagramModel;
 
-    if ( kdStockDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdStockDiagram );
-        delete kdStockDiagram;
-        delete kdStockDiagramModel;
-    }
+    delete kdBubbleDiagram;
+    delete kdBubbleDiagramModel;
 
-    if ( kdBubbleDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdBubbleDiagram );
-        delete kdBubbleDiagram;
-        delete kdBubbleDiagramModel;
-    }
+    delete kdSurfaceDiagram;
+    delete kdSurfaceDiagramModel;
 
-    if ( kdSurfaceDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdSurfaceDiagram );
-        delete kdSurfaceDiagram;
-        delete kdSurfaceDiagramModel;
-    }
+    delete kdGanttDiagram;
+    delete kdGanttDiagramModel;
 
-    if ( kdGanttDiagram ) {
-        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdGanttDiagram );
-        delete kdGanttDiagram;
-        delete kdGanttDiagramModel;
-    }
+    delete kdAxis;
 }
 
 void Axis::Private::registerDiagram( KDChart::AbstractDiagram *diagram )
@@ -1155,7 +1121,7 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
     d->dataSets.append( dataSet );
 
     if ( dimension() == XAxisDimension ) {
-        dataSet->setCategoryDataRegionString( d->categoryDataRegionString );
+        dataSet->setCategoryDataRegion( d->categoryDataRegion );
     }
     else if ( dimension() == YAxisDimension ) {
         dataSet->setAttachedAxis( this );
@@ -1171,7 +1137,6 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
         if( !model )
             return false;
 
-        dataSet->setKdDiagram( diagram );
         if ( model )
             model->addDataSet( dataSet, silent );
 
@@ -1192,7 +1157,7 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
     d->dataSets.removeAll( dataSet );
 
     if ( dimension() == XAxisDimension ) {
-        dataSet->setCategoryDataRegionString( "" );
+        dataSet->setCategoryDataRegion( CellRegion() );
     }
     else if ( dimension() == YAxisDimension ) {
         ChartType chartType = dataSet->chartType();
@@ -1229,9 +1194,7 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
                 oldModel->removeDataSet( dataSet, silent );
         }
 
-        dataSet->setKdDiagram( 0 );
         dataSet->setKdChartModel( 0 );
-        dataSet->setKdDataSetNumber( -1 );
         dataSet->setAttachedAxis( 0 );
 
         if ( !silent ) {
@@ -1449,23 +1412,25 @@ Qt::Orientation Axis::orientation()
     return Qt::Vertical;
 }
 
-QString Axis::categoryDataRegionString() const
+CellRegion Axis::categoryDataRegion() const
 {
-    return d->categoryDataRegionString;
+    return d->categoryDataRegion;
 }
 
-void Axis::setCategoryDataRegionString( const QString &region )
+void Axis::setCategoryDataRegion( const CellRegion &region )
 {
-    d->categoryDataRegionString = region;
+    d->categoryDataRegion = region;
 
     foreach( DataSet *dataSet, d->dataSets )
-        dataSet->setCategoryDataRegionString( region );
+        dataSet->setCategoryDataRegion( region );
 }
 
 bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context )
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
+
+    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
 
     d->title->setVisible( false );
     
@@ -1559,7 +1524,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
             }
             else if ( n.localName() == "categories" ) {
                 if ( n.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
-                    setCategoryDataRegionString( n.attributeNS( KoXmlNS::table, "cell-range-address" ) );
+                    setCategoryDataRegion( CellRegion( helper->tableSource, n.attributeNS( KoXmlNS::table, "cell-range-address" ) ) );
             }
         }
 
@@ -1954,11 +1919,16 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         if ( dataSet->chartType() != LastChartType )
             continue;
 
+// FIXME: What does this do? Only the user may set a data set's pen through
+// a proper UI, in any other case the pen falls back to a default
+// which depends on the chart type, so setting it here will break the default
+// for other chart types.
+#if 0
         Qt::PenStyle newPenStyle = newDiagram->pen().style();
         QPen newPen = dataSet->pen();
         newPen.setStyle( newPenStyle );
         dataSet->setPen(  newPen );
-        dataSet->setKdDiagram( newDiagram );
+#endif
         newModel->addDataSet( dataSet );        
         if ( oldModel && *oldModel ) {
             const int dataSetCount = (*oldModel)->dataDirection() == Qt::Vertical
@@ -2195,18 +2165,6 @@ void Axis::setGapBetweenSets( int percent )
         KDChart::BarAttributes attributes = d->kdBarDiagram->barAttributes();
         attributes.setGroupGapFactor( (float)percent / 100.0 );
         d->kdBarDiagram->setBarAttributes( attributes );
-    }
-
-    requestRepaint();
-}
-
-void Axis::setPieExplodeFactor( DataSet *dataSet, int percent )
-{
-    if ( d->kdCircleDiagram ) {
-        KDChart::PieAttributes attributes = d->kdCircleDiagram->pieAttributes();
-        attributes.setExplodeFactor( (float)percent / 100.0 );
-        d->kdCircleDiagram->setPieAttributes( dataSet->kdDataSetNumber(),
-                                              attributes );
     }
 
     requestRepaint();

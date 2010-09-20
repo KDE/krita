@@ -5,6 +5,7 @@
   <Separator/>
   <Action name="createTemplate"/>
  </Menu>
+
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
@@ -144,6 +145,11 @@
   <Action name="preferences" group="settings_configure"/>
 </Menu>
 
+
+<Menu name="help"><text>&amp;Help</text>
+  <Separator/>
+  <Action name="first_run"/>
+</Menu>
 
 </MenuBar>
 

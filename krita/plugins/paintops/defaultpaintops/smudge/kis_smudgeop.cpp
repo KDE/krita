@@ -51,7 +51,7 @@ const QPoint MIGHTY_CENTER = QPoint(0, 0);
 KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(settings, painter)
         , m_firstRun(true)
-        , m_srcdev(0)
+        , m_tempDev(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -63,7 +63,10 @@ KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainte
     m_opacityOption.sensor()->reset();
     m_rateOption.sensor()->reset();
 
-    m_srcdev = new KisPaintDevice(painter->device()->colorSpace());
+    m_tempDev = new KisPaintDevice(painter->device()->colorSpace());
+    
+    // Initializing to a valid value to avoid weird errors during modifications
+    m_wholeTempData = QRect(0, 0, 0, 0);
 }
 
 KisSmudgeOp::~KisSmudgeOp()
@@ -72,7 +75,7 @@ KisSmudgeOp::~KisSmudgeOp()
 
 /* To smudge, one does the following:
 
- 1.- First step: initialize a temporary paint device (m_srcdev) with a copy of the colors below the mouse pointer.
+ 1.- First step: initialize a temporary paint device (m_tempDev) with a copy of the colors below the mouse pointer.
  All other times:
  2.- Vanishing step: Reduce the transparency of the temporary paint device so as to let it mix gradually.
  3.- Combine: Combine the temporary device with the piece the brush currently is 'painting', according to a ratio:
@@ -82,6 +85,11 @@ KisSmudgeOp::~KisSmudgeOp()
  using a stylus sensitive to pressure), align the colors extracted to the center of the previously absorbed colors,
  and in the vanishing step, ensure that all the colors have their opacity slowly reduced, not just the ones below
  the current brush mask.
+ 
+ For the sake of speed optimization, the extent of the largest area of color contained in the
+ temporary device is cached such that only the colored areas are considered.
+ TODO: Make this cached value dump colors that have faded nearly completely and lie outside of the rectangle (dab)
+ of the current iteration.
 */
     
 double KisSmudgeOp::paintAt(const KisPaintInformation& info)
@@ -131,8 +139,12 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     // Convenient renaming for the limits of the maskDab
     qint32 sw = maskDab->bounds().width();
     qint32 sh = maskDab->bounds().height();
-                             
-    /* In the block below, the opacity of the colors stored in m_srcdev (TODO: rename it)
+    
+    /* Prepare the top left corner of the temporary paint device where the extracted color will be drawn */
+    QPoint extractionTopLeft = QPoint(MIGHTY_CENTER.x() - sw / 2,
+                                      MIGHTY_CENTER.y() - sh / 2);
+                                      
+    /* In the block below, the opacity of the colors stored in m_tempDev
     is reduced in opacity. Nothing of the color present inside it is left out */
     int opacity = OPACITY_OPAQUE_U8;
     if (!m_firstRun) {
@@ -142,11 +154,16 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
         if (opacity > MIXABLE_UPPER_LIMIT) opacity = MIXABLE_UPPER_LIMIT;
         if (opacity < MIXABLE_LOWER_LIMIT) opacity = MIXABLE_LOWER_LIMIT;
         
-        // This is the whole temporary data area
-        QRect wholeTempData = m_srcdev->extent();
-        KisRectIterator it = m_srcdev->createRectIterator(wholeTempData.x(), wholeTempData.y(),
-                                                          wholeTempData.width(), wholeTempData.height());
-        KoColorSpace* cs = m_srcdev->colorSpace();
+        // Update the whole temporary data area, only grow it, don't shrink it. TODO: Shrink it when relevant
+        QRect currentTempDataRect = QRect(extractionTopLeft, maskDab->bounds().size());
+        if (currentTempDataRect.contains(m_wholeTempData)) {
+            m_wholeTempData = currentTempDataRect;
+        }
+        
+        // Reduce the opacity of all the data contained therein
+        KisRectIterator it = m_tempDev->createRectIterator(m_wholeTempData.x(), m_wholeTempData.y(),
+                                                           m_wholeTempData.width(), m_wholeTempData.height());
+        KoColorSpace* cs = m_tempDev->colorSpace();
         while (!it.isDone()) {
             cs->setOpacity(it.rawData(), quint8(cs->opacityF(it.rawData()) * opacity), 1);
             ++it;
@@ -157,22 +174,19 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     }
     else {
         m_firstRun = false;
+        m_wholeTempData = QRect(extractionTopLeft, maskDab->bounds().size());
     }
-
-    /* Prepare the top left corner of the temporary paint device where the extracted color will be drawn */
-    QPoint extractionTopLeft = QPoint(MIGHTY_CENTER.x() - sw / 2,
-                                      MIGHTY_CENTER.y() - sh / 2);
                                       
     /* copyPainter will extract the piece of color (image) to be duplicated to generate the smudge effect,
     it extracts a simple unmasked rectangle and adds it to what was extracted before in this same block of code,
     this sometimes shows artifacts when the brush is used with stylus and high spacing */
-    KisPainter copyPainter(m_srcdev);
+    KisPainter copyPainter(m_tempDev);
     copyPainter.setOpacity(opacity);
     copyPainter.bitBlt(extractionTopLeft.x(), extractionTopLeft.y(), painter()->device(), x, y, sw, sh);
     copyPainter.end();
     
     // This is the line that renders the extracted colors to the screen, with maskDab giving it the brush shape
-    painter()->bitBltWithFixedSelection(x, y, m_srcdev, maskDab, 0, 0, extractionTopLeft.x(), extractionTopLeft.y(), sw, sh);
+    painter()->bitBltWithFixedSelection(x, y, m_tempDev, maskDab, 0, 0, extractionTopLeft.x(), extractionTopLeft.y(), sw, sh);
     
     return spacing(scale);
 }

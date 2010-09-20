@@ -68,20 +68,25 @@ namespace KChart {
  * region can vary, as well as their sizes.
  */
 
+// Definition in TableSource.h
+class Table;
+
 class CHARTSHAPELIB_EXPORT CellRegion
 {
 public:
     CellRegion();
     CellRegion( const CellRegion& region );
-    CellRegion( const QString& region );
-    CellRegion( const QPoint &point );
-    CellRegion( const QRect &rect );
-    CellRegion( const QPoint &point, const QSize &size );
-    CellRegion( const QVector<QRect> &rects );
+    CellRegion( TableSource *source, const QString& region );
+    CellRegion( Table *table, const QPoint &point );
+    CellRegion( Table *table, const QRect &rect );
+    CellRegion( Table *table, const QVector<QRect> &rects );
+    CellRegion( Table *table );
     ~CellRegion();
     
     CellRegion& operator = ( const CellRegion& region );    
     bool operator == ( const CellRegion &other ) const;
+
+    Table *table() const;
     
     QVector<QRect> rects() const;
     
@@ -115,9 +120,6 @@ public:
     bool   hasPointAtIndex( int index ) const;    
     QPoint pointAtIndex( int index ) const;
     int    indexAtPoint( const QPoint &point ) const;
-    
-    static QString regionToString( const QVector<QRect> &region );
-    static QVector<QRect> stringToRegion( const QString &string );
     
     static int rangeCharToInt( char c );
     static int rangeStringToInt( const QString &string );

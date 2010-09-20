@@ -24,6 +24,7 @@
 
 // Qt
 #include <QButtonGroup>
+#include <QComboBox>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -63,6 +64,7 @@
 #include "commands/ChartTypeCommand.h"
 #include "CellRegionStringValidator.h"
 #include "ChartTableModel.h"
+#include "TableSource.h"
 
 using namespace KChart;
 
@@ -140,6 +142,8 @@ public:
 
     // Table Editor (a.k.a. the data editor)
     TableEditorDialog    *tableEditorDialog;
+    // Source containing all tables the chart uses (name/model pairs)
+    TableSource          *tableSource;
 
     // Legend
     QButtonGroup         *positionButtonGroup;
@@ -178,6 +182,7 @@ ChartConfigWidget::Private::Private( QWidget *parent )
     lastFixedPosition       = KDChart::Position::East;
     selectedDataSet = 0;
     shape = 0;
+    tableSource = 0;
 
     type = KChart::LastChartType;
     subtype = KChart::NoChartSubtype;
@@ -227,49 +232,49 @@ ChartConfigWidget::ChartConfigWidget()
 
     // Chart type button with its associated menu
     QMenu *chartTypeMenu = new QMenu( this );
-    chartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
+    chartTypeMenu->setIcon( KIcon( "office-chart-bar" ) );
 
     // Bar charts
-    QMenu *barChartMenu = chartTypeMenu->addMenu( KIcon( "chart_bar_beside" ), i18n( "Bar Chart" ) );
-    d->normalBarChartAction  = barChartMenu->addAction( KIcon( "chart_bar_beside" ), i18n("Normal") );
-    d->stackedBarChartAction = barChartMenu->addAction( KIcon( "chart_bar_layer" ), i18n("Stacked") );
-    d->percentBarChartAction = barChartMenu->addAction( KIcon( "chart_bar_percent" ), i18n("Percent") );
+    QMenu *barChartMenu = chartTypeMenu->addMenu( KIcon( "office-chart-bar" ), i18n( "Bar Chart" ) );
+    d->normalBarChartAction  = barChartMenu->addAction( KIcon( "office-chart-bar" ), i18n("Normal") );
+    d->stackedBarChartAction = barChartMenu->addAction( KIcon( "office-chart-bar-stacked" ), i18n("Stacked") );
+    d->percentBarChartAction = barChartMenu->addAction( KIcon( "office-chart-bar-percentage" ), i18n("Percent") );
 
     // Line charts
-    QMenu *lineChartMenu = chartTypeMenu->addMenu( KIcon( "chart_line_normal" ), i18n( "Line Chart" ) );
-    d->normalLineChartAction  = lineChartMenu->addAction( KIcon( "chart_line_normal" ), i18n("Normal") );
-    d->stackedLineChartAction = lineChartMenu->addAction( KIcon( "chart_line_stacked" ), i18n("Stacked") );
-    d->percentLineChartAction = lineChartMenu->addAction( KIcon( "chart_line_percent" ), i18n("Percent") );
+    QMenu *lineChartMenu = chartTypeMenu->addMenu( KIcon( "office-chart-line" ), i18n( "Line Chart" ) );
+    d->normalLineChartAction  = lineChartMenu->addAction( KIcon( "office-chart-line" ), i18n("Normal") );
+    d->stackedLineChartAction = lineChartMenu->addAction( KIcon( "office-chart-line-stacked" ), i18n("Stacked") );
+    d->percentLineChartAction = lineChartMenu->addAction( KIcon( "office-chart-line-percentage" ), i18n("Percent") );
 
     // Area charts
-    QMenu *areaChartMenu = chartTypeMenu->addMenu( KIcon( "chart_area_normal" ), i18n( "Area Chart" ) );
-    d->normalAreaChartAction  = areaChartMenu->addAction( KIcon( "chart_area_normal" ), i18n("Normal") );
-    d->stackedAreaChartAction = areaChartMenu->addAction( KIcon( "chart_area_stacked" ), i18n("Stacked") );
-    d->percentAreaChartAction = areaChartMenu->addAction( KIcon( "chart_area_percent" ), i18n("Percent") );
+    QMenu *areaChartMenu = chartTypeMenu->addMenu( KIcon( "office-chart-area" ), i18n( "Area Chart" ) );
+    d->normalAreaChartAction  = areaChartMenu->addAction( KIcon( "office-chart-area" ), i18n("Normal") );
+    d->stackedAreaChartAction = areaChartMenu->addAction( KIcon( "office-chart-area-stacked" ), i18n("Stacked") );
+    d->percentAreaChartAction = areaChartMenu->addAction( KIcon( "office-chart-area-percentage" ), i18n("Percent") );
 
     chartTypeMenu->addSeparator();
 
     // Circular charts: pie and ring
-    d->circleChartAction = chartTypeMenu->addAction( KIcon( "chart_pie_normal" ), i18n("Pie Chart") );
-    d->ringChartAction = chartTypeMenu->addAction( KIcon( "chart_ring_normal" ), i18n("Ring Chart") );
+    d->circleChartAction = chartTypeMenu->addAction( KIcon( "office-chart-pie" ), i18n("Pie Chart") );
+    d->ringChartAction = chartTypeMenu->addAction( KIcon( "office-chart-ring" ), i18n("Ring Chart") );
 
     chartTypeMenu->addSeparator();
 
     // Polar charts: radar
-    d->radarChartAction = chartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
+    d->radarChartAction = chartTypeMenu->addAction( KIcon( "office-chart-polar" ), i18n("Polar Chart") );
 
     chartTypeMenu->addSeparator();
 
     // X/Y charts: scatter and bubble
-    d->scatterChartAction = chartTypeMenu->addAction( KIcon( "chart_scatter_normal" ), i18n("Scatter Chart") );
-    d->bubbleChartAction = chartTypeMenu->addAction( KIcon( "chart_bubble_normal" ), i18n("Bubble Chart") );
+    d->scatterChartAction = chartTypeMenu->addAction( KIcon( "office-chart-scatter" ), i18n("Scatter Chart") );
+    d->bubbleChartAction = chartTypeMenu->addAction( i18n("Bubble Chart") );
 
     chartTypeMenu->addSeparator();
 
-    d->stockChartAction = chartTypeMenu->addAction( KIcon( "chart_stock_normal" ), i18n("Stock Chart") );
-    d->surfaceChartAction = chartTypeMenu->addAction( KIcon( "chart_surface_normal" ), i18n("Surface Chart") );
+    d->stockChartAction = chartTypeMenu->addAction( i18n("Stock Chart") );
+    d->surfaceChartAction = chartTypeMenu->addAction( i18n("Surface Chart") );
     d->surfaceChartAction->setEnabled( false );
-    d->ganttChartAction = chartTypeMenu->addAction( KIcon( "chart_gantt_normal" ), i18n("Gantt Chart") );
+    d->ganttChartAction = chartTypeMenu->addAction( i18n("Gantt Chart") );
     d->ganttChartAction->setEnabled( false );
 
     d->ui.chartTypeMenu->setMenu( chartTypeMenu );
@@ -281,31 +286,31 @@ ChartConfigWidget::ChartConfigWidget()
     QMenu *dataSetChartTypeMenu = new QMenu( this );
 
     // Default chart type is a bar chart
-    dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
+    dataSetChartTypeMenu->setIcon( KIcon( "chart-bar" ) );
 
 
-    d->dataSetBarChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_bar" ), "Bar Chart" );
-    d->dataSetNormalBarChartAction  = d->dataSetBarChartMenu->addAction( KIcon( "chart_bar_beside" ), i18n("Normal") );
-    d->dataSetStackedBarChartAction = d->dataSetBarChartMenu->addAction( KIcon( "chart_bar_layer" ), i18n("Stacked") );
-    d->dataSetPercentBarChartAction = d->dataSetBarChartMenu->addAction( KIcon( "chart_bar_percent" ), i18n("Percent") );
+    d->dataSetBarChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "office-chart-bar" ), "Bar Chart" );
+    d->dataSetNormalBarChartAction  = d->dataSetBarChartMenu->addAction( KIcon( "office-chart-bar" ), i18n("Normal") );
+    d->dataSetStackedBarChartAction = d->dataSetBarChartMenu->addAction( KIcon( "office-chart-bar-stacked" ), i18n("Stacked") );
+    d->dataSetPercentBarChartAction = d->dataSetBarChartMenu->addAction( KIcon( "office-chart-bar-percentage" ), i18n("Percent") );
 
-    d->dataSetLineChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_line" ), "Line Chart" );
-    d->dataSetNormalLineChartAction  = d->dataSetLineChartMenu->addAction( KIcon( "chart_line_normal" ), i18n("Normal") );
-    d->dataSetStackedLineChartAction = d->dataSetLineChartMenu->addAction( KIcon( "chart_line_stacked" ), i18n("Stacked") );
-    d->dataSetPercentLineChartAction = d->dataSetLineChartMenu->addAction( KIcon( "chart_line_percent" ), i18n("Percent") );
+    d->dataSetLineChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "office-chart-line" ), "Line Chart" );
+    d->dataSetNormalLineChartAction  = d->dataSetLineChartMenu->addAction( KIcon( "office-chart-line" ), i18n("Normal") );
+    d->dataSetStackedLineChartAction = d->dataSetLineChartMenu->addAction( KIcon( "office-chart-line-stacked" ), i18n("Stacked") );
+    d->dataSetPercentLineChartAction = d->dataSetLineChartMenu->addAction( KIcon( "office-chart-line-percentage" ), i18n("Percent") );
 
-    d->dataSetAreaChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_area" ), "Area Chart" );
-    d->dataSetNormalAreaChartAction  = d->dataSetAreaChartMenu->addAction( KIcon( "chart_area_normal" ), i18n("Normal") );
-    d->dataSetStackedAreaChartAction = d->dataSetAreaChartMenu->addAction( KIcon( "chart_area_stacked" ), i18n("Stacked") );
-    d->dataSetPercentAreaChartAction = d->dataSetAreaChartMenu->addAction( KIcon( "chart_area_percent" ), i18n("Percent") );
+    d->dataSetAreaChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "office-chart-area" ), "Area Chart" );
+    d->dataSetNormalAreaChartAction  = d->dataSetAreaChartMenu->addAction( KIcon( "office-chart-area" ), i18n("Normal") );
+    d->dataSetStackedAreaChartAction = d->dataSetAreaChartMenu->addAction( KIcon( "office-chart-area-stacked" ), i18n("Stacked") );
+    d->dataSetPercentAreaChartAction = d->dataSetAreaChartMenu->addAction( KIcon( "office-chart-area-percentage" ), i18n("Percent") );
 
-    d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_pie_normal" ), i18n("Pie Chart") );
-    d->dataSetRingChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_ring_normal" ), i18n("Ring Chart") );
-    d->dataSetRadarChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
-    d->dataSetStockChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_stock_normal" ), i18n("Stock Chart") );
-    d->dataSetBubbleChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_bubble_normal" ), i18n("Bubble Chart") );
+    d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction( KIcon( "office-chart-pie" ), i18n("Pie Chart") );
+    d->dataSetRingChartAction = dataSetChartTypeMenu->addAction( KIcon( "office-chart-ring" ), i18n("Ring Chart") );
+    d->dataSetRadarChartAction = dataSetChartTypeMenu->addAction( KIcon( "office-chart-polar" ), i18n("Polar Chart") );
+    d->dataSetStockChartAction = dataSetChartTypeMenu->addAction( i18n("Stock Chart") );
+    d->dataSetBubbleChartAction = dataSetChartTypeMenu->addAction( i18n("Bubble Chart") );
 
-    d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_scatter_normal" ), i18n("Scatter Chart") );
+    d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction( KIcon( "office-chart-scatter" ), i18n("Scatter Chart") );
 
     d->ui.dataSetChartTypeMenu->setMenu( dataSetChartTypeMenu );
 
@@ -426,9 +431,13 @@ void ChartConfigWidget::open( KoShape* shape )
         }
     }
 
-    KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>( d->shape->model() );
-    ChartTableModel *tableModel = qobject_cast<ChartTableModel*>( d->shape->model() );
-    d->isExternalDataSource = ( spreadSheetModel != 0 && tableModel == 0 );
+    d->tableSource = d->shape->tableSource();
+
+// NOTE: There's no single source table anymore, a KSpread workbook allows multiple to be used with a chart.
+//    KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>( d->shape->internalModel() );
+// NOTE: This is obsolete, ChartShape::usesInternalModelOnly() is now used instead.
+//    ChartTableModel *tableModel = qobject_cast<ChartTableModel*>( d->shape->model() );
+//    d->isExternalDataSource = ( spreadSheetModel != 0 && tableModel == 0 );
 
     // Update the axis titles
     //d->ui.xAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText() );
@@ -438,18 +447,22 @@ void ChartConfigWidget::open( KoShape* shape )
     //d->ui.legendTitle->setText( d->shape->legend()->title() );
 
     // Fill the data table
-    if ( d->isExternalDataSource ) {
+    if ( !d->shape->usesInternalModelOnly() ) {
+ // FIXME: CellRegion itself together with a TableSource should now be used
+ // to validate  the correctness of a table range address.
+#if 0
         d->cellRegionStringValidator = new CellRegionStringValidator( spreadSheetModel );
         d->cellRegionDialog.labelDataRegion->setValidator( d->cellRegionStringValidator );
         d->cellRegionDialog.xDataRegion->setValidator( d->cellRegionStringValidator );
         d->cellRegionDialog.yDataRegion->setValidator( d->cellRegionStringValidator );
         d->cellRegionDialog.categoryDataRegion->setValidator( d->cellRegionStringValidator );
+#endif
 
         // If the data source is external, the editData button opens a
         // dialog to edit the data ranges instead of the data itself.
         d->ui.editData->setText( i18n( "Data Ranges..." ) );
-        connect( d->ui.editData,       SIGNAL( clicked( bool ) ),
-                 &d->cellRegionDialog, SLOT( show() ) );
+        connect( d->ui.editData, SIGNAL( clicked( bool ) ),
+                 this, SLOT( slotShowCellRegionDialog() ) );
         connect( d->cellRegionDialog.xDataRegion, SIGNAL( editingFinished() ),
                  this, SLOT( ui_dataSetXDataRegionChanged() ) );
         connect( d->cellRegionDialog.yDataRegion, SIGNAL( editingFinished() ),
@@ -467,7 +480,7 @@ void ChartConfigWidget::open( KoShape* shape )
         // This part is run when the data source is not external,
         // i.e. the data is handled by the chart shape itself.
         connect( d->ui.editData, SIGNAL( clicked( bool ) ),
-                 this,           SLOT( slotShowTableEditor( bool ) ) );
+                 this,           SLOT( slotShowTableEditor() ) );
     }
 
     update();
@@ -1040,19 +1053,25 @@ void ChartConfigWidget::update()
 }
 
 
-void ChartConfigWidget::slotShowTableEditor( bool show )
+void ChartConfigWidget::slotShowTableEditor()
 {
     if ( !d->tableEditorDialog ) {
         d->tableEditorDialog = new TableEditorDialog;
         d->tableEditorDialog->setProxyModel( d->shape->proxyModel() );
+        d->tableEditorDialog->setModel( d->shape->internalModel() );
     }
 
-    if ( show ) {
-        d->tableEditorDialog->hide();
-    }
-    else {
-        d->tableEditorDialog->show();
-    }
+    d->tableEditorDialog->show();
+}
+
+
+void ChartConfigWidget::slotShowCellRegionDialog()
+{
+    // Update regions of selected dataset
+    int selectedDataSet = d->cellRegionDialog.dataSets->currentIndex();
+    ui_dataSetSelectionChanged_CellRegionDialog( selectedDataSet );
+
+    d->cellRegionDialog.show();
 }
 
 
@@ -1166,12 +1185,12 @@ void ChartConfigWidget::setupDialogs()
              this, SLOT( ui_axisScalingButtonClicked() ) );
     connect( d->axisScalingDialog.logarithmicScaling, SIGNAL( toggled( bool ) ),
              this, SLOT( ui_axisUseLogarithmicScalingChanged( bool ) ) );
-    connect( d->axisScalingDialog.stepWidth, SIGNAL( valueChanged   ( double ) ),
-             this, SLOT( ui_axisStepWidthChanged( qreal ) ) );
+    connect( d->axisScalingDialog.stepWidth, SIGNAL( valueChanged( double ) ),
+             this, SLOT( ui_axisStepWidthChanged( double ) ) );
     connect ( d->axisScalingDialog.automaticStepWidth, SIGNAL( toggled( bool ) ),
               this, SLOT( ui_axisUseAutomaticStepWidthChanged( bool ) ) );
-    connect( d->axisScalingDialog.subStepWidth, SIGNAL( valueChanged( double) ),
-             this, SLOT( ui_axisSubStepWidthChanged( qreal ) ) );
+    connect( d->axisScalingDialog.subStepWidth, SIGNAL( valueChanged( double ) ),
+             this, SLOT( ui_axisSubStepWidthChanged( double ) ) );
     connect ( d->axisScalingDialog.automaticSubStepWidth, SIGNAL( toggled( bool ) ),
               this, SLOT( ui_axisUseAutomaticSubStepWidthChanged( bool ) ) );
 }
@@ -1268,7 +1287,8 @@ void ChartConfigWidget::ui_dataSetXDataRegionChanged()
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
 
-    const QString region = d->cellRegionDialog.xDataRegion->text();
+    const QString regionString = d->cellRegionDialog.xDataRegion->text();
+    const CellRegion region( d->tableSource, regionString );
 
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
 
@@ -1281,7 +1301,8 @@ void ChartConfigWidget::ui_dataSetYDataRegionChanged()
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
 
-    const QString region = d->cellRegionDialog.yDataRegion->text();
+    const QString regionString = d->cellRegionDialog.yDataRegion->text();
+    const CellRegion region( d->tableSource, regionString );
 
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
 
@@ -1313,7 +1334,8 @@ void ChartConfigWidget::ui_dataSetCategoryDataRegionChanged()
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
 
-    const QString region = d->cellRegionDialog.categoryDataRegion->text();
+    const QString regionString = d->cellRegionDialog.categoryDataRegion->text();
+    const CellRegion region( d->tableSource, regionString );
 
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
 
@@ -1326,7 +1348,8 @@ void ChartConfigWidget::ui_dataSetLabelDataRegionChanged()
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
 
-    const QString region = d->cellRegionDialog.labelDataRegion->text();
+    const QString regionString = d->cellRegionDialog.labelDataRegion->text();
+    const CellRegion region( d->tableSource, regionString );
 
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
 
@@ -1342,16 +1365,16 @@ void ChartConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog( int index )
     DataSet *dataSet = d->dataSets[ index ];
     const int dimensions = dataSet->dimension();
 
-    d->cellRegionDialog.labelDataRegion->setText( dataSet->labelDataRegionString() );
+    d->cellRegionDialog.labelDataRegion->setText( dataSet->labelDataRegion().toString() );
     if ( dimensions > 1 )
     {
         d->cellRegionDialog.xDataRegion->setEnabled( true );
-        d->cellRegionDialog.xDataRegion->setText( dataSet->xDataRegionString() );
+        d->cellRegionDialog.xDataRegion->setText( dataSet->xDataRegion().toString() );
     }
     else
         d->cellRegionDialog.xDataRegion->setEnabled( false );
-    d->cellRegionDialog.yDataRegion->setText( dataSet->yDataRegionString() );
-    d->cellRegionDialog.categoryDataRegion->setText( dataSet->categoryDataRegionString() );
+    d->cellRegionDialog.yDataRegion->setText( dataSet->yDataRegion().toString() );
+    d->cellRegionDialog.categoryDataRegion->setText( dataSet->categoryDataRegion().toString() );
 
     d->selectedDataSet_CellRegionDialog = index;
 }
@@ -1564,7 +1587,7 @@ void ChartConfigWidget::ui_axisUseLogarithmicScalingChanged( bool b )
     emit axisUseLogarithmicScalingChanged( d->axes[ index ], b );
 }
 
-void ChartConfigWidget::ui_axisStepWidthChanged( qreal width )
+void ChartConfigWidget::ui_axisStepWidthChanged( double width )
 {
     int index = d->ui.axes->currentIndex();
     // Check for valid index
@@ -1574,7 +1597,7 @@ void ChartConfigWidget::ui_axisStepWidthChanged( qreal width )
     emit axisStepWidthChanged( d->axes[ index ], width );
 }
 
-void ChartConfigWidget::ui_axisSubStepWidthChanged( qreal width )
+void ChartConfigWidget::ui_axisSubStepWidthChanged( double width )
 {
     int index = d->ui.axes->currentIndex();
     // Check for valid index

@@ -123,7 +123,7 @@ public:
      * @param forPrint if true, make sure only actual content is drawn and no decorations.
      * @param converter to convert between document and view coordinates.
      */
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, bool forPrint);
+    void paint(QPainter &painter, const KoViewConverter &converter, bool forPrint);
 
     /**
      * Returns the shape located at a specific point in the document.

@@ -36,6 +36,7 @@
 #include <QTimer>
 
 // KDE
+#include <krun.h>
 #include <kimageio.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -44,6 +45,7 @@
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <KUndoStack>
+#include <kstandarddirs.h>
 
 // KOffice
 #include <KoApplication.h>
@@ -115,7 +117,9 @@ public:
             , macroNestDepth(0)
             , ioProgressTotalSteps(0)
             , ioProgressBase(0)
-            , kraLoader(0) {
+            , kraLoader(0)
+            , dieOnError(false)
+    {
     }
 
     ~KisDocPrivate() {
@@ -137,6 +141,9 @@ public:
     KisKraLoader* kraLoader;
     KisKraSaver* kraSaver;
 
+    QString error;
+    bool dieOnError;
+
 };
 
 
@@ -144,13 +151,13 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
         : KoDocument(parentWidget, parent, singleViewMode)
         , m_d(new KisDocPrivate())
 {
-
     setComponentData(KisFactory2::componentData(), false);
     setTemplateType("krita_template");
     init();
     connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     undoStack()->setUndoLimit(KisConfig().undoStackLimit());
     setBackupFile(KisConfig().backupFile());
+
 }
 
 KisDoc2::~KisDoc2()
@@ -158,7 +165,7 @@ KisDoc2::~KisDoc2()
     // Despite being QObject they needs to be deleted before the image
     delete m_d->shapeController;
     delete m_d->nodeModel;
-    
+
     // The following line trigger the deletion of the image
     m_d->image.clear();
 
@@ -435,19 +442,38 @@ void KisDoc2::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
     // print error if the lcms engine is not available
     if (!KoColorSpaceEngineRegistry::instance()->contains("icc")) {
         // need to wait 1 event since exiting here would not work.
+        m_d->error = i18n("The KOffice LittleCMS color management plugin is not installed. Krita will quit now.");
+        m_d->dieOnError = true;
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
     }
-    else {
-        KoDocument::showStartUpWidget(parent, alwaysShow);
+
+    KoDocument::showStartUpWidget(parent, alwaysShow);
+    KisConfig cfg;
+    if (cfg.firstRun()) {
+
+        QStringList qtversion = QString(qVersion()).split('.');
+        if (qtversion[0] == "4" && qtversion[1] <= "6" && qtversion[2].toInt() < 3) {
+            m_d->error = i18n("Krita needs at least Qt 4.6.3 to work correctly. Your Qt version is %1. If you have a graphics tablet it will not work correctly!", qVersion());
+            m_d->dieOnError = false;
+            QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
+        }
+
+        QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
+        if (!fname.isEmpty()) {
+            openUrl(fname);
+        }
+        cfg.setFirstRun(false);
     }
 }
 
 void KisDoc2::showErrorAndDie()
 {
     KMessageBox::error(widget(),
-                       i18n("The KOffice LittleCMS color management plugin is not installed. Krita will quit now."),
-                       i18n("Installation Error"));
-    QCoreApplication::exit(10);
+                       m_d->error,
+                       i18n("Installation error"));
+    if (m_d->dieOnError) {
+        QCoreApplication::exit(10);
+    }
 }
 
 void KisDoc2::paintContent(QPainter& painter, const QRect& rc)

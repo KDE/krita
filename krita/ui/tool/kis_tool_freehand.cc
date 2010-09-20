@@ -392,6 +392,8 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     if (!currentNode() || !currentNode()->paintDevice() || currentNode()->systemLocked())
         return;
 
+    setCurrentNodeLocked(true);
+    
     m_mode = PAINT;
     m_hasPaintAtLeastOnce = false;
     m_dragDist = 0;
@@ -501,6 +503,8 @@ void KisToolFreehand::endPaint()
     delete m_pathPaintAction;
     m_pathPaintAction = 0;
 #endif
+
+    setCurrentNodeLocked(false);
 }
 
 void KisToolFreehand::paintAt(const KisPaintInformation &pi)

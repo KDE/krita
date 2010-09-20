@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Link
+URL=.source/Manga-JpTemplate.kra
+Icon=template_gray_empty
+Name=Manga template
+Name[pt]=Modelo Manga
+Name[pt_BR]=Modelo de Manga
+Name[uk]=Шаблон манґи
+Name[x-test]=xxManga templatexx
+Comment=template for Japanese Manga-style comics
+Comment[pt]=modelo de banda desenhada Manga do estilo Japonês
+Comment[pt_BR]=modelo de quadrinhos no estilo japonês de Manga
+Comment[uk]=шаблон японських коміксів у стилі манґа
+Comment[x-test]=xxtemplate for Japanese Manga-style comicsxx
+X-Krita-Version=2

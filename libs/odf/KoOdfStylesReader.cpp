@@ -58,12 +58,15 @@ KoOdfStylesReader::KoOdfStylesReader()
 
 KoOdfStylesReader::~KoOdfStylesReader()
 {
-    foreach(const QString& family, d->customStyles.keys())
-        qDeleteAll(d->customStyles[family]);
-    foreach(const QString& family, d->contentAutoStyles.keys())
-        qDeleteAll(d->contentAutoStyles[family]);
-    foreach(const QString& family, d->stylesAutoStyles.keys())
-        qDeleteAll(d->stylesAutoStyles[family]);
+    typedef QHash<QString, KoXmlElement*> AutoStylesMap;
+    foreach(const AutoStylesMap& map, d->customStyles)
+        qDeleteAll(map);
+    foreach(const AutoStylesMap& map, d->contentAutoStyles)
+        qDeleteAll(map);
+    foreach(const AutoStylesMap& map, d->stylesAutoStyles)
+        qDeleteAll(map);
+    foreach(const DataFormatsMap::mapped_type& dataFormat, d->dataFormats)
+        delete dataFormat.second;
     qDeleteAll(d->defaultStyles);
     qDeleteAll(d->styles);
     qDeleteAll(d->masterPages);
@@ -242,7 +245,7 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
                    || localName == "date-style"
                    || localName == "time-style")) {
         QPair<QString, KoOdfNumberStyles::NumericStyleFormat> numberStyle = KoOdfNumberStyles::loadOdfNumberStyle(e);
-        d->dataFormats.insert(numberStyle.first, numberStyle.second);
+        d->dataFormats.insert(numberStyle.first, qMakePair(numberStyle.second, new KoXmlElement(e)));
     }
 }
 

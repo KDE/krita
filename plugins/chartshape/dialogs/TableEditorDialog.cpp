@@ -24,6 +24,7 @@
 
 // Qt
 #include <QDebug>
+#include <QAbstractItemModel>
 
 // KDE
 #include <kdebug.h>
@@ -132,9 +133,7 @@ void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
 
     // Connect the new proxy model.
     if ( m_proxyModel ) {
-        m_tableView->setModel( m_proxyModel->sourceModel() );
-
-        connect( m_proxyModel,       SIGNAL( modelReset() ), 
+        connect( m_proxyModel,       SIGNAL( modelReset() ),
                  this,               SLOT( updateDialog() ) );
         connect( firstRowIsLabel,    SIGNAL( clicked( bool ) ),
                  m_proxyModel,       SLOT( setFirstRowIsLabel( bool ) ) );
@@ -143,6 +142,11 @@ void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
     }
 
     updateDialog();
+}
+
+void TableEditorDialog::setModel( QAbstractItemModel *model )
+{
+    m_tableView->setModel( model );
 }
 
 void TableEditorDialog::updateDialog()

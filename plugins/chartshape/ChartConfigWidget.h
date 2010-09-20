@@ -72,7 +72,8 @@ public slots:
     void setThreeDMode( bool threeD );
     void update();
 
-    void slotShowTableEditor( bool show );
+    void slotShowTableEditor();
+    void slotShowCellRegionDialog();
 
     void dataSetChartTypeSelected( QAction *action );
     void datasetColorSelected( const QColor& color );
@@ -102,9 +103,9 @@ public slots:
     void ui_axisShowTitleChanged( bool b );
     void ui_axisShowGridLinesChanged( bool b );
     void ui_axisUseLogarithmicScalingChanged( bool b );
-    void ui_axisStepWidthChanged( qreal width );
+    void ui_axisStepWidthChanged( double width );
     void ui_axisUseAutomaticStepWidthChanged( bool b );
-    void ui_axisSubStepWidthChanged( qreal width );
+    void ui_axisSubStepWidthChanged( double width );
     void ui_axisUseAutomaticSubStepWidthChanged( bool b );
     void ui_axisScalingButtonClicked();
     void ui_axisAdded();
@@ -124,11 +125,11 @@ signals:
     void showVerticalLinesChanged( bool b );
     void showHorizontalLinesChanged( bool b );
     
-    void dataSetXDataRegionChanged( DataSet *dataSet, const QString &region );
-    void dataSetYDataRegionChanged( DataSet *dataSet, const QString &region );
-    void dataSetCustomDataRegionChanged( DataSet *dataSet, const QString &region );
-    void dataSetCategoryDataRegionChanged( DataSet *dataSet, const QString &region );
-    void dataSetLabelDataRegionChanged( DataSet *dataSet, const QString &region );
+    void dataSetXDataRegionChanged( DataSet *dataSet, const CellRegion &region );
+    void dataSetYDataRegionChanged( DataSet *dataSet, const CellRegion &region );
+    void dataSetCustomDataRegionChanged( DataSet *dataSet, const CellRegion &region );
+    void dataSetCategoryDataRegionChanged( DataSet *dataSet, const CellRegion &region );
+    void dataSetLabelDataRegionChanged( DataSet *dataSet, const CellRegion &region );
     
     void datasetColorChanged( DataSet *dataSet, const QColor& color );
     void datasetShowValuesChanged( DataSet *dataSet, bool b );

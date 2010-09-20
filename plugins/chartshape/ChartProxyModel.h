@@ -22,6 +22,9 @@
 #define KCHART_PROXYMODEL_H
 
 
+#define INTERNAL_TABLE_NAME "ChartTable"
+
+
 // KChart
 #include "ChartShape.h"
 #include "CellRegion.h"
@@ -34,7 +37,7 @@ namespace KoChart
 
 
 // Qt
-#include <QAbstractProxyModel>
+#include <QAbstractTableModel>
 
 
 namespace KChart {
@@ -42,25 +45,36 @@ namespace KChart {
 /**
  * @brief The ChartProxyModel is a factory for the DataSet's and decorates the ChartTableModel.
  */
-class CHARTSHAPELIB_EXPORT ChartProxyModel : public QAbstractProxyModel
+class CHARTSHAPELIB_EXPORT ChartProxyModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
-    ChartProxyModel();
+    ChartProxyModel( TableSource *source );
     ~ChartProxyModel();
 
-public slots:
-    virtual void setSourceModel( QAbstractItemModel *sourceModel );
-    virtual void setSourceModel( QAbstractItemModel *sourceModel,
-                                 const QVector<QRect> &selection );
+    /**
+     * Used for data retrieval of all relevant dimensions: x, y, z, etc.
+     *
+     * This enum may be extended at a later point to store and retrieve
+     * attributes.
+     */
+    enum DataRole {
+        XDataRole = Qt::UserRole,
+        YDataRole,
+        CustomDataRole,
+        LabelDataRole,
+        CategoryDataRole,
+    };
 
-    void setSelection( const QVector<QRect> &selection );
-    
-    void setAutomaticDataSetCreation( bool enable );
-    bool automaticDataSetCreation() const;
-
-    QList<DataSet*> createDataSetsFromRegion( QList<DataSet*> dataSetsToRecycle );
+    /**
+     * Re-initializes the model with data from an arbitrary region.
+     *
+     * All data will be taken from the data source passed in the constructor.
+     * The ProxyModel will not react on insertions or removals in one of
+     * these models.
+     */
+    void reset( const CellRegion &region );
 
     /**
     * Load series from ODF
@@ -68,23 +82,38 @@ public slots:
     bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
     void saveOdf( KoShapeSavingContext &context ) const;
 
-    virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+    /**
+     * Returns data or properties of a data point.
+     *
+     * TODO: Not implemented yet. At the moment, DataSet's data and attribute
+     * getter are used instead.
+     */
+    virtual QVariant data( const QModelIndex &index, int role ) const;
 
-    virtual void dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
+    /**
+     * Returns properties that are global to either a data set or a category,
+     * depending on the orientation.
+     *
+     * If @a orientation is Qt::Horizontal, this method will return properties
+     * global do the data set with number @a section.
+     * If @a orientation is Qt::Vertical, it will return properties global to
+     * the category with index @a section.
+     *
+     * TODO: Not implemented yet. At the moment, DataSet's data and attribute
+     * getter are used instead.
+     */
+    virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
-    virtual QMap<int, QVariant> itemData( const QModelIndex &index ) const;
-
-    virtual QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
     virtual QModelIndex parent( const QModelIndex &index ) const;
 
-    virtual QModelIndex mapFromSource( const QModelIndex &sourceIndex ) const;
-    virtual QModelIndex mapToSource( const QModelIndex &proxyIndex ) const;
-
-    Qt::Orientation mapFromSource( Qt::Orientation orientation ) const;
-    Qt::Orientation mapToSource( Qt::Orientation orientation ) const;
-
+    /**
+     * Returns the number of data sets in this model.
+     */
     virtual int rowCount( const QModelIndex &parent = QModelIndex() ) const;
+
+    /**
+     * Returns maximum the number of data points the data sets have.
+     */
     virtual int columnCount( const QModelIndex &parent = QModelIndex() ) const;
 
     // The following methods are specific to the chart
@@ -92,41 +121,60 @@ public slots:
     void setFirstColumnIsLabel( bool b );
     void setDataDirection( Qt::Orientation orientation );
     void setDataDimensions( int dimensions );
-    
-    void slotRowsInserted( const QModelIndex &parent, int start, int end );
-    void slotRowsRemoved( const QModelIndex &parent, int start, int end );
-    void slotColumnsInserted( const QModelIndex &parent, int start, int end );
-    void slotColumnsRemoved( const QModelIndex &parent, int start, int end );
 
     bool firstRowIsLabel() const;
     bool firstColumnIsLabel() const;
     Qt::Orientation dataDirection();
     
-    QString categoryDataRegion() const;
-    void setCategoryDataRegion(const QString& region);
+    /**
+     * @see setCategoryDataRegion()
+     */
+    CellRegion categoryDataRegion() const;
 
+    /**
+     * Sets the region to use for categories, i.e. the labels for a certain
+     * index in all data sets. This is what will be used to label points
+     * on the x axis in a cartesian chart and what will be used as legend
+     * items in a polar chart.
+     */
+    void setCategoryDataRegion( const CellRegion &region );
+
+    /**
+     * A list of all data sets that are currently being used in the chart.
+     */
     QList<DataSet*> dataSets() const;
 
-    void invalidateDataSets();
     /**
-     * Discards old and creates new data sets from the current region selection
-     * if and only if automaticDataSetCreation() returns true.
+     * Clears the list of data sets, but keeps them in a list of "removed"
+     * data sets for the next time that reset() is called. The latter list
+     * will be re-used so that properties of data sets don't get lost.
      */
-    void rebuildDataMap();
+    void invalidateDataSets();
+
+public slots:
+    /**
+     * Connected to dataChanged() signal of source models in TableSource.
+     */
+    virtual void dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
+
+    /**
+     * Called by the TableSource whenever a table is added to it.
+     *
+     * TODO: It might improve performance if tables are only added when
+     * they are really in use. That is not necessarily the case if they
+     * are in the TableSource.
+     */
+    void addTable( Table *table );
+
+    /**
+     * Called by the TableSource whenever a table is removed from it.
+     */
+    void removeTable( Table *table );
 
 signals:
     void dataChanged();
 
-protected slots:
-    void slotModelReset();
-
 private:
-#if QT_VERSION < 0x040600
-    //! @todo Remove once we drop support for Qt < 4.6
-    //! For compatability with Qt < 4.6
-    void beginResetModel();
-    void endResetModel();
-#endif
     class Private;
     Private *const d;
 };

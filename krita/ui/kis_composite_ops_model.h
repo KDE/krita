@@ -33,7 +33,7 @@ public:
         CompositeOpSortRole = 0x1FDFDA
     };
 public:
-    KisCompositeOpsModel(const QList<KoCompositeOp*>& list);
+    KisCompositeOpsModel(const QList<KoCompositeOp*>& list, const QList<KoCompositeOp*>& whitelist = QList<KoCompositeOp*>());
     ~KisCompositeOpsModel();
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
@@ -49,6 +49,12 @@ private:
         QString id;
         QString description;
         QString category;
+
+        bool operator==(const CompositeOpInfo info) const
+        {
+            return ((info.id == id) && (info.description == description) && (info.category == category));
+        }
+
     };
     QList< CompositeOpInfo > m_list;
 };

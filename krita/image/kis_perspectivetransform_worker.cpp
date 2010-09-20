@@ -37,7 +37,7 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 
-KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, KisSelectionSP selection, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdater *progress)
+KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, KisSelectionSP selection, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdaterPtr progress)
         : m_dev(dev), m_progress(progress), m_selection(selection)
 
 {
@@ -65,7 +65,7 @@ KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP de
     }
 }
 
-KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QRect r, QPointF center, double aX, double aY, double distance, KoUpdater *progress)
+KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QRect r, QPointF center, double aX, double aY, double distance, KoUpdaterPtr progress)
         : m_dev(dev), m_progress(progress), m_selection(KisSelectionSP())
 
 {
@@ -100,6 +100,13 @@ KisPerspectiveTransformWorker::~KisPerspectiveTransformWorker()
 
 void KisPerspectiveTransformWorker::run()
 {
+    if (m_r.isNull()) {
+        if (!m_progress.isNull()) {
+            m_progress->setProgress(100);
+        }
+        return;
+    }
+
     KisRectIteratorPixel dstIt = m_dev->createRectIterator(m_r.x(), m_r.y(), m_r.width(), m_r.height());
     KisPaintDeviceSP srcdev = new KisPaintDevice(*m_dev.data());
 
@@ -136,9 +143,11 @@ void KisPerspectiveTransformWorker::run()
             m_progressStep ++;
             if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
                 m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-                m_progress->setProgress(m_lastProgressReport);
+                if (!m_progress.isNull()) {
+                    m_progress->setProgress(m_lastProgressReport);
+                }
             }
-            if (m_progress->interrupted()) {
+            if (!m_progress.isNull() && m_progress->interrupted()) {
                 break;
             }
             ++dstIt;

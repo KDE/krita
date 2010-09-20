@@ -1,4 +1,5 @@
 add_subdirectory( kdchart )
+add_subdirectory( tests )
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/chartshape
                      ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
@@ -19,6 +20,7 @@ SET (chartshape_LIB_SRCS
     Legend.cpp
     TextLabelDummy.cpp
     PlotArea.cpp
+    TableSource.cpp
     ChartProxyModel.cpp
     KDChartModel.cpp
     Surface.cpp

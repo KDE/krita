@@ -25,6 +25,7 @@
 
 // Qt
 #include <QRegion>
+#include <QPoint>
 
 // KDE
 #include <KDebug>
@@ -44,6 +45,8 @@
 // KChart
 #include "Axis.h"
 #include "DataSet.h"
+#include "TableSource.h"
+#include "OdfLoadingHelper.h"
 
 using namespace KChart;
 
@@ -54,29 +57,49 @@ using namespace KChart;
 
 class ChartProxyModel::Private {
 public:
-    Private();
+    Private( ChartProxyModel *parent, TableSource *source );
     ~Private();
+
+    ChartProxyModel *const q;
+
+    TableSource *const tableSource;
 
     bool             firstRowIsLabel;
     bool             firstColumnIsLabel;
     Qt::Orientation  dataDirection;
     int              dataDimensions;
     
-    QString categoryDataRegion;
+    CellRegion categoryDataRegion;
 
     QVector< CellRegion > dataSetRegions;
     
     QList<DataSet*>  dataSets;
     QList<DataSet*>  removedDataSets;
     
-    QVector<QRect>   selection;
+    CellRegion       selection;
 
     bool automaticDataSetCreation;
     int createdDataSetCount;
+
+    /**
+     * Discards old and creates new data sets from the current region selection
+     * if and only if automaticDataSetCreation() returns true.
+     */
+    void rebuildDataMap();
+
+    /**
+     * Extracts a list of data sets (with x data region, y data region, etc.
+     * assigned) from the current d->selection.
+     *
+     * As a side effect, this method sets d->categoryDataRegion.
+     */
+    QList<DataSet*> createDataSetsFromRegion( QList<DataSet*> dataSetsToRecycle );
 };
 
-ChartProxyModel::Private::Private():
-  createdDataSetCount( 0 )
+ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source )
+    : q( parent )
+    , tableSource( source )
+    , createdDataSetCount( 0 )
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
@@ -100,10 +123,14 @@ ChartProxyModel::Private::~Private()
 //                          Class ChartProxyModel
 
 
-ChartProxyModel::ChartProxyModel()
-    : QAbstractProxyModel( 0 ),
-      d( new Private )
+ChartProxyModel::ChartProxyModel( TableSource *source )
+    : QAbstractTableModel(),
+      d( new Private( this, source ) )
 {
+    connect( source, SIGNAL( tableAdded( Table* ) ),
+             this,   SLOT( addTable( Table* ) ) );
+    connect( source, SIGNAL( tableRemoved( Table* ) ),
+             this,   SLOT( removeTable( Table* ) ) );
 }
 
 ChartProxyModel::~ChartProxyModel()
@@ -111,341 +138,214 @@ ChartProxyModel::~ChartProxyModel()
     delete d;
 }
 
-
-void ChartProxyModel::setAutomaticDataSetCreation( bool enable )
+void ChartProxyModel::reset( const CellRegion& region )
 {
-    d->automaticDataSetCreation = enable;
-}
-
-bool ChartProxyModel::automaticDataSetCreation() const
-{
-    return d->automaticDataSetCreation;
-}
-
-#if QT_VERSION < 0x040600
-void ChartProxyModel::beginResetModel()
-{
-}
-
-void ChartProxyModel::endResetModel()
-{
-    reset();
-}
-#endif
-
-void ChartProxyModel::rebuildDataMap()
-{
-    if ( !d->automaticDataSetCreation )
-        return;
-
-    invalidateDataSets();
-    d->dataSets = createDataSetsFromRegion( d->removedDataSets );
-}
-
-QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataSetsToRecycle )
-{
-    QList<DataSet*> createdDataSets;
-    QVector<QRect> dataRegions;
-
-    if ( d->selection.isEmpty() ) {
-        const QRect dataBoundingRect( QPoint( 1, 1 ),
-                                      QSize( sourceModel()->columnCount(),
-                                             sourceModel()->rowCount() ) );
-        dataRegions.append( dataBoundingRect );
-    }
-    else
-        dataRegions = d->selection;
-    
-    int& createdDataSetCount = d->createdDataSetCount;
-    int number = 0;
-    if ( d->dataDirection == Qt::Horizontal ) {
-        QMap<int, QVector<QRect> >  rows;
-        QMap<int, QVector<QRect> >  sortedRows;
-
-        // Split up region in horizontal rectangles
-        // that are sorted from top to bottom
-        foreach ( const QRect &rect, dataRegions ) {
-            int x = rect.topLeft().x();
-            for ( int y = rect.topLeft().y(); y <= rect.bottomLeft().y(); y++ )
-            {
-                QRect dataRect = QRect( QPoint( x, y ), QSize( rect.width(), 1 ) );
-                if ( !rows.contains( y ) )
-                    rows.insert( y, QVector<QRect>() );
-                rows[y].append( dataRect );
-            }
-        }
-        
-        // Sort rectangles in each row from left to right.
-        QMapIterator<int, QVector<QRect> >  i( rows );
-        while ( i.hasNext() ) {
-            i.next();
-            int             row = i.key();
-            QVector<QRect>  unsortedRects = i.value();
-            QVector<QRect>  sortedRects;
-            
-            foreach ( const QRect &rect, unsortedRects ) {
-                int index;
-                
-                for ( index = 0; index < sortedRects.size(); index++ )
-                    if ( rect.topLeft().x() <= sortedRects[ index ].topLeft().x() )
-                        break;
-                
-                sortedRects.insert( index, rect );
-            }
-            
-            sortedRows.insert( row, sortedRects );
-        }
-        
-        QMapIterator<int, QVector<QRect> > j( sortedRows );
-        
-        CellRegion category;
-        if ( ! categoryDataRegion().isEmpty() ) {
-            category = CellRegion( categoryDataRegion() );
-        } else if ( d->firstRowIsLabel && j.hasNext() ) {
-            j.next();
-            
-            category = CellRegion( j.value() );
-            if ( d->firstColumnIsLabel )
-                category.subtract( category.pointAtIndex( 0 ) );
-        }
-        
-        while ( j.hasNext() ) {
-            j.next();
-            
-            DataSet *dataSet;
-            if ( !dataSetsToRecycle.isEmpty() )
-                dataSet = dataSetsToRecycle.takeLast();
-            else{
-                // the datasetnumber needs to be known at construction time, to ensure
-                // default colors are set correctly
-                dataSet = new DataSet( this, createdDataSetCount );                
-            }
-            createdDataSets.append( dataSet );
-
-            dataSet->blockSignals( true );
-            
-            dataSet->setNumber( number );
-            //dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
-
-            CellRegion labelDataRegion;
-
-            CellRegion xDataRegion;
-            // In case of > 1 data dimensions, x data appears before y data
-            if ( d->dataDimensions > 1 )
-                xDataRegion = CellRegion( j.value() );
-
-            //qDebug() << "Creating data set with region" << j.value();
-            if ( d->firstColumnIsLabel ) {
-                CellRegion tmpRegion = CellRegion( j.value() );
-                QPoint labelDataPoint = tmpRegion.pointAtIndex( 0 );
-                labelDataRegion = CellRegion( labelDataPoint );
-            }
-
-            if ( d->dataDimensions > 1 && j.hasNext() )
-                j.next();
-            
-            CellRegion yDataRegion( j.value() );
-
-            if ( d->firstColumnIsLabel ) {
-                xDataRegion.subtract( xDataRegion.pointAtIndex( 0 ) );
-                yDataRegion.subtract( yDataRegion.pointAtIndex( 0 ) );
-            }
-            
-            if ( d->dataDimensions > 2 && j.hasNext() )
-                j.next();
-            // adding support for third dimension, even if the existing scheme does not scale if we have need for aditional dimensions
-            CellRegion zDataRegion( j.value() );
-
-            if ( d->firstColumnIsLabel ) {
-                zDataRegion.subtract( zDataRegion.pointAtIndex( 0 ) );
-            }
-
-            dataSet->setXDataRegion( xDataRegion );
-            dataSet->setYDataRegion( yDataRegion );
-            if ( d->dataDimensions >= 3 )
-              dataSet->setCustomDataRegion( zDataRegion );
-            dataSet->setCategoryDataRegion( category );
-            dataSet->setLabelDataRegion( labelDataRegion );            
-            dataSet->blockSignals( false );
-            ++createdDataSetCount;
-            ++number;
-        }
-    }
-    else {
-        // Data direction == Qt::Vertical here.
-
-        QMap<int, QVector<QRect> >  columns;
-        QMap<int, QVector<QRect> >  sortedColumns;
-
-        // Split up region in horizontal rectangles
-        // that are sorted from top to bottom
-        foreach ( const QRect &rect, dataRegions ) {
-            int y = rect.topLeft().y();
-            for ( int x = rect.topLeft().x(); x <= rect.topRight().x(); x++ ) {
-                QRect dataRect = QRect( QPoint( x, y ), QSize( 1, rect.height() ) );
-                if ( !columns.contains( x ) )
-                    columns.insert( x, QVector<QRect>() );
-
-                columns[x].append( dataRect );
-            }
-        }
-        
-        // Sort rectangles in each column from top to bottom
-        QMapIterator<int, QVector<QRect> >  i( columns );
-        while ( i.hasNext() ) {
-            i.next();
-
-            int             row = i.key();
-            QVector<QRect>  unsortedRects = i.value();
-            QVector<QRect>  sortedRects;
-            
-            foreach ( const QRect &rect, unsortedRects ) {
-                int index;
-                
-                for ( index = 0; index < sortedRects.size(); index++ )
-                    if ( rect.topLeft().y() <= sortedRects[ index ].topLeft().y() )
-                        break;
-                
-                sortedRects.insert( index, rect );
-            }
-            
-            sortedColumns.insert( row, sortedRects );
-        }
-        
-        QMapIterator<int, QVector<QRect> > j( sortedColumns );
-        
-        CellRegion category;
-        if ( ! categoryDataRegion().isEmpty() ) {
-            category = CellRegion( categoryDataRegion() );
-        } else if ( d->firstColumnIsLabel && j.hasNext() ) {
-            j.next();
-            
-            category = CellRegion( j.value() );
-            if ( d->firstRowIsLabel )
-                category.subtract( category.pointAtIndex( 0 ) );
-        }
-        
-        while ( j.hasNext() ) {
-            j.next();
-
-            DataSet *dataSet;
-            if ( !dataSetsToRecycle.isEmpty() )
-                dataSet = dataSetsToRecycle.takeLast();
-            else{
-                // the datasetnumber needs to be known at construction time, to ensure
-                // default colors are set correctly
-                dataSet = new DataSet( this, createdDataSetCount );                
-            }
-            createdDataSets.append( dataSet );
-
-            dataSet->blockSignals( true );
-            
-            dataSet->setNumber( number );
-            //dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
-
-            CellRegion labelDataRegion;
-            
-            CellRegion xDataRegion;
-            // In case of > 1 data dimensions, x data appears before y data
-            if ( d->dataDimensions > 1 )
-                xDataRegion = CellRegion( j.value() );
-
-            //qDebug() << "Creating data set with region" << j.value();
-            if ( d->firstRowIsLabel ) {
-                CellRegion tmpRegion = CellRegion( j.value() );
-                QPoint labelDataPoint = tmpRegion.pointAtIndex( 0 );
-                labelDataRegion = CellRegion( labelDataPoint );
-            }
-
-            if ( d->dataDimensions > 1 && j.hasNext() )
-                j.next();
-            
-            CellRegion yDataRegion( j.value() );
-
-            if ( d->firstRowIsLabel ) {
-                xDataRegion.subtract( xDataRegion.pointAtIndex( 0 ) );
-                yDataRegion.subtract( yDataRegion.pointAtIndex( 0 ) );
-            }
-            
-            if ( d->dataDimensions > 2 && j.hasNext() )
-                j.next();
-            
-            CellRegion zDataRegion( j.value() );
-
-            if ( d->firstRowIsLabel ) {
-                zDataRegion.subtract( zDataRegion.pointAtIndex( 0 ) );
-            }
-
-            dataSet->setXDataRegion( xDataRegion );
-            dataSet->setYDataRegion( yDataRegion );
-            if ( d->dataDimensions >= 3 )
-              dataSet->setCustomDataRegion( zDataRegion );
-            dataSet->setLabelDataRegion( labelDataRegion );
-            dataSet->setCategoryDataRegion( category );
-            dataSet->blockSignals( false );
-            ++createdDataSetCount;
-            ++number;
-        }
-    }
-
-    return createdDataSets;
-}
-
-
-void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
-{
-    if ( this->sourceModel() == sourceModel )
-        return;
-
     beginResetModel();
 
-    if ( this->sourceModel() ) {
-        disconnect( this->sourceModel(), SIGNAL( modelReset() ),
-                    this,                SLOT( slotModelReset() ) );
-        disconnect( this->sourceModel(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
-                    this,                SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
-        disconnect( this->sourceModel(), SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
-                    this,                SLOT( slotRowsInserted( const QModelIndex&, int, int ) ) );
-        disconnect( this->sourceModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-                    this,                SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
-        disconnect( this->sourceModel(), SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
-                    this,                SLOT( slotRowsRemoved( const QModelIndex&, int, int ) ) );
-        disconnect( this->sourceModel(), SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
-                    this,                SLOT( slotColumnsRemoved( const QModelIndex&, int, int ) ) );
-    }
+    d->selection = region;
+    invalidateDataSets();
+    d->dataSets = d->createDataSetsFromRegion( d->removedDataSets );
 
-    if ( sourceModel ) {
-        connect( sourceModel, SIGNAL( modelReset() ),
-                 this,        SLOT( slotModelReset() ) );
-        connect( sourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
-                 this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
-        connect( sourceModel, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
-                 this,        SLOT( slotRowsInserted( const QModelIndex&, int, int ) ) );
-        connect( sourceModel, SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-                 this,        SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
-        connect( sourceModel, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
-                 this,        SLOT( slotRowsRemoved( const QModelIndex&, int, int ) ) );
-        connect( sourceModel, SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
-                 this,        SLOT( slotColumnsRemoved( const QModelIndex&, int, int ) ) );
-    }
-
-    QAbstractProxyModel::setSourceModel( sourceModel );
-    
-    rebuildDataMap();
     endResetModel();
 }
 
-void ChartProxyModel::setSourceModel( QAbstractItemModel *model,
-                                      const QVector<QRect> &selection )
+void ChartProxyModel::Private::rebuildDataMap()
 {
-    d->selection = selection;
-    setSourceModel( model );
+    q->invalidateDataSets();
+    dataSets = createDataSetsFromRegion( removedDataSets );
 }
 
-void ChartProxyModel::setSelection( const QVector<QRect> &selection )
+void ChartProxyModel::addTable( Table *table )
 {
-    d->selection = selection;
-    //needReset();
+    QAbstractItemModel *model = table->model();
+    connect( model, SIGNAL( dataChanged( QModelIndex, QModelIndex ) ),
+             this,  SLOT( dataChanged( QModelIndex, QModelIndex ) ) );
+}
+
+void ChartProxyModel::removeTable( Table *table )
+{
+    QAbstractItemModel *model = table->model();
+    model->disconnect( this );
+}
+
+/**
+ * Returns a row of a given region (i.e. a part of it with height 1), cutting
+ * off the first @a colOffset cells in that row.
+ *
+ * Examples: extractRow( A1:C2, 0, 0 ) --> A1:C1
+ *           extractRow( A1:C2, 1, 0 ) --> A2:C2
+ *           extractRow( A1:C2, 0, 1 ) --> B1:C1
+ *
+ * See notes in createDataSetsFromRegion() for further details.
+ *
+ * @param region The region to extract the row from
+ * @param row The number of the row, starting with 0
+ * @param colOffset How many of the first columns to cut from the resulting row
+ */
+static CellRegion extractRow( const CellRegion &region, int row, int colOffset )
+{
+    foreach( const QRect &rect, region.rects() ) {
+        if ( row >= rect.height() ) {
+            row -= rect.height();
+            continue;
+        }
+        QPoint topLeft = rect.topLeft() + QPoint( colOffset, row );
+        QRect row( topLeft, QSize( rect.width() - colOffset, 1 ) );
+        return CellRegion( region.table(), row );
+    }
+
+    return CellRegion();
+}
+
+/**
+ * Returns a column of a given region, cutting off the first @a rowOffset
+ * rows in that column.
+ *
+ * Examples: extractColumn( A1:C2, 0, 0 )       --> A1:A2
+ *           extractColumn( A1:C2;D1;F2, 0, 0 ) --> A1:A2;D1:D2
+ *
+ * See notes in createDataSetsFromRegion() for further details.
+ *
+ * @param region The region to extract the row from
+ * @param col The number of the column, starting with 0
+ * @param rowOffset How many of the first rows to cut from the resulting column
+ */
+static CellRegion extractColumn( const CellRegion &region, int col, int rowOffset )
+{
+    CellRegion result( region.table() );
+    foreach( const QRect &rect, region.rects() ) {
+        if ( col >= rect.width() )
+            continue;
+        QPoint topLeft = rect.topLeft() + QPoint( col, rowOffset );
+        QRect col( topLeft, QSize( 1, rect.height() - rowOffset ) );
+        result.add( col );
+    }
+
+    return result;
+}
+
+QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSet*> dataSetsToRecycle )
+{
+    if ( !selection.isValid() )
+        return QList<DataSet*>();
+
+    QList<DataSet*> createdDataSets;
+
+    // What this algorithm does:
+    //
+    // First it calculates the number of rows and columns we'd have if we'd
+    // stack up all subregions on top of each other. So something like
+    //
+    // aaa   bb
+    //   cccc
+    //
+    // would become
+    //
+    // aaa
+    // bb
+    // cccc
+    //
+    // assuming that the order is aaa,bb,cccc
+    //
+    // The methods extractRow() and extractColumn() are then used to extract
+    // the rows and columns from this very construct.
+    int rows = 0;
+    int cols = 0;
+    foreach( const QRect &rect, selection.rects() ) {
+        rows += rect.height();
+        cols = qMax( cols, rect.width() );
+    }
+
+    // In the end, the contents of this list will look something like this:
+    // ( Category-Data, X-Data, Y-Data, Y-Data, Y-Data )
+    // Semantic seperation of the regions will follow later.
+    QList<CellRegion> dataRegions;
+    // This region exlusively contains (global) data set labels, i.e.
+    // one label per data set (thus in opposite data direction)
+    CellRegion labelRegion;
+
+    // Determines how many individual rows/columns will be assigned per data set.
+    // It is at least one, but if there's more than one data dimension, the x
+    // data is shared among all data sets, thus - 1.
+    int regionsPerDataSet = qMax( 1, dataDimensions - 1 );
+
+    // Fill dataRegions and set categoryRegion.
+    // Note that here, we don't exactly know yet what region will be used for
+    // what data set, we also don't know yet what data these regions contain.
+    int rowOffset = firstRowIsLabel ? 1 : 0;
+    int colOffset = firstColumnIsLabel ? 1 : 0;
+
+    // When x data is present, it occupies the first non-header row/column
+    if ( dataDimensions > 1 && dataDirection == Qt::Horizontal )
+        rowOffset++;
+    if ( dataDimensions > 1 && dataDirection == Qt::Vertical )
+        colOffset++;
+
+    // This is the logic that extracts all the subregions from selection
+    // that are later used for the data sets
+    if ( dataDirection == Qt::Horizontal ) {
+        if ( firstColumnIsLabel )
+            labelRegion = extractColumn( selection, 0, rowOffset );
+        for ( int i = 0; i < rows; i++ )
+            dataRegions.append( extractRow( selection, i, colOffset ) );
+    } else {
+        if ( firstRowIsLabel )
+            labelRegion = extractRow( selection, 0, colOffset);
+        for ( int i = 0; i < cols; i++ )
+            dataRegions.append( extractColumn( selection, i, rowOffset ) );
+    }
+
+    bool useCategories =
+            dataDirection == Qt::Horizontal && firstRowIsLabel ||
+            dataDirection == Qt::Vertical && firstColumnIsLabel;
+
+    // Regions shared by all data sets: categories and x-data
+    categoryDataRegion = CellRegion(); // member variable
+    CellRegion xData;
+    if ( !dataRegions.isEmpty() && useCategories )
+        categoryDataRegion = dataRegions.takeFirst();
+    if ( !dataRegions.isEmpty() && dataDimensions > 1 )
+        xData = dataRegions.takeFirst();
+
+    int dataSetNumber = 0;
+    // Now assign all dataRegions to a number of data sets.
+    // Here they're semantically seperated into x data, y data, etc.
+    while ( !dataRegions.isEmpty() ) {
+        // Get a data set instance we can use
+        DataSet *dataSet;
+        if ( !dataSetsToRecycle.isEmpty() )
+            dataSet = dataSetsToRecycle.takeFirst();
+        else
+            dataSet = new DataSet( dataSetNumber );
+
+        // category and x data are "global" regions shared among all data sets
+        dataSet->setCategoryDataRegion( categoryDataRegion );
+        dataSet->setXDataRegion( xData );
+        // Last row/column of this data set contains label (row/column
+        // immediately before the next data set, thus (.. + 1) * .. - 1)
+        int labelRowCol = (dataSetNumber + 1) * regionsPerDataSet - 1;
+        if ( labelRegion.hasPointAtIndex( labelRowCol ) ) {
+            QPoint point( labelRegion.pointAtIndex( labelRowCol ) );
+            dataSet->setLabelDataRegion( CellRegion( selection.table(), point ) );
+        }
+        else
+            dataSet->setLabelDataRegion( CellRegion() );
+
+        // regions per data set: y data, custom data (e.g. bubble width)
+        dataSet->setYDataRegion( dataRegions.takeFirst() );
+
+        if ( !dataRegions.isEmpty() && dataDimensions > 2 )
+            dataSet->setCustomDataRegion( dataRegions.takeFirst() );
+        else
+            dataSet->setCustomDataRegion( CellRegion() );
+
+        createdDataSets.append( dataSet );
+
+        // Increment number at the very end!
+        dataSetNumber++;
+    }
+
+    return createdDataSets;
 }
 
 void ChartProxyModel::saveOdf( KoShapeSavingContext &context ) const
@@ -459,26 +359,36 @@ void ChartProxyModel::saveOdf( KoShapeSavingContext &context ) const
 bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                                KoShapeLoadingContext &context )
 {
+    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
+    // If we exclusively use the chart's internal model then all data
+    // is taken from there and each data set is automatically assigned
+    // the rows it belongs to.
+    bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
+
     beginResetModel();
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
     invalidateDataSets();
 
-    QList<DataSet*> createdDataSets;
-    int loadedDataSetCount = 0;
-
     // A cell range for all data is optional.
-    // If it is specified, use createDataSetsFromRegion() to automatically
-    // turn this data region into consecutive data series.
     // If cell ranges are in addition specified for one or more of these
     // data series, they'll be overwritten by these values.
-    if ( element.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
+    // Note: In case ignoreCellRanges is true, ChartShape::loadOdf() has
+    // already made sure the proxy is reset with data from the internal model.
+    if ( !ignoreCellRanges &&
+         element.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
     {
         QString cellRangeAddress = element.attributeNS( KoXmlNS::table, "cell-range-address" );
-        setSelection( CellRegion::stringToRegion( cellRangeAddress ) );
-        createdDataSets = createDataSetsFromRegion( d->removedDataSets );
+        d->selection = CellRegion( d->tableSource, cellRangeAddress );
     }
+
+    // This is what we'll use as basis for the data sets we "produce" from ODF.
+    // This might be data sets that were "instantiated" from the internal
+    // table or from an arbitrary selection of other tables as specified
+    // in the PlotArea's table:cell-range-address attribute (parsed above).
+    QList<DataSet*> createdDataSets = d->createDataSetsFromRegion( d->removedDataSets );
+    int loadedDataSetCount = 0;
 
     KoXmlElement n;
     forEachElement ( n, element ) {
@@ -492,7 +402,7 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
             } else {
                 // the datasetnumber needs to be known at construction time, to ensure
                 // default colors are set correctly
-                dataSet = new DataSet( this, d->dataSets.size() );
+                dataSet = new DataSet( d->dataSets.size() );
                 dataSet->setNumber( d->dataSets.size() );
             }
             d->dataSets.append( dataSet );
@@ -513,21 +423,12 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
 
 
 QVariant ChartProxyModel::data( const QModelIndex &index,
-                                int role /* = Qt::DisplayRole */ ) const
+                                int role ) const
 {
-    if ( sourceModel() == 0 )
-        return QVariant();
-    
-    QModelIndex sourceIndex = mapToSource( index );
-    if ( sourceIndex == QModelIndex() ) {
-        qWarning() << "ChartProxyModel::data(): Attempting to request data for invalid source index";
-        qWarning() << "ChartProxyModel::data(): Mapping resulted in:";
-        qWarning() << index << "-->" << sourceIndex;
-        return QVariant();
-    }
-
-    QVariant value = sourceModel()->data( sourceIndex, role );
-    return value;
+    Q_UNUSED( index );
+    Q_UNUSED( role );
+    Q_ASSERT( "To be implemented" );
+    return QVariant();
 }
 
 void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
@@ -536,7 +437,7 @@ void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex
 
     // Excerpt from the Qt reference for QRect::bottomRight() which is
     // used for calculating bottomRight.  Note that for historical
-    // reasons this function returns 
+    // reasons this function returns
     //   QPoint(left() + width() -1, top() + height() - 1).
     QPoint bottomRightPoint( bottomRight.column() + 1, bottomRight.row() + 1 );
     QRect dataChangedRect = QRect( topLeftPoint,
@@ -559,81 +460,20 @@ void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex
         if ( dataSet->customDataRegion().intersects( dataChangedRect ) )
             dataSet->customDataChanged( dataSet->customDataRegion().intersected( dataChangedRect ).boundingRect() );
     }
-	
+
     emit dataChanged();
 }
+
 
 QVariant ChartProxyModel::headerData( int section,
                                       Qt::Orientation orientation,
                                       int role /* = Qt::DisplayRole */ ) const
 {
-    if ( sourceModel() == 0 )
-        return QVariant();
-
-    orientation = mapToSource( orientation );
-
-    int row    = 0;
-    int column = 0;
-
-    if ( orientation == Qt::Horizontal ) {
-        if ( !d->firstColumnIsLabel )
-            return QVariant();
-
-        // Return the first column in the section-th row
-        row = section;
-        if ( d->firstRowIsLabel )
-            row++;
-        // first source row is used for x values
-        if ( d->dataDimensions == 2 )
-            row++;
-    }
-    else {
-        // orientation == Qt::Vertical here
-
-        if ( !d->firstRowIsLabel )
-            return QVariant();
-
-        // Return the section-th column in the first row.
-        column = section;
-        if ( d->firstColumnIsLabel )
-            column++;
-
-        // First source column is used for X values.
-        if ( d->dataDimensions == 2 )
-            column++;
-    }
-
-    // Check for overflow in rows.
-    if ( row >= sourceModel()->rowCount() ) {
-        qWarning() << "ChartProxyModel::headerData(): Attempting to request header data for row >= rowCount";
-
-        return QVariant();
-    }
-
-    // Check for overflow in columns.
-    if ( column >= sourceModel()->columnCount() ) {
-        qWarning() << "ChartProxyModel::headerData(): Attempting to request header data for column >= columnCount";
-
-        return QVariant();
-    }
-
-    return sourceModel()->data( sourceModel()->index( row, column ), role );
-}
-
-
-QMap<int, QVariant> ChartProxyModel::itemData( const QModelIndex &index ) const
-{
-    return sourceModel()->itemData( mapToSource( index ) );
-}
-
-
-QModelIndex ChartProxyModel::index( int row,
-                                    int column,
-                                    const QModelIndex &parent /* = QModelIndex() */ ) const
-{
-    Q_UNUSED( parent );
-
-    return QAbstractItemModel::createIndex( row, column, 0 );
+    Q_UNUSED( section );
+    Q_UNUSED( orientation );
+    Q_UNUSED( role );
+    Q_ASSERT( "To be implemented" );
+    return QVariant();
 }
 
 
@@ -644,103 +484,16 @@ QModelIndex ChartProxyModel::parent( const QModelIndex &index ) const
     return QModelIndex();
 }
 
-QModelIndex ChartProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
-{
-    Q_UNUSED( sourceIndex );
-    return QModelIndex();
-}
-
-QModelIndex ChartProxyModel::mapToSource( const QModelIndex &proxyIndex ) const
-{
-    Q_UNUSED( proxyIndex );
-    return QModelIndex();
-}
-
-
-Qt::Orientation ChartProxyModel::mapFromSource( Qt::Orientation orientation ) const
-{
-    // In fact, this method does exactly the same thing as
-    // mapToSource( Qt::Orientation ), but replacing the code with a
-    // call to mapToSource() would just confuse at this point.
-
-    if ( d->dataDirection == Qt::Horizontal )
-        return orientation;
-
-    // Orientation is Qt::Horizontal
-    // Thus, we need to return the opposite of orientation.
-    if ( orientation == Qt::Vertical )
-        return Qt::Horizontal;
-
-    return Qt::Vertical;
-}
-
-
-Qt::Orientation ChartProxyModel::mapToSource( Qt::Orientation orientation ) const
-{
-    if ( d->dataDirection == Qt::Horizontal )
-        return orientation;
-
-    // Orientation is Qt::Horizontal.
-    // Thus, we need to return the opposite of orientation.
-    if ( orientation == Qt::Vertical )
-        return Qt::Horizontal;
-
-    return Qt::Vertical;
-}
-
 int ChartProxyModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) const
 {
-    if ( sourceModel() == 0 )
-        return 0;
-
-    int rowCount;
-    if ( d->dataDirection == Qt::Horizontal )
-        rowCount = sourceModel()->rowCount( parent );
-    else
-        rowCount = sourceModel()->columnCount( parent );
-
-    // Even if the first row is a header - if the data table is empty,
-    // we still have 0 rows, not -1
-
-    bool firstRowIsLabel = d->firstRowIsLabel;
-    if ( d->dataDirection == Qt::Vertical )
-        firstRowIsLabel = d->firstColumnIsLabel;
-
-    if ( rowCount > 0 && firstRowIsLabel )
-        rowCount--;
-    
-    // One row is used for x values
-    if ( d->dataDimensions == 2 )
-        rowCount--;
-    
-    rowCount *= d->dataDimensions;
-
-    return rowCount;
+    return d->dataSets.count();
 }
 
 
 int ChartProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ ) const
 {
-    if ( sourceModel() == 0 )
-        return 0;
-    
-    int columnCount;
-    if ( d->dataDirection == Qt::Horizontal )
-        columnCount = sourceModel()->columnCount( parent );
-    else
-        columnCount = sourceModel()->rowCount( parent );
-
-    // Even if the first column is a header - if the data table is empty,
-    // we still have 0 columns, not -1
-
-    bool firstColumnIsLabel = d->firstColumnIsLabel;
-    if ( d->dataDirection == Qt::Vertical )
-        firstColumnIsLabel = d->firstRowIsLabel;
-
-    if ( columnCount > 0 && firstColumnIsLabel )
-        columnCount--;
-    
-    return columnCount;
+    // FIXME: Replace this by the actual column count once the proxy is properly being used.
+    return INT_MAX;
 }
 
 void ChartProxyModel::setFirstRowIsLabel( bool b )
@@ -752,10 +505,7 @@ void ChartProxyModel::setFirstRowIsLabel( bool b )
     
     d->firstRowIsLabel = b;
     
-    if ( !sourceModel() )
-        return;
-    
-    rebuildDataMap();
+    d->rebuildDataMap();
     endResetModel();
 }
  
@@ -767,11 +517,8 @@ void ChartProxyModel::setFirstColumnIsLabel( bool b )
 
     beginResetModel();
     d->firstColumnIsLabel = b;
-
-    if ( !sourceModel() )
-        return;
     
-    rebuildDataMap();
+    d->rebuildDataMap();
     endResetModel();
 }
 
@@ -794,10 +541,7 @@ void ChartProxyModel::setDataDirection( Qt::Orientation orientation )
     beginResetModel();
     d->dataDirection = orientation;
 
-    if ( !sourceModel() )
-        return;
-
-    rebuildDataMap();
+    d->rebuildDataMap();
     endResetModel();
 }
 
@@ -809,7 +553,7 @@ void ChartProxyModel::setDataDimensions( int dimensions )
     beginResetModel();
     d->dataDimensions = dimensions;
 
-    rebuildDataMap();
+    d->rebuildDataMap();
     endResetModel();
 }
 
@@ -823,12 +567,12 @@ bool ChartProxyModel::firstColumnIsLabel() const
     return d->firstColumnIsLabel;
 }
 
-QString ChartProxyModel::categoryDataRegion() const
+CellRegion ChartProxyModel::categoryDataRegion() const
 {
     return d->categoryDataRegion;
 }
 
-void ChartProxyModel::setCategoryDataRegion(const QString& region)
+void ChartProxyModel::setCategoryDataRegion( const CellRegion &region )
 {
     d->categoryDataRegion = region;
 }
@@ -836,60 +580,6 @@ void ChartProxyModel::setCategoryDataRegion(const QString& region)
 QList<DataSet*> ChartProxyModel::dataSets() const
 {
     return d->dataSets;
-}
-
-void ChartProxyModel::slotRowsInserted( const QModelIndex &parent, 
-                                        int start, int end )
-{
-    Q_UNUSED( parent );
-    Q_UNUSED( start );
-    Q_UNUSED( end );
-
-    beginResetModel();
-    rebuildDataMap();
-    endResetModel();
-}
-
-void ChartProxyModel::slotColumnsInserted( const QModelIndex &parent,
-                                           int start, int end )
-{
-    Q_UNUSED( parent );
-    Q_UNUSED( start );
-    Q_UNUSED( end );
-
-    beginResetModel();
-    rebuildDataMap();
-    endResetModel();
-}
-
-void ChartProxyModel::slotRowsRemoved( const QModelIndex &parent,
-                                       int start, int end )
-{
-    Q_UNUSED( parent );
-    Q_UNUSED( start );
-    Q_UNUSED( end );
-
-    beginResetModel();
-    rebuildDataMap();
-    endResetModel();
-}
-
-void ChartProxyModel::slotColumnsRemoved( const QModelIndex &parent,
-                                          int start, int end )
-{
-    Q_UNUSED( parent );
-    Q_UNUSED( start );
-    Q_UNUSED( end );
-
-    beginResetModel();
-    rebuildDataMap();
-    endResetModel();
-}
-
-void ChartProxyModel::slotModelReset()
-{
-    rebuildDataMap();
-    reset(); // propagate
 }
 
 #include "ChartProxyModel.moc"

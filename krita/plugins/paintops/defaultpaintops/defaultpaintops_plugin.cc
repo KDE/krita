@@ -26,6 +26,8 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
+#include <KoCompositeOp.h>
+
 #include "kis_simple_paintop_factory.h"
 #include "kis_brushop.h"
 #include "kis_brushop_settings_widget.h"
@@ -48,7 +50,9 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QVariantList
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSimplePaintOpFactory<KisBrushOp, KisBrushBasedPaintOpSettings, KisBrushOpSettingsWidget>("paintbrush", i18n("Pixel Brush"), "krita-paintbrush.png"));
     r->add(new KisDuplicateOpFactory);
-    r->add(new KisSimplePaintOpFactory<KisSmudgeOp, KisBrushBasedPaintOpSettings, KisSmudgeOpSettingsWidget>("smudge", i18n("Smudge Brush"), "krita-smudgebrush.png","smudge-finger"));
+    QStringList whiteList;
+    whiteList << COMPOSITE_COPY;
+    r->add(new KisSimplePaintOpFactory<KisSmudgeOp, KisBrushBasedPaintOpSettings, KisSmudgeOpSettingsWidget>("smudge", i18n("Smudge Brush"), "krita-smudgebrush.png","smudge-finger", whiteList));
 }
 
 DefaultPaintOpsPlugin::~DefaultPaintOpsPlugin()

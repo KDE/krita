@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Link
+URL=.source/Comics-USTemplate.kra
+Icon=template_gray_empty
+Name=US-style comics template
+Name[pt]=Modelo de banda desenhada dos EUA
+Name[pt_BR]=Modelo de quadrinhos no estilo americano
+Name[uk]=Шаблон коміксів у американському стилі
+Name[x-test]=xxUS-style comics templatexx
+Comment=template for US-style comics
+Comment[pt]=modelo de banda desenhada do estilo dos EUA
+Comment[pt_BR]=modelo para quadrinhos no estilo americano
+Comment[uk]=шаблон для коміксів у американському стилі
+Comment[x-test]=xxtemplate for US-style comicsxx
+X-Krita-Version=2

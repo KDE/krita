@@ -670,7 +670,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         if (plugin)
             plugin->setCurrentCursorPosition(m_textEditor.data()->document(), m_textEditor.data()->position());
     }
-    
+
     if (event->button() ==  Qt::MidButton) // Paste
         paste();
     else
@@ -939,9 +939,9 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
 
             event->accept();
             new KRun(m_textEditor.data()->charFormat().anchorHref(), 0);
-                m_textEditor.data()->setPosition(0);
-                ensureCursorVisible();
-                return;
+            m_textEditor.data()->setPosition(0);
+            ensureCursorVisible();
+            return;
         } else {
             QStringList anchorList = m_textEditor.data()->charFormat().anchorNames();
             QString anchorName;

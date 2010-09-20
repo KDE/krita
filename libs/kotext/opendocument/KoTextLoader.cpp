@@ -1203,8 +1203,8 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 
                     QString defaultCellStyleName = tblTag.attributeNS(KoXmlNS::table, "default-cell-style-name", "");
                     if (!defaultCellStyleName.isEmpty()) {
+                        KoTableCellStyle *cellStyle = d->textSharedData->tableCellStyle(defaultCellStyleName, d->stylesDotXml);
                         for (int c = columns; c < columns + repeatColumn; c++) {
-                            KoTableCellStyle *cellStyle = d->textSharedData->tableCellStyle(defaultCellStyleName, d->stylesDotXml);
                             tcarManager->setDefaultColumnCellStyle(c, cellStyle);
                         }
                     }
@@ -1263,7 +1263,6 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                                         }
 
                                         QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                                        Q_ASSERT(cellStyle);
                                         if (cellStyle)
                                             cellStyle->applyStyle(cellFormat);
                                         cell.setFormat(cellFormat);

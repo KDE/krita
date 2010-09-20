@@ -114,7 +114,9 @@ void KisToolRectangleBase::mouseReleaseEvent(KoPointerEvent *event)
     if (m_dragging && event->button() == Qt::LeftButton) {
         updateArea();
         m_dragging = false;
+        setCurrentNodeLocked(true);
         finishRect(QRectF(m_dragStart, m_dragEnd));
+        setCurrentNodeLocked(false);
         event->accept();
     }
 }

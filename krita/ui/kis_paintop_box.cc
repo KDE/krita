@@ -391,7 +391,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 
     m_cmbPaintops->setCurrentIndex(index);
     m_activePreset = preset;
-
+    updateCompositeOpComboBox();
     emit signalPaintopChanged(preset);
 }
 
@@ -509,7 +509,19 @@ void KisPaintopBox::updateCompositeOpComboBox()
 
         if (device) {
             QList<KoCompositeOp*> compositeOps = device->colorSpace()->compositeOps();
-            m_cmbComposite->setCompositeOpList(compositeOps);
+            QList<KoCompositeOp*> whiteList;
+            if (m_activePreset) {
+                QStringList whiteListIDs =  KisPaintOpRegistry::instance()->get(m_activePreset->paintOp().id())->whiteListedCompositeOps();
+                foreach(QString id, whiteListIDs) {
+                    foreach(KoCompositeOp* op, compositeOps) {
+                        if (op->id() == id) {
+                            whiteList << op;
+                        }
+                    }
+                }
+            }
+
+            m_cmbComposite->setCompositeOpList(compositeOps, whiteList);
 
             if(m_cmbComposite->currentItem().isEmpty()){
 

@@ -138,7 +138,9 @@ public:
     QMap<int, KDChart::DataValueAttributes> sectionsDataValueAttributes;
     QMap<int, bool> sectionsShowLabels;
 
-    int num;
+    /// The number of this series is passed in the constructor and after
+    /// that never changes.
+    const int num;
 
     // The different CellRegions for a dataset
     // Note: These are all 1-dimensional, i.e. vectors.
@@ -154,6 +156,9 @@ public:
 
     int size;
     bool blockSignals;
+
+    /// Used if no data region for the label is specified
+    const QString defaultLabel;
 };
 
 DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
@@ -177,8 +182,9 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     num( dataSetNr ),
     kdChartModel( 0 ),
     size( 0 ),
-    blockSignals( false )
-{    
+    blockSignals( false ),
+    defaultLabel( i18n( "Series %1", dataSetNr + 1 ) )
+{
 }
 
 DataSet::Private::~Private()
@@ -788,7 +794,7 @@ QVariant DataSet::labelData() const
         label += d->data( d->labelDataRegion, i ).toString();
 
     if ( label.isEmpty() )
-        label = i18n( "Series %1", number() + 1 );
+        label = d->defaultLabel;
 
     return QVariant( label );
 }

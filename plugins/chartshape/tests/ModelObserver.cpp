@@ -50,7 +50,6 @@ ModelObserver::ModelObserver( QAbstractItemModel *source )
 void ModelObserver::slotRowsInserted( const QModelIndex & parent, int start, int end )
 {
     Q_ASSERT( start <= end );
-    Q_ASSERT( end <= m_numRows );
 
     m_numRows += end - start + 1;
 
@@ -60,7 +59,6 @@ void ModelObserver::slotRowsInserted( const QModelIndex & parent, int start, int
 void ModelObserver::slotColumnsInserted( const QModelIndex & parent, int start, int end )
 {
     Q_ASSERT( start <= end );
-    Q_ASSERT( end <= m_numCols );
 
     m_numCols += end - start + 1;
 

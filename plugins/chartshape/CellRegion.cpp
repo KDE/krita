@@ -46,6 +46,39 @@ using namespace KChart;
 static QString columnName( uint column );
 //static int rangeCharToInt( char c );
 
+/**
+ * Makes sure that quotes are added if name contains spaces or special
+ * characters. May also be used to escape certain characters if needed.
+ */
+static QString formatTableName( QString name )
+{
+    static const QList<QChar> specialChars =
+        QList<QChar>() << ' ' << '\t' << '-' << '\'';
+
+    bool containsSpecialChars = false;
+    foreach( QChar c, specialChars )
+        containsSpecialChars = containsSpecialChars || name.contains( c );
+
+    if( containsSpecialChars )
+        name.prepend( '\'' ).append( '\'' );
+
+    return name;
+}
+
+/**
+ * Reverts any operation done by formatTableName(), so that ideally
+ * unformatTableName( formatTableName( name ) ) == name
+ */
+static QString unformatTableName( QString name )
+{
+    if ( name.startsWith( '\'' ) && name.endsWith( '\'' ) ) {
+        name.remove( 0, 1 );
+        name.remove( name.length() - 1, 1 );
+    }
+
+    return name;
+}
+
 class CellRegion::Private
 {
 public:
@@ -122,7 +155,7 @@ CellRegion::CellRegion( TableSource *source, const QString& region )
             if ( sheetName.endsWith( "." ) )
                 sheetName = sheetName.left( sheetName.length() - 1 );
             // TODO: Support for multiple tables in one region
-            d->table = source->get( sheetName );
+            d->table = source->get( unformatTableName( sheetName ) );
 
             QPoint topLeft( rangeStringToInt( regEx.cap(2) ), regEx.cap(3).toInt() );
             if ( isPoint ) {
@@ -229,7 +262,7 @@ QString CellRegion::toString() const
         const QRect range = d->rects[i];
         // Top-left corner
         if ( table() )
-            result.append( '$' + table()->name() + '.' );
+            result.append( '$' + formatTableName( table()->name() ) + '.' );
         result.append( d->pointToString( range.topLeft() ) );
 
         // If it is not a point, append rect's bottom-right corner

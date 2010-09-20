@@ -105,8 +105,8 @@ void TestKDChartModel::init()
 
 void TestKDChartModel::cleanup()
 {
-    m_model->disconnect( this );
     delete m_model;
+    delete m_testModel;
 }
 
 void TestKDChartModel::testDataSetInsertion()

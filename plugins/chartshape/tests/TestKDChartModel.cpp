@@ -111,8 +111,8 @@ void TestKDChartModel::cleanup()
 
 void TestKDChartModel::testDataSetInsertion()
 {
-    DataSet dataSet1( 0, 0 );
-    DataSet dataSet2( 0, 0 );
+    DataSet dataSet1( 0 );
+    DataSet dataSet2( 1 );
     dataSet1.setYDataRegion( CellRegion( m_table, QRect( 1, 1, 10, 1 ) ) );
     dataSet2.setYDataRegion( CellRegion( m_table, QRect( 2, 1, 10, 1 ) ) );
     m_model->addDataSet( &dataSet1 );
@@ -123,8 +123,8 @@ void TestKDChartModel::testDataSetInsertion()
 
 void TestKDChartModel::testDataSetInsertionAndRemoval()
 {
-    DataSet dataSet1( 0, 0 );
-    DataSet dataSet2( 0, 0 );
+    DataSet dataSet1( 0 );
+    DataSet dataSet2( 1 );
     dataSet1.setYDataRegion( CellRegion( m_table, QRect( 1, 1, 10, 1 ) ) );
     dataSet2.setYDataRegion( CellRegion( m_table, QRect( 2, 1, 10, 1 ) ) );
     m_model->addDataSet( &dataSet1 );
@@ -149,8 +149,8 @@ void TestKDChartModel::testDataSetInsertionAndRemoval()
 
 void TestKDChartModel::testData()
 {
-    DataSet dataSet1( 0, 0 );
-    DataSet dataSet2( 0, 0 );
+    DataSet dataSet1( 0 );
+    DataSet dataSet2( 1 );
 
     dataSet1.setYDataRegion( CellRegion( m_table, QRect( 2, 2, 10, 1 ) ) );
     dataSet1.setLabelDataRegion( CellRegion( m_table, QPoint( 1, 2 ) ) );

@@ -124,7 +124,7 @@ void TestDataSet::initTestCase()
 
 void TestDataSet::testFooData()
 {
-    DataSet dataSet( 0, 0 );
+    DataSet dataSet( 0 );
 
     dataSet.setLabelDataRegion( CellRegion( m_table1, QPoint( 1, 2 ) ) );
     dataSet.setCategoryDataRegion( CellRegion( m_table1, QRect( 2, 1, 4, 1 ) ) );
@@ -159,7 +159,7 @@ void TestDataSet::testFooData()
 
 void TestDataSet::testFooDataMultipleTables()
 {
-    DataSet dataSet( 0, 0 );
+    DataSet dataSet( 0 );
 
     dataSet.setLabelDataRegion( CellRegion( m_table1, QPoint( 1, 2 ) ) );
     dataSet.setCategoryDataRegion( CellRegion( m_table1, QRect( 2, 1, 4, 1 ) ) );

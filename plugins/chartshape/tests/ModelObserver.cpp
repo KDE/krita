@@ -28,6 +28,8 @@ ModelObserver::ModelObserver( QAbstractItemModel *source )
     m_source = source;
     m_numRows = 0;
     m_numCols = 0;
+    m_lastDataChange.valid = false;
+    m_lastHeaderDataChange.valid = false;
 
     connect( source, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
              this  , SLOT( slotRowsInserted( const QModelIndex&, int, int ) ) );
@@ -90,4 +92,19 @@ void ModelObserver::slotModelReset()
     qDebug() << "TestModel was reset";
     m_numRows = m_source->rowCount();
     m_numCols = m_source->columnCount();
+}
+
+void ModelObserver::slotHeaderDataChanged( Qt::Orientation orientation, int first, int last )
+{
+    m_lastHeaderDataChange.orientation = orientation;
+    m_lastHeaderDataChange.first = first;
+    m_lastHeaderDataChange.last = last;
+    m_lastHeaderDataChange.valid = true;
+}
+
+void ModelObserver::slotDataChanged( const QModelIndex & topLeft, const QModelIndex & bottomRight )
+{
+    m_lastDataChange.topLeft = topLeft;
+    m_lastDataChange.bottomRight = bottomRight;
+    m_lastHeaderDataChange.valid = true;
 }

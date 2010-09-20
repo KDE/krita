@@ -26,6 +26,19 @@
 
 class QAbstractItemModel;
 
+struct HeaderDataChange {
+    Qt::Orientation orientation;
+    int first;
+    int last;
+    bool valid;
+};
+
+struct DataChange {
+    QModelIndex topLeft;
+    QModelIndex bottomRight;
+    bool valid;
+};
+
 class ModelObserver : public QObject
 {
     Q_OBJECT
@@ -38,12 +51,16 @@ private slots:
     void slotColumnsInserted( const QModelIndex & parent, int start, int end );
     void slotRowsRemoved( const QModelIndex & parent, int start, int end );
     void slotColumnsRemoved( const QModelIndex & parent, int start, int end );
+    void slotHeaderDataChanged( Qt::Orientation, int first, int last );
+    void slotDataChanged( const QModelIndex & topLeft, const QModelIndex & bottomRight );
     void slotModelReset();
 
 public:
     QAbstractItemModel *m_source;
     int m_numRows;
     int m_numCols;
+    HeaderDataChange m_lastHeaderDataChange;
+    DataChange m_lastDataChange;
 };
 
 #endif // KCHART_MODELOBSERVER_H

@@ -199,4 +199,106 @@ void TestKDChartModel::testData()
     QCOMPARE( m_model->data( m_model->index( 9, 1 ) ), QVariant( 6.3 ) );
 }
 
+void TestKDChartModel::testDataChanges()
+{
+    DataSet dataSet1( 0 );
+    DataSet dataSet2( 1 );
+
+    dataSet1.setYDataRegion( CellRegion( m_table, QRect( 2, 2, 10, 1 ) ) );
+    dataSet2.setYDataRegion( CellRegion( m_table, QRect( 2, 3, 10, 1 ) ) );
+
+    m_model->addDataSet( &dataSet1 );
+    m_model->addDataSet( &dataSet2 );
+
+    // Test changing dataset-wide data
+
+    dataSet1.setLabelDataRegion( CellRegion( m_table, QPoint( 2, 2 ) ) );
+    QVERIFY( m_testModel->m_lastHeaderDataChange.valid );
+    QCOMPARE( m_testModel->m_lastHeaderDataChange.orientation, Qt::Vertical );
+    QCOMPARE( m_testModel->m_lastHeaderDataChange.first, 0 );
+    QCOMPARE( m_testModel->m_lastHeaderDataChange.last, 0 );
+
+    // Forget the last change to test another one
+    m_testModel->m_lastHeaderDataChange.valid = false;
+
+    dataSet2.setLabelDataRegion( CellRegion( m_table, QPoint( 2, 3 ) ) );
+    QVERIFY( m_testModel->m_lastHeaderDataChange.valid );
+    QCOMPARE( m_testModel->m_lastHeaderDataChange.orientation, Qt::Vertical );
+    QCOMPARE( m_testModel->m_lastHeaderDataChange.first, 1 );
+    QCOMPARE( m_testModel->m_lastHeaderDataChange.last, 1 );
+
+    // Test changing data points
+
+    // Forget the last change to test another one
+    m_testModel->m_lastDataChange.valid = false;
+
+    dataSet1.setYDataRegion( CellRegion( m_table, QRect( 3, 2, 9, 1 ) ) );
+    QVERIFY( m_testModel->m_lastHeaderDataChange.valid );
+    QCOMPARE( m_testModel->m_lastDataChange.topLeft, m_model->index( 0, 0 ) );
+    QCOMPARE( m_testModel->m_lastDataChange.bottomRight, m_model->index( 9, 0 ) );
+
+    // Forget the last change to test another one
+    m_testModel->m_lastDataChange.valid = false;
+
+    dataSet2.setYDataRegion( CellRegion( m_table, QRect( 3, 3, 9, 1 ) ) );
+    QVERIFY( m_testModel->m_lastHeaderDataChange.valid );
+    QCOMPARE( m_testModel->m_lastDataChange.topLeft, m_model->index( 0, 1 ) );
+    // The number of rows (data points) is now reduced by one because
+    // both y data regions have been reduced by one cell.
+    QCOMPARE( m_testModel->m_lastDataChange.bottomRight, m_model->index( 8, 1 ) );
+}
+
+void TestKDChartModel::testDataChangesWithTwoDimensions()
+{
+    DataSet dataSet1( 0 );
+    DataSet dataSet2( 1 );
+
+    dataSet1.setXDataRegion( CellRegion( m_table, QRect( 2, 1, 10, 1 ) ) );
+    dataSet1.setYDataRegion( CellRegion( m_table, QRect( 2, 2, 10, 1 ) ) );
+    dataSet1.setLabelDataRegion( CellRegion( m_table, QPoint( 1, 2 ) ) );
+
+    dataSet2.setXDataRegion( CellRegion( m_table, QRect( 2, 1, 10, 1 ) ) );
+    dataSet2.setYDataRegion( CellRegion( m_table, QRect( 2, 3, 10, 1 ) ) );
+    dataSet2.setLabelDataRegion( CellRegion( m_table, QPoint( 1, 3 ) ) );
+
+    m_model->setDataDimensions( 2 );
+    m_model->addDataSet( &dataSet1 );
+    m_model->addDataSet( &dataSet2 );
+
+    // Test changing dataset-wide data
+
+    dataSet1.setLabelDataRegion( CellRegion( m_table, QPoint( 2, 2 ) ) );
+    QVERIFY( m_testModel->m_lastHeaderDataChange.valid );
+    QCOMPARE( m_testModel->m_lastHeaderDataChange.orientation, Qt::Vertical );
+    QCOMPARE( m_testModel->m_lastHeaderDataChange.first, 0 );
+    QCOMPARE( m_testModel->m_lastHeaderDataChange.last, 1 );
+
+    // Forget the last change to test another one
+    m_testModel->m_lastHeaderDataChange.valid = false;
+
+    dataSet2.setLabelDataRegion( CellRegion( m_table, QPoint( 2, 3 ) ) );
+    QVERIFY( m_testModel->m_lastHeaderDataChange.valid );
+    QCOMPARE( m_testModel->m_lastHeaderDataChange.orientation, Qt::Vertical );
+    QCOMPARE( m_testModel->m_lastHeaderDataChange.first, 2 );
+    QCOMPARE( m_testModel->m_lastHeaderDataChange.last, 3 );
+
+    // Test changing data points
+
+    // Forget the last change to test another one
+    m_testModel->m_lastDataChange.valid = false;
+
+    dataSet1.setYDataRegion( CellRegion( m_table, QRect( 3, 2, 9, 1 ) ) );
+    QVERIFY( m_testModel->m_lastHeaderDataChange.valid );
+    QCOMPARE( m_testModel->m_lastDataChange.topLeft, m_model->index( 0, 0 ) );
+    QCOMPARE( m_testModel->m_lastDataChange.bottomRight, m_model->index( 9, 1 ) );
+
+    // Forget the last change to test another one
+    m_testModel->m_lastDataChange.valid = false;
+
+    dataSet2.setYDataRegion( CellRegion( m_table, QRect( 3, 3, 9, 1 ) ) );
+    QVERIFY( m_testModel->m_lastHeaderDataChange.valid );
+    QCOMPARE( m_testModel->m_lastDataChange.topLeft, m_model->index( 0, 2 ) );
+    QCOMPARE( m_testModel->m_lastDataChange.bottomRight, m_model->index( 9, 3 ) );
+}
+
 QTEST_MAIN( TestKDChartModel )

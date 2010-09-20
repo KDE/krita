@@ -272,11 +272,8 @@ void KDChartModel::dataSetChanged( DataSet *dataSet, DataRole role, int first /*
 
     const int lastIndex = d->biggestDataSetSize - 1;
     // be sure the 'first' and 'last' referenced rows are within our boundaries
-    const int rows = rowCount();
-    if ( first >= rows )
-        first = rows - 1;
-    if ( last >= rows )
-        last = rows - 1;
+    first = qMin( first, lastIndex );
+    last = qMin( last, lastIndex );
     // 'first' defaults to -1, which means that all data points changed.
     if ( first == -1 ) {
         first = 0;

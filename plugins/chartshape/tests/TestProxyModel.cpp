@@ -52,8 +52,9 @@ TestProxyModel::TestProxyModel()
 {
 }
 
-void TestProxyModel::initTestCase()
+void TestProxyModel::init()
 {
+    m_source.clear();
     m_table = m_source.add( "Table1", &m_sourceModel );
 
     m_sourceModel.setRowCount( 4 );
@@ -533,6 +534,72 @@ void TestProxyModel::testComplexRegions()
     QCOMPARE( dataSets[2]->customDataRegion(), CellRegion() );
     QCOMPARE( dataSets[2]->labelDataRegion(), CellRegion() );
     QCOMPARE( dataSets[2]->categoryDataRegion(), CellRegion());
+}
+
+void TestProxyModel::testTwoDimensions()
+{
+    QList<DataSet*> dataSets;
+
+    // Horizontal data direction
+    m_proxyModel.setDataDirection( Qt::Horizontal );
+    m_proxyModel.setFirstColumnIsLabel( false );
+    m_proxyModel.setFirstRowIsLabel( false );
+    m_proxyModel.setDataDimensions( 2 );
+
+    dataSets = m_proxyModel.dataSets();
+
+    QCOMPARE( dataSets.size(), 3 );
+    QCOMPARE( dataSets[0]->size(), 5 );
+    QCOMPARE( dataSets[1]->size(), 5 );
+    QCOMPARE( dataSets[2]->size(), 5 );
+
+    QCOMPARE( dataSets[0]->xDataRegion(), CellRegion( m_table, QRect( 1, 1, 5, 1 ) ) );
+    QCOMPARE( dataSets[0]->yDataRegion(), CellRegion( m_table, QRect( 1, 2, 5, 1 ) ) );
+    QCOMPARE( dataSets[0]->customDataRegion(), CellRegion() );
+    QCOMPARE( dataSets[0]->labelDataRegion(), CellRegion() );
+    QCOMPARE( dataSets[0]->categoryDataRegion(), CellRegion() );
+
+    QCOMPARE( dataSets[1]->xDataRegion(), CellRegion( m_table, QRect( 1, 1, 5, 1 ) ) );
+    QCOMPARE( dataSets[1]->yDataRegion(), CellRegion( m_table, QRect( 1, 3, 5, 1 ) ) );
+    QCOMPARE( dataSets[1]->customDataRegion(), CellRegion() );
+    QCOMPARE( dataSets[1]->labelDataRegion(), CellRegion() );
+    QCOMPARE( dataSets[1]->categoryDataRegion(), CellRegion() );
+
+    QCOMPARE( dataSets[2]->xDataRegion(), CellRegion( m_table, QRect( 1, 1, 5, 1 ) ) );
+    QCOMPARE( dataSets[2]->yDataRegion(), CellRegion( m_table, QRect( 1, 4, 5, 1 ) ) );
+    QCOMPARE( dataSets[2]->customDataRegion(), CellRegion() );
+    QCOMPARE( dataSets[2]->labelDataRegion(), CellRegion() );
+    QCOMPARE( dataSets[2]->categoryDataRegion(), CellRegion() );
+}
+
+void TestProxyModel::testThreeDimensions()
+{
+    QList<DataSet*> dataSets;
+
+    // Horizontal data direction
+    m_proxyModel.setDataDirection( Qt::Horizontal );
+    m_proxyModel.setFirstColumnIsLabel( false );
+    m_proxyModel.setFirstRowIsLabel( false );
+    m_proxyModel.setDataDimensions( 3 );
+
+    dataSets = m_proxyModel.dataSets();
+
+    QCOMPARE( dataSets.size(), 2 );
+    QCOMPARE( dataSets[0]->size(), 5 );
+    QCOMPARE( dataSets[1]->size(), 5 );
+
+    QCOMPARE( dataSets[0]->xDataRegion(), CellRegion( m_table, QRect( 1, 1, 5, 1 ) ) );
+    QCOMPARE( dataSets[0]->yDataRegion(), CellRegion( m_table, QRect( 1, 2, 5, 1 ) ) );
+    QCOMPARE( dataSets[0]->customDataRegion(), CellRegion( m_table, QRect( 1, 3, 5, 1 ) ) );
+    QCOMPARE( dataSets[0]->labelDataRegion(), CellRegion() );
+    QCOMPARE( dataSets[0]->categoryDataRegion(), CellRegion() );
+
+    QCOMPARE( dataSets[1]->xDataRegion(), CellRegion( m_table, QRect( 1, 1, 5, 1 ) ) );
+    QCOMPARE( dataSets[1]->yDataRegion(), CellRegion( m_table, QRect( 1, 4, 5, 1 ) ) );
+    // Since there's only four rows, not the necessary five, this region must be empty
+    QCOMPARE( dataSets[1]->customDataRegion(), CellRegion() );
+    QCOMPARE( dataSets[1]->labelDataRegion(), CellRegion() );
+    QCOMPARE( dataSets[1]->categoryDataRegion(), CellRegion() );
 }
 
 QTEST_MAIN( TestProxyModel )

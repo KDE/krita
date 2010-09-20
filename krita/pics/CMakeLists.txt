@@ -30,6 +30,7 @@ install(FILES
     paintop_presets_disabled.png
     width_icon.png
     height_icon.png
+    ratio_icon.png
     shear_horizontal.png
     shear_vertical.png
     offset_horizontal.png

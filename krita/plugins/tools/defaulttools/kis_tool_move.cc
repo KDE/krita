@@ -50,6 +50,7 @@
 #include "kis_selection_manager.h"
 #include <commands/kis_image_layer_add_command.h>
 #include <kis_transaction.h>
+#include <commands/kis_deselect_global_selection_command.h>
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
@@ -178,8 +179,10 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
                     oldLayer->paintDevice()->clearSelection(selection);
                     transaction.commit(image->undoAdapter());
 
-                    // deselect away the selection???
-                    selection->clear();
+                    if (image->globalSelection()) {
+                        KisDeselectGlobalSelectionCommand* cmd = new KisDeselectGlobalSelectionCommand(image);
+                        currentImage()->undoAdapter()->addCommand(cmd);
+                    }
                 }
 
                 KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());

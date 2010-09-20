@@ -50,7 +50,7 @@ KisDynaOpOption::KisDynaOpOption()
     connect(m_options->initWidthSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->massSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->dragSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->angleSlider,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->angleSlider,SIGNAL(valueChanged(qreal)),SIGNAL(sigSettingChanged()));
     connect(m_options->widthRangeSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->circleRadiusSPBox,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
     connect(m_options->lineCountSPBox,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));

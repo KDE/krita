@@ -108,6 +108,6 @@ KisDistanceInformation KisDynaPaintOp::paintLine(const KisPaintInformation &pi1,
 
 double KisDynaPaintOp::paintAt(const KisPaintInformation& info)
 {
-    Q_UNUSED(info);
-    return 1.0;
+    KisDistanceInformation di(0.0,1.0);
+    return paintLine(info, info, di).spacing;
 }

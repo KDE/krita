@@ -988,8 +988,6 @@ Axis::Axis( PlotArea *parent )
              this,        SLOT( setGapBetweenBars( int ) ) );
     connect( d->plotArea, SIGNAL( gapBetweenSetsChanged( int ) ),
              this,        SLOT( setGapBetweenSets( int ) ) );
-    connect( d->plotArea, SIGNAL( pieExplodeFactorChanged( DataSet*, int ) ),
-             this,        SLOT( setPieExplodeFactor( DataSet*, int ) ) );
     connect( d->plotArea, SIGNAL( pieAngleOffsetChanged( qreal ) ),
              this,        SLOT( setPieAngleOffset( qreal ) ) );
 }

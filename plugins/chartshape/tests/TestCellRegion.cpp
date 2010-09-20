@@ -81,27 +81,26 @@ void TestCellRegion::testFromStringWithSpecialCharactersSingleTable()
 
 void TestCellRegion::testToStringMultibleTables()
 {
-    QCOMPARE( m_region1.toString(), QString( "$Table1.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
+    QCOMPARE( m_region2.toString(), QString( "$Table1.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
 }
 
 void TestCellRegion::testFromStringMultibleTables()
 {
-    QCOMPARE( m_region1, CellRegion( &m_source, "$Table1.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
+    QCOMPARE( m_region2, CellRegion( &m_source, "$Table1.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
 }
 
 void TestCellRegion::testTableNameChangeMultibleTables()
 {
-    QCOMPARE( m_region1.toString(), QString( "$Table1.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
     m_source.rename( "Table1", "AGoodCookCanCookGoodCookies" );
-    QCOMPARE( m_region1.toString(), QString( "$AGoodCookCanCookGoodCookies.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
+    QCOMPARE( m_region2.toString(), QString( "$AGoodCookCanCookGoodCookies.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
     m_source.rename( "Table2", "DoubleBubbleGumBubblesDouble" );
-    QCOMPARE( m_region1.toString(), QString( "$AGoodCookCanCookGoodCookies.$B$3:$K$13;$DoubleBubbleGumBubblesDouble.$A$2:$E$7" ) );
+    QCOMPARE( m_region2.toString(), QString( "$AGoodCookCanCookGoodCookies.$B$3:$K$13;$DoubleBubbleGumBubblesDouble.$A$2:$E$7" ) );
 }
 
 void TestCellRegion::testToStringWithSpecialCharactersMultibleTables()
 {
     m_source.rename( "Table1", "table-one" );
-    QCOMPARE( m_region1.toString(), QString( "$'table-one'.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
+    QCOMPARE( m_region2.toString(), QString( "$'table-one'.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
 }
 
 void TestCellRegion::testFromStringWithSpecialCharactersMultibleTables()

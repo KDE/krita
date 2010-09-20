@@ -759,6 +759,8 @@ QVariant DataSet::xData( int index ) const
 QVariant DataSet::yData( int index ) const
 {
     const QVariant data = d->data( d->yDataRegion, index );
+    // FIXME: There should be no fallback here.. If there's no data,
+    // then we should return an invalid value nonetheless.
     return data.isValid() ? data : index + 1;
 //     return d->data( d->yDataRegion, index );
 }

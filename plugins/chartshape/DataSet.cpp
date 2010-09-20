@@ -871,7 +871,7 @@ void DataSet::setLabelDataRegion( const CellRegion &region )
     d->updateSize();
 
     if ( !d->blockSignals && d->kdChartModel )
-        d->kdChartModel->dataSetChanged( this, KDChartModel::LabelDataRole, 0, size() - 1 );
+        d->kdChartModel->dataSetChanged( this );
 }
 
 

@@ -193,7 +193,7 @@ QVariant KDChartModel::data( const QModelIndex &index,
         if ( d->dataDimensions > 1 && dataSection == 0 )
             return dataSet->xData( section );
         else
-            return dataSet->yData( section ).isValid() ? dataSet->yData( section ) : QVariant( 1 );
+            return dataSet->yData( section );
     case KDChart::DatasetBrushRole:
         return dataSet->brush( section );
     case KDChart::DatasetPenRole:

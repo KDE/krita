@@ -28,6 +28,21 @@ ModelObserver::ModelObserver( QAbstractItemModel *source )
     m_source = source;
     m_numRows = 0;
     m_numCols = 0;
+
+    connect( source, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
+             this  , SLOT( slotRowsInserted( const QModelIndex&, int, int ) ) );
+    connect( source, SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
+             this,   SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+    connect( source, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
+             this,   SLOT( slotRowsRemoved( const QModelIndex&, int, int ) ) );
+    connect( source, SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
+             this,   SLOT( slotColumnsRemoved( const QModelIndex&, int, int ) ) );
+    connect( source, SIGNAL( headerDataChanged( Qt::Orientation, int, int ) ),
+             this,   SLOT( slotHeaderDataChanged( Qt::Orientation, int, int ) ) );
+    connect( source, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
+             this,   SLOT( slotDataChanged( const QModelIndex&, const QModelIndex& ) ) );
+    connect( source, SIGNAL( modelReset() ),
+             this,   SLOT( slotModelReset() ) );
 }
 
 void ModelObserver::slotRowsInserted( const QModelIndex & parent, int start, int end )

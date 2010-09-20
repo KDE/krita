@@ -90,17 +90,6 @@ void TestKDChartModel::init()
 {
     m_model = new KDChartModel;
     m_testModel = new ModelObserver( m_model );
-
-    connect( m_model,     SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
-             m_testModel, SLOT( slotRowsInserted( const QModelIndex&, int, int ) ) );
-    connect( m_model,     SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-             m_testModel, SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
-    connect( m_model,     SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
-             m_testModel, SLOT( slotRowsRemoved( const QModelIndex&, int, int ) ) );
-    connect( m_model,     SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
-             m_testModel, SLOT( slotColumnsRemoved( const QModelIndex&, int, int ) ) );
-    connect( m_model,     SIGNAL( modelReset() ),
-             m_testModel, SLOT( slotModelReset() ) );
 }
 
 void TestKDChartModel::cleanup()

@@ -62,8 +62,6 @@ KisToolDyna::KisToolDyna(KoCanvasBase * canvas)
     m_timer = new QTimer(this);
     Q_CHECK_PTR(m_timer);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
-
-    
     
     initDyna();
 }
@@ -106,11 +104,15 @@ void KisToolDyna::timeoutPaint()
 
 void KisToolDyna::initPaint(KoPointerEvent *e)
 {
-    //initDyna();
-    first = false;
-    initMouse(convertToPixelCoord(e->point));
     m_rate = currentPaintOpPreset()->settings()->rate();
-
+    
+    QRectF imageSize = QRectF(QPointF(0.0,0.0),currentImage()->size());
+    QRectF documentSize = currentImage()->pixelToDocument(imageSize);
+    m_surfaceWidth = documentSize.width();
+    m_surfaceHeight = documentSize.height();
+    setMousePosition(e->point);
+    m_mouse.init(m_mousePos.x(), m_mousePos.y());
+    
     KisToolFreehand::initPaint(e);
 
     if (!m_painter) {
@@ -131,37 +133,161 @@ void KisToolDyna::endPaint()
     KisToolFreehand::endPaint();
 }
 
+void KisToolDyna::mousePressEvent(KoPointerEvent *e)
+{
+    setMousePosition(e->point);
+    m_mouse.init(m_mousePos.x(), m_mousePos.y());
+    m_odelx = m_mousePos.x();
+    m_odely = m_mousePos.y();
+    
+    KisToolFreehand::mousePressEvent(e);
+}
+
 
 void KisToolDyna::mouseMoveEvent(KoPointerEvent *e)
 {
-    if (m_mode != PAINT) return;
-
-    initMouse(convertToPixelCoord(e->point));
-
-    qreal mx, my;
-    mx = m_mousePos.x();
-    my = m_mousePos.y();
-
-    if (!first) {
-        m_mouse.init(mx, my);
-        m_odelx = 0.0;
-        m_odely = 0.0;
-
-        first = true;
-        m_previousPaintInformation = KisPaintInformation(e->point);
-
+    if (m_mode != PAINT){
+        KisToolFreehand::mouseMoveEvent(e);
         return;
     }
+    
+    setMousePosition(e->point);
 
-    if (applyFilter(mx, my)) {
-        drawSegment(e);
+    if (applyFilter(m_mousePos.x(), m_mousePos.y())) {
+        KoPointerEvent newEvent = filterEvent(e);
+        KisToolFreehand::mouseMoveEvent(&newEvent);
     }
 
-    //KisToolFreehand::mouseMoveEvent(e);
     if (m_painter && m_painter->paintOp() && currentPaintOpPreset()->settings()->isAirbrushing()) {
         m_timer->start(m_rate);
     }
 }
+
+// dyna algorithm
+int KisToolDyna::applyFilter(qreal mx, qreal my)
+{
+    /* calculate mass and drag */
+    qreal mass = flerp(1.0, 160.0, m_curmass);
+    qreal drag = flerp(0.00, 0.5, m_curdrag * m_curdrag);
+
+    /* calculate force and acceleration */
+    qreal fx = mx - m_mouse.curx;
+    qreal fy = my - m_mouse.cury;
+
+    m_mouse.acc = sqrt(fx * fx + fy * fy);
+
+    if (m_mouse.acc < 0.000001) {
+        return 0;
+    }
+
+    m_mouse.accx = fx / mass;
+    m_mouse.accy = fy / mass;
+
+    /* calculate new velocity */
+    m_mouse.velx += m_mouse.accx;
+    m_mouse.vely += m_mouse.accy;
+    m_mouse.vel = sqrt(m_mouse.velx * m_mouse.velx + m_mouse.vely * m_mouse.vely);
+    m_mouse.angx = -m_mouse.vely;
+    m_mouse.angy = m_mouse.velx;
+    if (m_mouse.vel < 0.000001) {
+        return 0;
+    }
+
+    /* calculate angle of drawing tool */
+    m_mouse.angx /= m_mouse.vel;
+    m_mouse.angy /= m_mouse.vel;
+    if (m_mouse.fixedangle) {
+        m_mouse.angx = m_xangle;
+        m_mouse.angy = m_yangle;
+    }
+
+    m_mouse.velx = m_mouse.velx * (1.0 - drag);
+    m_mouse.vely = m_mouse.vely * (1.0 - drag);
+
+    m_mouse.lastx = m_mouse.curx;
+    m_mouse.lasty = m_mouse.cury;
+    m_mouse.curx = m_mouse.curx + m_mouse.velx;
+    m_mouse.cury = m_mouse.cury + m_mouse.vely;
+
+    return 1;
+}
+
+
+KoPointerEvent KisToolDyna::filterEvent(KoPointerEvent* event)
+{
+    qreal wid = m_widthRange - m_mouse.vel;
+
+    wid = wid * m_width;
+
+    if (wid < 0.00001) {
+        wid = 0.00001;
+    }
+
+    qreal delx = m_mouse.angx * wid;
+    qreal dely = m_mouse.angy * wid;
+
+    qreal px = m_mouse.lastx;
+    qreal py = m_mouse.lasty;
+    qreal nx = m_mouse.curx;
+    qreal ny = m_mouse.cury;
+
+    QPointF prev(px , py);         // previous position
+    QPointF now(nx , ny);           // new position
+
+    QPointF prevr(px + m_odelx , py + m_odely);
+    QPointF prevl(px - m_odelx , py - m_odely);
+
+    QPointF nowl(nx - delx , ny - dely);
+    QPointF nowr(nx + delx , ny + dely);
+
+    // transform coords from float points into image points
+    prev.rx() *= m_surfaceWidth;
+    prevr.rx() *= m_surfaceWidth;
+    prevl.rx() *= m_surfaceWidth;
+    now.rx()  *= m_surfaceWidth;
+    nowl.rx() *= m_surfaceWidth;
+    nowr.rx() *= m_surfaceWidth;
+
+    prev.ry() *= m_surfaceHeight;
+    prevr.ry() *= m_surfaceHeight;
+    prevl.ry() *= m_surfaceHeight;
+    now.ry()  *= m_surfaceHeight;
+    nowl.ry() *= m_surfaceHeight;
+    nowr.ry() *= m_surfaceHeight;
+
+    qreal m_pressure;
+#if 0
+
+    qreal xTilt, yTilt;
+    qreal m_rotation;
+    qreal m_tangentialPressure;
+
+    // some funny debugging
+    dbgPlugins << "m_mouse.vel: " << m_mouse.vel;
+    dbgPlugins << "m_mouse.velx: " << m_mouse.velx;
+    dbgPlugins << "m_mouse.vely: " << m_mouse.vely;
+    dbgPlugins << "m_mouse.accx: " << m_mouse.accx;
+    dbgPlugins << "m_mouse.accy: " << m_mouse.accy;
+
+
+    dbgPlugins << "fixed: " << m_mouse.fixedangle;
+    dbgPlugins << "drag: " << m_curdrag;
+    dbgPlugins << "mass: " << m_curmass;
+    dbgPlugins << "xAngle: " << m_xangle;
+    dbgPlugins << "yAngle: " << m_yangle;
+
+#endif
+
+    m_pressure =  m_mouse.vel * 100;
+    m_pressure = qBound(0.0,m_pressure, 1.0);
+    
+    m_odelx = delx;
+    m_odely = dely;
+    
+    // how to change pressure in the KoPointerEvent???
+    return KoPointerEvent(event,now);
+}
+
 
 void KisToolDyna::slotSetDrag(double drag)
 {
@@ -203,7 +329,6 @@ void KisToolDyna::slotSetFixedAngle(bool fixedAngle)
 {
     m_mouse.fixedangle = fixedAngle;
 }
-
 
 QWidget * KisToolDyna::createOptionWidget()
 {
@@ -248,7 +373,7 @@ QWidget * KisToolDyna::createOptionWidget()
     m_optionLayout->setSpacing(2);
 
     KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
-   m_optionLayout->addWidget(initWidthLbl, 5, 0);
+    m_optionLayout->addWidget(initWidthLbl, 5, 0);
     m_optionLayout->addWidget(m_initWidthSPBox, 5, 1, 1, 2);
     m_optionLayout->addWidget(massLbl, 6, 0);
     m_optionLayout->addWidget(m_massSPBox, 6, 1, 1, 2);
@@ -265,173 +390,4 @@ QWidget * KisToolDyna::createOptionWidget()
     return optionWidget;
 }
 
-// dyna algorithm
-int KisToolDyna::applyFilter(qreal mx, qreal my)
-{
-    qreal mass, drag;
-    qreal fx, fy;
-
-    /* calculate mass and drag */
-    mass = flerp(1.0, 160.0, m_curmass);
-    drag = flerp(0.00, 0.5, m_curdrag * m_curdrag);
-
-    /* calculate force and acceleration */
-    fx = mx - m_mouse.curx;
-    fy = my - m_mouse.cury;
-
-    m_mouse.acc = sqrt(fx * fx + fy * fy);
-
-    if (m_mouse.acc < 0.000001) {
-        return 0;
-    }
-
-    m_mouse.accx = fx / mass;
-    m_mouse.accy = fy / mass;
-
-    /* calculate new velocity */
-    m_mouse.velx += m_mouse.accx;
-    m_mouse.vely += m_mouse.accy;
-    m_mouse.vel = sqrt(m_mouse.velx * m_mouse.velx + m_mouse.vely * m_mouse.vely);
-    m_mouse.angx = -m_mouse.vely;
-    m_mouse.angy = m_mouse.velx;
-    if (m_mouse.vel < 0.000001) {
-        return 0;
-    }
-
-    /* calculate angle of drawing tool */
-    m_mouse.angx /= m_mouse.vel;
-    m_mouse.angy /= m_mouse.vel;
-    if (m_mouse.fixedangle) {
-        m_mouse.angx = m_xangle;
-        m_mouse.angy = m_yangle;
-    }
-
-    m_mouse.velx = m_mouse.velx * (1.0 - drag);
-    m_mouse.vely = m_mouse.vely * (1.0 - drag);
-
-    m_mouse.lastx = m_mouse.curx;
-    m_mouse.lasty = m_mouse.cury;
-    m_mouse.curx = m_mouse.curx + m_mouse.velx;
-    m_mouse.cury = m_mouse.cury + m_mouse.vely;
-
-    return 1;
-}
-
-
-void KisToolDyna::drawSegment(KoPointerEvent* event)
-{
-    Q_UNUSED(event);
-    qreal delx, dely;
-    qreal wid;
-    qreal px, py, nx, ny;
-
-    wid = m_widthRange - m_mouse.vel;
-
-    wid = wid * m_width;
-
-    if (wid < 0.00001) {
-        wid = 0.00001;
-    }
-
-    delx = m_mouse.angx * wid;
-    dely = m_mouse.angy * wid;
-
-    px = m_mouse.lastx;
-    py = m_mouse.lasty;
-    nx = m_mouse.curx;
-    ny = m_mouse.cury;
-
-    QPointF prev(px , py);         // previous position
-    QPointF now(nx , ny);           // new position
-
-    QPointF prevr(px + m_odelx , py + m_odely);
-    QPointF prevl(px - m_odelx , py - m_odely);
-
-    QPointF nowl(nx - delx , ny - dely);
-    QPointF nowr(nx + delx , ny + dely);
-
-    // transform coords from float points into image points
-    prev.rx() *= currentImage()->width();
-    prevr.rx() *= currentImage()->width();
-    prevl.rx() *= currentImage()->width();
-    now.rx()  *= currentImage()->width();
-    nowl.rx() *= currentImage()->width();
-    nowr.rx() *= currentImage()->width();
-
-    prev.ry() *= currentImage()->height();
-    prevr.ry() *= currentImage()->height();
-    prevl.ry() *= currentImage()->height();
-    now.ry()  *= currentImage()->height();
-    nowl.ry() *= currentImage()->height();
-    nowr.ry() *= currentImage()->height();
-
-    qreal m_pressure;
-#if 0
-
-    qreal xTilt, yTilt;
-    qreal m_rotation;
-    qreal m_tangentialPressure;
-
-    // some funny debugging
-    dbgPlugins << "m_mouse.vel: " << m_mouse.vel;
-    dbgPlugins << "m_mouse.velx: " << m_mouse.velx;
-    dbgPlugins << "m_mouse.vely: " << m_mouse.vely;
-    dbgPlugins << "m_mouse.accx: " << m_mouse.accx;
-    dbgPlugins << "m_mouse.accy: " << m_mouse.accy;
-
-
-    dbgPlugins << "fixed: " << m_mouse.fixedangle;
-    dbgPlugins << "drag: " << m_curdrag;
-    dbgPlugins << "mass: " << m_curmass;
-    dbgPlugins << "xAngle: " << m_xangle;
-    dbgPlugins << "yAngle: " << m_yangle;
-
-#endif
-
-    m_pressure =  m_mouse.vel * 100;
-    if (m_pressure > 1.0) m_pressure = 1.0;
-    if (m_pressure < 0.0) m_pressure = 0.0;
-
-    KisPaintInformation pi1 = KisPaintInformation(prev, m_pressure);
-    KisPaintInformation info = KisPaintInformation(now, m_pressure);
-    paintLine(pi1 , info);
-
-    m_previousPaintInformation = info;
-    m_previousPressure = m_pressure;
-
-    m_odelx = delx;
-    m_odely = dely;
-}
-
-void KisToolDyna::mousePressEvent(KoPointerEvent *e)
-{
-    if (!currentNode())
-        return;
-
-    if (!currentNode()->paintDevice())
-        return;
-
-    if (currentPaintOpPreset() && currentPaintOpPreset()->settings()) {
-        m_paintIncremental = currentPaintOpPreset()->settings()->paintIncremental();
-        currentPaintOpPreset()->settings()->mousePressEvent(e);
-        if (e->isAccepted()) {
-            return;
-        }
-    }
-
-    if (e->button() == Qt::LeftButton) {
-        initPaint(e);
-        m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(e->point),
-                                     e->pressure(), e->xTilt(), e->yTilt(),
-                                     KisVector2D::Zero(),
-                                     e->rotation(), e->tangentialPressure());
-    }
-
-    if (m_mode == PAINT && (e->button() == Qt::MidButton || e->button() == Qt::RightButton)) {
-        // end painting, if calling the menu or the pop up palette. otherwise there is weird behaviour
-        endPaint();
-    }
-
-}
 #include "kis_tool_dyna.moc"
-

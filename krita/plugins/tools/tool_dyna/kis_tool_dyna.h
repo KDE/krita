@@ -129,6 +129,9 @@ private:
     QPointF m_mousePos;
     bool first;
 
+    qreal m_surfaceWidth;
+    qreal m_surfaceHeight;
+    
     // settings variables
     qreal m_width;
     qreal m_curmass;
@@ -142,14 +145,14 @@ private:
     qreal flerp(qreal f0, qreal f1, qreal p) {
         return ((f0 *(1.0 - p)) + (f1 * p));
     }
-    void initMouse(const QPointF &point) {
-        m_mousePos.setX(point.x() / currentImage()->width());
-        m_mousePos.setY(point.y() / currentImage()->height());
+    void setMousePosition(const QPointF &point) {
+        m_mousePos.setX(point.x() / m_surfaceWidth );
+        m_mousePos.setY(point.y() / m_surfaceHeight);
     }
 
     void initDyna();
     int applyFilter(qreal mx, qreal my);
-    void drawSegment(KoPointerEvent * event);
+    KoPointerEvent filterEvent(KoPointerEvent * event);
 
 };
 

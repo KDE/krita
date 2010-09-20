@@ -49,6 +49,9 @@ KisPaintOpRegistry::KisPaintOpRegistry()
 
 KisPaintOpRegistry::~KisPaintOpRegistry()
 {
+    foreach(QString id, keys()) {
+        delete get(id);
+    }
     dbgRegistry << "Deleting KisPaintOpRegistry";
 }
 

@@ -42,5 +42,8 @@ KisRecordedActionFactoryRegistry::KisRecordedActionFactoryRegistry()
 
 KisRecordedActionFactoryRegistry::~KisRecordedActionFactoryRegistry()
 {
+    foreach(QString id, keys()) {
+        delete get(id);
+    }
     dbgRegistry << "deleting KisRecordedActionFactoryRegistry";
 }

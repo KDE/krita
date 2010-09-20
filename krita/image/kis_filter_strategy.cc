@@ -181,6 +181,9 @@ KisFilterStrategyRegistry::KisFilterStrategyRegistry()
 
 KisFilterStrategyRegistry::~KisFilterStrategyRegistry()
 {
+    foreach(QString id, keys()) {
+        delete get(id);
+    }    
     dbgRegistry << "deleting KisFilterStrategyRegistry";
 }
 

@@ -41,8 +41,10 @@ using namespace KChart;
 
 class KDChartModel::Private {
 public:
-    Private();
+    Private( KDChartModel *parent );
     ~Private();
+
+    KDChartModel *const q;
 
     /**
      * Returns the index of a given dataSet. If it is not present in
@@ -67,6 +69,21 @@ public:
      */
     int  calcMaxDataSetSize() const;
 
+    /**
+     * Returns the first model index a certain data point of a data occupies
+     * in this model.
+     *
+     * Note that dataPointFirstModelIndex( .. ) == dataPointLastModelIndex( .. )
+     * in case we have only one data dimension.
+     */
+    QModelIndex dataPointFirstModelIndex( int dataSetNumber, int index );
+
+    /**
+     * Returns the last model index a certain data point of a data occupies
+     * in this model.
+     */
+    QModelIndex dataPointLastModelIndex( int dataSetNumber, int index );
+
     bool isKnownDataRole( int role ) const;
 
     int             dataDimensions;
@@ -77,7 +94,8 @@ public:
 };
 
 
-KDChartModel::Private::Private()
+KDChartModel::Private::Private( KDChartModel *parent )
+    : q( parent )
 {
     dataDimensions      = 1;
     dataDirection       = Qt::Vertical;
@@ -122,6 +140,26 @@ int KDChartModel::Private::dataSetIndex( DataSet *dataSet ) const
     return dataSets.indexOf( dataSet );
 }
 
+QModelIndex KDChartModel::Private::dataPointFirstModelIndex( int dataSetNumber, int index )
+{
+    // Use the first row or column this data set occupies, assuming the data
+    // direction is horizontal or vertical, respectively.
+    int dataSetRowOrCol = dataSetNumber * dataDimensions;
+    if ( dataDirection == Qt::Vertical )
+        return q->index( index, dataSetRowOrCol );
+    return q->index( dataSetRowOrCol, index );
+}
+
+QModelIndex KDChartModel::Private::dataPointLastModelIndex( int dataSetNumber, int index )
+{
+    // Use the last row or column this data set occupies, assuming the data
+    // direction is horizontal or vertical, respectively.
+    int dataSetRowOrCol = (dataSetNumber + 1) * dataDimensions - 1;
+    if ( dataDirection == Qt::Vertical )
+        return q->index( index, dataSetRowOrCol );
+    return q->index( dataSetRowOrCol, index );
+}
+
 
 // ================================================================
 //                     class KDChartModel
@@ -129,7 +167,7 @@ int KDChartModel::Private::dataSetIndex( DataSet *dataSet ) const
 
 KDChartModel::KDChartModel( QObject *parent /* = 0 */ )
     : QAbstractItemModel( parent ),
-      d( new Private )
+      d( new Private( this ) )
 {
 }
 
@@ -218,9 +256,12 @@ void KDChartModel::dataSetChanged( DataSet *dataSet )
     if ( !d->dataSets.contains( dataSet ) )
         return;
 
-    int dataSetColumn = d->dataSetIndex( dataSet ) * dataDimensions();
+    int dataSetNumber = d->dataSetIndex( dataSet );
 
-    emit headerDataChanged( categoryDirection(), dataSetColumn, dataSetColumn );
+    // Header data that belongs to this data set (e.g. label)
+    int first = dataSetNumber * dataDimensions();
+    int last = first + dataDimensions() - 1;
+    emit headerDataChanged( dataDirection(), first, last );
 }
 
 void KDChartModel::dataSetChanged( DataSet *dataSet, DataRole role, int first, int last /* = -1 */ )
@@ -246,20 +287,9 @@ void KDChartModel::dataSetChanged( DataSet *dataSet, DataRole role, int first, i
     if ( last < first )
         qSwap(first , last);
 
-    int dataSetColumn = d->dataSetIndex( dataSet ) * dataDimensions();
-
-    if ( dataDimensions() > 1 ) {
-        switch ( role ) {
-        case YDataRole:
-            dataSetColumn += 1;
-            break;
-        default:
-            ;
-        }
-    }
-
-    emit dataChanged( index( first, dataSetColumn ),
-                      index( last,  dataSetColumn ) );
+    int dataSetNumber = d->dataSetIndex( dataSet );
+    emit dataChanged( d->dataPointFirstModelIndex( dataSetNumber, first ),
+                      d->dataPointLastModelIndex( dataSetNumber, last ) );
 }
 
 void KDChartModel::dataSetSizeChanged( DataSet *dataSet, int newSize )

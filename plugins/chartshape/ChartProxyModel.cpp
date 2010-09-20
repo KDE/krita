@@ -145,13 +145,8 @@ ChartProxyModel::~ChartProxyModel()
 
 void ChartProxyModel::reset( const CellRegion& region )
 {
-    beginResetModel();
-
     d->selection = region;
-    invalidateDataSets();
-    d->dataSets = d->createDataSetsFromRegion( d->removedDataSets );
-
-    endResetModel();
+    d->rebuildDataMap();
 }
 
 void ChartProxyModel::Private::rebuildDataMap()
@@ -160,8 +155,10 @@ void ChartProxyModel::Private::rebuildDataMap()
     // ChartProxyModel::endLoading() will get back to us.
     if ( isLoading )
         return;
+    q->beginResetModel();
     q->invalidateDataSets();
     dataSets = createDataSetsFromRegion( removedDataSets );
+    q->endResetModel();
 }
 
 void ChartProxyModel::addTable( Table *table )
@@ -512,12 +509,8 @@ void ChartProxyModel::setFirstRowIsLabel( bool b )
     if ( b == d->firstRowIsLabel )
         return;
 
-    beginResetModel();
-    
     d->firstRowIsLabel = b;
-    
     d->rebuildDataMap();
-    endResetModel();
 }
  
 
@@ -526,11 +519,8 @@ void ChartProxyModel::setFirstColumnIsLabel( bool b )
     if ( b == d->firstColumnIsLabel )
         return;
 
-    beginResetModel();
     d->firstColumnIsLabel = b;
-    
     d->rebuildDataMap();
-    endResetModel();
 }
 
 Qt::Orientation ChartProxyModel::dataDirection()
@@ -559,9 +549,7 @@ void ChartProxyModel::endLoading()
     Q_ASSERT( d->isLoading );
     d->isLoading = false;
 
-    beginResetModel();
     d->rebuildDataMap();
-    endResetModel();
 }
 
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )
@@ -569,11 +557,8 @@ void ChartProxyModel::setDataDirection( Qt::Orientation orientation )
     if ( d->dataDirection == orientation )
         return;
 
-    beginResetModel();
     d->dataDirection = orientation;
-
     d->rebuildDataMap();
-    endResetModel();
 }
 
 void ChartProxyModel::setDataDimensions( int dimensions )
@@ -581,11 +566,8 @@ void ChartProxyModel::setDataDimensions( int dimensions )
     if ( d->dataDimensions == dimensions )
         return;
 
-    beginResetModel();
     d->dataDimensions = dimensions;
-
     d->rebuildDataMap();
-    endResetModel();
 }
 
 bool ChartProxyModel::firstRowIsLabel() const

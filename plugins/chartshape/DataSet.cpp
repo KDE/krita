@@ -863,6 +863,9 @@ void DataSet::setCategoryDataRegion( const CellRegion &region )
 {
     d->categoryDataRegion = region;
     d->updateSize();
+
+    if ( !d->blockSignals && d->kdChartModel )
+        d->kdChartModel->dataSetChanged( this, KDChartModel::CategoryDataRole );
 }
 
 void DataSet::setLabelDataRegion( const CellRegion &region )

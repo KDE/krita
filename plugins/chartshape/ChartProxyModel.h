@@ -151,6 +151,25 @@ public:
      */
     void invalidateDataSets();
 
+    /**
+     * Called by ChartShape when it begins loading from ODF.
+     *
+     * The proxy model will then avoid any insertion, removal or data-change
+     * signals or calls to speed up loading (significantly for large amounts
+     * of data).
+     *
+     * Properties like firstRowIsLabel() can still be modified, the changes
+     * will simply not get propagated until endLoading() is called.
+     */
+    void beginLoading();
+
+    /**
+     * Called by ChartShape when it is done loading from ODF.
+     *
+     * The proxy model will then be reset with its current properties.
+     */
+    void endLoading();
+
 public slots:
     /**
      * Connected to dataChanged() signal of source models in TableSource.

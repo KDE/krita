@@ -64,6 +64,10 @@ public:
 
     TableSource *const tableSource;
 
+    /// Set to true if we're in the process of loading data from ODF.
+    /// Used to avoid repeatedly updating data.
+    bool isLoading;
+
     bool             firstRowIsLabel;
     bool             firstColumnIsLabel;
     Qt::Orientation  dataDirection;
@@ -100,6 +104,7 @@ ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source 
     : q( parent )
     , tableSource( source )
     , createdDataSetCount( 0 )
+    , isLoading( false )
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
@@ -151,6 +156,10 @@ void ChartProxyModel::reset( const CellRegion& region )
 
 void ChartProxyModel::Private::rebuildDataMap()
 {
+    // Don't do anything while we're loading from ODF.
+    // ChartProxyModel::endLoading() will get back to us.
+    if ( isLoading )
+        return;
     q->invalidateDataSets();
     dataSets = createDataSetsFromRegion( removedDataSets );
 }
@@ -359,6 +368,8 @@ void ChartProxyModel::saveOdf( KoShapeSavingContext &context ) const
 bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                                KoShapeLoadingContext &context )
 {
+    Q_ASSERT( d->isLoading );
+
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
     // If we exclusively use the chart's internal model then all data
     // is taken from there and each data set is automatically assigned
@@ -531,6 +542,26 @@ void ChartProxyModel::invalidateDataSets()
 {
     d->removedDataSets = d->dataSets;
     d->dataSets.clear();
+}
+
+void ChartProxyModel::beginLoading()
+{
+    Q_ASSERT( !d->isLoading );
+    // FIXME: invalidateDataSets() used to be called explicitly at the beginning
+    // of ChartShape::loadOdf(). Now beginLoading() is called instead.
+    // So, is invalidateDataSets() still necessary here?
+    invalidateDataSets();
+    d->isLoading = true;
+}
+
+void ChartProxyModel::endLoading()
+{
+    Q_ASSERT( d->isLoading );
+    d->isLoading = false;
+
+    beginResetModel();
+    d->rebuildDataMap();
+    endResetModel();
 }
 
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )

@@ -38,9 +38,10 @@ struct KisMask::Private {
     class PerThreadPaintDevice {
     public:
         KisPaintDeviceSP device(KisPaintDeviceSP projection) {
-            if(!m_storage.hasLocalData())
+            if(!m_storage.hasLocalData()) {
+                // XXX: this leaks!
                 m_storage.setLocalData(new KisPaintDeviceSP(new KisPaintDevice(projection->colorSpace())));
-
+            }
             KisPaintDeviceSP device = *m_storage.localData();
             device->prepareClone(projection);
 

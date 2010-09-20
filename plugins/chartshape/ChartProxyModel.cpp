@@ -411,7 +411,6 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                 // the datasetnumber needs to be known at construction time, to ensure
                 // default colors are set correctly
                 dataSet = new DataSet( d->dataSets.size() );
-                dataSet->setNumber( d->dataSets.size() );
             }
             d->dataSets.append( dataSet );
             dataSet->loadOdf( n, context );

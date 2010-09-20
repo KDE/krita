@@ -688,17 +688,6 @@ int DataSet::number() const
     return d->num;
 }
 
-void DataSet::setNumber( int num )
-{
-    if ( !d->blockSignals && d->attachedAxis )
-        d->attachedAxis->detachDataSet( this );
-
-    d->num = num;
-
-    if ( !d->blockSignals && d->attachedAxis )
-        d->attachedAxis->attachDataSet( this );
-}
-
 void DataSet::setShowMeanValue( bool show )
 {
     d->showMeanValue = show;

@@ -152,7 +152,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
 
         currentImage()->undoAdapter()->beginMacro(i18n("Move"));
 
-        if (selection && !selection->isTotallyUnselected(image->bounds())) {
+        if (selection && !selection->isTotallyUnselected(image->bounds()) && !selection->isDeselected()) {
             //selection->convertToQImage(0).save("selection.png");
             // Create a temporary layer with the contents of the selection of the current layer.
             Q_ASSERT(!node->inherits("KisGroupLayer"));

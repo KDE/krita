@@ -837,7 +837,7 @@ void DataSet::setXDataRegion( const CellRegion &region )
     d->updateSize();
 
     if ( !d->blockSignals && d->kdChartModel )
-        d->kdChartModel->dataSetChanged( this, KDChartModel::XDataRole, 0, size() - 1 );
+        d->kdChartModel->dataSetChanged( this, KDChartModel::XDataRole );
 }
 
 void DataSet::setYDataRegion( const CellRegion &region )
@@ -846,7 +846,7 @@ void DataSet::setYDataRegion( const CellRegion &region )
     d->updateSize();
 
     if ( !d->blockSignals && d->kdChartModel )
-        d->kdChartModel->dataSetChanged( this, KDChartModel::YDataRole, 0, size() - 1 );
+        d->kdChartModel->dataSetChanged( this, KDChartModel::YDataRole );
 }
 
 void DataSet::setCustomDataRegion( const CellRegion &region )
@@ -856,7 +856,7 @@ void DataSet::setCustomDataRegion( const CellRegion &region )
     d->refreshCustomData();
     
     if ( !d->blockSignals && d->kdChartModel )
-        d->kdChartModel->dataSetChanged( this, KDChartModel::CustomDataRole, 0, size() - 1 );    
+        d->kdChartModel->dataSetChanged( this, KDChartModel::CustomDataRole );
 }
 
 void DataSet::setCategoryDataRegion( const CellRegion &region )

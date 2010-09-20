@@ -137,8 +137,13 @@ public slots:
     /**
      * Called by DataSet whenever one or more of its data points changes,
      * e.g. the x value of a data point.
+     *
+     * @param first First data point that changed. If -1 it is assumed that
+     *              all data points in this series changed.
+     * @param last Last data point that changed. If -1 it is assumed that
+     *             only a single data point changed.
      */
-    void dataSetChanged( DataSet *dataSet, DataRole role, int first, int last = -1 );
+    void dataSetChanged( DataSet *dataSet, DataRole role, int first = -1, int last = -1 );
 
     /**
      * Called by DataSet when the total number of data points it has changed.

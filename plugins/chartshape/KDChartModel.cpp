@@ -264,20 +264,26 @@ void KDChartModel::dataSetChanged( DataSet *dataSet )
     emit headerDataChanged( dataDirection(), first, last );
 }
 
-void KDChartModel::dataSetChanged( DataSet *dataSet, DataRole role, int first, int last /* = -1 */ )
+void KDChartModel::dataSetChanged( DataSet *dataSet, DataRole role, int first /* = -1 */, int last /* = -1 */ )
 {
     Q_ASSERT( d->dataSets.contains( dataSet ) );
     if ( !d->dataSets.contains( dataSet ) )
         return;
 
+    const int lastIndex = d->biggestDataSetSize - 1;
     // be sure the 'first' and 'last' referenced rows are within our boundaries
     const int rows = rowCount();
     if ( first >= rows )
         first = rows - 1;
     if ( last >= rows )
         last = rows - 1;
+    // 'first' defaults to -1, which means that all data points changed.
+    if ( first == -1 ) {
+        first = 0;
+        last = lastIndex;
+    }
     // 'last' defaults to -1, which means only one column was changed
-    if ( last == -1 )
+    else if ( last == -1 )
         last = first;
     // 'first' can be negative either cause rowCount()==0 or cause it still contains the default value of -1. In both cases we abort
     // and don't progress the update-request future. Same is true for last which should at this point contain a valid row index too.

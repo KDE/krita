@@ -58,7 +58,10 @@ KisMathToolboxRegistry::KisMathToolboxRegistry()
 
 KisMathToolboxRegistry::~KisMathToolboxRegistry()
 {
-    dbgRegistry << "deleting KisMathToolboxRegistry";
+    foreach(QString id, keys()) {
+        delete get(id);
+    }
+    dbgRegistry << "Deleting KisMathToolboxRegistry";
 }
 
 template<typename T>

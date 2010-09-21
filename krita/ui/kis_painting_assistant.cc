@@ -17,7 +17,9 @@
  */
 
 #include "kis_painting_assistant.h"
+#include "kis_debug.h"
 
+#include <kglobal.h>
 
 struct KisPaintingAssistantHandle::Private {
     QList<KisPaintingAssistant*> assistants;
@@ -143,18 +145,21 @@ KisPaintingAssistantFactory::~KisPaintingAssistantFactory()
 {
 }
 
-KisPaintingAssistantFactoryRegistry* KisPaintingAssistantFactoryRegistry::s_instance = 0;
-
 KisPaintingAssistantFactoryRegistry::KisPaintingAssistantFactoryRegistry()
 {
 }
 
+KisPaintingAssistantFactoryRegistry::~KisPaintingAssistantFactoryRegistry()
+{
+    foreach(QString id, keys()) {
+        delete get(id);
+    }
+    dbgRegistry << "deleting KisPaintingAssistantFactoryRegistry ";
+}
+
 KisPaintingAssistantFactoryRegistry* KisPaintingAssistantFactoryRegistry::instance()
 {
-    if(!s_instance)
-    {
-      s_instance = new KisPaintingAssistantFactoryRegistry;
-    }
+    K_GLOBAL_STATIC(KisPaintingAssistantFactoryRegistry, s_instance);
     return s_instance;
 }
 

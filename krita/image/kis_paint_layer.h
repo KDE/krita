@@ -40,6 +40,7 @@ class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisIndirectPaint
     Q_OBJECT
 
 public:
+    /// @param opacity is a value between OPACITY_TRANSPARENT_U8 and OPACITY_OPAQUE_U8
     KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev);
     KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity);
     KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace * colorSpace);

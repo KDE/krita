@@ -15,13 +15,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <kglobal.h>
 
+#include "kis_debug.h"
 #include "kis_meta_data_merge_strategy_registry.h"
 #include "kis_meta_data_merge_strategy_p.h"
 
 using namespace KisMetaData;
-
-MergeStrategyRegistry *MergeStrategyRegistry::s_singleton = 0;
 
 MergeStrategyRegistry::MergeStrategyRegistry()
 {
@@ -42,13 +42,15 @@ MergeStrategyRegistry& MergeStrategyRegistry::operator=(const MergeStrategyRegis
 
 MergeStrategyRegistry::~MergeStrategyRegistry()
 {
+    foreach(QString id, keys()) {
+        delete get(id);
+    }
+    dbgRegistry << "Deleting MergeStrategyRegistry";
 }
 
 MergeStrategyRegistry* MergeStrategyRegistry::instance()
 {
-    if (!s_singleton) {
-        s_singleton = new MergeStrategyRegistry();
-    }
-    return s_singleton;
+    K_GLOBAL_STATIC(MergeStrategyRegistry, s_instance);
+    return s_instance;
 }
 

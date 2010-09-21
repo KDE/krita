@@ -21,6 +21,7 @@
 #include <math.h>
 
 #include <QString>
+#include <QApplication>
 
 #include <kglobal.h>
 #include <kaction.h>
@@ -38,22 +39,27 @@
 #include "kis_paint_device.h"
 #include "generator/kis_generator.h"
 
-KisGeneratorRegistry::KisGeneratorRegistry()
+KisGeneratorRegistry::KisGeneratorRegistry(QObject *parent)
+    : QObject(parent)
 {
 }
 
 KisGeneratorRegistry::~KisGeneratorRegistry()
 {
+    foreach(QString id, keys()) {
+        remove(id);
+    }   
     dbgRegistry << "deleting KisGeneratorRegistry";
 }
 
 KisGeneratorRegistry* KisGeneratorRegistry::instance()
 {
-    K_GLOBAL_STATIC(KisGeneratorRegistry, s_instance);
-    if (!s_instance.exists()) {
+    KisGeneratorRegistry *reg = qApp->findChild<KisGeneratorRegistry *>("");
+    if (!reg) {
+        reg = new KisGeneratorRegistry(qApp);
         KoPluginLoader::instance()->load("Krita/Generator", "Type == 'Service' and ([X-Krita-Version] == 3)");
     }
-    return s_instance;
+    return reg;
 }
 
 void KisGeneratorRegistry::add(KisGeneratorSP item)

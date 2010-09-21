@@ -64,6 +64,10 @@ public:
 
     TableSource *const tableSource;
 
+    /// Set to true if we're in the process of loading data from ODF.
+    /// Used to avoid repeatedly updating data.
+    bool isLoading;
+
     bool             firstRowIsLabel;
     bool             firstColumnIsLabel;
     Qt::Orientation  dataDirection;
@@ -100,6 +104,7 @@ ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source 
     : q( parent )
     , tableSource( source )
     , createdDataSetCount( 0 )
+    , isLoading( false )
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
@@ -140,19 +145,20 @@ ChartProxyModel::~ChartProxyModel()
 
 void ChartProxyModel::reset( const CellRegion& region )
 {
-    beginResetModel();
-
     d->selection = region;
-    invalidateDataSets();
-    d->dataSets = d->createDataSetsFromRegion( d->removedDataSets );
-
-    endResetModel();
+    d->rebuildDataMap();
 }
 
 void ChartProxyModel::Private::rebuildDataMap()
 {
+    // Don't do anything while we're loading from ODF.
+    // ChartProxyModel::endLoading() will get back to us.
+    if ( isLoading )
+        return;
+    q->beginResetModel();
     q->invalidateDataSets();
     dataSets = createDataSetsFromRegion( removedDataSets );
+    q->endResetModel();
 }
 
 void ChartProxyModel::addTable( Table *table )
@@ -359,6 +365,8 @@ void ChartProxyModel::saveOdf( KoShapeSavingContext &context ) const
 bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                                KoShapeLoadingContext &context )
 {
+    Q_ASSERT( d->isLoading );
+
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
     // If we exclusively use the chart's internal model then all data
     // is taken from there and each data set is automatically assigned
@@ -403,7 +411,6 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                 // the datasetnumber needs to be known at construction time, to ensure
                 // default colors are set correctly
                 dataSet = new DataSet( d->dataSets.size() );
-                dataSet->setNumber( d->dataSets.size() );
             }
             d->dataSets.append( dataSet );
             dataSet->loadOdf( n, context );
@@ -501,12 +508,8 @@ void ChartProxyModel::setFirstRowIsLabel( bool b )
     if ( b == d->firstRowIsLabel )
         return;
 
-    beginResetModel();
-    
     d->firstRowIsLabel = b;
-    
     d->rebuildDataMap();
-    endResetModel();
 }
  
 
@@ -515,11 +518,8 @@ void ChartProxyModel::setFirstColumnIsLabel( bool b )
     if ( b == d->firstColumnIsLabel )
         return;
 
-    beginResetModel();
     d->firstColumnIsLabel = b;
-    
     d->rebuildDataMap();
-    endResetModel();
 }
 
 Qt::Orientation ChartProxyModel::dataDirection()
@@ -533,16 +533,31 @@ void ChartProxyModel::invalidateDataSets()
     d->dataSets.clear();
 }
 
+void ChartProxyModel::beginLoading()
+{
+    Q_ASSERT( !d->isLoading );
+    // FIXME: invalidateDataSets() used to be called explicitly at the beginning
+    // of ChartShape::loadOdf(). Now beginLoading() is called instead.
+    // So, is invalidateDataSets() still necessary here?
+    invalidateDataSets();
+    d->isLoading = true;
+}
+
+void ChartProxyModel::endLoading()
+{
+    Q_ASSERT( d->isLoading );
+    d->isLoading = false;
+
+    d->rebuildDataMap();
+}
+
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )
 {
     if ( d->dataDirection == orientation )
         return;
 
-    beginResetModel();
     d->dataDirection = orientation;
-
     d->rebuildDataMap();
-    endResetModel();
 }
 
 void ChartProxyModel::setDataDimensions( int dimensions )
@@ -550,11 +565,8 @@ void ChartProxyModel::setDataDimensions( int dimensions )
     if ( d->dataDimensions == dimensions )
         return;
 
-    beginResetModel();
     d->dataDimensions = dimensions;
-
     d->rebuildDataMap();
-    endResetModel();
 }
 
 bool ChartProxyModel::firstRowIsLabel() const

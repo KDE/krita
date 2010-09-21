@@ -36,8 +36,6 @@ private:
     MergeStrategyRegistry();
     MergeStrategyRegistry(const MergeStrategyRegistry&);
     MergeStrategyRegistry& operator=(const MergeStrategyRegistry&);
-private:
-    static MergeStrategyRegistry *s_singleton;
 };
 
 }

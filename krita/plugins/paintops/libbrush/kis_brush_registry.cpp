@@ -45,6 +45,9 @@ KisBrushRegistry::KisBrushRegistry()
 
 KisBrushRegistry::~KisBrushRegistry()
 {
+    foreach(QString id, keys()) {
+        delete get(id);
+    }
     dbgRegistry << "deleting KisBrushRegistry";
 }
 

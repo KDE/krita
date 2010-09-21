@@ -65,6 +65,7 @@ class KRITAIMAGE_EXPORT KisLayer : public KisNode
 
 public:
 
+    /// @param opacity is a value between OPACITY_TRANSPARENT_U8 and OPACITY_OPAQUE_U8
     KisLayer(KisImageWSP image, const QString &name, quint8 opacity);
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();

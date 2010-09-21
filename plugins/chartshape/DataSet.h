@@ -160,7 +160,6 @@ public:
     void setPen( int section, const QPen &pen );
     void setBrush( int section, const QBrush &brush );
     void setColor( const QColor &color );
-    void setNumber( int num );
 
     void setPieExplodeFactor( int factor );
     void setPieExplodeFactor( int section, int factor );

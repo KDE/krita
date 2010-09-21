@@ -539,9 +539,10 @@ void KoCsvImportDialog::Private::fillTable()
 
     for (column = 0; column < dialog->m_sheet->columnCount(); ++column)
     {
-        const QString header = dialog->m_sheet->model()->headerData(column, Qt::Horizontal).toString();
-        if ( formatList.contains( header ) )
-            dialog->m_sheet->model()->setHeaderData(column, Qt::Horizontal, i18n("Generic"));
+        const QTableWidgetItem* headerItem = dialog->m_sheet->horizontalHeaderItem(column);
+        if (!headerItem || !formatList.contains(headerItem->text())) {
+            dialog->m_sheet->setHorizontalHeaderItem(column, new QTableWidgetItem(i18n("Generic")));
+        }
     }
 
     dialog->m_rowStart->setMinimum(1);

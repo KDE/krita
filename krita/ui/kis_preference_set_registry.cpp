@@ -24,7 +24,10 @@ KisPreferenceSetRegistry ::KisPreferenceSetRegistry ()
 }
 
 KisPreferenceSetRegistry ::~KisPreferenceSetRegistry ()
-{
+{ 
+    foreach(QString id, keys()) {
+        delete get(id);
+    }
     dbgRegistry << "deleting KisPreferenceSetRegistry ";
 }
 

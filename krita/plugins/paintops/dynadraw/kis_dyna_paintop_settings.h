@@ -26,6 +26,8 @@ class KisDynaPaintOpSettings : public KisPaintOpSettings
 
 public:
     bool paintIncremental();
+    virtual bool isAirbrushing() const;
+    virtual int rate() const;
 };
 
 #endif

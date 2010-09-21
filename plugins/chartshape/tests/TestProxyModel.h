@@ -39,7 +39,7 @@ public:
     TestProxyModel();
 
 private slots:
-    void initTestCase();
+    void init();
 
     void testWithoutLabels();
     void testFirstRowAsLabel();
@@ -47,6 +47,8 @@ private slots:
     void testFirstRowAndColumnAsLabels();
     void testRegionOrder();
     void testComplexRegions();
+    void testTwoDimensions();
+    void testThreeDimensions();
 
 private:
     // m_source must be initialized before m_proxyModel

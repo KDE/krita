@@ -18,10 +18,19 @@
 
 #include "kis_dyna_paintop_settings.h"
 #include <kis_paint_action_type_option.h>
+#include <kis_airbrush_option.h>
 
 bool KisDynaPaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
+bool KisDynaPaintOpSettings::isAirbrushing() const
+{
+    return getBool(AIRBRUSH_ENABLED);
+}
 
+int KisDynaPaintOpSettings::rate() const
+{
+    return getInt(AIRBRUSH_RATE);
+}

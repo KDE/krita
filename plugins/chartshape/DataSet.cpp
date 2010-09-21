@@ -138,7 +138,9 @@ public:
     QMap<int, KDChart::DataValueAttributes> sectionsDataValueAttributes;
     QMap<int, bool> sectionsShowLabels;
 
-    int num;
+    /// The number of this series is passed in the constructor and after
+    /// that never changes.
+    const int num;
 
     // The different CellRegions for a dataset
     // Note: These are all 1-dimensional, i.e. vectors.
@@ -154,6 +156,9 @@ public:
 
     int size;
     bool blockSignals;
+
+    /// Used if no data region for the label is specified
+    const QString defaultLabel;
 };
 
 DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
@@ -177,8 +182,9 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     num( dataSetNr ),
     kdChartModel( 0 ),
     size( 0 ),
-    blockSignals( false )
-{    
+    blockSignals( false ),
+    defaultLabel( i18n( "Series %1", dataSetNr + 1 ) )
+{
 }
 
 DataSet::Private::~Private()
@@ -691,17 +697,6 @@ int DataSet::number() const
     return d->num;
 }
 
-void DataSet::setNumber( int num )
-{
-    if ( !d->blockSignals && d->attachedAxis )
-        d->attachedAxis->detachDataSet( this );
-
-    d->num = num;
-
-    if ( !d->blockSignals && d->attachedAxis )
-        d->attachedAxis->attachDataSet( this );
-}
-
 void DataSet::setShowMeanValue( bool show )
 {
     d->showMeanValue = show;
@@ -767,6 +762,8 @@ QVariant DataSet::xData( int index ) const
 QVariant DataSet::yData( int index ) const
 {
     const QVariant data = d->data( d->yDataRegion, index );
+    // FIXME: There should be no fallback here.. If there's no data,
+    // then we should return an invalid value nonetheless.
     return data.isValid() ? data : index + 1;
 //     return d->data( d->yDataRegion, index );
 }
@@ -802,7 +799,7 @@ QVariant DataSet::labelData() const
         label += d->data( d->labelDataRegion, i ).toString();
 
     if ( label.isEmpty() )
-        label = i18n( "Series %1", number() + 1 );
+        label = d->defaultLabel;
 
     return QVariant( label );
 }
@@ -840,7 +837,7 @@ void DataSet::setXDataRegion( const CellRegion &region )
     d->updateSize();
 
     if ( !d->blockSignals && d->kdChartModel )
-        d->kdChartModel->dataSetChanged( this, KDChartModel::XDataRole, 0, size() - 1 );
+        d->kdChartModel->dataSetChanged( this, KDChartModel::XDataRole );
 }
 
 void DataSet::setYDataRegion( const CellRegion &region )
@@ -849,7 +846,7 @@ void DataSet::setYDataRegion( const CellRegion &region )
     d->updateSize();
 
     if ( !d->blockSignals && d->kdChartModel )
-        d->kdChartModel->dataSetChanged( this, KDChartModel::YDataRole, 0, size() - 1 );
+        d->kdChartModel->dataSetChanged( this, KDChartModel::YDataRole );
 }
 
 void DataSet::setCustomDataRegion( const CellRegion &region )
@@ -859,13 +856,16 @@ void DataSet::setCustomDataRegion( const CellRegion &region )
     d->refreshCustomData();
     
     if ( !d->blockSignals && d->kdChartModel )
-        d->kdChartModel->dataSetChanged( this, KDChartModel::CustomDataRole, 0, size() - 1 );    
+        d->kdChartModel->dataSetChanged( this, KDChartModel::CustomDataRole );
 }
 
 void DataSet::setCategoryDataRegion( const CellRegion &region )
 {
     d->categoryDataRegion = region;
     d->updateSize();
+
+    if ( !d->blockSignals && d->kdChartModel )
+        d->kdChartModel->dataSetChanged( this, KDChartModel::CategoryDataRole );
 }
 
 void DataSet::setLabelDataRegion( const CellRegion &region )
@@ -874,7 +874,7 @@ void DataSet::setLabelDataRegion( const CellRegion &region )
     d->updateSize();
 
     if ( !d->blockSignals && d->kdChartModel )
-        d->kdChartModel->dataSetChanged( this, KDChartModel::LabelDataRole, 0, size() - 1 );
+        d->kdChartModel->dataSetChanged( this );
 }
 
 

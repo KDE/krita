@@ -36,8 +36,6 @@ private:
     FilterRegistry();
     FilterRegistry(const FilterRegistry&);
     FilterRegistry& operator=(const FilterRegistry&);
-private:
-    static FilterRegistry *s_singleton;
 };
 
 }

@@ -48,9 +48,8 @@ DynaBrush::DynaBrush()
 
 void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
 {
-    qreal mx, my;
-    mx = m_cursorPos.x();
-    my = m_cursorPos.y();
+    qreal mx = m_cursorPos.x();
+    qreal my = m_cursorPos.y();
 
     if (!m_initialized) {
         m_cursorFilter.initFilterPosition(mx, my);
@@ -58,9 +57,8 @@ void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
         m_cursorFilter.setFixedAngles(m_properties->xAngle,m_properties->yAngle);
         m_cursorFilter.setMass(m_properties->mass);
         m_cursorFilter.setDrag(m_properties->drag);
-        
 
-        for (quint16 i = 0; i < m_properties->circleRadius; i++) {
+        for (quint16 i = 0; i < m_properties->lineCount; i++) {
             m_prevPosition.append(QPointF(x, y));
         }
 
@@ -83,25 +81,19 @@ DynaBrush::~DynaBrush()
 
 void DynaBrush::drawSegment(KisPainter &painter)
 {
-    qreal delx, dely;
-    qreal wid;
-    qreal px, py, nx, ny;
-
-    wid = m_properties->widthRange - m_cursorFilter.velocity();
-
-    wid = wid * m_properties->initWidth;
-
+    qreal wid = (m_properties->widthRange - m_cursorFilter.velocity()) * m_properties->initWidth;
+    
     if (wid < 0.00001) {
         wid = 0.00001;
     }
 
-    delx = m_cursorFilter.angleX() * wid;
-    dely = m_cursorFilter.angleY() * wid;
-
-    px = m_cursorFilter.prevX();
-    py = m_cursorFilter.prevY();
-    nx = m_cursorFilter.x();
-    ny = m_cursorFilter.y();
+    qreal delx = m_cursorFilter.angleX() * wid;
+    qreal dely = m_cursorFilter.angleY() * wid;
+    
+    qreal px = m_cursorFilter.prevX();
+    qreal py = m_cursorFilter.prevY();
+    qreal nx = m_cursorFilter.x();
+    qreal ny = m_cursorFilter.y();
 
     QPointF prev(px , py);         // previous position
     QPointF now(nx , ny);           // new position
@@ -127,22 +119,21 @@ void DynaBrush::drawSegment(KisPainter &painter)
     nowl.ry() *= m_canvasHeight;
     nowr.ry() *= m_canvasHeight;
 
-    if (m_properties->enableLine)
+    if (m_properties->enableLine){
         painter.drawLine(prev, now);
+    }
 
     if (m_properties->action == 0) {
         qreal screenX = m_cursorFilter.velocityX() * m_canvasWidth;
         qreal screenY = m_cursorFilter.velocityY() * m_canvasHeight;
         qreal speed = sqrt(screenX * screenX + screenY * screenY);
-        speed = qBound(qreal(0.0), speed , qreal(m_properties->circleRadius * 2.0));
+        speed = qBound(qreal(0.0), speed , qreal(m_properties->diameter));
 
-        drawCircle(painter, prev.x(), prev.y() , m_properties->circleRadius + speed, 2 * m_properties->circleRadius  + speed);
-        //painter.paintEllipse(prevl.x(), prevl.y(), qAbs((prevl - prevr).x()), qAbs((prevl - prevr).y()) );
+        drawCircle(painter, prev.x(), prev.y() , m_properties->diameter * 0.5 + speed, m_properties->diameter + speed);
         if (m_properties->useTwoCircles) {
-            drawCircle(painter, now.x(), now.y() , m_properties->circleRadius + speed, 2 * m_properties->circleRadius + speed);
-            //drawCircle(painter, now.x(), now.y() , m_circleRadius * m_mouse.vel , 2 * m_circleRadius * m_mouse.vel );
-            //  painter.paintEllipse(nowl.x(), nowl.y(), qAbs((nowl - nowr).x()), qAbs((nowl - nowr).y()) );
+            drawCircle(painter, now.x(), now.y() , m_properties->diameter * 0.5 + speed, m_properties->diameter + speed);
         }
+        
     } else if (m_properties->action == 1) {
         drawQuad(painter, prevr, prevl, nowl, nowr);
     } else if (m_properties->action == 2) {

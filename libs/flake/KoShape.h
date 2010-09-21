@@ -869,7 +869,7 @@ public:
 
     /**
      * \internal
-     * Returns the private object for use withing the flake lib
+     * Returns the private object for use within the flake lib
      */
     KoShapePrivate *priv();
 

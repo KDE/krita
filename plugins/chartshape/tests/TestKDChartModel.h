@@ -45,6 +45,8 @@ private slots:
     void testDataSetInsertion();
     void testDataSetInsertionAndRemoval();
     void testData();
+    void testDataChanges();
+    void testDataChangesWithTwoDimensions();
 
 private:
     KDChartModel *m_model;

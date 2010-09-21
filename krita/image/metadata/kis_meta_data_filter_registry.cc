@@ -18,10 +18,11 @@
 
 #include "kis_meta_data_filter_registry.h"
 #include "kis_meta_data_filter_p.h"
+#include "kis_debug.h"
+
+#include <kglobal.h>
 
 using namespace KisMetaData;
-
-FilterRegistry *FilterRegistry::s_singleton = 0;
 
 FilterRegistry::FilterRegistry()
 {
@@ -41,13 +42,16 @@ FilterRegistry& FilterRegistry::operator=(const FilterRegistry&)
 
 FilterRegistry::~FilterRegistry()
 {
+    foreach(QString id, keys()) {
+        delete get(id);
+    }
+    dbgRegistry << "Deleting FilterRegistry";
+    
 }
 
 FilterRegistry* FilterRegistry::instance()
 {
-    if (!s_singleton) {
-        s_singleton = new FilterRegistry();
-    }
-    return s_singleton;
+    K_GLOBAL_STATIC(FilterRegistry, s_instance);
+    return s_instance;
 }
 

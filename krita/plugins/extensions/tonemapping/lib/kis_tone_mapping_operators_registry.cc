@@ -26,6 +26,9 @@ KisToneMappingOperatorsRegistry::KisToneMappingOperatorsRegistry()
 
 KisToneMappingOperatorsRegistry::~KisToneMappingOperatorsRegistry()
 {
+    foreach(QString id, keys()) {
+        delete get(id);
+    }
     dbgRegistry << "deleting KisToneMappingOperatorsRegistry";
 }
 

@@ -39,6 +39,7 @@
 #include <kis_brush_based_paintop_settings.h>
 #include <kis_color_source.h>
 #include <kis_pressure_sharpness_option.h>
+#include <KoColorSpaceRegistry.h>
 
 KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(settings, painter), m_hsvTransfo(0)
@@ -52,14 +53,15 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_hsvOptions.append(KisPressureHSVOption::createHueOption());
     m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
     m_hsvOptions.append(KisPressureHSVOption::createValueOption());
-    
+
+    const KoColorSpace* rgb = KoColorSpaceRegistry::instance()->rgb8();
     foreach(KisPressureHSVOption* option, m_hsvOptions)
     {
         option->readOptionSetting(settings);
         option->sensor()->reset();
         if(option->isChecked() && !m_hsvTransfo)
         {
-            m_hsvTransfo = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
+            m_hsvTransfo = rgb->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
         }
     }
     

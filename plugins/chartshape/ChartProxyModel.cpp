@@ -447,19 +447,19 @@ void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex
 
     foreach ( DataSet *dataSet, d->dataSets ) {
         if ( dataSet->xDataRegion().intersects( dataChangedRect ) )
-            dataSet->xDataChanged( dataSet->xDataRegion().intersected( dataChangedRect ).boundingRect() );
+            dataSet->xDataChanged( QRect() );
 
         if ( dataSet->yDataRegion().intersects( dataChangedRect ) )
-            dataSet->yDataChanged( dataSet->yDataRegion().intersected( dataChangedRect ).boundingRect() );
+            dataSet->yDataChanged( QRect() );
 
         if ( dataSet->categoryDataRegion().intersects( dataChangedRect ) )
-            dataSet->categoryDataChanged( dataSet->categoryDataRegion().intersected( dataChangedRect ).boundingRect() );
+            dataSet->categoryDataChanged( QRect() );
 
         if ( dataSet->labelDataRegion().intersects( dataChangedRect ) )
-            dataSet->labelDataChanged( dataSet->labelDataRegion().intersected( dataChangedRect ).boundingRect() );
+            dataSet->labelDataChanged( QRect() );
 
         if ( dataSet->customDataRegion().intersects( dataChangedRect ) )
-            dataSet->customDataChanged( dataSet->customDataRegion().intersected( dataChangedRect ).boundingRect() );
+            dataSet->customDataChanged( QRect() );
     }
 
     emit dataChanged();

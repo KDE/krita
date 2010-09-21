@@ -133,6 +133,7 @@ public:
     bool useAutomaticMajorInterval;
     bool useAutomaticMinorInterval;
 
+    /// Font used for axis labels
     /// TODO: Save to ODF
     QFont font;
 

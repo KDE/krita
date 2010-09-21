@@ -82,12 +82,8 @@ public:
     
     CellRegion       selection;
 
-    bool automaticDataSetCreation;
-    int createdDataSetCount;
-
     /**
-     * Discards old and creates new data sets from the current region selection
-     * if and only if automaticDataSetCreation() returns true.
+     * Discards old and creates new data sets from the current region selection.
      */
     void rebuildDataMap();
 
@@ -103,13 +99,11 @@ public:
 ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source )
     : q( parent )
     , tableSource( source )
-    , createdDataSetCount( 0 )
     , isLoading( false )
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
     dataDimensions     = 1;
-    automaticDataSetCreation = true;
 
     // Determines what orientation the data points in a data series
     // have when multiple data sets are created from one source

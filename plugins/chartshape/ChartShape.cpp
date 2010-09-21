@@ -625,18 +625,6 @@ bool ChartShape::usesInternalModelOnly() const
     return d->usesInternalModelOnly;
 }
 
-bool ChartShape::addAxis( Axis *axis )
-{
-    Q_ASSERT( d->plotArea );
-    return d->plotArea->addAxis( axis );
-}
-
-bool ChartShape::removeAxis( Axis *axis )
-{
-    Q_ASSERT( d->plotArea );
-    return d->plotArea->removeAxis( axis );
-}
-
 
 // ----------------------------------------------------------------
 //                         getters and setters

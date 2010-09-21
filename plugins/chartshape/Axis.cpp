@@ -109,8 +109,6 @@ public:
 
     // Pointer to Axis that owns this Private instance
     Axis * const q;
-    QMap< DataSet*, KDChart::MarkerAttributes > markerAttributesBackup;//QVector< KDChart::MarkerAttributes > > markerAttributesBackup;
-    QMap< DataSet*, KDChart::MarkerAttributes > markerAttributesGlobalBackup;//QVector< KDChart::MarkerAttributes > > markerAttributesBackup;
 
     PlotArea *plotArea;
 
@@ -120,6 +118,7 @@ public:
     KoShape *title;
     TextLabelData *titleData;
 
+    /// FIXME: Unused variable 'id', including id() getter
     QString id;
     QList<DataSet*> dataSets;
     qreal majorInterval;
@@ -134,6 +133,7 @@ public:
     bool useAutomaticMajorInterval;
     bool useAutomaticMinorInterval;
 
+    /// TODO: Save to ODF
     QFont font;
 
     KDChart::CartesianAxis            *kdAxis;

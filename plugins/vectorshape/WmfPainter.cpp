@@ -87,6 +87,24 @@ void WmfPainter::setWindowOrg(int left, int top)
 {
     mOrgX = left;
     mOrgY = top;
+
+    if (mRelativeCoord) {
+        // Translate back from last translation to the origin.
+        qreal dx = mInternalWorldMatrix.dx();
+        qreal dy = mInternalWorldMatrix.dy();
+        //kDebug(31000) << "old translation: " << dx << dy;
+        //kDebug(31000) << mInternalWorldMatrix;
+        //kDebug(31000) << "new translation: " << -orgX << -orgY;
+        mInternalWorldMatrix.translate(-dx, -dy);
+        mPainter->translate(-dx, -dy);
+
+        // Translate to the new origin.
+        mInternalWorldMatrix.translate(-left, -top);
+        mPainter->translate(-left, -top);
+    } else {
+        QRect rec = mPainter->window();
+        mPainter->setWindow(left, top, rec.width(), rec.height());
+    }
 }
 
 

@@ -100,7 +100,7 @@ public:
     bool contains( const QRect &rect, bool proper = false ) const;
     
     bool intersects( const QRect &rect ) const;
-    
+
     CellRegion intersected( const QRect &rect ) const;
     
     int cellCount() const;
@@ -112,8 +112,6 @@ public:
     void add( const QPoint &point );
     void add( const QRect &rect );
     void add( const QVector<QRect> &rects );
-    
-    void subtract( const QPoint &point );
     
     QRect boundingRect() const;
     

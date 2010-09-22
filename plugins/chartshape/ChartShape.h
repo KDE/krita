@@ -166,9 +166,6 @@ public:
      */
     bool usesInternalModelOnly() const;
 
-    bool addAxis( Axis *axis );
-    bool removeAxis( Axis *axis );
-
     ChartType     chartType() const;
     ChartSubtype  chartSubType() const;
     bool          isThreeD() const;
@@ -236,8 +233,6 @@ signals:
 private:
     class Private;
     Private *const d;
-
-    void showLabel( KoShape *label );
 };
 
 } // Namespace KChart

@@ -149,8 +149,6 @@ public slots:
      * Called by DataSet when the total number of data points it has changed.
      */
     void dataSetSizeChanged( DataSet *dataSet, int newSize );
-    
-    void emitReset();
 
 private:
     class Private;

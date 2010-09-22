@@ -82,12 +82,8 @@ public:
     
     CellRegion       selection;
 
-    bool automaticDataSetCreation;
-    int createdDataSetCount;
-
     /**
-     * Discards old and creates new data sets from the current region selection
-     * if and only if automaticDataSetCreation() returns true.
+     * Discards old and creates new data sets from the current region selection.
      */
     void rebuildDataMap();
 
@@ -103,13 +99,11 @@ public:
 ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source )
     : q( parent )
     , tableSource( source )
-    , createdDataSetCount( 0 )
     , isLoading( false )
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
     dataDimensions     = 1;
-    automaticDataSetCreation = true;
 
     // Determines what orientation the data points in a data series
     // have when multiple data sets are created from one source
@@ -453,19 +447,19 @@ void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex
 
     foreach ( DataSet *dataSet, d->dataSets ) {
         if ( dataSet->xDataRegion().intersects( dataChangedRect ) )
-            dataSet->xDataChanged( dataSet->xDataRegion().intersected( dataChangedRect ).boundingRect() );
+            dataSet->xDataChanged( QRect() );
 
         if ( dataSet->yDataRegion().intersects( dataChangedRect ) )
-            dataSet->yDataChanged( dataSet->yDataRegion().intersected( dataChangedRect ).boundingRect() );
+            dataSet->yDataChanged( QRect() );
 
         if ( dataSet->categoryDataRegion().intersects( dataChangedRect ) )
-            dataSet->categoryDataChanged( dataSet->categoryDataRegion().intersected( dataChangedRect ).boundingRect() );
+            dataSet->categoryDataChanged( QRect() );
 
         if ( dataSet->labelDataRegion().intersects( dataChangedRect ) )
-            dataSet->labelDataChanged( dataSet->labelDataRegion().intersected( dataChangedRect ).boundingRect() );
+            dataSet->labelDataChanged( QRect() );
 
         if ( dataSet->customDataRegion().intersects( dataChangedRect ) )
-            dataSet->customDataChanged( dataSet->customDataRegion().intersected( dataChangedRect ).boundingRect() );
+            dataSet->customDataChanged( QRect() );
     }
 
     emit dataChanged();

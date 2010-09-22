@@ -386,47 +386,6 @@ void CellRegion::add( const QVector<QRect> &rects )
         add( rect );
 }
 
-void CellRegion::subtract( const QPoint &point )
-{
-    if ( orientation() == Qt::Horizontal ) {
-        for ( int i = 0; i < d->rects.size(); i++ ) {
-            if ( d->rects[ i ].contains( point ) ) {
-
-                if ( d->rects[ i ].topLeft().x() == point.x() ) {
-                    d->rects[ i ].translate( 1, 0 );
-                    d->rects[ i ].setWidth( d->rects[ i ].width() - 1 );
-                }
-                else if ( d->rects[ i ].topRight().x() == point.x() ) {
-                    d->rects[ i ].setWidth( d->rects[ i ].width() - 1 );
-                }
-
-                return;
-            }
-        }
-    }
-    else {
-        for ( int i = 0; i < d->rects.size(); i++ ) {
-            if ( d->rects[ i ].contains( point ) ) {
-
-                if ( d->rects[ i ].topLeft().y() == point.y() ) {
-                    d->rects[ i ].translate( 0, 1 );
-                    d->rects[ i ].setHeight( d->rects[ i ].height() - 1 );
-                }
-                else if ( d->rects[ i ].bottomLeft().y() == point.y() ) {
-                    d->rects[ i ].setHeight( d->rects[ i ].height() - 1 );
-                }
-
-                return;
-            }
-        }
-    }
-
-    // Recalculate bounding rectangle
-    d->boundingRect = QRect();
-    foreach ( const QRect &rect, d->rects )
-        d->boundingRect |= rect;
-}
-
 QRect CellRegion::boundingRect() const
 {
     return d->boundingRect;

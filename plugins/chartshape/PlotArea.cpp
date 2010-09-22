@@ -308,11 +308,6 @@ QList<DataSet*> PlotArea::dataSets() const
     return proxyModel()->dataSets();
 }
 
-int PlotArea::dataSetCount() const
-{
-    return proxyModel()->dataSets().size();
-}
-
 Axis *PlotArea::xAxis() const
 {
     foreach( Axis *axis, d->axes ) {

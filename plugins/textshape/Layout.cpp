@@ -262,7 +262,7 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
             && m_parent->resizeMethod() == KoTextDocument::NoResize
             // line does not fit.
             && m_data->documentOffset() + shape->size().height() - footnoteHeight
-              < m_y + line.height() + m_shapeBorder.bottom
+              < line.y() + line.height() + m_shapeBorder.bottom
             // but make sure we don't leave the shape empty.
             && m_block.position() + line.textStart() > m_data->position()) {
         if (oldFootnoteDocLength >= 0) {
@@ -274,14 +274,37 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
 
         m_data->setEndPosition(m_block.position() + line.textStart() - 1);
 
-        bool ignoreParagraph = false;
+        bool entireParagraphMoved = false;
         if (! m_newParag && m_format.nonBreakableLines()) { // then revert layouting of parag
             // TODO check height of parag so far; and if it does not fit in the rest of the shapes, just continue.
             m_data->setEndPosition(m_block.position() - 1);
             m_block.layout()->endLayout();
             m_block.layout()->beginLayout();
-            line = m_block.layout()->createLine();
-            ignoreParagraph = true;
+            line = m_block.layout()->createLine(); //TODO should probably not create this line
+            entireParagraphMoved = true;
+        } else {
+            // unfortunately we can't undo a single line, so we undo entire paragraph
+            // and redo all previous lines
+            QList<LineKeeper> lineKeeps;
+            m_block.layout()->endLayout();
+            for(int i = 0; i < m_block.layout()->lineCount()-1; i++) {
+                QTextLine l = m_block.layout()->lineAt(i);
+                LineKeeper lk;
+                lk.lineWidth = l.width();
+                lk.columns = l.textLength();
+                lk.position = l.position();
+                lineKeeps.append(lk);
+            }
+            m_block.layout()->clearLayout();
+            m_block.layout()->beginLayout();
+            foreach(const LineKeeper &lk, lineKeeps) {
+                line = m_block.layout()->createLine();
+                line.setNumColumns(lk.columns, lk.lineWidth);
+                line.setPosition(lk.position);
+            }
+            if(lineKeeps.isEmpty()) {
+                entireParagraphMoved = true;
+            }
         }
         if (m_data->endPosition() == -1) // no text at all fit in the shape!
             m_data->setEndPosition(m_data->position());
@@ -290,7 +313,7 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
             m_textShape->markLayoutDone();
         nextShape();
         if (m_data)
-            m_data->setPosition(m_block.position() + (ignoreParagraph ? 0 : line.textStart()));
+            m_data->setPosition(m_block.position() + (entireParagraphMoved ? 0 : line.textStart()));
 
         // the demo-text feature means we have exactly the same amount of text as we have frame-space
         if (m_demoText)

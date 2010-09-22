@@ -23,6 +23,8 @@
 #include "kis_duplicateop_factory.h"
 
 #include <KoInputDevice.h>
+#include <KoCompositeOp.h>
+
 #include <kis_painter.h>
 #include <kis_paintop_settings.h>
 #include <kis_image.h>
@@ -32,6 +34,7 @@
 #include "kis_duplicateop.h"
 
 KisDuplicateOpFactory::KisDuplicateOpFactory()
+    : KisPaintOpFactory(QStringList(COMPOSITE_COPY))
 {
 }
 

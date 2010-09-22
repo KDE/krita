@@ -182,6 +182,14 @@ QRectF Layout::expandVisibleRect(const QRectF &rect) const
     return rect.adjusted(m_allTimeMinimumLeft, 0.0, 50.0, 0.0);
 }
 
+//local type for temporary use in addLine
+struct LineKeeper
+{
+    int columns;
+    qreal lineWidth;
+    QPointF position;
+};
+
 bool Layout::addLine(QTextLine &line, bool processingLine)
 {
     if (m_blockData && m_block.textList() && m_block.layout()->lineCount() == 1) {

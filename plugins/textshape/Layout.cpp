@@ -1762,7 +1762,6 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block, KoImageCol
         if (! data->counterText().isEmpty()) {
             QFont font(cf.font(), m_parent->paintDevice());
             QTextLayout layout(data->counterText(), font, m_parent->paintDevice());
-            layout.setCacheEnabled(true);
             QList<QTextLayout::FormatRange> layouts;
             QTextLayout::FormatRange format;
             format.start = 0;

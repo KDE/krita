@@ -4,6 +4,7 @@
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (c) 2010 José Luis Vergara Toloza <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -44,8 +45,8 @@
 const quint8 MIXABLE_UPPER_LIMIT = 240;
 const quint8 MIXABLE_LOWER_LIMIT = 15;
 
-// All pieces of color extracted from the canvas will be centered around MIGHTY_CENTER
-const QPoint MIGHTY_CENTER = QPoint(0, 0);
+// All pieces of color extracted from the canvas will be centered around ANCHOR_POINT
+const QPoint ANCHOR_POINT = QPoint(0, 0);
 
 
 KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
@@ -67,6 +68,8 @@ KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainte
     
     // Initializing to a valid value to avoid weird errors during modifications
     m_wholeTempData = QRect(0, 0, 0, 0);
+    
+    m_color = painter->paintColor();
 }
 
 KisSmudgeOp::~KisSmudgeOp()
@@ -130,9 +133,7 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     } else {
         // This is for parametric brushes, those created in the Autobrush popup config dialogue
         maskDab = cachedDab();
-        KoColor color = painter()->paintColor();
-        color.convertTo(maskDab->colorSpace());
-        brush->mask(maskDab, color, scale, scale, 0.0, info, xFraction, yFraction);
+        brush->mask(maskDab, m_color, scale, scale, 0.0, info, xFraction, yFraction);
         maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     }
 
@@ -141,18 +142,17 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     qint32 sh = maskDab->bounds().height();
     
     /* Prepare the top left corner of the temporary paint device where the extracted color will be drawn */
-    QPoint extractionTopLeft = QPoint(MIGHTY_CENTER.x() - sw / 2,
-                                      MIGHTY_CENTER.y() - sh / 2);
+    QPoint extractionTopLeft = QPoint(ANCHOR_POINT.x() - sw / 2,
+                                      ANCHOR_POINT.y() - sh / 2);
                                       
     /* In the block below, the opacity of the colors stored in m_tempDev
     is reduced in opacity. Nothing of the color present inside it is left out */
-    int opacity = OPACITY_OPAQUE_U8;
+    quint8 opacity = OPACITY_OPAQUE_U8;
     if (!m_firstRun) {
         opacity = m_rateOption.apply(opacity, info);
         /* Without those limits, the smudge brush doesn't smudge anymore, it either makes a single
         dropplet of color, or drags a frame indefinitely over the canvas. */
-        if (opacity > MIXABLE_UPPER_LIMIT) opacity = MIXABLE_UPPER_LIMIT;
-        if (opacity < MIXABLE_LOWER_LIMIT) opacity = MIXABLE_LOWER_LIMIT;
+        opacity = qBound(MIXABLE_LOWER_LIMIT, opacity, MIXABLE_UPPER_LIMIT);
         
         // Update the whole temporary data area, only grow it, don't shrink it. TODO: Shrink it when relevant
         QRect currentTempDataRect = QRect(extractionTopLeft, maskDab->bounds().size());

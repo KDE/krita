@@ -53,6 +53,8 @@ private:
     KisPaintDeviceSP m_tempDev;
     // The size of the rectangle encompassing the whole data in the temporary device needs to be cached for speed
     QRect m_wholeTempData;
+    KoColor m_color;
+    
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
     KisPressureRateOption m_rateOption;

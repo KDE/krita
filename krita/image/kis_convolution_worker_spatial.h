@@ -46,6 +46,7 @@ public:
         m_khalfHeight = (m_kh - 1) / 2;
         m_cacheSize = m_kw * m_kh;
         m_pixelSize = src->colorSpace()->pixelSize();
+        quint32 channelCount = src->colorSpace()->channelCount();
 
         m_kernelData = new qreal[m_cacheSize];
         qreal *kernelDataPtr = m_kernelData;
@@ -84,8 +85,8 @@ public:
         m_pixelPtrCache = new double*[m_cacheSize];
         m_pixelPtrCacheCopy = new double*[m_cacheSize];
         for (quint32 c = 0; c < m_cacheSize; ++c) {
-            m_pixelPtrCache[c] = new double[m_pixelSize];
-            m_pixelPtrCacheCopy[c] = new double[m_pixelSize];
+            m_pixelPtrCache[c] = new double[channelCount];
+            m_pixelPtrCacheCopy[c] = new double[channelCount];
         }
 
         // decide caching strategy
@@ -115,7 +116,7 @@ public:
                 const quint8* data = hitInitSrc.oldRawData();
                 for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
                     const quint32 channelPos = m_convChannelList[k]->pos();
-                    m_pixelPtrCache[i][k] = m_toDoubleFuncPtr[k](data, channelPos);
+                    m_pixelPtrCacheCopy[i][k] = m_toDoubleFuncPtr[k](data, channelPos);
                 }
 
                 ++hitInitSrc;
@@ -143,7 +144,7 @@ public:
             for (int prow = 0; prow < areaSize.height(); ++prow) {
                 // reload cache from copy
                 for (quint32 i = 0; i < m_cacheSize; ++i)
-                    memcpy(m_pixelPtrCache[i], m_pixelPtrCacheCopy[i], m_pixelSize);
+                    memcpy(m_pixelPtrCache[i], m_pixelPtrCacheCopy[i], channelCount * sizeof(double));
 
                 typename _IteratorFactory_::VLineConstIterator kitSrc = _IteratorFactory_::createVLineConstIterator(src, col + m_khalfWidth, row - m_khalfHeight, m_kh, dataRect);
                 for (int pcol = 0; pcol < areaSize.width(); ++pcol) {
@@ -185,7 +186,7 @@ public:
             for (int pcol = 0; pcol < areaSize.width(); pcol++) {
                 // reload cache from copy
                 for (quint32 i = 0; i < m_cacheSize; ++i)
-                    memcpy(m_pixelPtrCache[i], m_pixelPtrCacheCopy[i], m_pixelSize);
+                    memcpy(m_pixelPtrCache[i], m_pixelPtrCacheCopy[i], channelCount * sizeof(double));
 
                 typename _IteratorFactory_::HLineConstIterator khitSrc = _IteratorFactory_::createHLineConstIterator(src, col - m_khalfWidth, row + m_khalfHeight, m_kw, dataRect);
                 for (int prow = 0; prow < areaSize.height(); prow++) {

@@ -96,7 +96,7 @@ void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fract
         i--;
     }
 
-    double f = coordinate - i;
+    qreal f = coordinate - i;
 
     *whole = i;
     *fraction = f;
@@ -162,18 +162,18 @@ KisDistanceInformation KisPaintOp::paintLine(const KisPaintInformation &pi1,
 
     Q_ASSERT(savedDist.distance >= 0);
 
-    double endDist = dragVec.norm();
-    double currentDist = savedDist.distance;
+    qreal endDist = dragVec.norm();
+    qreal currentDist = savedDist.distance;
 
     dragVec.normalize();
     KisVector2D step(0, 0);
 
-    double sp = savedDist.spacing;
+    qreal sp = savedDist.spacing;
     while (currentDist < endDist) {
 
         QPointF p = toQPointF(start +  currentDist * dragVec);
 
-        double t = currentDist / endDist;
+        qreal t = currentDist / endDist;
 
         KisVector2D movement;
         if(sp > 0.01) {
@@ -201,9 +201,9 @@ KisPaintDeviceSP KisPaintOp::source() const
     return d->painter->device();
 }
 
-double KisPaintOp::scaleForPressure(double pressure)
+qreal KisPaintOp::scaleForPressure(qreal pressure)
 {
-    double scale = pressure / PRESSURE_DEFAULT;
+    qreal scale = pressure / PRESSURE_DEFAULT;
 
     if (scale < 0) {
         scale = 0;

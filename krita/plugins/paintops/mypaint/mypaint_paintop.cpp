@@ -55,7 +55,7 @@ MyPaint::~MyPaint()
     delete m_surface;
 }
 
-double MyPaint::paintAt(const KisPaintInformation& info)
+qreal MyPaint::paintAt(const KisPaintInformation& info)
 {
     if (m_mypaintThinksStrokeHasEnded) {
         m_settings->brush()->new_stroke();
@@ -65,7 +65,7 @@ double MyPaint::paintAt(const KisPaintInformation& info)
                                            info.pos().x(),
                                            info.pos().y(),
                                            info.pressure(),
-                                           double(m_eventTime.elapsed()) / 1000);
+                                           qreal(m_eventTime.elapsed()) / 1000);
     return 1.0;
 }
 
@@ -81,14 +81,14 @@ KisDistanceInformation MyPaint::paintLine(const KisPaintInformation &pi1, const 
     m_mypaintThinksStrokeHasEnded = m_brush->stroke_to(m_surface,
                                                        pi1.pos().x(), pi1.pos().y(),
                                                        pi1.pressure(),
-                                                       double(m_eventTime.elapsed()) / 1000);
+                                                       qreal(m_eventTime.elapsed()) / 1000);
     if (m_mypaintThinksStrokeHasEnded) {
         m_brush->new_stroke();
     }
     m_mypaintThinksStrokeHasEnded = m_brush->stroke_to(m_surface,
                                                        pi2.pos().x(), pi2.pos().y(),
                                                        pi2.pressure(),
-                                                       double(m_eventTime.elapsed()) / 1000);
+                                                       qreal(m_eventTime.elapsed()) / 1000);
 
     // not sure what to do with these...
     KisVector2D end = toKisVector2D(pi2.pos());

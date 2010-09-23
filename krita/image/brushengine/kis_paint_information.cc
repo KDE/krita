@@ -23,21 +23,21 @@ struct KisPaintInformation::Private {
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
     QPointF pos;
-    double pressure;
-    double xTilt;
-    double yTilt;
+    qreal pressure;
+    qreal xTilt;
+    qreal yTilt;
     KisVector2D movement;
-    double angle;
-    double rotation;
-    double tangentialPressure;
+    qreal angle;
+    qreal rotation;
+    qreal tangentialPressure;
     int time;
 };
 
-KisPaintInformation::KisPaintInformation(const QPointF & pos_, double pressure_,
-        double xTilt_, double yTilt_,
+KisPaintInformation::KisPaintInformation(const QPointF & pos_, qreal pressure_,
+        qreal xTilt_, qreal yTilt_,
         const KisVector2D& movement_,
-        double rotation_,
-        double tangentialPressure_,
+        qreal rotation_,
+        qreal tangentialPressure_,
         int time)
         : d(new Private)
 {
@@ -83,15 +83,15 @@ void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
 
 KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
 {
-    double pointX = e.attribute("pointX", "0.0").toDouble();
-    double pointY = e.attribute("pointY", "0.0").toDouble();
-    double pressure = e.attribute("pressure", "0.0").toDouble();
-    double rotation = e.attribute("rotation", "0.0").toDouble();
-    double tangentialPressure = e.attribute("tangentialPressure", "0.0").toDouble();
-    double xTilt = e.attribute("xTilt", "0.0").toDouble();
-    double yTilt = e.attribute("yTilt", "0.0").toDouble();
-    double movementX = e.attribute("movementX", "0.0").toDouble();
-    double movementY = e.attribute("movementY", "0.0").toDouble();
+    qreal pointX = qreal(e.attribute("pointX", "0.0").toDouble());
+    qreal pointY = qreal(e.attribute("pointY", "0.0").toDouble());
+    qreal pressure = qreal(e.attribute("pressure", "0.0").toDouble());
+    qreal rotation = qreal(e.attribute("rotation", "0.0").toDouble());
+    qreal tangentialPressure = qreal(e.attribute("tangentialPressure", "0.0").toDouble());
+    qreal xTilt = qreal(e.attribute("xTilt", "0.0").toDouble());
+    qreal yTilt = qreal(e.attribute("yTilt", "0.0").toDouble());
+    qreal movementX = qreal(e.attribute("movementX", "0.0").toDouble());
+    qreal movementY = qreal(e.attribute("movementY", "0.0").toDouble());
     int time = e.attribute("time", "0").toInt();
 
     return KisPaintInformation(QPointF(pointX, pointY), pressure, xTilt, yTilt, KisVector2D(movementX, movementY),
@@ -108,22 +108,22 @@ void KisPaintInformation::setPos(const QPointF& p)
     d->pos = p;
 }
 
-double KisPaintInformation::pressure() const
+qreal KisPaintInformation::pressure() const
 {
     return d->pressure;
 }
 
-void KisPaintInformation::setPressure(double p)
+void KisPaintInformation::setPressure(qreal p)
 {
     d->pressure = p;
 }
 
-double KisPaintInformation::xTilt() const
+qreal KisPaintInformation::xTilt() const
 {
     return d->xTilt;
 }
 
-double KisPaintInformation::yTilt() const
+qreal KisPaintInformation::yTilt() const
 {
     return d->yTilt;
 }
@@ -133,17 +133,17 @@ KisVector2D KisPaintInformation::movement() const
     return d->movement;
 }
 
-double KisPaintInformation::angle() const
+qreal KisPaintInformation::angle() const
 {
     return d->angle;
 }
 
-double KisPaintInformation::rotation() const
+qreal KisPaintInformation::rotation() const
 {
     return d->rotation;
 }
 
-double KisPaintInformation::tangentialPressure() const
+qreal KisPaintInformation::tangentialPressure() const
 {
     return d->tangentialPressure;
 }
@@ -171,13 +171,13 @@ QDebug operator<<(QDebug dbg, const KisPaintInformation &info)
     return dbg.space();
 }
 
-KisPaintInformation KisPaintInformation::mix(const QPointF& p, double t, const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisVector2D& movement)
+KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisVector2D& movement)
 {
-    double pressure = (1 - t) * pi1.pressure() + t * pi2.pressure();
-    double xTilt = (1 - t) * pi1.xTilt() + t * pi2.xTilt();
-    double yTilt = (1 - t) * pi1.yTilt() + t * pi2.yTilt();
-    double rotation = (1 - t) * pi1.rotation() + t * pi2.rotation();
-    double tangentialPressure = (1 - t) * pi1.tangentialPressure() + t * pi2.tangentialPressure();
+    qreal pressure = (1 - t) * pi1.pressure() + t * pi2.pressure();
+    qreal xTilt = (1 - t) * pi1.xTilt() + t * pi2.xTilt();
+    qreal yTilt = (1 - t) * pi1.yTilt() + t * pi2.yTilt();
+    qreal rotation = (1 - t) * pi1.rotation() + t * pi2.rotation();
+    qreal tangentialPressure = (1 - t) * pi1.tangentialPressure() + t * pi2.tangentialPressure();
     int time = (1 - t) * pi1.currentTime() + t * pi2.currentTime();
     return KisPaintInformation(p, pressure, xTilt, yTilt, movement, rotation, tangentialPressure, time);
 }

@@ -364,10 +364,10 @@ public:
      * @param w the rectangle width
      * @param h the rectangle height
      */
-    void paintRect(const double x,
-                   const double y,
-                   const double w,
-                   const double h);
+    void paintRect(const qreal x,
+                   const qreal y,
+                   const qreal w,
+                   const qreal h);
 
     /**
      * Paint the ellipse that fills the given rectangle.
@@ -384,10 +384,10 @@ public:
      * @param w the rectangle width
      * @param h the rectangle height
      */
-    void paintEllipse(const double x,
-                      const double y,
-                      const double w,
-                      const double h);
+    void paintEllipse(const qreal x,
+                      const qreal y,
+                      const qreal w,
+                      const qreal h);
 
     /**
      * Paint the polygon with the points given in points. It automatically closes the polygon
@@ -396,7 +396,7 @@ public:
     void paintPolygon(const vQPointF& points);
 
     /** Draw a spot at pos using the currently set paint op, brush and color */
-    double paintAt(const KisPaintInformation &pos);
+    qreal paintAt(const KisPaintInformation &pos);
 
     /**
      * Stroke the given QPainterPath.

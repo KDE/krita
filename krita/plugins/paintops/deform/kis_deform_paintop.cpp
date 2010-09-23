@@ -85,7 +85,7 @@ KisDeformPaintOp::~KisDeformPaintOp()
 {
 }
 
-double KisDeformPaintOp::paintAt(const KisPaintInformation& info)
+qreal KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return m_spacing;
     if (!m_dev) return m_spacing;

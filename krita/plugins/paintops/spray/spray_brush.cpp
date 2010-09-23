@@ -160,7 +160,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
         // generate random length
         if ( m_properties->gaussian ) {
-            length = qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0);
+            length = qBound<qreal>(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0);
         } else {
             length = drand48();
         }

@@ -40,7 +40,7 @@ public:
     KisFilterOp(const KisFilterOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisFilterOp();
 
-    double paintAt(const KisPaintInformation& info);
+    qreal paintAt(const KisPaintInformation& info);
 
 private:
 

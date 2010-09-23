@@ -57,7 +57,7 @@ public:
      * The distance between two calls of the paintAt is always specified by spacing;
      * xSpacing and ySpacing is 1.0 by default, negative values causes infinite loops (it is checked by Q_ASSERT)
      */
-    virtual double paintAt(const KisPaintInformation& info) = 0;
+    virtual qreal paintAt(const KisPaintInformation& info) = 0;
 
     /**
      * A painterly paintop must have a PainterlyInformation structure,

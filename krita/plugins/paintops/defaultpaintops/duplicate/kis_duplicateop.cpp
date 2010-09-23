@@ -80,34 +80,34 @@ KisDuplicateOp::~KisDuplicateOp()
 {
 }
 
-double KisDuplicateOp::minimizeEnergy(const double* m, double* sol, int w, int h)
+qreal KisDuplicateOp::minimizeEnergy(const qreal* m, qreal* sol, int w, int h)
 {
     int rowstride = 3 * w;
-    double err = 0;
-    memcpy(sol, m, 3* sizeof(double) * w);
+    qreal err = 0;
+    memcpy(sol, m, 3* sizeof(qreal) * w);
     m += rowstride;
     sol += rowstride;
     for (int i = 1; i < h - 1; i++) {
-        memcpy(sol, m, 3* sizeof(double));
+        memcpy(sol, m, 3* sizeof(qreal));
         m += 3; sol += 3;
         for (int j = 3; j < rowstride - 3; j++) {
-            double tmp = *sol;
+            qreal tmp = *sol;
             *sol = ((*(m - 3) + *(m + 3) + *(m - rowstride) + *(m + rowstride)) + 2 * *m) / 6;
-            double diff = *sol - tmp;
+            qreal diff = *sol - tmp;
             err += diff * diff;
             m ++; sol ++;
         }
-        memcpy(sol, m, 3* sizeof(double));
+        memcpy(sol, m, 3* sizeof(qreal));
         m += 3; sol += 3;
     }
-    memcpy(sol, m, 3* sizeof(double) * w);
+    memcpy(sol, m, 3* sizeof(qreal) * w);
     return err;
 }
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
 
-double KisDuplicateOp::paintAt(const KisPaintInformation& info)
+qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return 1.0;
 
@@ -125,7 +125,7 @@ double KisDuplicateOp::paintAt(const KisPaintInformation& info)
     if (! brush->canPaintFor(info))
         return 1.0;
 
-    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+    qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
@@ -135,9 +135,9 @@ double KisDuplicateOp::paintAt(const KisPaintInformation& info)
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
     qint32 x;
-    double xFraction;
+    qreal xFraction;
     qint32 y;
-    double yFraction;
+    qreal yFraction;
 
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
@@ -228,19 +228,19 @@ double KisDuplicateOp::paintAt(const KisPaintInformation& info)
     if (m_healing) {
         quint16 dataDevice[4];
         quint16 dataSrcDev[4];
-        double* matrix = new double[ 3 * sw * sh ];
+        qreal* matrix = new qreal[ 3 * sw * sh ];
         // First divide
         const KoColorSpace* deviceCs = source()->colorSpace();
         KisHLineConstIteratorPixel deviceIt = source()->createHLineConstIterator(x, y, sw);
         KisHLineIteratorPixel srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
-        double* matrixIt = &matrix[0];
+        qreal* matrixIt = &matrix[0];
         for (int j = 0; j < sh; j++) {
             for (int i = 0; !srcDevIt.isDone(); i++) {
                 deviceCs->toLabA16(deviceIt.rawData(), (quint8*)dataDevice, 1);
                 deviceCs->toLabA16(srcDevIt.rawData(), (quint8*)dataSrcDev, 1);
                 // Division
                 for (int k = 0; k < 3; k++) {
-                    matrixIt[k] = dataDevice[k] / (double)qMax((int)dataSrcDev [k], 1);
+                    matrixIt[k] = dataDevice[k] / (qreal)qMax((int)dataSrcDev [k], 1);
                 }
                 ++deviceIt;
                 ++srcDevIt;
@@ -252,11 +252,11 @@ double KisDuplicateOp::paintAt(const KisPaintInformation& info)
         // Minimize energy
         {
             int iter = 0;
-            double err;
-            double* solution = new double [ 3 * sw * sh ];
+            qreal err;
+            qreal* solution = new qreal [ 3 * sw * sh ];
             do {
                 err = minimizeEnergy(&matrix[0], &solution[0], sw, sh);
-                memcpy(&matrix[0], &solution[0], sw * sh * 3 * sizeof(double));
+                memcpy(&matrix[0], &solution[0], sw * sh * 3 * sizeof(qreal));
                 iter++;
             } while (err < 0.00001 && iter < 100);
             delete [] solution;

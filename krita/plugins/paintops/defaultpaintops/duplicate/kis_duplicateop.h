@@ -49,11 +49,11 @@ public:
 
     virtual ~KisDuplicateOp();
 
-    double paintAt(const KisPaintInformation& info);
+    qreal paintAt(const KisPaintInformation& info);
 
 private:
 
-    double minimizeEnergy(const double* m, double* sol, int w, int h);
+    qreal minimizeEnergy(const qreal* m, qreal* sol, int w, int h);
 
 private:
 

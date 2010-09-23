@@ -46,8 +46,8 @@ public:
 
     using KisNodeVisitor::visit;
 
-    KisTransformVisitor(KisImageWSP image, double  xscale, double  yscale,
-                        double  /*xshear*/, double  /*yshear*/, double angle,
+    KisTransformVisitor(KisImageWSP image, qreal  xscale, qreal  yscale,
+                        qreal  /*xshear*/, qreal  /*yshear*/, qreal angle,
                         qint32  tx, qint32  ty, KoUpdater *progress, KisFilterStrategy *filter)
             : KisNodeVisitor()
             , m_sx(xscale)
@@ -139,10 +139,10 @@ private:
     }
 
 private:
-    double m_sx, m_sy;
+    qreal m_sx, m_sy;
     qint32 m_tx, m_ty;
     KisFilterStrategy *m_filter;
-    double m_angle;
+    qreal m_angle;
     KoUpdater *m_progress;
     KisImageWSP m_image;
 };

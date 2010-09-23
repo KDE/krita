@@ -62,7 +62,7 @@ KisFilterOp::~KisFilterOp()
 {
 }
 
-double KisFilterOp::paintAt(const KisPaintInformation& info)
+qreal KisFilterOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) {
         return 1.0;
@@ -82,7 +82,7 @@ double KisFilterOp::paintAt(const KisPaintInformation& info)
     if (! brush->canPaintFor(info))
         return 1.0;
 
-    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+    qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(scale);
 
     setCurrentScale(scale);
@@ -95,9 +95,9 @@ double KisFilterOp::paintAt(const KisPaintInformation& info)
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
     qint32 x;
-    double xFraction;
+    qreal xFraction;
     qint32 y;
-    double yFraction;
+    qreal yFraction;
 
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);

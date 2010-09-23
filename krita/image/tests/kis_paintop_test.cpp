@@ -31,10 +31,10 @@ public:
             : KisPaintOp(gc) {
     }
 
-    double paintAt(const KisPaintInformation&) {
+    qreal paintAt(const KisPaintInformation&) {
         return 0.0;
     }
-    double spacing(double&, double&, double, double) const {
+    qreal spacing(qreal&, qreal&, qreal, qreal) const {
         return 0.5;
     }
 

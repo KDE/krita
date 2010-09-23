@@ -80,7 +80,7 @@ KisSprayPaintOp::~KisSprayPaintOp()
 {
 }
 
-double KisSprayPaintOp::paintAt(const KisPaintInformation& info)
+qreal KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return m_spacing;
 
@@ -90,9 +90,9 @@ double KisSprayPaintOp::paintAt(const KisPaintInformation& info)
         m_dab->clear();
     }
 
-    double rotation = m_rotationOption.apply(info);
+    qreal rotation = m_rotationOption.apply(info);
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
-    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+    qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
 
     setCurrentRotation(rotation);
     setCurrentScale(scale);

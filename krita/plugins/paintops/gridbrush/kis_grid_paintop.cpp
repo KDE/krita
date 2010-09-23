@@ -71,7 +71,7 @@ KisGridPaintOp::~KisGridPaintOp()
     delete m_painter;
 }
 
-double KisGridPaintOp::paintAt(const KisPaintInformation& info)
+qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
 {
 #ifdef BENCHMARK
     QTime time;

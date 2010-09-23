@@ -61,12 +61,12 @@ public:
 
      */
     KisPaintInformation(const QPointF & pos = QPointF(),
-                        double pressure = PRESSURE_DEFAULT,
-                        double xTilt = 0.0,
-                        double yTilt = 0.0,
+                        qreal pressure = PRESSURE_DEFAULT,
+                        qreal xTilt = 0.0,
+                        qreal yTilt = 0.0,
                         const KisVector2D& movement = nullKisVector2D(),
-                        double rotation = 0.0,
-                        double tangentialPressure = 0.0,
+                        qreal rotation = 0.0,
+                        qreal tangentialPressure = 0.0,
                         int time = 0);
 
     KisPaintInformation(const KisPaintInformation& rhs);
@@ -80,28 +80,28 @@ public:
     void setPos(const QPointF& p);
 
     /// The pressure of the value (from 0.0 to 1.0)
-    double pressure() const;
+    qreal pressure() const;
 
     /// Set the pressure
-    void setPressure(double p);
+    void setPressure(qreal p);
 
     /// The tilt of the pen on the horizontal axis (from 0.0 to 1.0)
-    double xTilt() const;
+    qreal xTilt() const;
 
     /// The tilt of the pen on the vertical axis (from 0.0 to 1.0)
-    double yTilt() const;
+    qreal yTilt() const;
 
     /// The movement of the pen is equal to current position minus the last position of the call to paintAt
     KisVector2D movement() const;
 
     /// Rotation computed from the movement
-    double angle() const;
+    qreal angle() const;
 
     /// rotation as given by the tablet event
-    double rotation() const;
+    qreal rotation() const;
 
     /// tangential pressure (i.e., rate for an airbrush device)
-    double tangentialPressure() const;
+    qreal tangentialPressure() const;
     
     /// Number of ms since the beginning of the stroke
     int currentTime() const;
@@ -111,7 +111,7 @@ public:
     static KisPaintInformation fromXML(const QDomElement&);
     
     /// (1-t) * p1 + t * p2
-    static KisPaintInformation mix(const QPointF& p, double t, const KisPaintInformation& p1, const KisPaintInformation& p2, const KisVector2D& movement);
+    static KisPaintInformation mix(const QPointF& p, qreal t, const KisPaintInformation& p1, const KisPaintInformation& p2, const KisVector2D& movement);
 
 private:
     struct Private;

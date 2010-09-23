@@ -41,8 +41,8 @@ public:
 
     virtual bool incremental() const { return true; }
 
-    double paintAt(const KisPaintInformation& info);
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
+    qreal paintAt(const KisPaintInformation& info);
+    qreal spacing(qreal & xSpacing, qreal & ySpacing, qreal pressure1, qreal pressure2) const;
     KisDistanceInformation paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist);
 
 private:

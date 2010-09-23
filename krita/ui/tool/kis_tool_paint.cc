@@ -276,7 +276,7 @@ void KisToolPaint::updateTabletPressureSamples()
 void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
 {
     KisTool::setupPaintAction(action);
-    action->setOpacity(m_opacity / 255.0);
+    action->setOpacity(m_opacity / qreal(255.0));
     if (m_compositeOp) {
         action->setCompositeOp(m_compositeOp->id());
     }

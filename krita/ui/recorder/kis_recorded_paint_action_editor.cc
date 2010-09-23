@@ -104,7 +104,7 @@ void KisRecordedPaintActionEditor::configurationUpdated()
 
     m_action->setPaintColor(m_paintColorPopup->currentKoColor());
     m_action->setBackgroundColor(m_backgroundColorPopup->currentKoColor());
-    m_action->setOpacity(m_actionEditor->opacity->value() / 100.0);
+    m_action->setOpacity(m_actionEditor->opacity->value() / qreal(100.0));
 
     emit(actionEdited());
 }

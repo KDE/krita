@@ -58,16 +58,16 @@ public:
     KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisGridPaintOp();
 
-    double paintAt(const KisPaintInformation& info);
+    qreal paintAt(const KisPaintInformation& info);
 
 private:
     const KisGridPaintOpSettings* m_settings;
     KisImageWSP         m_image;
     KisPaintDeviceSP    m_dab;
     KisPainter*         m_painter;
-    double              m_xSpacing;
-    double              m_ySpacing;
-    double              m_spacing;
+    qreal              m_xSpacing;
+    qreal              m_ySpacing;
+    qreal              m_spacing;
     int                 m_pixelSize;
     KisGridProperties   m_properties;
     KisColorProperties  m_colorProperties;

@@ -49,7 +49,7 @@ KisCurvePaintOp::~KisCurvePaintOp()
 {
 }
 
-double KisCurvePaintOp::paintAt(const KisPaintInformation& info)
+qreal KisCurvePaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
     return 1.0;

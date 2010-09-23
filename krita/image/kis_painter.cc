@@ -867,10 +867,10 @@ void KisPainter::paintRect(const QRectF &rect)
     paintPolygon(points);
 }
 
-void KisPainter::paintRect(const double x,
-                           const double y,
-                           const double w,
-                           const double h)
+void KisPainter::paintRect(const qreal x,
+                           const qreal y,
+                           const qreal w,
+                           const qreal h)
 {
     paintRect(QRectF(x, y, w, h));
 }
@@ -882,9 +882,9 @@ void KisPainter::paintEllipse(const QRectF &rect)
 
     // See http://www.whizkidtech.redprince.net/bezier/circle/ for explanation.
     // kappa = (4/3*(sqrt(2)-1))
-    const double kappa = 0.5522847498;
-    const double lx = (r.width() / 2) * kappa;
-    const double ly = (r.height() / 2) * kappa;
+    const qreal kappa = 0.5522847498;
+    const qreal lx = (r.width() / 2) * kappa;
+    const qreal ly = (r.height() / 2) * kappa;
 
     QPointF center = r.center();
 
@@ -917,15 +917,15 @@ void KisPainter::paintEllipse(const QRectF &rect)
     paintPolygon(points);
 }
 
-void KisPainter::paintEllipse(const double x,
-                              const double y,
-                              const double w,
-                              const double h)
+void KisPainter::paintEllipse(const qreal x,
+                              const qreal y,
+                              const qreal w,
+                              const qreal h)
 {
     paintEllipse(QRectF(x, y, w, h));
 }
 
-double KisPainter::paintAt(const KisPaintInformation& pi)
+qreal KisPainter::paintAt(const KisPaintInformation& pi)
 {
     if (!d->paintOp || !d->paintOp->canPaint()) return 0.0;
     return d->paintOp->paintAt(pi);

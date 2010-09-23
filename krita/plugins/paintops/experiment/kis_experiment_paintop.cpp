@@ -84,7 +84,7 @@ KisExperimentPaintOp::~KisExperimentPaintOp()
 }
 
 #define MEMORY
-double KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
+qreal KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return m_spacing;
 

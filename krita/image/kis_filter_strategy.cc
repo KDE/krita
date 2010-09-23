@@ -26,7 +26,7 @@
 
 #include "kis_debug.h"
 
-double KisHermiteFilterStrategy::valueAt(double t) const
+qreal KisHermiteFilterStrategy::valueAt(qreal t) const
 {
     /* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
     if (t < 0.0) t = -t;
@@ -82,7 +82,7 @@ qint32 KisBicubicFilterStrategy::intValueAt(qint32 t) const
     return(0);
 }
 
-double KisBoxFilterStrategy::valueAt(double t) const
+qreal KisBoxFilterStrategy::valueAt(qreal t) const
 {
     if ((t > -0.5) && (t <= 0.5)) return(1.0);
     return(0.0);
@@ -96,7 +96,7 @@ qint32 KisBoxFilterStrategy::intValueAt(qint32 t) const
     return 0;
 }
 
-double KisTriangleFilterStrategy::valueAt(double t) const
+qreal KisTriangleFilterStrategy::valueAt(qreal t) const
 {
     if (t < 0.0) t = -t;
     if (t < 1.0) return(1.0 - t);
@@ -116,7 +116,7 @@ qint32 KisTriangleFilterStrategy::intValueAt(qint32 t) const
 }
 
 
-double KisBellFilterStrategy::valueAt(double t) const
+qreal KisBellFilterStrategy::valueAt(qreal t) const
 {
     if (t < 0) t = -t;
     if (t < .5) return(.75 - (t * t));
@@ -127,9 +127,9 @@ double KisBellFilterStrategy::valueAt(double t) const
     return(0.0);
 }
 
-double KisBSplineFilterStrategy::valueAt(double t) const
+qreal KisBSplineFilterStrategy::valueAt(qreal t) const
 {
-    double tt;
+    qreal tt;
 
     if (t < 0) t = -t;
     if (t < 1) {
@@ -142,26 +142,26 @@ double KisBSplineFilterStrategy::valueAt(double t) const
     return(0.0);
 }
 
-double KisLanczos3FilterStrategy::valueAt(double t) const
+qreal KisLanczos3FilterStrategy::valueAt(qreal t) const
 {
     if (t < 0) t = -t;
     if (t < 3.0) return(sinc(t) * sinc(t / 3.0));
     return(0.0);
 }
 
-double KisLanczos3FilterStrategy::sinc(double x) const
+qreal KisLanczos3FilterStrategy::sinc(qreal x) const
 {
-    const double pi = 3.1415926535897932385;
+    const qreal pi = 3.1415926535897932385;
     x *= pi;
     if (x != 0) return(sin(x) / x);
     return(1.0);
 }
 
-double KisMitchellFilterStrategy::valueAt(double t) const
+qreal KisMitchellFilterStrategy::valueAt(qreal t) const
 {
-    const double B = 1.0 / 3.0;
-    const double C = 1.0 / 3.0;
-    double tt;
+    const qreal B = 1.0 / 3.0;
+    const qreal C = 1.0 / 3.0;
+    qreal tt;
 
     tt = t * t;
     if (t < 0) t = -t;

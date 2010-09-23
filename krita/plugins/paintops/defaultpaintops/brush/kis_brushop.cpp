@@ -54,14 +54,13 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
     m_hsvOptions.append(KisPressureHSVOption::createValueOption());
 
-    const KoColorSpace* rgb = KoColorSpaceRegistry::instance()->rgb8();
     foreach(KisPressureHSVOption* option, m_hsvOptions)
     {
         option->readOptionSetting(settings);
         option->sensor()->reset();
         if(option->isChecked() && !m_hsvTransfo)
         {
-            m_hsvTransfo = rgb->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
+            m_hsvTransfo = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
         }
     }
     

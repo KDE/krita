@@ -117,7 +117,7 @@ void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation
 
         if (nearestShape) {
             if (! nearestAlreadyPresent) {
-                //nearestShape->addConnectionPoint( nearestPoint );
+                //nearestShape->addConnectionPoint(nearestPoint);
                 nearestPointIndex = -1;
             }
             nearestPoint = nearestShape->absoluteTransformation(0).map(nearestPoint);

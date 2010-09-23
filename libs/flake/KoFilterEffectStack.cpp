@@ -83,7 +83,7 @@ void KoFilterEffectStack::removeFilterEffect(int index)
 
 KoFilterEffect* KoFilterEffectStack::takeFilterEffect(int index)
 {
-    if( index >= d->filterEffects.size() )
+    if (index >= d->filterEffects.size())
         return 0;
     return d->filterEffects.takeAt(index);
 }
@@ -128,10 +128,10 @@ void KoFilterEffectStack::save(KoXmlWriter &writer, const QString &filterId)
     writer.addAttribute("id", filterId);
     writer.addAttribute("filterUnits", "objectBoundingBox");
     writer.addAttribute("primitiveUnits", "objectBoundingBox");
-    writer.addAttribute("x", d->clipRect.x() );
-    writer.addAttribute("y", d->clipRect.y() );
-    writer.addAttribute("width", d->clipRect.width() );
-    writer.addAttribute("height", d->clipRect.height() );
+    writer.addAttribute("x", d->clipRect.x());
+    writer.addAttribute("y", d->clipRect.y());
+    writer.addAttribute("width", d->clipRect.width());
+    writer.addAttribute("height", d->clipRect.height());
 
     foreach(KoFilterEffect *effect, d->filterEffects) {
         effect->save(writer);
@@ -154,7 +154,7 @@ QSet<QString> KoFilterEffectStack::requiredStandarsInputs() const
     if (isEmpty())
         return requiredInputs;
 
-    if (d->filterEffects.first()->inputs().contains("") )
+    if (d->filterEffects.first()->inputs().contains(""))
         requiredInputs.insert("SourceGraphic");
 
     foreach(KoFilterEffect *effect, d->filterEffects) {

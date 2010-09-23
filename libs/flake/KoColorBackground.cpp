@@ -61,7 +61,7 @@ QColor KoColorBackground::color() const
     return d->color;
 }
 
-void KoColorBackground::setColor( const QColor &color )
+void KoColorBackground::setColor(const QColor &color)
 {
     d->color = color;
 }

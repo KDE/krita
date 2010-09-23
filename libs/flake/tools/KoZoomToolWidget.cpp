@@ -49,7 +49,7 @@ void KoZoomToolWidget::paintBirdEye()
     QPainter p;
     if (m_dirtyThumbnail) {
         m_thumbnail = QPixmap(birdEyeLabel->size());
-//        m_thumbnail.fill( birdEyeLabel->palette().dark().color() );
+//        m_thumbnail.fill(birdEyeLabel->palette().dark().color());
         p.begin(&m_thumbnail);
         // TODO fill in code to paint a thumbnail of the current document
         p.end();
@@ -58,7 +58,7 @@ void KoZoomToolWidget::paintBirdEye()
 
     p.begin(birdEyeLabel);
     p.drawPixmap(0, 0, m_thumbnail);
-//    p.drawRect( m_birdEyeRect );
+//    p.drawRect(m_birdEyeRect);
     p.end();
 }
 

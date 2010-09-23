@@ -68,7 +68,7 @@ public:
 };
 
 KoShapeContainerDefaultModel::KoShapeContainerDefaultModel()
-: d( new Private() )
+: d(new Private())
 {
 }
 
@@ -92,8 +92,8 @@ void KoShapeContainerDefaultModel::proposeMove(KoShape *shape, QPointF &move)
         parent = parent->parent();
     }
     if (! allowedToMove) {
-        move.setX( 0 );
-        move.setY( 0 );
+        move.setX(0);
+        move.setY(0);
     }
 }
 

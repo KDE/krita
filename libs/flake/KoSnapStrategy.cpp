@@ -78,7 +78,7 @@ bool OrthogonalSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pr
     QList<KoShape*> shapes = proxy->shapes();
     foreach(KoShape * shape, shapes) {
         QList<QPointF> points = proxy->pointsFromShape(shape);
-        foreach(const QPointF & point, points) {
+        foreach (const QPointF &point, points) {
             qreal dx = fabs(point.x() - mousePosition.x());
             if (dx < minHorzDist && dx < maxSnapDistance) {
                 minHorzDist = dx;
@@ -146,7 +146,7 @@ bool NodeSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, q
 
     QPointF snappedPoint = mousePosition;
 
-    foreach(const QPointF & point, points) {
+    foreach (const QPointF &point, points) {
         qreal distance = squareDistance(mousePosition, point);
         if (distance < maxDistance && distance < minDistance) {
             snappedPoint = point;
@@ -247,30 +247,30 @@ bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pro
     m_lines.clear();
     // if we have to extension near our mouse position, they might have an intersection
     // near our mouse position which we want to use as the snapped position
-    if (minDistances[0] < HUGE_VAL && minDistances[1] < HUGE_VAL ) {
+    if (minDistances[0] < HUGE_VAL && minDistances[1] < HUGE_VAL) {
         // check if intersection of extension lines is near mouse position
-        KoPathSegment s1( startPoints[0], snappedPoints[0] + snappedPoints[0]-startPoints[0] );
-        KoPathSegment s2( startPoints[1], snappedPoints[1] + snappedPoints[1]-startPoints[1] );
-        QList<QPointF> isects = s1.intersections( s2 );
+        KoPathSegment s1(startPoints[0], snappedPoints[0] + snappedPoints[0]-startPoints[0]);
+        KoPathSegment s2(startPoints[1], snappedPoints[1] + snappedPoints[1]-startPoints[1]);
+        QList<QPointF> isects = s1.intersections(s2);
         if (isects.count() == 1 && squareDistance(isects[0], mousePosition) < maxDistance) {
             // add both extension lines
-            m_lines.append( QLineF(startPoints[0], isects[0]) );
-            m_lines.append( QLineF(startPoints[1], isects[0]) );
+            m_lines.append(QLineF(startPoints[0], isects[0]));
+            m_lines.append(QLineF(startPoints[1], isects[0]));
             setSnappedPosition(isects[0]);
         }
         else {
             // only add nearest extension line of both
             uint index = minDistances[0] < minDistances[1] ? 0 : 1;
-            m_lines.append( QLineF(startPoints[index], snappedPoints[index]) );
+            m_lines.append(QLineF(startPoints[index], snappedPoints[index]));
             setSnappedPosition(snappedPoints[index]);
         }
     }
     else  if (minDistances[0] < HUGE_VAL) {
-        m_lines.append( QLineF(startPoints[0], snappedPoints[0]) );
+        m_lines.append(QLineF(startPoints[0], snappedPoints[0]));
         setSnappedPosition(snappedPoints[0]);
     }
     else if (minDistances[1] < HUGE_VAL) {
-        m_lines.append( QLineF(startPoints[1], snappedPoints[1]) );
+        m_lines.append(QLineF(startPoints[1], snappedPoints[1]));
         setSnappedPosition(snappedPoints[1]);
     }
     else {
@@ -286,7 +286,7 @@ QPainterPath ExtensionSnapStrategy::decoration(const KoViewConverter &converter)
     Q_UNUSED(converter);
 
     QPainterPath decoration;
-    foreach( const QLineF & line, m_lines ) {
+    foreach (const QLineF &line, m_lines) {
         decoration.moveTo(line.p1());
         decoration.lineTo(line.p2());
     }
@@ -361,7 +361,7 @@ IntersectionSnapStrategy::IntersectionSnapStrategy()
 {
 }
 
-bool IntersectionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance)
+bool IntersectionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance)
 {
     qreal maxDistance = maxSnapDistance * maxSnapDistance;
     qreal minDistance = HUGE_VAL;
@@ -375,7 +375,7 @@ bool IntersectionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * 
 
     int segmentCount = segments.count();
     for (int i = 0; i < segmentCount; ++i) {
-        const KoPathSegment& s1 = segments[i];
+        const KoPathSegment &s1 = segments[i];
         for (int j = i + 1; j < segmentCount; ++j) {
             QList<QPointF> isects = s1.intersections(segments[j]);
             //kDebug() << isects.count() << "intersections found";
@@ -410,7 +410,7 @@ GridSnapStrategy::GridSnapStrategy()
 {
 }
 
-bool GridSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance)
+bool GridSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance)
 {
     if (! proxy->canvas()->snapToGrid())
         return false;
@@ -473,7 +473,7 @@ BoundingBoxSnapStrategy::BoundingBoxSnapStrategy()
 {
 }
 
-bool BoundingBoxSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance)
+bool BoundingBoxSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance)
 {
     qreal maxDistance = maxSnapDistance * maxSnapDistance;
     qreal minDistance = HUGE_VAL;

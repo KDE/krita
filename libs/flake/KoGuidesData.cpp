@@ -40,11 +40,11 @@ public:
                 //point element
                 str = text.mid(pos + 1, (newPos - pos));
                 /*
-                QStringList listVal = QStringList::split( ",", str );
-                int posX = ( listVal[0].toInt()/100 );
-                int posY = ( listVal[1].toInt()/100 );
-                point.setAttribute("posX", MM_TO_POINT(  posX ));
-                point.setAttribute("posY", MM_TO_POINT(  posY ));
+                QStringList listVal = QStringList::split(",", str);
+                int posX = (listVal[0].toInt()/100);
+                int posY = (listVal[1].toInt()/100);
+                point.setAttribute("posX", MM_TO_POINT(posX));
+                point.setAttribute("posY", MM_TO_POINT(posY));
                 */
                 newPos = pos - 1;
             } else if (text[pos] == 'V') {

@@ -251,7 +251,7 @@ QSizeF KoPatternBackground::patternOriginalSize() const
     return d->imageData->imageSize();
 }
 
-KoPatternBackground& KoPatternBackground::operator = (const KoPatternBackground & rhs)
+KoPatternBackground &KoPatternBackground::operator = (const KoPatternBackground &rhs)
 {
     Q_D(KoPatternBackground);
     if (this == &rhs)
@@ -390,7 +390,7 @@ void KoPatternBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &con
     context.addDataCenter(d->imageCollection);
 }
 
-bool KoPatternBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF &)
+bool KoPatternBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &)
 {
     Q_D(KoPatternBackground);
     KoStyleStack &styleStack = context.styleStack();

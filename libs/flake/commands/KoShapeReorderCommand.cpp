@@ -79,10 +79,10 @@ void KoShapeReorderCommand::undo()
 static void prepare(KoShape *s, QMap<KoShape*, QList<KoShape*> > &newOrder, KoShapeManager *manager, KoShapeReorderCommand::MoveShapeType move)
 {
     KoShapeContainer *parent = s->parent();
-    QMap<KoShape*, QList<KoShape*> >::iterator it( newOrder.find( parent ) );
-    if ( it == newOrder.end() ) {
+    QMap<KoShape*, QList<KoShape*> >::iterator it(newOrder.find(parent));
+    if (it == newOrder.end()) {
         QList<KoShape*> children;
-        if ( parent != 0 ) {
+        if (parent != 0) {
             children = parent->shapes();
         }
         else {
@@ -99,7 +99,7 @@ static void prepare(KoShape *s, QMap<KoShape*, QList<KoShape*> > &newOrder, KoSh
     int index = shapes.indexOf(s);
     if (index != -1) {
         shapes.removeAt(index);
-        switch ( move ) {
+        switch (move) {
         case KoShapeReorderCommand::BringToFront:
             index = shapes.size();
             break;
@@ -129,13 +129,13 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
     QMap<KoShape*, QList<KoShape*> > newOrder;
     QList<KoShape*> sortedShapes(shapes);
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
-    if ( move == BringToFront || move == LowerShape ) {
-        for ( int i = 0; i < sortedShapes.size(); ++i ) {
+    if (move == BringToFront || move == LowerShape) {
+        for (int i = 0; i < sortedShapes.size(); ++i) {
             prepare(sortedShapes.at(i), newOrder, manager, move);
         }
     }
     else {
-        for ( int i = sortedShapes.size() - 1; i >= 0; --i ) {
+        for (int i = sortedShapes.size() - 1; i >= 0; --i) {
             prepare(sortedShapes.at(i), newOrder, manager, move);
         }
     }
@@ -143,7 +143,7 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
 
     QMap<KoShape*, QList<KoShape*> >::iterator newIt(newOrder.begin());
     for (; newIt!= newOrder.end(); ++newIt) {
-        QList<KoShape*> order( newIt.value() );
+        QList<KoShape*> order(newIt.value());
         order.removeAll(0);
         int index = -2^13;
         int pos = 0;

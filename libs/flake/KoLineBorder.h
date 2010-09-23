@@ -83,9 +83,9 @@ public:
     qreal dashOffset() const;
 
     /// Returns the color
-    const QColor & color() const;
+    QColor color() const;
     /// Sets the color
-    void setColor(const QColor & color);
+    void setColor(const QColor &color);
 
     /// Sets the strokes brush used to fill strokes of this border
     void setLineBrush(const QBrush & brush);

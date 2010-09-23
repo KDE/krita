@@ -52,7 +52,7 @@ public:
     bool activeControlPoint2;
 };
 
-KoPathPoint::KoPathPoint(const KoPathPoint & pathPoint)
+KoPathPoint::KoPathPoint(const KoPathPoint &pathPoint)
         : d(new Private())
 {
     d->shape = pathPoint.d->shape;
@@ -69,7 +69,7 @@ KoPathPoint::KoPathPoint()
 {
 }
 
-KoPathPoint::KoPathPoint(KoPathShape * path, const QPointF & point, PointProperties properties)
+KoPathPoint::KoPathPoint(KoPathShape * path, const QPointF &point, PointProperties properties)
         : d(new Private())
 {
     d->shape = path;
@@ -84,7 +84,7 @@ KoPathPoint::~KoPathPoint()
     delete d;
 }
 
-KoPathPoint& KoPathPoint::operator=(const KoPathPoint & rhs)
+KoPathPoint &KoPathPoint::operator=(const KoPathPoint &rhs)
 {
     if (this == &rhs)
         return (*this);
@@ -118,14 +118,14 @@ bool KoPathPoint::operator == (const KoPathPoint &rhs) const
     return true;
 }
 
-void KoPathPoint::setPoint(const QPointF & point)
+void KoPathPoint::setPoint(const QPointF &point)
 {
     d->point = point;
     if (d->shape)
         d->shape->notifyChanged();
 }
 
-void KoPathPoint::setControlPoint1(const QPointF & point)
+void KoPathPoint::setControlPoint1(const QPointF &point)
 {
     Q_ASSERT(!qIsNaNPoint(point));
     d->controlPoint1 = point;
@@ -134,7 +134,7 @@ void KoPathPoint::setControlPoint1(const QPointF & point)
         d->shape->notifyChanged();
 }
 
-void KoPathPoint::setControlPoint2(const QPointF & point)
+void KoPathPoint::setControlPoint2(const QPointF &point)
 {
     Q_ASSERT(!qIsNaNPoint(point));
     d->controlPoint2 = point;
@@ -309,7 +309,7 @@ void KoPathPoint::paint(QPainter &painter, int handleRadius, PointTypes types, b
 void KoPathPoint::setParent(KoPathShape* parent)
 {
     // don't set to zero
-    //Q_ASSERT( parent );
+    //Q_ASSERT(parent);
     d->shape = parent;
 }
 

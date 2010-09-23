@@ -105,7 +105,7 @@ KoPointerEvent::KoPointerEvent(KoInputDeviceHandlerEvent * ev, int x, int y, int
     d->rotationZ = rz;
 }
 
-KoPointerEvent::KoPointerEvent(KoPointerEvent *event, const QPointF& point)
+KoPointerEvent::KoPointerEvent(KoPointerEvent *event, const QPointF &point)
     : point(point)
     , m_event(event->m_event)
     , d(new Private(*(event->d)))

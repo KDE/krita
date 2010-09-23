@@ -35,7 +35,7 @@ void KoShapeBorderRegistry::init()
                                      config);
 
     // Also add our hard-coded basic border
-    // add( new KoPathShapeFactory(this, QStringList()) );  TODO
+    // add(new KoPathShapeFactory(this, QStringList()));  TODO
 }
 
 

@@ -59,7 +59,7 @@ void KoPathToolSelection::paint(QPainter &painter, const KoViewConverter &conver
 
 void KoPathToolSelection::add(KoPathPoint * point, bool clear)
 {
-    if( ! point )
+    if(! point)
         return;
 
     bool allreadyIn = false;
@@ -217,7 +217,7 @@ void KoPathToolSelection::update()
         if (! m_selectedShapes.contains(it.key()) || isParametricShape) {
             QSet<KoPathPoint *>::iterator pointIt(it.value().begin());
             for (; pointIt != it.value().end(); ++pointIt) {
-                m_selectedPoints.remove( *pointIt );
+                m_selectedPoints.remove(*pointIt);
             }
             it = m_shapePointMap.erase(it);
             selectionHasChanged = true;

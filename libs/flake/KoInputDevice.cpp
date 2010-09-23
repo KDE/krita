@@ -119,10 +119,10 @@ KoInputDevice KoInputDevice::eraser()
 QDebug operator<<(QDebug dbg, const KoInputDevice &device)
 {
 #ifndef NDEBUG
-    if ( device.isMouse() )
+    if (device.isMouse())
         dbg.nospace() << "mouse";
     else {
-        switch( device.pointer() ) {
+        switch (device.pointer()) {
         case QTabletEvent::UnknownPointer:
             dbg.nospace() << "unknown pointer";
             break;
@@ -136,7 +136,7 @@ QDebug operator<<(QDebug dbg, const KoInputDevice &device)
             dbg.nospace() << "eraser";
             break;
         }
-        switch( device.device() ) {
+        switch(device.device()) {
         case QTabletEvent::NoDevice:
             dbg.space() << "no device";
             break;

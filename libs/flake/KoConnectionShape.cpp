@@ -133,7 +133,7 @@ QPointF KoConnectionShapePrivate::perpendicularDirection(const QPointF &p1, cons
     return perpendicular;
 }
 
-void KoConnectionShapePrivate::normalPath( const qreal MinimumEscapeLength )
+void KoConnectionShapePrivate::normalPath(const qreal MinimumEscapeLength)
 {
     // Clear the path to build it again.
     path.clear();
@@ -273,7 +273,7 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
 {
     Q_D(const KoConnectionShape);
     context.xmlWriter().startElement("draw:connector");
-    saveOdfAttributes( context, OdfMandatories | OdfAdditionalAttributes );
+    saveOdfAttributes(context, OdfMandatories | OdfAdditionalAttributes);
 
     switch (d->connectionType) {
     case Lines:
@@ -292,7 +292,7 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
 
     if (d->shape1) {
         context.xmlWriter().addAttribute("draw:start-shape", context.drawId(d->shape1));
-        context.xmlWriter().addAttribute("draw:start-glue-point", d->connectionPointIndex1 );
+        context.xmlWriter().addAttribute("draw:start-glue-point", d->connectionPointIndex1);
     } else {
         QPointF p((d->handles[StartHandle] + position()) * context.shapeOffset(this));
         context.xmlWriter().addAttributePt("svg:x1", p.x());
@@ -300,7 +300,7 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
     }
     if (d->shape2) {
         context.xmlWriter().addAttribute("draw:end-shape", context.drawId(d->shape2));
-        context.xmlWriter().addAttribute("draw:end-glue-point", d->connectionPointIndex2 );
+        context.xmlWriter().addAttribute("draw:end-glue-point", d->connectionPointIndex2);
     } else {
         QPointF p((d->handles[EndHandle] + position()) * context.shapeOffset(this));
         context.xmlWriter().addAttributePt("svg:x2", p.x());
@@ -489,7 +489,7 @@ void KoConnectionShape::updatePath(const QSizeF &size)
     Q_UNUSED(size);
     Q_D(KoConnectionShape);
 
-    QPointF dst = 0.3 * ( d->handles[StartHandle] - d->handles[EndHandle]);
+    QPointF dst = 0.3 * (d->handles[StartHandle] - d->handles[EndHandle]);
     const qreal MinimumEscapeLength = (qreal)20.;
     clear();
     switch (d->connectionType) {
@@ -497,7 +497,7 @@ void KoConnectionShape::updatePath(const QSizeF &size)
         d->normalPath(MinimumEscapeLength);
         if (d->path.count() != 0){
             moveTo(d->path[0]);
-            for (int index = 1; index < d->path.count(); ++index )
+            for (int index = 1; index < d->path.count(); ++index)
                 lineTo(d->path[index]);
         }
 

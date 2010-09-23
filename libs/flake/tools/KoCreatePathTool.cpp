@@ -271,7 +271,7 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
         if (qFuzzyCompare(diff1.x(), diff2.x()) && qFuzzyCompare(diff1.y(), diff2.y()))
             lastActivePoint->setProperty(KoPathPoint::IsSymmetric);
     }
-    canvas()->snapGuide()->setIgnoredPathPoints( (QList<KoPathPoint*>()<<d->activePoint) );
+    canvas()->snapGuide()->setIgnoredPathPoints((QList<KoPathPoint*>()<<d->activePoint));
     if (d->angleSnapStrategy && lastActivePoint->activeControlPoint2()) {
         d->angleSnapStrategy->deactivate();
     }
@@ -371,11 +371,11 @@ QMap<QString, QWidget *> KoCreatePathTool::createOptionWidgets()
     QWidget *angleWidget = new QWidget();
     angleWidget->setObjectName("Angle Constraints");
     QGridLayout *layout = new QGridLayout(angleWidget);
-    layout->addWidget( new QLabel(i18n("Angle snapping delta"), angleWidget), 0, 0);
+    layout->addWidget(new QLabel(i18n("Angle snapping delta"), angleWidget), 0, 0);
     KIntNumInput *angleEdit = new KIntNumInput(d->angleSnappingDelta, angleWidget);
     angleEdit->setRange(1, 360, 1);
     angleEdit->setSuffix(QChar(Qt::Key_degree));
-    layout->addWidget( angleEdit, 0, 1);
+    layout->addWidget(angleEdit, 0, 1);
     map.insert(i18n("Angle Constraints"), angleWidget);
 
     connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));

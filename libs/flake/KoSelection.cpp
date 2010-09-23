@@ -50,11 +50,11 @@ QRectF KoSelectionPrivate::sizeRect()
 
             if (first) {
                 bb = (shapeTransform * invSelectionTransform).mapRect(shapeRect);
-                bound = shapeTransform.mapRect( shapeRect );
+                bound = shapeTransform.mapRect(shapeRect);
                 first = false;
             } else {
                 bb = bb.united((shapeTransform * invSelectionTransform).mapRect(shapeRect));
-                bound = bound.united( shapeTransform.mapRect( shapeRect ) );
+                bound = bound.united(shapeTransform.mapRect(shapeRect));
             }
         }
     }
@@ -161,10 +161,9 @@ void KoSelection::select(KoShape *shape, bool recursive)
     if (d->selectedShapes.count() == 1) {
         setTransformation(shape->absoluteTransformation(0));
         updateSizeAndPosition();
-    }
-    else {
+    } else {
         // reset global bound if there were no shapes selected before
-        if (!oldSelectionCount )
+        if (!oldSelectionCount)
             d->globalBound = QRectF();
 
         setTransformation(QTransform());
@@ -182,7 +181,7 @@ void KoSelection::select(KoShape *shape, bool recursive)
             const QTransform shapeTransform = shape->absoluteTransformation(0);
             const QRectF shapeRect(QRectF(QPointF(), shape->size()));
 
-            d->globalBound = d->globalBound.united( shapeTransform.mapRect( shapeRect ) );
+            d->globalBound = d->globalBound.united(shapeTransform.mapRect(shapeRect));
         }
         setSize(d->globalBound.size());
         setPosition(d->globalBound.topLeft());

@@ -65,13 +65,7 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *s
     }
     m_spacing = m_xSpacing;
 
-    
-    
-    if ( !settings->node() ){
-        m_dev = 0;
-    }else{
-        m_dev = settings->node()->paintDevice();
-    }
+    m_dev = source();
     
     m_size = 1;
     m_rotationOption.readOptionSetting(settings);
@@ -83,7 +77,8 @@ KisExperimentPaintOp::~KisExperimentPaintOp()
 {
 }
 
-#define MEMORY
+
+//#define MEMORY
 qreal KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return m_spacing;

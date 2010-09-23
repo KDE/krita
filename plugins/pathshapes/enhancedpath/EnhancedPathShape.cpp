@@ -447,6 +447,8 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     pos.setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y", QString())));
     setPosition(pos);
 
+    setPosition(position() - m_viewMatrix.map(QPointF(0, 0)) - m_viewBoxOffset);
+
     loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements);
 
     KoTextOnShapeContainer::tryWrapShape(this, element, context);

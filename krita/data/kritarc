@@ -152,3 +152,6 @@ TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect,spellcheck
 TextVariablePluginsDisabled=textvariables,kprvariables
 ToolPluginsDisabled=paragraphtool,kopabackgroundtool,kpresentertoolanimation
 
+[favoriteList]
+favoriteBrushes=paintbrush,deformbrush,hairybrush,hatchingbrush,sketchbrush,smudge,spraybrush,
+

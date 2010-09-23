@@ -445,9 +445,7 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     QPointF pos;
     pos.setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x", QString())));
     pos.setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y", QString())));
-    setPosition(pos);
-
-    setPosition(position() - m_viewMatrix.map(QPointF(0, 0)) - m_viewBoxOffset);
+    setPosition(pos - m_viewMatrix.map(QPointF(0, 0)) - m_viewBoxOffset);
 
     loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements);
 

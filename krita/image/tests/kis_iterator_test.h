@@ -36,6 +36,9 @@ private:
     void rectIter(const KoColorSpace * cs);
     void hLineIter(const KoColorSpace * cs);
     void randomAccessor(const KoColorSpace * cs);
+    void repeatHLineIter(const KoColorSpace * cs);
+    void repeatVLineIter(const KoColorSpace * cs);
+
 
 private slots:
 
@@ -45,6 +48,8 @@ private slots:
     void rectIter();
     void hLineIter();
     void randomAccessor();
+    void repeatHLineIter();
+    void repeatVLineIter();
 };
 
 #endif

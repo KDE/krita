@@ -24,6 +24,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
+#include <KoColor.h>
 
 #include "kis_iterators_pixel.h"
 #include "kis_random_accessor.h"
@@ -31,6 +32,7 @@
 
 
 #include "kis_paint_device.h"
+#include <kis_repeat_iterators_pixel.h>
 
 void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace*cs))
 {
@@ -350,6 +352,39 @@ void KisIteratorTest::randomAccessor(const KoColorSpace * colorSpace)
     delete[] bytes;
 }
 
+void KisIteratorTest::repeatHLineIter(const KoColorSpace* cs)
+{
+    KoColor color(Qt::green, cs);
+    
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->fill(5, 5, 10, 10, color.data());
+
+    KisRepeatHLineConstIteratorPixel iter = dev->createRepeatHLineConstIterator(0, 0, 20, QRect(5, 5, 10, 10));
+    for(int i = 0; i < 20; i++) {
+        while(!iter.isDone()) {
+            QVERIFY(!memcmp(color.data(), iter.oldRawData(), cs->pixelSize()));
+            ++iter;
+        }
+        iter.nextRow();
+    }
+}
+
+void KisIteratorTest::repeatVLineIter(const KoColorSpace* cs)
+{
+    KoColor color(Qt::green, cs);
+    
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->fill(5, 5, 10, 10, color.data());
+
+    KisRepeatVLineConstIteratorPixel iter = dev->createRepeatVLineConstIterator(0, 0, 20, QRect(5, 5, 10, 10));
+    for(int i = 0; i < 20; i++) {
+        while(!iter.isDone()) {
+            QVERIFY(!memcmp(color.data(), iter.oldRawData(), cs->pixelSize()));
+            ++iter;
+        }
+        iter.nextCol();
+    }
+}
 
 void KisIteratorTest::writeBytes()
 {
@@ -379,6 +414,16 @@ void KisIteratorTest::vLineIter()
 void KisIteratorTest::randomAccessor()
 {
     allCsApplicator(&KisIteratorTest::randomAccessor);
+}
+
+void KisIteratorTest::repeatHLineIter()
+{
+    allCsApplicator(&KisIteratorTest::repeatHLineIter);
+}
+
+void KisIteratorTest::repeatVLineIter()
+{
+    allCsApplicator(&KisIteratorTest::repeatVLineIter);
 }
 
 QTEST_KDEMAIN(KisIteratorTest, NoGUI)

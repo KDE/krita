@@ -169,7 +169,7 @@ inline KisRepeatHLineIteratorPixelBase<T> & KisRepeatHLineIteratorPixelBase<T>::
 template<class T>
 inline void KisRepeatHLineIteratorPixelBase<T>::nextRow()
 {
-    if (this->m_realY >= this->m_dataRect.y() && this->m_realY < this->m_dataRect.y() + this->m_dataRect.height()) {
+    if (this->m_realY >= this->m_dataRect.y() && this->m_realY < this->m_dataRect.y() + this->m_dataRect.height() - 1) {
         this->m_iterator->nextRow();
     } else {
         createIterator();
@@ -227,7 +227,7 @@ inline KisRepeatVLineIteratorPixelBase<T> & KisRepeatVLineIteratorPixelBase<T>::
 template<class T>
 inline void KisRepeatVLineIteratorPixelBase<T>::nextCol()
 {
-    if (this->m_realX >= this->m_dataRect.x() && this->m_realX < this->m_dataRect.x() + this->m_dataRect.width()) {
+    if (this->m_realX >= this->m_dataRect.x() && this->m_realX < this->m_dataRect.x() + this->m_dataRect.width() - 1) {
         this->m_iterator->nextCol();
     } else {
         createIterator();

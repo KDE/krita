@@ -1045,7 +1045,8 @@ namespace {
     void parseElement(QXmlStreamReader &xml, KoXmlPackedDocument &doc);
 
     // parse one element as if this were a standalone xml document
-    ParseError parseDocument(QXmlStreamReader &xml, KoXmlPackedDocument &doc) {
+    ParseError parseDocument(QXmlStreamReader &xml, KoXmlPackedDocument &doc)
+    {
         doc.clear();
         ParseError error;
         xml.readNext();
@@ -1117,7 +1118,8 @@ namespace {
         }
     }
 
-    void parseElement(QXmlStreamReader &xml, KoXmlPackedDocument &doc) {
+    void parseElement(QXmlStreamReader &xml, KoXmlPackedDocument &doc)
+    {
         // reader.tokenType() is now QXmlStreamReader::StartElement
         doc.addElement(xml.qualifiedName().toString(),
                        fixNamespace(xml.namespaceUri().toString()));
@@ -1133,7 +1135,6 @@ namespace {
         // reader.tokenType() is now QXmlStreamReader::EndElement
         doc.closeElement();
     }
-
 }
 
 
@@ -1196,6 +1197,8 @@ public:
     inline bool hasAttributeNS(const QString& nsURI, const QString& name) const;
     inline void clearAttributes();
     inline QStringList attributeNames() const;
+    inline QList< QPair<QString, QString> > attributeFullNames() const;
+
 
     // for text and CDATA
     QString data() const;
@@ -1393,6 +1396,15 @@ QStringList KoXmlNodeData::attributeNames() const
 {
     QStringList result;
     result = attr.keys();
+
+    return result;
+}
+
+
+QList< QPair<QString, QString> > KoXmlNodeData::attributeFullNames() const
+{
+    QList< QPair<QString, QString> > result;
+    result = attrNS.keys();
 
     return result;
 }
@@ -2051,6 +2063,14 @@ QStringList KoXmlNode::attributeNames() const
         d->loadChildren();
 
     return d->attributeNames();
+}
+
+QList< QPair<QString, QString> > KoXmlNode::attributeFullNames() const
+{
+    if (!d->loaded)
+        d->loadChildren();
+
+    return d->attributeFullNames();
 }
 
 KoXmlNode KoXmlNode::firstChild() const

@@ -27,6 +27,7 @@
 
 #include <QtXml/qxml.h>
 #include <QtXml/qdom.h>
+#include <qpair.h>
 
 class QIODevice;
 class QTextDecoder;
@@ -121,6 +122,7 @@ public:
 
     // workaround to get and iterate over all attributes
     QStringList attributeNames() const;
+    QList< QPair<QString, QString> > attributeFullNames() const;
 
     KoXmlNode namedItem(const QString& name) const;
     KoXmlNode namedItemNS(const QString& nsURI, const QString& name) const;

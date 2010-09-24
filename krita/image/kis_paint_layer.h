@@ -40,10 +40,34 @@ class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisIndirectPaint
     Q_OBJECT
 
 public:
-    /// @param opacity is a value between OPACITY_TRANSPARENT_U8 and OPACITY_OPAQUE_U8
+    /**
+     * Construct a paint layer with the given parameters. The default bounds of the paintdevice are overwriten.
+     * @param image this layer belongs to, or null, if it shouldn't belong to any image
+     * @param name of the layer
+     * @param opacity in the range between OPACITY_TRANSPARENT_U8 and OPACITY_OPAQUE_U8
+     * @param dev is the paint device, that should be used
+     */
     KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev);
+
+    /**
+     * Construct a paint layer with the given parameters
+     * @param image this layer belongs to. it must not be null and it must have a valid color space.
+     * @param name of the layer
+     * @param opacity in the range between OPACITY_TRANSPARENT_U8 and OPACITY_OPAQUE_U8
+     */
     KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity);
+
+    /**
+     * Construct a paint layer with the given parameters
+     * @param image this layer belongs to, or null, if it shouldn't belong to any image. image must not be null, if colorSpace is null
+     * @param name of the layer
+     * @param opacity in the range between OPACITY_TRANSPARENT_U8 and OPACITY_OPAQUE_U8
+     * @param colorSpace is the color space, that should be used to construct the paint device. it can be null, if the image is valid.
+     */
     KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace * colorSpace);
+    /**
+     * Copy Constructor
+     */
     KisPaintLayer(const KisPaintLayer& rhs);
     virtual ~KisPaintLayer();
 

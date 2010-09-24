@@ -65,12 +65,16 @@ class KRITAIMAGE_EXPORT KisLayer : public KisNode
 
 public:
 
-    /// @param opacity is a value between OPACITY_TRANSPARENT_U8 and OPACITY_OPAQUE_U8
+    /**
+     * @param image is the pointer of the image or null
+     * @param opacity is a value between OPACITY_TRANSPARENT_U8 and OPACITY_OPAQUE_U8
+    **/
     KisLayer(KisImageWSP image, const QString &name, quint8 opacity);
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
-    const KoColorSpace * colorSpace() const;
+    /// returns the image's colorSpace or null, if there is no image
+    virtual const KoColorSpace * colorSpace() const;
     const KoCompositeOp * compositeOp() const;
 
     /**
@@ -141,6 +145,7 @@ public:
      */
     void setTemporary(bool t);
 
+    /// returns the image this layer belongs to, or null if there is no image
     KisImageWSP image() const;
 
     /**

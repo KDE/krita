@@ -521,28 +521,6 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
                 gc.drawLine(bottomright, bottomleft);
                 gc.drawLine(bottomleft, topleft);
             }
-            //gc.drawRect(handleRect.translated(topleft).adjusted(1, 1, -1, -1));
-            //gc.drawRect(handleRect.translated(middletop).adjusted(1, 1, -1, -1));
-            //gc.drawRect(handleRect.translated(topright).adjusted(1, 1, -1, -1));
-            //gc.drawRect(handleRect.translated(middleright).adjusted(1, 1, -1, -1));
-            //gc.drawRect(handleRect.translated(bottomright).adjusted(1, 1, -1, -1));
-            //gc.drawRect(handleRect.translated(middlebottom).adjusted(1, 1, -1, -1));
-            //gc.drawRect(handleRect.translated(bottomleft).adjusted(1, 1, -1, -1));
-            //gc.drawRect(handleRect.translated(middleleft).adjusted(1, 1, -1, -1));
-            //gc.setPen(Qt::black);
-            //gc.drawRect(handleRect.translated(topleft));
-            //gc.drawRect(handleRect.translated(middletop));
-            //gc.drawRect(handleRect.translated(topright));
-            //gc.drawRect(handleRect.translated(middleright));
-            //gc.drawRect(handleRect.translated(bottomright));
-            //gc.drawRect(handleRect.translated(middlebottom));
-            //gc.drawRect(handleRect.translated(bottomleft));
-            //gc.drawRect(handleRect.translated(middleleft));
-
-            //gc.drawLine(topleft, topright);
-            //gc.drawLine(topright, bottomright);
-            //gc.drawLine(bottomright, bottomleft);
-            //gc.drawLine(bottomleft, topleft);
 
             QPointF rotationCenter = converter.documentToView(QPointF(m_rotationCenterProj.x() / kisimage->xRes(), m_rotationCenterProj.y() / kisimage->yRes()));
             QRectF rotationCenterRect(- m_rotationCenterRadius / 2., - m_rotationCenterRadius / 2., m_rotationCenterRadius, m_rotationCenterRadius);
@@ -553,18 +531,6 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
                 gc.drawLine(QPointF(rotationCenter.x() - m_rotationCenterRadius / 2. - 2, rotationCenter.y()), QPointF(rotationCenter.x() + m_rotationCenterRadius / 2. + 2, rotationCenter.y()));
                 gc.drawLine(QPointF(rotationCenter.x(), rotationCenter.y() - m_rotationCenterRadius / 2. - 2), QPointF(rotationCenter.x(), rotationCenter.y() + m_rotationCenterRadius / 2. + 2));
             }
-
-            //gc.setPen(Qt::lightGray);
-            //gc.drawEllipse(rotationCenterRect.translated(rotationCenter).adjusted(1, 1, -1, -1));
-            //gc.drawLine(QPointF(rotationCenter.x() - m_rotationCenterRadius / 2., rotationCenter.y() - 1), QPointF(rotationCenter.x() + m_rotationCenterRadius / 2., rotationCenter.y() - 1));
-            //gc.drawLine(QPointF(rotationCenter.x() - m_rotationCenterRadius / 2., rotationCenter.y() + 1), QPointF(rotationCenter.x() + m_rotationCenterRadius / 2., rotationCenter.y() + 1));
-            //gc.drawLine(QPointF(rotationCenter.x() - 1, rotationCenter.y() - m_rotationCenterRadius / 2.), QPointF(rotationCenter.x() - 1, rotationCenter.y() + m_rotationCenterRadius / 2.));
-            //gc.drawLine(QPointF(rotationCenter.x() + 1, rotationCenter.y() - m_rotationCenterRadius / 2.), QPointF(rotationCenter.x() + 1, rotationCenter.y() + m_rotationCenterRadius / 2.));
-
-            //gc.setPen(Qt::black);
-            //gc.drawEllipse(rotationCenterRect.translated(rotationCenter));
-            //gc.drawLine(QPointF(rotationCenter.x() - m_rotationCenterRadius / 2. - 2, rotationCenter.y()), QPointF(rotationCenter.x() + m_rotationCenterRadius / 2. + 2, rotationCenter.y()));
-            //gc.drawLine(QPointF(rotationCenter.x(), rotationCenter.y() - m_rotationCenterRadius / 2. - 2), QPointF(rotationCenter.x(), rotationCenter.y() + m_rotationCenterRadius / 2. + 2));
         }
     } else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
         pen[0].setWidth(2);

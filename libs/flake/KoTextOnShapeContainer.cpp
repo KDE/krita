@@ -25,6 +25,7 @@
 #include "KoTextShapeDataBase.h"
 
 #include <KoXmlNS.h>
+#include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 
 #include <KDebug>
@@ -190,6 +191,24 @@ bool KoTextOnShapeContainer::loadOdf(const KoXmlElement &element, KoShapeLoading
 
     KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(d->textShape->userData());
     Q_ASSERT(shapeData); // would be a bug in kotext
+
+    QString styleName = element.attributeNS(KoXmlNS::draw, "style-name");
+    if (!styleName.isEmpty()) {
+        KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+        styleStack.save();
+        context.odfLoadingContext().fillStyleStack(element, KoXmlNS::draw, "style-name", "graphic");
+        styleStack.setTypeProperties("graphic");
+        QString valign = styleStack.property(KoXmlNS::draw, "textarea-vertical-align");
+        if (valign == "top") {
+            shapeData->setVerticalAlignment(Qt::AlignTop);
+        } else if (valign == "middle") {
+            shapeData->setVerticalAlignment(Qt::AlignVCenter);
+        } else if (valign == "bottom") {
+            shapeData->setVerticalAlignment(Qt::AlignBottom);
+        }
+        styleStack.restore();
+    }
+
     return shapeData->loadOdf(element, context);
 }
 

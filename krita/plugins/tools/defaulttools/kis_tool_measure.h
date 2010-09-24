@@ -93,7 +93,6 @@ private:
     }
 
 private:
-    bool m_dragging;
     KisToolMeasureOptionsWidget *m_optWidget;
 
     QPointF m_startPos;

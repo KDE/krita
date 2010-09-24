@@ -73,37 +73,58 @@ inline double norm2(const QPointF& p)
 
 void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
 {
-    m_handleDrag = 0;
-    foreach(const KisPaintingAssistantHandleSP handle, m_handles) {
-        if (norm2(event->point - *handle) < 10) {
-            m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-            m_handleDrag = handle;
-            break;
+    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::NoModifier)) {
+
+        setMode(KisTool::PAINT_MODE);
+
+        m_handleDrag = 0;
+        foreach(const KisPaintingAssistantHandleSP handle, m_handles) {
+            if (norm2(event->point - *handle) < 10) {
+                m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+                m_handleDrag = handle;
+                break;
+            }
+        }
+        if (!m_handleDrag) {
+            event->ignore();
         }
     }
-    if (!m_handleDrag) {
-        event->ignore();
+    else {
+        KisTool::mousePressEvent(event);
     }
 }
 
 
 void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (m_handleDrag) {
-        *m_handleDrag = event->point;
-        m_canvas->updateCanvas();
-    } else {
-        event->ignore();
+    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
+        if (m_handleDrag) {
+            *m_handleDrag = event->point;
+            m_canvas->updateCanvas();
+        } else {
+            event->ignore();
+        }
+    }
+    else {
+        KisTool::mouseMoveEvent(event);
     }
 }
 
 void KisRulerAssistantTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (m_handleDrag) {
-        m_handleDrag = 0;
-        m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-    } else {
-        event->ignore();
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
+
+        if (m_handleDrag) {
+            m_handleDrag = 0;
+            m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+        } else {
+            event->ignore();
+        }
+    }
+    else {
+        KisTool::mouseReleaseEvent(event);
     }
 }
 

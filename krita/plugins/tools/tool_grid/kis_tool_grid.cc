@@ -37,7 +37,6 @@ KisToolGrid::KisToolGrid(KoCanvasBase * canvas)
 {
     Q_ASSERT(m_canvas);
     setObjectName("tool_grid");
-    m_dragging = false;
 }
 
 KisToolGrid::~KisToolGrid()
@@ -60,26 +59,34 @@ void KisToolGrid::deactivate()
 
 void KisToolGrid::mousePressEvent(KoPointerEvent *event)
 {
-    m_dragging = true;
-    m_dragStart = convertToPixelCoord(event);
-    KisConfig cfg;
-    if (event->modifiers() == Qt::ControlModifier) {
-        m_currentMode = SCALE;
-    } else {
-        m_currentMode = TRANSLATION;
-    }
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton, Qt::ControlModifier)) {
 
-    if (m_currentMode == TRANSLATION) {
-        m_initialOffset = QPoint(cfg.getGridOffsetX(), cfg.getGridOffsetY());
-    } else {
-        m_initialSpacing = QPoint(cfg.getGridHSpacing(), cfg.getGridVSpacing());
+        setMode(KisTool::PAINT_MODE);
+
+        m_dragStart = convertToPixelCoord(event);
+        KisConfig cfg;
+        if (event->modifiers() == Qt::ControlModifier) {
+            m_currentMode = SCALE;
+        } else {
+            m_currentMode = TRANSLATION;
+        }
+
+        if (m_currentMode == TRANSLATION) {
+            m_initialOffset = QPoint(cfg.getGridOffsetX(), cfg.getGridOffsetY());
+        } else {
+            m_initialSpacing = QPoint(cfg.getGridHSpacing(), cfg.getGridVSpacing());
+        }
+    }
+    else {
+        KisTool::mousePressEvent(event);
     }
 }
 
 
 void KisToolGrid::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (m_dragging) {
+    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         KisConfig cfg;
         int subdivisions = cfg.getGridSubdivisions();
         m_dragEnd = convertToPixelCoord(event);
@@ -93,15 +100,20 @@ void KisToolGrid::mouseMoveEvent(KoPointerEvent *event)
             if (newSize.y() >= 1) cfg.setGridVSpacing(newSize.y());
         }
         m_canvas->updateCanvas();
-    } else {
-        event->ignore();
+    }
+    else {
+        KisTool::mouseMoveEvent(event);
     }
 }
 
 void KisToolGrid::mouseReleaseEvent(KoPointerEvent *event)
 {
-    Q_UNUSED(event);
-    m_dragging = false;
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
+    }
+    else {
+        KisTool::mouseReleaseEvent(event);
+    }
 }
 
 void KisToolGrid::paint(QPainter& gc, const KoViewConverter &converter)

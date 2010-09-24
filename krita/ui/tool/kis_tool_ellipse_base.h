@@ -47,7 +47,6 @@ private:
     QPointF m_dragCenter;
     QPointF m_dragStart;
     QPointF m_dragEnd;
-    bool m_dragging;
 };
 
 #endif // KIS_TOOL_ELLIPSE_BASE_H

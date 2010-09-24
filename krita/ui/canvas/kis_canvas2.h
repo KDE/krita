@@ -212,7 +212,7 @@ public:
 
     void createFavoriteResourceManager(KisPaintopBox*);
     KoFavoriteResourceManager* favoriteResourceManager();
-    bool handlePopupPaletteIsVisible(KoPointerEvent *);
+    bool handlePopupPaletteIsVisible();
 
 private:
     Q_DISABLE_COPY(KisCanvas2);

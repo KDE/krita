@@ -61,12 +61,11 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 {
 }
 
-void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
+void KisToolSelectContiguous::mousePressEvent(KoPointerEvent *event)
 {
-    if (e->button() != Qt::LeftButton)
-        return;
+    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::NoModifier)) {
 
-    if (canvas() && currentImage()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
         if (!currentNode())
@@ -76,7 +75,7 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         if (!dev || !currentNode()->visible())
             return;
 
-        QPoint pos = convertToIntPixelCoord(e);
+        QPoint pos = convertToIntPixelCoord(event);
         QRect rc = currentImage()->bounds();
         KisFillPainter fillpainter(dev);
         fillpainter.setHeight(rc.height());
@@ -94,6 +93,9 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         helper.selectPixelSelection(selection->pixelSelection(), m_selectAction);
 
         QApplication::restoreOverrideCursor();
+    }
+    else {
+        KisTool::mousePressEvent(event);
     }
 }
 

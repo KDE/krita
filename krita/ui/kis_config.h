@@ -269,7 +269,8 @@ public:
     bool firstRun() const;
     void setFirstRun(const bool firstRun) const;
 
-
+    bool clicklessSpacePan() const;
+    void setClicklessSpacePan(const bool toggle) const;
 
 private:
     KisConfig(const KisConfig&);

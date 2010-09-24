@@ -64,7 +64,6 @@ KisToolColorPicker::KisToolColorPicker(KoCanvasBase* canvas)
     m_updateColor = true;
     m_normaliseValues = false;
     m_pickedColor = KoColor();
-    m_colorPicking = false;
     m_toForegroundColor = true;
 }
 
@@ -153,14 +152,10 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
 
 void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
 {
-    if (canvas()) {
-        if (event->button() != Qt::LeftButton && event->button() != Qt::RightButton){
-            return;
-        }
+    if(PRESS_CONDITION_WB(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton | Qt::RightButton, Qt::NoModifier)) {
 
-        if (!currentImage()){
-            return;
-        }
+        setMode(KisTool::PAINT_MODE);
 
         bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
         if (!sampleMerged) {
@@ -180,40 +175,48 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
             return;
         }
 
-        m_colorPicking = true;
         m_toForegroundColor = (event->button() == Qt::LeftButton);
-
         pickColor(pos);
         displayPickedColor();
-
+    }
+    else {
+        KisTool::mousePressEvent(event);
     }
 }
 
 void KisToolColorPicker::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (m_colorPicking){
+    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         QPoint pos = convertToIntPixelCoord(event);
         pickColor(pos);
         displayPickedColor();
     }
+    else {
+        KisTool::mouseMoveEvent(event);
+    }
 }
 
-void KisToolColorPicker::mouseReleaseEvent(KoPointerEvent */*event*/)
+void KisToolColorPicker::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (m_addPalette) {
-        KoColorSetEntry ent;
-        ent.color = m_pickedColor;
-        // We don't ask for a name, too intrusive here
+    if(RELEASE_CONDITION_WB(event, KisTool::PAINT_MODE, Qt::LeftButton | Qt::RightButton)) {
+        setMode(KisTool::HOVER_MODE);
 
-        KoColorSet* palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
-        palette->add(ent);
+        if (m_addPalette) {
+            KoColorSetEntry ent;
+            ent.color = m_pickedColor;
+            // We don't ask for a name, too intrusive here
 
-        if (!palette->save()) {
-            KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()), i18n("Palette"));
+            KoColorSet* palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
+            palette->add(ent);
+
+            if (!palette->save()) {
+                KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()), i18n("Palette"));
+            }
         }
     }
-
-    m_colorPicking = false;
+    else {
+        KisTool::mouseReleaseEvent(event);
+    }
 }
 
 void KisToolColorPicker::displayPickedColor()

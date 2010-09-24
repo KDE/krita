@@ -754,7 +754,6 @@ void KisConfig::setPresetChooserViewMode(const int mode)
     m_cfg.writeEntry("presetChooserViewMode", mode);
 }
 
-
 bool KisConfig::firstRun() const
 {
     return m_cfg.readEntry("firstRun", true);
@@ -763,4 +762,14 @@ bool KisConfig::firstRun() const
 void KisConfig::setFirstRun(const bool first) const
 {
     m_cfg.writeEntry("firstRun", first);
+}
+
+bool KisConfig::clicklessSpacePan() const
+{
+    return m_cfg.readEntry("clicklessSpacePan", true);
+}
+
+void KisConfig::setClicklessSpacePan(const bool toggle) const
+{
+    m_cfg.writeEntry("clicklessSpacePan", toggle);
 }

@@ -71,11 +71,13 @@
 #include <recorder/kis_recorded_paint_action.h>
 
 struct KisTool::Private {
-    Private() : currentPattern(0),
-            currentGradient(0),
-            currentPaintOpPreset(0),
-            currentGenerator(0),
-            optionWidget(0) { }
+    Private()
+        : currentPattern(0),
+          currentGradient(0),
+          currentPaintOpPreset(0),
+          currentGenerator(0),
+          optionWidget(0),
+          spacePressed(0) { }
     QCursor cursor; // the cursor that should be shown on tool activation.
 
     // From the canvas resources
@@ -93,6 +95,10 @@ struct KisTool::Private {
     KAction* toggleFgBg;
     KAction* resetFgBg;
 
+    bool spacePressed;
+    QPointF lastDocumentPoint;
+    QPointF initialGestureDocPoint;
+    QPoint initialGestureGlobalPoint;
 };
 
 KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
@@ -114,6 +120,7 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     connect(d->resetFgBg, SIGNAL(triggered()), this, SLOT(slotResetFgBg()));
     addAction("reset_fg_bg", d->resetFgBg);
 
+    setMode(HOVER_MODE);
 }
 
 KisTool::~KisTool()
@@ -373,19 +380,181 @@ KisFilterConfiguration * KisTool::currentGenerator()
     return d->currentGenerator;
 }
 
+bool KisTool::specialModifierActive()
+{
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    bool popupPalletActive = canvas2->handlePopupPaletteIsVisible();
+
+    KisConfig cfg;
+    return popupPalletActive || (d->spacePressed && !cfg.clicklessSpacePan());
+}
+
+void KisTool::setMode(ToolMode mode) {
+    m_mode = mode;
+}
+
+KisTool::ToolMode KisTool::mode() {
+    return m_mode;
+}
+
 void KisTool::mousePressEvent(KoPointerEvent *event)
 {
-    event->ignore();
+    KisConfig cfg;
+
+    if (mode() == KisTool::HOVER_MODE &&
+        ((event->button() == Qt::MidButton &&
+          event->modifiers() == Qt::NoModifier) ||
+         (d->spacePressed && !cfg.clicklessSpacePan()))) {
+
+        initPan(event->point);
+        event->accept();
+    }
+    else if (mode() == KisTool::HOVER_MODE &&
+             (event->button() == Qt::LeftButton &&
+              event->modifiers() == Qt::ShiftModifier)) {
+
+        initGesture(event->point);
+        event->accept();
+    }
+
+
+    d->lastDocumentPoint = event->point;
 }
 
 void KisTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    event->ignore();
+    if(mode() == PAN_MODE) {
+        pan(event->point);
+        event->accept();
+    }
+    else if (mode() == GESTURE_MODE) {
+        processGesture(event->point);
+        event->accept();
+    }
+
+    d->lastDocumentPoint = event->point;
 }
 
 void KisTool::mouseReleaseEvent(KoPointerEvent *event)
 {
+    KisConfig cfg;
+
+    if(mode() == PAN_MODE) {
+        if (event->button() == Qt::MidButton ||
+            (event->button() == Qt::LeftButton && !cfg.clicklessSpacePan())) {
+
+            endPan();
+            event->accept();
+        }
+    }
+    else if (mode() == GESTURE_MODE) {
+        if (event->button() == Qt::LeftButton) {
+            endGesture();
+            event->accept();
+        }
+    }
+
+    d->lastDocumentPoint = event->point;
+}
+
+void KisTool::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Space) {
+
+        KisConfig cfg;
+        if(cfg.clicklessSpacePan()) {
+            initPan(d->lastDocumentPoint);
+        }
+        else {
+            d->spacePressed = true;
+        }
+
+        event->accept();
+        return;
+    }
+
     event->ignore();
+}
+
+void KisTool::keyReleaseEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Space) {
+
+        KisConfig cfg;
+        if(cfg.clicklessSpacePan()) {
+            endPan();
+        }
+        else {
+            d->spacePressed = false;
+        }
+
+        event->accept();
+        return;
+    }
+
+    event->ignore();
+}
+
+void KisTool::initPan(const QPointF &docPoint)
+{
+    setMode(PAN_MODE);
+    m_lastPosition = convertDocumentToWidget(docPoint);
+    useCursor(QCursor(Qt::ClosedHandCursor));
+}
+
+void KisTool::pan(const QPointF &docPoint)
+{
+    Q_ASSERT(canvas());
+    Q_ASSERT(canvas()->canvasController());
+
+    QPointF actualPosition = convertDocumentToWidget(docPoint);
+    QPointF distance(m_lastPosition - actualPosition);
+    canvas()->canvasController()->pan(distance.toPoint());
+
+    m_lastPosition = actualPosition;
+}
+
+void KisTool::endPan()
+{
+    setMode(HOVER_MODE);
+    resetCursorStyle();
+}
+
+void KisTool::initGesture(const QPointF &docPoint)
+{
+    setMode(GESTURE_MODE);
+    d->initialGestureDocPoint = docPoint;
+    d->initialGestureGlobalPoint = QCursor::pos();
+    useCursor(KisCursor::blankCursor());
+}
+
+void KisTool::processGesture(const QPointF &docPoint)
+{
+    QPointF lastWidgetPosition = convertDocumentToWidget(d->lastDocumentPoint);
+    QPointF actualWidgetPosition = convertDocumentToWidget(docPoint);
+
+    QPointF offset = actualWidgetPosition - lastWidgetPosition;
+
+    /**
+     * view pixels != widget pixels, but we do this anyway, we only
+     * need to scale the gesture down, not rotate or anything
+     */
+    QPointF scaledOffset = canvas()->viewConverter()->viewToDocument(offset);
+    gesture(scaledOffset, d->initialGestureDocPoint);
+}
+
+void KisTool::endGesture()
+{
+    gesture(QPointF(), d->initialGestureDocPoint);
+    setMode(HOVER_MODE);
+    resetCursorStyle();
+    QCursor::setPos(d->initialGestureGlobalPoint);
+}
+
+void KisTool::gesture(const QPointF &offsetInDocPixels, const QPointF &initialDocPoint)
+{
+    Q_UNUSED(offsetInDocPixels);
+    Q_UNUSED(initialDocPoint);
 }
 
 void KisTool::setupPainter(KisPainter* painter)

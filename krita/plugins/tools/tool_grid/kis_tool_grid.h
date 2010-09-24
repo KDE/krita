@@ -55,7 +55,6 @@ private:
     QPoint m_initialSpacing;
 
     Mode m_currentMode;
-    bool m_dragging;
 };
 
 

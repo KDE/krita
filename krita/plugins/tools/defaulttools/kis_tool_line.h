@@ -62,8 +62,6 @@ private:
 
 private:
 
-    bool m_dragging;
-
     QPointF m_startPos;
     QPointF m_endPos;
 

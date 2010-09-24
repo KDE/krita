@@ -116,7 +116,6 @@ private slots:
 
 private:
     QRect m_rectCrop; // Is the coordinate of the region to crop.
-    bool m_selecting;
     QPoint m_dragStart;
 
     WdgToolCrop* m_optWidget;

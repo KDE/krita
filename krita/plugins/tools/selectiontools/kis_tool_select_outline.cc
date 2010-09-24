@@ -55,7 +55,6 @@
 KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
         : KisToolSelectBase(canvas, KisCursor::load("tool_outline_selection_cursor.png", 5, 5)), m_paintPath(new QPainterPath())
 {
-    m_dragging = false;
 }
 
 KisToolSelectOutline::~KisToolSelectOutline()
@@ -66,22 +65,27 @@ KisToolSelectOutline::~KisToolSelectOutline()
 
 void KisToolSelectOutline::mousePressEvent(KoPointerEvent *event)
 {
-    if (event->button() == Qt::LeftButton) {
-        m_dragging = true;
+    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::NoModifier)) {
+
+        setMode(KisTool::PAINT_MODE);
+
         m_points.clear();
         m_points.append(convertToPixelCoord(event));
-
         m_paintPath->moveTo(pixelToView(convertToPixelCoord(event)));
+    }
+    else {
+        KisTool::mousePressEvent(event);
     }
 }
 
 void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (m_dragging) {
+    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         QPointF point = convertToPixelCoord(event);
         //don't add the point, if the distance is very small
-        if (m_points.size()>0) {
-            QPointF diff = point-m_points.at(m_points.size()-1);
+        if (!m_points.isEmpty()) {
+            QPointF diff = point - m_points.last();
             if(fabs(diff.x())<3 && fabs(diff.y())<3)
                 return;
         }
@@ -89,18 +93,18 @@ void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
         m_points.append(point);
         updateFeedback();
     }
+    else {
+        KisTool::mouseMoveEvent(event);
+    }
 }
 
 void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (!canvas())
-        return;
-
-    if (m_dragging && event->button() == Qt::LeftButton) {
-        m_dragging = false;
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
         deactivate();
 
-        if (currentImage() && m_points.count() > 2) {
+        if (m_points.count() > 2) {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
 
             KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -150,6 +154,9 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
         delete m_paintPath;
         m_paintPath = new QPainterPath();
     }
+    else {
+        KisTool::mouseReleaseEvent(event);
+    }
 }
 
 
@@ -157,7 +164,7 @@ void KisToolSelectOutline::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
-    if (m_dragging && m_points.count() > 1) {
+    if (mode() == KisTool::PAINT_MODE && !m_points.isEmpty()) {
             paintToolOutline(&gc, *m_paintPath);
     }
 }

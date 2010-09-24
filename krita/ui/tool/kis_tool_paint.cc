@@ -66,6 +66,7 @@
 #include "kis_canvas_resource_provider.h"
 #include <recorder/kis_recorded_paint_action.h>
 #include <kis_cubic_curve.h>
+#include "kis_color_picker_utils.h"
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
@@ -78,13 +79,14 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 
     m_opacity = OPACITY_OPAQUE_U8;
     m_compositeOp = 0;
-    
+
     updateTabletPressureSamples();
-    
+
     m_supportOutline = false;
-    
+
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
     connect(kiscanvas->view()->resourceProvider(), SIGNAL(sigCompositeOpChanged(QString)), this, SLOT(slotSetCompositeMode(QString))); 
+    connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), kiscanvas, SIGNAL(favoritePaletteCalled(const QPoint&)));
 }
 
 
@@ -123,25 +125,83 @@ void KisToolPaint::paint(QPainter&, const KoViewConverter &)
 {
 }
 
-
-void KisToolPaint::mouseReleaseEvent(KoPointerEvent *e)
+void KisToolPaint::mousePressEvent(KoPointerEvent *event)
 {
-    if (e->button() == Qt::RightButton) {
-        //CALLING POP UP PALETTE
-        emit sigFavoritePaletteCalled(e->pos());
+    if(mode() == KisTool::HOVER_MODE &&
+       (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) &&
+       event->modifiers() & Qt::ControlModifier &&
+       !specialModifierActive()) {
 
-//        KoResourceManager * resourceProvider = 0;
-//        if (canvas() && (resourceProvider = canvas()->resourceProvider())) {
-//            QVariant fg = resourceProvider->resource(KoCanvasResource::ForegroundColor);
-//            if (!fg.isValid()) return;
-//            QVariant bg = resourceProvider->resource(KoCanvasResource::BackgroundColor);
-//            if (!bg.isValid()) return;
-//            resourceProvider->setResource(KoCanvasResource::ForegroundColor, bg);
-//            resourceProvider->setResource(KoCanvasResource::BackgroundColor, fg);
-//        }
+        setMode(SECONDARY_PAINT_MODE);
+        useCursor(KisCursor::pickerCursor());
+
+        m_toForegroundColor = event->button() == Qt::LeftButton;
+        pickColor(event->point, event->modifiers() & Qt::AltModifier,
+                  m_toForegroundColor);
+        event->accept();
+    }
+    else if(mode() == KisTool::HOVER_MODE &&
+            event->button() == Qt::RightButton &&
+            event->modifiers() == Qt::NoModifier &&
+            !specialModifierActive()) {
+
+        emit sigFavoritePaletteCalled(event->pos());
+        event->accept();
+    }
+    else {
+        KisTool::mousePressEvent(event);
     }
 }
 
+void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
+{
+    if(mode() == KisTool::SECONDARY_PAINT_MODE) {
+        pickColor(event->point, event->modifiers() & Qt::AltModifier,
+                  m_toForegroundColor);
+        event->accept();
+    }
+    else {
+        KisTool::mouseMoveEvent(event);
+    }
+}
+
+void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
+{
+    if(mode() == KisTool::SECONDARY_PAINT_MODE) {
+        setMode(KisTool::HOVER_MODE);
+        resetCursorStyle();
+        event->accept();
+    }
+    else {
+        KisTool::mouseReleaseEvent(event);
+    }
+}
+
+void KisToolPaint::keyPressEvent(QKeyEvent *event)
+{
+    KisTool::keyPressEvent(event);
+}
+
+void KisToolPaint::keyReleaseEvent(QKeyEvent* event)
+{
+    KisTool::keyReleaseEvent(event);
+}
+
+void KisToolPaint::pickColor(const QPointF &documentPixel,
+                             bool fromCurrentNode,
+                             bool toForegroundColor)
+{
+    int resource = toForegroundColor ?
+        KoCanvasResource::ForegroundColor : KoCanvasResource::BackgroundColor;
+
+    KisPaintDeviceSP device = fromCurrentNode ?
+        currentNode()->paintDevice() : image()->projection();
+
+    QPoint imagePoint = image()->documentToIntPixel(documentPixel);
+
+    canvas()->resourceManager()->
+        setResource(resource, KisToolUtils::pick(device, imagePoint));
+}
 
 QWidget * KisToolPaint::createOptionWidget()
 {

@@ -56,7 +56,6 @@ KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
 {
     setObjectName("tool_move");
-    m_dragging = false;
     m_optionsWidget = 0;
 }
 
@@ -112,16 +111,22 @@ KisNodeSP findNode(KisNodeSP node, int x, int y)
     return 0;
 }
 
-void KisToolMove::mousePressEvent(KoPointerEvent *e)
+void KisToolMove::mousePressEvent(KoPointerEvent *event)
 {
-    if (canvas() && e->button() == Qt::LeftButton) {
-        QPointF pos = convertToPixelCoord(e);
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton,
+                          Qt::ControlModifier | Qt::ShiftModifier)) {
+
+        setMode(KisTool::PAINT_MODE);
 
         KisNodeSP node;
         KisImageWSP image = currentImage();
         if (!image || !image->rootLayer() || image->rootLayer()->childCount() == 0) {
             return;
         }
+
+        QPointF pos = convertToPixelCoord(event);
+
         // shortcut: if the pixel at projection is transparent, it's all transparent
         const KoColorSpace* cs = image->projection()->colorSpace();
         KoColor color(cs);
@@ -129,9 +134,10 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
 
         KisSelectionSP selection = currentSelection();
 
-        if (cs->opacityU8(color.data()) == OPACITY_TRANSPARENT_U8
-                || m_optionsWidget->radioSelectedLayer->isChecked()
-                || e->modifiers() == Qt::ControlModifier) {
+        if (cs->opacityU8(color.data()) == OPACITY_TRANSPARENT_U8 ||
+            m_optionsWidget->radioSelectedLayer->isChecked() ||
+            event->modifiers() == Qt::ControlModifier) {
+
             node = currentNode();
         } else {
 
@@ -140,7 +146,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
             node = findNode(node, pos.x(), pos.y());
 
             // if there is a selection, we cannot move the group
-            if (node && !selection && (m_optionsWidget->radioGroup->isChecked() || e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier))) {
+            if (node && !selection && (m_optionsWidget->radioGroup->isChecked() || event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier))) {
                 node = node->parent();
             }
         }
@@ -153,7 +159,6 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
         currentImage()->undoAdapter()->beginMacro(i18n("Move"));
 
         if (selection && !selection->isTotallyUnselected(image->bounds()) && !selection->isDeselected()) {
-            //selection->convertToQImage(0).save("selection.png");
             // Create a temporary layer with the contents of the selection of the current layer.
             Q_ASSERT(!node->inherits("KisGroupLayer"));
 
@@ -207,20 +212,21 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
             m_targetLayer = 0;
         }
 
-        m_dragging = true;
-        m_dragStart = QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y()));
         m_layerStart.setX(node->x());
         m_layerStart.setY(node->y());
         m_layerPosition = m_layerStart;
+        m_dragStart = pos.toPoint();
+    }
+    else {
+        KisTool::mousePressEvent(event);
     }
 }
 
-void KisToolMove::mouseMoveEvent(KoPointerEvent *e)
+void KisToolMove::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (canvas() && m_dragging) {
-        QPointF posf = convertToPixelCoord(e);
-        QPoint pos = QPoint(static_cast<int>(posf.x()), static_cast<int>(posf.y()));
-        if ((e->modifiers() & Qt::AltModifier) || (e->modifiers() & Qt::ControlModifier)) {
+    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
+        QPoint pos = convertToPixelCoord(event).toPoint();
+        if ((event->modifiers() & Qt::AltModifier) || (event->modifiers() & Qt::ControlModifier)) {
             if (fabs(static_cast<double>(pos.x() - m_dragStart.x())) > fabs(static_cast<double>(pos.y() - m_dragStart.y())))
                 pos.setY(m_dragStart.y());
             else
@@ -230,25 +236,30 @@ void KisToolMove::mouseMoveEvent(KoPointerEvent *e)
 
         notifyModified();
     }
+    else {
+        KisTool::mouseMoveEvent(event);
+    }
 }
 
-void KisToolMove::mouseReleaseEvent(KoPointerEvent *e)
+void KisToolMove::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (m_dragging) {
-        if (canvas() && e->button() == Qt::LeftButton) {
-            QPointF pos = convertToPixelCoord(e);
-            if (m_selectedNode) {
-                drag(QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y())));
-                m_dragging = false;
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
 
-                QUndoCommand *cmd = new KisNodeMoveCommand(m_selectedNode, m_layerStart, m_layerPosition);
-                Q_CHECK_PTR(cmd);
+        if (m_selectedNode) {
+            QPoint pos = convertToPixelCoord(event).toPoint();
+            drag(pos);
 
-                canvas()->addCommand(cmd);
-                currentImage()->undoAdapter()->endMacro();
-            }
-            currentImage()->setModified();
+            QUndoCommand *cmd = new KisNodeMoveCommand(m_selectedNode, m_layerStart, m_layerPosition);
+            Q_CHECK_PTR(cmd);
+
+            canvas()->addCommand(cmd);
+            currentImage()->undoAdapter()->endMacro();
         }
+        currentImage()->setModified();
+    }
+    else {
+        KisTool::mouseReleaseEvent(event);
     }
 }
 

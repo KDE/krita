@@ -28,6 +28,28 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
+#define PRESS_CONDITION(_event, _mode, _button, _modifier)              \
+    (mode() == (_mode) && (_event)->button() == (_button) &&            \
+     (_event)->modifiers() == (_modifier) && !specialModifierActive())
+
+#define PRESS_CONDITION_WB(_event, _mode, _button, _modifier)            \
+    (mode() == (_mode) && (_event)->button() & (_button) &&            \
+     (_event)->modifiers() == (_modifier) && !specialModifierActive())
+
+#define PRESS_CONDITION_OM(_event, _mode, _button, _modifier)           \
+    (mode() == (_mode) && (_event)->button() == (_button) &&            \
+     ((_event)->modifiers() & (_modifier) ||                            \
+      (_event)->modifiers() == Qt::NoModifier) &&                       \
+     !specialModifierActive())
+
+#define RELEASE_CONDITION(_event, _mode, _button)               \
+    (mode() == (_mode) && (_event)->button() == (_button))
+
+#define RELEASE_CONDITION_WB(_event, _mode, _button)               \
+    (mode() == (_mode) && (_event)->button() & (_button))
+
+#define MOVE_CONDITION(_event, _mode) (mode() == (_mode))
+
 class KoCanvasBase;
 class KisPattern;
 class KoAbstractGradient;
@@ -74,16 +96,14 @@ public slots:
 
     virtual void resourceChanged(int key, const QVariant & res);
 
-public:
+protected:
 
-    /// reimplemented from superclass
     virtual void mousePressEvent(KoPointerEvent *event);
-
-    /// reimplemented from superclass
     virtual void mouseMoveEvent(KoPointerEvent *event);
-
-    /// reimplemented from superclass
     virtual void mouseReleaseEvent(KoPointerEvent *event);
+
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void keyReleaseEvent(QKeyEvent* event);
 
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *) {}  // when a krita tool is enabled, don't push double click on
@@ -135,6 +155,10 @@ public:
 
 protected:
 
+    bool specialModifierActive();
+    virtual void gesture(const QPointF &offsetInDocPixels,
+                         const QPointF &initialDocPoint);
+
     KisImageWSP image() const;
     QCursor cursor() const;
 
@@ -176,6 +200,20 @@ protected:
     /// Sets the systemLocked for the current node, this will not deactivate the tool buttons
     void setCurrentNodeLocked(bool locked);
 
+protected:
+    enum ToolMode {
+        HOVER_MODE,
+        PAINT_MODE,
+        SECONDARY_PAINT_MODE,
+        GESTURE_MODE,
+        PAN_MODE,
+        OTHER // not used now
+    };
+
+    void setMode(ToolMode mode);
+    ToolMode mode();
+
+
 protected slots:
     /**
      * Called whenever the configuration settings change.
@@ -188,7 +226,18 @@ private slots:
     void slotResetFgBg();
 
 private:
+    void initPan(const QPointF &docPoint);
+    void pan(const QPointF &docPoint);
+    void endPan();
+
+    void initGesture(const QPointF &docPoint);
+    void processGesture(const QPointF &docPoint);
+    void endGesture();
+
+private:
     PaintMode m_outlinePaintMode;
+    ToolMode m_mode;
+    QPointF m_lastPosition;
 
     struct Private;
     Private* const d;

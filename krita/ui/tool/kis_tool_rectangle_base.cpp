@@ -25,7 +25,7 @@
 
 
 KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, const QCursor & cursor) :
-    KisToolShape(canvas, cursor), m_dragStart(0, 0), m_dragEnd(0, 0), m_dragging(false)
+    KisToolShape(canvas, cursor), m_dragStart(0, 0), m_dragEnd(0, 0)
 {
 }
 
@@ -34,41 +34,35 @@ void KisToolRectangleBase::paint(QPainter& gc, const KoViewConverter &converter)
     Q_UNUSED(converter);
     Q_ASSERT(currentImage());
 
-    if (m_dragging)
+    if (mode() == KisTool::PAINT_MODE)
         paintRectangle(gc, QRect());
 }
 
 void KisToolRectangleBase::deactivate()
 {
-    m_dragging=false;
     updateArea();
 }
 
 
-void KisToolRectangleBase::mousePressEvent(KoPointerEvent *e)
+void KisToolRectangleBase::mousePressEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(canvas() && currentImage());
-    
-    if (!currentNode() || currentNode()->systemLocked()) {
-        return;
-    }
+    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::NoModifier)) {
 
-    if (e->button() == Qt::LeftButton) {
-        QPointF pos = convertToPixelCoord(e);
-        m_dragging = true;
-        m_dragStart = m_dragCenter = m_dragEnd = pos;
-        e->accept();
+        if (!currentNode() || currentNode()->systemLocked())
+            return;
+
+        setMode(KisTool::PAINT_MODE);
+        m_dragStart = m_dragCenter = m_dragEnd = convertToPixelCoord(event);
     }
-    else if (e->button()==Qt::RightButton || e->button()==Qt::MidButton) {
-        m_dragging = false;
-        updateArea();
-        e->accept();
+    else {
+        KisToolPaint::mousePressEvent(event);
     }
 }
 
 void KisToolRectangleBase::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (m_dragging) {
+    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         QPointF pos = convertToPixelCoord(event);
         updateArea();
 
@@ -101,23 +95,24 @@ void KisToolRectangleBase::mouseMoveEvent(KoPointerEvent *event)
 
         m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
                                (m_dragStart.y() + m_dragEnd.y()) / 2);
-    } else {
-        KisToolPaint::mouseReleaseEvent(event);
+    }
+    else {
+        KisToolPaint::mouseMoveEvent(event);
     }
 }
 
 void KisToolRectangleBase::mouseReleaseEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(canvas() && currentImage());
-    if (!currentNode()) return;
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
 
-    if (m_dragging && event->button() == Qt::LeftButton) {
         updateArea();
-        m_dragging = false;
         setCurrentNodeLocked(true);
         finishRect(QRectF(m_dragStart, m_dragEnd));
         setCurrentNodeLocked(false);
-        event->accept();
+    }
+    else {
+        KisToolPaint::mouseReleaseEvent(event);
     }
 }
 

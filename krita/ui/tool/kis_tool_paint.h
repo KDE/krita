@@ -54,14 +54,6 @@ class KoCanvasBase;
 
 class KisSliderSpinBox;
 
-enum enumBrushMode {
-    PAINT,
-    HOVER,
-    EDIT_BRUSH,
-    PAN,
-    COLOR_PICKING
-};
-
 // wacom 
 const static int LEVEL_OF_PRESSURE_RESOLUTION = 1024;
 
@@ -76,13 +68,19 @@ public:
     virtual ~KisToolPaint();
 
 
-public:
+protected:
 
     virtual void resourceChanged(int key, const QVariant & v);
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
+    virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void keyReleaseEvent(QKeyEvent* event);
+
 
     /** If the paint tool support outline like brushes, set to true.
     *   If not (e.g. gradient tool), set to false. Default is false.
@@ -114,7 +112,8 @@ protected:
     qreal pressureToCurve(qreal pressure){
         return m_pressureSamples.at( qRound(pressure * LEVEL_OF_PRESSURE_RESOLUTION) );
     }
-    
+
+
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
@@ -137,6 +136,10 @@ protected:
     QVector<qreal> m_pressureSamples;
 
 private:
+    void pickColor(const QPointF &documentPixel, bool fromCurrentNode,
+                   bool toForegroundColor);
+
+private:
 
     QGridLayout *m_optionWidgetLayout;
 
@@ -144,6 +147,11 @@ private:
     KisSliderSpinBox *m_slOpacity;
 
     bool m_supportOutline;
+
+    /**
+     * Used as a switch for pickColor
+     */
+    bool m_toForegroundColor;
 
 signals:
     void sigFavoritePaletteCalled(const QPoint&);

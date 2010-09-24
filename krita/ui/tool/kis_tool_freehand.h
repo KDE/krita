@@ -40,6 +40,16 @@ class FreehandPaintJob;
 class KisRecordedPathPaintAction;
 class FreehandPaintJobExecutor;
 
+#include "kis_paintop_settings.h"
+
+enum KDE_DEPRECATED enumBrushMode {
+    PAINT,
+    HOVER,
+    EDIT_BRUSH,
+    PAN,
+    COLOR_PICKING
+};
+
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
 {
 
@@ -51,20 +61,23 @@ public:
     KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText);
     virtual ~KisToolFreehand();
 
-    virtual void mousePressEvent(KoPointerEvent *e);
-    virtual void mouseMoveEvent(KoPointerEvent *e);
-    virtual void mouseReleaseEvent(KoPointerEvent *e);
-    virtual void customMoveEvent(KoPointerEvent * event); // only for panning
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent* event);
-    virtual bool wantsAutoScroll() const;
     virtual void setDirty(const QRegion& region);
-    virtual void deactivate();
 
 signals:
     void sigPainting();
 
 protected:
+    void gesture(const QPointF &offsetInDocPixels,
+                 const QPointF &initialDocPoint);
+
+    virtual void mousePressEvent(KoPointerEvent *e);
+    virtual void mouseMoveEvent(KoPointerEvent *e);
+    virtual void mouseReleaseEvent(KoPointerEvent *e);
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void keyReleaseEvent(QKeyEvent* event);
+    virtual bool wantsAutoScroll() const;
+    virtual void deactivate();
+
 
     /// Paint a single brush footprint on the current layer
     virtual void paintAt(const KisPaintInformation &pi);
@@ -82,10 +95,6 @@ protected:
     virtual void endPaint();
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
-    virtual void initPan();
-    virtual void pan(KoPointerEvent *e);
-    virtual void endPan();
-
 protected slots:
 
     void setSmooth(bool smooth);
@@ -98,18 +107,22 @@ private:
     QPointF adjustPosition(const QPointF& point);
     void queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* previousJob);
     void showOutlineTemporary();
-    void pickColor(const QPoint &pos, bool currentNode);
-    
-private slots:
 
+    void updateOutlineRect();
+    QPainterPath getOutlinePath(const QPointF &documentPos,
+                                KisPaintOpSettings::OutlineMode outlineMode);
+
+private slots:
     void increaseBrushSize();
     void decreaseBrushSize();
     void hideOutline();
 protected:
 
+    // For Dyna brush
+    QPointF m_outlineDocPoint;
+
     KisPaintInformation m_previousPaintInformation;
     QPointF m_previousTangent;
-    QPointF m_previousDrag;
     double m_dragDist;
 
     bool m_paintIncremental;
@@ -123,7 +136,6 @@ protected:
     double m_magnetism;
 
 private:
-    QPointF outlinePos() const;
 #if defined(HAVE_OPENGL)
     qreal m_xTilt;
     qreal m_yTilt;
@@ -135,34 +147,20 @@ private:
     QString m_brushModelName;
 #endif
 
-    QPointF m_mousePos;
-    QPointF m_prevMousePos;
-    QPointF m_originalMousePos;
-    QPoint  m_originalPos;
+    QTimer m_outlineTimer;
+    bool m_explicitShowOutline;
 
-    // for painting
-    QRectF m_oldOutlineRect;
-    QPointF m_oldOutlinePosition;
-    
-    
     QRegion m_incrementalDirtyRegion;
     QList<FreehandPaintJob*> m_paintJobs;
     KisRecordedPathPaintAction* m_pathPaintAction;
     QThreadPool* m_executor;
 
-    // for panning
-    QPointF m_lastPosition;
     QTime m_strokeTimeMeasure;
 
     KAction* m_increaseBrushSize;
     KAction* m_decreaseBrushSize;
-    
+
     bool m_hasPaintAtLeastOnce; ///< this indicates whether mouseReleaseEvent should call paintAt or not
-    
-    QTimer m_timer;
-    bool m_showOutline;
-    
-    bool m_toForegroundColor;
 };
 
 

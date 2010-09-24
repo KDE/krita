@@ -47,7 +47,6 @@ private:
     QPointF m_dragStart;
     QPointF m_dragEnd;
     QRect m_final_lines;
-    bool m_dragging;
 };
 
 #endif // KIS_TOOL_RECTANGLE_BASE_H

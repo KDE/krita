@@ -30,8 +30,8 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
-
 #include "kis_image.h"
+#include "kis_cursor.h"
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
 
@@ -93,8 +93,7 @@ void KisToolMeasureOptionsWidget::updateDistance()
 
 
 KisToolMeasure::KisToolMeasure(KoCanvasBase * canvas)
-        : KisTool(canvas, QCursor(Qt::CrossCursor)),
-        m_dragging(false)
+    : KisTool(canvas, KisCursor::crossCursor())
 {
     m_startPos = QPointF(0, 0);
     m_endPos = QPointF(0, 0);
@@ -108,8 +107,6 @@ void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
 {
     qreal sx, sy;
     converter.zoom(&sx, &sy);
-
-    if (!currentImage()) return;
 
     gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
 
@@ -139,49 +136,59 @@ void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
     gc.setPen(old);
 }
 
-void KisToolMeasure::mousePressEvent(KoPointerEvent *e)
+void KisToolMeasure::mousePressEvent(KoPointerEvent *event)
 {
-    if (!currentImage()) return;
+    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::NoModifier)) {
 
-    // Erase old temporary lines
-    canvas()->updateCanvas(convertToPt(boundingRect()));
+        setMode(KisTool::PAINT_MODE);
 
-    QPointF pos = convertToPixelCoord(e);
-
-    if (e->button() == Qt::LeftButton) {
-        m_dragging = true;
-        m_startPos = pos;
-        m_endPos = pos;
-    }
-    emit sigDistanceChanged(0.0);
-    emit sigAngleChanged(0.0);
-}
-
-void KisToolMeasure::mouseMoveEvent(KoPointerEvent *e)
-{
-    if (m_dragging) {
         // Erase old temporary lines
         canvas()->updateCanvas(convertToPt(boundingRect()));
 
-        QPointF pos = convertToPixelCoord(e);
+        m_startPos = convertToPixelCoord(event);
+        m_endPos = m_startPos;
 
-        if (e->modifiers() & Qt::AltModifier) {
+        emit sigDistanceChanged(0.0);
+        emit sigAngleChanged(0.0);
+    }
+    else {
+        KisTool::mousePressEvent(event);
+    }
+}
+
+void KisToolMeasure::mouseMoveEvent(KoPointerEvent *event)
+{
+    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
+        // Erase old temporary lines
+        canvas()->updateCanvas(convertToPt(boundingRect()));
+
+        QPointF pos = convertToPixelCoord(event);
+
+        if (event->modifiers() == Qt::AltModifier) {
             QPointF trans = pos - m_endPos;
             m_startPos += trans;
             m_endPos += trans;
-        } else
+        } else {
             m_endPos = pos;
+        }
 
         canvas()->updateCanvas(convertToPt(boundingRect()));
         emit sigDistanceChanged(distance());
         emit sigAngleChanged(angle());
     }
+    else {
+        KisTool::mouseMoveEvent(event);
+    }
 }
 
-void KisToolMeasure::mouseReleaseEvent(KoPointerEvent *e)
+void KisToolMeasure::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (m_dragging && e->button() == Qt::LeftButton) {
-        m_dragging = false;
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
+    }
+    else {
+        KisTool::mouseReleaseEvent(event);
     }
 }
 

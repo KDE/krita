@@ -49,7 +49,6 @@ USING_PART_OF_NAMESPACE_EIGEN
 KisToolSelectBrush::KisToolSelectBrush(KoCanvasBase * canvas)
         : KisToolSelectBase(canvas, KisCursor::load("tool_brush_selection_cursor.png", 6, 6)),
         m_brushRadius(15),
-        m_dragging(false),
         m_lastMousePosition(-1, -1)
 {
     resetSelection();
@@ -86,7 +85,7 @@ QWidget* KisToolSelectBrush::createOptionWidget()
 void KisToolSelectBrush::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
-    if(m_dragging) {
+    if(mode() == KisTool::PAINT_MODE) {
         paintToolOutline(&gc, pixelToView(m_selection));
     }
     else  if(m_lastMousePosition!=QPoint(-1, -1)) {
@@ -96,27 +95,51 @@ void KisToolSelectBrush::paint(QPainter& gc, const KoViewConverter &converter)
     }
 }
 
-void KisToolSelectBrush::mousePressEvent(KoPointerEvent *e)
+void KisToolSelectBrush::mousePressEvent(KoPointerEvent *event)
 {
-    if (e->button() == Qt::LeftButton) {
-        m_dragging = true;
-        m_lastPoint=convertToPixelCoord(e->point);
-        addPoint(convertToPixelCoord(e->point));
-        e->accept();
+    if(mode() == KisTool::PAINT_MODE) {
+        /**
+         * Cancalling must be done at KisTool level
+         */
+//        resetSelection();
+//        return;
     }
-    else if (e->button()==Qt::RightButton || e->button()==Qt::MidButton) {
-        m_dragging = false;
-        resetSelection();
-        e->accept();
+
+    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::NoModifier)) {
+
+        setMode(KisTool::PAINT_MODE);
+
+        m_lastPoint = convertToPixelCoord(event->point);
+        addPoint(m_lastPoint);
+    }
+    else {
+        KisTool::mousePressEvent(event);
     }
 }
 
-void KisToolSelectBrush::mouseMoveEvent(KoPointerEvent *e)
+void KisToolSelectBrush::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (m_dragging) {
+    /**
+     * Update outline
+     */
+    QRect brushRect(-m_brushRadius, -m_brushRadius, 2*m_brushRadius, 2*m_brushRadius);
+    brushRect.adjust(-2, -2, 2, 2);     //width of tool outline
 
+    brushRect.moveCenter(m_lastMousePosition);
+    updateCanvasPixelRect(brushRect);
+
+    m_lastMousePosition = convertToPixelCoord(event).toPoint();
+
+    brushRect.moveCenter(m_lastMousePosition);
+    updateCanvasPixelRect(brushRect);
+
+    /**
+     * Do selection
+     */
+    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         // this gives better performance
-        if(Vector2f((m_lastPoint-convertToPixelCoord(e->point)).x(), (m_lastPoint-convertToPixelCoord(e->point)).y()).norm()<m_brushRadius/6)
+        if(Vector2f((m_lastPoint-convertToPixelCoord(event->point)).x(), (m_lastPoint-convertToPixelCoord(event->point)).y()).norm()<m_brushRadius/6)
             return;
 
         //randomise the point to workaround a bug in QPainterPath::operator|=()
@@ -127,28 +150,21 @@ void KisToolSelectBrush::mouseMoveEvent(KoPointerEvent *e)
         qreal randomY=rand()%100;
         randomY/=1000.;
         QPointF smallRandomPoint(randomX, randomY);
-        addPoint(convertToPixelCoord(e->point)+smallRandomPoint);
+        addPoint(convertToPixelCoord(event->point)+smallRandomPoint);
     }
     else {
-        QRect brushRect(-m_brushRadius, -m_brushRadius, 2*m_brushRadius, 2*m_brushRadius);
-        brushRect.adjust(-2, -2, 2, 2);     //width of tool outline
-
-        brushRect.moveCenter(m_lastMousePosition);
-        updateCanvasPixelRect(brushRect);
-
-        m_lastMousePosition = convertToPixelCoord(e).toPoint();
-
-        brushRect.moveCenter(m_lastMousePosition);
-        updateCanvasPixelRect(brushRect);
+        KisTool::mouseMoveEvent(event);
     }
 }
 
-void KisToolSelectBrush::mouseReleaseEvent(KoPointerEvent *e)
+void KisToolSelectBrush::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (m_dragging && e->button() == Qt::LeftButton) {
-        m_dragging = false;
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
         applyToSelection(m_selection);
-        e->accept();
+    }
+    else {
+        KisTool::mouseReleaseEvent(event);
     }
 }
 
@@ -201,7 +217,6 @@ void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
 void KisToolSelectBrush::resetSelection()
 {
     updateCanvasPixelRect(m_selection.boundingRect());
-    m_dragging=false;
     m_selection = QPainterPath();
 }
 

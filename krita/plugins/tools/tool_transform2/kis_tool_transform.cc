@@ -240,10 +240,11 @@ QRectF KisToolTransform::calcWarpBoundRect()
     } else if (nbPoints == 1) {
         res = QRectF(m_originalTopLeft, m_originalBottomRight);
         res.translate(m_currentArgs.transfPoints()[0] - m_currentArgs.origPoints()[0]);
+        res |= QRectF(m_currentArgs.origPoints()[0], QSizeF(1, 1));
     } else {
         res = QRectF(m_currentArgs.transfPoints()[0], m_currentArgs.transfPoints()[0]);
 
-        for (int i = 1; i < nbPoints; ++i) {
+        for (int i = 0; i < nbPoints; ++i) {
             if ( m_currentArgs.transfPoints()[i].x() < res.left() )
                 res.setLeft(m_currentArgs.transfPoints()[i].x());
             else if ( m_currentArgs.transfPoints()[i].x() > res.right() )

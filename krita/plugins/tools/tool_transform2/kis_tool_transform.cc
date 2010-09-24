@@ -832,7 +832,7 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 
     KisImageWSP kisimage = image();
 
-    if (!currentNode())
+    if (!currentNode() || !currentNode()->paintDevice())
         return;
 
     setMode(KisTool::PAINT_MODE);

@@ -531,6 +531,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
                 gc.drawLine(QPointF(rotationCenter.x() - m_rotationCenterRadius / 2. - 2, rotationCenter.y()), QPointF(rotationCenter.x() + m_rotationCenterRadius / 2. + 2, rotationCenter.y()));
                 gc.drawLine(QPointF(rotationCenter.x(), rotationCenter.y() - m_rotationCenterRadius / 2. - 2), QPointF(rotationCenter.x(), rotationCenter.y() + m_rotationCenterRadius / 2. + 2));
             }
+
         }
     } else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
         pen[0].setWidth(2);
@@ -821,8 +822,8 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
 
 void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 {
-    if(!PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    if(!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::MetaModifier)) {
 
         KisTool::mousePressEvent(event);
         return;
@@ -893,6 +894,7 @@ void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Meta) {
         setTransformFunction(m_prevMousePos, event->modifiers());
+        setMode(KisTool::HOVER_MODE);
     }
 
     KisTool::keyReleaseEvent(event);
